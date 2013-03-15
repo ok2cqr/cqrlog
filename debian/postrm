@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+FILE=/etc/apparmor.d/usr.sbin.mysqld
+FTMP=`mktemp /tmp/tmp.XXXXXX`
+if [ -f $FILE ]
+then
+  if `cat $FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
+  then
+    LINES=`cat $FILE | grep  -n  @{HOME}/.config/cqrlog/database/** | sed 's/\:.*//'`
+    LINES1=$((LINES-1))
+    LINES2=$((LINES+1))
+    head $FILE -n $LINES1 > $FTMP
+    tail $FILE -n +$LINES2 >> $FTMP
+    cat $FTMP > $FILE
+    echo ""
+    echo Changes removed from $FILE 
+    echo ""   
+    if which invoke-rc.d >/dev/null 2>&1; then
+       invoke-rc.d apparmor restart
+    else
+      /etc/init.d/apparmor restart
+    fi
+  else
+    echo ""
+    echo Changes from $FILE already removed
+    echo ""   
+  fi
+fi
+rm $FTMP
+#DEBHELPER#

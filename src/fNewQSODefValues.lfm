@@ -1,0 +1,125 @@
+object frmNewQSODefValues: TfrmNewQSODefValues
+  Left = 407
+  Height = 430
+  Top = 273
+  Width = 420
+  Caption = 'frmNewQSODefValues'
+  ClientHeight = 430
+  ClientWidth = 420
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '0.9.30.2'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 380
+    Width = 420
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 420
+    TabOrder = 0
+    object btnOK: TButton
+      Left = 241
+      Height = 25
+      Top = 12
+      Width = 75
+      Caption = 'OK'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object btnCancel: TButton
+      Left = 323
+      Height = 25
+      Top = 12
+      Width = 75
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 232
+    Height = 380
+    Top = 0
+    Width = 188
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 380
+    ClientWidth = 188
+    TabOrder = 1
+    object edtValue: TEdit
+      Left = 9
+      Height = 27
+      Top = 40
+      Width = 157
+      TabOrder = 0
+      Text = 'edtValue'
+    end
+    object lblDesc: TLabel
+      Left = 9
+      Height = 18
+      Top = 23
+      Width = 50
+      Caption = 'lblDesc'
+      ParentColor = False
+    end
+    object Button1: TButton
+      Left = 9
+      Height = 25
+      Top = 72
+      Width = 75
+      Caption = 'Add ...'
+      OnClick = Button1Click
+      TabOrder = 1
+    end
+    object btnDelete: TButton
+      Left = 9
+      Height = 25
+      Top = 132
+      Width = 174
+      Caption = 'Delete selected value'
+      OnClick = btnDeleteClick
+      TabOrder = 2
+    end
+    object btnMoveUp: TButton
+      Left = 9
+      Height = 25
+      Top = 216
+      Width = 174
+      Caption = 'Move up'
+      OnClick = btnMoveUpClick
+      TabOrder = 3
+    end
+    object btnMoveDwn: TButton
+      Left = 9
+      Height = 25
+      Top = 248
+      Width = 174
+      Caption = 'Move down'
+      OnClick = btnMoveDwnClick
+      TabOrder = 4
+    end
+    object Button2: TButton
+      Left = 91
+      Height = 25
+      Top = 72
+      Width = 75
+      Caption = 'Change ...'
+      OnClick = Button2Click
+      TabOrder = 5
+    end
+  end
+  object lbValues: TListBox
+    Left = 0
+    Height = 380
+    Top = 0
+    Width = 232
+    Align = alClient
+    ItemHeight = 0
+    ScrollWidth = 230
+    TabOrder = 2
+    TopIndex = -1
+  end
+end

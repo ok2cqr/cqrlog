@@ -1,0 +1,69 @@
+object dmDXCluster: TdmDXCluster
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  OldCreateOrder = False
+  Height = 363
+  HorizontalOffset = 694
+  VerticalOffset = 621
+  Width = 400
+  object qBands: TSQLQuery
+    BeforeOpen = qBandsBeforeOpen
+    Transaction = trBands
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 144
+    top = 60
+  end
+  object trBands: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 144
+    top = 120
+  end
+  object trQ1: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 24
+    top = 120
+  end
+  object Q1: TSQLQuery
+    BeforeOpen = Q1BeforeOpen
+    Transaction = trQ1
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 25
+    top = 60
+  end
+  object trQ: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 80
+    top = 120
+  end
+  object Q: TSQLQuery
+    BeforeOpen = QBeforeOpen
+    Transaction = trQ
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 82
+    top = 60
+  end
+  object trDXCCRef: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 216
+    top = 120
+  end
+  object qDXCCRef: TSQLQuery
+    BeforeOpen = qDXCCRefBeforeOpen
+    Transaction = trDXCCRef
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 216
+    top = 60
+  end
+end

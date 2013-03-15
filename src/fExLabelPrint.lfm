@@ -1,0 +1,202 @@
+object frmExLabelPrint: TfrmExLabelPrint
+  Left = 567
+  Height = 479
+  Top = 255
+  Width = 424
+  HelpType = htKeyword
+  HelpKeyword = 'help/h22.html#bh4'
+  ActiveControl = chkAllQSOs
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Export for label printing'
+  ClientHeight = 479
+  ClientWidth = 424
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.30.2'
+  object Label1: TLabel
+    Left = 5
+    Height = 17
+    Top = 137
+    Width = 33
+    Caption = 'Print '
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 96
+    Height = 17
+    Top = 137
+    Width = 112
+    Caption = 'QSOs on one label'
+    ParentColor = False
+  end
+  object lblProgress: TLabel
+    Left = 5
+    Height = 20
+    Top = 401
+    Width = 412
+    Alignment = taCenter
+    AutoSize = False
+    ParentColor = False
+  end
+  object gchkExport: TCheckGroup
+    Left = 5
+    Height = 96
+    Top = 33
+    Width = 412
+    AutoFill = True
+    Caption = ' Export QSLs marked as '
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 2
+    Columns = 2
+    Items.Strings = (
+      'SB - (Buro)'
+      'SD - (Direct)'
+      'SM  (Manager)'
+      'SMD (Manager direct)'
+      'SMB (Manager buro)'
+    )
+    TabOrder = 0
+    Data = {
+      050000000202020202
+    }
+  end
+  object GroupBox1: TGroupBox
+    Left = 5
+    Height = 81
+    Top = 281
+    Width = 412
+    Caption = ' Export to '
+    ClientHeight = 49
+    ClientWidth = 408
+    TabOrder = 1
+    object edtBrowse: TButton
+      Left = 310
+      Height = 25
+      Top = 31
+      Width = 75
+      Caption = 'Browse'
+      OnClick = edtBrowseClick
+      TabOrder = 0
+    end
+    object edtFile: TEdit
+      Left = 9
+      Height = 22
+      Top = 7
+      Width = 379
+      TabOrder = 1
+    end
+  end
+  object edtQSOsToLabel: TEdit
+    Left = 40
+    Height = 22
+    Top = 134
+    Width = 48
+    OnExit = edtQSOsToLabelExit
+    TabOrder = 2
+    Text = '6'
+  end
+  object GroupBox2: TGroupBox
+    Left = 5
+    Height = 112
+    Top = 159
+    Width = 412
+    Caption = ' Remarks '
+    ClientHeight = 80
+    ClientWidth = 408
+    TabOrder = 3
+    object rbQSORemarks: TRadioButton
+      Left = 9
+      Height = 26
+      Top = 7
+      Width = 171
+      Caption = 'Print remarks from QSO'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+    end
+    object rbOwnRemarks: TRadioButton
+      Left = 9
+      Height = 26
+      Top = 31
+      Width = 157
+      Caption = 'Print my own remarks'
+      TabOrder = 1
+    end
+    object edtRemarks: TEdit
+      Left = 9
+      Height = 22
+      Top = 62
+      Width = 376
+      OnEnter = edtRemarksEnter
+      TabOrder = 2
+    end
+  end
+  object chkMarkSent: TCheckBox
+    Left = 5
+    Height = 26
+    Top = 371
+    Width = 200
+    Caption = 'Mark QSLs sent after export'
+    TabOrder = 4
+  end
+  object btnExport: TButton
+    Left = 16
+    Height = 25
+    Top = 444
+    Width = 75
+    Caption = 'Export'
+    OnClick = btnExportClick
+    TabOrder = 5
+  end
+  object btnHelp: TButton
+    Left = 152
+    Height = 25
+    Top = 444
+    Width = 75
+    Caption = 'Help'
+    OnClick = btnHelpClick
+    TabOrder = 6
+  end
+  object Cancel: TButton
+    Left = 312
+    Height = 25
+    Top = 444
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 7
+  end
+  object chkAllQSOs: TCheckBox
+    Left = 5
+    Height = 26
+    Top = 8
+    Width = 123
+    Caption = 'Export all QSOs'
+    OnChange = chkAllQSOsChange
+    TabOrder = 8
+  end
+  object btnExportFieldsPref: TButton
+    Left = 224
+    Height = 25
+    Top = 131
+    Width = 184
+    Caption = 'Choose fields for export'
+    OnClick = btnExportFieldsPrefClick
+    TabOrder = 9
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.csv'
+    Filter = 'CSV files|*.csv'
+    left = 319
+    top = 256
+  end
+end

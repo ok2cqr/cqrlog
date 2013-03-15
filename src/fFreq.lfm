@@ -1,0 +1,64 @@
+object frmFreq: TfrmFreq
+  Left = 514
+  Height = 385
+  Top = 313
+  Width = 561
+  HorzScrollBar.Page = 448
+  VertScrollBar.Page = 331
+  ActiveControl = dbgrdFreq
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Frequencies'
+  ClientHeight = 385
+  ClientWidth = 561
+  OnShow = FormShow
+  LCLVersion = '0.9.30'
+  object Panel1: TPanel
+    Left = 0
+    Height = 45
+    Top = 340
+    Width = 561
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 45
+    ClientWidth = 561
+    TabOrder = 0
+    object btnChange: TButton
+      Left = 18
+      Height = 25
+      Top = 8
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Change'
+      OnClick = btnChangeClick
+      TabOrder = 0
+    end
+    object btnCancel: TButton
+      Left = 360
+      Height = 25
+      Top = 8
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object dbgrdFreq: TDBGrid
+    Left = 0
+    Height = 340
+    Top = 0
+    Width = 561
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    DataSource = dsrFreq
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 1
+    TitleStyle = tsNative
+  end
+  object dsrFreq: TDatasource
+    left = 130
+    top = 57
+  end
+end

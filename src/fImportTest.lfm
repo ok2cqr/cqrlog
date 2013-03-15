@@ -1,0 +1,136 @@
+object frmImportTest: TfrmImportTest
+  Left = 387
+  Height = 540
+  Top = 210
+  Width = 898
+  HorzScrollBar.Page = 897
+  VertScrollBar.Page = 539
+  ActiveControl = btnClose
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Test QSO before import'
+  ClientHeight = 540
+  ClientWidth = 898
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.29'
+  object Panel1: TPanel
+    Left = 0
+    Height = 66
+    Top = 474
+    Width = 898
+    Align = alBottom
+    ClientHeight = 66
+    ClientWidth = 898
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 228
+      Height = 17
+      Top = 17
+      Width = 300
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Contest name:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 10
+      Height = 17
+      Top = 13
+      Width = 71
+      Caption = 'QSO Count:'
+      ParentColor = False
+    end
+    object lblQSOCount: TLabel
+      Left = 88
+      Height = 17
+      Top = 13
+      Width = 81
+      Caption = 'lblQSOCount'
+      ParentColor = False
+    end
+    object btnClose: TButton
+      Left = 812
+      Height = 25
+      Top = 34
+      Width = 75
+      Anchors = [akRight, akBottom]
+      BorderSpacing.InnerBorder = 4
+      Cancel = True
+      Caption = '&Cancel'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object edtContestName: TEdit
+      Left = 328
+      Height = 26
+      Top = 7
+      Width = 368
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 1
+    end
+    object btnImport: TButton
+      Left = 733
+      Height = 25
+      Top = 34
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Import'
+      Enabled = False
+      OnClick = btnImportClick
+      TabOrder = 2
+    end
+    object btnTest: TButton
+      Left = 652
+      Height = 25
+      Top = 34
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Test QSO'
+      OnClick = btnTestClick
+      TabOrder = 3
+    end
+    object btnEditQSO: TButton
+      Left = 10
+      Height = 25
+      Top = 34
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Edit QSO'
+      OnClick = btnEditQSOClick
+      TabOrder = 4
+    end
+    object btnDeleteQSO: TButton
+      Left = 95
+      Height = 25
+      Top = 34
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Delete QSO'
+      OnClick = btnDeleteQSOClick
+      TabOrder = 5
+    end
+    object pBarStat: TProgressBar
+      Left = 176
+      Height = 20
+      Top = 39
+      Width = 468
+      Anchors = [akTop, akLeft, akRight]
+      Step = 1
+      TabOrder = 6
+    end
+  end
+  object dbgrdImport: TDBGrid
+    Left = 0
+    Height = 474
+    Top = 0
+    Width = 898
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 1
+  end
+end

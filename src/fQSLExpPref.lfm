@@ -1,0 +1,221 @@
+object frmQSLExpPref: TfrmQSLExpPref
+  Left = 621
+  Height = 383
+  Top = 304
+  Width = 517
+  Caption = 'Choose fields for export'
+  ClientHeight = 383
+  ClientWidth = 517
+  OnShow = FormShow
+  LCLVersion = '0.9.30.2'
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 368
+    Top = 8
+    Width = 416
+    ClientHeight = 364
+    ClientWidth = 412
+    TabOrder = 0
+    object chkTimeOn: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 43
+      Width = 75
+      Caption = 'Time on'
+      Checked = True
+      State = cbChecked
+      TabOrder = 0
+    end
+    object chkDate: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 12
+      Width = 58
+      Caption = 'Date'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+    end
+    object chkTimeOff: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 75
+      Width = 78
+      Caption = 'Time off'
+      TabOrder = 2
+    end
+    object chkCallSign: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 107
+      Width = 77
+      Caption = 'CallSign'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+    end
+    object chkMode: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 139
+      Width = 63
+      Caption = 'Mode'
+      Checked = True
+      State = cbChecked
+      TabOrder = 4
+    end
+    object chkFreq: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 171
+      Width = 56
+      Caption = 'Freq'
+      TabOrder = 5
+    end
+    object chkRST_S: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 203
+      Width = 80
+      Caption = 'RST sent'
+      Checked = True
+      State = cbChecked
+      TabOrder = 6
+    end
+    object chkRST_R: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 235
+      Width = 110
+      Caption = 'RST Received'
+      TabOrder = 7
+    end
+    object chkName: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 267
+      Width = 63
+      Caption = 'Name'
+      TabOrder = 8
+    end
+    object chkQTH: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 299
+      Width = 54
+      Caption = 'QTH'
+      TabOrder = 9
+    end
+    object chkQSL_S: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 12
+      Width = 82
+      Caption = 'QSL sent'
+      TabOrder = 10
+    end
+    object chkQSL_VIA: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 74
+      Width = 108
+      Caption = 'QSL manager'
+      Checked = True
+      State = cbChecked
+      TabOrder = 11
+    end
+    object chkLoc: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 106
+      Width = 76
+      Caption = 'Locator'
+      TabOrder = 12
+    end
+    object chkMyLoc: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 139
+      Width = 94
+      Caption = 'My locator'
+      TabOrder = 13
+    end
+    object chkIOTA: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 171
+      Width = 56
+      Caption = 'IOTA'
+      TabOrder = 14
+    end
+    object chkAward: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 203
+      Width = 66
+      Caption = 'Award'
+      TabOrder = 15
+    end
+    object chkPower: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 235
+      Width = 66
+      Caption = 'Power'
+      TabOrder = 16
+    end
+    object chkRemarks: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 267
+      Width = 224
+      Caption = 'Comment to QSO/own comment'
+      TabOrder = 17
+    end
+    object chkQSL_R: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 43
+      Width = 109
+      Caption = 'QSL received'
+      TabOrder = 18
+    end
+    object chkQSLMsg: TCheckBox
+      Left = 166
+      Height = 26
+      Top = 299
+      Width = 170
+      Caption = 'QSL message (PSE/TNX)'
+      TabOrder = 19
+    end
+    object chkBand: TCheckBox
+      Left = 14
+      Height = 26
+      Top = 333
+      Width = 58
+      Caption = 'Band'
+      Checked = True
+      State = cbChecked
+      TabOrder = 20
+    end
+  end
+  object btnOK: TButton
+    Left = 432
+    Height = 25
+    Top = 8
+    Width = 75
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 1
+  end
+  object btnCancel: TButton
+    Left = 432
+    Height = 25
+    Top = 40
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

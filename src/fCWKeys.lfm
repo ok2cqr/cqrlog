@@ -1,0 +1,103 @@
+object frmCWKeys: TfrmCWKeys
+  Left = 392
+  Height = 67
+  Top = 566
+  Width = 682
+  ActiveControl = btnF1
+  Caption = 'CW keys'
+  ClientHeight = 67
+  ClientWidth = 682
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '0.9.30.2'
+  object btnF2: TButton
+    Left = 136
+    Height = 32
+    Top = 1
+    Width = 136
+    Caption = 'F2'
+    OnClick = btnF2Click
+    TabOrder = 0
+  end
+  object btnF3: TButton
+    Left = 272
+    Height = 32
+    Top = 1
+    Width = 136
+    Caption = 'F3'
+    OnClick = btnF3Click
+    TabOrder = 1
+  end
+  object btnF4: TButton
+    Left = 408
+    Height = 32
+    Top = 1
+    Width = 136
+    Caption = 'F4'
+    OnClick = btnF4Click
+    TabOrder = 2
+  end
+  object btnF8: TButton
+    Left = 273
+    Height = 32
+    Top = 32
+    Width = 136
+    Caption = 'F8'
+    OnClick = btnF8Click
+    TabOrder = 3
+  end
+  object btnF7: TButton
+    Left = 137
+    Height = 32
+    Top = 32
+    Width = 136
+    Caption = 'F7'
+    OnClick = btnF7Click
+    TabOrder = 4
+  end
+  object btnF6: TButton
+    Left = 1
+    Height = 32
+    Top = 32
+    Width = 136
+    Caption = 'F6'
+    OnClick = btnF6Click
+    TabOrder = 5
+  end
+  object btnF5: TButton
+    Left = 544
+    Height = 32
+    Top = 1
+    Width = 135
+    Caption = 'F5'
+    OnClick = btnF5Click
+    TabOrder = 6
+  end
+  object btnF1: TButton
+    Left = 1
+    Height = 32
+    Top = 1
+    Width = 136
+    Caption = 'F1'
+    OnClick = btnF1Click
+    TabOrder = 7
+  end
+  object btnF9: TButton
+    Left = 408
+    Height = 32
+    Top = 32
+    Width = 136
+    Caption = 'F9'
+    OnClick = btnF9Click
+    TabOrder = 8
+  end
+  object btnF10: TButton
+    Left = 544
+    Height = 32
+    Top = 32
+    Width = 136
+    Caption = 'F10'
+    OnClick = btnF10Click
+    TabOrder = 9
+  end
+end

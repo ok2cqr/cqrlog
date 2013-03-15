@@ -1,0 +1,115 @@
+object frmChangeFreq: TfrmChangeFreq
+  Left = 468
+  Height = 185
+  Top = 316
+  Width = 325
+  HorzScrollBar.Page = 324
+  VertScrollBar.Page = 184
+  ActiveControl = edtBegin
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Change frequency'
+  ClientHeight = 185
+  ClientWidth = 325
+  object Label1: TLabel
+    Left = 14
+    Height = 20
+    Top = 16
+    Width = 37
+    Caption = 'Begin'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 14
+    Height = 20
+    Top = 73
+    Width = 25
+    Caption = 'End'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 123
+    Height = 20
+    Top = 15
+    Width = 21
+    Caption = 'CW'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 123
+    Height = 20
+    Top = 73
+    Width = 29
+    Caption = 'RTTY'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 123
+    Height = 20
+    Top = 128
+    Width = 28
+    Caption = 'SSB'
+    Color = clNone
+    ParentColor = False
+  end
+  object edtBegin: TEdit
+    Left = 12
+    Height = 25
+    Top = 32
+    Width = 93
+    TabOrder = 0
+  end
+  object edtEnd: TEdit
+    Left = 12
+    Height = 25
+    Top = 91
+    Width = 93
+    TabOrder = 1
+  end
+  object edtCW: TEdit
+    Left = 117
+    Height = 25
+    Top = 32
+    Width = 93
+    TabOrder = 2
+  end
+  object edtRTTY: TEdit
+    Left = 117
+    Height = 25
+    Top = 91
+    Width = 93
+    TabOrder = 3
+  end
+  object edtSSB: TEdit
+    Left = 117
+    Height = 25
+    Top = 146
+    Width = 93
+    TabOrder = 4
+  end
+  object btnOK: TButton
+    Left = 240
+    Height = 25
+    Top = 23
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 5
+  end
+  object btnCancel: TButton
+    Left = 240
+    Height = 25
+    Top = 68
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 6
+  end
+end

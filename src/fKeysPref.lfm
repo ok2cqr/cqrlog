@@ -1,0 +1,492 @@
+object frmKeysPref: TfrmKeysPref
+  Left = 446
+  Height = 470
+  Top = 256
+  Width = 561
+  ActiveControl = ntbKeyboard
+  Caption = 'Keyboard preferences'
+  ClientHeight = 470
+  ClientWidth = 561
+  OnShow = FormShow
+  LCLVersion = '0.9.28'
+  object ntbKeyboard: TNotebook
+    Left = 0
+    Height = 420
+    Top = 0
+    Width = 561
+    Align = alClient
+    PageIndex = 0
+    TabOrder = 0
+    object pgRun: TPage
+      Caption = 'Run mode'
+      ClientWidth = 555
+      ClientHeight = 385
+      object GroupBox1: TGroupBox
+        Left = 13
+        Height = 160
+        Top = 8
+        Width = 521
+        Caption = ' Call field '
+        ClientHeight = 141
+        ClientWidth = 517
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 13
+          Height = 39
+          Top = 35
+          Width = 186
+          Caption = 'After pressed Enter key and '#10'exchange field is empty'
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 13
+          Height = 39
+          Top = 91
+          Width = 189
+          Caption = 'After pressed Enter key and '#10'exchange field is NOT empty'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 222
+          Height = 18
+          Top = 4
+          Width = 86
+          Caption = 'CW message'
+          ParentColor = False
+        end
+        object cmbREmptyExch: TComboBox
+          Left = 213
+          Height = 29
+          Top = 45
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 11
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'F9'
+            'F10'
+            'Custom ...'
+          )
+          OnChange = cmbREmptyExchChange
+          TabOrder = 0
+          Text = 'Custom ...'
+        end
+        object edtREmptyExch: TEdit
+          Left = 334
+          Height = 27
+          Top = 47
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 1
+          Text = 'EDTREMPTYEXCH'
+          Visible = False
+        end
+        object edtRNotEmptyExch: TEdit
+          Left = 334
+          Height = 27
+          Top = 103
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 2
+          Text = 'EDTRNOTEMPTYEXCH'
+          Visible = False
+        end
+        object cmbRNotEmptyExch: TComboBox
+          Left = 213
+          Height = 29
+          Top = 101
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 11
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'F9'
+            'F10'
+            'Custom ...'
+          )
+          OnChange = cmbRNotEmptyExchChange
+          TabOrder = 3
+          Text = 'Custom ...'
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 13
+        Height = 194
+        Top = 176
+        Width = 521
+        Caption = ' Echange field '
+        ClientHeight = 175
+        ClientWidth = 517
+        TabOrder = 1
+        object Label3: TLabel
+          Left = 14
+          Height = 39
+          Top = 80
+          Width = 162
+          Caption = 'If call field was changed '#10'send also'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          Left = 13
+          Height = 39
+          Top = 30
+          Width = 186
+          Caption = 'After pressed Enter key and '#10'call wasn''t changed'
+          ParentColor = False
+        end
+        object Label5: TLabel
+          Left = 13
+          Height = 18
+          Top = 144
+          Width = 128
+          Caption = 'After pressing \ key'
+          ParentColor = False
+        end
+        object Label7: TLabel
+          Left = 222
+          Height = 18
+          Top = 4
+          Width = 86
+          Caption = 'CW message'
+          ParentColor = False
+        end
+        object cmbRCallChange: TComboBox
+          Left = 214
+          Height = 29
+          Top = 90
+          Width = 177
+          ItemHeight = 0
+          ItemIndex = 1
+          Items.Strings = (
+            'Nothing'
+            'Changed part of call'
+            'Whole call'
+          )
+          TabOrder = 0
+          Text = 'Changed part of call'
+        end
+        object edtRNoCallChange: TEdit
+          Left = 334
+          Height = 27
+          Top = 42
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 1
+          Text = 'EDTRNOCALLCHANGE'
+          Visible = False
+        end
+        object cmbRNoCallChange: TComboBox
+          Left = 214
+          Height = 29
+          Top = 40
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 11
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'F9'
+            'F10'
+            'Custom ...'
+          )
+          OnChange = cmbRNoCallChangeChange
+          TabOrder = 2
+          Text = 'Custom ...'
+        end
+        object cmbRBackSlash: TComboBox
+          Left = 213
+          Height = 29
+          Top = 133
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 11
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'F9'
+            'F10'
+            'Custom ...'
+          )
+          OnChange = cmbRBackSlashChange
+          TabOrder = 3
+          Text = 'Custom ...'
+        end
+        object edtRBackSlash: TEdit
+          Left = 334
+          Height = 27
+          Top = 135
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 4
+          Text = 'EDTRBACKSLASH'
+          Visible = False
+        end
+      end
+    end
+    object pgSP: TPage
+      Caption = 'S&&P'
+      ClientWidth = 555
+      ClientHeight = 385
+      object GroupBox3: TGroupBox
+        Left = 13
+        Height = 160
+        Top = 8
+        Width = 521
+        Caption = ' Call field '
+        ClientHeight = 141
+        ClientWidth = 517
+        TabOrder = 0
+        object Label8: TLabel
+          Left = 13
+          Height = 39
+          Top = 35
+          Width = 186
+          Caption = 'After pressed Enter key and '#10'exchange field is empty'
+          ParentColor = False
+        end
+        object Label9: TLabel
+          Left = 13
+          Height = 39
+          Top = 91
+          Width = 189
+          Caption = 'After pressed Enter key and '#10'exchange field is NOT empty'
+          ParentColor = False
+        end
+        object Label10: TLabel
+          Left = 222
+          Height = 18
+          Top = 4
+          Width = 86
+          Caption = 'CW message'
+          ParentColor = False
+        end
+        object cmbSEmptyExch: TComboBox
+          Left = 213
+          Height = 29
+          Top = 45
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 9
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'Custom ...'
+          )
+          OnChange = cmbSEmptyExchChange
+          TabOrder = 0
+          Text = 'Custom ...'
+        end
+        object edtSEmptyExch: TEdit
+          Left = 334
+          Height = 27
+          Top = 47
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 1
+          Text = 'EDTSEMPTYEXCH'
+          Visible = False
+        end
+        object edtSNotEmptyExch: TEdit
+          Left = 334
+          Height = 27
+          Top = 103
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 2
+          Text = 'EDTSNOTEMPTYEXCH'
+          Visible = False
+        end
+        object cmbSNotEmptyExch: TComboBox
+          Left = 213
+          Height = 29
+          Top = 101
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 9
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'Custom ...'
+          )
+          OnChange = cmbSNotEmptyExchChange
+          TabOrder = 3
+          Text = 'Custom ...'
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 13
+        Height = 194
+        Top = 176
+        Width = 521
+        Caption = ' Echange field '
+        ClientHeight = 175
+        ClientWidth = 517
+        TabOrder = 1
+        object Label12: TLabel
+          Left = 13
+          Height = 18
+          Top = 47
+          Width = 158
+          Caption = 'After pressed Enter key '
+          ParentColor = False
+        end
+        object Label13: TLabel
+          Left = 13
+          Height = 18
+          Top = 90
+          Width = 128
+          Caption = 'After pressing \ key'
+          ParentColor = False
+        end
+        object Label14: TLabel
+          Left = 222
+          Height = 18
+          Top = 4
+          Width = 86
+          Caption = 'CW message'
+          ParentColor = False
+        end
+        object edtSNoCallChange: TEdit
+          Left = 334
+          Height = 27
+          Top = 42
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 0
+          Text = 'EDTSNOCALLCHANGE'
+          Visible = False
+        end
+        object cmbSNoCallChange: TComboBox
+          Left = 214
+          Height = 29
+          Top = 40
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 9
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'Custom ...'
+          )
+          OnChange = cmbSNoCallChangeChange
+          TabOrder = 1
+          Text = 'Custom ...'
+        end
+        object cmbSBackSlash: TComboBox
+          Left = 213
+          Height = 29
+          Top = 79
+          Width = 112
+          ItemHeight = 0
+          ItemIndex = 9
+          Items.Strings = (
+            'Nothing'
+            'F1'
+            'F2'
+            'F3'
+            'F4'
+            'F5'
+            'F6'
+            'F7'
+            'F8'
+            'Custom ...'
+          )
+          OnChange = cmbSBackSlashChange
+          TabOrder = 2
+          Text = 'Custom ...'
+        end
+        object edtSBackSlash: TEdit
+          Left = 334
+          Height = 27
+          Top = 81
+          Width = 152
+          CharCase = ecUppercase
+          TabOrder = 3
+          Text = 'EDTSBACKSLASH'
+          Visible = False
+        end
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 420
+    Width = 561
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 561
+    TabOrder = 1
+    object btnCancel: TButton
+      Left = 472
+      Height = 25
+      Top = 14
+      Width = 75
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object btnOK: TButton
+      Left = 384
+      Height = 25
+      Top = 14
+      Width = 75
+      Caption = 'OK'
+      ModalResult = 1
+      OnClick = btnOKClick
+      TabOrder = 1
+    end
+  end
+end

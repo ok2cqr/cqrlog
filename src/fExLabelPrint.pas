@@ -1,0 +1,449 @@
+unit fExLabelPrint;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ExtCtrls, ComCtrls, iniFiles, lcltype;
+
+
+const
+  C_SEP = ',';
+  C_REP = ';';
+
+type
+  TfrmExLabelPrint = class(TForm)
+    btnExport: TButton;
+    btnHelp: TButton;
+    btnExportFieldsPref : TButton;
+    Cancel: TButton;
+    chkAllQSOs: TCheckBox;
+    chkMarkSent: TCheckBox;
+    edtRemarks: TEdit;
+    edtQSOsToLabel: TEdit;
+    edtBrowse: TButton;
+    edtFile: TEdit;
+    gchkExport: TCheckGroup;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    lblProgress: TLabel;
+    rbQSORemarks: TRadioButton;
+    rbOwnRemarks: TRadioButton;
+    dlgSave: TSaveDialog;
+    procedure btnExportFieldsPrefClick(Sender : TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure btnExportClick(Sender: TObject);
+    procedure btnHelpClick(Sender: TObject);
+    procedure chkAllQSOsChange(Sender: TObject);
+    procedure edtBrowseClick(Sender: TObject);
+    procedure edtQSOsToLabelExit(Sender: TObject);
+    procedure edtRemarksEnter(Sender: TObject);
+  private
+    procedure LoadDataToTempDB;
+
+    function  GetExpFieldCount : Word;
+    function  Rep(what : String) : String;
+  public
+    { public declarations }
+  end; 
+
+var
+  frmExLabelPrint: TfrmExLabelPrint;
+
+implementation
+
+uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC;
+{ TfrmExLabelPrint }
+
+procedure TfrmExLabelPrint.edtQSOsToLabelExit(Sender: TObject);
+var
+  nr : Integer;
+begin
+  if not TryStrToInt(edtQSOsToLabel.Text, nr) then
+    edtQSOsToLabel.Text := '6'
+  else begin
+    if not ((nr > 0) and (nr<7)) then
+      edtQSOsToLabel.Text := '6'
+  end;
+end;
+
+procedure TfrmExLabelPrint.FormShow(Sender: TObject);
+begin
+  edtFile.Text := cqrini.ReadString('QslExport','Path',dmData.DataDir+'qsl.csv');
+  dlgSave.InitialDir := ExtractFilePath(edtFile.Text);
+  gchkExport.Checked[0] := True;
+  gchkExport.Checked[2] := True;
+  gchkExport.Checked[4] := True;
+  edtQSOsToLabel.Text   := cqrini.ReadString('QslExport','QSOs','6');
+  edtRemarks.Text       := cqrini.ReadString('QslExport','Remarks','');
+  if edtRemarks.Text <> '' then
+    rbOwnRemarks.Checked
+end;
+
+
+function TfrmExLabelPrint.GetExpFieldCount : Word;
+begin
+  Result := 0;
+  if cqrini.ReadBool('QSLExport', 'Date', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'time_on', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'time_off', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'CallSign', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'Mode', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'Freq', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'RST_S', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'RST_R', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'Name', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'QTH', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'band', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'QSL_S', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'QSL_R', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'QSL_VIA', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'locator', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'MyLoc', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'IOTA', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'award', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'power', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'Remarks', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'QSLMsg', True) then
+    inc(Result)
+end;
+
+function TfrmExLabelPrint.Rep(what : String) : String;
+begin
+  Result := StringReplace(what,C_SEP, C_REP,[rfReplaceAll])
+end;
+
+procedure TfrmExLabelPrint.LoadDataToTempDB;
+var
+  DoExp   : Boolean;
+  i       : Integer;
+  qsl_msg : String;
+  qsl_via : String;
+begin
+  dmData.qCQRLOG.DisableControls;
+  try
+    if dmData.trQ.Active then dmData.trQ.Rollback;
+    dmData.trQ.StartTransaction;
+    dmData.Q.Close;
+    dmData.Q.SQL.Text := 'insert into qslexport (idcall,id_cqrlog_main,dxcc,qsodate,time_on,time_off,callsign,freq,mode,rst_s,rst_r, '+
+                         'name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,loc,my_loc,award,remarks,band,qslmsg) values('+
+                         ':idcall,:id_cqrlog_main,:dxcc,:qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,'+
+                         ':qth,:qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:loc,:my_loc,:award,:remarks,:band,:qslmsg)';
+    if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
+    dmData.qCQRLOG.First;
+    while not dmData.qCQRLOG.Eof do
+    begin
+      DoExp := False;
+      if chkAllQSOs.Checked then
+        DoExp := True
+      else begin
+        if (dmData.qCQRLOG.Fields[11].AsString = 'SB')  and (gchkExport.Checked[0]) then
+          DoExp := True;
+        if (dmData.qCQRLOG.Fields[11].AsString = 'SD')  and (gchkExport.Checked[1]) then
+          DoExp := True;
+        if (dmData.qCQRLOG.Fields[11].AsString = 'SM')  and (gchkExport.Checked[2]) then
+          DoExp := True;
+        if (dmData.qCQRLOG.Fields[11].AsString = 'SMD') and (gchkExport.Checked[3]) then
+          DoExp := True;
+        if (dmData.qCQRLOG.Fields[11].AsString = 'SMB') and (gchkExport.Checked[4]) then
+          DoExp := True
+      end;
+      if (not DoExp) or (dmData.qCQRLOG.FieldByName('band').AsString='') then
+      begin
+        dmData.qCQRLOG.Next;
+        Continue
+      end;
+      dmData.Q.Prepare;
+
+      dmData.Q.ParamByName('id_cqrlog_main').AsInteger := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+
+      if dmUtils.IsQSLViaValid(dmData.qCQRLOG.FieldByName('qsl_via').AsString) then
+      begin
+        qsl_via := dmData.qCQRLOG.FieldByName('qsl_via').AsString;
+        dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(qsl_via);
+        dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
+                                                                     dmData.qCQRLOG.FieldByName('qsodate').AsDateTime);
+        dmData.Q.ParamByName('qsl_via').AsString := qsl_via
+      end
+      else begin
+        qsl_via := '';
+        dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(dmData.qCQRLOG.FieldByName('callsign').AsString);
+        dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
+                                                                     dmData.qCQRLOG.FieldByName('qsodate').AsDateTime);
+        dmData.Q.ParamByName('qsl_via').AsString := qsl_via
+      end;
+      //if dmData.Q.ParamByName('idcall').AsString = dmData.Q.ParamByName('qsl_via').AsString;
+
+
+      if (dmData.qCQRLOG.FieldByName('qsl_r').AsString='Q') then
+        qsl_msg := 'TNX'
+      else
+        qsl_msg := 'PSE';
+
+      if rbQSORemarks.Checked then
+        dmData.Q.ParamByName('remarks').AsString  := Rep(dmData.qCQRLOG.FieldByName('remarks').AsString)
+      else
+        dmData.Q.ParamByName('remarks').AsString  := edtRemarks.Text;
+
+      dmData.Q.ParamByName('qsodate').AsDateTime  := dmData.qCQRLOG.FieldByName('qsodate').AsDateTime;
+      dmData.Q.ParamByName('time_on').AsString    := dmData.qCQRLOG.FieldByName('time_on').AsString;
+      dmData.Q.ParamByName('time_off').AsString   := dmData.qCQRLOG.FieldByName('time_off').AsString;
+      dmData.Q.ParamByName('callsign').AsString   := dmData.qCQRLOG.FieldByName('callsign').AsString;
+      dmData.Q.ParamByName('freq').AsFloat        := dmData.qCQRLOG.FieldByName('freq').AsFloat;
+      dmData.Q.ParamByName('mode').AsString       := dmData.qCQRLOG.FieldByName('mode').AsString;
+      dmData.Q.ParamByName('rst_s').AsString      := dmData.qCQRLOG.FieldByName('rst_s').AsString;
+      dmData.Q.ParamByName('rst_r').AsString      := dmData.qCQRLOG.FieldByName('rst_r').AsString;
+      dmData.Q.ParamByName('name').AsString       := Rep(dmData.qCQRLOG.FieldByName('name').AsString);
+      dmData.Q.ParamByName('qth').AsString        := Rep(dmData.qCQRLOG.FieldByName('qth').AsString);
+      dmData.Q.ParamByName('qsl_s').AsString      := dmData.qCQRLOG.FieldByName('qsl_s').AsString;
+      dmData.Q.ParamByName('qsl_r').AsString      := dmData.qCQRLOG.FieldByName('qsl_r').AsString;
+      dmData.Q.ParamByName('iota').AsString       := dmData.qCQRLOG.FieldByName('iota').AsString;
+      dmData.Q.ParamByName('pwr').AsString        := dmData.qCQRLOG.FieldByName('pwr').AsString;
+      dmData.Q.ParamByName('loc').AsString        := dmData.qCQRLOG.FieldByName('loc').AsString;
+      dmData.Q.ParamByName('my_loc').AsString     := dmData.qCQRLOG.FieldByName('my_loc').AsString;
+      dmData.Q.ParamByName('award').AsString      := Rep(dmData.qCQRLOG.FieldByName('award').AsString);
+      dmData.Q.ParamByName('band').AsString       := dmData.qCQRLOG.FieldByName('band').AsString;
+      dmData.Q.ParamByName('qslmsg').AsString     := Rep(qsl_msg);
+
+      dmData.Q.ExecSQL;
+      dmData.qCQRLOG.Next
+    end
+  finally
+    dmData.trQ.Commit;
+    dmData.qCQRLOG.EnableControls
+  end
+end;
+
+procedure TfrmExLabelPrint.btnExportClick(Sender: TObject);
+var
+  f      : TextFile;
+  mycall : String = '';
+  old    : String = '';
+  lNr    : Integer = 0;
+  MaxQ   : Integer;
+  i      : Integer;
+  qsl_s  : String = '';
+  qso_nr : Int64 = 0;
+  FieldCount : Integer;
+  y          : Integer;
+
+  procedure WriteDataToFile;
+  begin
+    if cqrini.ReadBool('QSLExport', 'Date', True) then
+      Write(f,dmUtils.MyDateToStr(dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+    if cqrini.ReadBool('QSLExport', 'time_on', True) then
+      Write(f,dmData.Q.FieldByName('time_on').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'time_off', True) then
+      Write(f,dmData.Q.FieldByName('time_off').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'CallSign', True) then
+      Write(f,dmData.Q.FieldByName('callsign').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Mode', True) then
+      Write(f,dmData.Q.FieldByName('mode').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Freq', True) then
+      Write(f,FloatToStr(dmData.Q.FieldByName('freq').AsFloat),C_SEP);
+    if cqrini.ReadBool('QSLExport', 'RST_S', True) then
+      Write(f,dmData.Q.FieldByName('rst_s').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'RST_R', True) then
+      Write(f,dmData.Q.FieldByName('rst_r').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Name', True) then
+      Write(f,dmData.Q.FieldByName('name').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'QTH', True) then
+      Write(f,dmData.Q.FieldByName('qth').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'band', True) then
+      Write(f,dmData.Q.FieldByName('band').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'QSL_S', True) then
+      Write(f,dmData.Q.FieldByName('qsl_s').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'QSL_R', True) then
+      Write(f,dmData.Q.FieldByName('qsl_r').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'QSL_VIA', True) then
+      Write(f,dmData.Q.FieldByName('qsl_via').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'locator', True) then
+      Write(f,dmData.Q.FieldByName('loc').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'MyLoc', True) then
+      Write(f,dmData.Q.FieldByName('my_loc').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'IOTA', True) then
+      Write(f,dmData.Q.FieldByName('iota').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'award', True) then
+      Write(f,dmData.Q.FieldByName('award').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'power', True) then
+      Write(f,dmData.Q.FieldByName('pwr').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Remarks', True) then
+      Write(f,dmData.Q.FieldByName('remarks').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'QSLMsg', True) then
+      Write(f,dmData.Q.FieldByName('qslmsg').AsString,C_SEP)
+  end;
+
+begin
+  mycall := cqrini.ReadString('Station','Call','');
+  if (mycall='') then
+  begin
+    Application.MessageBox('Your callsign is not set! Please set it in Preferences.','Info ...',mb_OK + mb_IconInformation);
+    exit
+  end;
+
+  if FileExists(edtFile.Text) then
+  begin
+    if Application.MessageBox('File already exists! Do you want to overvrite it?',
+                              'Question',mb_YesNo + mb_IconQuestion) = idYes then
+      DeleteFile(edtFile.Text)
+    else
+      exit
+  end;
+
+  FieldCount := GetExpFieldCount;
+  dmData.CreateQSLTmpTable;
+  LoadDataToTempDB;
+//  FieldCount := GetExpFieldCount;
+
+  MaxQ := StrToInt(edtQSOsToLabel.Text);
+  AssignFile(f,edtFile.Text);
+  try  try
+    Rewrite(f);
+    dmData.trQ.StartTransaction;
+    dmData.trQ1.StartTransaction;
+    dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,idcall';
+    dmData.Q.Open;
+    while not dmData.Q.Eof do
+    begin
+      if chkMarkSent.Checked then
+      begin
+        qsl_s := dmData.Q.FieldByName('qsl_s').AsString;
+        if Pos('S',qsl_s) = 1 then
+          qsl_s := copy(qsl_s,2,Length(qsl_s)-1)
+        else begin
+          if qsl_s = '' then
+          begin
+            if dmData.Q.FieldByName('qsl_s').AsString <> '' then
+              qsl_s := 'MB'
+            else
+              qsl_s := 'B'
+          end
+        end;
+
+        dmData.Q1.SQL.Text := 'update cqrlog_main set qsl_s ='+QuotedStr(qsl_s)  +
+                              ', qsls_date = '+ QuotedStr(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0))) +
+                              ' where id_cqrlog_main='+IntToStr(dmData.Q.Fields[0].AsInteger);
+        if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
+        dmData.Q1.ExecSQL
+      end;
+
+      if old <> dmData.Q.FieldByName('callsign').AsString then
+      begin
+        if (old <> '') then
+        begin
+          for i:=lNr+1 to MaxQ do
+          begin
+            for y:=0 to FieldCount-1 do
+              Write(f,C_SEP)
+          end;
+          Writeln(f);
+          lNr := 0;
+          old := 'aaa'
+        end;
+        WriteDataToFile;
+        lNr := 1
+      end
+      else begin
+        WriteDataToFile;
+        inc(lNr)
+      end;
+      if lNr+1 > MaxQ then
+        old := 'aaa'
+      else
+        old := dmData.Q.FieldByName('callsign').AsString;
+
+      lblProgress.Caption := 'Exporting QSO nr. ' + IntToStr(qso_nr);
+      lblProgress.Repaint;
+      dmData.Q.Next
+    end
+  except
+    on E : Exception do
+    begin
+      Application.MessageBox(PChar('QSL export error: '+E.Message),'Error ...', mb_OK+mb_IconError);
+      dmData.trQ1.Rollback
+    end
+  end
+  finally
+    dmData.trQ.Rollback;
+    dmData.Q.Close;
+    dmData.Q1.Close;
+    if dmData.trQ1.Active then
+      dmData.trQ1.Commit;
+    dmData.DropQSLTmpTable;
+    lblProgress.Caption := 'Complete!';
+    CloseFile(f)
+  end
+end;
+
+procedure TfrmExLabelPrint.btnHelpClick(Sender: TObject);
+begin
+  ShowHelp
+end;
+
+procedure TfrmExLabelPrint.chkAllQSOsChange(Sender: TObject);
+begin
+  if chkAllQSOs.Checked then
+    gchkExport.Enabled := False
+  else
+    gchkExport.Enabled := True
+end;
+
+procedure TfrmExLabelPrint.edtBrowseClick(Sender: TObject);
+begin
+  if dlgSave.Execute then
+    edtFile.Text := dlgSave.FileName
+end;
+
+procedure TfrmExLabelPrint.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
+begin
+  cqrini.WriteString('QslExport','Path',edtFile.Text);
+  cqrini.WriteString('QslExport','QSOs',edtQSOsToLabel.Text);
+  cqrini.WriteString('QslExport','Remarks',edtRemarks.Text)
+end;
+
+procedure TfrmExLabelPrint.btnExportFieldsPrefClick(Sender : TObject);
+begin
+  with TfrmQSLExpPref.Create(nil) do
+  try
+    ShowModal
+  finally
+    Free
+  end
+end;
+
+procedure TfrmExLabelPrint.edtRemarksEnter(Sender: TObject);
+begin
+  rbOwnRemarks.Checked := True
+end;
+
+initialization
+  {$I fExLabelPrint.lrs}
+
+end.
+

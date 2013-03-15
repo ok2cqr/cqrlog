@@ -1,0 +1,487 @@
+Legend:
+  # info
+  + new feature
+  - bugfix
+--------------------
+1.5.4
+  - fixed problem with MASTER.SCP
+
+1.5.3
+  + added support for Super Check Partial
+  + added Tune function (for WinKeyerUSB and cwdaemon), hotkey CTRL+T 
+  + added Repair table function to database connection window (Utils button)
+  + improved export for QSL labels printing (labels are sorted by dxcc, you
+    can choose what fields will be be printed)
+  + updated membership tables
+  - fiexd program crash when editing DX cluster info
+  - CW keys window doesn't show caption for F9 and F10 keys
+  - ADIF export ignored delimitter in TX_PWR (0.5 was exported as 05)
+  - CQRLOG killed rigctld even when autostart was disabled
+  - double click to spots listed with SH/DX didn't work
+  - QSO list window showed filter is enabled after reopen (filter was disabled)  
+  - login to eQSL with password containing special character didn't work
+  - when QSO passed over the midnight, the qso was saved with wrong date
+
+1.5.2
+  + added CTRL+W hotkey to send spots to dxcluster
+  + DX cluster shows also country name next to the spot (must be enabled in Prefereces)
+  + international characters should work again
+  + DX spots with freq eqauls to the start of the band (21.000, 14.000 etc., usually notes) are ignored
+  + HamQTH added to dx clusters list
+  - fixed reading A-index (was 1 even when actually was 10)
+  - /MM, /AM and stations with unknown DXCC country didn't appear in bandmap
+  - database update hangs
+  - fixed xml request address of qrz.com
+  - DXCC CFM count function didn't uses eQSL cfm QSO
+  - fixed reading mode from FT-920 (returned MEMO as VFO)
+  - fixed bug in dxcluster caused program crash
+  - program didn't apply eQSL rcvd when the band was in lowercase
+
+1.5.1
+  - fixed program crash when scrolling down in QSO list window
+  - Clear new QSO window after significant freq change option removed
+
+1.5.0
+  + brand new user friendly TRX control settings 
+  + user can change freq in drop down list in new qso window
+  + clear RIT after saving QSO added
+  + clear New QSO window after significant freq change option added 
+  + remove dupes from the log function added
+  + native support of connection to MySQL server 5.5
+  + sh/dx cluster command fill the bandmap
+  + members database updated
+  + country tables updated
+  - program hangs when LoTW password was wrong or server was down
+  - wrong freq caused program crash with unfriendly message
+  - dx cluster autologin didin't work when the prompt was "Please enter your call:"
+  - after save QSO got endtime and start date not end date
+  - 5MHz band is not visible even if is checked in Preferences -> Bands
+  - program crashed after editing QSO from QSO list window (edit, close window, hit enter) - fixed
+  - station with /P, /M, KH6/ etc. get his original QTH and grid from callbook - fixed
+  - Database update function fixed
+
+1.4.1
+  + keys in CW Fx window also send CW messages
+  - error after click to "Station list" button in WAS statistic - fixed
+  - wrong US state was marked like AL in WAS statistic - fixed
+  - fixed TRX control
+  - after change TRX name in Preference, the description in TRX window wasn't changed - fixed
+  - number of cfm DXCC in mode table was the same like in total DXCC cfm - fixed 
+  - fixed problem with null comamnds in WKUSB communication
+
+1.4.0
+  + freq is displayed in 10Hz resolution instead of 100Hz
+  + Country name field into QSO list added
+  + added OR symbol into QSL_S combo box (Online Request)
+  + OK, Cancel and other buttons in filter window moved to the right to 
+    reduce window height
+  + rig control rewrited to use rigctld
+  + LoTW/eQSL users has the same background color also in bandmap
+  + IOTA information inserted from HamQTH callbook
+  + eQSL import error log is now stored into user's home directory
+  + added CTRL+I hotkey for ADIF import function (in New QSO window)
+  + you can set different background color for eQSL and LoTW users
+  - power wasn't imported from ADIF file - fixed
+  - QSLR field was sometimes empty even if QSO was confirmed - fixed
+
+1.3.1 (2012-02-21)
+  - CQRLOG won't run on Ubuntu 12.04 - fixed
+  - previous qso for callsign with / didn't work when
+    "In previous QSO list show also QSO with call/p " option enabled - fixed
+
+1.3.0 (2012-01-21)
+  + full eQSL support added (filter, statistics, export, import ...)
+  + DXCC, WAS, WAC, ITU, WAZ and IOTA statistic improved
+  + export QSO to CSV file for SOTA website added
+  + option to show previous QSO with station that was /p, /m etc added
+  + program now takes UTC time from the computer time
+  + added new column "qslr" into QSO list where you can see symbols for paper QSL
+    confirmed, LoTW and eQSL together
+  + refresh button to propagation window added
+  + files with LoTW and eQSL users list are part of DXCC tables
+  - export in SQL console crashed when the field was NULL - fixed
+  - qrz.com button fixed
+  - database update didn't affect QTH field - fixed
+  - height and width was saved also for dialog (non-sizeable)
+    windows - fixed
+  - xplanet config file was always overwriten - fixed
+  - GF in propagation windows was empty - fixed
+  - QSL manager search in QSO list window didn't work - fixed
+  - MM and AM station didn't get to bandmap - fixed
+
+1.2.2 (2011-10-23)
+  + FREQ field added to ADIF export for LoTW
+  + ROS mode added
+  - new Ubuntu scrollbars disabled (a lot of problems solved)
+  - after chnge to another log, QTH profile remained the same - fixed
+  - QSO from ADIF with freq over 147MHz were refused - fixed
+
+1.2.1 (2011-07-31)
+  + HamQTH.com integration improved
+  - qrz.com XML search fixed
+
+1.2.0 (2011-07-28)
+  + HamQTH.com XML search added
+  - after View QSO New QSO window remained in readonly mode - fixed
+  - CTRL+F2 hotkey didn't work in New QSO window - fixed
+  - DELETE statement wasn't supported in SQL console - fixed
+  - in Remote mode when time pass the midnight hour date remain
+    the same - fixed
+  - program crashed after attempt to edit QSO when log was in
+    remote mode - fixed
+  - ADIF import crashed when QSO had wrong freq or band - fixed
+  - LoTW statistic always showed 0  confirmed countries - fixed
+
+
+1.1.0 (2011-06-23)
+  * qrz.com XML search function added (Preferences -> Callbook)
+  * RST format is not changing when Automode is disabled
+  * big square statistic added
+
+1.0.2 (2011-06-11)
+  * ADIF import fixed
+
+1.0.1 (2011-06-10)
+  * backup into the same file option added
+  * ADIF export speed-up
+  * loading MySQL libraries on Debian unstable and Fedora 15 - fixed
+
+1.0.0 (2011-06-07)
+  + CQRLOG is now package ready (now deb packages for Ubuntu and Debian only)
+  + native 32bit and 64bit versions
+  + support multiple logs
+  + membership (> 70 clubs, 5 of them can be processed simultaneously) is tracked 
+    by membership number (if a club doesn't have numbers, callsign is used) 
+  + config file is stored directly to the main database. If a log is opened on 
+    another computer, the settings will remain the same
+  + other windows (Grayline, Detail info, DX cluster etc.) auto-opened only if they 
+    were previously opened in running CQRLOG which was properly (regularly) closed 
+  + new faster ADIF import
+  + CQRLOG can be used on local computer with MySQL embedded or on a MySQL server, 
+    CQRLOG can be run on another (remote) machine 
+  + echo for telnet DX cluster added (the sent-out command is also displayed in DX 
+    cluster window) 
+  + clear log function added (in database connection window all log data can be 
+    erased but the log file is not deleted) 
+  + new About window added
+  + changelog in html format added
+  + membership databases updated
+  + manual page added
+
+1.0.0~rc2 (2011-05-31)
+  + membership databases updated
+  + manual page added
+  - problem with creating new logs - fixed
+  - export of LoTW dates fixed
+  - debian packaging problems -  fixed
+  - ADIF export fixed
+
+1.0.0~rc1 (2011-05-22)
+  + new About window added
+  + changelog in html format added
+  + changelog is showing after the first start of new program version
+  + membership databases update
+  + load club window response improved
+
+  - rebuild membership statistic function didn't work when something were stored into award or name etc. fields - fixed
+  - adif import/export date format problems fixed
+  - after using clear database function save config didn't work - fixed
+  - zip code tracking for USA states fixed
+
+1.0.0~beta2 (2011-05-15)
+  + clear log function added (in database connection window you can delete all log data 
+    but not delete the log itself)
+  + echo for telnet dxcluster added (command you've send is also added do dxluster window)
+
+  - a few font issues fixed
+  - confirmed country on LoTW ignored paper confirmation - fixed
+  - access violation when user deteled cluster from the list - fixed
+  - error about wrong argument "2>" in LoTW sign function - fixed
+  - saving confinguration to database after clicking to OK in Preferences window - fixed
+  - access violation after clicking to Key macros button - fixed
+  - missing scrollbars in all TMemo - fixed
+  - before importing new qsl managers to database, old data were not deleted - fixed
+  - randomly program crashing (with dxcluster connected and long time program inactivity) - fixed
+  - "--skip-innodb" option from mysqld removed (on Mandriva mysqld didn't start)
+
+1.0.0~beta1 (2011-04-17)
+  + Close button to ADIF import window added
+  + "Complete" will appear after ADIF import finish
+  - hamlib dependencies fixed
+  - after swith to another log TRX control in New QSO window stoped working - fixed
+  - Transaction already active error in Mark QSL function fixed
+  - after changing frequency in Preferences -> Bands program crashed - fixed
+  - import of QSLS_DATE and QSLR_DATE damaged values - fixed
+  - after select different DXCC entity for station program crashed - fixed
+
+1.0.0~alpha2 (2011-03-27)
+  + auto open recent opened log function added
+  + ADIF import error log improved, now is saving to user's home directory
+  - a lot of bugs with ADIF import fixed (QSL dates, data length, extra spaces etc.)
+  - right click and columns moving in New QSO window didn't work - fixed
+
+1.0.0~alpha1 (2011-03-20)
+  + CQRLOG is ready to be packaged ( now have only deb packages for Ubuntu)
+  + native 32bit and 64bit versions
+  + support multiple logs
+  + membership is tracking according to members’ numbers (if club doesn’t have numbers, callsigns are used)
+  + config file is stored directly to main database so if you open you log from another computer, the settings will be still the same
+  + windows like Grayline, Detail info, DX cluster etc. are auto-opened only if they were opened when CQRLOG was closed
+  + new faster ADIF import
+  + CQRLOG can be used on local computer with MySQL embedded or use MySQL server running on other machine
+  + and more things I forget :-)
+
+0.9.6 (2010-11-13)
+  + CONTESTIA mode added
+  - QRZ.COM search - fixed
+
+0.9.5 (2010-09-11)
+  + multiple callsign on LoTW account supported (download only)
+  - Close button in installer fixed
+  - copying lotw1.txt in installer fixed
+  - WAS statistics fixed
+  - distance and azimut now calculated after entering big locator
+
+0.9.4 (2010-07-20)
+  + statusbar in QSO window could be disabled (good for netbook users)
+  + program restart after DXCC tables update no longer needed
+  + QRZ.COM icon search added to the 'QSO list' window toolbar
+  + QRZ.COM icon search added also to the 'New QSO' window to search working station
+  + LoTW users visible while working a station (a dedicated icon)
+  + window with CW keys added
+  + color marked DX cluster spots of LoTW users
+  + LoTW confirmed countries now visible also in DX cluster
+
+  - qrz.com search - fixed
+  - calls were imported in lower case as it was in ADIF file - fixed
+  - CQRLOG crashed while saving QTH longer than 60 characters
+  
+
+0.9.3 (2010-04-04)
+  + bandmap entries have now more precise frequency (down to a single Hz) for easier return to own spots
+  + possibility to use reverse sideband for CW (CWR) instead of CW
+  + the grayline map now uses a transparent overlay for night area visualisation
+
+  - program crashes in Ubuntu 10.04 after openining Preferences window - fixed
+  - storing values to grid and county field from membership doesn't work - fixed
+
+0.9.2 (2010-03-06)
+  + ordering by WAZ and ITU added
+  + database update now can grab names from previous QSOs
+  + 'QSL send' marking option added
+
+  - align of TIME_OFF column fixed
+  - looking for callsign with flash produced HTML code - fixed
+  - group editing of own locator fixed
+  - QTH profiles window doesn't show any records - fixed
+  - importing QSLRDATE and QSLSDATE fixed
+
+0.9.1 (2009-12-31)
+  - storing grid columns width and position - fixed
+  - propagation window shows wrong SSN number from NOAA - fixed
+
+0.9.0 (2009-12-20)
+  + program compiled in recent Lazarus version
+  + propagation indices added
+  + user definable digital modes added (in Preferences -> Modes tab)
+  + program shows new QSOs confirmed by LoTW after import
+  + SQL console added (with export to CSV and HMTL), now you can do with
+    QSOs whatever you want
+  + callsign attachments - you can add almost everything corrensponding to the call
+    in log to a directory named by call and show it from logging program. You can
+    display any picture, text or even PDF file related to the callsign.
+  + QSL attachments - an image of the QSL card can be added and displayed.
+  + QSL sent and QSL received date added
+  + 33CM band support added
+
+  - time checking function for ADIF tags <TIME_ON> <TIME_OFF> fixed
+  - loading StopBits and Databits parameters didn't work - fixed
+
+0.8.5 (2009-10-06)
+  + library libstdc++5 included into program installation
+  + after saving QSO station appears in bandmap (it must be set in Preferences)
+  + name is now capitalized also when you enter the 'Name' field
+
+  - option 'Refresh Data after Save QSO' didn't work - fixed
+  - if a non-default profile selected, after saving a QSO the profile turned to default - fixed
+  - access violation after clicking to 'New QSO' in QSO list window and pressing ESC - fixed
+  - autobackup didn't save last QSO - fixed
+  - if 'Show only QSO since XX' enabled, autobackup saved only these QSOs - fixed
+
+0.8.4 (2009-09-04)
+  + sorting by call,qsl_via,dxcc_ref and call,dxcc_ref added
+  + yellow dot in graline window pointed to your QTH (according to your own locator)
+  + new QSO window resizeable (good for Asus EE users)
+  + problem caused by QRZ.COM randomly generated bogus strings fixed
+  + a few speed improvements
+
+  - sometimes program freezed when closing bandmap - fixed
+
+0.8.3 (2009-08-26)
+  + when band map window is focused, bandmap is not automatically updated
+
+  - sometimes program hangs when closing - fixed
+  - without TRX program causes abnormally high CPU load - fixed
+  - for all QSO from fldigi program saves end time the same as start time - fixed
+  - two radio operating fixed
+
+0.8.2 (2009-07-30)
+  + MIX summary to DXCC statistic added
+
+  - program freezes when trying to chage preferences with radio off, fixed
+  - QSO from fldigi always gets freq from log, fixed
+  - the same station was more then once in bandmap, fixed
+  - auto add qsl managers, fixed
+  - qsl manager extraction from qrz.com info fixed
+
+0.8.1 (2009-07-05)
+  - fixed program crashing after rebuild dxcc
+  - a lot of other minor bugs fixed
+
+0.8.0 (2009-06-14)
+  + program compiled in recent version of Lazarus
+  + sunrise/sunset calculation added
+  + continent field added
+  + new qsl managers database support
+  + WAC statistic added
+  + WAS statistic added
+  + summary to WAZ, ITU, WAC and WAS statistics added
+  + WAZ, ITU, WAC and WAS statistics can be generated for specific mode and profiles
+  + station list of confirmed contacts for WAZ, ITU, WAC and WAS added
+  + communication with fldigi added (you can switch CQRLOG to remote mode and it will receive
+    and store qso from fldigi after saving)
+  + if log enters to remote mode, it could run fldigi (it must be set in Preferences)
+  + auto insert QSL manager from internal qsl managers database added
+  + auto backup on program exit added
+  + new splash screen
+  + user defined default font color for xplanet spots added
+  + details panel into QSO list window  added (shows comment for QSO, award,
+    lotw_qslsdate and lotw_qsrdate fields)
+  + much better qsl_via resolution for data from QRZ.COM
+  + State and County field auto filled from QRZ.COM
+  + a few QTH Profiles window improvements
+  + switching between radios with CTRL+1 for radion one, CTRL+2 for radio two (in New QSO window)
+
+  - filter in bandmap according to dxcc country didn't work
+  - two radio operating fixed
+
+0.7.0 (2009-03-09)
+  + program using now Firebird 2.1.1
+  + Preferences window improved
+  + frequencies for button in TRX window can be user defined
+  + sorting by DXCC country added
+  + TRX control rewritten (libmy_hamlib.so no longer needed)
+  + cwdaemon and WinKeyer support added
+  + 5 and 220 MHz band support added
+  + profile support improved (changing profile number, adif import fixed)
+  + JT6M, JT65, JT65A, JT65B, JT65C, FSK441, WSPR modes added
+  + sorting by dxcc+callsign added
+  + a few ADIF import improvements
+
+  - qrz.com search fixed
+  - editing own locator with group edit changed QSO locator
+
+0.6.0 (2008-12-15)
+  + complete LoTW support added, changes in DXCC, WAZ, ITU, IOTA statistics possible
+  + import QSOs from ADIF file downloaded from LoTW web site or automatic download from ARRL LoTW
+  + ADIF export for QSO signing or automated export, signing and upload QSOs to LoTW web site
+  + group editing added
+  + you can mark more QSO with CTRL+Left mouse and delete/edit, mark QSL_S, QSL_R
+  + spots from DX Cluster could have the same color in the band map
+  + new icons
+  + in New QSO window, you can see and view/edit latest QSOs
+
+  - after ADIF import in State field number appears
+  - after ADIF import RST received were also in RST sent
+  - MM stations didn't go to the band map
+  - after QTH profile change, own locator didn't change
+
+0.5.1 (2008-09-11)
+  - adif import/export fixed
+
+0.5.0 (2008-09-11)
+  + ZIP code tracking added
+  + export for label printing added
+  + auto mark QSL as sent function added
+  + state field to new QSO window added
+  - a few bugs fixed
+
+0.4.0 (2008-06-21)
+  + program compiled in recent Lazarus version
+  + changed font settings
+  + band map added
+  + improved program operating
+  + improved connection to telnet dxcluster
+  + a lot of optimalization, program is faster (import, membesrhip, statistics)
+  + xplanet support added
+  + auto search in qrz.com added (default is disabled, you can enable it in Preferences->New QSO tab)
+  + save/load filter settings added
+  + improved html export
+  + help is opening in web browser
+  + 70MHz band added
+  + you can add/modify general note for entire program
+  + auto upgrade dxcc tables added
+  - two radio operating fixed
+  - in edit qso mode after callsign change, idcall were not changed
+  - exported adif files with enter character in note or profile were broken
+  - if my locator is not set in adif file, my own locator were not stored
+
+0.3.0 (2008-04-27)
+  + membership suport added
+  + new installing script
+  + cqrlog.sh is no longer needed. Just run binary file cqrlog
+  + if trx is off, cqrlog also turn off radio suppport. You can get it back
+    by pressing TRX Control -> Refresh
+  + grou by function in filter dialog added
+  + filter also supports membership
+  + time offset can set also for Grayline
+  + if you want, dxcluster window can be opened after program run
+
+  - in edit qso mode, after callsign change current date were stored
+  - a few modifications to exported html files
+
+0.2.1 (2008-01-25)
+  + dxcc statistics per mode added
+  + program works better without radio turned on
+  + improved callsign resolution
+  + faster QSL manager search (auto-create index for QSL.DBF added)
+
+  - export makes corrupt html files
+  - RU6C/TF was Russia not Iceland
+    (the same problem was with W1AA/KH5K etc.)
+  - incorrect WAZ, ITU import from Windows version of CQRLOG
+  - band settings changed (radiobuttons replaced by buttons)
+
+0.2.0 (2007-12-02)
+  + new "detail" window with WAZ, ITU, IOTA info
+  + new WAZ and ITU statistics
+  + export statistics to html file
+  + if call field of new QSO is empty and ~ (tilde) is pressed, a spot
+    with data of last logged QSO is sent to the DX cluster
+  + program shows greetings according to target point time
+  + new IOTA statistics
+  + export IOTA statistics into a text file
+
+  - when you minimalize QSO list window, it were lost
+  - after mark QSL send or QSL received and filter were
+    enabled, all QSOs are displayed
+  - 'clear' button in web cluster didn't work
+
+0.1.1 (2007-10-26)
+  + font settings
+  + better callsign resolution e.g. OE1XA is Austria, Wien, Club Station
+
+  - title of exported html file was in Czech language
+  - after callbook search in QSO list window program hangs
+  - offline mode was active after repeated program close and run
+  - changing of own locator didn't work in edit mode
+  - ADIF import - QSOs on 12m band were ignored
+  - callbook search in new QSO window tried to track down whole
+    content of the callsign input box (e.g. KH6/OK2CQR instead of OK2CQR)
+  - power stored in ADIF file included "W", which does not meet
+    the ADIF specification.
+
+0.1.0 (2007-09-29)
+  initial version
+
+

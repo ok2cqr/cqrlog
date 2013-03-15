@@ -1,0 +1,51 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmSOTAExport','FORMDATA',[
+  'TPF0'#14'TfrmSOTAExport'#13'frmSOTAExport'#4'Left'#3#173#1#6'Height'#3'h'#1#3
+  +'Top'#3#5#1#5'Width'#3#4#2#11'BorderStyle'#7#8'bsDialog'#7'Caption'#6#23'Exp'
+  +'ort for SOTA website'#12'ClientHeight'#3'h'#1#11'ClientWidth'#3#4#2#7'OnClo'
+  +'se'#7#9'FormClose'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#6'0.9.30'#0#6'T'
+  +'Label'#6'Label1'#4'Left'#2#8#6'Height'#2#18#3'Top'#2#8#5'Width'#2'B'#7'Capt'
+  +'ion'#6#9'Filename:'#11'ParentColor'#8#0#0#5'TEdit'#11'edtFileName'#4'Left'#2
+  +#8#6'Height'#2#27#3'Top'#2' '#5'Width'#3#165#1#8'TabOrder'#2#0#0#0#7'TButton'
+  +#7'Button1'#4'Left'#3#177#1#6'Height'#2#25#3'Top'#2'"'#5'Width'#2'K'#7'Capti'
+  +'on'#6#6'Browse'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#1#0#0#7'TButton'
+  +#8'btnClose'#4'Left'#3#176#1#6'Height'#2#25#3'Top'#3'@'#1#5'Width'#2'K'#6'Ca'
+  +'ncel'#9#7'Caption'#6#5'Close'#11'ModalResult'#2#2#8'TabOrder'#2#3#0#0#7'TBu'
+  +'tton'#9'btnExport'#4'Left'#3'X'#1#6'Height'#2#25#3'Top'#3'@'#1#5'Width'#2'K'
+  +#7'Caption'#6#6'Export'#7'OnClick'#7#14'btnExportClick'#8'TabOrder'#2#2#0#0#9
+  +'TGroupBox'#9'GroupBox1'#4'Left'#2#8#6'Height'#2'P'#3'Top'#2'@'#5'Width'#3
+  +#244#1#12'ClientHeight'#2'L'#11'ClientWidth'#3#240#1#8'TabOrder'#2#4#0#12'TR'
+  +'adioButton'#9'rbSotaLog'#4'Left'#2#6#6'Height'#2#24#3'Top'#2#7#5'Width'#3
+  +#251#0#7'Caption'#6#31'use SOTA reference number from '#7'Checked'#9#14'Pare'
+  +'ntShowHint'#8#8'TabOrder'#2#0#7'TabStop'#9#0#0#9'TComboBox'#7'cmbSota'#4'Le'
+  +'ft'#3#6#1#6'Height'#2#31#3'Top'#2#3#5'Width'#3#130#0#10'ItemHeight'#2#0#9'I'
+  +'temIndex'#2#0#13'Items.Strings'#1#6#5'award'#6#7'comment'#6#3'qth'#0#8'OnSe'
+  +'lect'#7#13'cmbSotaSelect'#5'Style'#7#14'csDropDownList'#8'TabOrder'#2#1#4'T'
+  +'ext'#6#5'award'#0#0#6'TLabel'#6'Label2'#4'Left'#3#150#1#6'Height'#2#18#3'To'
+  +'p'#2#13#5'Width'#2#31#7'Caption'#6#5'field'#11'ParentColor'#8#0#0#6'TLabel'
+  +#6'Label3'#4'Left'#3#166#0#6'Height'#2#18#3'Top'#2')'#5'Width'#3'@'#1#7'Capt'
+  +'ion'#6'-as SOTA reference number for all exported QSO'#11'ParentColor'#8#0#0
+  +#12'TRadioButton'#9'rbSotaEdt'#4'Left'#2#6#6'Height'#2#24#3'Top'#2''''#5'Wid'
+  +'th'#2'4'#7'Caption'#6#4'use '#8'TabOrder'#2#2#0#0#5'TEdit'#7'edtSota'#4'Lef'
+  +'t'#2'>'#6'Height'#2#27#3'Top'#2'$'#5'Width'#2'`'#8'CharCase'#7#11'ecUpperca'
+  +'se'#7'OnEnter'#7#12'edtSotaEnter'#8'TabOrder'#2#3#0#0#0#9'TGroupBox'#9'Grou'
+  +'pBox2'#4'Left'#2#7#6'Height'#2'0'#3'Top'#3#152#0#5'Width'#3#245#1#12'Client'
+  +'Height'#2','#11'ClientWidth'#3#241#1#8'TabOrder'#2#5#0#5'TEdit'#11'edtCalls'
+  +'ign'#4'Left'#3#191#0#6'Height'#2#27#3'Top'#2#9#5'Width'#3#128#0#8'CharCase'
+  +#7#11'ecUppercase'#8'TabOrder'#2#0#0#0#6'TLabel'#6'Label6'#4'Left'#2#7#6'Hei'
+  +'ght'#2#18#3'Top'#2#14#5'Width'#3#174#0#7'Caption'#6#27'Callsign used on SOT'
+  +'A hill:'#11'ParentColor'#8#0#0#0#9'TGroupBox'#9'GroupBox3'#4'Left'#2#8#6'He'
+  +'ight'#2'i'#3'Top'#3#208#0#5'Width'#3#245#1#12'ClientHeight'#2'e'#11'ClientW'
+  +'idth'#3#241#1#8'TabOrder'#2#6#0#12'TRadioButton'#12'rbAddLogNote'#4'Left'#2
+  +#7#6'Height'#2#24#3'Top'#2#6#5'Width'#3'-'#1#7'Caption'#6'%add remarks from '
+  +'Comment to QSO field'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'#9#0#0#12'TRad'
+  +'ioButton'#12'rbAddEdtNote'#4'Left'#2#7#6'Height'#2#24#3'Top'#2'&'#5'Width'#2
+  +'v'#7'Caption'#6#14'add this note:'#8'TabOrder'#2#1#0#0#5'TEdit'#8'edtNotes'
+  +#4'Left'#2#31#6'Height'#2#27#3'Top'#2'>'#5'Width'#3#200#1#8'TabOrder'#2#2#0#0
+  +#0#12'TProgressBar'#8'pbExport'#4'Left'#2#7#6'Height'#2#20#3'Top'#3'B'#1#5'W'
+  +'idth'#3#8#1#4'Step'#2#1#8'TabOrder'#2#7#0#0#6'TLabel'#7'lblDone'#4'Left'#3
+  +' '#1#6'Height'#2#18#3'Top'#3'D'#1#5'Width'#2'$'#7'Caption'#6#4'Done'#11'Par'
+  +'entColor'#8#7'Visible'#8#0#0#11'TSaveDialog'#7'dlgSave'#10'DefaultExt'#6#4
+  +'.csv'#6'Filter'#6#14'CVS file|*.csv'#4'left'#3#192#1#3'top'#3#160#0#0#0#0
+]);

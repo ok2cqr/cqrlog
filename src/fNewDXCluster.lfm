@@ -1,0 +1,118 @@
+object frmNewDXCluster: TfrmNewDXCluster
+  Left = 616
+  Height = 179
+  Top = 498
+  Width = 303
+  HorzScrollBar.Page = 302
+  VertScrollBar.Page = 178
+  ActiveControl = edtDescription
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'New dxcluster'
+  ClientHeight = 179
+  ClientWidth = 303
+  OnShow = FormShow
+  Position = poMainFormCenter
+  object Label1: TLabel
+    Left = 9
+    Height = 20
+    Top = 8
+    Width = 77
+    Caption = 'Description:'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 9
+    Height = 20
+    Top = 64
+    Width = 57
+    Caption = 'Address:'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 128
+    Height = 20
+    Top = 64
+    Width = 31
+    Caption = 'Port:'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 9
+    Height = 20
+    Top = 122
+    Width = 76
+    Caption = 'User name:'
+    Color = clNone
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 124
+    Height = 20
+    Top = 122
+    Width = 64
+    Caption = 'Password:'
+    Color = clNone
+    ParentColor = False
+  end
+  object edtDescription: TEdit
+    Left = 9
+    Height = 25
+    Top = 32
+    Width = 193
+    MaxLength = 100
+    TabOrder = 0
+  end
+  object edtAddress: TEdit
+    Left = 9
+    Height = 25
+    Top = 88
+    Width = 104
+    TabOrder = 1
+  end
+  object edtPort: TEdit
+    Left = 122
+    Height = 25
+    Top = 88
+    Width = 80
+    TabOrder = 2
+  end
+  object edtUserName: TEdit
+    Left = 9
+    Height = 25
+    Top = 144
+    Width = 80
+    TabOrder = 3
+  end
+  object edtPassword: TEdit
+    Left = 122
+    Height = 25
+    Top = 144
+    Width = 80
+    TabOrder = 4
+  end
+  object btnOK: TButton
+    Left = 216
+    Height = 25
+    Top = 8
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    ModalResult = 1
+    TabOrder = 5
+  end
+  object btnCancel: TButton
+    Left = 216
+    Height = 25
+    Top = 42
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 6
+  end
+end

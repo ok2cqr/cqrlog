@@ -1,0 +1,254 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TdmData','FORMDATA',[
+  'TPF0'#7'TdmData'#6'dmData'#8'OnCreate'#7#16'DataModuleCreate'#9'OnDestroy'#7
+  +#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3'^'#2#16'HorizontalOf'
+  +'fset'#3#4#2#14'VerticalOffset'#2'p'#5'Width'#3#27#3#0#11'TDatasource'#7'dsr'
+  +'Main'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDatasource'
+  +#12'dsrQSOBefore'#7'DataSet'#7#10'qQSOBefore'#4'left'#3'H'#1#3'top'#3#216#0#0
+  +#0#11'TDatasource'#9'dsrImport'#4'left'#3'P'#2#3'top'#3#192#1#0#0#11'TDataso'
+  +'urce'#8'dsrBands'#7'DataSet'#7#6'qBands'#4'left'#3#136#0#3'top'#3#173#1#0#0
+  +#11'TDatasource'#11'dsrProfiles'#7'DataSet'#7#9'qProfiles'#4'left'#2'@'#3'to'
+  +'p'#2'p'#0#0#11'TDatasource'#12'dsrDXCluster'#7'DataSet'#7#11'qDXClusters'#4
+  +'left'#3#160#0#3'top'#2'H'#0#0#4'TDbf'#9'tblImport'#9'IndexDefs'#14#0#10'Tab'
+  +'leLevel'#2#4#13'FilterOptions'#11#0#4'left'#3#232#0#3'top'#3#216#1#0#0#11'T'
+  +'Datasource'#9'dsrQSLMgr'#8'AutoEdit'#8#7'DataSet'#7#7'qQSLMgr'#4'left'#3#128
+  +#1#3'top'#3#128#1#0#0#4'TDbf'#7'dbfBand'#9'IndexDefs'#14#0#10'TableLevel'#2#4
+  +#13'FilterOptions'#11#0#4'left'#3#232#0#3'top'#3#152#1#0#0#9'TSQLQuery'#2'mQ'
+  +#10'BeforeOpen'#7#12'mQBeforeOpen'#11'Transaction'#7#4'trmQ'#8'ReadOnly'#8#6
+  +'Params'#14#0#8'ParseSQL'#8#4'left'#3#153#2#3'top'#2#24#0#0#15'TSQLTransacti'
+  +'on'#4'trmQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#153#2#3'top'#2'P'#0
+  +#0#10'TSQLScript'#8'scCommon'#11'Transaction'#7#4'trmQ'#18'Directives.String'
+  +'s'#1#6#8'SET TERM'#6#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#END'
+  +'IF'#6#7'#DEFINE'#6#6'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6'WCREAT'
+  +'E DATABASE cqrlog_common DEFAULT CHARACTER SET = utf8  DEFAULT COLLATE = ut'
+  +'f8_bin;'#6#0#6#18'USE cqrlog_common;'#6#0#6#20'CREATE TABLE bands ('#6'/   '
+  +'    id_bands INT AUTO_INCREMENT PRIMARY KEY,'#6'#       band VARCHAR(10) DE'
+  +'FAULT '''','#6#29'       b_begin NUMERIC(10,4),'#6#27'       b_end NUMERIC('
+  +'10,4),'#6#24'       cw NUMERIC(10,4),'#6#26'       rtty NUMERIC(10,4),'#6#24
+  +'       ssb NUMERIC(10,4)'#6#2');'#6'!CREATE INDEX band ON bands(band);'#6#0
+  +#6#25'CREATE TABLE dxclusters ('#6'3      id_dxclusters INT AUTO_INCREMENT P'
+  +'RIMARY KEY,'#6'*      description VARCHAR(100) DEFAULT '''','#6'&      addr'
+  +'ess VARCHAR(100) DEFAULT '''','#6'"      port VARCHAR(10) DEFAULT '''','#6
+  +'%      dxcuser VARCHAR(12) DEFAULT '''','#6'$      dxcpass VARCHAR(20) DEFA'
+  +'ULT '''''#6#2');'#6'4CREATE INDEX description ON dxclusters(description);'#6
+  +#0#6#24'CREATE TABLE iota_list ('#6'2      id_iota_list INT AUTO_INCREMENT P'
+  +'RIMARY KEY,'#6'$      iota_nr VARCHAR(6) DEFAULT '''','#6'*      island_nam'
+  +'e VARCHAR(250) DEFAULT '''','#6'&      dxcc_ref VARCHAR(15) DEFAULT '''','#6
+  +'!      pref VARCHAR(15) DEFAULT '''''#6#2');'#6'+CREATE INDEX iota_nr ON io'
+  +'ta_list(iota_nr);'#6'%CREATE INDEX pref ON iota_list(pref);'#6#0#6#0#6#23'C'
+  +'REATE TABLE dxcc_ref ('#6'7            id_dxcc_ref INT AUTO_INCREMENT PRIMA'
+  +'RY KEY,'#6'&            pref VARCHAR(20) NOT NULL,'#6'''            name VA'
+  +'RCHAR(100) NOT NULL,'#6'%            cont VARCHAR(6) NOT NULL,'#6'$        '
+  +'    utc VARCHAR(12)NOT NULL,'#6'%            lat VARCHAR(10) NOT NULL,'#6'('
+  +'            longit VARCHAR(10) NOT NULL,'#6'%            itu VARCHAR(20) NO'
+  +'T NULL,'#6'%            waz VARCHAR(20) NOT NULL,'#6'-            adif SMAL'
+  +'LINT NOT NULL DEFAULT 0,'#6'/            deleted SMALLINT NOT NULL DEFAULT '
+  +'0'#6#2');'#6'$CREATE INDEX pref ON dxcc_ref(pref);'#6'$CREATE INDEX adif ON'
+  +' dxcc_ref(adif);'#6#0#6#21'CREATE TABLE qslmgr ('#6'5            id_qslmgr '
+  +'INT AUTO_INCREMENT PRIMARY KEY,'#6'!            callsign VARCHAR(20),'#6'  '
+  +'           qsl_via VARCHAR(20),'#6#25'            fromdate DATE'#6#2');'#6
+  +'*CREATE INDEX callsign ON qslmgr(callsign);'#6'*CREATE INDEX fromdate ON qs'
+  +'lmgr(fromdate);'#6#0#6#23'CREATE TABLE log_list ('#6'7            id_log_li'
+  +'st INT AUTO_INCREMENT PRIMARY KEY,'#6'%            log_nr SMALLINT NOT NULL'
+  +','#6',            log_name VARCHAR(50) DEFAULT '''','#6'1            auto_o'
+  +'pen SMALLINT NOT NULL DEFAULT 0'#6#2');'#6'(CREATE INDEX log_nr ON log_list'
+  +'(log_nr);'#6#0#6#23'CREATE TABLE db_version'#6#1'('#6#22'  nr SMALLINT NOT '
+  +'NULL'#6#2');'#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#9#9
+  +'UseCommit'#9#10'UseDefines'#9#4'left'#3'P'#2#3'top'#2'P'#0#0#10'TSQLScript'
+  +#5'scLog'#11'Transaction'#7#4'trmQ'#18'Directives.Strings'#1#6#8'SET TERM'#6
+  +#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6
+  +'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6#26'CREATE TABLE cqrlog_main'
+  +' ('#6':            id_cqrlog_main INT AUTO_INCREMENT PRIMARY KEY,'#6'"     '
+  +'       qsodate DATE NOT NULL,'#6'(            time_on VARCHAR(5) NOT NULL,'
+  +#6'+            time_off VARCHAR(5) DEFAULT '''','#6'*            callsign V'
+  +'ARCHAR(20) NOT NULL,'#6'(            freq NUMERIC(10,4) NOT NULL,'#6'%     '
+  +'       mode VARCHAR(8) NOT NULL,'#6')            rst_s VARCHAR(20) DEFAULT '
+  +''''','#6')            rst_r VARCHAR(20) DEFAULT '''','#6'(            name '
+  ,'VARCHAR(40) DEFAULT '''','#6'''            qth VARCHAR(60) DEFAULT '''','#6
+  +'(            qsl_s VARCHAR(3) DEFAULT '''','#6'(            qsl_r VARCHAR(3'
+  +') DEFAULT '''','#6'+            qsl_via VARCHAR(30) DEFAULT '''','#6'''    '
+  +'        iota VARCHAR(6) DEFAULT '''','#6'''            pwr VARCHAR(10) DEFA'
+  +'ULT '''','#6#30'            itu INT DEFAULT 0,'#6#30'            waz INT DE'
+  +'FAULT 0,'#6'&            loc VARCHAR(6) DEFAULT '''','#6')            my_lo'
+  +'c VARCHAR(6) DEFAULT '''','#6'*            county VARCHAR(30) DEFAULT '''','
+  +#6')            award VARCHAR(50) DEFAULT '''','#6',            remarks VARC'
+  +'HAR(200) DEFAULT '''','#6'#            adif INTEGER DEFAULT 0,'#6'0        '
+  +'    /*dxcc_ref VARCHAR(20) DEFAULT '''',*/'#6'''            band VARCHAR(6)'
+  +' DEFAULT '''','#6'#            qso_dxcc INT DEFAULT 0,'#6'"            prof'
+  +'ile INT DEFAULT 0,'#6'*            idcall VARCHAR(20) DEFAULT '''','#6'(   '
+  +'         state VARCHAR(4) DEFAULT '''','#6#31'            lotw_qslsdate DAT'
+  +'E,'#6#31'            lotw_qslrdate DATE,'#6'5            lotw_qsls VARCHAR('
+  +'3) DEFAULT '''' not null,'#6'5            lotw_qslr VARCHAR(3) DEFAULT '''''
+  +' not null,'#6'''            cont VARCHAR(3) DEFAULT '''','#6'"            q'
+  +'sls_date VARCHAR(10),'#6'"            qslr_date VARCHAR(10),'#6'-          '
+  +'  club_nr1 VARCHAR(100) DEFAULT '''','#6'-            club_nr2 VARCHAR(100)'
+  +' DEFAULT '''','#6'-            club_nr3 VARCHAR(100) DEFAULT '''','#6'-    '
+  +'        club_nr4 VARCHAR(100) DEFAULT '''','#6'-            club_nr5 VARCHA'
+  +'R(100) DEFAULT '''','#6'9            eqsl_qsl_sent varchar(1) default '''' '
+  +'not null,'#6',            eqsl_qslsdate date default null,'#6'9            '
+  +'eqsl_qsl_rcvd varchar(1) default '''' not null,'#6'+            eqsl_qslrda'
+  +'te date default null'#6#2');'#6'BCREATE INDEX main_index ON cqrlog_main(qso'
+  +'date DESC,time_on DESC);'#6'/CREATE INDEX callsign ON cqrlog_main(callsign)'
+  +';'#6'''CREATE INDEX name ON cqrlog_main(name);'#6'%CREATE INDEX qth ON cqrl'
+  +'og_main(QTH);'#6'''CREATE INDEX adif ON cqrlog_main(adif);'#6'+CREATE INDEX'
+  +' idcall ON cqrlog_main(idcall);'#6'''CREATE INDEX band ON cqrlog_main(band)'
+  +';'#6'/CREATE INDEX club_nr1 ON cqrlog_main(club_nr1);'#6'/CREATE INDEX club'
+  +'_nr2 ON cqrlog_main(club_nr2);'#6'/CREATE INDEX club_nr3 ON cqrlog_main(clu'
+  +'b_nr3);'#6'/CREATE INDEX club_nr4 ON cqrlog_main(club_nr4);'#6'/CREATE INDE'
+  +'X club_nr5 ON cqrlog_main(club_nr5);'#6#0#6#0#6#19'CREATE TABLE notes('#6'4'
+  +'            id_notes INT AUTO_INCREMENT PRIMARY KEY,'#6',            callsi'
+  +'gn VARCHAR(20) DEFAULT '''','#6'/            longremarks VARCHAR(256) DEFAU'
+  +'LT '''''#6#2');'#6')CREATE INDEX callsign ON notes(callsign);'#6#0#6#23'CRE'
+  +'ATE TABLE profiles ('#6'7            id_profiles INT AUTO_INCREMENT PRIMARY'
+  +' KEY,'#6#28'            nr INT NOT NULL,'#6'*            locator VARCHAR(6)'
+  +' DEFAULT '''','#6'(            qth VARCHAR(250) DEFAULT '''','#6'(         '
+  +'   rig VARCHAR(250) DEFAULT '''','#6',            remarks VARCHAR(250) DEFA'
+  +'ULT '''','#6'!            visible INT DEFAULT 1'#6#2');'#6' CREATE INDEX nr'
+  +' ON profiles(nr);'#6#0#6#24'CREATE TABLE long_note ('#6'8            id_lon'
+  +'g_note INT AUTO_INCREMENT PRIMARY KEY,'#6#25'            note LONGTEXT'#6#2
+  +');'#6#0#6#22'CREATE TABLE version ('#6'$            major INTEGER DEFAULT 0'
+  +','#6'$            minor INTEGER DEFAULT 9,'#6'$            releas INTEGER D'
+  +'EFAULT 4'#6#2');'#6#0#6#20'CREATE TABLE club1 ('#6'+   id_club1 INT AUTO_IN'
+  +'CREMENT PRIMARY KEY,'#6'#   club_nr VARCHAR(100) DEFAULT '''','#6'$   clubc'
+  +'all VARCHAR(100) DEFAULT '''','#6#17'   fromdate DATE,'#6#14'   todate DATE'
+  +#6#2');'#6'''CREATE INDEX club_nr ON club1(club_nr);'#6')CREATE INDEX fromda'
+  +'te ON club1(fromdate);'#6'%CREATE INDEX todate ON club1(todate);'#6')CREATE'
+  +' INDEX clubcall ON club1(clubcall);'#6#0#6#20'CREATE TABLE club2 ('#6'+   i'
+  +'d_club2 INT AUTO_INCREMENT PRIMARY KEY,'#6'#   club_nr VARCHAR(100) DEFAULT'
+  +' '''','#6'$   clubcall VARCHAR(100) DEFAULT '''','#6#17'   fromdate DATE,'#6
+  +#14'   todate DATE'#6#2');'#6'''CREATE INDEX club_nr ON club2(club_nr);'#6')'
+  +'CREATE INDEX fromdate ON club2(fromdate);'#6'%CREATE INDEX todate ON club2('
+  +'todate);'#6')CREATE INDEX clubcall ON club2(clubcall);'#6#0#6#20'CREATE TAB'
+  +'LE club3 ('#6'+   id_club3 INT AUTO_INCREMENT PRIMARY KEY,'#6'#   club_nr V'
+  +'ARCHAR(100) DEFAULT '''','#6'$   clubcall VARCHAR(100) DEFAULT '''','#6#17
+  +'   fromdate DATE,'#6#14'   todate DATE'#6#2');'#6'''CREATE INDEX club_nr ON'
+  +' club3(club_nr);'#6')CREATE INDEX fromdate ON club3(fromdate);'#6'%CREATE I'
+  +'NDEX todate ON club3(todate);'#6')CREATE INDEX clubcall ON club3(clubcall);'
+  +#6#0#6#20'CREATE TABLE club4 ('#6'+   id_club4 INT AUTO_INCREMENT PRIMARY KE'
+  +'Y,'#6'#   club_nr VARCHAR(100) DEFAULT '''','#6'$   clubcall VARCHAR(100) D'
+  +'EFAULT '''','#6#17'   fromdate DATE,'#6#14'   todate DATE'#6#2');'#6'''CREA'
+  +'TE INDEX club_nr ON club4(club_nr);'#6')CREATE INDEX fromdate ON club4(from'
+  ,'date);'#6'%CREATE INDEX todate ON club4(todate);'#6')CREATE INDEX clubcall '
+  +'ON club4(clubcall);'#6#0#6#20'CREATE TABLE club5 ('#6'+   id_club5 INT AUTO'
+  +'_INCREMENT PRIMARY KEY,'#6'#   club_nr VARCHAR(100) DEFAULT '''','#6'$   cl'
+  +'ubcall VARCHAR(100) DEFAULT '''','#6#17'   fromdate DATE,'#6#14'   todate D'
+  +'ATE'#6#2');'#6'''CREATE INDEX club_nr ON club5(club_nr);'#6')CREATE INDEX f'
+  +'romdate ON club5(fromdate);'#6'%CREATE INDEX todate ON club5(todate);'#6')C'
+  +'REATE INDEX clubcall ON club5(clubcall);'#6#0#6#0#6#23'CREATE TABLE zipcode'
+  +'1 ('#6'.   id_zipcode1 INT AUTO_INCREMENT PRIMARY KEY,'#6#30'   zip VARCHAR'
+  +'(20) DEFAULT '''','#6'!   county VARCHAR(100) DEFAULT '''''#6#2');'#6'"CREA'
+  +'TE INDEX zip ON zipcode1(zip);'#6#0#6#23'CREATE TABLE zipcode2 ('#6'.   id_'
+  +'zipcode2 INT AUTO_INCREMENT PRIMARY KEY,'#6#30'   zip VARCHAR(20) DEFAULT '
+  +''''','#6'!   county VARCHAR(100) DEFAULT '''''#6#2');'#6'"CREATE INDEX zip '
+  +'ON zipcode2(zip);'#6#0#6#23'CREATE TABLE zipcode3 ('#6'.   id_zipcode3 INT '
+  +'AUTO_INCREMENT PRIMARY KEY,'#6#30'   zip VARCHAR(20) DEFAULT '''','#6'!   c'
+  +'ounty VARCHAR(100) DEFAULT '''''#6#2');'#6'"CREATE INDEX zip ON zipcode3(zi'
+  +'p);'#6#0#6#28'CREATE TABLE cqrlog_config ('#6'3  id_cqrlog__config INT AUTO'
+  +'_INCREMENT PRIMARY KEY,'#6#22'  config_file LONGTEXT'#6#2');'#6'4INSERT INT'
+  +'O cqrlog_config (config_file) VALUES ('''');'#6#0#6#20'CREATE TABLE dxcc_id'
+  +#6#1'('#6')  id_dxcc INT AUTO_INCREMENT PRIMARY KEY,'#6#21'  adif INT DEFAUL'
+  +'T 0,'#6'   dxcc_ref VARCHAR(16) NOT NULL,'#6#31'  country VARCHAR(100) NOT '
+  +'NULL'#6#2');'#6'#CREATE INDEX adif ON dxcc_id(adif);'#6#0#6#23'CREATE TABLE'
+  +' db_version'#6#1'('#6#22'  nr SMALLINT NOT NULL'#6#2');'#0#10'Terminator'#6
+  +#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#8#9'UseCommit'#8#10'UseDefines'#8#11
+  +'OnException'#7#14'scLogException'#4'left'#3'P'#2#3'top'#3#136#0#0#0#11'TDat'
+  +'asource'#5'dsrmQ'#7'DataSet'#7#2'mQ'#4'left'#3#153#2#3'top'#3#136#0#0#0#9'T'
+  +'SQLQuery'#8'qLogList'#10'BeforeOpen'#7#18'qLogListBeforeOpen'#11'Transactio'
+  +'n'#7#9'trLogList'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3'P'#2
+  +#3'top'#3#208#0#0#0#15'TSQLTransaction'#9'trLogList'#6'Active'#8#6'Action'#7
+  +#6'caNone'#4'left'#3#176#2#3'top'#3#208#0#0#0#11'TDatasource'#10'dsrLogList'
+  +#7'DataSet'#7#8'qLogList'#4'left'#3'P'#2#3'top'#3#8#1#0#0#9'TSQLQuery'#11'qS'
+  +'QLConsole'#13'PacketRecords'#2'd'#11'Transaction'#7#4'trmQ'#8'ReadOnly'#8#6
+  +'Params'#14#0#8'ParseSQL'#8#4'left'#3'P'#2#3'top'#3'P'#1#0#0#15'TSQLTransact'
+  +'ion'#12'trSQLConsole'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#176#2#3't'
+  +'op'#3'P'#1#0#0#11'TDatasource'#13'dsrSQLConsole'#7'DataSet'#7#11'qSQLConsol'
+  +'e'#4'left'#3'P'#2#3'top'#3#137#1#0#0#9'TSQLQuery'#7'qQSLMgr'#11'Transaction'
+  +#7#8'trQSLMgr'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#128#1#3
+  +'top'#3#184#1#0#0#15'TSQLTransaction'#8'trQSLMgr'#6'Active'#8#6'Action'#7#6
+  +'caNone'#4'left'#3#128#1#3'top'#3#240#1#0#0#9'TSQLQuery'#9'qCallBook'#11'Tra'
+  +'nsaction'#7#10'trCallBook'#8'ReadOnly'#8#6'Params'#14#0#4'left'#2'@'#3'top'
+  +#3' '#1#0#0#15'TSQLTransaction'#10'trCallBook'#6'Active'#8#6'Action'#7#6'caN'
+  +'one'#4'left'#2'8'#3'top'#3'h'#1#0#0#15'TSQLTransaction'#10'trLongNote'#6'Ac'
+  +'tive'#8#6'Action'#7#6'caNone'#4'left'#3#160#0#3'top'#3'h'#1#0#0#9'TSQLQuery'
+  +#9'qLongNote'#10'BeforeOpen'#7#19'qLongNoteBeforeOpen'#11'Transaction'#7#10
+  +'trLongNote'#8'ReadOnly'#8#6'Params'#14#0#4'left'#3#160#0#3'top'#3' '#1#0#0#9
+  +'TSQLQuery'#9'qProfiles'#11'Transaction'#7#10'trProfiles'#8'ReadOnly'#8#6'Pa'
+  +'rams'#14#0#8'ParseSQL'#8#4'left'#2'@'#3'top'#3#184#0#0#0#15'TSQLTransaction'
+  +#10'trProfiles'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#2'@'#3'top'#3#235#0
+  +#0#0#9'TSQLQuery'#9'qIOTAList'#11'Transaction'#7#10'trIOTAList'#8'ReadOnly'#8
+  +#6'Params'#14#0#8'ParseSQL'#8#4'left'#2'8'#3'top'#3#173#1#0#0#15'TSQLTransac'
+  +'tion'#10'trIOTAList'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#2'8'#3'top'#3
+  +#234#1#0#0#15'TSQLTransaction'#7'trBands'#6'Active'#8#6'Action'#7#6'caNone'#4
+  +'left'#3#136#0#3'top'#3' '#2#0#0#9'TSQLQuery'#6'qBands'#10'BeforeOpen'#7#16
+  +'qBandsBeforeOpen'#11'Transaction'#7#7'trBands'#8'ReadOnly'#8#6'Params'#14#0
+  +#8'ParseSQL'#8#4'left'#3#136#0#3'top'#3#240#1#0#0#15'TSQLTransaction'#12'trD'
+  +'XClusters'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#160#0#3'top'#3#192#0
+  +#0#0#9'TSQLQuery'#11'qDXClusters'#11'Transaction'#7#12'trDXClusters'#8'ReadO'
+  +'nly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#160#0#3'top'#3#136#0#0#0#15'T'
+  +'SQLTransaction'#9'trComment'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#240
+  +#1#3'top'#3#240#1#0#0#9'TSQLQuery'#8'qComment'#11'Transaction'#7#9'trComment'
+  +#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#236#1#3'top'#3#184#1#0
+  +#0#15'TSQLTransaction'#11'trException'#6'Active'#8#6'Action'#7#6'caNone'#4'l'
+  +'eft'#3#236#1#3'top'#3#128#1#0#0#9'TSQLQuery'#10'qException'#11'Transaction'
+  +#7#11'trException'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#236#1
+  +#3'top'#3'P'#1#0#0#15'TSQLTransaction'#11'trQSOBefore'#6'Active'#8#6'Action'
+  ,#7#6'caNone'#4'left'#3'H'#1#3'top'#3'8'#1#0#0#9'TSQLQuery'#10'qQSOBefore'#11
+  +'Transaction'#7#11'trQSOBefore'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4
+  +'left'#3'H'#1#3'top'#3#8#1#0#0#15'TSQLTransaction'#4'trQ1'#6'Active'#8#6'Act'
+  +'ion'#7#6'caNone'#4'left'#3#240#1#3'top'#3#144#0#0#0#9'TSQLQuery'#2'Q1'#10'B'
+  +'eforeOpen'#7#12'Q1BeforeOpen'#11'Transaction'#7#4'trQ1'#8'ReadOnly'#8#6'Par'
+  +'ams'#14#0#8'ParseSQL'#8#4'left'#3#240#1#3'top'#2'P'#0#0#15'TSQLTransaction'
+  +#3'trQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#200#1#3'top'#3#144#0#0#0
+  +#9'TSQLQuery'#1'Q'#10'BeforeOpen'#7#11'QBeforeOpen'#11'Transaction'#7#3'trQ'
+  +#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#200#1#3'top'#2'P'#0#0
+  +#15'TSQLTransaction'#8'trCQRLOG'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3
+  +'H'#1#3'top'#3#152#0#0#0#9'TSQLQuery'#7'qCQRLOG'#13'PacketRecords'#2'd'#10'B'
+  +'eforeOpen'#7#17'qCQRLOGBeforeOpen'#11'Transaction'#7#8'trCQRLOG'#8'ReadOnly'
+  +#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3'H'#1#3'top'#2'X'#0#0#10'TSQLScript'
+  +#7'scViews'#11'Transaction'#7#4'trmQ'#18'Directives.Strings'#1#6#8'SET TERM'
+  +#6#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6
+  +'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6#186'CREATE VIEW view_cqrlog'
+  +'_main_by_qsodate AS SELECT id_cqrlog_main,qsodate,time_on,time_off,callsign'
+  +', freq,mode,rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,m'
+  +'y_loc,county,'#6#188'award,remarks, band, dxcc_id.dxcc_ref AS dxcc_ref ,qso'
+  +'_dxcc, profile,idcall, state, lotw_qslsdate, lotw_qslrdate,lotw_qsls, lotw_'
+  +'qslr, cont, qsls_date,qslr_date,club_nr1,club_nr2,club_nr3,'#6#237'club_nr4'
+  +',club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qs'
+  +'l_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country FROM cqrlog_main JOIN '
+  +'dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by qsodate DESC, time_on D'
+  +'ESC;'#6#187'CREATE VIEW view_cqrlog_main_by_callsign AS SELECT id_cqrlog_ma'
+  +'in,qsodate,time_on,time_off,callsign, freq,mode,rst_s,rst_r,name,qth,qsl_s,'
+  +'qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,county,'#6#188'award,remarks, ban'
+  +'d, dxcc_id.dxcc_ref AS dxcc_ref ,qso_dxcc, profile,idcall, state, lotw_qsls'
+  +'date, lotw_qslrdate,lotw_qsls, lotw_qslr, cont, qsls_date,qslr_date,club_nr'
+  +'1,club_nr2,club_nr3,'#6#219'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,e'
+  +'qsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dx'
+  +'cc_id.country FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.a'
+  +'dif order by callsign;'#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseS'
+  +'etTerm'#9#9'UseCommit'#9#10'UseDefines'#9#11'OnException'#7#16'scViewsExcep'
+  +'tion'#4'left'#3#3#2#3'top'#2#24#0#0#6'TTimer'#9'tmrDBPing'#7'Enabled'#8#7'O'
+  +'nTimer'#7#14'tmrDBPingTimer'#4'left'#2'@'#3'top'#2#16#0#0#10'TSQLScript'#11
+  +'scQSLExport'#18'Directives.Strings'#1#6#8'SET TERM'#6#6'COMMIT'#6#6'#IFDEF'
+  +#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6'#UNDEF'#6#9'#UNDEFINE'
+  +#0#14'Script.Strings'#1#6'1create temporary table if not exists  qslexport ('
+  +#6'8            id_qslexport INT AUTO_INCREMENT PRIMARY KEY,'#6'*           '
+  +' idcall VARCHAR(20) DEFAULT '''','#6'(            id_cqrlog_main INT NOT NU'
+  +'LL,'#6'*            dxcc   VARCHAR(20) DEFAULT '''','#6'"            qsodat'
+  +'e DATE NOT NULL,'#6'(            time_on VARCHAR(5) NOT NULL,'#6'+         '
+  +'   time_off VARCHAR(5) DEFAULT '''','#6'*            callsign VARCHAR(20) N'
+  +'OT NULL,'#6'(            freq NUMERIC(10,4) NOT NULL,'#6'%            mode '
+  +'VARCHAR(8) NOT NULL,'#6')            rst_s VARCHAR(20) DEFAULT '''','#6')  '
+  +'          rst_r VARCHAR(20) DEFAULT '''','#6'(            name VARCHAR(40) '
+  +'DEFAULT '''','#6'''            qth VARCHAR(60) DEFAULT '''','#6'(          '
+  +'  qsl_s VARCHAR(3) DEFAULT '''','#6'(            qsl_r VARCHAR(3) DEFAULT '
+  +''''','#6'+            qsl_via VARCHAR(30) DEFAULT '''','#6'''            io'
+  +'ta VARCHAR(6) DEFAULT '''','#6'''            pwr VARCHAR(10) DEFAULT '''','
+  +#6'&            loc VARCHAR(6) DEFAULT '''','#6')            my_loc VARCHAR('
+  +'6) DEFAULT '''','#6')            award VARCHAR(50) DEFAULT '''','#6',      '
+  +'      remarks VARCHAR(200) DEFAULT '''','#6'''            band VARCHAR(6) D'
+  +'EFAULT '''','#6')            qslmsg VARCHAR(20) DEFAULT '''''#6#2');'#6')CR'
+  +'EATE INDEX idcall ON qslexport(idcall);'#6'%CREATE INDEX dxcc ON qslexport('
+  +'dxcc);'#6#0#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#9#9
+  +'UseCommit'#9#10'UseDefines'#9#4'left'#3'P'#2#3'top'#2' '#0#0#0
+]);

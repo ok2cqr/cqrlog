@@ -1,0 +1,25 @@
+object dmUtils: TdmUtils
+  OnCreate = DataModuleCreate
+  OldCreateOrder = False
+  Height = 300
+  HorizontalOffset = 455
+  VerticalOffset = 684
+  Width = 400
+  object HelpDatabase: THTMLHelpDatabase
+    BaseURL = 'file:///home/ok2cqr'
+    AutoRegister = True
+    KeywordPrefix = 'help/'
+    left = 74
+    top = 40
+  end
+  object HelpViewer: THTMLBrowserHelpViewer
+    BrowserParams = '%s'
+    AutoRegister = True
+    left = 72
+    top = 80
+  end
+  object Datasource1: TDatasource
+    left = 80
+    top = 176
+  end
+end

@@ -1,0 +1,19 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmNewLog','FORMDATA',[
+  'TPF0'#10'TfrmNewLog'#9'frmNewLog'#4'Left'#3#134#1#6'Height'#2'v'#3'Top'#3#17
+  +#1#5'Width'#3'/'#1#11'BorderIcons'#11#12'biSystemMenu'#0#11'BorderStyle'#7#8
+  +'bsDialog'#7'Caption'#6#9'frmNewLog'#12'ClientHeight'#2'v'#11'ClientWidth'#3
+  +'/'#1#7'OnClose'#7#9'FormClose'#6'OnShow'#7#8'FormShow'#8'Position'#7#16'poM'
+  +'ainFormCenter'#10'LCLVersion'#6#6'0.9.29'#0#6'TLabel'#6'Label1'#4'Left'#2#16
+  +#6'Height'#2#18#3'Top'#2#9#5'Width'#2'R'#7'Caption'#6#11'Log number:'#11'Par'
+  +'entColor'#8#0#0#5'TEdit'#8'edtLogNR'#4'Left'#2#16#6'Height'#2#27#3'Top'#2'!'
+  +#5'Width'#2'.'#9'MaxLength'#2#3#8'TabOrder'#2#0#0#0#6'TLabel'#6'Label2'#4'Le'
+  +'ft'#2#16#6'Height'#2#18#3'Top'#2'A'#5'Width'#2'E'#7'Caption'#6#9'Log name:'
+  +#11'ParentColor'#8#0#0#5'TEdit'#10'edtLogName'#4'Left'#2#16#6'Height'#2#27#3
+  +'Top'#2'V'#5'Width'#3#184#0#9'MaxLength'#2'2'#8'TabOrder'#2#1#0#0#7'TButton'
+  +#5'btnOK'#4'Left'#3#224#0#6'Height'#2#25#3'Top'#2#9#5'Width'#2'K'#7'Caption'
+  +#6#2'OK'#7'OnClick'#7#10'btnOKClick'#8'TabOrder'#2#2#0#0#7'TButton'#7'Button'
+  +'2'#4'Left'#3#224#0#6'Height'#2#25#3'Top'#2'*'#5'Width'#2'K'#6'Cancel'#9#7'C'
+  +'aption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#3#0#0#0
+]);

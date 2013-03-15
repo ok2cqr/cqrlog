@@ -1,0 +1,147 @@
+object frmSerialPort: TfrmSerialPort
+  Left = 467
+  Height = 242
+  Top = 277
+  Width = 245
+  HorzScrollBar.Page = 244
+  VertScrollBar.Page = 241
+  ActiveControl = edtStopBits
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Port settings'
+  ClientHeight = 242
+  ClientWidth = 245
+  Position = poMainFormCenter
+  LCLVersion = '0.9.28'
+  object Label1: TLabel
+    Left = 11
+    Height = 18
+    Top = 9
+    Width = 85
+    Caption = 'Serial speed:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 11
+    Height = 18
+    Top = 68
+    Width = 60
+    Caption = 'Data bits'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 133
+    Height = 18
+    Top = 9
+    Width = 58
+    Caption = 'Stop bits'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 133
+    Height = 18
+    Top = 68
+    Width = 74
+    Caption = 'Handshake'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 11
+    Height = 18
+    Top = 136
+    Width = 38
+    Caption = 'Parity'
+    ParentColor = False
+  end
+  object edtSpeed: TEdit
+    Left = 11
+    Height = 27
+    Top = 33
+    Width = 80
+    TabOrder = 0
+    Text = '4800'
+  end
+  object edtDataBits: TEdit
+    Left = 11
+    Height = 27
+    Top = 96
+    Width = 80
+    TabOrder = 1
+    Text = '8'
+  end
+  object edtStopBits: TEdit
+    Left = 133
+    Height = 27
+    Top = 32
+    Width = 80
+    TabOrder = 2
+    Text = '1'
+  end
+  object cmbHanshake: TComboBox
+    Left = 133
+    Height = 27
+    Top = 96
+    Width = 107
+    AutoSize = False
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'None'
+      'XON/XOFF'
+      'HARDWARE'
+    )
+    TabOrder = 3
+    Text = 'None'
+  end
+  object cmbParity: TComboBox
+    Left = 11
+    Height = 29
+    Top = 160
+    Width = 109
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'None'
+      'Odd'
+      'Even'
+    )
+    TabOrder = 4
+    Text = 'None'
+  end
+  object btnOK: TButton
+    Left = 11
+    Height = 25
+    Top = 211
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 5
+  end
+  object Button2: TButton
+    Left = 152
+    Height = 25
+    Top = 211
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 6
+  end
+  object chkDTR: TCheckBox
+    Left = 136
+    Height = 22
+    Top = 136
+    Width = 51
+    Caption = 'DTR'
+    TabOrder = 7
+  end
+  object chkRTS: TCheckBox
+    Left = 136
+    Height = 22
+    Top = 163
+    Width = 48
+    Caption = 'RTS'
+    TabOrder = 8
+  end
+end

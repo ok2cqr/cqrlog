@@ -1,0 +1,20 @@
+Source: cqrlog
+Section: hamradio
+Priority: extra
+Maintainer: Debian Hamradio Maintainers <debian-hams@lists.debian.org>
+Uploaders: Petr Hlozek <petr@ok2cqr.com>, Kamal Mostafa <kamal@whence.com>
+Build-Depends: debhelper (>= 7), lazarus (>= 0.9.29) | lazarus-0.9.30, lcl (>= 0.9.30) | lcl-0.9.30, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk, fp-units-db, libhamlib-dev (>= 1.2.10)
+Standards-Version: 3.9.3
+Homepage: http://www.cqrlog.com
+
+Package: cqrlog
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libssl-dev, mysql-server, mysql-client, libhamlib2 (>= 1.2.10), libhamlib-utils (>= 1.2.10)
+Description: Advanced logging program for hamradio operators
+ CQRLOG is an advanced ham radio logger based on MySQL embedded database. 
+ Provides radio control based on hamlib libraries (currently support of 140+ 
+ radio types and models), DX cluster connection, HamQTH/QRZ callbook (XML access), 
+ a grayliner, internal QSL manager database support and a most accurate country 
+ resolution algorithm based on country tables developed by OK1RR. 
+ CQRLOG is intended for daily general logging of HF, CW & SSB contacts and 
+ strongly focused on easy operation and maintenance.

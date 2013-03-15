@@ -1,0 +1,79 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmLoTWExport','FORMDATA',[
+  'TPF0'#14'TfrmLoTWExport'#13'frmLoTWExport'#4'Left'#3#231#1#6'Height'#3'%'#2#3
+  +'Top'#3#221#0#5'Width'#3#221#1#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6
+  +#12'help/h7.html'#13'ActiveControl'#7#12'pgLoTWExport'#7'Caption'#6#15'Expor'
+  +'t for LoTW'#12'ClientHeight'#3'%'#2#11'ClientWidth'#3#221#1#12'OnCloseQuery'
+  +#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10
+  +'LCLVersion'#6#6'0.9.30'#0#12'TPageControl'#12'pgLoTWExport'#4'Left'#2#0#6'H'
+  +'eight'#3#253#1#3'Top'#2#0#5'Width'#3#221#1#10'ActivePage'#7#9'tabUpload'#5
+  +'Align'#7#8'alClient'#8'TabIndex'#2#1#8'TabOrder'#2#0#0#9'TTabSheet'#12'tabL'
+  +'ocalFile'#7'Caption'#6#20'Export to local file'#12'ClientHeight'#3#222#1#11
+  +'ClientWidth'#3#217#1#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#7#6'Height'#2'X'
+  +#3'Top'#2#6#5'Width'#3#203#1#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#12
+  +'ClientHeight'#2'T'#11'ClientWidth'#3#199#1#8'TabOrder'#2#0#0#12'TRadioButto'
+  +'n'#15'rbFileExportAll'#4'Left'#2#14#6'Height'#2#22#3'Top'#2#6#5'Width'#3#129
+  +#0#7'Caption'#6#16' Export all QSOs'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'
+  +#9#0#0#12'TRadioButton'#23'rbFileExportNotExported'#4'Left'#2#14#6'Height'#2
+  +#22#3'Top'#2''''#5'Width'#3'd'#1#7'Caption'#6'/Export only QSOs which have n'
+  +'ever been uploaded'#8'TabOrder'#2#1#0#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'
+  +#2#7#6'Height'#2'i'#3'Top'#2'`'#5'Width'#3#203#1#7'Anchors'#11#5'akTop'#6'ak'
+  +'Left'#7'akRight'#0#12'ClientHeight'#2'e'#11'ClientWidth'#3#199#1#8'TabOrder'
+  +#2#1#0#6'TLabel'#6'Label1'#4'Left'#2#14#6'Height'#2#18#3'Top'#2#4#5'Width'#2
+  +'@'#7'Caption'#6#10'Export to:'#11'ParentColor'#8#0#0#5'TEdit'#11'edtFileNam'
+  +'e'#4'Left'#2#14#6'Height'#2#27#3'Top'#2#21#5'Width'#3#175#1#7'Anchors'#11#5
+  +'akTop'#6'akLeft'#7'akRight'#0#8'TabOrder'#2#0#0#0#7'TButton'#13'btnFileBrow'
+  +'se'#4'Left'#3'r'#1#6'Height'#2#25#3'Top'#2'-'#5'Width'#2'K'#7'Anchors'#11#5
+  +'akTop'#7'akRight'#0#7'Caption'#6#6'Browse'#7'OnClick'#7#18'btnFileBrowseCli'
+  +'ck'#8'TabOrder'#2#1#0#0#0#9'TGroupBox'#9'GroupBox3'#4'Left'#2#7#6'Height'#2
+  +'i'#3'Top'#3#206#0#5'Width'#3#203#1#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRig'
+  +'ht'#0#12'ClientHeight'#2'e'#11'ClientWidth'#3#199#1#8'TabOrder'#2#2#0#9'TCh'
+  +'eckBox'#22'chkFileMarkAfterExport'#4'Left'#2#8#6'Height'#2#22#3'Top'#2#7#5
+  +'Width'#3#2#1#7'Caption'#6'"Mark QSOs as exported after export'#8'TabOrder'#2
+  +#0#0#0#7'TButton'#13'btnFileExport'#4'Left'#3'r'#1#6'Height'#2#25#3'Top'#2'7'
+  +#5'Width'#2'K'#7'Anchors'#11#5'akTop'#7'akRight'#0#7'Caption'#6#6'Export'#7
+  +'OnClick'#7#18'btnFileExportClick'#8'TabOrder'#2#1#0#0#0#0#9'TTabSheet'#9'ta'
+  +'bUpload'#7'Caption'#6#14'Upload to LoTW'#12'ClientHeight'#3#222#1#11'Client'
+  +'Width'#3#217#1#0#9'TGroupBox'#12'grbWebExport'#4'Left'#2#0#6'Height'#2'X'#3
+  +'Top'#2#0#5'Width'#3#217#1#5'Align'#7#5'alTop'#12'ClientHeight'#2'T'#11'Clie'
+  +'ntWidth'#3#213#1#8'TabOrder'#2#0#0#12'TRadioButton'#14'rbWebExportAll'#4'Le'
+  +'ft'#2#14#6'Height'#2#24#3'Top'#2#6#5'Width'#3#134#0#7'Caption'#6#16' Export'
+  +' all QSOs'#8'TabOrder'#2#0#0#0#12'TRadioButton'#22'rbWebExportNotExported'#4
+  +'Left'#2#14#6'Height'#2#24#3'Top'#2#31#5'Width'#3'i'#1#7'Caption'#6'/Export '
+  +'only QSOs which have never been uploaded'#7'Checked'#9#8'TabOrder'#2#1#7'Ta'
+  +'bStop'#9#0#0#0#9'TGroupBox'#7'grbTqsl'#4'Left'#2#0#6'Height'#3#128#0#3'Top'
+  +#2'X'#5'Width'#3#217#1#5'Align'#7#5'alTop'#12'ClientHeight'#2'|'#11'ClientWi'
+  +'dth'#3#213#1#8'TabOrder'#2#1#0#6'TLabel'#6'Label2'#4'Left'#2#6#6'Height'#2
+  +#18#3'Top'#2#7#5'Width'#3#203#0#7'Caption'#6#28'tqsl command line arguments:'
+  +#11'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4'Left'#2#14#6'Height'#2'&'#3'Top'
+  +#2'8'#5'Width'#3'8'#1#7'Caption'#6'I"your qth name" means the qth which you '
+  +'have '#10'defined in tqsl QTH profile'#11'ParentColor'#8#0#0#5'TEdit'#7'edt'
+  +'Tqsl'#4'Left'#2#14#6'Height'#2#27#3'Top'#2#29#5'Width'#3#168#1#8'TabOrder'#2
+  +#0#4'Text'#6')/usr/bin/tqsl -d -l "your qth name" %f -x'#0#0#0#9'TGroupBox'#9
+  +'GroupBox6'#4'Left'#2#0#6'Height'#3#6#1#3'Top'#3#216#0#5'Width'#3#217#1#5'Al'
+  +'ign'#7#8'alClient'#7'Caption'#6#8' Upload '#12'ClientHeight'#3#243#0#11'Cli'
+  +'entWidth'#3#213#1#8'TabOrder'#2#2#0#5'TMemo'#5'mStat'#4'Left'#2#0#6'Height'
+  +#3#205#0#3'Top'#2#0#5'Width'#3#213#1#5'Align'#7#8'alClient'#13'Lines.Strings'
+  +#1#6#0#0#8'ReadOnly'#9#10'ScrollBars'#7#10'ssAutoBoth'#8'TabOrder'#2#0#0#0#6
+  +'TPanel'#9'pnlUpload'#4'Left'#2#0#6'Height'#2'&'#3'Top'#3#205#0#5'Width'#3
+  +#213#1#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2
+  +'&'#11'ClientWidth'#3#213#1#8'TabOrder'#2#1#0#7'TButton'#13'btnExportSign'#4
+  +'Left'#3#211#0#6'Height'#2#25#3'Top'#2#8#5'Width'#2's'#7'Anchors'#11#5'akTop'
+  +#7'akRight'#0#7'Caption'#6#14'Export && sign'#7'OnClick'#7#18'btnExportSignC'
+  +'lick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnUpload'#4'Left'#3'S'#1#6'Height'#2
+  +#25#3'Top'#2#8#5'Width'#2's'#7'Anchors'#11#5'akTop'#7'akRight'#0#7'Caption'#6
+  +#6'Upload'#7'Enabled'#8#7'OnClick'#7#14'btnUploadClick'#8'TabOrder'#2#1#0#0#0
+  +#0#0#0#6'TPanel'#8'pnlClose'#4'Left'#2#0#6'Height'#2'('#3'Top'#3#253#1#5'Wid'
+  ,'th'#3#221#1#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeig'
+  +'ht'#2'('#11'ClientWidth'#3#221#1#8'TabOrder'#2#1#0#6'TLabel'#7'lblInfo'#4'L'
+  +'eft'#2#11#6'Height'#2#1#3'Top'#2#13#5'Width'#2#1#11'ParentColor'#8#0#0#7'TB'
+  +'utton'#8'btnClose'#4'Left'#3#144#1#6'Height'#2#25#3'Top'#2#8#5'Width'#2'K'#7
+  +'Anchors'#11#5'akTop'#7'akRight'#0#6'Cancel'#9#7'Caption'#6#5'Close'#11'Moda'
+  +'lResult'#2#2#8'TabOrder'#2#0#0#0#7'TButton'#7'btnHelp'#4'Left'#3'@'#1#6'Hei'
+  +'ght'#2#25#3'Top'#2#8#5'Width'#2'K'#7'Anchors'#11#5'akTop'#7'akRight'#0#7'Ca'
+  +'ption'#6#4'Help'#7'OnClick'#7#12'btnHelpClick'#8'TabOrder'#2#1#0#0#0#11'TSa'
+  +'veDialog'#7'dlgSave'#10'DefaultExt'#6#4'.adi'#6'Filter'#6#16'ADIF|*.adi;*.A'
+  +'DI'#4'left'#2'6'#3'top'#3'^'#1#0#0#6'TTimer'#7'tmrLoTW'#7'Enabled'#8#7'OnTi'
+  +'mer'#7#12'tmrLoTWTimer'#4'left'#3#148#0#3'top'#3#132#1#0#0#0
+]);

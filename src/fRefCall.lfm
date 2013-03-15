@@ -1,0 +1,53 @@
+object frmRefCall: TfrmRefCall
+  Left = 423
+  Height = 68
+  Top = 399
+  Width = 248
+  HorzScrollBar.Page = 247
+  VertScrollBar.Page = 67
+  ActiveControl = edtIdCall
+  Caption = 'Reference call'
+  ClientHeight = 68
+  ClientWidth = 248
+  OnShow = FormShow
+  Position = poMainFormCenter
+  object Label1: TLabel
+    Left = 8
+    Height = 20
+    Top = 8
+    Width = 128
+    Caption = 'Enter reference call:'
+    Color = clNone
+    ParentColor = False
+  end
+  object edtIdCall: TEdit
+    Left = 8
+    Height = 25
+    Top = 32
+    Width = 128
+    CharCase = ecUppercase
+    OnKeyPress = edtIdCallKeyPress
+    TabOrder = 0
+  end
+  object btnOK: TButton
+    Left = 166
+    Height = 25
+    Top = 8
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 1
+  end
+  object btnCancel: TButton
+    Left = 165
+    Height = 25
+    Top = 40
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

@@ -1,0 +1,138 @@
+object frmeQSLUpload: TfrmeQSLUpload
+  Left = 509
+  Height = 481
+  Top = 267
+  Width = 575
+  Caption = 'Upload QSO to eQSL.cc'
+  ClientHeight = 481
+  ClientWidth = 575
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '0.9.30'
+  object grbWebExport: TGroupBox
+    Left = 0
+    Height = 64
+    Top = 0
+    Width = 575
+    Align = alTop
+    ClientHeight = 60
+    ClientWidth = 571
+    TabOrder = 0
+    object rbWebExportAll: TRadioButton
+      Left = 14
+      Height = 24
+      Top = 6
+      Width = 134
+      Caption = ' Export all QSOs'
+      TabOrder = 0
+    end
+    object rbWebExportNotExported: TRadioButton
+      Left = 14
+      Height = 24
+      Top = 31
+      Width = 361
+      Caption = 'Export only QSOs which have never been uploaded'
+      Checked = True
+      TabOrder = 1
+      TabStop = True
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Height = 56
+    Top = 64
+    Width = 575
+    Align = alTop
+    ClientHeight = 52
+    ClientWidth = 571
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 14
+      Height = 18
+      Top = 14
+      Width = 104
+      Caption = 'QTH Nickname:'
+      ParentColor = False
+    end
+    object edtQTH: TEdit
+      Left = 174
+      Height = 27
+      Top = 9
+      Width = 174
+      TabOrder = 0
+    end
+  end
+  object GroupBox6: TGroupBox
+    Left = 0
+    Height = 361
+    Top = 120
+    Width = 575
+    Align = alClient
+    Caption = ' Upload '
+    ClientHeight = 342
+    ClientWidth = 571
+    TabOrder = 2
+    object mStat: TMemo
+      Left = 0
+      Height = 304
+      Top = 0
+      Width = 571
+      Align = alClient
+      Lines.Strings = (
+        ''
+      )
+      ReadOnly = True
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+    end
+    object pnlUpload: TPanel
+      Left = 0
+      Height = 38
+      Top = 304
+      Width = 571
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 38
+      ClientWidth = 571
+      TabOrder = 1
+      object btnUpload: TButton
+        Left = 414
+        Height = 25
+        Top = 11
+        Width = 70
+        Anchors = [akTop, akRight]
+        Caption = 'Upload'
+        OnClick = btnUploadClick
+        TabOrder = 0
+      end
+      object lblInfo: TLabel
+        Left = 118
+        Height = 19
+        Top = 15
+        Width = 288
+        AutoSize = False
+        ParentColor = False
+      end
+      object btnClose: TButton
+        Left = 494
+        Height = 25
+        Top = 11
+        Width = 67
+        Anchors = [akTop, akRight]
+        Cancel = True
+        Caption = 'Close'
+        ModalResult = 2
+        TabOrder = 1
+      end
+      object btnPreferences: TButton
+        Left = 14
+        Height = 25
+        Top = 11
+        Width = 96
+        Caption = 'Preferences'
+        OnClick = btnPreferencesClick
+        TabOrder = 2
+      end
+    end
+  end
+end

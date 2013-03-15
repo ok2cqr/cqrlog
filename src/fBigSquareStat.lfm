@@ -1,0 +1,144 @@
+object frmBigSquareStat: TfrmBigSquareStat
+  Left = 464
+  Height = 590
+  Top = 153
+  Width = 655
+  Caption = 'Big square statistic'
+  ClientHeight = 590
+  ClientWidth = 655
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '0.9.30'
+  object Panel1: TPanel
+    Left = 0
+    Height = 66
+    Top = 0
+    Width = 655
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 66
+    ClientWidth = 655
+    TabOrder = 0
+    object cmbBands: TComboBox
+      Left = 63
+      Height = 31
+      Top = 24
+      Width = 164
+      ItemHeight = 0
+      Style = csDropDownList
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 16
+      Height = 18
+      Top = 32
+      Width = 39
+      Caption = 'Band:'
+      ParentColor = False
+    end
+    object GroupBox1: TGroupBox
+      Left = 240
+      Height = 45
+      Top = 11
+      Width = 225
+      Caption = ' Confirmed '
+      ClientHeight = 26
+      ClientWidth = 221
+      TabOrder = 1
+      object chkQSL: TCheckBox
+        Left = 6
+        Height = 24
+        Top = 1
+        Width = 53
+        Caption = 'QSL'
+        TabOrder = 0
+      end
+      object chkLoTW: TCheckBox
+        Left = 70
+        Height = 24
+        Top = 1
+        Width = 65
+        Caption = 'LoTW'
+        TabOrder = 1
+      end
+      object chkeQSL: TCheckBox
+        Left = 149
+        Height = 24
+        Top = 1
+        Width = 61
+        Caption = 'eQSL'
+        TabOrder = 2
+      end
+    end
+    object btnRefresh: TButton
+      Left = 496
+      Height = 25
+      Top = 28
+      Width = 128
+      Anchors = [akTop, akRight]
+      Caption = 'Refresh statistic'
+      OnClick = btnRefreshClick
+      TabOrder = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 34
+    Top = 556
+    Width = 655
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 34
+    ClientWidth = 655
+    TabOrder = 1
+    object btnClose: TButton
+      Left = 569
+      Height = 25
+      Top = 6
+      Width = 75
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = 'Close'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object btnSaveTo: TButton
+      Left = 480
+      Height = 25
+      Top = 6
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'Save to ...'
+      OnClick = btnSaveToClick
+      TabOrder = 1
+    end
+  end
+  object IpHtmlPanel1: TIpHtmlPanel
+    Left = 0
+    Height = 490
+    Top = 66
+    Width = 655
+    Align = alClient
+    DataProvider = IpFileDataProvider1
+    FixedTypeface = 'Courier New'
+    DefaultTypeFace = 'Sans'
+    DefaultFontSize = 8
+    FlagErrors = True
+    PrintSettings.MarginLeft = 0.5
+    PrintSettings.MarginTop = 0.5
+    PrintSettings.MarginRight = 0.5
+    PrintSettings.MarginBottom = 0.5
+    TabOrder = 2
+    VLinkColor = clBlue
+  end
+  object IpFileDataProvider1: TIpFileDataProvider
+    left = 112
+    top = 512
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.html'
+    Filter = 'HTML files|*.html'
+    left = 24
+    top = 512
+  end
+end

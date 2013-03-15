@@ -1,0 +1,24 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TdmDXCC','FORMDATA',[
+  'TPF0'#7'TdmDXCC'#6'dmDXCC'#8'OnCreate'#7#16'DataModuleCreate'#9'OnDestroy'#7
+  +#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3#214#0#16'HorizontalO'
+  +'ffset'#3#178#2#14'VerticalOffset'#3'y'#1#5'Width'#3#178#1#0#9'TSQLQuery'#1
+  +'Q'#10'BeforeOpen'#7#11'QBeforeOpen'#11'Transaction'#7#3'trQ'#8'ReadOnly'#8#6
+  +'Params'#14#0#8'ParseSQL'#8#4'left'#3#168#0#3'top'#2#24#0#0#15'TSQLTransacti'
+  +'on'#3'trQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#168#0#3'top'#2'P'#0#0
+  +#9'TSQLQuery'#2'Q1'#11'Transaction'#7#4'trQ1'#8'ReadOnly'#8#6'Params'#14#0#8
+  +'ParseSQL'#8#4'left'#2'p'#3'top'#2#24#0#0#15'TSQLTransaction'#4'trQ1'#6'Acti'
+  +'ve'#8#6'Action'#7#6'caNone'#4'left'#2'p'#3'top'#2'P'#0#0#9'TSQLQuery'#8'qDX'
+  +'CCRef'#11'Transaction'#7#9'trDXCCRef'#8'ReadOnly'#8#6'Params'#14#0#8'ParseS'
+  +'QL'#8#4'left'#2'('#3'top'#2#24#0#0#15'TSQLTransaction'#9'trDXCCRef'#6'Activ'
+  +'e'#8#6'Action'#7#6'caNone'#4'left'#2'('#3'top'#2'P'#0#0#11'TDatasource'#8'd'
+  +'srValid'#7'DataSet'#7#6'qValid'#4'left'#3'0'#1#3'top'#2'P'#0#0#11'TDatasour'
+  +'ce'#10'dsrDeleted'#7'DataSet'#7#8'qDeleted'#4'left'#3'0'#1#3'top'#2#24#0#0#9
+  +'TSQLQuery'#6'qValid'#11'Transaction'#7#7'trValid'#8'ReadOnly'#8#6'Params'#14
+  +#0#4'left'#3'x'#1#3'top'#2'P'#0#0#15'TSQLTransaction'#7'trValid'#6'Active'#8
+  +#6'Action'#7#6'caNone'#4'left'#3#216#0#3'top'#2'P'#0#0#15'TSQLTransaction'#9
+  +'trDeleted'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#221#0#3'top'#2#24#0#0
+  +#9'TSQLQuery'#8'qDeleted'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'
+  +#3'x'#1#3'top'#2#24#0#0#0
+]);

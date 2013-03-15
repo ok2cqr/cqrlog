@@ -1,0 +1,638 @@
+object frmNewTestLog: TfrmNewTestLog
+  Left = 399
+  Height = 478
+  Top = 246
+  Width = 483
+  ActiveControl = Panel2
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'New log'
+  ClientHeight = 478
+  ClientWidth = 483
+  OnCreate = FormCreate
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.29'
+  object Panel2: TPanel
+    Left = 0
+    Height = 128
+    Top = 0
+    Width = 483
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 128
+    ClientWidth = 483
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 16
+      Height = 18
+      Top = 8
+      Width = 69
+      Caption = 'Log name:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 16
+      Height = 18
+      Top = 64
+      Width = 88
+      Caption = 'Contest type:'
+      ParentColor = False
+    end
+    object Label11: TLabel
+      Left = 216
+      Height = 18
+      Top = 64
+      Width = 63
+      Caption = 'Category:'
+      ParentColor = False
+    end
+    object btnOK: TButton
+      Left = 396
+      Height = 25
+      Top = 32
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'OK'
+      OnClick = btnOKClick
+      TabOrder = 0
+    end
+    object btnCancel: TButton
+      Left = 396
+      Height = 25
+      Top = 76
+      Width = 75
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object edtLogName: TEdit
+      Left = 16
+      Height = 27
+      Top = 32
+      Width = 184
+      OnKeyPress = edtLogNameKeyPress
+      TabOrder = 2
+    end
+    object cmbContest: TComboBox
+      Left = 16
+      Height = 29
+      Top = 88
+      Width = 184
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'DX expedition'
+        'Custom ...'
+      )
+      TabOrder = 3
+      Text = 'DX expedition'
+    end
+    object cmbCategory: TComboBox
+      Left = 216
+      Height = 29
+      Top = 88
+      Width = 160
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'SO-AB'
+        'SO-SB'
+        ''
+        ''
+      )
+      TabOrder = 4
+      Text = 'SO-AB'
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 350
+    Top = 128
+    Width = 483
+    ActivePage = tabDetails
+    Align = alClient
+    TabIndex = 1
+    TabOrder = 1
+    object tabBasic: TTabSheet
+      Caption = 'Basic information'
+      ClientHeight = 315
+      ClientWidth = 477
+      object Label3: TLabel
+        Left = 13
+        Height = 18
+        Top = 8
+        Width = 158
+        Caption = 'Call used in the contest:'
+        ParentColor = False
+      end
+      object Label4: TLabel
+        Left = 189
+        Height = 18
+        Top = 8
+        Width = 52
+        Caption = 'Country'
+        ParentColor = False
+      end
+      object Label5: TLabel
+        Left = 13
+        Height = 18
+        Top = 64
+        Width = 32
+        Caption = 'Grid:'
+        ParentColor = False
+      end
+      object Label6: TLabel
+        Left = 189
+        Height = 18
+        Top = 64
+        Width = 44
+        Caption = 'Name:'
+        ParentColor = False
+      end
+      object Label7: TLabel
+        Left = 13
+        Height = 18
+        Top = 120
+        Width = 33
+        Caption = 'QTH:'
+        ParentColor = False
+      end
+      object Label8: TLabel
+        Left = 189
+        Height = 18
+        Top = 120
+        Width = 53
+        Caption = 'Section:'
+        ParentColor = False
+      end
+      object Label9: TLabel
+        Left = 13
+        Height = 18
+        Top = 176
+        Width = 39
+        Caption = 'State:'
+        ParentColor = False
+      end
+      object Label10: TLabel
+        Left = 189
+        Height = 18
+        Top = 176
+        Width = 38
+        Caption = 'Zone:'
+        ParentColor = False
+      end
+      object Label16: TLabel
+        Left = 13
+        Height = 18
+        Top = 232
+        Width = 35
+        Caption = 'IOTA:'
+        ParentColor = False
+      end
+      object Label17: TLabel
+        Left = 189
+        Height = 18
+        Top = 232
+        Width = 45
+        Caption = 'Power:'
+        ParentColor = False
+      end
+      object edtCall: TEdit
+        Left = 13
+        Height = 27
+        Top = 24
+        Width = 152
+        CharCase = ecUppercase
+        TabOrder = 0
+      end
+      object edtCountry: TEdit
+        Left = 189
+        Height = 27
+        Top = 24
+        Width = 136
+        TabOrder = 1
+      end
+      object edtGrid: TEdit
+        Left = 13
+        Height = 27
+        Top = 80
+        Width = 104
+        CharCase = ecUppercase
+        TabOrder = 2
+      end
+      object edtName: TEdit
+        Left = 189
+        Height = 27
+        Top = 80
+        Width = 104
+        TabOrder = 3
+      end
+      object edtQTH: TEdit
+        Left = 13
+        Height = 27
+        Top = 136
+        Width = 152
+        TabOrder = 4
+      end
+      object edtSection: TEdit
+        Left = 189
+        Height = 27
+        Top = 136
+        Width = 136
+        TabOrder = 5
+      end
+      object edtState: TEdit
+        Left = 13
+        Height = 27
+        Top = 192
+        Width = 104
+        TabOrder = 6
+      end
+      object edtZone: TEdit
+        Left = 189
+        Height = 27
+        Top = 192
+        Width = 104
+        CharCase = ecUppercase
+        TabOrder = 7
+      end
+      object edtIOTA: TEdit
+        Left = 13
+        Height = 27
+        Top = 248
+        Width = 104
+        CharCase = ecUppercase
+        TabOrder = 8
+      end
+      object edtPower: TEdit
+        Left = 189
+        Height = 27
+        Top = 248
+        Width = 104
+        CharCase = ecUppercase
+        TabOrder = 9
+      end
+    end
+    object tabDetails: TTabSheet
+      Caption = 'Details'
+      ClientHeight = 315
+      ClientWidth = 477
+      object Label12: TLabel
+        Left = 12
+        Height = 18
+        Top = 17
+        Width = 89
+        Caption = 'First exhange'
+        ParentColor = False
+      end
+      object Label13: TLabel
+        Left = 12
+        Height = 18
+        Top = 80
+        Width = 119
+        Caption = 'Second exchange:'
+        ParentColor = False
+      end
+      object Label14: TLabel
+        Left = 12
+        Height = 18
+        Top = 152
+        Width = 100
+        Caption = 'First multiplier:'
+        ParentColor = False
+      end
+      object Label15: TLabel
+        Left = 12
+        Height = 18
+        Top = 216
+        Width = 119
+        Caption = 'Second multiplier:'
+        ParentColor = False
+      end
+      object cmbExch1: TComboBox
+        Left = 12
+        Height = 29
+        Top = 40
+        Width = 144
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'None'
+          'QSO number'
+          'WAZ zone'
+          'ITU zone'
+          'State'
+          'WPX'
+          'IOTA'
+          'Name'
+          'QTH'
+          'IOTA'
+          'Custom'
+          'From file ...'
+        )
+        TabOrder = 0
+        Text = 'None'
+      end
+      object cmbExch2: TComboBox
+        Left = 12
+        Height = 29
+        Top = 104
+        Width = 144
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'None'
+          'QSO number'
+          'WAZ zone'
+          'ITU zone'
+          'State'
+          'WPX'
+          'IOTA'
+          'Name'
+          'QTH'
+          'IOTA'
+          'Custom'
+          'From file ...'
+        )
+        TabOrder = 1
+        Text = 'None'
+      end
+      object cmbMult1: TComboBox
+        Left = 12
+        Height = 29
+        Top = 176
+        Width = 144
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'None'
+          'First exchange'
+          'Second exchange'
+          'WAZ zone'
+          'ITU zone'
+          'State'
+          'WPX'
+          'IOTA'
+          'DXCC'
+        )
+        TabOrder = 2
+        Text = 'None'
+      end
+      object cmbMult2: TComboBox
+        Left = 12
+        Height = 29
+        Top = 240
+        Width = 144
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'None'
+          'First exchange'
+          'Second exchange'
+          'WAZ zone'
+          'ITU zone'
+          'State'
+          'WPX'
+          'IOTA'
+          'DXCC'
+        )
+        TabOrder = 3
+        Text = 'None'
+      end
+      object chkWARC: TCheckBox
+        Left = 12
+        Height = 22
+        Top = 280
+        Width = 165
+        Caption = 'Use also WARC bands'
+        TabOrder = 4
+      end
+    end
+    object tabColumns: TTabSheet
+      Caption = 'Visible columns'
+      ClientHeight = 315
+      ClientWidth = 477
+      object chkDate: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 12
+        Width = 55
+        Caption = 'Date'
+        Checked = True
+        State = cbChecked
+        TabOrder = 0
+      end
+      object chkTimeOn: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 32
+        Width = 77
+        Caption = 'Time on'
+        Checked = True
+        State = cbChecked
+        TabOrder = 1
+      end
+      object chkCallSign: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 53
+        Width = 77
+        Caption = 'CallSign'
+        Checked = True
+        State = cbChecked
+        TabOrder = 2
+      end
+      object chkMode: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 73
+        Width = 60
+        Caption = 'Mode'
+        Checked = True
+        State = cbChecked
+        TabOrder = 3
+      end
+      object chkFreq: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 95
+        Width = 52
+        Caption = 'Freq'
+        Checked = True
+        State = cbChecked
+        TabOrder = 4
+      end
+      object chkRST_S: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 118
+        Width = 81
+        Caption = 'RST sent'
+        TabOrder = 5
+      end
+      object chkRST_R: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 140
+        Width = 112
+        Caption = 'RST Received'
+        TabOrder = 6
+      end
+      object chkName: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 161
+        Width = 63
+        Caption = 'Name'
+        TabOrder = 7
+      end
+      object chkQTH: TCheckBox
+        Left = 14
+        Height = 22
+        Top = 184
+        Width = 52
+        Caption = 'QTH'
+        TabOrder = 8
+      end
+      object chkIOTA: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 12
+        Width = 54
+        Caption = 'IOTA'
+        TabOrder = 9
+      end
+      object chkDXCC: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 32
+        Width = 60
+        Caption = 'DXCC'
+        Checked = True
+        State = cbChecked
+        TabOrder = 10
+      end
+      object chkWAZ: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 53
+        Width = 54
+        Caption = 'WAZ'
+        TabOrder = 11
+      end
+      object chkITU: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 73
+        Width = 46
+        Caption = 'ITU'
+        TabOrder = 12
+      end
+      object chkState: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 95
+        Width = 58
+        Caption = 'State'
+        TabOrder = 13
+      end
+      object chkCont: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 118
+        Width = 87
+        Caption = 'Continent'
+        TabOrder = 14
+      end
+      object chkQSONR: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 140
+        Width = 75
+        Caption = 'QSO NR'
+        Checked = True
+        State = cbChecked
+        TabOrder = 15
+      end
+      object chkExch1: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 161
+        Width = 91
+        Caption = 'Echange 1'
+        Checked = True
+        State = cbChecked
+        TabOrder = 16
+      end
+      object chkExch2: TCheckBox
+        Left = 181
+        Height = 22
+        Top = 184
+        Width = 91
+        Caption = 'Echange 2'
+        Checked = True
+        State = cbChecked
+        TabOrder = 17
+      end
+      object chkMult1: TCheckBox
+        Left = 309
+        Height = 22
+        Top = 12
+        Width = 65
+        Caption = 'Mult 1'
+        Checked = True
+        State = cbChecked
+        TabOrder = 18
+      end
+      object chkMult2: TCheckBox
+        Left = 309
+        Height = 22
+        Top = 32
+        Width = 65
+        Caption = 'Mult 2'
+        Checked = True
+        State = cbChecked
+        TabOrder = 19
+      end
+      object chkPoints: TCheckBox
+        Left = 309
+        Height = 22
+        Top = 53
+        Width = 64
+        Caption = 'Points'
+        Checked = True
+        State = cbChecked
+        TabOrder = 20
+      end
+      object chkBand: TCheckBox
+        Left = 309
+        Height = 22
+        Top = 73
+        Width = 57
+        Caption = 'Band'
+        Checked = True
+        State = cbChecked
+        TabOrder = 21
+      end
+      object chkWPX: TCheckBox
+        Left = 309
+        Height = 22
+        Top = 95
+        Width = 61
+        Caption = 'Prefix'
+        TabOrder = 22
+      end
+      object chkPower: TCheckBox
+        Left = 309
+        Height = 22
+        Top = 118
+        Width = 64
+        Caption = 'Power'
+        TabOrder = 23
+      end
+    end
+  end
+end

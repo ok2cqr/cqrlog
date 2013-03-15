@@ -1,0 +1,93 @@
+object frmQTHProfiles: TfrmQTHProfiles
+  Left = 336
+  Height = 510
+  Top = 230
+  Width = 631
+  ActiveControl = dbgrdProfiles
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'QTH Profiles'
+  ClientHeight = 510
+  ClientWidth = 631
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.29'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 460
+    Width = 631
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 631
+    TabOrder = 0
+    object btnNew: TButton
+      Left = 14
+      Height = 25
+      Top = 12
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'New'
+      OnClick = btnNewClick
+      TabOrder = 0
+    end
+    object btnEdit: TButton
+      Left = 112
+      Height = 25
+      Top = 12
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Edit'
+      OnClick = btnEditClick
+      TabOrder = 1
+    end
+    object btnDelete: TButton
+      Left = 207
+      Height = 25
+      Top = 12
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Delete'
+      OnClick = btnDeleteClick
+      TabOrder = 2
+    end
+    object btnClose: TButton
+      Left = 550
+      Height = 25
+      Top = 12
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.InnerBorder = 4
+      Cancel = True
+      Caption = 'Close'
+      ModalResult = 2
+      TabOrder = 3
+    end
+    object btnApply: TButton
+      Left = 464
+      Height = 25
+      Top = 12
+      Width = 75
+      Caption = 'Apply'
+      ModalResult = 1
+      TabOrder = 4
+      Visible = False
+    end
+  end
+  object dbgrdProfiles: TDBGrid
+    Left = 0
+    Height = 460
+    Top = 0
+    Width = 631
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 1
+    TitleStyle = tsNative
+    OnCellClick = dbgrdProfilesCellClick
+    OnColumnSized = dbgrdProfilesColumnSized
+  end
+end

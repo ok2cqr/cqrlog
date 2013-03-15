@@ -1,0 +1,3 @@
+version=3
+
+http://www.cqrlog.com/deb_src/index.php cqrlog_(.+).tar.gz

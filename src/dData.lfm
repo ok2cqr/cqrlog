@@ -1,0 +1,704 @@
+object dmData: TdmData
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  OldCreateOrder = False
+  Height = 606
+  HorizontalOffset = 516
+  VerticalOffset = 112
+  Width = 795
+  object dsrMain: TDatasource
+    DataSet = qCQRLOG
+    left = 328
+    top = 24
+  end
+  object dsrQSOBefore: TDatasource
+    DataSet = qQSOBefore
+    left = 328
+    top = 216
+  end
+  object dsrImport: TDatasource
+    left = 592
+    top = 448
+  end
+  object dsrBands: TDatasource
+    DataSet = qBands
+    left = 136
+    top = 429
+  end
+  object dsrProfiles: TDatasource
+    DataSet = qProfiles
+    left = 64
+    top = 112
+  end
+  object dsrDXCluster: TDatasource
+    DataSet = qDXClusters
+    left = 160
+    top = 72
+  end
+  object tblImport: TDbf
+    IndexDefs = <>
+    TableLevel = 4
+    FilterOptions = []
+    left = 232
+    top = 472
+  end
+  object dsrQSLMgr: TDatasource
+    AutoEdit = False
+    DataSet = qQSLMgr
+    left = 384
+    top = 384
+  end
+  object dbfBand: TDbf
+    IndexDefs = <>
+    TableLevel = 4
+    FilterOptions = []
+    left = 232
+    top = 408
+  end
+  object mQ: TSQLQuery
+    BeforeOpen = mQBeforeOpen
+    Transaction = trmQ
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 665
+    top = 24
+  end
+  object trmQ: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 665
+    top = 80
+  end
+  object scCommon: TSQLScript
+    Transaction = trmQ
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Script.Strings = (
+      'CREATE DATABASE cqrlog_common DEFAULT CHARACTER SET = utf8  DEFAULT COLLATE = utf8_bin;'
+      ''
+      'USE cqrlog_common;'
+      ''
+      'CREATE TABLE bands ('
+      '       id_bands INT AUTO_INCREMENT PRIMARY KEY,'
+      '       band VARCHAR(10) DEFAULT '''','
+      '       b_begin NUMERIC(10,4),'
+      '       b_end NUMERIC(10,4),'
+      '       cw NUMERIC(10,4),'
+      '       rtty NUMERIC(10,4),'
+      '       ssb NUMERIC(10,4)'
+      ');'
+      'CREATE INDEX band ON bands(band);'
+      ''
+      'CREATE TABLE dxclusters ('
+      '      id_dxclusters INT AUTO_INCREMENT PRIMARY KEY,'
+      '      description VARCHAR(100) DEFAULT '''','
+      '      address VARCHAR(100) DEFAULT '''','
+      '      port VARCHAR(10) DEFAULT '''','
+      '      dxcuser VARCHAR(12) DEFAULT '''','
+      '      dxcpass VARCHAR(20) DEFAULT '''''
+      ');'
+      'CREATE INDEX description ON dxclusters(description);'
+      ''
+      'CREATE TABLE iota_list ('
+      '      id_iota_list INT AUTO_INCREMENT PRIMARY KEY,'
+      '      iota_nr VARCHAR(6) DEFAULT '''','
+      '      island_name VARCHAR(250) DEFAULT '''','
+      '      dxcc_ref VARCHAR(15) DEFAULT '''','
+      '      pref VARCHAR(15) DEFAULT '''''
+      ');'
+      'CREATE INDEX iota_nr ON iota_list(iota_nr);'
+      'CREATE INDEX pref ON iota_list(pref);'
+      ''
+      ''
+      'CREATE TABLE dxcc_ref ('
+      '            id_dxcc_ref INT AUTO_INCREMENT PRIMARY KEY,'
+      '            pref VARCHAR(20) NOT NULL,'
+      '            name VARCHAR(100) NOT NULL,'
+      '            cont VARCHAR(6) NOT NULL,'
+      '            utc VARCHAR(12)NOT NULL,'
+      '            lat VARCHAR(10) NOT NULL,'
+      '            longit VARCHAR(10) NOT NULL,'
+      '            itu VARCHAR(20) NOT NULL,'
+      '            waz VARCHAR(20) NOT NULL,'
+      '            adif SMALLINT NOT NULL DEFAULT 0,'
+      '            deleted SMALLINT NOT NULL DEFAULT 0'
+      ');'
+      'CREATE INDEX pref ON dxcc_ref(pref);'
+      'CREATE INDEX adif ON dxcc_ref(adif);'
+      ''
+      'CREATE TABLE qslmgr ('
+      '            id_qslmgr INT AUTO_INCREMENT PRIMARY KEY,'
+      '            callsign VARCHAR(20),'
+      '            qsl_via VARCHAR(20),'
+      '            fromdate DATE'
+      ');'
+      'CREATE INDEX callsign ON qslmgr(callsign);'
+      'CREATE INDEX fromdate ON qslmgr(fromdate);'
+      ''
+      'CREATE TABLE log_list ('
+      '            id_log_list INT AUTO_INCREMENT PRIMARY KEY,'
+      '            log_nr SMALLINT NOT NULL,'
+      '            log_name VARCHAR(50) DEFAULT '''','
+      '            auto_open SMALLINT NOT NULL DEFAULT 0'
+      ');'
+      'CREATE INDEX log_nr ON log_list(log_nr);'
+      ''
+      'CREATE TABLE db_version'
+      '('
+      '  nr SMALLINT NOT NULL'
+      ');'
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = True
+    UseCommit = True
+    UseDefines = True
+    left = 592
+    top = 80
+  end
+  object scLog: TSQLScript
+    Transaction = trmQ
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Script.Strings = (
+      'CREATE TABLE cqrlog_main ('
+      '            id_cqrlog_main INT AUTO_INCREMENT PRIMARY KEY,'
+      '            qsodate DATE NOT NULL,'
+      '            time_on VARCHAR(5) NOT NULL,'
+      '            time_off VARCHAR(5) DEFAULT '''','
+      '            callsign VARCHAR(20) NOT NULL,'
+      '            freq NUMERIC(10,4) NOT NULL,'
+      '            mode VARCHAR(8) NOT NULL,'
+      '            rst_s VARCHAR(20) DEFAULT '''','
+      '            rst_r VARCHAR(20) DEFAULT '''','
+      '            name VARCHAR(40) DEFAULT '''','
+      '            qth VARCHAR(60) DEFAULT '''','
+      '            qsl_s VARCHAR(3) DEFAULT '''','
+      '            qsl_r VARCHAR(3) DEFAULT '''','
+      '            qsl_via VARCHAR(30) DEFAULT '''','
+      '            iota VARCHAR(6) DEFAULT '''','
+      '            pwr VARCHAR(10) DEFAULT '''','
+      '            itu INT DEFAULT 0,'
+      '            waz INT DEFAULT 0,'
+      '            loc VARCHAR(6) DEFAULT '''','
+      '            my_loc VARCHAR(6) DEFAULT '''','
+      '            county VARCHAR(30) DEFAULT '''','
+      '            award VARCHAR(50) DEFAULT '''','
+      '            remarks VARCHAR(200) DEFAULT '''','
+      '            adif INTEGER DEFAULT 0,'
+      '            /*dxcc_ref VARCHAR(20) DEFAULT '''',*/'
+      '            band VARCHAR(6) DEFAULT '''','
+      '            qso_dxcc INT DEFAULT 0,'
+      '            profile INT DEFAULT 0,'
+      '            idcall VARCHAR(20) DEFAULT '''','
+      '            state VARCHAR(4) DEFAULT '''','
+      '            lotw_qslsdate DATE,'
+      '            lotw_qslrdate DATE,'
+      '            lotw_qsls VARCHAR(3) DEFAULT '''' not null,'
+      '            lotw_qslr VARCHAR(3) DEFAULT '''' not null,'
+      '            cont VARCHAR(3) DEFAULT '''','
+      '            qsls_date VARCHAR(10),'
+      '            qslr_date VARCHAR(10),'
+      '            club_nr1 VARCHAR(100) DEFAULT '''','
+      '            club_nr2 VARCHAR(100) DEFAULT '''','
+      '            club_nr3 VARCHAR(100) DEFAULT '''','
+      '            club_nr4 VARCHAR(100) DEFAULT '''','
+      '            club_nr5 VARCHAR(100) DEFAULT '''','
+      '            eqsl_qsl_sent varchar(1) default '''' not null,'
+      '            eqsl_qslsdate date default null,'
+      '            eqsl_qsl_rcvd varchar(1) default '''' not null,'
+      '            eqsl_qslrdate date default null'
+      ');'
+      'CREATE INDEX main_index ON cqrlog_main(qsodate DESC,time_on DESC);'
+      'CREATE INDEX callsign ON cqrlog_main(callsign);'
+      'CREATE INDEX name ON cqrlog_main(name);'
+      'CREATE INDEX qth ON cqrlog_main(QTH);'
+      'CREATE INDEX adif ON cqrlog_main(adif);'
+      'CREATE INDEX idcall ON cqrlog_main(idcall);'
+      'CREATE INDEX band ON cqrlog_main(band);'
+      'CREATE INDEX club_nr1 ON cqrlog_main(club_nr1);'
+      'CREATE INDEX club_nr2 ON cqrlog_main(club_nr2);'
+      'CREATE INDEX club_nr3 ON cqrlog_main(club_nr3);'
+      'CREATE INDEX club_nr4 ON cqrlog_main(club_nr4);'
+      'CREATE INDEX club_nr5 ON cqrlog_main(club_nr5);'
+      ''
+      ''
+      'CREATE TABLE notes('
+      '            id_notes INT AUTO_INCREMENT PRIMARY KEY,'
+      '            callsign VARCHAR(20) DEFAULT '''','
+      '            longremarks VARCHAR(256) DEFAULT '''''
+      ');'
+      'CREATE INDEX callsign ON notes(callsign);'
+      ''
+      'CREATE TABLE profiles ('
+      '            id_profiles INT AUTO_INCREMENT PRIMARY KEY,'
+      '            nr INT NOT NULL,'
+      '            locator VARCHAR(6) DEFAULT '''','
+      '            qth VARCHAR(250) DEFAULT '''','
+      '            rig VARCHAR(250) DEFAULT '''','
+      '            remarks VARCHAR(250) DEFAULT '''','
+      '            visible INT DEFAULT 1'
+      ');'
+      'CREATE INDEX nr ON profiles(nr);'
+      ''
+      'CREATE TABLE long_note ('
+      '            id_long_note INT AUTO_INCREMENT PRIMARY KEY,'
+      '            note LONGTEXT'
+      ');'
+      ''
+      'CREATE TABLE version ('
+      '            major INTEGER DEFAULT 0,'
+      '            minor INTEGER DEFAULT 9,'
+      '            releas INTEGER DEFAULT 4'
+      ');'
+      ''
+      'CREATE TABLE club1 ('
+      '   id_club1 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   club_nr VARCHAR(100) DEFAULT '''','
+      '   clubcall VARCHAR(100) DEFAULT '''','
+      '   fromdate DATE,'
+      '   todate DATE'
+      ');'
+      'CREATE INDEX club_nr ON club1(club_nr);'
+      'CREATE INDEX fromdate ON club1(fromdate);'
+      'CREATE INDEX todate ON club1(todate);'
+      'CREATE INDEX clubcall ON club1(clubcall);'
+      ''
+      'CREATE TABLE club2 ('
+      '   id_club2 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   club_nr VARCHAR(100) DEFAULT '''','
+      '   clubcall VARCHAR(100) DEFAULT '''','
+      '   fromdate DATE,'
+      '   todate DATE'
+      ');'
+      'CREATE INDEX club_nr ON club2(club_nr);'
+      'CREATE INDEX fromdate ON club2(fromdate);'
+      'CREATE INDEX todate ON club2(todate);'
+      'CREATE INDEX clubcall ON club2(clubcall);'
+      ''
+      'CREATE TABLE club3 ('
+      '   id_club3 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   club_nr VARCHAR(100) DEFAULT '''','
+      '   clubcall VARCHAR(100) DEFAULT '''','
+      '   fromdate DATE,'
+      '   todate DATE'
+      ');'
+      'CREATE INDEX club_nr ON club3(club_nr);'
+      'CREATE INDEX fromdate ON club3(fromdate);'
+      'CREATE INDEX todate ON club3(todate);'
+      'CREATE INDEX clubcall ON club3(clubcall);'
+      ''
+      'CREATE TABLE club4 ('
+      '   id_club4 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   club_nr VARCHAR(100) DEFAULT '''','
+      '   clubcall VARCHAR(100) DEFAULT '''','
+      '   fromdate DATE,'
+      '   todate DATE'
+      ');'
+      'CREATE INDEX club_nr ON club4(club_nr);'
+      'CREATE INDEX fromdate ON club4(fromdate);'
+      'CREATE INDEX todate ON club4(todate);'
+      'CREATE INDEX clubcall ON club4(clubcall);'
+      ''
+      'CREATE TABLE club5 ('
+      '   id_club5 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   club_nr VARCHAR(100) DEFAULT '''','
+      '   clubcall VARCHAR(100) DEFAULT '''','
+      '   fromdate DATE,'
+      '   todate DATE'
+      ');'
+      'CREATE INDEX club_nr ON club5(club_nr);'
+      'CREATE INDEX fromdate ON club5(fromdate);'
+      'CREATE INDEX todate ON club5(todate);'
+      'CREATE INDEX clubcall ON club5(clubcall);'
+      ''
+      ''
+      'CREATE TABLE zipcode1 ('
+      '   id_zipcode1 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   zip VARCHAR(20) DEFAULT '''','
+      '   county VARCHAR(100) DEFAULT '''''
+      ');'
+      'CREATE INDEX zip ON zipcode1(zip);'
+      ''
+      'CREATE TABLE zipcode2 ('
+      '   id_zipcode2 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   zip VARCHAR(20) DEFAULT '''','
+      '   county VARCHAR(100) DEFAULT '''''
+      ');'
+      'CREATE INDEX zip ON zipcode2(zip);'
+      ''
+      'CREATE TABLE zipcode3 ('
+      '   id_zipcode3 INT AUTO_INCREMENT PRIMARY KEY,'
+      '   zip VARCHAR(20) DEFAULT '''','
+      '   county VARCHAR(100) DEFAULT '''''
+      ');'
+      'CREATE INDEX zip ON zipcode3(zip);'
+      ''
+      'CREATE TABLE cqrlog_config ('
+      '  id_cqrlog__config INT AUTO_INCREMENT PRIMARY KEY,'
+      '  config_file LONGTEXT'
+      ');'
+      'INSERT INTO cqrlog_config (config_file) VALUES ('''');'
+      ''
+      'CREATE TABLE dxcc_id'
+      '('
+      '  id_dxcc INT AUTO_INCREMENT PRIMARY KEY,'
+      '  adif INT DEFAULT 0,'
+      '  dxcc_ref VARCHAR(16) NOT NULL,'
+      '  country VARCHAR(100) NOT NULL'
+      ');'
+      'CREATE INDEX adif ON dxcc_id(adif);'
+      ''
+      'CREATE TABLE db_version'
+      '('
+      '  nr SMALLINT NOT NULL'
+      ');'
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = False
+    UseCommit = False
+    UseDefines = False
+    OnException = scLogException
+    left = 592
+    top = 136
+  end
+  object dsrmQ: TDatasource
+    DataSet = mQ
+    left = 665
+    top = 136
+  end
+  object qLogList: TSQLQuery
+    BeforeOpen = qLogListBeforeOpen
+    Transaction = trLogList
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 592
+    top = 208
+  end
+  object trLogList: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 688
+    top = 208
+  end
+  object dsrLogList: TDatasource
+    DataSet = qLogList
+    left = 592
+    top = 264
+  end
+  object qSQLConsole: TSQLQuery
+    PacketRecords = 100
+    Transaction = trmQ
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 592
+    top = 336
+  end
+  object trSQLConsole: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 688
+    top = 336
+  end
+  object dsrSQLConsole: TDatasource
+    DataSet = qSQLConsole
+    left = 592
+    top = 393
+  end
+  object qQSLMgr: TSQLQuery
+    Transaction = trQSLMgr
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 384
+    top = 440
+  end
+  object trQSLMgr: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 384
+    top = 496
+  end
+  object qCallBook: TSQLQuery
+    Transaction = trCallBook
+    ReadOnly = False
+    Params = <>
+    left = 64
+    top = 288
+  end
+  object trCallBook: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 56
+    top = 360
+  end
+  object trLongNote: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 160
+    top = 360
+  end
+  object qLongNote: TSQLQuery
+    BeforeOpen = qLongNoteBeforeOpen
+    Transaction = trLongNote
+    ReadOnly = False
+    Params = <>
+    left = 160
+    top = 288
+  end
+  object qProfiles: TSQLQuery
+    Transaction = trProfiles
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 64
+    top = 184
+  end
+  object trProfiles: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 64
+    top = 235
+  end
+  object qIOTAList: TSQLQuery
+    Transaction = trIOTAList
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 56
+    top = 429
+  end
+  object trIOTAList: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 56
+    top = 490
+  end
+  object trBands: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 136
+    top = 544
+  end
+  object qBands: TSQLQuery
+    BeforeOpen = qBandsBeforeOpen
+    Transaction = trBands
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 136
+    top = 496
+  end
+  object trDXClusters: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 160
+    top = 192
+  end
+  object qDXClusters: TSQLQuery
+    Transaction = trDXClusters
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 160
+    top = 136
+  end
+  object trComment: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 496
+    top = 496
+  end
+  object qComment: TSQLQuery
+    Transaction = trComment
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 492
+    top = 440
+  end
+  object trException: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 492
+    top = 384
+  end
+  object qException: TSQLQuery
+    Transaction = trException
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 492
+    top = 336
+  end
+  object trQSOBefore: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 328
+    top = 312
+  end
+  object qQSOBefore: TSQLQuery
+    Transaction = trQSOBefore
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 328
+    top = 264
+  end
+  object trQ1: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 496
+    top = 144
+  end
+  object Q1: TSQLQuery
+    BeforeOpen = Q1BeforeOpen
+    Transaction = trQ1
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 496
+    top = 80
+  end
+  object trQ: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 456
+    top = 144
+  end
+  object Q: TSQLQuery
+    BeforeOpen = QBeforeOpen
+    Transaction = trQ
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 456
+    top = 80
+  end
+  object trCQRLOG: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 328
+    top = 152
+  end
+  object qCQRLOG: TSQLQuery
+    PacketRecords = 100
+    BeforeOpen = qCQRLOGBeforeOpen
+    Transaction = trCQRLOG
+    ReadOnly = False
+    Params = <>
+    ParseSQL = False
+    left = 328
+    top = 88
+  end
+  object scViews: TSQLScript
+    Transaction = trmQ
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Script.Strings = (
+      'CREATE VIEW view_cqrlog_main_by_qsodate AS SELECT id_cqrlog_main,qsodate,time_on,time_off,callsign, freq,mode,rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,county,'
+      'award,remarks, band, dxcc_id.dxcc_ref AS dxcc_ref ,qso_dxcc, profile,idcall, state, lotw_qslsdate, lotw_qslrdate,lotw_qsls, lotw_qslr, cont, qsls_date,qslr_date,club_nr1,club_nr2,club_nr3,'
+      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by qsodate DESC, time_on DESC;'
+      'CREATE VIEW view_cqrlog_main_by_callsign AS SELECT id_cqrlog_main,qsodate,time_on,time_off,callsign, freq,mode,rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,county,'
+      'award,remarks, band, dxcc_id.dxcc_ref AS dxcc_ref ,qso_dxcc, profile,idcall, state, lotw_qslsdate, lotw_qslrdate,lotw_qsls, lotw_qslr, cont, qsls_date,qslr_date,club_nr1,club_nr2,club_nr3,'
+      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by callsign;'
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = True
+    UseCommit = True
+    UseDefines = True
+    OnException = scViewsException
+    left = 515
+    top = 24
+  end
+  object tmrDBPing: TTimer
+    Enabled = False
+    OnTimer = tmrDBPingTimer
+    left = 64
+    top = 16
+  end
+  object scQSLExport: TSQLScript
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Script.Strings = (
+      'create temporary table if not exists  qslexport ('
+      '            id_qslexport INT AUTO_INCREMENT PRIMARY KEY,'
+      '            idcall VARCHAR(20) DEFAULT '''','
+      '            id_cqrlog_main INT NOT NULL,'
+      '            dxcc   VARCHAR(20) DEFAULT '''','
+      '            qsodate DATE NOT NULL,'
+      '            time_on VARCHAR(5) NOT NULL,'
+      '            time_off VARCHAR(5) DEFAULT '''','
+      '            callsign VARCHAR(20) NOT NULL,'
+      '            freq NUMERIC(10,4) NOT NULL,'
+      '            mode VARCHAR(8) NOT NULL,'
+      '            rst_s VARCHAR(20) DEFAULT '''','
+      '            rst_r VARCHAR(20) DEFAULT '''','
+      '            name VARCHAR(40) DEFAULT '''','
+      '            qth VARCHAR(60) DEFAULT '''','
+      '            qsl_s VARCHAR(3) DEFAULT '''','
+      '            qsl_r VARCHAR(3) DEFAULT '''','
+      '            qsl_via VARCHAR(30) DEFAULT '''','
+      '            iota VARCHAR(6) DEFAULT '''','
+      '            pwr VARCHAR(10) DEFAULT '''','
+      '            loc VARCHAR(6) DEFAULT '''','
+      '            my_loc VARCHAR(6) DEFAULT '''','
+      '            award VARCHAR(50) DEFAULT '''','
+      '            remarks VARCHAR(200) DEFAULT '''','
+      '            band VARCHAR(6) DEFAULT '''','
+      '            qslmsg VARCHAR(20) DEFAULT '''''
+      ');'
+      'CREATE INDEX idcall ON qslexport(idcall);'
+      'CREATE INDEX dxcc ON qslexport(dxcc);'
+      ''
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = True
+    UseCommit = True
+    UseDefines = True
+    left = 592
+    top = 32
+  end
+end

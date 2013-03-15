@@ -1,0 +1,66 @@
+object frmNewLog: TfrmNewLog
+  Left = 390
+  Height = 118
+  Top = 273
+  Width = 303
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'frmNewLog'
+  ClientHeight = 118
+  ClientWidth = 303
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.29'
+  object Label1: TLabel
+    Left = 16
+    Height = 18
+    Top = 9
+    Width = 82
+    Caption = 'Log number:'
+    ParentColor = False
+  end
+  object edtLogNR: TEdit
+    Left = 16
+    Height = 27
+    Top = 33
+    Width = 46
+    MaxLength = 3
+    TabOrder = 0
+  end
+  object Label2: TLabel
+    Left = 16
+    Height = 18
+    Top = 65
+    Width = 69
+    Caption = 'Log name:'
+    ParentColor = False
+  end
+  object edtLogName: TEdit
+    Left = 16
+    Height = 27
+    Top = 86
+    Width = 184
+    MaxLength = 50
+    TabOrder = 1
+  end
+  object btnOK: TButton
+    Left = 224
+    Height = 25
+    Top = 9
+    Width = 75
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 224
+    Height = 25
+    Top = 42
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 3
+  end
+end

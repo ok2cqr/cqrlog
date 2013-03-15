@@ -1,0 +1,111 @@
+LazarusResources.Add('TfrmKeysPref','FORMDATA',[
+  'TPF0'#12'TfrmKeysPref'#11'frmKeysPref'#4'Left'#3#190#1#6'Height'#3#214#1#3'T'
+  +'op'#3#0#1#5'Width'#3'1'#2#13'ActiveControl'#7#11'ntbKeyboard'#7'Caption'#6
+  +#20'Keyboard preferences'#12'ClientHeight'#3#214#1#11'ClientWidth'#3'1'#2#6
+  +'OnShow'#7#8'FormShow'#10'LCLVersion'#6#6'0.9.28'#0#9'TNotebook'#11'ntbKeybo'
+  +'ard'#4'Left'#2#0#6'Height'#3#164#1#3'Top'#2#0#5'Width'#3'1'#2#5'Align'#7#8
+  +'alClient'#9'PageIndex'#2#0#8'TabOrder'#2#0#0#5'TPage'#5'pgRun'#7'Caption'#6
+  +#8'Run mode'#11'ClientWidth'#3'+'#2#12'ClientHeight'#3#129#1#0#9'TGroupBox'#9
+  +'GroupBox1'#4'Left'#2#13#6'Height'#3#160#0#3'Top'#2#8#5'Width'#3#9#2#7'Capti'
+  +'on'#6#12' Call field '#12'ClientHeight'#3#141#0#11'ClientWidth'#3#5#2#8'Tab'
+  +'Order'#2#0#0#6'TLabel'#6'Label1'#4'Left'#2#13#6'Height'#2''''#3'Top'#2'#'#5
+  +'Width'#3#186#0#7'Caption'#6'4After pressed Enter key and '#10'exchange fiel'
+  +'d is empty'#11'ParentColor'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#13#6'Height'
+  +#2''''#3'Top'#2'['#5'Width'#3#189#0#7'Caption'#6'8After pressed Enter key an'
+  +'d '#10'exchange field is NOT empty'#11'ParentColor'#8#0#0#6'TLabel'#6'Label'
+  +'6'#4'Left'#3#222#0#6'Height'#2#18#3'Top'#2#4#5'Width'#2'V'#7'Caption'#6#10
+  +'CW message'#11'ParentColor'#8#0#0#9'TComboBox'#13'cmbREmptyExch'#4'Left'#3
+  +#213#0#6'Height'#2#29#3'Top'#2'-'#5'Width'#2'p'#10'ItemHeight'#2#0#9'ItemInd'
+  +'ex'#2#11#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'#6#2'F2'#6#2'F3'#6#2'F4'#6
+  +#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#2'F9'#6#3'F10'#6#10'Custom ...'#0#8'OnChang'
+  +'e'#7#19'cmbREmptyExchChange'#8'TabOrder'#2#0#4'Text'#6#10'Custom ...'#0#0#5
+  +'TEdit'#13'edtREmptyExch'#4'Left'#3'N'#1#6'Height'#2#27#3'Top'#2'/'#5'Width'
+  +#3#152#0#8'CharCase'#7#11'ecUppercase'#8'TabOrder'#2#1#4'Text'#6#13'EDTREMPT'
+  +'YEXCH'#7'Visible'#8#0#0#5'TEdit'#16'edtRNotEmptyExch'#4'Left'#3'N'#1#6'Heig'
+  +'ht'#2#27#3'Top'#2'g'#5'Width'#3#152#0#8'CharCase'#7#11'ecUppercase'#8'TabOr'
+  +'der'#2#2#4'Text'#6#16'EDTRNOTEMPTYEXCH'#7'Visible'#8#0#0#9'TComboBox'#16'cm'
+  +'bRNotEmptyExch'#4'Left'#3#213#0#6'Height'#2#29#3'Top'#2'e'#5'Width'#2'p'#10
+  +'ItemHeight'#2#0#9'ItemIndex'#2#11#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'#6
+  +#2'F2'#6#2'F3'#6#2'F4'#6#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#2'F9'#6#3'F10'#6#10
+  +'Custom ...'#0#8'OnChange'#7#22'cmbRNotEmptyExchChange'#8'TabOrder'#2#3#4'Te'
+  +'xt'#6#10'Custom ...'#0#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#13#6'Height'
+  +#3#194#0#3'Top'#3#176#0#5'Width'#3#9#2#7'Caption'#6#15' Echange field '#12'C'
+  +'lientHeight'#3#175#0#11'ClientWidth'#3#5#2#8'TabOrder'#2#1#0#6'TLabel'#6'La'
+  +'bel3'#4'Left'#2#14#6'Height'#2''''#3'Top'#2'P'#5'Width'#3#162#0#7'Caption'#6
+  +'$If call field was changed '#10'send also'#11'ParentColor'#8#0#0#6'TLabel'#6
+  +'Label4'#4'Left'#2#13#6'Height'#2''''#3'Top'#2#30#5'Width'#3#186#0#7'Caption'
+  +#6'0After pressed Enter key and '#10'call wasn''t changed'#11'ParentColor'#8
+  +#0#0#6'TLabel'#6'Label5'#4'Left'#2#13#6'Height'#2#18#3'Top'#3#144#0#5'Width'
+  +#3#128#0#7'Caption'#6#20'After pressing \ key'#11'ParentColor'#8#0#0#6'TLabe'
+  +'l'#6'Label7'#4'Left'#3#222#0#6'Height'#2#18#3'Top'#2#4#5'Width'#2'V'#7'Capt'
+  +'ion'#6#10'CW message'#11'ParentColor'#8#0#0#9'TComboBox'#14'cmbRCallChange'
+  +#4'Left'#3#214#0#6'Height'#2#29#3'Top'#2'Z'#5'Width'#3#177#0#10'ItemHeight'#2
+  +#0#9'ItemIndex'#2#1#13'Items.Strings'#1#6#7'Nothing'#6#20'Changed part of ca'
+  +'ll'#6#10'Whole call'#0#8'TabOrder'#2#0#4'Text'#6#20'Changed part of call'#0
+  +#0#5'TEdit'#16'edtRNoCallChange'#4'Left'#3'N'#1#6'Height'#2#27#3'Top'#2'*'#5
+  +'Width'#3#152#0#8'CharCase'#7#11'ecUppercase'#8'TabOrder'#2#1#4'Text'#6#16'E'
+  +'DTRNOCALLCHANGE'#7'Visible'#8#0#0#9'TComboBox'#16'cmbRNoCallChange'#4'Left'
+  +#3#214#0#6'Height'#2#29#3'Top'#2'('#5'Width'#2'p'#10'ItemHeight'#2#0#9'ItemI'
+  +'ndex'#2#11#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'#6#2'F2'#6#2'F3'#6#2'F4'
+  +#6#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#2'F9'#6#3'F10'#6#10'Custom ...'#0#8'OnCha'
+  +'nge'#7#22'cmbRNoCallChangeChange'#8'TabOrder'#2#2#4'Text'#6#10'Custom ...'#0
+  +#0#9'TComboBox'#13'cmbRBackSlash'#4'Left'#3#213#0#6'Height'#2#29#3'Top'#3#133
+  +#0#5'Width'#2'p'#10'ItemHeight'#2#0#9'ItemIndex'#2#11#13'Items.Strings'#1#6#7
+  +'Nothing'#6#2'F1'#6#2'F2'#6#2'F3'#6#2'F4'#6#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#2
+  +'F9'#6#3'F10'#6#10'Custom ...'#0#8'OnChange'#7#19'cmbRBackSlashChange'#8'Tab'
+  +'Order'#2#3#4'Text'#6#10'Custom ...'#0#0#5'TEdit'#13'edtRBackSlash'#4'Left'#3
+  +'N'#1#6'Height'#2#27#3'Top'#3#135#0#5'Width'#3#152#0#8'CharCase'#7#11'ecUppe'
+  +'rcase'#8'TabOrder'#2#4#4'Text'#6#13'EDTRBACKSLASH'#7'Visible'#8#0#0#0#0#5'T'
+  +'Page'#4'pgSP'#7'Caption'#6#4'S&&P'#11'ClientWidth'#3'+'#2#12'ClientHeight'#3
+  +#129#1#0#9'TGroupBox'#9'GroupBox3'#4'Left'#2#13#6'Height'#3#160#0#3'Top'#2#8
+  +#5'Width'#3#9#2#7'Caption'#6#12' Call field '#12'ClientHeight'#3#141#0#11'Cl'
+  +'ientWidth'#3#5#2#8'TabOrder'#2#0#0#6'TLabel'#6'Label8'#4'Left'#2#13#6'Heigh'
+  +'t'#2''''#3'Top'#2'#'#5'Width'#3#186#0#7'Caption'#6'4After pressed Enter key'
+  +' and '#10'exchange field is empty'#11'ParentColor'#8#0#0#6'TLabel'#6'Label9'
+  +#4'Left'#2#13#6'Height'#2''''#3'Top'#2'['#5'Width'#3#189#0#7'Caption'#6'8Aft'
+  ,'er pressed Enter key and '#10'exchange field is NOT empty'#11'ParentColor'#8
+  +#0#0#6'TLabel'#7'Label10'#4'Left'#3#222#0#6'Height'#2#18#3'Top'#2#4#5'Width'
+  +#2'V'#7'Caption'#6#10'CW message'#11'ParentColor'#8#0#0#9'TComboBox'#13'cmbS'
+  +'EmptyExch'#4'Left'#3#213#0#6'Height'#2#29#3'Top'#2'-'#5'Width'#2'p'#10'Item'
+  +'Height'#2#0#9'ItemIndex'#2#9#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'#6#2'F'
+  +'2'#6#2'F3'#6#2'F4'#6#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#10'Custom ...'#0#8'OnC'
+  +'hange'#7#19'cmbSEmptyExchChange'#8'TabOrder'#2#0#4'Text'#6#10'Custom ...'#0
+  +#0#5'TEdit'#13'edtSEmptyExch'#4'Left'#3'N'#1#6'Height'#2#27#3'Top'#2'/'#5'Wi'
+  +'dth'#3#152#0#8'CharCase'#7#11'ecUppercase'#8'TabOrder'#2#1#4'Text'#6#13'EDT'
+  +'SEMPTYEXCH'#7'Visible'#8#0#0#5'TEdit'#16'edtSNotEmptyExch'#4'Left'#3'N'#1#6
+  +'Height'#2#27#3'Top'#2'g'#5'Width'#3#152#0#8'CharCase'#7#11'ecUppercase'#8'T'
+  +'abOrder'#2#2#4'Text'#6#16'EDTSNOTEMPTYEXCH'#7'Visible'#8#0#0#9'TComboBox'#16
+  +'cmbSNotEmptyExch'#4'Left'#3#213#0#6'Height'#2#29#3'Top'#2'e'#5'Width'#2'p'
+  +#10'ItemHeight'#2#0#9'ItemIndex'#2#9#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'
+  +#6#2'F2'#6#2'F3'#6#2'F4'#6#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#10'Custom ...'#0#8
+  +'OnChange'#7#22'cmbSNotEmptyExchChange'#8'TabOrder'#2#3#4'Text'#6#10'Custom '
+  +'...'#0#0#0#9'TGroupBox'#9'GroupBox4'#4'Left'#2#13#6'Height'#3#194#0#3'Top'#3
+  +#176#0#5'Width'#3#9#2#7'Caption'#6#15' Echange field '#12'ClientHeight'#3#175
+  +#0#11'ClientWidth'#3#5#2#8'TabOrder'#2#1#0#6'TLabel'#7'Label12'#4'Left'#2#13
+  +#6'Height'#2#18#3'Top'#2'/'#5'Width'#3#158#0#7'Caption'#6#24'After pressed E'
+  +'nter key '#11'ParentColor'#8#0#0#6'TLabel'#7'Label13'#4'Left'#2#13#6'Height'
+  +#2#18#3'Top'#2'Z'#5'Width'#3#128#0#7'Caption'#6#20'After pressing \ key'#11
+  +'ParentColor'#8#0#0#6'TLabel'#7'Label14'#4'Left'#3#222#0#6'Height'#2#18#3'To'
+  +'p'#2#4#5'Width'#2'V'#7'Caption'#6#10'CW message'#11'ParentColor'#8#0#0#5'TE'
+  +'dit'#16'edtSNoCallChange'#4'Left'#3'N'#1#6'Height'#2#27#3'Top'#2'*'#5'Width'
+  +#3#152#0#8'CharCase'#7#11'ecUppercase'#8'TabOrder'#2#0#4'Text'#6#16'EDTSNOCA'
+  +'LLCHANGE'#7'Visible'#8#0#0#9'TComboBox'#16'cmbSNoCallChange'#4'Left'#3#214#0
+  +#6'Height'#2#29#3'Top'#2'('#5'Width'#2'p'#10'ItemHeight'#2#0#9'ItemIndex'#2#9
+  +#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'#6#2'F2'#6#2'F3'#6#2'F4'#6#2'F5'#6#2
+  +'F6'#6#2'F7'#6#2'F8'#6#10'Custom ...'#0#8'OnChange'#7#22'cmbSNoCallChangeCha'
+  +'nge'#8'TabOrder'#2#1#4'Text'#6#10'Custom ...'#0#0#9'TComboBox'#13'cmbSBackS'
+  +'lash'#4'Left'#3#213#0#6'Height'#2#29#3'Top'#2'O'#5'Width'#2'p'#10'ItemHeigh'
+  +'t'#2#0#9'ItemIndex'#2#9#13'Items.Strings'#1#6#7'Nothing'#6#2'F1'#6#2'F2'#6#2
+  +'F3'#6#2'F4'#6#2'F5'#6#2'F6'#6#2'F7'#6#2'F8'#6#10'Custom ...'#0#8'OnChange'#7
+  +#19'cmbSBackSlashChange'#8'TabOrder'#2#2#4'Text'#6#10'Custom ...'#0#0#5'TEdi'
+  +'t'#13'edtSBackSlash'#4'Left'#3'N'#1#6'Height'#2#27#3'Top'#2'Q'#5'Width'#3
+  +#152#0#8'CharCase'#7#11'ecUppercase'#8'TabOrder'#2#3#4'Text'#6#13'EDTSBACKSL'
+  +'ASH'#7'Visible'#8#0#0#0#0#0#6'TPanel'#6'Panel1'#4'Left'#2#0#6'Height'#2'2'#3
+  +'Top'#3#164#1#5'Width'#3'1'#2#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNo'
+  +'ne'#12'ClientHeight'#2'2'#11'ClientWidth'#3'1'#2#8'TabOrder'#2#1#0#7'TButto'
+  +'n'#9'btnCancel'#4'Left'#3#216#1#6'Height'#2#25#3'Top'#2#14#5'Width'#2'K'#7
+  +'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#0#0#0#7'TButton'#5'b'
+  +'tnOK'#4'Left'#3#128#1#6'Height'#2#25#3'Top'#2#14#5'Width'#2'K'#7'Caption'#6
+  +#2'OK'#11'ModalResult'#2#1#7'OnClick'#7#10'btnOKClick'#8'TabOrder'#2#1#0#0#0
+  +#0
+]);

@@ -1,0 +1,118 @@
+object frmeQSLDownload: TfrmeQSLDownload
+  Left = 461
+  Height = 609
+  Top = 148
+  Width = 489
+  Caption = 'Download data from eQSL.cc'
+  ClientHeight = 609
+  ClientWidth = 489
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '0.9.30'
+  object GroupBox1: TGroupBox
+    Left = 0
+    Height = 431
+    Top = 128
+    Width = 489
+    Align = alClient
+    Caption = 'Progress'
+    ClientHeight = 412
+    ClientWidth = 485
+    TabOrder = 0
+    object mStat: TMemo
+      Left = 0
+      Height = 412
+      Top = 0
+      Width = 485
+      Align = alClient
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 128
+    Top = 0
+    Width = 489
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 128
+    ClientWidth = 489
+    TabOrder = 1
+    object btnDownload: TButton
+      Left = 88
+      Height = 25
+      Top = 96
+      Width = 329
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Download data from eQSL website'
+      OnClick = btnDownloadClick
+      TabOrder = 0
+    end
+    object GroupBox5: TGroupBox
+      Left = 0
+      Height = 88
+      Top = 0
+      Width = 489
+      Anchors = [akTop, akLeft, akRight]
+      Caption = ' '
+      ClientHeight = 69
+      ClientWidth = 485
+      TabOrder = 1
+      object Label3: TLabel
+        Left = 10
+        Height = 18
+        Top = 12
+        Width = 260
+        Caption = 'Return QSL records received on or after '
+        ParentColor = False
+      end
+      object edtDateFrom: TEdit
+        Left = 278
+        Height = 27
+        Top = 7
+        Width = 85
+        TabOrder = 0
+      end
+      object chkShowNew: TCheckBox
+        Left = 6
+        Height = 22
+        Top = 39
+        Width = 380
+        Caption = 'Show new comfirmed QSOs after download and import'
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 50
+    Top = 559
+    Width = 489
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 489
+    TabOrder = 2
+    object btnClose: TButton
+      Left = 402
+      Height = 25
+      Top = 13
+      Width = 72
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = 'Close'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object btnPreferences: TButton
+      Left = 8
+      Height = 25
+      Top = 13
+      Width = 96
+      Caption = 'Preferences'
+      OnClick = btnPreferencesClick
+      TabOrder = 1
+    end
+  end
+end

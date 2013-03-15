@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=CQRLOG
+Comment=Advanced logging program for hamradio operators
+Exec=cqrlog
+Terminal=false
+Type=Application
+Icon=cqrlog.png
+Categories=Utility;Database;HamRadio
+

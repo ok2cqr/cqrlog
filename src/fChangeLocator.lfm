@@ -1,0 +1,53 @@
+object frmChangeLocator: TfrmChangeLocator
+  Left = 657
+  Height = 89
+  Top = 416
+  Width = 240
+  HorzScrollBar.Page = 239
+  VertScrollBar.Page = 88
+  ActiveControl = edtLocator
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Change locator'
+  ClientHeight = 89
+  ClientWidth = 240
+  Position = poMainFormCenter
+  object Label1: TLabel
+    Left = 8
+    Height = 20
+    Top = 8
+    Width = 119
+    Caption = 'Enter your locator:'
+    ParentColor = False
+  end
+  object edtLocator: TEdit
+    Left = 9
+    Height = 23
+    Top = 23
+    Width = 216
+    CharCase = ecUppercase
+    OnKeyPress = edtLocatorKeyPress
+    TabOrder = 0
+  end
+  object btnOK: TButton
+    Left = 8
+    Height = 25
+    Top = 56
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 1
+  end
+  object btnStorno: TButton
+    Left = 150
+    Height = 25
+    Top = 56
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

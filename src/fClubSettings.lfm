@@ -1,0 +1,350 @@
+object frmClubSettings: TfrmClubSettings
+  Left = 338
+  Height = 411
+  Top = 244
+  Width = 781
+  HelpType = htKeyword
+  HelpKeyword = 'help/h1.html#ah15'
+  ActiveControl = edtNewInfo
+  Caption = 'Club settings'
+  ClientHeight = 411
+  ClientWidth = 781
+  OnShow = FormShow
+  LCLVersion = '0.9.29'
+  object GroupBox1: TGroupBox
+    Left = 9
+    Height = 392
+    Top = 8
+    Width = 447
+    Caption = ' Info '
+    ClientHeight = 373
+    ClientWidth = 443
+    TabOrder = 0
+    object GroupBox2: TGroupBox
+      Left = 13
+      Height = 71
+      Top = 4
+      Width = 416
+      Caption = ' New '
+      ClientHeight = 52
+      ClientWidth = 412
+      TabOrder = 0
+      object Label7: TLabel
+        Left = 301
+        Height = 18
+        Top = -1
+        Width = 35
+        Caption = 'Color'
+        ParentColor = False
+      end
+      object edtNewInfo: TEdit
+        Left = 6
+        Height = 27
+        Top = 21
+        Width = 289
+        TabOrder = 0
+      end
+      object cmbNewColor: TColorBox
+        Left = 301
+        Height = 31
+        Top = 17
+        Width = 100
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        ItemHeight = 0
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 13
+      Height = 70
+      Top = 75
+      Width = 416
+      Caption = ' New band'
+      ClientHeight = 51
+      ClientWidth = 412
+      TabOrder = 1
+      object Label8: TLabel
+        Left = 301
+        Height = 18
+        Top = -3
+        Width = 35
+        Caption = 'Color'
+        ParentColor = False
+      end
+      object edtNewBandInfo: TEdit
+        Left = 6
+        Height = 27
+        Top = 19
+        Width = 289
+        TabOrder = 0
+      end
+      object cmbBandColor: TColorBox
+        Left = 301
+        Height = 31
+        Top = 15
+        Width = 100
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        ItemHeight = 0
+        TabOrder = 1
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 13
+      Height = 70
+      Top = 146
+      Width = 416
+      Caption = ' New mode '
+      ClientHeight = 51
+      ClientWidth = 412
+      TabOrder = 2
+      object Label9: TLabel
+        Left = 301
+        Height = 18
+        Top = -1
+        Width = 35
+        Caption = 'Color'
+        ParentColor = False
+      end
+      object edtNewModeInfo: TEdit
+        Left = 6
+        Height = 27
+        Top = 21
+        Width = 289
+        TabOrder = 0
+      end
+      object cmbModeColor: TColorBox
+        Left = 301
+        Height = 31
+        Top = 17
+        Width = 100
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        ItemHeight = 0
+        TabOrder = 1
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 13
+      Height = 71
+      Top = 219
+      Width = 416
+      Caption = ' QSL needed  '
+      ClientHeight = 52
+      ClientWidth = 412
+      TabOrder = 3
+      object Label10: TLabel
+        Left = 301
+        Height = 18
+        Top = -2
+        Width = 35
+        Caption = 'Color'
+        ParentColor = False
+      end
+      object edtQSLNeededInfo: TEdit
+        Left = 6
+        Height = 27
+        Top = 20
+        Width = 289
+        TabOrder = 0
+      end
+      object cmbQSLColor: TColorBox
+        Left = 301
+        Height = 31
+        Top = 17
+        Width = 100
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        ItemHeight = 0
+        TabOrder = 1
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 13
+      Height = 70
+      Top = 294
+      Width = 416
+      Caption = ' Already confirmed  '
+      ClientHeight = 51
+      ClientWidth = 412
+      TabOrder = 4
+      object Label11: TLabel
+        Left = 301
+        Height = 18
+        Top = -3
+        Width = 35
+        Caption = 'Color'
+        ParentColor = False
+      end
+      object edtAlreadyCmfInfo: TEdit
+        Left = 6
+        Height = 27
+        Top = 19
+        Width = 289
+        TabOrder = 0
+      end
+      object cmbAlreadyColor: TColorBox
+        Left = 301
+        Height = 31
+        Top = 17
+        Width = 100
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        ItemHeight = 0
+        TabOrder = 1
+      end
+    end
+  end
+  object GroupBox7: TGroupBox
+    Left = 464
+    Height = 96
+    Top = 8
+    Width = 312
+    ClientHeight = 92
+    ClientWidth = 308
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 14
+      Height = 18
+      Top = 4
+      Width = 29
+      Caption = 'Join '
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 157
+      Height = 18
+      Top = 9
+      Width = 140
+      Caption = 'field in club database'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 14
+      Height = 18
+      Top = 39
+      Width = 29
+      Caption = 'with'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 158
+      Height = 18
+      Top = 40
+      Width = 138
+      Caption = 'field in main databse'
+      ParentColor = False
+    end
+    object cmbClubFields: TComboBox
+      Left = 47
+      Height = 31
+      Top = 0
+      Width = 100
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'clubcall'
+        'club_nr'
+      )
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'clubcall'
+    end
+    object cmbMainFields: TComboBox
+      Left = 47
+      Height = 31
+      Top = 34
+      Width = 100
+      ItemHeight = 0
+      Items.Strings = (
+        'call'
+        'qth'
+        'award'
+        'county'
+        'state'
+      )
+      Style = csDropDownList
+      TabOrder = 1
+    end
+  end
+  object GroupBox8: TGroupBox
+    Left = 464
+    Height = 96
+    Top = 104
+    Width = 312
+    ClientHeight = 92
+    ClientWidth = 308
+    TabOrder = 2
+    object Label5: TLabel
+      Left = 14
+      Height = 18
+      Top = 9
+      Width = 172
+      Caption = 'Store this information into'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 14
+      Height = 18
+      Top = 39
+      Width = 33
+      Caption = 'field:'
+      ParentColor = False
+    end
+    object cmbStoreFileds: TComboBox
+      Left = 190
+      Height = 31
+      Top = 0
+      Width = 113
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'award'
+        'qth'
+        'comm. for QSO'
+        'name'
+        'county'
+        'grid'
+        'state'
+      )
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'award'
+    end
+    object edtStoreText: TEdit
+      Left = 58
+      Height = 27
+      Top = 35
+      Width = 245
+      TabOrder = 1
+    end
+  end
+  object btnOK: TButton
+    Left = 504
+    Height = 25
+    Top = 368
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    ModalResult = 1
+    OnClick = btnOKClick
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Left = 608
+    Height = 25
+    Top = 368
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 4
+  end
+  object btnHelp: TButton
+    Left = 696
+    Height = 25
+    Top = 368
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'Help'
+    OnClick = btnHelpClick
+    TabOrder = 5
+  end
+end

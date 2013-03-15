@@ -1,0 +1,56 @@
+object frmChangelog: TfrmChangelog
+  Left = 427
+  Height = 480
+  Top = 275
+  Width = 628
+  BorderStyle = bsDialog
+  Caption = 'Changelog'
+  ClientHeight = 480
+  ClientWidth = 628
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.30'
+  object Panel1: TPanel
+    Left = 0
+    Height = 34
+    Top = 446
+    Width = 628
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 34
+    ClientWidth = 628
+    TabOrder = 0
+    object Button1: TButton
+      Left = 545
+      Height = 25
+      Top = 5
+      Width = 75
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = 'Close'
+      ModalResult = 2
+      TabOrder = 0
+    end
+  end
+  object IpHtmlPanel1: TIpHtmlPanel
+    Left = 0
+    Height = 446
+    Top = 0
+    Width = 628
+    Align = alClient
+    DataProvider = IpFileDataProvider1
+    FixedTypeface = 'Courier New'
+    DefaultTypeFace = 'default'
+    DefaultFontSize = 10
+    FlagErrors = False
+    PrintSettings.MarginLeft = 0.5
+    PrintSettings.MarginTop = 0.5
+    PrintSettings.MarginRight = 0.5
+    PrintSettings.MarginBottom = 0.5
+    TabOrder = 1
+  end
+  object IpFileDataProvider1: TIpFileDataProvider
+    left = 63
+    top = 35
+  end
+end

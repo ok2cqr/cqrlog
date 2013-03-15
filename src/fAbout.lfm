@@ -1,0 +1,126 @@
+object frmAbout: TfrmAbout
+  Left = 497
+  Height = 183
+  Top = 391
+  Width = 404
+  BorderStyle = bsDialog
+  Caption = 'About CQRLOG'
+  ClientHeight = 183
+  ClientWidth = 404
+  OnShow = FormShow
+  LCLVersion = '0.9.30'
+  object Image1: TImage
+    Left = 8
+    Height = 65
+    Top = 8
+    Width = 72
+    Picture.Data = {
+      1754506F727461626C654E6574776F726B477261706869637D02000089504E47
+      0D0A1A0A0000000D4948445200000020000000200806000000737A7AF4000000
+      0974455874582D496E6465780031C3C4ACF40000022F494441545885BD96E171
+      EB201084579ED7C0B5400BB4400B7E25A805B51095E0B402258812A00451C2E5
+      477C0A32A0C852EC9B61B06CC47DEC1E603033003000EEF5770F809919EF6845
+      F2C7FE2D00ADE479FF32803DC95F09B15B8157D9525140BF15A2AA80AE4048FB
+      6B88660DD4205EA1C4660DB4209899ADB57CEB355B6B4F41FCBA0B6A10218455
+      3B0301667E0AE2AF012E00F0E9815EB77B0D0FAD35FABE0700C4189187520ACE
+      39C681F8076C2797FED66BA8EB077A00A4D4915CF510295AF2DF7ACD21049EE7
+      99ADB53CCF334FD354D870D48A8B80B4562E915282520ADE7B28A59052AA2EE8
+      592B160066EE6A108F9143D47E7B8C94D226D0257F60E68ECC80EBF50A001001
+      DCF87F3704F0A3428C9189A8DB0D0000C69865E2FEEE81D61AC98DAB715A6B38
+      E70A88FCB965531E9D1C87798CE3C84AA9EFC9FC270080CC508C232278EF618C
+      596DCDFC3311E5AD50A30A50406493ED818831C218030070CEC11853244E2931
+      1175850512C33074314648BBBF548C4B292D7608A03106CEB9EABCDE7BCE6BA3
+      A980C4388E0CFC789BAF2E57848864B5CB96150851408A3357E457806CA5CB40
+      51A55680021163444AA950E3D18EDD0012A28824AC85149D5856AB81C3002D98
+      5AC896DE3A0B0E01E4C76DC5DFA5F29D734C44DB10CF5E1E21049EA6A9B874EE
+      17115B6B579792B596A769E2799EAB17D5530AC8DE6D29E1BDE77BE1AD56BBA9
+      C4D17F3235254208CDEBB8A5C4A1E42D395BDF6F419CDA054742ECD05A77A72C
+      38DBC4BE2F71E33874C381B1300000000049454E44AE426082
+    }
+    Stretch = True
+  end
+  object Label1: TLabel
+    Left = 136
+    Height = 65
+    Top = 8
+    Width = 251
+    Caption = 'CQRLOG'
+    Font.Height = -54
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object Bevel1: TBevel
+    Left = 8
+    Height = 8
+    Top = 96
+    Width = 392
+    Shape = bsTopLine
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 18
+    Top = 104
+    Width = 55
+    Caption = 'Authors:'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 72
+    Height = 18
+    Top = 104
+    Width = 314
+    Caption = 'Petr Hlozek, OK2CQR && Martin Kratoska, OK1RR'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 8
+    Height = 18
+    Top = 128
+    Width = 161
+    Caption = 'Home page and support:'
+    ParentColor = False
+  end
+  object lblLink: TLabel
+    Left = 176
+    Height = 18
+    Top = 128
+    Width = 147
+    Caption = 'http://www.cqrlog.com'
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = lblLinkClick
+    OnMouseEnter = lblLinkMouseEnter
+  end
+  object btnChangelog: TButton
+    Left = 8
+    Height = 25
+    Top = 152
+    Width = 94
+    Caption = 'Changelog'
+    OnClick = btnChangelogClick
+    TabOrder = 0
+  end
+  object btnClose: TButton
+    Left = 325
+    Height = 25
+    Top = 152
+    Width = 75
+    Cancel = True
+    Caption = 'Close'
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object lblVerze: TLabel
+    Left = 224
+    Height = 18
+    Top = 72
+    Width = 163
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = 'lblVerze'
+    ParentColor = False
+  end
+end

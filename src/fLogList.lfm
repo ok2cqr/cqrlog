@@ -1,0 +1,92 @@
+object frmLogList: TfrmLogList
+  Left = 405
+  Height = 422
+  Top = 241
+  Width = 496
+  ActiveControl = lbFiles
+  Caption = 'List of logs'
+  ClientHeight = 422
+  ClientWidth = 496
+  OnShow = FormShow
+  LCLVersion = '0.9.29'
+  object Panel1: TPanel
+    Left = 386
+    Height = 398
+    Top = 0
+    Width = 110
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 398
+    ClientWidth = 110
+    TabOrder = 0
+    object btnNew: TButton
+      Left = 8
+      Height = 25
+      Top = 112
+      Width = 96
+      Caption = 'New log'
+      OnClick = btnNewClick
+      TabOrder = 0
+    end
+    object btnDeleteLog: TButton
+      Left = 7
+      Height = 25
+      Top = 248
+      Width = 96
+      Caption = 'Delete log'
+      OnClick = btnDeleteLogClick
+      TabOrder = 1
+      Visible = False
+    end
+    object btnOpen: TButton
+      Left = 7
+      Height = 25
+      Top = 8
+      Width = 96
+      Caption = 'Open'
+      OnClick = btnOpenClick
+      TabOrder = 2
+    end
+    object btnCancel: TButton
+      Left = 8
+      Height = 25
+      Top = 48
+      Width = 96
+      Cancel = True
+      Caption = 'Cancel'
+      OnClick = btnCancelClick
+      TabOrder = 3
+    end
+    object btnEditLog: TButton
+      Left = 8
+      Height = 25
+      Top = 152
+      Width = 96
+      Caption = 'Edit log'
+      TabOrder = 4
+      Visible = False
+    end
+  end
+  object lbFiles: TListBox
+    Left = 0
+    Height = 398
+    Top = 0
+    Width = 386
+    Align = alClient
+    ItemHeight = 0
+    OnDblClick = lbFilesDblClick
+    OnKeyUp = lbFilesKeyUp
+    TabOrder = 1
+    TopIndex = -1
+  end
+  object pnlPath: TPanel
+    Left = 0
+    Height = 24
+    Top = 398
+    Width = 496
+    Align = alBottom
+    Alignment = taLeftJustify
+    BevelOuter = bvNone
+    TabOrder = 2
+  end
+end

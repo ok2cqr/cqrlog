@@ -1,0 +1,308 @@
+object frmDBConnect: TfrmDBConnect
+  Left = 499
+  Height = 552
+  Top = 248
+  Width = 369
+  Caption = 'Database connection'
+  ClientHeight = 552
+  ClientWidth = 369
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '0.9.30.2'
+  object grbLogin: TGroupBox
+    Left = 0
+    Height = 192
+    Top = 0
+    Width = 369
+    Align = alTop
+    Caption = ' MySQL server '
+    ClientHeight = 160
+    ClientWidth = 365
+    TabOrder = 0
+    Visible = False
+    object edtServer: TEdit
+      Left = 14
+      Height = 22
+      Top = 25
+      Width = 168
+      TabOrder = 0
+      Text = 'localhost'
+    end
+    object Label1: TLabel
+      Left = 14
+      Height = 17
+      Top = 9
+      Width = 80
+      Caption = 'Server name:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 218
+      Height = 17
+      Top = 9
+      Width = 31
+      Caption = 'Port:'
+      ParentColor = False
+    end
+    object edtPort: TEdit
+      Left = 218
+      Height = 22
+      Top = 25
+      Width = 80
+      TabOrder = 1
+      Text = '3306'
+    end
+    object Label3: TLabel
+      Left = 14
+      Height = 17
+      Top = 61
+      Width = 68
+      Caption = 'User name:'
+      ParentColor = False
+    end
+    object edtUser: TEdit
+      Left = 14
+      Height = 22
+      Top = 79
+      Width = 168
+      TabOrder = 2
+    end
+    object Label4: TLabel
+      Left = 218
+      Height = 17
+      Top = 61
+      Width = 61
+      Caption = 'Password:'
+      ParentColor = False
+    end
+    object edtPass: TEdit
+      Left = 218
+      Height = 22
+      Top = 79
+      Width = 132
+      EchoMode = emPassword
+      PasswordChar = '*'
+      TabOrder = 3
+    end
+    object chkSavePass: TCheckBox
+      Left = 18
+      Height = 26
+      Top = 114
+      Width = 106
+      Caption = 'Remeber me'
+      OnChange = chkSavePassChange
+      TabOrder = 4
+    end
+    object btnConnect: TButton
+      Left = 42
+      Height = 25
+      Top = 143
+      Width = 83
+      Caption = 'Connect'
+      OnClick = btnConnectClick
+      TabOrder = 5
+    end
+    object btnDisconnect: TButton
+      Left = 206
+      Height = 25
+      Top = 143
+      Width = 87
+      Caption = 'Disconnect'
+      OnClick = btnDisconnectClick
+      TabOrder = 6
+    end
+    object chkAutoConn: TCheckBox
+      Left = 206
+      Height = 26
+      Top = 114
+      Width = 111
+      Caption = 'Auto connect'
+      TabOrder = 7
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 334
+    Top = 218
+    Width = 369
+    Align = alClient
+    BevelOuter = bvNone
+    Caption = 'Panel1'
+    ClientHeight = 334
+    ClientWidth = 369
+    TabOrder = 1
+    object Panel2: TPanel
+      Left = 276
+      Height = 313
+      Top = 0
+      Width = 93
+      Align = alRight
+      BevelOuter = bvNone
+      ClientHeight = 313
+      ClientWidth = 93
+      TabOrder = 0
+      object btnNewLog: TButton
+        Left = 9
+        Height = 25
+        Top = 112
+        Width = 75
+        Caption = 'New log'
+        Enabled = False
+        OnClick = btnNewLogClick
+        TabOrder = 1
+      end
+      object btnEditLog: TButton
+        Left = 9
+        Height = 25
+        Top = 137
+        Width = 75
+        Caption = 'Edit log'
+        Enabled = False
+        OnClick = btnEditLogClick
+        TabOrder = 2
+      end
+      object btnDeleteLog: TButton
+        Left = 9
+        Height = 25
+        Top = 162
+        Width = 75
+        Caption = 'Delete log'
+        Enabled = False
+        OnClick = btnDeleteLogClick
+        TabOrder = 3
+      end
+      object btnOpenLog: TButton
+        Left = 9
+        Height = 25
+        Top = 10
+        Width = 75
+        Caption = 'Open log'
+        Enabled = False
+        OnClick = btnOpenLogClick
+        TabOrder = 0
+      end
+      object btnCancel: TButton
+        Left = 9
+        Height = 25
+        Top = 48
+        Width = 75
+        Cancel = True
+        Caption = 'Cancel'
+        OnClick = btnCancelClick
+        TabOrder = 4
+      end
+      object btnUtils: TButton
+        Left = 9
+        Height = 25
+        Top = 214
+        Width = 75
+        Caption = 'Utils'
+        OnClick = btnUtilsClick
+        TabOrder = 5
+      end
+    end
+    object dbgrdLogs: TDBGrid
+      Left = 0
+      Height = 313
+      Top = 0
+      Width = 276
+      Align = alClient
+      Color = clWindow
+      Columns = <>
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      ReadOnly = True
+      TabOrder = 1
+      TitleStyle = tsNative
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 21
+      Top = 313
+      Width = 369
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 21
+      ClientWidth = 369
+      TabOrder = 2
+      object chkAutoOpen: TCheckBox
+        Left = 8
+        Height = 26
+        Top = -1
+        Width = 245
+        Caption = 'Open recent log after program runs'
+        TabOrder = 0
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Height = 26
+    Top = 192
+    Width = 369
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 26
+    ClientWidth = 369
+    TabOrder = 2
+    object chkSaveToLocal: TCheckBox
+      Left = 12
+      Height = 26
+      Top = 2
+      Width = 215
+      Caption = 'Save log data to local machine'
+      OnClick = chkSaveToLocalClick
+      TabOrder = 0
+    end
+  end
+  object tmrAutoConnect: TTimer
+    Enabled = False
+    OnTimer = tmrAutoConnectTimer
+    left = 112
+    top = 400
+  end
+  object popUtils: TPopupMenu
+    left = 312
+    top = 472
+    object MenuItem1: TMenuItem
+      Caption = 'Configuration'
+      object mnuExport: TMenuItem
+        Caption = 'Export ...'
+        OnClick = mnuExportClick
+      end
+      object MenuItem2: TMenuItem
+        Caption = '-'
+      end
+      object mnuImport: TMenuItem
+        Caption = 'Import ...'
+        OnClick = mnuImportClick
+      end
+    end
+    object MenuItem3: TMenuItem
+      Caption = '-'
+    end
+    object mnuRepair: TMenuItem
+      Caption = 'Repair log database'
+      OnClick = mnuRepairClick
+    end
+    object MenuItem5: TMenuItem
+      Caption = '-'
+    end
+    object mnuClearLog: TMenuItem
+      Caption = 'Clear log'
+      OnClick = mnuClearLogClick
+    end
+  end
+  object dlgOpen: TOpenDialog
+    DefaultExt = '.ini'
+    Filter = 'ini files|*.ini'
+    left = 151
+    top = 234
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.ini'
+    Filter = 'ini files|*.ini'
+    left = 151
+    top = 295
+  end
+end

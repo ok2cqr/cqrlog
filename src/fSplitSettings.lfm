@@ -1,0 +1,345 @@
+object frmSplitSettings: TfrmSplitSettings
+  Left = 465
+  Height = 288
+  Top = 239
+  Width = 326
+  ActiveControl = cmbSplit1
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Split settings'
+  ClientHeight = 288
+  ClientWidth = 326
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.27'
+  object Label1: TLabel
+    Left = 8
+    Height = 18
+    Top = 19
+    Width = 53
+    Caption = 'CTRL+1'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 168
+    Height = 18
+    Top = 19
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 18
+    Top = 48
+    Width = 53
+    Caption = 'CTRL+2'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 168
+    Height = 18
+    Top = 48
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 18
+    Top = 77
+    Width = 53
+    Caption = 'CTRL+3'
+    ParentColor = False
+  end
+  object Label9: TLabel
+    Left = 168
+    Height = 18
+    Top = 77
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 8
+    Height = 18
+    Top = 106
+    Width = 53
+    Caption = 'CTRL+4'
+    ParentColor = False
+  end
+  object Label10: TLabel
+    Left = 168
+    Height = 18
+    Top = 106
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 8
+    Height = 18
+    Top = 136
+    Width = 53
+    Caption = 'CTRL+5'
+    ParentColor = False
+  end
+  object Label11: TLabel
+    Left = 168
+    Height = 18
+    Top = 136
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 8
+    Height = 18
+    Top = 165
+    Width = 53
+    Caption = 'CTRL+6'
+    ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 168
+    Height = 18
+    Top = 165
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label13: TLabel
+    Left = 8
+    Height = 18
+    Top = 194
+    Width = 53
+    Caption = 'CTRL+7'
+    ParentColor = False
+  end
+  object Label14: TLabel
+    Left = 168
+    Height = 18
+    Top = 194
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object Label15: TLabel
+    Left = 8
+    Height = 18
+    Top = 223
+    Width = 53
+    Caption = 'CTRL+8'
+    ParentColor = False
+  end
+  object Label16: TLabel
+    Left = 168
+    Height = 18
+    Top = 223
+    Width = 18
+    Caption = 'Hz'
+    ParentColor = False
+  end
+  object edtSplit1: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 16
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 0
+  end
+  object cmbSplit1: TComboBox
+    Left = 200
+    Height = 29
+    Top = 14
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 1
+    Text = 'UP'
+  end
+  object edtSplit2: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 45
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 2
+    Value = 1
+  end
+  object cmbSplit2: TComboBox
+    Left = 200
+    Height = 29
+    Top = 43
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 3
+    Text = 'UP'
+  end
+  object edtSplit3: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 74
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 4
+    Value = 1
+  end
+  object cmbSplit3: TComboBox
+    Left = 200
+    Height = 29
+    Top = 72
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 5
+    Text = 'UP'
+  end
+  object edtSplit4: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 103
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 6
+    Value = 1
+  end
+  object cmbSplit4: TComboBox
+    Left = 200
+    Height = 29
+    Top = 101
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 7
+    Text = 'UP'
+  end
+  object edtSplit5: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 133
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 8
+    Value = 1
+  end
+  object cmbSplit5: TComboBox
+    Left = 200
+    Height = 29
+    Top = 131
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 9
+    Text = 'UP'
+  end
+  object edtSplit6: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 162
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 10
+    Value = 1
+  end
+  object cmbSplit6: TComboBox
+    Left = 200
+    Height = 29
+    Top = 160
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 11
+    Text = 'UP'
+  end
+  object edtSplit7: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 191
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 12
+    Value = 1
+  end
+  object cmbSplit7: TComboBox
+    Left = 200
+    Height = 29
+    Top = 189
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 13
+    Text = 'UP'
+  end
+  object edtSplit8: TSpinEdit
+    Left = 72
+    Height = 27
+    Top = 220
+    Width = 88
+    MaxValue = 50000
+    TabOrder = 14
+    Value = 1
+  end
+  object cmbSplit8: TComboBox
+    Left = 200
+    Height = 29
+    Top = 218
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'UP'
+      'DOWN'
+    )
+    TabOrder = 15
+    Text = 'UP'
+  end
+  object btnOK: TButton
+    Left = 32
+    Height = 25
+    Top = 256
+    Width = 75
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 16
+  end
+  object btnCancel: TButton
+    Left = 210
+    Height = 25
+    Top = 256
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 17
+  end
+end

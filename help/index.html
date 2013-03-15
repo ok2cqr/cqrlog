@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en-us"><head>
+<title>CQRLOG - Help Index</title></head>
+<body>
+<strong><h1>CQRLOG for LINUX (version 0.9.0)</h1></strong>
+by<br><br>
+<i>Petr Hlozek, OK2CQR
+[http://www.ok2cqr.com]</i>
+<br>
+and
+<br>
+<i>Martin Kratoska, OK1RR
+[http://www.ok1rr.com]</i>
+<br><br>
+<strong><h3>Description:</h3></strong>
+<div align="justify"><div>CQRLOG is an advanced ham radio logger based
+on Firebird database. It provides radio control based on hamlib libraries
+(currently support of 140+ radio types and models), DX cluster
+connection, band map, QRZ callbook (web version), IOTA support, a
+grayliner, propagation indicator, xplanet support (maps in azimuthal projection centered in
+your QTH), OK1RR free QSL manager database etc.
+<br> <br>CQRLOG is intended mainly to seriously HF DX minded operators
+but can be used for any ham logging purpose, also by casual operators.
+It is equipped with probably most accurate DXCC country database
+available, providing not only the country resolution but also state,
+province, region, district etc. It resolves also antarctic bases,
+special event stations, contest callsigns and much more.<br><br>
+CQRLOG has now its own web site at <a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>. Find news, changes, latest additional files and howtos here. If you have a problem, browse this web site first, then ask for help.</div>
+<br><br> <strong><h3>License and disclaimer:</h3></strong>CQRLOG is
+published under GNU GENERAL PUBLIC LICENSE Version 2 (GPL v. 2), June
+1991. This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version. Full version of GPL v.
+2 is <a href="h8.html"><strong>here</strong></a>.
+<br><br>The authors are not responsible for any damages, losses or safety risks to the user; the software is published AS IS.
+<br><br><strong><h3>Supported transceivers:</h3></strong> The Radio Control is provided with <i>hamlib</i>,
+a set of libraries, which is a development effort to provide a
+consistent interface for programmers wanting to incorporate radio
+control in their programs. <i>hamlib</i> is not a complete user
+application, rather, it is a software layer intended to make
+controlling various radios and other shack hardware much easier.
+<br><br> Most recent amateur radio transceivers allow external control
+of their functions through a serial interface. Unfortunately, control
+commands are not always consistent across a manufacturer's product line
+and each manufacturer's product line differs greatly from its
+competitors.
+<br><br> There's no standardized protocol to remotely control one's
+rig, be it a Ham radio transceiver, a SWL receiver, any kind of scanner
+and other mobiles. However, some manufacturer may have designed their
+own proprietary protocol, implemented in some of their product family.
+Therefore, each rig family will require a <i>hamlib</i> backend to set
+the VFO frequency, change mode and passband width, get current signal
+strength, etc. The actual list of supported radios can be found <a href="h6.html"><strong>here</strong></a>.
+<br><br> <strong><h3>Installation:</h3></strong>Unpack (untar) the
+installation package cqrlog_version_install.tar.gz into a temporary
+directory and fire it up. An installer will do all the job for you.
+There is also a choice of a brand new installation or version upgrade.
+If upgrading, no important file will be overwritten. Anyway, <strong>backup your log</strong> before you begin any upgrade!
+<br><br><strong><h3>Dependencies:</h3></strong>
+The only dependency is the <i>hamlib</i> which must be installed also if you don't want radio control. The sources are available at <a href="http://hamlib.sourceforge.net/"><strong>http://hamlib.sourceforge.net/</strong></a>, however precompiled packages are available for almost any major Linux distribution.
+</div>
+<a name="aa"><strong></strong></a><h2><a name="aa"><strong>Contents:</strong></a></h2><h3><strong>Quick start</strong></h3>
+<ul style="margin-left: 40px;">
+<li><a href="h1.html">Preferences</a></li>
+<ul>
+<li><a href="h1.html#ah2">Program</a></li>
+<li><a href="h1.html#ah3">Station</a></li>
+<li><a href="h1.html#ah4">New QSO</a></li>
+<li><a href="h1.html#ah5">Visible columns</a></li>
+<li><a href="h1.html#ah6">Bands</a></li>
+<li><a href="h1.html#ah7">TRX Control</a></li>
+<li><a href="h1.html#ah8">Modes</a></li>
+<li><a href="h1.html#ah9">QTH Profiles</a></li>
+<li><a href="h1.html#ah10">Export</a></li>
+<li><a href="h1.html#ah11">DX Cluster</a></li>
+<li><a href="h1.html#ah12">Fonts</a></li>
+<li><a href="h1.html#ah13">WAZ, ITU Zones</a></li>
+<li><a href="h1.html#ah14">IOTA</a></li>
+<li><a href="h1.html#ah15">Membership</a></li>
+<li><a href="h1.html#bh1">Bandmap</a></li>
+<li><a href="h1.html#bh2">xplanet support</a></li>
+<li><a href="h1.html#bh3">Zip code tracking</a></li>
+<li><a href="h1.html#bh4">LoTW support</a></li>
+<li><a href="h1.html#ch1">CW interface</a></li>
+<li><a href="h1.html#ch2">fldigi interface</a></li>
+<li><a href="h1.html#ch3">Auto backup</a></li>
+<li><a href="h1.html#ch4">External viewers</a></li>
+</ul>
+</ul>
+<strong><h3>Operation</h3></strong>
+<ul>
+<li><a href="h20.html#ah16">Keys and Shortcuts</a></li>
+<li><a href="h20.html#ah17">New QSO</a> (online logging)</li>
+<li><a href="h20.html#ah18">New QSO</a> (offline logging, ie. from paper log etc.)</li>
+<li><a href="h20.html#ah33">Digital modes</a> (<em>fldigi</em> interface)</li>
+<li><a href="h25.html">QSO record edit</a></li>
+<li><a href="h25.html#grp">Group edit</a></li>
+<li><a href="h21.html#ah19">DX Cluster Operation</a></li>
+<li><a href="h21.html#bh19">Bandmap Operation</a></li>
+<li><a href="h26.html#">CW Operation</a></li>
+<li><a href="h21.html#ch19">xplanet support</a></li>
+<li><a href="h21.html#ch20">Propagation indicator</a></li>
+<li><a href="h23.html#ah22">Filtering</a></li>
+<li><a href="h22.html#ah21">QSL records</a></li>
+<li><a href="h22.html#bh4">QSL labels printing</a></li>
+<li><a href="h22.html#bh5">Auto mark QSL</a></li>
+<li><a href="h7.html">LoTW</a></li>
+<li><a href="h21.html#ch21">Additional notes to a callsign</a></li>
+<li><a href="h24.html#ah23">Statistics</a></li>
+</ul>
+<strong><h3>Advanced operations</h3></strong>
+<ul>
+<li><a href="h27.html">SQL console</a></li>
+</ul>
+<strong><h3>Maintenance</h3></strong>
+<ul>
+<li><a href="h3.html#ah24">ADIF import</a></li>
+<li><a href="h3.html#ah25">ADIF export</a></li>
+<li><a href="h3.html#ah26">HTML export</a></li>
+<li><a href="h3.html#ah27">Program version update</a></li>
+<li><a href="h3.html#ah28">Country files update</a></li>
+<li><a href="h3.html#ah29">QSL Manager Database update</a></li>
+<li><a href="h3.html#ah30">Statistics Rebuilding</a></li>
+<li><a href="h7.html#cfm">LoTW confirmation report update</a></li>
+<li><a href="h3.html#ah31">Membership databases</a></li>
+<li><a href="h3.html#ah32">Log backup</a></li>
+</ul>
+<strong><h3>Miscellaneous</h3></strong>
+<ul>
+<li><a href="h6.html">Supported radio types</a></li>
+<li><a href="h6.html#param">Comm parameters of some popular radios</a></li>
+<li><a href="h8.html">GNU GENERAL PUBLIC LICENSE</a></li>
+</ul>
+<strong><h3>Third Party Programs</h3></strong>
+<ul><li><strong>Hamlib</strong> - <strong><font color="#FF0000">NEEDED</font></strong>, without this CQRLOG does not work!</li>
+<li><strong>Trusted QSL</strong> - for LoTW operations. You need the updated version, download <a href="http://www.ok2cqr.com/?q=lotw-and-linux"><strong>here</strong></a> (sources, SuSE and Fedora packages). Ubuntu and Debian have this package in their repositories. Slackware packages download <a href="http://www.ok1rr.com/request.php?196"><strong>here</strong></a>.</li>
+<li><strong>xplanet</strong> - for DX Cluster spot visualization on the azimuthal map.</li>
+<li><strong>cwdaemon</strong> - for CW operation, only if you choose parallel or serial port keying without Winkey.</li>
+<table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/exc.png"></td><td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong> cwdaemon use may result in some cases in <strong>sloppy CW at speeds above 30 WPM</strong>. Use Winkey (by K1EL) if possible or your <strong>kernel must be modified to minimalize the latency</strong>. Tickless, high resolution timer and 1000 Hz sampling rate must be used. Recommended for very keen linux users only!</td></tr></tbody></table>
+<li><strong>fldigi</strong> for RTTY and Digital Modes. Download from the W1HKJ site <a href=http://www.w1hkj.com/Fldigi.html><strong>http://www.w1hkj.com/Fldigi.html</strong></a></li>
+</ul>
+<strong><h3>I want to...</h3></strong>
+<ul>
+<li><a href="h22.html#bh4">print QSL labels</a></li>
+<li><a href="h4.html#ah33">prepare LoTW log/update</a></li>
+<li><a href="h4.html#ah34">prepare eQSL log/update</a></li>
+<li><a href="h4.html#ah35">suggest a new feature</a></li>
+</ul>
+<strong><h3>Troubleshooting</h3></strong>
+<ul>
+<li><a href="h5.html#ah37">my radio control (CAT) does not work</a></li>
+<li><a href="h5.html#ah38">I'm unable to autologin to the Cluster</a></li>
+<li><a href="h5.html#ah39">error message when trying to load "Can't load library:..."</a></li>
+</ul><br>
+<p align="center"><img src="img/line.png"></p>
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+<tbody>
+<tr>
+<td align="left" width="33%">&nbsp;</td>
+<td align="center" width="33%">[<a href="#aa">Menu</a>]</td>
+<td align="right" width="33%"><a href="h1.html">Next </a>&gt;</td>
+</tr>
+</tbody>
+</table>
+</body></html>

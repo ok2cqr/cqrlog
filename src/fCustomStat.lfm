@@ -1,0 +1,207 @@
+object frmCustomStat: TfrmCustomStat
+  Left = 672
+  Height = 523
+  Top = 184
+  Width = 780
+  ActiveControl = pnlsettings
+  Caption = 'Custom statistics'
+  ClientHeight = 523
+  ClientWidth = 780
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '0.9.29'
+  object pnlsettings: TPanel
+    Left = 0
+    Height = 80
+    Top = 0
+    Width = 780
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 80
+    ClientWidth = 780
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 152
+      Height = 17
+      Top = 12
+      Width = 38
+      Caption = 'DXCC:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 8
+      Height = 17
+      Top = 12
+      Width = 34
+      Caption = 'Field:'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 496
+      Height = 17
+      Top = 12
+      Width = 81
+      Caption = 'QSL received'
+      ParentColor = False
+    end
+    object chkMode: TCheckBox
+      Left = 312
+      Height = 22
+      Top = 15
+      Width = 60
+      Caption = 'Mode'
+      TabOrder = 0
+    end
+    object chkBand: TCheckBox
+      Left = 312
+      Height = 22
+      Top = 40
+      Width = 56
+      Caption = 'Band'
+      TabOrder = 1
+    end
+    object edtPfx: TEdit
+      Left = 152
+      Height = 26
+      Top = 33
+      Width = 120
+      TabOrder = 2
+    end
+    object cmbMode: TComboBox
+      Left = 376
+      Height = 28
+      Top = 12
+      Width = 100
+      ItemHeight = 0
+      TabOrder = 3
+    end
+    object cmbField: TComboBox
+      Left = 8
+      Height = 28
+      Top = 33
+      Width = 128
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'award'
+        'county'
+        'state'
+        'qth'
+        'remarks'
+      )
+      TabOrder = 4
+      Text = 'award'
+    end
+    object btnShow: TButton
+      Left = 641
+      Height = 25
+      Top = 48
+      Width = 131
+      Anchors = [akTop, akRight]
+      Caption = 'Show statistics'
+      OnClick = btnShowClick
+      TabOrder = 5
+    end
+    object btnPref: TButton
+      Left = 269
+      Height = 25
+      Top = 33
+      Width = 24
+      Caption = '...'
+      OnClick = btnPrefClick
+      TabOrder = 6
+    end
+    object cmbQSLR: TComboBox
+      Left = 496
+      Height = 28
+      Top = 33
+      Width = 100
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        'CFM only'
+        'CMF+LoTW'
+        'LoTW only'
+      )
+      TabOrder = 7
+      Text = 'CFM only'
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 50
+    Top = 473
+    Width = 780
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 780
+    TabOrder = 1
+    object btnCancel: TButton
+      Left = 699
+      Height = 25
+      Top = 14
+      Width = 75
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object btnExport: TButton
+      Left = 603
+      Height = 25
+      Top = 14
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'Export'
+      TabOrder = 1
+    end
+    object btnHelp: TButton
+      Left = 8
+      Height = 25
+      Top = 14
+      Width = 75
+      Caption = 'Help'
+      TabOrder = 2
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 393
+    Top = 80
+    Width = 780
+    Align = alClient
+    BevelOuter = bvNone
+    Caption = 'Panel1'
+    ClientHeight = 393
+    ClientWidth = 780
+    TabOrder = 2
+    object grdStat: TStringGrid
+      Left = 0
+      Height = 288
+      Top = 0
+      Width = 780
+      Align = alClient
+      FixedRows = 2
+      TabOrder = 0
+    end
+    object grdSumStat: TStringGrid
+      Left = 0
+      Height = 100
+      Top = 293
+      Width = 780
+      Align = alBottom
+      TabOrder = 1
+    end
+    object Splitter1: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 5
+      Top = 288
+      Width = 780
+      Align = alBottom
+      ResizeAnchor = akBottom
+    end
+  end
+end

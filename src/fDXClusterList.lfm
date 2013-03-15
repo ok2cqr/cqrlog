@@ -1,0 +1,93 @@
+object frmDXClusterList: TfrmDXClusterList
+  Left = 494
+  Height = 376
+  Top = 326
+  Width = 515
+  HelpType = htKeyword
+  HelpKeyword = 'help/h21.html#ah19'
+  HorzScrollBar.Page = 514
+  VertScrollBar.Page = 375
+  ActiveControl = dbgrdDXClusterList
+  Caption = 'Choose dxcluster'
+  ClientHeight = 376
+  ClientWidth = 515
+  OnShow = FormShow
+  LCLVersion = '0.9.30.2'
+  object dbgrdDXClusterList: TDBGrid
+    Left = 0
+    Height = 334
+    Top = 0
+    Width = 515
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+    TitleStyle = tsNative
+    OnDblClick = dbgrdDXClusterListDblClick
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 42
+    Top = 334
+    Width = 515
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 42
+    ClientWidth = 515
+    TabOrder = 1
+    object btnNew: TButton
+      Left = 8
+      Height = 25
+      Top = 10
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'New'
+      OnClick = btnNewClick
+      TabOrder = 0
+    end
+    object btnEdit: TButton
+      Left = 95
+      Height = 25
+      Top = 10
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Edit'
+      OnClick = btnEditClick
+      TabOrder = 1
+    end
+    object btnDelete: TButton
+      Left = 181
+      Height = 25
+      Top = 10
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Delete'
+      OnClick = btnDeleteClick
+      TabOrder = 2
+    end
+    object btnCancel: TButton
+      Left = 431
+      Height = 25
+      Top = 10
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.InnerBorder = 4
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 3
+    end
+    object btnApply: TButton
+      Left = 348
+      Height = 25
+      Top = 10
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Apply'
+      ModalResult = 1
+      TabOrder = 4
+    end
+  end
+end

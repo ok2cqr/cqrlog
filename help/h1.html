@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<title>CQRLOG - Preferences</title>
+</head>
+<body><table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/exc.png"></td><td bgcolor=#ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong> Backup your data often! BACKUP your log file at the end of ANY session! All what you need to backup and store in a safe place is the main log database cqrlog.fdb located in the /log_data folder.</td></tr></tbody></table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td width="33%" align="left">&nbsp;&lt;<a href="index.html"> Prev</a></td>
+<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+<td width="33%" align="right"><a href="h20.html">Next </a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
+<p align=center><img src=img/line.png></p>
+<h2><strong>Preferences</strong></h2>
+<div align=justify>The first step you need is to set up your log preferences. From logging window, choose the 'File' menu item and 'Options' (or Ctrl-P].<br><br>
+<img src=img/h2.png border=0>
+<br><br>
+A multitab window appears, allowing setup of following parameters:<br>
+<ul style="margin-left: 40px;">
+<li><a href="h1.html#ah2">Program</a></li>
+<li><a href="h1.html#ah3">Station</a></li>
+<li><a href="h1.html#ah4">New QSO</a></li>
+<li><a href="h1.html#ah5">Visible columns</a></li>
+<li><a href="h1.html#ah6">Bands</a></li>
+<li><a href="h1.html#ah7">TRX Control</a></li>
+<li><a href="h1.html#ah8">Modes</a></li>
+<li><a href="h1.html#ah9">QTH Profiles</a></li>
+<li><a href="h1.html#ah10">Export</a></li>
+<li><a href="h1.html#ah11">DX Cluster</a></li>
+<li><a href="h1.html#ah12">Fonts</a></li>
+<li><a href="h1.html#ah13">WAZ, ITU Zones</a></li>
+<li><a href="h1.html#ah14">IOTA</a></li>
+<li><a href="h1.html#ah15">Membership</a></li>
+<li><a href="h1.html#bh1">Bandmap</a></li>
+<li><a href="h1.html#bh2">xplanet support</a></li>
+<li><a href="h1.html#bh3">Zip code tracking</a></li>
+<li><a href="h1.html#bh4">LoTW support</a></li>
+<li><a href="h1.html#ch1">CW interface</a></li>
+<li><a href="h1.html#ch2">fldigi interface</a></li>
+<li><a href="h1.html#ch3">Auto backup</a></li>
+<li><a href="h1.html#ch4">External viewers</a></li>
+</ul>
+<h2><strong>Preferences</strong></h2>
+The first tab of the 'Preferences' card is labelled  'Program'. Here is the setup of main program behaviour.<br><br>
+<a name=ah2><h2><strong>Program</strong></h2></a>
+<img src=img/h5.png border=0>
+<br><br>
+The <strong>Internet connection</strong> is important to those who is behind a proxy. The data to fill does not need further explanation, hopefully. Check the box above if you don't need an internet connection - CQRLOG attempts to connect if you try to connect to the DX Cluster (either via web or telnet) and/or if you hit F6 to access the QRZ.COM callbook data.
+<br><br>
+Other settings are:<br><br>
+<strong>UTC offset</strong> - you need to set up your time difference to UTC. We needed this to enable CQRLOG to run properly with minimalistic desktop managers which may/may not set the time properly depending on your time zone and possibly the Daylight Save Time. KDE and Gnome providing this.
+<br><br>
+<strong>Grayline offset</strong> - you need to set up your time difference to UTC to provide correct display of gray line.
+<br><br>
+<strong>Sorting order of the QSO list</strong> - choose ascending to see first your first QSO but most common option is descending to see your latest records in your log book.
+<br><br>
+<strong>Show band map after program startup</strong> - if checked, you see the Band map at the program start.<br><br><img src=img/h64.png border=0><br><br>
+<strong>Show DX cluster window after program startup</strong> - if checked, you see the DX cluster window at the program start.<br><br><img src=img/h4.png border=0><br><br>
+<strong>Show grayline after program startup</strong> - if checked, you see the grayline window at the program start.<br><br>
+<img src=img/h24.png border=0><br><br>
+<strong>Show TRX control window after program startup</strong> - if checked, you see the radio control window at the program startup.<br><br>
+<img src=img/h21.png border=0>
+<br><br>
+<strong>Show propagation window after program startup</strong> - if checked, a small window with propagation indices appears at the program startup.<br><br>
+<img src=img/h110.png border=0>
+<br><br>
+<strong>Check for newer version of DXCC tables after program startup</strong></a> - if checked, CQRLOG will check if any update of country files available. If new version is found, an update will be performed, however you are asked if you want this update.<br><br>
+<strong>Check for newer version of qsl managers database after program startup</strong> - if checked, CQRLOG will check if any update of QSL Managers database is available. If new version is found, an update will be performed, however you are asked if you want this update.<br><br>
+<img src=img/h67.png border=0><br><br>
+<strong>Show deleted countries in statistics</strong></a> - adds formerly valid countries to statistics and overall DXCC counts.<br><br>
+<strong>Show sunrise/sunset in UTC</strong> - if checked, sunrise and sunset times are shown in UTC, otherwise in local time. Set up the proper time difference for both grayline and sun rise/set.<br><br>
+<strong>Show all QSOs - Show QSO since</strong></a> - affects the QSO list window (Ctrl-O). 'Show all QSOs' means that all records in the log are displayed. It may speed up the operation if you are using a huge log (> 70 000 QSO). Actually, it limits the number of processed records to contacts since a year (the box contains a year in 4 digit form), entered into the box right from <em>Show QSO since</em>.  sets the limit of number of records displayed but the rendering of QSO list is much faster. Remember, that the option <strong><em>'Show QSO since'</em> affects also the export!</strong><br><br>
+<strong>Show statistics in</strong> metres (m) or Megahertz (MHz). Checking of one of the radio buttons affects the statistics appearing at the bottom of logging screen:<br><br>
+<img src=img/h27.png border=0><br><br>
+and also headers of the main statistics (DXCC, WAZ and ITU).
+<br><br>
+The bottom line with two options - 'Show all QSOs' and 'Show QSO since'  affects the QSO list window .  but the rendering is rather slow, the other option  - if you want to export records earlier than the year set in the fill box, choose 'Show all QSOs'!
+</div>
+<p align=center><img src=img/line.png></p>
+<a name=ah3><h2><strong>Station</strong></h2></a>
+<img src=img/h6.png border=0><br><br>
+<div align=justify>
+Enter your call, name, QTH and WW Locator here. Remember, that the entered call is used also as login for the DX Cluster and is displayed in all stats exported to html. The WW locator is of high importance because it determines your accurate position (ie. you don't need to enter your exact coordinates). The WW Locator is used in beam and distance computation as well as the start point of the simplified path to the other station which appears in the grayline map.
+</div>
+<p align=center><img src=img/line.png></p>
+<a name=ah4><h2><strong>New QSO</strong></h2></a>
+<img src=img/h7.png border=0><br><br>
+<div align=justify>
+Here are the default values for the new QSO. Remember, if the radio control is active, the default frequency does not appear on the logging screen. The preset RST values will apppear in their corresponding boxes.
+<br><br>
+The <em>'Use spacebar to move between fields'</em> is very interesting and probably the most natural way but it works only if you are moving forwards. To move between fields, there are two other generic possibilities (TAB key and up/down arrow keys) which would remain unaffected even if you check the spacebar option. The <em>'Refresh data after save QSO'</em> affects the data displayed in the QSO List (Ctrl-O). If checked, each QSO appears in this list immediately after logging, however the refresh procedure is quite slow. To save time, keep this box unchecked. The <em>'Skip over mode and frequency when radio is connected'</em> is very important if the radio control is active. The <em>'Show detail window'</em> option enables an extra window to appear at program start. The <em>'Enable auto search on QRZ.COM'</em> switches on the automated search for QRZ callbook data for any worked station. This option does the same as F6 in logging screen, however it can be rather slow depending on the QRZ.COM server availability. Finally, the <em>'Show recent QSO records for last ** days'</em> limits the record number listed in the logging screen. Do not set the number of days too high, a high number can cause the log speed issues! The default value of 5 days is appropriate for most cases.</div><br>
+<img src=img/h25.png border=0><br><br>
+<div align=justify>
+This window dispays details about new/confirmed zones, IOTA details etc.</div>
+<p align=center><img src=img/line.png></p>
+<a name=ah5><h2><strong>Visible columns</strong></h2></a>
+<img src=img/h8.png border=0><br><br>
+<div align=justify>
+Checked columns are visible in the previous QSO list appearing at the top of the logging screen.</div>
+<p align=center><img src=img/line.png></p>
+<a name=ah6><h2><strong>Bands</strong></h2></a>
+<img src=img/h9.png border=0><br><br>
+<div align=justify>
+Checked bands are visible in both statistics appearing at the bottom of logging screen (bands/modes of the actual logged station) and main DXCC, WAZ and ITU zones statistics. It affects also the Challenge points at the bottom of the DXCC statistics.</div>
+<p align=center><img src=img/line.png></p>
+<a name=ah7><h2><strong>TRX Control</strong></h2></a>
+<img src=img/h10.png border=0><br><br>
+<div align=justify>
+The TRX Control displays actual frequency. You can change band and mode. No further explanation needed. The number behind the RIG: indicates the radio type ID which correspond to the IDs used by hamlib. The full list is <a href=h6.html><strong>here</strong></a>.<br><br>
+The default frequencies where the radio tunes if you click onto a band button in the 'TRX control' panel can be changed to your preferences. The mode is switched in accordance to the band plan, there is actually a separate set of default frequencies for each CW, SSB, RTTY, AM and FM modes. Click onto 'Change default frequencies' button and set up frequencies of your choice.</div><br>
+<img src=img/h100.png border=0><br>
+<p align=center><img src=img/line.png></p>
+<a name=ah8><h2><strong>Modes</strong></h2></a>
+<img src=img/h11.png border=0><br><br>
+Here you can set up the default bandwidth for any of supported modes (CW - SSB - RTTY - AM - FM). If your radio is tuned to the corresponding band segment or if you switch the mode on the radio control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be changed at any time, however a program restart will be probably needed to take the changes into effect.<br><br><strong>User definable digital modes</strong> can be set up in a separate box. Use comma as a separator, ie.BPSK31,QPSK64,OLIVIA,CONTESTIA etc.
+<p align=center><img src=img/line.png></p>
+<a name=ah9><h2><strong>QTH Profiles</strong></h2></a>
+<img src=img/h12.png border=0><br><br>
+CQRLOG uses QTH Profiles. Your QTH and equipment details can be entered here. If you are logging a new QSO, choose the appropriate profile. Later, you can watch which rig and antenna was used but the main purpose is usage in filters. You can create a filter with QTH Profile as one of the criteria, a later filtering of QSOs made on your portable operation or QRP activity is possible. This method seems more effective as an usual portable log, even if you are using MM0XXX/P as your call it will probably contain a mixture of all portable activities together. With QTH Profile, there is always possible to make a separate 'log' for each operation.
+<p align=center><img src=img/line.png></p>
+<a name=ah10><h2><strong>Export</strong></h2></a>
+<img src=img/h13.png border=0><br><br>
+<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr><td valign="top"><img src="img/bulb.png"></td><td bgcolor="#ccffff" valign="top"><strong><font color="blue">Our tip:</font></strong> Check all fields if you backup your whole log. Nothing will be lost and the data amount is not so high, compared to very reduced export.</td></tr></tbody></table><br><br>
+This option allows an easy setup of the log fields to be exported into ADIF or HTML format. Exported are, of course, only checked fields. The 'Width' option denotes the column size in the HTML export.<br><br>
+<a name=ah11><h2><strong>DX cluster</strong></h2></a>
+<img src=img/h14.png border=0><br><br>
+This card allows an easy setup of the DX cluster spot filtering. Check the bands you want to display. If you want to supress (ie. filter out) spots of some DX countries, put its prefixes to the box below. Use a semicolon as a separator.
+<p align=center><img src=img/line.png></p>
+<a name=ah12><h2><strong>Fonts</strong></h2></a>
+<img src=img/h15.png border=0><br><br>
+This card is self explaining, hopefully it does not need any comments. Choose the appropriate font size to prevent any screen garbage and a nice look of the buttons.
+<p align=center><img src=img/line.png></p>
+<a name=ah13><h2><strong>WAZ, ITU zones</strong></h2></a>
+<img src=img/h16.png border=0><br><br>
+This is the color coding setup for the 'Details' window. New ones can be displayed in different color and QSL status is indicated verbosely in the 'Details' window. The 'Show info' boxes must be checked to display the relevant info.
+<p align=center><img src=img/line.png></p>
+<a name=ah14><h2><strong>IOTA</strong></h2></a>
+<img src=img/h17.png border=0><br><br>
+New IOTA color coding and QSL status can be set up here. The 'Show info' boxes must be checked to display the relevant info.
+<p align=center><img src=img/line.png></p>
+<a name=ah15><h2><strong>Membership</strong></h2></a>
+<img src=img/h31.png border=0><br><br>
+The primary aim of the 'Membership' info is tracking of members of a club or stations valid for an award. The info is derived from the call sign entered into 'Call' box in the logging screen. CQRLOG can track member's calls from up to 5 databases simultaneously. To set up the tracking, do following steps:<br><br>
+<strong>1. Choose a Club to be tracked.</strong> Click the first long button in the 'First club' box. A long list of Clubs appears.<br><br><img src=img/h37.png border=0><br><br>
+<strong>2. Click the 'Load' button.</strong> The membership data are loaded from the text database in the 'members' subfolder of your CQRLOG directory. A box with the number of converted records appears.<br><br><img src=img/h38.png border=0><br><br>
+<table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/note.png"></td><td bgcolor=#eaeaea valign="top" align="justify"><strong><font color="blue">Note:</font></strong> All files in the <em>'membership'</em> subfolder are displayed. If you create your own database, put it into this subfolder!
+</td></tr></tbody></table><br><br>
+<strong>3. Click the 'Settings' button.</strong> A new dialog appears:<br><br>
+<img src=img/h32.png border=0><br><br>
+The color coding scheme for new members, new band, new mode, need of a QSL card and an already confirmed contact can be set up in the left half of the window. You can see here also my preferred color settings.<br><br>This dialog allows also to set up the messages appearing in the 'Details' window if you work a member of a club which is tracked. There can be anything, my preferred messages are:<br>
+<pre>New %s member! (%c #%n)
+New band %s member! (%c #%n)
+New mode %s member! (%c #%n)
+QSL needed for %s member! (%c #%n)
+Already confirmed %s member! (%c #%n)</pre><br>
+Note also the regular expressions used in the messages. The complete list is here:<br>
+<pre>%l - long club name
+%s - short club name
+%n - club number
+%c - callsign</pre><br>
+The right half of this screen contains the join rules.
+<table border="0" cellpadding="5" cellspacing="2"><tbody><tr><td valign="top"><img src="img/h35.png"></td><td valign="top"><img src="img/h36.png">
+</td></tr></tbody></table>
+Here you can set up what from the QSO entry should be bound with the appropriate column in the membership database. Because most relevant is the call sign in the QSO and the membership database contains also mostly the call sign, use the defaults - the 'clubcall' in the 'join ... field in club database' and the 'call' in the 'with ... field in main database'.<br><br>The lower part contains a dialog allowing to set up where the resulting info will be stored.
+<br><br>
+<img src=img/h34.png border=0><br><br>While logging, you will see the info in the corresponding field. The most preferred field is 'Award'. Since this field is used for check purposes only, all info (more meberships) are displayed in a single line which can be longer than the corresponding field on the logging screen. You can navigate here with the cursor but the well formated and color coded results in verbose form are displayed in the 'Details' window.<br><br>
+<img src=img/h33.png border=0>
+<br><br>
+<a name=bh1><h2><strong>Bandmap</strong></h2></a>
+<img src=img/h61.png border=0><br><br>The Band map is a well known feature of many contesting programs, however it is great also in a general logging program. It contains a mix of filtered DX Cluster spots and your own entries where you can store call and frequency of a station which you can't work just now but you want to return to it later.<br><br> A very useful option of the Band Map is the <em>'entries aging'</em>. Depending on the time left since entry 'birth', the color changes to lighter tone until the entry disappears. There are two levels between appearance and disappearance of the entry. The times of these two levels and the time of disappearance can be set up. If you change the aging times, restart CQRLOG. Remember that a program restart will be needed to take the changes into effect!<br><br>The spots can be color coded to highlight new countries, new band countries etc., in the same way as in the DX Cluster window - check the <em>'Use the same color as the spot'</em> option. If this option remains unchecked, all entries are shown in black color (with aging to dark grey and light grey) and your own entries, <strong>made with Ctrl-A</strong> or the <strong>Big Plus key</strong> on the numerical keyboard, are shown in blue. Also, another set of <em>Watched</em> and <em>Ignored</em> entries can be defined.<br><br>The content of the Band map can be stored if leaving the log. Check the <em>'Save band map after close'</em> option.<br><br>The <em>'Show only active mode'</em> and <em>'Show only active band'</em> options providing an additional level of cluster spot filtering. When checked, the Band Map will show only spots for the mode or band where the radio is on. The spot are sorted by frequency, so you will see what is on the band - at a glance. No doubt you will prefer this over the DX Cluster window which contains a garbage of rolling spots, often hard to 'catch out'. Finally, if the <em>'Delete station from band map after QSO'</em> option is checked, the entry with a worked station disappers from the Band Map. If such station is spotted again, it appears again in the Band Map.
+<a name=bh2><h2><strong>xplanet support</strong></h2></a>
+<img src=img/h66.png border=0><br><br>
+To ensure correct rendering of the azimuthal map with DX Cluster spots, the external program xplanet must be installed and several parameters must be set up. First, install xplanet (version 1.2 if possible). Many distributions have this program either on the installation media (CD, DVD) or xplanet exists in the form of a corresponding package (rpm, deb, tgz, ebuild etc.). If not, download source codes from:<br>
+<a href="http://xplanet.sourceforge.net/download.php"><strong>http://xplanet.sourceforge.net/download.php</strong></a><br><br>Follow the usual installation instructions:<br>
+<pre>./configure
+make
+make install</pre>
+There are no known dependencies issues.<br><br>
+<div align=justify>
+First thing to be set up is the path to the xplanet binary. The default <pre>/usr/local/bin/xplanet</pre> is OK in most cases for installation from sources, the usual path for installation from precompiled packages is <pre>/usr/bin/xplanet</pre>Adjust the <strong>window size</strong> (remember to set up a square, ie. 400x400, 300x300 etc. to avoid strange efects). Also, the <strong>window position</strong> must be set up to create nice looking screen. Use the <strong>Test it!</strong> button to see how your settings affected the resulting screen.<br><br>
+Xplanet can refresh its display in a preset interval. This is very useful because it can read the spot (entry) list and update the displayed data. To avoid 'flooded', unreadable window, the number of displayed spots/entries must be limited. It seems that 20 is the maximum to keep the display garbage away. Actually, the number of spots (entries) is not limited by the program but by the readability. If you change the number of spots to be displayed or if the spots should (should not) go to xplanet, restart the program. Remember that a program restart will be needed to take the changes into effect!<br><br>
+Set up the source (DX Cluster, Band map) by checking the appropriate radio button in the '<strong>Show stations from</strong>' section. The '<strong>Projection</strong>' has 3 options:<br>
+<ul><li><strong>3D</strong> - shows the globe as viewed from the space. This rendering type without any projection is very nice, however the very distant points will be not visible, also spots or band map entries of distant DX locations will disappear. Angles should be true because the globe is 'centered' to your domestic location. Distance are <em>not true</em> because of lack of projection. This eye candy is therefore good for those who does not work DX stations.</li>
+<li><strong>Azimuthal</strong> - is the usual directional map which you find useful for any rotator indication. Both angles and distances are true, however the continents patterns may look a bit strange to those who is not very accustomed with this projection. The azimuthal projection is the best for a DXer.</li>
+<li><strong>Azimuthal without background</strong> - is the same as above but the background which contains the angle (polar) scale is not rendered. It is an 'emergency' solution which is useful if you have not space enough to set up the main xplanet window as a square.</li></ul>
+The xplanet window has currently no other function than to display spots or band map entries in the azimuthal projection or 3D-like picture.
+<br><br>
+<a name=bh3><h2><strong>Zip code tracking</strong></h2></a>
+<img src=img/h69.png border=0><br><br>
+Zip code tracking allows to determine states, counties, provinces and other geographical details if the postal zip code structure allows such operations. The zip code itself is retrieved from the callbook address. The database is located in the /zipcodes folder. If set up properly, the F6 key is used to determine US state, US county and italian province.<br><br>
+<strong>Setup: </strong>The database must be loaded before use and the target (field) must be specified. Also, the position of the zip code (line begin or end) must be set up.<br><br>
+<a name=bh4><h2><strong>LoTW support</strong></h2></a>
+<img src="img/h76.png"><br><br>
+Provide your user name for LoTW and the password (this is <strong>not</strong> the password sent to US amateurs via postcard!). Choose if you want to include LoTW confirmation in the statistics and <em>New country</em> and <em>New band country</em> info messages.<br><br>
+<a name=ch1><h2><strong>CW interface</strong></h2></a>
+<img src="img/h95.png"><br><br>
+Choose your preferred CW interface. There are 3 options: None, WinKeyer USB and cwdaemon. We strongly recommend the Winkey USB by Steve Elliot, K1EL, which provides 'all in one', including one of most advanced paddle keyers available. The cwdaemon should be seen as provisional option with many limitations, which may need a custom made linux kernel to avoid sloppy CW at speeds above 25 WPM. If cwdaemon used, only keyoard keying is possible.<br><br>
+Detailed setup of both CW devices is here:<ul>
+<li><a href=cwd.html><strong>cwdaemon</strong></a>
+<li><a href=wkusb.html><strong>Winkey USB</strong></a></li></ul>
+The further steps (CW messages edit, keyboard keyer operation) - click <a href=h26.html><strong>here</strong></a>.
+<br><br>
+<a name=ch2><h2><strong>fldigi interface</strong></h2></a>
+First, <em>fldigi</em> must be installed and functional.
+Preferences must be set up to operate with fldigi. Set up the path to fldigi of you want to start it when CQRLOG switches to remote mode. Other parameters including the way how should the CQRLOG - fldigi combo handle the frequency, mode and RST. CQRLOG also loads the fldigi contents to keep the data, so the 'polling' period should be set up. The 2 seconds interval is very acceptable default.<br><br>
+<img src="img/h101.png"><br><br>
+The way how the CQRLOG - fldigi combo handles the frequency, mode and RST is rather important. Keep in your mind that CQRLOG operates in remote mode which means that the logger is offline and therefore does not display the actual frequency and mode on the logging screen. If you set up properly the <em>fldigi</em> mode and frequency control, both are correctly displayed in the <em>fldigi</em> window. <strong>Choose the fldigi</strong> option in <em>Frequency from</em>, <em>Mode from</em> and <em>RST from</em> boxes and you don't need to watch the logger, except the QSO list in the upper portion of the logging screen. When logging/saving a contact, frequency, mode and RST should appear correctly in this QSO list. If you choose the CQRLOG option, you must set the mode in CQRLOG which seems less comfortable.
+<a name=ch3><h2><strong>Auto backup</strong></h2></a>
+To increase the safety of your log data, CQRLOG is equipped with <em>Auto backup</em> option which allows to export (ADIF) and store the log data in another safe location. The ADIF format was choosen because of its text format. The output file can be compressed in tar.gz format.<br><br>
+<img src="img/h102.png"><br><br>
+Of course, the export and compression takes some time, depending on the log size (QSO count). If you are not in a hurry, allow the program 2-3 minutes to perform this safety measure. We reccomend to backup your log to your hard drive from here it should be copied to another media (your server, USB flash, a memory card etc.).
+<a name=ch4><h2><strong>External viewers</strong></h2></a>
+Set up the viewers used for browsing the notes related to a particular callsign.<br><br>
+<img src="img/h111.png"><br><br>
+The notes in the call_data subfolder can contain text, html, pdf and image files. To enable reading of all file types, corresponding viewers must be set up properly, ie. must be in the system path.
+</div>
+<p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td width="33%" align="left">&nbsp;&lt;<a href="index.html"> Prev</a></td>
+<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+<td width="33%" align="right"><a href="h20.html">Next </a>&gt;</td>
+</tr>
+</tbody>
+</table>
+<br>
+</body></html>

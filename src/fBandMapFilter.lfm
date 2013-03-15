@@ -1,0 +1,157 @@
+object frmBandMapfilter: TfrmBandMapfilter
+  Left = 586
+  Height = 335
+  Top = 332
+  Width = 399
+  HorzScrollBar.Page = 398
+  VertScrollBar.Page = 334
+  ActiveControl = edtDXCC
+  Caption = 'Band map filter '
+  ClientHeight = 335
+  ClientWidth = 399
+  Position = poMainFormCenter
+  object GroupBox1: TGroupBox
+    Left = 16
+    Height = 65
+    Top = 6
+    Width = 361
+    Caption = ' DXCC (use ; as delimeter)'
+    ClientHeight = 46
+    ClientWidth = 357
+    TabOrder = 0
+    object edtDXCC: TEdit
+      Left = 6
+      Height = 23
+      Top = 9
+      Width = 336
+      TabOrder = 0
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 16
+    Height = 64
+    Top = 73
+    Width = 361
+    Caption = ' WAZ zones (use ; as delimeter)'
+    ClientHeight = 45
+    ClientWidth = 357
+    TabOrder = 1
+    object edtWAZ: TEdit
+      Left = 6
+      Height = 23
+      Top = 7
+      Width = 336
+      TabOrder = 0
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 16
+    Height = 65
+    Top = 141
+    Width = 361
+    Caption = ' ITU zones (use ; as delimiter)'
+    ClientHeight = 46
+    ClientWidth = 357
+    TabOrder = 2
+    object edtITU: TEdit
+      Left = 6
+      Height = 23
+      Top = 7
+      Width = 336
+      TabOrder = 0
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 16
+    Height = 56
+    Top = 208
+    Width = 361
+    Caption = ' Continets '
+    ClientHeight = 37
+    ClientWidth = 357
+    TabOrder = 3
+    object chkEU: TCheckBox
+      Left = 6
+      Height = 22
+      Top = 3
+      Width = 42
+      Caption = 'EU'
+      TabOrder = 0
+    end
+    object chkAS: TCheckBox
+      Left = 54
+      Height = 22
+      Top = 3
+      Width = 42
+      Caption = 'AS'
+      TabOrder = 1
+    end
+    object chkNA: TCheckBox
+      Left = 102
+      Height = 22
+      Top = 3
+      Width = 43
+      Caption = 'NA'
+      TabOrder = 2
+    end
+    object chkSA: TCheckBox
+      Left = 158
+      Height = 22
+      Top = 3
+      Width = 42
+      Caption = 'SA'
+      TabOrder = 3
+    end
+    object chkAF: TCheckBox
+      Left = 206
+      Height = 22
+      Top = 3
+      Width = 40
+      Caption = 'AF'
+      TabOrder = 4
+    end
+    object chkOC: TCheckBox
+      Left = 254
+      Height = 22
+      Top = 3
+      Width = 43
+      Caption = 'OC'
+      TabOrder = 5
+    end
+    object chkAN: TCheckBox
+      Left = 310
+      Height = 22
+      Top = 3
+      Width = 43
+      Caption = 'AN'
+      TabOrder = 6
+    end
+  end
+  object chkIOTA: TCheckBox
+    Left = 16
+    Height = 22
+    Top = 272
+    Width = 90
+    Caption = 'Watch iota'
+    TabOrder = 4
+  end
+  object btnOK: TButton
+    Left = 88
+    Height = 25
+    Top = 304
+    Width = 75
+    Caption = 'OK'
+    ModalResult = 1
+    TabOrder = 5
+  end
+  object btnCancel: TButton
+    Left = 218
+    Height = 25
+    Top = 304
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 6
+  end
+end

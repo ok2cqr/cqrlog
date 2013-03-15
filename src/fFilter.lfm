@@ -1,0 +1,948 @@
+object frmFilter: TfrmFilter
+  Left = 331
+  Height = 675
+  Top = 74
+  Width = 650
+  HelpType = htKeyword
+  HelpKeyword = 'help/h23.html#ah22'
+  ActiveControl = edtCallSign
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Filter'
+  ClientHeight = 675
+  ClientWidth = 650
+  Icon.Data = {
+    BE0C00000000010001002020000001001800A80C000016000000280000002000
+    0000400000000100180000000000000C00006400000064000000000000000000
+    0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCCCCCCFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBBBBBBCCCCCCFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEEEEFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBBBBBBCCCCCCEEEEEEFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFDDDDDDCCCCCCFFFFFFFFFFFFFFFFFFDDDDDDFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBBBBBBCCCCCCEEEEEEFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFEEEEEEFFFFFFFFFFFFFFFFFFBBBBBBBBBBBBBBBBBBFFFFFFCCCCCCBBBB
+    BBFFFFFFFFFFFFFFFFFFFFFFFFBBBBBBCCCCCCEEEEEEFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFDDDDDDCCCCCCFFFFFFFFFFFFFFFFFFFFFFFFBBBBBBFFFFFFBBBB
+    BBBBBBBBFFFFFFFFFFFFBBBBBBCCCCCCEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFBBBBBBBBBBBBBBBBBBFFFFFFFFFFFFBBBBBBBBBBBBFFFF
+    FFBBBBBBFFFFFFBBBBBBCCCCCCEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8888888888888888888888888888888888
+    88888888888888CCCCCCEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFF888888888888888888AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    AABBBBBBCCCCCCBBBBBBBBBBBBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    EEEEEEEEEEEEEEEEEECCCCCCAAAAAACCCCCCCCCCCCCCCCCCCCCCCCEEEEEEAAAA
+    AAEEEEEECCCCCCBBBBBBFFFFFFBBBBBBBBBBBBBBBBBBFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF888888888888
+    AAAAAAAAAAAA888888CCCCCCCCCCCCDDDDDDDDDDDDDDDDDDEEEEEEAAAAAAEEEE
+    EEDDDDDDFFFFFFBBBBBBBBBBBBFFFFFFFFFFFFBBBBBBBBBBBBFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF888888AAAAAAAAAAAA
+    CCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDEEEEEEBBBBBBEEEEEEDDDD
+    DDFFFFFFBBBBBBFFFFFFBBBBBBFFFFFFFFFFFFFFFFFFCCCCCCDDDDDDFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF888888AAAAAACCCCCCCCCCCC
+    CCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDEEEEEEBBBBBBFFFFFFDDDDDDDDDD
+    DDBBBBBBFFFFFFFFFFFFBBBBBBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEEEEFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF888888AAAAAACCCCCC6699CC6699CC
+    DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDEEEEEEBBBBBBFFFFFFDDDDDDDDDDDDDDDD
+    DDBBBBBBBBBBBBBBBBBBCCCCCCDDDDDDEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFBBBBBB7777770033663366993366996699CC
+    6699CCDDDDDDDDDDDDDDDDDDEEEEEEBBBBBBFFFFFFDDDDDDDDDDDDDDDDDDDDDD
+    DDBBBBBBFFFFFFCCCCCCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFF777777555555003366000033336699336699
+    DDDDDDDDDDDDDDDDDDDDDDDDBBBBBBFFFFFFDDDDDDDDDDDDDDDDDDDDDDDDBBBB
+    BBBBBBBBFFFFFFDDDDDDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFF000000003366000000003366000000336699DDDDDD
+    DDDDDDDDDDDDDDDDDDBBBBBBEEEEEEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDBBBB
+    BBFFFFFFFFFFFFFFFFFFEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFF000000003366000000003366000000003366336699DDDDDD
+    DDDDDDDDDDDDBBBBBBEEEEEECCCCCCDDDDDDDDDDDDDDDDDDDDDDDDBBBBBBBBBB
+    BBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFF003366000000003366000000003366000000336699DDDDDD
+    EEEEEEBBBBBBEEEEEECCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDBBBBBBFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFF003366000000003366000000003366000000003366000000003366
+    6699CCEEEEEE6699CCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDBBBBBBFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFF000000003366000000003366000000003366000000003366003366
+    3333336699CC003366BBBBBBDDDDDDDDDDDDDDDDDDDDDDDDBBBBBBFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFF003366000000003366000000003366000000003366000000333333
+    000000003366003366DDDDDDDDDDDDDDDDDDDDDDDDBBBBBBFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF003366000000003366000000003366000000003366000000333333000000
+    003366000000003366DDDDDDDDDDDDDDDDDDDDDDDDBBBBBBFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF000000003366000000003366000000003366000000333333000000003366
+    000000003366000000FFFFFFBBBBBB336699BBBBBBFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF003366000000003366000000003366000000333333000000003366000000
+    003366000000003366000000003366000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF000000003366000000003366000000333333000000003366000000003366
+    003366003366000000003366000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF003366000000003366000000333366000000003366000000003366000000
+    003366000000003366000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF000000003366000000003366000000003366000000003366000000003366
+    000000003366000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF003366000000003366000000003366000000003366000000003366000000
+    003366FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF000000003366000000003366000000003366000000003366000000003366
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFF000000000000003366000000003366000000003366000000FFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFF000000000000003366000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFDFFFFFFF3FFFBEFE3FFFCEFC7FFEE278FFFF3D31FFFF8CA3FFFFE
+    007FFFF0007FFFC0008FFF000267FE000573FC00237DF800401FF00082FFF001
+    02FFE000077FC00007FFC0000FFF80001FFF80001FFF80003FFF00003FFF0004
+    7FFF0000FFFF0001FFFF0003FFFF0007FFFF001FFFFF003FFFFF00FFFFFF83FF
+    FFFF
+  }
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '0.9.30'
+  object Label10: TLabel
+    Left = 14
+    Height = 18
+    Top = 608
+    Width = 50
+    Caption = 'Profile:'
+    ParentColor = False
+  end
+  object Label11: TLabel
+    Left = 14
+    Height = 18
+    Top = 646
+    Width = 90
+    Caption = 'Membership:'
+    ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 14
+    Height = 18
+    Top = 576
+    Width = 66
+    Caption = 'Group by:'
+    ParentColor = False
+  end
+  object Label15: TLabel
+    Left = 14
+    Height = 18
+    Top = 541
+    Width = 53
+    Caption = 'Sort by:'
+    ParentColor = False
+  end
+  object GroupBox1: TGroupBox
+    Left = 14
+    Height = 90
+    Top = 4
+    Width = 154
+    Caption = 'Callsign'
+    ClientHeight = 71
+    ClientWidth = 150
+    TabOrder = 0
+    object edtCallSign: TEdit
+      Left = 6
+      Height = 27
+      Top = 1
+      Width = 130
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object rbExactlyCall: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 25
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 1
+      TabStop = True
+    end
+    object rbIncludeCall: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 47
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 2
+    end
+  end
+  object btnOK: TButton
+    Left = 560
+    Height = 26
+    Top = 528
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'OK'
+    OnClick = btnOKClick
+    TabOrder = 1
+  end
+  object btnCancel: TButton
+    Left = 560
+    Height = 26
+    Top = 560
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    OnClick = btnCancelClick
+    TabOrder = 2
+  end
+  object GroupBox2: TGroupBox
+    Left = 173
+    Height = 90
+    Top = 4
+    Width = 140
+    Caption = ' DXCC '
+    ClientHeight = 71
+    ClientWidth = 136
+    TabOrder = 3
+    object edtDXCC: TEdit
+      Left = 18
+      Height = 27
+      Top = 0
+      Width = 99
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object btnSelectDXCC: TButton
+      Left = 27
+      Height = 25
+      Top = 29
+      Width = 75
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Select ...'
+      OnClick = btnSelectDXCCClick
+      TabOrder = 1
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 319
+    Height = 90
+    Top = 4
+    Width = 153
+    Caption = ' Freq '
+    ClientHeight = 71
+    ClientWidth = 149
+    TabOrder = 4
+    object Label1: TLabel
+      Left = 9
+      Height = 18
+      Top = 8
+      Width = 39
+      Caption = 'from:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 8
+      Height = 18
+      Top = 37
+      Width = 20
+      Caption = 'to:'
+      ParentColor = False
+    end
+    object edtFreqFrom: TEdit
+      Left = 45
+      Height = 27
+      Top = 2
+      Width = 92
+      TabOrder = 0
+    end
+    object edtFreqTo: TEdit
+      Left = 46
+      Height = 27
+      Top = 31
+      Width = 92
+      TabOrder = 1
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 480
+    Height = 90
+    Top = 4
+    Width = 163
+    Caption = ' Mode '
+    ClientHeight = 71
+    ClientWidth = 159
+    TabOrder = 5
+    object cmbMode: TComboBox
+      Left = 16
+      Height = 27
+      Top = 25
+      Width = 124
+      AutoSize = False
+      ItemHeight = 0
+      TabOrder = 0
+    end
+  end
+  object GroupBox5: TGroupBox
+    Left = 14
+    Height = 104
+    Top = 96
+    Width = 154
+    Caption = ' Date '
+    ClientHeight = 85
+    ClientWidth = 150
+    TabOrder = 6
+    object Label3: TLabel
+      Left = 10
+      Height = 18
+      Top = 25
+      Width = 39
+      Caption = 'from:'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 18
+      Height = 18
+      Top = 57
+      Width = 20
+      Caption = 'to:'
+      ParentColor = False
+    end
+    object edtDateFrom: TEdit
+      Left = 45
+      Height = 27
+      Top = 15
+      Width = 85
+      OnExit = edtDateFromExit
+      TabOrder = 0
+    end
+    object edtDateTo: TEdit
+      Left = 45
+      Height = 27
+      Top = 49
+      Width = 85
+      OnExit = edtDateToExit
+      TabOrder = 1
+    end
+  end
+  object GroupBox6: TGroupBox
+    Left = 173
+    Height = 104
+    Top = 96
+    Width = 140
+    Caption = ' Locator '
+    ClientHeight = 85
+    ClientWidth = 136
+    TabOrder = 7
+    object edtLocator: TEdit
+      Left = 9
+      Height = 27
+      Top = 5
+      Width = 94
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object rbIncludeLoc: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 59
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 1
+    end
+    object rbExactlyLoc: TRadioButton
+      Left = 8
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 2
+      TabStop = True
+    end
+  end
+  object GroupBox7: TGroupBox
+    Left = 173
+    Height = 104
+    Top = 416
+    Width = 163
+    Caption = 'QTH'
+    ClientHeight = 85
+    ClientWidth = 159
+    TabOrder = 8
+    object rbExactlyQth: TRadioButton
+      Left = 8
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+    end
+    object rbIncludeQth: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 57
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 1
+    end
+    object edtQTH: TEdit
+      Left = 9
+      Height = 27
+      Top = 5
+      Width = 131
+      TabOrder = 2
+    end
+  end
+  object GroupBox8: TGroupBox
+    Left = 14
+    Height = 104
+    Top = 200
+    Width = 629
+    Caption = 'QSL'
+    ClientHeight = 85
+    ClientWidth = 625
+    TabOrder = 9
+    object Label5: TLabel
+      Left = 8
+      Height = 18
+      Top = -4
+      Width = 55
+      Caption = 'QSL VIA'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 120
+      Height = 18
+      Top = -4
+      Width = 63
+      Caption = 'QSL send'
+      ParentColor = False
+    end
+    object Label7: TLabel
+      Left = 230
+      Height = 18
+      Top = -4
+      Width = 91
+      Caption = 'QSL Received'
+      ParentColor = False
+    end
+    object Label13: TLabel
+      Left = 7
+      Height = 18
+      Top = 53
+      Width = 98
+      Caption = 'eQSL QSL sent'
+      ParentColor = False
+    end
+    object Label14: TLabel
+      Left = 482
+      Height = 18
+      Top = -4
+      Width = 130
+      Caption = 'LoTW QSL received'
+      ParentColor = False
+    end
+    object edtQSLVia: TEdit
+      Left = 6
+      Height = 27
+      Top = 13
+      Width = 98
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object cmbQSL_S: TComboBox
+      Left = 120
+      Height = 27
+      Top = 13
+      Width = 98
+      AutoSize = False
+      ItemHeight = 0
+      TabOrder = 1
+    end
+    object cmbQSL_R: TComboBox
+      Left = 232
+      Height = 27
+      Top = 13
+      Width = 89
+      AutoSize = False
+      ItemHeight = 0
+      TabOrder = 2
+    end
+    object cmbLoTW_qsls: TComboBox
+      Left = 365
+      Height = 27
+      Top = 13
+      Width = 66
+      AutoSize = False
+      Font.Height = 8
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        ''
+        'Y'
+        'N'
+      )
+      ParentFont = False
+      Style = csDropDownList
+      TabOrder = 3
+    end
+    object cmbLoTW_qslr: TComboBox
+      Left = 506
+      Height = 27
+      Top = 13
+      Width = 66
+      AutoSize = False
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        ''
+        'L'
+        'N'
+      )
+      Style = csDropDownList
+      TabOrder = 4
+    end
+    object cmbeQSL_qsls: TComboBox
+      Left = 124
+      Height = 27
+      Top = 47
+      Width = 66
+      AutoSize = False
+      Font.Height = 8
+      ItemHeight = 0
+      ItemIndex = 0
+      Items.Strings = (
+        ''
+        'Y'
+        'N'
+      )
+      ParentFont = False
+      Style = csDropDownList
+      TabOrder = 5
+    end
+    object cmbeQSL_qslr: TComboBox
+      Left = 365
+      Height = 27
+      Top = 47
+      Width = 66
+      AutoSize = False
+      ItemHeight = 0
+      Items.Strings = (
+        ''
+        'E'
+        'N'
+      )
+      Style = csDropDownList
+      TabOrder = 6
+    end
+    object Label16: TLabel
+      Left = 216
+      Height = 18
+      Top = 53
+      Width = 126
+      Caption = 'eQSL QSL received'
+      ParentColor = False
+    end
+    object Label17: TLabel
+      Left = 352
+      Height = 18
+      Top = -4
+      Width = 102
+      Caption = 'LoTW QSL sent'
+      ParentColor = False
+    end
+  end
+  object GroupBox9: TGroupBox
+    Left = 14
+    Height = 97
+    Top = 320
+    Width = 154
+    Caption = ' Continent '
+    ClientHeight = 78
+    ClientWidth = 150
+    TabOrder = 10
+    object edtCont: TEdit
+      Left = 6
+      Height = 27
+      Top = 23
+      Width = 128
+      TabOrder = 0
+    end
+  end
+  object GroupBox10: TGroupBox
+    Left = 336
+    Height = 104
+    Top = 416
+    Width = 307
+    Caption = ' IOTA '
+    ClientHeight = 85
+    ClientWidth = 303
+    TabOrder = 11
+    object edtIOTA: TEdit
+      Left = 9
+      Height = 27
+      Top = 5
+      Width = 131
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object rbIncludeIOTA: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 57
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 1
+    end
+    object rbExactlyIOTA: TRadioButton
+      Left = 8
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 2
+      TabStop = True
+    end
+    object chkIOTAOnly: TCheckBox
+      Left = 94
+      Height = 24
+      Top = 47
+      Width = 156
+      Caption = 'Only QSO with IOTA'
+      TabOrder = 3
+    end
+  end
+  object GroupBox11: TGroupBox
+    Left = 319
+    Height = 97
+    Top = 320
+    Width = 158
+    Caption = 'Remarks'
+    ClientHeight = 78
+    ClientWidth = 154
+    TabOrder = 12
+    object rbExactlyRem: TRadioButton
+      Left = 8
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+    end
+    object rbIncludeRem: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 57
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 1
+    end
+    object edtRemarks: TEdit
+      Left = 6
+      Height = 27
+      Top = 5
+      Width = 147
+      TabOrder = 2
+    end
+  end
+  object GroupBox12: TGroupBox
+    Left = 480
+    Height = 97
+    Top = 320
+    Width = 163
+    Caption = ' Award '
+    ClientHeight = 78
+    ClientWidth = 159
+    TabOrder = 13
+    object rbExactlyDiplom: TRadioButton
+      Left = 8
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 0
+      TabStop = True
+    end
+    object rbIncludeDiplom: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 57
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 1
+    end
+    object edtDiplom: TEdit
+      Left = 10
+      Height = 27
+      Top = 5
+      Width = 142
+      TabOrder = 2
+    end
+  end
+  object GroupBox13: TGroupBox
+    Left = 323
+    Height = 104
+    Top = 96
+    Width = 154
+    Caption = ' My locator '
+    ClientHeight = 85
+    ClientWidth = 150
+    TabOrder = 14
+    object edtMyLoc: TEdit
+      Left = 6
+      Height = 27
+      Top = 4
+      Width = 79
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object rbIncludeMyLoc: TRadioButton
+      Left = 9
+      Height = 24
+      Top = 57
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 1
+    end
+    object rbExactlyMyLoc: TRadioButton
+      Left = 8
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 2
+      TabStop = True
+    end
+  end
+  object GroupBox14: TGroupBox
+    Left = 480
+    Height = 104
+    Top = 96
+    Width = 163
+    Caption = ' Zones '
+    ClientHeight = 85
+    ClientWidth = 159
+    TabOrder = 15
+    object Label8: TLabel
+      Left = 9
+      Height = 18
+      Top = 10
+      Width = 33
+      Caption = 'WAZ'
+      ParentColor = False
+    end
+    object Label9: TLabel
+      Left = 15
+      Height = 18
+      Top = 37
+      Width = 23
+      Caption = 'ITU'
+      ParentColor = False
+    end
+    object edtWAZ: TEdit
+      Left = 54
+      Height = 27
+      Top = 4
+      Width = 45
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+    object edtITU: TEdit
+      Left = 54
+      Height = 27
+      Top = 31
+      Width = 45
+      CharCase = ecUppercase
+      TabOrder = 1
+    end
+  end
+  object cmbProfile: TComboBox
+    Left = 109
+    Height = 29
+    Top = 602
+    Width = 360
+    ItemHeight = 0
+    TabOrder = 16
+    Text = 'cmbProfile'
+  end
+  object GroupBox15: TGroupBox
+    Left = 14
+    Height = 104
+    Top = 416
+    Width = 154
+    Caption = 'County'
+    ClientHeight = 85
+    ClientWidth = 150
+    TabOrder = 17
+    object edtCounty: TEdit
+      Left = 14
+      Height = 27
+      Top = 6
+      Width = 136
+      TabOrder = 0
+    end
+    object rbExactlyCounty: TRadioButton
+      Left = 14
+      Height = 24
+      Top = 37
+      Width = 74
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 1
+      TabStop = True
+    end
+    object rbIncludeCounty: TRadioButton
+      Left = 14
+      Height = 24
+      Top = 57
+      Width = 74
+      Caption = 'Include'
+      TabOrder = 2
+    end
+  end
+  object cmbMembers: TComboBox
+    Left = 109
+    Height = 31
+    Top = 636
+    Width = 360
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 18
+  end
+  object btnHelp: TButton
+    Left = 560
+    Height = 26
+    Top = 592
+    Width = 75
+    BorderSpacing.InnerBorder = 4
+    Caption = 'Help'
+    OnClick = btnHelpClick
+    TabOrder = 19
+  end
+  object cmbGroupBy: TComboBox
+    Left = 109
+    Height = 29
+    Top = 570
+    Width = 200
+    ItemHeight = 0
+    Items.Strings = (
+      ''
+      'dxcc_ref'
+      'remarks'
+      'award'
+      'call'
+      'idcall'
+      'loc'
+      'iota'
+      'waz'
+      'itu'
+      'state'
+      'county'
+      'club1'
+      'club2'
+      'club3'
+      'club4'
+      'club5'
+    )
+    TabOrder = 20
+  end
+  object btnSave: TButton
+    Left = 448
+    Height = 26
+    Top = 528
+    Width = 88
+    BorderSpacing.InnerBorder = 4
+    Caption = 'Save filter'
+    OnClick = btnSaveClick
+    TabOrder = 21
+  end
+  object btnLoad: TButton
+    Left = 448
+    Height = 26
+    Top = 560
+    Width = 88
+    BorderSpacing.InnerBorder = 4
+    Caption = 'Load filter'
+    OnClick = btnLoadClick
+    TabOrder = 22
+  end
+  object GroupBox16: TGroupBox
+    Left = 173
+    Height = 96
+    Top = 320
+    Width = 140
+    Caption = ' State '
+    ClientHeight = 77
+    ClientWidth = 136
+    TabOrder = 23
+    object edtState: TEdit
+      Left = 9
+      Height = 27
+      Top = 6
+      Width = 80
+      CharCase = ecUppercase
+      TabOrder = 0
+    end
+  end
+  object cmbSort: TComboBox
+    Left = 109
+    Height = 29
+    Top = 536
+    Width = 200
+    ItemHeight = 0
+    ItemIndex = 6
+    Items.Strings = (
+      'Date + time'
+      'Call'
+      'Mode'
+      'Freq'
+      'Name'
+      'QTH'
+      'DXCC'
+      'Award'
+      'State'
+      'County'
+      'DXCC'
+      'DXCC+Call'
+      'QSL via+Call+DXCC'
+      'Call+DXCC'
+      'WAZ'
+      'ITU'
+    )
+    TabOrder = 24
+    Text = 'DXCC'
+  end
+  object dlgOpen: TOpenDialog
+    Filter = 'filter *.fil|*.fil'
+    left = 334
+    top = 536
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.fil'
+    Filter = 'filter *.fil|*.fil'
+    Options = [ofOverwritePrompt, ofNoTestFileCreate, ofEnableSizing, ofViewDetail]
+    left = 390
+    top = 536
+  end
+end
