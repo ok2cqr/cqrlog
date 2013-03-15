@@ -1,6 +1,3 @@
-cqrlog
-======
-
 What is CQRLOG?
 ---------------
 
