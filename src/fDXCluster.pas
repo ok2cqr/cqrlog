@@ -84,6 +84,7 @@ type
     function  ShowSpot(spot : String; var sColor : Integer; var Country : String) : Boolean;
     function  GetFreq(spot : String) : String;
     function  GetCall(spot : String; web : Boolean = False) : String;
+    function  GetSplit(spot : String) :String;
   public
     ConWeb    : Boolean;
     ConTelnet : Boolean;
@@ -559,6 +560,42 @@ begin
   Result := trim(tmp)
 end;
 
+function TfrmDXCluster.GetSplit(spot : String) : String;
+var
+  tmp : String;
+  spl : String;
+  spn : String;
+  l : Integer;
+begin
+  tmp := copy(spot,34,Length(spot)-34);
+  //Writeln('tmp: ',tmp);
+  if Pos('UP',tmp)>0 then begin
+    spl:= copy(tmp,Pos('UP',tmp),13);
+    spn:='UP';
+    for l:=3 to Length(spl) do
+       if Pos(spl[l],' 0123456789.,-+')>0 then
+           spn:=spn+spl[l]
+        else break;
+    end;
+  if Pos('DOWN',tmp)>0 then begin
+    spl:= copy(tmp,Pos('DOWN',tmp),13);
+    spn:='DOWN';
+    for l:=5 to Length(spl) do
+       if Pos(spl[l],' 0123456789.,-+')>0 then
+           spn:=spn+spl[l]
+        else break;
+    end;
+  if Pos('QSX',tmp)>0 then begin
+    spl:= copy(tmp,Pos('QSX',tmp),13);
+    spn:='QSX';
+    for l:=4 to Length(spl) do
+       if Pos(spl[l],' 0123456789.,-+')>0 then
+           spn:=spn+spl[l]
+        else break;
+    end;
+  Result := trim(spn)
+end;
+
 function TfrmDXCluster.GetCall(spot : String; web : Boolean = False) : String;
 var
   tmp : String='';
@@ -623,6 +660,7 @@ var
   adif     : Word   = 0;
   f        : Currency;
   kHz      : String;
+  splitstr : String;
 begin
   sColor  := 0; //cerna
 
@@ -641,10 +679,13 @@ begin
     call     := GetCall(Spot, ConWeb)
   end;
 
+  splitstr := GetSplit(Spot);
+
   kHz := Freq;
 
   Writeln('Freq:',freq);
   Writeln('Call:',call);
+  Writeln('Split:',splitstr);
 
   tmp := Pos('.',freq);
   if tmp > 0 then
@@ -715,7 +756,7 @@ begin
     Result := True;
     sColor := clBlack;
     dmDXCluster.AddToMarkFile(prefix,call,clWhite,cqrini.ReadString('xplanet','LastSpots','20'),lat,long);
-    frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, clBlack,clWhite);
+    frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, clBlack,clWhite,splitstr);
     exit
   end;
   cont := UpperCase(cont);
@@ -863,10 +904,10 @@ begin
   if ToBandMap and frmBandMap.Showing then
   begin
     if cqrini.ReadBool('BandMap','UseDXCColors',False) then
-      frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, sColor, ThBckColor)
+      frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, sColor, ThBckColor,splitstr)
     else
       frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet,
-                                  cqrini.ReadInteger('BandMap','ClusterColor',clBlack),ThBckColor)
+                                  cqrini.ReadInteger('BandMap','ClusterColor',clBlack),ThBckColor,splitstr)
   end;
 
   if index > 0 then

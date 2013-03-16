@@ -487,6 +487,7 @@ type
     procedure SaveSettings;
     procedure ChangeCallBookCaption;
     procedure SendSpot;
+    procedure RunVK(key_pressed: String);
   public
     QTHfromCb   : Boolean;
     FromDXC     : Boolean;
@@ -696,7 +697,7 @@ var
 begin
   for i:= 0 to sgrdStatistic.ColCount-1 do
     for y := 0 to sgrdStatistic.RowCount-1 do
-      sgrdStatistic.Cells[i,y] := '';
+      sgrdStatistic.Cells[i,y] := '   ';
   with sgrdStatistic do
   begin
     Cells[0, 1] := 'SSB';
@@ -3686,51 +3687,61 @@ begin
   if (key = VK_F1) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F1',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F1');
     key := 0
   end;
-  if (key = VK_F2) and (Shift = []) then
+  if (key = VK_F2) and (Shift = []) then     
   begin
     CWint.SendText(dmUtils.GetCWMessage('F2',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F2');
     key := 0
   end;
   if (key = VK_F3) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F3',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F3');
     key := 0
   end;
   if (key = VK_F4) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F4',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F4');
     key := 0
   end;
   if (key = VK_F5) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F5',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F5');
     key := 0
   end;
   if (key = VK_F6) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F6',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F6');
     key := 0
   end;
   if (key = VK_F7) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F7',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F7');
     key := 0
   end;
   if (key = VK_F8) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F8',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F8');
     key := 0
   end;
   if (key = VK_F9) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F9',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F9');
     key := 0
   end;
   if (key = VK_F10) and (Shift = []) then
   begin
     CWint.SendText(dmUtils.GetCWMessage('F10',edtCall.Text,edtHisRST.Text,edtName.Text,''));
+    if (cmbMode.Text='SSB') then RunVK('F10');
     key := 0
   end;
 
@@ -4229,6 +4240,7 @@ var
   ShowLoTW : Boolean = False;
   mode : String;
   QSLR,LoTW,eQSL : String;
+  tmps : String;
 begin
   if old_stat_adif = ref_adif then
     exit;
@@ -4244,31 +4256,11 @@ begin
       break
     end;
     sgrdStatistic.Cells[i+1,0] := dmUtils.MyBands[i][1];
+    sgrdStatistic.Cells[i+1,1] := '   ';
+    sgrdStatistic.Cells[i+1,2] := '   ';
+    sgrdStatistic.Cells[i+1,3] := '   ';
   end;
 
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where adif='+
-                       IntToStr(ref_adif) + ' group by band,mode';
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open;
-  while not dmData.Q.Eof do
-  begin
-    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
-    mode := dmData.Q.Fields[1].AsString;
-    if i > 0 then
-    begin
-      if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
-        sgrdStatistic.Cells[i,1] := 'X'
-      else if (mode = 'CW') or (mode = 'CWR') then
-        sgrdStatistic.Cells[i,2] := 'X'
-      else
-        sgrdStatistic.Cells[i,3] := 'X'
-    end;
-    dmData.Q.Next
-  end;
-  dmData.Q.Close;
 
 
   ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
@@ -4295,80 +4287,67 @@ begin
     begin
       if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
       begin
+        tmps := sgrdStatistic.Cells[i,1] ;
         if QSLR = 'Q' then
-          sgrdStatistic.Cells[i,1] := 'Q'
-        else if (LoTW = 'L') then
-          sgrdStatistic.Cells[i,1] := 'L'
-        else if (eQSL = 'E') then
-          sgrdStatistic.Cells[i,1] := 'E'
-        else if (sgrdStatistic.Cells[i,1] = '') then
-          sgrdStatistic.Cells[i,1] := 'X'
+          tmps[1] := 'Q';
+        if (LoTW = 'L') then
+          tmps[2] := 'L';
+        if (eQSL = 'E') then
+          tmps[3] := 'E';
+       sgrdStatistic.Cells[i,1] := tmps
       end
       else begin
         if (Mode='CW') or (Mode='CWQ') then
         begin
+          tmps := sgrdStatistic.Cells[i,2] ;
           if QSLR = 'Q' then
-            sgrdStatistic.Cells[i,2] := 'Q'
-          else if (LoTW='L') then
-            sgrdStatistic.Cells[i,2] := 'L'
-          else if (eQSL='E') then
-            sgrdStatistic.Cells[i,2] := 'E'
-          else if sgrdStatistic.Cells[i,2] = '' then
-            sgrdStatistic.Cells[i,2] := 'X'
+            tmps[1] := 'Q';
+          if (LoTW = 'L') then
+            tmps[2] := 'L';
+          if (eQSL = 'E') then
+            tmps[3] := 'E';
+          sgrdStatistic.Cells[i,2] := tmps
         end
         else begin
+          tmps := sgrdStatistic.Cells[i,3] ;
           if QSLR = 'Q' then
-            sgrdStatistic.Cells[i,3] := 'Q'
-          else if (LoTW='L') then
-            sgrdStatistic.Cells[i,3] := 'L'
-          else if (eQSL='E') then
-            sgrdStatistic.Cells[i,3] := 'E'
-          else if sgrdStatistic.Cells[i,3] = '' then
-            sgrdStatistic.Cells[i,3] := 'X'
+            tmps[1] := 'Q';
+          if (LoTW = 'L') then
+            tmps[2] := 'L';
+          if (eQSL = 'E') then
+            tmps[3] := 'E';
+          sgrdStatistic.Cells[i,3] := tmps
         end
-      end
-      {
-
-
-      if (mode = 'SSB') or (mode = 'FM') or (mode = 'AM') then
-      begin
-        if sgrdStatistic.Cells[i,1] <> 'Q' then
-        begin
-          if (dmData.Q.Fields[2].AsString <> 'Q') and ShowLoTW and (dmData.Q.Fields[3].AsString = 'L') then
-            sgrdStatistic.Cells[i,1] :=  'L'
-          else begin
-            if dmData.Q.Fields[2].AsString = 'Q' then
-              sgrdStatistic.Cells[i,1] :=  'Q'
-          end
-        end
-      end
-      else if (mode = 'CW') or (mode = 'CWR') then
-      begin
-        if sgrdStatistic.Cells[i,2] <> 'Q' then
-        begin
-          if (dmData.Q.Fields[2].AsString <> 'Q') and ShowLoTW and (dmData.Q.Fields[3].AsString = 'L') then
-            sgrdStatistic.Cells[i,2] :=  'L'
-          else begin
-            if dmData.Q.Fields[2].AsString = 'Q' then
-              sgrdStatistic.Cells[i,2] :=  'Q'
-          end
-        end
-      end
-      else begin
-        if sgrdStatistic.Cells[i,3] <> 'Q' then
-        begin
-          if (dmData.Q.Fields[2].AsString <> 'Q') and ShowLoTW and (dmData.Q.Fields[3].AsString = 'L') then
-            sgrdStatistic.Cells[i,3] :=  'L'
-          else begin
-            if dmData.Q.Fields[2].AsString = 'Q' then
-              sgrdStatistic.Cells[i,3] :=  'Q'
-          end
-        end
-      end}
+      end;
     end;
     dmData.Q.Next
   end;
-  dmData.trQ.Rollback
+  dmData.trQ.Rollback;
+
+  dmData.Q.Close;
+  if dmData.trQ.Active then
+    dmData.trQ.Rollback;
+  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where adif='+
+                       IntToStr(ref_adif) + ' group by band,mode';
+  dmData.trQ.StartTransaction;
+  dmData.Q.Open;
+  while not dmData.Q.Eof do
+  begin
+    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
+    mode := dmData.Q.Fields[1].AsString;
+    if i > 0 then
+      begin
+        if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
+          if(sgrdStatistic.Cells[i,1] = '   ') then sgrdStatistic.Cells[i,1] := ' X ';
+        if ((mode = 'CW') or (mode = 'CWR')) then
+          if (sgrdStatistic.Cells[i,2] = '   ') then sgrdStatistic.Cells[i,2] := ' X ';
+        if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
+          if (sgrdStatistic.Cells[i,3] = '   ') then sgrdStatistic.Cells[i,3] := ' X '
+      end;
+      dmData.Q.Next;
+  end;
+  dmData.Q.Close;
+
 end;
 
 procedure TfrmNewQSO.CalculateDistanceEtc;
@@ -5106,6 +5085,20 @@ begin
     end
   finally
     Free
+  end
+end;
+
+procedure TfrmNewQSO.RunVK(key_pressed: String);
+var
+   AProcess: TProcess;
+begin
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.CommandLine := dmData.HomeDir +'voice_keyer/voice_keyer.sh '+key_pressed ;
+    Writeln('Command line: ',AProcess.CommandLine);
+    AProcess.Execute
+  finally
+    AProcess.Free
   end
 end;
 

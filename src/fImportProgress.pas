@@ -609,6 +609,7 @@ end;
 procedure TfrmImportProgress.ImportLoTWAdif;
 var
   num      : Word = 1;
+  qsln     : Word = 0;
   size     : Word;
   sSize    : String;
   a        : String;
@@ -621,6 +622,7 @@ var
   mode     : String;
   qsodate  : String;
   time_on  : String;
+  time_onx : String;
   qslr     : String;
   qslrdate : String;
   cqz      : String;
@@ -687,6 +689,7 @@ begin
         PosEOR   := 0;
         while not ((PosEOR > 0) or eof(f)) do
         begin
+          qso_in_log := False;
           Readln(f, a);
           a    := Trim(a);
           orig := a;
@@ -879,8 +882,10 @@ begin
 
           if PosEOR > 0 then
           begin
+            //inc(qsln);
             if dmData.DebugLevel >= 1 then
             begin
+             // Writeln('Number:   ',IntToStr(qsln));
               Writeln('Call:     ',call);
               Writeln('Band:     ',band);
               Writeln('Mode:     ',mode);
@@ -909,10 +914,13 @@ begin
             if dmData.trQ.Active then dmData.trQ.Rollback;
             dmData.trQ.StartTransaction;
             dmData.Q.Open();
+            if dmData.Q.Eof then  qso_in_log := False;
             while not dmData.Q.Eof do
             begin
               qso_in_log := False;
-              if (copy(dmData.Q.Fields[0].AsString,1,2) = copy(time_on,1,2)) then
+              time_onx:= copy(time_on,1,2)+':'+copy(time_on,3,2);
+              if dmData.DebugLevel >=1 then Writeln(dmData.Q.Fields[0].AsString+' | '+ time_onx);
+              if copy(dmData.Q.Fields[0].AsString,1,5) = copy(time_onx,1,5) then
               begin
                 if LoTWShowNew and (dmData.Q.Fields[1].AsString <> 'L') then  //this qso is already confirmed
                   LoTWQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
@@ -933,7 +941,8 @@ begin
                 if (county<>'') and (dmData.Q.Fields[7].AsString='') then
                   dmData.Q1.SQL.Add(',county = ' + QuotedStr(county));
                 dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[8].AsString);
-                if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
+                inc(qsln);
+                if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text+ '  qsl number:'+ IntToStr(qsln));
                 dmData.Q1.ExecSQL;
                 qso_in_log := True;
                 Break
@@ -970,8 +979,8 @@ begin
       dmData.trQ1.Commit;
       if ErrorCount > 0 then
       begin
-        l.SaveToFile(dmData.DataDir + 'lotw_error.txt');
-        ShowMessage('Some QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.HomeDir + 'lotw_error.txt')
+        l.SaveToFile(dmData.HomeDir + 'lotw_error.txt');
+        ShowMessage(IntToStr(ErrorCount)+' QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.HomeDir + 'lotw_error.txt')
       end
     end
     else begin
