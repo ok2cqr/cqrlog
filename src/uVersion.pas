@@ -4,7 +4,7 @@ unit uVersion;
 interface
 
 const
-  cVERSION   = '1.5.4dpvk';
+  cVERSION   = '1.5.4';
   cMAJOR     = 1;
   cMINOR     = 5;
   cRELEAS    = 4;
