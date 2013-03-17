@@ -318,7 +318,7 @@ object frmTRXControl: TfrmTRXControl
     object btn6m: TButton
       Left = 178
       Height = 25
-      Top = 54
+      Top = 30
       Width = 56
       BorderSpacing.InnerBorder = 4
       Caption = '6m'
@@ -338,7 +338,7 @@ object frmTRXControl: TfrmTRXControl
     object btn2m: TButton
       Left = 178
       Height = 25
-      Top = 30
+      Top = 54
       Width = 56
       BorderSpacing.InnerBorder = 4
       Caption = '2m'

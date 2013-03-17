@@ -521,13 +521,13 @@ end;
 procedure TCWKeying.cw_tune_on;
 begin
   if fActive then
-    udp.SendMessage(Chr(27)+'C10')
+    udp.SendMessage(Chr(27)+'c10')
 end;
 
 procedure TCWKeying.cw_tune_off;
 begin
   if fActive then
-    udp.SendMessage(Chr(27)+'C0')
+    udp.SendMessage(Chr(27)+'c0')
 end;
 
 end.

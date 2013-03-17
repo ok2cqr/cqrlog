@@ -961,7 +961,8 @@ begin
       Add('lat',ftString,10);
       Add('long',ftString,10);
       Add('id', ftAutoInc);
-      Add('bckcolor',ftLargeint)
+      Add('bckcolor',ftLargeint);
+      Add('splitstr',ftString,13);
     end;
     dbfBand.CreateTable;
     dbfBand.Open;

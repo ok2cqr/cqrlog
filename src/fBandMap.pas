@@ -59,7 +59,7 @@ type
     BandThread : TBandThread;
 
     procedure AddFromNewQSO(pfx, call : String; vfoa : Double; band, mode,lat,long : String);
-    procedure AddFromDXCluster(call, mode, pfx,band, lat, long : String;vfo_a : double; colo,BckColor : LongInt);
+    procedure AddFromDXCluster(call, mode, pfx,band, lat, long : String;vfo_a : double; colo,BckColor : LongInt; splitstr : String);
     procedure DeleteFromBandMap(call,band,mode : String);
     procedure LoadFonts;
     procedure SynBandMap;
@@ -214,6 +214,7 @@ begin
           dbf.Fields[4].AsInteger  := StrToInt(p[6]);
           dbf.Fields[8].AsString   := 'F';
           dbf.Fields[6].AsString   := p[7];
+          dbf.Fields[14].AsString  := p[9];
           dbf.Post;
           frmBandMap.ShowList.Delete(0);
           Go := True;
@@ -235,6 +236,7 @@ begin
       dbf.Fields[8].AsString   := 'F';
       dbf.Fields[6].AsString   := p[7];             //band
       dbf.Fields[13].AsInteger := StrToInt(p[8]);   //background color
+      dbf.Fields[14].AsString  := p[9];             //split
       dbf.Post;
       frmBandMap.ShowList.Delete(0)
     end;
@@ -293,8 +295,8 @@ begin
     frmBandMap.SyncList.Clear;
     while not dbf.Eof do
     begin
-      tmp   := dmUtils.SetSizeLeft(FloatToStrF(dbf.Fields[0].AsFloat,ffFixed,10,3),10) +
-               dmUtils.SetSizeLeft(dbf.Fields[1].AsString,14);
+      tmp   := dmUtils.SetSizeLeft(FloatToStrF(dbf.Fields[0].AsFloat,ffFixed,8,1),8) +
+               dmUtils.SetSizeLeft(dbf.Fields[1].AsString,14) + ' ' + dbf.Fields[14].AsString;
       frmBandMap.SyncList.Add(tmp+'|'+IntToStr(dbf.Fields[4].AsLongint)+'|'+IntToStr(dbf.Fields[13].AsLongint));
       if ToBandMap and (i <= iMax) then
       begin
@@ -476,13 +478,14 @@ begin
   end
 end;
 
-procedure TfrmBandMap.AddFromDXCluster(call, mode, pfx,band, lat, long : String;vfo_a : double;Colo,BckColor : LongInt);
+procedure TfrmBandMap.AddFromDXCluster(call, mode, pfx,band, lat, long : String;vfo_a : double;Colo,BckColor : LongInt; splitstr : String);
 begin
 
   Writeln('AddFromCluster *****');
   Writeln('Call:',call);
   Writeln('Band:',band);
   Writeln('Mode:',mode);
+  Writeln('Split:',splitstr);
   Writeln('********************');
 
   EnterCriticalSection(AddCrit);
@@ -490,7 +493,7 @@ begin
     if (mode = 'SSB') or (mode = 'AM') or (mode = 'FM') then
       mode := 'SSB';
     AddList.Add(FloatToStr(vfo_a)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(colo)+'|'+band+'|'+
-                IntToStr(BckColor));
+                IntToStr(BckColor)+'|'+splitstr+'|' );
     if dmData.DebugLevel >=2 then
       Writeln('AddList.Add:'+FloatToStr(vfo_a)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(Colo)+'|'+band+'|'+
               IntToStr(BckColor))
@@ -512,9 +515,9 @@ begin
     exit;
   dbClick := True;
   BandMap.cti_vetu(spot,tmp,tmp,tmp,where);
-  freq := copy(spot,1,10);
+  freq := copy(spot,1,8);
   freq := trim(freq);
-  call := copy(spot,11,18);
+  call := copy(spot,9,14);
   call := trim(call);
   if not TryStrToFloat(freq,f) then
     exit;
