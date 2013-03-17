@@ -469,7 +469,7 @@ begin
     end;
 
     AddList.Add(FloatToStr(fra)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(iColor)+'|'+band+'|'+
-                IntToStr(bckColor));
+                IntToStr(bckColor)+'| |');
     if dmData.DebugLevel >=2 then
        Writeln('AddList.Add:'+FloatToStr(fra)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(iColor)+'|'+band+'|'+
                IntToStr(bckColor))
