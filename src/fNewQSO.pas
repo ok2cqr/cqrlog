@@ -5089,12 +5089,17 @@ begin
 end;
 
 procedure TfrmNewQSO.RunVK(key_pressed: String);
+const
+  cVoiceKeyer = 'voice_keyer/voice_keyer.sh ';
 var
    AProcess: TProcess;
 begin
+  if not FileExists(dmData.HomeDir + cVoiceKeyer) then
+    exit;
+
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := dmData.HomeDir +'voice_keyer/voice_keyer.sh '+key_pressed ;
+    AProcess.CommandLine := dmData.HomeDir + cVoiceKeyer  +key_pressed;
     Writeln('Command line: ',AProcess.CommandLine);
     AProcess.Execute
   finally
