@@ -14,11 +14,15 @@ const
   C_REP = ';';
 
 type
+
+  { TfrmExLabelPrint }
+
   TfrmExLabelPrint = class(TForm)
     btnExport: TButton;
     btnHelp: TButton;
     btnExportFieldsPref : TButton;
     Cancel: TButton;
+    chkRemoveSep: TCheckBox;
     chkAllQSOs: TCheckBox;
     chkMarkSent: TCheckBox;
     edtRemarks: TEdit;
@@ -81,6 +85,7 @@ begin
   gchkExport.Checked[4] := True;
   edtQSOsToLabel.Text   := cqrini.ReadString('QslExport','QSOs','6');
   edtRemarks.Text       := cqrini.ReadString('QslExport','Remarks','');
+  chkRemoveSep.Checked  := cqrini.ReadBool('QslExport','RemoveSep',True);
   if edtRemarks.Text <> '' then
     rbOwnRemarks.Checked
 end;
@@ -206,7 +211,12 @@ begin
         qsl_msg := 'PSE';
 
       if rbQSORemarks.Checked then
-        dmData.Q.ParamByName('remarks').AsString  := Rep(dmData.qCQRLOG.FieldByName('remarks').AsString)
+      begin
+        if chkRemoveSep.Checked then
+          dmData.Q.ParamByName('remarks').AsString  := Rep(dmData.qCQRLOG.FieldByName('remarks').AsString)
+        else
+          dmData.Q.ParamByName('remarks').AsString  := dmData.qCQRLOG.FieldByName('remarks').AsString
+      end
       else
         dmData.Q.ParamByName('remarks').AsString  := edtRemarks.Text;
 
@@ -424,7 +434,8 @@ procedure TfrmExLabelPrint.FormClose(Sender: TObject;
 begin
   cqrini.WriteString('QslExport','Path',edtFile.Text);
   cqrini.WriteString('QslExport','QSOs',edtQSOsToLabel.Text);
-  cqrini.WriteString('QslExport','Remarks',edtRemarks.Text)
+  cqrini.WriteString('QslExport','Remarks',edtRemarks.Text);
+  cqrini.ReadBool('QslExport','RemoveSep',chkRemoveSep.Checked)
 end;
 
 procedure TfrmExLabelPrint.btnExportFieldsPrefClick(Sender : TObject);

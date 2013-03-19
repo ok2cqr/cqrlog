@@ -1,17 +1,17 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
-  'TPF0'#16'TfrmExLabelPrint'#15'frmExLabelPrint'#4'Left'#3'7'#2#6'Height'#3#223
-  +#1#3'Top'#3#255#0#5'Width'#3#168#1#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'
+  'TPF0'#16'TfrmExLabelPrint'#15'frmExLabelPrint'#4'Left'#3';'#1#6'Height'#3#247
+  +#1#3'Top'#3#175#0#5'Width'#3#168#1#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'
   +#6#17'help/h22.html#bh4'#13'ActiveControl'#7#10'chkAllQSOs'#11'BorderIcons'
   +#11#12'biSystemMenu'#0#11'BorderStyle'#7#8'bsDialog'#7'Caption'#6#25'Export '
-  +'for label printing'#12'ClientHeight'#3#223#1#11'ClientWidth'#3#168#1#7'OnCl'
+  +'for label printing'#12'ClientHeight'#3#247#1#11'ClientWidth'#3#168#1#7'OnCl'
   +'ose'#7#9'FormClose'#6'OnShow'#7#8'FormShow'#8'Position'#7#16'poMainFormCent'
   +'er'#10'LCLVersion'#6#8'0.9.30.2'#0#6'TLabel'#6'Label1'#4'Left'#2#5#6'Height'
-  +#2#17#3'Top'#3#137#0#5'Width'#2'!'#7'Caption'#6#6'Print '#11'ParentColor'#8#0
-  +#0#6'TLabel'#6'Label2'#4'Left'#2'`'#6'Height'#2#17#3'Top'#3#137#0#5'Width'#2
-  +'p'#7'Caption'#6#17'QSOs on one label'#11'ParentColor'#8#0#0#6'TLabel'#11'lb'
-  +'lProgress'#4'Left'#2#5#6'Height'#2#20#3'Top'#3#145#1#5'Width'#3#156#1#9'Ali'
+  +#2#16#3'Top'#3#137#0#5'Width'#2' '#7'Caption'#6#6'Print '#11'ParentColor'#8#0
+  +#0#6'TLabel'#6'Label2'#4'Left'#2'`'#6'Height'#2#16#3'Top'#3#137#0#5'Width'#2
+  +'e'#7'Caption'#6#17'QSOs on one label'#11'ParentColor'#8#0#0#6'TLabel'#11'lb'
+  +'lProgress'#4'Left'#2#5#6'Height'#2#20#3'Top'#3#176#1#5'Width'#3#156#1#9'Ali'
   +'gnment'#7#8'taCenter'#8'AutoSize'#8#11'ParentColor'#8#0#0#11'TCheckGroup'#10
   +'gchkExport'#4'Left'#2#5#6'Height'#2'`'#3'Top'#2'!'#5'Width'#3#156#1#8'AutoF'
   +'ill'#9#7'Caption'#6#23' Export QSLs marked as '#28'ChildSizing.LeftRightSpa'
@@ -23,35 +23,37 @@ LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
   +#7'Columns'#2#2#13'Items.Strings'#1#6#11'SB - (Buro)'#6#13'SD - (Direct)'#6
   +#13'SM  (Manager)'#6#20'SMD (Manager direct)'#6#18'SMB (Manager buro)'#0#8'T'
   +'abOrder'#2#0#4'Data'#10#9#0#0#0#5#0#0#0#2#2#2#2#2#0#0#9'TGroupBox'#9'GroupB'
-  +'ox1'#4'Left'#2#5#6'Height'#2'Q'#3'Top'#3#25#1#5'Width'#3#156#1#7'Caption'#6
-  +#11' Export to '#12'ClientHeight'#2'1'#11'ClientWidth'#3#152#1#8'TabOrder'#2
+  +'ox1'#4'Left'#2#5#6'Height'#2'Q'#3'Top'#3'0'#1#5'Width'#3#156#1#7'Caption'#6
+  +#11' Export to '#12'ClientHeight'#2'2'#11'ClientWidth'#3#152#1#8'TabOrder'#2
   +#1#0#7'TButton'#9'edtBrowse'#4'Left'#3'6'#1#6'Height'#2#25#3'Top'#2#31#5'Wid'
   +'th'#2'K'#7'Caption'#6#6'Browse'#7'OnClick'#7#14'edtBrowseClick'#8'TabOrder'
-  +#2#0#0#0#5'TEdit'#7'edtFile'#4'Left'#2#9#6'Height'#2#22#3'Top'#2#7#5'Width'#3
+  +#2#0#0#0#5'TEdit'#7'edtFile'#4'Left'#2#9#6'Height'#2#21#3'Top'#2#7#5'Width'#3
   +'{'#1#8'TabOrder'#2#1#0#0#0#5'TEdit'#14'edtQSOsToLabel'#4'Left'#2'('#6'Heigh'
-  +'t'#2#22#3'Top'#3#134#0#5'Width'#2'0'#6'OnExit'#7#18'edtQSOsToLabelExit'#8'T'
+  +'t'#2#21#3'Top'#3#134#0#5'Width'#2'0'#6'OnExit'#7#18'edtQSOsToLabelExit'#8'T'
   +'abOrder'#2#2#4'Text'#6#1'6'#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#5#6'Hei'
-  +'ght'#2'p'#3'Top'#3#159#0#5'Width'#3#156#1#7'Caption'#6#9' Remarks '#12'Clie'
-  +'ntHeight'#2'P'#11'ClientWidth'#3#152#1#8'TabOrder'#2#3#0#12'TRadioButton'#12
-  +'rbQSORemarks'#4'Left'#2#9#6'Height'#2#26#3'Top'#2#7#5'Width'#3#171#0#7'Capt'
-  +'ion'#6#22'Print remarks from QSO'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'#9
-  +#0#0#12'TRadioButton'#12'rbOwnRemarks'#4'Left'#2#9#6'Height'#2#26#3'Top'#2#31
-  +#5'Width'#3#157#0#7'Caption'#6#20'Print my own remarks'#8'TabOrder'#2#1#0#0#5
-  +'TEdit'#10'edtRemarks'#4'Left'#2#9#6'Height'#2#22#3'Top'#2'>'#5'Width'#3'x'#1
-  +#7'OnEnter'#7#15'edtRemarksEnter'#8'TabOrder'#2#2#0#0#0#9'TCheckBox'#11'chkM'
-  +'arkSent'#4'Left'#2#5#6'Height'#2#26#3'Top'#3's'#1#5'Width'#3#200#0#7'Captio'
-  +'n'#6#27'Mark QSLs sent after export'#8'TabOrder'#2#4#0#0#7'TButton'#9'btnEx'
-  +'port'#4'Left'#2#16#6'Height'#2#25#3'Top'#3#188#1#5'Width'#2'K'#7'Caption'#6
-  +#6'Export'#7'OnClick'#7#14'btnExportClick'#8'TabOrder'#2#5#0#0#7'TButton'#7
-  +'btnHelp'#4'Left'#3#152#0#6'Height'#2#25#3'Top'#3#188#1#5'Width'#2'K'#7'Capt'
-  +'ion'#6#4'Help'#7'OnClick'#7#12'btnHelpClick'#8'TabOrder'#2#6#0#0#7'TButton'
-  +#6'Cancel'#4'Left'#3'8'#1#6'Height'#2#25#3'Top'#3#188#1#5'Width'#2'K'#6'Canc'
-  +'el'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#7#0#0#9'TChe'
-  +'ckBox'#10'chkAllQSOs'#4'Left'#2#5#6'Height'#2#26#3'Top'#2#8#5'Width'#2'{'#7
-  +'Caption'#6#15'Export all QSOs'#8'OnChange'#7#16'chkAllQSOsChange'#8'TabOrde'
-  +'r'#2#8#0#0#7'TButton'#19'btnExportFieldsPref'#4'Left'#3#224#0#6'Height'#2#25
-  +#3'Top'#3#131#0#5'Width'#3#184#0#7'Caption'#6#24'Choose fields for export'#7
-  +'OnClick'#7#24'btnExportFieldsPrefClick'#8'TabOrder'#2#9#0#0#11'TSaveDialog'
-  +#7'dlgSave'#10'DefaultExt'#6#4'.csv'#6'Filter'#6#15'CSV files|*.csv'#4'left'
-  +#3'?'#1#3'top'#3#0#1#0#0#0
+  +'ght'#3#136#0#3'Top'#3#168#0#5'Width'#3#156#1#7'Caption'#6#9' Remarks '#12'C'
+  +'lientHeight'#2'i'#11'ClientWidth'#3#152#1#8'TabOrder'#2#3#0#12'TRadioButton'
+  +#12'rbQSORemarks'#4'Left'#2#9#6'Height'#2#26#3'Top'#2#0#5'Width'#3#163#0#7'C'
+  +'aption'#6#22'Print remarks from QSO'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'
+  +#9#0#0#12'TRadioButton'#12'rbOwnRemarks'#4'Left'#2#9#6'Height'#2#26#3'Top'#2
+  +#23#5'Width'#3#150#0#7'Caption'#6#20'Print my own remarks'#8'TabOrder'#2#1#0
+  +#0#5'TEdit'#10'edtRemarks'#4'Left'#2#9#6'Height'#2#21#3'Top'#2'9'#5'Width'#3
+  +'x'#1#7'OnEnter'#7#15'edtRemarksEnter'#8'TabOrder'#2#2#0#0#9'TCheckBox'#12'c'
+  +'hkRemoveSep'#4'Left'#2#9#6'Height'#2#26#3'Top'#2'N'#5'Width'#3#225#0#7'Capt'
+  +'ion'#6'!Remove separator (;) from remarks'#8'TabOrder'#2#3#0#0#0#9'TCheckBo'
+  +'x'#11'chkMarkSent'#4'Left'#2#5#6'Height'#2#26#3'Top'#3#136#1#5'Width'#3#188
+  +#0#7'Caption'#6#27'Mark QSLs sent after export'#8'TabOrder'#2#4#0#0#7'TButto'
+  +'n'#9'btnExport'#4'Left'#2#16#6'Height'#2#25#3'Top'#3#208#1#5'Width'#2'K'#7
+  +'Caption'#6#6'Export'#7'OnClick'#7#14'btnExportClick'#8'TabOrder'#2#5#0#0#7
+  +'TButton'#7'btnHelp'#4'Left'#3#152#0#6'Height'#2#25#3'Top'#3#208#1#5'Width'#2
+  +'K'#7'Caption'#6#4'Help'#7'OnClick'#7#12'btnHelpClick'#8'TabOrder'#2#6#0#0#7
+  +'TButton'#6'Cancel'#4'Left'#3'8'#1#6'Height'#2#25#3'Top'#3#208#1#5'Width'#2
+  +'K'#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#7#0
+  +#0#9'TCheckBox'#10'chkAllQSOs'#4'Left'#2#5#6'Height'#2#26#3'Top'#2#8#5'Width'
+  +#2'r'#7'Caption'#6#15'Export all QSOs'#8'OnChange'#7#16'chkAllQSOsChange'#8
+  +'TabOrder'#2#8#0#0#7'TButton'#19'btnExportFieldsPref'#4'Left'#3#224#0#6'Heig'
+  +'ht'#2#25#3'Top'#3#131#0#5'Width'#3#184#0#7'Caption'#6#24'Choose fields for '
+  +'export'#7'OnClick'#7#24'btnExportFieldsPrefClick'#8'TabOrder'#2#9#0#0#11'TS'
+  +'aveDialog'#7'dlgSave'#10'DefaultExt'#6#4'.csv'#6'Filter'#6#15'CSV files|*.c'
+  +'sv'#4'left'#3'?'#1#3'top'#3#0#1#0#0#0
 ]);

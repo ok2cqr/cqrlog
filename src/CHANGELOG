@@ -3,6 +3,9 @@ Legend:
   + new feature
   - bugfix
 --------------------
+1.5.5
+  + added option to choose if you want to remove separator from remarks text (default YES)
+
 1.5.4
   - fixed problem with MASTER.SCP
 
