@@ -9,7 +9,7 @@ Legend:
   + DXCC statistic in New QSO window now shows all type of cmf - Q,L and E (Darek, SP2MKI)
   + experimental DVK supprt (Darek, SP2MKI)
   - sending CW via cwdaemon didn't stopped after 2x ESC - fixed (Darek, SP2MKI)
-  
+  - Mark QSL sent after export didn't work properly - fixed (export for QSL label printing) 
 
 1.5.4
   - fixed problem with MASTER.SCP
