@@ -56,6 +56,7 @@ type
     acBigSquare: TAction;
     acSendSpot : TAction;
     acSCP : TAction;
+    acQSOList: TAction;
     acTune : TAction;
     chkAutoMode: TCheckBox;
     dbgrdQSOBefore: TDBGrid;
@@ -65,6 +66,7 @@ type
     MenuItem34 : TMenuItem;
     MenuItem35 : TMenuItem;
     MenuItem36 : TMenuItem;
+    MenuItem37: TMenuItem;
     MenuItem4 : TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
@@ -274,6 +276,7 @@ type
     procedure acCWFKeyExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
+    procedure acQSOListExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
     procedure acSCPExecute(Sender : TObject);
     procedure acSendSpotExecute(Sender : TObject);
@@ -1112,6 +1115,9 @@ begin
   if cqrini.ReadBool('Window','CWKeys',False) then
     acCWFKey.Execute;
 
+  if cqrini.ReadBool('Window','QSOList',False) then
+    acQSOList.Execute;
+
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
@@ -1159,7 +1165,8 @@ begin
   tmrRadio.Enabled := True;
   dmData.InsertProfiles(cmbProfiles,False);
   cmbProfiles.Text := dmData.GetDefaultProfileText;
-  ChangeCallBookCaption
+  ChangeCallBookCaption;
+  BringToFront
 end;
 
 procedure TfrmNewQSO.SaveSettings;
@@ -1238,6 +1245,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','SCP',False);
+
+    if frmMain.Showing then
+    begin
+      cqrini.WriteBool('Window','QSOList',True);
+      frmMain.Close
+    end
+    else
+      cqrini.WriteBool('Window','QSOList',False);
 
     cqrini.DeleteKey('TMPQSO','OFF');
     cqrini.DeleteKey('TMPQSO','FREQ');
@@ -2931,6 +2946,11 @@ end;
 procedure TfrmNewQSO.acPropExecute(Sender: TObject);
 begin
   frmPropagation.Show
+end;
+
+procedure TfrmNewQSO.acQSOListExecute(Sender: TObject);
+begin
+  frmMain.Show
 end;
 
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
