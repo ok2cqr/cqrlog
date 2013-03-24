@@ -328,7 +328,7 @@ var
 implementation
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, uVersion;
+     fTRXControl, fRotControl, uVersion;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -675,6 +675,7 @@ begin
   dmUtils.LoadBandsSettings;
 
   frmTRXControl.InicializeRig;
+  frmRotControl.InicializeRot;
 
   PrepareBandMapDB;
   LoadClubsSettings;

@@ -1,6 +1,8 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TfrmTRXControl','FORMDATA',[
-  'TPF0'#14'TfrmTRXControl'#13'frmTRXControl'#4'Left'#3'z'#2#6'Height'#3#232#0#3
-  +'Top'#3'^'#1#5'Width'#3'S'#1#13'ActiveControl'#7#7'btnVFOA'#11'BorderIcons'
+  'TPF0'#14'TfrmTRXControl'#13'frmTRXControl'#4'Left'#3'}'#1#6'Height'#3#232#0#3
+  +'Top'#3'B'#2#5'Width'#3'S'#1#13'ActiveControl'#7#7'btnVFOA'#11'BorderIcons'
   +#11#12'biSystemMenu'#0#11'BorderStyle'#7#8'bsDialog'#7'Caption'#6#11'TRX con'
   +'trol'#12'ClientHeight'#3#232#0#11'ClientWidth'#3'S'#1#9'Icon.Data'#10#194#16
   +#0#0#190#16#0#0#0#0#1#0#1#0'  '#0#0#1#0' '#0#168#16#0#0#22#0#0#0'('#0#0#0' '

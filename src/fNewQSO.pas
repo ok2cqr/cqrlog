@@ -56,6 +56,7 @@ type
     acBigSquare: TAction;
     acSendSpot : TAction;
     acSCP : TAction;
+    acRotControl: TAction;
     acTune : TAction;
     chkAutoMode: TCheckBox;
     dbgrdQSOBefore: TDBGrid;
@@ -65,6 +66,7 @@ type
     MenuItem34 : TMenuItem;
     MenuItem35 : TMenuItem;
     MenuItem36 : TMenuItem;
+    MenuItem37: TMenuItem;
     MenuItem4 : TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
@@ -268,6 +270,7 @@ type
     tmrFldigi: TTimer;
     tmrESC: TTimer;
     tmrRadio: TTimer;
+    tmrRotor: TTimer;
     tmrEnd: TTimer;
     tmrStart: TTimer;
     procedure acBigSquareExecute(Sender: TObject);
@@ -275,6 +278,7 @@ type
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
+    procedure acRotControlExecute(Sender: TObject);
     procedure acSCPExecute(Sender : TObject);
     procedure acSendSpotExecute(Sender : TObject);
     procedure acShowStatBarExecute(Sender: TObject);
@@ -552,6 +556,7 @@ var
   c_ErrMsg    : String;
   c_SyncText  : String;
   c_running   : Boolean = False;
+  Azimuth     : String;
 
   minimalize    : Boolean;
   MinDXCluster  : Boolean;
@@ -569,7 +574,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys,{ fTestMain,} uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP;
+     fBigSquareStat, fSCP, fRotControl;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1068,6 +1073,12 @@ begin
     frmTRXControl.BringToFront
   end;
 
+   if cqrini.ReadBool('Window','ROT',False) then
+  begin
+    frmRotControl.Show;
+    frmRotControl.BringToFront
+  end;
+
   if cqrini.ReadBool('Window','Dxcluster',False) then
   begin
     frmDXCluster.Show;
@@ -1083,6 +1094,17 @@ begin
   end
   else begin
     tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
+  end;
+
+    if frmRotControl.Showing then
+  begin
+    if frmRotControl.rbRotor1.Checked then
+      tmrRotor.Interval := cqrini.ReadInteger('ROT1','Poll',500)
+    else
+      tmrRotor.Interval := cqrini.ReadInteger('ROT2','Poll',500)
+  end
+  else begin
+    tmrRotor.Interval := cqrini.ReadInteger('ROT1','Poll',500)
   end;
 
   if cqrini.ReadBool('Window','Details',True) and (not dmData.ContestMode) then
@@ -1190,6 +1212,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','TRX',False);
+
+    if frmRotControl.Showing then
+    begin
+      frmRotControl.Close;
+      cqrini.WriteBool('Window','ROT',True)
+    end
+    else
+      cqrini.WriteBool('Window','ROT',False);
 
     if frmDXCluster.Showing then
     begin
@@ -2936,7 +2966,14 @@ end;
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
 begin
   frmTRXControl.InicializeRig;
-  tmrRadio.Enabled := True
+  tmrRadio.Enabled := True;
+  frmRotControl.InicializeRot;
+  tmrRotor.Enabled := True
+end;
+
+procedure TfrmNewQSO.acRotControlExecute(Sender: TObject);
+begin
+  frmRotControl.Show
 end;
 
 procedure TfrmNewQSO.acSCPExecute(Sender : TObject);
@@ -4430,6 +4467,7 @@ begin
   begin
     lblQRA.Caption := qra + ' km';
     lblAzi.Caption := azim;
+    Azimuth := azim;
   end;
 end;
 
