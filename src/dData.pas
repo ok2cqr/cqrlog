@@ -178,6 +178,7 @@ type
     procedure PrepareCtyData;
     procedure PrepareDXCCData;
     procedure PrepareXplanetDir;
+    procedure PrepareVoice_keyerDir;
     procedure PrepareBandMapDB;
     procedure KillMySQL(const OnStart : Boolean = True);
     procedure CloseBandMapDB;
@@ -865,7 +866,9 @@ begin
   if not DirectoryExistsUTF8(fHomeDir+'ctyfiles') then
     CreateDirUTF8(fHomeDir+'ctyfiles');
   if not DirectoryExistsUTF8(fHomeDir+'xplanet') then
-    CreateDirUTF8(fHomeDir+'xplanet')
+    CreateDirUTF8(fHomeDir+'xplanet');
+  if not DirectoryExistsUTF8(fHomeDir+'voice_keyer') then
+    CreateDirUTF8(fHomeDir+'voice_keyer')
 end;
 
 procedure TdmData.PrepareCtyData;
@@ -937,6 +940,16 @@ begin
   d := fHomeDir+'xplanet'+PathDelim;
   if not FileExistsUTF8(d+'geoconfig') then
     CopyFile(s+'geoconfig',d+'geoconfig')
+end;
+
+procedure TdmData.PrepareVoice_keyerDir;
+var
+  s,d : String;
+begin
+  s := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+PathDelim+'voice_keyer'+PathDelim);
+  d := fHomeDir+'voice_keyer'+PathDelim;
+  if not FileExistsUTF8(d+'voicekeyer.sh') then
+    CopyFile(s+'voice_keyer.sh',d+'voice_keye.sh')
 end;
 
 procedure TdmData.PrepareBandMapDB;
@@ -1122,6 +1135,7 @@ begin
   PrepareCtyData;
   PrepareDXCCData;
   PrepareXplanetDir;
+  PrepareVoice_keyerDir;
   LoadLoTWCalls;
   LoadeQSLCalls;
   LoadMasterSCP;

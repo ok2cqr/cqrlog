@@ -403,7 +403,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport;
+  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -444,6 +444,8 @@ begin
       dmUtils.LoadFontSettings(frmMain);
       if frmTRXControl.Showing then
         dmUtils.LoadFontSettings(frmTRXControl);
+      if frmRotControl.Showing then
+        dmUtils.LoadFontSettings(frmRotControl);
       if frmQSODetails.Showing then
         frmQSODetails.LoadFonts
     end

@@ -1632,7 +1632,8 @@ begin
     //labels, buttons, radio,checkbox ....
     if (aForm.Components[i] is TLabel) then
     begin
-      if (aForm.Components[i] as TLabel).Name  <> 'lblFreq' then //frequecy label font is set
+      if not (((aForm.Components[i] as TLabel).Name  = 'lblFreq')
+           or ((aForm.Components[i] as TLabel).Name  = 'lblAzimuth')) then //frequecy/Azimuth label font is set
       begin
         (aForm.Components[i] as TLabel).Font.Name := fButtons;
         (aForm.Components[i] as TLabel).Font.Style := [];

@@ -23,6 +23,7 @@ install:
 	install -d -v         $(datadir)/help/img
 	install -d -v         $(datadir)/members
 	install -d -v         $(datadir)/xplanet
+	install -d -v         $(datadir)/voice_keyer
 	install -d -v         $(datadir)/zipcodes
 	install -d -v         $(datadir)/images 
 	install -d -v         $(sharedir)/pixmaps/cqrlog
@@ -36,6 +37,7 @@ install:
 	install    -v -m 0644 help/*.*   $(datadir)/help/
 	install    -v -m 0644 members/*  $(datadir)/members/
 	install    -v -m 0644 xplanet/*  $(datadir)/xplanet/
+	install    -v -m 0755 voice_keyer/*  $(datadir)/voice_keyer/
 	install    -v -m 0644 zipcodes/* $(datadir)/zipcodes/
 	install    -v -m 0644 images/*   $(datadir)/images/
 	install    -v -m 0644 tools/cqrlog.desktop $(sharedir)/applications/cqrlog.desktop
