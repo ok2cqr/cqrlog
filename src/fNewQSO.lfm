@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
   Left = 457
   Height = 651
-  Top = 88
+  Top = 87
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -1782,8 +1782,8 @@ object frmNewQSO: TfrmNewQSO
   object tmrRadio: TTimer
     Enabled = False
     OnTimer = tmrRadioTimer
-    left = 336
-    top = 528
+    left = 320
+    top = 552
   end
   object MainMenu1: TMainMenu
     Images = imgMain1
@@ -1913,6 +1913,7 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem78: TMenuItem
         Action = acRefreshTRX
+        Caption = 'Refresh TRX/ROT control'
       end
       object MenuItem36: TMenuItem
         Caption = '-'
@@ -2088,7 +2089,7 @@ object frmNewQSO: TfrmNewQSO
         Action = acSCP
       end
       object MenuItem37: TMenuItem
-        Action = acQSOList
+        Action = acRotControl
       end
     end
     object MenuItem3: TMenuItem
@@ -2688,10 +2689,10 @@ object frmNewQSO: TfrmNewQSO
       OnExecute = acTuneExecute
       ShortCut = 16468
     end
-    object acQSOList: TAction
+    object acRotControl: TAction
       Category = 'Window'
-      Caption = 'QSO list'
-      OnExecute = acQSOListExecute
+      Caption = 'Rotor Control'
+      OnExecute = acRotControlExecute
     end
   end
   object imgMain: TImageList
@@ -3982,5 +3983,11 @@ object frmNewQSO: TfrmNewQSO
     OnTimer = tmrFldigiTimer
     left = 96
     top = 544
+  end
+  object tmrRotor: TTimer
+    Enabled = False
+    Interval = 500
+    left = 400
+    top = 552
   end
 end

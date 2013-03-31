@@ -30,6 +30,7 @@ const
   AllowedChars = ['A'..'Z','a'..'z','0'..'9','/',',','.','?','!',' ',':','|','-','=','+','@','#','*',
                   '%','_','(',')','$'];
   empty_freq = '0.00000';
+  empty_azimuth = '0.0';
   cMaxModes = 38;
   cModes: array [0..cMaxModes] of string = ('CW','SSB','AM','FM','RTTY','SSTV','PACTOR','PSK','ATV','CLOVER','GTOR','MTOR',
                                             'PSK31','HELL','MT63','QRSS','CWQ','BPSK31','MFSK','JT44','FSK44','WSJT','AMTOR',
@@ -212,6 +213,7 @@ type
     function  DateInSOTAFormat(date : TDateTime) : String;
     function  GetLocalUTCDelta : Double;
     function  GetRadioRigCtldCommandLine(radio : Word) : String;
+    function  GetRotorRotCtldCommandLine(rotor : Word) : String;
     function  IgnoreFreq(kHz : String) : Boolean;
     function  HTMLEncode(const Data: string): string;
 end;
@@ -1630,7 +1632,8 @@ begin
     //labels, buttons, radio,checkbox ....
     if (aForm.Components[i] is TLabel) then
     begin
-      if (aForm.Components[i] as TLabel).Name  <> 'lblFreq' then //frequecy label font is set
+      if not (((aForm.Components[i] as TLabel).Name  = 'lblFreq')
+           or ((aForm.Components[i] as TLabel).Name  = 'lblAzimuth')) then //frequecy/Azimuth label font is set
       begin
         (aForm.Components[i] as TLabel).Font.Name := fButtons;
         (aForm.Components[i] as TLabel).Font.Style := [];
@@ -3704,8 +3707,112 @@ begin
 
   Result := '-m '+ cqrini.ReadString(section,'model','') + ' ' +
             '-r '+ cqrini.ReadString(section,'device','') + ' ' +
-            '-t '+ cqrini.ReadString(section,'RigCtldPort','4534') + ' ';
+            '-t '+ cqrini.ReadString(section,'RigCtldPort','4532') + ' ';
   Result := Result + cqrini.ReadString(section,'ExtraRigCtldArgs','') + ' ';
+
+  case cqrini.ReadInteger(section,'SerialSpeed',0) of
+    0 : arg := '';
+    1 : arg := '-s 1200 ';
+    2 : arg := '-s 2400 ';
+    3 : arg := '-s 4800 ';
+    4 : arg := '-s 9600 ';
+    5 : arg := '-s 144000 ';
+    6 : arg := '-s 19200 ';
+    7 : arg := '-s 38400 ';
+    8 : arg := '-s 57600 ';
+    9 : arg := '-s 115200 '
+    else
+      arg := ''
+  end; //case
+  Result := Result + arg;
+
+  case cqrini.ReadInteger(section,'DataBits',0) of
+    0 : arg := '';
+    1 : arg := 'data_bits=5';
+    2 : arg := 'data_bits=6';
+    3 : arg := 'data_bits=7';
+    4 : arg := 'data_bits=8';
+    5 : arg := 'data_bits=9'
+    else
+      arg := ''
+  end; //case
+  if arg<>'' then
+    set_conf := set_conf+arg+',';
+
+  if cqrini.ReadInteger(section,'StopBits',0) > 0 then
+    set_conf := set_conf+'stop_bits='+IntToStr(cqrini.ReadInteger(section,'StopBits',0)-1)+',';
+
+  case cqrini.ReadInteger(section,'Parity',0) of
+    0 : arg := '';
+    1 : arg := 'parity=None';
+    2 : arg := 'parity=Odd';
+    3 : arg := 'parity=Even';
+    4 : arg := 'parity=Mark';
+    5 : arg := 'parity=Space'
+    else
+      arg := ''
+  end; //case
+  if arg<>'' then
+    set_conf := set_conf+arg+',';
+
+  case cqrini.ReadInteger(section,'HandShake',0) of
+    0 : arg := '';
+    1 : arg := 'serial_handshake=None';
+    2 : arg := 'serial_handshake=XONXOFF';
+    3 : arg := 'serial_handshake=Hardware';
+    else
+      arg := ''
+  end; //case
+  if arg<>'' then
+    set_conf := set_conf+arg+',';
+
+  case cqrini.ReadInteger(section,'DTR',0) of
+    0 : arg := '';
+    1 : arg := 'dtr_state=Unset';
+    2 : arg := 'dtr_state=ON';
+    3 : arg := 'dtr_state=OFF';
+    else
+      arg := ''
+  end; //case
+  if arg<>'' then
+    set_conf := set_conf+arg+',';
+
+  case cqrini.ReadInteger(section,'RTS',0) of
+    0 : arg := '';
+    1 : arg := 'rts_state=Unset';
+    2 : arg := 'rts_state=ON';
+    3 : arg := 'rts_state=OFF';
+    else
+      arg := ''
+  end; //case
+  if arg<>'' then
+    set_conf := set_conf+arg+',';
+
+  if (set_conf<>'') then
+  begin
+    set_conf := copy(set_conf,1,Length(set_conf)-1);
+    Result   := Result + ' --set-conf='+set_conf
+  end
+end;
+
+function TdmUtils.GetRotorRotCtldCommandLine(rotor : Word) : String;
+var
+  section  : ShortString='';
+  arg      : String='';
+  set_conf : String = '';
+begin
+  section := 'ROT'+IntToStr(rotor);
+
+  if cqrini.ReadString(section,'model','') = '' then
+  begin
+    Result := '';
+    exit
+  end;
+
+  Result := '-m '+ cqrini.ReadString(section,'model','') + ' ' +
+            '-r '+ cqrini.ReadString(section,'device','') + ' ' +
+            '-t '+ cqrini.ReadString(section,'RotCtldPort','4533') + ' ';
+  Result := Result + cqrini.ReadString(section,'ExtraRotCtldArgs','') + ' ';
 
   case cqrini.ReadInteger(section,'SerialSpeed',0) of
     0 : arg := '';

@@ -1,7 +1,7 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 634
+  Left = 381
   Height = 232
-  Top = 350
+  Top = 578
   Width = 339
   ActiveControl = btnVFOA
   BorderIcons = [biSystemMenu]

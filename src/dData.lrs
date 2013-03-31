@@ -3,51 +3,51 @@
 LazarusResources.Add('TdmData','FORMDATA',[
   'TPF0'#7'TdmData'#6'dmData'#8'OnCreate'#7#16'DataModuleCreate'#9'OnDestroy'#7
   +#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3'^'#2#16'HorizontalOf'
-  +'fset'#3#4#2#14'VerticalOffset'#2'p'#5'Width'#3#27#3#0#11'TDatasource'#7'dsr'
-  +'Main'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDatasource'
-  +#12'dsrQSOBefore'#7'DataSet'#7#10'qQSOBefore'#4'left'#3'H'#1#3'top'#3#216#0#0
-  +#0#11'TDatasource'#9'dsrImport'#4'left'#3'P'#2#3'top'#3#192#1#0#0#11'TDataso'
-  +'urce'#8'dsrBands'#7'DataSet'#7#6'qBands'#4'left'#3#136#0#3'top'#3#173#1#0#0
-  +#11'TDatasource'#11'dsrProfiles'#7'DataSet'#7#9'qProfiles'#4'left'#2'@'#3'to'
-  +'p'#2'p'#0#0#11'TDatasource'#12'dsrDXCluster'#7'DataSet'#7#11'qDXClusters'#4
-  +'left'#3#160#0#3'top'#2'H'#0#0#4'TDbf'#9'tblImport'#9'IndexDefs'#14#0#10'Tab'
-  +'leLevel'#2#4#13'FilterOptions'#11#0#4'left'#3#232#0#3'top'#3#216#1#0#0#11'T'
-  +'Datasource'#9'dsrQSLMgr'#8'AutoEdit'#8#7'DataSet'#7#7'qQSLMgr'#4'left'#3#128
-  +#1#3'top'#3#128#1#0#0#4'TDbf'#7'dbfBand'#9'IndexDefs'#14#0#10'TableLevel'#2#4
-  +#13'FilterOptions'#11#0#4'left'#3#232#0#3'top'#3#152#1#0#0#9'TSQLQuery'#2'mQ'
-  +#10'BeforeOpen'#7#12'mQBeforeOpen'#11'Transaction'#7#4'trmQ'#8'ReadOnly'#8#6
-  +'Params'#14#0#8'ParseSQL'#8#4'left'#3#153#2#3'top'#2#24#0#0#15'TSQLTransacti'
-  +'on'#4'trmQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#153#2#3'top'#2'P'#0
-  +#0#10'TSQLScript'#8'scCommon'#11'Transaction'#7#4'trmQ'#18'Directives.String'
-  +'s'#1#6#8'SET TERM'#6#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#END'
-  +'IF'#6#7'#DEFINE'#6#6'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6'WCREAT'
-  +'E DATABASE cqrlog_common DEFAULT CHARACTER SET = utf8  DEFAULT COLLATE = ut'
-  +'f8_bin;'#6#0#6#18'USE cqrlog_common;'#6#0#6#20'CREATE TABLE bands ('#6'/   '
-  +'    id_bands INT AUTO_INCREMENT PRIMARY KEY,'#6'#       band VARCHAR(10) DE'
-  +'FAULT '''','#6#29'       b_begin NUMERIC(10,4),'#6#27'       b_end NUMERIC('
-  +'10,4),'#6#24'       cw NUMERIC(10,4),'#6#26'       rtty NUMERIC(10,4),'#6#24
-  +'       ssb NUMERIC(10,4)'#6#2');'#6'!CREATE INDEX band ON bands(band);'#6#0
-  +#6#25'CREATE TABLE dxclusters ('#6'3      id_dxclusters INT AUTO_INCREMENT P'
-  +'RIMARY KEY,'#6'*      description VARCHAR(100) DEFAULT '''','#6'&      addr'
-  +'ess VARCHAR(100) DEFAULT '''','#6'"      port VARCHAR(10) DEFAULT '''','#6
-  +'%      dxcuser VARCHAR(12) DEFAULT '''','#6'$      dxcpass VARCHAR(20) DEFA'
-  +'ULT '''''#6#2');'#6'4CREATE INDEX description ON dxclusters(description);'#6
-  +#0#6#24'CREATE TABLE iota_list ('#6'2      id_iota_list INT AUTO_INCREMENT P'
-  +'RIMARY KEY,'#6'$      iota_nr VARCHAR(6) DEFAULT '''','#6'*      island_nam'
-  +'e VARCHAR(250) DEFAULT '''','#6'&      dxcc_ref VARCHAR(15) DEFAULT '''','#6
-  +'!      pref VARCHAR(15) DEFAULT '''''#6#2');'#6'+CREATE INDEX iota_nr ON io'
-  +'ta_list(iota_nr);'#6'%CREATE INDEX pref ON iota_list(pref);'#6#0#6#0#6#23'C'
-  +'REATE TABLE dxcc_ref ('#6'7            id_dxcc_ref INT AUTO_INCREMENT PRIMA'
-  +'RY KEY,'#6'&            pref VARCHAR(20) NOT NULL,'#6'''            name VA'
-  +'RCHAR(100) NOT NULL,'#6'%            cont VARCHAR(6) NOT NULL,'#6'$        '
-  +'    utc VARCHAR(12)NOT NULL,'#6'%            lat VARCHAR(10) NOT NULL,'#6'('
-  +'            longit VARCHAR(10) NOT NULL,'#6'%            itu VARCHAR(20) NO'
-  +'T NULL,'#6'%            waz VARCHAR(20) NOT NULL,'#6'-            adif SMAL'
-  +'LINT NOT NULL DEFAULT 0,'#6'/            deleted SMALLINT NOT NULL DEFAULT '
-  +'0'#6#2');'#6'$CREATE INDEX pref ON dxcc_ref(pref);'#6'$CREATE INDEX adif ON'
-  +' dxcc_ref(adif);'#6#0#6#21'CREATE TABLE qslmgr ('#6'5            id_qslmgr '
-  +'INT AUTO_INCREMENT PRIMARY KEY,'#6'!            callsign VARCHAR(20),'#6'  '
-  +'           qsl_via VARCHAR(20),'#6#25'            fromdate DATE'#6#2');'#6
+  +'fset'#3#179#1#14'VerticalOffset'#2'p'#5'Width'#3#27#3#0#11'TDatasource'#7'd'
+  +'srMain'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDatasour'
+  +'ce'#12'dsrQSOBefore'#7'DataSet'#7#10'qQSOBefore'#4'left'#3'H'#1#3'top'#3#216
+  +#0#0#0#11'TDatasource'#9'dsrImport'#4'left'#3'P'#2#3'top'#3#192#1#0#0#11'TDa'
+  +'tasource'#8'dsrBands'#7'DataSet'#7#6'qBands'#4'left'#3#136#0#3'top'#3#173#1
+  +#0#0#11'TDatasource'#11'dsrProfiles'#7'DataSet'#7#9'qProfiles'#4'left'#2'@'#3
+  +'top'#2'p'#0#0#11'TDatasource'#12'dsrDXCluster'#7'DataSet'#7#11'qDXClusters'
+  +#4'left'#3#160#0#3'top'#2'H'#0#0#4'TDbf'#9'tblImport'#9'IndexDefs'#14#0#10'T'
+  +'ableLevel'#2#4#13'FilterOptions'#11#0#4'left'#3#232#0#3'top'#3#216#1#0#0#11
+  +'TDatasource'#9'dsrQSLMgr'#8'AutoEdit'#8#7'DataSet'#7#7'qQSLMgr'#4'left'#3
+  +#128#1#3'top'#3#128#1#0#0#4'TDbf'#7'dbfBand'#9'IndexDefs'#14#0#10'TableLevel'
+  +#2#4#13'FilterOptions'#11#0#4'left'#3#232#0#3'top'#3#152#1#0#0#9'TSQLQuery'#2
+  +'mQ'#10'BeforeOpen'#7#12'mQBeforeOpen'#11'Transaction'#7#4'trmQ'#8'ReadOnly'
+  +#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#153#2#3'top'#2#24#0#0#15'TSQLTrans'
+  +'action'#4'trmQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#153#2#3'top'#2
+  +'P'#0#0#10'TSQLScript'#8'scCommon'#11'Transaction'#7#4'trmQ'#18'Directives.S'
+  +'trings'#1#6#8'SET TERM'#6#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6
+  +'#ENDIF'#6#7'#DEFINE'#6#6'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6'WC'
+  +'REATE DATABASE cqrlog_common DEFAULT CHARACTER SET = utf8  DEFAULT COLLATE '
+  +'= utf8_bin;'#6#0#6#18'USE cqrlog_common;'#6#0#6#20'CREATE TABLE bands ('#6
+  +'/       id_bands INT AUTO_INCREMENT PRIMARY KEY,'#6'#       band VARCHAR(10'
+  +') DEFAULT '''','#6#29'       b_begin NUMERIC(10,4),'#6#27'       b_end NUME'
+  +'RIC(10,4),'#6#24'       cw NUMERIC(10,4),'#6#26'       rtty NUMERIC(10,4),'
+  +#6#24'       ssb NUMERIC(10,4)'#6#2');'#6'!CREATE INDEX band ON bands(band);'
+  +#6#0#6#25'CREATE TABLE dxclusters ('#6'3      id_dxclusters INT AUTO_INCREME'
+  +'NT PRIMARY KEY,'#6'*      description VARCHAR(100) DEFAULT '''','#6'&      '
+  +'address VARCHAR(100) DEFAULT '''','#6'"      port VARCHAR(10) DEFAULT '''','
+  +#6'%      dxcuser VARCHAR(12) DEFAULT '''','#6'$      dxcpass VARCHAR(20) DE'
+  +'FAULT '''''#6#2');'#6'4CREATE INDEX description ON dxclusters(description);'
+  +#6#0#6#24'CREATE TABLE iota_list ('#6'2      id_iota_list INT AUTO_INCREMENT'
+  +' PRIMARY KEY,'#6'$      iota_nr VARCHAR(6) DEFAULT '''','#6'*      island_n'
+  +'ame VARCHAR(250) DEFAULT '''','#6'&      dxcc_ref VARCHAR(15) DEFAULT '''','
+  +#6'!      pref VARCHAR(15) DEFAULT '''''#6#2');'#6'+CREATE INDEX iota_nr ON '
+  +'iota_list(iota_nr);'#6'%CREATE INDEX pref ON iota_list(pref);'#6#0#6#0#6#23
+  +'CREATE TABLE dxcc_ref ('#6'7            id_dxcc_ref INT AUTO_INCREMENT PRIM'
+  +'ARY KEY,'#6'&            pref VARCHAR(20) NOT NULL,'#6'''            name V'
+  +'ARCHAR(100) NOT NULL,'#6'%            cont VARCHAR(6) NOT NULL,'#6'$       '
+  +'     utc VARCHAR(12)NOT NULL,'#6'%            lat VARCHAR(10) NOT NULL,'#6
+  +'(            longit VARCHAR(10) NOT NULL,'#6'%            itu VARCHAR(20) N'
+  +'OT NULL,'#6'%            waz VARCHAR(20) NOT NULL,'#6'-            adif SMA'
+  +'LLINT NOT NULL DEFAULT 0,'#6'/            deleted SMALLINT NOT NULL DEFAULT'
+  +' 0'#6#2');'#6'$CREATE INDEX pref ON dxcc_ref(pref);'#6'$CREATE INDEX adif O'
+  +'N dxcc_ref(adif);'#6#0#6#21'CREATE TABLE qslmgr ('#6'5            id_qslmgr'
+  +' INT AUTO_INCREMENT PRIMARY KEY,'#6'!            callsign VARCHAR(20),'#6' '
+  +'            qsl_via VARCHAR(20),'#6#25'            fromdate DATE'#6#2');'#6
   +'*CREATE INDEX callsign ON qslmgr(callsign);'#6'*CREATE INDEX fromdate ON qs'
   +'lmgr(fromdate);'#6#0#6#23'CREATE TABLE log_list ('#6'7            id_log_li'
   +'st INT AUTO_INCREMENT PRIMARY KEY,'#6'%            log_nr SMALLINT NOT NULL'
