@@ -959,11 +959,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtPoll2Exit(Sender: TObject);
     procedure edtPoll1Exit(Sender: TObject);
-    procedure Panel1Click(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
-    procedure pgROTControlChange(Sender: TObject);
-    procedure tabRot2ContextPopup(Sender: TObject; MousePos: TPoint;
-      var Handled: Boolean);
   private
     { private declarations }
   public
@@ -2642,25 +2638,9 @@ begin
     edtPoll1.Text := '500';
 end;
 
-procedure TfrmPreferences.Panel1Click(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
 begin
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-end;
-
-procedure TfrmPreferences.pgROTControlChange(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmPreferences.tabRot2ContextPopup(Sender: TObject;
-  MousePos: TPoint; var Handled: Boolean);
-begin
-
 end;
 
 initialization
