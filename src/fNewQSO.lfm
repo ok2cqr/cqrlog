@@ -1908,8 +1908,17 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem77: TMenuItem
         Action = acAddToBandMap
       end
+      object MenuItem40: TMenuItem
+        Caption = '-'
+      end
       object MenuItem79: TMenuItem
         Action = acCWMessages
+      end
+      object MenuItem39: TMenuItem
+        Action = acReloadCW
+      end
+      object MenuItem51: TMenuItem
+        Caption = '-'
       end
       object MenuItem78: TMenuItem
         Action = acRefreshTRX
@@ -2701,6 +2710,11 @@ object frmNewQSO: TfrmNewQSO
       Category = 'Window'
       Caption = 'QSO list'
       OnExecute = acQSOListExecute
+    end
+    object acReloadCW: TAction
+      Category = 'File'
+      Caption = 'Reload CW interface'
+      OnExecute = acReloadCWExecute
     end
   end
   object imgMain: TImageList

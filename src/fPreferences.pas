@@ -917,6 +917,7 @@ type
     procedure cmbDTRR2Change(Sender : TObject);
     procedure cmbHanshakeR1Change(Sender : TObject);
     procedure cmbHanshakeR2Change(Sender : TObject);
+    procedure cmbIfaceTypeChange(Sender: TObject);
     procedure cmbParityR1Change(Sender : TObject);
     procedure cmbParityR2Change(Sender : TObject);
     procedure cmbRTSR1Change(Sender : TObject);
@@ -932,6 +933,10 @@ type
     procedure edtRadio1Change(Sender: TObject);
     procedure edtRadio2Change(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
+    procedure edtWinMaxSpeedChange(Sender: TObject);
+    procedure edtWinMinSpeedChange(Sender: TObject);
+    procedure edtWinPortChange(Sender: TObject);
+    procedure edtWinSpeedChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
     procedure btnDefineProfileClick(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
@@ -975,6 +980,7 @@ var
   fbandSize: integer;
   TRXChanged: boolean;
   ReloadFreq: Boolean = False;
+  WinKeyerChanged : Boolean;
 
 implementation
 
@@ -1424,27 +1430,31 @@ begin
   cqrini.WriteString('CallBook', 'CBUser', edtCbUser.Text);
   cqrini.WriteString('CallBook', 'CBPass', edtCbPass.Text);
 
-  frmNewQSO.CWint.Close;
-  if cmbIfaceType.ItemIndex > 0 then
+  if WinKeyerChanged then
   begin
-    if cmbIfaceType.ItemIndex = 1 then
+    frmNewQSO.CWint.Close;
+    if cmbIfaceType.ItemIndex > 0 then
     begin
-      frmNewQSO.CWint.KeyType := ktWinKeyer;
-      frmNewQSO.CWint.Port := edtWinPort.Text;
-      frmNewQSO.CWint.SetSpeed(edtWinSpeed.Value);
-      frmNewQSO.CWint.Device := edtWinPort.Text;
-      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtWinSpeed.Value) + 'WPM';
+      if cmbIfaceType.ItemIndex = 1 then
+      begin
+        frmNewQSO.CWint.KeyType := ktWinKeyer;
+        frmNewQSO.CWint.Port := edtWinPort.Text;
+        frmNewQSO.CWint.SetSpeed(edtWinSpeed.Value);
+        frmNewQSO.CWint.Device := edtWinPort.Text;
+        frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtWinSpeed.Value) + 'WPM'
+      end
+      else
+      begin
+        frmNewQSO.CWint.KeyType := ktCWdaemon;
+        frmNewQSO.CWint.Port := edtCWPort.Text;
+        frmNewQSO.CWint.Device := edtCWAddress.Text;
+        frmNewQSO.CWint.SetSpeed(edtCWSpeed.Value);
+        frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtCWSpeed.Value) + 'WPM'
+      end;
+      frmNewQSO.CWint.Open
     end
-    else
-    begin
-      frmNewQSO.CWint.KeyType := ktCWdaemon;
-      frmNewQSO.CWint.Port := edtCWPort.Text;
-      frmNewQSO.CWint.Device := edtCWAddress.Text;
-      frmNewQSO.CWint.SetSpeed(edtCWSpeed.Value);
-      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtCWSpeed.Value) + 'WPM';
-    end;
-    frmNewQSO.CWint.Open;
   end;
+
   dmUtils.TimeOffset := StrToCurr(edtOffset.Text);
   dmUtils.GrayLineOffset := StrToCurr(edtGrayLineOffset.Text);
   dmUtils.SysUTC := chkSysUTC.Checked;
@@ -2057,6 +2067,11 @@ begin
   TRXChanged := True
 end;
 
+procedure TfrmPreferences.cmbIfaceTypeChange(Sender: TObject);
+begin
+  WinKeyerChanged := True
+end;
+
 procedure TfrmPreferences.cmbParityR1Change(Sender : TObject);
 begin
   TRXChanged := True
@@ -2131,6 +2146,26 @@ procedure TfrmPreferences.edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
 begin
   if not (key in ['0'..'9']) then
     key := #0;
+end;
+
+procedure TfrmPreferences.edtWinMaxSpeedChange(Sender: TObject);
+begin
+  WinKeyerChanged := True
+end;
+
+procedure TfrmPreferences.edtWinMinSpeedChange(Sender: TObject);
+begin
+  WinKeyerChanged := True
+end;
+
+procedure TfrmPreferences.edtWinPortChange(Sender: TObject);
+begin
+  WinKeyerChanged := True
+end;
+
+procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
+begin
+  WinKeyerChanged := True
 end;
 
 procedure TfrmPreferences.lbPreferencesClick(Sender: TObject);
@@ -2619,7 +2654,8 @@ begin
   edtFM1.Width := 60;
 
   chkSysUTCClick(nil);
-  TRXChanged := False;
+  TRXChanged      := False;
+  WinKeyerChanged := False;
 end;
 
 procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);

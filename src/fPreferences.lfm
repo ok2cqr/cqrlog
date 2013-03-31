@@ -21,10 +21,10 @@ object frmPreferences: TfrmPreferences
     Height = 566
     Top = 0
     Width = 639
-    ActivePage = TabROTcontrol
+    ActivePage = tabCWInterface
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 6
+    TabIndex = 19
     TabOrder = 0
     OnChange = pgPreferencesChange
     OnPageChanged = pgPreferencesChange
@@ -2567,12 +2567,12 @@ object frmPreferences: TfrmPreferences
         Top = 267
         Width = 561
         Caption = ' User defined digital modes (use , as delimitter)'
-        ClientHeight = 56
+        ClientHeight = 42
         ClientWidth = 557
         TabOrder = 0
         object edtDigiModes: TEdit
           Left = 7
-          Height = 27
+          Height = 21
           Top = 15
           Width = 536
           CharCase = ecUppercase
@@ -2585,36 +2585,36 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 208
         Caption = ' Radio one '
-        ClientHeight = 207
+        ClientHeight = 193
         ClientWidth = 204
         TabOrder = 1
         object Label28: TLabel
           Left = 13
-          Height = 18
+          Height = 16
           Top = 18
-          Width = 40
+          Width = 33
           Caption = 'Mode'
           ParentColor = False
         end
         object Label29: TLabel
           Left = 77
-          Height = 18
+          Height = 16
           Top = 18
-          Width = 73
+          Width = 61
           Caption = 'Bandwidth'
           ParentColor = False
         end
         object Label30: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 43
-          Width = 24
+          Width = 20
           Caption = 'CW'
           ParentColor = False
         end
         object edtCW1: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 39
           Width = 81
           Increment = 50
@@ -2624,23 +2624,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label35: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 43
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object Label36: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 75
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object edtSSB1: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 71
           Width = 81
           Increment = 50
@@ -2650,23 +2650,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label31: TLabel
           Left = 10
-          Height = 18
+          Height = 16
           Top = 75
-          Width = 26
+          Width = 21
           Caption = 'SSB'
           ParentColor = False
         end
         object Label32: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 106
-          Width = 35
+          Width = 30
           Caption = 'RTTY'
           ParentColor = False
         end
         object edtRTTY1: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 102
           Width = 81
           Increment = 50
@@ -2676,23 +2676,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label37: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 106
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object Label38: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 139
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object edtAM1: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 133
           Width = 81
           Increment = 100
@@ -2702,23 +2702,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label33: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 139
-          Width = 24
+          Width = 19
           Caption = 'AM'
           ParentColor = False
         end
         object Label34: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 170
-          Width = 22
+          Width = 18
           Caption = 'FM'
           ParentColor = False
         end
         object edtFM1: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 166
           Width = 81
           Increment = 100
@@ -2728,9 +2728,9 @@ object frmPreferences: TfrmPreferences
         end
         object Label39: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 170
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2741,36 +2741,36 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 208
         Caption = ' Radio two '
-        ClientHeight = 207
+        ClientHeight = 193
         ClientWidth = 204
         TabOrder = 2
         object Label110: TLabel
           Left = 13
-          Height = 18
+          Height = 16
           Top = 18
-          Width = 40
+          Width = 33
           Caption = 'Mode'
           ParentColor = False
         end
         object Label113: TLabel
           Left = 77
-          Height = 18
+          Height = 16
           Top = 18
-          Width = 73
+          Width = 61
           Caption = 'Bandwidth'
           ParentColor = False
         end
         object Label114: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 43
-          Width = 24
+          Width = 20
           Caption = 'CW'
           ParentColor = False
         end
         object edtCW2: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 39
           Width = 81
           Increment = 50
@@ -2780,23 +2780,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label115: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 43
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object Label116: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 75
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object edtSSB2: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 71
           Width = 81
           Increment = 50
@@ -2806,23 +2806,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label117: TLabel
           Left = 10
-          Height = 18
+          Height = 16
           Top = 75
-          Width = 26
+          Width = 21
           Caption = 'SSB'
           ParentColor = False
         end
         object Label118: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 106
-          Width = 35
+          Width = 30
           Caption = 'RTTY'
           ParentColor = False
         end
         object edtRTTY2: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 102
           Width = 81
           Increment = 50
@@ -2832,23 +2832,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label119: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 106
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object Label120: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 139
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
         object edtAM2: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 133
           Width = 81
           Increment = 100
@@ -2858,23 +2858,23 @@ object frmPreferences: TfrmPreferences
         end
         object Label121: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 139
-          Width = 24
+          Width = 19
           Caption = 'AM'
           ParentColor = False
         end
         object Label122: TLabel
           Left = 11
-          Height = 18
+          Height = 16
           Top = 170
-          Width = 22
+          Width = 18
           Caption = 'FM'
           ParentColor = False
         end
         object edtFM2: TSpinEdit
           Left = 77
-          Height = 27
+          Height = 21
           Top = 166
           Width = 81
           Increment = 100
@@ -2884,9 +2884,9 @@ object frmPreferences: TfrmPreferences
         end
         object Label123: TLabel
           Left = 169
-          Height = 18
+          Height = 16
           Top = 170
-          Width = 18
+          Width = 15
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2898,9 +2898,9 @@ object frmPreferences: TfrmPreferences
       ClientWidth = 631
       object chkUseProfiles: TCheckBox
         Left = 9
-        Height = 24
+        Height = 26
         Top = 12
-        Width = 138
+        Width = 122
         Caption = 'Use QTH Profiles'
         OnChange = chkUseProfilesChange
         TabOrder = 0
@@ -2911,7 +2911,7 @@ object frmPreferences: TfrmPreferences
         Top = 43
         Width = 510
         Caption = 'Profiles'
-        ClientHeight = 248
+        ClientHeight = 234
         ClientWidth = 506
         TabOrder = 1
         object Bevel1: TBevel
@@ -2924,15 +2924,15 @@ object frmPreferences: TfrmPreferences
         end
         object Label40: TLabel
           Left = 14
-          Height = 18
+          Height = 16
           Top = 111
-          Width = 251
+          Width = 214
           Caption = 'Description of the profile will include:'
           ParentColor = False
         end
         object cmbProfiles: TComboBox
           Left = 9
-          Height = 29
+          Height = 21
           Top = 12
           Width = 483
           ItemHeight = 0
@@ -2951,27 +2951,27 @@ object frmPreferences: TfrmPreferences
         end
         object chkProfileLocator: TCheckBox
           Left = 14
-          Height = 24
+          Height = 26
           Top = 143
-          Width = 79
+          Width = 72
           Caption = 'Locator'
           OnClick = chkProfileLocatorClick
           TabOrder = 2
         end
         object chkProfileQTH: TCheckBox
           Left = 14
-          Height = 24
+          Height = 26
           Top = 175
-          Width = 55
+          Width = 52
           Caption = 'QTH'
           OnClick = chkProfileQTHClick
           TabOrder = 3
         end
         object chkProfileRig: TCheckBox
           Left = 14
-          Height = 24
+          Height = 26
           Top = 207
-          Width = 47
+          Width = 46
           Caption = 'Rig'
           OnClick = chkProfileRigClick
           TabOrder = 4
@@ -2984,255 +2984,255 @@ object frmPreferences: TfrmPreferences
       ClientWidth = 631
       object Label46: TLabel
         Left = 6
-        Height = 17
+        Height = 16
         Top = 12
-        Width = 31
+        Width = 27
         Caption = 'Field'
         ParentColor = False
       end
       object Label47: TLabel
         Left = 174
-        Height = 17
+        Height = 16
         Top = 12
-        Width = 31
+        Width = 27
         Caption = 'Field'
         ParentColor = False
       end
       object Label48: TLabel
         Left = 366
-        Height = 17
+        Height = 16
         Top = 12
-        Width = 31
+        Width = 27
         Caption = 'Field'
         ParentColor = False
       end
       object Label49: TLabel
         Left = 110
-        Height = 17
+        Height = 16
         Top = 12
-        Width = 37
+        Width = 35
         Caption = 'Width'
         ParentColor = False
       end
       object Label50: TLabel
         Left = 302
-        Height = 17
+        Height = 16
         Top = 12
-        Width = 37
+        Width = 35
         Caption = 'Width'
         ParentColor = False
       end
       object Label51: TLabel
         Left = 507
-        Height = 17
+        Height = 16
         Top = 11
-        Width = 37
+        Width = 35
         Caption = 'Width'
         ParentColor = False
       end
       object chkexDate: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 38
-        Width = 53
+        Width = 56
         Caption = 'Date'
         TabOrder = 0
       end
       object chkexTimeon: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 64
-        Width = 70
+        Width = 73
         Caption = 'Time on'
         TabOrder = 1
       end
       object chkexTimeoff: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 89
-        Width = 73
+        Width = 75
         Caption = 'Time off'
         TabOrder = 2
       end
       object chkexCall: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 114
-        Width = 47
+        Width = 48
         Caption = 'Call'
         TabOrder = 3
       end
       object chkexMode: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 139
-        Width = 58
+        Width = 60
         Caption = 'Mode'
         TabOrder = 4
       end
       object chkexRSTS: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 191
-        Width = 75
+        Width = 78
         Caption = 'RST sent'
         TabOrder = 5
       end
       object chkexFreq: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 165
-        Width = 51
+        Width = 53
         Caption = 'Freq'
         TabOrder = 6
       end
       object chkexRSTR: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 217
-        Width = 75
+        Width = 76
         Caption = 'RST rcvd'
         TabOrder = 7
       end
       object chkexQTH: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 270
-        Width = 49
+        Width = 52
         Caption = 'QTH'
         TabOrder = 8
       end
       object chkexName: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 243
-        Width = 58
+        Width = 61
         Caption = 'Name'
         TabOrder = 9
       end
       object chkexQSLR: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 64
-        Width = 104
+        Width = 100
         Caption = 'QSL received'
         TabOrder = 10
       end
       object chkexQSLS: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 39
-        Width = 77
+        Width = 78
         Caption = 'QSL sent'
         TabOrder = 11
       end
       object chkexQSLVIA: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 89
-        Width = 103
+        Width = 101
         Caption = 'QSL manager'
         TabOrder = 12
       end
       object chkexLoc: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 114
-        Width = 71
+        Width = 72
         Caption = 'Locator'
         TabOrder = 13
       end
       object chkexIOTA: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 166
-        Width = 51
+        Width = 53
         Caption = 'IOTA'
         TabOrder = 14
       end
       object chkexMyLoc: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 139
-        Width = 89
+        Width = 88
         Caption = 'My locator'
         TabOrder = 15
       end
       object chkexAward: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 192
-        Width = 61
+        Width = 62
         Caption = 'Award'
         TabOrder = 16
       end
       object chkexCounty: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 217
-        Width = 67
+        Width = 68
         Caption = 'County'
         TabOrder = 17
       end
       object chkexPower: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 243
-        Width = 61
+        Width = 63
         Caption = 'Power'
         TabOrder = 18
       end
       object chkexDXCC: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 270
-        Width = 57
+        Width = 60
         Caption = 'DXCC'
         TabOrder = 19
       end
       object chkexRemarks: TCheckBox
         Left = 174
-        Height = 21
+        Height = 26
         Top = 297
-        Width = 75
+        Width = 77
         Caption = 'Remarks'
         TabOrder = 20
       end
       object chkexWAZ: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 39
-        Width = 50
+        Width = 53
         Caption = 'WAZ'
         TabOrder = 21
       end
       object chkexITU: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 64
-        Width = 42
+        Width = 46
         Caption = 'ITU'
         TabOrder = 22
       end
       object chkexNote: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 89
-        Width = 54
+        Width = 57
         Caption = 'Note'
         TabOrder = 23
       end
       object chkProfile: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 326
-        Width = 64
+        Width = 65
         Caption = 'Profile'
         TabOrder = 24
       end
       object edtWDate: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 37
         Width = 40
         TabOrder = 25
@@ -3240,7 +3240,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWTimeOn: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 64
         Width = 40
         TabOrder = 26
@@ -3248,7 +3248,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWTimeOff: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 88
         Width = 40
         TabOrder = 27
@@ -3256,7 +3256,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWCall: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 113
         Width = 40
         TabOrder = 28
@@ -3264,7 +3264,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWMode: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 139
         Width = 40
         TabOrder = 29
@@ -3272,7 +3272,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWFreq: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 166
         Width = 40
         TabOrder = 30
@@ -3280,7 +3280,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWRstS: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 190
         Width = 40
         TabOrder = 31
@@ -3288,7 +3288,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWRstR: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 217
         Width = 40
         TabOrder = 32
@@ -3296,7 +3296,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWName: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 243
         Width = 40
         TabOrder = 33
@@ -3304,7 +3304,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWQTH: TEdit
         Left = 110
-        Height = 24
+        Height = 21
         Top = 269
         Width = 40
         TabOrder = 34
@@ -3312,7 +3312,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWQSLS: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 38
         Width = 40
         TabOrder = 35
@@ -3320,7 +3320,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWQSLR: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 64
         Width = 40
         TabOrder = 36
@@ -3328,7 +3328,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWQSLVIA: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 89
         Width = 40
         TabOrder = 37
@@ -3336,7 +3336,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWLoc: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 114
         Width = 40
         TabOrder = 38
@@ -3344,7 +3344,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWMyLoc: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 139
         Width = 40
         TabOrder = 39
@@ -3352,7 +3352,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWIOTA: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 165
         Width = 40
         TabOrder = 40
@@ -3360,7 +3360,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWAward: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 191
         Width = 40
         TabOrder = 41
@@ -3368,7 +3368,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWCounty: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 217
         Width = 40
         TabOrder = 42
@@ -3376,7 +3376,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWPower: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 243
         Width = 40
         TabOrder = 43
@@ -3384,7 +3384,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWDXCC: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 270
         Width = 40
         TabOrder = 44
@@ -3392,7 +3392,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWRemarks: TEdit
         Left = 302
-        Height = 24
+        Height = 21
         Top = 296
         Width = 40
         TabOrder = 45
@@ -3400,7 +3400,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWWAZ: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 38
         Width = 40
         TabOrder = 46
@@ -3408,7 +3408,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWITU: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 63
         Width = 40
         TabOrder = 47
@@ -3416,7 +3416,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWNote: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 88
         Width = 40
         TabOrder = 48
@@ -3424,15 +3424,15 @@ object frmPreferences: TfrmPreferences
       end
       object chkexState: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 115
-        Width = 57
+        Width = 59
         Caption = 'State'
         TabOrder = 49
       end
       object edtWState: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 113
         Width = 40
         TabOrder = 50
@@ -3440,15 +3440,15 @@ object frmPreferences: TfrmPreferences
       end
       object chkexLQSLS: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 140
-        Width = 113
+        Width = 112
         Caption = 'LoTW QSL sent'
         TabOrder = 51
       end
       object edtWLQSLS: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 139
         Width = 40
         TabOrder = 52
@@ -3456,15 +3456,15 @@ object frmPreferences: TfrmPreferences
       end
       object chkexLQSLSDate: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 166
-        Width = 122
+        Width = 118
         Caption = 'LoTW QSLS date'
         TabOrder = 53
       end
       object edtWLQSLSDate: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 165
         Width = 40
         TabOrder = 54
@@ -3472,15 +3472,15 @@ object frmPreferences: TfrmPreferences
       end
       object chkexLQSLR: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 192
-        Width = 113
+        Width = 110
         Caption = 'LoTW QSL rcvd'
         TabOrder = 55
       end
       object edtWLQSLR: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 191
         Width = 40
         TabOrder = 56
@@ -3488,7 +3488,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWLQSLRDate: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 217
         Width = 40
         TabOrder = 57
@@ -3496,23 +3496,23 @@ object frmPreferences: TfrmPreferences
       end
       object chkexLQSLRDate: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 218
-        Width = 123
+        Width = 120
         Caption = 'LoTW QSLR date'
         TabOrder = 58
       end
       object chkExCont: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 296
-        Width = 84
+        Width = 86
         Caption = 'Continent'
         TabOrder = 59
       end
       object edtWQSLRDate: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 270
         Width = 40
         TabOrder = 60
@@ -3520,23 +3520,23 @@ object frmPreferences: TfrmPreferences
       end
       object chkexQSLRDate: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 271
-        Width = 109
+        Width = 105
         Caption = 'QSL rcvd date'
         TabOrder = 61
       end
       object chkexQSLSDate: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 244
-        Width = 109
+        Width = 107
         Caption = 'QSL sent date'
         TabOrder = 62
       end
       object edtWQSLSDate: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 243
         Width = 40
         TabOrder = 63
@@ -3544,15 +3544,15 @@ object frmPreferences: TfrmPreferences
       end
       object chkexeQSLS: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 298
-        Width = 112
+        Width = 109
         Caption = 'eQSL QSL sent'
         TabOrder = 64
       end
       object edtWeQSLS: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 297
         Width = 40
         TabOrder = 65
@@ -3560,7 +3560,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWeQSLSDate: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 323
         Width = 40
         TabOrder = 66
@@ -3568,23 +3568,23 @@ object frmPreferences: TfrmPreferences
       end
       object chkexeQSLSDate: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 324
-        Width = 121
+        Width = 115
         Caption = 'eQSL QSLS date'
         TabOrder = 67
       end
       object chkexeQSLR: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 350
-        Width = 112
+        Width = 107
         Caption = 'eQSL QSL rcvd'
         TabOrder = 68
       end
       object edtWeQSLR: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 349
         Width = 40
         TabOrder = 69
@@ -3592,7 +3592,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtWeQSLRDate: TEdit
         Left = 503
-        Height = 24
+        Height = 21
         Top = 375
         Width = 40
         TabOrder = 70
@@ -3600,9 +3600,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkexeQSLRDate: TCheckBox
         Left = 368
-        Height = 21
+        Height = 26
         Top = 376
-        Width = 122
+        Width = 117
         Caption = 'eQSL QSLR date'
         TabOrder = 71
       end
@@ -3617,44 +3617,44 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 512
         Caption = 'Colors'
-        ClientHeight = 88
+        ClientHeight = 74
         ClientWidth = 508
         TabOrder = 0
         object Label41: TLabel
           Left = 3
-          Height = 17
+          Height = 16
           Top = 11
-          Width = 80
+          Width = 76
           Caption = 'New country:'
           ParentColor = False
         end
         object Label42: TLabel
           Left = 3
-          Height = 17
+          Height = 16
           Top = 51
-          Width = 101
+          Width = 96
           Caption = 'New band count.'
           ParentColor = False
         end
         object Label43: TLabel
           Left = 246
-          Height = 17
+          Height = 16
           Top = 11
-          Width = 106
+          Width = 101
           Caption = 'New mode count.'
           ParentColor = False
         end
         object Label44: TLabel
           Left = 246
-          Height = 17
+          Height = 16
           Top = 51
-          Width = 78
+          Width = 70
           Caption = 'QSL needed:'
           ParentColor = False
         end
         object cmbNewCountry: TColorBox
           Left = 117
-          Height = 26
+          Height = 27
           Top = 6
           Width = 118
           Selected = clRed
@@ -3664,7 +3664,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbNewBand: TColorBox
           Left = 117
-          Height = 26
+          Height = 27
           Top = 48
           Width = 118
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -3673,7 +3673,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbNewMode: TColorBox
           Left = 385
-          Height = 26
+          Height = 27
           Top = 6
           Width = 118
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -3682,7 +3682,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbQSLNeeded: TColorBox
           Left = 385
-          Height = 26
+          Height = 27
           Top = 48
           Width = 118
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -3696,255 +3696,255 @@ object frmPreferences: TfrmPreferences
         Top = 123
         Width = 512
         Caption = ' Show only spots'
-        ClientHeight = 223
+        ClientHeight = 209
         ClientWidth = 508
         TabOrder = 1
         object Label45: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 154
-          Width = 337
+          Width = 320
           Caption = 'Do not show spots for this countries (use ; as dellimiter)'
           ParentColor = False
         end
         object chkShow2190M: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 66
+          Width = 69
           Caption = '137kHz'
           TabOrder = 0
         end
         object chkShow160M: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 31
-          Width = 69
+          Width = 73
           Caption = '1.8 MHz'
           TabOrder = 1
         end
         object chkShow80M: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 55
-          Width = 69
+          Width = 73
           Caption = '3.5 MHz'
           TabOrder = 2
         end
         object chkShow40M: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 103
-          Width = 59
+          Width = 63
           Caption = '7 MHz'
           TabOrder = 3
         end
         object chkShow30M: TCheckBox
           Left = 110
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 76
+          Width = 80
           Caption = '10.1 MHz'
           TabOrder = 4
         end
         object chkShow20M: TCheckBox
           Left = 110
-          Height = 21
+          Height = 26
           Top = 31
-          Width = 66
+          Width = 70
           Caption = '14 MHz'
           TabOrder = 5
         end
         object chkShow17M: TCheckBox
           Left = 110
-          Height = 21
+          Height = 26
           Top = 55
-          Width = 66
+          Width = 70
           Caption = '18 MHz'
           TabOrder = 6
         end
         object chkShow15M: TCheckBox
           Left = 111
-          Height = 21
+          Height = 26
           Top = 79
-          Width = 66
+          Width = 70
           Caption = '21 MHz'
           TabOrder = 7
         end
         object chkShow12M: TCheckBox
           Left = 110
-          Height = 21
+          Height = 26
           Top = 103
-          Width = 66
+          Width = 70
           Caption = '24 MHz'
           TabOrder = 8
         end
         object chkShow10M: TCheckBox
           Left = 207
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 66
+          Width = 70
           Caption = '28 MHz'
           TabOrder = 9
         end
         object chkShow2M: TCheckBox
           Left = 207
-          Height = 21
+          Height = 26
           Top = 79
-          Width = 73
+          Width = 77
           Caption = '144 MHz'
           TabOrder = 10
         end
         object chkShow6M: TCheckBox
           Left = 207
-          Height = 21
+          Height = 26
           Top = 31
-          Width = 66
+          Width = 70
           Caption = '50 MHz'
           TabOrder = 11
         end
         object chkShow70CM: TCheckBox
           Left = 294
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 73
+          Width = 77
           Caption = '430 MHz'
           TabOrder = 12
         end
         object chkShow23CM: TCheckBox
           Left = 294
-          Height = 21
+          Height = 26
           Top = 55
-          Width = 80
+          Width = 84
           Caption = '1260 MHz'
           TabOrder = 13
         end
         object chkShow13CM: TCheckBox
           Left = 294
-          Height = 21
+          Height = 26
           Top = 79
-          Width = 80
+          Width = 84
           Caption = '2300 MHz'
           TabOrder = 14
         end
         object chkShow9CM: TCheckBox
           Left = 294
-          Height = 21
+          Height = 26
           Top = 103
-          Width = 80
+          Width = 84
           Caption = '3400 MHz'
           TabOrder = 15
         end
         object chkShow6CM: TCheckBox
           Left = 391
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 80
+          Width = 84
           Caption = '5650 MHz'
           TabOrder = 16
         end
         object chkShow3CM: TCheckBox
           Left = 391
-          Height = 21
+          Height = 26
           Top = 31
-          Width = 64
+          Width = 67
           Caption = '10 GHz'
           TabOrder = 17
         end
         object chkShow125CM: TCheckBox
           Left = 391
-          Height = 21
+          Height = 26
           Top = 55
-          Width = 64
+          Width = 67
           Caption = '24 GHz'
           TabOrder = 18
         end
         object chkShow6MM: TCheckBox
           Left = 391
-          Height = 21
+          Height = 26
           Top = 79
-          Width = 61
+          Width = 64
           Caption = '47GHz'
           TabOrder = 19
         end
         object chkShow4MM: TCheckBox
           Left = 391
-          Height = 21
+          Height = 26
           Top = 103
-          Width = 64
+          Width = 67
           Caption = '76 GHz'
           TabOrder = 20
         end
         object chkCW: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 126
-          Width = 43
+          Width = 47
           Caption = 'CW'
           TabOrder = 21
         end
         object chkSSB: TCheckBox
           Left = 110
-          Height = 21
+          Height = 26
           Top = 126
-          Width = 45
+          Width = 48
           Caption = 'SSB'
           TabOrder = 22
         end
         object edtDoNotShow: TEdit
           Left = 6
-          Height = 24
+          Height = 21
           Top = 178
           Width = 420
           TabOrder = 23
         end
         object chkShow4M: TCheckBox
           Left = 207
-          Height = 21
+          Height = 26
           Top = 55
-          Width = 63
+          Width = 67
           Caption = '70MHz'
           TabOrder = 24
         end
         object chkShow60M: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 79
-          Width = 59
+          Width = 63
           Caption = '5 MHz'
           TabOrder = 25
         end
         object chkShow125M: TCheckBox
           Left = 207
-          Height = 21
+          Height = 26
           Top = 103
-          Width = 73
+          Width = 77
           Caption = '220 MHz'
           TabOrder = 26
         end
         object chkShow33CM: TCheckBox
           Left = 294
-          Height = 21
+          Height = 26
           Top = 31
-          Width = 73
+          Width = 77
           Caption = '900 MHz'
           TabOrder = 27
         end
       end
       object chkConToDXC: TCheckBox
         Left = 95
-        Height = 21
+        Height = 26
         Top = 406
-        Width = 270
+        Width = 261
         Caption = 'Connect to dxcluster after program runs'
         TabOrder = 2
         Visible = False
       end
       object chkShowDxcCountry: TCheckBox
         Left = 6
-        Height = 21
+        Height = 26
         Top = 374
-        Width = 274
+        Width = 263
         Caption = 'Show country name in the dx cluster spot'
         TabOrder = 3
       end
@@ -3959,22 +3959,22 @@ object frmPreferences: TfrmPreferences
         Top = 3
         Width = 496
         Caption = ' Font settings '
-        ClientHeight = 335
+        ClientHeight = 321
         ClientWidth = 492
         TabOrder = 0
         object lblButtons: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 39
-          Width = 269
+          Width = 251
           Caption = 'Buttons, labels, radiobuttons, checkboxes ...'
           ParentColor = False
         end
         object lblbFont: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 71
-          Width = 53
+          Width = 47
           Caption = 'lblbFont'
           ParentColor = False
         end
@@ -3986,17 +3986,17 @@ object frmPreferences: TfrmPreferences
         end
         object lblEdits: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 119
-          Width = 209
+          Width = 195
           Caption = 'Edits, comboboxes, memoboxes ...'
           ParentColor = False
         end
         object lbleFont: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 151
-          Width = 53
+          Width = 47
           Caption = 'lbleFont'
           ParentColor = False
         end
@@ -4008,17 +4008,17 @@ object frmPreferences: TfrmPreferences
         end
         object lblStatistics: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 199
-          Width = 58
+          Width = 56
           Caption = 'Statistics'
           ParentColor = False
         end
         object lblgFont: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 231
-          Width = 53
+          Width = 47
           Caption = 'lblgFont'
           ParentColor = False
         end
@@ -4030,17 +4030,17 @@ object frmPreferences: TfrmPreferences
         end
         object lblQSOList: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 279
-          Width = 56
+          Width = 52
           Caption = 'QSO lists'
           ParentColor = False
         end
         object lblqFont: TLabel
           Left = 12
-          Height = 17
+          Height = 16
           Top = 311
-          Width = 53
+          Width = 47
           Caption = 'lblqFont'
           ParentColor = False
         end
@@ -4086,9 +4086,9 @@ object frmPreferences: TfrmPreferences
         end
         object chkUseDefaultSEttings: TCheckBox
           Left = 12
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 147
+          Width = 144
           Caption = 'Use default settings'
           TabOrder = 4
         end
@@ -4104,36 +4104,36 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 233
         Caption = 'WAZ colors '
-        ClientHeight = 213
+        ClientHeight = 199
         ClientWidth = 229
         TabOrder = 0
         object Label23: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 95
+          Width = 90
           Caption = 'New WAZ zone: '
           ParentColor = False
         end
         object Label52: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 78
-          Width = 128
+          Width = 120
           Caption = 'New band WAZ zone: '
           ParentColor = False
         end
         object Label53: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 139
-          Width = 164
+          Width = 151
           Caption = 'QSL needed for WAZ zone: '
           ParentColor = False
         end
         object clboxNewWaz: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 39
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4142,7 +4142,7 @@ object frmPreferences: TfrmPreferences
         end
         object clBoxBandWAZ: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 103
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4151,7 +4151,7 @@ object frmPreferences: TfrmPreferences
         end
         object clBoxQSLWAZ: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 164
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4165,36 +4165,36 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 233
         Caption = 'ITU colors '
-        ClientHeight = 213
+        ClientHeight = 199
         ClientWidth = 229
         TabOrder = 1
         object Label54: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 87
+          Width = 83
           Caption = 'New ITU zone: '
           ParentColor = False
         end
         object Label55: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 78
-          Width = 120
+          Width = 113
           Caption = 'New band ITU zone: '
           ParentColor = False
         end
         object Label56: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 139
-          Width = 156
+          Width = 144
           Caption = 'QSL needed for ITU zone: '
           ParentColor = False
         end
         object clboxNewITU: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 39
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4203,7 +4203,7 @@ object frmPreferences: TfrmPreferences
         end
         object clBoxBandITU: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 103
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4212,7 +4212,7 @@ object frmPreferences: TfrmPreferences
         end
         object clBoxQSLITU: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 164
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4222,17 +4222,17 @@ object frmPreferences: TfrmPreferences
       end
       object chkShowWAZInfo: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 251
-        Width = 81
+        Width = 82
         Caption = 'Show info'
         TabOrder = 2
       end
       object chkShowITUInfo: TCheckBox
         Left = 262
-        Height = 21
+        Height = 26
         Top = 251
-        Width = 81
+        Width = 82
         Caption = 'Show info'
         TabOrder = 3
       end
@@ -4247,28 +4247,28 @@ object frmPreferences: TfrmPreferences
         Top = 19
         Width = 249
         Caption = 'IOTA colors'
-        ClientHeight = 151
+        ClientHeight = 137
         ClientWidth = 245
         TabOrder = 0
         object Label57: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 13
-          Width = 61
+          Width = 57
           Caption = 'New IOTA:'
           ParentColor = False
         end
         object Label58: TLabel
           Left = 13
-          Height = 17
+          Height = 16
           Top = 80
-          Width = 133
+          Width = 121
           Caption = 'QSL needed for IOTA: '
           ParentColor = False
         end
         object clboxNewIOTA: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 39
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4277,7 +4277,7 @@ object frmPreferences: TfrmPreferences
         end
         object clboxQSLIOTA: TColorBox
           Left = 13
-          Height = 26
+          Height = 27
           Top = 103
           Width = 127
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4287,9 +4287,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkShowIOTAInfo: TCheckBox
         Left = 22
-        Height = 21
+        Height = 26
         Top = 203
-        Width = 81
+        Width = 82
         Caption = 'Show info'
         TabOrder = 1
       end
@@ -4304,12 +4304,12 @@ object frmPreferences: TfrmPreferences
         Top = 8
         Width = 584
         Caption = 'First club'
-        ClientHeight = 63
+        ClientHeight = 49
         ClientWidth = 580
         TabOrder = 0
         object cmbFirstClub: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 293
           ItemHeight = 0
@@ -4338,15 +4338,15 @@ object frmPreferences: TfrmPreferences
         end
         object Label103: TLabel
           Left = 325
-          Height = 17
+          Height = 16
           Top = 17
-          Width = 36
+          Width = 34
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub1Date: TEdit
           Left = 372
-          Height = 24
+          Height = 21
           Top = 11
           Width = 96
           TabOrder = 3
@@ -4358,12 +4358,12 @@ object frmPreferences: TfrmPreferences
         Top = 96
         Width = 584
         Caption = 'Second club'
-        ClientHeight = 63
+        ClientHeight = 49
         ClientWidth = 580
         TabOrder = 1
         object cmbSecondClub: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 293
           ItemHeight = 0
@@ -4392,15 +4392,15 @@ object frmPreferences: TfrmPreferences
         end
         object Label104: TLabel
           Left = 325
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 36
+          Width = 34
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub2Date: TEdit
           Left = 372
-          Height = 24
+          Height = 21
           Top = 11
           Width = 96
           TabOrder = 3
@@ -4412,12 +4412,12 @@ object frmPreferences: TfrmPreferences
         Top = 184
         Width = 584
         Caption = 'Third club'
-        ClientHeight = 63
+        ClientHeight = 49
         ClientWidth = 580
         TabOrder = 2
         object cmbThirdClub: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 293
           ItemHeight = 0
@@ -4446,15 +4446,15 @@ object frmPreferences: TfrmPreferences
         end
         object Label105: TLabel
           Left = 325
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 36
+          Width = 34
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub3Date: TEdit
           Left = 372
-          Height = 24
+          Height = 21
           Top = 11
           Width = 96
           TabOrder = 3
@@ -4466,12 +4466,12 @@ object frmPreferences: TfrmPreferences
         Top = 272
         Width = 584
         Caption = 'Fourth club'
-        ClientHeight = 63
+        ClientHeight = 49
         ClientWidth = 580
         TabOrder = 3
         object cmbFourthClub: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 293
           ItemHeight = 0
@@ -4500,15 +4500,15 @@ object frmPreferences: TfrmPreferences
         end
         object Label106: TLabel
           Left = 325
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 36
+          Width = 34
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub4Date: TEdit
           Left = 372
-          Height = 24
+          Height = 21
           Top = 11
           Width = 96
           TabOrder = 3
@@ -4520,12 +4520,12 @@ object frmPreferences: TfrmPreferences
         Top = 360
         Width = 584
         Caption = 'Fifth club'
-        ClientHeight = 63
+        ClientHeight = 49
         ClientWidth = 580
         TabOrder = 4
         object cmbFifthClub: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 293
           ItemHeight = 0
@@ -4554,15 +4554,15 @@ object frmPreferences: TfrmPreferences
         end
         object Label107: TLabel
           Left = 325
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 36
+          Width = 34
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub5Date: TEdit
           Left = 372
-          Height = 24
+          Height = 21
           Top = 11
           Width = 96
           TabOrder = 3
@@ -4579,7 +4579,7 @@ object frmPreferences: TfrmPreferences
         Top = 3
         Width = 529
         Caption = ' Font '
-        ClientHeight = 44
+        ClientHeight = 30
         ClientWidth = 525
         TabOrder = 0
         object lblBandMapFont: TLabel
@@ -4605,20 +4605,20 @@ object frmPreferences: TfrmPreferences
         Top = 62
         Width = 529
         Caption = ' Color '
-        ClientHeight = 45
+        ClientHeight = 31
         ClientWidth = 525
         TabOrder = 1
         object Label61: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 11
-          Width = 304
+          Width = 282
           Caption = 'Select color of entry added from new qso window '
           ParentColor = False
         end
         object cmbQSOBandColor: TColorBox
           Left = 412
-          Height = 26
+          Height = 27
           Top = 3
           Width = 100
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4628,9 +4628,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkBandMapkHz: TCheckBox
         Left = 391
-        Height = 21
+        Height = 26
         Top = 230
-        Width = 152
+        Width = 147
         Caption = 'Show bandmap in kHz'
         Checked = True
         State = cbChecked
@@ -4639,25 +4639,25 @@ object frmPreferences: TfrmPreferences
       end
       object chkSaveBandMap: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 307
-        Width = 187
+        Width = 177
         Caption = 'Save band map after close '
         TabOrder = 3
       end
       object chkShowActiveBand: TCheckBox
         Left = 238
-        Height = 21
+        Height = 26
         Top = 307
-        Width = 158
+        Width = 149
         Caption = 'Show only active band'
         TabOrder = 4
       end
       object chkShowActiveMode: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 331
-        Width = 163
+        Width = 154
         Caption = 'Show only active mode'
         TabOrder = 5
       end
@@ -4675,36 +4675,36 @@ object frmPreferences: TfrmPreferences
         Top = 135
         Width = 529
         Caption = ' Band Map Entries Aging (in minutes) '
-        ClientHeight = 51
+        ClientHeight = 37
         ClientWidth = 525
         TabOrder = 7
         object Label62: TLabel
           Left = 11
-          Height = 17
+          Height = 16
           Top = 14
-          Width = 89
+          Width = 85
           Caption = 'The first after '
           ParentColor = False
         end
         object Label63: TLabel
           Left = 163
-          Height = 17
+          Height = 16
           Top = 14
-          Width = 107
+          Width = 100
           Caption = 'the second after '
           ParentColor = False
         end
         object Label64: TLabel
           Left = 350
-          Height = 17
+          Height = 16
           Top = 14
-          Width = 98
+          Width = 90
           Caption = 'disappear after '
           ParentColor = False
         end
         object edtFirst: TEdit
           Left = 104
-          Height = 24
+          Height = 21
           Top = 11
           Width = 50
           TabOrder = 0
@@ -4712,7 +4712,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtSecond: TEdit
           Left = 281
-          Height = 24
+          Height = 21
           Top = 11
           Width = 50
           TabOrder = 1
@@ -4720,7 +4720,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtDisep: TEdit
           Left = 462
-          Height = 24
+          Height = 21
           Top = 11
           Width = 50
           TabOrder = 2
@@ -4733,14 +4733,14 @@ object frmPreferences: TfrmPreferences
         Top = 211
         Width = 369
         Caption = 'Band map entries (from dxcluster)'
-        ClientHeight = 75
+        ClientHeight = 61
         ClientWidth = 365
         TabOrder = 8
         object Label65: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 41
-          Width = 38
+          Width = 34
           Caption = 'Color:'
           ParentColor = False
         end
@@ -4764,7 +4764,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbFrmDXCColor: TColorBox
           Left = 67
-          Height = 26
+          Height = 27
           Top = 35
           Width = 113
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4773,9 +4773,9 @@ object frmPreferences: TfrmPreferences
         end
         object chkUseDXCColors: TCheckBox
           Left = 6
-          Height = 21
+          Height = 26
           Top = 6
-          Width = 213
+          Width = 204
           Caption = 'Use the same color as the spot'
           OnChange = chkUseDXCColorsChange
           TabOrder = 3
@@ -4783,25 +4783,25 @@ object frmPreferences: TfrmPreferences
       end
       object chkDeleteAfterQSO: TCheckBox
         Left = 238
-        Height = 21
+        Height = 26
         Top = 331
-        Width = 267
+        Width = 255
         Caption = 'Delete station from bandmap after QSO'
         TabOrder = 9
       end
       object chkAddAfterSaveQSO: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 358
-        Width = 275
+        Width = 259
         Caption = 'Add station to bandmap after saving QSO'
         TabOrder = 10
       end
       object chkIgnoreBandFreq: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 385
-        Width = 574
+        Width = 549
         Caption = 'Ignore DX spots with freq eqauls to the start of the band (21.000, 14.000 etc., usually notes)'
         TabOrder = 11
       end
@@ -4816,12 +4816,12 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 521
         Caption = ' Path for the xplanet  '
-        ClientHeight = 72
+        ClientHeight = 58
         ClientWidth = 517
         TabOrder = 0
         object edtXplanetPath: TEdit
           Left = 6
-          Height = 24
+          Height = 21
           Top = 15
           Width = 432
           TabOrder = 0
@@ -4834,35 +4834,35 @@ object frmPreferences: TfrmPreferences
         Top = 107
         Width = 113
         Caption = ' Window size '
-        ClientHeight = 95
+        ClientHeight = 81
         ClientWidth = 109
         TabOrder = 1
         object Label66: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 46
+          Width = 42
           Caption = 'Height:'
           ParentColor = False
         end
         object Label67: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 55
-          Width = 40
+          Width = 38
           Caption = 'Width:'
           ParentColor = False
         end
         object edtXHeight: TEdit
           Left = 62
-          Height = 24
+          Height = 21
           Top = 12
           Width = 41
           TabOrder = 0
         end
         object edtXWidth: TEdit
           Left = 62
-          Height = 24
+          Height = 21
           Top = 52
           Width = 41
           TabOrder = 1
@@ -4874,35 +4874,35 @@ object frmPreferences: TfrmPreferences
         Top = 107
         Width = 129
         Caption = ' Window position '
-        ClientHeight = 95
+        ClientHeight = 81
         ClientWidth = 125
         TabOrder = 2
         object Label68: TLabel
           Left = 9
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 26
+          Width = 24
           Caption = 'Top:'
           ParentColor = False
         end
         object Label69: TLabel
           Left = 9
-          Height = 17
+          Height = 16
           Top = 34
-          Width = 30
+          Width = 28
           Caption = 'Left:'
           ParentColor = False
         end
         object edtXTop: TEdit
           Left = 54
-          Height = 24
+          Height = 21
           Top = 7
           Width = 52
           TabOrder = 0
         end
         object edtXLeft: TEdit
           Left = 54
-          Height = 24
+          Height = 21
           Top = 31
           Width = 52
           TabOrder = 1
@@ -4919,17 +4919,17 @@ object frmPreferences: TfrmPreferences
       end
       object chkShowXplanet: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 331
-        Width = 242
+        Width = 231
         Caption = 'Show xplanet after program startup'
         TabOrder = 3
       end
       object chkCloseXplanet: TCheckBox
         Left = 278
-        Height = 21
+        Height = 26
         Top = 331
-        Width = 195
+        Width = 185
         Caption = 'Close xplanet with CQRLOG '
         TabOrder = 4
       end
@@ -4939,51 +4939,51 @@ object frmPreferences: TfrmPreferences
         Top = 107
         Width = 257
         Caption = ' Refresh '
-        ClientHeight = 95
+        ClientHeight = 81
         ClientWidth = 253
         TabOrder = 5
         object Label70: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 137
+          Width = 123
           Caption = 'Refresh xplanet every'
           ParentColor = False
         end
         object Label71: TLabel
           Left = 206
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 25
+          Width = 24
           Caption = 'sec.'
           ParentColor = False
         end
         object Label72: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 47
-          Width = 59
+          Width = 54
           Caption = 'Show last'
           ParentColor = False
         end
         object Label73: TLabel
           Left = 120
-          Height = 17
+          Height = 16
           Top = 47
-          Width = 35
+          Width = 33
           Caption = 'spots'
           ParentColor = False
         end
         object edtXRefresh: TEdit
           Left = 150
-          Height = 24
+          Height = 21
           Top = 3
           Width = 49
           TabOrder = 0
         end
         object edtXLastSpots: TEdit
           Left = 73
-          Height = 24
+          Height = 21
           Top = 43
           Width = 42
           TabOrder = 1
@@ -5004,7 +5004,7 @@ object frmPreferences: TfrmPreferences
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 79
+        ClientHeight = 65
         ClientWidth = 253
         Items.Strings = (
           '3D'
@@ -5028,7 +5028,7 @@ object frmPreferences: TfrmPreferences
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 79
+        ClientHeight = 65
         ClientWidth = 252
         Items.Strings = (
           'dxcluster'
@@ -5038,7 +5038,7 @@ object frmPreferences: TfrmPreferences
       end
       object cmbXplanetColor: TColorBox
         Left = 240
-        Height = 26
+        Height = 27
         Top = 360
         Width = 100
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames, cbCustomColors]
@@ -5047,9 +5047,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkXplanetColor: TCheckBox
         Left = 14
-        Height = 21
+        Height = 26
         Top = 365
-        Width = 186
+        Width = 179
         Caption = 'Use this xplanet font color'
         TabOrder = 9
       end
@@ -5064,28 +5064,28 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 545
         Caption = ' First '
-        ClientHeight = 87
+        ClientHeight = 73
         ClientWidth = 541
         TabOrder = 0
         object Label74: TLabel
           Left = 14
-          Height = 17
+          Height = 16
           Top = 50
-          Width = 92
+          Width = 83
           Caption = 'Save county to'
           ParentColor = False
         end
         object Label75: TLabel
           Left = 254
-          Height = 17
+          Height = 16
           Top = 50
-          Width = 29
+          Width = 26
           Caption = 'field'
           ParentColor = False
         end
         object cmbFirstZip: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 224
           ItemHeight = 0
@@ -5116,7 +5116,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 55
+          ClientHeight = 41
           ClientWidth = 180
           Items.Strings = (
             'before town address'
@@ -5126,7 +5126,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbFirstSaveTo: TComboBox
           Left = 118
-          Height = 26
+          Height = 27
           Top = 46
           Width = 120
           ItemHeight = 0
@@ -5148,28 +5148,28 @@ object frmPreferences: TfrmPreferences
         Top = 123
         Width = 545
         Caption = ' Second '
-        ClientHeight = 87
+        ClientHeight = 73
         ClientWidth = 541
         TabOrder = 1
         object Label76: TLabel
           Left = 14
-          Height = 17
+          Height = 16
           Top = 50
-          Width = 92
+          Width = 83
           Caption = 'Save county to'
           ParentColor = False
         end
         object Label77: TLabel
           Left = 254
-          Height = 17
+          Height = 16
           Top = 50
-          Width = 29
+          Width = 26
           Caption = 'field'
           ParentColor = False
         end
         object cmbSecondZip: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 224
           ItemHeight = 0
@@ -5200,7 +5200,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 58
+          ClientHeight = 44
           ClientWidth = 180
           Items.Strings = (
             'before town address'
@@ -5210,7 +5210,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbSecondSaveTo: TComboBox
           Left = 118
-          Height = 26
+          Height = 27
           Top = 46
           Width = 120
           ItemHeight = 0
@@ -5232,28 +5232,28 @@ object frmPreferences: TfrmPreferences
         Top = 235
         Width = 545
         Caption = ' Third '
-        ClientHeight = 87
+        ClientHeight = 73
         ClientWidth = 541
         TabOrder = 2
         object Label78: TLabel
           Left = 14
-          Height = 17
+          Height = 16
           Top = 50
-          Width = 92
+          Width = 83
           Caption = 'Save county to'
           ParentColor = False
         end
         object Label79: TLabel
           Left = 254
-          Height = 17
+          Height = 16
           Top = 50
-          Width = 29
+          Width = 26
           Caption = 'field'
           ParentColor = False
         end
         object cmbThirdZip: TComboBox
           Left = 14
-          Height = 26
+          Height = 27
           Top = 7
           Width = 224
           ItemHeight = 0
@@ -5284,7 +5284,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 55
+          ClientHeight = 41
           ClientWidth = 180
           Items.Strings = (
             'before town address'
@@ -5294,7 +5294,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbThirdSaveTo: TComboBox
           Left = 118
-          Height = 26
+          Height = 27
           Top = 44
           Width = 120
           ItemHeight = 0
@@ -5317,25 +5317,25 @@ object frmPreferences: TfrmPreferences
       ClientWidth = 631
       object Label10: TLabel
         Left = 271
-        Height = 36
+        Height = 34
         Top = 282
-        Width = 299
+        Width = 279
         Caption = 'color as a background in DX cluster and band map'#10'for stations using LoTW'
         ParentColor = False
       end
       object chkIncLoTWDXCC: TCheckBox
         Left = 15
-        Height = 21
+        Height = 26
         Top = 182
-        Width = 391
+        Width = 377
         Caption = 'Include LoTW and eQSL confirmed countries in DXCC statistic'
         TabOrder = 0
       end
       object chkNewQSOLoTW: TCheckBox
         Left = 15
-        Height = 21
+        Height = 26
         Top = 206
-        Width = 548
+        Width = 523
         Caption = 'Use LoTW and eQSL confirmed countries for New country or New band country etc. info'
         TabOrder = 1
       end
@@ -5345,35 +5345,35 @@ object frmPreferences: TfrmPreferences
         Top = 6
         Width = 513
         Caption = ' Data for access to ARRL LoTW website '
-        ClientHeight = 55
+        ClientHeight = 41
         ClientWidth = 509
         TabOrder = 2
         object Label80: TLabel
           Left = 14
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 68
+          Width = 64
           Caption = 'User name:'
           ParentColor = False
         end
         object Label81: TLabel
           Left = 254
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 64
+          Width = 60
           Caption = 'Password: '
           ParentColor = False
         end
         object edtLoTWName: TEdit
           Left = 97
-          Height = 24
+          Height = 21
           Top = 12
           Width = 88
           TabOrder = 0
         end
         object edtLoTWPass: TEdit
           Left = 334
-          Height = 24
+          Height = 21
           Top = 12
           Width = 104
           EchoMode = emPassword
@@ -5383,23 +5383,23 @@ object frmPreferences: TfrmPreferences
       end
       object chkShowLoTWInfo: TCheckBox
         Left = 15
-        Height = 21
+        Height = 26
         Top = 243
-        Width = 359
+        Width = 345
         Caption = 'Show info in New QSO window if station uses LoTW/eQSL'
         TabOrder = 3
       end
       object chkShowBckLoTW: TCheckBox
         Left = 15
-        Height = 21
+        Height = 26
         Top = 282
-        Width = 75
+        Width = 77
         Caption = 'Use this '
         TabOrder = 4
       end
       object cmbLoTWBckColor: TColorBox
         Left = 103
-        Height = 26
+        Height = 27
         Top = 277
         Width = 164
         DefaultColorColor = clMoneyGreen
@@ -5415,35 +5415,35 @@ object frmPreferences: TfrmPreferences
         Top = 91
         Width = 513
         Caption = ' Data for access to eQSL website '
-        ClientHeight = 55
+        ClientHeight = 41
         ClientWidth = 509
         TabOrder = 6
         object Label108: TLabel
           Left = 14
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 68
+          Width = 64
           Caption = 'User name:'
           ParentColor = False
         end
         object Label109: TLabel
           Left = 254
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 64
+          Width = 60
           Caption = 'Password: '
           ParentColor = False
         end
         object edteQSLName: TEdit
           Left = 97
-          Height = 24
+          Height = 21
           Top = 12
           Width = 88
           TabOrder = 0
         end
         object edteQSLPass: TEdit
           Left = 334
-          Height = 24
+          Height = 21
           Top = 12
           Width = 104
           EchoMode = emPassword
@@ -5453,15 +5453,15 @@ object frmPreferences: TfrmPreferences
       end
       object chkShowBckEQSL: TCheckBox
         Left = 15
-        Height = 21
+        Height = 26
         Top = 328
-        Width = 75
+        Width = 77
         Caption = 'Use this '
         TabOrder = 7
       end
       object cmbeQSLBckColor: TColorBox
         Left = 103
-        Height = 26
+        Height = 27
         Top = 323
         Width = 164
         DefaultColorColor = clSkyBlue
@@ -5473,9 +5473,9 @@ object frmPreferences: TfrmPreferences
       end
       object Label128: TLabel
         Left = 271
-        Height = 36
+        Height = 34
         Top = 328
-        Width = 299
+        Width = 279
         Caption = 'color as a background in DX cluster and band map'#10'for stations using eQSL'
         ParentColor = False
       end
@@ -5486,15 +5486,15 @@ object frmPreferences: TfrmPreferences
       ClientWidth = 631
       object Label83: TLabel
         Left = 15
-        Height = 17
+        Height = 16
         Top = 22
-        Width = 98
+        Width = 91
         Caption = 'Interfaces type:'
         ParentColor = False
       end
       object cmbIfaceType: TComboBox
         Left = 127
-        Height = 26
+        Height = 21
         Top = 16
         Width = 214
         ItemHeight = 0
@@ -5504,6 +5504,7 @@ object frmPreferences: TfrmPreferences
           'WinKeyer USB'
           'cwdaemon'
         )
+        OnChange = cmbIfaceTypeChange
         TabOrder = 0
         Text = 'None'
       end
@@ -5513,74 +5514,76 @@ object frmPreferences: TfrmPreferences
         Top = 54
         Width = 497
         Caption = ' WinKeyer USB '
-        ClientHeight = 103
+        ClientHeight = 89
         ClientWidth = 493
         TabOrder = 1
         object Label84: TLabel
           Left = 11
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 31
+          Width = 29
           Caption = 'Port:'
           ParentColor = False
         end
         object Label85: TLabel
           Left = 206
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 111
+          Width = 103
           Caption = 'Default CW speed'
           ParentColor = False
         end
         object Label86: TLabel
           Left = 270
-          Height = 17
+          Height = 16
           Top = 29
-          Width = 31
+          Width = 30
           Caption = 'WPM'
           ParentColor = False
         end
         object Label97: TLabel
           Left = 11
-          Height = 17
+          Height = 16
           Top = 69
-          Width = 66
+          Width = 62
           Caption = 'Min speed:'
           ParentColor = False
           Visible = False
         end
         object Label98: TLabel
           Left = 218
-          Height = 17
+          Height = 16
           Top = 69
-          Width = 70
+          Width = 64
           Caption = 'Max speed:'
           ParentColor = False
           Visible = False
         end
         object edtWinPort: TEdit
           Left = 11
-          Height = 24
+          Height = 21
           Top = 23
           Width = 147
+          OnChange = edtWinPortChange
           TabOrder = 0
           Text = 'edtWinPort'
         end
         object edtWinSpeed: TSpinEdit
           Left = 206
-          Height = 24
+          Height = 21
           Top = 23
           Width = 50
           MaxValue = 99
           MinValue = 5
+          OnChange = edtWinSpeedChange
           TabOrder = 1
           Value = 5
         end
         object chkPotSpeed: TCheckBox
           Left = 326
-          Height = 21
+          Height = 26
           Top = 27
-          Width = 135
+          Width = 131
           Caption = 'Use pot CW speed'
           OnChange = chkPotSpeedChange
           TabOrder = 2
@@ -5588,22 +5591,24 @@ object frmPreferences: TfrmPreferences
         end
         object edtWinMinSpeed: TSpinEdit
           Left = 86
-          Height = 24
+          Height = 21
           Top = 63
           Width = 50
           MaxValue = 99
           MinValue = 5
+          OnChange = edtWinMinSpeedChange
           TabOrder = 3
           Value = 5
           Visible = False
         end
         object edtWinMaxSpeed: TSpinEdit
           Left = 302
-          Height = 24
+          Height = 21
           Top = 63
           Width = 50
           MaxValue = 99
           MinValue = 5
+          OnChange = edtWinMaxSpeedChange
           TabOrder = 4
           Value = 60
           Visible = False
@@ -5615,44 +5620,44 @@ object frmPreferences: TfrmPreferences
         Top = 182
         Width = 497
         Caption = ' cwdaemon '
-        ClientHeight = 88
+        ClientHeight = 74
         ClientWidth = 493
         TabOrder = 2
         object Label87: TLabel
           Left = 11
-          Height = 17
+          Height = 16
           Top = 13
-          Width = 54
+          Width = 49
           Caption = 'Address:'
           ParentColor = False
         end
         object Label88: TLabel
           Left = 174
-          Height = 17
+          Height = 16
           Top = 13
-          Width = 31
+          Width = 29
           Caption = 'Port:'
           ParentColor = False
         end
         object Label89: TLabel
           Left = 302
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 111
+          Width = 103
           Caption = 'Default CW speed'
           ParentColor = False
         end
         object Label90: TLabel
           Left = 366
-          Height = 17
+          Height = 16
           Top = 37
-          Width = 31
+          Width = 30
           Caption = 'WPM'
           ParentColor = False
         end
         object edtCWAddress: TEdit
           Left = 11
-          Height = 24
+          Height = 21
           Top = 31
           Width = 139
           TabOrder = 0
@@ -5660,7 +5665,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtCWPort: TEdit
           Left = 174
-          Height = 24
+          Height = 21
           Top = 31
           Width = 80
           TabOrder = 1
@@ -5668,7 +5673,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtCWSpeed: TSpinEdit
           Left = 302
-          Height = 24
+          Height = 21
           Top = 31
           Width = 50
           MaxValue = 99
@@ -5697,28 +5702,28 @@ object frmPreferences: TfrmPreferences
         Top = 6
         Width = 587
         Caption = ' Reading data from fldigi'
-        ClientHeight = 383
+        ClientHeight = 369
         ClientWidth = 583
         TabOrder = 0
         object Label91: TLabel
           Left = 224
-          Height = 17
+          Height = 16
           Top = 277
-          Width = 203
+          Width = 185
           Caption = 'Try to load QSO from fldigi every '
           ParentColor = False
         end
         object Label92: TLabel
           Left = 513
-          Height = 17
+          Height = 16
           Top = 277
-          Width = 51
+          Width = 48
           Caption = 'seconds'
           ParentColor = False
         end
         object edtLoadFromFldigi: TSpinEdit
           Left = 449
-          Height = 24
+          Height = 21
           Top = 269
           Width = 50
           MinValue = 1
@@ -5740,7 +5745,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 97
+          ClientHeight = 83
           ClientWidth = 205
           ItemIndex = 0
           Items.Strings = (
@@ -5752,7 +5757,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtDefaultFreq: TEdit
           Left = 137
-          Height = 24
+          Height = 21
           Top = 209
           Width = 81
           TabOrder = 2
@@ -5772,7 +5777,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 95
+          ClientHeight = 81
           ClientWidth = 220
           Items.Strings = (
             'CQRLOG'
@@ -5805,7 +5810,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 88
+          ClientHeight = 74
           ClientWidth = 181
           Items.Strings = (
             'fldigi'
@@ -5815,7 +5820,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtDefaultRST: TEdit
           Left = 113
-          Height = 24
+          Height = 21
           Top = 317
           Width = 81
           TabOrder = 6
@@ -5830,23 +5835,23 @@ object frmPreferences: TfrmPreferences
           TabOrder = 7
           object Label95: TLabel
             Left = 30
-            Height = 17
+            Height = 16
             Top = 40
-            Width = 84
+            Width = 78
             Caption = 'Path to fldigi:'
             ParentColor = False
           end
           object chkRunFldigi: TCheckBox
             Left = 9
-            Height = 21
+            Height = 26
             Top = 14
-            Width = 275
+            Width = 266
             Caption = 'Run fldigi after entering to Remote mode'
             TabOrder = 0
           end
           object edtFldigiPath: TEdit
             Left = 30
-            Height = 24
+            Height = 21
             Top = 64
             Width = 416
             TabOrder = 1
