@@ -2091,6 +2091,9 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem37: TMenuItem
         Action = acRotControl
       end
+      object MenuItem38: TMenuItem
+        Action = acQSOList
+      end
     end
     object MenuItem3: TMenuItem
       Caption = 'Statistics'
@@ -2693,6 +2696,11 @@ object frmNewQSO: TfrmNewQSO
       Category = 'Window'
       Caption = 'Rotor Control'
       OnExecute = acRotControlExecute
+    end
+    object acQSOList: TAction
+      Category = 'Window'
+      Caption = 'QSO list'
+      OnExecute = acQSOListExecute
     end
   end
   object imgMain: TImageList
