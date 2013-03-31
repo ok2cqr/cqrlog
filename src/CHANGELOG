@@ -8,15 +8,11 @@ Legend:
   + added option to choose if you want to remove separator from remarks text (default YES)
   + if the station is working up/down it's showed in bandmap next to the callsign (Darek, SP2MKI)
   + DXCC statistic in New QSO window now shows all type of cmf - Q,L and E (Darek, SP2MKI)
-<<<<<<< HEAD
   + experimental DVK support (Darek, SP2MKI)
-  - Tune function didn't work witch cwdaemon - fixed (Darek, SP2MKI)
-=======
-  + experimental DVK supprt (Darek, SP2MKI)
+  + rotor control support added (Darek, SP2MKI)
   + if the QSO list window was opened when closing the program, it's also restored after start
-  - Tune function didn't work with cwdaemon - fixed (Darek, SP2MKI)
->>>>>>> db2ac898a1205ef240e07ff775dfe6a9db980b1e
   - Mark QSL sent after export didn't work properly - fixed (export for QSL label printing) 
+  - Tune function didn't work witch cwdaemon - fixed (Darek, SP2MKI)
 
 1.5.4
   - fixed problem with MASTER.SCP
