@@ -272,6 +272,7 @@ var
   tmp,mycont : String;
   profile    : String;
   dxcc_adif  : Integer;
+  len        : Integer=0;
 begin
   Result := True;
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
@@ -361,14 +362,19 @@ begin
       if d.APP_CQRLOG_PROFILE <> '' then
       begin
         pAr := dmUtils.Explode('|',d.APP_CQRLOG_PROFILE);
+        len := Length(pAr);
         if pAr[0] <> '0' then
         begin
           pProf := pAr[0];
           profile := pAr[0];
-          pLoc  := pAr[1];
-          pQTH  := pAr[2];
-          pEq   := pAr[3];
-          pNote := pAr[4];
+          if len > 2 then
+            pLoc  := pAr[1];
+          if Len > 3 then
+            pQTH  := pAr[2];
+          if len > 4 then
+            pEq   := pAr[3];
+          if len > 5 then
+            pNote := pAr[4];
 
           Q4.Close;
           Q4.SQL.Text := 'SELECT nr FROM profiles WHERE locator='+QuotedStr(pLoc) +

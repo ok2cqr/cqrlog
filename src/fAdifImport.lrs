@@ -162,33 +162,33 @@ LazarusResources.Add('TfrmAdifImport','FORMDATA',[
   +#0#255#255#0#1#255#255#0#3#255#255#0#7#255#255#0#31#255#255#0'?'#255#255#0
   +#255#255#255#131#255#255#255#8'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'Form'
   +'Show'#8'Position'#7#16'poMainFormCenter'#10'LCLVersion'#6#8'0.9.30.2'#0#6'T'
-  +'Label'#6'Label1'#4'Left'#2#6#6'Height'#2#17#3'Top'#2#3#5'Width'#2#26#7'Capt'
+  +'Label'#6'Label1'#4'Left'#2#6#6'Height'#2#16#3'Top'#2#3#5'Width'#2#23#7'Capt'
   +'ion'#6#5'File:'#11'ParentColor'#8#0#0#6'TLabel'#11'lblFileName'#4'Left'#2'&'
-  +#6'Height'#2#17#3'Top'#2#3#5'Width'#2'J'#7'Caption'#6#11'lblFileName'#11'Par'
-  +'entColor'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#6#6'Height'#2#17#3'Top'#2#30#5
-  +'Width'#2'('#7'Caption'#6#7'Errors:'#11'ParentColor'#8#0#0#6'TLabel'#6'Label'
-  +'3'#4'Left'#3#152#0#6'Height'#2#17#3'Top'#2#30#5'Width'#2'?'#7'Caption'#6#10
+  +#6'Height'#2#16#3'Top'#2#3#5'Width'#2'B'#7'Caption'#6#11'lblFileName'#11'Par'
+  +'entColor'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#6#6'Height'#2#16#3'Top'#2#30#5
+  +'Width'#2''''#7'Caption'#6#7'Errors:'#11'ParentColor'#8#0#0#6'TLabel'#6'Labe'
+  +'l3'#4'Left'#3#152#0#6'Height'#2#16#3'Top'#2#30#5'Width'#2'<'#7'Caption'#6#10
   +'Importing:'#11'ParentColor'#8#0#0#6'TLabel'#9'lblErrors'#4'Left'#2'@'#6'Hei'
-  +'ght'#2#17#3'Top'#2#30#5'Width'#2'5'#9'Alignment'#7#14'taRightJustify'#7'Cap'
+  +'ght'#2#16#3'Top'#2#30#5'Width'#2'1'#9'Alignment'#7#14'taRightJustify'#7'Cap'
   +'tion'#6#9'lblErrors'#11'ParentColor'#8#0#0#6'TLabel'#8'lblCount'#4'Left'#3
-  +#232#0#6'Height'#2#17#3'Top'#2#30#5'Width'#2'6'#7'Caption'#6#8'lblCount'#11
-  +'ParentColor'#8#0#0#6'TLabel'#6'Label4'#4'Left'#2#8#6'Height'#2#17#3'Top'#3
-  +#128#0#5'Width'#2'8'#7'Caption'#6#8'Remarks:'#11'ParentColor'#8#0#0#6'TLabel'
-  +#11'lblComplete'#4'Left'#3'u'#1#6'Height'#2#17#3'Top'#3#146#0#5'Width'#2'C'#7
+  +#232#0#6'Height'#2#16#3'Top'#2#30#5'Width'#2'1'#7'Caption'#6#8'lblCount'#11
+  +'ParentColor'#8#0#0#6'TLabel'#6'Label4'#4'Left'#2#8#6'Height'#2#16#3'Top'#3
+  +#128#0#5'Width'#2'5'#7'Caption'#6#8'Remarks:'#11'ParentColor'#8#0#0#6'TLabel'
+  +#11'lblComplete'#4'Left'#3'u'#1#6'Height'#2#16#3'Top'#3#146#0#5'Width'#2'<'#7
   +'Caption'#6#9'Complete!'#10'Font.Color'#7#5'clRed'#11'ParentColor'#8#10'Pare'
-  +'ntFont'#8#7'Visible'#8#0#0#6'TLabel'#6'Label5'#4'Left'#2#8#6'Height'#2#17#3
-  +'Top'#3#192#0#5'Width'#2'G'#7'Caption'#6#11'QTH Profile'#11'ParentColor'#8#0
+  +'ntFont'#8#7'Visible'#8#0#0#6'TLabel'#6'Label5'#4'Left'#2#8#6'Height'#2#16#3
+  +'Top'#3#192#0#5'Width'#2'A'#7'Caption'#6#11'QTH Profile'#11'ParentColor'#8#0
   +#0#6'TLabel'#11'lblErrorLog'#4'Left'#2#6#6'Height'#2#1#3'Top'#2'8'#5'Width'#2
   +#1#11'ParentColor'#8#0#0#7'TButton'#9'btnImport'#4'Left'#3'p'#1#6'Height'#2
   +#25#3'Top'#3#187#0#5'Width'#2'K'#7'Anchors'#11#5'akTop'#7'akRight'#0#25'Bord'
   +'erSpacing.InnerBorder'#2#4#7'Caption'#6#6'Import'#7'OnClick'#7#14'btnImport'
   +'Click'#8'TabOrder'#2#0#0#0#5'TEdit'#10'edtRemarks'#4'Left'#2#8#6'Height'#2
-  +#24#3'Top'#3#152#0#5'Width'#3#145#0#8'TabOrder'#2#1#0#0#9'TComboBox'#11'cmbP'
-  +'rofiles'#4'Left'#2#8#6'Height'#2#26#3'Top'#3#216#0#5'Width'#3'N'#1#10'ItemH'
+  +#21#3'Top'#3#152#0#5'Width'#3#145#0#8'TabOrder'#2#1#0#0#9'TComboBox'#11'cmbP'
+  +'rofiles'#4'Left'#2#8#6'Height'#2#21#3'Top'#3#216#0#5'Width'#3'N'#1#10'ItemH'
   +'eight'#2#0#8'TabOrder'#2#2#4'Text'#6#11'cmbProfiles'#0#0#9'TCheckBox'#11'ch'
-  +'kLotOfQSO'#4'Left'#2#8#6'Height'#2#21#3'Top'#2'X'#5'Width'#3#9#1#7'Caption'
+  +'kLotOfQSO'#4'Left'#2#8#6'Height'#2#26#3'Top'#2'X'#5'Width'#3#0#1#7'Caption'
   +#6'''ADIF file contains more than 10 000 QSO'#8'TabOrder'#2#3#0#0#10'TStatus'
-  +'Bar'#2'sb'#4'Left'#2#0#6'Height'#2#20#3'Top'#3#4#1#5'Width'#3#188#1#6'Panel'
+  +'Bar'#2'sb'#4'Left'#2#0#6'Height'#2#19#3'Top'#3#5#1#5'Width'#3#188#1#6'Panel'
   +'s'#14#1#5'Width'#3#200#0#0#0#11'SimplePanel'#8#0#0#7'TButton'#8'btnClose'#4
   +'Left'#3'p'#1#6'Height'#2#25#3'Top'#3#219#0#5'Width'#2'K'#7'Caption'#6#5'Clo'
   +'se'#11'ModalResult'#2#2#8'TabOrder'#2#5#0#0#15'TSQLTransaction'#2'tr'#6'Act'
