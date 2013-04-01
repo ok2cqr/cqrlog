@@ -1428,6 +1428,7 @@ var
   date  : TDateTime;
   sDate : String='';
   Mask  : String='';
+  data  : String = '';
 begin
   ID:=msgget(1238,IPC_CREAT or 438);
   If ID<0 then DoError('MsgGet');
@@ -1455,6 +1456,7 @@ begin
     dmUtils.DateInRightFormat(date,Mask,sDate);
     edtDate.Text:=sDate;
 
+    data := LowerCase(buf.mtext);
     case cqrini.ReadInteger('fldigi','freq',0) of
       0 : begin
             if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
@@ -1465,7 +1467,7 @@ begin
           end;
 
       1 : begin
-            i := Pos('mhz',buf.mtext);
+            i := Pos('mhz',data);
             if i > 0 then
             begin
               i := i+3;
@@ -1492,7 +1494,7 @@ begin
             end
           end;
       1 : begin
-            i := Pos('mode',buf.mtext);
+            i := Pos('mode',data);
             if i > 0 then
             begin
               i := i+4;
@@ -1508,7 +1510,7 @@ begin
       2 : cmbMode.Text := cqrini.ReadString('fldigi','defmode','RTTY')
     end;
 
-    i := Pos('call',buf.mtext);
+    i := Pos('call',data);
     if i > 0 then
     begin
       i := i+4;
@@ -1521,7 +1523,7 @@ begin
       edtCall.Text := call;
       edtCallExit(nil)
     end;
-    i := Pos('time',buf.mtext);
+    i := Pos('time',data);
     if i > 0 then
     begin
       i := i+4;
@@ -1536,7 +1538,7 @@ begin
       else
         edtStartTime.Text := time1
     end;
-    i := Pos('endtime',buf.mtext);
+    i := Pos('endtime',data);
     if i > 0 then
     begin
       i := i+7;
@@ -1551,7 +1553,7 @@ begin
       else
         edtEndTime.Text := time2
     end;
-    i := Pos('name',buf.mtext);
+    i := Pos('name',data);
     if i > 0 then
     begin
       i := i+4;
@@ -1564,7 +1566,7 @@ begin
       edtName.Text := sname;
       edtNameExit(nil)
     end;
-    i := Pos('qth',buf.mtext);
+    i := Pos('qth',data);
     if i > 0 then
     begin
       i := i+3;
@@ -1577,7 +1579,7 @@ begin
       edtQTH.Text := qth;
       edtQTHExit(nil)
     end;
-    i := Pos('locator',buf.mtext);
+    i := Pos('locator',data);
     if i > 0 then
     begin
       i := i+7;
@@ -1594,7 +1596,7 @@ begin
 
     case cqrini.ReadInteger('fldigi','rst',0) of
       0 : begin
-            i := Pos('rx',buf.mtext);
+            i := Pos('rx',data);
             if i > 0 then
             begin
               i := i+2;
@@ -1609,7 +1611,7 @@ begin
               edtMyRST.Text := rst
             end;
             rst := '';
-            i := Pos('tx',buf.mtext);
+            i := Pos('tx',data);
             if i > 0 then
             begin
               i := i+2;
@@ -1629,7 +1631,7 @@ begin
             edtMyRST.Text  := cqrini.ReadString('fldigi','defrst','599')
           end
     end;
-    i := Pos('state',buf.mtext);
+    i := Pos('state',data);
     if i > 0 then
     begin
       i := i+5;
@@ -1642,7 +1644,7 @@ begin
       edtState.Text := state;
       edtStateExit(nil)
     end;
-    i := Pos('notes',buf.mtext);
+    i := Pos('notes',data);
     if i > 0 then
     begin
       i := i+5;

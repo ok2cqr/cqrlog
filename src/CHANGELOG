@@ -15,6 +15,8 @@ Legend:
   - ADIF import crashed when QTH profile didn't have all fields filled - fixed
   - Tune function didn't work witch cwdaemon - fixed (Darek, SP2MKI)
   - CW interface was re-inicialized even if no option in Preference were changed
+  - problem with wrong time in QSO from flidi - fixed
+
 
 1.5.4
   - fixed problem with MASTER.SCP
