@@ -501,6 +501,8 @@ type
     procedure SendSpot;
     procedure RunVK(key_pressed: String);
     procedure InitializeCW;
+
+    function GetDescKeyFromCode(key : Word) : String;
   public
     QTHfromCb   : Boolean;
     FromDXC     : Boolean;
@@ -3729,64 +3731,12 @@ begin
     key := 0
   end;
 
-  if (key = VK_F1) and (Shift = []) then
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
   begin
-    CWint.SendText(dmUtils.GetCWMessage('F1',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F1');
-    key := 0
-  end;
-  if (key = VK_F2) and (Shift = []) then     
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F2',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F2');
-    key := 0
-  end;
-  if (key = VK_F3) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F3',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F3');
-    key := 0
-  end;
-  if (key = VK_F4) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F4',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F4');
-    key := 0
-  end;
-  if (key = VK_F5) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F5',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F5');
-    key := 0
-  end;
-  if (key = VK_F6) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F6',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F6');
-    key := 0
-  end;
-  if (key = VK_F7) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F7',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F7');
-    key := 0
-  end;
-  if (key = VK_F8) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F8',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F8');
-    key := 0
-  end;
-  if (key = VK_F9) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F9',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F9');
-    key := 0
-  end;
-  if (key = VK_F10) and (Shift = []) then
-  begin
-    CWint.SendText(dmUtils.GetCWMessage('F10',edtCall.Text,edtHisRST.Text,edtName.Text,''));
-    if (cmbMode.Text='SSB') then RunVK('F10');
+    if (cmbMode.Text='SSB') then
+      RunVK(GetDescKeyFromCode(Key))
+    else
+      CWint.SendText(dmUtils.GetCWMessage(GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,''));
     key := 0
   end;
 
@@ -5182,6 +5132,11 @@ begin
       sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
     end
   end
+end;
+
+function TfrmNewQSO.GetDescKeyFromCode(key : Word) : String;
+begin
+  Result := 'F' + IntToStr(Key-111) //VK_F1 = 112
 end;
 
 initialization
