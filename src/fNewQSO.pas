@@ -4268,7 +4268,7 @@ begin
     dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
                          IntToStr(ref_adif) + ' and (qsl_r = '+QuotedStr('Q')+') '+
                          'group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd';
-  //dmData.trQ.StartTransaction;
+  dmData.trQ.StartTransaction;
   dmData.Q.Open;
   while not dmData.Q.Eof do
   begin
@@ -4342,7 +4342,7 @@ begin
       dmData.Q.Next;
   end;
   dmData.Q.Close;
-
+  dmData.trQ.Rollback
 end;
 
 procedure TfrmNewQSO.CalculateDistanceEtc;
