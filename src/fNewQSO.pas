@@ -1176,7 +1176,7 @@ end;
 
 procedure TfrmNewQSO.SaveSettings;
 begin
-  SaveGrid;
+  //SaveGrid;
   tmrRadio.Enabled := False;
   tmrEnd.Enabled   := False;
   tmrStart.Enabled := False;
@@ -1806,7 +1806,7 @@ begin
     exit
   end;
 
-  SaveGrid;
+  //SaveGrid;
   dmData.SaveComment(edtCall.Text,mComment.Text);
   if edtITU.Text = '' then
     edtITU.Text := '0';
@@ -3675,7 +3675,7 @@ begin
     begin
       if EscFirstTime then
       begin
-        SaveGrid;
+        //SaveGrid;
         if edtCall.Text = '' then
           edtCall.SetFocus
         else
@@ -3896,7 +3896,7 @@ begin
   case key of
     #13 : begin                     //enter
             btnSave.Click;
-            SaveGrid;
+            //SaveGrid;
             key := #0;
           end;
     #12 : begin                    // CTRL+L
@@ -4256,7 +4256,9 @@ begin
     sgrdStatistic.Cells[i+1,3] := '   ';
   end;
 
-
+  if dmData.trQ.Active then
+    dmData.trQ.RollBack;
+  dmData.Q.Close;
 
   ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
   if ShowLoTW then
