@@ -150,7 +150,7 @@ begin
     exit;
   band := qBands.Fields[1].AsString;
   cw   := qBands.Fields[4].AsFloat;
-  ssb  := qBands.Fields[5].AsFloat;
+  ssb  := qBands.Fields[6].AsFloat;
 
   Result := True;
   if (tmp <= cw) then
@@ -158,8 +158,10 @@ begin
   else begin
     if (tmp >= ssb) then
       mode := 'SSB'
+    else
+      mode := 'RTTY';
   end;
-  Writeln('TdmDXCluster.BandModFromFreq:',Result)
+  Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
 end;
 
 function TdmDXCluster.DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;

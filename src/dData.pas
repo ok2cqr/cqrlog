@@ -948,8 +948,8 @@ var
 begin
   s := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+PathDelim+'voice_keyer'+PathDelim);
   d := fHomeDir+'voice_keyer'+PathDelim;
-  if not FileExistsUTF8(d+'voicekeyer.sh') then
-    CopyFile(s+'voice_keyer.sh',d+'voice_keye.sh')
+  if not FileExistsUTF8(d+'voice_keyer.sh') then
+    CopyFile(s+'voice_keyer.sh',d+'voice_keyer.sh')
 end;
 
 procedure TdmData.PrepareBandMapDB;
