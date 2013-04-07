@@ -1,0 +1,9 @@
+voice_keyer.sh requres mpg123 for plaing messages. 
+You can install it using:
+$ sudo apt-get install mpg123
+
+The voice_keyer plays mp3 files which names are F1.mp3 - F10.mp3
+
+The example file F10.mp3 is the 5s long 1khz tone for test and volume adjustment. 
+
+  
