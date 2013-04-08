@@ -5097,7 +5097,7 @@ begin
   
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := 'sh ' + dmData.HomeDir + cVoiceKeyer  +' '+ key_pressed;
+    AProcess.CommandLine := 'bash ' + dmData.HomeDir + cVoiceKeyer  +' '+ key_pressed;
     Writeln('Command line: ',AProcess.CommandLine);
     AProcess.Execute
   finally
