@@ -1,4 +1,5 @@
-voice_keyer.sh requres mpg123 for plaing messages. 
+The configured cwdaemon is neccesary to control rig ptt.
+The voice_keyer.sh plays messages using mpg123 cli player  
 You can install it using:
 $ sudo apt-get install mpg123
 
