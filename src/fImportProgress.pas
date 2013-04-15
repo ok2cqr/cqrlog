@@ -905,6 +905,10 @@ begin
             qsodate  := dmUtils.ADIFDateToDate(qsodate);
             qslrdate := dmUtils.ADIFDateToDate(qslrdate);
 
+            mode := UpperCase(mode);
+            if mode='JT65' then
+              mode := 'JT65A';
+
             dmData.Q.Close;
             dmData.Q.SQL.Text := 'select time_on,lotw_qslr,waz,itu,iota,loc,state,county,id_cqrlog_main from cqrlog_main ' +
                                  'where (qsodate ='+QuotedStr(qsodate)+') '+

@@ -16,6 +16,7 @@ Legend:
   - Tune function didn't work witch cwdaemon - fixed (Darek, SP2MKI)
   - CW interface was re-inicialized even if no option in Preference were changed
   - problem with wrong time in QSO from flidi - fixed
+  - QSO cfm via LoTW with JT65 wasn't recognized
 
 
 1.5.4
