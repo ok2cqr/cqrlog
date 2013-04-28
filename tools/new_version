@@ -1,6 +1,6 @@
 #!/bin/bash
  
-VERSION=1.4.2
+VERSION=1.5.3
 # cqrlog version
 
 FINAL=/home/ok2cqr/projects/final_cqrlog/
@@ -23,8 +23,9 @@ echo cqrlog_"$VERSION"_$ARCH.tar.gz
 mkdir $CTMP/cqrlog-$VERSION -p
 mkdir $FINAL -p
 cd $CTMP
-svn co https://cqrlog.svn.sourceforge.net/svnroot/cqrlog/trunk cqrlog-$VERSION
-tar -cvf cqrlog_$VERSION.orig.tar --exclude='debian' --exclude='.svn' cqrlog-$VERSION
+#svn co https://cqrlog.svn.sourceforge.net/svnroot/cqrlog/trunk cqrlog-$VERSION
+git clone git://github.com/ok2cqr/cqrlog.git
+tar -cvf cqrlog_$VERSION.orig.tar --exclude='debian' --exclude='.git' cqrlog-$VERSION
 gzip -v9 cqrlog_$VERSION.orig.tar
 cd cqrlog-$VERSION
 debuild -i -I -S
