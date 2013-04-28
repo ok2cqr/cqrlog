@@ -1,3 +1,30 @@
+cqrlog (1.5.5-1) unstable; urgency=low
+
+  * experimental Rotor support (Darek, SP2MKI)
+  * added option to choose if you want to remove separator from 
+    remarks text (default YES)
+  * if the station is working up/down it's showed in bandmap next 
+    to the callsign (Darek, SP2MKI)  
+  * DXCC statistic in New QSO window now shows all type of 
+    cmf - Q,L and E (Darek, SP2MKI)  
+  * experimental DVK support (Darek, SP2MKI)
+  * rotor control support added (Darek, SP2MKI)
+  * if the QSO list window was opened when closing the program, 
+    it's also restored after start
+  * Mark QSL sent after export didn't work properly - fixed 
+    (export for QSL label printing)  
+  * ADIF import crashed when QTH profile didn't have all fields 
+    filled - fixed  
+  * Tune function didn't work witch cwdaemon fixed (Darek, SP2MKI)  
+  * CW interface was re-inicialized even if no option in 
+    Preference were changed
+  * problem with wrong time in QSO from flidi - fixed
+  * QSO cfm via LoTW with JT65 wasn't recognized
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 28 APR 2012 14:04:00 +0100
+
+
+
 cqrlog (1.5.4-1) unstable; urgency=low
 
   * added MASTER.SCP file
