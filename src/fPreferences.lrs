@@ -264,25 +264,25 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#5'Width'#2'h'#7'Caption'#6#14'Split settings'#7'OnClick'#7#13'btnSplitClick'
   +#8'TabOrder'#2#1#7'Visible'#8#0#0#9'TGroupBox'#10'GroupBox40'#4'Left'#2#7#6
   +'Height'#2'X'#3'Top'#2#3#5'Width'#3'9'#2#7'Caption'#6#9' rigctld '#12'Client'
-  +'Height'#2'9'#11'ClientWidth'#3'5'#2#8'TabOrder'#2#2#0#6'TLabel'#7'Label17'#4
+  +'Height'#2'G'#11'ClientWidth'#3'5'#2#8'TabOrder'#2#2#0#6'TLabel'#7'Label17'#4
   +'Left'#2#5#6'Height'#2#16#3'Top'#2#7#5'Width'#2'{'#7'Caption'#6#23'Path to r'
   +'igctld binary:'#11'ParentColor'#8#0#0#5'TEdit'#14'edtRigCtldPath'#4'Left'#2
   +#5#6'Height'#2#21#3'Top'#2#30#5'Width'#3#247#1#8'TabOrder'#2#0#4'Text'#6#14
   +'edtRigCtldPath'#0#0#0#12'TPageControl'#12'pgTRXControl'#4'Left'#2#7#6'Heigh'
   +'t'#3#136#1#3'Top'#2'c'#5'Width'#3'7'#2#10'ActivePage'#7#7'tabTRX2'#8'TabInd'
   +'ex'#2#1#8'TabOrder'#2#3#0#9'TTabSheet'#7'tabTRX1'#7'Caption'#6#9'Radio one'
-  +#12'ClientHeight'#3'c'#1#11'ClientWidth'#3'/'#2#0#9'TGroupBox'#9'GroupBox3'#4
-  +'Left'#2#14#6'Height'#3'M'#1#3'Top'#2#14#5'Width'#3#25#2#7'Caption'#6#18' Ra'
-  +'dio one, desc.:'#12'ClientHeight'#3'<'#1#11'ClientWidth'#3#21#2#8'TabOrder'
-  +#2#0#0#6'TLabel'#7'Label18'#4'Left'#2'u'#6'Height'#2#18#3'Top'#2#15#5'Width'
-  +#3#160#0#7'Caption'#6#25'Device (e.g. /dev/ttyS0):'#11'ParentColor'#8#0#0#6
-  +'TLabel'#7'Label21'#4'Left'#2#7#6'Height'#2#18#3'Top'#2#15#5'Width'#2'['#7'C'
-  +'aption'#6#13'RIG ID model:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label27'#4'Le'
-  +'ft'#3'Y'#1#6'Height'#2#18#3'Top'#2#15#5'Width'#2'>'#7'Caption'#6#10'Poll ra'
-  +'te:'#11'ParentColor'#8#0#0#5'TEdit'#11'edtR1Device'#4'Left'#2'u'#6'Height'#2
-  +#27#3'Top'#2'#'#5'Width'#3#205#0#8'OnChange'#7#15'edtRadio1Change'#8'TabOrde'
-  +'r'#2#0#0#0#5'TEdit'#9'edtRigID1'#4'Left'#2#6#6'Height'#2#27#3'Top'#2'#'#5'W'
-  +'idth'#2'W'#8'OnChange'#7#15'edtRadio1Change'#8'TabOrder'#2#1#0#0#5'TEdit'#8
+  +#12'ClientHeight'#3#132#1#11'ClientWidth'#3'3'#2#0#9'TGroupBox'#9'GroupBox3'
+  +#4'Left'#2#14#6'Height'#3'M'#1#3'Top'#2#14#5'Width'#3#25#2#7'Caption'#6#18' '
+  +'Radio one, desc.:'#12'ClientHeight'#3'<'#1#11'ClientWidth'#3#21#2#8'TabOrde'
+  +'r'#2#0#0#6'TLabel'#7'Label18'#4'Left'#2'u'#6'Height'#2#18#3'Top'#2#15#5'Wid'
+  +'th'#3#160#0#7'Caption'#6#25'Device (e.g. /dev/ttyS0):'#11'ParentColor'#8#0#0
+  +#6'TLabel'#7'Label21'#4'Left'#2#7#6'Height'#2#18#3'Top'#2#15#5'Width'#2'['#7
+  +'Caption'#6#13'RIG ID model:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label27'#4'L'
+  +'eft'#3'Y'#1#6'Height'#2#18#3'Top'#2#15#5'Width'#2'>'#7'Caption'#6#10'Poll r'
+  +'ate:'#11'ParentColor'#8#0#0#5'TEdit'#11'edtR1Device'#4'Left'#2'u'#6'Height'
+  +#2#27#3'Top'#2'#'#5'Width'#3#205#0#8'OnChange'#7#15'edtRadio1Change'#8'TabOr'
+  +'der'#2#0#0#0#5'TEdit'#9'edtRigID1'#4'Left'#2#6#6'Height'#2#27#3'Top'#2'#'#5
+  +'Width'#2'W'#8'OnChange'#7#15'edtRadio1Change'#8'TabOrder'#2#1#0#0#5'TEdit'#8
   +'edtPoll1'#4'Left'#3'U'#1#6'Height'#2#27#3'Top'#2'#'#5'Width'#2'P'#8'OnChang'
   +'e'#7#15'edtRadio1Change'#6'OnExit'#7#12'edtPoll1Exit'#8'TabOrder'#2#2#0#0#9
   +'TCheckBox'#12'chkR1SendCWR'#4'Left'#3#13#1#6'Height'#2#24#3'Top'#2'G'#5'Wid'
@@ -346,11 +346,11 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'n'#6#3'RTS'#11'ParentColor'#8#0#0#0#0#5'TEdit'#9'edtRadio1'#4'Left'#3#146#0
   +#6'Height'#2#27#3'Top'#2#11#5'Width'#2'^'#8'OnChange'#7#15'edtRadio1Change'#8
   +'TabOrder'#2#1#0#0#0#9'TTabSheet'#7'tabTRX2'#7'Caption'#6#9'Radio two'#12'Cl'
-  +'ientHeight'#3'c'#1#11'ClientWidth'#3'/'#2#0#5'TEdit'#9'edtRadio2'#4'Left'#3
+  +'ientHeight'#3#132#1#11'ClientWidth'#3'3'#2#0#5'TEdit'#9'edtRadio2'#4'Left'#3
   +#146#0#6'Height'#2#21#3'Top'#2#11#5'Width'#2'^'#8'OnChange'#7#15'edtRadio1Ch'
   +'ange'#8'TabOrder'#2#0#0#0#9'TGroupBox'#9'GroupBox4'#4'Left'#2#14#6'Height'#3
   +'M'#1#3'Top'#2#14#5'Width'#3#25#2#7'Caption'#6#18' Radio two, desc.:'#12'Cli'
-  +'entHeight'#3'.'#1#11'ClientWidth'#3#21#2#8'TabOrder'#2#1#0#6'TLabel'#7'Labe'
+  +'entHeight'#3'<'#1#11'ClientWidth'#3#21#2#8'TabOrder'#2#1#0#6'TLabel'#7'Labe'
   +'l22'#4'Left'#2'u'#6'Height'#2#16#3'Top'#2#15#5'Width'#3#135#0#7'Caption'#6
   +#25'Device (e.g. /dev/ttyS0):'#11'ParentColor'#8#0#0#6'TLabel'#7'Label24'#4
   +'Left'#2#7#6'Height'#2#16#3'Top'#2#15#5'Width'#2'L'#7'Caption'#6#13'RIG ID m'
@@ -379,7 +379,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#0#0#5'TEdit'#9'edtR2Host'#4'Left'#3#29#1#6'Height'#2#21#3'Top'#2#237#5'Widt'
   +'h'#3#128#0#8'TabOrder'#2#8#4'Text'#6#9'edtR1Host'#0#0#9'TGroupBox'#11'grbSe'
   +'rialR2'#4'Left'#2#6#6'Height'#3#161#0#3'Top'#3#140#0#5'Width'#3#255#1#7'Cap'
-  +'tion'#6#27'Radio two serial parameters'#12'ClientHeight'#3#130#0#11'ClientW'
+  +'tion'#6#27'Radio two serial parameters'#12'ClientHeight'#3#144#0#11'ClientW'
   +'idth'#3#251#1#8'TabOrder'#2#9#0#6'TLabel'#8'Label137'#4'Left'#2#11#6'Height'
   +#2#16#3'Top'#2#9#5'Width'#2'G'#7'Caption'#6#13'Serial speed:'#11'ParentColor'
   +#8#0#0#6'TLabel'#8'Label138'#4'Left'#2'~'#6'Height'#2#16#3'Top'#2#9#5'Width'
@@ -423,20 +423,20 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#0#0#0#0#0#0#0#9'TTabSheet'#13'TabROTcontrol'#7'Caption'#6#11'ROT control'#12
   +'ClientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#10'GroupBox41'#4
   +'Left'#2#7#6'Height'#2'X'#3'Top'#2#3#5'Width'#3'9'#2#7'Caption'#6#9' rotctld'
-  +' '#12'ClientHeight'#2'9'#11'ClientWidth'#3'5'#2#8'TabOrder'#2#0#0#6'TLabel'
+  +' '#12'ClientHeight'#2'G'#11'ClientWidth'#3'5'#2#8'TabOrder'#2#0#0#6'TLabel'
   +#8'Label124'#4'Left'#2#5#6'Height'#2#16#3'Top'#2#7#5'Width'#2'~'#7'Caption'#6
   +#23'Path to rotctld binary:'#11'ParentColor'#8#0#0#5'TEdit'#14'edtRotCtldPat'
   +'h'#4'Left'#2#5#6'Height'#2#21#3'Top'#2#30#5'Width'#3#247#1#8'TabOrder'#2#0#4
   +'Text'#6#14'edtRotCtldPath'#0#0#0#12'TPageControl'#12'pgROTControl'#4'Left'#2
   +#7#6'Height'#3#136#1#3'Top'#2'c'#5'Width'#3'7'#2#10'ActivePage'#7#7'tabRot2'
   +#8'TabIndex'#2#1#8'TabOrder'#2#1#0#9'TTabSheet'#7'tabRot1'#7'Caption'#6#9'Ro'
-  +'tor one'#12'ClientHeight'#3'c'#1#11'ClientWidth'#3'/'#2#0#9'TGroupBox'#10'G'
-  +'roupBox42'#4'Left'#2#14#6'Height'#3'M'#1#3'Top'#2#14#5'Width'#3#25#2#7'Capt'
-  +'ion'#6#18' Rotor one, desc.:'#12'ClientHeight'#3'<'#1#11'ClientWidth'#3#21#2
-  +#8'TabOrder'#2#0#0#6'TLabel'#8'Label125'#4'Left'#2'u'#6'Height'#2#18#3'Top'#2
-  +#15#5'Width'#3#160#0#7'Caption'#6#25'Device (e.g. /dev/ttyS0):'#11'ParentCol'
-  +'or'#8#0#0#6'TLabel'#8'Label129'#4'Left'#2#7#6'Height'#2#18#3'Top'#2#15#5'Wi'
-  +'dth'#2'`'#7'Caption'#6#13'ROT ID model:'#11'ParentColor'#8#0#0#6'TLabel'#8
+  +'tor one'#12'ClientHeight'#3#132#1#11'ClientWidth'#3'3'#2#0#9'TGroupBox'#10
+  +'GroupBox42'#4'Left'#2#14#6'Height'#3'M'#1#3'Top'#2#14#5'Width'#3#25#2#7'Cap'
+  +'tion'#6#18' Rotor one, desc.:'#12'ClientHeight'#3'<'#1#11'ClientWidth'#3#21
+  +#2#8'TabOrder'#2#0#0#6'TLabel'#8'Label125'#4'Left'#2'u'#6'Height'#2#18#3'Top'
+  +#2#15#5'Width'#3#160#0#7'Caption'#6#25'Device (e.g. /dev/ttyS0):'#11'ParentC'
+  +'olor'#8#0#0#6'TLabel'#8'Label129'#4'Left'#2#7#6'Height'#2#18#3'Top'#2#15#5
+  +'Width'#2'`'#7'Caption'#6#13'ROT ID model:'#11'ParentColor'#8#0#0#6'TLabel'#8
   +'Label144'#4'Left'#3'Y'#1#6'Height'#2#18#3'Top'#2#15#5'Width'#2'>'#7'Caption'
   +#6#10'Poll rate:'#11'ParentColor'#8#0#0#5'TEdit'#13'edtRot1Device'#4'Left'#2
   +'u'#6'Height'#2#27#3'Top'#2'#'#5'Width'#3#205#0#8'OnChange'#7#15'edtRadio1Ch'
@@ -503,11 +503,11 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#26#7'Caption'#6#3'RTS'#11'ParentColor'#8#0#0#0#0#5'TEdit'#9'edtRotor1'#4'Le'
   +'ft'#3#146#0#6'Height'#2#27#3'Top'#2#11#5'Width'#2'^'#8'OnChange'#7#15'edtRa'
   +'dio1Change'#8'TabOrder'#2#1#0#0#0#9'TTabSheet'#7'tabRot2'#7'Caption'#6#9'Ro'
-  +'tor two'#12'ClientHeight'#3'c'#1#11'ClientWidth'#3'/'#2#0#5'TEdit'#9'edtRot'
-  +'or2'#4'Left'#3#146#0#6'Height'#2#21#3'Top'#2#11#5'Width'#2'^'#8'OnChange'#7
+  +'tor two'#12'ClientHeight'#3#132#1#11'ClientWidth'#3'3'#2#0#5'TEdit'#9'edtRo'
+  +'tor2'#4'Left'#3#146#0#6'Height'#2#21#3'Top'#2#11#5'Width'#2'^'#8'OnChange'#7
   +#15'edtRadio1Change'#8'TabOrder'#2#0#0#0#9'TGroupBox'#10'GroupBox43'#4'Left'
   +#2#14#6'Height'#3'M'#1#3'Top'#2#14#5'Width'#3#25#2#7'Caption'#6#18' Rotor tw'
-  +'o, desc.:'#12'ClientHeight'#3'.'#1#11'ClientWidth'#3#21#2#8'TabOrder'#2#1#0
+  +'o, desc.:'#12'ClientHeight'#3'<'#1#11'ClientWidth'#3#21#2#8'TabOrder'#2#1#0
   +#6'TLabel'#8'Label154'#4'Left'#2'u'#6'Height'#2#16#3'Top'#2#15#5'Width'#3#135
   +#0#7'Caption'#6#25'Device (e.g. /dev/ttyS0):'#11'ParentColor'#8#0#0#6'TLabel'
   +#8'Label155'#4'Left'#2#7#6'Height'#2#16#3'Top'#2#15#5'Width'#2'Q'#7'Caption'
@@ -534,7 +534,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#0#0#5'TEdit'#11'edtRot2Host'#4'Left'#3#29#1#6'Height'#2#21#3'Top'#2#237#5'W'
   +'idth'#3#128#0#8'TabOrder'#2#7#4'Text'#6#11'edtRot2Host'#0#0#9'TGroupBox'#11
   +'grbSerialR4'#4'Left'#2#6#6'Height'#3#161#0#3'Top'#3#140#0#5'Width'#3#255#1#7
-  +'Caption'#6#27'Radio two serial parameters'#12'ClientHeight'#3#130#0#11'Clie'
+  +'Caption'#6#27'Radio two serial parameters'#12'ClientHeight'#3#144#0#11'Clie'
   +'ntWidth'#3#251#1#8'TabOrder'#2#8#0#6'TLabel'#8'Label159'#4'Left'#2#11#6'Hei'
   +'ght'#2#16#3'Top'#2#9#5'Width'#2'G'#7'Caption'#6#13'Serial speed:'#11'Parent'
   +'Color'#8#0#0#6'TLabel'#8'Label160'#4'Left'#2'~'#6'Height'#2#16#3'Top'#2#9#5
@@ -579,11 +579,11 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'Modes'#12'ClientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#10'Gro'
   ,'upBox35'#4'Left'#2#14#6'Height'#2'I'#3'Top'#3#11#1#5'Width'#3'1'#2#7'Captio'
   +'n'#6'1 User defined digital modes (use , as delimitter)'#12'ClientHeight'#2
-  +'*'#11'ClientWidth'#3'-'#2#8'TabOrder'#2#0#0#5'TEdit'#12'edtDigiModes'#4'Lef'
+  +'8'#11'ClientWidth'#3'-'#2#8'TabOrder'#2#0#0#5'TEdit'#12'edtDigiModes'#4'Lef'
   +'t'#2#7#6'Height'#2#21#3'Top'#2#15#5'Width'#3#24#2#8'CharCase'#7#11'ecUpperc'
   +'ase'#8'TabOrder'#2#0#0#0#0#9'TGroupBox'#10'GroupBox37'#4'Left'#2#14#6'Heigh'
   +'t'#3#224#0#3'Top'#2#11#5'Width'#3#208#0#7'Caption'#6#11' Radio one '#12'Cli'
-  +'entHeight'#3#193#0#11'ClientWidth'#3#204#0#8'TabOrder'#2#1#0#6'TLabel'#7'La'
+  +'entHeight'#3#207#0#11'ClientWidth'#3#204#0#8'TabOrder'#2#1#0#6'TLabel'#7'La'
   +'bel28'#4'Left'#2#13#6'Height'#2#16#3'Top'#2#18#5'Width'#2'!'#7'Caption'#6#4
   +'Mode'#11'ParentColor'#8#0#0#6'TLabel'#7'Label29'#4'Left'#2'M'#6'Height'#2#16
   +#3'Top'#2#18#5'Width'#2'='#7'Caption'#6#9'Bandwidth'#11'ParentColor'#8#0#0#6
@@ -614,7 +614,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ue'#3#196#9#0#0#6'TLabel'#7'Label39'#4'Left'#3#169#0#6'Height'#2#16#3'Top'#3
   +#170#0#5'Width'#2#15#7'Caption'#6#2'Hz'#11'ParentColor'#8#0#0#0#9'TGroupBox'
   +#10'GroupBox39'#4'Left'#3#246#0#6'Height'#3#224#0#3'Top'#2#11#5'Width'#3#208
-  +#0#7'Caption'#6#11' Radio two '#12'ClientHeight'#3#193#0#11'ClientWidth'#3
+  +#0#7'Caption'#6#11' Radio two '#12'ClientHeight'#3#207#0#11'ClientWidth'#3
   +#204#0#8'TabOrder'#2#2#0#6'TLabel'#8'Label110'#4'Left'#2#13#6'Height'#2#16#3
   +'Top'#2#18#5'Width'#2'!'#7'Caption'#6#4'Mode'#11'ParentColor'#8#0#0#6'TLabel'
   +#8'Label113'#4'Left'#2'M'#6'Height'#2#16#3'Top'#2#18#5'Width'#2'='#7'Caption'
@@ -650,7 +650,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'dth'#2'z'#7'Caption'#6#16'Use QTH Profiles'#8'OnChange'#7#20'chkUseProfiles'
   +'Change'#8'TabOrder'#2#0#0#0#9'TGroupBox'#10'gbProfiles'#4'Left'#2#8#6'Heigh'
   +'t'#3#9#1#3'Top'#2'+'#5'Width'#3#254#1#7'Caption'#6#8'Profiles'#12'ClientHei'
-  +'ght'#3#234#0#11'ClientWidth'#3#250#1#8'TabOrder'#2#1#0#6'TBevel'#6'Bevel1'#4
+  +'ght'#3#248#0#11'ClientWidth'#3#250#1#8'TabOrder'#2#1#0#6'TBevel'#6'Bevel1'#4
   +'Left'#2#9#6'Height'#2#15#3'Top'#2'W'#5'Width'#3#227#1#5'Shape'#7#9'bsTopLin'
   +'e'#5'Style'#7#8'bsRaised'#0#0#6'TLabel'#7'Label40'#4'Left'#2#14#6'Height'#2
   +#16#3'Top'#2'o'#5'Width'#3#214#0#7'Caption'#6'(Description of the profile wi'
@@ -797,7 +797,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'x'#1#5'Width'#2'u'#7'Caption'#6#14'eQSL QSLR date'#8'TabOrder'#2'G'#0#0#0#9
   +'TTabSheet'#12'tabDXCluster'#7'Caption'#6#9'DXCluster'#12'ClientHeight'#3#17
   +#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#9'GroupBox5'#4'Left'#2#6#6'Height'#2
-  +'i'#3'Top'#2#11#5'Width'#3#0#2#7'Caption'#6#6'Colors'#12'ClientHeight'#2'J'
+  +'i'#3'Top'#2#11#5'Width'#3#0#2#7'Caption'#6#6'Colors'#12'ClientHeight'#2'X'
   +#11'ClientWidth'#3#252#1#8'TabOrder'#2#0#0#6'TLabel'#7'Label41'#4'Left'#2#3#6
   +'Height'#2#16#3'Top'#2#11#5'Width'#2'L'#7'Caption'#6#12'New country:'#11'Par'
   +'entColor'#8#0#0#6'TLabel'#7'Label42'#4'Left'#2#3#6'Height'#2#16#3'Top'#2'3'
@@ -818,7 +818,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#27#3'Top'#2'0'#5'Width'#2'v'#5'Style'#11#16'cbStandardColors'#16'cbExtended'
   +'Colors'#14'cbSystemColors'#13'cbPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrde'
   +'r'#2#3#0#0#0#9'TGroupBox'#9'GroupBox6'#4'Left'#2#6#6'Height'#3#240#0#3'Top'
-  +#2'{'#5'Width'#3#0#2#7'Caption'#6#16' Show only spots'#12'ClientHeight'#3#209
+  +#2'{'#5'Width'#3#0#2#7'Caption'#6#16' Show only spots'#12'ClientHeight'#3#223
   +#0#11'ClientWidth'#3#252#1#8'TabOrder'#2#1#0#6'TLabel'#7'Label45'#4'Left'#2#6
   +#6'Height'#2#16#3'Top'#3#154#0#5'Width'#3'@'#1#7'Caption'#6':Do not show spo'
   +'ts for this countries (use ; as dellimiter)'#11'ParentColor'#8#0#0#9'TCheck'
@@ -876,7 +876,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#3#0#0#0#9'TTabSheet'#7'tabFont'#7'Caption'#6#5'Fonts'#12'ClientHeight'#3#17
   +#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#9'GroupBox7'#4'Left'#2#14#6'Height'
   +#3'`'#1#3'Top'#2#3#5'Width'#3#240#1#7'Caption'#6#15' Font settings '#12'Clie'
-  +'ntHeight'#3'A'#1#11'ClientWidth'#3#236#1#8'TabOrder'#2#0#0#6'TLabel'#10'lbl'
+  +'ntHeight'#3'O'#1#11'ClientWidth'#3#236#1#8'TabOrder'#2#0#0#6'TLabel'#10'lbl'
   +'Buttons'#4'Left'#2#12#6'Height'#2#16#3'Top'#2''''#5'Width'#3#251#0#7'Captio'
   +'n'#6'-Buttons, labels, radiobuttons, checkboxes ...'#11'ParentColor'#8#0#0#6
   +'TLabel'#8'lblbFont'#4'Left'#2#12#6'Height'#2#16#3'Top'#2'G'#5'Width'#2'/'#7
@@ -910,7 +910,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#9'TTabSheet'#9'tabWazItu'#7'Caption'#6#14'WAZ, ITU zones'#12'ClientHeight'#3
   +#17#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#9'GroupBox8'#4'Left'#2#14#6'Heig'
   +'ht'#3#230#0#3'Top'#2#11#5'Width'#3#233#0#7'Caption'#6#11'WAZ colors '#12'Cl'
-  +'ientHeight'#3#199#0#11'ClientWidth'#3#229#0#8'TabOrder'#2#0#0#6'TLabel'#7'L'
+  +'ientHeight'#3#213#0#11'ClientWidth'#3#229#0#8'TabOrder'#2#0#0#6'TLabel'#7'L'
   +'abel23'#4'Left'#2#13#6'Height'#2#16#3'Top'#2#15#5'Width'#2'Z'#7'Caption'#6
   +#14'New WAZ zone: '#11'ParentColor'#8#0#0#6'TLabel'#7'Label52'#4'Left'#2#13#6
   +'Height'#2#16#3'Top'#2'N'#5'Width'#2'x'#7'Caption'#6#19'New band WAZ zone: '
@@ -926,7 +926,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'h'#2#127#5'Style'#11#16'cbStandardColors'#16'cbExtendedColors'#14'cbSystemC'
   +'olors'#13'cbPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrder'#2#2#0#0#0#9'TGrou'
   +'pBox'#9'GroupBox9'#4'Left'#3#6#1#6'Height'#3#230#0#3'Top'#2#11#5'Width'#3
-  +#233#0#7'Caption'#6#11'ITU colors '#12'ClientHeight'#3#199#0#11'ClientWidth'
+  +#233#0#7'Caption'#6#11'ITU colors '#12'ClientHeight'#3#213#0#11'ClientWidth'
   +#3#229#0#8'TabOrder'#2#1#0#6'TLabel'#7'Label54'#4'Left'#2#13#6'Height'#2#16#3
   +'Top'#2#15#5'Width'#2'S'#7'Caption'#6#14'New ITU zone: '#11'ParentColor'#8#0
   +#0#6'TLabel'#7'Label55'#4'Left'#2#13#6'Height'#2#16#3'Top'#2'N'#5'Width'#2'q'
@@ -948,7 +948,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'TTabSheet'#7'tabIOTA'#7'Caption'#6#4'IOTA'#12'ClientHeight'#3#17#2#11'Clien'
   +'tWidth'#3'w'#2#0#9'TGroupBox'#10'GroupBox10'#4'Left'#2#22#6'Height'#3#168#0
   +#3'Top'#2#19#5'Width'#3#249#0#7'Caption'#6#11'IOTA colors'#12'ClientHeight'#3
-  +#137#0#11'ClientWidth'#3#245#0#8'TabOrder'#2#0#0#6'TLabel'#7'Label57'#4'Left'
+  +#151#0#11'ClientWidth'#3#245#0#8'TabOrder'#2#0#0#6'TLabel'#7'Label57'#4'Left'
   +#2#13#6'Height'#2#16#3'Top'#2#13#5'Width'#2'9'#7'Caption'#6#9'New IOTA:'#11
   +'ParentColor'#8#0#0#6'TLabel'#7'Label58'#4'Left'#2#13#6'Height'#2#16#3'Top'#2
   +'P'#5'Width'#2'y'#7'Caption'#6#21'QSL needed for IOTA: '#11'ParentColor'#8#0
@@ -962,7 +962,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'Caption'#6#9'Show info'#8'TabOrder'#2#1#0#0#0#9'TTabSheet'#14'tabMemebershi'
   +'p'#7'Caption'#6#11'Memebership'#12'ClientHeight'#3#17#2#11'ClientWidth'#3'w'
   ,#2#0#9'TGroupBox'#10'GroupBox11'#4'Left'#2#14#6'Height'#2'P'#3'Top'#2#8#5'Wi'
-  +'dth'#3'H'#2#7'Caption'#6#10'First club'#12'ClientHeight'#2'1'#11'ClientWidt'
+  +'dth'#3'H'#2#7'Caption'#6#10'First club'#12'ClientHeight'#2'?'#11'ClientWidt'
   +'h'#3'D'#2#8'TabOrder'#2#0#0#9'TComboBox'#12'cmbFirstClub'#4'Left'#2#14#6'He'
   +'ight'#2#27#3'Top'#2#7#5'Width'#3'%'#1#10'ItemHeight'#2#0#5'Style'#7#14'csDr'
   +'opDownList'#8'TabOrder'#2#0#0#0#7'TButton'#11'btnSetFirst'#4'Left'#3#237#1#6
@@ -975,7 +975,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'Color'#8#0#0#5'TEdit'#12'edtClub1Date'#4'Left'#3't'#1#6'Height'#2#21#3'Top'
   +#2#11#5'Width'#2'`'#8'TabOrder'#2#3#0#0#0#9'TGroupBox'#10'GroupBox12'#4'Left'
   +#2#14#6'Height'#2'P'#3'Top'#2'`'#5'Width'#3'H'#2#7'Caption'#6#11'Second club'
-  +#12'ClientHeight'#2'1'#11'ClientWidth'#3'D'#2#8'TabOrder'#2#1#0#9'TComboBox'
+  +#12'ClientHeight'#2'?'#11'ClientWidth'#3'D'#2#8'TabOrder'#2#1#0#9'TComboBox'
   +#13'cmbSecondClub'#4'Left'#2#14#6'Height'#2#27#3'Top'#2#7#5'Width'#3'%'#1#10
   +'ItemHeight'#2#0#5'Style'#7#14'csDropDownList'#8'TabOrder'#2#0#0#0#7'TButton'
   +#12'btnSetSecond'#4'Left'#3#237#1#6'Height'#2#25#3'Top'#2#31#5'Width'#2'K'#25
@@ -987,7 +987,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'idth'#2'"'#7'Caption'#6#6'Since:'#11'ParentColor'#8#0#0#5'TEdit'#12'edtClub'
   +'2Date'#4'Left'#3't'#1#6'Height'#2#21#3'Top'#2#11#5'Width'#2'`'#8'TabOrder'#2
   +#3#0#0#0#9'TGroupBox'#10'GroupBox13'#4'Left'#2#14#6'Height'#2'P'#3'Top'#3#184
-  +#0#5'Width'#3'H'#2#7'Caption'#6#10'Third club'#12'ClientHeight'#2'1'#11'Clie'
+  +#0#5'Width'#3'H'#2#7'Caption'#6#10'Third club'#12'ClientHeight'#2'?'#11'Clie'
   +'ntWidth'#3'D'#2#8'TabOrder'#2#2#0#9'TComboBox'#12'cmbThirdClub'#4'Left'#2#14
   +#6'Height'#2#27#3'Top'#2#7#5'Width'#3'%'#1#10'ItemHeight'#2#0#5'Style'#7#14
   +'csDropDownList'#8'TabOrder'#2#0#0#0#7'TButton'#11'btnSetThird'#4'Left'#3#237
@@ -1000,7 +1000,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'arentColor'#8#0#0#5'TEdit'#12'edtClub3Date'#4'Left'#3't'#1#6'Height'#2#21#3
   +'Top'#2#11#5'Width'#2'`'#8'TabOrder'#2#3#0#0#0#9'TGroupBox'#10'GroupBox14'#4
   +'Left'#2#14#6'Height'#2'P'#3'Top'#3#16#1#5'Width'#3'H'#2#7'Caption'#6#11'Fou'
-  +'rth club'#12'ClientHeight'#2'1'#11'ClientWidth'#3'D'#2#8'TabOrder'#2#3#0#9
+  +'rth club'#12'ClientHeight'#2'?'#11'ClientWidth'#3'D'#2#8'TabOrder'#2#3#0#9
   +'TComboBox'#13'cmbFourthClub'#4'Left'#2#14#6'Height'#2#27#3'Top'#2#7#5'Width'
   +#3'%'#1#10'ItemHeight'#2#0#5'Style'#7#14'csDropDownList'#8'TabOrder'#2#0#0#0
   +#7'TButton'#12'btnSetFourth'#4'Left'#3#237#1#6'Height'#2#25#3'Top'#2#31#5'Wi'
@@ -1013,7 +1013,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#12'edtClub4Date'#4'Left'#3't'#1#6'Height'#2#21#3'Top'#2#11#5'Width'#2'`'#8
   +'TabOrder'#2#3#0#0#0#9'TGroupBox'#10'GroupBox15'#4'Left'#2#14#6'Height'#2'P'
   +#3'Top'#3'h'#1#5'Width'#3'H'#2#7'Caption'#6#10'Fifth club'#12'ClientHeight'#2
-  +'1'#11'ClientWidth'#3'D'#2#8'TabOrder'#2#4#0#9'TComboBox'#12'cmbFifthClub'#4
+  +'?'#11'ClientWidth'#3'D'#2#8'TabOrder'#2#4#0#9'TComboBox'#12'cmbFifthClub'#4
   +'Left'#2#14#6'Height'#2#27#3'Top'#2#7#5'Width'#3'%'#1#10'ItemHeight'#2#0#5'S'
   +'tyle'#7#14'csDropDownList'#8'TabOrder'#2#0#0#0#7'TButton'#11'btnSetFifth'#4
   +'Left'#3#237#1#6'Height'#2#25#3'Top'#2#31#5'Width'#2'K'#25'BorderSpacing.Inn'
@@ -1026,13 +1026,13 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'Height'#2#21#3'Top'#2#11#5'Width'#2'`'#8'TabOrder'#2#3#0#0#0#0#9'TTabSheet'
   +#10'tabBandMap'#7'Caption'#6#7'Bandmap'#12'ClientHeight'#3#17#2#11'ClientWid'
   ,'th'#3'w'#2#0#9'TGroupBox'#10'GroupBox16'#4'Left'#2#14#6'Height'#2'='#3'Top'
-  +#2#3#5'Width'#3#17#2#7'Caption'#6#6' Font '#12'ClientHeight'#2#30#11'ClientW'
+  +#2#3#5'Width'#3#17#2#7'Caption'#6#6' Font '#12'ClientHeight'#2','#11'ClientW'
   +'idth'#3#13#2#8'TabOrder'#2#0#0#6'TLabel'#14'lblBandMapFont'#4'Left'#2#14#6
   +'Height'#2#1#3'Top'#2#4#5'Width'#2#1#11'ParentColor'#8#0#0#7'TButton'#17'btn'
   +'SelectBandFont'#4'Left'#3#160#1#6'Height'#2#25#3'Top'#2#4#5'Width'#2'`'#7'C'
   +'aption'#6#11'Select font'#7'OnClick'#7#22'btnSelectBandFontClick'#8'TabOrde'
   +'r'#2#0#0#0#0#9'TGroupBox'#10'GroupBox17'#4'Left'#2#14#6'Height'#2'>'#3'Top'
-  +#2'>'#5'Width'#3#17#2#7'Caption'#6#7' Color '#12'ClientHeight'#2#31#11'Clien'
+  +#2'>'#5'Width'#3#17#2#7'Caption'#6#7' Color '#12'ClientHeight'#2'-'#11'Clien'
   +'tWidth'#3#13#2#8'TabOrder'#2#1#0#6'TLabel'#7'Label61'#4'Left'#2#6#6'Height'
   +#2#16#3'Top'#2#11#5'Width'#3#26#1#7'Caption'#6'0Select color of entry added '
   +'from new qso window '#11'ParentColor'#8#0#0#9'TColorBox'#15'cmbQSOBandColor'
@@ -1051,7 +1051,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'t'#2'`'#3'Top'#3'k'#255#5'Width'#3#185#0#7'Caption'#6#6'Ignore'#8'TabOrder'
   +#2#6#0#0#9'TGroupBox'#10'GroupBox18'#4'Left'#2#14#6'Height'#2'D'#3'Top'#3#135
   +#0#5'Width'#3#17#2#7'Caption'#6'% Band Map Entries Aging (in minutes) '#12'C'
-  +'lientHeight'#2'%'#11'ClientWidth'#3#13#2#8'TabOrder'#2#7#0#6'TLabel'#7'Labe'
+  +'lientHeight'#2'3'#11'ClientWidth'#3#13#2#8'TabOrder'#2#7#0#6'TLabel'#7'Labe'
   +'l62'#4'Left'#2#11#6'Height'#2#16#3'Top'#2#14#5'Width'#2'U'#7'Caption'#6#16
   +'The first after '#11'ParentColor'#8#0#0#6'TLabel'#7'Label63'#4'Left'#3#163#0
   +#6'Height'#2#16#3'Top'#2#14#5'Width'#2'd'#7'Caption'#6#17'the second after '
@@ -1063,7 +1063,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'TEdit'#8'edtDisep'#4'Left'#3#206#1#6'Height'#2#21#3'Top'#2#11#5'Width'#2'2'
   +#8'TabOrder'#2#2#4'Text'#6#2'12'#0#0#0#9'TGroupBox'#10'GroupBox20'#4'Left'#2
   +#14#6'Height'#2'\'#3'Top'#3#211#0#5'Width'#3'q'#1#7'Caption'#6'!Band map ent'
-  +'ries (from dxcluster)'#12'ClientHeight'#2'='#11'ClientWidth'#3'm'#1#8'TabOr'
+  +'ries (from dxcluster)'#12'ClientHeight'#2'K'#11'ClientWidth'#3'm'#1#8'TabOr'
   +'der'#2#8#0#6'TLabel'#7'Label65'#4'Left'#2#6#6'Height'#2#16#3'Top'#2')'#5'Wi'
   +'dth'#2'"'#7'Caption'#6#6'Color:'#11'ParentColor'#8#0#0#7'TButton'#7'Button1'
   +#4'Left'#3#239#0#6'Height'#2#25#3'Top'#2#3#5'Width'#2'p'#7'Caption'#6#14'Wat'
@@ -1086,11 +1086,11 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'TTabSheet'#10'tabXplanet'#7'Caption'#6#15'xplanet support'#12'ClientHeight'
   +#3#17#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#10'GroupBox21'#4'Left'#2#14#6
   +'Height'#2'Y'#3'Top'#2#11#5'Width'#3#9#2#7'Caption'#6#23' Path for the xplan'
-  +'et  '#12'ClientHeight'#2':'#11'ClientWidth'#3#5#2#8'TabOrder'#2#0#0#5'TEdit'
+  +'et  '#12'ClientHeight'#2'H'#11'ClientWidth'#3#5#2#8'TabOrder'#2#0#0#5'TEdit'
   +#14'edtXplanetPath'#4'Left'#2#6#6'Height'#2#21#3'Top'#2#15#5'Width'#3#176#1#8
   +'TabOrder'#2#0#4'Text'#6#16'/usr/bin/xplanet'#0#0#0#9'TGroupBox'#10'GroupBox'
   ,'22'#4'Left'#2#14#6'Height'#2'p'#3'Top'#2'k'#5'Width'#2'q'#7'Caption'#6#13' '
-  +'Window size '#12'ClientHeight'#2'Q'#11'ClientWidth'#2'm'#8'TabOrder'#2#1#0#6
+  +'Window size '#12'ClientHeight'#2'_'#11'ClientWidth'#2'm'#8'TabOrder'#2#1#0#6
   +'TLabel'#7'Label66'#4'Left'#2#6#6'Height'#2#16#3'Top'#2#15#5'Width'#2'*'#7'C'
   +'aption'#6#7'Height:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label67'#4'Left'#2#6
   +#6'Height'#2#16#3'Top'#2'7'#5'Width'#2'&'#7'Caption'#6#6'Width:'#11'ParentCo'
@@ -1098,7 +1098,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'Width'#2')'#8'TabOrder'#2#0#0#0#5'TEdit'#9'edtXWidth'#4'Left'#2'>'#6'Height'
   +#2#21#3'Top'#2'4'#5'Width'#2')'#8'TabOrder'#2#1#0#0#0#9'TGroupBox'#10'GroupB'
   +'ox23'#4'Left'#3#142#0#6'Height'#2'p'#3'Top'#2'k'#5'Width'#3#129#0#7'Caption'
-  +#6#17' Window position '#12'ClientHeight'#2'Q'#11'ClientWidth'#2'}'#8'TabOrd'
+  +#6#17' Window position '#12'ClientHeight'#2'_'#11'ClientWidth'#2'}'#8'TabOrd'
   +'er'#2#2#0#6'TLabel'#7'Label68'#4'Left'#2#9#6'Height'#2#16#3'Top'#2#7#5'Widt'
   +'h'#2#24#7'Caption'#6#4'Top:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label69'#4'L'
   +'eft'#2#9#6'Height'#2#16#3'Top'#2'"'#5'Width'#2#28#7'Caption'#6#5'Left:'#11
@@ -1112,7 +1112,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#3#0#0#9'TCheckBox'#15'chkCloseXplanet'#4'Left'#3#22#1#6'Height'#2#26#3'Top'
   +#3'K'#1#5'Width'#3#185#0#7'Caption'#6#26'Close xplanet with CQRLOG '#8'TabOr'
   +'der'#2#4#0#0#9'TGroupBox'#10'GroupBox24'#4'Left'#3#22#1#6'Height'#2'p'#3'To'
-  +'p'#2'k'#5'Width'#3#1#1#7'Caption'#6#9' Refresh '#12'ClientHeight'#2'Q'#11'C'
+  +'p'#2'k'#5'Width'#3#1#1#7'Caption'#6#9' Refresh '#12'ClientHeight'#2'_'#11'C'
   +'lientWidth'#3#253#0#8'TabOrder'#2#5#0#6'TLabel'#7'Label70'#4'Left'#2#6#6'He'
   +'ight'#2#16#3'Top'#2#7#5'Width'#2'{'#7'Caption'#6#21'Refresh xplanet every'
   +#11'ParentColor'#8#0#0#6'TLabel'#7'Label71'#4'Left'#3#206#0#6'Height'#2#16#3
@@ -1130,7 +1130,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'nousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChilds'#26'C'
   +'hildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Layout'#7#29
   +'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'Clien'
-  +'tHeight'#2'A'#11'ClientWidth'#3#253#0#13'Items.Strings'#1#6#2'3D'#6#9'azimu'
+  +'tHeight'#2'O'#11'ClientWidth'#3#253#0#13'Items.Strings'#1#6#2'3D'#6#9'azimu'
   +'thal'#6#28'azimuthal without background'#0#8'TabOrder'#2#6#0#0#11'TRadioGro'
   +'up'#10'rgShowFrom'#4'Left'#2#15#6'Height'#2'`'#3'Top'#3#227#0#5'Width'#3#0#1
   +#8'AutoFill'#9#7'Caption'#6#20' Show stations from '#28'ChildSizing.LeftRigh'
@@ -1139,7 +1139,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#24'crsHomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScale'
   +'Childs'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.'
   +'Layout'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPerLine'
-  +#2#1#12'ClientHeight'#2'A'#11'ClientWidth'#3#252#0#13'Items.Strings'#1#6#9'd'
+  +#2#1#12'ClientHeight'#2'O'#11'ClientWidth'#3#252#0#13'Items.Strings'#1#6#9'd'
   +'xcluster'#6#7'bandmap'#0#8'TabOrder'#2#7#0#0#9'TColorBox'#15'cmbXplanetColo'
   +'r'#4'Left'#3#240#0#6'Height'#2#27#3'Top'#3'h'#1#5'Width'#2'd'#5'Style'#11#16
   +'cbStandardColors'#16'cbExtendedColors'#14'cbSystemColors'#13'cbPrettyNames'
@@ -1149,7 +1149,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'eet'#10'tabZipCode'#7'Caption'#6#17'Zip code tracking'#12'ClientHeight'#3#17
   +#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#10'GroupBox25'#4'Left'#2#6#6'Height'
   +#2'h'#3'Top'#2#11#5'Width'#3'!'#2#7'Caption'#6#7' First '#12'ClientHeight'#2
-  +'I'#11'ClientWidth'#3#29#2#8'TabOrder'#2#0#0#6'TLabel'#7'Label74'#4'Left'#2
+  +'W'#11'ClientWidth'#3#29#2#8'TabOrder'#2#0#0#6'TLabel'#7'Label74'#4'Left'#2
   +#14#6'Height'#2#16#3'Top'#2'2'#5'Width'#2'S'#7'Caption'#6#14'Save county to'
   +#11'ParentColor'#8#0#0#6'TLabel'#7'Label75'#4'Left'#3#254#0#6'Height'#2#16#3
   +'Top'#2'2'#5'Width'#2#26#7'Caption'#6#5'field'#11'ParentColor'#8#0#0#9'TComb'
@@ -1164,14 +1164,14 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'.EnlargeVertical'#7#24'crsHomogenousChildResize'#28'ChildSizing.ShrinkHoriz'
   +'ontal'#7#14'crsScaleChilds'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChi'
   +'lds'#18'ChildSizing.Layout'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSiz'
-  +'ing.ControlsPerLine'#2#1#12'ClientHeight'#2')'#11'ClientWidth'#3#180#0#13'I'
+  +'ing.ControlsPerLine'#2#1#12'ClientHeight'#2'7'#11'ClientWidth'#3#180#0#13'I'
   +'tems.Strings'#1#6#19'before town address'#6#18'after town address'#0#8'TabO'
   +'rder'#2#2#0#0#9'TComboBox'#14'cmbFirstSaveTo'#4'Left'#2'v'#6'Height'#2#27#3
   +'Top'#2'.'#5'Width'#2'x'#10'ItemHeight'#2#0#9'ItemIndex'#2#0#13'Items.String'
   +'s'#1#6#6'county'#6#3'QTH'#6#5'award'#6#5'state'#0#5'Style'#7#14'csDropDownL'
   +'ist'#8'TabOrder'#2#3#4'Text'#6#6'county'#0#0#0#9'TGroupBox'#10'GroupBox26'#4
   +'Left'#2#6#6'Height'#2'h'#3'Top'#2'{'#5'Width'#3'!'#2#7'Caption'#6#8' Second'
-  +' '#12'ClientHeight'#2'I'#11'ClientWidth'#3#29#2#8'TabOrder'#2#1#0#6'TLabel'
+  +' '#12'ClientHeight'#2'W'#11'ClientWidth'#3#29#2#8'TabOrder'#2#1#0#6'TLabel'
   +#7'Label76'#4'Left'#2#14#6'Height'#2#16#3'Top'#2'2'#5'Width'#2'S'#7'Caption'
   +#6#14'Save county to'#11'ParentColor'#8#0#0#6'TLabel'#7'Label77'#4'Left'#3
   +#254#0#6'Height'#2#16#3'Top'#2'2'#5'Width'#2#26#7'Caption'#6#5'field'#11'Par'
@@ -1186,14 +1186,14 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'usChildResize'#27'ChildSizing.EnlargeVertical'#7#24'crsHomogenousChildResiz'
   +'e'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChilds'#26'ChildSizing.Shr'
   +'inkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Layout'#7#29'cclLeftToRigh'
-  +'tThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2','
+  +'tThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2':'
   +#11'ClientWidth'#3#180#0#13'Items.Strings'#1#6#19'before town address'#6#18
   +'after town address'#0#8'TabOrder'#2#2#0#0#9'TComboBox'#15'cmbSecondSaveTo'#4
   +'Left'#2'v'#6'Height'#2#27#3'Top'#2'.'#5'Width'#2'x'#10'ItemHeight'#2#0#9'It'
   +'emIndex'#2#0#13'Items.Strings'#1#6#6'county'#6#3'QTH'#6#5'award'#6#5'state'
   +#0#5'Style'#7#14'csDropDownList'#8'TabOrder'#2#3#4'Text'#6#6'county'#0#0#0#9
   +'TGroupBox'#10'GroupBox27'#4'Left'#2#6#6'Height'#2'h'#3'Top'#3#235#0#5'Width'
-  +#3'!'#2#7'Caption'#6#7' Third '#12'ClientHeight'#2'I'#11'ClientWidth'#3#29#2
+  +#3'!'#2#7'Caption'#6#7' Third '#12'ClientHeight'#2'W'#11'ClientWidth'#3#29#2
   +#8'TabOrder'#2#2#0#6'TLabel'#7'Label78'#4'Left'#2#14#6'Height'#2#16#3'Top'#2
   +'2'#5'Width'#2'S'#7'Caption'#6#14'Save county to'#11'ParentColor'#8#0#0#6'TL'
   +'abel'#7'Label79'#4'Left'#3#254#0#6'Height'#2#16#3'Top'#2'2'#5'Width'#2#26#7
@@ -1209,7 +1209,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'crsHomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChi'
   +'lds'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Lay'
   +'out'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1
-  +#12'ClientHeight'#2')'#11'ClientWidth'#3#180#0#13'Items.Strings'#1#6#19'befo'
+  +#12'ClientHeight'#2'7'#11'ClientWidth'#3#180#0#13'Items.Strings'#1#6#19'befo'
   +'re town address'#6#18'after town address'#0#8'TabOrder'#2#2#0#0#9'TComboBox'
   +#14'cmbThirdSaveTo'#4'Left'#2'v'#6'Height'#2#27#3'Top'#2','#5'Width'#2'x'#10
   +'ItemHeight'#2#0#9'ItemIndex'#2#0#13'Items.Strings'#1#6#6'county'#6#3'QTH'#6
@@ -1225,7 +1225,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ption'#6'SUse LoTW and eQSL confirmed countries for New country or New band'
   +' country etc. info'#8'TabOrder'#2#1#0#0#9'TGroupBox'#10'GroupBox28'#4'Left'
   +#2#15#6'Height'#2'H'#3'Top'#2#6#5'Width'#3#1#2#7'Caption'#6'& Data for acces'
-  +'s to ARRL LoTW website '#12'ClientHeight'#2')'#11'ClientWidth'#3#253#1#8'Ta'
+  +'s to ARRL LoTW website '#12'ClientHeight'#2'7'#11'ClientWidth'#3#253#1#8'Ta'
   +'bOrder'#2#2#0#6'TLabel'#7'Label80'#4'Left'#2#14#6'Height'#2#16#3'Top'#2#15#5
   +'Width'#2'@'#7'Caption'#6#10'User name:'#11'ParentColor'#8#0#0#6'TLabel'#7'L'
   +'abel81'#4'Left'#3#254#0#6'Height'#2#16#3'Top'#2#15#5'Width'#2'<'#7'Caption'
@@ -1243,7 +1243,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'lors'#16'cbExtendedColors'#14'cbSystemColors'#13'cbPrettyNames'#0#10'ItemHe'
   +'ight'#2#0#8'TabOrder'#2#5#0#0#9'TGroupBox'#10'GroupBox36'#4'Left'#2#15#6'He'
   +'ight'#2'H'#3'Top'#2'['#5'Width'#3#1#2#7'Caption'#6'! Data for access to eQS'
-  +'L website '#12'ClientHeight'#2')'#11'ClientWidth'#3#253#1#8'TabOrder'#2#6#0
+  +'L website '#12'ClientHeight'#2'7'#11'ClientWidth'#3#253#1#8'TabOrder'#2#6#0
   +#6'TLabel'#8'Label108'#4'Left'#2#14#6'Height'#2#16#3'Top'#2#15#5'Width'#2'@'
   +#7'Caption'#6#10'User name:'#11'ParentColor'#8#0#0#6'TLabel'#8'Label109'#4'L'
   +'eft'#3#254#0#6'Height'#2#16#3'Top'#2#15#5'Width'#2'<'#7'Caption'#6#10'Passw'
@@ -1309,78 +1309,78 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'rder'#2#3#0#0#0#9'TTabSheet'#10'tabFldigi1'#7'Caption'#6#16'fldigi interfac'
   +'e'#12'ClientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#10'GroupBo'
   +'x31'#4'Left'#2#12#6'Height'#3#144#1#3'Top'#2#6#5'Width'#3'K'#2#7'Caption'#6
-  +#25' Reading data from fldigi'#12'ClientHeight'#3'q'#1#11'ClientWidth'#3'G'#2
-  +#8'TabOrder'#2#0#0#6'TLabel'#7'Label91'#4'Left'#3#224#0#6'Height'#2#16#3'Top'
-  +#3#21#1#5'Width'#3#185#0#7'Caption'#6'"Try to load QSO from fldigi every '#11
-  +'ParentColor'#8#0#0#6'TLabel'#7'Label92'#4'Left'#3#1#2#6'Height'#2#16#3'Top'
-  +#3#21#1#5'Width'#2'0'#7'Caption'#6#7'seconds'#11'ParentColor'#8#0#0#9'TSpinE'
-  +'dit'#17'edtLoadFromFldigi'#4'Left'#3#193#1#6'Height'#2#21#3'Top'#3#13#1#5'W'
-  +'idth'#2'2'#8'MinValue'#2#1#8'TabOrder'#2#0#5'Value'#2#2#0#0#11'TRadioGroup'
-  +#10'rgFreqFrom'#4'Left'#2#25#6'Height'#2'r'#3'Top'#3#133#0#5'Width'#3#209#0#8
-  +'AutoFill'#9#7'Caption'#6#16' Frequency from '#28'ChildSizing.LeftRightSpaci'
-  +'ng'#2#6#28'ChildSizing.TopBottomSpacing'#2#6#29'ChildSizing.EnlargeHorizont'
-  +'al'#7#24'crsHomogenousChildResize'#27'ChildSizing.EnlargeVertical'#7#24'crs'
-  +'HomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChilds'
-  +#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Layout'#7
-  +#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'Cl'
-  +'ientHeight'#2'S'#11'ClientWidth'#3#205#0#9'ItemIndex'#2#0#13'Items.Strings'
-  +#1#6#6'CQRLOG'#6#6'fldigi'#6#7'default'#0#8'TabOrder'#2#1#0#0#5'TEdit'#14'ed'
-  +'tDefaultFreq'#4'Left'#3#137#0#6'Height'#2#21#3'Top'#3#209#0#5'Width'#2'Q'#8
-  +'TabOrder'#2#2#0#0#11'TRadioGroup'#10'rgModeFrom'#4'Left'#3#1#1#6'Height'#2
-  +'p'#3'Top'#3#135#0#5'Width'#3#224#0#8'AutoFill'#9#7'Caption'#6#11' Mode from'
-  +' '#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildSizing.TopBottomSpacing'#2#6
-  +#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomogenousChildResize'#27'ChildSi'
-  +'zing.EnlargeVertical'#7#24'crsHomogenousChildResize'#28'ChildSizing.ShrinkH'
-  +'orizontal'#7#14'crsScaleChilds'#26'ChildSizing.ShrinkVertical'#7#14'crsScal'
-  +'eChilds'#18'ChildSizing.Layout'#7#29'cclLeftToRightThenTopToBottom'#27'Chil'
-  +'dSizing.ControlsPerLine'#2#1#12'ClientHeight'#2'Q'#11'ClientWidth'#3#220#0
-  +#13'Items.Strings'#1#6#6'CQRLOG'#6#6'fldigi'#6#7'default'#0#8'TabOrder'#2#3#0
-  +#0#9'TComboBox'#14'cmbDefaultMode'#4'Left'#3'Y'#1#6'Height'#2#27#3'Top'#3#209
-  +#0#5'Width'#3#128#0#8'AutoSize'#8#10'ItemHeight'#2#0#8'TabOrder'#2#4#0#0#11
-  +'TRadioGroup'#9'rgRSTFrom'#4'Left'#2#25#6'Height'#2'i'#3'Top'#3#255#0#5'Widt'
-  +'h'#3#185#0#8'AutoFill'#9#7'Caption'#6#10' RST from '#28'ChildSizing.LeftRig'
-  +'htSpacing'#2#6#28'ChildSizing.TopBottomSpacing'#2#6#29'ChildSizing.EnlargeH'
-  +'orizontal'#7#24'crsHomogenousChildResize'#27'ChildSizing.EnlargeVertical'#7
-  +#24'crsHomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScale'
-  +'Childs'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.'
-  +'Layout'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPerLine'
-  +#2#1#12'ClientHeight'#2'J'#11'ClientWidth'#3#181#0#13'Items.Strings'#1#6#6'f'
-  ,'ldigi'#6#7'default'#0#8'TabOrder'#2#5#0#0#5'TEdit'#13'edtDefaultRST'#4'Left'
-  +#2'q'#6'Height'#2#21#3'Top'#3'='#1#5'Width'#2'Q'#8'TabOrder'#2#6#0#0#9'TGrou'
-  +'pBox'#10'GroupBox34'#4'Left'#2#25#6'Height'#2'p'#3'Top'#2#5#5'Width'#3#31#2
-  +#12'ClientHeight'#2'l'#11'ClientWidth'#3#27#2#8'TabOrder'#2#7#0#6'TLabel'#7
-  +'Label95'#4'Left'#2#30#6'Height'#2#16#3'Top'#2'('#5'Width'#2'N'#7'Caption'#6
-  +#15'Path to fldigi:'#11'ParentColor'#8#0#0#9'TCheckBox'#12'chkRunFldigi'#4'L'
-  +'eft'#2#9#6'Height'#2#26#3'Top'#2#14#5'Width'#3#10#1#7'Caption'#6'(Run fldig'
-  +'i after entering to Remote mode'#8'TabOrder'#2#0#0#0#5'TEdit'#13'edtFldigiP'
-  +'ath'#4'Left'#2#30#6'Height'#2#21#3'Top'#2'@'#5'Width'#3#160#1#8'TabOrder'#2
-  +#1#0#0#7'TButton'#13'btnFldigiPath'#4'Left'#3#198#1#6'Height'#2#25#3'Top'#2
-  +'B'#5'Width'#2'K'#7'Caption'#6#6'Browse'#7'OnClick'#7#18'btnFldigiPathClick'
-  +#8'TabOrder'#2#2#0#0#0#0#0#9'TTabSheet'#13'tabAutoBackup'#7'Caption'#6#11'Au'
-  +'to backup'#12'ClientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#9'TGroupBox'#10
-  +'GroupBox32'#4'Left'#2#5#6'Height'#3#250#0#3'Top'#2#6#5'Width'#3'`'#2#12'Cli'
-  +'entHeight'#3#246#0#11'ClientWidth'#3'\'#2#8'TabOrder'#2#0#0#6'TLabel'#7'Lab'
-  +'el93'#4'Left'#2#14#6'Height'#2#17#3'Top'#2'0'#5'Width'#2'a'#7'Caption'#6#15
-  +'Save backup to:'#11'ParentColor'#8#0#0#9'TCheckBox'#15'chkEnableBackup'#4'L'
-  +'eft'#2#14#6'Height'#2#21#3'Top'#2#7#5'Width'#3#4#1#7'Caption'#6'$Enable aut'
-  +'obackup after program ends'#8'TabOrder'#2#0#0#0#5'TEdit'#13'edtBackupPath'#4
-  +'Left'#2#14#6'Height'#2#24#3'Top'#2'G'#5'Width'#3#240#1#8'TabOrder'#2#1#0#0#7
-  +'TButton'#15'btnBrowseBackup'#4'Left'#3#6#2#6'Height'#2#25#3'Top'#2'I'#5'Wid'
-  +'th'#2'K'#7'Caption'#6#6'Browse'#7'OnClick'#7#20'btnBrowseBackupClick'#8'Tab'
-  +'Order'#2#2#0#0#9'TCheckBox'#17'chkCompressBackup'#4'Left'#2#14#6'Height'#2
-  +#21#3'Top'#3#208#0#5'Width'#3#197#0#7'Caption'#6#27'Compress backup with tar'
-  +'.gz'#8'TabOrder'#2#3#0#0#11'TRadioGroup'#12'rgBackupType'#4'Left'#2#14#6'He'
-  +'ight'#2'X'#3'Top'#2'p'#5'Width'#3#240#1#8'AutoFill'#9#7'Caption'#6#13' Back'
-  +'up file '#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildSizing.TopBottomSpac'
-  +'ing'#2#6#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomogenousChildResize'#27
+  +#25' Reading data from fldigi'#12'ClientHeight'#3#127#1#11'ClientWidth'#3'G'
+  +#2#8'TabOrder'#2#0#0#6'TLabel'#7'Label91'#4'Left'#3#224#0#6'Height'#2#16#3'T'
+  +'op'#3#21#1#5'Width'#3#185#0#7'Caption'#6'"Try to load QSO from fldigi every'
+  +' '#11'ParentColor'#8#0#0#6'TLabel'#7'Label92'#4'Left'#3#1#2#6'Height'#2#16#3
+  +'Top'#3#21#1#5'Width'#2'0'#7'Caption'#6#7'seconds'#11'ParentColor'#8#0#0#9'T'
+  +'SpinEdit'#17'edtLoadFromFldigi'#4'Left'#3#193#1#6'Height'#2#21#3'Top'#3#13#1
+  +#5'Width'#2'2'#8'MinValue'#2#1#8'TabOrder'#2#0#5'Value'#2#2#0#0#11'TRadioGro'
+  +'up'#10'rgFreqFrom'#4'Left'#2#25#6'Height'#2'r'#3'Top'#3#133#0#5'Width'#3#209
+  +#0#8'AutoFill'#9#7'Caption'#6#16' Frequency from '#28'ChildSizing.LeftRightS'
+  +'pacing'#2#6#28'ChildSizing.TopBottomSpacing'#2#6#29'ChildSizing.EnlargeHori'
+  +'zontal'#7#24'crsHomogenousChildResize'#27'ChildSizing.EnlargeVertical'#7#24
+  +'crsHomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChi'
+  +'lds'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Lay'
+  +'out'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1
+  +#12'ClientHeight'#2'a'#11'ClientWidth'#3#205#0#9'ItemIndex'#2#0#13'Items.Str'
+  +'ings'#1#6#6'CQRLOG'#6#6'fldigi'#6#7'default'#0#8'TabOrder'#2#1#0#0#5'TEdit'
+  +#14'edtDefaultFreq'#4'Left'#3#137#0#6'Height'#2#21#3'Top'#3#209#0#5'Width'#2
+  +'Q'#8'TabOrder'#2#2#0#0#11'TRadioGroup'#10'rgModeFrom'#4'Left'#3#1#1#6'Heigh'
+  +'t'#2'p'#3'Top'#3#135#0#5'Width'#3#224#0#8'AutoFill'#9#7'Caption'#6#11' Mode'
+  +' from '#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildSizing.TopBottomSpacin'
+  +'g'#2#6#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomogenousChildResize'#27
   +'ChildSizing.EnlargeVertical'#7#24'crsHomogenousChildResize'#28'ChildSizing.'
   +'ShrinkHorizontal'#7#14'crsScaleChilds'#26'ChildSizing.ShrinkVertical'#7#14
   +'crsScaleChilds'#18'ChildSizing.Layout'#7#29'cclLeftToRightThenTopToBottom'
-  +#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2'G'#11'ClientWidth'#3
-  +#236#1#13'Items.Strings'#1#6'<callsign, date and time (yourcall__yyyy-mm-dd_'
-  +'_hh-mm-ss.adi)'#6'$callsign only (yourcall__backup.adi)'#0#8'TabOrder'#2#4#0
-  +#0#0#0#9'TTabSheet'#13'tabExtViewers'#7'Caption'#6#16'External viewers'#12'C'
-  +'lientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#6'TLabel'#7'Label99'#4'Left'#2
+  +#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2'_'#11'ClientWidth'#3
+  +#220#0#13'Items.Strings'#1#6#6'CQRLOG'#6#6'fldigi'#6#7'default'#0#8'TabOrder'
+  +#2#3#0#0#9'TComboBox'#14'cmbDefaultMode'#4'Left'#3'Y'#1#6'Height'#2#27#3'Top'
+  +#3#209#0#5'Width'#3#128#0#8'AutoSize'#8#10'ItemHeight'#2#0#8'TabOrder'#2#4#0
+  +#0#11'TRadioGroup'#9'rgRSTFrom'#4'Left'#2#25#6'Height'#2'i'#3'Top'#3#255#0#5
+  +'Width'#3#185#0#8'AutoFill'#9#7'Caption'#6#10' RST from '#28'ChildSizing.Lef'
+  +'tRightSpacing'#2#6#28'ChildSizing.TopBottomSpacing'#2#6#29'ChildSizing.Enla'
+  +'rgeHorizontal'#7#24'crsHomogenousChildResize'#27'ChildSizing.EnlargeVertica'
+  +'l'#7#24'crsHomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14'crs'
+  +'ScaleChilds'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSi'
+  +'zing.Layout'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.ControlsPer'
+  +'Line'#2#1#12'ClientHeight'#2'X'#11'ClientWidth'#3#181#0#13'Items.Strings'#1
+  ,#6#6'fldigi'#6#7'default'#0#8'TabOrder'#2#5#0#0#5'TEdit'#13'edtDefaultRST'#4
+  +'Left'#2'q'#6'Height'#2#21#3'Top'#3'='#1#5'Width'#2'Q'#8'TabOrder'#2#6#0#0#9
+  +'TGroupBox'#10'GroupBox34'#4'Left'#2#25#6'Height'#2'p'#3'Top'#2#5#5'Width'#3
+  +#31#2#12'ClientHeight'#2'l'#11'ClientWidth'#3#27#2#8'TabOrder'#2#7#0#6'TLabe'
+  +'l'#7'Label95'#4'Left'#2#30#6'Height'#2#16#3'Top'#2'('#5'Width'#2'N'#7'Capti'
+  +'on'#6#15'Path to fldigi:'#11'ParentColor'#8#0#0#9'TCheckBox'#12'chkRunFldig'
+  +'i'#4'Left'#2#9#6'Height'#2#26#3'Top'#2#14#5'Width'#3#10#1#7'Caption'#6'(Run'
+  +' fldigi after entering to Remote mode'#8'TabOrder'#2#0#0#0#5'TEdit'#13'edtF'
+  +'ldigiPath'#4'Left'#2#30#6'Height'#2#21#3'Top'#2'@'#5'Width'#3#160#1#8'TabOr'
+  +'der'#2#1#0#0#7'TButton'#13'btnFldigiPath'#4'Left'#3#198#1#6'Height'#2#25#3
+  +'Top'#2'B'#5'Width'#2'K'#7'Caption'#6#6'Browse'#7'OnClick'#7#18'btnFldigiPat'
+  +'hClick'#8'TabOrder'#2#2#0#0#0#0#0#9'TTabSheet'#13'tabAutoBackup'#7'Caption'
+  +#6#11'Auto backup'#12'ClientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#9'TGroup'
+  +'Box'#10'GroupBox32'#4'Left'#2#5#6'Height'#3#250#0#3'Top'#2#6#5'Width'#3'`'#2
+  +#12'ClientHeight'#3#246#0#11'ClientWidth'#3'\'#2#8'TabOrder'#2#0#0#6'TLabel'
+  +#7'Label93'#4'Left'#2#14#6'Height'#2#17#3'Top'#2'0'#5'Width'#2'a'#7'Caption'
+  +#6#15'Save backup to:'#11'ParentColor'#8#0#0#9'TCheckBox'#15'chkEnableBackup'
+  +#4'Left'#2#14#6'Height'#2#21#3'Top'#2#7#5'Width'#3#4#1#7'Caption'#6'$Enable '
+  +'autobackup after program ends'#8'TabOrder'#2#0#0#0#5'TEdit'#13'edtBackupPat'
+  +'h'#4'Left'#2#14#6'Height'#2#24#3'Top'#2'G'#5'Width'#3#240#1#8'TabOrder'#2#1
+  +#0#0#7'TButton'#15'btnBrowseBackup'#4'Left'#3#6#2#6'Height'#2#25#3'Top'#2'I'
+  +#5'Width'#2'K'#7'Caption'#6#6'Browse'#7'OnClick'#7#20'btnBrowseBackupClick'#8
+  +'TabOrder'#2#2#0#0#9'TCheckBox'#17'chkCompressBackup'#4'Left'#2#14#6'Height'
+  +#2#21#3'Top'#3#208#0#5'Width'#3#197#0#7'Caption'#6#27'Compress backup with t'
+  +'ar.gz'#8'TabOrder'#2#3#0#0#11'TRadioGroup'#12'rgBackupType'#4'Left'#2#14#6
+  +'Height'#2'X'#3'Top'#2'p'#5'Width'#3#240#1#8'AutoFill'#9#7'Caption'#6#13' Ba'
+  +'ckup file '#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildSizing.TopBottomSp'
+  +'acing'#2#6#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomogenousChildResize'
+  +#27'ChildSizing.EnlargeVertical'#7#24'crsHomogenousChildResize'#28'ChildSizi'
+  +'ng.ShrinkHorizontal'#7#14'crsScaleChilds'#26'ChildSizing.ShrinkVertical'#7
+  +#14'crsScaleChilds'#18'ChildSizing.Layout'#7#29'cclLeftToRightThenTopToBotto'
+  +'m'#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2'G'#11'ClientWidth'
+  +#3#236#1#13'Items.Strings'#1#6'<callsign, date and time (yourcall__yyyy-mm-d'
+  +'d__hh-mm-ss.adi)'#6'$callsign only (yourcall__backup.adi)'#0#8'TabOrder'#2#4
+  +#0#0#0#0#9'TTabSheet'#13'tabExtViewers'#7'Caption'#6#16'External viewers'#12
+  +'ClientHeight'#3#17#2#11'ClientWidth'#3'w'#2#0#6'TLabel'#7'Label99'#4'Left'#2
   +#23#6'Height'#2#17#3'Top'#2#30#5'Width'#2'`'#7'Caption'#6#18'Text files(*.tx'
   +'t):'#11'ParentColor'#8#0#0#6'TLabel'#8'Label100'#4'Left'#2#23#6'Height'#2#17
   +#3'Top'#2'V'#5'Width'#2'c'#7'Caption'#6#18'PDF files (*.pdf):'#11'ParentColo'

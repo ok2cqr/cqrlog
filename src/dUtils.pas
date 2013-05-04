@@ -782,7 +782,7 @@ begin
       Break
     end
   end;
-  if Pos(mode+',',cqrini.ReadString('Modes','Digi','')) > 0 then
+  if Pos(mode+',',cqrini.ReadString('Modes','Digi','')+',') > 0 then
     Result := True
 end;
 
