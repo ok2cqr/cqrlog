@@ -7,6 +7,7 @@ Legend:
 1.5.6
   - fixed "An invalid integer value" error during label export
   - import of QSO with custom digi mode didn't worked if the list of modes didn't ended with comma (,) - fixed
+  # removed mode from search criteria to confirm QSO via LoTW
 
 1.5.5
   + experimental Rotor support (Darek, SP2MKI)

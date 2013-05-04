@@ -912,7 +912,8 @@ begin
             dmData.Q.Close;
             dmData.Q.SQL.Text := 'select time_on,lotw_qslr,waz,itu,iota,loc,state,county,id_cqrlog_main from cqrlog_main ' +
                                  'where (qsodate ='+QuotedStr(qsodate)+') '+
-                                 'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ')'+
+                                 'and (band = ' + QuotedStr(band) + ')'+
+//                                 'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ')'+
                                  'and (callsign = ' + QuotedStr(call) + ')';
             if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
             if dmData.trQ.Active then dmData.trQ.Rollback;
