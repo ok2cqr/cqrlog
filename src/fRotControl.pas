@@ -22,9 +22,7 @@ type
     procedure ButtonShortPClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
-    procedure rbRotor1Change(Sender: TObject);
     procedure rbRotor1Click(Sender: TObject);
-    procedure rbRotor2Change(Sender: TObject);
     procedure rbRotor2Click(Sender: TObject);
     procedure tmrRotorTimer(Sender: TObject);
   private
@@ -43,7 +41,7 @@ implementation
 
 { TfrmRotControl }
 
-uses dUtils;
+uses dUtils, dData;
 
 procedure TfrmRotControl.FormShow(Sender: TObject);
 begin
@@ -52,19 +50,9 @@ begin
   rbRotor2.Caption := cqrini.ReadString('ROT2','Desc','Rotor 2')
 end;
 
-procedure TfrmRotControl.rbRotor1Change(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmRotControl.rbRotor1Click(Sender: TObject);
 begin
   InicializeRot
-end;
-
-procedure TfrmRotControl.rbRotor2Change(Sender: TObject);
-begin
-
 end;
 
 procedure TfrmRotControl.rbRotor2Click(Sender: TObject);
@@ -109,8 +97,8 @@ begin
     n := '2';
 
   rotor := TRotControl.Create;
-
-  rotor.DebugMode := True;
+  if dmData.DebugLevel>0 then
+    rotor.DebugMode := True;
   if not TryStrToInt(cqrini.ReadString('ROT'+n,'model',''),id) then
     rotor.RotId := 1
   else

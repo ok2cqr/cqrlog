@@ -605,7 +605,7 @@ begin
   if trQ.Active then
     trQ.Rollback;
   Q.SQL.Text := 'use ' + fDBName;
-  Writeln(Q.SQL.Text);
+  if fDebugLevel>=1 then Writeln(Q.SQL.Text);
   trQ.StartTransaction;
   Q.ExecSQL;
   trQ.Commit;
@@ -614,7 +614,7 @@ begin
     dmDXCluster.trQ.Rollback;
   dmDXCluster.Q.Close;
   dmDXCluster.Q.SQL.Text := 'use ' + fDBName;
-  Writeln(dmDXCluster.Q.SQL.Text);
+  if fDebugLevel>=1 then Writeln(dmDXCluster.Q.SQL.Text);
   dmDXCluster.trQ.StartTransaction;
   dmDXCluster.Q.ExecSQL;
   dmDXCluster.trQ.Commit;
@@ -711,7 +711,7 @@ begin
     Q.Close;
     l.Free
   end;
-  Writeln('Saving ini file to database')
+  if fDebugLevel>=1 then Writeln('Saving ini file to database')
 end;
 
 procedure TdmData.CloseDatabases;
@@ -790,7 +790,7 @@ begin
   res := FindFirst(fDataDir + '*.pid', faAnyFile, SearchRec);
   while Res = 0 do
   begin
-    Writeln(fDataDir + SearchRec.Name);
+    if fDebugLevel>=1 then Writeln(fDataDir + SearchRec.Name);
     if FileExists(fDataDir + SearchRec.Name) then
     begin
       pidfile := fDataDir + SearchRec.Name;
@@ -880,9 +880,12 @@ begin
 
   if not FileExistsUTF8(fHomeDir+'ctyfiles'+PathDelim+'AreaOK1RR.tbl') then
   begin
-    Writeln('');
-    Writeln('Ctyfiles dir: ',ExpandFileNameUTF8(s));
-    Writeln('Local ctyfiles dir: ',d);
+    if fDebugLevel>=1 then
+    begin
+      Writeln('');
+      Writeln('Ctyfiles dir: ',ExpandFileNameUTF8(s));
+      Writeln('Local ctyfiles dir: ',d)
+    end;
 
     CopyFile(s+'AreaOK1RR.tbl',d+'AreaOK1RR.tbl',True);
     CopyFile(s+'CallResolution.tbl',d+'CallResolution.tbl',True);
@@ -1028,8 +1031,6 @@ begin
   cqrini       := nil;
   IsSFilter    := False;
 
-  writeln('ParamCount = ',ParamCount);
-
   fDebugLevel:=0;
   if Paramcount>1 then
   begin
@@ -1051,13 +1052,10 @@ begin
     end
   end;
 
-  for i := 1 to ParamCount do
-      writeln('ParamStr(',i,') = ',ParamStr(i));
+  Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
 
-  fDebugLevel  := 2;
   fDLLSSLName  := '';
   fDLLUtilName := '';
-
 
   lib :=  FindLib('/usr/lib64/','libssl.so*');
   if (lib = '') then
@@ -1170,7 +1168,7 @@ begin
 
   if not FileExistsUTF8(fDataDir+'my.cnf') then
   begin
-    Writeln(fDataDir+'my.cnf');
+    if fDebugLevel>=1 then Writeln(fDataDir+'my.cnf');
     AssignFile(f,fDataDir+'my.cnf');
     Rewrite(f);
     Writeln(f,' ');
@@ -1180,16 +1178,19 @@ begin
   //Mysql still may be running, so we must close it first
   KillMySQL;
 
-  Writeln('*');
-  Writeln('User home directory:    ',fUsrHomeDir);
-  Writeln('Program home directory: ',fHomeDir);
-  Writeln('Data directory:         ',fDataDir);
-  Writeln('Memebers directory:     ',fMembersDir);
-  Writeln('ZIP code directory:     ',fZipCodeDir);
-  Writeln('Binary dir:             ',ExtractFilePath(Paramstr(0)));
-  Writeln('Share dir:              ',fShareDir);
-  Writeln('TConnection to MySQL:   ',FloatToStr(fMySQLVersion));
-  Writeln('*');
+  if fDebugLevel>=1 then
+  begin
+    Writeln('*');
+    Writeln('User home directory:    ',fUsrHomeDir);
+    Writeln('Program home directory: ',fHomeDir);
+    Writeln('Data directory:         ',fDataDir);
+    Writeln('Memebers directory:     ',fMembersDir);
+    Writeln('ZIP code directory:     ',fZipCodeDir);
+    Writeln('Binary dir:             ',ExtractFilePath(Paramstr(0)));
+    Writeln('Share dir:              ',fShareDir);
+    Writeln('TConnection to MySQL:   ',FloatToStr(fMySQLVersion));
+    Writeln('*')
+  end;
 
   if FileExistsUTF8('/usr/bin/mysqld') then
     mysqld := '/usr/bin/mysqld';
@@ -1235,7 +1236,7 @@ begin
                               ' --socket='+fHomeDir+'database/sock'+
                               ' --skip-grant-tables --port=64000 --key_buffer_size=32M'+
                               ' --key_buffer_size=4096K';
-  WriteLn(MySQLProcess.CommandLine);
+  if fDebugLevel>=1 then WriteLn(MySQLProcess.CommandLine);
   MySQLProcess.Execute;
   fContestMode := False;
 
@@ -1388,7 +1389,7 @@ begin
       pq.Transaction := tq;
       pq.SQL.Text := 'select * from '+fDBName+'.db_version';
       tq.StartTransaction;
-      Writeln('DBPing - ',pq.SQL.Text);
+      if fDebugLevel>=1 then Writeln('DBPing - ',pq.SQL.Text);
       pq.Open;
       pq.Close;
       tq.Rollback;
@@ -1398,7 +1399,7 @@ begin
       pq.Transaction := tq;
       pq.SQL.Text := 'select * from '+fDBName+'.db_version';
       tq.StartTransaction;
-      Writeln('DBPing - ',pq.SQL.Text);
+      if fDebugLevel>=1 then Writeln('DBPing - ',pq.SQL.Text);
       pq.Open;
       pq.Close;
       tq.Rollback
@@ -2138,7 +2139,7 @@ function TdmData.GetIOTAForDXCC(call,pref : String;cmbIOTA : TComboBox; date : T
 var
   tmp  : String = '';
 begin
-  Writeln('GetIOTAForDXCC');
+  if fDebugLevel>=1 then Writeln('GetIOTAForDXCC');
   Result := False;
   tmp := cmbIOTA.Text;
   cmbIOTA.Items.Clear;
@@ -2315,7 +2316,7 @@ begin
   if (Zip1.StoreField <> '') and (Zip1.Name<>'') and (Pos(pfx+';',Zip1.DXCC) > 0) then
   begin
     ZipCode  := dmUtils.ExtractZipCode(qth,Zip1.ZipPos);
-    Writeln('ZipCode: ',ZipCode);
+    if fDebugLevel>=1 then Writeln('ZipCode: ',ZipCode);
     if trQ.Active then trQ.Rollback;
     Q.Close;
     Q.SQL.Text := 'SELECT county from zipcode1 where zip = '+QuotedStr(ZipCode);

@@ -101,7 +101,7 @@ implementation
 constructor TRigControl.Create;
 begin
   RigCommand := TStringList.Create;
-  fDebugMode   := True;
+  fDebugMode   := DebugMode;
   if DebugMode then Writeln('In create');
   fRigCtldHost := 'localhost';
   fRigCtldPort := 4532;
@@ -480,7 +480,7 @@ begin
       sleep(100);
       cmd := RigCommand.Strings[i]+LineEnding;
       rcvdFreqMode.SendMessage(cmd);
-      Writeln('Sending: '+cmd)
+      if DebugMode then Writeln('Sending: '+cmd)
     end;
     RigCommand.Clear
   end
@@ -523,25 +523,25 @@ var
   excode : Integer=0;
 begin
   inherited;
-  Writeln(1);
+  if DebugMode then Writeln(1);
   if fRunRigCtld then
   begin
     if rigProcess.Running then
     begin
-      Writeln('1a');
+      if DebugMode then Writeln('1a');
       rigProcess.Terminate(excode)
     end
   end;
-  Writeln(2);
+  if DebugMode then Writeln(2);
   tmrRigPoll.Enabled := False;
-  Writeln(3);
+  if DebugMode then Writeln(3);
   rcvdFreqMode.Disconnect();
-  Writeln(4);
+  if DebugMode then Writeln(4);
   FreeAndNil(rcvdFreqMode);
-  Writeln(5);
+  if DebugMode then Writeln(5);
   FreeAndNil(rigProcess);
   FreeAndNil(RigCommand);
-  Writeln(6);
+  if DebugMode then Writeln(6)
 end;
 
 

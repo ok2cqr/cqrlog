@@ -1307,13 +1307,13 @@ end;
 function TLTcp.Connect(const Address: string; const APort: Word): Boolean;
 begin
   Result := inherited Connect(Address, aPort);
-  Writeln('Result0:',BoolToStr(Result,'Y','N'));
+  //Writeln('Result0:',BoolToStr(Result,'Y','N'));
   if Assigned(FRootSock) then
     Disconnect(True);
     
   FRootSock := InitSocket(SocketClass.Create);
   Result := FRootSock.Connect(Address, aPort);
-  Writeln('Result1:',BoolToStr(Result,'Y','N'));
+  //Writeln('Result1:',BoolToStr(Result,'Y','N'));
   if Result then begin
     Inc(FCount);
     FIterator := FRootSock;
@@ -1322,7 +1322,7 @@ begin
     FreeAndNil(FRootSock); // one possible use, since we're not in eventer yet
     FIterator := nil;
   end;
-  Writeln('Result2:',BoolToStr(Result,'Y','N'));
+  //Writeln('Result2:',BoolToStr(Result,'Y','N'));
 end;
 
 function TLTcp.Listen(const APort: Word; const AIntf: string = LADDR_ANY): Boolean;

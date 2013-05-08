@@ -354,7 +354,7 @@ var
 begin
   if dmData.DBName = '' then
     exit;
-  Writeln('SaveForm: ',aForm.Name);
+  if dmData.DebugLevel>=1 then Writeln('SaveForm: ',aForm.Name);
   l   := TStringList.Create;
   try
     for i:= 0 to aForm.ComponentCount - 1 do
@@ -393,7 +393,7 @@ var
   y : Integer;
   D : TDataSource;
 begin
-  Writeln('LoadForm: ',aForm.Name);
+  if dmData.DebugLevel>=1 then Writeln('LoadForm: ',aForm.Name);
   l    := TStringList.Create;
   try
     for i := 0 to aForm.ComponentCount - 1 do
@@ -1378,7 +1378,7 @@ var
   TagBegin, TagEnd, TagLength: integer;
   TagNum : Integer = 0;
 begin
-  Writeln('In StripHTML ...');
+  if dmData.DebugLevel>=1 then Writeln('In StripHTML ...');
   TagBegin := Pos( '<', S);      // search position of first <
   while (TagBegin > 0) do begin  // while there is a < in S
     inc(TagNum);
@@ -2389,7 +2389,7 @@ function TdmUtils.ExtractZipCode(qth : String; Position : Integer) : String;
 var
   i : Integer;
 begin
-  Writeln('Position: ',Position);
+  if dmData.DebugLevel>=1 then Writeln('Position: ',Position);
   Result := '';
   if Position = 0 then
     Result := copy(qth,1,Pos(' ',qth)-1)
@@ -3193,7 +3193,7 @@ begin
   try
     AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
       ' http://www.qrz.com/db/' + GetIDCall(call);
-    Writeln('Command line: ', AProcess.CommandLine);
+    if dmData.DebugLevel>=1 then Writeln('Command line: ', AProcess.CommandLine);
     AProcess.Execute
   finally
     AProcess.Free
@@ -3479,7 +3479,7 @@ begin
       ErrMsg := '('+IntToStr(http.ResultCode)+'):'+http.ResultString
     else begin
       m.LoadFromStream(http.Document);
-      Writeln(m.Text);
+      if dmData.DebugLevel>=1 then Writeln(m.Text);
       //I'd like to parse it as normal XML but it seems XML support in Freepascal
       //2.4.0 is broken :-(
       epos := Pos('<Error>',m.Text);
@@ -3531,7 +3531,7 @@ begin
       ErrMsg := '('+IntToStr(http.ResultCode)+'):'+http.ResultString
     else begin
       m.LoadFromStream(http.Document);
-      Writeln(m.Text);
+      if dmData.DebugLevel>=1 then Writeln(m.Text);
       //I'd like to parse it as normal XML but it seems XML support in Freepascal
       //2.4.0 is broken :-(
       ErrMsg := GetTagValue(m.Text,'<Error>');
@@ -3587,7 +3587,7 @@ begin
       ErrMsg := '('+IntToStr(http.ResultCode)+'):'+http.ResultString
     else begin
       m.LoadFromStream(http.Document);
-      Writeln(m.Text);
+      if dmData.DebugLevel>=1 then Writeln(m.Text);
       if Pos('<error>Session does not exist or expired</error>',m.Text) > 0 then
       begin
         fHamQTHSession := '';
@@ -3639,7 +3639,7 @@ begin
   try
     AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
       ' http://www.hamqth.com/' + GetIDCall(call);
-    Writeln('Command line: ', AProcess.CommandLine);
+    if dmData.DebugLevel>=1 then Writeln('Command line: ', AProcess.CommandLine);
     AProcess.Execute
   finally
     AProcess.Free
