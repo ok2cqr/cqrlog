@@ -648,6 +648,10 @@ var
   qso_in_log  : Boolean = False;
   ErrorCount  : Word = 0;
   l           : TStringList;
+  t_log  : TDateTime;
+  t_lotw : TDateTime;
+  t1,t2  : TDateTime;
+  t3     : Word;
 begin
   if dmData.trQ.Active then
     dmData.trQ.RollBack;
@@ -919,13 +923,22 @@ begin
             if dmData.trQ.Active then dmData.trQ.Rollback;
             dmData.trQ.StartTransaction;
             dmData.Q.Open();
+            dmData.Q.First;
             if dmData.Q.Eof then  qso_in_log := False;
             while not dmData.Q.Eof do
             begin
               qso_in_log := False;
-              time_onx:= copy(time_on,1,2)+':'+copy(time_on,3,2);
-              if dmData.DebugLevel >=1 then Writeln(dmData.Q.Fields[0].AsString+' | '+ time_onx);
-              if copy(dmData.Q.Fields[0].AsString,1,5) = copy(time_onx,1,5) then
+
+              t_log  := EncodeTime(StrToInt(copy(dmData.Q.Fields[0].AsString,1,2)),
+                        StrToInt(copy(dmData.Q.Fields[0].AsString,4,2)),0,0);
+              t_lotw := EncodeTime(StrToInt(copy(time_on,1,2)),
+                        StrToInt(copy(time_on,3,2)),0,0);
+
+              t1 := t_lotw-30/1440;
+              t2 := t_lotw+30/1440;
+
+              if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_lotw),' | ',TimeToStr(t1),'|',TimeToStr(t2));
+              if (t_lotw >=t1) and (t_lotw<=t2) then
               begin
                 if LoTWShowNew and (dmData.Q.Fields[1].AsString <> 'L') then  //this qso is already confirmed
                   LoTWQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
