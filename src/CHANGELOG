@@ -9,6 +9,7 @@ Legend:
   - import of QSO with custom digi mode didn't worked if the list of modes didn't ended with comma (,) - fixed
   # removed mode from search criteria to confirm QSO via LoTW
   # QSO will be confirmed when time difference between QSO and QSO from LoTW is not more than 1 hour
+  # default debug level is set 0, if you want to get more info what cqrlog does, run it with debug=1 or more
 
 1.5.5
   + experimental Rotor support (Darek, SP2MKI)

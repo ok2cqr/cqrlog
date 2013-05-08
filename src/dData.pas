@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil, Dbf,
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
-  mysql55dyn, mysql55conn;
+  mysql55dyn, mysql55conn, CustApp;
 
 const
   MaxCall   = 100000;
@@ -1023,9 +1023,37 @@ var
   i      : Integer;
   c      : TConnectionName;
   MySQLVer : String;
+  param    : String;
 begin
   cqrini       := nil;
   IsSFilter    := False;
+
+  writeln('ParamCount = ',ParamCount);
+
+  fDebugLevel:=0;
+  if Paramcount>1 then
+  begin
+    param := LowerCase(ParamStr(1));
+    if Pos('debug',param) > 0 then
+    begin
+      if Pos('=',param) > 0 then
+      begin
+        if TryStrToInt(copy(param,Pos('=',param)+1,2),i) then
+          fDebugLevel:=i
+        else
+          fDebugLevel:=1
+      end
+      else
+        fDebugLevel := 1;
+      Writeln();
+      Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
+      Writeln()
+    end
+  end;
+
+  for i := 1 to ParamCount do
+      writeln('ParamStr(',i,') = ',ParamStr(i));
+
   fDebugLevel  := 2;
   fDLLSSLName  := '';
   fDLLUtilName := '';
