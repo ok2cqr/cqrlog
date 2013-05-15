@@ -140,6 +140,7 @@ type
     procedure FillBandCombo(cmb : TComboBox);
     procedure ShowHamQTHInBrowser(call : String);
     procedure SortArray(l,r : Integer);
+    procedure OpenInApp(what : String);
 
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
@@ -3933,6 +3934,11 @@ begin
   end
 end;
 
+
+procedure TdmUtils.OpenInApp(what : String);
+begin
+  RunOnBackgroud('xdg-open '+what)
+end;
 
 initialization
   {$I dUtils.lrs}
