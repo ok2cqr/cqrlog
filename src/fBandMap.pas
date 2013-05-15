@@ -295,7 +295,7 @@ begin
     frmBandMap.SyncList.Clear;
     while not dbf.Eof do
     begin
-      tmp   := dmUtils.SetSizeLeft(FloatToStrF(dbf.Fields[0].AsFloat,ffFixed,8,1),8) +
+      tmp   := dmUtils.SetSizeLeft(FloatToStrF(dbf.Fields[0].AsFloat,ffFixed,8,2),8) +
                dmUtils.SetSizeLeft(dbf.Fields[1].AsString,14) + ' ' + dbf.Fields[14].AsString;
       frmBandMap.SyncList.Add(tmp+'|'+IntToStr(dbf.Fields[4].AsLongint)+'|'+IntToStr(dbf.Fields[13].AsLongint));
       if ToBandMap and (i <= iMax) then

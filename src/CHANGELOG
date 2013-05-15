@@ -7,6 +7,7 @@ Legend:
 1.5.6
   - fixed "An invalid integer value" error during label export
   - import of QSO with custom digi mode didn't worked if the list of modes didn't ended with comma (,) - fixed
+  - bandmap didn't worked if the freq of QSO precision was to ten Hz
   # removed mode from search criteria to confirm QSO via LoTW
   # QSO will be confirmed when time difference between QSO and QSO from LoTW is not more than 1 hour
   # default debug level is set 0, if you want to get more info what cqrlog does, run it with debug=1 or more
