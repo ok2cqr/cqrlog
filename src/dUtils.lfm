@@ -3,7 +3,7 @@ object dmUtils: TdmUtils
   OldCreateOrder = False
   Height = 300
   HorizontalOffset = 455
-  VerticalOffset = 684
+  VerticalOffset = 439
   Width = 400
   object HelpDatabase: THTMLHelpDatabase
     BaseURL = 'file:///home/ok2cqr'

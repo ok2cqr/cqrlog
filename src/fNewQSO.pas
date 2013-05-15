@@ -2924,7 +2924,7 @@ end;
 
 procedure TfrmNewQSO.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  Writeln('OnCloseQuery - NewQSO')
+  if dmData.DebugLevel>=1 then Writeln('OnCloseQuery - NewQSO')
 end;
 
 procedure TfrmNewQSO.edtCallChange(Sender: TObject);
@@ -3227,7 +3227,7 @@ begin
     AProcess.CommandLine := cqrini.ReadString('Program','WebBrowser','firefox')+
                             ' http://www.qrz.com/callsign/'+
                             dmData.qQSOBefore.Fields[4].AsString;
-    Writeln('Command line: ',AProcess.CommandLine);
+    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
     AProcess.Execute
   finally
     AProcess.Free
@@ -3243,7 +3243,7 @@ begin
     AProcess.CommandLine := cqrini.ReadString('Program','WebBrowser','firefox')+
                             ' http://www.ik3qar.it/manager/man_result.php?call='+
                             dmData.qQSOBefore.Fields[4].AsString;
-    Writeln('Command line: ',AProcess.CommandLine);
+    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
     AProcess.Execute
   finally
     AProcess.Free
@@ -5098,7 +5098,7 @@ begin
   AProcess := TProcess.Create(nil);
   try
     AProcess.CommandLine := 'bash ' + dmData.HomeDir + cVoiceKeyer  +' '+ key_pressed;
-    Writeln('Command line: ',AProcess.CommandLine);
+    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
     AProcess.Execute
   finally
     AProcess.Free
@@ -5110,7 +5110,7 @@ begin
   if Assigned(CWint) then
     FreeAndNil(CWint);
 
-  Writeln('CW init');
+  if dmData.DebugLevel>=1 then Writeln('CW init');
   CWint := TCWKeying.Create;
   if dmData.DebugLevel>=1 then
     CWint.DebugMode := True;

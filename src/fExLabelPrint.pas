@@ -357,7 +357,7 @@ begin
 
         dmData.Q1.SQL.Text := 'update cqrlog_main set qsl_s ='+QuotedStr(qsl_s)  +
                               ', qsls_date = '+ QuotedStr(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0))) +
-                              ' where id_cqrlog_main='+IntToStr(dmData.Q.Fields[3].AsInteger);
+                              ' where id_cqrlog_main='+IntToStr(dmData.Q.Fields[2].AsInteger);
         if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
         dmData.Q1.ExecSQL
       end;
@@ -406,7 +406,8 @@ begin
       dmData.trQ1.Commit;
     dmData.DropQSLTmpTable;
     lblProgress.Caption := 'Complete!';
-    CloseFile(f)
+    CloseFile(f);
+    dmData.RefreshMainDatabase()
   end
 end;
 

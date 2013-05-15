@@ -22,23 +22,21 @@ object frmRotControl: TfrmRotControl
   end
   object rbRotor1: TRadioButton
     Left = 16
-    Height = 24
+    Height = 26
     Top = 128
-    Width = 60
+    Width = 57
     Caption = 'ROT: '
     Checked = True
-    OnChange = rbRotor1Change
     OnClick = rbRotor1Click
     TabOrder = 2
     TabStop = True
   end
   object rbRotor2: TRadioButton
     Left = 112
-    Height = 24
+    Height = 26
     Top = 128
-    Width = 60
+    Width = 57
     Caption = 'ROT: '
-    OnChange = rbRotor2Change
     OnClick = rbRotor2Click
     TabOrder = 3
   end
@@ -48,7 +46,7 @@ object frmRotControl: TfrmRotControl
     Top = 0
     Width = 197
     Caption = 'Azimuth'
-    ClientHeight = 53
+    ClientHeight = 41
     ClientWidth = 193
     TabOrder = 0
     object lblAzimuth: TLabel

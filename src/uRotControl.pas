@@ -103,7 +103,7 @@ implementation
 constructor TRotControl.Create;
 begin
   RotCommand := TStringList.Create;
-  fDebugMode   := True;
+  fDebugMode   := DebugMode;
   if DebugMode then Writeln('In create');
   fRotCtldHost := 'localhost';
   fRotCtldPort := 4533;
@@ -489,7 +489,7 @@ begin
       sleep(100);
       cmd := RotCommand.Strings[i]+LineEnding;
       rcvdAzimut.SendMessage(cmd);
-      Writeln('Sending: '+cmd)
+      if DebugMode then Writeln('Sending: '+cmd)
     end;
     RotCommand.Clear
   end
@@ -538,25 +538,25 @@ var
   excode : Integer=0;
 begin
   inherited;
-  Writeln(1);
+  if DebugMode then Writeln(1);
   if fRunRotCtld then
   begin
     if rotProcess.Running then
     begin
-      Writeln('1a');
+      if DebugMode then Writeln('1a');
       rotProcess.Terminate(excode)
     end
   end;
-  Writeln(2);
+  if DebugMode then Writeln(2);
   tmrRotPoll.Enabled := False;
-  Writeln(3);
+  if DebugMode then Writeln(3);
   rcvdAzimut.Disconnect();
-  Writeln(4);
+  if DebugMode then Writeln(4);
   FreeAndNil(rcvdAzimut);
-  Writeln(5);
+  if DebugMode then Writeln(5);
   FreeAndNil(rotProcess);
   FreeAndNil(RotCommand);
-  Writeln(6);
+  if DebugMode then Writeln(6)
 end;
 
 end.
