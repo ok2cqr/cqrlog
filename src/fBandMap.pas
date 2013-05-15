@@ -519,8 +519,20 @@ begin
   freq := trim(freq);
   call := copy(spot,9,14);
   call := trim(call);
+  if dmData.DebugLevel >= 1 then
+  begin
+    Writeln('Bandmap spot:',spot);
+    Writeln('Bandmap freq:',freq);
+    Writeln('Bandmap call:',call)
+  end;
   if not TryStrToFloat(freq,f) then
     exit;
+  if dmData.DebugLevel >= 1 then
+  begin
+    Writeln('Bandmap spot:',spot);
+    Writeln('Bandmap freq:',freq);
+    Writeln('Bandmap call:',call)
+  end;
   dbf := TDbf.Create(nil);
   try
     f := StrToFloat(freq);
@@ -532,6 +544,11 @@ begin
     dbf.First;
     while not dbf.EOF do
     begin
+      if dmData.DebugLevel >= 1 then
+      begin
+        Writeln('dbf.FieldByName(vfo_a).AsFloat:',dbf.FieldByName('vfo_a').AsFloat);
+        Writeln('dbf.Fields[1].AsString:',dbf.Fields[1].AsString);
+      end;
       if (dbf.FieldByName('vfo_a').AsFloat = f) and (dbf.Fields[1].AsString = call) then
       begin
         if Pos('*',call)=1 then
