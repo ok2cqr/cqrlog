@@ -998,13 +998,17 @@ begin
       if ErrorCount > 0 then
       begin
         l.SaveToFile(dmData.HomeDir + 'lotw_error.txt');
-        ShowMessage(IntToStr(ErrorCount)+' QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.HomeDir + 'lotw_error.txt')
+        if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.HomeDir + 'lotw_error.txt'+
+                                  LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
+           dmUtils.OpenInApp(dmData.HomeDir + 'lotw_error.txt')
+        //ShowMessage(IntToStr(ErrorCount)+' QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.HomeDir + 'lotw_error.txt')
       end
     end
     else begin
-      Application.MessageBox('Something is wrong because LoTW server returned invalid adif file header.'+LineEnding+
-                             'Your LoTW username/password could be wrong of LoTW server is closed.','Error ...',
-                             mb_ok+mb_IconError)
+      if Application.MessageBox('Something is wrong because LoTW server returned invalid adif file header.'+LineEnding+
+                                'Your LoTW username/password could be wrong of LoTW server is closed.'+LineEnding+LineEnding+'Do you want to show the file?',
+                                'Error ...',mb_YesNo+mb_IconQuestion) = idYes then
+        dmUtils.OpenInApp(FileName)
     end
   finally
     l.Free;
