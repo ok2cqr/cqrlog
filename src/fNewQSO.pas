@@ -1770,6 +1770,12 @@ begin
     exit;
   if edtCall.Text = '' then
     exit;
+
+  if edtITU.Text = '' then
+    edtITU.Text := '0';
+  if edtWAZ.Text = '' then
+    edtWAZ.Text := '0';
+
   if not dmUtils.IsDateOK(edtDate.Text) then
   begin
     Application.MessageBox('You must enter correct date!', 'Error', mb_ok + mb_IconError);
@@ -1808,10 +1814,6 @@ begin
 
   //SaveGrid;
   dmData.SaveComment(edtCall.Text,mComment.Text);
-  if edtITU.Text = '' then
-    edtITU.Text := '0';
-  if edtWAZ.Text = '' then
-    edtWAZ.Text := '0';
 
   myloc := sbNewQSO.Panels[0].Text;
   myloc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
