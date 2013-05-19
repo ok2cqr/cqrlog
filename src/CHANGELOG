@@ -6,6 +6,7 @@ Legend:
 
 1.5.6
   + if any error message about LoTW import appear, you can open it in external app directly from CQRLOG	
+  + LoTW upload url changed
   - fixed "An invalid integer value" error during label export
   - import of QSO with custom digi mode didn't worked if the list of modes didn't ended with comma (,) - fixed
   - bandmap didn't worked if the freq of QSO precision was to ten Hz
