@@ -93,13 +93,13 @@ end;
 
 procedure TfrmLoTWExport.btnUploadClick(Sender: TObject);
 const
+  UPLOAD_URL = 'https://lotw.arrl.org/lotw/upload';
   CR = #$0d;
   LF = #$0a;
   CRLF = CR + LF;
 var
   http : THTTPSend;
   m    : TMemoryStream;
-  url : String = '';
   Bound, s: string;
   res  : Boolean;
   l    : TStringList;
@@ -109,7 +109,6 @@ begin
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
-  url  := 'https://p1k.arrl.org/lotw/upload';
   mStat.Lines.Add('Uploading file ...');
   mStat.Lines.Add('Size: ');
   http := THTTPSend.Create;
@@ -131,7 +130,7 @@ begin
     s := CRLF + '--' + Bound + '--' + CRLF;
     WriteStrToStream(http.Document, s);
     http.MimeType := 'multipart/form-data; boundary=' + Bound;
-    Res := HTTP.HTTPMethod('POST', url);
+    Res := HTTP.HTTPMethod('POST', UPLOAD_URL);
     if Res then
     begin
       l.LoadFromStream(HTTP.Document);
