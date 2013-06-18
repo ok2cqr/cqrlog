@@ -115,6 +115,7 @@ type
     procedure btnLoadClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure btnSelectDXCCClick(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -455,6 +456,16 @@ begin
       edtDXCC.Text := frmSelectDXCC.edtPrefix.Text
   finally
     frmSelectDXCC.Free
+  end
+end;
+
+procedure TfrmFilter.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_RETURN then
+  begin
+    btnOK.Click;
+    Key := 0
   end
 end;
 
