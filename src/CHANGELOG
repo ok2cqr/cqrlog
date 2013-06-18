@@ -7,6 +7,7 @@ Legend:
 1.5.7
   + Enter key in Filter window will activate the filter	
   - ADIF export didn't contain DXCC field with ADIF id of the country
+  # QSO will be confirmed when time difference between QSO and QSO from LoTW is not more than 10 minutes
 
 1.5.6
   + if any error message about LoTW import appear, you can open it in external app directly from CQRLOG	
