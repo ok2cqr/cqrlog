@@ -44,7 +44,7 @@ var
 implementation
 
 { TfrmExportProgress }
-uses dUtils, dData, uMyini;
+uses dUtils, dData, uMyini, dDXCC;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -375,6 +375,8 @@ var
       if Length(DXCC) > 0  then
       begin
         tmp := '<APP_CQRLOG_DXCC' + dmUtils.StringToADIF(dxcc);
+        Write(f,tmp);
+        tmp := '<DXCC'+dmUtils.StringToADIF(IntToStr(dmDXCC.AdifFromPfx(dxcc)));
         Write(f,tmp);
         leng := leng + Length(tmp)
       end

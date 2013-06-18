@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.5.7
+  - ADIF export didn't contain DXCC field with ADIF id of the country
+
 1.5.6
   + if any error message about LoTW import appear, you can open it in external app directly from CQRLOG	
   + LoTW upload url changed
