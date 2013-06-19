@@ -349,24 +349,45 @@ begin
            sql := 'remarks='+QuotedStr(UpperCase(cmbValue.Text))
         end;
    23 : begin
-           if not ((cmbValue.Text <> '') and dmUtils.IsLocOK(cmbValue.Text)) then
-           begin
-             Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
-             cmbValue.SetFocus;
-             exit
-           end;
-           sql := 'my_loc='+QuotedStr(UpperCase(cmbValue.Text))
-         end;
+          if (cmbValue.Text <> '') then
+          begin
+            if not dmUtils.IsLocOK(cmbValue.Text) then
+            begin
+              Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
+              cmbValue.SetFocus;
+              exit
+            end
+          end
+          else begin
+             if (Application.MessageBox('Dou you really want to clear My locator field?',
+              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+            begin
+              cmbValue.SetFocus;
+              exit
+            end
+          end;
+          sql := 'my_loc='+QuotedStr(UpperCase(cmbValue.Text))
+        end;
    24 : begin
-           if not ((cmbValue.Text <> '') and dmUtils.IsLocOK(cmbValue.Text)) then
-           begin
-             Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
-             cmbValue.SetFocus;
-             exit
-           end;
-           sql := 'loc='+QuotedStr(UpperCase(cmbValue.Text))
-         end;
-         
+          if (cmbValue.Text <> '') then
+          begin
+            if not dmUtils.IsLocOK(cmbValue.Text) then
+            begin
+              Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
+              cmbValue.SetFocus;
+              exit
+            end
+          end
+          else begin
+            if (Application.MessageBox('Dou you really want to clear Locator field?',
+               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+            begin
+              cmbValue.SetFocus;
+              exit
+            end
+          end;
+          sql := 'loc='+QuotedStr(UpperCase(cmbValue.Text))
+        end;
    25 : begin
           sql := 'profile=' + IntToStr(dmData.GetNRFromProfile(cmbValue.Text))
         end;

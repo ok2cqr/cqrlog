@@ -1,3 +1,5 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TfrmGroupEdit','FORMDATA',[
   'TPF0'#13'TfrmGroupEdit'#12'frmGroupEdit'#4'Left'#3'I'#2#6'Height'#3#146#0#3
   +'Top'#3'<'#1#5'Width'#3#129#1#13'ActiveControl'#7#8'btnApply'#11'BorderIcons'
@@ -159,15 +161,15 @@ LazarusResources.Add('TfrmGroupEdit','FORMDATA',[
   +#255#128#0#31#255#128#0'?'#255#0#0'?'#255#0#0#127#255#0#0#255#255#0#1#255#255
   +#0#3#255#255#0#7#255#255#0#31#255#255#0'?'#255#255#0#255#255#255#131#255#255
   +#255#6'OnShow'#7#8'FormShow'#8'Position'#7#16'poMainFormCenter'#10'LCLVersio'
-  +'n'#6#6'0.9.30'#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#0#6'Height'#2'l'#3'Top'
-  +#2#0#5'Width'#3#129#1#5'Align'#7#8'alClient'#12'ClientHeight'#2'h'#11'Client'
-  +'Width'#3'}'#1#8'TabOrder'#2#0#0#6'TLabel'#6'Label1'#4'Left'#2#10#6'Height'#2
-  +#18#3'Top'#2#7#5'Width'#2'$'#7'Caption'#6#6'Field:'#11'ParentColor'#8#0#0#6
-  +'TLabel'#6'Label2'#4'Left'#2#10#6'Height'#2#18#3'Top'#2''''#5'Width'#2')'#7
-  +'Caption'#6#6'Value:'#11'ParentColor'#8#0#0#6'TLabel'#7'lblInfo'#4'Left'#2#6
-  +#6'Height'#2#18#3'Top'#2'D'#5'Width'#2'*'#7'Caption'#6#7'lblInfo'#11'ParentC'
-  +'olor'#8#7'Visible'#8#0#0#9'TComboBox'#8'cmbField'#4'Left'#2'>'#6'Height'#2
-  +#31#3'Top'#2#255#5'Width'#3#144#0#10'ItemHeight'#2#0#13'Items.Strings'#1#6#8
+  +'n'#6#8'0.9.30.2'#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#0#6'Height'#2'l'#3'T'
+  +'op'#2#0#5'Width'#3#129#1#5'Align'#7#8'alClient'#12'ClientHeight'#2'h'#11'Cl'
+  +'ientWidth'#3'}'#1#8'TabOrder'#2#0#0#6'TLabel'#6'Label1'#4'Left'#2#10#6'Heig'
+  +'ht'#2#16#3'Top'#2#7#5'Width'#2#30#7'Caption'#6#6'Field:'#11'ParentColor'#8#0
+  +#0#6'TLabel'#6'Label2'#4'Left'#2#10#6'Height'#2#16#3'Top'#2''''#5'Width'#2'"'
+  +#7'Caption'#6#6'Value:'#11'ParentColor'#8#0#0#6'TLabel'#7'lblInfo'#4'Left'#2
+  +#6#6'Height'#2#16#3'Top'#2'D'#5'Width'#2'$'#7'Caption'#6#7'lblInfo'#11'Paren'
+  +'tColor'#8#7'Visible'#8#0#0#9'TComboBox'#8'cmbField'#4'Left'#2'>'#6'Height'#2
+  +#27#3'Top'#2#255#5'Width'#3#144#0#10'ItemHeight'#2#0#13'Items.Strings'#1#6#8
   +'QSO date'#6#7'Time_on'#6#8'Time_off'#6#4'Call'#6#4'Freq'#6#4'Mode'#6#8'RST '
   +'sent'#6#12'RSt received'#6#4'Name'#6#3'QTH'#6#8'QSL sent'#6#12'QSL received'
   +#6#7'QSL via'#6#5'Power'#6#3'ITU'#6#3'WAZ'#6#6'County'#6#5'State'#6#13'LoTW '
@@ -175,7 +177,7 @@ LazarusResources.Add('TfrmGroupEdit','FORMDATA',[
   +' locator'#6#7'Locator'#6#11'QTH Profile'#6#13'QSL sent date'#6#13'QSL rcvd '
   +'date'#6#9'eQSL sent'#6#14'eQSL sent date'#6#9'eQSL rcvd'#6#14'eQSL rcvd dat'
   +'e'#0#8'OnChange'#7#14'cmbFieldChange'#5'Style'#7#14'csDropDownList'#8'TabOr'
-  +'der'#2#0#0#0#9'TComboBox'#8'cmbValue'#4'Left'#2'>'#6'Height'#2#29#3'Top'#2
+  +'der'#2#0#0#0#9'TComboBox'#8'cmbValue'#4'Left'#2'>'#6'Height'#2#21#3'Top'#2
   +'"'#5'Width'#3'8'#1#10'ItemHeight'#2#0#8'TabOrder'#2#1#0#0#0#6'TPanel'#6'Pan'
   +'el1'#4'Left'#2#0#6'Height'#2'&'#3'Top'#2'l'#5'Width'#3#129#1#5'Align'#7#8'a'
   +'lBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2'&'#11'ClientWidth'#3
