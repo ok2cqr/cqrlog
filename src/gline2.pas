@@ -36,6 +36,15 @@ type
     elevation, azimuth: extended;          (* h, A *)
     end;
 
+const body_popis_max=30;
+type Tcarobod=record
+       typ:byte; // 0 - nic;1 cara, 2 bod ctverecek , 3 bod krizek
+       x1,y1,x2,y2:extended;
+       popis:string[body_popis_max];
+       barva:Tcolor;
+       vel_bodu:longint;
+     end;
+const body_max=128;
 var star_time_u:extended;
 
 type
@@ -47,6 +56,10 @@ type
       procedure kresli1(x1,y1:longint;can:Tcanvas); {vykresli 1:1, zadavan je "jen" levy horni roh}
       
       procedure jachcucaru(en:boolean;x1,y1,x2,y2:extended);
+
+      procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
+      procedure body_smaz;
+
     private
       nrd:boolean; // potrebuje prekreslit (probehl novy vypocet)
 
@@ -67,6 +80,8 @@ type
       obrA,obrT:TLazIntfImage;   // obra -  zde vse kreslit
 
       obmap: TBitmap;
+      body:array[0..body_max] of Tcarobod;
+      body_poc:longint;
 
       function calc_horizontalx(var coord:t_coord; date:TDateTime; z:longint;latitude: extended):longint;
   end;
@@ -480,6 +495,8 @@ var e,z:longint;
      asintab[-z]:=-asintab[z];
    end;
 
+  body_poc:=0;
+
   poslednicas:=now-1000000;
   nrd:=false;
 end;
@@ -507,7 +524,7 @@ var z,c:longint;
               vr1:=calc_horizontalx(pos1,datum,z,(x-obvy shr 1)*obvy2);
 //              if vr1>100 then vr1:=200;
 //              if vr1<80 then vr1:=80;
-//           vr1:=random(1000)-500;
+//              vr1:=random(1000)-500;
              end;
 
 
@@ -685,7 +702,72 @@ var
                     round(ax+round(x2*dx/360)),round(ay+round(y2*dy/180)));
           end;
       end;
-    
+
+    procedure bod_cmarniu(x1,y1,x2,y2:longint;b:Tcarobod);
+    var z,x,vb:longint;
+      begin
+        vb:=b.vel_bodu;
+        if b.typ=3 then
+        begin
+          can.pen.color:=clblack;
+          can.pen.Width:=5;
+          can.moveto(x1-vb,y1-vb);
+          can.lineto(x1+vb,y1+vb);
+          can.moveto(x1-vb,y1+vb);
+          can.lineto(x1+vb,y1-vb);
+          can.pen.color:=b.barva;
+          can.pen.Width:=2;
+          can.moveto(x1-vb,y1-vb);
+          can.lineto(x1+vb,y1+vb);
+          can.moveto(x1-vb,y1+vb);
+          can.lineto(x1+vb,y1-vb);
+        end;
+        if b.typ=2 then
+        begin
+          can.pen.color:=clblack;
+          can.pen.Width:=5;
+          can.moveto(x1-vb,y1-vb);
+          can.lineto(x1-vb,y1+vb);
+          can.lineto(x1+vb,y1+vb);
+          can.lineto(x1+vb,y1-vb);
+          can.lineto(x1-vb,y1-vb);
+          can.pen.color:=b.barva;
+          can.pen.Width:=2;
+          can.moveto(x1-vb,y1-vb);
+          can.lineto(x1-vb,y1+vb);
+          can.lineto(x1+vb,y1+vb);
+          can.lineto(x1+vb,y1-vb);
+          can.lineto(x1-vb,y1-vb);
+        end;
+        if b.typ=1 then
+        begin
+          can.pen.color:=clblack;
+          can.pen.Width:=5;
+          can.moveto(x1,y1);
+          can.lineto(x2,y2);
+          can.pen.color:=b.barva;
+          can.pen.Width:=2;
+          can.moveto(x1,y1);
+          can.lineto(x2,y2);
+        end;
+      end;
+
+
+
+    procedure bod_cmarni(b:Tcarobod);
+    var dx,dy,ax,ay:extended;
+      begin
+            dx:=r.right-r.left+1;
+            dy:=r.bottom-r.top+1;
+
+            ax:=(r.left+r.right)/2;
+            ay:=(r.top+r.bottom)/2;
+
+            bod_cmarniu(round(ax+round(b.x1*dx/360)),round(ay+round(b.y1*dy/180)),
+                    round(ax+round(b.x2*dx/360)),round(ay+round(b.y2*dy/180)),b);
+      end;
+
+
   begin
   if chcipni then exit;
 
@@ -763,6 +845,10 @@ var
 //                can.TextOut(10,10,inttostr(round(carax1))+':'+inttostr(round(caray1)));
 //                can.TextOut(10,20,inttostr(round(carax2))+':'+inttostr(round(caray2)));
               end;
+            for z:=0 to body_poc-1 do
+              begin
+                 bod_cmarni(body[z]);
+              end;
     nrd:=false;
   end;
 
@@ -806,5 +892,27 @@ procedure Tgrayline.jachcucaru(en:boolean;x1,y1,x2,y2:extended);
       end;
   end;
 
-end.
+procedure Tgrayline.body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
+ var z:longint;
+  begin
+    if chcipni then exit;
+    if body_poc<body_max-1 then
+      begin
+        body[body_poc].typ:=typ;
+        body[body_poc].x1:=x1;
+        body[body_poc].y1:=y1;
+        body[body_poc].x2:=x2;
+        body[body_poc].y2:=y2;
+        body[body_poc].popis:=copy(popis,1,body_popis_max);
+        body[body_poc].barva:=barva;
+        body[body_poc].vel_bodu:=vel_bodu;
+        inc(body_poc);
+      end;
+  end;
 
+procedure Tgrayline.body_smaz;
+  begin
+    body_poc:=0;
+  end;
+
+end.
