@@ -1032,7 +1032,8 @@ begin
   IsSFilter    := False;
 
   fDebugLevel:=0;
-  if Paramcount>1 then
+
+  if ParamCount>0 then
   begin
     param := LowerCase(ParamStr(1));
     if Pos('debug',param) > 0 then
@@ -1045,14 +1046,15 @@ begin
           fDebugLevel:=1
       end
       else
-        fDebugLevel := 1;
-      Writeln();
-      Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
-      Writeln()
+        fDebugLevel := 1
     end
   end;
 
+  Writeln('');
   Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
+  if fDebugLevel=0 then
+    Writeln('**** CHANGE WITH --debug=1 PARAMETER ****');
+  Writeln('');
 
   fDLLSSLName  := '';
   fDLLUtilName := '';
