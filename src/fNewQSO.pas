@@ -1028,7 +1028,7 @@ begin
   dmUtils.CoordinateFromLocator(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6),lat,long);
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
-  frmGrayline.FormPaint(nil);
+  frmGrayline.Refresh;
   if not mnuRemoteMode.Checked then
     edtCall.SetFocus;
   if not (fEditQSO or fViewQSO or cbOffline.Checked) then
