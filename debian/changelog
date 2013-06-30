@@ -1,3 +1,19 @@
+cqrlog (1.5.7-1) unstable; urgency=low
+   
+  * Enter key in Filter window will activate the filter
+  * blank locator field in Group edit clears locator field
+  * ADIF export didn't contain DXCC field with ADIF id of the country
+  * graline caused program crash after compile with recent FPC and 
+    Lazarus versions
+  * when the grid was in lowercase, the Big square statistic was 
+    broken
+  * bandmap didn't worked if the freq of QSO precision was to one Hz
+  * debug level settings didn't worked at all 
+  * QSO will be confirmed when time difference between QSO and QSO 
+    from LoTW is not more than 10 minutes
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 30 JUN 2012 10:02:00 +0100
+
 cqrlog (1.5.6-1) unstable; urgency=low
    
   * if any error message about LoTW import appear, you can open it in 

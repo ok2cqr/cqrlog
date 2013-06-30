@@ -5,11 +5,13 @@ Legend:
 --------------------
 
 1.5.7
-  + Enter key in Filter window will activate the filter	
+  + Enter key in Filter window will activate the filter
   + blank locator field in Group edit clears locator field
   - ADIF export didn't contain DXCC field with ADIF id of the country
   - graline caused program crash after compile with recent FPC and Lazarus versions
   - when the grid was in lowercase, the Big square statistic was broken
+  - bandmap didn't worked if the freq of QSO precision was to one Hz  
+  - debug level settings didn't worked at all  
   # QSO will be confirmed when time difference between QSO and QSO from LoTW is not more than 10 minutes
 
 1.5.6
