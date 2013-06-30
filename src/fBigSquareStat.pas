@@ -149,7 +149,7 @@ begin
   dmData.trQ.StartTransaction;
   dmData.trQ1.StartTransaction;
   try
-    dmData.Q.SQL.Text := 'select left(loc,2) as ll FROM cqrlog_main where loc <> '+QuotedStr('')+
+    dmData.Q.SQL.Text := 'select upper(left(loc,2)) as ll FROM cqrlog_main where loc <> '+QuotedStr('')+
                          ' and band='+QuotedStr(cmbBands.Text)+' group by ll';
     dmData.Q.Open;
     WriteHMTLHeader;
@@ -162,7 +162,7 @@ begin
       writeln(f,'<td align="left">');
       writeln(f,'<font color="black">');
       dmData.Q1.Close;
-      dmData.Q1.SQL.Text := 'select left(loc,4) as lll FROM cqrlog_main where loc like '+
+      dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM cqrlog_main where loc like '+
                             QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
                             ' group by lll order by loc';
       dmData.Q1.Open;
@@ -181,7 +181,7 @@ begin
       if tmp <> '' then
       begin
         dmData.Q1.Close;
-        dmData.Q1.SQL.Text := 'select left(loc,4) as lll FROM cqrlog_main where loc like '+
+        dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM cqrlog_main where loc like '+
                               QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
                               'and ('+tmp+') group by lll order by loc';
         dmData.Q1.Open;

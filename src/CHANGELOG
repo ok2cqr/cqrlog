@@ -9,6 +9,7 @@ Legend:
   + blank locator field in Group edit clears locator field
   - ADIF export didn't contain DXCC field with ADIF id of the country
   - graline caused program crash after compile with recent FPC and Lazarus versions
+  - when the grid was in lowercase, the Big square statistic was broken
   # QSO will be confirmed when time difference between QSO and QSO from LoTW is not more than 10 minutes
 
 1.5.6
