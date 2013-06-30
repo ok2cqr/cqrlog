@@ -114,8 +114,9 @@ begin
     ob^.VypocitejSunClock(dmUtils.GetDateTime(0))//-dmUtils.GetLocalUTCDelta)
   else
     ob^.VypocitejSunClock(now - (dmUtils.GrayLineOffset/24));
-  ob^.kresli(r,Canvas);
-  Writeln(DateTimeToStr(dmUtils.GetDateTime(0)))
+  Refresh;
+  //ob^.kresli(r,Canvas);
+  //Writeln(DateTimeToStr(dmUtils.GetDateTime(0)))
   //t2:=now - (dmUtils.GrayLineOffset/24);
 end;
 
@@ -156,7 +157,8 @@ begin
   lat := lat*-1;
   lat1 := lat1*-1;
   ob^.jachcucaru(true,long,lat,long1,lat1);
-  FormPaint(nil)
+  //FormPaint(nil)
+  Refresh
 end;
 
 procedure TfrmGrayline.SavePosition;

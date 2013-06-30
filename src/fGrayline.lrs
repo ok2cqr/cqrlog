@@ -161,6 +161,6 @@ LazarusResources.Add('TfrmGrayline','FORMDATA',[
   +#255#255#7'OnClose'#7#9'FormClose'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'O'
   +'nCreate'#7#10'FormCreate'#9'OnDestroy'#7#11'FormDestroy'#9'OnKeyDown'#7#11
   +'FormKeyDown'#7'OnPaint'#7#9'FormPaint'#6'OnShow'#7#8'FormShow'#10'LCLVersio'
-  +'n'#6#6'0.9.30'#0#6'TTimer'#11'tmrGrayLine'#7'Enabled'#8#8'Interval'#4'`'#234
-  +#0#0#7'OnTimer'#7#16'tmrGrayLineTimer'#4'left'#2'('#3'top'#2' '#0#0#0
+  +'n'#6#8'0.9.30.2'#0#6'TTimer'#11'tmrGrayLine'#7'Enabled'#8#8'Interval'#4'`'
+  +#234#0#0#7'OnTimer'#7#16'tmrGrayLineTimer'#4'left'#2'('#3'top'#2' '#0#0#0
 ]);
