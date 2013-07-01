@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.5.8
+  - nothing happened after double click on bandmap spot - fixed
+
 1.5.7
   + Enter key in Filter window will activate the filter
   + blank locator field in Group edit clears locator field
