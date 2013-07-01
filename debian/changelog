@@ -1,3 +1,9 @@
+cqrlog (1.5.8-1) unstable; urgency=low
+
+  * nothing happened after double click on bandmap spot - fixed
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Mon, 01 JUL 2013 10:02:00 +0100
+  
 cqrlog (1.5.7-1) unstable; urgency=low
    
   * Enter key in Filter window will activate the filter
@@ -12,7 +18,7 @@ cqrlog (1.5.7-1) unstable; urgency=low
   * QSO will be confirmed when time difference between QSO and QSO 
     from LoTW is not more than 10 minutes
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 30 JUN 2012 10:02:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 30 JUN 2013 10:02:00 +0100
 
 cqrlog (1.5.6-1) unstable; urgency=low
    
@@ -31,7 +37,7 @@ cqrlog (1.5.6-1) unstable; urgency=low
   * default debug level is set 0, if you want to get more info what 
     cqrlog does, run it with debug=1 or more
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 19 MAY 2012 11:04:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 19 MAY 2013 11:04:00 +0100
 
 
 cqrlog (1.5.5-1) unstable; urgency=low
@@ -57,7 +63,7 @@ cqrlog (1.5.5-1) unstable; urgency=low
   * problem with wrong time in QSO from flidi - fixed
   * QSO cfm via LoTW with JT65 wasn't recognized
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 28 APR 2012 14:04:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 28 APR 2013 14:04:00 +0100
 
 
 
@@ -65,7 +71,7 @@ cqrlog (1.5.4-1) unstable; urgency=low
 
   * added MASTER.SCP file
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 24 FEB 2012 10:30:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 24 FEB 2013 10:30:00 +0100
 
 
 cqrlog (1.5.3-1) unstable; urgency=low
@@ -91,7 +97,7 @@ cqrlog (1.5.3-1) unstable; urgency=low
   * when QSO passed over the midnight, the qso was saved with 
     wrong date  
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 24 FEB 2012 10:30:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 24 FEB 2013 10:30:00 +0100
 
 cqrlog (1.5.2-1) unstable; urgency=low
 
