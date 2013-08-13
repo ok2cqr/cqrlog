@@ -687,7 +687,7 @@ begin
   radio := TRigControl.Create;
 
   if dmData.DebugLevel>0 then
-    radio.DebugMode := False;
+    radio.DebugMode := True;
   //Writeln('huu3');
   if not TryStrToInt(cqrini.ReadString('TRX'+n,'model',''),id) then
     radio.RigId := 1

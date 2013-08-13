@@ -202,7 +202,7 @@ LazarusResources.Add('TfrmTRXControl','FORMDATA',[
   +'y'#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#9'OnDestroy'#7#11'Form'
   +'Destroy'#9'OnKeyDown'#7#11'FormKeyDown'#6'OnShow'#7#8'FormShow'#10'LCLVersi'
   +'on'#6#8'0.9.30.2'#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#4#6'Height'#2'H'#3
-  +'Top'#2#0#5'Width'#3#253#0#7'Caption'#6#6' Freq '#12'ClientHeight'#2'5'#11'C'
+  +'Top'#2#0#5'Width'#3#253#0#7'Caption'#6#6' Freq '#12'ClientHeight'#2'('#11'C'
   +'lientWidth'#3#249#0#8'TabOrder'#2#0#0#6'TLabel'#7'lblFreq'#4'Left'#2#10#6'H'
   +'eight'#2'1'#3'Top'#2#255#5'Width'#3#235#0#9'Alignment'#7#14'taRightJustify'
   +#8'AutoSize'#8#7'Caption'#6#6'0.0000'#10'Font.Color'#7#6'clBlue'#11'Font.Hei'
@@ -211,12 +211,12 @@ LazarusResources.Add('TfrmTRXControl','FORMDATA',[
   +' '#7'Caption'#6#1'A'#8'TabOrder'#2#0#7'Visible'#8#0#0#7'TButton'#7'btnVFOB'
   +#4'Left'#2#2#6'Height'#2#25#3'Top'#2#23#5'Width'#2' '#7'Caption'#6#1'B'#8'Ta'
   +'bOrder'#2#1#7'Visible'#8#0#0#0#12'TRadioButton'#8'rbRadio1'#4'Left'#2#24#6
-  +'Height'#2#24#3'Top'#3#208#0#5'Width'#2'8'#7'Caption'#6#5'RIG: '#7'Checked'#9
+  +'Height'#2#26#3'Top'#3#208#0#5'Width'#2'6'#7'Caption'#6#5'RIG: '#7'Checked'#9
   +#7'OnClick'#7#13'rbRadio1Click'#8'TabOrder'#2#1#7'TabStop'#9#0#0#12'TRadioBu'
-  +'tton'#8'rbRadio2'#4'Left'#3#200#0#6'Height'#2#24#3'Top'#3#208#0#5'Width'#2
-  +'8'#7'Caption'#6#5'RIG: '#7'OnClick'#7#13'rbRadio2Click'#8'TabOrder'#2#2#0#0
+  +'tton'#8'rbRadio2'#4'Left'#3#200#0#6'Height'#2#26#3'Top'#3#208#0#5'Width'#2
+  +'6'#7'Caption'#6#5'RIG: '#7'OnClick'#7#13'rbRadio2Click'#8'TabOrder'#2#2#0#0
   +#9'TGroupBox'#6'gbBand'#4'Left'#2#4#6'Height'#3#128#0#3'Top'#2'H'#5'Width'#3
-  +#253#0#7'Caption'#6#6' Band '#12'ClientHeight'#2'm'#11'ClientWidth'#3#249#0#8
+  +#253#0#7'Caption'#6#6' Band '#12'ClientHeight'#2'`'#11'ClientWidth'#3#249#0#8
   +'TabOrder'#2#3#0#7'TButton'#7'btn160m'#4'Left'#2#6#6'Height'#2#25#3'Top'#2#6
   +#5'Width'#2'8'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4'160m'#7'OnCl'
   +'ick'#7#12'btn160mClick'#8'TabOrder'#2#0#0#0#7'TButton'#6'btn80m'#4'Left'#2#6
@@ -247,7 +247,7 @@ LazarusResources.Add('TfrmTRXControl','FORMDATA',[
   +'6'#5'Width'#2'8'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#2'2m'#7'OnC'
   +'lick'#7#10'btn2mClick'#8'TabOrder'#2#11#0#0#0#9'TGroupBox'#9'GroupBox2'#4'L'
   +'eft'#3#8#1#6'Height'#3#200#0#3'Top'#2#0#5'Width'#2'H'#7'Caption'#6#6' Mode '
-  +#12'ClientHeight'#3#181#0#11'ClientWidth'#2'D'#8'TabOrder'#2#4#0#7'TButton'#5
+  +#12'ClientHeight'#3#168#0#11'ClientWidth'#2'D'#8'TabOrder'#2#4#0#7'TButton'#5
   +'btnCW'#4'Left'#2#8#6'Height'#2#25#3'Top'#2#4#5'Width'#2'3'#7'Caption'#6#2'C'
   +'W'#7'OnClick'#7#10'btnCWClick'#8'TabOrder'#2#0#0#0#7'TButton'#6'btnSSB'#4'L'
   +'eft'#2#8#6'Height'#2#25#3'Top'#2'('#5'Width'#2'3'#7'Caption'#6#3'SSB'#7'OnC'
