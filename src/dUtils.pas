@@ -217,6 +217,7 @@ type
     function  GetRotorRotCtldCommandLine(rotor : Word) : String;
     function  IgnoreFreq(kHz : String) : Boolean;
     function  HTMLEncode(const Data: string): string;
+    function  KmToMiles(qra : Double) : Double;
 end;
 
 var
@@ -3934,6 +3935,10 @@ begin
   end
 end;
 
+function TdmUtils.KmToMiles(qra : Double) : Double;
+begin
+  result := Round(0.621371192*qra)
+end;
 
 procedure TdmUtils.OpenInApp(what : String);
 begin

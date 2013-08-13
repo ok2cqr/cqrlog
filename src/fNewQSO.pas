@@ -4427,7 +4427,10 @@ begin
   end;
   if ((qra <>'') and (azim<>'')) then
   begin
-    lblQRA.Caption := qra + ' km';
+    if cqrini.ReadBool('Program','ShowMiles',False) then
+      lblQRA.Caption := FloatToStr(dmUtils.KmToMiles(StrToFloat(qra))) + ' miles'
+    else
+      lblQRA.Caption := qra + ' km';
     lblAzi.Caption := azim;
     Azimuth := azim;
   end;

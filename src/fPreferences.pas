@@ -112,6 +112,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkShowMiles : TCheckBox;
     chkIgnoreBandFreq : TCheckBox;
     chkRot1RunRotCtld: TCheckBox;
     chkRot2RunRotCtld: TCheckBox;
@@ -1039,6 +1040,7 @@ begin
   cqrini.WriteBool('Program', 'CheckQSLTabs', chkNewQSLTables.Checked);
   cqrini.WriteFloat('Program', 'SunOffset', StrToCurr(edtSunOffset.Text));
   cqrini.WriteBool('Program', 'SysUTC', chkSysUTC.Checked);
+  cqrini.WriteBool('Program','ShowMiles',chkShowMiles.Checked);
 
   cqrini.WriteBool('Columns', 'Date', chkDate.Checked);
   cqrini.WriteBool('Columns', 'time_on', chkTimeOn.Checked);
@@ -2244,6 +2246,7 @@ begin
   chkNewQSLTables.Checked := cqrini.ReadBool('Program', 'CheckQSLTabs', True);
   edtSunOffset.Text := CurrToStr(cqrini.ReadFloat('Program', 'SunOffset', 0));
   chkSysUTC.Checked := cqrini.ReadBool('Program', 'SysUTC', True);
+  chkShowMiles.Checked := cqrini.ReadBool('Program','ShowMiles',False);
 
   if cqrini.ReadBool('Program', 'BandStatMHz', True) then
     rgStatistics.ItemIndex := 0
