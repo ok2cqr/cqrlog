@@ -7,6 +7,7 @@ Legend:
 1.5.9
   + added JT9 to list of modes
   - double click on bandmap didn't work when the spot had split info  - fixed
+  - propagation info in spot notes has correct format
 
 1.5.8
   - nothing happened after double click on bandmap spot - fixed
