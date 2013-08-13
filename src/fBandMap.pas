@@ -517,7 +517,7 @@ begin
   BandMap.cti_vetu(spot,tmp,tmp,tmp,where);
   freq := copy(spot,1,12);
   freq := trim(freq);
-  call := copy(spot,13,14);
+  call := copy(spot,13,12);
   call := trim(call);
   if dmData.DebugLevel >= 1 then
   begin
