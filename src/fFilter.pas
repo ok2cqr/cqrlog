@@ -43,6 +43,8 @@ type
     cmbLoTW_qsls: TComboBox;
     cmbSort: TComboBox;
     edtCont: TEdit;
+    edtPwrFrom : TEdit;
+    edtPwrTo : TEdit;
     edtState: TEdit;
     edtCounty: TEdit;
     edtDateFrom: TEdit;
@@ -68,6 +70,7 @@ type
     GroupBox14: TGroupBox;
     GroupBox15: TGroupBox;
     GroupBox16: TGroupBox;
+    GroupBox17 : TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
@@ -85,6 +88,8 @@ type
     Label15: TLabel;
     Label16 : TLabel;
     Label17 : TLabel;
+    Label18 : TLabel;
+    Label19 : TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -326,6 +331,12 @@ begin
       tmp := tmp + ' (eqsl_qsl_rcvd <> '+QuotedStr('E')+') AND'
   end;
 
+  if ((edtPwrFrom.Text <> '') and (edtPwrTo.Text <> '')) then
+  begin
+    tmp := tmp + ' (pwr >= ' + edtPwrFrom.Text + ') AND '+
+                 ' (pwr <= ' + edtPwrTo.Text + ')';
+    tmp := tmp + ' AND'
+  end;
 
   if cmbMembers.ItemIndex >0 then
     tmp := tmp + ' (club_nr'+IntToStr(cmbMembers.ItemIndex)+' <> '+QuotedStr('')+') AND';
@@ -523,7 +534,9 @@ begin
       cmbLoTW_qslr.Text := filini.ReadString('lotw_qsls','lotw_qslr','');
       edtCont.Text      := filini.ReadString('cont','cont','');
       cmbeQSL_qsls.Text := filini.ReadString('eQSL','eqsl_qsl_sent','');
-      cmbeQSL_qslr.Text := filini.ReadString('eQSL','eqsl_qsl_rcvd','')
+      cmbeQSL_qslr.Text := filini.ReadString('eQSL','eqsl_qsl_rcvd','');
+      edtPwrFrom.Text   := filini.ReadString('Power','power_from','');
+      edtPwrTo.Text     := filini.ReadString('Power','power_to','')
     finally
       filini.Free
     end
@@ -576,7 +589,9 @@ begin
       filini.WriteString('lotw_qsls','lotw_qslr',cmbLoTW_qslr.Text);
       filini.WriteString('cont','cont',edtCont.Text);
       filini.WriteString('eQSL','eqsl_qsl_sent',cmbeQSL_qsls.Text);
-      filini.WriteString('eQSL','eqsl_qsl_rcvd',cmbeQSL_qslr.Text)
+      filini.WriteString('eQSL','eqsl_qsl_rcvd',cmbeQSL_qslr.Text) ;
+      filini.WriteString('Power','power_from',edtPwrFrom.Text);
+      filini.WriteString('Power','power_to',edtPwrTo.Text)
     finally
       filini.Free
     end;

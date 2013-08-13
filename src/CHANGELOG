@@ -6,6 +6,7 @@ Legend:
 
 1.5.9
   + added JT9 to list of modes
+  + added Power field to filter window
   - double click on bandmap didn't work when the spot had split info  - fixed
   - propagation info in spot notes has correct format
 

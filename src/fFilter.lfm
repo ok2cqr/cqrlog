@@ -1,16 +1,16 @@
 object frmFilter: TfrmFilter
-  Left = 331
-  Height = 675
-  Top = 71
-  Width = 650
+  Left = 321
+  Height = 624
+  Top = 150
+  Width = 812
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
   ActiveControl = edtCallSign
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Filter'
-  ClientHeight = 675
-  ClientWidth = 650
+  ClientHeight = 624
+  ClientWidth = 812
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -122,77 +122,77 @@ object frmFilter: TfrmFilter
   Position = poMainFormCenter
   LCLVersion = '0.9.30.2'
   object Label10: TLabel
-    Left = 14
-    Height = 16
-    Top = 608
-    Width = 41
+    Left = 200
+    Height = 17
+    Top = 559
+    Width = 45
     Caption = 'Profile:'
     ParentColor = False
   end
   object Label11: TLabel
-    Left = 14
-    Height = 16
-    Top = 646
-    Width = 75
+    Left = 181
+    Height = 17
+    Top = 598
+    Width = 80
     Caption = 'Membership:'
     ParentColor = False
   end
   object Label12: TLabel
-    Left = 14
-    Height = 16
-    Top = 576
-    Width = 53
+    Left = 200
+    Height = 17
+    Top = 527
+    Width = 59
     Caption = 'Group by:'
     ParentColor = False
   end
   object Label15: TLabel
-    Left = 14
-    Height = 16
-    Top = 541
-    Width = 43
+    Left = 200
+    Height = 17
+    Top = 492
+    Width = 48
     Caption = 'Sort by:'
     ParentColor = False
   end
   object GroupBox1: TGroupBox
     Left = 14
-    Height = 90
+    Height = 106
     Top = 4
     Width = 154
     Caption = 'Callsign'
-    ClientHeight = 59
+    ClientHeight = 74
     ClientWidth = 150
     TabOrder = 0
     object edtCallSign: TEdit
       Left = 6
-      Height = 21
-      Top = 1
+      Height = 22
+      Top = -2
       Width = 130
       CharCase = ecUppercase
       TabOrder = 0
     end
     object rbExactlyCall: TRadioButton
-      Left = 9
+      Left = 6
       Height = 26
-      Top = 25
-      Width = 68
+      Top = 21
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 1
       TabStop = True
     end
     object rbIncludeCall: TRadioButton
-      Left = 9
+      Left = 6
       Height = 26
-      Top = 47
-      Width = 69
+      Top = 45
+      Width = 72
       Caption = 'Include'
       TabOrder = 2
     end
   end
   object btnOK: TButton
-    Left = 560
+    Left = 727
     Height = 26
-    Top = 528
+    Top = 480
     Width = 75
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
@@ -200,9 +200,9 @@ object frmFilter: TfrmFilter
     TabOrder = 1
   end
   object btnCancel: TButton
-    Left = 560
+    Left = 727
     Height = 26
-    Top = 560
+    Top = 512
     Width = 75
     BorderSpacing.InnerBorder = 4
     Cancel = True
@@ -213,17 +213,17 @@ object frmFilter: TfrmFilter
   end
   object GroupBox2: TGroupBox
     Left = 173
-    Height = 90
+    Height = 106
     Top = 4
     Width = 140
     Caption = ' DXCC '
-    ClientHeight = 59
+    ClientHeight = 74
     ClientWidth = 136
     TabOrder = 3
     object edtDXCC: TEdit
       Left = 18
-      Height = 21
-      Top = 0
+      Height = 22
+      Top = -2
       Width = 99
       CharCase = ecUppercase
       TabOrder = 0
@@ -241,39 +241,39 @@ object frmFilter: TfrmFilter
   end
   object GroupBox3: TGroupBox
     Left = 319
-    Height = 90
+    Height = 106
     Top = 4
     Width = 153
     Caption = ' Freq '
-    ClientHeight = 59
+    ClientHeight = 74
     ClientWidth = 149
     TabOrder = 4
     object Label1: TLabel
       Left = 9
-      Height = 16
+      Height = 17
       Top = 8
-      Width = 32
+      Width = 33
       Caption = 'from:'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 8
-      Height = 16
+      Height = 17
       Top = 37
-      Width = 17
+      Width = 18
       Caption = 'to:'
       ParentColor = False
     end
     object edtFreqFrom: TEdit
       Left = 45
-      Height = 21
+      Height = 22
       Top = 2
       Width = 92
       TabOrder = 0
     end
     object edtFreqTo: TEdit
       Left = 46
-      Height = 21
+      Height = 22
       Top = 31
       Width = 92
       TabOrder = 1
@@ -281,17 +281,17 @@ object frmFilter: TfrmFilter
   end
   object GroupBox4: TGroupBox
     Left = 480
-    Height = 90
+    Height = 106
     Top = 4
     Width = 163
     Caption = ' Mode '
-    ClientHeight = 59
+    ClientHeight = 74
     ClientWidth = 159
     TabOrder = 5
     object cmbMode: TComboBox
-      Left = 16
+      Left = 14
       Height = 27
-      Top = 25
+      Top = 6
       Width = 124
       AutoSize = False
       ItemHeight = 0
@@ -299,77 +299,77 @@ object frmFilter: TfrmFilter
     end
   end
   object GroupBox5: TGroupBox
-    Left = 14
-    Height = 104
-    Top = 96
+    Left = 648
+    Height = 106
+    Top = 4
     Width = 154
     Caption = ' Date '
-    ClientHeight = 73
+    ClientHeight = 74
     ClientWidth = 150
     TabOrder = 6
     object Label3: TLabel
       Left = 10
-      Height = 16
-      Top = 25
-      Width = 32
+      Height = 17
+      Top = 7
+      Width = 33
       Caption = 'from:'
       ParentColor = False
     end
     object Label4: TLabel
-      Left = 18
-      Height = 16
-      Top = 57
-      Width = 17
+      Left = 10
+      Height = 17
+      Top = 36
+      Width = 18
       Caption = 'to:'
       ParentColor = False
     end
     object edtDateFrom: TEdit
-      Left = 45
-      Height = 21
-      Top = 15
+      Left = 46
+      Height = 22
+      Top = 2
       Width = 85
       OnExit = edtDateFromExit
       TabOrder = 0
     end
     object edtDateTo: TEdit
-      Left = 45
-      Height = 21
-      Top = 49
+      Left = 46
+      Height = 22
+      Top = 31
       Width = 85
       OnExit = edtDateToExit
       TabOrder = 1
     end
   end
   object GroupBox6: TGroupBox
-    Left = 173
+    Left = 12
     Height = 104
-    Top = 96
-    Width = 140
+    Top = 120
+    Width = 156
     Caption = ' Locator '
-    ClientHeight = 73
-    ClientWidth = 136
+    ClientHeight = 72
+    ClientWidth = 152
     TabOrder = 7
     object edtLocator: TEdit
-      Left = 9
-      Height = 21
-      Top = 5
+      Left = 10
+      Height = 22
+      Top = 2
       Width = 94
       CharCase = ecUppercase
       TabOrder = 0
     end
     object rbIncludeLoc: TRadioButton
-      Left = 9
+      Left = 8
       Height = 26
-      Top = 59
-      Width = 69
+      Top = 50
+      Width = 72
       Caption = 'Include'
       TabOrder = 1
     end
     object rbExactlyLoc: TRadioButton
-      Left = 8
+      Left = 10
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 26
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 2
@@ -377,19 +377,19 @@ object frmFilter: TfrmFilter
     end
   end
   object GroupBox7: TGroupBox
-    Left = 173
-    Height = 104
-    Top = 416
+    Left = 344
+    Height = 114
+    Top = 352
     Width = 163
     Caption = 'QTH'
-    ClientHeight = 73
+    ClientHeight = 82
     ClientWidth = 159
     TabOrder = 8
     object rbExactlyQth: TRadioButton
       Left = 8
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 29
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 0
@@ -398,14 +398,14 @@ object frmFilter: TfrmFilter
     object rbIncludeQth: TRadioButton
       Left = 9
       Height = 26
-      Top = 57
-      Width = 69
+      Top = 54
+      Width = 72
       Caption = 'Include'
       TabOrder = 1
     end
     object edtQTH: TEdit
       Left = 9
-      Height = 21
+      Height = 22
       Top = 5
       Width = 131
       TabOrder = 2
@@ -413,56 +413,56 @@ object frmFilter: TfrmFilter
   end
   object GroupBox8: TGroupBox
     Left = 14
-    Height = 104
-    Top = 200
+    Height = 112
+    Top = 232
     Width = 629
     Caption = 'QSL'
-    ClientHeight = 73
+    ClientHeight = 80
     ClientWidth = 625
     TabOrder = 9
     object Label5: TLabel
       Left = 8
-      Height = 16
+      Height = 17
       Top = -4
-      Width = 42
+      Width = 49
       Caption = 'QSL VIA'
       ParentColor = False
     end
     object Label6: TLabel
       Left = 120
-      Height = 16
+      Height = 17
       Top = -4
-      Width = 52
+      Width = 57
       Caption = 'QSL send'
       ParentColor = False
     end
     object Label7: TLabel
       Left = 230
-      Height = 16
+      Height = 17
       Top = -4
-      Width = 76
+      Width = 85
       Caption = 'QSL Received'
       ParentColor = False
     end
     object Label13: TLabel
       Left = 7
-      Height = 16
+      Height = 17
       Top = 53
-      Width = 82
+      Width = 90
       Caption = 'eQSL QSL sent'
       ParentColor = False
     end
     object Label14: TLabel
       Left = 482
-      Height = 16
+      Height = 17
       Top = -4
-      Width = 107
+      Width = 118
       Caption = 'LoTW QSL received'
       ParentColor = False
     end
     object edtQSLVia: TEdit
       Left = 6
-      Height = 21
+      Height = 22
       Top = 13
       Width = 98
       CharCase = ecUppercase
@@ -555,50 +555,50 @@ object frmFilter: TfrmFilter
     end
     object Label16: TLabel
       Left = 216
-      Height = 16
+      Height = 17
       Top = 53
-      Width = 104
+      Width = 117
       Caption = 'eQSL QSL received'
       ParentColor = False
     end
     object Label17: TLabel
       Left = 352
-      Height = 16
+      Height = 17
       Top = -4
-      Width = 85
+      Width = 91
       Caption = 'LoTW QSL sent'
       ParentColor = False
     end
   end
   object GroupBox9: TGroupBox
-    Left = 14
-    Height = 97
-    Top = 320
-    Width = 154
+    Left = 480
+    Height = 104
+    Top = 120
+    Width = 162
     Caption = ' Continent '
-    ClientHeight = 66
-    ClientWidth = 150
+    ClientHeight = 72
+    ClientWidth = 158
     TabOrder = 10
     object edtCont: TEdit
       Left = 6
-      Height = 21
+      Height = 22
       Top = 23
       Width = 128
       TabOrder = 0
     end
   end
   object GroupBox10: TGroupBox
-    Left = 336
-    Height = 104
-    Top = 416
-    Width = 307
+    Left = 512
+    Height = 114
+    Top = 352
+    Width = 290
     Caption = ' IOTA '
-    ClientHeight = 73
-    ClientWidth = 303
+    ClientHeight = 82
+    ClientWidth = 286
     TabOrder = 11
     object edtIOTA: TEdit
       Left = 9
-      Height = 21
+      Height = 22
       Top = 5
       Width = 131
       CharCase = ecUppercase
@@ -607,16 +607,16 @@ object frmFilter: TfrmFilter
     object rbIncludeIOTA: TRadioButton
       Left = 9
       Height = 26
-      Top = 57
-      Width = 69
+      Top = 54
+      Width = 72
       Caption = 'Include'
       TabOrder = 1
     end
     object rbExactlyIOTA: TRadioButton
       Left = 8
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 29
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 2
@@ -626,25 +626,25 @@ object frmFilter: TfrmFilter
       Left = 94
       Height = 26
       Top = 47
-      Width = 135
+      Width = 146
       Caption = 'Only QSO with IOTA'
       TabOrder = 3
     end
   end
   object GroupBox11: TGroupBox
-    Left = 319
-    Height = 97
-    Top = 320
+    Left = 648
+    Height = 113
+    Top = 232
     Width = 158
     Caption = 'Remarks'
-    ClientHeight = 66
+    ClientHeight = 81
     ClientWidth = 154
     TabOrder = 12
     object rbExactlyRem: TRadioButton
-      Left = 8
+      Left = 10
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 26
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 0
@@ -653,67 +653,67 @@ object frmFilter: TfrmFilter
     object rbIncludeRem: TRadioButton
       Left = 9
       Height = 26
-      Top = 57
-      Width = 69
+      Top = 50
+      Width = 72
       Caption = 'Include'
       TabOrder = 1
     end
     object edtRemarks: TEdit
       Left = 6
-      Height = 21
-      Top = 5
+      Height = 22
+      Top = 2
       Width = 147
       TabOrder = 2
     end
   end
   object GroupBox12: TGroupBox
-    Left = 480
-    Height = 97
-    Top = 320
+    Left = 14
+    Height = 114
+    Top = 352
     Width = 163
     Caption = ' Award '
-    ClientHeight = 66
+    ClientHeight = 82
     ClientWidth = 159
     TabOrder = 13
     object rbExactlyDiplom: TRadioButton
-      Left = 8
+      Left = 7
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 29
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 0
       TabStop = True
     end
     object rbIncludeDiplom: TRadioButton
-      Left = 9
+      Left = 8
       Height = 26
-      Top = 57
-      Width = 69
+      Top = 54
+      Width = 72
       Caption = 'Include'
       TabOrder = 1
     end
     object edtDiplom: TEdit
       Left = 10
-      Height = 21
+      Height = 22
       Top = 5
       Width = 142
       TabOrder = 2
     end
   end
   object GroupBox13: TGroupBox
-    Left = 323
+    Left = 173
     Height = 104
-    Top = 96
-    Width = 154
+    Top = 120
+    Width = 140
     Caption = ' My locator '
-    ClientHeight = 73
-    ClientWidth = 150
+    ClientHeight = 72
+    ClientWidth = 136
     TabOrder = 14
     object edtMyLoc: TEdit
-      Left = 6
-      Height = 21
-      Top = 4
+      Left = 17
+      Height = 22
+      Top = 2
       Width = 79
       CharCase = ecUppercase
       TabOrder = 0
@@ -721,16 +721,16 @@ object frmFilter: TfrmFilter
     object rbIncludeMyLoc: TRadioButton
       Left = 9
       Height = 26
-      Top = 57
-      Width = 69
+      Top = 50
+      Width = 72
       Caption = 'Include'
       TabOrder = 1
     end
     object rbExactlyMyLoc: TRadioButton
       Left = 8
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 26
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 2
@@ -738,33 +738,33 @@ object frmFilter: TfrmFilter
     end
   end
   object GroupBox14: TGroupBox
-    Left = 480
+    Left = 320
     Height = 104
-    Top = 96
-    Width = 163
+    Top = 120
+    Width = 149
     Caption = ' Zones '
-    ClientHeight = 73
-    ClientWidth = 159
+    ClientHeight = 72
+    ClientWidth = 145
     TabOrder = 15
     object Label8: TLabel
       Left = 9
-      Height = 16
+      Height = 17
       Top = 10
-      Width = 26
+      Width = 28
       Caption = 'WAZ'
       ParentColor = False
     end
     object Label9: TLabel
       Left = 15
-      Height = 16
+      Height = 17
       Top = 37
-      Width = 19
+      Width = 20
       Caption = 'ITU'
       ParentColor = False
     end
     object edtWAZ: TEdit
       Left = 54
-      Height = 21
+      Height = 22
       Top = 4
       Width = 45
       CharCase = ecUppercase
@@ -772,7 +772,7 @@ object frmFilter: TfrmFilter
     end
     object edtITU: TEdit
       Left = 54
-      Height = 21
+      Height = 22
       Top = 31
       Width = 45
       CharCase = ecUppercase
@@ -780,35 +780,35 @@ object frmFilter: TfrmFilter
     end
   end
   object cmbProfile: TComboBox
-    Left = 109
-    Height = 21
-    Top = 602
+    Left = 276
+    Height = 22
+    Top = 554
     Width = 360
     ItemHeight = 0
     TabOrder = 16
     Text = 'cmbProfile'
   end
   object GroupBox15: TGroupBox
-    Left = 14
-    Height = 104
-    Top = 416
+    Left = 184
+    Height = 114
+    Top = 352
     Width = 154
     Caption = 'County'
-    ClientHeight = 73
+    ClientHeight = 82
     ClientWidth = 150
     TabOrder = 17
     object edtCounty: TEdit
-      Left = 14
-      Height = 21
-      Top = 6
+      Left = 9
+      Height = 22
+      Top = 5
       Width = 136
       TabOrder = 0
     end
     object rbExactlyCounty: TRadioButton
-      Left = 14
+      Left = 12
       Height = 26
-      Top = 37
-      Width = 68
+      Top = 29
+      Width = 73
       Caption = 'Exactly'
       Checked = True
       TabOrder = 1
@@ -817,25 +817,25 @@ object frmFilter: TfrmFilter
     object rbIncludeCounty: TRadioButton
       Left = 14
       Height = 26
-      Top = 57
-      Width = 69
+      Top = 54
+      Width = 72
       Caption = 'Include'
       TabOrder = 2
     end
   end
   object cmbMembers: TComboBox
-    Left = 109
-    Height = 27
-    Top = 636
+    Left = 276
+    Height = 28
+    Top = 588
     Width = 360
     ItemHeight = 0
     Style = csDropDownList
     TabOrder = 18
   end
   object btnHelp: TButton
-    Left = 560
+    Left = 727
     Height = 26
-    Top = 592
+    Top = 544
     Width = 75
     BorderSpacing.InnerBorder = 4
     Caption = 'Help'
@@ -843,9 +843,9 @@ object frmFilter: TfrmFilter
     TabOrder = 19
   end
   object cmbGroupBy: TComboBox
-    Left = 109
-    Height = 21
-    Top = 570
+    Left = 276
+    Height = 22
+    Top = 522
     Width = 200
     ItemHeight = 0
     Items.Strings = (
@@ -870,9 +870,9 @@ object frmFilter: TfrmFilter
     TabOrder = 20
   end
   object btnSave: TButton
-    Left = 448
+    Left = 615
     Height = 26
-    Top = 528
+    Top = 480
     Width = 88
     BorderSpacing.InnerBorder = 4
     Caption = 'Save filter'
@@ -880,9 +880,9 @@ object frmFilter: TfrmFilter
     TabOrder = 21
   end
   object btnLoad: TButton
-    Left = 448
+    Left = 615
     Height = 26
-    Top = 560
+    Top = 512
     Width = 88
     BorderSpacing.InnerBorder = 4
     Caption = 'Load filter'
@@ -890,17 +890,17 @@ object frmFilter: TfrmFilter
     TabOrder = 22
   end
   object GroupBox16: TGroupBox
-    Left = 173
-    Height = 96
-    Top = 320
-    Width = 140
+    Left = 648
+    Height = 104
+    Top = 120
+    Width = 156
     Caption = ' State '
-    ClientHeight = 65
-    ClientWidth = 136
+    ClientHeight = 72
+    ClientWidth = 152
     TabOrder = 23
     object edtState: TEdit
       Left = 9
-      Height = 21
+      Height = 22
       Top = 6
       Width = 80
       CharCase = ecUppercase
@@ -908,9 +908,9 @@ object frmFilter: TfrmFilter
     end
   end
   object cmbSort: TComboBox
-    Left = 109
-    Height = 21
-    Top = 536
+    Left = 276
+    Height = 22
+    Top = 488
     Width = 200
     ItemHeight = 0
     ItemIndex = 6
@@ -935,16 +935,58 @@ object frmFilter: TfrmFilter
     TabOrder = 24
     Text = 'DXCC'
   end
+  object GroupBox17: TGroupBox
+    Left = 14
+    Height = 110
+    Top = 472
+    Width = 163
+    Caption = 'Power'
+    ClientHeight = 78
+    ClientWidth = 159
+    TabOrder = 25
+    object Label18: TLabel
+      Left = 12
+      Height = 17
+      Top = 39
+      Width = 18
+      Caption = 'to:'
+      ParentColor = False
+    end
+    object edtPwrTo: TEdit
+      Left = 48
+      Height = 22
+      Top = 34
+      Width = 85
+      OnExit = edtDateToExit
+      TabOrder = 0
+    end
+    object edtPwrFrom: TEdit
+      Left = 48
+      Height = 22
+      Top = 5
+      Width = 85
+      OnExit = edtDateFromExit
+      TabOrder = 1
+    end
+    object Label19: TLabel
+      Left = 12
+      Height = 17
+      Top = 10
+      Width = 33
+      Caption = 'from:'
+      ParentColor = False
+    end
+  end
   object dlgOpen: TOpenDialog
     Filter = 'filter *.fil|*.fil'
-    left = 334
-    top = 536
+    left = 501
+    top = 488
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.fil'
     Filter = 'filter *.fil|*.fil'
     Options = [ofOverwritePrompt, ofNoTestFileCreate, ofEnableSizing, ofViewDetail]
-    left = 390
-    top = 536
+    left = 557
+    top = 488
   end
 end
