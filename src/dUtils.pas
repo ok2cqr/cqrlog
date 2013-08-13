@@ -31,11 +31,11 @@ const
                   '%','_','(',')','$'];
   empty_freq = '0.00000';
   empty_azimuth = '0.0';
-  cMaxModes = 38;
+  cMaxModes = 39;
   cModes: array [0..cMaxModes] of string = ('CW','SSB','AM','FM','RTTY','SSTV','PACTOR','PSK','ATV','CLOVER','GTOR','MTOR',
                                             'PSK31','HELL','MT63','QRSS','CWQ','BPSK31','MFSK','JT44','FSK44','WSJT','AMTOR',
                                             'THROB','BPSK63','PACKET','OLIVIA','MFSK16','JT6M','JT65','JT65A','JT65B','JT65C',
-                                            'FSK441','PSK125','PSK63','WSPR','PSK250','ROS');
+                                            'JT9','FSK441','PSK125','PSK63','WSPR','PSK250','ROS');
   cMaxBandsCount = 26; //26 bands
   cDefaultFreq = '0.136|1.800|3.500|3.700|7.000|10.100|14.000|14.200|18.100|21.000|21.200|24.890|28.000|28.500|50.000|70.0875|'+
                  '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|';
