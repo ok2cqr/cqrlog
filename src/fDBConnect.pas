@@ -70,6 +70,9 @@ type
     procedure mnuRepairClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender: TObject);
   private
+    RemoteMySQL : Boolean;
+    AskForDB    : Boolean;
+
     procedure SaveLogin;
     procedure LoadLogin;
     procedure UpdateGridFields;
@@ -162,7 +165,8 @@ begin
       tmrAutoConnect.Enabled := True;
       chkAutoConn.Checked    := True;
       chkSaveToLocal.Checked := True;
-      chkSaveToLocalClick(nil)
+      chkSaveToLocalClick(nil);
+      RemoteMySQL  := False
     end
     else begin
       chkSaveToLocal.Checked := False;
@@ -180,7 +184,8 @@ begin
         chkAutoConn.Checked := ini.ReadBool('Login','AutoConnect',False);
       chkSavePassChange(nil);
       if (chkAutoConn.Checked) and (chkAutoConn.Enabled) then
-        tmrAutoConnect.Enabled := True
+        tmrAutoConnect.Enabled := True;
+      RemoteMySQL  := True
     end;
     chkAutoOpen.Checked := ini.ReadBool('Login','AutoOpen',False);
   finally
@@ -211,8 +216,16 @@ begin
 end;
 
 procedure TfrmDBConnect.FormCreate(Sender: TObject);
+var
+  ini : TIniFile;
 begin
-  OpenFromMenu := False
+  OpenFromMenu := False;
+  ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
+  try
+    AskForDB := not ini.ValueExists('Login','SaveToLocal')
+  finally
+    ini.Free
+  end
 end;
 
 procedure TfrmDBConnect.btnConnectClick(Sender: TObject);
@@ -348,14 +361,31 @@ end;
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
 begin
   if chkSaveToLocal.Checked then
+  begin
+    if RemoteMySQL then
+    begin
+      if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
+      begin
+        dmData.StartMysqldProcess;
+        btnConnectClick(nil)
+      end
+      else begin
+        chkSaveToLocal.Checked := False;
+        grbLogin.Visible       := True;
+        exit
+      end
+    end;
     grbLogin.Visible := False
-  else
+  end
+  else  begin
     grbLogin.Visible := True
+  end
 end;
 
 procedure TfrmDBConnect.FormShow(Sender: TObject);
 var
   ini : TIniFile;
+  StartMysql : Boolean;
 begin
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
@@ -365,12 +395,17 @@ begin
       Height := ini.ReadInteger(Name,'Height',Height);
       Width  := ini.ReadInteger(Name,'Width',Width);
       Top    := ini.ReadInteger(Name,'Top',20);
-      Left   := ini.ReadInteger(Name,'Left',20)
+      Left   := ini.ReadInteger(Name,'Left',20);
+      StartMysql := ini.ReadBool('Login','SaveTolocal',True)
     end
   finally
     ini.Free
   end;
   dbgrdLogs.DataSource := dmData.dsrLogList;
+
+  if StartMysql then
+    dmData.StartMysqldProcess;
+
   LoadLogin;
   if OpenFromMenu then
   begin
@@ -459,9 +494,24 @@ end;
 procedure TfrmDBConnect.tmrAutoConnectTimer(Sender: TObject);
 begin
   tmrAutoConnect.Enabled := False;
+  if AskForDB then
+  begin
+    if Application.MessageBox('It seems you are trying to run this program for the first time, '+
+                              'are you going to save data to local machine?','Question ...',
+                              mb_YesNo+mb_IconQuestion) =  idYes then
+    begin
+      dmData.StartMysqldProcess
+    end
+    else begin
+      chkSaveToLocal.Checked := False;
+      chkSaveToLocalClick(nil);
+      edtServer.SetFocus
+    end
+  end;
   if not OpenFromMenu then
     btnConnect.Click;
-  btnOpenLog.SetFocus
+  if btnOpenLog.Enabled then
+    btnOpenLog.SetFocus
 end;
 
 procedure TfrmDBConnect.OpenDefaultLog;

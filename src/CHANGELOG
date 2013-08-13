@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 1.5.9
+  + local mysqld is executed only when the log is stored to local machine
   + added JT9 to list of modes
   + added Power field to filter window
   + option to show distance in miles instead of km added

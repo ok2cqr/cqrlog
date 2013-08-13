@@ -169,6 +169,7 @@ type
     fMySQLVersion : Currency;
 
     function  FindLib(const Path,LibName : String) : String;
+    function  GetMysqldPath : String;
 
     procedure CreateViews;
     procedure PrepareBandDatabase;
@@ -183,6 +184,7 @@ type
     procedure KillMySQL(const OnStart : Boolean = True);
     procedure CloseBandMapDB;
     procedure UpdateDatabase(old_version : Integer);
+    procedure PrepareMysqlConfigFile;
   public
     {
     MainCon51 : TMySQL51Connection;
@@ -318,6 +320,7 @@ type
     procedure RepairTables(nr : Word);
     procedure CreateQSLTmpTable;
     procedure DropQSLTmpTable;
+    procedure StartMysqldProcess;
   end;
 
 var
@@ -1168,15 +1171,6 @@ begin
   LoadeQSLCalls;
   LoadMasterSCP;
 
-  if not FileExistsUTF8(fDataDir+'my.cnf') then
-  begin
-    if fDebugLevel>=1 then Writeln(fDataDir+'my.cnf');
-    AssignFile(f,fDataDir+'my.cnf');
-    Rewrite(f);
-    Writeln(f,' ');
-    CloseFile(f)
-  end;
-
   //Mysql still may be running, so we must close it first
   KillMySQL;
 
@@ -1193,6 +1187,8 @@ begin
     Writeln('TConnection to MySQL:   ',FloatToStr(fMySQLVersion));
     Writeln('*')
   end;
+
+  {
 
   if FileExistsUTF8('/usr/bin/mysqld') then
     mysqld := '/usr/bin/mysqld';
@@ -1240,6 +1236,8 @@ begin
                               ' --key_buffer_size=4096K';
   if fDebugLevel>=1 then WriteLn(MySQLProcess.CommandLine);
   MySQLProcess.Execute;
+  }
+  //StartMysqldProcess;
   fContestMode := False;
 
   tmrDBPing.Interval := CDB_PING_INT*1000;
@@ -3125,6 +3123,80 @@ begin
   Q.SQL.Text := C_SQL;
   Q.ExecSQL;
   trQ.Commit
+end;
+
+function TdmData.GetMysqldPath : String;
+var
+  l : TStringList;
+  info : String;
+begin
+  if FileExistsUTF8('/usr/bin/mysqld') then
+    Result := '/usr/bin/mysqld';
+  if FileExistsUTF8('/usr/bin/mysqld_safe') then //Fedora
+    Result := '/usr/bin/mysqld_safe';
+  if FileExistsUTF8('/usr/sbin/mysqld') then //openSUSE
+    Result := '/usr/sbin/mysqld';
+  if Result = '' then  //don't know where mysqld is, so hopefully will be in  $PATH
+    Result := 'mysqld';
+
+  if FileExistsUTF8('/etc/apparmor.d/usr.sbin.mysqld') then
+  begin
+    l := TStringList.Create;
+    try
+      l.LoadFromFile('/etc/apparmor.d/usr.sbin.mysqld');
+      l.Text := UpperCase(l.Text);
+      if Pos(UpperCase('@{HOME}/.config/cqrlog/database/** rwk,'),l.Text) = 0 then
+      begin
+        info := 'It looks like apparmor is running in your system. CQRLOG needs to add this :'+
+                LineEnding+
+                '@{HOME}/.config/cqrlog/database/** rwk,'+
+                LineEnding+
+                'into /etc/apparmor.d/usr.sbin.mysqld'+
+                LineEnding+
+                LineEnding+
+                'You can do that by running /usr/share/cqrlog/cqrtest-apparmor-fix or you can add the line '+
+                'and restart apparmor manually.'+
+                LineEnding+
+                LineEnding+
+                'Click OK to continue (program may not work correctly) or Cancel and modify the file '+
+                'first.';
+         if Application.MessageBox(PChar(info),'Information ...',mb_OKCancel+mb_IconInformation) = idCancel then
+           Application.Terminate
+      end
+    finally
+      l.Free
+    end
+  end
+end;
+
+procedure TdmData.PrepareMysqlConfigFile;
+var
+  f : TextFile;
+begin
+  if not FileExistsUTF8(fHomeDir+'database'+DirectorySeparator+'my.cnf') then
+  begin
+    AssignFile(f,fHomeDir+'database'+DirectorySeparator+'my.cnf');
+    Rewrite(f);
+    Writeln(f,'[mysqld]');
+    Writeln(f,'performance_schema = Off');
+    CloseFile(f)
+  end
+end;
+
+procedure TdmData.StartMysqldProcess;
+var
+  mysqld : String;
+begin
+  mysqld := GetMysqldPath;
+  PrepareMysqlConfigFile;
+  MySQLProcess := TProcess.Create(nil);
+  MySQLProcess.CommandLine := mysqld+' --defaults-file='+fHomeDir+'database/'+'my.cnf'+
+                              ' --default-storage-engine=InnoDB --datadir='+fHomeDir+'database/'+
+                              ' --socket='+fHomeDir+'database/sock'+
+                              ' --skip-grant-tables --port=64000 --key_buffer_size=32M'+
+                              ' --key_buffer_size=4096K';
+  MySQLProcess.Execute;
+  sleep(2000)
 end;
 
 initialization
