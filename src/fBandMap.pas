@@ -210,6 +210,7 @@ begin
            (dbf.Fields[5].AsString  = p[2])) then   //mode
         begin
           dbf.Edit;
+          dbf.Fields[0].AsFloat    := StrToFloat(p[0]); //freq
           dbf.Fields[7].AsDateTime := now;
           dbf.Fields[4].AsInteger  := StrToInt(p[6]);
           dbf.Fields[8].AsString   := 'F';
