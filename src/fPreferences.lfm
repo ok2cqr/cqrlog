@@ -1,7 +1,7 @@
 object frmPreferences: TfrmPreferences
-  Left = 465
+  Left = 422
   Height = 610
-  Top = 65
+  Top = 153
   Width = 799
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
@@ -21,10 +21,10 @@ object frmPreferences: TfrmPreferences
     Height = 566
     Top = 0
     Width = 639
-    ActivePage = tabProgram
+    ActivePage = tabRBN
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 0
+    TabIndex = 24
     TabOrder = 0
     OnChange = pgPreferencesChange
     OnPageChanged = pgPreferencesChange
@@ -5710,28 +5710,28 @@ object frmPreferences: TfrmPreferences
         Top = 6
         Width = 587
         Caption = ' Reading data from fldigi'
-        ClientHeight = 382
+        ClientHeight = 368
         ClientWidth = 583
         TabOrder = 0
         object Label91: TLabel
           Left = 224
-          Height = 16
+          Height = 17
           Top = 277
-          Width = 185
+          Width = 203
           Caption = 'Try to load QSO from fldigi every '
           ParentColor = False
         end
         object Label92: TLabel
           Left = 513
-          Height = 16
+          Height = 17
           Top = 277
-          Width = 48
+          Width = 51
           Caption = 'seconds'
           ParentColor = False
         end
         object edtLoadFromFldigi: TSpinEdit
           Left = 449
-          Height = 21
+          Height = 22
           Top = 269
           Width = 50
           MinValue = 1
@@ -5753,7 +5753,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 96
+          ClientHeight = 82
           ClientWidth = 205
           ItemIndex = 0
           Items.Strings = (
@@ -5765,7 +5765,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtDefaultFreq: TEdit
           Left = 137
-          Height = 21
+          Height = 22
           Top = 209
           Width = 81
           TabOrder = 2
@@ -5785,7 +5785,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 94
+          ClientHeight = 80
           ClientWidth = 220
           Items.Strings = (
             'CQRLOG'
@@ -5818,7 +5818,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 87
+          ClientHeight = 73
           ClientWidth = 181
           Items.Strings = (
             'fldigi'
@@ -5828,7 +5828,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtDefaultRST: TEdit
           Left = 113
-          Height = 21
+          Height = 22
           Top = 317
           Width = 81
           TabOrder = 6
@@ -5843,9 +5843,9 @@ object frmPreferences: TfrmPreferences
           TabOrder = 7
           object Label95: TLabel
             Left = 30
-            Height = 16
+            Height = 17
             Top = 40
-            Width = 78
+            Width = 84
             Caption = 'Path to fldigi:'
             ParentColor = False
           end
@@ -5853,13 +5853,13 @@ object frmPreferences: TfrmPreferences
             Left = 9
             Height = 26
             Top = 14
-            Width = 266
+            Width = 280
             Caption = 'Run fldigi after entering to Remote mode'
             TabOrder = 0
           end
           object edtFldigiPath: TEdit
             Left = 30
-            Height = 21
+            Height = 22
             Top = 64
             Width = 416
             TabOrder = 1
@@ -5898,15 +5898,15 @@ object frmPreferences: TfrmPreferences
         end
         object chkEnableBackup: TCheckBox
           Left = 14
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 260
+          Width = 265
           Caption = 'Enable autobackup after program ends'
           TabOrder = 0
         end
         object edtBackupPath: TEdit
           Left = 14
-          Height = 24
+          Height = 22
           Top = 71
           Width = 496
           TabOrder = 1
@@ -5922,9 +5922,9 @@ object frmPreferences: TfrmPreferences
         end
         object chkCompressBackup: TCheckBox
           Left = 14
-          Height = 21
+          Height = 26
           Top = 208
-          Width = 197
+          Width = 202
           Caption = 'Compress backup with tar.gz'
           TabOrder = 3
         end
@@ -5943,7 +5943,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 70
+          ClientHeight = 56
           ClientWidth = 492
           Items.Strings = (
             'callsign, date and time (yourcall__yyyy-mm-dd__hh-mm-ss.adi)'
@@ -5991,7 +5991,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtTxtFiles: TEdit
         Left = 47
-        Height = 24
+        Height = 22
         Top = 49
         Width = 321
         TabOrder = 0
@@ -5999,7 +5999,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtPdfFiles: TEdit
         Left = 47
-        Height = 24
+        Height = 22
         Top = 105
         Width = 320
         TabOrder = 1
@@ -6007,7 +6007,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtImgFiles: TEdit
         Left = 47
-        Height = 24
+        Height = 22
         Top = 166
         Width = 320
         TabOrder = 2
@@ -6015,7 +6015,7 @@ object frmPreferences: TfrmPreferences
       end
       object edtHtmlFiles: TEdit
         Left = 45
-        Height = 24
+        Height = 22
         Top = 264
         Width = 320
         TabOrder = 3
@@ -6023,9 +6023,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkIntQSLViewer: TCheckBox
         Left = 47
-        Height = 21
+        Height = 26
         Top = 200
-        Width = 281
+        Width = 286
         Caption = 'Open QSL card images with internal viewer'
         TabOrder = 4
       end
@@ -6040,14 +6040,14 @@ object frmPreferences: TfrmPreferences
         Top = 8
         Width = 585
         Caption = ' Callbook search '
-        ClientHeight = 142
+        ClientHeight = 128
         ClientWidth = 581
         TabOrder = 0
         object rbHamQTH: TRadioButton
           Left = 6
-          Height = 21
+          Height = 26
           Top = 7
-          Width = 108
+          Width = 113
           Caption = 'HamQTH.com '
           Checked = True
           TabOrder = 0
@@ -6055,15 +6055,15 @@ object frmPreferences: TfrmPreferences
         end
         object rbQRZ: TRadioButton
           Left = 6
-          Height = 21
+          Height = 26
           Top = 31
-          Width = 77
+          Width = 82
           Caption = 'QRZ.com'
           TabOrder = 1
         end
         object edtCbUser: TEdit
           Left = 96
-          Height = 24
+          Height = 22
           Top = 63
           Width = 134
           TabOrder = 2
@@ -6086,13 +6086,178 @@ object frmPreferences: TfrmPreferences
         end
         object edtCbPass: TEdit
           Left = 96
-          Height = 24
+          Height = 22
           Top = 97
           Width = 134
           EchoMode = emPassword
           PasswordChar = '*'
           TabOrder = 3
         end
+      end
+    end
+    object tabRBN: TTabSheet
+      Caption = 'RBN support'
+      ClientHeight = 528
+      ClientWidth = 631
+      object chkRBNAutoConn: TCheckBox
+        Left = 20
+        Height = 26
+        Top = 302
+        Width = 227
+        Caption = 'Auto connect after open the log'
+        TabOrder = 0
+      end
+      object edtRBNLogin: TEdit
+        Left = 92
+        Height = 22
+        Top = 62
+        Width = 101
+        CharCase = ecUppercase
+        TabOrder = 1
+      end
+      object Label166: TLabel
+        Left = 20
+        Height = 17
+        Top = 65
+        Width = 37
+        Caption = 'Login:'
+        ParentColor = False
+      end
+      object Label167: TLabel
+        Left = 20
+        Height = 17
+        Top = 97
+        Width = 64
+        Caption = 'Watch for:'
+        ParentColor = False
+      end
+      object edtWatchFor: TEdit
+        Left = 92
+        Height = 22
+        Top = 95
+        Width = 101
+        CharCase = ecUppercase
+        TabOrder = 2
+      end
+      object Label168: TLabel
+        Left = 212
+        Height = 17
+        Top = 65
+        Width = 157
+        Caption = '(usually your own callsign)'
+        ParentColor = False
+      end
+      object Label169: TLabel
+        Left = 212
+        Height = 17
+        Top = 97
+        Width = 334
+        Caption = '(callsign you are watching for, also can be your callsign)'
+        ParentColor = False
+      end
+      object Label170: TLabel
+        Left = 15
+        Height = 36
+        Top = 14
+        Width = 522
+        Caption = 'CQRLOG can receive spots from RBN and show it on Gray line map. It''s very useful '#10'especially when you are calling CQ and want to see where your signal can be received.'
+        ParentColor = False
+      end
+      object Label171: TLabel
+        Left = 20
+        Height = 17
+        Top = 140
+        Width = 87
+        Caption = 'Signal strench'
+        ParentColor = False
+      end
+      object Label172: TLabel
+        Left = 243
+        Height = 17
+        Top = 140
+        Width = 35
+        Caption = 'Color'
+        ParentColor = False
+      end
+      object Label173: TLabel
+        Left = 28
+        Height = 17
+        Top = 163
+        Width = 53
+        Caption = '0 ... 10db'
+        ParentColor = False
+      end
+      object cl10db: TColorBox
+        Left = 220
+        Height = 28
+        Top = 158
+        Width = 137
+        DefaultColorColor = clWhite
+        Selected = clWhite
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        Color = clWhite
+        ItemHeight = 0
+        TabOrder = 3
+      end
+      object Label174: TLabel
+        Left = 28
+        Height = 17
+        Top = 201
+        Width = 60
+        Caption = '11 ... 20db'
+        ParentColor = False
+      end
+      object cl20db: TColorBox
+        Left = 220
+        Height = 28
+        Top = 191
+        Width = 137
+        DefaultColorColor = clWhite
+        Selected = clPurple
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        Color = clWhite
+        ItemHeight = 0
+        TabOrder = 4
+      end
+      object Label175: TLabel
+        Left = 28
+        Height = 17
+        Top = 234
+        Width = 60
+        Caption = '21 ... 30db'
+        ParentColor = False
+      end
+      object cl30db: TColorBox
+        Left = 220
+        Height = 28
+        Top = 227
+        Width = 137
+        DefaultColorColor = clWhite
+        Selected = clMaroon
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        Color = clWhite
+        ItemHeight = 0
+        TabOrder = 5
+      end
+      object Label176: TLabel
+        Left = 28
+        Height = 17
+        Top = 270
+        Width = 62
+        Caption = 'over 30dB'
+        ParentColor = False
+      end
+      object clOver30db: TColorBox
+        Left = 220
+        Height = 28
+        Top = 262
+        Width = 137
+        DefaultColorColor = clWhite
+        Selected = clRed
+        Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        Color = clWhite
+        ItemHeight = 0
+        TabOrder = 6
       end
     end
   end
@@ -6168,6 +6333,7 @@ object frmPreferences: TfrmPreferences
       'Auto backup'
       'External viewers'
       'Callbook support'
+      'RBN support'
     )
     ItemHeight = 22
     OnClick = lbPreferencesClick
@@ -6177,11 +6343,11 @@ object frmPreferences: TfrmPreferences
   object dlgFont: TFontDialog
     MinFontSize = 0
     MaxFontSize = 0
-    left = 552
-    top = 48
+    left = 536
+    top = 360
   end
   object dlgOpen: TOpenDialog
-    left = 512
-    top = 48
+    left = 456
+    top = 360
   end
 end

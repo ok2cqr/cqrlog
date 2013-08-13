@@ -112,6 +112,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkRBNAutoConn : TCheckBox;
     chkShowMiles : TCheckBox;
     chkIgnoreBandFreq : TCheckBox;
     chkRot1RunRotCtld: TCheckBox;
@@ -397,6 +398,9 @@ type
     chkWAZ3: TCheckBox;
     chkWAZ4: TCheckBox;
     chkWAZ5: TCheckBox;
+    cl20db : TColorBox;
+    cl30db : TColorBox;
+    clOver30db : TColorBox;
     clBoxBandITU: TColorBox;
     clboxQSLIOTA: TColorBox;
     clboxNewITU: TColorBox;
@@ -462,6 +466,9 @@ type
     cmbXplanetColor: TColorBox;
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
+    cl10db : TColorBox;
+    edtWatchFor : TEdit;
+    edtRBNLogin : TEdit;
     edtFreqChange : TEdit;
     edtPoll1: TEdit;
     edtPoll2: TEdit;
@@ -723,7 +730,18 @@ type
     Label163: TLabel;
     Label164: TLabel;
     Label165: TLabel;
+    Label166 : TLabel;
+    Label167 : TLabel;
+    Label168 : TLabel;
+    Label169 : TLabel;
     Label17: TLabel;
+    Label170 : TLabel;
+    Label171 : TLabel;
+    Label172 : TLabel;
+    Label173 : TLabel;
+    Label174 : TLabel;
+    Label175 : TLabel;
+    Label176 : TLabel;
     Label18: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -868,6 +886,7 @@ type
     tabExtViewers: TTabSheet;
     tabCallbook: TTabSheet;
     TabROTcontrol: TTabSheet;
+    tabRBN : TTabSheet;
     tabTRX2: TTabSheet;
     tabTRX1: TTabSheet;
     tabRot1: TTabSheet;
@@ -1431,6 +1450,14 @@ begin
   cqrini.WriteBool('Callbook', 'HamQTH', rbHamQTH.Checked);
   cqrini.WriteString('CallBook', 'CBUser', edtCbUser.Text);
   cqrini.WriteString('CallBook', 'CBPass', edtCbPass.Text);
+
+  cqrini.WriteInteger('RBN','10db',cl10db.Selected);
+  cqrini.WriteInteger('RBN','20db',cl20db.Selected);
+  cqrini.WriteInteger('RBN','30db',cl30db.Selected);
+  cqrini.WriteInteger('RBN','over30db',clOver30db.Selected);
+  cqrini.WriteString('RBN','login',edtRBNLogin.Text);
+  cqrini.WriteString('RBN','watch',edtWatchFor.Text);
+  cqrini.WriteBool('RBN','AutoConnect',chkRBNAutoConn.Checked);
 
   if WinKeyerChanged then
   begin
@@ -2648,6 +2675,14 @@ begin
   edtCbPass.Text := cqrini.ReadString('CallBook', 'CBPass', '');
   rbHamQTH.Checked := cqrini.ReadBool('Callbook', 'HamQTH', True);
   rbQRZ.Checked := cqrini.ReadBool('Callbook', 'QRZ', False);
+
+  cl10db.Selected        := cqrini.ReadInteger('RBN','10db',clWhite);
+  cl20db.Selected        := cqrini.ReadInteger('RBN','20db',clPurple);
+  cl30db.Selected        := cqrini.ReadInteger('RBN','30db',clMaroon);
+  clOver30db.Selected    := cqrini.ReadInteger('RBN','over30db',clRed);
+  edtRBNLogin.Text       := cqrini.ReadString('RBN','login','');
+  edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
+  chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
   edtCW1.Width := 60;
