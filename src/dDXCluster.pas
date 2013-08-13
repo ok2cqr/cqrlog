@@ -64,6 +64,7 @@ type
     DXCCRefArray   : Array of TDXCCRef;
     DXCCDelArray   : Array of Integer;
     ExceptionArray : Array of String;
+    csDX           : TRTLCriticalSection;
 
     function  IsException(call : String) : Boolean;
     function  CoVyhodnocovat(znacka : String; datum : TDateTime; var UzNasel : Boolean;var ADIF : Integer) : String;
@@ -128,40 +129,45 @@ var
   tmp : Extended;
   cw, ssb : Extended;
 begin
-  Result := False;
-  if (freq = '') then
-    exit;
-  if not TryStrToFloat(freq,tmp) then
-    exit;
-  tmp := tmp/1000;
-  freq := FloatToStr(tmp);
+  EnterCriticalsection(csDX);
+  try
+    Result := False;
+    if (freq = '') then
+      exit;
+    if not TryStrToFloat(freq,tmp) then
+      exit;
+    tmp := tmp/1000;
+    freq := FloatToStr(tmp);
 
-  qBands.Close;
-  qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
-                      freq+') ORDER BY b_begin';
-  if dmData.DebugLevel >= 1 then
-    Writeln(qBands.SQL.Text);
-  if trBands.Active then
-    trBands.RollBack;
-  trBands.StartTransaction;
-  qBands.Open;
-  Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
-  if qBands.RecordCount = 0 then
-    exit;
-  band := qBands.Fields[1].AsString;
-  cw   := qBands.Fields[4].AsFloat;
-  ssb  := qBands.Fields[6].AsFloat;
+    qBands.Close;
+    qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
+                        freq+') ORDER BY b_begin';
+    if dmData.DebugLevel >= 1 then
+      Writeln(qBands.SQL.Text);
+    if trBands.Active then
+      trBands.RollBack;
+    trBands.StartTransaction;
+    qBands.Open;
+    Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
+    if qBands.RecordCount = 0 then
+      exit;
+    band := qBands.Fields[1].AsString;
+    cw   := qBands.Fields[4].AsFloat;
+    ssb  := qBands.Fields[6].AsFloat;
 
-  Result := True;
-  if (tmp <= cw) then
-    mode := 'CW'
-  else begin
-    if (tmp >= ssb) then
-      mode := 'SSB'
-    else
-      mode := 'RTTY';
-  end;
-  Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
+    Result := True;
+    if (tmp <= cw) then
+      mode := 'CW'
+    else begin
+      if (tmp >= ssb) then
+        mode := 'SSB'
+      else
+        mode := 'RTTY';
+    end;
+    Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 function TdmDXCluster.DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;
@@ -170,87 +176,92 @@ var
   lotw   : Boolean = False;
   sAdif : String = '';
 begin
-  // index : 0 - unknown country, no qsl needed
-  // index : 1 - New country
-  // index : 2 - New band country
-  // index : 3 - New mode country
-  // index : 4 - QSL needed
-  lotw := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
-  if (adif = 0) then
-  begin
-    Result := 'Unknown country';
-    index  := 0;
-    exit
-  end;
-  index := 1;
-  sAdif := IntToStr(adif);
-
-  band := dmUtils.GetBandFromFreq(freq);
-  if trQ.Active then
-    trQ.Rollback;
-
-  try try
-    if lotw then
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                    sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                    QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
-                    QuotedStr(mode)+' LIMIT 1'
-    else
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
-                     QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
-    trQ.StartTransaction;
-    Q.Open;
-    if Q.Fields[0].AsInteger > 0 then
+  EnterCriticalsection(csDX);
+  try
+    // index : 0 - unknown country, no qsl needed
+    // index : 1 - New country
+    // index : 2 - New band country
+    // index : 3 - New mode country
+    // index : 4 - QSL needed
+    lotw := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
+    if (adif = 0) then
     begin
-      Result := 'Confirmed country!!';
-      index  := 0
-    end
-    else begin
-      Q.Close;
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND mode='+
-                     QuotedStr(mode)+' LIMIT 1';
+      Result := 'Unknown country';
+      index  := 0;
+      exit
+    end;
+    index := 1;
+    sAdif := IntToStr(adif);
+
+    band := dmUtils.GetBandFromFreq(freq);
+    if trQ.Active then
+      trQ.Rollback;
+
+    try try
+      if lotw then
+        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                      sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
+                      QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
+                      QuotedStr(mode)+' LIMIT 1'
+      else
+        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                       sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
+                       QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+      trQ.StartTransaction;
       Q.Open;
       if Q.Fields[0].AsInteger > 0 then
       begin
-        Result := 'QSL needed !!';
-        index := 4
+        Result := 'Confirmed country!!';
+        index  := 0
       end
       else begin
         Q.Close;
         Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+                       sAdif+' AND band='+QuotedStr(band)+' AND mode='+
+                       QuotedStr(mode)+' LIMIT 1';
         Q.Open;
         if Q.Fields[0].AsInteger > 0 then
         begin
-          Result := 'New mode country!!';
-          index  := 3
+          Result := 'QSL needed !!';
+          index := 4
         end
         else begin
           Q.Close;
           Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                         sAdif+' LIMIT 1';
+                         sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
           Q.Open;
-          if Q.Fields[0].AsInteger>0 then
+          if Q.Fields[0].AsInteger > 0 then
           begin
-            Result := 'New band country!!';
-            index  := 2
+            Result := 'New mode country!!';
+            index  := 3
           end
           else begin
-            Result := 'New country!!';
-            index  := 1
+            Q.Close;
+            Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                           sAdif+' LIMIT 1';
+            Q.Open;
+            if Q.Fields[0].AsInteger>0 then
+            begin
+              Result := 'New band country!!';
+              index  := 2
+            end
+            else begin
+              Result := 'New country!!';
+              index  := 1
+            end
           end
         end
       end
+    except
+      on E : Exception do
+        Writeln(E.Message)
     end
-  except
-    on E : Exception do
-      Writeln(E.Message)
-  end
+    finally
+      Q.Close;
+      trQ.Rollback
+    end
   finally
-    Q.Close;
-    trQ.Rollback
+    LeaveCriticalsection(csDX)
   end
 end;
 
@@ -579,16 +590,26 @@ function TdmDXCluster.id_country(znacka : String; Datum : TDateTime; var pfx,cou
 var
   posun, lat, long: string;
 begin
-  cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-  Result := id_country(znacka,datum,pfx,cont,country,itu,waz,posun,lat,long)
+  EnterCriticalsection(csDX);
+  try
+    cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
+    Result := id_country(znacka,datum,pfx,cont,country,itu,waz,posun,lat,long)
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 function TdmDXCluster.id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont,lat,long : String) : Word;
 var
   posun : string;
 begin
-  cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-  Result := id_country(znacka,datum,pfx,cont,country,itu,waz,posun,lat,long)
+  EnterCriticalsection(csDX);
+  try
+    cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
+    Result := id_country(znacka,datum,pfx,cont,country,itu,waz,posun,lat,long)
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 function TdmDXCluster.id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
@@ -602,84 +623,89 @@ var
   sZnac : string_mdz;
   sADIF : String;
 begin
-  if (length(znacka)=0) then
-  begin
-    exit;
-  end;
-  UzNasel := False;
-  ADIF := 0;
-
-  sZnac := znacka;
-  sZnac := CoVyhodnocovat(znacka,datum,UzNasel,ADIF);
-  sDatum  := DateToDDXCCDate(Datum);// DateToStr(Datum);
-  x := sez2^.najdis_s2(sZnac,sDatum,NotExactly);
-  if x <>-1 then
-  begin
-    country  := sez2^.znacka_popis_ex(x,0);
-    ITU      := sez2^.znacka_popis_ex(x,5);
-    WAZ      := sez2^.znacka_popis_ex(x,6);
-    posun    := sez2^.znacka_popis_ex(x,2);
-    lat      := sez2^.znacka_popis_ex(x,3);
-    long     := sez2^.znacka_popis_ex(x,4);
-    sADIF    := sez2^.znacka_popis_ex(x,11);
-    cont     := UpperCase(sez2^.znacka_popis_ex(x,1));
-    NoDXCC   := Pos('no DXCC',country) > 0;
-    if TryStrToInt(sAdif,ADIF) then
+  EnterCriticalsection(csDX);
+  try
+    if (length(znacka)=0) then
     begin
-      if ADIF > 0 then
-      begin
-        pfx := DXCCRefArray[adif].pref;
-        Result := ADIF
-      end
-      else begin
-        if NoDXCC then
-          pfx := '#'
-        else
-          pfx := '!';
-        Result := 0
-      end
-    end
-    else
-      Result := 0;
-    exit
-  end
-  else begin
-    pfx := '!';
-    Result := 0
-  end;
+      exit;
+    end;
+    UzNasel := False;
+    ADIF := 0;
 
-  x := uhej^.najdis_s2(sZnac,sDatum,NotExactly);
-  if x <>-1 then
-  begin
-    country  := uhej^.znacka_popis_ex(x,0);
-    ITU      := uhej^.znacka_popis_ex(x,5);
-    WAZ      := uhej^.znacka_popis_ex(x,6);
-    posun    := uhej^.znacka_popis_ex(x,2);
-    lat      := uhej^.znacka_popis_ex(x,3);
-    long     := uhej^.znacka_popis_ex(x,4);
-    sADIF    := uhej^.znacka_popis_ex(x,11);
-    cont     := UpperCase(uhej^.znacka_popis_ex(x,1));
-    NoDXCC   := Pos('no DXCC',country) > 0;
-    if TryStrToInt(sAdif,ADIF) then
+    sZnac := znacka;
+    sZnac := CoVyhodnocovat(znacka,datum,UzNasel,ADIF);
+    sDatum  := DateToDDXCCDate(Datum);// DateToStr(Datum);
+    x := sez2^.najdis_s2(sZnac,sDatum,NotExactly);
+    if x <>-1 then
     begin
-      if ADIF > 0 then
+      country  := sez2^.znacka_popis_ex(x,0);
+      ITU      := sez2^.znacka_popis_ex(x,5);
+      WAZ      := sez2^.znacka_popis_ex(x,6);
+      posun    := sez2^.znacka_popis_ex(x,2);
+      lat      := sez2^.znacka_popis_ex(x,3);
+      long     := sez2^.znacka_popis_ex(x,4);
+      sADIF    := sez2^.znacka_popis_ex(x,11);
+      cont     := UpperCase(sez2^.znacka_popis_ex(x,1));
+      NoDXCC   := Pos('no DXCC',country) > 0;
+      if TryStrToInt(sAdif,ADIF) then
       begin
-        pfx    := DXCCRefArray[adif].pref;
-        Result := ADIF
+        if ADIF > 0 then
+        begin
+          pfx := DXCCRefArray[adif].pref;
+          Result := ADIF
+        end
+        else begin
+          if NoDXCC then
+            pfx := '#'
+          else
+            pfx := '!';
+          Result := 0
+        end
       end
-      else begin
-        if NoDXCC then
-          pfx := '#'
-        else
-          pfx := '!';
-        Result := 0
-      end;
+      else
+        Result := 0;
       exit
     end
-  end
-  else begin
-    pfx := '!';
-    Result := 0
+    else begin
+      pfx := '!';
+      Result := 0
+    end;
+
+    x := uhej^.najdis_s2(sZnac,sDatum,NotExactly);
+    if x <>-1 then
+    begin
+      country  := uhej^.znacka_popis_ex(x,0);
+      ITU      := uhej^.znacka_popis_ex(x,5);
+      WAZ      := uhej^.znacka_popis_ex(x,6);
+      posun    := uhej^.znacka_popis_ex(x,2);
+      lat      := uhej^.znacka_popis_ex(x,3);
+      long     := uhej^.znacka_popis_ex(x,4);
+      sADIF    := uhej^.znacka_popis_ex(x,11);
+      cont     := UpperCase(uhej^.znacka_popis_ex(x,1));
+      NoDXCC   := Pos('no DXCC',country) > 0;
+      if TryStrToInt(sAdif,ADIF) then
+      begin
+        if ADIF > 0 then
+        begin
+          pfx    := DXCCRefArray[adif].pref;
+          Result := ADIF
+        end
+        else begin
+          if NoDXCC then
+            pfx := '#'
+          else
+            pfx := '!';
+          Result := 0
+        end;
+        exit
+      end
+    end
+    else begin
+      pfx := '!';
+      Result := 0
+    end
+  finally
+    LeaveCriticalsection(csDX)
   end
 end;
 
@@ -741,20 +767,26 @@ end;
 
 function TdmDXCluster.LetterFromMode(mode : String) : String;
 begin
-  if (mode = 'CW') or (mode = 'CWQ') then
-    result := 'C'
-  else begin
-    if (mode = 'FM') or (mode = 'SSB') or (mode = 'AM') then
-      result := 'F'
-    else
-      result := 'D';
-  end;
+  EnterCriticalsection(csDX);
+  try
+    if (mode = 'CW') or (mode = 'CWQ') then
+      result := 'C'
+    else begin
+      if (mode = 'FM') or (mode = 'SSB') or (mode = 'AM') then
+        result := 'F'
+      else
+        result := 'D';
+    end;
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 procedure TdmDXCluster.DataModuleCreate(Sender: TObject);
 var
   i : Integer;
 begin
+  InitCriticalSection(csDX);
   if dmData.MySQLVersion < 5.5 then
     dbDXC := TMySQL51Connection.Create(self)
   else
@@ -784,7 +816,8 @@ procedure TdmDXCluster.DataModuleDestroy(Sender: TObject);
 begin
   dispose(sez1,done);
   dispose(sez2,done);
-  dbDXC.Connected := False
+  dbDXC.Connected := False;
+  DoneCriticalsection(csDX)
 end;
 
 procedure TdmDXCluster.Q1BeforeOpen(DataSet: TDataSet);
@@ -816,42 +849,47 @@ var
   stColor  : String = '';
   tmp      : String;
 begin
-  if  cqrini.ReadBool('xplanet','UseDefColor',True) then
-    sColor := cqrini.ReadInteger('xplanet','color',clWhite);
-  iMax      := cqrini.ReadInteger('xplanet','LastSpots',20);
-  if cqrini.ReadInteger('xplanet','ShowFrom',0) > 0 then exit;
-  dmUtils.GetRealCoordinate(lat,long,clat,clong);
-  stColor := IntToHex(sColor,8);
-  stColor := '0x'+Copy(stColor,3,Length(stColor)-2);
-  tmp := CurrToStr(clat)+' '+CurrToStr(clong)+' "'+call+'" color='+stColor;
-  l := TStringList.Create;
-  l.Clear;
-  if FileExists(dmData.HomeDir + 'xplanet'+PathDelim+'marker') then
-    l.LoadFromFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
+  EnterCriticalsection(csDX);
   try
-    for i:= 0 to l.Count-1 do
-    begin
-      if Pos('"'+call+'"',l.Strings[i]) > 0 then
-      begin
-        l.Delete(i);
-        break
-      end
-    end;
-    l.Add(tmp);
-    if l.Count > iMax then
-    begin
-      iMax := l.Count - iMax; // how many lines to delete?
-      for i:= 0 to iMax-1 do
-        l.Delete(i)
-    end;
+    if  cqrini.ReadBool('xplanet','UseDefColor',True) then
+      sColor := cqrini.ReadInteger('xplanet','color',clWhite);
+    iMax      := cqrini.ReadInteger('xplanet','LastSpots',20);
+    if cqrini.ReadInteger('xplanet','ShowFrom',0) > 0 then exit;
+    dmUtils.GetRealCoordinate(lat,long,clat,clong);
+    stColor := IntToHex(sColor,8);
+    stColor := '0x'+Copy(stColor,3,Length(stColor)-2);
+    tmp := CurrToStr(clat)+' '+CurrToStr(clong)+' "'+call+'" color='+stColor;
+    l := TStringList.Create;
+    l.Clear;
+    if FileExists(dmData.HomeDir + 'xplanet'+PathDelim+'marker') then
+      l.LoadFromFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
     try
-      l.SaveToFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
-    except
-      on e : Exception do
-        if dmData.DebugLevel >=1 then Writeln('Savig maker file failed with this message: ',e.Message)
+      for i:= 0 to l.Count-1 do
+      begin
+        if Pos('"'+call+'"',l.Strings[i]) > 0 then
+        begin
+          l.Delete(i);
+          break
+        end
+      end;
+      l.Add(tmp);
+      if l.Count > iMax then
+      begin
+        iMax := l.Count - iMax; // how many lines to delete?
+        for i:= 0 to iMax-1 do
+          l.Delete(i)
+      end;
+      try
+        l.SaveToFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
+      except
+        on e : Exception do
+          if dmData.DebugLevel >=1 then Writeln('Savig maker file failed with this message: ',e.Message)
+      end
+    finally
+      l.Free
     end
   finally
-    l.Free
+    LeaveCriticalsection(csDX)
   end
 end;
 
@@ -874,14 +912,19 @@ end;
 
 procedure TdmDXCluster.ReloadDXCCTables;
 begin
-  dispose(sez1,done);
-  dispose(sez2,done);
+  EnterCriticalsection(csDX);
+  try
+    dispose(sez1,done);
+    dispose(sez2,done);
 
-  chy1 := new(Pchyb1,init);
-  sez1 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data'+PathDelim+'country.tab',chy1));
-  uhej := sez1;
-  sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data'+PathDelim+'country_del.tab',chy1));
-  LoadDXCCRefArray
+    chy1 := new(Pchyb1,init);
+    sez1 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data'+PathDelim+'country.tab',chy1));
+    uhej := sez1;
+    sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data'+PathDelim+'country_del.tab',chy1));
+    LoadDXCCRefArray
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 function TdmDXCluster.UsesLotw(call : String) : Boolean;
@@ -889,31 +932,36 @@ var
   i : Integer;
   h : Integer;
 begin
-  Result := False;
-  if call = '' then
-    exit;
-  call := dmUtils.GetIDCall(UpperCase(call));
-  for i:=0 to MaxCall-1 do
-  begin
-    if dxCallArray[i] = '' then
-      Break;
-    h := Ord(dxCallArray[i][1]);
-    if h = Ord(Call[1]) then
+  EnterCriticalsection(csDX);
+  try
+    Result := False;
+    if call = '' then
+      exit;
+    call := dmUtils.GetIDCall(UpperCase(call));
+    for i:=0 to MaxCall-1 do
     begin
-      if dxCallArray[i] = call then
+      if dxCallArray[i] = '' then
+        Break;
+      h := Ord(dxCallArray[i][1]);
+      if h = Ord(Call[1]) then
       begin
-        if dmData.DebugLevel>=1 then Writeln('Found - '+dxCallArray[i]);
-        Result := True;
-        Break
+        if dxCallArray[i] = call then
+        begin
+          if dmData.DebugLevel>=1 then Writeln('Found - '+dxCallArray[i]);
+          Result := True;
+          Break
+        end
+      end
+      else begin
+        if h > Ord(Call[1]) then
+        begin
+          if dmData.DebugLevel>=1 then Writeln('NOT found - '+dxCallArray[i]);
+          Break
+        end
       end
     end
-    else begin
-      if h > Ord(Call[1]) then
-      begin
-        if dmData.DebugLevel>=1 then Writeln('NOT found - '+dxCallArray[i]);
-        Break
-      end
-    end
+  finally
+    LeaveCriticalsection(csDX)
   end
 end;
 
@@ -923,69 +971,89 @@ var
   r : Integer;
   i : Integer;
 begin
-  Result := False;
-  l := 0;
-  r := Length(dmData.eQSLUsers);
-  repeat
-    i := (l+r) div 2;
-    if call < dmData.eQSLUsers[i] then
-      r := i-1
-    else
-      l := i+1;
-  until (call = dmData.eQSLUsers[i]) or (r<l);
-  if call = dmData.eQSLUsers[i] then
-    Result := True
+  EnterCriticalsection(csDX);
+  try
+    Result := False;
+    l := 0;
+    r := Length(dmData.eQSLUsers);
+    repeat
+      i := (l+r) div 2;
+      if call < dmData.eQSLUsers[i] then
+        r := i-1
+      else
+        l := i+1;
+    until (call = dmData.eQSLUsers[i]) or (r<l);
+    if call = dmData.eQSLUsers[i] then
+      Result := True
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 procedure TdmDXCluster.LoadDXCCRefArray;
 var
   adif : Integer;
 begin
-  if trQ.Active then
-    trQ.Rollback;
-  Q.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY ADIF';
+  EnterCriticalsection(csDX);
   try
-    trQ.StartTransaction;
-    Q.Open;
-    Q.Last;
-    SetLength(DXCCRefArray,StrToInt(Q.FieldByName('adif').AsString)+1);
-    SetLength(DXCCDelArray,0);
-    DXCCRefArray[0].adif := 0;
-    Q.First;
-    while not Q.Eof do
-    begin
-      adif := StrToInt(Q.FieldByName('adif').AsString);
-      DXCCRefArray[adif].adif    := adif;
-      DXCCRefArray[adif].pref    := Q.FieldByName('pref').AsString;
-      DXCCRefArray[adif].name    := Q.FieldByName('name').AsString;
-      DXCCRefArray[adif].cont    := Q.FieldByName('cont').AsString;
-      DXCCRefArray[adif].utc     := Q.FieldByName('utc').AsString;
-      DXCCRefArray[adif].lat     := Q.FieldByName('lat').AsString;
-      DXCCRefArray[adif].longit  := Q.FieldByName('longit').AsString;
-      DXCCRefArray[adif].itu     := Q.FieldByName('itu').AsString;
-      DXCCRefArray[adif].waz     := Q.FieldByName('waz').AsString;
-      DXCCRefArray[adif].deleted := Q.FieldByName('deleted').AsInteger;
-      if DXCCRefArray[adif].deleted > 0 then
+    if trQ.Active then
+      trQ.Rollback;
+    Q.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY ADIF';
+    try
+      trQ.StartTransaction;
+      Q.Open;
+      Q.Last;
+      SetLength(DXCCRefArray,StrToInt(Q.FieldByName('adif').AsString)+1);
+      SetLength(DXCCDelArray,0);
+      DXCCRefArray[0].adif := 0;
+      Q.First;
+      while not Q.Eof do
       begin
-        SetLength(DXCCDelArray,Length(DXCCDelArray)+1);
-        DXCCDelArray[Length(DXCCDelArray)-1] := adif
+        adif := StrToInt(Q.FieldByName('adif').AsString);
+        DXCCRefArray[adif].adif    := adif;
+        DXCCRefArray[adif].pref    := Q.FieldByName('pref').AsString;
+        DXCCRefArray[adif].name    := Q.FieldByName('name').AsString;
+        DXCCRefArray[adif].cont    := Q.FieldByName('cont').AsString;
+        DXCCRefArray[adif].utc     := Q.FieldByName('utc').AsString;
+        DXCCRefArray[adif].lat     := Q.FieldByName('lat').AsString;
+        DXCCRefArray[adif].longit  := Q.FieldByName('longit').AsString;
+        DXCCRefArray[adif].itu     := Q.FieldByName('itu').AsString;
+        DXCCRefArray[adif].waz     := Q.FieldByName('waz').AsString;
+        DXCCRefArray[adif].deleted := Q.FieldByName('deleted').AsInteger;
+        if DXCCRefArray[adif].deleted > 0 then
+        begin
+          SetLength(DXCCDelArray,Length(DXCCDelArray)+1);
+          DXCCDelArray[Length(DXCCDelArray)-1] := adif
+        end;
+        Q.Next
       end;
-      Q.Next
-    end;
+    finally
+      Q.Close;
+      trQ.Rollback
+    end
   finally
-    Q.Close;
-    trQ.Rollback
+    LeaveCriticalsection(csDX)
   end
 end;
 
 function TdmDXCluster.PfxFromADIF(adif : Word) : String;
 begin
-  Result := DXCCRefArray[adif].pref
+    EnterCriticalsection(csDX);
+  try
+    Result := DXCCRefArray[adif].pref
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 function TdmDXCluster.CountryFromADIF(adif : Word) : String;
 begin
-  Result := DXCCRefArray[adif].name
+  EnterCriticalsection(csDX);
+  try
+    Result := DXCCRefArray[adif].name
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 procedure TdmDXCluster.LoadExceptionArray;
@@ -993,17 +1061,22 @@ var
   f    : TextFile;
   s    : String;
 begin
-  SetLength(ExceptionArray,0);
-  AssignFile(f,dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
-  Reset(f);
-  while not Eof(f) do
-  begin
-    ReadLn(f,s);
-    //file has only a few lines so there is no need to SetLength in higher blocks
-    SetLength(ExceptionArray,Length(ExceptionArray)+1);
-    ExceptionArray[Length(ExceptionArray)-1]:=s
-  end;
-  CloseFile(f)
+  EnterCriticalsection(csDX);
+  try
+    SetLength(ExceptionArray,0);
+    AssignFile(f,dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
+    Reset(f);
+    while not Eof(f) do
+    begin
+      ReadLn(f,s);
+      //file has only a few lines so there is no need to SetLength in higher blocks
+      SetLength(ExceptionArray,Length(ExceptionArray)+1);
+      ExceptionArray[Length(ExceptionArray)-1]:=s
+    end;
+    CloseFile(f)
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 
