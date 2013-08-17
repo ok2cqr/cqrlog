@@ -42,7 +42,6 @@ const
    ExNoEquals = 2; 
    MaxCall = 100000;
 
-
 type
   { TdmDXCluster }
   TdmDXCluster = class(TDataModule)
@@ -72,7 +71,6 @@ type
     function  NaselCountry(znacka : String; datum : TDateTime; var pfx, country,
               cont, ITU, WAZ, posun, lat, long : String; var ADIF : Integer; presne : Integer = NotExactly) : Boolean;
     function  Explode(const cSeparator, vString: String): TExplodeArray;
-    function  GetBandFromFreq(MHz : string): String;
     function  DateToDDXCCDate(date : TDateTime) : String;
 
     //procedure VyhodnotZnacku(znacka : String; datum : TDateTime; var pfx, country, cont, ITU, WAZ, posun, lat, long : String);
@@ -89,8 +87,10 @@ type
                                posun, ITU, lat, long: string) : Word; overload;
     function  id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont : String) : Word; overload;
     function  id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont,lat,long : String): Word; overload;
+    function  id_country(znacka : String;var lat,long : String): Word; overload;
     function  PfxFromADIF(adif : Word) : String;
     function  CountryFromADIF(adif : Word) : String;
+    function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
 
     procedure AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
     procedure ReloadDXCCTables;
@@ -123,6 +123,7 @@ begin
     Writeln(vzkaz);
 end;
 }
+
 
 function TdmDXCluster.BandModFromFreq(freq : String;var mode,band : String) : Boolean;
 var
@@ -612,6 +613,24 @@ begin
   end
 end;
 
+function TdmDXCluster.id_country(znacka : String;var lat,long : String): Word;
+var
+  posun : String;
+  cont  : String;
+  WAZ   : String;
+  ITU   : String;
+  pfx   : String;
+  country : String;
+begin
+  EnterCriticalsection(csDX);
+  try
+    cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
+    Result := id_country(znacka,now,pfx,cont,country,itu,waz,posun,lat,long)
+  finally
+    LeaveCriticalsection(csDX)
+  end
+end;
+
 function TdmDXCluster.id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
   posun, ITU, lat, long: string) : Word;
 var
@@ -709,60 +728,69 @@ begin
   end
 end;
 
-function TdmDXCluster.GetBandFromFreq(MHz : string): String;
+function TdmDXCluster.GetBandFromFreq(freq : string; kHz : Boolean=false): String;
 var
   x: Integer;
   tmp : Currency;
   dec  : Currency;
   band : String;
 begin
-  Result := '';
-  band := '';
-  if Pos('.',MHz) > 0 then
-    MHz[Pos('.',MHz)] := DecimalSeparator;
+  EnterCriticalsection(csDX);
+  try
+    Result := '';
+    band := '';
+    if Pos('.',freq) > 0 then
+      freq[Pos('.',freq)] := DecimalSeparator;
 
-  if pos(',',MHz) > 0 then
-    MHz[pos(',',MHz)] := DecimalSeparator;
+    if pos(',',freq) > 0 then
+      freq[pos(',',freq)] := DecimalSeparator;
 
-  if not TextToFloat(PChar(trim(MHZ)),tmp, fvCurrency) then
-    exit;
-  if tmp < 1 then
-  begin
-    dec := Int(frac(tmp) * 1000);
-    if ((dec >= 133) and (dec <= 139))  then
-      Result := '2190M';
-    exit
-  end;
-  x := trunc(tmp);
+    if not TextToFloat(PChar(trim(freq)),tmp, fvCurrency) then
+      exit;
 
-  case x of
-    1 : Band := '160M';
-    3 : band := '80M';
-    5 : band := '60M';
-    7 : band := '40M';
-    10 : band := '30M';
-    14 : band := '20M';
-    18 : Band := '17M';
-    21 : Band := '15M';
-    24 : Band := '12M';
-    28..30 : Band := '10M';
-    50..53 : Band := '6M';
-    70..72 : Band := '4M';
-    144..146 : Band := '2M';
-    219..225 : Band := '1.25M';
-    430..440 : band := '70CM';
-    900..929 : band := '33CM';
-    1240..1300 : Band := '23CM';
-    2300..2450 : Band := '13CM';  //12 cm
-    3400..3475 : band := '9CM';
-    5650..5850 : Band := '6CM';
+    if kHz then
+      tmp := tmp/1000;
 
-    10000..10500 : band := '3CM';
-    24000..24250 : band := '1.25CM';
-    47000..47200 : band := '6MM';
-    76000..84000 : band := '4MM';
-  end;
-  Result := band
+    if tmp < 1 then
+    begin
+      dec := Int(frac(tmp) * 1000);
+      if ((dec >= 133) and (dec <= 139))  then
+        Result := '2190M';
+      exit
+    end;
+    x := trunc(tmp);
+
+    case x of
+      1 : Band := '160M';
+      3 : band := '80M';
+      5 : band := '60M';
+      7 : band := '40M';
+      10 : band := '30M';
+      14 : band := '20M';
+      18 : Band := '17M';
+      21 : Band := '15M';
+      24 : Band := '12M';
+      28..30 : Band := '10M';
+      50..53 : Band := '6M';
+      70..72 : Band := '4M';
+      144..146 : Band := '2M';
+      219..225 : Band := '1.25M';
+      430..440 : band := '70CM';
+      900..929 : band := '33CM';
+      1240..1300 : Band := '23CM';
+      2300..2450 : Band := '13CM';  //12 cm
+      3400..3475 : band := '9CM';
+      5650..5850 : Band := '6CM';
+
+      10000..10500 : band := '3CM';
+      24000..24250 : band := '1.25CM';
+      47000..47200 : band := '6MM';
+      76000..84000 : band := '4MM';
+    end;
+    Result := band
+  finally
+    LeaveCriticalsection(csDX)
+  end
 end;
 
 function TdmDXCluster.LetterFromMode(mode : String) : String;
@@ -1078,7 +1106,6 @@ begin
     LeaveCriticalsection(csDX)
   end
 end;
-
 
 initialization
   {$I dDXCluster.lrs}

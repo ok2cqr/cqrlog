@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 1.5.9
+  + your CQ received by RBN will be visible in gray line map
   + local mysqld is executed only when the log is stored to local machine
   + added JT9 to list of modes
   + added Power field to filter window

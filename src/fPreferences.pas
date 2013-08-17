@@ -467,6 +467,7 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    edtDelAfter : TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
     edtFreqChange : TEdit;
@@ -742,6 +743,8 @@ type
     Label174 : TLabel;
     Label175 : TLabel;
     Label176 : TLabel;
+    Label177 : TLabel;
+    Label178 : TLabel;
     Label18: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1012,6 +1015,7 @@ uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoa
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
   freq : Currency;
+  int  : integer;
 begin
   cqrini.WriteString('Station', 'Call', edtCall.Text);
   cqrini.WriteString('Station', 'Name', edtName.Text);
@@ -1458,6 +1462,10 @@ begin
   cqrini.WriteString('RBN','login',edtRBNLogin.Text);
   cqrini.WriteString('RBN','watch',edtWatchFor.Text);
   cqrini.WriteBool('RBN','AutoConnect',chkRBNAutoConn.Checked);
+  if TryStrToInt(edtDelAfter.Text,int) then
+    cqrini.WriteInteger('RBN','deleteAfter',int)
+  else
+    cqrini.WriteInteger('RBN','deleteAfter',60);
 
   if WinKeyerChanged then
   begin
@@ -2683,6 +2691,7 @@ begin
   edtRBNLogin.Text       := cqrini.ReadString('RBN','login','');
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
+  edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
   edtCW1.Width := 60;

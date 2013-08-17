@@ -179,7 +179,7 @@ var
 
 implementation
 { TfrmTRXControl }
-uses dUtils, dData, fNewQSO, fBandMap, uMyIni;
+uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline;
 
 procedure TRigThread.Execute;
 
@@ -304,7 +304,8 @@ begin
   else if b = '2M' then
     btn2m.Font.Color   := clRed
   else if b = '70CM' then
-    btn70cm.Font.Color := clRed
+    btn70cm.Font.Color := clRed;
+  frmGrayline.band := b
 end;
 
 function TfrmTRXControl.GetModeNumber(mode : String) : Cardinal;
