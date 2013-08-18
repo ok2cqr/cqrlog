@@ -820,6 +820,7 @@ begin
   else
     dbDXC := TMySQL55Connection.Create(self);
 
+  dbDXC.KeepConnection := True;
   for i:=0 to ComponentCount-1 do
   begin
     if Components[i] is TSQLQuery then
