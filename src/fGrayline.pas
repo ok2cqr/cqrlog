@@ -7,7 +7,7 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet;
+  lnet, lclType;
 
 type
   TRBNList = record
@@ -390,8 +390,12 @@ end;
 
 procedure TfrmGrayline.acConnectExecute(Sender : TObject);
 begin
-  RBNThread := TRBNThread.Create(True);
-  RBNThread.Resume
+  if (cqrini.ReadString('RBN','login','')='') then
+    Application.MessageBox('Login to RBN server is not set. Go to Preferences -> RBN support and do the basic settings','Information ...',mb_OK+mb_IconInformation)
+  else begin
+    RBNThread := TRBNThread.Create(True);
+    RBNThread.Resume
+  end
 end;
 
 procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -437,6 +441,7 @@ begin
   offset := cqrini.ReadInteger('Program','GraylineOffset',0);
   sbGrayLine.Visible      := cqrini.ReadBool('Grayline','Statusbar',True);
   acShowStatusBar.Checked := sbGrayLine.Visible;
+  sbGrayLine.SimpleText   := 'Disconnected';
   tmrGrayLine.Enabled := True;
   tmrGrayLineTimer(nil);
   tmrAutoConnect.Enabled := True
