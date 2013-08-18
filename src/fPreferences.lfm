@@ -6100,9 +6100,9 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 528
       ClientWidth = 631
       object chkRBNAutoConn: TCheckBox
-        Left = 380
+        Left = 393
         Height = 26
-        Top = 58
+        Top = 62
         Width = 227
         Caption = 'Auto connect after open the log'
         TabOrder = 0
@@ -6268,15 +6268,15 @@ object frmPreferences: TfrmPreferences
         ParentColor = False
       end
       object edtDelAfter: TEdit
-        Left = 188
+        Left = 204
         Height = 22
-        Top = 307
+        Top = 305
         Width = 40
         TabOrder = 7
         Text = '60'
       end
       object Label178: TLabel
-        Left = 236
+        Left = 260
         Height = 17
         Top = 310
         Width = 51
