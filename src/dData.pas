@@ -272,6 +272,7 @@ type
     function  GetQSOCount : Integer;
     function  UseseQSL(call : String) : Boolean;
     function  QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
+    function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -3201,6 +3202,48 @@ begin
   MySQLProcess.Execute;
   sleep(2000)
 end;
+
+function TdmData.BandModFromFreq(freq : String;var mode,band : String) : Boolean;
+var
+  tmp : Extended;
+  cw, ssb : Extended;
+begin
+  Result := False;
+  if (freq = '') then
+    exit;
+  if not TryStrToFloat(freq,tmp) then
+    exit;
+  tmp := tmp/1000;
+  freq := FloatToStr(tmp);
+
+  qBands.Close;
+  qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
+                      freq+') ORDER BY b_begin';
+  if dmData.DebugLevel >= 1 then
+    Writeln(qBands.SQL.Text);
+  if trBands.Active then
+    trBands.RollBack;
+  trBands.StartTransaction;
+  qBands.Open;
+  Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
+  if qBands.RecordCount = 0 then
+    exit;
+  band := qBands.Fields[1].AsString;
+  cw   := qBands.Fields[4].AsFloat;
+  ssb  := qBands.Fields[6].AsFloat;
+
+  Result := True;
+  if (tmp <= cw) then
+    mode := 'CW'
+  else begin
+    if (tmp >= ssb) then
+      mode := 'SSB'
+    else
+      mode := 'RTTY';
+  end;
+  Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
+end;
+
 
 initialization
   {$I dData.lrs}

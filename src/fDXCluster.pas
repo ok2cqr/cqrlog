@@ -298,7 +298,7 @@ begin
   }
   if NOT TryStrToFloat(freq,etmp) then
     exit;
-  if (not dmDXCluster.BandModFromFreq(freq,mode,stmp)) or (mode='') then
+  if (not dmData.BandModFromFreq(freq,mode,stmp)) or (mode='') then
     exit;
 
   if dmData.ContestMode then
@@ -341,7 +341,7 @@ begin
 
   if NOT TryStrToFloat(freq,etmp) then
     exit;
-  if (not dmDXCluster.BandModFromFreq(freq,mode,stmp)) or (mode='') then
+  if (not dmData.BandModFromFreq(freq,mode,stmp)) or (mode='') then
     exit;
   if dmData.ContestMode then
     frmTestMain.NewQSOFromSpot(call,freq,mode)
