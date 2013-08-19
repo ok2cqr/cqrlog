@@ -137,6 +137,9 @@ begin
   List    := TStringList.Create;
   List.Clear;
   dmDXCC.qDXCCRef.Close;
+  if dmDXCC.trDXCCRef.Active then
+    dmDXCC.trDXCCRef.Rollback;
+
   dmDXCC.trDXCCRef.StartTransaction;
   dmDXCC.qDXCCRef.SQL.Text := 'DELETE FROM cqrlog_common.dxcc_ref';
   dmDXCC.qDXCCRef.ExecSQL;
