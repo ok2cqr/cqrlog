@@ -56,24 +56,24 @@ LazarusResources.Add('TfrmDBConnect','FORMDATA',[
   +'sNative'#0#0#6'TPanel'#6'Panel4'#4'Left'#2#0#6'Height'#2#21#3'Top'#3'9'#1#5
   +'Width'#3'q'#1#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHe'
   +'ight'#2#21#11'ClientWidth'#3'q'#1#8'TabOrder'#2#2#0#9'TCheckBox'#11'chkAuto'
-  +'Open'#4'Left'#2#8#6'Height'#2#26#3'Top'#2#255#5'Width'#3#245#0#7'Caption'#6
-  +'"Open recent log after program runs'#8'TabOrder'#2#0#0#0#0#0#6'TPanel'#6'Pa'
-  +'nel3'#4'Left'#2#0#6'Height'#2#26#3'Top'#3#192#0#5'Width'#3'q'#1#5'Align'#7#5
-  +'alTop'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2#26#11'ClientWidth'#3'q'
-  +#1#8'TabOrder'#2#2#0#9'TCheckBox'#14'chkSaveToLocal'#4'Left'#2#12#6'Height'#2
-  +#26#3'Top'#2#2#5'Width'#3#215#0#7'Caption'#6#30'Save log data to local machi'
-  +'ne'#7'OnClick'#7#19'chkSaveToLocalClick'#8'TabOrder'#2#0#0#0#0#6'TTimer'#14
-  +'tmrAutoConnect'#7'Enabled'#8#7'OnTimer'#7#19'tmrAutoConnectTimer'#4'left'#2
-  +'p'#3'top'#3#144#1#0#0#10'TPopupMenu'#8'popUtils'#4'left'#3'8'#1#3'top'#3#216
-  ,#1#0#9'TMenuItem'#9'MenuItem1'#7'Caption'#6#13'Configuration'#0#9'TMenuItem'
-  +#9'mnuExport'#7'Caption'#6#10'Export ...'#7'OnClick'#7#14'mnuExportClick'#0#0
-  +#9'TMenuItem'#9'MenuItem2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'mnuImport'#7
-  +'Caption'#6#10'Import ...'#7'OnClick'#7#14'mnuImportClick'#0#0#0#9'TMenuItem'
-  +#9'MenuItem3'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'mnuRepair'#7'Caption'#6#19
-  +'Repair log database'#7'OnClick'#7#14'mnuRepairClick'#0#0#9'TMenuItem'#9'Men'
-  +'uItem5'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#11'mnuClearLog'#7'Caption'#6#9'C'
-  +'lear log'#7'OnClick'#7#16'mnuClearLogClick'#0#0#0#11'TOpenDialog'#7'dlgOpen'
-  +#10'DefaultExt'#6#4'.ini'#6'Filter'#6#15'ini files|*.ini'#4'left'#3#151#0#3
-  +'top'#3#234#0#0#0#11'TSaveDialog'#7'dlgSave'#10'DefaultExt'#6#4'.ini'#6'Filt'
-  +'er'#6#15'ini files|*.ini'#4'left'#3#151#0#3'top'#3''''#1#0#0#0
+  +'Open'#4'Left'#2#8#6'Height'#2#26#3'Top'#2#255#5'Width'#3#250#0#7'Caption'#6
+  +'#Open recent log after program start'#8'TabOrder'#2#0#0#0#0#0#6'TPanel'#6'P'
+  +'anel3'#4'Left'#2#0#6'Height'#2#26#3'Top'#3#192#0#5'Width'#3'q'#1#5'Align'#7
+  +#5'alTop'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2#26#11'ClientWidth'#3
+  +'q'#1#8'TabOrder'#2#2#0#9'TCheckBox'#14'chkSaveToLocal'#4'Left'#2#12#6'Heigh'
+  +'t'#2#26#3'Top'#2#2#5'Width'#3#215#0#7'Caption'#6#30'Save log data to local '
+  +'machine'#7'OnClick'#7#19'chkSaveToLocalClick'#8'TabOrder'#2#0#0#0#0#6'TTime'
+  +'r'#14'tmrAutoConnect'#7'Enabled'#8#7'OnTimer'#7#19'tmrAutoConnectTimer'#4'l'
+  +'eft'#2'p'#3'top'#3#144#1#0#0#10'TPopupMenu'#8'popUtils'#4'left'#3'8'#1#3'to'
+  ,'p'#3#216#1#0#9'TMenuItem'#9'MenuItem1'#7'Caption'#6#13'Configuration'#0#9'T'
+  +'MenuItem'#9'mnuExport'#7'Caption'#6#10'Export ...'#7'OnClick'#7#14'mnuExpor'
+  +'tClick'#0#0#9'TMenuItem'#9'MenuItem2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9
+  +'mnuImport'#7'Caption'#6#10'Import ...'#7'OnClick'#7#14'mnuImportClick'#0#0#0
+  +#9'TMenuItem'#9'MenuItem3'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'mnuRepair'#7
+  +'Caption'#6#19'Repair log database'#7'OnClick'#7#14'mnuRepairClick'#0#0#9'TM'
+  +'enuItem'#9'MenuItem5'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#11'mnuClearLog'#7
+  +'Caption'#6#9'Clear log'#7'OnClick'#7#16'mnuClearLogClick'#0#0#0#11'TOpenDia'
+  +'log'#7'dlgOpen'#10'DefaultExt'#6#4'.ini'#6'Filter'#6#15'ini files|*.ini'#4
+  +'left'#3#151#0#3'top'#3#234#0#0#0#11'TSaveDialog'#7'dlgSave'#10'DefaultExt'#6
+  +#4'.ini'#6'Filter'#6#15'ini files|*.ini'#4'left'#3#151#0#3'top'#3''''#1#0#0#0
 ]);

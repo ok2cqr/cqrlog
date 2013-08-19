@@ -229,8 +229,8 @@ object frmDBConnect: TfrmDBConnect
         Left = 8
         Height = 26
         Top = -1
-        Width = 245
-        Caption = 'Open recent log after program runs'
+        Width = 250
+        Caption = 'Open recent log after program start'
         TabOrder = 0
       end
     end
