@@ -519,7 +519,7 @@ begin
     else begin
       if (Pos('LOGIN',UpperCase(tmp)) > 0) and (telUser <> '') then
         lTelnet.SendMessage(telUser+#13+#10);
-      if (Pos('please enter your call:',LowerCase(tmp)) > 0) and (telUser <> '') then
+      if (Pos('please enter your call',LowerCase(tmp)) > 0) and (telUser <> '') then
         lTelnet.SendMessage(telUser+#13+#10);
       if (Pos('PASSWORD',UpperCase(tmp)) > 0) and (telPass <> '') then
         lTelnet.SendMessage(telPass+#13+#10);
