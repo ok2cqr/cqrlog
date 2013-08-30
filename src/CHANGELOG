@@ -14,6 +14,7 @@ Legend:
   - propagation info in spot notes has correct format
   - existing band map record was not updated from dx cluster
   - program didn't accept ITU zones 78 and 90 - fixed
+  - program used QTH from previous QSO even is the station was /P - fixed
 
 1.5.8
   - nothing happened after double click on bandmap spot - fixed

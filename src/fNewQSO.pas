@@ -764,7 +764,7 @@ begin
       begin
         if (sName = '') then
           sName := dmData.qQSOBefore.FieldByName('name').AsString;
-        if (qth = '') then
+        if (qth = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           qth := dmData.qQSOBefore.FieldByName('qth').AsString;
         if (loc = '') then
           loc := dmData.qQSOBefore.FieldByName('loc').AsString;
