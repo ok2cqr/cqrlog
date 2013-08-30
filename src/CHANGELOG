@@ -10,6 +10,7 @@ Legend:
   + added JT9 to list of modes
   + added Power field to filter window
   + option to show distance in miles instead of km added
+  + limit of max QSO on QSL label increased
   - double click on bandmap didn't work when the spot had split info  - fixed
   - propagation info in spot notes has correct format
   - existing band map record was not updated from dx cluster

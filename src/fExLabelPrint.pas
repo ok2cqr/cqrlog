@@ -69,11 +69,11 @@ var
   nr : Integer;
 begin
   if not TryStrToInt(edtQSOsToLabel.Text, nr) then
-    edtQSOsToLabel.Text := '6'
+    edtQSOsToLabel.Text := '100'
   else begin
-    if not ((nr > 0) and (nr<7)) then
-      edtQSOsToLabel.Text := '6'
-  end;
+    if not ((nr > 0) and (nr<100)) then
+      edtQSOsToLabel.Text := '100'
+  end
 end;
 
 procedure TfrmExLabelPrint.FormShow(Sender: TObject);
