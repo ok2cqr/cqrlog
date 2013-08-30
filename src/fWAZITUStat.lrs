@@ -187,23 +187,23 @@ LazarusResources.Add('TfrmWAZITUStat','FORMDATA',[
   +'leStyle'#7#8'tsNative'#0#0#6'TPanel'#6'Panel2'#4'Left'#2#0#6'Height'#2'P'#3
   +'Top'#2#0#5'Width'#3#156#2#5'Align'#7#5'alTop'#10'BevelOuter'#7#6'bvNone'#12
   +'ClientHeight'#2'P'#11'ClientWidth'#3#156#2#8'TabOrder'#2#3#0#6'TLabel'#6'La'
-  +'bel2'#4'Left'#3#200#0#6'Height'#2#18#3'Top'#2#10#5'Width'#2'2'#7'Caption'#6
+  +'bel2'#4'Left'#3#200#0#6'Height'#2#16#3'Top'#2#10#5'Width'#2')'#7'Caption'#6
   +#8'Profile:'#11'ParentColor'#8#0#0#5'TEdit'#11'edtProfiles'#4'Left'#3#248#0#6
-  +'Height'#2#27#3'Top'#2#5#5'Width'#3#136#0#8'TabOrder'#2#0#0#0#7'TButton'#16
+  +'Height'#2#21#3'Top'#2#5#5'Width'#3#136#0#8'TabOrder'#2#0#0#0#7'TButton'#16
   +'btnSelectProfile'#4'Left'#3#136#1#6'Height'#2#25#3'Top'#2#7#5'Width'#2'x'#7
   +'Caption'#6#14'Select profile'#7'OnClick'#7#21'btnSelectProfileClick'#8'TabO'
-  +'rder'#2#1#0#0#6'TLabel'#6'Label1'#4'Left'#2#8#6'Height'#2#18#3'Top'#2#11#5
-  ,'Width'#2','#7'Caption'#6#5'Mode:'#11'ParentColor'#8#0#0#9'TComboBox'#7'cmbM'
-  +'ode'#4'Left'#2'8'#6'Height'#2#31#3'Top'#2#5#5'Width'#3#136#0#10'ItemHeight'
+  +'rder'#2#1#0#0#6'TLabel'#6'Label1'#4'Left'#2#8#6'Height'#2#16#3'Top'#2#11#5
+  ,'Width'#2'$'#7'Caption'#6#5'Mode:'#11'ParentColor'#8#0#0#9'TComboBox'#7'cmbM'
+  +'ode'#4'Left'#2'8'#6'Height'#2#27#3'Top'#2#5#5'Width'#3#136#0#10'ItemHeight'
   +#2#0#5'Style'#7#14'csDropDownList'#8'TabOrder'#2#2#0#0#7'TButton'#10'btnRefr'
   +'esh'#4'Left'#3#136#1#6'Height'#2#25#3'Top'#2'0'#5'Width'#2'x'#7'Caption'#6
   +#18'Refresh statistics'#7'OnClick'#7#15'btnRefreshClick'#8'TabOrder'#2#3#0#0
-  +#9'TComboBox'#10'cmbCfmType'#4'Left'#2'z'#6'Height'#2#31#3'Top'#2'*'#5'Width'
+  +#9'TComboBox'#10'cmbCfmType'#4'Left'#2'z'#6'Height'#2#27#3'Top'#2'*'#5'Width'
   +#3#4#1#10'ItemHeight'#2#0#9'ItemIndex'#2#6#13'Items.Strings'#1#6#14'paper QS'
   +'L only'#6#14'paper and LoTW'#6#9'LoTW only'#6#18'paper QSL and eQSL'#6#13'L'
   +'oTW and eQSL'#6#9'eQSL only'#6#24'paper QSL, LoTW and eQSL'#0#5'Style'#7#14
   +'csDropDownList'#8'TabOrder'#2#4#4'Text'#6#24'paper QSL, LoTW and eQSL'#0#0#6
-  +'TLabel'#6'Label3'#4'Left'#2#8#6'Height'#2#18#3'Top'#2'2'#5'Width'#2'm'#7'Ca'
+  +'TLabel'#6'Label3'#4'Left'#2#8#6'Height'#2#16#3'Top'#2'2'#5'Width'#2'\'#7'Ca'
   +'ption'#6#15'Confirmed type:'#11'ParentColor'#8#0#0#0#11'TSaveDialog'#7'dlgS'
   +'ave'#11'FilterIndex'#2#0#4'left'#3#8#2#3'top'#3#16#1#0#0#0
 ]);

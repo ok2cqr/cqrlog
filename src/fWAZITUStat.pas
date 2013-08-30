@@ -238,7 +238,7 @@ const
   C_SEL = 'select itu,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main '+
           '%s '+
           'group by itu,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd '+
-          'having (itu > 0) and (itu < 76) '+
+          'having (itu > 0) and (itu < 91) '+
           'order by itu';
 var
   zone     : Integer;
@@ -257,9 +257,11 @@ begin
   LoadBandsSettings;
   Caption := 'ITU statistic';
   grdStat.Cells[0,0] := 'ITU';
-  grdStat.RowCount := 76;
+  grdStat.RowCount := 78;
   for i:=1 to 75 do
-  grdStat.Cells[0,i] := IntToStr(i);
+    grdStat.Cells[0,i] := IntToStr(i);
+  grdStat.Cells[0,76] := '78';
+  grdStat.Cells[0,77] := '90';
 
   if gmode <> '' then
     dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
@@ -283,8 +285,10 @@ begin
     LoTW    := dmData.Q.Fields[3].AsString;
     eQSL    := dmData.Q.Fields[4].AsString;
 
-    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,zone);
+    if (zone=78) then zone:=76; //line 76 in the gird
+    if (zone=90) then zone:=77;
 
+    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,zone);
     dmData.Q.Next
   end;
   dmData.Q.Close;
