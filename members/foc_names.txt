@@ -643,3 +643,5 @@ OZ8SW;Steen
 G3WPH;Mike
 KT4P;Carey
 DL6LBI;Ingo
+SM1TDE;Eric
+W5PEH;Pete
