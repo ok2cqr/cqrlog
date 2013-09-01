@@ -1,3 +1,20 @@
+cqrlog (1.5.9-1) unstable; urgency=low
+
+  * your CQ received by RBN will be visible in gray line map
+  * local mysqld is executed only when the log is stored to 
+    local machine
+  * added JT9 to list of modes
+  * added Power field to filter window
+  * option to show distance in miles instead of km added
+  * limit of max QSO on QSL label increased
+  * double click on bandmap didn't work when the spot had split info
+  * propagation info in spot notes has correct format
+  * existing band map record was not updated from dx cluster
+  * program didn't accept ITU zones 78 and 90
+  * program used QTH from previous QSO even is the station was /P
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 01 SEP 2013 09:35:00 +0100
+  
 cqrlog (1.5.8-1) unstable; urgency=low
 
   * nothing happened after double click on bandmap spot - fixed
