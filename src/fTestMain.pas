@@ -748,8 +748,8 @@ end;
 
 procedure TfrmTestMain.acAddToBandMapExecute(Sender: TObject);
 begin
-  frmBandMap.AddFromNewQSO(lblDXCC.Caption,'*'+edtCall.Text,StrToFloat(cmbFreq.Text),dmUtils.GetBandFromFreq(cmbFreq.Text)
-  ,cmbMode.Text,lblLat.Caption,lblLong.Caption)
+  //frmBandMap.AddFromNewQSO(lblDXCC.Caption,'*'+edtCall.Text,StrToFloat(cmbFreq.Text),dmUtils.GetBandFromFreq(cmbFreq.Text)
+  //,cmbMode.Text,lblLat.Caption,lblLong.Caption)
 end;
 
 procedure TfrmTestMain.acCWMessagesExecute(Sender: TObject);
