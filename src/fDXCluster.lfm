@@ -1,7 +1,7 @@
 object frmDXCluster: TfrmDXCluster
   Left = 497
   Height = 219
-  Top = 765
+  Top = 527
   Width = 564
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
@@ -132,7 +132,7 @@ object frmDXCluster: TfrmDXCluster
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
-      ClientHeight = 181
+      ClientHeight = 182
       ClientWidth = 556
       object Panel4: TPanel
         Left = 0
@@ -215,12 +215,12 @@ object frmDXCluster: TfrmDXCluster
     end
     object tabTelnet: TTabSheet
       Caption = 'Telnet'
-      ClientHeight = 181
+      ClientHeight = 182
       ClientWidth = 556
       object Panel1: TPanel
         Left = 0
         Height = 34
-        Top = 147
+        Top = 148
         Width = 556
         Align = alBottom
         BevelOuter = bvNone
@@ -229,15 +229,15 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 0
         object Label1: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 13
-          Width = 65
+          Width = 61
           Caption = 'Command:'
           ParentColor = False
         end
         object edtCommand: TEdit
           Left = 88
-          Height = 22
+          Height = 21
           Top = 8
           Width = 266
           OnKeyPress = edtCommandKeyPress
@@ -277,7 +277,7 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 1
         object edtTelAddress: TEdit
           Left = 8
-          Height = 22
+          Height = 21
           Top = 1
           Width = 189
           TabOrder = 0
@@ -315,7 +315,7 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlTelnet: TPanel
         Left = 0
-        Height = 117
+        Height = 118
         Top = 30
         Width = 556
         Align = alClient

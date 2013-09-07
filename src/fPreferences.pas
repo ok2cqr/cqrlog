@@ -1500,8 +1500,11 @@ begin
 
   dmData.InsertProfiles(frmNewQSO.cmbProfiles, False);
   frmNewQSO.cmbProfiles.Text := dmData.GetDefaultProfileText;
-  frmBandMap.pOnlyActiveBand := chkShowActiveBand.Checked;
-  frmBandMap.pOnlyActiveMode := chkShowActiveMode.Checked;
+  frmBandMap.OnlyCurrBand    := chkShowActiveBand.Checked;
+  frmBandMap.OnlyCurrMode    := chkShowActiveMode.Checked;
+  frmBandMap.FirstInterval   := StrToint(edtFirst.Text)*60;
+  frmBandMap.SecondInterval  := StrToInt(edtSecond.Text)*60;
+  frmBandMap.DeleteAfter     := StrToint(edtDelAfter.Text)*60;
 
   if frmGrayline.Showing then
     frmGrayline.Repaint;

@@ -661,6 +661,7 @@ var
   f        : Currency;
   kHz      : String;
   splitstr : String;
+  cLat, cLng : Currency;
 begin
   sColor  := 0; //cerna
 
@@ -682,10 +683,6 @@ begin
   splitstr := GetSplit(Spot);
 
   kHz := Freq;
-
-  Writeln('Freq:',freq);
-  Writeln('Call:',call);
-  Writeln('Split:',splitstr);
 
   tmp := Pos('.',freq);
   if tmp > 0 then
@@ -753,11 +750,13 @@ begin
 
   if dmData.ContestMode then
   begin
+    {
     Result := True;
     sColor := clBlack;
     dmDXCluster.AddToMarkFile(prefix,call,clWhite,cqrini.ReadString('xplanet','LastSpots','20'),lat,long);
     frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, clBlack,clWhite,splitstr);
     exit
+    }
   end;
   cont := UpperCase(cont);
   Result := True;
@@ -903,11 +902,13 @@ begin
 
   if ToBandMap and frmBandMap.Showing then
   begin
+    dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
+
     if cqrini.ReadBool('BandMap','UseDXCColors',False) then
-      frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, sColor, ThBckColor,splitstr)
+      frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,sColor,ThBckColor)
     else
-      frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet,
-                                  cqrini.ReadInteger('BandMap','ClusterColor',clBlack),ThBckColor,splitstr)
+      frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,
+                              cqrini.ReadInteger('BandMap','ClusterColor',clBlack),ThBckColor)
   end;
 
   if index > 0 then
@@ -1016,7 +1017,6 @@ begin
     sp.Text := copy(sp.Text,tmp+5,Length(sp.Text)-tmp+5);
     tmp := Pos('</pre>',sp.Text);
     sp.Text := copy(sp.Text,1,tmp-1);
-    Writeln(sp.Text);
     for i:=0 to sp.Count-1 do
     begin
       EnterCriticalsection(frmDXCluster.csTelnet);

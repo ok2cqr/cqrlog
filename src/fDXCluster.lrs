@@ -2,7 +2,7 @@
 
 LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   'TPF0'#13'TfrmDXCluster'#12'frmDXCluster'#4'Left'#3#241#1#6'Height'#3#219#0#3
-  +'Top'#3#253#2#5'Width'#3'4'#2#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#18
+  +'Top'#3#15#2#5'Width'#3'4'#2#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#18
   +'help/h21.html#ah19'#13'ActiveControl'#7#11'pgDXCluster'#7'Caption'#6#9'DXCl'
   +'uster'#12'ClientHeight'#3#219#0#11'ClientWidth'#3'4'#2#9'Icon.Data'#10#194
   +#12#0#0#190#12#0#0#0#0#1#0#1#0'  '#0#0#1#0#24#0#168#12#0#0#22#0#0#0'('#0#0#0
@@ -165,7 +165,7 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +'how'#7#8'FormShow'#10'LCLVersion'#6#8'0.9.30.2'#0#12'TPageControl'#11'pgDXC'
   +'luster'#4'Left'#2#0#6'Height'#3#219#0#3'Top'#2#0#5'Width'#3'4'#2#10'ActiveP'
   +'age'#7#9'tabTelnet'#5'Align'#7#8'alClient'#8'TabIndex'#2#1#8'TabOrder'#2#0#0
-  +#9'TTabSheet'#6'tabWeb'#7'Caption'#6#3'Web'#12'ClientHeight'#3#181#0#11'Clie'
+  +#9'TTabSheet'#6'tabWeb'#7'Caption'#6#3'Web'#12'ClientHeight'#3#182#0#11'Clie'
   +'ntWidth'#3','#2#0#6'TPanel'#6'Panel4'#4'Left'#2#0#6'Height'#2'$'#3'Top'#3
   +#148#0#5'Width'#3'.'#2#5'Align'#7#8'alBottom'#12'ClientHeight'#2'$'#11'Clien'
   +'tWidth'#3'.'#2#8'TabOrder'#2#0#0#6'TLabel'#7'lblInfo'#4'Left'#2#10#6'Height'
@@ -186,13 +186,13 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +'BevelInner'#7#9'bvLowered'#10'BevelOuter'#7#9'bvLowered'#5'Color'#7#7'clWhi'
   +'te'#12'Font.CharSet'#7#12'ANSI_CHARSET'#11'Font.Height'#2#12#9'Font.Name'#6
   +#19'DejaVu Sans Mono 12'#11'ParentColor'#8#10'ParentFont'#8#8'TabOrder'#2#1#0
-  +#0#0#9'TTabSheet'#9'tabTelnet'#7'Caption'#6#6'Telnet'#12'ClientHeight'#3#181
+  +#0#0#9'TTabSheet'#9'tabTelnet'#7'Caption'#6#6'Telnet'#12'ClientHeight'#3#182
   +#0#11'ClientWidth'#3','#2#0#6'TPanel'#6'Panel1'#4'Left'#2#0#6'Height'#2'"'#3
-  +'Top'#3#147#0#5'Width'#3','#2#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNo'
+  +'Top'#3#148#0#5'Width'#3','#2#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNo'
   +'ne'#12'ClientHeight'#2'"'#11'ClientWidth'#3','#2#8'TabOrder'#2#0#0#6'TLabel'
-  +#6'Label1'#4'Left'#2#6#6'Height'#2#17#3'Top'#2#13#5'Width'#2'A'#7'Caption'#6
+  +#6'Label1'#4'Left'#2#6#6'Height'#2#16#3'Top'#2#13#5'Width'#2'='#7'Caption'#6
   +#8'Command:'#11'ParentColor'#8#0#0#5'TEdit'#10'edtCommand'#4'Left'#2'X'#6'He'
-  +'ight'#2#22#3'Top'#2#8#5'Width'#3#10#1#10'OnKeyPress'#7#18'edtCommandKeyPres'
+  +'ight'#2#21#3'Top'#2#8#5'Width'#3#10#1#10'OnKeyPress'#7#18'edtCommandKeyPres'
   ,'s'#8'TabOrder'#2#0#0#0#7'TButton'#7'Button1'#4'Left'#3#211#1#6'Height'#2#25
   +#3'Top'#2#8#5'Width'#2'U'#7'Anchors'#11#5'akTop'#7'akRight'#0#25'BorderSpaci'
   +'ng.InnerBorder'#2#4#7'Caption'#6#4'Help'#7'OnClick'#7#12'btnHelpClick'#8'Ta'
@@ -201,7 +201,7 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +'Order'#2#2#7'Visible'#8#0#0#0#6'TPanel'#6'Panel2'#4'Left'#2#0#6'Height'#2#30
   +#3'Top'#2#0#5'Width'#3','#2#5'Align'#7#5'alTop'#10'BevelOuter'#7#6'bvNone'#12
   +'ClientHeight'#2#30#11'ClientWidth'#3','#2#8'TabOrder'#2#1#0#5'TEdit'#13'edt'
-  +'TelAddress'#4'Left'#2#8#6'Height'#2#22#3'Top'#2#1#5'Width'#3#189#0#8'TabOrd'
+  +'TelAddress'#4'Left'#2#8#6'Height'#2#21#3'Top'#2#1#5'Width'#3#189#0#8'TabOrd'
   +'er'#2#0#0#0#7'TButton'#9'btnSelect'#4'Left'#3#206#0#6'Height'#2#25#3'Top'#2
   +#1#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#6'Select'#7
   +'OnClick'#7#14'btnSelectClick'#8'TabOrder'#2#1#0#0#7'TButton'#13'btnTelConne'
@@ -210,7 +210,7 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +'k'#8'TabOrder'#2#2#0#0#7'TButton'#8'btnFont1'#4'Left'#3#146#1#6'Height'#2#25
   +#3'Top'#2#1#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4'F'
   +'ont'#7'OnClick'#7#12'btnFontClick'#8'TabOrder'#2#3#0#0#0#6'TPanel'#9'pnlTel'
-  +'net'#4'Left'#2#0#6'Height'#2'u'#3'Top'#2#30#5'Width'#3','#2#5'Align'#7#8'al'
+  +'net'#4'Left'#2#0#6'Height'#2'v'#3'Top'#2#30#5'Width'#3','#2#5'Align'#7#8'al'
   +'Client'#10'BevelOuter'#7#6'bvNone'#5'Color'#7#7'clWhite'#11'ParentColor'#8#8
   +'TabOrder'#2#2#0#0#0#0#6'TTimer'#8'tmrSpots'#7'Enabled'#8#8'Interval'#3' N'#7
   +'OnTimer'#7#13'tmrSpotsTimer'#4'left'#2'X'#3'top'#2'z'#0#0#11'TFontDialog'#8

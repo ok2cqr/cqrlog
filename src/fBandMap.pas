@@ -1,14 +1,3 @@
-(*
- ***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License.        *
- *                                                                         *
- ***************************************************************************
-*)
-
-
 unit fBandMap;
 
 {$mode objfpc}{$H+}
@@ -16,337 +5,485 @@ unit fBandMap;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, inifiles, process, lcltype, buttons, dynlibs, jakozememo, dbf,
-  memds, SdfData, ComCtrls, ActnList, SyncObjs, lclproc;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  jakozememo,lclproc, Math;
 
-  type
-    TBandThread = class(TThread)
-    protected
-      procedure Execute; override;
+type
+  TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
+
+const
+  MAX_ITEMS = 500;
+  DELTA_FREQ = 0.3; //freq (kHz) tolerance between radio freq and freq in bandmap
+  CURRENT_STATION_CHAR = '|'; //this character will be placed before the bandmap item when the radio freq is close enough
+  ITEM_SEP = '|'; //separator used with bandmap items stored in a file
+
+type
+  TBandMapItem =  record
+    Freq      : Double;
+    Call      : String[30];
+    Mode      : String[10];
+    Band      : String[10];
+    SplitInfo : String[20];
+    Lat       : Double;
+    Long      : Double;
+    Color     : LongInt;
+    BgColor   : LongInt;
+    TimeStamp : TDateTime;
+    Flag      : String[1];
+    TextValue : String[80];
+    FrmNewQSO : Boolean;
+    Position  : Word;
   end;
 
 type
+  TBandMapThread = class(TThread)
+  protected
+    function  IncColor(AColor: TColor; AQuantity: Byte) : TColor;
+    procedure Execute; override;
+end;
+
+type
+
   { TfrmBandMap }
+
   TfrmBandMap = class(TForm)
-    MemDataset1: TMemDataset;
+    Panel1: TPanel;
     pnlBandMap: TPanel;
-    tmrClick: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure acPreferencesExecute(Sender: TObject);
-    procedure tmrClickTimer(Sender: TObject);
   private
     BandMap  : TJakoMemo;
-    AddList  : TStringList;
-    ShowList : TStringList;
-    db       : Tdbf;
-    dbClick  : Boolean;
-    procedure SavePositions;
-    procedure ClearAll;
+    BandMapItemsCount : Word;
+    BandMapCrit : TRTLCriticalSection;
+    RunXplanetExport : Integer;
+
+    FFirstInterval  : Word;
+    FSecondInterval : Word;
+    FDeleteAfter    : Word;
+    FBandFilter     : String;
+    FModeFilter     : String;
+    FCurrentFreq    : Currency;
+    FCurrentMode    : String;
+    FCurrentBand    : String;
+    FBandMapClick   : TBandMapClick;
+    FOnlyCurrMode   : Boolean;
+    FOnlyCurrBand   : Boolean;
+    FxplanetFile    : String;
+
+    procedure RecalcPosition;
+    procedure SortBandMapArray(l,r : Integer);
     procedure BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
+    procedure EmitBandMapClick(Sender:TObject;Call,Mode : String; Freq : Currency);
+    procedure ClearAll;
+    procedure xplanetExport;
+    procedure DeleteFromArray(index : Integer);
+
+    function FindFirstEmptyPos : Word;
+    function FormatItem(freq : Double; Call, SplitInfo : String; fromNewQSO : Boolean) : String;
+    function SetSizeLeft(Value : String;Len : Integer) : String;
+    function GetIndexFromPosition(ItemPos : Word) : Integer;
+    function ItemExists(call,band,mode: String) : Integer;
   public
-    AddCrit  : TRTLCriticalSection;
-    ShowCrit : TRTLCriticalSection;
-    BandThRun : Boolean;
-    pBand : String;
-    pMode : String;
-    pOnlyActiveBand : Boolean;
-    pOnlyActiveMode : Boolean;
-    SyncList : TStringList;
-    BandThread : TBandThread;
+    BandMapItems  : Array [1..MAX_ITEMS] of TBandMapItem;
+    BandMapThread : TBandMapThread;
 
-    procedure AddFromNewQSO(pfx, call : String; vfoa : Double; band, mode,lat,long : String);
-    procedure AddFromDXCluster(call, mode, pfx,band, lat, long : String;vfo_a : double; colo,BckColor : LongInt; splitstr : String);
-    procedure DeleteFromBandMap(call,band,mode : String);
+    //after XX seconds items get older
+    property FirstInterval  : Word write FFirstInterval;
+    property SecondInterval : Word Write FSecondInterval;
+    property DeleteAfter    : Word write FDeleteAfter;
+    property BandFilter     : String write FBandFilter;
+    property ModeFilter     : String write FModeFilter;
+    property CurrentFreq    : Currency write FCurrentFreq;
+    property CurrentBand    : String write FCurrentBand;
+    property CurrentMode    : String write FCurrentMode;
+    property OnlyCurrMode   : Boolean write FOnlyCurrMode;
+    property OnlyCurrBand   : Boolean write FOnlyCurrBand;
+    property xplanetFile    : String write FxplanetFile;
+    property OnBandMapClick : TBandMapClick read FBandMapClick write FBandMapClick;
+                            //Freq in kHz
+    procedure AddToBandMap(Freq : Double; Call, Mode, Band, SplitInfo : String; Lat,Long : Double; ItemColor, BgColor : LongInt;
+                           fromNewQSO : Boolean=False);
+    procedure DeleteFromBandMap(call, mode, band : String);
+    procedure SyncBandMap;
     procedure LoadFonts;
-    procedure SynBandMap;
-  end;
-
-
+    procedure SaveBandMapItemsToFile(FileName : String);
+    procedure LoadBandMapItemsFromFile(FileName : String);
+  end; 
 
 var
   frmBandMap: TfrmBandMap;
 
 implementation
 
+uses dUtils, uMyIni, dData;
+
 { TfrmBandMap }
 
-uses dUtils, dData, fPreferences, fNewQSO, dDXCluster, fTRXControl, fTestMain,
-     uMyIni;
-
-procedure TBandThread.Execute;
-type
-  TExplodeArray = Array of String;
-
-  function Explode(const cSeparator, vString: String): TExplodeArray;
-  var
-    i: Integer;
-    S: String;
-  begin
-    S := vString;
-    SetLength(Result, 0);
-    i := 0;
-    while Pos(cSeparator, S) > 0 do begin
-      SetLength(Result, Length(Result) +1);
-      Result[i] := Copy(S, 1, Pos(cSeparator, S) -1);
-      Inc(i);
-      S := Copy(S, Pos(cSeparator, S) + Length(cSeparator), Length(S));
-    end;
-    SetLength(Result, Length(Result) +1);
-    Result[i] := Copy(S, 1, Length(S));
-  end;
-
-  procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
-  var
-    s,d : String;
-  begin
-    s := lat;
-    d := long;
-    if ((Length(s)=0) or (Length(d)=0)) then
+procedure TfrmBandMap.AddToBandMap(Freq : Double; Call, Mode, Band, SplitInfo : String; Lat,Long : Double; ItemColor, BgColor : LongInt;
+                                   fromNewQSO : Boolean=False);
+var
+  i : Integer;
+  p : Integer;
+begin
+  Randomize;
+  EnterCriticalSection(BandMapCrit);
+  try
+    if dmData.DebugLevel>=1 then Writeln('Search for:',call,',',band,',',mode);
+    p := ItemExists(call,band,mode);
+    if dmData.DebugLevel>=1 then Writeln('Deleted data on position:',p);
+    if p>0 then
     begin
-      longitude := 0;
-      latitude  := 0;
+      if dmData.DebugLevel>=1 then
+      begin
+        Writeln('BandMapItems[p].Freq:',BandMapItems[p].Freq);
+        Writeln('BandMapItems[p].Call:',BandMapItems[p].Call);
+        Writeln('BandMapItems[p].Band:',BandMapItems[p].Band);
+        Writeln('BandMapItems[p].Mode:',BandMapItems[p].Mode)
+      end;
+      DeleteFromArray(p)
+    end;
+    i := FindFirstemptyPos;
+    if (i=0) then
+    begin
+      Writeln('CRITICAL ERROR: BANDMAP IS FULL');
       exit
     end;
-
-    if s[Length(s)] = 'S' then
-      s := '-' +s ;
-    s := copy(s,1,Length(s)-1);
-    if pos('.',s) > 0 then
-      s[pos('.',s)] := DecimalSeparator;
-    if not TryStrToCurr(s,latitude) then
-      latitude := 0;
-
-    if d[Length(d)] = 'W' then
-      d := '-' + d ;
-    d := copy(d,1,Length(d)-1);
-    if pos('.',d) > 0 then
-      d[pos('.',d)] := DecimalSeparator;
-    if not TryStrToCurr(d,longitude) then
-      longitude := 0
+    BandMapItems[i].frmNewQSO := fromNewQSO;
+    BandMapItems[i].Freq      := Freq+Random(100)*0.000000001;
+    BandMapItems[i].Call      := Call;
+    BandMapItems[i].Mode      := Mode;
+    BandMapItems[i].Band      := Band;
+    BandMapItems[i].SplitInfo := SplitInfo;
+    BandMapItems[i].Lat       := Lat;
+    BandMapItems[i].Long      := Long;
+    BandMapItems[i].Color     := ItemColor;
+    BandMapItems[i].BgColor   := BgColor;
+    BandMapItems[i].TimeStamp := now;
+    BandMapItems[i].TextValue := FormatItem(Freq, Call, SplitInfo,fromNewQSO);
+    BandMapItems[i].Position  := i;
+    if dmData.DebugLevel>=1 then Writeln('Added to position:',i)
+  finally
+    LeaveCriticalSection(BandMapCrit)
   end;
-
-
-var
-  dbf : Tdbf;
-  First  : TDateTime;
-  Second : TDateTime;
-  disep  : TDateTime;
-  go     : Boolean = False;
-  old_band : String = '';
-  old_mode : String = '';
-  p        : TExplodeArray;
-  tmp      : String = '';
-  dbtime   : TDateTime;
-  l        : TStringList;
-  iMax     : Integer;
-  i        : Integer;
-  clat,clong : Currency;
-  stColor  : String = '';
-  ToBandMap : Boolean = False;
-  sColor : Integer = 0;
-begin
-  dbf           := TDbf.Create(nil);
-  dbf.FilePath  := dmData.HomeDir;
-  dbf.TableName := 'bandmap.dat';
-  dbf.Open;
-  dbf.IndexName := 'vfo_a';
-  SetLength(p,0);
-  dbf.First;
-  l := TStringList.Create;
-  while (not Terminated) do
+  if dmData.DebugLevel>=1 then
   begin
-    First  := cqrini.ReadInteger('BandMap','FirstAging',5)/1440;
-    Second := cqrini.ReadInteger('BandMap','SecondAging',8)/1440;
-    Disep  := cqrini.ReadInteger('BandMap','Disep',12)/1440;
-    if  cqrini.ReadBool('xplanet','UseDefColor',True) then
-      sColor := cqrini.ReadInteger('xplanet','color',clWhite);
-    ToBandMap := cqrini.ReadInteger('xplanet','ShowFrom',0) > 0;
-    iMax      := cqrini.ReadInteger('xplanet','LastSpots',20);
-
-    EnterCriticalSection(frmBandMap.AddCrit);
-    try
-      while (frmBandMap.AddList.Count <> 0) do
-      begin
-        frmBandMap.ShowList.Add(frmBandMap.AddList.Strings[0]);
-        if dmData.DebugLevel>=2 then
-          Writeln('ShowList.Add:',frmBandMap.AddList.Strings[0]);
-        frmBandMap.AddList.Delete(0);
-      end
-    finally
-      LeaveCriticalSection(frmBandMap.AddCrit)
-    end;
-{
-      0  Add('vfo_a', ftFloat);
-      1  Add('Call', ftString, 20);
-      2  Add('vfo_b', ftFloat);
-      3  Add('split',ftBoolean);
-      4  Add('color',ftLargeint);
-      5  Add('mode',ftString,8);
-      6  Add('band',ftString,6);
-      7  Add('time',ftDateTime);
-      8  Add('age', ftString,1);
-      9  Add('pfx',ftString,10);
-      10 Add('lat',ftString,10);
-      11 Add('long',ftString,10);
-      12 Add('id', ftAutoInc);
-      13 Add('bckColor',ftLargeInt);
-
-    //vfoa+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(iColor)+'|'+band
-
-}
-    Go := False;
-    while frmBandMap.ShowList.Count <> 0 do
+    for i:=1 to MAX_ITEMS do
     begin
-      Go := False;
-      p := Explode('|',frmBandMap.ShowList.Strings[0]);
-      dbf.First;
-      while not dbf.Eof do
-      begin             //call                          //band
-        if ((dbf.Fields[1].AsString = p[1]) and (dbf.Fields[6].AsString = p[7]) and
-           (dbf.Fields[5].AsString  = p[2])) then   //mode
-        begin
-          dbf.Edit;
-          dbf.Fields[0].AsFloat    := StrToFloat(p[0]); //freq
-          dbf.Fields[7].AsDateTime := now;
-          dbf.Fields[4].AsInteger  := StrToInt(p[6]);
-          dbf.Fields[8].AsString   := 'F';
-          dbf.Fields[6].AsString   := p[7];
-          dbf.Fields[14].AsString  := p[9];
-          dbf.Post;
-          frmBandMap.ShowList.Delete(0);
-          Go := True;
-          Break
-        end;
-        dbf.Next
+      if BandMapItems[i].Freq > 0 then
+      begin
+        Writeln('add:BandMapItems[',i,'].Freq:',BandMapItems[i].Freq,'*');
+        Writeln('add:BandMapItems[',i,'].call:',BandMapItems[i].call,'*');
+        Writeln('add:BandMapItems[',i,'].band:',BandMapItems[i].band,'*');
+        Writeln('add:BandMapItems[',i,'].mode:',BandMapItems[i].mode,'*')
+      end
+    end
+  end
+end;
+
+function TfrmBandMap.ItemExists(call,band,mode: String) : Integer;
+var
+  i : Integer;
+begin
+  Result := 0;
+  for i:=1 to MAX_ITEMS do
+  begin
+    if (BandMapItems[i].call=call) and (BandMapItems[i].band=band) and (BandMapItems[i].mode=mode) then
+    begin
+      if dmData.DebugLevel>=1 then
+      begin
+        Writeln('Ex:BandMapItems[',i,'].Freq:',BandMapItems[i].Freq);
+        Writeln('Ex:BandMapItems[',i,'].Call:',BandMapItems[i].Call);
+        Writeln('Ex:BandMapItems[',i,'].Position:',BandMapItems[i].Position)
       end;
-      if Go then
+      Result := i;
+      Break
+    end
+  end
+end;
+
+procedure TfrmBandMap.DeleteFromBandMap(call, mode, band : String);
+var
+  i : integer;
+begin
+  EnterCriticalSection(BandMapCrit);
+  try
+    for i:=1 to MAX_ITEMS do
+    begin
+      if (BandMapItems[i].Call=call) and  (BandMapItems[i].Band=band) and
+         (BandMapItems[i].Mode=mode) then
+        DeleteFromArray(i)
+    end
+  finally
+    LeaveCriticalSection(BandMapCrit)
+  end
+end;
+
+procedure TfrmBandMap.ClearAll;
+begin
+  BandMap.smaz_vse
+end;
+
+function TfrmBandMap.FormatItem(freq : Double; Call, SplitInfo : String; fromNewQSO : Boolean) : String;
+begin
+  if fromNewQSO then
+    call := '*'+call;
+  Result := SetSizeLeft(FloatToStrF(freq,ffFixed,8,3),12)+SetSizeLeft(call,12)+' '+ SplitInfo
+end;
+
+procedure TfrmBandMap.DeleteFromArray(index : Integer);
+begin
+  EnterCriticalSection(BandMapCrit);
+  try
+    BandMapItems[index].Freq := 0;
+    BandMapItems[index].Call := '';
+    BandMapItems[index].Mode := '';
+    BandMapItems[index].Band := ''
+  finally
+    LeaveCriticalSection(BandMapCrit)
+  end
+end;
+
+procedure TfrmBandMap.SyncBandMap;
+var
+  i : Integer;
+  s : String;
+begin
+  if Active then exit; //do not refresh the window when is activated (user is scrolling)
+  ClearAll;
+  FBandFilter := UpperCase(FBandFilter);
+  FModeFilter := UpperCase(FModeFilter);
+  BandMap.zakaz_kresleni(True);
+  EnterCriticalSection(BandMapCrit);
+  try
+    for i:=1 to MAX_ITEMS do
+    begin
+      if (BandMapItems[i].Freq = 0) then
         Continue;
-      dbf.Append;
-      dbf.Fields[0].AsFloat    := StrToFloat(p[0]); //freq
-      dbf.Fields[1].AsString   := p[1];             //call
-      dbf.Fields[4].AsInteger  := StrToInt(p[6]);   //color
-      dbf.Fields[9].AsString   := p[3];             //pfx
-      dbf.Fields[5].AsString   := p[2];             //mode
-      dbf.Fields[10].AsString  := p[4];             //lat
-      dbf.Fields[11].AsString  := p[5];             //long
-      dbf.Fields[7].AsDateTime := now;              //time
-      dbf.Fields[8].AsString   := 'F';
-      dbf.Fields[6].AsString   := p[7];             //band
-      dbf.Fields[13].AsInteger := StrToInt(p[8]);   //background color
-      dbf.Fields[14].AsString  := p[9];             //split
-      dbf.Post;
-      frmBandMap.ShowList.Delete(0)
-    end;
-    dbf.Filtered := False;
-    dbf.First;
-    while not dbf.Eof do
-    begin
-      dbtime := dbf.Fields[7].AsDateTime;
-      if now > dbtime+disep then
+
+      if (FOnlyCurrBand) and (FCurrentBand<>'') then
       begin
-        dbf.Delete;
-        Continue
+        if BandMapItems[i].Band<>FCurrentBand then
+          Continue
+      end;
+
+      if (FOnlyCurrMode) and (FCurrentMode<>'') then
+      begin
+        if BandMapItems[i].Mode<>FCurrentMode then
+          Continue
+      end;
+
+      if abs(FCurrentFreq-BandMapItems[i].Freq)<=DELTA_FREQ then
+        s := CURRENT_STATION_CHAR + BandMapItems[i].TextValue
+      else
+        s := ' ' + BandMapItems[i].TextValue;
+      BandMap.pridej_vetu(s,BandMapItems[i].Color,BandMapItems[i].BgColor,BandMapItems[i].Position)
+    end;
+
+    if  RunXplanetExport > 10 then //data for xplanet couln't be exported on every bandmap reload
+    begin
+      if (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0) then //data from band map to xplanet
+        xplanetExport;
+      RunXplanetExport := 0
+    end;
+    inc(RunXplanetExport)
+  finally
+    LeaveCriticalSection(BandMapCrit);
+    BandMap.zakaz_kresleni(False)
+  end
+end;
+
+
+procedure TfrmBandMap.EmitBandMapClick(Sender:TObject;Call,Mode : String; Freq : Currency);
+begin
+  if Assigned(FBandMapClick) then
+    FBandMapClick(Self,Call,Mode,Freq)
+end;
+
+procedure TfrmBandMap.BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
+var
+  i : Integer=0;
+begin
+  if (where>=0) and (where <= MAX_ITEMS-1) then
+  begin
+    if dmData.DebugLevel>=1 then Writeln('Clicked to:',where);
+    i := GetIndexFromPosition(where);
+      if dmData.DebugLevel>=1 then Writeln('Array pos: ',i);
+    if i=0 then exit;
+    EmitBandMapClick(Self,BandMapItems[i].Call,BandMapItems[i].Mode,BandMapItems[i].Freq)
+  end;
+  if dmData.DebugLevel>=1 then
+  begin
+    for i:=1 to MAX_ITEMS do
+    begin
+      if BandMapItems[i].Freq<>0 then
+      begin
+        Writeln('BandMapItems[',i,'].Freq:',BandMapItems[i].Freq);
+        Writeln('BandMapItems[',i,'].Call:',BandMapItems[i].Call);
+        Writeln('BandMapItems[',i,'].Position:',BandMapItems[i].Position)
       end
-      else begin
-        if (now >= Second+dbtime) and (dbf.Fields[8].AsString='S')  then
+    end
+  end
+end;
+
+procedure TfrmBandMap.SortBandMapArray(l,r : integer);
+var
+  i,j : Integer;
+  w : TbandMapItem;
+  x : Double;
+begin
+  i:=l; j:=r;
+  x:=BandMapItems[(l+r) div 2].Freq;
+  repeat
+    while BandMapItems[i].Freq < x do i:=i+1;
+    while x < BandMapItems[j].Freq do j:=j-1;
+    if i <= j then
+    begin
+      w := BandMapItems[i];
+      BandMapItems[i] := BandMapItems[j];
+      BandMapItems[j] := w;
+      i:=i+1; j:=j-1
+    end
+  until i > j;
+  if l < j then SortBandMapArray(l,j);
+  if i < r then SortBandMapArray(i,r)
+end;
+
+procedure TfrmBandMap.RecalcPosition;
+var
+  i : Integer;
+  w : Word=1;
+begin
+  for i:=1 to MAX_ITEMS do
+  begin
+    if BandMapItems[i].Freq <> 0 then
+    begin
+      BandMapItems[i].Position := w;
+      inc(w)
+    end
+  end
+end;
+
+function TfrmBandMap.GetIndexFromPosition(ItemPos : Word) : Integer;
+var
+  i : Integer;
+  s : String;
+  c : TColor;
+begin
+  if BandMap.cti_vetu(s,c,c,i,ItemPos) then
+  begin
+    s := copy(s,2,Length(s)-1);
+    if dmData.DebugLevel>=1 then Writeln('GetIndexFromPosition, looking for:',s);
+    for i:=1 to MAX_ITEMS do
+    begin
+      if BandMapItems[i].TextValue=s then
+      begin
+        Result := i;
+        break
+      end
+    end
+  end
+  else
+    Result := 0
+end;
+
+function TfrmBandMap.FindFirstEmptyPos : Word;
+var
+  i : Integer;
+begin
+  Result := 0;
+  for i:=MAX_ITEMS downto 1 do
+  begin
+    if BandMapItems[i].Freq = 0 then
+    begin
+      Result := i;
+      Break
+    end
+  end
+end;
+
+procedure TBandMapThread.Execute;
+var
+  i : Integer;
+begin
+  while not Terminated do
+  begin
+    try
+      EnterCriticalSection(frmBandMap.BandMapCrit);
+      for i:=1 to MAX_ITEMS do
+      begin
+        if frmBandMap.BandMapItems[i].Freq = 0 then
+          Continue;
+        if now>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)) then
         begin
-          dbf.Edit;
-          dbf.Fields[4].AsLongInt := dmUtils.IncColor(dbf.Fields[4].AsLongint,60);
-          dbf.Fields[8].AsString  :='X';
-          dbf.Post
+          frmBandMap.DeleteFromArray(i)
         end
-        else begin
-          if (now >= First+dbtime) and (dbf.Fields[8].AsString='F') then
-          begin
-            dbf.Edit;
-            dbf.Fields[4].AsLongInt := dmUtils.IncColor(dbf.Fields[4].AsLongint,40);
-            dbf.Fields[8].AsString  := 'S';
-            dbf.Post
-          end
+        else if (now>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FSecondInterval/86400))) and (frmBandMap.BandMapItems[i].Flag='S') then
+        begin
+          frmBandMap.BandMapItems[i].Color := IncColor(frmBandMap.BandMapItems[i].Color,40);
+          frmBandMap.BandMapItems[i].Flag  := 'X'
+        end
+        else if (now>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FFirstInterval/86400))) and (frmBandMap.BandMapItems[i].Flag='') then
+        begin
+          frmBandMap.BandMapItems[i].Color := IncColor(frmBandMap.BandMapItems[i].Color,60);
+          frmBandMap.BandMapItems[i].Flag  := 'S'
         end
       end;
-      dbf.Next
+      frmBandMap.SortBandMapArray(1,MAX_ITEMS);
+      frmBandMap.RecalcPosition
+    finally
+      LeaveCriticalSection(frmBandMap.BandMapCrit)
     end;
-    if frmTRXControl.GetModeBand(old_mode,old_band) then
-    begin
-      dbf.Filter := '';
-      tmp := '';
-      if frmBandMap.pOnlyActiveMode then
-        tmp := 'mode = ' + QuotedStr(old_mode);
-      if frmBandMap.pOnlyActiveBand then
-      begin
-        if tmp = '' then
-          tmp := 'band = ' + QuotedStr(old_band)
-        else
-          tmp := tmp + ' and band = ' + QuotedStr(old_band);
-      end;
-      if tmp <> '' then
-      begin
-        dbf.Filter   := tmp;
-        dbf.Filtered := True
-      end
-    end;
-    dbf.First;
-    l.Clear;
-    i := 0;
-    frmBandMap.SyncList.Clear;
-    while not dbf.Eof do
-    begin
-      tmp   := dmUtils.SetSizeLeft(FloatToStrF(dbf.Fields[0].AsFloat,ffFixed,8,3),8) +
-               dmUtils.SetSizeLeft(dbf.Fields[1].AsString,14) + ' ' + dbf.Fields[14].AsString;
-      frmBandMap.SyncList.Add(tmp+'|'+IntToStr(dbf.Fields[4].AsLongint)+'|'+IntToStr(dbf.Fields[13].AsLongint));
-      if ToBandMap and (i <= iMax) then
-      begin
-        GetRealCoordinate(dbf.Fields[10].AsString,dbf.Fields[11].AsString,clat,clong);
-        stColor := IntToHex(sColor,8);
-        stColor := '0x'+Copy(stColor,3,Length(stColor)-2);
-       // if l.Count <= iMax then
-        l.Add(CurrToStr(clat)+' '+CurrToStr(clong)+' "'+dbf.Fields[1].AsString+'" color='+stColor);
-        inc(i)
-      end;
-      dbf.Next
-    end;
-    if ToBandMap then
-    begin
-      try
-        l.SaveToFile(dmData.HomeDir + 'xplanet/marker');
-      except
-        on e : Exception do
-          if dmData.DebugLevel >=1 then Writeln('Savig maker file failed with this message: ',e.Message)
-      end
-    end;
-    dbf.Filtered := False;
-    Synchronize(@frmBandMap.SynBandMap);
+    Synchronize(@frmBandMap.SyncBandMap);
     Sleep(500)
   end
 end;
 
-procedure TfrmBandMap.SynBandMap;
+
+function TBandMapThread.IncColor(AColor: TColor; AQuantity: Byte) : TColor;
 var
-  tmp     : String;
-  colo    : String;
-  p       : TExplodeArray;
+  R, G, B : Byte;
 begin
-  if not Active then
-  begin
-    BandMap.zakaz_kresleni(true);
-    BandMap.smaz_vse;
-    try
-      while SyncList.Count <> 0 do
-      begin
-        tmp := SyncList.Strings[0];
-        SyncList.Delete(0);
-        p    := dmUtils.Explode('|',tmp);
-        BandMap.pridej_vetu(p[0],StrToInt(p[1]),StrToInt(p[2]),0)
-      end
-    finally
-      BandMap.zakaz_kresleni(False)
-    end
-  end
+  RedGreenBlue(ColorToRGB(AColor), R, G, B);
+  R := Max(0, Integer(R) + AQuantity);
+  G := Max(0, Integer(G) + AQuantity);
+  B := Max(0, Integer(B) + AQuantity);
+  Result := RGBToColor(R, G, B);
+end;
+
+function TfrmBandMap.SetSizeLeft(Value : String;Len : Integer) : String;
+var
+  i : Integer;
+begin
+  Result := Value;
+  for i:=Length(Value) to Len-1 do
+    Result := ' ' + Result
+end;
+
+procedure TfrmBandMap.FormCreate(Sender: TObject);
+var
+  i : Integer;
+begin
+  InitCriticalSection(BandMapCrit);
+  RunXplanetExport    := 1;
+  BandMap             := Tjakomemo.Create(pnlBandMap);
+  BandMap.parent      := pnlBandMap;
+  BandMap.autoscroll  := True;
+  BandMap.Align       := alClient;
+  BandMap.oncdblclick := @BandMapDbClick;
+  BandMap.nastav_jazyk(1);
+  for i:=1 to MAX_ITEMS do
+      BandMapItems[i].Freq:=0;
+  BandMapItemsCount := 0;
+  ClearAll;
+  BandMapThread := TBandMapThread.Create(True);
+  BandMapThread.Resume
+end;
+
+procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  dmUtils.SaveWindowPos(frmBandMap)
 end;
 
 procedure TfrmBandMap.LoadFonts;
@@ -358,244 +495,144 @@ begin
   try
     f.Name := cqrini.ReadString('BandMap','BandFont','Monospace');
     f.Size := cqrini.ReadInteger('BandMap','FontSize',8);
-    BandMap.nastav_font(f);
+    BandMap.nastav_font(f)
   finally
     f.Free
   end
 end;
 
-procedure TfrmBandMap.SavePositions;
-begin
-end;
-
-procedure TfrmBandMap.FormCreate(Sender: TObject);
-begin
-  InitCriticalSection(AddCrit);
-  InitCriticalSection(ShowCrit);
-  AddList  := TStringList.Create;
-  ShowList := TStringList.Create;
-  SyncList := TStringList.Create;
-  db       := TDbf.Create(nil);
-  db.TableName := 'bandmap.dat';
-  db.FilePath  := dmData.HomeDir;
-  BandMap             := Tjakomemo.Create(pnlBandMap);
-  BandMap.parent      := pnlBandMap;
-  BandMap.autoscroll  := True;
-  BandMap.Align       := alClient;
-  BandMap.oncdblclick := @BandMapDbClick;
-  BandMap.nastav_jazyk(1);
-  ClearAll;
-  BandThread := TBandThread.Create(True);
-end;
-
 procedure TfrmBandMap.FormDestroy(Sender: TObject);
 begin
-  if dmData.DebugLevel>=1 then Writeln('Closing BandMap window');
-  BandThread.Terminate;
-  ShowList.Free;
-  AddList.Free;
-  SyncList.Free;
-  DoneCriticalsection(AddCrit);
-  DoneCriticalsection(ShowCrit)
+  DoneCriticalsection(BandMapCrit)
 end;
 
 procedure TfrmBandMap.FormShow(Sender: TObject);
 begin
-  LoadFonts;
-  dmUtils.LoadWindowPos(frmBandMap);
-  pOnlyActiveBand := cqrini.ReadBool('BnadMap','OnlyActiveBand', False);
-  pOnlyActiveMode := cqrini.ReadBool('BandMap','OnlyActiveMode', True);
-  dbClick := False;
-  if BandThread.Suspended  then
-    BandThread.Resume
+  dmUtils.LoadWindowPos(frmBandMap)
 end;
 
-
-procedure TfrmBandMap.acPreferencesExecute(Sender: TObject);
-begin
-  with TfrmPreferences.Create(self) do
-  try
-    pgPreferences.ActivePage := tabBandMap;
-    ShowModal
-  finally
-    Free
-  end
-end;
-
-procedure TfrmBandMap.tmrClickTimer(Sender: TObject);
-begin
-  dbClick := False
-end;
-
-procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  dmUtils.SaveWindowPos(frmBandMap)
-end;
-
-procedure TfrmBandMap.ClearAll;
-begin
-  BandMap.smaz_vse;
-end;
-
-procedure TfrmBandMap.AddFromNewQSO(pfx, call : String; vfoa : Double; band, mode,lat,long : String);
+procedure TfrmBandMap.SaveBandMapItemsToFile(FileName : String);
 var
-  fra       : double;
-  iColor    : Integer;
-  bckColor  : Integer;
+  f : TextFile;
+  i : Integer;
 begin
-  if call = '' then
-    exit;
-  EnterCriticalSection(AddCrit);
+  AssignFile(f,FileName);
   try
-    iColor    := cqrini.ReadInteger('BandMap','NewQSOColor',clBlack);
-    if (mode = 'SSB') or (mode = 'AM') or (mode = 'FM') then
-      mode := 'SSB';
-    fra := vfoa*1000;
-
-    bckColor := clWhite;
-
-    if cqrini.ReadBool('LoTW','UseBackColor',True) then
-    begin
-      if dmData.UsesLotw(copy(call,2,Length(call)-1)) then
-        bckColor := cqrini.ReadInteger('LoTW','BckColor',clMoneyGreen)
-      else
-        bckColor := clWhite
-    end;
-
-    if bckColor = clWhite then
-    begin
-      if cqrini.ReadBool('LoTW','eUseBackColor',True) then
-        if dmData.UseseQSL(copy(call,2,Length(call)-1)) then
-          bckColor := cqrini.ReadInteger('LoTW','eBckColor',clSkyBlue)
-    end;
-
-    AddList.Add(FloatToStr(fra)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(iColor)+'|'+band+'|'+
-                IntToStr(bckColor)+'| |');
-    if dmData.DebugLevel >=2 then
-       Writeln('AddList.Add:'+FloatToStr(fra)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(iColor)+'|'+band+'|'+
-               IntToStr(bckColor))
+    Rewrite(f);
+    for i:=1 to MAX_ITEMS do
+      Writeln(f,
+        BandMapItems[i].frmNewQSO,ITEM_SEP,
+        BandMapItems[i].Freq,ITEM_SEP,
+        BandMapItems[i].Call,ITEM_SEP,
+        BandMapItems[i].Mode,ITEM_SEP,
+        BandMapItems[i].Band,ITEM_SEP,
+        BandMapItems[i].SplitInfo,ITEM_SEP,
+        BandMapItems[i].Lat,ITEM_SEP,
+        BandMapItems[i].Long,ITEM_SEP,
+        BandMapItems[i].Color,ITEM_SEP,
+        BandMapItems[i].BgColor,ITEM_SEP,
+        BandMapItems[i].TimeStamp,ITEM_SEP,
+        BandMapItems[i].TextValue,ITEM_SEP,
+        BandMapItems[i].Position,ITEM_SEP
+      )
   finally
-    LeaveCriticalSection(AddCrit)
+    CloseFile(f)
   end
 end;
 
-procedure TfrmBandMap.AddFromDXCluster(call, mode, pfx,band, lat, long : String;vfo_a : double;Colo,BckColor : LongInt; splitstr : String);
-begin
-
-  Writeln('AddFromCluster *****');
-  Writeln('Call:',call);
-  Writeln('Band:',band);
-  Writeln('Mode:',mode);
-  Writeln('Split:',splitstr);
-  Writeln('********************');
-
-  EnterCriticalSection(AddCrit);
-  try
-    if (mode = 'SSB') or (mode = 'AM') or (mode = 'FM') then
-      mode := 'SSB';
-    AddList.Add(FloatToStr(vfo_a)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(colo)+'|'+band+'|'+
-                IntToStr(BckColor)+'|'+splitstr+'|' );
-    if dmData.DebugLevel >=2 then
-      Writeln('AddList.Add:'+FloatToStr(vfo_a)+'|'+call+'|'+mode+'|'+pfx+'|'+lat+'|'+long+'|'+IntToStr(Colo)+'|'+band+'|'+
-              IntToStr(BckColor))
-  finally
-    LeaveCriticalSection(AddCrit)
-  end
-end;
-
-procedure TfrmBandMap.BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
+procedure TfrmBandMap.LoadBandMapItemsFromFile(FileName : String);
 var
-  spot : String;
-  tmp  : Integer;
-  dbf  : TDbf;
-  freq : String;
-  call : String;
-  f    : double;
+  f : TextFile;
+  i : Integer=1;
+  a : TExplodeArray;
+  s : String;
 begin
-  if dbClick then
-    exit;
-  dbClick := True;
-  BandMap.cti_vetu(spot,tmp,tmp,tmp,where);
-  freq := copy(spot,1,12);
-  freq := trim(freq);
-  call := copy(spot,13,12);
-  call := trim(call);
-  if dmData.DebugLevel >= 1 then
-  begin
-    Writeln('Bandmap spot:',spot);
-    Writeln('Bandmap freq:',freq);
-    Writeln('Bandmap call:',call)
-  end;
-  if not TryStrToFloat(freq,f) then
-    exit;
-  if dmData.DebugLevel >= 1 then
-  begin
-    Writeln('Bandmap spot:',spot);
-    Writeln('Bandmap freq:',freq);
-    Writeln('Bandmap call:',call)
-  end;
-  dbf := TDbf.Create(nil);
+  if not FileExists(FileName) then exit;
+
+  ClearAll;
+  AssignFile(f,FileName);
+  EnterCriticalSection(BandMapCrit);
   try
-    f := StrToFloat(freq);
-    dbf.FilePath  := dmData.HomeDir;
-    dbf.TableName := 'bandmap.dat';
-    dbf.Open;
-    dbf.IndexName := 'vfo_a';
-    dbf.Refresh;
-    dbf.First;
-    while not dbf.EOF do
+    Reset(f);
+    while not Eof(f) do
     begin
-      if dmData.DebugLevel >= 1 then
-      begin
-        Writeln('dbf.FieldByName(vfo_a).AsFloat:',dbf.FieldByName('vfo_a').AsFloat);
-        Writeln('dbf.Fields[1].AsString:',dbf.Fields[1].AsString);
-      end;
-      if (dbf.FieldByName('vfo_a').AsFloat = f) and (dbf.Fields[1].AsString = call) then
-      begin
-        if Pos('*',call)=1 then
-          call := copy(call,2,Length(call)-1);
-        if dmData.ContestMode then
-          frmTestMain.NewQSOFromSpot(call,freq,dbf.Fields[5].AsString)
-        else
-          frmNewQSO.NewQSOFromSpot(call,freq,dbf.Fields[5].AsString);
-        break
-      end;
-      dbf.Next
+      ReadLn(f,s);
+      a := dmUtils.Explode(ITEM_SEP,s);
+      if Length(a)<13 then Continue; //probably corrupted line
+      i := StrToInt(a[12]);
+      if (i<=0) or (i>MAX_ITEMS) then Continue;
+      BandMapItems[i].frmNewQSO := StrToBool(a[0]);
+      BandMapItems[i].Freq      := StrToFloat(a[1]);
+      BandMapItems[i].Call      := a[2];
+      BandMapItems[i].Mode      := a[3];
+      BandMapItems[i].Band      := a[4];
+      BandMapItems[i].SplitInfo := a[5];
+      BandMapItems[i].Lat       := StrToFloat(a[6]);
+      BandMapItems[i].Long      := StrToFloat(a[7]);
+      BandMapItems[i].Color     := StrToInt(a[8]);
+      BandMapItems[i].BgColor   := StrToInt(a[9]);
+      BandMapItems[i].TimeStamp := StrToFloat(a[10]);
+      BandMapItems[i].TextValue := a[11];
+      BandMapItems[i].Position  := i
     end
   finally
-    dbf.Free
+    CloseFile(f);
+    LeaveCriticalSection(BandMapCrit)
   end
 end;
 
-procedure TfrmBandMap.DeleteFromBandMap(call,band,mode : String);
+procedure TfrmBandMAp.xplanetExport;
 var
-  dbf : TDbf;
+  i : Integer;
+  s : String;
+  l : TStringList;
+  xColor : String;
+  UseDefaultColor : Boolean;
+  DefaultColor    : Integer;
+  MaxXplanetSpots : Integer;
 begin
-  if not frmBandMap.Showing then
-    exit;
-  dbf := TDbf.Create(nil);
+  UseDefaultColor := cqrini.ReadBool('xplanet','UseDefColor',True);
+  DefaultColor    := cqrini.ReadInteger('xplanet','color',clWhite);
+  MaxXplanetSpots := cqrini.ReadInteger('xplanet','LastSpots',20);
+
+  DeleteFile(FxplanetFile);
+
+  l := TStringList.Create;
   try
-    dbf.FilePath  := dmData.HomeDir;
-    dbf.TableName := 'bandmap.dat';
-    dbf.Open;
-    dbf.IndexName := 'vfo_a';
-    dbf.Refresh;
-    dbf.First;
-    while not dbf.Eof do
+    for i:=1 to MAX_ITEMS do
     begin
-      if (dbf.Fields[1].AsString = call) and
-         (dbf.Fields[6].AsString = band) then
-        dbf.Delete
+      if (BandMapItems[i].Freq = 0) or (MaxXplanetSpots=0) then
+        Continue;
+
+      if (FOnlyCurrBand) and (FCurrentBand<>'') then
+      begin
+        if BandMapItems[i].Band<>FCurrentBand then
+          Continue
+      end;
+
+      if (FOnlyCurrMode) and (FCurrentMode<>'') then
+      begin
+        if BandMapItems[i].Mode<>FCurrentMode then
+          Continue
+      end;
+
+      if UseDefaultColor then
+        xColor := IntToHex(DefaultColor,8)
       else
-       dbf.Next
+        xColor := IntToHex(BandMapItems[i].Color,8);
+      xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
+
+      l.Add(CurrToStr(BandMapItems[i].Lat)+' '+CurrToStr(BandMapItems[i].Long)+' "'+BandMapItems[i].Call+
+                      '" color='+xColor);
+      dec(MaxXplanetSpots)
     end;
-    dbf.Close
+    l.SaveToFile(FxplanetFile)
   finally
-    dbf.Free
+    FreeAndNil(l)
   end
 end;
 
-initialization
-  {$I fBandMap.lrs}
+{$R *.lfm}
 
 end.
+

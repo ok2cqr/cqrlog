@@ -4,7 +4,7 @@ object dmDXCluster: TdmDXCluster
   OldCreateOrder = False
   Height = 363
   HorizontalOffset = 694
-  VerticalOffset = 621
+  VerticalOffset = 383
   Width = 400
   object qBands: TSQLQuery
     BeforeOpen = qBandsBeforeOpen

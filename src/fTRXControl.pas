@@ -279,7 +279,13 @@ begin
   UpdateModeButtons(m);
   ClearButtonsColor;
   if f = 0 then
-    exit;
+  begin
+    frmGrayline.band := '';
+    frmBandMap.CurrentBand := '';
+    frmBandMap.CurrentFreq := 0;
+    frmBandMap.CurrentMode := '';
+    exit
+  end;
   b := dmUtils.GetBandFromFreq(lblFreq.Caption);
   if b = '160M' then
     btn160m.Font.Color := clRed
@@ -305,7 +311,10 @@ begin
     btn2m.Font.Color   := clRed
   else if b = '70CM' then
     btn70cm.Font.Color := clRed;
-  frmGrayline.band := b
+  frmGrayline.band := b;
+  frmBandMap.CurrentBand := b;
+  frmBandMap.CurrentFreq := f*1000;
+  frmBandMap.CurrentMode := m
 end;
 
 function TfrmTRXControl.GetModeNumber(mode : String) : Cardinal;

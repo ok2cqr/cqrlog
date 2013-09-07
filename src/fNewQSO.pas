@@ -516,6 +516,7 @@ type
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
 
+    procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
     procedure ShowQSO;
     procedure NewQSO;
@@ -1161,6 +1162,16 @@ begin
     thqsl.Resume
   end;
 
+  frmBandMap.FirstInterval   := cqrini.ReadInteger('BandMap', 'FirstAging', 5)*60;
+  frmBandMap.SecondInterval  := cqrini.ReadInteger('BandMap', 'SecondAging', 8)*60;
+  frmBandMap.DeleteAfter     := cqrini.ReadInteger('BandMap', 'Disep', 12)*60;
+  frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
+  frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BnadMap', 'OnlyActiveBand', False);
+  frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
+
+  if cqrini.ReadBool('BandMap', 'Save', False) then
+    frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
+
   InitializeCW;
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
@@ -1230,7 +1241,9 @@ begin
     if frmBandMap.Showing then
     begin
       frmBandMap.Close;
-      cqrini.WriteBool('Window','BandMap',True)
+      cqrini.WriteBool('Window','BandMap',True);
+      if cqrini.ReadBool('BandMap', 'Save', False) then
+         frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv')
     end
     else
       cqrini.WriteBool('Window','BandMap',False);
@@ -1330,7 +1343,6 @@ begin
     ini.Free
   end;
 
-
   if changelog then
   begin
     with TfrmChangelog.Create(Application) do
@@ -1343,6 +1355,8 @@ begin
 
   if not (Sender = nil) then
     LoadSettings;
+
+  frmBandMap.OnBandMapClick := @OnBandMapClick;
 
   old_ccall := '';
   old_cmode := '';
@@ -2860,12 +2874,14 @@ end;
 procedure TfrmNewQSO.acAddToBandMapExecute(Sender: TObject);
 var
   f : Double;
+  lat, lng : Currency;
 begin
   f := frmTRXControl.GetFreqMHz;
   if f = 0.0 then
     f := StrToFloat(cmbFreq.Text);
-  frmBandMap.AddFromNewQSO(edtDXCCRef.Text,'*'+edtCall.Text,f,dmUtils.GetBandFromFreq(cmbFreq.Text)
-  ,cmbMode.Text,lblLat.Caption,lblLong.Caption)
+  dmUtils.GetRealCoordinate(lblLat.Caption,lblLong.Caption,lat,lng);
+  frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
+                          lng,clBlack,clWhite,True)
 end;
 
 procedure TfrmNewQSO.acCWMessagesExecute(Sender: TObject);
@@ -5144,6 +5160,11 @@ end;
 function TfrmNewQSO.GetDescKeyFromCode(key : Word) : String;
 begin
   Result := 'F' + IntToStr(Key-111) //VK_F1 = 112
+end;
+
+procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
+begin
+  NewQSOFromSpot(Call,FloatToStr(Freq),Mode)
 end;
 
 initialization

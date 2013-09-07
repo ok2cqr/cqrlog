@@ -11,11 +11,13 @@ Legend:
   + added Power field to filter window
   + option to show distance in miles instead of km added
   + limit of max QSO on QSL label increased
+  + added whole new bandmap with frequecy indicator
   - double click on bandmap didn't work when the spot had split info  - fixed
   - propagation info in spot notes has correct format
   - existing band map record was not updated from dx cluster
   - program didn't accept ITU zones 78 and 90 - fixed
   - program used QTH from previous QSO even is the station was /P - fixed
+  - app crashed after start on Ubuntu 13.10 - fixed
 
 1.5.8
   - nothing happened after double click on bandmap spot - fixed

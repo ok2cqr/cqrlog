@@ -93,6 +93,7 @@ type
     function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
 
     procedure AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
+    procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
     procedure ReloadDXCCTables;
     procedure LoadDXCCRefArray;
     procedure LoadExceptionArray;
@@ -149,7 +150,7 @@ begin
       trBands.RollBack;
     trBands.StartTransaction;
     qBands.Open;
-    Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
+    //Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
     if qBands.RecordCount = 0 then
       exit;
     band := qBands.Fields[1].AsString;
@@ -165,7 +166,7 @@ begin
       else
         mode := 'RTTY';
     end;
-    Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
+    //Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
   finally
     LeaveCriticalsection(csDX)
   end
@@ -1107,6 +1108,42 @@ begin
     LeaveCriticalsection(csDX)
   end
 end;
+
+procedure TdmDXCluster.GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
+var
+  s,d : String;
+begin
+  s := lat;
+  d := long;
+  if ((Length(s)=0) or (Length(d)=0)) then
+  begin
+    longitude := 0;
+    latitude  := 0;
+    exit
+  end;
+
+  if s[Length(s)] = 'S' then
+    s := '-' +s ;
+  s := copy(s,1,Length(s)-1);
+  if pos('.',s) > 0 then
+    s[pos('.',s)] := DecimalSeparator;
+  if not TryStrToCurr(s,latitude) then
+    latitude := 0;
+
+  if d[Length(d)] = 'W' then
+    d := '-' + d ;
+  d := copy(d,1,Length(d)-1);
+  if pos('.',d) > 0 then
+    d[pos('.',d)] := DecimalSeparator;
+  if not TryStrToCurr(d,longitude) then
+    longitude := 0;
+  if dmData.DebugLevel>=4 then
+  begin
+    //Writeln('Lat:  ',latitude);
+    //Writeln('Long: ',longitude);
+  end;
+end;
+
 
 initialization
   {$I dDXCluster.lrs}
