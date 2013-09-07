@@ -79,7 +79,6 @@ type
     dsrSQLConsole: TDatasource;
     dsrLogList: TDatasource;
     dsrmQ: TDatasource;
-    dbfBand: TDbf;
     mQ: TSQLQuery;
     qSQLConsole: TSQLQuery;
     scCommon: TSQLScript;
@@ -180,9 +179,7 @@ type
     procedure PrepareDXCCData;
     procedure PrepareXplanetDir;
     procedure PrepareVoice_keyerDir;
-    procedure PrepareBandMapDB;
     procedure KillMySQL(const OnStart : Boolean = True);
-    procedure CloseBandMapDB;
     procedure UpdateDatabase(old_version : Integer);
     procedure PrepareMysqlConfigFile;
   public
@@ -682,7 +679,6 @@ begin
   frmTRXControl.InicializeRig;
   frmRotControl.InicializeRot;
 
-  PrepareBandMapDB;
   LoadClubsSettings;
   LoadZipSettings
 end;
@@ -722,7 +718,6 @@ procedure TdmData.CloseDatabases;
 var
   i : Integer;
 begin
-  CloseBandMapDB;
   SaveConfigFile;
   for i := 0 to ComponentCount-1 do
   begin
@@ -749,22 +744,6 @@ begin
     end
   end;
   FreeAndNil(cqrini)
-end;
-
-procedure TdmData.CloseBandMapDB;
-begin
-  dbfBand.Close;
-  if not cqrini.ReadBool('BandMap','Save',False) then
-  begin
-    DeleteFile(fHomeDir+'bandmap.dat');
-    DeleteFile(fHomeDir+'bandmap.mdx')
-  end
-  else begin
-    dbfBand.Exclusive := True;
-    dbfBand.Open;
-    dbfBand.PackTable;
-    dbfBand.Close
-  end
 end;
 
 procedure TdmData.DeleteMySQLPidFile;
@@ -957,45 +936,6 @@ begin
   d := fHomeDir+'voice_keyer'+PathDelim;
   if not FileExistsUTF8(d+'voice_keyer.sh') then
     CopyFile(s+'voice_keyer.sh',d+'voice_keyer.sh')
-end;
-
-procedure TdmData.PrepareBandMapDB;
-begin
-  dbfBand.FilePathFull := fHomeDir;
-  dbfBand.TableName  := 'bandmap.dat';
-  if not FileExists(fHomeDir+'bandmap.dat') then
-  begin
-    dbfBand.TableLevel := 7;
-    dbfBand.Exclusive  := True;
-    dbfBand.FieldDefs.Clear;
-    With dbfBand.FieldDefs do begin
-      Add('vfo_a', ftFloat);
-      Add('Call', ftString, 20);
-      Add('vfo_b', ftFloat);
-      Add('split',ftBoolean);
-      Add('color',ftLargeint);
-      Add('mode',ftString,8);
-      Add('band',ftString,6);
-      Add('time',ftDateTime);
-      Add('age', ftString,1);
-      Add('pfx',ftString,10);
-      Add('lat',ftString,10);
-      Add('long',ftString,10);
-      Add('id', ftAutoInc);
-      Add('bckcolor',ftLargeint);
-      Add('splitstr',ftString,13);
-    end;
-    dbfBand.CreateTable;
-    dbfBand.Open;
-    dbfBand.AddIndex('id','id', [ixPrimary, ixUnique]);
-    dbfBand.AddIndex('vfo_a','vfo_a', []);
-    dbfBand.Close;
-    dbfBand.Exclusive := false;
-    dbfBand.Open
-  end
-  else
-    dbfBand.Open;
-  dbfBand.IndexName := 'vfo_a';
 end;
 
 function TdmData.FindLib(const Path,LibName : String) : String;

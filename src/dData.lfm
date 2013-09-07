@@ -48,13 +48,6 @@ object dmData: TdmData
     left = 384
     top = 384
   end
-  object dbfBand: TDbf
-    IndexDefs = <>
-    TableLevel = 4
-    FilterOptions = []
-    left = 232
-    top = 408
-  end
   object mQ: TSQLQuery
     BeforeOpen = mQBeforeOpen
     Transaction = trmQ
