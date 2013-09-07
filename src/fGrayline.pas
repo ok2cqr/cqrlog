@@ -547,11 +547,13 @@ begin
       if band<>RBNSpotList[i].band then
         Continue
     end;
+    {
     Writeln('Syn:spotter:',RBNSpotList[i].spotter);
     Writeln('Syn:stren:  ',RBNSpotList[i].strengt);
     Writeln('Syn:band:   ',RBNSpotList[i].band);
     Writeln('Syn:lat:    ',RBNSpotList[i].lat);
     Writeln('Syn:long:   ',RBNSpotList[i].long);
+    }
     case RBNSpotList[i].strengt of
       11..20  : c := cqrini.ReadInteger('RBN','20db',clPurple);
       21..30  : c := cqrini.ReadInteger('RBN','30db',clMaroon);
