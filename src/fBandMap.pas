@@ -129,7 +129,6 @@ var
   i : Integer;
   p : Integer;
 begin
-  Randomize;
   EnterCriticalSection(BandMapCrit);
   try
     if dmData.DebugLevel>=1 then Writeln('Search for:',call,',',band,',',mode);
@@ -479,6 +478,7 @@ begin
   for i:=1 to MAX_ITEMS do
       BandMapItems[i].Freq:=0;
   BandMapItemsCount := 0;
+  Randomize;
   ClearAll;
   BandMapThread := TBandMapThread.Create(True);
   BandMapThread.Resume
