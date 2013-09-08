@@ -71,6 +71,7 @@ type
     FOnlyCurrMode   : Boolean;
     FOnlyCurrBand   : Boolean;
     FxplanetFile    : String;
+    FxplanetExport  : Boolean;
 
     procedure RecalcPosition;
     procedure SortBandMapArray(l,r : Integer);
@@ -101,6 +102,7 @@ type
     property OnlyCurrMode   : Boolean write FOnlyCurrMode;
     property OnlyCurrBand   : Boolean write FOnlyCurrBand;
     property xplanetFile    : String write FxplanetFile;
+    property DoXplanetExport: Boolean write FxplanetExport;
     property OnBandMapClick : TBandMapClick read FBandMapClick write FBandMapClick;
                             //Freq in kHz
     procedure AddToBandMap(Freq : Double; Call, Mode, Band, SplitInfo : String; Lat,Long : Double; ItemColor, BgColor : LongInt;
@@ -284,7 +286,7 @@ begin
 
     if  RunXplanetExport > 10 then //data for xplanet couln't be exported on every bandmap reload
     begin
-      if (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0) then //data from band map to xplanet
+      if FxplanetExport then //data from band map to xplanet
         xplanetExport;
       RunXplanetExport := 0
     end;
@@ -484,7 +486,9 @@ end;
 
 procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  dmUtils.SaveWindowPos(frmBandMap)
+  dmUtils.SaveWindowPos(frmBandMap);
+  if cqrini.ReadBool('BandMap', 'Save', False) then
+     frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv')
 end;
 
 procedure TfrmBandMap.LoadFonts;

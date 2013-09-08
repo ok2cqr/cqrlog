@@ -21,10 +21,10 @@ object frmPreferences: TfrmPreferences
     Height = 566
     Top = 0
     Width = 639
-    ActivePage = tabBandMap
+    ActivePage = tabXplanet
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 15
+    TabIndex = 16
     TabOrder = 0
     OnChange = pgPreferencesChange
     OnPageChanged = pgPreferencesChange
@@ -5072,7 +5072,7 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 545
         Caption = ' First '
-        ClientHeight = 73
+        ClientHeight = 87
         ClientWidth = 541
         TabOrder = 0
         object Label74: TLabel
@@ -5124,7 +5124,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 41
+          ClientHeight = 55
           ClientWidth = 180
           Items.Strings = (
             'before town address'
@@ -5156,7 +5156,7 @@ object frmPreferences: TfrmPreferences
         Top = 123
         Width = 545
         Caption = ' Second '
-        ClientHeight = 73
+        ClientHeight = 87
         ClientWidth = 541
         TabOrder = 1
         object Label76: TLabel
@@ -5208,7 +5208,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 44
+          ClientHeight = 58
           ClientWidth = 180
           Items.Strings = (
             'before town address'
@@ -5240,7 +5240,7 @@ object frmPreferences: TfrmPreferences
         Top = 235
         Width = 545
         Caption = ' Third '
-        ClientHeight = 73
+        ClientHeight = 87
         ClientWidth = 541
         TabOrder = 2
         object Label78: TLabel
@@ -5292,7 +5292,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 41
+          ClientHeight = 55
           ClientWidth = 180
           Items.Strings = (
             'before town address'
@@ -5353,7 +5353,7 @@ object frmPreferences: TfrmPreferences
         Top = 6
         Width = 513
         Caption = ' Data for access to ARRL LoTW website '
-        ClientHeight = 41
+        ClientHeight = 55
         ClientWidth = 509
         TabOrder = 2
         object Label80: TLabel
@@ -5423,7 +5423,7 @@ object frmPreferences: TfrmPreferences
         Top = 91
         Width = 513
         Caption = ' Data for access to eQSL website '
-        ClientHeight = 41
+        ClientHeight = 55
         ClientWidth = 509
         TabOrder = 6
         object Label108: TLabel
@@ -5522,7 +5522,7 @@ object frmPreferences: TfrmPreferences
         Top = 54
         Width = 497
         Caption = ' WinKeyer USB '
-        ClientHeight = 89
+        ClientHeight = 103
         ClientWidth = 493
         TabOrder = 1
         object Label84: TLabel
@@ -5628,7 +5628,7 @@ object frmPreferences: TfrmPreferences
         Top = 182
         Width = 497
         Caption = ' cwdaemon '
-        ClientHeight = 74
+        ClientHeight = 88
         ClientWidth = 493
         TabOrder = 2
         object Label87: TLabel
@@ -5710,7 +5710,7 @@ object frmPreferences: TfrmPreferences
         Top = 6
         Width = 587
         Caption = ' Reading data from fldigi'
-        ClientHeight = 369
+        ClientHeight = 383
         ClientWidth = 583
         TabOrder = 0
         object Label91: TLabel
@@ -5753,7 +5753,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 83
+          ClientHeight = 97
           ClientWidth = 205
           ItemIndex = 0
           Items.Strings = (
@@ -5785,7 +5785,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 81
+          ClientHeight = 95
           ClientWidth = 220
           Items.Strings = (
             'CQRLOG'
@@ -5818,7 +5818,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 74
+          ClientHeight = 88
           ClientWidth = 181
           Items.Strings = (
             'fldigi'
@@ -5943,7 +5943,7 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 57
+          ClientHeight = 71
           ClientWidth = 492
           Items.Strings = (
             'callsign, date and time (yourcall__yyyy-mm-dd__hh-mm-ss.adi)'
@@ -6040,7 +6040,7 @@ object frmPreferences: TfrmPreferences
         Top = 8
         Width = 585
         Caption = ' Callbook search '
-        ClientHeight = 129
+        ClientHeight = 143
         ClientWidth = 581
         TabOrder = 0
         object rbHamQTH: TRadioButton

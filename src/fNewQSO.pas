@@ -1168,6 +1168,7 @@ begin
   frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
   frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BnadMap', 'OnlyActiveBand', False);
   frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
+  frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0);
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
@@ -1241,9 +1242,7 @@ begin
     if frmBandMap.Showing then
     begin
       frmBandMap.Close;
-      cqrini.WriteBool('Window','BandMap',True);
-      if cqrini.ReadBool('BandMap', 'Save', False) then
-         frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv')
+      cqrini.WriteBool('Window','BandMap',True)
     end
     else
       cqrini.WriteBool('Window','BandMap',False);
