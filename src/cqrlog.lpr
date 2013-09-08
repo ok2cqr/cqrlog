@@ -14,8 +14,7 @@ uses
   fBandMap,fBandMapFilter,fLongNote,fDatabaseUpdate,fExLabelPrint,
   fImportLoTWWeb,fLoTWExport,fGroupEdit,fDefaultFreq,fCustomStat,fKeyTexts,
   fCWType,fSplitSettings,MemDSLaz,SDFLaz,turbopoweripro,fShowStations,uMyIni,
-  fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,
-  fTestMain,fNewTestLog,fLogList,fSCP,fEditTestQSO,fKeysPref,fDBConnect,fNewLog,
+  fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fEditTestQSO,fKeysPref,fDBConnect,fNewLog,
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl;
 var
@@ -48,11 +47,8 @@ begin
   Application.CreateForm(TfrmBandMap, frmBandMap);
   Application.CreateForm(TfrmPropagation, frmPropagation);
   Application.CreateForm(TfrmCWKeys, frmCWKeys);
- {$IFDEF NO_CONTEST}
-  Application.CreateForm(TfrmTestMain, frmTestMain);
   Application.CreateForm(TfrmSCP, frmSCP);
   Application.CreateForm(TfrmRotControl, frmRotControl);
- {$ENDIF}
 
   Splash.Update;
   application.ProcessMessages;

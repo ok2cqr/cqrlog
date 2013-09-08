@@ -132,9 +132,6 @@ type
     procedure SaveWindowPos(a : TForm);
     procedure LoadWindowPos(a : TForm);
     procedure ShowQSLWithExtViewer(Call : String);
-    procedure GetFileList(l : TListBox);
-    procedure GetDirectoryList(l : TListBox);
-    procedure InsertContestFreq(cmbFreq : TcomboBox;warc : Boolean);
     procedure ShowQRZInBrowser(call : String);
     procedure LoadBandsSettings;
     procedure FillBandCombo(cmb : TComboBox);
@@ -2434,31 +2431,13 @@ var
   myname : String = '';
   myqth  : String = '';
 begin
-  {$IFDEF CONTEST}
-  if dmData.ContestMode and dmData.ContestDatabase.Connected then
-  begin
-    if dmData.ProgramMode = tmSP then
-      mode := 'SP';
-    if key <> '' then
-      Result := dmData.tstini.ReadString('CW',mode+key,'')
-    else
-      Result := text;
-    mycall := dmData.tstini.ReadString('Basic','Call','');
-    myname := dmData.tstini.ReadString('Basic','Name','');
-    myqth  := dmData.tstini.ReadString('Basic','QTH','')
-  end
-  else begin
-  {$ENDIF}
-    mycall := cqrini.ReadString('Station','Call','');
-    myname := cqrini.ReadString('Station','Name','');
-    myqth  := cqrini.ReadString('Station','QTH','');
-    if key <> '' then
-      Result := LowerCase(cqrini.ReadString('CW',key,''))
-    else
-      Result := text;
-  {$IFDEF CONTEST}
-  end;
-  {$ENDIF}
+  mycall := cqrini.ReadString('Station','Call','');
+  myname := cqrini.ReadString('Station','Name','');
+  myqth  := cqrini.ReadString('Station','QTH','');
+  if key <> '' then
+    Result := LowerCase(cqrini.ReadString('CW',key,''))
+  else
+    Result := text;
   Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
@@ -2881,10 +2860,7 @@ var
 begin
   if dmData.DBName = '' then
     exit;
-  if dmData.ContestMode then
-    section := 'C_'+a.Name
-  else
-    section := a.Name;
+  section := a.Name;
   if a.WindowState = wsMaximized then
     cqrini.WriteBool(section,'Max',True)
   else begin
@@ -2906,10 +2882,7 @@ procedure TdmUtils.LoadWindowPos(a : TForm);
 var
   section : String = '';
 begin
-  if dmData.ContestMode then
-    section := 'C_'+a.Name
-  else
-    section := a.Name;
+  section := a.Name;
   LoadFontSettings(a);
   if cqrini.ReadBool(section,'Max',False) then
     a.WindowState := wsMaximized
@@ -3125,66 +3098,6 @@ begin
         break
     end
   end
-end;
-
-procedure TdmUtils.GetFileList(l : TListBox);
-var
-  res          : Byte;
-  SearchRec    : TSearchRec;
-begin
-  l.Clear;
-  l.Items.Add('[..]');
-  //Writeln('GetFileList:',dmData.ContestDataDir);
-  res := FindFirst(dmData.ContestDataDir+'*', faDirectory, SearchRec);
-  while Res = 0 do
-  begin
-    //Writeln('SearchRec.Name:',SearchRec.Name);
-    if (SearchRec.Name <> '.')  and (SearchRec.Name <> '') and (SearchRec.Name <> '..')
-       and (DirectoryExistsUTF8(dmData.ContestDataDir+SearchRec.Name)) then
-      l.Items.Add('['+SearchRec.Name+']');
-    Res := FindNext(SearchRec)
-  end;
-  FindClose(SearchRec);
-  res := FindFirst(dmData.ContestDataDir + '*.cqr', faAnyFile, SearchRec);
-  while Res = 0 do
-  begin
-    l.Items.Add(SearchRec.Name);
-    Res := FindNext(SearchRec)
-  end;
-  FindClose(SearchRec)
-end;
-
-procedure TdmUtils.GetDirectoryList(l : TListBox);
-var
-  res          : Byte;
-  SearchRec    : TSearchRec;
-begin
-  l.Clear;
-  res := FindFirst(dmData.ContestDataDir + '*', faDirectory, SearchRec);
-  while Res = 0 do
-  begin
-    l.Items.Add(ExtractFileNameWithoutExt(SearchRec.Name));
-    Res := FindNext(SearchRec)
-  end;
-  FindClose(SearchRec)
-end;
-
-procedure TdmUtils.InsertContestFreq(cmbFreq : TcomboBox;warc : Boolean);
-begin
-  cmbFreq.Clear;
-  cmbFreq.Items.Add('1.800');
-  cmbFreq.Items.Add('3.500');
-  cmbFreq.Items.Add('7.000');
-  if warc then
-    cmbFreq.Items.Add('10.100');
-  cmbFreq.Items.Add('14.000');
-  if warc then
-    cmbFreq.Items.Add('18.068');
-  cmbFreq.Items.Add('21.000');
-  if warc then
-    cmbFreq.Items.Add('24.890');
-  cmbFreq.Items.Add('28.000');
-  cmbFreq.ItemIndex := 0
 end;
 
 procedure TdmUtils.ShowQRZInBrowser(call : String);

@@ -80,7 +80,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="81">
+    <Units Count="78">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -497,152 +497,128 @@
         <UnitName Value="fQSLViewer"/>
       </Unit60>
       <Unit61>
-        <Filename Value="fTestMain.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmTestMain"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fTestMain"/>
-      </Unit61>
-      <Unit62>
-        <Filename Value="fNewTestLog.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmNewTestLog"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fNewTestLog"/>
-      </Unit62>
-      <Unit63>
-        <Filename Value="fLogList.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmLogList"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fLogList"/>
-      </Unit63>
-      <Unit64>
         <Filename Value="fSCP.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSCP"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSCP"/>
-      </Unit64>
-      <Unit65>
+      </Unit61>
+      <Unit62>
         <Filename Value="fEditTestQSO.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmEditTestQSO"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fEditTestQSO"/>
-      </Unit65>
-      <Unit66>
+      </Unit62>
+      <Unit63>
         <Filename Value="fKeysPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmKeysPref"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fKeysPref"/>
-      </Unit66>
-      <Unit67>
+      </Unit63>
+      <Unit64>
         <Filename Value="fDBConnect.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDBConnect"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDBConnect"/>
-      </Unit67>
-      <Unit68>
+      </Unit64>
+      <Unit65>
         <Filename Value="fNewLog.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewLog"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewLog"/>
-      </Unit68>
-      <Unit69>
+      </Unit65>
+      <Unit66>
         <Filename Value="fRebuildMembStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRebuildMembStat"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRebuildMembStat"/>
-      </Unit69>
-      <Unit70>
+      </Unit66>
+      <Unit67>
         <Filename Value="uVersion.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uVersion"/>
-      </Unit70>
-      <Unit71>
+      </Unit67>
+      <Unit68>
         <Filename Value="fDXClusterList.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDXClusterList"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDXClusterList"/>
-      </Unit71>
-      <Unit72>
+      </Unit68>
+      <Unit69>
         <Filename Value="fAbout.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAbout"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fAbout"/>
-      </Unit72>
-      <Unit73>
+      </Unit69>
+      <Unit70>
         <Filename Value="fChangelog.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangelog"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fChangelog"/>
-      </Unit73>
-      <Unit74>
+      </Unit70>
+      <Unit71>
         <Filename Value="fbigsquarestat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmBigSquareStat"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fBigSquareStat"/>
-      </Unit74>
-      <Unit75>
+      </Unit71>
+      <Unit72>
         <Filename Value="feQSLUpload.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmeQSLUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="feQSLUpload"/>
-      </Unit75>
-      <Unit76>
+      </Unit72>
+      <Unit73>
         <Filename Value="feQSLDownload.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmeQSLDownload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="feQSLDownload"/>
-      </Unit76>
-      <Unit77>
+      </Unit73>
+      <Unit74>
         <Filename Value="fSOTAExport.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSOTAExport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSOTAExport"/>
-      </Unit77>
-      <Unit78>
+      </Unit74>
+      <Unit75>
         <Filename Value="fnewqsodefvalues.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewQSODefValues"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewQSODefValues"/>
-      </Unit78>
-      <Unit79>
+      </Unit75>
+      <Unit76>
         <Filename Value="fQSLExpPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmQSLExpPref"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQSLExpPref"/>
-      </Unit79>
-      <Unit80>
+      </Unit76>
+      <Unit77>
         <Filename Value="fRotControl.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRotControl"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRotControl"/>
-      </Unit80>
+      </Unit77>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

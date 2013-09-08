@@ -124,7 +124,7 @@ implementation
 
 { TfrmDXCluster }
 
-uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap, fTestMain,
+uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
      uMyIni;
 
 procedure TfrmDXCluster.ConnectToWeb;
@@ -301,10 +301,7 @@ begin
   if (not dmData.BandModFromFreq(freq,mode,stmp)) or (mode='') then
     exit;
 
-  if dmData.ContestMode then
-    frmTestMain.NewQSOFromSpot(call,freq,mode)
-  else
-    frmNewQSO.NewQSOFromSpot(call,freq,mode)
+  frmNewQSO.NewQSOFromSpot(call,freq,mode)
 end;
 
 procedure TfrmDXCluster.TelDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
@@ -343,10 +340,7 @@ begin
     exit;
   if (not dmData.BandModFromFreq(freq,mode,stmp)) or (mode='') then
     exit;
-  if dmData.ContestMode then
-    frmTestMain.NewQSOFromSpot(call,freq,mode)
-  else
-    frmNewQSO.NewQSOFromSpot(call,freq,mode)
+  frmNewQSO.NewQSOFromSpot(call,freq,mode)
 end;
 
 
@@ -748,16 +742,6 @@ begin
     Writeln('Index_: ',index);
   end;
 
-  if dmData.ContestMode then
-  begin
-    {
-    Result := True;
-    sColor := clBlack;
-    dmDXCluster.AddToMarkFile(prefix,call,clWhite,cqrini.ReadString('xplanet','LastSpots','20'),lat,long);
-    frmBandMap.AddFromDXCluster(call,mode,prefix,band,lat,long,kmitocet, clBlack,clWhite,splitstr);
-    exit
-    }
-  end;
   cont := UpperCase(cont);
   Result := True;
   wDXCC := cqrini.ReadString('BandMap','wDXCC','*');

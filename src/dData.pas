@@ -149,10 +149,6 @@ type
     fOrderBy : String;
     fVersionString : String;
     fHelpDir  : String;
-    fContestMode : Boolean;
-    fContestDataDir : String;
-    fContestDataFile : String;
-    fProgramMode : TMode;
     fCWStopped : Boolean;
     fZipCodeDir : String;
     fSortType   : TSortType;
@@ -221,11 +217,6 @@ type
     property VersionString : String read fVersionString write fVersionString;
     property HelpDir : String read fHelpDir write fHelpDir;
 
-    property ContestMode : Boolean read fContestMode write fContestMode;
-    property ContestDataDir : String read fContestDataDir write fContestDataDir;
-    property ContestDataFile : String read fContestDataFile write fContestDataFile;
-
-    property ProgramMode : TMode read fProgramMode write fProgramMode;
     property CWStopped   : Boolean read fCWStopped write fCWStopped;
     property SortType    : TSortType read fSortType write fSortType;
 
@@ -258,9 +249,6 @@ type
     function  ProfileExists(nr : string) : Boolean;
     function  ProfileInUse(nr : String) : Boolean;
     function  SendQSL(call,mode,freq : String; adif : Word) : String;
-    {$IFDEF CONTEST}
-    function  OpenContestDatabase(FileName : String) : Boolean;
-    {$ENDIF}
     function  GetSCPCalls(call : String) : String;
     function  UsesLotw(call : String) : Boolean;
     function  OpenConnections(host,port,user,pass : String) : Boolean;
@@ -289,18 +277,6 @@ type
     procedure RefreshMainDatabase(id : Integer = 0);
     procedure LoadClubsSettings;
     procedure LoadZipSettings;
-
-    {$IFDEF CONTEST}
-    procedure CreateContestDatabase(FileName : String);
-    procedure DeleteContestQSO(id : LongInt);
-    procedure SaveContestQSO(date : TDateTime;time_on,call,rst_s,rst_r,exch1,exch2,freq,mode,
-                             waz,itu,dxcc_ref : String);
-    procedure EditTestQSO(qsodate,time_on,call,freq,mode,rst_s,rst_r,exch1,exch2,sname,qth,power,
-                          waz,itu,wpx,state,iota : String;points : Integer;mult1,mult2 : Boolean;
-                          id : LongInt);
-    procedure GetLastExchange(call : String; var exch : String; var CurPos : TCurPos);
-    {$ENDIF}
-
     procedure CheckForDatabases;
     procedure CreateDatabase(nr : Word; log_name : String);
     procedure EditDatabaseName(nr : Word; log_name : String);
@@ -1180,65 +1156,9 @@ begin
   MySQLProcess.Execute;
   }
   //StartMysqldProcess;
-  fContestMode := False;
 
   tmrDBPing.Interval := CDB_PING_INT*1000;
   tmrDBPing.Enabled  := True;
-
-  {$IFDEF CONTEST}
-  if ParamStr(1) = '--contest-mode' then
-  begin
-    fContestMode := True;
-  end;
-
-  if not DirectoryExists(ExtractFilePath(Application.ExeName)+'contest_data') then
-  begin
-    CreateDir(ExtractFilePath(Application.ExeName)+'contest_data');
-    CreateDir(ExtractFilePath(Application.ExeName)+'contest_data/logs');
-    CreateDir(ExtractFilePath(Application.ExeName)+'contest_data/common');
-  end;
-  fContestDataDir := ExtractFilePath(Application.ExeName)+'contest_data/logs/';
-
-  if fContestMode and FileExists(ExtractFilePath(Application.ExeName)+'contest_data/common/MASTER.SCP') then
-  begin
-    AssignFile(f,ExtractFilePath(Application.ExeName)+'contest_data/common/MASTER.SCP');
-    Reset(f);
-    Readln(f,tmp);
-    Readln(f,tmp);
-    Readln(f,tmp);
-    //^^ skip header
-    while not eof(f) do
-    begin
-      Readln(f,tmp);
-      if tmp = '' then
-        Continue;
-      memSCP.Append;
-      memSCP.Fields[0].AsString :=  tmp;
-      memSCP.Post
-    end;
-    CloseFile(f)
-  end;
-
-
-  fProgramMode := tmRun;
-  fCWStopped   := False;
-  if not cqrini.SectionExists('KeysPref') then
-  begin
-    cqrini.WriteInteger('KeysPref','REmptyExch',6);
-    cqrini.WriteInteger('KeysPref','RNotEmptyExch',0);
-    cqrini.WriteInteger('KeysPref','RNoCallChange',11);
-    cqrini.WriteInteger('KeysPref','RCallChange',1);
-    cqrini.WriteInteger('KeysPref','RBackSlash',10);
-    cqrini.WriteString('KeysPref','RBackSlashC','TU');
-    cqrini.WriteInteger('KeysPref','SEmptyExch',1);
-    cqrini.WriteInteger('KeysPref','SNotEmptyExch',0);
-    cqrini.WriteInteger('KeysPref','SNoCallChange',7);
-    cqrini.WriteInteger('KeysPref','SBackSlash',9);
-    cqrini.WriteString('KeysPref','SBackSlashC','TU');
-    cqrini.WriteString('KeysPref','RNoCallChangeC','TU %mc TEST');
-    cqrini.WriteString('KeysPref','SNoCallChangeC','TU')
-  end;
-  {$ENDIF}
 end;
 
 procedure TdmData.DataModuleDestroy(Sender: TObject);

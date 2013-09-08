@@ -486,11 +486,6 @@ var
   lat1,long1 : Currency;
   my_loc : String;
 begin
-  {$IFDEF CONTEST}
-  if dmData.ContestMode and dmData.ContestDatabase.Connected then
-    my_loc :=   dmData.tstini.ReadString('Basic','Gird','')
-  else
-  {$ENDIF}
     my_loc := cqrini.ReadString('Station','LOC','JO70GG');
   if (s='') or (d='') then
     dmUtils.GetCoordinate(pfx,lat1,long1)

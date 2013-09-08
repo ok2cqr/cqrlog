@@ -585,7 +585,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
-     fQSLViewer, fCWKeys,{ fTestMain,} uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
+     fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl;
 
 procedure TQSLTabThread.Execute;
@@ -1119,7 +1119,7 @@ begin
     tmrRotor.Interval := cqrini.ReadInteger('ROT1','Poll',500)
   end;
 
-  if cqrini.ReadBool('Window','Details',True) and (not dmData.ContestMode) then
+  if cqrini.ReadBool('Window','Details',True) then
   begin
     frmQSODetails.Show;
     frmQSODetails.BringToFront

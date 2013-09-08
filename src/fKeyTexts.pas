@@ -144,78 +144,28 @@ var
 begin
   dmUtils.LoadWindowPos(frmKeyTexts);
   section := 'CW';
-  {$IFDEF CONTEST}
-  if dmData.ContestMode and dmData.ContestDatabase.Connected then
-  begin
-    edtF1.text     := dmData.tstini.ReadString(section,'F1','cq cq de %mc %mc pse K');
-    edtF2.text     := dmData.tstini.ReadString(section,'F2','');
-    edtF3.text     := dmData.tstini.ReadString(section,'F3','');
-    edtF4.text     := dmData.tstini.ReadString(section,'F4','');
-    edtF5.text     := dmData.tstini.ReadString(section,'F5','');
-    edtF6.text     := dmData.tstini.ReadString(section,'F6','');
-    edtF7.text     := dmData.tstini.ReadString(section,'F7','');
-    edtF8.text     := dmData.tstini.ReadString(section,'F8','');
-    edtF9.text     := dmData.tstini.ReadString(section,'F9','');
-    edtF10.text    := dmData.tstini.ReadString(section,'F10','');
-    edtCapF1.text  := dmData.tstini.ReadString(section,'CapF1','F1 - CQ');
-    edtCapF2.text  := dmData.tstini.ReadString(section,'CapF2','F2');
-    edtCapF3.text  := dmData.tstini.ReadString(section,'CapF3','F3');
-    edtCapF4.text  := dmData.tstini.ReadString(section,'CapF4','F4');
-    edtCapF5.text  := dmData.tstini.ReadString(section,'CapF5','F5');
-    edtCapF6.text  := dmData.tstini.ReadString(section,'CapF6','F6');
-    edtCapF7.text  := dmData.tstini.ReadString(section,'CapF7','F7');
-    edtCapF8.text  := dmData.tstini.ReadString(section,'CapF8','F8');
-    edtCapF9.text  := dmData.tstini.ReadString(section,'CapF9','F9');
-    edtCapF10.text  := dmData.tstini.ReadString(section,'CapF10','F10');
-
-    edtSPF1.text     := dmData.tstini.ReadString(section,'SPF1','cq cq de %mc %mc pse K');
-    edtSPF2.text     := dmData.tstini.ReadString(section,'SPF2','');
-    edtSPF3.text     := dmData.tstini.ReadString(section,'SPF3','');
-    edtSPF4.text     := dmData.tstini.ReadString(section,'SPF4','');
-    edtSPF5.text     := dmData.tstini.ReadString(section,'SPF5','');
-    edtSPF6.text     := dmData.tstini.ReadString(section,'SPF6','');
-    edtSPF7.text     := dmData.tstini.ReadString(section,'SPF7','');
-    edtSPF8.text     := dmData.tstini.ReadString(section,'SPF8','');
-    edtSPF9.text     := dmData.tstini.ReadString(section,'SPF9','');
-    edtSPF10.text     := dmData.tstini.ReadString(section,'SPF10','');
-    edtSPCapF1.text  := dmData.tstini.ReadString(section,'SPCapF1','DE CALL');
-    edtSPCapF2.text  := dmData.tstini.ReadString(section,'SPCapF2','F2');
-    edtSPCapF3.text  := dmData.tstini.ReadString(section,'SPCapF3','F3');
-    edtSPCapF4.text  := dmData.tstini.ReadString(section,'SPCapF4','F4');
-    edtSPCapF5.text  := dmData.tstini.ReadString(section,'SPCapF5','F5');
-    edtSPCapF6.text  := dmData.tstini.ReadString(section,'SPCapF6','F6');
-    edtSPCapF7.text  := dmData.tstini.ReadString(section,'SPCapF7','F7');
-    edtSPCapF8.text  := dmData.tstini.ReadString(section,'SPCapF8','F8');
-    edtSPCapF9.text  := dmData.tstini.ReadString(section,'SPCapF9','F9');
-    edtSPCapF10.text := dmData.tstini.ReadString(section,'SPCapF10','F10')
-  end
-  else begin
-  {$ENDIF}
-    pgCWTexts.Pages[1].TabVisible := False;
-    pgCWTexts.Pages[0].Caption := '';
-    edtF1.text     := cqrini.ReadString(section,'F1','cq cq de %mc %mc pse K');
-    edtF2.text     := cqrini.ReadString(section,'F2','');
-    edtF3.text     := cqrini.ReadString(section,'F3','');
-    edtF4.text     := cqrini.ReadString(section,'F4','');
-    edtF5.text     := cqrini.ReadString(section,'F5','');
-    edtF6.text     := cqrini.ReadString(section,'F6','');
-    edtF7.text     := cqrini.ReadString(section,'F7','');
-    edtF8.text     := cqrini.ReadString(section,'F8','');
-    edtF9.text     := cqrini.ReadString(section,'F9','');
-    edtF10.text    := cqrini.ReadString(section,'F10','');
-    edtCapF1.text  := cqrini.ReadString(section,'CapF1','F1 - CQ');
-    edtCapF2.text  := cqrini.ReadString(section,'CapF2','F2');
-    edtCapF3.text  := cqrini.ReadString(section,'CapF3','F3');
-    edtCapF4.text  := cqrini.ReadString(section,'CapF4','F4');
-    edtCapF5.text  := cqrini.ReadString(section,'CapF5','F5');
-    edtCapF6.text  := cqrini.ReadString(section,'CapF6','F6');
-    edtCapF7.text  := cqrini.ReadString(section,'CapF7','F7');
-    edtCapF8.text  := cqrini.ReadString(section,'CapF8','F8');
-    edtCapF9.text  := cqrini.ReadString(section,'CapF9','F9');
-    edtCapF10.text  := cqrini.ReadString(section,'CapF10','F10')
-  {$IFDEF CONTEST}
-  end
-  {$ENDIF}
+  pgCWTexts.Pages[1].TabVisible := False;
+  pgCWTexts.Pages[0].Caption := '';
+  edtF1.text     := cqrini.ReadString(section,'F1','cq cq de %mc %mc pse K');
+  edtF2.text     := cqrini.ReadString(section,'F2','');
+  edtF3.text     := cqrini.ReadString(section,'F3','');
+  edtF4.text     := cqrini.ReadString(section,'F4','');
+  edtF5.text     := cqrini.ReadString(section,'F5','');
+  edtF6.text     := cqrini.ReadString(section,'F6','');
+  edtF7.text     := cqrini.ReadString(section,'F7','');
+  edtF8.text     := cqrini.ReadString(section,'F8','');
+  edtF9.text     := cqrini.ReadString(section,'F9','');
+  edtF10.text    := cqrini.ReadString(section,'F10','');
+  edtCapF1.text  := cqrini.ReadString(section,'CapF1','F1 - CQ');
+  edtCapF2.text  := cqrini.ReadString(section,'CapF2','F2');
+  edtCapF3.text  := cqrini.ReadString(section,'CapF3','F3');
+  edtCapF4.text  := cqrini.ReadString(section,'CapF4','F4');
+  edtCapF5.text  := cqrini.ReadString(section,'CapF5','F5');
+  edtCapF6.text  := cqrini.ReadString(section,'CapF6','F6');
+  edtCapF7.text  := cqrini.ReadString(section,'CapF7','F7');
+  edtCapF8.text  := cqrini.ReadString(section,'CapF8','F8');
+  edtCapF9.text  := cqrini.ReadString(section,'CapF9','F9');
+  edtCapF10.text  := cqrini.ReadString(section,'CapF10','F10')
 end;
 
 procedure TfrmKeyTexts.FormClose(Sender: TObject; var CloseAction: TCloseAction
@@ -234,78 +184,27 @@ var
   section : String = '';
 begin
   section := 'CW';
-  {$IFDEF CONTEST}
-  if dmData.ContestMode and dmData.ContestDatabase.Connected then
-  begin
-    dmData.tstini.WriteString(section,'F1',edtF1.Text);
-    dmData.tstini.WriteString(section,'F2',edtF2.Text);
-    dmData.tstini.WriteString(section,'F3',edtF3.Text);
-    dmData.tstini.WriteString(section,'F4',edtF4.Text);
-    dmData.tstini.WriteString(section,'F5',edtF5.Text);
-    dmData.tstini.WriteString(section,'F6',edtF6.Text);
-    dmData.tstini.WriteString(section,'F7',edtF7.Text);
-    dmData.tstini.WriteString(section,'F8',edtF8.Text);
-    dmData.tstini.WriteString(section,'F9',edtF9.Text);
-    dmData.tstini.WriteString(section,'F10',edtF10.Text);
-    dmData.tstini.WriteString(section,'CapF1',edtCapF1.Text);
-    dmData.tstini.WriteString(section,'CapF2',edtCapF2.Text);
-    dmData.tstini.WriteString(section,'CapF3',edtCapF3.Text);
-    dmData.tstini.WriteString(section,'CapF4',edtCapF4.Text);
-    dmData.tstini.WriteString(section,'CapF5',edtCapF5.Text);
-    dmData.tstini.WriteString(section,'CapF6',edtCapF6.Text);
-    dmData.tstini.WriteString(section,'CapF7',edtCapF7.Text);
-    dmData.tstini.WriteString(section,'CapF8',edtCapF8.Text);
-    dmData.tstini.WriteString(section,'CapF9',edtCapF9.Text);
-    dmData.tstini.WriteString(section,'CapF10',edtCapF10.Text);
-
-    dmData.tstini.WriteString(section,'SPF1',edtSPF1.Text);
-    dmData.tstini.WriteString(section,'SPF2',edtSPF2.Text);
-    dmData.tstini.WriteString(section,'SPF3',edtSPF3.Text);
-    dmData.tstini.WriteString(section,'SPF4',edtSPF4.Text);
-    dmData.tstini.WriteString(section,'SPF5',edtSPF5.Text);
-    dmData.tstini.WriteString(section,'SPF6',edtSPF6.Text);
-    dmData.tstini.WriteString(section,'SPF7',edtSPF7.Text);
-    dmData.tstini.WriteString(section,'SPF8',edtSPF8.Text);
-    dmData.tstini.WriteString(section,'SPF9',edtSPF9.Text);
-    dmData.tstini.WriteString(section,'SPF10',edtSPF10.Text);
-    dmData.tstini.WriteString(section,'SPCapF1',edtSPCapF1.Text);
-    dmData.tstini.WriteString(section,'SPCapF2',edtSPCapF2.Text);
-    dmData.tstini.WriteString(section,'SPCapF3',edtSPCapF3.Text);
-    dmData.tstini.WriteString(section,'SPCapF4',edtSPCapF4.Text);
-    dmData.tstini.WriteString(section,'SPCapF5',edtSPCapF5.Text);
-    dmData.tstini.WriteString(section,'SPCapF6',edtSPCapF6.Text);
-    dmData.tstini.WriteString(section,'SPCapF7',edtSPCapF7.Text);
-    dmData.tstini.WriteString(section,'SPCapF8',edtSPCapF8.Text);
-    dmData.tstini.WriteString(section,'SPCapF9',edtSPCapF9.Text);
-    dmData.tstini.WriteString(section,'SPCapF10',edtSPCapF10.Text);
-    dmData.tstini.SaveToDisk
-  end
-  else begin
-  {$ENDIF}
-    cqrini.WriteString(section,'F1',edtF1.Text);
-    cqrini.WriteString(section,'F2',edtF2.Text);
-    cqrini.WriteString(section,'F3',edtF3.Text);
-    cqrini.WriteString(section,'F4',edtF4.Text);
-    cqrini.WriteString(section,'F5',edtF5.Text);
-    cqrini.WriteString(section,'F6',edtF6.Text);
-    cqrini.WriteString(section,'F7',edtF7.Text);
-    cqrini.WriteString(section,'F8',edtF8.Text);
-    cqrini.WriteString(section,'F9',edtF9.Text);
-    cqrini.WriteString(section,'F10',edtF10.Text);
-    cqrini.WriteString(section,'CapF1',edtCapF1.Text);
-    cqrini.WriteString(section,'CapF2',edtCapF2.Text);
-    cqrini.WriteString(section,'CapF3',edtCapF3.Text);
-    cqrini.WriteString(section,'CapF4',edtCapF4.Text);
-    cqrini.WriteString(section,'CapF5',edtCapF5.Text);
-    cqrini.WriteString(section,'CapF6',edtCapF6.Text);
-    cqrini.WriteString(section,'CapF7',edtCapF7.Text);
-    cqrini.WriteString(section,'CapF8',edtCapF8.Text);
-    cqrini.WriteString(section,'CapF9',edtCapF9.Text);
-    cqrini.WriteString(section,'CapF10',edtCapF10.Text);
-    cqrini.SaveToDisk;
-  {$IFDEF CONTEST}
-  end;
-  {$ENDIF}
+  cqrini.WriteString(section,'F1',edtF1.Text);
+  cqrini.WriteString(section,'F2',edtF2.Text);
+  cqrini.WriteString(section,'F3',edtF3.Text);
+  cqrini.WriteString(section,'F4',edtF4.Text);
+  cqrini.WriteString(section,'F5',edtF5.Text);
+  cqrini.WriteString(section,'F6',edtF6.Text);
+  cqrini.WriteString(section,'F7',edtF7.Text);
+  cqrini.WriteString(section,'F8',edtF8.Text);
+  cqrini.WriteString(section,'F9',edtF9.Text);
+  cqrini.WriteString(section,'F10',edtF10.Text);
+  cqrini.WriteString(section,'CapF1',edtCapF1.Text);
+  cqrini.WriteString(section,'CapF2',edtCapF2.Text);
+  cqrini.WriteString(section,'CapF3',edtCapF3.Text);
+  cqrini.WriteString(section,'CapF4',edtCapF4.Text);
+  cqrini.WriteString(section,'CapF5',edtCapF5.Text);
+  cqrini.WriteString(section,'CapF6',edtCapF6.Text);
+  cqrini.WriteString(section,'CapF7',edtCapF7.Text);
+  cqrini.WriteString(section,'CapF8',edtCapF8.Text);
+  cqrini.WriteString(section,'CapF9',edtCapF9.Text);
+  cqrini.WriteString(section,'CapF10',edtCapF10.Text);
+  cqrini.SaveToDisk;
   ModalResult := mrOK
 end;
 
