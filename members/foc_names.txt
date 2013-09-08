@@ -645,3 +645,5 @@ KT4P;Carey
 DL6LBI;Ingo
 SM1TDE;Eric
 W5PEH;Pete
+W4EDE;Lee
+M0PCB;Iain
