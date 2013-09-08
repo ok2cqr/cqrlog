@@ -239,7 +239,8 @@ begin
     BandMapItems[index].Freq := 0;
     BandMapItems[index].Call := '';
     BandMapItems[index].Mode := '';
-    BandMapItems[index].Band := ''
+    BandMapItems[index].Band := '';
+    BandMapItems[index].Flag := ''
   finally
     LeaveCriticalSection(BandMapCrit)
   end
