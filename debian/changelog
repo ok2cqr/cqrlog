@@ -1,5 +1,6 @@
-cqrlog (1.5.9-1) unstable; urgency=low
+cqrlog (1.6.0-1) unstable; urgency=low
 
+  * added whole new bandmap with frequecy indicator
   * your CQ received by RBN will be visible in gray line map
   * local mysqld is executed only when the log is stored to 
     local machine
@@ -12,8 +13,9 @@ cqrlog (1.5.9-1) unstable; urgency=low
   * existing band map record was not updated from dx cluster
   * program didn't accept ITU zones 78 and 90
   * program used QTH from previous QSO even is the station was /P
+  * app crashed after start on Ubuntu 13.10
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 01 SEP 2013 09:35:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 08 SEP 2013 15:35:00 +0100
   
 cqrlog (1.5.8-1) unstable; urgency=low
 
