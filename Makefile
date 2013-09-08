@@ -6,7 +6,7 @@ sharedir = $(DESTDIR)/usr/share
 
 cqrlog: src/cqrlog.lpi
 	$(CC) --ws=gtk2 src/cqrlog.lpi
-#	$(ST) src/cqrlog
+	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 clean:
