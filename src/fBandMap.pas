@@ -12,7 +12,7 @@ type
   TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
 
 const
-  MAX_ITEMS = 500;
+  MAX_ITEMS = 200;
   DELTA_FREQ = 0.3; //freq (kHz) tolerance between radio freq and freq in bandmap
   CURRENT_STATION_CHAR = '|'; //this character will be placed before the bandmap item when the radio freq is close enough
   ITEM_SEP = '|'; //separator used with bandmap items stored in a file
@@ -72,8 +72,8 @@ type
     FOnlyCurrBand   : Boolean;
     FxplanetFile    : String;
     FxplanetExport  : Boolean;
+    NewAdded        : Boolean;
 
-    procedure RecalcPosition;
     procedure SortBandMapArray(l,r : Integer);
     procedure BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure EmitBandMapClick(Sender:TObject;Call,Mode : String; Freq : Currency);
@@ -164,7 +164,8 @@ begin
     BandMapItems[i].TimeStamp := now;
     BandMapItems[i].TextValue := FormatItem(Freq, Call, SplitInfo,fromNewQSO);
     BandMapItems[i].Position  := i;
-    if dmData.DebugLevel>=1 then Writeln('Added to position:',i)
+    if dmData.DebugLevel>=1 then Writeln('Added to position:',i);
+    frmBandMap.NewAdded := True
   finally
     LeaveCriticalSection(BandMapCrit)
   end;
@@ -215,7 +216,8 @@ begin
       if (BandMapItems[i].Call=call) and  (BandMapItems[i].Band=band) and
          (BandMapItems[i].Mode=mode) then
         DeleteFromArray(i)
-    end
+    end;
+    NewAdded := True
   finally
     LeaveCriticalSection(BandMapCrit)
   end
@@ -257,7 +259,7 @@ begin
   FBandFilter := UpperCase(FBandFilter);
   FModeFilter := UpperCase(FModeFilter);
   BandMap.zakaz_kresleni(True);
-  EnterCriticalSection(BandMapCrit);
+  //EnterCriticalSection(BandMapCrit);
   try
     for i:=1 to MAX_ITEMS do
     begin
@@ -291,7 +293,7 @@ begin
     end;
     inc(RunXplanetExport)
   finally
-    LeaveCriticalSection(BandMapCrit);
+    //LeaveCriticalSection(BandMapCrit);
     BandMap.zakaz_kresleni(False)
   end
 end;
@@ -352,21 +354,6 @@ begin
   if i < r then SortBandMapArray(i,r)
 end;
 
-procedure TfrmBandMap.RecalcPosition;
-var
-  i : Integer;
-  w : Word=1;
-begin
-  for i:=1 to MAX_ITEMS do
-  begin
-    if BandMapItems[i].Freq <> 0 then
-    begin
-      BandMapItems[i].Position := w;
-      inc(w)
-    end
-  end
-end;
-
 function TfrmBandMap.GetIndexFromPosition(ItemPos : Word) : Integer;
 var
   i : Integer;
@@ -408,37 +395,72 @@ end;
 procedure TBandMapThread.Execute;
 var
   i : Integer;
+  Changed : Boolean = False;
+  When : TDateTime;
 begin
   while not Terminated do
   begin
     try
+      When := now;
       EnterCriticalSection(frmBandMap.BandMapCrit);
       for i:=1 to MAX_ITEMS do
       begin
         if frmBandMap.BandMapItems[i].Freq = 0 then
           Continue;
-        if now>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)) then
+
+        //Writeln('Now:      ',DateTimeToStr(When));
+        //Writeln('TimeStamp:',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp));
+        {Writeln('Delete:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)));
+        Writeln('Second:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FSecondInterval/86400)));
+        Writeln('First:    ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FFirstInterval/86400)));
+        Writeln('Call:     ',frmBandMap.BandMapItems[i].Call);
+        Writeln('Freq:     ',FloatToStr(frmBandMap.BandMapItems[i].Freq));
+        }
+
+        //Writeln('Now:      ',DateTimeToStr(When));
+        //Writeln('Delete:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)));
+        sleep(0);
+
+        if When>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)) then
         begin
-          frmBandMap.DeleteFromArray(i)
+          //Writeln('1');
+          //Writeln('Call:     ',frmBandMap.BandMapItems[i].Call);
+          //Writeln('Freq:     ',FloatToStr(frmBandMap.BandMapItems[i].Freq));
+          frmBandMap.DeleteFromArray(i);
+          Changed := True
         end
-        else if (now>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FSecondInterval/86400))) and (frmBandMap.BandMapItems[i].Flag='S') then
+        else if (When>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FSecondInterval/86400))) and (frmBandMap.BandMapItems[i].Flag='S') then
         begin
           frmBandMap.BandMapItems[i].Color := IncColor(frmBandMap.BandMapItems[i].Color,40);
-          frmBandMap.BandMapItems[i].Flag  := 'X'
+          frmBandMap.BandMapItems[i].Flag  := 'X';
+          //Writeln('2');
+          Changed := True
         end
-        else if (now>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FFirstInterval/86400))) and (frmBandMap.BandMapItems[i].Flag='') then
+        else if (When>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FFirstInterval/86400))) and (frmBandMap.BandMapItems[i].Flag='') then
         begin
           frmBandMap.BandMapItems[i].Color := IncColor(frmBandMap.BandMapItems[i].Color,60);
-          frmBandMap.BandMapItems[i].Flag  := 'S'
+          frmBandMap.BandMapItems[i].Flag  := 'S';
+          //Writeln('3');
+          Changed := True
         end
       end;
-      frmBandMap.SortBandMapArray(1,MAX_ITEMS);
-      frmBandMap.RecalcPosition
+      if frmbandMap.NewAdded then
+      begin
+        frmBandMap.SortBandMapArray(1,MAX_ITEMS);
+        frmBandMap.NewAdded := False;
+        //Writeln('4');
+        Changed := True
+      end
     finally
       LeaveCriticalSection(frmBandMap.BandMapCrit)
     end;
-    Synchronize(@frmBandMap.SyncBandMap);
-    Sleep(500)
+    if Changed then
+    begin
+      Synchronize(@frmBandMap.SyncBandMap);
+      Changed := False;
+      //Writeln('Something has changed .... ');
+    end;
+    Sleep(700)
   end
 end;
 
@@ -480,6 +502,7 @@ begin
   BandMapItemsCount := 0;
   Randomize;
   ClearAll;
+  NewAdded := False;
   BandMapThread := TBandMapThread.Create(True);
   BandMapThread.Resume
 end;
@@ -578,7 +601,8 @@ begin
       BandMapItems[i].BgColor   := StrToInt(a[9]);
       BandMapItems[i].TimeStamp := StrToFloat(a[10]);
       BandMapItems[i].TextValue := a[11];
-      BandMapItems[i].Position  := i
+      BandMapItems[i].Position  := i;
+      NewAdded := True
     end
   finally
     CloseFile(f);

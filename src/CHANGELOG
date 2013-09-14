@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 1.6.1
+  + band map is much faster, a few optimalization added
   - band map font settings was not loaded when program started
 	
 1.6.0
