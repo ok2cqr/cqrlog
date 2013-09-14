@@ -1169,6 +1169,7 @@ begin
   frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BnadMap', 'OnlyActiveBand', False);
   frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
   frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0);
+  frmBandMap.LoadFonts;
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');

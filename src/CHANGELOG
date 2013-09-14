@@ -4,7 +4,10 @@ Legend:
   - bugfix
 --------------------
 
-1.5.9
+1.6.1
+  - band map font settings was not loaded when program started
+	
+1.6.0
   + your CQ received by RBN will be visible in gray line map
   + local mysqld is executed only when the log is stored to local machine
   + added JT9 to list of modes
