@@ -396,8 +396,8 @@ begin
       Width  := ini.ReadInteger(Name,'Width',Width);
       Top    := ini.ReadInteger(Name,'Top',20);
       Left   := ini.ReadInteger(Name,'Left',20);
-      StartMysql := ini.ReadBool('Login','SaveTolocal',True)
-    end
+    end;
+    StartMysql := ini.ReadBool('Login','SaveTolocal',True)
   finally
     ini.Free
   end;
@@ -405,7 +405,6 @@ begin
 
   if StartMysql then
     dmData.StartMysqldProcess;
-
   LoadLogin;
   if OpenFromMenu then
   begin
