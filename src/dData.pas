@@ -3055,7 +3055,7 @@ begin
   PrepareMysqlConfigFile;
   MySQLProcess := TProcess.Create(nil);
   MySQLProcess.CommandLine := mysqld+' --defaults-file='+fHomeDir+'database/'+'my.cnf'+
-                              ' --default-storage-engine=InnoDB --datadir='+fHomeDir+'database/'+
+                              ' --default-storage-engine=MyISAM --datadir='+fHomeDir+'database/'+
                               ' --socket='+fHomeDir+'database/sock'+
                               ' --skip-grant-tables --port=64000 --key_buffer_size=32M'+
                               ' --key_buffer_size=4096K';
