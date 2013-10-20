@@ -26,7 +26,7 @@ const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 4;
   cDB_COMN_VER = 1;
-  cDB_PING_INT = 480;  //ping interval for database connection in seconds
+  cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
                        //which refresh connection
@@ -1158,7 +1158,7 @@ begin
   //StartMysqldProcess;
 
   tmrDBPing.Interval := CDB_PING_INT*1000;
-  tmrDBPing.Enabled  := True;
+  tmrDBPing.Enabled  := True
 end;
 
 procedure TdmData.DataModuleDestroy(Sender: TObject);
@@ -1237,11 +1237,10 @@ begin
 end;
 
 procedure TdmData.tmrDBPingTimer(Sender: TObject);
-//var
-  //pq : TSQLQuery;
-  //tq : TSQLTransaction;
+var
+  pq : TSQLQuery;
+  tq : TSQLTransaction;
 begin
-{
   pq := TSQLQuery.Create(nil);
   tq := TSQLTransaction.Create(nil);
   try
@@ -1271,7 +1270,6 @@ begin
     pq.Free;
     tq.Free
   end
-}
 end;
 
 procedure TdmData.SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,

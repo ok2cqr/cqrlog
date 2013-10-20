@@ -6,6 +6,7 @@ Legend:
 
 1.6.2
   - program freezed for a few miliseconds with every bandmap refresh - fixed
+  - "MySQL server has gone away" problem fixed
 
 1.6.1
   + band map is much faster, a few optimalization added
