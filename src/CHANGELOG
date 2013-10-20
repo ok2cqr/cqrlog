@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.6.2
+  - program freezed for a few miliseconds with every bandmap refresh - fixed
+
 1.6.1
   + band map is much faster, a few optimalization added
   - band map font settings was not loaded when program started

@@ -255,11 +255,10 @@ var
   s : String;
 begin
   if Active then exit; //do not refresh the window when is activated (user is scrolling)
-  ClearAll;
   FBandFilter := UpperCase(FBandFilter);
   FModeFilter := UpperCase(FModeFilter);
   BandMap.zakaz_kresleni(True);
-  //EnterCriticalSection(BandMapCrit);
+  ClearAll;
   try
     for i:=1 to MAX_ITEMS do
     begin
@@ -293,7 +292,6 @@ begin
     end;
     inc(RunXplanetExport)
   finally
-    //LeaveCriticalSection(BandMapCrit);
     BandMap.zakaz_kresleni(False)
   end
 end;
@@ -576,11 +574,11 @@ var
   s : String;
 begin
   if not FileExists(FileName) then exit;
-
-  ClearAll;
+  BandMap.zakaz_kresleni(True);
   AssignFile(f,FileName);
   EnterCriticalSection(BandMapCrit);
   try
+    ClearAll;
     Reset(f);
     while not Eof(f) do
     begin
@@ -606,6 +604,7 @@ begin
     end
   finally
     CloseFile(f);
+    BandMap.zakaz_kresleni(False);
     LeaveCriticalSection(BandMapCrit)
   end
 end;
