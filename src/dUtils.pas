@@ -36,7 +36,7 @@ const
                                             'PSK31','HELL','MT63','QRSS','CWQ','BPSK31','MFSK','JT44','FSK44','WSJT','AMTOR',
                                             'THROB','BPSK63','PACKET','OLIVIA','MFSK16','JT6M','JT65','JT65A','JT65B','JT65C',
                                             'JT9','FSK441','PSK125','PSK63','WSPR','PSK250','ROS');
-  cMaxBandsCount = 26; //26 bands
+  cMaxBandsCount = 27; //26 bands
   cDefaultFreq = '0.136|1.800|3.500|3.700|7.000|10.100|14.000|14.200|18.100|21.000|21.200|24.890|28.000|28.500|50.000|70.0875|'+
                  '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|';
 
@@ -67,6 +67,7 @@ type
     function  GetHamQTHInfo(call : String; var nick,qth,address,zip,grid,state,county,qsl,iota,ErrMsg : String) : Boolean;
   public
     s136  : String;
+    s630  : String;
     s160  : String;
     s80   : String;
     s60   : String;
@@ -240,8 +241,9 @@ end;
 
 function TdmUtils.GetBandFromFreq(MHz : string): String;
 var
-  x: Integer;
-  tmp : Currency;
+  x    : Integer;
+  tmp  : Currency;
+  dec  : Currency;
   band : String;
 begin
   Result := '';
@@ -254,9 +256,19 @@ begin
 
   if not TryStrToCurr(MHz,tmp) then
     exit;
+
+  if tmp < 1 then
+  begin
+    dec := Int(frac(tmp) * 1000);
+    if ((dec >= 133) and (dec <= 139))  then
+      Result := '2190M';
+    if ((dec >= 472) and (dec <= 480))  then
+      Result := '630M';
+    exit
+  end;
   x := trunc(tmp);
+
   case x of
-    0 : Band := '2190M';
     1 : Band := '160M';
     3 : band := '80M';
     5 : band := '60M';
@@ -281,7 +293,7 @@ begin
     10000..10500 : band := '3CM';
     24000..24250 : band := '1.25CM';
     47000..47200 : band := '6MM';
-    76000..84000 : band := '4MM';
+    76000..84000 : band := '4MM'
   end;
   Result := band
 end;
@@ -1780,6 +1792,7 @@ begin
   if cqrini.ReadBool('Program','BandStatMHz',True) then
   begin
     s136  := '136k';
+    s630  := '472k';
     s160  := '1.8';
     s80   := '3.5';
     s60   := '5';
@@ -1807,6 +1820,7 @@ begin
   end
   else begin
     s136  := '2.2k';
+    s630  := '0.5k';
     s160  := '160';
     s80   := '80';
     s60   := '60';
@@ -3133,6 +3147,13 @@ begin
     MyBands[i][1] := s136;
     inc(i)
   end;
+  if cqrini.ReadBool('Bands','472kHz',false) then
+  begin
+    MyBands[i][0] := '630M';
+    MyBands[i][1] := s630;
+    inc(i)
+  end;
+
   if cqrini.ReadBool('Bands','160m',true) then
   begin
     MyBands[i][0] := '160M';

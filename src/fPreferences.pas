@@ -69,7 +69,7 @@ type
     cb10m1: TCheckBox;
     cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
-    cb136kHz1: TCheckBox;
+    cb472kHz: TCheckBox;
     cb13cm1: TCheckBox;
     cb15m1: TCheckBox;
     cb160m: TCheckBox;
@@ -112,6 +112,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkShow630M : TCheckBox;
     chkRBNAutoConn : TCheckBox;
     chkShowMiles : TCheckBox;
     chkIgnoreBandFreq : TCheckBox;
@@ -1104,6 +1105,7 @@ begin
   cqrini.WriteBool('Columns', 'Country', chkCountry.Checked);
 
   cqrini.WriteBool('Bands', '137kHz', cb136kHz.Checked);
+  cqrini.WriteBool('Bands', '472kHz', cb472kHz.Checked);
   cqrini.WriteBool('Bands', '160m', cb160m.Checked);
   cqrini.WriteBool('Bands', '80m', cb80m.Checked);
   cqrini.WriteBool('Bands', '60m', cb60m.Checked);
@@ -1299,6 +1301,7 @@ begin
   cqrini.WriteInteger('DXCluster', 'NewMode', cmbNewMode.Selected);
   cqrini.WriteInteger('DXCluster', 'NeedQSL', cmbQSLNeeded.Selected);
   cqrini.WriteBool('DXCluster', 'Show2190M', chkShow2190M.Checked);
+  cqrini.WriteBool('DXCluster', 'Show630M', chkShow630M.Checked);
   cqrini.WriteBool('DXCluster', 'Show160M', chkShow160M.Checked);
   cqrini.WriteBool('DXCluster', 'Show80M', chkShow80M.Checked);
   cqrini.WriteBool('DXCluster', 'Show60M', chkShow60M.Checked);
@@ -2331,6 +2334,7 @@ begin
   chkCountry.Checked := cqrini.ReadBool('Columns', 'Country', False);
 
   cb136kHz.Checked := cqrini.ReadBool('Bands', '137kHz', False);
+  cb472kHz.Checked := cqrini.ReadBool('Bands', '472kHz', False);
   cb160m.Checked := cqrini.ReadBool('Bands', '160m', True);
   cb80m.Checked := cqrini.ReadBool('Bands', '80m', True);
   cb60m.Checked := cqrini.ReadBool('Bands', '60m', False);
@@ -2527,6 +2531,7 @@ begin
 
 
   chkShow2190M.Checked := cqrini.ReadBool('DXCluster', 'Show2190M', True);
+  chkShow630M.Checked := cqrini.ReadBool('DXCluster', 'Show630M', True);
   chkShow160M.Checked := cqrini.ReadBool('DXCluster', 'Show160M', True);
   chkShow80M.Checked := cqrini.ReadBool('DXCluster', 'Show80M', True);
   chkShow60M.Checked := cqrini.ReadBool('DXCluster', 'Show60M', True);

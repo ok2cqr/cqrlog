@@ -757,6 +757,8 @@ begin
       dec := Int(frac(tmp) * 1000);
       if ((dec >= 133) and (dec <= 139))  then
         Result := '2190M';
+      if ((dec >= 472) and (dec <= 480))  then
+        Result := '630M';
       exit
     end;
     x := trunc(tmp);
@@ -786,7 +788,7 @@ begin
       10000..10500 : band := '3CM';
       24000..24250 : band := '1.25CM';
       47000..47200 : band := '6MM';
-      76000..84000 : band := '4MM';
+      76000..84000 : band := '4MM'
     end;
     Result := band
   finally

@@ -25,7 +25,7 @@ const
   MaxCall   = 100000;
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 4;
-  cDB_COMN_VER = 1;
+  cDB_COMN_VER = 3;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -176,7 +176,8 @@ type
     procedure PrepareXplanetDir;
     procedure PrepareVoice_keyerDir;
     procedure KillMySQL(const OnStart : Boolean = True);
-    procedure UpdateDatabase(old_version : Integer);
+    procedure UpgradeMainDatabase(old_version : Integer);
+    procedure UpgradeCommonDatabase(old_version : Integer);
     procedure PrepareMysqlConfigFile;
   public
     {
@@ -624,11 +625,22 @@ begin
   try
     Q.SQL.Text := 'select * from db_version';
     Q.Open;
-    UpdateDatabase(Q.Fields[0].AsInteger)
+    UpgradeMainDatabase(Q.Fields[0].AsInteger)
   finally
     Q.Close();
     trQ.Rollback
   end;
+
+  trQ.StartTransaction;
+  try
+    Q.SQL.Text := 'select * from cqrlog_common.db_version';
+    Q.Open;
+    UpgradeCommonDatabase(Q.Fields[0].AsInteger)
+  finally
+    Q.Close();
+    trQ.Rollback
+  end;
+
 
   if Assigned(cqrini) then
     cqrini.Free;
@@ -1504,6 +1516,10 @@ begin
   trQ.StartTransaction;
   Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
                  QuotedStr('2190M')+',0.135,0.139,0.135,0.139,0.139)';
+  Q.ExecSQL;
+
+  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                 QuotedStr('2190M')+',0.472,0.480,0.472,0.472,0.480)';
   Q.ExecSQL;
 
   Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
@@ -2825,7 +2841,42 @@ begin
 end;
 
 
-procedure TdmData.UpdateDatabase(old_version : Integer);
+procedure TdmData.UpgradeCommonDatabase(old_version : Integer);
+var
+  err : Boolean = False;
+begin
+  Writeln('OLD:',old_version);
+  if old_version < cDB_COMN_VER then
+  begin
+    if trQ1.Active then trQ1.Rollback;
+    trQ1.StartTransaction;
+    try try
+      if old_version < 3 then
+      begin
+        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('2190M')+',0.472,0.480,0.472,0.472,0.480)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL
+      end;
+      Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
+      if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+      Q1.ExecSQL
+    except
+      on E : Exception do
+      begin
+        Application.MessageBox(PChar('Database upgrade crashed with this error:'+LineEnding+E.Message),'Error',mb_ok+mb_IconError);
+      end
+    end
+    finally
+      if err then
+        trQ1.Rollback
+      else
+        trQ1.Commit
+    end
+  end
+end;
+
+procedure TdmData.UpgradeMainDatabase(old_version : Integer);
 var
   err : Boolean = False;
 begin

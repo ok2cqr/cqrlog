@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 1.6.2
+  + 630M band added
   - program freezed for a few miliseconds with every bandmap refresh - fixed
   - "MySQL server has gone away" problem fixed
   - mebership values collation were case sensistive - fixed
