@@ -4859,7 +4859,7 @@ end;
 procedure TfrmNewQSO.StoreClubInfo(where,StoreText : String);
 begin
   StoreText := trim(StoreText);
-  if (where = 'award') and (Pos(StoreText,edtAward.text)=0) then
+  if (where = 'award') and (Pos(LowerCase(StoreText),LowerCase(edtAward.text))=0) then
   begin
     if edtAward.Text <> '' then
       edtAward.Text := edtAward.Text + ' ' + StoreText
@@ -4875,21 +4875,21 @@ begin
       edtQTH.Text := StoreText;
     edtQTHExit(nil);
   end;
-  if (where = 'comm. for QSO') and (Pos(StoreText,edtRemQSO.text)=0) then
+  if (where = 'comm. for QSO') and (Pos(LowerCase(StoreText),LowerCase(edtRemQSO.text))=0) then
   begin
     if edtRemQSO.Text <> ''  then
       edtRemQSO.Text := edtRemQSO.Text + ' ' + StoreText
     else
       edtRemQSO.Text := StoreText;
   end;
-  if (where = 'name') and (Pos(StoreText,edtName.text)=0) then
+  if (where = 'name') and (Pos(LowerCase(StoreText),LowerCase(edtName.text))=0) then
   begin
     if edtName.Text <> '' then
       edtName.Text := edtName.Text + ' ' + StoreText
     else
       edtName.Text := StoreText;
   end;
-  if (where = 'county') and (Pos(StoreText,edtCounty.text)=0) and (edtCounty.Text <> '') then
+  if (where = 'county') and (Pos(LowerCase(StoreText),LowerCase(edtCounty.text))=0) and (edtCounty.Text <> '') then
   begin
     edtCounty.Text := StoreText;
     edtCountyExit(nil);

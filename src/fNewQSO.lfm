@@ -6,7 +6,7 @@ object frmNewQSO: TfrmNewQSO
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 631
+  ClientHeight = 633
   ClientWidth = 807
   Font.Height = 8
   Icon.Data = {
@@ -127,8 +127,8 @@ object frmNewQSO: TfrmNewQSO
   LCLVersion = '0.9.30.2'
   object sbNewQSO: TStatusBar
     Left = 0
-    Height = 20
-    Top = 611
+    Height = 18
+    Top = 615
     Width = 807
     Panels = <    
       item
@@ -148,7 +148,7 @@ object frmNewQSO: TfrmNewQSO
   object Panel1: TPanel
     Left = 0
     Height = 499
-    Top = 112
+    Top = 116
     Width = 807
     Align = alBottom
     Caption = 'Panel1'
@@ -1213,16 +1213,16 @@ object frmNewQSO: TfrmNewQSO
         Width = 548
         Align = alBottom
         Caption = 'DXCC stat.'
-        ClientHeight = 109
-        ClientWidth = 544
+        ClientHeight = 110
+        ClientWidth = 546
         Font.Color = clBlue
         ParentFont = False
         TabOrder = 1
         object sgrdStatistic: TStringGrid
           Left = 0
-          Height = 109
+          Height = 110
           Top = 0
-          Width = 544
+          Width = 546
           Align = alClient
           ColCount = 2
           DefaultColWidth = 35
@@ -1255,8 +1255,8 @@ object frmNewQSO: TfrmNewQSO
         Top = 255
         Width = 240
         Caption = ' Callbook (qrz.com) '
-        ClientHeight = 139
-        ClientWidth = 236
+        ClientHeight = 140
+        ClientWidth = 238
         Font.Color = clBlue
         ParentFont = False
         TabOrder = 0
@@ -1276,8 +1276,8 @@ object frmNewQSO: TfrmNewQSO
         Top = -3
         Width = 240
         Caption = 'DXCC info'
-        ClientHeight = 220
-        ClientWidth = 236
+        ClientHeight = 221
+        ClientWidth = 238
         Font.Color = clBlue
         ParentFont = False
         TabOrder = 1
@@ -1752,7 +1752,7 @@ object frmNewQSO: TfrmNewQSO
   end
   object dbgrdQSOBefore: TDBGrid
     Left = 0
-    Height = 112
+    Height = 116
     Top = 0
     Width = 807
     Align = alClient
