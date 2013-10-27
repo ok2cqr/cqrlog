@@ -1,6 +1,6 @@
 object frmSearch: TfrmSearch
   Left = 547
-  Height = 321
+  Height = 362
   Top = 243
   Width = 288
   HorzScrollBar.Page = 236
@@ -8,7 +8,7 @@ object frmSearch: TfrmSearch
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Search '
-  ClientHeight = 321
+  ClientHeight = 362
   ClientWidth = 288
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -117,7 +117,7 @@ object frmSearch: TfrmSearch
   }
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.29'
+  LCLVersion = '0.9.30.2'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 136
@@ -125,12 +125,12 @@ object frmSearch: TfrmSearch
     Width = 288
     Align = alTop
     Caption = ' Search '
-    ClientHeight = 118
+    ClientHeight = 104
     ClientWidth = 284
     TabOrder = 0
     object cmbSearch: TComboBox
       Left = 8
-      Height = 28
+      Height = 22
       Top = 23
       Width = 248
       ItemHeight = 0
@@ -140,7 +140,7 @@ object frmSearch: TfrmSearch
     end
     object edtText: TEdit
       Left = 8
-      Height = 26
+      Height = 22
       Top = 79
       Width = 248
       OnKeyPress = edtTextKeyPress
@@ -158,28 +158,36 @@ object frmSearch: TfrmSearch
       Left = 8
       Height = 17
       Top = 7
-      Width = 45
+      Width = 44
       Caption = 'Where:'
       ParentColor = False
     end
   end
   object grbOptions: TGroupBox
     Left = 0
-    Height = 54
+    Height = 102
     Top = 226
     Width = 288
     Align = alTop
     Caption = ' Options '
-    ClientHeight = 36
+    ClientHeight = 70
     ClientWidth = 284
     TabOrder = 1
     object chkInclude: TCheckBox
       Left = 8
-      Height = 22
+      Height = 26
       Top = 7
-      Width = 70
+      Width = 72
       Caption = 'Include'
       TabOrder = 0
+    end
+    object chkSortByDate: TCheckBox
+      Left = 8
+      Height = 26
+      Top = 35
+      Width = 178
+      Caption = 'Always sort by QSO date'
+      TabOrder = 1
     end
   end
   object mHelp: TMemo
@@ -197,7 +205,7 @@ object frmSearch: TfrmSearch
   object Panel1: TPanel
     Left = 0
     Height = 34
-    Top = 287
+    Top = 328
     Width = 288
     Align = alBottom
     BevelOuter = bvNone

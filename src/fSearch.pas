@@ -26,6 +26,7 @@ type
   TfrmSearch = class(TForm)
     btnCancel: TButton;
     btnSearch: TButton;
+    chkSortByDate : TCheckBox;
     chkInclude: TCheckBox;
     cmbSearch: TComboBox;
     edtText: TEdit;
@@ -94,6 +95,8 @@ begin
             dmData.Q.Close;
             if dmData.trQ.Active then dmData.trQ.Rollback;
             sql := sql + ' where qsodate = '+ QuotedStr(edtText.Text);
+            if chkSortByDate.Checked then
+              sql := sql + ' order by qsodate';
             dmData.Q.SQL.Text := sql + ' LIMIT 1';
             dmData.trQ.StartTransaction;
             dmData.Q.Open;
@@ -133,6 +136,8 @@ begin
               sql := sql + ' where (callsign like ''%' + edtText.Text + '%'')'
             else
               sql := sql + ' where callsign = '+ QuotedStr(edtText.Text);
+              if chkSortByDate.Checked then
+                sql := sql + ' order by qsodate';
             dmData.Q.SQL.Text := sql + ' LIMIT 1';
             dmData.trQ.StartTransaction;
             dmData.Q.Open;
@@ -171,6 +176,8 @@ begin
               sql := sql + ' where (name like ''%' + edtText.Text + '%'')'
             else
               sql := sql + ' where name = '+ QuotedStr(edtText.Text);
+            if chkSortByDate.Checked then
+             sql := sql + ' order by qsodate';
             dmData.Q.SQL.Text := sql + ' LIMIT 1';
             dmData.trQ.StartTransaction;
             dmData.Q.Open;
@@ -206,9 +213,11 @@ begin
             dmData.Q.Close;
             if dmData.trQ.Active then dmData.trQ.Rollback;
             if chkInclude.Checked then
-              sql := sql + ' where qth (like ''%' + edtText.Text + '%'')'
+              sql := sql + ' where (qth like ''%' + edtText.Text + '%'')'
             else
               sql := sql + ' where qth = '+ QuotedStr(edtText.Text);
+            if chkSortByDate.Checked then
+              sql := sql + ' order by qsodate';
             dmData.Q.SQL.Text := sql + ' LIMIT 1';
             dmData.trQ.StartTransaction;
             dmData.Q.Open;
