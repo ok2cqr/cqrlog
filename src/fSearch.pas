@@ -63,7 +63,10 @@ begin
   cmbSearch.Items.Add('Callsign');
   cmbSearch.Items.Add('Name');
   cmbSearch.Items.Add('QTH');
-  LoadSettings;
+  if dmData.IsFilter then
+    cmbSearch.ItemIndex := 1
+  else
+    LoadSettings;
   edtText.SetFocus;
   cmbSearchChange(nil);
   if dmData.IsFilter and (not dmData.IsSFilter) then
@@ -76,14 +79,16 @@ end;
 
 procedure TfrmSearch.FormCloseQuery(Sender : TObject; var CanClose : boolean);
 begin
-  SaveSettings
+  if not dmData.IsFilter then
+    SaveSettings
 end;
 
 procedure TfrmSearch.btnSearchClick(Sender: TObject);
 var
   sql : String = '';
 begin
-  SaveSettings;
+  if not dmData.IsFilter then
+    SaveSettings;
   if edtText.Text = '' then
     exit;
   if dmData.SortType = stDate then
@@ -96,7 +101,10 @@ begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
             if  dmData.QueryLocate(dmData.qCQRLOG,'qsodate',edtText.Text,True) then
-              Close
+            begin
+              Close;
+              exit
+            end
             else
               ShowMessage(edtText.Text + ' not found')
           end
@@ -105,36 +113,17 @@ begin
             if dmData.trQ.Active then dmData.trQ.Rollback;
             sql := sql + ' where qsodate = '+ QuotedStr(edtText.Text);
             if chkSortByDate.Checked then
-              sql := sql + ' order by qsodate';
-            dmData.Q.SQL.Text := sql + ' LIMIT 1';
-            dmData.trQ.StartTransaction;
-            dmData.Q.Open;
-            Writeln('cnt:',dmData.Q.Fields[0].AsInteger);
-            if dmData.Q.Fields[0].AsInteger = 0 then
-              ShowMessage(edtText.Text + ' not found')
-            else begin
-              dmData.qCQRLOG.DisableControls;
-              try
-                dmData.qCQRLOG.Close;
-                dmData.trCQRLOG.Rollback;
-                dmData.qCQRLOG.SQL.Text := sql;
-                dmData.trCQRLOG.StartTransaction;
-                dmData.qCQRLOG.Open;
-                Close
-              finally
-                dmData.IsFilter  := True;
-                dmData.IsSFilter := True;
-                frmMain.RefreshQSODXCCCount;
-                dmData.qCQRLOG.EnableControls
-              end
-            end
+              sql := sql + ' order by qsodate'
           end
         end;
     1 : begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
             if dmData.QueryLocate(dmData.qCQRLOG,'callsign',edtText.Text,False) then
-              Close
+            begin
+              Close;
+              exit
+            end
             else
               ShowMessage(edtText.Text + ' not found')
           end
@@ -146,35 +135,17 @@ begin
             else
               sql := sql + ' where callsign = '+ QuotedStr(edtText.Text);
               if chkSortByDate.Checked then
-                sql := sql + ' order by qsodate';
-            dmData.Q.SQL.Text := sql + ' LIMIT 1';
-            dmData.trQ.StartTransaction;
-            dmData.Q.Open;
-            if dmData.Q.Fields[0].AsInteger = 0 then
-              ShowMessage(edtText.Text + ' not found')
-            else begin
-              dmData.qCQRLOG.DisableControls;
-              try
-                dmData.qCQRLOG.Close;
-                dmData.trCQRLOG.Rollback;
-                dmData.qCQRLOG.SQL.Text := sql;
-                dmData.trCQRLOG.StartTransaction;
-                dmData.qCQRLOG.Open;
-                Close
-              finally
-                dmData.IsFilter  := True;
-                dmData.IsSFilter := True;
-                frmMain.RefreshQSODXCCCount;
-                dmData.qCQRLOG.EnableControls
-              end
-            end
+                sql := sql + ' order by qsodate'
           end
         end;
     2 : begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
             if dmData.QueryLocate(dmData.qCQRLOG,'name',edtText.Text,False) then
-              Close
+            begin
+              Close;
+              exit
+            end
             else
               ShowMessage(edtText.Text + ' not found')
           end
@@ -186,35 +157,17 @@ begin
             else
               sql := sql + ' where name = '+ QuotedStr(edtText.Text);
             if chkSortByDate.Checked then
-             sql := sql + ' order by qsodate';
-            dmData.Q.SQL.Text := sql + ' LIMIT 1';
-            dmData.trQ.StartTransaction;
-            dmData.Q.Open;
-            if dmData.Q.Fields[0].AsInteger = 0 then
-              ShowMessage(edtText.Text + ' not found')
-            else begin
-              dmData.qCQRLOG.DisableControls;
-              try
-                dmData.qCQRLOG.Close;
-                dmData.trCQRLOG.Rollback;
-                dmData.qCQRLOG.SQL.Text := sql;
-                dmData.trCQRLOG.StartTransaction;
-                dmData.qCQRLOG.Open;
-                Close
-              finally
-                dmData.IsFilter  := True;
-                dmData.IsSFilter := True;
-                frmMain.RefreshQSODXCCCount;
-                dmData.qCQRLOG.EnableControls
-              end
-            end
+             sql := sql + ' order by qsodate'
           end
         end;
     3 : begin
           if dmData.IsFilter and (not dmData.IsSFilter) then
           begin
             if dmData.QueryLocate(dmData.qCQRLOG,'qth',edtText.Text,False) then
-              Close
+            begin
+              Close;
+              exit
+            end
             else
               ShowMessage(edtText.Text + ' not found')
           end
@@ -226,30 +179,30 @@ begin
             else
               sql := sql + ' where qth = '+ QuotedStr(edtText.Text);
             if chkSortByDate.Checked then
-              sql := sql + ' order by qsodate';
-            dmData.Q.SQL.Text := sql + ' LIMIT 1';
-            dmData.trQ.StartTransaction;
-            dmData.Q.Open;
-            if dmData.Q.Fields[0].AsInteger = 0 then
-              ShowMessage(edtText.Text + ' not found')
-            else begin
-              dmData.qCQRLOG.DisableControls;
-              try
-                dmData.qCQRLOG.Close;
-                dmData.trCQRLOG.Rollback;
-                dmData.qCQRLOG.SQL.Text := sql;
-                dmData.trCQRLOG.StartTransaction;
-                dmData.qCQRLOG.Open;
-                Close
-              finally
-                dmData.IsFilter  := True;
-                dmData.IsSFilter := True;
-                frmMain.RefreshQSODXCCCount;
-                dmData.qCQRLOG.EnableControls
-              end
-            end
+              sql := sql + ' order by qsodate'
           end
         end
+  end; //case
+  dmData.Q.SQL.Text := sql + ' LIMIT 1';
+  dmData.trQ.StartTransaction;
+  dmData.Q.Open;
+  if dmData.Q.Fields[0].AsInteger = 0 then
+    ShowMessage(edtText.Text + ' not found')
+  else begin
+    dmData.qCQRLOG.DisableControls;
+    try
+      dmData.qCQRLOG.Close;
+      dmData.trCQRLOG.Rollback;
+      dmData.qCQRLOG.SQL.Text := sql;
+      dmData.trCQRLOG.StartTransaction;
+      dmData.qCQRLOG.Open;
+      Close
+    finally
+      dmData.IsFilter  := True;
+      dmData.IsSFilter := True;
+      frmMain.RefreshQSODXCCCount;
+      dmData.qCQRLOG.EnableControls
+    end
   end;
   frmMain.CheckAttachment
 end;
