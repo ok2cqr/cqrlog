@@ -185,7 +185,7 @@ object dmData: TdmData
       '            rst_r VARCHAR(20) DEFAULT '''','
       '            name VARCHAR(40) DEFAULT '''','
       '            qth VARCHAR(60) DEFAULT '''','
-      '            qsl_s VARCHAR(3) DEFAULT '''','
+      '            qsl_s VARCHAR(4) DEFAULT '''','
       '            qsl_r VARCHAR(3) DEFAULT '''','
       '            qsl_via VARCHAR(30) DEFAULT '''','
       '            iota VARCHAR(6) DEFAULT '''','

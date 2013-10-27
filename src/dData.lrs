@@ -64,7 +64,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'req NUMERIC(10,4) NOT NULL,'#6'%            mode VARCHAR(8) NOT NULL,'#6') '
   +'           rst_s VARCHAR(20) DEFAULT '''','#6')            rst_r VARCHAR(20'
   +') DEFAULT '''','#6'(            name VARCHAR(40) DEFAULT '''','#6'''       '
-  +'     qth VARCHAR(60) DEFAULT '''','#6'(            qsl_s VARCHAR(3) DEFAULT'
+  +'     qth VARCHAR(60) DEFAULT '''','#6'(            qsl_s VARCHAR(4) DEFAULT'
   ,' '''','#6'(            qsl_r VARCHAR(3) DEFAULT '''','#6'+            qsl_v'
   +'ia VARCHAR(30) DEFAULT '''','#6'''            iota VARCHAR(6) DEFAULT '''','
   +#6'''            pwr VARCHAR(10) DEFAULT '''','#6#30'            itu INT DEF'
