@@ -501,6 +501,7 @@ type
     procedure SendSpot;
     procedure RunVK(key_pressed: String);
     procedure InitializeCW;
+    procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
 
     function GetDescKeyFromCode(key : Word) : String;
   public
@@ -1291,21 +1292,17 @@ begin
       dmUtils.CloseXplanet;
     cqrini.SaveToDisk;
     dmData.SaveConfigFile;
+
     if cqrini.ReadBool('Backup','Enable',False) and
       (DirectoryExists(cqrini.ReadString('Backup','Path',dmData.DataDir))) and (Paramstr(1) = '') then
     begin
-      with TfrmExportProgress.Create(self) do
-      try
-        AutoBackup := True;
-        FileName := cqrini.ReadString('Backup','Path',dmData.DataDir) + cqrini.ReadString('Station','Call','');
-        if cqrini.ReadInteger('Backup','BackupType',0) > 0 then
-          FileName := FileName + '_backup.adi'
-        else
-          FileName := FileName + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
-        ExportType := 2;
-        ShowModal
-      finally
-        Free
+      if cqrini.ReadBool('Backup','AskFirst',False) then
+      begin
+        if (Application.MessageBox('Do you want to backup your data?','Question ...',mb_YesNo+mb_IconQuestion) = idYes) then
+          CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Station','Call','backup'),cqrini.ReadInteger('Backup','BackupType',0))
+      end
+      else begin
+        CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Station','Call',''),cqrini.ReadInteger('Backup','BackupType',0))
       end
     end
   end;
@@ -5165,6 +5162,23 @@ end;
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
 begin
   NewQSOFromSpot(Call,FloatToStr(Freq),Mode)
+end;
+
+procedure TfrmNewQSO.CreateAutoBackup(Path,Call : String;BackupType : Integer);
+begin
+  with TfrmExportProgress.Create(self) do
+  try
+    AutoBackup := True;
+    FileName := Path + Call;
+    if  BackupType > 0 then
+      FileName := FileName + '_backup.adi'
+    else
+      FileName := FileName + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
+    ExportType := 2;
+    ShowModal
+  finally
+    Free
+  end
 end;
 
 initialization

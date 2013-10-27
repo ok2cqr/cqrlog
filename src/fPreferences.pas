@@ -112,6 +112,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkAskBackup : TCheckBox;
     chkShow630M : TCheckBox;
     chkRBNAutoConn : TCheckBox;
     chkShowMiles : TCheckBox;
@@ -1440,6 +1441,7 @@ begin
   cqrini.WriteBool('Backup', 'Compress', chkCompressBackup.Checked);
   cqrini.WriteString('Backup', 'Path', edtBackupPath.Text);
   cqrini.WriteInteger('Backup', 'BackupType', rgBackupType.ItemIndex);
+  cqrini.WriteBool('Backup','AskFirst',chkAskBackup.Checked);
 
   cqrini.WriteString('ExtView', 'txt', edtTxtFiles.Text);
   cqrini.WriteString('ExtView', 'pdf', edtPdfFiles.Text);
@@ -2675,6 +2677,7 @@ begin
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
   edtBackupPath.Text := cqrini.ReadString('Backup', 'Path', dmData.DataDir);
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
+  chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 
   edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', 'gedit');
   edtPdfFiles.Text := cqrini.ReadString('ExtView', 'pdf', 'evince');

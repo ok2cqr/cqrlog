@@ -21,17 +21,17 @@ object frmPreferences: TfrmPreferences
     Height = 566
     Top = 0
     Width = 639
-    ActivePage = tabProgram
+    ActivePage = tabAutoBackup
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 0
+    TabIndex = 21
     TabOrder = 0
     OnChange = pgPreferencesChange
     OnPageChanged = pgPreferencesChange
     object tabProgram: TTabSheet
       Caption = 'Program'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label60: TLabel
         Left = 364
         Height = 17
@@ -46,8 +46,8 @@ object frmPreferences: TfrmPreferences
         Top = 3
         Width = 341
         Caption = ' Internet connection '
-        ClientHeight = 106
-        ClientWidth = 339
+        ClientHeight = 105
+        ClientWidth = 337
         TabOrder = 0
         object Label12: TLabel
           Left = 7
@@ -125,8 +125,8 @@ object frmPreferences: TfrmPreferences
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 41
-        ClientWidth = 134
+        ClientHeight = 40
+        ClientWidth = 132
         Items.Strings = (
           'MHz'
           'meters'
@@ -179,8 +179,8 @@ object frmPreferences: TfrmPreferences
         Top = 278
         Width = 320
         Caption = ' Offsets '
-        ClientHeight = 100
-        ClientWidth = 318
+        ClientHeight = 99
+        ClientWidth = 316
         TabOrder = 7
         object Label15: TLabel
           Left = 15
@@ -251,8 +251,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabStation: TTabSheet
       Caption = 'Station'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label1: TLabel
         Left = 11
         Height = 17
@@ -318,8 +318,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabNewQSO: TTabSheet
       Caption = 'New QSO'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label82: TLabel
         Left = 342
         Height = 17
@@ -334,8 +334,8 @@ object frmPreferences: TfrmPreferences
         Top = 7
         Width = 600
         Caption = ' Default values '
-        ClientHeight = 129
-        ClientWidth = 598
+        ClientHeight = 128
+        ClientWidth = 596
         TabOrder = 0
         object Label5: TLabel
           Left = 6
@@ -594,8 +594,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabVisibleColumns: TTabSheet
       Caption = 'Visible columns'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object chkDate: TCheckBox
         Left = 14
         Height = 26
@@ -903,8 +903,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabBands: TTabSheet
       Caption = 'Bands'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object cb136kHz: TCheckBox
         Left = 14
         Height = 26
@@ -1126,8 +1126,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabTRXcontrol: TTabSheet
       Caption = 'TRX control'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object btnChangeDefaultFreq: TButton
         Left = 352
         Height = 25
@@ -1153,8 +1153,8 @@ object frmPreferences: TfrmPreferences
         Top = 3
         Width = 569
         Caption = ' rigctld '
-        ClientHeight = 57
-        ClientWidth = 567
+        ClientHeight = 56
+        ClientWidth = 565
         TabOrder = 2
         object Label17: TLabel
           Left = 5
@@ -1183,16 +1183,16 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 366
-          ClientWidth = 565
+          ClientHeight = 354
+          ClientWidth = 559
           object GroupBox3: TGroupBox
             Left = 14
             Height = 333
             Top = 14
             Width = 537
             Caption = ' Radio one, desc.:'
-            ClientHeight = 302
-            ClientWidth = 535
+            ClientHeight = 301
+            ClientWidth = 533
             TabOrder = 0
             object Label18: TLabel
               Left = 117
@@ -1316,8 +1316,8 @@ object frmPreferences: TfrmPreferences
               Top = 140
               Width = 511
               Caption = 'Radio one serial parameters'
-              ClientHeight = 130
-              ClientWidth = 509
+              ClientHeight = 129
+              ClientWidth = 507
               TabOrder = 9
               object Label130: TLabel
                 Left = 11
@@ -1525,8 +1525,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 366
-          ClientWidth = 565
+          ClientHeight = 354
+          ClientWidth = 559
           object edtRadio2: TEdit
             Left = 146
             Height = 22
@@ -1541,8 +1541,8 @@ object frmPreferences: TfrmPreferences
             Top = 14
             Width = 537
             Caption = ' Radio two, desc.:'
-            ClientHeight = 302
-            ClientWidth = 535
+            ClientHeight = 315
+            ClientWidth = 533
             TabOrder = 1
             object Label22: TLabel
               Left = 117
@@ -1666,8 +1666,8 @@ object frmPreferences: TfrmPreferences
               Top = 140
               Width = 511
               Caption = 'Radio two serial parameters'
-              ClientHeight = 130
-              ClientWidth = 509
+              ClientHeight = 143
+              ClientWidth = 507
               TabOrder = 9
               object Label137: TLabel
                 Left = 11
@@ -1869,16 +1869,16 @@ object frmPreferences: TfrmPreferences
     end
     object TabROTcontrol: TTabSheet
       Caption = 'ROT control'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox41: TGroupBox
         Left = 7
         Height = 88
         Top = 3
         Width = 569
         Caption = ' rotctld '
-        ClientHeight = 57
-        ClientWidth = 567
+        ClientHeight = 56
+        ClientWidth = 565
         TabOrder = 0
         object Label124: TLabel
           Left = 5
@@ -1907,16 +1907,16 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 366
-          ClientWidth = 565
+          ClientHeight = 354
+          ClientWidth = 559
           object GroupBox42: TGroupBox
             Left = 14
             Height = 333
             Top = 14
             Width = 537
             Caption = ' Rotor one, desc.:'
-            ClientHeight = 316
-            ClientWidth = 535
+            ClientHeight = 315
+            ClientWidth = 533
             TabOrder = 0
             object Label125: TLabel
               Left = 117
@@ -2031,8 +2031,8 @@ object frmPreferences: TfrmPreferences
               Top = 140
               Width = 511
               Caption = 'Radio one serial parameters'
-              ClientHeight = 144
-              ClientWidth = 509
+              ClientHeight = 143
+              ClientWidth = 507
               TabOrder = 8
               object Label147: TLabel
                 Left = 11
@@ -2240,8 +2240,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 366
-          ClientWidth = 565
+          ClientHeight = 354
+          ClientWidth = 559
           object edtRotor2: TEdit
             Left = 146
             Height = 22
@@ -2256,8 +2256,8 @@ object frmPreferences: TfrmPreferences
             Top = 14
             Width = 537
             Caption = ' Rotor two, desc.:'
-            ClientHeight = 302
-            ClientWidth = 535
+            ClientHeight = 301
+            ClientWidth = 533
             TabOrder = 1
             object Label154: TLabel
               Left = 117
@@ -2372,8 +2372,8 @@ object frmPreferences: TfrmPreferences
               Top = 140
               Width = 511
               Caption = 'Radio two serial parameters'
-              ClientHeight = 130
-              ClientWidth = 509
+              ClientHeight = 129
+              ClientWidth = 507
               TabOrder = 8
               object Label159: TLabel
                 Left = 11
@@ -2575,16 +2575,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabModes: TTabSheet
       Caption = 'Modes'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox35: TGroupBox
         Left = 14
         Height = 73
         Top = 267
         Width = 561
         Caption = ' User defined digital modes (use , as delimitter)'
-        ClientHeight = 42
-        ClientWidth = 559
+        ClientHeight = 41
+        ClientWidth = 557
         TabOrder = 0
         object edtDigiModes: TEdit
           Left = 7
@@ -2601,8 +2601,8 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 208
         Caption = ' Radio one '
-        ClientHeight = 193
-        ClientWidth = 206
+        ClientHeight = 192
+        ClientWidth = 204
         TabOrder = 1
         object Label28: TLabel
           Left = 13
@@ -2757,8 +2757,8 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 208
         Caption = ' Radio two '
-        ClientHeight = 193
-        ClientWidth = 206
+        ClientHeight = 192
+        ClientWidth = 204
         TabOrder = 2
         object Label110: TLabel
           Left = 13
@@ -2910,8 +2910,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabQTHProfiles: TTabSheet
       Caption = 'QTH Profiles'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object chkUseProfiles: TCheckBox
         Left = 9
         Height = 26
@@ -2927,8 +2927,8 @@ object frmPreferences: TfrmPreferences
         Top = 43
         Width = 510
         Caption = 'Profiles'
-        ClientHeight = 234
-        ClientWidth = 508
+        ClientHeight = 233
+        ClientWidth = 506
         TabOrder = 1
         object Bevel1: TBevel
           Left = 9
@@ -2996,8 +2996,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabExport: TTabSheet
       Caption = 'Export'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label46: TLabel
         Left = 6
         Height = 17
@@ -3625,16 +3625,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabDXCluster: TTabSheet
       Caption = 'DXCluster'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox5: TGroupBox
         Left = 6
         Height = 105
         Top = 11
         Width = 512
         Caption = 'Colors'
-        ClientHeight = 74
-        ClientWidth = 510
+        ClientHeight = 73
+        ClientWidth = 508
         TabOrder = 0
         object Label41: TLabel
           Left = 3
@@ -3712,8 +3712,8 @@ object frmPreferences: TfrmPreferences
         Top = 123
         Width = 512
         Caption = ' Show only spots'
-        ClientHeight = 209
-        ClientWidth = 510
+        ClientHeight = 208
+        ClientWidth = 508
         TabOrder = 1
         object Label45: TLabel
           Left = 6
@@ -3975,16 +3975,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabFont: TTabSheet
       Caption = 'Fonts'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox7: TGroupBox
         Left = 14
         Height = 352
         Top = 3
         Width = 496
         Caption = ' Font settings '
-        ClientHeight = 321
-        ClientWidth = 494
+        ClientHeight = 320
+        ClientWidth = 492
         TabOrder = 0
         object lblButtons: TLabel
           Left = 12
@@ -4120,16 +4120,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabWazItu: TTabSheet
       Caption = 'WAZ, ITU zones'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox8: TGroupBox
         Left = 14
         Height = 230
         Top = 11
         Width = 233
         Caption = 'WAZ colors '
-        ClientHeight = 199
-        ClientWidth = 231
+        ClientHeight = 198
+        ClientWidth = 229
         TabOrder = 0
         object Label23: TLabel
           Left = 13
@@ -4189,8 +4189,8 @@ object frmPreferences: TfrmPreferences
         Top = 11
         Width = 233
         Caption = 'ITU colors '
-        ClientHeight = 199
-        ClientWidth = 231
+        ClientHeight = 198
+        ClientWidth = 229
         TabOrder = 1
         object Label54: TLabel
           Left = 13
@@ -4263,16 +4263,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabIOTA: TTabSheet
       Caption = 'IOTA'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox10: TGroupBox
         Left = 22
         Height = 168
         Top = 19
         Width = 249
         Caption = 'IOTA colors'
-        ClientHeight = 137
-        ClientWidth = 247
+        ClientHeight = 136
+        ClientWidth = 245
         TabOrder = 0
         object Label57: TLabel
           Left = 13
@@ -4320,16 +4320,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabMemebership: TTabSheet
       Caption = 'Memebership'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox11: TGroupBox
         Left = 14
         Height = 80
         Top = 8
         Width = 584
         Caption = 'First club'
-        ClientHeight = 49
-        ClientWidth = 582
+        ClientHeight = 48
+        ClientWidth = 580
         TabOrder = 0
         object cmbFirstClub: TComboBox
           Left = 14
@@ -4382,8 +4382,8 @@ object frmPreferences: TfrmPreferences
         Top = 96
         Width = 584
         Caption = 'Second club'
-        ClientHeight = 49
-        ClientWidth = 582
+        ClientHeight = 48
+        ClientWidth = 580
         TabOrder = 1
         object cmbSecondClub: TComboBox
           Left = 14
@@ -4436,8 +4436,8 @@ object frmPreferences: TfrmPreferences
         Top = 184
         Width = 584
         Caption = 'Third club'
-        ClientHeight = 49
-        ClientWidth = 582
+        ClientHeight = 48
+        ClientWidth = 580
         TabOrder = 2
         object cmbThirdClub: TComboBox
           Left = 14
@@ -4490,8 +4490,8 @@ object frmPreferences: TfrmPreferences
         Top = 272
         Width = 584
         Caption = 'Fourth club'
-        ClientHeight = 49
-        ClientWidth = 582
+        ClientHeight = 48
+        ClientWidth = 580
         TabOrder = 3
         object cmbFourthClub: TComboBox
           Left = 14
@@ -4544,8 +4544,8 @@ object frmPreferences: TfrmPreferences
         Top = 360
         Width = 584
         Caption = 'Fifth club'
-        ClientHeight = 49
-        ClientWidth = 582
+        ClientHeight = 48
+        ClientWidth = 580
         TabOrder = 4
         object cmbFifthClub: TComboBox
           Left = 14
@@ -4595,16 +4595,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabBandMap: TTabSheet
       Caption = 'Bandmap'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox16: TGroupBox
         Left = 14
         Height = 61
         Top = 3
         Width = 529
         Caption = ' Font '
-        ClientHeight = 30
-        ClientWidth = 527
+        ClientHeight = 29
+        ClientWidth = 525
         TabOrder = 0
         object lblBandMapFont: TLabel
           Left = 14
@@ -4629,8 +4629,8 @@ object frmPreferences: TfrmPreferences
         Top = 62
         Width = 529
         Caption = ' Color '
-        ClientHeight = 31
-        ClientWidth = 527
+        ClientHeight = 30
+        ClientWidth = 525
         TabOrder = 1
         object Label61: TLabel
           Left = 6
@@ -4699,8 +4699,8 @@ object frmPreferences: TfrmPreferences
         Top = 135
         Width = 529
         Caption = ' Band Map Entries Aging (in minutes) '
-        ClientHeight = 37
-        ClientWidth = 527
+        ClientHeight = 36
+        ClientWidth = 525
         TabOrder = 7
         object Label62: TLabel
           Left = 11
@@ -4757,8 +4757,8 @@ object frmPreferences: TfrmPreferences
         Top = 211
         Width = 369
         Caption = 'Band map entries (from dxcluster)'
-        ClientHeight = 61
-        ClientWidth = 367
+        ClientHeight = 60
+        ClientWidth = 365
         TabOrder = 8
         object Label65: TLabel
           Left = 6
@@ -4832,16 +4832,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabXplanet: TTabSheet
       Caption = 'xplanet support'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox21: TGroupBox
         Left = 14
         Height = 89
         Top = 11
         Width = 521
         Caption = ' Path for the xplanet  '
-        ClientHeight = 58
-        ClientWidth = 519
+        ClientHeight = 57
+        ClientWidth = 517
         TabOrder = 0
         object edtXplanetPath: TEdit
           Left = 6
@@ -4858,8 +4858,8 @@ object frmPreferences: TfrmPreferences
         Top = 107
         Width = 113
         Caption = ' Window size '
-        ClientHeight = 81
-        ClientWidth = 111
+        ClientHeight = 80
+        ClientWidth = 109
         TabOrder = 1
         object Label66: TLabel
           Left = 6
@@ -4898,8 +4898,8 @@ object frmPreferences: TfrmPreferences
         Top = 107
         Width = 129
         Caption = ' Window position '
-        ClientHeight = 81
-        ClientWidth = 127
+        ClientHeight = 80
+        ClientWidth = 125
         TabOrder = 2
         object Label68: TLabel
           Left = 9
@@ -4963,8 +4963,8 @@ object frmPreferences: TfrmPreferences
         Top = 107
         Width = 257
         Caption = ' Refresh '
-        ClientHeight = 81
-        ClientWidth = 255
+        ClientHeight = 80
+        ClientWidth = 253
         TabOrder = 5
         object Label70: TLabel
           Left = 6
@@ -5028,8 +5028,8 @@ object frmPreferences: TfrmPreferences
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 65
-        ClientWidth = 255
+        ClientHeight = 64
+        ClientWidth = 253
         Items.Strings = (
           '3D'
           'azimuthal'
@@ -5052,8 +5052,8 @@ object frmPreferences: TfrmPreferences
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 65
-        ClientWidth = 254
+        ClientHeight = 64
+        ClientWidth = 252
         Items.Strings = (
           'dxcluster'
           'bandmap'
@@ -5080,16 +5080,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabZipCode: TTabSheet
       Caption = 'Zip code tracking'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox25: TGroupBox
         Left = 6
         Height = 104
         Top = 11
         Width = 545
         Caption = ' First '
-        ClientHeight = 73
-        ClientWidth = 543
+        ClientHeight = 72
+        ClientWidth = 541
         TabOrder = 0
         object Label74: TLabel
           Left = 14
@@ -5140,8 +5140,8 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 41
-          ClientWidth = 182
+          ClientHeight = 40
+          ClientWidth = 180
           Items.Strings = (
             'before town address'
             'after town address'
@@ -5172,8 +5172,8 @@ object frmPreferences: TfrmPreferences
         Top = 123
         Width = 545
         Caption = ' Second '
-        ClientHeight = 73
-        ClientWidth = 543
+        ClientHeight = 72
+        ClientWidth = 541
         TabOrder = 1
         object Label76: TLabel
           Left = 14
@@ -5224,8 +5224,8 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 44
-          ClientWidth = 182
+          ClientHeight = 43
+          ClientWidth = 180
           Items.Strings = (
             'before town address'
             'after town address'
@@ -5256,8 +5256,8 @@ object frmPreferences: TfrmPreferences
         Top = 235
         Width = 545
         Caption = ' Third '
-        ClientHeight = 73
-        ClientWidth = 543
+        ClientHeight = 72
+        ClientWidth = 541
         TabOrder = 2
         object Label78: TLabel
           Left = 14
@@ -5308,8 +5308,8 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 41
-          ClientWidth = 182
+          ClientHeight = 40
+          ClientWidth = 180
           Items.Strings = (
             'before town address'
             'after town address'
@@ -5337,8 +5337,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabLoTW: TTabSheet
       Caption = 'LoTW/eQSL support'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label10: TLabel
         Left = 271
         Height = 36
@@ -5369,8 +5369,8 @@ object frmPreferences: TfrmPreferences
         Top = 6
         Width = 513
         Caption = ' Data for access to ARRL LoTW website '
-        ClientHeight = 41
-        ClientWidth = 511
+        ClientHeight = 40
+        ClientWidth = 509
         TabOrder = 2
         object Label80: TLabel
           Left = 14
@@ -5439,8 +5439,8 @@ object frmPreferences: TfrmPreferences
         Top = 91
         Width = 513
         Caption = ' Data for access to eQSL website '
-        ClientHeight = 41
-        ClientWidth = 511
+        ClientHeight = 40
+        ClientWidth = 509
         TabOrder = 6
         object Label108: TLabel
           Left = 14
@@ -5506,8 +5506,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabCWInterface: TTabSheet
       Caption = 'CW interface'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label83: TLabel
         Left = 15
         Height = 17
@@ -5538,8 +5538,8 @@ object frmPreferences: TfrmPreferences
         Top = 54
         Width = 497
         Caption = ' WinKeyer USB '
-        ClientHeight = 89
-        ClientWidth = 495
+        ClientHeight = 88
+        ClientWidth = 493
         TabOrder = 1
         object Label84: TLabel
           Left = 11
@@ -5644,8 +5644,8 @@ object frmPreferences: TfrmPreferences
         Top = 182
         Width = 497
         Caption = ' cwdaemon '
-        ClientHeight = 74
-        ClientWidth = 495
+        ClientHeight = 73
+        ClientWidth = 493
         TabOrder = 2
         object Label87: TLabel
           Left = 11
@@ -5718,16 +5718,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabFldigi1: TTabSheet
       Caption = 'fldigi interface'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox31: TGroupBox
         Left = 12
         Height = 400
         Top = 6
         Width = 587
         Caption = ' Reading data from fldigi'
-        ClientHeight = 369
-        ClientWidth = 585
+        ClientHeight = 368
+        ClientWidth = 583
         TabOrder = 0
         object Label91: TLabel
           Left = 224
@@ -5769,8 +5769,8 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 83
-          ClientWidth = 207
+          ClientHeight = 82
+          ClientWidth = 205
           ItemIndex = 0
           Items.Strings = (
             'CQRLOG'
@@ -5801,8 +5801,8 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 81
-          ClientWidth = 222
+          ClientHeight = 80
+          ClientWidth = 220
           Items.Strings = (
             'CQRLOG'
             'fldigi'
@@ -5834,8 +5834,8 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 74
-          ClientWidth = 183
+          ClientHeight = 73
+          ClientWidth = 181
           Items.Strings = (
             'fldigi'
             'default'
@@ -5854,8 +5854,8 @@ object frmPreferences: TfrmPreferences
           Height = 112
           Top = 5
           Width = 543
-          ClientHeight = 110
-          ClientWidth = 541
+          ClientHeight = 108
+          ClientWidth = 539
           TabOrder = 7
           object Label95: TLabel
             Left = 30
@@ -5894,20 +5894,20 @@ object frmPreferences: TfrmPreferences
     end
     object tabAutoBackup: TTabSheet
       Caption = 'Auto backup'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox32: TGroupBox
         Left = 5
-        Height = 250
+        Height = 274
         Top = 6
         Width = 608
-        ClientHeight = 248
-        ClientWidth = 606
+        ClientHeight = 270
+        ClientWidth = 604
         TabOrder = 0
         object Label93: TLabel
           Left = 14
           Height = 17
-          Top = 48
+          Top = 69
           Width = 97
           Caption = 'Save backup to:'
           ParentColor = False
@@ -5923,14 +5923,14 @@ object frmPreferences: TfrmPreferences
         object edtBackupPath: TEdit
           Left = 14
           Height = 22
-          Top = 71
+          Top = 92
           Width = 496
           TabOrder = 1
         end
         object btnBrowseBackup: TButton
           Left = 518
           Height = 25
-          Top = 73
+          Top = 94
           Width = 75
           Caption = 'Browse'
           OnClick = btnBrowseBackupClick
@@ -5939,7 +5939,7 @@ object frmPreferences: TfrmPreferences
         object chkCompressBackup: TCheckBox
           Left = 14
           Height = 26
-          Top = 208
+          Top = 229
           Width = 202
           Caption = 'Compress backup with tar.gz'
           TabOrder = 3
@@ -5947,7 +5947,7 @@ object frmPreferences: TfrmPreferences
         object rgBackupType: TRadioGroup
           Left = 14
           Height = 88
-          Top = 112
+          Top = 133
           Width = 496
           AutoFill = True
           Caption = ' Backup file '
@@ -5959,20 +5959,28 @@ object frmPreferences: TfrmPreferences
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
-          ClientHeight = 57
-          ClientWidth = 494
+          ClientHeight = 56
+          ClientWidth = 492
           Items.Strings = (
             'callsign, date and time (yourcall__yyyy-mm-dd__hh-mm-ss.adi)'
             'callsign only (yourcall__backup.adi)'
           )
           TabOrder = 4
         end
+        object chkAskBackup: TCheckBox
+          Left = 37
+          Height = 26
+          Top = 37
+          Width = 206
+          Caption = 'Ask before creating a backup'
+          TabOrder = 5
+        end
       end
     end
     object tabExtViewers: TTabSheet
       Caption = 'External viewers'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object Label99: TLabel
         Left = 23
         Height = 17
@@ -6048,16 +6056,16 @@ object frmPreferences: TfrmPreferences
     end
     object tabCallbook: TTabSheet
       Caption = 'Callbook support'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object GroupBox38: TGroupBox
         Left = 13
         Height = 160
         Top = 8
         Width = 585
         Caption = ' Callbook search '
-        ClientHeight = 129
-        ClientWidth = 583
+        ClientHeight = 142
+        ClientWidth = 581
         TabOrder = 0
         object rbHamQTH: TRadioButton
           Left = 6
@@ -6113,8 +6121,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabRBN: TTabSheet
       Caption = 'RBN support'
-      ClientHeight = 540
-      ClientWidth = 637
+      ClientHeight = 528
+      ClientWidth = 631
       object chkRBNAutoConn: TCheckBox
         Left = 393
         Height = 26
@@ -6377,7 +6385,7 @@ object frmPreferences: TfrmPreferences
     )
     ItemHeight = 22
     OnClick = lbPreferencesClick
-    ScrollWidth = 158
+    ScrollWidth = 156
     TabOrder = 2
   end
   object dlgFont: TFontDialog
