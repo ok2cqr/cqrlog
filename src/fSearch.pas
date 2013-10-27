@@ -36,12 +36,14 @@ type
     Label2: TLabel;
     mHelp: TMemo;
     Panel1: TPanel;
+    procedure FormCloseQuery(Sender : TObject; var CanClose : boolean);
     procedure FormShow(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure cmbSearchChange(Sender: TObject);
     procedure edtTextKeyPress(Sender: TObject; var Key: char);
   private
-    { private declarations }
+    procedure LoadSettings;
+    procedure SaveSettings;
   public
     { public declarations }
   end; 
@@ -52,7 +54,8 @@ var
 implementation
 
 { TfrmSearch }
-uses dData, fMain, dUtils;
+uses dData, fMain, dUtils, uMyIni;
+
 procedure TfrmSearch.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
@@ -60,7 +63,7 @@ begin
   cmbSearch.Items.Add('Callsign');
   cmbSearch.Items.Add('Name');
   cmbSearch.Items.Add('QTH');
-  cmbSearch.ItemIndex := 1;
+  LoadSettings;
   edtText.SetFocus;
   cmbSearchChange(nil);
   if dmData.IsFilter and (not dmData.IsSFilter) then
@@ -71,10 +74,16 @@ begin
   end
 end;
 
+procedure TfrmSearch.FormCloseQuery(Sender : TObject; var CanClose : boolean);
+begin
+  SaveSettings
+end;
+
 procedure TfrmSearch.btnSearchClick(Sender: TObject);
 var
   sql : String = '';
 begin
+  SaveSettings;
   if edtText.Text = '' then
     exit;
   if dmData.SortType = stDate then
@@ -265,6 +274,21 @@ begin
     key := #0
   end
 end;
+
+procedure TfrmSearch.LoadSettings;
+begin
+  chkSortByDate.Checked := cqrini.ReadBool('Search','SortByDate',False);
+  chkInclude.Checked    := cqrini.ReadBool('Search','Include',False);
+  cmbSearch.ItemIndex   := cqrini.ReadInteger('Search','Index',1)
+end;
+
+procedure TfrmSearch.SaveSettings;
+begin
+  cqrini.WriteBool('Search','SortByDate',chkSortByDate.Checked);
+  cqrini.WriteBool('Search','Include',chkInclude.Checked);
+  cqrini.WriteInteger('Search','Index',cmbSearch.ItemIndex)
+end;
+
 
 initialization
   {$I fSearch.lrs}

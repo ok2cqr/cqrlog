@@ -115,6 +115,7 @@ object frmSearch: TfrmSearch
     7FFF0000FFFF0001FFFF0003FFFF0007FFFF001FFFFF003FFFFF00FFFFFF83FF
     FFFF
   }
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '0.9.30.2'
