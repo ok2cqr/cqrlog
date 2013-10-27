@@ -536,7 +536,8 @@ begin
   QSL_S.Items.Add('SMD');
   QSL_S.Items.Add('SMB');
   QSL_S.Items.Add('SPE');
-  QSL_S.Items.Add('OR')
+  QSL_S.Items.Add('OR');
+  QSL_S.Items.Add('OQRS')
 end;
 
 procedure TdmUtils.InsertQSL_R(QSL_R : TComboBox);

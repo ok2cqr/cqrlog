@@ -156,6 +156,7 @@ type
     MenuItem48 : TMenuItem;
     MenuItem49: TMenuItem;
     MenuItem50: TMenuItem;
+    mnuOQRS : TMenuItem;
     MenuItem55: TMenuItem;
     MenuItem56: TMenuItem;
     MenuItem57: TMenuItem;
@@ -335,6 +336,7 @@ type
     procedure acShowToolBarExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure mnuOQRSClick(Sender : TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure acAboutExecute(Sender: TObject);
     procedure acCallBookExecute(Sender: TObject);
@@ -701,6 +703,11 @@ begin
     dmUtils.EnterFreq;
     key := 0;
   end;
+end;
+
+procedure TfrmMain.mnuOQRSClick(Sender : TObject);
+begin
+  MarkQSLSend('OQRS')
 end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
