@@ -329,6 +329,10 @@ begin
   try
     ini.WriteBool('Login','AutoOpen',chkAutoOpen.Checked);
     ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger);
+    if chkAutoOpen.Checked then
+      ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger)
+    else
+      ini.WriteInteger('Login','LastOpenedLog',dmData.qLogList.Fields[0].AsInteger)
   finally
     ini.Free
   end;
@@ -516,18 +520,26 @@ end;
 procedure TfrmDBConnect.OpenDefaultLog;
 var
   ini    : TIniFile;
-  log_nr : Integer;
+  AutoLog  : Integer;
+  AutoOpen : Boolean;
+  LastLog  : Integer;
 begin
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
-    if not  ini.ReadBool('Login','AutoOpen',False) then
-      exit;
-    log_nr := ini.ReadInteger('Login','LastLog',0)
+    AutoOpen := ini.ReadBool('Login','AutoOpen',False);
+    AutoLog  := ini.ReadInteger('Login','LastLog',0);
+    LastLog  := ini.ReadInteger('Login','LastOpenedLog',0)
   finally
     ini.Free
   end;
-  if dmData.qLogList.Locate('log_nr',log_nr,[]) then
-    btnOpenLog.Click
+  if AutoOpen then
+  begin
+    if dmData.qLogList.Locate('log_nr',AutoLog,[]) then
+      btnOpenLog.Click
+  end
+  else begin
+    dmData.qLogList.Locate('log_nr',LastLog,[])
+  end
 end;
 
 initialization

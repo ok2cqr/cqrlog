@@ -8,6 +8,7 @@ Legend:
   + 630M band added
   + added OQRS (online QSL request system) to QSL sent menu
   + added "Always sort by QSO date" option to Search function
+  + cursor is moved to last opened log in DB connection window
   - program freezed for a few miliseconds with every bandmap refresh - fixed
   - "MySQL server has gone away" problem fixed
   - mebership values collation were case sensistive - fixed
