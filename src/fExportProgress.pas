@@ -44,7 +44,7 @@ var
 implementation
 
 { TfrmExportProgress }
-uses dUtils, dData, uMyini, dDXCC;
+uses dUtils, dData, uMyini, dDXCC, uVersion;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -552,6 +552,8 @@ begin
   Writeln(f);
   Writeln(f, 'Internet: http://www.cqrlog.com');
   Writeln(f);
+  Writeln(f, '<PROGRAMID:6>CQRLOG');
+  Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
   Writeln(f, '<EOH>');
 
   i := 0;

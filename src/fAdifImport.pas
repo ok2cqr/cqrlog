@@ -127,7 +127,7 @@ var
 
 implementation
 
-uses dData, dUtils, dDXCC, fMain, uMyIni;
+uses dData, dUtils, dDXCC, fMain, uMyIni, uVersion;
 
 function TfrmAdifImport.pochash(aaa:String):longint;
 var z,x:longint;
@@ -704,6 +704,8 @@ begin
     Writeln(f,'Internet: http://www.cqrlog.com');
     Writeln(f,'');
     Writeln(f,'ERROR QSOs FROM ADIF IMPORT');
+    Writeln(f, '<PROGRAMID:6>CQRLOG');
+    Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
     Writeln(f,'');
     Writeln(f,'<EOH>');
 

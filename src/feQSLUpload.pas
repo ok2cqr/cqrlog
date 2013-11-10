@@ -52,7 +52,7 @@ var
 
 implementation
 
-uses dUtils,dData,uMyIni, fPreferences;
+uses dUtils,dData,uMyIni, fPreferences, uVersion;
 
 procedure TfrmeQSLUpload.SockCallBack(Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 begin
@@ -117,6 +117,8 @@ begin
     Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
     Writeln(f);
     Writeln(f, 'Internet: http://www.cqrlog.com');
+    Writeln(f, '<PROGRAMID:6>CQRLOG');
+    Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
     Writeln(f);
     Writeln(f,'<EQSL_USER'+dmUtils.StringToADIF(cqrini.ReadString('LoTW','eQSLName','')));
     Writeln(f,'<EQSL_PSWD'+dmUtils.StringToADIF(cqrini.ReadString('LoTW','eQSLPass','')));
