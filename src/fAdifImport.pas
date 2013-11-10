@@ -586,10 +586,10 @@ begin
   GlobalProfile := dmData.GetNRFromProfile(cmbProfiles.Text);
   RecNR := 0;
   WrongRecNr := 0;
-  system.assign(sou,lblFileName.Caption);
-  system.reset(sou);
-  smazzaznam(d);
   try try
+    system.assign(sou,lblFileName.Caption);
+    system.reset(sou);
+    smazzaznam(d);
     if chkLotOfQSO.Checked then
     begin
       sb.Panels[0].Text := 'Deleting indexes ...';

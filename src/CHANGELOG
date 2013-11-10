@@ -13,6 +13,7 @@ Legend:
   - program freezed for a few miliseconds with every bandmap refresh - fixed
   - "MySQL server has gone away" problem fixed
   - mebership values collation were case sensistive - fixed
+  - ADIF import sometimes crashed with access vioalation, now will show what happened
 
 1.6.1
   + band map is much faster, a few optimalization added
