@@ -15,7 +15,7 @@ Legend:
   - "MySQL server has gone away" problem fixed
   - mebership values collation were case sensistive - fixed
   - ADIF import sometimes crashed with access vioalation, now will show what happened
-  - qrz search with right click on a call in the recent QSOs list didn't worked 
+  - qrz search with right click on a call in the recent QSOs list didn't work
   - band map font settings was not loaded when program started
 	
 1.6.0
