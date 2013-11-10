@@ -3234,19 +3234,8 @@ begin
 end;
 
 procedure TfrmNewQSO.MenuItem45Click(Sender: TObject);
-var
-   AProcess: TProcess;
 begin
-  AProcess := TProcess.Create(nil);
-  try
-    AProcess.CommandLine := cqrini.ReadString('Program','WebBrowser','firefox')+
-                            ' http://www.qrz.com/callsign/'+
-                            dmData.qQSOBefore.Fields[4].AsString;
-    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
-    AProcess.Execute
-  finally
-    AProcess.Free
-  end
+  dmUtils.ShowQRZInBrowser(dmData.qQSOBefore.Fields[4].AsString)
 end;
 
 procedure TfrmNewQSO.MenuItem46Click(Sender: TObject);
