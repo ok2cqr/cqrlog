@@ -16,7 +16,7 @@ cqrlog (1.6.1-1) unstable; urgency=low
   * band map font settings was not loaded when program started
   * band map is much faster, a few optimalization added
 
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 10 NOV 2013 18:35:00 +0100
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 10 Nov 2013 18:28:00 +0100
 
 cqrlog (1.6.0-1) unstable; urgency=low
 
