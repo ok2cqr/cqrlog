@@ -396,6 +396,7 @@ M5X;Justin
 WK2G;Merrill
 OZ1HET;Finn
 HS0AC;Finn
+HS0ZLM;Finn
 S53R;Robert
 G3PDH;Malcolm
 DA3A;Joe
@@ -621,6 +622,7 @@ GM0GAV;Gav
 IK0IXI;Fabio
 KF1B;Fabio
 G4IRN;John
+D44TWQ;John
 K9FN;Dave
 G3YEC;Rick
 GB1FOC;Rick
@@ -647,3 +649,8 @@ SM1TDE;Eric
 W5PEH;Pete
 W4EDE;Lee
 M0PCB;Iain
+WA1FCN;Bob
+DL5YL;Tina
+N5RR;Bill
+DL5YM;Fred
+AK5X;Bill
