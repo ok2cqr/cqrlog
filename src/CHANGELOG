@@ -4,20 +4,18 @@ Legend:
   - bugfix
 --------------------
 
-1.6.2
+1.6.1
   + 630M band added
   + added OQRS (online QSL request system) to QSL sent menu
   + added "Always sort by QSO date" option to Search function
   + cursor is moved to last opened log in DB connection window
   + "Ask before creating a backup" option to "Auto backup" added
+  + band map is much faster, a few optimalization added
   - program freezed for a few miliseconds with every bandmap refresh - fixed
   - "MySQL server has gone away" problem fixed
   - mebership values collation were case sensistive - fixed
   - ADIF import sometimes crashed with access vioalation, now will show what happened
   - qrz search with right click on a call in the recent QSOs list didn't worked 
-
-1.6.1
-  + band map is much faster, a few optimalization added
   - band map font settings was not loaded when program started
 	
 1.6.0

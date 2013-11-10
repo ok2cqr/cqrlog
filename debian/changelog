@@ -1,3 +1,23 @@
+cqrlog (1.6.1-1) unstable; urgency=low
+
+  * 630M band added
+  * added OQRS (online QSL request system) to QSL sent menu
+  * added "Always sort by QSO date" option to Search function
+  * cursor is moved to last opened log in DB connection window
+  * "Ask before creating a backup" option to "Auto backup" added
+  * program freezed for a few miliseconds with every bandmap 
+    refresh - fixed
+  * "MySQL server has gone away" problem fixed
+  * mebership values collation were case sensistive - fixed
+  * ADIF import sometimes crashed with access vioalation, now 
+    will show what happened
+  * qrz search with right click on a call in the recent QSOs list 
+    didn't worked
+  * band map font settings was not loaded when program started
+  * band map is much faster, a few optimalization added
+
+-- Petr Hlozek <petr@ok2cqr.com>  Sun, 10 NOV 2013 18:35:00 +0100
+
 cqrlog (1.6.0-1) unstable; urgency=low
 
   * added whole new bandmap with frequecy indicator
