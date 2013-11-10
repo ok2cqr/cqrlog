@@ -939,6 +939,7 @@ var
   s,d : String;
 begin
   //dmDXCC.trDXCCRef.StartTransaction;
+  dmDXCC.qDXCCRef.Close;
   dmDXCC.qDXCCRef.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE pref=' + QuotedStr(pfx);
   dmDXCC.qDXCCRef.Open;
   s := dmDXCC.qDXCCRef.Fields[4].AsString;
