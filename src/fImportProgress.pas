@@ -1020,6 +1020,8 @@ begin
 end;
 
 procedure TfrmImportProgress.ImportQSLMgrs;
+const
+  C_INS = 'INSERT INTO cqrlog_common.qslmgr (callsign,qsl_via,fromdate) VALUES (:callsign,:qsl_via, :fromdate)';
 var
   sF : TextFile;
   a  : TExplodeArray;
@@ -1030,6 +1032,7 @@ var
   num      : Word = 1;
   e        : Boolean = False;
 begin
+  lblComment.Caption := 'Importing QSL managers ...';
   AssignFile(sF,FileName);
   FileMode := 0;
   {$I-}
@@ -1049,6 +1052,7 @@ begin
     dmData.trQSLMgr.StartTransaction;
     dmData.qQSLMgr.SQL.Text := 'delete from cqrlog_common.qslmgr';
     dmData.qQSLMgr.ExecSQL;
+    dmData.qQSLMgr.SQL.Text := C_INS;
     while not Eof(sF) do
     begin
       readln(sF,line);
@@ -1058,10 +1062,11 @@ begin
       qsl_via  := a[1];
       fromDate := a[2]+'-01';
 
-      dmData.qQSLMgr.SQL.Text := 'INSERT INTO cqrlog_common.qslmgr (callsign,qsl_via,fromdate)'+
-                                 ' VALUES ('+QuotedStr(call)+','+QuotedStr(qsl_via)+','+
-                                 QuotedStr(fromDate)+')';
-      if dmData.DebugLevel>=1 then Writeln(dmData.qQSLMgr.SQL.Text);
+
+      dmData.qQSLMgr.Prepare;
+      dmData.qQSLMgr.Params[0].AsString := call;
+      dmData.qQSLMgr.Params[1].AsString := qsl_via;
+      dmData.qQSLMgr.Params[2].AsString := fromDate;
       dmData.qQSLMgr.ExecSQL;
 
       inc(num);

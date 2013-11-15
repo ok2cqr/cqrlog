@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.6.2
+  + improved QSL managers import, should be faster a bit
+
 1.6.1
   + 630M band added
   + added OQRS (online QSL request system) to QSL sent menu
