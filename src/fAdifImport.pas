@@ -559,8 +559,15 @@ begin
       Q1.Params[35].AsString  := 'Y'
     end
     else begin
-      Q1.Params[34].Clear;
-      Q1.Params[35].AsString  := ''
+      if (d.EQSL_QSL_SENT = 'Y') then
+      begin
+        Q1.Params[34].AsString := NowDate;
+        Q1.Params[35].AsString := 'Y';
+      end
+      else begin
+        Q1.Params[34].Clear;
+        Q1.Params[35].AsString  := ''
+      end
     end;
         Writeln(5);
     if dmUtils.IsDateOK(d.EQSL_QSLRDATE) then
@@ -569,8 +576,15 @@ begin
       Q1.Params[37].AsString  := 'E'
     end
     else begin
-      Q1.Params[36].Clear;
-      Q1.Params[37].AsString  := ''
+      if (d.EQSL_QSL_RCVD='Y') then
+      begin
+        Q1.Params[36].AsString := NowDate;
+        Q1.Params[37].AsString := 'E';
+      end
+      else begin
+        Q1.Params[36].Clear;
+        Q1.Params[37].AsString  := ''
+      end
     end;
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
