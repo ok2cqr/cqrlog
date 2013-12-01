@@ -109,6 +109,7 @@ type
     WrongRecNr : Integer;
     RecNR      : Integer;
     GlobalProfile : Word;
+    NowDate : String;
     procedure WriteWrongADIF(lines : Array of String; error : String);
 
     function pochash(aaa:String):longint;
@@ -515,8 +516,15 @@ begin
       Q1.Params[29].AsString  := 'Y'
     end
     else begin
-      Q1.Params[28].Clear;
-      Q1.Params[29].AsString := ''
+      if d.LOTW_QSL_SENT = 'Y' then
+      begin
+        Q1.Params[28].AsString  := NowDate;
+        Q1.Params[29].AsString  := 'Y'
+      end
+      else begin
+        Q1.Params[28].Clear;
+        Q1.Params[29].AsString := ''
+      end
     end;
     Writeln(2);
     if dmUtils.IsDateOK(d.LOTW_QSLRDATE) then
@@ -525,8 +533,15 @@ begin
       Q1.Params[31].AsString  := 'L'
     end
     else begin
-      Q1.Params[30].Clear;
-      Q1.Params[31].AsString  := ''
+      if d.LOTW_QSL_RCVD = 'Y' then
+      begin
+        Q1.Params[30].AsString  := NowDate;
+        Q1.Params[31].AsString  := 'L'
+      end
+      else begin
+        Q1.Params[30].Clear;
+        Q1.Params[31].AsString  := ''
+      end
     end;
     Writeln(3);
     if dmUtils.IsDateOK(d.QSLSDATE) then
@@ -653,6 +668,7 @@ procedure TfrmAdifImport.FormCreate(Sender: TObject);
 var
   tmp : Char;
 begin
+  NowDate := dmUtils.MyDateToStr(now);
 
   Q1.DataBase := dmData.MainCon;
   Q2.DataBase := dmData.MainCon;
