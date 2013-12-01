@@ -180,7 +180,7 @@ object dmData: TdmData
       '            time_off VARCHAR(5) DEFAULT '''','
       '            callsign VARCHAR(20) NOT NULL,'
       '            freq NUMERIC(10,4) NOT NULL,'
-      '            mode VARCHAR(8) NOT NULL,'
+      '            mode VARCHAR(10) NOT NULL,'
       '            rst_s VARCHAR(20) DEFAULT '''','
       '            rst_r VARCHAR(20) DEFAULT '''','
       '            name VARCHAR(40) DEFAULT '''','

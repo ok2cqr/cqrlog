@@ -6,7 +6,8 @@ Legend:
 
 1.6.2
   + improved QSL managers import, should be faster a bit
-  - LoTW QSL RCVD was not imported when ADIF didn't include LOTW_QSLRDATE value   
+  - LoTW QSL RCVD was not imported when ADIF didn't include LOTW_QSLRDATE value  
+  - CONTESTIA mode was saved as CONSTESTI (increased max length of mode to 10 characters) 
 
 1.6.1
   + 630M band added

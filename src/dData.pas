@@ -24,7 +24,7 @@ uses
 const
   MaxCall   = 100000;
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 5;
+  cDB_MAIN_VER = 6;
   cDB_COMN_VER = 3;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -2953,6 +2953,12 @@ begin
         Q1.ExecSQL
       end;
 
+      if old_version < 6 then
+      begin
+        Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(10) not null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL
+      end;
 
       Q1.SQL.Text := 'drop view view_cqrlog_main_by_callsign';
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
