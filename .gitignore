@@ -1,0 +1,7 @@
+*.o
+*.~*~
+*.ppu
+src/backup/*.bak
+src/backup
+*.compiled
+*.or
