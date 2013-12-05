@@ -1,7 +1,7 @@
 object frmRotControl: TfrmRotControl
-  Left = 384
+  Left = 405
   Height = 167
-  Top = 304
+  Top = 282
   Width = 214
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
@@ -12,7 +12,7 @@ object frmRotControl: TfrmRotControl
   OnShow = FormShow
   LCLVersion = '0.9.30.2'
   object ButtonShortP: TButton
-    Left = 72
+    Left = 16
     Height = 25
     Top = 80
     Width = 75
@@ -22,9 +22,9 @@ object frmRotControl: TfrmRotControl
   end
   object rbRotor1: TRadioButton
     Left = 16
-    Height = 26
+    Height = 24
     Top = 128
-    Width = 57
+    Width = 60
     Caption = 'ROT: '
     Checked = True
     OnClick = rbRotor1Click
@@ -33,9 +33,9 @@ object frmRotControl: TfrmRotControl
   end
   object rbRotor2: TRadioButton
     Left = 112
-    Height = 26
+    Height = 24
     Top = 128
-    Width = 57
+    Width = 60
     Caption = 'ROT: '
     OnClick = rbRotor2Click
     TabOrder = 3
@@ -46,7 +46,7 @@ object frmRotControl: TfrmRotControl
     Top = 0
     Width = 197
     Caption = 'Azimuth'
-    ClientHeight = 41
+    ClientHeight = 53
     ClientWidth = 193
     TabOrder = 0
     object lblAzimuth: TLabel
@@ -63,6 +63,15 @@ object frmRotControl: TfrmRotControl
       ParentColor = False
       ParentFont = False
     end
+  end
+  object ButtonLongP: TButton
+    Left = 120
+    Height = 25
+    Top = 80
+    Width = 75
+    Caption = 'LongPath'
+    OnClick = ButtonLongPClick
+    TabOrder = 4
   end
   object tmrRotor: TTimer
     Enabled = False
