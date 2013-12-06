@@ -149,41 +149,53 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'ENT PRIMARY KEY,'#6#21'  adif INT DEFAULT 0,'#6'   dxcc_ref VARCHAR(16) NOT'
   +' NULL,'#6#31'  country VARCHAR(100) NOT NULL'#6#2');'#6'#CREATE INDEX adif '
   +'ON dxcc_id(adif);'#6#0#6#23'CREATE TABLE db_version'#6#1'('#6#22'  nr SMALL'
-  +'INT NOT NULL'#6#2');'#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseSet'
-  +'Term'#8#9'UseCommit'#8#10'UseDefines'#8#11'OnException'#7#14'scLogException'
-  +#4'left'#3'P'#2#3'top'#3#136#0#0#0#11'TDatasource'#5'dsrmQ'#7'DataSet'#7#2'm'
-  +'Q'#4'left'#3#153#2#3'top'#3#136#0#0#0#9'TSQLQuery'#8'qLogList'#10'BeforeOpe'
-  +'n'#7#18'qLogListBeforeOpen'#11'Transaction'#7#9'trLogList'#8'ReadOnly'#8#6
-  +'Params'#14#0#8'ParseSQL'#8#4'left'#3'P'#2#3'top'#3#208#0#0#0#15'TSQLTransac'
-  +'tion'#9'trLogList'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#176#2#3'top'
-  +#3#208#0#0#0#11'TDatasource'#10'dsrLogList'#7'DataSet'#7#8'qLogList'#4'left'
-  +#3'P'#2#3'top'#3#8#1#0#0#9'TSQLQuery'#11'qSQLConsole'#13'PacketRecords'#2'd'
-  +#11'Transaction'#7#4'trmQ'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'
-  +#3'P'#2#3'top'#3'P'#1#0#0#15'TSQLTransaction'#12'trSQLConsole'#6'Active'#8#6
-  +'Action'#7#6'caNone'#4'left'#3#176#2#3'top'#3'P'#1#0#0#11'TDatasource'#13'ds'
-  +'rSQLConsole'#7'DataSet'#7#11'qSQLConsole'#4'left'#3'P'#2#3'top'#3#137#1#0#0
-  +#9'TSQLQuery'#7'qQSLMgr'#11'Transaction'#7#8'trQSLMgr'#8'ReadOnly'#8#6'Param'
-  +'s'#14#0#8'ParseSQL'#8#4'left'#3#128#1#3'top'#3#184#1#0#0#15'TSQLTransaction'
-  +#8'trQSLMgr'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#128#1#3'top'#3#240#1
-  +#0#0#9'TSQLQuery'#9'qCallBook'#11'Transaction'#7#10'trCallBook'#8'ReadOnly'#8
-  +#6'Params'#14#0#4'left'#2'@'#3'top'#3' '#1#0#0#15'TSQLTransaction'#10'trCall'
-  +'Book'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#2'8'#3'top'#3'h'#1#0#0#15'T'
-  +'SQLTransaction'#10'trLongNote'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3
-  +#160#0#3'top'#3'h'#1#0#0#9'TSQLQuery'#9'qLongNote'#10'BeforeOpen'#7#19'qLong'
-  +'NoteBeforeOpen'#11'Transaction'#7#10'trLongNote'#8'ReadOnly'#8#6'Params'#14
-  +#0#4'left'#3#160#0#3'top'#3' '#1#0#0#9'TSQLQuery'#9'qProfiles'#11'Transactio'
-  +'n'#7#10'trProfiles'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#2'@'
-  +#3'top'#3#184#0#0#0#15'TSQLTransaction'#10'trProfiles'#6'Active'#8#6'Action'
-  +#7#6'caNone'#4'left'#2'@'#3'top'#3#235#0#0#0#9'TSQLQuery'#9'qIOTAList'#11'Tr'
-  +'ansaction'#7#10'trIOTAList'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'le'
-  +'ft'#2'8'#3'top'#3#173#1#0#0#15'TSQLTransaction'#10'trIOTAList'#6'Active'#8#6
-  +'Action'#7#6'caNone'#4'left'#2'8'#3'top'#3#234#1#0#0#15'TSQLTransaction'#7't'
-  +'rBands'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#136#0#3'top'#3' '#2#0#0
-  +#9'TSQLQuery'#6'qBands'#10'BeforeOpen'#7#16'qBandsBeforeOpen'#11'Transaction'
-  +#7#7'trBands'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#136#0#3't'
-  +'op'#3#240#1#0#0#15'TSQLTransaction'#12'trDXClusters'#6'Active'#8#6'Action'#7
-  +#6'caNone'#4'left'#3#160#0#3'top'#3#192#0#0#0#9'TSQLQuery'#11'qDXClusters'#11
-  +'Transaction'#7#12'trDXClusters'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4
+  +'INT NOT NULL'#6#2');'#6#0#6#26'CREATE TABLE log_changes ('#6'-  id int NOT '
+  +'NULL AUTO_INCREMENT PRIMARY KEY,'#6#30'  id_cqrlog_main int(11) NULL,'#6#27
+  +'  cmd varchar(10) NOT NULL,'#6#28'  old_qsodate date NOT NULL,'#6'"  old_ti'
+  +'me_on varchar(5) NOT NULL,'#6'$  old_callsign varchar(20) NOT NULL,'#6'   o'
+  +'ld_mode varchar(10) NOT NULL,'#6#30'  old_band varchar(6) NOT NULL'#6#21') '
+  +'COLLATE ''utf8_bin'';'#6#0#6#23'ALTER TABLE log_changes'#6'+ADD UNIQUE id_c'
+  +'qrlog_main (id_cqrlog_main);'#6#0#6#23'ALTER TABLE log_changes'#6'nADD FORE'
+  +'IGN KEY (id_cqrlog_main) REFERENCES cqrlog_main (id_cqrlog_main) ON DELETE '
+  +'SET NULL ON UPDATE CASCADE;'#6#0#6#28'CREATE TABLE upload_status ('#6'-  id'
+  +' int NOT NULL AUTO_INCREMENT PRIMARY KEY,'#6#31'  logname varchar(30) NOT N'
+  +'ULL,'#6#30'  id_log_changes int(11) NULL,'#6'M  FOREIGN KEY (id_log_changes'
+  +') REFERENCES log_changes (id) ON DELETE SET NULL'#6#21') COLLATE ''utf8_bin'
+  +''';'#6#0#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#8#9'Use'
+  +'Commit'#8#10'UseDefines'#8#11'OnException'#7#14'scLogException'#4'left'#3'P'
+  +#2#3'top'#3#136#0#0#0#11'TDatasource'#5'dsrmQ'#7'DataSet'#7#2'mQ'#4'left'#3
+  +#153#2#3'top'#3#136#0#0#0#9'TSQLQuery'#8'qLogList'#10'BeforeOpen'#7#18'qLogL'
+  +'istBeforeOpen'#11'Transaction'#7#9'trLogList'#8'ReadOnly'#8#6'Params'#14#0#8
+  +'ParseSQL'#8#4'left'#3'P'#2#3'top'#3#208#0#0#0#15'TSQLTransaction'#9'trLogLi'
+  +'st'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#176#2#3'top'#3#208#0#0#0#11
+  +'TDatasource'#10'dsrLogList'#7'DataSet'#7#8'qLogList'#4'left'#3'P'#2#3'top'#3
+  +#8#1#0#0#9'TSQLQuery'#11'qSQLConsole'#13'PacketRecords'#2'd'#11'Transaction'
+  +#7#4'trmQ'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3'P'#2#3'top'#3
+  +'P'#1#0#0#15'TSQLTransaction'#12'trSQLConsole'#6'Active'#8#6'Action'#7#6'caN'
+  +'one'#4'left'#3#176#2#3'top'#3'P'#1#0#0#11'TDatasource'#13'dsrSQLConsole'#7
+  +'DataSet'#7#11'qSQLConsole'#4'left'#3'P'#2#3'top'#3#137#1#0#0#9'TSQLQuery'#7
+  +'qQSLMgr'#11'Transaction'#7#8'trQSLMgr'#8'ReadOnly'#8#6'Params'#14#0#8'Parse'
+  +'SQL'#8#4'left'#3#128#1#3'top'#3#184#1#0#0#15'TSQLTransaction'#8'trQSLMgr'#6
+  +'Active'#8#6'Action'#7#6'caNone'#4'left'#3#128#1#3'top'#3#240#1#0#0#9'TSQLQu'
+  +'ery'#9'qCallBook'#11'Transaction'#7#10'trCallBook'#8'ReadOnly'#8#6'Params'
+  +#14#0#4'left'#2'@'#3'top'#3' '#1#0#0#15'TSQLTransaction'#10'trCallBook'#6'Ac'
+  +'tive'#8#6'Action'#7#6'caNone'#4'left'#2'8'#3'top'#3'h'#1#0#0#15'TSQLTransac'
+  +'tion'#10'trLongNote'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#160#0#3'to'
+  +'p'#3'h'#1#0#0#9'TSQLQuery'#9'qLongNote'#10'BeforeOpen'#7#19'qLongNoteBefore'
+  +'Open'#11'Transaction'#7#10'trLongNote'#8'ReadOnly'#8#6'Params'#14#0#4'left'
+  +#3#160#0#3'top'#3' '#1#0#0#9'TSQLQuery'#9'qProfiles'#11'Transaction'#7#10'tr'
+  +'Profiles'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#2'@'#3'top'#3
+  +#184#0#0#0#15'TSQLTransaction'#10'trProfiles'#6'Active'#8#6'Action'#7#6'caNo'
+  +'ne'#4'left'#2'@'#3'top'#3#235#0#0#0#9'TSQLQuery'#9'qIOTAList'#11'Transactio'
+  +'n'#7#10'trIOTAList'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#2'8'
+  +#3'top'#3#173#1#0#0#15'TSQLTransaction'#10'trIOTAList'#6'Active'#8#6'Action'
+  +#7#6'caNone'#4'left'#2'8'#3'top'#3#234#1#0#0#15'TSQLTransaction'#7'trBands'#6
+  +'Active'#8#6'Action'#7#6'caNone'#4'left'#3#136#0#3'top'#3' '#2#0#0#9'TSQLQue'
+  +'ry'#6'qBands'#10'BeforeOpen'#7#16'qBandsBeforeOpen'#11'Transaction'#7#7'trB'
+  +'ands'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#136#0#3'top'#3
+  ,#240#1#0#0#15'TSQLTransaction'#12'trDXClusters'#6'Active'#8#6'Action'#7#6'ca'
+  +'None'#4'left'#3#160#0#3'top'#3#192#0#0#0#9'TSQLQuery'#11'qDXClusters'#11'Tr'
+  +'ansaction'#7#12'trDXClusters'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4
   +'left'#3#160#0#3'top'#3#136#0#0#0#15'TSQLTransaction'#9'trComment'#6'Active'
   +#8#6'Action'#7#6'caNone'#4'left'#3#240#1#3'top'#3#240#1#0#0#9'TSQLQuery'#8'q'
   +'Comment'#11'Transaction'#7#9'trComment'#8'ReadOnly'#8#6'Params'#14#0#8'Pars'
@@ -193,7 +205,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'Params'#14#0#8'ParseSQL'#8#4'left'#3#236#1#3'top'#3'P'#1#0#0#15'TSQLTransac'
   +'tion'#11'trQSOBefore'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3'H'#1#3'to'
   +'p'#3'8'#1#0#0#9'TSQLQuery'#10'qQSOBefore'#11'Transaction'#7#11'trQSOBefore'
-  ,#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3'H'#1#3'top'#3#8#1#0#0
+  +#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3'H'#1#3'top'#3#8#1#0#0
   +#15'TSQLTransaction'#4'trQ1'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#240
   +#1#3'top'#3#144#0#0#0#9'TSQLQuery'#2'Q1'#10'BeforeOpen'#7#12'Q1BeforeOpen'#11
   +'Transaction'#7#4'trQ1'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'left'#3
@@ -245,7 +257,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +#6'''            pwr VARCHAR(10) DEFAULT '''','#6'&            loc VARCHAR(6'
   +') DEFAULT '''','#6')            my_loc VARCHAR(6) DEFAULT '''','#6')       '
   +'     award VARCHAR(50) DEFAULT '''','#6',            remarks VARCHAR(200) D'
-  +'EFAULT '''','#6'''            band VARCHAR(6) DEFAULT '''','#6')           '
+  ,'EFAULT '''','#6'''            band VARCHAR(6) DEFAULT '''','#6')           '
   +' qslmsg VARCHAR(20) DEFAULT '''''#6#2');'#6')CREATE INDEX idcall ON qslexpo'
   +'rt(idcall);'#6'%CREATE INDEX dxcc ON qslexport(dxcc);'#6#0#0#10'Terminator'
   +#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefines'#9

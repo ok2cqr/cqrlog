@@ -24,7 +24,7 @@ uses
 const
   MaxCall   = 100000;
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 6;
+  cDB_MAIN_VER = 7;
   cDB_COMN_VER = 3;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -2956,6 +2956,45 @@ begin
       if old_version < 6 then
       begin
         Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(10) not null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL
+      end;
+
+      if old_version < 7 then
+      begin
+        Q1.SQL.Clear;
+        Q1.SQL.Add('CREATE TABLE log_changes (');
+        Q1.SQL.Add('id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
+        Q1.SQL.Add('id_cqrlog_main int(11) NULL,');
+        Q1.SQL.Add('cmd varchar(10) NOT NULL,');
+        Q1.SQL.Add('old_qsodate date NOT NULL,');
+        Q1.SQL.Add('old_time_on varchar(5) NOT NULL,');
+        Q1.SQL.Add('old_callsign varchar(20) NOT NULL,');
+        Q1.SQL.Add('old_mode varchar(10) NOT NULL,');
+        Q1.SQL.Add('old_band varchar(6) NOT NULL');
+        Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
+        Q1.SQL.Clear;
+        Q1.SQL.Add('ALTER TABLE log_changes');
+        Q1.SQL.Add('ADD UNIQUE id_cqrlog_main (id_cqrlog_main);');
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
+        Q1.SQL.Clear;
+        Q1.SQL.Add('ALTER TABLE log_changes');
+        Q1.SQL.Add('ADD FOREIGN KEY (id_cqrlog_main) REFERENCES cqrlog_main (id_cqrlog_main) ON DELETE SET NULL ON UPDATE CASCADE;');
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
+        Q1.SQL.Clear;
+        Q1.SQL.Add('CREATE TABLE upload_status (');
+        Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
+        Q1.SQL.Add('  logname varchar(30) NOT NULL,');
+        Q1.SQL.Add('  id_log_changes int(11) NULL,');
+        Q1.SQL.Add('  FOREIGN KEY (id_log_changes) REFERENCES log_changes (id) ON DELETE SET NULL');
+        Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
       end;
