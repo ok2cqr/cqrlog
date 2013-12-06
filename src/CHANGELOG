@@ -6,6 +6,7 @@ Legend:
 
 1.6.2
   + improved QSL managers import, should be faster a bit
+  + in Rotor Control 'Long Path' button added (Darek, SP2MKI)
   - LoTW QSL RCVD was not imported when ADIF didn't include LOTW_QSLRDATE value  
   - CONTESTIA mode was saved as CONSTESTI (increased max length of mode to 10 characters) 
 

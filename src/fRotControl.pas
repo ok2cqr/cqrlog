@@ -14,12 +14,14 @@ type
 
   TfrmRotControl = class(TForm)
     ButtonShortP: TButton;
+    ButtonLongP: TButton;
     GroupBox2: TGroupBox;
     lblAzimuth: TLabel;
     rbRotor1: TRadioButton;
     rbRotor2: TRadioButton;
     tmrRotor: TTimer;
     procedure ButtonShortPClick(Sender: TObject);
+    procedure ButtonLongPClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure rbRotor1Click(Sender: TObject);
@@ -74,6 +76,21 @@ end;
 procedure TfrmRotControl.ButtonShortPClick(Sender: TObject);
 begin
    rotor.SetAzimuth(fNewQSO.Azimuth)
+end;
+
+procedure TfrmRotControl.ButtonLongPClick(Sender: TObject);
+var
+    LAzimuth : String = '';
+    SAz : Double = 0 ;
+    LAz : Double = 0 ;
+begin
+   SAz := StrToFloat(fNewQSO.Azimuth);
+   if SAz >180 then
+      LAz := SAz - 180
+   else
+      LAz := SAz + 180;
+   Lazimuth := FloatToStr(LAz);
+   rotor.SetAzimuth(LAzimuth)
 end;
 
 function TfrmRotControl.InicializeRot : Boolean;
