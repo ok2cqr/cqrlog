@@ -99,6 +99,7 @@ type
     qCQRLOG: TSQLQuery;
     scViews: TSQLScript;
     scQSLExport : TSQLScript;
+    scOnlineLogTriggers: TSQLScript;
     tmrDBPing: TTimer;
     trCQRLOG: TSQLTransaction;
     trQ: TSQLTransaction;
@@ -296,6 +297,7 @@ type
     procedure CreateQSLTmpTable;
     procedure DropQSLTmpTable;
     procedure StartMysqldProcess;
+    procedure CreateOnLineLogTriggers;
   end;
 
 var
@@ -3213,6 +3215,27 @@ begin
   Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
 end;
 
+procedure TdmData.CreateOnLineLogTriggers;
+var
+  i : Integer;
+begin
+  trmQ.StartTransaction;
+  mQ.SQL.Text := '';
+  for i:=0 to scOnlineLogTriggers.Script.Count-1 do
+  begin
+    if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
+      mQ.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
+    else begin
+      mQ.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
+      if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+      mQ.ExecSQL;
+      mQ.SQL.Text := ''
+    end
+  end;
+  trmQ.Commit
+  //^^ because of bug in  TSQLSript. For SQL is applied,
+  //second command - no effect. My workaround works. Semicolon is a delimitter.
+end;
 
 initialization
   {$I dData.lrs}

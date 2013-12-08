@@ -18,7 +18,7 @@ object dmData: TdmData
   end
   object dsrImport: TDatasource
     left = 592
-    top = 448
+    top = 496
   end
   object dsrBands: TDatasource
     DataSet = qBands
@@ -157,7 +157,7 @@ object dmData: TdmData
     UseCommit = True
     UseDefines = True
     left = 592
-    top = 80
+    top = 128
   end
   object scLog: TSQLScript
     Transaction = trmQ
@@ -405,7 +405,7 @@ object dmData: TdmData
     UseDefines = False
     OnException = scLogException
     left = 592
-    top = 136
+    top = 184
   end
   object dsrmQ: TDatasource
     DataSet = mQ
@@ -419,7 +419,7 @@ object dmData: TdmData
     Params = <>
     ParseSQL = False
     left = 592
-    top = 208
+    top = 256
   end
   object trLogList: TSQLTransaction
     Active = False
@@ -430,7 +430,7 @@ object dmData: TdmData
   object dsrLogList: TDatasource
     DataSet = qLogList
     left = 592
-    top = 264
+    top = 312
   end
   object qSQLConsole: TSQLQuery
     PacketRecords = 100
@@ -439,7 +439,7 @@ object dmData: TdmData
     Params = <>
     ParseSQL = False
     left = 592
-    top = 336
+    top = 384
   end
   object trSQLConsole: TSQLTransaction
     Active = False
@@ -450,7 +450,7 @@ object dmData: TdmData
   object dsrSQLConsole: TDatasource
     DataSet = qSQLConsole
     left = 592
-    top = 393
+    top = 441
   end
   object qQSLMgr: TSQLQuery
     Transaction = trQSLMgr
@@ -716,6 +716,43 @@ object dmData: TdmData
       ');'
       'CREATE INDEX idcall ON qslexport(idcall);'
       'CREATE INDEX dxcc ON qslexport(dxcc);'
+      ''
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = True
+    UseCommit = True
+    UseDefines = True
+    left = 592
+    top = 80
+  end
+  object scOnlineLogTriggers: TSQLScript
+    Transaction = trmQ
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Script.Strings = (
+      'CREATE TRIGGER `cqrlog_main_ai` AFTER INSERT ON `cqrlog_main` FOR EACH ROW'
+      'insert into log_changes(id_cqrlog_main,cmd,qsodate,time_on,callsign,mode,freq,band) values'
+      '  (NEW.id_cqrlog_main,''INSERT'',NEW.qsodate,NEW.time_on,NEW.callsign,NEW.mode,NEW.freq,NEW.band);'
+      ''
+      'CREATE TRIGGER `cqrlog_main_bd` BEFORE DELETE ON `cqrlog_main` FOR EACH ROW'
+      'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq)'
+      'values (OLD.id_cqrlog_main,''DELETE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band, old_freq);'
+      ''
+      'CREATE TRIGGER `cqrlog_main_bu` BEFORE UPDATE ON `cqrlog_main` FOR EACH ROW'
+      'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq,'
+      'qsodate, time_on, callsign, mode, band,freq)'
+      'values (OLD.id_cqrlog_main,''UPDATE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band,OLD.freq,'
+      'NEW.qsodate, NEW.time_on, NEW.callsign, NEW.mode, NEW.freq, NEW.band);'
       ''
     )
     Terminator = ';'
