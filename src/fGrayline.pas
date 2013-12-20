@@ -131,7 +131,7 @@ begin
   begin
     tmp  := Copy(Buffer, sStart, sStop - sStart);
     tmp  := trim(tmp);
-    if dmData.DebugLevel >=3 then Writeln(tmp);
+    if dmData.DebugLevel >=1 then Writeln(tmp);
     itmp := Pos('DX DE',UpperCase(tmp));
     if (itmp > 0) or TryStrToFloat(copy(tmp,1,Pos(' ',tmp)-1),f)  then
     begin
@@ -254,7 +254,7 @@ begin
 
   spotter := trim(copy(spot,7,Pos('-',spot)-7));
   stren   := trim(copy(spot,48,3));
-  freq    := trim(copy(spot,18,10));
+  freq    := trim(copy(spot,18,9));
 
   dmDXCluster.id_country(spotter,lat,long);
 

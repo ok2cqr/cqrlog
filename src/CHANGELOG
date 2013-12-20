@@ -9,6 +9,7 @@ Legend:
   + in Rotor Control 'Long Path' button added (Darek, SP2MKI)
   - LoTW QSL RCVD was not imported when ADIF didn't include LOTW_QSLRDATE value  
   - CONTESTIA mode was saved as CONSTESTI (increased max length of mode to 10 characters) 
+  - ReverseBeacon support in gray line didn't work - fixed 
 
 1.6.1
   + 630M band added
