@@ -26,17 +26,22 @@ const jazyk=1; // 0 cz , 1 en (nic vic zatim..., netreba menit tu, objekt "umi" 
 
 const mpv=100000; // max pocet polozek... je to malo?
 
+const text_Vybrat_vse:string='Vybrat vse|Select all';
+const text_Zrusit_vyber:string='Zrusit vyber|Select none';
+const text_Zacatek_bloku:string='Zacatek bloku|Start of selection';
+const text_Konec_bloku:string='Konec bloku|End of selection';
+const text_Kopirovat:string='Kopirovat|Copy';
+
+
 Type Tveta=record
        te:string;  // kus textu
        bpi:TColor; // barva pisma
        bpo:Tcolor; // barva podkladu
        pom:longint;
      end;
-     
-     Pveta=^Tveta;
-     
-     Tvety=array[0..mpv] of Pveta;
 
+  Pveta=^Tveta;
+  Tvety=array[0..mpv] of Pveta;
 
 type
    Tjakomemo = class(TPanel)
@@ -127,9 +132,6 @@ type
 
            separator je '-' (jeden znak minus) v c_text, ale kto to dnes potrebuje vedet?
          }
-       
-       
-
      private
        sbs,sbv:Tscrollbar; {scrollbar svisly/vodorovny}
        pab:Tpaintbox;
@@ -179,30 +181,10 @@ type
        procedure postav_obsah_popupa(p:Tpopupmenu);
          { [je-li co, tak prvni vse smaze a znovu] nakrmi popup menu polozkama dle akt. jazyka. }
        function dt(celytext:string):string;
-
-
    end;
 
 
-
-{
-const text_Vybrat_vse:string='Vybrat vse';
-const text_Zrusit_vyber:string='Zrusit vyber';
-const text_Zacatek_bloku:string='Zacatek bloku';
-const text_Konec_bloku:string='Konec bloku';
-const text_Kopirovat:string='Kopirovat';
-}
-
-
-const text_Vybrat_vse:string='Vybrat vse|Select all';
-const text_Zrusit_vyber:string='Zrusit vyber|Select none';
-const text_Zacatek_bloku:string='Zacatek bloku|Start of selection';
-const text_Konec_bloku:string='Konec bloku|End of selection';
-const text_Kopirovat:string='Kopirovat|Copy';
-
-
 implementation
-
 
 
 constructor Tjakomemo.Create(TheOwner: TComponent);
@@ -281,7 +263,7 @@ constructor Tjakomemo.Create(TheOwner: TComponent);
 
     aktualizujpozici(nil);
 
-  end;
+end;
 
 destructor Tjakomemo.Destroy;
 var z:longint;
