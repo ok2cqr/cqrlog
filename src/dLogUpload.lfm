@@ -1,0 +1,21 @@
+object dmLogUpload: TdmLogUpload
+  OnCreate = DataModuleCreate
+  OldCreateOrder = False
+  Height = 245
+  HorizontalOffset = 367
+  VerticalOffset = 237
+  Width = 331
+  object Q: TSQLQuery
+    Transaction = trQ
+    ReadOnly = False
+    Params = <>
+    left = 44
+    top = 36
+  end
+  object trQ: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 128
+    top = 36
+  end
+end

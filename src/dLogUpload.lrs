@@ -1,0 +1,10 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TdmLogUpload','FORMDATA',[
+  'TPF0'#12'TdmLogUpload'#11'dmLogUpload'#8'OnCreate'#7#16'DataModuleCreate'#14
+  +'OldCreateOrder'#8#6'Height'#3#245#0#16'HorizontalOffset'#3'o'#1#14'Vertical'
+  +'Offset'#3#237#0#5'Width'#3'K'#1#0#9'TSQLQuery'#1'Q'#11'Transaction'#7#3'trQ'
+  +#8'ReadOnly'#8#6'Params'#14#0#4'left'#2','#3'top'#2'$'#0#0#15'TSQLTransactio'
+  +'n'#3'trQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#128#0#3'top'#2'$'#0#0
+  +#0
+]);
