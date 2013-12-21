@@ -309,7 +309,7 @@ var
 implementation
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion;
+     fTRXControl, fRotControl, uVersion, dLogUpload;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -469,6 +469,8 @@ begin
     MainCon.Connected := False;
   if dmDXCluster.dbDXC.Connected then
     dmDXCluster.dbDXC.Connected := False;
+  if dmLogUpload.LogUploadCon.Connected then
+    dmLogUpload.LogUploadCon.Connected := False;
 
   if fMySQLVersion < 5.5 then
   begin
@@ -496,9 +498,23 @@ begin
   dmDXCluster.dbDXC.Password     := pass;
   dmDXCluster.dbDXC.DatabaseName := 'information_schema';
 
+  if fMySQLVersion < 5.5 then
+  begin
+    (dmLogUpload.LogUploadCon as TMySQL51Connection).HostName := host;
+    (dmLogUpload.LogUploadCon as TMySQL51Connection).Port     := StrToInt(port)
+  end
+  else begin
+    (dmLogUpload.LogUploadCon as TMySQL55Connection).HostName := host;
+    (dmLogUpload.LogUploadCon as TMySQL55Connection).Port     := StrToInt(port)
+  end;
+  dmLogUpload.LogUploadCon.UserName     := user;
+  dmLogUpload.LogUploadCon.Password     := pass;
+  dmLogUpload.LogUploadCon.DatabaseName := 'information_schema';
+
   try
-    MainCon.Connected := True;
-    dmDXCluster.dbDXC.Connected := True
+    MainCon.Connected                  := True;
+    dmDXCluster.dbDXC.Connected        := True;
+    dmLogUpload.LogUploadCon.Connected := True;
   except
     on E : Exception do
     begin

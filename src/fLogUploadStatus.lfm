@@ -1,0 +1,60 @@
+object frmLogUploadStatus: TfrmLogUploadStatus
+  Left = 347
+  Height = 295
+  Top = 190
+  Width = 206
+  HorzScrollBar.Visible = False
+  Caption = 'Status of log upload'
+  ClientHeight = 272
+  ClientWidth = 206
+  Menu = MainMenu1
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '0.9.30.2'
+  object pnlLogStatus: TPanel
+    Left = 0
+    Height = 272
+    Top = 0
+    Width = 206
+    Align = alClient
+    Color = clWhite
+    ParentColor = False
+    TabOrder = 0
+  end
+  object MainMenu1: TMainMenu
+    left = 48
+    top = 80
+    object mnuStatus: TMenuItem
+      Caption = 'Status'
+      object MenuItem1: TMenuItem
+        Caption = 'Clear status messages'
+      end
+      object MenuItem2: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem3: TMenuItem
+        Action = acFontSettings
+      end
+    end
+  end
+  object acLogUploadStatus: TActionList
+    left = 48
+    top = 24
+    object acClearMessages: TAction
+      Caption = 'Clear mesages'
+      OnExecute = acClearMessagesExecute
+    end
+    object acFontSettings: TAction
+      Caption = 'Font'
+      OnExecute = acFontSettingsExecute
+    end
+  end
+  object dlgFont: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    left = 168
+    top = 32
+  end
+end

@@ -16,7 +16,8 @@ uses
   fCWType,fSplitSettings,MemDSLaz,SDFLaz,turbopoweripro,fShowStations,uMyIni,
   fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fEditTestQSO,fKeysPref,fDBConnect,fNewLog,
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
-  feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl;
+  feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
+dLogUpload, fLogUploadStatus;
 var
   Splash : TfrmSplash;
 
@@ -35,6 +36,7 @@ begin
   Sleep(500);
   Application.CreateForm(TfrmNewQSO, frmNewQSO);
   Application.CreateForm(TdmData, dmData);
+  Application.CreateForm(TdmLogUpload, dmLogUpload);
   Application.CreateForm(TfrmMain, frmMain);
   Application.CreateForm(TdmUtils, dmUtils);
   Application.CreateForm(TdmDXCC, dmDXCC);
@@ -49,6 +51,7 @@ begin
   Application.CreateForm(TfrmCWKeys, frmCWKeys);
   Application.CreateForm(TfrmSCP, frmSCP);
   Application.CreateForm(TfrmRotControl, frmRotControl);
+  Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
 
   Splash.Update;
   application.ProcessMessages;

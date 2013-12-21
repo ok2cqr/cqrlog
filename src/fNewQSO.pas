@@ -59,6 +59,7 @@ type
     acQSOList: TAction;
     acRotControl: TAction;
     acReloadCW: TAction;
+    acLogUploadStatus: TAction;
     acTune : TAction;
     chkAutoMode: TCheckBox;
     dbgrdQSOBefore: TDBGrid;
@@ -74,6 +75,7 @@ type
     MenuItem4 : TMenuItem;
     MenuItem40: TMenuItem;
     MenuItem51: TMenuItem;
+    MenuItem52: TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
     acWASCfm: TAction;
@@ -281,6 +283,7 @@ type
     tmrStart: TTimer;
     procedure acBigSquareExecute(Sender: TObject);
     procedure acCWFKeyExecute(Sender: TObject);
+    procedure acLogUploadStatusExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
@@ -587,7 +590,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1150,12 +1153,14 @@ begin
   if cqrini.ReadBool('Window','QSOList',False) then
     acQSOList.Execute;
 
+  if cqrini.ReadBool('Window','LogUploadStatus', False) then
+    acLogUploadStatus.Execute;
+
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
     Tab.Resume
   end;
-
 
   if cqrini.ReadBool('Program','CheckQSLTabs',True) then
   begin
@@ -1280,6 +1285,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','QSOList',False);
+
+    if frmLogUploadStatus.Showing then
+    begin
+      cqrini.WriteBool('Window','LogUploadStatus', True);
+      frmLogUploadStatus.Close
+    end
+    else
+      cqrini.WriteBool('Window','LogUploadStatus', False);
 
     cqrini.DeleteKey('TMPQSO','OFF');
     cqrini.DeleteKey('TMPQSO','FREQ');
@@ -3035,6 +3048,11 @@ procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
 begin
   UpdateFKeyLabels;
   frmCWKeys.Show
+end;
+
+procedure TfrmNewQSO.acLogUploadStatusExecute(Sender: TObject);
+begin
+  frmLogUploadStatus.Show
 end;
 
 procedure TfrmNewQSO.acBigSquareExecute(Sender: TObject);

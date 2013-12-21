@@ -80,7 +80,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="78">
+    <Units Count="80">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -619,6 +619,20 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRotControl"/>
       </Unit77>
+      <Unit78>
+        <Filename Value="dLogUpload.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dmLogUpload"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <UnitName Value="dLogUpload"/>
+      </Unit78>
+      <Unit79>
+        <Filename Value="fLogUploadStatus.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmLogUploadStatus"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fLogUploadStatus"/>
+      </Unit79>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
