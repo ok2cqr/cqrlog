@@ -112,7 +112,13 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkHrUpEnabled: TCheckBox;
+    chkHrUpOnline: TCheckBox;
+    chkHaUpEnabled: TCheckBox;
+    chkClUpEnabled: TCheckBox;
+    chkHaupOnline: TCheckBox;
     chkAskBackup : TCheckBox;
+    chkClUpOnline: TCheckBox;
     chkShow630M : TCheckBox;
     chkRBNAutoConn : TCheckBox;
     chkShowMiles : TCheckBox;
@@ -469,7 +475,15 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    edtClEmail: TEdit;
+    edtHrCode: TEdit;
+    edtHrPasswd: TEdit;
+    edtHrUserName: TEdit;
+    edtHaPasswd: TEdit;
+    edtClPasswd: TEdit;
+    edtHaUserName: TEdit;
     edtDelAfter : TEdit;
+    edtClUserName: TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
     edtFreqChange : TEdit;
@@ -654,6 +668,9 @@ type
     GroupBox41: TGroupBox;
     GroupBox42: TGroupBox;
     GroupBox43: TGroupBox;
+    GroupBox44: TGroupBox;
+    GroupBox45: TGroupBox;
+    GroupBox46: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -747,7 +764,13 @@ type
     Label176 : TLabel;
     Label177 : TLabel;
     Label178 : TLabel;
+    Label179: TLabel;
     Label18: TLabel;
+    Label180: TLabel;
+    Label181: TLabel;
+    Label182: TLabel;
+    Label183: TLabel;
+    lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
     Label20: TLabel;
@@ -790,6 +813,8 @@ type
     Label94: TLabel;
     Label95: TLabel;
     Label96: TLabel;
+    lbl1: TLabel;
+    lbl2: TLabel;
     lblButtons: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -892,6 +917,7 @@ type
     tabCallbook: TTabSheet;
     TabROTcontrol: TTabSheet;
     tabRBN : TTabSheet;
+    tabOnlineLog: TTabSheet;
     tabTRX2: TTabSheet;
     tabTRX1: TTabSheet;
     tabRot1: TTabSheet;
@@ -927,6 +953,9 @@ type
     procedure btnChangeDefaultFreqClick(Sender: TObject);
     procedure btnKeyTextClick(Sender: TObject);
     procedure btnSplitClick(Sender: TObject);
+    procedure chkClUpEnabledChange(Sender: TObject);
+    procedure chkHaUpEnabledChange(Sender: TObject);
+    procedure chkHrUpEnabledChange(Sender: TObject);
     procedure chkPotSpeedChange(Sender: TObject);
     procedure chkProfileLocatorClick(Sender: TObject);
     procedure chkProfileQTHClick(Sender: TObject);
@@ -1472,6 +1501,23 @@ begin
   else
     cqrini.WriteInteger('RBN','deleteAfter',60);
 
+  cqrini.WriteBool('OnlineLog','HaUP',chkHaUpEnabled.Checked);
+  cqrini.WriteBool('OnlineLog','HaUpOnline',chkHaUpOnline.Checked);
+  cqrini.WriteString('OnlineLog','HaUserName',edtHaUserName.Text);
+  cqrini.WriteString('OnlineLog','HaPasswd',edtHaPasswd.Text);
+
+  cqrini.WriteBool('OnlineLog','ClUP',chkClUpEnabled.Checked);
+  cqrini.WriteBool('OnlineLog','ClUpOnline',chkClUpOnline.Checked);
+  cqrini.WriteString('OnlineLog','ClUserName',edtClUserName.Text);
+  cqrini.WriteString('OnlineLog','ClPasswd',edtClPasswd.Text);
+  cqrini.WriteString('OnlineLog','ClEmail',edtClEmail.Text);
+
+  cqrini.WriteBool('OnlineLog','HrUP',chkHrUpEnabled.Checked);
+  cqrini.WriteBool('OnlineLog','HrUpOnline',chkHrUpOnline.Checked);
+  cqrini.WriteString('OnlineLog','HrUserName',edtHrUserName.Text);
+  cqrini.WriteString('OnlineLog','HrPasswd',edtHrPasswd.Text);
+  cqrini.WriteString('OnlineLog','HrCode',edtHrCode.Text);
+
   if WinKeyerChanged then
   begin
     frmNewQSO.CWint.Close;
@@ -1977,6 +2023,29 @@ begin
     finally
       Free
     end;
+end;
+
+procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
+begin
+  edtClUserName.Enabled := chkClUpEnabled.Checked;
+  edtClPasswd.Enabled   := chkClUpEnabled.Checked;
+  edtClEmail.Enabled    := chkClUpEnabled.Checked;
+  chkClupOnline.Enabled := chkClUpEnabled.Checked
+end;
+
+procedure TfrmPreferences.chkHaUpEnabledChange(Sender: TObject);
+begin
+  edtHaUserName.Enabled := chkHaUpEnabled.Checked;
+  edtHaPasswd.Enabled   := chkHaUpEnabled.Checked;
+  chkHaupOnline.Enabled := chkHaUpEnabled.Checked
+end;
+
+procedure TfrmPreferences.chkHrUpEnabledChange(Sender: TObject);
+begin
+  edtHrUserName.Enabled := chkHrUpEnabled.Checked;
+  edtHrPasswd.Enabled   := chkHrUpEnabled.Checked;
+  edtHrCode.Enabled     := chkHrUpEnabled.Checked;
+  chkHrUpOnline.Enabled := chkHrUpEnabled.Checked
 end;
 
 procedure TfrmPreferences.chkPotSpeedChange(Sender: TObject);
@@ -2704,6 +2773,26 @@ begin
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
   edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
+
+  chkHaUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HaUP',False);
+  chkHaUpOnline.Checked  := cqrini.ReadBool('OnlineLog','HaUpOnline',False);
+  edtHaUserName.Text     := cqrini.ReadString('OnlineLog','HaUserName','');
+  edtHaPasswd.Text       := cqrini.ReadString('OnlineLog','HaPasswd','');
+  chkHaUpEnabledChange(nil);
+
+  chkClUpEnabled.Checked := cqrini.ReadBool('OnlineLog','ClUP',False);
+  chkClUpOnline.Checked  := cqrini.ReadBool('OnlineLog','ClUpOnline',False);
+  edtClUserName.Text     := cqrini.ReadString('OnlineLog','ClUserName','');
+  edtClPasswd.Text       := cqrini.ReadString('OnlineLog','ClPasswd','');
+  edtClEmail.Text        := cqrini.ReadString('OnlineLog','ClEmail','');
+  chkClUpEnabledChange(nil);
+
+  chkHrUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HrUP',False);
+  chkHrUpOnline.Checked  := cqrini.ReadBool('OnlineLog','HrUpOnline',False);
+  edtHrUserName.Text     := cqrini.ReadString('OnlineLog','HrUserName','');
+  edtHrPasswd.Text       := cqrini.ReadString('OnlineLog','HrPasswd','');
+  edtHrCode.Text         := cqrini.ReadString('OnlineLog','HrCode','');
+  chkHrUpEnabledChange(nil);
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
   edtCW1.Width := 60;
