@@ -77,6 +77,14 @@ type
     aceQSLDwn : TAction;
     acSOTAExport : TAction;
     acRemoveDupes: TAction;
+    acMarkAllClubLog: TAction;
+    acMarkAllHrdLog: TAction;
+    acMarkAll: TAction;
+    acUploadToAll: TAction;
+    acUploadToHrdLog: TAction;
+    acUploadToClubLog: TAction;
+    acUploadToHamQTH: TAction;
+    acMarkAllHamQTH: TAction;
     acWASCfm:   TAction;
     acWACCfm:   TAction;
     acUnselAll: TAction;
@@ -156,6 +164,19 @@ type
     MenuItem48 : TMenuItem;
     MenuItem49: TMenuItem;
     MenuItem50: TMenuItem;
+    MenuItem51: TMenuItem;
+    MenuItem52: TMenuItem;
+    MenuItem53: TMenuItem;
+    MenuItem54: TMenuItem;
+    MenuItem68: TMenuItem;
+    MenuItem69: TMenuItem;
+    MenuItem70: TMenuItem;
+    MenuItem73: TMenuItem;
+    MenuItem74: TMenuItem;
+    MenuItem75: TMenuItem;
+    MenuItem94: TMenuItem;
+    MenuItem95: TMenuItem;
+    MenuItem96: TMenuItem;
     mnuOQRS : TMenuItem;
     MenuItem55: TMenuItem;
     MenuItem56: TMenuItem;
@@ -288,6 +309,10 @@ type
     procedure aceQSLDwnExecute(Sender : TObject);
     procedure aceQSLUpExecute(Sender : TObject);
     procedure acHamQTHExecute(Sender : TObject);
+    procedure acMarkAllClubLogExecute(Sender: TObject);
+    procedure acMarkAllExecute(Sender: TObject);
+    procedure acMarkAllHamQTHExecute(Sender: TObject);
+    procedure acMarkAllHrdLogExecute(Sender: TObject);
     procedure acPnlDetailsExecute(Sender: TObject);
     procedure acQRZExecute(Sender: TObject);
     procedure acQSLImageExecute(Sender: TObject);
@@ -295,6 +320,10 @@ type
     procedure acRemoveDupesExecute(Sender: TObject);
     procedure acSOTAExportExecute(Sender : TObject);
     procedure acSQLExecute(Sender: TObject);
+    procedure acUploadToAllExecute(Sender: TObject);
+    procedure acUploadToClubLogExecute(Sender: TObject);
+    procedure acUploadToHamQTHExecute(Sender: TObject);
+    procedure acUploadToHrdLogExecute(Sender: TObject);
     procedure dbgrdMainColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer
       );
     procedure dbgrdMainColumnSized(Sender: TObject);
@@ -1279,6 +1308,26 @@ begin
   dmUtils.ShowHamQTHInBrowser(dmData.qCQRLOG.Fields[4].AsString)
 end;
 
+procedure TfrmMain.acMarkAllClubLogExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmMain.acMarkAllExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmMain.acMarkAllHamQTHExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmMain.acMarkAllHrdLogExecute(Sender: TObject);
+begin
+  //
+end;
+
 procedure TfrmMain.acSQLExecute(Sender: TObject);
 begin
   frmSQLConsole := TfrmSQLConsole.Create(self);
@@ -1287,6 +1336,26 @@ begin
   finally
     frmSQLConsole.Free
   end
+end;
+
+procedure TfrmMain.acUploadToAllExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmMain.acUploadToClubLogExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmMain.acUploadToHamQTHExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmMain.acUploadToHrdLogExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TfrmMain.dbgrdMainColumnMoved(Sender: TObject; FromIndex,

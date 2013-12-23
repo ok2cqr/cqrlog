@@ -2162,6 +2162,33 @@ object frmNewQSO: TfrmNewQSO
         end
       end
     end
+    object mnuOnlineLog: TMenuItem
+      Caption = 'Online log'
+      object MenuItem53: TMenuItem
+        Caption = 'HamQTH'
+        object MenuItem56: TMenuItem
+          Action = acUploadToHamQTH
+        end
+      end
+      object MenuItem57: TMenuItem
+        Caption = 'Clublog'
+        object MenuItem58: TMenuItem
+          Action = acUploadToClubLog
+        end
+      end
+      object MenuItem86: TMenuItem
+        Caption = 'HRDLog.net'
+        object MenuItem87: TMenuItem
+          Action = acUploadToHrdLog
+        end
+      end
+      object MenuItem88: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem89: TMenuItem
+        Action = acUploadToAll
+      end
+    end
     object MenuItem5: TMenuItem
       Caption = 'Grayline'
       Visible = False
@@ -2723,6 +2750,26 @@ object frmNewQSO: TfrmNewQSO
       Category = 'Window'
       Caption = 'Online log upload status'
       OnExecute = acLogUploadStatusExecute
+    end
+    object acUploadToHamQTH: TAction
+      Category = 'OnlineLog'
+      Caption = 'Upload all changes'
+      OnExecute = acUploadToHamQTHExecute
+    end
+    object acUploadToClubLog: TAction
+      Category = 'OnlineLog'
+      Caption = 'Upload all changes'
+      OnExecute = acUploadToClubLogExecute
+    end
+    object acUploadToHrdLog: TAction
+      Category = 'OnlineLog'
+      Caption = 'Upload all changes'
+      OnExecute = acUploadToHrdLogExecute
+    end
+    object acUploadToAll: TAction
+      Category = 'OnlineLog'
+      Caption = 'Upload changes to all logs'
+      OnExecute = acUploadToAllExecute
     end
   end
   object imgMain: TImageList

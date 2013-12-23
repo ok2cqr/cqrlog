@@ -60,6 +60,10 @@ type
     acRotControl: TAction;
     acReloadCW: TAction;
     acLogUploadStatus: TAction;
+    acUploadToAll: TAction;
+    acUploadToHrdLog: TAction;
+    acUploadToClubLog: TAction;
+    acUploadToHamQTH: TAction;
     acTune : TAction;
     chkAutoMode: TCheckBox;
     dbgrdQSOBefore: TDBGrid;
@@ -76,6 +80,15 @@ type
     MenuItem40: TMenuItem;
     MenuItem51: TMenuItem;
     MenuItem52: TMenuItem;
+    MenuItem53: TMenuItem;
+    MenuItem56: TMenuItem;
+    MenuItem57: TMenuItem;
+    MenuItem58: TMenuItem;
+    MenuItem86: TMenuItem;
+    MenuItem87: TMenuItem;
+    MenuItem88: TMenuItem;
+    MenuItem89: TMenuItem;
+    mnuOnlineLog: TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
     acWASCfm: TAction;
@@ -294,6 +307,10 @@ type
     procedure acSendSpotExecute(Sender : TObject);
     procedure acShowStatBarExecute(Sender: TObject);
     procedure acTuneExecute(Sender : TObject);
+    procedure acUploadToAllExecute(Sender: TObject);
+    procedure acUploadToClubLogExecute(Sender: TObject);
+    procedure acUploadToHamQTHExecute(Sender: TObject);
+    procedure acUploadToHrdLogExecute(Sender: TObject);
     procedure chkAutoModeChange(Sender: TObject);
     procedure cmbFreqExit(Sender: TObject);
     procedure cmbIOTAEnter(Sender: TObject);
@@ -3042,6 +3059,26 @@ begin
   CWint.TuneStart;
   ShowMessage('Tunning started .... '+LineEnding+LineEnding+'OK to abort');
   CWint.TuneStop
+end;
+
+procedure TfrmNewQSO.acUploadToAllExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmNewQSO.acUploadToClubLogExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmNewQSO.acUploadToHamQTHExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmNewQSO.acUploadToHrdLogExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
