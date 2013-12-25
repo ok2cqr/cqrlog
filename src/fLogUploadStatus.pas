@@ -30,10 +30,10 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
-    mStatus : TJakoMemo;
+    mStatus     : TJakoMemo;
     procedure LoadFonts;
   public
-    { public declarations }
+
   end; 
 
 var

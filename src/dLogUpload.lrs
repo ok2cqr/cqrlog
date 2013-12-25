@@ -1,10 +1,34 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TdmLogUpload','FORMDATA',[
-  'TPF0'#12'TdmLogUpload'#11'dmLogUpload'#8'OnCreate'#7#16'DataModuleCreate'#14
-  +'OldCreateOrder'#8#6'Height'#3#245#0#16'HorizontalOffset'#3'o'#1#14'Vertical'
-  +'Offset'#3#237#0#5'Width'#3'K'#1#0#9'TSQLQuery'#1'Q'#11'Transaction'#7#3'trQ'
-  +#8'ReadOnly'#8#6'Params'#14#0#4'left'#2','#3'top'#2'$'#0#0#15'TSQLTransactio'
-  +'n'#3'trQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#128#0#3'top'#2'$'#0#0
-  +#0
+  'TPF0'#12'TdmLogUpload'#11'dmLogUpload'#8'OnCreate'#7#16'DataModuleCreate'#9
+  +'OnDestroy'#7#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3#245#0#16
+  +'HorizontalOffset'#3'o'#1#14'VerticalOffset'#3#237#0#5'Width'#3'K'#1#0#9'TSQ'
+  +'LQuery'#1'Q'#11'Transaction'#7#3'trQ'#8'ReadOnly'#8#6'Params'#14#0#4'left'#3
+  +#224#0#3'top'#2#24#0#0#15'TSQLTransaction'#3'trQ'#6'Active'#8#6'Action'#7#6
+  +'caNone'#4'left'#3#16#1#3'top'#2#24#0#0#10'TSQLScript'#19'scOnlineLogTrigger'
+  +'s'#11'Transaction'#7#3'trQ'#18'Directives.Strings'#1#6#8'SET TERM'#6#6'COMM'
+  +'IT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6'#UNDEF'
+  +#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6'JCREATE TRIGGER `cqrlog_main_ai` AF'
+  +'TER INSERT ON `cqrlog_main` FOR EACH ROW'#6'Zinsert into log_changes(id_cqr'
+  +'log_main,cmd,qsodate,time_on,callsign,mode,freq,band) values'#6'`  (NEW.id_'
+  +'cqrlog_main,''INSERT'',NEW.qsodate,NEW.time_on,NEW.callsign,NEW.mode,NEW.fr'
+  +'eq,NEW.band);'#6#0#6'KCREATE TRIGGER `cqrlog_main_bd` BEFORE DELETE ON `cqr'
+  +'log_main` FOR EACH ROW'#6'oinsert into log_changes(id_cqrlog_main,cmd,old_q'
+  +'sodate, old_time_on, old_callsign, old_mode, old_band,old_freq)'#6'jvalues '
+  +'(OLD.id_cqrlog_main,''DELETE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.'
+  +'mode, OLD.band, old_freq);'#6#0#6'KCREATE TRIGGER `cqrlog_main_bu` BEFORE U'
+  +'PDATE ON `cqrlog_main` FOR EACH ROW'#6'oinsert into log_changes(id_cqrlog_m'
+  +'ain,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq'
+  +','#6',qsodate, time_on, callsign, mode, band,freq)'#6'hvalues (OLD.id_cqrlo'
+  +'g_main,''UPDATE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.ban'
+  +'d,OLD.freq,'#6'FNEW.qsodate, NEW.time_on, NEW.callsign, NEW.mode, NEW.freq,'
+  +' NEW.band);'#6#0#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'
+  +#9#9'UseCommit'#9#10'UseDefines'#9#4'left'#2'8'#3'top'#2'h'#0#0#15'TSQLTrans'
+  +'action'#4'trQ1'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3#16#1#3'top'#2'X'
+  +#0#0#9'TSQLQuery'#2'Q1'#11'Transaction'#7#4'trQ1'#8'ReadOnly'#8#6'Params'#14
+  +#0#8'ParseSQL'#8#4'left'#3#224#0#3'top'#2'X'#0#0#9'TSQLQuery'#2'Q2'#11'Trans'
+  +'action'#7#4'trQ2'#8'ReadOnly'#8#6'Params'#14#0#4'left'#3#224#0#3'top'#3#146
+  +#0#0#0#15'TSQLTransaction'#4'trQ2'#6'Active'#8#6'Action'#7#6'caNone'#4'left'
+  +#3#16#1#3'top'#3#146#0#0#0#0
 ]);
