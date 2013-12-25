@@ -613,6 +613,13 @@ begin
   dmDXCluster.Q.ExecSQL;
   dmDXCluster.trQ.Commit;
 
+  if dmLogUpload.trQ.Active then dmLogUpload.trQ.Rollback;
+  dmLogUpload.Q.Close;
+  dmLogUpload.Q.SQL.Text := 'use ' + fDBName;
+  if fDebugLevel>=1 then Writeln(dmLogUpload.Q.SQL.Text);
+  dmLogUpload.Q.ExecSQL;
+  dmLogUpload.trQ.Commit;
+
   DeleteFile(fHomeDir+'cqrlog.cfg');
   Q.SQL.Text := 'SELECT * FROM cqrlog_config';
   trQ.StartTransaction;
