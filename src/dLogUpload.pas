@@ -7,13 +7,17 @@ interface
 uses
   Classes, SysUtils, sqldb, FileUtil, LResources,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
-  mysql55dyn, mysql55conn, mysql51conn, db, httpsend, blcksock, synautil, Forms;
+  mysql55dyn, mysql55conn, mysql51conn, db, httpsend, blcksock, synautil, Forms,
+  Graphics;
 
 const
   C_HAMQTH       = 'HamQTH';
   C_CLUBLOG      = 'ClubLog';
   C_HRDLOG       = 'HRDLog';
   C_ALLDONE      = 'ALLDONE';
+
+type
+  TWhereToUpload = (upHamQTH, upClubLog, upHrdLog);
 
 type
 
@@ -38,9 +42,13 @@ type
     LogUploadCon : TSQLConnection;
     csLogUpload  : TRTLCriticalSection;
 
+    function  CheckUserUploadSettings(where : TWhereToUpload) : String;
+    function  GetLogUploadColor(where : TWhereToUpload) : Integer;
+
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
     procedure EnableOnlineLogSupport;
+    procedure PrepareHamQTHUserData(data : TStringList);
   end; 
 
 var
@@ -48,7 +56,7 @@ var
 
 implementation
 
-uses dData, dDXCluster;
+uses dData, dDXCluster, uMyIni;
 
 procedure TdmLogUpload.DataModuleCreate(Sender: TObject);
 var
@@ -369,6 +377,54 @@ begin
   finally
     trQ1.Rollback
   end
+end;
+
+function TdmLogUpload.CheckUserUploadSettings(where : TWhereToUpload) : String;
+const
+  C_IS_NOT_SET   = '%s is not set! Go to Preferences and change settings.';
+begin
+  Result := '';
+  case where of
+    upHamQTH  : begin
+                  if (cqrini.ReadString('OnlineLog','HaUserName','')='') then
+                    Result := C_HAMQTH + ' ' + Format(C_IS_NOT_SET,['User name'])
+                  else if (cqrini.ReadString('OnlineLog','HaPasswd','')='') then
+                    Result := C_HAMQTH + ' ' + Format(C_IS_NOT_SET,['Password'])
+                end;
+    upClubLog : begin
+                  if (cqrini.ReadString('OnlineLog','ClUserName','')='') then
+                    Result := C_CLUBLOG + ' ' + Format(C_IS_NOT_SET,['User name'])
+                  else if (cqrini.ReadString('OnlineLog','ClPasswd','')='') then
+                    Result := C_CLUBLOG + ' ' + Format(C_IS_NOT_SET,['Password'])
+                  else if (cqrini.ReadString('OnlineLog','ClEmail','')='') then
+                    Result := C_CLUBLOG + ' ' + Format(C_IS_NOT_SET,['Email'])
+                end;
+    upHrdLog :  begin
+                  if (cqrini.ReadString('OnlineLog','HrUserName','')='') then
+                    Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['User name'])
+                  else if (cqrini.ReadString('OnlineLog','HrPasswd','')='') then
+                    Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Password'])
+                  else if (cqrini.ReadString('OnlineLog','HrCode','')='') then
+                    Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Code'])
+                end
+  end //case
+end;
+
+function  TdmLogUpload.GetLogUploadColor(where : TWhereToUpload) : Integer;
+begin
+  Result := clBlack;
+  case where of
+    upHamQTH  : Result := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
+    upClubLog : Result := cqrini.ReadInteger('OnlineLog','ClColor',clRed);
+    upHrdLog  : Result := cqrini.ReadInteger('OnlineLog','HrColor',clPurple)
+  end
+end;
+
+procedure TdmLogUpload.PrepareHamQTHUserData(data : TStringList);
+begin
+  data.Clear;
+  data.Add('u='+cqrini.ReadString('OnlineLog','HaUserName',''));
+  data.Add('p='+cqrini.ReadString('OnlineLog','HaPasswd',''))
 end;
 
 initialization

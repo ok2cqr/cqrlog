@@ -29,7 +29,7 @@ object frmLogUploadStatus: TfrmLogUploadStatus
     object mnuStatus: TMenuItem
       Caption = 'Status'
       object MenuItem1: TMenuItem
-        Caption = 'Clear status messages'
+        Action = acClearMessages
       end
       object MenuItem2: TMenuItem
         Caption = '-'

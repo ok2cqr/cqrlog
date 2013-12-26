@@ -3063,22 +3063,22 @@ end;
 
 procedure TfrmNewQSO.acUploadToAllExecute(Sender: TObject);
 begin
-  //
+  frmLogUploadStatus.UploadDataToAll
 end;
 
 procedure TfrmNewQSO.acUploadToClubLogExecute(Sender: TObject);
 begin
-  //
+  frmLogUploadStatus.UploadDataToClubLog
 end;
 
 procedure TfrmNewQSO.acUploadToHamQTHExecute(Sender: TObject);
 begin
-  //
+  frmLogUploadStatus.UploadDataToHamQTH
 end;
 
 procedure TfrmNewQSO.acUploadToHrdLogExecute(Sender: TObject);
 begin
-  //
+  frmLogUploadStatus.UploadDataToHrdLog
 end;
 
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);

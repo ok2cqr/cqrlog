@@ -10,12 +10,12 @@ LazarusResources.Add('TfrmLogUploadStatus','FORMDATA',[
   +#1#3'Top'#2#0#5'Width'#3#206#0#5'Align'#7#8'alClient'#5'Color'#7#7'clWhite'
   +#11'ParentColor'#8#8'TabOrder'#2#0#0#0#9'TMainMenu'#9'MainMenu1'#4'left'#2'0'
   +#3'top'#2'P'#0#9'TMenuItem'#9'mnuStatus'#7'Caption'#6#6'Status'#0#9'TMenuIte'
-  +'m'#9'MenuItem1'#7'Caption'#6#21'Clear status messages'#0#0#9'TMenuItem'#9'M'
-  +'enuItem2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem3'#6'Action'#7#14'ac'
-  +'FontSettings'#0#0#0#0#11'TActionList'#17'acLogUploadStatus'#4'left'#2'0'#3
-  +'top'#2#24#0#7'TAction'#15'acClearMessages'#7'Caption'#6#13'Clear mesages'#9
-  +'OnExecute'#7#22'acClearMessagesExecute'#0#0#7'TAction'#14'acFontSettings'#7
-  +'Caption'#6#4'Font'#9'OnExecute'#7#21'acFontSettingsExecute'#0#0#0#11'TFontD'
-  +'ialog'#7'dlgFont'#11'MinFontSize'#2#0#11'MaxFontSize'#2#0#4'left'#3#168#0#3
-  +'top'#2' '#0#0#0
+  +'m'#9'MenuItem1'#6'Action'#7#15'acClearMessages'#0#0#9'TMenuItem'#9'MenuItem'
+  +'2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem3'#6'Action'#7#14'acFontSet'
+  +'tings'#0#0#0#0#11'TActionList'#17'acLogUploadStatus'#4'left'#2'0'#3'top'#2
+  +#24#0#7'TAction'#15'acClearMessages'#7'Caption'#6#13'Clear mesages'#9'OnExec'
+  +'ute'#7#22'acClearMessagesExecute'#0#0#7'TAction'#14'acFontSettings'#7'Capti'
+  +'on'#6#4'Font'#9'OnExecute'#7#21'acFontSettingsExecute'#0#0#0#11'TFontDialog'
+  +#7'dlgFont'#11'MinFontSize'#2#0#11'MaxFontSize'#2#0#4'left'#3#168#0#3'top'#2
+  +' '#0#0#0
 ]);
