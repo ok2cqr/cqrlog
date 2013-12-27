@@ -7,6 +7,7 @@ object dmLogUpload: TdmLogUpload
   VerticalOffset = 237
   Width = 331
   object Q: TSQLQuery
+    BeforeOpen = QBeforeOpen
     Transaction = trQ
     ReadOnly = False
     Params = <>
@@ -63,6 +64,7 @@ object dmLogUpload: TdmLogUpload
     top = 88
   end
   object Q1: TSQLQuery
+    BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
     ReadOnly = False
     Params = <>
@@ -71,6 +73,7 @@ object dmLogUpload: TdmLogUpload
     top = 88
   end
   object Q2: TSQLQuery
+    BeforeOpen = Q2BeforeOpen
     Transaction = trQ2
     ReadOnly = False
     Params = <>

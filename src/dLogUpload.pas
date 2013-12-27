@@ -33,6 +33,9 @@ type
     trQ: TSQLTransaction;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+    procedure Q1BeforeOpen(DataSet: TDataSet);
+    procedure Q2BeforeOpen(DataSet: TDataSet);
+    procedure QBeforeOpen(DataSet: TDataSet);
   private
     function  UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  GetAdifValue(Field,Value : String) : String;
@@ -83,6 +86,21 @@ end;
 procedure TdmLogUpload.DataModuleDestroy(Sender: TObject);
 begin
   DoneCriticalSection(csLogUpload)
+end;
+
+procedure TdmLogUpload.Q1BeforeOpen(DataSet: TDataSet);
+begin
+  if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text)
+end;
+
+procedure TdmLogUpload.Q2BeforeOpen(DataSet: TDataSet);
+begin
+  if dmData.DebugLevel >=1 then Writeln(Q2.SQL.Text)
+end;
+
+procedure TdmLogUpload.QBeforeOpen(DataSet: TDataSet);
+begin
+  if dmData.DebugLevel >=1 then Writeln(Q.SQL.Text)
 end;
 
 procedure TdmLogUpload.EnableOnlineLogSupport;
