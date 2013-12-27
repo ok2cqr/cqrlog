@@ -6423,8 +6423,8 @@ object frmPreferences: TfrmPreferences
           Left = 9
           Height = 16
           Top = 36
-          Width = 64
-          Caption = 'User name:'
+          Width = 47
+          Caption = 'Callsign:'
           ParentColor = False
         end
         object edtClUserName: TEdit
@@ -6528,8 +6528,8 @@ object frmPreferences: TfrmPreferences
           Left = 9
           Height = 16
           Top = 36
-          Width = 64
-          Caption = 'User name:'
+          Width = 47
+          Caption = 'Callsign:'
           ParentColor = False
         end
         object edtHrUserName: TEdit
@@ -6540,34 +6540,16 @@ object frmPreferences: TfrmPreferences
           TabOrder = 1
           Text = 'edtHrUserName'
         end
-        object lbl2: TLabel
-          Left = 198
-          Height = 16
-          Top = 36
-          Width = 57
-          Caption = 'Password:'
-          ParentColor = False
-        end
-        object edtHrPasswd: TEdit
-          Left = 198
-          Height = 25
-          Top = 57
-          Width = 104
-          EchoMode = emPassword
-          PasswordChar = '*'
-          TabOrder = 2
-          Text = 'edtHrPasswd'
-        end
         object chkHrUpOnline: TCheckBox
           Left = 6
           Height = 22
           Top = 89
           Width = 349
           Caption = 'Upload QSO data immediately after save, update or delete'
-          TabOrder = 4
+          TabOrder = 3
         end
         object Label183: TLabel
-          Left = 358
+          Left = 200
           Height = 16
           Top = 36
           Width = 33
@@ -6575,11 +6557,11 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
         end
         object edtHrCode: TEdit
-          Left = 358
+          Left = 200
           Height = 25
           Top = 57
           Width = 184
-          TabOrder = 3
+          TabOrder = 2
           Text = 'edtHrCode'
         end
         object Label188: TLabel
@@ -6600,7 +6582,7 @@ object frmPreferences: TfrmPreferences
           Selected = clPurple
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           ItemHeight = 0
-          TabOrder = 5
+          TabOrder = 4
         end
         object Label189: TLabel
           Left = 237

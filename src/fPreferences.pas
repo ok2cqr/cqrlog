@@ -480,7 +480,6 @@ type
     cl10db : TColorBox;
     edtClEmail: TEdit;
     edtHrCode: TEdit;
-    edtHrPasswd: TEdit;
     edtHrUserName: TEdit;
     edtHaPasswd: TEdit;
     edtClPasswd: TEdit;
@@ -823,7 +822,6 @@ type
     Label95: TLabel;
     Label96: TLabel;
     lbl1: TLabel;
-    lbl2: TLabel;
     lblButtons: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -1526,7 +1524,6 @@ begin
   cqrini.WriteBool('OnlineLog','HrUP',chkHrUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','HrUpOnline',chkHrUpOnline.Checked);
   cqrini.WriteString('OnlineLog','HrUserName',edtHrUserName.Text);
-  cqrini.WriteString('OnlineLog','HrPasswd',edtHrPasswd.Text);
   cqrini.WriteString('OnlineLog','HrCode',edtHrCode.Text);
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
 
@@ -2057,7 +2054,6 @@ end;
 procedure TfrmPreferences.chkHrUpEnabledChange(Sender: TObject);
 begin
   edtHrUserName.Enabled := chkHrUpEnabled.Checked;
-  edtHrPasswd.Enabled   := chkHrUpEnabled.Checked;
   edtHrCode.Enabled     := chkHrUpEnabled.Checked;
   chkHrUpOnline.Enabled := chkHrUpEnabled.Checked;
   cmbHrColor.Enabled    := chkHrUpEnabled.Checked
@@ -2807,7 +2803,6 @@ begin
   chkHrUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HrUP',False);
   chkHrUpOnline.Checked  := cqrini.ReadBool('OnlineLog','HrUpOnline',False);
   edtHrUserName.Text     := cqrini.ReadString('OnlineLog','HrUserName','');
-  edtHrPasswd.Text       := cqrini.ReadString('OnlineLog','HrPasswd','');
   edtHrCode.Text         := cqrini.ReadString('OnlineLog','HrCode','');
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
   chkHrUpEnabledChange(nil);
