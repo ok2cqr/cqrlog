@@ -48,6 +48,9 @@ type
 
 type
   TUploadThread = class(TThread)
+  private
+    function CheckEnabledOnlineLogs : Boolean;
+    function GetLogName : String;
   protected
     procedure Execute; override;
   public
@@ -63,15 +66,53 @@ implementation
 
 uses dData, dUtils, uMyIni;
 
-procedure TUploadThread.Execute;
+function TUploadThread.CheckEnabledOnlineLogs : Boolean;
 const
   C_IS_NOT_ENABLED = 'Upload to %s is not enabled! Go to Preferences and change settings.';
+begin
+  Result := True;
+  case WhereToUpload of
+    upHamQTH :  begin
+                  if not cqrini.ReadBool('OnlineLog','HaUP',False) then
+                  begin
+                    frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HamQTH']);
+                    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+                    Result := False
+                  end
+                end;
+    upClubLog : begin
+                  if not cqrini.ReadBool('OnlineLog','ClUP',False) then
+                  begin
+                    frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['ClubLog']);
+                    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+                    Result := False
+                  end
+                end;
+    upHrdLog : begin
+                  if not cqrini.ReadBool('OnlineLog','HrUP',False) then
+                  begin
+                    frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HRDLog']);
+                    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+                    Result := False
+                  end
+                end
+  end //case
+end;
+
+procedure TUploadThread.Execute;
+const
+  C_SEL_UPLOAD_STATUS = 'select * from upload_status where logname=%s';
+  C_SEL_LOG_CHANGES = 'select * from log_changes where id > %d';
 var
-  data : TStringList;
-  err  : String;
-  PError: PChar;
-  msg : String;
-  i : Integer = 1;
+  data       : TStringList;
+  err        : String = '';
+  msg        : String = '';
+  i          : Integer = 1;
+  LastId     : Integer = 0;
+  Response   : String;
+  ResultCode : Integer;
+  Command    : String;
+  UpSuccess  : Boolean = False;
 begin
   data := TStringList.Create;
   try
@@ -80,32 +121,8 @@ begin
     frmLogUploadStatus.SyncUpdate := '';
     frmLogUploadStatus.SyncColor  := dmLogUpload.GetLogUploadColor(WhereToUpload);
 
-    case WhereToUpload of
-      upHamQTH :  begin
-                    if not cqrini.ReadBool('OnlineLog','HaUP',False) then
-                    begin
-                      frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HamQTH']);
-                      Synchronize(@frmLogUploadStatus.SyncUploadInformation);
-                      exit
-                    end
-                  end;
-      upClubLog : begin
-                    if not cqrini.ReadBool('OnlineLog','ClUP',False) then
-                    begin
-                      frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['ClubLog']);
-                      Synchronize(@frmLogUploadStatus.SyncUploadInformation);
-                      exit
-                    end
-                  end;
-      upHrdLog : begin
-                    if not cqrini.ReadBool('OnlineLog','HrUP',False) then
-                    begin
-                      frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HRDLog']);
-                      Synchronize(@frmLogUploadStatus.SyncUploadInformation);
-                      exit
-                    end
-                  end
-    end; //case
+    if not CheckEnabledOnlineLogs then
+      exit;
 
     err :=  dmLogUpload.CheckUserUploadSettings(WhereToUpload);
     if (err<>'') then
@@ -115,13 +132,92 @@ begin
       exit
     end;
 
-    dmLogUpload.PrepareHamQTHUserData(data);
-    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+    if dmLogUpload.trQ.Active then dmLogUpload.trQ.RollBack;
+    dmLogUpload.trQ.StartTransaction;
+    try try
+      dmLogUpload.Q.Close;
+      dmLogUpload.Q.SQL.Text := Format(C_SEL_UPLOAD_STATUS,[QuotedStr(GetLogName)]);
+      dmLogUpload.Q.Open;
+      LastId := dmLogUpload.Q.FieldByName('id_log_changes').AsInteger;
+
+      dmLogUpload.Q.Close;
+      dmLogUpload.Q.SQL.Text := Format(C_SEL_LOG_CHANGES,[LastId]);
+      dmLogUpload.Q.Open;
+      if dmLogUpload.Q.Fields[0].IsNull then
+      begin
+        frmLogUploadStatus.SyncMsg := GetLogName + ': All QSO already uploaded';
+        Synchronize(@frmLogUploadStatus.SyncUploadInformation)
+      end
+      else begin
+        frmLogUploadStatus.SyncMsg := GetLogName + ': Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString;
+        Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+
+        Command := dmLogUpload.Q.FieldByName('cmd').AsString;
+        if (Command<>'INSERT') and (Command<>'UPDATE') and (Command<>'DELETE') then
+        begin
+          Writeln('Uknown command:',Command);
+          exit
+        end;
+        data.Clear;
+        dmLogUpload.PrepareUserInfoHeader(WhereToUpload,data);
+
+        if (Command = 'INSERT') then
+        begin
+          dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
+          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode);
+        end
+        else if (Command = 'UPDATE') then
+        begin
+
+        end
+        else if (Command = 'DELETE') then
+        begin
+          dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
+        end;
+        if UpSuccess then
+        begin
+          Writeln('Response:',Response);
+          Writeln('ResultCode:',ResultCode)
+        end
+        else begin
+          frmLogUploadStatus.SyncMsg := GetLogName + ': Failed!';
+          Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+          frmLogUploadStatus.SyncMsg := GetLogName + Response;
+          Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+        end;
+        Writeln('Data2:',data.Text);
+
+        //UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+
+
+      end
+    finally
+      dmLogUpload.Q.Close;
+      dmLogUpload.trQ.RollBack
+    end;
+
+
+
     Sleep(500)
+
+  except
+    on E : Exception do
+      Writeln(E.Message)
+  end
   finally
     FreeAndNil(data);
     frmLogUploadStatus.thRunning := False
   end
+end;
+
+function TUploadThread.GetLogName : String;
+begin
+  Result := '';
+  case WhereToUpload of
+    upHamQTH  : Result := C_HAMQTH;
+    upClubLog : Result := C_CLUBLOG;
+    upHrdlog  : Result := C_HRDLOG
+  end //case
 end;
 
 procedure TfrmLogUploadStatus.SyncUploadInformation;

@@ -15,7 +15,7 @@ const
   C_CLUBLOG      = 'ClubLog';
   C_HRDLOG       = 'HRDLog';
   C_ALLDONE      = 'ALLDONE';
-
+  C_CLUBLOG_API  = '21507885dece41ca049fec7fe02a813f2105aff2';
 type
   TWhereToUpload = (upHamQTH, upClubLog, upHrdLog);
 
@@ -37,22 +37,26 @@ type
     procedure Q2BeforeOpen(DataSet: TDataSet);
     procedure QBeforeOpen(DataSet: TDataSet);
   private
-    function  UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  GetAdifValue(Field,Value : String) : String;
     function  RemoveSpaces(s : String) : String;
     function  GetQSOInAdif(id_cqrlog_main : Integer) : String;
+    function  EncodeBandForClubLog(band : String) : String;
   public
     LogUploadCon : TSQLConnection;
     csLogUpload  : TRTLCriticalSection;
 
+    function  UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  CheckUserUploadSettings(where : TWhereToUpload) : String;
     function  GetLogUploadColor(where : TWhereToUpload) : Integer;
+    function  GetUploadUrl(where : TWhereToUpload; cmd : String) : String;
 
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
     procedure EnableOnlineLogSupport;
-    procedure PrepareHamQTHUserData(data : TStringList);
-  end; 
+    procedure PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
+    procedure PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
+    procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
+  end;
 
 var
   dmLogUpload: TdmLogUpload;
@@ -287,7 +291,7 @@ begin
 
     data   := DateToStr(Q1.Fields[1].AsDateTime);
     data   := copy(data,1,4) + copy(data,6,2) + copy(data,9,2);
-    data   := GetAdifValue('QSODATE',data);
+    data   := GetAdifValue('QSO_DATE',data);
     Result := data;
 
     data   := Q1.Fields[2].AsString;
@@ -393,7 +397,20 @@ begin
     if (Result <> '') then
       Result := Result + '<EOR>'
   finally
+    Q1.Close;
     trQ1.Rollback
+  end
+end;
+
+function TdmLogUpload.EncodeBandForClubLog(band : String) : String;
+var
+  i : Integer;
+begin
+  Result := '';
+  for i := 1 to Length(band) do
+  begin
+    if (band[i] in ['0'..'9']) then
+      Result := Result + band
   end
 end;
 
@@ -411,7 +428,7 @@ begin
                 end;
     upClubLog : begin
                   if (cqrini.ReadString('OnlineLog','ClUserName','')='') then
-                    Result := C_CLUBLOG + ' ' + Format(C_IS_NOT_SET,['User name'])
+                    Result := C_CLUBLOG + ' ' + Format(C_IS_NOT_SET,['Callsign'])
                   else if (cqrini.ReadString('OnlineLog','ClPasswd','')='') then
                     Result := C_CLUBLOG + ' ' + Format(C_IS_NOT_SET,['Password'])
                   else if (cqrini.ReadString('OnlineLog','ClEmail','')='') then
@@ -419,16 +436,14 @@ begin
                 end;
     upHrdLog :  begin
                   if (cqrini.ReadString('OnlineLog','HrUserName','')='') then
-                    Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['User name'])
-                  else if (cqrini.ReadString('OnlineLog','HrPasswd','')='') then
-                    Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Password'])
+                    Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Callsign'])
                   else if (cqrini.ReadString('OnlineLog','HrCode','')='') then
                     Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Code'])
                 end
   end //case
 end;
 
-function  TdmLogUpload.GetLogUploadColor(where : TWhereToUpload) : Integer;
+function TdmLogUpload.GetLogUploadColor(where : TWhereToUpload) : Integer;
 begin
   Result := clBlack;
   case where of
@@ -438,11 +453,106 @@ begin
   end
 end;
 
-procedure TdmLogUpload.PrepareHamQTHUserData(data : TStringList);
+procedure TdmLogUpload.PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
 begin
-  data.Clear;
-  data.Add('u='+cqrini.ReadString('OnlineLog','HaUserName',''));
-  data.Add('p='+cqrini.ReadString('OnlineLog','HaPasswd',''))
+  case where of
+    upHamQTH  :  begin
+                   data.Add('u='+cqrini.ReadString('OnlineLog','HaUserName',''));
+                   data.Add('p='+cqrini.ReadString('OnlineLog','HaPasswd',''));
+                   data.Add('prg=CQRLOG')
+                 end;
+    upClublog :  begin
+                   data.Add('email='+cqrini.ReadString('OnlineLog','ClEmail',''));
+                   data.Add('password='+cqrini.ReadString('OnlineLog','ClPasswd',''));
+                   data.Add('callsign='+cqrini.ReadString('OnlineLog','ClUserName',''));
+                   data.Add('api='+C_CLUBLOG_API)
+                 end;
+    upHrdLog  :  begin
+                   data.Add('Callsign='+cqrini.ReadString('OnlineLog','HrUserName',''));
+                   data.Add('Code='+cqrini.ReadString('OnlineLog','HrCode',''));
+                   data.Add('App=CQRLOG')
+                 end;
+  end //case
+end;
+
+procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
+var
+  adif : String;
+begin
+  adif := GetQSOInAdif(id_cqrlog_main);
+  case where of
+    upHamQTH  :  begin
+                   data.Add('adif='+adif);
+                   data.Add('cmd=INSERT')
+                 end;
+    upClublog :  begin
+                   data.Add('adif='+adif)
+                 end;
+    upHrdLog  :  begin
+                   data.Add('ADIFData='+adif)
+                 end
+  end //case
+end;
+
+procedure TdmLogUpload.PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
+const
+  C_SEL_LOG_CHANGES = 'select * from log_changes whre id = %d';
+var
+  adif    : String;
+  time_on : String;
+  qsodate : String;
+begin
+  if trQ2.Active then trQ2.RollBack;
+  try
+    Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
+    Q2.Open;
+    if Q2.Fields[0].IsNull then exit; //this shouldn't happen
+
+    qsodate := Q2.FieldByName('old_qso_date').AsString;
+    qsodate := copy(qsodate,1,4) + copy(qsodate,6,2) + copy(qsodate,9,2);
+    time_on := Q2.FieldByName('old_time_on').AsString;
+    time_on := copy(time_on,1,2) + copy(time_on,4,2);
+
+    case where of
+      upHamQTH  :  begin
+                     adif := GetAdifValue('OLD_QSODATE',qsodate)+GetAdifValue('OLD_TIME_ON',time_on)+
+                             GetAdifValue('OLD_CALL',Q2.FieldByName('old_callsign').AsString)+
+                             GetAdifValue('OLD_BAND',Q2.FieldByName('old_band').AsString)+
+                             GetAdifValue('OLD_MODE',Q2.FieldByName('old_mode').AsString);
+                     data.Add('adif='+adif);
+                     data.Add('cmd=DELETE')
+                   end;
+      upClublog :  begin
+                     data.Add('dxcall='+Q2.FieldByName('old_callsign').AsString);
+                     data.Add('datetime='+Q2.FieldByName('old_qsodate').AsString+' '+
+                               Q2.FieldByName('old_time_on').AsString+':00');
+                     data.Add('bandid='+EncodeBandForClubLog(Q2.FieldByName('old_band').AsString))
+                   end;
+      upHrdLog  :  begin
+                    adif := GetAdifValue('QSODATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
+                            GetAdifValue('CALL',Q2.FieldByName('old_callsign').AsString);
+                    data.Add('Cmd=DELETE')
+                   end
+    end //case
+  finally
+    Q2.Close;
+    trQ2.RollBack
+  end
+end;
+
+function TdmLogUpload.GetUploadUrl(where : TWhereToUpload; cmd : String) : String;
+begin
+  Result := '';
+  case where of
+    upHamQTH  : Result := 'http://hamqth.com/qso_realtime.php';
+    upClubLog : begin
+                  if (cmd='DELETE') then
+                    Result := 'https://secure.clublog.org/delete.php'
+                  else
+                    Result := 'https://secure.clublog.org/realtime.php'
+                end;
+    upHrdLog  : Result := 'http://robot.hrdlog.net/NewEntrry.aspx'
+  end //case
 end;
 
 initialization
