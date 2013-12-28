@@ -334,7 +334,7 @@ begin
     Result := Result + GetAdifValue('MY_GRIDSQUARE',Q1.FieldByName('my_loc').AsString);
     Result := Result + GetAdifValue('AWARD',Q1.FieldByName('award').AsString);
     Result := Result + GetAdifValue('TX_PWR',Q1.FieldByName('pwr').AsString);
-    Result := Result + GetAdifValue('REMARKS',Q1.FieldByName('remarks').AsString);
+    Result := Result + GetAdifValue('COMMENT',Q1.FieldByName('remarks').AsString);
     Result := Result + GetAdifValue('ITUZ',Q1.FieldByName('itu').AsString);
     Result := Result + GetAdifValue('CQZ',Q1.FieldByName('waz').AsString);
     Result := Result + GetAdifValue('STATE',Q1.FieldByName('state').AsString);
@@ -344,21 +344,21 @@ begin
     begin
       data   := Q1.FieldByName('lotw_qslsdate').AsString;
       data   := copy(data,1,4) + copy(data,6,2) + copy(data,9,2);
-      Result := Result + GetAdifValue('LOTW_QSLS','Y');
+      Result := Result + GetAdifValue('LOTW_QSL_SENT','Y');
       Result := Result + GetAdifValue('LOTW_QSLSDATE',data)
     end
     else
-      Result := Result + GetAdifValue('LOTW_QSLS','N');
+      Result := Result + GetAdifValue('LOTW_QSL_SENT','N');
 
     if Q1.FieldByName('lotw_qslr').AsString<>'' then
     begin
       data   := Q1.FieldByName('lotw_qslrdate').AsString;
       data   := copy(data,1,4) + copy(data,6,2) + copy(data,9,2);
-      Result := Result + GetAdifValue('LOTW_QSLR','Y');
+      Result := Result + GetAdifValue('LOTW_QSL_RCVD','Y');
       Result := Result + GetAdifValue('LOTW_QSLRDATE',data)
     end
     else
-      Result := Result + GetAdifValue('LOTW_QSLR','N');
+      Result := Result + GetAdifValue('LOTW_QSL_RCVD','N');
 
     Result := Result + GetAdifValue('CONT',Q1.FieldByName('cont').AsString);
 
