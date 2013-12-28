@@ -487,10 +487,10 @@ var z:longint;
     if kam<0 then begin result:=false;exit;end;
     if kam>vetp then begin result:=false;exit;end;
 
-    if msk and 1=1 then vety[kam]^.te:=te;
-    if msk and 2=2 then vety[kam]^.bpi:=bpi;
-    if msk and 4=4 then vety[kam]^.bpo:=bpo;
-    if msk and 8=8 then vety[kam]^.pom:=pom;
+    if msk=0 then vety[kam]^.te:=te;
+    if msk=1 then vety[kam]^.bpi:=bpi;
+    if msk=2 then vety[kam]^.bpo:=bpo;
+    if msk=3 then vety[kam]^.pom:=pom;
 
 //    aktualizujpozici(self);
     if autoscroll then
