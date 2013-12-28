@@ -49,6 +49,7 @@ type
     function  CheckUserUploadSettings(where : TWhereToUpload) : String;
     function  GetLogUploadColor(where : TWhereToUpload) : Integer;
     function  GetUploadUrl(where : TWhereToUpload; cmd : String) : String;
+    function  GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var FatalError : Boolean) : String;
 
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
@@ -56,6 +57,7 @@ type
     procedure PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
     procedure PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
     procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
+    procedure MarkAsUploaded(LogName : String; id_log_changes : Integer);
   end;
 
 var
@@ -496,7 +498,7 @@ end;
 
 procedure TdmLogUpload.PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
 const
-  C_SEL_LOG_CHANGES = 'select * from log_changes whre id = %d';
+  C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
 var
   adif    : String;
   time_on : String;
@@ -508,14 +510,14 @@ begin
     Q2.Open;
     if Q2.Fields[0].IsNull then exit; //this shouldn't happen
 
-    qsodate := Q2.FieldByName('old_qso_date').AsString;
+    qsodate := Q2.FieldByName('old_qsodate').AsString;
     qsodate := copy(qsodate,1,4) + copy(qsodate,6,2) + copy(qsodate,9,2);
     time_on := Q2.FieldByName('old_time_on').AsString;
     time_on := copy(time_on,1,2) + copy(time_on,4,2);
 
     case where of
       upHamQTH  :  begin
-                     adif := GetAdifValue('OLD_QSODATE',qsodate)+GetAdifValue('OLD_TIME_ON',time_on)+
+                     adif := GetAdifValue('OLD_QSO_DATE',qsodate)+GetAdifValue('OLD_TIME_ON',time_on)+
                              GetAdifValue('OLD_CALL',Q2.FieldByName('old_callsign').AsString)+
                              GetAdifValue('OLD_BAND',Q2.FieldByName('old_band').AsString)+
                              GetAdifValue('OLD_MODE',Q2.FieldByName('old_mode').AsString);
@@ -529,7 +531,7 @@ begin
                      data.Add('bandid='+EncodeBandForClubLog(Q2.FieldByName('old_band').AsString))
                    end;
       upHrdLog  :  begin
-                    adif := GetAdifValue('QSODATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
+                    adif := GetAdifValue('QSO_DATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
                             GetAdifValue('CALL',Q2.FieldByName('old_callsign').AsString);
                     data.Add('Cmd=DELETE')
                    end
@@ -553,6 +555,86 @@ begin
                 end;
     upHrdLog  : Result := 'http://robot.hrdlog.net/NewEntrry.aspx'
   end //case
+end;
+
+function TdmLogUpload.GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var FatalError : Boolean) : String;
+begin
+  Result     := '';
+  FatalError := False;
+  Response   := Trim(Response);
+
+  case where of
+    upHamQTH  : begin
+                  case ResultCode of
+                    200 : Result := 'OK';
+                    500 : begin
+                            Result     := Response;
+                            FatalError := True
+                          end;//something wrong with HamQTH server
+                    400 : begin
+                            Result := Response;
+                            if (Response = 'QSO already exists in the log') then
+                              Result := 'Already exists'
+                            else begin
+                              FatalError := True; //QSO rejected
+                              Result     := Response
+                            end
+                          end;
+                    403 : begin
+                            Result     := 'Access denied';
+                            FatalError := True
+                          end
+                    else begin
+                      Result     := Response;
+                      FatalError := True
+                    end
+                  end
+                end;
+    upClubLog : begin
+                  case ResultCode of
+                    200 : Result := 'OK';
+                    400 : begin
+                            Result     := Response;
+                            FatalError := True
+                          end;
+                    403 : begin
+                            Result := 'Access denied';
+                            FatalError := True
+                          end;
+                    500 : begin
+                            Result := 'Internal error';
+                            FatalError := True
+                          end
+                  end //case
+                end;
+  end //case
+end;
+
+procedure TdmLogUpload.MarkAsUploaded(LogName : String; id_log_changes : Integer);
+const
+  C_UPD = 'update upload_status set id_log_changes = %d where logname = %s';
+var
+  err : Boolean = False;
+begin
+  if trQ2.Active then trQ2.RollBack;
+  try try
+    Q2.SQL.Text := Format(C_UPD,[id_log_changes,QuotedStr(LogName)]);
+    if dmData.DebugLevel >= 1 then Writeln(Q2.SQL.Text);
+    Q2.ExecSQL
+  except
+    on E : Exception do
+    begin
+      err := True;
+      Writeln(E.Message)
+    end
+  end
+  finally
+    Q2.Close;
+    if err then
+      trQ2.Rollback
+    else
+      trQ2.Commit
+  end
 end;
 
 initialization
