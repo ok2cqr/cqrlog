@@ -42,7 +42,6 @@ type
     procedure UploadDataToClubLog;
     procedure UploadDataToHrdLog;
     procedure UploadDataToAll;
-
     procedure SyncUploadInformation;
   end; 
 
@@ -51,6 +50,8 @@ type
   private
     function CheckEnabledOnlineLogs : Boolean;
     function GetLogName : String;
+
+    procedure ToMainThread(Message,Update : String);
   protected
     procedure Execute; override;
   public
@@ -102,7 +103,7 @@ end;
 procedure TUploadThread.Execute;
 const
   C_SEL_UPLOAD_STATUS = 'select * from upload_status where logname=%s';
-  C_SEL_LOG_CHANGES = 'select * from log_changes where id > %d';
+  C_SEL_LOG_CHANGES   = 'select * from log_changes where id > %d';
 var
   data       : TStringList;
   err        : String = '';
@@ -113,6 +114,7 @@ var
   ResultCode : Integer;
   Command    : String;
   UpSuccess  : Boolean = False;
+  FatalError : Boolean = False;
 begin
   data := TStringList.Create;
   try
@@ -145,26 +147,26 @@ begin
       dmLogUpload.Q.Open;
       if dmLogUpload.Q.Fields[0].IsNull then
       begin
-        frmLogUploadStatus.SyncMsg := GetLogName + ': All QSO already uploaded';
-        Synchronize(@frmLogUploadStatus.SyncUploadInformation)
-      end
-      else begin
-        frmLogUploadStatus.SyncMsg := GetLogName + ': Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString;
-        Synchronize(@frmLogUploadStatus.SyncUploadInformation);
-
+        ToMainThread('All QSO already uploaded','');
+        exit
+      end;
+      while not dmLogUpload.Q.Eof do
+      begin
         Command := dmLogUpload.Q.FieldByName('cmd').AsString;
         if (Command<>'INSERT') and (Command<>'UPDATE') and (Command<>'DELETE') then
         begin
           Writeln('Uknown command:',Command);
-          exit
+          dmLogUpload.Q.Next;
+          Continue
         end;
         data.Clear;
         dmLogUpload.PrepareUserInfoHeader(WhereToUpload,data);
 
         if (Command = 'INSERT') then
         begin
+          ToMainThread('Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
           dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
-          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode);
+          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end
         else if (Command = 'UPDATE') then
         begin
@@ -172,34 +174,44 @@ begin
         end
         else if (Command = 'DELETE') then
         begin
+          ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
           dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
+          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end;
+        Writeln('data.Text:');
+        Writeln(data.Text);
+        Writeln('-----------');
+        Writeln('Response  :',Response);
+        Writeln('ResultCode:',ResultCode);
+        Writeln('-----------');
+
         if UpSuccess then
         begin
+          Response := dmLogUpload.GetResultMessage(WhereToUpload,Response,ResultCode,FatalError);
+          if (Response='OK') then
+            ToMainThread('','OK')
+          else
+            ToMainThread(Response,'');
+
+          if FatalError then
+            Break //cannot continue when fatal error
+          else
+            dmLogUpload.MarkAsUploaded(GetLogName,dmLogUpload.Q.FieldByName('id').AsInteger);
+
           Writeln('Response:',Response);
           Writeln('ResultCode:',ResultCode)
         end
         else begin
-          frmLogUploadStatus.SyncMsg := GetLogName + ': Failed!';
-          Synchronize(@frmLogUploadStatus.SyncUploadInformation);
-          frmLogUploadStatus.SyncMsg := GetLogName + Response;
-          Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+          ToMainThread('Upload failed! Check Internet connection','')
         end;
-        Writeln('Data2:',data.Text);
-
-        //UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
-
-
+        Sleep(2000); //we don't want to make small DDOS attack to server
+        dmLogUpload.Q.Next
       end
     finally
       dmLogUpload.Q.Close;
       dmLogUpload.trQ.RollBack
     end;
-
-
-
     Sleep(500)
-
   except
     on E : Exception do
       Writeln(E.Message)
@@ -220,17 +232,29 @@ begin
   end //case
 end;
 
+procedure TUploadThread.ToMainThread(Message,Update : String);
+begin
+  frmLogUploadStatus.SyncUpdate := Update;
+  frmLogUploadStatus.SyncMsg    := GetLogName + ': ' + Message;
+  Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+  frmLogUploadStatus.SyncUpdate := '';
+  frmLogUploadStatus.SyncMsg    := ''
+end;
+
 procedure TfrmLogUploadStatus.SyncUploadInformation;
 var
   item : String;
   tmp  : LongInt;
   c    : TColor;
 begin
+  Writeln('SyncUpdate:',SyncUpdate);
+  Writeln('SyncMsg   :',SyncMsg);
   if (SyncUpdate<>'') then
   begin
     //cti_vetu(var te:string;var bpi,bpo:Tcolor;var pom:longint;kam:longint):boolean;
     mStatus.cti_vetu(item,c,c,tmp,mStatus.posledniveta);
-    item := item + '...' + SyncUpdate;
+    item := item + ' ... ' + SyncUpdate;
+    Writeln('Item:',item);
     //prepis_vetu(te:string;bpi,bpo:Tcolor;pom:longint;kam:longint;msk:longint):boolean;
     mStatus.prepis_vetu(item,SyncColor,clWhite,0,mStatus.posledniveta,0)
   end
