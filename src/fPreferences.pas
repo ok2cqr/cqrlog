@@ -1027,7 +1027,7 @@ type
     procedure edtPoll1Exit(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
   private
-    { private declarations }
+    wasOnlineLogSupportEnabled : Boolean;
   public
     { public declarations }
   end;
@@ -1587,6 +1587,21 @@ begin
     dmUtils.InsertModes(frmNewQSO.cmbMode);
     frmNewQSO.cmbMode.Text := cmbMode.Text;
   end;
+
+  if (not (chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked)) then
+  begin
+    if wasOnlineLogSupportEnabled then
+      dmData.DisableOnlineLogSupport
+  end
+  else begin
+    if not wasOnlineLogSupportEnabled then
+    begin
+      if dmData.TriggersExistsOnCqrlog_main then
+        dmData.DisableOnlineLogSupport;
+      dmData.EnableOnlineLogSupport
+    end
+  end;
+
   frmTRXControl.rbRadio1.Caption := edtRadio1.Text;
   frmTRXControl.rbRadio2.Caption := edtRadio2.Text;
   cqrini.SaveToDisk;
@@ -2806,6 +2821,8 @@ begin
   edtHrCode.Text         := cqrini.ReadString('OnlineLog','HrCode','');
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
   chkHrUpEnabledChange(nil);
+
+  wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
   edtCW1.Width := 60;
