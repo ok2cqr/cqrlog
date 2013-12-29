@@ -25,7 +25,6 @@ type
 
   TdmLogUpload = class(TDataModule)
     Q: TSQLQuery;
-    scOnlineLogTriggers: TSQLScript;
     Q1: TSQLQuery;
     Q2: TSQLQuery;
     trQ2: TSQLTransaction;
@@ -53,7 +52,6 @@ type
 
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
-    procedure EnableOnlineLogSupport;
     procedure PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
     procedure PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
     procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
@@ -85,8 +83,7 @@ begin
       (Components[i] as TSQLQuery).DataBase := LogUploadCon;
     if Components[i] is TSQLTransaction then
       (Components[i] as TSQLTransaction).DataBase := LogUploadCon
-  end;
-  scOnlineLogTriggers.DataBase := LogUploadCon
+  end
 end;
 
 procedure TdmLogUpload.DataModuleDestroy(Sender: TObject);
@@ -108,29 +105,6 @@ procedure TdmLogUpload.QBeforeOpen(DataSet: TDataSet);
 begin
   if dmData.DebugLevel >=1 then Writeln(Q.SQL.Text)
 end;
-
-procedure TdmLogUpload.EnableOnlineLogSupport;
-var
-  i : Integer;
-begin
-  trQ.StartTransaction;
-  Q.SQL.Text := '';
-  for i:=0 to scOnlineLogTriggers.Script.Count-1 do
-  begin
-    if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
-      Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
-    else begin
-      Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
-      if dmData.DebugLevel>=1 then Writeln(Q.SQL.Text);
-      Q.ExecSQL;
-      Q.SQL.Text := ''
-    end
-  end;
-  trQ.Commit
-  //^^ because of bug in  TSQLSript. For SQL is applied,
-  //second command - no effect. My workaround works. Semicolon is a delimitter.
-end;
-
 
 
 function TdmLogUpload.UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;

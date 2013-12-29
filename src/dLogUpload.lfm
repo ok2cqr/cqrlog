@@ -20,43 +20,6 @@ object dmLogUpload: TdmLogUpload
     left = 272
     top = 24
   end
-  object scOnlineLogTriggers: TSQLScript
-    Transaction = trQ
-    Directives.Strings = (
-      'SET TERM'
-      'COMMIT'
-      '#IFDEF'
-      '#IFNDEF'
-      '#ELSE'
-      '#ENDIF'
-      '#DEFINE'
-      '#UNDEF'
-      '#UNDEFINE'
-    )
-    Script.Strings = (
-      'CREATE TRIGGER `cqrlog_main_ai` AFTER INSERT ON `cqrlog_main` FOR EACH ROW'
-      'insert into log_changes(id_cqrlog_main,cmd,qsodate,time_on,callsign,mode,freq,band) values'
-      '  (NEW.id_cqrlog_main,''INSERT'',NEW.qsodate,NEW.time_on,NEW.callsign,NEW.mode,NEW.freq,NEW.band);'
-      ''
-      'CREATE TRIGGER `cqrlog_main_bd` BEFORE DELETE ON `cqrlog_main` FOR EACH ROW'
-      'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq)'
-      'values (OLD.id_cqrlog_main,''DELETE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band, old_freq);'
-      ''
-      'CREATE TRIGGER `cqrlog_main_bu` BEFORE UPDATE ON `cqrlog_main` FOR EACH ROW'
-      'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq,'
-      'qsodate, time_on, callsign, mode, band,freq)'
-      'values (OLD.id_cqrlog_main,''UPDATE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band,OLD.freq,'
-      'NEW.qsodate, NEW.time_on, NEW.callsign, NEW.mode, NEW.freq, NEW.band);'
-      ''
-    )
-    Terminator = ';'
-    CommentsinSQL = True
-    UseSetTerm = True
-    UseCommit = True
-    UseDefines = True
-    left = 56
-    top = 104
-  end
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
