@@ -456,6 +456,25 @@ begin
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   mQ.ExecSQL;
   trmQ.Commit;
+
+  trmQ.StartTransaction;
+  mQ.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
+  if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+  mQ.ExecSQL;
+
+  mQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HAMQTH)+',1)';
+  if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+  mQ.ExecSQL;
+
+  mQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_CLUBLOG)+',1)';
+  if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+  mQ.ExecSQL;
+
+  mQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
+  if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+  mQ.ExecSQL;
+  trmQ.Commit;
+
   RefreshLogList(nr)
 end;
 
