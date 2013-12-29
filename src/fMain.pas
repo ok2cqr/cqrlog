@@ -434,7 +434,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl;
+  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, dLogUpload, fLogUploadStatus;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -1310,22 +1310,23 @@ end;
 
 procedure TfrmMain.acMarkAllClubLogExecute(Sender: TObject);
 begin
-  //
+  dmLogUpload.MarkAsUploaded(C_CLUBLOG)
 end;
 
 procedure TfrmMain.acMarkAllExecute(Sender: TObject);
 begin
-  //
+  dmLogUpload.MarkAsUploadedToAllOnlineLogs;
+  Application.MessageBox('Done, now all QSO are marked as uploaded.','Info ...',mb_Ok + mb_IconInformation)
 end;
 
 procedure TfrmMain.acMarkAllHamQTHExecute(Sender: TObject);
 begin
-  //
+  dmLogUpload.MarkAsUploaded(C_HAMQTH)
 end;
 
 procedure TfrmMain.acMarkAllHrdLogExecute(Sender: TObject);
 begin
-  //
+    dmLogUpload.MarkAsUploaded(C_HRDLOG)
 end;
 
 procedure TfrmMain.acSQLExecute(Sender: TObject);
@@ -1345,17 +1346,17 @@ end;
 
 procedure TfrmMain.acUploadToClubLogExecute(Sender: TObject);
 begin
-  //
+  frmLogUploadStatus.UploadDataToClubLog
 end;
 
 procedure TfrmMain.acUploadToHamQTHExecute(Sender: TObject);
 begin
-  //
+    frmLogUploadStatus.UploadDataToHamQTH
 end;
 
 procedure TfrmMain.acUploadToHrdLogExecute(Sender: TObject);
 begin
-  //
+  frmLogUploadStatus.UploadDataToHrdLog
 end;
 
 procedure TfrmMain.dbgrdMainColumnMoved(Sender: TObject; FromIndex,
