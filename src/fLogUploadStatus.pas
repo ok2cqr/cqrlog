@@ -170,11 +170,27 @@ begin
         end
         else if (Command = 'UPDATE') then
         begin
-
+          ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
+          dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
+          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode);
+          if UpSuccess then
+          begin
+            Response := dmLogUpload.GetResultMessage(WhereToUpload,Response,ResultCode,FatalError);
+            if FatalError then
+            begin
+              ToMainThread('Could not delete original QSO data!','');
+              Break
+            end;
+            ToMainThread('Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
+            dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
+            UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
+          end
+          else
+            ToMainThread('Update failed! Check Internet connection','')
         end
         else if (Command = 'DELETE') then
         begin
-          ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
+          ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
           dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end;
