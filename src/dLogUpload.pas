@@ -190,16 +190,20 @@ begin
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
     Q.SQL.Text := 'insert into log_changes (cmd) values('+QuotedStr(C_ALLDONE)+')';
+    if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
     Q.SQL.Text := 'select max(id) from log_changes';
     Q.Open;
     max := Q.Fields[0].AsInteger;
+    Q.Close;
 
-    Q.SQL.Text := 'update table upload_status set id_log_changes='+IntToStr(max);
+    Q.SQL.Text := 'update upload_status set id_log_changes='+IntToStr(max);
+    if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
     Q.SQL.Text := 'delete from log_changes where id < '+IntToStr(max);
+    if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL
   except
     on E : Exception do
@@ -213,6 +217,7 @@ begin
       trQ.RollBack
     else
       trQ.Commit;
+    Q.Close;
     LeaveCriticalsection(csLogUpload)
   end
 end;
@@ -228,13 +233,15 @@ begin
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
     Q.SQL.Text := 'insert into log_changes (cmd) values('+QuotedStr(LogName+'DONE')+')';
+    if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
     Q.SQL.Text := 'select max(id) from log_changes';
     Q.Open;
     max := Q.Fields[0].AsInteger;
 
-    Q.SQL.Text := 'update table upload_status set id_log_changes='+IntToStr(max);
+    Q.SQL.Text := 'update upload_status set id_log_changes='+IntToStr(max);
+    if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL
   except
     on E : Exception do
