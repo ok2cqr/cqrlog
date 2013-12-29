@@ -15,8 +15,8 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'TDatasource'#9'dsrQSLMgr'#8'AutoEdit'#8#7'DataSet'#7#7'qQSLMgr'#4'left'#3
   +#128#1#3'top'#3#128#1#0#0#9'TSQLQuery'#2'mQ'#10'BeforeOpen'#7#12'mQBeforeOpe'
   +'n'#11'Transaction'#7#4'trmQ'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4'l'
-  +'eft'#3#153#2#3'top'#2#24#0#0#15'TSQLTransaction'#4'trmQ'#6'Active'#8#6'Acti'
-  +'on'#7#6'caNone'#4'left'#3#153#2#3'top'#2'P'#0#0#10'TSQLScript'#8'scCommon'
+  +'eft'#3#160#2#3'top'#2#24#0#0#15'TSQLTransaction'#4'trmQ'#6'Active'#8#6'Acti'
+  +'on'#7#6'caNone'#4'left'#3#160#2#3'top'#2'P'#0#0#10'TSQLScript'#8'scCommon'
   +#11'Transaction'#7#4'trmQ'#18'Directives.Strings'#1#6#8'SET TERM'#6#6'COMMIT'
   +#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6'#UNDEF'#6#9
   +'#UNDEFINE'#0#14'Script.Strings'#1#6'WCREATE DATABASE cqrlog_common DEFAULT '
@@ -166,7 +166,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'og_changes (id) ON DELETE SET NULL'#6#21') COLLATE ''utf8_bin'';'#6#0#0#10
   +'Terminator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#8#9'UseCommit'#8#10'U'
   +'seDefines'#8#11'OnException'#7#14'scLogException'#4'left'#3'P'#2#3'top'#3
-  +#184#0#0#0#11'TDatasource'#5'dsrmQ'#7'DataSet'#7#2'mQ'#4'left'#3#153#2#3'top'
+  +#184#0#0#0#11'TDatasource'#5'dsrmQ'#7'DataSet'#7#2'mQ'#4'left'#3#160#2#3'top'
   +#3#136#0#0#0#9'TSQLQuery'#8'qLogList'#10'BeforeOpen'#7#18'qLogListBeforeOpen'
   +#11'Transaction'#7#9'trLogList'#8'ReadOnly'#8#6'Params'#14#0#8'ParseSQL'#8#4
   +'left'#3'P'#2#3'top'#3#0#1#0#0#15'TSQLTransaction'#9'trLogList'#6'Active'#8#6
@@ -240,10 +240,10 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'l_qsl_rcvd) as qslr,dxcc_id.country FROM cqrlog_main JOIN dxcc_id ON dxcc_i'
   +'d.adif = cqrlog_main.adif order by callsign;'#0#10'Terminator'#6#1';'#13'Co'
   +'mmentsinSQL'#9#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefines'#9#11'OnExcept'
-  +'ion'#7#16'scViewsException'#4'left'#3#3#2#3'top'#2#24#0#0#6'TTimer'#9'tmrDB'
-  +'Ping'#7'Enabled'#8#7'OnTimer'#7#14'tmrDBPingTimer'#4'left'#2'@'#3'top'#2#16
-  +#0#0#10'TSQLScript'#11'scQSLExport'#18'Directives.Strings'#1#6#8'SET TERM'#6
-  +#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6
+  +'ion'#7#16'scViewsException'#4'left'#3#236#1#3'top'#2#24#0#0#6'TTimer'#9'tmr'
+  +'DBPing'#7'Enabled'#8#7'OnTimer'#7#14'tmrDBPingTimer'#4'left'#2'@'#3'top'#2
+  +#16#0#0#10'TSQLScript'#11'scQSLExport'#18'Directives.Strings'#1#6#8'SET TERM'
+  +#6#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6
   +'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.Strings'#1#6'1create temporary table if '
   +'not exists  qslexport ('#6'8            id_qslexport INT AUTO_INCREMENT PRI'
   +'MARY KEY,'#6'*            idcall VARCHAR(20) DEFAULT '''','#6'(            '
@@ -264,5 +264,23 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'EFAULT '''''#6#2');'#6')CREATE INDEX idcall ON qslexport(idcall);'#6'%CREAT'
   +'E INDEX dxcc ON qslexport(dxcc);'#6#0#0#10'Terminator'#6#1';'#13'Commentsin'
   +'SQL'#9#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefines'#9#4'left'#3'P'#2#3'to'
-  +'p'#2'P'#0#0#0
+  +'p'#2'P'#0#0#10'TSQLScript'#19'scOnlineLogTriggers'#11'Transaction'#7#4'trmQ'
+  +#18'Directives.Strings'#1#6#8'SET TERM'#6#6'COMMIT'#6#6'#IFDEF'#6#7'#IFNDEF'
+  +#6#5'#ELSE'#6#6'#ENDIF'#6#7'#DEFINE'#6#6'#UNDEF'#6#9'#UNDEFINE'#0#14'Script.'
+  +'Strings'#1#6'JCREATE TRIGGER `cqrlog_main_ai` AFTER INSERT ON `cqrlog_main`'
+  +' FOR EACH ROW'#6'Zinsert into log_changes(id_cqrlog_main,cmd,qsodate,time_o'
+  +'n,callsign,mode,freq,band) values'#6'`  (NEW.id_cqrlog_main,''INSERT'',NEW.'
+  +'qsodate,NEW.time_on,NEW.callsign,NEW.mode,NEW.freq,NEW.band);'#6#0#6'KCREAT'
+  +'E TRIGGER `cqrlog_main_bd` BEFORE DELETE ON `cqrlog_main` FOR EACH ROW'#6'o'
+  +'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_ca'
+  +'llsign, old_mode, old_band,old_freq)'#6'jvalues (OLD.id_cqrlog_main,''DELET'
+  +'E'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band, old_freq);'
+  +#6#0#6'KCREATE TRIGGER `cqrlog_main_bu` BEFORE UPDATE ON `cqrlog_main` FOR E'
+  +'ACH ROW'#6'oinsert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_tim'
+  +'e_on, old_callsign, old_mode, old_band,old_freq,'#6',qsodate, time_on, call'
+  +'sign, mode, band,freq)'#6'hvalues (OLD.id_cqrlog_main,''UPDATE'',OLD.qsodat'
+  +'e, OLD.time_on, OLD.callsign, OLD.mode, OLD.band,OLD.freq,'#6'FNEW.qsodate,'
+  +' NEW.time_on, NEW.callsign, NEW.mode, NEW.freq, NEW.band);'#6#0#0#10'Termin'
+  +'ator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefi'
+  +'nes'#9#4'left'#3'P'#2#3'top'#2#24#0#0#0
 ]);

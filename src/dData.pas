@@ -97,6 +97,7 @@ type
     Q1: TSQLQuery;
     Q: TSQLQuery;
     qCQRLOG: TSQLQuery;
+    scOnlineLogTriggers: TSQLScript;
     scViews: TSQLScript;
     scQSLExport : TSQLScript;
     tmrDBPing: TTimer;
@@ -259,6 +260,7 @@ type
     function  UseseQSL(call : String) : Boolean;
     function  QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
+    function  TriggersExistsOnCqrlog_main : Boolean;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -296,6 +298,8 @@ type
     procedure CreateQSLTmpTable;
     procedure DropQSLTmpTable;
     procedure StartMysqldProcess;
+    procedure EnableOnlineLogSupport;
+    procedure DisableOnlineLogSupport;
   end;
 
 var
@@ -3272,6 +3276,63 @@ begin
       mode := 'RTTY';
   end;
   Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
+end;
+
+procedure TdmData.EnableOnlineLogSupport;
+var
+  i : Integer;
+begin
+  trQ.StartTransaction;
+  Q.SQL.Text := '';
+  for i:=0 to scOnlineLogTriggers.Script.Count-1 do
+  begin
+    if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
+      Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
+    else begin
+      Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
+      if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+      Q.ExecSQL;
+      Q.SQL.Text := ''
+    end
+  end;
+  trQ.Commit
+  //^^ because of bug in  TSQLSript. For SQL is applied,
+  //second command - no effect. My workaround works. Semicolon is a delimitter.
+end;
+
+procedure TdmData.DisableOnlineLogSupport;
+begin
+  Q.Close;
+  if trQ.Active then trQ.Rollback;
+  try
+    Q.SQL.Text := 'DROP TRIGGER IF EXISTS cqrlog_main_bd';
+    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+    Q.ExecSQL;
+    Q.SQL.Text := 'DROP TRIGGER IF EXISTS cqrlog_main_ai';
+    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+    Q.ExecSQL;
+    Q.SQL.Text := 'DROP TRIGGER IF EXISTS cqrlog_main_bu';
+    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+    Q.ExecSQL
+  finally
+    trQ.Commit
+  end
+end;
+
+function TdmData.TriggersExistsOnCqrlog_main : Boolean;
+const
+  C_SEL = 'show triggers from %s';
+begin
+  Q.Close;
+  if trQ.Active then trQ.Rollback;
+  try
+    Q.SQL.Text := Format(C_SEL,[fDBName]);
+    Q.Open;
+    Result := Q.RecordCount > 0
+  finally
+    Q.Close;
+    trQ.RollBack
+  end
 end;
 
 initialization

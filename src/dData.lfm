@@ -54,13 +54,13 @@ object dmData: TdmData
     ReadOnly = False
     Params = <>
     ParseSQL = False
-    left = 665
+    left = 672
     top = 24
   end
   object trmQ: TSQLTransaction
     Active = False
     Action = caNone
-    left = 665
+    left = 672
     top = 80
   end
   object scCommon: TSQLScript
@@ -409,7 +409,7 @@ object dmData: TdmData
   end
   object dsrmQ: TDatasource
     DataSet = mQ
-    left = 665
+    left = 672
     top = 136
   end
   object qLogList: TSQLQuery
@@ -665,7 +665,7 @@ object dmData: TdmData
     UseCommit = True
     UseDefines = True
     OnException = scViewsException
-    left = 515
+    left = 492
     top = 24
   end
   object tmrDBPing: TTimer
@@ -725,5 +725,42 @@ object dmData: TdmData
     UseDefines = True
     left = 592
     top = 80
+  end
+  object scOnlineLogTriggers: TSQLScript
+    Transaction = trmQ
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Script.Strings = (
+      'CREATE TRIGGER `cqrlog_main_ai` AFTER INSERT ON `cqrlog_main` FOR EACH ROW'
+      'insert into log_changes(id_cqrlog_main,cmd,qsodate,time_on,callsign,mode,freq,band) values'
+      '  (NEW.id_cqrlog_main,''INSERT'',NEW.qsodate,NEW.time_on,NEW.callsign,NEW.mode,NEW.freq,NEW.band);'
+      ''
+      'CREATE TRIGGER `cqrlog_main_bd` BEFORE DELETE ON `cqrlog_main` FOR EACH ROW'
+      'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq)'
+      'values (OLD.id_cqrlog_main,''DELETE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band, old_freq);'
+      ''
+      'CREATE TRIGGER `cqrlog_main_bu` BEFORE UPDATE ON `cqrlog_main` FOR EACH ROW'
+      'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq,'
+      'qsodate, time_on, callsign, mode, band,freq)'
+      'values (OLD.id_cqrlog_main,''UPDATE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band,OLD.freq,'
+      'NEW.qsodate, NEW.time_on, NEW.callsign, NEW.mode, NEW.freq, NEW.band);'
+      ''
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = True
+    UseCommit = True
+    UseDefines = True
+    left = 592
+    top = 24
   end
 end
