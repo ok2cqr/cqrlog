@@ -752,8 +752,7 @@ object dmData: TdmData
       'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_callsign, old_mode, old_band,old_freq,'
       'qsodate, time_on, callsign, mode, band,freq)'
       'values (OLD.id_cqrlog_main,''UPDATE'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band,OLD.freq,'
-      'NEW.qsodate, NEW.time_on, NEW.callsign, NEW.mode, NEW.freq, NEW.band);'
-      ''
+      'NEW.qsodate, NEW.time_on, NEW.callsign, NEW.mode, NEW.band, NEW.freq);'
     )
     Terminator = ';'
     CommentsinSQL = True

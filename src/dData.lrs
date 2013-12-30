@@ -280,7 +280,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'e_on, old_callsign, old_mode, old_band,old_freq,'#6',qsodate, time_on, call'
   +'sign, mode, band,freq)'#6'hvalues (OLD.id_cqrlog_main,''UPDATE'',OLD.qsodat'
   +'e, OLD.time_on, OLD.callsign, OLD.mode, OLD.band,OLD.freq,'#6'FNEW.qsodate,'
-  +' NEW.time_on, NEW.callsign, NEW.mode, NEW.freq, NEW.band);'#6#0#0#10'Termin'
-  +'ator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefi'
-  +'nes'#9#4'left'#3'P'#2#3'top'#2#24#0#0#0
+  +' NEW.time_on, NEW.callsign, NEW.mode, NEW.band, NEW.freq);'#0#10'Terminator'
+  +#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefines'#9
+  +#4'left'#3'P'#2#3'top'#2#24#0#0#0
 ]);
