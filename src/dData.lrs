@@ -274,7 +274,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'E TRIGGER `cqrlog_main_bd` BEFORE DELETE ON `cqrlog_main` FOR EACH ROW'#6'o'
   +'insert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_time_on, old_ca'
   +'llsign, old_mode, old_band,old_freq)'#6'jvalues (OLD.id_cqrlog_main,''DELET'
-  +'E'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band, old_freq);'
+  +'E'',OLD.qsodate, OLD.time_on, OLD.callsign, OLD.mode, OLD.band, OLD.freq);'
   +#6#0#6'KCREATE TRIGGER `cqrlog_main_bu` BEFORE UPDATE ON `cqrlog_main` FOR E'
   +'ACH ROW'#6'oinsert into log_changes(id_cqrlog_main,cmd,old_qsodate, old_tim'
   +'e_on, old_callsign, old_mode, old_band,old_freq,'#6',qsodate, time_on, call'
