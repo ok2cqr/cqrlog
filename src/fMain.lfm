@@ -2046,10 +2046,13 @@ object frmMain: TfrmMain
         Caption = '-'
       end
       object MenuItem95: TMenuItem
-        Action = acUploadToAll
+        Action = acMarkAll
+      end
+      object MenuItem97: TMenuItem
+        Caption = '-'
       end
       object MenuItem96: TMenuItem
-        Action = acMarkAll
+        Action = acUploadToAll
       end
     end
     object mnuHelp: TMenuItem

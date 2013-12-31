@@ -177,6 +177,7 @@ type
     MenuItem94: TMenuItem;
     MenuItem95: TMenuItem;
     MenuItem96: TMenuItem;
+    MenuItem97: TMenuItem;
     mnuOQRS : TMenuItem;
     MenuItem55: TMenuItem;
     MenuItem56: TMenuItem;
