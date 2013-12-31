@@ -484,7 +484,7 @@ begin
   end //case
 end;
 
-procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList); overload;
+procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
 const
   C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
 var
