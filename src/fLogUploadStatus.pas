@@ -118,6 +118,7 @@ var
 begin
   data := TStringList.Create;
   try
+    frmLogUploadStatus.thRunning := True;
     FreeOnTerminate := True;
     frmLogUploadStatus.SyncMsg    := '';
     frmLogUploadStatus.SyncUpdate := '';
