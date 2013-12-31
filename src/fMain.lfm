@@ -4040,4 +4040,11 @@ object frmMain: TfrmMain
       FFFFFFFFFFFFFFFFFFFFFFFFFFFF
     }
   end
+  object tmrUploadAll: TTimer
+    Enabled = False
+    Interval = 2000
+    OnTimer = tmrUploadAllTimer
+    left = 480
+    top = 116
+  end
 end

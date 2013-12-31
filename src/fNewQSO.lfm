@@ -1656,7 +1656,7 @@ object frmNewQSO: TfrmNewQSO
         end
       end
       object btnSave: TButton
-        Left = 11
+        Left = 9
         Height = 25
         Top = 432
         Width = 125
@@ -4066,5 +4066,11 @@ object frmNewQSO: TfrmNewQSO
     Interval = 500
     left = 400
     top = 552
+  end
+  object tmrUploadAll: TTimer
+    Enabled = False
+    OnTimer = tmrUploadAllTimer
+    left = 203
+    top = 347
   end
 end

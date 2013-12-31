@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
-  uCWKeying, ipc, baseunix;
+  uCWKeying, ipc, baseunix, dLogUpload;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
@@ -288,6 +288,7 @@ type
     sbtnQRZ: TSpeedButton;
     sbtnLoTW: TSpeedButton;
     sbtnHamQTH : TSpeedButton;
+    tmrUploadAll: TTimer;
     tmrFldigi: TTimer;
     tmrESC: TTimer;
     tmrRadio: TTimer;
@@ -465,6 +466,7 @@ type
     procedure tmrRadioTimer(Sender: TObject);
     procedure tmrStartStartTimer(Sender: TObject);
     procedure tmrStartTimer(Sender: TObject);
+    procedure tmrUploadAllTimer(Sender: TObject);
   private
     fEditQSO : Boolean;
     fViewQSO : Boolean;
@@ -493,6 +495,8 @@ type
     fromNewQSO : Boolean;
     FreqBefChange : Double;
     adif : Word;
+    WhatUpNext : TWhereToUpload;
+    UploadAll  : Boolean;
 
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -551,6 +555,7 @@ type
     procedure SynDXCCTab;
     procedure SynQSLTab;
     procedure CalculateLocalSunRiseSunSet;
+    procedure UploadAllQSOOnline;
   end;
 
   type
@@ -1774,6 +1779,44 @@ begin
   end
 end;
 
+procedure TfrmNewQSO.tmrUploadAllTimer(Sender: TObject);
+begin
+  if (not frmLogUploadStatus.thRunning) then
+  begin
+    case WhatUpNext of
+      upHamQTH :  begin
+                    if UploadAll then
+                      frmLogUploadStatus.UploadDataToHamQTH
+                    else begin
+                      if cqrini.ReadBool('OnlineLog','HaUpOnline',False) then
+                        frmLogUploadStatus.UploadDataToHamQTH
+                    end;
+                    WhatUpNext := upClubLog
+                  end;
+      upClubLog : begin
+                    if UploadAll then
+                      frmLogUploadStatus.UploadDataToClubLog
+                    else begin
+                      if cqrini.ReadBool('OnlineLog','ClUpOnline',False) then
+                        frmLogUploadStatus.UploadDataToClubLog
+                    end;
+                    WhatUpNext := upHrdLog
+                  end;
+      upHrdLog  : begin
+                    if UploadAll then
+                      frmLogUploadStatus.UploadDataToHrdLog
+                    else begin
+                      if cqrini.ReadBool('OnlineLog','HrUpOnline',False) then
+                        frmLogUploadStatus.UploadDataToHrdLog
+                    end;
+                    tmrUploadAll.Enabled := False;
+                    UploadAll            := False;
+                    WhatUpNext           := upHamQTH
+                  end
+    end //case
+  end
+end;
+
 procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
   CWint := nil;
@@ -1786,7 +1829,9 @@ begin
   ShowWin  := False;
   old_t_band := '';
   old_t_mode := '';
-  old_prof   := -1
+  old_prof   := -1;
+  WhatUpNext := upHamQTH;
+  UploadAll  := False
 end;
 
 procedure TfrmNewQSO.btnSaveClick(Sender: TObject);
@@ -2006,7 +2051,8 @@ begin
   end
   else
     if not mnuRemoteMode.Checked then
-     edtCall.SetFocus
+     edtCall.SetFocus;
+  UploadAllQSOOnline
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
@@ -3063,7 +3109,11 @@ end;
 
 procedure TfrmNewQSO.acUploadToAllExecute(Sender: TObject);
 begin
-  frmLogUploadStatus.UploadDataToAll
+  if not tmrUploadAll.Enabled then
+  begin
+    UploadAll            := True;
+    tmrUploadAll.Enabled := True
+  end
 end;
 
 procedure TfrmNewQSO.acUploadToClubLogExecute(Sender: TObject);
@@ -5224,6 +5274,16 @@ begin
     Free
   end
 end;
+
+procedure TfrmNewQSO.UploadAllQSOOnline;
+begin
+  if not tmrUploadAll.Enabled then
+  begin
+    UploadAll            := False;
+    tmrUploadAll.Enabled := True
+  end
+end;
+
 
 initialization
   {$I fNewQSO.lrs}

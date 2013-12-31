@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, ExtCtrls, StdCtrls, ComCtrls, DBGrids, Buttons, LCLType, IniFiles, process,
-  Grids, DBCtrls;
+  Grids, DBCtrls, dLogUpload;
 
 type
 
@@ -266,6 +266,7 @@ type
     sbMain:     TStatusBar;
     Timer1:     TTimer;
     tmrTime:    TTimer;
+    tmrUploadAll: TTimer;
     ToolButton18: TToolButton;
     ToolButton19: TToolButton;
     ToolButton20: TToolButton;
@@ -408,8 +409,11 @@ type
     procedure mnuSMDClick(Sender: TObject);
     procedure pnlButtonsClick(Sender: TObject);
     procedure tmrTimeTimer(Sender: TObject);
+    procedure tmrUploadAllTimer(Sender: TObject);
   private
-    InRefresh: boolean;
+    InRefresh  : Boolean;
+    WhatUpNext : TWhereToUpload;
+
     procedure ChechkSelRecords;
     { private declarations }
   public
@@ -434,7 +438,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, dLogUpload, fLogUploadStatus;
+  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, fLogUploadStatus;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -604,6 +608,27 @@ begin
   sbMain.Panels[0].Text := sDate;
 end;
 
+procedure TfrmMain.tmrUploadAllTimer(Sender: TObject);
+begin
+  if (not frmLogUploadStatus.thRunning) then
+  begin
+    case WhatUpNext of
+      upHamQTH :  begin
+                    frmLogUploadStatus.UploadDataToHamQTH;
+                    WhatUpNext := upClubLog
+                  end;
+      upClubLog : begin
+                    frmLogUploadStatus.UploadDataToClubLog;
+                    WhatUpNext := upHrdLog
+                  end;
+      upHrdLog  : begin
+                    frmLogUploadStatus.UploadDataToHrdLog;
+                    tmrUploadAll.Enabled := False
+                  end;
+    end //case
+  end
+end;
+
 procedure TfrmMain.acNewQSOExecute(Sender: TObject);
 begin
   frmNewQSO.Caption := dmUtils.GetNewQSOCaption('New QSO');
@@ -679,7 +704,8 @@ begin
       finally
         dmData.qCQRLOG.EnableControls
       end;
-      dmData.RefreshMainDatabase(id);
+      frmNewQSO.UploadAllQSOOnline;
+      dmData.RefreshMainDatabase(id)
     end
     else
     begin
@@ -1176,6 +1202,7 @@ begin
   MinTRXControl := False;
   MinNewQSO     := False;
   MinQSODetails := False;
+  WhatUpNext    := upHamQTH
 end;
 
 procedure TfrmMain.acPnlDetailsExecute(Sender: TObject);
@@ -1341,7 +1368,7 @@ end;
 
 procedure TfrmMain.acUploadToAllExecute(Sender: TObject);
 begin
-  //
+  frmNewQSO.acUploadToAll.Execute
 end;
 
 procedure TfrmMain.acUploadToClubLogExecute(Sender: TObject);

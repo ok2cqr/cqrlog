@@ -30,13 +30,13 @@ type
     mFont     : TFont;
     thUpload  : TThread;
     mStatus   : TJakoMemo;
-    thRunning : Boolean;
     procedure LoadFonts;
     procedure UploadDataToOnlineLogs(where : TWhereToUpload);
   public
     SyncMsg    : String;
     SyncColor  : TColor;
     SyncUpdate : String;
+    thRunning  : Boolean;
 
     procedure UploadDataToHamQTH;
     procedure UploadDataToClubLog;
