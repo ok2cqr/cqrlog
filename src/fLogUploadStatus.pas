@@ -103,7 +103,7 @@ end;
 procedure TUploadThread.Execute;
 const
   C_SEL_UPLOAD_STATUS = 'select * from upload_status where logname=%s';
-  C_SEL_LOG_CHANGES   = 'select * from log_changes where id > %d';
+  C_SEL_LOG_CHANGES   = 'select * from log_changes where id > %d order by id';
 var
   data       : TStringList;
   err        : String = '';
@@ -165,14 +165,23 @@ begin
         if (Command = 'INSERT') then
         begin
           ToMainThread('Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
-          dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
+          if dmLogUpload.Q.FieldByName('id_cqrlog_main').IsNull then
+            dmLogUpload.PrepareMinimalInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data)
+          else
+            dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end
+
+
         else if (Command = 'UPDATE') then
         begin
-          ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
+          ToMainThread('Deleting original '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
           dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
-          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode);
+          Writeln('data.Text:');
+          Writeln(data.Text);
+          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,'DELETE'),data,Response,ResultCode);
+          Writeln('Response  :',Response);
+          Writeln('ResultCode:',ResultCode);
           if UpSuccess then
           begin
             Response := dmLogUpload.GetResultMessage(WhereToUpload,Response,ResultCode,FatalError);
@@ -180,20 +189,28 @@ begin
             begin
               ToMainThread('Could not delete original QSO data!','');
               Break
-            end;
-            ToMainThread('Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
-            dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
+            end
+            else
+              ToMainThread('','OK');
+            ToMainThread('Uploading updated '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
+            if dmLogUpload.Q.FieldByName('id_cqrlog_main').IsNull then
+              dmLogUpload.PrepareMinimalInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data)
+            else
+              dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
             UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
           end
           else
             ToMainThread('Update failed! Check Internet connection','')
         end
+
+
         else if (Command = 'DELETE') then
         begin
           ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
           dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end;
+
         Writeln('data.Text:');
         Writeln(data.Text);
         Writeln('-----------');
