@@ -1326,7 +1326,7 @@ end;
 
 procedure TfrmMain.acMarkAllHrdLogExecute(Sender: TObject);
 begin
-    dmLogUpload.MarkAsUploaded(C_HRDLOG)
+  dmLogUpload.MarkAsUploaded(C_HRDLOG)
 end;
 
 procedure TfrmMain.acSQLExecute(Sender: TObject);
@@ -1351,7 +1351,7 @@ end;
 
 procedure TfrmMain.acUploadToHamQTHExecute(Sender: TObject);
 begin
-    frmLogUploadStatus.UploadDataToHamQTH
+  frmLogUploadStatus.UploadDataToHamQTH
 end;
 
 procedure TfrmMain.acUploadToHrdLogExecute(Sender: TObject);
