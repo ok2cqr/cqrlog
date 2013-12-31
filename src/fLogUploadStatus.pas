@@ -174,11 +174,21 @@ begin
         begin
           ToMainThread('Deleting original '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
           dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
-          Writeln('data.Text:');
-          Writeln(data.Text);
+
+          if dmData.DebugLevel > 1 then
+          begin
+            Writeln('data.Text:');
+            Writeln(data.Text)
+          end;
+
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,'DELETE'),data,Response,ResultCode);
-          Writeln('Response  :',Response);
-          Writeln('ResultCode:',ResultCode);
+
+          if dmData.DebugLevel > 1 then
+          begin
+            Writeln('Response  :',Response);
+            Writeln('ResultCode:',ResultCode)
+          end;
+
           if UpSuccess then
           begin
             Response := dmLogUpload.GetResultMessage(WhereToUpload,Response,ResultCode,FatalError);
@@ -205,12 +215,15 @@ begin
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end;
 
-        Writeln('data.Text:');
-        Writeln(data.Text);
-        Writeln('-----------');
-        Writeln('Response  :',Response);
-        Writeln('ResultCode:',ResultCode);
-        Writeln('-----------');
+        if dmData.DebugLevel > 1 then
+        begin
+          Writeln('data.Text:');
+          Writeln(data.Text);
+          Writeln('-----------');
+          Writeln('Response  :',Response);
+          Writeln('ResultCode:',ResultCode);
+          Writeln('-----------')
+        end;
 
         if UpSuccess then
         begin
@@ -223,10 +236,7 @@ begin
           if FatalError then
             Break //cannot continue when fatal error
           else
-            dmLogUpload.MarkAsUploaded(GetLogName,dmLogUpload.Q.FieldByName('id').AsInteger);
-
-          Writeln('Response:',Response);
-          Writeln('ResultCode:',ResultCode)
+            dmLogUpload.MarkAsUploaded(GetLogName,dmLogUpload.Q.FieldByName('id').AsInteger)
         end
         else begin
           ToMainThread('Upload failed! Check Internet connection','')

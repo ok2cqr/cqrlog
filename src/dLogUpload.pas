@@ -53,9 +53,7 @@ type
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
     procedure PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
-    procedure PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
-    procedure PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList); overload;
-    procedure PrepareMinimalInsertHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
+    procedure PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
     procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
     procedure MarkAsUploaded(LogName : String; id_log_changes : Integer);
   end;
@@ -464,25 +462,6 @@ begin
   end //case
 end;
 
-procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
-var
-  adif : String;
-begin
-  adif := GetQSOInAdif(id_cqrlog_main);
-  case where of
-    upHamQTH  :  begin
-                   data.Add('adif='+adif);
-                   data.Add('cmd=INSERT')
-                 end;
-    upClublog :  begin
-                   data.Add('adif='+adif)
-                 end;
-    upHrdLog  :  begin
-                   data.Add('ADIFData='+adif)
-                 end
-  end //case
-end;
-
 procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList); overload;
 const
   C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
@@ -511,49 +490,6 @@ begin
       adif := adif + GetQSOInAdif(id_cqrlog_main)
     else
       adif := adif+'<EOR>';
-
-    case where of
-      upHamQTH  :  begin
-                     data.Add('adif='+adif);
-                     data.Add('cmd=INSERT')
-                   end;
-      upClublog :  begin
-                     data.Add('adif='+adif)
-                   end;
-      upHrdLog  :  begin
-                     data.Add('ADIFData='+adif)
-                   end
-    end //case
-  finally
-    Q2.Close;
-    trQ2.RollBack
-  end
-end;
-
-procedure TdmLogUpload.PrepareMinimalInsertHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
-const
-  C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
-
-var
-  adif    : String;
-  qsodate : String;
-  time_on : String;
-begin
-  if trQ2.Active then trQ2.RollBack;
-  try
-    Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
-    Q2.Open;
-    if Q2.Fields[0].IsNull then exit; //this shouldn't happen
-
-    qsodate := Q2.FieldByName('qsodate').AsString;
-    qsodate := copy(qsodate,1,4) + copy(qsodate,6,2) + copy(qsodate,9,2);
-    time_on := Q2.FieldByName('time_on').AsString;
-    time_on := copy(time_on,1,2) + copy(time_on,4,2);
-
-    adif := GetAdifValue('QSO_DATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
-            GetAdifValue('CALL',Q2.FieldByName('callsign').AsString)+
-            GetAdifValue('BAND',Q2.FieldByName('band').AsString)+
-            GetAdifValue('MODE',Q2.FieldByName('mode').AsString)+'<EOR>';
 
     case where of
       upHamQTH  :  begin
