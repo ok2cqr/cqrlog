@@ -165,10 +165,7 @@ begin
         if (Command = 'INSERT') then
         begin
           ToMainThread('Uploading '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
-          if dmLogUpload.Q.FieldByName('id_cqrlog_main').IsNull then
-            dmLogUpload.PrepareMinimalInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data)
-          else
-            dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
+          dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end
 
@@ -193,10 +190,7 @@ begin
             else
               ToMainThread('','OK');
             ToMainThread('Uploading updated '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
-            if dmLogUpload.Q.FieldByName('id_cqrlog_main').IsNull then
-              dmLogUpload.PrepareMinimalInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data)
-            else
-              dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
+            dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
             UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
           end
           else

@@ -54,6 +54,7 @@ type
     procedure MarkAsUploaded(LogName : String);
     procedure PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
     procedure PrepareInsertHeader(where : TWhereToUpload; id_cqrlog_main : Integer; data : TStringList);
+    procedure PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList); overload;
     procedure PrepareMinimalInsertHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
     procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
     procedure MarkAsUploaded(LogName : String; id_log_changes : Integer);
@@ -272,7 +273,7 @@ begin
       if dmData.DebugLevel>=1 then Writeln('GetQSOInAdif: QSO not found in the log. ID:', id_cqrlog_main);
       exit
     end;
-
+    {
     data   := DateToStr(Q1.Fields[1].AsDateTime);
     data   := copy(data,1,4) + copy(data,6,2) + copy(data,9,2);
     data   := GetAdifValue('QSO_DATE',data);
@@ -282,12 +283,14 @@ begin
     data   := copy(data,1,2) + copy(data,4,2);
     data   := GetAdifValue('TIME_ON',data);
     Result := Result + data;
+    }
 
     data   := Q1.Fields[3].AsString;
     data   := copy(data,1,2) + copy(data,4,2);
     data   := GetAdifValue('TIME_OFF',data);
     Result := Result + data;
 
+    {
     data   := RemoveSpaces(Q1.Fields[4].AsString);
     data   := GetAdifValue('CALL',data);
     Result := Result + data;
@@ -295,6 +298,8 @@ begin
     Result := Result + GetAdifValue('FREQ',CurrToStr(Q1.Fields[5].AsCurrency));
     Result := Result + GetAdifValue('BAND',Q1.FieldByName('band').AsString);
     Result := Result + GetAdifValue('MODE',Q1.Fields[6].AsString);
+    }
+
     Result := Result + GetAdifValue('RST_SENT',Q1.FieldByName('rst_s').AsString);
     Result := Result + GetAdifValue('RST_RCVD',Q1.FieldByName('rst_r').AsString);
     Result := Result + GetAdifValue('NAME',Q1.FieldByName('name').AsString);
@@ -476,6 +481,53 @@ begin
                    data.Add('ADIFData='+adif)
                  end
   end //case
+end;
+
+procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList); overload;
+const
+  C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
+var
+  adif    : String;
+  qsodate : String;
+  time_on : String;
+begin
+  if trQ2.Active then trQ2.RollBack;
+  try
+    Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
+    Q2.Open;
+    if Q2.Fields[0].IsNull then exit; //this shouldn't happen
+
+    qsodate := Q2.FieldByName('qsodate').AsString;
+    qsodate := copy(qsodate,1,4) + copy(qsodate,6,2) + copy(qsodate,9,2);
+    time_on := Q2.FieldByName('time_on').AsString;
+    time_on := copy(time_on,1,2) + copy(time_on,4,2);
+
+    adif := GetAdifValue('QSO_DATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
+            GetAdifValue('CALL',Q2.FieldByName('callsign').AsString)+
+            GetAdifValue('BAND',Q2.FieldByName('band').AsString)+
+            GetAdifValue('MODE',Q2.FieldByName('mode').AsString);
+
+    if (id_cqrlog_main>0) then
+      adif := adif + GetQSOInAdif(id_cqrlog_main)
+    else
+      adif := adif+'<EOR>';
+
+    case where of
+      upHamQTH  :  begin
+                     data.Add('adif='+adif);
+                     data.Add('cmd=INSERT')
+                   end;
+      upClublog :  begin
+                     data.Add('adif='+adif)
+                   end;
+      upHrdLog  :  begin
+                     data.Add('ADIFData='+adif)
+                   end
+    end //case
+  finally
+    Q2.Close;
+    trQ2.RollBack
+  end
 end;
 
 procedure TdmLogUpload.PrepareMinimalInsertHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
