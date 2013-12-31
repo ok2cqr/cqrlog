@@ -176,7 +176,7 @@ begin
           ToMainThread('Deleting original '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
           dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
 
-          if dmData.DebugLevel > 1 then
+          if dmData.DebugLevel >= 1 then
           begin
             Writeln('data.Text:');
             Writeln(data.Text)
@@ -184,7 +184,7 @@ begin
 
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,'DELETE'),data,Response,ResultCode);
 
-          if dmData.DebugLevel > 1 then
+          if dmData.DebugLevel >= 1 then
           begin
             Writeln('Response  :',Response);
             Writeln('ResultCode:',ResultCode)
@@ -200,6 +200,9 @@ begin
             end
             else
               ToMainThread('','OK');
+
+            data.Clear;
+            dmLogUpload.PrepareUserInfoHeader(WhereToUpload,data);
             ToMainThread('Uploading updated '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
             dmLogUpload.PrepareInsertHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,dmLogUpload.Q.FieldByName('id_cqrlog_main').AsInteger,data);
             UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
@@ -216,7 +219,7 @@ begin
           UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,Command),data,Response,ResultCode)
         end;
 
-        if dmData.DebugLevel > 1 then
+        if dmData.DebugLevel >= 1 then
         begin
           Writeln('data.Text:');
           Writeln(data.Text);
@@ -240,11 +243,15 @@ begin
             dmLogUpload.MarkAsUploaded(GetLogName,dmLogUpload.Q.FieldByName('id').AsInteger)
         end
         else begin
-          ToMainThread('Upload failed! Check Internet connection','')
+          ToMainThread('Upload failed! Check Internet connection','');
+          FatalError := True;
+          Break
         end;
         Sleep(2000); //we don't want to make small DDOS attack to server
         dmLogUpload.Q.Next
-      end
+      end;
+      if not FatalError then
+        ToMainThread('Done ...','')
     finally
       dmLogUpload.Q.Close;
       dmLogUpload.trQ.RollBack

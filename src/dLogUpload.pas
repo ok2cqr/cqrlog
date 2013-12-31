@@ -40,6 +40,7 @@ type
     function  RemoveSpaces(s : String) : String;
     function  GetQSOInAdif(id_cqrlog_main : Integer) : String;
     function  EncodeBandForClubLog(band : String) : String;
+    function  ParseHrdLogOutput(Output : String; var Response : String) : Integer;
   public
     LogUploadCon : TSQLConnection;
     csLogUpload  : TRTLCriticalSection;
@@ -401,6 +402,27 @@ begin
   end
 end;
 
+function TdmLogUpload.ParseHrdLogOutput(Output : String; var Response : String) : Integer;
+var
+  msg    : String = '';
+  ErrPos : Integer;
+begin
+  Result := 200;
+  // 200 OK, 500 Internal error, 400 QSO rejected, 403 Forbidden, 404 QSO not found
+  ErrPos := Pos('<error>',Output);
+  if ( ErrPos > 0) then
+  begin
+    Response := copy(Output,ErrPos+7,Pos('</error>',Output)-ErrPos-7);
+
+    if (LowerCase(msg)='unknown user') then
+      Result := 403
+    else if (LowerCase(msg)='unable to find qso') then
+      Result := 404
+    else
+      Result := 500
+  end
+end;
+
 function TdmLogUpload.CheckUserUploadSettings(where : TWhereToUpload) : String;
 const
   C_IS_NOT_SET   = '%s is not set! Go to Preferences and change settings.';
@@ -544,8 +566,9 @@ begin
                      data.Add('bandid='+EncodeBandForClubLog(Q2.FieldByName('old_band').AsString))
                    end;
       upHrdLog  :  begin
-                    adif := GetAdifValue('QSO_DATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
+                    adif := '<qso_date:8:d>'+qsodate+'<time_on:6>'+time_on+'00'+
                             GetAdifValue('CALL',Q2.FieldByName('old_callsign').AsString);
+                    data.Add('ADIFKey='+adif);
                     data.Add('Cmd=DELETE')
                    end
     end //case
@@ -566,7 +589,7 @@ begin
                   else
                     Result := 'https://secure.clublog.org/realtime.php'
                 end;
-    upHrdLog  : Result := 'http://robot.hrdlog.net/NewEntrry.aspx'
+    upHrdLog  : Result := 'http://robot.hrdlog.net/NewEntry.aspx'
   end //case
 end;
 
@@ -624,6 +647,15 @@ begin
                           end
                   end //case
                 end;
+    upHrdLog  : begin
+                  case ParseHrdLogOutput(Response,Result) of
+                    200 : Result := 'OK';
+                    400 : FatalError := True;
+                    403 : FatalError := True;
+                    500 : FatalError := True;
+                    404 : FatalError := True
+                  end //case
+                end
   end //case
 end;
 
