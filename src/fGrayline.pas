@@ -246,7 +246,7 @@ var
   curr    : Currency;
   latitude, longitude: Currency;
 begin
-  call := trim(copy(spot,28,12));
+  call := trim(copy(spot,27,12));
   if watchFor<>'' then
   begin
     if (call <> watchFor) then exit;

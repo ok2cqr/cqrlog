@@ -167,8 +167,8 @@ object frmGrayline: TfrmGrayline
   end
   object sbGrayLine: TStatusBar
     Left = 0
-    Height = 20
-    Top = 228
+    Height = 19
+    Top = 229
     Width = 419
     Panels = <>
   end
