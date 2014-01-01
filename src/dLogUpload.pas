@@ -512,7 +512,8 @@ begin
     adif := GetAdifValue('QSO_DATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
             GetAdifValue('CALL',Q2.FieldByName('callsign').AsString)+
             GetAdifValue('BAND',Q2.FieldByName('band').AsString)+
-            GetAdifValue('MODE',Q2.FieldByName('mode').AsString);
+            GetAdifValue('MODE',Q2.FieldByName('mode').AsString)+
+            GetAdifValue('FREQ',CurrToStr(Q2.FieldByName('freq').AsCurrency));
 
     if (id_cqrlog_main>0) then
       adif := adif + GetQSOInAdif(id_cqrlog_main)
