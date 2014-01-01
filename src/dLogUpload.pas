@@ -162,6 +162,7 @@ var
 begin
   EnterCriticalsection(csLogUpload);
   try try
+    Q.Close;
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
     Q.SQL.Text := 'insert into log_changes (cmd) values('+QuotedStr(C_ALLDONE)+')';
@@ -205,6 +206,7 @@ var
 begin
   EnterCriticalsection(csLogUpload);
   try try
+    Q.Close;
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
     Q.SQL.Text := 'insert into log_changes (cmd) values('+QuotedStr(LogName+'DONE')+')';
@@ -215,6 +217,7 @@ begin
     Q.Open;
     max := Q.Fields[0].AsInteger;
 
+    Q.Close;
     Q.SQL.Text := 'update upload_status set id_log_changes='+IntToStr(max);
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL
@@ -230,6 +233,7 @@ begin
       trQ.RollBack
     else
       trQ.Commit;
+    Q.Close;
     LeaveCriticalsection(csLogUpload)
   end
 end;
@@ -260,6 +264,7 @@ var
   data : String;
 begin
   Result := '';
+  Q1.Close;
   if trQ1.Active then trQ1.Rollback;
 
   trQ1.StartTransaction;
@@ -492,6 +497,7 @@ var
   qsodate : String;
   time_on : String;
 begin
+  Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try
     Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
@@ -539,6 +545,7 @@ var
   time_on : String;
   qsodate : String;
 begin
+  Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try
     Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
@@ -665,6 +672,7 @@ const
 var
   err : Boolean = False;
 begin
+  Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try try
     Q2.SQL.Text := Format(C_UPD,[id_log_changes,QuotedStr(LogName)]);
