@@ -43,6 +43,9 @@ A multitab window appears, allowing setup of following parameters:<br>
 <li><a href="h1.html#ch2">fldigi interface</a></li>
 <li><a href="h1.html#ch3">Auto backup</a></li>
 <li><a href="h1.html#ch4">External viewers</a></li>
+<li><a href="h1.html#ch5">Callbook support</a></li>
+<li><a href="h1.html#ch6">RBN support</a></li>
+<li><a href="h1.html#ch7">Online log upload support</a></li>
 </ul>
 <h2><strong>Preferences</strong></h2>
 The first tab of the 'Preferences' card is labelled  'Program'. Here is the setup of main program behaviour.<br><br>
@@ -92,7 +95,8 @@ Enter your call, name, QTH and WW Locator here. Remember, that the entered call 
 <div align=justify>
 Here are the default values for the new QSO. Remember, if the radio control is active, the default frequency does not appear on the logging screen. The preset RST values will apppear in their corresponding boxes.
 <br><br>
-The <em>'Use spacebar to move between fields'</em> is very interesting and probably the most natural way but it works only if you are moving forwards. To move between fields, there are two other generic possibilities (TAB key and up/down arrow keys) which would remain unaffected even if you check the spacebar option. The <em>'Refresh data after save QSO'</em> affects the data displayed in the QSO List (Ctrl-O). If checked, each QSO appears in this list immediately after logging, however the refresh procedure is quite slow. To save time, keep this box unchecked. The <em>'Skip over mode and frequency when radio is connected'</em> is very important if the radio control is active. The <em>'Show detail window'</em> option enables an extra window to appear at program start. The <em>'Enable auto search on QRZ.COM'</em> switches on the automated search for QRZ callbook data for any worked station. This option does the same as F6 in logging screen, however it can be rather slow depending on the QRZ.COM server availability. Finally, the <em>'Show recent QSO records for last ** days'</em> limits the record number listed in the logging screen. Do not set the number of days too high, a high number can cause the log speed issues! The default value of 5 days is appropriate for most cases.</div><br>
+The <em>Change default values</em> button allows you to change frequencies available in drop down menu in NewQSO window. Very usefull, if you have your favourite frequencies and don't have radio connected to computer.<br>
+The <em>'Use spacebar to move between fields'</em> is very interesting and probably the most natural way but it works only if you are moving forwards. To move between fields, there are two other generic possibilities (TAB key and up/down arrow keys) which would remain unaffected even if you check the spacebar option. The <em>'Refresh data after save QSO'</em> affects the data displayed in the QSO List (Ctrl-O). If checked, each QSO appears in this list immediately after logging, however the refresh procedure is quite slow. To save time, keep this box unchecked. The <em>'Skip over mode and frequency when radio is connected'</em> is very important if the radio control is active. The <em>'Show detail window'</em> option enables an extra window to appear at program start. The <em>'Enable auto search on HamQTH.com/QRZ.COM'</em> switches on the automated search for HamQTH/QRZ callbook data for any worked station. This option does the same as F6 in logging screen, however it can be rather slow depending on the HamQTH.com/QRZ.COM server availability. The <em>'Show recent QSO records for last ** days'</em> limits the record number listed in the logging screen. Do not set the number of days too high, a high number can cause the log speed issues! The default value of 5 days is appropriate for most cases. The <em>In previous QSO list show also QSO with call/p</em> etc. means you can see previous QSO with station even if he was active from another country with his call/prefix. E.g. if you enter OK2CQR, you'll see also previous QSO with him when he was OM/OK2CQR, SP/OK2CQR etc.</div><br>
 <img src=img/h25.png border=0><br><br>
 <div align=justify>
 This window dispays details about new/confirmed zones, IOTA details etc.</div>
@@ -110,13 +114,22 @@ Checked bands are visible in both statistics appearing at the bottom of logging 
 <a name=ah7><h2><strong>TRX Control</strong></h2></a>
 <img src=img/h10.png border=0><br><br>
 <div align=justify>
-The TRX Control displays actual frequency. You can change band and mode. No further explanation needed. The number behind the RIG: indicates the radio type ID which correspond to the IDs used by hamlib. The full list is <a href=h6.html><strong>here</strong></a>.<br><br>
+The TRX Control displays actual frequency. You can change band and mode. Radio will change the freq/mode after you double click to a spot from dx cluster or on an item in bandmap.<br> CQRLOG users rigctld utilty from HamLib. It controls the radion and programs can communicate with it throught UDP and control the radio. CQRLOG supports operating with two TRX but always only one is active.<br><br>
+<em>Radio one, desc:</em> is a description you'll see in TRX control window. It's only description text, you can write there whatever you want.<br>
+<em>Host:</em> computer where is rigctld running, I suppose localhost is just fine for most cases. <br>
+<em>RIG ID model:</em> indicates the radio type ID which correspond to the IDs used by hamlib. The full list is <a href=h6.html><strong>here</strong></a>.<br>
+<em>Device</em> device where the radio is connected to. /dev/ttyS0 is COM1, /dev/ttyS1 is COM2 etc. If you use USB to serial interface, the device usually will be /dev/ttyUSB0 for COM1 etc. If you are using Ubuntu, you have to be member of dialout users group to have rights to the serial ports.<br>
+<em>Poll rate:</em> means how often CQRLOG should read data from the rigctld. 500 miliseconds is fine.
+<em>Port number</em> is number of port used to communicate with rigctld. Default value is 4532. The second radio, has to have different port e.g. 4533.<br>
+<em>Extra command line arguments</em> usefull when you have to specify more parameters to rigctld. E.g. CIV address.<br>
+<em>Serial port parameters</em> from manual of your rig, please choose right options. Very often is much better to specify only serial speed and other options left as Default. Default value means settings from HamLib will be used.<br>
+<br>
 The default frequencies where the radio tunes if you click onto a band button in the 'TRX control' panel can be changed to your preferences. The mode is switched in accordance to the band plan, there is actually a separate set of default frequencies for each CW, SSB, RTTY, AM and FM modes. Click onto 'Change default frequencies' button and set up frequencies of your choice.</div><br>
 <img src=img/h100.png border=0><br>
 <p align=center><img src=img/line.png></p>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
-Here you can set up the default bandwidth for any of supported modes (CW - SSB - RTTY - AM - FM). If your radio is tuned to the corresponding band segment or if you switch the mode on the radio control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be changed at any time, however a program restart will be probably needed to take the changes into effect.<br><br><strong>User definable digital modes</strong> can be set up in a separate box. Use comma as a separator, ie.BPSK31,QPSK64,OLIVIA,CONTESTIA etc.
+Here you can set up the default bandwidth for any of supported modes (CW - SSB - RTTY - AM - FM). If your radio is tuned to the corresponding band segment or if you switch the mode on the radio control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be changed at any time, however a program restart will be probably needed to take the changes into effect.<br><br><strong>User definable digital modes</strong> can be set up in a separate box. Use comma as a separator, ie. BPSK31,QPSK64,OLIVIA,CONTESTIA etc.<br> Some TRX like ICOM doesn't have support for this in HamLib. To get mode settings work, set all values to 0 (zero).
 <p align=center><img src=img/line.png></p>
 <a name=ah9><h2><strong>QTH Profiles</strong></h2></a>
 <img src=img/h12.png border=0><br><br>
@@ -193,9 +206,9 @@ The xplanet window has currently no other function than to display spots or band
 <img src=img/h69.png border=0><br><br>
 Zip code tracking allows to determine states, counties, provinces and other geographical details if the postal zip code structure allows such operations. The zip code itself is retrieved from the callbook address. The database is located in the /zipcodes folder. If set up properly, the F6 key is used to determine US state, US county and italian province.<br><br>
 <strong>Setup: </strong>The database must be loaded before use and the target (field) must be specified. Also, the position of the zip code (line begin or end) must be set up.<br><br>
-<a name=bh4><h2><strong>LoTW support</strong></h2></a>
+<a name=bh4><h2><strong>LoTW/eQSL support</strong></h2></a>
 <img src="img/h76.png"><br><br>
-Provide your user name for LoTW and the password (this is <strong>not</strong> the password sent to US amateurs via postcard!). Choose if you want to include LoTW confirmation in the statistics and <em>New country</em> and <em>New band country</em> info messages.<br><br>
+Provide your user name for eQSL/LoTW and the password (this is <strong>not</strong> the password sent to US amateurs via postcard!). Choose if you want to include LoTW confirmation in the statistics and <em>New country</em> and <em>New band country</em> info messages.<br><br>
 <a name=ch1><h2><strong>CW interface</strong></h2></a>
 <img src="img/h95.png"><br><br>
 Choose your preferred CW interface. There are 3 options: None, WinKeyer USB and cwdaemon. We strongly recommend the Winkey USB by Steve Elliot, K1EL, which provides 'all in one', including one of most advanced paddle keyers available. The cwdaemon should be seen as provisional option with many limitations, which may need a custom made linux kernel to avoid sloppy CW at speeds above 25 WPM. If cwdaemon used, only keyoard keying is possible.<br><br>
@@ -216,7 +229,32 @@ Of course, the export and compression takes some time, depending on the log size
 <a name=ch4><h2><strong>External viewers</strong></h2></a>
 Set up the viewers used for browsing the notes related to a particular callsign.<br><br>
 <img src="img/h111.png"><br><br>
-The notes in the call_data subfolder can contain text, html, pdf and image files. To enable reading of all file types, corresponding viewers must be set up properly, ie. must be in the system path.
+The notes in the call_data subfolder can contain text, html, pdf and image files. To enable reading of all file types, corresponding viewers must be set up properly, ie. must be in the system path.<br>
+<a name=ch5><h2><strong>Callbook support</strong></h2></a>
+CQRLOG supports <a href="http://HamQTH.com">HamQTH</a> and <a href="http://qrz.com">QRZ.com</a> callbooks but only access throught XML interace is supported. HamQTH has free interface, for QRZ.com you have to pay a year fee.<br><br>
+<img src="img/h1112.png"><br><br>
+
+<a name=ch6><h2><strong>RBN support</strong></h2></a>
+CQRLOG can receive spots from RBN and show it on Gray line map. It's very nice to see where your signal has been decoded especially when you are calling CQ on empty band.<br><br>
+<img src="img/h1114.png"><br><br>
+<em>Login:</em> - your user name to log in to RBN. It's usually your own callsign.<br>
+<em>Watch for:</em> the callsign you are watching for, also usually your own callsign. If you leave this field empty, every spot will be shown on he grayline map.<br>
+<em>Auto connect after open the log</em> - check this option if you want to be autoconnect to RBN when program stats, you don't have to care about it and CQRLOG will do it for you automatically.
+<em>Signal strench</em> How strong you are will be clear very quickly when you look at the map with the dots in different color. Which color will be used can be changed here.<br>
+<em>Delete old information after XX seconds</em> The dots won't stay on the map forever. 180 seconds (3 minutes) is good default value. Please note, it also depends on the band, if you change the band, dots will always be deleted. All data is band related.<br>
+<a name=ch7><h2><strong>Online log upload support</strong></h2></a>
+CQRLOG supports online log upload to <a href="http://HamQTH.com">HamQTH</a>, <a href="https://secure.clublog.org/loginform.php">ClubLog.org</a> and <a href="http://hrdlog.net/">HRDLOG.net</a><br>
+<img src="img/h1116.png"><br><br>
+Both ClubLog and HamQTH need user and password, Clublog also email used when registered. HRDLog.net needs only user name and code, you've got by e-mail. You can set different color for every service. This color will be used for status messages which will inform you about upload progress.<em>Upload QSO data immediately after save, update or delete</em> means that every insert/update or delete will be uploaded automatically. But if you change something in QSO list window with hot keys e.g. CTRL+S, CTRL+W etc. and/or download data from eQSL/LoTW, changes won't be uploaded. All will be uploaded after you save/delete QSO or if you choose Online log and Upload to all online logs menu.<br>
+
+<a name=ch8><h3>How to get it work?</h3></a>
+<ul>
+	<li>check if you have set correct username, password (email, Code)</li>
+	<li>export all data from the log to ADIF file</li>
+	<li>import this adif file to the website of online log you are going to use (if you are using HamQTH, please wait till email about success import arrives)</li>
+	<li>open QSO list window, click to <em>Online log</em> menu and choose <em>Mark QSO as uploaded to all logs</em>, CQRLOG marks all QSO as uploaded</li>
+</ul>
+That's all, Now if you insert/edit or delete QSO, it will be also uploaded to online log.	
 </div>
 <p align=center><img src=img/line.png></p>
 <br>
@@ -228,6 +266,6 @@ The notes in the call_data subfolder can contain text, html, pdf and image files
 <td width="33%" align="right"><a href="h20.html">Next </a>&gt;</td>
 </tr>
 </tbody>
-</table>
+</table> 
 <br>
 </body></html>

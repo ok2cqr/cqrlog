@@ -2,7 +2,7 @@
 <html lang="en-us"><head>
 <title>CQRLOG - Help Index</title></head>
 <body>
-<strong><h1>CQRLOG for LINUX (version 0.9.0)</h1></strong>
+<strong><h1>CQRLOG for LINUX (version 1.7.0)</h1></strong>
 by<br><br>
 <i>Petr Hlozek, OK2CQR
 [http://www.ok2cqr.com]</i>
@@ -14,9 +14,9 @@ and
 <br><br>
 <strong><h3>Description:</h3></strong>
 <div align="justify"><div>CQRLOG is an advanced ham radio logger based
-on Firebird database. It provides radio control based on hamlib libraries
+on MySQL database. It provides radio control based on hamlib libraries
 (currently support of 140+ radio types and models), DX cluster
-connection, band map, QRZ callbook (web version), IOTA support, a
+connection, band map, QRZ.com/HamQTH.com callbook (XML access), IOTA support, a
 grayliner, propagation indicator, xplanet support (maps in azimuthal projection centered in
 your QTH), OK1RR free QSL manager database etc.
 <br> <br>CQRLOG is intended mainly to seriously HF DX minded operators
@@ -52,13 +52,20 @@ own proprietary protocol, implemented in some of their product family.
 Therefore, each rig family will require a <i>hamlib</i> backend to set
 the VFO frequency, change mode and passband width, get current signal
 strength, etc. The actual list of supported radios can be found <a href="h6.html"><strong>here</strong></a>.
-<br><br> <strong><h3>Installation:</h3></strong>Unpack (untar) the
-installation package cqrlog_version_install.tar.gz into a temporary
-directory and fire it up. An installer will do all the job for you.
-There is also a choice of a brand new installation or version upgrade.
+<br><br> <strong><h3>Installation:</h3></strong>Ubuntu users can use repository on Launchpad. To add the repo, open terminal and copy&amp;paste<br><br> 
+<code>
+sudo add-apt-repository ppa:ok2cqr/ppa<br>
+sudo apt-get update<br>
+sudo apt-get install cqrlog	<br>
+</code><br><br>
+Only Ubuntu 12.04 LTS is officially supported but there are builds also fo newer versions of Ubuntu. For other distributions, you can use binaries located at <a href="http://cqrlog.com/download">http://cqrlog.com/download</a>. Some of them, like Fedora and Arch, have their own repositories with CQRLOG - Fedora: <a href="https://admin.fedoraproject.org/pkgdb/acls/name/cqrlog">https://admin.fedoraproject.org/pkgdb/acls/name/cqrlog</a> ArchLinux <a href="https://aur.archlinux.org/packages/cqrlog/">https://aur.archlinux.org/packages/cqrlog/</a><br>
 If upgrading, no important file will be overwritten. Anyway, <strong>backup your log</strong> before you begin any upgrade!
 <br><br><strong><h3>Dependencies:</h3></strong>
-The only dependency is the <i>hamlib</i> which must be installed also if you don't want radio control. The sources are available at <a href="http://hamlib.sourceforge.net/"><strong>http://hamlib.sourceforge.net/</strong></a>, however precompiled packages are available for almost any major Linux distribution.
+<ul>
+	<li><strong>HamLib</strong> - must be installed also if you don't want radio control. The sources are available at <a href="http://hamlib.sourceforge.net/"><strong>http://hamlib.sourceforge.net/</strong></a>, however precompiled packages are available for almost any major Linux distribution</li>
+	<li><strong>MySQL server and client</strong> - without this program can't work at all</li>
+	<li><strong>libssl-devel</strong> needed if you want to use LoTW and/or online log uplod	
+</ul>
 </div>
 <a name="aa"><strong></strong></a><h2><a name="aa"><strong>Contents:</strong></a></h2><h3><strong>Quick start</strong></h3>
 <ul style="margin-left: 40px;">
@@ -86,6 +93,9 @@ The only dependency is the <i>hamlib</i> which must be installed also if you don
 <li><a href="h1.html#ch2">fldigi interface</a></li>
 <li><a href="h1.html#ch3">Auto backup</a></li>
 <li><a href="h1.html#ch4">External viewers</a></li>
+<li><a href="h1.html#ch5">Callbook support</a></li>
+<li><a href="h1.html#ch6">RBN support</a></li> 
+<li><a href="h1.html#ch7">Online log upload support</a></li>
 </ul>
 </ul>
 <strong><h3>Operation</h3></strong>
