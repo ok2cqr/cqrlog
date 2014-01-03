@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 1.7.0
+  + online QSO upload to HamQTH, ClubLog and HRDLog added
   + improved QSL managers import, should be faster a bit
   + in Rotor Control 'Long Path' button added (Darek, SP2MKI)
   + COMMENT field is exported to eQSL server
