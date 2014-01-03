@@ -311,10 +311,11 @@ begin
   begin
     if dmData.DebugLevel>=1 then Writeln('Clicked to:',where);
     i := GetIndexFromPosition(where);
-      if dmData.DebugLevel>=1 then Writeln('Array pos: ',i);
+    if dmData.DebugLevel>=1 then Writeln('Array pos: ',i);
     if i=0 then exit;
     EmitBandMapClick(Self,BandMapItems[i].Call,BandMapItems[i].Mode,BandMapItems[i].Freq)
   end;
+
   if dmData.DebugLevel>=1 then
   begin
     for i:=1 to MAX_ITEMS do
@@ -362,7 +363,7 @@ begin
   begin
     s := copy(s,2,Length(s)-1);
     if dmData.DebugLevel>=1 then Writeln('GetIndexFromPosition, looking for:',s);
-    for i:=1 to MAX_ITEMS do
+    for i:= MAX_ITEMS downto 1 do
     begin
       if BandMapItems[i].TextValue=s then
       begin
@@ -395,7 +396,9 @@ var
   i : Integer;
   Changed : Boolean = False;
   When : TDateTime;
+  iter : Word;
 begin
+  iter := 1;
   while not Terminated do
   begin
     try
@@ -405,10 +408,10 @@ begin
       begin
         if frmBandMap.BandMapItems[i].Freq = 0 then
           Continue;
-
-        //Writeln('Now:      ',DateTimeToStr(When));
-        //Writeln('TimeStamp:',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp));
-        {Writeln('Delete:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)));
+        {
+        Writeln('Now:      ',DateTimeToStr(When));
+        Writeln('TimeStamp:',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp));
+        Writeln('Delete:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)));
         Writeln('Second:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FSecondInterval/86400)));
         Writeln('First:    ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FFirstInterval/86400)));
         Writeln('Call:     ',frmBandMap.BandMapItems[i].Call);
@@ -452,12 +455,14 @@ begin
     finally
       LeaveCriticalSection(frmBandMap.BandMapCrit)
     end;
-    if Changed then
+    if Changed or (iter>3) then
     begin
       Synchronize(@frmBandMap.SyncBandMap);
       Changed := False;
+      iter    := 1;
       //Writeln('Something has changed .... ');
     end;
+    inc(iter);
     Sleep(700)
   end
 end;

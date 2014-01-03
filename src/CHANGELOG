@@ -12,6 +12,7 @@ Legend:
   - CONTESTIA mode was saved as CONSTESTI (increased max length of mode to 10 characters) 
   - ReverseBeacon support in gray line didn't work - fixed 
   - after click to OK button in Preferences, bandmap stopped deleting old spots - fixed
+  - bandmap was not updated when any spot was not added - fixed
 
 
 1.6.1
