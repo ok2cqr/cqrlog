@@ -86,13 +86,13 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then dmData.trQ.Rollback;
   if rbWebExportNotExported.Checked then
-    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r '+
+    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks '+
                          'from cqrlog_main where eqsl_qslsdate is null'
   else begin
     if dmData.IsFilter then
       dmData.Q.SQL.Text := dmData.qCQRLOG.SQL.Text
     else
-      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r '+
+      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks '+
                            'from cqrlog_main'
   end;
   dmData.Q.Open;
@@ -122,7 +122,7 @@ begin
     Writeln(f);
     Writeln(f,'<EQSL_USER'+dmUtils.StringToADIF(cqrini.ReadString('LoTW','eQSLName','')));
     Writeln(f,'<EQSL_PSWD'+dmUtils.StringToADIF(cqrini.ReadString('LoTW','eQSLPass','')));
-    Writeln(f, '<EOH>');
+    Writeln(f,'<EOH>');
     while not dmData.Q.Eof do
     begin
       lblInfo.Caption := 'Exporting QSO nr. ' + IntToStr(Nr);
@@ -153,6 +153,12 @@ begin
 
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(dmData.Q.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
+
+      if (dmData.Q.FieldByName('remarks').AsString<>'') then
+      begin
+        tmp := '<COMMENT' + dmUtils.StringToADIF(dmData.Q.FieldByName('remarks').AsString);
+        Writeln(f,tmp)
+      end;
 
       tmp := '<APP_EQSL_QTH_NICKNAME'+dmUtils.StringToADIF(edtQTH.Text);
       Writeln(f,tmp);

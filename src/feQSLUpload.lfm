@@ -1,14 +1,14 @@
 object frmeQSLUpload: TfrmeQSLUpload
   Left = 509
   Height = 481
-  Top = 267
+  Top = 265
   Width = 575
   Caption = 'Upload QSO to eQSL.cc'
   ClientHeight = 481
   ClientWidth = 575
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '0.9.30.2'
   object grbWebExport: TGroupBox
     Left = 0
     Height = 64
@@ -20,17 +20,17 @@ object frmeQSLUpload: TfrmeQSLUpload
     TabOrder = 0
     object rbWebExportAll: TRadioButton
       Left = 14
-      Height = 24
+      Height = 22
       Top = 6
-      Width = 134
+      Width = 113
       Caption = ' Export all QSOs'
       TabOrder = 0
     end
     object rbWebExportNotExported: TRadioButton
       Left = 14
-      Height = 24
+      Height = 22
       Top = 31
-      Width = 361
+      Width = 303
       Caption = 'Export only QSOs which have never been uploaded'
       Checked = True
       TabOrder = 1
@@ -48,15 +48,15 @@ object frmeQSLUpload: TfrmeQSLUpload
     TabOrder = 1
     object Label1: TLabel
       Left = 14
-      Height = 18
+      Height = 16
       Top = 14
-      Width = 104
+      Width = 87
       Caption = 'QTH Nickname:'
       ParentColor = False
     end
     object edtQTH: TEdit
       Left = 174
-      Height = 27
+      Height = 25
       Top = 9
       Width = 174
       TabOrder = 0
@@ -69,12 +69,12 @@ object frmeQSLUpload: TfrmeQSLUpload
     Width = 575
     Align = alClient
     Caption = ' Upload '
-    ClientHeight = 342
+    ClientHeight = 344
     ClientWidth = 571
     TabOrder = 2
     object mStat: TMemo
       Left = 0
-      Height = 304
+      Height = 306
       Top = 0
       Width = 571
       Align = alClient
@@ -88,7 +88,7 @@ object frmeQSLUpload: TfrmeQSLUpload
     object pnlUpload: TPanel
       Left = 0
       Height = 38
-      Top = 304
+      Top = 306
       Width = 571
       Align = alBottom
       BevelOuter = bvNone
