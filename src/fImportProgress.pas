@@ -940,7 +940,7 @@ begin
               t2 := t_lotw+5/1440;
 
               if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_lotw),' | ',TimeToStr(t1),'|',TimeToStr(t2));
-              if (t_lotw >=t1) and (t_lotw<=t2) then
+              if (t_lotw >=t1) and (t_lotw<=t2) and (dmData.Q.Fields[1].AsString <> 'L') then
               begin
                 if LoTWShowNew and (dmData.Q.Fields[1].AsString <> 'L') then  //this qso is already confirmed
                   LoTWQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
