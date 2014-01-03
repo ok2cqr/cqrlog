@@ -1,14 +1,14 @@
 object frmeQSLDownload: TfrmeQSLDownload
   Left = 461
   Height = 609
-  Top = 148
+  Top = 137
   Width = 489
   Caption = 'Download data from eQSL.cc'
   ClientHeight = 609
   ClientWidth = 489
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '0.9.30.2'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 431
@@ -16,12 +16,12 @@ object frmeQSLDownload: TfrmeQSLDownload
     Width = 489
     Align = alClient
     Caption = 'Progress'
-    ClientHeight = 412
+    ClientHeight = 414
     ClientWidth = 485
     TabOrder = 0
     object mStat: TMemo
       Left = 0
-      Height = 412
+      Height = 414
       Top = 0
       Width = 485
       Align = alClient
@@ -56,20 +56,20 @@ object frmeQSLDownload: TfrmeQSLDownload
       Width = 489
       Anchors = [akTop, akLeft, akRight]
       Caption = ' '
-      ClientHeight = 69
+      ClientHeight = 71
       ClientWidth = 485
       TabOrder = 1
       object Label3: TLabel
         Left = 10
-        Height = 18
+        Height = 16
         Top = 12
-        Width = 260
+        Width = 230
         Caption = 'Return QSL records received on or after '
         ParentColor = False
       end
       object edtDateFrom: TEdit
         Left = 278
-        Height = 27
+        Height = 25
         Top = 7
         Width = 85
         TabOrder = 0
@@ -78,7 +78,7 @@ object frmeQSLDownload: TfrmeQSLDownload
         Left = 6
         Height = 22
         Top = 39
-        Width = 380
+        Width = 331
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end

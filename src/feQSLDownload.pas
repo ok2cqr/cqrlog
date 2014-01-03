@@ -194,8 +194,11 @@ begin
                             http.Sock.LastErrorDesc)
           end
         end
-        else
-          mStat.Lines.Add('eQSL page was probably changed, cannot find the link to ADIF file')
+        else begin
+          mStat.Lines.Add('eQSL page was probably changed, cannot find the link to ADIF file');
+          mStat.Lines.Add('Server returned this:');
+          mStat.Lines.Add(l.Text)
+        end
       end
     end
     else begin
