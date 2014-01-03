@@ -121,6 +121,11 @@ begin
   HTTP  := THTTPSend.Create;
   l     := TStringList.Create;
   try
+    HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
+    HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
+    HTTP.UserName  := cqrini.ReadString('Program','User','');
+    HTTP.Password  := cqrini.ReadString('Program','Passwd','');
+
     for i:=0 to data.Count-1 do
     begin
       Key   := copy(data.Strings[i],1,Pos('=',data.Strings[i])-1);
