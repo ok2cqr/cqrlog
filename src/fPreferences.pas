@@ -1564,7 +1564,7 @@ begin
   frmBandMap.OnlyCurrMode    := chkShowActiveMode.Checked;
   frmBandMap.FirstInterval   := StrToint(edtFirst.Text)*60;
   frmBandMap.SecondInterval  := StrToInt(edtSecond.Text)*60;
-  frmBandMap.DeleteAfter     := StrToint(edtDelAfter.Text)*60;
+  frmBandMap.DeleteAfter     := StrToint(edtDisep.Text)*60;
   frmBandMap.DoXplanetExport := (rgShowFrom.ItemIndex > 0);
 
   if frmGrayline.Showing then

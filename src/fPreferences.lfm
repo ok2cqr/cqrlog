@@ -21,10 +21,10 @@ object frmPreferences: TfrmPreferences
     Height = 576
     Top = 0
     Width = 639
-    ActivePage = tabOnlineLog
+    ActivePage = tabBandMap
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 25
+    TabIndex = 15
     TabOrder = 0
     OnChange = pgPreferencesChange
     OnPageChanged = pgPreferencesChange
@@ -4634,15 +4634,15 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object Label61: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 11
-          Width = 304
+          Width = 282
           Caption = 'Select color of entry added from new qso window '
           ParentColor = False
         end
         object cmbQSOBandColor: TColorBox
           Left = 412
-          Height = 28
+          Height = 29
           Top = 3
           Width = 100
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4652,9 +4652,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkBandMapkHz: TCheckBox
         Left = 391
-        Height = 26
+        Height = 22
         Top = 230
-        Width = 157
+        Width = 143
         Caption = 'Show bandmap in kHz'
         Checked = True
         State = cbChecked
@@ -4663,25 +4663,25 @@ object frmPreferences: TfrmPreferences
       end
       object chkSaveBandMap: TCheckBox
         Left = 14
-        Height = 26
+        Height = 22
         Top = 307
-        Width = 192
+        Width = 173
         Caption = 'Save band map after close '
         TabOrder = 3
       end
       object chkShowActiveBand: TCheckBox
         Left = 238
-        Height = 26
+        Height = 22
         Top = 307
-        Width = 163
+        Width = 145
         Caption = 'Show only active band'
         TabOrder = 4
       end
       object chkShowActiveMode: TCheckBox
         Left = 14
-        Height = 26
+        Height = 22
         Top = 331
-        Width = 168
+        Width = 150
         Caption = 'Show only active mode'
         TabOrder = 5
       end
@@ -4704,31 +4704,31 @@ object frmPreferences: TfrmPreferences
         TabOrder = 7
         object Label62: TLabel
           Left = 11
-          Height = 17
+          Height = 16
           Top = 14
-          Width = 89
+          Width = 85
           Caption = 'The first after '
           ParentColor = False
         end
         object Label63: TLabel
           Left = 163
-          Height = 17
+          Height = 16
           Top = 14
-          Width = 107
+          Width = 100
           Caption = 'the second after '
           ParentColor = False
         end
         object Label64: TLabel
           Left = 350
-          Height = 17
+          Height = 16
           Top = 14
-          Width = 98
+          Width = 90
           Caption = 'disappear after '
           ParentColor = False
         end
         object edtFirst: TEdit
           Left = 104
-          Height = 22
+          Height = 25
           Top = 11
           Width = 50
           TabOrder = 0
@@ -4736,7 +4736,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtSecond: TEdit
           Left = 281
-          Height = 22
+          Height = 25
           Top = 11
           Width = 50
           TabOrder = 1
@@ -4744,7 +4744,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtDisep: TEdit
           Left = 462
-          Height = 22
+          Height = 25
           Top = 11
           Width = 50
           TabOrder = 2
@@ -4762,9 +4762,9 @@ object frmPreferences: TfrmPreferences
         TabOrder = 8
         object Label65: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 41
-          Width = 38
+          Width = 34
           Caption = 'Color:'
           ParentColor = False
         end
@@ -4788,7 +4788,7 @@ object frmPreferences: TfrmPreferences
         end
         object cmbFrmDXCColor: TColorBox
           Left = 67
-          Height = 28
+          Height = 29
           Top = 35
           Width = 113
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
@@ -4797,9 +4797,9 @@ object frmPreferences: TfrmPreferences
         end
         object chkUseDXCColors: TCheckBox
           Left = 6
-          Height = 26
+          Height = 22
           Top = 6
-          Width = 218
+          Width = 200
           Caption = 'Use the same color as the spot'
           OnChange = chkUseDXCColorsChange
           TabOrder = 3
@@ -4807,25 +4807,25 @@ object frmPreferences: TfrmPreferences
       end
       object chkDeleteAfterQSO: TCheckBox
         Left = 238
-        Height = 26
+        Height = 22
         Top = 331
-        Width = 272
+        Width = 251
         Caption = 'Delete station from bandmap after QSO'
         TabOrder = 9
       end
       object chkAddAfterSaveQSO: TCheckBox
         Left = 14
-        Height = 26
+        Height = 22
         Top = 358
-        Width = 280
+        Width = 255
         Caption = 'Add station to bandmap after saving QSO'
         TabOrder = 10
       end
       object chkIgnoreBandFreq: TCheckBox
         Left = 14
-        Height = 26
+        Height = 22
         Top = 385
-        Width = 579
+        Width = 545
         Caption = 'Ignore DX spots with freq eqauls to the start of the band (21.000, 14.000 etc., usually notes)'
         TabOrder = 11
       end
@@ -4845,7 +4845,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 0
         object edtXplanetPath: TEdit
           Left = 6
-          Height = 22
+          Height = 25
           Top = 15
           Width = 432
           TabOrder = 0
@@ -4863,30 +4863,30 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object Label66: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 15
-          Width = 46
+          Width = 42
           Caption = 'Height:'
           ParentColor = False
         end
         object Label67: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 55
-          Width = 40
+          Width = 38
           Caption = 'Width:'
           ParentColor = False
         end
         object edtXHeight: TEdit
           Left = 62
-          Height = 22
+          Height = 25
           Top = 12
           Width = 41
           TabOrder = 0
         end
         object edtXWidth: TEdit
           Left = 62
-          Height = 22
+          Height = 25
           Top = 52
           Width = 41
           TabOrder = 1
@@ -4903,30 +4903,30 @@ object frmPreferences: TfrmPreferences
         TabOrder = 2
         object Label68: TLabel
           Left = 9
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 26
+          Width = 24
           Caption = 'Top:'
           ParentColor = False
         end
         object Label69: TLabel
           Left = 9
-          Height = 17
+          Height = 16
           Top = 34
-          Width = 30
+          Width = 28
           Caption = 'Left:'
           ParentColor = False
         end
         object edtXTop: TEdit
           Left = 54
-          Height = 22
+          Height = 25
           Top = 7
           Width = 52
           TabOrder = 0
         end
         object edtXLeft: TEdit
           Left = 54
-          Height = 22
+          Height = 25
           Top = 31
           Width = 52
           TabOrder = 1
@@ -4943,17 +4943,17 @@ object frmPreferences: TfrmPreferences
       end
       object chkShowXplanet: TCheckBox
         Left = 14
-        Height = 26
+        Height = 22
         Top = 331
-        Width = 247
+        Width = 227
         Caption = 'Show xplanet after program startup'
         TabOrder = 3
       end
       object chkCloseXplanet: TCheckBox
         Left = 278
-        Height = 26
+        Height = 22
         Top = 331
-        Width = 200
+        Width = 181
         Caption = 'Close xplanet with CQRLOG '
         TabOrder = 4
       end
@@ -4968,46 +4968,46 @@ object frmPreferences: TfrmPreferences
         TabOrder = 5
         object Label70: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 137
+          Width = 123
           Caption = 'Refresh xplanet every'
           ParentColor = False
         end
         object Label71: TLabel
           Left = 206
-          Height = 17
+          Height = 16
           Top = 7
-          Width = 25
+          Width = 24
           Caption = 'sec.'
           ParentColor = False
         end
         object Label72: TLabel
           Left = 6
-          Height = 17
+          Height = 16
           Top = 47
-          Width = 59
+          Width = 54
           Caption = 'Show last'
           ParentColor = False
         end
         object Label73: TLabel
           Left = 120
-          Height = 17
+          Height = 16
           Top = 47
-          Width = 35
+          Width = 33
           Caption = 'spots'
           ParentColor = False
         end
         object edtXRefresh: TEdit
           Left = 150
-          Height = 22
+          Height = 25
           Top = 3
           Width = 49
           TabOrder = 0
         end
         object edtXLastSpots: TEdit
           Left = 73
-          Height = 22
+          Height = 25
           Top = 43
           Width = 42
           TabOrder = 1
@@ -5062,7 +5062,7 @@ object frmPreferences: TfrmPreferences
       end
       object cmbXplanetColor: TColorBox
         Left = 240
-        Height = 28
+        Height = 29
         Top = 360
         Width = 100
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames, cbCustomColors]
@@ -5071,9 +5071,9 @@ object frmPreferences: TfrmPreferences
       end
       object chkXplanetColor: TCheckBox
         Left = 14
-        Height = 26
+        Height = 22
         Top = 365
-        Width = 191
+        Width = 175
         Caption = 'Use this xplanet font color'
         TabOrder = 9
       end
