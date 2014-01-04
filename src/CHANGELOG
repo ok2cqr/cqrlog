@@ -14,7 +14,7 @@ Legend:
   - ReverseBeacon support in gray line didn't work - fixed 
   - after click to OK button in Preferences, bandmap stopped deleting old spots - fixed
   - bandmap was not updated when any spot was not added - fixed
-
+  - station was added to bandmap when offline mode was activated - fixed
 
 1.6.1
   + 630M band added

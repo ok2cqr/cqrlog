@@ -1985,11 +1985,13 @@ begin
     if edtWAZ.Text = '' then
       edtWAZ.Text := '0';
 
-    if Delete then
-      frmBandMap.DeleteFromBandMap(edtCall.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),cmbMode.Text);
-    if cqrini.ReadBool('BandMap','AddAfterQSO',False) then
-      acAddToBandMap.Execute;
-
+    if not cbOffline.Checked then
+    begin
+      if Delete then
+        frmBandMap.DeleteFromBandMap(edtCall.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),cmbMode.Text);
+      if cqrini.ReadBool('BandMap','AddAfterQSO',False) then
+        acAddToBandMap.Execute;
+    end;
     dmData.SaveQSO(date,
                    edtStartTime.Text,
                    edtEndTime.Text,
