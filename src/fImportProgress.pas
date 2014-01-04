@@ -1333,13 +1333,16 @@ begin
           qso_in_log := False;
           if eQSLShowNew and (dmData.Q.Fields[1].AsString <> 'E') then  //this qso is already confirmed
             eQSLQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
-          dmData.Q1.Close;
-          dmData.Q1.SQL.Clear;
-          dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
-          dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
-          dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
-          if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
-          dmData.Q1.ExecSQL;
+          if (dmData.Q.Fields[1].AsString <> 'E') then
+          begin
+            dmData.Q1.Close;
+            dmData.Q1.SQL.Clear;
+            dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
+            dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
+            dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
+            if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
+            dmData.Q1.ExecSQL
+          end;
           qso_in_log := True;
           dmData.Q.Next
         end;
