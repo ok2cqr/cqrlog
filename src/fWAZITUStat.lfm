@@ -215,7 +215,7 @@ object frmWAZITUStat: TfrmWAZITUStat
     end
     object edtProfiles: TEdit
       Left = 248
-      Height = 21
+      Height = 25
       Top = 5
       Width = 136
       TabOrder = 0
@@ -239,7 +239,7 @@ object frmWAZITUStat: TfrmWAZITUStat
     end
     object cmbMode: TComboBox
       Left = 56
-      Height = 27
+      Height = 29
       Top = 5
       Width = 136
       ItemHeight = 0
@@ -257,7 +257,7 @@ object frmWAZITUStat: TfrmWAZITUStat
     end
     object cmbCfmType: TComboBox
       Left = 122
-      Height = 27
+      Height = 29
       Top = 42
       Width = 260
       ItemHeight = 0

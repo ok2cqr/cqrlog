@@ -202,6 +202,7 @@ begin
   for i:=1 to 40 do
   grdStat.Cells[0,i] := IntToStr(i);
 
+  dmData.Q.Close;
   if gmode <> '' then
     dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
   else
@@ -263,6 +264,7 @@ begin
   grdStat.Cells[0,76] := '78';
   grdStat.Cells[0,77] := '90';
 
+  dmData.Q.Close;
   if gmode <> '' then
     dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
   else
@@ -295,148 +297,7 @@ begin
   dmData.trQ.Rollback;
   CreateSummary
 end;
-{
-procedure TfrmWAZITUStat.CreateWAZStat;
-var
-  zone : Integer;
-  i    : Integer = 1;
-  y    : Integer;
-begin
 
-  for i:=0 to grdStat.RowCount-1 do
-    for y:=0 to grdStat.ColCount-1 do
-      grdStat.Cells[y,i] := '';
-
-  LoadBandsSettings;
-
-  Caption := 'WAZ statistic';
-  grdStat.Cells[0,0] := 'WAZ';
-
-  dmData.Q.Close();
-  if gmode <> '' then
-    dmData.Q.SQL.Text := 'select waz,band from cqrlog_main where '+gmode+' group by waz,band order by waz'
-  else
-    dmData.Q.SQL.Text := 'select waz,band from cqrlog_main group by waz,band order by waz';
-
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  dmData.Q.First;
-
-  grdStat.RowCount := 41;
-  for i:=1 to 40 do
-    grdStat.Cells[0,i] := IntToStr(i);
-
-  while not dmData.Q.Eof do
-  begin
-    zone := dmData.Q.Fields[0].AsInteger;
-    while not (zone <> dmData.Q.Fields[0].AsInteger) and (not dmData.Q.Eof) do
-    begin
-      if zone > 40 then
-      begin
-        dmData.Q.Next;
-        Continue
-      end;
-      if (zone <> 0) then
-        ShowBandChar(dmData.Q.Fields[1].AsString,zone,'X');
-      dmData.Q.Next
-    end
-  end;
-
-  if (CfmType = stLoTWOnly) then
-  begin
-    dmData.Q.Close();
-    if gmode <> '' then
-      dmData.Q.SQL.Text := 'select waz,band from cqrlog_main WHERE qsl_r=' +
-                           QuotedStr('Q') + ' AND '+ gmode +' group by waz,band order by waz'
-    else
-      dmData.Q.SQL.Text := 'select waz,band from cqrlog_main WHERE qsl_r=' +
-                           QuotedStr('Q') +' group by waz,band order by waz';
-    if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    dmData.Q.First;
-    while not dmData.Q.Eof do
-    begin
-      zone := dmData.Q.Fields[0].AsInteger;
-      while not (zone <> dmData.Q.Fields[0].AsInteger) and (not dmData.Q.Eof) do
-      begin
-        if zone > 40 then
-        begin
-          dmData.Q.Next;
-          Continue
-        end;
-        if (zone <> 0) then
-          ShowBandChar(dmData.Q.Fields[1].AsString,zone,'Q');
-        dmData.Q.Next
-      end
-    end;
-    dmData.Q.Close()
-  end;
-
-
-  //if (CfmType = tcQSLLoTW) or (CfmType = tcLoTW) then
-  begin
-    dmData.Q.Close();
-    if gmode <> '' then
-        dmData.Q.SQL.Text := 'select waz,band from cqrlog_main WHERE lotw_qslr=' +
-                           QuotedStr('L') + ' AND ' + gmode +' group by waz,band order by waz'
-    else
-      dmData.Q.SQL.Text := 'select waz,band from cqrlog_main WHERE lotw_qslr=' +
-                           QuotedStr('L') +' group by waz,band order by waz';
-    if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    dmData.Q.First;
-    while not dmData.Q.Eof do
-    begin
-      zone := dmData.Q.Fields[0].AsInteger;
-      while not (zone <> dmData.Q.Fields[0].AsInteger) and (not dmData.Q.Eof) do
-      begin
-        if zone > 40 then
-        begin
-          dmData.Q.Next;
-          Continue
-        end;
-        if (zone <> 0) then
-          ShowBandChar(dmData.Q.Fields[1].AsString,zone,'L');
-        dmData.Q.Next
-      end
-    end;
-    dmData.Q.Close()
-  end;
-  //if (CfmType <> tcLoTW) then
-  begin
-    dmData.Q.Close();
-    if gmode <> '' then
-      dmData.Q.SQL.Text := 'select waz,band from cqrlog_main WHERE qsl_r=' +
-                           QuotedStr('Q') + ' AND '+ gmode +' group by waz,band order by waz'
-    else
-      dmData.Q.SQL.Text := 'select waz,band from cqrlog_main WHERE qsl_r=' +
-                           QuotedStr('Q') +' group by waz,band order by waz';
-    if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    dmData.Q.First;
-    while not dmData.Q.Eof do
-    begin
-      zone := dmData.Q.Fields[0].AsInteger;
-      while not (zone <> dmData.Q.Fields[0].AsInteger) and (not dmData.Q.Eof) do
-      begin
-        if zone > 40 then
-        begin
-          dmData.Q.Next;
-          Continue
-        end;
-        if (zone <> 0) then
-          ShowBandChar(dmData.Q.Fields[1].AsString,zone,'Q');
-        dmData.Q.Next
-      end
-    end;
-    dmData.Q.Close()
-  end;
-  dmData.trQ.RollBack;
-  CreateSummary
-end;
-}
 procedure TfrmWAZITUStat.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   dmUtils.SaveForm(self);
@@ -970,6 +831,7 @@ begin
   grdStat.Cells[0,pOC] := 'OC';
   grdStat.Cells[0,pSA] := 'SA';
 
+  dmData.Q.Close;
   if gmode <> '' then
     dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
   else
@@ -1094,6 +956,7 @@ begin
   LoadBandsSettings;
   Caption := 'WAS statistic';
 
+  dmData.Q.Close;
   where := '((adif=291) or (adif=6) or (adif=110))';
   if gmode <> '' then
     where := where + ' and '+ gmode;
