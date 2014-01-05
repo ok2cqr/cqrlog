@@ -1202,9 +1202,6 @@ object frmMain: TfrmMain
           Action = acImportADIF
           OnClick = acImportADIFExecute
         end
-        object MenuItem32: TMenuItem
-          Caption = 'CQRLOG for Windows'
-        end
         object MenuItem33: TMenuItem
           Caption = '-'
         end
