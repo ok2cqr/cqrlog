@@ -8,7 +8,7 @@ object frmBigSquareStat: TfrmBigSquareStat
   ClientWidth = 655
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '0.9.30.2'
   object Panel1: TPanel
     Left = 0
     Height = 66
@@ -21,7 +21,7 @@ object frmBigSquareStat: TfrmBigSquareStat
     TabOrder = 0
     object cmbBands: TComboBox
       Left = 63
-      Height = 31
+      Height = 29
       Top = 24
       Width = 164
       ItemHeight = 0
@@ -30,9 +30,9 @@ object frmBigSquareStat: TfrmBigSquareStat
     end
     object Label1: TLabel
       Left = 16
-      Height = 18
+      Height = 16
       Top = 32
-      Width = 39
+      Width = 32
       Caption = 'Band:'
       ParentColor = False
     end
@@ -42,30 +42,30 @@ object frmBigSquareStat: TfrmBigSquareStat
       Top = 11
       Width = 225
       Caption = ' Confirmed '
-      ClientHeight = 26
+      ClientHeight = 28
       ClientWidth = 221
       TabOrder = 1
       object chkQSL: TCheckBox
         Left = 6
-        Height = 24
+        Height = 22
         Top = 1
-        Width = 53
+        Width = 45
         Caption = 'QSL'
         TabOrder = 0
       end
       object chkLoTW: TCheckBox
         Left = 70
-        Height = 24
+        Height = 22
         Top = 1
-        Width = 65
+        Width = 55
         Caption = 'LoTW'
         TabOrder = 1
       end
       object chkeQSL: TCheckBox
         Left = 149
-        Height = 24
+        Height = 22
         Top = 1
-        Width = 61
+        Width = 52
         Caption = 'eQSL'
         TabOrder = 2
       end

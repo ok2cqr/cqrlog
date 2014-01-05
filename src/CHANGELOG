@@ -15,6 +15,7 @@ Legend:
   - after click to OK button in Preferences, bandmap stopped deleting old spots - fixed
   - bandmap was not updated when any spot was not added - fixed
   - station was added to bandmap when offline mode was activated - fixed
+  - big square statistics didn't worked in newer versions of distributions - fixed
 
 1.6.1
   + 630M band added
