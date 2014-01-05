@@ -48,7 +48,6 @@ type
     acShowToolBar: TAction;
     acButtons:  TAction;
     acRefresh:  TAction;
-    acCQRLOGImport: TAction;
     acQSLMgr:   TAction;
     acDatabaseUpdate: TAction;
     acLabelsExport: TAction;
@@ -361,7 +360,6 @@ type
     procedure mnuHelpIndexClick(Sender: TObject);
     procedure mnuIOTAStatClick(Sender: TObject);
     procedure acButtonsExecute(Sender: TObject);
-    procedure acCQRLOGImportExecute(Sender: TObject);
     procedure acQSLMgrExecute(Sender: TObject);
     procedure acRefreshExecute(Sender: TObject);
     procedure acShowToolBarExecute(Sender: TObject);
@@ -826,28 +824,6 @@ begin
     pnlButtons.Visible     := True;
     mnuShowButtons.Checked := True;
   end;
-end;
-
-procedure TfrmMain.acCQRLOGImportExecute(Sender: TObject);
-begin
-  dlgOpen.Filter     := 'CQRLOG|cqrlog.dbf';
-  dlgOpen.DefaultExt := '.dbf';
-  if dlgOpen.Execute then
-  begin
-    with TfrmImportProgress.Create(self) do
-      try
-        lblComment.Caption := 'Importing CQRLOG data ...';
-        Directory  := ExtractFilePath(dlgOpen.FileName);
-        ImportType := 2;
-        FileName   := ExtractFileName(dlgOpen.FileName);
-        ShowModal;
-      finally
-        Free
-      end;
-  end
-  else
-    BringToFront;
-  RefreshQSODXCCCount;
 end;
 
 procedure TfrmMain.acQSLMgrExecute(Sender: TObject);

@@ -16,7 +16,7 @@ unit dData;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil, Dbf,
+  Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil,
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp;
@@ -118,7 +118,6 @@ type
     trLogList: TSQLTransaction;
     trmQ: TSQLTransaction;
     dsrQSLMgr: TDatasource;
-    tblImport: TDbf;
     dsrDXCluster: TDatasource;
     dsrProfiles: TDatasource;
     dsrBands: TDatasource;

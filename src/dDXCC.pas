@@ -16,7 +16,7 @@ unit dDXCC;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Dialogs, Dbf, sqldb,
+  Classes, SysUtils, LResources, Forms, Controls, Dialogs, sqldb,
   mysql50conn, db, iniFiles, dateutils;
 
 

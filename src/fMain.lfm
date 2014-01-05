@@ -1203,8 +1203,7 @@ object frmMain: TfrmMain
           OnClick = acImportADIFExecute
         end
         object MenuItem32: TMenuItem
-          Action = acCQRLOGImport
-          OnClick = acCQRLOGImportExecute
+          Caption = 'CQRLOG for Windows'
         end
         object MenuItem33: TMenuItem
           Caption = '-'
@@ -2247,10 +2246,6 @@ object frmMain: TfrmMain
     object acRefresh: TAction
       Caption = 'Refresh data'
       OnExecute = acRefreshExecute
-    end
-    object acCQRLOGImport: TAction
-      Caption = 'CQRLOG for Windows'
-      OnExecute = acCQRLOGImportExecute
     end
     object acQSLMgr: TAction
       Caption = 'QSL manager search'

@@ -39,7 +39,6 @@ type
     FileSize : Int64;
     procedure ImportDXCCTables;
     procedure RegenerateDXCCStat;
-    procedure ImportCQRLOGWin;
     procedure DownloadDXCCData;
     procedure ImportLoTWAdif;
     procedure ImportQSLMgrs;
@@ -81,7 +80,6 @@ begin
     case ImportType of
       0 : RegenerateDXCCStat;
       1 : ImportDXCCTables;
-      2 : ImportCQRLOGWin;
       3 : DownloadDXCCData;
       4 : ImportLoTWAdif;
       5 : ImportQSLMgrs;
@@ -389,146 +387,6 @@ begin
     dmData.qCQRLOG.EnableControls
   end;
   Close
-end;
-
-procedure TfrmImportProgress.ImportCQRLOGWin;
-{var
-  time_off  : String;
-  waz,itu   : String;
-  iwaz,iitu : Integer;
-  profil    : Integer;
-  vis       : Integer;
-  iota      : String;
-  time_on   : String;
-  }
-begin
-  {
-  dmData.tblImport.FilePathFull := Directory;
-  dmData.tblImport.TableName    := FileName;
-  try
-    dmData.tblImport.Open;
-    dmData.tblImport.First;
-    pBarProg.Max := dmData.tblImport.RecordCount;
-    while not dmData.tblImport.EOF do
-    begin
-      //waz := dmData.tblImport.FieldByName('waz').AsString;
-      //itu := dmData.tblImport.FieldByName('itu').AsString;
-      if not TryStrToInt(waz,iwaz) then
-        iwaz := 0;
-      if not TryStrToInt(itu,iitu) then
-        iitu := 0;
-      if not dmUtils.IsTimeOK(dmData.tblImport.FieldByName('cas').AsString) then
-      begin
-        time_on  := '12:12';
-        time_off := '12:12'
-      end
-      else begin
-        time_on := dmData.tblImport.FieldByName('cas').AsString;
-        if dmUtils.IsTimeOK(dmData.tblImport.FieldByName('CAS1').AsString) then
-          time_off := dmData.tblImport.FieldByName('CAS1').AsString
-        else
-          time_off := dmData.tblImport.FieldByName('cas').AsString
-      end;
-      if dmData.tblImport.FieldByName('profil').AsInteger = -1 then
-        profil := 0
-      else
-        profil := dmData.tblImport.FieldByName('profil').AsInteger;
-      iota := dmData.tblImport.FieldByName('iota').AsString;
-      if not dmUtils.IsIOTAOK(iota) then
-        iota := '';
-      dmData.SaveQSO(dmData.tblImport.FieldByName('datum').AsDateTime,
-                     time_on,
-                     time_off,
-                     dmData.tblImport.FieldByName('call').AsString,
-                     dmData.tblImport.FieldByName('freq').AsFloat,
-                     UpperCase(dmData.tblImport.FieldByName('mode').AsString),
-                     dmData.tblImport.FieldByName('rst_s').AsString,
-                     dmData.tblImport.FieldByName('rst_r').AsString,
-                     dmData.tblImport.FieldByName('name').AsString,
-                     dmData.tblImport.FieldByName('qth').AsString,
-                     dmData.tblImport.FieldByName('qsl_s').AsString,
-                     dmData.tblImport.FieldByName('qsl_r').AsString,
-                     dmData.tblImport.FieldByName('qsl_via').AsString,
-                     iota,
-                     dmData.tblImport.FieldByName('pwr').AsString,
-                     iwaz,
-                     iitu,
-                     dmData.tblImport.FieldByName('loc').AsString,
-                     dmData.tblImport.FieldByName('my_loc').AsString,
-                     dmData.tblImport.FieldByName('county').AsString,
-                     dmData.tblImport.FieldByName('diplom').AsString,
-                     dmData.tblImport.FieldByName('rem').AsString,
-                     adif,
-                     dmUtils.GetIDCall(dmData.tblImport.FieldByName('call').AsString),
-                     '',
-                     dmDXCC.GetCont(dmData.tblImport.FieldByName('call').AsString,
-                                    dmData.tblImport.FieldByName('datum').AsDateTime),
-                     dmData.tblImport.FieldByName('podlepfx').AsBoolean,
-                     profil
-      );
-      dmData.tblImport.Next;
-      pBarProg.StepIt;
-      if (pBarProg.Position mod 100) = 0 then
-      begin
-        Repaint;
-        Application.ProcessMessages;
-      end;
-
-        procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
-                     rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
-                     loc, my_loc,county,award,remarks,dxcc_ref : String; qso_dxcc : Boolean;
-                     profile : Integer);
-
-    end;
-    dmData.tblImport.Close;
-    dmData.tblImport.TableName    := 'profily.dbf';
-    dmData.tblImport.Open;
-    dmData.tblImport.First;
-
-    while not dmData.tblImport.EOF do
-    begin
-      if dmData.tblImport.Fields[6].AsBoolean then
-        vis := 1
-      else
-        vis := 0;
-      dmData.Q.SQL.Text := 'INSERT INTO profiles (nr,locator,qth,rig,remarks,visible)'+
-                           ' VALUES ('+IntToStr(dmData.tblImport.Fields[0].AsInteger)+
-                           ','+QuotedStr(dmData.tblImport.Fields[1].AsString)+
-                           ','+QuotedStr(dmData.tblImport.Fields[2].AsString)+
-                           ','+QuotedStr(dmData.tblImport.Fields[3].AsString)+
-                           ','+QuotedStr(dmData.tblImport.Fields[4].AsString)+
-                           ','+IntToStr(vis)+')';
-      if dmData.DebugLevel >=1 then
-        Writeln(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.ExecSQL;
-      dmData.trQ.Commit;
-      dmData.tblImport.Next
-    end;
-
-    pBarProg.Position := 0;
-    dmData.tblImport.Close;
-    dmData.tblImport.TableName    := 'remarks.dbf';
-    dmData.tblImport.Open;
-    dmData.tblImport.First;
-    pBarProg.Max := dmData.tblImport.RecordCount;
-    while not dmData.tblImport.EOF do
-    begin
-      dmData.SaveComment(dmData.tblImport.Fields[0].AsString,
-                         dmData.tblImport.Fields[1].AsString);
-      dmData.tblImport.Next;
-      pBarProg.StepIt;
-      if (pBarProg.Position mod 100) = 0 then
-      begin
-        Repaint;
-        Application.ProcessMessages;
-      end;
-    end;
-  finally
-    dmData.tblImport.Close;
-    lblCount.Caption := 'Complete';
-  end
-  }
 end;
 
 procedure TfrmImportProgress.DownloadDXCCData;

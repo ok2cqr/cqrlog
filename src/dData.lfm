@@ -35,13 +35,6 @@ object dmData: TdmData
     left = 160
     top = 72
   end
-  object tblImport: TDbf
-    IndexDefs = <>
-    TableLevel = 4
-    FilterOptions = []
-    left = 232
-    top = 472
-  end
   object dsrQSLMgr: TDatasource
     AutoEdit = False
     DataSet = qQSLMgr
