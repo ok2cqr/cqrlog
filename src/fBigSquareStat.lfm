@@ -11,12 +11,12 @@ object frmBigSquareStat: TfrmBigSquareStat
   LCLVersion = '0.9.30.2'
   object Panel1: TPanel
     Left = 0
-    Height = 66
+    Height = 88
     Top = 0
     Width = 655
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 66
+    ClientHeight = 88
     ClientWidth = 655
     TabOrder = 0
     object cmbBands: TComboBox
@@ -115,8 +115,8 @@ object frmBigSquareStat: TfrmBigSquareStat
   end
   object IpHtmlPanel1: TIpHtmlPanel
     Left = 0
-    Height = 490
-    Top = 66
+    Height = 468
+    Top = 88
     Width = 655
     Align = alClient
     DataProvider = IpFileDataProvider1
