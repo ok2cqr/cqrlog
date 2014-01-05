@@ -38,17 +38,17 @@ object frmBigSquareStat: TfrmBigSquareStat
     end
     object GroupBox1: TGroupBox
       Left = 240
-      Height = 45
+      Height = 72
       Top = 11
       Width = 225
       Caption = ' Confirmed '
-      ClientHeight = 28
+      ClientHeight = 55
       ClientWidth = 221
       TabOrder = 1
       object chkQSL: TCheckBox
         Left = 6
         Height = 22
-        Top = 1
+        Top = 3
         Width = 45
         Caption = 'QSL'
         TabOrder = 0
@@ -56,7 +56,7 @@ object frmBigSquareStat: TfrmBigSquareStat
       object chkLoTW: TCheckBox
         Left = 70
         Height = 22
-        Top = 1
+        Top = 3
         Width = 55
         Caption = 'LoTW'
         TabOrder = 1
@@ -64,7 +64,7 @@ object frmBigSquareStat: TfrmBigSquareStat
       object chkeQSL: TCheckBox
         Left = 149
         Height = 22
-        Top = 1
+        Top = 3
         Width = 52
         Caption = 'eQSL'
         TabOrder = 2

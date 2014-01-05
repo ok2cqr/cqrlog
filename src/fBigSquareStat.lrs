@@ -11,13 +11,13 @@ LazarusResources.Add('TfrmBigSquareStat','FORMDATA',[
   +#24#5'Width'#3#164#0#10'ItemHeight'#2#0#5'Style'#7#14'csDropDownList'#8'TabO'
   +'rder'#2#0#0#0#6'TLabel'#6'Label1'#4'Left'#2#16#6'Height'#2#16#3'Top'#2' '#5
   +'Width'#2' '#7'Caption'#6#5'Band:'#11'ParentColor'#8#0#0#9'TGroupBox'#9'Grou'
-  +'pBox1'#4'Left'#3#240#0#6'Height'#2'-'#3'Top'#2#11#5'Width'#3#225#0#7'Captio'
-  +'n'#6#11' Confirmed '#12'ClientHeight'#2#28#11'ClientWidth'#3#221#0#8'TabOrd'
-  +'er'#2#1#0#9'TCheckBox'#6'chkQSL'#4'Left'#2#6#6'Height'#2#22#3'Top'#2#1#5'Wi'
+  +'pBox1'#4'Left'#3#240#0#6'Height'#2'H'#3'Top'#2#11#5'Width'#3#225#0#7'Captio'
+  +'n'#6#11' Confirmed '#12'ClientHeight'#2'7'#11'ClientWidth'#3#221#0#8'TabOrd'
+  +'er'#2#1#0#9'TCheckBox'#6'chkQSL'#4'Left'#2#6#6'Height'#2#22#3'Top'#2#3#5'Wi'
   +'dth'#2'-'#7'Caption'#6#3'QSL'#8'TabOrder'#2#0#0#0#9'TCheckBox'#7'chkLoTW'#4
-  +'Left'#2'F'#6'Height'#2#22#3'Top'#2#1#5'Width'#2'7'#7'Caption'#6#4'LoTW'#8'T'
+  +'Left'#2'F'#6'Height'#2#22#3'Top'#2#3#5'Width'#2'7'#7'Caption'#6#4'LoTW'#8'T'
   +'abOrder'#2#1#0#0#9'TCheckBox'#7'chkeQSL'#4'Left'#3#149#0#6'Height'#2#22#3'T'
-  +'op'#2#1#5'Width'#2'4'#7'Caption'#6#4'eQSL'#8'TabOrder'#2#2#0#0#0#7'TButton'
+  +'op'#2#3#5'Width'#2'4'#7'Caption'#6#4'eQSL'#8'TabOrder'#2#2#0#0#0#7'TButton'
   +#10'btnRefresh'#4'Left'#3#240#1#6'Height'#2#25#3'Top'#2#28#5'Width'#3#128#0#7
   +'Anchors'#11#5'akTop'#7'akRight'#0#7'Caption'#6#17'Refresh statistic'#7'OnCl'
   +'ick'#7#15'btnRefreshClick'#8'TabOrder'#2#2#0#0#0#6'TPanel'#6'Panel2'#4'Left'
