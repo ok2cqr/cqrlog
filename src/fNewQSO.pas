@@ -4706,6 +4706,7 @@ var
   IgnoreQRZ : Boolean = False;
   MvToRem   : Boolean = False;
   call  : String;
+  AlwaysReplace : Boolean;
 begin
   if c_ErrMsg <> '' then
   begin
@@ -4719,8 +4720,10 @@ begin
     mCallBook.Lines.Add(c_address);
     mCallBook.SelStart := 1;
 
-    IgnoreQRZ := cqrini.ReadBool('NewQSO','IgnoreQRZ',False);
-    MvToRem   := cqrini.ReadBool('NewQSO','MvToRem',True);
+    IgnoreQRZ     := cqrini.ReadBool('NewQSO','IgnoreQRZ',False);
+    MvToRem       := cqrini.ReadBool('NewQSO','MvToRem',True);
+    AlwaysReplace := cqrini.ReadBool('NewQSO','UseCallBookData',False);
+
     if (edtQSL_VIA.Text = '') and (not IgnoreQRZ) and (c_qsl<>'') then
     begin
       c_qsl := dmUtils.GetQSLVia(c_qsl);
@@ -4740,29 +4743,29 @@ begin
       end
     end; //qsl manager
 
-    if edtName.Text = '' then
+    if (edtName.Text = '') or AlwaysReplace then
       edtName.Text := c_nick; //operator's name
-    if (edtQTH.Text = '') and (c_callsign = edtCall.Text) then
+    if ((edtQTH.Text = '') or AlwaysReplace) and (c_callsign = edtCall.Text) then
       edtQTH.Text := c_qth;  //qth
 
-    if (edtGrid.Text='') and dmUtils.IsLocOK(c_grid) and (c_callsign = edtCall.Text) then
+    if ((edtGrid.Text='') or AlwaysReplace) and dmUtils.IsLocOK(c_grid) and (c_callsign = edtCall.Text) then
     begin
       edtGrid.Text := c_grid;
       edtGridExit(nil)
     end;  //grid
 
-    if cmbIOTA.Text='' then
+    if (cmbIOTA.Text='') or AlwaysReplace then
     begin
       cmbIOTA.Text := c_iota;
       cmbIOTAExit(nil)
     end;
 
-    if (c_state <> '') and (edtState.Text = '') and (c_callsign = edtCall.Text) then
+    if ((c_state <> '') and (edtState.Text = '') or AlwaysReplace) and (c_callsign = edtCall.Text) then
     begin
       edtState.Text := c_state;
-      if (c_county <> '') and (edtCounty.Text='') then
+      if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace then
       begin
-        if (edtState.Text<>'') then
+        if (edtState.Text<>'') or AlwaysReplace then
           edtCounty.Text := edtState.Text+','+c_county
         else
           edtCounty.Text := c_county

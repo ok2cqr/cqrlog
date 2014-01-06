@@ -112,6 +112,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkUseCallBookData: TCheckBox;
     chkHrUpEnabled: TCheckBox;
     chkHrUpOnline: TCheckBox;
     chkHaUpEnabled: TCheckBox;
@@ -1085,6 +1086,7 @@ begin
   else
     cqrini.WriteFloat('NewQSO','FreqChange',0.010);
   cqrini.WriteBool('NewQSO','ClearAfterFreqChange',chkClearNewQSOFreq.Checked);
+  cqrini.WriteBool('NewQSO','UseCallBookData',chkUseCallBookData.Checked);
 
   cqrini.WriteString('Program', 'Proxy', edtProxy.Text);
   cqrini.WriteString('Program', 'Port', edtPort.Text);
@@ -2369,6 +2371,7 @@ begin
   chkClearRIT.Checked := cqrini.ReadBool('NewQSO','ClearRIT',False);
   edtFreqChange.Text := FloatToStr(cqrini.ReadFloat('NewQSO','FreqChange',0.010)*1000);
   chkClearNewQSOFreq.Checked := cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
+  chkUseCallBookData.Checked := cqrini.ReadBool('NewQSO','UseCallBookData',False);
 
   edtProxy.Text := cqrini.ReadString('Program', 'Proxy', '');
   edtPort.Text := cqrini.ReadString('Program', 'Port', '');
