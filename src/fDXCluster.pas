@@ -139,8 +139,8 @@ begin
       Writeln('In ConnectWeb');
     if WebThread = nil then
       WebThread := TWebThread.Create(True);
-    WebThread.Resume;
-  end;
+    WebThread.Start
+  end
 end;
 
 procedure TfrmDXCluster.ConnectToTelnet;
@@ -232,7 +232,7 @@ begin
       TelThread := TTelThread.Create(True);
     end;
     Writeln('bb');
-    TelThread.Resume;
+    TelThread.Start;
     Writeln('cc');
   end;
 end;
@@ -270,7 +270,7 @@ begin
 
     TelThread := TTelThread.Create(True);
     TelThread.FreeOnTerminate := True;
-    TelThread.Resume
+    TelThread.Start
 end;
 
 procedure TfrmDXCluster.WebDbClick(where:longint;mb:TmouseButton;ms:TShiftState);

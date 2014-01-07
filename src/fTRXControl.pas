@@ -718,32 +718,8 @@ begin
   if not radio.Connected then
   begin
     //Writeln('huu5');
-    FreeAndNil(radio);
-  end;
-
-  {
-  Result := True;
-  if dmData.DebugLevel >=1 then Writeln('In inicializerig');
-  Writeln('huh-2');
-  if Running then
-  begin
-    Writeln('huh-1');
-    thRig.Terminate;
-    Application.ProcessMessages;
-    Writeln('huh0');
-    Sleep(2000)
-  end;
-  Writeln('huh1');
-  thRig := TRigThread.Create(True);
-  Writeln('huh2');
-  thRig.FreeOnTerminate := True;
-
-  Writeln('huh3');
-  ReloadCfg := True;
-  Writeln('huh4');
-  thRig.Resume;
-  Writeln('huh5');
-  }
+    FreeAndNil(radio)
+  end
 end;
 
 procedure TfrmTRXControl.SetMode(mode : String;bandwidth :Integer);

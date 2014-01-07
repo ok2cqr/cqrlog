@@ -1181,13 +1181,13 @@ begin
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
-    Tab.Resume
+    Tab.Start
   end;
 
   if cqrini.ReadBool('Program','CheckQSLTabs',True) then
   begin
     thqsl := TQSLTabThread.Create(True);
-    thqsl.Resume
+    thqsl.Start
   end;
 
   frmBandMap.FirstInterval   := cqrini.ReadInteger('BandMap', 'FirstAging', 5)*60;
@@ -3754,7 +3754,7 @@ begin
       begin
         c_callsign := edtCall.Text;
         QRZ := TQRZThread.Create(True);
-        QRZ.Resume
+        QRZ.Start
       end
     end
   end;
@@ -3879,7 +3879,7 @@ begin
       c_callsign := edtCall.Text;
       mCallBook.Clear;
       QRZ := TQRZThread.Create(True);
-      QRZ.Resume
+      QRZ.Start
     end
   end;
   if (Shift = [ssAlt]) and (key = VK_F) then

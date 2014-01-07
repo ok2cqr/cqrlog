@@ -507,7 +507,7 @@ begin
   ClearAll;
   NewAdded := False;
   BandMapThread := TBandMapThread.Create(True);
-  BandMapThread.Resume
+  BandMapThread.Start
 end;
 
 procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);

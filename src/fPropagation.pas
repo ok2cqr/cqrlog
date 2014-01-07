@@ -177,7 +177,7 @@ var
   T : TPropThread;
 begin
   T := TPropThread.Create(True);
-  T.Resume
+  T.Start
 end;
 
 procedure TfrmPropagation.SyncProp;

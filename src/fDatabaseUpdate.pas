@@ -370,7 +370,7 @@ begin
         exit
     end;
     QRZ := TQRZThread.Create(True);
-    QRZ.Resume
+    QRZ.Start
   end
 end;
 

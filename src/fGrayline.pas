@@ -394,7 +394,7 @@ begin
     Application.MessageBox('Login to RBN server is not set. Go to Preferences -> RBN support and do the basic settings','Information ...',mb_OK+mb_IconInformation)
   else begin
     RBNThread := TRBNThread.Create(True);
-    RBNThread.Resume
+    RBNThread.Start
   end
 end;
 
