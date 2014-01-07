@@ -4765,7 +4765,7 @@ begin
       edtState.Text := c_state;
       if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace then
       begin
-        if (edtState.Text<>'') or AlwaysReplace then
+        if (edtState.Text<>'') then
           edtCounty.Text := edtState.Text+','+c_county
         else
           edtCounty.Text := c_county
