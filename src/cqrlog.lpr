@@ -2,7 +2,7 @@ program cqrlog;
 
 {$mode objfpc}{$H+}
 uses
-  cthreads,uScrollBars,cmem,
+  cthreads,uScrollBars,{cmem,}
   Interfaces, // this includes the LCL widgetset
   Forms,sysutils,fMain,fPreferences,dUtils,fNewQSO,dialogs,fChangeLocator,dData,
   dDXCC,fMarkQSL,fDXCCStat,fSort,fFilter,fImportProgress,fImportTest,
