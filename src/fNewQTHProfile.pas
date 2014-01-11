@@ -49,8 +49,6 @@ uses dUtils, dData;
 
 procedure TfrmNewQTHProfile.btnSaveClick(Sender: TObject);
 begin
-  Writeln('Old:',OldProf);
-  Writeln('New:',edtProfNr.Text);
   if NOT dmUtils.IsLocOK(edtLocator.Text) then
   begin
     Application.MessageBox('You must enter correct locator','Error!',mb_ok + mb_IconError);

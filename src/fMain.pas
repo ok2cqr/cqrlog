@@ -1917,7 +1917,7 @@ procedure TfrmMain.ShowFields;
       //Writeln('dbgrdMain.Columns[i].DisplayName:',dbgrdMain.Columns[i].DisplayName);
       if UpperCase(dbgrdMain.Columns[i].DisplayName) = Column then
       begin
-        Writeln('Column:',column,':',IfShow);
+        //Writeln('Column:',column,':',IfShow);
         dbgrdMain.Columns[i].Visible := IfShow;
         if IfShow and (dbgrdMain.Columns[i].Width = 0) then
           dbgrdMain.Columns[i].Width := 60;
@@ -2019,7 +2019,7 @@ procedure TfrmMain.ShowFields;
     end;
     if (not isAdded) and IfShow then
     begin
-      Writeln('Adding ',Column);
+      //Writeln('Adding ',Column);
       dbgrdMain.Columns.Add;
       dbgrdMain.Columns[dbgrdMain.Columns.Count-1].FieldName   := LowerCase(Column);
       dbgrdMain.Columns[dbgrdMain.Columns.Count-1].DisplayName := LowerCase(Column);

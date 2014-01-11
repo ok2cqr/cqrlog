@@ -2890,7 +2890,6 @@ procedure TdmData.UpgradeCommonDatabase(old_version : Integer);
 var
   err : Boolean = False;
 begin
-  Writeln('OLD:',old_version);
   if old_version < cDB_COMN_VER then
   begin
     if trQ1.Active then trQ1.Rollback;
