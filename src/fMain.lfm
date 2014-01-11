@@ -448,7 +448,6 @@ object frmMain: TfrmMain
       Width = 61
       Alignment = taRightJustify
       Caption = 'QSO in log:'
-      Font.Color = clBlue
       ParentColor = False
       ParentFont = False
     end
@@ -473,7 +472,6 @@ object frmMain: TfrmMain
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = False
       Caption = 'DXCC:'
-      Font.Color = clBlue
       ParentColor = False
       ParentFont = False
     end
@@ -498,7 +496,6 @@ object frmMain: TfrmMain
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       Caption = 'DXCC CFM:'
-      Font.Color = clBlue
       ParentColor = False
       ParentFont = False
     end
@@ -839,7 +836,6 @@ object frmMain: TfrmMain
       Top = 2
       Width = 108
       Caption = 'Comment for QSO:'
-      Font.Color = clBlue
       ParentColor = False
       ParentFont = False
     end
@@ -849,7 +845,6 @@ object frmMain: TfrmMain
       Top = 29
       Width = 38
       Caption = 'Award:'
-      Font.Color = clBlue
       ParentColor = False
       ParentFont = False
     end
@@ -883,7 +878,6 @@ object frmMain: TfrmMain
         Top = 2
         Width = 60
         Caption = 'QS_S date:'
-        Font.Color = clBlue
         ParentColor = False
         ParentFont = False
       end
@@ -907,7 +901,6 @@ object frmMain: TfrmMain
         Top = 29
         Width = 62
         Caption = 'QS_R date:'
-        Font.Color = clBlue
         ParentColor = False
         ParentFont = False
       end
@@ -928,7 +921,6 @@ object frmMain: TfrmMain
         Top = 3
         Width = 94
         Caption = 'LoTW QS_S date:'
-        Font.Color = clBlue
         ParentColor = False
         ParentFont = False
       end
@@ -952,7 +944,6 @@ object frmMain: TfrmMain
         Top = 30
         Width = 96
         Caption = 'LoTW QS_R date:'
-        Font.Color = clBlue
         ParentColor = False
         ParentFont = False
       end

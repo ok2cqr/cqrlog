@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 457
+  Left = 259
   Height = 651
-  Top = 87
+  Top = 67
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -179,10 +179,9 @@ object frmNewQSO: TfrmNewQSO
         object Label11: TLabel
           Left = 256
           Height = 16
-          Top = 192
+          Top = 194
           Width = 122
           Caption = 'Comment to callsign:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -192,7 +191,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 55
           Width = 28
           Caption = 'QTH:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -202,7 +200,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 55
           Width = 37
           Caption = 'Name:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -212,7 +209,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 8
           Width = 43
           Caption = 'My RST:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -222,7 +218,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 8
           Width = 44
           Caption = 'His RST:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -232,7 +227,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 8
           Width = 24
           Caption = 'Call:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -242,7 +236,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 8
           Width = 62
           Caption = 'Frequency:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -252,7 +245,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 8
           Width = 36
           Caption = 'Mode:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -262,17 +254,15 @@ object frmNewQSO: TfrmNewQSO
           Top = 248
           Width = 55
           Caption = 'End time:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
         object Label2: TLabel
-          Left = 108
+          Left = 114
           Height = 16
           Top = 248
           Width = 63
           Caption = 'Start time:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -282,7 +272,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 248
           Width = 32
           Caption = 'Date:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -292,7 +281,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 55
           Width = 29
           Caption = 'GRID'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -302,7 +290,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 55
           Width = 27
           Caption = 'PWR'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -312,7 +299,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 55
           Width = 34
           Caption = 'QSL_S'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -322,7 +308,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 55
           Width = 36
           Caption = 'QSL_R'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -332,17 +317,15 @@ object frmNewQSO: TfrmNewQSO
           Top = 99
           Width = 19
           Caption = 'ITU'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
         object Label20: TLabel
-          Left = 414
+          Left = 397
           Height = 16
           Top = 99
           Width = 35
           Caption = 'Award'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -352,7 +335,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 147
           Width = 55
           Caption = 'DXCC ref.'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -362,7 +344,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 99
           Width = 26
           Caption = 'WAZ'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -372,7 +353,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 99
           Width = 26
           Caption = 'IOTA'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -382,7 +362,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 99
           Width = 41
           Caption = 'County'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -392,7 +371,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 147
           Width = 104
           Caption = 'Comment to QSO:'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -402,7 +380,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 147
           Width = 42
           Caption = 'QSL VIA'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -419,7 +396,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQSLMgr: TLabel
           Left = 406
           Height = 16
-          Top = 191
+          Top = 194
           Width = 113
           Caption = 'QSL manager found!'
           Font.Color = clRed
@@ -433,7 +410,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 99
           Width = 32
           Caption = 'State'
-          Font.Color = clBlue
           ParentColor = False
           ParentFont = False
         end
@@ -1215,7 +1191,6 @@ object frmNewQSO: TfrmNewQSO
         Caption = 'DXCC stat.'
         ClientHeight = 124
         ClientWidth = 544
-        Font.Color = clBlue
         ParentFont = False
         TabOrder = 1
         object sgrdStatistic: TStringGrid
@@ -1257,7 +1232,6 @@ object frmNewQSO: TfrmNewQSO
         Caption = ' Callbook (qrz.com) '
         ClientHeight = 154
         ClientWidth = 236
-        Font.Color = clBlue
         ParentFont = False
         TabOrder = 0
         object mCallBook: TMemo
@@ -1271,14 +1245,13 @@ object frmNewQSO: TfrmNewQSO
         end
       end
       object GroupBox1: TGroupBox
-        Left = 9
+        Left = 11
         Height = 252
         Top = -3
         Width = 240
         Caption = 'DXCC info'
         ClientHeight = 235
         ClientWidth = 236
-        Font.Color = clBlue
         ParentFont = False
         TabOrder = 1
         object Label26: TLabel
@@ -1290,36 +1263,44 @@ object frmNewQSO: TfrmNewQSO
           ParentColor = False
         end
         object Label27: TLabel
-          Left = 124
+          Left = 126
           Height = 16
           Top = 89
           Width = 36
           Caption = 'DXCC:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object Label28: TLabel
-          Left = 8
+          Left = 10
           Height = 16
           Top = 72
           Width = 29
           Caption = 'WAZ:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object Label29: TLabel
-          Left = 17
+          Left = 19
           Height = 16
           Top = 89
           Width = 22
           Caption = 'ITU:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object Label30: TLabel
-          Left = 129
+          Left = 131
           Height = 16
           Top = 73
           Width = 32
           Caption = 'Cont:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object lblWAZ: TLabel
           Left = 48
@@ -1358,12 +1339,14 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label31: TLabel
-          Left = 16
+          Left = 18
           Height = 16
           Top = 105
           Width = 22
           Caption = 'LAT:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object Label32: TLabel
           Left = 122
@@ -1392,12 +1375,14 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label33: TLabel
-          Left = 6
+          Left = 8
           Height = 16
           Top = 122
           Width = 31
           Caption = 'DIST.:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object lblQRA: TLabel
           Left = 48
@@ -1639,12 +1624,14 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label14: TLabel
-          Left = 8
+          Left = 10
           Height = 16
           Top = 185
           Width = 33
           Caption = 'Local:'
+          Font.Color = clBlack
           ParentColor = False
+          ParentFont = False
         end
         object mCountry: TMemo
           Left = 57
@@ -1702,7 +1689,7 @@ object frmNewQSO: TfrmNewQSO
         Top = 9
         Width = 42
         Caption = 'QSO nr.'
-        Font.Color = clBlue
+        Font.Color = clBlack
         ParentColor = False
         ParentFont = False
       end

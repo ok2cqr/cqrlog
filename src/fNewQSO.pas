@@ -968,7 +968,7 @@ begin
   lblQSONr.Caption := '0';
   mCallBook.Clear;
   dmData.qQSOBefore.Close;
-  lblIOTA.Font.Color := clBlue;
+  lblIOTA.Font.Color := clDefault;
   if frmQSODetails.Showing then
   begin
     frmQSODetails.ClearAll;
@@ -2773,7 +2773,7 @@ begin
       if dmData.GetIOTAForDXCC(edtCall.Text,lblDXCC.Caption,cmbIOTA,dmUtils.MyStrToDate(edtDate.Text)) then
         lblIOTA.Font.Color := clRed
       else
-        lblIOTA.Font.Color := clBlue
+        lblIOTA.Font.Color := clDefault
     end
   finally
     frmSelectDXCC.Free
@@ -2913,7 +2913,7 @@ begin
     tmrFldigi.Enabled     := False;
     mnuRemoteMode.Checked := False;
     lblCall.Caption       := 'Call:';
-    lblCall.Font.Color    := clBlue;
+    lblCall.Font.Color    := clDefault;
     edtCall.Enabled       := True;
     cbOffline.Checked     := False;
     edtCall.SetFocus
@@ -3728,7 +3728,7 @@ begin
   if dmData.GetIOTAForDXCC(edtCall.Text,lblDXCC.Caption,cmbIOTA,dmUtils.MyStrToDate(edtDate.Text)) then
     lblIOTA.Font.Color := clRed
   else
-    lblIOTA.Font.Color := clBlue;
+    lblIOTA.Font.Color := clDefault;
   frmQSODetails.freq := cmbFreq.Text;
   frmQSODetails.waz  := edtWAZ.Text;
   frmQSODetails.itu  := edtITU.Text;
@@ -4864,7 +4864,7 @@ end;
 procedure TfrmNewQSO.UnsetEditLabel;
 begin
   lblCall.Caption    := 'Call:';
-  lblCall.Font.Color := clBlue;
+  lblCall.Font.Color := clDefault;
   Caption := dmUtils.GetNewQSOCaption('New QSO')
 end;
 
