@@ -79,16 +79,14 @@ end;
 
 procedure TfrmSearch.FormCloseQuery(Sender : TObject; var CanClose : boolean);
 begin
-  if not dmData.IsFilter then
-    SaveSettings
+  SaveSettings
 end;
 
 procedure TfrmSearch.btnSearchClick(Sender: TObject);
 var
   sql : String = '';
 begin
-  if not dmData.IsFilter then
-    SaveSettings;
+  SaveSettings;
   if edtText.Text = '' then
     exit;
   if dmData.SortType = stDate then
