@@ -1119,7 +1119,6 @@ begin
       if PosQsoDate > 0 then
       begin
         qsodate :=copy(orig,PosQsoDate+14,8);
-        Writeln(qsodate);
         {
         sSize      := '';
         PosQsoDate := PosQsoDate + 13;
@@ -1176,12 +1175,26 @@ begin
           Writeln('------------------------------------------------')
         end;
         qsodate  := dmUtils.ADIFDateToDate(qsodate);
+        mode     := UpperCase(mode);
+
 
         dmData.Q.Close;
-        dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
-                             'where (qsodate ='+QuotedStr(qsodate)+') '+
-                             'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ')'+
-                             'and (callsign = ' + QuotedStr(call) + ')';
+
+        if (mode='JT65') then
+        begin
+          dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
+                               'where (qsodate ='+QuotedStr(qsodate)+') '+
+                               'and ((mode = ' + QuotedStr('JT65') + ') or (mode='+QuotedStr('JT65A')+') '+
+                               'or (mode='+QuotedStr('JT65B')+') or (mode='+QuotedStr('JT65C')+')) '+
+                               'and (band = ' + QuotedStr(band) + ') '+
+                               'and (callsign = ' + QuotedStr(call) + ')'
+        end
+        else begin
+          dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
+                               'where (qsodate ='+QuotedStr(qsodate)+') '+
+                               'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ') '+
+                               'and (callsign = ' + QuotedStr(call) + ')'
+        end;
         if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
         if dmData.trQ.Active then dmData.trQ.Rollback;
         dmData.trQ.StartTransaction;
