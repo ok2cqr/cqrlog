@@ -41,8 +41,6 @@ N3RS;Sig
 NN3L;Sig
 SM0BDS;Lars
 K3ZO;Fred
-GW3NJW;Clive
-GW7X;Clive
 SA6G;Lars
 SM6CUK;Lars
 OH2EA;Hans
@@ -166,7 +164,6 @@ A45XR;Chris
 K7NJ;Riki
 W4DGJ;George
 G3CWW;Tony
-G3LPN;Phil
 LA3FL;Per
 G3BEX;John
 N2UU;Bob
@@ -654,3 +651,10 @@ DL5YL;Tina
 N5RR;Bill
 DL5YM;Fred
 AK5X;Bill
+K3TF;Tom
+W2MV;Alan
+W0JX;Dennis
+HA9RT;Joska
+PA4N;Frank
+W0VX;David
+AC4CA;John
