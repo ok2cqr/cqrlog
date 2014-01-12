@@ -339,7 +339,7 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label22: TLabel
-          Left = 57
+          Left = 60
           Height = 16
           Top = 99
           Width = 26
@@ -1415,9 +1415,9 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblGreeting: TLabel
-          Left = 167
+          Left = 189
           Height = 16
-          Top = 202
+          Top = 179
           Width = 40
           Caption = 'GE/GM'
           Font.Color = clRed
@@ -1629,7 +1629,7 @@ object frmNewQSO: TfrmNewQSO
         object mCountry: TMemo
           Left = 62
           Height = 70
-          Top = 5
+          Top = 3
           Width = 164
           ParentFont = False
           TabOrder = 0
@@ -1686,7 +1686,7 @@ object frmNewQSO: TfrmNewQSO
         ParentFont = False
       end
       object lblCountryInfo: TLabel
-        Left = 567
+        Left = 527
         Height = 16
         Top = 8
         Width = 19
@@ -1697,7 +1697,7 @@ object frmNewQSO: TfrmNewQSO
         ParentFont = False
       end
       object lblAmbiguous: TLabel
-        Left = 701
+        Left = 691
         Height = 16
         Top = 8
         Width = 99
@@ -4049,7 +4049,7 @@ object frmNewQSO: TfrmNewQSO
   object tmrUploadAll: TTimer
     Enabled = False
     OnTimer = tmrUploadAllTimer
-    left = 203
-    top = 347
+    left = 192
+    top = 344
   end
 end
