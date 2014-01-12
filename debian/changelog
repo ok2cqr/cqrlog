@@ -1,3 +1,30 @@
+cqrlog (1.7.0-1) unstable; urgency=low
+
+  * online QSO upload to HamQTH, ClubLog and HRDLog added
+  * improved QSL managers import, should be faster a bit
+  * "Long Path" button to Rotor Control added (Darek, SP2MKI)
+  * COMMENT field is exported to eQSL server
+  * Always overwrite info from previous QSO with callbook 
+    data option added
+  * help updated
+  * country files updated
+  * membership files updated
+  * layout improved (mostly new QSO window)
+  * LoTW QSL RCVD was not imported when ADIF didn't include 
+    LOTW_QSLRDATE value - fixed
+  * CONTESTIA mode was saved as CONSTESTI (increased max 
+    length of mode to 10 characters) - fixed
+  * ReverseBeacon support in Gray line didn't work - fixed
+  * after click to OK button in Preferences, bandmap stopped 
+    deleting old spots - fixed    
+  * bandmap was not updated when any spot was not added - fixed
+  * station was added to bandmap when offline mode was activated
+  * big square statistics didn't work in newer versions of 
+    distributions - fixed
+  * QSO JT65* mode were not confirmed by eQSL - fixed  
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 12 Jan 2014 17:16:00 +0100
+
 cqrlog (1.6.1-1) unstable; urgency=low
 
   * 630M band added
