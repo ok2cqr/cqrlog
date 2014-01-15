@@ -3,7 +3,7 @@ Section: hamradio
 Priority: extra
 Maintainer: Debian Hamradio Maintainers <debian-hams@lists.debian.org>
 Uploaders: Petr Hlozek <petr@ok2cqr.com>, Kamal Mostafa <kamal@whence.com>
-Build-Depends: debhelper (>= 7), lazarus (>= 0.9.29) | lazarus-0.9.30, lcl (>= 0.9.30) | lcl-0.9.30, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk, fp-units-db, libhamlib-dev (>= 1.2.10)
+Build-Depends: debhelper (>= 7), lazarus (>= 0.9.29) | lazarus-0.9.30, lcl (>= 0.9.30) | lcl-0.9.30, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk, fp-units-db, libhamlib-dev (>= 1.2.10), fp-units-math
 Standards-Version: 3.9.3
 Homepage: http://www.cqrlog.com
 
