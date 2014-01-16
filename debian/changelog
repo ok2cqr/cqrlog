@@ -1,3 +1,6 @@
+cqrlog (1.7.1-1) unstable; urgency=low
+  * building deb package works
+
 cqrlog (1.7.0-1) unstable; urgency=low
 
   * online QSO upload to HamQTH, ClubLog and HRDLog added
@@ -362,22 +365,24 @@ cqrlog (1.0.1-1) unstable; urgency=low
 
 cqrlog (1.0.0-1) unstable; urgency=low
 
-  * CQRLOG is now package ready (now deb packages for Ubuntu and Debian only)
+  * CQRLOG is now package ready (now deb packages for Ubuntu/Debian only)
   * native 32bit and 64bit versions
   * support multiple logs
-  * membership (> 70 clubs, 5 of them can be processed simultaneously) is tracked
-    by membership number (if a club doesn't have numbers, callsign is used)
-  * config file is stored directly to the main database. If a log is opened on
-    another computer, the settings will remain the same
-  * other windows (Grayline, Detail info, DX cluster etc.) auto-opened only if they
-    were previously opened in running CQRLOG which was properly (regularly) closed
+  * membership (> 70 clubs, 5 of them can be processed simultaneously) is 
+    tracked by membership number (if a club doesn't have numbers, callsign 
+    is used)
+  * config file is stored directly to the main database. If a log is opened 
+    on another computer, the settings will remain the same
+  * other windows (Grayline, Detail info, DX cluster etc.) auto-opened only 
+    if they were previously opened in running CQRLOG which was properly 
+    (regularly) closed
   * new faster ADIF import
-  * CQRLOG can be used on local computer with MySQL embedded or on a MySQL server,
-    CQRLOG can be run on another (remote) machine
-  * echo for telnet DX cluster added (the sent-out command is also displayed in DX
-    cluster window)
-  * clear log function added (in database connection window all log data can be
-    erased but the log file is not deleted)
+  * CQRLOG can be used on local computer with MySQL embedded or on a MySQL 
+    server, CQRLOG can be run on another (remote) machine
+  * echo for telnet DX cluster added (the sent-out command is also displayed 
+    in DX cluster window)
+  * clear log function added (in database connection window all log data can 
+    be erased but the log file is not deleted)
   * new About window added
   * changelog in html format added
   * membership databases updated
