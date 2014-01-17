@@ -2,6 +2,8 @@ cqrlog (1.7.1-1) unstable; urgency=low
   * building deb package fixed (Closes: #713516)
   * debian/control: added depency fp-units-math, build fixed 
     (Closes: #720701)
+  * debian/control: added MariaDB as alternative dependecy
+    (Closes: #732863)
 
  -- Petr Hlozek <petr@ok2cqr.com>  Sun, 12 Jan 2014 17:16:00 +0100
 
