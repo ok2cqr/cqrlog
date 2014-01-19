@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.7.1
+  - TRX control window was not sizeable - fixed
+
 1.7.0
   + online QSO upload to HamQTH, ClubLog and HRDLog added
   + improved QSL managers import, should be faster a bit

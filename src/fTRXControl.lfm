@@ -5,7 +5,6 @@ object frmTRXControl: TfrmTRXControl
   Width = 339
   ActiveControl = btnVFOA
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'TRX control'
   ClientHeight = 232
   ClientWidth = 339
@@ -160,7 +159,7 @@ object frmTRXControl: TfrmTRXControl
     Top = 0
     Width = 253
     Caption = ' Freq '
-    ClientHeight = 41
+    ClientHeight = 55
     ClientWidth = 249
     TabOrder = 0
     object lblFreq: TLabel
@@ -198,9 +197,9 @@ object frmTRXControl: TfrmTRXControl
   end
   object rbRadio1: TRadioButton
     Left = 24
-    Height = 26
+    Height = 22
     Top = 208
-    Width = 53
+    Width = 49
     Caption = 'RIG: '
     Checked = True
     OnClick = rbRadio1Click
@@ -209,9 +208,9 @@ object frmTRXControl: TfrmTRXControl
   end
   object rbRadio2: TRadioButton
     Left = 200
-    Height = 26
+    Height = 22
     Top = 208
-    Width = 53
+    Width = 49
     Caption = 'RIG: '
     OnClick = rbRadio2Click
     TabOrder = 2
@@ -222,7 +221,7 @@ object frmTRXControl: TfrmTRXControl
     Top = 72
     Width = 253
     Caption = ' Band '
-    ClientHeight = 97
+    ClientHeight = 111
     ClientWidth = 249
     TabOrder = 3
     object btn160m: TButton
@@ -352,7 +351,7 @@ object frmTRXControl: TfrmTRXControl
     Top = 0
     Width = 72
     Caption = ' Mode '
-    ClientHeight = 169
+    ClientHeight = 183
     ClientWidth = 68
     TabOrder = 4
     object btnCW: TButton
