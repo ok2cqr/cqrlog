@@ -6,6 +6,7 @@ Legend:
 
 1.7.1
   - TRX control window was not sizeable - fixed
+  - when ESC was pressed twice in Remote mode, log crashed - fixed
 
 1.7.0
   + online QSO upload to HamQTH, ClubLog and HRDLog added

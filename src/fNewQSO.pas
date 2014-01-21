@@ -3788,7 +3788,10 @@ begin
       begin
         //SaveGrid;
         if edtCall.Text = '' then
-          edtCall.SetFocus
+        begin
+          if edtCall.Enabled then
+            edtCall.SetFocus
+        end
         else
           edtCall.Text := ''; // OnChange calls ClearAll;
         EscFirstTime := False;
