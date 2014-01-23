@@ -264,7 +264,7 @@ end;
 
 procedure TfrmTRXControl.SynTRX;
 var
-  b : String;
+  b : String = '';
   f : Double;
   m : String;
 begin
@@ -278,15 +278,31 @@ begin
   lblFreq.Caption := FormatFloat(empty_freq+';;',f);
   UpdateModeButtons(m);
   ClearButtonsColor;
-  if f = 0 then
+  if (f = 0) then
   begin
-    frmGrayline.band := '';
-    frmBandMap.CurrentBand := '';
-    frmBandMap.CurrentFreq := 0;
-    frmBandMap.CurrentMode := '';
+    if cqrini.ReadBool('BandMap','UseNewQSOFreqMode',False) then
+    begin
+      if TryStrToFloat(frmNewQSO.cmbFreq.Text,f) then
+      begin
+        b := dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text);
+        m := frmNewQSO.cmbMode.Text;
+        frmGrayline.band := b;
+        frmBandMap.CurrentBand := b;
+        frmBandMap.CurrentFreq := f*1000;
+        frmBandMap.CurrentMode := m
+      end
+    end
+    else begin
+      frmGrayline.band := '';
+      frmBandMap.CurrentBand := '';
+      frmBandMap.CurrentFreq := 0;
+      frmBandMap.CurrentMode := ''
+    end;
     exit
   end;
-  b := dmUtils.GetBandFromFreq(lblFreq.Caption);
+
+  if (b='') then
+    b := dmUtils.GetBandFromFreq(lblFreq.Caption);
   if b = '160M' then
     btn160m.Font.Color := clRed
   else if b = '80M' then
