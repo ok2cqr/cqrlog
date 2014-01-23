@@ -528,6 +528,7 @@ type
     procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
 
     function GetDescKeyFromCode(key : Word) : String;
+    function CheckFreq(freq : String) : String;
   public
     QTHfromCb   : Boolean;
     FromDXC     : Boolean;
@@ -3492,6 +3493,7 @@ end;
 
 procedure TfrmNewQSO.cmbFreqChange(Sender: TObject);
 begin
+  cmbFreq.Text := CheckFreq(cmbFreq.Text);
   ShowCountryInfo;
   ChangeReports
 end;
@@ -5292,6 +5294,16 @@ begin
   end
 end;
 
+function TfrmNewQSO.CheckFreq(freq : String) : String;
+begin
+  if (Pos(',',cmbFreq.Text) > 0) then
+  begin
+    freq := cmbFreq.Text;
+    freq[Pos(',',cmbFreq.Text)] := DecimalSeparator;
+    Result := freq
+  end;
+  Result := freq
+end;
 
 initialization
   {$I fNewQSO.lrs}
