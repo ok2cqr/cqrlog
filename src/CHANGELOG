@@ -9,6 +9,7 @@ Legend:
   - TRX control window was not sizeable - fixed
   - when ESC was pressed twice in Remote mode, log crashed - fixed
   - program crashed when freq was entered with comma as decimal separator - fixed
+  - broken grid square statistic fixed
 
 1.7.0
   + online QSO upload to HamQTH, ClubLog and HRDLog added

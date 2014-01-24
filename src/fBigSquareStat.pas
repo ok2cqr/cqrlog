@@ -101,16 +101,17 @@ var
   sum_cfm : Word = 0;
   db : TBufDataset;
 begin
-  db := TBufDataset.Create(nil);
+  //db := TBufDataset.Create(nil);
   try
-    db.Fields.Clear;
-    with db.FieldDefs do
-    begin
-      Add('loc', ftString, 4);
-      Add('cfm',ftBoolean)
-    end;
-    db.CreateDataset;
-    db.Open;
+    //db.Fields.Clear;
+    //with db.FieldDefs do
+    //begin
+    //  Add('loc', ftString, 4);
+    //  Add('cfm',ftBoolean)
+    //end;
+    //db.CreateDataset;
+    //db.IndexDefs.Add('loc','loc',[ixPrimary]);
+    //db.Open;
 
     dmData.Q.Close;
     dmData.Q1.Close;
@@ -144,7 +145,6 @@ begin
       while not dmData.Q.Eof do
       begin
         ll := dmData.Q.Fields[0].AsString;
-        Writeln('ll:',ll);
         writeln(f,'<tr>'+LineEnding+'<td valign="middle">'+LineEnding+'<font color="black"><b>'+ll+'</b></font>'+LineEnding+'</td>');
         writeln(f,'<td align="left">');
         writeln(f,'<font color="black">');
@@ -153,70 +153,87 @@ begin
                               QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
                               ' group by lll order by loc';
         dmData.Q1.Open;
-        wkd := 0;
-        while not dmData.Q1.Eof do
-        begin
-          db.Append;
-          db.Fields[0].AsString  := dmData.Q1.Fields[0].AsString;
-          db.Fields[1].AsBoolean := False;
-          db.Post;
-          inc(wkd);
-          dmData.Q1.Next
-        end;
-        sum_wkd := sum_wkd + wkd;
-        if tmp <> '' then
-        begin
-          dmData.Q1.Close;
-          dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM cqrlog_main where loc like '+
-                                QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
-                                'and ('+tmp+') group by lll order by loc';
-          dmData.Q1.Open;
-          cfm := 0;
+
+
+        db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
+        try
+          db.FieldDefs.Clear;
+          with db.FieldDefs do
+          begin
+            Add('loc', ftString, 4);
+            Add('cfm',ftBoolean)
+          end;
+          db.CreateDataset;
+          db.IndexDefs.Add('loc','loc',[ixPrimary]);
+
+          db.Open;
+          wkd := 0;
           while not dmData.Q1.Eof do
           begin
-            if db.Locate('LOC',dmData.Q1.Fields[0].AsString,[]) then
-            begin
-              db.Edit;
-              db.Fields[1].AsBoolean := True;
-              db.Post
-            end;
-            inc(cfm);
+            db.Append;
+            db.Fields[0].AsString  := dmData.Q1.Fields[0].AsString;
+            db.Fields[1].AsBoolean := False;
+            db.Post;
+            inc(wkd);
             dmData.Q1.Next
           end;
-          sum_cfm := sum_cfm + cfm
-        end;
-        dmData.Q1.Close;
-
-        db.IndexName := 'loc';
-        db.First;
-        while not db.Eof do
-        begin
-          if db.Bof then
+          sum_wkd := sum_wkd + wkd;
+          if tmp <> '' then
           begin
-            if db.Fields[1].AsBoolean then
-              Write(f,'<font color="black">',db.Fields[0].AsString,'</font>')
-            else
-              Write(f,'<font color="gray">',db.Fields[0].AsString,'</font>')
-          end
-          else begin
-            if db.Fields[1].AsBoolean then
-              Write(f,', <font color="black">',db.Fields[0].AsString,'</font>')
-            else
-              Write(f,', <font color="gray">',db.Fields[0].AsString,'</font>')
+            dmData.Q1.Close;
+            dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM cqrlog_main where loc like '+
+                                  QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
+                                  'and ('+tmp+') group by lll order by loc';
+            dmData.Q1.Open;
+            cfm := 0;
+            while not dmData.Q1.Eof do
+            begin
+              if db.Locate('LOC',dmData.Q1.Fields[0].AsString,[]) then
+              begin
+                db.Edit;
+                db.Fields[1].AsBoolean := True;
+                db.Post
+              end;
+              inc(cfm);
+              dmData.Q1.Next
+            end;
+            sum_cfm := sum_cfm + cfm
           end;
-          db.Next;
+          dmData.Q1.Close;
+
+          db.IndexFieldNames := 'loc';
+          db.First;
+          while not db.Eof do
+          begin
+            if db.Bof then
+            begin
+              if db.Fields[1].AsBoolean then
+                Write(f,'<font color="black">',db.Fields[0].AsString,'</font>')
+              else
+                Write(f,'<font color="gray">',db.Fields[0].AsString,'</font>')
+            end
+            else begin
+              if db.Fields[1].AsBoolean then
+                Write(f,', <font color="black">',db.Fields[0].AsString,'</font>')
+              else
+                Write(f,', <font color="gray">',db.Fields[0].AsString,'</font>')
+            end;
+            db.Next;
+          end;
+          Writeln(f,'</font>');
+          Writeln(f,'</td>');
+          Writeln(f,'<td valign="middle" align="left">');
+          Writeln(f,'<font color="black">');
+          Writeln(f,'<b>WKD: ',wkd,'</b><br>');
+          if tmp<>'' then
+            Writeln(f,'<font color="black"><b>CFM: ',cfm,'</font></b>');
+          Writeln(f,'</font>');
+          Writeln(f,'</td>');
+          Writeln(f,'</tr>');
+          dmData.Q.Next
+        finally
+          FreeAndNil(db)
         end;
-        Writeln(f,'</font>');
-        Writeln(f,'</td>');
-        Writeln(f,'<td valign="middle" align="left">');
-        Writeln(f,'<font color="black">');
-        Writeln(f,'<b>WKD: ',wkd,'</b><br>');
-        if tmp<>'' then
-          Writeln(f,'<font color="black"><b>CFM: ',cfm,'</font></b>');
-        Writeln(f,'</font>');
-        Writeln(f,'</td>');
-        Writeln(f,'</tr>');
-        dmData.Q.Next
       end;
       Writeln(f,'</table>');
       Writeln(f,'<hr>');
@@ -234,8 +251,8 @@ begin
     CopyFile(TmpFile,ExtractFileNameWithoutExt(TmpFile)+'.html');
     IpHtmlPanel1.OpenURL(expandLocalHtmlFileName(ExtractFileNameWithoutExt(TmpFile)+'.html'))
   finally
-    db.Close;
-    FreeAndNil(db)
+    //db.Close;
+    //FreeAndNil(db)
   end
 end;
 
