@@ -6,6 +6,7 @@ Legend:
 
 1.7.1
   + "When TRX control is not active, use frequency and mode from NewQSO window" option to Preferences->Band map added
+  + CTRL+N hotkey to QSO list window added (do NOT send QSL)
   - TRX control window was not sizeable - fixed
   - when ESC was pressed twice in Remote mode, log crashed - fixed
   - program crashed when freq was entered with comma as decimal separator - fixed

@@ -756,6 +756,11 @@ begin
     dmUtils.EnterFreq;
     key := 0;
   end;
+  if (Shift = [ssCTRL]) and (Key = VK_N) then
+  begin
+    mnuDoNotSendClick(nil);
+    key := 0
+  end
 end;
 
 procedure TfrmMain.mnuOQRSClick(Sender : TObject);
