@@ -1,6 +1,6 @@
 #!/bin/bash
  
-VERSION=1.7.0
+VERSION=1.7.1
 # cqrlog version
 
 FINAL=/home/ok2cqr/projects/final_cqrlog/
