@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.7.2
+  + after hitting ESC in any window opened from NewQSO, cursor will be returned to callsign edit field
+
 1.7.1
   + "When TRX control is not active, use frequency and mode from NewQSO window" option to Preferences->Band map added
   + CTRL+N hotkey to QSO list window added (do NOT send QSL)

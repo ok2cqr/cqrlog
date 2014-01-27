@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
-  ExtCtrls, jakozememo;
+  ExtCtrls, jakozememo, lcltype;
 
 type
 
@@ -28,6 +28,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
   private
     fwaz      : String;
@@ -180,6 +181,16 @@ end;
 procedure TfrmQSODetails.FormDestroy(Sender: TObject);
 begin
   Details.Free
+end;
+
+procedure TfrmQSODetails.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmQSODetails.FormClose(Sender: TObject;

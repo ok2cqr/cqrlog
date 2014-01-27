@@ -9,6 +9,9 @@ uses
   Menus, ActnList, ExtCtrls, jakozememo, lcltype,  dLogUpload, lclintf, lmessages;
 
 type
+
+  { TfrmLogUploadStatus }
+
   TfrmLogUploadStatus = class(TForm)
     acLogUploadStatus: TActionList;
     acClearMessages: TAction;
@@ -25,6 +28,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
   private
     mFont     : TFont;
@@ -65,7 +69,7 @@ var
 
 implementation
 
-uses dData, dUtils, uMyIni;
+uses dData, dUtils, uMyIni, fNewQSO;
 
 function TUploadThread.CheckEnabledOnlineLogs : Boolean;
 const
@@ -341,6 +345,16 @@ end;
 procedure TfrmLogUploadStatus.FormCreate(Sender: TObject);
 begin
   thRunning := False
+end;
+
+procedure TfrmLogUploadStatus.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmLogUploadStatus.FormShow(Sender: TObject);

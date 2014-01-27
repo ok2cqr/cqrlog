@@ -7,10 +7,12 @@ object frmLogUploadStatus: TfrmLogUploadStatus
   Caption = 'Status of log upload'
   ClientHeight = 272
   ClientWidth = 206
+  KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   LCLVersion = '0.9.30.2'
   object pnlLogStatus: TPanel

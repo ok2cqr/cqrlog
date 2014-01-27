@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend;
+  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType;
 
 type
 
@@ -28,6 +28,7 @@ type
     tmrProp: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDblClick(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure sbtnRefreshClick(Sender : TObject);
     procedure tmrPropTimer(Sender: TObject);
@@ -58,7 +59,7 @@ var
 implementation
 
 { TfrmPropagation }
-uses dData, dUtils, uMyIni;
+uses dData, dUtils, uMyIni, fNewQSO;
 
 procedure TPropThread.Execute;
 var
@@ -155,6 +156,16 @@ end;
 procedure TfrmPropagation.FormDblClick(Sender: TObject);
 begin
   tmrPropTimer(nil)
+end;
+
+procedure TfrmPropagation.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmPropagation.FormShow(Sender: TObject);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO;
+  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType;
 
 type
 
@@ -23,6 +23,7 @@ type
     procedure ButtonShortPClick(Sender: TObject);
     procedure ButtonLongPClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure rbRotor1Click(Sender: TObject);
     procedure rbRotor2Click(Sender: TObject);
@@ -71,6 +72,16 @@ procedure TfrmRotControl.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
    dmUtils.SaveWindowPos(frmRotControl);
+end;
+
+procedure TfrmRotControl.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmRotControl.ButtonShortPClick(Sender: TObject);

@@ -6,95 +6,97 @@ object frmPropagation: TfrmPropagation
   Caption = 'Propagation'
   ClientHeight = 149
   ClientWidth = 167
+  KeyPreview = True
   OnClose = FormClose
   OnDblClick = FormDblClick
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   LCLVersion = '0.9.30.2'
   object Label1: TLabel
     Left = 9
-    Height = 17
+    Height = 16
     Top = 8
-    Width = 51
+    Width = 46
     Caption = 'A-index:'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 9
-    Height = 17
+    Height = 16
     Top = 32
-    Width = 49
+    Width = 46
     Caption = 'K-index:'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 9
-    Height = 17
+    Height = 16
     Top = 56
-    Width = 21
+    Width = 19
     Caption = 'SFI:'
     ParentColor = False
   end
   object Label4: TLabel
     Left = 9
-    Height = 17
+    Height = 16
     Top = 80
-    Width = 27
+    Width = 25
     Caption = 'SSN:'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 9
-    Height = 17
+    Height = 16
     Top = 104
-    Width = 20
+    Width = 18
     Caption = 'GF:'
     ParentColor = False
   end
   object lblAIndex: TLabel
     Left = 77
-    Height = 17
+    Height = 16
     Top = 9
-    Width = 59
+    Width = 51
     Caption = 'lblAIndex'
     ParentColor = False
   end
   object lblKIndex: TLabel
     Left = 77
-    Height = 17
+    Height = 16
     Top = 32
-    Width = 58
+    Width = 52
     Caption = 'lblKIndex'
     ParentColor = False
   end
   object lblSFI: TLabel
     Left = 77
-    Height = 17
+    Height = 16
     Top = 56
-    Width = 34
+    Width = 29
     Caption = 'lblSFI'
     ParentColor = False
   end
   object lblSSN: TLabel
     Left = 77
-    Height = 17
+    Height = 16
     Top = 80
-    Width = 40
+    Width = 35
     Caption = 'lblSSN'
     ParentColor = False
   end
   object lblGF: TLabel
     Left = 77
-    Height = 17
+    Height = 16
     Top = 104
-    Width = 33
+    Width = 28
     Caption = 'lblGF'
     ParentColor = False
   end
   object lblInfo: TLabel
     Left = 2
-    Height = 17
+    Height = 16
     Top = 128
-    Width = 40
+    Width = 36
     Caption = 'lblInfo'
     ParentColor = False
   end

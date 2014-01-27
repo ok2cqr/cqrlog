@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
-  ExtCtrls, ComCtrls, StdCtrls, Buttons, httpsend,  jakozememo,
+  ExtCtrls, ComCtrls, StdCtrls, Buttons, httpsend, jakozememo,
   db, lcltype, dynlibs, lNetComponents, lnet;
 
 type
@@ -53,6 +53,7 @@ type
     procedure btnHelpClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
     procedure btnFontClick(Sender: TObject);
@@ -271,6 +272,16 @@ begin
     TelThread := TTelThread.Create(True);
     TelThread.FreeOnTerminate := True;
     TelThread.Start
+end;
+
+procedure TfrmDXCluster.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmDXCluster.WebDbClick(where:longint;mb:TmouseButton;ms:TShiftState);

@@ -151,6 +151,7 @@ object frmTRXControl: TfrmTRXControl
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   LCLVersion = '0.9.30.2'
   object GroupBox1: TGroupBox

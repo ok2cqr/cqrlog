@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  jakozememo,lclproc, Math;
+  jakozememo,lclproc, Math, lcltype;
 
 type
   TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
@@ -52,6 +52,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
   private
     BandMap  : TJakoMemo;
@@ -119,7 +120,7 @@ var
 
 implementation
 
-uses dUtils, uMyIni, dData;
+uses dUtils, uMyIni, dData, fNewQSO;
 
 { TfrmBandMap }
 
@@ -535,6 +536,16 @@ end;
 procedure TfrmBandMap.FormDestroy(Sender: TObject);
 begin
   DoneCriticalsection(BandMapCrit)
+end;
+
+procedure TfrmBandMap.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmBandMap.FormShow(Sender: TObject);

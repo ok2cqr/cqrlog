@@ -59,6 +59,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btn10mClick(Sender: TObject);
     procedure btn12mClick(Sender: TObject);
@@ -614,6 +615,17 @@ begin
     key := 0;
   end
 end;
+
+procedure TfrmTRXControl.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
+end;
+
 procedure TfrmTRXControl.LoadSettings;
 var
   n      : String = '';

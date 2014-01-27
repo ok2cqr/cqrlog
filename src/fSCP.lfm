@@ -6,7 +6,9 @@ object frmSCP: TfrmSCP
   Caption = 'Super check partial'
   ClientHeight = 168
   ClientWidth = 462
+  KeyPreview = True
   OnClose = FormClose
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   LCLVersion = '0.9.30.2'
   object mSCP: TMemo

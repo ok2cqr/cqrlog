@@ -557,6 +557,7 @@ type
     procedure SynQSLTab;
     procedure CalculateLocalSunRiseSunSet;
     procedure UploadAllQSOOnline;
+    procedure ReturnToNewQSO;
   end;
 
   type
@@ -5303,6 +5304,12 @@ begin
     Result := freq
   end;
   Result := freq
+end;
+
+procedure TfrmNewQSO.ReturnToNewQSO;
+begin
+  if edtCall.Enabled then
+    edtCall.SetFocus
 end;
 
 initialization

@@ -159,9 +159,9 @@ LazarusResources.Add('TfrmQSODetails','FORMDATA',[
   +#248#0'@'#31#240#0#130#255#240#1#2#255#224#0#7#127#192#0#7#255#192#0#15#255
   +#128#0#31#255#128#0#31#255#128#0'?'#255#0#0'?'#255#0#4#127#255#0#0#255#255#0
   +#1#255#255#0#3#255#255#0#7#255#255#0#31#255#255#0'?'#255#255#0#255#255#255
-  +#131#255#255#255#7'OnClose'#7#9'FormClose'#12'OnCloseQuery'#7#14'FormCloseQu'
-  +'ery'#9'OnDestroy'#7#11'FormDestroy'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6
-  +#6'0.9.29'#0#6'TPanel'#10'pnlDetails'#4'Left'#2#0#6'Height'#3#210#0#3'Top'#2
-  +#0#5'Width'#3#10#1#5'Align'#7#8'alClient'#5'Color'#7#7'clWhite'#11'ParentCol'
-  +'or'#8#8'TabOrder'#2#0#0#0#0
+  +#131#255#255#255#10'KeyPreview'#9#7'OnClose'#7#9'FormClose'#12'OnCloseQuery'
+  +#7#14'FormCloseQuery'#9'OnDestroy'#7#11'FormDestroy'#7'OnKeyUp'#7#9'FormKeyU'
+  +'p'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#8'0.9.30.2'#0#6'TPanel'#10'pnlD'
+  +'etails'#4'Left'#2#0#6'Height'#3#210#0#3'Top'#2#0#5'Width'#3#10#1#5'Align'#7
+  +#8'alClient'#5'Color'#7#7'clWhite'#11'ParentColor'#8#8'TabOrder'#2#0#0#0#0
 ]);
