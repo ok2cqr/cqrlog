@@ -129,8 +129,6 @@ type
     procedure Q1BeforeOpen(DataSet: TDataSet);
     procedure qBandsBeforeOpen(DataSet: TDataSet);
     procedure QBeforeOpen(DataSet: TDataSet);
-    procedure qCQRLOGAfterOpen(DataSet: TDataSet);
-    procedure dsQSOBeforeAfterOpen(DataSet: TDataSet);
     procedure mQBeforeOpen(DataSet: TDataSet);
     procedure qCQRLOGBeforeOpen(DataSet: TDataSet);
     procedure qLogListBeforeOpen(DataSet: TDataSet);
@@ -1241,16 +1239,6 @@ end;
 procedure TdmData.QBeforeOpen(DataSet: TDataSet);
 begin
   if fDebugLevel >=1 then Writeln(Q.SQL.Text)
-end;
-
-procedure TdmData.qCQRLOGAfterOpen(DataSet: TDataSet);
-begin
-  TFloatField(qCQRLOG.Fields[5]).DisplayFormat:= '###,##0.0000;;'
-end;
-
-procedure TdmData.dsQSOBeforeAfterOpen(DataSet: TDataSet);
-begin
-  TFloatField(qQSOBefore.Fields[5]).DisplayFormat:= '###,##0.0000;;'
 end;
 
 procedure TdmData.mQBeforeOpen(DataSet: TDataSet);

@@ -4237,6 +4237,13 @@ procedure TfrmNewQSO.ShowFields;
         dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
       end;
 
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'FREQ') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment       := taRightJustify;
+        dbgrdQSOBefore.Columns[i].DisplayFormat   := '###,##0.0000;;';
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+
       if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = UpperCase(Column) then
       begin
         dbgrdQSOBefore.Columns[i].Visible := IfShow;
