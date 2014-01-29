@@ -13,8 +13,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libssl-dev, mariadb-server | mysql-
 Description: Advanced logging program for hamradio operators
  CQRLOG is an advanced ham radio logger based on MySQL embedded database. 
  Provides radio control based on hamlib libraries (currently support of 140+ 
- radio types and models), DX cluster connection, HamQTH/QRZ callbook (XML access), 
- a grayliner, internal QSL manager database support and a most accurate country 
- resolution algorithm based on country tables developed by OK1RR. 
- CQRLOG is intended for daily general logging of HF, CW & SSB contacts and 
- strongly focused on easy operation and maintenance.
+ radio types and models), DX cluster connection, HamQTH/QRZ callbook
+ (XML access), a grayliner, internal QSL manager database support and a most
+ accurate country resolution algorithm based on country tables developed by
+ OK1RR. CQRLOG is intended for daily general logging of HF, CW & SSB contacts
+ and strongly focused on easy operation and maintenance.
