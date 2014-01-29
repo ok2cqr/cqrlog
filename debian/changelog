@@ -1,3 +1,11 @@
+cqrlog (1.7.1-2) unstable; urgency=medium
+
+  * Really fix #713516 by stopping lazbuild trying to write to ~/
+  * Fix long description to remove lines longer than 80
+  * Update watch file
+
+ -- Colin Tuckley <colint@debian.org>  Mon, 27 Jan 2014 11:10:15 +0000
+
 cqrlog (1.7.1-1) unstable; urgency=low
   * "When TRX control is not active, use frequency and mode 
     from NewQSO window" option to Preferences->Band map added

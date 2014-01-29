@@ -1,3 +1,4 @@
 version=3
-
-http://www.cqrlog.com/deb_src/index.php cqrlog_(.+).tar.gz
+opts=uversionmangle=s/(\d)[\._](mac|win32|i386|amd64)$/$1~$2/;s/(\d)\.deb\.src/$1/ \
+http://www.cqrlog.com/download \
+(?:.*[/=]|)cqrlog[_\-](\d.*)\.(?:tgz|tbz2|txz|tar\.(?:gz|bz2|xz)).*
