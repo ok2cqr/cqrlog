@@ -8,6 +8,7 @@ Legend:
   + after hitting ESC in any window opened from NewQSO, cursor will be returned to callsign edit field
   + frequency in New QSO and QSO list wondow is formated to 0.0000
   - RBN integration into GrayLine showed CW speed instead of signal strench - fixed
+  - DXCC entity window didn't show when compiled in Debian Sid and Ubuntu 13.10 - fixed
 
 1.7.1
   + "When TRX control is not active, use frequency and mode from NewQSO window" option to Preferences->Band map added

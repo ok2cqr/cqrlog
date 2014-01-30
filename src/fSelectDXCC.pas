@@ -31,10 +31,10 @@ type
     dbgrdValid: TDBGrid;
     edtPrefix: TEdit;
     Label1: TLabel;
-    ntbSelectDXCC: TNotebook;
-    pgValid: TPage;
-    pgDeleted: TPage;
+    pgDXCC: TPageControl;
     Panel1: TPanel;
+    tabValid: TTabSheet;
+    tabDeleted: TTabSheet;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -71,16 +71,16 @@ begin
   if edtPrefix.Text <> '' then
   begin
     if (Pos('*',edtPrefix.Text) > 0) then
-      ntbSelectDXCC.PageIndex := 1
+      pgDXCC.PageIndex := 1
     else
-      ntbSelectDXCC.PageIndex := 0;
+      pgDXCC.PageIndex := 0;
     edtPrefixChange(nil)
   end
 end;
 
 procedure TfrmSelectDXCC.btnApplyClick(Sender: TObject);
 begin
-  if ntbSelectDXCC.PageIndex = 0 then
+  if pgDXCC.PageIndex = 0 then
     edtPrefix.Text := dmDXCC.qValid.Fields[1].AsString
   else
     edtPrefix.Text := dmDXCC.qDeleted.Fields[1].AsString;
@@ -133,7 +133,7 @@ end;
 
 procedure TfrmSelectDXCC.edtPrefixChange(Sender: TObject);
 begin
-  if ntbSelectDXCC.PageIndex = 0 then
+  if pgDXCC.PageIndex = 0 then
   begin
     dmDXCC.qValid.DisableControls;
     try

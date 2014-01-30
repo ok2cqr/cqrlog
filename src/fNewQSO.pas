@@ -2729,7 +2729,7 @@ begin
   try
     frmSelectDXCC.edtPrefix.Text := edtDXCCRef.Text;
     old := edtDXCCRef.Text;
-    frmSelectDXCC.ntbSelectDXCC.PageIndex := 0;
+    frmSelectDXCC.pgDXCC.PageIndex := 0;
     frmSelectDXCC.ShowModal;
     if frmSelectDXCC.ModalResult = mrOK then
     begin

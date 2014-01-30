@@ -243,7 +243,7 @@ procedure TfrmCustomStat.btnPrefClick(Sender: TObject);
 begin
   frmSelectDXCC := TfrmSelectDXCC.Create(self);
   try
-    frmSelectDXCC.ntbSelectDXCC.PageIndex := 0;
+    frmSelectDXCC.pgDXCC.PageIndex := 0;
     frmSelectDXCC.ShowModal;
     if frmSelectDXCC.ModalResult = mrOK then
     begin

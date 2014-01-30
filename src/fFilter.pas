@@ -461,7 +461,7 @@ begin
   frmSelectDXCC := TfrmSelectDXCC.Create(self);
   try
     frmSelectDXCC.edtPrefix.Text := edtDXCC.Text;
-    frmSelectDXCC.ntbSelectDXCC.PageIndex := 0;
+    frmSelectDXCC.pgDXCC.PageIndex := 0;
     frmSelectDXCC.ShowModal;
     if frmSelectDXCC.ModalResult = mrOK then
       edtDXCC.Text := frmSelectDXCC.edtPrefix.Text

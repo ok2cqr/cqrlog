@@ -3,7 +3,6 @@ object frmSelectDXCC: TfrmSelectDXCC
   Height = 501
   Top = 173
   Width = 651
-  ActiveControl = ntbSelectDXCC
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Select country'
@@ -14,7 +13,7 @@ object frmSelectDXCC: TfrmSelectDXCC
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30'
+  LCLVersion = '0.9.30.2'
   object Panel1: TPanel
     Left = 0
     Height = 48
@@ -27,9 +26,9 @@ object frmSelectDXCC: TfrmSelectDXCC
     TabOrder = 0
     object Label1: TLabel
       Left = 8
-      Height = 17
+      Height = 16
       Top = 16
-      Width = 41
+      Width = 37
       Caption = 'Prefix:'
       ParentColor = False
     end
@@ -58,7 +57,7 @@ object frmSelectDXCC: TfrmSelectDXCC
     end
     object edtPrefix: TEdit
       Left = 56
-      Height = 26
+      Height = 25
       Top = 10
       Width = 80
       CharCase = ecUppercase
@@ -67,47 +66,46 @@ object frmSelectDXCC: TfrmSelectDXCC
       TabOrder = 2
     end
   end
-  object ntbSelectDXCC: TNotebook
+  object pgDXCC: TPageControl
     Left = 0
     Height = 453
     Top = 0
     Width = 651
+    ActivePage = tabValid
     Align = alClient
-    PageIndex = 0
+    TabIndex = 0
     TabOrder = 1
-    object pgValid: TPage
+    object tabValid: TTabSheet
       Caption = 'Valid countries'
-      ClientWidth = 649
-      ClientHeight = 427
+      ClientHeight = 420
+      ClientWidth = 645
       object dbgrdValid: TDBGrid
         Left = 0
-        Height = 427
+        Height = 420
         Top = 0
-        Width = 649
+        Width = 645
         Align = alClient
         Color = clWindow
         Columns = <>
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         Scrollbars = ssAutoBoth
         TabOrder = 0
-        OnDblClick = dbgrdValidDblClick
       end
     end
-    object pgDeleted: TPage
-      Caption = 'Deleted countries'
-      ClientWidth = 649
-      ClientHeight = 427
+    object tabDeleted: TTabSheet
+      Caption = 'Delted countries'
+      ClientHeight = 420
+      ClientWidth = 645
       object dbgrdDeleted: TDBGrid
         Left = 0
-        Height = 426
+        Height = 420
         Top = 0
-        Width = 649
+        Width = 645
         Align = alClient
         Color = clWindow
         Columns = <>
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         TabOrder = 0
-        OnDblClick = dbgrdDeletedDblClick
       end
     end
   end
