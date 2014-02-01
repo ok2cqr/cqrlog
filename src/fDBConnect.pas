@@ -371,6 +371,7 @@ begin
       if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
       begin
         dmData.StartMysqldProcess;
+        Sleep(3000);
         btnConnectClick(nil)
       end
       else begin
@@ -401,7 +402,7 @@ begin
       Top    := ini.ReadInteger(Name,'Top',20);
       Left   := ini.ReadInteger(Name,'Left',20);
     end;
-    StartMysql := ini.ReadBool('Login','SaveTolocal',True)
+    StartMysql := ini.ReadBool('Login','SaveTolocal',False)
   finally
     ini.Free
   end;
@@ -495,23 +496,29 @@ begin
 end;
 
 procedure TfrmDBConnect.tmrAutoConnectTimer(Sender: TObject);
+var
+  Connect : Boolean = True;
 begin
   tmrAutoConnect.Enabled := False;
   if AskForDB then
   begin
     if Application.MessageBox('It seems you are trying to run this program for the first time, '+
-                              'are you going to save data to local machine?','Question ...',
+                              'are you going to save data to local machine?'#10#13'If you say Yes, '+
+                              'new databases will be created. This may take a while, please be patient.' ,'Question ...',
                               mb_YesNo+mb_IconQuestion) =  idYes then
     begin
-      dmData.StartMysqldProcess
+      dmData.StartMysqldProcess;
+      Sleep(3000)
     end
     else begin
+      Connect     := False;
+      RemoteMySQL := True;
       chkSaveToLocal.Checked := False;
       chkSaveToLocalClick(nil);
       edtServer.SetFocus
     end
   end;
-  if not OpenFromMenu then
+  if (not OpenFromMenu) and Connect then
     btnConnect.Click;
   if btnOpenLog.Enabled then
     btnOpenLog.SetFocus
