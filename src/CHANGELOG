@@ -7,6 +7,7 @@ Legend:
 1.7.2
   + after hitting ESC in any window opened from NewQSO, cursor will be returned to callsign edit field
   + frequency in New QSO and QSO list wondow is formated to 0.0000
+  + added Help -> Keys and shortcut to menu in QSO window
   - RBN integration into GrayLine showed CW speed instead of signal strench - fixed
   - DXCC entity window didn't show when compiled in Debian Sid and Ubuntu 13.10 - fixed
   - when CQRLOG was run for the first time, two mysqld proccesses opened the same database - fixed

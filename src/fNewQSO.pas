@@ -60,6 +60,7 @@ type
     acRotControl: TAction;
     acReloadCW: TAction;
     acLogUploadStatus: TAction;
+    acHotkeys: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -88,6 +89,7 @@ type
     MenuItem87: TMenuItem;
     MenuItem88: TMenuItem;
     MenuItem89: TMenuItem;
+    MenuItem90: TMenuItem;
     mnuOnlineLog: TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
@@ -297,6 +299,7 @@ type
     tmrStart: TTimer;
     procedure acBigSquareExecute(Sender: TObject);
     procedure acCWFKeyExecute(Sender: TObject);
+    procedure acHotkeysExecute(Sender: TObject);
     procedure acLogUploadStatusExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
@@ -3139,6 +3142,11 @@ procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
 begin
   UpdateFKeyLabels;
   frmCWKeys.Show
+end;
+
+procedure TfrmNewQSO.acHotkeysExecute(Sender: TObject);
+begin
+  dmUtils.OpenInApp(dmData.HelpDir+'h20.html')
 end;
 
 procedure TfrmNewQSO.acLogUploadStatusExecute(Sender: TObject);

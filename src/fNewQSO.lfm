@@ -2515,6 +2515,9 @@ object frmNewQSO: TfrmNewQSO
         ShortCut = 32840
         OnClick = MenuItem17Click
       end
+      object MenuItem90: TMenuItem
+        Action = acHotkeys
+      end
       object MenuItem16: TMenuItem
         Caption = '-'
       end
@@ -2557,6 +2560,7 @@ object frmNewQSO: TfrmNewQSO
       OnExecute = acTRXControlExecute
     end
     object acAbout: TAction
+      Category = 'Help'
       Caption = 'About'
     end
     object acDXCluster: TAction
@@ -2749,6 +2753,11 @@ object frmNewQSO: TfrmNewQSO
       Category = 'OnlineLog'
       Caption = 'Upload changes to all logs'
       OnExecute = acUploadToAllExecute
+    end
+    object acHotkeys: TAction
+      Category = 'Help'
+      Caption = 'Keys and shortcuts'
+      OnExecute = acHotkeysExecute
     end
   end
   object imgMain: TImageList
