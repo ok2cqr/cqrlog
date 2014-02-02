@@ -510,13 +510,6 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fEditTestQSO"/>
       </Unit62>
-      <Unit63>
-        <Filename Value="fKeysPref.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmKeysPref"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fKeysPref"/>
-      </Unit63>
       <Unit64>
         <Filename Value="fDBConnect.pas"/>
         <IsPartOfProject Value="True"/>
