@@ -14,7 +14,7 @@ uses
   fBandMap,fBandMapFilter,fLongNote,fDatabaseUpdate,fExLabelPrint,
   fImportLoTWWeb,fLoTWExport,fGroupEdit,fDefaultFreq,fCustomStat,fKeyTexts,
   fCWType,fSplitSettings,MemDSLaz,SDFLaz,turbopoweripro,fShowStations,uMyIni,
-  fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fEditTestQSO,fDBConnect,fNewLog,
+  fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fDBConnect,fNewLog,
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
 dLogUpload, fLogUploadStatus;
