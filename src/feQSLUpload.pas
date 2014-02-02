@@ -32,7 +32,6 @@ type
     procedure FormShow(Sender : TObject);
   private
     FileSize     : Int64;
-    OrigFileSize : Int64;
     QSOCount     : Integer;
     function  ExportData(const FileName : String) : Boolean;
     function  HttpPostFile(const URL, FieldName, FileName: string;
@@ -68,15 +67,6 @@ end;
 
 function TfrmeQSLUpload.ExportData(const FileName : String) : Boolean;
 var
-  qsodate   : String;
-  time_on   : String;
-  call      : String;
-  mode      : String;
-  band      : String;
-  freq      : String;
-  rst_sent  : String;
-  rst_rcvd  : String;
-  id_cqrlog : Integer;
   nr  : integer = 0;
   tmp : String = '';
   f   : TextFile;
@@ -288,8 +278,6 @@ end;
 
 
 function TfrmeQSLUpload.FormatOutput(ResultText: String) : String;
-var
-  tmp : String;
 begin
   ResultText := copy(ResultText,Pos('<BODY>',ResultText)+6,Length(ResultText));
   ResultText := copy(ResultText,1,Pos('</BODY>',ResultText)-1);

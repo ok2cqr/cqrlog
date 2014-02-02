@@ -184,12 +184,10 @@ var
   zone     : Integer;
   i        : Integer = 1;
   y        : Integer;
-  old_zone : Integer;
   BandPos  : Integer;
   QSL_R    : String;
   LoTW     : String;
   eQSL     : String;
-  where    : String;
 begin
   for i:=0 to grdStat.RowCount-1 do
     for y:=0 to grdStat.ColCount-1 do
@@ -249,7 +247,6 @@ var
   QSL_R    : String;
   LoTW     : String;
   eQSL     : String;
-  where    : String;
 begin
   for i:=0 to grdStat.RowCount-1 do
     for y:=0 to grdStat.ColCount-1 do
@@ -806,12 +803,10 @@ const
 var
   i       : Integer = 1;
   y       : Integer;
-  cont    : Integer;
   BandPos : Integer;
   QSL_R   : String;
   LoTW    : String;
   eQSL    : String;
-  where   : String;
 begin
 
   for i:=0 to grdStat.RowCount-1 do

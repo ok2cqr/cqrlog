@@ -704,7 +704,7 @@ var
       end;
 
     procedure bod_cmarniu(x1,y1,x2,y2:longint;b:Tcarobod);
-    var z,x,vb:longint;
+    var vb:longint;
       begin
         vb:=b.vel_bodu;
         if b.typ=3 then
@@ -893,7 +893,6 @@ procedure Tgrayline.jachcucaru(en:boolean;x1,y1,x2,y2:extended);
   end;
 
 procedure Tgrayline.body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
- var z:longint;
   begin
     if chcipni then exit;
     if body_poc<body_max-1 then

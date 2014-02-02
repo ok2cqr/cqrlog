@@ -146,7 +146,6 @@ end;
 procedure TfrmExLabelPrint.LoadDataToTempDB;
 var
   DoExp   : Boolean;
-  i       : Integer;
   qsl_msg : String;
   qsl_via : String;
 begin

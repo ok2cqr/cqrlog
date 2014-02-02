@@ -131,15 +131,6 @@ const
   C_SEL = 'select distinct iota,callsign from cqrlog_main %s group by iota order by iota';
   C_SUM = 'select count(*) from (select count(iota) from cqrlog_main %s group by iota) as aa';
 var
-  EUcount : Integer = 0;
-  AFcount : Integer = 0;
-  ANcount : Integer = 0;
-  AScount : Integer = 0;
-  NAcount : Integer = 0;
-  OCcount : Integer = 0;
-  SAcount : Integer = 0;
-  iota    : String = '';
-  call    : String = '';
   i       : Integer = 0;
   where   : String = '';
   sumiota : Integer = 0;

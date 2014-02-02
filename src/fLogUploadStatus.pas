@@ -32,7 +32,6 @@ type
     procedure FormShow(Sender: TObject);
   private
     mFont     : TFont;
-    thUpload  : TThread;
     mStatus   : TJakoMemo;
     procedure LoadFonts;
     procedure UploadDataToOnlineLogs(where : TWhereToUpload);
@@ -111,8 +110,6 @@ const
 var
   data       : TStringList;
   err        : String = '';
-  msg        : String = '';
-  i          : Integer = 1;
   LastId     : Integer = 0;
   Response   : String;
   ResultCode : Integer;

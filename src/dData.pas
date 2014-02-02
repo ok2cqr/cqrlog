@@ -613,7 +613,6 @@ end;
 procedure TdmData.OpenDatabase(nr : Word);
 var
   l : TStringList;
-  v : Integer;
 begin
   fDBName := GetProperDBName(nr);
   if trQ.Active then
@@ -994,10 +993,6 @@ end;
 procedure TdmData.DataModuleCreate(Sender: TObject);
 var
   lib    : String;
-  mysqld : String;
-  l      : TStringList;
-  info   : String = '';
-  f      : TextFile;
   i      : Integer;
   c      : TConnectionName;
   MySQLVer : String;

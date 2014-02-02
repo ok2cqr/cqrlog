@@ -24,24 +24,24 @@ LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
   +#13'SM  (Manager)'#6#20'SMD (Manager direct)'#6#18'SMB (Manager buro)'#0#8'T'
   +'abOrder'#2#0#4'Data'#10#9#0#0#0#5#0#0#0#2#2#2#2#2#0#0#9'TGroupBox'#9'GroupB'
   +'ox1'#4'Left'#2#5#6'Height'#2'Q'#3'Top'#3'0'#1#5'Width'#3#156#1#7'Caption'#6
-  +#11' Export to '#12'ClientHeight'#2'2'#11'ClientWidth'#3#152#1#8'TabOrder'#2
+  +#11' Export to '#12'ClientHeight'#2'@'#11'ClientWidth'#3#152#1#8'TabOrder'#2
   +#1#0#7'TButton'#9'edtBrowse'#4'Left'#3'6'#1#6'Height'#2#25#3'Top'#2#31#5'Wid'
   +'th'#2'K'#7'Caption'#6#6'Browse'#7'OnClick'#7#14'edtBrowseClick'#8'TabOrder'
-  +#2#0#0#0#5'TEdit'#7'edtFile'#4'Left'#2#9#6'Height'#2#21#3'Top'#2#7#5'Width'#3
+  +#2#0#0#0#5'TEdit'#7'edtFile'#4'Left'#2#9#6'Height'#2#25#3'Top'#2#7#5'Width'#3
   +'{'#1#8'TabOrder'#2#1#0#0#0#5'TEdit'#14'edtQSOsToLabel'#4'Left'#2'('#6'Heigh'
-  +'t'#2#21#3'Top'#3#134#0#5'Width'#2'0'#6'OnExit'#7#18'edtQSOsToLabelExit'#8'T'
+  +'t'#2#25#3'Top'#3#134#0#5'Width'#2'0'#6'OnExit'#7#18'edtQSOsToLabelExit'#8'T'
   +'abOrder'#2#2#4'Text'#6#1'6'#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#5#6'Hei'
   +'ght'#3#136#0#3'Top'#3#168#0#5'Width'#3#156#1#7'Caption'#6#9' Remarks '#12'C'
-  +'lientHeight'#2'i'#11'ClientWidth'#3#152#1#8'TabOrder'#2#3#0#12'TRadioButton'
-  +#12'rbQSORemarks'#4'Left'#2#9#6'Height'#2#26#3'Top'#2#0#5'Width'#3#163#0#7'C'
+  +'lientHeight'#2'w'#11'ClientWidth'#3#152#1#8'TabOrder'#2#3#0#12'TRadioButton'
+  +#12'rbQSORemarks'#4'Left'#2#9#6'Height'#2#22#3'Top'#2#0#5'Width'#3#159#0#7'C'
   +'aption'#6#22'Print remarks from QSO'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'
-  +#9#0#0#12'TRadioButton'#12'rbOwnRemarks'#4'Left'#2#9#6'Height'#2#26#3'Top'#2
-  +#23#5'Width'#3#150#0#7'Caption'#6#20'Print my own remarks'#8'TabOrder'#2#1#0
-  +#0#5'TEdit'#10'edtRemarks'#4'Left'#2#9#6'Height'#2#21#3'Top'#2'9'#5'Width'#3
+  +#9#0#0#12'TRadioButton'#12'rbOwnRemarks'#4'Left'#2#9#6'Height'#2#22#3'Top'#2
+  +#23#5'Width'#3#146#0#7'Caption'#6#20'Print my own remarks'#8'TabOrder'#2#1#0
+  +#0#5'TEdit'#10'edtRemarks'#4'Left'#2#9#6'Height'#2#25#3'Top'#2'9'#5'Width'#3
   +'x'#1#7'OnEnter'#7#15'edtRemarksEnter'#8'TabOrder'#2#2#0#0#9'TCheckBox'#12'c'
-  +'hkRemoveSep'#4'Left'#2#9#6'Height'#2#26#3'Top'#2'N'#5'Width'#3#225#0#7'Capt'
+  +'hkRemoveSep'#4'Left'#2#9#6'Height'#2#22#3'Top'#2'N'#5'Width'#3#221#0#7'Capt'
   +'ion'#6'!Remove separator (;) from remarks'#8'TabOrder'#2#3#0#0#0#9'TCheckBo'
-  +'x'#11'chkMarkSent'#4'Left'#2#5#6'Height'#2#26#3'Top'#3#136#1#5'Width'#3#188
+  +'x'#11'chkMarkSent'#4'Left'#2#5#6'Height'#2#22#3'Top'#3#136#1#5'Width'#3#184
   +#0#7'Caption'#6#27'Mark QSLs sent after export'#8'TabOrder'#2#4#0#0#7'TButto'
   +'n'#9'btnExport'#4'Left'#2#16#6'Height'#2#25#3'Top'#3#208#1#5'Width'#2'K'#7
   +'Caption'#6#6'Export'#7'OnClick'#7#14'btnExportClick'#8'TabOrder'#2#5#0#0#7
@@ -49,8 +49,8 @@ LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
   +'K'#7'Caption'#6#4'Help'#7'OnClick'#7#12'btnHelpClick'#8'TabOrder'#2#6#0#0#7
   +'TButton'#6'Cancel'#4'Left'#3'8'#1#6'Height'#2#25#3'Top'#3#208#1#5'Width'#2
   +'K'#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#7#0
-  +#0#9'TCheckBox'#10'chkAllQSOs'#4'Left'#2#5#6'Height'#2#26#3'Top'#2#8#5'Width'
-  +#2'r'#7'Caption'#6#15'Export all QSOs'#8'OnChange'#7#16'chkAllQSOsChange'#8
+  +#0#9'TCheckBox'#10'chkAllQSOs'#4'Left'#2#5#6'Height'#2#22#3'Top'#2#8#5'Width'
+  +#2'n'#7'Caption'#6#15'Export all QSOs'#8'OnChange'#7#16'chkAllQSOsChange'#8
   +'TabOrder'#2#8#0#0#7'TButton'#19'btnExportFieldsPref'#4'Left'#3#224#0#6'Heig'
   +'ht'#2#25#3'Top'#3#131#0#5'Width'#3#184#0#7'Caption'#6#24'Choose fields for '
   +'export'#7'OnClick'#7#24'btnExportFieldsPrefClick'#8'TabOrder'#2#9#0#0#11'TS'

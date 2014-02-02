@@ -37,7 +37,6 @@ type TRotControl = class
     fRotCtldHost : String;
 //    fVFO         : TVFO;
     RotCommand   : TStringList;
-    fRigSendCWR  : Boolean;
 
     function  RotConnected   : Boolean;
     function  StartRotctld   : Boolean;
@@ -339,10 +338,6 @@ procedure TRotControl.OnReceivedRcvdAzimut(aSocket: TLSocket);
 var
   msg : String;
   tmp : String;
-  poz : Word;
-  wdt : Integer;
-//  a   : TExplodeArray;
-  i   : Integer;
   Az   : Double;
 begin
   if aSocket.GetMessage(msg) > 0 then
@@ -500,7 +495,7 @@ end;
 
 procedure TRotControl.Restart;
 var
-  excode : Integer;
+  excode : Integer = 0;
 begin
   rotProcess.Terminate(excode);
   tmrRotPoll.Enabled := False;

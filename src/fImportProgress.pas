@@ -483,7 +483,6 @@ var
   mode     : String;
   qsodate  : String;
   time_on  : String;
-  time_onx : String;
   qslr     : String;
   qslrdate : String;
   cqz      : String;
@@ -509,7 +508,6 @@ var
   qso_in_log  : Boolean = False;
   ErrorCount  : Word = 0;
   l           : TStringList;
-  t_log  : TDateTime;
   t_lotw : TDateTime;
   t1,t2  : TDateTime;
 begin
@@ -789,8 +787,6 @@ begin
             begin
               qso_in_log := False;
 
-              t_log  := EncodeTime(StrToInt(copy(dmData.Q.Fields[0].AsString,1,2)),
-                        StrToInt(copy(dmData.Q.Fields[0].AsString,4,2)),0,0);
               t_lotw := EncodeTime(StrToInt(copy(time_on,1,2)),
                         StrToInt(copy(time_on,3,2)),0,0);
 
@@ -1002,26 +998,12 @@ var
   qsodate  : String;
   time_on  : String;
   qslr     : String;
-  qslrdate : String;
-  cqz      : String;
-  ituz     : String;
-  iota     : String;
-  grid     : String;
-  state    : String;
-  county   : String;
   PosCall     : Word;
   PosBand     : Word;
   PosMode     : Word;
   PosQsoDate  : Word;
   PosTime_on  : Word;
   PosQslr     : Word;
-  PosQslrDate : Word;
-  PosCqz      : Word;
-  PosItuz     : Word;
-  PosIota     : Word;
-  PosGrid     : Word;
-  PosState    : Word;
-  PosCounty   : Word;
 
   qso_in_log  : Boolean = False;
   ErrorCount  : Word = 0;
@@ -1054,13 +1036,6 @@ begin
     qsodate  := '';
     time_on  := '';
     qslr     := '';
-    qslrdate := '';
-    cqz      := '';
-    ituz     := '';
-    iota     := '';
-    grid     := '';
-    state    := '';
-    county   := '';
     PosEOR   := 0;
     while not ((PosEOR > 0) or eof(f)) do
     begin

@@ -119,7 +119,6 @@ type
     procedure CloseRigs;
     procedure Split(up : Integer);
     procedure DisableSplit;
-    procedure LoadSettings;
     procedure ClearRIT;
   end;
 
@@ -186,8 +185,6 @@ procedure TRigThread.Execute;
 
 var
   mRig : TRigControl;
-  rel  : Boolean;
-  mode : TRigMode;
 
   procedure ReadSettings;
   begin
@@ -626,84 +623,10 @@ begin
   end
 end;
 
-procedure TfrmTRXControl.LoadSettings;
-var
-  n      : String = '';
-  id     : Integer = 0;
-  Resume : Boolean = False;
-begin
-  {
-  if rbRadio1.Checked then
-    n := '1'
-  else
-    n := '2';
-  set_freq  := 0;
-  set_mode  := '';
-  set_width := 0;
-
-  if not TryStrToInt(cqrini.ReadString('TRX'+n,'model',''),id) then
-    thRig.Rig_RigId := 1
-  else
-    thRig.Rig_RigId := id;
-
-  thRig.Rig_RigCtldPath := cqrini.ReadString('TRX','RigCtldPath','/usr/bin/rigctld');
-  thRig.Rig_RigCtldArgs := cqrini.ReadString('TRX'+n,'RigCtldArgs','-m %m -r %r -t %t');
-  thRig.Rig_RunRigCtld  := cqrini.ReadBool('TRX'+n,'RunRigCtld',False);
-  thRig.Rig_RigDevice   := cqrini.ReadString('TRX'+n,'device','');
-  thRig.Rig_RigCtldPort := cqrini.ReadInteger('TRX'+n,'RigCtldPort',4532);
-  thRig.Rig_RigCtldHost := cqrini.ReadString('TRX'+n,'host','localhost');
-  thRig.Rig_RigPoll     := StrToInt(cqrini.ReadString('TRX'+n,'poll','500'));
-  thRig.Rig_RigSendCWR  := cqrini.ReadBool('TRX'+n,'CWR',False);
-
-  }{
-
-  thRig.Rig_Port  := cqrini.ReadString('TRX','device'+n,'/dev/ttyS0');
-  thRig.Rig_SerialSpeed := IntToStr(cqrini.ReadInteger('TRX','Speed'+n,9600));
-  thRig.Rig_DataBits    := IntToStr(cqrini.ReadInteger('TRX','DataBits'+n,8));
-  thRig.Rig_Stopbits    := IntToStr(cqrini.ReadInteger('TRX','StopBits'+n,1));
-  case cqrini.ReadInteger('TRX','Handshake'+n,0) of
-    0 : thRig.Rig_Handshake := Handshakes[0];
-    1 : thRig.Rig_Handshake := Handshakes[1];
-    2 : thRig.Rig_Handshake := Handshakes[2]
-  end;
-  case cqrini.ReadInteger('TRX','Parity'+n,0) of
-    0,1 : thRig.Rig_Parity := Parity[0];
-    2 : thRig.Rig_Parity := Parity[1];
-    3 : thRig.Rig_Parity := Parity[2]
-  end;
-  if cqrini.ReadInteger('TRX','dtr'+n,0) > 0 then
-    thRig.Rig_DTRState := RTSDTR[1]
-  else
-    thRig.Rig_DTRState := RTSDTR[2];
-  if cqrini.ReadInteger('TRX','rts'+n,0) > 0 then
-    thRig.Rig_RTSState := RTSDTR[1]
-  else
-    thRig.Rig_RTSState := RTSDTR[2];
-
-  thRig.Rig_Poll    := cqrini.ReadInteger('TRX','Poll'+n,500);
-  thRig.Rig_SendCWR := cqrini.ReadBool('TRX','CWR'+n,False);
-  if dmData.DebugLevel>=1 then
-  begin
-    Writeln('Model:',thRig.Rig_Model);
-    Writeln('Port:',thRig.Rig_Port);
-    Writeln('Baudrate:',thRig.Rig_SerialSpeed);
-    Writeln('Databits:',thRig.Rig_DataBits);
-    Writeln('StopBits:',thRig.Rig_Stopbits);
-    Writeln('Handshake:',thRig.Rig_Handshake);
-    Writeln('Parity:',thRig.Rig_Parity);
-    Writeln('DTR:',thRig.Rig_DTRState);
-    Writeln('RTS:',thRig.Rig_RTSState);
-    Writeln('Poll:',thRig.Rig_Poll)
-  end
-  }
-end;
-
-
 function TfrmTRXControl.InicializeRig : Boolean;
 var
   n      : String = '';
   id     : Integer = 0;
-  Resume : Boolean = False;
 begin
   if Assigned(radio) then
   begin
@@ -743,6 +666,7 @@ begin
 
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled  := True;
+  Result := radio.Connected;
   if not radio.Connected then
   begin
     //Writeln('huu5');

@@ -243,7 +243,6 @@ var
   index   : Word;
   band    : String;
   tmp     : Integer;
-  curr    : Currency;
   latitude, longitude: Currency;
 begin
   call := trim(copy(spot,27,12));
@@ -473,20 +472,12 @@ begin
 end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
-var r:Trect;
-//    t1,t2:Tdatetime;
 begin
-  //t1:=now - (dmUtils.GrayLineOffset/24);
-  r.left:=0;r.right:=width-1;
-  r.top:=0;r.bottom:=width*obvy div obsi-1;
   if dmUtils.SysUTC then
     ob^.VypocitejSunClock(dmUtils.GetDateTime(0))//-dmUtils.GetLocalUTCDelta)
   else
     ob^.VypocitejSunClock(now - (dmUtils.GrayLineOffset/24));
-  Refresh;
-  //ob^.kresli(r,Canvas);
-  //Writeln(DateTimeToStr(dmUtils.GetDateTime(0)))
-  //t2:=now - (dmUtils.GrayLineOffset/24);
+  Refresh
 end;
 
 procedure TfrmGrayline.kresli;

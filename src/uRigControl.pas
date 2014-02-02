@@ -334,9 +334,6 @@ end;
 procedure TRigControl.OnReceivedRcvdFreqMode(aSocket: TLSocket);
 var
   msg : String;
-  tmp : String;
-  poz : Word;
-  wdt : Integer;
   a   : TExplodeArray;
   i   : Integer;
   f   : Double;
@@ -491,7 +488,7 @@ end;
 
 procedure TRigControl.Restart;
 var
-  excode : Integer;
+  excode : Integer = 0;
 begin
   rigProcess.Terminate(excode);
   tmrRigPoll.Enabled := False;

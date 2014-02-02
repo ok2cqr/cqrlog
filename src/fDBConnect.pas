@@ -152,7 +152,6 @@ end;
 procedure TfrmDBConnect.LoadLogin;
 var
   ini : TIniFile;
-  log_nr : Integer = 0;
 begin
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try

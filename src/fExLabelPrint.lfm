@@ -74,7 +74,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     Top = 304
     Width = 412
     Caption = ' Export to '
-    ClientHeight = 50
+    ClientHeight = 64
     ClientWidth = 408
     TabOrder = 1
     object edtBrowse: TButton
@@ -88,7 +88,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     end
     object edtFile: TEdit
       Left = 9
-      Height = 21
+      Height = 25
       Top = 7
       Width = 379
       TabOrder = 1
@@ -96,7 +96,7 @@ object frmExLabelPrint: TfrmExLabelPrint
   end
   object edtQSOsToLabel: TEdit
     Left = 40
-    Height = 21
+    Height = 25
     Top = 134
     Width = 48
     OnExit = edtQSOsToLabelExit
@@ -109,14 +109,14 @@ object frmExLabelPrint: TfrmExLabelPrint
     Top = 168
     Width = 412
     Caption = ' Remarks '
-    ClientHeight = 105
+    ClientHeight = 119
     ClientWidth = 408
     TabOrder = 3
     object rbQSORemarks: TRadioButton
       Left = 9
-      Height = 26
+      Height = 22
       Top = 0
-      Width = 163
+      Width = 159
       Caption = 'Print remarks from QSO'
       Checked = True
       TabOrder = 0
@@ -124,15 +124,15 @@ object frmExLabelPrint: TfrmExLabelPrint
     end
     object rbOwnRemarks: TRadioButton
       Left = 9
-      Height = 26
+      Height = 22
       Top = 23
-      Width = 150
+      Width = 146
       Caption = 'Print my own remarks'
       TabOrder = 1
     end
     object edtRemarks: TEdit
       Left = 9
-      Height = 21
+      Height = 25
       Top = 57
       Width = 376
       OnEnter = edtRemarksEnter
@@ -140,18 +140,18 @@ object frmExLabelPrint: TfrmExLabelPrint
     end
     object chkRemoveSep: TCheckBox
       Left = 9
-      Height = 26
+      Height = 22
       Top = 78
-      Width = 225
+      Width = 221
       Caption = 'Remove separator (;) from remarks'
       TabOrder = 3
     end
   end
   object chkMarkSent: TCheckBox
     Left = 5
-    Height = 26
+    Height = 22
     Top = 392
-    Width = 188
+    Width = 184
     Caption = 'Mark QSLs sent after export'
     TabOrder = 4
   end
@@ -185,9 +185,9 @@ object frmExLabelPrint: TfrmExLabelPrint
   end
   object chkAllQSOs: TCheckBox
     Left = 5
-    Height = 26
+    Height = 22
     Top = 8
-    Width = 114
+    Width = 110
     Caption = 'Export all QSOs'
     OnChange = chkAllQSOsChange
     TabOrder = 8

@@ -108,7 +108,6 @@ function TfrmRotControl.InicializeRot : Boolean;
 var
   n      : String = '';
   id     : Integer = 0;
-  Resume : Boolean = False;
 begin
   if Assigned(rotor) then
   begin
@@ -141,6 +140,7 @@ begin
 
   tmrRotor.Interval := rotor.RotPoll;
   tmrRotor.Enabled  := True;
+  Result := rotor.Connected;
   if not rotor.Connected then
   begin
     FreeAndNil(rotor);

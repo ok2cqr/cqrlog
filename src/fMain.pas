@@ -1894,7 +1894,6 @@ procedure TfrmMain.ShowFields;
   var
     i       : integer;
     isAdded : Boolean = False;
-    T       : TColumn;
   begin
     for i := 0 to dbgrdMain.Columns.Count - 1 do
     begin

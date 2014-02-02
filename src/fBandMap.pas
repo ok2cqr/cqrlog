@@ -628,7 +628,6 @@ end;
 procedure TfrmBandMAp.xplanetExport;
 var
   i : Integer;
-  s : String;
   l : TStringList;
   xColor : String;
   UseDefaultColor : Boolean;

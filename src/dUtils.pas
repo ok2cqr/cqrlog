@@ -3445,8 +3445,6 @@ var
   http     : THTTPSend;
   req      : String = '';
   m        : TStringList;
-  epos     : Word;
-  kpos     : Word;
 begin
   Result := False;
   if (cqrini.ReadString('CallBook','CBUser','')='') or

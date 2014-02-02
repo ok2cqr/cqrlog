@@ -1078,7 +1078,6 @@ end;
 
 procedure TfrmNewQSO.LoadSettings;
 var
-  i     : Integer;
   Tab   : TDXCCTabThread;
   thqsl : TQSLTabThread;
 begin
@@ -1846,10 +1845,7 @@ var
   id     : LongInt;
   Delete : Boolean = False;
   ShowMain : Boolean = False;
-  freq     : Double;
-  ton,toff : Word;
-  date     : Tdate;
-  stmp     : String;
+  date     : TDate;
 begin
   ShowMain := (fEditQSO or fViewQSO) and (not fromNewQSO);
   if not cbOffline.Checked then
@@ -4012,11 +4008,6 @@ begin
 end;
 
 procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
-var
-  tmp    : String = '';
-  f      : Currency = 0;
-  call   : String = '';
-  freq   : String = '';
 begin
   case key of
     #13 : begin                     //enter
@@ -4721,12 +4712,10 @@ end;
 
 procedure TfrmNewQSO.SynCallBook;
 var
-  tmp     : String = '';
   County  : String = '';
   StoreTo : String = '';
   IgnoreQRZ : Boolean = False;
   MvToRem   : Boolean = False;
-  call  : String;
   AlwaysReplace : Boolean;
 begin
   if c_ErrMsg <> '' then
