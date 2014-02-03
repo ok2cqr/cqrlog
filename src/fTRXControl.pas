@@ -51,6 +51,7 @@ type
     GroupBox2: TGroupBox;
     GroupBox4: TGroupBox;
     lblFreq: TLabel;
+    Panel1: TPanel;
     rbRadio1: TRadioButton;
     rbRadio2: TRadioButton;
     tmrRadio : TTimer;

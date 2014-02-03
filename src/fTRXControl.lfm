@@ -1,12 +1,12 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 381
-  Height = 232
-  Top = 514
+  Left = 396
+  Height = 230
+  Top = 234
   Width = 339
   ActiveControl = btnVFOA
   BorderIcons = [biSystemMenu]
   Caption = 'TRX control'
-  ClientHeight = 232
+  ClientHeight = 230
   ClientWidth = 339
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
@@ -196,26 +196,6 @@ object frmTRXControl: TfrmTRXControl
       Visible = False
     end
   end
-  object rbRadio1: TRadioButton
-    Left = 24
-    Height = 22
-    Top = 208
-    Width = 49
-    Caption = 'RIG: '
-    Checked = True
-    OnClick = rbRadio1Click
-    TabOrder = 1
-    TabStop = True
-  end
-  object rbRadio2: TRadioButton
-    Left = 200
-    Height = 22
-    Top = 208
-    Width = 49
-    Caption = 'RIG: '
-    OnClick = rbRadio2Click
-    TabOrder = 2
-  end
   object gbBand: TGroupBox
     Left = 4
     Height = 128
@@ -224,7 +204,7 @@ object frmTRXControl: TfrmTRXControl
     Caption = ' Band '
     ClientHeight = 111
     ClientWidth = 249
-    TabOrder = 3
+    TabOrder = 1
     object btn160m: TButton
       Left = 6
       Height = 25
@@ -354,7 +334,7 @@ object frmTRXControl: TfrmTRXControl
     Caption = ' Mode '
     ClientHeight = 183
     ClientWidth = 68
-    TabOrder = 4
+    TabOrder = 2
     object btnCW: TButton
       Left = 8
       Height = 25
@@ -401,11 +381,42 @@ object frmTRXControl: TfrmTRXControl
       TabOrder = 4
     end
   end
+  object Panel1: TPanel
+    Left = 0
+    Height = 26
+    Top = 204
+    Width = 339
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 26
+    ClientWidth = 339
+    TabOrder = 3
+    object rbRadio1: TRadioButton
+      Left = 26
+      Height = 22
+      Top = 2
+      Width = 49
+      Caption = 'RIG: '
+      Checked = True
+      OnClick = rbRadio1Click
+      TabOrder = 0
+      TabStop = True
+    end
+    object rbRadio2: TRadioButton
+      Left = 202
+      Height = 22
+      Top = 2
+      Width = 49
+      Caption = 'RIG: '
+      OnClick = rbRadio2Click
+      TabOrder = 1
+    end
+  end
   object tmrRadio: TTimer
     Enabled = False
     Interval = 500
     OnTimer = tmrRadioTimer
-    left = 144
-    top = 192
+    left = 248
+    top = 128
   end
 end
