@@ -1191,8 +1191,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 359
-          ClientWidth = 561
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox3: TGroupBox
             Left = 14
             Height = 333
@@ -1533,8 +1533,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 359
-          ClientWidth = 561
+          ClientHeight = 388
+          ClientWidth = 563
           object edtRadio2: TEdit
             Left = 146
             Height = 22
@@ -1915,8 +1915,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 359
-          ClientWidth = 561
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
             Height = 333
@@ -2248,8 +2248,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 359
-          ClientWidth = 561
+          ClientHeight = 388
+          ClientWidth = 563
           object edtRotor2: TEdit
             Left = 146
             Height = 25
@@ -4606,7 +4606,7 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 543
       ClientWidth = 633
       object GroupBox16: TGroupBox
-        Left = 14
+        Left = 13
         Height = 61
         Top = 3
         Width = 529
@@ -4615,16 +4615,17 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 525
         TabOrder = 0
         object lblBandMapFont: TLabel
-          Left = 14
-          Height = 1
-          Top = 4
-          Width = 1
+          Left = 16
+          Height = 34
+          Top = 6
+          Width = 383
+          AutoSize = False
           ParentColor = False
         end
         object btnSelectBandFont: TButton
           Left = 416
           Height = 25
-          Top = 4
+          Top = 6
           Width = 96
           Caption = 'Select font'
           OnClick = btnSelectBandFontClick
@@ -4632,9 +4633,9 @@ object frmPreferences: TfrmPreferences
         end
       end
       object GroupBox17: TGroupBox
-        Left = 14
+        Left = 13
         Height = 62
-        Top = 62
+        Top = 74
         Width = 529
         Caption = ' Color '
         ClientHeight = 45
@@ -4659,9 +4660,9 @@ object frmPreferences: TfrmPreferences
         end
       end
       object chkBandMapkHz: TCheckBox
-        Left = 391
+        Left = 13
         Height = 22
-        Top = 230
+        Top = 466
         Width = 143
         Caption = 'Show bandmap in kHz'
         Checked = True
@@ -4672,7 +4673,7 @@ object frmPreferences: TfrmPreferences
       object chkSaveBandMap: TCheckBox
         Left = 14
         Height = 22
-        Top = 307
+        Top = 330
         Width = 173
         Caption = 'Save band map after close '
         TabOrder = 3
@@ -4680,7 +4681,7 @@ object frmPreferences: TfrmPreferences
       object chkShowActiveBand: TCheckBox
         Left = 238
         Height = 22
-        Top = 307
+        Top = 330
         Width = 145
         Caption = 'Show only active band'
         TabOrder = 4
@@ -4688,7 +4689,7 @@ object frmPreferences: TfrmPreferences
       object chkShowActiveMode: TCheckBox
         Left = 14
         Height = 22
-        Top = 331
+        Top = 354
         Width = 150
         Caption = 'Show only active mode'
         TabOrder = 5
@@ -4702,9 +4703,9 @@ object frmPreferences: TfrmPreferences
         TabOrder = 6
       end
       object GroupBox18: TGroupBox
-        Left = 14
+        Left = 13
         Height = 68
-        Top = 135
+        Top = 146
         Width = 529
         Caption = ' Band Map Entries Aging (in minutes) '
         ClientHeight = 51
@@ -4760,9 +4761,9 @@ object frmPreferences: TfrmPreferences
         end
       end
       object GroupBox20: TGroupBox
-        Left = 14
+        Left = 13
         Height = 92
-        Top = 211
+        Top = 230
         Width = 369
         Caption = 'Band map entries (from dxcluster)'
         ClientHeight = 75
@@ -4816,7 +4817,7 @@ object frmPreferences: TfrmPreferences
       object chkDeleteAfterQSO: TCheckBox
         Left = 238
         Height = 22
-        Top = 331
+        Top = 354
         Width = 251
         Caption = 'Delete station from bandmap after QSO'
         TabOrder = 9
@@ -4824,7 +4825,7 @@ object frmPreferences: TfrmPreferences
       object chkAddAfterSaveQSO: TCheckBox
         Left = 14
         Height = 22
-        Top = 358
+        Top = 381
         Width = 255
         Caption = 'Add station to bandmap after saving QSO'
         TabOrder = 10
@@ -4832,7 +4833,7 @@ object frmPreferences: TfrmPreferences
       object chkIgnoreBandFreq: TCheckBox
         Left = 14
         Height = 22
-        Top = 385
+        Top = 408
         Width = 545
         Caption = 'Ignore DX spots with freq eqauls to the start of the band (21.000, 14.000 etc., usually notes)'
         TabOrder = 11
@@ -4840,7 +4841,7 @@ object frmPreferences: TfrmPreferences
       object chkUseNewQSOFreqMode: TCheckBox
         Left = 14
         Height = 22
-        Top = 412
+        Top = 435
         Width = 470
         Caption = 'When TRX control is not active, use frequency and mode from NewQSO window'
         TabOrder = 12
@@ -6694,11 +6695,11 @@ object frmPreferences: TfrmPreferences
   object dlgFont: TFontDialog
     MinFontSize = 0
     MaxFontSize = 0
-    left = 608
-    top = 496
+    left = 704
+    top = 328
   end
   object dlgOpen: TOpenDialog
-    left = 512
-    top = 496
+    left = 704
+    top = 368
   end
 end

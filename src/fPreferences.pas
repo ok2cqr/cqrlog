@@ -1777,11 +1777,10 @@ begin
   if dlgFont.Execute then
   begin
     fbandSize := dlgFont.Font.Size;
-    //dmUtils.ExtractFontSize(dlgFont.Font.Name);
     lblBandMapFont.Font.Name := dlgFont.Font.Name;
     lblBandMapFont.Font.Size := dlgFont.Font.Size;
-    lblBandMapFont.Caption := dlgFont.Font.Name + ' ' + IntToStr(fbandSize);
-  end;
+    lblBandMapFont.Caption   := dlgFont.Font.Name + ' ' + IntToStr(fbandSize)
+  end
 end;
 
 procedure TfrmPreferences.btnSelqFontClick(Sender: TObject);
