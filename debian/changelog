@@ -1,3 +1,20 @@
+cqrlog (1.7.2-1) unstable; urgency=low
+  * after hitting ESC in any window opened from NewQSO, cursor 
+    will be returned to callsign edit field
+  * frequency in New QSO and QSO list wondow is formated to 0.0000
+  * added Help -> Keys and shortcut to menu in QSO window
+  * RBN integration into GrayLine showed CW speed instead of signal 
+    strench - fixed
+  * DXCC entity window didn't show when compiled in Debian Sid 
+    and Ubuntu 13.10 - fixed  
+  * when CQRLOG was run for the first time, two mysqld proccesses 
+    opened the same database - fixed  
+  * upload to ClubLog didn't work after enter QSO and delete - fixed 
+    (big thanks to Pawel, SQ5LTL)  
+  * TRX control window's layout was broken with some font sizes - fixed  
+  
+ -- Petr Hlozek <petr@ok2cqr.com>  Mon, 03 Feb 2014 20:30:00 +0100
+
 cqrlog (1.7.1-2) unstable; urgency=medium
 
   * Really fix #713516 by stopping lazbuild trying to write to ~/
