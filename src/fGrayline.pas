@@ -68,6 +68,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormPaint(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure sbtnGrayLineClick(Sender : TObject);
@@ -96,7 +97,7 @@ implementation
 
 { TfrmGrayline }
 
-uses dUtils, dData, uMyIni, dDXCluster;
+uses dUtils, dData, uMyIni, dDXCluster, fNewQSO;
 
 procedure TRBNThread.lConnect(aSocket: TLSocket);
 begin
@@ -423,6 +424,16 @@ procedure TfrmGrayline.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if not (Shift = [ssCtrl,ssAlt]) then
     key := 0;
+end;
+
+procedure TfrmGrayline.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmGrayline.FormPaint(Sender: TObject);
