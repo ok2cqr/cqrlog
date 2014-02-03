@@ -280,6 +280,7 @@ begin
     if Q1.Fields[0].IsNull then
     begin  //this shouldn't happen
       if dmData.DebugLevel>=1 then Writeln('GetQSOInAdif: QSO not found in the log. ID:', id_cqrlog_main);
+      Result := '<EOR>';
       exit
     end;
     {
