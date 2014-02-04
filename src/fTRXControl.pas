@@ -667,7 +667,7 @@ begin
 
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled  := True;
-  Result := radio.Connected;
+  Result := True;
   if not radio.Connected then
   begin
     //Writeln('huu5');

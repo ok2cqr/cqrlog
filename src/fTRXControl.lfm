@@ -160,7 +160,7 @@ object frmTRXControl: TfrmTRXControl
     Top = 0
     Width = 253
     Caption = ' Freq '
-    ClientHeight = 55
+    ClientHeight = 40
     ClientWidth = 249
     TabOrder = 0
     object lblFreq: TLabel
@@ -202,7 +202,7 @@ object frmTRXControl: TfrmTRXControl
     Top = 72
     Width = 253
     Caption = ' Band '
-    ClientHeight = 111
+    ClientHeight = 96
     ClientWidth = 249
     TabOrder = 1
     object btn160m: TButton
@@ -332,7 +332,7 @@ object frmTRXControl: TfrmTRXControl
     Top = 0
     Width = 72
     Caption = ' Mode '
-    ClientHeight = 183
+    ClientHeight = 168
     ClientWidth = 68
     TabOrder = 2
     object btnCW: TButton
@@ -393,9 +393,9 @@ object frmTRXControl: TfrmTRXControl
     TabOrder = 3
     object rbRadio1: TRadioButton
       Left = 26
-      Height = 22
+      Height = 26
       Top = 2
-      Width = 49
+      Width = 54
       Caption = 'RIG: '
       Checked = True
       OnClick = rbRadio1Click
@@ -404,9 +404,9 @@ object frmTRXControl: TfrmTRXControl
     end
     object rbRadio2: TRadioButton
       Left = 202
-      Height = 22
+      Height = 26
       Top = 2
-      Width = 49
+      Width = 54
       Caption = 'RIG: '
       OnClick = rbRadio2Click
       TabOrder = 1
