@@ -1,4 +1,12 @@
+cqrlog (1.7.3-1) unstable; urgency=low
+ 
+  * TRX control didn't work - fixed
+  * rotor control didn't work - fixed 
+ 
+ -- Petr Hlozek <petr@ok2cqr.com>  Mon, 04 Feb 2014 06:56:00 +0100
+
 cqrlog (1.7.2-1) unstable; urgency=low
+ 
   * after hitting ESC in any window opened from NewQSO, cursor 
     will be returned to callsign edit field
   * frequency in New QSO and QSO list wondow is formated to 0.0000
