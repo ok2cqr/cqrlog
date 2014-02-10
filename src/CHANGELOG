@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.7.3
+  - program used grid, state and county from previous QSO even is the station was /P - fixed
+
 1.7.2
   + after hitting ESC in any window opened from NewQSO, cursor will be returned to callsign edit field
   + frequency in New QSO and QSO list wondow is formated to 0.0000
