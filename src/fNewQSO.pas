@@ -798,19 +798,19 @@ begin
           sName := dmData.qQSOBefore.FieldByName('name').AsString;
         if (qth = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           qth := dmData.qQSOBefore.FieldByName('qth').AsString;
-        if (loc = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+        if (loc = '') then
           loc := dmData.qQSOBefore.FieldByName('loc').AsString;
-        if (county = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+        if (county = '') then
           county := dmData.qQSOBefore.FieldByName('county').AsString;
-        if (qsl_via = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+        if (qsl_via = '') then
           qsl_via := dmData.qQSOBefore.FieldByName('qsl_via').AsString;
         if (award = '') then
           award := dmData.qQSOBefore.FieldByName('award').AsString;
-        if (state = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+        if (state = '') then
           state := dmData.qQSOBefore.FieldByName('state').AsString;
         if (qslrdate = '') and (not dmData.qQSOBefore.FieldByName('qslr_date').IsNull) then
           lblQSLRcvdDate.Caption := 'QSL rcvd on '+dmData.qQSOBefore.FieldByName('qslr_date').AsString;
-        dmData.qQSOBefore.Prior
+        dmData.qQSOBefore.Prior;
       end;
       lblQSLRcvdDate.Visible := True
     finally

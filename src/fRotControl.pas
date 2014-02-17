@@ -140,7 +140,7 @@ begin
 
   tmrRotor.Interval := rotor.RotPoll;
   tmrRotor.Enabled  := True;
-  Result := rotor.Connected;
+  Result := True;
   if not rotor.Connected then
   begin
     FreeAndNil(rotor);
