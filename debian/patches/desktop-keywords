@@ -1,0 +1,11 @@
+Description: Add Keywords to cqrlog.desktop
+ Add the Ham Radio and Log Keywords
+
+--- a/tools/cqrlog.desktop
++++ b/tools/cqrlog.desktop
+@@ -6,4 +6,4 @@
+ Type=Application
+ Icon=cqrlog.png
+ Categories=Utility;Database;HamRadio
+-
++Keywords=Ham;Radio;Log;

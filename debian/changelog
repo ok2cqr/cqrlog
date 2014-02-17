@@ -1,3 +1,11 @@
+cqrlog (1.7.1-3) unstable; urgency=medium
+
+  * Remove src/ipc and src/mysql directories in debian/rules
+    since they are no longer needed (Closes: #692820)
+  * Add Keywords to cqrlog.desktop file
+
+ -- Colin Tuckley <colint@debian.org>  Mon, 27 Jan 2014 19:31:46 +0000
+
 cqrlog (1.7.1-2) unstable; urgency=medium
 
   * Really fix #713516 by stopping lazbuild trying to write to ~/

@@ -11,3 +11,8 @@
 
 %:
 	dh  $@
+
+override_dh_clean:
+	rm -rf src/ipc
+	rm -rf src/mysql
+	dh_clean
