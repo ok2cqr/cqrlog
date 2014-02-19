@@ -72,6 +72,41 @@ type
     FirstShow  : Boolean;
     ConOnShow  : Boolean;
     lTelnet    : TLTelnetClientComponent;
+    csDXCPref  : TRTLCriticalSection;
+    ReloadDXCPref : Boolean;
+
+    gcfgUseBackColor : Boolean;
+    gcfgBckColor : TColor;
+    gcfgeUseBackColor : Boolean;
+    gcfgeBckColor : TColor;
+    gcfgiDXCC : String;
+    gcfgwIOTA : Boolean;
+    gcfgNewCountryColor : TColor;
+    gcfgNewBandColor : TColor;
+    gcfgNewModeColor : TColor;
+    gcfgNeedQSLColor : TColor;
+    gcfgShowFrom : Integer;
+    gcfgLastSpots : String;
+    gcfgIgnoreBandFreq : Boolean;
+    gcfgUseDXCColors : Boolean;
+    gcfgClusterColor : TColor;
+    gcfgNotShow : String;
+    gcfgCW : Boolean;
+    gcfgSSB : Boolean;
+    gcfgEU  : Boolean;
+    gcfgAS  : Boolean;
+    gcfgAF  : Boolean;
+    gcfgNA  : Boolean;
+    gcfgSA  : Boolean;
+    gcfgAN  : Boolean;
+    gcfgOC  : Boolean;
+    gwDXCC    : String;
+    gwWAZ     : String;
+    gwITU     : String;
+    giDXCC    : String;
+    giWAZ     : String;
+    giITU     : String;
+
     procedure WebDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure TelDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure ConnectToWeb;
@@ -94,7 +129,7 @@ type
     procedure SavePosition;
     procedure SendCommand(cmd : String);
     procedure StopAllConnections;
-
+    procedure ReloadSettings;
   end;
 
   type
@@ -241,37 +276,39 @@ end;
 procedure TfrmDXCluster.FormCreate(Sender: TObject);
 begin
   InitCriticalSection(csTelnet);
+  InitCriticalSection(csDXCPref);
   FirstShow := True;
   ConOnShow := False;
   lTelnet := TLTelnetClientComponent.Create(nil);
+  ReloadDXCPref := True;
 
   lTelnet.OnConnect    := @lConnect;
   lTelnet.OnDisconnect := @lDisconnect;
   lTelnet.OnReceive    := @lReceive;
 
-    WebSpots             := Tjakomemo.Create(pnlWeb);
-    WebSpots.parent      := pnlWeb;
-    WebSpots.autoscroll  := True;
-    WebSpots.oncdblclick := @WebDbClick;
-    WebSpots.Align       := alClient;
-    WebSpots.nastav_jazyk(1);
+  WebSpots             := Tjakomemo.Create(pnlWeb);
+  WebSpots.parent      := pnlWeb;
+  WebSpots.autoscroll  := True;
+  WebSpots.oncdblclick := @WebDbClick;
+  WebSpots.Align       := alClient;
+  WebSpots.nastav_jazyk(1);
 
 
-    TelSpots             := Tjakomemo.Create(pnlTelnet);
-    TelSpots.parent      := pnlTelnet;
-    TelSpots.autoscroll  := True;
-    TelSpots.oncdblclick := @TelDbClick;
-    TelSpots.Align       := alClient;
-    TelSpots.nastav_jazyk(1);
+  TelSpots             := Tjakomemo.Create(pnlTelnet);
+  TelSpots.parent      := pnlTelnet;
+  TelSpots.autoscroll  := True;
+  TelSpots.oncdblclick := @TelDbClick;
+  TelSpots.Align       := alClient;
+  TelSpots.nastav_jazyk(1);
 
-    Spots := TStringList.Create;
-    Spots.Clear;
-    Running := False;
-    mindex  := 1;
+  Spots := TStringList.Create;
+  Spots.Clear;
+  Running := False;
+  mindex  := 1;
 
-    TelThread := TTelThread.Create(True);
-    TelThread.FreeOnTerminate := True;
-    TelThread.Start
+  TelThread := TTelThread.Create(True);
+  TelThread.FreeOnTerminate := True;
+  TelThread.Start
 end;
 
 procedure TfrmDXCluster.FormKeyUp(Sender: TObject; var Key: Word;
@@ -371,6 +408,7 @@ begin
   end;
   dmUtils.LoadFontSettings(frmDXCluster);
   dmUtils.LoadWindowPos(frmDXCluster);
+  ReloadSettings;
   pgDXCluster.ActivePageIndex :=  cqrini.ReadInteger('DXCluster','Tab',1);;
   telDesc := cqrini.ReadString('DXCluster','Desc','');
   telAddr := cqrini.ReadString('DXCluster','Addr','');
@@ -667,8 +705,72 @@ var
   kHz      : String;
   splitstr : String;
   cLat, cLng : Currency;
+
+  cfgUseBackColor : Boolean = True;
+  cfgBckColor : TColor;
+  cfgeUseBackColor : Boolean = True;
+  cfgeBckColor : TColor;
+  cfgiDXCC : String;
+  cfgwIOTA : Boolean;
+  cfgNewCountryColor : TColor;
+  cfgNewBandColor : TColor;
+  cfgNewModeColor : TColor;
+  cfgNeedQSLColor : TColor;
+  cfgShowFrom : Integer;
+  cfgLastSpots : String;
+  cfgIgnoreBandFreq : Boolean;
+  cfgUseDXCColors : Boolean;
+  cfgClusterColor : TColor;
+  cfgNotShow : String;
+
+  cfgCW : Boolean;
+  cfgSSB : Boolean;
+  cfgEU  : Boolean;
+  cfgAS  : Boolean;
+  cfgAF  : Boolean;
+  cfgNA  : Boolean;
+  cfgSA  : Boolean;
+  cfgAN  : Boolean;
+  cfgOC  : Boolean;
 begin
   sColor  := 0; //cerna
+
+  EnterCriticalSection(csDXCPref);
+  try
+    cfgUseBackColor  := gcfgUseBackColor;
+    cfgBckColor      := gcfgBckColor;
+    cfgeUseBackColor := gcfgeUseBackColor;
+    cfgeBckColor     := gcfgeBckColor;
+    wDXCC  := gwDXCC;
+    iDXCC  := giDXCC;
+    wWAZ   := gwWAZ;
+    iWAZ   := giWAZ;
+    wITU   := gwITU;
+    iITU   := giITU;
+    cfgCW  := gcfgCW;
+    cfgSSB := gcfgSSB;
+    cfgEU  := gcfgEU;
+    cfgAS  := gcfgAS;
+    cfgNA  := gcfgNA;
+    cfgSA  := gcfgSA;
+    cfgAF  := gcfgAF;
+    cfgAN  := gcfgAN;
+    cfgOC  := gcfgOC;
+    cfgiDXCC := gcfgiDXCC;
+    cfgwIOTA := gcfgwIOTA;
+    cfgNewCountryColor := gcfgNewCountryColor;
+    cfgNewBandColor := gcfgNewBandColor;
+    cfgNewModeColor := gcfgNewModeColor;
+    cfgNeedQSLColor := gcfgNeedQSLColor;
+    cfgShowFrom     := gcfgShowFrom;
+    cfgLastSpots    := gcfgLastSpots;
+    cfgIgnoreBandFreq := gcfgIgnoreBandFreq;
+    cfgUseDXCColors := gcfgUseDXCColors;
+    cfgClusterColor := gcfgClusterColor;
+    cfgNotShow := gcfgNotShow
+  finally
+    LeaveCriticalSection(csDXCPref)
+  end;
 
   spot := UpperCase(spot);
   i := Pos('DX DE ',spot);
@@ -696,19 +798,19 @@ begin
   if tmp > 0 then
     freq[tmp] := DecimalSeparator;
 
-  if cqrini.ReadBool('LoTW','UseBackColor',True) then
+  if cfgUseBackColor then
   begin
     if dmDXCluster.UsesLotw(call) then
-      ThBckColor := cqrini.ReadInteger('LoTW','BckColor',clMoneyGreen)
+      ThBckColor := cfgBckColor
     else
       ThBckColor := clWhite
   end;
 
   if ThBckColor = clWhite then
   begin
-    if cqrini.ReadBool('LoTW','eUseBackColor',True) then
+    if cfgeUseBackColor then
       if dmDXCluster.UseseQSL(call) then
-        ThBckColor := cqrini.ReadInteger('LoTW','eBckColor',clSkyBlue)
+        ThBckColor := cfgeBckColor
   end;
 
   if not TryStrToFloat(freq,kmitocet) then
@@ -740,27 +842,21 @@ begin
     Writeln('dx_prefix:',prefix);
     Writeln('dx_cont:  ',cont);
     Writeln('Freq:     ',freq);
-    Writeln('Call:     ',call);
+    Writeln('Call:     ',call)
   end;
   if dmData.DebugLevel >=2 then
   begin
     Writeln('Prefix: ',prefix);
-    WriteLn('index_: ',index);
+    WriteLn('index_: ',index)
   end;
   if dmData.DebugLevel >=1 then
   begin
     Writeln('Color: ',ColorToString(sColor));
-    Writeln('Index_: ',index);
+    Writeln('Index_: ',index)
   end;
 
   cont := UpperCase(cont);
   Result := True;
-  wDXCC := cqrini.ReadString('BandMap','wDXCC','*');
-  iDXCC := cqrini.ReadString('BandMap','iDXCC','');
-  wWAZ  := cqrini.ReadString('BandMap','wWAZ','*');
-  iWAZ  := cqrini.ReadString('BandMap','iWAZ','');
-  wITU  := cqrini.ReadString('BandMap','wITU','*');
-  iITU  := cqrini.ReadString('BandMap','iITU','');
 
   if Pos('.',band) > 0 then
     stmp := StringReplace(band,'.','',[rfReplaceAll, rfIgnoreCase])
@@ -774,13 +870,13 @@ begin
     exit
   end;
 
-  if not (cqrini.ReadBool('DXCluster','CW',true)) then
+  if not cfgCW then
   begin
     if (mode='CW') then
       Result := False
   end;
 
-  if not (cqrini.ReadBool('DXCluster','SSB',True))  then
+  if not cfgSSB  then
   begin
     if (mode='SSB') then
       Result := false
@@ -831,40 +927,40 @@ begin
     else
       ToBandMap := False
   end;
-  if (cont='EU') and (cqrini.ReadBool('BandMap','wEU',True)) then
+  if (cont='EU') and cfgEU then
     ToBandMap := True
   else  begin
-    if (cont='AS') and (cqrini.ReadBool('BandMap','wAS',True)) then
+    if (cont='AS') and cfgAS then
       ToBandMap := True
     else begin
-      if (cont='NA') and (cqrini.ReadBool('BandMap','wNA',True)) then
+      if (cont='NA') and cfgNA then
         ToBandMap := True
       else begin
-        if (cont='SA') and (cqrini.ReadBool('BandMap','wSA',True)) then
+        if (cont='SA') and cfgSA then
           ToBandMap := True
         else begin
-          if (cont='AF') and (cqrini.ReadBool('BandMap','wAF',True)) then
+          if (cont='AF') and cfgAF then
             ToBandMap := True
           else begin
-            if (cont='OC') and (cqrini.ReadBool('BandMap','wOC',True)) then
+            if (cont='OC') and cfgOC then
               ToBandMap := True
             else begin
-              if (cont='AN') and (cqrini.ReadBool('BandMap','wAN',True)) then
+              if (cont='AN') and cfgAN then
                 ToBandMap := True
               else
                 ToBandMap := False
-            end;
-          end;
-        end;
-      end;
-    end;
+            end
+          end
+        end
+      end
+    end
   end;
 
-  if Pos(prefix+';',cqrini.ReadString('BandMap','iDXCC','')+';') > 0 then
+  if Pos(prefix+';',cfgiDXCC+';') > 0 then
     ToBandMap := False;
   if not ToBandMap then
   begin
-    if cqrini.ReadBool('BandMap','wIOTA', True) then
+    if cfgwIOTA then
     begin
       if dmUtils.IsItIOTA(spot) then
        ToBandMap := True
@@ -873,23 +969,23 @@ begin
   if index = 0 then
     sColor := 0;
   if index = 1 then
-    sColor := cqrini.ReadInteger('DXCluster','NewCountry',0);
+    sColor := cfgNewCountryColor;
   if index = 2 then
-    sColor := cqrini.ReadInteger('DXCluster','NewBand',0);
+    sColor := cfgNewBandColor;
   if index = 3 then
-    sColor := cqrini.ReadInteger('DXCluster','NewMode',0);
+    sColor := cfgNewModeColor;
   if index = 4 then
-    sColor := cqrini.ReadInteger('DXCluster','NeedQSL',0);
+    sColor := cfgNeedQSLColor;
 
   if (cont='') or (prefix='') then
     ToBandMap := True; //for MM stations etc.
 
-  if cqrini.ReadInteger('xplanet','ShowFrom',0) = 0 then
+  if cfgShowFrom = 0 then
   begin
-    dmDXCluster.AddToMarkFile(prefix,call,sColor,cqrini.ReadString('xplanet','LastSpots','20'),lat,long)
+    dmDXCluster.AddToMarkFile(prefix,call,sColor,cfgLastSpots,lat,long)
   end;
 
-  if dmUtils.IgnoreFreq(kHz) and cqrini.ReadBool('BandMap','IgnoreBandFreq',True) then
+  if dmUtils.IgnoreFreq(kHz) and cfgIgnoreBandFreq then
   begin
     if dmData.DebugLevel >=1 then Writeln('This freq: ',freq,' is ignored');
     ToBandMap := False
@@ -899,11 +995,11 @@ begin
   begin
     dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
 
-    if cqrini.ReadBool('BandMap','UseDXCColors',False) then
+    if cfgUseDXCColors then
       frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,sColor,ThBckColor)
     else
       frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,
-                              cqrini.ReadInteger('BandMap','ClusterColor',clBlack),ThBckColor)
+                              cfgClusterColor,ThBckColor)
   end;
 
   if index > 0 then
@@ -912,7 +1008,7 @@ begin
     try
       seznam.Clear;
       seznam.Delimiter     := ';';
-      seznam.DelimitedText := cqrini.ReadString('DXCluster','NotShow','');
+      seznam.DelimitedText := cfgNotShow;
       for i:=0 to seznam.Count-1 do
       begin
         if (prefix=seznam.Strings[i]) then
@@ -1082,6 +1178,46 @@ begin
   //if dmData.DebugLevel>=1 then Writeln('TfrmDXCluster.SynTelnet - before PridejVetu ');
   //if dmData.DebugLevel>=1 then Writeln('TfrmDXCluster.SynTelnet - after zakaz_kresleni');
   //Sleep(200)
+end;
+
+procedure TfrmDXCluster.ReloadSettings;
+begin
+  EnterCriticalSection(csDXCPref);
+  try
+    gcfgUseBackColor  := cqrini.ReadBool('LoTW','UseBackColor',True);
+    gcfgBckColor      := cqrini.ReadInteger('LoTW','BckColor',clMoneyGreen);
+    gcfgeUseBackColor := cqrini.ReadBool('LoTW','eUseBackColor',True);
+    gcfgeBckColor     := cqrini.ReadInteger('LoTW','eBckColor',clSkyBlue);
+    gwDXCC  := cqrini.ReadString('BandMap','wDXCC','*');
+    giDXCC  := cqrini.ReadString('BandMap','iDXCC','');
+    gwWAZ   := cqrini.ReadString('BandMap','wWAZ','*');
+    giWAZ   := cqrini.ReadString('BandMap','iWAZ','');
+    gwITU   := cqrini.ReadString('BandMap','wITU','*');
+    giITU   := cqrini.ReadString('BandMap','iITU','');
+    gcfgCW  := cqrini.ReadBool('DXCluster','CW',true);
+    gcfgSSB := cqrini.ReadBool('DXCluster','SSB',True);
+    gcfgEU  := cqrini.ReadBool('BandMap','wEU',True);
+    gcfgAS  := cqrini.ReadBool('BandMap','wAS',True);
+    gcfgNA  := cqrini.ReadBool('BandMap','wNA',True);
+    gcfgSA  := cqrini.ReadBool('BandMap','wSA',True);
+    gcfgAF  := cqrini.ReadBool('BandMap','wAF',True);
+    gcfgAN  := cqrini.ReadBool('BandMap','wAN',True);
+    gcfgOC  := cqrini.ReadBool('BandMap','wOC',True);
+    gcfgiDXCC := cqrini.ReadString('BandMap','iDXCC','');
+    gcfgwIOTA := cqrini.ReadBool('BandMap','wIOTA', True);
+    gcfgNewCountryColor := cqrini.ReadInteger('DXCluster','NewCountry',0);
+    gcfgNewBandColor := cqrini.ReadInteger('DXCluster','NewBand',0);
+    gcfgNewModeColor := cqrini.ReadInteger('DXCluster','NewMode',0);
+    gcfgNeedQSLColor := cqrini.ReadInteger('DXCluster','NeedQSL',0);
+    gcfgShowFrom     := cqrini.ReadInteger('xplanet','ShowFrom',0);
+    gcfgLastSpots    := cqrini.ReadString('xplanet','LastSpots','20');
+    gcfgIgnoreBandFreq := cqrini.ReadBool('BandMap','IgnoreBandFreq',True);
+    gcfgUseDXCColors := cqrini.ReadBool('BandMap','UseDXCColors',False);
+    gcfgClusterColor := cqrini.ReadInteger('BandMap','ClusterColor',clBlack);
+    gcfgNotShow := cqrini.ReadString('DXCluster','NotShow','')
+  finally
+    LeaveCriticalSection(csDXCPref)
+  end
 end;
 
 initialization

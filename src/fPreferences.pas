@@ -1050,7 +1050,7 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapFilter, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1610,6 +1610,7 @@ begin
   frmTRXControl.rbRadio2.Caption := edtRadio2.Text;
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
+  frmDXCluster.ReloadSettings;
   ModalResult := mrOk;
   dmUtils.LoadBandLabelSettins;
   dmUtils.LoadBandsSettings;

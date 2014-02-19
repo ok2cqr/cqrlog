@@ -5,8 +5,12 @@ Legend:
 --------------------
 
 1.7.3
+<<<<<<< HEAD
   - TRX control didn't work - fixed
   - rotor control didn't work - fixed
+=======
+  - program used grid, state and county from previous QSO even is the station was /P - fixed
+>>>>>>> 7e3d20e307a616e785b6975a5f23c6af8a45dc91
 
 1.7.2
   + after hitting ESC in any window opened from NewQSO, cursor will be returned to callsign edit field
