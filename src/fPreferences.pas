@@ -480,6 +480,7 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    edtRBNServer : TEdit;
     edtClEmail: TEdit;
     edtHrCode: TEdit;
     edtHrUserName: TEdit;
@@ -780,6 +781,8 @@ type
     Label187: TLabel;
     Label188: TLabel;
     Label189: TLabel;
+    Label190 : TLabel;
+    Label191 : TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1511,6 +1514,7 @@ begin
     cqrini.WriteInteger('RBN','deleteAfter',int)
   else
     cqrini.WriteInteger('RBN','deleteAfter',60);
+  cqrini.WriteString('RBN','Server',edtRBNServer.Text);
 
   cqrini.WriteBool('OnlineLog','HaUP',chkHaUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','HaUpOnline',chkHaUpOnline.Checked);
@@ -2805,6 +2809,7 @@ begin
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
   edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
+  edtRBNServer.Text      := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7300');
 
   chkHaUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HaUP',False);
   chkHaUpOnline.Checked  := cqrini.ReadBool('OnlineLog','HaUpOnline',False);
