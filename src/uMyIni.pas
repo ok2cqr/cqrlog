@@ -46,7 +46,6 @@ end;
 
 function TMyIni.ReadString(const Section, Ident, Default: string): string;
 begin
-  Result := Default;
   EnterCriticalsection(crit);
   try
     Result := ini.ReadString(Section, Ident, Default)
@@ -57,7 +56,6 @@ end;
 
 function TMyIni.ReadInteger(const Section, Ident: string; Default: Longint): Longint;
 begin
-  Result := Default;
   EnterCriticalsection(crit);
   try
     Result := ini.ReadInteger(Section, Ident, Default)
@@ -68,7 +66,6 @@ end;
 
 function TMyIni.ReadBool(const Section, Ident: string; Default: Boolean): Boolean;
 begin
-  Result := Default;
   EnterCriticalsection(crit);
   try
     Result := ini.ReadBool(Section, Ident, Default)
@@ -79,7 +76,6 @@ end;
 
 function TMyIni.ReadFloat(const Section, Ident: string; Default: Double): Double;
 begin
-  Result := Default;
   EnterCriticalsection(crit);
   try
     Result := ini.ReadFloat(Section, Ident, Default)
