@@ -437,7 +437,8 @@ begin
              Result := pred_lomitkem;
              exit
            end;
-           if (((za_lomitkem[1]='M') and (za_lomitkem[2]='M')) or (za_lomitkem='AM')) then //nevim kde je
+           //if (((za_lomitkem[1]='M') and (za_lomitkem[2]='M')) or (za_lomitkem='AM')) then //nevim kde je
+           if (za_lomitkem='MM') or (za_lomitkem='MM1')  or (za_lomitkem='MM2') or (za_lomitkem='MM3') or (za_lomitkem='AM') then
            begin
              Result := '?';
              exit
