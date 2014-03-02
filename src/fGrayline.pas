@@ -314,15 +314,27 @@ begin
 end;
 
 function TRBNThread.ConnectToRBN : Boolean;
+var
+  server : String;
+  port   : Integer;
+  tmp    : String;
 begin
   Result := True;
   lTelnet := TLTelnetClientComponent.Create(nil);
   try
+    tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7300');
+    server := copy(tmp,1,Pos(':',tmp)-1);
+    tmp    := copy(tmp,Pos(':',tmp)+1,5);
+    if not TryStrToInt(tmp,port) then
+      port := 7300; //default value
+
+    if dmData.DebugLevel>=1 then Writeln('Server:',server,' Port:',port);
+
     lTelnet.OnConnect    := @lConnect;
     lTelnet.OnDisconnect := @lDisconnect;
     lTelnet.OnReceive    := @lReceive;
-    lTelnet.Host := 'telnet.reversebeacon.net';
-    lTelnet.Port := 7300;
+    lTelnet.Host := server;
+    lTelnet.Port := port;
     lTelnet.Connect;
     lTelnet.CallAction
   except
@@ -358,6 +370,7 @@ begin
     Synchronize(@frmGrayline.SynRBN);
     sleep(2000)
   end;
+  lTelnet.Disconnect(true);
   DoneCriticalsection(cs)
 end;
 
@@ -402,8 +415,16 @@ begin
   if (cqrini.ReadString('RBN','login','')='') then
     Application.MessageBox('Login to RBN server is not set. Go to Preferences -> RBN support and do the basic settings','Information ...',mb_OK+mb_IconInformation)
   else begin
-    RBNThread := TRBNThread.Create(True);
-    RBNThread.Start
+    if acConnect.Caption = 'Disconnect' then
+    begin
+      RBNThread.Terminate;
+      acConnect.Caption     := 'Connect to RBN';
+      sbGrayLine.SimpleText := 'Disconnected'
+    end
+    else begin
+      RBNThread := TRBNThread.Create(True);
+      RBNThread.Start
+    end
   end
 end;
 
@@ -541,6 +562,10 @@ var
   c : TColor;
 begin
   sbGrayLine.SimpleText := rbn_status;
+  if rbn_status='Connected' then
+    acConnect.Caption := 'Disconnect'
+  else
+    acConnect.Caption := 'Connect to RBN';
   //procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
   ob^.body_smaz;
   for i:=1 to MAX_ITEMS do
