@@ -3849,6 +3849,7 @@ begin
     fViewQSO := False;
     fEditQSO := False;
     NewQSO;
+    ClearAll;
     key := 0
   end;
 

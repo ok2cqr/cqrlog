@@ -7,6 +7,7 @@ Legend:
 1.7.4
   + address to RBN server can be changed in Preferences 
   - 6W/MM0NDX was marked as uknown country instead of Senegal - fixed
+  - after View QSO and CTRL+F2 fields was still read-only - fixed
 
 1.7.3
   - TRX control didn't work - fixed
