@@ -530,7 +530,6 @@ type
     procedure InitializeCW;
     procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
 
-    function GetDescKeyFromCode(key : Word) : String;
     function CheckFreq(freq : String) : String;
   public
     QTHfromCb   : Boolean;
@@ -3856,9 +3855,9 @@ begin
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
   begin
     if (cmbMode.Text='SSB') then
-      RunVK(GetDescKeyFromCode(Key))
+      RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
-      CWint.SendText(dmUtils.GetCWMessage(GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,''));
+      CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,''));
     key := 0
   end;
 
@@ -5105,16 +5104,7 @@ end;
 
 procedure TfrmNewQSO.UpdateFKeyLabels;
 begin
-  frmCWKeys.btnF1.Caption  := cqrini.ReadString('CW','CapF1','CQ');
-  frmCWKeys.btnF2.Caption  := cqrini.ReadString('CW','CapF2','F2');
-  frmCWKeys.btnF3.Caption  := cqrini.ReadString('CW','CapF3','F3');
-  frmCWKeys.btnF4.Caption  := cqrini.ReadString('CW','CapF4','F4');
-  frmCWKeys.btnF5.Caption  := cqrini.ReadString('CW','CapF5','F5');
-  frmCWKeys.btnF6.Caption  := cqrini.ReadString('CW','CapF6','F6');
-  frmCWKeys.btnF7.Caption  := cqrini.ReadString('CW','CapF7','F7');
-  frmCWKeys.btnF8.Caption  := cqrini.ReadString('CW','CapF8','F8');
-  frmCWKeys.btnF9.Caption  := cqrini.ReadString('CW','CapF9','F9');
-  frmCWKeys.btnF10.Caption  := cqrini.ReadString('CW','CapF10','F10')
+  frmCWKeys.fraCWKeys.UpdateFKeyLabels
 end;
 
 procedure TfrmNewQSO.ChangeCallBookCaption;
@@ -5262,11 +5252,6 @@ begin
       sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
     end
   end
-end;
-
-function TfrmNewQSO.GetDescKeyFromCode(key : Word) : String;
-begin
-  Result := 'F' + IntToStr(Key-111) //VK_F1 = 112
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);

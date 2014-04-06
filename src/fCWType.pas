@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Spin, inifiles, lcltype;
+  StdCtrls, Spin, inifiles, lcltype,ActnList,frCWKeys;
 
 type
 
@@ -16,6 +16,7 @@ type
     btnClose: TButton;
     btnClear: TButton;
     edtSpeed: TSpinEdit;
+    fraCWKeys1 : TfraCWKeys;
     Label1: TLabel;
     Label85: TLabel;
     m: TMemo;
@@ -145,6 +146,11 @@ begin
     frmNewQSO.CWint.SetSpeed(speed);
     edtSpeed.Value := speed;
     key := 0
+  end;
+
+  if (key >= VK_F1) and (key <= VK_F10) then
+  begin
+    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(key),frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,''))
   end;
 
   if Key = VK_ESCAPE then

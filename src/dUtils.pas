@@ -216,6 +216,7 @@ type
     function  IgnoreFreq(kHz : String) : Boolean;
     function  HTMLEncode(const Data: string): string;
     function  KmToMiles(qra : Double) : Double;
+    function  GetDescKeyFromCode(key : Word) : String;
 end;
 
 var
@@ -3878,6 +3879,12 @@ procedure TdmUtils.OpenInApp(what : String);
 begin
   RunOnBackgroud('xdg-open '+what)
 end;
+
+function TdmUtils.GetDescKeyFromCode(key : Word) : String;
+begin
+  Result := 'F' + IntToStr(Key-111) //VK_F1 = 112
+end;
+
 
 initialization
   {$I dUtils.lrs}

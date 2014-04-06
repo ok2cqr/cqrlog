@@ -1,16 +1,14 @@
 object frmCWType: TfrmCWType
-  Left = 444
-  Height = 389
-  Top = 219
-  Width = 458
-  HelpType = htKeyword
-  HelpKeyword = 'help/h26.html'
+  Left = 222
+  Height = 405
+  Top = 203
+  Width = 680
   ActiveControl = Panel1
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'CW type'
-  ClientHeight = 389
-  ClientWidth = 458
+  ClientHeight = 405
+  ClientWidth = 680
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -120,22 +118,22 @@ object frmCWType: TfrmCWType
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30'
+  LCLVersion = '0.9.30.2'
   object Panel1: TPanel
     Left = 0
     Height = 88
     Top = 0
-    Width = 458
+    Width = 680
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 88
-    ClientWidth = 458
+    ClientWidth = 680
     TabOrder = 0
     object Label85: TLabel
       Left = 8
       Height = 17
       Top = 30
-      Width = 60
+      Width = 62
       Caption = 'CW speed'
       ParentColor = False
     end
@@ -143,13 +141,13 @@ object frmCWType: TfrmCWType
       Left = 136
       Height = 17
       Top = 30
-      Width = 30
+      Width = 29
       Caption = 'wpm'
       ParentColor = False
     end
     object edtSpeed: TSpinEdit
       Left = 80
-      Height = 26
+      Height = 22
       Top = 24
       Width = 50
       Increment = 2
@@ -187,15 +185,15 @@ object frmCWType: TfrmCWType
   object Panel2: TPanel
     Left = 0
     Height = 35
-    Top = 354
-    Width = 458
+    Top = 370
+    Width = 680
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 35
-    ClientWidth = 458
+    ClientWidth = 680
     TabOrder = 1
     object btnClose: TButton
-      Left = 376
+      Left = 598
       Height = 25
       Top = 8
       Width = 75
@@ -206,7 +204,7 @@ object frmCWType: TfrmCWType
       TabOrder = 0
     end
     object btnClear: TButton
-      Left = 296
+      Left = 518
       Height = 25
       Top = 8
       Width = 75
@@ -218,13 +216,20 @@ object frmCWType: TfrmCWType
   end
   object m: TMemo
     Left = 0
-    Height = 266
-    Top = 88
-    Width = 458
+    Height = 217
+    Top = 153
+    Width = 680
     Align = alClient
     OnKeyPress = mKeyPress
     OnKeyUp = mKeyUp
     ScrollBars = ssAutoBoth
     TabOrder = 2
+  end
+  inline fraCWKeys1: TfraCWKeys
+    Top = 88
+    Width = 680
+    Align = alTop
+    ClientWidth = 680
+    TabOrder = 3
   end
 end
