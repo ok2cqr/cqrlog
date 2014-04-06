@@ -4035,8 +4035,8 @@ begin
             Key := #0
           end;
     #43 : begin  //+ key
-            acAddToBandMap.Execute;
-            key := #0
+            //acAddToBandMap.Execute;
+            //key := #0
           end;
   end; //case
 end;
