@@ -24,7 +24,7 @@ uses
 const
   MaxCall   = 100000;
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 8;
+  cDB_MAIN_VER = 9;
   cDB_COMN_VER = 3;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -3048,6 +3048,13 @@ begin
         Q1.ExecSQL;
 
         Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL
+      end;
+
+      if old_version < 9 then
+      begin
+        Q1.SQL.Text := 'alter table log_changes add upddeleted int(1) default 1';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
       end;
