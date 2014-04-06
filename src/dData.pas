@@ -3054,7 +3054,7 @@ begin
 
       if old_version < 9 then
       begin
-        Q1.SQL.Text := 'alter table log_changes add upddeleted int(1) default 1';
+        Q1.SQL.Text := 'alter table log_changes add upddeleted int(1) default 0';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
       end;
