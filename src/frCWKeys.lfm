@@ -1,0 +1,102 @@
+object fraCWKeys: TfraCWKeys
+  Left = 0
+  Height = 65
+  Top = 0
+  Width = 682
+  ClientHeight = 65
+  ClientWidth = 682
+  OnResize = FrameResize
+  TabOrder = 0
+  DesignLeft = 509
+  DesignTop = 320
+  object btnF1: TButton
+    Left = 0
+    Height = 32
+    Top = 0
+    Width = 136
+    Caption = 'F1'
+    OnClick = btnClicked
+    TabOrder = 0
+  end
+  object btnF2: TButton
+    Left = 136
+    Height = 32
+    Top = 0
+    Width = 136
+    Caption = 'F2'
+    OnClick = btnClicked
+    TabOrder = 1
+  end
+  object btnF3: TButton
+    Left = 272
+    Height = 32
+    Top = 0
+    Width = 136
+    Caption = 'F3'
+    OnClick = btnClicked
+    TabOrder = 2
+  end
+  object btnF4: TButton
+    Left = 408
+    Height = 32
+    Top = 0
+    Width = 136
+    Caption = 'F4'
+    OnClick = btnClicked
+    TabOrder = 3
+  end
+  object btnF5: TButton
+    Left = 544
+    Height = 32
+    Top = 0
+    Width = 136
+    Caption = 'F5'
+    OnClick = btnClicked
+    TabOrder = 4
+  end
+  object btnF6: TButton
+    Left = 0
+    Height = 32
+    Top = 33
+    Width = 136
+    Caption = 'F6'
+    OnClick = btnClicked
+    TabOrder = 5
+  end
+  object btnF7: TButton
+    Left = 136
+    Height = 32
+    Top = 33
+    Width = 136
+    Caption = 'F7'
+    OnClick = btnClicked
+    TabOrder = 6
+  end
+  object btnF8: TButton
+    Left = 272
+    Height = 32
+    Top = 33
+    Width = 136
+    Caption = 'F8'
+    OnClick = btnClicked
+    TabOrder = 7
+  end
+  object btnF9: TButton
+    Left = 408
+    Height = 32
+    Top = 33
+    Width = 136
+    Caption = 'F9'
+    OnClick = btnClicked
+    TabOrder = 8
+  end
+  object btnF10: TButton
+    Left = 544
+    Height = 32
+    Top = 33
+    Width = 136
+    Caption = 'F10'
+    OnClick = btnClicked
+    TabOrder = 9
+  end
+end
