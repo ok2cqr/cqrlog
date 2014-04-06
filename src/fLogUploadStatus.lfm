@@ -5,7 +5,7 @@ object frmLogUploadStatus: TfrmLogUploadStatus
   Width = 206
   HorzScrollBar.Visible = False
   Caption = 'Status of log upload'
-  ClientHeight = 272
+  ClientHeight = 275
   ClientWidth = 206
   KeyPreview = True
   Menu = MainMenu1
@@ -17,7 +17,7 @@ object frmLogUploadStatus: TfrmLogUploadStatus
   LCLVersion = '0.9.30.2'
   object pnlLogStatus: TPanel
     Left = 0
-    Height = 272
+    Height = 275
     Top = 0
     Width = 206
     Align = alClient

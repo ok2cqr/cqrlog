@@ -57,6 +57,7 @@ type
     procedure PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
     procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
     procedure MarkAsUploaded(LogName : String; id_log_changes : Integer);
+    procedure MarkAsUpDeleted(id_log_upload : Integer);
   end;
 
 var
@@ -700,6 +701,35 @@ begin
       trQ2.Commit
   end
 end;
+
+procedure TdmLogUpload.MarkAsUpDeleted(id_log_upload : Integer);
+const
+  C_UPD = 'update log_changes set upddeleted=1 where id = %d';
+var
+  err : Boolean = False;
+begin
+  Q2.Close;
+  if trQ2.Active then trQ2.RollBack;
+  try try
+    Q2.SQL.Text := Format(C_UPD,[id_log_upload]);
+    if dmData.DebugLevel >= 1 then Writeln(Q2.SQL.Text);
+    Q2.ExecSQL
+  except
+    on E : Exception do
+    begin
+      err := True;
+      Writeln(E.Message)
+    end
+  end
+  finally
+    Q2.Close;
+    if err then
+      trQ2.Rollback
+    else
+      trQ2.Commit
+  end
+end;
+
 
 initialization
   {$I dLogUpload.lrs}

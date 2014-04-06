@@ -175,20 +175,29 @@ begin
         else if (Command = 'UPDATE') then
         begin
           ToMainThread('Deleting original '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
-          dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
-
-          if dmData.DebugLevel >= 1 then
+          if dmLogUpload.Q.FieldByName('upddeleted').asInteger = 0 then
           begin
-            Writeln('data.Text:');
-            Writeln(data.Text)
-          end;
+            dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
 
-          UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,'DELETE'),data,Response,ResultCode);
+            if dmData.DebugLevel >= 1 then
+            begin
+              Writeln('data.Text:');
+              Writeln(data.Text)
+            end;
 
-          if dmData.DebugLevel >= 1 then
-          begin
-            Writeln('Response  :',Response);
-            Writeln('ResultCode:',ResultCode)
+            UpSuccess := dmLogUpload.UploadLogData(dmLogUpload.GetUploadUrl(WhereToUpload,'DELETE'),data,Response,ResultCode);
+
+            if dmData.DebugLevel >= 1 then
+            begin
+              Writeln('Response  :',Response);
+              Writeln('ResultCode:',ResultCode)
+            end
+          end
+          else begin
+            ToMainThread('Already deleted '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
+            UpSuccess  := True;
+            Response   := '';
+            ResultCode := 200
           end;
 
           if UpSuccess then
@@ -201,7 +210,7 @@ begin
             end
             else
               ToMainThread('','OK');
-
+            dmLogUpload.MarkAsUpDeleted(dmLogUpload.Q.Fields[0].AsInteger);
             data.Clear;
             dmLogUpload.PrepareUserInfoHeader(WhereToUpload,data);
             ToMainThread('Uploading updated '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
@@ -211,8 +220,6 @@ begin
           else
             ToMainThread('Update failed! Check Internet connection','')
         end
-
-
         else if (Command = 'DELETE') then
         begin
           ToMainThread('Deleting '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
