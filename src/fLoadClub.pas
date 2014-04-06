@@ -108,6 +108,8 @@ var
   data     : TExplodeArray;
   num      : Integer = 0;
   e        : Boolean = False;
+  day      : String;
+  iday     : Integer;
 begin
   mLoad.Clear;
   if not FileExists(SourceFile) then
@@ -150,14 +152,20 @@ begin
         clubnr := data[1];
       if Length(data) > 2 then
       begin
-        fromDate := data[2]+'-01';
         if Length(data) > 3 then
           toDate := data[3]
         else
           toDate := '';
-        month := copy(fromDate,6,2);
-        year  := copy(fromDate,1,4);
-        if not (TryStrToInt(month,imonth) or TryStrToInt(year,iyear)) then
+
+        fromDate := data[2];
+        month    := copy(fromDate,6,2);
+        year     := copy(fromDate,1,4);
+        if Length(fromDate)>7 then
+          day := copy(fromDate,9,2)
+        else
+          day := '01';
+
+        if not (TryStrToInt(month,imonth) or TryStrToInt(year,iyear) or TryStrToInt(day,iday)) then
         begin
           mLoad.Lines.Add('Wrong date to encode!');
           mLoad.Lines.Add('Call: '+call);
@@ -165,6 +173,7 @@ begin
           mLoad.Lines.Add('From date: '+fromDate);
           Break
         end;
+        fromDate := year + '-' + month + '-' + day;
 
         if toDate='-' then
           toDate := '';
@@ -172,7 +181,12 @@ begin
         begin
           month := copy(toDate,6,2);
           year  := copy(toDate,1,4);
-          if not (TryStrToInt(month,imonth) or TryStrToInt(year,iyear)) then
+          if Length(toDate)>7 then
+            day := copy(toDate,9,2)
+          else
+            day := IntToStr(DaysInAMonth(iYear,iMonth));
+
+          if not (TryStrToInt(month,imonth) or TryStrToInt(year,iyear) or TryStrToInt(day,iday)) then
           begin
             mLoad.Lines.Add('Wrong date to encode!');
             mLoad.Lines.Add('Call: '+call);
@@ -180,10 +194,7 @@ begin
             mLoad.Lines.Add('To date: '+toDate);
             Break
           end;
-          tmp := IntToStr(DaysInAMonth(iYear,iMonth));
-          if Length(tmp) = 1 then
-            tmp := '0' + tmp;
-          toDate :=  toDate + '-'+tmp
+          toDate := year + '-' + month + '-' + day
         end
         else
           toDate := cToDate
@@ -206,19 +217,19 @@ begin
       dmData.trQ.Rollback;
       mLoad.Lines.Add('EX: '+ Ex.Message);
       e := True
-    end;
+    end
   end
   finally
     if not e then
     begin
       mLoad.Lines.Add(IntToStr(num) + ' records converted');
-      dmData.trQ.Commit;
+      dmData.trQ.Commit
     end
     else
         mLoad.Lines.Add('0 records converted');
     dmData.Q.Close;
     CloseFile(sF)
-  end;
+  end
 end;
 
 procedure TfrmLoadClub.LoadZIP;
