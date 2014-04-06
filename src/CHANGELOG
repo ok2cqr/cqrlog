@@ -10,6 +10,7 @@ Legend:
   + full date (not only year,month) is supported in membership files
   - 6W/MM0NDX was marked as uknown country instead of Senegal - fixed
   - after View QSO and CTRL+F2 fields was still read-only - fixed
+  - QSL information was added to Commend to QSO even if it already exists
   - '+' character is now allowed in any field in New QSO window
 
   # '+' as hotkey to add to bandmap function removed, use CTRL+A instead

@@ -4717,6 +4717,7 @@ var
   IgnoreQRZ : Boolean = False;
   MvToRem   : Boolean = False;
   AlwaysReplace : Boolean;
+  tmp : String;
 begin
   if c_ErrMsg <> '' then
   begin
@@ -4734,16 +4735,19 @@ begin
     MvToRem       := cqrini.ReadBool('NewQSO','MvToRem',True);
     AlwaysReplace := cqrini.ReadBool('NewQSO','UseCallBookData',False);
 
-    if (edtQSL_VIA.Text = '') and (not IgnoreQRZ) and (c_qsl<>'') then
+    writeln('c_qsl:',c_qsl);
+    Writeln('MvToRem:',MvToRem);
+    if (not IgnoreQRZ) and (c_qsl<>'') then
     begin
-      c_qsl := dmUtils.GetQSLVia(c_qsl);
-      if dmUtils.IsQSLViaValid(dmUtils.CallTrim(c_qsl)) then
-        edtQSL_VIA.Text := dmUtils.CallTrim(c_qsl)
-    end
-    else begin
+      if (edtQSL_VIA.Text = '') then
+      begin
+        tmp := dmUtils.GetQSLVia(c_qsl);
+        if dmUtils.IsQSLViaValid(dmUtils.CallTrim(tmp)) then
+          edtQSL_VIA.Text := dmUtils.CallTrim(tmp)
+      end;
       if MvToRem then
       begin
-        if c_qsl <> '' then
+        if (Pos(LowerCase(c_qsl),LowerCase(edtRemQSO.Text))=0) then
         begin
           if edtRemQSO.Text= '' then
             edtRemQSO.Text := c_qsl
@@ -4751,7 +4755,7 @@ begin
             edtRemQSO.Text := edtRemQSO.Text + ', '+c_qsl
         end
       end
-    end; //qsl manager
+    end;
 
     if (edtName.Text = '') or AlwaysReplace then
       edtName.Text := c_nick; //operator's name
