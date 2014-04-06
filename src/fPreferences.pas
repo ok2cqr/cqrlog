@@ -112,6 +112,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkCloseAfterUpload : TCheckBox;
     chkUseNewQSOFreqMode: TCheckBox;
     chkUseCallBookData: TCheckBox;
     chkHrUpEnabled: TCheckBox;
@@ -1534,6 +1535,7 @@ begin
   cqrini.WriteString('OnlineLog','HrUserName',edtHrUserName.Text);
   cqrini.WriteString('OnlineLog','HrCode',edtHrCode.Text);
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
+  cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
 
   if WinKeyerChanged then
   begin
@@ -2831,6 +2833,7 @@ begin
   edtHrUserName.Text     := cqrini.ReadString('OnlineLog','HrUserName','');
   edtHrCode.Text         := cqrini.ReadString('OnlineLog','HrCode','');
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
+  chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
   chkHrUpEnabledChange(nil);
 
   wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked;

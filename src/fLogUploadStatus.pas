@@ -312,7 +312,13 @@ begin
     mStatus.prepis_vetu(item,SyncColor,clWhite,0,mStatus.posledniveta,0)
   end
   else
-    mStatus.pridej_vetu(SyncMsg,SyncColor,clWhite,0)
+    mStatus.pridej_vetu(SyncMsg,SyncColor,clWhite,0);
+
+  if (Pos('Done ...',SyncMsg)>0) or (Pos('All QSO already uploaded',SyncMsg)>0) then
+  begin
+    if cqrini.ReadBool('OnlineLog','CloseAfterUpload',False) then
+      Close
+  end
 end;
 
 procedure TfrmLogUploadStatus.acClearMessagesExecute(Sender: TObject);
@@ -341,7 +347,6 @@ end;
 procedure TfrmLogUploadStatus.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 begin
-  Writeln('Posralo se to ...');
   FreeAndNil(mStatus);
   FreeAndNil(mFont)
 end;
