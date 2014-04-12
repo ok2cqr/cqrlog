@@ -116,6 +116,11 @@ begin
   m    := TMemoryStream.Create;
   l    := TStringList.Create;
   try
+    http.ProxyHost := cqrini.ReadString('Program','Proxy','');
+    http.ProxyPort := cqrini.ReadString('Program','Port','');
+    http.UserName  := cqrini.ReadString('Program','User','');
+    http.Password  := cqrini.ReadString('Program','Passwd','');
+
     m.LoadFromFile(FileName);
     http.Sock.OnStatus := @SockCallBack;
     s := '--' + Bound + CRLF;
