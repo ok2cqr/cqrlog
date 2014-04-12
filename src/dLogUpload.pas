@@ -646,7 +646,8 @@ begin
                     200 : Result := 'OK';
                     400 : begin
                             Result     := Response;
-                            FatalError := True
+                            if (Pos('skipping qso',LowerCase(Response))=0) then //consider skiping QSO as non fatal error, the app can live with it :)
+                              FatalError := True
                           end;
                     403 : begin
                             Result := 'Access denied';

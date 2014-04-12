@@ -15,8 +15,10 @@ Legend:
   - QSL information was added to Commend to QSO even if it already exists
   - '+' character is now allowed in any field in New QSO window
   - log could not recove from a wrong upload of updated QSO - fixed
+  
 
   # '+' as hotkey to add to bandmap function removed, use CTRL+A instead
+  # any result from ClubLog with 'Skipping QSO' won't stop uploading of the log
 
 1.7.3
   - TRX control didn't work - fixed
