@@ -114,13 +114,12 @@ begin
     end;
     cqrini.WriteString('LoTWImp','DateFrom',edtDateFrom.Text);
 
-    url := 'https://p1k.arrl.org/lotwuser/lotwreport.adi?login='+user+'&password='+pass+'&qso_query=1&qso_qsldetail="yes"'+
+    url := 'https://LoTW.arrl.org/lotwuser/lotwreport.adi?login='+user+'&password='+pass+'&qso_query=1&qso_qsldetail="yes"'+
            '&qso_qslsince='+edtDateFrom.Text;
+
     if edtCall.Text <> '' then
       url := url+'&qso_owncall='+edtCall.Text;
     if dmData.DebugLevel>=1 then Writeln(url);
-    //DLLSSLName  := dmData.cDLLSSLName;
-    //DLLUtilName := dmData.cDLLUtilName;
     http.MimeType := 'text/xml';
     http.Protocol := '1.1';
     if http.HTTPMethod('GET',url) then
@@ -175,6 +174,7 @@ begin
       end;
       mStat.Lines.Add('NOT logged');
       mStat.Lines.Add('Error: '+IntToStr(http.Sock.LastError));
+      mStat.Lines.Add('Error: '+http.Sock.LastErrorDesc);
       mStat.Lines.Add('Error: '+http.Sock.SSL.LibName)
     end
   finally

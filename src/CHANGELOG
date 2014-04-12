@@ -9,6 +9,7 @@ Legend:
   + address to RBN server can be changed in Preferences 
   + full date (not only year,month) is supported in membership files
   + Close the "Status of log upload" window after successful upload added
+  + moved to new LoTW url and updated upload routines 
   - 6W/MM0NDX was marked as uknown country instead of Senegal - fixed
   - after View QSO and CTRL+F2 fields was still read-only - fixed
   - QSL information was added to Commend to QSO even if it already exists

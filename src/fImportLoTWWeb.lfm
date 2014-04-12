@@ -123,12 +123,12 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
     Width = 546
     Align = alClient
     Caption = 'Progress'
-    ClientHeight = 386
+    ClientHeight = 373
     ClientWidth = 542
     TabOrder = 0
     object mStat: TMemo
       Left = 0
-      Height = 386
+      Height = 373
       Top = 0
       Width = 542
       Align = alClient
@@ -163,43 +163,43 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
       Width = 546
       Anchors = [akTop, akLeft, akRight]
       Caption = ' '
-      ClientHeight = 69
+      ClientHeight = 56
       ClientWidth = 542
       TabOrder = 1
       object Label3: TLabel
         Left = 10
-        Height = 18
+        Height = 17
         Top = 12
-        Width = 269
+        Width = 247
         Caption = 'Return QSL records received on or after '
         ParentColor = False
       end
       object edtDateFrom: TEdit
         Left = 270
-        Height = 27
+        Height = 22
         Top = 6
         Width = 85
         TabOrder = 0
       end
       object chkShowNew: TCheckBox
         Left = 6
-        Height = 24
+        Height = 26
         Top = 39
-        Width = 394
+        Width = 357
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end
       object Label1: TLabel
         Left = 358
-        Height = 18
+        Height = 17
         Top = 12
-        Width = 48
+        Width = 44
         Caption = 'for call'
         ParentColor = False
       end
       object edtCall: TEdit
         Left = 406
-        Height = 27
+        Height = 22
         Top = 6
         Width = 112
         TabOrder = 2

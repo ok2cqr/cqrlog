@@ -93,7 +93,7 @@ end;
 
 procedure TfrmLoTWExport.btnUploadClick(Sender: TObject);
 const
-  UPLOAD_URL = 'https://lotw.arrl.org/lotw/upload';
+  UPLOAD_URL = 'https://LoTW.arrl.org/lotwuser/upload?login=%s&password=%s';
   CR = #$0d;
   LF = #$0a;
   CRLF = CR + LF;
@@ -105,6 +105,7 @@ var
   l    : TStringList;
   suc  : Boolean = False;
   date : String = '';
+  url  : String = '';
 begin
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
@@ -112,10 +113,6 @@ begin
   mStat.Lines.Add('Uploading file ...');
   mStat.Lines.Add('Size: ');
   http := THTTPSend.Create;
-  {
-  DLLSSLName := dmData.cDLLSSLName;
-  DLLUtilName := dmData.cDLLUtilName;
-  }
   m    := TMemoryStream.Create;
   l    := TStringList.Create;
   try
@@ -130,7 +127,11 @@ begin
     s := CRLF + '--' + Bound + '--' + CRLF;
     WriteStrToStream(http.Document, s);
     http.MimeType := 'multipart/form-data; boundary=' + Bound;
-    Res := HTTP.HTTPMethod('POST', UPLOAD_URL);
+
+    url := Format(UPLOAD_URL,[cqrini.ReadString('LoTW','LoTWName',''),cqrini.ReadString('LoTW','LoTWPass','')]);
+    if dmData.DebugLevel >= 1 then Writeln(url);
+
+    Res := HTTP.HTTPMethod('POST', url);
     if Res then
     begin
       l.LoadFromStream(HTTP.Document);
