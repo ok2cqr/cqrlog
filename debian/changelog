@@ -1,3 +1,22 @@
+cqrlog (1.7.4-1) unstable; urgency=low
+ 
+  * F keys to CW type window added
+  * address to RBN server can be changed in Preferences
+  * full date (not only year,month) is supported in membership files
+  * Close the "Status of log upload" window after successful upload 
+    added
+  * moved to new LoTW url and updated upload routines 
+  * band button description is editable (Preferences -> TRX control ->
+    Change default frequencies)
+  * 6W/MM0NDX was marked as uknown country instead of Senegal - fixed
+  * after View QSO and CTRL+F2 fields was still read-only - fixed
+  * QSL information was added to Commend to QSO even if it already 
+    exists
+  * '+' character is now allowed in any field in New QSO window
+  * log could not recover from a wrong upload of updated QSO - fixed
+ 
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 13 Apr 2014 14:56:00 +0100
+
 cqrlog (1.7.3-1) unstable; urgency=low
  
   * TRX control didn't work - fixed
