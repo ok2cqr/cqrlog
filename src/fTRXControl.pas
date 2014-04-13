@@ -121,6 +121,7 @@ type
     procedure Split(up : Integer);
     procedure DisableSplit;
     procedure ClearRIT;
+    procedure LoadButtonCaptions;
   end;
 
 {
@@ -376,6 +377,7 @@ end;
 
 procedure TfrmTRXControl.FormShow(Sender: TObject);
 begin
+  LoadButtonCaptions;
   dmUtils.LoadWindowPos(frmTRXControl);
   rbRadio1.Caption := cqrini.ReadString('TRX1','Desc','Radio 1');
   rbRadio2.Caption := cqrini.ReadString('TRX2','Desc','Radio 2')
@@ -1036,6 +1038,22 @@ end;
 procedure TfrmTRXControl.ClearRIT;
 begin
   radio.ClearRit
+end;
+
+procedure TfrmTRXControl.LoadButtonCaptions;
+begin
+  btn160m.Caption := cqrini.ReadString('DefFreq','160btn','160m');
+  btn80m.Caption  := cqrini.ReadString('DefFreq','80btn','80m');
+  btn40m.Caption  := cqrini.ReadString('DefFreq','40btn','40m');
+  btn30m.Caption  := cqrini.ReadString('DefFreq','30btn','30m');
+  btn20m.Caption  := cqrini.ReadString('DefFreq','20btn','20m');
+  btn17m.Caption  := cqrini.ReadString('DefFreq','17btn','17m');
+  btn15m.Caption  := cqrini.ReadString('DefFreq','15btn','15m');
+  btn12m.Caption  := cqrini.ReadString('DefFreq','12btn','12m');
+  btn10m.Caption  := cqrini.ReadString('DefFreq','10btn','10m');
+  btn6m.Caption   := cqrini.ReadString('DefFreq','6btn','6m');
+  btn2m.Caption   := cqrini.ReadString('DefFreq','2btn','2m');
+  btn70cm.Caption := cqrini.ReadString('DefFreq','70btn','70cm')
 end;
 
 initialization

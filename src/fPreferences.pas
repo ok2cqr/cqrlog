@@ -1586,6 +1586,8 @@ begin
   if TRXChanged then
     frmTRXControl.InicializeRig;
 
+  frmTRXControl.LoadButtonCaptions;
+
   frmNewQSO.ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   frmNewQSO.ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
 

@@ -11,28 +11,12 @@ object frmDefaultFreq: TfrmDefaultFreq
   ClientWidth = 550
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.27'
-  object Label1: TLabel
-    Left = 18
-    Height = 18
-    Top = 56
-    Width = 38
-    Caption = '160m'
-    ParentColor = False
-  end
-  object Label2: TLabel
-    Left = 18
-    Height = 18
-    Top = 88
-    Width = 30
-    Caption = '80m'
-    ParentColor = False
-  end
+  LCLVersion = '0.9.30.2'
   object Label3: TLabel
     Left = 18
-    Height = 18
+    Height = 17
     Top = 16
-    Width = 39
+    Width = 33
     Caption = 'Band'
     Font.Style = [fsBold]
     ParentColor = False
@@ -40,41 +24,41 @@ object frmDefaultFreq: TfrmDefaultFreq
   end
   object Label4: TLabel
     Left = 120
-    Height = 18
+    Height = 17
     Top = 16
-    Width = 23
+    Width = 21
     Caption = 'CW'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 208
-    Height = 18
+    Height = 17
     Top = 16
-    Width = 26
+    Width = 23
     Caption = 'SSB'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 304
-    Height = 18
+    Height = 17
     Top = 16
-    Width = 33
+    Width = 30
     Caption = 'RTTY'
     ParentColor = False
   end
   object Label7: TLabel
     Left = 400
-    Height = 18
+    Height = 17
     Top = 16
-    Width = 22
+    Width = 21
     Caption = 'AM'
     ParentColor = False
   end
   object Label8: TLabel
     Left = 480
-    Height = 18
+    Height = 17
     Top = 16
-    Width = 21
+    Width = 19
     Caption = 'FM'
     ParentColor = False
   end
@@ -85,86 +69,6 @@ object frmDefaultFreq: TfrmDefaultFreq
     Width = 518
     Shape = bsTopLine
   end
-  object Label9: TLabel
-    Left = 18
-    Height = 18
-    Top = 120
-    Width = 30
-    Caption = '40m'
-    ParentColor = False
-  end
-  object Label10: TLabel
-    Left = 18
-    Height = 18
-    Top = 152
-    Width = 30
-    Caption = '30m'
-    ParentColor = False
-  end
-  object Label11: TLabel
-    Left = 18
-    Height = 18
-    Top = 184
-    Width = 30
-    Caption = '20m'
-    ParentColor = False
-  end
-  object Label12: TLabel
-    Left = 18
-    Height = 18
-    Top = 216
-    Width = 30
-    Caption = '17m'
-    ParentColor = False
-  end
-  object Label13: TLabel
-    Left = 18
-    Height = 18
-    Top = 248
-    Width = 30
-    Caption = '15m'
-    ParentColor = False
-  end
-  object Label14: TLabel
-    Left = 18
-    Height = 18
-    Top = 280
-    Width = 30
-    Caption = '12m'
-    ParentColor = False
-  end
-  object Label15: TLabel
-    Left = 18
-    Height = 18
-    Top = 312
-    Width = 30
-    Caption = '10m'
-    ParentColor = False
-  end
-  object Label16: TLabel
-    Left = 18
-    Height = 18
-    Top = 344
-    Width = 22
-    Caption = '6m'
-    ParentColor = False
-  end
-  object Label17: TLabel
-    Left = 18
-    Height = 18
-    Top = 376
-    Width = 22
-    Caption = '2m'
-    ParentColor = False
-  end
-  object Label18: TLabel
-    Left = 18
-    Height = 18
-    Top = 408
-    Width = 37
-    Caption = '70cm'
-    ParentColor = False
-  end
   object Bevel2: TBevel
     Left = 18
     Height = 12
@@ -174,423 +78,423 @@ object frmDefaultFreq: TfrmDefaultFreq
   end
   object edt160cw: TEdit
     Left = 93
-    Height = 27
-    Top = 53
-    Width = 80
-    TabOrder = 0
-  end
-  object edt160ssb: TEdit
-    Left = 184
-    Height = 27
+    Height = 22
     Top = 53
     Width = 80
     TabOrder = 1
   end
-  object edt160rtty: TEdit
-    Left = 275
-    Height = 27
+  object edt160ssb: TEdit
+    Left = 184
+    Height = 22
     Top = 53
     Width = 80
     TabOrder = 2
   end
-  object edt160am: TEdit
-    Left = 368
-    Height = 27
+  object edt160rtty: TEdit
+    Left = 275
+    Height = 22
     Top = 53
     Width = 80
     TabOrder = 3
   end
-  object edt160fm: TEdit
-    Left = 456
-    Height = 27
+  object edt160am: TEdit
+    Left = 368
+    Height = 22
     Top = 53
     Width = 80
     TabOrder = 4
   end
-  object edt80cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 85
+  object edt160fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 53
     Width = 80
     TabOrder = 5
   end
-  object edt80ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 85
-    Width = 80
-    TabOrder = 6
-  end
-  object edt80rtty: TEdit
-    Left = 275
-    Height = 27
+  object edt80cw: TEdit
+    Left = 93
+    Height = 22
     Top = 85
     Width = 80
     TabOrder = 7
   end
-  object edt80am: TEdit
-    Left = 368
-    Height = 27
+  object edt80ssb: TEdit
+    Left = 184
+    Height = 22
     Top = 85
     Width = 80
     TabOrder = 8
   end
-  object edt80fm: TEdit
-    Left = 456
-    Height = 27
+  object edt80rtty: TEdit
+    Left = 275
+    Height = 22
     Top = 85
     Width = 80
     TabOrder = 9
   end
-  object edt40cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 117
+  object edt80am: TEdit
+    Left = 368
+    Height = 22
+    Top = 85
     Width = 80
     TabOrder = 10
   end
-  object edt40ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 117
+  object edt80fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 85
     Width = 80
     TabOrder = 11
   end
-  object edt40rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 117
-    Width = 80
-    TabOrder = 12
-  end
-  object edt40am: TEdit
-    Left = 368
-    Height = 27
+  object edt40cw: TEdit
+    Left = 93
+    Height = 22
     Top = 117
     Width = 80
     TabOrder = 13
   end
-  object edt40fm: TEdit
-    Left = 456
-    Height = 27
+  object edt40ssb: TEdit
+    Left = 184
+    Height = 22
     Top = 117
     Width = 80
     TabOrder = 14
   end
-  object edt30cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 149
+  object edt40rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 117
     Width = 80
     TabOrder = 15
   end
-  object edt30ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 149
+  object edt40am: TEdit
+    Left = 368
+    Height = 22
+    Top = 117
     Width = 80
     TabOrder = 16
   end
-  object edt30rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 149
+  object edt40fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 117
     Width = 80
     TabOrder = 17
   end
-  object edt30am: TEdit
-    Left = 368
-    Height = 27
-    Top = 149
-    Width = 80
-    TabOrder = 18
-  end
-  object edt30fm: TEdit
-    Left = 456
-    Height = 27
+  object edt30cw: TEdit
+    Left = 93
+    Height = 22
     Top = 149
     Width = 80
     TabOrder = 19
   end
-  object edt20cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 181
+  object edt30ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 149
     Width = 80
     TabOrder = 20
   end
-  object edt20ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 181
+  object edt30rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 149
     Width = 80
     TabOrder = 21
   end
-  object edt20rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 181
+  object edt30am: TEdit
+    Left = 368
+    Height = 22
+    Top = 149
     Width = 80
     TabOrder = 22
   end
-  object edt20am: TEdit
-    Left = 368
-    Height = 27
-    Top = 181
+  object edt30fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 149
     Width = 80
     TabOrder = 23
   end
-  object edt20fm: TEdit
-    Left = 456
-    Height = 27
-    Top = 181
-    Width = 80
-    TabOrder = 24
-  end
-  object edt17cw: TEdit
+  object edt20cw: TEdit
     Left = 93
-    Height = 27
-    Top = 213
+    Height = 22
+    Top = 181
     Width = 80
     TabOrder = 25
   end
-  object edt17ssb: TEdit
+  object edt20ssb: TEdit
     Left = 184
-    Height = 27
-    Top = 213
+    Height = 22
+    Top = 181
     Width = 80
     TabOrder = 26
   end
-  object edt17rtty: TEdit
+  object edt20rtty: TEdit
     Left = 275
-    Height = 27
-    Top = 213
+    Height = 22
+    Top = 181
     Width = 80
     TabOrder = 27
   end
-  object edt17am: TEdit
+  object edt20am: TEdit
     Left = 368
-    Height = 27
-    Top = 213
+    Height = 22
+    Top = 181
     Width = 80
     TabOrder = 28
   end
-  object edt17fm: TEdit
+  object edt20fm: TEdit
     Left = 456
-    Height = 27
-    Top = 213
+    Height = 22
+    Top = 181
     Width = 80
     TabOrder = 29
   end
-  object edt15cw: TEdit
+  object edt17cw: TEdit
     Left = 93
-    Height = 27
-    Top = 245
-    Width = 80
-    TabOrder = 30
-  end
-  object edt15ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 245
+    Height = 22
+    Top = 213
     Width = 80
     TabOrder = 31
   end
-  object edt15rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 245
+  object edt17ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 213
     Width = 80
     TabOrder = 32
   end
-  object edt15am: TEdit
-    Left = 368
-    Height = 27
-    Top = 245
+  object edt17rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 213
     Width = 80
     TabOrder = 33
   end
-  object edt15fm: TEdit
-    Left = 456
-    Height = 27
-    Top = 245
+  object edt17am: TEdit
+    Left = 368
+    Height = 22
+    Top = 213
     Width = 80
     TabOrder = 34
   end
-  object edt12cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 277
+  object edt17fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 213
     Width = 80
     TabOrder = 35
   end
-  object edt12ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 277
-    Width = 80
-    TabOrder = 36
-  end
-  object edt12rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 277
+  object edt15cw: TEdit
+    Left = 93
+    Height = 22
+    Top = 245
     Width = 80
     TabOrder = 37
   end
-  object edt12am: TEdit
-    Left = 368
-    Height = 27
-    Top = 277
+  object edt15ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 245
     Width = 80
     TabOrder = 38
   end
-  object edt12fm: TEdit
-    Left = 456
-    Height = 27
-    Top = 277
+  object edt15rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 245
     Width = 80
     TabOrder = 39
   end
-  object edt10cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 309
+  object edt15am: TEdit
+    Left = 368
+    Height = 22
+    Top = 245
     Width = 80
     TabOrder = 40
   end
-  object edt10ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 309
+  object edt15fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 245
     Width = 80
     TabOrder = 41
   end
-  object edt10rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 309
-    Width = 80
-    TabOrder = 42
-  end
-  object edt10am: TEdit
-    Left = 368
-    Height = 27
-    Top = 309
+  object edt12cw: TEdit
+    Left = 93
+    Height = 22
+    Top = 277
     Width = 80
     TabOrder = 43
   end
-  object edt10fm: TEdit
-    Left = 456
-    Height = 27
-    Top = 309
+  object edt12ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 277
     Width = 80
     TabOrder = 44
   end
-  object edt6cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 341
+  object edt12rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 277
     Width = 80
     TabOrder = 45
   end
-  object edt6ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 341
+  object edt12am: TEdit
+    Left = 368
+    Height = 22
+    Top = 277
     Width = 80
     TabOrder = 46
   end
-  object edt6rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 341
+  object edt12fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 277
     Width = 80
     TabOrder = 47
   end
-  object edt6am: TEdit
-    Left = 368
-    Height = 27
-    Top = 341
-    Width = 80
-    TabOrder = 48
-  end
-  object edt6fm: TEdit
-    Left = 456
-    Height = 27
-    Top = 341
+  object edt10cw: TEdit
+    Left = 93
+    Height = 22
+    Top = 309
     Width = 80
     TabOrder = 49
   end
-  object edt2cw: TEdit
-    Left = 93
-    Height = 27
-    Top = 373
+  object edt10ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 309
     Width = 80
     TabOrder = 50
   end
-  object edt2ssb: TEdit
-    Left = 184
-    Height = 27
-    Top = 373
+  object edt10rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 309
     Width = 80
     TabOrder = 51
   end
-  object edt2rtty: TEdit
-    Left = 275
-    Height = 27
-    Top = 373
+  object edt10am: TEdit
+    Left = 368
+    Height = 22
+    Top = 309
     Width = 80
     TabOrder = 52
   end
-  object edt2am: TEdit
-    Left = 368
-    Height = 27
-    Top = 373
+  object edt10fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 309
     Width = 80
     TabOrder = 53
   end
-  object edt2fm: TEdit
-    Left = 456
-    Height = 27
-    Top = 373
-    Width = 80
-    TabOrder = 54
-  end
-  object edt70cw: TEdit
+  object edt6cw: TEdit
     Left = 93
-    Height = 27
-    Top = 405
+    Height = 22
+    Top = 341
     Width = 80
     TabOrder = 55
   end
-  object edt70ssb: TEdit
+  object edt6ssb: TEdit
     Left = 184
-    Height = 27
-    Top = 405
+    Height = 22
+    Top = 341
     Width = 80
     TabOrder = 56
   end
-  object edt70rtty: TEdit
+  object edt6rtty: TEdit
     Left = 275
-    Height = 27
-    Top = 405
+    Height = 22
+    Top = 341
     Width = 80
     TabOrder = 57
   end
-  object edt70am: TEdit
+  object edt6am: TEdit
     Left = 368
-    Height = 27
-    Top = 405
+    Height = 22
+    Top = 341
     Width = 80
     TabOrder = 58
   end
-  object edt70fm: TEdit
+  object edt6fm: TEdit
     Left = 456
-    Height = 27
-    Top = 405
+    Height = 22
+    Top = 341
     Width = 80
     TabOrder = 59
+  end
+  object edt2cw: TEdit
+    Left = 93
+    Height = 22
+    Top = 373
+    Width = 80
+    TabOrder = 61
+  end
+  object edt2ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 373
+    Width = 80
+    TabOrder = 62
+  end
+  object edt2rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 373
+    Width = 80
+    TabOrder = 63
+  end
+  object edt2am: TEdit
+    Left = 368
+    Height = 22
+    Top = 373
+    Width = 80
+    TabOrder = 64
+  end
+  object edt2fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 373
+    Width = 80
+    TabOrder = 65
+  end
+  object edt70cw: TEdit
+    Left = 93
+    Height = 22
+    Top = 405
+    Width = 80
+    TabOrder = 67
+  end
+  object edt70ssb: TEdit
+    Left = 184
+    Height = 22
+    Top = 405
+    Width = 80
+    TabOrder = 68
+  end
+  object edt70rtty: TEdit
+    Left = 275
+    Height = 22
+    Top = 405
+    Width = 80
+    TabOrder = 69
+  end
+  object edt70am: TEdit
+    Left = 368
+    Height = 22
+    Top = 405
+    Width = 80
+    TabOrder = 70
+  end
+  object edt70fm: TEdit
+    Left = 456
+    Height = 22
+    Top = 405
+    Width = 80
+    TabOrder = 71
   end
   object btnOK: TButton
     Left = 112
@@ -599,7 +503,7 @@ object frmDefaultFreq: TfrmDefaultFreq
     Width = 75
     Caption = 'OK'
     OnClick = btnOKClick
-    TabOrder = 60
+    TabOrder = 72
   end
   object btnCancel: TButton
     Left = 363
@@ -609,6 +513,102 @@ object frmDefaultFreq: TfrmDefaultFreq
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 61
+    TabOrder = 73
   end
-end
+  object edt160btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 53
+    Width = 68
+    TabOrder = 0
+    Text = '160m'
+  end
+  object edt80btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 85
+    Width = 68
+    TabOrder = 6
+    Text = '80m'
+  end
+  object edt40btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 117
+    Width = 68
+    TabOrder = 12
+    Text = '40m'
+  end
+  object edt30btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 149
+    Width = 68
+    TabOrder = 18
+    Text = '30m'
+  end
+  object edt20btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 181
+    Width = 68
+    TabOrder = 24
+    Text = '20m'
+  end
+  object edt17btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 213
+    Width = 68
+    TabOrder = 30
+    Text = '17m'
+  end
+  object edt15btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 245
+    Width = 68
+    TabOrder = 36
+    Text = '15m'
+  end
+  object edt12btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 277
+    Width = 68
+    TabOrder = 42
+    Text = '12m'
+  end
+  object edt10btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 309
+    Width = 68
+    TabOrder = 48
+    Text = '10m'
+  end
+  object edt6btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 341
+    Width = 68
+    TabOrder = 54
+    Text = '6m'
+  end
+  object edt2btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 373
+    Width = 68
+    TabOrder = 60
+    Text = '2m'
+  end
+  object edt70btn: TEdit
+    Left = 10
+    Height = 22
+    Top = 405
+    Width = 68
+    TabOrder = 66
+    Text = '70cm'
+  end
+end
