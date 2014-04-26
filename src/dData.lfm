@@ -42,9 +42,9 @@ object dmData: TdmData
     top = 384
   end
   object mQ: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = mQBeforeOpen
     Transaction = trmQ
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 672
@@ -407,9 +407,9 @@ object dmData: TdmData
     top = 136
   end
   object qLogList: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = qLogListBeforeOpen
     Transaction = trLogList
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 592
@@ -428,8 +428,8 @@ object dmData: TdmData
   end
   object qSQLConsole: TSQLQuery
     PacketRecords = 100
+    FieldDefs = <>
     Transaction = trmQ
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 592
@@ -447,8 +447,8 @@ object dmData: TdmData
     top = 441
   end
   object qQSLMgr: TSQLQuery
+    FieldDefs = <>
     Transaction = trQSLMgr
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 384
@@ -461,8 +461,8 @@ object dmData: TdmData
     top = 496
   end
   object qCallBook: TSQLQuery
+    FieldDefs = <>
     Transaction = trCallBook
-    ReadOnly = False
     Params = <>
     left = 64
     top = 288
@@ -480,16 +480,16 @@ object dmData: TdmData
     top = 360
   end
   object qLongNote: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = qLongNoteBeforeOpen
     Transaction = trLongNote
-    ReadOnly = False
     Params = <>
     left = 160
     top = 288
   end
   object qProfiles: TSQLQuery
+    FieldDefs = <>
     Transaction = trProfiles
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 64
@@ -502,8 +502,8 @@ object dmData: TdmData
     top = 235
   end
   object qIOTAList: TSQLQuery
+    FieldDefs = <>
     Transaction = trIOTAList
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 56
@@ -522,9 +522,9 @@ object dmData: TdmData
     top = 544
   end
   object qBands: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
     Transaction = trBands
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 136
@@ -537,8 +537,8 @@ object dmData: TdmData
     top = 192
   end
   object qDXClusters: TSQLQuery
+    FieldDefs = <>
     Transaction = trDXClusters
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 160
@@ -551,8 +551,8 @@ object dmData: TdmData
     top = 496
   end
   object qComment: TSQLQuery
+    FieldDefs = <>
     Transaction = trComment
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 492
@@ -565,8 +565,8 @@ object dmData: TdmData
     top = 384
   end
   object qException: TSQLQuery
+    FieldDefs = <>
     Transaction = trException
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 492
@@ -579,8 +579,8 @@ object dmData: TdmData
     top = 312
   end
   object qQSOBefore: TSQLQuery
+    FieldDefs = <>
     Transaction = trQSOBefore
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 328
@@ -593,9 +593,9 @@ object dmData: TdmData
     top = 144
   end
   object Q1: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 496
@@ -608,9 +608,9 @@ object dmData: TdmData
     top = 144
   end
   object Q: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 456
@@ -624,9 +624,9 @@ object dmData: TdmData
   end
   object qCQRLOG: TSQLQuery
     PacketRecords = 100
+    FieldDefs = <>
     BeforeOpen = qCQRLOGBeforeOpen
     Transaction = trCQRLOG
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 328

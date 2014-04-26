@@ -200,7 +200,7 @@ begin
     dmDXCC.trDXCCRef.Commit;
     f.SaveToFile(dmData.HomeDir+'dxcc_data'+PathDelim+'country_del.tab');
 
-    /////////////////////////////////////////////////////////////////// exceptions.tbl
+    /////////////////////////////////////////////////////////////////// exceptions.tab
     CopyFile(Directory+'Exceptions.tab',dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
 
     ////////////////////////////////////////////////////////////////// callresolution.tbl

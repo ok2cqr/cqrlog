@@ -4,6 +4,11 @@ Legend:
   - bugfix
 --------------------
 
+1.8.0
+  
+  - program crashed with error about Exceptions.tbl when started for the first time 
+
+
 1.7.4
   + F keys to CW type window added
   + address to RBN server can be changed in Preferences 

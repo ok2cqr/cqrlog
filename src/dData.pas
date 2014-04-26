@@ -905,7 +905,7 @@ begin
     CopyFile(s+'Country.tab',d+'Country.tab',True);
     CopyFile(s+'CountryDel.tab',d+'CountryDel.tab',True);
     CopyFile(s+'Ambiguous.tbl',d+'Ambiguous.tbl',True);
-    CopyFile(s+'Exceptions.tbl',d+'Exceptions.tbl',True);
+    CopyFile(s+'Exceptions.tab',d+'Exceptions.tab',True);
     CopyFile(s+'iota.tbl',d+'iota.tbl',True);
     CopyFile(s+'qslmgr.csv',d+'qslmgr.csv',True)
   end;
@@ -938,7 +938,7 @@ begin
     l.SaveToFile(fHomeDir+'dxcc_data'+PathDelim+'country.tab');
     CopyFile(fHomeDir+'ctyfiles'+PathDelim+'CountryDel.tab',
              fHomeDir+'dxcc_data'+PathDelim+'country_del.tab');
-    CopyFile(fHomeDir+'ctyfiles'+PathDelim+'Exceptions.tbl',
+    CopyFile(fHomeDir+'ctyfiles'+PathDelim+'Exceptions.tab',
              fHomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
     CopyFile(fHomeDir+'ctyfiles'+PathDelim+'Ambiguous.tbl',
              fHomeDir+'dxcc_data'+PathDelim+'ambiguous.tab')
