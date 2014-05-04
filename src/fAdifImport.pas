@@ -693,11 +693,11 @@ begin
   dmData.InsertProfiles(cmbProfiles,False);
   cmbProfiles.Text := dmData.GetDefaultProfileText;
   try
-    tmp := TimeSeparator;
-    TimeSeparator := '_';
+    tmp := FormatSettings.TimeSeparator;
+    FormatSettings.TimeSeparator := '_';
     ERR_FILE := 'errors_'+TimeToStr(now)+'.adi'
   finally
-    TimeSeparator := tmp
+    FormatSettings.TimeSeparator := tmp
   end
 end;
 
