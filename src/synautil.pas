@@ -1742,7 +1742,7 @@ var
 begin
   for n :=  1 to 12 do
   begin
-    CustomMonthNames[n] := ShortMonthNames[n];
-    MyMonthNames[0, n] := ShortMonthNames[n];
+    CustomMonthNames[n] := FormatSettings.ShortMonthNames[n];
+    MyMonthNames[0, n] := FormatSettings.ShortMonthNames[n];
   end;
 end.
