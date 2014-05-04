@@ -742,10 +742,10 @@ begin
     Result := '';
     band := '';
     if Pos('.',freq) > 0 then
-      freq[Pos('.',freq)] := DecimalSeparator;
+      freq[Pos('.',freq)] := FormatSettings.DecimalSeparator;
 
     if pos(',',freq) > 0 then
-      freq[pos(',',freq)] := DecimalSeparator;
+      freq[pos(',',freq)] := FormatSettings.DecimalSeparator;
 
     if not TextToFloat(PChar(trim(freq)),tmp, fvCurrency) then
       exit;
@@ -1129,7 +1129,7 @@ begin
     s := '-' +s ;
   s := copy(s,1,Length(s)-1);
   if pos('.',s) > 0 then
-    s[pos('.',s)] := DecimalSeparator;
+    s[pos('.',s)] := FormatSettings.DecimalSeparator;
   if not TryStrToCurr(s,latitude) then
     latitude := 0;
 
@@ -1137,7 +1137,7 @@ begin
     d := '-' + d ;
   d := copy(d,1,Length(d)-1);
   if pos('.',d) > 0 then
-    d[pos('.',d)] := DecimalSeparator;
+    d[pos('.',d)] := FormatSettings.DecimalSeparator;
   if not TryStrToCurr(d,longitude) then
     longitude := 0;
   if dmData.DebugLevel>=4 then

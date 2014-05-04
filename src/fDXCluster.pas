@@ -793,10 +793,10 @@ begin
 
   tmp := Pos('.',freq);
   if tmp > 0 then
-    freq[tmp] := DecimalSeparator;
+    freq[tmp] := FormatSettings.DecimalSeparator;
   tmp := Pos(',',freq);
   if tmp > 0 then
-    freq[tmp] := DecimalSeparator;
+    freq[tmp] := FormatSettings.DecimalSeparator;
 
   if cfgUseBackColor then
   begin

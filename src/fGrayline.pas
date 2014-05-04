@@ -216,7 +216,7 @@ procedure TRBNThread.AddToList(spot : String);
       s := '-' +s ;
     s := copy(s,1,Length(s)-1);
     if pos('.',s) > 0 then
-      s[pos('.',s)] := DecimalSeparator;
+      s[pos('.',s)] := FormatSettings.DecimalSeparator;
     if not TryStrToCurr(s,latitude) then
       latitude := 0;
 
@@ -224,7 +224,7 @@ procedure TRBNThread.AddToList(spot : String);
       d := '-' + d ;
     d := copy(d,1,Length(d)-1);
     if pos('.',d) > 0 then
-      d[pos('.',d)] := DecimalSeparator;
+      d[pos('.',d)] := FormatSettings.DecimalSeparator;
     if not TryStrToCurr(d,longitude) then
       longitude := 0;
     if dmData.DebugLevel>=4 then
@@ -526,7 +526,7 @@ begin
       s := '-' +s ;
     s := copy(s,1,Length(s)-1);
     if pos('.',s) > 0 then
-      s[pos('.',s)] := DecimalSeparator;
+      s[pos('.',s)] := FormatSettings.DecimalSeparator;
     if not TryStrToCurr(s,lat1) then
       lat1 := 0;
 
@@ -534,7 +534,7 @@ begin
       d := '-' + d ;
     d := copy(d,1,Length(d)-1);
     if pos('.',d) > 0 then
-      d[pos('.',d)] := DecimalSeparator;
+      d[pos('.',d)] := FormatSettings.DecimalSeparator;
     if not TryStrToCurr(d,long1) then
       long1 := 0
   end;

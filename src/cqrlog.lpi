@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2069"/>
+      <BuildNr Value="2071"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -124,6 +124,7 @@
         <Filename Value="dData.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmData"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dData"/>
       </Unit6>
@@ -166,6 +167,7 @@
         <Filename Value="fImportProgress.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmImportProgress"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fImportProgress"/>
       </Unit12>
@@ -269,6 +271,7 @@
         <Filename Value="fDXCluster.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDXCluster"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDXCluster"/>
       </Unit27>
@@ -345,6 +348,7 @@
         <Filename Value="fLoadClub.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmLoadClub"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLoadClub"/>
       </Unit38>
@@ -358,6 +362,7 @@
         <Filename Value="fBandMap.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmBandMap"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fBandMap"/>
       </Unit40>
@@ -616,6 +621,7 @@
         <Filename Value="fLogUploadStatus.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmLogUploadStatus"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLogUploadStatus"/>
       </Unit77>
@@ -630,12 +636,11 @@
     </Units>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="9"/>
+    <Version Value="11"/>
     <SearchPaths>
       <Libraries Value="$(LazarusDir)/lcl"/>
       <OtherUnitFiles Value="lnet/lib;ipc;mysql"/>
       <SrcPath Value="$(LazarusDir)/lcl;$(LazarusDir)/lcl/interfaces/$(LCLWidgetType)"/>
-      <LCLWidgetType Value="gtk2"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>

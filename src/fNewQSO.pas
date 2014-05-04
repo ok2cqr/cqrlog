@@ -5294,7 +5294,7 @@ begin
   if (Pos(',',cmbFreq.Text) > 0) then
   begin
     freq := cmbFreq.Text;
-    freq[Pos(',',cmbFreq.Text)] := DecimalSeparator;
+    freq[Pos(',',cmbFreq.Text)] := FormatSettings.DecimalSeparator;
     Result := freq
   end;
   Result := freq

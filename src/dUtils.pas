@@ -250,10 +250,10 @@ begin
   Result := '';
   band := '';
   if Pos('.',MHz) > 0 then
-    MHz[Pos('.',MHz)] := DecimalSeparator;
+    MHz[Pos('.',MHz)] := FormatSettings.DecimalSeparator;
 
   if pos(',',MHz) > 0 then
-    MHz[pos(',',MHz)] := DecimalSeparator;
+    MHz[pos(',',MHz)] := FormatSettings.DecimalSeparator;
 
   if not TryStrToCurr(MHz,tmp) then
     exit;
@@ -309,10 +309,10 @@ begin
   Result := '';
   band := '';
   if Pos('.',MHz) > 0 then
-    MHz[Pos('.',MHz)] := DecimalSeparator;
+    MHz[Pos('.',MHz)] := FormatSettings.DecimalSeparator;
 
   if pos(',',MHz) > 0 then
-    MHz[pos(',',MHz)] := DecimalSeparator;
+    MHz[pos(',',MHz)] := FormatSettings.DecimalSeparator;
 
   if not TextToFloat(PChar(MHZ),tmp, fvCurrency) then
     exit;
@@ -1533,7 +1533,7 @@ end;
 function TdmUtils.MyStrToFloat(num : String) : Extended;
 begin
   if Pos('.',num) > 0 then
-    num[Pos('.',num)] := DecimalSeparator;
+    num[Pos('.',num)] := FormatSettings.DecimalSeparator;
   Result := StrToFloat(num);
 end;
 
@@ -1559,7 +1559,7 @@ begin
   Result := '';
   for i:= 1 to Length(power) do
   begin
-    if (power[i] in ['0'..'9',DecimalSeparator]) then
+    if (power[i] in ['0'..'9',FormatSettings.DecimalSeparator]) then
       Result := Result + power[i];
   end;
 end;
@@ -1889,7 +1889,7 @@ begin
     s := '-' +s ;
   s := copy(s,1,Length(s)-1);
   if pos('.',s) > 0 then
-    s[pos('.',s)] := DecimalSeparator;
+    s[pos('.',s)] := FormatSettings.DecimalSeparator;
   if not TryStrToCurr(s,latitude) then
     latitude := 0;
 
@@ -1897,7 +1897,7 @@ begin
     d := '-' + d ;
   d := copy(d,1,Length(d)-1);
   if pos('.',d) > 0 then
-    d[pos('.',d)] := DecimalSeparator;
+    d[pos('.',d)] := FormatSettings.DecimalSeparator;
   if not TryStrToCurr(d,longitude) then
     longitude := 0;
   if dmData.DebugLevel>=4 then
