@@ -606,13 +606,13 @@ procedure TdmUtils.DateInRightFormat(date : TDateTime; var Mask,sDate : String);
 var
   Sep    : Char;
 begin
-  sep := DateSeparator;
+  sep := FormatSettings.DateSeparator;
   try
     Mask  := '9999-99-99';
-    DateSeparator := '-';
-    sDate := FormatDateTime('YYYY-MM-DD', date);
+    FormatSettings.DateSeparator := '-';
+    sDate := FormatDateTime('YYYY-MM-DD', date)
   finally
-    DateSeparator := sep;
+    FormatSettings.DateSeparator := sep
   end;
   {
   
@@ -643,14 +643,14 @@ var
   Sep    : Char;
 begin
   sdf := ShortDateFormat;
-  sep := DateSeparator;
+  sep := FormatSettings.DateSeparator;
   try
     ShortDateFormat := 'YYYY-MM-DD';
-    DateSeparator   := '-';
-    Result := StrToDateTime(sDate);
+    FormatSettings.DateSeparator   := '-';
+    Result := StrToDateTime(sDate)
   finally
     ShortDateFormat := sdf;
-    DateSeparator   := sep;
+    FormatSettings.DateSeparator   := sep
   end;
 
 
@@ -679,10 +679,13 @@ function TdmUtils.DateToSQLIteDate(date : TDateTime) : String;
 var
   ds : Char;
 begin
-  ds := DateSeparator;
-  DateSeparator := '-';
-  Result := FormatDateTime('YYY-MM-DD',date);
-  DateSeparator := ds;
+  ds := FormatSettings.DateSeparator;
+  try
+    FormatSettings.DateSeparator := '-';
+    Result := FormatDateTime('YYY-MM-DD',date)
+  finally
+    FormatSettings.DateSeparator := ds
+  end
 end;
 
 procedure TdmUtils.FileCopy(const FileFrom, FileTo: string) ;
@@ -3587,12 +3590,12 @@ function TdmUtils.DateInSOTAFormat(date : TDateTime) : String;
 var
   Sep    : Char;
 begin
-  sep := DateSeparator;
+  sep := FormatSettings.DateSeparator;
   try
-    DateSeparator := '/';
+    FormatSettings.DateSeparator := '/';
     Result := FormatDateTime('DD/MM/YY', date)
   finally
-    DateSeparator := sep
+    FormatSettings.DateSeparator := sep
   end
 end;
 
