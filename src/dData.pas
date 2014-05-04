@@ -1120,7 +1120,7 @@ begin
   //^^this ugly hack is because FreePascal doesn't have anything like
   // ./configure and I have to specify all dyn libs by hand
 
-  ShortDateFormat := 'yyyy-mm-dd';
+  FormatSettings.ShortDateFormat := 'yyyy-mm-dd';
 
   reg := TRegExpr.Create;
   fVersionString := cVERSION;

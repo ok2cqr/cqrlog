@@ -3,14 +3,14 @@
 LazarusResources.Add('TdmData','FORMDATA',[
   'TPF0'#7'TdmData'#6'dmData'#8'OnCreate'#7#16'DataModuleCreate'#9'OnDestroy'#7
   +#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3'^'#2#16'HorizontalOf'
-  +'fset'#3#179#1#14'VerticalOffset'#2'p'#5'Width'#3#27#3#0#11'TDatasource'#7'd'
-  +'srMain'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDatasour'
+  +'fset'#3#179#1#14'VerticalOffset'#2'p'#5'Width'#3#27#3#0#11'TDataSource'#7'd'
+  +'srMain'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDataSour'
   +'ce'#12'dsrQSOBefore'#7'DataSet'#7#10'qQSOBefore'#4'left'#3'H'#1#3'top'#3#216
-  +#0#0#0#11'TDatasource'#9'dsrImport'#4'left'#3'P'#2#3'top'#3#240#1#0#0#11'TDa'
-  +'tasource'#8'dsrBands'#7'DataSet'#7#6'qBands'#4'left'#3#136#0#3'top'#3#173#1
-  +#0#0#11'TDatasource'#11'dsrProfiles'#7'DataSet'#7#9'qProfiles'#4'left'#2'@'#3
-  +'top'#2'p'#0#0#11'TDatasource'#12'dsrDXCluster'#7'DataSet'#7#11'qDXClusters'
-  +#4'left'#3#160#0#3'top'#2'H'#0#0#11'TDatasource'#9'dsrQSLMgr'#8'AutoEdit'#8#7
+  +#0#0#0#11'TDataSource'#9'dsrImport'#4'left'#3'P'#2#3'top'#3#240#1#0#0#11'TDa'
+  +'taSource'#8'dsrBands'#7'DataSet'#7#6'qBands'#4'left'#3#136#0#3'top'#3#173#1
+  +#0#0#11'TDataSource'#11'dsrProfiles'#7'DataSet'#7#9'qProfiles'#4'left'#2'@'#3
+  +'top'#2'p'#0#0#11'TDataSource'#12'dsrDXCluster'#7'DataSet'#7#11'qDXClusters'
+  +#4'left'#3#160#0#3'top'#2'H'#0#0#11'TDataSource'#9'dsrQSLMgr'#8'AutoEdit'#8#7
   +'DataSet'#7#7'qQSLMgr'#4'left'#3#128#1#3'top'#3#128#1#0#0#9'TSQLQuery'#2'mQ'
   +#9'FieldDefs'#14#0#10'BeforeOpen'#7#12'mQBeforeOpen'#11'Transaction'#7#4'trm'
   +'Q'#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#160#2#3'top'#2#24#0#0#15'TSQLTran'
@@ -165,16 +165,16 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'_changes (id) ON DELETE SET NULL'#6#21') COLLATE ''utf8_bin'';'#6#0#0#10'Te'
   +'rminator'#6#1';'#13'CommentsinSQL'#9#10'UseSetTerm'#8#9'UseCommit'#8#10'Use'
   +'Defines'#8#11'OnException'#7#14'scLogException'#4'left'#3'P'#2#3'top'#3#184
-  +#0#0#0#11'TDatasource'#5'dsrmQ'#7'DataSet'#7#2'mQ'#4'left'#3#160#2#3'top'#3
+  +#0#0#0#11'TDataSource'#5'dsrmQ'#7'DataSet'#7#2'mQ'#4'left'#3#160#2#3'top'#3
   +#136#0#0#0#9'TSQLQuery'#8'qLogList'#9'FieldDefs'#14#0#10'BeforeOpen'#7#18'qL'
   +'ogListBeforeOpen'#11'Transaction'#7#9'trLogList'#6'Params'#14#0#8'ParseSQL'
   +#8#4'left'#3'P'#2#3'top'#3#0#1#0#0#15'TSQLTransaction'#9'trLogList'#6'Active'
-  +#8#6'Action'#7#6'caNone'#4'left'#3#176#2#3'top'#3#208#0#0#0#11'TDatasource'
+  +#8#6'Action'#7#6'caNone'#4'left'#3#176#2#3'top'#3#208#0#0#0#11'TDataSource'
   +#10'dsrLogList'#7'DataSet'#7#8'qLogList'#4'left'#3'P'#2#3'top'#3'8'#1#0#0#9
   +'TSQLQuery'#11'qSQLConsole'#13'PacketRecords'#2'd'#9'FieldDefs'#14#0#11'Tran'
   +'saction'#7#4'trmQ'#6'Params'#14#0#8'ParseSQL'#8#4'left'#3'P'#2#3'top'#3#128
   +#1#0#0#15'TSQLTransaction'#12'trSQLConsole'#6'Active'#8#6'Action'#7#6'caNone'
-  +#4'left'#3#176#2#3'top'#3'P'#1#0#0#11'TDatasource'#13'dsrSQLConsole'#7'DataS'
+  +#4'left'#3#176#2#3'top'#3'P'#1#0#0#11'TDataSource'#13'dsrSQLConsole'#7'DataS'
   +'et'#7#11'qSQLConsole'#4'left'#3'P'#2#3'top'#3#185#1#0#0#9'TSQLQuery'#7'qQSL'
   +'Mgr'#9'FieldDefs'#14#0#11'Transaction'#7#8'trQSLMgr'#6'Params'#14#0#8'Parse'
   +'SQL'#8#4'left'#3#128#1#3'top'#3#184#1#0#0#15'TSQLTransaction'#8'trQSLMgr'#6

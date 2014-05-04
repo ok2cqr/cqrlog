@@ -6,36 +6,36 @@ object dmData: TdmData
   HorizontalOffset = 435
   VerticalOffset = 112
   Width = 795
-  object dsrMain: TDatasource
+  object dsrMain: TDataSource
     DataSet = qCQRLOG
     left = 328
     top = 24
   end
-  object dsrQSOBefore: TDatasource
+  object dsrQSOBefore: TDataSource
     DataSet = qQSOBefore
     left = 328
     top = 216
   end
-  object dsrImport: TDatasource
+  object dsrImport: TDataSource
     left = 592
     top = 496
   end
-  object dsrBands: TDatasource
+  object dsrBands: TDataSource
     DataSet = qBands
     left = 136
     top = 429
   end
-  object dsrProfiles: TDatasource
+  object dsrProfiles: TDataSource
     DataSet = qProfiles
     left = 64
     top = 112
   end
-  object dsrDXCluster: TDatasource
+  object dsrDXCluster: TDataSource
     DataSet = qDXClusters
     left = 160
     top = 72
   end
-  object dsrQSLMgr: TDatasource
+  object dsrQSLMgr: TDataSource
     AutoEdit = False
     DataSet = qQSLMgr
     left = 384
@@ -401,7 +401,7 @@ object dmData: TdmData
     left = 592
     top = 184
   end
-  object dsrmQ: TDatasource
+  object dsrmQ: TDataSource
     DataSet = mQ
     left = 672
     top = 136
@@ -421,7 +421,7 @@ object dmData: TdmData
     left = 688
     top = 208
   end
-  object dsrLogList: TDatasource
+  object dsrLogList: TDataSource
     DataSet = qLogList
     left = 592
     top = 312
@@ -441,7 +441,7 @@ object dmData: TdmData
     left = 688
     top = 336
   end
-  object dsrSQLConsole: TDatasource
+  object dsrSQLConsole: TDataSource
     DataSet = qSQLConsole
     left = 592
     top = 441

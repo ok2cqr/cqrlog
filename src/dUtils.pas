@@ -642,14 +642,14 @@ var
   sdf    : String;
   Sep    : Char;
 begin
-  sdf := ShortDateFormat;
+  sdf := FormatSettings.ShortDateFormat;
   sep := FormatSettings.DateSeparator;
   try
-    ShortDateFormat := 'YYYY-MM-DD';
+    FormatSettings.ShortDateFormat := 'YYYY-MM-DD';
     FormatSettings.DateSeparator   := '-';
     Result := StrToDateTime(sDate)
   finally
-    ShortDateFormat := sdf;
+    FormatSettings.ShortDateFormat := sdf;
     FormatSettings.DateSeparator   := sep
   end;
 
@@ -863,17 +863,17 @@ function TdmUtils.MyStrToDate(date : String) : TDateTime;
 var
   tmp : String;
 begin
-  tmp := ShortDateFormat;
-  ShortDateFormat := 'YYYY-MM-DD';
+  tmp := FormatSettings.ShortDateFormat;
   try
+    FormatSettings.ShortDateFormat := 'YYYY-MM-DD';
     try
-      Result := StrToDate(date);
+      Result := StrToDate(date)
     except
-      Result := StrToDate('1980-01-01');
+      Result := StrToDate('1980-01-01')
     end
   finally
-    ShortDateFormat := tmp;
-  end;
+    FormatSettings.ShortDateFormat := tmp
+  end
 end;
 
 function TdmUtils.GetDateTime(delta : Currency) : TDateTime;
@@ -1054,16 +1054,17 @@ begin
     exit
   end;
   Result := True;
-  tmp := ShortDateFormat;
-  ShortDateFormat := 'YYYY-MM-DD';
+
+  tmp := FormatSettings.ShortDateFormat;
   try
+    FormatSettings.ShortDateFormat := 'YYYY-MM-DD';
     try
       StrToDate(date)
     except
       Result := False
     end
   finally
-    ShortDateFormat := tmp
+    FormatSettings.ShortDateFormat := tmp
   end
 end;
 
