@@ -90,6 +90,7 @@
         <Filename Value="fNewQSO.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewQSO"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewQSO"/>
       </Unit1>
@@ -97,6 +98,7 @@
         <Filename Value="fMain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMain"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fMain"/>
       </Unit2>
@@ -404,6 +406,7 @@
         <Filename Value="fLoTWExport.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmLoTWExport"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLoTWExport"/>
       </Unit46>

@@ -7,7 +7,7 @@ Legend:
 1.8.0
   
   - program crashed with error about Exceptions.tbl when started for the first time 
-
+  - Shift+F12 didn't cancel the filtr - fixed
 
 1.7.4
   + F keys to CW type window added

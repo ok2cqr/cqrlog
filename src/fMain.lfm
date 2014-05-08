@@ -7,7 +7,7 @@ object frmMain: TfrmMain
   HelpKeyword = 'help/index.html'
   ActiveControl = Panel2
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 564
+  ClientHeight = 568
   ClientWidth = 854
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
@@ -124,11 +124,11 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.0.3'
   object sbMain: TStatusBar
     Left = 0
     Height = 19
-    Top = 545
+    Top = 549
     Width = 854
     Panels = <    
       item
@@ -149,7 +149,7 @@ object frmMain: TfrmMain
   object pnlButtons: TPanel
     Left = 0
     Height = 40
-    Top = 505
+    Top = 509
     Width = 854
     Align = alBottom
     ClientHeight = 40
@@ -199,7 +199,6 @@ object frmMain: TfrmMain
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF003939E7FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      NumGlyphs = 0
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
@@ -244,7 +243,6 @@ object frmMain: TfrmMain
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF003939E7FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      NumGlyphs = 0
       TabOrder = 1
     end
     object BitBtn3: TBitBtn
@@ -290,7 +288,6 @@ object frmMain: TfrmMain
         0000000000000000000000000000000000000000000000000000000000000000
         00000000000000000000000000006D9CD4FF6A9AD2FF6697CFFF
       }
-      NumGlyphs = 0
       TabOrder = 2
     end
     object BitBtn4: TBitBtn
@@ -336,7 +333,6 @@ object frmMain: TfrmMain
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF003939E7FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      NumGlyphs = 0
       TabOrder = 3
     end
     object btnSort: TBitBtn
@@ -382,7 +378,6 @@ object frmMain: TfrmMain
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      NumGlyphs = 0
       TabOrder = 4
     end
     object BitBtn5: TBitBtn
@@ -427,7 +422,6 @@ object frmMain: TfrmMain
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF003939E7FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      NumGlyphs = 0
       TabOrder = 5
     end
   end
@@ -443,9 +437,9 @@ object frmMain: TfrmMain
     TabOrder = 1
     object Label1: TLabel
       Left = 8
-      Height = 16
+      Height = 17
       Top = 8
-      Width = 61
+      Width = 69
       Alignment = taRightJustify
       Caption = 'QSO in log:'
       ParentColor = False
@@ -489,10 +483,10 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 727
-      Height = 16
+      Left = 716
+      Height = 17
       Top = 8
-      Width = 64
+      Width = 75
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       Caption = 'DXCC CFM:'
@@ -515,7 +509,7 @@ object frmMain: TfrmMain
   end
   object dbgrdMain: TDBGrid
     Left = 0
-    Height = 396
+    Height = 400
     Top = 56
     Width = 854
     Align = alClient
@@ -558,7 +552,7 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton18: TToolButton
-      Left = 302
+      Left = 314
       Top = 2
       Action = acSelRecord
       ParentShowHint = False
@@ -593,7 +587,7 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton5: TToolButton
-      Left = 124
+      Left = 126
       Top = 2
       Action = acPreferences
       ParentShowHint = False
@@ -602,68 +596,68 @@ object frmMain: TfrmMain
     object ToolButton7: TToolButton
       Left = 116
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton7'
       Style = tbsSeparator
     end
     object ToolButton6: TToolButton
-      Left = 147
+      Left = 149
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton6'
       Style = tbsSeparator
     end
     object ToolButton8: TToolButton
-      Left = 155
+      Left = 159
       Top = 2
       Action = acSort
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton9: TToolButton
-      Left = 178
+      Left = 182
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton9'
       Style = tbsSeparator
     end
     object ToolButton10: TToolButton
-      Left = 186
+      Left = 192
       Top = 2
       Action = acDXCCCfm
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton11: TToolButton
-      Left = 217
+      Left = 225
       Top = 2
       Action = acCreateFilter
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton12: TToolButton
-      Left = 209
+      Left = 215
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton12'
       Style = tbsSeparator
     end
     object ToolButton13: TToolButton
-      Left = 248
+      Left = 258
       Top = 2
       Action = acGrayline
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton14: TToolButton
-      Left = 240
+      Left = 248
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton14'
       Style = tbsSeparator
     end
     object ToolButton15: TToolButton
-      Left = 271
+      Left = 281
       Hint = 'TRX control'
       Top = 2
       Action = acTRXControl
@@ -672,9 +666,9 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton16: TToolButton
-      Left = 294
+      Left = 304
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton16'
       Style = tbsSeparator
     end
@@ -686,42 +680,42 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton19: TToolButton
-      Left = 325
+      Left = 337
       Top = 2
       Action = acUnselRecord
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton20: TToolButton
-      Left = 356
+      Left = 370
       Top = 2
       Action = acSelAll
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton21: TToolButton
-      Left = 379
+      Left = 393
       Top = 2
       Action = acUnselAll
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton22: TToolButton
-      Left = 348
+      Left = 360
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton22'
       Style = tbsSeparator
     end
     object ToolButton23: TToolButton
-      Left = 402
+      Left = 416
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton23'
       Style = tbsSeparator
     end
     object ToolButton24: TToolButton
-      Left = 410
+      Left = 426
       Hint = 'Upload data to LoTW'
       Top = 2
       Action = acUploadQSOToLoTWWeb
@@ -730,7 +724,7 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton25: TToolButton
-      Left = 433
+      Left = 449
       Top = 2
       Action = acDownloadDataFromLoTW
       ImageIndex = 24
@@ -738,14 +732,14 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton26: TToolButton
-      Left = 564
+      Left = 584
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton26'
       Style = tbsSeparator
     end
     object ToolButton27: TToolButton
-      Left = 572
+      Left = 594
       Hint = 'Refresh data'
       Top = 2
       Action = acRefresh
@@ -754,29 +748,29 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton28: TToolButton
-      Left = 595
+      Left = 617
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton28'
       Style = tbsSeparator
     end
     object ToolButton29: TToolButton
-      Left = 603
+      Left = 627
       Top = 2
       Action = acAttach
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton30: TToolButton
-      Left = 626
+      Left = 1
       Hint = 'Call has a QSL image'
-      Top = 2
+      Top = 24
       Action = acQSLImage
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton31: TToolButton
-      Left = 518
+      Left = 538
       Hint = 'Search on qrz.com'
       Top = 2
       Action = acQRZ
@@ -784,14 +778,14 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton32: TToolButton
-      Left = 456
+      Left = 472
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton32'
       Style = tbsSeparator
     end
     object ToolButton33: TToolButton
-      Left = 541
+      Left = 561
       Hint = 'Search on HamQTH.com'
       Top = 2
       Action = acHamQTH
@@ -799,23 +793,23 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton34: TToolButton
-      Left = 464
+      Left = 482
       Top = 2
       Action = aceQSLUp
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton35: TToolButton
-      Left = 487
+      Left = 505
       Top = 2
       Action = aceQSLDwn
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton36: TToolButton
-      Left = 510
+      Left = 528
       Top = 2
-      Width = 8
+      Width = 10
       Caption = 'ToolButton36'
       Style = tbsSeparator
     end
@@ -823,7 +817,7 @@ object frmMain: TfrmMain
   object pnlDetails: TPanel
     Left = 0
     Height = 53
-    Top = 452
+    Top = 456
     Width = 854
     Align = alBottom
     BevelOuter = bvNone
@@ -832,34 +826,34 @@ object frmMain: TfrmMain
     TabOrder = 5
     object Label23: TLabel
       Left = 8
-      Height = 16
+      Height = 17
       Top = 2
-      Width = 108
+      Width = 122
       Caption = 'Comment for QSO:'
       ParentColor = False
       ParentFont = False
     end
     object Label24: TLabel
       Left = 8
-      Height = 16
+      Height = 17
       Top = 29
-      Width = 38
+      Width = 41
       Caption = 'Award:'
       ParentColor = False
       ParentFont = False
     end
     object dbtComment: TDBText
       Left = 141
-      Height = 1
+      Height = 17
       Top = 2
-      Width = 1
+      Width = 88
       ParentColor = False
     end
     object dbtAward: TDBText
       Left = 58
-      Height = 1
+      Height = 17
       Top = 29
-      Width = 1
+      Width = 60
       ParentColor = False
     end
     object Panel1: TPanel
@@ -874,32 +868,32 @@ object frmMain: TfrmMain
       TabOrder = 0
       object Label25: TLabel
         Left = 7
-        Height = 16
+        Height = 17
         Top = 2
-        Width = 60
+        Width = 67
         Caption = 'QS_S date:'
         ParentColor = False
         ParentFont = False
       end
       object dbtQSLSDate: TDBText
         Left = 89
-        Height = 1
+        Height = 17
         Top = 2
-        Width = 1
+        Width = 85
         ParentColor = False
       end
       object dbtQSLRDate: TDBText
         Left = 89
-        Height = 1
+        Height = 17
         Top = 30
-        Width = 1
+        Width = 87
         ParentColor = False
       end
       object Label26: TLabel
         Left = 7
-        Height = 16
+        Height = 17
         Top = 29
-        Width = 62
+        Width = 69
         Caption = 'QS_R date:'
         ParentColor = False
         ParentFont = False
@@ -917,32 +911,32 @@ object frmMain: TfrmMain
       TabOrder = 1
       object Label27: TLabel
         Left = 7
-        Height = 16
+        Height = 17
         Top = 3
-        Width = 94
+        Width = 105
         Caption = 'LoTW QS_S date:'
         ParentColor = False
         ParentFont = False
       end
       object dbtLoTWQSLS: TDBText
         Left = 134
-        Height = 1
+        Height = 17
         Top = 3
-        Width = 1
+        Width = 89
         ParentColor = False
       end
       object dbtLoTWQSLR: TDBText
         Left = 134
-        Height = 1
+        Height = 17
         Top = 30
-        Width = 1
+        Width = 91
         ParentColor = False
       end
       object Label28: TLabel
         Left = 7
-        Height = 16
+        Height = 17
         Top = 30
-        Width = 96
+        Width = 107
         Caption = 'LoTW QS_R date:'
         ParentColor = False
         ParentFont = False
@@ -2145,6 +2139,7 @@ object frmMain: TfrmMain
       Caption = 'Cancel filter'
       Hint = 'Cancel filter'
       OnExecute = acCancelFilterExecute
+      ShortCut = 8315
     end
     object acClose: TAction
       Caption = 'Close'
