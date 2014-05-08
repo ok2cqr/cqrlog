@@ -31,7 +31,7 @@ type
     procedure btnCallClick(Sender: TObject);
     procedure btnDateTimeClick(Sender: TObject);
   private
-    { private declarations }
+    procedure DisableFilter;
   public
     { public declarations }
   end; 
@@ -43,10 +43,18 @@ implementation
 
 { TfrmSort }
 
-uses dData, dUtils;
+uses dData, dUtils, fMain;
+
+procedure TfrmSort.DisableFilter;
+begin
+  dmData.IsFilter  := False;
+  dmData.IsSFilter := False;
+  frmMain.sbMain.Panels[2].Text := ''
+end;
 
 procedure TfrmSort.btnDateTimeClick(Sender: TObject);
 begin
+  DisableFilter;
   dmData.SortType := stDate;
   dmData.qCQRLOG.Close;
   dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(cDB_LIMIT);
@@ -55,6 +63,7 @@ end;
 
 procedure TfrmSort.btnCallClick(Sender: TObject);
 begin
+  DisableFilter;
   dmData.SortType := stCall;
   dmData.qCQRLOG.Close;
   dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_callsign LIMIT '+IntToStr(cDB_LIMIT);
