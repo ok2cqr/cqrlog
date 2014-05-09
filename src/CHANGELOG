@@ -5,7 +5,7 @@ Legend:
 --------------------
 
 1.8.0
-  
+  + after click to "Upload all" qso to online logs, info about disabled services is not shown  
   - program crashed with error about Exceptions.tbl when started for the first time 
   - Shift+F12 didn't cancel the filtr - fixed
   - "Filter is USED!" info wasn't canceled after click to Sort button (filter was disabled)

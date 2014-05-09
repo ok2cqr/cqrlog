@@ -1789,7 +1789,7 @@ begin
     case WhatUpNext of
       upHamQTH :  begin
                     if UploadAll then
-                      frmLogUploadStatus.UploadDataToHamQTH
+                      frmLogUploadStatus.UploadDataToHamQTH(UploadAll)
                     else begin
                       if cqrini.ReadBool('OnlineLog','HaUpOnline',False) then
                         frmLogUploadStatus.UploadDataToHamQTH
@@ -1798,7 +1798,7 @@ begin
                   end;
       upClubLog : begin
                     if UploadAll then
-                      frmLogUploadStatus.UploadDataToClubLog
+                      frmLogUploadStatus.UploadDataToClubLog(UploadAll)
                     else begin
                       if cqrini.ReadBool('OnlineLog','ClUpOnline',False) then
                         frmLogUploadStatus.UploadDataToClubLog
@@ -1807,7 +1807,7 @@ begin
                   end;
       upHrdLog  : begin
                     if UploadAll then
-                      frmLogUploadStatus.UploadDataToHrdLog
+                      frmLogUploadStatus.UploadDataToHrdLog(UploadAll)
                     else begin
                       if cqrini.ReadBool('OnlineLog','HrUpOnline',False) then
                         frmLogUploadStatus.UploadDataToHrdLog

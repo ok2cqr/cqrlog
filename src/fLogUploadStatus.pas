@@ -34,16 +34,16 @@ type
     mFont     : TFont;
     mStatus   : TJakoMemo;
     procedure LoadFonts;
-    procedure UploadDataToOnlineLogs(where : TWhereToUpload);
+    procedure UploadDataToOnlineLogs(where : TWhereToUpload; ToAll : Boolean = False);
   public
     SyncMsg    : String;
     SyncColor  : TColor;
     SyncUpdate : String;
     thRunning  : Boolean;
 
-    procedure UploadDataToHamQTH;
-    procedure UploadDataToClubLog;
-    procedure UploadDataToHrdLog;
+    procedure UploadDataToHamQTH(ToAll : Boolean = False);
+    procedure UploadDataToClubLog(ToAll : Boolean = False);
+    procedure UploadDataToHrdLog(ToAll : Boolean = False);
     procedure UploadDataToAll;
     procedure SyncUploadInformation;
   end; 
@@ -59,6 +59,7 @@ type
     procedure Execute; override;
   public
     WhereToUpload : TWhereToUpload;
+    ToAll         : Boolean;
   end;
 
 
@@ -79,24 +80,33 @@ begin
     upHamQTH :  begin
                   if not cqrini.ReadBool('OnlineLog','HaUP',False) then
                   begin
-                    frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HamQTH']);
-                    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+                    if (not ToAll) then
+                    begin
+                      frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HamQTH']);
+                      Synchronize(@frmLogUploadStatus.SyncUploadInformation)
+                    end;
                     Result := False
                   end
                 end;
     upClubLog : begin
                   if not cqrini.ReadBool('OnlineLog','ClUP',False) then
                   begin
-                    frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['ClubLog']);
-                    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+                    if (not ToAll) then
+                    begin
+                      frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['ClubLog']);
+                      Synchronize(@frmLogUploadStatus.SyncUploadInformation)
+                    end;
                     Result := False
                   end
                 end;
     upHrdLog : begin
                   if not cqrini.ReadBool('OnlineLog','HrUP',False) then
                   begin
-                    frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HRDLog']);
-                    Synchronize(@frmLogUploadStatus.SyncUploadInformation);
+                    if (not ToAll) then
+                    begin
+                      frmLogUploadStatus.SyncMsg := Format(C_IS_NOT_ENABLED,['HRDLog']);
+                      Synchronize(@frmLogUploadStatus.SyncUploadInformation)
+                    end;
                     Result := False
                   end
                 end
@@ -385,7 +395,7 @@ begin
   mStatus.nastav_font(mFont)
 end;
 
-procedure TfrmLogUploadStatus.UploadDataToOnlineLogs(where : TWhereToUpload);
+procedure TfrmLogUploadStatus.UploadDataToOnlineLogs(where : TWhereToUpload; ToAll : Boolean = False);
 var
   UploadThread : TUploadThread;
 begin
@@ -398,30 +408,31 @@ begin
       Show;
     UploadThread := TUploadThread.Create(True);
     UploadThread.WhereToUpload := where;
+    UploadThread.ToAll         := ToAll;
     UploadThread.Start
   end
 end;
 
-procedure TfrmLogUploadStatus.UploadDataToHamQTH;
+procedure TfrmLogUploadStatus.UploadDataToHamQTH(ToAll : Boolean = False);
 begin
-  UploadDataToOnlineLogs(upHamQTH)
+  UploadDataToOnlineLogs(upHamQTH, ToAll)
 end;
 
-procedure TfrmLogUploadStatus.UploadDataToClubLog;
+procedure TfrmLogUploadStatus.UploadDataToClubLog(ToAll : Boolean = False);
 begin
-  UploadDataToOnlineLogs(upClubLog)
+  UploadDataToOnlineLogs(upClubLog, ToAll)
 end;
 
-procedure TfrmLogUploadStatus.UploadDataToHrdLog;
+procedure TfrmLogUploadStatus.UploadDataToHrdLog(ToAll : Boolean = False);
 begin
-  UploadDataToOnlineLogs(upHrdLog)
+  UploadDataToOnlineLogs(upHrdLog, ToAll)
 end;
 
 procedure TfrmLogUploadStatus.UploadDataToAll;
 begin
-  UploadDataToOnlineLogs(upHamQTH);
-  UploadDataToOnlineLogs(upClubLog);
-  UploadDataToOnlineLogs(upHrdLog)
+  UploadDataToOnlineLogs(upHamQTH, True);
+  UploadDataToOnlineLogs(upClubLog, True);
+  UploadDataToOnlineLogs(upHrdLog, True)
 end;
 
 initialization
