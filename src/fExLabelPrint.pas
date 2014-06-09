@@ -260,11 +260,46 @@ var
   qso_nr : Int64 = 0;
   FieldCount : Integer;
   y          : Integer;
+  sep     : Char;
 
   procedure WriteDataToFile;
   begin
+    /// Use selected date format in frmQSLExpPref
+    /// tom@dl7bj.de, 2014-06-09
     if cqrini.ReadBool('QSLExport', 'Date', True) then
-      Write(f,dmUtils.MyDateToStr(dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+    begin
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 0 then
+        Write(f,dmUtils.MyDateToStr(dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 1 then
+        Write(f,FormatDateTime('yyyy-mmm-dd',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 2 then
+        Write(f,FormatDateTime('dd.mm.yyyy',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 3 then
+        Write(f,FormatDateTime('dd mmm yyyy',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 4 then
+        Write(f,FormatDateTime('dd-mmm-yyyy',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 5 then
+      begin
+        sep := FormatSettings.DateSeparator;
+        FormatSettings.DateSeparator:='/';
+        Write(f,FormatDateTime('yyyy/mm/dd',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+        FormatSettings.DateSeparator:=sep;
+      end;
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 6 then
+      begin
+        sep := FormatSettings.DateSeparator;
+        FormatSettings.DateSeparator:='/';
+        Write(f,FormatDateTime('yyyy/mmm/dd',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+        FormatSettings.DateSeparator:=sep;
+      end;
+      if cqrini.ReadInteger('QSLExport', 'DateFormat',0) = 7 then
+      begin
+        sep := FormatSettings.DateSeparator;
+        FormatSettings.DateSeparator:='/';
+        Write(f,FormatDateTime('mm/dd/yyyy',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
+        FormatSettings.DateSeparator:=sep;
+      end;
+    end;
     if cqrini.ReadBool('QSLExport', 'time_on', True) then
       Write(f,dmData.Q.FieldByName('time_on').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'time_off', True) then

@@ -35,6 +35,7 @@ type
     chkRST_S : TCheckBox;
     chkTimeOff : TCheckBox;
     chkTimeOn : TCheckBox;
+    cbxDateFormat: TComboBox;
     GroupBox1 : TGroupBox;
     procedure btnOKClick(Sender : TObject);
     procedure FormShow(Sender : TObject);
@@ -56,6 +57,7 @@ uses uMyIni;
 procedure TfrmQSLExpPref.FormShow(Sender : TObject);
 begin
   chkDate.Checked     := cqrini.ReadBool('QSLExport', 'Date', True);
+  cbxDateFormat.ItemIndex:=cqrini.ReadInteger('QSLExport','DateFormat', 0);
   chkTimeOn.Checked   := cqrini.ReadBool('QSLExport', 'time_on', True);
   chkTimeOff.Checked  := cqrini.ReadBool('QSLExport', 'time_off', False);
   chkCallSign.Checked := cqrini.ReadBool('QSLExport', 'CallSign', True);
@@ -81,6 +83,7 @@ end;
 procedure TfrmQSLExpPref.btnOKClick(Sender : TObject);
 begin
   cqrini.WriteBool('QSLExport', 'Date', chkDate.Checked);
+  cqrini.WriteInteger('QSLExport','DateFormat', cbxDateFormat.ItemIndex);
   cqrini.WriteBool('QSLExport', 'time_on', chkTimeOn.Checked);
   cqrini.WriteBool('QSLExport', 'time_off', chkTimeOff.Checked);
   cqrini.WriteBool('QSLExport', 'CallSign', chkCallSign.Checked);
