@@ -1,7 +1,7 @@
 object frmExLabelPrint: TfrmExLabelPrint
-  Left = 315
+  Left = 1072
   Height = 503
-  Top = 175
+  Top = 335
   Width = 424
   HelpType = htKeyword
   HelpKeyword = 'help/h22.html#bh4'
@@ -14,20 +14,20 @@ object frmExLabelPrint: TfrmExLabelPrint
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.0.10.0'
   object Label1: TLabel
     Left = 5
-    Height = 16
+    Height = 18
     Top = 137
-    Width = 32
+    Width = 37
     Caption = 'Print '
     ParentColor = False
   end
   object Label2: TLabel
     Left = 96
-    Height = 16
+    Height = 18
     Top = 137
-    Width = 101
+    Width = 122
     Caption = 'QSOs on one label'
     ParentColor = False
   end
@@ -55,6 +55,8 @@ object frmExLabelPrint: TfrmExLabelPrint
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
+    ClientHeight = 77
+    ClientWidth = 408
     Columns = 2
     Items.Strings = (
       'SB - (Buro)'
@@ -74,7 +76,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     Top = 304
     Width = 412
     Caption = ' Export to '
-    ClientHeight = 64
+    ClientHeight = 62
     ClientWidth = 408
     TabOrder = 1
     object edtBrowse: TButton
@@ -88,7 +90,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     end
     object edtFile: TEdit
       Left = 9
-      Height = 25
+      Height = 27
       Top = 7
       Width = 379
       TabOrder = 1
@@ -96,7 +98,7 @@ object frmExLabelPrint: TfrmExLabelPrint
   end
   object edtQSOsToLabel: TEdit
     Left = 40
-    Height = 25
+    Height = 27
     Top = 134
     Width = 48
     OnExit = edtQSOsToLabelExit
@@ -109,14 +111,14 @@ object frmExLabelPrint: TfrmExLabelPrint
     Top = 168
     Width = 412
     Caption = ' Remarks '
-    ClientHeight = 119
+    ClientHeight = 117
     ClientWidth = 408
     TabOrder = 3
     object rbQSORemarks: TRadioButton
       Left = 9
-      Height = 22
+      Height = 26
       Top = 0
-      Width = 159
+      Width = 190
       Caption = 'Print remarks from QSO'
       Checked = True
       TabOrder = 0
@@ -124,15 +126,15 @@ object frmExLabelPrint: TfrmExLabelPrint
     end
     object rbOwnRemarks: TRadioButton
       Left = 9
-      Height = 22
+      Height = 26
       Top = 23
-      Width = 146
+      Width = 174
       Caption = 'Print my own remarks'
       TabOrder = 1
     end
     object edtRemarks: TEdit
       Left = 9
-      Height = 25
+      Height = 27
       Top = 57
       Width = 376
       OnEnter = edtRemarksEnter
@@ -140,18 +142,18 @@ object frmExLabelPrint: TfrmExLabelPrint
     end
     object chkRemoveSep: TCheckBox
       Left = 9
-      Height = 22
+      Height = 26
       Top = 78
-      Width = 221
+      Width = 265
       Caption = 'Remove separator (;) from remarks'
       TabOrder = 3
     end
   end
   object chkMarkSent: TCheckBox
     Left = 5
-    Height = 22
+    Height = 26
     Top = 392
-    Width = 184
+    Width = 218
     Caption = 'Mark QSLs sent after export'
     TabOrder = 4
   end
@@ -185,9 +187,9 @@ object frmExLabelPrint: TfrmExLabelPrint
   end
   object chkAllQSOs: TCheckBox
     Left = 5
-    Height = 22
+    Height = 26
     Top = 8
-    Width = 110
+    Width = 133
     Caption = 'Export all QSOs'
     OnChange = chkAllQSOsChange
     TabOrder = 8

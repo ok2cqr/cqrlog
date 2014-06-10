@@ -1,13 +1,13 @@
 object frmQSLExpPref: TfrmQSLExpPref
-  Left = 621
+  Left = 344
   Height = 383
-  Top = 304
+  Top = 518
   Width = 517
   Caption = 'Choose fields for export'
   ClientHeight = 383
   ClientWidth = 517
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.0.10.0'
   object GroupBox1: TGroupBox
     Left = 8
     Height = 368
@@ -20,7 +20,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 43
-      Width = 75
+      Width = 81
       Caption = 'Time on'
       Checked = True
       State = cbChecked
@@ -30,7 +30,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 12
-      Width = 58
+      Width = 60
       Caption = 'Date'
       Checked = True
       State = cbChecked
@@ -40,7 +40,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 75
-      Width = 78
+      Width = 84
       Caption = 'Time off'
       TabOrder = 2
     end
@@ -48,7 +48,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 107
-      Width = 77
+      Width = 81
       Caption = 'CallSign'
       Checked = True
       State = cbChecked
@@ -58,7 +58,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 139
-      Width = 63
+      Width = 67
       Caption = 'Mode'
       Checked = True
       State = cbChecked
@@ -68,7 +68,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 171
-      Width = 56
+      Width = 59
       Caption = 'Freq'
       TabOrder = 5
     end
@@ -76,7 +76,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 203
-      Width = 80
+      Width = 85
       Caption = 'RST sent'
       Checked = True
       State = cbChecked
@@ -86,7 +86,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 235
-      Width = 110
+      Width = 116
       Caption = 'RST Received'
       TabOrder = 7
     end
@@ -94,7 +94,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 267
-      Width = 63
+      Width = 68
       Caption = 'Name'
       TabOrder = 8
     end
@@ -102,23 +102,23 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 299
-      Width = 54
+      Width = 57
       Caption = 'QTH'
       TabOrder = 9
     end
     object chkQSL_S: TCheckBox
       Left = 166
       Height = 26
-      Top = 12
-      Width = 82
+      Top = 43
+      Width = 87
       Caption = 'QSL sent'
       TabOrder = 10
     end
     object chkQSL_VIA: TCheckBox
       Left = 166
       Height = 26
-      Top = 74
-      Width = 108
+      Top = 107
+      Width = 117
       Caption = 'QSL manager'
       Checked = True
       State = cbChecked
@@ -127,64 +127,64 @@ object frmQSLExpPref: TfrmQSLExpPref
     object chkLoc: TCheckBox
       Left = 166
       Height = 26
-      Top = 106
-      Width = 76
+      Top = 139
+      Width = 81
       Caption = 'Locator'
       TabOrder = 12
     end
     object chkMyLoc: TCheckBox
       Left = 166
       Height = 26
-      Top = 139
-      Width = 94
+      Top = 171
+      Width = 100
       Caption = 'My locator'
       TabOrder = 13
     end
     object chkIOTA: TCheckBox
       Left = 166
       Height = 26
-      Top = 171
-      Width = 56
+      Top = 203
+      Width = 60
       Caption = 'IOTA'
       TabOrder = 14
     end
     object chkAward: TCheckBox
       Left = 166
       Height = 26
-      Top = 203
-      Width = 66
+      Top = 235
+      Width = 72
       Caption = 'Award'
       TabOrder = 15
     end
     object chkPower: TCheckBox
       Left = 166
       Height = 26
-      Top = 235
-      Width = 66
+      Top = 267
+      Width = 71
       Caption = 'Power'
       TabOrder = 16
     end
     object chkRemarks: TCheckBox
       Left = 166
       Height = 26
-      Top = 267
-      Width = 224
+      Top = 299
+      Width = 245
       Caption = 'Comment to QSO/own comment'
       TabOrder = 17
     end
     object chkQSL_R: TCheckBox
       Left = 166
       Height = 26
-      Top = 43
-      Width = 109
+      Top = 75
+      Width = 115
       Caption = 'QSL received'
       TabOrder = 18
     end
     object chkQSLMsg: TCheckBox
       Left = 166
       Height = 26
-      Top = 299
-      Width = 170
+      Top = 333
+      Width = 189
       Caption = 'QSL message (PSE/TNX)'
       TabOrder = 19
     end
@@ -192,11 +192,33 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 333
-      Width = 58
+      Width = 62
       Caption = 'Band'
       Checked = True
       State = cbChecked
       TabOrder = 20
+    end
+    object cbxDateFormat: TComboBox
+      Left = 166
+      Height = 31
+      Hint = 'Change the format of date  for export'
+      Top = 6
+      Width = 232
+      ItemHeight = 0
+      Items.Strings = (
+        'yyyy-mm-dd'
+        'yyyy-mmm-dd'
+        'dd.mm.yyyy'
+        'dd mmm yyyy'
+        'dd-mmm-yyyy'
+        'yyyy/mm/dd'
+        'yyyy/mmm/dd'
+        'mm/dd/yyyy'
+      )
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 21
+      Text = 'yyyy-mm-dd'
     end
   end
   object btnOK: TButton
