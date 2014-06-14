@@ -255,8 +255,7 @@ begin
   spotter := trim(copy(spot,7,Pos('-',spot)-7));
   freq    := trim(copy(spot,18,9));
 
-  stren   := trim(copy(spot,38,20));
-  stren   := trim(copy(stren,Pos(' ',stren)+1,3));
+  stren   := trim(copy(spot,Pos('dB',spot)-4,4));
 
   if dmData.DebugLevel>=1 then
   begin

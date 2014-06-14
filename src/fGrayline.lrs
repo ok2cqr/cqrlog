@@ -162,7 +162,7 @@ LazarusResources.Add('TfrmGrayline','FORMDATA',[
   +'se'#7#9'FormClose'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7#10'F'
   +'ormCreate'#9'OnDestroy'#7#11'FormDestroy'#9'OnKeyDown'#7#11'FormKeyDown'#7
   +'OnKeyUp'#7#9'FormKeyUp'#7'OnPaint'#7#9'FormPaint'#6'OnShow'#7#8'FormShow'#8
-  +'ShowHint'#9#10'LCLVersion'#6#8'0.9.30.2'#0#12'TSpeedButton'#12'sbtnGrayLine'
+  +'ShowHint'#9#10'LCLVersion'#6#7'1.2.2.0'#0#12'TSpeedButton'#12'sbtnGrayLine'
   +#4'Left'#3#144#1#6'Height'#2#16#3'Top'#2#0#5'Width'#2#16#7'Anchors'#11#5'akT'
   +'op'#7'akRight'#0#10'Glyph.Data'#10':'#4#0#0'6'#4#0#0'BM6'#4#0#0#0#0#0#0'6'#0
   +#0#0'('#0#0#0#16#0#0#0#16#0#0#0#1#0' '#0#0#0#0#0#0#4#0#0'd'#0#0#0'd'#0#0#0#0
@@ -213,17 +213,17 @@ LazarusResources.Add('TfrmGrayline','FORMDATA',[
   +#201#255#200#202#201#255#190#192#191#245#133#138#136'l'#0#0#0#0#0#0#0#0#133
   +#138#136#19#133#138#136'?'#133#138#136'F'#133#138#136'F'#133#138#136'F'#133
   +#138#136'F'#133#138#136'F'#133#138#136'F'#133#138#136'F'#133#138#136'F'#133
-  +#138#136'F'#133#138#136'F'#133#138#136'?'#132#137#135#19#0#0#0#0#9'NumGlyphs'
-  +#2#0#7'OnClick'#7#17'sbtnGrayLineClick'#0#0#10'TStatusBar'#10'sbGrayLine'#4
-  +'Left'#2#0#6'Height'#2#20#3'Top'#3#228#0#5'Width'#3#163#1#6'Panels'#14#0#0#0
-  +#6'TTimer'#11'tmrGrayLine'#7'Enabled'#8#8'Interval'#4'`'#234#0#0#7'OnTimer'#7
-  +#16'tmrGrayLineTimer'#4'left'#2'('#3'top'#2' '#0#0#10'TPopupMenu'#11'popGray'
-  +'Line'#4'left'#3'P'#1#3'top'#2#24#0#9'TMenuItem'#9'MenuItem1'#6'Action'#7#9
-  +'acConnect'#0#0#9'TMenuItem'#9'MenuItem2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'
-  +#9'MenuItem3'#6'Action'#7#15'acShowStatusBar'#0#0#0#11'TActionList'#10'acGra'
-  +'yLine'#4'left'#3'P'#1#3'top'#2'P'#0#7'TAction'#9'acConnect'#7'Caption'#6#14
-  +'Connect to RBN'#9'OnExecute'#7#16'acConnectExecute'#0#0#7'TAction'#15'acSho'
-  +'wStatusBar'#7'Caption'#6#14'Show statusbar'#9'OnExecute'#7#22'acShowStatusB'
-  +'arExecute'#0#0#0#6'TTimer'#14'tmrAutoConnect'#7'Enabled'#8#8'Interval'#3#208
-  +#7#7'OnTimer'#7#19'tmrAutoConnectTimer'#4'left'#3#158#0#3'top'#2' '#0#0#0
+  +#138#136'F'#133#138#136'F'#133#138#136'?'#132#137#135#19#0#0#0#0#7'OnClick'#7
+  +#17'sbtnGrayLineClick'#0#0#10'TStatusBar'#10'sbGrayLine'#4'Left'#2#0#6'Heigh'
+  +'t'#2#17#3'Top'#3#231#0#5'Width'#3#163#1#6'Panels'#14#0#0#0#6'TTimer'#11'tmr'
+  +'GrayLine'#7'Enabled'#8#8'Interval'#4'`'#234#0#0#7'OnTimer'#7#16'tmrGrayLine'
+  +'Timer'#4'left'#2'('#3'top'#2' '#0#0#10'TPopupMenu'#11'popGrayLine'#4'left'#3
+  +'P'#1#3'top'#2#24#0#9'TMenuItem'#9'MenuItem1'#6'Action'#7#9'acConnect'#0#0#9
+  +'TMenuItem'#9'MenuItem2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem3'#6'A'
+  +'ction'#7#15'acShowStatusBar'#0#0#0#11'TActionList'#10'acGrayLine'#4'left'#3
+  +'P'#1#3'top'#2'P'#0#7'TAction'#9'acConnect'#7'Caption'#6#14'Connect to RBN'#9
+  +'OnExecute'#7#16'acConnectExecute'#0#0#7'TAction'#15'acShowStatusBar'#7'Capt'
+  +'ion'#6#14'Show statusbar'#9'OnExecute'#7#22'acShowStatusBarExecute'#0#0#0#6
+  +'TTimer'#14'tmrAutoConnect'#7'Enabled'#8#8'Interval'#3#208#7#7'OnTimer'#7#19
+  +'tmrAutoConnectTimer'#4'left'#3#158#0#3'top'#2' '#0#0#0
 ]);
