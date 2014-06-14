@@ -10,6 +10,7 @@ Legend:
   - Shift+F12 didn't cancel the filtr - fixed
   - "Filter is USED!" info wasn't canceled after click to Sort button (filter was disabled)
   - reading signal strength from RBN spots fixed
+  - RBN default port is 7000 not 7300 - fixed
 
 1.7.4
   + F keys to CW type window added

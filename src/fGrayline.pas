@@ -321,11 +321,11 @@ begin
   Result := True;
   lTelnet := TLTelnetClientComponent.Create(nil);
   try
-    tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7300');
+    tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
     server := copy(tmp,1,Pos(':',tmp)-1);
     tmp    := copy(tmp,Pos(':',tmp)+1,5);
     if not TryStrToInt(tmp,port) then
-      port := 7300; //default value
+      port := 7000; //default value
 
     if dmData.DebugLevel>=1 then Writeln('Server:',server,' Port:',port);
 

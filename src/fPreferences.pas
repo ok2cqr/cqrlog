@@ -2813,7 +2813,7 @@ begin
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
   edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
-  edtRBNServer.Text      := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7300');
+  edtRBNServer.Text      := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
 
   chkHaUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HaUP',False);
   chkHaUpOnline.Checked  := cqrini.ReadBool('OnlineLog','HaUpOnline',False);
