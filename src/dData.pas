@@ -100,6 +100,7 @@ type
     scOnlineLogTriggers: TSQLScript;
     scViews: TSQLScript;
     scQSLExport : TSQLScript;
+    scMySQLConfig: TSQLScript;
     tmrDBPing: TTimer;
     trCQRLOG: TSQLTransaction;
     trQ: TSQLTransaction;
@@ -3199,12 +3200,11 @@ procedure TdmData.PrepareMysqlConfigFile;
 var
   f : TextFile;
 begin
-  if not FileExistsUTF8(fHomeDir+'database'+DirectorySeparator+'my.cnf') then
+  if not FileExistsUTF8(fHomeDir+'database'+DirectorySeparator+'mysql.cnf') then
   begin
-    AssignFile(f,fHomeDir+'database'+DirectorySeparator+'my.cnf');
+    AssignFile(f,fHomeDir+'database'+DirectorySeparator+'mysql.cnf');
     Rewrite(f);
-    Writeln(f,'[mysqld]');
-    Writeln(f,'performance_schema = Off');
+    Writeln(f,scMySQLConfig.Script.Text);
     CloseFile(f)
   end
 end;
@@ -3216,11 +3216,10 @@ begin
   mysqld := GetMysqldPath;
   PrepareMysqlConfigFile;
   MySQLProcess := TProcess.Create(nil);
-  MySQLProcess.CommandLine := mysqld+' --defaults-file='+fHomeDir+'database/'+'my.cnf'+
-                              ' --default-storage-engine=MyISAM --datadir='+fHomeDir+'database/'+
+  MySQLProcess.CommandLine := mysqld+' --defaults-file='+fHomeDir+'database/'+'mysql.cnf'+
+                              ' --datadir='+fHomeDir+'database/'+
                               ' --socket='+fHomeDir+'database/sock'+
-                              ' --skip-grant-tables --port=64000 --key_buffer_size=32M'+
-                              ' --key_buffer_size=4096K';
+                              ' --port=64000';
   MySQLProcess.Execute;
   sleep(2000)
 end;
