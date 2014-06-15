@@ -255,8 +255,7 @@ begin
   spotter := trim(copy(spot,7,Pos('-',spot)-7));
   freq    := trim(copy(spot,18,9));
 
-  stren   := trim(copy(spot,38,20));
-  stren   := trim(copy(stren,Pos(' ',stren)+1,3));
+  stren   := trim(copy(spot,Pos('dB',spot)-4,4));
 
   if dmData.DebugLevel>=1 then
   begin
@@ -322,11 +321,11 @@ begin
   Result := True;
   lTelnet := TLTelnetClientComponent.Create(nil);
   try
-    tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7300');
+    tmp    := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
     server := copy(tmp,1,Pos(':',tmp)-1);
     tmp    := copy(tmp,Pos(':',tmp)+1,5);
     if not TryStrToInt(tmp,port) then
-      port := 7300; //default value
+      port := 7000; //default value
 
     if dmData.DebugLevel>=1 then Writeln('Server:',server,' Port:',port);
 
