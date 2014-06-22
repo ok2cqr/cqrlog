@@ -153,15 +153,15 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.2.0'
   object GroupBox1: TGroupBox
     Left = 4
     Height = 72
     Top = 0
     Width = 253
     Caption = ' Freq '
-    ClientHeight = 40
-    ClientWidth = 249
+    ClientHeight = 56
+    ClientWidth = 251
     TabOrder = 0
     object lblFreq: TLabel
       Left = 10
@@ -202,8 +202,8 @@ object frmTRXControl: TfrmTRXControl
     Top = 72
     Width = 253
     Caption = ' Band '
-    ClientHeight = 96
-    ClientWidth = 249
+    ClientHeight = 112
+    ClientWidth = 251
     TabOrder = 1
     object btn160m: TButton
       Left = 6
@@ -332,8 +332,8 @@ object frmTRXControl: TfrmTRXControl
     Top = 0
     Width = 72
     Caption = ' Mode '
-    ClientHeight = 168
-    ClientWidth = 68
+    ClientHeight = 184
+    ClientWidth = 70
     TabOrder = 2
     object btnCW: TButton
       Left = 8
@@ -393,9 +393,9 @@ object frmTRXControl: TfrmTRXControl
     TabOrder = 3
     object rbRadio1: TRadioButton
       Left = 26
-      Height = 26
+      Height = 21
       Top = 2
-      Width = 54
+      Width = 48
       Caption = 'RIG: '
       Checked = True
       OnClick = rbRadio1Click
@@ -404,9 +404,9 @@ object frmTRXControl: TfrmTRXControl
     end
     object rbRadio2: TRadioButton
       Left = 202
-      Height = 26
+      Height = 21
       Top = 2
-      Width = 54
+      Width = 48
       Caption = 'RIG: '
       OnClick = rbRadio2Click
       TabOrder = 1

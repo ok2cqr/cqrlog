@@ -121,7 +121,7 @@ object frmDXCluster: TfrmDXCluster
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.2.0.3'
+  LCLVersion = '1.2.2.0'
   object pgDXCluster: TPageControl
     Left = 0
     Height = 219
@@ -133,7 +133,7 @@ object frmDXCluster: TfrmDXCluster
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
-      ClientHeight = 192
+      ClientHeight = 194
       ClientWidth = 562
       object Panel4: TPanel
         Left = 0
@@ -216,12 +216,12 @@ object frmDXCluster: TfrmDXCluster
     end
     object tabTelnet: TTabSheet
       Caption = 'Telnet'
-      ClientHeight = 192
+      ClientHeight = 194
       ClientWidth = 562
       object Panel1: TPanel
         Left = 0
         Height = 34
-        Top = 158
+        Top = 160
         Width = 562
         Align = alBottom
         BevelOuter = bvNone
@@ -230,15 +230,15 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 0
         object Label1: TLabel
           Left = 6
-          Height = 17
+          Height = 15
           Top = 13
-          Width = 70
+          Width = 60
           Caption = 'Command:'
           ParentColor = False
         end
         object edtCommand: TEdit
           Left = 88
-          Height = 23
+          Height = 21
           Top = 8
           Width = 266
           OnKeyPress = edtCommandKeyPress
@@ -278,7 +278,7 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 1
         object edtTelAddress: TEdit
           Left = 8
-          Height = 23
+          Height = 21
           Top = 1
           Width = 189
           TabOrder = 0
@@ -316,7 +316,7 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlTelnet: TPanel
         Left = 0
-        Height = 128
+        Height = 130
         Top = 30
         Width = 562
         Align = alClient

@@ -391,6 +391,8 @@ end;
 
 procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  if RBNThread<>nil then
+    RBNThread.Terminate;
   cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
   dmUtils.SaveWindowPos(frmGrayline);
   tmrGrayLine.Enabled := False

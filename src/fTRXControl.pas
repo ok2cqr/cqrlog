@@ -579,6 +579,8 @@ end;
 procedure TfrmTRXControl.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
+  if Assigned(thRig) then
+    thRig.Terminate;
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 

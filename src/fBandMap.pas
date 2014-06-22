@@ -515,7 +515,8 @@ procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmBandMap);
   if cqrini.ReadBool('BandMap', 'Save', False) then
-     frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv')
+     frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv');
+  BandMapThread.Terminate
 end;
 
 procedure TfrmBandMap.LoadFonts;

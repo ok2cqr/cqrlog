@@ -227,7 +227,7 @@ begin
     btnWebConnect.Click;
   if ConTelnet then
     btnTelConnect.Click;
-  tmrSpots.Enabled := False
+  tmrSpots.Enabled := False;
 end;
 
 procedure TfrmDXCluster.btnHelpClick(Sender: TObject);

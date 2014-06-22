@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2079"/>
+      <BuildNr Value="2081"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -114,6 +114,7 @@
         <Filename Value="dUtils.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmUtils"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dUtils"/>
       </Unit4>
@@ -135,6 +136,7 @@
         <Filename Value="dDXCC.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmDXCC"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dDXCC"/>
       </Unit7>
@@ -192,6 +194,7 @@
         <Filename Value="fGrayline.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmGrayline"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fGrayline"/>
       </Unit15>
@@ -206,6 +209,7 @@
         <Filename Value="fTRXControl.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmTRXControl"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fTRXControl"/>
       </Unit17>
@@ -261,6 +265,7 @@
         <Filename Value="fExportProgress.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmExportProgress"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fExportProgress"/>
       </Unit25>
@@ -282,6 +287,7 @@
         <Filename Value="dDXCluster.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmDXCluster"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dDXCluster"/>
       </Unit28>
@@ -401,6 +407,7 @@
         <Filename Value="fImportLoTWWeb.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmImportLoTWWeb"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fImportLoTWWeb"/>
       </Unit45>
@@ -423,6 +430,7 @@
         <Filename Value="fDefaultFreq.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDefaultFreq"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDefaultFreq"/>
       </Unit48>
@@ -620,6 +628,7 @@
         <Filename Value="dLogUpload.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmLogUpload"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dLogUpload"/>
       </Unit76>
