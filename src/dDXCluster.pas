@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, Graphics,
-  inifiles, sqldb, mysql51conn, db, mysql55conn;
+  inifiles, sqldb, mysql51conn, db, mysql55conn, process;
 
 type
   TExplodeArray = Array of String;
@@ -48,7 +48,9 @@ type
     qBands: TSQLQuery;
     Q1: TSQLQuery;
     Q: TSQLQuery;
+    qCallAlert: TSQLQuery;
     qDXCCRef: TSQLQuery;
+    trCallAlert: TSQLTransaction;
     trDXCCRef: TSQLTransaction;
     trQ: TSQLTransaction;
     trQ1: TSQLTransaction;
@@ -91,12 +93,14 @@ type
     function  PfxFromADIF(adif : Word) : String;
     function  CountryFromADIF(adif : Word) : String;
     function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
+    function  IsAlertCall(const call,band,mode : String) : Boolean;
 
     procedure AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
     procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
     procedure ReloadDXCCTables;
     procedure LoadDXCCRefArray;
     procedure LoadExceptionArray;
+    procedure RunCallAlertCmd;
   end;
 
 var
@@ -1147,6 +1151,60 @@ begin
   end;
 end;
 
+procedure TdmDXCluster.RunCallAlertCmd;
+var
+  AProcess : TProcess;
+begin
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.CommandLine := cqrini.ReadString('DXCluster','AlertCmd','');
+    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+    if (AProcess.CommandLine = '') then
+      exit;
+    AProcess.Execute
+  finally
+    AProcess.Free
+  end
+end;
+
+function TdmDXCluster.IsAlertCall(const call,band,mode : String) : Boolean;
+const
+   C_SEL = 'select * from call_alert where callsign = %s';
+begin
+  try
+    qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
+    if dmData.DebugLevel>=1 then Writeln(qCallAlert.SQL.Text);
+    trCallAlert.StartTransaction;
+    qCallAlert.Open;
+    if qCallAlert.RecordCount = 0 then
+    begin
+      Result := False
+    end
+    else begin
+      Result := False;
+      qCallAlert.First;
+      while not qCallAlert.Eof do
+      begin
+        if (qCallAlert.Fields[2].AsString='') and (qCallAlert.Fields[3].AsString='') then
+        begin
+          Result := True;
+          Break
+        end
+        else begin
+           if (band = qCallAlert.Fields[2].AsString) and (mode = qCallAlert.Fields[3].AsString) then
+           begin
+             Result := True;
+             Break
+           end
+        end;
+        qCallAlert.Next
+      end
+    end
+  finally
+    qCallAlert.Close;
+    trCallAlert.Rollback;
+  end
+end;
 
 initialization
   {$I dDXCluster.lrs}

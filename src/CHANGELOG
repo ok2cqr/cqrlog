@@ -8,6 +8,7 @@ Legend:
   + after click to "Upload all" qso to online logs, info about disabled services is not shown  
   + added new optimized MySQL configuration file (log should be faster and won't show error about missing tables)
   + additional date formats for QSL label printing added (Tom, DL7JB)
+  + alert for for callsign on specific mode and band added
   - program crashed with error about Exceptions.tbl when started for the first time 
   - Shift+F12 didn't cancel the filtr - fixed
   - "Filter is USED!" info wasn't canceled after click to Sort button (filter was disabled)

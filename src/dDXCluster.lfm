@@ -7,9 +7,9 @@ object dmDXCluster: TdmDXCluster
   VerticalOffset = 383
   Width = 400
   object qBands: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
     Transaction = trBands
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 144
@@ -28,9 +28,9 @@ object dmDXCluster: TdmDXCluster
     top = 120
   end
   object Q1: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 25
@@ -43,9 +43,9 @@ object dmDXCluster: TdmDXCluster
     top = 120
   end
   object Q: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 82
@@ -58,12 +58,24 @@ object dmDXCluster: TdmDXCluster
     top = 120
   end
   object qDXCCRef: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = qDXCCRefBeforeOpen
     Transaction = trDXCCRef
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 216
     top = 60
+  end
+  object trCallAlert: TSQLTransaction
+    Active = False
+    left = 24
+    top = 236
+  end
+  object qCallAlert: TSQLQuery
+    FieldDefs = <>
+    Transaction = trCallAlert
+    Params = <>
+    left = 24
+    top = 188
   end
 end

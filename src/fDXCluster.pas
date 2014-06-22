@@ -1025,6 +1025,9 @@ begin
     end
   end;
 
+  if dmDXCluster.IsAlertCall(call,band,mode) then
+    dmDXCluster.RunCallAlertCmd;
+
   if dmData.DebugLevel >=1 then
   begin
     Writeln('Color: ',ColorToString(sColor));
