@@ -1,0 +1,93 @@
+object frmCallAlert: TfrmCallAlert
+  Left = 343
+  Height = 433
+  Top = 241
+  Width = 534
+  Caption = 'Callsign alert'
+  ClientHeight = 433
+  ClientWidth = 534
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '1.2.2.0'
+  object dbgrdCallAlert: TDBGrid
+    Left = 0
+    Height = 383
+    Top = 0
+    Width = 534
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    DataSource = dsrCallAlert
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 383
+    Width = 534
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 534
+    TabOrder = 1
+    object Button1: TButton
+      Left = 17
+      Height = 25
+      Top = 11
+      Width = 75
+      Action = acNew
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 112
+      Height = 25
+      Top = 11
+      Width = 75
+      Action = acEdit
+      TabOrder = 1
+    end
+    object Button3: TButton
+      Left = 224
+      Height = 25
+      Top = 11
+      Width = 75
+      Action = acDelete
+      TabOrder = 2
+    end
+    object Button4: TButton
+      Left = 448
+      Height = 25
+      Top = 11
+      Width = 75
+      Action = acClose
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      TabOrder = 3
+    end
+  end
+  object ActionList1: TActionList
+    left = 382
+    top = 292
+    object acNew: TAction
+      Caption = '&New'
+      OnExecute = acNewExecute
+    end
+    object acEdit: TAction
+      Caption = '&Edit'
+      OnExecute = acEditExecute
+    end
+    object acDelete: TAction
+      Caption = '&Delete'
+      OnExecute = acDeleteExecute
+    end
+    object acClose: TAction
+      Caption = '&Close'
+      OnExecute = acCloseExecute
+    end
+  end
+  object dsrCallAlert: TDataSource
+    left = 247
+    top = 224
+  end
+end
