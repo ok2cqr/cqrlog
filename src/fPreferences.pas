@@ -66,6 +66,7 @@ type
     btnFldigiPath: TButton;
     btnChangeDefFreq: TButton;
     btnChangeDefMode: TButton;
+    btnAlertCallsigns: TButton;
     cb10m1: TCheckBox;
     cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
@@ -481,6 +482,7 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    edtAlertCmd: TEdit;
     edtRBNServer : TEdit;
     edtClEmail: TEdit;
     edtHrCode: TEdit;
@@ -677,6 +679,7 @@ type
     GroupBox44: TGroupBox;
     GroupBox45: TGroupBox;
     GroupBox46: TGroupBox;
+    GroupBox47: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -784,6 +787,7 @@ type
     Label189: TLabel;
     Label190 : TLabel;
     Label191 : TLabel;
+    Label192: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -958,6 +962,7 @@ type
     tabModes: TTabSheet;
     tabQTHProfiles: TTabSheet;
     tabDXCluster: TTabSheet;
+    procedure btnAlertCallsignsClick(Sender: TObject);
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -1054,7 +1059,7 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapFilter, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1375,6 +1380,7 @@ begin
   cqrini.WriteString('DXCluster', 'NotShow', edtDoNotShow.Text);
   cqrini.WriteBool('DXCluster', 'ConAfterRun', chkConToDXC.Checked);
   cqrini.WriteBool('DXCluster','ShowDxcCountry',chkShowDxcCountry.Checked);
+  cqrini.WriteString('DXCluster','AlertCmd', edtAlertCmd.Text);
 
   cqrini.WriteBool('Fonts', 'UseDefault', chkUseDefaultSEttings.Checked);
   cqrini.WriteString('Fonts', 'Buttons', lblbFont.Caption);
@@ -1984,6 +1990,18 @@ begin
     end
   finally
     FreeAndNil(frmNewQSODefValues)
+  end
+end;
+
+procedure TfrmPreferences.btnAlertCallsignsClick(Sender: TObject);
+var
+  F : TfrmCallAlert;
+begin
+  F := TfrmCallAlert.Create(self);
+  try
+    F.ShowModal
+  finally
+    FreeAndNil(F)
   end
 end;
 
@@ -2675,6 +2693,7 @@ begin
   cmbQSLNeeded.Selected := cqrini.ReadInteger('DXCluster', 'NeedQSL', 0);
   chkConToDXC.Checked := cqrini.ReadBool('DXCluster', 'ConAfterRun', False);
   chkShowDxcCountry.Checked := cqrini.ReadBool('DXCluster','ShowDxcCountry',False);
+  edtAlertCmd.Text := cqrini.ReadString('DXCluster','AlertCmd','');
 
   chkUseDefaultSEttings.Checked := cqrini.ReadBool('Fonts', 'UseDefault', True);
   lblbFont.Caption := cqrini.ReadString('Fonts', 'Buttons', 'Sans 10');
