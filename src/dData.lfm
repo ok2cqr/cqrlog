@@ -391,6 +391,17 @@ object dmData: TdmData
       '  FOREIGN KEY (id_log_changes) REFERENCES log_changes (id) ON DELETE SET NULL'
       ') COLLATE ''utf8_bin'';'
       ''
+      'CREATE TABLE call_alert ('
+      '  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
+      '  callsign varchar(20) NOT NULL,'
+      '  band varchar(6) NULL,'
+      '  mode varchar(6) NULL'
+      ') COLLATE ''utf8_bin'';'
+      ''
+      'ALTER TABLE call_alert ADD INDEX (id);'
+      'ALTER TABLE call_alert ADD INDEX (callsign);'
+      ''
+      ''
     )
     Terminator = ';'
     CommentsinSQL = True
