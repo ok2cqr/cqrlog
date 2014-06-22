@@ -80,7 +80,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="79">
+    <Units Count="81">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -151,6 +151,7 @@
         <Filename Value="fDXCCStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDXCCStat"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDXCCStat"/>
       </Unit9>
@@ -648,6 +649,20 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="frCWKeys"/>
       </Unit78>
+      <Unit79>
+        <Filename Value="fCallAlert.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmCallAlert"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fCallAlert"/>
+      </Unit79>
+      <Unit80>
+        <Filename Value="fNewCallAlert.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmNewCallAlert"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fNewCallAlert"/>
+      </Unit80>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

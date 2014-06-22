@@ -259,6 +259,7 @@ type
     function  QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  TriggersExistsOnCqrlog_main : Boolean;
+    function  GetLastAllertCallId(const callsign,band,mode : String) : Integer;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -298,6 +299,9 @@ type
     procedure StartMysqldProcess;
     procedure EnableOnlineLogSupport;
     procedure DisableOnlineLogSupport;
+    procedure DeleteCallAlert(const id : Integer);
+    procedure AddCallAlert(const callsign, band, mode : String);
+    procedure EditCallAlert(const id : Integer; const callsign, band, mode : String);
   end;
 
 var
@@ -3339,6 +3343,91 @@ begin
   finally
     Q.Close;
     trQ.RollBack
+  end
+end;
+
+procedure TdmData.DeleteCallAlert(const id : Integer);
+const
+  C_DEL = 'delete from call_alert where id = %d';
+begin
+  Q1.Close;
+  if trQ1.Active then trQ1.Rollback;
+  try
+    trQ1.StartTransaction;
+    Q1.SQL.Text := Format(C_DEL,[id]);
+    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+    Q1.ExecSQL
+  finally
+    trQ1.Commit;
+    Q1.Close
+  end
+end;
+
+procedure TdmData.AddCallAlert(const callsign, band, mode : String);
+const
+  C_INS = 'insert into call_alert(callsign,mode,band) values (:callsign,:mode,:band)';
+begin
+  Q1.Close;
+  if trQ1.Active then trQ1.Rollback;
+  try
+    trQ1.StartTransaction;
+    Q1.SQL.Text := C_INS;
+    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+    Q1.Prepare;
+    Q1.Params[0].AsString := callsign;
+    Q1.Params[1].AsString := mode;
+    Q1.Params[2].AsString := band;
+    Q1.ExecSQL
+  finally
+    trQ1.Commit;
+    Q1.Close
+  end
+end;
+
+procedure TdmData.EditCallAlert(const id : Integer; const callsign, band, mode : String);
+const
+  C_UPD = 'update call_alert set callsign=:callsing,band =:band,mode =:mode where id=:id';
+var
+  i : Integer;
+begin
+  Q1.Close;
+  if trQ1.Active then trQ1.Rollback;
+  try
+    trQ1.StartTransaction;
+    Q1.SQL.Text := C_UPD;
+    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+    Q1.Prepare;
+    Q1.Params[0].AsString  := callsign;
+    Q1.Params[1].AsString  := band;
+    Q1.Params[2].AsString  := mode;
+    Q1.Params[3].AsInteger := id;
+    if fDebugLevel>-1 then
+    begin
+      for i:=0 to Q1.Params.Count-1 do
+        Writeln(Q1.Params[i].Name,':',Q1.Params[i].Value)
+    end;
+    Q1.ExecSQL
+  finally
+    trQ1.Commit;
+    Q1.Close
+  end
+end;
+
+function TdmData.GetLastAllertCallId(const callsign,band,mode : String) : Integer;
+const
+  C_SEL = 'select max(id) from call_alert where (callsign=%s) and (band=%s) and (mode=%s)';
+begin
+  Q1.Close;
+  if trQ1.Active then trQ1.Rollback;
+  try
+    trQ1.StartTransaction;
+    Q1.SQL.Text := Format(C_SEL,[QuotedStr(callsign),QuotedStr(band),QuotedStr(mode)]);
+    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+    Q1.Open;
+    Result := Q1.Fields[0].AsInteger
+  finally
+    trQ1.Rollback;
+    Q1.Close
   end
 end;
 

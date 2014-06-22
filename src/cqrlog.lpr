@@ -17,7 +17,7 @@ uses
   fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fDBConnect,fNewLog,
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
-dLogUpload, fLogUploadStatus,frCWKeys;
+dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert;
 var
   Splash : TfrmSplash;
 

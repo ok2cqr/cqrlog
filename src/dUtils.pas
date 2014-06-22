@@ -39,6 +39,9 @@ const
   cMaxBandsCount = 27; //26 bands
   cDefaultFreq = '0.136|1.800|3.500|3.700|7.000|10.100|14.000|14.200|18.100|21.000|21.200|24.890|28.000|28.500|50.000|70.0875|'+
                  '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|';
+  cBands : array[0..25] of String[10] = ('2190M','630M','160M','80M','60M','40M','30M','20M','17M','15M','12M','10M','6M',
+                                         '4M','2M','1.25M','70CM','33CM','23CM','13CM','9CM','6CM','3CM',
+                                         '1.25CM','6MM','4MM');
 
   cMaxIgnoreFreq = 6;
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string = ('1800.0','3500.0','7000.0','10100.0','14000.0','21000.0','28000.0');
@@ -103,6 +106,7 @@ type
     procedure InsertQSL_S(QSL_S : TComboBox);
     procedure InsertQSL_R(QSL_R : TcomboBox);
     procedure InsertFreq(cmbFreq  : TComboBox);
+    procedure InsertBands(cmbBand : TComboBox);
     procedure DateInRightFormat(date : TDateTime; var Mask,sDate : String);
     procedure FileCopy(const FileFrom, FileTo: string) ;
     procedure CopyData(Source,Destination : String);
@@ -590,6 +594,15 @@ begin
   cmbFreq.Items.Add('47100.0');
   cmbFreq.Items.Add('78000.0');
   }
+end;
+
+procedure TdmUtils.InsertBands(cmbBand : TComboBox);
+var
+  i : Integer;
+begin
+  cmbBand.Clear;
+  for i:=0 to cMaxBandsCount-2 do
+    cmbBand.Items.Add(cBands[i])
 end;
 
 function TdmUtils.DateInRightFormat(date : TDateTime) : String;
@@ -3888,6 +3901,8 @@ function TdmUtils.GetDescKeyFromCode(key : Word) : String;
 begin
   Result := 'F' + IntToStr(Key-111) //VK_F1 = 112
 end;
+
+
 
 
 initialization
