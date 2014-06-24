@@ -115,7 +115,7 @@ object frmDXCCStat: TfrmDXCCStat
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.0.10.0'
   object Panel1: TPanel
     Left = 0
     Height = 81
@@ -308,7 +308,7 @@ object frmDXCCStat: TfrmDXCCStat
     end
     object cmbCfmType: TComboBox
       Left = 133
-      Height = 31
+      Height = 25
       Top = 10
       Width = 260
       ItemHeight = 0

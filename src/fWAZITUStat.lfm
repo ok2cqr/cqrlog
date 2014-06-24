@@ -1,7 +1,7 @@
 object frmWAZITUStat: TfrmWAZITUStat
-  Left = 394
+  Left = 66
   Height = 587
-  Top = 145
+  Top = 408
   Width = 668
   ActiveControl = grdStat
   Caption = 'frmWAZITUStat'
@@ -116,7 +116,7 @@ object frmWAZITUStat: TfrmWAZITUStat
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.0.10.0'
   object Panel1: TPanel
     Left = 0
     Height = 43
@@ -207,15 +207,15 @@ object frmWAZITUStat: TfrmWAZITUStat
     TabOrder = 3
     object Label2: TLabel
       Left = 200
-      Height = 16
+      Height = 18
       Top = 10
-      Width = 41
+      Width = 50
       Caption = 'Profile:'
       ParentColor = False
     end
     object edtProfiles: TEdit
       Left = 248
-      Height = 25
+      Height = 27
       Top = 5
       Width = 136
       TabOrder = 0
@@ -231,9 +231,9 @@ object frmWAZITUStat: TfrmWAZITUStat
     end
     object Label1: TLabel
       Left = 8
-      Height = 16
+      Height = 18
       Top = 11
-      Width = 36
+      Width = 44
       Caption = 'Mode:'
       ParentColor = False
     end
@@ -257,7 +257,7 @@ object frmWAZITUStat: TfrmWAZITUStat
     end
     object cmbCfmType: TComboBox
       Left = 122
-      Height = 29
+      Height = 25
       Top = 42
       Width = 260
       ItemHeight = 0
@@ -277,9 +277,9 @@ object frmWAZITUStat: TfrmWAZITUStat
     end
     object Label3: TLabel
       Left = 8
-      Height = 16
+      Height = 18
       Top = 50
-      Width = 92
+      Width = 109
       Caption = 'Confirmed type:'
       ParentColor = False
     end

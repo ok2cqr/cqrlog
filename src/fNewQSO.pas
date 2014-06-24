@@ -1404,7 +1404,37 @@ begin
   ClearAll;
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
-  tmrStart.Enabled := True
+  tmrStart.Enabled := True;
+
+  // Another grid style tom@dl7bj.de, 2014-06-20
+  if cqrini.ReadBool('Design','GridGreenBar',False) = True then
+  begin
+    dbgrdQSOBefore.AlternateColor:=$00E7FFEB;
+    sgrdStatistic.AlternateColor:=$00E7FFEB;
+  end else begin
+    dbgrdQSOBefore.AlternateColor:=clWindow;
+    sgrdStatistic.AlternateColor:=clWindow;
+  end;
+  if cqrini.ReadBool('Design','GridSmallRows',False) = True then
+  begin
+    dbgrdQSOBefore.DefaultRowHeight:=dbgrdQSOBefore.Canvas.Font.Size+8;
+    sgrdStatistic.DefaultRowHeight:=sgrdStatistic.Canvas.Font.Size+8;
+  end else begin
+    dbgrdQSOBefore.DefaultRowHeight:=25;
+    sgrdStatistic.DefaultRowHeight:=25;
+  end;
+  if cqrini.ReadBool('Design','GridBoldTitle',false) = True then
+  begin
+    dbgrdQSOBefore.TitleFont.Style:=[fsBold];
+    sgrdStatistic.TitleFont.Style:=[fsBold];
+  end else begin
+    dbgrdQSOBefore.TitleFont.Style:=[];
+    sgrdStatistic.TitleFont.Style:=[];
+  end;
+  if cqrini.ReadBool('Design','GridShowHint',false) = True then
+  begin
+    // not yet
+  end;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -4359,12 +4389,19 @@ var
   mode : String;
   QSLR,LoTW,eQSL : String;
   tmps : String;
+  space: String;
 begin
   if old_stat_adif = ref_adif then
     exit;
   old_stat_adif := ref_adif;
   sgrdStatistic.ColCount  := cMaxBandsCount;
   ClearStatGrid;
+
+  space := ' ';
+  if cqrini.ReadBool('Design','GridDotsInsteadSpaces',False) = True then
+  begin
+    space := '.';
+  end;
 
   for i:=0 to cMaxBandsCount-1 do
   begin
@@ -4374,9 +4411,9 @@ begin
       break
     end;
     sgrdStatistic.Cells[i+1,0] := dmUtils.MyBands[i][1];
-    sgrdStatistic.Cells[i+1,1] := '   ';
-    sgrdStatistic.Cells[i+1,2] := '   ';
-    sgrdStatistic.Cells[i+1,3] := '   ';
+    sgrdStatistic.Cells[i+1,1] := space+space+space;
+    sgrdStatistic.Cells[i+1,2] := space+space+space;
+    sgrdStatistic.Cells[i+1,3] := space+space+space;
   end;
 
   if dmData.trQ.Active then
@@ -4458,11 +4495,11 @@ begin
     if i > 0 then
       begin
         if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
-          if(sgrdStatistic.Cells[i,1] = '   ') then sgrdStatistic.Cells[i,1] := ' X ';
+          if(sgrdStatistic.Cells[i,1] = space+space+space) then sgrdStatistic.Cells[i,1] := ' X ';
         if ((mode = 'CW') or (mode = 'CWR')) then
-          if (sgrdStatistic.Cells[i,2] = '   ') then sgrdStatistic.Cells[i,2] := ' X ';
+          if (sgrdStatistic.Cells[i,2] = space+space+space) then sgrdStatistic.Cells[i,2] := ' X ';
         if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
-          if (sgrdStatistic.Cells[i,3] = '   ') then sgrdStatistic.Cells[i,3] := ' X '
+          if (sgrdStatistic.Cells[i,3] = space+space+space) then sgrdStatistic.Cells[i,3] := ' X '
       end;
       dmData.Q.Next;
   end;

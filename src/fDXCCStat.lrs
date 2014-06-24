@@ -1,3 +1,5 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TfrmDXCCStat','FORMDATA',[
   'TPF0'#12'TfrmDXCCStat'#11'frmDXCCStat'#4'Left'#3#2#1#6'Height'#3#17#2#3'Top'
   +#3#209#0#5'Width'#3#199#2#13'ActiveControl'#7#11'grdDXCCStat'#7'Caption'#6#14
@@ -158,7 +160,7 @@ LazarusResources.Add('TfrmDXCCStat','FORMDATA',[
   +#128#0#31#255#128#0#31#255#128#0'?'#255#0#0'?'#255#0#4#127#255#0#0#255#255#0
   +#1#255#255#0#3#255#255#0#7#255#255#0#31#255#255#0'?'#255#255#0#255#255#255
   +#131#255#255#255#7'OnClose'#7#9'FormClose'#8'OnCreate'#7#10'FormCreate'#6'On'
-  +'Show'#7#8'FormShow'#10'LCLVersion'#6#8'0.9.30.2'#0#6'TPanel'#6'Panel1'#4'Le'
+  +'Show'#7#8'FormShow'#10'LCLVersion'#6#8'1.0.10.0'#0#6'TPanel'#6'Panel1'#4'Le'
   +'ft'#2#0#6'Height'#2'Q'#3'Top'#3#192#1#5'Width'#3#199#2#5'Align'#7#8'alBotto'
   +'m'#12'ClientHeight'#2'Q'#11'ClientWidth'#3#199#2#8'TabOrder'#2#0#0#7'TButto'
   +'n'#7'Button1'#4'Left'#3'p'#2#6'Height'#2#25#3'Top'#2'0'#5'Width'#2'K'#7'Anc'
@@ -203,7 +205,7 @@ LazarusResources.Add('TfrmDXCCStat','FORMDATA',[
   +#7#6'bvNone'#12'ClientHeight'#2'2'#11'ClientWidth'#3#199#2#8'TabOrder'#2#3#0
   +#6'TLabel'#6'Label1'#4'Left'#2#19#6'Height'#2#18#3'Top'#2#18#5'Width'#2'm'#7
   +'Caption'#6#15'Confirmed type:'#11'ParentColor'#8#0#0#9'TComboBox'#10'cmbCfm'
-  +'Type'#4'Left'#3#133#0#6'Height'#2#31#3'Top'#2#10#5'Width'#3#4#1#10'ItemHeig'
+  +'Type'#4'Left'#3#133#0#6'Height'#2#25#3'Top'#2#10#5'Width'#3#4#1#10'ItemHeig'
   +'ht'#2#0#9'ItemIndex'#2#6#13'Items.Strings'#1#6#14'paper QSL only'#6#14'pape'
   +'r and LoTW'#6#9'LoTW only'#6#18'paper QSL and eQSL'#6#13'LoTW and eQSL'#6#9
   +'eQSL only'#6#24'paper QSL, LoTW and eQSL'#0#5'Style'#7#14'csDropDownList'#8
