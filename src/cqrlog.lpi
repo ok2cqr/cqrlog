@@ -528,6 +528,7 @@
         <Filename Value="fDBConnect.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDBConnect"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDBConnect"/>
       </Unit62>

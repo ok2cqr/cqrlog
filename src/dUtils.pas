@@ -1707,14 +1707,59 @@ begin
     begin
       (aForm.Components[i] as TDBGrid).Font.Name := fQsoGr;
       (aForm.Components[i] as TDBGrid).Font.Size := fqSize;
+
+      if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
+      begin
+        (aForm.Components[i] as TDBGrid).AlternateColor := $00E7FFEB;
+      end
+      else begin
+        (aForm.Components[i] as TDBGrid).AlternateColor := clWindow;
+      end;
+
+      if cqrini.ReadBool('Fonts','GridSmallRows',false) = True then
+      begin
+          (aForm.Components[i] as TDBGrid).DefaultRowHeight := (aForm.Components[i] as TDBGrid).Font.Size + 8;
+      end
+      else begin
+          (aForm.Components[i] as TDBGrid).DefaultRowHeight := 24;
+      end;
+      if cqrini.ReadBool('Fonts','GridBoldTitle',false) = True then
+      begin
+        (aForm.Components[i] as TDBGrid).TitleFont.Style := [fsBold];
+      end
+      else begin
+        (aForm.Components[i] as TDBGrid).TitleFont.Style := [];
+      end;
     end;
-    
     ////////////////////////////////////////////////////////
     //statistics
     if (aForm.Components[i] is TStringGrid) then
     begin
       (aForm.Components[i] as TStringGrid).Font.Name := fGrids;
       (aForm.Components[i] as TStringGrid).Font.Size := fgSize;
+      if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
+      begin
+        (aForm.Components[i] as TStringGrid).AlternateColor := $00E7FFEB;
+        (aForm.Components[i] as TStringGrid).Options := [goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
+      end
+      else begin
+        (aForm.Components[i] as TStringGrid).AlternateColor := clWindow;
+        (aForm.Components[i] as TStringGrid).Options := [goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
+      end;
+      if cqrini.ReadBool('Fonts','GridSmallRows',false) = True then
+      begin
+        (aForm.Components[i] as TStringGrid).DefaultRowHeight := (aForm.Components[i] as TStringGrid).Canvas.Font.Size + 8;
+      end
+      else begin
+        (aForm.Components[i] as TStringGrid).DefaultRowHeight := 25;
+      end;
+      if cqrini.ReadBool('Fonts','GridBoldTitle',false) = True then
+      begin
+        (aForm.Components[i] as TStringGrid).TitleFont.Style := [fsBold];
+      end
+      else begin
+        (aForm.Components[i] as TStringGrid).TitleFont.Style := [];
+      end;
     end;
   end;
 end;

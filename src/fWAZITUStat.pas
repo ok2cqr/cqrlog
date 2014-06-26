@@ -361,7 +361,7 @@ begin
     grdStat.ColWidths[0] := w;
 
   // Another grid style tom@dl7bj.de, 2014-06-20
-  if cqrini.ReadBool('Design','GridGreenBar',False) = True then
+  if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
   begin
     grdSumStat.AlternateColor:=$00E7FFEB;
     grdStat.AlternateColor:=$00E7FFEB;
@@ -373,7 +373,7 @@ begin
     grdSumStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
     grdStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
   end;
-  if cqrini.ReadBool('Design','GridSmallRows',false) = True then
+  if cqrini.ReadBool('Fonts','GridSmallRows',false) = True then
   begin
     grdSumStat.DefaultRowHeight:=grdSumStat.Canvas.Font.Size+8;
     grdStat.DefaultRowHeight:=grdStat.Canvas.Font.Size+8;
@@ -381,19 +381,13 @@ begin
     grdSumStat.DefaultRowHeight:=25;
     grdStat.DefaultRowHeight:=25;
   end;
-  if cqrini.ReadBool('Design','GridBoldTitle',false) = True then
+  if cqrini.ReadBool('Fonts','GridBoldTitle',false) = True then
   begin
     grdSumStat.TitleFont.Style:=[fsBold];
     grdStat.TitleFont.Style:=[fsBold];
   end else begin
     grdSumStat.TitleFont.Style:=[];
     grdStat.TitleFont.Style:=[];
-  end;
-  if cqrini.ReadBool('Design','GridShowHint',false) = True then
-  begin
-    // ***TODO
-  end else begin
-    // ***TODO
   end;
   btnRefresh.Click
 end;

@@ -4,4 +4,5 @@
 src/backup/*.bak
 src/backup
 *.compiled
-*.or
+*.or/share
+/src/cqrlog

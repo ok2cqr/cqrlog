@@ -1914,8 +1914,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
-          ClientWidth = 553
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
             Height = 333
@@ -2247,8 +2247,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
-          ClientWidth = 553
+          ClientHeight = 388
+          ClientWidth = 563
           object edtRotor2: TEdit
             Left = 146
             Height = 27
@@ -4211,6 +4211,7 @@ object frmPreferences: TfrmPreferences
           ParentShowHint = False
           ShowHint = True
           TabOrder = 3
+          Visible = False
         end
         object chkgriddotsinsteadspaces: TCheckBox
           Left = 297

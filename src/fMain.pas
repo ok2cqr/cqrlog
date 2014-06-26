@@ -1828,30 +1828,6 @@ begin
   sbMain.Visible := False;  //without this workaround statusbar was hidden
   sbMain.Visible := True;   // and after resize windows was visible again
 
-  // Another grid style tom@dl7bj.de, 2014-06-20
-  if cqrini.ReadBool('Design','GridGreenBar',False) = True then
-  begin
-    dbgrdMain.AlternateColor:=$00E7FFEB;
-  end else begin
-    dbgrdMain.AlternateColor:=clWindow;
-  end;
-  if cqrini.ReadBool('Design','GridSmallRows',False) = True then
-  begin
-    dbgrdMain.DefaultRowHeight:=dbgrdMain.Canvas.Font.Size+8;
-  end else begin
-    dbgrdMain.DefaultRowHeight:=25;
-  end;
-  if cqrini.ReadBool('Design','GridBoldTitle',false) = True then
-  begin
-    dbgrdMain.TitleFont.Style:=[fsBold];
-  end else begin
-    dbgrdMain.TitleFont.Style:=[];
-  end;
-  if cqrini.ReadBool('Design','GridShowHint',false) = True then
-  begin
-    // not yet
-  end;
-
   dmData.qCQRLOG.Close;
   dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(cDB_LIMIT)+' OFFSET 0';
   dmData.qCQRLOG.Open;
