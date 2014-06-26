@@ -1,13 +1,13 @@
 object frmMain: TfrmMain
-  Left = 358
+  Left = 130
   Height = 587
-  Top = 105
+  Top = 199
   Width = 854
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   ActiveControl = Panel2
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 568
+  ClientHeight = 587
   ClientWidth = 854
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
@@ -124,11 +124,11 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '1.2.0.3'
+  LCLVersion = '1.0.10.0'
   object sbMain: TStatusBar
     Left = 0
-    Height = 19
-    Top = 549
+    Height = 21
+    Top = 566
     Width = 854
     Panels = <    
       item
@@ -149,7 +149,7 @@ object frmMain: TfrmMain
   object pnlButtons: TPanel
     Left = 0
     Height = 40
-    Top = 509
+    Top = 526
     Width = 854
     Align = alBottom
     ClientHeight = 40
@@ -437,9 +437,9 @@ object frmMain: TfrmMain
     TabOrder = 1
     object Label1: TLabel
       Left = 8
-      Height = 17
+      Height = 18
       Top = 8
-      Width = 69
+      Width = 74
       Alignment = taRightJustify
       Caption = 'QSO in log:'
       ParentColor = False
@@ -484,7 +484,7 @@ object frmMain: TfrmMain
     end
     object Label3: TLabel
       Left = 716
-      Height = 17
+      Height = 18
       Top = 8
       Width = 75
       Alignment = taRightJustify
@@ -509,7 +509,7 @@ object frmMain: TfrmMain
   end
   object dbgrdMain: TDBGrid
     Left = 0
-    Height = 400
+    Height = 417
     Top = 56
     Width = 854
     Align = alClient
@@ -817,7 +817,7 @@ object frmMain: TfrmMain
   object pnlDetails: TPanel
     Left = 0
     Height = 53
-    Top = 456
+    Top = 473
     Width = 854
     Align = alBottom
     BevelOuter = bvNone
@@ -826,34 +826,34 @@ object frmMain: TfrmMain
     TabOrder = 5
     object Label23: TLabel
       Left = 8
-      Height = 17
+      Height = 18
       Top = 2
-      Width = 122
+      Width = 128
       Caption = 'Comment for QSO:'
       ParentColor = False
       ParentFont = False
     end
     object Label24: TLabel
       Left = 8
-      Height = 17
+      Height = 18
       Top = 29
-      Width = 41
+      Width = 49
       Caption = 'Award:'
       ParentColor = False
       ParentFont = False
     end
     object dbtComment: TDBText
       Left = 141
-      Height = 17
+      Height = 1
       Top = 2
-      Width = 88
+      Width = 1
       ParentColor = False
     end
     object dbtAward: TDBText
       Left = 58
-      Height = 17
+      Height = 1
       Top = 29
-      Width = 60
+      Width = 1
       ParentColor = False
     end
     object Panel1: TPanel
@@ -868,32 +868,32 @@ object frmMain: TfrmMain
       TabOrder = 0
       object Label25: TLabel
         Left = 7
-        Height = 17
+        Height = 18
         Top = 2
-        Width = 67
+        Width = 73
         Caption = 'QS_S date:'
         ParentColor = False
         ParentFont = False
       end
       object dbtQSLSDate: TDBText
         Left = 89
-        Height = 17
+        Height = 1
         Top = 2
-        Width = 85
+        Width = 1
         ParentColor = False
       end
       object dbtQSLRDate: TDBText
         Left = 89
-        Height = 17
+        Height = 1
         Top = 30
-        Width = 87
+        Width = 1
         ParentColor = False
       end
       object Label26: TLabel
         Left = 7
-        Height = 17
+        Height = 18
         Top = 29
-        Width = 69
+        Width = 74
         Caption = 'QS_R date:'
         ParentColor = False
         ParentFont = False
@@ -911,32 +911,32 @@ object frmMain: TfrmMain
       TabOrder = 1
       object Label27: TLabel
         Left = 7
-        Height = 17
+        Height = 18
         Top = 3
-        Width = 105
+        Width = 115
         Caption = 'LoTW QS_S date:'
         ParentColor = False
         ParentFont = False
       end
       object dbtLoTWQSLS: TDBText
         Left = 134
-        Height = 17
+        Height = 1
         Top = 3
-        Width = 89
+        Width = 1
         ParentColor = False
       end
       object dbtLoTWQSLR: TDBText
         Left = 134
-        Height = 17
+        Height = 1
         Top = 30
-        Width = 91
+        Width = 1
         ParentColor = False
       end
       object Label28: TLabel
         Left = 7
-        Height = 17
+        Height = 18
         Top = 30
-        Width = 107
+        Width = 116
         Caption = 'LoTW QS_R date:'
         ParentColor = False
         ParentFont = False

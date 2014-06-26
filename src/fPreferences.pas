@@ -113,6 +113,11 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkgridshowhint: TCheckBox;
+    chkgriddotsinsteadspaces: TCheckBox;
+    chkgridboldtitle: TCheckBox;
+    chkgridsmallrows: TCheckBox;
+    chkgridgreenbar: TCheckBox;
     chkCloseAfterUpload : TCheckBox;
     chkUseNewQSOFreqMode: TCheckBox;
     chkUseCallBookData: TCheckBox;
@@ -680,6 +685,7 @@ type
     GroupBox45: TGroupBox;
     GroupBox46: TGroupBox;
     GroupBox47: TGroupBox;
+    GroupBox48: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -1391,6 +1397,12 @@ begin
   cqrini.WriteInteger('Fonts', 'bSize', fbSize);
   cqrini.WriteInteger('Fonts', 'gSize', fgSize);
   cqrini.WriteInteger('Fonts', 'qSize', fqSize);
+
+  cqrini.WriteBool('Design','GridGreenBar',chkgridgreenbar.Checked);
+  cqrini.WriteBool('Design','GridBoldTitle',chkgridboldtitle.Checked);
+  cqrini.WriteBool('Design','GridShowHint',chkgridshowhint.Checked);
+  cqrini.WriteBool('Design','GridSmallRows',chkgridsmallrows.Checked);
+  cqrini.WriteBool('Design','GridDotsInsteadSpaces',chkgriddotsinsteadspaces.Checked);
 
   cqrini.WriteInteger('Zones', 'NewWAZ', clboxNewWaz.Selected);
   cqrini.WriteInteger('Zones', 'NewBandWAZ', clBoxBandWAZ.Selected);
@@ -2704,6 +2716,12 @@ begin
   fbSize := cqrini.ReadInteger('Fonts', 'bSize', 10);
   fgSize := cqrini.ReadInteger('Fonts', 'gSize', 8);
   fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10);
+
+  chkgridgreenbar.Checked := cqrini.ReadBool('Design','GridGreenBar',False);
+  chkgridboldtitle.Checked := cqrini.ReadBool('Design','GridBoldTitle',False);
+  chkgridshowhint.Checked := cqrini.ReadBool('Design','GridShowHint',False);
+  chkgridsmallrows.Checked := cqrini.ReadBool('Design','GridSmallRows',False);
+  chkgriddotsinsteadspaces.Checked := cqrini.ReadBool('Design','GridDotsInsteadSpaces',False);
 
   clboxNewWaz.Selected := cqrini.ReadInteger('Zones', 'NewWAZ', 0);
   clBoxBandWAZ.Selected := cqrini.ReadInteger('Zones', 'NewBandWAZ', 0);

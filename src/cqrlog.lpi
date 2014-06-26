@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -323,6 +323,7 @@
         <Filename Value="fQSODetails.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmQSODetails"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQSODetails"/>
       </Unit33>
@@ -337,6 +338,7 @@
         <Filename Value="fWAZITUStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmWAZITUStat"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fWAZITUStat"/>
       </Unit35>
@@ -660,6 +662,7 @@
         <Filename Value="fNewCallAlert.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewCallAlert"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewCallAlert"/>
       </Unit80>

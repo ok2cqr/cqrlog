@@ -102,6 +102,48 @@ begin
   dmUtils.LoadFontSettings(self);
   LoadBandsSettings;
 
+  // Another grid style tom@dl7bj.de, 2014-06-20
+  if cqrini.ReadBool('Design','GridGreenBar',False) = True then
+  begin
+    grdDXCCStat.AlternateColor:=$00E7FFEB;
+    grdStat.AlternateColor:=$00E7FFEB;
+    grdDXCCStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
+    grdStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
+  end else begin
+    grdDXCCStat.AlternateColor:=clWindow;
+    grdStat.AlternateColor:=clWindow;
+    grdDXCCStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
+    grdStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
+  end;
+  if cqrini.ReadBool('Design','GridSmallRows',false) = True then
+  begin
+    grdDXCCStat.DefaultRowHeight:=grdDXCCStat.Canvas.Font.Size+8;
+    grdStat.DefaultRowHeight:=grdStat.Canvas.Font.Size+8;
+  end else begin
+    grdDXCCStat.DefaultRowHeight:=25;
+    grdStat.DefaultRowHeight:=25;
+  end;
+  if cqrini.ReadBool('Design','GridBoldTitle',false) = True then
+  begin
+    grdDXCCStat.TitleFont.Style:=[fsBold];
+    grdStat.TitleFont.Style:=[fsBold];
+  end else begin
+    grdDXCCStat.TitleFont.Style:=[];
+    grdStat.TitleFont.Style:=[];
+  end;
+  if cqrini.ReadBool('Design','GridShowHint',false) = True then
+  begin
+    // ***TODO
+    // grdDXCCStat.ShowHint:=True;
+    // grdStat.ShowHint:=True;
+  end else begin
+    // ***TODO
+    // grdDXCCStat.ShowHint:=False;
+    // grdStat.ShowHint:=False;
+  end;
+
+
+
   grdDXCCStat.Cells[0,0] := 'DXCC';
   grdDXCCStat.Cells[1,0] := 'Country';
 
@@ -440,19 +482,28 @@ begin
 end;
 
 function TfrmDXCCStat.GetFieldText(fone,cw,digi : String) : String;
+var
+  space: String;
 begin
-  if (fone = '') then
-    fone := '  '
+  space := ' ';
+  // Dots instead spaces, tom@dl7bj.de, 2014-06-24
+  if cqrini.ReadBool('Design','GridDotsInsteadSpaces',False) = True then
+  begin
+    space := '.';
+  end;
+
+   if (fone = '') then
+    fone := space+' '
   else
     fone := fone+' ';
 
   if (cw = '') then
-    cw := '  '
+    cw := space+' '
   else
     cw := cw+' ';
 
   if (digi='') then
-    digi := '  '
+    digi := space+' '
   else
     digi := digi+' ';
 
@@ -687,12 +738,20 @@ var
   Mode      : String;
   mDXCC     : TMemDataset;
   Country   : String;
+  space     : String;
 begin
   grdDXCCStat.RowCount := 2;
   LoadBandsSettings;
   Deleted := cqrini.ReadBool('Program','ShowDeleted',False);
   SetLength(BandMode,grdDXCCStat.ColCount-2);
   grdDXCCStat.ColWidths[1] := 160;
+
+  space := '';
+  // dots instead spaces, tom@dl7bj.de, 2014-06-24
+  if cqrini.ReadBool('Design','GridDotsInsteadSpaces', False) then
+  begin
+    Space := '.';
+  end;
 
   mDXCC := TMemDataset.Create(nil);
   try
@@ -727,6 +786,18 @@ begin
     OldPrefix := Prefix;
     grdDXCCStat.Cells[0,y] := Prefix;
     grdDXCCStat.Cells[1,y] := Country;
+
+    if Space = '.' then
+    begin
+      for i:=0 to Length(BandMode)-1 do
+      begin
+        grdDXCCStat.Cells[i+2,y] := GetFieldText(BandMode[i].SSB,BandMode[i].CW,BandMode[i].DIGI);
+        BandMode[i].CW   := Space;
+        BandMode[i].SSB  := Space;
+        BandMode[i].DIGI := Space;
+      end;
+    end;
+
     while not mDXCC.Eof do
     begin
       Prefix    := mDXCC.Fields[0].AsString;
@@ -736,9 +807,9 @@ begin
         for i:=0 to Length(BandMode)-1 do
         begin
           grdDXCCStat.Cells[i+2,y] := GetFieldText(BandMode[i].SSB,BandMode[i].CW,BandMode[i].DIGI);
-          BandMode[i].CW   := '';
-          BandMode[i].SSB  := '';
-          BandMode[i].DIGI := ''
+          BandMode[i].CW   := space;
+          BandMode[i].SSB  := space;
+          BandMode[i].DIGI := space;
         end;
         inc(y);
         OldPrefix := Prefix;
@@ -767,7 +838,7 @@ begin
                        begin
                          if QSLR = 'Q' then
                            BandMode[BandPos].SSB := 'Q'
-                         else if BandMode[BandPos].SSB = '' then
+                         else if BandMode[BandPos].SSB = space then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -775,13 +846,13 @@ begin
                          begin
                            if QSLR = 'Q' then
                              BandMode[BandPos].CW := 'Q'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
                            if QSLR = 'Q' then
                              BandMode[BandPos].DIGI := 'Q'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
@@ -793,7 +864,7 @@ begin
                            BandMode[BandPos].SSB := 'Q'
                          else if (LoTW = 'L') then
                            BandMode[BandPos].SSB := 'L'
-                         else if (BandMode[BandPos].SSB = '') then
+                         else if (BandMode[BandPos].SSB = space) then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -803,7 +874,7 @@ begin
                              BandMode[BandPos].CW := 'Q'
                            else if (LoTW='L') then
                              BandMode[BandPos].CW := 'L'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
@@ -811,7 +882,7 @@ begin
                              BandMode[BandPos].DIGI := 'Q'
                            else if (LoTW='L') then
                              BandMode[BandPos].DIGI := 'L'
-                           else if BandMode[BandPos].DIGI = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
@@ -821,7 +892,7 @@ begin
                        begin
                          if LoTW = 'L' then
                            BandMode[BandPos].SSB := 'L'
-                         else if BandMode[BandPos].SSB = '' then
+                         else if BandMode[BandPos].SSB = space then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -829,13 +900,13 @@ begin
                          begin
                            if LoTW = 'L' then
                              BandMode[BandPos].CW := 'L'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
                            if LoTW = 'L' then
                              BandMode[BandPos].DIGI := 'L'
-                           else if BandMode[BandPos].DIGI = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
@@ -847,7 +918,7 @@ begin
                            BandMode[BandPos].SSB := 'Q'
                          else if (eQSL = 'E') then
                            BandMode[BandPos].SSB := 'E'
-                         else if (BandMode[BandPos].SSB = '') then
+                         else if (BandMode[BandPos].SSB = space) then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -857,7 +928,7 @@ begin
                              BandMode[BandPos].CW := 'Q'
                            else if (eQSL='E') then
                              BandMode[BandPos].CW := 'E'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
@@ -865,7 +936,7 @@ begin
                              BandMode[BandPos].DIGI := 'Q'
                            else if (eQSL='E') then
                              BandMode[BandPos].DIGI := 'E'
-                           else if BandMode[BandPos].DIGI = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
@@ -877,7 +948,7 @@ begin
                            BandMode[BandPos].SSB := 'L'
                          else if (eQSL = 'E') then
                            BandMode[BandPos].SSB := 'E'
-                         else if (BandMode[BandPos].SSB = '') then
+                         else if (BandMode[BandPos].SSB = space) then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -887,7 +958,7 @@ begin
                              BandMode[BandPos].CW := 'L'
                            else if (eQSL='E') then
                              BandMode[BandPos].CW := 'E'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
@@ -895,7 +966,7 @@ begin
                              BandMode[BandPos].DIGI := 'L'
                            else if (eQSL='E') then
                              BandMode[BandPos].DIGI := 'E'
-                           else if BandMode[BandPos].DIGI = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
@@ -905,7 +976,7 @@ begin
                        begin
                          if eQSL = 'E' then
                            BandMode[BandPos].SSB := 'E'
-                         else if BandMode[BandPos].SSB = '' then
+                         else if BandMode[BandPos].SSB = space then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -913,13 +984,13 @@ begin
                          begin
                            if eQSL = 'E' then
                              BandMode[BandPos].CW := 'E'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
                            if eQSL = 'E' then
                              BandMode[BandPos].DIGI := 'E'
-                           else if BandMode[BandPos].DIGI = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
@@ -933,7 +1004,7 @@ begin
                            BandMode[BandPos].SSB := 'L'
                          else if (eQSL = 'E') then
                            BandMode[BandPos].SSB := 'E'
-                         else if (BandMode[BandPos].SSB = '') then
+                         else if (BandMode[BandPos].SSB = space) then
                            BandMode[BandPos].SSB := 'X'
                        end
                        else begin
@@ -945,7 +1016,7 @@ begin
                              BandMode[BandPos].CW := 'L'
                            else if (eQSL='E') then
                              BandMode[BandPos].CW := 'E'
-                           else if BandMode[BandPos].CW = '' then
+                           else if BandMode[BandPos].CW = space then
                              BandMode[BandPos].CW := 'X'
                          end
                          else begin
@@ -955,7 +1026,7 @@ begin
                              BandMode[BandPos].DIGI := 'L'
                            else if (eQSL='E') then
                              BandMode[BandPos].DIGI := 'E'
-                           else if BandMode[BandPos].DIGI = '' then
+                           else if BandMode[BandPos].DIGI = space then
                              BandMode[BandPos].DIGI := 'X'
                          end
                        end
