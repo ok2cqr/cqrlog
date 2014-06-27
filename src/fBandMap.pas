@@ -405,6 +405,7 @@ begin
     try
       When := now;
       EnterCriticalSection(frmBandMap.BandMapCrit);
+
       for i:=1 to MAX_ITEMS do
       begin
         if frmBandMap.BandMapItems[i].Freq = 0 then

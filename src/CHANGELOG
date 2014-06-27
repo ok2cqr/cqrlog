@@ -5,15 +5,17 @@ Legend:
 --------------------
 
 1.8.0
+  + Design of gridlists can be changed in Preferences/Fonts/Gridlist settings (Tom, DL7BJ) 
   + after click to "Upload all" qso to online logs, info about disabled services is not shown  
   + added new optimized MySQL configuration file (log should be faster and won't show error about missing tables)
-  + additional date formats for QSL label printing added (Tom, DL7JB)
+  + additional date formats for QSL label printing added (Tom, DL7BJ)
   + alert for for callsign on specific mode and band added
   - program crashed with error about Exceptions.tbl when started for the first time 
   - Shift+F12 didn't cancel the filtr - fixed
   - "Filter is USED!" info wasn't canceled after click to Sort button (filter was disabled)
   - reading signal strength from RBN spots fixed
   - RBN default port is 7000 not 7300 - fixed
+  - Correct a bug in DXCC statistics in mode 'Paper QSL only' (Tom, DL7BJ) 
 
 1.7.4
   + F keys to CW type window added
@@ -44,7 +46,7 @@ Legend:
   - DXCC entity window didn't show when compiled in Debian Sid and Ubuntu 13.10 - fixed
   - when CQRLOG was run for the first time, two mysqld proccesses opened the same database - fixed
   - upload to ClubLog didn't work after enter QSO and delete - fixed (big thanks to Pawel, SQ5LTL)
-  - TRX control window's layout was broken with some font sizes - fixed
+  -
 
 1.7.1
   + "When TRX control is not active, use frequency and mode from NewQSO window" option to Preferences->Band map added
