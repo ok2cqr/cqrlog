@@ -15,6 +15,7 @@ Legend:
   - reading signal strength from RBN spots fixed
   - RBN default port is 7000 not 7300 - fixed
   - program crashed after close - fixed
+  - program crashed after click to Cancel in DB connection window
 
 1.7.4
   + F keys to CW type window added

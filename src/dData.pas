@@ -658,6 +658,9 @@ begin
     l.Free
   end;
 
+  FreeAndNil(cqrini);  //ini.SetStrings doesn't work :(
+  cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg');
+
   trQ.StartTransaction;
   Q.SQL.Text := 'truncate table dxcc_id';
   Q.ExecSQL;
@@ -687,12 +690,6 @@ begin
     Q.Close();
     trQ.Rollback
   end;
-
-
-  if Assigned(cqrini) then
-    cqrini.Free;
-
-  cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg');
 
   dmUtils.TimeOffset     := cqrini.ReadFloat('Program','offset',0);
   dmUtils.GrayLineOffset := cqrini.ReadFloat('Program','GraylineOffset',0);
@@ -1143,6 +1140,8 @@ begin
   LoadLoTWCalls;
   LoadeQSLCalls;
   LoadMasterSCP;
+
+  cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg');
 
   //Mysql still may be running, so we must close it first
   KillMySQL;
