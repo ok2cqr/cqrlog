@@ -1193,6 +1193,9 @@ begin
     thqsl.Start
   end;
 
+  dmUtils.InsertQSL_S(cmbQSL_S);
+  dmUtils.InsertQSL_R(cmbQSL_R);
+
   frmBandMap.FirstInterval   := cqrini.ReadInteger('BandMap', 'FirstAging', 5)*60;
   frmBandMap.SecondInterval  := cqrini.ReadInteger('BandMap', 'SecondAging', 8)*60;
   frmBandMap.DeleteAfter     := cqrini.ReadInteger('BandMap', 'Disep', 12)*60;
@@ -1360,7 +1363,10 @@ begin
   try
     ShowModal;
     if ModalResult <> mrOK then
-      Application.Terminate
+    begin
+      Application.Terminate;
+      exit
+    end
     else
       frmNewQSO.Caption := dmUtils.GetNewQSOCaption('New QSO')
   finally
@@ -1854,8 +1860,6 @@ procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
   CWint := nil;
   tmrRadio.Enabled := False;
-  dmUtils.InsertQSL_S(cmbQSL_S);
-  dmUtils.InsertQSL_R(cmbQSL_R);
   fViewQSO := False;
   fEditQSO := False;
   FromDXC  := False;
