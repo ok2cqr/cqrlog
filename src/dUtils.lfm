@@ -18,7 +18,7 @@ object dmUtils: TdmUtils
     left = 72
     top = 80
   end
-  object Datasource1: TDatasource
+  object Datasource1: TDataSource
     left = 80
     top = 176
   end

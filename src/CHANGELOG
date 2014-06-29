@@ -10,12 +10,16 @@ Legend:
   + added new optimized MySQL configuration file (log should be faster and won't show error about missing tables)
   + additional date formats for QSL label printing added (Tom, DL7BJ)
   + alert for for callsign on specific mode and band added
+  + %h CW macro added (sends GM/GA/GE calculated from wkd station local time)
+  + %rs CW macro added (sends RST_S and replace 9 with N)
   - program crashed with error about Exceptions.tbl when started for the first time 
   - Shift+F12 didn't cancel the filtr - fixed
   - "Filter is USED!" info wasn't canceled after click to Sort button (filter was disabled)
   - reading signal strength from RBN spots fixed
   - RBN default port is 7000 not 7300 - fixed
   - Correct a bug in DXCC statistics in mode 'Paper QSL only' (Tom, DL7BJ) 
+  - program crashed after close - fixed
+  - program crashed after click to Cancel in DB connection window
 
 1.7.4
   + F keys to CW type window added

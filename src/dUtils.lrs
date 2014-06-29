@@ -7,5 +7,5 @@ LazarusResources.Add('TdmUtils','FORMDATA',[
   +#19'file:///home/ok2cqr'#12'AutoRegister'#9#13'KeywordPrefix'#6#5'help/'#4'l'
   +'eft'#2'J'#3'top'#2'('#0#0#22'THTMLBrowserHelpViewer'#10'HelpViewer'#13'Brow'
   +'serParams'#6#2'%s'#12'AutoRegister'#9#4'left'#2'H'#3'top'#2'P'#0#0#11'TData'
-  +'source'#11'Datasource1'#4'left'#2'P'#3'top'#3#176#0#0#0#0
+  +'Source'#11'Datasource1'#4'left'#2'P'#3'top'#3#176#0#0#0#0
 ]);

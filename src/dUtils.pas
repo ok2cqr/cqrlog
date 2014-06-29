@@ -152,91 +152,89 @@ type
     procedure ShowQSLWithExtViewer(Call: string);
     procedure ShowQRZInBrowser(call: string);
     procedure LoadBandsSettings;
-    procedure FillBandCombo(cmb: TComboBox);
-    procedure ShowHamQTHInBrowser(call: string);
-    procedure SortArray(l, r: integer);
-    procedure OpenInApp(what: string);
+    procedure FillBandCombo(cmb : TComboBox);
+    procedure ShowHamQTHInBrowser(call : String);
+    procedure SortArray(l,r : Integer);
+    procedure OpenInApp(what : String);
 
-    function StrToDateFormat(sDate: string): TDateTime;
-    function DateToSQLIteDate(date: TDateTime): string;
-    function GetBandFromFreq(MHz: string): string;
-    function LetterFromMode(mode: string): string;
-    function DateToFilterDate(date: TDateTime): string;
-    function ADIFDateToDate(date: string): string;
-    function IsModeOK(mode: string): boolean;
-    function IsTimeOK(time: string): boolean;
-    function Explode(const cSeparator, vString: string): TExplodeArray;
-    function MyDateToStr(Date: TDateTime): string;
-    function MyStrToDate(date: string): TDateTime;
-    function GetDateTime(delta: currency): TDateTime;
-    function IsLocOK(loc: string): boolean;
-    function CompleteLoc(loc: string): string;
-    function HisDateTime(pfx: string): string;
-    function IsDateOK(date: string): boolean;
-    function IsAdifOK(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r, iota,
-      itu, waz, loc, my_loc, band: string; var error: string): boolean;
-    function IsFreqOK(freq: string): boolean;
-    function FreqFromBand(band, mode: string): string;
-    function RemoveSpaces(S: string): string;
-    function StripHTML(S: string): string;
-    function ExtractQTH(qth: string): string;
-    function GetModeFromFreq(freq: string): string;
-    function StringToADIF(Text: string): string;
-    function MyTrim(Text: string): string;
-    function ReplaceSpace(txt: string): string;
-    function ReplaceEnter(txt: string): string;
-    function MyStrToFloat(num: string): extended;
-    function ExtractQSLMgr(Text: string): string;
-    function ExtractPower(power: string): string;
-    function ExtractFontSize(sFont: string): integer;
-    function ExtractCallsign(call: string): string;
-    function GetGreetings(time: string): string;
-    function IsIOTAOK(iota: string): boolean;
-    function SetSize(Text: string; Len: integer): string;
-    function SetSizeLeft(Text: string; Len: integer): string;
-    function MonthToStr(mon: integer): string;
-    function GetIDCall(callsign: string): string;
-    function ExtractIOTAPrefix(call: string; date: TDateTime): string;
-    function IncludesNum(Text: string): boolean;
-    function GetRigError(err: integer): string;
-    function IncColor(AColor: TColor; AQuantity: byte): TColor;
-    function IsItIOTA(spot: string): boolean;
-    function GetXplanetCommand: string;
-    function GetLastUpgradeDate: TDateTime;
-    function UnTarFiles(FileName, TargetDir: string): boolean;
-    function ExtractZipCode(qth: string; Position: integer): string;
-    function GetLabelBand(freq: string): string;
-    function GetAdifBandFromFreq(MHz: string): string;
-    function GetCWMessage(Key, call, rst_s, HisName, Text: string;
-      QSONR: string = ''): string;
-    function RigGetcmd(r: string): string;
-    function GetLastQSLUpgradeDate: TDateTime;
-    function CallTrim(call: string): string;
-    function GetQSLVia(Text: string): string;
-    function IsQSLViaValid(Text: string): boolean;
-    function GetShortState(state: string): string;
-    function GetCallAttachDir(call: string): string;
-    function GetApplicationName(FileExt: string): string;
-    function FindInMailCap(mime: string): string;
-    function GetHomeDirectory: string;
-    function DateInRightFormat(date: TDateTime): string;
-    function QSLFrontImageExists(fCall: string): string;
-    function QSLBackImageExists(fCall: string): string;
-    function GetCallForAttach(call: string): string;
-    function IsValidFileName(const fileName: string): boolean;
-    function GetBandPos(band: string): integer;
-    function GetNewQSOCaption(capt: string): string;
-    function GetCallBookData(call: string;
-      var nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg: string): boolean;
-    function DateInSOTAFormat(date: TDateTime): string;
-    function GetLocalUTCDelta: double;
-    function GetRadioRigCtldCommandLine(radio: word): string;
-    function GetRotorRotCtldCommandLine(rotor: word): string;
-    function IgnoreFreq(kHz: string): boolean;
-    function HTMLEncode(const Data: string): string;
-    function KmToMiles(qra: double): double;
-    function GetDescKeyFromCode(key: word): string;
-  end;
+    function  StrToDateFormat(sDate : String) : TDateTime;
+    function  DateToSQLIteDate(date : TDateTime) : String;
+    function  GetBandFromFreq(MHz : string): String;
+    function  LetterFromMode(mode : String) : String;
+    function  DateToFilterDate(date : TDateTime) : String;
+    function  ADIFDateToDate(date : String) : String;
+    function  IsModeOK(mode : String) : Boolean;
+    function  IsTimeOK(time : String) : Boolean;
+    function  Explode(const cSeparator, vString: String): TExplodeArray;
+    function  MyDateToStr(Date : TDateTime) : String;
+    function  MyStrToDate(date : String) : TDateTime;
+    function  GetDateTime(delta : Currency) : TDateTime;
+    function  IsLocOK(loc : String) : Boolean;
+    function  CompleteLoc(loc : String) : String;
+    function  HisDateTime(pfx : String) : String;
+    function  IsDateOK(date : String) : Boolean;
+    function  IsAdifOK(qsodate,time_on,time_off,call,freq,mode,rst_s,rst_r,iota,
+                       itu,waz,loc,my_loc,band : String; var error : String) : Boolean;
+    function  IsFreqOK(freq : String) : boolean;
+    function  FreqFromBand(band,mode : String) : String;
+    function  RemoveSpaces(S : String) : String;
+    function  StripHTML(S: string): string;
+    function  ExtractQTH( qth : String) : String;
+    function  GetModeFromFreq(freq : String) : String;
+    function  StringToADIF(text : String) : String;
+    function  MyTrim(text : String) : String;
+    function  ReplaceSpace(txt : String) : String;
+    function  ReplaceEnter(txt : String) : String;
+    function  MyStrToFloat(num : String) : Extended;
+    function  ExtractQSLMgr(text : String) : String;
+    function  ExtractPower(power : String) : String;
+    function  ExtractFontSize(sFont : String) : Integer;
+    function  ExtractCallsign(call : String) : String;
+    function  GetGreetings(time : String) : String;
+    function  IsIOTAOK(iota : String) : Boolean;
+    function  SetSize(text : String;Len : Integer) : String;
+    function  SetSizeLeft(text : String;Len : Integer) : String;
+    function  MonthToStr(mon : Integer) : String;
+    function  GetIDCall(callsign : String) : String;
+    function  ExtractIOTAPrefix(call : String; date : TDateTime) : String;
+    function  IncludesNum(text : String) : Boolean;
+    function  GetRigError(err : Integer) : String;
+    function  IncColor(AColor: TColor; AQuantity: Byte) : TColor;
+    function  IsItIOTA(spot : String) : Boolean;
+    function  GetXplanetCommand : String;
+    function  GetLastUpgradeDate : TDateTime;
+    function  UnTarFiles(FileName,TargetDir : String) : Boolean;
+    function  ExtractZipCode(qth : String; Position : Integer) : String;
+    function  GetLabelBand(freq : String) : String;
+    function  GetAdifBandFromFreq(MHz : string): String;
+    function  GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+    function  RigGetcmd(r : String): String;
+    function  GetLastQSLUpgradeDate : TDateTime;
+    function  CallTrim(call : String) : String;
+    function  GetQSLVia(text : String) : String;
+    function  IsQSLViaValid(text : String) : Boolean;
+    function  GetShortState(state : String) : String;
+    function  GetCallAttachDir(call : String) : String;
+    function  GetApplicationName(FileExt : String) : String;
+    function  FindInMailCap(mime : String) : String;
+    function  GetHomeDirectory : String;
+    function  DateInRightFormat(date : TDateTime) : String;
+    function  QSLFrontImageExists(fCall : String) : String;
+    function  QSLBackImageExists(fCall : String) : String;
+    function  GetCallForAttach(call : String) : String;
+    function  IsValidFileName(const fileName : string) : boolean;
+    function  GetBandPos(band : String) : Integer;
+    function  GetNewQSOCaption(capt : String) : String;
+    function  GetCallBookData(call : String; var nick,qth,address,zip,grid,state,county,qsl,iota,ErrMsg : String) : Boolean;
+    function  DateInSOTAFormat(date : TDateTime) : String;
+    function  GetLocalUTCDelta : Double;
+    function  GetRadioRigCtldCommandLine(radio : Word) : String;
+    function  GetRotorRotCtldCommandLine(rotor : Word) : String;
+    function  IgnoreFreq(kHz : String) : Boolean;
+    function  HTMLEncode(const Data: string): string;
+    function  KmToMiles(qra : Double) : Double;
+    function  GetDescKeyFromCode(key : Word) : String;
+end;
 
 var
   dmUtils: TdmUtils;
@@ -2577,8 +2575,7 @@ begin
   Result := LowerCase(GetBandFromFreq(freq));
 end;
 
-function TdmUtils.GetCWMessage(Key, call, rst_s, HisName, Text: string;
-  QSONR: string = ''): string;
+function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
 {
  %mc - my callsign
  %mn - my name
@@ -2586,17 +2583,21 @@ function TdmUtils.GetCWMessage(Key, call, rst_s, HisName, Text: string;
  %nr - qso number
 
  %r  - rst send
+ %rs - rst send sends N instead of 9
  %n  - name
  %c  - callsign
+
+ %h - greeting GM/GA/GE calculated from the station location time
 
 if text is not empty and we didn't send any key (F1 etc.) we can
 use this function to prepare every text wee need to send
 }
 
 var
-  mycall: string = '';
-  myname: string = '';
-  myqth: string = '';
+  mycall : String = '';
+  myname : String = '';
+  myqth  : String = '';
+  rst_sh : String = '';
 begin
   mycall := cqrini.ReadString('Station', 'Call', '');
   myname := cqrini.ReadString('Station', 'Name', '');
@@ -2604,49 +2605,53 @@ begin
   if key <> '' then
     Result := LowerCase(cqrini.ReadString('CW', key, ''))
   else
-    Result := Text;
-  Result := StringReplace(Result, '%mc', mycall, [rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result, '%mn', myname, [rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result, '%mq', myqth, [rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result, '%nr', QSONR, [rfReplaceAll, rfIgnoreCase]);
+    Result := text;
 
-  Result := StringReplace(Result, '%r', rst_s, [rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result, '%n', HisName, [rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result, '%c', call, [rfReplaceAll, rfIgnoreCase]);
-  if dmData.DebugLevel >= 1 then
-    Writeln('Sending:', Result);
+  rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
+
+  Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%nr',QSONR,[rfReplaceAll, rfIgnoreCase]);
+
+  Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
+
+  if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
 end;
 
-function TdmUtils.RigGetcmd(r: string): string;
+function TdmUtils.RigGetcmd(r : String) : String;
 var
-  cmd: string = '';
-  rigid: string = '';
-  device: string = '';
-  port: string = '';
-  speed: string = '';
-  parity: integer = 0;
-  databits: integer = 0;
-  stopbits: integer = 0;
-  handshake: integer = 0;
-  RTS: boolean = False;
-  DTR: boolean = False;
-  civadr: string = '';
+  cmd : String = '';
+  rigid : String ='';
+  device : String = '';
+  port : String = '';
+  speed : String = '';
+  parity : Integer = 0;
+  databits : Integer = 0;
+  stopbits : Integer = 0;
+  handshake : Integer = 0;
+  RTS : Boolean = False;
+  DTR : Boolean = False;
+  civadr : String = '';
 begin
-  if r = '' then
-    exit;
-  Result := '';
-  civadr := cqrini.ReadString('TRX' + r, 'civ', '');
-  speed := cqrini.ReadString('TRX' + r, 'Speed', '4800');
-  DataBits := cqrini.ReadInteger('TRX' + r, 'DataBits', 8);
-  stopbits := cqrini.ReadInteger('TRX' + r, 'StopBits', 1);
-  handshake := cqrini.ReadInteger('TRX' + r, 'Handshake', 0);
-  parity := cqrini.ReadInteger('TRX' + r, 'Parity', 0);
-  DTR := cqrini.ReadInteger('TRX' + r, 'dtr', 0) > 0;
-  RTS := cqrini.ReadInteger('TRX' + r, 'rts', 0) > 0;
-  rigid := cqrini.ReadString('TRX' + r, 'model', '');
-  device := cqrini.ReadString('TRX' + r, 'device', '');
+  if r = '' then exit;
+  result := '';
+  civadr    := cqrini.ReadString('TRX'+r,'civ','');
+  speed     := cqrini.ReadString('TRX'+r,'Speed','4800');
+  DataBits  := cqrini.ReadInteger('TRX'+r,'DataBits',8);
+  stopbits  := cqrini.ReadInteger('TRX'+r,'StopBits',1);
+  handshake := cqrini.ReadInteger('TRX'+r,'Handshake',0);
+  parity    := cqrini.ReadInteger('TRX'+r,'Parity',0);
+  DTR       := cqrini.ReadInteger('TRX'+r,'dtr',0) > 0;
+  RTS       := cqrini.ReadInteger('TRX'+r,'rts',0) > 0;
+  rigid     := cqrini.ReadString('TRX'+r,'model','');
+  device    := cqrini.ReadString('TRX'+r,'device','');
 
-  if not cqrini.ReadBool('TRX' + r, 'Run', False) then
+  if not cqrini.ReadBool('TRX'+r,'Run',False) then
     exit;
 
   if rigid = '' then
