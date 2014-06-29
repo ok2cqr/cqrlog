@@ -3891,7 +3891,7 @@ begin
     if (cmbMode.Text='SSB') then
       RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
-      CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,''));
+      CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,lblGreeting.Caption,''));
     key := 0
   end;
 

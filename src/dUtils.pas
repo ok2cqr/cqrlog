@@ -194,7 +194,7 @@ type
     function  ExtractZipCode(qth : String; Position : Integer) : String;
     function  GetLabelBand(freq : String) : String;
     function  GetAdifBandFromFreq(MHz : string): String;
-    function  GetCWMessage(Key,call,rst_s,HisName,text : String; QSONR : String = '') : String;
+    function  GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
     function  CallTrim(call : String) : String;
@@ -2445,7 +2445,7 @@ begin
   Result := LowerCase(GetBandFromFreq(freq))
 end;
 
-function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,text : String; QSONR : String = '') : String;
+function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
 {
  %mc - my callsign
  %mn - my name
@@ -2455,6 +2455,8 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,text : String; QSONR : Str
  %r  - rst send
  %n  - name
  %c  - callsign
+
+ %h - greeting GM/GA/GE calculated from the station location time
 
 if text is not empty and we didn't send any key (F1 etc.) we can
 use this function to prepare every text wee need to send
@@ -2480,6 +2482,7 @@ begin
   Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
   if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
 end;
 
