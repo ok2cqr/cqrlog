@@ -1,7 +1,7 @@
 object frmQSLExpPref: TfrmQSLExpPref
-  Left = 344
+  Left = 489
   Height = 383
-  Top = 518
+  Top = 323
   Width = 517
   Caption = 'Choose fields for export'
   ClientHeight = 383
@@ -86,8 +86,8 @@ object frmQSLExpPref: TfrmQSLExpPref
       Left = 14
       Height = 26
       Top = 235
-      Width = 116
-      Caption = 'RST Received'
+      Width = 84
+      Caption = 'RST Rec.'
       TabOrder = 7
     end
     object chkName: TCheckBox
@@ -205,6 +205,7 @@ object frmQSLExpPref: TfrmQSLExpPref
       Top = 6
       Width = 232
       ItemHeight = 0
+      ItemIndex = 0
       Items.Strings = (
         'yyyy-mm-dd'
         'yyyy-mmm-dd'
@@ -219,6 +220,30 @@ object frmQSLExpPref: TfrmQSLExpPref
       ShowHint = True
       TabOrder = 21
       Text = 'yyyy-mm-dd'
+    end
+    object tgSplitRST_S: TToggleBox
+      Left = 102
+      Height = 20
+      Hint = 'Split RST in three fields.'
+      Top = 206
+      Width = 50
+      Caption = 'Split'
+      OnClick = tgSplit_Click
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 22
+    end
+    object tgSplitRST_R: TToggleBox
+      Left = 102
+      Height = 20
+      Hint = 'Split RST in three fields.'
+      Top = 238
+      Width = 50
+      Caption = 'Split'
+      OnClick = tgSplit_Click
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 23
     end
   end
   object btnOK: TButton

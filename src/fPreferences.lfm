@@ -4182,7 +4182,7 @@ object frmPreferences: TfrmPreferences
         object chkgridsmallrows: TCheckBox
           Left = 12
           Height = 26
-          Hint = 'Set the row height to 8 pixel + font size'
+          Hint = 'Set the row height to 8 pixel + font size'#10'(Not with default settings checked!)'
           Top = 31
           Width = 101
           Caption = 'Small rows'
