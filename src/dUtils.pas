@@ -2453,6 +2453,7 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; Q
  %nr - qso number
  
  %r  - rst send
+ %rs - rst send sends N instead of 9
  %n  - name
  %c  - callsign
 
@@ -2466,6 +2467,7 @@ var
   mycall : String = '';
   myname : String = '';
   myqth  : String = '';
+  rst_sh : String = '';
 begin
   mycall := cqrini.ReadString('Station','Call','');
   myname := cqrini.ReadString('Station','Name','');
@@ -2474,15 +2476,20 @@ begin
     Result := LowerCase(cqrini.ReadString('CW',key,''))
   else
     Result := text;
+
+  rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
+
   Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%nr',QSONR,[rfReplaceAll, rfIgnoreCase]);
 
+  Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
+
   if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
 end;
 
