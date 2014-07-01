@@ -1,31 +1,31 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmQSLExpPref','FORMDATA',[
-  'TPF0'#14'TfrmQSLExpPref'#13'frmQSLExpPref'#4'Left'#3'X'#1#6'Height'#3#127#1#3
-  +'Top'#3#6#2#5'Width'#3#5#2#7'Caption'#6#24'Choose fields for export'#12'Clie'
-  +'ntHeight'#3#127#1#11'ClientWidth'#3#5#2#6'OnShow'#7#8'FormShow'#10'LCLVersi'
-  +'on'#6#8'1.0.10.0'#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#8#6'Height'#3'p'#1#3
-  +'Top'#2#8#5'Width'#3#160#1#12'ClientHeight'#3'l'#1#11'ClientWidth'#3#156#1#8
-  +'TabOrder'#2#0#0#9'TCheckBox'#9'chkTimeOn'#4'Left'#2#14#6'Height'#2#26#3'Top'
-  +#2'+'#5'Width'#2'Q'#7'Caption'#6#7'Time on'#7'Checked'#9#5'State'#7#9'cbChec'
-  +'ked'#8'TabOrder'#2#0#0#0#9'TCheckBox'#7'chkDate'#4'Left'#2#14#6'Height'#2#26
-  +#3'Top'#2#12#5'Width'#2'<'#7'Caption'#6#4'Date'#7'Checked'#9#5'State'#7#9'cb'
-  +'Checked'#8'TabOrder'#2#1#0#0#9'TCheckBox'#10'chkTimeOff'#4'Left'#2#14#6'Hei'
-  +'ght'#2#26#3'Top'#2'K'#5'Width'#2'T'#7'Caption'#6#8'Time off'#8'TabOrder'#2#2
-  +#0#0#9'TCheckBox'#11'chkCallSign'#4'Left'#2#14#6'Height'#2#26#3'Top'#2'k'#5
-  +'Width'#2'Q'#7'Caption'#6#8'CallSign'#7'Checked'#9#5'State'#7#9'cbChecked'#8
-  +'TabOrder'#2#3#0#0#9'TCheckBox'#7'chkMode'#4'Left'#2#14#6'Height'#2#26#3'Top'
-  +#3#139#0#5'Width'#2'C'#7'Caption'#6#4'Mode'#7'Checked'#9#5'State'#7#9'cbChec'
-  +'ked'#8'TabOrder'#2#4#0#0#9'TCheckBox'#7'chkFreq'#4'Left'#2#14#6'Height'#2#26
-  +#3'Top'#3#171#0#5'Width'#2';'#7'Caption'#6#4'Freq'#8'TabOrder'#2#5#0#0#9'TCh'
-  +'eckBox'#8'chkRST_S'#4'Left'#2#14#6'Height'#2#26#3'Top'#3#203#0#5'Width'#2'U'
-  +#7'Caption'#6#8'RST sent'#7'Checked'#9#5'State'#7#9'cbChecked'#8'TabOrder'#2
-  +#6#0#0#9'TCheckBox'#8'chkRST_R'#4'Left'#2#14#6'Height'#2#26#3'Top'#3#235#0#5
-  +'Width'#2't'#7'Caption'#6#12'RST Received'#8'TabOrder'#2#7#0#0#9'TCheckBox'#7
-  +'chkName'#4'Left'#2#14#6'Height'#2#26#3'Top'#3#11#1#5'Width'#2'D'#7'Caption'
-  +#6#4'Name'#8'TabOrder'#2#8#0#0#9'TCheckBox'#6'chkQTH'#4'Left'#2#14#6'Height'
-  +#2#26#3'Top'#3'+'#1#5'Width'#2'9'#7'Caption'#6#3'QTH'#8'TabOrder'#2#9#0#0#9
-  +'TCheckBox'#8'chkQSL_S'#4'Left'#3#166#0#6'Height'#2#26#3'Top'#2'+'#5'Width'#2
+  'TPF0'#14'TfrmQSLExpPref'#13'frmQSLExpPref'#4'Left'#3#233#1#6'Height'#3#127#1
+  +#3'Top'#3'C'#1#5'Width'#3#5#2#7'Caption'#6#24'Choose fields for export'#12'C'
+  +'lientHeight'#3#127#1#11'ClientWidth'#3#5#2#6'OnShow'#7#8'FormShow'#10'LCLVe'
+  +'rsion'#6#8'1.0.10.0'#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#8#6'Height'#3'p'
+  +#1#3'Top'#2#8#5'Width'#3#160#1#12'ClientHeight'#3'l'#1#11'ClientWidth'#3#156
+  +#1#8'TabOrder'#2#0#0#9'TCheckBox'#9'chkTimeOn'#4'Left'#2#14#6'Height'#2#26#3
+  +'Top'#2'+'#5'Width'#2'Q'#7'Caption'#6#7'Time on'#7'Checked'#9#5'State'#7#9'c'
+  +'bChecked'#8'TabOrder'#2#0#0#0#9'TCheckBox'#7'chkDate'#4'Left'#2#14#6'Height'
+  +#2#26#3'Top'#2#12#5'Width'#2'<'#7'Caption'#6#4'Date'#7'Checked'#9#5'State'#7
+  +#9'cbChecked'#8'TabOrder'#2#1#0#0#9'TCheckBox'#10'chkTimeOff'#4'Left'#2#14#6
+  +'Height'#2#26#3'Top'#2'K'#5'Width'#2'T'#7'Caption'#6#8'Time off'#8'TabOrder'
+  +#2#2#0#0#9'TCheckBox'#11'chkCallSign'#4'Left'#2#14#6'Height'#2#26#3'Top'#2'k'
+  +#5'Width'#2'Q'#7'Caption'#6#8'CallSign'#7'Checked'#9#5'State'#7#9'cbChecked'
+  +#8'TabOrder'#2#3#0#0#9'TCheckBox'#7'chkMode'#4'Left'#2#14#6'Height'#2#26#3'T'
+  +'op'#3#139#0#5'Width'#2'C'#7'Caption'#6#4'Mode'#7'Checked'#9#5'State'#7#9'cb'
+  +'Checked'#8'TabOrder'#2#4#0#0#9'TCheckBox'#7'chkFreq'#4'Left'#2#14#6'Height'
+  +#2#26#3'Top'#3#171#0#5'Width'#2';'#7'Caption'#6#4'Freq'#8'TabOrder'#2#5#0#0#9
+  +'TCheckBox'#8'chkRST_S'#4'Left'#2#14#6'Height'#2#26#3'Top'#3#203#0#5'Width'#2
+  +'U'#7'Caption'#6#8'RST sent'#7'Checked'#9#5'State'#7#9'cbChecked'#8'TabOrder'
+  +#2#6#0#0#9'TCheckBox'#8'chkRST_R'#4'Left'#2#14#6'Height'#2#26#3'Top'#3#235#0
+  +#5'Width'#2'T'#7'Caption'#6#8'RST Rec.'#8'TabOrder'#2#7#0#0#9'TCheckBox'#7'c'
+  +'hkName'#4'Left'#2#14#6'Height'#2#26#3'Top'#3#11#1#5'Width'#2'D'#7'Caption'#6
+  +#4'Name'#8'TabOrder'#2#8#0#0#9'TCheckBox'#6'chkQTH'#4'Left'#2#14#6'Height'#2
+  +#26#3'Top'#3'+'#1#5'Width'#2'9'#7'Caption'#6#3'QTH'#8'TabOrder'#2#9#0#0#9'TC'
+  +'heckBox'#8'chkQSL_S'#4'Left'#3#166#0#6'Height'#2#26#3'Top'#2'+'#5'Width'#2
   +'W'#7'Caption'#6#8'QSL sent'#8'TabOrder'#2#10#0#0#9'TCheckBox'#10'chkQSL_VIA'
   +#4'Left'#3#166#0#6'Height'#2#26#3'Top'#2'k'#5'Width'#2'u'#7'Caption'#6#11'QS'
   +'L manager'#7'Checked'#9#5'State'#7#9'cbChecked'#8'TabOrder'#2#11#0#0#9'TChe'
@@ -47,12 +47,19 @@ LazarusResources.Add('TfrmQSLExpPref','FORMDATA',[
   +#1#5'Width'#2'>'#7'Caption'#6#4'Band'#7'Checked'#9#5'State'#7#9'cbChecked'#8
   +'TabOrder'#2#20#0#0#9'TComboBox'#13'cbxDateFormat'#4'Left'#3#166#0#6'Height'
   +#2#31#4'Hint'#6'%Change the format of date  for export'#3'Top'#2#6#5'Width'#3
-  +#232#0#10'ItemHeight'#2#0#13'Items.Strings'#1#6#10'yyyy-mm-dd'#6#11'yyyy-mmm'
-  +'-dd'#6#10'dd.mm.yyyy'#6#11'dd mmm yyyy'#6#11'dd-mmm-yyyy'#6#10'yyyy/mm/dd'#6
-  +#11'yyyy/mmm/dd'#6#10'mm/dd/yyyy'#0#14'ParentShowHint'#8#8'ShowHint'#9#8'Tab'
-  +'Order'#2#21#4'Text'#6#10'yyyy-mm-dd'#0#0#0#7'TButton'#5'btnOK'#4'Left'#3#176
-  +#1#6'Height'#2#25#3'Top'#2#8#5'Width'#2'K'#7'Caption'#6#2'OK'#7'OnClick'#7#10
-  +'btnOKClick'#8'TabOrder'#2#1#0#0#7'TButton'#9'btnCancel'#4'Left'#3#176#1#6'H'
-  +'eight'#2#25#3'Top'#2'('#5'Width'#2'K'#6'Cancel'#9#7'Caption'#6#6'Cancel'#11
-  +'ModalResult'#2#2#8'TabOrder'#2#2#0#0#0
+  +#232#0#10'ItemHeight'#2#0#9'ItemIndex'#2#0#13'Items.Strings'#1#6#10'yyyy-mm-'
+  +'dd'#6#11'yyyy-mmm-dd'#6#10'dd.mm.yyyy'#6#11'dd mmm yyyy'#6#11'dd-mmm-yyyy'#6
+  +#10'yyyy/mm/dd'#6#11'yyyy/mmm/dd'#6#10'mm/dd/yyyy'#0#14'ParentShowHint'#8#8
+  +'ShowHint'#9#8'TabOrder'#2#21#4'Text'#6#10'yyyy-mm-dd'#0#0#10'TToggleBox'#12
+  +'tgSplitRST_S'#4'Left'#2'f'#6'Height'#2#20#4'Hint'#6#26'Split RST in three f'
+  +'ields.'#3'Top'#3#206#0#5'Width'#2'2'#7'Caption'#6#5'Split'#7'OnClick'#7#13
+  +'tgSplit_Click'#14'ParentShowHint'#8#8'ShowHint'#9#8'TabOrder'#2#22#0#0#10'T'
+  +'ToggleBox'#12'tgSplitRST_R'#4'Left'#2'f'#6'Height'#2#20#4'Hint'#6#26'Split '
+  +'RST in three fields.'#3'Top'#3#238#0#5'Width'#2'2'#7'Caption'#6#5'Split'#7
+  +'OnClick'#7#13'tgSplit_Click'#14'ParentShowHint'#8#8'ShowHint'#9#8'TabOrder'
+  +#2#23#0#0#0#7'TButton'#5'btnOK'#4'Left'#3#176#1#6'Height'#2#25#3'Top'#2#8#5
+  +'Width'#2'K'#7'Caption'#6#2'OK'#7'OnClick'#7#10'btnOKClick'#8'TabOrder'#2#1#0
+  +#0#7'TButton'#9'btnCancel'#4'Left'#3#176#1#6'Height'#2#25#3'Top'#2'('#5'Widt'
+  +'h'#2'K'#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2
+  +#2#0#0#0
 ]);

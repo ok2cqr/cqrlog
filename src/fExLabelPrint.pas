@@ -261,6 +261,7 @@ var
   FieldCount : Integer;
   y          : Integer;
   sep     : Char;
+  rst_tmp : String;
 
   procedure WriteDataToFile;
   begin
@@ -311,9 +312,31 @@ var
     if cqrini.ReadBool('QSLExport', 'Freq', True) then
       Write(f,FloatToStr(dmData.Q.FieldByName('freq').AsFloat),C_SEP);
     if cqrini.ReadBool('QSLExport', 'RST_S', True) then
-      Write(f,dmData.Q.FieldByName('rst_s').AsString,C_SEP);
+    begin
+      if not cqrini.ReadBool('QSLExport','SplitRST_S',False) then
+      begin
+        Write(f,dmData.Q.FieldByName('rst_s').AsString,C_SEP)
+      end
+      else begin
+        rst_tmp := dmData.Q.FieldByName('rst_s').AsString + '   ';
+        Write(f,rst_tmp[1],C_SEP);
+        Write(f,rst_tmp[2],C_SEP);
+        Write(f,rst_tmp[3],C_SEP);
+      end;
+    end;
     if cqrini.ReadBool('QSLExport', 'RST_R', True) then
-      Write(f,dmData.Q.FieldByName('rst_r').AsString,C_SEP);
+    begin
+      if not cqrini.ReadBool('QSLExport','SplitRST_R',False) then
+      begin
+        Write(f,dmData.Q.FieldByName('rst_r').AsString,C_SEP);
+      end
+      else begin
+        rst_tmp := dmData.Q.FieldByName('rst_r').AsString + '   ';
+        Write(f,rst_tmp[1],C_SEP);
+        Write(f,rst_tmp[2],C_SEP);
+        Write(f,rst_tmp[3],C_SEP);
+      end;
+    end;
     if cqrini.ReadBool('QSLExport', 'Name', True) then
       Write(f,dmData.Q.FieldByName('name').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'QTH', True) then

@@ -37,8 +37,11 @@ type
     chkTimeOn : TCheckBox;
     cbxDateFormat: TComboBox;
     GroupBox1 : TGroupBox;
+    tgSplitRST_S: TToggleBox;
+    tgSplitRST_R: TToggleBox;
     procedure btnOKClick(Sender : TObject);
     procedure FormShow(Sender : TObject);
+    procedure tgSplit_Click(Sender: TObject);
   private
     { private declarations }
   public
@@ -64,7 +67,9 @@ begin
   chkMode.Checked     := cqrini.ReadBool('QSLExport', 'Mode', True);
   chkFreq.Checked     := cqrini.ReadBool('QSLExport', 'Freq', False);
   chkRST_S.Checked    := cqrini.ReadBool('QSLExport', 'RST_S', True);
+  tgSplitRST_S.Checked:= cqrini.ReadBool('QSLExport', 'SplitRST_S', False);
   chkRST_R.Checked    := cqrini.ReadBool('QSLExport', 'RST_R', False);
+  tgSplitRST_R.Checked:= cqrini.ReadBool('QSLExport', 'SplitRST_R', False);
   chkName.Checked     := cqrini.ReadBool('QSLExport', 'Name', False);
   chkQTH.Checked      := cqrini.ReadBool('QSLExport', 'QTH', False);
   chkBand.Checked     := cqrini.ReadBool('QSLExport', 'Band', True);
@@ -78,6 +83,19 @@ begin
   chkPower.Checked    := cqrini.ReadBool('QSLExport', 'Power', False);
   chkRemarks.Checked  := cqrini.ReadBool('QSLExport', 'Remarks', True);
   chkQSLMsg.Checked   := cqrini.ReadBool('QSLExport', 'QSLMsg', True);
+  tgSplit_Click(Sender);
+end;
+
+procedure TfrmQSLExpPref.tgSplit_Click(Sender: TObject);
+begin
+  if tgSplitRST_S.Checked = True then
+    tgSplitRST_S.Color := clLime
+  else
+    tgSplitRST_S.Color := clDefault;
+  if tgSplitRST_R.Checked = True then
+    tgSplitRST_R.Color := clLime
+  else
+    tgSplitRST_R.Color := clDefault;
 end;
 
 procedure TfrmQSLExpPref.btnOKClick(Sender : TObject);
@@ -90,7 +108,9 @@ begin
   cqrini.WriteBool('QSLExport', 'Mode', chkMode.Checked);
   cqrini.WriteBool('QSLExport', 'Freq', chkFreq.Checked);
   cqrini.WriteBool('QSLExport', 'RST_S', chkRST_S.Checked);
+  cqrini.WriteBool('QSLExport', 'SplitRST_S',tgSplitRST_S.Checked);
   cqrini.WriteBool('QSLExport', 'RST_R', chkRST_R.Checked);
+  cqrini.WriteBool('QSLExport', 'SplitRST_R',tgSplitRST_R.Checked);
   cqrini.WriteBool('QSLExport', 'Name', chkName.Checked);
   cqrini.WriteBool('QSLExport', 'QTH', chkQTH.Checked);
   cqrini.WriteBool('QSLExport', 'Band', chkBand.Checked);

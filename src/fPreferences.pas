@@ -1398,11 +1398,11 @@ begin
   cqrini.WriteInteger('Fonts', 'gSize', fgSize);
   cqrini.WriteInteger('Fonts', 'qSize', fqSize);
 
-  cqrini.WriteBool('Design','GridGreenBar',chkgridgreenbar.Checked);
-  cqrini.WriteBool('Design','GridBoldTitle',chkgridboldtitle.Checked);
-  cqrini.WriteBool('Design','GridShowHint',chkgridshowhint.Checked);
-  cqrini.WriteBool('Design','GridSmallRows',chkgridsmallrows.Checked);
-  cqrini.WriteBool('Design','GridDotsInsteadSpaces',chkgriddotsinsteadspaces.Checked);
+  cqrini.WriteBool('Fonts','GridGreenBar',chkgridgreenbar.Checked);
+  cqrini.WriteBool('Fonts','GridBoldTitle',chkgridboldtitle.Checked);
+  cqrini.WriteBool('Fonts','GridShowHint',chkgridshowhint.Checked);
+  cqrini.WriteBool('Fonts','GridSmallRows',chkgridsmallrows.Checked);
+  cqrini.WriteBool('Fonts','GridDotsInsteadSpaces',chkgriddotsinsteadspaces.Checked);
 
   cqrini.WriteInteger('Zones', 'NewWAZ', clboxNewWaz.Selected);
   cqrini.WriteInteger('Zones', 'NewBandWAZ', clBoxBandWAZ.Selected);
@@ -2717,11 +2717,11 @@ begin
   fgSize := cqrini.ReadInteger('Fonts', 'gSize', 8);
   fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10);
 
-  chkgridgreenbar.Checked := cqrini.ReadBool('Design','GridGreenBar',False);
-  chkgridboldtitle.Checked := cqrini.ReadBool('Design','GridBoldTitle',False);
-  chkgridshowhint.Checked := cqrini.ReadBool('Design','GridShowHint',False);
-  chkgridsmallrows.Checked := cqrini.ReadBool('Design','GridSmallRows',False);
-  chkgriddotsinsteadspaces.Checked := cqrini.ReadBool('Design','GridDotsInsteadSpaces',False);
+  chkgridgreenbar.Checked := cqrini.ReadBool('Fonts','GridGreenBar',False);
+  chkgridboldtitle.Checked := cqrini.ReadBool('Fonts','GridBoldTitle',False);
+  chkgridshowhint.Checked := cqrini.ReadBool('Fonts','GridShowHint',False);
+  chkgridsmallrows.Checked := cqrini.ReadBool('Fonts','GridSmallRows',False);
+  chkgriddotsinsteadspaces.Checked := cqrini.ReadBool('Fonts','GridDotsInsteadSpaces',False);
 
   clboxNewWaz.Selected := cqrini.ReadInteger('Zones', 'NewWAZ', 0);
   clBoxBandWAZ.Selected := cqrini.ReadInteger('Zones', 'NewBandWAZ', 0);

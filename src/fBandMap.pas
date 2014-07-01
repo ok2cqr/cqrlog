@@ -405,6 +405,7 @@ begin
     try
       When := now;
       EnterCriticalSection(frmBandMap.BandMapCrit);
+
       for i:=1 to MAX_ITEMS do
       begin
         if frmBandMap.BandMapItems[i].Freq = 0 then
@@ -421,7 +422,7 @@ begin
 
         //Writeln('Now:      ',DateTimeToStr(When));
         //Writeln('Delete:   ',DateTimeToStr(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)));
-        sleep(0);
+        sleep(550);
 
         if When>(frmBandMap.BandMapItems[i].TimeStamp + (frmBandMap.FDeleteAfter/86400)) then
         begin

@@ -102,47 +102,19 @@ begin
   dmUtils.LoadFontSettings(self);
   LoadBandsSettings;
 
-  // Another grid style tom@dl7bj.de, 2014-06-20
-  if cqrini.ReadBool('Design','GridGreenBar',False) = True then
+  if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
   begin
     grdDXCCStat.AlternateColor:=$00E7FFEB;
     grdStat.AlternateColor:=$00E7FFEB;
     grdDXCCStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
     grdStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
-  end else begin
+  end
+  else begin
     grdDXCCStat.AlternateColor:=clWindow;
     grdStat.AlternateColor:=clWindow;
     grdDXCCStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
     grdStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
   end;
-  if cqrini.ReadBool('Design','GridSmallRows',false) = True then
-  begin
-    grdDXCCStat.DefaultRowHeight:=grdDXCCStat.Canvas.Font.Size+8;
-    grdStat.DefaultRowHeight:=grdStat.Canvas.Font.Size+8;
-  end else begin
-    grdDXCCStat.DefaultRowHeight:=25;
-    grdStat.DefaultRowHeight:=25;
-  end;
-  if cqrini.ReadBool('Design','GridBoldTitle',false) = True then
-  begin
-    grdDXCCStat.TitleFont.Style:=[fsBold];
-    grdStat.TitleFont.Style:=[fsBold];
-  end else begin
-    grdDXCCStat.TitleFont.Style:=[];
-    grdStat.TitleFont.Style:=[];
-  end;
-  if cqrini.ReadBool('Design','GridShowHint',false) = True then
-  begin
-    // ***TODO
-    // grdDXCCStat.ShowHint:=True;
-    // grdStat.ShowHint:=True;
-  end else begin
-    // ***TODO
-    // grdDXCCStat.ShowHint:=False;
-    // grdStat.ShowHint:=False;
-  end;
-
-
 
   grdDXCCStat.Cells[0,0] := 'DXCC';
   grdDXCCStat.Cells[1,0] := 'Country';
@@ -487,7 +459,7 @@ var
 begin
   space := ' ';
   // Dots instead spaces, tom@dl7bj.de, 2014-06-24
-  if cqrini.ReadBool('Design','GridDotsInsteadSpaces',False) = True then
+  if cqrini.ReadBool('Fonts','GridDotsInsteadSpaces',False) = True then
   begin
     space := '.';
   end;
@@ -748,7 +720,7 @@ begin
 
   space := '';
   // dots instead spaces, tom@dl7bj.de, 2014-06-24
-  if cqrini.ReadBool('Design','GridDotsInsteadSpaces', False) then
+  if cqrini.ReadBool('Fonts','GridDotsInsteadSpaces', False) then
   begin
     Space := '.';
   end;
