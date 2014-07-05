@@ -43,40 +43,20 @@ The icons in the upper menu allowing following actions:<br><br>
 <strong>7th icon</strong>
 &nbsp;&nbsp;&nbsp;Get SQL command currently used to the main database. For example, if a filter is set, clicking this icon allows to edit SQL command created by the filter.<br><br>
 
-<strong>Tables:</strong><br><br>
+<h3><strong>Tables in cqrlogXXX:</strong></h3><br>
 
+where XXX is numer of the log e.g. cqrlog001 for the first log.<br><br>
 <strong>cqrlog_main</strong><br>
 &nbsp;&nbsp;&nbsp;the main table with all QSO records<br><br>
 
-<strong>remarks</strong><br>
+<strong>notes</strong><br>
 &nbsp;&nbsp;&nbsp;table containing the call sign related notes<br><br>
-
-<strong>bandcn</strong><br>
-&nbsp;&nbsp;&nbsp;info if the country is worked and confirmed by a paper QSL or via LoTW<br><br>
-
-<strong>ref_dxcc</strong><br>
-&nbsp;&nbsp;&nbsp;the current DXCC reference table<br><br>
-
-<strong>exceptions</strong><br>
-&nbsp;&nbsp;&nbsp;list of strings to be ignores if such string appears in the call sign after a slash<br><br>
-
-<strong>bands</strong><br>
-&nbsp;&nbsp;&nbsp;band limits (lower/upper end)<br><br>
 
 <strong>profiles</strong><br>
 &nbsp;&nbsp;&nbsp;list of QTH profiles<br><br>
 
-<strong>version</strong><br>
-&nbsp;&nbsp;&nbsp;program version<br><br>
-
-<strong>dxclusters</strong><br>
-&nbsp;&nbsp;&nbsp;list of DX cluster nodes<br><br>
-
-<strong>ambiguos</strong><br>
-&nbsp;&nbsp;&nbsp;list of ambiguos prefixes<br><br>
-
-<strong>iota_list</strong><br>
-&nbsp;&nbsp;&nbsp;IOTA reference list<br><br>
+<strong>db_version</strong><br>
+&nbsp;&nbsp;&nbsp;database version<br><br>
 
 <strong>award1 ... award5</strong><br>
 &nbsp;&nbsp;&nbsp;external tables used for memberships<br><br>
@@ -86,6 +66,57 @@ The icons in the upper menu allowing following actions:<br><br>
 
 <strong>long_note</strong><br>
 &nbsp;&nbsp;&nbsp;a long note valid for whole log<br><br>
+
+<strong>cqrlog_config</strong><br>
+&nbsp;&nbsp;&nbsp;configuration file<br><br>
+
+<strong>long_note</strong><br>
+&nbsp;&nbsp;&nbsp;a long note valid for whole log<br><br>
+
+<strong>dxcc_id</strong><br>
+&nbsp;&nbsp;&nbsp;a list of DXCC countries<br><br>
+
+<strong>log_changes</strong><br>
+&nbsp;&nbsp;&nbsp;a list of changes made to cqrlog_main database filled by triggers (only when log upload function is enabled)<br><br>
+
+<strong>upload_status</strong><br>
+&nbsp;&nbsp;&nbsp;last IDs of uploaded QSO to online logs<br><br>
+
+<strong>view_cqrlog_main_by_callsign</strong><br>
+&nbsp;&nbsp;&nbsp;a view to show QSO sorted by callsign<br><br>
+
+<strong>view_cqrlog_main_by_qsodate</strong><br>
+&nbsp;&nbsp;&nbsp;a view to show QSO sorted by qsodate<br><br>
+
+
+<h3><strong>Tables in cqrlog_common:</strong></h3><br>
+
+The common database used by all logs. <br>
+
+<strong>bands</strong><br>
+&nbsp;&nbsp;&nbsp;band limits (lower/upper end)<br><br>
+
+<strong>db_version</strong><br>
+&nbsp;&nbsp;&nbsp;database version<br><br>
+
+<strong>bandcn</strong><br>
+&nbsp;&nbsp;&nbsp;info if the country is worked and confirmed by a paper QSL or via LoTW<br><br>
+
+<strong>dxcc_ref</strong><br>
+&nbsp;&nbsp;&nbsp;the current DXCC reference table<br><br>
+
+<strong>dxclusters</strong><br>
+&nbsp;&nbsp;&nbsp;list of DX cluster nodes<br><br>
+
+<strong>iota_list</strong><br>
+&nbsp;&nbsp;&nbsp;IOTA reference list<br><br>
+
+<strong>log_list</strong><br>
+&nbsp;&nbsp;&nbsp;list of logs created in cqrlog<br><br>
+
+<strong>qslmngr</strong><br>
+&nbsp;&nbsp;&nbsp;list of QSL managers<br><br>
+
 </div>
 <strong>Example:</strong><br><br>
 
@@ -93,7 +124,7 @@ The icons in the upper menu allowing following actions:<br><br>
 
 <strong>SQL command:</strong><br>
 <pre>
-SELECT qsodate, call, freq, mode FROM cqrlog_main WHERE qsodate >= '2009-01-01' and qsodate <= '2009-31-12' and waz = 15
+SELECT qsodate, callsign, freq, mode FROM view_cqrlog_main_by_qsodate WHERE qsodate >= '2009-01-01' and qsodate <= '2009-31-12' and waz = 15
 </pre><br>
 The databases structures are listed <a href=sql_console.html><strong>here</strong>.</a></div>
 </div>
