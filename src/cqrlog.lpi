@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -659,6 +659,7 @@
         <Filename Value="fCallAlert.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCallAlert"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCallAlert"/>
       </Unit79>

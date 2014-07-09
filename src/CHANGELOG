@@ -21,6 +21,7 @@ Legend:
   - fixed a bug in DXCC statistics, mode 'Paper QSL only' (Tom, DL7BJ) 
   - program crashed after close - fixed
   - program crashed after click to Cancel in DB connection window
+  - sunrise, sunse and greeting info was broken - fixed 
 
 1.7.4
   + F keys to CW type window added

@@ -4557,7 +4557,9 @@ begin
     end;
     }
     lblTarSunRise.Caption := TimeToStr(SunRise);
-    lblTarSunSet.Caption  := TimeToStr(SunSet)
+    lblTarSunSet.Caption  := TimeToStr(SunSet);
+    lblHisTime.Refresh;
+    lblGreeting.Refresh
   end
   else begin
     if (lblLat.Caption <> '') and (lblLong.Caption <> '') then
@@ -4578,6 +4580,8 @@ begin
       end;
       lblTarSunRise.Caption := TimeToStr(SunRise);
       lblTarSunSet.Caption  := TimeToStr(SunSet);
+      lblHisTime.Refresh;
+      lblGreeting.Refresh;
       dmUtils.DistanceFromCoordinate(myloc,lat,long,qra,azim)
     end
     else
