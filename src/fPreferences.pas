@@ -1071,6 +1071,7 @@ procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
   freq : Currency;
   int  : integer;
+  KeyType: TKeyType;
 begin
   cqrini.WriteString('Station', 'Call', edtCall.Text);
   cqrini.WriteString('Station', 'Name', edtName.Text);
@@ -1562,7 +1563,7 @@ begin
     begin
       if cmbIfaceType.ItemIndex = 1 then
       begin
-        frmNewQSO.CWint.KeyType := ktWinKeyer;
+        //frmNewQSO.CWint.KeyType := ktWinKeyer;
         frmNewQSO.CWint.Port := edtWinPort.Text;
         frmNewQSO.CWint.SetSpeed(edtWinSpeed.Value);
         frmNewQSO.CWint.Device := edtWinPort.Text;
@@ -1570,7 +1571,7 @@ begin
       end
       else
       begin
-        frmNewQSO.CWint.KeyType := ktCWdaemon;
+        //frmNewQSO.CWint.KeyType := ktCWdaemon;
         frmNewQSO.CWint.Port := edtCWPort.Text;
         frmNewQSO.CWint.Device := edtCWAddress.Text;
         frmNewQSO.CWint.SetSpeed(edtCWSpeed.Value);

@@ -535,7 +535,7 @@ type
     QTHfromCb   : Boolean;
     FromDXC     : Boolean;
     UseSpaceBar : Boolean;
-    CWint       : TCWKeying;
+    CWint       : TCWDevice;
     ShowWin     : Boolean;
 
     ClearAfterFreqChange : Boolean;
@@ -5269,19 +5269,20 @@ begin
 end;
 
 procedure TfrmNewQSO.InitializeCW;
+var
+  KeyType: TKeyType;
 begin
   if Assigned(CWint) then
     FreeAndNil(CWint);
 
   if dmData.DebugLevel>=1 then Writeln('CW init');
-  CWint := TCWKeying.Create;
-  if dmData.DebugLevel>=1 then
-    CWint.DebugMode := True;
+  //CWint := TCWKeying.Create;
   if cqrini.ReadInteger('CW','Type',0) > 0 then
   begin
     if cqrini.ReadInteger('CW','Type',0) = 1 then
     begin
-      CWint.KeyType := ktWinKeyer;
+      CWint := TCWWinKeyerUSB.Create;
+      //CWint.KeyType := ktWinKeyer;
       CWint.Port    := cqrini.ReadString('CW','wk_port','');
       CWint.Device  := cqrini.ReadString('CW','wk_port','');
       CWint.Open;
@@ -5289,13 +5290,15 @@ begin
       sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','wk_speed',30)) + 'WPM'
     end
     else begin
-      CWint.KeyType := ktCWdaemon;
+      CWint    := TCWDaemon.Create;
+      //CWint.KeyType := ktCWdaemon;
       CWint.Port    := cqrini.ReadString('CW','cw_port','');
       CWint.Device  := cqrini.ReadString('CW','cw_address','');
       CWint.Open;
       CWint.SetSpeed(cqrini.ReadInteger('CW','cw_speed',30));
       sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
-    end
+    end;
+    CWint.DebugMode := dmData.DebugLevel>=1
   end
 end;
 

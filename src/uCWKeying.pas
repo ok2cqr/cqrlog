@@ -9,219 +9,108 @@ uses
 
 type TKeyType   = (ktCWdaemon, ktWinKeyer);
 type TKeyStatus = (ksReady, ksBusy);
-  
+
 type
+  TCWDevice = class
+    protected
+      fPort      : String;
+      fLastErrNr : Word;
+      fLastErrSt : String;
+      fDevice    : String;
+      fDebugMode : Boolean;
+      fMinSpeed  : Word;
+      fMaxSpeed  : Word;
+    public
+      property Port      : String read fPort write fPort;
+      property Device    : String read fDevice write fDevice;
+      property LastErrNr : Word read fLastErrNr;
+      property LastErrSt : String read fLastErrSt;
+      property DebugMode : Boolean read fDebugMode write fDebugMode;
+      property MinSpeed  : Word read fMinSpeed;
+      property MaxSpeed  : Word read fMaxSpeed;
 
-  TCWKeying = class
-    ser : TBlockSerial;
-    udp : TLUDPComponent;
+      constructor Create; virtual; abstract;
 
-    function  wk_open : Boolean;
-    function  wk_get_speed : Word;
-    function  wk_get_status : TKeyStatus;
-    
-    procedure wk_close;
-    procedure wk_send_text(text : String);
-    procedure wk_stop_sending;
-    procedure wk_set_speed(wpm : Word);
-    procedure wk_del_last_char;
-    procedure wk_set_min_max_speed(min,max : Word);
-    procedure wk_tune_on;
-    procedure wk_tune_off;
-    /////////////////////////////////////////////////////////
-    
-    function  cw_open : Boolean;
-    
-    procedure cw_close;
-    procedure cw_send_text(text : String);
-    procedure cw_stop_sending;
-    procedure cw_set_speed(wpm : Word);
-    procedure cw_tune_on;
-    procedure cw_tune_off;
+      function GetSpeed  : Word; virtual; abstract;
+      function GetStatus : TKeyStatus; virtual; abstract;
 
-  private
-    fActive    : Boolean;
-    fKeyType   : TKeyType;
-    fPort      : String;
-    fLastErrNr : Word;
-    fLastErrSt : String;
-    fSpeed     : Word;
-    fDevice    : String;
-    fDebugMode : Boolean;
-    fMinSpeed  : Word;
-    fMaxSpeed  : Word;
-  public
-    property KeyType   : TKeyType read fKeyType write fKeyType;
-    property Port      : String read fPort write fPort;
-    property Device    : String read fDevice write fDevice;
-    property LastErrNr : Word read fLastErrNr;
-    property LastErrSt : String read fLastErrSt;
-    property DebugMode : Boolean read fDebugMode write fDebugMode;
-    property MinSpeed  : Word read fMinSpeed;
-    property MaxSpeed  : Word read fMaxSpeed;
+      procedure Open; virtual; abstract;
+      procedure Close; virtual; abstract;
+      procedure SetSpeed(speed : Word); virtual; abstract;
+      procedure SendText(text : String); virtual; abstract;
+      procedure StopSending; virtual; abstract;
+      procedure DelLastChar; virtual; abstract;
+      procedure SetMixManSpeed(min,max : Word); virtual; abstract;
+      procedure TuneStart; virtual; abstract;
+      procedure TuneStop; virtual; abstract;
+  end;
 
-    constructor Create;
-    destructor  Destroy; override;
-    
-    function GetSpeed  : Word;
-    function GetStatus : TKeyStatus;
-    
-    procedure Open;
-    procedure Close;
-    procedure SetSpeed(speed : Word);
-    procedure SendText(text : String);
-    procedure StopSending;
-    procedure DelLastChar;
-    procedure SetMixManSpeed(min,max : Word);
-    procedure TuneStart;
-    procedure TuneStop;
+  TCWWinKeyerUSB = class(TCWDevice)
+    private
+      fActive : Boolean;
+      fSpeed  : Word;
+      ser     : TBlockSerial;
+    public
+      constructor Create; override;
+      destructor  Destroy; override;
+
+      function GetSpeed  : Word; override;
+      function GetStatus : TKeyStatus; override;
+
+      procedure Open; override;
+      procedure Close; override;
+      procedure SetSpeed(speed : Word); override;
+      procedure SendText(text : String); override;
+      procedure StopSending; override;
+      procedure DelLastChar; override;
+      procedure SetMixManSpeed(min,max : Word); override;
+      procedure TuneStart; override;
+      procedure TuneStop; override;
+  end;
+
+  TCWDaemon = class(TCWDevice)
+    private
+      fActive : Boolean;
+      fSpeed  : Word;
+      udp     : TLUDPComponent;
+    public
+      constructor Create; override;
+      destructor  Destroy; override;
+
+      function GetSpeed  : Word; override;
+      function GetStatus : TKeyStatus; override;
+
+      procedure Open; override;
+      procedure Close; override;
+      procedure SetSpeed(speed : Word); override;
+      procedure SendText(text : String); override;
+      procedure StopSending; override;
+      procedure DelLastChar; override;
+      procedure SetMixManSpeed(min,max : Word); override;
+      procedure TuneStart; override;
+      procedure TuneStop; override;
   end;
 
 implementation
 
-constructor TCWKeying.Create;
+
+constructor TCWWinKeyerUSB.Create;
 begin
   fActive       := False;
-  fKeyType      := ktWinKeyer;
   fDebugMode    := False;
   ser           := TBlockserial.Create;
   ser.LinuxLock := False;
-  udp           := TLUDPComponent.Create(nil);
   fMinSpeed     := 5;
   fMaxSpeed     := 60
 end;
 
-destructor TCWKeying.Destroy;
-begin
-  inherited;
-  if fActive then
-    Close;
-  ser.Free
-end;
-
-procedure TCWKeying.Open;
-begin
-  if fDebugMode then
-  begin
-    Writeln('Device:',fDevice);
-    Writeln('Port:  ',fPort);
-  end;
-  if fActive then
-    Close;
-  if fKeyType = ktWinKeyer then
-  begin
-    if wk_open then
-      fActive := True
-  end
-  else begin
-    if cw_open then
-      fActive := True
-  end;
-end;
-
-procedure TCWKeying.Close;
-begin
-  if fActive then
-  begin
-    if fKeyType = ktWinKeyer then
-      wk_close
-    else
-      cw_close;
-    fActive := False
-  end
-end;
-
-function TCWKeying.GetSpeed : Word;
-begin
-  {if fKeyType = ktWinKeyer then
-    Result := wk_get_speed
-  else
-  }
-    Result := fSpeed
-end;
-
-function TCWKeying.GetStatus : TKeyStatus;
-begin
-  Result := ksBusy
-end;
-
-procedure TCWKeying.SetSpeed(speed : Word);
-begin
-  if fKeyType =  ktWinKeyer then
-    wk_set_speed(speed)
-  else
-    cw_set_speed(speed);
-  fSpeed := speed
-end;
-
-procedure TCWKeying.SendText(text : String);
-begin
-  if not fActive then
-    exit;
-  if fDebugMode then Writeln('text:',text);
-  if fKeyType = ktWinKeyer then
-    wk_send_text(text)
-  else
-    cw_send_text(text)
-end;
-
-procedure TCWKeying.StopSending;
-begin
-  if not fActive then
-    exit;
-  if fKeyType = ktWinKeyer then
-    wk_stop_sending
-  else
-    cw_stop_sending
-end;
-
-procedure TCWKeying.DelLastChar;
-begin
-  if not fActive then
-    exit;
-  if fKeyType = ktWinKeyer then
-    wk_del_last_char
-end;
-
-procedure TCWKeying.SetMixManSpeed(min,max : Word);
-begin
-  fMinSpeed := min;
-  fMaxSpeed := max;
-  if not fActive then
-    exit;
-  if fKeyType = ktWinKeyer then
-    wk_set_min_max_speed(min,max)
-end;
-
-procedure TCWKeying.TuneStart;
-begin
-  if not fActive then
-    exit;
-  if fKeyType = ktWinKeyer then
-    wk_tune_on
-  else
-    cw_tune_on
-end;
-
-procedure TCWKeying.TuneStop;
-begin
-  if not fActive then
-    exit;
-  if fKeyType = ktWinKeyer then
-    wk_tune_off
-  else
-    cw_tune_off
-end;
-
-
-//---------------------------------------------------------------------
-
-function TCWKeying.wk_open : Boolean;
+procedure TCWWinKeyerUSB.Open;
 var
   rec : byte;
 begin
+  if fActive then Close();
+
   if fDebugMode then Writeln('Device: ',fDevice);
-  Result := False;
   ser.RaiseExcept := False;
   ser.Connect(fDevice);
   ser.Config(1200,8,'N',2,false,false);
@@ -251,7 +140,7 @@ begin
   end;
   if fDebugMode then Writeln('After sending echo command: ',rec);
   if rec = 20 then
-    Result := True
+    fActive := True
   else begin
     fLastErrNr := 1000;
     fLastErrSt := 'WinKeyer USB inicialization failed';
@@ -265,18 +154,68 @@ begin
     rec := (ser.recvByte(0))
   end;
   if fDebugMode then Writeln('Firmware version: ',rec);
-  wk_set_speed(fSpeed)
+  fActive := True;
+
+  SetSpeed(fSpeed)
 end;
 
-procedure TCWKeying.wk_close;
+procedure TCWWinKeyerUSB.SetSpeed(speed : Word);
 begin
-  ser.SendByte(0);
-  ser.SendByte(3); // close keyer
-  if fDebugMode then Writeln('WinKeyer closed');
-  ser.CloseSocket
+  if fDebugMode then Writeln('Speed: ',speed);
+  ser.Flush;
+  ser.SendByte(2);
+  ser.SendByte(speed);
+  sleep(50)
 end;
 
-procedure TCWKeying.wk_send_text(text : String);
+function TCWWinKeyerUSB.GetSpeed  : Word;
+var
+  rec : Byte;
+begin
+  ser.SendByte(7); //enable communication
+  sleep(50);
+  while ser.CanReadex(10) do
+  begin
+    rec := (ser.recvByte(0))
+  end;
+  Result := fMinSpeed + rec
+end;
+
+function TCWWinKeyerUSB.GetStatus : TKeyStatus;
+begin
+  Result := ksBusy //not implemented, default value
+end;
+
+procedure TCWWinKeyerUSB.DelLastChar;
+begin
+  ser.SendByte($8)
+end;
+
+procedure TCWWinKeyerUSB.SetMixManSpeed(min,max : Word);
+begin
+  ser.SendByte(5);
+  ser.SendByte(min);
+  ser.SendByte(max)
+end;
+
+procedure TCWWinKeyerUSB.TuneStart;
+begin
+  ser.SendByte($0B);
+  ser.SendByte(1)
+end;
+
+procedure TCWWinKeyerUSB.TuneStop;
+begin
+  ser.SendByte($0B);
+  ser.SendByte(0)
+end;
+
+procedure TCWWinKeyerUSB.StopSending;
+begin
+  ser.SendByte($A)
+end;
+
+procedure TCWWinKeyerUSB.SendText(text : String);
 var
   i : Integer;
   spd : Integer;
@@ -391,63 +330,33 @@ begin
     ser.SendString(text)
 end;
 
-procedure TCWKeying.wk_stop_sending;
+procedure TCWWinKeyerUSB.Close;
 begin
-  ser.SendByte($A)
+  ser.SendByte(0);
+  ser.SendByte(3); // close keyer
+  if fDebugMode then Writeln('WinKeyer closed');
+  ser.CloseSocket;
+  fActive := False
 end;
 
-function TCWKeying.wk_get_speed : Word;
-var
-  rec : Byte;
+destructor TCWWinKeyerUSB.Destroy;
 begin
-  ser.SendByte(7); //enable communication
-  sleep(50);
-  while ser.CanReadex(10) do
-  begin
-    rec := (ser.recvByte(0))
-  end;
-  Result := fMinSpeed + rec
+  if fActive then
+    Close();
+  FreeAndNil(ser)
 end;
 
-procedure TCWKeying.wk_set_speed(wpm : Word);
+
+constructor TCWDaemon.Create;
 begin
-  if fDebugMode then Writeln('Speed: ',wpm);
-  ser.Flush;
-  ser.SendByte(2);
-  ser.SendByte(wpm);
-  sleep(50)
+  fActive       := False;
+  fDebugMode    := False;
+  udp           := TLUDPComponent.Create(nil);
+  fMinSpeed     := 5;
+  fMaxSpeed     := 60
 end;
 
-function TCWKeying.wk_get_status : TKeyStatus;
-begin
-  Result := ksBusy
-end;
-
-procedure TCWKeying.wk_del_last_char;
-begin
-  ser.SendByte($8)
-end;
-
-procedure TCWKeying.wk_set_min_max_speed(min,max : Word);
-begin
-  ser.SendByte(5);
-  ser.SendByte(min);
-  ser.SendByte(max)
-end;
-
-procedure TCWKeying.wk_tune_on;
-begin
-  ser.SendByte($0B);
-  ser.SendByte(1)
-end;
-
-procedure TCWKeying.wk_tune_off;
-begin
-  ser.SendByte($0B);
-  ser.SendByte(0)
-end;
-
-function TCWKeying.cw_open : Boolean;
+procedure TCWDaemon.Open;
 begin
   if fDebugMode then
   begin
@@ -457,18 +366,56 @@ begin
   udp.Host := fDevice;
   udp.Port := StrToInt(fPort);
   fActive  := udp.Connect;
-  Result   := fActive;
-  cw_set_speed(fSpeed)
+
+  SetSpeed(fSpeed)
 end;
 
-procedure TCWKeying.cw_close;
+procedure TCWDaemon.SetSpeed(speed : Word);
 begin
-  if udp.Connected then
-    udp.Disconnect;
-  fActive := False
+  fSpeed := speed;
+  if fActive then
+    udp.SendMessage(Chr(27)+'2'+IntToStr(speed))
 end;
 
-procedure TCWKeying.cw_send_text(text : String);
+function TCWDaemon.GetSpeed  : Word;
+begin
+  Result := fSpeed
+end;
+
+function TCWDaemon.GetStatus : TKeyStatus;
+begin
+  Result := ksBusy //not implemented, yet
+end;
+
+procedure TCWDaemon.DelLastChar;
+begin
+  //not implemented
+end;
+
+procedure TCWDaemon.SetMixManSpeed(min,max : Word);
+begin
+  //not supported in cwdaemon
+end;
+
+procedure TCWDaemon.TuneStart;
+begin
+  if fActive then
+    udp.SendMessage(Chr(27)+'c10')
+end;
+
+procedure TCWDaemon.TuneStop;
+begin
+  if fActive then
+    udp.SendMessage(Chr(27)+'c0')
+end;
+
+procedure TCWDaemon.StopSending;
+begin
+  if fActive then
+    udp.SendMessage(Chr(27)+'4')
+end;
+
+procedure TCWDaemon.SendText(text : String);
 var
   i   : Integer;
   spd : Word;
@@ -476,7 +423,8 @@ var
 begin
   if not fActive then
     exit;
-  text    := UpperCase(Trim(text));
+
+  text := UpperCase(Trim(text));
   if text = '' then
     exit;
   spd     := fSpeed;
@@ -506,28 +454,18 @@ begin
     udp.SendMessage(text)
 end;
 
-procedure TCWKeying.cw_stop_sending;
+procedure TCWDaemon.Close;
 begin
-  if fActive then
-    udp.SendMessage(Chr(27)+'4')
+  if udp.Connected then
+    udp.Disconnect;
+  fActive := False
 end;
 
-procedure TCWKeying.cw_set_speed(wpm : Word);
+destructor TCWDaemon.Destroy;
 begin
   if fActive then
-    udp.SendMessage(Chr(27)+'2'+IntToStr(wpm))
-end;
-
-procedure TCWKeying.cw_tune_on;
-begin
-  if fActive then
-    udp.SendMessage(Chr(27)+'c10')
-end;
-
-procedure TCWKeying.cw_tune_off;
-begin
-  if fActive then
-    udp.SendMessage(Chr(27)+'c0')
+    Close();
+  FreeAndNil(udp)
 end;
 
 end.
