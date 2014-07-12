@@ -91,6 +91,29 @@ type
       procedure TuneStop; override;
   end;
 
+  TCWK3NG = class(TCWDevice)
+    private
+      fActive : Boolean;
+      fSpeed  : Word;
+      ser     : TBlockSerial;
+    public
+      constructor Create; override;
+      destructor  Destroy; override;
+
+      function GetSpeed  : Word; override;
+      function GetStatus : TKeyStatus; override;
+
+      procedure Open; override;
+      procedure Close; override;
+      procedure SetSpeed(speed : Word); override;
+      procedure SendText(text : String); override;
+      procedure StopSending; override;
+      procedure DelLastChar; override;
+      procedure SetMixManSpeed(min,max : Word); override;
+      procedure TuneStart; override;
+      procedure TuneStop; override;
+  end;
+
 implementation
 
 
@@ -467,5 +490,155 @@ begin
     Close();
   FreeAndNil(udp)
 end;
+
+constructor TCWK3NG.Create;
+begin
+  fActive       := False;
+  fDebugMode    := False;
+  ser           := TBlockserial.Create;
+  ser.LinuxLock := False;
+  fMinSpeed     := 5;
+  fMaxSpeed     := 60
+end;
+
+procedure TCWK3NG.Open;
+var
+  rec : byte;
+begin
+  if fActive then Close();
+
+  if fDebugMode then Writeln('Device: ',fDevice);
+  ser.RaiseExcept := False;
+  ser.Connect(fDevice);
+  ser.Config(115200,8,'N',2,false,false);
+  ser.DTR:=False;
+  ser.RTS:=False;
+  fLastErrNr := ser.LastError;
+  fLastErrSt := ser.LastErrorDesc;
+  if fDebugMode then
+  begin
+    Writeln('Last error nr:  ',fLastErrNr);
+    Writeln('Last error desc:',fLastErrSt)
+  end;
+  if LastErrNr > 0 then
+    exit;
+  fActive := True;
+  SetSpeed(fSpeed)
+end;
+
+procedure TCWK3NG.SetSpeed(speed : Word);
+begin
+  Writeln(Speed);
+  fSpeed := speed;
+  ser.SendByte($5C);
+  ser.SendByte($57);
+  ser.SendString(IntToStr(speed));
+  ser.SendString(CR)
+end;
+
+function TCWK3NG.GetSpeed  : Word;
+begin
+  Result := fSpeed
+end;
+
+function TCWK3NG.GetStatus : TKeyStatus;
+begin
+  Result := ksBusy //not implemented, yet
+end;
+
+procedure TCWK3NG.DelLastChar;
+begin
+  //not implemented
+end;
+
+procedure TCWK3NG.SetMixManSpeed(min,max : Word);
+begin
+  //not supported in cwdaemon
+end;
+
+procedure TCWK3NG.TuneStart;
+begin
+  ser.SendByte($5C);
+  ser.SendByte($54)
+end;
+
+procedure TCWK3NG.TuneStop;
+begin
+  StopSending
+end;
+
+procedure TCWK3NG.StopSending;
+begin
+  if fActive then
+  begin
+    ser.SendByte($5C);
+    ser.SendByte($5C)
+  end
+end;
+
+procedure TCWK3NG.SendText(text : String);
+
+  procedure ChangeSpeed(spd : Word);
+  begin
+    ser.SendByte($5C);
+    ser.SendByte($57);
+    ser.SendString(IntToStr(spd));
+    ser.SendString(CR)
+  end;
+
+var
+  i   : Integer;
+  spd : Word;
+  old_spd : Word = 0;
+begin
+  if not fActive then
+    exit;
+
+  text := UpperCase(Trim(text));
+  if text = '' then
+    exit;
+  spd     := fSpeed;
+  old_spd := spd;
+  if (Pos('+',text) > 0) or (Pos('-',text) > 0) then
+  begin
+    for i:=1 to Length(text) do
+    begin
+      if text[i] = '+' then
+      begin
+        spd := spd+5;
+        ChangeSpeed(spd)
+      end
+      else begin
+        if text[i] = '-' then
+        begin
+          spd := spd-5;
+          ChangeSpeed(spd)
+        end
+        else
+          ser.SendString(text[i])
+      end
+    end;
+    ChangeSpeed(old_spd)
+  end
+  else
+    ser.SendString(text)
+end;
+
+procedure TCWK3NG.Close;
+begin
+  if fDebugMode then Writeln('K3NG keyer closed');
+  ser.CloseSocket;
+  fActive := False
+end;
+
+
+destructor TCWK3NG.Destroy;
+begin
+  if fActive then
+    Close();
+  FreeAndNil(ser)
+end;
+
+
 
 end.
