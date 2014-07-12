@@ -20,6 +20,7 @@ type
       fDebugMode : Boolean;
       fMinSpeed  : Word;
       fMaxSpeed  : Word;
+      fPortSpeed : Word;
     public
       property Port      : String read fPort write fPort;
       property Device    : String read fDevice write fDevice;
@@ -28,6 +29,7 @@ type
       property DebugMode : Boolean read fDebugMode write fDebugMode;
       property MinSpeed  : Word read fMinSpeed;
       property MaxSpeed  : Word read fMaxSpeed;
+      property PortSpeed : Word read fPortSpeed write fPortSpeed;
 
       constructor Create; virtual; abstract;
 
@@ -510,9 +512,9 @@ begin
   if fDebugMode then Writeln('Device: ',fDevice);
   ser.RaiseExcept := False;
   ser.Connect(fDevice);
-  ser.Config(115200,8,'N',2,false,false);
-  ser.DTR:=False;
-  ser.RTS:=False;
+  ser.Config(fPortSpeed,8,'N',2,false,false);
+  ser.DTR := False;
+  ser.RTS := False;
   fLastErrNr := ser.LastError;
   fLastErrSt := ser.LastErrorDesc;
   if fDebugMode then
