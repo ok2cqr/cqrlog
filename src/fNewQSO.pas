@@ -527,7 +527,6 @@ type
     procedure ChangeCallBookCaption;
     procedure SendSpot;
     procedure RunVK(key_pressed: String);
-    procedure InitializeCW;
     procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
 
     function CheckFreq(freq : String) : String;
@@ -560,6 +559,7 @@ type
     procedure CalculateLocalSunRiseSunSet;
     procedure UploadAllQSOOnline;
     procedure ReturnToNewQSO;
+    procedure InitializeCW;
   end;
 
   type
@@ -5276,30 +5276,38 @@ begin
     FreeAndNil(CWint);
 
   if dmData.DebugLevel>=1 then Writeln('CW init');
-  //CWint := TCWKeying.Create;
-  if cqrini.ReadInteger('CW','Type',0) > 0 then
-  begin
-    if cqrini.ReadInteger('CW','Type',0) = 1 then
-    begin
-      CWint := TCWWinKeyerUSB.Create;
-      //CWint.KeyType := ktWinKeyer;
-      CWint.Port    := cqrini.ReadString('CW','wk_port','');
-      CWint.Device  := cqrini.ReadString('CW','wk_port','');
-      CWint.Open;
-      CWint.SetSpeed(cqrini.ReadInteger('CW','wk_speed',30));
-      sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','wk_speed',30)) + 'WPM'
-    end
-    else begin
-      CWint    := TCWDaemon.Create;
-      //CWint.KeyType := ktCWdaemon;
-      CWint.Port    := cqrini.ReadString('CW','cw_port','');
-      CWint.Device  := cqrini.ReadString('CW','cw_address','');
-      CWint.Open;
-      CWint.SetSpeed(cqrini.ReadInteger('CW','cw_speed',30));
-      sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
-    end;
-    CWint.DebugMode := dmData.DebugLevel>=1
-  end
+  case  cqrini.ReadInteger('CW','Type',0) of
+    1 : begin
+          CWint := TCWWinKeyerUSB.Create;
+          CWint.Port    := cqrini.ReadString('CW','wk_port','');
+          CWint.Device  := cqrini.ReadString('CW','wk_port','');
+          CWint.PortSpeed := 1200;
+          CWint.Open;
+          CWint.SetSpeed(cqrini.ReadInteger('CW','wk_speed',30));
+          CWint.DebugMode := dmData.DebugLevel>=1;
+          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','wk_speed',30)) + 'WPM'
+        end;
+    2 : begin
+          CWint    := TCWDaemon.Create;
+          CWint.Port    := cqrini.ReadString('CW','cw_port','');
+          CWint.Device  := cqrini.ReadString('CW','cw_address','');
+          CWint.PortSpeed := 0;
+          CWint.Open;
+          CWint.SetSpeed(cqrini.ReadInteger('CW','cw_speed',30));
+          CWint.DebugMode := dmData.DebugLevel>=1;
+          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
+        end;
+    3 : begin
+          CWint := TCWK3NG.Create;
+          CWint.Port    := cqrini.ReadString('CW','K3NGPort','');
+          CWint.Device  := cqrini.ReadString('CW','K3NGPort','');
+          CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
+          CWint.Open;
+          CWint.SetSpeed(cqrini.ReadInteger('CW','K3NGSpeed',30));
+          CWint.DebugMode := dmData.DebugLevel>=1;
+          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30)) + 'WPM'
+        end
+  end //case
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);

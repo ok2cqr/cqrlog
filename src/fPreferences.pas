@@ -487,6 +487,7 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
     edtRBNServer : TEdit;
     edtClEmail: TEdit;
@@ -576,6 +577,8 @@ type
     edtCWSpeed: TSpinEdit;
     edtWinMinSpeed: TSpinEdit;
     edtWinMaxSpeed: TSpinEdit;
+    edtK3NGPort: TEdit;
+    edtK3NGSpeed: TSpinEdit;
     edtWIOTA: TEdit;
     edtWITU: TEdit;
     edtWLoc: TEdit;
@@ -686,6 +689,7 @@ type
     GroupBox46: TGroupBox;
     GroupBox47: TGroupBox;
     GroupBox48: TGroupBox;
+    GroupBox49: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -794,6 +798,10 @@ type
     Label190 : TLabel;
     Label191 : TLabel;
     Label192: TLabel;
+    Label193: TLabel;
+    Label194: TLabel;
+    Label195: TLabel;
+    Label196: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1004,6 +1012,7 @@ type
     procedure cmbSpeedR2Change(Sender : TObject);
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
+    procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
     procedure edtR1RigCtldPortChange(Sender : TObject);
     procedure edtR2RigCtldArgsChange(Sender : TObject);
@@ -1486,6 +1495,9 @@ begin
   cqrini.WriteInteger('CW', 'cw_speed', edtCWSpeed.Value);
   cqrini.WriteInteger('CW', 'wk_min', edtWinMinSpeed.Value);
   cqrini.WriteInteger('CW', 'wk_max', edtWinMaxSpeed.Value);
+  cqrini.WriteString('CW','K3NGPort',edtK3NGPort.Text);
+  cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
+  cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
 
   cqrini.WriteInteger('fldigi', 'freq', rgFreqFrom.ItemIndex);
   cqrini.WriteString('fldigi', 'deffreq', edtDefaultFreq.Text);
@@ -1558,6 +1570,7 @@ begin
 
   if WinKeyerChanged then
   begin
+    {
     frmNewQSO.CWint.Close;
     if cmbIfaceType.ItemIndex > 0 then
     begin
@@ -1578,7 +1591,8 @@ begin
         frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtCWSpeed.Value) + 'WPM'
       end;
       frmNewQSO.CWint.Open
-    end
+    end}
+    frmNewQSO.InitializeCW
   end;
 
   dmUtils.TimeOffset := StrToCurr(edtOffset.Text);
@@ -2296,9 +2310,14 @@ begin
   TRXChanged := True
 end;
 
+procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
+begin
+  WinKeyerChanged := True
+end;
+
 procedure TfrmPreferences.edtR1RigCtldArgsChange(Sender: TObject);
 begin
-  TRXChanged := True;
+  TRXChanged := True
 end;
 
 procedure TfrmPreferences.edtR1RigCtldPortChange(Sender : TObject);
@@ -2808,6 +2827,9 @@ begin
   edtCWSpeed.Value := cqrini.ReadInteger('CW', 'cw_speed', 30);
   edtWinMinSpeed.Value := cqrini.ReadInteger('CW', 'wk_min', 5);
   edtWinMaxSpeed.Value := cqrini.ReadInteger('CW', 'wk_max', 60);
+  edtK3NGPort.Text := cqrini.ReadString('CW','K3NGPort','');
+  edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
+  edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
 
   rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);
   edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');

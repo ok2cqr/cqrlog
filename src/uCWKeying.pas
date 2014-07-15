@@ -555,7 +555,7 @@ end;
 
 procedure TCWK3NG.SetMixManSpeed(min,max : Word);
 begin
-  //not supported in cwdaemon
+  //not supported
 end;
 
 procedure TCWK3NG.TuneStart;
