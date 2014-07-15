@@ -1698,7 +1698,7 @@ object frmNewQSO: TfrmNewQSO
         Visible = False
       end
       object Label6: TLabel
-        Left = 86
+        Left = 99
         Height = 17
         Top = 9
         Width = 81
@@ -1707,10 +1707,10 @@ object frmNewQSO: TfrmNewQSO
         ParentFont = False
       end
       object cmbProfiles: TComboBox
-        Left = 175
+        Left = 187
         Height = 23
         Top = 3
-        Width = 293
+        Width = 281
         ItemHeight = 0
         OnChange = cmbProfilesChange
         ParentFont = False
