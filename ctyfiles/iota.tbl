@@ -1,5 +1,5 @@
 AF-001|Agalega Islands|3B6|3B6
-AF-002|Amsterdam & St Paul Islands|FT(Z)|FT[0-9]Z
+AF-002|Amsterdam & St. Paul Islands|FT(Z)|FT[0-9]Z
 AF-003|Ascension Island|ZD8|ZD8
 AF-004|Canary Islands|EA8|EA8
 AF-005|Cape Verde - Leeward Islands (aka Sotavento)|D4|
@@ -11,7 +11,7 @@ AF-010|Bioco (Fernando Poo) Island|3C|
 AF-011|Glorioso Islands|FT(G)|FT[0-9]G
 AF-012|Juan de Nova|FT(J)|FT[0-9]J
 AF-013|Madagascar|5R|
-AF-014|Madeira Archipelago|CT3|
+AF-014|Madeira Archipelago|CT9|
 AF-015|Saint Brandon Islands|3B6|3B7
 AF-016|Reunion Island|FR|
 AF-017|Rodrigues Island|3B9|3B9
@@ -19,7 +19,7 @@ AF-018|Pantelleria Island|I|IH9
 AF-019|Pelagie Islands|I|IG9
 AF-020|Bijagos Archipelago|J5|
 AF-021|Prince Edward and Marion Islands|ZS8|ZS8
-AF-022|St Helena Island|ZD7|ZD7
+AF-022|St. Helena Island|ZD7|ZD7
 AF-023|Sao Tome Island|S9|
 AF-024|Seychelles - Inner Islands|S7|
 AF-025|Aldabra Islands|S7|
@@ -42,8 +42,8 @@ AF-042|Alboran Island|EA9|
 AF-043|Gabon Estuaire Province Group|TR|
 AF-044|Principe Island|S9|
 AF-045|Senegal North Group|6W|
-AF-046|Desertas Islands|CT3|
-AF-047|Selvagens Islands|CT3|
+AF-046|Desertas Islands|CT9|
+AF-047|Selvagens Islands|CT9|
 AF-048|Kerguelen Islands|FT(X)|FT[0-9]X
 AF-049|Mauritius Island|3B8|3B8
 AF-050|Dakhlet Nouadhibou / Inchiri Region Group|5T|
@@ -112,6 +112,8 @@ AF-114|Halaib Triangle Group|ST|
 AF-115|Red Sea State Group|ST|
 AF-116|Gulf of Aden West Group|T5|
 AF-117|Gulf of Aden East Group|T5|
+AF-118|Los Farallones and Jaegerschmidt|CN|
+AF-119|Coetivy Island|S7|
 AN-001|Graham Land West (Adelaide Island) group|ZL5|
 AN-002|Bouvet Island|3Y(B)|3Y(B)
 AN-003|Heard Island|VK0(H)|VK0(H)
@@ -206,7 +208,7 @@ AS-072|Perak State group|9M2|
 AS-073|Kelantan / Terengganu State group|9M2|
 AS-074|Selangor / Negeri Sembilan State group|9M2|
 AS-075|Macau group|XX9|XX9
-AS-076|Shikoku Island|JA|JA5
+AS-076|Shikoku Island|JA|
 AS-077|Kyushu Island|JA|
 AS-078|Hokkaido Island|JA|
 AS-079|Miyako Islands|JA|
@@ -330,9 +332,13 @@ AS-196|Nam'p'o-si / Hwanghae-Namdo Province group|P5|
 AS-197|Hamgyong-Bukto / Hamgyong-Namdo Province group|P5|
 AS-198|Kangwon-do Province group|P5|
 AS-199|Andhra Pradesh State South group|VU|
+AS-200|Shikoku Coastal Islands|JA|
+AS-201|Sea of Marmara Isl.|TA|
+AS-202|Hawar Isl.|A9|
+AS-203|Sea of Okhotsk Coast Group|UA(AS)|
 EU-001|Dodecanese|SV5|SV5
 EU-002|Aland Islands|OH0|OH0
-EU-003|Eastern Azores group|CU|CU[12]
+EU-003|Eastern Azores group|CT8|CT8
 EU-004|Balearic Islands|EA6|EA6
 EU-005|Great Britain|G|
 EU-005|Scotland|GM|
@@ -350,7 +356,7 @@ EU-015|Crete Island|SV9|
 EU-016|Dalmatia South group|9A|
 EU-017|Eolie Islands (aka Lipari Islands)|I|ID9
 EU-018|Faroe Islands|OY|OY
-EU-019|Franz Josef Land|R1(F)|R1F
+EU-019|Franz Josef Land|R1(F)|
 EU-020|Gotland County (Gotland Island) group|SM|SM1
 EU-021|Iceland|TF|
 EU-022|Jan Mayen Island|JX|JX
@@ -390,7 +396,7 @@ EU-055|Sogn og Fjordane / Hordaland / Rogaland County group|LA|
 EU-056|More og Romsdal County Centre group|LA|
 EU-057|Mecklenburg-Vorpommern State group|DL|
 EU-058|Provence-Cote d'Azur (Alpes Maritimes) Region group|F|
-EU-059|St Kilda|GM|
+EU-059|St. Kilda|GM|
 EU-060|Sterea Ellas Region group|SV|
 EU-061|Vest Agder to Ostfold County group|LA|
 EU-062|Nordland / Nord-Trondelag County group|LA|
@@ -420,7 +426,7 @@ EU-085|Kolguev Island|UA(EU)|
 EU-086|Pechorskoye Sea Coast East group|UA(EU)|
 EU-087|Vasternorrland County group|SM|
 EU-088|Kattegat group|OZ|
-EU-089|Western Azores group|CU|CU[89]
+EU-089|Western Azores group|CT8|CT8
 EU-090|Palagruza Islands|9A|
 EU-091|Puglia (Lecce / Brindisi / Bari) Region group|I|IJ7
 EU-092|Summer Isles|GM|
@@ -436,7 +442,7 @@ EU-102|Pechorskoye Sea Coast Centre group|UA(EU)|
 EU-103|Saltee Islands|EI|
 EU-104|Sanguinaires Islands|TK|
 EU-105|Bretagne (Finistere North) Region group|F|
-EU-106|St Tudwal's Islands|GW|
+EU-106|St. Tudwal's Islands|GW|
 EU-107|Bretagne (Cotes-d'Armor West) Region group|F|
 EU-108|Treshnish Isles|GM|
 EU-109|Farne Islands|G|
@@ -506,14 +512,14 @@ EU-171|Jylland North group|OZ|
 EU-172|Jylland East and Fyn group|OZ|
 EU-173|Lansi-Suomi (Pori) Province group|OH|
 EU-174|Makedonia / Thraki Region group|SV|
-EU-175|Central Azores group|CU|CU[34567]
+EU-175|Central Azores group|CT8|CT8
 EU-176|Gavleborg County group|SM|
 EU-177|Sodermanland / Ostergotland County group|SM|
 EU-178|Parnumaa County / Saaremaa County South group|ES|ES8
-EU-179|Black Sea Coast group|UR|
-EU-180|Black Sea Coast group|UR|
+EU-179|Black Sea Coast group|UT|
+EU-180|Black Sea Coast group|UT|
 EU-181|Bulgaria group|LZ|
-EU-182|Black Sea Coast group|UR|
+EU-182|Black Sea Coast group|UT|
 EU-183|Romania group|YO|
 EU-184|Oulu Province group|OH|
 EU-185|Black Sea Coast group|UA(EU)|
@@ -521,6 +527,9 @@ EU-186|Turkey group|TA|
 EU-187|Crete's Coastal Islands|SV9|
 EU-188|Pechorskoye Sea Coast West group|UA(EU)|
 EU-189|Isle of Rockall|GM|
+EU-190|Viktoriya Isl.|R1(F)|
+EU-191|Fericirii Isl|YO|
+EU-191|Fericirii Isl|UT|
 NA-001|Great Bahama Bank group|C6|
 NA-002|Caicos Islands|VP5|
 NA-003|Turks Islands|VP5|
@@ -553,7 +562,7 @@ NA-028|Pribilof Islands|KL|
 NA-029|Prince Edward Island (include satellite islands)|VE|VY2
 NA-030|Revilla Gigedo Islands|XF4|
 NA-031|Rhode Island State group|W|
-NA-032|St Pierre and Miquelon Islands|FP|
+NA-032|St. Pierre and Miquelon Islands|FP|
 NA-033|San Andres Island|HK0(A)|
 NA-034|Florida State Centre West (Pasco to Sarasota County) group|W|
 NA-035|Santanilla Islands (aka Swan Islands Cisne Islands)|HR|
@@ -561,7 +570,7 @@ NA-036|British Columbia Province (Vancouver Island) group|VE|
 NA-037|Near Islands (Semichi Islands) group|KL|
 NA-038|Quebec Province (La Madeleine Islands) group|VE|
 NA-039|Andreanof Islands|KL|
-NA-040|St Lawrence Island|KL|
+NA-040|St. Lawrence Island|KL|
 NA-041|Alexander Archipelago|KL|
 NA-042|Valdez Cordova County West group|KL|
 NA-043|Nunavut (Sverdrup Islands) group|VE|
@@ -605,17 +614,17 @@ NA-080|Little Bahama Bank group|C6|
 NA-081|Nova Scotia Province East group|VE|
 NA-082|Mississippi State group|W|
 NA-083|Virginia State group|W|
-NA-084|Quebec Province (St Lawrence Gulf) East group|VE|
+NA-084|Quebec Province (St. Lawrence Gulf) East group|VE|
 NA-085|Florida State North West (Bay to Wakulla County) group|W|
 NA-086|Ciego de Avila / Camaguey Province North group|CO|
 NA-087|Shumagin Islands|KL|
 NA-088|Bocas del Toro Province group|HP|
-NA-089|Louisiana State East (St Bernard Parish) group|W|
+NA-089|Louisiana State East (St. Bernard Parish) group|W|
 NA-090|Quintana Roo State Centre group|XE|
 NA-091|British Columbia Province South group|VE|
 NA-092|Texas State West (Cameron to Calhoun County) group|W|
 NA-093|Pinar del Rio / La Habana Province group|CO|
-NA-094|St Paul Island|CY9|CY9
+NA-094|St. Paul Island|CY9|CY9
 NA-095|Desecheo Island|KP5|KP5
 NA-096|Hispaniola|HI|
 NA-096|Hispaniola|HH|HH
@@ -626,13 +635,13 @@ NA-100|Antigua and Barbuda|V2|V2
 NA-101|Dominica|J7|J7
 NA-102|Guadeloupe|FG|
 NA-103|Montserrat|VP2M|VP2M
-NA-104|St Kitts and Nevis|V4|V4
-NA-105|Sint Maarten|PJ7|PJ7
-NA-105|St Martin |FS|
+NA-104|St. Kitts and Nevis|V4|V4
+NA-105|Sint Maarten|PJ7|
+NA-105|St. Martin |FS|
 NA-106|Virgin Islands|KP2|KP2
 NA-107|Martinique|FM|FM
-NA-108|St Lucia|J6|J6
-NA-109|St Vincent|J8|
+NA-108|St. Lucia|J6|J6
+NA-109|St. Vincent|J8|
 NA-110|South Carolina State group|W|
 NA-111|New Jersey State group|W|
 NA-112|North Carolina State West (Brunswick to Carteret County) group|W|
@@ -643,15 +652,15 @@ NA-116|Puntarenas Province West group|TI|
 NA-117|Puntarenas Province East group|TI|
 NA-118|British Columbia Province (Dundas Islands) group|VE|
 NA-119|Louisiana State Centre (Terrebonne Parish) group|W|
-NA-120|Louisiana State West (Cameron to St Mary Parish) group|W|
+NA-120|Louisiana State West (Cameron to St. Mary Parish) group|W|
 NA-121|Dillingham / Bristol Bay County group|KL|
 NA-122|Dominican Republic's Coastal Islands|HI|
 NA-123|Turneffe Islands|V3|
 NA-124|Baja California Sur State South East group|XE|
-NA-125|Quebec Province (St Lawrence Gulf) West group|VE|
+NA-125|Quebec Province (St. Lawrence Gulf) West group|VE|
 NA-126|Nova Scotia Province South group|VE|
 NA-127|Nova Scotia Province West group|VE|
-NA-128|Quebec Province (St Lawrence Waterway) group|VE|
+NA-128|Quebec Province (St. Lawrence Waterway) group|VE|
 NA-129|Nunavut (Banks Island) group|VE|
 NA-130|Nunavut (Baffin's Coastal Islands) East group|VE|
 NA-131|Nunavut (Kitikmeot Region) East Centre group|VE|
@@ -668,12 +677,12 @@ NA-141|Florida State South East (Dade to Indian River County) group|W|
 NA-142|Florida State North West (Escambia to Walton County) group|W|
 NA-143|Texas State East (Matagorda to Jefferson County) group|W|
 NA-144|California State South (Santa Barbara to Los Angeles County) group|W|
-NA-145|Sint Eustatius|PJ7|PJ5
-NA-145|Saba|PJ7|PJ6
-NA-145|Sint Eustatius|PJ6|PJ5
-NA-145|Saba|PJ6|PJ6
-NA-146|St Barthelemy Island|FS|FJ
-NA-146|St Barthelemy Island|FJ|FJ
+NA-145|Sint Eustatius|PJ7|
+NA-145|Saba|PJ7|
+NA-145|Sint Eustatius|PJ6|
+NA-145|Saba|PJ6|
+NA-146|St. Barthelemy Island|FS|FJ
+NA-146|St. Barthelemy Island|FJ|
 NA-147|The Grenadines|J3|
 NA-148|Massachusetts State North (Barnstable to Essex County) group|W|
 NA-149|Haiti's Coastal Islands|HI|
@@ -703,7 +712,7 @@ NA-172|North Slope County North group|KL|
 NA-173|Nunavut (Hudson Bay - Quebec Coast) South group|VE|
 NA-174|Nunavut (Foxe Basin) group|VE|
 NA-175|Nunavut (Kitikmeot Region) West Centre group|VE|
-NA-176|Quebec Province (St Lawrence Gulf) Centre group|VE|
+NA-176|Quebec Province (St. Lawrence Gulf) Centre group|VE|
 NA-177|Quebec Province (Gaspe Peninsula) group|VE|
 NA-178|California State Centre (Sonoma to Santa Cruz County) group|W|
 NA-179|Guadalupe Island|XE|
@@ -726,7 +735,7 @@ NA-195|Nunavut (Hudson Bay - Quebec Coast) Centre group|VE|
 NA-196|Nunavut (Belcher Islands) group|VE|
 NA-197|Kenai Peninsula County group|KL|
 NA-198|Newfoundland's Coastal Islands|VE|
-NA-199|St Martin's Coastal Islands|FS|
+NA-199|St. Martin's Coastal Islands|FS|
 NA-200|Quintana Roo State South group|XE|
 NA-201|Ciego de Avila / Camaguey Province South group|CO|
 NA-202|Colon / Veraguas North Province group|HP|
@@ -759,7 +768,7 @@ NA-228|Caribbean Sea Coast North group|YN|
 NA-229|Nunavut (Hudson Bay - Quebec Coast) North East group|VE|
 NA-230|Nunavut (Ottawa Islands) group|VE|
 NA-231|Nunavut (Hudson Bay - Ontario Coast) North group|VE|
-NA-232|St Matthew Island|KL|
+NA-232|St. Matthew Island|KL|
 NA-233|Delarof Islands|KL|
 NA-234|Islands of Four Mountains|KL|
 NA-235|Semidi Islands|KL|
@@ -774,6 +783,8 @@ NA-243|Greenland's Coastal Islands North East group|OX|
 NA-244|Marias Islands|XE|
 NA-245|Rocas Alijos Islands|XE|
 NA-246|Tamaulipas State Group|XE|
+NA-247|St. Maarten’s Coastal Islands|PJ7|
+NA-248|Nunavut (Devon) Island|VE|
 OC-001|Australia|VK|
 OC-002|Christmas Island|VK9(X)|VK9X
 OC-003|Cocos (Keeling) Islands|VK9(C)|VK9C
@@ -790,14 +801,14 @@ OC-013|Rarotonga Island|E51(S)|
 OC-014|Manihiki Atoll|E51(N)|
 OC-015|Tuvalu Islands|T2|
 OC-016|Viti Levu and Vanua Levu group|3D2|
-OC-017|Gilbert Islands|T32|
-OC-018|Banaba Island|T33|
+OC-017|Gilbert Islands|T30|T30
+OC-018|Banaba (Ocean) Island|T33|T33
 OC-019|Hawaiian Islands|KH6|
 OC-020|Kure Atoll|KH7K|KH7K
 OC-021|Java Island|YB|
 OC-022|Bali Island|YB|
 OC-023|Johnston Atoll|KH3|KH3
-OC-024|Kiritimati Island (aka Christmas Island)|T30|T30
+OC-024|Kiritimati Island (aka Christmas Island)|T32|
 OC-025|Admiralty Islands|P2|
 OC-026|Guam Island|KH2|
 OC-027|Marquesas Islands|FO(M)|FO(M)
@@ -878,7 +889,7 @@ OC-099|Tabar Islands|P2|
 OC-100|Nendo Island|H40|
 OC-101|Feni Islands|P2|
 OC-102|Tanga Islands|P2|
-OC-103|St Matthias group|P2|
+OC-103|St. Matthias group|P2|
 OC-104|Banks Islands|YJ|
 OC-105|Cagayan de Sulu group|DU|
 OC-106|Natuna Besar Islands|YB|
@@ -952,7 +963,7 @@ OC-172|Queensland State (North Coast) Centre group|VK|
 OC-173|Northern Territory (Arafura Sea Coast) West group|VK|
 OC-174|Tawi Tawi group|DU|
 OC-175|Sarangani Islands|DU|
-OC-176|Chesterfield Islands|FK(C)|
+OC-176|Chesterfield Islands|FK(C)|FK(C)
 OC-177|Seribu Islands|YB|
 OC-178|Tikopia and Anuta Islands|H40|
 OC-179|Duff Islands|H40|
@@ -1073,6 +1084,7 @@ OC-293|Pearl and Hermes Atoll|KH6|
 OC-294|Sandy Island|VK|
 OC-295|Sebatik Island|YB|
 OC-295|Sebatik Island|9M6|
+OC-296|Tobi and Helen|T8|
 SA-001|Easter Island|CE0(A)|
 SA-002|Falkland Islands|VP8(F)|
 SA-003|Fernando De Noronha Archipelago|PY0(F)|PY0F

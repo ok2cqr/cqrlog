@@ -75,9 +75,9 @@ C5|The Gambia|AF|0|13.46N|16.60W|46|35|422||
 C6|Bahamas|NA|5|25.0088N|77.3087W|11|08|60||
 C9|Mozambique|AF|-2|25.97S|32.58E|53|37|181||
 CE|Chile|SA|4|33.46S|70.65W|14|12|112||
-CE0(A)|Easter Islands (Rapa Nui)|SA|6|27.15S|109.43W|63|12|47||
-CE0(X)|San Felix & San Ambrosio Islands|SA|4|26.27S|80.10W|14|12|217||
-CE0(Z)|Juan Fernandez Islands|SA|4|33.61S|78.91W|14|12|125||
+CE0(A)|Easter Islands (Rapa Nui)|SA|6|27.1167S|109.3667W|63|12|47||
+CE0(X)|San Felix & San Ambrosio Islands|SA|4|26.32S|80.00W|14|12|217||
+CE0(Z)|Juan Fernandez Islands|SA|4|33.6451S|78.8232W|14|12|125||
 CE9|Antarctica|AN|0|80.3167S|81.25W|73|13|13||
 CN|Morocco|AF|0|34.02N|6.84W|37|33|446||
 CO|Cuba|NA|5|23.11N|82.41W|11|08|70||
@@ -113,7 +113,7 @@ ET|Ethiopia|AF|-3|9.02N|38.75E|48|37|53||
 EU|Belarus|EU|-2|53.89N|27.59E|29|16|27||
 EX|Kyrgyzstan|AS|-6|42.90N|74.60E|31|17|135||
 EY|Tadzhikistan|AS|-5|38.58N|68.76E|30|17|262||
-EZ|Turkmenistan|AS|-5|38.00N|58.35E|30|17|280||
+EZ|Turkmenistan|AS|-5|38.00N|58.35E|30|17|280||-2006/12/31
 F|France|EU|-1|48.86N|2.36E|27|14|227||
 FG|Guadeloupe Island|NA|4|15.9977N|61.718W|11|08|79||
 FH|Mayotte|AF|-3|12.7792S|45.2135E|53|39|169||
@@ -170,8 +170,8 @@ J6|Saint Lucia|NA|4|14.0078N|60.9835W|11|08|97||
 J7|Dominica|NA|4|15.2847N|61.3858W|11|08|95||
 J8|Saint Vincent & Grenadines|NA|4|13.2058N|61.2622W|11|08|98||
 JA|Japan|AS|-9|35.70N|139.80E|45|25|339||
-JD1(M)|Minami Torishima (Marcus Island)|OC|-10|24.29N|153.98E|90|27|177||
-JD1(O)|Ogasawara (Bonin & Volcano Isl., Iwo Jima)|AS|-9|24.79N|141.34E|45|27|192||
+JD1(M)|Minami Torishima (Marcus Island)|OC|-10|24.286667N|153.980556E|90|27|177||
+JD1(O)|Ogasawara (Bonin & Volcano Isl., Iwo Jima)|AS|-9|26.998056N|142.218056E|45|27|192||
 JT|Mongolia|AS|-7|47.89N|106.98E|32-33|23|363||1993/01/01-
 JW|Spitsbergen (Svalbard)|EU|-1|78.23N|15.57E|18|40|259||
 JX|Jan Mayen Island|EU|1|70.98N|8.08W|18|40|118||
@@ -182,7 +182,7 @@ KH1|Baker & Howland Islands|OC|12|0.8044N|176.616W|61|31|20||
 KH2|Guam|OC|-10|13.467N|144.7476E|64|27|103||
 KH3|Johnston Islands|OC|10|16.7388N|169.5183W|61|31|123||
 KH4|Midway Island|OC|11|28.2337N|177.3693W|61|31|174||
-KH5|Palmyra, Jarvis Islands|OC|11|5.8799N|162.0759W|61-62|31|197||
+KH5|Palmyra, Jarvis Islands|OC|11|5.8883N|162.0837W|61|31|197||
 KH5(K)|Kingman Reef|OC|11|6.3711N|162.4110W|61|31|134||
 KH6|Hawaii|OC|10|21.33N|157.84W|61|31|110||
 KH7(K)|Kure Island|OC|10|28.4164N|178.3279W|61|31|138||
