@@ -2394,7 +2394,7 @@ begin
   wait := '-wait ' + cqrini.ReadString('xplanet', 'refresh', '5');
   Result := Result + ' -config ' + dmData.HomeDir +
     'xplanet' + PathDelim + 'geoconfig  -glare 28 ' + '-light_time -range 2.5 ' +
-    wait + ' ' + geom + ' -window_title "CQRLOG - xplanet"' + proj;
+    wait + ' ' + geom + ' -window_title "CQRLOG - xplanet"' + myloc + proj
 end;
 
 procedure TdmUtils.RunXplanet;
