@@ -187,6 +187,7 @@ end;
 procedure TCWWinKeyerUSB.SetSpeed(speed : Word);
 begin
   if fDebugMode then Writeln('Speed: ',speed);
+  fSpeed := speed;
   ser.Flush;
   ser.SendByte(2);
   ser.SendByte(speed);
@@ -194,16 +195,8 @@ begin
 end;
 
 function TCWWinKeyerUSB.GetSpeed  : Word;
-var
-  rec : Byte;
 begin
-  ser.SendByte(7); //enable communication
-  sleep(50);
-  while ser.CanReadex(10) do
-  begin
-    rec := (ser.recvByte(0))
-  end;
-  Result := fMinSpeed + rec
+  Result := fSpeed
 end;
 
 function TCWWinKeyerUSB.GetStatus : TKeyStatus;
