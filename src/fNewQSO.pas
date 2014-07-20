@@ -4065,9 +4065,12 @@ begin
             Key := #0
           end;
     #43 : begin  //+ key
-            //acAddToBandMap.Execute;
-            //key := #0
-          end;
+            if cqrini.ReadBool('BandMap','PlusToBandMap',False) then
+            begin
+              acAddToBandMap.Execute;
+              key := #0
+            end
+          end
   end; //case
 end;
 

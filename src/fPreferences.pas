@@ -113,6 +113,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkPlusToBandMap: TCheckBox;
     chkgridshowhint: TCheckBox;
     chkgriddotsinsteadspaces: TCheckBox;
     chkgridboldtitle: TCheckBox;
@@ -1449,6 +1450,7 @@ begin
   cqrini.WriteBool('BandMap', 'AddAfterQSO', chkAddAfterSaveQSO.Checked);
   cqrini.WriteBool('BandMap','IgnoreBandFreq',chkIgnoreBandFreq.Checked);
   cqrini.WriteBool('BandMap','UseNewQSOFreqMode',chkUseNewQSOFreqMode.Checked);
+  cqrini.WriteBool('BandMap','PlusToBandMap',chkPlusToBandMap.Checked);
 
   cqrini.WriteString('xplanet', 'path', edtXplanetPath.Text);
   cqrini.WriteString('xplanet', 'height', edtXHeight.Text);
@@ -2781,6 +2783,7 @@ begin
   chkAddAfterSaveQSO.Checked := cqrini.ReadBool('BandMap', 'AddAfterQSO', False);
   chkIgnoreBandFreq.Checked := cqrini.ReadBool('BandMap','IgnoreBandFreq',True);
   chkUseNewQSOFreqMode.Checked := cqrini.ReadBool('BandMap','UseNewQSOFreqMode',False);
+  chkPlusToBandMap.Checked := cqrini.ReadBool('BandMap','PlusToBandMap',False);
 
   edtXplanetPath.Text := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
   edtXHeight.Text := cqrini.ReadString('xplanet', 'height', '100');
