@@ -115,7 +115,7 @@ object frmDXCCStat: TfrmDXCCStat
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.0.10.0'
+  LCLVersion = '1.2.2.0'
   object Panel1: TPanel
     Left = 0
     Height = 81
@@ -154,22 +154,22 @@ object frmDXCCStat: TfrmDXCCStat
       Top = 8
       Width = 104
       Caption = ' CW '
-      ClientHeight = 42
-      ClientWidth = 100
+      ClientHeight = 45
+      ClientWidth = 102
       TabOrder = 2
       object lblCWWKD: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 0
-        Width = 33
+        Width = 25
         Caption = 'wkd:'
         ParentColor = False
       end
       object lblCWCmf: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 22
-        Width = 31
+        Width = 26
         Caption = 'cfm:'
         ParentColor = False
       end
@@ -180,22 +180,22 @@ object frmDXCCStat: TfrmDXCCStat
       Top = 8
       Width = 104
       Caption = ' PHONE'
-      ClientHeight = 42
-      ClientWidth = 100
+      ClientHeight = 45
+      ClientWidth = 102
       TabOrder = 3
       object lblFoneWKD: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = -1
-        Width = 33
+        Width = 25
         Caption = 'wkd:'
         ParentColor = False
       end
       object lblFoneCmf: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 23
-        Width = 31
+        Width = 26
         Caption = 'cfm:'
         ParentColor = False
       end
@@ -206,22 +206,22 @@ object frmDXCCStat: TfrmDXCCStat
       Top = 8
       Width = 104
       Caption = ' DIGI '
-      ClientHeight = 42
-      ClientWidth = 100
+      ClientHeight = 45
+      ClientWidth = 102
       TabOrder = 4
       object lblDIGIWKD: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 0
-        Width = 33
+        Width = 25
         Caption = 'wkd:'
         ParentColor = False
       end
       object lblDIGICmf: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 22
-        Width = 31
+        Width = 26
         Caption = 'cfm:'
         ParentColor = False
       end
@@ -232,22 +232,22 @@ object frmDXCCStat: TfrmDXCCStat
       Top = 8
       Width = 104
       Caption = ' MIX '
-      ClientHeight = 42
-      ClientWidth = 100
+      ClientHeight = 45
+      ClientWidth = 102
       TabOrder = 5
       object lblWkdMix: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 0
-        Width = 33
+        Width = 25
         Caption = 'wkd:'
         ParentColor = False
       end
       object lblCfmMix: TLabel
         Left = 6
-        Height = 18
+        Height = 15
         Top = 22
-        Width = 31
+        Width = 26
         Caption = 'cfm:'
         ParentColor = False
       end
@@ -300,15 +300,15 @@ object frmDXCCStat: TfrmDXCCStat
     TabOrder = 3
     object Label1: TLabel
       Left = 19
-      Height = 18
+      Height = 15
       Top = 18
-      Width = 109
+      Width = 91
       Caption = 'Confirmed type:'
       ParentColor = False
     end
     object cmbCfmType: TComboBox
       Left = 133
-      Height = 25
+      Height = 19
       Top = 10
       Width = 260
       ItemHeight = 0

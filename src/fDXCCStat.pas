@@ -747,6 +747,7 @@ begin
       mDXCC.Open;
       mDXCC.Append;
       mDXCC.Fields[0].AsString := '';
+      mDXCC.FieldByName('mode').AsString := '';
       mDXCC.Post;
       mDXCC.First
     finally
