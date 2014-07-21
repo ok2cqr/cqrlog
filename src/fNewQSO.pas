@@ -3003,12 +3003,15 @@ end;
 
 procedure TfrmNewQSO.acCWTypeExecute(Sender: TObject);
 begin
-  with TfrmCWType.Create(self) do
-  try
-    edtSpeed.Value := CWint.GetSpeed;
-    ShowModal
-  finally
-    Free
+  if Assigned(CWint) then
+  begin
+    with TfrmCWType.Create(self) do
+    try
+      edtSpeed.Value := CWint.GetSpeed;
+      ShowModal
+    finally
+      Free
+    end
   end
 end;
 
@@ -3134,9 +3137,12 @@ end;
 
 procedure TfrmNewQSO.acTuneExecute(Sender : TObject);
 begin
-  CWint.TuneStart;
-  ShowMessage('Tunning started .... '+LineEnding+LineEnding+'OK to abort');
-  CWint.TuneStop
+  if Assigned(CWint) then
+  begin
+    CWint.TuneStart;
+    ShowMessage('Tunning started .... '+LineEnding+LineEnding+'OK to abort');
+    CWint.TuneStop
+  end
 end;
 
 procedure TfrmNewQSO.acUploadToAllExecute(Sender: TObject);
@@ -3836,7 +3842,8 @@ begin
         old_cmode := ''
       end
       else begin
-        CWint.StopSending;
+        if Assigned(CWint) then
+          CWint.StopSending;
         EscFirstTime   := True;
         tmrESC.Enabled := True
       end
@@ -3887,22 +3894,29 @@ begin
     if (cmbMode.Text='SSB') then
       RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
-      CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,lblGreeting.Caption,''));
+      if Assigned(CWint) then
+        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,lblGreeting.Caption,''));
     key := 0
   end;
 
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
-    speed := CWint.GetSpeed+2;
-    CWint.SetSpeed(speed);
-    sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM'
+    if Assigned(CWint) then
+    begin
+      speed := CWint.GetSpeed+2;
+      CWint.SetSpeed(speed);
+      sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM'
+    end
   end;
 
   if (key = 34) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
-    speed := CWint.GetSpeed-2;
-    CWint.SetSpeed(speed);
-    sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM'
+    if Assigned(CWint) then
+    begin
+      speed := CWint.GetSpeed-2;
+      CWint.SetSpeed(speed);
+      sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM'
+    end
   end;
 
   if (Shift = [ssCtrl]) and (Key = VK_F8) then

@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.8.1
+  - cqrlog crashed after hit ESC for the first time when no keying device was set 
+
 1.8.0
   + after click to "Upload all" qso to online logs, info about disabled services is not shown  
   + added new optimized MySQL configuration file (log should be faster and won't show error about missing tables)
