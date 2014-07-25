@@ -6,6 +6,7 @@ Legend:
 
 1.8.1
   - cqrlog crashed after hit ESC for the first time when no keying device was set 
+  - after hit enter in New QSO window, it takes long time to save it - fixed  
 
 1.8.0
   + after click to "Upload all" qso to online logs, info about disabled services is not shown  

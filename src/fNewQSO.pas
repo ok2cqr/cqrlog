@@ -2014,13 +2014,12 @@ begin
       edtITU.Text := '0';
     if edtWAZ.Text = '' then
       edtWAZ.Text := '0';
-
     if not cbOffline.Checked then
     begin
-      if Delete then
-        frmBandMap.DeleteFromBandMap(edtCall.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),cmbMode.Text);
       if cqrini.ReadBool('BandMap','AddAfterQSO',False) then
         acAddToBandMap.Execute;
+      if Delete then
+        frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
     end;
     dmData.SaveQSO(date,
                    edtStartTime.Text,
@@ -4456,7 +4455,6 @@ begin
     QSLR := dmData.Q.Fields[2].AsString;
     LoTW := dmData.Q.Fields[3].AsString;
     eQSL := dmData.Q.Fields[4].AsString;
-    //Writeln(dmData.Q.Fields[0].AsString,'|',mode,'|',QSLR,'|',LoTW,'|',eQSL);
     if i > 0 then
     begin
       if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
@@ -4763,9 +4761,7 @@ begin
   cqrini.WriteInteger('NewQSO','Top',Top);
   cqrini.WriteInteger('NewQSO','Left',Left);
   cqrini.WriteBool('NewQSO','StatBar',sbNewQSO.Visible);
-  cqrini.SaveToDisk;
-  //if dmData.DebugLevel>0 then Writeln('Saving window size a position (height|width|top|left):',
-  //height,'|',Width,'|',top,'|',left)
+  cqrini.SaveToDisk
 end;
 
 procedure TfrmNewQSO.SynCallBook;
@@ -4793,8 +4789,6 @@ begin
     MvToRem       := cqrini.ReadBool('NewQSO','MvToRem',True);
     AlwaysReplace := cqrini.ReadBool('NewQSO','UseCallBookData',False);
 
-    writeln('c_qsl:',c_qsl);
-    Writeln('MvToRem:',MvToRem);
     if (not IgnoreQRZ) and (c_qsl<>'') then
     begin
       if (edtQSL_VIA.Text = '') then
@@ -5192,18 +5186,10 @@ begin
   else
     SunDelta := cqrini.ReadFloat('Program','SunOffset',0);
   chkAutoMode.Checked := cqrini.ReadBool('NewQSO','AutoMode',True);
-  //Writeln('SunDelta:',SunDelta);
   if dmUtils.IsLocOK(myloc) then
   begin
     dmUtils.CoordinateFromLocator(myloc,lat,long);
     dmUtils.CalcSunRiseSunSet(lat,long,SunRise,SunSet);
-    {
-    if SunDelta <> 0 then
-    begin
-      SunRise := SunRise + (SunDelta/24);
-      SunSet  := SunSet + (SunDelta/24)
-    end;
-    }
     if not inUTC then
     begin
       SunRise := SunRise + (SunDelta/24);
