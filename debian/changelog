@@ -1,3 +1,11 @@
+cqrlog (1.8.1-1) unstable; urgency=low
+
+  * cqrlog crashed after hit ESC for the first time when no keying device 
+    was set
+  * after hit enter in New QSO window, it took long time to save QSO
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 26 Jul 2014 09:30:05 +0100  
+  
 cqrlog (1.8.0-1) unstable; urgency=low
  
   * after click to "Upload all" qso to online logs, info about disabled 
