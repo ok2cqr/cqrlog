@@ -1117,7 +1117,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'Width'#3#254#0#7'Caption'#6'''Add station to bandmap after saving QSO'#8'Ta'
   +'bOrder'#2#10#0#0#9'TCheckBox'#17'chkIgnoreBandFreq'#4'Left'#2#14#6'Height'#2
   +#21#3'Top'#3#152#1#5'Width'#3' '#2#7'Caption'#6'^Ignore DX spots with freq e'
-  +'qauls to the start of the band (21.000, 14.000 etc., usually notes)'#8'TabO'
+  +'quals to the start of the band (21.000, 14.000 etc., usually notes)'#8'TabO'
   +'rder'#2#11#0#0#9'TCheckBox'#20'chkUseNewQSOFreqMode'#4'Left'#2#14#6'Height'
   +#2#21#3'Top'#3#179#1#5'Width'#3#213#1#7'Caption'#6'IWhen TRX control is not '
   +'active, use frequency and mode from NewQSO window'#8'TabOrder'#2#12#0#0#9'T'

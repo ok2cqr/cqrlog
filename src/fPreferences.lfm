@@ -4935,7 +4935,7 @@ object frmPreferences: TfrmPreferences
         Height = 21
         Top = 408
         Width = 544
-        Caption = 'Ignore DX spots with freq eqauls to the start of the band (21.000, 14.000 etc., usually notes)'
+        Caption = 'Ignore DX spots with freq equals to the start of the band (21.000, 14.000 etc., usually notes)'
         TabOrder = 11
       end
       object chkUseNewQSOFreqMode: TCheckBox
