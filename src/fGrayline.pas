@@ -244,12 +244,22 @@ var
   index   : Word;
   band    : String;
   tmp     : Integer;
+  wCall   : String;
   latitude, longitude: Currency;
 begin
   call := trim(copy(spot,27,12));
+
   if watchFor<>'' then
   begin
-    if (call <> watchFor) then exit;
+    if Pos('*',watchFor) > 0 then   //ZL*
+    begin
+      wCall := copy(watchFor,1,Pos('*',watchFor)-1);
+      if (Pos(wCall,call) <> 1) then    //all callsign started with ZL
+        exit
+    end
+    else begin
+      if (call <> watchFor) then exit;
+    end
   end;
 
   spotter := trim(copy(spot,7,Pos('-',spot)-7));
