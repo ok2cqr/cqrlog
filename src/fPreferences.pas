@@ -979,6 +979,7 @@ type
     tabDXCluster: TTabSheet;
     procedure btnAlertCallsignsClick(Sender: TObject);
     procedure btnChangeDefFreqClick(Sender: TObject);
+    procedure btnChangeDefModeClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -1068,6 +1069,7 @@ var
   fbandSize: integer;
   TRXChanged: boolean;
   ReloadFreq: Boolean = False;
+  ReloadModes: Boolean = False;
   WinKeyerChanged : Boolean;
 
 implementation
@@ -1628,7 +1630,8 @@ begin
 
   if ReloadFreq then
     dmUtils.InsertFreq(frmNewQSO.cmbFreq);
-
+  if ReloadModes then
+    dmUtils.InsertModes(frmNewQSO.cmbMode);
   if frmNewQSO.edtCall.Text = '' then
   begin
     dmUtils.InsertModes(frmNewQSO.cmbMode);
@@ -2020,6 +2023,32 @@ begin
   finally
     FreeAndNil(frmNewQSODefValues)
   end
+end;
+
+procedure TfrmPreferences.btnChangeDefModeClick(Sender: TObject);
+var
+  cDefaultModes: String;
+  i: Integer;
+begin
+  cDefaultModes := '';
+  frmNewQSODefValues := TfrmNewQSODefValues.Create(frmPreferences);
+  try
+    frmNewQSODefValues.WhatChangeDesc := 'Mode';
+    for i := 0 to cMaxModes do
+    begin
+      cDefaultModes := cDefaultModes + '|' + cModes[i];
+    end;
+    frmNewQSODefValues.WhatChange :=
+      cqrini.ReadString('NewQSO', 'Modes', cDefaultModes);
+    if frmNewQSODefValues.ShowModal = mrOK then
+    begin
+      cqrini.WriteString('NewQSO', 'Modes', frmNewQSODefValues.GetValues);
+      dmUtils.InsertModes(cmbMode);
+      ReloadModes := True
+    end
+  finally
+    FreeAndNil(frmNewQSODefValues);
+  end;
 end;
 
 procedure TfrmPreferences.btnAlertCallsignsClick(Sender: TObject);

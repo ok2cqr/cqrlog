@@ -1,92 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <ProjectOptions>
+  <ProjectSession>
     <Version Value="9"/>
-    <General>
-      <Flags>
-        <LRSInOutputDirectory Value="False"/>
-      </Flags>
-      <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
-      <AutoCreateForms Value="False"/>
-      <Title Value="cqrlog"/>
-      <Icon Value="0"/>
-    </General>
-    <VersionInfo>
-      <AutoIncrementBuild Value="True"/>
-      <MinorVersionNr Value="3"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="2083"/>
-      <StringTable ProductVersion="0.3.1.2026"/>
-    </VersionInfo>
-    <BuildModes Count="1">
-      <Item1 Name="default" Default="True"/>
-    </BuildModes>
-    <PublishOptions>
-      <Version Value="2"/>
-      <IgnoreBinaries Value="False"/>
-      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
-      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
-    </PublishOptions>
-    <RunParams>
-      <local>
-        <FormatVersion Value="1"/>
-        <CommandLineParams Value="--DEBUG=1"/>
-        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
-      </local>
-      <environment>
-        <UserOverrides Count="2">
-          <Variable0 Name="FIREBIRD" Value="/home/ok2cqr/projekty/cqrlog/testing"/>
-          <Variable1 Name="HEAPTRC" Value="1"/>
-        </UserOverrides>
-      </environment>
-    </RunParams>
-    <RequiredPackages Count="10">
-      <Item1>
-        <PackageName Value="TurboPowerIPro"/>
-        <MinVersion Major="1" Valid="True"/>
-      </Item1>
-      <Item2>
-        <PackageName Value="SQLDBLaz"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
-      </Item2>
-      <Item3>
-        <PackageName Value="SDFLaz"/>
-        <MinVersion Minor="1" Release="1" Valid="True"/>
-      </Item3>
-      <Item4>
-        <PackageName Value="SynEdit"/>
-        <MinVersion Major="1" Valid="True"/>
-      </Item4>
-      <Item5>
-        <PackageName Value="TAChartLazarusPkg"/>
-        <MinVersion Valid="True"/>
-      </Item5>
-      <Item6>
-        <PackageName Value="RunTimeTypeInfoControls"/>
-        <MinVersion Minor="1" Valid="True"/>
-      </Item6>
-      <Item7>
-        <PackageName Value="LCL"/>
-      </Item7>
-      <Item8>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
-      </Item8>
-      <Item9>
-        <PackageName Value="DBFLaz"/>
-        <MinVersion Minor="1" Release="1" Valid="True"/>
-      </Item9>
-      <Item10>
-        <PackageName Value="MemDSLaz"/>
-        <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
-      </Item10>
-    </RequiredPackages>
-    <Units Count="81">
+    <Units Count="83">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="cqrlog"/>
+        <UsageCount Value="34"/>
       </Unit0>
       <Unit1>
         <Filename Value="fNewQSO.pas"/>
@@ -95,6 +16,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewQSO"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="5043"/>
+        <CursorPos X="1" Y="5099"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="fMain.pas"/>
@@ -103,6 +31,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fMain"/>
+        <UsageCount Value="34"/>
       </Unit2>
       <Unit3>
         <Filename Value="fPreferences.pas"/>
@@ -111,6 +40,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fPreferences"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2008"/>
+        <CursorPos X="133" Y="2023"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="dUtils.pas"/>
@@ -119,12 +55,20 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dUtils"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="420"/>
+        <CursorPos X="82" Y="420"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit4>
       <Unit5>
         <Filename Value="fChangeLocator.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangeLocator"/>
         <UnitName Value="fChangeLocator"/>
+        <UsageCount Value="34"/>
       </Unit5>
       <Unit6>
         <Filename Value="dData.pas"/>
@@ -133,6 +77,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dData"/>
+        <UsageCount Value="34"/>
       </Unit6>
       <Unit7>
         <Filename Value="dDXCC.pas"/>
@@ -141,6 +86,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dDXCC"/>
+        <UsageCount Value="34"/>
       </Unit7>
       <Unit8>
         <Filename Value="fMarkQSL.pas"/>
@@ -148,6 +94,7 @@
         <ComponentName Value="frmMarkQSL"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fMarkQSL"/>
+        <UsageCount Value="34"/>
       </Unit8>
       <Unit9>
         <Filename Value="fDXCCStat.pas"/>
@@ -156,6 +103,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDXCCStat"/>
+        <UsageCount Value="34"/>
       </Unit9>
       <Unit10>
         <Filename Value="fSort.pas"/>
@@ -163,6 +111,7 @@
         <ComponentName Value="frmSort"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSort"/>
+        <UsageCount Value="34"/>
       </Unit10>
       <Unit11>
         <Filename Value="fFilter.pas"/>
@@ -170,6 +119,7 @@
         <ComponentName Value="frmFilter"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fFilter"/>
+        <UsageCount Value="34"/>
       </Unit11>
       <Unit12>
         <Filename Value="fImportProgress.pas"/>
@@ -178,6 +128,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fImportProgress"/>
+        <UsageCount Value="34"/>
       </Unit12>
       <Unit13>
         <Filename Value="fImportTest.pas"/>
@@ -185,6 +136,7 @@
         <ComponentName Value="frmImportTest"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fImportTest"/>
+        <UsageCount Value="34"/>
       </Unit13>
       <Unit14>
         <Filename Value="fSelectDXCC.pas"/>
@@ -192,6 +144,7 @@
         <ComponentName Value="frmSelectDXCC"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSelectDXCC"/>
+        <UsageCount Value="34"/>
       </Unit14>
       <Unit15>
         <Filename Value="fGrayline.pas"/>
@@ -200,6 +153,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fGrayline"/>
+        <UsageCount Value="34"/>
       </Unit15>
       <Unit16>
         <Filename Value="fCallbook.pas"/>
@@ -208,6 +162,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCallbook"/>
+        <UsageCount Value="34"/>
       </Unit16>
       <Unit17>
         <Filename Value="fTRXControl.pas"/>
@@ -216,6 +171,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fTRXControl"/>
+        <UsageCount Value="34"/>
       </Unit17>
       <Unit18>
         <Filename Value="fFreq.pas"/>
@@ -223,12 +179,14 @@
         <ComponentName Value="frmFreq"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fFreq"/>
+        <UsageCount Value="34"/>
       </Unit18>
       <Unit19>
         <Filename Value="fChangeFreq.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangeFreq"/>
         <UnitName Value="fChangeFreq"/>
+        <UsageCount Value="34"/>
       </Unit19>
       <Unit20>
         <Filename Value="fAdifImport.pas"/>
@@ -236,6 +194,7 @@
         <ComponentName Value="frmAdifImport"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fAdifImport"/>
+        <UsageCount Value="34"/>
       </Unit20>
       <Unit21>
         <Filename Value="fSplash.pas"/>
@@ -243,6 +202,7 @@
         <ComponentName Value="frmSplash"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSplash"/>
+        <UsageCount Value="34"/>
       </Unit21>
       <Unit22>
         <Filename Value="fQTHProfiles.pas"/>
@@ -250,6 +210,7 @@
         <ComponentName Value="frmQTHProfiles"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQTHProfiles"/>
+        <UsageCount Value="34"/>
       </Unit22>
       <Unit23>
         <Filename Value="fNewQTHProfile.pas"/>
@@ -257,6 +218,7 @@
         <ComponentName Value="frmNewQTHProfile"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewQTHProfile"/>
+        <UsageCount Value="34"/>
       </Unit23>
       <Unit24>
         <Filename Value="fEnterFreq.pas"/>
@@ -264,6 +226,7 @@
         <ComponentName Value="frmEnterFreq"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fEnterFreq"/>
+        <UsageCount Value="34"/>
       </Unit24>
       <Unit25>
         <Filename Value="fExportProgress.pas"/>
@@ -272,12 +235,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fExportProgress"/>
+        <UsageCount Value="34"/>
       </Unit25>
       <Unit26>
         <Filename Value="fNewDXCluster.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewDXCluster"/>
         <UnitName Value="fNewDXCluster"/>
+        <UsageCount Value="34"/>
       </Unit26>
       <Unit27>
         <Filename Value="fDXCluster.pas"/>
@@ -286,6 +251,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDXCluster"/>
+        <UsageCount Value="34"/>
       </Unit27>
       <Unit28>
         <Filename Value="dDXCluster.pas"/>
@@ -294,6 +260,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dDXCluster"/>
+        <UsageCount Value="34"/>
       </Unit28>
       <Unit29>
         <Filename Value="fWorking.pas"/>
@@ -301,6 +268,7 @@
         <ComponentName Value="frmWorking"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fWorking"/>
+        <UsageCount Value="34"/>
       </Unit29>
       <Unit30>
         <Filename Value="fSerialPort.pas"/>
@@ -308,6 +276,7 @@
         <ComponentName Value="frmSerialPort"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSerialPort"/>
+        <UsageCount Value="34"/>
       </Unit30>
       <Unit31>
         <Filename Value="fQSLMgr.pas"/>
@@ -315,12 +284,14 @@
         <ComponentName Value="frmQSLMgr"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQSLMgr"/>
+        <UsageCount Value="34"/>
       </Unit31>
       <Unit32>
         <Filename Value="fSendSpot.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSendSpot"/>
         <UnitName Value="fSendSpot"/>
+        <UsageCount Value="34"/>
       </Unit32>
       <Unit33>
         <Filename Value="fQSODetails.pas"/>
@@ -329,6 +300,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQSODetails"/>
+        <UsageCount Value="34"/>
       </Unit33>
       <Unit34>
         <Filename Value="fUpgrade.pas"/>
@@ -336,6 +308,7 @@
         <ComponentName Value="frmUpgrade"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fUpgrade"/>
+        <UsageCount Value="34"/>
       </Unit34>
       <Unit35>
         <Filename Value="fWAZITUStat.pas"/>
@@ -344,6 +317,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fWAZITUStat"/>
+        <UsageCount Value="34"/>
       </Unit35>
       <Unit36>
         <Filename Value="fIOTAStat.pas"/>
@@ -351,6 +325,7 @@
         <ComponentName Value="frmIOTAStat"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fIOTAStat"/>
+        <UsageCount Value="34"/>
       </Unit36>
       <Unit37>
         <Filename Value="fClubSettings.pas"/>
@@ -358,6 +333,7 @@
         <ComponentName Value="frmClubSettings"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fClubSettings"/>
+        <UsageCount Value="34"/>
       </Unit37>
       <Unit38>
         <Filename Value="fLoadClub.pas"/>
@@ -366,12 +342,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLoadClub"/>
+        <UsageCount Value="34"/>
       </Unit38>
       <Unit39>
         <Filename Value="fRefCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRefCall"/>
         <UnitName Value="fRefCall"/>
+        <UsageCount Value="34"/>
       </Unit39>
       <Unit40>
         <Filename Value="fBandMap.pas"/>
@@ -380,12 +358,20 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fBandMap"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="361"/>
+        <CursorPos X="1" Y="384"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit40>
       <Unit41>
         <Filename Value="fBandMapFilter.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmBandMapfilter"/>
         <UnitName Value="fBandMapFilter"/>
+        <UsageCount Value="34"/>
       </Unit41>
       <Unit42>
         <Filename Value="fLongNote.pas"/>
@@ -393,6 +379,7 @@
         <ComponentName Value="frmLongNote"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLongNote"/>
+        <UsageCount Value="34"/>
       </Unit42>
       <Unit43>
         <Filename Value="fDatabaseUpdate.pas"/>
@@ -400,6 +387,7 @@
         <ComponentName Value="frmDatabaseUpdate"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDatabaseUpdate"/>
+        <UsageCount Value="34"/>
       </Unit43>
       <Unit44>
         <Filename Value="fExLabelPrint.pas"/>
@@ -408,6 +396,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fExLabelPrint"/>
+        <UsageCount Value="34"/>
       </Unit44>
       <Unit45>
         <Filename Value="fImportLoTWWeb.pas"/>
@@ -416,6 +405,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fImportLoTWWeb"/>
+        <UsageCount Value="34"/>
       </Unit45>
       <Unit46>
         <Filename Value="fLoTWExport.pas"/>
@@ -424,6 +414,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLoTWExport"/>
+        <UsageCount Value="34"/>
       </Unit46>
       <Unit47>
         <Filename Value="fGroupEdit.pas"/>
@@ -431,6 +422,7 @@
         <ComponentName Value="frmGroupEdit"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fGroupEdit"/>
+        <UsageCount Value="34"/>
       </Unit47>
       <Unit48>
         <Filename Value="fDefaultFreq.pas"/>
@@ -439,11 +431,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDefaultFreq"/>
+        <UsageCount Value="34"/>
       </Unit48>
       <Unit49>
         <Filename Value="uCWKeying.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCWKeying"/>
+        <UsageCount Value="34"/>
       </Unit49>
       <Unit50>
         <Filename Value="fCustomStat.pas"/>
@@ -451,6 +445,7 @@
         <ComponentName Value="frmCustomStat"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCustomStat"/>
+        <UsageCount Value="34"/>
       </Unit50>
       <Unit51>
         <Filename Value="fKeyTexts.pas"/>
@@ -458,6 +453,7 @@
         <ComponentName Value="frmKeyTexts"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fKeyTexts"/>
+        <UsageCount Value="34"/>
       </Unit51>
       <Unit52>
         <Filename Value="fCWType.pas"/>
@@ -465,6 +461,7 @@
         <ComponentName Value="frmCWType"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCWType"/>
+        <UsageCount Value="34"/>
       </Unit52>
       <Unit53>
         <Filename Value="fSplitSettings.pas"/>
@@ -472,6 +469,7 @@
         <ComponentName Value="frmSplitSettings"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSplitSettings"/>
+        <UsageCount Value="34"/>
       </Unit53>
       <Unit54>
         <Filename Value="fShowStations.pas"/>
@@ -479,11 +477,13 @@
         <ComponentName Value="frmShowStations"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fShowStations"/>
+        <UsageCount Value="34"/>
       </Unit54>
       <Unit55>
         <Filename Value="uMyIni.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uMyIni"/>
+        <UsageCount Value="34"/>
       </Unit55>
       <Unit56>
         <Filename Value="fPropagation.pas"/>
@@ -491,6 +491,7 @@
         <ComponentName Value="frmPropagation"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fPropagation"/>
+        <UsageCount Value="34"/>
       </Unit56>
       <Unit57>
         <Filename Value="fSQLConsole.pas"/>
@@ -498,6 +499,7 @@
         <ComponentName Value="frmSQLConsole"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSQLConsole"/>
+        <UsageCount Value="34"/>
       </Unit57>
       <Unit58>
         <Filename Value="fCallAttachment.pas"/>
@@ -505,6 +507,7 @@
         <ComponentName Value="frmCallAttachment"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCallAttachment"/>
+        <UsageCount Value="34"/>
       </Unit58>
       <Unit59>
         <Filename Value="fEditDetails.pas"/>
@@ -512,6 +515,7 @@
         <ComponentName Value="frmEditDetails"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fEditDetails"/>
+        <UsageCount Value="34"/>
       </Unit59>
       <Unit60>
         <Filename Value="fQSLViewer.pas"/>
@@ -519,6 +523,7 @@
         <ComponentName Value="frmQSLViewer"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQSLViewer"/>
+        <UsageCount Value="34"/>
       </Unit60>
       <Unit61>
         <Filename Value="fSCP.pas"/>
@@ -526,6 +531,7 @@
         <ComponentName Value="frmSCP"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSCP"/>
+        <UsageCount Value="34"/>
       </Unit61>
       <Unit62>
         <Filename Value="fDBConnect.pas"/>
@@ -534,6 +540,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDBConnect"/>
+        <UsageCount Value="34"/>
       </Unit62>
       <Unit63>
         <Filename Value="fNewLog.pas"/>
@@ -541,6 +548,7 @@
         <ComponentName Value="frmNewLog"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewLog"/>
+        <UsageCount Value="34"/>
       </Unit63>
       <Unit64>
         <Filename Value="fRebuildMembStat.pas"/>
@@ -548,11 +556,13 @@
         <ComponentName Value="frmRebuildMembStat"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRebuildMembStat"/>
+        <UsageCount Value="34"/>
       </Unit64>
       <Unit65>
         <Filename Value="uVersion.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uVersion"/>
+        <UsageCount Value="34"/>
       </Unit65>
       <Unit66>
         <Filename Value="fDXClusterList.pas"/>
@@ -561,6 +571,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDXClusterList"/>
+        <UsageCount Value="34"/>
       </Unit66>
       <Unit67>
         <Filename Value="fAbout.pas"/>
@@ -569,6 +580,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fAbout"/>
+        <UsageCount Value="34"/>
       </Unit67>
       <Unit68>
         <Filename Value="fChangelog.pas"/>
@@ -577,6 +589,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fChangelog"/>
+        <UsageCount Value="34"/>
       </Unit68>
       <Unit69>
         <Filename Value="fBigSquareStat.pas"/>
@@ -585,6 +598,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fBigSquareStat"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit69>
       <Unit70>
         <Filename Value="feQSLUpload.pas"/>
@@ -593,6 +613,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="feQSLUpload"/>
+        <UsageCount Value="34"/>
       </Unit70>
       <Unit71>
         <Filename Value="feQSLDownload.pas"/>
@@ -601,6 +622,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="feQSLDownload"/>
+        <UsageCount Value="34"/>
       </Unit71>
       <Unit72>
         <Filename Value="fSOTAExport.pas"/>
@@ -609,6 +631,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSOTAExport"/>
+        <UsageCount Value="34"/>
       </Unit72>
       <Unit73>
         <Filename Value="fNewQSODefValues.pas"/>
@@ -617,6 +640,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewQSODefValues"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="129"/>
+        <CursorPos X="1" Y="149"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit73>
       <Unit74>
         <Filename Value="fQSLExpPref.pas"/>
@@ -625,6 +655,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fQSLExpPref"/>
+        <UsageCount Value="34"/>
       </Unit74>
       <Unit75>
         <Filename Value="fRotControl.pas"/>
@@ -632,6 +663,7 @@
         <ComponentName Value="frmRotControl"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRotControl"/>
+        <UsageCount Value="34"/>
       </Unit75>
       <Unit76>
         <Filename Value="dLogUpload.pas"/>
@@ -640,6 +672,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="dLogUpload"/>
+        <UsageCount Value="34"/>
       </Unit76>
       <Unit77>
         <Filename Value="fLogUploadStatus.pas"/>
@@ -648,6 +681,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fLogUploadStatus"/>
+        <UsageCount Value="34"/>
       </Unit77>
       <Unit78>
         <Filename Value="frCWKeys.pas"/>
@@ -656,6 +690,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="frCWKeys"/>
+        <UsageCount Value="34"/>
       </Unit78>
       <Unit79>
         <Filename Value="fCallAlert.pas"/>
@@ -664,6 +699,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCallAlert"/>
+        <UsageCount Value="34"/>
       </Unit79>
       <Unit80>
         <Filename Value="fNewCallAlert.pas"/>
@@ -672,48 +708,151 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewCallAlert"/>
+        <UsageCount Value="34"/>
       </Unit80>
+      <Unit81>
+        <Filename Value="fbigsquarestat.pas"/>
+        <ComponentName Value="frmBigSquareStat"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fBigSquareStat"/>
+        <UsageCount Value="33"/>
+      </Unit81>
+      <Unit82>
+        <Filename Value="/usr/lib/lazarus/1.2.2/lcl/include/customform.inc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="987"/>
+        <CursorPos X="1" Y="1010"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit82>
     </Units>
-  </ProjectOptions>
-  <CompilerOptions>
-    <Version Value="11"/>
-    <SearchPaths>
-      <Libraries Value="$(LazarusDir)/lcl"/>
-      <OtherUnitFiles Value="lnet/lib"/>
-      <SrcPath Value="$(LazarusDir)/lcl;$(LazarusDir)/lcl/interfaces/$(LCLWidgetType)"/>
-    </SearchPaths>
-    <Parsing>
-      <SyntaxOptions>
-        <CStyleOperator Value="False"/>
-      </SyntaxOptions>
-    </Parsing>
-    <CodeGeneration>
-      <Optimizations>
-        <OptimizationLevel Value="3"/>
-      </Optimizations>
-    </CodeGeneration>
-    <Other>
-      <Verbosity>
-        <ShowNotes Value="False"/>
-        <ShowHints Value="False"/>
-        <ShoLineNum Value="True"/>
-      </Verbosity>
-      <CompilerMessages>
-        <UseMsgFile Value="True"/>
-      </CompilerMessages>
-      <CustomOptions Value="-dNO_CONTEST"/>
-      <CompilerPath Value="$(CompPath)"/>
-      <CreateMakefileOnBuild Value="True"/>
-    </Other>
-  </CompilerOptions>
-  <Debugging>
-    <Exceptions Count="2">
-      <Item1>
-        <Name Value="ECodetoolError"/>
-      </Item1>
-      <Item2>
-        <Name Value="EFOpenError"/>
-      </Item2>
-    </Exceptions>
-  </Debugging>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position1>
+      <Position2>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position2>
+      <Position3>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position3>
+      <Position4>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position4>
+      <Position5>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position5>
+      <Position6>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position6>
+      <Position7>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position7>
+      <Position8>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position8>
+      <Position9>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position9>
+      <Position10>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position10>
+      <Position11>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position11>
+      <Position12>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position12>
+      <Position13>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position13>
+      <Position14>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position14>
+      <Position15>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position15>
+      <Position16>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position16>
+      <Position17>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position17>
+      <Position18>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position18>
+      <Position19>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position19>
+      <Position20>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position20>
+      <Position21>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position21>
+      <Position22>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position22>
+      <Position23>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="408" Column="1" TopLine="375"/>
+      </Position23>
+      <Position24>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="409" Column="1" TopLine="375"/>
+      </Position24>
+      <Position25>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="410" Column="1" TopLine="375"/>
+      </Position25>
+      <Position26>
+        <Filename Value="dUtils.pas"/>
+        <Caret Line="420" Column="82" TopLine="420"/>
+      </Position26>
+      <Position27>
+        <Filename Value="/usr/lib/lazarus/1.2.2/lcl/include/customform.inc"/>
+        <Caret Line="1010" Column="1" TopLine="987"/>
+      </Position27>
+      <Position28>
+        <Filename Value="fBandMap.pas"/>
+        <Caret Line="384" Column="1" TopLine="361"/>
+      </Position28>
+      <Position29>
+        <Filename Value="/usr/lib/lazarus/1.2.2/lcl/include/customform.inc"/>
+        <Caret Line="1010" Column="1" TopLine="987"/>
+      </Position29>
+      <Position30>
+        <Filename Value="fBandMap.pas"/>
+        <Caret Line="384" Column="1" TopLine="361"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
 </CONFIG>

@@ -20,6 +20,7 @@ type
     btnMoveUp : TButton;
     btnOK : TButton;
     Button2 : TButton;
+    Button3: TButton;
     edtValue : TEdit;
     lblDesc : TLabel;
     lbValues : TListBox;
@@ -30,6 +31,7 @@ type
     procedure btnMoveUpClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormShow(Sender : TObject);
   private
@@ -113,6 +115,28 @@ begin
   lbValues.SetFocus
 end;
 
+procedure TfrmNewQSODefValues.Button3Click(Sender: TObject);
+var
+  cDefaultModes : String;
+  i : Integer;
+begin
+  cDefaultModes := '';
+  if WhatChangeDesc = 'Frequency' then
+  begin
+    WhatChange := dUtils.cDefaultFreq;
+    LoadValues
+  end;
+  if WhatChangeDesc = 'Mode' then
+  begin
+    for i := 0 to cMaxModes do
+    begin
+      cDefaultModes := cDefaultModes + '|' + cModes[i];
+    end;
+    WhatChange := cDefaultModes;
+    LoadValues
+  end;
+end;
+
 procedure TfrmNewQSODefValues.FormShow(Sender : TObject);
 begin
   dmUtils.LoadWindowPos(frmNewQSODefValues);
@@ -127,10 +151,11 @@ var
   a : TExplodeArray;
   i : Integer;
 begin
+  lbValues.Items.Clear;
   a := dmUtils.Explode('|',WhatChange);
   for i:=0 to Length(a)-1 do
     if a[i] <> '' then
-      lbValues.Items.Add(a[i])
+      lbValues.Items.Add(a[i]);
 end;
 
 function TfrmNewQSODefValues.GetValues : String;
@@ -140,7 +165,7 @@ begin
   Result := '';
   for i:=0 to lbValues.Items.Count-1 do
     if lbValues.Items.Strings[i] <> '' then
-      Result := Result + '|'+lbValues.Items.Strings[i]
+      Result := Result + '|' +lbValues.Items.Strings[i]
 end;
 
 initialization

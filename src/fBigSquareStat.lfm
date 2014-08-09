@@ -1,14 +1,14 @@
 object frmBigSquareStat: TfrmBigSquareStat
-  Left = 464
+  Left = 580
   Height = 590
-  Top = 153
+  Top = 279
   Width = 655
   Caption = 'Big square statistic'
   ClientHeight = 590
   ClientWidth = 655
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.2.0'
   object Panel1: TPanel
     Left = 0
     Height = 88
@@ -21,7 +21,7 @@ object frmBigSquareStat: TfrmBigSquareStat
     TabOrder = 0
     object cmbBands: TComboBox
       Left = 63
-      Height = 29
+      Height = 31
       Top = 24
       Width = 164
       ItemHeight = 0
@@ -30,9 +30,9 @@ object frmBigSquareStat: TfrmBigSquareStat
     end
     object Label1: TLabel
       Left = 16
-      Height = 16
+      Height = 17
       Top = 32
-      Width = 32
+      Width = 38
       Caption = 'Band:'
       ParentColor = False
     end
@@ -42,30 +42,30 @@ object frmBigSquareStat: TfrmBigSquareStat
       Top = 11
       Width = 225
       Caption = ' Confirmed '
-      ClientHeight = 55
+      ClientHeight = 53
       ClientWidth = 221
       TabOrder = 1
       object chkQSL: TCheckBox
         Left = 6
-        Height = 22
+        Height = 24
         Top = 3
-        Width = 45
+        Width = 53
         Caption = 'QSL'
         TabOrder = 0
       end
       object chkLoTW: TCheckBox
         Left = 70
-        Height = 22
+        Height = 24
         Top = 3
-        Width = 55
+        Width = 65
         Caption = 'LoTW'
         TabOrder = 1
       end
       object chkeQSL: TCheckBox
         Left = 149
-        Height = 22
+        Height = 24
         Top = 3
-        Width = 52
+        Width = 61
         Caption = 'eQSL'
         TabOrder = 2
       end
@@ -132,13 +132,13 @@ object frmBigSquareStat: TfrmBigSquareStat
     VLinkColor = clBlue
   end
   object IpFileDataProvider1: TIpFileDataProvider
-    left = 112
+    left = 160
     top = 512
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.html'
     Filter = 'HTML files|*.html'
-    left = 24
+    left = 64
     top = 512
   end
 end
