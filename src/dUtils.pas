@@ -544,7 +544,7 @@ begin
   if cqrini.ReadString('Modes', 'Digi', '') <> '' then
   begin
     SetLength(a, 0);
-    a := Explode('|', cqrini.ReadString('Modes', 'Digi', ''));
+    a := Explode(',', cqrini.ReadString('Modes', 'Digi', ''));
     for i := 0 to Length(a) - 1 do
       cmbMode.Items.Add(a[i]);
   end;

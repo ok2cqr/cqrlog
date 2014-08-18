@@ -6,6 +6,3 @@ src/backup
 *.compiled
 *.or/share
 /src/cqrlog
-/members
-/ctyfiles
-/zipcodes
