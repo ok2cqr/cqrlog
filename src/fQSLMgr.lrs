@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmQSLMgr','FORMDATA',[
   'TPF0'#10'TfrmQSLMgr'#9'frmQSLMgr'#4'Left'#3#145#1#6'Height'#3'f'#1#3'Top'#3
   +#255#0#5'Width'#3#244#1#13'ActiveControl'#7#11'dbgrdQSLMgr'#7'Caption'#6#11

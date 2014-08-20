@@ -1411,32 +1411,6 @@ begin
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
-  (*
-  if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
-  begin
-    dbgrdQSOBefore.AlternateColor:=$00E7FFEB;
-    sgrdStatistic.AlternateColor:=$00E7FFEB;
-  end else begin
-    dbgrdQSOBefore.AlternateColor:=clWindow;
-    sgrdStatistic.AlternateColor:=clWindow;
-  end;
-  if cqrini.ReadBool('Fonts','GridSmallRows',False) = True then
-  begin
-    dbgrdQSOBefore.DefaultRowHeight:=dbgrdQSOBefore.Canvas.Font.Size+8;
-    sgrdStatistic.DefaultRowHeight:=sgrdStatistic.Canvas.Font.Size+8;
-  end else begin
-    dbgrdQSOBefore.DefaultRowHeight:=25;
-    sgrdStatistic.DefaultRowHeight:=25;
-  end;
-  if cqrini.ReadBool('Fonts','GridBoldTitle',false) = True then
-  begin
-    dbgrdQSOBefore.TitleFont.Style:=[fsBold];
-    sgrdStatistic.TitleFont.Style:=[fsBold];
-  end else begin
-    dbgrdQSOBefore.TitleFont.Style:=[];
-    sgrdStatistic.TitleFont.Style:=[];
-  end;
-  *)
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);

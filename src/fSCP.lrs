@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmSCP','FORMDATA',[
   'TPF0'#7'TfrmSCP'#6'frmSCP'#4'Left'#3#8#2#6'Height'#3#168#0#3'Top'#3#153#1#5
   +'Width'#3#206#1#7'Caption'#6#19'Super check partial'#12'ClientHeight'#3#168#0

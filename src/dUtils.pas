@@ -41,6 +41,7 @@ const
     'JT9', 'FSK441', 'PSK125',
     'PSK63', 'WSPR', 'PSK250', 'ROS');
   cMaxBandsCount = 27; //26 bands
+
   cDefaultFreq =
     '0.136|1.800|3.500|3.700|7.000|10.100|14.000|14.200|18.100|21.000|21.200|24.890|28.000|28.500|50.000|70.0875|'
     +
@@ -406,7 +407,7 @@ begin
         begin
           Ident := TColumn(Grid.Columns[j]).FieldName;
           cqrini.WriteString(Section, Ident, IntToStr(Grid.Columns[j].Width));
-          //Writeln('Saving:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[j].Width)
+          // Writeln('Saving:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[j].Width)
         end;
       end;
     end
@@ -451,7 +452,7 @@ begin
             Grid.Columns.Add.DisplayName := Ident;
             TColumn(Grid.Columns[y]).FieldName := Ident;
             Grid.Columns[y].Width := cqrini.ReadInteger(section, Ident, 100);
-            //Writeln('Loading:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[y].Width)
+            // Writeln('Loading:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[y].Width)
           end
         finally
           Grid.DataSource := D;
@@ -528,8 +529,18 @@ var
   a: TExplodeArray;
 begin
   cmbMode.Clear;
-  for i := 0 to cMaxModes do
+  if cqrini.ReadString('NewQSO', 'Modes', '') <> '' then
+  begin
+    SetLength(a, 0);
+    a := Explode('|', cqrini.ReadString('NewQSO','Modes',''));
+    for i := 0 to Length(a) - 1 do
+      if(a[i] <> '') then
+        cmbMode.Items.Add(a[i])
+  end
+  else begin
+    for i := 0 to cMaxModes do
     cmbMode.Items.Add(cModes[i]);
+  end;
   if cqrini.ReadString('Modes', 'Digi', '') <> '' then
   begin
     SetLength(a, 0);

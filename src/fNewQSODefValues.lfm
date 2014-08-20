@@ -1,14 +1,14 @@
 object frmNewQSODefValues: TfrmNewQSODefValues
-  Left = 407
+  Left = 1347
   Height = 430
-  Top = 273
+  Top = 78
   Width = 420
   Caption = 'frmNewQSODefValues'
   ClientHeight = 430
   ClientWidth = 420
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.2.0'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -59,9 +59,9 @@ object frmNewQSODefValues: TfrmNewQSODefValues
     end
     object lblDesc: TLabel
       Left = 9
-      Height = 18
+      Height = 17
       Top = 23
-      Width = 50
+      Width = 49
       Caption = 'lblDesc'
       ParentColor = False
     end
@@ -109,6 +109,15 @@ object frmNewQSODefValues: TfrmNewQSODefValues
       Caption = 'Change ...'
       OnClick = Button2Click
       TabOrder = 5
+    end
+    object Button3: TButton
+      Left = 9
+      Height = 25
+      Top = 168
+      Width = 174
+      Caption = 'Set default values'
+      OnClick = Button3Click
+      TabOrder = 6
     end
   end
   object lbValues: TListBox

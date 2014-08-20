@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmDXCCStat','FORMDATA',[
   'TPF0'#12'TfrmDXCCStat'#11'frmDXCCStat'#4'Left'#3#2#1#6'Height'#3#17#2#3'Top'
   +#3#209#0#5'Width'#3#199#2#13'ActiveControl'#7#11'grdDXCCStat'#7'Caption'#6#14
