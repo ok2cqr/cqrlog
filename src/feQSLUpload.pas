@@ -144,7 +144,7 @@ begin
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(dmData.Q.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
 
-      if (dmData.Q.FieldByName('remarks').AsString<>'') then
+      if (dmData.Q.FieldByName('remarks').AsString<>'') and cqrini.ReadBool('LoTW', 'ExpComment', True) then
       begin
         tmp := '<COMMENT' + dmUtils.StringToADIF(dmData.Q.FieldByName('remarks').AsString);
         Writeln(f,tmp)

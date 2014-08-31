@@ -113,6 +113,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkExpCommet: TCheckBox;
     chkPlusToBandMap: TCheckBox;
     chkgridshowhint: TCheckBox;
     chkgriddotsinsteadspaces: TCheckBox;
@@ -1489,6 +1490,7 @@ begin
   cqrini.WriteString('LoTW', 'eQSLPass', edteQSLPass.Text);
   cqrini.WriteBool('LoTW', 'eUseBackColor', chkShowBckEQSL.Checked);
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
+  cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
 
   cqrini.WriteInteger('CW', 'Type', cmbIfaceType.ItemIndex);
   cqrini.WriteString('CW', 'wk_port', edtWinPort.Text);
@@ -2849,6 +2851,7 @@ begin
   edteQSLPass.Text := cqrini.ReadString('LoTW', 'eQSLPass', '');
   chkShowBckEQSL.Checked := cqrini.ReadBool('LoTW', 'eUseBackColor', True);
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
+  chkExpCommet.Checked := cqrini.ReadBool('LoTW', 'ExpComment', True);
 
   cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW', 'Type', 0);
   edtWinPort.Text := cqrini.ReadString('CW', 'wk_port', '');
