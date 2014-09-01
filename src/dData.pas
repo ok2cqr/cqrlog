@@ -1098,6 +1098,13 @@ begin
     FreeAndNil(c)
   end;
 
+  if fDebugLevel>=1 then
+  begin
+    Writeln('**************************');
+    Writeln('MySQL version: ',MySQLVer);
+    Writeln('**************************')
+  end;
+
   if not TryStrToCurr(MySQLVer,fMySQLVersion) then
     fMySQLVersion := 5.1;
 
