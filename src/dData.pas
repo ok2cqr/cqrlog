@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil,
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
-  mysql55dyn, mysql55conn, CustApp;
+  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn;
 
 const
   MaxCall   = 100000;
@@ -1103,8 +1103,10 @@ begin
 
   if fMySQLVersion < 5.5 then
     MainCon := TMySQL51Connection.Create(self)
+  else  if fMySQLVersion < 5.6 then
+    MainCon := TMySQL55Connection.Create(self)
   else
-    MainCon := TMySQL55Connection.Create(self);
+    MainCon := TMySQL56Connection.Create(self);
 
   MainCon.KeepConnection := True;
   MainCon.Transaction := trmQ;
