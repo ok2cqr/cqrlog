@@ -8,6 +8,7 @@ Legend:
   + Select Modes in Preferences/New QSO for New QSO Form (Tom, DL7BJ)
   + Load default values for Frequency and Mode in Preferences/New QSO (Tom, DL7BJ)
   + uploading COMMENT field to eQSL is now configurable in Preferences
+  + His RST and My RST changed to RST sent/RST rcvd
 
 1.8.1
   - cqrlog crashed after hit ESC for the first time when no keying device was set 
