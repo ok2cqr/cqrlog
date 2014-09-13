@@ -1235,6 +1235,12 @@ begin
   if Application.MessageBox('PLEASE MAKE A BACKUP FIRST! THIS FUNCTION MAY DELETE QSO FROM YOUR LOG!'+LineEnding+LineEnding+
        'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion) = idYes then
   begin
+    if cqrini.ReadBool('OnlineLog','HaUP',False)  or cqrini.ReadBool('OnlineLog','ClUP',False) or cqrini.ReadBool('OnlineLog','HrUP',False) then
+    begin
+      if Application.MessageBox('It seems you are using online log upload. First, please go to Online log menu and click to  "Mark all QSO as uploaded to all logs".'+
+                              LineEnding + LineEnding + 'Do you want to continue?','Question...', mb_YesNo+mb_IconQuestion) = idNo then
+        exit
+    end;
     with TfrmImportProgress.Create(self) do
     try
       ImportType := 9;
