@@ -12,9 +12,11 @@ type
     ini  : TMemIniFile;
     crit : TRTLCriticalSection;
   private
-
+    fIniFileName : String;
   public
-    constructor Create(IniFileName : String);
+    property IniFileName : String read fIniFileName;
+
+    constructor Create(IniFile : String);
     destructor  Destroy; override;
 
     function  ReadString(const Section, Ident, Default: string): string;
@@ -38,10 +40,11 @@ var
 
 implementation
 
-constructor TMyIni.Create(IniFileName : String);
+constructor TMyIni.Create(IniFile : String);
 begin
   InitCriticalSection(crit);
-  ini := TMemIniFile.Create(IniFileName)
+  fIniFileName := IniFile;
+  ini := TMemIniFile.Create(IniFile)
 end;
 
 function TMyIni.ReadString(const Section, Ident, Default: string): string;

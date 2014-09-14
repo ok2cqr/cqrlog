@@ -9,7 +9,7 @@ object frmDBConnect: TfrmDBConnect
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.2.0'
   object grbLogin: TGroupBox
     Left = 0
     Height = 192
@@ -31,17 +31,17 @@ object frmDBConnect: TfrmDBConnect
     end
     object Label1: TLabel
       Left = 14
-      Height = 16
+      Height = 15
       Top = 9
-      Width = 73
+      Width = 72
       Caption = 'Server name:'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 218
-      Height = 16
+      Height = 15
       Top = 9
-      Width = 29
+      Width = 28
       Caption = 'Port:'
       ParentColor = False
     end
@@ -55,9 +55,9 @@ object frmDBConnect: TfrmDBConnect
     end
     object Label3: TLabel
       Left = 14
-      Height = 16
+      Height = 15
       Top = 61
-      Width = 64
+      Width = 63
       Caption = 'User name:'
       ParentColor = False
     end
@@ -70,9 +70,9 @@ object frmDBConnect: TfrmDBConnect
     end
     object Label4: TLabel
       Left = 218
-      Height = 16
+      Height = 15
       Top = 61
-      Width = 57
+      Width = 56
       Caption = 'Password:'
       ParentColor = False
     end
@@ -87,9 +87,9 @@ object frmDBConnect: TfrmDBConnect
     end
     object chkSavePass: TCheckBox
       Left = 18
-      Height = 22
+      Height = 18
       Top = 114
-      Width = 97
+      Width = 93
       Caption = 'Remeber me'
       OnChange = chkSavePassChange
       TabOrder = 4
@@ -114,9 +114,9 @@ object frmDBConnect: TfrmDBConnect
     end
     object chkAutoConn: TCheckBox
       Left = 206
-      Height = 22
+      Height = 18
       Top = 114
-      Width = 102
+      Width = 98
       Caption = 'Auto connect'
       TabOrder = 7
     end
@@ -227,9 +227,9 @@ object frmDBConnect: TfrmDBConnect
       TabOrder = 2
       object chkAutoOpen: TCheckBox
         Left = 8
-        Height = 22
+        Height = 18
         Top = -1
-        Width = 231
+        Width = 227
         Caption = 'Open recent log after program start'
         TabOrder = 0
       end
@@ -247,9 +247,9 @@ object frmDBConnect: TfrmDBConnect
     TabOrder = 2
     object chkSaveToLocal: TCheckBox
       Left = 12
-      Height = 22
+      Height = 18
       Top = 2
-      Width = 192
+      Width = 188
       Caption = 'Save log data to local machine'
       OnClick = chkSaveToLocalClick
       TabOrder = 0

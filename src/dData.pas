@@ -178,6 +178,7 @@ type
     procedure UpgradeMainDatabase(old_version : Integer);
     procedure UpgradeCommonDatabase(old_version : Integer);
     procedure PrepareMysqlConfigFile;
+    procedure DeleteOldConfigFiles;
   public
     {
     MainCon51 : TMySQL51Connection;
@@ -619,6 +620,9 @@ procedure TdmData.OpenDatabase(nr : Word);
 var
   l : TStringList;
 begin
+  DeleteFile(cqrini.IniFileName);
+  FreeAndNil(cqrini);
+
   fDBName := GetProperDBName(nr);
   if trQ.Active then
     trQ.Rollback;
@@ -644,22 +648,19 @@ begin
   dmLogUpload.Q.ExecSQL;
   dmLogUpload.trQ.Commit;
 
-  DeleteFile(fHomeDir+'cqrlog.cfg');
   Q.SQL.Text := 'SELECT * FROM cqrlog_config';
   trQ.StartTransaction;
   l := TStringList.Create;
   Q.Open;
   try
     l.Text := Q.Fields[1].AsString;
-    l.SaveToFile(fHomeDir+'cqrlog.cfg')
+    l.SaveToFile(fHomeDir+IntToStr(nr)+'cqrlog.cfg')
   finally
     Q.Close;
     trQ.Rollback;
     l.Free
   end;
-
-  FreeAndNil(cqrini);  //ini.SetStrings doesn't work :(
-  cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg');
+  cqrini := TMyIni.Create(fHomeDir+IntToStr(nr)+'cqrlog.cfg');
 
   trQ.StartTransaction;
   Q.SQL.Text := 'truncate table dxcc_id';
@@ -726,7 +727,7 @@ begin
   cqrini.SaveToDisk;
   l := TStringList.Create;
   try
-    l.LoadFromFile(fHomeDir+'cqrlog.cfg');
+    l.LoadFromFile(cqrini.IniFileName);
     Q.SQL.Text := 'select count(*) from '+fDBName+'.cqrlog_config';
     Q.Open;
     ins := Q.Fields[0].AsInteger = 0;
@@ -774,8 +775,7 @@ begin
     begin
       (dmDXCluster.Components[i] as TSQLTransaction).Rollback
     end
-  end;
-  FreeAndNil(cqrini)
+  end
 end;
 
 procedure TdmData.DeleteMySQLPidFile;
@@ -1226,6 +1226,7 @@ end;
 
 procedure TdmData.DataModuleDestroy(Sender: TObject);
 begin
+  DeleteOldConfigFiles;
   if dmData.DebugLevel>=1 then Writeln('Closing dData');
   qCQRLOG.Close;
   reg.Free;
@@ -3438,6 +3439,24 @@ begin
     Q1.Close
   end
 end;
+
+procedure TdmData.DeleteOldConfigFiles;
+var
+  res: byte;
+  SearchRec: TSearchRec;
+begin
+  res := FindFirst(fHomeDir + '*cqrlog.cfg', faAnyFile, SearchRec);
+  while Res = 0 do
+  begin
+    if FileExists(fHomeDir + SearchRec.Name) then
+      DeleteFile(fHomeDir + SearchRec.Name);
+    if fDebugLevel>=1 then
+      Writeln('Deleting config file: ',SearchRec.Name);
+    Res := FindNext(SearchRec)
+  end;
+  FindClose(SearchRec)
+end;
+
 
 initialization
   {$I dData.lrs}
