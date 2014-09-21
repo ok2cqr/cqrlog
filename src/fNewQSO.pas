@@ -3307,8 +3307,7 @@ begin
     minimalize := True;
     if frmDXCluster.Showing then
     begin
-      frmDXCluster.SavePosition;
-      MinDXCluster := True;
+      MinDXCluster := True
     end;
     if frmGrayline.Showing then
     begin

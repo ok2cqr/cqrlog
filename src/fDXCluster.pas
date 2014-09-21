@@ -74,6 +74,7 @@ type
     lTelnet    : TLTelnetClientComponent;
     csDXCPref  : TRTLCriticalSection;
     ReloadDXCPref : Boolean;
+    FirstWebGet : Boolean;
 
     gcfgUseBackColor : Boolean;
     gcfgBckColor : TColor;
@@ -117,7 +118,7 @@ type
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
 
-    function  ShowSpot(spot : String; var sColor : Integer; var Country : String) : Boolean;
+    function  ShowSpot(spot : String; var sColor : Integer; var Country : String; FromTelnet : Boolean = True) : Boolean;
     function  GetFreq(spot : String) : String;
     function  GetCall(spot : String; web : Boolean = False) : String;
     function  GetSplit(spot : String) :String;
@@ -126,7 +127,6 @@ type
     ConTelnet : Boolean;
     csTelnet  : TRTLCriticalSection;
 
-    procedure SavePosition;
     procedure SendCommand(cmd : String);
     procedure StopAllConnections;
     procedure ReloadSettings;
@@ -135,6 +135,7 @@ type
   type
     TWebThread = class(TThread)
     protected
+      BiggerFetch : Boolean;
       procedure Execute; override;
   end;
 
@@ -175,7 +176,9 @@ begin
       Writeln('In ConnectWeb');
     if WebThread = nil then
       WebThread := TWebThread.Create(True);
-    WebThread.Start
+    WebThread.BiggerFetch := FirstWebGet;
+    WebThread.Start;
+    FirstWebGet := False
   end
 end;
 
@@ -279,6 +282,7 @@ begin
   InitCriticalSection(csDXCPref);
   FirstShow := True;
   ConOnShow := False;
+  FirstWebGet := True;
   lTelnet := TLTelnetClientComponent.Create(nil);
   ReloadDXCPref := True;
 
@@ -449,8 +453,7 @@ begin
       telPort            := dmData.qDXClusters.Fields[3].AsString;
       telUser            := dmData.qDXClusters.Fields[4].AsString;
       telPass            := dmData.qDXClusters.Fields[5].AsString;
-      edtTelAddress.Text := telDesc;
-      SavePosition
+      edtTelAddress.Text := telDesc
     end
   finally
     frmDXClusterList.Free
@@ -675,7 +678,7 @@ begin
   end;
 end;
 
-function TfrmDXCluster.ShowSpot(spot : String; var sColor : Integer; var Country : String) : Boolean;
+function TfrmDXCluster.ShowSpot(spot : String; var sColor : Integer; var Country : String; FromTelnet : Boolean = True) : Boolean;
 var
   kmitocet : Extended = 0.0;
   call     : String  = '';
@@ -1079,10 +1082,72 @@ begin
 end;
 
 procedure TWebThread.Execute;
+
+  function SpacesFromLeft(What : String; TargetLen : Integer) : String;
+  var
+    n : Integer;
+    i : Integer;
+  begin
+    Result := What;
+    n := TargetLen - Length(what);
+    if n < 0 then
+      Result := copy(What,1,abs(n))
+    else begin
+      for i:=Length(What) to TargetLen do
+      begin
+        Result := ' '+Result;
+        //Writeln(Result)
+      end
+    end
+  end;
+
+  function SpacesFromRight(What : String; TargetLen : Integer) : String;
+  var
+    n : Integer;
+    i : Integer;
+  begin
+    Result := What;
+    n := TargetLen - Length(what);
+    if n < 0 then
+      Result := copy(What,1,abs(n))
+    else begin
+      for i:=Length(What) to TargetLen do
+      begin
+        Result := Result+' ';
+        //Writeln(Result+'*')
+      end
+    end
+  end;
+
+  function  Explode(const cSeparator, vString: String): TExplodeArray;
+  var
+    i: integer;
+    S: string;
+  begin
+    S := vString;
+    SetLength(Result, 0);
+    i := 0;
+    while Pos(cSeparator, S) > 0 do
+    begin
+      SetLength(Result, Length(Result) + 1);
+      Result[i] := Copy(S, 1, Pos(cSeparator, S) - 1);
+      Inc(i);
+      S := Copy(S, Pos(cSeparator, S) + Length(cSeparator), Length(S))
+    end;
+    SetLength(Result, Length(Result) + 1);
+    Result[i] := Copy(S, 1, Length(S))
+  end;
+
 var
-  i,tmp  : Integer;
-  HTTP   : THTTPSend;
-  sp     : TStringList;
+  i,tmp   : Integer;
+  HTTP    : THTTPSend;
+  sp      : TStringList;
+  spot    : String;
+  a       : TExplodeArray;
+  sColor  : TColor;
+  Country : String;
+  x       : String;
+  limit   : String;
 begin
   if dmData.DebugLevel>=1 then
     Writeln('In TWebThread.Execute');
@@ -1091,6 +1156,10 @@ begin
   HTTP   := THTTPSend.Create;
   sp     := TStringList.Create;
   try
+    if BiggerFetch then
+      limit := '60'
+    else
+      limit := '20';
     sp.Clear;
     ThInfo := 'Connecting ...';
     Synchronize(@frmDXCluster.SynWeb);
@@ -1098,7 +1167,7 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if not HTTP.HTTPMethod('GET','http://www.dxsummit.fi/text/Default.aspx') then
+    if not HTTP.HTTPMethod('GET','http://hamqth.com/dxc_csv.php?limit='+limit) then
     begin
       frmDXCluster.StopAllConnections;
       frmDXCluster.btnWebConnect.Click;
@@ -1107,17 +1176,37 @@ begin
     ThInfo := 'Downloading spots ...';
     Synchronize(@frmDXCluster.SynWeb);
     sp.LoadFromStream(HTTP.Document);
-    tmp := Pos('<pre>',sp.Text);
-    sp.Text := copy(sp.Text,tmp+5,Length(sp.Text)-tmp+5);
-    tmp := Pos('</pre>',sp.Text);
-    sp.Text := copy(sp.Text,1,tmp-1);
     for i:=0 to sp.Count-1 do
     begin
       EnterCriticalsection(frmDXCluster.csTelnet);
       if dmData.DebugLevel>=1 then Writeln('Enter critical section TWebThread.Execute');
       try
-        if dmData.DebugLevel>=1 then Writeln('Adding from web:',dmUtils.MyTrim('DX DE ' + sp.Strings[i]));
-        Spots.Add(dmUtils.MyTrim('DX DE ' + sp.Strings[i]));
+        a := Explode('^',sp.Strings[i]);
+        if Length(a) < 3 then
+          Continue;
+        spot :=  SpacesFromRight('DX de '+a[0]+':',13)+ //spotter
+                 SpacesFromLeft(a[1],8)+ ' '+  //freq
+                 SpacesFromRight(a[2],12)+ ' ' + //dxcall
+                 SpacesFromRight(a[3],28)+ ' ' + //comment
+                 copy(a[4],1,4)+'Z';
+        {
+        Writeln(SpacesFromRight('DX de '+a[0]+':',14),'|',Length(SpacesFromRight('DX de '+a[0]+':',14)));
+        Writeln(SpacesFromLeft(a[1],9),'|',Length(SpacesFromLeft(a[1],9)));
+        Writeln(SpacesFromRight(a[2],13),'|',Length(SpacesFromRight(a[2],13)));
+        Writeln(SpacesFromRight(a[3],29),'|',Length(SpacesFromRight(a[3],29)));
+        Writeln(copy(a[4],1,4)+'Z','|',Length(copy(a[4],1,4)+'Z'));
+        }
+        if dmData.DebugLevel>=1 then Writeln('Adding from web:',spot);
+        if frmDXCluster.ShowSpot(spot,sColor, Country) then
+        begin
+          if cqrini.ReadBool('DXCluster','ShowDxcCountry',False) then
+            ThSpot := spot + ' ' + Country
+          else
+            ThSpot := spot;
+          ThColor   := sColor;
+          ThInfo    := '';
+          Synchronize(@frmDXCluster.SynWeb)
+        end
       finally
         LeaveCriticalsection(frmDXCluster.csTelnet);
         if dmData.DebugLevel>=1 then Writeln('Leave critical section TWebThread.Execute')
@@ -1125,20 +1214,21 @@ begin
     end
   finally
     ThInfo := '';
-    Synchronize(@frmDXCluster.SynWeb);
     HTTP.Free;
     sp.Free;
     frmDXCluster.Running := False
   end
 end;
 
-procedure TfrmDXCluster.SavePosition;
-begin
-end;
-
 procedure TfrmDXCluster.SynWeb;
 begin
   lblInfo.Caption := ThInfo;
+  if WebSpots.hledej(ThSpot,0,True,True) = -1 then
+  begin
+    WebSpots.zakaz_kresleni(true);
+    WebSpots.pridej_vetu(ThSpot,ThColor,ThBckColor,0);
+    WebSpots.zakaz_kresleni(false)
+  end
   {
   if ThSpot = '' then
     exit;
@@ -1171,12 +1261,14 @@ begin
     TelSpots.zakaz_kresleni(false)
   end
   else begin
+    {
     if WebSpots.hledej(ThSpot,0,True,True) = -1 then
     begin
       WebSpots.zakaz_kresleni(true);
       WebSpots.vloz_vetu(ThSpot,ThColor,ThBckColor,0,0);
       WebSpots.zakaz_kresleni(false);
     end
+    }
   end;
   //if dmData.DebugLevel>=1 then Writeln('TfrmDXCluster.SynTelnet - before PridejVetu ');
   //if dmData.DebugLevel>=1 then Writeln('TfrmDXCluster.SynTelnet - after zakaz_kresleni');

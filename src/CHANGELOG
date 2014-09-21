@@ -10,7 +10,9 @@ Legend:
   + uploading COMMENT field to eQSL is now configurable in Preferences
   + His RST and My RST changed to RST sent/RST rcvd
   + MySQL 5.6 support added
+  + web dx cluster works again, it reads data from HamQTH.com
   - sometimes program loaded configuration from different log - fixed
+
 
 1.8.1
   - cqrlog crashed after hit ESC for the first time when no keying device was set 
