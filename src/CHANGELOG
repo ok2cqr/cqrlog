@@ -12,6 +12,7 @@ Legend:
   + MySQL 5.6 support added
   + web dx cluster works again, it reads data from HamQTH.com
   + added Grayline offset option (sometimes Grayline is not accurate)
+  + added button to refresh start and end time of QSO
   - sometimes program loaded configuration from different log - fixed
 
 

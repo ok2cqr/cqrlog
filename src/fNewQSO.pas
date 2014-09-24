@@ -61,6 +61,7 @@ type
     acReloadCW: TAction;
     acLogUploadStatus: TAction;
     acHotkeys: TAction;
+    acRefreshTime: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -290,6 +291,7 @@ type
     sbtnQRZ: TSpeedButton;
     sbtnLoTW: TSpeedButton;
     sbtnHamQTH : TSpeedButton;
+    sbtnRefreshTime: TSpeedButton;
     tmrUploadAll: TTimer;
     tmrFldigi: TTimer;
     tmrESC: TTimer;
@@ -304,6 +306,7 @@ type
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
+    procedure acRefreshTimeExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
     procedure acReloadCWExecute(Sender: TObject);
     procedure acRotControlExecute(Sender: TObject);
@@ -3065,6 +3068,11 @@ end;
 procedure TfrmNewQSO.acQSOListExecute(Sender: TObject);
 begin
   frmMain.Show
+end;
+
+procedure TfrmNewQSO.acRefreshTimeExecute(Sender: TObject);
+begin
+  tmrStartStartTimer(nil)
 end;
 
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
