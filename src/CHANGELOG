@@ -11,6 +11,7 @@ Legend:
   + His RST and My RST changed to RST sent/RST rcvd
   + MySQL 5.6 support added
   + web dx cluster works again, it reads data from HamQTH.com
+  + added Grayline offset option (sometimes Grayline is not accurate)
   - sometimes program loaded configuration from different log - fixed
 
 

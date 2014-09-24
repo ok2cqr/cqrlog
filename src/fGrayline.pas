@@ -81,7 +81,6 @@ type
   public
     RBNSpotList : array[1..MAX_ITEMS] of TRBNList;
     band   : String;
-    offset : Currency;
     ob  : Pgrayline;
     s,d : String;
     pfx : String;
@@ -138,16 +137,6 @@ begin
     begin
       //Writeln('RBN:',tmp);
       AddToList(tmp);
-      {
-      EnterCriticalsection(frmDXCluster.csTelnet);
-      if dmData.DebugLevel>=1 then Writeln('Enter critical section On Receive');
-      try
-        Spots.Add(tmp)
-      finally
-        LeaveCriticalsection(csTelnet);
-        if dmData.DebugLevel>=1 then Writeln('Leave critical section On Receive')
-      end
-      }
     end
     else begin
       if (Pos('LOGIN',UpperCase(tmp)) > 0) and (cqrini.ReadString('RBN','login','') <> '') then
@@ -471,25 +460,19 @@ end;
 procedure TfrmGrayline.FormPaint(Sender: TObject);
 var
   r:Trect;
-  //t1,t2:Tdatetime;
 begin
-  //t1:=now - (dmUtils.GrayLineOffset/24);
   r.left:=0;r.right:=width-1;
   r.top:=0;r.bottom:=width*obvy div obsi-1;
   if dmUtils.SysUTC then
-    ob^.VypocitejSunClock(dmUtils.GetDateTime(0))//-dmUtils.GetLocalUTCDelta)
+    ob^.VypocitejSunClock(dmUtils.GetDateTime(0) - (dmUtils.GrayLineOffset/24))//-dmUtils.GetLocalUTCDelta)
   else
     ob^.VypocitejSunClock(now - (dmUtils.GrayLineOffset/24));
-  ob^.kresli(r,Canvas);
-  //Writeln(DateTimeToStr(dmUtils.GetDateTime(0)))
-  //t2:=now - (dmUtils.GrayLineOffset/24);
-  //label3.caption:=floattostr((t2-t1)*24*3600);
+  ob^.kresli(r,Canvas)
 end;
 
 procedure TfrmGrayline.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmGrayline);
-  offset := cqrini.ReadInteger('Program','GraylineOffset',0);
   sbGrayLine.Visible      := cqrini.ReadBool('Grayline','Statusbar',True);
   acShowStatusBar.Checked := sbGrayLine.Visible;
   sbGrayLine.SimpleText   := 'Disconnected';
@@ -516,10 +499,6 @@ end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
 begin
-  if dmUtils.SysUTC then
-    ob^.VypocitejSunClock(dmUtils.GetDateTime(0))//-dmUtils.GetLocalUTCDelta)
-  else
-    ob^.VypocitejSunClock(now - (dmUtils.GrayLineOffset/24));
   Refresh
 end;
 
@@ -555,7 +534,6 @@ begin
   lat := lat*-1;
   lat1 := lat1*-1;
   ob^.jachcucaru(true,long,lat,long1,lat1);
-  //FormPaint(nil)
   Refresh
 end;
 
@@ -577,7 +555,6 @@ begin
     acConnect.Caption := 'Disconnect'
   else
     acConnect.Caption := 'Connect to RBN';
-  //procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
   ob^.body_smaz;
   for i:=1 to MAX_ITEMS do
   begin

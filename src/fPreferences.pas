@@ -804,6 +804,7 @@ type
     Label194: TLabel;
     Label195: TLabel;
     Label196: TLabel;
+    Label197: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1617,7 +1618,7 @@ begin
   frmBandMap.DoXplanetExport := (rgShowFrom.ItemIndex > 0);
 
   if frmGrayline.Showing then
-    frmGrayline.Repaint;
+    frmGrayline.tmrGrayLineTimer(nil);
   frmNewQSO.UseSpaceBar := chkUseSpaceBar.Checked;
   if frmBandMap.Showing then
     frmBandMap.LoadFonts;
@@ -2204,9 +2205,8 @@ end;
 
 procedure TfrmPreferences.chkSysUTCClick(Sender: TObject);
 begin
-  edtOffset.Enabled := not chkSysUTC.Checked;
-  edtGrayLineOffset.Enabled := not chkSysUTC.Checked;
-  edtSunOffset.Enabled := not chkSysUTC.Checked;
+  edtOffset.Enabled    := not chkSysUTC.Checked;
+  edtSunOffset.Enabled := not chkSysUTC.Checked
 end;
 
 procedure TfrmPreferences.chkUseDXCColorsChange(Sender: TObject);
