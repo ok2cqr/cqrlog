@@ -15,6 +15,7 @@ Legend:
   + added button to refresh start and end time of QSO
   + added "Mark all QSO as uploaded to eQSL/LoTW" functions
   - sometimes program loaded configuration from different log - fixed
+  - rotctld process still running when cqrlog was closed - fixed
 
 
 1.8.1

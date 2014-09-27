@@ -515,7 +515,10 @@ begin
     dmData.trQ.RollBack;
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
+
   dmData.trQ1.StartTransaction;
+  dmData.trQ.StartTransaction;
+
   l := TStringList.Create;
   AssignFile(f,FileName);
   try
@@ -778,8 +781,8 @@ begin
 //                                 'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ')'+
                                  'and (callsign = ' + QuotedStr(call) + ')';
             if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-            if dmData.trQ.Active then dmData.trQ.Rollback;
-            dmData.trQ.StartTransaction;
+            //if dmData.trQ.Active then dmData.trQ.Rollback;
+            //dmData.trQ.StartTransaction;
             dmData.Q.Open();
             dmData.Q.First;
             if dmData.Q.Eof then  qso_in_log := False;
@@ -870,6 +873,8 @@ begin
         dmUtils.OpenInApp(FileName)
     end
   finally
+    if dmData.trQ.Active then
+      dmData.trQ.Rollback;
     l.Free;
     CloseFile(f)
   end;

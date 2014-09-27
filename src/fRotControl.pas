@@ -23,6 +23,7 @@ type
     procedure ButtonShortPClick(Sender: TObject);
     procedure ButtonLongPClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure rbRotor1Click(Sender: TObject);
@@ -72,6 +73,12 @@ procedure TfrmRotControl.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
    dmUtils.SaveWindowPos(frmRotControl);
+end;
+
+procedure TfrmRotControl.FormDestroy(Sender: TObject);
+begin
+  if Assigned(rotor) then
+    FreeAndNil(rotor)
 end;
 
 procedure TfrmRotControl.FormKeyUp(Sender: TObject; var Key: Word;
@@ -143,8 +150,8 @@ begin
   Result := True;
   if not rotor.Connected then
   begin
-    FreeAndNil(rotor);
-  end;
+    FreeAndNil(rotor)
+  end
 end;
 
 procedure TfrmRotControl.SynROT;

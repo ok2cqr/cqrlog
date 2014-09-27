@@ -630,6 +630,7 @@
         <Filename Value="fRotControl.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRotControl"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRotControl"/>
       </Unit75>

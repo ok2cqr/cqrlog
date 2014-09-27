@@ -532,7 +532,6 @@ destructor TRotControl.Destroy;
 var
   excode : Integer=0;
 begin
-  inherited;
   if DebugMode then Writeln(1);
   if fRunRotCtld then
   begin
@@ -542,6 +541,7 @@ begin
       rotProcess.Terminate(excode)
     end
   end;
+  sleep(500);
   if DebugMode then Writeln(2);
   tmrRotPoll.Enabled := False;
   if DebugMode then Writeln(3);
