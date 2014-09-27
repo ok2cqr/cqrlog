@@ -16,7 +16,7 @@ Legend:
   + added "Mark all QSO as uploaded to eQSL/LoTW" functions
   - sometimes program loaded configuration from different log - fixed
   - rotctld process still running when cqrlog was closed - fixed
-
+  - export for SOTA website didn't work - fixed
 
 1.8.1
   - cqrlog crashed after hit ESC for the first time when no keying device was set 

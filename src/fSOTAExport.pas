@@ -141,9 +141,9 @@ begin
     dmData.Q.SQL.Text := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
                          'from view_cqrlog_main_by_qsodate order by qsodate,time_on'
   else begin
-    q := LowerCase(dmData.qCQRLOG.SQL.Text);
-    if Pos('order by',q) > 0 then
-      q := copy(q,1,Pos('order by',q)-1);
+    q := dmData.qCQRLOG.SQL.Text;
+    if Pos('order by',LowerCase(q)) > 0 then
+      q := copy(q,1,Pos('order by',LowerCase(q))-1);
     q := q + ' order by qsodate,time_on';
     dmData.Q.SQL.Text := q;
   end;

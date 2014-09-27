@@ -9,18 +9,18 @@ object frmSOTAExport: TfrmSOTAExport
   ClientWidth = 516
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '1.2.2.0'
   object Label1: TLabel
     Left = 8
-    Height = 18
+    Height = 15
     Top = 8
-    Width = 66
+    Width = 53
     Caption = 'Filename:'
     ParentColor = False
   end
   object edtFileName: TEdit
     Left = 8
-    Height = 27
+    Height = 25
     Top = 32
     Width = 421
     TabOrder = 0
@@ -63,9 +63,9 @@ object frmSOTAExport: TfrmSOTAExport
     TabOrder = 4
     object rbSotaLog: TRadioButton
       Left = 6
-      Height = 24
+      Height = 18
       Top = 7
-      Width = 251
+      Width = 212
       Caption = 'use SOTA reference number from '
       Checked = True
       ParentShowHint = False
@@ -74,7 +74,7 @@ object frmSOTAExport: TfrmSOTAExport
     end
     object cmbSota: TComboBox
       Left = 262
-      Height = 31
+      Height = 25
       Top = 3
       Width = 130
       ItemHeight = 0
@@ -91,31 +91,31 @@ object frmSOTAExport: TfrmSOTAExport
     end
     object Label2: TLabel
       Left = 406
-      Height = 18
+      Height = 15
       Top = 13
-      Width = 31
+      Width = 25
       Caption = 'field'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 166
-      Height = 18
+      Height = 15
       Top = 41
-      Width = 320
+      Width = 267
       Caption = 'as SOTA reference number for all exported QSO'
       ParentColor = False
     end
     object rbSotaEdt: TRadioButton
       Left = 6
-      Height = 24
+      Height = 18
       Top = 39
-      Width = 52
+      Width = 43
       Caption = 'use '
       TabOrder = 2
     end
     object edtSota: TEdit
       Left = 62
-      Height = 27
+      Height = 25
       Top = 36
       Width = 96
       CharCase = ecUppercase
@@ -133,7 +133,7 @@ object frmSOTAExport: TfrmSOTAExport
     TabOrder = 5
     object edtCallsign: TEdit
       Left = 191
-      Height = 27
+      Height = 25
       Top = 9
       Width = 128
       CharCase = ecUppercase
@@ -141,9 +141,9 @@ object frmSOTAExport: TfrmSOTAExport
     end
     object Label6: TLabel
       Left = 7
-      Height = 18
+      Height = 15
       Top = 14
-      Width = 174
+      Width = 143
       Caption = 'Callsign used on SOTA hill:'
       ParentColor = False
     end
@@ -158,9 +158,9 @@ object frmSOTAExport: TfrmSOTAExport
     TabOrder = 6
     object rbAddLogNote: TRadioButton
       Left = 7
-      Height = 24
+      Height = 18
       Top = 6
-      Width = 301
+      Width = 251
       Caption = 'add remarks from Comment to QSO field'
       Checked = True
       TabOrder = 0
@@ -168,15 +168,15 @@ object frmSOTAExport: TfrmSOTAExport
     end
     object rbAddEdtNote: TRadioButton
       Left = 7
-      Height = 24
+      Height = 18
       Top = 38
-      Width = 118
+      Width = 98
       Caption = 'add this note:'
       TabOrder = 1
     end
     object edtNotes: TEdit
       Left = 31
-      Height = 27
+      Height = 25
       Top = 62
       Width = 456
       TabOrder = 2
@@ -192,9 +192,9 @@ object frmSOTAExport: TfrmSOTAExport
   end
   object lblDone: TLabel
     Left = 288
-    Height = 18
+    Height = 15
     Top = 324
-    Width = 36
+    Width = 30
     Caption = 'Done'
     ParentColor = False
     Visible = False
