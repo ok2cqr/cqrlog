@@ -6,3 +6,4 @@ src/backup
 *.compiled
 *.or/share
 /src/cqrlog
+/src/cqrlog.lps
