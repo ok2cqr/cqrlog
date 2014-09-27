@@ -1640,6 +1640,12 @@ object frmMain: TfrmMain
             0000000000000000000000000000000000000000000000000000
           }
         end
+        object MenuItem32: TMenuItem
+          Caption = '-'
+        end
+        object MenuItem98: TMenuItem
+          Action = acMarkAlleQSL
+        end
       end
       object MenuItem91: TMenuItem
         Caption = '-'
@@ -2425,6 +2431,11 @@ object frmMain: TfrmMain
       Category = 'OnlineLog'
       Caption = 'Mark QSO as uploaded to all logs'
       OnExecute = acMarkAllExecute
+    end
+    object acMarkAlleQSL: TAction
+      Category = 'eQSL'
+      Caption = 'Mark all qso as uploaded to eQSL'
+      OnExecute = acMarkAlleQSLExecute
     end
   end
   object tmrTime: TTimer

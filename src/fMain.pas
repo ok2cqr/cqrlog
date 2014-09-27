@@ -79,6 +79,7 @@ type
     acMarkAllClubLog: TAction;
     acMarkAllHrdLog: TAction;
     acMarkAll: TAction;
+    acMarkAlleQSL: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -145,6 +146,7 @@ type
     MenuItem29: TMenuItem;
     MenuItem30: TMenuItem;
     MenuItem31: TMenuItem;
+    MenuItem32: TMenuItem;
     MenuItem33: TMenuItem;
     MenuItem34: TMenuItem;
     MenuItem35: TMenuItem;
@@ -176,6 +178,7 @@ type
     MenuItem95: TMenuItem;
     MenuItem96: TMenuItem;
     MenuItem97: TMenuItem;
+    MenuItem98: TMenuItem;
     mnuOQRS : TMenuItem;
     MenuItem55: TMenuItem;
     MenuItem56: TMenuItem;
@@ -310,6 +313,7 @@ type
     procedure aceQSLUpExecute(Sender : TObject);
     procedure acHamQTHExecute(Sender : TObject);
     procedure acMarkAllClubLogExecute(Sender: TObject);
+    procedure acMarkAlleQSLExecute(Sender: TObject);
     procedure acMarkAllExecute(Sender: TObject);
     procedure acMarkAllHamQTHExecute(Sender: TObject);
     procedure acMarkAllHrdLogExecute(Sender: TObject);
@@ -1325,6 +1329,15 @@ end;
 procedure TfrmMain.acMarkAllClubLogExecute(Sender: TObject);
 begin
   dmLogUpload.MarkAsUploaded(C_CLUBLOG)
+end;
+
+procedure TfrmMain.acMarkAlleQSLExecute(Sender: TObject);
+begin
+  if Application.MessageBox('Do you really want to mark all QSO as uploaded to eQSL?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
+  begin
+    dmData.MarkAllAsUploadedToeQSL;
+    acRefresh.Execute
+  end
 end;
 
 procedure TfrmMain.acMarkAllExecute(Sender: TObject);
