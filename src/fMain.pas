@@ -80,6 +80,7 @@ type
     acMarkAllHrdLog: TAction;
     acMarkAll: TAction;
     acMarkAlleQSL: TAction;
+    acUploadAllToLoTW: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -125,6 +126,7 @@ type
     lblQSOCount: TLabel;
     MenuItem1:  TMenuItem;
     MenuItem10: TMenuItem;
+    MenuItem100: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
@@ -179,6 +181,7 @@ type
     MenuItem96: TMenuItem;
     MenuItem97: TMenuItem;
     MenuItem98: TMenuItem;
+    MenuItem99: TMenuItem;
     mnuOQRS : TMenuItem;
     MenuItem55: TMenuItem;
     MenuItem56: TMenuItem;
@@ -324,6 +327,7 @@ type
     procedure acRemoveDupesExecute(Sender: TObject);
     procedure acSOTAExportExecute(Sender : TObject);
     procedure acSQLExecute(Sender: TObject);
+    procedure acUploadAllToLoTWExecute(Sender: TObject);
     procedure acUploadToAllExecute(Sender: TObject);
     procedure acUploadToClubLogExecute(Sender: TObject);
     procedure acUploadToHamQTHExecute(Sender: TObject);
@@ -1363,6 +1367,15 @@ begin
     frmSQLConsole.ShowModal
   finally
     frmSQLConsole.Free
+  end
+end;
+
+procedure TfrmMain.acUploadAllToLoTWExecute(Sender: TObject);
+begin
+  if Application.MessageBox('Do you really want to mark all QSO as uploaded to LoTW?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
+  begin
+    dmData.MarkAllAsUploadedToLoTW;
+    acRefresh.Execute
   end
 end;
 

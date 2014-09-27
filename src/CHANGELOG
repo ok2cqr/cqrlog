@@ -13,7 +13,7 @@ Legend:
   + web dx cluster works again, it reads data from HamQTH.com
   + added Grayline offset option (sometimes Grayline is not accurate)
   + added button to refresh start and end time of QSO
-  + added "Mark all QSO as uploaded to eQSL" function
+  + added "Mark all QSO as uploaded to eQSL/LoTW" functions
   - sometimes program loaded configuration from different log - fixed
 
 

@@ -304,6 +304,7 @@ type
     procedure AddCallAlert(const callsign, band, mode : String);
     procedure EditCallAlert(const id : Integer; const callsign, band, mode : String);
     procedure MarkAllAsUploadedToeQSL;
+    procedure MarkAllAsUploadedToLoTW;
   end;
 
 var
@@ -3461,6 +3462,25 @@ end;
 procedure TdmData.MarkAllAsUploadedToeQSL;
 const
   C_UPD = 'update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s';
+begin
+  Q1.Close;
+  if trQ1.Active then
+    trQ1.Active := False;
+  try try
+    Q1.SQL.Text := Format(C_UPD,[QuotedStr('Y'),QuotedStr(dmUtils.DateToSQLIteDate(now))]);
+    Q1.ExecSQL
+  except
+    trQ1.Rollback
+  end
+  finally
+    if trQ1.Active then
+      trQ1.Commit;
+    Q.Close
+  end
+end;
+procedure TdmData.MarkAllAsUploadedToLoTW;
+const
+  C_UPD = 'update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s';
 begin
   Q1.Close;
   if trQ1.Active then

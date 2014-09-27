@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = 130
+  Left = 334
   Height = 587
-  Top = 199
+  Top = 206
   Width = 854
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -1556,6 +1556,12 @@ object frmMain: TfrmMain
             OnClick = acUploadQSOToLoTWWebExecute
           end
         end
+        object MenuItem99: TMenuItem
+          Caption = '-'
+        end
+        object MenuItem100: TMenuItem
+          Action = acUploadAllToLoTW
+        end
       end
       object MenuItem34: TMenuItem
         Caption = '-'
@@ -2436,6 +2442,11 @@ object frmMain: TfrmMain
       Category = 'eQSL'
       Caption = 'Mark all qso as uploaded to eQSL'
       OnExecute = acMarkAlleQSLExecute
+    end
+    object acUploadAllToLoTW: TAction
+      Category = 'LoTW'
+      Caption = 'Mark all QSO as uploded to LoTW'
+      OnExecute = acUploadAllToLoTWExecute
     end
   end
   object tmrTime: TTimer
