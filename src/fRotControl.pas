@@ -162,36 +162,7 @@ begin
     Az := rotor.GetAzimut
   else
     Az := 0;
-  lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az);
-{  UpdateModeButtons(m);
-  ClearButtonsColor;
-  if f = 0 then
-    exit;
-  b := dmUtils.GetBandFromFreq(lblAzimuth.Caption);
-  if b = '160M' then
-    btn160m.Font.Color := clRed
-  else if b = '80M' then
-    btn80m.Font.Color  := clRed
-  else if b = '40M' then
-    btn40m.Font.Color  := clRed
-  else if b = '30M' then
-    btn30m.Font.Color  := clRed
-  else if b = '20M' then
-    btn20m.Font.Color  := clRed
-  else if b = '17M' then
-    btn17m.Font.Color  := clRed
-  else if b = '15M' then
-    btn15m.Font.Color  := clRed
-  else if b = '12M' then
-    btn12m.Font.Color  := clRed
-  else if b = '10M' then
-    btn10m.Font.Color  := clRed
-  else if b = '6M' then
-    btn6m.Font.Color   := clRed
-  else if b = '2M' then
-    btn2m.Font.Color   := clRed
-  else if b = '70CM' then
-    btn70cm.Font.Color := clRed }
+  lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az)
 end;
 
 initialization
