@@ -164,6 +164,7 @@ type
 
     function  FindLib(const Path,LibName : String) : String;
     function  GetMysqldPath : String;
+    function  TableExists(TableName : String) : Boolean;
 
     procedure CreateViews;
     procedure PrepareBandDatabase;
@@ -388,6 +389,7 @@ procedure TdmData.CreateViews;
 var
   i : Integer;
 begin
+  if trmQ.Active then trmQ.Rollback;
   trmQ.StartTransaction;
   mQ.SQL.Text := '';
   for i:=0 to scViews.Script.Count-1 do
@@ -2926,10 +2928,10 @@ begin
   if old_version < cDB_MAIN_VER then
   begin
     if trQ1.Active then trQ1.Rollback;
-    trQ1.StartTransaction;
     try try
       if old_version < 2 then
       begin
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'alter table cqrlog_main add eqsl_qsl_sent varchar(1) null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -2941,11 +2943,13 @@ begin
         Q1.ExecSQL;
         Q1.SQL.Text := 'alter table cqrlog_main add eqsl_qslrdate date null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
       if old_version < 4 then
       begin
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'update cqrlog_main set eqsl_qsl_sent = '+QuotedStr('')+' where eqsl_qsl_sent is null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -2986,71 +2990,100 @@ begin
         Q1.ExecSQL;
         Q1.SQL.Text := 'alter table cqrlog_main change eqsl_qsl_rcvd eqsl_qsl_rcvd varchar(1) default '+QuotedStr('')+ 'not null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL ;
+        trQ1.Commit
       end;
 
       if old_version < 5 then
       begin
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'alter table cqrlog_main change qsl_s qsl_s varchar(4) default '+QuotedStr('')+ ' not null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
       if old_version < 6 then
       begin
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(10) not null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
       if old_version < 7 then
       begin
-        Q1.SQL.Clear;
-        Q1.SQL.Add('CREATE TABLE log_changes (');
-        Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
-        Q1.SQL.Add('  id_cqrlog_main int(11) NULL,');
-        Q1.SQL.Add('  cmd varchar(10) NOT NULL,');
-        Q1.SQL.Add('  qsodate date NULL,');
-        Q1.SQL.Add('  time_on varchar(5) NULL,');
-        Q1.SQL.Add('  callsign varchar(20) NULL,');
-        Q1.SQL.Add('  mode varchar(10) NULL,');
-        Q1.SQL.Add('  freq numeric(10,4) NULL,');
-        Q1.SQL.Add('  band varchar(6) NULL,');
-        Q1.SQL.Add('  old_qsodate date NULL,');
-        Q1.SQL.Add('  old_time_on varchar(5) NULL,');
-        Q1.SQL.Add('  old_callsign varchar(20) NULL,');
-        Q1.SQL.Add('  old_mode varchar(10) NULL,');
-        Q1.SQL.Add('  old_freq numeric(10,4) NULL,');
-        Q1.SQL.Add('  old_band varchar(6) NULL');
-        Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
+        if not TableExists('log_changes') then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Clear;
+          Q1.SQL.Add('CREATE TABLE log_changes (');
+          Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
+          Q1.SQL.Add('  id_cqrlog_main int NULL,');
+          Q1.SQL.Add('  cmd varchar(10) NOT NULL,');
+          Q1.SQL.Add('  qsodate date NULL,');
+          Q1.SQL.Add('  time_on varchar(5) NULL,');
+          Q1.SQL.Add('  callsign varchar(20) NULL,');
+          Q1.SQL.Add('  mode varchar(10) NULL,');
+          Q1.SQL.Add('  freq numeric(10,4) NULL,');
+          Q1.SQL.Add('  band varchar(6) NULL,');
+          Q1.SQL.Add('  old_qsodate date NULL,');
+          Q1.SQL.Add('  old_time_on varchar(5) NULL,');
+          Q1.SQL.Add('  old_callsign varchar(20) NULL,');
+          Q1.SQL.Add('  old_mode varchar(10) NULL,');
+          Q1.SQL.Add('  old_freq numeric(10,4) NULL,');
+          Q1.SQL.Add('  old_band varchar(6) NULL');
+          Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
 
-        Q1.SQL.Clear;
-        Q1.SQL.Add('ALTER TABLE log_changes');
-        Q1.SQL.Add('ADD INDEX id_cqrlog_main (id_cqrlog_main);');
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
+          trQ1.StartTransaction;
+          Q1.SQL.Clear;
+          Q1.SQL.Add('ALTER TABLE log_changes');
+          Q1.SQL.Add('ADD INDEX id_cqrlog_main (id_cqrlog_main);');
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
 
-        Q1.SQL.Clear;
-        Q1.SQL.Add('ALTER TABLE log_changes');
-        Q1.SQL.Add('ADD FOREIGN KEY (id_cqrlog_main) REFERENCES cqrlog_main (id_cqrlog_main) ON DELETE SET NULL ON UPDATE CASCADE;');
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
+          { version older than 1.8.0 may have all tables in MyISAM engine
+            new version has as default InnoDB. Creating Foreign key between
+            tables in two different engines fail with error no 150.
 
-        Q1.SQL.Clear;
-        Q1.SQL.Add('CREATE TABLE upload_status (');
-        Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
-        Q1.SQL.Add('  logname varchar(30) NOT NULL,');
-        Q1.SQL.Add('  id_log_changes int(11) NULL,');
-        Q1.SQL.Add('  FOREIGN KEY (id_log_changes) REFERENCES log_changes (id) ON DELETE SET NULL');
-        Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+            This happen only when user updates from old version where cqrlog_main was created in
+            MyISAM engine. I hope this won't happen so often, cqrlog can live without
+            this foreign key
+
+          trQ1.StartTransaction;
+          Q1.SQL.Clear;
+          Q1.SQL.Add('ALTER TABLE log_changes');
+          Q1.SQL.Add('ADD FOREIGN KEY (id_cqrlog_main) REFERENCES cqrlog_main (id_cqrlog_main) ON DELETE SET NULL ON UPDATE CASCADE;');
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit
+          }
+        end;
+
+        if not TableExists('upload_status') then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Clear;
+          Q1.SQL.Add('CREATE TABLE upload_status (');
+          Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
+          Q1.SQL.Add('  logname varchar(30) NOT NULL,');
+          Q1.SQL.Add('  id_log_changes int(11) NULL,');
+          Q1.SQL.Add('  FOREIGN KEY (id_log_changes) REFERENCES log_changes (id) ON DELETE SET NULL');
+          Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit
+        end
       end;
 
       if old_version < 8 then
       begin
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -3065,18 +3098,23 @@ begin
 
         Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
       if old_version < 9 then
       begin
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'alter table log_changes add upddeleted int(1) default 0';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
       if old_version < 10 then
       begin
+        trQ1.StartTransaction;
+        Q1.SQL.Clear;
         Q1.SQL.Add('CREATE TABLE call_alert (');
         Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
         Q1.SQL.Add('  callsign varchar(20) NOT NULL,');
@@ -3085,28 +3123,35 @@ begin
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
+        trQ1.Commit;
 
+        trQ1.StartTransaction;
         Q1.SQL.Text := 'ALTER TABLE call_alert ADD INDEX (id);';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
         Q1.SQL.Text := 'ALTER TABLE call_alert ADD INDEX (callsign);';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
+      trQ1.StartTransaction;
       Q1.SQL.Text := 'drop view view_cqrlog_main_by_callsign';
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL;
       Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate';
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL;
+      trQ1.Commit;
 
       CreateViews;
 
+      trQ1.StartTransaction;
       Q1.SQL.Text := 'update db_version set nr='+IntToStr(cDB_MAIN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-      Q1.ExecSQL
+      Q1.ExecSQL;
+      trQ1.Commit
     except
       on E : Exception do
       begin
@@ -3114,10 +3159,8 @@ begin
       end
     end
     finally
-      if err then
+      if trQ1.Active then
         trQ1.Rollback
-      else
-        trQ1.Commit
     end
   end
 end;
@@ -3495,6 +3538,33 @@ begin
     if trQ1.Active then
       trQ1.Commit;
     Q.Close
+  end
+end;
+
+function TdmData.TableExists(TableName : String) : Boolean;
+const
+  C_SEL = 'select table_name from information_schema.tables where table_schema=%s and table_name=%s';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+begin
+  Result := True;
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    t.SQL.Text := Format(C_SEL,[QuotedStr(fDBName),QuotedStr(TableName)]);
+    if fDebugLevel>=1 then Writeln(t.SQL.Text);
+    t.Open;
+    Result := t.RecordCount>0
+  finally
+    t.Close;
+    tr.Rollback;
+    FreeAndNil(t);
+    FreeAndNil(tr)
   end
 end;
 
