@@ -868,13 +868,16 @@ begin
     end
     else begin
       if Application.MessageBox('Something is wrong because LoTW server returned invalid adif file header.'+LineEnding+
-                                'Your LoTW username/password could be wrong of LoTW server is closed.'+LineEnding+LineEnding+'Do you want to show the file?',
+                                'Your LoTW username/password could be wrong or LoTW server is down.'+LineEnding+LineEnding+'Do you want to show the file?',
                                 'Error ...',mb_YesNo+mb_IconQuestion) = idYes then
         dmUtils.OpenInApp(FileName)
     end
   finally
+    dmData.Q.Close();
     if dmData.trQ.Active then
       dmData.trQ.Rollback;
+    if dmData.trQ1.Active then
+      dmData.trQ1.Rollback;
     l.Free;
     CloseFile(f)
   end;
@@ -1019,7 +1022,10 @@ begin
     dmData.trQ.RollBack;
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
+
   dmData.trQ1.StartTransaction;
+  dmData.trQ.StartTransaction;
+
   AssignFile(f,FileName);
   Reset(f);
   lblComment.Caption := 'Importing eQSL Adif file ...';
@@ -1176,8 +1182,8 @@ begin
                                'and (callsign = ' + QuotedStr(call) + ')'
         end;
         if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-        if dmData.trQ.Active then dmData.trQ.Rollback;
-        dmData.trQ.StartTransaction;
+        //if dmData.trQ.Active then dmData.trQ.Rollback;
+        //dmData.trQ.StartTransaction;
         dmData.Q.Open();
         while not dmData.Q.Eof do
         begin
