@@ -3369,21 +3369,48 @@ var
   i : Integer;
 begin
   trQ.StartTransaction;
-  Q.SQL.Text := '';
-  for i:=0 to scOnlineLogTriggers.Script.Count-1 do
-  begin
-    if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
-      Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
-    else begin
-      Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
-      if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-      Q.ExecSQL;
-      Q.SQL.Text := ''
-    end
+  try try
+    Q.SQL.Text := 'delete from upload_status';
+    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+    Q.ExecSQL;
+
+    Q.SQL.Text := 'delete from log_changes';
+    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+    Q.ExecSQL
+  except
+    trQ.Rollback;
+    exit
+  end
+  finally
+    if trQ.Active then
+      trQ.Commit
   end;
-  trQ.Commit
-  //^^ because of bug in  TSQLSript. For SQL is applied,
-  //second command - no effect. My workaround works. Semicolon is a delimitter.
+  trQ.StartTransaction;
+
+  try try
+    Q.SQL.Text := '';
+    for i:=0 to scOnlineLogTriggers.Script.Count-1 do
+    begin
+      if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
+        Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
+      else begin
+        Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
+        if fDebugLevel>=1 then Writeln(Q.SQL.Text);
+        Q.ExecSQL;
+        Q.SQL.Text := ''
+      end
+    end
+    //^^ because of bug in  TSQLSript. For SQL is applied,
+    //second command - no effect. My workaround works. Semicolon is a delimitter.
+  except
+    trQ.Rollback
+  end
+  finally
+    if trQ.Active then;
+      trQ.Commit
+  end;
+
+  PrepareEmptyLogUploadStatusTables(Q,trQ)
 end;
 
 procedure TdmData.DisableOnlineLogSupport;
