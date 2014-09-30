@@ -19,6 +19,7 @@ Legend:
   - export for SOTA website didn't work - fixed
   - upgrade problem with already existing tables fixed
   - LoTW/eQSL were not marked as sent/received after upload/download - fixed
+  - Clear log function in Database connection window didn't work - fixed
 
 1.8.1
   - cqrlog crashed after hit ESC for the first time when no keying device was set 

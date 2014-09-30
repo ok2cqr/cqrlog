@@ -180,6 +180,7 @@ type
     procedure UpgradeCommonDatabase(old_version : Integer);
     procedure PrepareMysqlConfigFile;
     procedure DeleteOldConfigFiles;
+    procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
   public
     {
     MainCon51 : TMySQL51Connection;
@@ -468,6 +469,8 @@ begin
   mQ.ExecSQL;
   trmQ.Commit;
 
+  PrepareEmptyLogUploadStatusTables(mQ,trmQ);
+  {
   trmQ.StartTransaction;
   mQ.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
@@ -485,6 +488,7 @@ begin
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   mQ.ExecSQL;
   trmQ.Commit;
+  }
 
   RefreshLogList(nr)
 end;
@@ -2798,46 +2802,61 @@ end;
 
 procedure TdmData.TruncateTables(nr : Word);
 var
-  db : String;
+  lQ  : TSQLQuery;
+  lTr : TSQLTransaction;
 begin
-  db := GetProperDBName(nr);
   Q.Close;
+  lQ  := TSQLQuery.Create(nil);
+  lTr := TSQLTransaction.Create(nil);
   try
-    if trQ.Active then trQ.RollBack;
-    trQ.StartTransaction;
-    Q.SQL.Text := 'TRUNCATE '+db+'.club1;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.club2;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.club3;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.club4;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.club5;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.cqrlog_config;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.cqrlog_main;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.dxcc_id;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.long_note;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.notes;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.profiles;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.version;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.zipcode1;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.zipcode2;';
-    Q.ExecSQL;
-    Q.SQL.Text := 'TRUNCATE '+db+'.zipcode3;';
-    Q.ExecSQL;
-    trQ.Commit
+    lQ.DataBase  := MainCon;
+    lTr.DataBase := MainCon;
+    lQ.Transaction := lTr;
+
+    lQ.SQL.Text := 'use '+ GetProperDBName(nr);
+    lQ.ExecSQL;
+    lTr.Commit;
+
+    lTr.StartTransaction;
+    lQ.SQL.Text := 'TRUNCATE club1;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE club2;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE club3;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE club4;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE club5;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE cqrlog_config;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'delete from cqrlog_main;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'delete from upload_status';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'delete from log_changes';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE dxcc_id;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE long_note;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE notes;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE profiles;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE version;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE zipcode1;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE zipcode2;';
+    lQ.ExecSQL;
+    lQ.SQL.Text := 'TRUNCATE zipcode3;';
+    lQ.ExecSQL;
+    lTr.Commit
   finally
-    dmData.Q.Close
+    lQ.Close;
+    FreeAndNil(lQ);
+    FreeAndNil(lTr)
   end
 end;
 
@@ -3083,6 +3102,8 @@ begin
 
       if old_version < 8 then
       begin
+        PrepareEmptyLogUploadStatusTables(Q1,trQ1);
+        {
         trQ1.StartTransaction;
         Q1.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
@@ -3099,7 +3120,7 @@ begin
         Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        trQ1.Commit
+        trQ1.Commit}
       end;
 
       if old_version < 9 then
@@ -3566,6 +3587,35 @@ begin
     FreeAndNil(t);
     FreeAndNil(tr)
   end
+end;
+
+procedure TdmData.PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
+var
+  Commit : Boolean = False;
+begin
+  Commit := not lTr.Active;
+
+  if Commit then
+    lTr.StartTransaction;
+
+  lQ.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
+  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+  lQ.ExecSQL;
+
+  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HAMQTH)+',1)';
+  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+  lQ.ExecSQL;
+
+  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_CLUBLOG)+',1)';
+  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+  lQ.ExecSQL;
+
+  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
+  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+  lQ.ExecSQL;
+
+  if Commit then
+    lTr.Commit
 end;
 
 initialization
