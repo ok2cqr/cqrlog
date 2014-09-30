@@ -344,6 +344,8 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormWindowStateChange(Sender: TObject);
+    procedure lblAziChangeBounds(Sender: TObject);
+    procedure lblQRAChangeBounds(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
@@ -531,6 +533,7 @@ type
     procedure SendSpot;
     procedure RunVK(key_pressed: String);
     procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
+    procedure RefreshInfoLabels;
 
     function CheckFreq(freq : String) : String;
   public
@@ -3334,6 +3337,16 @@ begin
   end
 end;
 
+procedure TfrmNewQSO.lblAziChangeBounds(Sender: TObject);
+begin
+  RefreshInfoLabels
+end;
+
+procedure TfrmNewQSO.lblQRAChangeBounds(Sender: TObject);
+begin
+  RefreshInfoLabels
+end;
+
 procedure TfrmNewQSO.MenuItem11Click(Sender: TObject);
 begin
   with TfrmWAZITUStat.Create(self) do
@@ -4553,9 +4566,7 @@ begin
     end;
     }
     lblTarSunRise.Caption := TimeToStr(SunRise);
-    lblTarSunSet.Caption  := TimeToStr(SunSet);
-    lblHisTime.Refresh;
-    lblGreeting.Refresh
+    lblTarSunSet.Caption  := TimeToStr(SunSet)
   end
   else begin
     if (lblLat.Caption <> '') and (lblLong.Caption <> '') then
@@ -4576,8 +4587,6 @@ begin
       end;
       lblTarSunRise.Caption := TimeToStr(SunRise);
       lblTarSunSet.Caption  := TimeToStr(SunSet);
-      lblHisTime.Refresh;
-      lblGreeting.Refresh;
       dmUtils.DistanceFromCoordinate(myloc,lat,long,qra,azim)
     end
     else
@@ -4590,8 +4599,9 @@ begin
     else
       lblQRA.Caption := qra + ' km';
     lblAzi.Caption := azim;
-    Azimuth := azim;
+    Azimuth := azim
   end;
+  RefreshInfoLabels;
 end;
 
 procedure TfrmNewQSO.ShowQSO;
@@ -5340,6 +5350,15 @@ procedure TfrmNewQSO.ReturnToNewQSO;
 begin
   if edtCall.Enabled then
     edtCall.SetFocus
+end;
+
+procedure TfrmNewQSO.RefreshInfoLabels;
+begin
+  lblHisTime.Refresh;
+  lblGreeting.Refresh;
+  lblTarSunRise.Refresh;
+  lblTarSunSet.Refresh;
+  lblHisTime.Refresh
 end;
 
 initialization

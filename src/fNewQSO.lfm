@@ -124,7 +124,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '1.2.4.0'
   object sbNewQSO: TStatusBar
     Left = 0
     Height = 19
@@ -1425,6 +1425,7 @@ object frmNewQSO: TfrmNewQSO
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
+          OnChangeBounds = lblQRAChangeBounds
         end
         object Label34: TLabel
           Left = 126
@@ -1442,6 +1443,7 @@ object frmNewQSO: TfrmNewQSO
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
+          OnChangeBounds = lblAziChangeBounds
         end
         object lblHisTime: TLabel
           Left = 8
