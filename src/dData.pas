@@ -1317,7 +1317,6 @@ begin
       pq.Open;
       pq.Close;
       tq.Rollback;
-
       pq.DataBase := dmDXCluster.dbDXC;
       tq.DataBase := dmDXCluster.dbDXC;
       pq.Transaction := tq;
@@ -3222,21 +3221,29 @@ procedure TdmData.CreateQSLTmpTable;
 var
   i : Integer;
 begin
-  mQ.Close;
-  trmQ.StartTransaction;
-  mQ.SQL.Text := '';
-  for i:=0 to scQSLExport.Script.Count-1 do
-  begin
-    if Pos(';',scQSLExport.Script.Strings[i]) = 0 then
-      mQ.SQL.Add(scQSLExport.Script.Strings[i])
-    else begin
-      mQ.SQL.Add(scQSLExport.Script.Strings[i]);
-      if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
-      mQ.ExecSQL;
-      mQ.SQL.Text := ''
+  Q.Close;
+  if trQ.Active then
+    trQ.Rollback;
+  trQ.StartTransaction;
+  try try
+     Q.SQL.Text := '';
+    for i:=0 to scQSLExport.Script.Count-1 do
+    begin
+      if Pos(';',scQSLExport.Script.Strings[i]) = 0 then
+        Q.SQL.Add(scQSLExport.Script.Strings[i])
+      else begin
+        Q.SQL.Add(scQSLExport.Script.Strings[i]);
+        if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+        Q.ExecSQL;
+        Q.SQL.Text := ''
+      end
     end
-  end;
-  trmQ.Commit
+  except
+    trQ.Rollback
+  end
+  finally
+    if trQ.Active then trQ.Commit
+  end
 //^^ because of bug in  TSQLSript. For the firt time cretreates the database,
 //second database - no effect. My workaround works. Semicolon is a delimitter.
 end;
