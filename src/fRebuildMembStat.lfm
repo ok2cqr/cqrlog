@@ -10,12 +10,12 @@ object frmRebuildMembStat: TfrmRebuildMembStat
   OnClose = FormClose
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '0.9.30'
+  LCLVersion = '1.2.4.0'
   object Label1: TLabel
     Left = 16
-    Height = 18
+    Height = 15
     Top = 16
-    Width = 49
+    Width = 42
     Caption = 'Rebuild'
     ParentColor = False
   end
@@ -23,7 +23,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
     Left = 32
     Height = 22
     Top = 40
-    Width = 13
+    Width = 312
     AutoSize = False
     TabOrder = 0
   end
@@ -31,7 +31,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
     Left = 32
     Height = 22
     Top = 72
-    Width = 13
+    Width = 312
     AutoSize = False
     TabOrder = 1
   end
@@ -39,7 +39,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
     Left = 32
     Height = 22
     Top = 104
-    Width = 13
+    Width = 309
     AutoSize = False
     TabOrder = 2
   end
@@ -47,7 +47,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
     Left = 32
     Height = 22
     Top = 136
-    Width = 13
+    Width = 312
     AutoSize = False
     TabOrder = 3
   end
@@ -55,69 +55,29 @@ object frmRebuildMembStat: TfrmRebuildMembStat
     Left = 32
     Height = 22
     Top = 168
-    Width = 13
+    Width = 309
     AutoSize = False
     TabOrder = 4
   end
-  object lblClub1: TLabel
-    Left = 80
-    Height = 18
-    Top = 44
-    Width = 54
-    Caption = 'lblClub1'
-    ParentColor = False
-  end
-  object lblClub2: TLabel
-    Left = 80
-    Height = 18
-    Top = 76
-    Width = 54
-    Caption = 'lblClub2'
-    ParentColor = False
-  end
-  object lblClub3: TLabel
-    Left = 80
-    Height = 18
-    Top = 108
-    Width = 54
-    Caption = 'lblClub3'
-    ParentColor = False
-  end
-  object lblClub4: TLabel
-    Left = 80
-    Height = 18
-    Top = 140
-    Width = 54
-    Caption = 'lblClub4'
-    ParentColor = False
-  end
-  object lblClub5: TLabel
-    Left = 80
-    Height = 18
-    Top = 172
-    Width = 54
-    Caption = 'lblClub5'
-    ParentColor = False
-  end
   object Label2: TLabel
     Left = 80
-    Height = 18
+    Height = 15
     Top = 16
-    Width = 71
+    Width = 59
     Caption = 'Club name'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 384
-    Height = 18
+    Height = 15
     Top = 16
-    Width = 119
+    Width = 102
     Caption = 'Rebuild QSO since'
     ParentColor = False
   end
   object edtSince1: TEdit
     Left = 400
-    Height = 27
+    Height = 25
     Top = 35
     Width = 96
     TabOrder = 5
@@ -125,7 +85,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
   end
   object edtSince2: TEdit
     Left = 400
-    Height = 27
+    Height = 25
     Top = 67
     Width = 96
     TabOrder = 6
@@ -133,7 +93,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
   end
   object edtSince3: TEdit
     Left = 400
-    Height = 27
+    Height = 25
     Top = 99
     Width = 96
     TabOrder = 7
@@ -141,7 +101,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
   end
   object edtSince4: TEdit
     Left = 400
-    Height = 27
+    Height = 25
     Top = 131
     Width = 96
     TabOrder = 8
@@ -149,7 +109,7 @@ object frmRebuildMembStat: TfrmRebuildMembStat
   end
   object edtSince5: TEdit
     Left = 400
-    Height = 27
+    Height = 25
     Top = 163
     Width = 96
     TabOrder = 9
@@ -182,45 +142,45 @@ object frmRebuildMembStat: TfrmRebuildMembStat
   end
   object lblDone1: TLabel
     Left = 352
-    Height = 18
+    Height = 15
     Top = 44
-    Width = 33
+    Width = 28
     Caption = 'done'
     ParentColor = False
     Visible = False
   end
   object lblDone2: TLabel
     Left = 352
-    Height = 18
+    Height = 15
     Top = 76
-    Width = 33
+    Width = 28
     Caption = 'done'
     ParentColor = False
     Visible = False
   end
   object lblDone3: TLabel
     Left = 352
-    Height = 18
+    Height = 15
     Top = 108
-    Width = 33
+    Width = 28
     Caption = 'done'
     ParentColor = False
     Visible = False
   end
   object lblDone4: TLabel
     Left = 352
-    Height = 18
+    Height = 15
     Top = 140
-    Width = 33
+    Width = 28
     Caption = 'done'
     ParentColor = False
     Visible = False
   end
   object lblDone5: TLabel
     Left = 352
-    Height = 18
+    Height = 15
     Top = 172
-    Width = 33
+    Width = 28
     Caption = 'done'
     ParentColor = False
     Visible = False

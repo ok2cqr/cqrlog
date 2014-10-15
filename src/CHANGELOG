@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.8.3
+  - Rebuild membership statistic dialog was broken - fixed
+
 1.8.2
   + Select Modes in Preferences/New QSO for New QSO Form (Tom, DL7BJ)
   + Load default values for Frequency and Mode in Preferences/New QSO (Tom, DL7BJ)

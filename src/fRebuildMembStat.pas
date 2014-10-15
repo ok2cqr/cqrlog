@@ -30,11 +30,6 @@ type
     Label2: TLabel;
     Label3: TLabel;
     lblInfo: TLabel;
-    lblClub1: TLabel;
-    lblClub2: TLabel;
-    lblClub3: TLabel;
-    lblClub4: TLabel;
-    lblClub5: TLabel;
     lblDone1: TLabel;
     lblDone2: TLabel;
     lblDone3: TLabel;
@@ -61,11 +56,11 @@ uses dUtils, dData;
 procedure TfrmRebuildMembStat.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmRebuildMembStat);
-  lblClub1.Caption := dmData.Club1.LongName;
-  lblClub2.Caption := dmData.Club2.LongName;
-  lblClub3.Caption := dmData.Club3.LongName;
-  lblClub4.Caption := dmData.Club4.LongName;
-  lblClub5.Caption := dmData.Club5.LongName;
+  chkRebClub1.Caption := dmData.Club1.LongName;
+  chkRebClub2.Caption := dmData.Club2.LongName;
+  chkRebClub3.Caption := dmData.Club3.LongName;
+  chkRebClub4.Caption := dmData.Club4.LongName;
+  chkRebClub5.Caption := dmData.Club5.LongName;
 
   edtSince1.Text := dmData.Club1.DateFrom;
   edtSince2.Text := dmData.Club2.DateFrom;
@@ -73,35 +68,20 @@ begin
   edtSince4.Text := dmData.Club4.DateFrom;
   edtSince5.Text := dmData.Club5.DateFrom;
 
-  if lblClub1.Caption = '' then
-  begin
-    chkRebClub1.Enabled := False;
-    edtSince1.Enabled   := False
-  end;
+  chkRebClub1.Enabled := chkRebClub1.Caption<>'';
+  edtSince1.Enabled   := chkRebClub1.Caption<>'';
 
-  if lblClub2.Caption = '' then
-  begin
-    chkRebClub2.Enabled := False;
-    edtSince2.Enabled   := False
-  end;
+  chkRebClub2.Enabled := chkRebClub2.Caption<>'';
+  edtSince2.Enabled   := chkRebClub2.Caption<>'';
 
-  if lblClub3.Caption = '' then
-  begin
-    chkRebClub3.Enabled := False;
-    edtSince3.Enabled   := False
-  end;
+  chkRebClub3.Enabled := chkRebClub3.Caption<>'';
+  edtSince3.Enabled   := chkRebClub3.Caption<>'';
 
-  if lblClub4.Caption = '' then
-  begin
-    chkRebClub4.Enabled := False;
-    edtSince4.Enabled   := False
-  end;
+  chkRebClub4.Enabled := chkRebClub4.Caption<>'';
+  edtSince4.Enabled   := chkRebClub4.Caption<>'';
 
-  if lblClub5.Caption = '' then
-  begin
-    chkRebClub5.Enabled := False;
-    edtSince5.Enabled   := False
-  end
+  chkRebClub5.Enabled := chkRebClub5.Caption<>'';
+  edtSince5.Enabled   := chkRebClub5.Caption<>''
 end;
 
 procedure TfrmRebuildMembStat.FormClose(Sender: TObject;
