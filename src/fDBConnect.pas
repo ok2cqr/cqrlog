@@ -407,13 +407,15 @@ begin
   end;
   dbgrdLogs.DataSource := dmData.dsrLogList;
 
-  if StartMysql then
-    dmData.StartMysqldProcess;
   LoadLogin;
   if OpenFromMenu then
   begin
     UpdateGridFields;
     EnableButtons
+  end
+  else begin
+    if StartMysql then
+      dmData.StartMysqldProcess
   end;
   dlgOpen.InitialDir := dmData.HomeDir;
   dlgSave.InitialDir := dmData.HomeDir

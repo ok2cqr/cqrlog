@@ -9,7 +9,7 @@ object frmDBConnect: TfrmDBConnect
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '1.2.4.0'
   object grbLogin: TGroupBox
     Left = 0
     Height = 192
@@ -17,13 +17,13 @@ object frmDBConnect: TfrmDBConnect
     Width = 369
     Align = alTop
     Caption = ' MySQL server '
-    ClientHeight = 175
+    ClientHeight = 173
     ClientWidth = 365
     TabOrder = 0
     Visible = False
     object edtServer: TEdit
       Left = 14
-      Height = 25
+      Height = 27
       Top = 25
       Width = 168
       TabOrder = 0
@@ -31,23 +31,23 @@ object frmDBConnect: TfrmDBConnect
     end
     object Label1: TLabel
       Left = 14
-      Height = 15
+      Height = 17
       Top = 9
-      Width = 72
+      Width = 87
       Caption = 'Server name:'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 218
-      Height = 15
+      Height = 17
       Top = 9
-      Width = 28
+      Width = 34
       Caption = 'Port:'
       ParentColor = False
     end
     object edtPort: TEdit
       Left = 218
-      Height = 25
+      Height = 27
       Top = 25
       Width = 80
       TabOrder = 1
@@ -55,30 +55,30 @@ object frmDBConnect: TfrmDBConnect
     end
     object Label3: TLabel
       Left = 14
-      Height = 15
+      Height = 17
       Top = 61
-      Width = 63
+      Width = 75
       Caption = 'User name:'
       ParentColor = False
     end
     object edtUser: TEdit
       Left = 14
-      Height = 25
+      Height = 27
       Top = 79
       Width = 168
       TabOrder = 2
     end
     object Label4: TLabel
       Left = 218
-      Height = 15
+      Height = 17
       Top = 61
-      Width = 56
+      Width = 70
       Caption = 'Password:'
       ParentColor = False
     end
     object edtPass: TEdit
       Left = 218
-      Height = 25
+      Height = 27
       Top = 79
       Width = 132
       EchoMode = emPassword
@@ -87,9 +87,9 @@ object frmDBConnect: TfrmDBConnect
     end
     object chkSavePass: TCheckBox
       Left = 18
-      Height = 18
+      Height = 24
       Top = 114
-      Width = 93
+      Width = 111
       Caption = 'Remeber me'
       OnChange = chkSavePassChange
       TabOrder = 4
@@ -114,9 +114,9 @@ object frmDBConnect: TfrmDBConnect
     end
     object chkAutoConn: TCheckBox
       Left = 206
-      Height = 18
+      Height = 24
       Top = 114
-      Width = 98
+      Width = 115
       Caption = 'Auto connect'
       TabOrder = 7
     end
@@ -227,9 +227,9 @@ object frmDBConnect: TfrmDBConnect
       TabOrder = 2
       object chkAutoOpen: TCheckBox
         Left = 8
-        Height = 18
+        Height = 24
         Top = -1
-        Width = 227
+        Width = 267
         Caption = 'Open recent log after program start'
         TabOrder = 0
       end
@@ -247,9 +247,9 @@ object frmDBConnect: TfrmDBConnect
     TabOrder = 2
     object chkSaveToLocal: TCheckBox
       Left = 12
-      Height = 18
+      Height = 24
       Top = 2
-      Width = 188
+      Width = 227
       Caption = 'Save log data to local machine'
       OnClick = chkSaveToLocalClick
       TabOrder = 0

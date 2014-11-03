@@ -6,6 +6,8 @@ Legend:
 
 1.8.3
   - Rebuild membership statistic dialog was broken - fixed
+  # after program starts it's waiting for a MySQL server in a loop, every
+    second is trying to connect to local database, maximum is 5 tries
 
 1.8.2
   + Select Modes in Preferences/New QSO for New QSO Form (Tom, DL7BJ)

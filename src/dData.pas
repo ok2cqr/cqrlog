@@ -510,8 +510,15 @@ begin
     (MainCon as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
-    (MainCon as TMySQL55Connection).HostName := host;
-    (MainCon as TMySQL55Connection).Port     := StrToInt(port)
+    if fMySQLVersion = 5.5 then
+    begin
+      (MainCon as TMySQL55Connection).HostName := host;
+      (MainCon as TMySQL55Connection).Port     := StrToInt(port)
+    end
+    else begin
+      (MainCon as TMySQL56Connection).HostName := host;
+      (MainCon as TMySQL56Connection).Port     := StrToInt(port)
+    end
   end;
   MainCon.UserName     := user;
   MainCon.Password     := pass;
@@ -3332,7 +3339,9 @@ end;
 
 procedure TdmData.StartMysqldProcess;
 var
-  mysqld : String;
+  mysqld    : String;
+  Connected : Boolean = False;
+  Tryies    : Word = 0;
 begin
   mysqld := GetMysqldPath;
   PrepareMysqlConfigFile;
@@ -3342,9 +3351,57 @@ begin
                               ' --socket='+fHomeDir+'database/sock'+
                               ' --port=64000';
   MySQLProcess.Execute;
+  if MainCon.Connected then
+    MainCon.Connected := False;
 
+  if fMySQLVersion < 5.5 then
+  begin
+    (MainCon as TMySQL51Connection).HostName := '127.0.0.1';
+    (MainCon as TMySQL51Connection).Port     := 64000
+  end
+  else begin
+    if fMySQLVersion = 5.5 then
+    begin
+      (MainCon as TMySQL55Connection).HostName := '127.0.0.1';
+      (MainCon as TMySQL55Connection).Port     := 64000
+    end
+    else begin
+      (MainCon as TMySQL56Connection).HostName := '127.0.0.1';
+      (MainCon as TMySQL56Connection).Port     := 64000
+    end
+  end;
+  MainCon.DatabaseName := 'information_schema';
+  MainCon.UserName     := 'cqrlog';
+  MainCon.Password     := 'cqrlog';
 
-  sleep(2000)
+  while true do
+  begin
+    try try
+      Connected := True;
+      inc(Tryies);
+      MainCon.Connected := True
+    except
+      on E : Exception do
+      begin
+        if fDebugLevel>=1 then Writeln('Trying to connect to database');
+        Sleep(1000);
+        Connected := False;
+        if fDebugLevel>=1 then Writeln(E.Message);
+        if fDebugLevel>=1 then Writeln('Trying:',Tryies);
+        Continue
+      end
+    end
+    finally
+      MainCon.Connected := False
+    end;
+    if Connected or (Tryies>5) then break
+  end;
+  MainCon.DatabaseName := '';
+  if not Connected then
+  begin
+    Application.MessageBox('MySQL could not be started, please check if the MySQL server is installed properly','Error...',
+                           mb_OK + mb_IconError)
+  end
 end;
 
 function TdmData.BandModFromFreq(freq : String;var mode,band : String) : Boolean;
