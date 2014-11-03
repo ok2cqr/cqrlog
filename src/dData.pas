@@ -523,8 +523,15 @@ begin
     (dmDXCluster.dbDXC as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
-    (dmDXCluster.dbDXC as TMySQL55Connection).HostName := host;
-    (dmDXCluster.dbDXC as TMySQL55Connection).Port     := StrToInt(port)
+    if (fMySQLVersion = 5.5) then
+    begin
+      (dmDXCluster.dbDXC as TMySQL55Connection).HostName := host;
+      (dmDXCluster.dbDXC as TMySQL55Connection).Port     := StrToInt(port)
+    end
+    else begin
+      (dmDXCluster.dbDXC as TMySQL56Connection).HostName := host;
+      (dmDXCluster.dbDXC as TMySQL56Connection).Port     := StrToInt(port)
+    end
   end;
   dmDXCluster.dbDXC.UserName     := user;
   dmDXCluster.dbDXC.Password     := pass;
@@ -536,9 +543,17 @@ begin
     (dmLogUpload.LogUploadCon as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
-    (dmLogUpload.LogUploadCon as TMySQL55Connection).HostName := host;
-    (dmLogUpload.LogUploadCon as TMySQL55Connection).Port     := StrToInt(port)
+    if (fMySQLVersion = 5.5) then
+    begin
+      (dmLogUpload.LogUploadCon as TMySQL55Connection).HostName := host;
+      (dmLogUpload.LogUploadCon as TMySQL55Connection).Port     := StrToInt(port)
+    end
+    else begin
+      (dmLogUpload.LogUploadCon as TMySQL56Connection).HostName := host;
+      (dmLogUpload.LogUploadCon as TMySQL56Connection).Port     := StrToInt(port)
+    end
   end;
+
   dmLogUpload.LogUploadCon.UserName     := user;
   dmLogUpload.LogUploadCon.Password     := pass;
   dmLogUpload.LogUploadCon.DatabaseName := 'information_schema';
@@ -3327,6 +3342,8 @@ begin
                               ' --socket='+fHomeDir+'database/sock'+
                               ' --port=64000';
   MySQLProcess.Execute;
+
+
   sleep(2000)
 end;
 
