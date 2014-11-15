@@ -500,6 +500,7 @@ type
     edtHaUserName: TEdit;
     edtDelAfter : TEdit;
     edtClUserName: TEdit;
+    edtRotor2: TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
     edtFreqChange : TEdit;
@@ -526,7 +527,6 @@ type
     edtRadio1: TEdit;
     edtRadio2: TEdit;
     edtRotor1: TEdit;
-    edtRotor2: TEdit;
     edtRigCtldPath: TEdit;
     edtAM1: TSpinEdit;
     edtClub1Date: TEdit;
