@@ -534,6 +534,7 @@ type
     procedure RunVK(key_pressed: String);
     procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
     procedure RefreshInfoLabels;
+    procedure FillDateTimeFields;
 
     function CheckFreq(freq : String) : String;
   public
@@ -1777,20 +1778,10 @@ begin
 end;
 
 procedure TfrmNewQSO.tmrStartTimer(Sender: TObject);
-var
-  Date : TDateTime;
-  sDate : String='';
-  Mask  : String='';
 begin
   if not cbOffline.Checked then
   begin
-    date := dmUtils.GetDateTime(0);
-    StartTime := date;
-    edtDate.Clear;
-    dmUtils.DateInRightFormat(date,Mask,sDate);
-    edtDate.Text      := sDate;
-    edtStartTime.Text := FormatDateTime('hh:mm',date);
-    edtEndTime.Text   := FormatDateTime('hh:mm',date)
+    FillDateTimeFields
   end
 end;
 
@@ -3075,7 +3066,7 @@ end;
 
 procedure TfrmNewQSO.acRefreshTimeExecute(Sender: TObject);
 begin
-  tmrStartStartTimer(nil)
+  FillDateTimeFields
 end;
 
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
@@ -5359,6 +5350,21 @@ begin
   lblTarSunRise.Refresh;
   lblTarSunSet.Refresh;
   lblHisTime.Refresh
+end;
+
+procedure TfrmNewQSO.FillDateTimeFields;
+var
+  Date : TDateTime;
+  sDate : String='';
+  Mask  : String='';
+begin
+  date := dmUtils.GetDateTime(0);
+  StartTime := date;
+  edtDate.Clear;
+  dmUtils.DateInRightFormat(date,Mask,sDate);
+  edtDate.Text      := sDate;
+  edtStartTime.Text := FormatDateTime('hh:mm',date);
+  edtEndTime.Text   := FormatDateTime('hh:mm',date)
 end;
 
 initialization

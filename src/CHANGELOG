@@ -6,6 +6,7 @@ Legend:
 
 1.8.3
   - Rebuild membership statistic dialog was broken - fixed
+  - clock icon next to QSO time didn't work in offline mode - fixed
   # after program starts it's waiting for a MySQL server in a loop, every
     second is trying to connect to local database, maximum is 5 tries
 
