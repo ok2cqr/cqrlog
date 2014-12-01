@@ -8,22 +8,22 @@ object frmeQSLDownload: TfrmeQSLDownload
   ClientWidth = 489
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.4.0'
   object GroupBox1: TGroupBox
     Left = 0
-    Height = 431
-    Top = 128
+    Height = 407
+    Top = 152
     Width = 489
     Align = alClient
     Caption = 'Progress'
-    ClientHeight = 414
-    ClientWidth = 485
+    ClientHeight = 386
+    ClientWidth = 481
     TabOrder = 0
     object mStat: TMemo
       Left = 0
-      Height = 414
+      Height = 386
       Top = 0
-      Width = 485
+      Width = 481
       Align = alClient
       ScrollBars = ssAutoBoth
       TabOrder = 0
@@ -31,18 +31,18 @@ object frmeQSLDownload: TfrmeQSLDownload
   end
   object Panel1: TPanel
     Left = 0
-    Height = 128
+    Height = 152
     Top = 0
     Width = 489
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 128
+    ClientHeight = 152
     ClientWidth = 489
     TabOrder = 1
     object btnDownload: TButton
       Left = 88
       Height = 25
-      Top = 96
+      Top = 120
       Width = 329
       Anchors = [akTop, akLeft, akRight]
       Caption = 'Download data from eQSL website'
@@ -51,36 +51,51 @@ object frmeQSLDownload: TfrmeQSLDownload
     end
     object GroupBox5: TGroupBox
       Left = 0
-      Height = 88
+      Height = 120
       Top = 0
       Width = 489
       Anchors = [akTop, akLeft, akRight]
       Caption = ' '
-      ClientHeight = 71
-      ClientWidth = 485
+      ClientHeight = 99
+      ClientWidth = 481
       TabOrder = 1
       object Label3: TLabel
         Left = 10
-        Height = 16
+        Height = 17
         Top = 12
-        Width = 230
+        Width = 268
         Caption = 'Return QSL records received on or after '
         ParentColor = False
       end
       object edtDateFrom: TEdit
         Left = 278
-        Height = 25
+        Height = 27
         Top = 7
         Width = 85
         TabOrder = 0
       end
       object chkShowNew: TCheckBox
-        Left = 6
+        Left = 10
         Height = 22
-        Top = 39
-        Width = 331
+        Top = 72
+        Width = 398
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
+      end
+      object Label4: TLabel
+        Left = 10
+        Height = 17
+        Top = 40
+        Width = 101
+        Caption = 'QTH Nickname'
+        ParentColor = False
+      end
+      object edtQTH: TEdit
+        Left = 278
+        Height = 27
+        Top = 40
+        Width = 184
+        TabOrder = 2
       end
     end
   end

@@ -18,9 +18,11 @@ type
     btnPreferences : TButton;
     chkShowNew : TCheckBox;
     edtDateFrom : TEdit;
+    edtQTH: TEdit;
     GroupBox1 : TGroupBox;
     GroupBox5 : TGroupBox;
     Label3 : TLabel;
+    Label4: TLabel;
     mStat : TMemo;
     Panel1 : TPanel;
     Panel2 : TPanel;
@@ -49,12 +51,14 @@ begin
   Done := False;
   dmUtils.LoadWindowPos(frmeQSLDownload);
   edtDateFrom.Text   := cqrini.ReadString('eQSLImp','DateFrom',edtDateFrom.Text);
+  edtQTH.Text        := cqrini.ReadString('eQSL','QTH','');
   chkShowNew.Checked := cqrini.ReadBool('eQSLImp','ShowNewQSOs',True)
 end;
 
 procedure TfrmeQSLDownload.FormClose(Sender : TObject;
   var CloseAction : TCloseAction);
 begin
+  cqrini.WriteString('eQSL','QTH',edtQTH.Text);
   dmUtils.SaveWindowPos(frmeQSLDownload)
 end;
 
@@ -117,6 +121,7 @@ begin
     url := 'http://www.eqsl.cc/qslcard/DownloadInBox.cfm'+
            '?UserName='+user+
            '&Password='+dmUtils.HTMLEncode(pass)+
+           '&QTHNickname='+edtQTH.Text+
            '&RcvdSince='+StringReplace(edtDateFrom.Text,'-','',[rfReplaceAll, rfIgnoreCase]);
     if dmData.DebugLevel>=1 then Writeln(url);
     http.MimeType := 'text/xml';
