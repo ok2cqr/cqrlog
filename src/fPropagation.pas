@@ -131,8 +131,6 @@ begin
     finally
       Free
     end;
-    finally
-    end;
 
     tmp := frmPropagation.k;
     if Pos('(',tmp) > 0 then
