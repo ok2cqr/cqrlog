@@ -1,26 +1,28 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TfrmPropagation','FORMDATA',[
   'TPF0'#15'TfrmPropagation'#14'frmPropagation'#4'Left'#3#214#1#6'Height'#3#149
   +#0#3'Top'#3#232#0#5'Width'#3#167#0#7'Caption'#6#11'Propagation'#12'ClientHei'
   +'ght'#3#149#0#11'ClientWidth'#3#167#0#10'KeyPreview'#9#7'OnClose'#7#9'FormCl'
   +'ose'#10'OnDblClick'#7#12'FormDblClick'#7'OnKeyUp'#7#9'FormKeyUp'#6'OnShow'#7
-  +#8'FormShow'#10'LCLVersion'#6#8'0.9.30.2'#0#6'TLabel'#6'Label1'#4'Left'#2#9#6
-  +'Height'#2#16#3'Top'#2#8#5'Width'#2'.'#7'Caption'#6#8'A-index:'#11'ParentCol'
-  +'or'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#9#6'Height'#2#16#3'Top'#2' '#5'Widt'
-  +'h'#2'.'#7'Caption'#6#8'K-index:'#11'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4
-  +'Left'#2#9#6'Height'#2#16#3'Top'#2'8'#5'Width'#2#19#7'Caption'#6#4'SFI:'#11
-  +'ParentColor'#8#0#0#6'TLabel'#6'Label4'#4'Left'#2#9#6'Height'#2#16#3'Top'#2
-  +'P'#5'Width'#2#25#7'Caption'#6#4'SSN:'#11'ParentColor'#8#0#0#6'TLabel'#6'Lab'
-  +'el5'#4'Left'#2#9#6'Height'#2#16#3'Top'#2'h'#5'Width'#2#18#7'Caption'#6#3'GF'
-  +':'#11'ParentColor'#8#0#0#6'TLabel'#9'lblAIndex'#4'Left'#2'M'#6'Height'#2#16
-  +#3'Top'#2#9#5'Width'#2'3'#7'Caption'#6#9'lblAIndex'#11'ParentColor'#8#0#0#6
-  +'TLabel'#9'lblKIndex'#4'Left'#2'M'#6'Height'#2#16#3'Top'#2' '#5'Width'#2'4'#7
+  +#8'FormShow'#10'LCLVersion'#6#7'1.2.4.0'#0#6'TLabel'#6'Label1'#4'Left'#2#9#6
+  +'Height'#2#15#3'Top'#2#8#5'Width'#2'-'#7'Caption'#6#8'A-index:'#11'ParentCol'
+  +'or'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#9#6'Height'#2#15#3'Top'#2' '#5'Widt'
+  +'h'#2'-'#7'Caption'#6#8'K-index:'#11'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4
+  +'Left'#2#9#6'Height'#2#15#3'Top'#2'8'#5'Width'#2#18#7'Caption'#6#4'SFI:'#11
+  +'ParentColor'#8#0#0#6'TLabel'#6'Label4'#4'Left'#2#9#6'Height'#2#15#3'Top'#2
+  +'P'#5'Width'#2#24#7'Caption'#6#4'SSN:'#11'ParentColor'#8#0#0#6'TLabel'#6'Lab'
+  +'el5'#4'Left'#2#9#6'Height'#2#15#3'Top'#2'h'#5'Width'#2#17#7'Caption'#6#3'GF'
+  +':'#11'ParentColor'#8#0#0#6'TLabel'#9'lblAIndex'#4'Left'#2'M'#6'Height'#2#15
+  +#3'Top'#2#9#5'Width'#2'2'#7'Caption'#6#9'lblAIndex'#11'ParentColor'#8#0#0#6
+  +'TLabel'#9'lblKIndex'#4'Left'#2'M'#6'Height'#2#15#3'Top'#2' '#5'Width'#2'3'#7
   +'Caption'#6#9'lblKIndex'#11'ParentColor'#8#0#0#6'TLabel'#6'lblSFI'#4'Left'#2
-  +'M'#6'Height'#2#16#3'Top'#2'8'#5'Width'#2#29#7'Caption'#6#6'lblSFI'#11'Paren'
-  +'tColor'#8#0#0#6'TLabel'#6'lblSSN'#4'Left'#2'M'#6'Height'#2#16#3'Top'#2'P'#5
-  +'Width'#2'#'#7'Caption'#6#6'lblSSN'#11'ParentColor'#8#0#0#6'TLabel'#5'lblGF'
-  +#4'Left'#2'M'#6'Height'#2#16#3'Top'#2'h'#5'Width'#2#28#7'Caption'#6#5'lblGF'
-  +#11'ParentColor'#8#0#0#6'TLabel'#7'lblInfo'#4'Left'#2#2#6'Height'#2#16#3'Top'
-  +#3#128#0#5'Width'#2'$'#7'Caption'#6#7'lblInfo'#11'ParentColor'#8#0#0#12'TSpe'
+  +'M'#6'Height'#2#15#3'Top'#2'8'#5'Width'#2#28#7'Caption'#6#6'lblSFI'#11'Paren'
+  +'tColor'#8#0#0#6'TLabel'#6'lblSSN'#4'Left'#2'M'#6'Height'#2#15#3'Top'#2'P'#5
+  +'Width'#2'"'#7'Caption'#6#6'lblSSN'#11'ParentColor'#8#0#0#6'TLabel'#5'lblGF'
+  +#4'Left'#2'M'#6'Height'#2#15#3'Top'#2'h'#5'Width'#2#27#7'Caption'#6#5'lblGF'
+  +#11'ParentColor'#8#0#0#6'TLabel'#7'lblInfo'#4'Left'#2#2#6'Height'#2#15#3'Top'
+  +#3#128#0#5'Width'#2'#'#7'Caption'#6#7'lblInfo'#11'ParentColor'#8#0#0#12'TSpe'
   +'edButton'#11'sbtnRefresh'#4'Left'#3#144#0#6'Height'#2#22#4'Hint'#6#17'Refre'
   +'sh statistic'#3'Top'#2'|'#5'Width'#2#23#7'Anchors'#11#7'akRight'#8'akBottom'
   +#0#10'Glyph.Data'#10':'#4#0#0'6'#4#0#0'BM6'#4#0#0#0#0#0#0'6'#0#0#0'('#0#0#0
@@ -60,8 +62,8 @@ LazarusResources.Add('TfrmPropagation','FORMDATA',[
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#9'NumGl'
-  +'yphs'#2#0#7'OnClick'#7#16'sbtnRefreshClick'#8'ShowHint'#9#14'ParentShowHint'
-  +#8#0#0#6'TTimer'#7'tmrProp'#7'Enabled'#8#7'OnTimer'#7#12'tmrPropTimer'#4'lef'
-  ,'t'#3#128#0#3'top'#2'0'#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#7'OnCli'
+  +'ck'#7#16'sbtnRefreshClick'#8'ShowHint'#9#14'ParentShowHint'#8#0#0#6'TTimer'
+  +#7'tmrProp'#7'Enabled'#8#7'OnTimer'#7#12'tmrPropTimer'#4'left'#3#128#0#3'top'
+  ,#2'0'#0#0#0
 ]);

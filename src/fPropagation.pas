@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType;
+  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, ftpsend;
 
 type
 
@@ -87,7 +87,7 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://www.swpc.noaa.gov/ftpdir/latest/wwv.txt') then
+    if HTTP.HTTPMethod('GET', 'http://services.swpc.noaa.gov/text/wwv.txt') then
     begin
       m.LoadFromStream(HTTP.Document);
       tmp := m.Text;
@@ -105,16 +105,35 @@ begin
       frmPropagation.k := copy(tmp,1,Length(tmp)-1)
     end;
 
-    HTTP.Clear;
-    if HTTP.HTTPMethod('GET', 'http://www.swpc.noaa.gov/ftpdir/indices/DSD.txt') then
-    begin
-      m.LoadFromStream(HTTP.Document);
-      tmp := m.Text;
-      t := copy(tmp,Pos(':Issued:',tmp)+9,Pos('#',tmp)-1 - Pos(':Issued:',tmp)-9);
-      frmPropagation.time := t;
-      tmp := m.Strings[m.Count-1];
-      frmPropagation.ssn := trim(copy(tmp,20,5))
+    with TFTPSend.Create do
+    try try
+      TargetHost := 'ftp.swpc.noaa.gov';
+      TargetPort := '21';
+      if Login then
+      begin
+        DirectFileName := dmData.HomeDir +'dsd.txt';
+        DirectFile     := True;
+        if RetrieveFile('pub/indices/DSD.txt', False) then
+        begin
+          m.LoadFromFile(dmData.HomeDir +'dsd.txt');
+          tmp := m.Text;
+          t := copy(tmp,Pos(':Issued:',tmp)+9,Pos('#',tmp)-1 - Pos(':Issued:',tmp)-9);
+          frmPropagation.time := t;
+          tmp := m.Strings[m.Count-1];
+          frmPropagation.ssn   := trim(copy(tmp,20,5))
+        end;
+        Logout
+      end
+    except
+      on E: Exception do
+        Writeln(E.Message)
+    end
+    finally
+      Free
     end;
+    finally
+    end;
+
     tmp := frmPropagation.k;
     if Pos('(',tmp) > 0 then
       tmp := trim(copy(tmp,1,Pos('(',tmp)-1));
@@ -128,6 +147,7 @@ begin
           frmPropagation.gf := ''
        end
     end;
+
     if dmData.DebugLevel >=1 then
     begin
       Writeln('SFI:  ',frmPropagation.sfi);
@@ -169,12 +189,20 @@ begin
 end;
 
 procedure TfrmPropagation.FormShow(Sender: TObject);
+const
+  C_LOADING = 'Loading...';
 begin
   running := False;
   dmUtils.LoadWindowPos(frmPropagation);
-  tmrProp.Enabled  := False;
-  tmrProp.Interval := 1000 * 60 * 5; //every 5 minutes do refresh
-  tmrProp.Enabled  := True;
+  lblAIndex.Caption := C_LOADING;
+  lblKIndex.Caption := C_LOADING;
+  lblSFI.Caption    := C_LOADING;
+  lblSSN.Caption    := C_LOADING;
+  lblGF.Caption     := C_LOADING;
+  lblInfo.Caption   := '';
+  tmrProp.Enabled   := False;
+  tmrProp.Interval  := 1000 * 60 * 5; //every 5 minutes do refresh
+  tmrProp.Enabled   := True;
   tmrPropTimer(nil)
 end;
 

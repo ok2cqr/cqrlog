@@ -11,92 +11,92 @@ object frmPropagation: TfrmPropagation
   OnDblClick = FormDblClick
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.4.0'
   object Label1: TLabel
     Left = 9
-    Height = 16
+    Height = 15
     Top = 8
-    Width = 46
+    Width = 45
     Caption = 'A-index:'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 9
-    Height = 16
+    Height = 15
     Top = 32
-    Width = 46
+    Width = 45
     Caption = 'K-index:'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 9
-    Height = 16
+    Height = 15
     Top = 56
-    Width = 19
+    Width = 18
     Caption = 'SFI:'
     ParentColor = False
   end
   object Label4: TLabel
     Left = 9
-    Height = 16
+    Height = 15
     Top = 80
-    Width = 25
+    Width = 24
     Caption = 'SSN:'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 9
-    Height = 16
+    Height = 15
     Top = 104
-    Width = 18
+    Width = 17
     Caption = 'GF:'
     ParentColor = False
   end
   object lblAIndex: TLabel
     Left = 77
-    Height = 16
+    Height = 15
     Top = 9
-    Width = 51
+    Width = 50
     Caption = 'lblAIndex'
     ParentColor = False
   end
   object lblKIndex: TLabel
     Left = 77
-    Height = 16
+    Height = 15
     Top = 32
-    Width = 52
+    Width = 51
     Caption = 'lblKIndex'
     ParentColor = False
   end
   object lblSFI: TLabel
     Left = 77
-    Height = 16
+    Height = 15
     Top = 56
-    Width = 29
+    Width = 28
     Caption = 'lblSFI'
     ParentColor = False
   end
   object lblSSN: TLabel
     Left = 77
-    Height = 16
+    Height = 15
     Top = 80
-    Width = 35
+    Width = 34
     Caption = 'lblSSN'
     ParentColor = False
   end
   object lblGF: TLabel
     Left = 77
-    Height = 16
+    Height = 15
     Top = 104
-    Width = 28
+    Width = 27
     Caption = 'lblGF'
     ParentColor = False
   end
   object lblInfo: TLabel
     Left = 2
-    Height = 16
+    Height = 15
     Top = 128
-    Width = 36
+    Width = 35
     Caption = 'lblInfo'
     ParentColor = False
   end
@@ -143,7 +143,6 @@ object frmPropagation: TfrmPropagation
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000
     }
-    NumGlyphs = 0
     OnClick = sbtnRefreshClick
     ShowHint = True
     ParentShowHint = False
