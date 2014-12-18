@@ -2869,12 +2869,18 @@ begin
   with TfrmLongNote.Create(self) do
   try
     dmData.qLongNote.Close();
+    if dmData.trLongNote.Active then dmData.trLongNote.Rollback;
     dmData.qLongNote.SQL.Text := 'SELECT id_long_note, note FROM long_note';
-    dmData.qLongNote.Open();
-    if dmData.qLongNote.Fields[0].IsNull then
-      new := True;
-    mNote.Lines.Text := dmData.qLongNote.Fields[1].AsString;
-    dmData.qLongNote.Close;
+    dmData.trLongNote.StartTransaction;
+    try
+      dmData.qLongNote.Open();
+      if dmData.qLongNote.Fields[0].IsNull then
+        new := True;
+      mNote.Lines.Text := dmData.qLongNote.Fields[1].AsString;
+    finally
+      dmData.qLongNote.Close();
+      dmData.trLongNote.Rollback
+    end;
     ShowModal;
     if ModalResult = mrOK then
     begin
@@ -2882,11 +2888,20 @@ begin
         dmData.qLongNote.SQL.Text := 'insert into long_note(id_long_note,note) values (1,:note)'
       else
         dmData.qLongNote.SQL.Text := 'UPDATE long_note set note = :note where id_long_note = 1';
-      dmData.qLongNote.Params[0].AsString := mNote.Text;
-      dmData.trLongNote.StartTransaction;
-      dmData.qLongNote.ExecSQL;
+      try try
+        dmData.qLongNote.Params[0].AsString := mNote.Text;
+        dmData.trLongNote.StartTransaction;
+        dmData.qLongNote.ExecSQL;
       dmData.trLongNote.Commit;
-      dmData.qLongNote.Close()
+      dmData.qLongNote.Close();
+      except
+        dmData.trLongNote.Rollback
+      end
+      finally
+        if dmData.trLongNote.Active then
+          dmData.trLongNote.Commit;
+        dmData.qLongNote.Close()
+      end
     end
   finally
     Free
