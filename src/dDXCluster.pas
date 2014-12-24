@@ -17,7 +17,8 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, Graphics,
-  inifiles, sqldb, mysql51conn, db, mysql55conn, process;
+  inifiles, sqldb, mysql51conn, db, mysql55conn, process, mysql56conn,
+  mysql56dyn;
 
 type
   TExplodeArray = Array of String;
@@ -823,10 +824,13 @@ var
   i : Integer;
 begin
   InitCriticalSection(csDX);
+
   if dmData.MySQLVersion < 5.5 then
     dbDXC := TMySQL51Connection.Create(self)
+  else  if dmData.MySQLVersion < 5.6 then
+    dbDXC := TMySQL55Connection.Create(self)
   else
-    dbDXC := TMySQL55Connection.Create(self);
+    dbDXC := TMySQL56Connection.Create(self);
 
   dbDXC.KeepConnection := True;
   for i:=0 to ComponentCount-1 do

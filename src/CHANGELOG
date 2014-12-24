@@ -7,6 +7,7 @@ Legend:
 1.8.3
   + Added support for setting the QTH Nickname in eQSL.cc download dialog (Florian, DF2ET)
   + buttons fom bottom of Preferences window moved to to right side
+  + MariaDB 10 support added
   - Rebuild membership statistic dialog was broken - fixed
   - clock icon next to QSO time didn't work in offline mode - fixed
   - after saving Long note "Transaction already active" appeard - fixed

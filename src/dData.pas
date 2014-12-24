@@ -1136,7 +1136,15 @@ begin
   end;
 
   if not TryStrToCurr(MySQLVer,fMySQLVersion) then
-    fMySQLVersion := 5.1;
+    fMySQLVersion := 5.6;
+
+  if fDebugLevel>=1 then
+  begin
+    Writeln('**********************************');
+    Writeln('MySQL version assigned: ',fMySQLVersion);
+    Writeln('**********************************')
+  end;
+
 
   if fMySQLVersion < 5.5 then
     MainCon := TMySQL51Connection.Create(self)
