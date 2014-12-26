@@ -456,11 +456,11 @@ begin
     end
   end
   finally
-    dmData.trQ.Rollback;
     dmData.Q.Close;
     dmData.Q1.Close;
     if dmData.trQ1.Active then
       dmData.trQ1.Commit;
+    dmData.trQ.Rollback;
     dmData.DropQSLTmpTable;
     lblProgress.Caption := 'Complete!';
     CloseFile(f);
