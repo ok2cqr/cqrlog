@@ -1,16 +1,15 @@
 FOC_NAMES
 FOC names
 GW3SB;Chas
-VE7BS;Bob
 G3ESY;Peter
 G2HKU;Ted
 G8VG;Pete
-G3JJZ;Dave
 DL6TQ;Hans
 DL9TJ;Gerry
 SM5CCE;Kjell
 LA5HE;Rag
 PA0LOU;Lou
+PA73LOU;Lou
 G3JUL;Geoff
 ZS1EL;Vidi
 G3LKZ;Owen
@@ -29,7 +28,6 @@ GM3X;Clive
 VK2AYD;Dave
 G3LHJ;Derrick
 G3SXW;Roger
-CT3AS;Ben
 G3RPB;Keith
 W1YL;Ellen
 N3RS;Sig
@@ -62,7 +60,6 @@ G3RWL;Richard
 GM3WUX;Terry
 GA3WUX;Terry
 G3LIK;Mick
-VE3BHZ;Dave
 OZ1LO;Leif
 OZ5DX;Hans
 W4YE;Bud
@@ -75,6 +72,7 @@ W9KNI;Bob
 K4EWG;Pete
 G3KTZ;Ron
 G3TXF;Nigel
+ZD9XF;Nigel
 K4XU;Dick
 W1OT;Tony
 GW3KDB;Pete
@@ -113,9 +111,10 @@ G3SYM;Dave
 PA0ABM;Wino
 SM5GLC;Lasse
 W1HL;Jim
-I0XXR;Chas
 W4IR;Joe
 GM3YTS;Rob
+GM5CX;Rob
+GA5CX;Rob
 K4LQ;Fred
 OK1RR;Martin
 G4DJX;Alan
@@ -134,17 +133,19 @@ G3BEX;John
 N2UU;Bob
 SM6BGA;Hans
 G4BUO;Dave
+YJ0OU;Dave
+A35UO;Dave
 N4UB;Don
 VK6LW;Kev
 OQ3R;Mar
 K2SG;Tony
 KN0V;Gary
-VE3MS;Rodger
 G3XAQ;Alan
 G4SIE;Rik
 PA5TT;Teun
 K9QVB;John
 G3SWH;Phil
+AD5YS;Phil
 SM5COP;Rune
 W4CK;Mark
 F5VCT;Bo
@@ -224,6 +225,7 @@ G0IVZ;Jan
 OY1CT;Caen
 N6NT;Bruce
 5B4AGN;Bob
+G3ZEM;Bob
 G3IZD;Ivan
 G0BQV;Mary
 G3SED;Mike
@@ -253,7 +255,6 @@ VK4OQ;John
 N4AF;Howie
 OZ4FF;Karsten
 ZL2AZ;Pete
-LA8XM;Trond
 K2UFT;Dick
 W5ZR;Bert
 KC4YDP;Jerry
@@ -281,8 +282,8 @@ VE2QLF;Alan
 VE3HX;Alan
 G3ZGC;Richard
 VE3VA;Jeff
-AA4Z;Bruce
 G5LP;Lionel
+G5L;Lionel
 G4VHH;Fred
 K4UEE;Bob
 K5RC;Tom
@@ -300,6 +301,7 @@ LY2PX;Willy
 G3ZRJ;Tony
 KF3B;Alan
 G0OPB;Tony
+G2NF;Tony
 G3PJT;Bob
 G3MBN;Brian
 4Z4KX;Mark
@@ -308,7 +310,7 @@ W8FJ;John
 G4TSH;Justin
 WK2G;Merrill
 HS0ZLM;Finn
-S53R;Robert
+S53R;Rob
 G3PDH;Malcolm
 DK7VW;Werner
 DJ1YFK;Fabian
@@ -367,6 +369,7 @@ K6XG;Dave
 KU8E;Jeff
 WR5U;Mike
 VQ9JC;Jim
+VQ94JC;Jim
 W1ZT;George
 G4FON;Ray
 G0RTN;Gerry
@@ -375,6 +378,7 @@ K8RD;Ed
 LU5OM;Manuel
 KR3E;Ed
 DK2GZ;Harry
+K2GZ;Harry
 AD8P;Bill
 W1AO;Joe
 W2TB;Mike
@@ -399,6 +403,8 @@ M2G;John
 PA3CVV;Miles
 G0CHV;Mike
 G3RWF;Nick
+GM3RWF;Nick
+7P8NH;Nick
 W0UA;George
 DF4BV;Heinz
 EI5DI;Paul
@@ -475,8 +481,6 @@ LA4XX;Hal
 OK1WF;Jarda
 G3XJS;Peter
 G5CL;Ryan
-G3LZQ;John
-W4PRO;Jim
 K0VBU;Bill
 DJ5IL;Karl
 DL3AZ;Andy
@@ -500,7 +504,7 @@ GM0GAV;Gav
 GM6Z;Gav
 IK0IXI;Fabio
 G4IRN;John
-K9FN;David
+K9FN;Dave
 G3YEC;Rick
 K5TF;Dick
 N6TT;Steven
@@ -551,3 +555,18 @@ DK7LX;Georg
 K7LXX;Georg
 EW8O;Mik
 NA6M;Mark
+K0VXU;Russ
+G0IBN;Andy
+NN6T;Glen
+N2NL;Dave
+WH7AA;Dave
+RX6CB;Ed
+JA1GZV;Moto
+EA4BB;Nando
+TZ6BB;Nando
+VE3KI;Rich
+W8ZR;Jim
+W4CI;Dave
+YB4IR;Imam
+K5OT;Larry
+GM4EVS;David
