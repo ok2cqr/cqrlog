@@ -121,7 +121,7 @@ begin
     url := 'http://www.eqsl.cc/qslcard/DownloadInBox.cfm'+
            '?UserName='+user+
            '&Password='+dmUtils.HTMLEncode(pass)+
-           '&QTHNickname='+edtQTH.Text+
+           '&QTHNickname='+dmUtils.EncodeURLData(edtQTH.Text)+
            '&RcvdSince='+StringReplace(edtDateFrom.Text,'-','',[rfReplaceAll, rfIgnoreCase]);
     if dmData.DebugLevel>=1 then Writeln(url);
     http.MimeType := 'text/xml';

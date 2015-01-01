@@ -235,6 +235,7 @@ type
     function  HTMLEncode(const Data: string): string;
     function  KmToMiles(qra : Double) : Double;
     function  GetDescKeyFromCode(key : Word) : String;
+    function  EncodeURLData(data : String) : String;
 end;
 
 var
@@ -4082,7 +4083,32 @@ begin
   Result := 'F' + IntToStr(Key - 111); //VK_F1 = 112
 end;
 
-
+function TdmUtils.EncodeURLData(data : String) : String;
+var
+  x: integer;
+  sBuff: string;
+const
+  SafeMask = ['A'..'Z', '0'..'9', 'a'..'z', '*', '@', '.', '_', '-'];
+begin
+  sBuff := '';
+  for x := 1 to Length(data) do
+  begin
+    if data[x] in SafeMask then
+    begin
+      sBuff := sBuff + data[x]
+    end
+    else begin
+      if data[x] = ' ' then
+      begin
+        sBuff := sBuff + '%20'
+      end
+      else begin
+        sBuff := sBuff + '%' + IntToHex(Ord(data[x]), 2)
+      end
+    end
+  end;
+  Result := sBuff
+end;
 
 
 initialization
