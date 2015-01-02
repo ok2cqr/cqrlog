@@ -3396,7 +3396,10 @@ begin
         Connected := False;
         if fDebugLevel>=1 then Writeln(E.Message);
         if fDebugLevel>=1 then Writeln('Trying:',Tryies);
-        Continue
+	if (Tryies > 7) then
+	  Break
+	else
+          Continue
       end
     end
     finally
