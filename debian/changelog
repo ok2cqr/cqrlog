@@ -1,3 +1,19 @@
+cqrlog (1.8.3-1) unstable; urgency=low
+
+  * Added support for setting the QTH Nickname in eQSL.cc download 
+    dialog (Florian, DF2ET)   
+  * buttons fom bottom of Preferences window moved to to right side
+  * MariaDB 10 support added
+  * Rebuild membership statistic dialog was broken - fixed
+  * clock icon next to QSO time didn't work in offline mode - fixed
+  * after saving Long note Transaction already active appeard - fixed
+  * loading of dx prediction data fixed
+  * sometimes eqsl_sentdate was not filled after upload - fixed
+  * "Mark QSLs sent after export" in export for label printing didn't 
+    work - fixed
+  
+ -- Petr Hlozek <petr@ok2cqr.com>  Fri, 02 Jan 2015 18:23:45 +0100
+
 cqrlog (1.8.2-1) unstable; urgency=low
 
   * Select Modes in Preferences/New QSO for New QSO Form (Tom, DL7BJ)

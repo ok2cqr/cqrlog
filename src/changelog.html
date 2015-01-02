@@ -1,6 +1,25 @@
 <strong>New user?</strong> Please look to <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
 <hr>
 <br>
+<strong>CQRLOG 1.8.3 (2015-01-01)</strong><br>
+<ul style="list-style: square;text-align:left; color: blue;">
+  <li>added support for setting the QTH Nickname in eQSL.cc download dialog (Florian, DF2ET)</li>
+  <li>buttons fom bottom of Preferences window moved to to right side</li>
+  <li>MariaDB 10 support added</li>
+</ul>
+<ul style="list-style: square;text-align:left; color: red;">
+  <li>Rebuild membership statistic dialog was broken - fixed</li>
+  <li>clock icon next to QSO time didn't work in offline mode - fixed</li>
+  <li>after saving Long note "Transaction already active" appeard - fixed</li>
+  <li>loading of dx prediction data fixed</li>
+  <li>sometimes eqsl_sentdate was not filled after upload - fixed</li>
+  <li>"Mark QSLs sent after export" in export for label printing didn't work - fixed</li>
+</ul>
+<ul style="list-style: square;text-align:left; color: gray;">
+  <li>after program starts it's waiting for a MySQL server in a loop, every
+    second is trying to connect to local database, maximum is 8 tries</li>
+</ul>
+<br><br>
 <strong>CQRLOG 1.8.2 (2014-10-03)</strong><br>
 <ul style="list-style: square;text-align:left; color: blue;">
   <li>Select Modes in Preferences/New QSO for New QSO Form (Tom, DL7BJ)</li>
