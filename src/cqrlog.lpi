@@ -82,7 +82,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="81">
+    <Units Count="82">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -674,6 +674,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewCallAlert"/>
       </Unit80>
+      <Unit81>
+        <Filename Value="fConfigStorage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmConfigStorage"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fConfigStorage"/>
+      </Unit81>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

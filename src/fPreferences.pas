@@ -67,6 +67,7 @@ type
     btnChangeDefFreq: TButton;
     btnChangeDefMode: TButton;
     btnAlertCallsigns: TButton;
+    btnCfgStorage: TButton;
     cb10m1: TCheckBox;
     cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
@@ -980,6 +981,7 @@ type
     tabQTHProfiles: TTabSheet;
     tabDXCluster: TTabSheet;
     procedure btnAlertCallsignsClick(Sender: TObject);
+    procedure btnCfgStorageClick(Sender: TObject);
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnChangeDefModeClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
@@ -1079,7 +1081,7 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapFilter, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -2063,6 +2065,18 @@ begin
     F.ShowModal
   finally
     FreeAndNil(F)
+  end
+end;
+
+procedure TfrmPreferences.btnCfgStorageClick(Sender: TObject);
+var
+  frmConfigStorage : TfrmConfigStorage;
+begin
+  frmConfigStorage := TfrmConfigStorage.Create(nil);
+  try
+    frmConfigStorage.ShowModal
+  finally
+    FreeAndNil(frmConfigStorage)
   end
 end;
 

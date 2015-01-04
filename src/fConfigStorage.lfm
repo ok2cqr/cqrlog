@@ -1,0 +1,606 @@
+object frmConfigStorage: TfrmConfigStorage
+  Left = 330
+  Height = 510
+  Top = 225
+  Width = 842
+  BorderStyle = bsDialog
+  Caption = 'Configuration storage settings'
+  ClientHeight = 510
+  ClientWidth = 842
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '1.2.4.0'
+  object Label1: TLabel
+    Left = 16
+    Height = 17
+    Top = 16
+    Width = 143
+    Caption = 'Type of configuration'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 258
+    Height = 17
+    Top = 16
+    Width = 53
+    Caption = 'Storage'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 21
+    Height = 17
+    Top = 61
+    Width = 59
+    Caption = 'Program'
+    ParentColor = False
+  end
+  object Shape1: TShape
+    Left = 19
+    Height = 5
+    Top = 40
+    Width = 800
+  end
+  object Label15: TLabel
+    Left = 664
+    Height = 17
+    Top = 16
+    Width = 53
+    Caption = 'Storage'
+    ParentColor = False
+  end
+  object Label16: TLabel
+    Left = 416
+    Height = 17
+    Top = 16
+    Width = 143
+    Caption = 'Type of configuration'
+    ParentColor = False
+  end
+  object Label17: TLabel
+    Left = 416
+    Height = 17
+    Top = 61
+    Width = 115
+    Caption = 'ZIP code tracking'
+    ParentColor = False
+  end
+  object cmbStoreProgram: TComboBox
+    Left = 167
+    Height = 27
+    Top = 56
+    Width = 228
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 0
+    Text = 'Common for all computers'
+  end
+  object cmbStoreZipCode: TComboBox
+    Left = 584
+    Height = 27
+    Top = 56
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 1
+    Text = 'Common for all computers'
+  end
+  object Label26: TLabel
+    Left = 21
+    Height = 17
+    Top = 93
+    Width = 63
+    Caption = 'New QSO'
+    ParentColor = False
+  end
+  object Label29: TLabel
+    Left = 416
+    Height = 17
+    Top = 93
+    Width = 136
+    Caption = 'LoTW/eQSL support'
+    ParentColor = False
+  end
+  object cmbStoreNewQSO: TComboBox
+    Left = 167
+    Height = 27
+    Top = 88
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 2
+    Text = 'Common for all computers'
+  end
+  object cmbStoreLoTW: TComboBox
+    Left = 584
+    Height = 27
+    Top = 88
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 3
+    Text = 'Common for all computers'
+  end
+  object Label30: TLabel
+    Left = 21
+    Height = 17
+    Top = 125
+    Width = 105
+    Caption = 'Visible columns'
+    ParentColor = False
+  end
+  object Label31: TLabel
+    Left = 416
+    Height = 17
+    Top = 125
+    Width = 87
+    Caption = 'CW interface'
+    ParentColor = False
+  end
+  object cmbStoreVisColumns: TComboBox
+    Left = 167
+    Height = 27
+    Top = 120
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 4
+    Text = 'Common for all computers'
+  end
+  object cmbStoreCWInterface: TComboBox
+    Left = 584
+    Height = 27
+    Top = 120
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 5
+    Text = 'Common for all computers'
+  end
+  object Label32: TLabel
+    Left = 21
+    Height = 17
+    Top = 157
+    Width = 78
+    Caption = 'TRX control'
+    ParentColor = False
+  end
+  object Label33: TLabel
+    Left = 416
+    Height = 17
+    Top = 157
+    Width = 102
+    Caption = 'FlDigi Interface'
+    ParentColor = False
+  end
+  object cmbStoreTRXControl: TComboBox
+    Left = 167
+    Height = 27
+    Top = 152
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 6
+    Text = 'Common for all computers'
+  end
+  object cmbStoreFldigiInterface: TComboBox
+    Left = 584
+    Height = 27
+    Top = 152
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 7
+    Text = 'Common for all computers'
+  end
+  object Label34: TLabel
+    Left = 21
+    Height = 17
+    Top = 189
+    Width = 91
+    Caption = 'Rotor control'
+    ParentColor = False
+  end
+  object Label35: TLabel
+    Left = 416
+    Height = 17
+    Top = 189
+    Width = 85
+    Caption = 'Auto backup'
+    ParentColor = False
+  end
+  object cmbStoreRotorControl: TComboBox
+    Left = 167
+    Height = 27
+    Top = 184
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 8
+    Text = 'Common for all computers'
+  end
+  object cmbStoreAutoBackup: TComboBox
+    Left = 584
+    Height = 27
+    Top = 184
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 9
+    Text = 'Common for all computers'
+  end
+  object Label36: TLabel
+    Left = 21
+    Height = 17
+    Top = 221
+    Width = 46
+    Caption = 'Modes'
+    ParentColor = False
+  end
+  object Label37: TLabel
+    Left = 416
+    Height = 17
+    Top = 221
+    Width = 110
+    Caption = 'External viewers'
+    ParentColor = False
+  end
+  object cmbStoreModes: TComboBox
+    Left = 167
+    Height = 27
+    Top = 216
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 10
+    Text = 'Common for all computers'
+  end
+  object cmbStoreExtViewers: TComboBox
+    Left = 584
+    Height = 27
+    Top = 216
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 11
+    Text = 'Common for all computers'
+  end
+  object Label38: TLabel
+    Left = 21
+    Height = 17
+    Top = 253
+    Width = 46
+    Caption = 'Export'
+    ParentColor = False
+  end
+  object Label39: TLabel
+    Left = 416
+    Height = 17
+    Top = 253
+    Width = 117
+    Caption = 'CallBook support'
+    ParentColor = False
+  end
+  object cmbStoreExport: TComboBox
+    Left = 167
+    Height = 27
+    Top = 248
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 12
+    Text = 'Common for all computers'
+  end
+  object cmbStoreCalbook: TComboBox
+    Left = 584
+    Height = 27
+    Top = 248
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 13
+    Text = 'Common for all computers'
+  end
+  object Label40: TLabel
+    Left = 21
+    Height = 17
+    Top = 285
+    Width = 68
+    Caption = 'DX cluster'
+    ParentColor = False
+  end
+  object Label41: TLabel
+    Left = 416
+    Height = 17
+    Top = 285
+    Width = 86
+    Caption = 'RBN support'
+    ParentColor = False
+  end
+  object cmbStoreCluster: TComboBox
+    Left = 167
+    Height = 27
+    Top = 280
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 14
+    Text = 'Common for all computers'
+  end
+  object cmbStoreRbn: TComboBox
+    Left = 584
+    Height = 27
+    Top = 280
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 15
+    Text = 'Common for all computers'
+  end
+  object Label42: TLabel
+    Left = 19
+    Height = 17
+    Top = 317
+    Width = 38
+    Caption = 'Fonts'
+    ParentColor = False
+  end
+  object Label43: TLabel
+    Left = 416
+    Height = 17
+    Top = 317
+    Width = 117
+    Caption = 'Online log upload'
+    ParentColor = False
+  end
+  object cmbStoreFonts: TComboBox
+    Left = 167
+    Height = 27
+    Top = 312
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 16
+    Text = 'Common for all computers'
+  end
+  object cmbStoreOnlineLog: TComboBox
+    Left = 584
+    Height = 27
+    Top = 312
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 17
+    Text = 'Common for all computers'
+  end
+  object Label44: TLabel
+    Left = 19
+    Height = 17
+    Top = 349
+    Width = 85
+    Caption = 'Membership'
+    ParentColor = False
+  end
+  object cmbStoreMembership: TComboBox
+    Left = 167
+    Height = 27
+    Top = 344
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 18
+    Text = 'Common for all computers'
+  end
+  object Label45: TLabel
+    Left = 19
+    Height = 17
+    Top = 381
+    Width = 67
+    Caption = 'Band map'
+    ParentColor = False
+  end
+  object Label46: TLabel
+    Left = 416
+    Height = 17
+    Top = 381
+    Width = 153
+    Caption = 'Windows size/position'
+    ParentColor = False
+  end
+  object cmbStoreBandMap: TComboBox
+    Left = 167
+    Height = 27
+    Top = 376
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 19
+    Text = 'Common for all computers'
+  end
+  object cmbStoreWindowSize: TComboBox
+    Left = 584
+    Height = 27
+    Top = 376
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 20
+    Text = 'Common for all computers'
+  end
+  object Label47: TLabel
+    Left = 21
+    Height = 17
+    Top = 413
+    Width = 51
+    Caption = 'xPlanet'
+    ParentColor = False
+  end
+  object Label48: TLabel
+    Left = 418
+    Height = 17
+    Top = 413
+    Width = 142
+    Caption = 'Column size/position'
+    ParentColor = False
+  end
+  object cmbStoreXplanet: TComboBox
+    Left = 169
+    Height = 27
+    Top = 408
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 21
+    Text = 'Common for all computers'
+  end
+  object cmbStoreColumnSize: TComboBox
+    Left = 584
+    Height = 27
+    Top = 408
+    Width = 227
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Common for all computers'
+      'Local computer only'
+    )
+    Style = csDropDownList
+    TabOrder = 22
+    Text = 'Common for all computers'
+  end
+  object btnSave: TButton
+    Left = 641
+    Height = 25
+    Top = 472
+    Width = 75
+    Caption = 'Save'
+    OnClick = btnSaveClick
+    TabOrder = 23
+  end
+  object Shape2: TShape
+    Left = 19
+    Height = 5
+    Top = 456
+    Width = 800
+  end
+  object btnCancel: TButton
+    Left = 744
+    Height = 25
+    Top = 472
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 24
+  end
+end

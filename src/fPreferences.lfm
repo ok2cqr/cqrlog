@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 640
     Top = 0
     Width = 752
-    ActivePage = tabNewQSO
+    ActivePage = tabProgram
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -253,6 +253,15 @@ object frmPreferences: TfrmPreferences
         Width = 176
         Caption = 'Show distance in miles'
         TabOrder = 8
+      end
+      object btnCfgStorage: TButton
+        Left = 16
+        Height = 25
+        Top = 432
+        Width = 232
+        Caption = 'Configuration storage settings'
+        OnClick = btnCfgStorageClick
+        TabOrder = 9
       end
     end
     object tabStation: TTabSheet
@@ -1197,7 +1206,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox3: TGroupBox
             Left = 14
@@ -1539,7 +1548,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object edtRadio2: TEdit
             Left = 146
@@ -1921,7 +1930,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2254,7 +2263,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
