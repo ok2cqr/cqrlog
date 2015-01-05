@@ -532,7 +532,7 @@ type
     procedure ChangeCallBookCaption;
     procedure SendSpot;
     procedure RunVK(key_pressed: String);
-    procedure CreateAutoBackup(Path,Call : String;BackupType : Integer);
+    procedure CreateAutoBackup(Path,Path1,Call : String;BackupType : Integer);
     procedure RefreshInfoLabels;
     procedure FillDateTimeFields;
 
@@ -1347,10 +1347,10 @@ begin
       if cqrini.ReadBool('Backup','AskFirst',False) then
       begin
         if (Application.MessageBox('Do you want to backup your data?','Question ...',mb_YesNo+mb_IconQuestion) = idYes) then
-          CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Station','Call','backup'),cqrini.ReadInteger('Backup','BackupType',0))
+          CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Backup','Path1',''),cqrini.ReadString('Station','Call','backup'),cqrini.ReadInteger('Backup','BackupType',0))
       end
       else begin
-        CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Station','Call',''),cqrini.ReadInteger('Backup','BackupType',0))
+        CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Backup','Path1',''),cqrini.ReadString('Station','Call',''),cqrini.ReadInteger('Backup','BackupType',0))
       end
     end
   end;
@@ -5315,11 +5315,12 @@ begin
   NewQSOFromSpot(Call,FloatToStr(Freq),Mode)
 end;
 
-procedure TfrmNewQSO.CreateAutoBackup(Path,Call : String;BackupType : Integer);
+procedure TfrmNewQSO.CreateAutoBackup(Path,Path1,Call : String;BackupType : Integer);
 begin
   with TfrmExportProgress.Create(self) do
   try
     AutoBackup := True;
+    SecondBackupPath :=  Path1;
     FileName := Path + Call;
     if  BackupType > 0 then
       FileName := FileName + '_backup.adi'

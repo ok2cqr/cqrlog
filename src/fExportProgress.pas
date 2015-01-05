@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ComCtrls, iniFiles, ExtCtrls, db, dateutils;
+  ComCtrls, iniFiles, ExtCtrls, db, dateutils, FileUtil;
 
 type
 
@@ -31,6 +31,7 @@ type
 
     { private declarations }
   public
+    SecondBackupPath : String;
     ExportType : Integer; // 0 - ADIF, 1 - HTML, 2 - ADIF for backup
     FileName   : String;
     AutoBackup : Boolean;
@@ -664,12 +665,23 @@ begin
     else begin
       dir      := ExtractFilePath(FileName);
       FileName := ExtractFileName(FileName);
+      if SecondBackupPath<>'' then
+
       if cqrini.ReadBool('Backup','Compress',True) then
       begin
         chdir(dir);
         dmUtils.ExecuteCommand('tar -cvzf ' + ChangeFileExt(FileName,'.tar.gz') + ' ' +
                                FileName);
-        DeleteFile(Dir + FileName)
+        DeleteFile(Dir + FileName);
+        if (SecondBackupPath<>'') then
+        begin
+          SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
+          CopyFile(Dir + ChangeFileExt(FileName,'.tar.gz'),SecondBackupPath+ChangeFileExt(FileName,'.tar.gz'))
+        end
+      end
+      else begin
+        SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
+        CopyFile(Dir+FileName,SecondBackupPath+FileName)
       end
     end;
     dmData.CloseProfileExport;

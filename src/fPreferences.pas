@@ -2906,7 +2906,7 @@ begin
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
   edtBackupPath.Text := cqrini.ReadString('Backup', 'Path', dmData.DataDir);
-  edtBackupPath1.Text := cqrini.ReadString('Backup', 'Path','');
+  edtBackupPath1.Text := cqrini.ReadString('Backup', 'Path1','');
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
   chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 
