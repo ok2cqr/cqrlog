@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.9.0
+  + configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)
+
 1.8.3
   + Added support for setting the QTH Nickname in eQSL.cc download dialog (Florian, DF2ET)
   + buttons fom bottom of Preferences window moved to to right side

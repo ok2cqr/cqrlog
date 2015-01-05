@@ -145,7 +145,7 @@ begin
   if cmbStoreVisColumns.ItemIndex>0 then
     Sections := Sections + 'Columns,';
   if cmbStoreTRXControl.ItemIndex>0 then
-    Sections := Sections + 'TRX1,TRX2,';
+    Sections := Sections + 'TRX,TRX1,TRX2,';
   if cmbStoreRotorControl.ItemIndex>0 then
     Sections := Sections + 'ROT,ROT1,ROT2,';
   if cmbStoreModes.ItemIndex>=0 then
@@ -181,10 +181,11 @@ begin
   if cmbStoreOnlineLog.ItemIndex>0 then
     Sections := Sections + 'OnlineLog,';
   if cmbStoreWindowSize.ItemIndex>0 then
-    Sections := Sections + 'WindowSize,';
+    Sections := Sections + 'WindowSize, Window,Grayline,';
   if cmbStoreColumnSize.ItemIndex>0 then
     Sections := Sections + 'ColumnSize,';
   cqrini.WriteString('ConfigStorage','Items',Sections);
+  cqrini.LoadLocalSectionsList;
   ModalResult := mrOK
 end;
 

@@ -1237,7 +1237,7 @@ begin
 
   if Assigned(cqrini) then
   begin
-    cqrini.WriteBool('Windows','CWKeys',frmCWKeys.Showing);
+    cqrini.WriteBool('Window','CWKeys',frmCWKeys.Showing);
 
     //I have to close window manually because of bug in lazarus.
 

@@ -690,7 +690,9 @@ begin
     trQ.Rollback;
     l.Free
   end;
-  cqrini := TMyIni.Create(fHomeDir+IntToStr(nr)+'cqrlog.cfg');
+
+  cqrini := TMyIni.Create(fHomeDir+IntToStr(nr)+'cqrlog.cfg',fHomeDir+IntToStr(nr)+'local.cfg');
+  cqrini.LoadLocalSectionsList;
 
   trQ.StartTransaction;
   Q.SQL.Text := 'truncate table dxcc_id';
@@ -1188,7 +1190,7 @@ begin
   LoadeQSLCalls;
   LoadMasterSCP;
 
-  cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg');
+  cqrini := TMyIni.Create(fHomeDir+'cqrlog.cfg',fHomeDir+'local.cfg');
 
   //Mysql still may be running, so we must close it first
   KillMySQL;

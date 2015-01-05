@@ -10,29 +10,33 @@ uses
 type
   TMyIni = class
     ini  : TMemIniFile;
+    lini : TMemIniFile;
     crit : TRTLCriticalSection;
   private
+    LocalSections : String;
     fIniFileName : String;
   public
     property IniFileName : String read fIniFileName;
 
-    constructor Create(IniFile : String);
+    constructor Create(IniFile,LocalIniFile : String);
     destructor  Destroy; override;
 
     function  ReadString(const Section, Ident, Default: string): string;
-    function  ReadInteger(const Section, Ident: string; Default: Longint): Longint;
-    function  ReadBool(const Section, Ident: string; Default: Boolean): Boolean;
+    function  ReadInteger(const Section, Ident: string; Default: Longint;ToLocal : Boolean=FALSE): Longint;
+    function  ReadBool(const Section, Ident: string; Default: Boolean;ToLocal : Boolean=FALSE): Boolean;
     function  ReadFloat(const Section, Ident: string; Default: Double): Double;
     function  SectionExists(Section : String) : Boolean;
+    function  LocalOnly(Section : String) : Boolean;
 
-    procedure WriteString(const Section, Ident, Value: String);
-    procedure WriteInteger(const Section, Ident: string; Value: Longint);
-    procedure WriteBool(const Section, Ident: string; Value: Boolean);
+    procedure WriteString(const Section, Ident, Value: String;ToLocal : Boolean=FALSE);
+    procedure WriteInteger(const Section, Ident: string; Value: Longint;ToLocal : Boolean=FALSE);
+    procedure WriteBool(const Section, Ident: string; Value: Boolean;ToLocal : Boolean=FALSE);
     procedure WriteFloat(const Section, Ident: string; Value: Double);
     procedure SaveToDisk;
-    procedure DeleteKey(const Section, Ident: String);
-    procedure ReadSection(const Section: string; Strings: TStrings);
+    procedure DeleteKey(const Section, Ident: String;ToLocal : Boolean=FALSE);
+    procedure ReadSection(const Section: string; Strings: TStrings;ToLocal : Boolean=FALSE);
     procedure ReadSectionRaw(const Section: string; Strings: TStrings);
+    procedure LoadLocalSectionsList;
 end;
 
 var
@@ -40,38 +44,50 @@ var
 
 implementation
 
-constructor TMyIni.Create(IniFile : String);
+constructor TMyIni.Create(IniFile,LocalIniFile : String);
 begin
   InitCriticalSection(crit);
   fIniFileName := IniFile;
-  ini := TMemIniFile.Create(IniFile)
+  Writeln('IniFile:',IniFile);
+  Writeln('LocalIniFile:',LocalIniFile);
+  ini  := TMemIniFile.Create(IniFile);
+  lini := TMemIniFile.Create(LocalIniFile)
 end;
 
 function TMyIni.ReadString(const Section, Ident, Default: string): string;
 begin
   EnterCriticalsection(crit);
   try
-    Result := ini.ReadString(Section, Ident, Default)
+    if LocalOnly(Section) then
+      Result := lini.ReadString(Section, Ident, Default)
+    else
+      Result := ini.ReadString(Section, Ident, Default)
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
-function TMyIni.ReadInteger(const Section, Ident: string; Default: Longint): Longint;
+function TMyIni.ReadInteger(const Section, Ident: string; Default: Longint;ToLocal : Boolean=FALSE): Longint;
 begin
   EnterCriticalsection(crit);
   try
-    Result := ini.ReadInteger(Section, Ident, Default)
+    if (LocalOnly(Section) or ToLocal) then
+      Result := lini.ReadInteger(Section, Ident, Default)
+    else
+      Result := ini.ReadInteger(Section, Ident, Default)
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
-function TMyIni.ReadBool(const Section, Ident: string; Default: Boolean): Boolean;
+function TMyIni.ReadBool(const Section, Ident: string; Default: Boolean;ToLocal : Boolean=FALSE): Boolean;
 begin
   EnterCriticalsection(crit);
   try
-    Result := ini.ReadBool(Section, Ident, Default)
+    if (LocalOnly(Section) or ToLocal)  then
+      Result := lini.ReadBool(Section, Ident, Default)
+    else
+      Result := ini.ReadBool(Section, Ident, Default)
   finally
     LeaveCriticalsection(crit)
   end
@@ -81,38 +97,50 @@ function TMyIni.ReadFloat(const Section, Ident: string; Default: Double): Double
 begin
   EnterCriticalsection(crit);
   try
-    Result := ini.ReadFloat(Section, Ident, Default)
+    if LocalOnly(Section) then
+      Result := lini.ReadFloat(Section, Ident, Default)
+    else
+      Result := ini.ReadFloat(Section, Ident, Default)
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
 
-procedure TMyIni.WriteString(const Section, Ident, Value: String);
+procedure TMyIni.WriteString(const Section, Ident, Value: String;ToLocal : Boolean=FALSE);
 begin
   EnterCriticalsection(crit);
   try
-    ini.WriteString(Section, Ident, Value)
+    if (LocalOnly(Section) or ToLocal) then
+      lini.WriteString(Section, Ident, Value)
+    else
+      ini.WriteString(Section, Ident, Value)
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
-procedure TMyIni.WriteInteger(const Section, Ident: string; Value: Longint);
+procedure TMyIni.WriteInteger(const Section, Ident: string; Value: Longint;ToLocal : Boolean=FALSE);
 begin
   EnterCriticalsection(crit);
   try
-    ini.WriteInteger(Section, Ident, Value)
+    if (LocalOnly(Section) or ToLocal) then
+      lini.WriteInteger(Section, Ident, Value)
+    else
+      ini.WriteInteger(Section, Ident, Value)
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
-procedure TMyIni.WriteBool(const Section, Ident: string; Value: Boolean);
+procedure TMyIni.WriteBool(const Section, Ident: string; Value: Boolean;ToLocal : Boolean=FALSE);
 begin
   EnterCriticalsection(crit);
   try
-    ini.WriteBool(Section, Ident, Value)
+    if (LocalOnly(Section) or ToLocal) then
+      lini.WriteBool(Section, Ident, Value)
+    else
+      ini.WriteBool(Section, Ident, Value)
   finally
     LeaveCriticalsection(crit)
   end
@@ -122,7 +150,10 @@ procedure TMyIni.WriteFloat(const Section, Ident: string; Value: Double);
 begin
   EnterCriticalsection(crit);
   try
-    ini.WriteFloat(Section, Ident, Value)
+    if LocalOnly(Section) then
+      lini.WriteFloat(Section, Ident, Value)
+    else
+      ini.WriteFloat(Section, Ident, Value)
   finally
     LeaveCriticalsection(crit)
   end
@@ -132,27 +163,34 @@ procedure TMyIni.SaveToDisk;
 begin
   EnterCriticalsection(crit);
   try
-    ini.UpdateFile
+    ini.UpdateFile;
+    lini.UpdateFile
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
-procedure TMyIni.DeleteKey(const Section, Ident: String);
+procedure TMyIni.DeleteKey(const Section, Ident: String;ToLocal : Boolean=FALSE);
 begin
   EnterCriticalsection(crit);
   try
-    ini.DeleteKey(Section,Ident)
+    if (LocalOnly(Section) or ToLocal) then
+      lini.DeleteKey(Section,Ident)
+    else
+      ini.DeleteKey(Section,Ident)
   finally
     LeaveCriticalsection(crit)
   end
 end;
 
-procedure TMyIni.ReadSection(const Section: string; Strings: TStrings);
+procedure TMyIni.ReadSection(const Section: string; Strings: TStrings;ToLocal : Boolean=FALSE);
 begin
   EnterCriticalsection(crit);
   try
-    ini.ReadSection(Section,Strings)
+    if (LocalOnly(Section) or ToLocal) then
+      lini.ReadSection(Section,Strings)
+    else
+      ini.ReadSection(Section,Strings)
   finally
     LeaveCriticalsection(crit)
   end
@@ -162,7 +200,10 @@ procedure TMyIni.ReadSectionRaw(const Section: string; Strings: TStrings);
 begin
   EnterCriticalsection(crit);
   try
-    ini.ReadSectionRaw(Section,Strings)
+    if LocalOnly(Section) then
+      lini.ReadSectionRaw(Section,Strings)
+    else
+      ini.ReadSectionRaw(Section,Strings)
   finally
     LeaveCriticalsection(crit)
   end
@@ -173,24 +214,39 @@ function TMyIni.SectionExists(Section : String) : Boolean;
 begin
   EnterCriticalsection(crit);
   try
-    Result := ini.SectionExists(Section);
+    if LocalOnly(Section) then
+      Result := lini.SectionExists(Section)
+    else
+      Result := ini.SectionExists(Section)
   finally
     LeaveCriticalsection(crit)
   end
+end;
+
+function TMyIni.LocalOnly(Section : String) : Boolean;
+begin
+  Result := Pos(Section+',',LocalSections)>0
+end;
+
+procedure TMyIni.LoadLocalSectionsList;
+begin
+  LocalSections := cqrini.ReadString('ConfigStorage','Items','');
+  Writeln('LocalSections:',LocalSections)
 end;
 
 destructor TMyIni.Destroy;
 begin
   inherited;
   ini.UpdateFile;
-  ini.Free;
+  FreeAndNil(ini);
+  lini.UpdateFile;
+  FreeAndNil(lini);
   DoneCriticalsection(crit)
 end;
 
 initialization
 
 finalization
-  cqrini.Free;
   Writeln('Closing ini file ...')
 end.
 

@@ -678,6 +678,7 @@
         <Filename Value="fConfigStorage.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmConfigStorage"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fConfigStorage"/>
       </Unit81>

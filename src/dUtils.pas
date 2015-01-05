@@ -397,25 +397,25 @@ begin
         Grid := aForm.Components[i] as TDBGrid;
         Section := aForm.Name + '_' + Grid.Name;
         l.Clear;
-        cqrini.ReadSection(Section, l);
+        cqrini.ReadSection(Section, l,cqrini.LocalOnly('WindowSize'));
         l.Text := Trim(l.Text);
         if l.Text <> '' then
         begin //delete old settings
           for y := 0 to l.Count - 1 do
-            cqrini.DeleteKey(Section, l[y]);
+            cqrini.DeleteKey(Section, l[y],cqrini.LocalOnly('WindowSize'))
         end;
         for j := 0 to Grid.Columns.Count - 1 do
         begin
           Ident := TColumn(Grid.Columns[j]).FieldName;
-          cqrini.WriteString(Section, Ident, IntToStr(Grid.Columns[j].Width));
+          cqrini.WriteString(Section, Ident, IntToStr(Grid.Columns[j].Width),cqrini.LocalOnly('WindowSize'))
           // Writeln('Saving:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[j].Width)
-        end;
-      end;
+        end
+      end
     end
   finally
     l.Free;
     cqrini.SaveToDisk
-  end;
+  end
 end;
 
 procedure TdmUtils.LoadForm(aForm: TForm);
@@ -438,7 +438,7 @@ begin
         Grid := (aForm.Components[i] as TDBGrid);
         Section := aForm.Name + '_' + Grid.Name;
         l.Clear;
-        cqrini.ReadSection(Section, l);
+        cqrini.ReadSection(Section, l, cqrini.LocalOnly('WindowSize'));
         l.Text := Trim(l.Text);
         if l.Text = '' then
           exit;
@@ -452,19 +452,19 @@ begin
             Ident := l[y];
             Grid.Columns.Add.DisplayName := Ident;
             TColumn(Grid.Columns[y]).FieldName := Ident;
-            Grid.Columns[y].Width := cqrini.ReadInteger(section, Ident, 100);
+            Grid.Columns[y].Width := cqrini.ReadInteger(section, Ident, 100, cqrini.LocalOnly('WindowSize'))
             // Writeln('Loading:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[y].Width)
           end
         finally
           Grid.DataSource := D;
           Grid.EndUpdate()
-        end;
-      end;
+        end
+      end
     end
   finally
     cqrini.SaveToDisk;
     l.Free
-  end;
+  end
 end;
 
 
@@ -3053,14 +3053,14 @@ begin
     exit;
   section := a.Name;
   if a.WindowState = wsMaximized then
-    cqrini.WriteBool(section, 'Max', True)
+    cqrini.WriteBool(section, 'Max', True, cqrini.LocalOnly('WindowSize'))
   else
   begin
-    cqrini.WriteInteger(section, 'Height', a.Height);
-    cqrini.WriteInteger(section, 'Width', a.Width);
-    cqrini.WriteInteger(section, 'Top', a.Top);
-    cqrini.WriteInteger(section, 'Left', a.Left);
-    cqrini.WriteBool(section, 'Max', False);
+    cqrini.WriteInteger(section, 'Height', a.Height, cqrini.LocalOnly('WindowSize'));
+    cqrini.WriteInteger(section, 'Width', a.Width, cqrini.LocalOnly('WindowSize'));
+    cqrini.WriteInteger(section, 'Top', a.Top, cqrini.LocalOnly('WindowSize'));
+    cqrini.WriteInteger(section, 'Left', a.Left, cqrini.LocalOnly('WindowSize'));
+    cqrini.WriteBool(section, 'Max', False, cqrini.LocalOnly('WindowSize'));
   end;
   if dmData.DebugLevel >= 1 then
   begin
@@ -3076,17 +3076,17 @@ var
 begin
   section := a.Name;
   LoadFontSettings(a);
-  if cqrini.ReadBool(section, 'Max', False) then
+  if cqrini.ReadBool(section, 'Max', False, cqrini.LocalOnly('WindowSize')) then
     a.WindowState := wsMaximized
   else
   begin
     if (a.BorderStyle <> bsDialog) then
     begin
-      a.Height := cqrini.ReadInteger(section, 'Height', a.Height);
-      a.Width := cqrini.ReadInteger(section, 'Width', a.Width);
+      a.Height := cqrini.ReadInteger(section, 'Height', a.Height, cqrini.LocalOnly('WindowSize'));
+      a.Width := cqrini.ReadInteger(section, 'Width', a.Width, cqrini.LocalOnly('WindowSize'));
     end;
-    a.Top := cqrini.ReadInteger(section, 'Top', 20);
-    a.Left := cqrini.ReadInteger(section, 'Left', 20);
+    a.Top := cqrini.ReadInteger(section, 'Top', 20, cqrini.LocalOnly('WindowSize'));
+    a.Left := cqrini.ReadInteger(section, 'Left', 20, cqrini.LocalOnly('WindowSize'));
   end;
   if dmData.DebugLevel >= 1 then
   begin
