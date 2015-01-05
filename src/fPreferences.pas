@@ -2073,6 +2073,8 @@ begin
 end;
 
 procedure TfrmPreferences.btnBrowseBackup1Click(Sender: TObject);
+var
+  path : String;
 begin
   if SelectDirectory('Select directory for backuping ...', dmData.DataDir, path) then
     edtBackupPath1.Text := path;
