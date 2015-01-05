@@ -29,6 +29,7 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
+    btnBrowseBackup1: TButton;
     btnDefineProfile1: TButton;
     btnSecondLoad: TButton;
     btnFrequencies1: TButton;
@@ -490,6 +491,7 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    edtBackupPath1: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
     edtRBNServer : TEdit;
@@ -981,6 +983,7 @@ type
     tabQTHProfiles: TTabSheet;
     tabDXCluster: TTabSheet;
     procedure btnAlertCallsignsClick(Sender: TObject);
+    procedure btnBrowseBackup1Click(Sender: TObject);
     procedure btnCfgStorageClick(Sender: TObject);
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnChangeDefModeClick(Sender: TObject);
@@ -1524,6 +1527,7 @@ begin
   cqrini.WriteBool('Backup', 'Enable', chkEnableBackup.Checked);
   cqrini.WriteBool('Backup', 'Compress', chkCompressBackup.Checked);
   cqrini.WriteString('Backup', 'Path', edtBackupPath.Text);
+  cqrini.WriteString('Backup', 'Path1', edtBackupPath1.Text);
   cqrini.WriteInteger('Backup', 'BackupType', rgBackupType.ItemIndex);
   cqrini.WriteBool('Backup','AskFirst',chkAskBackup.Checked);
 
@@ -2066,6 +2070,12 @@ begin
   finally
     FreeAndNil(F)
   end
+end;
+
+procedure TfrmPreferences.btnBrowseBackup1Click(Sender: TObject);
+begin
+  if SelectDirectory('Select directory for backuping ...', dmData.DataDir, path) then
+    edtBackupPath1.Text := path;
 end;
 
 procedure TfrmPreferences.btnCfgStorageClick(Sender: TObject);
@@ -2894,6 +2904,7 @@ begin
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
   edtBackupPath.Text := cqrini.ReadString('Backup', 'Path', dmData.DataDir);
+  edtBackupPath1.Text := cqrini.ReadString('Backup', 'Path','');
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
   chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 

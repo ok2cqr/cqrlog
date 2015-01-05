@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 640
     Top = 0
     Width = 752
-    ActivePage = tabProgram
+    ActivePage = tabAutoBackup
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 0
+    TabIndex = 21
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -1206,7 +1206,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox3: TGroupBox
             Left = 14
@@ -1548,7 +1548,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object edtRadio2: TEdit
             Left = 146
@@ -1930,7 +1930,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2263,7 +2263,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
@@ -6118,11 +6118,11 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 609
       ClientWidth = 748
       object GroupBox32: TGroupBox
-        Left = 5
-        Height = 274
-        Top = 6
+        Left = 8
+        Height = 370
+        Top = 8
         Width = 608
-        ClientHeight = 270
+        ClientHeight = 366
         ClientWidth = 604
         TabOrder = 0
         object Label93: TLabel
@@ -6160,7 +6160,7 @@ object frmPreferences: TfrmPreferences
         object chkCompressBackup: TCheckBox
           Left = 14
           Height = 24
-          Top = 229
+          Top = 295
           Width = 219
           Caption = 'Compress backup with tar.gz'
           TabOrder = 3
@@ -6168,7 +6168,7 @@ object frmPreferences: TfrmPreferences
         object rgBackupType: TRadioGroup
           Left = 14
           Height = 88
-          Top = 133
+          Top = 176
           Width = 496
           AutoFill = True
           Caption = ' Backup file '
@@ -6195,6 +6195,22 @@ object frmPreferences: TfrmPreferences
           Width = 221
           Caption = 'Ask before creating a backup'
           TabOrder = 5
+        end
+        object edtBackupPath1: TEdit
+          Left = 14
+          Height = 27
+          Top = 128
+          Width = 496
+          TabOrder = 6
+        end
+        object btnBrowseBackup1: TButton
+          Left = 518
+          Height = 25
+          Top = 130
+          Width = 75
+          Caption = 'Browse'
+          OnClick = btnBrowseBackup1Click
+          TabOrder = 7
         end
       end
     end
@@ -6931,8 +6947,8 @@ object frmPreferences: TfrmPreferences
   object dlgFont: TFontDialog
     MinFontSize = 0
     MaxFontSize = 0
-    left = 712
-    top = 192
+    left = 720
+    top = 376
   end
   object dlgOpen: TOpenDialog
     left = 712
