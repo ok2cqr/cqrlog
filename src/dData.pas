@@ -307,6 +307,8 @@ type
     procedure EditCallAlert(const id : Integer; const callsign, band, mode : String);
     procedure MarkAllAsUploadedToeQSL;
     procedure MarkAllAsUploadedToLoTW;
+    procedure RemoveeQSLUploadedFlag(id : Integer);
+    procedure RemoveLoTWUploadedFlag(id : Integer);
   end;
 
 var
@@ -3737,6 +3739,83 @@ begin
 
   if Commit then
     lTr.Commit
+end;
+
+
+{
+eqsl_qsl_sent varchar(1) default '' not null,
+eqsl_qslsdate date default null,
+}
+procedure TdmData.RemoveeQSLUploadedFlag(id : Integer);
+const
+  C_UPD = 'update cqrlog_main set eqsl_qsl_sent=%s,eqsl_qslsdate=NULL where id_cqrlog_main=%d';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+begin
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    tr.StartTransaction;
+    t.SQL.Text := Format(C_UPD,[QuotedStr(''),id]);
+    if fDebugLevel>=1 then Writeln(t.SQL.Text);
+    t.ExecSQL
+  except
+    on E : Exception do
+    begin
+      Writeln(E.Message);
+      tr.Rollback
+    end
+  end;
+  finally
+    t.Close;
+    if tr.Active then
+      tr.Commit;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
+end;
+
+{
+lotw_qslsdate DATE default null,
+lotw_qsls VARCHAR(3) DEFAULT '' not null,
+}
+procedure TdmData.RemoveLoTWUploadedFlag(id : Integer);
+const
+  C_UPD = 'update cqrlog_main set lotw_qsls=%s,lotw_qslsdate=NULL where id_cqrlog_main=%d';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+begin
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    tr.StartTransaction;
+    t.SQL.Text := Format(C_UPD,[QuotedStr(''),id]);
+    if fDebugLevel>=1 then Writeln(t.SQL.Text);
+    t.ExecSQL
+  except
+    on E : Exception do
+    begin
+      Writeln(E.Message);
+      tr.Rollback
+    end
+  end;
+  finally
+    t.Close;
+    if tr.Active then
+      tr.Commit;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
 end;
 
 initialization

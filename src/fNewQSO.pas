@@ -493,6 +493,9 @@ type
     old_qslr   : String;
     posun      : String;
     old_call   : String;
+    old_time   : String;
+    old_rsts   : String;
+    old_rstr   : String;
     ChangeDXCC : Boolean;
     StartTime  : TDateTime;
     Running    : Boolean;
@@ -971,6 +974,9 @@ begin
   QTHfromCb := False;
   lblAmbiguous.Visible := False;
   old_call := '';
+  old_time := '';
+  old_rstr := '';
+  old_rsts := '';
   lblCfmLoTW.Visible := False;
   lblQSLRcvdDate.Visible := False;
   lblQSLRcvdDate.Caption := '';
@@ -1951,7 +1957,14 @@ begin
                    lblCont.Caption,
                    ChangeDXCC,
                    dmData.GetNRFromProfile(cmbProfiles.Text),
-                   id)
+                   id);
+    if (old_call<>edtCall.Text) or (old_mode<>cmbMode.Text) or (StrToFloat(old_freq)<>StrToFloat(cmbFreq.Text)) or
+       (old_date<>StrToDate(edtDate.Text)) or (old_time<>edtStartTime.Text) or (old_rsts<>edtHisRST.Text) or
+       (old_rstr<>edtMyRST.Text) then
+    begin
+      dmData.RemoveeQSLUploadedFlag(id);
+      dmData.RemoveLoTWUploadedFlag(id)
+    end
   end
   else begin
     if not mnuRemoteMode.Checked then
@@ -4717,7 +4730,10 @@ begin
     old_mode := dmData.qQSOBefore.FieldByName('mode').AsString;
     old_adif := dmDXCC.AdifFromPfx(dmData.qQSOBefore.FieldByName('dxcc_ref').AsString);
     old_qslr := dmData.qQSOBefore.FieldByName('qsl_r').AsString;
-    old_call := dmData.qQSOBefore.FieldByName('callsign').AsString
+    old_call := dmData.qQSOBefore.FieldByName('callsign').AsString;
+    old_time := dmData.qQSOBefore.FieldByName('time_on').AsString;
+    old_rsts := dmData.qQSOBefore.FieldByName('rst_s').AsString;
+    old_rstr := dmData.qQSOBefore.FieldByName('rst_r').AsString
   end
   else begin
     old_date := dmUtils.MyStrToDate(dmData.qCQRLOG.FieldByName('qsodate').AsString);
@@ -4725,7 +4741,10 @@ begin
     old_mode := dmData.qCQRLOG.FieldByName('mode').AsString;
     old_adif := dmDXCC.AdifFromPfx(dmData.qCQRLOG.FieldByName('dxcc_ref').AsString);
     old_qslr := dmData.qCQRLOG.FieldByName('qsl_r').AsString;
-    old_call := dmData.qCQRLOG.FieldByName('callsign').AsString
+    old_call := dmData.qCQRLOG.FieldByName('callsign').AsString;
+    old_time := dmData.qCQRLOG.FieldByName('time_on').AsString;
+    old_rsts := dmData.qCQRLOG.FieldByName('rst_s').AsString;
+    old_rstr := dmData.qCQRLOG.FieldByName('rst_r').AsString
   end;
   if fViewQSO then
     old_call := '';
