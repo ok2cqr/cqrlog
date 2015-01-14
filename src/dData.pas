@@ -300,7 +300,7 @@ type
     procedure CreateQSLTmpTable;
     procedure DropQSLTmpTable;
     procedure StartMysqldProcess;
-    procedure EnableOnlineLogSupport;
+    procedure EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
     procedure DisableOnlineLogSupport;
     procedure DeleteCallAlert(const id : Integer);
     procedure AddCallAlert(const callsign, band, mode : String);
@@ -3460,71 +3460,103 @@ begin
   Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
 end;
 
-procedure TdmData.EnableOnlineLogSupport;
+procedure TdmData.EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
+const
+  C_DEL = 'DELETE FROM %s';
 var
-  i : Integer;
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+  i  : Integer;
 begin
-  trQ.StartTransaction;
-  try try
-    Q.SQL.Text := 'delete from upload_status';
-    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-    Q.ExecSQL;
-
-    Q.SQL.Text := 'delete from log_changes';
-    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-    Q.ExecSQL
-  except
-    trQ.Rollback;
-    exit
-  end
-  finally
-    if trQ.Active then
-      trQ.Commit
-  end;
-  trQ.StartTransaction;
-
-  try try
-    Q.SQL.Text := '';
-    for i:=0 to scOnlineLogTriggers.Script.Count-1 do
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+    if RemoveOldChanges then
     begin
-      if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
-        Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
-      else begin
-        Q.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
-        if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-        Q.ExecSQL;
-        Q.SQL.Text := ''
-      end
-    end
-    //^^ because of bug in  TSQLSript. For SQL is applied,
-    //second command - no effect. My workaround works. Semicolon is a delimitter.
-  except
-    trQ.Rollback
-  end
-  finally
-    if trQ.Active then;
-      trQ.Commit
-  end;
+      try
+        tr.StartTransaction;
+        t.SQL.Text := Format(C_DEL,['uload_status']);
+        if fDebugLevel>=1 then Writeln(t.SQL.Text);
+        t.ExecSQL;
 
-  PrepareEmptyLogUploadStatusTables(Q,trQ)
+        t.SQL.Text := Format(C_DEL,['log_changes']);
+        if fDebugLevel>=1 then Writeln(t.SQL.Text);
+        t.ExecSQL;
+
+        tr.Commit
+      except
+        tr.Rollback;
+        exit
+      end
+    end;
+
+    try
+      tr.StartTransaction;
+      t.SQL.Text := '';
+      for i:=0 to scOnlineLogTriggers.Script.Count-1 do
+      begin
+        if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
+          t.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
+        else begin
+          t.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
+          if fDebugLevel>=1 then Writeln(t.SQL.Text);
+          t.ExecSQL;
+          t.SQL.Text := ''
+        end
+      end;
+
+      if RemoveOldChanges then
+        PrepareEmptyLogUploadStatusTables(t,tr)
+
+    except
+      tr.Rollback
+    end
+  finally
+    t.Close;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
 end;
 
 procedure TdmData.DisableOnlineLogSupport;
+const
+  C_DROP = 'DROP TRIGGER IF EXISTS %s';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+  i  : Integer;
 begin
-  Q.Close;
-  if trQ.Active then trQ.Rollback;
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
   try
-    Q.SQL.Text := 'DROP TRIGGER IF EXISTS cqrlog_main_bd';
-    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-    Q.ExecSQL;
-    Q.SQL.Text := 'DROP TRIGGER IF EXISTS cqrlog_main_ai';
-    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-    Q.ExecSQL;
-    Q.SQL.Text := 'DROP TRIGGER IF EXISTS cqrlog_main_bu';
-    if fDebugLevel>=1 then Writeln(Q.SQL.Text);
-    Q.ExecSQL
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    try
+      t.SQL.Text := Format(C_DROP,['cqrlog_main_bd']);
+      if fDebugLevel>=1 then Writeln(t.SQL.Text);
+      t.ExecSQL;
+
+      t.SQL.Text := Format(C_DROP,['cqrlog_main_ai']);
+      if fDebugLevel>=1 then Writeln(t.SQL.Text);
+      t.ExecSQL;
+
+      t.SQL.Text := Format(C_DROP,['cqrlog_main_bu']);
+      if fDebugLevel>=1 then Writeln(t.SQL.Text);
+      t.ExecSQL;
+
+      tr.Commit
+    except
+      tr.Rollback
+    end
   finally
-    trQ.Commit
+    t.Close;
+    FreeAndNil(t);
+    FreeAndNil(tr)
   end
 end;
 
