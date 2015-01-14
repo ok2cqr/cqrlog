@@ -12,7 +12,7 @@ object frmLoTWExport: TfrmLoTWExport
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.2.4.0'
   object pgLoTWExport: TPageControl
     Left = 0
     Height = 509
@@ -24,8 +24,8 @@ object frmLoTWExport: TfrmLoTWExport
     TabOrder = 0
     object tabLocalFile: TTabSheet
       Caption = 'Export to local file'
-      ClientHeight = 471
-      ClientWidth = 469
+      ClientHeight = 478
+      ClientWidth = 473
       object GroupBox1: TGroupBox
         Left = 7
         Height = 88
@@ -121,30 +121,30 @@ object frmLoTWExport: TfrmLoTWExport
     end
     object tabUpload: TTabSheet
       Caption = 'Upload to LoTW'
-      ClientHeight = 471
-      ClientWidth = 469
+      ClientHeight = 478
+      ClientWidth = 473
       object grbWebExport: TGroupBox
         Left = 0
         Height = 88
         Top = 0
-        Width = 469
+        Width = 473
         Align = alTop
         ClientHeight = 84
-        ClientWidth = 465
+        ClientWidth = 469
         TabOrder = 0
         object rbWebExportAll: TRadioButton
           Left = 14
-          Height = 26
+          Height = 24
           Top = 6
-          Width = 126
+          Width = 134
           Caption = ' Export all QSOs'
           TabOrder = 0
         end
         object rbWebExportNotExported: TRadioButton
           Left = 14
-          Height = 26
+          Height = 24
           Top = 31
-          Width = 338
+          Width = 361
           Caption = 'Export only QSOs which have never been uploaded'
           Checked = True
           TabOrder = 1
@@ -155,30 +155,30 @@ object frmLoTWExport: TfrmLoTWExport
         Left = 0
         Height = 128
         Top = 88
-        Width = 469
+        Width = 473
         Align = alTop
         ClientHeight = 124
-        ClientWidth = 465
+        ClientWidth = 469
         TabOrder = 1
         object Label2: TLabel
           Left = 6
           Height = 17
           Top = 7
-          Width = 183
+          Width = 202
           Caption = 'tqsl command line arguments:'
           ParentColor = False
         end
         object Label3: TLabel
           Left = 14
-          Height = 36
+          Height = 34
           Top = 56
-          Width = 290
+          Width = 311
           Caption = '"your qth name" means the qth which you have '#10'defined in tqsl QTH profile'
           ParentColor = False
         end
         object edtTqsl: TEdit
           Left = 14
-          Height = 22
+          Height = 27
           Top = 29
           Width = 424
           TabOrder = 0
@@ -187,19 +187,19 @@ object frmLoTWExport: TfrmLoTWExport
       end
       object GroupBox6: TGroupBox
         Left = 0
-        Height = 255
+        Height = 262
         Top = 216
-        Width = 469
+        Width = 473
         Align = alClient
         Caption = ' Upload '
-        ClientHeight = 223
-        ClientWidth = 465
+        ClientHeight = 243
+        ClientWidth = 469
         TabOrder = 2
         object mStat: TMemo
           Left = 0
-          Height = 185
+          Height = 205
           Top = 0
-          Width = 465
+          Width = 469
           Align = alClient
           Lines.Strings = (
             ''
@@ -211,15 +211,15 @@ object frmLoTWExport: TfrmLoTWExport
         object pnlUpload: TPanel
           Left = 0
           Height = 38
-          Top = 185
-          Width = 465
+          Top = 205
+          Width = 469
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 38
-          ClientWidth = 465
+          ClientWidth = 469
           TabOrder = 1
           object btnExportSign: TButton
-            Left = 207
+            Left = 211
             Height = 25
             Top = 8
             Width = 115
@@ -229,7 +229,7 @@ object frmLoTWExport: TfrmLoTWExport
             TabOrder = 0
           end
           object btnUpload: TButton
-            Left = 335
+            Left = 339
             Height = 25
             Top = 8
             Width = 115

@@ -516,12 +516,15 @@ begin
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
 
-  dmData.trQ1.StartTransaction;
-  dmData.trQ.StartTransaction;
 
   l := TStringList.Create;
   AssignFile(f,FileName);
   try
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+      dmData.DisableOnlineLogSupport;
+
+    dmData.trQ1.StartTransaction;
+    dmData.trQ.StartTransaction;
     Reset(f);
     lblComment.Caption := 'Importing LoTW Adif file ...';
     pBarProg.Visible   := False;
@@ -879,7 +882,9 @@ begin
     if dmData.trQ1.Active then
       dmData.trQ1.Rollback;
     l.Free;
-    CloseFile(f)
+    CloseFile(f);
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+      dmData.EnableOnlineLogSupport(False)
   end;
   Close
 end;
@@ -1023,214 +1028,221 @@ begin
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
 
+  if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+    dmData.DisableOnlineLogSupport;
+
   dmData.trQ1.StartTransaction;
   dmData.trQ.StartTransaction;
-
-  AssignFile(f,FileName);
-  Reset(f);
-  lblComment.Caption := 'Importing eQSL Adif file ...';
-  pBarProg.Visible   := False;
-  Repaint;
-  PosEOH := 0;
-  PosEOR := 0;
-  while not (PosEOH > 0) do //Skip header
-  begin
-    Readln(f, a);
-    a      := UpperCase(a);
-    PosEOH := Pos('<EOH>', a);
-  end;
-  while not eof(f) do
-  begin
-    call     := '';
-    band     := '';
-    mode     := '';
-    qsodate  := '';
-    time_on  := '';
-    qslr     := '';
-    PosEOR   := 0;
-    while not ((PosEOR > 0) or eof(f)) do
+  try
+    AssignFile(f,FileName);
+    Reset(f);
+    lblComment.Caption := 'Importing eQSL Adif file ...';
+    pBarProg.Visible   := False;
+    Repaint;
+    PosEOH := 0;
+    PosEOR := 0;
+    while not (PosEOH > 0) do //Skip header
     begin
       Readln(f, a);
-      a    := Trim(a);
-      orig := a;
-      a    := UpperCase(a);
-
-      PosCall     := Pos('<CALL:',a);
-      PosBand     := Pos('<BAND:',a);
-      PosMode     := Pos('<MODE:',a);
-      PosQsoDate  := Pos('<QSO_DATE:8:D',a);
-      PosTime_on  := Pos('<TIME_ON:',a);
-      PosQslr     := Pos('<QSL_RCVD:',a);
-      PosEOR      := Pos('<EOR>',a);
-
-      if PosCall > 0 then
-      begin
-        sSize   := '';
-        PosCall := PosCall + 6;
-        while not (a[PosCall] = '>') do
-        begin
-          sSize := sSize + a[PosCall];
-          inc(PosCall)
-        end;
-        Size := StrToInt(sSize);
-        call := copy(orig,PosCall+1,Size)
-      end;
-
-      if PosBand > 0 then
-      begin
-        sSize   := '';
-        PosBand := PosBand + 6;
-        while not (a[PosBand] = '>') do
-        begin
-          sSize := sSize + a[PosBand];
-          inc(PosBand)
-        end;
-        Size := StrToInt(sSize);
-        band := copy(orig,PosBand+1,Size)
-      end;
-
-      if PosMode > 0 then
-      begin
-        sSize   := '';
-        PosMode := PosMode + 6;
-        while not (a[PosMode] = '>') do
-        begin
-          sSize := sSize + a[PosMode];
-          inc(PosMode)
-        end;
-        Size := StrToInt(sSize);
-        mode := copy(orig,PosMode+1,Size)
-      end;
-
-      if PosQsoDate > 0 then
-      begin
-        qsodate :=copy(orig,PosQsoDate+14,8);
-        {
-        sSize      := '';
-        PosQsoDate := PosQsoDate + 13;
-        while not (a[PosQsoDate] = '>') do
-        begin
-          sSize := sSize + a[PosQsoDate];
-          inc(PosQsoDate)
-        end;
-        Size    := StrToInt(sSize);
-        qsodate := copy(orig,PosQsoDate+1,Size)
-        }
-      end;
-
-      if PosTime_on > 0 then
-      begin
-        sSize      := '';
-        PosTime_on := PosTime_on + 9;
-        while not (a[PosTime_on] = '>') do
-        begin
-          sSize := sSize + a[PosTime_on];
-          inc(PosTime_on)
-        end;
-        Size    := StrToInt(sSize);
-        time_on := copy(orig,PosTime_on+1,Size)
-      end;
-
-      if PosQslr > 0 then
-      begin
-        sSize   := '';
-        PosQslr := PosQslr + 10;
-        while not (a[PosQslr] = '>') do
-        begin
-          sSize := sSize + a[PosQslr];
-          inc(PosQslr)
-        end;
-        Size := StrToInt(sSize);
-        qslr := copy(orig,PosQslr+1,Size)
-      end;
-
-      if PosEOR > 0 then
-      begin
-        band := UpperCase(band);
-        mode := UpperCase(mode);
-        qslr := UpperCase(qslr);
-        call := UpperCase(call);
-        if dmData.DebugLevel >= 1 then
-        begin
-          Writeln('Call:     ',call);
-          Writeln('Band:     ',band);
-          Writeln('Mode:     ',mode);
-          Writeln('QSO_date: ',qsodate);
-          Writeln('Time_on:  ',time_on);
-          Writeln('QSLR:     ',qslr);
-          Writeln('------------------------------------------------')
-        end;
-        qsodate  := dmUtils.ADIFDateToDate(qsodate);
-        mode     := UpperCase(mode);
-
-
-        dmData.Q.Close;
-
-        if (mode='JT65') then
-        begin
-          dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
-                               'where (qsodate ='+QuotedStr(qsodate)+') '+
-                               'and ((mode = ' + QuotedStr('JT65') + ') or (mode='+QuotedStr('JT65A')+') '+
-                               'or (mode='+QuotedStr('JT65B')+') or (mode='+QuotedStr('JT65C')+')) '+
-                               'and (band = ' + QuotedStr(band) + ') '+
-                               'and (callsign = ' + QuotedStr(call) + ')'
-        end
-        else begin
-          dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
-                               'where (qsodate ='+QuotedStr(qsodate)+') '+
-                               'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ') '+
-                               'and (callsign = ' + QuotedStr(call) + ')'
-        end;
-        if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-        //if dmData.trQ.Active then dmData.trQ.Rollback;
-        //dmData.trQ.StartTransaction;
-        dmData.Q.Open();
-        while not dmData.Q.Eof do
-        begin
-          qso_in_log := False;
-          if eQSLShowNew and (dmData.Q.Fields[1].AsString <> 'E') then  //this qso is already confirmed
-            eQSLQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
-          if (dmData.Q.Fields[1].AsString <> 'E') then
-          begin
-            dmData.Q1.Close;
-            dmData.Q1.SQL.Clear;
-            dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
-            dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
-            dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
-            if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
-            dmData.Q1.ExecSQL
-          end;
-          qso_in_log := True;
-          dmData.Q.Next
-        end;
-        if not qso_in_log then
-        begin
-          l.Add('QSO NOT FOUND in log');
-          l.Add('Call:     '+call);
-          l.Add('Band:     '+band);
-          l.Add('Mode:     '+mode);
-          l.Add('QSO_date: '+qsodate);
-          l.Add('Time_on:  '+time_on);
-          l.Add('------------------------------------------------');
-          l.Add('');
-          inc(ErrorCount)
-        end
-      end
+      a      := UpperCase(a);
+      PosEOH := Pos('<EOH>', a);
     end;
-    inc(num);
-    lblCount.Caption:= IntToStr(num);
-    if num mod 100 = 0 then
-      Repaint
-  end;
-  dmData.trQ1.Commit;
-  CloseFile(f);
-  if ErrorCount > 0 then
-  begin
-    l.SaveToFile(dmData.UsrHomeDir + 'eQSL_error.txt');
-    ShowMessage('Some QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.UsrHomeDir + 'eQSL_error.txt')
-  end;
-  l.Free;
-  Close
+    while not eof(f) do
+    begin
+      call     := '';
+      band     := '';
+      mode     := '';
+      qsodate  := '';
+      time_on  := '';
+      qslr     := '';
+      PosEOR   := 0;
+      while not ((PosEOR > 0) or eof(f)) do
+      begin
+        Readln(f, a);
+        a    := Trim(a);
+        orig := a;
+        a    := UpperCase(a);
+
+        PosCall     := Pos('<CALL:',a);
+        PosBand     := Pos('<BAND:',a);
+        PosMode     := Pos('<MODE:',a);
+        PosQsoDate  := Pos('<QSO_DATE:8:D',a);
+        PosTime_on  := Pos('<TIME_ON:',a);
+        PosQslr     := Pos('<QSL_RCVD:',a);
+        PosEOR      := Pos('<EOR>',a);
+
+        if PosCall > 0 then
+        begin
+          sSize   := '';
+          PosCall := PosCall + 6;
+          while not (a[PosCall] = '>') do
+          begin
+            sSize := sSize + a[PosCall];
+            inc(PosCall)
+          end;
+          Size := StrToInt(sSize);
+          call := copy(orig,PosCall+1,Size)
+        end;
+
+        if PosBand > 0 then
+        begin
+          sSize   := '';
+          PosBand := PosBand + 6;
+          while not (a[PosBand] = '>') do
+          begin
+            sSize := sSize + a[PosBand];
+            inc(PosBand)
+          end;
+          Size := StrToInt(sSize);
+          band := copy(orig,PosBand+1,Size)
+        end;
+
+        if PosMode > 0 then
+        begin
+          sSize   := '';
+          PosMode := PosMode + 6;
+          while not (a[PosMode] = '>') do
+          begin
+            sSize := sSize + a[PosMode];
+            inc(PosMode)
+          end;
+          Size := StrToInt(sSize);
+          mode := copy(orig,PosMode+1,Size)
+        end;
+
+        if PosQsoDate > 0 then
+        begin
+          qsodate :=copy(orig,PosQsoDate+14,8);
+          {
+          sSize      := '';
+          PosQsoDate := PosQsoDate + 13;
+          while not (a[PosQsoDate] = '>') do
+          begin
+            sSize := sSize + a[PosQsoDate];
+            inc(PosQsoDate)
+          end;
+          Size    := StrToInt(sSize);
+          qsodate := copy(orig,PosQsoDate+1,Size)
+          }
+        end;
+
+        if PosTime_on > 0 then
+        begin
+          sSize      := '';
+          PosTime_on := PosTime_on + 9;
+          while not (a[PosTime_on] = '>') do
+          begin
+            sSize := sSize + a[PosTime_on];
+            inc(PosTime_on)
+          end;
+          Size    := StrToInt(sSize);
+          time_on := copy(orig,PosTime_on+1,Size)
+        end;
+
+        if PosQslr > 0 then
+        begin
+          sSize   := '';
+          PosQslr := PosQslr + 10;
+          while not (a[PosQslr] = '>') do
+          begin
+            sSize := sSize + a[PosQslr];
+            inc(PosQslr)
+          end;
+          Size := StrToInt(sSize);
+          qslr := copy(orig,PosQslr+1,Size)
+        end;
+
+        if PosEOR > 0 then
+        begin
+          band := UpperCase(band);
+          mode := UpperCase(mode);
+          qslr := UpperCase(qslr);
+          call := UpperCase(call);
+          if dmData.DebugLevel >= 1 then
+          begin
+            Writeln('Call:     ',call);
+            Writeln('Band:     ',band);
+            Writeln('Mode:     ',mode);
+            Writeln('QSO_date: ',qsodate);
+            Writeln('Time_on:  ',time_on);
+            Writeln('QSLR:     ',qslr);
+            Writeln('------------------------------------------------')
+          end;
+          qsodate  := dmUtils.ADIFDateToDate(qsodate);
+          mode     := UpperCase(mode);
+
+
+          dmData.Q.Close;
+
+          if (mode='JT65') then
+          begin
+            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
+                                 'where (qsodate ='+QuotedStr(qsodate)+') '+
+                                 'and ((mode = ' + QuotedStr('JT65') + ') or (mode='+QuotedStr('JT65A')+') '+
+                                 'or (mode='+QuotedStr('JT65B')+') or (mode='+QuotedStr('JT65C')+')) '+
+                                 'and (band = ' + QuotedStr(band) + ') '+
+                                 'and (callsign = ' + QuotedStr(call) + ')'
+          end
+          else begin
+            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
+                                 'where (qsodate ='+QuotedStr(qsodate)+') '+
+                                 'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ') '+
+                                 'and (callsign = ' + QuotedStr(call) + ')'
+          end;
+          if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
+          //if dmData.trQ.Active then dmData.trQ.Rollback;
+          //dmData.trQ.StartTransaction;
+          dmData.Q.Open();
+          while not dmData.Q.Eof do
+          begin
+            qso_in_log := False;
+            if eQSLShowNew and (dmData.Q.Fields[1].AsString <> 'E') then  //this qso is already confirmed
+              eQSLQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
+            if (dmData.Q.Fields[1].AsString <> 'E') then
+            begin
+              dmData.Q1.Close;
+              dmData.Q1.SQL.Clear;
+              dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
+              dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
+              dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
+              if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
+              dmData.Q1.ExecSQL
+            end;
+            qso_in_log := True;
+            dmData.Q.Next
+          end;
+          if not qso_in_log then
+          begin
+            l.Add('QSO NOT FOUND in log');
+            l.Add('Call:     '+call);
+            l.Add('Band:     '+band);
+            l.Add('Mode:     '+mode);
+            l.Add('QSO_date: '+qsodate);
+            l.Add('Time_on:  '+time_on);
+            l.Add('------------------------------------------------');
+            l.Add('');
+            inc(ErrorCount)
+          end
+        end
+      end;
+      inc(num);
+      lblCount.Caption:= IntToStr(num);
+      if num mod 100 = 0 then
+        Repaint
+    end;
+    dmData.trQ1.Commit;
+    CloseFile(f);
+    if ErrorCount > 0 then
+    begin
+      l.SaveToFile(dmData.UsrHomeDir + 'eQSL_error.txt');
+      ShowMessage('Some QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.UsrHomeDir + 'eQSL_error.txt')
+    end
+  finally
+    l.Free;
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+      dmData.EnableOnlineLogSupport(False);
+    Close
+  end
 end;
 
 procedure TfrmImportProgress.RemoveDupes;

@@ -6,11 +6,11 @@ LazarusResources.Add('TfrmLoTWExport','FORMDATA',[
   +#12'help/h7.html'#13'ActiveControl'#7#12'pgLoTWExport'#7'Caption'#6#15'Expor'
   +'t for LoTW'#12'ClientHeight'#3'%'#2#11'ClientWidth'#3#221#1#12'OnCloseQuery'
   +#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10
-  +'LCLVersion'#6#8'0.9.30.2'#0#12'TPageControl'#12'pgLoTWExport'#4'Left'#2#0#6
+  +'LCLVersion'#6#7'1.2.4.0'#0#12'TPageControl'#12'pgLoTWExport'#4'Left'#2#0#6
   +'Height'#3#253#1#3'Top'#2#0#5'Width'#3#221#1#10'ActivePage'#7#9'tabUpload'#5
   +'Align'#7#8'alClient'#8'TabIndex'#2#1#8'TabOrder'#2#0#0#9'TTabSheet'#12'tabL'
-  +'ocalFile'#7'Caption'#6#20'Export to local file'#12'ClientHeight'#3#215#1#11
-  +'ClientWidth'#3#213#1#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#7#6'Height'#2'X'
+  +'ocalFile'#7'Caption'#6#20'Export to local file'#12'ClientHeight'#3#222#1#11
+  +'ClientWidth'#3#217#1#0#9'TGroupBox'#9'GroupBox1'#4'Left'#2#7#6'Height'#2'X'
   +#3'Top'#2#6#5'Width'#3#203#1#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#12
   +'ClientHeight'#2'T'#11'ClientWidth'#3#199#1#8'TabOrder'#2#0#0#12'TRadioButto'
   +'n'#15'rbFileExportAll'#4'Left'#2#14#6'Height'#2#22#3'Top'#2#6#5'Width'#3#129
@@ -34,34 +34,34 @@ LazarusResources.Add('TfrmLoTWExport','FORMDATA',[
   +#0#0#0#7'TButton'#13'btnFileExport'#4'Left'#3'r'#1#6'Height'#2#25#3'Top'#2'7'
   +#5'Width'#2'K'#7'Anchors'#11#5'akTop'#7'akRight'#0#7'Caption'#6#6'Export'#7
   +'OnClick'#7#18'btnFileExportClick'#8'TabOrder'#2#1#0#0#0#0#9'TTabSheet'#9'ta'
-  +'bUpload'#7'Caption'#6#14'Upload to LoTW'#12'ClientHeight'#3#215#1#11'Client'
-  +'Width'#3#213#1#0#9'TGroupBox'#12'grbWebExport'#4'Left'#2#0#6'Height'#2'X'#3
-  +'Top'#2#0#5'Width'#3#213#1#5'Align'#7#5'alTop'#12'ClientHeight'#2'T'#11'Clie'
-  +'ntWidth'#3#209#1#8'TabOrder'#2#0#0#12'TRadioButton'#14'rbWebExportAll'#4'Le'
-  +'ft'#2#14#6'Height'#2#26#3'Top'#2#6#5'Width'#2'~'#7'Caption'#6#16' Export al'
-  +'l QSOs'#8'TabOrder'#2#0#0#0#12'TRadioButton'#22'rbWebExportNotExported'#4'L'
-  +'eft'#2#14#6'Height'#2#26#3'Top'#2#31#5'Width'#3'R'#1#7'Caption'#6'/Export o'
-  +'nly QSOs which have never been uploaded'#7'Checked'#9#8'TabOrder'#2#1#7'Tab'
-  +'Stop'#9#0#0#0#9'TGroupBox'#7'grbTqsl'#4'Left'#2#0#6'Height'#3#128#0#3'Top'#2
-  +'X'#5'Width'#3#213#1#5'Align'#7#5'alTop'#12'ClientHeight'#2'|'#11'ClientWidt'
-  +'h'#3#209#1#8'TabOrder'#2#1#0#6'TLabel'#6'Label2'#4'Left'#2#6#6'Height'#2#17
-  +#3'Top'#2#7#5'Width'#3#183#0#7'Caption'#6#28'tqsl command line arguments:'#11
-  +'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4'Left'#2#14#6'Height'#2'$'#3'Top'#2
-  +'8'#5'Width'#3'"'#1#7'Caption'#6'I"your qth name" means the qth which you ha'
-  +'ve '#10'defined in tqsl QTH profile'#11'ParentColor'#8#0#0#5'TEdit'#7'edtTq'
-  +'sl'#4'Left'#2#14#6'Height'#2#22#3'Top'#2#29#5'Width'#3#168#1#8'TabOrder'#2#0
-  +#4'Text'#6')/usr/bin/tqsl -d -l "your qth name" %f -x'#0#0#0#9'TGroupBox'#9
-  +'GroupBox6'#4'Left'#2#0#6'Height'#3#255#0#3'Top'#3#216#0#5'Width'#3#213#1#5
-  +'Align'#7#8'alClient'#7'Caption'#6#8' Upload '#12'ClientHeight'#3#223#0#11'C'
-  +'lientWidth'#3#209#1#8'TabOrder'#2#2#0#5'TMemo'#5'mStat'#4'Left'#2#0#6'Heigh'
-  +'t'#3#185#0#3'Top'#2#0#5'Width'#3#209#1#5'Align'#7#8'alClient'#13'Lines.Stri'
-  +'ngs'#1#6#0#0#8'ReadOnly'#9#10'ScrollBars'#7#10'ssAutoBoth'#8'TabOrder'#2#0#0
-  +#0#6'TPanel'#9'pnlUpload'#4'Left'#2#0#6'Height'#2'&'#3'Top'#3#185#0#5'Width'
-  +#3#209#1#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2
-  +'&'#11'ClientWidth'#3#209#1#8'TabOrder'#2#1#0#7'TButton'#13'btnExportSign'#4
-  +'Left'#3#207#0#6'Height'#2#25#3'Top'#2#8#5'Width'#2's'#7'Anchors'#11#5'akTop'
+  +'bUpload'#7'Caption'#6#14'Upload to LoTW'#12'ClientHeight'#3#222#1#11'Client'
+  +'Width'#3#217#1#0#9'TGroupBox'#12'grbWebExport'#4'Left'#2#0#6'Height'#2'X'#3
+  +'Top'#2#0#5'Width'#3#217#1#5'Align'#7#5'alTop'#12'ClientHeight'#2'T'#11'Clie'
+  +'ntWidth'#3#213#1#8'TabOrder'#2#0#0#12'TRadioButton'#14'rbWebExportAll'#4'Le'
+  +'ft'#2#14#6'Height'#2#24#3'Top'#2#6#5'Width'#3#134#0#7'Caption'#6#16' Export'
+  +' all QSOs'#8'TabOrder'#2#0#0#0#12'TRadioButton'#22'rbWebExportNotExported'#4
+  +'Left'#2#14#6'Height'#2#24#3'Top'#2#31#5'Width'#3'i'#1#7'Caption'#6'/Export '
+  +'only QSOs which have never been uploaded'#7'Checked'#9#8'TabOrder'#2#1#7'Ta'
+  +'bStop'#9#0#0#0#9'TGroupBox'#7'grbTqsl'#4'Left'#2#0#6'Height'#3#128#0#3'Top'
+  +#2'X'#5'Width'#3#217#1#5'Align'#7#5'alTop'#12'ClientHeight'#2'|'#11'ClientWi'
+  +'dth'#3#213#1#8'TabOrder'#2#1#0#6'TLabel'#6'Label2'#4'Left'#2#6#6'Height'#2
+  +#17#3'Top'#2#7#5'Width'#3#202#0#7'Caption'#6#28'tqsl command line arguments:'
+  +#11'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4'Left'#2#14#6'Height'#2'"'#3'Top'
+  +#2'8'#5'Width'#3'7'#1#7'Caption'#6'I"your qth name" means the qth which you '
+  +'have '#10'defined in tqsl QTH profile'#11'ParentColor'#8#0#0#5'TEdit'#7'edt'
+  +'Tqsl'#4'Left'#2#14#6'Height'#2#27#3'Top'#2#29#5'Width'#3#168#1#8'TabOrder'#2
+  +#0#4'Text'#6')/usr/bin/tqsl -d -l "your qth name" %f -x'#0#0#0#9'TGroupBox'#9
+  +'GroupBox6'#4'Left'#2#0#6'Height'#3#6#1#3'Top'#3#216#0#5'Width'#3#217#1#5'Al'
+  +'ign'#7#8'alClient'#7'Caption'#6#8' Upload '#12'ClientHeight'#3#243#0#11'Cli'
+  +'entWidth'#3#213#1#8'TabOrder'#2#2#0#5'TMemo'#5'mStat'#4'Left'#2#0#6'Height'
+  +#3#205#0#3'Top'#2#0#5'Width'#3#213#1#5'Align'#7#8'alClient'#13'Lines.Strings'
+  +#1#6#0#0#8'ReadOnly'#9#10'ScrollBars'#7#10'ssAutoBoth'#8'TabOrder'#2#0#0#0#6
+  +'TPanel'#9'pnlUpload'#4'Left'#2#0#6'Height'#2'&'#3'Top'#3#205#0#5'Width'#3
+  +#213#1#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2
+  +'&'#11'ClientWidth'#3#213#1#8'TabOrder'#2#1#0#7'TButton'#13'btnExportSign'#4
+  +'Left'#3#211#0#6'Height'#2#25#3'Top'#2#8#5'Width'#2's'#7'Anchors'#11#5'akTop'
   +#7'akRight'#0#7'Caption'#6#14'Export && sign'#7'OnClick'#7#18'btnExportSignC'
-  +'lick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnUpload'#4'Left'#3'O'#1#6'Height'#2
+  +'lick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnUpload'#4'Left'#3'S'#1#6'Height'#2
   +#25#3'Top'#2#8#5'Width'#2's'#7'Anchors'#11#5'akTop'#7'akRight'#0#7'Caption'#6
   +#6'Upload'#7'Enabled'#8#7'OnClick'#7#14'btnUploadClick'#8'TabOrder'#2#1#0#0#0
   +#0#0#0#6'TPanel'#8'pnlClose'#4'Left'#2#0#6'Height'#2'('#3'Top'#3#253#1#5'Wid'

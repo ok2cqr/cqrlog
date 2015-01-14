@@ -161,6 +161,9 @@ begin
       dmData.trQ1.Rollback;
       dmData.trQ1.StartTransaction;
       try
+        if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+          dmData.DisableOnlineLogSupport;
+
         dmData.Q1.Open();
         dmData.Q1.First;
         dmData.Q.Close;
@@ -179,7 +182,9 @@ begin
       finally
         dmData.Q.Close();
         dmData.trQ.Commit;
-        dmData.trQ1.Rollback
+        dmData.trQ1.Rollback;
+        if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+          dmData.EnableOnlineLogSupport(False)
       end
     end
   finally

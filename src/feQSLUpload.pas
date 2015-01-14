@@ -210,20 +210,29 @@ begin
     exit
   end;
   FileName := dmData.HomeDir+'eQSL'+PathDelim+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
-  if ExportData(FileName) then
-  begin
-    if (QSOCount > 1000) then
+  try
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+      dmData.DisableOnlineLogSupport;
+
+    if ExportData(FileName) then
     begin
-      if Application.MessageBox('It seems that you have a lot of QSO to upload. eQSL server can process about '+
-                                '1000 qso per minute, so maybe it will be better to log into eQSL website and '+
-                                'use background upload mode.'+LineEnding+LineEnding+'Do you want to continue?',
-                                'Question ...',mb_YesNo+mb_IconQuestion) = idYes then
-        Upload(FileName)
+      if (QSOCount > 1000) then
+      begin
+        if Application.MessageBox('It seems that you have a lot of QSO to upload. eQSL server can process about '+
+                                  '1000 qso per minute, so maybe it will be better to log into eQSL website and '+
+                                  'use background upload mode.'+LineEnding+LineEnding+'Do you want to continue?',
+                                  'Question ...',mb_YesNo+mb_IconQuestion) = idYes then
+          Upload(FileName)
+        else
+          Close()
+      end
       else
-        Close()
+        Upload(FileName)
     end
-    else
-      Upload(FileName)
+
+  finally
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+      dmData.EnableOnlineLogSupport(False)
   end
 end;
 
