@@ -3478,7 +3478,7 @@ begin
     begin
       try
         tr.StartTransaction;
-        t.SQL.Text := Format(C_DEL,['uload_status']);
+        t.SQL.Text := Format(C_DEL,['upload_status']);
         if fDebugLevel>=1 then Writeln(t.SQL.Text);
         t.ExecSQL;
 
@@ -3488,8 +3488,12 @@ begin
 
         tr.Commit
       except
-        tr.Rollback;
-        exit
+        on E : Exception do
+        begin
+          Writeln('EnableOnlineLogSupport:',E.Message);
+          tr.Rollback;
+          exit
+        end
       end
     end;
 
@@ -3512,7 +3516,11 @@ begin
         PrepareEmptyLogUploadStatusTables(t,tr)
 
     except
-      tr.Rollback
+      on E : Exception do
+      begin
+        Writeln('EnableOnlineLogSupport:',E.Message);
+        tr.Rollback
+      end
     end
   finally
     t.Close;
