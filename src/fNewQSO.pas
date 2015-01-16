@@ -1213,7 +1213,7 @@ begin
   frmBandMap.SecondInterval  := cqrini.ReadInteger('BandMap', 'SecondAging', 8)*60;
   frmBandMap.DeleteAfter     := cqrini.ReadInteger('BandMap', 'Disep', 12)*60;
   frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
-  frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BnadMap', 'OnlyActiveBand', False);
+  frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
   frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0);
   frmBandMap.LoadFonts;

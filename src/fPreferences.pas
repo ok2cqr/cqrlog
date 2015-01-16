@@ -1447,13 +1447,13 @@ begin
   cqrini.WriteString('BandMap', 'BandFont', lblBandMapFont.Font.Name);
   cqrini.WriteInteger('BandMap', 'FontSize', fbandSize);
   cqrini.WriteInteger('BandMap', 'NewQSOColor', cmbQSOBandColor.Selected);
-  cqrini.WriteBool('BnadMap', 'in_kHz', chkBandMapkHz.Checked);
+  cqrini.WriteBool('BandMap', 'in_kHz', chkBandMapkHz.Checked);
   cqrini.WriteBool('BandMap', 'Save', chkSaveBandMap.Checked);
   cqrini.WriteInteger('BandMap', 'FirstAging', StrToInt(edtFirst.Text));
   cqrini.WriteInteger('BandMap', 'SecondAging', StrToInt(edtSecond.Text));
   cqrini.WriteInteger('BandMap', 'Disep', StrToInt(edtDisep.Text));
   cqrini.WriteInteger('BandMap', 'ClusterColor', cmbFrmDXCColor.Selected);
-  cqrini.WriteBool('BnadMap', 'OnlyActiveBand', chkShowActiveBand.Checked);
+  cqrini.WriteBool('BandMap', 'OnlyActiveBand', chkShowActiveBand.Checked);
   cqrini.WriteBool('BandMap', 'OnlyActiveMode', chkShowActiveMode.Checked);
   cqrini.WriteBool('BandMap', 'DeleteAfterQSO', chkDeleteAfterQSO.Checked);
   cqrini.WriteBool('BandMap', 'UseDXCColors', chkUseDXCColors.Checked);
@@ -2829,13 +2829,13 @@ begin
   lblBandMapFont.Caption :=
     cqrini.ReadString('BandMap', 'BandFont', 'Monospace') + ' ' + IntToStr(fbandSize);
   cmbQSOBandColor.Selected := cqrini.ReadInteger('BandMap', 'NewQSOColor', clBlack);
-  chkBandMapkHz.Checked := cqrini.ReadBool('BnadMap', 'in_kHz', True);
+  chkBandMapkHz.Checked := cqrini.ReadBool('BandMap', 'in_kHz', True);
   chkSaveBandMap.Checked := cqrini.ReadBool('BandMap', 'Save', False);
   edtFirst.Text := IntToStr(cqrini.ReadInteger('BandMap', 'FirstAging', 5));
   edtSecond.Text := IntToStr(cqrini.ReadInteger('BandMap', 'SecondAging', 8));
   edtDisep.Text := IntToStr(cqrini.ReadInteger('BandMap', 'Disep', 12));
   cmbFrmDXCColor.Selected := cqrini.ReadInteger('BandMap', 'ClusterColor', clBlack);
-  chkShowActiveBand.Checked := cqrini.ReadBool('BnadMap', 'OnlyActiveBand', False);
+  chkShowActiveBand.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   chkShowActiveMode.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
   chkDeleteAfterQSO.Checked := cqrini.ReadBool('BandMap', 'DeleteAfterQSO', True);
   chkUseDXCColors.Checked := cqrini.ReadBool('BandMap', 'UseDXCColors', False);
