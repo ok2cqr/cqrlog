@@ -146,6 +146,7 @@ var
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate : Boolean;
   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate : Boolean;
   Source : TDataSet;
+  FirstBackupPath : String;
 
   procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
@@ -542,7 +543,12 @@ begin
     ExQSLVIA := True;ExIOTA := True;ExAward := True;ExLoc := True;ExMyLoc := True;ExPower := True;
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExCont := True;
-    ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True
+    ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True;
+
+    if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
+      CreateDirUTF8(dmData.HomeDir + 'tmp');
+    FirstBackupPath := ExtractFilePath(FileName);
+    FileName        := dmData.HomeDir + 'tmp' + DirectorySeparator + ExtractFileName(FileName)
   end;
 
   AssignFile(f, FileName);
@@ -665,24 +671,31 @@ begin
     else begin
       dir      := ExtractFilePath(FileName);
       FileName := ExtractFileName(FileName);
-      if SecondBackupPath<>'' then
 
       if cqrini.ReadBool('Backup','Compress',True) then
       begin
         chdir(dir);
         dmUtils.ExecuteCommand('tar -cvzf ' + ChangeFileExt(FileName,'.tar.gz') + ' ' +
                                FileName);
-        DeleteFile(Dir + FileName);
+        tmp := ChangeFileExt(FileName,'.tar.gz');
+
+        CopyFile(Dir + tmp,FirstBackupPath+tmp);
+
         if (SecondBackupPath<>'') then
         begin
           SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
-          CopyFile(Dir + ChangeFileExt(FileName,'.tar.gz'),SecondBackupPath+ChangeFileExt(FileName,'.tar.gz'))
+          CopyFile(Dir + tmp,SecondBackupPath+tmp)
         end
       end
       else begin
-        SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
-        CopyFile(Dir+FileName,SecondBackupPath+FileName)
-      end
+        CopyFile(Dir + FileName,FirstBackupPath+FileName);
+        if (SecondBackupPath<>'') then
+        begin
+          SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
+          CopyFile(Dir+FileName,SecondBackupPath+FileName)
+        end
+      end;
+      DeleteFile(Dir + FileName)
     end;
     dmData.CloseProfileExport;
     Close
