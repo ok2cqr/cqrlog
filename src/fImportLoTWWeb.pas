@@ -77,10 +77,6 @@ begin
     edtDateFrom.SetFocus;
     exit
   end;
-  btnClose.Enabled       := False;
-  btnDownload.Enabled    := False;
-  btnPreferences.Enabled := False;
-  edtDateFrom.Enabled    := False;
   //DLLSSLName  := dmData.cDLLSSLName;
   //DLLUtilName := dmData.cDLLUtilName;
 
@@ -99,6 +95,12 @@ begin
 
   m        := TFileStream.Create(AdifFile,fmCreate);
   try
+    btnClose.Enabled       := False;
+    btnDownload.Enabled    := False;
+    btnPreferences.Enabled := False;
+    edtDateFrom.Enabled    := False;
+    edtCall.Enabled        := False;
+
     user := cqrini.ReadString('LoTW','LoTWName','');
     pass := cqrini.ReadString('LoTW','LoTWPass','');
     http.Sock.OnStatus := @SockCallBack;
@@ -181,10 +183,11 @@ begin
     http.Free;
     m.Free;
     QSOList.Free;
-    btnClose.Enabled    := True;
-    btnDownload.Enabled := True;
+    btnClose.Enabled       := True;
+    btnDownload.Enabled    := True;
     btnPreferences.Enabled := True;
-    edtDateFrom.Enabled    := True
+    edtDateFrom.Enabled    := True;
+    edtCall.Enabled        := True
   end
 end;
 
