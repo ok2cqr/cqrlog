@@ -685,7 +685,8 @@ begin
         begin
           SecondBackupPath := IncludeTrailingBackslash(SecondBackupPath);
           CopyFile(Dir + tmp,SecondBackupPath+tmp)
-        end
+        end;
+        DeleteFileUTF8(Dir + tmp)
       end
       else begin
         CopyFile(Dir + FileName,FirstBackupPath+FileName);
@@ -695,7 +696,7 @@ begin
           CopyFile(Dir+FileName,SecondBackupPath+FileName)
         end
       end;
-      DeleteFile(Dir + FileName)
+      DeleteFileUTF8(Dir + FileName)
     end;
     dmData.CloseProfileExport;
     Close
