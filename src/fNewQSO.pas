@@ -786,6 +786,7 @@ var
   county, qsl_via : String;
   award,state     : String;
   qslrdate        : String;
+  waz, itu        : String;
 begin
   sName    := '';
   QTH      := '';
@@ -795,6 +796,8 @@ begin
   award    := '';
   state    := '';
   qslrdate := '';
+  waz      := '';
+  itu      := '';
   
   if dmData.qQSOBefore.RecordCount > 0 then
   begin
@@ -819,6 +822,10 @@ begin
           state := dmData.qQSOBefore.FieldByName('state').AsString;
         if (qslrdate = '') and (not dmData.qQSOBefore.FieldByName('qslr_date').IsNull) then
           lblQSLRcvdDate.Caption := 'QSL rcvd on '+dmData.qQSOBefore.FieldByName('qslr_date').AsString;
+        if (waz = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+          waz := dmData.qQSOBefore.FieldByName('waz').AsString;
+        if (itu = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+          itu := dmData.qQSOBefore.FieldByName('itu').AsString;
         dmData.qQSOBefore.Prior
       end;
       lblQSLRcvdDate.Visible := True
@@ -841,7 +848,11 @@ begin
     if (edtAward.Text = '') then
       edtAward.Text := award;
     if (edtState.Text = '') then
-      edtState.Text := state
+      edtState.Text := state;
+    if (waz <> '') then
+      edtWAZ.Text := waz;
+    if (itu <> '') then
+      edtITU.Text := itu
   end
 end;
 
