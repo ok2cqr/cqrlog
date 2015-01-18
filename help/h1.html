@@ -53,36 +53,25 @@ The first tab of the 'Preferences' card is labelled  'Program'. Here is the setu
 <a name=ah2><h2><strong>Program</strong></h2></a>
 <img src=img/h5.png border=0>
 <br><br>
-The <strong>Internet connection</strong> is important to those who is behind a proxy. The data to fill does not need further explanation, hopefully. Check the box above if you don't need an internet connection - CQRLOG attempts to connect if you try to connect to the DX Cluster (either via web or telnet) and/or if you hit F6 to access the QRZ.COM callbook data.
+The <strong>Internet connection</strong> is important to those who is behind a proxy. The data to fill does not need further explanation, hopefully. Check the box above if you don't need an internet connection - CQRLOG attempts to connect if you try to connect to the DX Cluster (either via web or telnet) and/or if you hit F6 to access the HamQTH.com/QRZ.COM callbook data.
 <br><br>
 Other settings are:<br><br>
-<strong>UTC offset</strong> - you need to set up your time difference to UTC. We needed this to enable CQRLOG to run properly with minimalistic desktop managers which may/may not set the time properly depending on your time zone and possibly the Daylight Save Time. KDE and Gnome providing this.
+<strong>get URC time from computer time</strong> - CQRLOG will read the UTC from the system time. If you uncheck the option, you can set difference between UTC and your local time manually both for sunrise/sunset and qso time.
 <br><br>
-<strong>Grayline offset</strong> - you need to set up your time difference to UTC to provide correct display of gray line.
-<br><br>
-<strong>Sorting order of the QSO list</strong> - choose ascending to see first your first QSO but most common option is descending to see your latest records in your log book.
-<br><br>
-<strong>Show band map after program startup</strong> - if checked, you see the Band map at the program start.<br><br><img src=img/h64.png border=0><br><br>
-<strong>Show DX cluster window after program startup</strong> - if checked, you see the DX cluster window at the program start.<br><br><img src=img/h4.png border=0><br><br>
-<strong>Show grayline after program startup</strong> - if checked, you see the grayline window at the program start.<br><br>
-<img src=img/h24.png border=0><br><br>
-<strong>Show TRX control window after program startup</strong> - if checked, you see the radio control window at the program startup.<br><br>
-<img src=img/h21.png border=0>
-<br><br>
-<strong>Show propagation window after program startup</strong> - if checked, a small window with propagation indices appears at the program startup.<br><br>
-<img src=img/h110.png border=0>
+<strong>Grayline offset</strong> - sometimes the gray line position is not accurate. You can set your own correction.
 <br><br>
 <strong>Check for newer version of DXCC tables after program startup</strong></a> - if checked, CQRLOG will check if any update of country files available. If new version is found, an update will be performed, however you are asked if you want this update.<br><br>
 <strong>Check for newer version of qsl managers database after program startup</strong> - if checked, CQRLOG will check if any update of QSL Managers database is available. If new version is found, an update will be performed, however you are asked if you want this update.<br><br>
 <img src=img/h67.png border=0><br><br>
 <strong>Show deleted countries in statistics</strong></a> - adds formerly valid countries to statistics and overall DXCC counts.<br><br>
 <strong>Show sunrise/sunset in UTC</strong> - if checked, sunrise and sunset times are shown in UTC, otherwise in local time. Set up the proper time difference for both grayline and sun rise/set.<br><br>
-<strong>Show all QSOs - Show QSO since</strong></a> - affects the QSO list window (Ctrl-O). 'Show all QSOs' means that all records in the log are displayed. It may speed up the operation if you are using a huge log (> 70 000 QSO). Actually, it limits the number of processed records to contacts since a year (the box contains a year in 4 digit form), entered into the box right from <em>Show QSO since</em>.  sets the limit of number of records displayed but the rendering of QSO list is much faster. Remember, that the option <strong><em>'Show QSO since'</em> affects also the export!</strong><br><br>
 <strong>Show statistics in</strong> metres (m) or Megahertz (MHz). Checking of one of the radio buttons affects the statistics appearing at the bottom of logging screen:<br><br>
 <img src=img/h27.png border=0><br><br>
 and also headers of the main statistics (DXCC, WAZ and ITU).
 <br><br>
-The bottom line with two options - 'Show all QSOs' and 'Show QSO since'  affects the QSO list window .  but the rendering is rather slow, the other option  - if you want to export records earlier than the year set in the fill box, choose 'Show all QSOs'!
+<strong>Configuration storage settings</strong> - if you have one common database and more computers with CQRLOG, you can choose what configuration will be stored only to local computer and what can be stored in database. Configuration stored in database will be common for all
+computers but local configuration will affect CQRLOG on local computer only. E.g. you have two computers in hamshack, both are connected to common database. Now you can choose that TRX control, CW keying interface and position of opened windows will be stored only to local computer.
+You'll be able to have different TRX control configuration, windows postions, number of opened windows etc. for both computers.
 </div>
 <p align=center><img src=img/line.png></p>
 <a name=ah3><h2><strong>Station</strong></h2></a>
@@ -212,10 +201,11 @@ Zip code tracking allows to determine states, counties, provinces and other geog
 Provide your user name for eQSL/LoTW and the password (this is <strong>not</strong> the password sent to US amateurs via postcard!). Choose if you want to include LoTW confirmation in the statistics and <em>New country</em> and <em>New band country</em> info messages.<br><br>
 <a name=ch1><h2><strong>CW interface</strong></h2></a>
 <img src="img/h95.png"><br><br>
-Choose your preferred CW interface. There are 3 options: None, WinKeyer USB and cwdaemon. We strongly recommend the Winkey USB by Steve Elliot, K1EL, which provides 'all in one', including one of most advanced paddle keyers available. The cwdaemon should be seen as provisional option with many limitations, which may need a custom made linux kernel to avoid sloppy CW at speeds above 25 WPM. If cwdaemon used, only keyoard keying is possible.<br><br>
+Choose your preferred CW interface. There are 4 options: None, WinKeyer USB, cwdaemon and K3NG keyer. We strongly recommend the Winkey USB by Steve Elliot, K1EL, which provides 'all in one', including one of most advanced paddle keyers available. The cwdaemon should be seen as provisional option with many limitations, which may need a custom made linux kernel to avoid sloppy CW at speeds above 25 WPM. If cwdaemon used, only keyoard keying is possible.<br><br>
 Detailed setup of both CW devices is here:<ul>
 <li><a href=cwd.html><strong>cwdaemon</strong></a>
-<li><a href=wkusb.html><strong>Winkey USB</strong></a></li></ul>
+<li><a href=wkusb.html><strong>Winkey USB</strong></a></li>
+<li><a href="http://blog.radioartisan.com/arduino-cw-keyer/" target="_blank"><strong>K3NG</strong></a></li></ul>
 The further steps (CW messages edit, keyboard keyer operation) - click <a href=h26.html><strong>here</strong></a>.
 <br><br>
 <a name=ch2><h2><strong>fldigi interface</strong></h2></a>
@@ -256,6 +246,10 @@ Both ClubLog and HamQTH need user and password, Clublog also email used when reg
 	<li>open QSO list window, click to <em>Online log</em> menu and choose <em>Mark QSO as uploaded to all logs</em>, CQRLOG marks all QSO as uploaded</li>
 </ul>
 That's all, Now if you insert/edit or delete QSO, it will be also uploaded to online log.	
+<br><br>
+<strong>Close the "Status of log upload" window after successful upload</strong> if you don't want to have Log upload status window visible, check this option and windows will be closed after upload to online log is finished.
+<br><br>
+<strong>Ignore changes caused by LoTW/eQSL upload or download</strong> - every change of a qso will cause new upload to online log database. Sometimes can be useful to have opportunity to disable it when upload/download data to LoTW/eQSL. These changes won't be logged and QSO won't be uploaded to any online log.
 </div>
 <p align=center><img src=img/line.png></p>
 <br>
