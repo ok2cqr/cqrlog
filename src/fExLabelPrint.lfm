@@ -143,7 +143,7 @@ object frmExLabelPrint: TfrmExLabelPrint
     object chkRemoveSep: TCheckBox
       Left = 9
       Height = 24
-      Top = 78
+      Top = 86
       Width = 263
       Caption = 'Remove separator (;) from remarks'
       TabOrder = 3
@@ -197,7 +197,7 @@ object frmExLabelPrint: TfrmExLabelPrint
   object btnExportFieldsPref: TButton
     Left = 224
     Height = 25
-    Top = 131
+    Top = 134
     Width = 184
     Caption = 'Choose fields for export'
     OnClick = btnExportFieldsPrefClick

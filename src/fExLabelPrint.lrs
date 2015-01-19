@@ -40,7 +40,7 @@ LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
   +#20'Print my own remarks'#8'TabOrder'#2#1#0#0#5'TEdit'#10'edtRemarks'#4'Left'
   +#2#9#6'Height'#2#27#3'Top'#2'9'#5'Width'#3'x'#1#7'OnEnter'#7#15'edtRemarksEn'
   +'ter'#8'TabOrder'#2#2#0#0#9'TCheckBox'#12'chkRemoveSep'#4'Left'#2#9#6'Height'
-  +#2#24#3'Top'#2'N'#5'Width'#3#7#1#7'Caption'#6'!Remove separator (;) from rem'
+  +#2#24#3'Top'#2'V'#5'Width'#3#7#1#7'Caption'#6'!Remove separator (;) from rem'
   +'arks'#8'TabOrder'#2#3#0#0#0#9'TCheckBox'#11'chkMarkSent'#4'Left'#2#5#6'Heig'
   +'ht'#2#24#3'Top'#3#136#1#5'Width'#3#216#0#7'Caption'#6#27'Mark QSLs sent aft'
   +'er export'#8'TabOrder'#2#4#0#0#7'TButton'#9'btnExport'#4'Left'#2#16#6'Heigh'
@@ -52,7 +52,7 @@ LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
   +#11'ModalResult'#2#2#8'TabOrder'#2#7#0#0#9'TCheckBox'#10'chkAllQSOs'#4'Left'
   +#2#5#6'Height'#2#24#3'Top'#2#8#5'Width'#3#131#0#7'Caption'#6#15'Export all Q'
   +'SOs'#8'OnChange'#7#16'chkAllQSOsChange'#8'TabOrder'#2#8#0#0#7'TButton'#19'b'
-  +'tnExportFieldsPref'#4'Left'#3#224#0#6'Height'#2#25#3'Top'#3#131#0#5'Width'#3
+  +'tnExportFieldsPref'#4'Left'#3#224#0#6'Height'#2#25#3'Top'#3#134#0#5'Width'#3
   +#184#0#7'Caption'#6#24'Choose fields for export'#7'OnClick'#7#24'btnExportFi'
   +'eldsPrefClick'#8'TabOrder'#2#9#0#0#11'TSaveDialog'#7'dlgSave'#10'DefaultExt'
   +#6#4'.csv'#6'Filter'#6#15'CSV files|*.csv'#4'left'#3'?'#1#3'top'#3#0#1#0#0#0
