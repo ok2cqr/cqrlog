@@ -56,7 +56,6 @@ type
     procedure tmrLoTWTimer(Sender: TObject);
   private
     FileName  : String;
-    ExportAll : Boolean;
     MarkAfter : Boolean;
     AProcess  : TProcess;
     FileSize : Int64;
@@ -219,7 +218,6 @@ begin
     exit
   end;
   FileName  := edtFileName.Text;
-  ExportAll := rbFileExportAll.Checked;
   MarkAfter := chkFileMarkAfterExport.Checked;
   ExportToAdif
 end;
@@ -271,7 +269,6 @@ var
   tmp : String;
   res : Integer;
 begin
-  ExportAll := rbWebExportAll.Checked;
   MarkAfter := False;
   mStat.Clear;
   FileName := dmData.HomeDir + 'lotw'+PathDelim+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
@@ -280,13 +277,13 @@ begin
   begin
     mStat.Lines.Add('tqsl file not found!');
     mStat.Lines.Add(tmp);
-    mStat.Lines.Add('Correct path to the tqsl binary or if you do not have tqsl installed, please visit' +
-                     'http://www.ok2cqr.com/?q=lotw-and-linux and install it.');
+    mStat.Lines.Add('Correct path to the tqsl binary or if you do not have tqsl installed, please install it from ' +
+                     'software repository');
     exit
   end;
   mStat.Lines.Add('Starting export to adif ...');
   mStat.Repaint;
-  res :=ExportToAdif;
+  res := ExportToAdif;
   if res > 1 then
   begin
     mStat.Lines.Add('Error creating adif file!');
@@ -354,10 +351,16 @@ begin
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
   dmData.Q1.Close;
-  if (not dmData.IsFilter) and (not ExportAll) then
-    dmData.Q1.SQL.Text := 'select * from cqrlog_main where lotw_qslsdate is null'
-  else
-    dmData.Q1.SQL.Text := dmData.qCQRLOG.SQL.Text;
+  if (dmData.IsFilter and rbWebExportAll.Checked) then
+  begin
+    dmData.Q1.SQL.Text := dmData.qCQRLOG.SQL.Text
+  end
+  else begin
+     if rbWebExportAll.Checked then
+       dmData.Q1.SQL.Text := 'select * from cqrlog_main'
+     else
+       dmData.Q1.SQL.Text := 'select * from cqrlog_main where lotw_qslsdate is null'
+  end;
   dmData.trQ1.StartTransaction;
   if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
   dmData.Q1.Open();
@@ -369,7 +372,7 @@ begin
     while not dmData.Q1.EOF do
     begin
       lblInfo.Caption := 'Exporting QSO nr. ' + IntToStr(Nr);
-      if not ExportAll then
+      if not rbWebExportAll.Checked then
       begin
         if dmData.Q1.FieldByName('lotw_qsls').AsString <> '' then
         begin

@@ -10,6 +10,7 @@ Legend:
 + Ignore changes caused by LoTW/eQSL upload or download option added
   + CQ and ITU zones are taken from previous QSO if exists
   - after change of callsign, report, date or time, the QSO was still marked as uploaded to LotW/eQSL - fixed
+  - LoTW upload - when Export all QSO was selected, only 500 QSO were exported - fixed
 
 1.8.3
   + Added support for setting the QTH Nickname in eQSL.cc download dialog (Florian, DF2ET)
