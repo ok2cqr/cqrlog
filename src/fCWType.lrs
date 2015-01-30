@@ -161,24 +161,24 @@ LazarusResources.Add('TfrmCWType','FORMDATA',[
   +#255#128#0'?'#255#0#0'?'#255#0#0#127#255#0#0#255#255#0#1#255#255#0#3#255#255
   +#0#7#255#255#0#31#255#255#0'?'#255#255#0#255#255#255#131#255#255#255#7'OnClo'
   +'se'#7#9'FormClose'#9'OnKeyDown'#7#11'FormKeyDown'#6'OnShow'#7#8'FormShow'#8
-  +'Position'#7#16'poMainFormCenter'#10'LCLVersion'#6#8'0.9.30.2'#0#6'TPanel'#6
+  +'Position'#7#16'poMainFormCenter'#10'LCLVersion'#6#7'1.2.4.0'#0#6'TPanel'#6
   +'Panel1'#4'Left'#2#0#6'Height'#2'X'#3'Top'#2#0#5'Width'#3#168#2#5'Align'#7#5
   +'alTop'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2'X'#11'ClientWidth'#3
   +#168#2#8'TabOrder'#2#0#0#6'TLabel'#7'Label85'#4'Left'#2#8#6'Height'#2#17#3'T'
-  +'op'#2#30#5'Width'#2'>'#7'Caption'#6#8'CW speed'#11'ParentColor'#8#0#0#6'TLa'
-  +'bel'#6'Label1'#4'Left'#3#136#0#6'Height'#2#17#3'Top'#2#30#5'Width'#2#29#7'C'
+  +'op'#2#30#5'Width'#2'C'#7'Caption'#6#8'CW speed'#11'ParentColor'#8#0#0#6'TLa'
+  +'bel'#6'Label1'#4'Left'#3#136#0#6'Height'#2#17#3'Top'#2#30#5'Width'#2'!'#7'C'
   +'aption'#6#3'wpm'#11'ParentColor'#8#0#0#9'TSpinEdit'#8'edtSpeed'#4'Left'#2'P'
-  +#6'Height'#2#22#3'Top'#2#24#5'Width'#2'2'#9'Increment'#2#2#8'MaxValue'#2'c'#8
+  +#6'Height'#2#27#3'Top'#2#24#5'Width'#2'2'#9'Increment'#2#2#8'MaxValue'#2'c'#8
   +'MinValue'#2#5#8'OnChange'#7#14'edtSpeedChange'#8'TabOrder'#2#0#5'Value'#2#5
   +#0#0#11'TRadioGroup'#6'rgMode'#4'Left'#3#176#0#6'Height'#2'^'#3'Top'#2#248#5
-  +'Width'#3#20#1#8'AutoFill'#9#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildSi'
-  +'zing.TopBottomSpacing'#2#6#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomoge'
-  +'nousChildResize'#27'ChildSizing.EnlargeVertical'#7#24'crsHomogenousChildRes'
-  +'ize'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChilds'#26'ChildSizing.S'
-  +'hrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Layout'#7#29'cclLeftToRi'
-  +'ghtThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2
-  +'Z'#11'ClientWidth'#3#16#1#9'ItemIndex'#2#0#13'Items.Strings'#1#6#11'letter '
-  +'mode'#6'$word mode, first word in letter mode'#6#9'word mode'#0#8'TabOrder'
+  +'Width'#3#144#1#8'AutoFill'#9#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildS'
+  +'izing.TopBottomSpacing'#2#6#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomog'
+  +'enousChildResize'#27'ChildSizing.EnlargeVertical'#7#24'crsHomogenousChildRe'
+  +'size'#28'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChilds'#26'ChildSizing.'
+  +'ShrinkVertical'#7#14'crsScaleChilds'#18'ChildSizing.Layout'#7#29'cclLeftToR'
+  +'ightThenTopToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2
+  +'Z'#11'ClientWidth'#3#140#1#9'ItemIndex'#2#0#13'Items.Strings'#1#6#11'letter'
+  +' mode'#6'$word mode, first word in letter mode'#6#9'word mode'#0#8'TabOrder'
   +#2#1#0#0#0#6'TPanel'#6'Panel2'#4'Left'#2#0#6'Height'#2'#'#3'Top'#3'r'#1#5'Wi'
   +'dth'#3#168#2#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHei'
   +'ght'#2'#'#11'ClientWidth'#3#168#2#8'TabOrder'#2#1#0#7'TButton'#8'btnClose'#4

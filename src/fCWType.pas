@@ -65,6 +65,7 @@ end;
 procedure TfrmCWType.FormShow(Sender: TObject);
 begin
   rgMode.ItemIndex := cqrini.ReadInteger('CW','Mode',1);
+  fraCWKeys1.UpdateFKeyLabels;
   m.SetFocus;
   m.Clear
 end;
