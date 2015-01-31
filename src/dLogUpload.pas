@@ -707,7 +707,7 @@ end;
 
 procedure TdmLogUpload.MarkAsUpDeleted(id_log_upload : Integer);
 const
-  C_UPD = 'update log_changes set upddeleted=1 where id = %d';
+  C_UPD = 'update log_changes set upddeleted=0 where id = %d';
 var
   err : Boolean = False;
 begin

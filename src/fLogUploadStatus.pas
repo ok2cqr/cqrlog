@@ -126,6 +126,7 @@ var
   Command    : String;
   UpSuccess  : Boolean = False;
   FatalError : Boolean = False;
+  AlreadyDel : Boolean = False;
 begin
   data := TStringList.Create;
   try
@@ -164,6 +165,7 @@ begin
       end;
       while not dmLogUpload.Q.Eof do
       begin
+        AlreadyDel := False;
         Command := dmLogUpload.Q.FieldByName('cmd').AsString;
         if (Command<>'INSERT') and (Command<>'UPDATE') and (Command<>'DELETE') then
         begin
@@ -185,7 +187,8 @@ begin
         else if (Command = 'UPDATE') then
         begin
           ToMainThread('Deleting original '+dmLogUpload.Q.FieldByName('old_callsign').AsString,'');
-          if dmLogUpload.Q.FieldByName('upddeleted').asInteger = 0 then
+
+          if dmLogUpload.Q.FieldByName('upddeleted').asInteger = 1 then
           begin
             dmLogUpload.PrepareDeleteHeader(WhereToUpload,dmLogUpload.Q.Fields[0].AsInteger,data);
 
@@ -220,7 +223,7 @@ begin
             end
             else
               ToMainThread('','OK');
-            dmLogUpload.MarkAsUpDeleted(dmLogUpload.Q.Fields[0].AsInteger);
+            AlreadyDel := True;
             data.Clear;
             dmLogUpload.PrepareUserInfoHeader(WhereToUpload,data);
             ToMainThread('Uploading updated '+dmLogUpload.Q.FieldByName('callsign').AsString,'');
@@ -256,18 +259,29 @@ begin
             ToMainThread(Response,'');
 
           if FatalError then
+          begin
+            if AlreadyDel then  //if cmd was update, delete was successful but new insert was not
+            begin
+              dmLogUpload.MarkAsUpDeleted(dmLogUpload.Q.Fields[0].AsInteger)
+            end;
             Break //cannot continue when fatal error
+          end
           else
             dmLogUpload.MarkAsUploaded(GetLogName,dmLogUpload.Q.FieldByName('id').AsInteger)
         end
         else begin
+          if AlreadyDel then  //if cmd was update, delete was successful but new insert was not
+          begin
+            dmLogUpload.MarkAsUpDeleted(dmLogUpload.Q.Fields[0].AsInteger)
+          end;
           ToMainThread('Upload failed! Check Internet connection','');
           FatalError := True;
           Break
         end;
         Sleep(2000); //we don't want to make small DDOS attack to server
         dmLogUpload.Q.Next
-      end;
+      end; //while not dmLogUpload.Q.Eof do
+
       if not FatalError then
         ToMainThread('Done ...','')
     finally

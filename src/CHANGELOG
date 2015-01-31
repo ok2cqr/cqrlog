@@ -12,6 +12,7 @@ Legend:
   - after change of callsign, report, date or time, the QSO was still marked as uploaded to LotW/eQSL - fixed
   - LoTW upload - when Export all QSO was selected, only 500 QSO were exported - fixed
   - buttons caption in CW type window didn't use values from settings
+  - online log upload of edited QSO fixed
 
 1.8.3
   + Added support for setting the QTH Nickname in eQSL.cc download dialog (Florian, DF2ET)
