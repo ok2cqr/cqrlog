@@ -101,7 +101,7 @@ type
     procedure ReloadDXCCTables;
     procedure LoadDXCCRefArray;
     procedure LoadExceptionArray;
-    procedure RunCallAlertCmd;
+    procedure RunCallAlertCmd(call,band,mode,freq : String);
   end;
 
 var
@@ -1155,19 +1155,27 @@ begin
   end;
 end;
 
-procedure TdmDXCluster.RunCallAlertCmd;
+procedure TdmDXCluster.RunCallAlertCmd(call,band,mode,freq : String);
 var
   AProcess : TProcess;
+  cmd      : String;
 begin
-  AProcess := TProcess.Create(nil);
-  try
-    AProcess.CommandLine := cqrini.ReadString('DXCluster','AlertCmd','');
-    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
-    if (AProcess.CommandLine = '') then
-      exit;
-    AProcess.Execute
-  finally
-    AProcess.Free
+  cmd := cqrini.ReadString('DXCluster','AlertCmd','');
+  if (cmd<>'') then
+  begin
+    AProcess := TProcess.Create(nil);
+    try
+      cmd := StringReplace(cmd,'$CALLSIGN',call,[rfReplaceAll, rfIgnoreCase]);
+      cmd := StringReplace(cmd,'$BAND',band,[rfReplaceAll, rfIgnoreCase]);
+      cmd := StringReplace(cmd,'$MODE',mode,[rfReplaceAll, rfIgnoreCase]);
+      cmd := StringReplace(cmd,'$FREQ',freq,[rfReplaceAll, rfIgnoreCase]);
+
+      AProcess.CommandLine := cmd;
+      if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+      AProcess.Execute
+    finally
+      AProcess.Free
+    end
   end
 end;
 

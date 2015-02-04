@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabProgram
+    ActivePage = tabDXCluster
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 0
+    TabIndex = 10
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -3979,29 +3979,29 @@ object frmPreferences: TfrmPreferences
         end
       end
       object chkConToDXC: TCheckBox
-        Left = 8
+        Left = 5
         Height = 24
-        Top = 536
+        Top = 552
         Width = 296
         Caption = 'Connect to dxcluster after program runs'
         TabOrder = 2
         Visible = False
       end
       object chkShowDxcCountry: TCheckBox
-        Left = 8
+        Left = 5
         Height = 24
-        Top = 504
+        Top = 528
         Width = 299
         Caption = 'Show country name in the dx cluster spot'
         TabOrder = 3
       end
       object GroupBox47: TGroupBox
         Left = 6
-        Height = 129
+        Height = 152
         Top = 368
         Width = 513
         Caption = ' Callsign alert '
-        ClientHeight = 110
+        ClientHeight = 133
         ClientWidth = 509
         TabOrder = 4
         object btnAlertCallsigns: TButton
@@ -4028,6 +4028,14 @@ object frmPreferences: TfrmPreferences
           Width = 471
           TabOrder = 1
           Text = 'edtAlertCmd'
+        end
+        object Label198: TLabel
+          Left = 10
+          Height = 17
+          Top = 110
+          Width = 296
+          Caption = 'Macros: $CALLSIGN, $BAND, $MODE, $FREQ'
+          ParentColor = False
         end
       end
     end

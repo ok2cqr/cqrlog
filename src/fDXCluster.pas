@@ -1034,7 +1034,7 @@ begin
   end;
 
   if dmDXCluster.IsAlertCall(call,band,mode) then
-    dmDXCluster.RunCallAlertCmd;
+    dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
 
   if dmData.DebugLevel >=1 then
   begin

@@ -809,6 +809,7 @@ type
     Label195: TLabel;
     Label196: TLabel;
     Label197: TLabel;
+    Label198: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
