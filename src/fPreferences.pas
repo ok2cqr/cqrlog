@@ -1084,7 +1084,7 @@ implementation
 
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
-  fGrayline, fNewQSO, fBandMap, fBandMapFilter, fDefaultFreq, fKeyTexts, fTRXControl,
+  fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
@@ -1976,7 +1976,7 @@ end;
 
 procedure TfrmPreferences.Button1Click(Sender: TObject);
 begin
-  with TfrmBandMapfilter.Create(self) do
+  with TfrmBandMapWatch.Create(self) do
     try
       Caption := Caption + ' - watch';
       edtDXCC.Text := cqrini.ReadString('BandMap', 'wDXCC', '*');
@@ -2096,7 +2096,7 @@ end;
 
 procedure TfrmPreferences.Button2Click(Sender: TObject);
 begin
-  with TfrmBandMapfilter.Create(self) do
+  with TfrmBandMapWatch.Create(self) do
     try
       Caption := Caption + ' - ignore';
       chkIOTA.Visible := False;

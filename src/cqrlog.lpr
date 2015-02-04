@@ -11,7 +11,7 @@ uses
   fNewQTHProfile,fEnterFreq,fExportProgress,fNewDXCluster,fDXCluster,
   fDXClusterList,dDXCluster,fWorking,fSerialPort,fQSLMgr,fSendSpot,fQSODetails,
   fUpgrade,fWAZITUStat,fIOTAStat,fClubSettings,fLoadClub,fRefCall,fGraphStat,
-  fBandMap,fBandMapFilter,fLongNote,fDatabaseUpdate,fExLabelPrint,
+  fBandMap,fBandMapWatch,fLongNote,fDatabaseUpdate,fExLabelPrint,
   fImportLoTWWeb,fLoTWExport,fGroupEdit,fDefaultFreq,fCustomStat,fKeyTexts,
   fCWType,fSplitSettings,MemDSLaz,SDFLaz,turbopoweripro,fShowStations,uMyIni,
   fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fDBConnect,fNewLog,
