@@ -1220,13 +1220,7 @@ begin
   dmUtils.InsertQSL_S(cmbQSL_S);
   dmUtils.InsertQSL_R(cmbQSL_R);
 
-  frmBandMap.FirstInterval   := cqrini.ReadInteger('BandMap', 'FirstAging', 5)*60;
-  frmBandMap.SecondInterval  := cqrini.ReadInteger('BandMap', 'SecondAging', 8)*60;
-  frmBandMap.DeleteAfter     := cqrini.ReadInteger('BandMap', 'Disep', 12)*60;
-  frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
-  frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
-  frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
-  frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0);
+  frmBandMap.LoadSettings;
   frmBandMap.LoadFonts;
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
@@ -2995,7 +2989,7 @@ begin
     f := StrToFloat(cmbFreq.Text);
   dmUtils.GetRealCoordinate(lblLat.Caption,lblLong.Caption,lat,lng);
   frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
-                          lng,clBlack,clWhite,True)
+                          lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible)
 end;
 
 procedure TfrmNewQSO.acCWMessagesExecute(Sender: TObject);

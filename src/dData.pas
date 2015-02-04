@@ -101,6 +101,8 @@ type
     scViews: TSQLScript;
     scQSLExport : TSQLScript;
     scMySQLConfig: TSQLScript;
+    qBandMapFil: TSQLQuery;
+    trBandMapFil: TSQLTransaction;
     tmrDBPing: TTimer;
     trCQRLOG: TSQLTransaction;
     trQ: TSQLTransaction;
@@ -186,7 +188,8 @@ type
     MainCon51 : TMySQL51Connection;
     MainCon55 : TMySQL55Connection;
     }
-    MainCon   : TSQLConnection;
+    MainCon    : TSQLConnection;
+    BandMapCon : TSQLConnection;
     eQSLUsers : Array of ShortString;
     CallArray : Array [0..MaxCall] of String[20];
     IsFilter  : Boolean;
@@ -263,6 +266,7 @@ type
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  TriggersExistsOnCqrlog_main : Boolean;
     function  GetLastAllertCallId(const callsign,band,mode : String) : Integer;
+    function  SkipBandMapDateTime(callsign,band,mode,LastDate,LastTime : String) : Boolean;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -509,22 +513,35 @@ begin
   if fMySQLVersion < 5.5 then
   begin
     (MainCon as TMySQL51Connection).HostName := host;
-    (MainCon as TMySQL51Connection).Port     := StrToInt(port)
+    (MainCon as TMySQL51Connection).Port     := StrToInt(port);
+
+    (BandMapCon as TMySQL51Connection).HostName := host;
+    (BandMapCon as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
     if fMySQLVersion = 5.5 then
     begin
       (MainCon as TMySQL55Connection).HostName := host;
-      (MainCon as TMySQL55Connection).Port     := StrToInt(port)
+      (MainCon as TMySQL55Connection).Port     := StrToInt(port);
+
+      (BandMapCon as TMySQL55Connection).HostName := host;
+      (BandMapCon as TMySQL55Connection).Port     := StrToInt(port)
     end
     else begin
       (MainCon as TMySQL56Connection).HostName := host;
-      (MainCon as TMySQL56Connection).Port     := StrToInt(port)
+      (MainCon as TMySQL56Connection).Port     := StrToInt(port);
+
+      (BandMapCon as TMySQL56Connection).HostName := host;
+      (BandMapCon as TMySQL56Connection).Port     := StrToInt(port)
     end
   end;
   MainCon.UserName     := user;
   MainCon.Password     := pass;
   MainCon.DatabaseName := 'information_schema';
+
+  BandMapCon.UserName     := user;
+  BandMapCon.Password     := pass;
+  BandMapCon.DatabaseName := 'information_schema';
 
   if fMySQLVersion < 5.5 then
   begin
@@ -571,6 +588,7 @@ begin
     MainCon.Connected                  := True;
     dmDXCluster.dbDXC.Connected        := True;
     dmLogUpload.LogUploadCon.Connected := True;
+    BandMapCon.Connected               := True
   except
     on E : Exception do
     begin
@@ -679,6 +697,13 @@ begin
   if fDebugLevel>=1 then Writeln(dmLogUpload.Q.SQL.Text);
   dmLogUpload.Q.ExecSQL;
   dmLogUpload.trQ.Commit;
+
+  if trBandMapFil.Active then trBandMapFil.Rollback;
+  qBandMapFil.Close;
+  qBandMapFil.SQL.Text := 'use ' + fDBName;
+  if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
+  qBandMapFil.ExecSQL;
+  trBandMapFil.Commit;
 
   Q.SQL.Text := 'SELECT * FROM cqrlog_config';
   trQ.StartTransaction;
@@ -1151,11 +1176,19 @@ begin
 
 
   if fMySQLVersion < 5.5 then
-    MainCon := TMySQL51Connection.Create(self)
+  begin
+    MainCon    := TMySQL51Connection.Create(self);
+    BandMapCon := TMySQL51Connection.Create(self)
+  end
   else  if fMySQLVersion < 5.6 then
-    MainCon := TMySQL55Connection.Create(self)
-  else
-    MainCon := TMySQL56Connection.Create(self);
+  begin
+    MainCon    := TMySQL55Connection.Create(self);
+    BandMapCon := TMySQL55Connection.Create(self)
+  end
+  else begin
+    MainCon    := TMySQL56Connection.Create(self);
+    BandMapCon := TMySQL56Connection.Create(self)
+  end;
 
   MainCon.KeepConnection := True;
   MainCon.Transaction := trmQ;
@@ -1166,6 +1199,13 @@ begin
     if Components[i] is TSQLTransaction then
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
+
+  //special connection for band map thread
+  BandMapCon.KeepConnection := True;
+  BandMapCon.Transaction    := trBandMapFil;
+  qBandMapFil.Transaction   := trBandMapFil;
+  qBandMapFil.DataBase      := BandMapCon;
+  trBandMapFil.DataBase     := BandMapCon;
 
   DLLSSLName  := dmData.cDLLSSLName;
   DLLUtilName := dmData.cDLLUtilName;
@@ -1273,6 +1313,7 @@ begin
   qCQRLOG.Close;
   reg.Free;
   DeleteFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
+  BandMapCon.Connected := False;
   MainCon.Connected := False;
   KillMySQL(False)
 end;
@@ -3855,6 +3896,28 @@ begin
       tr.Commit;
     FreeAndNil(t);
     FreeAndNil(tr)
+  end
+end;
+
+function TdmData.SkipBandMapDateTime(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+var
+  sql : String;
+begin
+  Result := False;
+  qBandMapFil.Close;
+  try
+    //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
+    //too late to rewrite it (Petr, OK2CQR)
+    sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
+           'and (mode = '+QuotedStr(mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
+           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')';
+    qBandMapFil.SQL.Text := sql;
+    if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
+    qBandMapFil.Open;
+    Result := qBandMapFil.RecordCount > 0
+  finally
+    qBandMapFil.Close;
+    trBandMapFil.RollBack
   end
 end;
 

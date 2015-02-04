@@ -6,10 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  jakozememo,lclproc, Math, lcltype;
+  jakozememo,lclproc, Math, lcltype, ComCtrls, ActnList;
 
 type
   TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
+
+type
+  TDateFilterType = (dftShowAll, dftShowLastHours, dftShowLastDateTime);
 
 const
   MAX_ITEMS = 200;
@@ -33,6 +36,8 @@ type
     TextValue : String[80];
     FrmNewQSO : Boolean;
     Position  : Word;
+    isLoTW    : Boolean;
+    isEQSL    : Boolean;
   end;
 
 type
@@ -56,8 +61,17 @@ type
   { TfrmBandMap }
 
   TfrmBandMap = class(TForm)
+    acBandMap: TActionList;
+    acFilter: TAction;
+    acFilterSettings: TAction;
+    imglBandMap: TImageList;
     Panel1: TPanel;
     pnlBandMap: TPanel;
+    toolBandMap: TToolBar;
+    tbtnFilter: TToolButton;
+    ToolButton1: TToolButton;
+    procedure acFilterExecute(Sender: TObject);
+    procedure acFilterSettingsExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -82,6 +96,12 @@ type
     FOnlyCurrBand   : Boolean;
     FxplanetFile    : String;
     FxplanetExport  : Boolean;
+    FDateFilterType : TDateFilterType;
+    FLastHours      : Word;
+    FSinceDate      : String;
+    FSinceTime      : String;
+    FOnlyLoTW       : Boolean;
+    FOnlyEQSL       : Boolean;
 
     procedure SortBandMapArray(l,r : Integer);
     procedure BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
@@ -113,13 +133,20 @@ type
     property OnlyCurrBand   : Boolean write FOnlyCurrBand;
     property xplanetFile    : String write FxplanetFile;
     property DoXplanetExport: Boolean write FxplanetExport;
+    property DateFilterType : TDateFilterType write FDateFilterType;
+    property LastHours      : Word write FLastHours;
+    property SinceDate      : String write FSinceDate;
+    property SinceTime      : String write FSinceTime;
+    property OnlyLoTW       : Boolean write FOnlyLoTW;
+    property OnlyEQSL       : Boolean write FOnlyEQSL;
     property OnBandMapClick : TBandMapClick read FBandMapClick write FBandMapClick;
                             //Freq in kHz
     procedure AddToBandMap(Freq : Double; Call, Mode, Band, SplitInfo : String; Lat,Long : Double; ItemColor, BgColor : LongInt;
-                           fromNewQSO : Boolean=False);
+                           fromNewQSO : Boolean=False;isLoTW : Boolean=False;isEQSL : Boolean = False);
     procedure DeleteFromBandMap(call, mode, band : String);
     procedure SyncBandMap;
     procedure LoadFonts;
+    procedure LoadSettings;
     procedure SaveBandMapItemsToFile(FileName : String);
     procedure LoadBandMapItemsFromFile(FileName : String);
   end; 
@@ -129,12 +156,12 @@ var
 
 implementation
 
-uses dUtils, uMyIni, dData, fNewQSO;
+uses dUtils, uMyIni, dData, fNewQSO, fBandMapFilter;
 
 { TfrmBandMap }
 
 procedure TfrmBandMap.AddToBandMap(Freq : Double; Call, Mode, Band, SplitInfo : String; Lat,Long : Double; ItemColor, BgColor : LongInt;
-                                   fromNewQSO : Boolean=False);
+                                   fromNewQSO : Boolean=False;isLoTW : Boolean=False;isEQSL : Boolean = False);
 var
   i : Integer;
 begin
@@ -154,6 +181,8 @@ begin
     AddToBandMapArr[i].BgColor   := BgColor;
     AddToBandMapArr[i].TimeStamp := now;
     AddToBandMapArr[i].TextValue := FormatItem(Freq, Call, SplitInfo,fromNewQSO);
+    AddToBandMapArr[i].isLoTW    := isLoTW;
+    AddToBandMapArr[i].isEQSL    := isEQSL;
 
     if dmData.DebugLevel>=1 then
       Writeln(DateTimeToStr(now), ' add to bandmap ', AddToBandMapArr[i].Call)
@@ -372,6 +401,9 @@ var
   Changed : Boolean = False;
   When : TDateTime;
   iter : Word;
+  skip : Boolean = False;
+  LastDate : String;
+  LastTime : String;
 begin
   try
     SetLength(DelArray,0);
@@ -391,6 +423,19 @@ begin
         LeaveCriticalSection(frmBandMap.BandMapCrit)
       end;
 
+      if (frmBandMap.FDateFilterType = dftShowLastHours) then
+      begin
+        LastDate := FormatDateTime('YYY-MM-DD',when - (frmBandMap.FLastHours/24));
+        LastTime := FormatDateTime('HH:NN',when - (frmBandMap.FLastHours/24))
+      end
+      else begin
+        if (frmBandMap.FDateFilterType = dftShowLastDateTime) then
+        begin
+          LastDate := frmBandMap.FSinceDate;
+          LastTime := frmBandMap.FSinceTime
+        end
+      end;
+
       for y:=0 to Length(AddArray)-1 do
       begin
         p := ItemExists(AddArray[y].call,AddArray[y].band,AddArray[y].mode);
@@ -399,6 +444,30 @@ begin
         begin
           DeleteFromArray(p)
         end;
+
+        skip := False;
+
+        if not (frmBandMap.FDateFilterType = dftShowAll) then
+          skip := dmData.SkipBandMapDateTime(AddArray[y].Call,AddArray[y].Band,AddArray[y].Mode,LastDate,LastTime);
+
+        if frmBandMap.FOnlyLoTW and frmBandMap.FOnlyEQSL then
+        begin
+           if not (AddArray[y].isLoTW or AddArray[y].isEQSL) then
+             skip := True
+        end
+        else begin
+          if ((not AddArray[y].isLoTW) and frmBandMap.FOnlyLoTW) then
+            skip := True
+          else begin
+           if ((not AddArray[y].isEQSL) and frmBandMap.FOnlyEQSL) then
+            skip := True
+          end
+        end;
+
+        if skip then
+          Continue;
+
+
         i := FindFirstemptyPos;
         if (i>0) then
         begin
@@ -414,7 +483,9 @@ begin
           frmBandMap.BandMapItems[i].BgColor   := AddArray[y].BgColor;
           frmBandMap.BandMapItems[i].TimeStamp := AddArray[y].TimeStamp;
           frmBandMap.BandMapItems[i].TextValue := AddArray[y].TextValue;
-          frmBandMap.BandMapItems[i].Position  := i;
+          frmBandMap.BandMapItems[i].isLoTW    := AddArray[y].isLoTW;
+          frmBandMap.BandMapItems[i].isEQSL    := AddArray[y].isEQSL;
+          frmBandMap.BandMapItems[i].Position  := i
         end;
         NewAdded := True
       end;
@@ -522,6 +593,23 @@ begin
   BandMapThread.Terminate
 end;
 
+procedure TfrmBandMap.acFilterExecute(Sender: TObject);
+var
+  f : TfrmBandMapFilter;
+begin
+  f := TfrmBandMapFilter.Create(nil);
+  try
+    if f.ShowModal = mrOK then
+      LoadSettings
+  finally
+    FreeAndNil(f)
+  end
+end;
+
+procedure TfrmBandMap.acFilterSettingsExecute(Sender: TObject);
+begin
+end;
+
 procedure TfrmBandMap.LoadFonts;
 var
   f      : TFont;
@@ -579,7 +667,9 @@ begin
         BandMapItems[i].BgColor,ITEM_SEP,
         BandMapItems[i].TimeStamp,ITEM_SEP,
         BandMapItems[i].TextValue,ITEM_SEP,
-        BandMapItems[i].Position,ITEM_SEP
+        BandMapItems[i].Position,ITEM_SEP,
+        BandMapItems[i].isLoTW,ITEM_SEP,
+        BandMapItems[i].isEQSL,ITEM_SEP
       )
   finally
     CloseFile(f)
@@ -604,7 +694,7 @@ begin
     begin
       ReadLn(f,s);
       a := dmUtils.Explode(ITEM_SEP,s);
-      if Length(a)<13 then Continue; //probably corrupted line
+      if Length(a)<12 then Continue; //probably corrupted line
       if (i>MAX_ITEMS-1) then Continue;
       SetLength(AddToBandMapArr,i+1);
       AddToBandMapArr[i].frmNewQSO := StrToBool(a[0]);
@@ -620,6 +710,15 @@ begin
       AddToBandMapArr[i].TimeStamp := StrToFloat(a[10]);
       AddToBandMapArr[i].TextValue := a[11];
       AddToBandMapArr[i].Position  := i;
+      if i<14 then
+      begin
+        AddToBandMapArr[i].isLoTW := False;
+        AddToBandMapArr[i].isEQSL := False
+      end
+      else begin
+        AddToBandMapArr[i].isLoTW := StrToBool(a[12]);
+        AddToBandMapArr[i].isEQSL := StrToBool(a[13])
+      end;
       inc(i)
     end
   finally
@@ -677,6 +776,31 @@ begin
   finally
     FreeAndNil(l)
   end
+end;
+
+procedure TfrmBandMap.LoadSettings;
+begin
+  frmBandMap.FirstInterval   := cqrini.ReadInteger('BandMap', 'FirstAging', 5)*60;
+  frmBandMap.SecondInterval  := cqrini.ReadInteger('BandMap', 'SecondAging', 8)*60;
+  frmBandMap.DeleteAfter     := cqrini.ReadInteger('BandMap', 'Disep', 12)*60;
+  frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
+  frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
+  frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
+  frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0);
+
+  if cqrini.ReadBool('BandMapFilter','ShowAll',True) then
+    frmBandMap.DateFilterType := dftShowAll;
+  if cqrini.ReadBool('BandMapFilter','NoWkdHour',False) then
+    frmBandMap.DateFilterType := dftShowLastHours;
+  if cqrini.ReadBool('BandMapFilter','NoWkdDate',False) then
+    frmBandMap.DateFilterType := dftShowLastDateTime;
+
+  frmBandMap.LastHours := cqrini.ReadInteger('BandMapFilter','LastHours',48);
+  frmBandMap.SinceDate := cqrini.ReadString('BandMapFilter','LastDate','');
+  frmBandMap.SinceTime := cqrini.ReadString('BandMapFilter','LastTime','');
+
+  frmBandMap.OnlyLoTW := cqrini.ReadBool('BandMapFilter','OnlyLoTW',False);
+  frmBandMap.OnlyEQSL := cqrini.ReadBool('BandMapFilter','OnlyeQSL',False)
 end;
 
 {$R *.lfm}

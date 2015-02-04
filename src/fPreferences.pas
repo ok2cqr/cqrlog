@@ -1618,12 +1618,8 @@ begin
 
   dmData.InsertProfiles(frmNewQSO.cmbProfiles, False);
   frmNewQSO.cmbProfiles.Text := dmData.GetDefaultProfileText;
-  frmBandMap.OnlyCurrBand    := chkShowActiveBand.Checked;
-  frmBandMap.OnlyCurrMode    := chkShowActiveMode.Checked;
-  frmBandMap.FirstInterval   := StrToint(edtFirst.Text)*60;
-  frmBandMap.SecondInterval  := StrToInt(edtSecond.Text)*60;
-  frmBandMap.DeleteAfter     := StrToint(edtDisep.Text)*60;
-  frmBandMap.DoXplanetExport := (rgShowFrom.ItemIndex > 0);
+
+  frmBandMap.LoadSettings;
 
   if frmGrayline.Showing then
     frmGrayline.tmrGrayLineTimer(nil);

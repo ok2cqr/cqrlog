@@ -708,6 +708,8 @@ var
   kHz      : String;
   splitstr : String;
   cLat, cLng : Currency;
+  isLoTW : Boolean;
+  isEQSL : Boolean;
 
   cfgUseBackColor : Boolean = True;
   cfgBckColor : TColor;
@@ -801,9 +803,12 @@ begin
   if tmp > 0 then
     freq[tmp] := FormatSettings.DecimalSeparator;
 
+  isLoTW := dmDXCluster.UsesLotw(call);
+  isEQSL := dmDXCluster.UseseQSL(call);
+
   if cfgUseBackColor then
   begin
-    if dmDXCluster.UsesLotw(call) then
+    if isLoTW then
       ThBckColor := cfgBckColor
     else
       ThBckColor := clWhite
@@ -812,7 +817,7 @@ begin
   if ThBckColor = clWhite then
   begin
     if cfgeUseBackColor then
-      if dmDXCluster.UseseQSL(call) then
+      if isEQSL then
         ThBckColor := cfgeBckColor
   end;
 
@@ -999,10 +1004,10 @@ begin
     dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
 
     if cfgUseDXCColors then
-      frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,sColor,ThBckColor)
+      frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,sColor,ThBckColor, False, isLoTW, isEQSL)
     else
       frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,
-                              cfgClusterColor,ThBckColor)
+                              cfgClusterColor,ThBckColor, False, isLoTW, isEQSL)
   end;
 
   if index > 0 then

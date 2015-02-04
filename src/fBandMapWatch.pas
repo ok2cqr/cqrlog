@@ -1,4 +1,4 @@
-unit fBandMapFilter;
+unit fBandMapWatch;
 
 {$mode objfpc}{$H+}
 
@@ -9,9 +9,9 @@ uses
 
 type
 
-  { TfrmBandMapfilter }
+  { TfrmBandMapWatch }
 
-  TfrmBandMapfilter = class(TForm)
+  TfrmBandMapWatch = class(TForm)
     btnOK: TButton;
     btnCancel: TButton;
     chkIOTA: TCheckBox;
@@ -36,14 +36,14 @@ type
   end; 
 
 var
-  frmBandMapfilter: TfrmBandMapfilter;
+  frmBandMapWatch: TfrmBandMapWatch;
 
 implementation
 
-{ TfrmBandMapfilter }
+{ TfrmBandMapWatch }
 
 initialization
-  {$I fBandMapFilter.lrs}
+  {$I fBandMapWatch.lrs}
 
 end.
 

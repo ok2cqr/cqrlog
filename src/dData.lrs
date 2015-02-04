@@ -319,5 +319,7 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'nnection (default:8h)'#6#21'wait_timeout=31536000'#6#0#6#8'[client]'#6#26'd'
   +'efault-character-set=utf8'#6#0#0#10'Terminator'#6#1';'#13'CommentsinSQL'#9
   +#10'UseSetTerm'#9#9'UseCommit'#9#10'UseDefines'#9#4'left'#3#200#1#3'top'#3
-  +#208#0#0#0#0
+  +#208#0#0#0#9'TSQLQuery'#11'qBandMapFil'#9'FieldDefs'#14#0#6'Params'#14#0#4'l'
+  +'eft'#3#13#1#3'top'#3#134#1#0#0#15'TSQLTransaction'#12'trBandMapFil'#6'Activ'
+  ,'e'#8#4'left'#3#13#1#3'top'#3#192#1#0#0#0
 ]);

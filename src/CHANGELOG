@@ -9,6 +9,7 @@ Legend:
   + second directory path to auto backup added
 + Ignore changes caused by LoTW/eQSL upload or download option added
   + CQ and ITU zones are taken from previous QSO if exists
+  + added new band map filter 
   - after change of callsign, report, date or time, the QSO was still marked as uploaded to LotW/eQSL - fixed
   - LoTW upload - when Export all QSO was selected, only 500 QSO were exported - fixed
   - buttons caption in CW type window didn't use values from settings
