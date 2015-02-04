@@ -7,7 +7,7 @@ Legend:
 1.9.0
   + configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)
   + second directory path to auto backup added
-+ Ignore changes caused by LoTW/eQSL upload or download option added
+  + Ignore changes caused by LoTW/eQSL upload or download option added
   + CQ and ITU zones are taken from previous QSO if exists
   + added new band map filter 
   - after change of callsign, report, date or time, the QSO was still marked as uploaded to LotW/eQSL - fixed
