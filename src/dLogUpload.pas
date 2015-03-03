@@ -599,7 +599,7 @@ function TdmLogUpload.GetUploadUrl(where : TWhereToUpload; cmd : String) : Strin
 begin
   Result := '';
   case where of
-    upHamQTH  : Result := 'http://hamqth.com/qso_realtime.php';
+    upHamQTH  : Result := 'http://www.hamqth.com/qso_realtime.php';
     upClubLog : begin
                   if (cmd='DELETE') then
                     Result := 'https://secure.clublog.org/delete.php'
