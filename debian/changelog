@@ -1,3 +1,28 @@
+cqrlog (1.9.0-1) unstable; urgency=low
+
+  * configuration can be stored into database or local computer only
+    (Preferences -> Program -> Configure storage settings)
+  * second directory path to auto backup added
+  * Ignore changes caused by LoTW/eQSL upload or download option
+    added
+  * CQ and ITU zones are taken from previous QSO if exists
+  * added new band map filter
+  * CALLSIGN, BAND, MODE, FREQ macros to dxcluster allert command
+    added
+  * "Capitalise first letter in QTH field" option added
+  * Propagation window improved, now shows more information
+    (Saku, OH1KH)
+  * after change of callsign, report, date or time, the QSO was still
+    marked as uploaded to LotW/eQSL - fixed
+  * LoTW upload - when Export all QSO was selected, only 500 QSO were
+    exported - fixed
+  * buttons caption in CW type window didn't use values from settings
+  * online log upload of edited QSO fixed
+  * uploading QSO to HamQTH fixed
+  * downloading data for web dx cluster fixed
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Wed, 04 Mar 2015 16:30:42 +0100
+
 cqrlog (1.8.3-1) unstable; urgency=low
 
   * Added support for setting the QTH Nickname in eQSL.cc download 
