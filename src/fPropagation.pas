@@ -14,14 +14,22 @@ type
 
   TfrmPropagation = class(TForm)
     Label1: TLabel;
+    lblK3hour: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    lblAbIndex: TLabel;
+    lblAuIndex: TLabel;
     lblInfo: TLabel;
     lblGF: TLabel;
     lblSSN: TLabel;
     lblSFI: TLabel;
+    lblSA: TLabel;
     lblKIndex: TLabel;
     lblAIndex: TLabel;
     sbtnRefresh : TSpeedButton;
@@ -35,12 +43,16 @@ type
   private
     { private declarations }
   public
-    a : String;
-    k : String;
-    sfi : String;
-    ssn : String;
-    gf  : String;
+    a    : String;
+    ab   : String;
+    k    : String;
+    k3h  : String;
+    sfi  : String;
+    ssn  : String;
+    sa   : String;
+    gf   : String;
     time : String;
+    au   : String;
     running : Boolean;
 
     procedure SyncProp;
@@ -74,11 +86,16 @@ begin
     exit;
   frmPropagation.running := True;
   frmPropagation.a    := '';
+  frmPropagation.ab   := '';
   frmPropagation.k    := '';
   frmPropagation.sfi  := '';
   frmPropagation.ssn  := '';
+  frmPropagation.sa   := '';
   frmPropagation.gf   := '';
+  frmPropagation.au   := '';
   frmPropagation.time := '';
+  frmPropagation.k3h  := '';
+
   FreeOnTerminate := True;
   http   := THTTPSend.Create;
   m      := TStringList.Create;
@@ -87,75 +104,73 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://services.swpc.noaa.gov/text/wwv.txt') then
+    if HTTP.HTTPMethod('GET', 'http://dk0wcy.de/magnetogram/' ) then
     begin
       m.LoadFromStream(HTTP.Document);
       tmp := m.Text;
-      p   := Pos('Solar flux',tmp);
-      frmPropagation.sfi := trim(copy(tmp,p+11,3));
 
-      p   := Pos('A-INDEX',UpperCase(tmp)); //they sometimes have A-Index instead of  A-index
-      frmPropagation.a   := trim(copy(tmp,p+8,10));
-      frmPropagation.a   := copy(frmPropagation.a,1,Pos('.',frmPropagation.a)-1);
-
-      p   := Pos('K-index',tmp);
-      tmp := copy(tmp,p,50);
-      p   := Pos('was',tmp);
-      tmp := trim(copy(tmp,p+4,Pos('.',tmp)-p-1));
-      frmPropagation.k := copy(tmp,1,Length(tmp)-1)
-    end;
-
-    with TFTPSend.Create do
-    try try
-      TargetHost := 'ftp.swpc.noaa.gov';
-      TargetPort := '21';
-      if Login then
+    if dmData.DebugLevel >=1 then
       begin
-        DirectFileName := dmData.HomeDir +'dsd.txt';
-        DirectFile     := True;
-        if RetrieveFile('pub/indices/DSD.txt', False) then
-        begin
-          m.LoadFromFile(dmData.HomeDir +'dsd.txt');
-          tmp := m.Text;
-          t := copy(tmp,Pos(':Issued:',tmp)+9,Pos('#',tmp)-1 - Pos(':Issued:',tmp)-9);
-          frmPropagation.time := t;
-          tmp := m.Strings[m.Count-1];
-          frmPropagation.ssn   := trim(copy(tmp,20,5))
-        end;
-        Logout
-      end
-    except
-      on E: Exception do
-        Writeln(E.Message)
-    end
-    finally
-      Free
-    end;
+       Writeln('TMP:      ',tmp)
+      end;
 
-    tmp := frmPropagation.k;
-    if Pos('(',tmp) > 0 then
-      tmp := trim(copy(tmp,1,Pos('(',tmp)-1));
-    if TryStrToInt(tmp,ki) then
-    begin
-      case ki of
-        0,1,2,3 : frmPropagation.gf := 'QUIET';
-          4 : frmPropagation.gf := 'UNSET';
-        5,6,7,8,9 : frmPropagation.gf := 'STORM'
-        else
-          frmPropagation.gf := ''
-       end
-    end;
+       p   := Pos('>Indices of',tmp);
+      frmPropagation.time   := trim(copy(tmp,p+1,30));
+      frmPropagation.time   := copy(frmPropagation.time,1,Pos('</th>',frmPropagation.time)-1);
+      frmPropagation.time   := frmPropagation.time + ' ' + TimeToStr(Time);
+
+      p   := Pos('>Boulder A',tmp);
+      frmPropagation.ab   := trim(copy(tmp,p+44,18));
+      frmPropagation.ab   := copy(frmPropagation.ab,1,Pos('</b>',frmPropagation.ab)-1);
+
+      p  := Pos('>Solar Activity',tmp);
+      frmPropagation.sa   := trim(copy(tmp,p+44,18));
+      frmPropagation.sa   := copy(frmPropagation.sa,1,Pos('</b>',frmPropagation.sa)-1);
+
+      p   := Pos('>Kiel A',tmp);
+      frmPropagation.a   := trim(copy(tmp,p+44,18));
+      frmPropagation.a   := copy(frmPropagation.a,1,Pos('</b>',frmPropagation.a)-1);
+
+      p   := Pos('>Kiel current k',tmp);
+      frmPropagation.k   := trim(copy(tmp,p+44,18));
+      frmPropagation.k   := copy(frmPropagation.k,1,Pos('</b>',frmPropagation.k)-1);
+
+      p   := Pos('>Geomagnetic Field',tmp);
+      frmPropagation.gf   := trim(copy(tmp,p+44,18));
+      frmPropagation.gf   := copy(frmPropagation.gf,1,Pos('</b>',frmPropagation.gf)-1);
+
+      p   := Pos('>Sunspot Number',tmp);
+      frmPropagation.ssn   := trim(copy(tmp,p+44,18));
+      frmPropagation.ssn   := copy(frmPropagation.ssn,1,Pos('</b>',frmPropagation.ssn)-1);
+
+      p   := Pos('>Aurora',tmp);
+      frmPropagation.au   := trim(copy(tmp,p+44,18));
+      frmPropagation.au   := copy(frmPropagation.au,1,Pos('</b>',frmPropagation.au)-1);
+
+      p   := Pos('>Solar Flux',tmp);
+      frmPropagation.sfi := trim(copy(tmp,p+30,18));
+      frmPropagation.sfi := copy(frmPropagation.sfi,1,Pos('</b>',frmPropagation.sfi)-1);
+
+      p := Pos('>Kiel 3-hour k',tmp);
+      frmPropagation.k3h := trim(copy(tmp,p+44,18));
+      frmPropagation.k3h := copy(frmPropagation.k3h,1,Pos('</b>',frmPropagation.k3h)-1)
+     end;
 
     if dmData.DebugLevel >=1 then
     begin
-      Writeln('SFI:  ',frmPropagation.sfi);
-      Writeln('A:    ',frmPropagation.a);
-      Writeln('K:    ',frmPropagation.k);
-      Writeln('GF:   ',frmPropagation.gf);
-      Writeln('SSN:  ',frmPropagation.ssn);
-      Writeln('Time: ',frmPropagation.time)
+      Writeln('Time:     ',frmPropagation.time);
+      Writeln('Boulder A:',frmPropagation.ab);
+      Writeln('Solar Act:',frmPropagation.sa);
+      Writeln('Kiel    A:',frmPropagation.a);
+      Writeln('Kiel K:   ',frmPropagation.k);
+      Writeln('Kiel 3h   ',frmPropagation.k3h);
+      Writeln('GF:       ',frmPropagation.gf);
+      Writeln('SSN:      ',frmPropagation.ssn);
+      Writeln('Aurora:   ',frmPropagation.au);
+      Writeln('SFI:      ',frmPropagation.sfi)
     end;
-    Synchronize(@frmPropagation.SyncProp)
+
+    Synchronize(@frmPropagation.SyncProp);
   finally
     http.Free;
     m.Free;
@@ -192,15 +207,19 @@ const
 begin
   running := False;
   dmUtils.LoadWindowPos(frmPropagation);
-  lblAIndex.Caption := C_LOADING;
-  lblKIndex.Caption := C_LOADING;
-  lblSFI.Caption    := C_LOADING;
-  lblSSN.Caption    := C_LOADING;
-  lblGF.Caption     := C_LOADING;
-  lblInfo.Caption   := '';
-  tmrProp.Enabled   := False;
-  tmrProp.Interval  := 1000 * 60 * 5; //every 5 minutes do refresh
-  tmrProp.Enabled   := True;
+  lblAIndex.Caption  := C_LOADING;
+  lblAbIndex.Caption := C_LOADING;
+  lblKIndex.Caption  := C_LOADING;
+  lblK3hour.Caption  := C_LOADING;
+  lblAuIndex.Caption := C_LOADING;
+  lblSFI.Caption     := C_LOADING;
+  lblSSN.Caption     := C_LOADING;
+  lblSA.Caption      := C_LOADING;
+  lblGF.Caption      := C_LOADING;
+  lblInfo.Caption    := '';
+  tmrProp.Enabled    := False;
+  tmrProp.Interval   := 1000 * 60 * 5; //every 5 minutes do refresh
+  tmrProp.Enabled    := True;
   tmrPropTimer(nil)
 end;
 
@@ -218,13 +237,42 @@ begin
 end;
 
 procedure TfrmPropagation.SyncProp;
+
+  function getKindexColor(kIndex : Double) : TColor;
+  begin
+    if (kIndex<=3) then
+      Result := clGreen
+    else if (kIndex>3) and (kIndex<5) then
+      Result := TColor($0000A2FF)
+    else if (kIndex>=5) and (kIndex<6) then
+      Result := TColor($00006CFF)
+    else
+      Result := clRed
+  end;
+
+var
+  dk : Double;
 begin
-  lblAIndex.Caption := a;
-  lblKIndex.Caption := k;
-  lblSFI.Caption    := sfi;
-  lblSSN.Caption    := ssn;
-  lblGF.Caption     := gf;
-  lblInfo.Caption   := time
+  lblInfo.Caption    := time;
+  lblAbIndex.Caption := ab;
+  lblSA.Caption      := sa;
+  lblAIndex.Caption  := a;
+  lblKIndex.Caption  := k;
+  lblGF.Caption      := gf;
+  lblSSN.Caption     := ssn;
+  lblAuIndex.Caption := au;
+  lblSFI.Caption     := sfi;
+  lblK3hour.Caption  := k3h;
+
+  if TryStrToFloat(k,dk) then
+    lblKIndex.Font.Color := getKindexColor(dk)
+  else
+    lblKIndex.Font.Color := clBlack;
+
+  if TryStrToFloat(k3h,dk) then
+    lblK3hour.Font.Color := getKindexColor(dk)
+  else
+    lblK3hour.Font.Color := clBlack
 end;
 
 initialization

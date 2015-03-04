@@ -234,6 +234,7 @@
         <Filename Value="fAdifImport.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAdifImport"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fAdifImport"/>
       </Unit20>
@@ -400,6 +401,7 @@
         <Filename Value="fDatabaseUpdate.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmDatabaseUpdate"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fDatabaseUpdate"/>
       </Unit43>
@@ -465,6 +467,7 @@
         <Filename Value="fCWType.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCWType"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fCWType"/>
       </Unit52>
@@ -491,6 +494,7 @@
         <Filename Value="fPropagation.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmPropagation"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fPropagation"/>
       </Unit56>
