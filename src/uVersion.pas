@@ -4,10 +4,10 @@ unit uVersion;
 interface
 
 const
-  cVERSION   = '1.8.3';
+  cVERSION   = '1.9.0';
   cMAJOR     = 1;
-  cMINOR     = 8;
-  cRELEAS    = 3;
+  cMINOR     = 9;
+  cRELEAS    = 0;
 
 implementation
 
