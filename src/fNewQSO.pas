@@ -2569,7 +2569,7 @@ procedure TfrmNewQSO.edtQTHExit(Sender: TObject);
 var
   tmp : String;
 begin
-  if edtQTH.Text <> '' then
+  if (edtQTH.Text <> '') and cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True) then
   begin
     tmp := edtQTH.Text;
     tmp[1] := UpCase(tmp[1]);

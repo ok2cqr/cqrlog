@@ -115,6 +115,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkCapFirstQTHLetter: TCheckBox;
     chkIgnoreLoTW: TCheckBox;
     chkExpCommet: TCheckBox;
     chkPlusToBandMap: TCheckBox;
@@ -1125,6 +1126,7 @@ begin
     cqrini.WriteFloat('NewQSO','FreqChange',0.010);
   cqrini.WriteBool('NewQSO','ClearAfterFreqChange',chkClearNewQSOFreq.Checked);
   cqrini.WriteBool('NewQSO','UseCallBookData',chkUseCallBookData.Checked);
+  cqrini.WriteBool('NewQSO','CapFirstQTHLetter',chkCapFirstQTHLetter.Checked);
 
   cqrini.WriteString('Program', 'Proxy', edtProxy.Text);
   cqrini.WriteString('Program', 'Port', edtPort.Text);
@@ -2490,6 +2492,7 @@ begin
   edtFreqChange.Text := FloatToStr(cqrini.ReadFloat('NewQSO','FreqChange',0.010)*1000);
   chkClearNewQSOFreq.Checked := cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   chkUseCallBookData.Checked := cqrini.ReadBool('NewQSO','UseCallBookData',False);
+  chkCapFirstQTHLetter.Checked := cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True);
 
   edtProxy.Text := cqrini.ReadString('Program', 'Proxy', '');
   edtPort.Text := cqrini.ReadString('Program', 'Port', '');
@@ -2971,7 +2974,7 @@ begin
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
-  WinKeyerChanged := False;
+  WinKeyerChanged := False
 end;
 
 procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);

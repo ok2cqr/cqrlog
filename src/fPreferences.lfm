@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabDXCluster
+    ActivePage = tabNewQSO
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 10
+    TabIndex = 2
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -580,27 +580,27 @@ object frmPreferences: TfrmPreferences
         TabOrder = 14
       end
       object chkClearNewQSOFreq: TCheckBox
-        Left = 22
+        Left = 16
         Height = 24
-        Top = 484
+        Top = 562
         Width = 399
         Caption = 'Clear New QSO window after freq is changed more then '
         TabOrder = 15
         Visible = False
       end
       object edtFreqChange: TEdit
-        Left = 422
+        Left = 416
         Height = 27
-        Top = 482
+        Top = 560
         Width = 64
         TabOrder = 16
         Text = 'edtFreqChange'
         Visible = False
       end
       object Label26: TLabel
-        Left = 494
+        Left = 488
         Height = 17
-        Top = 488
+        Top = 566
         Width = 25
         Caption = 'kHz'
         ParentColor = False
@@ -609,10 +609,18 @@ object frmPreferences: TfrmPreferences
       object chkUseCallBookData: TCheckBox
         Left = 22
         Height = 24
-        Top = 509
+        Top = 484
         Width = 429
         Caption = 'Always overwrite info from previous QSO with callbook data'
         TabOrder = 17
+      end
+      object chkCapFirstQTHLetter: TCheckBox
+        Left = 22
+        Height = 24
+        Top = 508
+        Width = 245
+        Caption = 'Capitalise first letter in QTH field'
+        TabOrder = 18
       end
     end
     object tabVisibleColumns: TTabSheet
