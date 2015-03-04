@@ -1172,7 +1172,7 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if not HTTP.HTTPMethod('GET','http://hamqth.com/dxc_csv.php?limit='+limit) then
+    if not HTTP.HTTPMethod('GET','http://www.hamqth.com/dxc_csv.php?limit='+limit) then
     begin
       frmDXCluster.StopAllConnections;
       frmDXCluster.btnWebConnect.Click;
