@@ -442,6 +442,8 @@ begin
   if dlgSave.Execute then
   begin
     db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
+    if dmData.DBName<>'' then
+      dmData.SaveConfigFile;
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
     dmData.Q.SQL.Text := 'select config_file from '+db+'.cqrlog_config';

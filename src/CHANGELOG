@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+1.9.1
+  - Export configuration of opened log doesn't reflect recent changes - fixed
+
 1.9.0
   + configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)
   + second directory path to auto backup added
