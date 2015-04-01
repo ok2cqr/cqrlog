@@ -137,7 +137,7 @@ object frmPreferences: TfrmPreferences
         Top = 115
         Width = 176
         TabOrder = 2
-        Text = 'firefox'
+        Text = 'xdg-open'
       end
       object chkNewDXCCTables: TCheckBox
         Left = 14
@@ -6296,7 +6296,7 @@ object frmPreferences: TfrmPreferences
         Top = 264
         Width = 320
         TabOrder = 3
-        Text = 'firefox'
+        Text = 'xdg-open'
       end
       object chkIntQSLViewer: TCheckBox
         Left = 47

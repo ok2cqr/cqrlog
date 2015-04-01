@@ -64,11 +64,11 @@ begin
     else if ext = '.txt' then
       prg := cqrini.ReadString('ExtView','txt','gedit')
     else if ((ext = '.html') or (ext = '.htm')) then
-      prg := cqrini.ReadString('ExtView','html','firefox')
+      prg := cqrini.ReadString('ExtView','html','xdg-open')
     else
       prg := cqrini.ReadString('ExtView','img','eog');
     if prg = '' then
-      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
+      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', 'xdg-open') +
                              ' ' + flAttach.FileName)
     else
       dmUtils.RunOnBackgroud(prg + ' ' + flAttach.FileName)

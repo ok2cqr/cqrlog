@@ -2502,7 +2502,7 @@ begin
   pgPreferences.ActivePageIndex := cqrini.ReadInteger('Program', 'Options', 0);
   edtGrayLineOffset.Text :=
     CurrToStr(cqrini.ReadFloat('Program', 'GraylineOffset', 0));
-  edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+  edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', 'xdg-open');
   chkNewDXCCTables.Checked := cqrini.ReadBool('Program', 'CheckDXCCTabs', True);
   chkShowDeleted.Checked := cqrini.ReadBool('Program', 'ShowDeleted', False);
   chkSunUTC.Checked := cqrini.ReadBool('Program', 'SunUTC', False);
@@ -2915,7 +2915,7 @@ begin
   edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', 'gedit');
   edtPdfFiles.Text := cqrini.ReadString('ExtView', 'pdf', 'evince');
   edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', 'eog');
-  edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'firefox');
+  edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'xdg-open');
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
 
   edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', '1945-01-01');
