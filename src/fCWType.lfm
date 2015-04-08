@@ -1,7 +1,7 @@
 object frmCWType: TfrmCWType
-  Left = 222
+  Left = 501
   Height = 405
-  Top = 203
+  Top = 153
   Width = 680
   ActiveControl = Panel1
   BorderIcons = [biSystemMenu]
@@ -131,26 +131,25 @@ object frmCWType: TfrmCWType
     TabOrder = 0
     object Label85: TLabel
       Left = 8
-      Height = 17
+      Height = 15
       Top = 30
-      Width = 67
+      Width = 60
       Caption = 'CW speed'
       ParentColor = False
     end
     object Label1: TLabel
       Left = 136
-      Height = 17
+      Height = 15
       Top = 30
-      Width = 33
+      Width = 30
       Caption = 'wpm'
       ParentColor = False
     end
     object edtSpeed: TSpinEdit
       Left = 80
-      Height = 27
+      Height = 25
       Top = 24
       Width = 50
-      Increment = 2
       MaxValue = 99
       MinValue = 5
       OnChange = edtSpeedChange
@@ -171,8 +170,8 @@ object frmCWType: TfrmCWType
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 90
-      ClientWidth = 396
+      ClientHeight = 92
+      ClientWidth = 398
       ItemIndex = 0
       Items.Strings = (
         'letter mode'

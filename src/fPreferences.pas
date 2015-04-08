@@ -496,6 +496,7 @@ type
     edtBackupPath1: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
+    edtRIGCtlSpeed: TSpinEdit;
     edtRBNServer : TEdit;
     edtClEmail: TEdit;
     edtHrCode: TEdit;
@@ -811,6 +812,9 @@ type
     Label196: TLabel;
     Label197: TLabel;
     Label198: TLabel;
+    Label199: TLabel;
+    Label200: TLabel;
+    Label201: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1514,6 +1518,7 @@ begin
   cqrini.WriteString('CW','K3NGPort',edtK3NGPort.Text);
   cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
   cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
+  cqrini.WriteInteger('CW','RIGCTLspeed',StrToInt(edtRIGCtlSpeed.Text));
 
   cqrini.WriteInteger('fldigi', 'freq', rgFreqFrom.ItemIndex);
   cqrini.WriteString('fldigi', 'deffreq', edtDefaultFreq.Text);

@@ -116,8 +116,33 @@ type
       procedure TuneStop; override;
   end;
 
+  TCRIGCTLCW = class(TCWDevice)
+    private
+      fActive : Boolean;
+      fSpeed  : Word;
+
+    public
+      constructor Create; override;
+      destructor  Destroy; override;
+
+      function GetSpeed  : Word; override;
+      function GetStatus : TKeyStatus; override;
+
+      procedure Open; override;
+      procedure Close; override;
+      procedure SetSpeed(speed : Word); override;
+      procedure SendText(text : String); override;
+      procedure StopSending; override;
+      procedure DelLastChar; override;
+      procedure SetMixManSpeed(min,max : Word); override;
+      procedure TuneStart; override;
+      procedure TuneStop; override;
+
+  end;
+
 implementation
 
+uses fTRXControl;
 
 constructor TCWWinKeyerUSB.Create;
 begin
@@ -634,6 +659,91 @@ begin
   FreeAndNil(ser)
 end;
 
+constructor TCRIGCTLCW.Create;
+begin
+  fActive       := False;
+  fDebugMode    := False;
+  fMinSpeed     := 10;
+  fMaxSpeed     := 60;
+  fSpeed        := frmTRXControl.GetKeySpd
+end;
 
+procedure TCRIGCTLCW.Open;
+var
+  rec : byte;
+begin
+  if fActive then Close();
+
+  if fDebugMode then Writeln('Device: ',fDevice);
+
+  fActive := True;
+  SetSpeed(fSpeed)
+end;
+
+procedure TCRIGCTLCW.SetSpeed(speed : Word);
+begin
+  Writeln(Speed);
+  fSpeed := speed;
+  frmTRXControl.SetWPM( speed );
+end;
+
+function TCRIGCTLCW.GetSpeed  : Word;
+begin
+  Result := fSpeed
+end;
+
+function TCRIGCTLCW.GetStatus : TKeyStatus;
+begin
+  Result := ksBusy //not implemented, yet
+end;
+
+procedure TCRIGCTLCW.DelLastChar;
+begin
+  //not implemented
+end;
+
+procedure TCRIGCTLCW.SetMixManSpeed(min,max : Word);
+begin
+  //not supported
+end;
+
+procedure TCRIGCTLCW.TuneStart;
+begin
+  //ser.SendByte($5C);
+  //ser.SendByte($54)
+end;
+
+procedure TCRIGCTLCW.TuneStop;
+begin
+  StopSending
+end;
+
+procedure TCRIGCTLCW.StopSending;
+begin
+  if fActive then
+  begin
+  //  ser.SendByte($5C);
+  //  ser.SendByte($5C)
+  end
+end;
+
+procedure TCRIGCTLCW.SendText(text : String);
+begin
+  frmTRXControl.SendMorse(text)
+end;
+
+procedure TCRIGCTLCW.Close;
+begin
+  if fDebugMode then Writeln('RIGCTL keyer closed');
+
+  fActive := False
+end;
+
+
+destructor TCRIGCTLCW.Destroy;
+begin
+  if fActive then
+    Close()
+end;
 
 end.

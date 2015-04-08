@@ -28,6 +28,7 @@ type TRigControl = class
     fRunRigCtld  : Boolean;
     fMode        : TRigMode;
     fFreq        : Double;
+    fKeySpd      : Integer;
     fRigPoll     : Word;
     fRigCtldPort : Word;
     fLastError   : String;
@@ -83,6 +84,7 @@ type TRigControl = class
     function  GetFreqHz   : Double;
     function  GetFreqKHz  : Double;
     function  GetFreqMHz  : Double;
+    function  GetKeySpd   : Integer;
     function  GetModePass(vfo : TVFO) : TRigMode;  overload;
     function  GetModeOnly(vfo : TVFO) : String; overload;
     function  GetFreqHz(vfo : TVFO)   : Double; overload;
@@ -92,6 +94,8 @@ type TRigControl = class
     procedure SetCurrVFO(vfo : TVFO);
     procedure SetModePass(mode : TRigMode);
     procedure SetFreqKHz(freq : Double);
+    procedure SendMorse( morse : String );
+    procedure SetWPM( wpm : Integer );
     procedure ClearRit;
     procedure Restart;
 end;
@@ -221,6 +225,16 @@ begin
   RigCommand.Add('F '+FloatToStr(freq*1000))
 end;
 
+procedure TRigControl.SendMorse(morse : String);
+begin
+  RigCommand.Add('b '+morse)
+end;
+
+procedure TRigControl.SetWPM( wpm : Integer );
+begin
+  RigCommand.Add('L KEYSPD '+IntToStr(wpm));
+end;
+
 procedure TRigControl.ClearRit;
 begin
   RigCommand.Add('J 0')
@@ -254,6 +268,11 @@ end;
 function TRigControl.GetFreqMHz  : Double;
 begin
   result := fFreq / 1000000
+end;
+
+function TRigControl.GetKeySpd : Integer;
+begin
+  result := fKeySpd;
 end;
 
 function TRigControl.GetModePass(vfo : TVFO) : TRigMode;
@@ -353,7 +372,12 @@ begin
         if f>20000 then
           fFReq := f
         else
-          fMode.pass := round(f);
+          begin
+          if f<60 then
+             fKeySpd := StrToInt(a[i])
+          else
+             fMode.pass := round(f)
+          end;
         Continue
       end;
 
@@ -482,7 +506,7 @@ begin
     RigCommand.Clear
   end
   else begin
-    rcvdFreqMode.SendMessage('fmv'+LineEnding)
+    rcvdFreqMode.SendMessage('fmvl KEYSPD'+LineEnding)
   end
 end;
 

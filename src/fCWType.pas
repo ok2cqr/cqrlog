@@ -66,6 +66,10 @@ procedure TfrmCWType.FormShow(Sender: TObject);
 begin
   rgMode.ItemIndex := cqrini.ReadInteger('CW','Mode',1);
   fraCWKeys1.UpdateFKeyLabels;
+
+  if Assigned(frmNewQSO.CWint) then
+    edtSpeed.Value := frmNewQSO.CWint.GetSpeed;
+
   m.SetFocus;
   m.Clear
 end;
