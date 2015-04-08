@@ -76,7 +76,7 @@ end;
 
 procedure TfrmCWType.btnCloseClick(Sender: TObject);
 begin
-  ModalResult := mrCancel
+  Close
 end;
 
 procedure TfrmCWType.edtSpeedChange(Sender: TObject);

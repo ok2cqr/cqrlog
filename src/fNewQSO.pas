@@ -3011,9 +3011,9 @@ begin
     with TfrmCWType.Create(self) do
     try
       edtSpeed.Value := CWint.GetSpeed;
-      ShowModal
+      Show
     finally
-      Free
+      // no longer a modal form, what to do here?
     end
   end
 end;
