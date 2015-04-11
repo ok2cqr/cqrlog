@@ -3011,9 +3011,9 @@ begin
     with TfrmCWType.Create(self) do
     try
       edtSpeed.Value := CWint.GetSpeed;
-      ShowModal
+      Show
     finally
-      Free
+      // no longer a modal form, what to do here?
     end
   end
 end;
@@ -5330,7 +5330,14 @@ begin
           CWint.SetSpeed(cqrini.ReadInteger('CW','K3NGSpeed',30));
           CWint.DebugMode := dmData.DebugLevel>=1;
           sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30)) + 'WPM'
-        end
+        end;
+    4 : begin
+          CWint := TCRIGCTLCW.Create;
+          CWint.Open;
+          CWint.SetSpeed(cqrini.ReadInteger('CW','RIGCTLSpeed',30));
+          CWint.DebugMode := dmData.DebugLevel>=1;
+          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','RIGCTLSpeed',30)) + 'WPM'
+        end;
   end //case
 end;
 

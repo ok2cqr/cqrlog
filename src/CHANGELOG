@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 1.9.1
+  + Added CW interface to rig's internal keyer via rigctld connection
   - Export configuration of opened log doesn't reflect recent changes - fixed
 
 1.9.0

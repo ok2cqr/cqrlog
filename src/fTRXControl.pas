@@ -110,12 +110,15 @@ type
     function  GetBandWidth(mode : String) : Integer;
     function  GetModeBand(var mode,band : String) : Boolean;
     function  InicializeRig : Boolean;
+    function  GetKeySpd  : Integer;
     function  GetFreqHz  : Double;
     function  GetFreqkHz : Double;
     function  GetFreqMHz : Double;
     function  GetDislayFreq : String;
 
     procedure SetModeFreq(mode,freq : String);
+    procedure SendMorse( morse : String );
+    procedure SetWPM( wpm : Integer );
     procedure SavePosition;
     procedure CloseRigs;
     procedure Split(up : Integer);
@@ -899,6 +902,16 @@ begin
   }
 end;
 
+procedure TfrmTRXControl.SendMorse( morse : String );
+begin
+    radio.SendMorse( morse );
+end;
+
+procedure TfrmTRXControl.SetWPM( wpm : Integer );
+begin
+    radio.SetWPM( wpm );
+end;
+
 function TfrmTRXControl.GetModeFreqNewQSO(var mode,freq : String) : Boolean;
 begin
   Result := False;
@@ -1003,6 +1016,14 @@ begin
     //TRX1.DisableSplit
   //else
     //TRX2.DisableSplit
+end;
+
+function TfrmTRXControl.GetKeySpd : Integer;
+begin
+  if Assigned(radio) then
+     Result := radio.GetKeySpd
+  else
+     Result := 0
 end;
 
 function TfrmTRXControl.GetFreqHz  : Double;
