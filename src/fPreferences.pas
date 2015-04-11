@@ -1518,7 +1518,7 @@ begin
   cqrini.WriteString('CW','K3NGPort',edtK3NGPort.Text);
   cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
   cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
-  cqrini.WriteInteger('CW','RIGCTLspeed',StrToInt(edtRIGCtlSpeed.Text));
+  cqrini.WriteInteger('CW','RIGCTLSpeed',StrToInt(edtRIGCtlSpeed.Text));
 
   cqrini.WriteInteger('fldigi', 'freq', rgFreqFrom.ItemIndex);
   cqrini.WriteString('fldigi', 'deffreq', edtDefaultFreq.Text);
@@ -2898,6 +2898,7 @@ begin
   edtK3NGPort.Text := cqrini.ReadString('CW','K3NGPort','');
   edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
   edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
+  edtRIGCTLSpeed.Text := IntToStr(cqrini.ReadInteger('CW','RIGCTLSpeed',30));
 
   rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);
   edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');

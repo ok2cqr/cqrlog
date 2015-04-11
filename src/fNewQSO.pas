@@ -5334,9 +5334,9 @@ begin
     4 : begin
           CWint := TCRIGCTLCW.Create;
           CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','RIGCTLspeed',30));
+          CWint.SetSpeed(cqrini.ReadInteger('CW','RIGCTLSpeed',30));
           CWint.DebugMode := dmData.DebugLevel>=1;
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','RIGCTLspeed',30)) + 'WPM'
+          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','RIGCTLSpeed',30)) + 'WPM'
         end;
   end //case
 end;
