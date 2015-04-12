@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabNewQSO
+    ActivePage = tabCWInterface
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 19
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -5684,15 +5684,15 @@ object frmPreferences: TfrmPreferences
       object cmbIfaceType: TComboBox
         Left = 127
         Height = 29
-        Top = 19
+        Top = 17
         Width = 214
         ItemHeight = 0
-        ItemIndex = 0
         Items.Strings = (
           'None'
           'WinKeyer USB'
           'cwdaemon'
           'K3NG Key'
+          'HamLib'
         )
         OnChange = cmbIfaceTypeChange
         TabOrder = 0
@@ -5875,7 +5875,7 @@ object frmPreferences: TfrmPreferences
       object btnKeyText: TButton
         Left = 407
         Height = 25
-        Top = 456
+        Top = 562
         Width = 105
         Caption = 'Key macros'
         OnClick = btnKeyTextClick
@@ -5949,6 +5949,51 @@ object frmPreferences: TfrmPreferences
           Top = 68
           Width = 119
           Caption = 'Serial port speed:'
+          ParentColor = False
+        end
+      end
+      object GroupBox50: TGroupBox
+        Left = 16
+        Height = 105
+        Top = 456
+        Width = 497
+        Caption = 'HamLib'
+        ClientHeight = 86
+        ClientWidth = 493
+        TabOrder = 5
+        object Label199: TLabel
+          Left = 10
+          Height = 17
+          Top = 16
+          Width = 120
+          Caption = 'Default CW speed'
+          ParentColor = False
+        end
+        object edtHamLibSpeed: TSpinEdit
+          Left = 10
+          Height = 27
+          Top = 37
+          Width = 50
+          MaxValue = 99
+          MinValue = 5
+          OnChange = edtWinSpeedChange
+          TabOrder = 0
+          Value = 5
+        end
+        object Label200: TLabel
+          Left = 74
+          Height = 17
+          Top = 40
+          Width = 36
+          Caption = 'WPM'
+          ParentColor = False
+        end
+        object Label201: TLabel
+          Left = 205
+          Height = 34
+          Top = 16
+          Width = 252
+          Caption = 'host and port number are taken from '#10'parameters of the first rig'
           ParentColor = False
         end
       end

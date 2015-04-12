@@ -5330,6 +5330,15 @@ begin
           CWint.SetSpeed(cqrini.ReadInteger('CW','K3NGSpeed',30));
           CWint.DebugMode := dmData.DebugLevel>=1;
           sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30)) + 'WPM'
+        end;
+    4 : begin
+          CWint        := TCWHamLib.Create;
+          CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');
+          CWint.Device := cqrini.ReadString('TRX1','host','localhost');
+          CWint.Open;
+          CWint.SetSpeed(cqrini.ReadInteger('CW','HamLibSpeed',30));
+          CWint.DebugMode := dmData.DebugLevel>=1;
+          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30)) + 'WPM'
         end
   end //case
 end;

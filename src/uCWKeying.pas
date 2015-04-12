@@ -116,6 +116,30 @@ type
       procedure TuneStop; override;
   end;
 
+  TCWHamLib = class(TCWDevice)
+    private
+      fActive : Boolean;
+      fSpeed  : Word;
+      tcp     : TLTCPComponent;
+    public
+      constructor Create; override;
+      destructor  Destroy; override;
+
+      function GetSpeed  : Word; override;
+      function GetStatus : TKeyStatus; override;
+
+      procedure Open; override;
+      procedure Close; override;
+      procedure SetSpeed(speed : Word); override;
+      procedure SendText(text : String); override;
+      procedure StopSending; override;
+      procedure DelLastChar; override;
+      procedure SetMixManSpeed(min,max : Word); override;
+      procedure TuneStart; override;
+      procedure TuneStop; override;
+  end;
+
+
 implementation
 
 
@@ -634,6 +658,91 @@ begin
   FreeAndNil(ser)
 end;
 
+constructor TCWHamLib.Create;
+begin
+  fActive       := False;
+  fDebugMode    := False;
+  tcp           := TLTCPComponent.Create(nil);
+  fMinSpeed     := 5;
+  fMaxSpeed     := 60
+end;
 
+procedure TCWHamLib.Open;
+begin
+  if fActive then Close();
+
+  if fDebugMode then
+  begin
+    Writeln('address: ',fDevice);
+    Writeln('port:    ',fPort)
+  end;
+  tcp.Host := fDevice;
+  tcp.Port := StrToInt(fPort);
+  fActive  := tcp.Connect(fDevice,StrToInt(fPort));
+
+  fActive := True;
+  SetSpeed(fSpeed)
+end;
+
+procedure TCWHamLib.SetSpeed(speed : Word);
+begin
+  fSpeed := speed;
+  if fActive then
+    tcp.SendMessage('L KEYSPD '+IntToStr(speed))
+end;
+
+function TCWHamLib.GetSpeed  : Word;
+begin
+  Result := fSpeed
+end;
+
+function TCWHamLib.GetStatus : TKeyStatus;
+begin
+  Result := ksBusy //not implemented, yet
+end;
+
+procedure TCWHamLib.DelLastChar;
+begin
+  //not implemented
+end;
+
+procedure TCWHamLib.SetMixManSpeed(min,max : Word);
+begin
+  //not supported
+end;
+
+procedure TCWHamLib.TuneStart;
+begin
+  //not supported
+end;
+
+procedure TCWHamLib.TuneStop;
+begin
+  //not supported
+end;
+
+procedure TCWHamLib.StopSending;
+begin
+  //not implemented
+end;
+
+procedure TCWHamLib.SendText(text : String);
+begin
+  tcp.SendMessage('b '+text)
+end;
+
+procedure TCWHamLib.Close;
+begin
+  if tcp.Connected then
+    tcp.Disconnect;
+  fActive := False
+end;
+
+destructor TCWHamLib.Destroy;
+begin
+  if fActive then
+    Close();
+  FreeAndNil(tcp)
+end;
 
 end.

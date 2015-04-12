@@ -496,6 +496,7 @@ type
     edtBackupPath1: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
+    edtHamLibSpeed: TSpinEdit;
     edtRBNServer : TEdit;
     edtClEmail: TEdit;
     edtHrCode: TEdit;
@@ -698,6 +699,7 @@ type
     GroupBox48: TGroupBox;
     GroupBox49: TGroupBox;
     GroupBox5: TGroupBox;
+    GroupBox50: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
@@ -811,6 +813,9 @@ type
     Label196: TLabel;
     Label197: TLabel;
     Label198: TLabel;
+    Label199: TLabel;
+    Label200: TLabel;
+    Label201: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1514,6 +1519,7 @@ begin
   cqrini.WriteString('CW','K3NGPort',edtK3NGPort.Text);
   cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
   cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
+  cqrini.WriteInteger('CW','HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
 
   cqrini.WriteInteger('fldigi', 'freq', rgFreqFrom.ItemIndex);
   cqrini.WriteString('fldigi', 'deffreq', edtDefaultFreq.Text);
@@ -2893,6 +2899,8 @@ begin
   edtK3NGPort.Text := cqrini.ReadString('CW','K3NGPort','');
   edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
   edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
+  edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30));
+
 
   rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);
   edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');
