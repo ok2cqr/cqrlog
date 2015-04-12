@@ -1124,6 +1124,8 @@ begin
   sbNewQSO.Visible := cqrini.ReadBool('NewQSO','StatBar',True);
   acShowStatBar.Checked := sbNewQSO.Visible;
 
+  InitializeCW;
+
   if dbgrdQSOBefore.Visible then
     mnuQSOBefore.Caption := 'Disable QSO before grid'
   else
@@ -1205,6 +1207,9 @@ begin
   if cqrini.ReadBool('Window','LogUploadStatus', False) then
     acLogUploadStatus.Execute;
 
+  if cqrini.ReadBool('Window','CWType',False) then
+    acCWType.Execute;
+
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
@@ -1225,8 +1230,6 @@ begin
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
-
-  InitializeCW;
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
@@ -1339,6 +1342,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','LogUploadStatus', False);
+
+    if frmCWType.Showing then
+    begin
+      cqrini.WriteBool('Window','CWType',True);
+      frmCWType.Close
+    end
+    else
+      cqrini.WriteBool('Window','CWType',False);
 
     cqrini.DeleteKey('TMPQSO','OFF');
     cqrini.DeleteKey('TMPQSO','FREQ');
@@ -3008,13 +3019,8 @@ procedure TfrmNewQSO.acCWTypeExecute(Sender: TObject);
 begin
   if Assigned(CWint) then
   begin
-    with TfrmCWType.Create(self) do
-    try
-      edtSpeed.Value := CWint.GetSpeed;
-      ShowModal
-    finally
-      Free
-    end
+    frmCWType.edtSpeed.Value:= CWint.GetSpeed;
+    frmCWType.Show
   end
 end;
 

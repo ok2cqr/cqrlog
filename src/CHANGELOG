@@ -6,6 +6,7 @@ Legend:
 
 1.9.1
   + support sending CW via HamLib library added
+  + CW type window is not modal window anymore
   - Export configuration of opened log doesn't reflect recent changes - fixed
 
 1.9.0

@@ -59,11 +59,13 @@ end;
 
 procedure TfrmCWType.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  cqrini.WriteInteger('CW','Mode',rgMode.ItemIndex)
+  cqrini.WriteInteger('CW','Mode',rgMode.ItemIndex);
+  dmUtils.SaveWindowPos(frmCWType)
 end;
 
 procedure TfrmCWType.FormShow(Sender: TObject);
 begin
+  dmUtils.LoadWindowPos(frmCWType);
   rgMode.ItemIndex := cqrini.ReadInteger('CW','Mode',1);
   fraCWKeys1.UpdateFKeyLabels;
   m.SetFocus;
@@ -72,7 +74,7 @@ end;
 
 procedure TfrmCWType.btnCloseClick(Sender: TObject);
 begin
-  ModalResult := mrCancel
+  Close
 end;
 
 procedure TfrmCWType.edtSpeedChange(Sender: TObject);

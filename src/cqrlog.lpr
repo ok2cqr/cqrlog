@@ -53,6 +53,7 @@ begin
   Application.CreateForm(TfrmSCP, frmSCP);
   Application.CreateForm(TfrmRotControl, frmRotControl);
   Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
+  Application.CreateForm(TfrmCWType, frmCWType);
 
   Splash.Update;
   application.ProcessMessages;
