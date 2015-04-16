@@ -688,7 +688,7 @@ procedure TCWHamLib.SetSpeed(speed : Word);
 begin
   fSpeed := speed;
   if fActive then
-    tcp.SendMessage('L KEYSPD '+IntToStr(speed))
+    tcp.SendMessage('L KEYSPD '+IntToStr(speed)+LineEnding)
 end;
 
 function TCWHamLib.GetSpeed  : Word;
@@ -728,7 +728,7 @@ end;
 
 procedure TCWHamLib.SendText(text : String);
 begin
-  tcp.SendMessage('b '+text)
+  tcp.SendMessage('b '+text+LineEnding)
 end;
 
 procedure TCWHamLib.Close;
