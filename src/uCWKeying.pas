@@ -688,7 +688,9 @@ procedure TCWHamLib.SetSpeed(speed : Word);
 begin
   fSpeed := speed;
   if fActive then
-    tcp.SendMessage('L KEYSPD '+IntToStr(speed)+LineEnding)
+    tcp.SendMessage('L KEYSPD '+IntToStr(speed)+LineEnding);
+  if fDebugMode then
+    Writeln('CW speed changed to:',fSpeed)
 end;
 
 function TCWHamLib.GetSpeed  : Word;
@@ -728,7 +730,9 @@ end;
 
 procedure TCWHamLib.SendText(text : String);
 begin
-  tcp.SendMessage('b '+text+LineEnding)
+  tcp.SendMessage('b '+text+LineEnding);
+  if fDebugMode then
+    Writeln('Sending message:',text)
 end;
 
 procedure TCWHamLib.Close;
@@ -742,7 +746,9 @@ destructor TCWHamLib.Destroy;
 begin
   if fActive then
     Close();
-  FreeAndNil(tcp)
+  FreeAndNil(tcp);
+  if fDebugMode then
+    Writeln('Keying over HamLib closed')
 end;
 
 end.
