@@ -121,6 +121,9 @@ type
       fActive : Boolean;
       fSpeed  : Word;
       tcp     : TLTCPComponent;
+      procedure OnReceived(aSocket: TLSocket);
+      procedure OnHamLibConnect(aSocket: TLSocket);
+      procedure OnHamLibError(const msg: AnsiString; aSocket: TLSocket);
     public
       constructor Create; override;
       destructor  Destroy; override;
@@ -661,10 +664,32 @@ end;
 constructor TCWHamLib.Create;
 begin
   fActive       := False;
-  fDebugMode    := False;
+  fDebugMode    := True;
   tcp           := TLTCPComponent.Create(nil);
+  tcp.ReuseAddress:= True;
+  tcp.OnReceive := @OnReceived;
+  tcp.OnConnect := @OnHamLibConnect;
+  tcp.OnError   := @onHamLibError;
   fMinSpeed     := 5;
   fMaxSpeed     := 60
+end;
+
+procedure TCWHamLib.OnHamLibConnect(aSocket: TLSocket);
+begin
+  fActive := True;
+  if DebugMode then
+     Writeln('CWint connected to hamlib');
+
+  tcp.SendMessage('fmv'+LineEnding);
+  SetSpeed(fSpeed)
+end;
+
+procedure TCWHamLib.OnHamLibError(const msg: AnsiString; aSocket: TLSocket);
+begin
+  if DebugMode then
+     Writeln('CWint connect to hamlib FAILED: '+msg);
+
+  fActive := False
 end;
 
 procedure TCWHamLib.Open;
@@ -678,11 +703,18 @@ begin
   end;
   tcp.Host := fDevice;
   tcp.Port := StrToInt(fPort);
-  fActive  := tcp.Connect(fDevice,StrToInt(fPort));
-
-  fActive := True;
-  SetSpeed(fSpeed)
+  tcp.Connect(fDevice,StrToInt(fPort));
 end;
+
+procedure TCWHamLib.OnReceived(aSocket: TLSocket);
+var
+  msg : String;
+begin
+  if aSocket.GetMessage(msg) > 0 then
+    if DebugMode then
+       Writeln('Whole MSG:|',msg,'|');
+end;
+
 
 procedure TCWHamLib.SetSpeed(speed : Word);
 begin
