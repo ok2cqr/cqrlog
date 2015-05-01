@@ -664,7 +664,7 @@ end;
 constructor TCWHamLib.Create;
 begin
   fActive       := False;
-  fDebugMode    := True;
+  fDebugMode    := False;
   tcp           := TLTCPComponent.Create(nil);
   tcp.ReuseAddress:= True;
   tcp.OnReceive := @OnReceived;
