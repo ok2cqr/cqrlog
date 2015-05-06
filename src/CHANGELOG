@@ -8,6 +8,7 @@ Legend:
   + support sending CW via HamLib library added
   + CW type window is not modal window anymore
   - Export configuration of opened log doesn't reflect recent changes - fixed
+  - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
 
 1.9.0
   + configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)

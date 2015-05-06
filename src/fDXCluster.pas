@@ -261,7 +261,7 @@ var
 begin
   //Spots.Add('10368961.9  GB3CCX/B    17-Jan-2009 1905Z  51S IO81XW>IO81JM           <GW3TKH>')
   //Spots.Add('DX de GW3TKH  10368961.9  GB3CCX/B                                    1905Z     ');
-  Spots.Add('DX de WT4Y:      14207.0  HI3CCP/MM        UP 1                        1905Z EL88');
+  Spots.Add('DX de WT4Y:      14207.0  UA1CCP        UP 1                        1905Z EL88');
   if not Running then
   begin
     Writeln('aa');
@@ -999,17 +999,6 @@ begin
     ToBandMap := False
   end;
 
-  if ToBandMap and frmBandMap.Showing then
-  begin
-    dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
-
-    if cfgUseDXCColors then
-      frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,sColor,ThBckColor, False, isLoTW, isEQSL)
-    else
-      frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,
-                              cfgClusterColor,ThBckColor, False, isLoTW, isEQSL)
-  end;
-
   if index > 0 then
   begin
     seznam := TStringList.Create;
@@ -1024,12 +1013,25 @@ begin
          Result:= False;
          if dmData.DebugLevel >=1 then
             Writeln('Cannot show this sport because of prefix  ...');
-         Break;
-         exit
+         Break
         end
       end
     finally
       seznam.Free
+    end
+  end;
+
+  if Result then
+  begin
+    if ToBandMap and frmBandMap.Showing then
+    begin
+      dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
+
+      if cfgUseDXCColors then
+        frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,sColor,ThBckColor, False, isLoTW, isEQSL)
+      else
+        frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,
+                                cfgClusterColor,ThBckColor, False, isLoTW, isEQSL)
     end
   end;
 
