@@ -198,22 +198,22 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +#7'akRight'#0#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4'Help'#7'OnCli'
   +'ck'#7#12'btnHelpClick'#8'TabOrder'#2#1#0#0#7'TButton'#7'Button2'#4'Left'#3
   +'o'#1#6'Height'#2#25#3'Top'#2#8#5'Width'#2'K'#7'Caption'#6#7'Button2'#7'OnCl'
-  +'ick'#7#12'Button2Click'#8'TabOrder'#2#2#0#0#0#6'TPanel'#6'Panel2'#4'Left'#2
-  +#0#6'Height'#2#30#3'Top'#2#0#5'Width'#3'0'#2#5'Align'#7#5'alTop'#10'BevelOut'
-  +'er'#7#6'bvNone'#12'ClientHeight'#2#30#11'ClientWidth'#3'0'#2#8'TabOrder'#2#1
-  +#0#5'TEdit'#13'edtTelAddress'#4'Left'#2#8#6'Height'#2#27#3'Top'#2#1#5'Width'
-  +#3#189#0#8'TabOrder'#2#0#0#0#7'TButton'#9'btnSelect'#4'Left'#3#206#0#6'Heigh'
-  +'t'#2#25#3'Top'#2#1#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Captio'
-  +'n'#6#6'Select'#7'OnClick'#7#14'btnSelectClick'#8'TabOrder'#2#1#0#0#7'TButto'
-  +'n'#13'btnTelConnect'#4'Left'#3' '#1#6'Height'#2#25#3'Top'#2#1#5'Width'#2'W'
-  +#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#7'Connect'#7'OnClick'#7#18'b'
-  +'tnTelConnectClick'#8'TabOrder'#2#2#0#0#7'TButton'#8'btnFont1'#4'Left'#3#146
-  +#1#6'Height'#2#25#3'Top'#2#1#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4
-  +#7'Caption'#6#4'Font'#7'OnClick'#7#12'btnFontClick'#8'TabOrder'#2#3#0#0#0#6
-  +'TPanel'#9'pnlTelnet'#4'Left'#2#0#6'Height'#2'|'#3'Top'#2#30#5'Width'#3'0'#2
-  +#5'Align'#7#8'alClient'#10'BevelOuter'#7#6'bvNone'#5'Color'#7#7'clWhite'#11
-  +'ParentColor'#8#8'TabOrder'#2#2#0#0#0#0#6'TTimer'#8'tmrSpots'#7'Enabled'#8#8
-  +'Interval'#3' N'#7'OnTimer'#7#13'tmrSpotsTimer'#4'left'#2'X'#3'top'#2'z'#0#0
-  +#11'TFontDialog'#8'dlgDXfnt'#11'MinFontSize'#2#0#11'MaxFontSize'#2#0#4'left'
-  +#3#136#0#3'top'#2'z'#0#0#0
+  +'ick'#7#12'Button2Click'#8'TabOrder'#2#2#7'Visible'#8#0#0#0#6'TPanel'#6'Pane'
+  +'l2'#4'Left'#2#0#6'Height'#2#30#3'Top'#2#0#5'Width'#3'0'#2#5'Align'#7#5'alTo'
+  +'p'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2#30#11'ClientWidth'#3'0'#2#8
+  +'TabOrder'#2#1#0#5'TEdit'#13'edtTelAddress'#4'Left'#2#8#6'Height'#2#27#3'Top'
+  +#2#1#5'Width'#3#189#0#8'TabOrder'#2#0#0#0#7'TButton'#9'btnSelect'#4'Left'#3
+  +#206#0#6'Height'#2#25#3'Top'#2#1#5'Width'#2'K'#25'BorderSpacing.InnerBorder'
+  +#2#4#7'Caption'#6#6'Select'#7'OnClick'#7#14'btnSelectClick'#8'TabOrder'#2#1#0
+  +#0#7'TButton'#13'btnTelConnect'#4'Left'#3' '#1#6'Height'#2#25#3'Top'#2#1#5'W'
+  +'idth'#2'W'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#7'Connect'#7'OnCl'
+  +'ick'#7#18'btnTelConnectClick'#8'TabOrder'#2#2#0#0#7'TButton'#8'btnFont1'#4
+  +'Left'#3#146#1#6'Height'#2#25#3'Top'#2#1#5'Width'#2'K'#25'BorderSpacing.Inne'
+  +'rBorder'#2#4#7'Caption'#6#4'Font'#7'OnClick'#7#12'btnFontClick'#8'TabOrder'
+  +#2#3#0#0#0#6'TPanel'#9'pnlTelnet'#4'Left'#2#0#6'Height'#2'|'#3'Top'#2#30#5'W'
+  +'idth'#3'0'#2#5'Align'#7#8'alClient'#10'BevelOuter'#7#6'bvNone'#5'Color'#7#7
+  +'clWhite'#11'ParentColor'#8#8'TabOrder'#2#2#0#0#0#0#6'TTimer'#8'tmrSpots'#7
+  +'Enabled'#8#8'Interval'#3' N'#7'OnTimer'#7#13'tmrSpotsTimer'#4'left'#2'X'#3
+  +'top'#2'z'#0#0#11'TFontDialog'#8'dlgDXfnt'#11'MinFontSize'#2#0#11'MaxFontSiz'
+  +'e'#2#0#4'left'#3#136#0#3'top'#2'z'#0#0#0
 ]);

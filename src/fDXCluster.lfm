@@ -263,6 +263,7 @@ object frmDXCluster: TfrmDXCluster
           Caption = 'Button2'
           OnClick = Button2Click
           TabOrder = 2
+          Visible = False
         end
       end
       object Panel2: TPanel
