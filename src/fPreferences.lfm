@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabCWInterface
+    ActivePage = tabDXCluster
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 19
+    TabIndex = 10
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -1214,7 +1214,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox3: TGroupBox
             Left = 14
@@ -1556,7 +1556,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object edtRadio2: TEdit
             Left = 146
@@ -1938,7 +1938,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2271,7 +2271,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
@@ -3750,8 +3750,8 @@ object frmPreferences: TfrmPreferences
           Left = 6
           Height = 17
           Top = 154
-          Width = 372
-          Caption = 'Do not show spots for this countries (use ; as dellimiter)'
+          Width = 410
+          Caption = 'Do not show spots for following countries (use ; as dellimiter)'
           ParentColor = False
         end
         object chkShow2190M: TCheckBox
@@ -5687,6 +5687,7 @@ object frmPreferences: TfrmPreferences
         Top = 17
         Width = 214
         ItemHeight = 0
+        ItemIndex = 0
         Items.Strings = (
           'None'
           'WinKeyer USB'
