@@ -1,0 +1,33 @@
+object frmMonWsjtx: TfrmMonWsjtx
+  Left = 500
+  Height = 287
+  Top = 177
+  Width = 444
+  Caption = 'Wsjt-x CQ-monitor'
+  ClientHeight = 287
+  ClientWidth = 444
+  OnClose = FormClose
+  LCLVersion = '1.2.6.0'
+  object WsjtxMemo: TMemo
+    Left = 8
+    Height = 250
+    Top = 32
+    Width = 432
+    OnChange = WsjtxMemoChange
+    TabOrder = 0
+  end
+  object lblBand: TLabel
+    Left = 48
+    Height = 1
+    Top = 8
+    Width = 1
+    ParentColor = False
+  end
+  object lblMode: TLabel
+    Left = 360
+    Height = 1
+    Top = 8
+    Width = 1
+    ParentColor = False
+  end
+end

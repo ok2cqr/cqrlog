@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
-  uCWKeying, ipc, baseunix, dLogUpload;
+  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils ;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
@@ -62,6 +62,9 @@ type
     acLogUploadStatus: TAction;
     acHotkeys: TAction;
     acRefreshTime: TAction;
+    acRemoteModeWsjtx: TAction;
+    acMonitorWsjtx: TAction;
+    acWorked_grids: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -91,6 +94,9 @@ type
     MenuItem88: TMenuItem;
     MenuItem89: TMenuItem;
     MenuItem90: TMenuItem;
+    mnuWorked_grids: TMenuItem;
+    mnuMoniWsjtx: TMenuItem;
+    mnuRemoteModeWsjtx: TMenuItem;
     mnuOnlineLog: TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
@@ -292,6 +298,7 @@ type
     sbtnLoTW: TSpeedButton;
     sbtnHamQTH : TSpeedButton;
     sbtnRefreshTime: TSpeedButton;
+    tmrWsjtx: TTimer;
     tmrUploadAll: TTimer;
     tmrFldigi: TTimer;
     tmrESC: TTimer;
@@ -303,12 +310,14 @@ type
     procedure acCWFKeyExecute(Sender: TObject);
     procedure acHotkeysExecute(Sender: TObject);
     procedure acLogUploadStatusExecute(Sender: TObject);
+    procedure acMonitorWsjtxExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
     procedure acRefreshTimeExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
     procedure acReloadCWExecute(Sender: TObject);
+    procedure acRemoteModeWsjtxExecute(Sender: TObject);
     procedure acRotControlExecute(Sender: TObject);
     procedure acSCPExecute(Sender : TObject);
     procedure acSendSpotExecute(Sender : TObject);
@@ -318,6 +327,7 @@ type
     procedure acUploadToClubLogExecute(Sender: TObject);
     procedure acUploadToHamQTHExecute(Sender: TObject);
     procedure acUploadToHrdLogExecute(Sender: TObject);
+    procedure acWorked_gridsExecute(Sender: TObject);
     procedure chkAutoModeChange(Sender: TObject);
     procedure cmbFreqExit(Sender: TObject);
     procedure cmbIOTAEnter(Sender: TObject);
@@ -475,6 +485,7 @@ type
     procedure tmrStartStartTimer(Sender: TObject);
     procedure tmrStartTimer(Sender: TObject);
     procedure tmrUploadAllTimer(Sender: TObject);
+    procedure tmrWsjtxTimer(Sender: TObject);
   private
     fEditQSO : Boolean;
     fViewQSO : Boolean;
@@ -540,6 +551,10 @@ type
     procedure FillDateTimeFields;
 
     function CheckFreq(freq : String) : String;
+
+    procedure DisWsjtxRemote;        //shut down wsjtx-mode
+    procedure DisFldigiRemote;       //shut down fldigi-mode
+
   public
     QTHfromCb   : Boolean;
     FromDXC     : Boolean;
@@ -549,6 +564,10 @@ type
 
     ClearAfterFreqChange : Boolean;
     ChangeFreqLimit : Double;
+
+    Wsjtxsock:TUDPBlockSocket;
+    WsjtxMode,
+    WsjtxBand : String;
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -626,7 +645,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1084,7 +1103,7 @@ begin
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
   frmGrayline.Refresh;
-  if not mnuRemoteMode.Checked then
+  if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked) then
     edtCall.SetFocus;
   if not (fEditQSO or fViewQSO or cbOffline.Checked) then
     tmrStart.Enabled := True;
@@ -1123,8 +1142,6 @@ begin
   dbgrdQSOBefore.Visible := cqrini.ReadBool('NewQSO','ShowGrd',True);
   sbNewQSO.Visible := cqrini.ReadBool('NewQSO','StatBar',True);
   acShowStatBar.Checked := sbNewQSO.Visible;
-
-  InitializeCW;
 
   if dbgrdQSOBefore.Visible then
     mnuQSOBefore.Caption := 'Disable QSO before grid'
@@ -1207,9 +1224,6 @@ begin
   if cqrini.ReadBool('Window','LogUploadStatus', False) then
     acLogUploadStatus.Execute;
 
-  if cqrini.ReadBool('Window','CWType',False) then
-    acCWType.Execute;
-
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
@@ -1230,6 +1244,8 @@ begin
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
+
+  InitializeCW;
 
   ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
@@ -1342,14 +1358,6 @@ begin
     end
     else
       cqrini.WriteBool('Window','LogUploadStatus', False);
-
-    if frmCWType.Showing then
-    begin
-      cqrini.WriteBool('Window','CWType',True);
-      frmCWType.Close
-    end
-    else
-      cqrini.WriteBool('Window','CWType',False);
 
     cqrini.DeleteKey('TMPQSO','OFF');
     cqrini.DeleteKey('TMPQSO','FREQ');
@@ -1759,7 +1767,7 @@ begin
   try
     if (not (fViewQSO or fEditQSO)) then
     begin
-      if (cbOffline.Checked and (not mnuRemoteMode.Checked)) then
+      if (cbOffline.Checked and (not mnuRemoteMode.Checked)and (not mnuRemoteModeWsjtx.Checked)) then
         exit;
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
@@ -1845,6 +1853,464 @@ begin
   end
 end;
 
+procedure TfrmNewQSO.tmrWsjtxTimer(Sender: TObject);
+var
+  Buf,
+  Fdes,
+  ParStr,
+  TimeLine: String;
+  ParNum,
+  MsgType,
+  Min,
+  Hour    : integer;
+  Dtim    : TDateTime;
+  new     : Boolean;
+
+//var copied from tmrfldigi
+ call : String;
+ time1 : String;
+ time2 : String;
+ sname : String;
+ qth   : String;
+ loc   : String;
+ mhz   : String;
+ mode  : String;
+ pwr   : String;
+ rstS  : String;
+ rstR  : String;
+ state : String;
+ note  : String;
+ date  : TDateTime;
+ sDate : String='';
+ Mask  : String='';
+
+// data conversion functions. Not so clever....but working.
+// take one string or number at time and cut received buffer for that amount of bytes.
+
+function UiFBuf:uint32;                 //Quint32
+   begin
+     UiFBuf := $01000000*ord(Buf[1]) + $00010000*ord(Buf[2]) +  $00000100*ord(Buf[3]) +ord(Buf[4]);  // 32-bit unsigned int BigEndian
+     Buf := copy (Buf,5,length(Buf)-4); //remainder of buffer
+   end;
+
+function StFBuf:String;                 //Qstring
+  var
+    P : uint32;
+  begin
+    P := UiFBuf;                        //string length;
+    StFBuf := copy(Buf,1,P);            //string value
+    Buf := copy (Buf,P+1,length(Buf)-P);//remainder of buffer
+  end;
+
+function DUiFBuf:uint64;                //Quint64
+ var
+    lo,hi    :uint32;
+ begin
+    hi :=  UiFBuf;
+    lo :=  UiFBuf;
+    DuiFBuf := $100000000 * hi + lo;
+ end;
+
+function DiFBuf:int64;                  //Qint64
+  begin
+     DiFBuf := DUiFBuf;
+  end;
+
+function IFBuf:int32;                   //Qint32
+  begin
+    IFBuf := UiFBuf;
+  end;
+
+function BFBuf:uint8;                   //Quint8
+  begin
+    BFBuf := ord(Buf[1]);
+    Buf := copy (Buf,2,length(Buf)-1);
+  end;
+
+begin
+     tmrWsjtx.Enabled := False;  //a round should not take 1000ms, but for sure to prevent double calls.
+     //check what we have and process type 5 message (qso logged) if rcvd
+     //we do not use Id to identify sender all type 5 are logged
+      Buf := Wsjtxsock.RecvPacket(200);
+      if Wsjtxsock.lasterror=0 then
+        begin
+          ParNum := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
+          if dmData.DebugLevel>=1 then Write('Header position:',ParNum);
+          Buf := copy (Buf,ParNum+4,length(Buf)-4);  // strip QT header
+
+          ParNum :=  UiFBuf;
+          if dmData.DebugLevel>=1 then Write(' Schema number:',ParNum);
+
+          MsgType :=  UiFBuf;
+          if dmData.DebugLevel>=1 then Write(' Message type:', MsgType,' ');
+          lblCall.Caption       := 'Wsjt-x remote #'+intToStr(MsgType);   //changed to see last received msgtype
+          case MsgType of
+
+          0    :       Begin  //Heartbeat in(coming frm wsjtx)
+                         ParStr := StFBuf;
+                         if dmData.DebugLevel>=1 then Writeln('HeartBeat Id:', ParStr);
+                         if lblCall.Font.Color = clRed then
+                             lblCall.Font.Color    := clFuchsia
+                             else
+                               lblCall.Font.Color    := clRed;
+                       end;
+
+          1    :       Begin  //Status in
+                         new := false;
+                         ParStr := StFBuf;
+                         if dmData.DebugLevel>=1 then Writeln('Status Id:', ParStr);
+                         //----------------------------------------------------
+                         ParNum := DUiFBuf;
+                         if dmData.DebugLevel>=1 then Writeln('Freq Hz:', ParNUm);
+                         ParNum := ParNum div 1000000;
+                         if dmData.DebugLevel>=1 then Writeln('Freq MHz:', ParNum);
+                         case ParNum of
+                         1   : ParStr := '160M';
+                         3   : ParStr := '80M';
+                         5   : ParStr := '60M';
+                         7   : ParStr := '40M';
+                         10  : ParStr := '30M';
+                         14  : ParStr := '20M';
+                         18  : ParStr := '17M';
+                         21  : ParStr := '15M';
+                         24  : ParStr := '12M';
+                         28  : ParStr := '10M';
+                         29  : ParStr := '10M';
+                         50  : ParStr := '6M';
+                         51  : ParStr := '6M';
+                         70  : ParStr := '4M';
+                         144 : ParStr := '2M';
+                         145 : ParStr := '2M';
+                         else
+                             ParStr := '';
+                         end;
+                         if ParStr<>WsjtxBand then
+                           Begin
+                             new :=true;
+                             WsjtxBand := ParStr;
+                           end;
+                         if dmData.DebugLevel>=1 then Writeln('Band :', WsjtxBand);
+                         //----------------------------------------------------
+                         ParStr := StFBuf;
+                         if ParStr<>WsjtxMode then
+                           Begin
+                             new :=true;
+                             WsjtxMode := ParStr;
+                           end;
+                         if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode);
+                         //----------------------------------------------------
+                         //Flush rest. Not needed:
+                         // DX call                utf8
+                         // Report                 utf8
+                         // Tx Mode                utf8
+
+                         if new then
+                           frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode);
+                       end;
+
+
+          2    :       Begin  //Decode in
+                         ParStr := StFBuf;
+                         if dmData.DebugLevel>=1 then Writeln('Decode Id:', ParStr);
+                         new:= ord(Buf[1]) = 1;
+                         if new then
+                             Begin
+                               if dmData.DebugLevel>=1 then Writeln('New');
+                             end
+                           else
+                             Begin
+                              if dmData.DebugLevel>=1 then Writeln('Old');
+                             end;
+                         Buf := copy (Buf,2,length(Buf)-1); // strip New
+                         //----------------------------------------------------
+                         ParNum := UiFBuf;
+                         Min := ParNum div 60000;  //minutes from 00:00    UTC
+                         Hour := Min div 60;
+                         Min := Min - Hour * 60;
+                         TimeLine :='';
+                         If length(intToStr(Hour)) = 1 then
+                            TimeLine := TimeLine + '0'+ intToStr(Hour) +':'
+                           else
+                            TimeLine :=TimeLine + intToStr(Hour) +':';
+                         If length(intToStr(Min)) = 1 then
+                            TimeLine := TimeLine + '0' + intToStr(Min) +' '
+                           else
+                            TimeLine := TimeLine + intToStr(Min);
+                         if dmData.DebugLevel>=1 then Writeln(TimeLine);
+                         //----------------------------------------------------
+                         ParNum :=  IFBuf;
+                         if dmData.DebugLevel>=1 then Writeln('snr:',ParNum );
+                         //----------------------------------------------------
+                         ParNum := DUiFBuf; //this is actually Double(float) but we do not use it for anything.
+                         if dmData.DebugLevel>=1 then Writeln('delta time:',ParNum);
+                         //----------------------------------------------------
+                         ParNum :=  UiFBuf;
+                         if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
+                         //----------------------------------------------------
+                         mode := StFBuf;    //mode as letter: # @
+                         if dmData.DebugLevel>=1 then Writeln(mode);
+                         //----------------------------------------------------
+                         ParStr := StFBuf;    //message
+                         if dmData.DebugLevel>=1 then Writeln(ParStr);
+
+                         if new
+                          and (WsjtxBand <>'')
+                            and (WsjtxMode <>'')
+                             and (UpperCase(copy(ParStr,1,3))='CQ ')
+                              and (mnuMoniWsjtx.Visible) then
+                                  frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand);
+                         //----------------------------------------------------
+                       end;
+
+          3    :       Begin  //Clear in
+                        ParStr := StFBuf;
+                        if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
+                       end;
+
+          4    :       Begin  //Reply (outgoing)
+                       end;
+
+          5    :       Begin  //QSO logged in
+                        ParStr := StFBuf;
+                        if dmData.DebugLevel>=1 then Writeln('Qso Logged Id:', ParStr);
+                        //----------------------------------------------------
+                        ClearAll;
+                        cbOffline.Checked := True;
+                        call := '';
+                        time1 := '';
+                        time2 := '';
+                        sname := '';
+                        qth   := '';
+                        loc   := '';
+                        mhz   := '';
+                        mode  := '';
+                        rstS  := '';
+                        rstR  := '';
+                        state := '';
+                        note  := '';
+                        pwr   := '';
+
+                        date := dmUtils.GetDateTime(0);
+                        edtDate.Clear;
+                        dmUtils.DateInRightFormat(date,Mask,sDate);
+                        edtDate.Text:=sDate;
+
+                        //----------------------------------------------------
+                        if TryJulianDateToDateTime(DiFBuf,DTim)  then  //date (not used in cqrlog)
+                           if dmData.DebugLevel>=1 then Writeln('Date :',FormatDateTime('YYYY-MM-DD',DTim));
+                        //----------------------------------------------------
+                        ParNum := UiFBuf;          //time
+                         Min := ParNum div 60000;  //minutes from 00:00    UTC
+                         Hour := Min div 60;
+                         Min := Min - Hour * 60;
+                         TimeLine :='';
+                         If length(intToStr(Hour)) = 1 then
+                            TimeLine := TimeLine + '0'+ intToStr(Hour) +':'
+                           else
+                            TimeLine :=TimeLine + intToStr(Hour) +':';
+                         If length(intToStr(Min)) = 1 then
+                            TimeLine := TimeLine + '0' + intToStr(Min)
+                           else
+                            TimeLine := TimeLine + intToStr(Min);
+                         if dmData.DebugLevel>=1 then Writeln('Time: ',TimeLine);
+                         edtStartTime.Text := TimeLine;
+                         edtEndTime.Text := TimeLine;
+                         //----------------------------------------------------
+                         ParNum := BFBuf;  //timespec local/utc   (not used in cqrlog)
+                         if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
+                         //----------------------------------------------------
+                         if ParNum = 2 then  // time offset  (not used in cqrlog)
+                            Begin
+                             ParNum := IFBuf;
+                             if dmData.DebugLevel>=1 then Writeln('offset :', IFBuf);
+                            end;
+                        //----------------------------------------------------
+                        call:= trim(StFBuf); //to be sure...
+                        if dmData.DebugLevel>=1 then Writeln('Call :', call);
+                        edtCall.Text := call;
+                        edtCallExit(nil);
+                        //----------------------------------------------------
+                        loc:= trim(StFBuf);
+                        if dmData.DebugLevel>=1 then Writeln('Grid :', loc);
+                        if dmUtils.IsLocOK(loc) then
+                                                edtGrid.Text := loc;
+
+                        //----------------------------------------------------
+                        case cqrini.ReadInteger('fldigi','freq',0) of
+                         0 : begin
+                                 if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
+                                                        cmbFreq.Text := mhz
+                            end;
+
+                         1 : begin
+                                 mhz := IntToStr(DUiFBuf);   // in Hz here from wsjtx
+                                 Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
+                                 mhz := copy(mhz,1,length(mhz)-6); //integer part here
+                                 mhz := mhz+'.'+Fdes;
+                                 if dmData.DebugLevel>=1 then Writeln('Qrg :', mhz);
+                                 mhz := Trim(mhz);
+                                 if dmUtils.GetBandFromFreq(mhz) <> '' then
+                                                        cmbFreq.Text := mhz;
+
+                             end;
+
+                         2 : cmbFreq.Text := cqrini.ReadString('fldigi','deffreq','3.600')
+                        end;
+                        //----------------------------------------------------
+                        case cqrini.ReadInteger('fldigi','mode',1) of
+                         0 : begin
+                                if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
+                                                        cmbMode.Text := mode
+                             end;
+                         1 : begin
+                                mode:= trim(StFBuf);
+                                if dmData.DebugLevel>=1 then Writeln('Mode :', mode);
+                                cmbMode.Text := mode;
+                             end;
+                         2 : cmbMode.Text := cqrini.ReadString('fldigi','defmode','RTTY')
+                         end;
+                        //----------------------------------------------------
+                        rstS:= trim(StFBuf);
+                        if dmData.DebugLevel>=1 then Writeln('RSTs :', rstS);
+                        edtHisRST.Text := rstS;
+                        //----------------------------------------------------
+                        rstR:= trim(StFBuf);
+                        if dmData.DebugLevel>=1 then Writeln('RSTr :', rstR);
+                        edtMyRST.Text := rstR;
+                        //----------------------------------------------------
+                        pwr:= trim(StFBuf);
+                        if dmData.DebugLevel>=1 then Writeln('Pwr :', pwr);
+                        edtPWR.Text := pwr;
+                        //----------------------------------------------------
+                        note:= trim(StFBuf);
+                        if dmData.DebugLevel>=1 then Writeln('Comments :', note);
+                        edtRemQSO.Text := note;
+                        //--------------------------------------------------
+                        sname:= trim(StFBuf);
+                        if dmData.DebugLevel>=1 then Writeln('Name :', sname);
+                        edtName.Text := sname;
+                        edtNameExit(nil);
+                        //----------------------------------------------------
+                        btnSave.Click;
+                       end;
+
+          6    :       Begin  //Close in
+                        ParStr := StFBuf;
+                        if dmData.DebugLevel>=1 then Writeln('Close Id:', ParStr);
+                        //wsjtx closed maybe need to disable remote mode  ?
+                        DisWsjtxRemote;
+                       end;
+
+          7    :       Begin  //Replay (outgoing)
+                       end;
+
+          end;
+        end;
+          {
+          /*
+           * WSJT-X Message Formats
+           * ======================
+           *
+           * All messages are written or  read using the QDataStream derivatives
+           * defined below, note that we are using the default for floating
+           * point precision which means all are double precision i.e. 64-bit
+           * IEEE format.
+           *
+           *  Message is big endian format
+           *
+           *   Header format:
+           *
+           *      32-bit unsigned integer magic number 0xadbccbda
+           *      32-bit unsigned integer schema number
+           *
+           *   Payload format:
+           *
+           *      As per  the QDataStream format,  see below for version  used and
+           *      here:
+           *
+           *        http://doc.qt.io/qt-5/datastreamformat.html
+           *
+           *      for the serialization details for each type, at the time of
+           *      writing the above document is for Qt_5_0 format which is buggy
+           *      so we use Qt_5_2 format, differences are:
+           *
+           *      QDateTime:
+           *           QDate      qint64    Julian day number
+           *           QTime      quint32   Milli-seconds since midnight
+           *           timespec   quint8    0=local, 1=UTC, 2=Offset from UTC
+           *                                                 (seconds)
+           *                                3=time zone
+           *           offset     qint32    only present if timespec=2
+           *           timezone   several-fields only present if timespec=3
+           *
+           *      we will avoid using QDateTime fields with time zones for simplicity.
+           *
+           * Type utf8  is a  utf-8 byte  string formatted  as a  QByteArray for
+           * serialization purposes  (currently a quint32 size  followed by size
+           * bytes, no terminator is present or counted).
+           *
+           * Schema Version 1:
+           * -----------------
+           *
+           * Message       Direction Value                  Type
+           * ------------- --------- ---------------------- -----------
+           * Heartbeat     Out       0                      quint32
+           *                         Id (unique key)        utf8
+           *
+           * Status        Out       1                      quint32
+           *                         Id (unique key)        utf8
+           *                         Dial Frequency (Hz)    quint64
+           *                         Mode                   utf8
+           *                         DX call                utf8
+           *                         Report                 utf8
+           *                         Tx Mode                utf8
+           *
+           * Decode        Out       2                      quint32
+           *                         Id (unique key)        utf8
+           *                         New                    bool
+           *                         Time                   QTime
+           *                         snr                    qint32
+           *                         Delta time (S)         float (serialized as double)
+           *                         Delta frequency (Hz)   quint32
+           *                         Mode                   utf8
+           *                         Message                utf8
+           *
+           * Clear         Out       3                      quint32
+           *                         Id (unique key)        utf8
+           *
+           * Reply         In        4                      quint32
+           *                         Id (target unique key) utf8
+           *                         Time                   QTime
+           *                         snr                    qint32
+           *                         Delta time (S)         float
+           *                         Delta frequency (Hz)   quint32
+           *                         Mode                   utf8
+           *                         Message                utf8
+           *
+           * QSO Logged    Out       5                      quint32
+           *                         Id (unique key)        utf8
+           *                         Date & Time            QDateTime
+           *                         DX call                utf8
+           *                         DX grid                utf8
+           *                         Dial frequency (Hz)    quint64
+           *                         Mode                   utf8
+           *                         Report send            utf8
+           *                         Report received        utf8
+           *                         Tx power               utf8
+           *                         Comments               utf8
+           *                         Name                   utf8
+           *
+           * Close         Out       6                      quint32
+           *                         Id (unique key)        utf8
+           *
+           * Replay        In        7                      quint32
+           *                         Id (unique key)        utf8
+           */
+           }
+  tmrWsjtx.Enabled := True;
+end;
+
+
 procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
   CWint := nil;
@@ -1894,14 +2360,14 @@ begin
 
   if not dmUtils.IsTimeOK(edtStartTime.Text) then
   begin
-    Application.MessageBox('You must enter correct time!', 'Error', mb_ok + mb_IconError);
+    Application.MessageBox('You must enter correct start time!', 'Error', mb_ok + mb_IconError);
     edtStartTime.SetFocus;
     exit
   end;
 
   if not dmUtils.IsTimeOK(edtEndTime.Text) then
   begin
-    Application.MessageBox('You must enter correct time!', 'Error', mb_ok + mb_IconError);
+    Application.MessageBox('You must enter correct end time!', 'Error', mb_ok + mb_IconError);
     edtEndTime.SetFocus;
     exit
   end;
@@ -1983,7 +2449,7 @@ begin
     end
   end
   else begin
-    if not mnuRemoteMode.Checked then
+    if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked) then
       if edtCall.Focused then
       begin
         edtCallExit(nil)
@@ -1991,7 +2457,7 @@ begin
 
     date := StrToDate(edtDate.Text);
     {
-    if (not cbOffline.Checked) or (mnuRemoteMode.Checked) then
+    if (not cbOffline.Checked) or (mnuRemoteMode.Checked) then   //if used remember to add mnuRemoteModeWsjtx.Checked
     begin
       stmp    := edtStartTime.Text;
       stmp[3] := char('');
@@ -2059,7 +2525,7 @@ begin
   begin
     dmData.RefreshMainDatabase(id)
   end;
-  if not mnuRemoteMode.Checked then
+  if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
     UnsetEditLabel;
   dmData.qQSOBefore.Close;
   fEditQSO := False;
@@ -2081,7 +2547,7 @@ begin
     frmMain.dbgrdMain.SetFocus
   end
   else
-    if not mnuRemoteMode.Checked then
+    if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
      edtCall.SetFocus;
   UploadAllQSOOnline
 end;
@@ -2861,7 +3327,7 @@ end;
 
 procedure TfrmNewQSO.acEditQSOExecute(Sender: TObject);
 begin
-  if (dmData.qQSOBefore.RecordCount > 0) and (not mnuRemoteMode.Checked) then
+  if (dmData.qQSOBefore.RecordCount > 0) and (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
   begin
     Caption := dmUtils.GetNewQSOCaption('Edit QSO');
     EditQSO := True;
@@ -2946,6 +3412,17 @@ begin
     Free
   end
 end;
+Procedure TfrmNewQSO.DisFldigiRemote;
+Begin
+    tmrFldigi.Enabled     := False;
+    mnuRemoteMode.Checked := False;
+    lblCall.Caption       := 'Call:';
+    lblCall.Font.Color    := clDefault;
+    edtCall.Enabled       := True;
+    cbOffline.Checked     := False;
+    edtCall.SetFocus;
+    if dmData.DebugLevel>=1 then Writeln('Disabled remote fldigi');
+end;
 
 procedure TfrmNewQSO.acRemoteModeExecute(Sender: TObject);
 var
@@ -2954,22 +3431,19 @@ var
 begin
   if mnuRemoteMode.Checked then
   begin
-    tmrFldigi.Enabled     := False;
-    mnuRemoteMode.Checked := False;
-    lblCall.Caption       := 'Call:';
-    lblCall.Font.Color    := clDefault;
-    edtCall.Enabled       := True;
-    cbOffline.Checked     := False;
-    edtCall.SetFocus
+    DisFldigiRemote;   //moved to private procedure so that wsjtx can call it too
   end
-  else begin
+  else
+  begin
+    if mnuRemoteModeWsjtx.Checked then DisWsjtxRemote; //Shut down wsjtx-mode if active
+
     tmrFldigi.Interval := cqrini.ReadInteger('fldigi','interval',2)*1000;
     run                := cqrini.ReadBool('fldigi','run',False);
     path               := cqrini.ReadString('fldigi','path','');
 
     ClearAll;
     mnuRemoteMode.Checked := True;
-    lblCall.Caption       := 'Remote mode!';
+    lblCall.Caption       := 'Fldigi remote';        //changed to see if wsjtx or fldigi is remote
     lblCall.Font.Color    := clRed;
     edtCall.Enabled       := False;
     tmrFldigi.Enabled     := True;
@@ -3019,8 +3493,13 @@ procedure TfrmNewQSO.acCWTypeExecute(Sender: TObject);
 begin
   if Assigned(CWint) then
   begin
-    frmCWType.edtSpeed.Value:= CWint.GetSpeed;
-    frmCWType.Show
+    with TfrmCWType.Create(self) do
+    try
+      edtSpeed.Value := CWint.GetSpeed;
+      ShowModal
+    finally
+      Free
+    end
   end
 end;
 
@@ -3121,6 +3600,77 @@ begin
   InitializeCW
 end;
 
+procedure TfrmNewQSO.DisWsjtxRemote;
+Begin
+  tmrWsjtx.Enabled     := False;
+  Wsjtxsock.CloseSocket;
+  mnuRemoteModeWsjtx.Checked := False;
+  mnuMoniWsjtx.Visible       := False;
+  frmMonWsjtx.hide;
+  lblCall.Caption       := 'Call:';
+  lblCall.Font.Color    := clDefault;
+  edtCall.Enabled       := True;
+  cbOffline.Checked     := False;
+  edtCall.SetFocus;
+  if dmData.DebugLevel>=1 then Writeln('Disabled remote wsjtx');
+end;
+
+procedure TfrmNewQSO.acRemoteModeWsjtxExecute(Sender: TObject);
+var
+run    : Boolean = False;
+path   : String = '';
+
+begin
+if mnuRemoteModeWsjtx.Checked then
+ begin
+  DisWsjtxRemote;
+ end
+else
+ begin
+  if mnuRemoteMode.Checked then DisFldigiRemote;  //Shut down fldigi-mode if active
+  {
+  This needs setup modification.Now we look at fldigi's setup and do the same for wsjtx
+  Run path is just 'wsjtx' as it can be found via defaut path
+   }
+  tmrWsjtx.Interval := 100;//Timer fetches only 1 UDP packet at time. This is too seldom: cqrini.ReadInteger('fldigi','interval',2)*1000;
+  run                := cqrini.ReadBool('fldigi','run',False);
+  path               := '/usr/bin/wsjtx'; //cqrini.ReadString('fldigi','path','');
+
+  if dmData.DebugLevel>=1 then Writeln('Enable remote wsjtx');
+
+  ClearAll;
+  mnuRemoteModeWsjtx.Checked := True;
+  mnuMoniWsjtx.Visible       := True;
+  lblCall.Caption       := 'Wsjtx remote';   //changed to see if wsjtx or fldigi is remote
+  lblCall.Font.Color    := clRed;
+  edtCall.Enabled       := False;
+  tmrWsjtx.Enabled     := True;
+  cbOffline.Checked     := True;
+  if run and FileExists(path) then
+    dmUtils.RunOnBackgroud(path);
+
+  WsjtxMode:='';    //will be set by type1 message
+  WsjtxBand:='';
+  // start UDP server
+  Wsjtxsock:=TUDPBlockSocket.Create;
+  if dmData.DebugLevel>=1 then Writeln('Socket created!');
+  try
+   //perhaps multicast  ?
+    //Wsjtxsock.createsocket;
+    //Wsjtxsock.Bind('0.0.0.0','2237');
+    //Wsjtxsock.AddMulticast('224.0.0.1');
+    //if dmData.DebugLevel>=1 then Writeln('Multicast issued');
+    Wsjtxsock.bind('127.0.0.1','2237');
+    if dmData.DebugLevel>=1 then Writeln('Bind issued');
+  except
+      if dmData.DebugLevel>=1 then Writeln('Could not bind socket for wsjtx!');
+      DisWsjtxRemote;
+  end;
+  acMonitorWsjtxExecute(nil);
+ end;
+end;
+
+
 procedure TfrmNewQSO.acRotControlExecute(Sender: TObject);
 begin
   frmRotControl.Show
@@ -3183,6 +3733,11 @@ begin
   frmLogUploadStatus.UploadDataToHrdLog
 end;
 
+procedure TfrmNewQSO.acWorked_gridsExecute(Sender: TObject);
+begin
+  frmWorked_grids.show;
+end;
+
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
 begin
   UpdateFKeyLabels;
@@ -3197,6 +3752,14 @@ end;
 procedure TfrmNewQSO.acLogUploadStatusExecute(Sender: TObject);
 begin
   frmLogUploadStatus.Show
+end;
+
+procedure TfrmNewQSO.acMonitorWsjtxExecute(Sender: TObject);
+begin
+  //wsjtx monitor window open to see type 2 messages (CQs from them)
+
+  if mnuRemoteModeWsjtx.Checked then // we can open form and start
+       frmMonWsjtx.Show;
 end;
 
 procedure TfrmNewQSO.acBigSquareExecute(Sender: TObject);
@@ -3488,7 +4051,7 @@ end;
 
 procedure TfrmNewQSO.acViewQSOExecute(Sender: TObject);
 begin
-  if (dmData.qQSOBefore.RecordCount > 0) and (not mnuRemoteMode.Checked) then
+  if (dmData.qQSOBefore.RecordCount > 0) and (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
   begin
     ViewQSO := True;
     Caption := dmUtils.GetNewQSOCaption('View QSO');
@@ -4169,6 +4732,7 @@ begin
     end;
   end;
 end;
+
 
 procedure TfrmNewQSO.mnuIOTAClick(Sender: TObject);
 begin

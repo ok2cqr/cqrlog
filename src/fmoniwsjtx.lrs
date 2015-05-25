@@ -1,0 +1,12 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmMonWsjtx','FORMDATA',[
+  'TPF0'#12'TfrmMonWsjtx'#11'frmMonWsjtx'#4'Left'#3#244#1#6'Height'#3#31#1#3'To'
+  +'p'#3#177#0#5'Width'#3#188#1#7'Caption'#6#17'Wsjt-x CQ-monitor'#12'ClientHei'
+  +'ght'#3#31#1#11'ClientWidth'#3#188#1#7'OnClose'#7#9'FormClose'#10'LCLVersion'
+  +#6#7'1.2.6.0'#0#5'TMemo'#9'WsjtxMemo'#4'Left'#2#8#6'Height'#3#250#0#3'Top'#2
+  +' '#5'Width'#3#176#1#8'OnChange'#7#15'WsjtxMemoChange'#8'TabOrder'#2#0#0#0#6
+  +'TLabel'#7'lblBand'#4'Left'#2'0'#6'Height'#2#1#3'Top'#2#8#5'Width'#2#1#11'Pa'
+  +'rentColor'#8#0#0#6'TLabel'#7'lblMode'#4'Left'#3'h'#1#6'Height'#2#1#3'Top'#2
+  +#8#5'Width'#2#1#11'ParentColor'#8#0#0#0
+]);

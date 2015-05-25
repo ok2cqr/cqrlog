@@ -1,112 +1,118 @@
 object frmPropagation: TfrmPropagation
-  Left = 1534
-  Height = 240
-  Top = 139
-  Width = 221
+  Left = 1975
+  Height = 312
+  Top = 308
+  Width = 229
   Caption = 'Propagation'
-  ClientHeight = 240
-  ClientWidth = 221
+  ClientHeight = 312
+  ClientWidth = 229
   KeyPreview = True
   OnClose = FormClose
+  OnCreate = FormCreate
   OnDblClick = FormDblClick
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.2.4.0'
-  object Label1: TLabel
-    Left = 12
-    Height = 17
-    Top = 8
-    Width = 95
+  LCLVersion = '1.2.6.0'
+  object lblBoulAidx: TLabel
+    Left = 10
+    Height = 15
+    Top = 80
+    Width = 89
     Caption = 'Boulder A-idx:'
     ParentColor = False
+    OnClick = lblBoulAidxClick
   end
-  object Label2: TLabel
-    Left = 12
-    Height = 17
-    Top = 49
-    Width = 89
+  object lblCurKidx: TLabel
+    Left = 10
+    Height = 15
+    Top = 140
+    Width = 84
     Caption = 'Kiel cur K-idx:'
     ParentColor = False
   end
-  object Label3: TLabel
-    Left = 12
-    Height = 17
-    Top = 95
-    Width = 68
+  object lblSolarFlx: TLabel
+    Left = 10
+    Height = 15
+    Top = 180
+    Width = 63
     Caption = 'Solar flux:'
     ParentColor = False
   end
-  object Label4: TLabel
-    Left = 12
-    Height = 17
-    Top = 117
-    Width = 76
+  object lblSunSNr: TLabel
+    Left = 10
+    Height = 15
+    Top = 200
+    Width = 74
     Caption = 'Sunspot nr:'
     ParentColor = False
   end
-  object Label5: TLabel
-    Left = 12
-    Height = 17
-    Top = 164
-    Width = 93
+  object lblGeomFi: TLabel
+    Left = 10
+    Height = 15
+    Top = 240
+    Width = 89
     Caption = 'Geomag field:'
     ParentColor = False
   end
-  object lblAIndex: TLabel
+  object DBoulAidx: TLabel
     Left = 120
-    Height = 17
-    Top = 29
-    Width = 64
-    Caption = 'lblAIndex'
+    Height = 15
+    Top = 80
+    Width = 65
+    Caption = 'DBoulAidx'
     ParentColor = False
   end
-  object lblKIndex: TLabel
+  object DCurKidx: TLabel
     Left = 120
-    Height = 17
-    Top = 49
-    Width = 63
-    Caption = 'lblKIndex'
+    Height = 15
+    Top = 140
+    Width = 58
+    Caption = 'DCurKidx'
+    ParentColor = False
+    ParentFont = False
+  end
+  object DSolarFlx: TLabel
+    Left = 120
+    Height = 15
+    Top = 180
+    Width = 60
+    Caption = 'DSolarFlx'
     ParentColor = False
   end
-  object lblSFI: TLabel
+  object DSunSNr: TLabel
     Left = 120
-    Height = 17
-    Top = 95
-    Width = 37
-    Caption = 'lblSFI'
+    Height = 15
+    Top = 200
+    Width = 59
+    Caption = 'DSunSNr'
     ParentColor = False
   end
-  object lblSSN: TLabel
+  object DGeomFi: TLabel
     Left = 120
-    Height = 17
-    Top = 117
-    Width = 44
-    Caption = 'lblSSN'
-    ParentColor = False
-  end
-  object lblGF: TLabel
-    Left = 122
-    Height = 17
-    Top = 164
-    Width = 35
-    Caption = 'lblGF'
+    Height = 15
+    Top = 240
+    Width = 58
+    Caption = 'DGeomFi'
     ParentColor = False
   end
   object lblInfo: TLabel
-    Left = 12
-    Height = 17
-    Top = 216
-    Width = 44
+    Left = 10
+    Height = 15
+    Top = 60
+    Width = 37
     Caption = 'lblInfo'
     ParentColor = False
   end
   object sbtnRefresh: TSpeedButton
-    Left = 198
-    Height = 22
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 205
+    Height = 20
     Hint = 'Refresh statistic'
-    Top = 218
+    Top = 290
     Width = 23
-    Anchors = [akRight, akBottom]
+    Anchors = []
     Glyph.Data = {
       36040000424D3604000000000000360000002800000010000000100000000100
       2000000000000004000064000000640000000000000000000000000000000000
@@ -147,74 +153,124 @@ object frmPropagation: TfrmPropagation
     ShowHint = True
     ParentShowHint = False
   end
-  object Label6: TLabel
-    Left = 12
-    Height = 17
-    Top = 140
-    Width = 91
+  object lblSolAct: TLabel
+    Left = 10
+    Height = 15
+    Top = 220
+    Width = 85
     Caption = 'Solar activity:'
     ParentColor = False
   end
-  object Label7: TLabel
-    Left = 12
-    Height = 17
-    Top = 29
-    Width = 67
+  object lblKielAidx: TLabel
+    Left = 10
+    Height = 15
+    Top = 100
+    Width = 62
     Caption = 'Kiel A-idx:'
     ParentColor = False
   end
-  object Label8: TLabel
-    Left = 12
-    Height = 17
-    Top = 186
-    Width = 51
+  object lblAurora: TLabel
+    Left = 10
+    Height = 15
+    Top = 260
+    Width = 47
     Caption = 'Aurora:'
     ParentColor = False
   end
-  object lblAbIndex: TLabel
+  object DKielAidx: TLabel
     Left = 120
-    Height = 17
-    Top = 8
-    Width = 73
-    Caption = 'lblAbIndex'
+    Height = 15
+    Top = 100
+    Width = 59
+    Caption = 'DKielAidx'
     ParentColor = False
   end
-  object lblSA: TLabel
+  object DSolAct: TLabel
     Left = 120
-    Height = 17
-    Top = 140
-    Width = 35
-    Caption = 'lblSA'
+    Height = 15
+    Top = 220
+    Width = 51
+    Caption = 'DSolAct'
     ParentColor = False
   end
-  object lblAuIndex: TLabel
-    Left = 122
-    Height = 17
-    Top = 186
-    Width = 72
-    Caption = 'lblAuIndex'
+  object DAurora: TLabel
+    Left = 120
+    Height = 15
+    Top = 260
+    Width = 53
+    Caption = 'DAurora'
     ParentColor = False
   end
-  object Label9: TLabel
-    Left = 12
-    Height = 17
-    Top = 72
-    Width = 87
+  object lblKiel3K: TLabel
+    Left = 10
+    Height = 15
+    Top = 120
+    Width = 84
     Caption = 'Kiel 3-hour K:'
     ParentColor = False
   end
-  object lblK3hour: TLabel
+  object DKiel3K: TLabel
     Left = 120
-    Height = 17
-    Top = 72
-    Width = 65
-    Caption = 'lblK3hour'
+    Height = 15
+    Top = 120
+    Width = 48
+    Caption = 'DKiel3K'
     ParentColor = False
+    ParentFont = False
+  end
+  object lblInfoUTC: TLabel
+    Left = 120
+    Height = 15
+    Top = 5
+    Width = 62
+    Caption = 'lblInfoUTC'
+    ParentColor = False
+  end
+  object lblInfoFrom: TLabel
+    Left = 10
+    Height = 15
+    Top = 25
+    Width = 69
+    Caption = 'lblInfoFrom'
+    ParentColor = False
+    ParentFont = False
+    OnMouseDown = lblInfoFromMouseDown
+    OnMouseEnter = lblInfoFromMouseEnter
+    OnMouseLeave = lblInfoFromMouseLeave
+  end
+  object ImageKidx: TImage
+    Left = 120
+    Height = 20
+    Top = 157
+    Width = 72
+  end
+  object lblKidxG: TLabel
+    Left = 10
+    Height = 15
+    Top = 160
+    Width = 95
+    Caption = 'K-idx graph 3h:'
+    ParentColor = False
+  end
+  object lblInfoDate: TLabel
+    Left = 10
+    Height = 15
+    Top = 5
+    Width = 68
+    Caption = 'lblInfoDate'
+    ParentColor = False
+  end
+  object Panel1: TPanel
+    Left = 60
+    Height = 5
+    Top = 45
+    Width = 100
+    TabOrder = 0
   end
   object tmrProp: TTimer
     Enabled = False
     OnTimer = tmrPropTimer
-    left = 64
-    top = 296
+    left = 16
+    top = 288
   end
 end

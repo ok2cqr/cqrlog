@@ -6,44 +6,58 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, ftpsend;
+  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, ftpsend,
+  lazutf8sysutils, lclintf;
 
 type
 
   { TfrmPropagation }
 
   TfrmPropagation = class(TForm)
-    Label1: TLabel;
-    lblK3hour: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    Label9: TLabel;
-    lblAbIndex: TLabel;
-    lblAuIndex: TLabel;
+    ImageKidx: TImage;
+    lblInfoDate: TLabel;
+    lblBoulAidx: TLabel;
+    lblKidxG: TLabel;
+    lblInfoFrom: TLabel;
+    lblInfoUTC: TLabel;
+    DKiel3K: TLabel;
+    lblCurKidx: TLabel;
+    lblSolarFlx: TLabel;
+    lblSunSNr: TLabel;
+    lblGeomFi: TLabel;
+    lblSolAct: TLabel;
+    lblKielAidx: TLabel;
+    lblAurora: TLabel;
+    lblKiel3K: TLabel;
+    DKielAidx: TLabel;
+    DAurora: TLabel;
     lblInfo: TLabel;
-    lblGF: TLabel;
-    lblSSN: TLabel;
-    lblSFI: TLabel;
-    lblSA: TLabel;
-    lblKIndex: TLabel;
-    lblAIndex: TLabel;
+    DGeomFi: TLabel;
+    DSunSNr: TLabel;
+    DSolarFlx: TLabel;
+    DSolAct: TLabel;
+    DCurKidx: TLabel;
+    DBoulAidx: TLabel;
+    Panel1: TPanel;
     sbtnRefresh : TSpeedButton;
     tmrProp: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormDblClick(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure lblBoulAidxClick(Sender: TObject);
+    procedure lblInfoFromMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure lblInfoFromMouseEnter(Sender: TObject);
+    procedure lblInfoFromMouseLeave(Sender: TObject);
     procedure sbtnRefreshClick(Sender : TObject);
     procedure tmrPropTimer(Sender: TObject);
+
   private
     { private declarations }
   public
-    a    : String;
+    ak   : String;
     ab   : String;
     k    : String;
     k3h  : String;
@@ -51,14 +65,22 @@ type
     ssn  : String;
     sa   : String;
     gf   : String;
-    time : String;
     au   : String;
+    time : String;
+    date : String;
+    UTC  : String;
+    HttpFrm: String;
     running : Boolean;
 
+    dbc : integer; // debug colors
+
     procedure SyncProp;
+    procedure KidxGraph;
+    function getKindexColor(kIndex : integer) : TColor;
   end; 
 
   type
+    KData = array [0..35] of integer;   //stores 3h K-idx data
     TPropThread = class(TThread)
     protected
       procedure Execute; override;
@@ -66,7 +88,12 @@ type
 
 
 var
-  frmPropagation: TfrmPropagation;
+  frmPropagation  : TfrmPropagation;
+  KValues         : KData;
+  BkColor         : TColor = clGray; //background and borderline in KidxGraph
+  FrColor         : TColor = clBlack;
+
+  tstcolor        : integer;    // for color testing
 
 implementation
 
@@ -81,11 +108,12 @@ var
   p      : Integer;
   ki     : Integer;
   t      : String;
+
 begin
   if frmPropagation.running then
     exit;
   frmPropagation.running := True;
-  frmPropagation.a    := '';
+  frmPropagation.ak   := '';
   frmPropagation.ab   := '';
   frmPropagation.k    := '';
   frmPropagation.sfi  := '';
@@ -94,6 +122,9 @@ begin
   frmPropagation.gf   := '';
   frmPropagation.au   := '';
   frmPropagation.time := '';
+  frmPropagation.date := '';
+  frmPropagation.UTC  := '';
+  frmPropagation.HttpFrm  := '';
   frmPropagation.k3h  := '';
 
   FreeOnTerminate := True;
@@ -104,7 +135,8 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://dk0wcy.de/magnetogram/' ) then
+    frmPropagation.HttpFrm  := 'http://dk0wcy.de/magnetogram/';                //fetch address
+    if HTTP.HTTPMethod('GET', frmPropagation.HttpFrm ) then
     begin
       m.LoadFromStream(HTTP.Document);
       tmp := m.Text;
@@ -117,7 +149,9 @@ begin
        p   := Pos('>Indices of',tmp);
       frmPropagation.time   := trim(copy(tmp,p+1,30));
       frmPropagation.time   := copy(frmPropagation.time,1,Pos('</th>',frmPropagation.time)-1);
-      frmPropagation.time   := frmPropagation.time + ' ' + TimeToStr(Time);
+      frmPropagation.time   := frmPropagation.time;
+      frmPropagation.UTC    := TimeToStr(nowUTC());
+      frmPropagation.date   := DateToStr(nowUTC());
 
       p   := Pos('>Boulder A',tmp);
       frmPropagation.ab   := trim(copy(tmp,p+44,18));
@@ -128,8 +162,8 @@ begin
       frmPropagation.sa   := copy(frmPropagation.sa,1,Pos('</b>',frmPropagation.sa)-1);
 
       p   := Pos('>Kiel A',tmp);
-      frmPropagation.a   := trim(copy(tmp,p+44,18));
-      frmPropagation.a   := copy(frmPropagation.a,1,Pos('</b>',frmPropagation.a)-1);
+      frmPropagation.ak  := trim(copy(tmp,p+44,18));
+      frmPropagation.ak  := copy(frmPropagation.ak,1,Pos('</b>',frmPropagation.ak)-1);
 
       p   := Pos('>Kiel current k',tmp);
       frmPropagation.k   := trim(copy(tmp,p+44,18));
@@ -159,9 +193,10 @@ begin
     if dmData.DebugLevel >=1 then
     begin
       Writeln('Time:     ',frmPropagation.time);
+      Writeln('UTC:     ',frmPropagation.UTC);
       Writeln('Boulder A:',frmPropagation.ab);
       Writeln('Solar Act:',frmPropagation.sa);
-      Writeln('Kiel    A:',frmPropagation.a);
+      Writeln('Kiel    A:',frmPropagation.ak);
       Writeln('Kiel K:   ',frmPropagation.k);
       Writeln('Kiel 3h   ',frmPropagation.k3h);
       Writeln('GF:       ',frmPropagation.gf);
@@ -186,6 +221,26 @@ begin
   dmUtils.SaveWindowPos(frmPropagation)
 end;
 
+procedure TfrmPropagation.FormCreate(Sender: TObject);
+var kloop : integer;
+
+Begin
+  //clear K-idx image and data
+  ImageKidx.Canvas.brush.style := bsSolid;
+  ImageKidx.Canvas.brush.Color := BkColor;
+  ImageKidx.Canvas.pen.Color   := BkColor;
+  ImageKidx.Canvas.Rectangle(0,0,ImageKidx.Width,ImageKidx.Height);
+  ImageKidx.Canvas.pen.Width   := 1;
+  for kloop := 0 to 35 do
+   begin
+     KValues[kloop] :=-1;
+   end;
+  if dmData.DebugLevel >=1 then
+      begin
+       tstcolor :=0;
+      end;
+end;
+
 procedure TfrmPropagation.FormDblClick(Sender: TObject);
 begin
   tmrPropTimer(nil)
@@ -207,20 +262,48 @@ const
 begin
   running := False;
   dmUtils.LoadWindowPos(frmPropagation);
-  lblAIndex.Caption  := C_LOADING;
-  lblAbIndex.Caption := C_LOADING;
-  lblKIndex.Caption  := C_LOADING;
-  lblK3hour.Caption  := C_LOADING;
-  lblAuIndex.Caption := C_LOADING;
-  lblSFI.Caption     := C_LOADING;
-  lblSSN.Caption     := C_LOADING;
-  lblSA.Caption      := C_LOADING;
-  lblGF.Caption      := C_LOADING;
+  DBoulAidx.Caption  := C_LOADING;
+  DKielAidx.Caption := C_LOADING;
+  DCurKidx.Caption  := C_LOADING;
+  DKiel3K.Caption  := C_LOADING;
+  DAurora.Caption := C_LOADING;
+  DSolarFlx.Caption     := C_LOADING;
+  DSunSNr.Caption     := C_LOADING;
+  DSolAct.Caption      := C_LOADING;
+  DGeomFi.Caption      := C_LOADING;
   lblInfo.Caption    := '';
+  lblInfoUTC.Caption := '';
+  lblInfoDate.Caption := '';
+  lblInfoFrom.Caption:= frmPropagation.HttpFrm;
   tmrProp.Enabled    := False;
   tmrProp.Interval   := 1000 * 60 * 5; //every 5 minutes do refresh
   tmrProp.Enabled    := True;
   tmrPropTimer(nil)
+end;
+
+procedure TfrmPropagation.lblBoulAidxClick(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmPropagation.lblInfoFromMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  OpenURL(frmPropagation.HttpFrm);
+end;
+
+procedure TfrmPropagation.lblInfoFromMouseEnter(Sender: TObject);
+begin
+  TLabel(Sender).Font.Style := [fsUnderLine];
+  TLabel(Sender).Font.Color := clBlue;
+  TLabel(Sender).Cursor := crHandPoint;
+end;
+
+procedure TfrmPropagation.lblInfoFromMouseLeave(Sender: TObject);
+begin
+   TLabel(Sender).Font.Style := [];
+  TLabel(Sender).Font.Color := clDefault;
+  TLabel(Sender).Cursor := crDefault;
 end;
 
 procedure TfrmPropagation.sbtnRefreshClick(Sender : TObject);
@@ -236,43 +319,172 @@ begin
   T.Start
 end;
 
-procedure TfrmPropagation.SyncProp;
+function TfrmPropagation.getKindexColor(kIndex : integer) : TColor;
+begin
 
-  function getKindexColor(kIndex : Double) : TColor;
-  begin
-    if (kIndex<=3) then
-      Result := clGreen
-    else if (kIndex>3) and (kIndex<5) then
-      Result := TColor($0000A2FF)
-    else if (kIndex>=5) and (kIndex<6) then
-      Result := TColor($00006CFF)
-    else
-      Result := clRed
+  if dmData.DebugLevel >=1 then
+      begin
+       kIndex := tstcolor;
+       Writeln('Color selection by:      ',kIndex)
+      end;
+
+  case kIndex of
+    0 .. 133      : Result :=RGBToColor(  0,180,  0); //Green
+  134 .. 266      : Result :=RGBToColor(  0,222,  0); //lGreen
+  267 .. 399      : Result :=RGBToColor( 96,240, 96); //llGreen
+  400 .. 499      : Result :=RGBToColor(244,244,  0); //Yellow
+  500 .. 599      : Result :=RGBToColor(255,130,  0); //Orange
+  600 .. 699      : Result :=RGBToColor(245, 40, 65); //lred
+  700 .. 799      : Result :=RGBToColor(215, 25, 30); //red
+  800 .. 900      : Result :=RGBToColor(222, 48,222); //violet
+  else
+    Result := clDefault;
   end;
+
+end;
+
+
+procedure TfrmPropagation.SyncProp;
 
 var
   dk : Double;
 begin
   lblInfo.Caption    := time;
-  lblAbIndex.Caption := ab;
-  lblSA.Caption      := sa;
-  lblAIndex.Caption  := a;
-  lblKIndex.Caption  := k;
-  lblGF.Caption      := gf;
-  lblSSN.Caption     := ssn;
-  lblAuIndex.Caption := au;
-  lblSFI.Caption     := sfi;
-  lblK3hour.Caption  := k3h;
+  lblInfoUTC.Caption := UTC;
+  lblInfoDate.Caption := Date;
+  lblInfoFrom.Caption:= HttpFrm;
+  DBoulAidx.Caption  := ab;
+  DKielAidx.Caption := ak;
+  DKiel3K.Caption  := k3h;
+  DCurKidx.Caption  := k;
+  DSolarFlx.Caption     := sfi;
+  DSunSNr.Caption     := ssn;
+  DSolAct.Caption      := sa;
+  DGeomFi.Caption      := gf;
+  DAurora.Caption := au;
 
   if TryStrToFloat(k,dk) then
-    lblKIndex.Font.Color := getKindexColor(dk)
+   begin
+     DCurKidx.Color := getKindexColor(round(dk*100));
+     DCurKidx.Font.Style := [fsBold];
+   end
   else
-    lblKIndex.Font.Color := clBlack;
+   begin
+    DCurKidx.Color := clBtnFace;
+    DCurKidx.Font.Style := [];
+   end;
 
   if TryStrToFloat(k3h,dk) then
-    lblK3hour.Font.Color := getKindexColor(dk)
+   begin
+    DKiel3K.Color := getKindexColor(round(dk*100));
+    DKiel3K.Font.Style := [fsBold];
+   end
   else
-    lblK3hour.Font.Color := clBlack
+   begin
+    DKiel3K.Color := clBtnFace;
+    DKiel3K.Font.Style := [];
+   end;
+
+  frmPropagation.KidxGraph;
+
+if dmData.DebugLevel >=1 then
+ begin
+  if tstcolor < 950 then
+    tstcolor := tstcolor +50
+    else
+    tstcolor := 0;
+  end;
+
+end;
+procedure TfrmPropagation.KidxGraph;
+var
+  kloop,kv : integer;
+  dk       : double;
+  AllKdata : boolean;
+
+
+begin
+
+if not TryStrToFloat(k,dk) then
+          begin
+            dk := 0;
+            ImageKidx.Canvas.pen.Color := FrColor;
+          end;
+
+if dmData.DebugLevel >=1 then
+      begin
+       Writeln('Rounded Kidx for Graph:      ',round(dk*100))
+      end;
+
+
+AllKdata := True;
+kloop := 0;
+repeat
+ begin
+   if KValues[kloop]=-1 then  //all data is not yet filled
+      begin
+       KValues[kloop] := round(dk*100);      //place new value  to first free
+       if dmData.DebugLevel >=1 then
+        begin
+         Writeln('There are :   ',kloop +1,' Kdata entries');
+        end;
+       kloop:=35;
+       AllKdata :=False;
+      end;
+   inc(kloop);
+ end;
+until kloop>35;
+
+kloop := 0;
+repeat
+ begin
+  if AllKdata then
+   begin
+    if kloop<35  then
+      KValues[kloop]:=KValues[kloop+1] //scroll data
+    else
+      begin
+       if dmData.DebugLevel >=1 then
+        begin
+         Writeln('All Kdata entries filled; scroll and place new to end');
+        end;
+       KValues[kloop] := round(dk*100);      //place new value to end
+      end;
+
+   end;
+
+  kv:=0;
+  if  KValues[kloop]>-1 then
+    begin
+     kv := KValues[kloop];
+     ImageKidx.Canvas.pen.Color := getKindexColor(kv);
+    end
+   else
+    ImageKidx.Canvas.pen.Color := FrColor;
+
+  //double lines pen width 1 are better than one with pen width 2 (why?)
+  ImageKidx.Canvas.line(kloop*2,20 - 20*kv div 1000,kloop*2,20);    //Kidx value
+  ImageKidx.Canvas.line(kloop*2+1,20 - 20*kv div 1000,kloop*2+1,20);
+  ImageKidx.Canvas.pen.Color := BkColor;
+  ImageKidx.Canvas.line(kloop*2,0,kloop*2,20 - 20*kv div 1000);     //the rest of bar
+  ImageKidx.Canvas.line(kloop*2+1,0,kloop*2+1,20 - 20*kv div 1000);
+
+  if (kloop mod 12) = 0 then
+    begin
+       ImageKidx.Canvas.pen.Color := FrColor;   //Hour lines if fetch is every 5min
+       ImageKidx.Canvas.pen.style := psDot;
+       ImageKidx.Canvas.line(kloop*2,0,kloop*2,20 - 20*kv div 1000);
+       ImageKidx.Canvas.pen.style := psSolid;
+    end;
+
+  inc(kloop);
+ end;
+ until kloop>35;
+
+ ImageKidx.Canvas.pen.Color := FrColor;
+ ImageKidx.Canvas.pen.style := psDot;
+ ImageKidx.Canvas.line(0,19,72,19); // bottom line
+ ImageKidx.Canvas.pen.style := psSolid;
 end;
 
 initialization
