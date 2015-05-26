@@ -2065,6 +2065,7 @@ begin
           3    :       Begin  //Clear in
                         ParStr := StFBuf;
                         if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
+                        frmMonWsjtx.WsjtxMemo.lines.Clear;
                        end;
 
           4    :       Begin  //Reply (outgoing)

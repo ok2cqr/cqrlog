@@ -66,23 +66,18 @@ FIXED
   Used variable "name" for name. Var "name" seems to be introduced somewhere as global because complier
   does not complain.
 FIXED
-
-- database information: What is the selected database? (now was hard coded to my settings).
+ 
+ -Worked_grids works now only for OH1KH.
+  Still need to understand how database is selected in cqrlog !!!!
+  I have separate database running at localhost (cqrlog accesses with IP and port) because that works faster
+  than cqrlog's internal version of database (no hickups at start with this!!!).
+  That's why I can access log database easily from my code (and I have only 1 database).
+  Database information: What is the selected database? (now was hard coded to my settings).
   is there difference if DB is internal (cqrlog) or external (IP+port). Have to dig out from original code.
+  ---
   Found some kind of solution. May work also for others than me. If I have understand program's startup
   right. Not tested with different variations and not with program internal mysql at all.
 FIXED (but needs testing)
-
-
-
-
-- takes name from qrz.com but puts it only to newQSO form, not in log. (Name comes too late!) 
-  YEP! same issue with fldigi-remote. Name appears to form, ({too} late) but not in log.
-  This is not big deal. Maybe I'll look it sometimes. 
-
-- if form is open at close -> reopen when started again (something more to ini?).
-  Worked_grids does not open automaticly.
-  Worked_grids and wsxt-x CQ-monitor do not remember last runtime's position on screen.
 
 -  I would like have the CQ-monitor display to be more colorfull !
   Means: 
@@ -96,14 +91,24 @@ FIXED (but needs testing)
   Tried to install TRichMemo and the install went ok to my Lazarus,
   but it did not work. Compile/runtime problems. Source was quite old (2009 !!).
   Maybe there is better solution now (@2015)? I have to google more about this.
- 
- -Worked_grids works now only for OH1KH. (FIXED see above)
-  Still need to understand how database is selected in cqrlog !!!!
-  I have separate database running at localhost (cqrlog accesses with IP and port) because that works faster
-  than cqrlog's internal version of database (no hickups at start with this!!!).
-  That's why I can access log database easily from my code (and I have only 1 database).
+  ---
+  Managed with  https://svn.code.sf.net/p/lazarus-ccr/svn/components/richmemo/ (Revision 4151).
+  CQ-Monitor has now colors telling status. Additional texts removed.
+  Changed font to non proportional for better justify.
+  Received message #3 (clear) from wsjt-x clears now Cq-Monitor, too (fNewQSO/decode msgs)
+FIXED
 
- - I think I have many duplicate parts of code as it seems that cqrlog has many functions that could be used
+
+
+- takes name from qrz.com but puts it only to newQSO form, not in log. (Name comes too late!) 
+  YEP! same issue with fldigi-remote. Name appears to form, ({too} late) but not in log.
+  This is not big deal. Maybe I'll look it sometimes. 
+
+- if form is open at close -> reopen when started again (something more to ini?).
+  Worked_grids does not open automaticly.
+  Worked_grids and wsxt-x CQ-monitor do not remember last runtime's position on screen.
+
+- I think I have many duplicate parts of code as it seems that cqrlog has many functions that could be used
    for wsjt-x CQ-monitor and worked_grids form. I just can not follow all the ideas original code has.
 
 

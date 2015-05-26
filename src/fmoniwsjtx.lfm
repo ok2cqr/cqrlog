@@ -1,21 +1,13 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 500
+  Left = 1967
   Height = 287
-  Top = 177
+  Top = 123
   Width = 444
   Caption = 'Wsjt-x CQ-monitor'
   ClientHeight = 287
   ClientWidth = 444
   OnClose = FormClose
   LCLVersion = '1.2.6.0'
-  object WsjtxMemo: TMemo
-    Left = 8
-    Height = 250
-    Top = 32
-    Width = 432
-    OnChange = WsjtxMemoChange
-    TabOrder = 0
-  end
   object lblBand: TLabel
     Left = 48
     Height = 1
@@ -29,5 +21,20 @@ object frmMonWsjtx: TfrmMonWsjtx
     Top = 8
     Width = 1
     ParentColor = False
+  end
+  object WsjtxMemo: TRichMemo
+    Left = 8
+    Height = 250
+    Top = 32
+    Width = 432
+    Font.Height = -13
+    Font.Name = 'Monospace'
+    HideSelection = False
+    OnChange = WsjtxMemoChange
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 0
+    WordWrap = False
+    ZoomFactor = 1
   end
 end
