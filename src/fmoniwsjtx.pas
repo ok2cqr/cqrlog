@@ -160,7 +160,7 @@ Begin
 
          //CQ exeptions may be anything so we look
          // if no number in string it is addition
-          if length(msgCQ2)>2 then   // if shorter than 3 it is addition
+          if length(msgCQ2)>2 then   // if longer than 2 may be call, otherwise is addition
              Begin
               i:=1;
               while not ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) and (i <= length(msgCQ2)) do inc(i);
@@ -174,8 +174,12 @@ Begin
                   if dmData.DebugLevel>=1 then Write('Call-');
                   msgCall := NextElement;
                  end;
-             end;
-
+             end
+           else
+            Begin  //next is call
+                  if dmData.DebugLevel>=1 then Write('Call-');
+                  msgCall := NextElement;
+            end;
 
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement;

@@ -1864,7 +1864,8 @@ var
   Min,
   Hour    : integer;
   Dtim    : TDateTime;
-  new     : Boolean;
+  new     : Boolean;       //multi purpose
+  i       : word;
 
 //var copied from tmrfldigi
  call : String;
@@ -1931,7 +1932,7 @@ begin
      tmrWsjtx.Enabled := False;  //a round should not take 1000ms, but for sure to prevent double calls.
      //check what we have and process type 5 message (qso logged) if rcvd
      //we do not use Id to identify sender all type 5 are logged
-      Buf := Wsjtxsock.RecvPacket(200);
+      Buf := Wsjtxsock.RecvPacket(100);
       if Wsjtxsock.lasterror=0 then
         begin
           ParNum := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
@@ -1953,6 +1954,27 @@ begin
                              lblCall.Font.Color    := clFuchsia
                              else
                                lblCall.Font.Color    := clRed;
+
+                         if WsjtxMode = '' then
+                           Begin
+                             //if we got HB, but WsjtxMode is '' then wsjt-x has been running before
+                             //remote mode.I.E. we never have receved 'status'-packet.
+                             //We call 'replay' to get 'status'-message(among old decoded messages)
+                             //set the beginning of 'replay'-packet
+                             Buf := #$ad+#$bc+#$cb+#$da+#$00+#$00+#$00+#$02+#$00+#$00+#$00+#$07+#$00+#$00;
+                             //add the receved Id
+                             i:=length(ParStr);
+                             if dmData.DebugLevel>=1 then Writeln('Return Id length:',i,' hi:',i div 256,' lo:',i mod 256);
+                             Buf := Buf+ chr(i div 256) + chr(i mod 256);  //BigEndian word;
+                             for i:=1 to length(ParStr) do
+                                Buf := Buf+ParStr[i];
+
+                             //default id should give:
+                             //lenght 00 06 WSJT-X
+                             //#$00#$06+#$57+#$53+#$4a+#$54+#$2d+#$58;
+
+                             Wsjtxsock.SendString(Buf);
+                           end;
                        end;
 
           1    :       Begin  //Status in
@@ -3618,8 +3640,8 @@ end;
 
 procedure TfrmNewQSO.acRemoteModeWsjtxExecute(Sender: TObject);
 var
-run    : Boolean = False;
-path   : String = '';
+run      : Boolean = False;
+path     : String = '';
 
 begin
 if mnuRemoteModeWsjtx.Checked then
@@ -3647,20 +3669,20 @@ else
   edtCall.Enabled       := False;
   tmrWsjtx.Enabled     := True;
   cbOffline.Checked     := True;
-  if run and FileExists(path) then
+
+  //check that wsjtx is not already running.
+  //Check existence of/tmp/WSJT-X.lock. Works for single instance of wsjt-x
+  // IS THIS NEEDED WITH FLDIGI; TOO???
+  if (dmData.DebugLevel>=1) and FileExists('/tmp/WSJT-X.lock') then Writeln('Wsjt-x lock file exists, not starting');
+  if run and FileExists(path) and not FileExists('/tmp/WSJT-X.lock') then
     dmUtils.RunOnBackgroud(path);
 
-  WsjtxMode:='';    //will be set by type1 message
+  WsjtxMode:='';    //will be set by type1 'status'-message
   WsjtxBand:='';
   // start UDP server
   Wsjtxsock:=TUDPBlockSocket.Create;
   if dmData.DebugLevel>=1 then Writeln('Socket created!');
   try
-   //perhaps multicast  ?
-    //Wsjtxsock.createsocket;
-    //Wsjtxsock.Bind('0.0.0.0','2237');
-    //Wsjtxsock.AddMulticast('224.0.0.1');
-    //if dmData.DebugLevel>=1 then Writeln('Multicast issued');
     Wsjtxsock.bind('127.0.0.1','2237');
     if dmData.DebugLevel>=1 then Writeln('Bind issued');
   except

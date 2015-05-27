@@ -35,6 +35,18 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - trying to move to GitHub. Lots of questions and difficulties.
   Desperately need "GitHub for Dummies". And in finnish, if I may choose ;) 
 
+- fixed CQ-monitor's CQ-packet decoding (twice as got bug there).
+
+- added check that wsjt-x is not runnung when remote mode is set and run parameter (@ fldigi's preferences) is set.
+  (who would add own preferences to wsjt-x remote ?)
+  Lock file existence /tmp/WSJT-X.lock is cheked and run command is not issued if file exists
+
+- this leads to situation where wsjt-x is running and remote mode is issued afterwards. Then we do not know wsjtxmode or band
+  as they come from 'status' packet that is sent at start, every mode or band change and if 'replay' packet is sent to wsjt-x.
+  So if no band or mode change the CQ-Monitor does not know band and mode and dies not show anything.
+  This is solved by sending 'replay' packet if we get HeartBeat packet and if WsjtxMode is still ''. We can not do this earlier
+  as there is no (return) port for UDP datagram to send  until we have got first HB-packet.    
+
 
  Issues to resolve:
 ===================
