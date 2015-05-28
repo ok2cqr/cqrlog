@@ -458,7 +458,9 @@ begin
           //here wsjt-x makes exeption as mode is JT9 , JT65 or combination JT9+JT65 not what RigCtl says
           //maybe same is needed from fldigi, too. It just does not update it before qso is logged!
           //perhaps could use preference's option: (rigctl, from program or fixed "RTTY")
-          if frmNewQSO.mnuRemoteModeWsjtx.Checked then
+
+          //empty frmNewQSO.WsjtxMode causes crash. Happens if "follow rig" checked before wsjtx starts.
+          if frmNewQSO.mnuRemoteModeWsjtx.Checked and (frmNewQSO.WsjtxMode<>'')then
                               mode := frmNewQSO.WsjtxMode;
           if dmData.DebugLevel>=1 then Writeln('Follow rig mode: ',mode,' Band: ',band);
           if WsMode.Itemindex < 0 then

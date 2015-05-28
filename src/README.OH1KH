@@ -110,7 +110,10 @@ FIXED (but needs testing)
   Received message #3 (clear) from wsjt-x clears now Cq-Monitor, too (fNewQSO/decode msgs)
 FIXED
 
-
+- If Worked Grids map is open and "follow rig" is checked then starting remote wsjt-x causes crash because wkdGrid-autoupdate
+  timer runs before wsjt-x has sent "status" packet frmNewQSO.WsjtxMode is sill empty.
+  Must check under FollowRig.checked that wsjtxRemote.checked needs also frmNewQSO.WsjtxMode<>'' 
+FIXED
 
 - takes name from qrz.com but puts it only to newQSO form, not in log. (Name comes too late!) 
   YEP! same issue with fldigi-remote. Name appears to form, ({too} late) but not in log.
