@@ -118,6 +118,11 @@ FIXED
 - takes name from qrz.com but puts it only to newQSO form, not in log. (Name comes too late!) 
   YEP! same issue with fldigi-remote. Name appears to form, ({too} late) but not in log.
   This is not big deal. Maybe I'll look it sometimes. 
+  I think I have solution for this. There is QRZ.Thread at editCallExit. Added QRZ.WaitFor; after QRZ.Start. Now we wait QRZ to finish.
+  This may make problem if qrz-fetch fails somehow and has no timeout timer. Is it needed ????
+  After that added to both fldigiTimer and wsjtxtimer a condition where if sname is empty (user did not give name on remote side)
+  value of edtName.Text stays as is (from qrz, may it be). If sname has content it is palced to edtName.Text and runs over qrz value.
+FIXED
 
 - if form is open at close -> reopen when started again (something more to ini?).
   Worked_grids does not open automaticly.

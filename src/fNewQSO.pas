@@ -764,7 +764,7 @@ begin
     Synchronize(@frmNewQSO.SynCallBook)
   finally
     c_running := False
-  end
+  end;
 end;
 
 procedure TfrmNewQSO.ClearStatGrid;
@@ -1657,7 +1657,8 @@ begin
         inc(i)
       end;
       if dmData.DebugLevel>=1 then Writeln('Name:',sname);
-      edtName.Text := sname;
+      if sname <>'' then  //if user does not give name edtName stays what qrz.com may have found
+                  edtName.Text := sname;
       edtNameExit(nil)
     end;
     i := Pos('qth',data);
@@ -2209,9 +2210,12 @@ begin
                         if dmData.DebugLevel>=1 then Writeln('Comments :', note);
                         edtRemQSO.Text := note;
                         //--------------------------------------------------
+                        if dmData.DebugLevel>=1 then Writeln('Name :', sname);
                         sname:= trim(StFBuf);
                         if dmData.DebugLevel>=1 then Writeln('Name :', sname);
-                        edtName.Text := sname;
+                        if dmData.DebugLevel>=1 then Writeln('edtName :',edtName.Text );
+                        if sname <>'' then  //if user does not give name edtName stays what qrz.com may have found
+                            edtName.Text := sname;
                         edtNameExit(nil);
                         //----------------------------------------------------
                         btnSave.Click;
@@ -2409,7 +2413,6 @@ begin
     edtITU.SetFocus;
     exit
   end;
-
   //SaveGrid;
   dmData.SaveComment(edtCall.Text,mComment.Text);
 
@@ -2427,7 +2430,6 @@ begin
                      //without clicking to btnDXCCRef
 
   old_prof := cmbProfiles.ItemIndex;
-
   if fEditQSO then
   begin
     if fromNewQSO then
@@ -2477,7 +2479,6 @@ begin
       begin
         edtCallExit(nil)
       end;
-
     date := StrToDate(edtDate.Text);
     {
     if (not cbOffline.Checked) or (mnuRemoteMode.Checked) then   //if used remember to add mnuRemoteModeWsjtx.Checked
@@ -2562,7 +2563,6 @@ begin
 
   if (cqrini.ReadBool('NewQSO','RefreshAfterSave',False) and frmMain.Showing) then
     frmMain.acRefresh.Execute;
-
   if ShowMain and frmMain.Showing then
   begin
     frmMain.BringToFront;
@@ -4405,7 +4405,11 @@ begin
       begin
         c_callsign := edtCall.Text;
         QRZ := TQRZThread.Create(True);
-        QRZ.Start
+        QRZ.Start;
+         // this should help if name is fetch from qrz.com
+         // so that it does not come too late when in remote modes
+         // Might halt program because there is no timer how long thread may run
+        QRZ.WaitFor;
       end
     end
   end;
@@ -4542,7 +4546,7 @@ begin
       c_callsign := edtCall.Text;
       mCallBook.Clear;
       QRZ := TQRZThread.Create(True);
-      QRZ.Start
+      QRZ.Start;
     end
   end;
   if (Shift = [ssAlt]) and (key = VK_F) then
