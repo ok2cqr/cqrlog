@@ -338,7 +338,7 @@ begin
   if not OpenFromMenu then
   begin
     dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger);
-    dmData.LogName := dmData.qLogList.Fields[1].AsString
+    dmData.LogName := dmData.qLogList.Fields[1].AsString;
   end;
   ModalResult    := mrOK
 end;

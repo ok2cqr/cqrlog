@@ -17,6 +17,7 @@ type
     lblMode: TLabel;
     WsjtxMemo: TRichMemo;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormShow(Sender: TObject);
     procedure WsjtxMemoChange(Sender: TObject);
   private
     procedure FocusLastLine;
@@ -86,8 +87,15 @@ end;
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
-    frmMonWsjtx.hide;
+   dmUtils.SaveWindowPos(frmMonWsjtx);
+   frmMonWsjtx.hide;
 end;
+
+procedure TfrmMonWsjtx.FormShow(Sender: TObject);
+begin
+   dmUtils.LoadWindowPos(frmMonWsjtx);
+end;
+
 procedure TfrmMonWsjtx.NewBandMode(Band,Mode:string);
 Begin
      lblBand.Caption := Band;

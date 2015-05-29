@@ -1215,6 +1215,9 @@ begin
   if cqrini.ReadBool('Window','Prop',False) then
     frmPropagation.Show;
 
+  if cqrini.ReadBool('Window','Worked_grids',False) then
+    frmWorked_grids.Show;
+
   if cqrini.ReadBool('Window','CWKeys',False) then
     acCWFKey.Execute;
 
@@ -1350,6 +1353,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','QSOList',False);
+
+    if frmWorked_grids.Showing then
+    begin
+      cqrini.WriteBool('Window','Worked_grids',True);
+      frmWorked_grids.Close
+    end
+    else
+      cqrini.WriteBool('Window','Worked_grids',False);
 
     if frmLogUploadStatus.Showing then
     begin
@@ -3629,7 +3640,7 @@ Begin
   Wsjtxsock.CloseSocket;
   mnuRemoteModeWsjtx.Checked := False;
   mnuMoniWsjtx.Visible       := False;
-  frmMonWsjtx.hide;
+  frmMonWsjtx.close;
   lblCall.Caption       := 'Call:';
   lblCall.Font.Color    := clDefault;
   edtCall.Enabled       := True;
@@ -3812,6 +3823,8 @@ begin
       dmData.CloseDatabases;
       dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger);
       dmData.LogName    := dmData.qLogList.Fields[1].AsString;
+
+
       frmNewQSO.Caption := dmUtils.GetNewQSOCaption('New QSO');
       LoadSettings;
       ShowFields

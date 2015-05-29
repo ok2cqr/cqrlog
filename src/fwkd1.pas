@@ -26,7 +26,6 @@ type
     ZooLbl: TLabel;
     LocMapBase: TImage;
     ZooMap: TImage;
-    Logo: TLabel;
     ShoWkdOnly: TCheckBox;
     SaveMapImage: TSaveDialog;
     SaveMap: TButton;
@@ -49,10 +48,15 @@ type
     procedure ZooMapClick(Sender: TObject);
   private
     { private declarations }
+    procedure DrawBase(BCanvas : TCanvas; SubBase : boolean);
+    procedure MarkGrid(LocGrid : String;MCanvas : TCanvas; SubBase : boolean);
   public
     { public declarations }
+    Procedure ToRigMode(mode:string);
+    Procedure ToRigBand(band:string);
     function RecordCount(SwConTrans:boolean) :String;
     procedure ConnectionInfo;
+    procedure StartState;
     function WkdGrid(loc,band,mode:string):integer;  //returns 0=not wkd, 1=main grid wkd, 2=wkd
     function WkdCall(call,band,mode:string):boolean;  //returns wkd=true
   end;
@@ -61,6 +65,7 @@ var
   frmWorked_grids: TfrmWorked_grids; //Main form
   MaxRowId,                    //rows in table (Number of qsos in log database)
   BandQsoCount,                //Number of qsos on selected band
+  OldLogDatabase,              // Old Log database file name (+path)
   LogDatabase,                 //Log database file name (+path)
   LogTable,                    //Table name found from database file (own call ad locator)
   LogUsername,
@@ -73,13 +78,13 @@ var
   MouseX, MouseY,              //Mouse position on loc map rounded to grids up/right corner
   MainGridCount,               //Number of Maingrids (achrs) from query result
   GridCount       :integer;    //Number of subgrids (4chrs) from query result
-
+  Changes         : Boolean;   //changes happened somewhere
 
 
 implementation
 
 {$R *.lfm}
-Uses fNewQSO,fTRXControl,dData;
+Uses fNewQSO,fTRXControl,dData,dUtils;
 
 { TfrmWorked_grids }
 
@@ -88,30 +93,32 @@ procedure TfrmWorked_grids.ConnectionInfo;
 Var
     ini : TIniFile;
     s   :longint;
-    ao  :string;
 begin
-{         //Mysql/MariaDB usage is a hack from original version's SQlite DB usage (actually queries are almost same format)
-         // these values work only @OH1KH !!!!
-         //we need to get these from cqrlog main code (dData ???) after used log is selected !
-         LogDatabase := 'cqrlog001';
-         LogTable := 'cqrlog_main';
-         LogUsername := 'cqrlog';
-         LogPassword := 'oh1kh';
-         LogHostname := '127.0.0.1';
+         //I think I got the idea now between local and server database. Actually EASY...
 
-         //OK. we can do it like this, but does it work with internal DB? Not tested!
-         }
          ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
          try
-         LogHostname := ini.ReadString('Login','Server','');
-         LogPort     := ini.ReadString('Login','Port','');
-         LogPassword := ini.ReadString('Login','Pass','');
-         ao          := ini.ReadString('Login','AutoOpen','');
-         if ao = '1' then
+
+          if ini.ReadBool('Login','SaveTolocal',True) then
+               begin
+                LogHostname := '127.0.0.1';
+                LogPort     := '64000';
+                LogUsername := 'cqrlog';
+                LogPassword := 'cqrlog';
+               end
+            else
+               Begin
+                LogHostname := ini.ReadString('Login','Server','');
+                LogPort     := ini.ReadString('Login','Port','');
+                LogPassword := ini.ReadString('Login','Pass','');
+                LogUsername := ini.ReadString('Logini','User','');
+               end;
+
+          if ini.ReadBool('Login','AutoOpen',True)  then
               TryStrToInt(ini.ReadString('Login','LastLog',''),s)
-          else
+            else
               TryStrToInt(ini.ReadString('Login','LastOpenedLog',''),s);
-         LogUsername := ini.ReadString('Logini','User','');
+
          finally
           ini.Free
          end;
@@ -123,6 +130,73 @@ begin
          if TryStrToInt(LogPort,s) then DBConnection.Port := s;
          DBConnection.UserName:=LogUsername;
          DBConnection.Password:=LogPassword;
+
+         if dmData.DebugLevel>=1 then Writeln('LogDatabase: ',LogDatabase, ' OldLogDatabase: ',OldLogDatabase);
+         if LogDatabase <> OldLogDatabase then //log has changed  enable updater
+             Begin
+               OldLogDatabase := LogDatabase;
+               Changes := True;
+               if dmData.DebugLevel>=1 then Writeln('Changes->LogDatabase: ',LogDatabase);
+             end;
+end;
+procedure TfrmWorked_grids.StartState;
+Begin
+  AutoUpdate.enabled := False;
+  AutoUpdate.Interval := 5000;
+  WsMode.Itemindex := -1;
+  BandSelector.Itemindex := -1;
+  LogSave := 'Wkd_locs_empty';
+  LogBand := ' ';
+  OldLogDatabase :='';
+
+  //load map base image
+  LocMapBase.Picture.LoadFromLazarusResource('borders');
+  frmWorked_grids.Caption := frmWorked_grids.Caption+' '+dmData.LogName+' '+LogBand;
+
+  LocMap.Canvas.CopyRect(Rect(0,0,Width,Height),
+  LocMapBase.Picture.Bitmap.Canvas,Rect(0,0,Width,Height));
+
+  DrawBase(LocMap.canvas, False);
+end;
+
+Procedure TfrmWorked_grids.ToRigMode(mode:string);
+var
+ i        : integer;
+Begin
+  if dmData.DebugLevel>=1 then Writeln('ToRigMode ',WsMode.Itemindex);
+   i:=0;
+   Changes := True;
+   repeat
+    begin
+     if WsMode.Items[i] = mode then
+      Begin
+       WsMode.Itemindex := i;
+       i := WsMode.Items.Count;
+      end;
+     inc(i);
+     end;
+    until (i > WsMode.Items.Count);
+   if dmData.DebugLevel>=1 then Writeln(i,'  ',WsMode.Items[WsMode.Itemindex]);
+end;
+
+procedure TfrmWorked_grids.ToRigBand(band:string);
+var
+ i        : integer;
+Begin
+  if dmData.DebugLevel>=1 then Writeln('ToRigBand ',BandSelector.Itemindex);
+  i:=0;
+  Changes := True;
+  repeat
+   begin
+    if BandSelector.Items[i] = band then
+     Begin
+      BandSelector.Itemindex := i;
+      i := BandSelector.Items.Count;
+     end;
+     inc(i);
+    end;
+   until (i > BandSelector.Items.Count);
+  if dmData.DebugLevel>=1 then Writeln(i,'  ',BandSelector.Items[BandSelector.Itemindex]);
 end;
 
 function TfrmWorked_grids.RecordCount(SwConTrans:boolean) :String;
@@ -196,7 +270,7 @@ Begin
      if dmData.DebugLevel>=1 then Writeln('WkdCall is:',WkdCall);
 end;
 
-procedure MarkGrid(LocGrid : String;Canvas : TCanvas; SubBase : boolean);
+procedure TfrmWorked_grids.MarkGrid(LocGrid : String;MCanvas : TCanvas; SubBase : boolean);
 
   var v,vs,h,hs,Mheight,ltrbase,Pwidth,Pcolor,Grid1,Grid2:integer;
 
@@ -218,7 +292,7 @@ begin
         Grid1 := 3;
         Grid2 := 4;
    end;
-  with Canvas do
+  with MCanvas do
     begin
       //draw main grids
       v:=(ord(LocGrid[Grid1])- ltrbase)*40;
@@ -248,7 +322,7 @@ begin
 end;
 
 
-procedure DrawBase(Canvas : TCanvas; SubBase : boolean);
+procedure TfrmWorked_grids.DrawBase(BCanvas : TCanvas; SubBase : boolean);
 
 var v,vc,h,hc,Bwidth,Bheight,ltrbase:integer;
 
@@ -265,7 +339,7 @@ begin
         ltrbase := 48;
    end;
 
-  with Canvas do
+  with BCanvas do
     begin
       v:=0;
       repeat
@@ -303,30 +377,10 @@ end;
 
 procedure TfrmWorked_grids.FormCreate(Sender: TObject);
 
-var ErrorMsg,
-    ParOption: String;
-
 begin
-     AutoUpdate.enabled := False;
-     AutoUpdate.Interval := 5000;
-     WsMode.Itemindex := -1;
-     BandSelector.Itemindex := -1;
-     LogSave := 'Wkd_locs_empty';
-     LogBand := ' ';
-     Logo.Caption := 'V1.0cqr @OH1KH-2015';
-
-     //load map base image
-     LocMapBase.Picture.LoadFromLazarusResource('borders');
-
+     if dmData.DebugLevel>=1 then Writeln('frmWkd_Grids Create');
+     StartState;
      ConnectionInfo;
-
-     frmWorked_grids.Caption := frmWorked_grids.Caption+' '+LogDatabase+' '+LogBand;
-
-     LocMap.Canvas.CopyRect(Rect(0,0,Width,Height),
-     LocMapBase.Picture.Bitmap.Canvas,Rect(0,0,Width,Height));
-
-     DrawBase(LocMap.canvas, False);
-
 end;
 
 procedure TfrmWorked_grids.SaveMapImageClose(Sender: TObject);
@@ -348,7 +402,7 @@ begin
         AddSize  := 20;
         aWidth   :=LocMap.Picture.Bitmap.Width;
         aHeight  :=LocMap.Picture.Bitmap.Height + AddSize;
-        AddText  :=LogTable+' '+LogBand+' '+WsMode.items[WsMode.Itemindex]+'  '+
+        AddText  :=dmData.LogName+' '+LogBand+' '+WsMode.items[WsMode.Itemindex]+'  '+
                               intToStr(MainGridCount)+'main/'+intToStr(GridCount)+'sub grids     '+
                               ExtractFileName(LogDatabase)+'     '+BandQsoCount+'/'+MaxRowId+'qsos';
         end
@@ -357,7 +411,7 @@ begin
         AddSize  := 40;
         aWidth   := ZooMap.Picture.Bitmap.Width;
         aHeight  := ZooMap.Picture.Bitmap.Height + AddSize;
-        AddText  := LogTable+'     '+LogBand+' '+WsMode.items[WsMode.Itemindex]+'    '+
+        AddText  := dmData.LogName+'     '+LogBand+' '+WsMode.items[WsMode.Itemindex]+'    '+
                     LogMainGrid+' -> '+intToStr(GridCount)+'subgrids';
         AddText1 := ExtractFileName(LogDatabase)+'    '+BandQsoCount+'/'+MaxRowId+'qsos';
        end;
@@ -409,50 +463,16 @@ var
       mode,
       band,
       GotRows: String;
-      i        : integer;
-      Changes  : Boolean;
 
-Procedure ToRigMode;
-Begin
-  if dmData.DebugLevel>=1 then Writeln('ToRigMode ',WsMode.Itemindex);
-   i:=0;
-   Changes := True;
-   repeat
-    begin
-     if WsMode.Items[i] = mode then
-      Begin
-       WsMode.Itemindex := i;
-       i := WsMode.Items.Count;
-      end;
-     inc(i);
-     end;
-    until (i > WsMode.Items.Count);
-   if dmData.DebugLevel>=1 then Writeln(i,'  ',WsMode.Items[WsMode.Itemindex]);
-end;
-
-procedure ToRigBand;
-Begin
-  if dmData.DebugLevel>=1 then Writeln('ToRigBand ',BandSelector.Itemindex);
-  i:=0;
-  Changes := True;
-  repeat
-   begin
-    if BandSelector.Items[i] = band then
-     Begin
-      BandSelector.Itemindex := i;
-      i := BandSelector.Items.Count;
-     end;
-     inc(i);
-    end;
-   until (i > BandSelector.Items.Count);
-  if dmData.DebugLevel>=1 then Writeln(i,'  ',BandSelector.Items[BandSelector.Itemindex]);
-end;
 
 begin
+   if dmData.DebugLevel>=1 then Writeln('WkdGrids-TimerTick. FlwRig stage0 is:',FollowRig.Checked );
    AutoUpdate.enabled := False;
-   Changes := False;
+
    if FollowRig.Checked then
       Begin
+       if dmData.DebugLevel>=1 then Writeln(' FlwRig stage 1 is:',FollowRig.Checked );
+       if dmData.DebugLevel>=1 then Writeln(' FlwRig getmode returns:',frmTRXControl.GetModeBand(mode,band) );
        if frmTRXControl.GetModeBand(mode,band) then
         Begin
           //here wsjt-x makes exeption as mode is JT9 , JT65 or combination JT9+JT65 not what RigCtl says
@@ -464,16 +484,16 @@ begin
                               mode := frmNewQSO.WsjtxMode;
           if dmData.DebugLevel>=1 then Writeln('Follow rig mode: ',mode,' Band: ',band);
           if WsMode.Itemindex < 0 then
-             ToRigMode
+             ToRigMode(mode)
             else
              if WsMode.Items[WsMode.Itemindex] <> mode then
-                ToRigMode;
+                ToRigMode(mode);
 
           if BandSelector.Itemindex < 0 then
-             ToRigBand
+             ToRigBand(band)
             else
              if BandSelector.Items[BandSelector.Itemindex] <> band then
-                ToRigBand;
+                ToRigBand(band);
         end;
       end;
 
@@ -511,8 +531,13 @@ var
       SQLExtension,
       Grid           : String;
       qsocount       : integer;
+
 Begin
+  //no updates if band and mode are not set
+ if (BandSelector.itemIndex >= 0) and (WsMode.itemindex >= 0) then
+  Begin
     AutoUpdate.enabled := False;
+    Changes := False;
     //clean map if caller is not zoomed grid(=visible)
     if ZooMap.Visible then
        Begin
@@ -527,12 +552,6 @@ Begin
        end;
 
       case WsMode.itemindex of
-           // not set
-     -1    : if BandSelector.itemIndex > 0 then //band selected
-                Begin
-                 SQLExtension := '';
-                 WsMode.itemindex := 0; //any
-                end;
            //any
       0    : SQLExtension := '';
            //JT9+JT65
@@ -615,26 +634,27 @@ Begin
 
       SQLTransaction1.Active:= False;
       DBConnection.Connected:= False;
-
       if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then    //both must be set
          Begin
-          LogSave := 'Wkd_locs_'+LogTable+'_'+BandSelector.items[BandSelector.itemIndex];
+          LogSave := 'Wkd_locs_'+dmData.LogName+'_'+BandSelector.items[BandSelector.itemIndex];
           LogBand := BandSelector.items[BandSelector.itemIndex];
-          frmWorked_grids.Caption := 'Worked locator grids '+LogDatabase+' '+LogBand+' '+WsMode.items[WsMode.Itemindex];
+          frmWorked_grids.Caption := 'Worked locator grids '+dmData.LogName+' '+LogBand+' '+WsMode.items[WsMode.Itemindex];
           end;
 
       Nrgrids.Caption  := intToStr(MainGridCount)+'main/'+intToStr(GridCount)+'sub grids';
-      Nrstatus.Caption := ExtractFileName(LogDatabase);
+      Nrstatus.Caption := dmData.LogName;
       Nrqsos.Caption   := BandQsoCount+'/'+MaxRowId+'qsos';
       Nrgrids.Visible := True;
       Nrstatus.Visible := True;
       Nrqsos.Visible := True;
 
       AutoUpdate.enabled := True;
+  end;
 end;
 
 procedure TfrmWorked_grids.FormShow(Sender: TObject);
 begin
+  dmUtils.LoadWindowPos(frmWorked_grids);
   AutoUpdate.enabled := True;
 end;
 
@@ -645,7 +665,7 @@ var Bmp:TBitmap;
 
 Begin
 
-      if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then  //both must be set
+if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then  //both must be set
  begin
   aWidth:=40;
   aHeight:=20;
@@ -699,6 +719,7 @@ end;
 procedure TfrmWorked_grids.FormClose(Sender: TObject);
 begin
   AutoUpdate.enabled := False;
+  dmUtils.SaveWindowPos(frmWorked_grids);
   frmWorked_grids.hide;
 end;
 

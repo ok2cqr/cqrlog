@@ -2151,7 +2151,6 @@ object frmWorked_grids: TfrmWorked_grids
     Width = 124
     BorderSpacing.Top = 25
     ItemHeight = 0
-    ItemIndex = 0
     Items.Strings = (
       'all'
       '160M'
@@ -2171,7 +2170,6 @@ object frmWorked_grids: TfrmWorked_grids
     OnChange = BandSelectorChange
     Style = csDropDownList
     TabOrder = 0
-    Text = 'all'
   end
   object BandLabel: TLabel
     AnchorSideLeft.Control = BandSelector
@@ -2214,18 +2212,6 @@ object frmWorked_grids: TfrmWorked_grids
     Caption = 'Show wkd only'
     OnClick = ShoWkdOnlyClick
     TabOrder = 2
-  end
-  object Logo: TLabel
-    Left = 662
-    Height = 9
-    Top = 432
-    Width = 70
-    Caption = 'V0.0 @ OH1KH-2015'
-    Font.CharSet = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = 7
-    ParentColor = False
-    ParentFont = False
   end
   object ZooMap: TImage
     AnchorSideLeft.Control = LocMap
@@ -2322,7 +2308,6 @@ object frmWorked_grids: TfrmWorked_grids
     Width = 128
     BorderSpacing.Left = 165
     ItemHeight = 0
-    ItemIndex = 0
     Items.Strings = (
       'any'
       'AM'
@@ -2358,7 +2343,6 @@ object frmWorked_grids: TfrmWorked_grids
     OnChange = WsModeChange
     Style = csDropDownList
     TabOrder = 3
-    Text = 'any'
   end
   object modeLabel: TLabel
     AnchorSideLeft.Control = WsMode

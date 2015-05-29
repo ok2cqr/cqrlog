@@ -89,7 +89,9 @@ FIXED
   ---
   Found some kind of solution. May work also for others than me. If I have understand program's startup
   right. Not tested with different variations and not with program internal mysql at all.
-FIXED (but needs testing)
+NOT FIXED WITH THIS(but needs testing)
+  I thik I understood now how database is selected. It did not work with local database. Now does.
+FIXED
 
 -  I would like have the CQ-monitor display to be more colorfull !
   Means: 
@@ -127,8 +129,26 @@ FIXED
 - if form is open at close -> reopen when started again (something more to ini?).
   Worked_grids does not open automaticly.
   Worked_grids and wsxt-x CQ-monitor do not remember last runtime's position on screen.
+  When searching something else found how this was done with other forms. Simply copied needed parts to worked_grids and monwsjtx.
+FIXED
 
-- I think I have many duplicate parts of code as it seems that cqrlog has many functions that could be used
+
+- wsjt-x need preferences tab just like fldigi has.
+
+- fldigi remote has issue: It does not check if fldigi is already running and so starting another thread of fldigi. NO GOOD.
+
+- cqrlog has issue in log selection: When remote database is used and open or change log is selected and there "save log data to local.." is checked
+  and local database engine start is accepted, form does not load local logs but shows still remote log(s? I do have just one) in selection.
+  This is fixed by stopping cqrlog and starting it again. 
+
+- cqrlog has issue in rigctld usage: tried long time to trap error where worked_grids map did not follow rig, altough it was checked, at situation
+  where local log was changed to another. At log change cqrlog losts its connect to rigctld. And when I found that I remembered that it has been
+  issue for long time (before 1.9.0).
+
+- there is something wrong at frmworked_grids when database is changed from local to remote and vice versa. How ever cqrlog issues in log selection
+  and rigctld makes it too hard to debug!!!!!!!!!!
+
+- I think I have many duplicate parts of code as it seems that cqrlog has many functions (specially DB access) that could be used
    for wsjt-x CQ-monitor and worked_grids form. I just can not follow all the ideas original code has.
 
 

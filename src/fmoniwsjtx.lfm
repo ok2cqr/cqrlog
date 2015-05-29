@@ -7,6 +7,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   ClientHeight = 287
   ClientWidth = 444
   OnClose = FormClose
+  OnShow = FormShow
   LCLVersion = '1.2.6.0'
   object lblBand: TLabel
     Left = 48
