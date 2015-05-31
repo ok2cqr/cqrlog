@@ -723,7 +723,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtQTHEnter
           OnExit = edtQTHExit
           OnKeyDown = edtQTHKeyDown
-          TabOrder = 6
+          TabOrder = 7
         end
         object edtName: TEdit
           Left = 12
@@ -735,10 +735,10 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtNameEnter
           OnExit = edtNameExit
           OnKeyDown = edtNameKeyDown
-          TabOrder = 5
+          TabOrder = 6
         end
         object edtMyRST: TEdit
-          Left = 442
+          Left = 444
           Height = 27
           Top = 24
           Width = 90
@@ -746,7 +746,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtMyRSTEnter
           OnExit = edtMyRSTExit
           OnKeyDown = edtMyRSTKeyDown
-          TabOrder = 4
+          TabOrder = 2
         end
         object edtHisRST: TEdit
           Left = 343
@@ -757,7 +757,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtHisRSTEnter
           OnExit = edtHisRSTExit
           OnKeyDown = edtHisRSTKeyDown
-          TabOrder = 3
+          TabOrder = 1
         end
         object edtCall: TEdit
           Left = 12
@@ -814,7 +814,8 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = cmbModeEnter
           OnExit = cmbModeExit
           OnKeyDown = cmbModeKeyDown
-          TabOrder = 2
+          TabOrder = 4
+          TabStop = False
         end
         object edtGrid: TEdit
           Left = 255
@@ -826,7 +827,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtGridEnter
           OnExit = edtGridExit
           OnKeyDown = edtGridKeyDown
-          TabOrder = 7
+          TabOrder = 5
           Text = 'JO80OB'
         end
         object edtPWR: TEdit
@@ -949,7 +950,8 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = cmbFreqEnter
           OnExit = cmbFreqExit
           OnKeyDown = cmbFreqKeyDown
-          TabOrder = 1
+          TabOrder = 3
+          TabStop = False
         end
         object edtQSL_VIA: TEdit
           Left = 414

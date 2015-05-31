@@ -47,6 +47,17 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   This is solved by sending 'replay' packet if we get HeartBeat packet and if WsjtxMode is still ''. We can not do this earlier
   as there is no (return) port for UDP datagram to send  until we have got first HB-packet.    
 
+- In the mean time worked some 6m qsos (CW,SSB) and was not happy for the NewQSO filling order.
+  Actually would like to have here some kind of order selector at Preferences-> new qso. How ever did not
+  find acceptable way. I do know what it should look like, but did not find a way to code it (yet).
+  SO: Now arrow up and down keys work as they did before: the order that fields are on the form.
+  I changed forms TabOrder sequence numbers so that Pressing Tab key we go as:
+  Call->RSTtx->RSTrx->Grid (at that pont you can press enter to log) or continue as usual order,
+  just dropping grid, Name->QTH->PWR->QSL_S->QSL_R etc...
+
+  This is not far from adding autoincrement qso number to RSTsend  :)
+
+
 
  Issues to resolve:
 ===================
