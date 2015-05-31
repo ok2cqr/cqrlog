@@ -2,10 +2,10 @@
 
 LazarusResources.Add('TdmData','FORMDATA',[
   'TPF0'#7'TdmData'#6'dmData'#8'OnCreate'#7#16'DataModuleCreate'#9'OnDestroy'#7
-  +#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3'^'#2#16'HorizontalOf'
-  +'fset'#3#179#1#14'VerticalOffset'#2'p'#5'Width'#3#27#3#0#11'TDataSource'#7'd'
-  +'srMain'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDataSour'
-  +'ce'#12'dsrQSOBefore'#7'DataSet'#7#10'qQSOBefore'#4'left'#3'H'#1#3'top'#3#216
+  +#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3'&'#2#16'HorizontalOf'
+  +'fset'#3#179#0#14'VerticalOffset'#2#0#5'Width'#3#27#3#0#11'TDataSource'#7'ds'
+  +'rMain'#7'DataSet'#7#7'qCQRLOG'#4'left'#3'H'#1#3'top'#2#24#0#0#11'TDataSourc'
+  +'e'#12'dsrQSOBefore'#7'DataSet'#7#10'qQSOBefore'#4'left'#3'H'#1#3'top'#3#216
   +#0#0#0#11'TDataSource'#9'dsrImport'#4'left'#3'P'#2#3'top'#3#240#1#0#0#11'TDa'
   +'taSource'#8'dsrBands'#7'DataSet'#7#6'qBands'#4'left'#3#136#0#3'top'#3#173#1
   +#0#0#11'TDataSource'#11'dsrProfiles'#7'DataSet'#7#9'qProfiles'#4'left'#2'@'#3

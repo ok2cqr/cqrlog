@@ -17,8 +17,8 @@ uses
   fPropagation,fSQLConsole,fCallAttachment,fEditDetails,fQSLViewer,fCWKeys,fSCP,fDBConnect,fNewLog,
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
-dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
-fConfigStorage;
+  dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
+  fConfigStorage, fMoniWsjtx, fWkd1;
 var
   Splash : TfrmSplash;
 
@@ -54,6 +54,8 @@ begin
   Application.CreateForm(TfrmRotControl, frmRotControl);
   Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
   Application.CreateForm(TfrmCWType, frmCWType);
+  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
+  Application.CreateForm(TfrmWorked_grids, frmWorked_grids);
 
   Splash.Update;
   application.ProcessMessages;

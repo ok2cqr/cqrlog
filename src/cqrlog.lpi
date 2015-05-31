@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2093"/>
+      <BuildNr Value="2098"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -24,6 +24,7 @@
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
+      <DestinationDirectory Value="/home/saku/lazarus/cqrlog-1.9.0/src/pub"/>
       <IgnoreBinaries Value="False"/>
       <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
       <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
@@ -41,48 +42,51 @@
         </UserOverrides>
       </environment>
     </RunParams>
-    <RequiredPackages Count="10">
+    <RequiredPackages Count="11">
       <Item1>
-        <PackageName Value="TurboPowerIPro"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="richmemopackage"/>
       </Item1>
       <Item2>
-        <PackageName Value="SQLDBLaz"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="TurboPowerIPro"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item2>
       <Item3>
-        <PackageName Value="SDFLaz"/>
-        <MinVersion Minor="1" Release="1" Valid="True"/>
+        <PackageName Value="SQLDBLaz"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item3>
       <Item4>
-        <PackageName Value="SynEdit"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="SDFLaz"/>
+        <MinVersion Minor="1" Release="1" Valid="True"/>
       </Item4>
       <Item5>
-        <PackageName Value="TAChartLazarusPkg"/>
-        <MinVersion Valid="True"/>
+        <PackageName Value="SynEdit"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item5>
       <Item6>
-        <PackageName Value="RunTimeTypeInfoControls"/>
-        <MinVersion Minor="1" Valid="True"/>
+        <PackageName Value="TAChartLazarusPkg"/>
+        <MinVersion Valid="True"/>
       </Item6>
       <Item7>
-        <PackageName Value="LCL"/>
+        <PackageName Value="RunTimeTypeInfoControls"/>
+        <MinVersion Minor="1" Valid="True"/>
       </Item7>
       <Item8>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="LCL"/>
       </Item8>
       <Item9>
-        <PackageName Value="DBFLaz"/>
-        <MinVersion Minor="1" Release="1" Valid="True"/>
+        <PackageName Value="FCL"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item9>
       <Item10>
+        <PackageName Value="DBFLaz"/>
+        <MinVersion Minor="1" Release="1" Valid="True"/>
+      </Item10>
+      <Item11>
         <PackageName Value="MemDSLaz"/>
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
-      </Item10>
+      </Item11>
     </RequiredPackages>
-    <Units Count="83">
+    <Units Count="85">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -242,6 +246,7 @@
         <Filename Value="fSplash.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSplash"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fSplash"/>
       </Unit21>
@@ -545,6 +550,7 @@
         <Filename Value="fNewLog.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewLog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fNewLog"/>
       </Unit63>
@@ -696,6 +702,22 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fBandMapWatch"/>
       </Unit82>
+      <Unit83>
+        <Filename Value="fmoniwsjtx.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmMonWsjtx"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fMoniWsjtx"/>
+      </Unit83>
+      <Unit84>
+        <Filename Value="fwkd1.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmWorked_grids"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fWkd1"/>
+      </Unit84>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -711,10 +733,19 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
+      <TargetProcessor Value="80386"/>
+      <TargetCPU Value="i386"/>
+      <TargetOS Value="linux"/>
       <Optimizations>
         <OptimizationLevel Value="3"/>
       </Optimizations>
     </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
+    </Linking>
     <Other>
       <Verbosity>
         <ShowNotes Value="False"/>
@@ -729,14 +760,4 @@
       <CreateMakefileOnBuild Value="True"/>
     </Other>
   </CompilerOptions>
-  <Debugging>
-    <Exceptions Count="2">
-      <Item1>
-        <Name Value="ECodetoolError"/>
-      </Item1>
-      <Item2>
-        <Name Value="EFOpenError"/>
-      </Item2>
-    </Exceptions>
-  </Debugging>
 </CONFIG>

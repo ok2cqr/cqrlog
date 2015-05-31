@@ -1,0 +1,167 @@
+
+Additions done after first ver:
+===============================
+WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
+
+-changed text "Remote mode!" to texts "Wsjt remote!" and "Fldigi remote!" to see what remote is running
+
+-fldigi's remote stops wsjt-x remote and also other way round to prevent two remotes at same time.
+
+- wsjtx heartbeat-message changes color of "remote mode!" clred->clFuchsia->clred to indicate UDP is running
+
+-"wsjt-x remote" shows now also last decoded UDP message's type number for more running information.
+
+-reads now all settings from fldigi/preferences (except run path is just '/usr/bin/wsjtx') and follows them. 
+ Now it is easy to make new tab for preferences just by copying the fldigi one and change just names.
+
+-fldigis timersetting is not good to copy from preferences. It polls too seldom as we get just one UDP packet 
+ per poll. Have to be something like 100-200ms. Now harcoded.
+
+-added wsjt-x CQ-monitor. Uses status- and decode-packets. Status is needed for knowing the band and mode. 
+ We get it on start and on every mode or band change. We could request it with packet "replay" but at the    
+ moment threre is no need. "Replay" sends first current status packet and then all decoded information that
+ has not been cleared with wsjt-x's erase button.
+ Status packets update public variables wsjtxBand and wsjtxMode 
+ (@ frmNewQSO where the UDP receive is in  tmrWsjtxRemote).
+ Band and mode are used on CQ-monitor's header display and also @workedGrids "FollowRig" 
+ extension.
+
+
+-added simplified version of "wkdlog" (@sourceforge). Displays worked grids by band and mode using cqrlogs
+ database. All unneeded properties are stripped from this version (jt65-hb9hqx support, adif support and    
+ wsjtx support).
+
+
+- trying to move to GitHub. Lots of questions and difficulties.
+  Desperately need "GitHub for Dummies". And in finnish, if I may choose ;) 
+
+- fixed CQ-monitor's CQ-packet decoding (twice as got bug there).
+
+- added check that wsjt-x is not runnung when remote mode is set and run parameter (@ fldigi's preferences) is set.
+  (who would add own preferences to wsjt-x remote ?)
+  Lock file existence /tmp/WSJT-X.lock is cheked and run command is not issued if file exists
+
+- this leads to situation where wsjt-x is running and remote mode is issued afterwards. Then we do not know wsjtxmode or band
+  as they come from 'status' packet that is sent at start, every mode or band change and if 'replay' packet is sent to wsjt-x.
+  So if no band or mode change the CQ-Monitor does not know band and mode and dies not show anything.
+  This is solved by sending 'replay' packet if we get HeartBeat packet and if WsjtxMode is still ''. We can not do this earlier
+  as there is no (return) port for UDP datagram to send  until we have got first HB-packet.    
+
+- In the mean time worked some 6m qsos (CW,SSB) and was not happy for the NewQSO filling order.
+  Actually would like to have here some kind of order selector at Preferences-> new qso. How ever did not
+  find acceptable way. I do know what it should look like, but did not find a way to code it (yet).
+  SO: Now arrow up and down keys work as they did before: the order that fields are on the form.
+  I changed forms TabOrder sequence numbers so that Pressing Tab key we go as:
+  Call->RSTtx->RSTrx->Grid (at that pont you can press enter to log) or continue as usual order,
+  just dropping grid, Name->QTH->PWR->QSL_S->QSL_R etc...
+
+  This is not far from adding autoincrement qso number to RSTsend  :)
+
+
+
+ Issues to resolve:
+===================
+
+- when in remotemodewsjtx: open qso list, edit qso, causes focus error (does fldigi the same? must test)
+  Oh, found !
+  "Log is in remote mode please disble it!" in fldigi remote. Two changes needed:
+  TfrmMain.acEditQSOExecute @ main.pas
+  line 650: if (frmNewQSO.mnuRemoteMode.Checked) or (frmNewQSO.mnuRemoteModeWsjtx.Checked) then
+  TfrmMain.acViewExecute @ main.pas
+  line 742  if (frmNewQSO.mnuRemoteMode.Checked) or (frmNewQSO.mnuRemoteModeWsjtx.Checked) then
+FIXED
+
+- for some unknown reason wsjtx-remote works if started from console in debug mode "cqrlog debug=1"
+  if started from icon (no debug) wsjtx-remote does not work !!!!
+  Strange and hard to find. Noticed from no color change in text "Wsjtx remote!" when hearbeat is send
+  from wsjtx (seen with tcpdump).
+  STUPID ME ! 
+  I had built decode partially so that it worked only under "if dmData.DebugLevel>=1 then" sentences.
+  So it can't work without debug=1 !
+FIXED
+
+- in wsjtx logging misstyped power as "15" to "Name" field of wsjtx that causes name to be 15 and error
+  in cqrlog logging. On the other hand if cqrlog in manual mode you can type name as 15 and there
+  will be no error. Error is:" "15" is not a valid component name."
+  Empty or string (A..Z, a..z) does not cause error.
+  We'll fix this by sorting name at wsjtx message 5 decode section so that it contains only A..Z,a..z.
+  TYPO!
+  Used variable "name" for name. Var "name" seems to be introduced somewhere as global because complier
+  does not complain.
+FIXED
+ 
+ -Worked_grids works now only for OH1KH.
+  Still need to understand how database is selected in cqrlog !!!!
+  I have separate database running at localhost (cqrlog accesses with IP and port) because that works faster
+  than cqrlog's internal version of database (no hickups at start with this!!!).
+  That's why I can access log database easily from my code (and I have only 1 database).
+  Database information: What is the selected database? (now was hard coded to my settings).
+  is there difference if DB is internal (cqrlog) or external (IP+port). Have to dig out from original code.
+  ---
+  Found some kind of solution. May work also for others than me. If I have understand program's startup
+  right. Not tested with different variations and not with program internal mysql at all.
+NOT FIXED WITH THIS(but needs testing)
+  I thik I understood now how database is selected. It did not work with local database. Now does.
+FIXED
+
+-  I would like have the CQ-monitor display to be more colorfull !
+  Means: 
+     Call that is not worked  would be green, otherwise red.
+     If locator (4chrs. I call it subgrid), is not worked green, otherwise red.
+     If main grid , first (2chr) is worked: them red, rest of loc (the numbers) green.
+  Managed to get DXCCInfo to the end of line although it took some time to find functions to get
+  prefix from call and then 'adif' (means what in here?)from prefix and finally dxccinfo. 
+     Text could also have different colours depending the DXCCInfo message content.
+  So all this means several colors at same line.
+  Tried to install TRichMemo and the install went ok to my Lazarus,
+  but it did not work. Compile/runtime problems. Source was quite old (2009 !!).
+  Maybe there is better solution now (@2015)? I have to google more about this.
+  ---
+  Managed with  https://svn.code.sf.net/p/lazarus-ccr/svn/components/richmemo/ (Revision 4151).
+  CQ-Monitor has now colors telling status. Additional texts removed.
+  Changed font to non proportional for better justify.
+  Received message #3 (clear) from wsjt-x clears now Cq-Monitor, too (fNewQSO/decode msgs)
+FIXED
+
+- If Worked Grids map is open and "follow rig" is checked then starting remote wsjt-x causes crash because wkdGrid-autoupdate
+  timer runs before wsjt-x has sent "status" packet frmNewQSO.WsjtxMode is sill empty.
+  Must check under FollowRig.checked that wsjtxRemote.checked needs also frmNewQSO.WsjtxMode<>'' 
+FIXED
+
+- takes name from qrz.com but puts it only to newQSO form, not in log. (Name comes too late!) 
+  YEP! same issue with fldigi-remote. Name appears to form, ({too} late) but not in log.
+  This is not big deal. Maybe I'll look it sometimes. 
+  I think I have solution for this. There is QRZ.Thread at editCallExit. Added QRZ.WaitFor; after QRZ.Start. Now we wait QRZ to finish.
+  This may make problem if qrz-fetch fails somehow and has no timeout timer. Is it needed ????
+  After that added to both fldigiTimer and wsjtxtimer a condition where if sname is empty (user did not give name on remote side)
+  value of edtName.Text stays as is (from qrz, may it be). If sname has content it is palced to edtName.Text and runs over qrz value.
+FIXED
+
+- if form is open at close -> reopen when started again (something more to ini?).
+  Worked_grids does not open automaticly.
+  Worked_grids and wsxt-x CQ-monitor do not remember last runtime's position on screen.
+  When searching something else found how this was done with other forms. Simply copied needed parts to worked_grids and monwsjtx.
+FIXED
+
+
+- wsjt-x need preferences tab just like fldigi has.
+
+- fldigi remote has issue: It does not check if fldigi is already running and so starting another thread of fldigi. NO GOOD.
+
+- cqrlog has issue in log selection: When remote database is used and open or change log is selected and there "save log data to local.." is checked
+  and local database engine start is accepted, form does not load local logs but shows still remote log(s? I do have just one) in selection.
+  This is fixed by stopping cqrlog and starting it again. 
+
+- cqrlog has issue in rigctld usage: tried long time to trap error where worked_grids map did not follow rig, altough it was checked, at situation
+  where local log was changed to another. At log change cqrlog losts its connect to rigctld. And when I found that I remembered that it has been
+  issue for long time (before 1.9.0).
+
+- there is something wrong at frmworked_grids when database is changed from local to remote and vice versa. How ever cqrlog issues in log selection
+  and rigctld makes it too hard to debug!!!!!!!!!!
+
+- I think I have many duplicate parts of code as it seems that cqrlog has many functions (specially DB access) that could be used
+   for wsjt-x CQ-monitor and worked_grids form. I just can not follow all the ideas original code has.
+
+
+
+
