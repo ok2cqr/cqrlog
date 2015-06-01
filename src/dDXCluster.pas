@@ -102,6 +102,8 @@ type
     procedure LoadDXCCRefArray;
     procedure LoadExceptionArray;
     procedure RunCallAlertCmd(call,band,mode,freq : String);
+
+
   end;
 
 var
@@ -1217,6 +1219,9 @@ begin
     trCallAlert.Rollback;
   end
 end;
+
+
+
 
 initialization
   {$I dDXCluster.lrs}

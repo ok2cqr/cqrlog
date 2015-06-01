@@ -18,7 +18,7 @@ uses
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
 dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
-fConfigStorage;
+fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer;
 var
   Splash : TfrmSplash;
 
@@ -54,6 +54,7 @@ begin
   Application.CreateForm(TfrmRotControl, frmRotControl);
   Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
   Application.CreateForm(TfrmCWType, frmCWType);
+  Application.CreateForm(TfrmRbnMonitor, frmRbnMonitor);
 
   Splash.Update;
   application.ProcessMessages;

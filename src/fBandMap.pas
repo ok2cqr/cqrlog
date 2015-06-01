@@ -448,7 +448,7 @@ begin
         skip := False;
 
         if not (frmBandMap.FDateFilterType = dftShowAll) then
-          skip := dmData.SkipBandMapDateTime(AddArray[y].Call,AddArray[y].Band,AddArray[y].Mode,LastDate,LastTime);
+          skip := dmData.CallExistsInLog(AddArray[y].Call,AddArray[y].Band,AddArray[y].Mode,LastDate,LastTime);
 
         if frmBandMap.FOnlyLoTW and frmBandMap.FOnlyEQSL then
         begin

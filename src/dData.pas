@@ -102,6 +102,8 @@ type
     scQSLExport : TSQLScript;
     scMySQLConfig: TSQLScript;
     qBandMapFil: TSQLQuery;
+    qRbnMon: TSQLQuery;
+    trRbnMon: TSQLTransaction;
     trBandMapFil: TSQLTransaction;
     tmrDBPing: TTimer;
     trCQRLOG: TSQLTransaction;
@@ -161,7 +163,7 @@ type
     aProf : Array of TExpProfile;
     aSCP  : Array of String[20];
     MySQLProcess : TProcess;
-
+    csPreviousQSO : TRTLCriticalSection;
     fMySQLVersion : Currency;
 
     function  FindLib(const Path,LibName : String) : String;
@@ -190,6 +192,8 @@ type
     }
     MainCon    : TSQLConnection;
     BandMapCon : TSQLConnection;
+    RbnMonCon  : TSQLConnection;
+
     eQSLUsers : Array of ShortString;
     CallArray : Array [0..MaxCall] of String[20];
     IsFilter  : Boolean;
@@ -266,7 +270,9 @@ type
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  TriggersExistsOnCqrlog_main : Boolean;
     function  GetLastAllertCallId(const callsign,band,mode : String) : Integer;
-    function  SkipBandMapDateTime(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+    function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+    function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
+    function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -509,6 +515,8 @@ begin
     dmDXCluster.dbDXC.Connected := False;
   if dmLogUpload.LogUploadCon.Connected then
     dmLogUpload.LogUploadCon.Connected := False;
+  if RbnMonCon.Connected then
+    RbnMonCon.Connected := False;
 
   if fMySQLVersion < 5.5 then
   begin
@@ -516,7 +524,10 @@ begin
     (MainCon as TMySQL51Connection).Port     := StrToInt(port);
 
     (BandMapCon as TMySQL51Connection).HostName := host;
-    (BandMapCon as TMySQL51Connection).Port     := StrToInt(port)
+    (BandMapCon as TMySQL51Connection).Port     := StrToInt(port);
+
+    (RbnMonCon as TMySQL51Connection).HostName := host;
+    (RbnMonCon as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
     if fMySQLVersion = 5.5 then
@@ -525,14 +536,20 @@ begin
       (MainCon as TMySQL55Connection).Port     := StrToInt(port);
 
       (BandMapCon as TMySQL55Connection).HostName := host;
-      (BandMapCon as TMySQL55Connection).Port     := StrToInt(port)
+      (BandMapCon as TMySQL55Connection).Port     := StrToInt(port);
+
+      (RbnMonCon as TMySQL55Connection).HostName := host;
+      (RbnMonCon as TMySQL55Connection).Port     := StrToInt(port)
     end
     else begin
       (MainCon as TMySQL56Connection).HostName := host;
       (MainCon as TMySQL56Connection).Port     := StrToInt(port);
 
       (BandMapCon as TMySQL56Connection).HostName := host;
-      (BandMapCon as TMySQL56Connection).Port     := StrToInt(port)
+      (BandMapCon as TMySQL56Connection).Port     := StrToInt(port);
+
+      (RbnMonCon as TMySQL56Connection).HostName := host;
+      (RbnMonCon as TMySQL56Connection).Port     := StrToInt(port)
     end
   end;
   MainCon.UserName     := user;
@@ -542,6 +559,10 @@ begin
   BandMapCon.UserName     := user;
   BandMapCon.Password     := pass;
   BandMapCon.DatabaseName := 'information_schema';
+
+  RbnMonCon.UserName     := user;
+  RbnMonCon.Password     := pass;
+  RbnMonCon.DatabaseName := 'information_schema';
 
   if fMySQLVersion < 5.5 then
   begin
@@ -588,7 +609,8 @@ begin
     MainCon.Connected                  := True;
     dmDXCluster.dbDXC.Connected        := True;
     dmLogUpload.LogUploadCon.Connected := True;
-    BandMapCon.Connected               := True
+    BandMapCon.Connected               := True;
+    RbnMonCon.Connected                := True;
   except
     on E : Exception do
     begin
@@ -704,6 +726,14 @@ begin
   if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
   qBandMapFil.ExecSQL;
   trBandMapFil.Commit;
+
+  if trRbnMon.Active then trRbnMon.Rollback;
+  qRbnMon.Close;
+  qRbnMon.SQL.Text := 'use ' + fDBName;
+  if (fDebugLevel>=1) then Writeln(qRbnMon.SQL.Text);
+  trRbnMon.StartTransaction;
+  qRbnMon.ExecSQL;
+  trRbnMon.Commit;
 
   Q.SQL.Text := 'SELECT * FROM cqrlog_config';
   trQ.StartTransaction;
@@ -1059,6 +1089,7 @@ var
   MySQLVer : String;
   param    : String;
 begin
+  InitCriticalSection(csPreviousQSO);
   cqrini       := nil;
   IsSFilter    := False;
 
@@ -1178,16 +1209,19 @@ begin
   if fMySQLVersion < 5.5 then
   begin
     MainCon    := TMySQL51Connection.Create(self);
-    BandMapCon := TMySQL51Connection.Create(self)
+    BandMapCon := TMySQL51Connection.Create(self);
+    RbnMonCon  := TMySQL51Connection.Create(self);
   end
   else  if fMySQLVersion < 5.6 then
   begin
     MainCon    := TMySQL55Connection.Create(self);
-    BandMapCon := TMySQL55Connection.Create(self)
+    BandMapCon := TMySQL55Connection.Create(self);
+    RbnMonCon  := TMySQL55Connection.Create(self)
   end
   else begin
     MainCon    := TMySQL56Connection.Create(self);
-    BandMapCon := TMySQL56Connection.Create(self)
+    BandMapCon := TMySQL56Connection.Create(self);
+    RbnMonCon  := TMySQL56Connection.Create(self)
   end;
 
   MainCon.KeepConnection := True;
@@ -1206,6 +1240,12 @@ begin
   qBandMapFil.Transaction   := trBandMapFil;
   qBandMapFil.DataBase      := BandMapCon;
   trBandMapFil.DataBase     := BandMapCon;
+
+  RbnMonCon.KeepConnection := True;
+  RbnMonCon.Transaction    := trRbnMon;
+  qRbnMon.Transaction      := trRbnMon;
+  qRbnMon.DataBase         := RbnMonCon;
+  trRbnMon.DataBase        := RbnMonCon;
 
   DLLSSLName  := dmData.cDLLSSLName;
   DLLUtilName := dmData.cDLLUtilName;
@@ -1315,6 +1355,7 @@ begin
   DeleteFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
   BandMapCon.Connected := False;
   MainCon.Connected := False;
+  DoneCriticalsection(csPreviousQSO);
   KillMySQL(False)
 end;
 
@@ -3899,13 +3940,15 @@ begin
   end
 end;
 
-function TdmData.SkipBandMapDateTime(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+function TdmData.CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
 var
   sql : String;
 begin
-  Result := False;
-  qBandMapFil.Close;
+  EnterCriticalsection(csPreviousQSO);
   try
+    Result := False;
+    qBandMapFil.Close;
+
     //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
     //too late to rewrite it (Petr, OK2CQR)
     sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
@@ -3917,9 +3960,120 @@ begin
     Result := qBandMapFil.RecordCount > 0
   finally
     qBandMapFil.Close;
-    trBandMapFil.RollBack
+    trBandMapFil.RollBack;
+    LeaveCriticalsection(csPreviousQSO)
   end
 end;
+
+function TdmData.RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean; var index : integer) : String;
+var
+  sAdif : String = '';
+begin
+  // index : 0 - unknown country, no qsl needed
+  // index : 1 - New country
+  // index : 2 - New band country
+  // index : 3 - New mode country
+  // index : 4 - QSL needed
+  if (adif = 0) then
+  begin
+    Result := 'Unknown country';
+    index  := 0;
+    exit
+  end;
+  index := 1;
+  sAdif := IntToStr(adif);
+
+  if trRbnMon.Active then
+    trRbnMon.Rollback;
+
+  try try
+    if DxccWithLoTW then
+      qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                    sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
+                    QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
+                    QuotedStr(mode)+' LIMIT 1'
+    else
+      qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                     sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
+                     QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+    trRbnMon.StartTransaction;
+    qRbnMon.Open;
+    if qRbnMon.Fields[0].AsInteger > 0 then
+    begin
+      Result := 'Confirmed country!!';
+      index  := 0
+    end
+    else begin
+      qRbnMon.Close;
+      qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                     sAdif+' AND band='+QuotedStr(band)+' AND mode='+
+                     QuotedStr(mode)+' LIMIT 1';
+      qRbnMon.Open;
+      if qRbnMon.Fields[0].AsInteger > 0 then
+      begin
+        Result := 'QSL needed !!';
+        index := 4
+      end
+      else begin
+        qRbnMon.Close;
+        qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                       sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+        qRbnMon.Open;
+        if qRbnMon.Fields[0].AsInteger > 0 then
+        begin
+          Result := 'New mode country!!';
+          index  := 3
+        end
+        else begin
+          qRbnMon.Close;
+          qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
+                         sAdif+' LIMIT 1';
+          qRbnMon.Open;
+          if qRbnMon.Fields[0].AsInteger>0 then
+          begin
+            Result := 'New band country!!';
+            index  := 2
+          end
+          else begin
+            Result := 'New country!!';
+            index  := 1
+          end
+        end
+      end
+    end
+  except
+    on E : Exception do
+      Writeln(E.Message)
+  end
+  finally
+    qRbnMon.Close;
+    trRbnMon.Rollback
+  end
+end;
+
+function TdmData.RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+var
+  sql : String;
+begin
+  try
+    Result := False;
+    qRbnMon.Close;
+
+    //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
+    //too late to rewrite it (Petr, OK2CQR)
+    sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
+           'and (mode = '+QuotedStr(mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
+           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')';
+    qRbnMon.SQL.Text := sql;
+    if fDebugLevel>=1 then Writeln(qRbnMon.SQL.Text);
+    qRbnMon.Open;
+    Result := qRbnMon.RecordCount > 0
+  finally
+    qRbnMon.Close;
+    trRbnMon.RollBack
+  end
+end;
+
 
 initialization
   {$I dData.lrs}

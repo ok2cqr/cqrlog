@@ -1,0 +1,63 @@
+object frmRbnServer: TfrmRbnServer
+  Left = 435
+  Height = 132
+  Top = 330
+  Width = 428
+  ActiveControl = edtServerName
+  BorderStyle = bsDialog
+  Caption = 'Change RBN server address'
+  ClientHeight = 132
+  ClientWidth = 428
+  Position = poOwnerFormCenter
+  LCLVersion = '1.2.4.0'
+  object Label1: TLabel
+    Left = 8
+    Height = 17
+    Top = 9
+    Width = 77
+    Caption = 'Server:port'
+    ParentColor = False
+  end
+  object edtServerName: TEdit
+    Left = 8
+    Height = 27
+    Top = 32
+    Width = 328
+    TabOrder = 0
+    Text = 'edtServerName'
+  end
+  object Button1: TButton
+    Left = 346
+    Height = 25
+    Top = 5
+    Width = 75
+    Caption = 'OK'
+    OnClick = Button1Click
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 346
+    Height = 25
+    Top = 34
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    TabOrder = 3
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 17
+    Top = 70
+    Width = 75
+    Caption = 'User name:'
+    ParentColor = False
+  end
+  object edtUserName: TEdit
+    Left = 8
+    Height = 27
+    Top = 95
+    Width = 179
+    TabOrder = 1
+    Text = 'edtUserName'
+  end
+end

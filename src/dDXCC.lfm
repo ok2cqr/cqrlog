@@ -7,9 +7,9 @@ object dmDXCC: TdmDXCC
   VerticalOffset = 377
   Width = 434
   object Q: TSQLQuery
+    FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 168
@@ -22,8 +22,8 @@ object dmDXCC: TdmDXCC
     top = 80
   end
   object Q1: TSQLQuery
+    FieldDefs = <>
     Transaction = trQ1
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 112
@@ -36,8 +36,8 @@ object dmDXCC: TdmDXCC
     top = 80
   end
   object qDXCCRef: TSQLQuery
+    FieldDefs = <>
     Transaction = trDXCCRef
-    ReadOnly = False
     Params = <>
     ParseSQL = False
     left = 40
@@ -49,19 +49,19 @@ object dmDXCC: TdmDXCC
     left = 40
     top = 80
   end
-  object dsrValid: TDatasource
+  object dsrValid: TDataSource
     DataSet = qValid
     left = 304
     top = 80
   end
-  object dsrDeleted: TDatasource
+  object dsrDeleted: TDataSource
     DataSet = qDeleted
     left = 304
     top = 24
   end
   object qValid: TSQLQuery
+    FieldDefs = <>
     Transaction = trValid
-    ReadOnly = False
     Params = <>
     left = 376
     top = 80
@@ -79,7 +79,7 @@ object dmDXCC: TdmDXCC
     top = 24
   end
   object qDeleted: TSQLQuery
-    ReadOnly = False
+    FieldDefs = <>
     Params = <>
     ParseSQL = False
     left = 376

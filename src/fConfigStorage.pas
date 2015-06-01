@@ -177,7 +177,7 @@ begin
   if cmbStoreCalbook.ItemIndex>0 then
     Sections := Sections + 'CallBook,';
   if cmbStoreRbn.ItemIndex>0 then
-    Sections := Sections + 'RBN,';
+    Sections := Sections + 'RBN,RBNFilter,';
   if cmbStoreOnlineLog.ItemIndex>0 then
     Sections := Sections + 'OnlineLog,';
   if cmbStoreWindowSize.ItemIndex>0 then

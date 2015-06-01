@@ -62,6 +62,7 @@ type
     acLogUploadStatus: TAction;
     acHotkeys: TAction;
     acRefreshTime: TAction;
+    acRBNMonitor: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -91,6 +92,7 @@ type
     MenuItem88: TMenuItem;
     MenuItem89: TMenuItem;
     MenuItem90: TMenuItem;
+    MenuItem91: TMenuItem;
     mnuOnlineLog: TMenuItem;
     MenuItem54: TMenuItem;
     MenuItem55: TMenuItem;
@@ -306,6 +308,7 @@ type
     procedure acOpenLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
+    procedure acRBNMonitorExecute(Sender: TObject);
     procedure acRefreshTimeExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
     procedure acReloadCWExecute(Sender: TObject);
@@ -559,7 +562,7 @@ type
     procedure NewQSO;
     procedure ClearAll;
     procedure SavePosition;
-    procedure NewQSOFromSpot(call,freq,mode : String);
+    procedure NewQSOFromSpot(call,freq,mode : String;FromRbn : Boolean = False);
     procedure SetEditLabel;
     procedure UnsetEditLabel;
     procedure StoreClubInfo(where,StoreText : String);
@@ -626,7 +629,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1210,6 +1213,9 @@ begin
   if cqrini.ReadBool('Window','CWType',False) then
     acCWType.Execute;
 
+  if cqrini.ReadBool('Window','RBNMonitor',False) then
+    acRBNMonitor.Execute;
+
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
@@ -1347,6 +1353,14 @@ begin
     begin
       cqrini.WriteBool('Window','CWType',True);
       frmCWType.Close
+    end
+    else
+      cqrini.WriteBool('Window','CWType',False);
+
+    if frmRBNMonitor.Showing then
+    begin
+      cqrini.WriteBool('Window','RBNMonitor',True);
+      frmRBNMonitor.Close
     end
     else
       cqrini.WriteBool('Window','CWType',False);
@@ -3101,6 +3115,11 @@ end;
 procedure TfrmNewQSO.acQSOListExecute(Sender: TObject);
 begin
   frmMain.Show
+end;
+
+procedure TfrmNewQSO.acRBNMonitorExecute(Sender: TObject);
+begin
+  frmRBNMonitor.Show
 end;
 
 procedure TfrmNewQSO.acRefreshTimeExecute(Sender: TObject);
@@ -4917,7 +4936,7 @@ begin
   Handled := True
 end;
 
-procedure TfrmNewQSO.NewQSOFromSpot(call,freq,mode : String);
+procedure TfrmNewQSO.NewQSOFromSpot(call,freq,mode : String;FromRbn : Boolean = False);
 var
   etmp : Extended;
 begin
@@ -4938,7 +4957,8 @@ begin
     if chkAutoMode.Checked then
       cmbMode.Text := mode;
     freq := FloatToStr(etmp);
-    mode := dmUtils.GetModeFromFreq(freq);
+    if not FromRbn then
+      mode := dmUtils.GetModeFromFreq(freq);
     etmp := etmp*1000;
     freq := FloatToStr(etmp);
     frmTRXControl.SetModeFreq(mode,freq);

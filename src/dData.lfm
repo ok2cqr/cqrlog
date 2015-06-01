@@ -858,12 +858,23 @@ object dmData: TdmData
   object qBandMapFil: TSQLQuery
     FieldDefs = <>
     Params = <>
-    left = 269
-    top = 390
+    left = 256
+    top = 488
   end
   object trBandMapFil: TSQLTransaction
     Active = False
-    left = 269
-    top = 448
+    left = 256
+    top = 424
+  end
+  object qRbnMon: TSQLQuery
+    FieldDefs = <>
+    Params = <>
+    left = 176
+    top = 15
+  end
+  object trRbnMon: TSQLTransaction
+    Active = False
+    left = 256
+    top = 16
   end
 end

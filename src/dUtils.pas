@@ -56,6 +56,11 @@ const
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string =
     ('1800.0', '3500.0', '7000.0', '10100.0', '14000.0', '21000.0', '28000.0');
 
+  C_RBN_CONT  = 'AF,AN,AS,EU,NA,SA,OC';
+  C_RBN_BANDS = '160M,80M,40M,30M,20M,17M,15M,12M,10M,6M,2M';
+  C_RBN_MODES = 'CW,RTTY,PSK31';
+
+
 type
 
   { TdmUtils }

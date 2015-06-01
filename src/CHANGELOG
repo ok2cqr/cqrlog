@@ -7,6 +7,7 @@ Legend:
 1.9.1
   + support sending CW via HamLib library added
   + CW type window is not modal window anymore
+  + RBN monitor added
   - Export configuration of opened log doesn't reflect recent changes - fixed
   - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
 

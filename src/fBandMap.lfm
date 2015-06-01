@@ -27,7 +27,7 @@ object frmBandMap: TfrmBandMap
       Left = 0
       Height = 26
       Top = 0
-      Width = 259
+      Width = 255
       Caption = 'toolBandMap'
       Images = imglBandMap
       TabOrder = 0
