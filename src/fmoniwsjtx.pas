@@ -73,13 +73,16 @@ begin
      end;
 end;
 procedure TfrmMonWsjtx.WsjtxMemoChange(Sender: TObject);
+var
+  MaxLines : integer;
 begin
+  MaxLines := 16;
   //scroll buffer
-  if WsjtxMemo.lines.count > 15 then
+  if WsjtxMemo.lines.count >= MaxLines then
          Begin
           repeat
             WsjtxMemo.lines.delete(0);
-          until WsjtxMemo.lines.count < 15;
+          until WsjtxMemo.lines.count <= Maxlines;
           FocusLastLine;
          end;
 end;
@@ -121,6 +124,7 @@ function NextElement:String; //detach next element from Message. Cut Message
 begin
    Result:='';
    i:=1;
+    trim(Message);
     while (Message[i]<>' ') and (i <= length(Message)) do
      Begin
        Result:=Result + Message[i];

@@ -5,7 +5,7 @@ unit fWkd1;
 interface
 
 uses
-  Classes, SysUtils, sqlite3conn, sqldb, mysql56conn, mysql55conn, db, FileUtil,
+  Classes, SysUtils,FileUtil,
   Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, LResources, IniFiles;
 
 
@@ -14,8 +14,8 @@ type
   { TfrmWorked_grids }
 
     TfrmWorked_grids = class(TForm)
+    ZooIlbl: TImage;
     modeLabel: TLabel;
-    DBConnection: TMySQL55Connection;
     FollowRig: TCheckBox;
     WsMode: TComboBox;
     Nrstatus: TLabel;
@@ -23,17 +23,13 @@ type
     AutoUpdate: TTimer;
     Nrgrids: TLabel;
     Nrqsos: TLabel;
-    ZooLbl: TLabel;
     LocMapBase: TImage;
     ZooMap: TImage;
     ShoWkdOnly: TCheckBox;
     SaveMapImage: TSaveDialog;
     SaveMap: TButton;
-    DataSource1: TDataSource;
     LocMap: TImage;
     BandLabel: TLabel;
-    SQLQuery1: TSQLQuery;
-    SQLTransaction1: TSQLTransaction;
     procedure BandSelectorChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LocMapClick(Sender: TObject);
@@ -54,9 +50,7 @@ type
     { public declarations }
     Procedure ToRigMode(mode:string);
     Procedure ToRigBand(band:string);
-    function RecordCount(SwConTrans:boolean) :String;
-    procedure ConnectionInfo;
-    procedure StartState;
+    function RecordCount:String;
     function WkdGrid(loc,band,mode:string):integer;  //returns 0=not wkd, 1=main grid wkd, 2=wkd
     function WkdCall(call,band,mode:string):boolean;  //returns wkd=true
   end;
@@ -65,13 +59,7 @@ var
   frmWorked_grids: TfrmWorked_grids; //Main form
   MaxRowId,                    //rows in table (Number of qsos in log database)
   BandQsoCount,                //Number of qsos on selected band
-  OldLogDatabase,              // Old Log database file name (+path)
-  LogDatabase,                 //Log database file name (+path)
   LogTable,                    //Table name found from database file (own call ad locator)
-  LogUsername,
-  LogPassword,
-  LogHostname,
-  LogPort,
   LogBand,                     //Band that is selected for worked locators
   LogSave,                     //Default File name for saving image
   LogMainGrid     : String;    //first 2 letters ov locator grid clicked from map
@@ -87,77 +75,6 @@ implementation
 Uses fNewQSO,fTRXControl,dData,dUtils;
 
 { TfrmWorked_grids }
-
-
-procedure TfrmWorked_grids.ConnectionInfo;
-Var
-    ini : TIniFile;
-    s   :longint;
-begin
-         //I think I got the idea now between local and server database. Actually EASY...
-
-         ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
-         try
-
-          if ini.ReadBool('Login','SaveTolocal',True) then
-               begin
-                LogHostname := '127.0.0.1';
-                LogPort     := '64000';
-                LogUsername := 'cqrlog';
-                LogPassword := 'cqrlog';
-               end
-            else
-               Begin
-                LogHostname := ini.ReadString('Login','Server','');
-                LogPort     := ini.ReadString('Login','Port','');
-                LogPassword := ini.ReadString('Login','Pass','');
-                LogUsername := ini.ReadString('Logini','User','');
-               end;
-
-          if ini.ReadBool('Login','AutoOpen',True)  then
-              TryStrToInt(ini.ReadString('Login','LastLog',''),s)
-            else
-              TryStrToInt(ini.ReadString('Login','LastOpenedLog',''),s);
-
-         finally
-          ini.Free
-         end;
-
-         LogDatabase := dmData.GetProperDBName(s);
-         LogTable := 'cqrlog_main';  //assume table name is this always
-         DBConnection.DataBaseName:=LogDatabase;
-         DBConnection.HostName:=LogHostname;
-         if TryStrToInt(LogPort,s) then DBConnection.Port := s;
-         DBConnection.UserName:=LogUsername;
-         DBConnection.Password:=LogPassword;
-
-         if dmData.DebugLevel>=1 then Writeln('LogDatabase: ',LogDatabase, ' OldLogDatabase: ',OldLogDatabase);
-         if LogDatabase <> OldLogDatabase then //log has changed  enable updater
-             Begin
-               OldLogDatabase := LogDatabase;
-               Changes := True;
-               if dmData.DebugLevel>=1 then Writeln('Changes->LogDatabase: ',LogDatabase);
-             end;
-end;
-procedure TfrmWorked_grids.StartState;
-Begin
-  AutoUpdate.enabled := False;
-  AutoUpdate.Interval := 5000;
-  WsMode.Itemindex := -1;
-  BandSelector.Itemindex := -1;
-  LogSave := 'Wkd_locs_empty';
-  LogBand := ' ';
-  OldLogDatabase :='';
-
-  //load map base image
-  LocMapBase.Picture.LoadFromLazarusResource('borders');
-  frmWorked_grids.Caption := frmWorked_grids.Caption+' '+dmData.LogName+' '+LogBand;
-
-  LocMap.Canvas.CopyRect(Rect(0,0,Width,Height),
-  LocMapBase.Picture.Bitmap.Canvas,Rect(0,0,Width,Height));
-
-  DrawBase(LocMap.canvas, False);
-end;
 
 Procedure TfrmWorked_grids.ToRigMode(mode:string);
 var
@@ -199,74 +116,71 @@ Begin
   if dmData.DebugLevel>=1 then Writeln(i,'  ',BandSelector.Items[BandSelector.Itemindex]);
 end;
 
-function TfrmWorked_grids.RecordCount(SwConTrans:boolean) :String;
+function TfrmWorked_grids.RecordCount:String;
  Begin
 
 
-       SQLQuery1.Close;
-      // SQLQuery1.SQL.Text:= 'select max(rowid) from '+LogTable;     sqlite's
-       SQLQuery1.SQL.Text:= 'select count(callsign) from '+LogTable;
-       ConnectionInfo;
-       if SwConTrans then
-         Begin
-          DBConnection.Connected:= True;
-          SQLTransaction1.Active:= True;
-         end;
-       SQLQuery1.Open;
-       RecordCount := SQLQuery1.fields[0].AsString;
-       if (RecordCount = '') then
+       dmData.Q1.Close;
+       if dmData.trQ1.Active then dmData.trQ1.Rollback;
+       dmData.Q1.SQL.Text := 'select count(callsign) from '+LogTable;
+       dmData.trQ1.StartTransaction;
+       try
+        dmData.Q1.Open;
+        RecordCount := dmData.Q1.Fields[0].AsString;
+        if (RecordCount = '') then
                RecordCount := '0';
-       SQLQuery1.Close;
-       if SwConTrans then
-         Begin
-          SQLTransaction1.Active:= False;
-          DBConnection.Connected:= False;
-         end;
+        dmData.Q1.Close;
+
+       finally
+        dmData.trQ1.Rollback;
+       end;
 end;
 function TfrmWorked_grids.WkdGrid(loc,band,mode:string):integer;
 Begin
      WkdGrid:= 0;
-     SQLQuery1.Close;
-     SQLQuery1.SQL.Text:='select loc from '+LogTable+' where band='+chr(39)+band+chr(39)+
+     dmData.Q.Close;
+     if dmData.trQ.Active then dmData.trQ.Rollback;
+
+     dmData.Q.SQL.Text:='select loc from '+LogTable+' where band='+chr(39)+band+chr(39)+
                          ' and mode='+chr(39)+mode+chr(39)+' and loc like '+chr(39)+loc+'%'+chr(39);
-     if dmData.DebugLevel>=1 then Writeln(SQLQuery1.SQL.Text);
-     ConnectionInfo;
-     DBConnection.Connected:= True;
-     SQLTransaction1.Active:= True;
-     SQLQuery1.Open;
-     if SQLQuery1.fields[0].AsString <> '' then
+     if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
+     dmData.trQ.StartTransaction;
+     try
+       dmData.Q.Open;
+       if dmData.Q.Fields[0].AsString <> '' then
                WkdGrid:= 2;
-     SQLQuery1.Close;
-     if WkdGrid = 0 then
-       Begin
-        SQLQuery1.SQL.Text:='select loc from '+LogTable+' where band='+chr(39)+band+chr(39)+
+       dmData.Q.Close;
+       if WkdGrid = 0 then
+        Begin
+         dmData.Q.SQL.Text:='select loc from '+LogTable+' where band='+chr(39)+band+chr(39)+
                          ' and mode='+chr(39)+mode+chr(39)+' and loc like '+chr(39)+copy(loc,1,2)+'%'+chr(39);
-        if dmData.DebugLevel>=1 then Writeln(SQLQuery1.SQL.Text);
-        SQLQuery1.Open;
-        if SQLQuery1.fields[0].AsString <> '' then
+         if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
+        dmData.Q.Open;
+        if dmData.Q.Fields[0].AsString <> '' then
                                         WkdGrid:= 1;
-        SQLQuery1.Close;
+       dmData.Q.Close;
        end;
-     SQLTransaction1.Active:= False;
-     DBConnection.Connected:= False;
+       finally
+        dmData.trQ.Rollback;
+       end;
      if dmData.DebugLevel>=1 then Writeln('WkdGrid is:',WkdGrid);
 end;
 function TfrmWorked_grids.WkdCall(call,band,mode:string):boolean;
 Begin
      WkdCall:=False;
-     SQLQuery1.Close;
-     SQLQuery1.SQL.Text:='select callsign from '+LogTable+' where band='+chr(39)+band+chr(39)+
+     dmData.Q.Close;
+     if dmData.trQ.Active then dmData.trQ.Rollback;
+     dmData.Q.SQL.Text:='select callsign from '+LogTable+' where band='+chr(39)+band+chr(39)+
                          ' and mode='+chr(39)+mode+chr(39)+' and callsign='+chr(39)+call+chr(39);
-     if dmData.DebugLevel>=1 then Writeln(SQLQuery1.SQL.Text);
-     ConnectionInfo;
-     DBConnection.Connected:= True;
-     SQLTransaction1.Active:= True;
-     SQLQuery1.Open;
-     if SQLQuery1.fields[0].AsString <> '' then
+     if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
+     try
+       dmData.Q.Open;
+       if dmData.Q.Fields[0].AsString <> '' then
                WkdCall:= True;
-     SQLQuery1.Close;
-     SQLTransaction1.Active:= False;
-     DBConnection.Connected:= False;
+       dmData.Q.Close;
+     finally
+      dmData.trQ.Rollback;
+     end;
      if dmData.DebugLevel>=1 then Writeln('WkdCall is:',WkdCall);
 end;
 
@@ -378,9 +292,22 @@ end;
 procedure TfrmWorked_grids.FormCreate(Sender: TObject);
 
 begin
-     if dmData.DebugLevel>=1 then Writeln('frmWkd_Grids Create');
-     StartState;
-     ConnectionInfo;
+  AutoUpdate.enabled := False;
+  AutoUpdate.Interval := 5000;
+  WsMode.Itemindex := -1;
+  BandSelector.Itemindex := -1;
+  LogSave := 'Wkd_locs_empty';
+  LogBand := ' ';
+  LogTable := 'cqrlog_main';  //assume table name is this always
+
+  //load map base image
+  LocMapBase.Picture.LoadFromLazarusResource('borders');
+  frmWorked_grids.Caption := frmWorked_grids.Caption+' '+dmData.LogName+' '+LogBand;
+
+  LocMap.Canvas.CopyRect(Rect(0,0,Width,Height),
+  LocMapBase.Picture.Bitmap.Canvas,Rect(0,0,Width,Height));
+
+  DrawBase(LocMap.canvas, False);
 end;
 
 procedure TfrmWorked_grids.SaveMapImageClose(Sender: TObject);
@@ -404,7 +331,7 @@ begin
         aHeight  :=LocMap.Picture.Bitmap.Height + AddSize;
         AddText  :=dmData.LogName+' '+LogBand+' '+WsMode.items[WsMode.Itemindex]+'  '+
                               intToStr(MainGridCount)+'main/'+intToStr(GridCount)+'sub grids     '+
-                              ExtractFileName(LogDatabase)+'     '+BandQsoCount+'/'+MaxRowId+'qsos';
+                              dmData.DBName+'     '+BandQsoCount+'/'+MaxRowId+'qsos';
         end
       else
        begin
@@ -413,7 +340,7 @@ begin
         aHeight  := ZooMap.Picture.Bitmap.Height + AddSize;
         AddText  := dmData.LogName+'     '+LogBand+' '+WsMode.items[WsMode.Itemindex]+'    '+
                     LogMainGrid+' -> '+intToStr(GridCount)+'subgrids';
-        AddText1 := ExtractFileName(LogDatabase)+'    '+BandQsoCount+'/'+MaxRowId+'qsos';
+        AddText1 := dmData.DBName+'    '+BandQsoCount+'/'+MaxRowId+'qsos';
        end;
 
       Bmp        :=TBitmap.Create;
@@ -461,8 +388,7 @@ end;
 procedure TfrmWorked_grids.AutoUpdateTimer(Sender: TObject);
 var
       mode,
-      band,
-      GotRows: String;
+      band: String;
 
 
 begin
@@ -499,8 +425,7 @@ begin
 
    if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then    //both must be set
       begin
-        GotRows := RecordCount(True);
-        if (MaxRowId <> GotRows) or Changes then
+        if (MaxRowId <> RecordCount) or Changes then
           Begin
            BandSelectorChange(AutoUpdate);   //update map(s)
           end;
@@ -520,7 +445,7 @@ end;
 procedure TfrmWorked_grids.ZooMapClick(Sender: TObject);
 begin
     ZooMap.Visible := False;
-    ZooLbl.Visible := False;
+    ZooILbl.Visible := False;
     ShoWkdOnlyClick(ZooMap);
     LocMap.Visible := True;
 end;
@@ -561,36 +486,38 @@ Begin
           SQLExtension := ' and mode='+chr(39)+WsMode.items[WsMode.Itemindex]+chr(39);
       end;
 
-       SQLQuery1.Close;
+      dmData.Q.Close;
+       if dmData.trQ.Active then dmData.trQ.Rollback;
 
        if BandSelector.itemIndex > 0 then //band selected
           Begin
-           SQLQuery1.SQL.Text:= 'select distinct upper(left(loc,4)) as lo from '+LogTable+' where band='+chr(39)+
+          dmData.Q.SQL.Text := 'select distinct upper(left(loc,4)) as lo from '+LogTable+' where band='+chr(39)+
                                  BandSelector.items[BandSelector.itemIndex]+chr(39)+
                                  'and loc<>'+chr(39)+chr(39)+SQLExtension;
           end
        else     //band "all"
           Begin
-            SQLQuery1.SQL.Text:= 'select distinct upper(left(loc,4)) lo from '+LogTable+' where loc<>'+chr(39)+chr(39)+SQLExtension;
+            dmData.Q.SQL.Text:= 'select distinct upper(left(loc,4)) lo from '+LogTable+' where loc<>'+chr(39)+chr(39)+SQLExtension;
           end;
 
        if ZooMap.Visible then  //coming from zoomed grid
            Begin
-            SQLQuery1.SQL.Text:= SQLQuery1.SQL.Text + ' and loc like '+chr(39)+LogMainGrid+'%'+chr(39);
+            dmData.Q.SQL.Text:= dmData.Q.SQL.Text + ' and loc like '+chr(39)+LogMainGrid+'%'+chr(39);
            end;
 
 
-       if dmData.DebugLevel>=1 then Write( SQLQuery1.SQL.Text );
-       ConnectionInfo;
-       DBConnection.Connected:= True;
-       SQLTransaction1.Active:= True;
-       SQLQuery1.Open;
+       if dmData.DebugLevel>=1 then Write( dmData.Q.SQL.Text);
+
        GridCount:= 0;
        MainGridCount:= 0;
        MainGridStream := '';
-       while not SQLQuery1.Eof do
+       dmData.trQ.StartTransaction;
+       try                             //try is new
+       dmData.Q.Open;
+       while not dmData.Q.Eof do
          begin
-           Grid := SQLQuery1.FieldByName('lo').AsString;
+           Grid := dmData.Q.FieldByName('lo').AsString;
+
            if ZooMap.Visible then  //coming from zoomed grid
               Begin
                  MarkGrid(Grid ,ZooMap.canvas,True);
@@ -605,35 +532,36 @@ Begin
               MainGridStream := MainGridStream +','+ copy(Grid ,1,2);
              end;
           inc(GridCount);
-          SQLQuery1.Next;
+          dmData.Q.Next;
          end;
+      dmData.Q.Close;
 
-      MaxRowId := RecordCount(False);
+      MaxRowId := RecordCount;
       if (BandSelector.itemIndex > 0) then
          Begin
-           qsocount:=0;
-           SQLQuery1.SQL.Text:= 'select loc from '+LogTable+' where band='+chr(39)+
+          qsocount:=0;
+          dmData.Q.SQL.Text:= 'select loc from '+LogTable+' where band='+chr(39)+
                                  BandSelector.items[BandSelector.itemIndex]+chr(39)+
                                  SQLExtension;
 
-           if dmData.DebugLevel>=1 then Write( SQLQuery1.SQL.Text );
+           if dmData.DebugLevel>=1 then Write(dmData.Q.SQL.Text);
 
-           SQLQuery1.Open;
-           while not SQLQuery1.Eof do
-             Begin
+           dmData.Q.Open;
+           while not dmData.Q.Eof do
+              Begin
                  inc(qsocount);
-                 SQLQuery1.Next;
+                 dmData.Q.Next;
              end;
-           SQLQuery1.Close;
+           dmData.Q.Close;
            BandQsoCount := IntToStr(qsocount);
          end
       else
          Begin
            BandQsoCount := MaxRowId;
          end;
-
-      SQLTransaction1.Active:= False;
-      DBConnection.Connected:= False;
+      finally
+      dmData.trQ.Rollback;
+      end;
       if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then    //both must be set
          Begin
           LogSave := 'Wkd_locs_'+dmData.LogName+'_'+BandSelector.items[BandSelector.itemIndex];
@@ -660,8 +588,10 @@ end;
 
 procedure TfrmWorked_grids.LocMapClick(Sender: TObject);
 
-var Bmp:TBitmap;
- aWidth,aHeight:integer;
+var Bmp   :TBitmap;
+ aWidth,
+ aHeight,
+ ww,hh          :integer;
 
 Begin
 
@@ -683,10 +613,28 @@ if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then  //both must b
   if Sender <> BandSelector then //to avoid BandSelector looping when ZooMap active
      Begin
       LogMainGrid := chr((MouseX)div 40+65)+chr((340-MouseY)div 20+65);
-      ZooLbl.Caption := LogMainGrid;
-      ZooMap.Visible := True;
-      ZooLbl.Visible := True;
       LocMap.Visible := False;
+      ZooMap.Visible := True;
+      ZooILbl.Visible := True;
+      with ZooIlbl.Canvas do  //had to make this grapic as cqrlog controls font size of window after wkd-map
+        Begin                 //position saved/loaded as other forms and I'm too lazy to dig out how to avoid it
+          Clear;
+          Brush.Color:=clBackground;
+          FillRect(0,0,width,height);
+          Brush.style:=bsClear;
+          font.Color := clBlack;
+          Font.Style := [fsBold];
+          font.Size := 54;
+          repeat            //fit the text to canvas
+            Begin
+             font.Size := font.Size -1;
+             GetTextSize(LogMainGrid, ww, hh);
+             if dmData.DebugLevel>=1 then Writeln('Font size:', font.Size);
+             end;
+          until (ww<=width) and (hh<=height);
+           TextOut(1,1 , LogMainGrid);
+        end;
+
       BandSelectorChange(LocMap);
      end;
 

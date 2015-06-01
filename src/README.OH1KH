@@ -144,6 +144,16 @@ FIXED
 FIXED
 
 
+- there is something wrong at frmworked_grids when database is changed from local to remote and vice versa. How ever cqrlog issues in log selection
+  and rigctld makes it too hard to debug!!!!!!!!!!
+- I think I have many duplicate parts of code as it seems that cqrlog has many functions (specially DB access) that could be used
+  for wsjt-x CQ-monitor and worked_grids form. I just can not follow all the ideas original code has.
+  I group these two.
+  Now I did what should be done long ago. I used dData's sql routines for worked_grids map and wsjt-x CQ-monitor. It was not even hard
+  and simplified my code a lot. And at the same time I got rid of getting the right database after log change. If logging works map and monitor works.
+  Got some reports that these two, when using my own sql routines did not work with latest Fedora distibutions (I'm stuck with F20 ;)
+FIXED !!
+
 - wsjt-x need preferences tab just like fldigi has.
 
 - fldigi remote has issue: It does not check if fldigi is already running and so starting another thread of fldigi. NO GOOD.
@@ -154,13 +164,14 @@ FIXED
 
 - cqrlog has issue in rigctld usage: tried long time to trap error where worked_grids map did not follow rig, altough it was checked, at situation
   where local log was changed to another. At log change cqrlog losts its connect to rigctld. And when I found that I remembered that it has been
-  issue for long time (before 1.9.0).
-
-- there is something wrong at frmworked_grids when database is changed from local to remote and vice versa. How ever cqrlog issues in log selection
-  and rigctld makes it too hard to debug!!!!!!!!!!
-
-- I think I have many duplicate parts of code as it seems that cqrlog has many functions (specially DB access) that could be used
-   for wsjt-x CQ-monitor and worked_grids form. I just can not follow all the ideas original code has.
+  issue for long time (before 1.9.0). And confirmed also by other users.
+TRIED to resolve this, but no luck.
+  Problem, one of them, is on URigControl.pas. It does not check if rigctld is already running when cqrlog starts. Sometimes this leads
+  to Defunc-state of second rigctld (seen with ps ax | grep rig).
+  Tried to make a code that checks this with pidof/Tprocess. First results were promising, but then the same problem continued. This may
+  be easier to do with bash script  that first checks pid and if not found starts rigctld. Bash is so much easier !!!
+  Maybe I try via that way next.
+  But there may be something else, too.
 
 
 

@@ -2238,21 +2238,6 @@ object frmWorked_grids: TfrmWorked_grids
     OnMouseMove = LocMapMouseMove
     Visible = False
   end
-  object ZooLbl: TLabel
-    AnchorSideLeft.Control = LocMap
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = LocMap
-    Left = 324
-    Height = 78
-    Top = 72
-    Width = 104
-    Caption = 'AA'
-    Font.Height = -67
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-    Visible = False
-  end
   object Nrstatus: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
@@ -2369,24 +2354,16 @@ object frmWorked_grids: TfrmWorked_grids
     Caption = 'Follow rig'
     TabOrder = 4
   end
-  object DataSource1: TDataSource
-    DataSet = SQLQuery1
-    left = 152
-    top = 368
-  end
-  object SQLQuery1: TSQLQuery
-    FieldDefs = <>
-    Database = DBConnection
-    Transaction = SQLTransaction1
-    Params = <>
-    left = 232
-    top = 368
-  end
-  object SQLTransaction1: TSQLTransaction
-    Active = False
-    Database = DBConnection
-    left = 328
-    top = 368
+  object ZooIlbl: TImage
+    AnchorSideLeft.Control = ZooMap
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideBottom.Control = ZooMap
+    Left = 320
+    Height = 80
+    Top = 72
+    Width = 112
+    Anchors = [akLeft, akBottom]
+    Visible = False
   end
   object SaveMapImage: TSaveDialog
     OnClose = SaveMapImageClose
@@ -2401,15 +2378,6 @@ object frmWorked_grids: TfrmWorked_grids
     Enabled = False
     OnTimer = AutoUpdateTimer
     left = 638
-    top = 368
-  end
-  object DBConnection: TMySQL55Connection
-    Connected = False
-    LoginPrompt = False
-    KeepConnection = False
-    Transaction = SQLTransaction1
-    LogEvents = []
-    left = 448
     top = 368
   end
 end

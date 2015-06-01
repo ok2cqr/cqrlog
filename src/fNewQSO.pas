@@ -3810,6 +3810,11 @@ procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
 var
   old : String;
 begin
+  //right at beginning we have to disable wdk_grids timer
+  // unless doing so program crashes when changed from external to local mysql
+  //because "savsettings" is doing wkd_grids shutdown too late.
+  frmWorked_grids.AutoUpdate.enabled := False;
+
   with TfrmDBConnect.Create(self) do
   try
     old := dmData.LogName;
