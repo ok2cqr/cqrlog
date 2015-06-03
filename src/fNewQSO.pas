@@ -2090,7 +2090,8 @@ begin
                          if new
                           and (WsjtxBand <>'')
                             and (WsjtxMode <>'')
-                             and (UpperCase(copy(ParStr,1,3))='CQ ')
+                             and ((pos('CQ ',UpperCase(ParStr))=1) or
+                                  (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1))
                               and (mnuMoniWsjtx.Visible) then
                                   frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand);
                          //----------------------------------------------------

@@ -36,7 +36,7 @@ implementation
 
 { TfrmMonWsjtx }
 
-Uses fNewQSO,dData,dUtils,dDXCC,fWkd1;
+Uses fNewQSO,dData,dUtils,dDXCC,fWkd1,uMyini;
 
 
 procedure TfrmMonWsjtx.AddColorStr(s: string; const col: TColor = clBlack);
@@ -119,6 +119,7 @@ var
   freq :string;
   i          :integer;
   adif       :Word;
+  isMyCall   : boolean;
 
 function NextElement:String; //detach next element from Message. Cut Message
 begin
@@ -131,10 +132,12 @@ begin
        inc(i);
      end;
     if i <= length(Message) then Message := copy(Message,i+1,length(Message)-i);
+    trim(Result); //just in case
     if dmData.DebugLevel>=1 then Writeln('Result:',Result,' rest of msg:',Message);
 end;
 
-Begin
+Begin   //TfrmMonWsjtx.AddDecodedMessage
+
       {split message
        it can be:
        12:34 # CQ CA1LL AA11
@@ -142,6 +145,9 @@ Begin
        1536  @ CQ NA RV3AMV      //or other continents/prefixes
        12:34 @ CQ CA1LL DX
       actual mode from decoded message. Can be jt9 or jt65, nothing else(at this point)
+
+       Added.. may be also "mycall" something, but we count just those with proper locator.
+       12:34 # MYCALL CA1LL AA11
       }
 
       if dmData.DebugLevel>=1 then Write('Time-');
@@ -158,14 +164,11 @@ Begin
 
       if mode <>'' then //we can continue
         Begin
-         AddColorStr(msgTime,clDefault); //time
-         if mode='JT65' then
-             AddColorStr('  '+msgMode+'  ',clOlive) //mode
-          else
-             AddColorStr('  '+msgMode+'  ',clPurple);
 
          if dmData.DebugLevel>=1 then Write('Cq1-');
          msgCQ1 := NextElement;
+
+         isMyCall :=  msgCQ1 = cqrini.ReadString('Station', 'Call', '');
 
          if dmData.DebugLevel>=1 then Write('Cq2-');
          msgCQ2 := NextElement;
@@ -202,7 +205,15 @@ Begin
             if not dmUtils.IsLocOK(msgLoc+'AA') then //to fool dmUtils.IsLocOK; wsjtx locators are all 4chrs
                msgLoc:='----';
 
-         //printing out rest of  line
+         if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator (I.E. Answer to my CQ)
+         Begin
+         //printing out   line
+         AddColorStr(msgTime,clDefault); //time
+         if mode='JT65' then
+             AddColorStr('  '+msgMode+'  ',clOlive) //mode
+          else
+             AddColorStr('  '+msgMode+'  ',clPurple);
+
          if frmWorked_grids.WkdCall(msgCall,band,mode) then
                  AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
              else
@@ -239,6 +250,7 @@ Begin
          end;
 
          AddColorStr(#13#10,clDefault);  //make new line
+         end;
         end;
 
 end;

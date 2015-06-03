@@ -154,6 +154,15 @@ FIXED
   Got some reports that these two, when using my own sql routines did not work with latest Fedora distibutions (I'm stuck with F20 ;)
 FIXED !!
 
+FIXED dUtils.pas isLOcOK.  Locator can have letters  A..R, not  A..X (From AA00AA to RR99RR)
+
+ADDED CQ-monitor prints also lines with "mycall" if they are answers to my cq I.E. last element is locator of answering station. This
+  needs change in monitor code, but also change in newQSO where UDP packets are decoded.
+
+
+
+
+
 - wsjt-x need preferences tab just like fldigi has.
 
 - fldigi remote has issue: It does not check if fldigi is already running and so starting another thread of fldigi. NO GOOD.

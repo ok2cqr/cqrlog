@@ -970,7 +970,7 @@ begin
       Loc[i] := UpCase(Loc[i]);
       case i of
         1, 2, 5, 6: case Loc[i] of
-            'A'..'X':
+            'A'..'R':           //grids just AA .. RR
             begin
             end
             else
