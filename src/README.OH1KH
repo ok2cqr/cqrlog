@@ -159,6 +159,10 @@ FIXED dUtils.pas isLOcOK.  Locator can have letters  A..R, not  A..X (From AA00A
 ADDED CQ-monitor prints also lines with "mycall" if they are answers to my cq I.E. last element is locator of answering station. This
   needs change in monitor code, but also change in newQSO where UDP packets are decoded.
 
+  sometimes stops showing CQ messages on wsjt-x CQ-monitor. Reason is that when decoding message functoion NextElement(FMoniWsjtx.pas) fails to
+  remove heading space before mode letter (# or @) resulting mode as ' ' that causes line not to print.
+  Moved NextElement to public functions where it now has own internal loop variable (i) and string Message is handled as calling var.
+FIXED (I hope, but his may take long time to be confirmed) 
 
 
 

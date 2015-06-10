@@ -24,6 +24,7 @@ type
     procedure AddColorStr(s: string; const col: TColor = clBlack);
     { private declarations }
   public
+    function NextElement(var Message:String):String;
     procedure AddDecodedMessage(Message,Band:string);
     procedure NewBandMode(Band,Mode:string);
     { public declarations }
@@ -105,6 +106,22 @@ Begin
      lblMode.Caption := Mode;
      WsjtxMemo.lines.Clear;
 end;
+function TfrmMonWsjtx.NextElement(var Message:string):String; //detach next element from Message. Cut Message
+var
+   i : integer;
+begin
+   Result:='';
+   i:=1;
+    trim(Message);
+    while (Message[i]<>' ') and (i <= length(Message)) do
+     Begin
+       Result:=Result + Message[i];
+       inc(i);
+     end;
+    if i <= length(Message) then Message := copy(Message,i+1,length(Message)-i);
+    trim(Result);
+    if dmData.DebugLevel>=1 then Writeln('Result:',Result,' rest of msg:',Message);
+end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message,band:string);
 var
@@ -121,20 +138,7 @@ var
   adif       :Word;
   isMyCall   : boolean;
 
-function NextElement:String; //detach next element from Message. Cut Message
-begin
-   Result:='';
-   i:=1;
-    trim(Message);
-    while (Message[i]<>' ') and (i <= length(Message)) do
-     Begin
-       Result:=Result + Message[i];
-       inc(i);
-     end;
-    if i <= length(Message) then Message := copy(Message,i+1,length(Message)-i);
-    trim(Result); //just in case
-    if dmData.DebugLevel>=1 then Writeln('Result:',Result,' rest of msg:',Message);
-end;
+
 
 Begin   //TfrmMonWsjtx.AddDecodedMessage
 
@@ -151,10 +155,10 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       }
 
       if dmData.DebugLevel>=1 then Write('Time-');
-      msgTime := NextElement;
+      msgTime := NextElement(Message);
 
       if dmData.DebugLevel>=1 then Write('Mode-');
-      msgMode := NextElement;
+      msgMode := NextElement(Message);
 
       case msgMode of
       '#'  : mode := 'JT65';
@@ -166,12 +170,12 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
         Begin
 
          if dmData.DebugLevel>=1 then Write('Cq1-');
-         msgCQ1 := NextElement;
+         msgCQ1 := NextElement(Message);
 
          isMyCall :=  msgCQ1 = cqrini.ReadString('Station', 'Call', '');
 
          if dmData.DebugLevel>=1 then Write('Cq2-');
-         msgCQ2 := NextElement;
+         msgCQ2 := NextElement(Message);
 
          //CQ exeptions may be anything so we look
          // if no number in string it is addition
@@ -187,17 +191,17 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                 else
                  Begin  //next is call
                   if dmData.DebugLevel>=1 then Write('Call-');
-                  msgCall := NextElement;
+                  msgCall := NextElement(Message);
                  end;
              end
            else
             Begin  //next is call
                   if dmData.DebugLevel>=1 then Write('Call-');
-                  msgCall := NextElement;
+                  msgCall := NextElement(Message);
             end;
 
          if dmData.DebugLevel>=1 then Write('Loc-');
-         msgLoc := NextElement;
+         msgLoc := NextElement(Message);
 
          if length(msgLoc)<4 then   //no locator  may be "DX" or something
                msgLoc:='----';
