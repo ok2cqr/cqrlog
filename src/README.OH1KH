@@ -59,7 +59,7 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 
 
- Issues to resolve:
+ Issues to resolved:
 ===================
 
 - when in remotemodewsjtx: open qso list, edit qso, causes focus error (does fldigi the same? must test)
@@ -164,8 +164,14 @@ ADDED CQ-monitor prints also lines with "mycall" if they are answers to my cq I.
   Moved NextElement to public functions where it now has own internal loop variable (i) and string Message is handled as calling var.
 FIXED (I hope, but his may take long time to be confirmed) 
 
+ Cqmonitor did not prepoerly decode line "CQ DX CALLSIGN" placing CALLSIGN also to locator (that should have noticed by IsLocOK!!).
+ NextElement did not properly cut message line when extracting the last item of line.
+FIXED
 
 
+
+ Issues to resolve:
+===================
 
 - wsjt-x need preferences tab just like fldigi has.
 

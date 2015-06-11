@@ -113,13 +113,20 @@ begin
    Result:='';
    i:=1;
     trim(Message);
-    while (Message[i]<>' ') and (i <= length(Message)) do
-     Begin
-       Result:=Result + Message[i];
-       inc(i);
-     end;
-    if i <= length(Message) then Message := copy(Message,i+1,length(Message)-i);
-    trim(Result);
+    if Message<>'' then
+           begin
+             while (Message[i]<>' ') and (i <= length(Message)) do
+               Begin
+                 Result:=Result + Message[i];
+                 inc(i);
+               end;
+             trim(Result);
+           end;
+    if i > length(Message) then
+     Message :=''
+    else
+     Message := copy(Message,i+1,length(Message)-i);
+
     if dmData.DebugLevel>=1 then Writeln('Result:',Result,' rest of msg:',Message);
 end;
 
@@ -190,13 +197,13 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                  end
                 else
                  Begin  //next is call
-                  if dmData.DebugLevel>=1 then Write('Call-');
+                  if dmData.DebugLevel>=1 then Write('CQ2 was letters>2. Call-');
                   msgCall := NextElement(Message);
                  end;
              end
            else
             Begin  //next is call
-                  if dmData.DebugLevel>=1 then Write('Call-');
+                  if dmData.DebugLevel>=1 then Write('CQ2 was short. Call-');
                   msgCall := NextElement(Message);
             end;
 
