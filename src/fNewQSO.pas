@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
-  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils ;
+  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
@@ -1871,10 +1871,12 @@ var
   Fdes,
   ParStr,
   TimeLine: String;
+  index,
   ParNum,
   MsgType,
   Min,
   Hour    : integer;
+  ParDou  : Double;
   Dtim    : TDateTime;
   new     : Boolean;       //multi purpose
   i       : word;
@@ -1900,44 +1902,69 @@ var
 // data conversion functions. Not so clever....but working.
 // take one string or number at time and cut received buffer for that amount of bytes.
 
-function UiFBuf:uint32;                 //Quint32
+function UiFBuf(var index:integer):uint32;
    begin
-     UiFBuf := $01000000*ord(Buf[1]) + $00010000*ord(Buf[2]) +  $00000100*ord(Buf[3]) +ord(Buf[4]);  // 32-bit unsigned int BigEndian
-     Buf := copy (Buf,5,length(Buf)-4); //remainder of buffer
+     Result := $01000000*ord(Buf[index])
+             + $00010000*ord(Buf[index+1])
+             + $00000100*ord(Buf[index+2])
+             + ord(Buf[index+3]);         // 32-bit unsigned int BigEndian
+     index:=index+4;                      //point to next element
    end;
 
-function StFBuf:String;                 //Qstring
+function StFBuf(var index:integer):String;
+
   var
     P : uint32;
   begin
-    P := UiFBuf;                        //string length;
-    StFBuf := copy(Buf,1,P);            //string value
-    Buf := copy (Buf,P+1,length(Buf)-P);//remainder of buffer
+    P := UiFBuf(index);                 //string length;
+    Result := copy(Buf,index,P);        //string value
+    index := index + P;                 //point to next element
   end;
 
-function DUiFBuf:uint64;                //Quint64
+function DUiFBuf(var index:integer):uint64;
  var
     lo,hi    :uint32;
  begin
-    hi :=  UiFBuf;
-    lo :=  UiFBuf;
-    DuiFBuf := $100000000 * hi + lo;
+    hi :=  UiFBuf(index);
+    lo :=  UiFBuf(index);
+    Result := $100000000 * hi + lo;
  end;
 
-function DiFBuf:int64;                  //Qint64
+ function DouFBuf(var index:integer):Double;  //this does not work!!
+var
+  b8: QWord;              //8 bytes integer
+  d8: Double absolute b8; //8 bytes double
+  buffer : array [0 .. 7] of byte;
+  i :integer;
+Begin
+  for i:=0 to 7 do
+    buffer[i]:=ord(buf[index+i]);
+  index:= index+8;
+
+  b8 := BEtoN(PQWord(@buffer[0])^);
+  Result := b8;
+end;
+
+function DiFBuf(var index:integer):int64;
   begin
-     DiFBuf := DUiFBuf;
+     REsult := DUiFBuf(index);
   end;
 
-function IFBuf:int32;                   //Qint32
+function IFBuf(var index:integer):int32;
   begin
-    IFBuf := UiFBuf;
+    Result := UiFBuf(index);
   end;
 
-function BFBuf:uint8;                   //Quint8
+function BFBuf(var index:integer):uint8;
   begin
-    BFBuf := ord(Buf[1]);
-    Buf := copy (Buf,2,length(Buf)-1);
+    Result := ord(Buf[index]);
+    inc(index);
+  end;
+
+function BoolBuf(var index:integer):Boolean;
+  begin
+    Result := ord(Buf[index]) = 1;
+    inc(index);
   end;
 
 begin
@@ -1947,20 +1974,20 @@ begin
       Buf := Wsjtxsock.RecvPacket(100);
       if Wsjtxsock.lasterror=0 then
         begin
-          ParNum := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
-          if dmData.DebugLevel>=1 then Write('Header position:',ParNum);
-          Buf := copy (Buf,ParNum+4,length(Buf)-4);  // strip QT header
+          index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
+          if dmData.DebugLevel>=1 then Write('Header position:',index);
+          index:=index+4;  // skip QT header
 
-          ParNum :=  UiFBuf;
+          ParNum :=  UiFBuf(index);
           if dmData.DebugLevel>=1 then Write(' Schema number:',ParNum);
 
-          MsgType :=  UiFBuf;
+          MsgType :=  UiFBuf(index);
           if dmData.DebugLevel>=1 then Write(' Message type:', MsgType,' ');
           lblCall.Caption       := 'Wsjt-x remote #'+intToStr(MsgType);   //changed to see last received msgtype
           case MsgType of
 
           0    :       Begin  //Heartbeat in(coming frm wsjtx)
-                         ParStr := StFBuf;
+                         ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('HeartBeat Id:', ParStr);
                          if lblCall.Font.Color = clRed then
                              lblCall.Font.Color    := clFuchsia
@@ -1982,7 +2009,7 @@ begin
                                 Buf := Buf+ParStr[i];
 
                              //default id should give:
-                             //lenght 00 06 WSJT-X
+                             //length+id: 00 06 WSJT-X
                              //#$00#$06+#$57+#$53+#$4a+#$54+#$2d+#$58;
 
                              Wsjtxsock.SendString(Buf);
@@ -1991,10 +2018,10 @@ begin
 
           1    :       Begin  //Status in
                          new := false;
-                         ParStr := StFBuf;
+                         ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Status Id:', ParStr);
                          //----------------------------------------------------
-                         ParNum := DUiFBuf;
+                         ParNum := DUiFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Freq Hz:', ParNUm);
                          ParNum := ParNum div 1000000;
                          if dmData.DebugLevel>=1 then Writeln('Freq MHz:', ParNum);
@@ -2025,7 +2052,7 @@ begin
                            end;
                          if dmData.DebugLevel>=1 then Writeln('Band :', WsjtxBand);
                          //----------------------------------------------------
-                         ParStr := StFBuf;
+                         ParStr := StFBuf(index);
                          if ParStr<>WsjtxMode then
                            Begin
                              new :=true;
@@ -2044,9 +2071,9 @@ begin
 
 
           2    :       Begin  //Decode in
-                         ParStr := StFBuf;
+                         ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Decode Id:', ParStr);
-                         new:= ord(Buf[1]) = 1;
+                         new:= BoolBuf(index);
                          if new then
                              Begin
                                if dmData.DebugLevel>=1 then Writeln('New');
@@ -2055,9 +2082,9 @@ begin
                              Begin
                               if dmData.DebugLevel>=1 then Writeln('Old');
                              end;
-                         Buf := copy (Buf,2,length(Buf)-1); // strip New
+
                          //----------------------------------------------------
-                         ParNum := UiFBuf;
+                         ParNum := UiFBuf(index);
                          Min := ParNum div 60000;  //minutes from 00:00    UTC
                          Hour := Min div 60;
                          Min := Min - Hour * 60;
@@ -2072,19 +2099,19 @@ begin
                             TimeLine := TimeLine + intToStr(Min);
                          if dmData.DebugLevel>=1 then Writeln(TimeLine);
                          //----------------------------------------------------
-                         ParNum :=  IFBuf;
+                         ParNum :=  IFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('snr:',ParNum );
                          //----------------------------------------------------
-                         ParNum := DUiFBuf; //this is actually Double(float) but we do not use it for anything.
-                         if dmData.DebugLevel>=1 then Writeln('delta time:',ParNum);
+                         ParDou := DouFBuf(index);
+                         if dmData.DebugLevel>=1 then Writeln('delta time:',ParDou);
                          //----------------------------------------------------
-                         ParNum :=  UiFBuf;
+                         ParNum :=  UiFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
                          //----------------------------------------------------
-                         mode := StFBuf;    //mode as letter: # @
+                         mode := StFBuf(index);    //mode as letter: # @
                          if dmData.DebugLevel>=1 then Writeln(mode);
                          //----------------------------------------------------
-                         ParStr := StFBuf;    //message
+                         ParStr := StFBuf(index);    //message
                          if dmData.DebugLevel>=1 then Writeln(ParStr);
 
                          if new
@@ -2098,7 +2125,7 @@ begin
                        end;
 
           3    :       Begin  //Clear in
-                        ParStr := StFBuf;
+                        ParStr := StFBuf(index);
                         if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
                         frmMonWsjtx.WsjtxMemo.lines.Clear;
                        end;
@@ -2107,7 +2134,7 @@ begin
                        end;
 
           5    :       Begin  //QSO logged in
-                        ParStr := StFBuf;
+                        ParStr := StFBuf(index);
                         if dmData.DebugLevel>=1 then Writeln('Qso Logged Id:', ParStr);
                         //----------------------------------------------------
                         ClearAll;
@@ -2132,10 +2159,10 @@ begin
                         edtDate.Text:=sDate;
 
                         //----------------------------------------------------
-                        if TryJulianDateToDateTime(DiFBuf,DTim)  then  //date (not used in cqrlog)
+                        if TryJulianDateToDateTime(DiFBuf(index),DTim)  then  //date (not used in cqrlog)
                            if dmData.DebugLevel>=1 then Writeln('Date :',FormatDateTime('YYYY-MM-DD',DTim));
                         //----------------------------------------------------
-                        ParNum := UiFBuf;          //time
+                        ParNum := UiFBuf(index);          //time
                          Min := ParNum div 60000;  //minutes from 00:00    UTC
                          Hour := Min div 60;
                          Min := Min - Hour * 60;
@@ -2152,21 +2179,21 @@ begin
                          edtStartTime.Text := TimeLine;
                          edtEndTime.Text := TimeLine;
                          //----------------------------------------------------
-                         ParNum := BFBuf;  //timespec local/utc   (not used in cqrlog)
+                         ParNum := BFBuf(index);  //timespec local/utc   (not used in cqrlog)
                          if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
                          //----------------------------------------------------
                          if ParNum = 2 then  // time offset  (not used in cqrlog)
                             Begin
-                             ParNum := IFBuf;
-                             if dmData.DebugLevel>=1 then Writeln('offset :', IFBuf);
+                             ParNum := IFBuf(index);
+                             if dmData.DebugLevel>=1 then Writeln('offset :', IFBuf(index));
                             end;
                         //----------------------------------------------------
-                        call:= trim(StFBuf); //to be sure...
+                        call:= trim(StFBuf(index)); //to be sure...
                         if dmData.DebugLevel>=1 then Writeln('Call :', call);
                         edtCall.Text := call;
                         edtCallExit(nil);
                         //----------------------------------------------------
-                        loc:= trim(StFBuf);
+                        loc:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('Grid :', loc);
                         if dmUtils.IsLocOK(loc) then
                                                 edtGrid.Text := loc;
@@ -2179,7 +2206,7 @@ begin
                             end;
 
                          1 : begin
-                                 mhz := IntToStr(DUiFBuf);   // in Hz here from wsjtx
+                                 mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx
                                  Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
                                  mhz := copy(mhz,1,length(mhz)-6); //integer part here
                                  mhz := mhz+'.'+Fdes;
@@ -2199,31 +2226,31 @@ begin
                                                         cmbMode.Text := mode
                              end;
                          1 : begin
-                                mode:= trim(StFBuf);
+                                mode:= trim(StFBuf(index));
                                 if dmData.DebugLevel>=1 then Writeln('Mode :', mode);
                                 cmbMode.Text := mode;
                              end;
                          2 : cmbMode.Text := cqrini.ReadString('fldigi','defmode','RTTY')
                          end;
                         //----------------------------------------------------
-                        rstS:= trim(StFBuf);
+                        rstS:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('RSTs :', rstS);
                         edtHisRST.Text := rstS;
                         //----------------------------------------------------
-                        rstR:= trim(StFBuf);
+                        rstR:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('RSTr :', rstR);
                         edtMyRST.Text := rstR;
                         //----------------------------------------------------
-                        pwr:= trim(StFBuf);
+                        pwr:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('Pwr :', pwr);
                         edtPWR.Text := pwr;
                         //----------------------------------------------------
-                        note:= trim(StFBuf);
+                        note:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('Comments :', note);
                         edtRemQSO.Text := note;
                         //--------------------------------------------------
                         if dmData.DebugLevel>=1 then Writeln('Name :', sname);
-                        sname:= trim(StFBuf);
+                        sname:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('Name :', sname);
                         if dmData.DebugLevel>=1 then Writeln('edtName :',edtName.Text );
                         if sname <>'' then  //if user does not give name edtName stays what qrz.com may have found
@@ -2234,7 +2261,7 @@ begin
                        end;
 
           6    :       Begin  //Close in
-                        ParStr := StFBuf;
+                        ParStr := StFBuf(index);
                         if dmData.DebugLevel>=1 then Writeln('Close Id:', ParStr);
                         //wsjtx closed maybe need to disable remote mode  ?
                         DisWsjtxRemote;

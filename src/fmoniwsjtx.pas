@@ -24,7 +24,7 @@ type
     procedure AddColorStr(s: string; const col: TColor = clBlack);
     { private declarations }
   public
-    function NextElement(var Message:String):String;
+    function NextElement(Message:string;var index:integer):String;
     procedure AddDecodedMessage(Message,Band:string);
     procedure NewBandMode(Band,Mode:string);
     { public declarations }
@@ -106,28 +106,23 @@ Begin
      lblMode.Caption := Mode;
      WsjtxMemo.lines.Clear;
 end;
-function TfrmMonWsjtx.NextElement(var Message:string):String; //detach next element from Message. Cut Message
-var
-   i : integer;
+function TfrmMonWsjtx.NextElement(Message:string;var index:integer):String;
+//detach next element from Message. Move index pointer, do not touch message string itself
+
 begin
    Result:='';
-   i:=1;
-    trim(Message);
     if Message<>'' then
            begin
-             while (Message[i]<>' ') and (i <= length(Message)) do
+            while (Message[index]=' ') and (index <= length(Message)) do inc(index);
+               while (Message[index]<>' ') and (index <= length(Message)) do
                Begin
-                 Result:=Result + Message[i];
-                 inc(i);
+                 Result:=Result + Message[index];
+                 inc(index);
                end;
-             trim(Result);
+             UpperCase(trim(Result));  //to be surely fixed
            end;
-    if i > length(Message) then
-     Message :=''
-    else
-     Message := copy(Message,i+1,length(Message)-i);
 
-    if dmData.DebugLevel>=1 then Writeln('Result:',Result,' rest of msg:',Message);
+    if dmData.DebugLevel>=1 then Writeln('Result:',Result,' index of msg:',index);
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message,band:string);
@@ -141,10 +136,10 @@ var
   msgRes,
   mode,
   freq :string;
-  i          :integer;
+  i,
+  index      :integer;
   adif       :Word;
-  isMyCall   : boolean;
-
+  isMyCall   :Boolean;
 
 
 Begin   //TfrmMonWsjtx.AddDecodedMessage
@@ -161,11 +156,13 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
        12:34 # MYCALL CA1LL AA11
       }
 
+      index := 1;
+
       if dmData.DebugLevel>=1 then Write('Time-');
-      msgTime := NextElement(Message);
+      msgTime := NextElement(Message,index);
 
       if dmData.DebugLevel>=1 then Write('Mode-');
-      msgMode := NextElement(Message);
+      msgMode := NextElement(Message,index);
 
       case msgMode of
       '#'  : mode := 'JT65';
@@ -173,97 +170,79 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       else mode :='';
       end;
 
-      if mode <>'' then //we can continue
+      if mode <>'' then //mode is clear; we can continue
         Begin
-
-         if dmData.DebugLevel>=1 then Write('Cq1-');
-         msgCQ1 := NextElement(Message);
-
-         isMyCall :=  msgCQ1 = cqrini.ReadString('Station', 'Call', '');
-
+         if dmData.DebugLevel>=1 then Write('Cq1-'); //this is checked by newQSO to be MYCall or CQ
+         msgCQ1 := NextElement(Message,index);
+         isMyCall :=  msgCQ1 = UpperCase(cqrini.ReadString('Station', 'Call', ''));
          if dmData.DebugLevel>=1 then Write('Cq2-');
-         msgCQ2 := NextElement(Message);
-
-         //CQ exeptions may be anything so we look
-         // if no number in string it is addition
-          if length(msgCQ2)>2 then   // if longer than 2 may be call, otherwise is addition
-             Begin
-              i:=1;
-              while not ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) and (i <= length(msgCQ2)) do inc(i);
-              if length(msgCQ2)> i then //while dropped before end, may be real call  (has number)
-                 Begin
-                  msgCall := msgCQ2;
-                  if dmData.DebugLevel>=1 then Writeln('msgCQ2 is Call-','Result:',msgCall,' rest of msg:',Message);
-                 end
-                else
-                 Begin  //next is call
-                  if dmData.DebugLevel>=1 then Write('CQ2 was letters>2. Call-');
-                  msgCall := NextElement(Message);
-                 end;
-             end
-           else
-            Begin  //next is call
-                  if dmData.DebugLevel>=1 then Write('CQ2 was short. Call-');
-                  msgCall := NextElement(Message);
-            end;
-
+         msgCQ2 := NextElement(Message,index);
+         if length(msgCQ2)>2 then   // if longer than 2 may be call, otherwise is addition DX AS EU etc.
+          Begin
+            i:=1;
+            while not ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) and (i <= length(msgCQ2)) do inc(i);
+            if (length(msgCQ2)> i)  then
+               Begin //while dropped before end  (has number) may be real call
+                msgCall := msgCQ2;
+                if dmData.DebugLevel>=1 then Writeln('msgCQ2>2(lrs+num) is Call-','Result:',msgCall,' index of msg:',index);
+               end;
+          end
+         else
+          Begin //was shortie, so next must be call
+            if dmData.DebugLevel>=1 then Write('CQ2 was letters=<2. Call-');
+                msgCall := NextElement(Message,index);
+          end;
+         //so we should have time, mode and call by now. That reamains locator, if exists
          if dmData.DebugLevel>=1 then Write('Loc-');
-         msgLoc := NextElement(Message);
-
-         if length(msgLoc)<4 then   //no locator  may be "DX" or something
+         msgLoc := NextElement(Message,index);
+         if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
                msgLoc:='----';
          if length(msgLoc)=4 then
             if not dmUtils.IsLocOK(msgLoc+'AA') then //to fool dmUtils.IsLocOK; wsjtx locators are all 4chrs
                msgLoc:='----';
 
-         if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator (I.E. Answer to my CQ)
-         Begin
-         //printing out   line
-         AddColorStr(msgTime,clDefault); //time
-         if mode='JT65' then
-             AddColorStr('  '+msgMode+'  ',clOlive) //mode
-          else
-             AddColorStr('  '+msgMode+'  ',clPurple);
-
-         if frmWorked_grids.WkdCall(msgCall,band,mode) then
-                 AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
-             else
-                 AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clGreen);
-
-         if msgLoc='----' then
-                AddColorStr(msgLoc,clDefault) //no loc
+         if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
+         Begin                                        //and other combinations (CQs) will print, too
+           AddColorStr(msgTime,clDefault); //time
+           if mode='JT65' then
+               AddColorStr('  '+msgMode+'  ',clOlive) //mode
             else
-             Begin
-                i:=frmWorked_grids.WkdGrid(msgLoc,band,mode);
-                case i of
-                 0  : AddColorStr(UpperCase(msgLoc),clGreen); //not wkd
-                 1  : Begin
-                       AddColorStr(lowerCase(copy(msgLoc,1,2)),clRed); //maingrid wkd
-                       AddColorStr(lowerCase(copy(msgLoc,3,2)),clGreen);
-                      end;
-                 2  : AddColorStr(lowerCase(msgLoc),clRed); //grid wkd
-                 end;
-             end;
+               AddColorStr('  '+msgMode+'  ',clPurple);
+           if frmWorked_grids.WkdCall(msgCall,band,mode) then
+                   AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
+               else
+                   AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clGreen);
+           if msgLoc='----' then
+                  AddColorStr(msgLoc,clDefault) //no loc
+              else
+               Begin
+                  i:=frmWorked_grids.WkdGrid(msgLoc,band,mode);
+                  case i of
+                   0  : AddColorStr(UpperCase(msgLoc),clGreen); //not wkd
+                   1  : Begin
+                         AddColorStr(lowerCase(copy(msgLoc,1,2)),clRed); //maingrid wkd
+                         AddColorStr(lowerCase(copy(msgLoc,3,2)),clGreen);
+                        end;
+                   2  : AddColorStr(lowerCase(msgLoc),clRed); //grid wkd
+                   end;
+               end;
+           msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
+           AddColorStr(' '+PadRight(msgRes,7)+' ',clDefault);
+           adif :=  dmDXCC.AdifFromPfx(msgRes);
+           freq := dmUtils.FreqFromBand(band, mode);
+           msgRes:= dmDXCC.DXCCInfo(adif,freq,mode,i);    //wkd info
 
-         msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
-         AddColorStr(' '+PadRight(msgRes,7)+' ',clDefault);
-         adif :=  dmDXCC.AdifFromPfx(msgRes);
-         freq := dmUtils.FreqFromBand(band, mode);
-         msgRes:= dmDXCC.DXCCInfo(adif,freq,mode,i);    //wkd info
-
-         if dmData.DebugLevel>=1 then Writeln('Looking this>',msgRes[1],'< from:',msgRes);
-         case msgRes[1] of
-           'U'  :  AddColorStr(msgRes,clRed);        //Unknown
-           'C'  :  AddColorStr(msgRes,clFuchsia);    //Confirmed
-           'Q'  :  AddColorStr(msgRes,clTeal);       //Qsl needed
-           'N'  :  AddColorStr(msgRes,clGreen);      //New something
-          else    AddColorStr(msgRes,clDefault);     //something else...can't be
-         end;
-
-         AddColorStr(#13#10,clDefault);  //make new line
-         end;
-        end;
-
+           if dmData.DebugLevel>=1 then Writeln('Looking this>',msgRes[1],'< from:',msgRes);
+           case msgRes[1] of
+             'U'  :  AddColorStr(msgRes,clRed);        //Unknown
+             'C'  :  AddColorStr(msgRes,clFuchsia);    //Confirmed
+             'Q'  :  AddColorStr(msgRes,clTeal);       //Qsl needed
+             'N'  :  AddColorStr(msgRes,clGreen);      //New something
+            else    AddColorStr(msgRes,clDefault);     //something else...can't be
+           end;
+           AddColorStr(#13#10,clDefault);  //make new line
+           end;//printing out  line
+        end;  //continued
 end;
 
 
