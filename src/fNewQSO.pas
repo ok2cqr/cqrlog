@@ -1871,12 +1871,14 @@ var
   Buf,
   Fdes,
   ParStr,
-  TimeLine: String;
+  TimeLine,
+  Repbuf   : String;
   index,
   ParNum,
   MsgType,
   Min,
-  Hour    : integer;
+  Hour,
+  RepStart: integer;
   ParDou  : Double;
   Dtim    : TDateTime;
   new,
@@ -1979,6 +1981,7 @@ begin
       if Wsjtxsock.lasterror=0 then
         begin
           index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
+          RepStart := index; //for possibly reply creation
           if dmData.DebugLevel>=1 then Write('Header position:',index);
           index:=index+4;  // skip QT header
 
@@ -2001,23 +2004,13 @@ begin
 
                          if WsjtxMode = '' then
                            Begin
-                             //if we got HB, but WsjtxMode is '' then wsjt-x has been running before
-                             //remote mode.I.E. we never have receved 'status'-packet.
-                             //We call 'replay' to get 'status'-message(among old decoded messages)
-                             //set the beginning of 'replay'-packet
-                             Buf := #$ad+#$bc+#$cb+#$da+#$00+#$00+#$00+#$02+#$00+#$00+#$00+#$07+#$00+#$00;
-                             //add the receved Id
-                             i:=length(ParStr);
-                             if dmData.DebugLevel>=1 then Writeln('Return Id length:',i,' hi:',i div 256,' lo:',i mod 256);
-                             Buf := Buf+ chr(i div 256) + chr(i mod 256);  //BigEndian word;
-                             for i:=1 to length(ParStr) do
-                                Buf := Buf+ParStr[i];
-
-                             //default id should give:
-                             //length+id: 00 06 WSJT-X
-                             //#$00#$06+#$57+#$53+#$4a+#$54+#$2d+#$58;
-
-                             Wsjtxsock.SendString(Buf);
+                             Repbuf := copy(Buf,RepStart,length(Buf));  //Reply is copy of heartbeat
+                             if (length(RepBuf) > 11 ) and (RepBuf[12] = #$00) then //we should have proper reply
+                               Begin
+                                  RepBuf[12] := #$07;    //quick hack: change message type from 0 to 7
+                                  if dmData.DebugLevel>=1 then Writeln('Changed message type from 0 to 7. Sending...');
+                                 end;
+                             Wsjtxsock.SendString(RepBuf);
                            end;
                        end;
           //Status
@@ -2098,7 +2091,9 @@ begin
           2    :       Begin
                          ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Decode Id:', ParStr);
+                         Repbuf := copy(Buf,RepStart,index-RepStart);  //Reply str head part
                          new:= BoolBuf(index);
+                         RepStart := index;     //Reply new/old skip. Str tail start
                          if new then
                              Begin
                                if dmData.DebugLevel>=1 then Writeln('New');
@@ -2138,14 +2133,16 @@ begin
                          //----------------------------------------------------
                          ParStr := StFBuf(index);    //message
                          if dmData.DebugLevel>=1 then Writeln(ParStr);
-
+                         //----------------------------------------------------
+                         Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
+                         if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
                          if new
                           and (WsjtxBand <>'')
                             and (WsjtxMode <>'')
                              and ((pos('CQ ',UpperCase(ParStr))=1) or
                                   (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1))
                               and (mnuMoniWsjtx.Visible) then
-                                  frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand);
+                                  frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf);
                          //----------------------------------------------------
                        end;
           //Clear

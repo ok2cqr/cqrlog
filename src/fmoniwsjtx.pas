@@ -17,21 +17,26 @@ type
     lblMode: TLabel;
     WsjtxMemo: TRichMemo;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure WsjtxMemoChange(Sender: TObject);
+    procedure WsjtxMemoDblClick(Sender: TObject);
   private
     procedure FocusLastLine;
     procedure AddColorStr(s: string; const col: TColor = clBlack);
     { private declarations }
   public
     function NextElement(Message:string;var index:integer):String;
-    procedure AddDecodedMessage(Message,Band:string);
+    procedure AddDecodedMessage(Message,Band,Reply:string);
     procedure NewBandMode(Band,Mode:string);
     { public declarations }
   end;
+Const
+ MaxLines :integer = 16;        //Max monitor lines
 
 var
   frmMonWsjtx: TfrmMonWsjtx;
+  RepArr     : array of string;  //array for reply strings
 
 implementation
 
@@ -73,9 +78,9 @@ begin
       Refresh;
      end;
 end;
+
 procedure TfrmMonWsjtx.WsjtxMemoChange(Sender: TObject);
-var
-  MaxLines : integer;
+var i: integer;
 begin
   MaxLines := 16;
   //scroll buffer
@@ -83,9 +88,26 @@ begin
          Begin
           repeat
             WsjtxMemo.lines.delete(0);
+            for i:=0 to MaxLines-2 do
+                RepArr[i] := RepArr[i+1];
           until WsjtxMemo.lines.count <= Maxlines;
           FocusLastLine;
          end;
+end;
+
+procedure TfrmMonWsjtx.WsjtxMemoDblClick(Sender: TObject);
+var
+   reply : string;
+begin
+  if dmData.DebugLevel>=1 then Writeln('Clicked line no:',WsjtxMemo.Caretpos.Y,' Array gives:',RepArr[WsjtxMemo.Caretpos.Y]);
+  reply := RepArr[WsjtxMemo.Caretpos.Y];
+
+  if (length(reply) > 11 ) and (reply[12] = #$02) then //we should have proper reply
+               Begin
+                reply[12] := #$04;    //quick hack: change message type from 2 to 4
+                if dmData.DebugLevel>=1 then Writeln('Changed message type from 2 to 4. Sending...');
+                frmNewQSO.Wsjtxsock.SendString(reply);
+               end;
 end;
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
@@ -93,6 +115,11 @@ procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
    dmUtils.SaveWindowPos(frmMonWsjtx);
    frmMonWsjtx.hide;
+end;
+
+procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
+begin
+  SetLength(RepArr,MaxLines);
 end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
@@ -125,7 +152,7 @@ begin
     if dmData.DebugLevel>=1 then Writeln('Result:',Result,' index of msg:',index);
 end;
 
-procedure TfrmMonWsjtx.AddDecodedMessage(Message,band:string);
+procedure TfrmMonWsjtx.AddDecodedMessage(Message,band,Reply:string);
 var
   msgTime,
   msgMode,
@@ -155,8 +182,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
        Added.. may be also "mycall" something, but we count just those with proper locator.
        12:34 # MYCALL CA1LL AA11
       }
-
-      index := 1;
+      if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count); index := 1;
 
       if dmData.DebugLevel>=1 then Write('Time-');
       msgTime := NextElement(Message,index);
@@ -203,6 +229,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
          Begin                                        //and other combinations (CQs) will print, too
+           RepArr[WsjtxMemo.lines.count] := Reply;  //corresponding reply string to array
+
            AddColorStr(msgTime,clDefault); //time
            if mode='JT65' then
                AddColorStr('  '+msgMode+'  ',clOlive) //mode

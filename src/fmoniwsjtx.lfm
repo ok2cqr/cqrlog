@@ -7,6 +7,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   ClientHeight = 287
   ClientWidth = 444
   OnClose = FormClose
+  OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '1.2.6.0'
   object lblBand: TLabel
@@ -32,6 +33,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     Font.Name = 'Monospace'
     HideSelection = False
     OnChange = WsjtxMemoChange
+    OnDblClick = WsjtxMemoDblClick
     ParentFont = False
     ReadOnly = True
     TabOrder = 0

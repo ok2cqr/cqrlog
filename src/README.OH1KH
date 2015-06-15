@@ -180,12 +180,15 @@ Rewritten NextElement, and also UDP decoding tmrwsjtx@NewQso so that message str
  behind.
 FIXED (hopely now!)
 
+- answering to CQ by double clicking CQ-Monitors line.
+  Double click on wsjt-x CQ-monitor line sends corresponding UDP-reply message that initiates QSO.
+FIXED 
 
 
  Issues to resolve:
 ===================
 
-- answering to CQ by double clicking CQ-Monitors line
+
 
 - wsjt-x need preferences tab just like fldigi has.
 
