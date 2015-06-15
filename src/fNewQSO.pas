@@ -568,6 +568,7 @@ type
     Wsjtxsock:TUDPBlockSocket;
     WsjtxMode,
     WsjtxBand : String;
+    WsjtxRememberAutoMode :Boolean;
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -1878,8 +1879,11 @@ var
   Hour    : integer;
   ParDou  : Double;
   Dtim    : TDateTime;
-  new     : Boolean;       //multi purpose
+  new,
+  TXEna,
+  TXOn    : Boolean;
   i       : word;
+  TXmode  :string;
 
 //var copied from tmrfldigi
  call : String;
@@ -1986,7 +1990,8 @@ begin
           lblCall.Caption       := 'Wsjt-x remote #'+intToStr(MsgType);   //changed to see last received msgtype
           case MsgType of
 
-          0    :       Begin  //Heartbeat in(coming frm wsjtx)
+          //Heartbeat
+          0    :       Begin
                          ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('HeartBeat Id:', ParStr);
                          if lblCall.Font.Color = clRed then
@@ -2015,36 +2020,28 @@ begin
                              Wsjtxsock.SendString(Buf);
                            end;
                        end;
-
-          1    :       Begin  //Status in
+          //Status
+          1    :       Begin
                          new := false;
                          ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Status Id:', ParStr);
-                         //----------------------------------------------------
-                         ParNum := DUiFBuf(index);
-                         if dmData.DebugLevel>=1 then Writeln('Freq Hz:', ParNUm);
-                         ParNum := ParNum div 1000000;
-                         if dmData.DebugLevel>=1 then Writeln('Freq MHz:', ParNum);
-                         case ParNum of
-                         1   : ParStr := '160M';
-                         3   : ParStr := '80M';
-                         5   : ParStr := '60M';
-                         7   : ParStr := '40M';
-                         10  : ParStr := '30M';
-                         14  : ParStr := '20M';
-                         18  : ParStr := '17M';
-                         21  : ParStr := '15M';
-                         24  : ParStr := '12M';
-                         28  : ParStr := '10M';
-                         29  : ParStr := '10M';
-                         50  : ParStr := '6M';
-                         51  : ParStr := '6M';
-                         70  : ParStr := '4M';
-                         144 : ParStr := '2M';
-                         145 : ParStr := '2M';
-                         else
-                             ParStr := '';
+                        //----------------------------------------------------
+                        case cqrini.ReadInteger('fldigi','freq',0) of
+                         0 : begin
+                                 if not frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
+                                                        mhz := '';
+                            end;
+                         1 : begin
+                                 mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx
+                                 Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
+                                 mhz := copy(mhz,1,length(mhz)-6); //integer part here
+                                 mhz := mhz+'.'+Fdes;
+                                 if dmData.DebugLevel>=1 then Writeln('Qrg :', mhz);
+                                 mhz := Trim(mhz);
+                             end;
+                         2 : mhz := cqrini.ReadString('fldigi','deffreq','3.600')
                          end;
+                         ParStr := dmUtils.GetBandFromFreq(mhz);
                          if ParStr<>WsjtxBand then
                            Begin
                              new :=true;
@@ -2060,17 +2057,45 @@ begin
                            end;
                          if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode);
                          //----------------------------------------------------
-                         //Flush rest. Not needed:
-                         // DX call                utf8
-                         // Report                 utf8
-                         // Tx Mode                utf8
-
+                         call:= trim(StFBuf(index)); //to be sure...
+                         if dmData.DebugLevel>=1 then Writeln('Call :', call);
+                        //----------------------------------------------------
+                         ParStr := StFBuf(index);    //report
+                         if dmData.DebugLevel>=1 then Writeln('Report: ',ParStr);
+                         //----------------------------------------------------
+                          case cqrini.ReadInteger('fldigi','TXmode',1) of
+                         0 : begin
+                                if not frmTRXControl.GetModeFreqNewQSO(TXmode,mhz) then
+                                                        TXmode :='';
+                             end;
+                         1 : begin
+                                TXmode:= trim(StFBuf(index));
+                             end;
+                         2 : TXmode := cqrini.ReadString('fldigi','defmode','RTTY')
+                         end;
+                         if dmData.DebugLevel>=1 then Writeln('TXmode: ',Txmode);
+                         //----------------------------------------------------
+                         TXEna := BoolBuf(index);
+                         if dmData.DebugLevel>=1 then Writeln('TXEnabled: ',TXEna);
+                         //----------------------------------------------------
+                         TXOn := BoolBuf(index);
+                         if dmData.DebugLevel>=1 then Writeln('Transmitting: ',TXOn);
+                         //----------------------------------------------------
+                         if TXEna and TXOn then
+                            begin
+                              if dmUtils.GetBandFromFreq(mhz) <> '' then
+                                                            cmbFreq.Text := mhz;
+                              cmbMode.Text := TXmode;
+                              edtCall.Text := call;
+                              edtCallExit(nil);
+                            end;
+                        //----------------------------------------------------
                          if new then
                            frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode);
                        end;
 
-
-          2    :       Begin  //Decode in
+          //Decode
+          2    :       Begin
                          ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Decode Id:', ParStr);
                          new:= BoolBuf(index);
@@ -2123,17 +2148,15 @@ begin
                                   frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand);
                          //----------------------------------------------------
                        end;
-
-          3    :       Begin  //Clear in
+          //Clear
+          3    :       Begin
                         ParStr := StFBuf(index);
                         if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
                         frmMonWsjtx.WsjtxMemo.lines.Clear;
                        end;
 
-          4    :       Begin  //Reply (outgoing)
-                       end;
-
-          5    :       Begin  //QSO logged in
+          //QSO logged in
+          5    :       Begin
                         ParStr := StFBuf(index);
                         if dmData.DebugLevel>=1 then Writeln('Qso Logged Id:', ParStr);
                         //----------------------------------------------------
@@ -2259,15 +2282,12 @@ begin
                         //----------------------------------------------------
                         btnSave.Click;
                        end;
-
-          6    :       Begin  //Close in
+          //Close
+          6    :       Begin
                         ParStr := StFBuf(index);
                         if dmData.DebugLevel>=1 then Writeln('Close Id:', ParStr);
                         //wsjtx closed maybe need to disable remote mode  ?
                         DisWsjtxRemote;
-                       end;
-
-          7    :       Begin  //Replay (outgoing)
                        end;
 
           end;
@@ -3779,6 +3799,7 @@ Begin
   mnuRemoteModeWsjtx.Checked := False;
   mnuMoniWsjtx.Visible       := False;
   frmMonWsjtx.close;
+  chkAutoMode.Checked := WsjtxRememberAutoMode;
   lblCall.Caption       := 'Call:';
   lblCall.Font.Color    := clDefault;
   edtCall.Enabled       := True;
@@ -3838,6 +3859,8 @@ else
       if dmData.DebugLevel>=1 then Writeln('Could not bind socket for wsjtx!');
       DisWsjtxRemote;
   end;
+  WsjtxRememberAutoMode := chkAutoMode.Checked;
+  chkAutoMode.Checked := False;
   acMonitorWsjtxExecute(nil);
  end;
 end;

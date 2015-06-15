@@ -57,6 +57,9 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
   This is not far from adding autoincrement qso number to RSTsend  :)
 
+- added more decoding for UDP-status message. Now, if transmitting, prefills log's call+mode+freq fields so you are able to see
+  country, qrz.com and possible previous qsos before qso is finished and actual logging is done.
+  Double ESC key cleans these fields, if needed, as usual.
 
 
  Issues resolved:
@@ -182,6 +185,7 @@ FIXED (hopely now!)
  Issues to resolve:
 ===================
 
+- answering to CQ by double clicking CQ-Monitors line
 
 - wsjt-x need preferences tab just like fldigi has.
 
