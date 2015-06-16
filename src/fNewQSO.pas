@@ -1906,7 +1906,7 @@ var
  Mask  : String='';
 
 // data conversion functions. Not so clever....but working.
-// take one string or number at time and cut received buffer for that amount of bytes.
+// take one string or number at time , move index pointer
 
 function UiFBuf(var index:integer):uint32;
    begin
@@ -2189,10 +2189,10 @@ begin
                         edtDate.Text:=sDate;
 
                         //----------------------------------------------------
-                        if TryJulianDateToDateTime(DiFBuf(index),DTim)  then  //date (not used in cqrlog)
+                         if TryJulianDateToDateTime(DiFBuf(index),DTim)  then  //date (not used in cqrlog)
                            if dmData.DebugLevel>=1 then Writeln('Date :',FormatDateTime('YYYY-MM-DD',DTim));
                         //----------------------------------------------------
-                        ParNum := UiFBuf(index);          //time
+                         ParNum := UiFBuf(index);          //time
                          Min := ParNum div 60000;  //minutes from 00:00    UTC
                          Hour := Min div 60;
                          Min := Min - Hour * 60;
@@ -2209,10 +2209,10 @@ begin
                          edtStartTime.Text := TimeLine;
                          edtEndTime.Text := TimeLine;
                          //----------------------------------------------------
-                         ParNum := BFBuf(index);  //timespec local/utc   (not used in cqrlog)
+                          ParNum := BFBuf(index);  //timespec local/utc   (not used in cqrlog)
                          if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
                          //----------------------------------------------------
-                         if ParNum = 2 then  // time offset  (not used in cqrlog)
+                          if ParNum = 2 then  // time offset  (not used in cqrlog)
                             Begin
                              ParNum := IFBuf(index);
                              if dmData.DebugLevel>=1 then Writeln('offset :', IFBuf(index));
@@ -2288,6 +2288,7 @@ begin
                         edtNameExit(nil);
                         //----------------------------------------------------
                         btnSave.Click;
+                        writeln('end loging');
                        end;
           //Close
           6    :       Begin

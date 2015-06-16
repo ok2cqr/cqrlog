@@ -187,6 +187,11 @@ FIXED (hopely now!)
   Double click on wsjt-x CQ-monitor line sends corresponding UDP-reply message that initiates QSO.
 FIXED 
 
+- found a reproductable bug: Open Qso list -> pres Edit QSO. Halts program. THis leads also some other halts on various situations, I think.
+  It has been there on some commits now.
+  Reason is my clever fix for dUtls-> islocok cheking locator lettes to be valis A trough X. As locators can be onlu AA to RR I changed this
+  at one commit to be A trough R. That causes problem somewhere in grayline calculation that halts program.
+FIXED by returning range to A .. X
 
  Issues to resolve:
 ===================

@@ -38,8 +38,8 @@ Const
 
 var
   frmMonWsjtx: TfrmMonWsjtx;
-  RepArr     : array [0 .. 16] of string[255];  //array for reply strings
-  LastTime   : string;                          //time of last printed line
+  RepArr     : array [0 .. 16] of string[255];  //static array for reply strings: set max same as MaxLines
+  LastWsjtLineTime   : string;                  //time of last printed line
 
 implementation
 
@@ -71,10 +71,11 @@ procedure TfrmMonWsjtx.AddColorStr(s: string; const col: TColor = clBlack);
      end;
    end;
 procedure TfrmMonWsjtx.CleanWsjtxMemo;
-var i : integer;
+
+var l : integer;
 Begin
      WsjtxMemo.lines.Clear;
-     for i:=0 to Maxlines do RepArr[i]:='';
+     for l:=0 to Maxlines do RepArr[l]:='';
 end;
 
 procedure TfrmMonWsjtx.FocusLastLine;
@@ -128,7 +129,7 @@ end;
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
 begin
   //SetLength(RepArr,MaxLines);
-  LastTime:='';
+  LastWsjtLineTime:='';
 end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
@@ -240,8 +241,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
          Begin                                        //and other combinations (CQs) will print, too
-           if chkHistory.Checked and (msgTime <> LastTime) then CleanWsjtxMemo;
-           LastTime := msgTime;
+           if chkHistory.Checked and (msgTime <> LastWsjtLineTime) then CleanWsjtxMemo;
+           LastWsjtLineTime := msgTime;
            RepArr[WsjtxMemo.lines.count] := Reply;  //corresponding reply string to array
            //start printing
            AddColorStr(msgTime,clDefault); //time
