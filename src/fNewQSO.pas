@@ -2076,7 +2076,11 @@ begin
                          //----------------------------------------------------
                          if TXEna and TXOn then
                             begin
-                              if dmUtils.GetBandFromFreq(mhz) <> '' then
+                              edtCall.Text := '';//clean grid like double ESC does
+                              old_ccall := '';
+                              old_cfreq := '';
+                              old_cmode := '';
+                              if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
                                                             cmbFreq.Text := mhz;
                               cmbMode.Text := TXmode;
                               edtCall.Text := call;
@@ -2084,7 +2088,13 @@ begin
                             end;
                         //----------------------------------------------------
                          if new then
-                           frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode);
+                            Begin
+                            edtCall.Text := '';//clean grid like double ESC does
+                            old_ccall := '';
+                            old_cfreq := '';
+                            old_cmode := '';
+                            frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode);
+                            end;
                        end;
 
           //Decode

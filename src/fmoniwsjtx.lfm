@@ -1,34 +1,55 @@
 object frmMonWsjtx: TfrmMonWsjtx
   Left = 1967
-  Height = 287
+  Height = 291
   Top = 123
-  Width = 444
+  Width = 454
   Caption = 'Wsjt-x CQ-monitor'
-  ClientHeight = 287
-  ClientWidth = 444
+  ClientHeight = 291
+  ClientWidth = 454
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '1.2.6.0'
   object lblBand: TLabel
-    Left = 48
-    Height = 1
-    Top = 8
-    Width = 1
+    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 61
+    Height = 15
+    Top = 11
+    Width = 33
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 50
+    BorderSpacing.Bottom = 5
+    Caption = 'Band'
     ParentColor = False
   end
   object lblMode: TLabel
-    Left = 360
-    Height = 1
-    Top = 8
-    Width = 1
+    AnchorSideRight.Control = WsjtxMemo
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 358
+    Height = 15
+    Top = 11
+    Width = 35
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 50
+    BorderSpacing.Bottom = 5
+    Caption = 'Mode'
     ParentColor = False
   end
   object WsjtxMemo: TRichMemo
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 11
     Height = 250
-    Top = 32
+    Top = 31
     Width = 432
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Bottom = 10
     Font.Height = -13
     Font.Name = 'Monospace'
     HideSelection = False
@@ -39,5 +60,18 @@ object frmMonWsjtx: TfrmMonWsjtx
     TabOrder = 0
     WordWrap = False
     ZoomFactor = 1
+  end
+  object chkHistory: TCheckBox
+    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 183
+    Height = 23
+    Top = 7
+    Width = 89
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Bottom = 1
+    Caption = 'no history'
+    TabOrder = 1
   end
 end

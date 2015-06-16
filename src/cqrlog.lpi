@@ -32,8 +32,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="--DEBUG=1"/>
-        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+        <LaunchingApplication PathPlusParams="/usr/bin/lxterminal -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>
         <UserOverrides Count="2">
@@ -742,7 +741,6 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
         <StripSymbols Value="True"/>
       </Debugging>
     </Linking>

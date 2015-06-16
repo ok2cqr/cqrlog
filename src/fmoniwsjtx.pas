@@ -13,6 +13,7 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
+    chkHistory: TCheckBox;
     lblBand: TLabel;
     lblMode: TLabel;
     WsjtxMemo: TRichMemo;
@@ -26,6 +27,7 @@ type
     procedure AddColorStr(s: string; const col: TColor = clBlack);
     { private declarations }
   public
+    procedure CleanWsjtxMemo;
     function NextElement(Message:string;var index:integer):String;
     procedure AddDecodedMessage(Message,Band,Reply:string);
     procedure NewBandMode(Band,Mode:string);
@@ -36,7 +38,8 @@ Const
 
 var
   frmMonWsjtx: TfrmMonWsjtx;
-  RepArr     : array of string;  //array for reply strings
+  RepArr     : array [0 .. 16] of string[255];  //array for reply strings
+  LastTime   : string;                          //time of last printed line
 
 implementation
 
@@ -67,6 +70,12 @@ procedure TfrmMonWsjtx.AddColorStr(s: string; const col: TColor = clBlack);
 
      end;
    end;
+procedure TfrmMonWsjtx.CleanWsjtxMemo;
+var i : integer;
+Begin
+     WsjtxMemo.lines.Clear;
+     for i:=0 to Maxlines do RepArr[i]:='';
+end;
 
 procedure TfrmMonWsjtx.FocusLastLine;
 begin
@@ -82,7 +91,6 @@ end;
 procedure TfrmMonWsjtx.WsjtxMemoChange(Sender: TObject);
 var i: integer;
 begin
-  MaxLines := 16;
   //scroll buffer
   if WsjtxMemo.lines.count >= MaxLines then
          Begin
@@ -119,19 +127,22 @@ end;
 
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
 begin
-  SetLength(RepArr,MaxLines);
+  //SetLength(RepArr,MaxLines);
+  LastTime:='';
 end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
    dmUtils.LoadWindowPos(frmMonWsjtx);
+   CleanWsjtxMemo;
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band,Mode:string);
+
 Begin
      lblBand.Caption := Band;
      lblMode.Caption := Mode;
-     WsjtxMemo.lines.Clear;
+     CleanWsjtxMemo;
 end;
 function TfrmMonWsjtx.NextElement(Message:string;var index:integer):String;
 //detach next element from Message. Move index pointer, do not touch message string itself
@@ -229,13 +240,16 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
          Begin                                        //and other combinations (CQs) will print, too
+           if chkHistory.Checked and (msgTime <> LastTime) then CleanWsjtxMemo;
+           LastTime := msgTime;
            RepArr[WsjtxMemo.lines.count] := Reply;  //corresponding reply string to array
-
+           //start printing
            AddColorStr(msgTime,clDefault); //time
            if mode='JT65' then
-               AddColorStr('  '+msgMode+'  ',clOlive) //mode
+               AddColorStr('  '+msgMode+' ',clOlive) //mode
             else
-               AddColorStr('  '+msgMode+'  ',clPurple);
+               AddColorStr('  '+msgMode+' ',clPurple);
+           if isMyCall then AddColorStr('=',clGreen) else AddColorStr(' ',clGreen);
            if frmWorked_grids.WkdCall(msgCall,band,mode) then
                    AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
                else
@@ -268,6 +282,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
              'N'  :  AddColorStr(msgRes,clGreen);      //New something
             else    AddColorStr(msgRes,clDefault);     //something else...can't be
            end;
+
            AddColorStr(#13#10,clDefault);  //make new line
            end;//printing out  line
         end;  //continued
