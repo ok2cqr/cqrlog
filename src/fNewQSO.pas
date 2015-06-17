@@ -3434,7 +3434,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cqrini.ReadString('Program','WebBrowser','firefox')+
+    AProcess.CommandLine := cqrini.ReadString('Program','WebBrowser','xdg-open')+
                             ' http://www.ik3qar.it/manager/man_result.php?call='+
                             dmData.qQSOBefore.Fields[4].AsString;
     if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);

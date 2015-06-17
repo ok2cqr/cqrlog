@@ -3273,7 +3273,7 @@ begin
     SetCurrentDir(dmData.HomeDir + 'call_data' + PathDelim + call + PathDelim);
     prg := cqrini.ReadString('ExtView', 'img', 'eog');
     if prg = '' then
-      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
+      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', 'xdg-open') +
         ' ' + qsl)
     else
       dmUtils.RunOnBackgroud(prg + ' ' + qsl)
@@ -3306,7 +3306,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
+    AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'xdg-open') +
       ' http://www.qrz.com/db/' + GetIDCall(call);
     if dmData.DebugLevel >= 1 then
       Writeln('Command line: ', AProcess.CommandLine);
@@ -3770,7 +3770,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
+    AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'xdg-open') +
       ' http://www.hamqth.com/' + GetIDCall(call);
     if dmData.DebugLevel >= 1 then
       Writeln('Command line: ', AProcess.CommandLine);

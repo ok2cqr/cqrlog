@@ -38,7 +38,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ing.ControlsPerLine'#2#1#12'ClientHeight'#2'5'#11'ClientWidth'#3#132#0#13'I'
   +'tems.Strings'#1#6#3'MHz'#6#6'meters'#0#8'TabOrder'#2#1#0#0#5'TEdit'#13'edtW'
   +'ebBrowser'#4'Left'#3'g'#1#6'Height'#2#27#3'Top'#2's'#5'Width'#3#176#0#8'Tab'
-  +'Order'#2#2#4'Text'#6#7'firefox'#0#0#9'TCheckBox'#16'chkNewDXCCTables'#4'Lef'
+  +'Order'#2#2#4'Text'#6#7'xdg-open'#0#0#9'TCheckBox'#16'chkNewDXCCTables'#4'Lef'
   +'t'#2#14#6'Height'#2#24#3'Top'#3#152#0#5'Width'#3#179#1#7'Caption'#6'<Check '
   +'for newer version of dxcc tables after program startup'#8'TabOrder'#2#3#0#0
   +#9'TCheckBox'#14'chkShowDeleted'#4'Left'#2#14#6'Height'#2#24#3'Top'#3#197#0#5
@@ -1479,7 +1479,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ext'#6#6'evince'#0#0#5'TEdit'#11'edtImgFiles'#4'Left'#2'/'#6'Height'#2#27#3
   +'Top'#3#166#0#5'Width'#3'@'#1#8'TabOrder'#2#2#4'Text'#6#3'eog'#0#0#5'TEdit'
   +#12'edtHtmlFiles'#4'Left'#2'-'#6'Height'#2#27#3'Top'#3#8#1#5'Width'#3'@'#1#8
-  +'TabOrder'#2#3#4'Text'#6#7'firefox'#0#0#9'TCheckBox'#15'chkIntQSLViewer'#4'L'
+  +'TabOrder'#2#3#4'Text'#6#7'xdg-open'#0#0#9'TCheckBox'#15'chkIntQSLViewer'#4'L'
   +'eft'#2'/'#6'Height'#2#24#3'Top'#3#200#0#5'Width'#3'6'#1#7'Caption'#6')Open '
   +'QSL card images with internal viewer'#8'TabOrder'#2#4#0#0#0#9'TTabSheet'#11
   +'tabCallbook'#7'Caption'#6#16'Callbook support'#12'ClientHeight'#3'j'#2#11'C'
