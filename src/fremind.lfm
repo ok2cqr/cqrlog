@@ -1,0 +1,116 @@
+object frmReminder: TfrmReminder
+  Left = 1508
+  Height = 170
+  Top = 269
+  Width = 599
+  Caption = 'Reminder'
+  ClientHeight = 170
+  ClientWidth = 599
+  OnClose = FormClose
+  OnCreate = FormCreate
+  LCLVersion = '1.2.6.0'
+  object lblRemi1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 13
+    Height = 25
+    Top = 0
+    Width = 572
+    Caption = 'Sitting is killing you!  Take a short walk !'
+    Color = clRed
+    Font.Color = clYellow
+    Font.Height = -21
+    Font.Name = 'Monospace'
+    Font.Style = [fsBold, fsItalic]
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+  object RemiMemo: TMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 8
+    Height = 90
+    Top = 76
+    Width = 582
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Bottom = 4
+    TabOrder = 0
+  end
+  object chRemi: TCheckBox
+    AnchorSideLeft.Control = lblRemi1
+    AnchorSideTop.Control = lblRemi1
+    AnchorSideTop.Side = asrBottom
+    Left = 13
+    Height = 23
+    Top = 30
+    Width = 328
+    BorderSpacing.Top = 5
+    Caption = 'Do NOT remind me again (are you sure?!) after'
+    TabOrder = 1
+  end
+  object lblRemi2: TLabel
+    AnchorSideLeft.Control = RemiMemo
+    AnchorSideBottom.Control = RemiMemo
+    Left = 8
+    Height = 15
+    Top = 59
+    Width = 91
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Bottom = 2
+    Caption = 'Remember to:'
+    ParentColor = False
+  end
+  object btClose: TButton
+    AnchorSideRight.Control = RemiMemo
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = RemiMemo
+    Left = 515
+    Height = 25
+    Top = 49
+    Width = 75
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Bottom = 2
+    Caption = 'Close'
+    OnClick = btCloseClick
+    TabOrder = 2
+  end
+  object RemindTImeSet: TMaskEdit
+    AnchorSideLeft.Control = chRemi
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = chRemi
+    Left = 341
+    Height = 27
+    Top = 30
+    Width = 47
+    CharCase = ecNormal
+    MaxLength = 3
+    TabOrder = 3
+    EditMask = '000;1;0'
+    Text = '   '
+    SpaceChar = '0'
+  end
+  object lblRemi3: TLabel
+    AnchorSideLeft.Control = RemindTImeSet
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = chRemi
+    AnchorSideTop.Side = asrCenter
+    Left = 390
+    Height = 15
+    Top = 34
+    Width = 52
+    BorderSpacing.Left = 2
+    Caption = 'minutes'
+    ParentColor = False
+  end
+  object tmrRemi: TTimer
+    Enabled = False
+    Interval = 15000
+    OnTimer = tmrRemiTimer
+    left = 75
+    top = 216
+  end
+end
