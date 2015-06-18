@@ -44,6 +44,7 @@ var TimeValue :string;
 Begin
    tmrRemi.Enabled := False;
    TimeValue := IntToStr(tmrRemi.Interval div 60000);
+   writeln(TimeValue,' ', tmrRemi.Interval );
    while length(Timevalue)< 3 do TimeValue := '0'+TimeValue;
    RemindTimeSet.EditText:= TimeValue;
    frmReminder.ShowOnTop;

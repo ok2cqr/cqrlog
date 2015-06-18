@@ -108,7 +108,7 @@ object frmReminder: TfrmReminder
   end
   object tmrRemi: TTimer
     Enabled = False
-    Interval = 15000
+    Interval = 1800000
     OnTimer = tmrRemiTimer
     left = 75
     top = 216

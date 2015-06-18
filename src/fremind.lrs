@@ -36,5 +36,6 @@ LazarusResources.Add('TfrmReminder','FORMDATA',[
   +'rol'#7#6'chRemi'#18'AnchorSideTop.Side'#7#9'asrCenter'#4'Left'#3#134#1#6'He'
   +'ight'#2#15#3'Top'#2'"'#5'Width'#2'4'#18'BorderSpacing.Left'#2#2#7'Caption'#6
   +#7'minutes'#11'ParentColor'#8#0#0#6'TTimer'#7'tmrRemi'#7'Enabled'#8#8'Interv'
-  +'al'#3#152':'#7'OnTimer'#7#12'tmrRemiTimer'#4'left'#2'K'#3'top'#3#216#0#0#0#0
+  +'al'#4'@w'#27#0#7'OnTimer'#7#12'tmrRemiTimer'#4'left'#2'K'#3'top'#3#216#0#0#0
+  +#0
 ]);
