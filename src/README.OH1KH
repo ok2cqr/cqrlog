@@ -202,6 +202,11 @@ FIXED by returning range to A .. X
   It can handle up to 8 chr long locators and checks validy of letters and numbers and also that length is pair.
 FIXED
 
+- if worked girds map has "Follow rig" checked and we turn off from ham freq happens crash. frmTRXControl.GetModeBand(mode,band) gives True result, but empty band.
+  What means true? We got something from rig or... as fixing these from original code has shown out to be dangerous worked grids map now checks first
+  that it is getting True resut and then that band is not empty string. 
+FIXED
+
  Issues to resolve:
 ===================
 

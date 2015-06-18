@@ -84,8 +84,7 @@ var
 begin
   Result := True;
   Loc := trim(UpCase(Loc));
-  Writeln (loc,' len mod:',Length(Loc) mod 2,'  0=ok');
-  if Length(Loc) mod 2 = 0 then
+ if Length(Loc) mod 2 = 0 then
     Begin
     for i:=1 to length(loc) do
         Begin
@@ -101,14 +100,12 @@ begin
                            Result := False;
                            end;
           end;
-          Writeln (i,'/',length(loc),' ',Result);
         end;
     end
    else
     Begin
      Result:=false;
     end;
-    writeln('finally ',Result);
 end;
 Procedure TfrmWorked_grids.ToRigMode(mode:string);
 var
@@ -434,8 +431,8 @@ begin
    if FollowRig.Checked then
       Begin
        if dmData.DebugLevel>=1 then Writeln(' FlwRig stage 1 is:',FollowRig.Checked );
-       if dmData.DebugLevel>=1 then Writeln(' FlwRig getmode returns:',frmTRXControl.GetModeBand(mode,band) );
-       if frmTRXControl.GetModeBand(mode,band) then
+       if dmData.DebugLevel>=1 then Writeln(' FlwRig getmode returns(st-m-b):',frmTRXControl.GetModeBand(mode,band),' ',mode,' ',band );
+       if (frmTRXControl.GetModeBand(mode,band)) and (band<>'') then //if off from ham freq gives True, but empty band !!!
         Begin
           //here wsjt-x makes exeption as mode is JT9 , JT65 or combination JT9+JT65 not what RigCtl says
           //maybe same is needed from fldigi, too. It just does not update it before qso is logged!
