@@ -94,6 +94,7 @@ type
     MenuItem88: TMenuItem;
     MenuItem89: TMenuItem;
     MenuItem90: TMenuItem;
+    MenuItem97: TMenuItem;
     mnuWorked_grids: TMenuItem;
     mnuMoniWsjtx: TMenuItem;
     mnuRemoteModeWsjtx: TMenuItem;
@@ -362,6 +363,7 @@ type
     procedure MenuItem45Click(Sender: TObject);
     procedure MenuItem46Click(Sender: TObject);
     procedure MenuItem84Click(Sender : TObject);
+    procedure MenuItem97Click(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
     procedure acRemoteModeExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
@@ -646,7 +648,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1,fRemind;
 
 procedure TQSLTabThread.Execute;
 var
@@ -4202,6 +4204,11 @@ end;
 procedure TfrmNewQSO.MenuItem84Click(Sender : TObject);
 begin
   sbtnHamQTH.Click
+end;
+
+procedure TfrmNewQSO.MenuItem97Click(Sender: TObject);
+begin
+  frmReminder.ShowReminder;
 end;
 
 procedure TfrmNewQSO.acNewQSOExecute(Sender: TObject);

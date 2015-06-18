@@ -18,7 +18,7 @@ uses
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
   dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
-  fConfigStorage, fMoniWsjtx, fWkd1;
+  fConfigStorage, fMoniWsjtx, fWkd1, fRemind;
 var
   Splash : TfrmSplash;
 
@@ -56,6 +56,7 @@ begin
   Application.CreateForm(TfrmCWType, frmCWType);
   Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
   Application.CreateForm(TfrmWorked_grids, frmWorked_grids);
+  Application.CreateForm(TfrmReminder, frmReminder );
 
   Splash.Update;
   application.ProcessMessages;

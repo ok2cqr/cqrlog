@@ -65,6 +65,9 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   Added some cleaning routines to CQ-monitor and newQSO and a checkbox "no history". If checked, incoming CQ line's time is compared to last
   printed line. If they differ whole monitor is cleaned before printing this new line. That keeps only latest CQs visible.
 
+- added new popping form "Reminder". Found from Window-> Reminder. Also pops up after 30mins from start. You can disable it, but I recommed
+  to leave it as is :) . You can also write your notes into it like : "Call wife", "pick up kids"  etc...
+
  Issues resolved:
 ===================
 

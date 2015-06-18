@@ -2129,6 +2129,10 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem52: TMenuItem
         Action = acLogUploadStatus
       end
+      object MenuItem97: TMenuItem
+        Caption = 'Reminder'
+        OnClick = MenuItem97Click
+      end
       object mnuWorked_grids: TMenuItem
         Caption = 'Worked grids'
         OnClick = acWorked_gridsExecute

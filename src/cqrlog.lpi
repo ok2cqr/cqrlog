@@ -85,7 +85,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="85">
+    <Units Count="86">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -717,6 +717,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fWkd1"/>
       </Unit84>
+      <Unit85>
+        <Filename Value="fremind.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmReminder"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fRemind"/>
+      </Unit85>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
