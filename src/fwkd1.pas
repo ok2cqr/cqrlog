@@ -53,6 +53,7 @@ type
     function RecordCount:String;
     function WkdGrid(loc,band,mode:string):integer;  //returns 0=not wkd, 1=main grid wkd, 2=wkd
     function WkdCall(call,band,mode:string):boolean;  //returns wkd=true
+    function GridOK(Loc: string): boolean;
   end;
 
 var
@@ -76,6 +77,39 @@ Uses fNewQSO,fTRXControl,dData,dUtils;
 
 { TfrmWorked_grids }
 
+
+function TfrmWorked_grids.GridOK(Loc: string): boolean;
+var
+  i: integer;
+begin
+  Result := True;
+  Loc := trim(UpCase(Loc));
+  Writeln (loc,' len mod:',Length(Loc) mod 2,'  0=ok');
+  if Length(Loc) mod 2 = 0 then
+    Begin
+    for i:=1 to length(loc) do
+        Begin
+          case i of
+          1, 2, 5, 6: case Loc[i] of
+                           'A'..'R':Begin {OK!} end;
+                           else
+                           Result := False;
+                           end;
+          3, 4, 7, 8: case Loc[i] of
+                           '0'..'9':Begin {OK!} end;
+                           else
+                           Result := False;
+                           end;
+          end;
+          Writeln (i,'/',length(loc),' ',Result);
+        end;
+    end
+   else
+    Begin
+     Result:=false;
+    end;
+    writeln('finally ',Result);
+end;
 Procedure TfrmWorked_grids.ToRigMode(mode:string);
 var
  i        : integer;
@@ -196,6 +230,8 @@ begin
   ltrbase := 65;
   Grid1 := 1;
   Grid2 := 2;
+
+  if not GridOK(LocGrid) then exit;  // all (4chr) must be valid
 
   if SubBase then
    Begin
@@ -499,7 +535,6 @@ Begin
           Begin
             dmData.Q.SQL.Text:= 'select distinct upper(left(loc,4)) lo from '+LogTable+' where loc<>'+chr(39)+chr(39)+SQLExtension;
           end;
-
        if ZooMap.Visible then  //coming from zoomed grid
            Begin
             dmData.Q.SQL.Text:= dmData.Q.SQL.Text + ' and loc like '+chr(39)+LogMainGrid+'%'+chr(39);
@@ -526,7 +561,7 @@ Begin
               Begin
                  MarkGrid(Grid ,LocMap.canvas,False);
               end;
-          If pos(copy(Grid ,1,2),MainGridStream) = 0 then
+          If (GridOK(Grid)) and (pos(copy(Grid ,1,2),MainGridStream) = 0) then
              Begin
               inc(MainGridCount);
               MainGridStream := MainGridStream +','+ copy(Grid ,1,2);

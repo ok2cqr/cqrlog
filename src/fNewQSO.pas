@@ -2227,7 +2227,7 @@ begin
                         //----------------------------------------------------
                         loc:= trim(StFBuf(index));
                         if dmData.DebugLevel>=1 then Writeln('Grid :', loc);
-                        if dmUtils.IsLocOK(loc) then
+                        if frmWorked_grids.GridOK(loc) then
                                                 edtGrid.Text := loc;
 
                         //----------------------------------------------------

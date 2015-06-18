@@ -721,6 +721,7 @@
         <Filename Value="fremind.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmReminder"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fRemind"/>
       </Unit85>

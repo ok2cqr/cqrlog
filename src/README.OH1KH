@@ -196,6 +196,12 @@ FIXED
   at one commit to be A trough R. That causes problem somewhere in grayline calculation that halts program.
 FIXED by returning range to A .. X
 
+
+- Problem reported on main/sub gid count. Gives more main grids that are on map. Caused by mistyped locator that had only one letter (I.E. length=1).
+  Tried first to resolve id by modifying dmUtils.ISlocOK but as it caused errors before decide to write own check frmWorked_grids.GridOK.
+  It can handle up to 8 chr long locators and checks validy of letters and numbers and also that length is pair.
+FIXED
+
  Issues to resolve:
 ===================
 

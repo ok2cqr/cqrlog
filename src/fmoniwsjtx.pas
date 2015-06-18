@@ -236,7 +236,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
                msgLoc:='----';
          if length(msgLoc)=4 then
-            if not dmUtils.IsLocOK(msgLoc+'AA') then //to fool dmUtils.IsLocOK; wsjtx locators are all 4chrs
+            if not frmWorked_grids.GridOK(msgLoc) then
                msgLoc:='----';
 
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)

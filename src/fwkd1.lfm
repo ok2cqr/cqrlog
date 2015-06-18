@@ -2145,7 +2145,7 @@ object frmWorked_grids: TfrmWorked_grids
     AnchorSideLeft.Control = LocMap
     AnchorSideTop.Control = Owner
     Left = 16
-    Height = 23
+    Height = 27
     Hint = 'Band selector'
     Top = 25
     Width = 124
@@ -2178,7 +2178,7 @@ object frmWorked_grids: TfrmWorked_grids
     AnchorSideBottom.Side = asrBottom
     Left = 40
     Height = 15
-    Top = 8
+    Top = 12
     Width = 76
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 25
@@ -2288,7 +2288,7 @@ object frmWorked_grids: TfrmWorked_grids
     AnchorSideLeft.Control = LocMap
     AnchorSideTop.Control = BandSelector
     Left = 181
-    Height = 23
+    Height = 27
     Top = 25
     Width = 128
     BorderSpacing.Left = 165
@@ -2336,7 +2336,7 @@ object frmWorked_grids: TfrmWorked_grids
     AnchorSideBottom.Side = asrBottom
     Left = 205
     Height = 15
-    Top = 8
+    Top = 12
     Width = 81
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 25
