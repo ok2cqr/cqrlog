@@ -32,6 +32,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="--DEBUG=1"/>
         <LaunchingApplication PathPlusParams="/usr/bin/lxterminal -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>

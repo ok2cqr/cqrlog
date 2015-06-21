@@ -207,6 +207,11 @@ FIXED
   that it is getting True resut and then that band is not empty string. 
 FIXED
 
+
+ -When selected "Clear DX call and gird afetr logging" wsjt-x sends empty string (as "call") in UDP status (1) packet and cqrlog does crash at that point.
+ Empty stiring has length as  $FFFF FFFF and it has no other content. This exeption is now taken account when decoding UDP-packets.
+FIXED
+
  Issues to resolve:
 ===================
 

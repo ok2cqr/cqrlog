@@ -1920,13 +1920,20 @@ function UiFBuf(var index:integer):uint32;
    end;
 
 function StFBuf(var index:integer):String;
-
   var
     P : uint32;
   begin
     P := UiFBuf(index);                 //string length;
-    Result := copy(Buf,index,P);        //string value
-    index := index + P;                 //point to next element
+    if P = $FFFFFFFF then               //exeption: empty Qstring len: $FFFF FFFF content: empty
+       Begin
+         Result := '';
+       end
+     else
+       Begin
+          Result := copy(Buf,index,P);        //string content
+          index := index + P;                 //point to next element
+       end;
+
   end;
 
 function DUiFBuf(var index:integer):uint64;

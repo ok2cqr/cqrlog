@@ -1,12 +1,12 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 163
-  Height = 573
-  Top = 0
+  Left = 185
+  Height = 569
+  Top = 117
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 552
+  ClientHeight = 548
   ClientWidth = 807
   Font.Height = 8
   Icon.Data = {
@@ -128,7 +128,7 @@ object frmNewQSO: TfrmNewQSO
   object sbNewQSO: TStatusBar
     Left = 0
     Height = 17
-    Top = 535
+    Top = 531
     Width = 807
     Panels = <    
       item
@@ -148,7 +148,7 @@ object frmNewQSO: TfrmNewQSO
   object Panel1: TPanel
     Left = 0
     Height = 499
-    Top = 36
+    Top = 32
     Width = 807
     Align = alBottom
     Caption = 'Panel1'
@@ -1770,7 +1770,7 @@ object frmNewQSO: TfrmNewQSO
   end
   object dbgrdQSOBefore: TDBGrid
     Left = 0
-    Height = 36
+    Height = 32
     Top = 0
     Width = 807
     Align = alClient
