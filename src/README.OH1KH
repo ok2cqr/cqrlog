@@ -68,6 +68,8 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - added new popping form "Reminder". Found from Window-> Reminder. Also pops up after 30mins from start. You can disable it, but I recommed
   to leave it as is :) . You can also write your notes into it like : "Call wife", "pick up kids"  etc...
 
+- changed worked grids print. Now prints somehow confirmed (L,E,Q) grids with green, not confirmed but worked with red.
+
  Issues resolved:
 ===================
 

@@ -45,7 +45,7 @@ type
   private
     { private declarations }
     procedure DrawBase(BCanvas : TCanvas; SubBase : boolean);
-    procedure MarkGrid(LocGrid : String;MCanvas : TCanvas; SubBase : boolean);
+    procedure MarkGrid(LocGrid : String; Cfmd:boolean; MCanvas : TCanvas; SubBase : boolean);
   public
     { public declarations }
     Procedure ToRigMode(mode:string);
@@ -63,7 +63,7 @@ var
   LogTable,                    //Table name found from database file (own call ad locator)
   LogBand,                     //Band that is selected for worked locators
   LogSave,                     //Default File name for saving image
-  LogMainGrid     : String;    //first 2 letters ov locator grid clicked from map
+  LogMainGrid     : String;    //first 2 letters of locator grid clicked from map
   MouseX, MouseY,              //Mouse position on loc map rounded to grids up/right corner
   MainGridCount,               //Number of Maingrids (achrs) from query result
   GridCount       :integer;    //Number of subgrids (4chrs) from query result
@@ -215,14 +215,18 @@ Begin
      if dmData.DebugLevel>=1 then Writeln('WkdCall is:',WkdCall);
 end;
 
-procedure TfrmWorked_grids.MarkGrid(LocGrid : String;MCanvas : TCanvas; SubBase : boolean);
+procedure TfrmWorked_grids.MarkGrid(LocGrid : String; Cfmd:boolean ;MCanvas : TCanvas; SubBase : boolean);
 
-  var v,vs,h,hs,Mheight,ltrbase,Pwidth,Pcolor,Grid1,Grid2:integer;
+  var v,vs,h,hs,
+      Mheight,ltrbase,
+      Pwidth,Pcolor,
+      Grid1,Grid2       :integer;
+
 
 begin
   LocGrid:=UpperCase(LocGrid);//to be sure ;)
   Pwidth := 2;
-  Pcolor := clMaroon;
+  if Cfmd then Pcolor := clGreen else Pcolor := clMaroon;
   Mheight := 360;
   ltrbase := 65;
   Grid1 := 1;
@@ -233,12 +237,13 @@ begin
   if SubBase then
    Begin
         Pwidth := 4;
-        Pcolor := clred;
+        if Cfmd then Pcolor := clLime else Pcolor := clred;
         Mheight := 200;
         ltrbase := 48;
         Grid1 := 3;
         Grid2 := 4;
    end;
+
   with MCanvas do
     begin
       //draw main grids
@@ -248,11 +253,19 @@ begin
       brush.style := bsClear;
       pen.Color := Pcolor;
       pen.width := Pwidth;
-      Rectangle(v, h, v+41, h+21);
+      if subBase then
+        Begin
+          brush.Color := Pcolor;
+          FillRect(v+3, h+3, v+38, h+18)
+        end
+       else
+        Begin
+         Rectangle(v+2, h+2, v+39, h+19);
+        end;
 
       //name grids
       font.Size := 7;
-      font.Color := Pcolor;
+      font.Color := clBlack;
       Font.Style := [fsBold];
       TextOut(v+15,h+5, LocGrid[Grid1]+LocGrid[Grid2]);
       Font.Style := [];
@@ -262,7 +275,8 @@ begin
       Begin
            hs:= h + 20 - ((ord(LocGrid[4])-47)*2);
            vs:= v + (ord(LocGrid[3])-48)*4;
-           pen.Color := clred;
+           if Cfmd then Pcolor := clLime else Pcolor := clred;
+           pen.Color := Pcolor;
            Rectangle(vs, hs, vs+4, hs+2);
       end;
     end;
@@ -488,8 +502,9 @@ var
       MainGridStream,
       SQLExtension,
       Grid           : String;
-      qsocount       : integer;
-
+      qsocount,
+      c              : integer;
+      SQLCfm         : array [0 .. 2] of string;
 Begin
   //no updates if band and mode are not set
  if (BandSelector.itemIndex >= 0) and (WsMode.itemindex >= 0) then
@@ -519,53 +534,71 @@ Begin
           SQLExtension := ' and mode='+chr(39)+WsMode.items[WsMode.Itemindex]+chr(39);
       end;
 
+      //0:the base query string, 1:not confirmed grids, 2:confirmed grids
+      SQLCfm[1] :=' and eqsl_qsl_rcvd='+chr(39)+chr(39)+' and lotw_qslr='+chr(39)+chr(39)+' and qsl_r='+chr(39)+chr(39);
+      SQLCfm[2] :=' and (eqsl_qsl_rcvd<>'+chr(39)+chr(39)+' or lotw_qslr<>'+chr(39)+chr(39)+' or qsl_r<>'+chr(39)+chr(39)+')';
+
       dmData.Q.Close;
        if dmData.trQ.Active then dmData.trQ.Rollback;
 
        if BandSelector.itemIndex > 0 then //band selected
           Begin
-          dmData.Q.SQL.Text := 'select distinct upper(left(loc,4)) as lo from '+LogTable+' where band='+chr(39)+
-                                 BandSelector.items[BandSelector.itemIndex]+chr(39)+
-                                 'and loc<>'+chr(39)+chr(39)+SQLExtension;
+          SQLCfm[0] := 'select upper(left(loc,4)) as lo from '+LogTable+' where band='+chr(39)+
+                       BandSelector.items[BandSelector.itemIndex]+chr(39)+
+                       'and loc<>'+chr(39)+chr(39)+SQLExtension;
           end
        else     //band "all"
           Begin
-            dmData.Q.SQL.Text:= 'select distinct upper(left(loc,4)) lo from '+LogTable+' where loc<>'+chr(39)+chr(39)+SQLExtension;
+            SQLCfm[0] := 'select upper(left(loc,4)) lo from '+LogTable+' where loc<>'+chr(39)+chr(39)+SQLExtension;
           end;
        if ZooMap.Visible then  //coming from zoomed grid
            Begin
-            dmData.Q.SQL.Text:= dmData.Q.SQL.Text + ' and loc like '+chr(39)+LogMainGrid+'%'+chr(39);
+            SQLCfm[0] := SQLCfm[0]  + ' and loc like '+chr(39)+LogMainGrid+'%'+chr(39);
            end;
-
-
-       if dmData.DebugLevel>=1 then Write( dmData.Q.SQL.Text);
 
        GridCount:= 0;
        MainGridCount:= 0;
        MainGridStream := '';
        dmData.trQ.StartTransaction;
-       try                             //try is new
-       dmData.Q.Open;
-       while not dmData.Q.Eof do
-         begin
-           Grid := dmData.Q.FieldByName('lo').AsString;
+       try
+       for c:=1 to 2 do
+        Begin
+          dmData.Q.SQL.Text:= SQLCfm[0] + SQLCfm[c];
+         //if dmData.DebugLevel>=1 then Writeln(c,': ',dmData.Q.SQL.Text);
+         dmData.Q.Open;
+         while not dmData.Q.Eof do
+           begin
+             Grid := dmData.Q.FieldByName('lo').AsString;
 
-           if ZooMap.Visible then  //coming from zoomed grid
+             if ZooMap.Visible then  //coming from zoomed grid
+                Begin
+                   MarkGrid(Grid, c=2 ,ZooMap.canvas,True);
+                end
+                  else
+                Begin
+                   MarkGrid(Grid, c=2 ,LocMap.canvas,False);
+                end;
+
+            If (GridOK(Grid)) and (pos(copy(Grid ,1,2),MainGridStream) = 0) then
+               Begin
+                inc(MainGridCount);
+                MainGridStream := MainGridStream +','+ copy(Grid ,1,2);
+               end;
+
+
+            dmData.Q.Next;
+           end;
+         dmData.Q.Close;
+        end;
+
+      //distinct sub grid count
+      dmData.Q.SQL.Text:= 'select distinct' + copy(SQLCfm[0],7,length(SQLCfm[0]));
+      dmData.Q.Open;
+      while not dmData.Q.Eof do
               Begin
-                 MarkGrid(Grid ,ZooMap.canvas,True);
-              end
-                else
-              Begin
-                 MarkGrid(Grid ,LocMap.canvas,False);
-              end;
-          If (GridOK(Grid)) and (pos(copy(Grid ,1,2),MainGridStream) = 0) then
-             Begin
-              inc(MainGridCount);
-              MainGridStream := MainGridStream +','+ copy(Grid ,1,2);
+                 inc(GridCount);
+                 dmData.Q.Next;
              end;
-          inc(GridCount);
-          dmData.Q.Next;
-         end;
       dmData.Q.Close;
 
       MaxRowId := RecordCount;
