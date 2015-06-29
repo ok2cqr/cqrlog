@@ -70,6 +70,10 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - changed worked grids print. Now prints somehow confirmed (L,E,Q) grids with green, not confirmed but worked with red.
 
+- changed way to look confirmed grids. Before looked for empty fields, now really seeks L,E,Q from fields. I was afraid that there could be
+  spaces that were counted as confirm (<>''). Now also '!' is counted as not confirmed in qsl_r field.
+
+
  Issues resolved:
 ===================
 

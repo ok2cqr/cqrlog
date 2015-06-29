@@ -534,15 +534,18 @@ Begin
           SQLExtension := ' and mode='+chr(39)+WsMode.items[WsMode.Itemindex]+chr(39);
       end;
 
-      //0:the base query string, 1:not confirmed grids, 2:confirmed grids
-      SQLCfm[1] :=' and eqsl_qsl_rcvd='+chr(39)+chr(39)+' and lotw_qslr='+chr(39)+chr(39)+' and qsl_r='+chr(39)+chr(39);
-      SQLCfm[2] :=' and (eqsl_qsl_rcvd<>'+chr(39)+chr(39)+' or lotw_qslr<>'+chr(39)+chr(39)+' or qsl_r<>'+chr(39)+chr(39)+')';
+
+      //1:not (at all) confirmed grids
+      SQLCfm[1] :=' and eqsl_qsl_rcvd<>'+chr(39)+'E'+chr(39)+' and lotw_qslr<>'+chr(39)+'L'+chr(39)+' and qsl_r<>'+chr(39)+'Q'+chr(39);
+      //2:some way confirmed grids
+      SQLCfm[2] :=' and (eqsl_qsl_rcvd='+chr(39)+'E'+chr(39)+' or lotw_qslr='+chr(39)+'L'+chr(39)+' or qsl_r='+chr(39)+'Q'+chr(39)+')';
 
       dmData.Q.Close;
        if dmData.trQ.Active then dmData.trQ.Rollback;
 
        if BandSelector.itemIndex > 0 then //band selected
           Begin
+          //0:the base query string
           SQLCfm[0] := 'select upper(left(loc,4)) as lo from '+LogTable+' where band='+chr(39)+
                        BandSelector.items[BandSelector.itemIndex]+chr(39)+
                        'and loc<>'+chr(39)+chr(39)+SQLExtension;
@@ -564,7 +567,6 @@ Begin
        for c:=1 to 2 do
         Begin
           dmData.Q.SQL.Text:= SQLCfm[0] + SQLCfm[c];
-         //if dmData.DebugLevel>=1 then Writeln(c,': ',dmData.Q.SQL.Text);
          dmData.Q.Open;
          while not dmData.Q.Eof do
            begin
