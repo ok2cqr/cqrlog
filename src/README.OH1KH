@@ -73,6 +73,34 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - changed way to look confirmed grids. Before looked for empty fields, now really seeks L,E,Q from fields. I was afraid that there could be
   spaces that were counted as confirm (<>''). Now also '!' is counted as not confirmed in qsl_r field.
 
+- wsjt-x monitor: Added ALert feature. This is usefull only if you have socond audio card as the first one is used for your wsjt-x!
+  Works similar way as the voice keyer faeature.
+  You must add new script to ~.config/cqrlog/voice_keyer directory called voice_alert.sh You can copy existing voice_keyer.sh and
+  add the audio device selection lines if you do not have them.
+  Then record corresponding mp3 files.
+
+  voice_alert.sh:
+  #!/bin/bash
+  # //audio file name (prefix) played on alert
+  # //can be:'my'= ansver to my cq,
+  # //       'loc'=new main grid,
+  # //       'band'=new band,
+  # //       'mode'=new mode,
+  # //       'dxcc'=new country 
+  # // create files you want to be played
+  # scirpt is seeking names with '.wav' suffix! Change if needed    
+
+  #wait if you want several alerts to be played in queue 
+  #instead of on top of each other. Even this fails sometimes ;(
+  while pgrep alplay ; do
+   sleep $(echo '0.'$RANDOM)
+  done
+
+  #select audio card(if needed) and play alert message
+  aplay ~/.config/cqrlog/voice_keyer/$1.wav
+
+
+
 
  Issues resolved:
 ===================

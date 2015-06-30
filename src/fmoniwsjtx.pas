@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, RichMemo, strutils;
+  StdCtrls, RichMemo, strutils,  process;
 
 type
 
@@ -14,6 +14,7 @@ type
 
   TfrmMonWsjtx = class(TForm)
     chkHistory: TCheckBox;
+    chkAlert: TCheckBox;
     lblBand: TLabel;
     lblMode: TLabel;
     WsjtxMemo: TRichMemo;
@@ -25,6 +26,7 @@ type
   private
     procedure FocusLastLine;
     procedure AddColorStr(s: string; const col: TColor = clBlack);
+    procedure RunVA(Afile: String);
     { private declarations }
   public
     procedure CleanWsjtxMemo;
@@ -40,6 +42,12 @@ var
   frmMonWsjtx: TfrmMonWsjtx;
   RepArr     : array [0 .. 16] of string[255];  //static array for reply strings: set max same as MaxLines
   LastWsjtLineTime   : string;                  //time of last printed line
+  myAlert            : string;                  //audio file name played on alert
+                                                //can be:'my'= ansver to my cq,
+                                                //       'loc'=new main grid,
+                                                //       'band'=new band,
+                                                //       'mode'=new mode,
+                                                //       'dxcc'=new country
 
 implementation
 
@@ -48,6 +56,25 @@ implementation
 Uses fNewQSO,dData,dUtils,dDXCC,fWkd1,uMyini;
 
 
+
+procedure TfrmMonWsjtx.RunVA(Afile: String);
+const
+  cAlert = 'voice_keyer/voice_alert.sh';
+var
+   AProcess: TProcess;
+begin
+  if not FileExists(dmData.HomeDir + cAlert) then
+  exit;
+
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.CommandLine := 'bash ' + dmData.HomeDir + cAlert  +' '+ Afile;
+    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+    AProcess.Execute
+  finally
+    AProcess.Free
+  end
+end;
 procedure TfrmMonWsjtx.AddColorStr(s: string; const col: TColor = clBlack);
    begin
      with WsjtxMemo do
@@ -194,6 +221,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
        Added.. may be also "mycall" something, but we count just those with proper locator.
        12:34 # MYCALL CA1LL AA11
       }
+
+      myAlert:='';
       if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count); index := 1;
 
       if dmData.DebugLevel>=1 then Write('Time-');
@@ -261,7 +290,10 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                Begin
                   i:=frmWorked_grids.WkdGrid(msgLoc,band,mode);
                   case i of
-                   0  : AddColorStr(UpperCase(msgLoc),clGreen); //not wkd
+                   0  : Begin
+                             AddColorStr(UpperCase(msgLoc),clGreen); //not wkd
+                             myAlert := 'loc';
+                        end;
                    1  : Begin
                          AddColorStr(lowerCase(copy(msgLoc,1,2)),clRed); //maingrid wkd
                          AddColorStr(lowerCase(copy(msgLoc,3,2)),clGreen);
@@ -280,12 +312,22 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
              'U'  :  AddColorStr(msgRes,clRed);        //Unknown
              'C'  :  AddColorStr(msgRes,clFuchsia);    //Confirmed
              'Q'  :  AddColorStr(msgRes,clTeal);       //Qsl needed
-             'N'  :  AddColorStr(msgRes,clGreen);      //New something
+             'N'  :  Begin
+                       AddColorStr(msgRes,clGreen);      //New something
+                       if pos('ew band',msgRes)>0 then myAlert := 'band';
+                       if pos('ew mode',msgRes)>0 then myAlert := 'mode';
+                       if pos('ew coun',msgRes)>0 then myAlert := 'dxcc';
+                     end;
             else    AddColorStr(msgRes,clDefault);     //something else...can't be
            end;
 
            AddColorStr(#13#10,clDefault);  //make new line
-           end;//printing out  line
+
+           if isMyCall then myAlert :='my'; //overrides anything else
+           if (myAlert <>'') and chkAlert.Checked then
+                                 RunVA(myAlert); //play voice_keyer
+
+         end;//printing out  line
         end;  //continued
 end;
 

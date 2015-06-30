@@ -62,16 +62,32 @@ object frmMonWsjtx: TfrmMonWsjtx
     ZoomFactor = 1
   end
   object chkHistory: TCheckBox
-    AnchorSideLeft.Control = WsjtxMemo
-    AnchorSideLeft.Side = asrCenter
+    AnchorSideLeft.Control = lblBand
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = WsjtxMemo
-    Left = 183
+    Left = 114
     Height = 23
     Top = 7
-    Width = 89
-    Anchors = [akLeft, akBottom]
+    Width = 158
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 20
     BorderSpacing.Bottom = 1
     Caption = 'no history'
     TabOrder = 1
+  end
+  object chkAlert: TCheckBox
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideRight.Control = lblMode
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 262
+    Height = 23
+    Top = 7
+    Width = 76
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 20
+    BorderSpacing.Bottom = 1
+    Caption = 'Alert on'
+    TabOrder = 2
   end
 end
