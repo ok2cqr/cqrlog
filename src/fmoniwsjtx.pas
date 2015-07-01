@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, RichMemo, strutils,  process;
+  StdCtrls, maskedit, RichMemo, strutils,  process;
 
 type
 
@@ -14,7 +14,11 @@ type
 
   TfrmMonWsjtx = class(TForm)
     chkHistory: TCheckBox;
-    chkAlert: TCheckBox;
+    chkmyAlert: TCheckBox;
+    chkLocAlert: TCheckBox;
+    EditAlert: TEdit;
+    lblAlert1: TLabel;
+    lblAlert2: TLabel;
     lblBand: TLabel;
     lblMode: TLabel;
     WsjtxMemo: TRichMemo;
@@ -45,9 +49,8 @@ var
   myAlert            : string;                  //audio file name played on alert
                                                 //can be:'my'= ansver to my cq,
                                                 //       'loc'=new main grid,
-                                                //       'band'=new band,
-                                                //       'mode'=new mode,
-                                                //       'dxcc'=new country
+                                                //       'text'= text given is foun from new monitor line
+  MonitorLine        : string;                  // complete line as printed to monitor
 
 implementation
 
@@ -76,7 +79,14 @@ begin
   end
 end;
 procedure TfrmMonWsjtx.AddColorStr(s: string; const col: TColor = clBlack);
-   begin
+var i : integer;
+begin
+     for i:= 1 to length(s) do
+       Begin
+         if ((ord(s[i]) >= 32) and (ord(s[i]) <= 122)) then   //from space to z accepted
+                                              MonitorLine := MonitorLine + s[i];
+       end;
+
      with WsjtxMemo do
      begin
        //if dmData.DebugLevel>=1 then Writeln('LineCount-start:',Lines.Count,' String:',s);
@@ -155,7 +165,7 @@ end;
 
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
 begin
-  //SetLength(RepArr,MaxLines);
+  EditAlert.Text := '';
   LastWsjtLineTime:='';
 end;
 
@@ -223,6 +233,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       }
 
       myAlert:='';
+      MonitorLine :='';
       if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count); index := 1;
 
       if dmData.DebugLevel>=1 then Write('Time-');
@@ -292,7 +303,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                   case i of
                    0  : Begin
                              AddColorStr(UpperCase(msgLoc),clGreen); //not wkd
-                             myAlert := 'loc';
+                             if chkLocAlert.Checked then myAlert := 'loc';
                         end;
                    1  : Begin
                          AddColorStr(lowerCase(copy(msgLoc,1,2)),clRed); //maingrid wkd
@@ -301,6 +312,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                    2  : AddColorStr(lowerCase(msgLoc),clRed); //grid wkd
                    end;
                end;
+
            msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
            AddColorStr(' '+PadRight(msgRes,7)+' ',clDefault);
            adif :=  dmDXCC.AdifFromPfx(msgRes);
@@ -312,20 +324,17 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
              'U'  :  AddColorStr(msgRes,clRed);        //Unknown
              'C'  :  AddColorStr(msgRes,clFuchsia);    //Confirmed
              'Q'  :  AddColorStr(msgRes,clTeal);       //Qsl needed
-             'N'  :  Begin
-                       AddColorStr(msgRes,clGreen);      //New something
-                       if pos('ew band',msgRes)>0 then myAlert := 'band';
-                       if pos('ew mode',msgRes)>0 then myAlert := 'mode';
-                       if pos('ew coun',msgRes)>0 then myAlert := 'dxcc';
-                     end;
+             'N'  :  AddColorStr(msgRes,clGreen);      //New something
+
             else    AddColorStr(msgRes,clDefault);     //something else...can't be
            end;
 
            AddColorStr(#13#10,clDefault);  //make new line
-
-           if isMyCall then myAlert :='my'; //overrides anything else
-           if (myAlert <>'') and chkAlert.Checked then
-                                 RunVA(myAlert); //play voice_keyer
+           if ((trim(EditAlert.Text) <>'')
+            and (pos(trim(EditAlert.Text),MonitorLine) > 0 ))
+                                   then myAlert := 'text'; // overrides locator
+           if ( chkMyAlert.Checked and isMyCall ) then myAlert :='my'; //overrides anything else
+           if (myAlert <>'') then RunVA(myAlert); //play voice_keyer
 
          end;//printing out  line
         end;  //continued

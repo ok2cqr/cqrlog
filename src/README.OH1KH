@@ -77,25 +77,29 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   Works similar way as the voice keyer faeature.
   You must add new script to ~.config/cqrlog/voice_keyer directory called voice_alert.sh You can copy existing voice_keyer.sh and
   add the audio device selection lines if you do not have them.
-  Then record corresponding mp3 files.
+
+- wsjt-x CQ-monitor->Alert->Rethink. Now has 3 different alerts selectable from CQmonitor.
+  1) "MyAlert"=someone answered to your CQ plays file named with prefix 'my' from ~.config/cqrlog/voice_keyer directory  
+  2) "Text_______Alert"= if the written text is found from printed CQmonitor line plays file named with prefix 'text'
+     from ~.config/cqrlog/voice_keyer directory. Text may contain chars from ' '(space) to 'z' but can not hold space(s) at start or end.
+     TextAlert should give all bossibilities as before + some more.
+  3) "LocAlert"= printed CQmonitor line has new main grid.
+  The priority of alerts is same as numbering here. Smaller number overrides previous. 
+
 
   voice_alert.sh:
   #!/bin/bash
   # //audio file name (prefix) played on alert
   # //can be:'my'= ansver to my cq,
   # //       'loc'=new main grid,
-  # //       'band'=new band,
-  # //       'mode'=new mode,
-  # //       'dxcc'=new country 
+  # //       'text'=text found from printed line
   # // create files you want to be played
   # scirpt is seeking names with '.wav' suffix! Change if needed    
-
   #wait if you want several alerts to be played in queue 
   #instead of on top of each other. Even this fails sometimes ;(
   while pgrep alplay ; do
    sleep $(echo '0.'$RANDOM)
   done
-
   #select audio card(if needed) and play alert message
   aplay ~/.config/cqrlog/voice_keyer/$1.wav
 
