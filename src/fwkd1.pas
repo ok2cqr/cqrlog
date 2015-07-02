@@ -54,6 +54,7 @@ type
     function WkdGrid(loc,band,mode:string):integer;  //returns 0=not wkd, 1=main grid wkd, 2=wkd
     function WkdCall(call,band,mode:string):boolean;  //returns wkd=true
     function GridOK(Loc: string): boolean;
+    var Changes         : Boolean;   //changes happened somewhere: update map
   end;
 
 var
@@ -67,7 +68,7 @@ var
   MouseX, MouseY,              //Mouse position on loc map rounded to grids up/right corner
   MainGridCount,               //Number of Maingrids (achrs) from query result
   GridCount       :integer;    //Number of subgrids (4chrs) from query result
-  Changes         : Boolean;   //changes happened somewhere
+
 
 
 implementation
@@ -472,7 +473,8 @@ begin
 
    if (BandSelector.itemIndex >= 0) and (WsMode.Itemindex >= 0) then    //both must be set
       begin
-        if (MaxRowId <> RecordCount) or Changes then
+        //if (MaxRowId <> RecordCount) or Changes then
+          if Changes then
           Begin
            BandSelectorChange(AutoUpdate);   //update map(s)
           end;

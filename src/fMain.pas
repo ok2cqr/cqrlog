@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, ExtCtrls, StdCtrls, ComCtrls, DBGrids, Buttons, LCLType, IniFiles, process,
-  Grids, DBCtrls, dLogUpload;
+  Grids, DBCtrls, dLogUpload, fWkd1;
 
 type
 
@@ -731,7 +731,8 @@ begin
       end;
       dmData.RefreshMainDatabase()
     end;
-    ReloadGrid
+    ReloadGrid;
+    frmWorked_grids.Changes := True;
   end
 end;
 

@@ -2758,7 +2758,8 @@ begin
   else
     if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
      edtCall.SetFocus;
-  UploadAllQSOOnline
+  UploadAllQSOOnline;
+  frmWorked_grids.Changes := True;
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);

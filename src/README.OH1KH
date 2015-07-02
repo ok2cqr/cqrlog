@@ -250,6 +250,15 @@ FIXED
  Empty stiring has length as  $FFFF FFFF and it has no other content. This exeption is now taken account when decoding UDP-packets.
 FIXED
 
+ - If worked_grids form is open while exporting qsos to LoTW export ends with error "Q1:Field not found: 'id_cqrlog_main'.
+   This happens because worked_grid's autoupdate timer polls while LoTW upload an uses same Q1 query.
+   Removed qso amount polling (that used Q1) from autoupdate timer. Autoupdate timer now polls only rig (if "follow rig" checked and boolean
+   "changes" (that was previously indicating rig changes only). Now "changes" is public variable and is set true as last thing when
+   pressing "save button" on NEwQSO form and pressing "Delete qso" on main from. These should keep worked_grids up to date and avoid it
+   using Q1 with timer. This might help also to other similar situations (mysterious erros) that happened because Q1 suddenly is taken in use by
+   autoupdate timer.
+FIXED
+  
  Issues to resolve:
 ===================
 
