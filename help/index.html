@@ -13,28 +13,33 @@ and
 [http://www.ok1rr.com]</i>
 <br><br>
 <strong><h3>Description:</h3></strong>
-<div align="justify"><div>CQRLOG is an advanced ham radio logger based
-on MySQL database. It provides radio control based on hamlib libraries
-(currently support of 140+ radio types and models), DX cluster
-connection, band map, QRZ.com/HamQTH.com callbook (XML access), IOTA support, a
+<div align="justify"><div>CQRLOG is an advanced ham radio logging application based
+on a MySQL database. It provides radio interfacing utilizing the hamlib libraries
+(currently support for 140+ radio types and models), DX cluster
+connection, band map, QRZ.com/HamQTH.com callbook (XML access),
+ClubLog and Logbook of the World support, IOTA support, a
 grayliner, propagation indicator, xplanet support (maps in azimuthal projection centered in
 your QTH), OK1RR free QSL manager database etc.
-<br> <br>CQRLOG is intended mainly to seriously HF DX minded operators
+<br> <br>CQRLOG is intended mainly for seriously HF DX minded operators
 but can be used for any ham logging purpose, also by casual operators.
 It is equipped with probably most accurate DXCC country database
 available, providing not only the country resolution but also state,
 province, region, district etc. It resolves also antarctic bases,
 special event stations, contest callsigns and much more.<br><br>
-CQRLOG has now its own web site at <a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>. Find news, changes, latest additional files and howtos here. If you have a problem, browse this web site first, then ask for help.</div>
+CQRLOG has its own web site at
+<a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>.
+Find news, changes, latest additional files and howtos there.
+If you have a problem, browse the web site first, then ask for help.</div>
 <br><br> <strong><h3>License and disclaimer:</h3></strong>CQRLOG is
-published under GNU GENERAL PUBLIC LICENSE Version 2 (GPL v. 2), June
+published under the GNU GENERAL PUBLIC LICENSE Version 2 (GPL v. 2), June
 1991. This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation; either version 2 of the
 License, or (at your option) any later version. Full version of GPL v.
 2 is <a href="h8.html"><strong>here</strong></a>.
 <br><br>The authors are not responsible for any damages, losses or safety risks to the user; the software is published AS IS.
-<br><br><strong><h3>Supported transceivers:</h3></strong> The Radio Control is provided with <i>hamlib</i>,
+<br><br><strong><h3>Supported transceivers:</h3>
+</strong> The Radio Control interface is provided using <i>hamlib</i>,
 a set of libraries, which is a development effort to provide a
 consistent interface for programmers wanting to incorporate radio
 control in their programs. <i>hamlib</i> is not a complete user
@@ -47,24 +52,36 @@ and each manufacturer's product line differs greatly from its
 competitors.
 <br><br> There's no standardized protocol to remotely control one's
 rig, be it a Ham radio transceiver, a SWL receiver, any kind of scanner
-and other mobiles. However, some manufacturer may have designed their
+or other mobiles. However, many manufacturer have designed their
 own proprietary protocol, implemented in some of their product family.
 Therefore, each rig family will require a <i>hamlib</i> backend to set
 the VFO frequency, change mode and passband width, get current signal
 strength, etc. The actual list of supported radios can be found <a href="h6.html"><strong>here</strong></a>.
-<br><br> <strong><h3>Installation:</h3></strong>Ubuntu users can use repository on Launchpad. To add the repo, open terminal and copy&amp;paste<br><br> 
+<br><br> <strong><h3>Installation:</h3></strong>
+Ubuntu users can use a repository on Launchpad. To add the repo, open a terminal and copy&amp;paste<br><br> 
 <code>
 sudo add-apt-repository ppa:ok2cqr/ppa<br>
 sudo apt-get update<br>
 sudo apt-get install cqrlog	<br>
+</code><br>
+Only Ubuntu 12.04 LTS is officially supported but there are also builds for newer
+versions of Ubuntu.
+<br><br>
+Debian users can simply install using the package manager<br><br> 
+<code>
+sudo apt-get install cqrlog	<br>
 </code><br><br>
-Only Ubuntu 12.04 LTS is officially supported but there are builds also fo newer versions of Ubuntu. For other distributions, you can use binaries located at <a href="http://cqrlog.com/download">http://cqrlog.com/download</a>. Some of them, like Fedora and Arch, have their own repositories with CQRLOG - Fedora: <a href="https://admin.fedoraproject.org/pkgdb/acls/name/cqrlog">https://admin.fedoraproject.org/pkgdb/acls/name/cqrlog</a> ArchLinux <a href="https://aur.archlinux.org/packages/cqrlog/">https://aur.archlinux.org/packages/cqrlog/</a><br>
+For other distributions, you can use binaries located at
+<a href="http://cqrlog.com/download">http://cqrlog.com/download</a>.
+Some of them, like Fedora and Arch, have their own repositories for CQRLOG - Fedora: <a href="https://admin.fedoraproject.org/pkgdb/acls/name/cqrlog">https://admin.fedoraproject.org/pkgdb/acls/name/cqrlog</a> ArchLinux <a href="https://aur.archlinux.org/packages/cqrlog/">https://aur.archlinux.org/packages/cqrlog/</a><br>
 If upgrading, no important file will be overwritten. Anyway, <strong>backup your log</strong> before you begin any upgrade!
 <br><br><strong><h3>Dependencies:</h3></strong>
 <ul>
-	<li><strong>HamLib</strong> - must be installed also if you don't want radio control. The sources are available at <a href="http://hamlib.sourceforge.net/"><strong>http://hamlib.sourceforge.net/</strong></a>, however precompiled packages are available for almost any major Linux distribution</li>
-	<li><strong>MySQL server and client</strong> - without this program can't work at all</li>
-	<li><strong>libssl-devel</strong> needed if you want to use LoTW and/or online log uplod	
+<li><strong>HamLib</strong> - must be installed even if you don't want radio control. The sources are available at <a href="http://hamlib.sourceforge.net/"><strong>http://hamlib.sourceforge.net/</strong></a>, however precompiled packages are available for almost all major Linux distributions.</li>
+<li><strong>MySQL server and client</strong> - The MySQL client must be installed,
+without this the program will not work at all. A MySQL server must be reachable,
+either on the local machine or via a network.</li>
+<li><strong>libssl-devel</strong> needed if you want to use LoTW and/or online log upload	
 </ul>
 </div>
 <a name="aa"><strong></strong></a><h2><a name="aa"><strong>Contents:</strong></a></h2><h3><strong>Quick start</strong></h3>
@@ -143,12 +160,24 @@ If upgrading, no important file will be overwritten. Anyway, <strong>backup your
 <li><a href="h8.html">GNU GENERAL PUBLIC LICENSE</a></li>
 </ul>
 <strong><h3>Third Party Programs</h3></strong>
-<ul><li><strong>Hamlib</strong> - <strong><font color="#FF0000">NEEDED</font></strong>, without this CQRLOG does not work!</li>
-<li><strong>Trusted QSL</strong> - for LoTW operations. You need the updated version, download <a href="http://www.ok2cqr.com/?q=lotw-and-linux"><strong>here</strong></a> (sources, SuSE and Fedora packages). Ubuntu and Debian have this package in their repositories. Slackware packages download <a href="http://www.ok1rr.com/request.php?196"><strong>here</strong></a>.</li>
+<ul><li><strong>Hamlib</strong> - <strong><font color="#FF0000">NEEDED</font></strong>,
+without this CQRLOG will not work!</li>
+<li><strong>Trusted QSL</strong> - for LoTW operations. You need the updated version, download
+<a href="http://www.ok2cqr.com/?q=lotw-and-linux"><strong>here</strong></a>
+(sources, SuSE and Fedora packages).
+Ubuntu and Debian have this package in their repositories.
+Slackware packages download <a href="http://www.ok1rr.com/request.php?196"><strong>here</strong></a>.</li>
 <li><strong>xplanet</strong> - for DX Cluster spot visualization on the azimuthal map.</li>
 <li><strong>cwdaemon</strong> - for CW operation, only if you choose parallel or serial port keying without Winkey.</li>
-<table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/exc.png"></td><td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong> cwdaemon use may result in some cases in <strong>sloppy CW at speeds above 30 WPM</strong>. Use Winkey (by K1EL) if possible or your <strong>kernel must be modified to minimalize the latency</strong>. Tickless, high resolution timer and 1000 Hz sampling rate must be used. Recommended for very keen linux users only!</td></tr></tbody></table>
-<li><strong>fldigi</strong> for RTTY and Digital Modes. Download from the W1HKJ site <a href=http://www.w1hkj.com/Fldigi.html><strong>http://www.w1hkj.com/Fldigi.html</strong></a></li>
+<table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top">
+<img src="img/exc.png"></td>
+<td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong>
+cwdaemon use may result in <strong>sloppy CW at speeds above 30 WPM</strong>.
+Use Winkey (by K1EL) if possible or your <strong>kernel must be modified to minimalize the
+latency</strong>. Tickless, high resolution timer and 1000 Hz sampling rate must be used.
+Recommended for very experienced linux users only!</td></tr></tbody></table>
+<li><strong>fldigi</strong> for RTTY and Digital Modes. Instal the package from your
+distribution or download from the W1HKJ site <a href=http://www.w1hkj.com/Fldigi.html><strong>http://www.w1hkj.com/Fldigi.html</strong></a></li>
 </ul>
 <strong><h3>I want to...</h3></strong>
 <ul>
