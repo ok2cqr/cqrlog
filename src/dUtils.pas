@@ -1671,10 +1671,9 @@ begin
     fGrids := 'default';
     fgSize := 0;
     fQsoGr := 'default';
-    fqSize := 0;
+    fqSize := 0
   end
-  else
-  begin
+  else begin
     fEdits := cqrini.ReadString('Fonts', 'Edits', 'Sans 10');
     feSize := cqrini.ReadInteger('Fonts', 'eSize', 10);
 
@@ -1685,7 +1684,7 @@ begin
     fgSize := cqrini.ReadInteger('Fonts', 'gSize', 8);
 
     fQsoGr := cqrini.ReadString('Fonts', 'QGrids', 'Sans 10');
-    fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10);
+    fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10)
   end;
 
   for i := 0 to aForm.ComponentCount - 1 do
@@ -1694,37 +1693,37 @@ begin
     if (aForm.Components[i] is TEdit) then
     begin
       (aForm.Components[i] as TEdit).Font.Name := fEdits;
-      (aForm.Components[i] as TEdit).Font.Size := feSize;
+      (aForm.Components[i] as TEdit).Font.Size := feSize
     end;
 
     if (aForm.Components[i] is TMemo) then
     begin
       (aForm.Components[i] as TMemo).Font.Name := fEdits;
-      (aForm.Components[i] as TMemo).Font.Size := feSize;
+      (aForm.Components[i] as TMemo).Font.Size := feSize
     end;
 
     if (aForm.Components[i] is TMemo) then
     begin
       (aForm.Components[i] as TMemo).Font.Name := fEdits;
-      (aForm.Components[i] as TMemo).Font.Size := feSize;
+      (aForm.Components[i] as TMemo).Font.Size := feSize
     end;
 
     if (aForm.Components[i] is TSpinEdit) then
     begin
       (aForm.Components[i] as TSpinEdit).Font.Name := fEdits;
-      (aForm.Components[i] as TSpinEdit).Font.Size := feSize;
+      (aForm.Components[i] as TSpinEdit).Font.Size := feSize
     end;
 
     if (aForm.Components[i] is TComboBox) then
     begin
       (aForm.Components[i] as TComboBox).Font.Name := fEdits;
-      (aForm.Components[i] as TComboBox).Font.Size := feSize;
+      (aForm.Components[i] as TComboBox).Font.Size := feSize
     end;
 
     if (aForm.Components[i] is TColorBox) then
     begin
       (aForm.Components[i] as TColorBox).Font.Name := fEdits;
-      (aForm.Components[i] as TColorBox).Font.Size := feSize;
+      (aForm.Components[i] as TColorBox).Font.Size := feSize
     end;
 
     ///////////////////////////////////////////////////////////
@@ -1736,38 +1735,38 @@ begin
         //frequecy/Azimuth label font is set
       begin
         (aForm.Components[i] as TLabel).Font.Name := fButtons;
-        (aForm.Components[i] as TLabel).Font.Style := [];
-      end;
+        (aForm.Components[i] as TLabel).Font.Style := []
+      end
     end;
 
     if (aForm.Components[i] is TGroupBox) then
     begin
       (aForm.Components[i] as TGroupBox).Font.Name := fButtons;
-      (aForm.Components[i] as TGroupBox).Font.Size := fbSize;
+      (aForm.Components[i] as TGroupBox).Font.Size := fbSize
     end;
 
     if (aForm.Components[i] is TButton) then
     begin
       (aForm.Components[i] as TButton).Font.Name := fButtons;
-      (aForm.Components[i] as TButton).Font.Size := fbSize;
+      (aForm.Components[i] as TButton).Font.Size := fbSize
     end;
 
     if (aForm.Components[i] is TCheckBox) then
     begin
       (aForm.Components[i] as TCheckBox).Font.Name := fButtons;
-      (aForm.Components[i] as TCheckBox).Font.Size := fbSize;
+      (aForm.Components[i] as TCheckBox).Font.Size := fbSize
     end;
 
     if (aForm.Components[i] is TRadioButton) then
     begin
       (aForm.Components[i] as TRadioButton).Font.Name := fButtons;
-      (aForm.Components[i] as TRadioButton).Font.Size := fbSize;
+      (aForm.Components[i] as TRadioButton).Font.Size := fbSize
     end;
 
     if (aForm.Components[i] is TBitBtn) then
     begin
       (aForm.Components[i] as TBitBtn).Font.Name := fButtons;
-      (aForm.Components[i] as TBitBtn).Font.Size := fbSize;
+      (aForm.Components[i] as TBitBtn).Font.Size := fbSize
     end;
 
     /////////////////////////////////////////////////////////
@@ -1779,11 +1778,10 @@ begin
 
       if cqrini.ReadBool('Fonts', 'GridGreenBar', False) = True then
       begin
-        (aForm.Components[i] as TDBGrid).AlternateColor := $00E7FFEB;
+        (aForm.Components[i] as TDBGrid).AlternateColor := $00E7FFEB
       end
-      else
-      begin
-        (aForm.Components[i] as TDBGrid).AlternateColor := clWindow;
+      else begin
+        (aForm.Components[i] as TDBGrid).AlternateColor := clWindow
       end;
 
       if cqrini.ReadBool('Fonts', 'GridSmallRows', False) = True then
@@ -1791,20 +1789,18 @@ begin
         if fqSize > 0 then
           (aForm.Components[i] as TDBGrid).DefaultRowHeight := fqSize + 8
         else
-          (aForm.Components[i] as TDBGrid).DefaultRowHeight := 22;
+          (aForm.Components[i] as TDBGrid).DefaultRowHeight := 22
       end
-      else
-      begin
-        (aForm.Components[i] as TDBGrid).DefaultRowHeight := 22;
+      else begin
+        (aForm.Components[i] as TDBGrid).DefaultRowHeight := 22
       end;
       if cqrini.ReadBool('Fonts', 'GridBoldTitle', False) = True then
       begin
-        (aForm.Components[i] as TDBGrid).TitleFont.Style := [fsBold];
+        (aForm.Components[i] as TDBGrid).TitleFont.Style := [fsBold]
       end
-      else
-      begin
-        (aForm.Components[i] as TDBGrid).TitleFont.Style := [];
-      end;
+      else begin
+        (aForm.Components[i] as TDBGrid).TitleFont.Style := []
+      end
     end;
     ////////////////////////////////////////////////////////
     //statistics
@@ -1816,35 +1812,32 @@ begin
       begin
         (aForm.Components[i] as TStringGrid).AlternateColor := $00E7FFEB;
         (aForm.Components[i] as TStringGrid).Options :=
-          [goRowSelect, goRangeSelect, goSmoothScroll, goVertLine, goFixedVertLine];
+          [goRowSelect, goRangeSelect, goSmoothScroll, goVertLine, goFixedVertLine]
       end
-      else
-      begin
+      else begin
         (aForm.Components[i] as TStringGrid).AlternateColor := clWindow;
         (aForm.Components[i] as TStringGrid).Options :=
-          [goRangeSelect, goSmoothScroll, goVertLine, goFixedVertLine, goFixedHorzLine, goHorzline];
+          [goRangeSelect, goSmoothScroll, goVertLine, goFixedVertLine, goFixedHorzLine, goHorzline]
       end;
       if cqrini.ReadBool('Fonts', 'GridSmallRows', False) = True then
       begin
         if fgSize > 0 then
           (aForm.Components[i] as TStringGrid).DefaultRowHeight := fgSize + 8
         else
-          (aForm.Components[i] as TStringGrid).DefaultRowHeight := 20;
+          (aForm.Components[i] as TStringGrid).DefaultRowHeight := 20
       end
-      else
-      begin
-        (aForm.Components[i] as TStringGrid).DefaultRowHeight := 25;
+      else begin
+        (aForm.Components[i] as TStringGrid).DefaultRowHeight := 25
       end;
       if cqrini.ReadBool('Fonts', 'GridBoldTitle', False) = True then
       begin
         (aForm.Components[i] as TStringGrid).TitleFont.Style := [fsBold];
       end
-      else
-      begin
-        (aForm.Components[i] as TStringGrid).TitleFont.Style := [];
-      end;
-    end;
-  end;
+      else begin
+        (aForm.Components[i] as TStringGrid).TitleFont.Style := []
+      end
+    end
+  end
 end;
 
 function TdmUtils.ExtractFontSize(sFont: string): integer;
