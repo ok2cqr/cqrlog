@@ -77,6 +77,9 @@ type
     fHamQTHSession: string;
     fSysUTC: boolean;
 
+    procedure LoadRigList(RigCtlBinaryPath : String;RigList : TStringList);
+    procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
+
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
     function GetQRZSession(var ErrMsg: string): boolean;
@@ -162,6 +165,7 @@ type
     procedure ShowHamQTHInBrowser(call : String);
     procedure SortArray(l,r : Integer);
     procedure OpenInApp(what : String);
+    procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
 
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
@@ -241,6 +245,7 @@ type
     function  KmToMiles(qra : Double) : Double;
     function  GetDescKeyFromCode(key : Word) : String;
     function  EncodeURLData(data : String) : String;
+    function  GetRigIdFromComboBoxItem(ItemText : String) : String;
 end;
 
 var
@@ -4113,6 +4118,69 @@ begin
     end
   end;
   Result := sBuff
+end;
+
+procedure TdmUtils.LoadRigList(RigCtlBinaryPath : String;RigList : TStringList);
+var
+  p : TProcess;
+begin
+  p := TProcess.Create(nil);
+  try
+    p.Executable := RigCtlBinaryPath;
+    p.Parameters.add('-l');
+    p.Options := p.Options + [poWaitOnExit, poUsePipes];
+    p.Execute;
+
+    RigList.LoadFromStream(p.Output);
+  finally
+    FreeAndNil(p)
+  end
+end;
+
+procedure TdmUtils.LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
+var
+  i       : Integer;
+  RigId   : String;
+  RigName : String;
+  RigType : String;
+  CmbText : String = '';
+begin
+  for i:= 1 to RigList.Count-1 do
+  begin
+    RigId   := trim(copy(RigList.Strings[i],1,7));
+    if RigId<>'' then
+    begin
+      RigName := trim(copy(RigList.Strings[i],8,24));
+      RigType := trim(copy(RigList.Strings[i],32,23));
+      RigComboBox.Items.Add(RigId + ' ' + RigName + ' ' + RigType + ' ');
+      if (RigId = CurrentRigId) then
+      begin
+        CmbText := RigId + ' ' + RigName + ' ' + RigType + ' '
+      end
+    end
+  end;
+  if (CmbText='') then
+    RigComboBox.ItemIndex := 0
+  else
+    RigComboBox.Text := CmbText
+end;
+
+procedure TdmUtils.LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
+var
+  RigList : TStringList;
+begin
+  RigList := TStringList.Create;
+  try
+    LoadRigList(RigCtlBinaryPath,RigList);
+    LoadRigListCombo(CurrentRigId,RigList,RigComboBox)
+  finally
+    FreeAndNil(RigList)
+  end
+end;
+
+function TdmUtils.GetRigIdFromComboBoxItem(ItemText : String) : String;
+begin
+  Result := Copy(ItemText,1,Pos(' ',ItemText)-1)
 end;
 
 
