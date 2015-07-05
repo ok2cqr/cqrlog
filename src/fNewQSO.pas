@@ -3469,6 +3469,8 @@ begin
         dmUtils.LoadFontSettings(frmTRXControl);
       if frmQSODetails.Showing then
         frmQSODetails.LoadFonts;
+      if frmRbnMonitor.Showing then
+        dmUtils.LoadFontSettings(frmRbnMonitor)
     end;
     ChangeCallBookCaption
   finally
