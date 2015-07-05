@@ -440,6 +440,7 @@ type
     cmbHrColor: TColorBox;
     cmbHanshakeRot1: TComboBox;
     cmbHanshakeRot2: TComboBox;
+    cmbModelRig2: TComboBox;
     cmbParityRot1: TComboBox;
     cmbParityRot2: TComboBox;
     cmbRTSR1: TComboBox;
@@ -493,6 +494,7 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
+    cmbModelRig1: TComboBox;
     edtBackupPath1: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
@@ -553,8 +555,6 @@ type
     edtRot1ID: TEdit;
     edtRot2ID: TEdit;
     edtRotCtldPath: TEdit;
-    edtRigID1: TEdit;
-    edtRigID2: TEdit;
     edtRTTY1: TSpinEdit;
     edtRTTY2: TSpinEdit;
     edtSSB1: TSpinEdit;
@@ -1219,7 +1219,7 @@ begin
   cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
 
   cqrini.WriteString('TRX1', 'device', edtR1Device.Text);
-  cqrini.WriteString('TRX1', 'model', edtRigID1.Text);
+  cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig1.Text));
   cqrini.WriteString('TRX1', 'poll', edtPoll1.Text);
   cqrini.WriteString('TRX1', 'Desc', edtRadio1.Text);
   cqrini.WriteBool('TRX1', 'CWR', chkR1SendCWR.Checked);
@@ -1236,7 +1236,7 @@ begin
   cqrini.WriteInteger('TRX1', 'RTS', cmbRTSR1.ItemIndex);
 
   cqrini.WriteString('TRX2', 'device', edtR2Device.Text);
-  cqrini.WriteString('TRX2', 'model', edtRigID2.Text);
+  cqrini.WriteString('TRX2', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig2.Text));
   cqrini.WriteString('TRX2', 'poll', edtPoll2.Text);
   cqrini.WriteString('TRX2', 'Desc', edtRadio2.Text);
   cqrini.WriteBool('TRX2', 'CWR', chkR2SendCWR.Checked);
@@ -2590,8 +2590,8 @@ begin
 
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
 
+  dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig1);
   edtR1Device.Text := cqrini.ReadString('TRX1', 'device', '');
-  edtRigID1.Text := cqrini.ReadString('TRX1', 'model', '');
   edtPoll1.Text := cqrini.ReadString('TRX1', 'poll', '500');
   edtRadio1.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
   chkR1SendCWR.Checked := cqrini.ReadBool('TRX1', 'CWR', False);
@@ -2608,8 +2608,8 @@ begin
   cmbRTSR1.ItemIndex := cqrini.ReadInteger('TRX1', 'RTS', 0);
 
 
+  dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX2', 'model', ''),edtRigCtldPath.Text,cmbModelRig2);
   edtR2Device.Text := cqrini.ReadString('TRX2', 'device', '');
-  edtRigID2.Text := cqrini.ReadString('TRX2', 'model', '');
   edtPoll2.Text := cqrini.ReadString('TRX2', 'poll', '500');
   edtRadio2.Text := cqrini.ReadString('TRX2', 'Desc', 'Radio 2');
   chkR2SendCWR.Checked := cqrini.ReadBool('TRX2', 'CWR', False);

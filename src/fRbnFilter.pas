@@ -55,6 +55,8 @@ type
     rbOnlyCallReg: TRadioButton;
     rbIgnWkdDate: TRadioButton;
     rbIgnWkdHour: TRadioButton;
+    procedure btnDXCCntyClick(Sender: TObject);
+    procedure btnDXCNotCntyClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -68,7 +70,7 @@ var
 
 implementation
 
-uses uMyIni, dUtils;
+uses uMyIni, dUtils, dDXCC, fSelectDXCC;
 
 {$R *.lfm}
 
@@ -184,6 +186,40 @@ begin
   cqrini.WriteBool('RBNFilter','NewDXCOnly',chkNewDXConly.Checked);
 
   ModalResult := mrOK
+end;
+
+procedure TfrmRbnFilter.btnDXCCntyClick(Sender: TObject);
+begin
+  frmSelectDXCC := TfrmSelectDXCC.Create(self);
+  try
+    frmSelectDXCC.pgDXCC.PageIndex := 0;
+    if frmSelectDXCC.ShowModal = mrOK then
+    begin
+      if (edtDXCnty.Text='') then
+        edtDXCnty.Text := dmDXCC.qValid.Fields[1].AsString
+      else
+        edtDXCnty.Text := edtDXCnty.Text + ', '+dmDXCC.qValid.Fields[1].AsString
+    end
+  finally
+    FreeAndNil(frmSelectDXCC)
+  end
+end;
+
+procedure TfrmRbnFilter.btnDXCNotCntyClick(Sender: TObject);
+begin
+  frmSelectDXCC := TfrmSelectDXCC.Create(self);
+  try
+    frmSelectDXCC.pgDXCC.PageIndex := 0;
+    if frmSelectDXCC.ShowModal = mrOK then
+    begin
+      if (edtDXCNotCnty.Text='') then
+        edtDXCNotCnty.Text := dmDXCC.qValid.Fields[1].AsString
+      else
+        edtDXCNotCnty.Text := edtDXCNotCnty.Text + ', '+dmDXCC.qValid.Fields[1].AsString
+    end
+  finally
+    FreeAndNil(frmSelectDXCC)
+  end
 end;
 
 { TfrmRbnFilter }

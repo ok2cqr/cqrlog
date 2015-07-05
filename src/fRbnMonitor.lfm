@@ -76,20 +76,8 @@ object frmRbnMonitor: TfrmRbnMonitor
       Top = 2
       Action = acScrollDown
     end
-    object ToolButton9: TToolButton
-      Left = 151
-      Top = 2
-      Width = 10
-      Caption = 'ToolButton9'
-      Style = tbsSeparator
-    end
-    object ToolButton10: TToolButton
-      Left = 161
-      Top = 2
-      Action = acHelp
-    end
     object btnEatFocus: TButton
-      Left = 184
+      Left = 151
       Height = 22
       Top = 2
       Width = 2
@@ -99,8 +87,8 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object sbRbn: TStatusBar
     Left = 0
-    Height = 21
-    Top = 581
+    Height = 22
+    Top = 580
     Width = 665
     Panels = <    
       item
@@ -110,7 +98,7 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object sgRbn: TStringGrid
     Left = 0
-    Height = 556
+    Height = 555
     Top = 25
     Width = 665
     Align = alClient
