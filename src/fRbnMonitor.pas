@@ -82,7 +82,6 @@ type
     ToolBar1: TToolBar;
     tbtnConnect: TToolButton;
     ToolButton1 : TToolButton;
-    ToolButton10 : TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -90,7 +89,6 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8 : TToolButton;
-    ToolButton9 : TToolButton;
     procedure acConnectExecute(Sender: TObject);
     procedure acDisconnectExecute(Sender: TObject);
     procedure acFilterExecute(Sender: TObject);
