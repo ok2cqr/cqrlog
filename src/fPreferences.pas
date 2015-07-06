@@ -434,6 +434,7 @@ type
     cmbDataBitsR2: TComboBox;
     cmbDataBitsRot1: TComboBox;
     cmbDataBitsRot2: TComboBox;
+    cmbWsjtDefaultMode: TComboBox;
     cmbDTRR1: TComboBox;
     cmbDTRRot1: TComboBox;
     cmbDTRRot2: TComboBox;
@@ -458,7 +459,6 @@ type
     cmbSpeedRot2: TComboBox;
     cmbStopBitsR1: TComboBox;
     cmbDefaultMode: TComboBox;
-    cmbDefaultMode1: TComboBox;
     cmbeQSLBckColor: TColorBox;
     cmbHanshakeR1: TComboBox;
     cmbParityR1: TComboBox;
@@ -498,6 +498,7 @@ type
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
     edtBackupPath1: TEdit;
+    edtWsjtDefaultFreq: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
     edtHamLibSpeed: TSpinEdit;
@@ -942,11 +943,11 @@ type
     RadioGroup2: TRadioGroup;
     rbRSTDefault1: TRadioButton;
     rbRSTFldigi1: TRadioButton;
-    rgFreqFrom1: TRadioGroup;
+    rgWsjtFreqFrom: TRadioGroup;
     rgModeFrom: TRadioGroup;
     rgFreqFrom: TRadioGroup;
     rgFirstZipPos: TRadioGroup;
-    rgModeFrom1: TRadioGroup;
+    rgWsjtModeFrom: TRadioGroup;
     rgSecondZipPos: TRadioGroup;
     rgThirdZipPos: TRadioGroup;
     rgShowFrom: TRadioGroup;
@@ -1542,6 +1543,10 @@ begin
   cqrini.WriteString('wsjt','path',edtWsjtPath.Text);
   cqrini.WriteString('wsjt','port',edtWsjtPort.Text);
   cqrini.WriteBool('wsjt','run',chkRunWsjt.Checked);
+  cqrini.WriteInteger('wsjt', 'freq', rgWsjtFreqFrom.ItemIndex);
+  cqrini.WriteString('wsjt', 'deffreq', edtWsjtDefaultFreq.Text);
+  cqrini.WriteInteger('wsjt', 'mode', rgWsjtModeFrom.ItemIndex);
+  cqrini.WriteString('wsjt', 'defmode', cmbWsjtDefaultMode.Text);
 
   if edtBackupPath.Text <> '' then
     if edtBackupPath.Text[Length(edtBackupPath.Text)] <> PathDelim then
@@ -2463,7 +2468,9 @@ begin
   dmUtils.ReadZipList(cmbFirstZip);
   dmUtils.InsertModes(cmbDefaultMode);
   dmUtils.InsertModes(cmbMode);
-  cmbDefaultMode.ReadOnly := True;
+  dmUtils.InsertModes(cmbWsjtDefaultMode);
+  cmbDefaultMode.ReadOnly     := True;
+  cmbWsjtDefaultMode.ReadOnly := True;
 
   for i := 0 to cmbFirstClub.Items.Count - 1 do
   begin
@@ -2914,10 +2921,10 @@ begin
   edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30));
 
 
-  rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);
-  edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');
-  rgModeFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'mode', 1);
-  cmbDefaultMode.Text := cqrini.ReadString('fldigi', 'defmode', 'RTTY');
+  rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);       //
+  edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');//
+  rgModeFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'mode', 1);       //
+  cmbDefaultMode.Text := cqrini.ReadString('fldigi', 'defmode', 'RTTY'); //
   edtDefaultRST.Text := cqrini.ReadString('fldigi', 'defrst', '599');
   rgRSTFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'rst', 0);
   edtLoadFromFldigi.Value := cqrini.ReadInteger('fldigi', 'interval', 2);
@@ -2925,9 +2932,13 @@ begin
   chkRunFldigi.Checked := cqrini.ReadBool('fldigi', 'run', False);
   edtFldigiPath.Text := cqrini.ReadString('fldigi', 'path', '');
 
-  edtWsjtPath.Text   := cqrini.ReadString('wsjt','path','');
-  edtWsjtPort.Text   := cqrini.ReadString('wsjt','port','2237');
-  chkRunWsjt.Checked := cqrini.ReadBool('wsjt','run',False);
+  edtWsjtPath.Text         := cqrini.ReadString('wsjt','path','');
+  edtWsjtPort.Text         := cqrini.ReadString('wsjt','port','2237');
+  chkRunWsjt.Checked       := cqrini.ReadBool('wsjt','run',False);
+  rgWsjtFreqFrom.ItemIndex := cqrini.ReadInteger('wsjt', 'freq', 1);
+  edtWsjtDefaultFreq.Text  := cqrini.ReadString('wsjt', 'deffreq', '3.600');
+  rgWsjtModeFrom.ItemIndex := cqrini.ReadInteger('wsjt', 'mode', 1);
+  cmbWsjtDefaultMode.Text  := cqrini.ReadString('wsjt', 'defmode', 'JT65');
 
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
