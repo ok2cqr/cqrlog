@@ -258,6 +258,8 @@ FIXED
    using Q1 with timer. This might help also to other similar situations (mysterious erros) that happened because Q1 suddenly is taken in use by
    autoupdate timer.
 FIXED
+   Small change. "Delete" and "save qso" buttons now directly updates worked_grids map. Not any more just turns "change" flag and let autoupdate routine
+   do the job. This minimizes more Q and Q1 queries usage "at wrong time".
   
  Issues to resolve:
 ===================

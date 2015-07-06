@@ -732,7 +732,7 @@ begin
       dmData.RefreshMainDatabase()
     end;
     ReloadGrid;
-    frmWorked_grids.Changes := True;
+    frmWorked_grids.UpdateMap;
   end
 end;
 

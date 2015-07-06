@@ -2759,7 +2759,7 @@ begin
     if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
      edtCall.SetFocus;
   UploadAllQSOOnline;
-  frmWorked_grids.Changes := True;
+  frmWorked_grids.UpdateMap;
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
