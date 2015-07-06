@@ -260,7 +260,11 @@ FIXED
 FIXED
    Small change. "Delete" and "save qso" buttons now directly updates worked_grids map. Not any more just turns "change" flag and let autoupdate routine
    do the job. This minimizes more Q and Q1 queries usage "at wrong time".
-  
+
+ - if  mode and frequency is selected from (cqrlog or fixed) from preferences caused UDP decoding error as value from UDP was not read and index pointer
+   did not move to next element.
+FIXED
+ 
  Issues to resolve:
 ===================
 

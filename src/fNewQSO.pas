@@ -2028,13 +2028,14 @@ begin
                          ParStr := StFBuf(index);
                          if dmData.DebugLevel>=1 then Writeln('Status Id:', ParStr);
                         //----------------------------------------------------
+                        mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx. Must read even when not used
                         case cqrini.ReadInteger('fldigi','freq',0) of
                          0 : begin
                                  if not frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
                                                         mhz := '';
                             end;
                          1 : begin
-                                 mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx
+
                                  Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
                                  mhz := copy(mhz,1,length(mhz)-6); //integer part here
                                  mhz := mhz+'.'+Fdes;
@@ -2065,14 +2066,13 @@ begin
                          ParStr := StFBuf(index);    //report
                          if dmData.DebugLevel>=1 then Writeln('Report: ',ParStr);
                          //----------------------------------------------------
+                         TXmode:= trim(StFBuf(index));   // Must read even when not used
                           case cqrini.ReadInteger('fldigi','TXmode',1) of
                          0 : begin
                                 if not frmTRXControl.GetModeFreqNewQSO(TXmode,mhz) then
                                                         TXmode :='';
                              end;
-                         1 : begin
-                                TXmode:= trim(StFBuf(index));
-                             end;
+
                          2 : TXmode := cqrini.ReadString('fldigi','defmode','RTTY')
                          end;
                          if dmData.DebugLevel>=1 then Writeln('TXmode: ',Txmode);
@@ -2238,6 +2238,7 @@ begin
                                                 edtGrid.Text := loc;
 
                         //----------------------------------------------------
+                        mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx. Must read even when not used
                         case cqrini.ReadInteger('fldigi','freq',0) of
                          0 : begin
                                  if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
@@ -2245,7 +2246,6 @@ begin
                             end;
 
                          1 : begin
-                                 mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx
                                  Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
                                  mhz := copy(mhz,1,length(mhz)-6); //integer part here
                                  mhz := mhz+'.'+Fdes;
@@ -2259,13 +2259,13 @@ begin
                          2 : cmbFreq.Text := cqrini.ReadString('fldigi','deffreq','3.600')
                         end;
                         //----------------------------------------------------
+                        mode:= trim(StFBuf(index)); //Must read even when not used
                         case cqrini.ReadInteger('fldigi','mode',1) of
                          0 : begin
                                 if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
                                                         cmbMode.Text := mode
                              end;
                          1 : begin
-                                mode:= trim(StFBuf(index));
                                 if dmData.DebugLevel>=1 then Writeln('Mode :', mode);
                                 cmbMode.Text := mode;
                              end;
