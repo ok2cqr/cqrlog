@@ -31,6 +31,7 @@ type
     Bevel4: TBevel;
     btnBrowseBackup1: TButton;
     btnDefineProfile1: TButton;
+    btnFldigiPath1: TButton;
     btnSecondLoad: TButton;
     btnFrequencies1: TButton;
     btnLoadFifth: TButton;
@@ -125,6 +126,7 @@ type
     chkgridsmallrows: TCheckBox;
     chkgridgreenbar: TCheckBox;
     chkCloseAfterUpload : TCheckBox;
+    chkRunWsjt: TCheckBox;
     chkUseNewQSOFreqMode: TCheckBox;
     chkUseCallBookData: TCheckBox;
     chkHrUpEnabled: TCheckBox;
@@ -610,6 +612,8 @@ type
     edtWRemarks: TEdit;
     edtWRstR: TEdit;
     edtWRstS: TEdit;
+    edtWsjtPath: TEdit;
+    edtWsjtPort: TEdit;
     edtWState: TEdit;
     edtWLQSLS: TEdit;
     edtWLQSLSDate: TEdit;
@@ -700,6 +704,8 @@ type
     GroupBox49: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox50: TGroupBox;
+    GroupBox51: TGroupBox;
+    GroupBox52: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
@@ -816,6 +822,8 @@ type
     Label199: TLabel;
     Label200: TLabel;
     Label201: TLabel;
+    Label202: TLabel;
+    Label203: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1530,6 +1538,10 @@ begin
   cqrini.WriteInteger('fldigi', 'interval', edtLoadFromFldigi.Value);
   cqrini.WriteBool('fldigi', 'run', chkRunFldigi.Checked);
   cqrini.WriteString('fldigi', 'path', edtFldigiPath.Text);
+
+  cqrini.WriteString('wsjt','path',edtWsjtPath.Text);
+  cqrini.WriteString('wsjt','port',edtWsjtPort.Text);
+  cqrini.WriteBool('wsjt','run',chkRunWsjt.Checked);
 
   if edtBackupPath.Text <> '' then
     if edtBackupPath.Text[Length(edtBackupPath.Text)] <> PathDelim then
@@ -2912,6 +2924,10 @@ begin
 
   chkRunFldigi.Checked := cqrini.ReadBool('fldigi', 'run', False);
   edtFldigiPath.Text := cqrini.ReadString('fldigi', 'path', '');
+
+  edtWsjtPath.Text   := cqrini.ReadString('wsjt','path','');
+  edtWsjtPort.Text   := cqrini.ReadString('wsjt','port','2237');
+  chkRunWsjt.Checked := cqrini.ReadBool('wsjt','run',False);
 
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);

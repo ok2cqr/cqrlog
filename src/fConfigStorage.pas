@@ -169,7 +169,7 @@ begin
   if cmbStoreCWInterface.ItemIndex>0 then
     Sections := Sections + 'CW,';
   if cmbStoreFldigiInterface.ItemIndex>0 then
-    Sections := Sections + 'fldigi,';
+    Sections := Sections + 'fldigi,wsjt';
   if cmbStoreAutoBackup.ItemIndex>0 then
     Sections := Sections + 'Backup,';
   if cmbStoreExtViewers.ItemIndex>0 then
