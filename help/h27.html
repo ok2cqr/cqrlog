@@ -1,9 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head>
-<title>CQRLOG - Advanced operations</title>
+<title>CQRLOG - SQL console</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/exc.png"></td><td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of ANY session! All what you need to backup and store in a safe place is the log database directory located in the ~/.config/cqrlog/database folder, or you can enable autobackup function in Preferences. This autobackup function creates ADIF file with backup of your log.</td></tr></tbody></table>
+<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
+<tbody><tr><td valign="top"><img src="img/exc.png"></td>
+<td bgcolor=ffffcc valign="top" align="justify"><strong>
+<font color="red">WARNING!</font></strong> 
+Backup your data often! BACKUP your log directory at the end of EVERY session!
+All that you need to backup and store in a safe place is the log database directory
+located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+</td></tr></tbody></table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
 <tbody>
 <tr>
@@ -17,9 +24,11 @@ Backup your data often! BACKUP your log directory at the end of ANY session! All
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>SQL Console</strong></h2>
-<div style="text-align: justify;">To enter the SQL Console, go to QSO list (Ctrl+O) and in the upper menu bar go to <em>Filter -> SQL console.</em>
+<div style="text-align: justify;">To enter the SQL Console, go to QSO list (Ctrl+O)
+and in the upper menu bar go to <em>Filter -> SQL console.</em>
 
-<div align="left"><table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+<div align="left">
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
 <tbody>
 <tr>
 <td width="50%" align="left"><img src=img/h114.png border="0"></td></tr>
@@ -27,7 +36,7 @@ Backup your data often! BACKUP your log directory at the end of ANY session! All
 </tr>
 </tbody>
 </table><br>
-The icons in the upper menu allowing following actions:<br><br>
+The icons in the upper menu allow the following actions:<br><br>
 <strong>1st icon</strong>
 &nbsp;  &nbsp;&nbsp;Execute SQL statement<br>
 <strong>2nd icon</strong>
@@ -35,13 +44,15 @@ The icons in the upper menu allowing following actions:<br><br>
 <strong>3rd icon</strong>
 &nbsp;&nbsp;&nbsp;Next SQL command<br>
 <strong>4th icon</strong>
-&nbsp;&nbsp;&nbsp;Load SQL command saved into a file<br>
+&nbsp;&nbsp;&nbsp;Load SQL command from a file<br>
 <strong>5th icon</strong>
-&nbsp;&nbsp;&nbsp;Save SQL command into a file<br> 
+&nbsp;&nbsp;&nbsp;Save SQL command to a file<br> 
 <strong>6th icon</strong>
-&nbsp;&nbsp;&nbsp;Export data into a csv or html file<br>
+&nbsp;&nbsp;&nbsp;Export data to a csv or html file<br>
 <strong>7th icon</strong>
-&nbsp;&nbsp;&nbsp;Get SQL command currently used to the main database. For example, if a filter is set, clicking this icon allows to edit SQL command created by the filter.<br><br>
+&nbsp;&nbsp;&nbsp;Get SQL command currently used in the main database. For example,
+if a filter is set, clicking this icon allows you to edit the SQL command created
+by the filter.<br><br>
 
 <h3><strong>Tables in cqrlogXXX:</strong></h3><br>
 
@@ -65,19 +76,17 @@ where XXX is numer of the log e.g. cqrlog001 for the first log.<br><br>
 &nbsp;&nbsp;&nbsp;external tables used for zip codes<br><br>
 
 <strong>long_note</strong><br>
-&nbsp;&nbsp;&nbsp;a long note valid for whole log<br><br>
+&nbsp;&nbsp;&nbsp;a long note valid for the whole log<br><br>
 
 <strong>cqrlog_config</strong><br>
 &nbsp;&nbsp;&nbsp;configuration file<br><br>
-
-<strong>long_note</strong><br>
-&nbsp;&nbsp;&nbsp;a long note valid for whole log<br><br>
 
 <strong>dxcc_id</strong><br>
 &nbsp;&nbsp;&nbsp;a list of DXCC countries<br><br>
 
 <strong>log_changes</strong><br>
-&nbsp;&nbsp;&nbsp;a list of changes made to cqrlog_main database filled by triggers (only when log upload function is enabled)<br><br>
+&nbsp;&nbsp;&nbsp;a list of changes made to cqrlog_main database filled by
+triggers (only when log upload function is enabled)<br><br>
 
 <strong>upload_status</strong><br>
 &nbsp;&nbsp;&nbsp;last IDs of uploaded QSO to online logs<br><br>
@@ -120,11 +129,14 @@ The common database used by all logs. <br>
 </div>
 <strong>Example:</strong><br><br>
 
-<div align="justify">Select from the database date, call sign, frequency and mode, where the QSO date is from timespan between Jan. 1. 2009 and Dec. 31. 2009 and the WAZ zone is 15.<br><br>
+<div align="justify">Select from the database date, call sign, frequency and mode,
+where the QSO date is from timespan between Jan. 1. 2009 and Dec. 31. 2009 and the WAZ
+zone is 15.<br><br>
 
 <strong>SQL command:</strong><br>
 <pre>
-SELECT qsodate, callsign, freq, mode FROM view_cqrlog_main_by_qsodate WHERE qsodate >= '2009-01-01' and qsodate <= '2009-31-12' and waz = 15
+SELECT qsodate, callsign, freq, mode FROM view_cqrlog_main_by_qsodate WHERE
+qsodate >= '2009-01-01' and qsodate <= '2009-31-12' and waz = 15
 </pre><br>
 The databases structures are listed <a href=sql_console.html><strong>here</strong>.</a></div>
 </div>
