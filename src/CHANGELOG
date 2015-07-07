@@ -9,6 +9,7 @@ Legend:
   + CW type window is not modal window anymore
   + RBN monitor added
   + TRX configuration improved (you can choose rig from a list instead of entering Hamlib rig ID)
+  + Remote mode for wsjt added (thanks to Saku, OH1KH) 
   - Export configuration of opened log doesn't reflect recent changes - fixed
   - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
 
