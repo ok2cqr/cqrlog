@@ -2,8 +2,15 @@
 <html><head>
 <title>CQRLOG - Supported Radio Types</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/exc.png"></td><td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of ANY session! All what you need to backup and store in a safe place is the log database directory located in the ~/.config/cqrlog/database folder, or you can enable autobackup function in Preferences. This autobackup function creates ADIF file with backup of your log.</td></tr></tbody></table>
+<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
+<tbody><tr><td valign="top"><img src="img/exc.png"></td>
+<td bgcolor=ffffcc valign="top" align="justify"><strong>
+<font color="red">WARNING!</font></strong> 
+Backup your data often! BACKUP your log directory at the end of EVERY session!
+All that you need to backup and store in a safe place is the log database directory
+located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+/td></tr></tbody></table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
 <tbody>
 <tr>
@@ -22,10 +29,10 @@ Backup your data often! BACKUP your log directory at the end of ANY session! All
 The actual list of supported radios depends on the hamlib version.
 You can obtain the actual list using the command:
 <pre>
-./rigctl --list > riglist.txt
+rigctl --list > riglist.txt
 </pre>
-However, you must navigate to the folder containing <i>rigctl</i> executable (mostly /usr/local/bin).
-The actual snapshot version 1.2.7. supports following radio types:
+Remember, the <i>rigctl</i> executable must be on your path.<br>
+The snapshot version 1.2.7. supports the following radio types:
 <pre>
   Rig#	Mfg                 Model               Vers.   Status
 ===================================================================
@@ -190,9 +197,21 @@ The actual snapshot version 1.2.7. supports following radio types:
    126	Yaesu               VR-5000             0.2     Alpha      
 ------------------------------------------------------------------
 </pre>
-There's no standardized protocol to remotely control one's rig, be it a Ham radio transceiver, a SWL receiver, any kind of scanner and other mobiles. However, some manufacturer may have designed their own proprietary protocol, implemented in some of their product family. Therefore, each rig family will require a Hamlib backend to set the VFO frequency, change mode and passband width, get current signal strength, etc.<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr><td valign="top"><img src="img/note.png"></td><td style="width: 100%; text-align: justify; background-color: rgb(234, 234, 234);"><strong><font color="blue">Note:</font></strong> If your radio is not on the list, it does not mean that it is not supported at all. The Elecraft K3 radio works as K2 (Rig# 221), you can also try one of the Kenwood radios. Ten-Tec Omni-VI is using Icom IC-735 backend.</td></tr></tbody></table><br>
-Anyway, new backends for Yaesu FTDX-9000, FT-2000, FT-950 and FT-450 to be expected very soon. You can try the Kenwood radio instead or FT-1000MP.
+There's no standardized protocol to remotely control one's rig, be it a Ham radio
+transceiver, a SWL receiver, any kind of scanner or other mobile.
+Many manufacturers have designed their own proprietary protocol, implemented in
+some of their product family. Therefore, each rig family will require a Hamlib
+backend to set the VFO frequency, change mode and passband width, get current
+signal strength, etc.<br><br>
+<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
+<td valign="top"><img src="img/note.png"></td>
+<td style="width: 100%; text-align: justify; background-color: rgb(234, 234, 234);">
+<strong><font color="blue">Note:</font></strong> If your radio is not on the list,
+it does not mean that it is not supported at all. The Elecraft K3 radio works as K2
+(Rig# 221), you could also try one of the Kenwood radios. The Ten-Tec Omni-VI uses the
+Icom IC-735 backend.</td></tr></tbody></table><br>
+New backends for Yaesu FTDX-9000, FT-2000, FT-950 and FT-450 are expected very soon.
+You can try the Kenwood radio instead or FT-1000MP.
 <br>
 </div>
 <p align=center><img src=img/line.png></p>

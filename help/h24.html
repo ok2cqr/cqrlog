@@ -2,8 +2,15 @@
 <html><head>
 <title>CQRLOG - Statistics</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr><td valign="top"><img src="img/exc.png"></td><td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of ANY session! All what you need to backup and store in a safe place is the log database directory located in the ~/.config/cqrlog/database folder, or you can enable autobackup function in Preferences. This autobackup function creates ADIF file with backup of your log.</td></tr></tbody></table>
+<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
+<tbody><tr><td valign="top"><img src="img/exc.png"></td>
+<td bgcolor=ffffcc valign="top" align="justify"><strong>
+<font color="red">WARNING!</font></strong> 
+Backup your data often! BACKUP your log directory at the end of EVERY session!
+All that you need to backup and store in a safe place is the log database directory
+located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+</td></tr></tbody></table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
 <tbody>
 <tr>
@@ -18,39 +25,65 @@ Backup your data often! BACKUP your log directory at the end of ANY session! All
 <p align=center><img src=img/line.png></p>
 <a name="ah23"><h2><strong>Statistics</strong></h2></a>
 There are 4 basic types of online statistics:<ul>
-<li>DXCC statistic</li>
+<li>DXCC</li>
 <li>WAZ zones</li>
 <li>ITU zones</li>
-<li>IOTA statistic</li></ul>
+<li>IOTA</li></ul>
 <p align=center><img src=img/line.png></p>
 <strong>DXCC</strong><br><br>
-The statistics can be watched from both loggin screen and QSO list, however the menu is slightly different. While the logging screen allows only watching statistics, from the QSO list can be the DXCC statistic rebuilt.
+The statistics can be viewed from both the login screen and the QSO list, however the menu
+is slightly different. While the logging screen only allows viewing the statistics,
+the QSO list can trigger a DXCC statistics rebuild.
 <table cellspacing="2" border="0" cellpadding="5">
 <tbody>
 <tr><td><strong>Logging screen</strong></td><td><strong>QSO List</strong></td></tr>
-<tr><td valign="top"><img src="img/h20.png" border="0"><td valign="top"><img src="img/h46.png"></td></td></tr></tbody>
+<tr><td valign="top"><img src="img/h20.png" border="0"><td valign="top">
+<img src="img/h46.png"></td></td></tr></tbody>
 </table>
-The main difference is that the 'Details' window can be activated (if not activated at program startup, <a href="h1.html#ah4"><strong>see 'Preferences'</strong></a>) only from the logging screen. Statistics <a href="h3.html#ah30"><strong>rebuilding</strong></a> is possible only from the QSO list.<br><br>
-The only statistics which should be maintained is the DXCC. With the exception of the footer of DXCC detailed presentation, all DXCC scores are based on actual valid contries on the current DXCC list, ie. <strong>NO</strong> deleted countries. Other stats are computed while logging.<br><br>
-There are several presentations of DXCC statistics. A summary is displayed in the QSO List, just above the table.<br>
+The main difference is that the 'Details' window can ionly be activated (if not activated
+at program startup, <a href="h1.html#ah4"><strong>see 'Preferences'</strong></a>)
+from the logging screen.
+Statistics <a href="h3.html#ah30"><strong>rebuilding</strong></a> is only possible
+from the QSO list.<br><br>
+The only statistics which should be maintained are the DXCC ones. With the exception of
+the footer of the DXCC detailed presentation, all DXCC scores are based on actual valid
+contries on the current DXCC list, ie. <strong>NO</strong> deleted countries. Other
+stats are computed while logging.<br><br>
+There are several presentations of DXCC statistics. A summary is displayed in the
+QSO List, just above the table.<br>
 <img src="img/h56.png" border="0"><br><br>
-The detailed statistics is diplayed from the logging screen by clicking on the 'Statistics' item of the upper menu bar.<br>
+The detailed statistics are displayed from the logging screen by clicking on the
+'Statistics' item of the upper menu bar.<br>
 <img src="img/h57.png" border="0"><br>
-The 'X' denotes a worked country, the 'Q' a confirmed country. The order is <strong>PHONE - CW - DIGI</strong>. The example above shows, that Rodrigues, 3B9, been worked on 30 metres CW only, on 20 and 17 metres CW and SSB and on 15 metres CW, SSB and digital modes.<br><br>
+The 'X' denotes a worked country, the 'Q' a confirmed country.
+The order is <strong>PHONE - CW - DIGI</strong>. The example above shows, that Rodrigues,
+3B9, has been worked on 30 metres CW only, on 20 and 17 metres CW and SSB and on 15 metres
+CW, SSB and digital modes.<br><br>
 <img src="img/h58.png" border="0"><br>
-The summary footer shows your actual score band by band on all modes, worked and confirmed separately. The 'Totals' column shows your band point score per DXCC Challenge rules. The framed counts showing <strong>ALL TIME DXCC scores</strong> with deleted countries. It is the only instance showing this.<br><br>
-The 'Export to HTML' button allows exporting of your whole statistics into nicely formatted HTML page. This is an exact copy of the detailed DXCC stats presentation, including the footer with all-time scores.
+The summary footer shows your actual score band by band on all modes, worked and
+confirmed separately. The 'Totals' column shows your band point score per DXCC
+Challenge rules. The framed counts showing <strong>ALL TIME DXCC scores</strong>
+with deleted countries. It is the only instance showing this.<br><br>
+The 'Export to HTML' button allows exporting of your whole statistics into a nicely
+formatted HTML page. This is an exact copy of the detailed DXCC stats presentation,
+including the footer with all-time scores.
 <p align=center><img src=img/line.png></p>
 <strong>WAZ and ITU Zones</strong><br><br>
 Both statistics are similar and very simple.<br><br>
 <img src="img/h59.png" border="0"><br><br>
-Again, the 'X' denotes a worked country, the 'Q' a confirmed zone. The footer contains totals of worked and confirmed zones, band by band.
+Again, the 'X' denotes worked, the 'Q' confirmed, the footer contains totals of worked
+and confirmed zones, band by band.
 <p align=center><img src=img/line.png></p>
 <strong>IOTA</strong><br><br>
 <img src="img/h60.png" border="0">
 <br><br>
-The IOTA statistics presentation is slightly different. An IOTA reference number and the station worked (confirmed) is displayed. This statistics is derived from the IOTA records of each logged contact. If a QSO record does not contain an IOTA information but the station <strong>is</strong> valid for IOTA, the statistics does not reflect this fact. So update regularly!<br><br>
-The small check box in left lower corner toggles the worked/confirmed scores. The 'Save' button exports the whole statistics into a ASCII text file.
+The IOTA statistics presentation is slightly different. An IOTA reference number and
+the station worked (confirmed) is displayed. These statistics are derived from the IOTA
+records of each logged contact. If a QSO record does not contain IOTA information but
+the station <strong>is</strong> valid for IOTA, the statistics do not reflect this fact.
+So update regularly!<br><br>
+The small check box in the left lower corner toggles the worked/confirmed scores.
+The 'Save' button exports the statistics to an ASCII text file.
 <p align=center><img src=img/line.png></p>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
 <tbody>
