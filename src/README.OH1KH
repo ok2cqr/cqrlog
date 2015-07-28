@@ -103,6 +103,9 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   #select audio card(if needed) and play alert message
   aplay ~/.config/cqrlog/voice_keyer/$1.wav
 
+- Wsjt-x CQ-monitor. Disabled false used "RR73" being a locator. "RR73 should not be used as saying RRR + 73 at same time, but some stations
+  how ever are using it.
+
 
 
 
