@@ -719,7 +719,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 71
           Width = 136
           AutoSize = False
-          OnChange = edtQTHChange
           OnEnter = edtQTHEnter
           OnExit = edtQTHExit
           OnKeyDown = edtQTHKeyDown
@@ -731,7 +730,6 @@ object frmNewQSO: TfrmNewQSO
           Top = 71
           Width = 92
           AutoSize = False
-          OnChange = edtNameChange
           OnEnter = edtNameEnter
           OnExit = edtNameExit
           OnKeyDown = edtNameKeyDown
@@ -959,6 +957,7 @@ object frmNewQSO: TfrmNewQSO
           AutoSize = False
           CharCase = ecUppercase
           OnEnter = edtQSL_VIAEnter
+          OnExit = edtQSL_VIAExit
           OnKeyDown = edtQSL_VIAKeyDown
           TabOrder = 20
         end
