@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmPreferences','FORMDATA',[
   'TPF0'#15'TfrmPreferences'#14'frmPreferences'#4'Left'#3#148#1#6'Height'#3#137
   +#2#3'Top'#3#162#0#5'Width'#3#232#3#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'
@@ -139,9 +137,9 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ox'#12'chkAutoQQSLS'#4'Left'#2'1'#6'Height'#2#24#3'Top'#3#225#0#5'Width'#3
   +#140#1#7'Caption'#6'7Mark only the first QSO, first band QSO, first mode QSO'
   +#8'TabOrder'#2#12#0#0#9'TCheckBox'#14'chkAllVariants'#4'Left'#2#22#6'Height'
-  +#2#24#3'Top'#3#180#1#5'Width'#3#206#1#7'Caption'#6'CIn previous QSO list sho'
-  +'w also QSO with call/p, call/m, W6/cal etc.'#8'TabOrder'#2#13#0#0#9'TCheckB'
-  +'ox'#11'chkClearRIT'#4'Left'#2#22#6'Height'#2#24#3'Top'#3#204#1#5'Width'#3
+  +#2#24#3'Top'#3#180#1#5'Width'#3#206#1#7'Caption'#6'DIn previous QSO list sho'
+  +'w also QSO with call/p, call/m, W6/call etc.'#8'TabOrder'#2#13#0#0#9'TCheck'
+  +'Box'#11'chkClearRIT'#4'Left'#2#22#6'Height'#2#24#3'Top'#3#204#1#5'Width'#3
   +#200#0#7'Caption'#6#26'Clear RIT after saving QSO'#8'TabOrder'#2#14#0#0#9'TC'
   +'heckBox'#18'chkClearNewQSOFreq'#4'Left'#2#16#6'Height'#2#24#3'Top'#3'2'#2#5
   +'Width'#3#143#1#7'Caption'#6'5Clear New QSO window after freq is changed mor'
