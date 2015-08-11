@@ -19,6 +19,10 @@ type
     btnCancel: TButton;
     btnDXCCnty: TButton;
     btnDXCNotCnty: TButton;
+    btnDxContAll: TButton;
+    btnSrcContAll: TButton;
+    btnDxBandsAll: TButton;
+    btnDxModeAll: TButton;
     chkNewDXConly: TCheckBox;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
@@ -55,9 +59,13 @@ type
     rbOnlyCallReg: TRadioButton;
     rbIgnWkdDate: TRadioButton;
     rbIgnWkdHour: TRadioButton;
+    procedure btnDxBandsAllClick(Sender: TObject);
     procedure btnDXCCntyClick(Sender: TObject);
     procedure btnDXCNotCntyClick(Sender: TObject);
+    procedure btnDxContAllClick(Sender: TObject);
+    procedure btnDxModeAllClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure btnSrcContAllClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -188,6 +196,11 @@ begin
   ModalResult := mrOK
 end;
 
+procedure TfrmRbnFilter.btnSrcContAllClick(Sender: TObject);
+begin
+  edtSrcCont.Text := C_RBN_CONT
+end;
+
 procedure TfrmRbnFilter.btnDXCCntyClick(Sender: TObject);
 begin
   frmSelectDXCC := TfrmSelectDXCC.Create(self);
@@ -205,6 +218,11 @@ begin
   end
 end;
 
+procedure TfrmRbnFilter.btnDxBandsAllClick(Sender: TObject);
+begin
+  edtDXBand.Text := C_RBN_BANDS
+end;
+
 procedure TfrmRbnFilter.btnDXCNotCntyClick(Sender: TObject);
 begin
   frmSelectDXCC := TfrmSelectDXCC.Create(self);
@@ -220,6 +238,16 @@ begin
   finally
     FreeAndNil(frmSelectDXCC)
   end
+end;
+
+procedure TfrmRbnFilter.btnDxContAllClick(Sender: TObject);
+begin
+  edtDXCont.Text := C_RBN_CONT
+end;
+
+procedure TfrmRbnFilter.btnDxModeAllClick(Sender: TObject);
+begin
+  edtDXMode.Text := C_RBN_MODES
 end;
 
 { TfrmRbnFilter }
