@@ -568,7 +568,7 @@ object frmPreferences: TfrmPreferences
         Height = 24
         Top = 436
         Width = 462
-        Caption = 'In previous QSO list show also QSO with call/p, call/m, W6/cal etc.'
+        Caption = 'In previous QSO list show also QSO with call/p, call/m, W6/call etc.'
         TabOrder = 13
       end
       object chkClearRIT: TCheckBox
