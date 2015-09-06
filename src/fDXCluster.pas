@@ -521,7 +521,6 @@ end;
 
 procedure TfrmDXCluster.tmrAutoConnectTimer(Sender: TObject);
 begin
-  Writeln('Trying to connect');
   tmrAutoConnect.Enabled := False;
   if pgDXCluster.ActivePageIndex = 0 then
   begin
