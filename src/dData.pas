@@ -1942,11 +1942,11 @@ var
   tmp : String;
 begin
   if text = '' then
-    Result := 0
+    Result := -1
   else
     tmp := copy(text,1,Pos('-',text)-1);
   if NOT TryStrToInt(tmp, Result) then
-    Result := 0
+    Result := -1
 end;
 
 function TdmData.GetDefaultProfileText : String;

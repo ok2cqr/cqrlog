@@ -1067,14 +1067,15 @@ begin
     edtDate.Text      := sDate
   end;
   dmData.InsertProfiles(cmbProfiles,False);
+
   if old_prof = -1 then
     cmbProfiles.Text := dmData.GetDefaultProfileText
   else begin
-    if old_prof <= cmbProfiles.Items.Count-1 then
-      cmbProfiles.ItemIndex := old_prof
+    cmbProfiles.Text := dmData.GetProfileText(old_prof)
   end;
   if cmbProfiles.Text <> '' then
     cmbProfilesChange(nil);
+
   if sbNewQSO.Panels[0].Text = '' then
     sbNewQSO.Panels[0].Text := cMyLoc + cqrini.ReadString('Station','LOC','');
 
@@ -2437,8 +2438,6 @@ begin
     ChangeDXCC := True; //if user chooses another country by direct enter to the edtDXCCref
                      //without clicking to btnDXCCRef
 
-  old_prof := cmbProfiles.ItemIndex;
-
   if fEditQSO then
   begin
     if fromNewQSO then
@@ -2489,6 +2488,7 @@ begin
         edtCallExit(nil)
       end;
 
+    old_prof := dmData.GetNRFromProfile(cmbProfiles.Text);
     date := StrToDate(edtDate.Text);
     {
     if (not cbOffline.Checked) or (mnuRemoteMode.Checked) then

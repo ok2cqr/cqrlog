@@ -14,6 +14,7 @@ Legend:
   - Export configuration of opened log doesn't reflect recent changes - fixed
   - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
   - station name and QTH is replaced automatically when callsign is edited during the qso
+  - after edit QSO QTH profile was set to wrong position
 
 1.9.0
   + configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)
