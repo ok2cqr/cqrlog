@@ -1,7 +1,7 @@
 object frmDXCluster: TfrmDXCluster
   Left = 497
   Height = 219
-  Top = 527
+  Top = 548
   Width = 564
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
@@ -138,11 +138,11 @@ object frmDXCluster: TfrmDXCluster
       object Panel4: TPanel
         Left = 0
         Height = 36
-        Top = 148
-        Width = 558
+        Top = 152
+        Width = 560
         Align = alBottom
         ClientHeight = 36
-        ClientWidth = 558
+        ClientWidth = 560
         TabOrder = 0
         object lblInfo: TLabel
           Left = 10
@@ -152,7 +152,7 @@ object frmDXCluster: TfrmDXCluster
           ParentColor = False
         end
         object btnWebConnect: TButton
-          Left = 469
+          Left = 471
           Height = 25
           Top = 6
           Width = 84
@@ -163,7 +163,7 @@ object frmDXCluster: TfrmDXCluster
           TabOrder = 0
         end
         object btnClear: TButton
-          Left = 387
+          Left = 389
           Height = 25
           Top = 6
           Width = 75
@@ -185,7 +185,7 @@ object frmDXCluster: TfrmDXCluster
           Visible = False
         end
         object btnFont: TButton
-          Left = 307
+          Left = 309
           Height = 25
           Top = 6
           Width = 75
@@ -198,9 +198,9 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlWeb: TPanel
         Left = 0
-        Height = 148
+        Height = 152
         Top = 0
-        Width = 558
+        Width = 560
         Align = alClient
         Alignment = taLeftJustify
         BevelInner = bvLowered
@@ -339,5 +339,12 @@ object frmDXCluster: TfrmDXCluster
     MaxFontSize = 0
     left = 136
     top = 122
+  end
+  object tmrAutoConnect: TTimer
+    Enabled = False
+    Interval = 3000
+    OnTimer = tmrAutoConnectTimer
+    left = 246
+    top = 68
   end
 end

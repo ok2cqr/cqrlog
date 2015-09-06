@@ -46,6 +46,7 @@ type
     pnlWeb: TPanel;
     tabTelnet: TTabSheet;
     tabWeb: TTabSheet;
+    tmrAutoConnect: TTimer;
     tmrSpots: TTimer;
     procedure Button2Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -61,6 +62,7 @@ type
     procedure btnTelConnectClick(Sender: TObject);
     procedure btnWebConnectClick(Sender: TObject);
     procedure edtCommandKeyPress(Sender: TObject; var Key: char);
+    procedure tmrAutoConnectTimer(Sender: TObject);
     procedure tmrSpotsTimer(Sender: TObject);
   private
     telDesc    : String;
@@ -404,7 +406,6 @@ begin
   try
     f.Name    := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
     f.Size    := cqrini.ReadInteger('DXCluster','FontSize',12);
-    ConOnShow := cqrini.ReadBool('DXCluster','ConAfterRun',False);
     WebSpots.nastav_font(f);
     TelSpots.nastav_font(f)
   finally
@@ -419,7 +420,10 @@ begin
   telPort := cqrini.ReadString('DXCluster','Port','');
   telUser := cqrini.ReadString('DXCluster','User','');
   telPass := cqrini.ReadString('DXCluster','Pass','');
-  edtTelAddress.Text := telDesc
+  edtTelAddress.Text := telDesc;
+
+  if cqrini.ReadBool('DXCluster', 'ConAfterRun', False) then
+    tmrAutoConnect.Enabled := True
 end;
 
 procedure TfrmDXCluster.btnClearClick(Sender: TObject);
@@ -513,6 +517,21 @@ begin
    SendCommand(edtCommand.Text);
    edtCommand.Clear
   end;
+end;
+
+procedure TfrmDXCluster.tmrAutoConnectTimer(Sender: TObject);
+begin
+  Writeln('Trying to connect');
+  tmrAutoConnect.Enabled := False;
+  if pgDXCluster.ActivePageIndex = 0 then
+  begin
+    if not ConWeb then
+      btnWebConnectClick(nil)
+  end
+  else begin
+    if not ConTelnet then
+      btnTelConnectClick(nil)
+  end
 end;
 
 procedure TfrmDXCluster.lConnect(aSocket: TLSocket);

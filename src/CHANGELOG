@@ -10,6 +10,7 @@ Legend:
   + RBN monitor added
   + TRX configuration improved (you can choose rig from a list instead of entering Hamlib rig ID)
   + Remote mode for wsjt added (thanks to Saku, OH1KH) 
+  + Auto connect to DX cluster added (must be enabled in Preferences)
   - Export configuration of opened log doesn't reflect recent changes - fixed
   - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
   - station name and QTH is replaced automatically when callsign is edited during the qso
