@@ -2153,6 +2153,8 @@ object frmWorked_grids: TfrmWorked_grids
     ItemHeight = 0
     Items.Strings = (
       'all'
+      '2190M'
+      '630M'
       '160M'
       '80M'
       '60M'
