@@ -112,46 +112,40 @@ Procedure TfrmWorked_grids.ToRigMode(mode:string);
 var
  i        : integer;
 Begin
-  if dmData.DebugLevel>=1 then Writeln('ToRigMode ',WsMode.Itemindex);
-   i:=0;
+  if dmData.DebugLevel>=1 then Writeln('ToRigMode was index:',WsMode.Itemindex);
+   i:=WsMode.Items.Count;
    Changes := True;
    repeat
     begin
-     if WsMode.Items[i] = mode then
-      Begin
-       WsMode.Itemindex := i;
-       i := WsMode.Items.Count;
-      end;
-     inc(i);
-     end;
-    until (i > WsMode.Items.Count);
-   if dmData.DebugLevel>=1 then Writeln(i,'  ',WsMode.Items[WsMode.Itemindex]);
-end;
-procedure TfrmWorked_grids.UpdateMap;
-Begin
- BandSelectorChange(AutoUpdate);   //update map(s)
+     dec(i);
+     if dmData.DebugLevel>=1 then Writeln('looping now:',i);
+    end;
+    until ( WsMode.Items[i] = mode ) or ( i=0 );
+    WsMode.Itemindex := i;
+   if dmData.DebugLevel>=1 then Writeln('Result:',i,'  ',WsMode.Items[WsMode.Itemindex]);
 end;
 
 procedure TfrmWorked_grids.ToRigBand(band:string);
 var
  i        : integer;
 Begin
-  if dmData.DebugLevel>=1 then Writeln('ToRigBand ',BandSelector.Itemindex);
-  i:=0;
-  Changes := True;
-  repeat
-   begin
-    if BandSelector.Items[i] = band then
-     Begin
-      BandSelector.Itemindex := i;
-      i := BandSelector.Items.Count;
-     end;
-     inc(i);
+  if dmData.DebugLevel>=1 then Writeln('ToRigBand was index:',WsMode.Itemindex);
+   i:=BandSelector.Items.Count;
+   Changes := True;
+   repeat
+    begin
+     dec(i);
+     if dmData.DebugLevel>=1 then Writeln('looping now:',i);
     end;
-   until (i > BandSelector.Items.Count);
-  if dmData.DebugLevel>=1 then Writeln(i,'  ',BandSelector.Items[BandSelector.Itemindex]);
+    until ( BandSelector.Items[i] = band ) or ( i=0 );
+    BandSelector.Itemindex := i;
+   if dmData.DebugLevel>=1 then Writeln('Result:',i,'  ',BandSelector.Items[BandSelector.Itemindex]);
 end;
+procedure TfrmWorked_grids.UpdateMap;
 
+Begin
+ BandSelectorChange(AutoUpdate);   //update map(s)
+end;
 function TfrmWorked_grids.RecordCount:String;
  Begin
 
