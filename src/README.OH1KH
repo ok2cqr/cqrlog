@@ -272,8 +272,9 @@ FIXED
    floating point error chrash.
    Added 2km and 600m bands to worked grids map band selector.
    FIXED
- 
 
+ - Adjust of time in Reminder did not work. Wonder how it was working during tests?!?. Changed EditMaskof Reminder, allows now time setting ok. 
+   FIXED
 
  Issues to resolve:
 ===================

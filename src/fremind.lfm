@@ -1,10 +1,10 @@
 object frmReminder: TfrmReminder
   Left = 1508
-  Height = 170
+  Height = 178
   Top = 269
   Width = 599
   Caption = 'Reminder'
-  ClientHeight = 170
+  ClientHeight = 178
   ClientWidth = 599
   OnClose = FormClose
   OnCreate = FormCreate
@@ -34,7 +34,7 @@ object frmReminder: TfrmReminder
     AnchorSideBottom.Side = asrBottom
     Left = 8
     Height = 90
-    Top = 76
+    Top = 84
     Width = 582
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 4
@@ -47,9 +47,9 @@ object frmReminder: TfrmReminder
     Left = 13
     Height = 23
     Top = 30
-    Width = 328
+    Width = 435
     BorderSpacing.Top = 5
-    Caption = 'Do NOT remind me again (are you sure?!) after'
+    Caption = 'Do NOT remind me again (are you sure?!).    Reminding interval '
     TabOrder = 1
   end
   object lblRemi2: TLabel
@@ -57,7 +57,7 @@ object frmReminder: TfrmReminder
     AnchorSideBottom.Control = RemiMemo
     Left = 8
     Height = 15
-    Top = 59
+    Top = 67
     Width = 91
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 2
@@ -70,7 +70,7 @@ object frmReminder: TfrmReminder
     AnchorSideBottom.Control = RemiMemo
     Left = 515
     Height = 25
-    Top = 49
+    Top = 57
     Width = 75
     Anchors = [akRight, akBottom]
     BorderSpacing.Bottom = 2
@@ -82,23 +82,23 @@ object frmReminder: TfrmReminder
     AnchorSideLeft.Control = chRemi
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = chRemi
-    Left = 341
+    Left = 448
     Height = 27
     Top = 30
     Width = 47
     CharCase = ecNormal
     MaxLength = 3
     TabOrder = 3
-    EditMask = '000;1;0'
+    EditMask = '999;1; '
     Text = '   '
-    SpaceChar = '0'
+    SpaceChar = ' '
   end
   object lblRemi3: TLabel
     AnchorSideLeft.Control = RemindTImeSet
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = chRemi
     AnchorSideTop.Side = asrCenter
-    Left = 390
+    Left = 497
     Height = 15
     Top = 34
     Width = 52

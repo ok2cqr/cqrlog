@@ -1,8 +1,8 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmReminder','FORMDATA',[
-  'TPF0'#12'TfrmReminder'#11'frmReminder'#4'Left'#3#228#5#6'Height'#3#170#0#3'T'
-  +'op'#3#13#1#5'Width'#3'W'#2#7'Caption'#6#8'Reminder'#12'ClientHeight'#3#170#0
+  'TPF0'#12'TfrmReminder'#11'frmReminder'#4'Left'#3#228#5#6'Height'#3#178#0#3'T'
+  +'op'#3#13#1#5'Width'#3'W'#2#7'Caption'#6#8'Reminder'#12'ClientHeight'#3#178#0
   +#11'ClientWidth'#3'W'#2#7'OnClose'#7#9'FormClose'#8'OnCreate'#7#10'FormCreat'
   +'e'#10'LCLVersion'#6#7'1.2.6.0'#0#6'TLabel'#8'lblRemi1'#22'AnchorSideLeft.Co'
   +'ntrol'#7#5'Owner'#19'AnchorSideLeft.Side'#7#9'asrCenter'#21'AnchorSideTop.C'
@@ -13,29 +13,29 @@ LazarusResources.Add('TfrmReminder','FORMDATA',[
   +'tFont'#8#11'Transparent'#8#0#0#5'TMemo'#8'RemiMemo'#22'AnchorSideLeft.Contr'
   +'ol'#7#5'Owner'#19'AnchorSideLeft.Side'#7#9'asrCenter'#24'AnchorSideBottom.C'
   +'ontrol'#7#5'Owner'#21'AnchorSideBottom.Side'#7#9'asrBottom'#4'Left'#2#8#6'H'
-  +'eight'#2'Z'#3'Top'#2'L'#5'Width'#3'F'#2#7'Anchors'#11#6'akLeft'#8'akBottom'
+  +'eight'#2'Z'#3'Top'#2'T'#5'Width'#3'F'#2#7'Anchors'#11#6'akLeft'#8'akBottom'
   +#0#20'BorderSpacing.Bottom'#2#4#8'TabOrder'#2#0#0#0#9'TCheckBox'#6'chRemi'#22
   +'AnchorSideLeft.Control'#7#8'lblRemi1'#21'AnchorSideTop.Control'#7#8'lblRemi'
   +'1'#18'AnchorSideTop.Side'#7#9'asrBottom'#4'Left'#2#13#6'Height'#2#23#3'Top'
-  +#2#30#5'Width'#3'H'#1#17'BorderSpacing.Top'#2#5#7'Caption'#6'-Do NOT remind '
-  +'me again (are you sure?!) after'#8'TabOrder'#2#1#0#0#6'TLabel'#8'lblRemi2'
-  +#22'AnchorSideLeft.Control'#7#8'RemiMemo'#24'AnchorSideBottom.Control'#7#8'R'
-  +'emiMemo'#4'Left'#2#8#6'Height'#2#15#3'Top'#2';'#5'Width'#2'['#7'Anchors'#11
-  +#6'akLeft'#8'akBottom'#0#20'BorderSpacing.Bottom'#2#2#7'Caption'#6#12'Rememb'
-  +'er to:'#11'ParentColor'#8#0#0#7'TButton'#7'btClose'#23'AnchorSideRight.Cont'
-  +'rol'#7#8'RemiMemo'#20'AnchorSideRight.Side'#7#9'asrBottom'#24'AnchorSideBot'
-  +'tom.Control'#7#8'RemiMemo'#4'Left'#3#3#2#6'Height'#2#25#3'Top'#2'1'#5'Width'
-  +#2'K'#7'Anchors'#11#7'akRight'#8'akBottom'#0#20'BorderSpacing.Bottom'#2#2#7
-  +'Caption'#6#5'Close'#7'OnClick'#7#12'btCloseClick'#8'TabOrder'#2#2#0#0#9'TMa'
-  +'skEdit'#13'RemindTImeSet'#22'AnchorSideLeft.Control'#7#6'chRemi'#19'AnchorS'
-  +'ideLeft.Side'#7#9'asrBottom'#21'AnchorSideTop.Control'#7#6'chRemi'#4'Left'#3
-  +'U'#1#6'Height'#2#27#3'Top'#2#30#5'Width'#2'/'#8'CharCase'#7#8'ecNormal'#9'M'
-  +'axLength'#2#3#8'TabOrder'#2#3#8'EditMask'#6#7'000;1;0'#4'Text'#6#3'   '#9'S'
-  +'paceChar'#6#1'0'#0#0#6'TLabel'#8'lblRemi3'#22'AnchorSideLeft.Control'#7#13
-  +'RemindTImeSet'#19'AnchorSideLeft.Side'#7#9'asrBottom'#21'AnchorSideTop.Cont'
-  +'rol'#7#6'chRemi'#18'AnchorSideTop.Side'#7#9'asrCenter'#4'Left'#3#134#1#6'He'
-  +'ight'#2#15#3'Top'#2'"'#5'Width'#2'4'#18'BorderSpacing.Left'#2#2#7'Caption'#6
-  +#7'minutes'#11'ParentColor'#8#0#0#6'TTimer'#7'tmrRemi'#7'Enabled'#8#8'Interv'
-  +'al'#4'@w'#27#0#7'OnTimer'#7#12'tmrRemiTimer'#4'left'#2'K'#3'top'#3#216#0#0#0
-  +#0
+  +#2#30#5'Width'#3#179#1#17'BorderSpacing.Top'#2#5#7'Caption'#6'?Do NOT remind'
+  +' me again (are you sure?!).    Reminding interval '#8'TabOrder'#2#1#0#0#6'T'
+  +'Label'#8'lblRemi2'#22'AnchorSideLeft.Control'#7#8'RemiMemo'#24'AnchorSideBo'
+  +'ttom.Control'#7#8'RemiMemo'#4'Left'#2#8#6'Height'#2#15#3'Top'#2'C'#5'Width'
+  +#2'['#7'Anchors'#11#6'akLeft'#8'akBottom'#0#20'BorderSpacing.Bottom'#2#2#7'C'
+  +'aption'#6#12'Remember to:'#11'ParentColor'#8#0#0#7'TButton'#7'btClose'#23'A'
+  +'nchorSideRight.Control'#7#8'RemiMemo'#20'AnchorSideRight.Side'#7#9'asrBotto'
+  +'m'#24'AnchorSideBottom.Control'#7#8'RemiMemo'#4'Left'#3#3#2#6'Height'#2#25#3
+  +'Top'#2'9'#5'Width'#2'K'#7'Anchors'#11#7'akRight'#8'akBottom'#0#20'BorderSpa'
+  +'cing.Bottom'#2#2#7'Caption'#6#5'Close'#7'OnClick'#7#12'btCloseClick'#8'TabO'
+  +'rder'#2#2#0#0#9'TMaskEdit'#13'RemindTImeSet'#22'AnchorSideLeft.Control'#7#6
+  +'chRemi'#19'AnchorSideLeft.Side'#7#9'asrBottom'#21'AnchorSideTop.Control'#7#6
+  +'chRemi'#4'Left'#3#192#1#6'Height'#2#27#3'Top'#2#30#5'Width'#2'/'#8'CharCase'
+  +#7#8'ecNormal'#9'MaxLength'#2#3#8'TabOrder'#2#3#8'EditMask'#6#7'999;1; '#4'T'
+  +'ext'#6#3'   '#9'SpaceChar'#6#1' '#0#0#6'TLabel'#8'lblRemi3'#22'AnchorSideLe'
+  +'ft.Control'#7#13'RemindTImeSet'#19'AnchorSideLeft.Side'#7#9'asrBottom'#21'A'
+  +'nchorSideTop.Control'#7#6'chRemi'#18'AnchorSideTop.Side'#7#9'asrCenter'#4'L'
+  +'eft'#3#241#1#6'Height'#2#15#3'Top'#2'"'#5'Width'#2'4'#18'BorderSpacing.Left'
+  +#2#2#7'Caption'#6#7'minutes'#11'ParentColor'#8#0#0#6'TTimer'#7'tmrRemi'#7'En'
+  +'abled'#8#8'Interval'#4'@w'#27#0#7'OnTimer'#7#12'tmrRemiTimer'#4'left'#2'K'#3
+  +'top'#3#216#0#0#0#0
 ]);
