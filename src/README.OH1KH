@@ -108,6 +108,8 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - Worked grids map: Follow rig: rewritten band/mode selection. Should now fall to 'all' or 'any' if mode or band is not in selection list.
 
+- Added alternative Propagation2 form. (newQso->Window->Propagation2). Shows image from http://hamqsl.com/solar - selection. Selection is done
+  in Preferences-> external viewers. Actually it can show a gif image from any url... It has small bug see "issues to resolve"
 
  Issues resolved:
 ===================
@@ -298,6 +300,7 @@ TRIED to resolve this, but no luck.
   Maybe I try via that way next.
   But there may be something else, too.
 
+- Propagation2 form has a bug that causes crash if gif is not found from given url. Tried to resolve this, but no luck yet.
 
 
 

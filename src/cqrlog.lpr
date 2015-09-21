@@ -18,7 +18,7 @@ uses
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
   dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
-  fConfigStorage, fMoniWsjtx, fWkd1, fRemind;
+  fConfigStorage, fMoniWsjtx, fWkd1, fRemind, fProp2;
 var
   Splash : TfrmSplash;
 
@@ -49,6 +49,7 @@ begin
   Application.CreateForm(TfrmQSODetails, frmQSODetails);
   Application.CreateForm(TfrmBandMap, frmBandMap);
   Application.CreateForm(TfrmPropagation, frmPropagation);
+  Application.CreateForm(TfrmPropagation2, frmPropagation2);
   Application.CreateForm(TfrmCWKeys, frmCWKeys);
   Application.CreateForm(TfrmSCP, frmSCP);
   Application.CreateForm(TfrmRotControl, frmRotControl);

@@ -64,6 +64,7 @@ type
     acRefreshTime: TAction;
     acRemoteModeWsjtx: TAction;
     acMonitorWsjtx: TAction;
+    acProp2: TAction;
     acWorked_grids: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
@@ -94,6 +95,7 @@ type
     MenuItem88: TMenuItem;
     MenuItem89: TMenuItem;
     MenuItem90: TMenuItem;
+    MenuItem91: TMenuItem;
     MenuItem97: TMenuItem;
     mnuWorked_grids: TMenuItem;
     mnuMoniWsjtx: TMenuItem;
@@ -313,6 +315,7 @@ type
     procedure acLogUploadStatusExecute(Sender: TObject);
     procedure acMonitorWsjtxExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
+    procedure acProp2Execute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
     procedure acRefreshTimeExecute(Sender: TObject);
@@ -648,7 +651,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1,fRemind;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1,fRemind,fProp2;
 
 procedure TQSLTabThread.Execute;
 var
@@ -4016,6 +4019,11 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmNewQSO.acProp2Execute(Sender: TObject);
+begin
+  frmPropagation2.Show;
 end;
 
 procedure TfrmNewQSO.chkAutoModeChange(Sender: TObject);

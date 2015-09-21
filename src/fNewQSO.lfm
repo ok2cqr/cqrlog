@@ -2114,6 +2114,9 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem74: TMenuItem
         Action = acProp
       end
+      object MenuItem91: TMenuItem
+        Action = acProp2
+      end
       object MenuItem80: TMenuItem
         Action = acDetails
       end
@@ -2828,13 +2831,18 @@ object frmNewQSO: TfrmNewQSO
     end
     object acWorked_grids: TAction
       Category = 'Window'
-      Caption = 'acWorked_grids'
+      Caption = 'Worked grids'
       OnExecute = acWorked_gridsExecute
     end
     object acMonitorWsjtx: TAction
       Category = 'Window'
       Caption = 'Monitor wsjtx'
       OnExecute = acMonitorWsjtxExecute
+    end
+    object acProp2: TAction
+      Category = 'Window'
+      Caption = 'Propagation2'
+      OnExecute = acProp2Execute
     end
   end
   object imgMain: TImageList

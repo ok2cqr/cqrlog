@@ -494,6 +494,7 @@ type
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
     edtBackupPath1: TEdit;
+    edtPropUrl: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
     edtHamLibSpeed: TSpinEdit;
@@ -816,6 +817,7 @@ type
     Label199: TLabel;
     Label200: TLabel;
     Label201: TLabel;
+    Label202: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1546,6 +1548,7 @@ begin
   cqrini.WriteString('ExtView', 'img', edtImgFiles.Text);
   cqrini.WriteString('ExtView', 'html', edtHtmlFiles.Text);
   cqrini.WriteBool('ExtView', 'QSL', chkIntQSLViewer.Checked);
+  cqrini.WriteString('ExtView', 'PUrl', edtPropUrl.Text);
 
   cqrini.WriteString('FirstClub', 'DateFrom', edtClub1Date.Text);
   cqrini.WriteString('SecondClub', 'DateFrom', edtClub2Date.Text);
@@ -2925,6 +2928,7 @@ begin
   edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', 'eog');
   edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'firefox');
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
+  edtPropUrl.Text := cqrini.ReadString('ExtView', 'PUrl', '');
 
   edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', '1945-01-01');
   edtClub2Date.Text := cqrini.ReadString('SecondClub', 'DateFrom', '1945-01-01');
