@@ -278,6 +278,11 @@ FIXED
  - Adjust of time in Reminder did not work. Wonder how it was working during tests?!?. Changed EditMaskof Reminder, allows now time setting ok. 
    FIXED
 
+- Propagation2 form has a bug that causes crash if gif is not found from given url. Fixed some thread handling and now error reporting from
+  false url and galse content (not gif) works.
+  FIXED
+
+
  Issues to resolve:
 ===================
 
@@ -300,7 +305,8 @@ TRIED to resolve this, but no luck.
   Maybe I try via that way next.
   But there may be something else, too.
 
-- Propagation2 form has a bug that causes crash if gif is not found from given url. Tried to resolve this, but no luck yet.
+- I'm afraid that Propagation2 form has sill a bug in Memory stream handling that may eat memory during longer use. We'll see...
+
 
 
 

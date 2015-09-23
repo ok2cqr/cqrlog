@@ -730,6 +730,7 @@
         <Filename Value="fprop2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmPropagation2"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fProp2"/>
       </Unit86>

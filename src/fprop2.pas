@@ -22,9 +22,13 @@ type
     procedure tmrProp2Timer(Sender: TObject);
   private
     { private declarations }
+    procedure ShowLoaded;
   public
     { public declarations }
     running : Boolean;
+    MyStream       :TmemoryStream;
+    MyOk           :Boolean;
+    gif: TGIFImage;
   end;
 
   type
@@ -36,6 +40,7 @@ type
 var
   frmPropagation2: TfrmPropagation2;
 
+
 implementation
 
 { TfrmPropagation2 }
@@ -43,13 +48,14 @@ uses  dData, dUtils, uMyIni;
 
 procedure TProp2Thread.Execute;
 var
- gif: TGIFImage;
  MyUrl: String;
+ HTTP : THTTPSend;
 
 begin
   if frmPropagation2.running then
     exit;
   frmPropagation2.running := True;
+  FreeOnTerminate := True;
   { Show propagation image from http://www.hamqsl.com/solar.html
     Select desired image from webpage.
     Use address given after "img src"-text of link for MyUrl variable.
@@ -63,28 +69,15 @@ begin
    }
   //MyUrl:= 'http://www.hamqsl.com/solarpic.php';
   MyUrl:= cqrini.ReadString('ExtView', 'PUrl', '');
-  if dmData.DebugLevel>=1 then writeln('MyUrl ',MyUrl);
-  with THTTPSend.Create do
-  begin
-    if HTTPMethod('GET',MyUrl) then
+  frmPropagation2.MyOk := false;
+  HTTP := THTTPSend.Create;
+    if HTTP.HTTPMethod('GET',MyUrl) then
      Begin
-     gif:= TGIFImage.Create;
-     try
-      if dmData.DebugLevel>=1 then writeln('Url found, loading');
-      gif.LoadFromStream(Document);
-      frmPropagation2.PropImage2.Picture.Graphic:= gif;
-      frmPropagation2.PropImage2.Visible:=true;
-      frmPropagation2.tmrProp2.Enabled  :=True;
-      frmPropagation2.lblProp2.Visible := False;
-     except
-      frmPropagation2.lblProp2.Caption:='Url ERROR!';
+      frmPropagation2.MyOk :=true;
+      frmPropagation2.MyStream := HTTP.Document;
      end;
-     gif.Free;
-     if dmData.DebugLevel>=1 then writeln('loading done');
-    end;
-    Free;
-  end;
-
+  Synchronize(@frmPropagation2.ShowLoaded);
+  HTTP.Free;
   frmPropagation2.running := False
 end;
 
@@ -95,7 +88,7 @@ begin
    PropImage2.Visible:=false;
    lblProp2.Visible := True;
    tmrProp2.Enabled    := False;
-   tmrProp2.Interval   := 5000;//1000 * 60 * 60; //every 60 minutes do refresh
+   tmrProp2.Interval   := 1000 * 60 * 60; //every 60 minutes do refresh
    tmrProp2.Enabled    := True;
    tmrProp2Timer(nil)
 end;
@@ -105,6 +98,10 @@ procedure TfrmPropagation2.tmrProp2Timer(Sender: TObject);
 var
   T : TProp2Thread;
 begin
+  lblProp2.Caption:='Loading...';
+  PropImage2.Visible:=false;
+  lblProp2.Visible := True;
+  lblProp2.Font.Color := clDefault;
   T := TProp2Thread.Create(True);
   T.Start
 end;
@@ -124,8 +121,30 @@ begin
    dmUtils.SaveWindowPos(frmPropagation2);
    frmPropagation2.Hide;
 end;
+procedure TfrmPropagation2.ShowLoaded;
 
-
+begin
+     if Myok then
+      begin
+           gif:= TGIFImage.Create;
+           try
+              gif.LoadFromStream(MyStream);
+              PropImage2.Picture.Graphic:= gif;
+              PropImage2.Visible:=true;
+              tmrProp2.Enabled  :=True;
+              lblProp2.Visible := False;
+           except
+           lblProp2.Font.Color := clRed;
+           lblProp2.Caption:='Image loading ERROR!'#13'Check that Url response is a GIF image!';
+           end;
+           gif.Free;
+      end
+     else
+     Begin
+       lblProp2.Font.Color := clRed;
+       lblProp2.Caption:='Url loading ERROR!'#13'Check Url!';
+     end;
+end;
 
 initialization
   {$I fProp2.lrs}
