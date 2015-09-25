@@ -286,6 +286,9 @@ FIXED
   Dropped one memory strem off and fixed error handling /and debugging) a bit.
   HOPE IT IS FIXED NOW
 
+- Propagation2: small bug in remembering was window open or not on last session
+  FIXED
+
  Issues to resolve:
 ===================
 

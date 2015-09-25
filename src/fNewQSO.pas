@@ -1221,6 +1221,9 @@ begin
   if cqrini.ReadBool('Window','Prop',False) then
     frmPropagation.Show;
 
+   if cqrini.ReadBool('Window','Prop2',False) then
+    frmPropagation2.Show;
+
   if cqrini.ReadBool('Window','Worked_grids',False) then
     frmWorked_grids.Show;
 
@@ -1335,6 +1338,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','Prop',False);
+
+    if frmPropagation2.Showing then
+    begin
+      frmPropagation2.Close;
+      cqrini.WriteBool('Window','Prop2',True)
+    end
+    else
+      cqrini.WriteBool('Window','Prop2',False);
 
     if frmCWKeys.Showing then
     begin
