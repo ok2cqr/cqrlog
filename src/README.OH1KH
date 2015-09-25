@@ -282,6 +282,9 @@ FIXED
   false url and galse content (not gif) works.
   FIXED
 
+- I'm afraid that Propagation2 form has sill a bug in Memory stream handling that may eat memory during longer use. We'll see...
+  Dropped one memory strem off and fixed error handling /and debugging) a bit.
+  HOPE IT IS FIXED NOW
 
  Issues to resolve:
 ===================
@@ -305,7 +308,6 @@ TRIED to resolve this, but no luck.
   Maybe I try via that way next.
   But there may be something else, too.
 
-- I'm afraid that Propagation2 form has sill a bug in Memory stream handling that may eat memory during longer use. We'll see...
 
 
 

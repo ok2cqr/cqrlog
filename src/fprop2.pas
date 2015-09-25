@@ -26,8 +26,8 @@ type
   public
     { public declarations }
     running : Boolean;
-    MyStream       :TmemoryStream;
-    MyOk           :Boolean;
+    MyUrlOk,
+    MyGifOk :Boolean;
     gif: TGIFImage;
   end;
 
@@ -53,7 +53,7 @@ var
 
 begin
   if frmPropagation2.running then
-    exit;
+                                 exit;
   frmPropagation2.running := True;
   FreeOnTerminate := True;
   { Show propagation image from http://www.hamqsl.com/solar.html
@@ -64,21 +64,34 @@ begin
     <center>
     <a href="http://www.hamqsl.com/solar.html"
     title="Click to add Solar-Terrestrial Data to your website!">
-    <img src="http://www.hamqsl.com/solarpic.php"></a>    <===============THIS ONE within " "s
+    <img src="http://www.hamqsl.com/solarpic.php"></a>    <===============USE THIS ONE within " "s
     </center>
    }
   //MyUrl:= 'http://www.hamqsl.com/solarpic.php';
   MyUrl:= cqrini.ReadString('ExtView', 'PUrl', '');
-  frmPropagation2.MyOk := false;
+  if dmData.DebugLevel >=1 then Writeln('MyURL: ',MyUrl);
+
+
   HTTP := THTTPSend.Create;
-    if HTTP.HTTPMethod('GET',MyUrl) then
+  frmPropagation2.MyUrlOk :=  HTTP.HTTPMethod('GET',MyUrl);
+    if frmPropagation2.MyUrlOk then
      Begin
-      frmPropagation2.MyOk :=true;
-      frmPropagation2.MyStream := HTTP.Document;
+      if dmData.DebugLevel >=1 then Writeln('Found something ...');
+      frmPropagation2.MyUrlOk :=true;
+      try
+         frmPropagation2.MyGifOk := true;
+         frmPropagation2.gif.LoadFromStream(HTTP.Document);
+      except
+         frmPropagation2.MyGifOk :=false;
+         if dmData.DebugLevel >=1 then Writeln('LoadFromStream Failed');
+      end;
      end;
+  if dmData.DebugLevel >=1 then Writeln('Synchronizing');
   Synchronize(@frmPropagation2.ShowLoaded);
   HTTP.Free;
-  frmPropagation2.running := False
+  frmPropagation2.running := False;
+  if dmData.DebugLevel >=1 then Writeln('Stop thread.');
+
 end;
 
 procedure TfrmPropagation2.FormShow(Sender: TObject);
@@ -102,8 +115,14 @@ begin
   PropImage2.Visible:=false;
   lblProp2.Visible := True;
   lblProp2.Font.Color := clDefault;
-  T := TProp2Thread.Create(True);
-  T.Start
+  if not running then
+   Begin
+      if dmData.DebugLevel >=1 then Writeln('Crate gif. Start Thread.');
+      gif:= TGIFImage.Create;
+      T := TProp2Thread.Create(True);
+      T.Start
+   end;
+
 end;
 
 procedure TfrmPropagation2.FormHide(Sender: TObject);
@@ -124,26 +143,34 @@ end;
 procedure TfrmPropagation2.ShowLoaded;
 
 begin
-     if Myok then
+     if MyUrlok then
       begin
-           gif:= TGIFImage.Create;
+         if MyGifOk then
+          Begin
            try
-              gif.LoadFromStream(MyStream);
+              if dmData.DebugLevel >=1 then Writeln('Try to assign gif');
               PropImage2.Picture.Graphic:= gif;
               PropImage2.Visible:=true;
               tmrProp2.Enabled  :=True;
               lblProp2.Visible := False;
            except
+              lblProp2.Font.Color := clRed;
+              lblProp2.Caption:='Image loading ERROR!'#13'Check that Url response is a GIF image!';
+           end;
+          end
+         else
+          begin
            lblProp2.Font.Color := clRed;
            lblProp2.Caption:='Image loading ERROR!'#13'Check that Url response is a GIF image!';
-           end;
-           gif.Free;
+          end;
       end
      else
      Begin
        lblProp2.Font.Color := clRed;
        lblProp2.Caption:='Url loading ERROR!'#13'Check Url!';
      end;
+     if dmData.DebugLevel >=1 then Writeln('Free gif');
+     gif.Free;
 end;
 
 initialization
