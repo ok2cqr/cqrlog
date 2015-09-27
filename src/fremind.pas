@@ -24,6 +24,7 @@ type
     procedure btCloseClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure RemindTImeSetExit(Sender: TObject);
     procedure tmrRemiTimer(Sender: TObject);
   private
     { private declarations }
@@ -38,6 +39,9 @@ var
 implementation
 
 { TfrmReminder }
+
+uses dData;
+
 Procedure TfrmReminder.ShowReminder;
 var TimeValue :string;
 
@@ -56,6 +60,12 @@ begin
   tmrRemi.Enabled :=true;
 end;
 
+procedure TfrmReminder.RemindTImeSetExit(Sender: TObject);
+begin
+  if RemindTimeSet.EditText = '000' then
+     RemindTimeSet.EditText := '001';
+end;
+
 procedure TfrmReminder.btCloseClick(Sender: TObject);
 var
    TimerSetting : integer;
@@ -64,14 +74,16 @@ begin
   if chRemi.Checked = False then
      Begin
        if TryStrToINt(RemindTimeSet.EditText,TimerSetting) then
-          Begin
-            TimerSetting := TimerSetting * 60000; //to milliseconds
-            if TimerSetting > 0 then
-               Begin
-                 tmrRemi.Interval:= TimerSetting;
-                 tmrRemi.Enabled := True;
-               end;
-          end;
+        TimerSetting := TimerSetting * 60000 //to milliseconds
+       else
+        begin
+           RemindTimeSet.EditText :='030';
+           TimerSetting := 30 * 60000; //if conversion fails for some reason take base value
+        end;
+       tmrRemi.Interval:= TimerSetting;
+       tmrRemi.Enabled := True;
+       if dmData.DebugLevel >=1 then Writeln('Remind timer set to :',tmrRemi.Interval,'ms');
+
      end
     else
      tmrRemi.Enabled := False;

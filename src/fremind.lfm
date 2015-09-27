@@ -89,9 +89,10 @@ object frmReminder: TfrmReminder
     CharCase = ecNormal
     MaxLength = 3
     TabOrder = 3
-    EditMask = '999;1; '
+    OnExit = RemindTImeSetExit
+    EditMask = '999;1;0'
     Text = '   '
-    SpaceChar = ' '
+    SpaceChar = '0'
   end
   object lblRemi3: TLabel
     AnchorSideLeft.Control = RemindTImeSet

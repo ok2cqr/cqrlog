@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, inifiles, DB, process, Spin, ColorBox, lcltype,
-  uCWKeying, types;
+  maskedit, uCWKeying, types;
 
 type
 
@@ -818,6 +818,7 @@ type
     Label200: TLabel;
     Label201: TLabel;
     Label202: TLabel;
+    Label203: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -921,6 +922,7 @@ type
     lbleFont1: TLabel;
     lbPreferences: TListBox;
     dlgOpen: TOpenDialog;
+    edtPropUrltime: TMaskEdit;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -1032,6 +1034,7 @@ type
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
+    procedure edtPropUrltimeExit(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
     procedure edtR1RigCtldPortChange(Sender : TObject);
     procedure edtR2RigCtldArgsChange(Sender : TObject);
@@ -1084,6 +1087,7 @@ var
   fgSize: integer;
   fqSize: integer;
   fbandSize: integer;
+  PUrltime:integer;
   TRXChanged: boolean;
   ReloadFreq: Boolean = False;
   ReloadModes: Boolean = False;
@@ -1094,7 +1098,7 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage,fProp2;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1549,6 +1553,8 @@ begin
   cqrini.WriteString('ExtView', 'html', edtHtmlFiles.Text);
   cqrini.WriteBool('ExtView', 'QSL', chkIntQSLViewer.Checked);
   cqrini.WriteString('ExtView', 'PUrl', edtPropUrl.Text);
+  cqrini.WriteString('ExtView', 'PUrlts', edtPropUrltime.EditText);
+  cqrini.WriteInteger('ExtView', 'PUrltime', PUrltime);
 
   cqrini.WriteString('FirstClub', 'DateFrom', edtClub1Date.Text);
   cqrini.WriteString('SecondClub', 'DateFrom', edtClub2Date.Text);
@@ -2384,6 +2390,28 @@ begin
   WinKeyerChanged := True
 end;
 
+procedure TfrmPreferences.edtPropUrltimeExit(Sender: TObject);
+
+begin
+       if TryStrToINt(edtPropUrltime.EditText,PUrlTime) then
+          Begin
+            If Purltime < 15 then      //no shorter value than 15min (Max 999 comes from mask)
+              Begin
+                PUrltime := 15;
+                edtPropUrltime.EditText := '015';
+              end;
+          end
+        else
+          begin
+             PUrltime := 60;
+             edtPropUrltime.EditText := '060'; //if conversion fails for some reason take base value
+          end;
+       frmPropagation2.tmrProp2.Enabled    := False;
+       frmPropagation2.tmrProp2.Interval   := 1000 * 60 * PUrltime;
+       frmPropagation2.tmrProp2.Enabled    := True;
+       frmPropagation2.tmrProp2Timer(nil);
+end;
+
 procedure TfrmPreferences.edtR1RigCtldArgsChange(Sender: TObject);
 begin
   TRXChanged := True
@@ -2929,6 +2957,8 @@ begin
   edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'firefox');
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
   edtPropUrl.Text := cqrini.ReadString('ExtView', 'PUrl', '');
+  edtPropUrltime.EditText := cqrini.ReadString('ExtView', 'PUrlts', '060');
+  PUrltime := cqrini.ReadInteger('ExtView', 'PUrltime', 60);
 
   edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', '1945-01-01');
   edtClub2Date.Text := cqrini.ReadString('SecondClub', 'DateFrom', '1945-01-01');

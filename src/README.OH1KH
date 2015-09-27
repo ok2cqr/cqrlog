@@ -111,6 +111,8 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - Added alternative Propagation2 form. (newQso->Window->Propagation2). Shows image from http://hamqsl.com/solar - selection. Selection is done
   in Preferences-> external viewers. Actually it can show a gif image from any url... It has small bug see "issues to resolve"
 
+- Added adjustable refresh time for Propagation2 (15-999min) with mask edit. Fixed also Reminder's time setting mask edit.
+
  Issues resolved:
 ===================
 

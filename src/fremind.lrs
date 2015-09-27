@@ -30,12 +30,12 @@ LazarusResources.Add('TfrmReminder','FORMDATA',[
   +'rder'#2#2#0#0#9'TMaskEdit'#13'RemindTImeSet'#22'AnchorSideLeft.Control'#7#6
   +'chRemi'#19'AnchorSideLeft.Side'#7#9'asrBottom'#21'AnchorSideTop.Control'#7#6
   +'chRemi'#4'Left'#3#192#1#6'Height'#2#27#3'Top'#2#30#5'Width'#2'/'#8'CharCase'
-  +#7#8'ecNormal'#9'MaxLength'#2#3#8'TabOrder'#2#3#8'EditMask'#6#7'999;1; '#4'T'
-  +'ext'#6#3'   '#9'SpaceChar'#6#1' '#0#0#6'TLabel'#8'lblRemi3'#22'AnchorSideLe'
-  +'ft.Control'#7#13'RemindTImeSet'#19'AnchorSideLeft.Side'#7#9'asrBottom'#21'A'
-  +'nchorSideTop.Control'#7#6'chRemi'#18'AnchorSideTop.Side'#7#9'asrCenter'#4'L'
-  +'eft'#3#241#1#6'Height'#2#15#3'Top'#2'"'#5'Width'#2'4'#18'BorderSpacing.Left'
-  +#2#2#7'Caption'#6#7'minutes'#11'ParentColor'#8#0#0#6'TTimer'#7'tmrRemi'#7'En'
-  +'abled'#8#8'Interval'#4'@w'#27#0#7'OnTimer'#7#12'tmrRemiTimer'#4'left'#2'K'#3
-  +'top'#3#216#0#0#0#0
+  +#7#8'ecNormal'#9'MaxLength'#2#3#8'TabOrder'#2#3#6'OnExit'#7#17'RemindTImeSet'
+  +'Exit'#8'EditMask'#6#7'999;1;0'#4'Text'#6#3'   '#9'SpaceChar'#6#1'0'#0#0#6'T'
+  +'Label'#8'lblRemi3'#22'AnchorSideLeft.Control'#7#13'RemindTImeSet'#19'Anchor'
+  +'SideLeft.Side'#7#9'asrBottom'#21'AnchorSideTop.Control'#7#6'chRemi'#18'Anch'
+  +'orSideTop.Side'#7#9'asrCenter'#4'Left'#3#241#1#6'Height'#2#15#3'Top'#2'"'#5
+  +'Width'#2'4'#18'BorderSpacing.Left'#2#2#7'Caption'#6#7'minutes'#11'ParentCol'
+  +'or'#8#0#0#6'TTimer'#7'tmrRemi'#7'Enabled'#8#8'Interval'#4'@w'#27#0#7'OnTime'
+  +'r'#7#12'tmrRemiTimer'#4'left'#2'K'#3'top'#3#216#0#0#0#0
 ]);

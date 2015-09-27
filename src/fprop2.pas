@@ -101,7 +101,7 @@ begin
    PropImage2.Visible:=false;
    lblProp2.Visible := True;
    tmrProp2.Enabled    := False;
-   tmrProp2.Interval   := 1000 * 60 * 60; //every 60 minutes do refresh
+   tmrProp2.Interval   := 1000 * 60 * cqrini.ReadInteger('ExtView', 'PUrltime', 60);
    tmrProp2.Enabled    := True;
    tmrProp2Timer(nil)
 end;
@@ -117,7 +117,7 @@ begin
   lblProp2.Font.Color := clDefault;
   if not running then
    Begin
-      if dmData.DebugLevel >=1 then Writeln('Crate gif. Start Thread.');
+      if dmData.DebugLevel >=1 then Writeln('Crate gif. Start Thread. Timer interval is:',tmrProp2.Interval );
       gif:= TGIFImage.Create;
       T := TProp2Thread.Create(True);
       T.Start

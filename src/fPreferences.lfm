@@ -1,7 +1,7 @@
 object frmPreferences: TfrmPreferences
-  Left = 14
+  Left = 94
   Height = 573
-  Top = 0
+  Top = 30
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
@@ -6366,6 +6366,27 @@ object frmPreferences: TfrmPreferences
         Top = 296
         Width = 686
         Caption = 'Propagation2 image from http://www.hamqsl.com/solar.html'#10'    Select desired image from webpage.'#10'    Use address given after "img src"-text of link for Url variable.'#10'    Example:'#10'    <center>'#10'    <a href="http://www.hamqsl.com/solar.html"'#10'    title="Click to add Solar-Terrestrial Data to your website!">'#10'    <img src="http://www.hamqsl.com/solarpic.php"></a>    <===============THIS ONE within " "s'#10'    </center> '
+        ParentColor = False
+      end
+      object edtPropUrltime: TMaskEdit
+        Left = 408
+        Height = 27
+        Top = 440
+        Width = 40
+        CharCase = ecNormal
+        MaxLength = 3
+        TabOrder = 6
+        OnExit = edtPropUrltimeExit
+        EditMask = '999;1;0'
+        Text = '   '
+        SpaceChar = '0'
+      end
+      object Label203: TLabel
+        Left = 472
+        Height = 15
+        Top = 448
+        Width = 201
+        Caption = 'refresh interval 15-999 minutes'
         ParentColor = False
       end
     end
