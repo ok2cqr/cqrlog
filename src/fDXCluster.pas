@@ -263,7 +263,8 @@ var
 begin
   //Spots.Add('10368961.9  GB3CCX/B    17-Jan-2009 1905Z  51S IO81XW>IO81JM           <GW3TKH>')
   //Spots.Add('DX de GW3TKH  10368961.9  GB3CCX/B                                    1905Z     ');
-  Spots.Add('DX de WT4Y:      14207.0  UA1CCP        UP 1                        1905Z EL88');
+  Spots.Add('DX de AK7V-#:     7025.30  AC2K           CW    28 dB  27 WPM  CQ      0425Z');
+  {
   if not Running then
   begin
     Writeln('aa');
@@ -276,6 +277,7 @@ begin
     TelThread.Start;
     Writeln('cc');
   end;
+  }
 end;
 
 procedure TfrmDXCluster.FormCreate(Sender: TObject);
@@ -664,7 +666,6 @@ function TfrmDXCluster.GetCall(spot : String; web : Boolean = False) : String;
 var
   tmp : String='';
 begin
-  //these all horrible lines because of bug in dxsummit.fi cluster
   if web then
   begin
     //Writeln('spot:',spot);
@@ -677,7 +678,7 @@ begin
     //Writeln('tmp: ',tmp);
   end
   else begin
-    tmp    := copy(spot,Pos('.',spot)+2,Length(spot)-Pos('.',spot)-1);
+    tmp    := copy(spot,Pos('.',spot)+3,Length(spot)-Pos('.',spot)-1);
     tmp    := trim(tmp);
     tmp    := trim(copy(tmp,1,Pos(' ',tmp)))
   end;
