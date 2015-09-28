@@ -1,24 +1,25 @@
-object frmPropagation2: TfrmPropagation2
+object frmImgView: TfrmImgView
   Left = 1923
-  Height = 55
+  Height = 50
   Top = 729
-  Width = 131
+  Width = 120
   AutoSize = True
-  Caption = 'Propagation2'
-  ClientHeight = 55
-  ClientWidth = 131
+  Caption = 'ImgView'
+  ClientHeight = 50
+  ClientWidth = 120
   OnClose = FormClose
   OnHide = FormHide
   OnShow = FormShow
   LCLVersion = '1.2.6.0'
-  object PropImage2: TImage
+  object ImgImage: TImage
     Left = 1
     Height = 1
     Top = 1
     Width = 1
     AutoSize = True
+    Center = True
   end
-  object lblProp2: TLabel
+  object lblImgView1: TLabel
     Left = 32
     Height = 15
     Top = 16
@@ -26,9 +27,9 @@ object frmPropagation2: TfrmPropagation2
     Caption = 'Loading...'
     ParentColor = False
   end
-  object tmrProp2: TTimer
+  object tmrImgView1: TTimer
     Interval = 3600000
-    OnTimer = tmrProp2Timer
+    OnTimer = tmrImgView1Timer
     left = 24
     top = 96
   end

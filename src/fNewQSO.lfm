@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
   Left = 215
   Height = 569
-  Top = 0
+  Top = 42
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -714,7 +714,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 25
         end
         object edtQTH: TEdit
-          Left = 111
+          Left = 112
           Height = 27
           Top = 71
           Width = 136
@@ -2114,9 +2114,6 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem74: TMenuItem
         Action = acProp
       end
-      object MenuItem91: TMenuItem
-        Action = acProp2
-      end
       object MenuItem80: TMenuItem
         Action = acDetails
       end
@@ -2131,6 +2128,9 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem52: TMenuItem
         Action = acLogUploadStatus
+      end
+      object MenuItem91: TMenuItem
+        Action = acImgView
       end
       object MenuItem97: TMenuItem
         Caption = 'Reminder'
@@ -2839,10 +2839,10 @@ object frmNewQSO: TfrmNewQSO
       Caption = 'Monitor wsjtx'
       OnExecute = acMonitorWsjtxExecute
     end
-    object acProp2: TAction
+    object acImgView: TAction
       Category = 'Window'
-      Caption = 'Propagation2'
-      OnExecute = acProp2Execute
+      Caption = 'ImgView'
+      OnExecute = acImgViewExecute
     end
   end
   object imgMain: TImageList

@@ -727,12 +727,12 @@
         <UnitName Value="fRemind"/>
       </Unit85>
       <Unit86>
-        <Filename Value="fprop2.pas"/>
+        <Filename Value="fimgview.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmPropagation2"/>
+        <ComponentName Value="frmImgView"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fProp2"/>
+        <UnitName Value="fImgView"/>
       </Unit86>
     </Units>
   </ProjectOptions>

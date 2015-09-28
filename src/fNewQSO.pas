@@ -64,7 +64,7 @@ type
     acRefreshTime: TAction;
     acRemoteModeWsjtx: TAction;
     acMonitorWsjtx: TAction;
-    acProp2: TAction;
+    acImgView: TAction;
     acWorked_grids: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
@@ -315,7 +315,7 @@ type
     procedure acLogUploadStatusExecute(Sender: TObject);
     procedure acMonitorWsjtxExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
-    procedure acProp2Execute(Sender: TObject);
+    procedure acImgViewExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
     procedure acRefreshTimeExecute(Sender: TObject);
@@ -651,7 +651,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1,fRemind,fProp2;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1,fRemind,fImgView;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1221,8 +1221,8 @@ begin
   if cqrini.ReadBool('Window','Prop',False) then
     frmPropagation.Show;
 
-   if cqrini.ReadBool('Window','Prop2',False) then
-    frmPropagation2.Show;
+   if cqrini.ReadBool('Window','ImgView',False) then
+    frmImgView.Show;
 
   if cqrini.ReadBool('Window','Worked_grids',False) then
     frmWorked_grids.Show;
@@ -1339,13 +1339,13 @@ begin
     else
       cqrini.WriteBool('Window','Prop',False);
 
-    if frmPropagation2.Showing then
+    if frmImgView.Showing then
     begin
-      frmPropagation2.Close;
-      cqrini.WriteBool('Window','Prop2',True)
+      frmImgView.Close;
+      cqrini.WriteBool('Window','ImgView',True)
     end
     else
-      cqrini.WriteBool('Window','Prop2',False);
+      cqrini.WriteBool('Window','ImgView',False);
 
     if frmCWKeys.Showing then
     begin
@@ -4032,9 +4032,9 @@ begin
   end
 end;
 
-procedure TfrmNewQSO.acProp2Execute(Sender: TObject);
+procedure TfrmNewQSO.acImgViewExecute(Sender: TObject);
 begin
-  frmPropagation2.Show;
+  frmImgView.Show;
 end;
 
 procedure TfrmNewQSO.chkAutoModeChange(Sender: TObject);

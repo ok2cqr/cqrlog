@@ -113,6 +113,24 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - Added adjustable refresh time for Propagation2 (15-999min) with mask edit. Fixed also Reminder's time setting mask edit.
 
+- Renamed propagation2 to ImgView. You can now show also something else than hamqsl's propagation image. Supports now jpg,png,gif.
+  Maybe you like to see image from your door webcam instead?
+  Be aware that autosize seems to fail sometimes. I do not know (yet) where the problem is: My code, Lazarus or X server.
+  If you have tested version with Propagation2 you might like to remove some variables from config.
+  To do this, you need to remove them from mysql DB named "log youhave used" table "cqrlog_config".
+  Dump config from database:
+	mysqldump -p --user=cqrlog cqrlog001 cqrlog_config >/tmp/cnf.sql
+
+	Open /tmp/cnf.sql with your favorite text editor (nano, mc, joe ..)
+	Note that all data is in one line !
+	Search and remove this part:
+
+	\nPUrl=http://url.you.have.typed.is.here\nPUrlts=061\nPUrltime=61
+
+	Then return config to database:
+	mysql -u cqrlog -p -D cqrlog001 < /tmp/cnf.sql
+
+
  Issues resolved:
 ===================
 

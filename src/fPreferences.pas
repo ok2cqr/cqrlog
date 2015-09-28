@@ -494,7 +494,7 @@ type
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
     edtBackupPath1: TEdit;
-    edtPropUrl: TEdit;
+    edtImgViewUrl: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
     edtHamLibSpeed: TSpinEdit;
@@ -922,7 +922,7 @@ type
     lbleFont1: TLabel;
     lbPreferences: TListBox;
     dlgOpen: TOpenDialog;
-    edtPropUrltime: TMaskEdit;
+    edtImgViewUrltime: TMaskEdit;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -1034,7 +1034,8 @@ type
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
-    procedure edtPropUrltimeExit(Sender: TObject);
+    procedure edtImgViewUrlExit(Sender: TObject);
+    procedure edtImgViewUrltimeExit(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
     procedure edtR1RigCtldPortChange(Sender : TObject);
     procedure edtR2RigCtldArgsChange(Sender : TObject);
@@ -1087,7 +1088,7 @@ var
   fgSize: integer;
   fqSize: integer;
   fbandSize: integer;
-  PUrltime:integer;
+  ImgViewUrltime:integer;
   TRXChanged: boolean;
   ReloadFreq: Boolean = False;
   ReloadModes: Boolean = False;
@@ -1098,7 +1099,7 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage,fProp2;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage,fImgView;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1552,9 +1553,9 @@ begin
   cqrini.WriteString('ExtView', 'img', edtImgFiles.Text);
   cqrini.WriteString('ExtView', 'html', edtHtmlFiles.Text);
   cqrini.WriteBool('ExtView', 'QSL', chkIntQSLViewer.Checked);
-  cqrini.WriteString('ExtView', 'PUrl', edtPropUrl.Text);
-  cqrini.WriteString('ExtView', 'PUrlts', edtPropUrltime.EditText);
-  cqrini.WriteInteger('ExtView', 'PUrltime', PUrltime);
+  cqrini.WriteString('ExtView', 'ImgViewUrl', edtImgViewUrl.Text);
+  cqrini.WriteString('ExtView', 'ImgViewUrlts', edtImgViewUrltime.EditText);
+  cqrini.WriteInteger('ExtView', 'ImgViewUrltime', ImgViewUrltime);
 
   cqrini.WriteString('FirstClub', 'DateFrom', edtClub1Date.Text);
   cqrini.WriteString('SecondClub', 'DateFrom', edtClub2Date.Text);
@@ -2390,26 +2391,37 @@ begin
   WinKeyerChanged := True
 end;
 
-procedure TfrmPreferences.edtPropUrltimeExit(Sender: TObject);
+procedure TfrmPreferences.edtImgViewUrlExit(Sender: TObject);
+begin
+    edtImgViewUrltimeExit(nil);
+end;
+
+procedure TfrmPreferences.edtImgViewUrltimeExit(Sender: TObject);
 
 begin
-       if TryStrToINt(edtPropUrltime.EditText,PUrlTime) then
+       if TryStrToINt(edtImgViewUrltime.EditText,ImgViewUrlTime) then
           Begin
-            If Purltime < 15 then      //no shorter value than 15min (Max 999 comes from mask)
+            If ImgViewUrlTime < 1 then      //no shorter value than 1min (Max 999 comes from mask)
               Begin
-                PUrltime := 15;
-                edtPropUrltime.EditText := '015';
+                ImgViewUrlTime := 1;
+                edtImgViewUrltime.EditText := '001';
               end;
           end
         else
           begin
-             PUrltime := 60;
-             edtPropUrltime.EditText := '060'; //if conversion fails for some reason take base value
+             ImgViewUrlTime := 60;
+             edtImgViewUrltime.EditText := '060'; //if conversion fails for some reason take base value
           end;
-       frmPropagation2.tmrProp2.Enabled    := False;
-       frmPropagation2.tmrProp2.Interval   := 1000 * 60 * PUrltime;
-       frmPropagation2.tmrProp2.Enabled    := True;
-       frmPropagation2.tmrProp2Timer(nil);
+
+   //do changes
+   cqrini.WriteString('ExtView', 'ImgViewUrl', edtImgViewUrl.Text);
+   cqrini.WriteString('ExtView', 'ImgViewUrlts', edtImgViewUrltime.EditText);
+   cqrini.WriteInteger('ExtView', 'ImgViewUrltime', ImgViewUrltime);
+
+   frmImgView.tmrImgView1.Enabled    := False;
+   frmImgView.tmrImgView1.Interval   := 1000 * 60 * ImgViewUrltime;
+   frmImgView.tmrImgView1.Enabled    := True;
+   frmImgView.tmrImgView1Timer(nil);
 end;
 
 procedure TfrmPreferences.edtR1RigCtldArgsChange(Sender: TObject);
@@ -2956,9 +2968,9 @@ begin
   edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', 'eog');
   edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'firefox');
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
-  edtPropUrl.Text := cqrini.ReadString('ExtView', 'PUrl', '');
-  edtPropUrltime.EditText := cqrini.ReadString('ExtView', 'PUrlts', '060');
-  PUrltime := cqrini.ReadInteger('ExtView', 'PUrltime', 60);
+  edtImgViewUrl.Text := cqrini.ReadString('ExtView', 'ImgViewUrl', '');
+  edtImgViewUrltime.EditText := cqrini.ReadString('ExtView', 'ImgViewUrlts', '060');
+  ImgViewUrlTime := cqrini.ReadInteger('ExtView', 'ImgViewUrltime', 60);
 
   edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', '1945-01-01');
   edtClub2Date.Text := cqrini.ReadString('SecondClub', 'DateFrom', '1945-01-01');

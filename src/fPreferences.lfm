@@ -1,7 +1,7 @@
 object frmPreferences: TfrmPreferences
-  Left = 94
+  Left = 22
   Height = 573
-  Top = 30
+  Top = 92
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
@@ -6337,7 +6337,7 @@ object frmPreferences: TfrmPreferences
         Text = 'eog'
       end
       object edtHtmlFiles: TEdit
-        Left = 45
+        Left = 47
         Height = 27
         Top = 264
         Width = 320
@@ -6352,41 +6352,42 @@ object frmPreferences: TfrmPreferences
         Caption = 'Open QSL card images with internal viewer'
         TabOrder = 4
       end
-      object edtPropUrl: TEdit
+      object edtImgViewUrl: TEdit
         Left = 47
         Height = 27
-        Top = 440
+        Top = 328
         Width = 320
+        OnExit = edtImgViewUrlExit
         TabOrder = 5
         Text = 'http://www.hamqsl.com/solarpic.php'
       end
       object Label202: TLabel
-        Left = 23
-        Height = 135
-        Top = 296
-        Width = 686
-        Caption = 'Propagation2 image from http://www.hamqsl.com/solar.html'#10'    Select desired image from webpage.'#10'    Use address given after "img src"-text of link for Url variable.'#10'    Example:'#10'    <center>'#10'    <a href="http://www.hamqsl.com/solar.html"'#10'    title="Click to add Solar-Terrestrial Data to your website!">'#10'    <img src="http://www.hamqsl.com/solarpic.php"></a>    <===============THIS ONE within " "s'#10'    </center> '
+        Left = 24
+        Height = 15
+        Top = 304
+        Width = 79
+        Caption = 'ImgView Url:'
         ParentColor = False
       end
-      object edtPropUrltime: TMaskEdit
-        Left = 408
+      object edtImgViewUrltime: TMaskEdit
+        Left = 392
         Height = 27
-        Top = 440
+        Top = 328
         Width = 40
         CharCase = ecNormal
         MaxLength = 3
         TabOrder = 6
-        OnExit = edtPropUrltimeExit
+        OnExit = edtImgViewUrltimeExit
         EditMask = '999;1;0'
         Text = '   '
         SpaceChar = '0'
       end
       object Label203: TLabel
-        Left = 472
+        Left = 392
         Height = 15
-        Top = 448
-        Width = 201
-        Caption = 'refresh interval 15-999 minutes'
+        Top = 304
+        Width = 193
+        Caption = 'refresh interval 1-999 minutes'
         ParentColor = False
       end
     end
