@@ -23,9 +23,9 @@ LazarusResources.Add('TfrmRbnMonitor','FORMDATA',[
   +'on'#11'ToolButton8'#4'Left'#3#128#0#3'Top'#2#2#6'Action'#7#12'acScrollDown'
   +#0#0#7'TButton'#11'btnEatFocus'#4'Left'#3#151#0#6'Height'#2#22#3'Top'#2#2#5
   +'Width'#2#2#7'Caption'#6#11'btnEatFocus'#8'TabOrder'#2#0#0#0#0#10'TStatusBar'
-  +#5'sbRbn'#4'Left'#2#0#6'Height'#2#22#3'Top'#3'D'#2#5'Width'#3#153#2#6'Panels'
+  +#5'sbRbn'#4'Left'#2#0#6'Height'#2#21#3'Top'#3'E'#2#5'Width'#3#153#2#6'Panels'
   +#14#1#5'Width'#2'2'#0#0#11'SimplePanel'#8#0#0#11'TStringGrid'#5'sgRbn'#4'Lef'
-  +'t'#2#0#6'Height'#3'+'#2#3'Top'#2#25#5'Width'#3#153#2#5'Align'#7#8'alClient'
+  +'t'#2#0#6'Height'#3','#2#3'Top'#2#25#5'Width'#3#153#2#5'Align'#7#8'alClient'
   +#8'ColCount'#2#7#9'FixedCols'#2#0#7'Options'#11#15'goFixedVertLine'#15'goFix'
   +'edHorzLine'#10'goVertLine'#10'goHorzLine'#11'goColSizing'#14'goSmoothScroll'
   +#19'goScrollKeepVisible'#0#8'TabOrder'#2#2#10'OnDblClick'#7#13'sgRbnDblClick'
@@ -36,9 +36,9 @@ LazarusResources.Add('TfrmRbnMonitor','FORMDATA',[
   +#2#4#2#1#6#2'LE'#2#5#2#0#6#2'dB'#2#5#2#1#6#2'40'#2#6#2#0#6#1'D'#2#6#2#1#6#1
   +'N'#0#0#0#11'TActionList'#12'acRbnMonitor'#6'Images'#7#13'imgRbnMonitor'#4'l'
   +'eft'#3'X'#1#3'top'#2'H'#0#7'TAction'#9'acConnect'#7'Caption'#6#7'Connect'#4
-  +'Hint'#6#21'Connect to RBN server'#10'ImageIndex'#2#0#9'OnExecute'#7#16'acCo'
+  +'Hint'#6#21'Connect to RBN server'#10'ImageIndex'#2#1#9'OnExecute'#7#16'acCo'
   +'nnectExecute'#0#0#7'TAction'#12'acDisconnect'#7'Caption'#6#10'Disconnect'#4
-  +'Hint'#6#26'Disconnect from RBN server'#10'ImageIndex'#2#1#9'OnExecute'#7#19
+  +'Hint'#6#26'Disconnect from RBN server'#10'ImageIndex'#2#0#9'OnExecute'#7#19
   +'acDisconnectExecute'#0#0#7'TAction'#14'acFontSettings'#7'Caption'#6#13'Font'
   +' settings'#4'Hint'#6#13'Font settings'#10'ImageIndex'#2#3#9'OnExecute'#7#21
   +'acFontSettingsExecute'#0#0#7'TAction'#8'acFilter'#7'Caption'#6#6'Filter'#4

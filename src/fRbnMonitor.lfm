@@ -87,8 +87,8 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object sbRbn: TStatusBar
     Left = 0
-    Height = 22
-    Top = 580
+    Height = 21
+    Top = 581
     Width = 665
     Panels = <    
       item
@@ -98,7 +98,7 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object sgRbn: TStringGrid
     Left = 0
-    Height = 555
+    Height = 556
     Top = 25
     Width = 665
     Align = alClient
@@ -171,13 +171,13 @@ object frmRbnMonitor: TfrmRbnMonitor
     object acConnect: TAction
       Caption = 'Connect'
       Hint = 'Connect to RBN server'
-      ImageIndex = 0
+      ImageIndex = 1
       OnExecute = acConnectExecute
     end
     object acDisconnect: TAction
       Caption = 'Disconnect'
       Hint = 'Disconnect from RBN server'
-      ImageIndex = 1
+      ImageIndex = 0
       OnExecute = acDisconnectExecute
     end
     object acFontSettings: TAction
