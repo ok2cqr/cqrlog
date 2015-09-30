@@ -103,7 +103,6 @@ end;
 procedure TfrmImgView.FormShow(Sender: TObject);
 begin
    running := False;
-   dmUtils.LoadWindowPos(frmImgView);
    ImgImage.Visible:=false;
    lblImgView1.Visible := True;
    tmrImgView1.Enabled    := False;
@@ -117,14 +116,10 @@ procedure TfrmImgView.tmrImgView1Timer(Sender: TObject);
 var
   T : TImgViewThread;
 begin
-   //rescale in case image size has changed
+  dmUtils.LoadWindowPos(frmImgView);
   ImgImage.Visible:=false;
-  ImgImage.Width :=120;
-  ImgImage.Height :=50;
   ImgImage.AutoSize := True;
   ImgImage.Center := True;
-  frmImgView.Width :=120;
-  frmImgView.Height :=50;
   frmImgView.AutoSize := True;
   lblImgView1.Visible := True;
   lblImgView1.Font.Color := clDefault;
@@ -187,7 +182,7 @@ begin
          Writeln('Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
                  ' Form: ',frmImgView.Width,'x',frmImgView.Height,' ',frmImgView.AutoSize);
        end;
-
+     dmUtils.SaveWindowPos(frmImgView);
 end;
 
 initialization

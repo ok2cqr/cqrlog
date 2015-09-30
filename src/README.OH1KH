@@ -130,6 +130,7 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 	Then return config to database:
 	mysql -u cqrlog -p -D cqrlog001 < /tmp/cnf.sql
 
+- ImgView: small change trying to keep form window image sized.
 
  Issues resolved:
 ===================
