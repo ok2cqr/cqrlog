@@ -132,6 +132,11 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - ImgView: small change trying to keep form window image sized.
 
+- Changed cDB_PING_INT from 300 to 300000 as suggested by Jussi AA6KJ in thread http://www.cqrlog.com/node/1489 to see if it has effect.
+- Added Product/File numbers to splash and about. Mainly for myself to keep track what version is under test. Auto increment for version
+  numbering must be selected from Project properties and only build (Shift+F9) automatcly increases file number.
+
+
  Issues resolved:
 ===================
 

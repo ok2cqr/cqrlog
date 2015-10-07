@@ -1,7 +1,7 @@
 object frmSplash: TfrmSplash
-  Left = 526
+  Left = 1934
   Height = 272
-  Top = 198
+  Top = 290
   Width = 407
   BorderIcons = []
   BorderStyle = bsNone
@@ -116,7 +116,7 @@ object frmSplash: TfrmSplash
   }
   OnCreate = FormCreate
   Position = poDesktopCenter
-  LCLVersion = '0.9.29'
+  LCLVersion = '1.2.6.0'
   object Image1: TImage
     Left = 0
     Height = 272

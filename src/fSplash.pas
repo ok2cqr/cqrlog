@@ -24,13 +24,13 @@ type
   { TfrmSplash }
 
   TfrmSplash = class(TForm)
+    Button1: TButton;
     Image1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure Image1Paint(Sender: TObject);
   private
     { private declarations }
   public
-
     { public declarations }
   end; 
 
@@ -40,7 +40,7 @@ var
 
 implementation
 
-uses uVersion;
+uses uVersion,vinfo,versiontypes;
 
 { TfrmSplash }
 
@@ -52,8 +52,13 @@ begin
 end;
 
 procedure TfrmSplash.Image1Paint(Sender: TObject);
+function ProductVersionToString(PV: TFileProductVersion): String;
+   begin
+     Result := Format('%d.%d.%d.%d', [PV[0],PV[1],PV[2],PV[3]])
+   end;
 const
-  VersionPos: TPoint = (X:340; Y:243);
+  //VersionPos: TPoint = (X:340; Y:243);
+  VersionPos: TPoint = (X:210; Y:250);
   VersionStyle: TTextStyle =
    (
      Alignment  : taCenter;
@@ -69,12 +74,20 @@ const
    );
 var
   ATextRect: TRect;
+  Info: TVersionInfo;
 begin
+  Info := TVersionInfo.Create;
+  Info.Load(HINSTANCE);
   ATextRect.TopLeft := VersionPos;
   ATextRect.BottomRight := Point(Image1.Picture.Width, Image1.Picture.Height);
   Image1.Canvas.Font.Style := [fsBold];
+  Image1.Canvas.Font.Size:=8;
   Image1.Canvas.Font.Color := clRed;
-  Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y, cVERSION, VersionStyle)
+  //Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y, cVERSION, VersionStyle)
+  Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y,'P#'+
+  ProductVersionToString(Info.FixedInfo.ProductVersion)+' F#'+
+  ProductVersionToString(Info.FixedInfo.FileVersion), VersionStyle);
+  Info.Free;
 end;
 
 initialization

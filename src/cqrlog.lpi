@@ -13,11 +13,12 @@
       <Icon Value="0"/>
     </General>
     <VersionInfo>
+      <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <MinorVersionNr Value="3"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="2100"/>
-      <StringTable ProductVersion="0.3.1.2026"/>
+      <MajorVersionNr Value="1"/>
+      <MinorVersionNr Value="9"/>
+      <BuildNr Value="2106"/>
+      <StringTable ProductName="cqrlog" ProductVersion="1.9.0"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>

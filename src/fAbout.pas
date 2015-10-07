@@ -41,7 +41,7 @@ implementation
 {$R *.lfm}
 
 { TfrmAbout }
-uses fChangelog, uVersion;
+uses fChangelog, uVersion,vinfo,versiontypes;
 
 procedure TfrmAbout.lblLinkMouseEnter(Sender: TObject);
 begin
@@ -64,8 +64,20 @@ begin
 end;
 
 procedure TfrmAbout.FormShow(Sender: TObject);
+function ProductVersionToString(PV: TFileProductVersion): String;
+   begin
+     Result := Format('%d.%d.%d.%d', [PV[0],PV[1],PV[2],PV[3]])
+   end;
+var
+  Info: TVersionInfo;
 begin
-  lblVerze.Caption:= cVERSION
+  Info := TVersionInfo.Create;
+  Info.Load(HINSTANCE);
+  //lblVerze.Caption:= cVERSION
+   lblVerze.Caption:= 'P#'+
+  ProductVersionToString(Info.FixedInfo.ProductVersion)+' F#'+
+  ProductVersionToString(Info.FixedInfo.FileVersion);
+  Info.Free;
 end;
 
 end.

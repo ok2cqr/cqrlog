@@ -26,7 +26,7 @@ const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 10;
   cDB_COMN_VER = 3;
-  cDB_PING_INT = 300;  //ping interval for database connection in seconds
+  cDB_PING_INT = 300000;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
                        //which refresh connection
