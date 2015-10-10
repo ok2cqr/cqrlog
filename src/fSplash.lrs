@@ -1,8 +1,8 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmSplash','FORMDATA',[
-  'TPF0'#10'TfrmSplash'#9'frmSplash'#4'Left'#3#142#7#6'Height'#3#16#1#3'Top'#3
-  +'"'#1#5'Width'#3#151#1#11'BorderIcons'#11#0#11'BorderStyle'#7#6'bsNone'#7'Ca'
+  'TPF0'#10'TfrmSplash'#9'frmSplash'#4'Left'#3#211#3#6'Height'#3#16#1#3'Top'#3
+  +'&'#1#5'Width'#3#151#1#11'BorderIcons'#11#0#11'BorderStyle'#7#6'bsNone'#7'Ca'
   +'ption'#6#19'Starting CQRLOG ...'#12'ClientHeight'#3#16#1#11'ClientWidth'#3
   +#151#1#10'Font.Color'#7#11'clHighlight'#9'Icon.Data'#10#194#12#0#0#190#12#0#0
   +#0#0#1#0#1#0'  '#0#0#1#0#24#0#168#12#0#0#22#0#0#0'('#0#0#0' '#0#0#0'@'#0#0#0

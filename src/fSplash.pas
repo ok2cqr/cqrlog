@@ -57,8 +57,7 @@ function ProductVersionToString(PV: TFileProductVersion): String;
      Result := Format('%d.%d.%d.%d', [PV[0],PV[1],PV[2],PV[3]])
    end;
 const
-  //VersionPos: TPoint = (X:340; Y:243);
-  VersionPos: TPoint = (X:210; Y:250);
+  VersionPos: TPoint = (X:310; Y:250);
   VersionStyle: TTextStyle =
    (
      Alignment  : taCenter;
@@ -84,9 +83,8 @@ begin
   Image1.Canvas.Font.Size:=8;
   Image1.Canvas.Font.Color := clRed;
   //Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y, cVERSION, VersionStyle)
-  Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y,'P#'+
-  ProductVersionToString(Info.FixedInfo.ProductVersion)+' F#'+
-  ProductVersionToString(Info.FixedInfo.FileVersion), VersionStyle);
+  //ProductVersionToString(Info.FixedInfo.ProductVersion)
+  Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y,ProductVersionToString(Info.FixedInfo.FileVersion), VersionStyle);
   Info.Free;
 end;
 

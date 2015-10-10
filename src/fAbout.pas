@@ -74,9 +74,8 @@ begin
   Info := TVersionInfo.Create;
   Info.Load(HINSTANCE);
   //lblVerze.Caption:= cVERSION
-   lblVerze.Caption:= 'P#'+
-  ProductVersionToString(Info.FixedInfo.ProductVersion)+' F#'+
-  ProductVersionToString(Info.FixedInfo.FileVersion);
+  //ProductVersionToString(Info.FixedInfo.ProductVersion)
+   lblVerze.Caption:=ProductVersionToString(Info.FixedInfo.FileVersion);
   Info.Free;
 end;
 
