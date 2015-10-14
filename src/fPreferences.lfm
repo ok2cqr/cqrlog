@@ -7090,8 +7090,8 @@ object frmPreferences: TfrmPreferences
         Left = 74
         Height = 17
         Top = 48
-        Width = 135
-        Caption = 'Downoad data from'
+        Width = 139
+        Caption = 'Downoad data from:'
         ParentColor = False
       end
       object rbCondxAsText: TRadioButton

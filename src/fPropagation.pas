@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, ftpsend;
+  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, Menus, ftpsend;
 
 type
 
   { TfrmPropagation }
 
   TfrmPropagation = class(TForm)
+    imgProp: TImage;
     Label1: TLabel;
     lblK3hour: TLabel;
     Label2: TLabel;
@@ -32,13 +33,14 @@ type
     lblSA: TLabel;
     lblKIndex: TLabel;
     lblAIndex: TLabel;
-    sbtnRefresh : TSpeedButton;
+    mnuRefresh: TMenuItem;
+    popPropagation: TPopupMenu;
     tmrProp: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDblClick(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
-    procedure sbtnRefreshClick(Sender : TObject);
+    procedure mnuRefreshClick(Sender: TObject);
     procedure tmrPropTimer(Sender: TObject);
   private
     { private declarations }
@@ -56,6 +58,9 @@ type
     running : Boolean;
 
     procedure SyncProp;
+    procedure SyncPropImage;
+
+    procedure RefreshPropagation;
   end; 
 
   type
@@ -97,80 +102,55 @@ begin
   frmPropagation.k3h  := '';
 
   FreeOnTerminate := True;
-  http   := THTTPSend.Create;
-  m      := TStringList.Create;
-  try
+  http := THTTPSend.Create;
+  m    := TStringList.Create;
+  try try
     HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://dk0wcy.de/magnetogram/' ) then
-    begin
-      m.LoadFromStream(HTTP.Document);
-      tmp := m.Text;
 
-    if dmData.DebugLevel >=1 then
+    if cqrini.ReadBool('prop','AsImage',True) then
+    begin
+      if HTTP.HTTPMethod('GET',cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php')) then
       begin
-       Writeln('TMP:      ',tmp)
+        HTTP.Document.SaveToFile(dmData.HomeDir + 'propagation.gif');
+        Synchronize(@frmPropagation.SyncPropImage)
+      end
+    end
+    else begin
+
+      if HTTP.HTTPMethod('GET', 'http://www.hamqsl.com/solarxml.php' ) then
+      begin
+        m.LoadFromStream(HTTP.Document);
+        tmp := m.Text;
+        Writeln(tmp);
+        if dmData.DebugLevel >=1 then
+        begin
+         Writeln('TMP:      ',tmp)
+        end
       end;
 
-       p   := Pos('>Indices of',tmp);
-      frmPropagation.time   := trim(copy(tmp,p+1,30));
-      frmPropagation.time   := copy(frmPropagation.time,1,Pos('</th>',frmPropagation.time)-1);
-      frmPropagation.time   := frmPropagation.time + ' ' + TimeToStr(Time);
+      if dmData.DebugLevel >=1 then
+      begin
+        Writeln('Time:     ',frmPropagation.time);
+        Writeln('Boulder A:',frmPropagation.ab);
+        Writeln('Solar Act:',frmPropagation.sa);
+        Writeln('Kiel    A:',frmPropagation.a);
+        Writeln('Kiel K:   ',frmPropagation.k);
+        Writeln('Kiel 3h   ',frmPropagation.k3h);
+        Writeln('GF:       ',frmPropagation.gf);
+        Writeln('SSN:      ',frmPropagation.ssn);
+        Writeln('Aurora:   ',frmPropagation.au);
+        Writeln('SFI:      ',frmPropagation.sfi)
+      end;
 
-      p   := Pos('>Boulder A',tmp);
-      frmPropagation.ab   := trim(copy(tmp,p+44,18));
-      frmPropagation.ab   := copy(frmPropagation.ab,1,Pos('</b>',frmPropagation.ab)-1);
-
-      p  := Pos('>Solar Activity',tmp);
-      frmPropagation.sa   := trim(copy(tmp,p+44,18));
-      frmPropagation.sa   := copy(frmPropagation.sa,1,Pos('</b>',frmPropagation.sa)-1);
-
-      p   := Pos('>Kiel A',tmp);
-      frmPropagation.a   := trim(copy(tmp,p+44,18));
-      frmPropagation.a   := copy(frmPropagation.a,1,Pos('</b>',frmPropagation.a)-1);
-
-      p   := Pos('>Kiel current k',tmp);
-      frmPropagation.k   := trim(copy(tmp,p+44,18));
-      frmPropagation.k   := copy(frmPropagation.k,1,Pos('</b>',frmPropagation.k)-1);
-
-      p   := Pos('>Geomagnetic Field',tmp);
-      frmPropagation.gf   := trim(copy(tmp,p+44,18));
-      frmPropagation.gf   := copy(frmPropagation.gf,1,Pos('</b>',frmPropagation.gf)-1);
-
-      p   := Pos('>Sunspot Number',tmp);
-      frmPropagation.ssn   := trim(copy(tmp,p+44,18));
-      frmPropagation.ssn   := copy(frmPropagation.ssn,1,Pos('</b>',frmPropagation.ssn)-1);
-
-      p   := Pos('>Aurora',tmp);
-      frmPropagation.au   := trim(copy(tmp,p+44,18));
-      frmPropagation.au   := copy(frmPropagation.au,1,Pos('</b>',frmPropagation.au)-1);
-
-      p   := Pos('>Solar Flux',tmp);
-      frmPropagation.sfi := trim(copy(tmp,p+30,18));
-      frmPropagation.sfi := copy(frmPropagation.sfi,1,Pos('</b>',frmPropagation.sfi)-1);
-
-      p := Pos('>Kiel 3-hour k',tmp);
-      frmPropagation.k3h := trim(copy(tmp,p+44,18));
-      frmPropagation.k3h := copy(frmPropagation.k3h,1,Pos('</b>',frmPropagation.k3h)-1)
-     end;
-
-    if dmData.DebugLevel >=1 then
-    begin
-      Writeln('Time:     ',frmPropagation.time);
-      Writeln('Boulder A:',frmPropagation.ab);
-      Writeln('Solar Act:',frmPropagation.sa);
-      Writeln('Kiel    A:',frmPropagation.a);
-      Writeln('Kiel K:   ',frmPropagation.k);
-      Writeln('Kiel 3h   ',frmPropagation.k3h);
-      Writeln('GF:       ',frmPropagation.gf);
-      Writeln('SSN:      ',frmPropagation.ssn);
-      Writeln('Aurora:   ',frmPropagation.au);
-      Writeln('SFI:      ',frmPropagation.sfi)
-    end;
-
-    Synchronize(@frmPropagation.SyncProp);
+      Synchronize(@frmPropagation.SyncProp)
+    end
+  except
+    on E : Exception do
+      Writeln(E.Message)
+  end
   finally
     http.Free;
     m.Free;
@@ -218,14 +198,14 @@ begin
   lblGF.Caption      := C_LOADING;
   lblInfo.Caption    := '';
   tmrProp.Enabled    := False;
-  tmrProp.Interval   := 1000 * 60 * 5; //every 5 minutes do refresh
+  tmrProp.Interval   := 1000 * 60 * 1; //every 5 minutes do refresh
   tmrProp.Enabled    := True;
   tmrPropTimer(nil)
 end;
 
-procedure TfrmPropagation.sbtnRefreshClick(Sender : TObject);
+procedure TfrmPropagation.mnuRefreshClick(Sender: TObject);
 begin
-  tmrPropTimer(nil)
+  RefreshPropagation
 end;
 
 procedure TfrmPropagation.tmrPropTimer(Sender: TObject);
@@ -253,6 +233,8 @@ procedure TfrmPropagation.SyncProp;
 var
   dk : Double;
 begin
+  imgProp.Visible := False;
+
   lblInfo.Caption    := time;
   lblAbIndex.Caption := ab;
   lblSA.Caption      := sa;
@@ -273,6 +255,28 @@ begin
     lblK3hour.Font.Color := getKindexColor(dk)
   else
     lblK3hour.Font.Color := clBlack
+end;
+
+procedure TfrmPropagation.SyncPropImage;
+begin
+  try try
+    imgProp.Visible := True;
+    imgProp.Picture.LoadFromFile(dmData.HomeDir + 'propagation.gif');
+    Height := imgProp.Picture.Height;
+    Width  := imgProp.Picture.Width;
+    imgProp.Align := alClient
+  except
+    on E : Exception do
+      Writeln(E.Message)
+  end
+  finally
+  end
+end;
+
+procedure TfrmPropagation.RefreshPropagation;
+begin
+  Writeln('Refresing');
+  tmrPropTimer(nil)
 end;
 
 initialization

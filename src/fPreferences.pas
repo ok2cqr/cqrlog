@@ -1110,7 +1110,7 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1700,6 +1700,9 @@ begin
       dmData.EnableOnlineLogSupport
     end
   end;
+
+  if frmPropagation.Showing then
+    frmPropagation.RefreshPropagation;
 
   frmTRXControl.rbRadio1.Caption := edtRadio1.Text;
   frmTRXControl.rbRadio2.Caption := edtRadio2.Text;
