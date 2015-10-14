@@ -8,17 +8,17 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ClientWidth'#3#232#3#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7#10
   +'FormCreate'#6'OnShow'#7#8'FormShow'#8'Position'#7#16'poMainFormCenter'#10'L'
   +'CLVersion'#6#7'1.2.4.0'#0#12'TPageControl'#13'pgPreferences'#4'Left'#3#160#0
-  +#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#240#2#10'ActivePage'#7#12'tabDXClus'
-  +'ter'#5'Align'#7#8'alClient'#7'Anchors'#11#6'akLeft'#7'akRight'#8'akBottom'#0
-  +#8'TabIndex'#2#10#8'TabOrder'#2#0#8'OnChange'#7#19'pgPreferencesChange'#0#9
-  +'TTabSheet'#10'tabProgram'#7'Caption'#6#7'Program'#12'ClientHeight'#3'j'#2#11
-  +'ClientWidth'#3#236#2#0#6'TLabel'#7'Label60'#4'Left'#3'l'#1#6'Height'#2#17#3
-  +'Top'#2'['#5'Width'#3#140#0#7'Caption'#6#19'Default web browser'#11'ParentCo'
-  +'lor'#8#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#14#6'Height'#3#137#0#3'Top'#2
-  +#3#5'Width'#3'U'#1#7'Caption'#6#21' Internet connection '#12'ClientHeight'#2
-  +'v'#11'ClientWidth'#3'Q'#1#8'TabOrder'#2#0#0#6'TLabel'#7'Label12'#4'Left'#2#7
-  +#6'Height'#2#17#3'Top'#2#24#5'Width'#2'+'#7'Caption'#6#6'Proxy:'#11'ParentCo'
-  +'lor'#8#0#0#6'TLabel'#7'Label13'#4'Left'#3#192#0#6'Height'#2#17#3'Top'#2#24#5
+  +#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#240#2#10'ActivePage'#7#8'tabCondx'#5
+  +'Align'#7#8'alClient'#7'Anchors'#11#6'akLeft'#7'akRight'#8'akBottom'#0#8'Tab'
+  +'Index'#2#26#8'TabOrder'#2#0#8'OnChange'#7#19'pgPreferencesChange'#0#9'TTabS'
+  +'heet'#10'tabProgram'#7'Caption'#6#7'Program'#12'ClientHeight'#3'j'#2#11'Cli'
+  +'entWidth'#3#236#2#0#6'TLabel'#7'Label60'#4'Left'#3'l'#1#6'Height'#2#17#3'To'
+  +'p'#2'['#5'Width'#3#140#0#7'Caption'#6#19'Default web browser'#11'ParentColo'
+  +'r'#8#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#14#6'Height'#3#137#0#3'Top'#2#3
+  +#5'Width'#3'U'#1#7'Caption'#6#21' Internet connection '#12'ClientHeight'#2'v'
+  +#11'ClientWidth'#3'Q'#1#8'TabOrder'#2#0#0#6'TLabel'#7'Label12'#4'Left'#2#7#6
+  +'Height'#2#17#3'Top'#2#24#5'Width'#2'+'#7'Caption'#6#6'Proxy:'#11'ParentColo'
+  +'r'#8#0#0#6'TLabel'#7'Label13'#4'Left'#3#192#0#6'Height'#2#17#3'Top'#2#24#5
   +'Width'#2'"'#7'Caption'#6#5'Port:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label14'
   +#4'Left'#2#7#6'Height'#2#17#3'Top'#2'E'#5'Width'#2'#'#7'Caption'#6#5'User:'
   +#11'ParentColor'#8#0#0#6'TLabel'#7'Label19'#4'Left'#3#160#0#6'Height'#2#17#3
@@ -1664,26 +1664,44 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#5'Width'#3#196#1#7'Caption'#6'?Close the "Status of log upload" window afte'
   +'r successful upload'#8'TabOrder'#2#3#0#0#9'TCheckBox'#13'chkIgnoreLoTW'#4'L'
   +'eft'#2#13#6'Height'#2#24#3'Top'#3'@'#2#5'Width'#3#159#1#7'Caption'#6'5Ignor'
-  +'e changes caused by LoTW/eQSL upload or download'#8'TabOrder'#2#4#0#0#0#0#6
-  ,'TPanel'#6'Panel1'#4'Left'#3#144#3#6'Height'#3#137#2#3'Top'#2#0#5'Width'#2'X'
-  +#5'Align'#7#7'alRight'#12'ClientHeight'#3#137#2#11'ClientWidth'#2'X'#8'TabOr'
-  +'der'#2#1#0#7'TButton'#5'btnOK'#4'Left'#2#8#6'Height'#2#25#3'Top'#2' '#5'Wid'
-  +'th'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#2'OK'#7'OnClick'#7
-  +#10'btnOKClick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnCancel'#4'Left'#2#8#6'He'
-  +'ight'#2#25#3'Top'#2'H'#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#6'Ca'
-  +'ncel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#1#0#0#7'TB'
-  +'utton'#7'btnHelp'#4'Left'#2#8#6'Height'#2#25#3'Top'#3#160#0#5'Width'#2'K'#25
-  +'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4'Help'#7'OnClick'#7#12'btnHelp'
-  +'Click'#8'TabOrder'#2#2#0#0#0#8'TListBox'#13'lbPreferences'#4'Left'#2#0#6'He'
-  +'ight'#3#137#2#3'Top'#2#0#5'Width'#3#160#0#5'Align'#7#6'alLeft'#13'Items.Str'
-  +'ings'#1#6#7'Program'#6#7'Station'#6#7'New QSO'#6#15'Visible columns'#6#5'Ba'
-  +'nds'#6#11'TRX control'#6#11'ROT control'#6#5'Modes'#6#12'QTH profiles'#6#6
+  +'e changes caused by LoTW/eQSL upload or download'#8'TabOrder'#2#4#0#0#0#9'T'
+  ,'TabSheet'#8'tabCondx'#7'Caption'#6#11'Propagation'#12'ClientHeight'#3'j'#2
+  +#11'ClientWidth'#3#236#2#0#12'TRadioButton'#14'rbCondxAsImage'#4'Left'#2#25#6
+  +'Height'#2#24#3'Top'#2#16#5'Width'#3#211#0#7'Caption'#6#25'Show propagation '
+  +'as image'#7'Checked'#9#8'TabOrder'#2#0#0#0#5'TEdit'#16'edtCondxImageUrl'#4
+  +'Left'#2'H'#6'Height'#2#27#3'Top'#2'H'#5'Width'#3#16#2#8'TabOrder'#2#1#4'Tex'
+  +'t'#6#16'edtCondxImageUrl'#0#0#6'TLabel'#8'Label204'#4'Left'#2'J'#6'Height'#2
+  +#17#3'Top'#2'0'#5'Width'#3#135#0#7'Caption'#6#17'Downoad data from'#11'Paren'
+  +'tColor'#8#0#0#12'TRadioButton'#13'rbCondxAsText'#4'Left'#2#25#6'Height'#2#24
+  +#3'Top'#3#152#0#5'Width'#3#195#0#7'Caption'#6#24'Show as text information'#8
+  +'TabOrder'#2#2#0#0#9'TCheckBox'#18'chkShowCondxValues'#4'Left'#2'8'#6'Height'
+  +#2#24#3'Top'#3#185#0#5'Width'#3#195#0#7'Caption'#6#25'Show A, K, SSN, FOF2 e'
+  +'tc.'#8'TabOrder'#2#3#0#0#9'TCheckBox'#14'chkCondxCalcHF'#4'Left'#2'8'#6'Hei'
+  +'ght'#2#24#3'Top'#3#217#0#5'Width'#3'('#1#7'Caption'#6'''Show calculated pre'
+  +'diction for HF bands'#8'TabOrder'#2#4#0#0#9'TCheckBox'#15'chkCondxCalcVHF'#4
+  +'Left'#2'8'#6'Height'#2#24#3'Top'#3#249#0#5'Width'#3'2'#1#7'Caption'#6'(Show'
+  +' calculated prediction for VHF bands'#8'TabOrder'#2#5#0#0#6'TLabel'#8'Label'
+  +'205'#4'Left'#2'H'#6'Height'#2#17#3'Top'#2'h'#5'Width'#3#156#1#7'Caption'#6
+  +':Look at http://www.hamqsl.com/solar.html for more variants'#11'ParentColor'
+  +#8#0#0#0#0#6'TPanel'#6'Panel1'#4'Left'#3#144#3#6'Height'#3#137#2#3'Top'#2#0#5
+  +'Width'#2'X'#5'Align'#7#7'alRight'#12'ClientHeight'#3#137#2#11'ClientWidth'#2
+  +'X'#8'TabOrder'#2#1#0#7'TButton'#5'btnOK'#4'Left'#2#8#6'Height'#2#25#3'Top'#2
+  +' '#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#2'OK'#7'OnC'
+  +'lick'#7#10'btnOKClick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnCancel'#4'Left'#2
+  +#8#6'Height'#2#25#3'Top'#2'H'#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4
+  +#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#1#0#0#7
+  +'TButton'#7'btnHelp'#4'Left'#2#8#6'Height'#2#25#3'Top'#3#160#0#5'Width'#2'K'
+  +#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4'Help'#7'OnClick'#7#12'btnH'
+  +'elpClick'#8'TabOrder'#2#2#0#0#0#8'TListBox'#13'lbPreferences'#4'Left'#2#0#6
+  +'Height'#3#137#2#3'Top'#2#0#5'Width'#3#160#0#5'Align'#7#6'alLeft'#13'Items.S'
+  +'trings'#1#6#7'Program'#6#7'Station'#6#7'New QSO'#6#15'Visible columns'#6#5
+  +'Bands'#6#11'TRX control'#6#11'ROT control'#6#5'Modes'#6#12'QTH profiles'#6#6
   +'Export'#6#9'DXCluster'#6#5'Fonts'#6#14'WAZ, ITU zones'#6#4'IOTA'#6#10'Membe'
   +'rship'#6#7'Bandmap'#6#15'xplanet support'#6#17'Zip code tracking'#6#17'LoTW'
   +'/eQSL support'#6#12'CW interface'#6#21'fldigi/wsjt interface'#6#11'Auto bac'
   +'kup'#6#16'External viewers'#6#16'Callbook support'#6#11'RBN support'#6#17'O'
-  +'nline log upload'#0#10'ItemHeight'#2#23#7'OnClick'#7#18'lbPreferencesClick'
-  +#11'ScrollWidth'#3#158#0#8'TabOrder'#2#2#0#0#11'TFontDialog'#7'dlgFont'#11'M'
-  +'inFontSize'#2#0#11'MaxFontSize'#2#0#4'left'#3#168#3#3'top'#3#8#1#0#0#11'TOp'
-  +'enDialog'#7'dlgOpen'#4'left'#3#168#3#3'top'#3#208#0#0#0#0
+  +'nline log upload'#6#11'Propagation'#0#10'ItemHeight'#2#23#7'OnClick'#7#18'l'
+  +'bPreferencesClick'#11'ScrollWidth'#3#158#0#8'TabOrder'#2#2#0#0#11'TFontDial'
+  +'og'#7'dlgFont'#11'MinFontSize'#2#0#11'MaxFontSize'#2#0#4'left'#3#168#3#3'to'
+  +'p'#3#8#1#0#0#11'TOpenDialog'#7'dlgOpen'#4'left'#3#168#3#3'top'#3#208#0#0#0#0
 ]);

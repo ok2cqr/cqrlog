@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabDXCluster
+    ActivePage = tabCondx
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 10
+    TabIndex = 26
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -7065,6 +7065,76 @@ object frmPreferences: TfrmPreferences
         TabOrder = 4
       end
     end
+    object tabCondx: TTabSheet
+      Caption = 'Propagation'
+      ClientHeight = 618
+      ClientWidth = 748
+      object rbCondxAsImage: TRadioButton
+        Left = 25
+        Height = 24
+        Top = 16
+        Width = 211
+        Caption = 'Show propagation as image'
+        Checked = True
+        TabOrder = 0
+      end
+      object edtCondxImageUrl: TEdit
+        Left = 72
+        Height = 27
+        Top = 72
+        Width = 528
+        TabOrder = 1
+        Text = 'edtCondxImageUrl'
+      end
+      object Label204: TLabel
+        Left = 74
+        Height = 17
+        Top = 48
+        Width = 135
+        Caption = 'Downoad data from'
+        ParentColor = False
+      end
+      object rbCondxAsText: TRadioButton
+        Left = 25
+        Height = 24
+        Top = 152
+        Width = 195
+        Caption = 'Show as text information'
+        TabOrder = 2
+      end
+      object chkShowCondxValues: TCheckBox
+        Left = 56
+        Height = 24
+        Top = 185
+        Width = 195
+        Caption = 'Show A, K, SSN, FOF2 etc.'
+        TabOrder = 3
+      end
+      object chkCondxCalcHF: TCheckBox
+        Left = 56
+        Height = 24
+        Top = 217
+        Width = 296
+        Caption = 'Show calculated prediction for HF bands'
+        TabOrder = 4
+      end
+      object chkCondxCalcVHF: TCheckBox
+        Left = 56
+        Height = 24
+        Top = 249
+        Width = 306
+        Caption = 'Show calculated prediction for VHF bands'
+        TabOrder = 5
+      end
+      object Label205: TLabel
+        Left = 72
+        Height = 17
+        Top = 104
+        Width = 412
+        Caption = 'Look at http://www.hamqsl.com/solar.html for more variants'
+        ParentColor = False
+      end
+    end
   end
   object Panel1: TPanel
     Left = 912
@@ -7140,6 +7210,7 @@ object frmPreferences: TfrmPreferences
       'Callbook support'
       'RBN support'
       'Online log upload'
+      'Propagation'
     )
     ItemHeight = 23
     OnClick = lbPreferencesClick

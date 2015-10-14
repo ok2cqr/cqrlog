@@ -116,6 +116,9 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkShowCondxValues: TCheckBox;
+    chkCondxCalcHF: TCheckBox;
+    chkCondxCalcVHF: TCheckBox;
     chkCapFirstQTHLetter: TCheckBox;
     chkIgnoreLoTW: TCheckBox;
     chkExpCommet: TCheckBox;
@@ -497,6 +500,7 @@ type
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
+    edtCondxImageUrl: TEdit;
     edtBackupPath1: TEdit;
     edtWsjtDefaultFreq: TEdit;
     edtK3NGSerSpeed: TEdit;
@@ -825,6 +829,8 @@ type
     Label201: TLabel;
     Label202: TLabel;
     Label203: TLabel;
+    Label204: TLabel;
+    Label205: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -936,6 +942,8 @@ type
     pgPreferences: TPageControl;
     Panel1: TPanel;
     pgROTControl: TPageControl;
+    rbCondxAsText: TRadioButton;
+    rbCondxAsImage: TRadioButton;
     rbHamQTH: TRadioButton;
     rbQRZ: TRadioButton;
     rgBackupType: TRadioGroup;
@@ -972,6 +980,7 @@ type
     TabROTcontrol: TTabSheet;
     tabRBN : TTabSheet;
     tabOnlineLog: TTabSheet;
+    tabCondx: TTabSheet;
     tabTRX2: TTabSheet;
     tabTRX1: TTabSheet;
     tabRot1: TTabSheet;
@@ -1608,6 +1617,13 @@ begin
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
   cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreLoTWeQSL',chkIgnoreLoTW.Checked);
+
+  cqrini.WriteString('prop','Url',edtCondxImageUrl.Text);
+  cqrini.WriteBool('prop','AsImage',rbCondxAsImage.Checked);
+  cqrini.WriteBool('prop','AsText',rbCondxAsText.Checked);
+  cqrini.WriteBool('prop','Values',chkShowCondxValues.Checked);
+  cqrini.WriteBool('prop','CalcHF',chkCondxCalcHF.Checked);
+  cqrini.WriteBool('prop','CalcVHF',chkCondxCalcVHF.Checked);
 
   if WinKeyerChanged then
   begin
@@ -2997,6 +3013,13 @@ begin
   chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
   chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
   chkHrUpEnabledChange(nil);
+
+  edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');
+  rbCondxAsImage.Checked     := cqrini.ReadBool('prop','AsImage',True);
+  rbCondxAsText.Checked      := cqrini.ReadBool('prop','AsText',False);
+  chkShowCondxValues.Checked := cqrini.ReadBool('prop','Values',True);
+  chkCondxCalcHF.Checked     := cqrini.ReadBool('prop','CalcHF',True);
+  chkCondxCalcVHF.Checked    := cqrini.ReadBool('prop','CalcVHF',True);
 
   wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked;
 
