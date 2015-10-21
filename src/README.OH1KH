@@ -317,6 +317,9 @@ FIXED
 - Propagation2: small bug in remembering was window open or not on last session
   FIXED
 
+- Unproperly formatted CQ (ex: CQ USA CA1LL should be: CQ CA1LL USA) crashed Wsjtx-CQ-monitor.
+  FIXED
+
  Issues to resolve:
 ===================
 

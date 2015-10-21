@@ -257,19 +257,37 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          msgCQ2 := NextElement(Message,index);
          if length(msgCQ2)>2 then   // if longer than 2 may be call, otherwise is addition DX AS EU etc.
           Begin
-            i:=1;
-            while not ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) and (i <= length(msgCQ2)) do inc(i);
-            if (length(msgCQ2)> i)  then
-               Begin //while dropped before end  (has number) may be real call
+            i:=0;
+            repeat
+            //while not ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) and (i <= length(msgCQ2)) do inc(i);
+             begin
+             inc(i);
+              if dmData.DebugLevel>=1 then Writeln('Count now:', i,' lenght is:',length(msgCQ2));
+             end;
+            until (i > length(msgCQ2)) or ((msgCQ2[i]>='0') and (msgCQ2[i]<='9'));
+          if (length(msgCQ2)> i)  then
+               Begin //dropped before end  (has number) it may be real call
                 msgCall := msgCQ2;
                 if dmData.DebugLevel>=1 then Writeln('msgCQ2>2(lrs+num) is Call-','Result:',msgCall,' index of msg:',index);
-               end;
+               end
+              else
+               Begin //was shortie, so next must be call
+                if dmData.DebugLevel>=1 then  Begin
+                                               Writeln('CQ2 had no number.');
+                                               Write('Call-');
+                                              end;
+                msgCall := NextElement(Message,index);
+                end;
           end
          else
           Begin //was shortie, so next must be call
-            if dmData.DebugLevel>=1 then Write('CQ2 was letters=<2. Call-');
+            if dmData.DebugLevel>=1 then  Begin
+                                               Writeln('CQ2 length=<2.');
+                                               Write('Call-');
+                                              end;
                 msgCall := NextElement(Message,index);
           end;
+
          //so we should have time, mode and call by now. That reamains locator, if exists
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement(Message,index);
