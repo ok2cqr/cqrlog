@@ -139,7 +139,41 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - Removed product number from splash & about. We do not need that for anything.
 
- Issues resolved:
+- Started with simple contest support.
+
+  Note: This is NOT a contest logging add-on!!! BE SURE TO BACKUP YOUR LOGS BEFORE TESTING !!!
+
+	It is ment to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
+  NewQso has new fieds:
+	stx field(sent qso nr), srx field(received qso nr), inc checkbox(for auto incerement of sent qso nr) and
+	TabOrder(norm,vhf,contest) 
+           With this you can effect how TAB-key moves cursor between fields. Test it by selecting one of the three and
+	   then click cursor to callsign field and start pressing TAB-key. Note how fied order goes with different
+           tabOrder settings. Remember that pressing ENTER key at any field saves qso with existing values.
+	   So contest qso goes like: type callsign->press TAB->type contest rxnumber->press ENTER.
+
+	If you click cursor to stx (my contest nr) field and type either a number or number with leading zero(es)
+	TabOrder = Contest will be selected automaticly at time you press ENTER or click Save QSO button.
+	
+	If there is(are) leading zero(es) in stx number they are added there after increasing number (if INC checked)
+	so that the length of number is same as it was. 001->002--->099---->999.
+
+	Uncheck Inc checkbox if you need stabile number (like zone) to your contest report. 
+	 
+	Contest numbers are saved in RST fields separated with underscore. 599_001
+	
+	RECOMMENDATION: Make new log for each contest !!
+
+   Things TO DO for contest support:
+  ==================================
+
+	- make ADIF export that splits RSTs to different fields RST and stx and srx like ADIF standard says.
+	- make ADIF import that can join RST and srx stx with undersocre to RST fieds (for restoring backups)
+	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands)
+	- make RST + stx to go out via CW macro if contest mode is on. (not sure what happens now!)
+	- fix all errors!
+
+Issues resolved:
 ===================
 
 - when in remotemodewsjtx: open qso list, edit qso, causes focus error (does fldigi the same? must test)
@@ -315,9 +349,6 @@ FIXED
   HOPE IT IS FIXED NOW
 
 - Propagation2: small bug in remembering was window open or not on last session
-  FIXED
-
-- Unproperly formatted CQ (ex: CQ USA CA1LL should be: CQ CA1LL USA) crashed Wsjtx-CQ-monitor.
   FIXED
 
  Issues to resolve:

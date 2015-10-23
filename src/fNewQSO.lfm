@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 215
+  Left = 256
   Height = 569
-  Top = 0
+  Top = 17
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -414,9 +414,9 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblCfmLoTW: TLabel
-          Left = 12
+          Left = 8
           Height = 15
-          Top = 199
+          Top = 194
           Width = 153
           Caption = 'QSO confirmed by LoTW'
           Font.Color = clRed
@@ -425,9 +425,9 @@ object frmNewQSO: TfrmNewQSO
           Visible = False
         end
         object lblQSLRcvdDate: TLabel
-          Left = 95
+          Left = 91
           Height = 15
-          Top = 226
+          Top = 224
           Width = 81
           Caption = 'QSL rcvd on '
           Font.Color = clRed
@@ -711,7 +711,7 @@ object frmNewQSO: TfrmNewQSO
           OnKeyDown = mCommentKeyDown
           OnKeyUp = mCommentKeyUp
           ScrollBars = ssAutoBoth
-          TabOrder = 25
+          TabOrder = 26
         end
         object edtQTH: TEdit
           Left = 112
@@ -741,7 +741,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 444
           Height = 27
           Top = 24
-          Width = 90
+          Width = 50
           AutoSize = False
           OnEnter = edtMyRSTEnter
           OnExit = edtMyRSTExit
@@ -752,7 +752,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 343
           Height = 27
           Top = 24
-          Width = 90
+          Width = 50
           AutoSize = False
           OnEnter = edtHisRSTEnter
           OnExit = edtHisRSTExit
@@ -978,16 +978,16 @@ object frmNewQSO: TfrmNewQSO
           Left = 16
           Height = 24
           Top = 220
-          Width = 80
+          Width = 68
           BevelOuter = bvNone
           ClientHeight = 24
-          ClientWidth = 80
-          TabOrder = 26
+          ClientWidth = 68
+          TabOrder = 27
           object cbOffline: TCheckBox
             Left = -3
             Height = 23
             Top = 4
-            Width = 66
+            Width = 53
             Caption = 'Offline'
             OnChange = cbOfflineChange
             TabOrder = 0
@@ -1084,7 +1084,7 @@ object frmNewQSO: TfrmNewQSO
           Checked = True
           OnChange = chkAutoModeChange
           State = cbChecked
-          TabOrder = 27
+          TabOrder = 28
         end
         object sbtnHamQTH: TSpeedButton
           Left = 509
@@ -1221,6 +1221,60 @@ object frmNewQSO: TfrmNewQSO
           }
           ShowHint = True
           ParentShowHint = False
+        end
+        object edtHisRSTstx: TEdit
+          Left = 392
+          Height = 27
+          Top = 24
+          Width = 50
+          AutoSize = False
+          TabOrder = 29
+        end
+        object edtMyRSTsrx: TEdit
+          Left = 493
+          Height = 27
+          Top = 24
+          Width = 50
+          AutoSize = False
+          TabOrder = 30
+        end
+        object chkAutoIncStx: TCheckBox
+          Left = 400
+          Height = 23
+          Top = 4
+          Width = 44
+          Caption = 'inc'
+          Checked = True
+          OnChange = chkAutoModeChange
+          State = cbChecked
+          TabOrder = 31
+        end
+        object lblTabOrder: TLabel
+          Left = 184
+          Height = 15
+          Top = 194
+          Width = 57
+          Caption = 'TabOrder'
+          ParentColor = False
+          ParentFont = False
+        end
+        object cmbTabOrd: TComboBox
+          Left = 184
+          Height = 25
+          Top = 217
+          Width = 60
+          ItemHeight = 0
+          ItemIndex = 0
+          Items.Strings = (
+            'Norm'
+            'Vhf'
+            'Cont'
+          )
+          OnChange = cmbTabOrdChange
+          ParentShowHint = False
+          Style = csDropDownList
+          TabOrder = 25
+          Text = 'Norm'
         end
       end
       object GroupBox2: TGroupBox

@@ -14,10 +14,9 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="9"/>
-      <BuildNr Value="2107"/>
+      <BuildNr Value="2108"/>
       <StringTable ProductName="cqrlog" ProductVersion="1.9.0"/>
     </VersionInfo>
     <BuildModes Count="1">

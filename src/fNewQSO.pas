@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
-  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils;
+  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,strutils;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
@@ -72,7 +72,12 @@ type
     acUploadToHamQTH: TAction;
     acTune : TAction;
     chkAutoMode: TCheckBox;
+    chkAutoIncStx: TCheckBox;
+    cmbTabOrd: TComboBox;
     dbgrdQSOBefore: TDBGrid;
+    edtHisRSTstx: TEdit;
+    edtMyRSTsrx: TEdit;
+    lblTabOrder: TLabel;
     lblQSLRcvdDate: TLabel;
     MenuItem32 : TMenuItem;
     MenuItem33 : TMenuItem;
@@ -337,6 +342,7 @@ type
     procedure cmbIOTAEnter(Sender: TObject);
     procedure cmbQSL_REnter(Sender: TObject);
     procedure cmbQSL_SEnter(Sender: TObject);
+    procedure cmbTabOrdChange(Sender: TObject);
     procedure dbgrdQSOBeforeColumnSized(Sender: TObject);
     procedure edtAwardEnter(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
@@ -525,6 +531,18 @@ type
     WhatUpNext : TWhereToUpload;
     UploadAll  : Boolean;
 
+    ContestMode    :Boolean;
+    RSTstx         :string; //contest mode serial numbers store
+    RSTsrx         :string;
+    TabCurOrd      :integer; //this is same as cmbTabOrd.ItemIndex, but saved over "ClearAll".
+Const
+    TabJmpOrd      : array [0..2,1..7] of integer =( //Jump list of fieds in array number order
+                                                     //nr>10 means TabStop=True else false:
+                                                     //RSTs,stx,RSTr,srx,Name,Qth,Grid
+                                                       (11  ,02 ,13  ,04 ,15  ,16 ,17),   //basic (plain), no serial nrs
+                                                       (11  ,02 ,13  ,04 ,16  ,17 ,15),   //VUShf Grid after RST, no serial nr
+                                                       (14  ,15 ,13  ,11 ,06  ,07 ,12));  //Contest, no name, no qth
+
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
     procedure ChangeReports;
@@ -559,6 +577,7 @@ type
 
     procedure DisWsjtxRemote;        //shut down wsjtx-mode
     procedure DisFldigiRemote;       //shut down fldigi-mode
+    procedure MkTabOrd(OrdArr:integer);  //set field tabulation order (0=order,1=VUShf,2=Contest);
 
   public
     QTHfromCb   : Boolean;
@@ -574,6 +593,7 @@ type
     WsjtxMode,
     WsjtxBand : String;
     WsjtxRememberAutoMode :Boolean;
+
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -595,6 +615,7 @@ type
     procedure UploadAllQSOOnline;
     procedure ReturnToNewQSO;
     procedure InitializeCW;
+    procedure ChkSerialNrUpd;
   end;
 
   type
@@ -641,7 +662,8 @@ var
   MinTRXControl : Boolean;
   MinNewQSO     : Boolean;
   MinQSODetails : Boolean;
-  
+
+
 implementation
 
 { TfrmNewQSO }
@@ -652,6 +674,76 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fMoniWsjtx, fWkd1,fRemind,fImgView;
+
+procedure    TfrmNewQSO.MkTabOrd(OrdArr:integer);
+
+Begin
+ case OrdArr of
+
+   0,1,2: begin
+            if dmData.DebugLevel>=1 then Writeln('TabOrdItemIdx is:', cmbTabOrd.ItemIndex,' OrdArr is:',OrdArr);
+            cmbTabOrd.ItemIndex:=OrdArr;
+            if dmData.DebugLevel>=1 then Writeln('TabOrdItemIdx now set:', cmbTabOrd.ItemIndex);
+
+            edtHisRST.TabOrder           :=  TabJmpOrd[OrdArr,1] mod 10;
+            edtHisRST.TabStop            :=  TabJmpOrd[OrdArr,1] > 10;
+            edtHisRSTstx.TabOrder        :=  TabJmpOrd[OrdArr,2] mod 10;
+            edtHisRSTstx.TabStop         :=  TabJmpOrd[OrdArr,2] > 10;
+            edtMyRST.TabOrder            :=  TabJmpOrd[OrdArr,3] mod 10;
+            edtMyRST.TabStop             :=  TabJmpOrd[OrdArr,3] > 10;
+            edtMyRSTsrx.TabOrder         :=  TabJmpOrd[OrdArr,4] mod 10;
+            edtMyRSTsrx.TabStop          :=  TabJmpOrd[OrdArr,4] > 10;
+            if dmData.DebugLevel>=1 then Writeln('RSTsrx set:', TabJmpOrd[OrdArr,4] mod 10,' ',TabJmpOrd[OrdArr,4] > 10);
+            edtName.TabOrder             :=  TabJmpOrd[OrdArr,5] mod 10;
+            edtName.TabStop              :=  TabJmpOrd[OrdArr,5] > 10;
+            edtQTH.TabOrder              :=  TabJmpOrd[OrdArr,6] mod 10;
+            edtQTH.TabStop               :=  TabJmpOrd[OrdArr,6] > 10;
+            edtGrid.TabOrder             :=  TabJmpOrd[OrdArr,7] mod 10;
+            edtGrid.TabStop              :=  TabJmpOrd[OrdArr,7] > 10;
+            TabCurOrd                    :=  OrdArr; //save what is set
+          end;
+ end;
+
+end;
+
+procedure    TfrmNewQSO.ChkSerialNrUpd;   //is contest mode & do we need serial nr inc
+var
+   stxLen,
+   stxInt     : integer;
+   lZero      : boolean;
+   stx        : string;
+
+   Begin
+      ContestMode := trim(edtHisRSTstx.Text) <> '';  //there is some text so it is contest mode
+      if ContestMode then
+       Begin
+          stx :=  trim(edtHisRSTstx.Text);
+         stxlen:= length(stx);
+         if chkAutoIncStx.Checked then //inc of number requested
+          Begin
+            lZero:= stx[1] = '0'; //do we have leading zero(es)
+            if dmData.DebugLevel>=1 then Writeln('Need inc number:',stx,' Has leading zero:',lZero,' len:',stxlen);
+            if TryStrToInt(stx,stxint) then
+              Begin
+                 if dmData.DebugLevel>=1 then Writeln('Integer is:',stxInt);
+                 inc(stxInt);
+                 stx :=IntToStr(stxInt);
+                 if dmData.DebugLevel>=1 then Writeln('New number is:',stx);
+                 if (length(stx) < stxLen ) and lZero then //pad with zero(es)
+                    Begin
+                      //AddChar('0',stx,stxLen); // why does this NOT work???
+                      While length(stx) < stxlen do
+                                          stx:= '0'+stx;
+                      if dmData.DebugLevel>=1 then Writeln('After leading zero(es) added:',stx);
+                    end;
+              end;
+          end;
+         RSTstx:=stx;
+         RSTsrx:= edtMyRSTsrx.Text;
+       end;
+   if dmData.DebugLevel>=1 then Writeln('Contest mode is: ',ContestMode);
+
+end;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1045,6 +1137,7 @@ begin
   end;
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertFreq(cmbFreq);
+  cmbTabOrd.ItemIndex := TabCurOrd;
 
   if cbOffline.Checked then
   begin
@@ -2550,7 +2643,11 @@ begin
   old_t_mode := '';
   old_prof   := -1;
   WhatUpNext := upHamQTH;
-  UploadAll  := False
+  UploadAll  := False;
+  RSTstx :='';
+  RSTsrx :='';
+  ContestMode := False;
+  TabCurOrd :=0;
 end;
 
 procedure TfrmNewQSO.btnSaveClick(Sender: TObject);
@@ -2631,7 +2728,7 @@ begin
 
   old_prof := cmbProfiles.ItemIndex;
   if fEditQSO then
-  begin
+   begin
     if fromNewQSO then
       id := dmData.qQSOBefore.FieldByName('id_cqrlog_main').AsInteger
     else
@@ -2672,8 +2769,9 @@ begin
       dmData.RemoveeQSLUploadedFlag(id);
       dmData.RemoveLoTWUploadedFlag(id)
     end
-  end
-  else begin
+   end     //end edit sqo
+  else
+   begin
     if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked) then
       if edtCall.Focused then
       begin
@@ -2704,13 +2802,29 @@ begin
       edtITU.Text := '0';
     if edtWAZ.Text = '' then
       edtWAZ.Text := '0';
+
     if not cbOffline.Checked then
-    begin
+     begin
       if cqrini.ReadBool('BandMap','AddAfterQSO',False) then
         acAddToBandMap.Execute;
       if Delete then
         frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
-    end;
+     end;
+
+    ChkSerialNrUpd;  //contest mode & need inc number??
+
+    if ContestMode then
+     Begin
+       edtHisRST.Text :=  edtHisRST.Text +'_'+RSTstx;
+       edtMyRST.Text  :=  edtMyRST.Text  +'_'+RSTsrx;
+       MkTabOrd(2);  //set tabulation order as "contest"
+     end
+    else
+       Begin
+        if dmData.DebugLevel>=1 then Writeln('No contest TabOrd:',cmbTabOrd.ItemIndex);
+        MkTabOrd(cmbTabOrd.ItemIndex);
+       end;
+
     dmData.SaveQSO(date,
                    edtStartTime.Text,
                    edtEndTime.Text,
@@ -2744,13 +2858,14 @@ begin
                    frmQSODetails.ClubNR3,
                    frmQSODetails.ClubNR4,
                    frmQSODetails.ClubNR5)
-  end;
+   end;   //end NOT edit qso
+
   if fEditQSO and (not fromNewQSO) then
-  begin
+   begin
     dmData.RefreshMainDatabase(id)
-  end;
+   end;
   if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
-    UnsetEditLabel;
+                                                                           UnsetEditLabel;
   dmData.qQSOBefore.Close;
   fEditQSO := False;
   edtCall.Text := ''; //calls Clear.All
@@ -2759,21 +2874,23 @@ begin
   old_cmode := '';
 
   if cqrini.ReadBool('NewQSO','ClearRIT',False) then
-    frmTRXControl.ClearRIT;
+                                                    frmTRXControl.ClearRIT;
 
   if (cqrini.ReadBool('NewQSO','RefreshAfterSave',False) and frmMain.Showing) then
-    frmMain.acRefresh.Execute;
+                                                                              frmMain.acRefresh.Execute;
   if ShowMain and frmMain.Showing then
-  begin
+   begin
     frmMain.BringToFront;
     frmMain.BringToFront;
     frmMain.dbgrdMain.SetFocus
-  end
+   end
   else
     if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjtx.Checked ) then
-     edtCall.SetFocus;
+                                                                         edtCall.SetFocus;
   UploadAllQSOOnline;
   frmWorked_grids.UpdateMap;
+  if ContestMode then
+                     edtHisRSTstx.Text := RSTstx;
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
@@ -4066,6 +4183,11 @@ end;
 procedure TfrmNewQSO.cmbQSL_SEnter(Sender: TObject);
 begin
   cmbQSL_S.SelectAll
+end;
+
+procedure TfrmNewQSO.cmbTabOrdChange(Sender: TObject);
+begin
+  MkTabOrd(cmbTabOrd.ItemIndex);
 end;
 
 procedure TfrmNewQSO.dbgrdQSOBeforeColumnSized(Sender: TObject);
