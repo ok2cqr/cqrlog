@@ -1415,10 +1415,13 @@ begin
 end;
 
 procedure TdmData.tmrDBPingTimer(Sender: TObject);
+{
 var
   pq : TSQLQuery;
   tq : TSQLTransaction;
+}
 begin
+{
   pq := TSQLQuery.Create(nil);
   tq := TSQLTransaction.Create(nil);
   try
@@ -1447,6 +1450,7 @@ begin
     pq.Free;
     tq.Free
   end
+}
 end;
 
 procedure TdmData.SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
