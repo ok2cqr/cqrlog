@@ -38,6 +38,7 @@ type TRigControl = class
     fVFO         : TVFO;
     RigCommand   : TStringList;
     fRigSendCWR  : Boolean;
+    BadRcvd      : Integer;
 
     function  RigConnected   : Boolean;
     function  StartRigctld   : Boolean;
@@ -113,6 +114,7 @@ begin
   tmrRigPoll.Enabled := False;
   if DebugMode then Writeln('All objects created');
   tmrRigPoll.OnTimer     := @OnRigPollTimer;
+  BadRcvd := 0;
   rcvdFreqMode.OnReceive := @OnReceivedRcvdFreqMode
 end;
 
@@ -363,11 +365,23 @@ begin
       begin
         if Pos('RPRT',a[i]) = 0 then
         begin
+          BadRcvd := 0;
           fMode.mode := a[i];
           if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
             fMode.mode := 'SSB';
           if fMode.mode = 'CWR' then
-            fMode.mode := 'CW';
+            fMode.mode := 'CW'
+        end
+        else begin
+          if BadRcvd>2 then
+          begin
+            fFreq := 0;
+            fVFO := VFOA;
+            fMode.mode := 'SSB';
+            fMode.pass := 2700
+          end
+          else
+            inc(BadRcvd)
         end
       end;
       if (a[i][1] = 'V') then
