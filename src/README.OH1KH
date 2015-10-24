@@ -142,8 +142,9 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - Started with simple contest support.
 
   Note: This is NOT a contest logging add-on!!! BE SURE TO BACKUP YOUR LOGS BEFORE TESTING !!!
+  RECOMMENDATION: Make new log for each contest !!
 
-	It is ment to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
+  It is ment to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
   NewQso has new fieds:
 	stx field(sent qso nr), srx field(received qso nr), inc checkbox(for auto incerement of sent qso nr) and
 	TabOrder(norm,vhf,contest) 
@@ -162,7 +163,11 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 	 
 	Contest numbers are saved in RST fields separated with underscore. 599_001
 	
-	RECOMMENDATION: Make new log for each contest !!
+	Make RST + stx to go out via CW macro DONE. New predefined macros are now: (Build .2109)
+		  %s  - contest qso nr send
+ 		  %ss - contest qso nr send replace N instead of 9, T instead of 0 
+        Use them after %r or %rr to make full contest report.
+ 
 
    Things TO DO for contest support:
   ==================================
@@ -170,7 +175,7 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 	- make ADIF export that splits RSTs to different fields RST and stx and srx like ADIF standard says.
 	- make ADIF import that can join RST and srx stx with undersocre to RST fieds (for restoring backups)
 	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands)
-	- make RST + stx to go out via CW macro if contest mode is on. (not sure what happens now!)
+	
 	- fix all errors!
 
 Issues resolved:

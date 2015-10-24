@@ -1,7 +1,7 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmNewQSO','FORMDATA',[
-  'TPF0'#10'TfrmNewQSO'#9'frmNewQSO'#4'Left'#3#0#1#6'Height'#3'9'#2#3'Top'#2#17
+  'TPF0'#10'TfrmNewQSO'#9'frmNewQSO'#4'Left'#3#169#1#6'Height'#3'9'#2#3'Top'#2#2
   +#5'Width'#3''''#3#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#15'help/index'
   +'.html'#7'Caption'#6#30'New QSO ... (CQRLOG for Linux)'#12'ClientHeight'#3'$'
   +#2#11'ClientWidth'#3''''#3#11'Font.Height'#2#8#9'Icon.Data'#10#194#12#0#0#190
@@ -622,7 +622,7 @@ LazarusResources.Add('TfrmNewQSO','FORMDATA',[
   +#7#15'btnDXCCRefClick'#8'TabOrder'#2#18#0#0#6'TPanel'#10'pnlOffline'#4'Left'
   +#2#16#6'Height'#2#24#3'Top'#3#220#0#5'Width'#2'D'#10'BevelOuter'#7#6'bvNone'
   +#12'ClientHeight'#2#24#11'ClientWidth'#2'D'#8'TabOrder'#2#27#0#9'TCheckBox'#9
-  +'cbOffline'#4'Left'#2#253#6'Height'#2#23#3'Top'#2#4#5'Width'#2'5'#7'Caption'
+  +'cbOffline'#4'Left'#2#253#6'Height'#2#23#3'Top'#2#4#5'Width'#2'B'#7'Caption'
   +#6#7'Offline'#8'OnChange'#7#15'cbOfflineChange'#8'TabOrder'#2#0#0#0#0#7'TBut'
   +'ton'#9'btnQSLMgr'#4'Left'#3#254#1#6'Height'#2#27#3'Top'#3#163#0#5'Width'#2
   +#24#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#3'...'#7'OnClick'#7#14'bt'
@@ -820,7 +820,7 @@ LazarusResources.Add('TfrmNewQSO','FORMDATA',[
   +#9#8'OnChange'#7#17'chkAutoModeChange'#5'State'#7#9'cbChecked'#8'TabOrder'#2
   +#31#0#0#6'TLabel'#11'lblTabOrder'#4'Left'#3#184#0#6'Height'#2#15#3'Top'#3#194
   +#0#5'Width'#2'9'#7'Caption'#6#8'TabOrder'#11'ParentColor'#8#10'ParentFont'#8
-  +#0#0#9'TComboBox'#9'cmbTabOrd'#4'Left'#3#184#0#6'Height'#2#25#3'Top'#3#217#0
+  +#0#0#9'TComboBox'#9'cmbTabOrd'#4'Left'#3#184#0#6'Height'#2#23#3'Top'#3#217#0
   +#5'Width'#2'<'#10'ItemHeight'#2#0#9'ItemIndex'#2#0#13'Items.Strings'#1#6#4'N'
   +'orm'#6#3'Vhf'#6#4'Cont'#0#8'OnChange'#7#15'cmbTabOrdChange'#14'ParentShowHi'
   +'nt'#8#5'Style'#7#14'csDropDownList'#8'TabOrder'#2#25#4'Text'#6#4'Norm'#0#0#0

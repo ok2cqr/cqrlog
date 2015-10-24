@@ -4851,7 +4851,7 @@ begin
       RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
       if Assigned(CWint) then
-        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,lblGreeting.Caption,''));
+        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,edtName.Text,lblGreeting.Caption,''));
     key := 0
   end;
 

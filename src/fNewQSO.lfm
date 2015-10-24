@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 256
+  Left = 425
   Height = 569
-  Top = 17
+  Top = 2
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -987,7 +987,7 @@ object frmNewQSO: TfrmNewQSO
             Left = -3
             Height = 23
             Top = 4
-            Width = 53
+            Width = 66
             Caption = 'Offline'
             OnChange = cbOfflineChange
             TabOrder = 0
@@ -1260,7 +1260,7 @@ object frmNewQSO: TfrmNewQSO
         end
         object cmbTabOrd: TComboBox
           Left = 184
-          Height = 25
+          Height = 23
           Top = 217
           Width = 60
           ItemHeight = 0

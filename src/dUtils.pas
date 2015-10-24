@@ -208,7 +208,7 @@ type
     function  ExtractZipCode(qth : String; Position : Integer) : String;
     function  GetLabelBand(freq : String) : String;
     function  GetAdifBandFromFreq(MHz : string): String;
-    function  GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+    function  GetCWMessage(Key,call,rst_s,stx,HisName,HelloMsg, text : String; QSONR : String = '') : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
     function  CallTrim(call : String) : String;
@@ -2587,7 +2587,7 @@ begin
   Result := LowerCase(GetBandFromFreq(freq));
 end;
 
-function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+function TdmUtils.GetCWMessage(Key,call,rst_s,stx,HisName,HelloMsg, text : String; QSONR : String = '') : String;
 {
  %mc - my callsign
  %mn - my name
@@ -2596,6 +2596,8 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; Q
 
  %r  - rst send
  %rs - rst send sends N instead of 9
+ %s  - contest qso nr send
+ %ss - contest qso nr send replace N instead of 9, T instead of 0
  %n  - name
  %c  - callsign
 
@@ -2610,6 +2612,7 @@ var
   myname : String = '';
   myqth  : String = '';
   rst_sh : String = '';
+  stx_sh : String = '';
 begin
   mycall := cqrini.ReadString('Station', 'Call', '');
   myname := cqrini.ReadString('Station', 'Name', '');
@@ -2620,6 +2623,9 @@ begin
     Result := text;
 
   rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
+  stx_sh := StringReplace(stx,'9','N',[rfReplaceAll, rfIgnoreCase]);
+  stx_sh := StringReplace(stx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);
+
 
   Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
@@ -2628,6 +2634,9 @@ begin
 
   Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%ss',stx_sh,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%s',stx,[rfReplaceAll, rfIgnoreCase]);
+
   Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
