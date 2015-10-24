@@ -6,7 +6,14 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, Menus, ftpsend;
+  StdCtrls, ExtCtrls,ComCtrls,Buttons, httpsend, LCLType, Menus, ftpsend,
+  DOM, XMLRead;
+
+type
+  TDayNight = record
+    day   : String[10];
+    night : String[10]
+end;
 
 type
 
@@ -14,27 +21,52 @@ type
 
   TfrmPropagation = class(TForm)
     imgProp: TImage;
-    Label1: TLabel;
-    lblK3hour: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    Label9: TLabel;
-    lblAbIndex: TLabel;
-    lblAuIndex: TLabel;
-    lblInfo: TLabel;
-    lblGF: TLabel;
-    lblSSN: TLabel;
-    lblSFI: TLabel;
-    lblSA: TLabel;
-    lblKIndex: TLabel;
-    lblAIndex: TLabel;
+    Label1 : TLabel;
+    Label10 : TLabel;
+    Label11 : TLabel;
+    Label12 : TLabel;
+    Label13 : TLabel;
+    Label14 : TLabel;
+    Label15 : TLabel;
+    Label16 : TLabel;
+    Label17 : TLabel;
+    Label18 : TLabel;
+    Label19 : TLabel;
+    lblDegree: TLabel;
+    lbl2mEsEu : TLabel;
+    lbl2mEsNa : TLabel;
+    lbl6mEsEu : TLabel;
+    Label8 : TLabel;
+    lbl12d : TLabel;
+    lbl12n : TLabel;
+    lbl17d : TLabel;
+    lbl17n : TLabel;
+    lbl30d : TLabel;
+    lbl30n : TLabel;
+    lbl4mEsEu : TLabel;
+    lbl80d : TLabel;
+    Label5 : TLabel;
+    Label6 : TLabel;
+    Label9 : TLabel;
+    lbl80n : TLabel;
+    lblAu : TLabel;
+    lblMag : TLabel;
+    lblSigs : TLabel;
+    Label2 : TLabel;
+    Label3 : TLabel;
+    Label4 : TLabel;
+    Label7 : TLabel;
+    lblAIndex : TLabel;
+    lblGF : TLabel;
+    lblKIndex : TLabel;
+    lblSFI : TLabel;
+    lblSSN : TLabel;
     mnuRefresh: TMenuItem;
+    pnlVhfCondx : TPanel;
+    pnlHfCondx : TPanel;
+    pnlCondxValues : TPanel;
     popPropagation: TPopupMenu;
+    sbInfo : TStatusBar;
     tmrProp: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDblClick(Sender: TObject);
@@ -43,18 +75,31 @@ type
     procedure mnuRefreshClick(Sender: TObject);
     procedure tmrPropTimer(Sender: TObject);
   private
-    { private declarations }
+    procedure SetHfCondxColorAndCaption(lbl : TLabel;desc : String);
   public
-    a    : String;
-    ab   : String;
-    k    : String;
-    k3h  : String;
-    sfi  : String;
-    ssn  : String;
-    sa   : String;
-    gf   : String;
-    time : String;
-    au   : String;
+    LastUpdate : String;
+
+    sfi   : String;
+    a     : String;
+    k     : String;
+    ssn   : String;
+    aur   : String;
+    lat   : String;
+    mag   : String;
+    geo   : String;
+    sigs  : String;
+    fof2  : String;
+    b8040 : TDayNight;
+    b3020 : TDayNight;
+    b1715 : TDayNight;
+    b1210 : TDayNight;
+
+    vhf_aur : String;
+    skip_eu : String;
+    skip_na : String;
+    skip_eu_6m : String;
+    skip_eu_4m : String;
+
     running : Boolean;
 
     procedure SyncProp;
@@ -65,6 +110,8 @@ type
 
   type
     TPropThread = class(TThread)
+    private
+      procedure LoadXMLFile;
     protected
       procedure Execute; override;
   end;
@@ -90,16 +137,6 @@ begin
   if frmPropagation.running then
     exit;
   frmPropagation.running := True;
-  frmPropagation.a    := '';
-  frmPropagation.ab   := '';
-  frmPropagation.k    := '';
-  frmPropagation.sfi  := '';
-  frmPropagation.ssn  := '';
-  frmPropagation.sa   := '';
-  frmPropagation.gf   := '';
-  frmPropagation.au   := '';
-  frmPropagation.time := '';
-  frmPropagation.k3h  := '';
 
   FreeOnTerminate := True;
   http := THTTPSend.Create;
@@ -119,33 +156,13 @@ begin
       end
     end
     else begin
-
       if HTTP.HTTPMethod('GET', 'http://www.hamqsl.com/solarxml.php' ) then
       begin
         m.LoadFromStream(HTTP.Document);
-        tmp := m.Text;
-        Writeln(tmp);
-        if dmData.DebugLevel >=1 then
-        begin
-         Writeln('TMP:      ',tmp)
-        end
-      end;
-
-      if dmData.DebugLevel >=1 then
-      begin
-        Writeln('Time:     ',frmPropagation.time);
-        Writeln('Boulder A:',frmPropagation.ab);
-        Writeln('Solar Act:',frmPropagation.sa);
-        Writeln('Kiel    A:',frmPropagation.a);
-        Writeln('Kiel K:   ',frmPropagation.k);
-        Writeln('Kiel 3h   ',frmPropagation.k3h);
-        Writeln('GF:       ',frmPropagation.gf);
-        Writeln('SSN:      ',frmPropagation.ssn);
-        Writeln('Aurora:   ',frmPropagation.au);
-        Writeln('SFI:      ',frmPropagation.sfi)
-      end;
-
-      Synchronize(@frmPropagation.SyncProp)
+        m.SaveToFile(dmData.HomeDir+'solar.xml');
+        LoadXMLFile;
+        Synchronize(@frmPropagation.SyncProp)
+      end
     end
   except
     on E : Exception do
@@ -158,6 +175,121 @@ begin
   end
 end;
 
+procedure TPropThread.LoadXMLFile;
+var
+  Doc: TXMLDocument;
+  Child: TDOMNode;
+  j: Integer;
+  data : TDOMNode;
+begin
+  try
+    ReadXMLFile(Doc,dmData.HomeDir+'solar.xml');
+
+    Child := Doc.DocumentElement.FirstChild;
+
+    data := Child.FindNode('updated');
+    if Assigned(data) then
+      frmPropagation.LastUpdate := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('solarflux');
+    if Assigned(data) then
+      frmPropagation.sfi := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('aindex');
+    if Assigned(data) then
+      frmPropagation.a := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('kindex');
+    if Assigned(data) then
+      frmPropagation.k := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('sunspots');
+    if Assigned(data) then
+      frmPropagation.ssn := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('aurora');
+    if Assigned(data) then
+      frmPropagation.aur := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('latdegree');
+    if Assigned(data) then
+      frmPropagation.lat := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('magneticfield');
+    if Assigned(data) then
+      frmPropagation.mag := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('geomagfield');
+    if Assigned(data) then
+      frmPropagation.geo := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('signalnoise');
+    if Assigned(data) then
+      frmPropagation.sigs := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('fof2');
+    if Assigned(data) then
+      frmPropagation.fof2 := data.FirstChild.NodeValue;
+
+    data := Child.FindNode('calculatedconditions');
+    if Assigned(data) then
+    begin
+      for j:=0 to data.ChildNodes.Count-1 do
+      begin                                              //80-40m                                       daynight                                                         poor
+        if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '80m-40m') then
+        begin
+          if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
+            frmPropagation.b8040.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else
+            frmPropagation.b8040.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+        end;
+        if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '30m-20m') then
+        begin
+          if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
+            frmPropagation.b3020.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else
+            frmPropagation.b3020.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+        end;
+        if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '17m-15m') then
+        begin
+          if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
+            frmPropagation.b1715.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else
+            frmPropagation.b1715.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+        end;
+        if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '12m-10m') then
+        begin
+          if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
+            frmPropagation.b1210.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else
+            frmPropagation.b1210.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+        end
+      end
+    end;
+    data := Child.FindNode('calculatedvhfconditions');
+    if Assigned(data) then
+    begin
+      for j:=0 to data.ChildNodes.Count-1 do
+      begin
+        if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = 'vhf-aurora') then
+           frmPropagation.vhf_aur := data.ChildNodes.Item[j].FirstChild.NodeValue;
+        if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = 'E-Skip') then
+        begin
+          if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe') then
+            frmPropagation.skip_eu := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'north_america') then
+            frmPropagation.skip_na := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe_6m') then
+            frmPropagation.skip_eu_6m := data.ChildNodes.Item[j].FirstChild.NodeValue
+          else if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe_4m') then
+            frmPropagation.skip_eu_4m := data.ChildNodes.Item[j].FirstChild.NodeValue
+        end
+      end
+    end
+  finally
+    FreeAndNil(Doc)
+  end
+end;
 
 procedure TfrmPropagation.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
@@ -187,18 +319,18 @@ const
 begin
   running := False;
   dmUtils.LoadWindowPos(frmPropagation);
-  lblAIndex.Caption  := C_LOADING;
-  lblAbIndex.Caption := C_LOADING;
-  lblKIndex.Caption  := C_LOADING;
-  lblK3hour.Caption  := C_LOADING;
-  lblAuIndex.Caption := C_LOADING;
-  lblSFI.Caption     := C_LOADING;
-  lblSSN.Caption     := C_LOADING;
-  lblSA.Caption      := C_LOADING;
-  lblGF.Caption      := C_LOADING;
-  lblInfo.Caption    := '';
+  lblAIndex.Caption  := '';
+  lblKIndex.Caption  := '';
+  lblSFI.Caption     := '';
+  lblSSN.Caption     := '';
+  lblGF.Caption      := '';
+  sbInfo.SimpleText  := '';
+  lblAu.Caption      := '';
+  lblMag.Caption     := '';
+  lblSigs.Caption    := '';
+  lblDegree.Caption  := '';
   tmrProp.Enabled    := False;
-  tmrProp.Interval   := 1000 * 60 * 1; //every 5 minutes do refresh
+  tmrProp.Interval   := 1000 * 60 * 3; //every 3 minutes do refresh
   tmrProp.Enabled    := True;
   tmrPropTimer(nil)
 end;
@@ -235,32 +367,122 @@ var
 begin
   imgProp.Visible := False;
 
-  lblInfo.Caption    := time;
-  lblAbIndex.Caption := ab;
-  lblSA.Caption      := sa;
-  lblAIndex.Caption  := a;
-  lblKIndex.Caption  := k;
-  lblGF.Caption      := gf;
-  lblSSN.Caption     := ssn;
-  lblAuIndex.Caption := au;
-  lblSFI.Caption     := sfi;
-  lblK3hour.Caption  := k3h;
+  pnlCondxValues.Visible := cqrini.ReadBool('prop','Values',True);
+  pnlHfCondx.Visible     := cqrini.ReadBool('prop','CalcHF',True);
+  pnlVhfCondx.Visible    := cqrini.ReadBool('prop','CalcVHF',True);
+  sbInfo.Visible         := True;
 
-  if TryStrToFloat(k,dk) then
-    lblKIndex.Font.Color := getKindexColor(dk)
-  else
-    lblKIndex.Font.Color := clBlack;
+  pnlHfCondx.Left  := 168;
+  pnlVhfCondx.Left := 368;
 
-  if TryStrToFloat(k3h,dk) then
-    lblK3hour.Font.Color := getKindexColor(dk)
+  if (not pnlCondxValues.Visible) and (not pnlHfCondx.Visible) and (not pnlVhfCondx.Visible) then
+    pnlCondxValues.Visible := True;
+
+  if (not pnlCondxValues.Visible) then
+  begin
+    if (not pnlHfCondx.Visible) then
+      pnlVhfCondx.Left := 0
+    else begin
+      pnlHfCondx.Left := 0;
+      if (pnlVhfCondx.Visible) then
+      begin
+        pnlVhfCondx.Left := pnlHfCondx.Width
+      end
+    end
+  end
+  else begin
+    if (not pnlHfCondx.Visible) then
+      pnlVhfCondx.Left := 168
+  end;
+
+  sbInfo.SimpleText := LastUpdate + ' data courtesy of Paul, N0NBH';
+  lblAIndex.Caption := a;
+  lblKIndex.Caption := k;
+  lblGF.Caption     := geo;
+  lblSSN.Caption    := ssn;
+  lblSFI.Caption    := sfi;
+  lblMag.Caption    := mag;
+  lblSigs.Caption   := sigs;
+  lblDegree.Caption := lat;
+
+  SetHfCondxColorAndCaption(lbl80d,b8040.day);
+  SetHfCondxColorAndCaption(lbl80n,b8040.night);
+
+  SetHfCondxColorAndCaption(lbl30d,b3020.day);
+  SetHfCondxColorAndCaption(lbl30n,b3020.night);
+
+  SetHfCondxColorAndCaption(lbl17d,b1715.day);
+  SetHfCondxColorAndCaption(lbl17n,b1715.night);
+
+  SetHfCondxColorAndCaption(lbl12d,b1210.day);
+  SetHfCondxColorAndCaption(lbl12n,b1210.night);
+
+  lblAu.Caption := aur;
+  if (aur='Band Closed') then
+    lblAu.Font.Color := clRed
   else
-    lblK3hour.Font.Color := clBlack
+    lblAu.Font.Color := clGreen;
+
+
+  //I'm not sure if the HIGH MUF and other information
+  //are common to all VHF bands
+  lbl6mEsEu.Caption := skip_eu_6m;
+  if (skip_eu_6m='Band Closed') then
+    lbl6mEsEu.Font.Color := clRed
+  else if (skip_eu_6m='High MUF') then
+    lbl6mEsEu.Font.Color := TColor($000075FF)
+  else
+    lbl6mEsEu.Font.Color := clGreen;
+
+  lbl4mEsEu.Caption := skip_eu_4m;
+  if (skip_eu_4m='Band Closed') then
+    lbl4mEsEu.Font.Color := clRed
+  else if (skip_eu_4m='High MUF') then
+    lbl4mEsEu.Font.Color := TColor($000075FF)
+  else
+    lbl4mEsEu.Font.Color := clGreen;
+
+  lbl2mEsEu.Caption := skip_eu;
+  if (skip_eu='Band Closed') then
+    lbl2mEsEu.Font.Color := clRed
+  else if (skip_eu='High MUF') then
+    lbl2mEsEu.Font.Color := TColor($000075FF)
+  else
+    lbl2mEsEu.Font.Color := clGreen;
+
+  lbl2mEsNa.Caption := skip_na;
+  if (skip_na='Band Closed') then
+    lbl2mEsNa.Font.Color := clRed
+  else if (skip_na='High MUF') then
+    lbl2mEsNa.Font.Color := TColor($000075FF)
+  else
+    lbl2mEsNa.Font.Color := clGreen;
+
+  lblKIndex.Font.Color := getKindexColor(StrToFloat(k))
+end;
+
+procedure TfrmPropagation.SetHfCondxColorAndCaption(lbl : TLabel;desc : String);
+begin
+  lbl.Caption := desc;
+  desc := LowerCase(desc);
+  if (desc='poor') then
+    lbl.Font.Color := clRed
+  else if (desc='fair') then
+    lbl.Font.Color := TColor($000075FF)
+  else
+    lbl.Font.Color := clGreen
 end;
 
 procedure TfrmPropagation.SyncPropImage;
 begin
   try try
     imgProp.Visible := True;
+
+    pnlCondxValues.Visible := False;
+    pnlHfCondx.Visible     := False;
+    pnlVhfCondx.Visible    := False;
+    sbInfo.Visible         := False;
+
     imgProp.Picture.LoadFromFile(dmData.HomeDir + 'propagation.gif');
     Height := imgProp.Picture.Height;
     Width  := imgProp.Picture.Width;
@@ -275,7 +497,6 @@ end;
 
 procedure TfrmPropagation.RefreshPropagation;
 begin
-  Writeln('Refresing');
   tmrPropTimer(nil)
 end;
 

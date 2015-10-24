@@ -1,11 +1,11 @@
 object frmPropagation: TfrmPropagation
-  Left = 1325
-  Height = 261
-  Top = 182
-  Width = 362
+  Left = 526
+  Height = 148
+  Top = 402
+  Width = 534
   Caption = 'Propagation'
-  ClientHeight = 261
-  ClientWidth = 362
+  ClientHeight = 148
+  ClientWidth = 534
   KeyPreview = True
   OnClose = FormClose
   OnDblClick = FormDblClick
@@ -13,173 +13,379 @@ object frmPropagation: TfrmPropagation
   OnShow = FormShow
   PopupMenu = popPropagation
   LCLVersion = '1.2.4.0'
-  object Label1: TLabel
-    Left = 12
-    Height = 17
-    Top = 8
-    Width = 95
-    Caption = 'Boulder A-idx:'
-    ParentColor = False
-  end
-  object Label2: TLabel
-    Left = 12
-    Height = 17
-    Top = 49
-    Width = 89
-    Caption = 'Kiel cur K-idx:'
-    ParentColor = False
-  end
-  object Label3: TLabel
-    Left = 12
-    Height = 17
-    Top = 95
-    Width = 68
-    Caption = 'Solar flux:'
-    ParentColor = False
-  end
-  object Label4: TLabel
-    Left = 12
-    Height = 17
-    Top = 117
-    Width = 76
-    Caption = 'Sunspot nr:'
-    ParentColor = False
-  end
-  object Label5: TLabel
-    Left = 12
-    Height = 17
-    Top = 164
-    Width = 93
-    Caption = 'Geomag field:'
-    ParentColor = False
-  end
-  object lblAIndex: TLabel
-    Left = 120
-    Height = 17
-    Top = 29
-    Width = 64
-    Caption = 'lblAIndex'
-    ParentColor = False
-  end
-  object lblKIndex: TLabel
-    Left = 120
-    Height = 17
-    Top = 49
-    Width = 63
-    Caption = 'lblKIndex'
-    ParentColor = False
-  end
-  object lblSFI: TLabel
-    Left = 120
-    Height = 17
-    Top = 95
-    Width = 37
-    Caption = 'lblSFI'
-    ParentColor = False
-  end
-  object lblSSN: TLabel
-    Left = 120
-    Height = 17
-    Top = 117
-    Width = 44
-    Caption = 'lblSSN'
-    ParentColor = False
-  end
-  object lblGF: TLabel
-    Left = 122
-    Height = 17
-    Top = 164
-    Width = 35
-    Caption = 'lblGF'
-    ParentColor = False
-  end
-  object lblInfo: TLabel
-    Left = 12
-    Height = 17
-    Top = 216
-    Width = 44
-    Caption = 'lblInfo'
-    ParentColor = False
-  end
-  object Label6: TLabel
-    Left = 12
-    Height = 17
-    Top = 140
-    Width = 91
-    Caption = 'Solar activity:'
-    ParentColor = False
-  end
-  object Label7: TLabel
-    Left = 12
-    Height = 17
-    Top = 29
-    Width = 67
-    Caption = 'Kiel A-idx:'
-    ParentColor = False
-  end
-  object Label8: TLabel
-    Left = 12
-    Height = 17
-    Top = 186
-    Width = 51
-    Caption = 'Aurora:'
-    ParentColor = False
-  end
-  object lblAbIndex: TLabel
-    Left = 120
-    Height = 17
-    Top = 8
-    Width = 73
-    Caption = 'lblAbIndex'
-    ParentColor = False
-  end
-  object lblSA: TLabel
-    Left = 120
-    Height = 17
-    Top = 140
-    Width = 35
-    Caption = 'lblSA'
-    ParentColor = False
-  end
-  object lblAuIndex: TLabel
-    Left = 122
-    Height = 17
-    Top = 186
-    Width = 72
-    Caption = 'lblAuIndex'
-    ParentColor = False
-  end
-  object Label9: TLabel
-    Left = 12
-    Height = 17
-    Top = 72
-    Width = 87
-    Caption = 'Kiel 3-hour K:'
-    ParentColor = False
-  end
-  object lblK3hour: TLabel
-    Left = 120
-    Height = 17
-    Top = 72
-    Width = 65
-    Caption = 'lblK3hour'
-    ParentColor = False
-  end
   object imgProp: TImage
-    Left = 96
+    Left = 88
     Height = 26
-    Top = 207
+    Top = 128
     Width = 42
+  end
+  object pnlCondxValues: TPanel
+    Left = 0
+    Height = 128
+    Top = 0
+    Width = 168
+    BevelOuter = bvNone
+    ClientHeight = 128
+    ClientWidth = 168
+    TabOrder = 0
+    object lblSFI: TLabel
+      Left = 48
+      Height = 17
+      Top = 8
+      Width = 24
+      Caption = '111'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 8
+      Height = 17
+      Top = 8
+      Width = 24
+      Caption = 'SFI:'
+      ParentColor = False
+    end
+    object lblSSN: TLabel
+      Left = 128
+      Height = 17
+      Top = 8
+      Width = 24
+      Caption = '100'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 88
+      Height = 17
+      Top = 8
+      Width = 31
+      Caption = 'SSN:'
+      ParentColor = False
+    end
+    object lblKIndex: TLabel
+      Left = 110
+      Height = 17
+      Top = 32
+      Width = 9
+      Caption = 'K'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 8
+      Height = 17
+      Top = 32
+      Width = 14
+      Caption = 'A:'
+      ParentColor = False
+    end
+    object lblAIndex: TLabel
+      Left = 32
+      Height = 17
+      Top = 32
+      Width = 10
+      Caption = 'A'
+      ParentColor = False
+    end
+    object Label7: TLabel
+      Left = 86
+      Height = 17
+      Top = 32
+      Width = 13
+      Caption = 'K:'
+      ParentColor = False
+    end
+    object Label10: TLabel
+      Left = 8
+      Height = 17
+      Top = 55
+      Width = 93
+      Caption = 'Geomag field:'
+      ParentColor = False
+    end
+    object lblGF: TLabel
+      Left = 112
+      Height = 17
+      Top = 55
+      Width = 35
+      Caption = 'lblGF'
+      ParentColor = False
+    end
+    object Label11: TLabel
+      Left = 8
+      Height = 17
+      Top = 77
+      Width = 83
+      Caption = 'Signal noise:'
+      ParentColor = False
+    end
+    object lblSigs: TLabel
+      Left = 112
+      Height = 17
+      Top = 77
+      Width = 44
+      Caption = 'lblSigs'
+      ParentColor = False
+    end
+    object Label12: TLabel
+      Left = 8
+      Height = 17
+      Top = 99
+      Width = 66
+      Caption = 'Mag field:'
+      ParentColor = False
+    end
+    object lblMag: TLabel
+      Left = 112
+      Height = 17
+      Top = 99
+      Width = 46
+      Caption = 'lblMag'
+      ParentColor = False
+    end
+  end
+  object pnlHfCondx: TPanel
+    Left = 168
+    Height = 128
+    Top = 0
+    Width = 208
+    BevelOuter = bvNone
+    ClientHeight = 128
+    ClientWidth = 208
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 13
+      Height = 17
+      Top = 8
+      Width = 34
+      Caption = 'Band'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 96
+      Height = 17
+      Top = 8
+      Width = 25
+      Caption = 'Day'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 157
+      Height = 17
+      Top = 8
+      Width = 37
+      Caption = 'Night'
+      ParentColor = False
+    end
+    object Label9: TLabel
+      Left = 8
+      Height = 17
+      Top = 32
+      Width = 62
+      Caption = '80m-40m'
+      ParentColor = False
+    end
+    object Label13: TLabel
+      Left = 8
+      Height = 17
+      Top = 55
+      Width = 62
+      Caption = '30m-20m'
+      ParentColor = False
+    end
+    object Label14: TLabel
+      Left = 8
+      Height = 17
+      Top = 77
+      Width = 62
+      Caption = '17m-15m'
+      ParentColor = False
+    end
+    object Label15: TLabel
+      Left = 8
+      Height = 17
+      Top = 99
+      Width = 62
+      Caption = '12m-10m'
+      ParentColor = False
+    end
+    object lbl80d: TLabel
+      Left = 94
+      Height = 17
+      Top = 32
+      Width = 42
+      Caption = 'lbl80d'
+      ParentColor = False
+    end
+    object lbl30d: TLabel
+      Left = 94
+      Height = 17
+      Top = 55
+      Width = 42
+      Caption = 'lbl30d'
+      ParentColor = False
+    end
+    object lbl17d: TLabel
+      Left = 94
+      Height = 17
+      Top = 77
+      Width = 42
+      Caption = 'lbl17d'
+      ParentColor = False
+      ParentFont = False
+    end
+    object lbl12d: TLabel
+      Left = 94
+      Height = 17
+      Top = 99
+      Width = 42
+      Caption = 'lbl12d'
+      ParentColor = False
+    end
+    object lbl80n: TLabel
+      Left = 152
+      Height = 17
+      Top = 32
+      Width = 41
+      Caption = 'lbl80n'
+      ParentColor = False
+    end
+    object lbl30n: TLabel
+      Left = 152
+      Height = 17
+      Top = 55
+      Width = 41
+      Caption = 'lbl30n'
+      ParentColor = False
+    end
+    object lbl17n: TLabel
+      Left = 152
+      Height = 17
+      Top = 77
+      Width = 41
+      Caption = 'lbl17n'
+      ParentColor = False
+    end
+    object lbl12n: TLabel
+      Left = 152
+      Height = 17
+      Top = 99
+      Width = 41
+      Caption = 'lbl12n'
+      ParentColor = False
+    end
+  end
+  object pnlVhfCondx: TPanel
+    Left = 368
+    Height = 128
+    Top = 0
+    Width = 174
+    BevelOuter = bvNone
+    ClientHeight = 128
+    ClientWidth = 174
+    TabOrder = 2
+    object Label8: TLabel
+      Left = 8
+      Height = 17
+      Top = 8
+      Width = 51
+      Caption = 'Aurora:'
+      ParentColor = False
+    end
+    object lblAu: TLabel
+      Left = 72
+      Height = 17
+      Top = 8
+      Width = 35
+      Caption = 'lblAu'
+      ParentColor = False
+    end
+    object Label16: TLabel
+      Left = 8
+      Height = 17
+      Top = 32
+      Width = 61
+      Caption = '6m ES EU'
+      ParentColor = False
+    end
+    object lbl6mEsEu: TLabel
+      Left = 86
+      Height = 17
+      Top = 32
+      Width = 69
+      Caption = 'lbl6mEsEu'
+      ParentColor = False
+    end
+    object Label17: TLabel
+      Left = 8
+      Height = 17
+      Top = 55
+      Width = 61
+      Caption = '4m ES EU'
+      ParentColor = False
+    end
+    object lbl4mEsEu: TLabel
+      Left = 86
+      Height = 17
+      Top = 55
+      Width = 69
+      Caption = 'lbl4mEsEu'
+      ParentColor = False
+    end
+    object Label18: TLabel
+      Left = 8
+      Height = 17
+      Top = 77
+      Width = 61
+      Caption = '2m ES EU'
+      ParentColor = False
+    end
+    object lbl2mEsEu: TLabel
+      Left = 86
+      Height = 17
+      Top = 77
+      Width = 69
+      Caption = 'lbl2mEsEu'
+      ParentColor = False
+    end
+    object Label19: TLabel
+      Left = 8
+      Height = 17
+      Top = 99
+      Width = 64
+      Caption = '2m ES NA'
+      ParentColor = False
+    end
+    object lbl2mEsNa: TLabel
+      Left = 86
+      Height = 17
+      Top = 99
+      Width = 72
+      Caption = 'lbl2mEsNa'
+      ParentColor = False
+    end
+    object lblDegree: TLabel
+      Left = 112
+      Height = 17
+      Top = 8
+      Width = 65
+      Caption = 'lblDegree'
+      ParentColor = False
+    end
+  end
+  object sbInfo: TStatusBar
+    Left = 0
+    Height = 21
+    Top = 127
+    Width = 534
+    Panels = <>
   end
   object tmrProp: TTimer
     Enabled = False
     OnTimer = tmrPropTimer
-    left = 64
-    top = 296
+    left = 564
+    top = 408
   end
   object popPropagation: TPopupMenu
-    left = 296
-    top = 184
+    left = 248
+    top = 8
     object mnuRefresh: TMenuItem
       Caption = 'Refresh'
       OnClick = mnuRefreshClick
