@@ -33,6 +33,8 @@ type
   public
     SecondBackupPath : String;
     ExportType : Integer; // 0 - ADIF, 1 - HTML, 2 - ADIF for backup
+                          // Export type 0 - ADIF will split RST to RST and STX/RTX if "_" is found from RST
+                          // Then can be used on adif2cabrillo contest converters, I hope so...
     FileName   : String;
     AutoBackup : Boolean;
     { public declarations }
@@ -139,6 +141,7 @@ var
   eQSL_qslrdate : String;
   qsls_date     : String;
   qslr_date     : String;
+  stx,srx       : String; //contest serial nr
   ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
@@ -212,8 +215,17 @@ var
       Writeln(f);
       leng := 0
     end;
+
     if exRSTS then
     begin
+      if (pos('_',RSTS)> 0) and (ExportType = 0) then  //splitting RST and STX when ExprtType=0
+        Begin
+         stx := copy(RSTS,pos('_',RSTS)+1,length(RSTS)-pos('_',RSTS));
+         RSTS :=copy(RSTS,1,pos('_',RSTS)-1);
+         tmp := '<STX' + dmUtils.StringToADIF(stx);
+         Write(f,tmp);
+         leng := leng + Length(tmp)
+        end;
       tmp := '<RST_SENT' + dmUtils.StringToADIF(RSTS);
       Write(f,tmp);
       leng := leng + Length(tmp)
@@ -223,8 +235,18 @@ var
       Writeln(f);
       leng := 0
     end;
+
+
     if exRSTR then
     begin
+      if (pos('_',RSTR)> 0) and (ExportType = 0) then  //splitting RST and SRX when ExprtType=0
+        Begin
+         srx := copy(RSTR,pos('_',RSTR)+1,length(RSTR)-pos('_',RSTR));
+         RSTR :=copy(RSTR,1,pos('_',RSTR)-1);
+         tmp := '<SRX' + dmUtils.StringToADIF(srx);
+         Write(f,tmp);
+         leng := leng + Length(tmp)
+        end;
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(RSTR);
       Write(f,tmp);
       leng := leng + Length(tmp)

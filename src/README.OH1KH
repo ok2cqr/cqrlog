@@ -163,19 +163,29 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 	 
 	Contest numbers are saved in RST fields separated with underscore. 599_001
 	
-	Make RST + stx to go out via CW macro DONE. New predefined macros are now: (Build .2109)
+	Make RST + stx to go out via CW macro DONE.  (Build .2109)
+		New predefined macros are now:
 		  %s  - contest qso nr send
  		  %ss - contest qso nr send replace N instead of 9, T instead of 0 
         Use them after %r or %rr to make full contest report.
- 
+
+
+	Make ADIF export that splits RSTs to different fields RST and stx and srx like ADIF standard says. DONE (Build .2110)
+		Solved splitting so that if exportType is 0 (ADIF export) RST fieds are splitted.
+		If ExportType is 1 (html), 2 (ADIF backup), or qsl printing (CSV) RST is kept as is I.E. contest number is included wit underscore
+		(it is saved so into database,too).
+		Then there is no need to do ADIFImport routine for restoring backups as backups have information on RST fields ("599_001") and 
+		they restore same way.
+	 
+	
 
    Things TO DO for contest support:
   ==================================
 
-	- make ADIF export that splits RSTs to different fields RST and stx and srx like ADIF standard says.
-	- make ADIF import that can join RST and srx stx with undersocre to RST fieds (for restoring backups)
 	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands)
-	
+
+	- test exporter "contest" ADIF with adif2cabrillo converter (visibly fields seem to be OK) to be sure it works.
+	- test ADIF backup. For some reason my teslog will not autobackup even I have selected so from preferences.	
 	- fix all errors!
 
 Issues resolved:
