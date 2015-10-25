@@ -170,22 +170,33 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
         Use them after %r or %rr to make full contest report.
 
 
-	Make ADIF export that splits RSTs to different fields RST and stx and srx like ADIF standard says. DONE (Build .2110)
-		Solved splitting so that if exportType is 0 (ADIF export) RST fieds are splitted.
+	DONE:make ADIF export that splits RSTs to different fields RST and stx and srx like ADIF standard says. (Build .2110)
+		Solved splitting so that if ExportType is 0 (ADIF export) RST fieds are splitted.
 		If ExportType is 1 (html), 2 (ADIF backup), or qsl printing (CSV) RST is kept as is I.E. contest number is included wit underscore
 		(it is saved so into database,too).
 		Then there is no need to do ADIFImport routine for restoring backups as backups have information on RST fields ("599_001") and 
 		they restore same way.
-	 
+
+	DONE:test ADIF backup. For some reason my testlog will not autobackup even I have selected so from preferences.
+	   	Found out that if you create new log for (testing purposes, at this time) You !HAVE TO! go through:
+			Prefereces->Program->Configuration storage settings->Save (you have no need to modify anything there, just save)
+		Othewise corresponding [lognr]cqrlog.cfg will NOT get all sections written in and (in my case) autobacup did not have section
+		at all although I did select checkboxes and path on AutoBackup page of preferences!
+		After done this "Configuration storage settings-Save" autobackup started to work and confirmed that ExportType 2 of ADIF 
+		"contestmode RST" is transferred as it is on database (599_001-format).	
+	
+	DONE:test exporter "contest" ADIF with adif2cabrillo converter (visibly fields seem to be OK) to be sure it works.
+		Found adif2cabrillo program for Linux from http://users.telenet.be/on4qz/ . Starting is bit complicated you have to have
+		qt5 and (qmake-qt5 for Fedora) to compile it. Then there are no templates you habe to create them, but after that it serves you well!
+		It accepted nicely exported ADIF format and digged out STX as expeted.
+
+	That completes ADIF export section.
 	
 
    Things TO DO for contest support:
   ==================================
 
-	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands)
-
-	- test exporter "contest" ADIF with adif2cabrillo converter (visibly fields seem to be OK) to be sure it works.
-	- test ADIF backup. For some reason my teslog will not autobackup even I have selected so from preferences.	
+	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands. Do we need separate numbers?)
 	- fix all errors!
 
 Issues resolved:
