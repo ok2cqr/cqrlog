@@ -199,6 +199,11 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands. Do we need separate numbers?)
 	- fix all errors!
 
+
+- Bored to wrong typed DXcluster commands and full retyping. Simple rollback buffer is made for DXCluster command line.  (Build .2111)
+  With Ctrl-Z you can go round 5 last typed commands. 
+  History is not stored anywhere after program close. It lasts just current DXCluster session.
+
 Issues resolved:
 ===================
 

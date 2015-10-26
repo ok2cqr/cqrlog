@@ -108,6 +108,9 @@ type
     giWAZ     : String;
     giITU     : String;
 
+    HistCmd      : array [0..4] of string;
+    HistPtr      : integer;
+
     procedure WebDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure TelDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure ConnectToWeb;
@@ -122,6 +125,8 @@ type
     function  GetFreq(spot : String) : String;
     function  GetCall(spot : String; web : Boolean = False) : String;
     function  GetSplit(spot : String) :String;
+    procedure StoreLastCmd(LastCmd:string);
+    function  GetHistCmd:string;
   public
     ConWeb    : Boolean;
     ConTelnet : Boolean;
@@ -232,6 +237,32 @@ begin
     btnTelConnect.Click;
   tmrSpots.Enabled := False;
 end;
+procedure TfrmDXCluster.StoreLastCmd(LastCmd:string);  //scroll &store last typed line
+
+begin
+  HistPtr:=4;
+  Repeat
+        Begin
+         HistCmd[HistPtr] := HistCmd[HistPtr-1];
+          if dmData.DebugLevel>=1 then writeln('[',HistPtr,']' ,HistCmd[HistPtr]);
+         dec(HistPtr);
+        end;
+  until HistPtr = 0;
+  HistCmd[HistPtr] := LastCmd;
+
+  if dmData.DebugLevel>=1 then  writeln('[',HistPtr,']' ,HistCmd[HistPtr]);
+
+end;
+function TfrmDXCluster.GetHistCmd:string;  //return line that ptr points & inc ptr(go round);
+begin
+  Result:= HistCmd[HistPtr];
+  if HistPtr < 4 then
+     inc (HistPtr)
+    else
+     HistPtr:=0;
+end;
+
+
 
 procedure TfrmDXCluster.btnHelpClick(Sender: TObject);
 begin
@@ -312,7 +343,15 @@ begin
 
   TelThread := TTelThread.Create(True);
   TelThread.FreeOnTerminate := True;
-  TelThread.Start
+  TelThread.Start;
+
+  HistPtr:=5;               //initialize command history to be clean
+  repeat
+        Begin
+          dec(HistPtr);
+          HistCmd[HistPtr]:=''
+        end;
+  until HistPtr =0;
 end;
 
 procedure TfrmDXCluster.FormKeyUp(Sender: TObject; var Key: Word;
@@ -507,8 +546,17 @@ end;
 
 procedure TfrmDXCluster.edtCommandKeyPress(Sender: TObject; var Key: char);
 begin
+
+  if key=#26 then
+  Begin
+    key := #0;
+    edtCommand.Clear;
+    edtCommand.Text := GetHistCmd;
+    edtCommand.SelStart := Length(edtCommand.Text);
+  end;
   if key=#13 then
   begin
+    StoreLastCmd(edtCommand.Text);
     key := #0;
    SendCommand(edtCommand.Text);
    edtCommand.Clear
