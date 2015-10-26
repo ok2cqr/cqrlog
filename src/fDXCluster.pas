@@ -253,10 +253,10 @@ begin
   if dmData.DebugLevel>=1 then  writeln('[',HistPtr,']' ,HistCmd[HistPtr]);
 
 end;
-function TfrmDXCluster.GetHistCmd:string;  //return line that ptr points & inc ptr(go round);
+function TfrmDXCluster.GetHistCmd:string;  //return line that ptr points & inc ptr(go round if not empty);
 begin
   Result:= HistCmd[HistPtr];
-  if HistPtr < 4 then
+  if (HistPtr < 4) and ( HistCmd[HistPtr+1]<>'') then
      inc (HistPtr)
     else
      HistPtr:=0;

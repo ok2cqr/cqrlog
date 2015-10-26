@@ -204,6 +204,8 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   With Ctrl-Z you can go round 5 last typed commands. 
   History is not stored anywhere after program close. It lasts just current DXCluster session.
 
+- Small fix to DXCluster history command: Ctrl-Z now goes round only through those memory lines (max 5) that have text (skipping empty ones. Build .2112).
+
 Issues resolved:
 ===================
 
