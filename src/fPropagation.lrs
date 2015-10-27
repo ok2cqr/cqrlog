@@ -23,14 +23,14 @@ LazarusResources.Add('TfrmPropagation','FORMDATA',[
   +#0#0#6'TLabel'#6'Label7'#4'Left'#2'V'#6'Height'#2#17#3'Top'#2' '#5'Width'#2
   +#13#7'Caption'#6#2'K:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label10'#4'Left'#2#8
   +#6'Height'#2#17#3'Top'#2'7'#5'Width'#2']'#7'Caption'#6#13'Geomag field:'#11
-  +'ParentColor'#8#0#0#6'TLabel'#5'lblGF'#4'Left'#2'p'#6'Height'#2#17#3'Top'#2
+  +'ParentColor'#8#0#0#6'TLabel'#5'lblGF'#4'Left'#2'i'#6'Height'#2#17#3'Top'#2
   +'7'#5'Width'#2'#'#7'Caption'#6#5'lblGF'#11'ParentColor'#8#0#0#6'TLabel'#7'La'
   +'bel11'#4'Left'#2#8#6'Height'#2#17#3'Top'#2'M'#5'Width'#2'S'#7'Caption'#6#13
-  +'Signal noise:'#11'ParentColor'#8#0#0#6'TLabel'#7'lblSigs'#4'Left'#2'p'#6'He'
+  +'Signal noise:'#11'ParentColor'#8#0#0#6'TLabel'#7'lblSigs'#4'Left'#2'i'#6'He'
   +'ight'#2#17#3'Top'#2'M'#5'Width'#2','#7'Caption'#6#7'lblSigs'#11'ParentColor'
   +#8#0#0#6'TLabel'#7'Label12'#4'Left'#2#8#6'Height'#2#17#3'Top'#2'c'#5'Width'#2
   +'B'#7'Caption'#6#10'Mag field:'#11'ParentColor'#8#0#0#6'TLabel'#6'lblMag'#4
-  +'Left'#2'p'#6'Height'#2#17#3'Top'#2'c'#5'Width'#2'.'#7'Caption'#6#6'lblMag'
+  +'Left'#2'i'#6'Height'#2#17#3'Top'#2'c'#5'Width'#2'.'#7'Caption'#6#6'lblMag'
   +#11'ParentColor'#8#0#0#0#6'TPanel'#10'pnlHfCondx'#4'Left'#3#168#0#6'Height'#3
   +#128#0#3'Top'#2#0#5'Width'#3#208#0#10'BevelOuter'#7#6'bvNone'#12'ClientHeigh'
   +'t'#3#128#0#11'ClientWidth'#3#208#0#8'TabOrder'#2#1#0#6'TLabel'#6'Label1'#4

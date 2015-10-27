@@ -101,7 +101,7 @@ object frmPropagation: TfrmPropagation
       ParentColor = False
     end
     object lblGF: TLabel
-      Left = 112
+      Left = 105
       Height = 17
       Top = 55
       Width = 35
@@ -117,7 +117,7 @@ object frmPropagation: TfrmPropagation
       ParentColor = False
     end
     object lblSigs: TLabel
-      Left = 112
+      Left = 105
       Height = 17
       Top = 77
       Width = 44
@@ -133,7 +133,7 @@ object frmPropagation: TfrmPropagation
       ParentColor = False
     end
     object lblMag: TLabel
-      Left = 112
+      Left = 105
       Height = 17
       Top = 99
       Width = 46
