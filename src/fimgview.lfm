@@ -1,18 +1,14 @@
 object frmImgView: TfrmImgView
-  Left = 1923
+  Left = 873
   Height = 50
-  Top = 729
+  Top = 8
   Width = 120
   AutoSize = True
   Caption = 'ImgView'
   ClientHeight = 50
   ClientWidth = 120
-  OnChangeBounds = FormWindowStateChange
   OnClose = FormClose
-  OnHide = FormHide
-  OnResize = FormWindowStateChange
   OnShow = FormShow
-  OnWindowStateChange = FormWindowStateChange
   LCLVersion = '1.2.6.0'
   object ImgImage: TImage
     Left = 1

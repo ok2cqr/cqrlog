@@ -46,7 +46,6 @@ type
     procedure FormDblClick(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
-    procedure lblBoulAidxClick(Sender: TObject);
     procedure lblInfoFromMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure lblInfoFromMouseEnter(Sender: TObject);
@@ -281,10 +280,6 @@ begin
   tmrPropTimer(nil)
 end;
 
-procedure TfrmPropagation.lblBoulAidxClick(Sender: TObject);
-begin
-
-end;
 
 procedure TfrmPropagation.lblInfoFromMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

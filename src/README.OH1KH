@@ -204,6 +204,11 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   With Ctrl-Z you can go round 5 last typed commands. 
   History is not stored anywhere after program close. It lasts just current DXCluster session.
 
+- Added PgUp PgDn buttons to fCW buttons for making speed change easier, just mouse click instead of first focusing NewQSO
+  frame and then pressing PgUP or PgDn keys. And it works now also in my mini HP that does not have PgUp PgDn on keyboard 
+  at all!! 
+  Found mysterious "property" on frame rescaling. See source file for comments.
+
 Issues resolved:
 ===================
 
@@ -383,6 +388,8 @@ FIXED
   FIXED
 
 - ImgView form returns to old place if it is dragged to new position between refresh period. Added ObBounds,OnResize,ONStateChange save position.(Build 2113)
+  FIXED
+- No it was not ok. Yet another try to make ImgView positioning and rescaling work. (Build 2114)
   FIXED
 
  Issues to resolve:

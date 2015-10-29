@@ -17,10 +17,7 @@ type
     ImgImage: TImage;
     tmrImgView1: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure FormDragDrop(Sender, Source: TObject; X, Y: Integer);
-    procedure FormHide(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FormWindowStateChange(Sender: TObject);
     procedure tmrImgView1Timer(Sender: TObject);
   private
     { private declarations }
@@ -66,10 +63,9 @@ begin
     <center>
     <a href="http://www.hamqsl.com/solar.html"
     title="Click to add Solar-Terrestrial Data to your website!">
-    <img src="http://www.hamqsl.com/solarpic.php"></a>    <===============USE THIS ONE within " "s
+    <img src="http://www.hamqsl.com/solarpic.php"></a>            <=============== USE THIS LINE TEXT within " "s
     </center>
    }
-  //MyUrl:= 'http://www.hamqsl.com/solarpic.php';
   MyUrl:= cqrini.ReadString('ExtView', 'ImgViewUrl', '');
   if dmData.DebugLevel >=1 then Writeln('MyURL: ',MyUrl);
 
@@ -105,6 +101,10 @@ end;
 procedure TfrmImgView.FormShow(Sender: TObject);
 begin
    running := False;
+   dmUtils.LoadWindowPos(frmImgView);
+   frmImgView.Width:= 120;
+   frmImgView.Height := 50;
+   with ImgImage.Picture.Bitmap do SetSize(1,1);
    ImgImage.Visible:=false;
    lblImgView1.Visible := True;
    tmrImgView1.Enabled    := False;
@@ -113,24 +113,29 @@ begin
    tmrImgView1Timer(nil)
 end;
 
-procedure TfrmImgView.FormWindowStateChange(Sender: TObject);
-begin
-   dmUtils.SaveWindowPos(frmImgView);
-end;
 
 procedure TfrmImgView.tmrImgView1Timer(Sender: TObject);
 
 var
   T : TImgViewThread;
 begin
-  dmUtils.LoadWindowPos(frmImgView);
-  ImgImage.Visible:=false;
-  ImgImage.AutoSize := True;
-  ImgImage.Center := True;
-  frmImgView.AutoSize := True;
-  lblImgView1.Visible := True;
-  lblImgView1.Font.Color := clDefault;
-  lblImgView1.Caption:='Loading...';
+    with ImgImage.Picture.Bitmap do  SetSize(1,1);
+    ImgImage.Visible:=false;
+    ImgImage.Center := True;
+    ImgImage.AutoSize := True;
+
+  with frmImgView do
+    begin
+     Width:= 120;
+     Height := 50;
+     AutoSize := True;
+    end;
+   with lblImgView1 do
+    begin
+      Visible := True;
+      Font.Color := clDefault;
+      Caption:='Loading...';
+    end;
 
   if not running then
    Begin
@@ -146,27 +151,11 @@ begin
 
 end;
 
-procedure TfrmImgView.FormHide(Sender: TObject);
+procedure TfrmImgView.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-   ImgImage.Visible  :=false;
-   tmrImgView1.Enabled  :=false;
-   frmImgView.Hide;
-end;
-
-procedure TfrmImgView.FormClose(Sender: TObject;
-  var CloseAction: TCloseAction);
-begin
-   ImgImage.Visible  :=false;
    tmrImgView1.Enabled  :=false;
    dmUtils.SaveWindowPos(frmImgView);
-   frmImgView.Hide;
 end;
-
-procedure TfrmImgView.FormDragDrop(Sender, Source: TObject; X, Y: Integer);
-begin
-
-end;
-
 
 procedure TfrmImgView.ShowLoaded;
 
@@ -196,7 +185,6 @@ begin
          Writeln('Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
                  ' Form: ',frmImgView.Width,'x',frmImgView.Height,' ',frmImgView.AutoSize);
        end;
-     dmUtils.SaveWindowPos(frmImgView);
 end;
 
 initialization

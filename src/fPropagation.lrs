@@ -7,91 +7,91 @@ LazarusResources.Add('TfrmPropagation','FORMDATA',[
   +'OnCreate'#7#10'FormCreate'#10'OnDblClick'#7#12'FormDblClick'#7'OnKeyUp'#7#9
   +'FormKeyUp'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.2.6.0'#0#6'TLabel'
   +#11'lblBoulAidx'#4'Left'#2#10#6'Height'#2#15#3'Top'#2'P'#5'Width'#2'Y'#7'Cap'
-  +'tion'#6#14'Boulder A-idx:'#11'ParentColor'#8#7'OnClick'#7#16'lblBoulAidxCli'
-  +'ck'#0#0#6'TLabel'#10'lblCurKidx'#4'Left'#2#10#6'Height'#2#15#3'Top'#3#140#0
-  +#5'Width'#2'T'#7'Caption'#6#15'Kiel cur K-idx:'#11'ParentColor'#8#0#0#6'TLab'
-  +'el'#11'lblSolarFlx'#4'Left'#2#10#6'Height'#2#15#3'Top'#3#180#0#5'Width'#2'?'
-  +#7'Caption'#6#11'Solar flux:'#11'ParentColor'#8#0#0#6'TLabel'#9'lblSunSNr'#4
-  +'Left'#2#10#6'Height'#2#15#3'Top'#3#200#0#5'Width'#2'J'#7'Caption'#6#11'Suns'
-  +'pot nr:'#11'ParentColor'#8#0#0#6'TLabel'#9'lblGeomFi'#4'Left'#2#10#6'Height'
-  +#2#15#3'Top'#3#240#0#5'Width'#2'Y'#7'Caption'#6#13'Geomag field:'#11'ParentC'
-  +'olor'#8#0#0#6'TLabel'#9'DBoulAidx'#4'Left'#2'x'#6'Height'#2#15#3'Top'#2'P'#5
-  +'Width'#2'A'#7'Caption'#6#9'DBoulAidx'#11'ParentColor'#8#0#0#6'TLabel'#8'DCu'
-  +'rKidx'#4'Left'#2'x'#6'Height'#2#15#3'Top'#3#140#0#5'Width'#2':'#7'Caption'#6
-  +#8'DCurKidx'#11'ParentColor'#8#10'ParentFont'#8#0#0#6'TLabel'#9'DSolarFlx'#4
-  +'Left'#2'x'#6'Height'#2#15#3'Top'#3#180#0#5'Width'#2'<'#7'Caption'#6#9'DSola'
-  +'rFlx'#11'ParentColor'#8#0#0#6'TLabel'#7'DSunSNr'#4'Left'#2'x'#6'Height'#2#15
-  +#3'Top'#3#200#0#5'Width'#2';'#7'Caption'#6#7'DSunSNr'#11'ParentColor'#8#0#0#6
-  +'TLabel'#7'DGeomFi'#4'Left'#2'x'#6'Height'#2#15#3'Top'#3#240#0#5'Width'#2':'
-  +#7'Caption'#6#7'DGeomFi'#11'ParentColor'#8#0#0#6'TLabel'#7'lblInfo'#4'Left'#2
-  +#10#6'Height'#2#15#3'Top'#2'<'#5'Width'#2'%'#7'Caption'#6#7'lblInfo'#11'Pare'
-  +'ntColor'#8#0#0#12'TSpeedButton'#11'sbtnRefresh'#18'AnchorSideTop.Side'#7#9
-  +'asrCenter'#20'AnchorSideRight.Side'#7#9'asrBottom'#21'AnchorSideBottom.Side'
-  +#7#9'asrBottom'#4'Left'#3#205#0#6'Height'#2#20#4'Hint'#6#17'Refresh statisti'
-  +'c'#3'Top'#3'"'#1#5'Width'#2#23#7'Anchors'#11#0#10'Glyph.Data'#10':'#4#0#0'6'
-  +#4#0#0'BM6'#4#0#0#0#0#0#0'6'#0#0#0'('#0#0#0#16#0#0#0#16#0#0#0#1#0' '#0#0#0#0
-  +#0#0#4#0#0'd'#0#0#0'd'#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +'tion'#6#14'Boulder A-idx:'#11'ParentColor'#8#0#0#6'TLabel'#10'lblCurKidx'#4
+  +'Left'#2#10#6'Height'#2#15#3'Top'#3#140#0#5'Width'#2'T'#7'Caption'#6#15'Kiel'
+  +' cur K-idx:'#11'ParentColor'#8#0#0#6'TLabel'#11'lblSolarFlx'#4'Left'#2#10#6
+  +'Height'#2#15#3'Top'#3#180#0#5'Width'#2'?'#7'Caption'#6#11'Solar flux:'#11'P'
+  +'arentColor'#8#0#0#6'TLabel'#9'lblSunSNr'#4'Left'#2#10#6'Height'#2#15#3'Top'
+  +#3#200#0#5'Width'#2'J'#7'Caption'#6#11'Sunspot nr:'#11'ParentColor'#8#0#0#6
+  +'TLabel'#9'lblGeomFi'#4'Left'#2#10#6'Height'#2#15#3'Top'#3#240#0#5'Width'#2
+  +'Y'#7'Caption'#6#13'Geomag field:'#11'ParentColor'#8#0#0#6'TLabel'#9'DBoulAi'
+  +'dx'#4'Left'#2'x'#6'Height'#2#15#3'Top'#2'P'#5'Width'#2'A'#7'Caption'#6#9'DB'
+  +'oulAidx'#11'ParentColor'#8#0#0#6'TLabel'#8'DCurKidx'#4'Left'#2'x'#6'Height'
+  +#2#15#3'Top'#3#140#0#5'Width'#2':'#7'Caption'#6#8'DCurKidx'#11'ParentColor'#8
+  +#10'ParentFont'#8#0#0#6'TLabel'#9'DSolarFlx'#4'Left'#2'x'#6'Height'#2#15#3'T'
+  +'op'#3#180#0#5'Width'#2'<'#7'Caption'#6#9'DSolarFlx'#11'ParentColor'#8#0#0#6
+  +'TLabel'#7'DSunSNr'#4'Left'#2'x'#6'Height'#2#15#3'Top'#3#200#0#5'Width'#2';'
+  +#7'Caption'#6#7'DSunSNr'#11'ParentColor'#8#0#0#6'TLabel'#7'DGeomFi'#4'Left'#2
+  +'x'#6'Height'#2#15#3'Top'#3#240#0#5'Width'#2':'#7'Caption'#6#7'DGeomFi'#11'P'
+  +'arentColor'#8#0#0#6'TLabel'#7'lblInfo'#4'Left'#2#10#6'Height'#2#15#3'Top'#2
+  +'<'#5'Width'#2'%'#7'Caption'#6#7'lblInfo'#11'ParentColor'#8#0#0#12'TSpeedBut'
+  +'ton'#11'sbtnRefresh'#18'AnchorSideTop.Side'#7#9'asrCenter'#20'AnchorSideRig'
+  +'ht.Side'#7#9'asrBottom'#21'AnchorSideBottom.Side'#7#9'asrBottom'#4'Left'#3
+  +#205#0#6'Height'#2#20#4'Hint'#6#17'Refresh statistic'#3'Top'#3'"'#1#5'Width'
+  +#2#23#7'Anchors'#11#0#10'Glyph.Data'#10':'#4#0#0'6'#4#0#0'BM6'#4#0#0#0#0#0#0
+  +'6'#0#0#0'('#0#0#0#16#0#0#0#16#0#0#0#1#0' '#0#0#0#0#0#0#4#0#0'd'#0#0#0'd'#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'#S('#255'-k2'#255#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0'R_*'#255'Z'#164'b'#255'X'#161'^'#255'7'#131'>'#255'4~:'#255'1'
-  +'z6'#255'.u3'#255'''h+'#255#29'N '#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0'&R5'#255'b'#172'j'#255#133#200#141#255#133#199#139#255#130#198#136
-  +#255#127#196#134#255'|'#194#130#255'y'#193#128#255'q'#185'x'#255'_'#168'e'
-  +#255'I'#145'N'#255#26'N5'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'j'#155'a'#255
-  +'f'#176'n'#255#138#202#146#255#137#202#144#255#134#200#141#255#131#198#138
-  +#255#128#197#135#255'~'#195#132#255'{'#194#129#255'm'#187't'#255'v'#190'|'
-  +#255'Y'#160']'#255#27'L#'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'}'#194#131#255
-  +'g'#177'o'#255'd'#173'k'#255'C'#148'K'#255'@'#143'G'#255'<'#138'C'#255'9'#133
-  +'@'#255'T'#157'Z'#255't'#186'z'#255'y'#193#127#255'w'#191'}'#255'J'#145'O'
-  +#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#133#172'j'#255'k'#175'o'#255#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0'DR$'#255'F'#141'K'#255'u'#187'{'#255'p'#189'w'
-  +#255'c'#171'i'#255#30'P!'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'#L$'#255'a'#168'g'#255'{'#194#130
-  +#255'v'#188'|'#255':~C'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'#VJ'#255'd'#171'k'#255#127#196#134#255
-  +'y'#190#129#255'B'#132'D'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'''U,'#255':'#129'B'#255#129#195#136#255'}'
-  +#196#133#255'n'#179'u'#255'&[*'#255#0#0#0#0#0#0#0#0#0#0#0#0'_'#186'j'#255'\'
-  +#182'g'#255'Y'#179'd'#255'V'#174'`'#255'S'#170']'#255'P'#166'Y'#255'M'#161'V'
-  +#255'h'#177'p'#255#136#200#144#255#141#204#149#255#139#203#146#255']'#165'd'
-  +#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'b'#190'm'#255#165#218#174#255#162#216
-  +#172#255#161#216#170#255#158#214#167#255#156#213#165#255#153#212#162#255#151
-  +#210#159#255#140#205#149#255#145#207#153#255's'#184'{'#255'-c1'#255#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0'd'#193'p'#255#166#219#176#255#166#218#175#255#163#217
-  +#173#255#162#216#171#255#159#215#168#255#156#213#165#255#148#208#157#255#131
-  +#197#140#255'l'#180't'#255'1j7'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +'f'#196'r'#255'd'#194'p'#255'b'#191'n'#255'`'#188'k'#255']'#184'h'#255'['#181
-  +'e'#255'W'#176'b'#255'N'#158'W'#255';yA'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0'#S('#255'-k2'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'R_*'#255'Z'
+  +#164'b'#255'X'#161'^'#255'7'#131'>'#255'4~:'#255'1z6'#255'.u3'#255'''h+'#255
+  +#29'N '#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'&R5'#255'b'#172
+  +'j'#255#133#200#141#255#133#199#139#255#130#198#136#255#127#196#134#255'|'
+  +#194#130#255'y'#193#128#255'q'#185'x'#255'_'#168'e'#255'I'#145'N'#255#26'N5'
+  +#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'j'#155'a'#255'f'#176'n'#255#138#202#146
+  +#255#137#202#144#255#134#200#141#255#131#198#138#255#128#197#135#255'~'#195
+  +#132#255'{'#194#129#255'm'#187't'#255'v'#190'|'#255'Y'#160']'#255#27'L#'#255
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'}'#194#131#255'g'#177'o'#255'd'#173'k'#255
+  +'C'#148'K'#255'@'#143'G'#255'<'#138'C'#255'9'#133'@'#255'T'#157'Z'#255't'#186
+  +'z'#255'y'#193#127#255'w'#191'}'#255'J'#145'O'#255#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#133#172'j'#255'k'#175'o'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +'DR$'#255'F'#141'K'#255'u'#187'{'#255'p'#189'w'#255'c'#171'i'#255#30'P!'#255
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0'#L$'#255'a'#168'g'#255'{'#194#130#255'v'#188'|'#255':~C'#255#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0'#VJ'#255'd'#171'k'#255#127#196#134#255'y'#190#129#255'B'#132'D'#255
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0'''U,'#255':'#129'B'#255#129#195#136#255'}'#196#133#255'n'#179'u'#255'&['
+  +'*'#255#0#0#0#0#0#0#0#0#0#0#0#0'_'#186'j'#255'\'#182'g'#255'Y'#179'd'#255'V'
+  +#174'`'#255'S'#170']'#255'P'#166'Y'#255'M'#161'V'#255'h'#177'p'#255#136#200
+  +#144#255#141#204#149#255#139#203#146#255']'#165'd'#255#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0'b'#190'm'#255#165#218#174#255#162#216#172#255#161#216#170#255#158
+  +#214#167#255#156#213#165#255#153#212#162#255#151#210#159#255#140#205#149#255
+  +#145#207#153#255's'#184'{'#255'-c1'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'd'
+  +#193'p'#255#166#219#176#255#166#218#175#255#163#217#173#255#162#216#171#255
+  +#159#215#168#255#156#213#165#255#148#208#157#255#131#197#140#255'l'#180't'
+  +#255'1j7'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'f'#196'r'#255'd'#194'p'
+  +#255'b'#191'n'#255'`'#188'k'#255']'#184'h'#255'['#181'e'#255'W'#176'b'#255'N'
+  +#158'W'#255';yA'#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   ,#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#7'OnClick'#7#16'sbtnRefreshClick'#8'Sho'
-  +'wHint'#9#14'ParentShowHint'#8#0#0#6'TLabel'#9'lblSolAct'#4'Left'#2#10#6'Hei'
-  +'ght'#2#15#3'Top'#3#220#0#5'Width'#2'U'#7'Caption'#6#15'Solar activity:'#11
-  +'ParentColor'#8#0#0#6'TLabel'#11'lblKielAidx'#4'Left'#2#10#6'Height'#2#15#3
-  +'Top'#2'd'#5'Width'#2'>'#7'Caption'#6#11'Kiel A-idx:'#11'ParentColor'#8#0#0#6
-  +'TLabel'#9'lblAurora'#4'Left'#2#10#6'Height'#2#15#3'Top'#3#4#1#5'Width'#2'/'
-  +#7'Caption'#6#7'Aurora:'#11'ParentColor'#8#0#0#6'TLabel'#9'DKielAidx'#4'Left'
-  +#2'x'#6'Height'#2#15#3'Top'#2'd'#5'Width'#2';'#7'Caption'#6#9'DKielAidx'#11
-  +'ParentColor'#8#0#0#6'TLabel'#7'DSolAct'#4'Left'#2'x'#6'Height'#2#15#3'Top'#3
-  +#220#0#5'Width'#2'3'#7'Caption'#6#7'DSolAct'#11'ParentColor'#8#0#0#6'TLabel'
-  +#7'DAurora'#4'Left'#2'x'#6'Height'#2#15#3'Top'#3#4#1#5'Width'#2'5'#7'Caption'
-  +#6#7'DAurora'#11'ParentColor'#8#0#0#6'TLabel'#9'lblKiel3K'#4'Left'#2#10#6'He'
-  +'ight'#2#15#3'Top'#2'x'#5'Width'#2'T'#7'Caption'#6#14'Kiel 3-hour K:'#11'Par'
-  +'entColor'#8#0#0#6'TLabel'#7'DKiel3K'#4'Left'#2'x'#6'Height'#2#15#3'Top'#2'x'
-  +#5'Width'#2'0'#7'Caption'#6#7'DKiel3K'#11'ParentColor'#8#10'ParentFont'#8#0#0
-  +#6'TLabel'#10'lblInfoUTC'#4'Left'#2'x'#6'Height'#2#15#3'Top'#2#5#5'Width'#2
-  +'>'#7'Caption'#6#10'lblInfoUTC'#11'ParentColor'#8#0#0#6'TLabel'#11'lblInfoFr'
-  +'om'#4'Left'#2#10#6'Height'#2#15#3'Top'#2#25#5'Width'#2'E'#7'Caption'#6#11'l'
-  +'blInfoFrom'#11'ParentColor'#8#10'ParentFont'#8#11'OnMouseDown'#7#20'lblInfo'
-  +'FromMouseDown'#12'OnMouseEnter'#7#21'lblInfoFromMouseEnter'#12'OnMouseLeave'
-  +#7#21'lblInfoFromMouseLeave'#0#0#6'TImage'#9'ImageKidx'#4'Left'#2'x'#6'Heigh'
-  +'t'#2#20#3'Top'#3#157#0#5'Width'#2'H'#0#0#6'TLabel'#8'lblKidxG'#4'Left'#2#10
-  +#6'Height'#2#15#3'Top'#3#160#0#5'Width'#2'_'#7'Caption'#6#15'K-idx graph 3h:'
-  +#11'ParentColor'#8#0#0#6'TLabel'#11'lblInfoDate'#4'Left'#2#10#6'Height'#2#15
-  +#3'Top'#2#5#5'Width'#2'D'#7'Caption'#6#11'lblInfoDate'#11'ParentColor'#8#0#0
-  +#6'TPanel'#6'Panel1'#4'Left'#2'<'#6'Height'#2#5#3'Top'#2'-'#5'Width'#2'd'#8
-  +'TabOrder'#2#0#0#0#6'TTimer'#7'tmrProp'#7'Enabled'#8#7'OnTimer'#7#12'tmrProp'
-  +'Timer'#4'left'#2#16#3'top'#3' '#1#0#0#0
+  +#0#0#0#0#0#0#7'OnClick'#7#16'sbtnRefreshClick'#8'ShowHint'#9#14'ParentShowHi'
+  +'nt'#8#0#0#6'TLabel'#9'lblSolAct'#4'Left'#2#10#6'Height'#2#15#3'Top'#3#220#0
+  +#5'Width'#2'U'#7'Caption'#6#15'Solar activity:'#11'ParentColor'#8#0#0#6'TLab'
+  +'el'#11'lblKielAidx'#4'Left'#2#10#6'Height'#2#15#3'Top'#2'd'#5'Width'#2'>'#7
+  +'Caption'#6#11'Kiel A-idx:'#11'ParentColor'#8#0#0#6'TLabel'#9'lblAurora'#4'L'
+  +'eft'#2#10#6'Height'#2#15#3'Top'#3#4#1#5'Width'#2'/'#7'Caption'#6#7'Aurora:'
+  +#11'ParentColor'#8#0#0#6'TLabel'#9'DKielAidx'#4'Left'#2'x'#6'Height'#2#15#3
+  +'Top'#2'd'#5'Width'#2';'#7'Caption'#6#9'DKielAidx'#11'ParentColor'#8#0#0#6'T'
+  +'Label'#7'DSolAct'#4'Left'#2'x'#6'Height'#2#15#3'Top'#3#220#0#5'Width'#2'3'#7
+  +'Caption'#6#7'DSolAct'#11'ParentColor'#8#0#0#6'TLabel'#7'DAurora'#4'Left'#2
+  +'x'#6'Height'#2#15#3'Top'#3#4#1#5'Width'#2'5'#7'Caption'#6#7'DAurora'#11'Par'
+  +'entColor'#8#0#0#6'TLabel'#9'lblKiel3K'#4'Left'#2#10#6'Height'#2#15#3'Top'#2
+  +'x'#5'Width'#2'T'#7'Caption'#6#14'Kiel 3-hour K:'#11'ParentColor'#8#0#0#6'TL'
+  +'abel'#7'DKiel3K'#4'Left'#2'x'#6'Height'#2#15#3'Top'#2'x'#5'Width'#2'0'#7'Ca'
+  +'ption'#6#7'DKiel3K'#11'ParentColor'#8#10'ParentFont'#8#0#0#6'TLabel'#10'lbl'
+  +'InfoUTC'#4'Left'#2'x'#6'Height'#2#15#3'Top'#2#5#5'Width'#2'>'#7'Caption'#6
+  +#10'lblInfoUTC'#11'ParentColor'#8#0#0#6'TLabel'#11'lblInfoFrom'#4'Left'#2#10
+  +#6'Height'#2#15#3'Top'#2#25#5'Width'#2'E'#7'Caption'#6#11'lblInfoFrom'#11'Pa'
+  +'rentColor'#8#10'ParentFont'#8#11'OnMouseDown'#7#20'lblInfoFromMouseDown'#12
+  +'OnMouseEnter'#7#21'lblInfoFromMouseEnter'#12'OnMouseLeave'#7#21'lblInfoFrom'
+  +'MouseLeave'#0#0#6'TImage'#9'ImageKidx'#4'Left'#2'x'#6'Height'#2#20#3'Top'#3
+  +#157#0#5'Width'#2'H'#0#0#6'TLabel'#8'lblKidxG'#4'Left'#2#10#6'Height'#2#15#3
+  +'Top'#3#160#0#5'Width'#2'_'#7'Caption'#6#15'K-idx graph 3h:'#11'ParentColor'
+  +#8#0#0#6'TLabel'#11'lblInfoDate'#4'Left'#2#10#6'Height'#2#15#3'Top'#2#5#5'Wi'
+  +'dth'#2'D'#7'Caption'#6#11'lblInfoDate'#11'ParentColor'#8#0#0#6'TPanel'#6'Pa'
+  +'nel1'#4'Left'#2'<'#6'Height'#2#5#3'Top'#2'-'#5'Width'#2'd'#8'TabOrder'#2#0#0
+  +#0#6'TTimer'#7'tmrProp'#7'Enabled'#8#7'OnTimer'#7#12'tmrPropTimer'#4'left'#2
+  +#16#3'top'#3' '#1#0#0#0
 ]);

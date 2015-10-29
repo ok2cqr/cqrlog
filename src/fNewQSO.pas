@@ -4865,7 +4865,7 @@ begin
     end
   end;
 
-  if (key = 34) and (not dbgrdQSOBefore.Focused) then//pgup
+  if (key = 34) and (not dbgrdQSOBefore.Focused) then//pgdn
   begin
     if Assigned(CWint) then
     begin

@@ -20,7 +20,6 @@ object frmPropagation: TfrmPropagation
     Width = 89
     Caption = 'Boulder A-idx:'
     ParentColor = False
-    OnClick = lblBoulAidxClick
   end
   object lblCurKidx: TLabel
     Left = 10
