@@ -17,8 +17,10 @@ type
     ImgImage: TImage;
     tmrImgView1: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure FormHide(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormWindowStateChange(Sender: TObject);
     procedure tmrImgView1Timer(Sender: TObject);
   private
     { private declarations }
@@ -111,6 +113,11 @@ begin
    tmrImgView1Timer(nil)
 end;
 
+procedure TfrmImgView.FormWindowStateChange(Sender: TObject);
+begin
+   dmUtils.SaveWindowPos(frmImgView);
+end;
+
 procedure TfrmImgView.tmrImgView1Timer(Sender: TObject);
 
 var
@@ -154,6 +161,13 @@ begin
    dmUtils.SaveWindowPos(frmImgView);
    frmImgView.Hide;
 end;
+
+procedure TfrmImgView.FormDragDrop(Sender, Source: TObject; X, Y: Integer);
+begin
+
+end;
+
+
 procedure TfrmImgView.ShowLoaded;
 
 begin
@@ -172,12 +186,12 @@ begin
           end;
       end
      else
-     Begin
+      Begin
        lblImgView1.Font.Color := clRed;
        lblImgView1.Caption:='Url loading ERROR!'#13'Check Url!';
-     end;
+      end;
 
-      if dmData.DebugLevel >=1 then
+     if dmData.DebugLevel >=1 then
        begin
          Writeln('Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
                  ' Form: ',frmImgView.Width,'x',frmImgView.Height,' ',frmImgView.AutoSize);

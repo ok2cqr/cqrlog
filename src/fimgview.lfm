@@ -7,9 +7,12 @@ object frmImgView: TfrmImgView
   Caption = 'ImgView'
   ClientHeight = 50
   ClientWidth = 120
+  OnChangeBounds = FormWindowStateChange
   OnClose = FormClose
   OnHide = FormHide
+  OnResize = FormWindowStateChange
   OnShow = FormShow
+  OnWindowStateChange = FormWindowStateChange
   LCLVersion = '1.2.6.0'
   object ImgImage: TImage
     Left = 1
