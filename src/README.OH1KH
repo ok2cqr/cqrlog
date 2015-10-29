@@ -388,9 +388,11 @@ FIXED
   FIXED
 
 - ImgView form returns to old place if it is dragged to new position between refresh period. Added ObBounds,OnResize,ONStateChange save position.(Build 2113)
-  FIXED
+  notFIXED
 - No it was not ok. Yet another try to make ImgView positioning and rescaling work. (Build 2114)
-  FIXED
+  notFIXED
+- I really hope 3rd try fixes this. ImgView from is now manually resized after image is loaded. No autorezise.
+  FIXED (or not?)
 
  Issues to resolve:
 ===================

@@ -3,7 +3,6 @@ object frmImgView: TfrmImgView
   Height = 50
   Top = 8
   Width = 120
-  AutoSize = True
   Caption = 'ImgView'
   ClientHeight = 50
   ClientWidth = 120

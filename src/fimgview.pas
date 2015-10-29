@@ -117,25 +117,21 @@ end;
 procedure TfrmImgView.tmrImgView1Timer(Sender: TObject);
 
 var
-  T : TImgViewThread;
+   T : TImgViewThread;
 begin
     with ImgImage.Picture.Bitmap do  SetSize(1,1);
+
     ImgImage.Visible:=false;
     ImgImage.Center := True;
     ImgImage.AutoSize := True;
+    frmImgView.Width:= 120;
+    frmImgView.Height := 50;
 
-  with frmImgView do
-    begin
-     Width:= 120;
-     Height := 50;
-     AutoSize := True;
-    end;
-   with lblImgView1 do
-    begin
-      Visible := True;
-      Font.Color := clDefault;
-      Caption:='Loading...';
-    end;
+    lblImgView1.Visible := True;
+    lblImgView1.Font.Color := clDefault;
+    lblImgView1.Left := 32;
+    lblImgView1.Top :=16;
+    lblImgView1.Caption:='Loading...';
 
   if not running then
    Begin
@@ -143,7 +139,7 @@ begin
        begin
          Writeln('Start Thread. Timer interval is:',tmrImgView1.Interval );
          Writeln('Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
-                 ' Form: ',frmImgView.Width,'x',frmImgView.Height,' ',frmImgView.AutoSize);
+                 ' Form: ',frmImgView.Width,'x',frmImgView.Height);
        end;
       T := TImgViewThread.Create(True);
       T.Start
@@ -182,8 +178,16 @@ begin
 
      if dmData.DebugLevel >=1 then
        begin
-         Writeln('Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
-                 ' Form: ',frmImgView.Width,'x',frmImgView.Height,' ',frmImgView.AutoSize);
+         Writeln('ShowLoaded before setting Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
+                 ' Form: ',frmImgView.Width,'x',frmImgView.Height);
+       end;
+      //autoresize on form just does not work as expected so:
+      frmImgView.Width := ImgImage.Width;
+      frmImgView.Height := ImgImage.Height;
+      if dmData.DebugLevel >=1 then
+       begin
+         Writeln('ShowLoaded after setting Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
+                 ' Form: ',frmImgView.Width,'x',frmImgView.Height);
        end;
 end;
 
