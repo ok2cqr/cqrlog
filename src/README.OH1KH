@@ -209,6 +209,9 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   at all!! 
   Found mysterious "property" on frame rescaling. See source file for comments.
 
+- ImgView: Little better error reporting if Url is faulty. I.E. result is not image, or Url is not found at all.
+  Then "Seeking Url" is displayed but timeout comes from your TCPstack(seems to be loooooong...if ever.).
+
 Issues resolved:
 ===================
 

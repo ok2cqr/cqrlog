@@ -22,6 +22,7 @@ type
   private
     { private declarations }
     procedure ShowLoaded;
+    procedure InfoUrl;
   public
     { public declarations }
     running : Boolean;
@@ -75,8 +76,7 @@ begin
     if frmImgView.MyUrlOk then
      Begin
        if dmData.DebugLevel >=1 then Writeln('Found Url ...');
-       frmImgView.MyUrlOk :=true;
-
+       Synchronize(@frmImgView.InfoUrl);
        response := TMemoryStream.Create;
        try
        if HttpGetBinary(MyUrl, response) then
@@ -97,6 +97,7 @@ begin
       if dmData.DebugLevel >=1 then Writeln('Stop thread.');
      end;
 end;
+
 
 procedure TfrmImgView.FormShow(Sender: TObject);
 begin
@@ -130,8 +131,8 @@ begin
     lblImgView1.Visible := True;
     lblImgView1.Font.Color := clDefault;
     lblImgView1.Left := 32;
-    lblImgView1.Top :=16;
-    lblImgView1.Caption:='Loading...';
+    lblImgView1.Top :=13;
+    lblImgView1.Caption:='Seeking Url...';
 
   if not running then
    Begin
@@ -181,14 +182,30 @@ begin
          Writeln('ShowLoaded before setting Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
                  ' Form: ',frmImgView.Width,'x',frmImgView.Height);
        end;
-      //autoresize on form just does not work as expected so:
-      frmImgView.Width := ImgImage.Width;
-      frmImgView.Height := ImgImage.Height;
+
+      if MyUrlOK and MyImgOk then  //autoresize on form just does not work as expected so:
+        begin
+          frmImgView.Width := ImgImage.Width;
+          frmImgView.Height := ImgImage.Height;
+        end
+       else   //make room for error message
+        begin
+         frmImgView.Width := 300;
+         frmImgView.Height := 50;
+        end;
       if dmData.DebugLevel >=1 then
        begin
          Writeln('ShowLoaded after setting Image: ',ImgImage.Width,'x',ImgImage.Height,' ',ImgImage.AutoSize,
                  ' Form: ',frmImgView.Width,'x',frmImgView.Height);
        end;
+end;
+Procedure TfrmImgView.InfoUrl;
+Begin
+ If MyUrlOk then
+  begin
+   lblImgView1.Font.Color := clGreen;
+   lblImgView1.Caption:='Url found!'#13'Loading...';
+  end;
 end;
 
 initialization
