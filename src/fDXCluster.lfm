@@ -1,7 +1,7 @@
 object frmDXCluster: TfrmDXCluster
-  Left = 448
+  Left = 1872
   Height = 219
-  Top = 286
+  Top = 635
   Width = 564
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
@@ -326,6 +326,15 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 2
       end
     end
+  end
+  object tbAlertCalls: TToggleBox
+    Left = 104
+    Height = 23
+    Top = 0
+    Width = 90
+    Caption = 'AlertCall(s)'
+    OnClick = tbAlertCallsClick
+    TabOrder = 1
   end
   object tmrSpots: TTimer
     Enabled = False

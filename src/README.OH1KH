@@ -193,9 +193,8 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 	That completes ADIF export section.
 	
 
-   Things TO DO for contest support:
-  ==================================
-
+   	Things TO DO for contest support:
+  	==================================
 	- make contest stx number realated to bands so that each band has own numbering (now on one number for all bands. Do we need separate numbers?)
 	- fix all errors!
 
@@ -211,6 +210,9 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - ImgView: Little better error reporting if Url is faulty. I.E. result is not image, or Url is not found at all.
   Then "Seeking Url" is displayed but timeout comes from your TCPstack(seems to be loooooong...if ever.).
+
+- DXCluster: Added toggle box "AlertCall(s)" to DXCluster form for fast callsign list edit (normally via preferences) and
+  toggling alert on and off. (Build 2117)
 
 Issues resolved:
 ===================

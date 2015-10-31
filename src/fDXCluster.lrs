@@ -1,8 +1,8 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmDXCluster','FORMDATA',[
-  'TPF0'#13'TfrmDXCluster'#12'frmDXCluster'#4'Left'#3#192#1#6'Height'#3#219#0#3
-  +'Top'#3#30#1#5'Width'#3'4'#2#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#18
+  'TPF0'#13'TfrmDXCluster'#12'frmDXCluster'#4'Left'#3'P'#7#6'Height'#3#219#0#3
+  +'Top'#3'{'#2#5'Width'#3'4'#2#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#18
   +'help/h21.html#ah19'#13'ActiveControl'#7#11'pgDXCluster'#7'Caption'#6#9'DXCl'
   +'uster'#12'ClientHeight'#3#219#0#11'ClientWidth'#3'4'#2#9'Icon.Data'#10#194
   +#12#0#0#190#12#0#0#0#0#1#0#1#0'  '#0#0#1#0#24#0#168#12#0#0#22#0#0#0'('#0#0#0
@@ -212,8 +212,10 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +'rBorder'#2#4#7'Caption'#6#4'Font'#7'OnClick'#7#12'btnFontClick'#8'TabOrder'
   +#2#3#0#0#0#6'TPanel'#9'pnlTelnet'#4'Left'#2#0#6'Height'#2'~'#3'Top'#2#30#5'W'
   +'idth'#3'*'#2#5'Align'#7#8'alClient'#10'BevelOuter'#7#6'bvNone'#5'Color'#7#7
-  +'clWhite'#11'ParentColor'#8#8'TabOrder'#2#2#0#0#0#0#6'TTimer'#8'tmrSpots'#7
-  +'Enabled'#8#8'Interval'#3' N'#7'OnTimer'#7#13'tmrSpotsTimer'#4'left'#2'X'#3
-  +'top'#2'z'#0#0#11'TFontDialog'#8'dlgDXfnt'#11'MinFontSize'#2#0#11'MaxFontSiz'
-  +'e'#2#0#4'left'#3#136#0#3'top'#2'z'#0#0#0
+  +'clWhite'#11'ParentColor'#8#8'TabOrder'#2#2#0#0#0#0#10'TToggleBox'#12'tbAler'
+  +'tCalls'#4'Left'#2'h'#6'Height'#2#23#3'Top'#2#0#5'Width'#2'Z'#7'Caption'#6#12
+  +'AlertCall(s)'#7'OnClick'#7#17'tbAlertCallsClick'#8'TabOrder'#2#1#0#0#6'TTim'
+  +'er'#8'tmrSpots'#7'Enabled'#8#8'Interval'#3' N'#7'OnTimer'#7#13'tmrSpotsTime'
+  +'r'#4'left'#2'X'#3'top'#2'z'#0#0#11'TFontDialog'#8'dlgDXfnt'#11'MinFontSize'
+  +#2#0#11'MaxFontSize'#2#0#4'left'#3#136#0#3'top'#2'z'#0#0#0
 ]);

@@ -47,6 +47,7 @@ type
     tabTelnet: TTabSheet;
     tabWeb: TTabSheet;
     tmrSpots: TTimer;
+    tbAlertCalls: TToggleBox;
     procedure Button2Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -61,6 +62,7 @@ type
     procedure btnTelConnectClick(Sender: TObject);
     procedure btnWebConnectClick(Sender: TObject);
     procedure edtCommandKeyPress(Sender: TObject; var Key: char);
+    procedure tbAlertCallsClick(Sender: TObject);
     procedure tmrSpotsTimer(Sender: TObject);
   private
     telDesc    : String;
@@ -167,7 +169,7 @@ implementation
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
-     uMyIni;
+     uMyIni, fPreferences;
 
 procedure TfrmDXCluster.ConnectToWeb;
 var
@@ -561,6 +563,18 @@ begin
    SendCommand(edtCommand.Text);
    edtCommand.Clear
   end;
+end;
+
+procedure TfrmDXCluster.tbAlertCallsClick(Sender: TObject);
+begin
+  if tbAlertCalls.Checked then
+    Begin
+     tbAlertCalls.Font.Color := clGreen;
+     frmPreferences.btnAlertCallsignsClick(nil);
+    end
+   else
+     tbAlertCalls.Font.Color := clDefault;
+
 end;
 
 procedure TfrmDXCluster.lConnect(aSocket: TLSocket);
@@ -1083,7 +1097,7 @@ begin
     end
   end;
 
-  if dmDXCluster.IsAlertCall(call,band,mode) then
+  if (dmDXCluster.IsAlertCall(call,band,mode)) and tbAlertCalls.Checked then
     dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
 
   if dmData.DebugLevel >=1 then
