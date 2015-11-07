@@ -214,6 +214,13 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - DXCluster: Added toggle box "AlertCall(s)" to DXCluster form for fast callsign list edit (normally via preferences) and
   toggling alert on and off. (Build 2117)
 
+- DXCluster: Added checkbox "include" that changes alert calls behavior. When checked it does regexp call against alertcall.
+  It might do strange things, but is handy if you are looking for example all calls that have suffix IARU. Just put IARU
+  on alert calls and check "include". It is not suffix situated (hmm.. could be... maybe later...) it just finds alertcall
+  from any part of call. So putting alertcall like OH1 it will alert all calls that have OH1 as part of call (usually prefix)
+  Uncheck "include" and alertcalls works as it has worked before.
+  (Build 2118)
+
 Issues resolved:
 ===================
 

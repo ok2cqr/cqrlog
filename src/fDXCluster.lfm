@@ -336,6 +336,14 @@ object frmDXCluster: TfrmDXCluster
     OnClick = tbAlertCallsClick
     TabOrder = 1
   end
+  object cbAlertRegExp: TCheckBox
+    Left = 192
+    Height = 23
+    Top = 0
+    Width = 71
+    Caption = 'include'
+    TabOrder = 2
+  end
   object tmrSpots: TTimer
     Enabled = False
     Interval = 20000

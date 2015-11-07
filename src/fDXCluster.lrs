@@ -214,8 +214,10 @@ LazarusResources.Add('TfrmDXCluster','FORMDATA',[
   +'idth'#3'*'#2#5'Align'#7#8'alClient'#10'BevelOuter'#7#6'bvNone'#5'Color'#7#7
   +'clWhite'#11'ParentColor'#8#8'TabOrder'#2#2#0#0#0#0#10'TToggleBox'#12'tbAler'
   +'tCalls'#4'Left'#2'h'#6'Height'#2#23#3'Top'#2#0#5'Width'#2'Z'#7'Caption'#6#12
-  +'AlertCall(s)'#7'OnClick'#7#17'tbAlertCallsClick'#8'TabOrder'#2#1#0#0#6'TTim'
-  +'er'#8'tmrSpots'#7'Enabled'#8#8'Interval'#3' N'#7'OnTimer'#7#13'tmrSpotsTime'
-  +'r'#4'left'#2'X'#3'top'#2'z'#0#0#11'TFontDialog'#8'dlgDXfnt'#11'MinFontSize'
-  +#2#0#11'MaxFontSize'#2#0#4'left'#3#136#0#3'top'#2'z'#0#0#0
+  +'AlertCall(s)'#7'OnClick'#7#17'tbAlertCallsClick'#8'TabOrder'#2#1#0#0#9'TChe'
+  +'ckBox'#13'cbAlertRegExp'#4'Left'#3#192#0#6'Height'#2#23#3'Top'#2#0#5'Width'
+  +#2'G'#7'Caption'#6#7'include'#8'TabOrder'#2#2#0#0#6'TTimer'#8'tmrSpots'#7'En'
+  +'abled'#8#8'Interval'#3' N'#7'OnTimer'#7#13'tmrSpotsTimer'#4'left'#2'X'#3'to'
+  +'p'#2'z'#0#0#11'TFontDialog'#8'dlgDXfnt'#11'MinFontSize'#2#0#11'MaxFontSize'
+  +#2#0#4'left'#3#136#0#3'top'#2'z'#0#0#0
 ]);

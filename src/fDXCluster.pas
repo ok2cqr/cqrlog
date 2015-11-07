@@ -33,6 +33,7 @@ type
     btnWebConnect: TButton;
     Button1: TButton;
     Button2: TButton;
+    cbAlertRegExp: TCheckBox;
     dlgDXfnt: TFontDialog;
     edtCommand: TEdit;
     edtTelAddress: TEdit;
@@ -1097,7 +1098,7 @@ begin
     end
   end;
 
-  if (dmDXCluster.IsAlertCall(call,band,mode)) and tbAlertCalls.Checked then
+  if (dmDXCluster.IsAlertCall(call,band,mode,cbAlertRegExp.Checked)) and tbAlertCalls.Checked then
     dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
 
   if dmData.DebugLevel >=1 then
