@@ -351,6 +351,7 @@ type
     procedure edtEndTimeEnter(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
     procedure edtHisRSTExit(Sender: TObject);
+    procedure edtHisRSTstxExit(Sender: TObject);
     procedure edtITUEnter(Sender: TObject);
     procedure edtMyRSTExit(Sender: TObject);
     procedure edtNameEnter(Sender: TObject);
@@ -701,8 +702,12 @@ Begin
             edtGrid.TabOrder             :=  TabJmpOrd[OrdArr,7] mod 10;
             edtGrid.TabStop              :=  TabJmpOrd[OrdArr,7] > 10;
             TabCurOrd                    :=  OrdArr; //save what is set
+
           end;
  end;
+
+  ContestMode := (OrdArr = 2);  //sets contest mode. stx<>'' may may also set it later (on qso save). Else Resets  it
+  if dmData.DebugLevel>=1 then Writeln('ContestMode:', ContestMode);
 
 end;
 
@@ -1073,6 +1078,7 @@ begin
     edtDate.ReadOnly  := False;
     mComment.ReadOnly := False;
   end;
+
   sbtnQRZ.Visible    := False;
   sbtnLoTW.Visible   := False;
   sbtneQSL.Visible   := False;
@@ -1114,6 +1120,7 @@ begin
   mCallBook.Clear;
   dmData.qQSOBefore.Close;
   lblIOTA.Font.Color := clDefault;
+
   if frmQSODetails.Showing then
   begin
     frmQSODetails.ClearAll;
@@ -1138,6 +1145,8 @@ begin
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertFreq(cmbFreq);
   cmbTabOrd.ItemIndex := TabCurOrd;
+  if ContestMode then
+                   edtHisRSTstx.Text := RSTstx;
 
   if cbOffline.Checked then
   begin
@@ -4206,6 +4215,11 @@ begin
   edtHisRST.SelLength := 0
 end;
 
+procedure TfrmNewQSO.edtHisRSTstxExit(Sender: TObject);
+begin
+  RSTstx:= edtHisRSTstx.Text;   //needed for first entry otherwise stx disappears on double esc
+end;
+
 procedure TfrmNewQSO.edtITUEnter(Sender: TObject);
 begin
   edtITU.SelectAll
@@ -4792,10 +4806,11 @@ begin
         end
         else
           edtCall.Text := ''; // OnChange calls ClearAll;
+
         EscFirstTime := False;
         old_ccall := '';
         old_cfreq := '';
-        old_cmode := ''
+        old_cmode := '';
       end
       else begin
         if Assigned(CWint) then
@@ -5877,7 +5892,9 @@ begin
     freq := FloatToStr(etmp);
     frmTRXControl.SetModeFreq(mode,freq);
     edtCallExit(nil);
-    BringToFront
+    BringToFront;
+    if ContestMode then      //should fix stx disappearing when call replaced with anotherfrom cluster/bandmap
+                     edtHisRSTstx.Text := RSTstx;
   end
 end;
 

@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
   Left = 164
   Height = 569
-  Top = 8
+  Top = 4
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -1228,6 +1228,7 @@ object frmNewQSO: TfrmNewQSO
           Top = 24
           Width = 50
           AutoSize = False
+          OnExit = edtHisRSTstxExit
           TabOrder = 29
         end
         object edtMyRSTsrx: TEdit

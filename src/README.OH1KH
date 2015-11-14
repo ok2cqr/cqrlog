@@ -406,6 +406,10 @@ FIXED
 - I really hope 3rd try fixes this. ImgView from is now manually resized after image is loaded. No autorezise.
   FIXED (or not?)
 
+- ContestMode: Did clean own number (stx) when double ESC or new call selected by clicking DXCluster or bandmap. Now should not.
+  Also added ContestMode activation by selecting "Cont" tab order. Before ContesMOde was set only after frist qso with filled stx was saved.
+  FIXED (Build 1.9.0.2119)
+
  Issues to resolve:
 ===================
 
