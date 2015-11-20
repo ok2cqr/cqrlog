@@ -616,7 +616,7 @@ Const
     procedure UploadAllQSOOnline;
     procedure ReturnToNewQSO;
     procedure InitializeCW;
-    procedure ChkSerialNrUpd;
+    procedure ChkSerialNrUpd(IncNr:boolean);
   end;
 
   type
@@ -711,7 +711,7 @@ Begin
 
 end;
 
-procedure    TfrmNewQSO.ChkSerialNrUpd;   //is contest mode & do we need serial nr inc
+procedure    TfrmNewQSO.ChkSerialNrUpd(IncNr:boolean);   //is contest mode & do we need serial nr inc
 var
    stxLen,
    stxInt     : integer;
@@ -720,7 +720,7 @@ var
 
    Begin
       ContestMode := trim(edtHisRSTstx.Text) <> '';  //there is some text so it is contest mode
-      if ContestMode then
+      if ContestMode and IncNr then
        Begin
           stx :=  trim(edtHisRSTstx.Text);
          stxlen:= length(stx);
@@ -746,7 +746,7 @@ var
          RSTstx:=stx;
          RSTsrx:= edtMyRSTsrx.Text;
        end;
-   if dmData.DebugLevel>=1 then Writeln('Contest mode is: ',ContestMode);
+   if dmData.DebugLevel>=1 then Writeln('Contest mode is: ',ContestMode,' Inc number is: ',IncNr);
 
 end;
 
@@ -2820,7 +2820,7 @@ begin
         frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
      end;
 
-    ChkSerialNrUpd;  //contest mode & need inc number??
+    ChkSerialNrUpd(false);  //contest mode & need inc number??
 
     if ContestMode then
      Begin
@@ -2899,7 +2899,10 @@ begin
   UploadAllQSOOnline;
   frmWorked_grids.UpdateMap;
   if ContestMode then
-                     edtHisRSTstx.Text := RSTstx;
+                 Begin
+                  ChkSerialNrUpd(true);
+                  edtHisRSTstx.Text := RSTstx;
+                 end;
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);

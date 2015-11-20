@@ -1,4 +1,5 @@
 
+
 Additions done after first ver:
 ===============================
 WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
@@ -409,6 +410,8 @@ FIXED
 - ContestMode: Did clean own number (stx) when double ESC or new call selected by clicking DXCluster or bandmap. Now should not.
   Also added ContestMode activation by selecting "Cont" tab order. Before ContesMOde was set only after frist qso with filled stx was saved.
   FIXED (Build 1.9.0.2119)
+- ContestMode:  Oooops ! There was bug that incremented qso number (stx) BEFORE logging qso. SO first qso that was 001 went ro log as 002.
+  FIXED (Build 1.9.0.2120)
 
  Issues to resolve:
 ===================
