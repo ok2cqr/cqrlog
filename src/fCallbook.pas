@@ -68,6 +68,8 @@ var
   c_county    : String;
   c_qsl       : String;
   c_iota      : String;
+  c_waz       : String;
+  c_itu       : String;
   c_ErrMsg    : String;
 begin
   mCallbook.Lines.Clear;
@@ -75,7 +77,7 @@ begin
   mCallbook.Repaint;
   c_callsign := dmUtils.GetIDCall(edtCall.Text);
   Application.ProcessMessages;
-  dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_ErrMsg);
+  dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_waz,c_itu,c_ErrMsg);
   if c_ErrMsg = '' then
   begin
     mCallbook.Text    := c_address;

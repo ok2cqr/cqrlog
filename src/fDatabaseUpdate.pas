@@ -60,6 +60,8 @@ var
   c_iota      : String;
   c_ErrMsg    : String;
   c_SyncText  : String;
+  c_waz       : String;
+  c_itu       : String;
   c_running   : Boolean = False;
 
 procedure TQRZThread.Execute;
@@ -77,6 +79,8 @@ var
   StoreTo   : string = '';
   dbRemQSO  : string = '';
   dbIota    : String = '';
+  dbWAZ     : String = '';
+  dbITU     : String = '';
   IgnoreQRZ : boolean = False;
   MvToRem   : boolean = True;
   County    : String;
@@ -94,16 +98,20 @@ var
     dbRemQSO := dmData.qCallBook.FieldByName('remarks').AsString;
     dbGrid   := dmData.qCallBook.FieldByName('loc').AsString;
     dbIota   := dmData.qCallBook.FieldByName('iota').AsString;
+    dbWAZ    := dmData.qCallbook.FieldByName('waz').AsString;
+    dbITU    := dmdata.qCallbook.FieldByName('itu').AsString;
 
-    c_nick     := '';
-    c_qth      := '';
-    c_address  := '';
-    c_zip      := '';
-    c_grid     := '';
-    c_state    := '';
-    c_county   := '';
-    c_qsl      := '';
-    c_ErrMsg   := '';
+    c_nick    := '';
+    c_qth     := '';
+    c_address := '';
+    c_zip     := '';
+    c_grid    := '';
+    c_state   := '';
+    c_county  := '';
+    c_qsl     := '';
+    c_waz     := '';
+    c_itu     := '';
+    c_ErrMsg  := '';
 
     if frmDatabaseUpdate.NameFromLog then
     begin
@@ -145,7 +153,7 @@ var
     c_SyncText := dbCall;
     Synchronize(@frmDatabaseUpdate.SynCallBook);
     c_callsign := dmUtils.GetIDCall(dbCall);
-    dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_ErrMsg);
+    dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_waz,c_itu,c_ErrMsg);
 
     if c_ErrMsg <> '' then
     begin
@@ -243,12 +251,18 @@ var
     dbState  := copy(dbState, 1, 4);
     dbRemQSO := copy(dbRemQSO, 1, 200);
 
+    if (c_waz<>'') then
+      dbWAZ := c_waz;
+
+    if (c_itu<>'') then
+      dbITU := c_itu;
+
     dmData.Q1.SQL.Text := 'update cqrlog_main set name=' + QuotedStr(
       dbName) + ',qth=' + QuotedStr(dbQTH) + ',qsl_via=' +
       QuotedStr(dbQSLVia) + ',county=' + QuotedStr(dbCounty) +
       ',award=' + QuotedStr(dbAward) + ',state =' +
       QuotedStr(dbState) + ',remarks=' + QuotedStr(dbRemQSO) +
-      ',iota='+QuotedStr(dbIota)+
+      ',iota='+QuotedStr(dbIota)+',waz='+QuotedStr(dbWAZ)+',itu='+QuotedStr(dbITU)+
       ' where id_cqrlog_main = ' + IntToStr(dbId);
     dmData.trQ1.StartTransaction;
     if dmData.DebugLevel >= 1 then

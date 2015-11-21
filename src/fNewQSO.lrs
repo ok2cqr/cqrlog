@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmNewQSO','FORMDATA',[
   'TPF0'#10'TfrmNewQSO'#9'frmNewQSO'#4'Left'#3'p'#1#6'Height'#3#139#2#3'Top'#3
   +'/'#1#5'Width'#3''''#3#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#15'help/'

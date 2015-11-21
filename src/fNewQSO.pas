@@ -644,6 +644,8 @@ var
   c_county    : String;
   c_qsl       : String;
   c_iota      : String;
+  c_waz       : String;
+  c_itu       : String;
   c_ErrMsg    : String;
   c_SyncText  : String;
   c_running   : Boolean = False;
@@ -776,10 +778,13 @@ begin
     c_qsl      := '';
     c_iota     := '';
     c_ErrMsg   := '';
+    c_waz      := '';
+    c_itu      := '';
+
     FreeOnTerminate:= True;
     c_SyncText := 'Working ...';
     Synchronize(@frmNewQSO.SynCallBook);
-    dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_ErrMsg);
+    dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_waz,c_itu,c_ErrMsg);
     c_SyncText := '';
     Synchronize(@frmNewQSO.SynCallBook)
   finally
@@ -5380,6 +5385,12 @@ begin
           edtCounty.Text := c_county
       end
     end;  //county
+
+    if (c_itu<>'') then
+      edtITU.Text := c_itu;
+
+    if (c_waz<>'') then
+      edtWAZ.Text := c_waz;
 
     if c_zip <> '' then
     begin

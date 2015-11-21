@@ -85,9 +85,9 @@ type
     function GetQRZSession(var ErrMsg: string): boolean;
     function GetHamQTHSession(var ErrMsg: string): boolean;
     function GetQRZInfo(call: string;
-      var nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg: string): boolean;
+      var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
     function GetHamQTHInfo(call: string;
-      var nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg: string): boolean;
+      var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
   public
     s136: string;
     s630: string;
@@ -235,7 +235,7 @@ type
     function  IsValidFileName(const fileName : string) : boolean;
     function  GetBandPos(band : String) : Integer;
     function  GetNewQSOCaption(capt : String) : String;
-    function  GetCallBookData(call : String; var nick,qth,address,zip,grid,state,county,qsl,iota,ErrMsg : String) : Boolean;
+    function  GetCallBookData(call : String; var nick,qth,address,zip,grid,state,county,qsl,iota,waz,itu,ErrMsg : String) : Boolean;
     function  DateInSOTAFormat(date : TDateTime) : String;
     function  GetLocalUTCDelta : Double;
     function  GetRadioRigCtldCommandLine(radio : Word) : String;
@@ -2976,7 +2976,7 @@ begin
 end;
 
 function TdmUtils.GetQRZInfo(call: string;
-  var nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg: string): boolean;
+  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
 var
   http: THTTPSend;
   req: string = '';
@@ -3016,7 +3016,7 @@ begin
       begin
         fQRZSession := '';
         Result := GetQRZInfo(call, nick, qth, address, zip, grid, state,
-          county, qsl, iota, ErrMsg);
+          county, qsl, iota, waz, itu, ErrMsg);
       end
       else
       begin
@@ -3040,7 +3040,9 @@ begin
         grid := UpperCase(GetTagValue(m.Text, '<grid>'));
         qsl := GetTagValue(m.Text, '<qslmgr>');
         iota := GetTagValue(m.Text, '<iota>');
-      end;
+        waz := GetTagValue(m.Text, '<cqzone>');
+        itu := GetTagValue(m.Text, '<ituzone>')
+      end
     end
   finally
     m.Free;
@@ -3545,12 +3547,12 @@ begin
 end;
 
 function TdmUtils.GetCallBookData(call: string;
-  var nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg: string): boolean;
+  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu,  ErrMsg: string): boolean;
 begin
   if cqrini.ReadBool('Callbook', 'QRZ', False) then
-    Result := GetQRZInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg)
+    Result := GetQRZInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg)
   else
-    Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg);
+    Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg)
 end;
 
 function TdmUtils.GetTagValue(Data, tg: string): string;
@@ -3677,7 +3679,7 @@ begin
 end;
 
 function TdmUtils.GetHamQTHInfo(call: string;
-  var nick, qth, address, zip, grid, state, county, qsl, iota, ErrMsg: string): boolean;
+  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
 var
   http: THTTPSend;
   req: string = '';
@@ -3721,7 +3723,7 @@ begin
       begin
         fHamQTHSession := '';
         Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state,
-          county, qsl, iota, ErrMsg);
+          county, qsl, iota, waz, itu, ErrMsg)
       end
       else
       begin
@@ -3754,7 +3756,9 @@ begin
         grid := UpperCase(GetTagValue(m.Text, '<grid>'));
         qsl := GetTagValue(m.Text, '<qsl_via>');
         iota := GetTagValue(m.Text, '<iota>');
-      end;
+        waz := GetTagValue(m.Text, '<cq>');
+        itu := GetTagValue(m.Text, '<itu>')
+      end
     end
   finally
     m.Free;

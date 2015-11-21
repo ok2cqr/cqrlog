@@ -12,6 +12,7 @@ Legend:
   + Remote mode for wsjt added (thanks to Saku, OH1KH) 
   + Auto connect to DX cluster added (must be enabled in Preferences)
   + New propagation data courtesy of Paul, N0NBH
+  + WAZ and ITU zones are taken from callbook as well
   - Export configuration of opened log doesn't reflect recent changes - fixed
   - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
   - station name and QTH is replaced automatically when callsign is edited during the qso
