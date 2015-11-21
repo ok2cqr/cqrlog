@@ -33,107 +33,107 @@ AF-032|Zanzibar Island|5H|
 AF-033|Amirante Islands|S7|
 AF-035|Farquhar Islands|S7|
 AF-036|Chafarinas Islands|EA9|
-AF-037|Sierra Leone Northern/Western Province Group|9L|
+AF-037|Sierra Leone Northern/Western Province group|9L|
 AF-038|Dahlak Archipelago|E3|
 AF-039|Annobon (Pagalu) Island|3C0|3C0
-AF-040|Kenya Coast Province North Group|5Z|
-AF-041|Egmont Group|VQ9|
+AF-040|Kenya Coast Province North group|5Z|
+AF-041|Egmont group|VQ9|
 AF-042|Alboran Island|EA9|
-AF-043|Gabon Estuaire Province Group|TR|
+AF-043|Gabon Estuaire Province group|TR|
 AF-044|Principe Island|S9|
-AF-045|Senegal North Group|6W|
+AF-045|Senegal North group|6W|
 AF-046|Desertas Islands|CT9|
 AF-047|Selvagens Islands|CT9|
 AF-048|Kerguelen Islands|FT(X)|FT[0-9]X
 AF-049|Mauritius Island|3B8|3B8
-AF-050|Dakhlet Nouadhibou / Inchiri Region Group|5T|
-AF-051|Guinee-Maritime Province South Group|3X|
+AF-050|Dakhlet Nouadhibou / Inchiri Region group|5T|
+AF-051|Guinee-Maritime Province South group|3X|
 AF-052|Indian Ocean Coast South|T5|
-AF-053|Gulf of Tadjoura Group|J2|
+AF-053|Gulf of Tadjoura group|J2|
 AF-054|Mafia Island|5H|
-AF-056|Sierra Leone Southern Province Group|9L|
+AF-056|Sierra Leone Southern Province group|9L|
 AF-057|Madagascar's Coastal Islands West|5R|
-AF-058|Salomon Group|VQ9|
-AF-059|Strait of Mandab Group|J2|
-AF-060|The Gambia Group|C5|
-AF-061|Cabo Delgado District Group|C9|
+AF-058|Salomon group|VQ9|
+AF-059|Strait of Mandab group|J2|
+AF-060|The Gambia group|C5|
+AF-061|Cabo Delgado District group|C9|
 AF-062|Suakin Archipelago|ST|
 AF-063|Pemba Island|5H|
-AF-064|Western Cape Province South West Group|ZS|
-AF-065|Safi / Essaouira / Agadir Region Group|CN|
-AF-066|Gaza / Maputo District Group|C9|
-AF-067|Coast Province South Group|5Z|
-AF-068|Western Sahara South Group|S0|
+AF-064|Western Cape Province South West group|ZS|
+AF-065|Safi / Essaouira / Agadir Region group|CN|
+AF-066|Gaza / Maputo District group|C9|
+AF-067|Coast Province South group|5Z|
+AF-068|Western Sahara South group|S0|
 AF-069|Alhucemas Island|EA9|
-AF-070|Karas Region Group|V5|
-AF-072|Inhambane District Group|C9|
-AF-073|Sfax Region Group|3V|
-AF-074|Lindi / Mtwara Region Group|5H|
-AF-075|Dar Es Salaam / Pwani Region Group|5H|
-AF-076|Bayelsa / Rivers / Akwa Ibom etc States Group|5N|
-AF-077|Western Cape Province South Group|ZS|
-AF-078|Senegal South Group|6W|
-AF-079|Eastern Cape Province Group|ZS|
-AF-080|Red Sea Coast North Group|E3|
-AF-081|Red Sea Coast South Group|E3|
-AF-082|Rio Muni Province Group|3C|
-AF-083|Gabes / Medenine Region Group|3V|
-AF-084|Ghana Group|9G|
-AF-085|Western Cape Province North West Group|ZS|
+AF-070|Karas Region group|V5|
+AF-072|Inhambane District group|C9|
+AF-073|Sfax Region group|3V|
+AF-074|Lindi / Mtwara Region group|5H|
+AF-075|Dar Es Salaam / Pwani Region group|5H|
+AF-076|Bayelsa / Rivers / Akwa Ibom etc States group|5N|
+AF-077|Western Cape Province South group|ZS|
+AF-078|Senegal South group|6W|
+AF-079|Eastern Cape Province group|ZS|
+AF-080|Red Sea Coast North group|E3|
+AF-081|Red Sea Coast South group|E3|
+AF-082|Rio Muni Province group|3C|
+AF-083|Gabes / Medenine Region group|3V|
+AF-084|Ghana group|9G|
+AF-085|Western Cape Province North West group|ZS|
 AF-086|Cape Verde - Windward Islands (aka Barlavento)|D4|
-AF-087|Tanga Region Group|5H|
-AF-088|Nampula District Group|C9|
-AF-089|Ogooue-Maritime Province Group|TR|
+AF-087|Tanga Region group|5H|
+AF-088|Nampula District group|C9|
+AF-089|Ogooue-Maritime Province group|TR|
 AF-090|Madagascar's Coastal Islands East|5R|
-AF-091|Jendouba / Bizerte / Tunis / Nabeul Reg Group|3V|
-AF-092|Sousse / Monastir / Mahdia Region Group|3V|
-AF-093|Guinea-Bissau Coastal Region Group|J5|
-AF-094|Mediterranean Sea Coast West Group|7X|
-AF-095|Cameroon Group|TJ|
-AF-096|Guinee-Maritime Province North Group|3X|
-AF-097|Mediterranean Sea Coast Centre Group|7X|
-AF-098|Sofala District Group|C9|
-AF-099|Matruh Region Group|SU|
-AF-100|Bas-Congo Province Group|9Q|
-AF-101|Red Sea Coast North Group|SU|
-AF-102|Erongo / Hardap Region Group|V5|
-AF-103|Zambezia District Group|C9|
-AF-104|Mediterranean Sea Coast East Group|7X|
-AF-105|Nyanga Province Group|TR|
-AF-106|Cote d'Ivoire Group|TU|
-AF-107|Cuanza Sul / Benguela Province Group|D2|
-AF-108|Namibe Province Group|D2|
-AF-109|Nile Delta and Sinai Region Group|SU|
-AF-110|Red Sea Coast South Group|SU|
-AF-111|Liberia Group|EL|
-AF-112|Mediterranean Sea Coast Centre Group|5A|
-AF-113|Mediterranean Sea Coast East Group|5A|
-AF-114|Halaib Triangle Group|ST|
-AF-115|Red Sea State Group|ST|
-AF-116|Gulf of Aden West Group|T5|
-AF-117|Gulf of Aden East Group|T5|
+AF-091|Jendouba / Bizerte / Tunis / Nabeul Reg group|3V|
+AF-092|Sousse / Monastir / Mahdia Region group|3V|
+AF-093|Guinea-Bissau Coastal Region group|J5|
+AF-094|Mediterranean Sea Coast West group|7X|
+AF-095|Cameroon group|TJ|
+AF-096|Guinee-Maritime Province North group|3X|
+AF-097|Mediterranean Sea Coast Centre group|7X|
+AF-098|Sofala District group|C9|
+AF-099|Matruh Region group|SU|
+AF-100|Bas-Congo Province group|9Q|
+AF-101|Red Sea Coast North group|SU|
+AF-102|Erongo / Hardap Region group|V5|
+AF-103|Zambezia District group|C9|
+AF-104|Mediterranean Sea Coast East group|7X|
+AF-105|Nyanga Province group|TR|
+AF-106|Cote d'Ivoire group|TU|
+AF-107|Cuanza Sul / Benguela Province group|D2|
+AF-108|Namibe Province group|D2|
+AF-109|Nile Delta and Sinai Region group|SU|
+AF-110|Red Sea Coast South group|SU|
+AF-111|Liberia group|EL|
+AF-112|Mediterranean Sea Coast Centre group|5A|
+AF-113|Mediterranean Sea Coast East group|5A|
+AF-114|Halaib Triangle group|ST|
+AF-115|Red Sea State group|ST|
+AF-116|Gulf of Aden West group|T5|
+AF-117|Gulf of Aden East group|T5|
 AF-118|Los Farallones and Jaegerschmidt|CN|
 AF-119|Coetivy Island|S7|
-AN-001|Graham Land West (Adelaide Island) group|ZL5|
+AN-001|Graham Land West (Adelaide Island) group|CE9|
 AN-002|Bouvet Island|3Y(B)|3Y(B)
 AN-003|Heard Island|VK0(H)|VK0(H)
 AN-004|Peter 1 Island|3Y(P)|3Y(P)
 AN-005|Macquarie Island|VK0(M)|VK0(M)
-AN-006|Graham Land West (Biscoe Islands) group|ZL5|
+AN-006|Graham Land West (Biscoe Islands) group|CE9|
 AN-007|South Georgia Island|VP8(G)|
 AN-008|South Orkney Islands|VP8(O)|VP8(O)
 AN-009|South Sandwich Islands|VP8(S)|VP8(S)
 AN-010|South Shetland Islands|VP8(H)|VP8(H)
-AN-011|Ross Island group|ZL5|
-AN-012|Graham Land West (Palmer Archipelago) group|ZL5|
-AN-013|Trinity Peninsula group|ZL5|
-AN-014|Berkner Island|ZL5|
-AN-015|Queen Maud Land (Prince Harald etc) group|ZL5|
-AN-016|Antartica|ZL5|
-AN-017|Adelie Land|ZL5|
-AN-018|Palmer Land West (aka Alexander Island)|ZL5|
-AN-019|Balleny Islands|ZL5|
-AN-020|Scott Island|ZL5|
+AN-011|Ross Island group|CE9|
+AN-012|Graham Land West (Palmer Archipelago) group|CE9|
+AN-013|Trinity Peninsula group|CE9|
+AN-014|Berkner Island|CE9|
+AN-015|Queen Maud Land (Prince Harald etc.) group|CE9|
+AN-016|Antartica|CE9|
+AN-017|Adelie Land|CE9|
+AN-018|Palmer Land West (aka Alexander Island)|CE9|
+AN-019|Balleny Islands|CE9|
+AN-020|Scott Island|CE9|
 AN-021|Shag Rocks|VP8(G)|
 AS-001|Andaman Islands|VU(A)|
 AS-002|Bahrain Island|A9|
@@ -335,7 +335,7 @@ AS-199|Andhra Pradesh State South group|VU|
 AS-200|Shikoku Coastal Islands|JA|
 AS-201|Sea of Marmara Isl.|TA|
 AS-202|Hawar Isl.|A9|
-AS-203|Sea of Okhotsk Coast Group|UA(AS)|
+AS-203|Sea of Okhotsk Coast group (Shelikhova Bay group)|UA(AS)|
 EU-001|Dodecanese|SV5|SV5
 EU-002|Aland Islands|OH0|OH0
 EU-003|Eastern Azores group|CT8|CT8
@@ -717,7 +717,7 @@ NA-177|Quebec Province (Gaspe Peninsula) group|VE|
 NA-178|California State Centre (Sonoma to Santa Cruz County) group|W|
 NA-179|Guadalupe Island|XE|
 NA-180|Stann Creek / Toledo District group|V3|
-NA-181|British Columbia Province (Estevan Group)|VE|
+NA-181|British Columbia Province (Estevan group)|VE|
 NA-182|NWT (Inuvik Region) East group|VE|
 NA-183|Guerrero State group|XE|
 NA-184|California State North (Del Norte to Mendocino County) group|W|
@@ -782,9 +782,9 @@ NA-242|North Slope County West group|KL|
 NA-243|Greenland's Coastal Islands North East group|OX|
 NA-244|Marias Islands|XE|
 NA-245|Rocas Alijos Islands|XE|
-NA-246|Tamaulipas State Group|XE|
+NA-246|Tamaulipas State group|XE|
 NA-247|St. Maarten’s Coastal Islands|PJ7|
-NA-248|Nunavut (Devon) Island|VE|
+NA-248|Nunavut (Devon) Island (Melville Island group)|VE|
 OC-001|Australia|VK|
 OC-002|Christmas Island|VK9(X)|VK9X
 OC-003|Cocos (Keeling) Islands|VK9(C)|VK9C
@@ -826,6 +826,7 @@ OC-037|Campbell Island|ZL9|
 OC-038|Chatham Islands|ZL7|ZL7
 OC-039|Kermadec Islands|ZL8|ZL8
 OC-040|Niue Island|ZK2|ZK2
+OC-040|Niue Island|E6|E6
 OC-041|Ninigo group|P2|
 OC-042|Luzon Island|DU|
 OC-043|Phoenix Islands|T31|T31
@@ -956,7 +957,7 @@ OC-165|Sarawak's Coastal Islands|9M6|
 OC-166|Kalimantan's Coastal Islands East|YB|
 OC-167|Kapingamarangi Atoll|V6|
 OC-168|Russell Islands|H4|
-OC-169|Ha'apai Group|A3|
+OC-169|Ha'apai group|A3|
 OC-170|Western Australia State (South Coast) East Centre group|VK|
 OC-171|Queensland State (North Coast) South group|VK|
 OC-172|Queensland State (North Coast) Centre group|VK|
@@ -982,7 +983,7 @@ OC-191|Niuatoputapu Island|A3|
 OC-192|Ontong Java Atoll|H4|
 OC-193|Western Australia State (South Coast) West Centre group|VK|
 OC-194|New South Wales State North group|VK|
-OC-195|Furneaux Group|VK|
+OC-195|Furneaux group|VK|
 OC-196|Victoria State East group|VK|
 OC-197|Bawean Island|YB|
 OC-198|Northern Territory (Gulf of Carpentaria) South group|VK|
@@ -1186,3 +1187,4 @@ SA-096|Chubut Province North group|LU|
 SA-097|Diego Ramirez Islands|CE|
 SA-098|Arequipa / Moquegua / Tacna Department group|OA|
 SA-099|Curacao|PJ2|PJ2
+SA-100|Arica and Parinacota/Tarapaca Region group|CE|CE1
