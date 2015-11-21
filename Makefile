@@ -3,9 +3,10 @@ ST=strip
 datadir  = $(DESTDIR)/usr/share/cqrlog
 bindir   = $(DESTDIR)/usr/bin
 sharedir = $(DESTDIR)/usr/share
+tmpdir   = /tmp
 
 cqrlog: src/cqrlog.lpi
-	$(CC) --ws=gtk2 src/cqrlog.lpi
+	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
