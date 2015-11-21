@@ -18,6 +18,7 @@ Legend:
   - station name and QTH is replaced automatically when callsign is edited during the qso
   - after edit QSO QTH profile was set to wrong position
   - when trx was tuned on after program started, trx contol didn't work - fixed
+  - fixed country recognition for e.g. OK2CQR/XE1, it's XE not OK
 
 1.9.0
   + configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)

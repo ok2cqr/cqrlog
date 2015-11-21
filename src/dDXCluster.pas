@@ -75,6 +75,7 @@ type
               cont, ITU, WAZ, posun, lat, long : String; var ADIF : Integer; presne : Integer = NotExactly) : Boolean;
     function  Explode(const cSeparator, vString: String): TExplodeArray;
     function  DateToDDXCCDate(date : TDateTime) : String;
+    function  MyTryStrToInt(s : String; var i : Integer) : Boolean;
 
     //procedure VyhodnotZnacku(znacka : String; datum : TDateTime; var pfx, country, cont, ITU, WAZ, posun, lat, long : String);
   public
@@ -132,6 +133,19 @@ begin
 end;
 }
 
+function TdmDXCluster.MyTryStrToInt(s : String; var i : Integer) : Boolean;
+begin
+  i := 0;
+  s := UpperCase(s);
+  if (length(s) > 0) and (s[1] = 'X') then
+  begin // when the string starts with X, trystrtoint expecs it's number in hexa, that is wrong e.g. XE1 is not valid integer
+    result := false;
+    exit
+  end
+  else begin
+    result := TryStrToInt(s,i)
+  end
+end;
 
 function TdmDXCluster.BandModFromFreq(freq : String;var mode,band : String) : Boolean;
 var
@@ -428,7 +442,7 @@ begin
       1: begin
            pred_lomitkem := pole[0];
            za_lomitkem   := pole[1];
-           if ((TryStrToInt(za_lomitkem,tmp)) and (Length(za_lomitkem)>1)) then
+           if ((MyTryStrToInt(za_lomitkem,tmp)) and (Length(za_lomitkem)>1)) then
            begin
              Result := pred_lomitkem;
              exit
