@@ -3407,7 +3407,7 @@ begin
                 'into /etc/apparmor.d/usr.sbin.mysqld'+
                 LineEnding+
                 LineEnding+
-                'You can do that by running /usr/share/cqrlog/cqrtest-apparmor-fix or you can add the line '+
+                'You can do that by running /usr/share/cqrlog/cqrlog-apparmor-fix or you can add the line '+
                 'and restart apparmor manually.'+
                 LineEnding+
                 LineEnding+
