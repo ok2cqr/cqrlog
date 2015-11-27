@@ -423,6 +423,7 @@ begin
     end
     else begin
       RBNThread := TRBNThread.Create(True);
+      RBNThread.FreeOnTerminate := True;
       RBNThread.Start
     end
   end

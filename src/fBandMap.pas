@@ -71,7 +71,6 @@ type
     tbtnFilter: TToolButton;
     ToolButton1: TToolButton;
     procedure acFilterExecute(Sender: TObject);
-    procedure acFilterSettingsExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -582,6 +581,7 @@ begin
   Randomize;
   ClearAll;
   BandMapThread := TBandMapThread.Create(True);
+  BandMapThread.FreeOnTerminate := True;
   BandMapThread.Start
 end;
 
@@ -604,10 +604,6 @@ begin
   finally
     FreeAndNil(f)
   end
-end;
-
-procedure TfrmBandMap.acFilterSettingsExecute(Sender: TObject);
-begin
 end;
 
 procedure TfrmBandMap.LoadFonts;

@@ -1281,12 +1281,14 @@ begin
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
+    Tab.FreeOnTerminate := True;
     Tab.Start
   end;
 
   if cqrini.ReadBool('Program','CheckQSLTabs',True) then
   begin
     thqsl := TQSLTabThread.Create(True);
+    thqsl.FreeOnTerminate := True;
     thqsl.Start
   end;
 
@@ -3148,7 +3150,6 @@ end;
 
 procedure TfrmNewQSO.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  SaveSettings;
   if cqrini.ReadBool('Backup','Enable',False) then
   begin
     if cqrini.ReadBool('Backup','AskFirst',False) then
@@ -3165,6 +3166,7 @@ begin
       CreateAutoBackup()
   end;
   CloseAllWindows;
+  SaveSettings;
   dmData.CloseDatabases
 end;
 
@@ -4338,6 +4340,7 @@ begin
       begin
         c_callsign := edtCall.Text;
         QRZ := TQRZThread.Create(True);
+        QRZ.FreeOnTerminate := True;
         QRZ.Start
       end
     end
@@ -4475,6 +4478,7 @@ begin
       c_callsign := edtCall.Text;
       mCallBook.Clear;
       QRZ := TQRZThread.Create(True);
+      QRZ.FreeOnTerminate := True;
       QRZ.Start
     end
   end;
