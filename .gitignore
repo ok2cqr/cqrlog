@@ -7,3 +7,5 @@ src/backup
 *.or/share
 /src/cqrlog
 /src/cqrlog.lps
+src/cqrlog/cqrlog.or
+
