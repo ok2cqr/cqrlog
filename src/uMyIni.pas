@@ -48,8 +48,6 @@ constructor TMyIni.Create(IniFile,LocalIniFile : String);
 begin
   InitCriticalSection(crit);
   fIniFileName := IniFile;
-  Writeln('IniFile:',IniFile);
-  Writeln('LocalIniFile:',LocalIniFile);
   ini  := TMemIniFile.Create(IniFile);
   lini := TMemIniFile.Create(LocalIniFile)
 end;
@@ -230,8 +228,7 @@ end;
 
 procedure TMyIni.LoadLocalSectionsList;
 begin
-  LocalSections := cqrini.ReadString('ConfigStorage','Items','');
-  Writeln('LocalSections:',LocalSections)
+  LocalSections := cqrini.ReadString('ConfigStorage','Items','')
 end;
 
 destructor TMyIni.Destroy;

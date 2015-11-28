@@ -473,7 +473,7 @@ var
         leng := leng + Length(tmp)
       end;
     end;
-    if ExProfile and (profile<>'0') then
+    if ExProfile and (profile<>'0') and (profile<>'-1') then
     begin
       Writeln(f);
       leng := 0;

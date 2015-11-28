@@ -177,7 +177,10 @@ begin
     if dmData.DebugLevel>=1 then
       Writeln('In ConnectWeb');
     if WebThread = nil then
+    begin
       WebThread := TWebThread.Create(True);
+      WebThread.FreeOnTerminate := True
+    end;
     WebThread.BiggerFetch := FirstWebGet;
     WebThread.Start;
     FirstWebGet := False

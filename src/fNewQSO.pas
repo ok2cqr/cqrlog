@@ -354,7 +354,6 @@ type
     procedure edtStateEnter(Sender: TObject);
     procedure edtWAZEnter(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormWindowStateChange(Sender: TObject);
     procedure lblAziChangeBounds(Sender: TObject);
     procedure lblQRAChangeBounds(Sender: TObject);
@@ -572,11 +571,12 @@ type
     procedure ChangeCallBookCaption;
     procedure SendSpot;
     procedure RunVK(key_pressed: String);
-    procedure CreateAutoBackup(Path,Path1,Call : String;BackupType : Integer);
+    procedure CreateAutoBackup();
     procedure RefreshInfoLabels;
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
     procedure DisableRemoteMode;
+    procedure CloseAllWindows;
 
     function CheckFreq(freq : String) : String;
   public
@@ -1281,12 +1281,14 @@ begin
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
+    Tab.FreeOnTerminate := True;
     Tab.Start
   end;
 
   if cqrini.ReadBool('Program','CheckQSLTabs',True) then
   begin
     thqsl := TQSLTabThread.Create(True);
+    thqsl.FreeOnTerminate := True;
     thqsl.Start
   end;
 
@@ -1310,7 +1312,7 @@ begin
   BringToFront
 end;
 
-procedure TfrmNewQSO.SaveSettings;
+procedure TfrmNewQSO.CloseAllWindows;
 begin
   //SaveGrid;
   tmrRadio.Enabled := False;
@@ -1425,33 +1427,24 @@ begin
       frmRBNMonitor.Close
     end
     else
-      cqrini.WriteBool('Window','CWType',False);
+      cqrini.WriteBool('Window','CWType',False)
+  end
+end;
 
-    cqrini.DeleteKey('TMPQSO','OFF');
-    cqrini.DeleteKey('TMPQSO','FREQ');
-    cqrini.DeleteKey('TMPQSO','Mode');
-    cqrini.DeleteKey('TMPQSO','PWR');
-    cqrini.WriteBool('NewQSO','AutoMode',chkAutoMode.Checked);
-    SavePosition;
-    cqrini.WriteBool('NewQSO','ShowGrd',dbgrdQSOBefore.Visible);
-    if cqrini.ReadBool('xplanet','close',False) then
-      dmUtils.CloseXplanet;
-    cqrini.SaveToDisk;
-    dmData.SaveConfigFile;
+procedure TfrmNewQSO.SaveSettings;
+begin
+  cqrini.DeleteKey('TMPQSO','OFF');
+  cqrini.DeleteKey('TMPQSO','FREQ');
+  cqrini.DeleteKey('TMPQSO','Mode');
+  cqrini.DeleteKey('TMPQSO','PWR');
+  cqrini.WriteBool('NewQSO','AutoMode',chkAutoMode.Checked);
+  SavePosition;
+  cqrini.WriteBool('NewQSO','ShowGrd',dbgrdQSOBefore.Visible);
+  if cqrini.ReadBool('xplanet','close',False) then
+    dmUtils.CloseXplanet;
+  cqrini.SaveToDisk;
+  dmData.SaveConfigFile;
 
-    if cqrini.ReadBool('Backup','Enable',False) and
-      (DirectoryExists(cqrini.ReadString('Backup','Path',dmData.DataDir))) and (Paramstr(1) = '') then
-    begin
-      if cqrini.ReadBool('Backup','AskFirst',False) then
-      begin
-        if (Application.MessageBox('Do you want to backup your data?','Question ...',mb_YesNo+mb_IconQuestion) = idYes) then
-          CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Backup','Path1',''),cqrini.ReadString('Station','Call','backup'),cqrini.ReadInteger('Backup','BackupType',0))
-      end
-      else begin
-        CreateAutoBackup(cqrini.ReadString('Backup','Path',dmData.DataDir),cqrini.ReadString('Backup','Path1',''),cqrini.ReadString('Station','Call',''),cqrini.ReadInteger('Backup','BackupType',0))
-      end
-    end
-  end;
   if Assigned(CWint) then
   begin
     CWint.Close;
@@ -3157,6 +3150,22 @@ end;
 
 procedure TfrmNewQSO.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  if cqrini.ReadBool('Backup','Enable',False) then
+  begin
+    if cqrini.ReadBool('Backup','AskFirst',False) then
+    begin
+      case Application.MessageBox('Do you want to backup your data?','Question ...',mb_YesNoCancel+mb_IconQuestion) of
+        idCancel : begin
+                     CloseAction := caNone;
+                     exit
+                   end;
+        idYes : CreateAutoBackup()
+      end //case
+    end
+    else
+      CreateAutoBackup()
+  end;
+  CloseAllWindows;
   SaveSettings;
   dmData.CloseDatabases
 end;
@@ -3541,11 +3550,6 @@ begin
     ShowWin := False;
     ShowWindows
   end
-end;
-
-procedure TfrmNewQSO.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-begin
-  if dmData.DebugLevel>=1 then Writeln('OnCloseQuery - NewQSO')
 end;
 
 procedure TfrmNewQSO.edtCallChange(Sender: TObject);
@@ -4336,6 +4340,7 @@ begin
       begin
         c_callsign := edtCall.Text;
         QRZ := TQRZThread.Create(True);
+        QRZ.FreeOnTerminate := True;
         QRZ.Start
       end
     end
@@ -4473,6 +4478,7 @@ begin
       c_callsign := edtCall.Text;
       mCallBook.Clear;
       QRZ := TQRZThread.Create(True);
+      QRZ.FreeOnTerminate := True;
       QRZ.Start
     end
   end;
@@ -5882,18 +5888,31 @@ begin
   NewQSOFromSpot(Call,FloatToStr(Freq),Mode)
 end;
 
-procedure TfrmNewQSO.CreateAutoBackup(Path,Path1,Call : String;BackupType : Integer);
+procedure TfrmNewQSO.CreateAutoBackup();
+var
+  path1, path2 : String;
 begin
+  path1 := cqrini.ReadString('Backup','Path',dmData.DataDir);
+  path2 := cqrini.ReadString('Backup','Path1','');
+
+  if not DirectoryExists(path1) then
+    exit;
+
+  if (path2<>'') and (not DirectoryExists(path2)) then
+    exit;
+
   with TfrmExportProgress.Create(self) do
   try
-    AutoBackup := True;
-    SecondBackupPath :=  Path1;
-    FileName := Path + Call;
-    if  BackupType > 0 then
+    AutoBackup       := True;
+    SecondBackupPath := Path2;
+
+    FileName         := Path1 + cqrini.ReadString('Station', 'Call', '');
+    if cqrini.ReadInteger('Backup', 'BackupType', 0) > 0 then
       FileName := FileName + '_backup.adi'
     else
       FileName := FileName + '_'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
     ExportType := 2;
+
     ShowModal
   finally
     Free

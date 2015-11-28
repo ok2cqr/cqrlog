@@ -160,7 +160,7 @@ begin
 
   if (Pos(SrcCont+',',fil_SrcCont+',') = 0) and (fil_SrcCont<>'') then
   begin
-    Writeln('RBNMonitor: ','Wrong source continent - ',SrcCont);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong source continent - ',SrcCont);
     exit
   end;
 
@@ -177,13 +177,13 @@ begin
   Band := dmDXCluster.GetBandFromFreq(freq,True);
   if (Band='') then
   begin
-    Writeln('RBNMonitor: ','Wrong band - ',Band);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong band - ',Band);
     exit
   end;
 
   if dmData.RbnCallExistsInLog(dxstn,Band,mode,LastDate,LastTime) then
   begin
-    Writeln('RBNMonitor: ','Station already exist in the log - ',dxstn);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station already exist in the log - ',dxstn);
     exit
   end;
 
@@ -191,7 +191,7 @@ begin
   begin
     if Pos(dxstn+',',fil_AllowOnlyCallValue+',') = 0 then
     begin
-      Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
+      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
       exit
     end
   end;
@@ -202,20 +202,20 @@ begin
     reg.InputString := dxstn;
     if not reg.Exec(1) then
     begin
-      Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
+      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station is not between allowed callsigns - ',dxstn);
       exit
     end
   end;
 
   if (Pos(band+',',fil_AllowBands+',')=0) and (fil_AllowBands<>'') then
   begin
-    Writeln('RBNMonitor: ','This band is NOT allowed - ',band);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This band is NOT allowed - ',band);
     exit
   end;
 
   if (Pos(mode+',',fil_AllowModes+',')=0) and (fil_AllowModes<>'') then
   begin
-    Writeln('RBNMonitor: ','This mode is NOT allowed - ',mode);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This mode is NOT allowed - ',mode);
     exit
   end;
 
@@ -223,31 +223,31 @@ begin
 
   if (Pos(DestCont+',',fil_AllowCont+',') = 0) and (fil_AllowCont<>'') then
   begin
-    Writeln('RBNMonitor: ','Wrong continent - ',DestCont);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong continent - ',DestCont);
     exit
   end;
 
   if ((fil_NotCnty<>'') and (Pos(pfx+',',fil_NotCnty+',')>0)) then
   begin
-    Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
     exit
   end;
 
   if ((fil_AllowCnty<>'') and (Pos(pfx+',',fil_AllowCnty+',')=0)) then
   begin
-    Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This country is not allowed - ',pfx);
     exit
   end;
 
   if fil_LoTWOnly and (LoTW<>'L') then
   begin
-    Writeln('RBNMonitor: ','This station is not LoTW user - ',dxstn);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This station is not LoTW user - ',dxstn);
     exit
   end;
 
   if fil_eQSLOnly and (eQSL<>'E') then
   begin
-    Writeln('RBNMonitor: ','This station is not eQSL user - ',dxstn);
+    if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','This station is not eQSL user - ',dxstn);
     exit
   end;
 
@@ -264,7 +264,7 @@ begin
   begin
     if (index>0) and (index<4) then
     begin
-      Writeln('RBNMonitor: ','Not new one, band or mode - ',dxstn);
+      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Not new one, band or mode - ',dxstn);
       exit
     end
   end;
@@ -317,20 +317,11 @@ begin
       dxstn    := trim(dxstn);
       dxstn    := trim(copy(dxstn,1,Pos(' ',dxstn)));
 
-      Writeln('Spotter:',spotter);
-      Writeln('Freq:',freq);
-      Writeln('Stren:',stren);
-      Writeln('Mode:',mode);
-      Writeln('Dxstn:',dxstn);
-
-
-      Writeln('Before UsesLoTW');
       if dmDXCluster.UsesLotw(dxstn) then
         LoTW := 'L'
       else
         LoTW := '';
 
-      Writeln('Before UseseQSL');
       if dmDXCluster.UseseQSL(dxstn) then
         eQSL := 'E'
       else
@@ -406,7 +397,6 @@ begin
 
     if (Pos('DX DE',UpperCase(tmp))>0)  then
     begin
-      writeln(tmp);
       AddSpotToThread(tmp)
     end
     else begin
@@ -527,7 +517,7 @@ var
 begin
   for i:=0 to sgRbn.ColCount-1 do
     cqrini.WriteInteger('WindowSize','RbnCol'+IntToStr(i),sgRbn.ColWidths[i]);
-
+  lTelnet.Disconnect();
   dmUtils.SaveWindowPos(self)
 end;
 
