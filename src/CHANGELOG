@@ -13,6 +13,7 @@ Legend:
   + Auto connect to DX cluster added (must be enabled in Preferences)
   + New propagation data courtesy of Paul, N0NBH
   + WAZ and ITU zones are taken from callbook as well
+  + export for SOTA version 2 added
   - Export configuration of opened log doesn't reflect recent changes - fixed
   - station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed
   - station name and QTH is replaced automatically when callsign is edited during the qso

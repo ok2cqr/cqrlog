@@ -16,7 +16,9 @@ type
     Button1 : TButton;
     btnClose : TButton;
     btnExport : TButton;
+    chkHisSota : TCheckBox;
     cmbSota : TComboBox;
+    cmbHisSota : TComboBox;
     edtNotes : TEdit;
     edtCallsign : TEdit;
     edtFileName : TEdit;
@@ -27,6 +29,7 @@ type
     Label1 : TLabel;
     Label2 : TLabel;
     Label3 : TLabel;
+    Label4 : TLabel;
     Label6 : TLabel;
     lblDone : TLabel;
     pbExport : TProgressBar;
@@ -98,11 +101,12 @@ end;
 
 procedure TfrmSOTAExport.btnExportClick(Sender : TObject);
 var
-  AllQSO : Boolean=False;
-  f      : TextFile;
-  sota   : String;
-  note   : String;
-  q      : String;
+  AllQSO  : Boolean=False;
+  f       : TextFile;
+  sota    : String;
+  note    : String;
+  q       : String;
+  HisSota : String='';
 begin
   SaveSettings;
   if not dmData.IsFilter then
@@ -171,6 +175,30 @@ begin
       else
         note := edtNotes.Text;
       note := StringReplace(note,',',' ',[rfReplaceAll, rfIgnoreCase]);
+
+      if chkHisSota.Checked then
+      begin
+        case cmbHisSota.ItemIndex of
+           0 : HisSota := dmData.Q.FieldByName('award').AsString;
+           1 : HisSota := dmData.Q.FieldByName('remarks').AsString;
+           2 : HisSota := dmData.Q.FieldByName('qth').AsString
+         end //case
+      end;
+
+      Writeln(f,
+              'V2,',
+              edtCallsign.Text+',',  //callsign
+              sota+',',              //sota
+              dmUtils.DateInSOTAFormat(dmData.Q.FieldByName('qsodate').AsDateTime)+',',
+              StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+',',
+              FormatFloat('0.00;;',dmData.Q.FieldByName('freq').AsFloat),'MHz,',
+              dmData.Q.FieldByName('mode').AsString,',',
+              dmData.Q.FieldByName('callsign').AsString,',',  //his callsign
+              HisSota+',', //his summit
+              note  //comments
+      );
+
+      {
       Writeln(f,edtCallsign.Text,',',
               dmUtils.DateInSOTAFormat(dmData.Q.FieldByName('qsodate').AsDateTime),',',
               StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase]),',',
@@ -180,6 +208,7 @@ begin
               dmData.Q.FieldByName('callsign').AsString,',',
               note
               );
+      }
       pbExport.StepIt;
       dmData.Q.Next
     end;
