@@ -78,7 +78,10 @@ begin
     dlgSave.InitialDir := ExtractFilePath(edtFileName.Text);
   rbAddLogNote.Checked := cqrini.ReadBool('SotaExport','Note',True);
   rbAddEdtNote.Checked := not rbAddEdtNote.Checked;
-  edtNotes.Text        := cqrini.ReadString('SotaExport','NoteText','')
+  edtNotes.Text        := cqrini.ReadString('SotaExport','NoteText','');
+
+  chkHisSota.Checked   := cqrini.ReadBool('SotaExport','ExportHisSummit',False);
+  cmbHisSota.ItemIndex := cqrini.ReadInteger('SotaExport','cmbHisSota',0)
 end;
 
 procedure TfrmSOTAExport.SaveSettings;
@@ -89,7 +92,10 @@ begin
   cqrini.WriteInteger('SotaExport','cmbSota',cmbSota.ItemIndex);
   cqrini.WriteString('SotaExport','Callsign',edtCallsign.Text);
   cqrini.WriteBool('SotaExport','Note',rbAddLogNote.Checked);
-  cqrini.WriteString('SotaExport','NoteText',edtNotes.Text)
+  cqrini.WriteString('SotaExport','NoteText',edtNotes.Text);
+
+  cqrini.WriteBool('SotaExport','ExportHisSummit',chkHisSota.Checked);
+  cqrini.WriteInteger('SotaExport','cmbHisSota',cmbHisSota.ItemIndex)
 end;
 
 procedure TfrmSOTAExport.FormClose(Sender : TObject;

@@ -132,7 +132,7 @@ object frmSOTAExport: TfrmSOTAExport
     end
     object cmbHisSota: TComboBox
       Left = 168
-      Height = 31
+      Height = 27
       Top = 69
       Width = 120
       ItemHeight = 0
@@ -150,8 +150,8 @@ object frmSOTAExport: TfrmSOTAExport
       Left = 305
       Height = 17
       Top = 76
-      Width = 92
-      Caption = 'into ''His field'''
+      Width = 146
+      Caption = 'into ''His summit'' field'
       ParentColor = False
     end
   end
