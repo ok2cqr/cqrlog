@@ -1,24 +1,26 @@
 #!/bin/bash
-FILE=/etc/apparmor.d/usr.sbin.mysqld
-FTMP=`mktemp /tmp/tmp.XXXXXX` 
+FILE=/etc/apparmor.d/local/usr.sbin.mysqld
+IFILE=/etc/init.d/apparmor
+FTMP=`mktemp /tmp/tmp.XXXXXX`
 if [ -f $FILE ]
 then
-  if `cat $FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'` 
+  if `cat $FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
   then
-   echo "" 
+   echo ""
    echo File $FILE  was already modified, no changes needed
    echo ""
   else
-    LINES=`cat $FILE | grep -n -E '^[\ \t]*\}[\ \t]*$' | sed 's/\:.*//'`
-    LINES=$((LINES-1))
-    head $FILE -n $LINES > $FTMP
+    cat $FILE > $FTMP
     echo "  @{HOME}/.config/cqrlog/database/** rwk," >> $FTMP
-    echo "}" >> $FTMP
     cat $FTMP > $FILE
-   echo "" 
-   echo File $FILE  was modified, now restarting apparmor ...
    echo ""
-    /etc/init.d/apparmor restart	
+   echo File $FILE  was modified ...
+   if [ -f $IFILE ]
+   then
+    echo now restarting apparmor
+    /etc/init.d/apparmor restart
+   fi
+   echo ""
   fi
 fi
 rm $FTMP
