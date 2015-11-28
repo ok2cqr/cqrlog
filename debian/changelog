@@ -1,3 +1,30 @@
+cqrlog (1.9.1-1) unstable; urgency=low
+
+  * support sending CW via HamLib library added
+  * CW type window is not modal window anymore
+  * RBN monitor added
+  * TRX configuration improved (you can choose rig from a list
+    instead of entering Hamlib rig ID)
+  * Remote mode for wsjt added (thanks to Saku, OH1KH)
+  * Auto connect to DX cluster added (must be enabled in Preferences)
+  * New propagation data courtesy of Paul, N0NBH
+  * WAZ and ITU zones are taken from callbook as well
+  * export for SOTA version 2 added
+  * Export configuration of opened log doesn't reflect recent
+    changes - fixed
+  * station that were not added to DX cluster window (because of
+    filter criteria) were added to bandmap - fixed
+  * station name and QTH is replaced automatically when callsign
+    is edited during the qso
+  * after edit QSO QTH profile was set to wrong position
+  * when trx was tuned on after program started, trx contol didn't
+    work - fixed
+  * fixed country recognition for e.g. OK2CQR/XE1, it's XE not OK
+  * autobackup failed when QTH profile was not set
+  * fixed libmysqlclient dependency
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 28 Nov 2015 18:40:18 +0100
+
 cqrlog (1.9.0-1) unstable; urgency=low
 
   * configuration can be stored into database or local computer only

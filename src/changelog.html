@@ -1,6 +1,29 @@
 <strong>New user?</strong> Please look to <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
 <hr>
 <br>
+<strong>CQRLOG 1.9.1 (2015-11-28)</strong><br>
+<ul style="list-style: square;text-align:left; color: blue;">
+  <li>support sending CW via HamLib library added</li>
+  <li>CW type window is not modal window anymore</li>
+  <li>RBN monitor added</li>
+  <li>TRX configuration improved (you can choose rig from a list instead of entering Hamlib rig ID)</li>
+  <li>Remote mode for wsjt added (thanks to Saku, OH1KH) </li>
+  <li>Auto connect to DX cluster added (must be enabled in Preferences)</li>
+  <li>New propagation data courtesy of Paul, N0NBH</li>
+  <li>WAZ and ITU zones are taken from callbook as well</li>
+  <li>export for SOTA version 2 added</li>
+</ul>
+<ul style="list-style: square;text-align:left; color: red;">
+  <li>Export configuration of opened log doesn't reflect recent changes - fixed</li>
+  <li>station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed</li>
+  <li>station name and QTH is replaced automatically when callsign is edited during the QSO</li>
+  <li>after edit QSO QTH profile was set to wrong position</li>
+  <li>when trx was tuned on after program started, trx contol didn't work - fixed</li>
+  <li>fixed country recognition for e.g. OK2CQR/XE1, it's XE not OK</li>
+  <li>autobackup failed when QTH profile was not set</li>
+  <li>fixed libmysqlclient dependency</li>
+</ul>
+<br><br>
 <strong>CQRLOG 1.9.0 (2015-03-04)</strong><br>
 <ul style="list-style: square;text-align:left; color: blue;">
   <li>configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)</li>
