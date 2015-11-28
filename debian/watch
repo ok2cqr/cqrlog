@@ -1,4 +1,2 @@
 version=3
-opts=uversionmangle=s/(\d)[\._](mac|win32|i386|amd64)$/$1~$2/;s/(\d)\.deb\.src/$1/ \
-http://www.cqrlog.com/download \
-(?:.*[/=]|)cqrlog[_\-](\d.*)\.(?:tgz|tbz2|txz|tar\.(?:gz|bz2|xz)).*
+https://github.com/ok2cqr/cqrlog/tags .*/v(\d.*)\.(?:tgz|tbz2|txz|tar\.(?:gz|bz2|xz))
