@@ -1,5 +1,29 @@
 #!/bin/sh
 set -e
-/usr/share/cqrlog/cqrlog-apparmor-fix
+FILE=/etc/apparmor.d/usr.sbin.mysqld
+IFILE=/etc/init.d/apparmor
+FTMP=`mktemp /tmp/tmp.XXXXXX`
+if [ -f $FILE ]
+then
+  if `cat $FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
+  then
+   echo ""
+   echo File $FILE  was already modified, no changes needed
+   echo ""
+  else
+    cat $FILE > $FTMP
+    echo "  @{HOME}/.config/cqrlog/database/** rwk," >> $FTMP
+    cat $FTMP > $FILE
+   echo ""
+   echo File $FILE  was modified ...
+   if [ -f $IFILE ]
+   then
+    echo now restarting apparmor
+    /etc/init.d/apparmor restart
+   fi
+   echo ""
+  fi
+fi
+rm $FTMP
 #DEBHELPER#
 

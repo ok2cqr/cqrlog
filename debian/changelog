@@ -1,3 +1,9 @@
+cqrlog (1.9.1-3) unstable; urgency=low
+
+  * fixed apparmor configuration
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 29 Nov 2015 08:37:55 +0100
+
 cqrlog (1.9.1-2) unstable; urgency=low
 
   * fixed dependencies for Ubuntu 15.10
