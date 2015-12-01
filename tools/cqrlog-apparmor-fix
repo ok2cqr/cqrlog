@@ -10,11 +10,15 @@ then
    echo File $FILE  was already modified, no changes needed
    echo ""
   else
-    cat $FILE > $FTMP
+    LINES=`cat $FILE | grep -n -E '^[\ \t]*\}[\ \t]*$' | sed 's/\:.*//'`
+    LINES=$((LINES-1))
+    head $FILE -n $LINES > $FTMP
     echo "  @{HOME}/.config/cqrlog/database/** rwk," >> $FTMP
+    echo "}" >> $FTMP
     cat $FTMP > $FILE
-   echo ""
-   echo File $FILE  was modified ...
+    echo ""
+    echo File $FILE  was modified, now restarting apparmor ...
+    echo ""
    if [ -f $IFILE ]
    then
     echo now restarting apparmor
