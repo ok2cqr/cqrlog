@@ -5,7 +5,6 @@ object frmCWType: TfrmCWType
   Width = 680
   ActiveControl = Panel1
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'CW type'
   ClientHeight = 405
   ClientWidth = 680
@@ -118,7 +117,7 @@ object frmCWType: TfrmCWType
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.4.4.0'
   object Panel1: TPanel
     Left = 0
     Height = 88
@@ -232,4 +231,4 @@ object frmCWType: TfrmCWType
     ClientWidth = 680
     TabOrder = 3
   end
-end
+end

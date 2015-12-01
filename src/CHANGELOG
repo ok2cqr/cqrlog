@@ -4,6 +4,10 @@ Legend:
   - bugfix
 --------------------
 
+1.9.2
+  - CW type window was not sizeable - fixed
+
+
 1.9.1 (2015-11-28)
   + support sending CW via HamLib library added
   + CW type window is not modal window anymore
