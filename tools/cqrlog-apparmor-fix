@@ -1,5 +1,5 @@
 #!/bin/bash
-FILE=/etc/apparmor.d/local/usr.sbin.mysqld
+FILE=/etc/apparmor.d/usr.sbin.mysqld
 IFILE=/etc/init.d/apparmor
 FTMP=`mktemp /tmp/tmp.XXXXXX`
 if [ -f $FILE ]
