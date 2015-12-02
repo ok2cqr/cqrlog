@@ -8,7 +8,7 @@ object frmeQSLDownload: TfrmeQSLDownload
   ClientWidth = 489
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.4.4.0'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 407

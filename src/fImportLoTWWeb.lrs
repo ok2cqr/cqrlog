@@ -160,7 +160,7 @@ LazarusResources.Add('TfrmImportLoTWWeb','FORMDATA',[
   +#0#15#255#128#0#31#255#128#0#31#255#128#0'?'#255#0#0'?'#255#0#0#127#255#0#0
   +#255#255#0#1#255#255#0#3#255#255#0#7#255#255#0#31#255#255#0'?'#255#255#0#255
   +#255#255#131#255#255#255#12'OnCloseQuery'#7#14'FormCloseQuery'#6'OnShow'#7#8
-  +'FormShow'#8'Position'#7#16'poMainFormCenter'#10'LCLVersion'#6#7'1.2.4.0'#0#9
+  +'FormShow'#8'Position'#7#16'poMainFormCenter'#10'LCLVersion'#6#7'1.4.4.0'#0#9
   +'TGroupBox'#9'GroupBox1'#4'Left'#2#0#6'Height'#3#149#1#3'Top'#3#128#0#5'Widt'
   +'h'#3'<'#2#5'Align'#7#8'alClient'#7'Caption'#6#8'Progress'#12'ClientHeight'#3
   +#130#1#11'ClientWidth'#3'8'#2#8'TabOrder'#2#0#0#5'TMemo'#5'mStat'#4'Left'#2#0

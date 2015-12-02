@@ -6,7 +6,7 @@ interface
 
 uses
   Classes,SysUtils,FileUtil,LResources,Forms,Controls,Graphics,Dialogs,StdCtrls,
-  ExtCtrls, httpsend, blcksock, synautil, lcltype, dateutils;
+  ExtCtrls, httpsend, blcksock, synautil, lcltype, dateutils, synacode;
 
 type
 
@@ -111,7 +111,7 @@ begin
     Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
     Writeln(f);
     Writeln(f,'<EQSL_USER'+dmUtils.StringToADIF(cqrini.ReadString('LoTW','eQSLName','')));
-    Writeln(f,'<EQSL_PSWD'+dmUtils.StringToADIF(cqrini.ReadString('LoTW','eQSLPass','')));
+    Writeln(f,'<EQSL_PSWD'+dmUtils.StringToADIF(EncodeURL(cqrini.ReadString('LoTW','eQSLPass',''))));
     Writeln(f,'<EOH>');
     while not dmData.Q.Eof do
     begin

@@ -115,7 +115,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.4.4.0'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 405

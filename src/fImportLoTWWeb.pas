@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs,
-  httpsend, blcksock, StdCtrls, ExtCtrls, inifiles, ssl_openssl, ssl_openssl_lib;
+  httpsend, blcksock, StdCtrls, ExtCtrls, inifiles, ssl_openssl, ssl_openssl_lib,
+  synacode;
 
 type
 
@@ -102,7 +103,7 @@ begin
     edtCall.Enabled        := False;
 
     user := cqrini.ReadString('LoTW','LoTWName','');
-    pass := cqrini.ReadString('LoTW','LoTWPass','');
+    pass := EncodeURL(cqrini.ReadString('LoTW','LoTWPass',''));
     http.Sock.OnStatus := @SockCallBack;
     HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');

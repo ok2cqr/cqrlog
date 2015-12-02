@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ExtCtrls, lcltype, iniFiles, process, httpsend, ssl_openssl, synautil,
-  blcksock, ssl_openssl_lib, dateutils;
+  blcksock, ssl_openssl_lib, dateutils, synacode;
 
 type
 
@@ -132,7 +132,7 @@ begin
     WriteStrToStream(http.Document, s);
     http.MimeType := 'multipart/form-data; boundary=' + Bound;
 
-    url := Format(UPLOAD_URL,[cqrini.ReadString('LoTW','LoTWName',''),cqrini.ReadString('LoTW','LoTWPass','')]);
+    url := Format(UPLOAD_URL,[cqrini.ReadString('LoTW','LoTWName',''),EncodeURL(cqrini.ReadString('LoTW','LoTWPass',''))]);
     if dmData.DebugLevel >= 1 then Writeln(url);
 
     Res := HTTP.HTTPMethod('POST', url);
