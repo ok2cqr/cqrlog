@@ -14,7 +14,7 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.4.4.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 649
@@ -7077,6 +7077,7 @@ object frmPreferences: TfrmPreferences
         Caption = 'Show propagation as image'
         Checked = True
         TabOrder = 0
+        TabStop = True
       end
       object edtCondxImageUrl: TEdit
         Left = 72

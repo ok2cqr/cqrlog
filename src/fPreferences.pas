@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, inifiles, DB, process, Spin, ColorBox, lcltype,
-  uCWKeying, types;
+  uCWKeying, types, fileutil;
 
 type
 
@@ -2628,7 +2628,16 @@ begin
 
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
 
-  dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig1);
+  if (FileExistsUTF8(edtRigCtldPath.Text)) then
+  begin
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig1);
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX2', 'model', ''),edtRigCtldPath.Text,cmbModelRig2)
+  end
+  else begin
+    Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
+                           'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
+  end;
+
   edtR1Device.Text := cqrini.ReadString('TRX1', 'device', '');
   edtPoll1.Text := cqrini.ReadString('TRX1', 'poll', '500');
   edtRadio1.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
@@ -2645,8 +2654,6 @@ begin
   cmbDTRR1.ItemIndex := cqrini.ReadInteger('TRX1', 'DTR', 0);
   cmbRTSR1.ItemIndex := cqrini.ReadInteger('TRX1', 'RTS', 0);
 
-
-  dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX2', 'model', ''),edtRigCtldPath.Text,cmbModelRig2);
   edtR2Device.Text := cqrini.ReadString('TRX2', 'device', '');
   edtPoll2.Text := cqrini.ReadString('TRX2', 'poll', '500');
   edtRadio2.Text := cqrini.ReadString('TRX2', 'Desc', 'Radio 2');

@@ -1,3 +1,5 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TfrmPreferences','FORMDATA',[
   'TPF0'#15'TfrmPreferences'#14'frmPreferences'#4'Left'#3#148#1#6'Height'#3#137
   +#2#3'Top'#3#162#0#5'Width'#3#232#3#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'
@@ -5,7 +7,7 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#12'biSystemMenu'#0#7'Caption'#6#11'Preferences'#12'ClientHeight'#3#137#2#11
   +'ClientWidth'#3#232#3#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7#10
   +'FormCreate'#6'OnShow'#7#8'FormShow'#8'Position'#7#16'poMainFormCenter'#10'L'
-  +'CLVersion'#6#7'1.2.4.0'#0#12'TPageControl'#13'pgPreferences'#4'Left'#3#160#0
+  +'CLVersion'#6#7'1.4.4.0'#0#12'TPageControl'#13'pgPreferences'#4'Left'#3#160#0
   +#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#240#2#10'ActivePage'#7#8'tabCondx'#5
   +'Align'#7#8'alClient'#7'Anchors'#11#6'akLeft'#7'akRight'#8'akBottom'#0#8'Tab'
   +'Index'#2#26#8'TabOrder'#2#0#8'OnChange'#7#19'pgPreferencesChange'#0#9'TTabS'
@@ -1666,41 +1668,41 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   ,'TabSheet'#8'tabCondx'#7'Caption'#6#11'Propagation'#12'ClientHeight'#3'j'#2
   +#11'ClientWidth'#3#236#2#0#12'TRadioButton'#14'rbCondxAsImage'#4'Left'#2#25#6
   +'Height'#2#24#3'Top'#2#16#5'Width'#3#211#0#7'Caption'#6#25'Show propagation '
-  +'as image'#7'Checked'#9#8'TabOrder'#2#0#0#0#5'TEdit'#16'edtCondxImageUrl'#4
-  +'Left'#2'H'#6'Height'#2#27#3'Top'#2'H'#5'Width'#3#16#2#8'TabOrder'#2#1#4'Tex'
-  +'t'#6#16'edtCondxImageUrl'#0#0#6'TLabel'#8'Label204'#4'Left'#2'J'#6'Height'#2
-  +#17#3'Top'#2'0'#5'Width'#3#139#0#7'Caption'#6#18'Downoad data from:'#11'Pare'
-  +'ntColor'#8#0#0#12'TRadioButton'#13'rbCondxAsText'#4'Left'#2#25#6'Height'#2
-  +#24#3'Top'#3#152#0#5'Width'#3#195#0#7'Caption'#6#24'Show as text information'
-  +#8'TabOrder'#2#2#0#0#9'TCheckBox'#18'chkShowCondxValues'#4'Left'#2'8'#6'Heig'
-  +'ht'#2#24#3'Top'#3#185#0#5'Width'#3#195#0#7'Caption'#6#25'Show A, K, SSN, FO'
-  +'F2 etc.'#8'TabOrder'#2#3#0#0#9'TCheckBox'#14'chkCondxCalcHF'#4'Left'#2'8'#6
-  +'Height'#2#24#3'Top'#3#217#0#5'Width'#3'('#1#7'Caption'#6'''Show calculated '
-  +'prediction for HF bands'#8'TabOrder'#2#4#0#0#9'TCheckBox'#15'chkCondxCalcVH'
-  +'F'#4'Left'#2'8'#6'Height'#2#24#3'Top'#3#249#0#5'Width'#3'2'#1#7'Caption'#6
-  +'(Show calculated prediction for VHF bands'#8'TabOrder'#2#5#0#0#6'TLabel'#8
-  +'Label205'#4'Left'#2'H'#6'Height'#2#17#3'Top'#2'h'#5'Width'#3#156#1#7'Captio'
-  +'n'#6':Look at http://www.hamqsl.com/solar.html for more variants'#11'Parent'
-  +'Color'#8#0#0#0#0#6'TPanel'#6'Panel1'#4'Left'#3#144#3#6'Height'#3#137#2#3'To'
-  +'p'#2#0#5'Width'#2'X'#5'Align'#7#7'alRight'#12'ClientHeight'#3#137#2#11'Clie'
-  +'ntWidth'#2'X'#8'TabOrder'#2#1#0#7'TButton'#5'btnOK'#4'Left'#2#8#6'Height'#2
-  +#25#3'Top'#2' '#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6
-  +#2'OK'#7'OnClick'#7#10'btnOKClick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnCance'
-  +'l'#4'Left'#2#8#6'Height'#2#25#3'Top'#2'H'#5'Width'#2'K'#25'BorderSpacing.In'
-  +'nerBorder'#2#4#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'Tab'
-  +'Order'#2#1#0#0#7'TButton'#7'btnHelp'#4'Left'#2#8#6'Height'#2#25#3'Top'#3#160
-  +#0#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4'Help'#7'On'
-  +'Click'#7#12'btnHelpClick'#8'TabOrder'#2#2#0#0#0#8'TListBox'#13'lbPreference'
-  +'s'#4'Left'#2#0#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#160#0#5'Align'#7#6'a'
-  +'lLeft'#13'Items.Strings'#1#6#7'Program'#6#7'Station'#6#7'New QSO'#6#15'Visi'
-  +'ble columns'#6#5'Bands'#6#11'TRX control'#6#11'ROT control'#6#5'Modes'#6#12
-  +'QTH profiles'#6#6'Export'#6#9'DXCluster'#6#5'Fonts'#6#14'WAZ, ITU zones'#6#4
-  +'IOTA'#6#10'Membership'#6#7'Bandmap'#6#15'xplanet support'#6#17'Zip code tra'
-  +'cking'#6#17'LoTW/eQSL support'#6#12'CW interface'#6#21'fldigi/wsjt interfac'
-  +'e'#6#11'Auto backup'#6#16'External viewers'#6#16'Callbook support'#6#11'RBN'
-  +' support'#6#17'Online log upload'#6#11'Propagation'#0#10'ItemHeight'#2#23#7
-  +'OnClick'#7#18'lbPreferencesClick'#11'ScrollWidth'#3#158#0#8'TabOrder'#2#2#0
-  +#0#11'TFontDialog'#7'dlgFont'#11'MinFontSize'#2#0#11'MaxFontSize'#2#0#4'left'
-  +#3#168#3#3'top'#3#8#1#0#0#11'TOpenDialog'#7'dlgOpen'#4'left'#3#168#3#3'top'#3
-  +#208#0#0#0#0
+  +'as image'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'#9#0#0#5'TEdit'#16'edtCond'
+  +'xImageUrl'#4'Left'#2'H'#6'Height'#2#27#3'Top'#2'H'#5'Width'#3#16#2#8'TabOrd'
+  +'er'#2#1#4'Text'#6#16'edtCondxImageUrl'#0#0#6'TLabel'#8'Label204'#4'Left'#2
+  +'J'#6'Height'#2#17#3'Top'#2'0'#5'Width'#3#139#0#7'Caption'#6#18'Downoad data'
+  +' from:'#11'ParentColor'#8#0#0#12'TRadioButton'#13'rbCondxAsText'#4'Left'#2
+  +#25#6'Height'#2#24#3'Top'#3#152#0#5'Width'#3#195#0#7'Caption'#6#24'Show as t'
+  +'ext information'#8'TabOrder'#2#2#0#0#9'TCheckBox'#18'chkShowCondxValues'#4
+  +'Left'#2'8'#6'Height'#2#24#3'Top'#3#185#0#5'Width'#3#195#0#7'Caption'#6#25'S'
+  +'how A, K, SSN, FOF2 etc.'#8'TabOrder'#2#3#0#0#9'TCheckBox'#14'chkCondxCalcH'
+  +'F'#4'Left'#2'8'#6'Height'#2#24#3'Top'#3#217#0#5'Width'#3'('#1#7'Caption'#6
+  +'''Show calculated prediction for HF bands'#8'TabOrder'#2#4#0#0#9'TCheckBox'
+  +#15'chkCondxCalcVHF'#4'Left'#2'8'#6'Height'#2#24#3'Top'#3#249#0#5'Width'#3'2'
+  +#1#7'Caption'#6'(Show calculated prediction for VHF bands'#8'TabOrder'#2#5#0
+  +#0#6'TLabel'#8'Label205'#4'Left'#2'H'#6'Height'#2#17#3'Top'#2'h'#5'Width'#3
+  +#156#1#7'Caption'#6':Look at http://www.hamqsl.com/solar.html for more varia'
+  +'nts'#11'ParentColor'#8#0#0#0#0#6'TPanel'#6'Panel1'#4'Left'#3#144#3#6'Height'
+  +#3#137#2#3'Top'#2#0#5'Width'#2'X'#5'Align'#7#7'alRight'#12'ClientHeight'#3
+  +#137#2#11'ClientWidth'#2'X'#8'TabOrder'#2#1#0#7'TButton'#5'btnOK'#4'Left'#2#8
+  +#6'Height'#2#25#3'Top'#2' '#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7
+  +'Caption'#6#2'OK'#7'OnClick'#7#10'btnOKClick'#8'TabOrder'#2#0#0#0#7'TButton'
+  +#9'btnCancel'#4'Left'#2#8#6'Height'#2#25#3'Top'#2'H'#5'Width'#2'K'#25'Border'
+  +'Spacing.InnerBorder'#2#4#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'
+  +#2#2#8'TabOrder'#2#1#0#0#7'TButton'#7'btnHelp'#4'Left'#2#8#6'Height'#2#25#3
+  +'Top'#3#160#0#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#4
+  +'Help'#7'OnClick'#7#12'btnHelpClick'#8'TabOrder'#2#2#0#0#0#8'TListBox'#13'lb'
+  +'Preferences'#4'Left'#2#0#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#160#0#5'Al'
+  +'ign'#7#6'alLeft'#13'Items.Strings'#1#6#7'Program'#6#7'Station'#6#7'New QSO'
+  +#6#15'Visible columns'#6#5'Bands'#6#11'TRX control'#6#11'ROT control'#6#5'Mo'
+  +'des'#6#12'QTH profiles'#6#6'Export'#6#9'DXCluster'#6#5'Fonts'#6#14'WAZ, ITU'
+  +' zones'#6#4'IOTA'#6#10'Membership'#6#7'Bandmap'#6#15'xplanet support'#6#17
+  +'Zip code tracking'#6#17'LoTW/eQSL support'#6#12'CW interface'#6#21'fldigi/w'
+  +'sjt interface'#6#11'Auto backup'#6#16'External viewers'#6#16'Callbook suppo'
+  +'rt'#6#11'RBN support'#6#17'Online log upload'#6#11'Propagation'#0#10'ItemHe'
+  +'ight'#2#23#7'OnClick'#7#18'lbPreferencesClick'#11'ScrollWidth'#3#158#0#8'Ta'
+  +'bOrder'#2#2#0#0#11'TFontDialog'#7'dlgFont'#11'MinFontSize'#2#0#11'MaxFontSi'
+  +'ze'#2#0#4'left'#3#168#3#3'top'#3#8#1#0#0#11'TOpenDialog'#7'dlgOpen'#4'left'
+  +#3#168#3#3'top'#3#208#0#0#0#0
 ]);
