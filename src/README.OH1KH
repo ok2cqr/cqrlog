@@ -222,6 +222,10 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   Uncheck "include" and alertcalls works as it has worked before.
   (Build 2118)
 
+- No change to program itself. (Build is still 1.9.0.2120). Just added richmemo pagage files as subdir to /src. So there is no need
+  to seek and install RichMemo.lpk to Lazarus itself.
+
+
 Issues resolved:
 ===================
 

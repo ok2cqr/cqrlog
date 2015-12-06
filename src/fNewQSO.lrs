@@ -1,7 +1,7 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmNewQSO','FORMDATA',[
-  'TPF0'#10'TfrmNewQSO'#9'frmNewQSO'#4'Left'#3#164#0#6'Height'#3'9'#2#3'Top'#2#4
+  'TPF0'#10'TfrmNewQSO'#9'frmNewQSO'#4'Left'#3'9'#1#6'Height'#3'9'#2#3'Top'#2#2
   +#5'Width'#3''''#3#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6#15'help/index'
   +'.html'#7'Caption'#6#30'New QSO ... (CQRLOG for Linux)'#12'ClientHeight'#3'$'
   +#2#11'ClientWidth'#3''''#3#11'Font.Height'#2#8#9'Icon.Data'#10#194#12#0#0#190
