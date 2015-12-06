@@ -9,6 +9,7 @@ Legend:
   - CW type window was not sizeable - fixed
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed
+  - RBN monitor didn't show any data when RBN didn't send any operating mode
 
 1.9.1 (2015-11-28)
   + support sending CW via HamLib library added

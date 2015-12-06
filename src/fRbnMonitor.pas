@@ -65,6 +65,9 @@ end;
 
 
 type
+
+  { TfrmRbnMonitor }
+
   TfrmRbnMonitor = class(TForm)
     acRbnMonitor: TActionList;
     acConnect: TAction;
@@ -109,6 +112,8 @@ type
     RbnMonThread : TRbnThread;
     lTelnet      : TLTelnetClientComponent;
     aRbnArchive  : Array of TRbnSpot;
+
+    function  GetModeFromFreq(freq: string): string;
 
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
@@ -285,6 +290,7 @@ var
   dxinfo  : String;
   RbnSpot : TRbnSpot;
   index   : Integer;
+  band    : String;
 begin
   reg := TRegExpr.Create;
   try try
@@ -308,14 +314,28 @@ begin
         Continue
       end;
 
-      spotter := trim(copy(spot,7,Pos('-',spot)-7));
+      if (Pos('-',copy(spot,1,17))>0) then
+        spotter := trim(copy(spot,7,Pos('-',spot)-7))
+      else
+        spotter := trim(copy(spot,7,Pos(':',spot)-7));
+
       freq    := trim(copy(spot,18,9));
       stren   := trim(copy(spot,Pos('dB',spot)-4,4));
-      mode    := trim(copy(spot,41,6));
+
+      Writeln(spotter);
+      Writeln(freq);
 
       dxstn    := copy(spot,Pos('.',spot)+3,Length(spot)-Pos('.',spot)-1);
       dxstn    := trim(dxstn);
       dxstn    := trim(copy(dxstn,1,Pos(' ',dxstn)));
+
+      mode    := trim(copy(spot,41,6));
+      Writeln(mode);
+      if (Pos(','+mode+',',','+C_RBN_MODES+',') = 0) then //some rbn nodes doesn't have mode value
+      begin
+        mode := frmRbnMonitor.getModeFromFreq(freq)
+      end;
+      Writeln(mode);
 
       if dmDXCluster.UsesLotw(dxstn) then
         LoTW := 'L'
@@ -668,6 +688,46 @@ begin
   end
 end;
 
+function TfrmRbnMonitor.GetModeFromFreq(freq: string): string;
+var
+  Band: string;
+  eFreq: Currency;
+begin
+  Result := '';
+  if TryStrToCurr(freq,eFreq) then
+    eFreq := eFreq/1000
+  else
+    exit;
+
+  band := dmDXCluster.GetBandFromFreq(freq, True);
+  dmData.qRbnMon.Close;
+  dmData.qRbnMon.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
+  if dmData.DebugLevel>=1 then Writeln(dmData.qRbnMon.SQL.Text);
+  if dmData.trRbnMon.Active then
+    dmData.trRbnMon.Rollback;
+  dmData.trRbnMon.StartTransaction;
+  try
+    dmData.qRbnMon.Open;
+    if dmData.qRbnMon.RecordCount > 0 then
+    begin
+      if ((eFreq >= dmData.qRbnMon.FieldByName('B_BEGIN').AsCurrency) and
+        (eFreq <= dmData.qRbnMon.FieldByName('CW').AsCurrency)) then
+        Result := 'CW'
+      else
+      begin
+        if ((eFreq > dmData.qRbnMon.FieldByName('RTTY').AsCurrency) and
+          (eFreq <= dmData.qRbnMon.FieldByName('SSB').AsCurrency)) then
+          Result := 'RTTY'
+        else begin
+          Result := 'SSB'
+        end
+      end
+    end
+  finally
+    dmData.qRbnMon.Close;
+    dmData.trRbnMon.Rollback
+  end
+end;
 
 initialization
   {$I fRbnMonitor.lrs}
