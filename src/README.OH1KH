@@ -225,6 +225,12 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 - No change to program itself. (Build is still 1.9.0.2120). Just added richmemo pagage files as subdir to /src. So there is no need
   to seek and install RichMemo.lpk to Lazarus itself.
 
+- Added mode JT4 as new wsjt-x 1.6.0.-rc1 supports that mode, too. (Build 2121)
+
+
+
+
+
 
 Issues resolved:
 ===================
@@ -416,6 +422,14 @@ FIXED
   FIXED (Build 1.9.0.2119)
 - ContestMode:  Oooops ! There was bug that incremented qso number (stx) BEFORE logging qso. SO first qso that was 001 went ro log as 002.
   FIXED (Build 1.9.0.2120)
+
+- NewQso TabOrder. At the beginning TabOrder showed "Norm" but real tab order was how ever "Vhf". Added TabOrder setting to function "ClearAll"
+  that hopefully resolves this without causing another bug(s). AT least start of program seems to be ok now.
+  FIXED (Build 2121)
+
+
+
+
 
  Issues to resolve:
 ===================

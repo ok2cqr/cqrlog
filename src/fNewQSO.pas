@@ -1145,6 +1145,7 @@ begin
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertFreq(cmbFreq);
   cmbTabOrd.ItemIndex := TabCurOrd;
+  MkTabOrd(TabCurOrd);
   if ContestMode then
                    edtHisRSTstx.Text := RSTstx;
 
