@@ -52,3 +52,7 @@ deb:
 	dpkg-buildpackage -rfakeroot -i -I
 deb_src:
 	dpkg-buildpackage -rfakeroot -i -I -S
+debug:
+	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
