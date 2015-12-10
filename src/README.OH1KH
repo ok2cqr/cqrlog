@@ -227,6 +227,7 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - Added mode JT4 as new wsjt-x 1.6.0.-rc1 supports that mode, too. (Build 2121)
 
+- Program should work also with MariaDB 10.1 (fix copied from Petr's 1.9.1 version [mysqlconn.inc] Build 2122)
 
 
 

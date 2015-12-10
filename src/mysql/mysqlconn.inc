@@ -61,7 +61,7 @@ Const
 {$ENDIF}
 MariaDBVersion =
 {$IFDEF mysql56}   // MariaDB 10.0 is compatible with MySQL 5.6
-  '10.0';
+  '10';
 {$ELSE} // MariaDB 5.1..5.5 presumably report the same version number as MySQL
    MySQLVersion;
 {$ENDIF}
