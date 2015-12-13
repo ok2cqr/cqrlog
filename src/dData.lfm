@@ -401,6 +401,12 @@ object dmData: TdmData
       'ALTER TABLE call_alert ADD INDEX (id);'
       'ALTER TABLE call_alert ADD INDEX (callsign);'
       ''
+      'CREATE TABLE freqmem ('
+      '       id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
+      '       freq numeric(10,4) NOT NULL,'
+      '       mode varchar(6) NOT NULL,'
+      '       bandwidth int NOT NULL'
+      ') COLLATE ''utf8_bin'';'
       ''
     )
     Terminator = ';'

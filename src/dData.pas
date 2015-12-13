@@ -19,12 +19,12 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil,
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
-  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn;
+  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids;
 
 const
   MaxCall   = 100000;
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 10;
+  cDB_MAIN_VER = 11;
   cDB_COMN_VER = 3;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -3271,6 +3271,21 @@ begin
         Q1.ExecSQL;
 
         Q1.SQL.Text := 'ALTER TABLE call_alert ADD INDEX (callsign);';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit
+      end;
+
+      if old_version < 11 then
+      begin
+        trQ1.StartTransaction;
+        Q1.SQL.Clear;
+        Q1.SQL.Add('CREATE TABLE freqmem (');
+        Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
+        Q1.SQL.Add('  freq numeric(10,4) NOT NULL,');
+        Q1.SQL.Add('  mode varchar(6) NOT NULL,');
+        Q1.SQL.Add('  bandwidth int NOT NULL');
+        Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
