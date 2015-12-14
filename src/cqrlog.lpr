@@ -18,7 +18,8 @@ uses
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
 dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
-fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer;
+fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer, fRadioMemories, 
+fAddRadioMemory;
 var
   Splash : TfrmSplash;
 

@@ -18,7 +18,8 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, inifiles, process, lcltype, buttons, dynlibs,{rig,} uRigControl;
+  ExtCtrls, inifiles, process, lcltype, buttons, Menus, ActnList, dynlibs,
+  uRigControl;
 
 
 
@@ -27,34 +28,45 @@ type
   { TfrmTRXControl }
 
   TfrmTRXControl = class(TForm)
-    btn160m: TButton;
-    btn20m: TButton;
+    acMem: TActionList;
+    acAddModMem: TAction;
     btn10m: TButton;
     btn12m: TButton;
-    btn2m: TButton;
     btn15m: TButton;
+    btn160m: TButton;
+    btn17m: TButton;
+    btn20m: TButton;
+    btn2m: TButton;
+    btn30m: TButton;
+    btn40m: TButton;
+    btn6m: TButton;
     btn70cm: TButton;
     btn80m: TButton;
-    btn40m: TButton;
-    btn30m: TButton;
-    btn17m: TButton;
-    btn6m: TButton;
     btnCW: TButton;
-    btnVFOA: TButton;
+    btnMemUp: TButton;
+    btnMemDwn: TButton;
     btnSSB: TButton;
     btnRTTY: TButton;
     btnAM: TButton;
     btnFM: TButton;
+    btnVFOA: TButton;
     btnVFOB: TButton;
-    GroupBox1: TGroupBox;
     gbBand: TGroupBox;
+    GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox4: TGroupBox;
     lblFreq: TLabel;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    mnuMem: TMainMenu;
     Panel1: TPanel;
+    Panel2: TPanel;
     rbRadio1: TRadioButton;
     rbRadio2: TRadioButton;
     tmrRadio : TTimer;
+    procedure acAddModMemExecute(Sender: TObject);
+    procedure btnMemDwnClick(Sender: TObject);
+    procedure btnMemUpClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender : TObject; var CanClose : boolean);
     procedure FormCreate(Sender: TObject);
@@ -116,6 +128,7 @@ type
     function  GetDislayFreq : String;
 
     procedure SetModeFreq(mode,freq : String);
+    procedure SetFreqModeBandWidth(freq : Double; mode : String; BandWidth : Integer);
     procedure SavePosition;
     procedure CloseRigs;
     procedure Split(up : Integer);
@@ -181,7 +194,7 @@ var
 
 implementation
 { TfrmTRXControl }
-uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline;
+uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories;
 
 procedure TRigThread.Execute;
 
@@ -584,6 +597,43 @@ begin
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 
+procedure TfrmTRXControl.acAddModMemExecute(Sender: TObject);
+begin
+  frmRadioMemories := TfrmRadioMemories.Create(frmTRXControl);
+  try
+    dmData.LoadFreqMemories(frmRadioMemories.sgrdMem);
+    frmRadioMemories.ShowModal;
+    if frmRadioMemories.ModalResult = mrOK then
+    begin
+      dmData.StoreFreqMemories(frmRadioMemories.sgrdMem)
+    end
+  finally
+    FreeAndNil(frmRadioMemories)
+  end
+end;
+
+procedure TfrmTRXControl.btnMemDwnClick(Sender: TObject);
+var
+  freq      : Double;
+  mode      : String;
+  bandwidth : Integer;
+begin
+  dmData.GetNextFreqFromMem(freq,mode,bandwidth);
+  if freq > 0 then
+    SetFreqModeBandWidth(freq,mode,bandwidth)
+end;
+
+procedure TfrmTRXControl.btnMemUpClick(Sender: TObject);
+var
+  freq      : Double;
+  mode      : String;
+  bandwidth : Integer;
+begin
+  dmData.GetPreviousFreqFromMem(freq,mode,bandwidth);
+  if freq > 0 then
+    SetFreqModeBandWidth(freq,mode,bandwidth)
+end;
+
 procedure TfrmTRXControl.FormCloseQuery(Sender : TObject; var CanClose : boolean
   );
 begin
@@ -855,11 +905,34 @@ begin
   end
 end;
 
+procedure TfrmTRXControl.SetFreqModeBandWidth(freq : Double; mode : String; BandWidth : Integer);
+var
+  rmode : TRigMode;
+begin
+  if mode = 'SSB' then
+  begin
+    if freq > 10000 then
+      mode := 'USB'
+    else
+      mode := 'LSB'
+  end;
+
+  if Assigned(radio) then
+  begin
+    radio.SetFreqKHz(freq);
+    if AutoMode then
+    begin
+      rmode.mode := mode;
+      rmode.pass := BandWidth;
+      radio.SetModePass(rmode)
+    end
+  end
+end;
+
 procedure TfrmTRXControl.SetModeFreq(mode,freq : String); //freq in kHz
 var
   bandwidth : Integer = 0;
   f         : double = 0;
-  rmode     : TRigMode;
 begin
   if (lblFreq.Caption = empty_freq) then
     exit;
@@ -873,30 +946,7 @@ begin
       mode := 'LSB'
   end;
 
-  if Assigned(radio) then
-  begin
-    radio.SetFreqKHz(f);
-    if AutoMode then
-    begin
-      rmode.mode := mode;
-      rmode.pass := bandwidth;
-      radio.SetModePass(rmode)
-    end
-  end
-
-  {
-  EnterCriticalsection(RigCrit);
-  try
-    if AutoMode then
-    begin
-      set_width := bandwidth;
-      set_mode  := mode
-    end;
-    set_freq  := f
-  finally
-    LeaveCriticalsection(RigCrit)
-  end
-  }
+  SetFreqModeBandWidth(f,mode,bandwidth)
 end;
 
 function TfrmTRXControl.GetModeFreqNewQSO(var mode,freq : String) : Boolean;

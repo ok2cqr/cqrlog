@@ -1,0 +1,167 @@
+object frmRadioMemories: TfrmRadioMemories
+  Left = 476
+  Height = 510
+  Top = 232
+  Width = 482
+  Caption = 'Memories'
+  ClientHeight = 510
+  ClientWidth = 482
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '1.4.4.0'
+  object sgrdMem: TStringGrid
+    Left = 0
+    Height = 510
+    Top = 0
+    Width = 379
+    Align = alClient
+    ColCount = 3
+    FixedCols = 0
+    RowCount = 1
+    TabOrder = 0
+    OnCompareCells = sgrdMemCompareCells
+    ColWidths = (
+      132
+      104
+      115
+    )
+    Cells = (
+      3
+      0
+      0
+      'Freq (kHz)'
+      1
+      0
+      'Mode'
+      2
+      0
+      'Bandwidth (Hz)'
+    )
+  end
+  object Panel1: TPanel
+    Left = 379
+    Height = 510
+    Top = 0
+    Width = 103
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 510
+    ClientWidth = 103
+    TabOrder = 1
+    object Button1: TButton
+      Left = 16
+      Height = 25
+      Top = 48
+      Width = 75
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 16
+      Height = 25
+      Top = 128
+      Width = 75
+      Action = acAdd
+      TabOrder = 1
+    end
+    object Button3: TButton
+      Left = 16
+      Height = 25
+      Top = 160
+      Width = 75
+      Action = acEdit
+      TabOrder = 2
+    end
+    object Button4: TButton
+      Left = 16
+      Height = 25
+      Top = 200
+      Width = 75
+      Action = acDelete
+      TabOrder = 3
+    end
+    object btnFunction: TButton
+      Left = 16
+      Height = 25
+      Top = 254
+      Width = 75
+      Caption = 'More...'
+      OnClick = btnFunctionClick
+      TabOrder = 4
+    end
+    object btnOK: TButton
+      Left = 16
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'OK'
+      ModalResult = 1
+      TabOrder = 5
+    end
+  end
+  object acMem: TActionList
+    left = 24
+    top = 48
+    object acAdd: TAction
+      Caption = 'Add'
+      OnExecute = acAddExecute
+    end
+    object acEdit: TAction
+      Caption = 'Edit'
+      OnExecute = acEditExecute
+    end
+    object acDelete: TAction
+      Caption = 'Delete'
+      OnExecute = acDeleteExecute
+    end
+    object acUp: TAction
+      Caption = 'Move up'
+    end
+    object acDown: TAction
+      Caption = 'Move down'
+    end
+    object acImport: TAction
+      Caption = 'Import from CSV'
+      OnExecute = acImportExecute
+    end
+    object acExport: TAction
+      Caption = 'Export to CSV'
+      OnExecute = acExportExecute
+    end
+    object acSortByFreq: TAction
+      Caption = 'Sort by freq'
+      OnExecute = acSortByFreqExecute
+    end
+  end
+  object popMem: TPopupMenu
+    left = 96
+    top = 48
+    object MenuItem1: TMenuItem
+      Action = acImport
+    end
+    object MenuItem2: TMenuItem
+      Action = acExport
+    end
+    object MenuItem3: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem4: TMenuItem
+      Action = acSortByFreq
+    end
+  end
+  object dlgOpen: TOpenDialog
+    DefaultExt = '.csv'
+    Filter = 'CSV files|*.csv'
+    left = 176
+    top = 48
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.csv'
+    Filter = 'CSV files|*.csv'
+    Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+    left = 264
+    top = 48
+  end
+end

@@ -1,0 +1,42 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmRadioMemories','FORMDATA',[
+  'TPF0'#17'TfrmRadioMemories'#16'frmRadioMemories'#4'Left'#3#220#1#6'Height'#3
+  +#254#1#3'Top'#3#232#0#5'Width'#3#226#1#7'Caption'#6#8'Memories'#12'ClientHei'
+  +'ght'#3#254#1#11'ClientWidth'#3#226#1#7'OnClose'#7#9'FormClose'#6'OnShow'#7#8
+  +'FormShow'#10'LCLVersion'#6#7'1.4.4.0'#0#11'TStringGrid'#7'sgrdMem'#4'Left'#2
+  +#0#6'Height'#3#254#1#3'Top'#2#0#5'Width'#3'{'#1#5'Align'#7#8'alClient'#8'Col'
+  +'Count'#2#3#9'FixedCols'#2#0#8'RowCount'#2#1#8'TabOrder'#2#0#14'OnCompareCel'
+  +'ls'#7#19'sgrdMemCompareCells'#9'ColWidths'#1#3#132#0#2'h'#2's'#0#5'Cells'#1
+  +#2#3#2#0#2#0#6#10'Freq (kHz)'#2#1#2#0#6#4'Mode'#2#2#2#0#6#14'Bandwidth (Hz)'
+  +#0#0#0#6'TPanel'#6'Panel1'#4'Left'#3'{'#1#6'Height'#3#254#1#3'Top'#2#0#5'Wid'
+  +'th'#2'g'#5'Align'#7#7'alRight'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#3
+  +#254#1#11'ClientWidth'#2'g'#8'TabOrder'#2#1#0#7'TButton'#7'Button1'#4'Left'#2
+  +#16#6'Height'#2#25#3'Top'#2'0'#5'Width'#2'K'#6'Cancel'#9#7'Caption'#6#6'Canc'
+  +'el'#11'ModalResult'#2#2#8'TabOrder'#2#0#0#0#7'TButton'#7'Button2'#4'Left'#2
+  +#16#6'Height'#2#25#3'Top'#3#128#0#5'Width'#2'K'#6'Action'#7#5'acAdd'#8'TabOr'
+  +'der'#2#1#0#0#7'TButton'#7'Button3'#4'Left'#2#16#6'Height'#2#25#3'Top'#3#160
+  +#0#5'Width'#2'K'#6'Action'#7#6'acEdit'#8'TabOrder'#2#2#0#0#7'TButton'#7'Butt'
+  +'on4'#4'Left'#2#16#6'Height'#2#25#3'Top'#3#200#0#5'Width'#2'K'#6'Action'#7#8
+  +'acDelete'#8'TabOrder'#2#3#0#0#7'TButton'#11'btnFunction'#4'Left'#2#16#6'Hei'
+  +'ght'#2#25#3'Top'#3#254#0#5'Width'#2'K'#7'Caption'#6#7'More...'#7'OnClick'#7
+  +#16'btnFunctionClick'#8'TabOrder'#2#4#0#0#7'TButton'#5'btnOK'#4'Left'#2#16#6
+  +'Height'#2#25#3'Top'#2#16#5'Width'#2'K'#7'Caption'#6#2'OK'#11'ModalResult'#2
+  +#1#8'TabOrder'#2#5#0#0#0#11'TActionList'#5'acMem'#4'left'#2#24#3'top'#2'0'#0
+  +#7'TAction'#5'acAdd'#7'Caption'#6#3'Add'#9'OnExecute'#7#12'acAddExecute'#0#0
+  +#7'TAction'#6'acEdit'#7'Caption'#6#4'Edit'#9'OnExecute'#7#13'acEditExecute'#0
+  +#0#7'TAction'#8'acDelete'#7'Caption'#6#6'Delete'#9'OnExecute'#7#15'acDeleteE'
+  +'xecute'#0#0#7'TAction'#4'acUp'#7'Caption'#6#7'Move up'#0#0#7'TAction'#6'acD'
+  +'own'#7'Caption'#6#9'Move down'#0#0#7'TAction'#8'acImport'#7'Caption'#6#15'I'
+  +'mport from CSV'#9'OnExecute'#7#15'acImportExecute'#0#0#7'TAction'#8'acExpor'
+  +'t'#7'Caption'#6#13'Export to CSV'#9'OnExecute'#7#15'acExportExecute'#0#0#7
+  +'TAction'#12'acSortByFreq'#7'Caption'#6#12'Sort by freq'#9'OnExecute'#7#19'a'
+  +'cSortByFreqExecute'#0#0#0#10'TPopupMenu'#6'popMem'#4'left'#2'`'#3'top'#2'0'
+  +#0#9'TMenuItem'#9'MenuItem1'#6'Action'#7#8'acImport'#0#0#9'TMenuItem'#9'Menu'
+  +'Item2'#6'Action'#7#8'acExport'#0#0#9'TMenuItem'#9'MenuItem3'#7'Caption'#6#1
+  +'-'#0#0#9'TMenuItem'#9'MenuItem4'#6'Action'#7#12'acSortByFreq'#0#0#0#11'TOpe'
+  +'nDialog'#7'dlgOpen'#10'DefaultExt'#6#4'.csv'#6'Filter'#6#15'CSV files|*.csv'
+  +#4'left'#3#176#0#3'top'#2'0'#0#0#11'TSaveDialog'#7'dlgSave'#10'DefaultExt'#6
+  +#4'.csv'#6'Filter'#6#15'CSV files|*.csv'#7'Options'#11#17'ofOverwritePrompt'
+  +#14'ofEnableSizing'#12'ofViewDetail'#0#4'left'#3#8#1#3'top'#2'0'#0#0#0
+]);

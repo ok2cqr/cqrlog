@@ -1,0 +1,84 @@
+object frmAddRadioMemory: TfrmAddRadioMemory
+  Left = 420
+  Height = 204
+  Top = 260
+  Width = 308
+  BorderStyle = bsDialog
+  Caption = 'New memory'
+  ClientHeight = 204
+  ClientWidth = 308
+  OnShow = FormShow
+  Position = poOwnerFormCenter
+  LCLVersion = '1.4.4.0'
+  object Label1: TLabel
+    Left = 16
+    Height = 17
+    Top = 16
+    Width = 112
+    Caption = 'Frequency in kHz'
+    ParentColor = False
+  end
+  object edtFreq: TEdit
+    Left = 16
+    Height = 27
+    Top = 40
+    Width = 192
+    TabOrder = 0
+    Text = '0'
+  end
+  object Label2: TLabel
+    Left = 16
+    Height = 17
+    Top = 80
+    Width = 39
+    Caption = 'Mode'
+    ParentColor = False
+  end
+  object cmbMode: TComboBox
+    Left = 16
+    Height = 29
+    Top = 104
+    Width = 192
+    AutoComplete = True
+    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    CharCase = ecUppercase
+    ItemHeight = 0
+    TabOrder = 1
+    Text = 'CMBMODE'
+  end
+  object Label3: TLabel
+    Left = 16
+    Height = 17
+    Top = 144
+    Width = 102
+    Caption = 'Bandwidth (Hz)'
+    ParentColor = False
+  end
+  object edtWidth: TEdit
+    Left = 16
+    Height = 27
+    Top = 172
+    Width = 112
+    TabOrder = 2
+    Text = '0'
+  end
+  object Button1: TButton
+    Left = 224
+    Height = 25
+    Top = 16
+    Width = 75
+    Caption = 'OK'
+    OnClick = Button1Click
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Left = 224
+    Height = 25
+    Top = 48
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 4
+  end
+end

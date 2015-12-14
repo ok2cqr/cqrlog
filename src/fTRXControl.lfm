@@ -1,11 +1,10 @@
 object frmTRXControl: TfrmTRXControl
   Left = 396
-  Height = 230
+  Height = 233
   Top = 234
   Width = 339
-  ActiveControl = btnVFOA
   Caption = 'TRX control'
-  ClientHeight = 230
+  ClientHeight = 233
   ClientWidth = 339
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
@@ -145,6 +144,7 @@ object frmTRXControl: TfrmTRXControl
     0000
   }
   KeyPreview = True
+  Menu = mnuMem
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -152,270 +152,321 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.2.4.0'
-  object GroupBox1: TGroupBox
-    Left = 4
-    Height = 72
-    Top = 0
-    Width = 253
-    Caption = ' Freq '
-    ClientHeight = 53
-    ClientWidth = 249
-    TabOrder = 0
-    object lblFreq: TLabel
-      Left = 10
-      Height = 49
-      Top = -1
-      Width = 235
-      Alignment = taRightJustify
-      AutoSize = False
-      Caption = '0.0000'
-      Font.Color = clBlue
-      Font.Height = 30
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-    end
-    object btnVFOA: TButton
-      Left = 2
-      Height = 25
-      Top = -1
-      Width = 32
-      Caption = 'A'
-      TabOrder = 0
-      Visible = False
-    end
-    object btnVFOB: TButton
-      Left = 2
-      Height = 25
-      Top = 23
-      Width = 32
-      Caption = 'B'
-      TabOrder = 1
-      Visible = False
-    end
-  end
-  object gbBand: TGroupBox
-    Left = 4
-    Height = 128
-    Top = 72
-    Width = 253
-    Caption = ' Band '
-    ClientHeight = 109
-    ClientWidth = 249
-    TabOrder = 1
-    object btn160m: TButton
-      Left = 6
-      Height = 25
-      Top = 6
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '160m'
-      OnClick = btn160mClick
-      TabOrder = 0
-    end
-    object btn80m: TButton
-      Left = 6
-      Height = 25
-      Top = 30
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '80m'
-      OnClick = btn80mClick
-      TabOrder = 1
-    end
-    object btn40m: TButton
-      Left = 6
-      Height = 25
-      Top = 54
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '40m'
-      OnClick = btn40mClick
-      TabOrder = 2
-    end
-    object btn30m: TButton
-      Left = 6
-      Height = 25
-      Top = 78
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '30m'
-      OnClick = btn30mClick
-      TabOrder = 3
-    end
-    object btn12m: TButton
-      Left = 90
-      Height = 25
-      Top = 78
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '12m'
-      OnClick = btn12mClick
-      TabOrder = 4
-    end
-    object btn15m: TButton
-      Left = 90
-      Height = 25
-      Top = 54
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '15m'
-      OnClick = btn15mClick
-      TabOrder = 5
-    end
-    object btn17m: TButton
-      Left = 90
-      Height = 25
-      Top = 30
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '17m'
-      OnClick = btn17mClick
-      TabOrder = 6
-    end
-    object btn20m: TButton
-      Left = 90
-      Height = 25
-      Top = 6
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '20m'
-      OnClick = btn20mClick
-      TabOrder = 7
-    end
-    object btn10m: TButton
-      Left = 178
-      Height = 25
-      Top = 6
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '10m'
-      OnClick = btn10mClick
-      TabOrder = 8
-    end
-    object btn6m: TButton
-      Left = 178
-      Height = 25
-      Top = 30
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '6m'
-      OnClick = btn6mClick
-      TabOrder = 9
-    end
-    object btn70cm: TButton
-      Left = 178
-      Height = 25
-      Top = 78
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '70cm'
-      OnClick = btn70cmClick
-      TabOrder = 10
-    end
-    object btn2m: TButton
-      Left = 178
-      Height = 25
-      Top = 54
-      Width = 56
-      BorderSpacing.InnerBorder = 4
-      Caption = '2m'
-      OnClick = btn2mClick
-      TabOrder = 11
-    end
-  end
+  LCLVersion = '1.4.4.0'
   object GroupBox2: TGroupBox
-    Left = 264
-    Height = 200
+    Left = 256
+    Height = 233
     Top = 0
-    Width = 72
+    Width = 83
+    Align = alRight
     Caption = ' Mode '
-    ClientHeight = 181
-    ClientWidth = 68
-    TabOrder = 2
+    ClientHeight = 214
+    ClientWidth = 79
+    TabOrder = 0
     object btnCW: TButton
-      Left = 8
+      Left = 14
       Height = 25
-      Top = 4
+      Top = 6
       Width = 51
       Caption = 'CW'
       OnClick = btnCWClick
       TabOrder = 0
     end
     object btnSSB: TButton
-      Left = 8
+      Left = 14
       Height = 25
-      Top = 40
+      Top = 32
       Width = 51
       Caption = 'SSB'
       OnClick = btnSSBClick
       TabOrder = 1
     end
     object btnRTTY: TButton
-      Left = 8
+      Left = 14
       Height = 25
-      Top = 76
+      Top = 58
       Width = 51
       Caption = 'RTTY'
       OnClick = btnRTTYClick
       TabOrder = 2
     end
     object btnAM: TButton
-      Left = 8
+      Left = 14
       Height = 25
-      Top = 114
+      Top = 84
       Width = 51
       Caption = 'AM'
       OnClick = btnAMClick
       TabOrder = 3
     end
     object btnFM: TButton
-      Left = 8
+      Left = 14
       Height = 25
-      Top = 150
+      Top = 110
       Width = 51
       Caption = 'FM'
       OnClick = btnFMClick
       TabOrder = 4
     end
-  end
-  object Panel1: TPanel
-    Left = 0
-    Height = 26
-    Top = 204
-    Width = 339
-    Align = alBottom
-    BevelOuter = bvNone
-    ClientHeight = 26
-    ClientWidth = 339
-    TabOrder = 3
-    object rbRadio1: TRadioButton
-      Left = 26
-      Height = 24
-      Top = 2
-      Width = 56
-      Caption = 'RIG: '
-      Checked = True
-      OnClick = rbRadio1Click
-      TabOrder = 0
-      TabStop = True
+    object btnMemUp: TButton
+      Left = 11
+      Height = 25
+      Top = 145
+      Width = 57
+      Caption = 'M up'
+      OnClick = btnMemUpClick
+      TabOrder = 5
     end
-    object rbRadio2: TRadioButton
-      Left = 202
-      Height = 24
-      Top = 2
-      Width = 56
-      Caption = 'RIG: '
-      OnClick = rbRadio2Click
+    object btnMemDwn: TButton
+      Left = 11
+      Height = 25
+      Top = 172
+      Width = 54
+      Caption = 'M dwn'
+      OnClick = btnMemDwnClick
+      TabOrder = 6
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 233
+    Top = 0
+    Width = 256
+    Align = alClient
+    BevelOuter = bvNone
+    Caption = 'Panel2'
+    ClientHeight = 233
+    ClientWidth = 256
+    TabOrder = 1
+    object GroupBox1: TGroupBox
+      Left = 0
+      Height = 72
+      Top = 0
+      Width = 256
+      Align = alTop
+      Caption = ' Freq '
+      ClientHeight = 53
+      ClientWidth = 252
+      TabOrder = 0
+      object lblFreq: TLabel
+        Left = 10
+        Height = 49
+        Top = -1
+        Width = 235
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = '0.0000'
+        Font.Color = clBlue
+        Font.Height = 30
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object btnVFOA: TButton
+        Left = 2
+        Height = 25
+        Top = -1
+        Width = 32
+        Caption = 'A'
+        TabOrder = 0
+        Visible = False
+      end
+      object btnVFOB: TButton
+        Left = 2
+        Height = 25
+        Top = 23
+        Width = 32
+        Caption = 'B'
+        TabOrder = 1
+        Visible = False
+      end
+    end
+    object gbBand: TGroupBox
+      Left = 0
+      Height = 135
+      Top = 72
+      Width = 256
+      Align = alClient
+      Caption = ' Band '
+      ClientHeight = 116
+      ClientWidth = 252
       TabOrder = 1
+      object btn160m: TButton
+        Left = 6
+        Height = 25
+        Top = 6
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '160m'
+        OnClick = btn160mClick
+        TabOrder = 0
+      end
+      object btn80m: TButton
+        Left = 6
+        Height = 25
+        Top = 30
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '80m'
+        OnClick = btn80mClick
+        TabOrder = 1
+      end
+      object btn40m: TButton
+        Left = 6
+        Height = 25
+        Top = 54
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '40m'
+        OnClick = btn40mClick
+        TabOrder = 2
+      end
+      object btn30m: TButton
+        Left = 6
+        Height = 25
+        Top = 78
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '30m'
+        OnClick = btn30mClick
+        TabOrder = 3
+      end
+      object btn12m: TButton
+        Left = 90
+        Height = 25
+        Top = 78
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '12m'
+        OnClick = btn12mClick
+        TabOrder = 4
+      end
+      object btn15m: TButton
+        Left = 90
+        Height = 25
+        Top = 54
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '15m'
+        OnClick = btn15mClick
+        TabOrder = 5
+      end
+      object btn17m: TButton
+        Left = 90
+        Height = 25
+        Top = 30
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '17m'
+        OnClick = btn17mClick
+        TabOrder = 6
+      end
+      object btn20m: TButton
+        Left = 90
+        Height = 25
+        Top = 6
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '20m'
+        OnClick = btn20mClick
+        TabOrder = 7
+      end
+      object btn10m: TButton
+        Left = 178
+        Height = 25
+        Top = 6
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '10m'
+        OnClick = btn10mClick
+        TabOrder = 8
+      end
+      object btn6m: TButton
+        Left = 178
+        Height = 25
+        Top = 30
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '6m'
+        OnClick = btn6mClick
+        TabOrder = 9
+      end
+      object btn70cm: TButton
+        Left = 178
+        Height = 25
+        Top = 78
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '70cm'
+        OnClick = btn70cmClick
+        TabOrder = 10
+      end
+      object btn2m: TButton
+        Left = 178
+        Height = 25
+        Top = 54
+        Width = 56
+        BorderSpacing.InnerBorder = 4
+        Caption = '2m'
+        OnClick = btn2mClick
+        TabOrder = 11
+      end
+    end
+    object Panel1: TPanel
+      Left = 0
+      Height = 26
+      Top = 207
+      Width = 256
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 26
+      ClientWidth = 256
+      TabOrder = 2
+      object rbRadio1: TRadioButton
+        Left = 8
+        Height = 24
+        Top = 2
+        Width = 56
+        Caption = 'RIG: '
+        Checked = True
+        OnClick = rbRadio1Click
+        TabOrder = 0
+        TabStop = True
+      end
+      object rbRadio2: TRadioButton
+        Left = 160
+        Height = 24
+        Top = 2
+        Width = 56
+        Caption = 'RIG: '
+        OnClick = rbRadio2Click
+        TabOrder = 1
+      end
     end
   end
   object tmrRadio: TTimer
     Enabled = False
     Interval = 500
     OnTimer = tmrRadioTimer
-    left = 248
-    top = 128
+    left = 80
+    top = 24
+  end
+  object mnuMem: TMainMenu
+    left = 144
+    top = 72
+    object MenuItem1: TMenuItem
+      Caption = 'File'
+      object MenuItem2: TMenuItem
+        Action = acAddModMem
+      end
+    end
+  end
+  object acMem: TActionList
+    left = 203
+    top = 68
+    object acAddModMem: TAction
+      Caption = 'Add/Modify memory'
+      OnExecute = acAddModMemExecute
+    end
   end
 end
