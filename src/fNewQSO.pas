@@ -4594,7 +4594,12 @@ begin
   if ((Shift = [ssCTRL]) and (key = VK_0)) then
     frmTRXControl.DisableSplit;
   if ((Shift = [ssCTRL]) and (key = VK_W)) then
-    acSendSpot.Execute
+    acSendSpot.Execute;
+
+  if ((Shift = [ssAlt]) and (key = VK_V)) then
+    frmTRXControl.btnMemUp.Click;
+  if ((Shift = [ssAlt]) and (key = VK_B)) then
+    frmTRXControl.btnMemDwn.Click
 end;
 
 procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
