@@ -883,4 +883,16 @@ object dmData: TdmData
     left = 256
     top = 16
   end
+  object qFreqMem: TSQLQuery
+    FieldDefs = <>
+    Transaction = trFreqMem
+    Params = <>
+    left = 448
+    top = 272
+  end
+  object trFreqMem: TSQLTransaction
+    Active = False
+    left = 520
+    top = 272
+  end
 end

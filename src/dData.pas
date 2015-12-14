@@ -103,6 +103,8 @@ type
     scMySQLConfig: TSQLScript;
     qBandMapFil: TSQLQuery;
     qRbnMon: TSQLQuery;
+    qFreqMem: TSQLQuery;
+    trFreqMem: TSQLTransaction;
     trRbnMon: TSQLTransaction;
     trBandMapFil: TSQLTransaction;
     tmrDBPing: TTimer;
@@ -160,6 +162,7 @@ type
     fLogName     : String;
     fUsrHomeDir  : String;
     fShareDir    : String;
+    fFirstMemId  : Integer;
     aProf : Array of TExpProfile;
     aSCP  : Array of String[20];
     MySQLProcess : TProcess;
@@ -185,6 +188,8 @@ type
     procedure PrepareMysqlConfigFile;
     procedure DeleteOldConfigFiles;
     procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
+    procedure OpenFreqMemories;
+    procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
   public
     {
     MainCon51 : TMySQL51Connection;
@@ -319,6 +324,10 @@ type
     procedure MarkAllAsUploadedToLoTW;
     procedure RemoveeQSLUploadedFlag(id : Integer);
     procedure RemoveLoTWUploadedFlag(id : Integer);
+    procedure StoreFreqMemories(grid : TStringGrid);
+    procedure LoadFreqMemories(grid : TStringGrid);
+    procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+    procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
   end;
 
 var
@@ -800,6 +809,8 @@ begin
 
   frmTRXControl.InicializeRig;
   frmRotControl.InicializeRot;
+
+  OpenFreqMemories;
 
   LoadClubsSettings;
   LoadZipSettings
@@ -4093,6 +4104,124 @@ begin
   end
 end;
 
+procedure TdmData.StoreFreqMemories(grid : TStringGrid);
+const
+  C_INS = 'insert into freqmem (freq,mode,bandwidth) values (:freq,:mode,:bandwidth)';
+  C_DEL = 'delete from freqmem';
+var
+  i : Integer;
+begin
+  try try
+    dmData.trQ.StartTransaction;
+    dmData.Q.SQL.Text := C_DEL;
+    dmData.Q.ExecSQL;
+    dmData.Q.SQL.Text := C_INS;
+    for i:= 1 to grid.RowCount-1 do
+    begin
+      Q.Prepare;
+      Q.Params[0].AsFloat   := StrToFloat(grid.Cells[0,i]);
+      Q.Params[1].AsString  := grid.Cells[1,i];
+      Q.Params[2].AsInteger := StrToInt(grid.Cells[2,i]);
+      Q.ExecSQL
+    end
+  except
+    dmData.trQ.Rollback
+  end
+  finally
+    dmData.Q.Close;
+    if dmData.trQ.Active then
+      dmData.trQ.Commit;
+    OpenFreqMemories
+  end
+end;
+
+procedure TdmData.LoadFreqMemories(grid : TStringGrid);
+const
+  C_SEL = 'select freq,mode,bandwidth from freqmem order by id';
+begin
+  try
+    grid.RowCount := 1;
+    dmData.trQ.StartTransaction;
+    dmData.Q.SQL.Text := C_SEL;
+    dmData.Q.Open;
+    while not dmData.Q.Eof do
+    begin
+      grid.RowCount := grid.RowCount + 1;
+      grid.Cells[0,grid.RowCount-1] := FloatToStrF(Q.Fields[0].AsFloat,ffFixed,15,3);
+      grid.Cells[1,grid.RowCount-1] := Q.Fields[1].AsString;
+      grid.Cells[2,grid.RowCount-1] := IntToStr(Q.Fields[2].AsInteger);
+      Q.Next
+    end
+  finally
+    dmData.Q.Close;
+    dmData.trQ.Rollback
+  end
+end;
+
+procedure TdmData.OpenFreqMemories;
+const
+  C_SEL = 'select id,freq,mode,bandwidth from freqmem order by id';
+begin
+  qFreqMem.Close;
+  if trFreqMem.Active then
+    trFreqMem.Rollback;
+
+  qFreqMem.SQL.Text := C_SEL;
+  trFreqMem.StartTransaction;
+  qFreqMem.Open;
+  qFreqMem.First;
+  fFirstMemId := qFreqMem.Fields[0].AsInteger
+end;
+
+procedure TdmData.GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+begin
+  if (qFreqMem.RecordCount > 0) then
+  begin
+    freq      := qFreqMem.Fields[1].AsFloat;
+    mode      := qFreqMem.Fields[2].AsString;
+    bandwidth := qFreqMem.Fields[3].AsInteger
+  end
+  else begin
+     freq      := 0;
+     mode      := 'CW';
+     bandwidth := 0
+  end
+end;
+
+procedure TdmData.GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+begin
+  if not qFreqMem.Active then
+  begin
+    OpenFreqMemories;
+    qFreqMem.Last
+  end
+  else begin
+    //if qFreqMem.Bof then  doesn't work because when it's on the first record, it has to call Prior again to be sure that
+    //it's really first - that caused user has to click twice to get on the end of the table
+    if (fFirstMemId = qFreqMem.Fields[0].AsInteger) then
+      qFreqMem.Last
+    else
+      qFreqMem.Prior
+  end;
+  GetCurrentFreqFromMem(freq,mode,bandwidth)
+end;
+
+
+procedure TdmData.GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+begin
+  if not qFreqMem.Active then
+  begin
+    OpenFreqMemories;
+    qFreqMem.First
+  end
+  else begin
+    if qFreqMem.Eof then
+      qFreqMem.First
+    else
+      qFreqMem.Next
+  end;
+  GetCurrentFreqFromMem(freq,mode,bandwidth)
+end;
 
 initialization
   {$I dData.lrs}

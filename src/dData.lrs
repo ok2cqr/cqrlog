@@ -326,5 +326,8 @@ LazarusResources.Add('TdmData','FORMDATA',[
   +'eft'#3#0#1#3'top'#3#232#1#0#0#15'TSQLTransaction'#12'trBandMapFil'#6'Active'
   +#8#4'left'#3#0#1#3'top'#3#168#1#0#0#9'TSQLQuery'#7'qRbnMon'#9'FieldDefs'#14#0
   +#6'Params'#14#0#4'left'#3#176#0#3'top'#2#15#0#0#15'TSQLTransaction'#8'trRbnM'
-  +'on'#6'Active'#8#4'left'#3#0#1#3'top'#2#16#0#0#0
+  +'on'#6'Active'#8#4'left'#3#0#1#3'top'#2#16#0#0#9'TSQLQuery'#8'qFreqMem'#9'Fi'
+  +'eldDefs'#14#0#11'Transaction'#7#9'trFreqMem'#6'Params'#14#0#4'left'#3#192#1
+  +#3'top'#3#16#1#0#0#15'TSQLTransaction'#9'trFreqMem'#6'Active'#8#4'left'#3#8#2
+  +#3'top'#3#16#1#0#0#0
 ]);
