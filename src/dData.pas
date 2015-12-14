@@ -163,6 +163,7 @@ type
     fUsrHomeDir  : String;
     fShareDir    : String;
     fFirstMemId  : Integer;
+    fLastMemId   : Integer;
     aProf : Array of TExpProfile;
     aSCP  : Array of String[20];
     MySQLProcess : TProcess;
@@ -4169,6 +4170,10 @@ begin
   qFreqMem.SQL.Text := C_SEL;
   trFreqMem.StartTransaction;
   qFreqMem.Open;
+
+  qFreqMem.Last;
+  fLastMemId := qFreqMem.Fields[0].AsInteger;
+
   qFreqMem.First;
   fFirstMemId := qFreqMem.Fields[0].AsInteger
 end;
@@ -4215,7 +4220,8 @@ begin
     qFreqMem.First
   end
   else begin
-    if qFreqMem.Eof then
+    //if qFreqMem.Eof then the same problem like with Bof()
+    if (fLastMemId = qFreqMem.Fields[0].AsInteger) then
       qFreqMem.First
     else
       qFreqMem.Next
