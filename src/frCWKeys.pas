@@ -112,7 +112,7 @@ begin
     else
       Begin
         cwkey := copy((Sender as TButton).Name,4,3);
-        frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+        frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtHisRSTstxAdd.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
       end;
     end;
   end;

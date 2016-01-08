@@ -208,7 +208,7 @@ type
     function  ExtractZipCode(qth : String; Position : Integer) : String;
     function  GetLabelBand(freq : String) : String;
     function  GetAdifBandFromFreq(MHz : string): String;
-    function  GetCWMessage(Key,call,rst_s,stx,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+    function  GetCWMessage(Key,call,rst_s,stx,stxAdd,HisName,HelloMsg, text : String; QSONR : String = '') : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
     function  CallTrim(call : String) : String;
@@ -2587,7 +2587,7 @@ begin
   Result := LowerCase(GetBandFromFreq(freq));
 end;
 
-function TdmUtils.GetCWMessage(Key,call,rst_s,stx,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stxAdd,HisName,HelloMsg, text : String; QSONR : String = '') : String;
 {
  %mc - my callsign
  %mn - my name
@@ -2598,6 +2598,7 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,stx,HisName,HelloMsg, text : Strin
  %rs - rst send sends N instead of 9
  %s  - contest qso nr send
  %ss - contest qso nr send replace N instead of 9, T instead of 0
+ %sm - fixed part of contest message (3rd report field)
  %n  - name
  %c  - callsign
 
@@ -2636,6 +2637,7 @@ begin
   Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%ss',stx_sh,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%s',stx,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%sm',stxAdd,[rfReplaceAll, rfIgnoreCase]);
 
   Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);

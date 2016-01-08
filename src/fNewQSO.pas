@@ -76,6 +76,7 @@ type
     cmbTabOrd: TComboBox;
     dbgrdQSOBefore: TDBGrid;
     edtHisRSTstx: TEdit;
+    edtHisRSTstxAdd: TEdit;
     edtMyRSTsrx: TEdit;
     lblTabOrder: TLabel;
     lblQSLRcvdDate: TLabel;
@@ -534,6 +535,7 @@ type
 
     ContestMode    :Boolean;
     RSTstx         :string; //contest mode serial numbers store
+    RSTstxAdd      :string; //contest mode additional string store
     RSTsrx         :string;
     TabCurOrd      :integer; //this is same as cmbTabOrd.ItemIndex, but saved over "ClearAll".
 Const
@@ -718,11 +720,13 @@ var
    lZero      : boolean;
    stx        : string;
 
-   Begin
-      ContestMode := trim(edtHisRSTstx.Text) <> '';  //there is some text so it is contest mode
-      if ContestMode and IncNr then
+ Begin
+   ContestMode := trim(edtHisRSTstx.Text) <> '';  //there is some text so it is contest mode
+   if ContestMode then
+     begin
+       if IncNr then
        Begin
-          stx :=  trim(edtHisRSTstx.Text);
+         stx :=  trim(edtHisRSTstx.Text);
          stxlen:= length(stx);
          if chkAutoIncStx.Checked then //inc of number requested
           Begin
@@ -744,8 +748,10 @@ var
               end;
           end;
          RSTstx:=stx;
+         RSTstxAdd:=edtHisRSTstxAdd.Text;
+     end;
          RSTsrx:= edtMyRSTsrx.Text;
-       end;
+    end;
    if dmData.DebugLevel>=1 then Writeln('Contest mode is: ',ContestMode,' Inc number is: ',IncNr);
 
 end;
@@ -1147,8 +1153,10 @@ begin
   cmbTabOrd.ItemIndex := TabCurOrd;
   MkTabOrd(TabCurOrd);
   if ContestMode then
+                 Begin
                    edtHisRSTstx.Text := RSTstx;
-
+                   edtHisRSTstxAdd.Text := RSTstxAdd;
+                 end;
   if cbOffline.Checked then
   begin
     edtStartTime.Text := sTimeOn;
@@ -2655,6 +2663,7 @@ begin
   WhatUpNext := upHamQTH;
   UploadAll  := False;
   RSTstx :='';
+  RSTstxAdd :='';
   RSTsrx :='';
   ContestMode := False;
   TabCurOrd :=0;
@@ -2826,6 +2835,8 @@ begin
     if ContestMode then
      Begin
        edtHisRST.Text :=  edtHisRST.Text +'_'+RSTstx;
+       if length(trim(RSTstxAdd)) > 0 then
+                             edtHisRST.Text :=  edtHisRST.Text +'|'+RSTstxAdd;
        edtMyRST.Text  :=  edtMyRST.Text  +'_'+RSTsrx;
        MkTabOrd(2);  //set tabulation order as "contest"
      end
@@ -2903,6 +2914,7 @@ begin
                  Begin
                   ChkSerialNrUpd(true);
                   edtHisRSTstx.Text := RSTstx;
+                  edtHisRSTstxAdd.Text := RSTstxAdd;
                  end;
 end;
 
@@ -4222,6 +4234,7 @@ end;
 procedure TfrmNewQSO.edtHisRSTstxExit(Sender: TObject);
 begin
   RSTstx:= edtHisRSTstx.Text;   //needed for first entry otherwise stx disappears on double esc
+  RSTstxAdd:= edtHisRSTstxAdd.Text;
 end;
 
 procedure TfrmNewQSO.edtITUEnter(Sender: TObject);
@@ -4870,7 +4883,7 @@ begin
       RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
       if Assigned(CWint) then
-        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,edtName.Text,lblGreeting.Caption,''));
+        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text+frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtHisRSTstxAdd.Text,edtName.Text,lblGreeting.Caption,''));
     key := 0
   end;
 
@@ -5898,7 +5911,10 @@ begin
     edtCallExit(nil);
     BringToFront;
     if ContestMode then      //should fix stx disappearing when call replaced with anotherfrom cluster/bandmap
-                     edtHisRSTstx.Text := RSTstx;
+                     begin
+                       edtHisRSTstx.Text := RSTstx;
+                       edtHisRSTstxAdd.Text := RSTstxAdd;
+                     end
   end
 end;
 

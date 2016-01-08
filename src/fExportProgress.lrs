@@ -159,7 +159,7 @@ LazarusResources.Add('TfrmExportProgress','FORMDATA',[
   +#240#1#2#255#224#0#7#127#192#0#7#255#192#0#15#255#128#0#31#255#128#0#31#255
   +#128#0'?'#255#0#0'?'#255#0#4#127#255#0#0#255#255#0#1#255#255#0#3#255#255#0#7
   +#255#255#0#31#255#255#0'?'#255#255#0#255#255#255#131#255#255#255#8'OnCreate'
-  +#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.2.4.0'#0#6'TL'
+  +#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.4.2.0'#0#6'TL'
   +'abel'#10'lblComment'#4'Left'#2#0#6'Height'#2#17#3'Top'#2#8#5'Width'#3'0'#1#9
   +'Alignment'#7#8'taCenter'#8'AutoSize'#8#11'ParentColor'#8#0#0#12'TProgressBa'
   +'r'#8'pBarProg'#4'Left'#2#0#6'Height'#2#20#3'Top'#2'$'#5'Width'#3'9'#1#5'Ali'

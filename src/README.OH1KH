@@ -229,7 +229,17 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
 
 - Program should work also with MariaDB 10.1 (fix copied from Petr's 1.9.1 version [mysqlconn.inc] Build 2122)
 
+- Added 3rd field to sent report. When working contest there is sometimes need for serial number and fixed message like your age, county, etc. This 3rd field, if not empty
+  is added to sent report when in contest mode.
+  TX side:  give RST(if not "auto"->set serial number base (chk "inc" if number needs to grow with qsos) -> set fixed part after serNr.
+	    This will be written in log like:  RST_serNR|fixMSG  -> 599_001|FIN. At ADIF export these appear like: <STX:3>001<STX_STRING:3>FIN<RST_SENT:3>599
+  RX side:  write RST (if not "auto") -> write serial number and message part together. They appear to log like  599_001FIN (or 599_001 FIN if you hit space between NR and MSG)
+	    If you  write them like 001FIN ADIF export goes like: <SRX:6>012FIN
+            If you hit space between serialNR and fixed msg 001 FIN ADIF export goes like: <SRX:3>001<SRX_STRING:3>FIN
 
+  New CW macro for this is %sm
+  (Build 2123)
+	    
 
 
 

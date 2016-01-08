@@ -35,7 +35,7 @@ uses dUtils,fNewQSO;
 procedure TfrmCWKeys.SendCWMessage(cwkey : String);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,
-                           frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+                           frmNewQSO.edtHisRSTstxAdd.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
 end;
 
 procedure TfrmCWKeys.FormClose(Sender: TObject; var CloseAction: TCloseAction);

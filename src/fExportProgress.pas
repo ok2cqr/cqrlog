@@ -130,7 +130,8 @@ end;
 procedure TfrmExportProgress.ExportADIF;
 var
   f      : TextFile;
-  tmp    : String;
+  tmp,
+  tmp2   : String;
   i      : LongInt;
   note   : String;
   dir    : String;
@@ -142,6 +143,7 @@ var
   qsls_date     : String;
   qslr_date     : String;
   stx,srx       : String; //contest serial nr
+  posUn,posSl   : integer; //limiter positions of RSTS
   ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
@@ -218,14 +220,40 @@ var
 
     if exRSTS then
     begin
-      if (pos('_',RSTS)> 0) and (ExportType = 0) then  //splitting RST and STX when ExprtType=0
-        Begin
-         stx := copy(RSTS,pos('_',RSTS)+1,length(RSTS)-pos('_',RSTS));
-         RSTS :=copy(RSTS,1,pos('_',RSTS)-1);
-         tmp := '<STX' + dmUtils.StringToADIF(stx);
-         Write(f,tmp);
-         leng := leng + Length(tmp)
-        end;
+      if (ExportType = 0) then  //splitting RST and STX when ExprtType=0
+       begin
+        posUn := pos('_',RSTS);
+        posSl := pos('|',RSTS);
+        if posUn > 0 then  //splitting RST and STX when ExprtType=0
+         if posSl = 0 then  //no stx_string included, just zone/qsonr
+           Begin
+             stx := copy(RSTS,posUn +1,length(RSTS)-posUn);
+             RSTS :=copy(RSTS,1,posUn-1);
+             tmp := '<STX' + dmUtils.StringToADIF(stx);
+             Write(f,tmp);
+             leng := leng + Length(tmp)
+           end
+         else
+           Begin  //1st zone/qsonr
+             stx := copy(RSTS,posUn+1,posSl-(posUn+1) );
+             if dmData.DebugLevel>=1 then
+              Begin
+               writeln('RSTS: ',RSTS,' stx: ',stx,' Un=',posUn,'Sl=',posSl,' len=', posSl-(posUn+1) );
+              end;
+             tmp2:=RSTS;
+             RSTS :=copy(RSTS,1,posUn-1);
+             tmp := '<STX' + dmUtils.StringToADIF(stx);
+             Write(f,tmp);
+             leng := leng + Length(tmp);
+                  //2nd stx_string
+             posSl := pos('|',tmp2);
+             stx := copy(tmp2,posSl+1,length(tmp2)-posSl);
+             tmp := '<STX_STRING' + dmUtils.StringToADIF(stx);
+             Write(f,tmp);
+             leng := leng + Length(tmp);
+           end;
+       end;
+
       tmp := '<RST_SENT' + dmUtils.StringToADIF(RSTS);
       Write(f,tmp);
       leng := leng + Length(tmp)
@@ -241,11 +269,24 @@ var
     begin
       if (pos('_',RSTR)> 0) and (ExportType = 0) then  //splitting RST and SRX when ExprtType=0
         Begin
-         srx := copy(RSTR,pos('_',RSTR)+1,length(RSTR)-pos('_',RSTR));
+         srx := trim(copy(RSTR,pos('_',RSTR)+1,length(RSTR)-pos('_',RSTR)));
          RSTR :=copy(RSTR,1,pos('_',RSTR)-1);
+         tmp2 := '';
+         if pos(' ',srx)> 0 then  //split RSTR to SRX and SRX_sting if there is space in the middle
+           Begin
+            tmp2 := trim(copy(srx,pos(' ',srx)+1,length(srx)-pos(' ',srx)));
+            srx := trim(copy(srx,1,pos(' ',srx)-1));
+           end;
          tmp := '<SRX' + dmUtils.StringToADIF(srx);
          Write(f,tmp);
-         leng := leng + Length(tmp)
+         leng := leng + Length(tmp);
+         if tmp2 <> '' then
+          Begin
+            tmp := '<SRX_STRING' + dmUtils.StringToADIF(tmp2);
+            Write(f,tmp);
+            leng := leng + Length(tmp);
+          end;
+
         end;
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(RSTR);
       Write(f,tmp);

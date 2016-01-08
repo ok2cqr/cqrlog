@@ -154,7 +154,7 @@ begin
   if (key >= VK_F1) and (key <= VK_F10) then
   begin
     frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(key),frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtHisRSTstxAdd.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
   end;
 
   if Key = VK_ESCAPE then

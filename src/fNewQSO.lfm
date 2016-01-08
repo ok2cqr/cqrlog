@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 215
+  Left = 168
   Height = 569
-  Top = 2
+  Top = 0
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -124,7 +124,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.4.2.0'
   object sbNewQSO: TStatusBar
     Left = 0
     Height = 17
@@ -180,7 +180,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 256
           Height = 15
           Top = 194
-          Width = 136
+          Width = 139
           Caption = 'Comment to callsign:'
           ParentColor = False
           ParentFont = False
@@ -189,7 +189,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 112
           Height = 15
           Top = 55
-          Width = 31
+          Width = 32
           Caption = 'QTH:'
           ParentColor = False
           ParentFont = False
@@ -204,19 +204,19 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label8: TLabel
-          Left = 448
+          Left = 447
           Height = 15
           Top = 8
-          Width = 55
+          Width = 57
           Caption = 'RST rcvd'
           ParentColor = False
           ParentFont = False
         end
         object Label7: TLabel
-          Left = 343
+          Left = 317
           Height = 15
           Top = 8
-          Width = 56
+          Width = 57
           Caption = 'RST sent'
           ParentColor = False
           ParentFont = False
@@ -225,22 +225,22 @@ object frmNewQSO: TfrmNewQSO
           Left = 16
           Height = 15
           Top = 8
-          Width = 27
+          Width = 29
           Caption = 'Call:'
           ParentColor = False
           ParentFont = False
         end
         object Label5: TLabel
-          Left = 136
+          Left = 126
           Height = 15
           Top = 8
-          Width = 68
+          Width = 69
           Caption = 'Frequency:'
           ParentColor = False
           ParentFont = False
         end
         object Label4: TLabel
-          Left = 234
+          Left = 218
           Height = 15
           Top = 8
           Width = 39
@@ -252,7 +252,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 172
           Height = 15
           Top = 248
-          Width = 61
+          Width = 62
           Caption = 'End time:'
           ParentColor = False
           ParentFont = False
@@ -279,7 +279,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 258
           Height = 15
           Top = 55
-          Width = 31
+          Width = 33
           Caption = 'GRID'
           ParentColor = False
           ParentFont = False
@@ -288,7 +288,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 338
           Height = 15
           Top = 55
-          Width = 27
+          Width = 30
           Caption = 'PWR'
           ParentColor = False
           ParentFont = False
@@ -297,7 +297,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 405
           Height = 15
           Top = 55
-          Width = 42
+          Width = 40
           Caption = 'QSL_S'
           ParentColor = False
           ParentFont = False
@@ -315,7 +315,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 16
           Height = 15
           Top = 99
-          Width = 20
+          Width = 22
           Caption = 'ITU'
           ParentColor = False
           ParentFont = False
@@ -324,7 +324,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 397
           Height = 15
           Top = 99
-          Width = 38
+          Width = 40
           Caption = 'Award'
           ParentColor = False
           ParentFont = False
@@ -333,7 +333,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 12
           Height = 15
           Top = 147
-          Width = 59
+          Width = 61
           Caption = 'DXCC ref.'
           ParentColor = False
           ParentFont = False
@@ -342,7 +342,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 60
           Height = 15
           Top = 99
-          Width = 29
+          Width = 30
           Caption = 'WAZ'
           ParentColor = False
           ParentFont = False
@@ -351,7 +351,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 127
           Height = 15
           Top = 99
-          Width = 28
+          Width = 30
           Caption = 'IOTA'
           ParentColor = False
           ParentFont = False
@@ -360,7 +360,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 224
           Height = 15
           Top = 99
-          Width = 45
+          Width = 46
           Caption = 'County'
           ParentColor = False
           ParentFont = False
@@ -369,7 +369,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 111
           Height = 15
           Top = 147
-          Width = 118
+          Width = 117
           Caption = 'Comment to QSO:'
           ParentColor = False
           ParentFont = False
@@ -408,7 +408,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 344
           Height = 15
           Top = 99
-          Width = 35
+          Width = 34
           Caption = 'State'
           ParentColor = False
           ParentFont = False
@@ -417,7 +417,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 8
           Height = 15
           Top = 194
-          Width = 153
+          Width = 157
           Caption = 'QSO confirmed by LoTW'
           Font.Color = clRed
           ParentColor = False
@@ -738,7 +738,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 6
         end
         object edtMyRST: TEdit
-          Left = 444
+          Left = 447
           Height = 27
           Top = 24
           Width = 50
@@ -749,7 +749,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 2
         end
         object edtHisRST: TEdit
-          Left = 343
+          Left = 317
           Height = 27
           Top = 24
           Width = 50
@@ -774,7 +774,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 0
         end
         object cmbMode: TComboBox
-          Left = 232
+          Left = 218
           Height = 27
           Top = 24
           Width = 100
@@ -938,7 +938,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 14
         end
         object cmbFreq: TComboBox
-          Left = 132
+          Left = 126
           Height = 27
           Top = 24
           Width = 93
@@ -987,7 +987,7 @@ object frmNewQSO: TfrmNewQSO
             Left = -3
             Height = 23
             Top = 4
-            Width = 66
+            Width = 69
             Caption = 'Offline'
             OnChange = cbOfflineChange
             TabOrder = 0
@@ -1076,10 +1076,10 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 15
         end
         object chkAutoMode: TCheckBox
-          Left = 277
+          Left = 260
           Height = 23
           Top = 4
-          Width = 62
+          Width = 63
           Caption = 'AUTO'
           Checked = True
           OnChange = chkAutoModeChange
@@ -1183,47 +1183,11 @@ object frmNewQSO: TfrmNewQSO
           Top = 270
           Width = 23
           Action = acRefreshTime
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000BBBBBB00BBBB
-            BB2ABBBBBB54BBBBBB7EBBBBBBA8BBBBBBD5BBBBBBFFBBBBBBFFBBBBBBFFBBBB
-            BBFFBBBBBBD5BBBBBB9FBBBBBB6CBBBBBB36BBBBBB00BBBBBB00BBBBBB00BBBB
-            BB00BBBBBB00BBBBBB0084857E4784857EAB84857EEC84857EF284857EEF8485
-            7EAE84857E4DBBBBBB00BBBBBB00BBBBBB00BBBBBB00BBBBBB00FFFFFF00FFFF
-            FF0085867F3385867F9796978EF6AFB0A4FBBFC0B1FFC0C1B2FFBFC0B1FFB0B1
-            A4FB989990F685867FA285867F3FFFFFFF00FFFFFF00FFFFFF00FFFFFF008687
-            8030878881F2ACADA2FAC2C3B5FFC2C3B5FFC2C3B5FFC2C3B5FFC2C3B5FFC2C3
-            B5FFC2C3B5FFAFB0A4FB888982F286878041FFFFFF00FFFFFF00FFFFFF008687
-            8194ADAEA3FAC5C6B8FFC5C6B8FFC5C6B8FFC5C6B8FFC5C6B8FFC5C6B8FFACAD
-            A2FF999991FFC5C6B8FFB2B3A7FB868781A5FFFFFF00FFFFFF008788823C9899
-            91F5C9C9BCFFC9C9BCFFC9C9BCFFC9C9BCFFC9C9BCFFC9C9BCFFAEAEA4FF6565
-            64FFAFAFA5FFC9C9BCFFC9C9BCFF9D9D95F68788824DFFFFFF008889839DB5B6
-            ACFACCCDC1FFCCCDC1FFCCCDC1FFCCCDC1FFCCCDC1FFAFB0A7FF656564FFB2B2
-            A9FFCCCDC1FFCCCDC1FFCCCDC1FFB9BAAFFB888983ABFFFFFF00898A83DBCACB
-            BFFED0D1C5FFD0D1C5FFD0D1C5FFD0D1C5FFD0D1C5FF636362FFB2B3AAFFD0D1
-            C5FFD0D1C5FFD0D1C5FFD0D1C5FFCDCEC3FF898A83E9FFFFFF008A8B84F2D4D4
-            CAFFD4D4CAFFD4D4CAFFD4D4CAFFD4D4CAFFD4D4CAFF636362FFCDCDC4FFD4D4
-            CAFFD4D4CAFFD4D4CAFFD4D4CAFFD4D4CAFF8D8E86F28A8B84098B8C85D8CFD0
-            C7FED7D8CEFFD7D8CEFFD7D8CEFFD7D8CEFFD7D8CEFF636363FFD0D1C7FFD7D8
-            CEFFD7D8CEFFD7D8CEFFD7D8CEFFD4D5CBFE8B8C85E7FFFFFF008C8D869DC0C0
-            B8FADBDBD2FFDBDBD2FFDBDBD2FFDBDBD2FFDBDBD2FF636363FFD4D4CBFFDBDB
-            D2FFDBDBD2FFDBDBD2FFDBDBD2FFC7C7BEFB8C8D86B1FFFFFF008D8E87399C9D
-            96F4DCDDD4FFDEDFD6FFDEDFD6FFDEDFD6FFDEDFD6FF646463FFD6D7CFFFDEDF
-            D6FFDEDFD6FFDEDFD6FFDDDED5FFA0A199F58D8E874DFFFFFF00FFFFFF008D8E
-            8889B6B6B0F8E1E1DAFFE1E1DAFFE1E1DAFFE1E1DAFF646463FFD9D9D3FFE1E1
-            DAFFE1E1DAFFE1E1DAFFBBBCB5F98D8E888CFFFFFF00FFFFFF00FFFFFF008E8F
-            890E8F908AF2B8B9B2F8E2E2DAFFE4E4DCFFE4E4DCFFCACAC4FFE2E2DAFFE4E4
-            DCFFE3E3DBFFBCBCB5F990918BF28E8F891FFFFFFF00FFFFFF00FFFFFF00FFFF
-            FF008F908A118F908A899FA09AF4C8C9C2FADBDCD5FDE6E6DFFFDCDDD6FDCACB
-            C4FBA1A29CF58F908A8C8F908A1AFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF008F908A398F908A9D8F908AD38F908AF28F908AD68F90
-            8AA28F908A3FFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-          }
           ShowHint = True
           ParentShowHint = False
         end
         object edtHisRSTstx: TEdit
-          Left = 392
+          Left = 365
           Height = 27
           Top = 24
           Width = 50
@@ -1232,7 +1196,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 29
         end
         object edtMyRSTsrx: TEdit
-          Left = 493
+          Left = 495
           Height = 27
           Top = 24
           Width = 50
@@ -1240,10 +1204,10 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 30
         end
         object chkAutoIncStx: TCheckBox
-          Left = 400
+          Left = 375
           Height = 23
           Top = 4
-          Width = 44
+          Width = 45
           Caption = 'inc'
           Checked = True
           OnChange = chkAutoModeChange
@@ -1254,7 +1218,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 184
           Height = 15
           Top = 194
-          Width = 57
+          Width = 58
           Caption = 'TabOrder'
           ParentColor = False
           ParentFont = False
@@ -1276,6 +1240,16 @@ object frmNewQSO: TfrmNewQSO
           Style = csDropDownList
           TabOrder = 25
           Text = 'Norm'
+        end
+        object edtHisRSTstxAdd: TEdit
+          Left = 413
+          Height = 27
+          Top = 24
+          Width = 34
+          AutoSize = False
+          OnExit = edtHisRSTstxExit
+          TabStop = False
+          TabOrder = 32
         end
       end
       object GroupBox2: TGroupBox
@@ -1354,7 +1328,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 1
           Height = 15
           Top = 3
-          Width = 53
+          Width = 54
           Caption = 'Country:'
           ParentColor = False
         end
@@ -1362,7 +1336,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 126
           Height = 15
           Top = 95
-          Width = 39
+          Width = 40
           Caption = 'DXCC:'
           ParentColor = False
           ParentFont = False
@@ -1371,7 +1345,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 10
           Height = 15
           Top = 78
-          Width = 33
+          Width = 34
           Caption = 'WAZ:'
           ParentColor = False
           ParentFont = False
@@ -1380,7 +1354,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 19
           Height = 15
           Top = 95
-          Width = 24
+          Width = 26
           Caption = 'ITU:'
           ParentColor = False
           ParentFont = False
@@ -1434,7 +1408,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 18
           Height = 15
           Top = 113
-          Width = 25
+          Width = 26
           Caption = 'LAT:'
           ParentColor = False
           ParentFont = False
@@ -1469,7 +1443,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 8
           Height = 15
           Top = 132
-          Width = 35
+          Width = 36
           Caption = 'DIST.:'
           ParentColor = False
           ParentFont = False
@@ -1679,7 +1653,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 38
           Height = 15
           Top = 227
-          Width = 87
+          Width = 90
           Caption = 'lblLocSunRise'
           ParentColor = False
           ParentFont = False
@@ -1697,7 +1671,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 28
           Height = 15
           Top = 155
-          Width = 83
+          Width = 87
           Caption = 'lblTarSunRise'
           ParentColor = False
           ParentFont = False
@@ -1706,7 +1680,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 149
           Height = 15
           Top = 155
-          Width = 79
+          Width = 80
           Caption = 'lblTarSunSet'
           ParentColor = False
           ParentFont = False
@@ -1715,7 +1689,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 10
           Height = 15
           Top = 202
-          Width = 37
+          Width = 38
           Caption = 'Local:'
           ParentColor = False
           ParentFont = False
@@ -1774,7 +1748,7 @@ object frmNewQSO: TfrmNewQSO
         Left = 7
         Height = 15
         Top = 9
-        Width = 49
+        Width = 48
         Caption = 'QSO nr.'
         ParentColor = False
         ParentFont = False
@@ -1794,7 +1768,7 @@ object frmNewQSO: TfrmNewQSO
         Left = 656
         Height = 15
         Top = 8
-        Width = 111
+        Width = 114
         Caption = 'Ambiguous prefix'
         Font.Color = clRed
         ParentColor = False
@@ -1805,7 +1779,7 @@ object frmNewQSO: TfrmNewQSO
         Left = 99
         Height = 15
         Top = 9
-        Width = 82
+        Width = 85
         Caption = 'QTH profile:  '
         ParentColor = False
         ParentFont = False
