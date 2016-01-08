@@ -2635,10 +2635,13 @@ begin
 
   Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%ss',stx_sh,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%s',stx,[rfReplaceAll, rfIgnoreCase]);
+  if dmData.DebugLevel>=1 then Writeln('Result:',Result);
   Result := StringReplace(Result,'%sm',stxAdd,[rfReplaceAll, rfIgnoreCase]);
-
+  if dmData.DebugLevel>=1 then Writeln('Result:',Result);
+  Result := StringReplace(Result,'%ss',stx_sh,[rfReplaceAll, rfIgnoreCase]);
+  if dmData.DebugLevel>=1 then Writeln('Result:',Result);
+  Result := StringReplace(Result,'%s',stx,[rfReplaceAll, rfIgnoreCase]);
+  if dmData.DebugLevel>=1 then Writeln('Result:',Result);
   Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
