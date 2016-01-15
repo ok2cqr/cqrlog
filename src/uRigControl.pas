@@ -344,6 +344,9 @@ begin
   begin
     //Writeln('Whole MSG:|',msg,'|');
     msg := trim(msg);
+
+    if DebugMode then Writeln('Msg from rig: ',msg);
+
     a := Explode(LineEnding,msg);
     for i:=0 to Length(a)-1 do
     begin
@@ -496,7 +499,9 @@ begin
     RigCommand.Clear
   end
   else begin
-    rcvdFreqMode.SendMessage('fmv'+LineEnding)
+    cmd := 'fmv'+LineEnding;
+    if DebugMode then Writeln('Sending: '+cmd);
+    rcvdFreqMode.SendMessage(cmd)
   end
 end;
 
