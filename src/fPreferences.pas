@@ -116,6 +116,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkTrxControlDebug : TCheckBox;
     chkShowCondxValues: TCheckBox;
     chkCondxCalcHF: TCheckBox;
     chkCondxCalcVHF: TCheckBox;
@@ -831,6 +832,7 @@ type
     Label203: TLabel;
     Label204: TLabel;
     Label205: TLabel;
+    Label206 : TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1235,6 +1237,7 @@ begin
   cqrini.WriteBool('Bands', '76GHz', cb76GHz.Checked);
 
   cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
+  cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
 
   cqrini.WriteString('TRX1', 'device', edtR1Device.Text);
   cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig1.Text));
@@ -1706,6 +1709,8 @@ begin
 
   frmTRXControl.rbRadio1.Caption := edtRadio1.Text;
   frmTRXControl.rbRadio2.Caption := edtRadio2.Text;
+  frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked);
+
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
   frmDXCluster.ReloadSettings;
@@ -2627,6 +2632,7 @@ begin
   cb76GHz.Checked := cqrini.ReadBool('Bands', '76GHz', False);
 
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
+  chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
 
   if (FileExistsUTF8(edtRigCtldPath.Text)) then
   begin

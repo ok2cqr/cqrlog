@@ -135,6 +135,7 @@ type
     procedure DisableSplit;
     procedure ClearRIT;
     procedure LoadButtonCaptions;
+    procedure SetDebugMode(DebugMode : Boolean);
   end;
 
 {
@@ -702,7 +703,7 @@ begin
 
   radio := TRigControl.Create;
 
-  if dmData.DebugLevel>0 then
+  if (dmData.DebugLevel>0) or cqrini.ReadBool('TRX','Debug',False) then
     radio.DebugMode := True;
   //Writeln('huu3');
   if not TryStrToInt(cqrini.ReadString('TRX'+n,'model',''),id) then
@@ -1106,6 +1107,14 @@ begin
   btn6m.Caption   := cqrini.ReadString('DefFreq','6btn','6m');
   btn2m.Caption   := cqrini.ReadString('DefFreq','2btn','2m');
   btn70cm.Caption := cqrini.ReadString('DefFreq','70btn','70cm')
+end;
+
+procedure TfrmTRXControl.SetDebugMode(DebugMode : Boolean);
+begin
+  if Assigned(radio) then
+  begin
+    radio.DebugMode := DebugMode
+  end
 end;
 
 initialization
