@@ -122,20 +122,20 @@ function TRigControl.StartRigctld : Boolean;
 var
   cmd : String;
 begin
-
   cmd := fRigCtldPath + ' ' +RigCtldArgs;
-  {
-  cmd := StringReplace(cmd,'%m',IntToStr(fRigId),[rfReplaceAll, rfIgnoreCase]);
-  cmd := StringReplace(cmd,'%r',fRigDevice,[rfReplaceAll, rfIgnoreCase]);
-  cmd := StringReplace(cmd,'%t',IntToStr(fRigCtldPort),[rfReplaceAll, rfIgnoreCase]);
-  }
-  if DebugMode then Writeln('Starting RigCtld ...');
-  if fDebugMode then Writeln(cmd);
-  rigProcess.CommandLine := cmd;
 
+  if fDebugMode then Writeln('Starting RigCtld ...');
+  if fDebugMode then Writeln(cmd);
+
+  rigProcess.CommandLine := cmd;
   try
     rigProcess.Execute;
-    sleep(1000)
+    sleep(1500);
+    if not rigProcess.Active then
+    begin
+      Result := False;
+      exit
+    end
   except
     on E : Exception do
     begin
@@ -146,8 +146,6 @@ begin
       exit
     end
   end;
-  tmrRigPoll.Interval := fRigPoll;
-  tmrRigPoll.Enabled  := True;
 
   Result := True
 end;
