@@ -488,8 +488,9 @@ begin
     ConnectToTelnet;
     btnTelConnect.Caption := 'Disconnect';
     ConTelnet := True;
-    edtCommand.SetFocus;
-  end;
+    if (Sender <> nil) then
+      edtCommand.SetFocus
+  end
 end;
 
 procedure TfrmDXCluster.btnWebConnectClick(Sender: TObject);
@@ -535,14 +536,14 @@ begin
   else begin
     if not ConTelnet then
       btnTelConnectClick(nil)
-  end
+  end;
+  frmNewQSO.ReturnToNewQSO
 end;
 
 procedure TfrmDXCluster.lConnect(aSocket: TLSocket);
 begin
   btnTelConnect.Caption := 'Disconnect';
-  ConTelnet := True;
-  edtCommand.SetFocus
+  ConTelnet := True
 end;
 
 procedure TfrmDXCluster.lDisconnect(aSocket: TLSocket);
