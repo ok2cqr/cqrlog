@@ -16,7 +16,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="9"/>
-      <BuildNr Value="2124"/>
+      <BuildNr Value="2125"/>
       <StringTable ProductName="cqrlog" ProductVersion="1.9.0"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -86,7 +86,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="87">
+    <Units Count="98">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -651,13 +651,59 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fImgView"/>
       </Unit86>
+      <Unit87>
+        <Filename Value="richmemo/richmemofactory.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="RichMemoFactory"/>
+      </Unit87>
+      <Unit88>
+        <Filename Value="richmemo/richmemopackage.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit88>
+      <Unit89>
+        <Filename Value="richmemo/rtfparspre211.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit89>
+      <Unit90>
+        <Filename Value="richmemo/wsrichmemo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit90>
+      <Unit91>
+        <Filename Value="richmemo/rtfdata.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit91>
+      <Unit92>
+        <Filename Value="richmemo/richmemoutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit92>
+      <Unit93>
+        <Filename Value="richmemo/richmemoregister.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit93>
+      <Unit94>
+        <Filename Value="richmemo/richmemortf.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit94>
+      <Unit95>
+        <Filename Value="richmemo/richmemohelpers.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit95>
+      <Unit96>
+        <Filename Value="richmemo/richmemo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit96>
+      <Unit97>
+        <Filename Value="richmemo/gtk2/gtk2richmemo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit97>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <SearchPaths>
+      <IncludeFiles Value="richmemo"/>
       <Libraries Value="$(LazarusDir)/lcl"/>
-      <OtherUnitFiles Value="lnet/lib;mysql"/>
+      <OtherUnitFiles Value="lnet/lib;mysql;richmemo;richmemo/gtk2"/>
       <SrcPath Value="$(LazarusDir)/lcl;$(LazarusDir)/lcl/interfaces/$(LCLWidgetType)"/>
     </SearchPaths>
     <Parsing>

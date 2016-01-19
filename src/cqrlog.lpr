@@ -18,7 +18,7 @@ uses
   fRebuildMembStat,uVersion,fAbout,fChangelog,fBigSquareStat,feQSLDownload,
   feQSLUpload,fSOTAExport, fNewQSODefValues, fQSLExpPref, fRotControl,
   dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
-  fConfigStorage, fMoniWsjtx, fWkd1, fRemind, fImgView;
+  fConfigStorage, fMoniWsjtx, fWkd1, fRemind, fImgView, RichMemoFactory;
 var
   Splash : TfrmSplash;
 

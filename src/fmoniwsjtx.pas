@@ -215,7 +215,9 @@ var
   i,
   index      :integer;
   adif       :Word;
-  isMyCall   :Boolean;
+  isMyCall,
+  HasNum,
+  HasChr     :Boolean;
 
 
 Begin   //TfrmMonWsjtx.AddDecodedMessage
@@ -230,6 +232,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
        Added.. may be also "mycall" something, but we count just those with proper locator.
        12:34 # MYCALL CA1LL AA11
+
+       Fixed stupid cq handling "CQ 000 PA7ZZ JO22 !where?" decodes now ok.
       }
 
       myAlert:='';
@@ -258,22 +262,26 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          if length(msgCQ2)>2 then   // if longer than 2 may be call, otherwise is addition DX AS EU etc.
           Begin
             i:=0;
+            HasNum:=false;
+            HasChr:=false;
             repeat
             //while not ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) and (i <= length(msgCQ2)) do inc(i);
              begin
              inc(i);
+             if ((msgCQ2[i]>='0') and (msgCQ2[i]<='9')) then HasNum:=true;
+             if ((msgCQ2[i]>='A') and (msgCQ2[i]<='Z')) then HasChr:=true;
               if dmData.DebugLevel>=1 then Writeln('Count now:', i,' lenght is:',length(msgCQ2));
              end;
-            until (i > length(msgCQ2)) or ((msgCQ2[i]>='0') and (msgCQ2[i]<='9'));
+            until (i > length(msgCQ2)) or ( HasNum and HasChr );
           if (length(msgCQ2)> i)  then
-               Begin //dropped before end  (has number) it may be real call
+               Begin //dropped before end  (has number+char) it may be real call
                 msgCall := msgCQ2;
                 if dmData.DebugLevel>=1 then Writeln('msgCQ2>2(lrs+num) is Call-','Result:',msgCall,' index of msg:',index);
                end
               else
                Begin //was shortie, so next must be call
                 if dmData.DebugLevel>=1 then  Begin
-                                               Writeln('CQ2 had no number.');
+                                               Writeln('CQ2 had no number+char.');
                                                Write('Call-');
                                               end;
                 msgCall := NextElement(Message,index);

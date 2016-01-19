@@ -441,7 +441,9 @@ FIXED
 - Small bug with RST's 3rd field CW macro. One hould test EVERYTHING before release ! 
   FIXED(Build 2124)
 
-
+- CQ-Monitor. Decoding of stupid CQ "CQ 000 PA7ZZ JO22 !where?" is now handled right. Assumed "000" to be a callsign. Now needs at least 1number and 1 character
+  to accepted as callsign.
+  FIXED(Build 2125)
 
 
  Issues to resolve:
