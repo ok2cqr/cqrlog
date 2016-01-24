@@ -347,7 +347,6 @@ type
     procedure edtNameEnter(Sender: TObject);
     procedure edtPWREnter(Sender: TObject);
     procedure edtQSL_VIAEnter(Sender: TObject);
-    procedure edtQSL_VIAExit(Sender: TObject);
     procedure edtQTHEnter(Sender: TObject);
     procedure edtRemQSOEnter(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
@@ -523,27 +522,6 @@ type
     WsjtxMode             : String;
     WsjtxBand             : String;
     WsjtxRememberAutoMode : Boolean;
-
-    NameNotChanged   : Boolean;
-    QthNotChanged    : Boolean;
-    GridNotChanged   : Boolean;
-    CountyNotChanged : Boolean;
-    QslViaNotChanged : Boolean;
-    AwardNotChanged  : Boolean;
-    StateNotChanged  : Boolean;
-    WazNotChanged    : Boolean;
-    ItuNotChanged    : Boolean;
-
-    //it would be great if OnChange works as I expected :)
-    OldName   : String;
-    OldQth    : String;
-    OldGrid   : String;
-    OldCounty : String;
-    OldAward  : String;
-    OldQslVia : String;
-    OldState  : String;
-    OldWaz    : String;
-    OldItu    : String;
 
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -879,23 +857,23 @@ begin
       dmData.qQSOBefore.Last
     end;
 
-    if (edtName.Text = '') or NameNotChanged then
+    if (edtName.Text = '') then
       edtName.Text := sName;
-    if (edtQTH.Text = '') or QthNotChanged then
+    if (edtQTH.Text = '') then
       edtQTH.Text := qth;
-    if (edtGrid.Text = '') or GridNotChanged then
+    if (edtGrid.Text = '') then
       edtGrid.Text := loc;
-    if (edtCounty.Text = '') or CountyNotChanged then
+    if (edtCounty.Text = '') then
       edtCounty.text := county;
-    if (edtQSL_VIA.Text = '') or QslViaNotChanged then
+    if (edtQSL_VIA.Text = '') then
       edtQSL_VIA.Text := qsl_via;
-    if (edtAward.Text = '') or AwardNotChanged then
+    if (edtAward.Text = '') then
       edtAward.Text := award;
-    if (edtState.Text = '') or StateNotChanged then
+    if (edtState.Text = '') then
       edtState.Text := state;
-    if (waz <> '') or WazNotChanged then
+    if (waz <> '') then
       edtWAZ.Text := waz;
-    if (itu <> '') or ItuNotChanged then
+    if (itu <> '') then
       edtITU.Text := itu
   end
 end;
@@ -1141,27 +1119,7 @@ begin
   sbtnQSL.Visible    := False;
   ChangeDXCC := False;
   adif := 0;
-  FreqBefChange := frmTRXControl.GetFreqMHz;
-
-  OldName   := '';
-  OldQth    := '';
-  OldGrid   := '';
-  OldCounty := '';
-  OldAward  := '';
-  OldQslVia := '';
-  OldState  := '';
-  OldWaz    := '';
-  OldItu    := '';
-
-  NameNotChanged   := True;
-  QthNotChanged    := True;
-  GridNotChanged   := True;
-  CountyNotChanged := True;
-  QslViaNotChanged := True;
-  AwardNotChanged  := True;
-  StateNotChanged  := True;
-  WazNotChanged    := True;
-  ItuNotChanged    := True
+  FreqBefChange := frmTRXControl.GetFreqMHz
 end;
 
 procedure TfrmNewQSO.LoadSettings;
@@ -2692,15 +2650,12 @@ begin
   begin
     frmQSODetails.iota := cmbIOTA.Text
   end;
-  edtCounty.SelectAll;
-  OldCounty := edtCounty.Text
+  edtCounty.SelectAll
 end;
 
 procedure TfrmNewQSO.edtCountyExit(Sender: TObject);
 begin
-  CheckCountyClub;
-  if edtCounty.Text<>OldCounty then
-    CountyNotChanged := False
+  CheckCountyClub
 end;
 
 procedure TfrmNewQSO.edtCountyKeyDown(Sender: TObject; var Key: Word;
@@ -2862,9 +2817,7 @@ end;
 
 procedure TfrmNewQSO.edtGridExit(Sender: TObject);
 begin
-  CalculateDistanceEtc;
-  if OldGrid<>edtGrid.Text then
-    GridNotChanged := False
+  CalculateDistanceEtc
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
@@ -2929,9 +2882,7 @@ end;
 
 procedure TfrmNewQSO.edtITUExit(Sender: TObject);
 begin
-  frmQSODetails.itu := edtITU.Text;
-  if edtITU.Text<>OldItu then
-    ItuNotChanged := False
+  frmQSODetails.itu := edtITU.Text
 end;
 
 procedure TfrmNewQSO.edtITUKeyDown(Sender: TObject; var Key: Word;
@@ -3006,9 +2957,7 @@ begin
     tmp := edtName.Text;
     tmp[1] := UpCase(tmp[1]);
     edtName.Text := tmp
-  end;
-  if edtName.Text<>OldName then
-    NameNotChanged := False
+  end
 end;
 
 procedure TfrmNewQSO.edtNameKeyDown(Sender: TObject; var Key: Word;
@@ -3083,10 +3032,7 @@ begin
     tmp[1] := UpCase(tmp[1]);
     edtQTH.Text := tmp
   end;
-  CheckQTHClub;
-
-  if OldQth<>edtQTH.Text then
-    QthNotChanged := False
+  CheckQTHClub
 end;
 
 procedure TfrmNewQSO.edtQTHKeyDown(Sender: TObject; var Key: Word;
@@ -3580,8 +3526,7 @@ end;
 
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
 begin
-  edtGrid.SelectAll;
-  OldGrid := edtGrid.Text
+  edtGrid.SelectAll
 end;
 
 procedure TfrmNewQSO.acPropExecute(Sender: TObject);
@@ -3777,8 +3722,7 @@ end;
 
 procedure TfrmNewQSO.edtAwardEnter(Sender: TObject);
 begin
-  edtAward.SelectAll;
-  OldAward := edtAward.Text
+  edtAward.SelectAll
 end;
 
 procedure TfrmNewQSO.edtHisRSTExit(Sender: TObject);
@@ -3789,8 +3733,7 @@ end;
 
 procedure TfrmNewQSO.edtITUEnter(Sender: TObject);
 begin
-  edtITU.SelectAll;
-  OldItu := edtITU.Text
+  edtITU.SelectAll
 end;
 
 procedure TfrmNewQSO.edtMyRSTExit(Sender: TObject);
@@ -3809,8 +3752,7 @@ begin
     tmp[1] := UpCase(tmp[1]);
     edtName.Text := tmp
   end;
-  edtName.SelectAll;
-  OldName := edtName.Text
+  edtName.SelectAll
 end;
 
 procedure TfrmNewQSO.edtPWREnter(Sender: TObject);
@@ -3820,20 +3762,12 @@ end;
 
 procedure TfrmNewQSO.edtQSL_VIAEnter(Sender: TObject);
 begin
-  edtQSL_VIA.SelectAll;
-  OldQslVia := edtQSL_VIA.Text
-end;
-
-procedure TfrmNewQSO.edtQSL_VIAExit(Sender: TObject);
-begin
-  if edtQSL_VIA.Text<>OldQslVia then
-    QslViaNotChanged := False
+  edtQSL_VIA.SelectAll
 end;
 
 procedure TfrmNewQSO.edtQTHEnter(Sender: TObject);
 begin
-  edtQTH.SelectAll;
-  OldQth := edtQTH.Text
+  edtQTH.SelectAll
 end;
 
 procedure TfrmNewQSO.edtRemQSOEnter(Sender: TObject);
@@ -3848,14 +3782,12 @@ end;
 
 procedure TfrmNewQSO.edtStateEnter(Sender: TObject);
 begin
-  edtState.SelectAll;
-  OldState := edtState.Text
+  edtState.SelectAll
 end;
 
 procedure TfrmNewQSO.edtWAZEnter(Sender: TObject);
 begin
-  edtWAZ.SelectAll;
-  OldWaz := edtWAZ.Text
+  edtWAZ.SelectAll
 end;
 
 procedure TfrmNewQSO.FormWindowStateChange(Sender: TObject);
@@ -4173,9 +4105,7 @@ end;
 
 procedure TfrmNewQSO.edtAwardExit(Sender: TObject);
 begin
-  CheckAwardClub;
-  if edtAward.Text<>OldAward then
-    AwardNotChanged := False
+  CheckAwardClub
 end;
 
 procedure TfrmNewQSO.edtCallEnter(Sender: TObject);
@@ -4647,9 +4577,7 @@ end;
 
 procedure TfrmNewQSO.edtStateExit(Sender: TObject);
 begin
-  CheckStateClub;
-  if edtState.Text<>OldState then
-    StateNotChanged := False
+  CheckStateClub
 end;
 
 procedure TfrmNewQSO.edtStateKeyDown(Sender: TObject; var Key: Word;
@@ -4674,9 +4602,7 @@ end;
 
 procedure TfrmNewQSO.edtWAZExit(Sender: TObject);
 begin
-  frmQSODetails.waz := edtWAZ.Text;
-  if edtWAZ.Text<>OldWaz then
-    WazNotChanged := False
+  frmQSODetails.waz := edtWAZ.Text
 end;
 
 procedure TfrmNewQSO.mCommentKeyDown(Sender: TObject; var Key: Word;
@@ -5368,12 +5294,12 @@ begin
       end
     end;
 
-    if (edtName.Text = '') or AlwaysReplace or NameNotChanged then
+    if (edtName.Text = '') or AlwaysReplace then
       edtName.Text := c_nick; //operator's name
-    if ((edtQTH.Text = '') or AlwaysReplace or QthNotChanged) and (c_callsign = edtCall.Text) then
+    if ((edtQTH.Text = '') or AlwaysReplace) and (c_callsign = edtCall.Text) then
       edtQTH.Text := c_qth;  //qth
 
-    if ((edtGrid.Text='') or AlwaysReplace or GridNotChanged) and dmUtils.IsLocOK(c_grid) and (c_callsign = edtCall.Text) then
+    if ((edtGrid.Text='') or AlwaysReplace) and dmUtils.IsLocOK(c_grid) and (c_callsign = edtCall.Text) then
     begin
       edtGrid.Text := c_grid;
       edtGridExit(nil)
@@ -5385,10 +5311,10 @@ begin
       cmbIOTAExit(nil)
     end;
 
-    if ((c_state <> '') and (edtState.Text = '') or AlwaysReplace or StateNotChanged) and (c_callsign = edtCall.Text) then
+    if ((c_state <> '') and (edtState.Text = '') or AlwaysReplace) and (c_callsign = edtCall.Text) then
     begin
       edtState.Text := c_state;
-      if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace or StateNotChanged then
+      if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace then
       begin
         if (edtState.Text<>'') then
           edtCounty.Text := edtState.Text+','+c_county

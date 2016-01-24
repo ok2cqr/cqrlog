@@ -11,6 +11,7 @@ Legend:
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed
   - RBN monitor didn't show any data when RBN didn't send any operating mode
+  - callbook data always replaced data from previous QSO - fixed
 
 1.9.1 (2015-11-28)
   + support sending CW via HamLib library added

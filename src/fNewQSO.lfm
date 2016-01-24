@@ -956,7 +956,6 @@ object frmNewQSO: TfrmNewQSO
           AutoSize = False
           CharCase = ecUppercase
           OnEnter = edtQSL_VIAEnter
-          OnExit = edtQSL_VIAExit
           OnKeyDown = edtQSL_VIAKeyDown
           TabOrder = 20
         end
