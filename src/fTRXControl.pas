@@ -96,6 +96,7 @@ type
     procedure tmrRadioTimer(Sender : TObject);
   private
     radio : TRigControl;
+    old_mode : String;
     function  GetActualMode : String;
     function  GetModeNumber(mode : String) : Cardinal;
     procedure SetMode(mode : String;bandwidth :Integer);
@@ -126,6 +127,7 @@ type
     function  GetFreqkHz : Double;
     function  GetFreqMHz : Double;
     function  GetDislayFreq : String;
+    function  GetRawMode : String;
 
     procedure SetModeFreq(mode,freq : String);
     procedure SetFreqModeBandWidth(freq : Double; mode : String; BandWidth : Integer);
@@ -315,6 +317,16 @@ begin
     exit
   end;
 
+  m := radio.GetRawMode;
+  if (m<>old_mode) then
+  begin
+    if not (((old_mode='LSB') or (old_mode='USB')) and ((m='LSB') or (m='USB'))) then
+    begin
+      old_mode := m;
+      dmData.OpenFreqMemories(old_mode)
+    end
+  end;
+
   if (b='') then
     b := dmUtils.GetBandFromFreq(lblFreq.Caption);
   if b = '160M' then
@@ -394,7 +406,8 @@ begin
   LoadButtonCaptions;
   dmUtils.LoadWindowPos(frmTRXControl);
   rbRadio1.Caption := cqrini.ReadString('TRX1','Desc','Radio 1');
-  rbRadio2.Caption := cqrini.ReadString('TRX2','Desc','Radio 2')
+  rbRadio2.Caption := cqrini.ReadString('TRX2','Desc','Radio 2');
+  old_mode := ''
 end;
 
 procedure TfrmTRXControl.btn10mClick(Sender: TObject);
@@ -1115,6 +1128,14 @@ begin
   begin
     radio.DebugMode := DebugMode
   end
+end;
+
+function TfrmTRXControl.GetRawMode : String;
+begin
+  if Assigned(radio) then
+    Result := radio.GetRawMode
+  else
+    Result := ''
 end;
 
 initialization

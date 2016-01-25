@@ -189,7 +189,6 @@ type
     procedure PrepareMysqlConfigFile;
     procedure DeleteOldConfigFiles;
     procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
-    procedure OpenFreqMemories;
     procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
   public
     {
@@ -329,6 +328,7 @@ type
     procedure LoadFreqMemories(grid : TStringGrid);
     procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
     procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+    procedure OpenFreqMemories(mode : String);
   end;
 
 var
@@ -811,7 +811,7 @@ begin
   frmTRXControl.InicializeRig;
   frmRotControl.InicializeRot;
 
-  OpenFreqMemories;
+  OpenFreqMemories('');
 
   LoadClubsSettings;
   LoadZipSettings
@@ -4132,7 +4132,7 @@ begin
     dmData.Q.Close;
     if dmData.trQ.Active then
       dmData.trQ.Commit;
-    OpenFreqMemories
+    OpenFreqMemories(frmTRXControl.GetRawMode)
   end
 end;
 
@@ -4159,15 +4159,27 @@ begin
   end
 end;
 
-procedure TdmData.OpenFreqMemories;
+procedure TdmData.OpenFreqMemories(mode : String);
 const
-  C_SEL = 'select id,freq,mode,bandwidth from freqmem order by id';
+  C_SEL = 'select id,freq,mode,bandwidth from freqmem';
 begin
   qFreqMem.Close;
   if trFreqMem.Active then
     trFreqMem.Rollback;
 
-  qFreqMem.SQL.Text := C_SEL;
+  if (mode='') then
+    qFreqMem.SQL.Text := C_SEL + ' order by id'
+  else begin
+    if ((mode='LSB') or (mode='USB')) then
+    begin
+      qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('LSB') +') or ' +
+                           '(mode = ' + QuotedStr('USB') + ') order by id'
+    end
+    else
+      qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
+  end;
+
+  if fDebugLevel>=1 then Writeln(qFreqMem.SQL.Text);
   trFreqMem.StartTransaction;
   qFreqMem.Open;
 
@@ -4197,7 +4209,7 @@ procedure TdmData.GetPreviousFreqFromMem(var freq : Double; var mode : String; v
 begin
   if not qFreqMem.Active then
   begin
-    OpenFreqMemories;
+    OpenFreqMemories(frmTRXControl.GetRawMode);
     qFreqMem.Last
   end
   else begin
@@ -4216,7 +4228,7 @@ procedure TdmData.GetNextFreqFromMem(var freq : Double; var mode : String; var b
 begin
   if not qFreqMem.Active then
   begin
-    OpenFreqMemories;
+    OpenFreqMemories(frmTRXControl.GetRawMode);
     qFreqMem.First
   end
   else begin

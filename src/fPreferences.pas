@@ -116,6 +116,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkModeRelatedOnly : TCheckBox;
     chkTrxControlDebug : TCheckBox;
     chkShowCondxValues: TCheckBox;
     chkCondxCalcHF: TCheckBox;
@@ -1238,6 +1239,7 @@ begin
 
   cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
+  cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
 
   cqrini.WriteString('TRX1', 'device', edtR1Device.Text);
   cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig1.Text));
@@ -2633,6 +2635,7 @@ begin
 
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
   chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
+  chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
 
   if (FileExistsUTF8(edtRigCtldPath.Text)) then
   begin

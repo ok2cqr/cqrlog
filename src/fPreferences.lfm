@@ -1902,7 +1902,7 @@ object frmPreferences: TfrmPreferences
       object chkTrxControlDebug: TCheckBox
         Left = 16
         Height = 24
-        Top = 503
+        Top = 536
         Width = 300
         Caption = 'Show communication with TRX in console'
         TabOrder = 4
@@ -1910,10 +1910,18 @@ object frmPreferences: TfrmPreferences
       object Label206: TLabel
         Left = 40
         Height = 17
-        Top = 528
+        Top = 561
         Width = 401
         Caption = 'You have to run cqrlog in console to see the debug messages'
         ParentColor = False
+      end
+      object chkModeRelatedOnly: TCheckBox
+        Left = 16
+        Height = 24
+        Top = 504
+        Width = 327
+        Caption = 'Switch only between mode related memories'
+        TabOrder = 5
       end
     end
     object TabROTcontrol: TTabSheet
@@ -1956,7 +1964,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2289,7 +2297,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
