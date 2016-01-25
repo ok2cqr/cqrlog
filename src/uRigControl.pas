@@ -10,6 +10,7 @@ uses
 type TRigMode =  record
     mode : String[10];
     pass : word;
+    raw  : String[10];
 end;
 
 type TVFO = (VFOA,VFOB);
@@ -89,6 +90,7 @@ type TRigControl = class
     function  GetFreqHz(vfo : TVFO)   : Double; overload;
     function  GetFreqKHz(vfo : TVFO)  : Double; overload;
     function  GetFreqMHz(vfo : TVFO)  : Double; overload;
+    function  GetRawMode : String;
 
     procedure SetCurrVFO(vfo : TVFO);
     procedure SetModePass(mode : TRigMode);
@@ -368,6 +370,7 @@ begin
         begin
           BadRcvd := 0;
           fMode.mode := a[i];
+          fMode.raw  := a[i];
           if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
             fMode.mode := 'SSB';
           if fMode.mode = 'CWR' then
@@ -379,6 +382,7 @@ begin
             fFreq := 0;
             fVFO := VFOA;
             fMode.mode := 'SSB';
+            fMode.raw  := 'SSB';
             fMode.pass := 2700
           end
           else
@@ -531,6 +535,10 @@ begin
   Result[i] := Copy(S, 1, Length(S))
 end;
 
+function TRigControl.GetRawMode : String;
+begin
+  Result := fMode.raw
+end;
 
 destructor TRigControl.Destroy;
 var
@@ -557,7 +565,6 @@ begin
   FreeAndNil(RigCommand);
   if DebugMode then Writeln(6)
 end;
-
 
 end.
 
