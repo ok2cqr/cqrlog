@@ -41,7 +41,12 @@ uses dUtils;
 procedure TfrmAddRadioMemory.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(frmAddRadioMemory);
+
   dmUtils.InsertModes(cmbMode);
+  cmbMode.Items.Delete(cmbMode.Items.IndexOf('SSB'));
+  cmbMode.Items.Insert(1,'USB');
+  cmbMode.Items.Insert(2,'LSB');
+
   edtFreq.SetFocus
 end;
 
