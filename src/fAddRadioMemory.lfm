@@ -7,6 +7,7 @@ object frmAddRadioMemory: TfrmAddRadioMemory
   Caption = 'New memory'
   ClientHeight = 204
   ClientWidth = 308
+  OnCreate = FormCreate
   OnShow = FormShow
   Position = poOwnerFormCenter
   LCLVersion = '1.4.4.0'

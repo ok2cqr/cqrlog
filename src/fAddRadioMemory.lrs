@@ -3,22 +3,23 @@
 LazarusResources.Add('TfrmAddRadioMemory','FORMDATA',[
   'TPF0'#18'TfrmAddRadioMemory'#17'frmAddRadioMemory'#4'Left'#3#164#1#6'Height'
   +#3#204#0#3'Top'#3#4#1#5'Width'#3'4'#1#11'BorderStyle'#7#8'bsDialog'#7'Captio'
-  +'n'#6#10'New memory'#12'ClientHeight'#3#204#0#11'ClientWidth'#3'4'#1#6'OnSho'
-  +'w'#7#8'FormShow'#8'Position'#7#17'poOwnerFormCenter'#10'LCLVersion'#6#7'1.4'
-  +'.4.0'#0#6'TLabel'#6'Label1'#4'Left'#2#16#6'Height'#2#17#3'Top'#2#16#5'Width'
-  +#2'p'#7'Caption'#6#16'Frequency in kHz'#11'ParentColor'#8#0#0#5'TEdit'#7'edt'
-  +'Freq'#4'Left'#2#16#6'Height'#2#27#3'Top'#2'('#5'Width'#3#192#0#8'TabOrder'#2
-  +#0#4'Text'#6#1'0'#0#0#6'TLabel'#6'Label2'#4'Left'#2#16#6'Height'#2#17#3'Top'
-  +#2'P'#5'Width'#2''''#7'Caption'#6#4'Mode'#11'ParentColor'#8#0#0#9'TComboBox'
-  +#7'cmbMode'#4'Left'#2#16#6'Height'#2#29#3'Top'#2'h'#5'Width'#3#192#0#12'Auto'
-  +'Complete'#9#16'AutoCompleteText'#11#12'cbactEnabled'#22'cbactEndOfLineCompl'
-  +'ete'#20'cbactSearchAscending'#0#8'CharCase'#7#11'ecUppercase'#10'ItemHeight'
-  +#2#0#8'TabOrder'#2#1#4'Text'#6#7'CMBMODE'#0#0#6'TLabel'#6'Label3'#4'Left'#2
-  +#16#6'Height'#2#17#3'Top'#3#144#0#5'Width'#2'f'#7'Caption'#6#14'Bandwidth (H'
-  +'z)'#11'ParentColor'#8#0#0#5'TEdit'#8'edtWidth'#4'Left'#2#16#6'Height'#2#27#3
-  +'Top'#3#172#0#5'Width'#2'p'#8'TabOrder'#2#2#4'Text'#6#1'0'#0#0#7'TButton'#7
-  +'Button1'#4'Left'#3#224#0#6'Height'#2#25#3'Top'#2#16#5'Width'#2'K'#7'Caption'
-  +#6#2'OK'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#3#0#0#7'TButton'#7'Butt'
-  +'on2'#4'Left'#3#224#0#6'Height'#2#25#3'Top'#2'0'#5'Width'#2'K'#6'Cancel'#9#7
-  +'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'#2#4#0#0#0
+  +'n'#6#10'New memory'#12'ClientHeight'#3#204#0#11'ClientWidth'#3'4'#1#8'OnCre'
+  +'ate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#8'Position'#7#17'poOwnerFormC'
+  +'enter'#10'LCLVersion'#6#7'1.4.4.0'#0#6'TLabel'#6'Label1'#4'Left'#2#16#6'Hei'
+  +'ght'#2#17#3'Top'#2#16#5'Width'#2'p'#7'Caption'#6#16'Frequency in kHz'#11'Pa'
+  +'rentColor'#8#0#0#5'TEdit'#7'edtFreq'#4'Left'#2#16#6'Height'#2#27#3'Top'#2'('
+  +#5'Width'#3#192#0#8'TabOrder'#2#0#4'Text'#6#1'0'#0#0#6'TLabel'#6'Label2'#4'L'
+  +'eft'#2#16#6'Height'#2#17#3'Top'#2'P'#5'Width'#2''''#7'Caption'#6#4'Mode'#11
+  +'ParentColor'#8#0#0#9'TComboBox'#7'cmbMode'#4'Left'#2#16#6'Height'#2#29#3'To'
+  +'p'#2'h'#5'Width'#3#192#0#12'AutoComplete'#9#16'AutoCompleteText'#11#12'cbac'
+  +'tEnabled'#22'cbactEndOfLineComplete'#20'cbactSearchAscending'#0#8'CharCase'
+  +#7#11'ecUppercase'#10'ItemHeight'#2#0#8'TabOrder'#2#1#4'Text'#6#7'CMBMODE'#0
+  +#0#6'TLabel'#6'Label3'#4'Left'#2#16#6'Height'#2#17#3'Top'#3#144#0#5'Width'#2
+  +'f'#7'Caption'#6#14'Bandwidth (Hz)'#11'ParentColor'#8#0#0#5'TEdit'#8'edtWidt'
+  +'h'#4'Left'#2#16#6'Height'#2#27#3'Top'#3#172#0#5'Width'#2'p'#8'TabOrder'#2#2
+  +#4'Text'#6#1'0'#0#0#7'TButton'#7'Button1'#4'Left'#3#224#0#6'Height'#2#25#3'T'
+  +'op'#2#16#5'Width'#2'K'#7'Caption'#6#2'OK'#7'OnClick'#7#12'Button1Click'#8'T'
+  +'abOrder'#2#3#0#0#7'TButton'#7'Button2'#4'Left'#3#224#0#6'Height'#2#25#3'Top'
+  +#2'0'#5'Width'#2'K'#6'Cancel'#9#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8
+  +'TabOrder'#2#4#0#0#0
 ]);
