@@ -86,7 +86,10 @@ end;
 
 procedure TfrmRadioMemories.acDeleteExecute(Sender: TObject);
 begin
-  sgrdMem.DeleteRow(sgrdMem.Row)
+  if (sgrdMem.RowCount < 2) then
+    Application.MessageBox('There is nothing to delete','Info...',mb_ok+mb_IconInformation)
+  else
+    sgrdMem.DeleteRow(sgrdMem.Row)
 end;
 
 procedure TfrmRadioMemories.acEditExecute(Sender: TObject);
