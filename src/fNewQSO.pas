@@ -4527,9 +4527,9 @@ begin
     acSendSpot.Execute;
 
   if ((Shift = [ssAlt]) and (key = VK_V)) then
-    frmTRXControl.btnMemUp.Click;
+    frmTRXControl.btnMemDwn.Click;
   if ((Shift = [ssAlt]) and (key = VK_B)) then
-    frmTRXControl.btnMemDwn.Click
+    frmTRXControl.btnMemUp.Click
 end;
 
 procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
