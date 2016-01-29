@@ -1,0 +1,131 @@
+object frmException: TfrmException
+  Left = 629
+  Height = 429
+  Top = 243
+  Width = 719
+  BorderStyle = bsDialog
+  Caption = 'Oops something bad happened'
+  ClientHeight = 429
+  ClientWidth = 719
+  Position = poDesktopCenter
+  LCLVersion = '1.4.4.0'
+  object Panel1: TPanel
+    Left = 633
+    Height = 429
+    Top = 0
+    Width = 86
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 429
+    ClientWidth = 86
+    TabOrder = 0
+    object Button1: TButton
+      Left = 5
+      Height = 25
+      Top = 11
+      Width = 76
+      Caption = 'OK'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 5
+      Height = 25
+      Top = 72
+      Width = 76
+      Caption = 'Quit '
+      OnClick = Button2Click
+      TabOrder = 1
+    end
+    object btnSave: TButton
+      Left = 5
+      Height = 25
+      Top = 208
+      Width = 76
+      Caption = 'Save'
+      OnClick = btnSaveClick
+      TabOrder = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 429
+    Top = 0
+    Width = 633
+    Align = alClient
+    ClientHeight = 429
+    ClientWidth = 633
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 1
+      Height = 40
+      Top = 11
+      Width = 631
+      Align = alTop
+      AutoSize = False
+      Caption = '  Something bad happened and CQRLOG stopped working. '#13#10'  You can click to OK to continue but CQRLOG may not work properly. '
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object Memo2: TMemo
+      Left = 1
+      Height = 173
+      Top = 51
+      Width = 631
+      Align = alTop
+      Lines.Strings = (
+        'If you want to help us to fix this, please run CQRLOG from console with --debug=1 parameter '
+        'and try to reproduce what you did. '
+        ''
+        'When the this error message appears again, copy related part of console output and paste '
+        'it to CQRLOG forum at https://www.cqrlog.com or send it directly to petr@ok2cqr.com '
+        'with short information what you did. '
+        ''
+        'Thank you!'
+      )
+      ReadOnly = True
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Height = 204
+      Top = 224
+      Width = 631
+      Align = alClient
+      Caption = 'Error message'
+      ClientHeight = 185
+      ClientWidth = 627
+      TabOrder = 1
+      object memErrorMessage: TMemo
+        Left = 0
+        Height = 185
+        Top = 0
+        Width = 627
+        Align = alClient
+        Lines.Strings = (
+          ''
+        )
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Height = 10
+      Top = 1
+      Width = 631
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 2
+    end
+  end
+  object dlgSave: TSaveDialog
+    Title = 'Save the file as'
+    DefaultExt = '.txt'
+    Filter = 'Text files|*.txt'
+    left = 552
+    top = 136
+  end
+end

@@ -555,6 +555,7 @@ type
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
     procedure DisableRemoteMode;
     procedure CloseAllWindows;
+    procedure onExcept(Sender: TObject; E: Exception);
 
     function CheckFreq(freq : String) : String;
   public
@@ -645,7 +646,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException;
 
 procedure TQSLTabThread.Execute;
 var
@@ -5970,7 +5971,17 @@ begin
   end
 end;
 
-
+procedure TfrmNewQSO.onExcept(Sender: TObject; E: Exception);
+begin
+  with TfrmException.Create(self) do
+  try
+    memErrorMessage.Lines.Add('Error in ' + E.UnitName);
+    memErrorMessage.Lines.Add(E.Message);
+    ShowModal
+  finally
+    Free
+  end
+end;
 
 initialization
   {$I fNewQSO.lrs}
