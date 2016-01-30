@@ -505,6 +505,8 @@ type
     cmbModelRig1: TComboBox;
     edtCondxImageUrl: TEdit;
     edtBackupPath1: TEdit;
+    edtR1Host : TEdit;
+    edtR2Host : TEdit;
     edtWsjtDefaultFreq: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
@@ -532,9 +534,7 @@ type
     edtRot1RotCtldArgs: TEdit;
     edtRot1RotCtldPort: TEdit;
     edtR2Device: TEdit;
-    edtR1Host: TEdit;
     edtRot2Device: TEdit;
-    edtR2Host: TEdit;
     edtR1RigCtldArgs: TEdit;
     edtRot2Host: TEdit;
     edtR2RigCtldArgs: TEdit;
