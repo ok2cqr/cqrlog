@@ -70,6 +70,7 @@ type
     btnChangeDefMode: TButton;
     btnAlertCallsigns: TButton;
     btnCfgStorage: TButton;
+    btnAddTrxMem : TButton;
     cb10m1: TCheckBox;
     cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
@@ -1011,6 +1012,7 @@ type
     tabModes: TTabSheet;
     tabQTHProfiles: TTabSheet;
     tabDXCluster: TTabSheet;
+    procedure btnAddTrxMemClick(Sender : TObject);
     procedure btnAlertCallsignsClick(Sender: TObject);
     procedure btnBrowseBackup1Click(Sender: TObject);
     procedure btnCfgStorageClick(Sender: TObject);
@@ -1113,7 +1115,8 @@ implementation
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
-  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation;
+  fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
+  fRadioMemories;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -2119,6 +2122,21 @@ begin
     F.ShowModal
   finally
     FreeAndNil(F)
+  end
+end;
+
+procedure TfrmPreferences.btnAddTrxMemClick(Sender : TObject);
+begin
+  frmRadioMemories := TfrmRadioMemories.Create(frmTRXControl);
+  try
+    dmData.LoadFreqMemories(frmRadioMemories.sgrdMem);
+    frmRadioMemories.ShowModal;
+    if frmRadioMemories.ModalResult = mrOK then
+    begin
+      dmData.StoreFreqMemories(frmRadioMemories.sgrdMem)
+    end
+  finally
+    FreeAndNil(frmRadioMemories)
   end
 end;
 

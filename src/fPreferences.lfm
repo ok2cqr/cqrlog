@@ -1169,9 +1169,9 @@ object frmPreferences: TfrmPreferences
         TabOrder = 0
       end
       object btnSplit: TButton
-        Left = 544
+        Left = 536
         Height = 25
-        Top = 528
+        Top = 584
         Width = 104
         Caption = 'Split settings'
         OnClick = btnSplitClick
@@ -1922,6 +1922,15 @@ object frmPreferences: TfrmPreferences
         Width = 327
         Caption = 'Switch only between mode related memories'
         TabOrder = 5
+      end
+      object btnAddTrxMem: TButton
+        Left = 472
+        Height = 25
+        Top = 528
+        Width = 191
+        Caption = 'Add/Modify memory'
+        OnClick = btnAddTrxMemClick
+        TabOrder = 6
       end
     end
     object TabROTcontrol: TTabSheet
