@@ -169,31 +169,42 @@ change the freq/mode after you double click on a spot from dx cluster or on an i
 in bandmap.<br> CQRLOG uses the rigctld utilty from HamLib. It controls the radio and
 programs communicate with it through UDP. CQRLOG supports operating with two TRX but
 only one can be active at a time.<br><br>
-<em>Radio one, desc:</em> is a description you'll see in TRX control window. It is only
-descriptive text, you can write whatever you want.<br>
-<em>Host:</em> computer where rigctld is running, localhost is fine for most cases. <br>
-<em>RIG ID model:</em> indicates the radio type ID which corresponds to the ID used by
-hamlib. The full list is <a href=h6.html><strong>here</strong></a>.<br>
-<em>Device</em> device which the radio is connected to. /dev/ttyS0 is COM1, /dev/ttyS1
+<strong>Radio one, desc:</strong> is a description you'll see in TRX control window. It is only
+descriptive text, you can write whatever you want.<br><br>
+<strong>Host:</strong> computer where rigctld is running, localhost is fine for most cases. <br><br>
+<strong>RIG model:</strong> choose your radio model from the list<br><br>
+<strong>Device:</strong> device which the radio is connected to. /dev/ttyS0 is COM1, /dev/ttyS1
 is COM2 etc. If you use USB to serial interface, the device will usually be /dev/ttyUSB0
 for COM1 etc. If you are using Ubuntu or Debian, you have to be member of the dialout users
-group to have rights to the serial ports.<br>
-<em>Poll rate:</em> specifies how often CQRLOG should read data from rigctld. 500 miliseconds
-is fine.
-<em>Port number</em> is the number of the port used to communicate with rigctld.
-Default value is 4532. The second radio, has to have a different port e.g. 4533.<br>
-<em>Extra command line arguments</em> usefull when you have to specify more parameters to
-rigctld. E.g. CIV address (--civaddr=ID, where ID is the CIV address).<br>
-<em>Serial port parameters</em> from the manual of your rig, please choose the correct options.
+group to have rights to the serial ports.<br><br>
+<strong>Poll rate:</strong> specifies how often CQRLOG should read data from rigctld. 500 miliseconds
+is fine.<br><br>
+<strong>Port number</strong> is the number of the port used to communicate with rigctld.
+Default value is 4532. The second radio, has to have a different port e.g. 4533.<br><br>
+<strong>Extra command line arguments</strong> usefull when you have to specify more parameters to
+rigctld. E.g. CIV address (--civaddr=ID, where ID is the CIV address).<br><br>
+<strong>Serial port parameters</strong> from the manual of your rig, please choose the correct options.
 Very often it is much better to specify only serial speed and leave other options as default.
-Default value means that the ettings from HamLib will be used.<br>
+Default value means that the settings from HamLib will be used.<br>
 <br>
+<strong>Switch only between mode related memories</strong> if this option is cheched, only memories related to current
+operating mode will be used. E.g. you are on CW right now, CQRLOG will switch only between memories with CW mode. When you switch to
+USB or LSB, CQRLOG will use memories both with USB and LSB mode.<br><br>
+<strong>Show communication with TRX in console</strong> sometimes TRX control doesn't work. Check this option, run CQRLOG from console and
+you'll see the communication between TRX and Hamlib. This could help to find out what is wrong.<br><br>
+<strong>Change default frequencies</strong><br>
 The default frequencies which the radio tunes if you click a band button in the 'TRX control'
 panel can be changed to your preferences. The mode is switched in accordance to the band plan,
 there is actually a separate set of default frequencies for each CW, SSB, RTTY, AM and FM modes.
 Click the 'Change default frequencies' button and set up frequencies of your choice.</div><br>
 <img src=img/h100.png border=0><br>
 <p align=center><img src=img/line.png></p>
+<br>
+<a name="mem"><strong>Add/Modify memory</strong></a><br><br>
+You can define your own favourite frequencis and swich between them directly in New QSO window using ALT+V (Mem down) and 
+ALT+B (Mem up). These keys are used in N6TR clones to switch between bands.
+<br><br>
+<img src="img/radio_memory.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
 Here you can set up the default bandwidth for any of the supported modes (CW - SSB - RTTY - AM - FM).
