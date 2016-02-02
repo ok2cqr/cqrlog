@@ -556,6 +556,8 @@ type
     procedure DisableRemoteMode;
     procedure CloseAllWindows;
     procedure onExcept(Sender: TObject; E: Exception);
+    procedure DisplayCoordinates(latitude, Longitude : Currency);
+    procedure DrawGrayline;
 
     function CheckFreq(freq : String) : String;
   public
@@ -2629,10 +2631,7 @@ begin
   begin
     if frmGrayline.Showing then
     begin
-      frmGrayline.s := lblLat.Caption;
-      frmGrayline.d := lblLong.Caption;
-      frmGrayline.pfx := lblDXCC.Caption;
-      frmGrayline.kresli
+      DrawGrayline
     end
   end;
   if NOT (old_call = '') then
@@ -4208,10 +4207,7 @@ begin
   begin
     if frmGrayline.Showing then
     begin
-      frmGrayline.s := lblLat.Caption;
-      frmGrayline.d := lblLong.Caption;
-      frmGrayline.pfx := lblDXCC.Caption;
-      frmGrayline.kresli
+      DrawGrayline
     end
   end;
   if NOT (old_call = '') then
@@ -5042,6 +5038,10 @@ begin
       SunRise := SunRise + (SunDelta/24);
       SunSet  := SunSet + (SunDelta/24)
     end;
+
+    DisplayCoordinates(lat,long);
+    DrawGrayline;
+
     {
     if SunDelta <> 0 then
     begin
@@ -5334,6 +5334,11 @@ begin
     begin
       edtWAZ.Text    := c_waz;
       lblWAZ.Caption := c_waz
+    end;
+
+    if (edtGrid.Text <> '') then
+    begin
+      CalculateDistanceEtc
     end;
 
     if c_zip <> '' then
@@ -5987,6 +5992,24 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmNewQSO.DisplayCoordinates(latitude, Longitude : Currency);
+var
+  lat,long : String;
+begin
+  dmUtils.GetShorterCoordinates(latitude,longitude,lat,long);
+
+  lblLat.Caption  := lat;
+  lblLong.Caption := long
+end;
+
+procedure TfrmNewQSO.DrawGrayLine;
+begin
+  frmGrayline.s   := lblLat.Caption;
+  frmGrayline.d   := lblLong.Caption;
+  frmGrayline.pfx := lblDXCC.Caption;
+  frmGrayline.kresli
 end;
 
 initialization

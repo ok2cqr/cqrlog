@@ -166,6 +166,7 @@ type
     procedure SortArray(l,r : Integer);
     procedure OpenInApp(what : String);
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
+    procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
 
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
@@ -4180,6 +4181,21 @@ begin
   Result := Copy(ItemText,1,Pos(' ',ItemText)-1)
 end;
 
+procedure TdmUtils.GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
+begin
+  latitude  := RoundTo(latitude,-2);
+  longitude := RoundTo(longitude,-2);
+
+  if (latitude < 0) then
+    lat := FloatToStr(latitude*-1)+'S'
+  else
+    lat := FloatToStr(latitude);
+
+  if (longitude < 0) then
+    long := FloatToStr(longitude*-1)+'W'
+  else
+    long := FloatToStr(longitude)
+end;
 
 initialization
   {$I dUtils.lrs}
