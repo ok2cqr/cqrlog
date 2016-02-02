@@ -5325,10 +5325,16 @@ begin
     end;  //county
 
     if (c_itu<>'') then
-      edtITU.Text := c_itu;
+    begin
+      edtITU.Text    := c_itu;
+      lblITU.Caption := c_itu
+    end;
 
     if (c_waz<>'') then
-      edtWAZ.Text := c_waz;
+    begin
+      edtWAZ.Text    := c_waz;
+      lblWAZ.Caption := c_waz
+    end;
 
     if c_zip <> '' then
     begin
