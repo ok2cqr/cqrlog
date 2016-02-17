@@ -13,7 +13,7 @@ object frmRotControl: TfrmRotControl
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '1.4.4.0'
   object ButtonShortP: TButton
     Left = 16
     Height = 25
@@ -25,9 +25,9 @@ object frmRotControl: TfrmRotControl
   end
   object rbRotor1: TRadioButton
     Left = 16
-    Height = 18
+    Height = 24
     Top = 128
-    Width = 49
+    Width = 60
     Caption = 'ROT: '
     Checked = True
     OnClick = rbRotor1Click
@@ -36,9 +36,9 @@ object frmRotControl: TfrmRotControl
   end
   object rbRotor2: TRadioButton
     Left = 112
-    Height = 18
+    Height = 24
     Top = 128
-    Width = 49
+    Width = 60
     Caption = 'ROT: '
     OnClick = rbRotor2Click
     TabOrder = 3
@@ -49,7 +49,7 @@ object frmRotControl: TfrmRotControl
     Top = 0
     Width = 197
     Caption = 'Azimuth'
-    ClientHeight = 55
+    ClientHeight = 53
     ClientWidth = 193
     TabOrder = 0
     object lblAzimuth: TLabel

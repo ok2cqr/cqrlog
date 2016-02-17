@@ -115,6 +115,8 @@ function TfrmRotControl.InicializeRot : Boolean;
 var
   n      : String = '';
   id     : Integer = 0;
+  port   : Integer;
+  poll   : Integer;
 begin
   if Assigned(rotor) then
   begin
@@ -137,13 +139,23 @@ begin
     rotor.RotId := 1
   else
     rotor.RotId := id;
+
+  //broken configuration caused crash because RotCtldPort was empty
+  //probably late to change it to Integer, I have no idea if the current
+  //setting would be converted automatically or user has to do it again :(
+  if not TryStrToInt(cqrini.ReadString('ROT'+n,'RotCtldPort','4533'),port) then
+    port := 4533;
+
+  if not TryStrToInt(cqrini.ReadString('ROT'+n,'poll','500'),poll) then
+    poll := 500;
+
   rotor.RotCtldPath := cqrini.ReadString('ROT','RigCtldPath','/usr/bin/rotctld');
   rotor.RotCtldArgs := dmUtils.GetRotorRotCtldCommandLine(StrToInt(n));
   rotor.RunRotCtld  := cqrini.ReadBool('ROT'+n,'RunRotCtld',False);
   rotor.RotDevice   := cqrini.ReadString('ROT'+n,'device','');
-  rotor.RotCtldPort := StrToInt(cqrini.ReadString('ROT'+n,'RotCtldPort','4533'));
+  rotor.RotCtldPort := port;
   rotor.RotCtldHost := cqrini.ReadString('ROT'+n,'host','localhost');
-  rotor.RotPoll     := StrToInt(cqrini.ReadString('ROT'+n,'poll','500'));
+  rotor.RotPoll     := poll;
 
   tmrRotor.Interval := rotor.RotPoll;
   tmrRotor.Enabled  := True;

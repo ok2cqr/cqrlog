@@ -6,15 +6,15 @@ LazarusResources.Add('TfrmRotControl','FORMDATA',[
   +'derStyle'#7#8'bsDialog'#7'Caption'#6#13'Rotor control'#12'ClientHeight'#3
   +#167#0#11'ClientWidth'#3#214#0#10'KeyPreview'#9#7'OnClose'#7#9'FormClose'#9
   +'OnDestroy'#7#11'FormDestroy'#7'OnKeyUp'#7#9'FormKeyUp'#6'OnShow'#7#8'FormSh'
-  +'ow'#10'LCLVersion'#6#7'1.2.2.0'#0#7'TButton'#12'ButtonShortP'#4'Left'#2#16#6
+  +'ow'#10'LCLVersion'#6#7'1.4.4.0'#0#7'TButton'#12'ButtonShortP'#4'Left'#2#16#6
   +'Height'#2#25#3'Top'#2'P'#5'Width'#2'K'#7'Caption'#6#10'Short Path'#7'OnClic'
   +'k'#7#17'ButtonShortPClick'#8'TabOrder'#2#1#0#0#12'TRadioButton'#8'rbRotor1'
-  +#4'Left'#2#16#6'Height'#2#18#3'Top'#3#128#0#5'Width'#2'1'#7'Caption'#6#5'ROT'
+  +#4'Left'#2#16#6'Height'#2#24#3'Top'#3#128#0#5'Width'#2'<'#7'Caption'#6#5'ROT'
   +': '#7'Checked'#9#7'OnClick'#7#13'rbRotor1Click'#8'TabOrder'#2#2#7'TabStop'#9
-  +#0#0#12'TRadioButton'#8'rbRotor2'#4'Left'#2'p'#6'Height'#2#18#3'Top'#3#128#0
-  +#5'Width'#2'1'#7'Caption'#6#5'ROT: '#7'OnClick'#7#13'rbRotor2Click'#8'TabOrd'
+  +#0#0#12'TRadioButton'#8'rbRotor2'#4'Left'#2'p'#6'Height'#2#24#3'Top'#3#128#0
+  +#5'Width'#2'<'#7'Caption'#6#5'ROT: '#7'OnClick'#7#13'rbRotor2Click'#8'TabOrd'
   +'er'#2#3#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#8#6'Height'#2'H'#3'Top'#2#0
-  +#5'Width'#3#197#0#7'Caption'#6#7'Azimuth'#12'ClientHeight'#2'7'#11'ClientWid'
+  +#5'Width'#3#197#0#7'Caption'#6#7'Azimuth'#12'ClientHeight'#2'5'#11'ClientWid'
   +'th'#3#193#0#8'TabOrder'#2#0#0#6'TLabel'#10'lblAzimuth'#4'Left'#2#10#6'Heigh'
   +'t'#2'1'#3'Top'#2#255#5'Width'#3#168#0#9'Alignment'#7#14'taRightJustify'#8'A'
   +'utoSize'#8#7'Caption'#6#3'0.0'#10'Font.Color'#7#6'clBlue'#11'Font.Height'#2

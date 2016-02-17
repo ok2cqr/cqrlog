@@ -696,16 +696,16 @@ function TfrmTRXControl.InicializeRig : Boolean;
 var
   n      : String = '';
   id     : Integer = 0;
+  port   : Integer;
+  poll   : Integer;
 begin
   if Assigned(radio) then
   begin
-    //Writeln('huu0');
     FreeAndNil(radio);
   end;
-  //Writeln('huu1');
+
   Application.ProcessMessages;
   Sleep(500);
-  //Writeln('huu2');
 
   tmrRadio.Enabled := False;
 
@@ -718,27 +718,36 @@ begin
 
   if (dmData.DebugLevel>0) or cqrini.ReadBool('TRX','Debug',False) then
     radio.DebugMode := True;
-  //Writeln('huu3');
+
   if not TryStrToInt(cqrini.ReadString('TRX'+n,'model',''),id) then
     radio.RigId := 1
   else
     radio.RigId := id;
-  //Writeln('huu4');
+
+  //broken configuration caused crash because RigCtldPort was empty
+  //probably late to change it to Integer, I have no idea if the current
+  //setting would be converted automatically or user has to do it again :(
+  if not TryStrToInt(cqrini.ReadString('TRX'+n,'RigCtldPort','4532'),port) then
+    port := 4532;
+
+  if not TryStrToInt(cqrini.ReadString('TRX'+n,'poll','500'),poll) then
+    poll := 500;
+
   radio.RigCtldPath := cqrini.ReadString('TRX','RigCtldPath','/usr/bin/rigctld');
   radio.RigCtldArgs := dmUtils.GetRadioRigCtldCommandLine(StrToInt(n));
   radio.RunRigCtld  := cqrini.ReadBool('TRX'+n,'RunRigCtld',False);
   radio.RigDevice   := cqrini.ReadString('TRX'+n,'device','');
-  radio.RigCtldPort := StrToInt(cqrini.ReadString('TRX'+n,'RigCtldPort','4532'));
+  radio.RigCtldPort := port;
   radio.RigCtldHost := cqrini.ReadString('TRX'+n,'host','localhost');
-  radio.RigPoll     := StrToInt(cqrini.ReadString('TRX'+n,'poll','500'));
+  radio.RigPoll     := poll;
   radio.RigSendCWR  := cqrini.ReadBool('TRX'+n,'CWR',False);
 
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled  := True;
   Result := True;
+
   if not radio.Connected then
   begin
-    //Writeln('huu5');
     FreeAndNil(radio)
   end
 end;
