@@ -1209,8 +1209,8 @@ object frmPreferences: TfrmPreferences
         Height = 392
         Top = 99
         Width = 647
-        ActivePage = tabTRX2
-        TabIndex = 1
+        ActivePage = tabTRX1
+        TabIndex = 0
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
@@ -1559,14 +1559,6 @@ object frmPreferences: TfrmPreferences
           Caption = 'Radio two'
           ClientHeight = 361
           ClientWidth = 643
-          object edtRadio2: TEdit
-            Left = 145
-            Height = 27
-            Top = 12
-            Width = 94
-            OnChange = edtRadio1Change
-            TabOrder = 0
-          end
           object GroupBox4: TGroupBox
             Left = 16
             Height = 333
@@ -1575,7 +1567,7 @@ object frmPreferences: TfrmPreferences
             Caption = ' Radio two, desc.:'
             ClientHeight = 314
             ClientWidth = 612
-            TabOrder = 1
+            TabOrder = 0
             object Label22: TLabel
               Left = 217
               Height = 17
@@ -1894,8 +1886,16 @@ object frmPreferences: TfrmPreferences
             Height = 27
             Top = 12
             Width = 128
-            TabOrder = 2
+            TabOrder = 1
             Text = 'edtR2Host'
+          end
+          object edtRadio2: TEdit
+            Left = 144
+            Height = 27
+            Top = 12
+            Width = 94
+            OnChange = edtRadio1Change
+            TabOrder = 2
           end
         end
       end

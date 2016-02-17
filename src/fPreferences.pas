@@ -507,6 +507,7 @@ type
     edtBackupPath1: TEdit;
     edtR1Host : TEdit;
     edtR2Host : TEdit;
+    edtRadio2 : TEdit;
     edtWsjtDefaultFreq: TEdit;
     edtK3NGSerSpeed: TEdit;
     edtAlertCmd: TEdit;
@@ -543,7 +544,6 @@ type
     edtR2RigCtldPort: TEdit;
     edtRot2RotCtldPort: TEdit;
     edtRadio1: TEdit;
-    edtRadio2: TEdit;
     edtRotor1: TEdit;
     edtRigCtldPath: TEdit;
     edtAM1: TSpinEdit;
