@@ -24,6 +24,13 @@ uses
 type
   TExplodeArray = array of string;
 
+type
+  TVisibleColumn = record
+    FieldName : String[20];
+    Visible   : Boolean;
+    Exists    : Boolean;
+  end;
+
 const
   MyWhiteSpace = [#0..#31];
   AllowedCallChars = ['A'..'Z', '0'..'9', '/'];
@@ -167,6 +174,8 @@ type
     procedure OpenInApp(what : String);
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
+    procedure LoadVisibleColumnsConfiguration(var aColumns : array of TVisibleColumn);
+
 
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
@@ -4195,6 +4204,126 @@ begin
     long := FloatToStr(longitude*-1)+'W'
   else
     long := FloatToStr(longitude)
+end;
+
+procedure TdmUtils.LoadVisibleColumnsConfiguration(var aColumns : Array of TVisibleColumn);
+var
+  i : Integer;
+begin
+
+  aColumns[0].FieldName := 'QSODATE';
+  aColumns[0].Visible   := cqrini.ReadBool('Columns','qsodate',True);
+
+  aColumns[1].FieldName := 'TIME_ON';
+  aColumns[1].Visible   := cqrini.ReadBool('Columns','time_on',True);
+
+  aColumns[2].FieldName := 'TIME_OFF';
+  aColumns[2].Visible   := cqrini.ReadBool('Columns','time_off',True);
+
+  aColumns[3].FieldName := 'CALLSIGN';
+  aColumns[3].Visible   := cqrini.ReadBool('Columns','CallSign',True);
+
+  aColumns[4].FieldName := 'MODE';
+  aColumns[4].Visible   := cqrini.ReadBool('Columns','Mode',True);
+
+  aColumns[4].FieldName := 'FREQ';
+  aColumns[4].Visible   := cqrini.ReadBool('Columns','Freq',True);
+
+  aColumns[5].FieldName := 'RST_S';
+  aColumns[5].Visible   := cqrini.ReadBool('Columns','RST_S',True);
+
+  aColumns[6].FieldName := 'RST_R';
+  aColumns[6].Visible   := cqrini.ReadBool('Columns','RST_R',True);
+
+  aColumns[7].FieldName := 'NAME';
+  aColumns[7].Visible   := cqrini.ReadBool('Columns','Name',True);
+
+  aColumns[8].FieldName := 'QTH';
+  aColumns[8].Visible   := cqrini.ReadBool('Columns','QTH',True);
+
+  aColumns[9].FieldName := 'QSL_S';
+  aColumns[9].Visible   := cqrini.ReadBool('Columns','QSL_S',True);
+
+  aColumns[10].FieldName := 'QSL_R';
+  aColumns[10].Visible   := cqrini.ReadBool('Columns','QSL_R',True);
+
+  aColumns[11].FieldName := 'QSL_VIA';
+  aColumns[11].Visible   := cqrini.ReadBool('Columns','QSL_VIA',False);
+
+  aColumns[12].FieldName := 'LOC';
+  aColumns[12].Visible   := cqrini.ReadBool('Columns','Locator',False);
+
+  aColumns[13].FieldName := 'MY_LOC';
+  aColumns[13].Visible   := cqrini.ReadBool('Columns','MyLoc',False);
+
+  aColumns[14].FieldName := 'IOTA';
+  aColumns[14].Visible   := cqrini.ReadBool('Columns','IOTA',False);
+
+  aColumns[15].FieldName := 'AWARD';
+  aColumns[16].Visible   := cqrini.ReadBool('Columns','Award',False);
+
+  aColumns[17].FieldName := 'COUNTY';
+  aColumns[17].Visible   := cqrini.ReadBool('Columns','County',False);
+
+  aColumns[18].FieldName := 'PWR';
+  aColumns[18].Visible   := cqrini.ReadBool('Columns','Power',False);
+
+  aColumns[19].FieldName := 'DXCC_REF';
+  aColumns[19].Visible   := cqrini.ReadBool('Columns','DXCC',False);
+
+  aColumns[21].FieldName := 'REMARKS';
+  aColumns[21].Visible   := cqrini.ReadBool('Columns','Remarks',False);
+
+  aColumns[22].FieldName := 'WAZ';
+  aColumns[22].Visible   := cqrini.ReadBool('Columns','WAZ',False);
+
+  aColumns[23].FieldName := 'ITU';
+  aColumns[23].Visible   := cqrini.ReadBool('Columns','ITU',False);
+
+  aColumns[24].FieldName := 'STATE';
+  aColumns[24].Visible   := cqrini.ReadBool('Columns','State',False);
+
+  aColumns[25].FieldName := 'LOTW_QSLSDATE';
+  aColumns[25].Visible   := cqrini.ReadBool('Columns','LoTWQSLSDate',False);
+
+  aColumns[26].FieldName := 'LOTW_QSLRDATE';
+  aColumns[26].Visible   := cqrini.ReadBool('Columns','LoTWQSLRDate',False);
+
+  aColumns[27].FieldName := 'LOTW_QSLS';
+  aColumns[27].Visible   := cqrini.ReadBool('Columns','LoTWQSLS',False);
+
+  aColumns[28].FieldName := 'LOTW_QSLR';
+  aColumns[28].Visible   := cqrini.ReadBool('Columns','LOTWQSLR',False);
+
+  aColumns[29].FieldName := 'CONT';
+  aColumns[29].Visible   := cqrini.ReadBool('Columns','Cont',False);
+
+  aColumns[30].FieldName := 'QSLS_DATE';
+  aColumns[30].Visible   := cqrini.ReadBool('Columns','QSLSDate',False);
+
+  aColumns[31].FieldName := 'QSLR_DATE';
+  aColumns[31].Visible   := cqrini.ReadBool('Columns','QSLRDate',False);
+
+  aColumns[32].FieldName := 'EQSL_QSL_SENT';
+  aColumns[32].Visible   := cqrini.ReadBool('Columns','eQSLQSLS',False);
+
+  aColumns[33].FieldName := 'EQSL_QSLSDATE';
+  aColumns[33].Visible   := cqrini.ReadBool('Columns','eQSLQSLSDate',False);
+
+  aColumns[34].FieldName := 'EQSL_QSL_RCVD';
+  aColumns[34].Visible   := cqrini.ReadBool('Columns','eQSLQSLR',False);
+
+  aColumns[35].FieldName := 'EQSL_QSLRDATE';
+  aColumns[35].Visible   := cqrini.ReadBool('Columns','eQSLQSLRDate',False);
+
+  aColumns[36].FieldName := 'QSLR';
+  aColumns[36].Visible   := cqrini.ReadBool('Columns','QSLRAll',False);
+
+  aColumns[37].FieldName := 'COUNTRY';
+  aColumns[37].Visible   := cqrini.ReadBool('Columns','Country',False);
+
+  for i:=0 to Length(aColumns)-1 do
+    aColumns[i].Exists := False
 end;
 
 initialization

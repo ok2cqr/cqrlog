@@ -7,6 +7,7 @@ Legend:
 1.9.2
   + program should work also with MariaDB 10.1
   + Frequency memories added
+  + list of previous QSO should be much faster on older computers
   - CW type window was not sizeable - fixed
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed

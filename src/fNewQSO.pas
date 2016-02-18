@@ -28,6 +28,7 @@ const
 type
   TRemoteModeType = (rmtFldigi, rmtWsjt);
 
+
 type
 
   { TfrmNewQSO }
@@ -4695,148 +4696,121 @@ begin
 end;
 
 procedure TfrmNewQSO.ShowFields;
+var
+  aColumns : array of TVisibleColumn;
+  i : Integer;
+  y : Integer;
 
-  procedure ChangeVis(Column : String; IfShow : Boolean);
-  var
-    i       : Integer;
-    fQsoGr  : String;
-    fqSize  : Integer;
-    isAdded : Boolean = False;
-  begin
-    fQsoGr := cqrini.ReadString('Fonts','QGrids','Sans 10');
-    fqSize := cqrini.ReadInteger('Fonts','qSize',10);
-
-    for i:=0 to dbgrdQSOBefore.Columns.Count-1 do
-    begin
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'BAND' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSO_DXCC' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'PROFILE' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'ID_CQRLOG_MAIN' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'IDCALL' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR1' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR2' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR3' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR4' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR5' then
-        dbgrdQSOBefore.Columns[i].Visible := False;
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'STATE') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLS') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLR') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_SENT') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_RCVD') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSLR') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-
-      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'FREQ') then
-      begin
-        dbgrdQSOBefore.Columns[i].Alignment       := taRightJustify;
-        dbgrdQSOBefore.Columns[i].DisplayFormat   := '###,##0.0000;;';
-        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-      end;
-
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = UpperCase(Column) then
-      begin
-        dbgrdQSOBefore.Columns[i].Visible := IfShow;
-        if IfShow and (dbgrdQSOBefore.Columns[i].Width = 0) then
-          dbgrdQSOBefore.Columns[i].Width := 60;
-        isAdded := True
-      end;
-
-      if cqrini.ReadBool('Fonts','UseDefault',True) then
-      begin
-        dbgrdQSOBefore.Columns[i].Title.Font.Name := 'default';
-        dbgrdQSOBefore.Columns[i].Title.Font.Size := 0
-      end
-      else begin
-        dbgrdQSOBefore.Columns[i].Title.Font.Name := fQsoGr;
-        dbgrdQSOBefore.Columns[i].Title.Font.Size := fqSize
-      end
-    end;
-    if (not isAdded) and IfShow then
-    begin
-      dbgrdQSOBefore.Columns.Add;
-      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].FieldName   := LowerCase(Column);
-      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].DisplayName := LowerCase(Column);
-      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].Width       := 60
-    end
-  end;
-
+  fQsoGr  : String;
+  fqSize  : Integer;
+  isAdded : Boolean = False;
+  fDefault : Boolean;
+  ColExists : Boolean = False;
 begin
   dbgrdQSOBefore.DataSource := dmData.dsrQSOBefore;
   dbgrdQSOBefore.ResetColWidths;
   LoadGrid;
-  //dbgrdQSOBefore.Columns[0].Visible := False;
-  ChangeVis('qsodate',cqrini.ReadBool('Columns','qsodate',True));
-  ChangeVis('TIME_ON',cqrini.ReadBool('Columns','time_on',True));
-  ChangeVis('TIME_OFF',cqrini.ReadBool('Columns','time_off',False));
-  ChangeVis('CALLSIGN',cqrini.ReadBool('Columns','CallSign',True));
-  ChangeVis('MODE',cqrini.ReadBool('Columns','Mode',True));
-  ChangeVis('FREQ',cqrini.ReadBool('Columns','Freq',True));
-  ChangeVis('RST_S',cqrini.ReadBool('Columns','RST_S',True));
-  ChangeVis('RST_R',cqrini.ReadBool('Columns','RST_R',True));
-  ChangeVis('NAME',cqrini.ReadBool('Columns','Name',True));
-  ChangeVis('QTH',cqrini.ReadBool('Columns','QTH',True));
-  ChangeVis('QSL_S',cqrini.ReadBool('Columns','QSL_S',True));
-  ChangeVis('QSL_R',cqrini.ReadBool('Columns','QSL_R',True));
-  ChangeVis('QSL_VIA',cqrini.ReadBool('Columns','QSL_VIA',False));
-  ChangeVis('LOC',cqrini.ReadBool('Columns','Locator',False));
-  ChangeVis('MY_LOC',cqrini.ReadBool('Columns','MyLoc',False));
-  ChangeVis('IOTA',cqrini.ReadBool('Columns','IOTA',False));
-  ChangeVis('AWARD',cqrini.ReadBool('Columns','Award',False));
-  ChangeVis('COUNTY',cqrini.ReadBool('Columns','County',False));
-  ChangeVis('PWR',cqrini.ReadBool('Columns','Power',False));
-  ChangeVis('dxcc_ref',cqrini.ReadBool('Columns','DXCC',False));
-  ChangeVis('REMARKS',cqrini.ReadBool('Columns','Remarks',False));
-  ChangeVis('WAZ',cqrini.ReadBool('Columns','WAZ',False));
-  ChangeVis('ITU',cqrini.ReadBool('Columns','ITU',False));
-  ChangeVis('STATE',cqrini.ReadBool('Columns','State',False));
-  ChangeVis('LOTW_QSLSDATE',cqrini.ReadBool('Columns','LoTWQSLSDate',False));
-  ChangeVis('LOTW_QSLRDATE',cqrini.ReadBool('Columns','LoTWQSLRDate',False));
-  ChangeVis('LOTW_QSLS',cqrini.ReadBool('Columns','LoTWQSLS',False));
-  ChangeVis('LOTW_QSLR',cqrini.ReadBool('Columns','LOTWQSLR',False));
-  ChangeVis('CONT',cqrini.ReadBool('Columns','Cont',False));
-  ChangeVis('QSLS_DATE',cqrini.ReadBool('Columns','QSLSDate',False));
-  ChangeVis('QSLR_DATE',cqrini.ReadBool('Columns','QSLRDate',False));
-  ChangeVis('EQSL_QSL_SENT',cqrini.ReadBool('Columns','eQSLQSLS',False));
-  ChangeVis('EQSL_QSLSDATE',cqrini.ReadBool('Columns','eQSLQSLSDate',False));
-  ChangeVis('EQSL_QSL_RCVD',cqrini.ReadBool('Columns','eQSLQSLR',False));
-  ChangeVis('EQSL_QSLRDATE',cqrini.ReadBool('Columns','eQSLQSLRDate',False));
-  ChangeVis('QSLR',cqrini.ReadBool('Columns','QSLRAll',False));
-  ChangeVis('COUNTRY',cqrini.ReadBool('Columns','Country',False))
+  SetLength(aColumns,38);
+  dmUtils.LoadVisibleColumnsConfiguration(aColumns);
+
+  fQsoGr   := cqrini.ReadString('Fonts','QGrids','Sans 10');
+  fqSize   := cqrini.ReadInteger('Fonts','qSize',10);
+  fDefault := cqrini.ReadBool('Fonts','UseDefault',True);
+
+  for i:=0 to dbgrdQSOBefore.Columns.Count-1 do
+  begin
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'BAND' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSO_DXCC' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'PROFILE' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'ID_CQRLOG_MAIN' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'IDCALL' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR1' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR2' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR3' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR4' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR5' then
+      dbgrdQSOBefore.Columns[i].Visible := False;
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'STATE') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLS') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLR') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_SENT') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_RCVD') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSLR') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+
+    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'FREQ') then
+    begin
+      dbgrdQSOBefore.Columns[i].Alignment       := taRightJustify;
+      dbgrdQSOBefore.Columns[i].DisplayFormat   := '###,##0.0000;;';
+      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+    end;
+
+    for y:=0 to Length(aColumns)-1 do
+    begin
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = aColumns[y].FieldName then
+      begin
+        dbgrdQSOBefore.Columns[i].Visible := aColumns[y].Visible;
+        aColumns[y].Exists := True;
+        if aColumns[y].Visible and (dbgrdQSOBefore.Columns[i].Width = 0) then
+          dbgrdQSOBefore.Columns[i].Width := 60
+      end
+    end;
+
+    if fDefault then
+    begin
+      dbgrdQSOBefore.Columns[i].Title.Font.Name := 'default';
+      dbgrdQSOBefore.Columns[i].Title.Font.Size := 0
+    end
+    else begin
+      dbgrdQSOBefore.Columns[i].Title.Font.Name := fQsoGr;
+      dbgrdQSOBefore.Columns[i].Title.Font.Size := fqSize
+    end
+  end;
+
+  for i:=0 to Length(aColumns) do
+  begin
+    if (aColumns[i].Visible) and (not aColumns[i].Exists) then
+    begin
+      dbgrdQSOBefore.Columns.Add;
+      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].FieldName   := aColumns[i].FieldName;
+      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].DisplayName := aColumns[i].FieldName;
+      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].Width       := 60
+    end
+  end
 end;
 
 procedure TfrmNewQSO.ChangeReports;
