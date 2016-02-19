@@ -4717,99 +4717,107 @@ begin
   fqSize   := cqrini.ReadInteger('Fonts','qSize',10);
   fDefault := cqrini.ReadBool('Fonts','UseDefault',True);
 
-  for i:=0 to dbgrdQSOBefore.Columns.Count-1 do
-  begin
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'BAND' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSO_DXCC' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'PROFILE' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'ID_CQRLOG_MAIN' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'IDCALL' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR1' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR2' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR3' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR4' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR5' then
-      dbgrdQSOBefore.Columns[i].Visible := False;
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'STATE') then
-    begin
-      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLS') then
-    begin
-      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLR') then
-    begin
-      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
+  try
+    //it's strange but disable grid browsing speed up this much more
+    //then code refactoring before
+    dbgrdQSOBefore.DataSource.DataSet.DisableControls;
 
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_SENT') then
+    for i:=0 to dbgrdQSOBefore.Columns.Count-1 do
     begin
-      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_RCVD') then
-    begin
-      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
-
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSLR') then
-    begin
-      dbgrdQSOBefore.Columns[i].Alignment := taCenter;
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
-
-    if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'FREQ') then
-    begin
-      dbgrdQSOBefore.Columns[i].Alignment       := taRightJustify;
-      dbgrdQSOBefore.Columns[i].DisplayFormat   := '###,##0.0000;;';
-      dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
-    end;
-
-    for y:=0 to Length(aColumns)-1 do
-    begin
-      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = aColumns[y].FieldName then
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'BAND' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSO_DXCC' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'PROFILE' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'ID_CQRLOG_MAIN' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'IDCALL' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR1' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR2' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR3' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR4' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'CLUB_NR5' then
+        dbgrdQSOBefore.Columns[i].Visible := False;
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'STATE') then
       begin
-        dbgrdQSOBefore.Columns[i].Visible := aColumns[y].Visible;
-        aColumns[y].Exists := True;
-        if aColumns[y].Visible and (dbgrdQSOBefore.Columns[i].Width = 0) then
-          dbgrdQSOBefore.Columns[i].Width := 60
+        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLS') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'LOTW_QSLR') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_SENT') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'EQSL_QSL_RCVD') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'QSLR') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment := taCenter;
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+
+      if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'FREQ') then
+      begin
+        dbgrdQSOBefore.Columns[i].Alignment       := taRightJustify;
+        dbgrdQSOBefore.Columns[i].DisplayFormat   := '###,##0.0000;;';
+        dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
+      end;
+
+      for y:=0 to Length(aColumns)-1 do
+      begin
+        if UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = aColumns[y].FieldName then
+        begin
+          dbgrdQSOBefore.Columns[i].Visible := aColumns[y].Visible;
+          aColumns[y].Exists := True;
+          if aColumns[y].Visible and (dbgrdQSOBefore.Columns[i].Width = 0) then
+            dbgrdQSOBefore.Columns[i].Width := 60
+        end
+      end;
+
+      if fDefault then
+      begin
+        dbgrdQSOBefore.Columns[i].Title.Font.Name := 'default';
+        dbgrdQSOBefore.Columns[i].Title.Font.Size := 0
+      end
+      else begin
+        dbgrdQSOBefore.Columns[i].Title.Font.Name := fQsoGr;
+        dbgrdQSOBefore.Columns[i].Title.Font.Size := fqSize
       end
     end;
 
-    if fDefault then
+    for i:=0 to Length(aColumns) do
     begin
-      dbgrdQSOBefore.Columns[i].Title.Font.Name := 'default';
-      dbgrdQSOBefore.Columns[i].Title.Font.Size := 0
+      if (aColumns[i].Visible) and (not aColumns[i].Exists) then
+      begin
+        dbgrdQSOBefore.Columns.Add;
+        dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].FieldName   := aColumns[i].FieldName;
+        dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].DisplayName := aColumns[i].FieldName;
+        dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].Width       := 60
+      end
     end
-    else begin
-      dbgrdQSOBefore.Columns[i].Title.Font.Name := fQsoGr;
-      dbgrdQSOBefore.Columns[i].Title.Font.Size := fqSize
-    end
-  end;
-
-  for i:=0 to Length(aColumns) do
-  begin
-    if (aColumns[i].Visible) and (not aColumns[i].Exists) then
-    begin
-      dbgrdQSOBefore.Columns.Add;
-      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].FieldName   := aColumns[i].FieldName;
-      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].DisplayName := aColumns[i].FieldName;
-      dbgrdQSOBefore.Columns[dbgrdQSOBefore.Columns.Count-1].Width       := 60
-    end
+  finally
+    dbgrdQSOBefore.DataSource.DataSet.EnableControls
   end
 end;
 
