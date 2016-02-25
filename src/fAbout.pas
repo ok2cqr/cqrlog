@@ -65,7 +65,7 @@ end;
 
 procedure TfrmAbout.FormShow(Sender: TObject);
 begin
-  lblVerze.Caption:= cVERSION
+  lblVerze.Caption := cVERSION + '  ' + cBUILD_DATE
 end;
 
 end.

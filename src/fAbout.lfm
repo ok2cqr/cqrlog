@@ -1,14 +1,14 @@
 object frmAbout: TfrmAbout
-  Left = 497
+  Left = 658
   Height = 183
-  Top = 391
+  Top = 447
   Width = 404
   BorderStyle = bsDialog
   Caption = 'About CQRLOG'
   ClientHeight = 183
   ClientWidth = 404
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '1.4.4.0'
   object Image1: TImage
     Left = 8
     Height = 65
@@ -41,9 +41,9 @@ object frmAbout: TfrmAbout
   end
   object Label1: TLabel
     Left = 136
-    Height = 65
+    Height = 62
     Top = 8
-    Width = 251
+    Width = 223
     Caption = 'CQRLOG'
     Font.Height = -54
     Font.Style = [fsBold]
@@ -59,33 +59,33 @@ object frmAbout: TfrmAbout
   end
   object Label2: TLabel
     Left = 8
-    Height = 18
+    Height = 17
     Top = 104
-    Width = 55
+    Width = 58
     Caption = 'Authors:'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 72
-    Height = 18
+    Height = 17
     Top = 104
-    Width = 314
+    Width = 320
     Caption = 'Petr Hlozek, OK2CQR && Martin Kratoska, OK1RR'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 8
-    Height = 18
+    Height = 17
     Top = 128
-    Width = 161
+    Width = 165
     Caption = 'Home page and support:'
     ParentColor = False
   end
   object lblLink: TLabel
     Left = 176
-    Height = 18
+    Height = 17
     Top = 128
-    Width = 147
+    Width = 158
     Caption = 'http://www.cqrlog.com'
     Font.Color = clBlue
     Font.Style = [fsUnderline]

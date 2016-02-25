@@ -116,7 +116,7 @@ object frmSplash: TfrmSplash
   }
   OnCreate = FormCreate
   Position = poDesktopCenter
-  LCLVersion = '0.9.29'
+  LCLVersion = '1.4.4.0'
   object Image1: TImage
     Left = 0
     Height = 272
