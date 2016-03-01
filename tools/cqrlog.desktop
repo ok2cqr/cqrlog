@@ -6,5 +6,5 @@ Terminal=false
 Type=Application
 Icon=cqrlog.png
 Categories=Utility;Database;HamRadio
-+Keywords=Ham;Radio;Log;
+Keywords=Ham;Radio;Log;
 
