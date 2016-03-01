@@ -8,17 +8,17 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +'ClientWidth'#3#232#3#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7#10
   +'FormCreate'#6'OnShow'#7#8'FormShow'#8'Position'#7#16'poMainFormCenter'#10'L'
   +'CLVersion'#6#7'1.4.4.0'#0#12'TPageControl'#13'pgPreferences'#4'Left'#3#160#0
-  +#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#240#2#10'ActivePage'#7#13'tabTRXcon'
-  +'trol'#5'Align'#7#8'alClient'#7'Anchors'#11#6'akLeft'#7'akRight'#8'akBottom'
-  +#0#8'TabIndex'#2#5#8'TabOrder'#2#0#8'OnChange'#7#19'pgPreferencesChange'#0#9
-  +'TTabSheet'#10'tabProgram'#7'Caption'#6#7'Program'#12'ClientHeight'#3'j'#2#11
-  +'ClientWidth'#3#236#2#0#6'TLabel'#7'Label60'#4'Left'#3'l'#1#6'Height'#2#17#3
-  +'Top'#2'['#5'Width'#3#140#0#7'Caption'#6#19'Default web browser'#11'ParentCo'
-  +'lor'#8#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#14#6'Height'#3#137#0#3'Top'#2
-  +#3#5'Width'#3'U'#1#7'Caption'#6#21' Internet connection '#12'ClientHeight'#2
-  +'v'#11'ClientWidth'#3'Q'#1#8'TabOrder'#2#0#0#6'TLabel'#7'Label12'#4'Left'#2#7
-  +#6'Height'#2#17#3'Top'#2#24#5'Width'#2'+'#7'Caption'#6#6'Proxy:'#11'ParentCo'
-  +'lor'#8#0#0#6'TLabel'#7'Label13'#4'Left'#3#192#0#6'Height'#2#17#3'Top'#2#24#5
+  +#6'Height'#3#137#2#3'Top'#2#0#5'Width'#3#240#2#10'ActivePage'#7#6'tabRBN'#5
+  +'Align'#7#8'alClient'#7'Anchors'#11#6'akLeft'#7'akRight'#8'akBottom'#0#8'Tab'
+  +'Index'#2#24#8'TabOrder'#2#0#8'OnChange'#7#19'pgPreferencesChange'#0#9'TTabS'
+  +'heet'#10'tabProgram'#7'Caption'#6#7'Program'#12'ClientHeight'#3'j'#2#11'Cli'
+  +'entWidth'#3#236#2#0#6'TLabel'#7'Label60'#4'Left'#3'l'#1#6'Height'#2#17#3'To'
+  +'p'#2'['#5'Width'#3#140#0#7'Caption'#6#19'Default web browser'#11'ParentColo'
+  +'r'#8#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#14#6'Height'#3#137#0#3'Top'#2#3
+  +#5'Width'#3'U'#1#7'Caption'#6#21' Internet connection '#12'ClientHeight'#2'v'
+  +#11'ClientWidth'#3'Q'#1#8'TabOrder'#2#0#0#6'TLabel'#7'Label12'#4'Left'#2#7#6
+  +'Height'#2#17#3'Top'#2#24#5'Width'#2'+'#7'Caption'#6#6'Proxy:'#11'ParentColo'
+  +'r'#8#0#0#6'TLabel'#7'Label13'#4'Left'#3#192#0#6'Height'#2#17#3'Top'#2#24#5
   +'Width'#2'"'#7'Caption'#6#5'Port:'#11'ParentColor'#8#0#0#6'TLabel'#7'Label14'
   +#4'Left'#2#7#6'Height'#2#17#3'Top'#2'E'#5'Width'#2'#'#7'Caption'#6#5'User:'
   +#11'ParentColor'#8#0#0#6'TLabel'#7'Label19'#4'Left'#3#160#0#6'Height'#2#17#3
@@ -1587,94 +1587,94 @@ LazarusResources.Add('TfrmPreferences','FORMDATA',[
   +#17'DefaultColorColor'#7#7'clWhite'#8'Selected'#7#5'clRed'#5'Style'#11#16'cb'
   +'StandardColors'#16'cbExtendedColors'#14'cbSystemColors'#13'cbPrettyNames'#0
   +#5'Color'#7#7'clWhite'#10'ItemHeight'#2#0#8'TabOrder'#2#6#0#0#6'TLabel'#8'La'
-  +'bel177'#4'Left'#2#15#6'Height'#2#17#3'Top'#3'd'#1#5'Width'#3#184#0#7'Captio'
-  +'n'#6#27'Delete old information afer'#11'ParentColor'#8#0#0#5'TEdit'#11'edtD'
-  +'elAfter'#4'Left'#3#204#0#6'Height'#2#27#3'Top'#3'_'#1#5'Width'#2'('#8'TabOr'
-  +'der'#2#7#4'Text'#6#2'60'#0#0#6'TLabel'#8'Label178'#4'Left'#3#4#1#6'Height'#2
-  +#17#3'Top'#3'd'#1#5'Width'#2'7'#7'Caption'#6#7'seconds'#11'ParentColor'#8#0#0
-  +#6'TLabel'#8'Label190'#4'Left'#2#20#6'Height'#2#17#3'Top'#2'K'#5'Width'#2'/'
-  +#7'Caption'#6#7'Server:'#11'ParentColor'#8#0#0#5'TEdit'#12'edtRBNServer'#4'L'
-  +'eft'#2'\'#6'Height'#2#27#3'Top'#2'F'#5'Width'#3'0'#1#8'TabOrder'#2#8#4'Text'
-  +#6#12'edtRBNServer'#0#0#6'TLabel'#8'Label191'#4'Left'#3#160#1#6'Height'#2#17
-  +#3'Top'#2'K'#5'Width'#2'L'#7'Caption'#6#11'server:port'#11'ParentColor'#8#0#0
-  +#0#9'TTabSheet'#12'tabOnlineLog'#7'Caption'#6#17'Online log upload'#12'Clien'
-  +'tHeight'#3'j'#2#11'ClientWidth'#3#236#2#0#9'TGroupBox'#10'GroupBox44'#4'Lef'
-  +'t'#2#13#6'Height'#3#179#0#3'Top'#2#7#5'Width'#3'9'#2#7'Caption'#6#8' HamQTH'
-  +' '#12'ClientHeight'#3#160#0#11'ClientWidth'#3'5'#2#8'TabOrder'#2#0#0#9'TChe'
-  ,'ckBox'#14'chkHaUpEnabled'#4'Left'#2#7#6'Height'#2#24#3'Top'#2#4#5'Width'#3
-  +#202#0#7'Caption'#6#23'Enable upload to HamQTH'#8'OnChange'#7#20'chkHaUpEnab'
-  +'ledChange'#8'TabOrder'#2#0#0#0#6'TLabel'#8'Label179'#4'Left'#2#9#6'Height'#2
-  +#17#3'Top'#2'$'#5'Width'#2'K'#7'Caption'#6#10'User name:'#11'ParentColor'#8#0
-  +#0#5'TEdit'#13'edtHaUserName'#4'Left'#2#9#6'Height'#2#27#3'Top'#2'4'#5'Width'
-  +#2'f'#8'TabOrder'#2#1#4'Text'#6#13'edtHaUserName'#0#0#6'TLabel'#3'lbl'#4'Lef'
-  +'t'#3#199#0#6'Height'#2#17#3'Top'#2'$'#5'Width'#2'F'#7'Caption'#6#9'Password'
-  +':'#11'ParentColor'#8#0#0#5'TEdit'#11'edtHaPasswd'#4'Left'#3#199#0#6'Height'
-  +#2#27#3'Top'#2'4'#5'Width'#2'h'#8'EchoMode'#7#10'emPassword'#12'PasswordChar'
-  +#6#1'*'#8'TabOrder'#2#2#4'Text'#6#11'edtHaPasswd'#0#0#9'TCheckBox'#13'chkHau'
-  +'pOnline'#4'Left'#2#7#6'Height'#2#24#3'Top'#2'\'#5'Width'#3#162#1#7'Caption'
-  +#6'8Upload QSO data immediately after save, update or delete'#8'TabOrder'#2#3
-  +#0#0#6'TLabel'#8'Label184'#4'Left'#2#9#6'Height'#2#17#3'Top'#3#132#0#5'Width'
-  +#2'5'#7'Caption'#6#8'Use this'#11'ParentColor'#8#0#0#6'TLabel'#8'Label185'#4
-  +'Left'#3#238#0#6'Height'#2#17#3'Top'#3#132#0#5'Width'#3'T'#1#7'Caption'#6'1c'
-  +'olor to show information in status upload window'#11'ParentColor'#8#0#0#9'T'
-  +'ColorBox'#10'cmbHaColor'#4'Left'#2'>'#6'Height'#2#31#3'Top'#2'|'#5'Width'#3
-  +#164#0#17'DefaultColorColor'#7#6'clBlue'#14'NoneColorColor'#7#12'clMoneyGree'
-  +'n'#8'Selected'#7#6'clBlue'#5'Style'#11#16'cbStandardColors'#16'cbExtendedCo'
-  +'lors'#14'cbSystemColors'#13'cbPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrder'
-  +#2#4#0#0#0#9'TGroupBox'#10'GroupBox45'#4'Left'#2#12#6'Height'#3#168#0#3'Top'
-  +#3#194#0#5'Width'#3'9'#2#7'Caption'#6#9' ClubLog '#12'ClientHeight'#3#149#0
-  +#11'ClientWidth'#3'5'#2#8'TabOrder'#2#1#0#9'TCheckBox'#14'chkClUpEnabled'#4
-  +'Left'#2#7#6'Height'#2#24#3'Top'#2#4#5'Width'#3#197#0#7'Caption'#6#24'Enable'
-  +' upload to ClubLog'#8'OnChange'#7#20'chkClUpEnabledChange'#8'TabOrder'#2#0#0
-  +#0#6'TLabel'#8'Label180'#4'Left'#2#9#6'Height'#2#17#3'Top'#2'$'#5'Width'#2'8'
-  +#7'Caption'#6#9'Callsign:'#11'ParentColor'#8#0#0#5'TEdit'#13'edtClUserName'#4
+  +'bel177'#4'Left'#2#16#6'Height'#2#17#3'Top'#3'd'#1#5'Width'#3#190#0#7'Captio'
+  +'n'#6#28'Delete old information after'#11'ParentColor'#8#0#0#5'TEdit'#11'edt'
+  +'DelAfter'#4'Left'#3#212#0#6'Height'#2#27#3'Top'#3'_'#1#5'Width'#2'('#8'TabO'
+  +'rder'#2#7#4'Text'#6#2'60'#0#0#6'TLabel'#8'Label178'#4'Left'#3#4#1#6'Height'
+  +#2#17#3'Top'#3'd'#1#5'Width'#2'7'#7'Caption'#6#7'seconds'#11'ParentColor'#8#0
+  +#0#6'TLabel'#8'Label190'#4'Left'#2#20#6'Height'#2#17#3'Top'#2'K'#5'Width'#2
+  +'/'#7'Caption'#6#7'Server:'#11'ParentColor'#8#0#0#5'TEdit'#12'edtRBNServer'#4
+  +'Left'#2'\'#6'Height'#2#27#3'Top'#2'F'#5'Width'#3'0'#1#8'TabOrder'#2#8#4'Tex'
+  +'t'#6#12'edtRBNServer'#0#0#6'TLabel'#8'Label191'#4'Left'#3#160#1#6'Height'#2
+  +#17#3'Top'#2'K'#5'Width'#2'L'#7'Caption'#6#11'server:port'#11'ParentColor'#8
+  +#0#0#0#9'TTabSheet'#12'tabOnlineLog'#7'Caption'#6#17'Online log upload'#12'C'
+  +'lientHeight'#3'j'#2#11'ClientWidth'#3#236#2#0#9'TGroupBox'#10'GroupBox44'#4
+  +'Left'#2#13#6'Height'#3#179#0#3'Top'#2#7#5'Width'#3'9'#2#7'Caption'#6#8' Ham'
+  +'QTH '#12'ClientHeight'#3#160#0#11'ClientWidth'#3'5'#2#8'TabOrder'#2#0#0#9'T'
+  ,'CheckBox'#14'chkHaUpEnabled'#4'Left'#2#7#6'Height'#2#24#3'Top'#2#4#5'Width'
+  +#3#202#0#7'Caption'#6#23'Enable upload to HamQTH'#8'OnChange'#7#20'chkHaUpEn'
+  +'abledChange'#8'TabOrder'#2#0#0#0#6'TLabel'#8'Label179'#4'Left'#2#9#6'Height'
+  +#2#17#3'Top'#2'$'#5'Width'#2'K'#7'Caption'#6#10'User name:'#11'ParentColor'#8
+  +#0#0#5'TEdit'#13'edtHaUserName'#4'Left'#2#9#6'Height'#2#27#3'Top'#2'4'#5'Wid'
+  +'th'#2'f'#8'TabOrder'#2#1#4'Text'#6#13'edtHaUserName'#0#0#6'TLabel'#3'lbl'#4
+  +'Left'#3#199#0#6'Height'#2#17#3'Top'#2'$'#5'Width'#2'F'#7'Caption'#6#9'Passw'
+  +'ord:'#11'ParentColor'#8#0#0#5'TEdit'#11'edtHaPasswd'#4'Left'#3#199#0#6'Heig'
+  +'ht'#2#27#3'Top'#2'4'#5'Width'#2'h'#8'EchoMode'#7#10'emPassword'#12'Password'
+  +'Char'#6#1'*'#8'TabOrder'#2#2#4'Text'#6#11'edtHaPasswd'#0#0#9'TCheckBox'#13
+  +'chkHaupOnline'#4'Left'#2#7#6'Height'#2#24#3'Top'#2'\'#5'Width'#3#162#1#7'Ca'
+  +'ption'#6'8Upload QSO data immediately after save, update or delete'#8'TabOr'
+  +'der'#2#3#0#0#6'TLabel'#8'Label184'#4'Left'#2#9#6'Height'#2#17#3'Top'#3#132#0
+  +#5'Width'#2'5'#7'Caption'#6#8'Use this'#11'ParentColor'#8#0#0#6'TLabel'#8'La'
+  +'bel185'#4'Left'#3#238#0#6'Height'#2#17#3'Top'#3#132#0#5'Width'#3'T'#1#7'Cap'
+  +'tion'#6'1color to show information in status upload window'#11'ParentColor'
+  +#8#0#0#9'TColorBox'#10'cmbHaColor'#4'Left'#2'>'#6'Height'#2#31#3'Top'#2'|'#5
+  +'Width'#3#164#0#17'DefaultColorColor'#7#6'clBlue'#14'NoneColorColor'#7#12'cl'
+  +'MoneyGreen'#8'Selected'#7#6'clBlue'#5'Style'#11#16'cbStandardColors'#16'cbE'
+  +'xtendedColors'#14'cbSystemColors'#13'cbPrettyNames'#0#10'ItemHeight'#2#0#8
+  +'TabOrder'#2#4#0#0#0#9'TGroupBox'#10'GroupBox45'#4'Left'#2#12#6'Height'#3#168
+  +#0#3'Top'#3#194#0#5'Width'#3'9'#2#7'Caption'#6#9' ClubLog '#12'ClientHeight'
+  +#3#149#0#11'ClientWidth'#3'5'#2#8'TabOrder'#2#1#0#9'TCheckBox'#14'chkClUpEna'
+  +'bled'#4'Left'#2#7#6'Height'#2#24#3'Top'#2#4#5'Width'#3#197#0#7'Caption'#6#24
+  +'Enable upload to ClubLog'#8'OnChange'#7#20'chkClUpEnabledChange'#8'TabOrder'
+  +#2#0#0#0#6'TLabel'#8'Label180'#4'Left'#2#9#6'Height'#2#17#3'Top'#2'$'#5'Widt'
+  +'h'#2'8'#7'Caption'#6#9'Callsign:'#11'ParentColor'#8#0#0#5'TEdit'#13'edtClUs'
+  +'erName'#4'Left'#2#9#6'Height'#2#27#3'Top'#2'9'#5'Width'#2'f'#8'TabOrder'#2#1
+  +#4'Text'#6#13'edtClUserName'#0#0#6'TLabel'#4'lbl1'#4'Left'#3#198#0#6'Height'
+  +#2#17#3'Top'#2'$'#5'Width'#2'F'#7'Caption'#6#9'Password:'#11'ParentColor'#8#0
+  +#0#5'TEdit'#11'edtClPasswd'#4'Left'#3#198#0#6'Height'#2#27#3'Top'#2'9'#5'Wid'
+  +'th'#2'h'#8'EchoMode'#7#10'emPassword'#12'PasswordChar'#6#1'*'#8'TabOrder'#2
+  +#2#4'Text'#6#11'edtClPasswd'#0#0#9'TCheckBox'#13'chkClUpOnline'#4'Left'#2#6#6
+  +'Height'#2#24#3'Top'#2'Y'#5'Width'#3#162#1#7'Caption'#6'8Upload QSO data imm'
+  +'ediately after save, update or delete'#8'TabOrder'#2#4#0#0#6'TLabel'#8'Labe'
+  +'l181'#4'Left'#3'f'#1#6'Height'#2#17#3'Top'#2'$'#5'Width'#2')'#7'Caption'#6#6
+  +'Email:'#11'ParentColor'#8#0#0#5'TEdit'#10'edtClEmail'#4'Left'#3'f'#1#6'Heig'
+  +'ht'#2#27#3'Top'#2'9'#5'Width'#3#184#0#8'TabOrder'#2#3#4'Text'#6#10'edtClEma'
+  +'il'#0#0#6'TLabel'#8'Label186'#4'Left'#2#10#6'Height'#2#17#3'Top'#2'y'#5'Wid'
+  +'th'#2'5'#7'Caption'#6#8'Use this'#11'ParentColor'#8#0#0#6'TLabel'#8'Label18'
+  +'7'#4'Left'#3#238#0#6'Height'#2#17#3'Top'#2'y'#5'Width'#3'T'#1#7'Caption'#6
+  +'1color to show information in status upload window'#11'ParentColor'#8#0#0#9
+  +'TColorBox'#10'cmbClColor'#4'Left'#2'A'#6'Height'#2#31#3'Top'#2'q'#5'Width'#3
+  +#164#0#17'DefaultColorColor'#7#5'clRed'#14'NoneColorColor'#7#12'clMoneyGreen'
+  +#8'Selected'#7#5'clRed'#5'Style'#11#16'cbStandardColors'#16'cbExtendedColors'
+  +#14'cbSystemColors'#13'cbPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrder'#2#5#0
+  +#0#0#9'TGroupBox'#10'GroupBox46'#4'Left'#2#12#6'Height'#3#168#0#3'Top'#3'r'#1
+  +#5'Width'#3'9'#2#7'Caption'#6#12' HRDLog.net '#12'ClientHeight'#3#149#0#11'C'
+  +'lientWidth'#3'5'#2#8'TabOrder'#2#2#0#9'TCheckBox'#14'chkHrUpEnabled'#4'Left'
+  +#2#7#6'Height'#2#24#3'Top'#2#4#5'Width'#3#222#0#7'Caption'#6#27'Enable uploa'
+  +'d to HRDLog.net'#8'OnChange'#7#20'chkHrUpEnabledChange'#8'TabOrder'#2#0#0#0
+  +#6'TLabel'#8'Label182'#4'Left'#2#9#6'Height'#2#17#3'Top'#2'$'#5'Width'#2'8'#7
+  +'Caption'#6#9'Callsign:'#11'ParentColor'#8#0#0#5'TEdit'#13'edtHrUserName'#4
   +'Left'#2#9#6'Height'#2#27#3'Top'#2'9'#5'Width'#2'f'#8'TabOrder'#2#1#4'Text'#6
-  +#13'edtClUserName'#0#0#6'TLabel'#4'lbl1'#4'Left'#3#198#0#6'Height'#2#17#3'To'
-  +'p'#2'$'#5'Width'#2'F'#7'Caption'#6#9'Password:'#11'ParentColor'#8#0#0#5'TEd'
-  +'it'#11'edtClPasswd'#4'Left'#3#198#0#6'Height'#2#27#3'Top'#2'9'#5'Width'#2'h'
-  +#8'EchoMode'#7#10'emPassword'#12'PasswordChar'#6#1'*'#8'TabOrder'#2#2#4'Text'
-  +#6#11'edtClPasswd'#0#0#9'TCheckBox'#13'chkClUpOnline'#4'Left'#2#6#6'Height'#2
+  +#13'edtHrUserName'#0#0#9'TCheckBox'#13'chkHrUpOnline'#4'Left'#2#6#6'Height'#2
   +#24#3'Top'#2'Y'#5'Width'#3#162#1#7'Caption'#6'8Upload QSO data immediately a'
-  +'fter save, update or delete'#8'TabOrder'#2#4#0#0#6'TLabel'#8'Label181'#4'Le'
-  +'ft'#3'f'#1#6'Height'#2#17#3'Top'#2'$'#5'Width'#2')'#7'Caption'#6#6'Email:'
-  +#11'ParentColor'#8#0#0#5'TEdit'#10'edtClEmail'#4'Left'#3'f'#1#6'Height'#2#27
-  +#3'Top'#2'9'#5'Width'#3#184#0#8'TabOrder'#2#3#4'Text'#6#10'edtClEmail'#0#0#6
-  +'TLabel'#8'Label186'#4'Left'#2#10#6'Height'#2#17#3'Top'#2'y'#5'Width'#2'5'#7
-  +'Caption'#6#8'Use this'#11'ParentColor'#8#0#0#6'TLabel'#8'Label187'#4'Left'#3
-  +#238#0#6'Height'#2#17#3'Top'#2'y'#5'Width'#3'T'#1#7'Caption'#6'1color to sho'
-  +'w information in status upload window'#11'ParentColor'#8#0#0#9'TColorBox'#10
-  +'cmbClColor'#4'Left'#2'A'#6'Height'#2#31#3'Top'#2'q'#5'Width'#3#164#0#17'Def'
-  +'aultColorColor'#7#5'clRed'#14'NoneColorColor'#7#12'clMoneyGreen'#8'Selected'
-  +#7#5'clRed'#5'Style'#11#16'cbStandardColors'#16'cbExtendedColors'#14'cbSyste'
-  +'mColors'#13'cbPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrder'#2#5#0#0#0#9'TGr'
-  +'oupBox'#10'GroupBox46'#4'Left'#2#12#6'Height'#3#168#0#3'Top'#3'r'#1#5'Width'
-  +#3'9'#2#7'Caption'#6#12' HRDLog.net '#12'ClientHeight'#3#149#0#11'ClientWidt'
-  +'h'#3'5'#2#8'TabOrder'#2#2#0#9'TCheckBox'#14'chkHrUpEnabled'#4'Left'#2#7#6'H'
-  +'eight'#2#24#3'Top'#2#4#5'Width'#3#222#0#7'Caption'#6#27'Enable upload to HR'
-  +'DLog.net'#8'OnChange'#7#20'chkHrUpEnabledChange'#8'TabOrder'#2#0#0#0#6'TLab'
-  +'el'#8'Label182'#4'Left'#2#9#6'Height'#2#17#3'Top'#2'$'#5'Width'#2'8'#7'Capt'
-  +'ion'#6#9'Callsign:'#11'ParentColor'#8#0#0#5'TEdit'#13'edtHrUserName'#4'Left'
-  +#2#9#6'Height'#2#27#3'Top'#2'9'#5'Width'#2'f'#8'TabOrder'#2#1#4'Text'#6#13'e'
-  +'dtHrUserName'#0#0#9'TCheckBox'#13'chkHrUpOnline'#4'Left'#2#6#6'Height'#2#24
-  +#3'Top'#2'Y'#5'Width'#3#162#1#7'Caption'#6'8Upload QSO data immediately afte'
-  +'r save, update or delete'#8'TabOrder'#2#3#0#0#6'TLabel'#8'Label183'#4'Left'
-  +#3#200#0#6'Height'#2#17#3'Top'#2'$'#5'Width'#2''''#7'Caption'#6#5'Code:'#11
-  +'ParentColor'#8#0#0#5'TEdit'#9'edtHrCode'#4'Left'#3#200#0#6'Height'#2#27#3'T'
-  +'op'#2'9'#5'Width'#3#184#0#8'TabOrder'#2#2#4'Text'#6#9'edtHrCode'#0#0#6'TLab'
-  +'el'#8'Label188'#4'Left'#2#9#6'Height'#2#17#3'Top'#2'}'#5'Width'#2'5'#7'Capt'
-  +'ion'#6#8'Use this'#11'ParentColor'#8#0#0#9'TColorBox'#10'cmbHrColor'#4'Left'
-  +#2'@'#6'Height'#2#31#3'Top'#2'u'#5'Width'#3#164#0#17'DefaultColorColor'#7#8
-  +'clPurple'#14'NoneColorColor'#7#12'clMoneyGreen'#8'Selected'#7#8'clPurple'#5
-  ,'Style'#11#16'cbStandardColors'#16'cbExtendedColors'#14'cbSystemColors'#13'c'
-  +'bPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrder'#2#4#0#0#6'TLabel'#8'Label189'
-  +#4'Left'#3#237#0#6'Height'#2#17#3'Top'#2'}'#5'Width'#3'T'#1#7'Caption'#6'1co'
-  +'lor to show information in status upload window'#11'ParentColor'#8#0#0#0#9
-  +'TCheckBox'#19'chkCloseAfterUpload'#4'Left'#2#12#6'Height'#2#24#3'Top'#3' '#2
-  +#5'Width'#3#196#1#7'Caption'#6'?Close the "Status of log upload" window afte'
-  +'r successful upload'#8'TabOrder'#2#3#0#0#9'TCheckBox'#13'chkIgnoreLoTW'#4'L'
-  +'eft'#2#13#6'Height'#2#24#3'Top'#3'@'#2#5'Width'#3#159#1#7'Caption'#6'5Ignor'
-  +'e changes caused by LoTW/eQSL upload or download'#8'TabOrder'#2#4#0#0#0#9'T'
-  +'TabSheet'#8'tabCondx'#7'Caption'#6#11'Propagation'#12'ClientHeight'#3'j'#2
+  +'fter save, update or delete'#8'TabOrder'#2#3#0#0#6'TLabel'#8'Label183'#4'Le'
+  +'ft'#3#200#0#6'Height'#2#17#3'Top'#2'$'#5'Width'#2''''#7'Caption'#6#5'Code:'
+  +#11'ParentColor'#8#0#0#5'TEdit'#9'edtHrCode'#4'Left'#3#200#0#6'Height'#2#27#3
+  +'Top'#2'9'#5'Width'#3#184#0#8'TabOrder'#2#2#4'Text'#6#9'edtHrCode'#0#0#6'TLa'
+  +'bel'#8'Label188'#4'Left'#2#9#6'Height'#2#17#3'Top'#2'}'#5'Width'#2'5'#7'Cap'
+  +'tion'#6#8'Use this'#11'ParentColor'#8#0#0#9'TColorBox'#10'cmbHrColor'#4'Lef'
+  +'t'#2'@'#6'Height'#2#31#3'Top'#2'u'#5'Width'#3#164#0#17'DefaultColorColor'#7
+  +#8'clPurple'#14'NoneColorColor'#7#12'clMoneyGreen'#8'Selected'#7#8'clPurple'
+  ,#5'Style'#11#16'cbStandardColors'#16'cbExtendedColors'#14'cbSystemColors'#13
+  +'cbPrettyNames'#0#10'ItemHeight'#2#0#8'TabOrder'#2#4#0#0#6'TLabel'#8'Label18'
+  +'9'#4'Left'#3#237#0#6'Height'#2#17#3'Top'#2'}'#5'Width'#3'T'#1#7'Caption'#6
+  +'1color to show information in status upload window'#11'ParentColor'#8#0#0#0
+  +#9'TCheckBox'#19'chkCloseAfterUpload'#4'Left'#2#12#6'Height'#2#24#3'Top'#3' '
+  +#2#5'Width'#3#196#1#7'Caption'#6'?Close the "Status of log upload" window af'
+  +'ter successful upload'#8'TabOrder'#2#3#0#0#9'TCheckBox'#13'chkIgnoreLoTW'#4
+  +'Left'#2#13#6'Height'#2#24#3'Top'#3'@'#2#5'Width'#3#159#1#7'Caption'#6'5Igno'
+  +'re changes caused by LoTW/eQSL upload or download'#8'TabOrder'#2#4#0#0#0#9
+  +'TTabSheet'#8'tabCondx'#7'Caption'#6#11'Propagation'#12'ClientHeight'#3'j'#2
   +#11'ClientWidth'#3#236#2#0#12'TRadioButton'#14'rbCondxAsImage'#4'Left'#2#25#6
   +'Height'#2#24#3'Top'#2#16#5'Width'#3#211#0#7'Caption'#6#25'Show propagation '
   +'as image'#7'Checked'#9#8'TabOrder'#2#0#7'TabStop'#9#0#0#5'TEdit'#16'edtCond'

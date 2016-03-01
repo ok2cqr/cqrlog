@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabTRXcontrol
+    ActivePage = tabRBN
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 5
+    TabIndex = 24
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -6748,15 +6748,15 @@ object frmPreferences: TfrmPreferences
         TabOrder = 6
       end
       object Label177: TLabel
-        Left = 15
+        Left = 16
         Height = 17
         Top = 356
-        Width = 184
-        Caption = 'Delete old information afer'
+        Width = 190
+        Caption = 'Delete old information after'
         ParentColor = False
       end
       object edtDelAfter: TEdit
-        Left = 204
+        Left = 212
         Height = 27
         Top = 351
         Width = 40
