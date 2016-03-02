@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, sqldb,
-  mysql50conn, db, iniFiles, dateutils;
+  mysql50conn, db, iniFiles, dateutils, FileUtil;
 
 
 
@@ -47,7 +47,25 @@ const
 {                presne: c_pres_dlouhe=0;   co muze byt delsi nez nalezena znacka.
                          c_pres_kratke=1;   tak musi mit nalezena znacka stejnou delku jak "co".
                          c_pres_strikt=2;   jako kratke, ale BEZ = na zacatku.
-} 
+}
+
+type
+  TUSStates = record
+    prefix : String[10];
+    name   : String[30];
+    state  : String[3];
+    offset : String[5];
+    itu    : String[2];
+    waz    : String[2];
+    cont   : String[2];
+    lat    : String[10];
+    long   : String[10];
+    adif   : Integer;
+  end;
+
+const
+  MAX_STATES = 60;
+
 type
 
   { TdmDXCC }
@@ -76,6 +94,8 @@ type
     DXCCDelArray   : Array of Integer;
     AmbiguousArray : Array of String;
     ExceptionArray : Array of String;
+    USStatesArray  : Array of TUSStates;
+
     function  CoVyhodnocovat(znacka : String; datum : TDateTime; var UzNasel : Boolean;var ADIF : Integer) : String;
     function  NaselCountry(znacka : String; datum : TDateTime; var ADIF : Integer;presne : Integer = NotExactly) : Boolean; overload;
     function  NaselCountry(znacka : String; datum : TDateTime; var pfx, country,
@@ -104,6 +124,7 @@ type
     procedure LoadDXCCRefArray;
     procedure LoadAmbiguousArray;
     procedure LoadExceptionArray;
+    procedure LoadUSStates;
   end;
 
 var
@@ -754,7 +775,9 @@ begin
   chy1 := new(Pchyb1,init);
   sez1 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country.tab',chy1));
   uhej := sez1;
-  sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country_del.tab',chy1))
+  sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country_del.tab',chy1));
+
+  LoadUSStates
 end;
 
 procedure TdmDXCC.DataModuleDestroy(Sender: TObject);
@@ -852,7 +875,8 @@ begin
   sez1 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country.tab',chy1));
   uhej := sez1;
   sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country_del.tab',chy1));
-  LoadDXCCRefArray
+  LoadDXCCRefArray;
+  LoadUSStates
 end;
 
 procedure TdmDXCC.LoadDXCCRefArray;
@@ -977,6 +1001,51 @@ begin
     ExceptionArray[Length(ExceptionArray)-1]:=s
   end;
   CloseFile(f)
+end;
+
+procedure TdmDXCC.LoadUSStates;
+var
+  f : TextFile;
+  a : TExplodeArray;
+  i : Integer = 0;
+  r : String;
+begin
+  if FileExistsUTF8(dmData.HomeDir+'dxcc_data'+PathDelim+'us_states.tab') then
+  begin
+    try
+      AssignFile(f,dmData.HomeDir+'dxcc_data'+PathDelim+'us_states.tab');
+      Reset(f);
+
+      SetLength(USStatesArray,MAX_STATES);
+
+      while not Eof(f) do
+      begin
+        Readln(f,r);
+        a := Explode('|',r);
+
+        USStatesArray[i].prefix := a[0];
+        USStatesArray[i].name   := a[1];
+        USStatesArray[i].state  := a[2];
+        USStatesArray[i].cont   := a[3];
+
+        if (pos('+',a[4])>0) then
+          USStatesArray[i].offset := copy(a[4],2,10)
+        else
+          USStatesArray[i].offset := a[4];
+
+        USStatesArray[i].itu  := a[5];
+        USStatesArray[i].waz  := a[6];
+        USStatesArray[i].lat  := a[7];
+        USStatesArray[i].long := a[8];
+        USStatesArray[i].adif := StrToInt(a[9]);
+
+        inc(i)
+      end
+    finally
+      CloseFile(f);
+      if dmData.DebugLevel>=1 then Writeln(i,' us states loaded')
+    end
+  end
 end;
 
 initialization

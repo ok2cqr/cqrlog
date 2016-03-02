@@ -253,6 +253,13 @@ begin
       dmData.LoadMasterSCP
     end;
 
+    if FileExistsUTF8(Directory+'us_states.tab') then
+    begin
+      DeleteFileUTF8(dmData.HomeDir+'dxcc_data'+PathDelim+'us_states.tab');
+      CopyFile(Directory+'us_states.tab',dmData.HomeDir+'dxcc_data'+PathDelim+'us_states.tab')
+      //reloading is in dmDXCC.ReloadDXCCTables
+    end;
+
     lblComment.Caption := 'Importing IOTA table ...';
     Application.ProcessMessages;
     dmData.qIOTAList.Close();
