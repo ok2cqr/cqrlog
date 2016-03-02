@@ -118,7 +118,7 @@ object frmImportProgress: TfrmImportProgress
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '1.4.4.0'
   object lblComment: TLabel
     Left = 8
     Height = 17

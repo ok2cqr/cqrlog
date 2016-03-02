@@ -243,11 +243,14 @@ begin
       CopyFile(Directory+'eqsl.txt',dmData.HomeDir+'eqsl.txt');
       dmData.LoadeQSLCalls
     end;
+
+    lblComment.Caption := 'Loading MASTER.SCP ...';
+    Application.ProcessMessages;
     if FileExistsUTF8(Directory+'MASTER.SCP') then
     begin
       DeleteFileUTF8(dmData.HomeDir+'MASTER.SCP');
       CopyFile(Directory+'MASTER.SCP',dmData.HomeDir+'MASTER.SCP');
-      dmData.LoadeQSLCalls
+      dmData.LoadMasterSCP
     end;
 
     lblComment.Caption := 'Importing IOTA table ...';
