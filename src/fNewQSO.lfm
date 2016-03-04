@@ -356,7 +356,7 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label17: TLabel
-          Left = 224
+          Left = 261
           Height = 17
           Top = 99
           Width = 47
@@ -404,7 +404,7 @@ object frmNewQSO: TfrmNewQSO
           Visible = False
         end
         object Label25: TLabel
-          Left = 344
+          Left = 210
           Height = 17
           Top = 99
           Width = 36
@@ -923,7 +923,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 12
         end
         object edtCounty: TEdit
-          Left = 210
+          Left = 256
           Height = 27
           Top = 115
           Width = 126
@@ -931,7 +931,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtCountyEnter
           OnExit = edtCountyExit
           OnKeyDown = edtCountyKeyDown
-          TabOrder = 14
+          TabOrder = 15
         end
         object cmbFreq: TComboBox
           Left = 132
@@ -1059,7 +1059,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 19
         end
         object edtState: TEdit
-          Left = 344
+          Left = 210
           Height = 27
           Top = 115
           Width = 38
@@ -1068,7 +1068,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtStateEnter
           OnExit = edtStateExit
           OnKeyDown = edtStateKeyDown
-          TabOrder = 15
+          TabOrder = 14
         end
         object chkAutoMode: TCheckBox
           Left = 277

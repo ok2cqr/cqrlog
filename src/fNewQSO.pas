@@ -2664,14 +2664,14 @@ procedure TfrmNewQSO.edtCountyKeyDown(Sender: TObject; var Key: Word;
 begin
   if (key = 40) then  //down arrow
   begin
-    edtState.SetFocus;
-    key := 0;
+    edtAward.SetFocus;
+    key := 0
   end;
   if (key = 38) then //up arrow
   begin
-    cmbIOTA.SetFocus;
-    key := 0;
-  end;
+    edtState.SetFocus;
+    key := 0
+  end
 end;
 
 procedure TfrmNewQSO.edtCQKeyDown(Sender: TObject; var Key: Word;
@@ -2745,13 +2745,13 @@ begin
   if (key = 40) then  //down arrow
   begin
     edtDXCCRef.SetFocus;
-    key := 0;
+    key := 0
   end;
   if (key = 38) then //up arrow
   begin
-    edtState.SetFocus;
-    key := 0;
-  end;
+    edtCounty.SetFocus;
+    key := 0
+  end
 end;
 
 procedure TfrmNewQSO.edtDXCCRefExit(Sender: TObject);
@@ -3164,19 +3164,19 @@ procedure TfrmNewQSO.cmbIOTAKeyDown(Sender: TObject; var Key: Word;
 begin
   if (key = 40) then  //down arrow
   begin
-    edtCounty.SetFocus;
-    key := 0;
+    edtState.SetFocus;
+    key := 0
   end;
   if (key = 38) then //up arrow
   begin
     edtWAZ.SetFocus;
-    key := 0;
+    key := 0
   end;
   if ((key = VK_SPACE) and UseSpaceBar) then
   begin
-    edtCounty.SetFocus;
-    key := 0;
-  end;
+    edtState.SetFocus;
+    key := 0
+  end
 end;
 
 procedure TfrmNewQSO.cmbModeChange(Sender: TObject);
@@ -4592,19 +4592,19 @@ procedure TfrmNewQSO.edtStateKeyDown(Sender: TObject; var Key: Word;
 begin
   if (key = 40) then  //down arrow
   begin
-    edtAward.SetFocus;
-    key := 0;
+    edtCounty.SetFocus;
+    key := 0
   end;
   if (key = 38) then //up arrow
   begin
-    edtCounty.SetFocus;
-    key := 0;
+    cmbIOTA.SetFocus;
+    key := 0
   end;
   if ((key = VK_SPACE) and UseSpaceBar) then
   begin
-    edtAward.SetFocus;
-    key := 0;
-  end;
+    edtCounty.SetFocus;
+    key := 0
+  end
 end;
 
 procedure TfrmNewQSO.edtWAZExit(Sender: TObject);
