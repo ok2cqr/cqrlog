@@ -5315,13 +5315,13 @@ begin
       end
     end;  //county
 
-    if (c_itu<>'') then
+    if (c_itu<>'') and (c_callsign = edtCall.Text) then
     begin
       edtITU.Text    := c_itu;
       lblITU.Caption := c_itu
     end;
 
-    if (c_waz<>'') then
+    if (c_waz<>'') and (c_callsign = edtCall.Text) then
     begin
       edtWAZ.Text    := c_waz;
       lblWAZ.Caption := c_waz
