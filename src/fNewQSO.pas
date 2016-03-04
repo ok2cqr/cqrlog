@@ -5248,6 +5248,7 @@ var
   IgnoreQRZ : Boolean = False;
   MvToRem   : Boolean = False;
   AlwaysReplace : Boolean;
+  ReplaceZonesEtc : Boolean;
   tmp : String;
 begin
   if c_ErrMsg <> '' then
@@ -5265,6 +5266,8 @@ begin
     IgnoreQRZ     := cqrini.ReadBool('NewQSO','IgnoreQRZ',False);
     MvToRem       := cqrini.ReadBool('NewQSO','MvToRem',True);
     AlwaysReplace := cqrini.ReadBool('NewQSO','UseCallBookData',False);
+    ReplaceZonesEtc := cqrini.ReadBool('NewQSO','UseCallbookZonesEtc',True);
+
 
     if (not IgnoreQRZ) and (c_qsl<>'') then
     begin
@@ -5303,7 +5306,7 @@ begin
       cmbIOTAExit(nil)
     end;
 
-    if ((c_state <> '') and (edtState.Text = '') or AlwaysReplace) and (c_callsign = edtCall.Text) then
+    if ((c_state <> '') and (edtState.Text = '') or AlwaysReplace or ReplaceZonesEtc) and (c_callsign = edtCall.Text) then
     begin
       edtState.Text := c_state;
       if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace then
@@ -5315,13 +5318,13 @@ begin
       end
     end;  //county
 
-    if (c_itu<>'') and (c_callsign = edtCall.Text) then
+    if ((c_itu<>'') or ReplaceZonesEtc) and (c_callsign = edtCall.Text) then
     begin
       edtITU.Text    := c_itu;
       lblITU.Caption := c_itu
     end;
 
-    if (c_waz<>'') and (c_callsign = edtCall.Text) then
+    if ((c_waz<>'') or ReplaceZonesEtc) and (c_callsign = edtCall.Text) then
     begin
       edtWAZ.Text    := c_waz;
       lblWAZ.Caption := c_waz

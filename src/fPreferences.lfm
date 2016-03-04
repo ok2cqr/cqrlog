@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabRBN
+    ActivePage = tabNewQSO
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 24
+    TabIndex = 2
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -567,7 +567,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 436
-        Width = 462
+        Width = 466
         Caption = 'In previous QSO list show also QSO with call/p, call/m, W6/call etc.'
         TabOrder = 13
       end
@@ -582,7 +582,7 @@ object frmPreferences: TfrmPreferences
       object chkClearNewQSOFreq: TCheckBox
         Left = 16
         Height = 24
-        Top = 562
+        Top = 578
         Width = 399
         Caption = 'Clear New QSO window after freq is changed more then '
         TabOrder = 15
@@ -591,7 +591,7 @@ object frmPreferences: TfrmPreferences
       object edtFreqChange: TEdit
         Left = 416
         Height = 27
-        Top = 560
+        Top = 576
         Width = 64
         TabOrder = 16
         Text = 'edtFreqChange'
@@ -600,7 +600,7 @@ object frmPreferences: TfrmPreferences
       object Label26: TLabel
         Left = 488
         Height = 17
-        Top = 566
+        Top = 582
         Width = 25
         Caption = 'kHz'
         ParentColor = False
@@ -615,12 +615,20 @@ object frmPreferences: TfrmPreferences
         TabOrder = 17
       end
       object chkCapFirstQTHLetter: TCheckBox
-        Left = 22
+        Left = 24
         Height = 24
-        Top = 508
+        Top = 537
         Width = 245
         Caption = 'Capitalise first letter in QTH field'
         TabOrder = 18
+      end
+      object chkUseCallbookZonesEtc: TCheckBox
+        Left = 49
+        Height = 24
+        Top = 509
+        Width = 405
+        Caption = 'Always overwrite only CQ, ITU zones, county and US state'
+        TabOrder = 19
       end
     end
     object tabVisibleColumns: TTabSheet
@@ -1973,7 +1981,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2306,7 +2314,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8

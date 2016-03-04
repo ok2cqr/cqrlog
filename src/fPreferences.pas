@@ -117,6 +117,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkUseCallbookZonesEtc : TCheckBox;
     chkModeRelatedOnly : TCheckBox;
     chkTrxControlDebug : TCheckBox;
     chkShowCondxValues: TCheckBox;
@@ -1156,6 +1157,7 @@ begin
   cqrini.WriteBool('NewQSO','ClearAfterFreqChange',chkClearNewQSOFreq.Checked);
   cqrini.WriteBool('NewQSO','UseCallBookData',chkUseCallBookData.Checked);
   cqrini.WriteBool('NewQSO','CapFirstQTHLetter',chkCapFirstQTHLetter.Checked);
+  cqrini.WriteBool('NewQSO','UseCallbookZonesEtc',chkUseCallbookZonesEtc.Checked);
 
   cqrini.WriteString('Program', 'Proxy', edtProxy.Text);
   cqrini.WriteString('Program', 'Port', edtPort.Text);
@@ -2562,6 +2564,7 @@ begin
   chkClearNewQSOFreq.Checked := cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   chkUseCallBookData.Checked := cqrini.ReadBool('NewQSO','UseCallBookData',False);
   chkCapFirstQTHLetter.Checked := cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True);
+  chkUseCallbookZonesEtc.Checked := cqrini.ReadBool('NewQSO','UseCallbookZonesEtc',True);
 
   edtProxy.Text := cqrini.ReadString('Program', 'Proxy', '');
   edtPort.Text := cqrini.ReadString('Program', 'Port', '');

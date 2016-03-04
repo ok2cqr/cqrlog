@@ -8,6 +8,7 @@ Legend:
   + program should work also with MariaDB 10.1
   + Frequency memories added
   + list of previous QSO should be much faster on older computers
+  + "Always overwrite only CQ, ITU zones, county and US state from callbook" option added
   - CW type window was not sizeable - fixed
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed
