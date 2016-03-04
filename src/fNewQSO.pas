@@ -5309,7 +5309,7 @@ begin
     if ((c_state <> '') and (edtState.Text = '') or AlwaysReplace or ReplaceZonesEtc) and (c_callsign = edtCall.Text) then
     begin
       edtState.Text := c_state;
-      if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace then
+      if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace or ReplaceZonesEtc then
       begin
         if (edtState.Text<>'') then
           edtCounty.Text := edtState.Text+','+c_county
