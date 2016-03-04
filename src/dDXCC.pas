@@ -103,6 +103,7 @@ type
     function  Explode(const cSeparator, vString: String): TExplodeArray;
     function  DateToDDXCCDate(date : TDateTime) : String;
     function  MyTryStrToInt(s : String; var i : Integer) : Boolean;
+    function  GetStateInfo(state : String; var country,lat,long,waz,itu,offset,cont : String) : Integer;
 
   public
     function  IsException(call : String) : Boolean;
@@ -112,6 +113,8 @@ type
     function  IsAmbiguous(call : String) : Boolean;
     function  IsPrefix(pref : String; Date : TDateTime) : Boolean;
     function  GetCont(call : String; Date : TDateTime) : String;
+    function  id_country(znacka: string; us_state : String; datum : TDateTime; var pfx, cont, country, WAZ,
+                           posun, ITU, lat, long: string) : Word; overload;
     function  id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
                                posun, ITU, lat, long: string) : Word; overload;
     function  id_country(znacka : String; Datum : TDateTime; var pfx,country : String) : Word; overload;
@@ -664,6 +667,12 @@ end;
 
 function TdmDXCC.id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
   posun, ITU, lat, long: string) : Word;
+begin
+  Result := id_country(znacka, '', datum, pfx, cont, country, WAZ, posun, ITU, lat, long)
+end;
+
+function TdmDXCC.id_country(znacka: string; us_state : String; datum : TDateTime; var pfx, cont, country, WAZ,
+                       posun, ITU, lat, long: string) : Word;
 var
   ADIF   : Integer;
   UzNasel : Boolean;
@@ -672,6 +681,7 @@ var
   x :longint;
   sZnac : string_mdz;
   sADIF : String;
+  us_adif : Integer;
 begin
   if (length(znacka)=0) then
   begin
@@ -699,6 +709,13 @@ begin
     begin
       if ADIF > 0 then
       begin
+        if ((adif = 6) or (adif = 9) or (adif = 103) or (adif = 110) or (adif = 166) or (adif = 202) or (adif = 285) or (adif = 291))
+           and (us_state<>'') then
+        begin
+          us_adif := GetStateInfo(us_state,country,lat,long,waz,itu,posun,cont);
+          if us_adif > 0 then
+            ADIF := us_adif
+        end;
         pfx := DXCCRefArray[adif].pref;
         Result := ADIF
       end
@@ -735,6 +752,13 @@ begin
     begin
       if ADIF > 0 then
       begin
+        if ((adif = 6) or (adif = 9) or (adif = 103) or (adif = 110) or (adif = 166) or (adif = 202) or (adif = 285) or (adif = 291))
+           and (us_state<>'') then
+        begin
+          us_adif := GetStateInfo(us_state,country,lat,long,waz,itu,posun,cont);
+          if us_adif > 0 then
+            ADIF := us_adif
+        end;
         pfx    := DXCCRefArray[adif].pref;
         Result := ADIF
       end
@@ -1044,6 +1068,29 @@ begin
     finally
       CloseFile(f);
       if dmData.DebugLevel>=1 then Writeln(i,' us states loaded')
+    end
+  end
+end;
+
+function TdmDXCC.GetStateInfo(state : String; var country,lat,long,waz,itu,offset,cont : String) : Integer;
+var
+  i : Integer;
+begin
+  Result := 0;
+
+  for i:=0 to Length(USStatesArray)-1 do
+  begin
+    if (state = USStatesArray[i].state) then
+    begin
+      country := USStatesArray[i].name;
+      lat     := USStatesArray[i].lat;
+      long    := USStatesArray[i].long;
+      waz     := USStatesArray[i].waz;
+      itu     := USStatesArray[i].itu;
+      offset  := USStatesArray[i].offset;
+      cont    := USStatesArray[i].cont;
+      Result  := USStatesArray[i].adif;
+      break
     end
   end
 end;

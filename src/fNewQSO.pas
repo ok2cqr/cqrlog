@@ -913,7 +913,7 @@ begin
   if ref_adif = 0 then
   begin
     Date := dmUtils.StrToDateFormat(edtDate.Text);
-    adif := dmDXCC.id_country(edtCall.Text,date,pfx, cont, country, WAZ, posun, ITU, lat, long);
+    adif := dmDXCC.id_country(edtCall.Text,edtState.Text,date,pfx, cont, country, WAZ, posun, ITU, lat, long);
     dmUtils.ModifyWAZITU(waz,itu);
     sDelta := posun
   end
@@ -4151,10 +4151,6 @@ begin
     cqrini.WriteBool('TMPQSO','OFF',cbOffline.Checked);
     SearchQRZ := cqrini.ReadBool('NewQSO','AutoSearch',False)
   end;
-  if ChangeDXCC then
-    ShowDXCCInfo(adif)
-  else
-    ShowDXCCInfo();
   {
   if (not (fViewQSO or fEditQSO or cbOffline.Checked or lblQSOTakes.Visible)) or
      ((fEditQSO or fViewQSO) and (old_call <> edtCall.Text))  then
@@ -4194,14 +4190,21 @@ begin
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount)
   else
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount+1);
-  ShowCountryInfo;
-  ChangeReports;
-  ShowStatistic(adif);
   if (not (fViewQSO or fEditQSO)) then
   begin
     InsertNameQTH;
     cmbQSL_S.Text := dmData.SendQSL(edtCall.Text,cmbMode.Text,cmbFreq.Text,adif)
   end;
+
+
+  if ChangeDXCC then
+    ShowDXCCInfo(adif)
+  else
+    ShowDXCCInfo();
+
+  ShowCountryInfo;
+  ChangeReports;
+  ShowStatistic(adif);
   CalculateDistanceEtc;
   mComment.Text := dmData.GetComment(edtCall.Text);
   if (lblDXCC.Caption <> '!') and (lblDXCC.Caption <> '#') then
@@ -4575,6 +4578,12 @@ end;
 
 procedure TfrmNewQSO.edtStateExit(Sender: TObject);
 begin
+  ShowDXCCInfo();
+  ShowCountryInfo;
+  ShowStatistic(adif);
+  CalculateDistanceEtc;
+  if frmGrayline.Showing then
+    DrawGrayline;
   CheckStateClub
 end;
 
@@ -5364,6 +5373,8 @@ begin
       end
     end //zip code
   end;
+  if edtState.Text<>'' then
+    edtStateExit(nil);
   CheckAwardClub;
   CheckQTHClub;
   CheckCountyClub;
