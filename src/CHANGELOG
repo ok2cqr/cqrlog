@@ -17,6 +17,7 @@ Legend:
   - callbook data always replaced data from previous QSO - fixed
   - cqrlog didn't start with broken TRX/Rotor control configuration - fixed
   - fixed loading of MASTER.SCP after downloading new DXCC tables
+  - QSO with mode in lower case was market as error and not imported - fixed
 
 1.9.1 (2015-11-28)
   + support sending CW via HamLib library added

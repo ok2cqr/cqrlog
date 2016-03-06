@@ -340,6 +340,8 @@ begin
     Writeln('d.TX_PWR:',d.TX_PWR);
     Writeln('MyPower: ',MyPower);
 
+    d.MODE := UpperCase(d.MODE);
+
     if not dmUtils.IsAdifOK(d.QSO_DATE,d.TIME_ON,d.TIME_OFF,d.CALL,d.FREQ,d.MODE,d.RST_SENT,
                             d.RST_RCVD,d.IOTA,d.ITUZ,d.CQZ,d.GRIDSQUARE,d.MY_GRIDSQUARE,
                             d.BAND,err) then
