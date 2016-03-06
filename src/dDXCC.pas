@@ -801,6 +801,11 @@ begin
   uhej := sez1;
   sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country_del.tab',chy1));
 
+  //after upgrade from version 1.9.1 and older, this file won't exist
+  //but we need it
+  if not FileExistsUTF8(dmData.HomeDir + 'dxcc_data/us_states.tab') then
+    CopyFile(dmData.HomeDir+'ctyfiles/us_states.tab',dmData.HomeDir + 'dxcc_data/us_states.tab');
+
   LoadUSStates
 end;
 
