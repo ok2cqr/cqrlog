@@ -243,8 +243,15 @@ begin
 
       if (FOnlyCurrMode) and (FCurrentMode<>'') then
       begin
-        if BandMapItems[i].Mode<>FCurrentMode then
-          Continue
+        if ((FCurrentMode='LSB') or (FCurrentMode='USB')) then
+        begin
+          if BandMapItems[i].Mode<>'SSB' then
+            Continue
+        end
+        else begin
+          if BandMapItems[i].Mode<>FCurrentMode then
+            Continue
+        end
       end;
 
       if abs(FCurrentFreq-BandMapItems[i].Freq)<=DELTA_FREQ then
@@ -754,8 +761,15 @@ begin
 
       if (FOnlyCurrMode) and (FCurrentMode<>'') then
       begin
-        if BandMapItems[i].Mode<>FCurrentMode then
-          Continue
+        if ((FCurrentMode='LSB') or (FCurrentMode='USB')) then
+        begin
+          if BandMapItems[i].Mode<>'SSB' then
+            Continue
+        end
+        else begin
+          if BandMapItems[i].Mode<>FCurrentMode then
+            Continue
+        end
       end;
 
       if UseDefaultColor then
