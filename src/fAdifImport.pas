@@ -457,7 +457,7 @@ begin
     freq := FormatFloat('0.0000;;',StrToFloat(d.FREQ));
     band := dmUtils.GetBandFromFreq(d.FREQ);
 
-    dxcc_adif := dmDXCC.id_country(d.CALL,dmUtils.StrToDateFormat(d.QSO_DATE),dxcc,mycont,tmp,id_waz,tmp,id_itu,tmp,tmp);
+    dxcc_adif := dmDXCC.id_country(d.CALL,d.STATE,dmUtils.StrToDateFormat(d.QSO_DATE),dxcc,mycont,tmp,id_waz,tmp,id_itu,tmp,tmp);
     if d.CQZ = '' then
       d.CQZ := id_waz;
     if d.ITUZ = '' then

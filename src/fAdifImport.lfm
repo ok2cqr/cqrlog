@@ -117,12 +117,12 @@ object frmAdifImport: TfrmAdifImport
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.4.4.0'
   object Label1: TLabel
     Left = 6
     Height = 17
     Top = 3
-    Width = 26
+    Width = 28
     Caption = 'File:'
     ParentColor = False
   end
@@ -130,7 +130,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 38
     Height = 17
     Top = 3
-    Width = 74
+    Width = 81
     Caption = 'lblFileName'
     ParentColor = False
   end
@@ -138,7 +138,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 6
     Height = 17
     Top = 30
-    Width = 40
+    Width = 46
     Caption = 'Errors:'
     ParentColor = False
   end
@@ -146,7 +146,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 152
     Height = 17
     Top = 30
-    Width = 63
+    Width = 71
     Caption = 'Importing:'
     ParentColor = False
   end
@@ -154,7 +154,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 64
     Height = 17
     Top = 30
-    Width = 53
+    Width = 59
     Alignment = taRightJustify
     Caption = 'lblErrors'
     ParentColor = False
@@ -163,7 +163,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 232
     Height = 17
     Top = 30
-    Width = 54
+    Width = 57
     Caption = 'lblCount'
     ParentColor = False
   end
@@ -171,7 +171,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 8
     Height = 17
     Top = 128
-    Width = 56
+    Width = 63
     Caption = 'Remarks:'
     ParentColor = False
   end
@@ -179,7 +179,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 373
     Height = 17
     Top = 146
-    Width = 67
+    Width = 70
     Caption = 'Complete!'
     Font.Color = clRed
     ParentColor = False
@@ -190,7 +190,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 8
     Height = 17
     Top = 192
-    Width = 71
+    Width = 77
     Caption = 'QTH Profile'
     ParentColor = False
   end
@@ -214,14 +214,14 @@ object frmAdifImport: TfrmAdifImport
   end
   object edtRemarks: TEdit
     Left = 8
-    Height = 22
+    Height = 27
     Top = 152
     Width = 145
     TabOrder = 1
   end
   object cmbProfiles: TComboBox
     Left = 8
-    Height = 22
+    Height = 29
     Top = 216
     Width = 334
     ItemHeight = 0
@@ -230,16 +230,16 @@ object frmAdifImport: TfrmAdifImport
   end
   object chkLotOfQSO: TCheckBox
     Left = 8
-    Height = 26
+    Height = 24
     Top = 88
-    Width = 270
+    Width = 293
     Caption = 'ADIF file contains more than 10 000 QSO'
     TabOrder = 3
   end
   object sb: TStatusBar
     Left = 0
-    Height = 20
-    Top = 260
+    Height = 21
+    Top = 259
     Width = 444
     Panels = <    
       item
@@ -263,29 +263,29 @@ object frmAdifImport: TfrmAdifImport
     top = 184
   end
   object Q1: TSQLQuery
+    FieldDefs = <>
     Transaction = tr
-    ReadOnly = False
     Params = <>
     left = 170
     top = 184
   end
   object Q2: TSQLQuery
+    FieldDefs = <>
     Transaction = tr
-    ReadOnly = False
     Params = <>
     left = 219
     top = 184
   end
   object Q3: TSQLQuery
+    FieldDefs = <>
     Transaction = tr
-    ReadOnly = False
     Params = <>
     left = 267
     top = 184
   end
   object Q4: TSQLQuery
+    FieldDefs = <>
     Transaction = tr
-    ReadOnly = False
     Params = <>
     left = 315
     top = 184
