@@ -1112,6 +1112,8 @@ end;
 
 procedure TfrmTRXControl.ClearRIT;
 begin
+  if (lblFreq.Caption = empty_freq) then
+    exit;
   radio.ClearRit
 end;
 
