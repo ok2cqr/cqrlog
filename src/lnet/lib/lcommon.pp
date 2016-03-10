@@ -512,15 +512,25 @@ end;
 procedure FillAddressInfo(var aAddrInfo: TLSocketAddress; const aFamily: sa_family_t;
   const Address: string; const aPort: Word);
 begin
+  {$ifdef ver2}
   aAddrInfo.IPv4.family := aFamily;
   aAddrInfo.IPv4.Port := htons(aPort);
-
+  {$else}
+  aAddrInfo.IPv4.sin_family := aFamily;
+  aAddrInfo.IPv4.sin_port := htons(aPort);
+  {$endif}
   case aFamily of
     LAF_INET  :
       begin
+      {$ifdef ver2}
         aAddrInfo.IPv4.Addr := StrToNetAddr(Address);
         if (Address <> LADDR_ANY) and (aAddrInfo.IPv4.Addr = 0) then
           aAddrInfo.IPv4.Addr := StrToNetAddr(GetHostIP(Address));
+      {$else}
+        aAddrInfo.IPv4.sin_addr.s_addr := StrToNetAddr(Address);
+        if (Address <> LADDR_ANY) and (aAddrInfo.IPv4.sin_addr.s_addr = 0) then
+          aAddrInfo.IPv4.sin_addr.s_addr := StrToNetAddr(GetHostIP(Address));
+      {$endif}
       end;
     LAF_INET6 :
       begin
