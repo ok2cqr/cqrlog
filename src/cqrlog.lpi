@@ -82,7 +82,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="89">
+    <Units Count="90">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -653,6 +653,13 @@
         <IsPartOfProject Value="True"/>
         <HasResources Value="True"/>
       </Unit88>
+      <Unit89>
+        <Filename Value="fdberror.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmDbError"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fDbError"/>
+      </Unit89>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -10,6 +10,8 @@ Legend:
   + list of previous QSO should be much faster on older computers
   + "Always overwrite only CQ, ITU zones, county and US state from callbook" option added
   + callbook is used for better DXCC and state recognition
+  + new database connection error window with small how to
+  + the db error window can open mysql.err
   - CW type window was not sizeable - fixed
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed

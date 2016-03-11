@@ -4,7 +4,7 @@ LazarusResources.Add('TfrmDBConnect','FORMDATA',[
   'TPF0'#13'TfrmDBConnect'#12'frmDBConnect'#4'Left'#3#243#1#6'Height'#3'('#2#3
   +'Top'#3#194#0#5'Width'#3'q'#1#7'Caption'#6#19'Database connection'#12'Client'
   +'Height'#3'('#2#11'ClientWidth'#3'q'#1#7'OnClose'#7#9'FormClose'#8'OnCreate'
-  +#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.2.4.0'#0#9'TG'
+  +#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.4.4.0'#0#9'TG'
   +'roupBox'#8'grbLogin'#4'Left'#2#0#6'Height'#3#192#0#3'Top'#2#0#5'Width'#3'q'
   +#1#5'Align'#7#5'alTop'#7'Caption'#6#14' MySQL server '#12'ClientHeight'#3#173
   +#0#11'ClientWidth'#3'm'#1#8'TabOrder'#2#0#7'Visible'#8#0#5'TEdit'#9'edtServe'

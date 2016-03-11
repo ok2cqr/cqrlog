@@ -329,6 +329,7 @@ type
     procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
     procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
     procedure OpenFreqMemories(mode : String);
+    procedure CheckApparmorConfig;
   end;
 
 var
@@ -340,7 +341,7 @@ var
 implementation
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -3417,36 +3418,7 @@ begin
   if FileExistsUTF8('/usr/sbin/mysqld') then //openSUSE
     Result := '/usr/sbin/mysqld';
   if Result = '' then  //don't know where mysqld is, so hopefully will be in  $PATH
-    Result := 'mysqld';
-
-  if FileExistsUTF8('/etc/apparmor.d/usr.sbin.mysqld') then
-  begin
-    l := TStringList.Create;
-    try
-      l.LoadFromFile('/etc/apparmor.d/usr.sbin.mysqld');
-      l.Text := UpperCase(l.Text);
-      if Pos(UpperCase('@{HOME}/.config/cqrlog/database/** rwk,'),l.Text) = 0 then
-      begin
-        info := 'It looks like apparmor is running in your system. CQRLOG needs to add this :'+
-                LineEnding+
-                '@{HOME}/.config/cqrlog/database/** rwk,'+
-                LineEnding+
-                'into /etc/apparmor.d/usr.sbin.mysqld'+
-                LineEnding+
-                LineEnding+
-                'You can do that by running /usr/share/cqrlog/cqrlog-apparmor-fix or you can add the line '+
-                'and restart apparmor manually.'+
-                LineEnding+
-                LineEnding+
-                'Click OK to continue (program may not work correctly) or Cancel and modify the file '+
-                'first.';
-         if Application.MessageBox(PChar(info),'Information ...',mb_OKCancel+mb_IconInformation) = idCancel then
-           Application.Terminate
-      end
-    finally
-      l.Free
-    end
-  end
+    Result := 'mysqld'
 end;
 
 procedure TdmData.PrepareMysqlConfigFile;
@@ -3527,8 +3499,12 @@ begin
   MainCon.DatabaseName := '';
   if not Connected then
   begin
-    Application.MessageBox('MySQL could not be started, please check if the MySQL server is installed properly','Error...',
-                           mb_OK + mb_IconError)
+    with TfrmDbError.Create(nil) do
+    try
+      ShowModal
+    finally
+      Free
+    end
   end
 end;
 
@@ -4239,6 +4215,58 @@ begin
       qFreqMem.Next
   end;
   GetCurrentFreqFromMem(freq,mode,bandwidth)
+end;
+
+procedure TdmData.CheckApparmorConfig;
+
+  function IsModified(FileName : String) : Boolean;
+  var
+    l : TStringList;
+  begin
+    Result := False;
+    l := TStringList.Create;
+    try
+      l.LoadFromFile(FileName);
+      l.Text := UpperCase(l.Text);
+      if Pos(UpperCase('@{HOME}/.config/cqrlog/database/** rwk,'),l.Text) = 0 then
+        Result := True
+    finally
+      l.Free
+    end
+  end;
+
+var
+  ShowInfo : Boolean = False;
+  MsgText  : String = '';
+begin
+  Writeln('Checking apparmor configuration');
+
+  if FileExistsUTF8('/etc/apparmor.d/usr.sbin.mysqld') then
+  begin
+    ShowInfo := IsModified('/etc/apparmor.d/usr.sbin.mysqld')
+  end;
+
+  if FileExistsUTF8('/etc/apparmor.d/local/usr.sbin.mysqld') then //debian
+  begin
+    ShowInfo := IsModified('/etc/apparmor.d/usr.sbin.mysqld')
+  end;
+
+
+  MsgText := 'It looks like apparmor is running in your system. CQRLOG needs to add this :'+
+             LineEnding+
+             '@{HOME}/.config/cqrlog/database/** rwk,'+
+             LineEnding+
+             'into /etc/apparmor.d/usr.sbin.mysqld'+
+             LineEnding+
+             LineEnding+
+             'You can do that by running /usr/share/cqrlog/cqrlog-apparmor-fix or you can add the line '+
+             'and restart apparmor manually.'+
+             LineEnding+
+             LineEnding+
+             'Click OK to continue (program may not work correctly) or Cancel and modify the file '+
+             'first.';
+  if Application.MessageBox(PChar(MsgText),'Information ...',mb_OKCancel+mb_IconInformation) = idCancel then
+    Application.Terminate
 end;
 
 initialization
