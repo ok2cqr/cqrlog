@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil,
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
-  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids;
+  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils;
 
 const
   MaxCall   = 100000;
@@ -1013,6 +1013,10 @@ begin
     CopyFile(s+'iota.tbl',d+'iota.tbl',True);
     CopyFile(s+'qslmgr.csv',d+'qslmgr.csv',True)
   end;
+
+  //us states
+  if not FileExistsUTF8(d+'us_states.tab') then
+    CopyFile(s+'us_states.tab',d+'us_states.tab');
 
   if not FileExistsUTF8(fHomeDir+'lotw1.txt') then
     CopyFile(s+'lotw1.txt',fHomeDir+'lotw1.txt',True);
