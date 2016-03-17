@@ -14,16 +14,16 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.0.4'
   object pgPreferences: TPageControl
     Left = 160
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabNewQSO
+    ActivePage = tabDXCluster
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 10
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -1222,7 +1222,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
@@ -1565,7 +1565,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
@@ -1981,7 +1981,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2314,7 +2314,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
@@ -4033,16 +4033,16 @@ object frmPreferences: TfrmPreferences
         Left = 5
         Height = 24
         Top = 552
-        Width = 296
-        Caption = 'Connect to dxcluster after program runs'
+        Width = 322
+        Caption = 'Connect to DX cluster after program startup'
         TabOrder = 2
       end
       object chkShowDxcCountry: TCheckBox
         Left = 5
         Height = 24
         Top = 528
-        Width = 299
-        Caption = 'Show country name in the dx cluster spot'
+        Width = 301
+        Caption = 'Show country name in the DX cluster spot'
         TabOrder = 3
       end
       object GroupBox47: TGroupBox
