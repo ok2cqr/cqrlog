@@ -50,6 +50,7 @@ type
     function  GetLogUploadColor(where : TWhereToUpload) : Integer;
     function  GetUploadUrl(where : TWhereToUpload; cmd : String) : String;
     function  GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var FatalError : Boolean) : String;
+    function  LogUploadEnabled : Boolean;
 
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
@@ -733,6 +734,12 @@ begin
   end
 end;
 
+function TdmLogUpload.LogUploadEnabled : Boolean;
+begin
+  Result := cqrini.ReadBool('OnlineLog','HaUp',False) or
+            cqrini.ReadBool('OnlineLog','ClUp',False) or
+            cqrini.ReadBool('OnlineLog','HrUp',False)
+end;
 
 initialization
   {$I dLogUpload.lrs}
