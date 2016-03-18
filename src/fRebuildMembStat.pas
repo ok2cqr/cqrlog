@@ -16,6 +16,7 @@ type
     Bevel1: TBevel;
     btnStart: TButton;
     btnCancel: TButton;
+    chkIgnoreChanges : TCheckBox;
     chkRebClub1: TCheckBox;
     chkRebClub2: TCheckBox;
     chkRebClub3: TCheckBox;
@@ -50,7 +51,7 @@ var
 implementation
 
 { TfrmRebuildMembStat }
-uses dUtils, dData;
+uses dUtils, dData, uMyIni, dLogUpload;
 
 
 procedure TfrmRebuildMembStat.FormShow(Sender: TObject);
@@ -81,7 +82,9 @@ begin
   edtSince4.Enabled   := chkRebClub4.Caption<>'';
 
   chkRebClub5.Enabled := chkRebClub5.Caption<>'';
-  edtSince5.Enabled   := chkRebClub5.Caption<>''
+  edtSince5.Enabled   := chkRebClub5.Caption<>'';
+
+  chkIgnoreChanges.Checked := cqrini.ReadBool('Clubs','NotUpload',True)
 end;
 
 procedure TfrmRebuildMembStat.FormClose(Sender: TObject;
@@ -138,6 +141,8 @@ procedure TfrmRebuildMembStat.btnStartClick(Sender: TObject);
 var
   e : Boolean = False;
 begin
+  cqrini.WriteBool('Clubs','NotUpload',chkIgnoreChanges.Checked);
+
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   dmData.Q.SQL.Clear;
@@ -152,6 +157,9 @@ begin
   lblInfo.Caption := 'Working ...';
   Application.ProcessMessages;
   try try
+    if chkIgnoreChanges.Checked and dmLogUpload.LogUploadEnabled then
+      dmData.DisableOnlineLogSupport;
+
     if chkRebClub1.Checked then
     begin
       UpdateClub(dmData.Club1,'1',edtSince1.Text);
@@ -204,6 +212,9 @@ begin
     Cursor := crDefault;
     if not e then
       dmData.trQ.Commit;
+
+    if chkIgnoreChanges.Checked and dmLogUpload.LogUploadEnabled then
+      dmData.EnableOnlineLogSupport(False);
     lblInfo.Caption := 'Done ...'
   end
 end;
