@@ -6,7 +6,7 @@ LazarusResources.Add('TfrmLoTWExport','FORMDATA',[
   +#12'help/h7.html'#13'ActiveControl'#7#12'pgLoTWExport'#7'Caption'#6#15'Expor'
   +'t for LoTW'#12'ClientHeight'#3'%'#2#11'ClientWidth'#3#221#1#12'OnCloseQuery'
   +#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#10
-  +'LCLVersion'#6#7'1.4.4.0'#0#12'TPageControl'#12'pgLoTWExport'#4'Left'#2#0#6
+  +'LCLVersion'#6#7'1.6.0.4'#0#12'TPageControl'#12'pgLoTWExport'#4'Left'#2#0#6
   +'Height'#3#253#1#3'Top'#2#0#5'Width'#3#221#1#10'ActivePage'#7#9'tabUpload'#5
   +'Align'#7#8'alClient'#8'TabIndex'#2#1#8'TabOrder'#2#0#0#9'TTabSheet'#12'tabL'
   +'ocalFile'#7'Caption'#6#20'Export to local file'#12'ClientHeight'#3#222#1#11

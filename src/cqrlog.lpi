@@ -488,6 +488,7 @@
         <Filename Value="fRebuildMembStat.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRebuildMembStat"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit64>
       <Unit65>

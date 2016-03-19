@@ -69,7 +69,7 @@ implementation
 
 { TfrmImportProgress }
 
-uses dData, dUtils, fImportTest, dDXCC, uMyini;
+uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload;
 
 procedure TfrmImportProgress.FormActivate(Sender: TObject);
 begin
@@ -530,7 +530,7 @@ begin
   l := TStringList.Create;
   AssignFile(f,FileName);
   try
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
       dmData.DisableOnlineLogSupport;
 
     dmData.trQ1.StartTransaction;
@@ -893,7 +893,7 @@ begin
       dmData.trQ1.Rollback;
     l.Free;
     CloseFile(f);
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
       dmData.EnableOnlineLogSupport(False)
   end;
   Close

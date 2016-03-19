@@ -75,7 +75,7 @@ implementation
 
 { TfrmLoTWExport }
 
-uses dData, dUtils, uMyIni;
+uses dData, dUtils, uMyIni, dLogUpload;
 
 procedure TfrmLoTWExport.btnFileBrowseClick(Sender: TObject);
 begin
@@ -160,7 +160,7 @@ begin
       dmData.trQ1.Rollback;
       dmData.trQ1.StartTransaction;
       try
-        if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+        if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
           dmData.DisableOnlineLogSupport;
 
         dmData.Q1.Open();
@@ -182,7 +182,7 @@ begin
         dmData.Q.Close();
         dmData.trQ.Commit;
         dmData.trQ1.Rollback;
-        if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
+        if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
           dmData.EnableOnlineLogSupport(False)
       end
     end
