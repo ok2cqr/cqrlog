@@ -69,6 +69,7 @@ type
     acRefreshTime: TAction;
     acRBNMonitor: TAction;
     acRemoteWsjt: TAction;
+    acCommentToCallsign : TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -99,6 +100,8 @@ type
     MenuItem89: TMenuItem;
     MenuItem90: TMenuItem;
     MenuItem91: TMenuItem;
+    MenuItem92 : TMenuItem;
+    MenuItem93 : TMenuItem;
     mnuRemoteModeWsjt: TMenuItem;
     mnuOnlineLog: TMenuItem;
     MenuItem54: TMenuItem;
@@ -310,6 +313,7 @@ type
     tmrEnd: TTimer;
     tmrStart: TTimer;
     procedure acBigSquareExecute(Sender: TObject);
+    procedure acCommentToCallsignExecute(Sender : TObject);
     procedure acCWFKeyExecute(Sender: TObject);
     procedure acHotkeysExecute(Sender: TObject);
     procedure acLogUploadStatusExecute(Sender: TObject);
@@ -649,7 +653,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall;
 
 procedure TQSLTabThread.Execute;
 var
@@ -3656,6 +3660,16 @@ begin
     frmBigSquareStat.ShowModal
   finally
     FreeAndNil(frmBigSquareStat)
+  end
+end;
+
+procedure TfrmNewQSO.acCommentToCallsignExecute(Sender : TObject);
+begin
+  frmCommentToCall := TfrmCommentToCall.Create(frmNewQSO);
+  try
+    frmCommentToCall.ShowModal
+  finally
+    frmCommentToCall.Free
   end
 end;
 

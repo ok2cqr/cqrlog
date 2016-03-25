@@ -1,0 +1,106 @@
+object frmCommentToCall: TfrmCommentToCall
+  Left = 673
+  Height = 583
+  Top = 324
+  Width = 860
+  Caption = 'Comment to callsign'
+  ClientHeight = 583
+  ClientWidth = 860
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '1.6.0.4'
+  object Panel1: TPanel
+    Left = 744
+    Height = 583
+    Top = 0
+    Width = 116
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 583
+    ClientWidth = 116
+    TabOrder = 0
+    object Button1: TButton
+      Left = 24
+      Height = 25
+      Top = 16
+      Width = 75
+      Cancel = True
+      Caption = 'Close'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object btnNew: TButton
+      Left = 24
+      Height = 25
+      Top = 144
+      Width = 75
+      Action = acNew
+      TabOrder = 1
+    end
+    object btnEdit: TButton
+      Left = 24
+      Height = 25
+      Top = 176
+      Width = 75
+      Action = acEdit
+      TabOrder = 2
+    end
+    object btnDelete: TButton
+      Left = 24
+      Height = 25
+      Top = 224
+      Width = 75
+      Action = acDelete
+      TabOrder = 3
+    end
+    object btnFind: TButton
+      Left = 24
+      Height = 25
+      Top = 80
+      Width = 75
+      Action = acSearch
+      Caption = '&Search'
+      TabOrder = 4
+    end
+  end
+  object dbgrdComment: TDBGrid
+    Left = 0
+    Height = 583
+    Top = 0
+    Width = 744
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    DataSource = dsrComment
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAnyButtonCanSelect]
+    TabOrder = 1
+    OnColumnSized = dbgrdCommentColumnSized
+    OnDblClick = dbgrdCommentDblClick
+  end
+  object dsrComment: TDataSource
+    DataSet = dmData.qComment
+    left = 105
+    top = 57
+  end
+  object acComment: TActionList
+    left = 472
+    top = 216
+    object acSearch: TAction
+      Caption = 'Search'
+      OnExecute = acSearchExecute
+      ShortCut = 16454
+    end
+    object acNew: TAction
+      Caption = '&New'
+      OnExecute = acNewExecute
+    end
+    object acEdit: TAction
+      Caption = '&Edit'
+      OnExecute = acEditExecute
+    end
+    object acDelete: TAction
+      Caption = '&Delete'
+      OnExecute = acDeleteExecute
+    end
+  end
+end

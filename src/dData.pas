@@ -278,6 +278,7 @@ type
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
     function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
+    function  CallNoteExists(Callsign : String) : Boolean;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -290,6 +291,7 @@ type
                       loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,cont : String;
                       qso_dxcc : Boolean; profile : Integer; idx : LongInt);
     procedure SaveComment(call,text : String);
+    procedure DeleteComment(id : Integer);
     procedure PrepareImport;
     procedure DoAfterImport;
     procedure InsertProfiles(cmbProfile : TComboBox; ShowAll : Boolean);
@@ -1627,6 +1629,50 @@ begin
   Result := qComment.Fields[0].AsString;
   qComment.Close;
   trComment.Rollback
+end;
+
+procedure TdmData.DeleteComment(id : Integer);
+const
+  C_DEL = 'delete from notes where id_notes = %d';
+
+begin
+  qComment.Close;
+  if trComment.Active then
+    trComment.Rollback;
+
+  trComment.StartTransaction;
+  try try
+    qComment.SQL.Text := Format(C_DEL,[id]);
+    qComment.ExecSQL
+  except
+    on E : Exception do
+    begin
+      Writeln(E.Message);
+      trComment.Rollback
+    end
+  end
+  finally
+    if trComment.Active then
+      trComment.Commit
+  end
+end;
+
+function TdmData.CallNoteExists(Callsign : String) : Boolean;
+const
+  C_SEL = 'select id_notes from notes where callsign=%s';
+begin
+  Result := False;
+  if dmData.trQ.Active then
+    dmData.trQ.Rollback;
+  dmData.trQ.StartTransaction;
+  try
+    dmData.Q.SQL.Text := Format(C_SEL,[QuotedStr(Callsign)]);
+    dmData.Q.Open;
+    Result := dmData.Q.RecordCount > 0
+  finally
+    dmData.Q.Close;
+    dmData.trQ.Rollback
+  end
 end;
 
 procedure TdmData.PrepareImport;

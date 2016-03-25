@@ -1,0 +1,33 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmCommentToCall','FORMDATA',[
+  'TPF0'#17'TfrmCommentToCall'#16'frmCommentToCall'#4'Left'#3#161#2#6'Height'#3
+  +'G'#2#3'Top'#3'D'#1#5'Width'#3'\'#3#7'Caption'#6#19'Comment to callsign'#12
+  +'ClientHeight'#3'G'#2#11'ClientWidth'#3'\'#3#7'OnClose'#7#9'FormClose'#6'OnS'
+  +'how'#7#8'FormShow'#10'LCLVersion'#6#7'1.6.0.4'#0#6'TPanel'#6'Panel1'#4'Left'
+  +#3#232#2#6'Height'#3'G'#2#3'Top'#2#0#5'Width'#2't'#5'Align'#7#7'alRight'#10
+  +'BevelOuter'#7#6'bvNone'#12'ClientHeight'#3'G'#2#11'ClientWidth'#2't'#8'TabO'
+  +'rder'#2#0#0#7'TButton'#7'Button1'#4'Left'#2#24#6'Height'#2#25#3'Top'#2#16#5
+  +'Width'#2'K'#6'Cancel'#9#7'Caption'#6#5'Close'#11'ModalResult'#2#2#8'TabOrde'
+  +'r'#2#0#0#0#7'TButton'#6'btnNew'#4'Left'#2#24#6'Height'#2#25#3'Top'#3#144#0#5
+  +'Width'#2'K'#6'Action'#7#5'acNew'#8'TabOrder'#2#1#0#0#7'TButton'#7'btnEdit'#4
+  +'Left'#2#24#6'Height'#2#25#3'Top'#3#176#0#5'Width'#2'K'#6'Action'#7#6'acEdit'
+  +#8'TabOrder'#2#2#0#0#7'TButton'#9'btnDelete'#4'Left'#2#24#6'Height'#2#25#3'T'
+  +'op'#3#224#0#5'Width'#2'K'#6'Action'#7#8'acDelete'#8'TabOrder'#2#3#0#0#7'TBu'
+  +'tton'#7'btnFind'#4'Left'#2#24#6'Height'#2#25#3'Top'#2'P'#5'Width'#2'K'#6'Ac'
+  +'tion'#7#8'acSearch'#7'Caption'#6#7'&Search'#8'TabOrder'#2#4#0#0#0#7'TDBGrid'
+  +#12'dbgrdComment'#4'Left'#2#0#6'Height'#3'G'#2#3'Top'#2#0#5'Width'#3#232#2#5
+  +'Align'#7#8'alClient'#5'Color'#7#8'clWindow'#7'Columns'#14#0#10'DataSource'#7
+  +#10'dsrComment'#7'Options'#11#8'dgTitles'#11'dgIndicator'#14'dgColumnResize'
+  +#12'dgColumnMove'#10'dgColLines'#10'dgRowLines'#6'dgTabs'#11'dgRowSelect'#21
+  +'dgAlwaysShowSelection'#15'dgConfirmDelete'#14'dgCancelOnExit'#20'dgAnyButto'
+  +'nCanSelect'#0#8'TabOrder'#2#1#13'OnColumnSized'#7#23'dbgrdCommentColumnSize'
+  +'d'#10'OnDblClick'#7#20'dbgrdCommentDblClick'#0#0#11'TDataSource'#10'dsrComm'
+  +'ent'#7'DataSet'#7#15'dmData.qComment'#4'left'#2'i'#3'top'#2'9'#0#0#11'TActi'
+  +'onList'#9'acComment'#4'left'#3#216#1#3'top'#3#216#0#0#7'TAction'#8'acSearch'
+  +#7'Caption'#6#6'Search'#9'OnExecute'#7#15'acSearchExecute'#8'ShortCut'#3'F@'
+  +#0#0#7'TAction'#5'acNew'#7'Caption'#6#4'&New'#9'OnExecute'#7#12'acNewExecute'
+  +#0#0#7'TAction'#6'acEdit'#7'Caption'#6#5'&Edit'#9'OnExecute'#7#13'acEditExec'
+  +'ute'#0#0#7'TAction'#8'acDelete'#7'Caption'#6#7'&Delete'#9'OnExecute'#7#15'a'
+  +'cDeleteExecute'#0#0#0#0
+]);

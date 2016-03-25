@@ -123,7 +123,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.0.4'
   object sbNewQSO: TStatusBar
     Left = 0
     Height = 21
@@ -1900,6 +1900,12 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem51: TMenuItem
         Caption = '-'
       end
+      object MenuItem93: TMenuItem
+        Action = acCommentToCallsign
+      end
+      object MenuItem92: TMenuItem
+        Caption = '-'
+      end
       object MenuItem78: TMenuItem
         Action = acRefreshTRX
         Caption = 'Refresh TRX/ROT control'
@@ -2777,6 +2783,11 @@ object frmNewQSO: TfrmNewQSO
       Category = 'File'
       Caption = 'Remote mode for wsjt'
       OnExecute = acRemoteWsjtExecute
+    end
+    object acCommentToCallsign: TAction
+      Category = 'File'
+      Caption = 'Comment to callsigns'
+      OnExecute = acCommentToCallsignExecute
     end
   end
   object imgMain: TImageList

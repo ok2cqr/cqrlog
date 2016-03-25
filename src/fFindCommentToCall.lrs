@@ -1,0 +1,17 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TfrmFindCommentToCall','FORMDATA',[
+  'TPF0'#21'TfrmFindCommentToCall'#20'frmFindCommentToCall'#4'Left'#3#201#2#6'H'
+  +'eight'#2'S'#3'Top'#3#145#1#5'Width'#3#14#1#13'ActiveControl'#7#11'edtCallsi'
+  +'gn'#11'BorderStyle'#7#8'bsDialog'#7'Caption'#6#13'Find callsign'#12'ClientH'
+  +'eight'#2'S'#11'ClientWidth'#3#14#1#6'OnShow'#7#8'FormShow'#8'Position'#7#17
+  +'poOwnerFormCenter'#10'LCLVersion'#6#7'1.6.0.4'#0#6'TLabel'#6'Label1'#4'Left'
+  +#2#8#6'Height'#2#17#3'Top'#2#8#5'Width'#2'8'#7'Caption'#6#9'Callsign:'#11'Pa'
+  +'rentColor'#8#0#0#7'TButton'#9'btnSearch'#4'Left'#3#184#0#6'Height'#2#25#3'T'
+  +'op'#2#16#5'Width'#2'K'#7'Caption'#6#7'&Search'#11'ModalResult'#2#1#8'TabOrd'
+  +'er'#2#1#0#0#5'TEdit'#11'edtCallsign'#4'Left'#2#8#6'Height'#2#27#3'Top'#2' '
+  +#5'Width'#3#160#0#8'CharCase'#7#11'ecUppercase'#10'OnKeyPress'#7#19'edtCalls'
+  +'ignKeyPress'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnCancel'#4'Left'#3#184#0#6
+  +'Height'#2#25#3'Top'#2'0'#5'Width'#2'K'#6'Cancel'#9#7'Caption'#6#7'&Cancel'
+  +#11'ModalResult'#2#2#8'TabOrder'#2#2#0#0#0
+]);

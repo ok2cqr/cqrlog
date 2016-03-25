@@ -13,6 +13,7 @@ Legend:
   + new database connection error window with small how to
   + the db error window can open mysql.err
   + "Do NOT upload changes to online logs" option to Rebuild membership added
+  + all comments to callsign can be modified (NewQSO window -> File -> Comment to callsigns
   - CW type window was not sizeable - fixed
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed
