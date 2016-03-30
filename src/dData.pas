@@ -25,7 +25,7 @@ const
   MaxCall   = 100000;
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 11;
-  cDB_COMN_VER = 3;
+  cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -3104,6 +3104,18 @@ begin
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
       end;
+
+      if (old_version < 4) then
+      begin
+        Q1.SQL.Text := 'alter table cqrlog_common.bands add rx_offset numeric(10,4) default 0';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
+        Q1.SQL.Text := 'alter table cqrlog_common.bands add tx_offset numeric(10,4) default 0';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL
+      end;
+
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL
