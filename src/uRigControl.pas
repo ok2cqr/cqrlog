@@ -111,7 +111,7 @@ implementation
 constructor TRigControl.Create;
 begin
   RigCommand := TStringList.Create;
-  fDebugMode   := DebugMode;
+  fDebugMode := False;
   if DebugMode then Writeln('In create');
   fRigCtldHost := 'localhost';
   fRigCtldPort := 4532;

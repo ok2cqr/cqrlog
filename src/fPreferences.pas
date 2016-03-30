@@ -1716,7 +1716,7 @@ begin
 
   frmTRXControl.rbRadio1.Caption := edtRadio1.Text;
   frmTRXControl.rbRadio2.Caption := edtRadio2.Text;
-  frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked);
+  frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
