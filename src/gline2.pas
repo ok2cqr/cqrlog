@@ -405,7 +405,14 @@ begin
                            cos_d(h)*sin_d(latitude)-
                            tan_d(coord.declination)*cos_d(latitude) );{}
 *)
-  la:=round(latitude*512) div 180 and 1023;
+
+//la:=round(latitude*512) div 180 and 1023;
+
+  //workaround because of bug in fpc 3.0.0 and above
+  la:=round(latitude*512) div 180;
+  while(la<0) do la:=la+1024;
+  while(la>1023) do la:=la-1024;
+
   calc_horizontalx:= asintab[round((sintab[la]*sideclin+costab[la]*codeclin*costab[h])*999)];
 
 end;
@@ -417,6 +424,7 @@ end;
 constructor Tgrayline.init(naz_sou:string);
 var e,z:longint;
     a:extended;
+    co : Integer;
     //xptr:^byte;
     
     ImgFormatDescription: TRawImageDescription;
@@ -473,7 +481,10 @@ var e,z:longint;
    begin
      a:=sin(z*pi/512);
      sintab[z]:=a;
-     costab[(z-256) and 1023]:=a;
+     //costab[(z-256) and 1023]:=a;
+     //workaround because of bug in fpc 3.0.0 and above
+     co:=z-256;if co<0 then co:=co+1024;
+     costab[co]:=a
    end;
 
 { fillchar(sqtab1[-901],100,20);}
@@ -636,12 +647,24 @@ begin
   begin
      fillchar(q,obvy*obsi,0);
      pos1:=sun_coordinate(trunc(datum));
-     declin:=round(pos1.declination*512) div 180 and 1023;
+     //declin:=round(pos1.declination*512) div 180 and 1023;
+     //workaround because of bug in fpc 3.0.0 and above
+     declin:=round(pos1.declination*512) div 180;
+     while(declin<0) do declin:=declin+1024;
+     while(declin>1023) do declin:=declin-1024;
+
      sideclin:=sintab[declin];
      codeclin:=costab[declin];
      star_time_u:=star_time(datum);
      ziju:=true;
-     for z:=0 to obsi-1 do harr[z]:=(round(star_time_u-pos1.rektaszension-(datum2+z*obsi2)) shl 9 div 180) and 1023;
+     for z:=0 to obsi-1 do
+     begin
+       //harr[z]:=(round(star_time_u-pos1.rektaszension-(datum2+z*obsi2)) shl 9 div 180) and 1023;
+       //workaround because of bug in fpc 3.0.0 and above
+       harr[z]:=(round(star_time_u-pos1.rektaszension-(datum2+z*obsi2)) *512 div 180);
+       while(harr[z]<0) do harr[z]:=harr[z]+1024;
+       while(harr[z]>1023) do harr[z]:=harr[z]-1024
+     end;
 //(round(star_time_u-coord.rektaszension-(datum2+z*obsi2)) shl 9 div 180) and 1023;
      
      vere:=0;
@@ -811,7 +834,6 @@ var
                    inc(xptr);
                    //xptr^:=round(longint(xptr^)*ze); // alfa
                    inc(xptr);
-
 {
                    ba:=imcache.colors[z,x];
                    ba.red:=round(longint(ba.red)*ze);
