@@ -2,7 +2,7 @@ object frmChangeFreq: TfrmChangeFreq
   Left = 468
   Height = 185
   Top = 316
-  Width = 442
+  Width = 557
   HorzScrollBar.Page = 324
   VertScrollBar.Page = 184
   ActiveControl = edtBegin
@@ -10,7 +10,7 @@ object frmChangeFreq: TfrmChangeFreq
   BorderStyle = bsDialog
   Caption = 'Change frequency'
   ClientHeight = 185
-  ClientWidth = 442
+  ClientWidth = 557
   Position = poOwnerFormCenter
   LCLVersion = '1.6.0.4'
   object Label1: TLabel
@@ -22,7 +22,7 @@ object frmChangeFreq: TfrmChangeFreq
     ParentColor = False
   end
   object Label2: TLabel
-    Left = 137
+    Left = 169
     Height = 17
     Top = 16
     Width = 25
@@ -38,7 +38,7 @@ object frmChangeFreq: TfrmChangeFreq
     ParentColor = False
   end
   object Label4: TLabel
-    Left = 142
+    Left = 174
     Height = 17
     Top = 72
     Width = 34
@@ -46,7 +46,7 @@ object frmChangeFreq: TfrmChangeFreq
     ParentColor = False
   end
   object Label5: TLabel
-    Left = 254
+    Left = 328
     Height = 17
     Top = 72
     Width = 25
@@ -62,7 +62,7 @@ object frmChangeFreq: TfrmChangeFreq
     TabOrder = 0
   end
   object edtEnd: TEdit
-    Left = 136
+    Left = 168
     Height = 27
     Top = 33
     Width = 100
@@ -78,7 +78,7 @@ object frmChangeFreq: TfrmChangeFreq
     TabOrder = 2
   end
   object edtRTTY: TEdit
-    Left = 136
+    Left = 168
     Height = 27
     Top = 89
     Width = 100
@@ -86,7 +86,7 @@ object frmChangeFreq: TfrmChangeFreq
     TabOrder = 3
   end
   object edtSSB: TEdit
-    Left = 248
+    Left = 328
     Height = 27
     Top = 89
     Width = 100
@@ -94,9 +94,9 @@ object frmChangeFreq: TfrmChangeFreq
     TabOrder = 4
   end
   object btnOK: TButton
-    Left = 360
+    Left = 472
     Height = 25
-    Top = 16
+    Top = 8
     Width = 75
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
@@ -104,9 +104,9 @@ object frmChangeFreq: TfrmChangeFreq
     TabOrder = 7
   end
   object btnCancel: TButton
-    Left = 360
+    Left = 472
     Height = 25
-    Top = 56
+    Top = 48
     Width = 75
     BorderSpacing.InnerBorder = 4
     Cancel = True
@@ -132,7 +132,7 @@ object frmChangeFreq: TfrmChangeFreq
     ParentColor = False
   end
   object edtTXOffset: TEdit
-    Left = 136
+    Left = 168
     Height = 27
     Top = 145
     Width = 100
@@ -141,11 +141,67 @@ object frmChangeFreq: TfrmChangeFreq
     Text = '0'
   end
   object Label7: TLabel
-    Left = 136
+    Left = 168
     Height = 17
     Top = 129
     Width = 61
     Caption = 'TX offset'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 115
+    Height = 17
+    Top = 39
+    Width = 30
+    Caption = 'MHz'
+    ParentColor = False
+  end
+  object Label9: TLabel
+    Left = 115
+    Height = 17
+    Top = 96
+    Width = 30
+    Caption = 'MHz'
+    ParentColor = False
+  end
+  object Label10: TLabel
+    Left = 115
+    Height = 17
+    Top = 151
+    Width = 30
+    Caption = 'MHz'
+    ParentColor = False
+  end
+  object Label11: TLabel
+    Left = 272
+    Height = 17
+    Top = 39
+    Width = 30
+    Caption = 'MHz'
+    ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 272
+    Height = 17
+    Top = 96
+    Width = 30
+    Caption = 'MHz'
+    ParentColor = False
+  end
+  object Label13: TLabel
+    Left = 272
+    Height = 17
+    Top = 151
+    Width = 30
+    Caption = 'MHz'
+    ParentColor = False
+  end
+  object Label14: TLabel
+    Left = 432
+    Height = 17
+    Top = 96
+    Width = 30
+    Caption = 'MHz'
     ParentColor = False
   end
 end
