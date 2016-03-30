@@ -333,6 +333,7 @@ type
     procedure OpenFreqMemories(mode : String);
     procedure CheckApparmorConfig;
     procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
+    procedure GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
   end;
 
 var
@@ -4364,6 +4365,41 @@ begin
   finally
     if trBands.Active then
       trBands.Commit
+  end
+end;
+
+procedure TdmData.GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
+const
+  C_SEL = 'select rx_offset, tx_offset from cqrlog_common.bands where b_begin <= :b_begin '+
+          'and b_end >= :b_end';
+begin
+  RXOffset := 0;
+  TXOffset := 0;
+
+  qBands.Close;
+  if trBands.Active then
+    trBands.Rollback;
+
+  trBands.StartTransaction;
+  try try
+    qBands.SQL.Text := C_SEL;
+    qBands.Prepare;
+    qBands.Params[0].AsCurrency := Freq;
+    qBands.Params[1].AsCurrency := Freq;
+    qBands.Open;
+
+    if qBands.RecordCount > 0 then
+    begin
+      RXOffset := qBands.Fields[0].AsCurrency;
+      TXOffset := qBands.Fields[1].AsCurrency
+    end
+  except
+    on E : Exception do
+      Writeln(E.Message)
+  end
+  finally
+    qBands.Close;
+    trBands.Rollback
   end
 end;
 

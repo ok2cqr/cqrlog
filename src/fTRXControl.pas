@@ -931,6 +931,8 @@ end;
 procedure TfrmTRXControl.SetFreqModeBandWidth(freq : Double; mode : String; BandWidth : Integer);
 var
   rmode : TRigMode;
+  RXOffset : Currency;
+  TXOffset : Currency;
 begin
   if mode = 'SSB' then
   begin
@@ -942,6 +944,10 @@ begin
 
   if Assigned(radio) then
   begin
+    dmData.GetRXTXOffset(freq/1000,RXOffset,TXOffset);
+    radio.RXOffset := RXOffset;
+    radio.TXOffset := TXOffset;
+
     radio.SetFreqKHz(freq);
     if AutoMode then
     begin
