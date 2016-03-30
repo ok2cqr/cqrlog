@@ -16,7 +16,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2095"/>
+      <BuildNr Value="2096"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -203,12 +203,15 @@
         <Filename Value="fFreq.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmFreq"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit18>
       <Unit19>
         <Filename Value="fChangeFreq.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangeFreq"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit19>
       <Unit20>
         <Filename Value="fAdifImport.pas"/>
@@ -665,18 +668,21 @@
         <Filename Value="fCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCommentToCall"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit90>
       <Unit91>
         <Filename Value="fNewCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewCommentToCall"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit91>
       <Unit92>
         <Filename Value="fFindCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmFindCommentToCall"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit92>
     </Units>

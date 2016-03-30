@@ -332,6 +332,7 @@ type
     procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
     procedure OpenFreqMemories(mode : String);
     procedure CheckApparmorConfig;
+    procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
   end;
 
 var
@@ -4329,6 +4330,41 @@ begin
              'first.';
   if Application.MessageBox(PChar(MsgText),'Information ...',mb_OKCancel+mb_IconInformation) = idCancel then
     Application.Terminate
+end;
+
+procedure TdmData.SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
+const
+  C_UPD = 'update cqrlog_common.bands set b_begin = :b_begin, b_end = :b_end, cw = :cw, rtty = :rtty, '+
+          'ssb = :ssb, rx_offset = :rx_offset, tx_offset = :tx_offset where band = :band';
+begin
+  qBands.Close;
+  if trBands.Active then
+    trBands.Rollback;
+
+  trBands.StartTransaction;
+  try try
+    qBands.SQL.Text := C_UPD;
+    qBands.Prepare;
+    qBands.Params[0].AsCurrency := BandBegin;
+    qBands.Params[1].AsCurrency := BandEnd;
+    qBands.Params[2].AsCurrency := BandCW;
+    qBands.Params[3].AsCurrency := BandRTTY;
+    qBands.Params[4].AsCurrency := BandSSB;
+    qBands.Params[5].AsCurrency := RXOffset;
+    qBands.Params[6].AsCurrency := TXOffset;
+    qBands.Params[7].AsString   := band;
+    qBands.ExecSQL
+  except
+    on E : Exception do
+    begin
+      Writeln(E.Message);
+      trBands.Rollback
+    end
+  end
+  finally
+    if trBands.Active then
+      trBands.Commit
+  end
 end;
 
 initialization

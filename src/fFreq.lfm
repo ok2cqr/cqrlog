@@ -7,12 +7,12 @@ object frmFreq: TfrmFreq
   VertScrollBar.Page = 331
   ActiveControl = dbgrdFreq
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'Frequencies'
   ClientHeight = 385
   ClientWidth = 561
+  OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '0.9.30'
+  LCLVersion = '1.6.0.4'
   object Panel1: TPanel
     Left = 0
     Height = 45
@@ -24,22 +24,24 @@ object frmFreq: TfrmFreq
     ClientWidth = 561
     TabOrder = 0
     object btnChange: TButton
-      Left = 18
+      Left = 376
       Height = 25
       Top = 8
       Width = 75
+      Anchors = [akRight, akBottom]
       BorderSpacing.InnerBorder = 4
-      Caption = 'Change'
+      Caption = 'Modify'
       OnClick = btnChangeClick
       TabOrder = 0
     end
     object btnCancel: TButton
-      Left = 360
+      Left = 472
       Height = 25
       Top = 8
       Width = 75
+      Anchors = [akRight, akBottom]
       BorderSpacing.InnerBorder = 4
-      Caption = 'Cancel'
+      Caption = 'Close'
       ModalResult = 2
       TabOrder = 1
     end
@@ -56,9 +58,12 @@ object frmFreq: TfrmFreq
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
     TabOrder = 1
     TitleStyle = tsNative
+    OnColumnSized = dbgrdFreqColumnSized
+    OnDblClick = dbgrdFreqDblClick
   end
-  object dsrFreq: TDatasource
+  object dsrFreq: TDataSource
+    DataSet = dmData.qBands
     left = 130
     top = 57
   end
-end
+end

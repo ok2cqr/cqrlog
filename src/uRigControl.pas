@@ -40,6 +40,8 @@ type TRigControl = class
     RigCommand   : TStringList;
     fRigSendCWR  : Boolean;
     BadRcvd      : Integer;
+    fRXOffset    : Double;
+    fTXOffset    : Double;
 
     function  RigConnected   : Boolean;
     function  StartRigctld   : Boolean;
@@ -78,6 +80,11 @@ type TRigControl = class
     property LastError   : String  read fLastError;
     //last error during operation
 
+    //RX offset for transvertor in MHz
+    property RXOffset : Double read fRXOffset write fRXOffset;
+
+    //TX offset for transvertor in MHz
+    property TXOffset : Double read fTXOffset write fTXOffset;
 
     function  GetCurrVFO  : TVFO;
     function  GetModePass : TRigMode;
@@ -220,7 +227,7 @@ end;
 
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
-  RigCommand.Add('F '+FloatToStr(freq*1000))
+  RigCommand.Add('F '+FloatToStr(freq*1000-TXOffset*1000000))
 end;
 
 procedure TRigControl.ClearRit;
@@ -243,19 +250,19 @@ begin
   result := fMode.mode
 end;
 
-function TRigControl.GetFreqHz   : Double;
+function TRigControl.GetFreqHz : Double;
 begin
-  result := fFreq
+  result := fFreq + fRXOffset*1000000;
 end;
 
-function TRigControl.GetFreqKHz  : Double;
+function TRigControl.GetFreqKHz : Double;
 begin
-  result := fFreq / 1000
+  result := (fFreq + fRXOffset*1000000) / 1000
 end;
 
-function TRigControl.GetFreqMHz  : Double;
+function TRigControl.GetFreqMHz : Double;
 begin
-  result := fFreq / 1000000
+  result := (fFreq + fRXOffset*1000000) / 1000000
 end;
 
 function TRigControl.GetModePass(vfo : TVFO) : TRigMode;

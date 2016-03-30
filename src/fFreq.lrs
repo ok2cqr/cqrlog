@@ -1,21 +1,26 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TfrmFreq','FORMDATA',[
   'TPF0'#8'TfrmFreq'#7'frmFreq'#4'Left'#3#2#2#6'Height'#3#129#1#3'Top'#3'9'#1#5
   +'Width'#3'1'#2#18'HorzScrollBar.Page'#3#192#1#18'VertScrollBar.Page'#3'K'#1
-  +#13'ActiveControl'#7#9'dbgrdFreq'#11'BorderIcons'#11#12'biSystemMenu'#0#11'B'
-  +'orderStyle'#7#8'bsDialog'#7'Caption'#6#11'Frequencies'#12'ClientHeight'#3
-  +#129#1#11'ClientWidth'#3'1'#2#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#6'0.9'
-  +'.30'#0#6'TPanel'#6'Panel1'#4'Left'#2#0#6'Height'#2'-'#3'Top'#3'T'#1#5'Width'
-  +#3'1'#2#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2
-  +'-'#11'ClientWidth'#3'1'#2#8'TabOrder'#2#0#0#7'TButton'#9'btnChange'#4'Left'
-  +#2#18#6'Height'#2#25#3'Top'#2#8#5'Width'#2'K'#25'BorderSpacing.InnerBorder'#2
-  +#4#7'Caption'#6#6'Change'#7'OnClick'#7#14'btnChangeClick'#8'TabOrder'#2#0#0#0
-  +#7'TButton'#9'btnCancel'#4'Left'#3'h'#1#6'Height'#2#25#3'Top'#2#8#5'Width'#2
-  +'K'#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#6'Cancel'#11'ModalResult'
-  +#2#2#8'TabOrder'#2#1#0#0#0#7'TDBGrid'#9'dbgrdFreq'#4'Left'#2#0#6'Height'#3'T'
-  +#1#3'Top'#2#0#5'Width'#3'1'#2#5'Align'#7#8'alClient'#5'Color'#7#8'clWindow'#7
+  +#13'ActiveControl'#7#9'dbgrdFreq'#11'BorderIcons'#11#12'biSystemMenu'#0#7'Ca'
+  +'ption'#6#11'Frequencies'#12'ClientHeight'#3#129#1#11'ClientWidth'#3'1'#2#7
+  +'OnClose'#7#9'FormClose'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.6.0.4'
+  +#0#6'TPanel'#6'Panel1'#4'Left'#2#0#6'Height'#2'-'#3'Top'#3'T'#1#5'Width'#3'1'
+  +#2#5'Align'#7#8'alBottom'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2'-'#11
+  +'ClientWidth'#3'1'#2#8'TabOrder'#2#0#0#7'TButton'#9'btnChange'#4'Left'#3'x'#1
+  +#6'Height'#2#25#3'Top'#2#8#5'Width'#2'K'#7'Anchors'#11#7'akRight'#8'akBottom'
+  +#0#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#6'Modify'#7'OnClick'#7#14
+  +'btnChangeClick'#8'TabOrder'#2#0#0#0#7'TButton'#9'btnCancel'#4'Left'#3#216#1
+  +#6'Height'#2#25#3'Top'#2#8#5'Width'#2'K'#7'Anchors'#11#7'akRight'#8'akBottom'
+  +#0#25'BorderSpacing.InnerBorder'#2#4#7'Caption'#6#5'Close'#11'ModalResult'#2
+  +#2#8'TabOrder'#2#1#0#0#0#7'TDBGrid'#9'dbgrdFreq'#4'Left'#2#0#6'Height'#3'T'#1
+  +#3'Top'#2#0#5'Width'#3'1'#2#5'Align'#7#8'alClient'#5'Color'#7#8'clWindow'#7
   +'Columns'#14#0#10'DataSource'#7#7'dsrFreq'#7'Options'#11#8'dgTitles'#11'dgIn'
   +'dicator'#14'dgColumnResize'#12'dgColumnMove'#10'dgColLines'#10'dgRowLines'#6
   +'dgTabs'#11'dgRowSelect'#21'dgAlwaysShowSelection'#15'dgConfirmDelete'#14'dg'
-  +'CancelOnExit'#0#8'TabOrder'#2#1#10'TitleStyle'#7#8'tsNative'#0#0#11'TDataso'
-  +'urce'#7'dsrFreq'#4'left'#3#130#0#3'top'#2'9'#0#0#0
+  +'CancelOnExit'#0#8'TabOrder'#2#1#10'TitleStyle'#7#8'tsNative'#13'OnColumnSiz'
+  +'ed'#7#20'dbgrdFreqColumnSized'#10'OnDblClick'#7#17'dbgrdFreqDblClick'#0#0#11
+  +'TDataSource'#7'dsrFreq'#7'DataSet'#7#13'dmData.qBands'#4'left'#3#130#0#3'to'
+  +'p'#2'9'#0#0#0
 ]);

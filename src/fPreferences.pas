@@ -1737,12 +1737,12 @@ end;
 
 procedure TfrmPreferences.btnFrequenciesClick(Sender: TObject);
 begin
-  with TfrmFreq.Create(self) do
-    try
-      ShowModal;
-    finally
-      Free
-    end;
+  frmFreq := TfrmFreq.Create(frmPreferences);
+  try
+    frmFreq.ShowModal
+  finally
+    frmFreq.Free
+  end
 end;
 
 procedure TfrmPreferences.FormCloseQuery(Sender: TObject; var CanClose: boolean);
