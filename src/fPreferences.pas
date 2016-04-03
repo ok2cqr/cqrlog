@@ -1683,6 +1683,7 @@ begin
     frmTRXControl.InicializeRig;
 
   frmTRXControl.LoadButtonCaptions;
+  frmTRXControl.LoadBandButtons;
 
   frmNewQSO.ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   frmNewQSO.ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);

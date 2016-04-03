@@ -190,11 +190,11 @@ begin
   edt2fm.Text   := cqrini.ReadString('DefFreq','2fm','145300');
 
   edt70btn.Text  := cqrini.ReadString('DefFreq','70btn','70cm');
-  edt70cw.Text   := cqrini.ReadString('DefFreq','70cw','3525');
-  edt70ssb.Text  := cqrini.ReadString('DefFreq','70ssb','3525');
-  edt70rtty.Text := cqrini.ReadString('DefFreq','70rtty','3525');
-  edt70am.Text   := cqrini.ReadString('DefFreq','70am','3525');
-  edt70fm.Text   := cqrini.ReadString('DefFreq','70fm','3525')
+  edt70cw.Text   := cqrini.ReadString('DefFreq','70cw','430000');
+  edt70ssb.Text  := cqrini.ReadString('DefFreq','70ssb','430000');
+  edt70rtty.Text := cqrini.ReadString('DefFreq','70rtty','430000');
+  edt70am.Text   := cqrini.ReadString('DefFreq','70am','430000');
+  edt70fm.Text   := cqrini.ReadString('DefFreq','70fm','430000')
 end;
 
 procedure TfrmDefaultFreq.btnOKClick(Sender: TObject);

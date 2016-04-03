@@ -97,6 +97,20 @@ type
   private
     radio : TRigControl;
     old_mode : String;
+
+    btn160MBand : String;
+    btn80MBand  : String;
+    btn40MBand  : String;
+    btn30MBand  : String;
+    btn20MBand  : String;
+    btn17MBand  : String;
+    btn15MBand  : String;
+    btn12MBand  : String;
+    btn10MBand  : String;
+    btn6MBand   : String;
+    btn2MBand   : String;
+    btn70CMBand : String;
+
     function  GetActualMode : String;
     function  GetModeNumber(mode : String) : Cardinal;
     procedure SetMode(mode : String;bandwidth :Integer);
@@ -138,6 +152,7 @@ type
     procedure ClearRIT;
     procedure LoadButtonCaptions;
     procedure SetDebugMode(DebugMode : Boolean);
+    procedure LoadBandButtons;
   end;
 
 {
@@ -329,29 +344,29 @@ begin
 
   if (b='') then
     b := dmUtils.GetBandFromFreq(lblFreq.Caption);
-  if b = '160M' then
+  if b = btn160MBand then
     btn160m.Font.Color := clRed
-  else if b = '80M' then
+  else if b = btn80MBand then
     btn80m.Font.Color  := clRed
-  else if b = '40M' then
+  else if b = btn40MBand then
     btn40m.Font.Color  := clRed
-  else if b = '30M' then
+  else if b = btn30MBand then
     btn30m.Font.Color  := clRed
-  else if b = '20M' then
+  else if b = btn20MBand then
     btn20m.Font.Color  := clRed
-  else if b = '17M' then
+  else if b = btn17MBand then
     btn17m.Font.Color  := clRed
-  else if b = '15M' then
+  else if b = btn15MBand then
     btn15m.Font.Color  := clRed
-  else if b = '12M' then
+  else if b = btn12MBand then
     btn12m.Font.Color  := clRed
-  else if b = '10M' then
+  else if b = btn10MBand then
     btn10m.Font.Color  := clRed
-  else if b = '6M' then
+  else if b = btn6MBand then
     btn6m.Font.Color   := clRed
-  else if b = '2M' then
+  else if b = btn2MBand then
     btn2m.Font.Color   := clRed
-  else if b = '70CM' then
+  else if b = btn70CMBand then
     btn70cm.Font.Color := clRed;
   frmGrayline.band := b;
   frmBandMap.CurrentBand := b;
@@ -404,6 +419,7 @@ end;
 procedure TfrmTRXControl.FormShow(Sender: TObject);
 begin
   LoadButtonCaptions;
+  LoadBandButtons;
   dmUtils.LoadWindowPos(frmTRXControl);
   rbRadio1.Caption := cqrini.ReadString('TRX1','Desc','Radio 1');
   rbRadio2.Caption := cqrini.ReadString('TRX2','Desc','Radio 2');
@@ -1153,6 +1169,22 @@ begin
     Result := radio.GetRawMode
   else
     Result := ''
+end;
+
+procedure TfrmTRXControl.LoadBandButtons;
+begin
+  btn160MBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','160cw',1830)/1000));
+  btn80MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','80cw',3525)/1000));
+  btn40MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','40cw',7015)/1000));
+  btn30MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','30cw',10110)/1000));
+  btn20MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','20cw',14025)/1000));
+  btn17MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','17cw',18080)/1000));
+  btn15MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','15cw',21025)/1000));
+  btn12MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','12cw',24895)/1000));
+  btn10MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','10cw',28025)/1000));
+  btn6MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','6cw',50090)/1000));
+  btn2MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','2cw',144050)/1000));
+  btn70CMBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','70cw',430000)/1000))
 end;
 
 initialization

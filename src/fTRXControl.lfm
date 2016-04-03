@@ -152,7 +152,7 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.0.4'
   object GroupBox2: TGroupBox
     Left = 256
     Height = 233

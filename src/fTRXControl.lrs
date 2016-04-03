@@ -200,7 +200,7 @@ LazarusResources.Add('TfrmTRXControl','FORMDATA',[
   +#0#0#0#0#0#0#0#0#0#10'KeyPreview'#9#4'Menu'#7#6'mnuMem'#7'OnClose'#7#9'FormC'
   +'lose'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#9
   +'OnDestroy'#7#11'FormDestroy'#9'OnKeyDown'#7#11'FormKeyDown'#7'OnKeyUp'#7#9
-  +'FormKeyUp'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.4.4.0'#0#9'TGroupBo'
+  +'FormKeyUp'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.6.0.4'#0#9'TGroupBo'
   +'x'#9'GroupBox2'#4'Left'#3#0#1#6'Height'#3#233#0#3'Top'#2#0#5'Width'#2'S'#5
   +'Align'#7#7'alRight'#7'Caption'#6#6' Mode '#12'ClientHeight'#3#214#0#11'Clie'
   +'ntWidth'#2'O'#8'TabOrder'#2#0#0#7'TButton'#5'btnCW'#4'Left'#2#14#6'Height'#2
