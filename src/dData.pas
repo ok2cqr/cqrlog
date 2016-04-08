@@ -3488,6 +3488,8 @@ end;
 procedure TdmData.PrepareMysqlConfigFile;
 var
   f : TextFile;
+  l : TStringList;
+  i : Integer;
 begin
   if not FileExistsUTF8(fHomeDir+'database'+DirectorySeparator+'mysql.cnf') then
   begin
@@ -3495,6 +3497,29 @@ begin
     Rewrite(f);
     Writeln(f,scMySQLConfig.Script.Text);
     CloseFile(f)
+  end
+  else begin
+    //innodb_additional_mem_pool_size is deprecated in MySQL >= 5.6.3
+    //and MySQL in Ubuntu 16.04 doesn't start with this parameter
+    //in mysql.cnf
+    //it seems I can remove it in all versions of MySQL used by CQRLOG
+
+    l := TStringList.Create;
+    try try
+      l.LoadFromFile(fHomeDir+'database'+DirectorySeparator+'mysql.cnf');
+      i := l.IndexOf('innodb_additional_mem_pool_size=1M');
+      if i > -1 then
+      begin
+        l.Strings[i] := '#innodb_additional_mem_pool_size=1M';
+        l.SaveToFile(fHomeDir+'database'+DirectorySeparator+'mysql.cnf')
+      end
+    except
+      on E : Exception do
+        Writeln(E.Message)
+    end
+    finally
+      FreeAndNil(l);
+    end
   end
 end;
 

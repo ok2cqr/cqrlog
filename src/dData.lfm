@@ -831,7 +831,7 @@ object dmData: TdmData
       ''
       '# memory pool InnoDB uses to store data dictionary information and other internal data structures (default:1M)'
       '# Deprecated in MySQL >= 5.6.3'
-      'innodb_additional_mem_pool_size=1M'
+      '#innodb_additional_mem_pool_size=1M'
       ''
       '# memory buffer InnoDB uses to cache data and indexes of its tables (default:128M)'
       '# Larger values means less I/O'
