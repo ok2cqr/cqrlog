@@ -3536,7 +3536,9 @@ begin
                               ' --datadir='+fHomeDir+'database/'+
                               ' --socket='+fHomeDir+'database/sock'+
                               ' --port=64000';
+  if fDebugLevel >= 1 then Writeln(MySQLProcess.CommandLine);
   MySQLProcess.Execute;
+
   if MainCon.Connected then
     MainCon.Connected := False;
 
