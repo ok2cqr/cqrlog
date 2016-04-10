@@ -5,20 +5,22 @@ LazarusResources.Add('TdmDXCluster','FORMDATA',[
   +'OnDestroy'#7#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3'k'#1#16
   +'HorizontalOffset'#3#182#2#14'VerticalOffset'#3#127#1#5'Width'#3#144#1#0#9'T'
   +'SQLQuery'#6'qBands'#9'FieldDefs'#14#0#10'BeforeOpen'#7#16'qBandsBeforeOpen'
-  +#11'Transaction'#7#7'trBands'#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#144#0#3
-  +'top'#2'<'#0#0#15'TSQLTransaction'#7'trBands'#6'Active'#8#6'Action'#7#6'caNo'
-  +'ne'#4'left'#3#144#0#3'top'#2'x'#0#0#15'TSQLTransaction'#4'trQ1'#6'Active'#8
-  +#6'Action'#7#6'caNone'#4'left'#2#24#3'top'#2'x'#0#0#9'TSQLQuery'#2'Q1'#9'Fie'
-  +'ldDefs'#14#0#10'BeforeOpen'#7#12'Q1BeforeOpen'#11'Transaction'#7#4'trQ1'#6
-  +'Params'#14#0#8'ParseSQL'#8#4'left'#2#25#3'top'#2'<'#0#0#15'TSQLTransaction'
-  +#3'trQ'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#2'P'#3'top'#2'x'#0#0#9'TSQ'
-  +'LQuery'#1'Q'#9'FieldDefs'#14#0#10'BeforeOpen'#7#11'QBeforeOpen'#11'Transact'
-  +'ion'#7#3'trQ'#6'Params'#14#0#8'ParseSQL'#8#4'left'#2'R'#3'top'#2'<'#0#0#15
-  +'TSQLTransaction'#9'trDXCCRef'#6'Active'#8#6'Action'#7#6'caNone'#4'left'#3
-  +#216#0#3'top'#2'x'#0#0#9'TSQLQuery'#8'qDXCCRef'#9'FieldDefs'#14#0#10'BeforeO'
-  +'pen'#7#18'qDXCCRefBeforeOpen'#11'Transaction'#7#9'trDXCCRef'#6'Params'#14#0
-  +#8'ParseSQL'#8#4'left'#3#216#0#3'top'#2'<'#0#0#15'TSQLTransaction'#11'trCall'
-  +'Alert'#6'Active'#8#4'left'#2#24#3'top'#3#236#0#0#0#9'TSQLQuery'#10'qCallAle'
-  +'rt'#9'FieldDefs'#14#0#11'Transaction'#7#11'trCallAlert'#6'Params'#14#0#4'le'
-  +'ft'#2#24#3'top'#3#188#0#0#0#0
+  +#11'Transaction'#7#7'trBands'#7'Options'#11#0#6'Params'#14#0#8'ParseSQL'#8#4
+  +'left'#3#144#0#3'top'#2'<'#0#0#15'TSQLTransaction'#7'trBands'#6'Active'#8#6
+  +'Action'#7#6'caNone'#7'Options'#11#0#4'left'#3#144#0#3'top'#2'x'#0#0#15'TSQL'
+  +'Transaction'#4'trQ1'#6'Active'#8#6'Action'#7#6'caNone'#7'Options'#11#0#4'le'
+  +'ft'#2#24#3'top'#2'x'#0#0#9'TSQLQuery'#2'Q1'#9'FieldDefs'#14#0#10'BeforeOpen'
+  +#7#12'Q1BeforeOpen'#11'Transaction'#7#4'trQ1'#7'Options'#11#0#6'Params'#14#0
+  +#8'ParseSQL'#8#4'left'#2#25#3'top'#2'<'#0#0#15'TSQLTransaction'#3'trQ'#6'Act'
+  +'ive'#8#6'Action'#7#6'caNone'#7'Options'#11#0#4'left'#2'P'#3'top'#2'x'#0#0#9
+  +'TSQLQuery'#1'Q'#9'FieldDefs'#14#0#10'BeforeOpen'#7#11'QBeforeOpen'#11'Trans'
+  +'action'#7#3'trQ'#7'Options'#11#0#6'Params'#14#0#8'ParseSQL'#8#4'left'#2'R'#3
+  +'top'#2'<'#0#0#15'TSQLTransaction'#9'trDXCCRef'#6'Active'#8#6'Action'#7#6'ca'
+  +'None'#7'Options'#11#0#4'left'#3#216#0#3'top'#2'x'#0#0#9'TSQLQuery'#8'qDXCCR'
+  +'ef'#9'FieldDefs'#14#0#10'BeforeOpen'#7#18'qDXCCRefBeforeOpen'#11'Transactio'
+  +'n'#7#9'trDXCCRef'#7'Options'#11#0#6'Params'#14#0#8'ParseSQL'#8#4'left'#3#216
+  +#0#3'top'#2'<'#0#0#15'TSQLTransaction'#11'trCallAlert'#6'Active'#8#7'Options'
+  +#11#0#4'left'#2#24#3'top'#3#236#0#0#0#9'TSQLQuery'#10'qCallAlert'#9'FieldDef'
+  +'s'#14#0#11'Transaction'#7#11'trCallAlert'#7'Options'#11#0#6'Params'#14#0#4
+  +'left'#2#24#3'top'#3#188#0#0#0#0
 ]);

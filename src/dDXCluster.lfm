@@ -10,6 +10,7 @@ object dmDXCluster: TdmDXCluster
     FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
     Transaction = trBands
+    Options = []
     Params = <>
     ParseSQL = False
     left = 144
@@ -18,12 +19,14 @@ object dmDXCluster: TdmDXCluster
   object trBands: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 144
     top = 120
   end
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 24
     top = 120
   end
@@ -31,6 +34,7 @@ object dmDXCluster: TdmDXCluster
     FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
+    Options = []
     Params = <>
     ParseSQL = False
     left = 25
@@ -39,6 +43,7 @@ object dmDXCluster: TdmDXCluster
   object trQ: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 80
     top = 120
   end
@@ -46,6 +51,7 @@ object dmDXCluster: TdmDXCluster
     FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
+    Options = []
     Params = <>
     ParseSQL = False
     left = 82
@@ -54,6 +60,7 @@ object dmDXCluster: TdmDXCluster
   object trDXCCRef: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 216
     top = 120
   end
@@ -61,6 +68,7 @@ object dmDXCluster: TdmDXCluster
     FieldDefs = <>
     BeforeOpen = qDXCCRefBeforeOpen
     Transaction = trDXCCRef
+    Options = []
     Params = <>
     ParseSQL = False
     left = 216
@@ -68,12 +76,14 @@ object dmDXCluster: TdmDXCluster
   end
   object trCallAlert: TSQLTransaction
     Active = False
+    Options = []
     left = 24
     top = 236
   end
   object qCallAlert: TSQLQuery
     FieldDefs = <>
     Transaction = trCallAlert
+    Options = []
     Params = <>
     left = 24
     top = 188

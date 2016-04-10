@@ -19,7 +19,8 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, DB, FileUtil,
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
-  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils;
+  mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
+  mysql57dyn, mysql57conn;
 
 const
   MaxCall   = 100000;
@@ -545,7 +546,7 @@ begin
     (RbnMonCon as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
-    if fMySQLVersion = 5.5 then
+    if fMySQLVersion < 5.6 then
     begin
       (MainCon as TMySQL55Connection).HostName := host;
       (MainCon as TMySQL55Connection).Port     := StrToInt(port);
@@ -557,14 +558,27 @@ begin
       (RbnMonCon as TMySQL55Connection).Port     := StrToInt(port)
     end
     else begin
-      (MainCon as TMySQL56Connection).HostName := host;
-      (MainCon as TMySQL56Connection).Port     := StrToInt(port);
+      if fMySQLVersion < 5.7 then
+      begin
+        (MainCon as TMySQL56Connection).HostName := host;
+        (MainCon as TMySQL56Connection).Port     := StrToInt(port);
 
-      (BandMapCon as TMySQL56Connection).HostName := host;
-      (BandMapCon as TMySQL56Connection).Port     := StrToInt(port);
+        (BandMapCon as TMySQL56Connection).HostName := host;
+        (BandMapCon as TMySQL56Connection).Port     := StrToInt(port);
 
-      (RbnMonCon as TMySQL56Connection).HostName := host;
-      (RbnMonCon as TMySQL56Connection).Port     := StrToInt(port)
+        (RbnMonCon as TMySQL56Connection).HostName := host;
+        (RbnMonCon as TMySQL56Connection).Port     := StrToInt(port)
+      end
+      else begin
+        (MainCon as TMySQL57Connection).HostName := host;
+        (MainCon as TMySQL57Connection).Port     := StrToInt(port);
+
+        (BandMapCon as TMySQL57Connection).HostName := host;
+        (BandMapCon as TMySQL57Connection).Port     := StrToInt(port);
+
+        (RbnMonCon as TMySQL57Connection).HostName := host;
+        (RbnMonCon as TMySQL57Connection).Port     := StrToInt(port)
+      end
     end
   end;
   MainCon.UserName     := user;
@@ -585,14 +599,21 @@ begin
     (dmDXCluster.dbDXC as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
-    if (fMySQLVersion = 5.5) then
+    if (fMySQLVersion < 5.6) then
     begin
       (dmDXCluster.dbDXC as TMySQL55Connection).HostName := host;
       (dmDXCluster.dbDXC as TMySQL55Connection).Port     := StrToInt(port)
     end
     else begin
-      (dmDXCluster.dbDXC as TMySQL56Connection).HostName := host;
-      (dmDXCluster.dbDXC as TMySQL56Connection).Port     := StrToInt(port)
+      if (fMySQLVersion < 5.7) then
+      begin
+        (dmDXCluster.dbDXC as TMySQL56Connection).HostName := host;
+        (dmDXCluster.dbDXC as TMySQL56Connection).Port     := StrToInt(port)
+      end
+      else begin
+        (dmDXCluster.dbDXC as TMySQL57Connection).HostName := host;
+        (dmDXCluster.dbDXC as TMySQL57Connection).Port     := StrToInt(port)
+      end
     end
   end;
   dmDXCluster.dbDXC.UserName     := user;
@@ -605,14 +626,21 @@ begin
     (dmLogUpload.LogUploadCon as TMySQL51Connection).Port     := StrToInt(port)
   end
   else begin
-    if (fMySQLVersion = 5.5) then
+    if (fMySQLVersion < 5.6) then
     begin
       (dmLogUpload.LogUploadCon as TMySQL55Connection).HostName := host;
       (dmLogUpload.LogUploadCon as TMySQL55Connection).Port     := StrToInt(port)
     end
     else begin
-      (dmLogUpload.LogUploadCon as TMySQL56Connection).HostName := host;
-      (dmLogUpload.LogUploadCon as TMySQL56Connection).Port     := StrToInt(port)
+      if (fMySQLVersion < 5.7) then
+      begin
+        (dmLogUpload.LogUploadCon as TMySQL56Connection).HostName := host;
+        (dmLogUpload.LogUploadCon as TMySQL56Connection).Port     := StrToInt(port)
+      end
+      else begin
+        (dmLogUpload.LogUploadCon as TMySQL57Connection).HostName := host;
+        (dmLogUpload.LogUploadCon as TMySQL57Connection).Port     := StrToInt(port)
+      end
     end
   end;
 
@@ -1240,9 +1268,17 @@ begin
     RbnMonCon  := TMySQL55Connection.Create(self)
   end
   else begin
-    MainCon    := TMySQL56Connection.Create(self);
-    BandMapCon := TMySQL56Connection.Create(self);
-    RbnMonCon  := TMySQL56Connection.Create(self)
+    if fMySQLVersion < 5.7 then
+    begin
+      MainCon    := TMySQL56Connection.Create(self);
+      BandMapCon := TMySQL56Connection.Create(self);
+      RbnMonCon  := TMySQL56Connection.Create(self)
+    end
+    else begin
+      MainCon    := TMySQL57Connection.Create(self);
+      BandMapCon := TMySQL57Connection.Create(self);
+      RbnMonCon  := TMySQL57Connection.Create(self)
+    end
   end;
 
   MainCon.KeepConnection := True;
@@ -3548,14 +3584,21 @@ begin
     (MainCon as TMySQL51Connection).Port     := 64000
   end
   else begin
-    if fMySQLVersion = 5.5 then
+    if fMySQLVersion < 5.6 then
     begin
       (MainCon as TMySQL55Connection).HostName := '127.0.0.1';
       (MainCon as TMySQL55Connection).Port     := 64000
     end
     else begin
-      (MainCon as TMySQL56Connection).HostName := '127.0.0.1';
-      (MainCon as TMySQL56Connection).Port     := 64000
+      if fMySQLVersion < 5.7 then
+      begin
+        (MainCon as TMySQL56Connection).HostName := '127.0.0.1';
+        (MainCon as TMySQL56Connection).Port     := 64000
+      end
+      else begin
+        (MainCon as TMySQL57Connection).HostName := '127.0.0.1';
+        (MainCon as TMySQL57Connection).Port     := 64000
+      end
     end
   end;
   MainCon.DatabaseName := 'information_schema';
