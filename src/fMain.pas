@@ -454,22 +454,9 @@ end;
 
 procedure TfrmMain.RefreshQSODXCCCount;
 begin
-  if dmData.IsFilter then
-    lblQSOCount.Caption := IntToStr(dmData.qCQRLOG.RecordCount)
-  else
-  begin
-    dmData.Q.Close;
-    dmData.Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main';
-    if dmData.trQ.Active then
-      dmData.trQ.RollBack;
-    dmData.trQ.StartTransaction;
-    dmData.Q.Open;
-    lblQSOCount.Caption := IntToStr(dmData.Q.Fields[0].AsInteger);
-    dmData.trQ.RollBack;
-    dmData.Q.Close
-  end;
-  lblDXCC.Caption    := IntToStr(dmDXCC.DXCCCount);
-  lblDXCCCmf.Caption := IntToStr(dmDXCC.DXCCCmfCount)
+  lblQSOCount.Caption := IntToStr(dmData.GetQSOCount);
+  lblDXCC.Caption     := IntToStr(dmDXCC.DXCCCount);
+  lblDXCCCmf.Caption  := IntToStr(dmDXCC.DXCCCmfCount)
 end;
 
 procedure TfrmMain.acPreferencesExecute(Sender: TObject);

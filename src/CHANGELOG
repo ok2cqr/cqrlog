@@ -25,6 +25,7 @@ Legend:
   - QSO with mode in lower case was market as error and not imported - fixed
   - band map didn't show any data on SSB - fixed 
   - after change "Default frequencies", related button in TRX control window didn't go red - fixed
+  - QSO count with active filter was wrong after delete or update
 
 1.9.1 (2015-11-28)
   + support sending CW via HamLib library added

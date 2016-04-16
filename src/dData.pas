@@ -3002,20 +3002,33 @@ end;
 
 function TdmData.GetQSOCount : Integer;
 begin
-  Result := 0;
+  Q.Close;
+  if trQ.Active then
+    trQ.RollBack;
+
   if IsFilter then
-    Result := qCQRLOG.RecordCount
-  else begin
-    Q.Close;
+  begin
+    Q.SQL.Text := dmData.qCQRLOG.SQL.Text;
+    trQ.StartTransaction;
     try
-      Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main';
-      if trQ.Active then trQ.RollBack;
-      trQ.StartTransaction;
-      dmData.Q.Open;
-      Result := dmData.Q.Fields[0].AsInteger
+      Q.Open;
+      Q.Last;
+      Q.First;
+      Result := dmData.Q.RecordCount
     finally
-      dmData.Q.Close;
-      dmData.trQ.RollBack
+      Q.Close;
+      trQ.RollBack
+    end
+  end
+  else begin
+    Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main';
+    trQ.StartTransaction;
+    try
+      Q.Open;
+      Result := Q.Fields[0].AsInteger
+    finally
+      Q.Close;
+      trQ.RollBack
     end
   end
 end;
