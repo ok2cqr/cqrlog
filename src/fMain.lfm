@@ -1097,7 +1097,6 @@ object frmMain: TfrmMain
           630063636300636363006363630063636300636363006363FF00001108000C00
           0C00012200001101030001FFC4006C9BD3FF6999D1FF6596CEFF
         }
-        ImageIndex = 4
         OnClick = acCloseExecute
       end
     end
@@ -1952,7 +1951,7 @@ object frmMain: TfrmMain
     object acClose: TAction
       Caption = 'Close'
       Hint = 'Close program'
-      ImageIndex = 3
+      ImageIndex = 4
       OnExecute = acCloseExecute
       ShortCut = 16465
     end
