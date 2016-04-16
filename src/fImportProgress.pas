@@ -1279,7 +1279,7 @@ begin
     if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL;
 
-    dmData.Q.SQL.Text := 'truncate table cqrlog_main';
+    dmData.Q.SQL.Text := 'delete from cqrlog_main';
     if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL;
 
