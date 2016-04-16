@@ -180,6 +180,12 @@ begin
     Writeln('')
   end;
 
+  if (RigId = 1) then
+  begin
+    Result := False;
+    exit
+  end;
+
   if fRunRigCtld then
   begin
     if not StartRigctld then
