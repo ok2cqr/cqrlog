@@ -42,7 +42,6 @@ type
     function  EncodeBandForClubLog(band : String) : String;
     function  ParseHrdLogOutput(Output : String; var Response : String) : Integer;
   public
-    LogUploadCon : TSQLConnection;
     csLogUpload  : TRTLCriticalSection;
 
     function  UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
@@ -74,22 +73,13 @@ var
 begin
   InitCriticalSection(csLogUpload);
 
-  if dmData.MySQLVersion < 5.5 then
-    LogUploadCon := TMySQL51Connection.Create(self)
-  else  if dmData.MySQLVersion < 5.6 then
-    LogUploadCon := TMySQL55Connection.Create(self)
-  else if dmData.MySQLVersion < 5.7 then
-    LogUploadCon := TMySQL56Connection.Create(self)
-  else
-    LogUploadCon := TMySQL57Connection.Create(self);
-
-  LogUploadCon.KeepConnection := True;
+  dmData.LogUploadCon.KeepConnection := True;
   for i:=0 to ComponentCount-1 do
   begin
     if Components[i] is TSQLQuery then
-      (Components[i] as TSQLQuery).DataBase := LogUploadCon;
+      (Components[i] as TSQLQuery).DataBase := dmData.LogUploadCon;
     if Components[i] is TSQLTransaction then
-      (Components[i] as TSQLTransaction).DataBase := LogUploadCon
+      (Components[i] as TSQLTransaction).DataBase := dmData.LogUploadCon
   end
 end;
 

@@ -192,13 +192,11 @@ type
     procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
     procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
   public
-    {
-    MainCon51 : TMySQL51Connection;
-    MainCon55 : TMySQL55Connection;
-    }
-    MainCon    : TSQLConnection;
-    BandMapCon : TSQLConnection;
-    RbnMonCon  : TSQLConnection;
+    MainCon      : TSQLConnection;
+    BandMapCon   : TSQLConnection;
+    RbnMonCon    : TSQLConnection;
+    LogUploadCon : TSQLConnection;
+    dbDXC        : TSQLConnection;
 
     eQSLUsers : Array of ShortString;
     CallArray : Array [0..MaxCall] of String[20];
@@ -527,133 +525,49 @@ begin
 
   if MainCon.Connected then
     MainCon.Connected := False;
-  if dmDXCluster.dbDXC.Connected then
-    dmDXCluster.dbDXC.Connected := False;
-  if dmLogUpload.LogUploadCon.Connected then
-    dmLogUpload.LogUploadCon.Connected := False;
+  if dbDXC.Connected then
+    dbDXC.Connected := False;
+  if LogUploadCon.Connected then
+    LogUploadCon.Connected := False;
   if RbnMonCon.Connected then
     RbnMonCon.Connected := False;
 
-  if fMySQLVersion < 5.5 then
-  begin
-    (MainCon as TMySQL51Connection).HostName := host;
-    (MainCon as TMySQL51Connection).Port     := StrToInt(port);
-
-    (BandMapCon as TMySQL51Connection).HostName := host;
-    (BandMapCon as TMySQL51Connection).Port     := StrToInt(port);
-
-    (RbnMonCon as TMySQL51Connection).HostName := host;
-    (RbnMonCon as TMySQL51Connection).Port     := StrToInt(port)
-  end
-  else begin
-    if fMySQLVersion < 5.6 then
-    begin
-      (MainCon as TMySQL55Connection).HostName := host;
-      (MainCon as TMySQL55Connection).Port     := StrToInt(port);
-
-      (BandMapCon as TMySQL55Connection).HostName := host;
-      (BandMapCon as TMySQL55Connection).Port     := StrToInt(port);
-
-      (RbnMonCon as TMySQL55Connection).HostName := host;
-      (RbnMonCon as TMySQL55Connection).Port     := StrToInt(port)
-    end
-    else begin
-      if fMySQLVersion < 5.7 then
-      begin
-        (MainCon as TMySQL56Connection).HostName := host;
-        (MainCon as TMySQL56Connection).Port     := StrToInt(port);
-
-        (BandMapCon as TMySQL56Connection).HostName := host;
-        (BandMapCon as TMySQL56Connection).Port     := StrToInt(port);
-
-        (RbnMonCon as TMySQL56Connection).HostName := host;
-        (RbnMonCon as TMySQL56Connection).Port     := StrToInt(port)
-      end
-      else begin
-        (MainCon as TMySQL57Connection).HostName := host;
-        (MainCon as TMySQL57Connection).Port     := StrToInt(port);
-
-        (BandMapCon as TMySQL57Connection).HostName := host;
-        (BandMapCon as TMySQL57Connection).Port     := StrToInt(port);
-
-        (RbnMonCon as TMySQL57Connection).HostName := host;
-        (RbnMonCon as TMySQL57Connection).Port     := StrToInt(port)
-      end
-    end
-  end;
+  MainCon.HostName     := host;
+  MainCon.Params.Text  := 'Port='+port;
   MainCon.UserName     := user;
   MainCon.Password     := pass;
   MainCon.DatabaseName := 'information_schema';
 
+  BandMapCon.HostName     := host;
+  BandMapCon.Params.Text  := 'Port='+port;
   BandMapCon.UserName     := user;
   BandMapCon.Password     := pass;
   BandMapCon.DatabaseName := 'information_schema';
 
+  RbnMonCon.HostName     := host;
+  RbnMonCon.Params.Text  := 'Port='+port;
   RbnMonCon.UserName     := user;
   RbnMonCon.Password     := pass;
   RbnMonCon.DatabaseName := 'information_schema';
 
-  if fMySQLVersion < 5.5 then
-  begin
-    (dmDXCluster.dbDXC as TMySQL51Connection).HostName := host;
-    (dmDXCluster.dbDXC as TMySQL51Connection).Port     := StrToInt(port)
-  end
-  else begin
-    if (fMySQLVersion < 5.6) then
-    begin
-      (dmDXCluster.dbDXC as TMySQL55Connection).HostName := host;
-      (dmDXCluster.dbDXC as TMySQL55Connection).Port     := StrToInt(port)
-    end
-    else begin
-      if (fMySQLVersion < 5.7) then
-      begin
-        (dmDXCluster.dbDXC as TMySQL56Connection).HostName := host;
-        (dmDXCluster.dbDXC as TMySQL56Connection).Port     := StrToInt(port)
-      end
-      else begin
-        (dmDXCluster.dbDXC as TMySQL57Connection).HostName := host;
-        (dmDXCluster.dbDXC as TMySQL57Connection).Port     := StrToInt(port)
-      end
-    end
-  end;
-  dmDXCluster.dbDXC.UserName     := user;
-  dmDXCluster.dbDXC.Password     := pass;
-  dmDXCluster.dbDXC.DatabaseName := 'information_schema';
+  dbDXC.HostName     := host;
+  dbDXC.Params.Text  := 'Port='+port;
+  dbDXC.UserName     := user;
+  dbDXC.Password     := pass;
+  dbDXC.DatabaseName := 'information_schema';
 
-  if fMySQLVersion < 5.5 then
-  begin
-    (dmLogUpload.LogUploadCon as TMySQL51Connection).HostName := host;
-    (dmLogUpload.LogUploadCon as TMySQL51Connection).Port     := StrToInt(port)
-  end
-  else begin
-    if (fMySQLVersion < 5.6) then
-    begin
-      (dmLogUpload.LogUploadCon as TMySQL55Connection).HostName := host;
-      (dmLogUpload.LogUploadCon as TMySQL55Connection).Port     := StrToInt(port)
-    end
-    else begin
-      if (fMySQLVersion < 5.7) then
-      begin
-        (dmLogUpload.LogUploadCon as TMySQL56Connection).HostName := host;
-        (dmLogUpload.LogUploadCon as TMySQL56Connection).Port     := StrToInt(port)
-      end
-      else begin
-        (dmLogUpload.LogUploadCon as TMySQL57Connection).HostName := host;
-        (dmLogUpload.LogUploadCon as TMySQL57Connection).Port     := StrToInt(port)
-      end
-    end
-  end;
-
-  dmLogUpload.LogUploadCon.UserName     := user;
-  dmLogUpload.LogUploadCon.Password     := pass;
-  dmLogUpload.LogUploadCon.DatabaseName := 'information_schema';
+  LogUploadCon.HostName     := host;
+  LogUploadCon.Params.Text  := 'Port='+port;
+  LogUploadCon.UserName     := user;
+  LogUploadCon.Password     := pass;
+  LogUploadCon.DatabaseName := 'information_schema';
 
   try
-    MainCon.Connected                  := True;
-    dmDXCluster.dbDXC.Connected        := True;
-    dmLogUpload.LogUploadCon.Connected := True;
-    BandMapCon.Connected               := True;
-    RbnMonCon.Connected                := True;
+    MainCon.Connected      := True;
+    dbDXC.Connected        := True;
+    LogUploadCon.Connected := True;
+    BandMapCon.Connected   := True;
+    RbnMonCon.Connected    := True;
   except
     on E : Exception do
     begin
@@ -1225,6 +1139,19 @@ begin
   try try
     c := TConnectionName.Create(nil);
     MySQLVer := copy(c.ClientInfo,1,3);
+
+    if fDebugLevel>=1 then
+    begin
+      Writeln('**************************');
+      Writeln('MySQL version: ',MySQLVer);
+      Writeln('**************************')
+    end;
+
+    if MySQLVer = '10.' then
+      MySQLVer := '5.6';
+    if MySQLVer = '10.1' then
+      MySQLVer := '5.7'
+
   except
     on E : Exception do
     begin
@@ -1237,47 +1164,48 @@ begin
     FreeAndNil(c)
   end;
 
-  if fDebugLevel>=1 then
-  begin
-    Writeln('**************************');
-    Writeln('MySQL version: ',MySQLVer);
-    Writeln('**************************')
-  end;
-
   if not TryStrToCurr(MySQLVer,fMySQLVersion) then
     fMySQLVersion := 5.6;
 
   if fDebugLevel>=1 then
   begin
     Writeln('**********************************');
-    Writeln('MySQL version assigned: ',fMySQLVersion);
+    Writeln('MySQL version assigned: ',FloatToStr(fMySQLVersion));
     Writeln('**********************************')
   end;
 
 
   if fMySQLVersion < 5.5 then
   begin
-    MainCon    := TMySQL51Connection.Create(self);
-    BandMapCon := TMySQL51Connection.Create(self);
-    RbnMonCon  := TMySQL51Connection.Create(self);
+    MainCon      := TMySQL51Connection.Create(self);
+    BandMapCon   := TMySQL51Connection.Create(self);
+    RbnMonCon    := TMySQL51Connection.Create(self);
+    LogUploadCon := TMySQL51Connection.Create(self);
+    dbDXC        := TMySQL51Connection.Create(self)
   end
   else  if fMySQLVersion < 5.6 then
   begin
-    MainCon    := TMySQL55Connection.Create(self);
-    BandMapCon := TMySQL55Connection.Create(self);
-    RbnMonCon  := TMySQL55Connection.Create(self)
+    MainCon      := TMySQL55Connection.Create(self);
+    BandMapCon   := TMySQL55Connection.Create(self);
+    RbnMonCon    := TMySQL55Connection.Create(self);
+    LogUploadCon := TMySQL55Connection.Create(self);
+    dbDXC        := TMySQL55Connection.Create(self)
   end
   else begin
     if fMySQLVersion < 5.7 then
     begin
-      MainCon    := TMySQL56Connection.Create(self);
-      BandMapCon := TMySQL56Connection.Create(self);
-      RbnMonCon  := TMySQL56Connection.Create(self)
+      MainCon      := TMySQL56Connection.Create(self);
+      BandMapCon   := TMySQL56Connection.Create(self);
+      RbnMonCon    := TMySQL56Connection.Create(self);
+      LogUploadCon := TMySQL56Connection.Create(self);
+      dbDXC        := TMySQL56Connection.Create(self)
     end
     else begin
-      MainCon    := TMySQL57Connection.Create(self);
-      BandMapCon := TMySQL57Connection.Create(self);
-      RbnMonCon  := TMySQL57Connection.Create(self)
+      MainCon      := TMySQL57Connection.Create(self);
+      BandMapCon   := TMySQL57Connection.Create(self);
+      RbnMonCon    := TMySQL57Connection.Create(self);
+      LogUploadCon := TMySQL57Connection.Create(self);
+      dbDXC        := TMySQL57Connection.Create(self)
     end
   end;
 
@@ -3591,29 +3519,8 @@ begin
   if MainCon.Connected then
     MainCon.Connected := False;
 
-  if fMySQLVersion < 5.5 then
-  begin
-    (MainCon as TMySQL51Connection).HostName := '127.0.0.1';
-    (MainCon as TMySQL51Connection).Port     := 64000
-  end
-  else begin
-    if fMySQLVersion < 5.6 then
-    begin
-      (MainCon as TMySQL55Connection).HostName := '127.0.0.1';
-      (MainCon as TMySQL55Connection).Port     := 64000
-    end
-    else begin
-      if fMySQLVersion < 5.7 then
-      begin
-        (MainCon as TMySQL56Connection).HostName := '127.0.0.1';
-        (MainCon as TMySQL56Connection).Port     := 64000
-      end
-      else begin
-        (MainCon as TMySQL57Connection).HostName := '127.0.0.1';
-        (MainCon as TMySQL57Connection).Port     := 64000
-      end
-    end
-  end;
+  MainCon.HostName     := '127.0.0.1';
+  MainCon.Params.Text  := 'Port=64000';
   MainCon.DatabaseName := 'information_schema';
   MainCon.UserName     := 'cqrlog';
   MainCon.Password     := 'cqrlog';
