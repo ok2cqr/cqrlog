@@ -1,30 +1,61 @@
 #!/bin/bash
-FILE=/etc/apparmor.d/usr.sbin.mysqld
-IFILE=/etc/init.d/apparmor
+APPARMOR_INIT=/etc/init.d/apparmor
+GLOBAL_MYSQL_FILE=/etc/apparmor.d/usr.sbin.mysqld
+LOCAL_MYSQL_FILE=/etc/apparmor.d/local/usr.sbin.mysqld
 FTMP=`mktemp /tmp/tmp.XXXXXX`
-if [ -f $FILE ]
-then
-  if `cat $FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
+
+restart_apparmor() 
+{
+  #apparmor config file may exists and apparmor itself not
+  if [ -f $APPARMOR_INIT ]
   then
-   echo ""
-   echo File $FILE  was already modified, no changes needed
-   echo ""
+    if which invoke-rc.d >/dev/null 2>&1; then
+       invoke-rc.d apparmor restart
+    else
+      /etc/init.d/apparmor restart
+    fi    
   else
-    LINES=`cat $FILE | grep -n -E '^[\ \t]*\}[\ \t]*$' | sed 's/\:.*//'`
-    LINES=$((LINES-1))
-    head $FILE -n $LINES > $FTMP
-    echo "  @{HOME}/.config/cqrlog/database/** rwk," >> $FTMP
-    echo "}" >> $FTMP
-    cat $FTMP > $FILE
+    echo it seems apparmor is not installed, restarting skipped
+  fi
+}
+
+if [ -f "$GLOBAL_MYSQL_FILE" ] 
+then
+  if `cat $GLOBAL_MYSQL_FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
+  then
+    LINES=`cat $GLOBAL_MYSQL_FILE | grep  -n  @{HOME}/.config/cqrlog/database/** | sed 's/\:.*//'`
+    LINES1=$((LINES-1))
+    LINES2=$((LINES+1))
+    head $GLOBAL_MYSQL_FILE -n $LINES1 > $FTMP
+    tail $GLOBAL_MYSQL_FILE -n +$LINES2 >> $FTMP
+    cat $FTMP > $GLOBAL_MYSQL_FILE
     echo ""
-    echo File $FILE  was modified, now restarting apparmor ...
+    echo Changes removed from $GLOBAL_MYSQL_FILE
+    echo ""    
+  fi
+  
+  if `cat $LOCAL_MYSQL_FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
+  then
+    if ! grep -q "@{HOME}/.config/cqrlog/database/  r," "$LOCAL_MYSQL_FILE"; then
+      echo "@{HOME}/.config/cqrlog/database/  r," >> $LOCAL_MYSQL_FILE
+      echo File $LOCAL_MYSQL_FILE was modified, restarting apparmor
+      echo "" 
+      restart_apparmor
+      echo ""
+    else
+      echo ""
+      echo File $LOCAL_MYSQL_FILE was already modified, no changes needed
+      echo ""   
+    fi   
+  else
+    echo "@{HOME}/.config/cqrlog/database/  r," >> $LOCAL_MYSQL_FILE
+    echo "@{HOME}/.config/cqrlog/database/** rwk," >> $LOCAL_MYSQL_FILE
     echo ""
-   if [ -f $IFILE ]
-   then
-    echo now restarting apparmor
-    /etc/init.d/apparmor restart
-   fi
-   echo ""
+    echo File $LOCAL_MYSQL_FILE was modified, restarting apparmor
+    echo "" 
+    restart_apparmor
+    echo ""
   fi
 fi
 rm $FTMP
+
