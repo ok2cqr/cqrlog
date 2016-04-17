@@ -1,0 +1,635 @@
+object fraExportPref: TfraExportPref
+  Left = 0
+  Height = 414
+  Top = 0
+  Width = 596
+  ClientHeight = 414
+  ClientWidth = 596
+  TabOrder = 0
+  DesignLeft = 623
+  DesignTop = 214
+  object chkProfile: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 326
+    Width = 71
+    Caption = 'Profile'
+    TabOrder = 0
+  end
+  object chkExCont: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 296
+    Width = 92
+    Caption = 'Continent'
+    TabOrder = 1
+  end
+  object chkexQTH: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 270
+    Width = 55
+    Caption = 'QTH'
+    TabOrder = 2
+  end
+  object chkexName: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 243
+    Width = 66
+    Caption = 'Name'
+    TabOrder = 3
+  end
+  object chkexRSTR: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 217
+    Width = 83
+    Caption = 'RST rcvd'
+    TabOrder = 4
+  end
+  object chkexRSTS: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 191
+    Width = 83
+    Caption = 'RST sent'
+    TabOrder = 5
+  end
+  object chkexFreq: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 165
+    Width = 57
+    Caption = 'Freq'
+    TabOrder = 6
+  end
+  object chkexMode: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 139
+    Width = 65
+    Caption = 'Mode'
+    TabOrder = 7
+  end
+  object chkexCall: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 114
+    Width = 51
+    Caption = 'Call'
+    TabOrder = 8
+  end
+  object chkexTimeoff: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 89
+    Width = 82
+    Caption = 'Time off'
+    TabOrder = 9
+  end
+  object chkexTimeon: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 64
+    Width = 79
+    Caption = 'Time on'
+    TabOrder = 10
+  end
+  object chkexDate: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 38
+    Width = 58
+    Caption = 'Date'
+    TabOrder = 11
+  end
+  object edtWDate: TEdit
+    Left = 110
+    Height = 27
+    Top = 37
+    Width = 40
+    TabOrder = 12
+    Text = '50'
+  end
+  object edtWTimeOn: TEdit
+    Left = 110
+    Height = 27
+    Top = 64
+    Width = 40
+    TabOrder = 13
+    Text = '50'
+  end
+  object edtWTimeOff: TEdit
+    Left = 110
+    Height = 27
+    Top = 88
+    Width = 40
+    TabOrder = 14
+    Text = '50'
+  end
+  object edtWCall: TEdit
+    Left = 110
+    Height = 27
+    Top = 113
+    Width = 40
+    TabOrder = 15
+    Text = '50'
+  end
+  object edtWMode: TEdit
+    Left = 110
+    Height = 27
+    Top = 139
+    Width = 40
+    TabOrder = 16
+    Text = '50'
+  end
+  object edtWFreq: TEdit
+    Left = 110
+    Height = 27
+    Top = 166
+    Width = 40
+    TabOrder = 17
+    Text = '50'
+  end
+  object edtWRstS: TEdit
+    Left = 110
+    Height = 27
+    Top = 190
+    Width = 40
+    TabOrder = 18
+    Text = '50'
+  end
+  object edtWRstR: TEdit
+    Left = 110
+    Height = 27
+    Top = 217
+    Width = 40
+    TabOrder = 19
+    Text = '50'
+  end
+  object edtWName: TEdit
+    Left = 110
+    Height = 27
+    Top = 243
+    Width = 40
+    TabOrder = 20
+    Text = '50'
+  end
+  object edtWQTH: TEdit
+    Left = 110
+    Height = 27
+    Top = 269
+    Width = 40
+    TabOrder = 21
+    Text = '50'
+  end
+  object Label46: TLabel
+    Left = 6
+    Height = 17
+    Top = 12
+    Width = 33
+    Caption = 'Field'
+    ParentColor = False
+  end
+  object Label49: TLabel
+    Left = 110
+    Height = 17
+    Top = 12
+    Width = 41
+    Caption = 'Width'
+    ParentColor = False
+  end
+  object Label47: TLabel
+    Left = 174
+    Height = 17
+    Top = 12
+    Width = 33
+    Caption = 'Field'
+    ParentColor = False
+  end
+  object Label50: TLabel
+    Left = 302
+    Height = 17
+    Top = 12
+    Width = 41
+    Caption = 'Width'
+    ParentColor = False
+  end
+  object Label48: TLabel
+    Left = 366
+    Height = 17
+    Top = 12
+    Width = 33
+    Caption = 'Field'
+    ParentColor = False
+  end
+  object Label51: TLabel
+    Left = 528
+    Height = 17
+    Top = 12
+    Width = 41
+    Caption = 'Width'
+    ParentColor = False
+  end
+  object chkexQSLS: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 39
+    Width = 85
+    Caption = 'QSL sent'
+    TabOrder = 22
+  end
+  object chkexQSLR: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 64
+    Width = 113
+    Caption = 'QSL received'
+    TabOrder = 23
+  end
+  object chkexQSLVIA: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 89
+    Width = 115
+    Caption = 'QSL manager'
+    TabOrder = 24
+  end
+  object chkexLoc: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 114
+    Width = 79
+    Caption = 'Locator'
+    TabOrder = 25
+  end
+  object chkexMyLoc: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 139
+    Width = 98
+    Caption = 'My locator'
+    TabOrder = 26
+  end
+  object chkexIOTA: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 166
+    Width = 58
+    Caption = 'IOTA'
+    TabOrder = 27
+  end
+  object chkexAward: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 192
+    Width = 70
+    Caption = 'Award'
+    TabOrder = 28
+  end
+  object chkexCounty: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 217
+    Width = 73
+    Caption = 'County'
+    TabOrder = 29
+  end
+  object chkexPower: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 243
+    Width = 69
+    Caption = 'Power'
+    TabOrder = 30
+  end
+  object chkexDXCC: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 270
+    Width = 63
+    Caption = 'DXCC'
+    TabOrder = 31
+  end
+  object chkexRemarks: TCheckBox
+    Left = 174
+    Height = 24
+    Top = 297
+    Width = 85
+    Caption = 'Remarks'
+    TabOrder = 32
+  end
+  object edtWRemarks: TEdit
+    Left = 302
+    Height = 27
+    Top = 296
+    Width = 40
+    TabOrder = 33
+    Text = '50'
+  end
+  object edtWDXCC: TEdit
+    Left = 302
+    Height = 27
+    Top = 270
+    Width = 40
+    TabOrder = 34
+    Text = '50'
+  end
+  object edtWPower: TEdit
+    Left = 302
+    Height = 27
+    Top = 243
+    Width = 40
+    TabOrder = 35
+    Text = '50'
+  end
+  object edtWCounty: TEdit
+    Left = 302
+    Height = 27
+    Top = 217
+    Width = 40
+    TabOrder = 36
+    Text = '50'
+  end
+  object edtWAward: TEdit
+    Left = 302
+    Height = 27
+    Top = 191
+    Width = 40
+    TabOrder = 37
+    Text = '50'
+  end
+  object edtWIOTA: TEdit
+    Left = 302
+    Height = 27
+    Top = 165
+    Width = 40
+    TabOrder = 38
+    Text = '50'
+  end
+  object edtWMyLoc: TEdit
+    Left = 302
+    Height = 27
+    Top = 139
+    Width = 40
+    TabOrder = 39
+    Text = '50'
+  end
+  object edtWLoc: TEdit
+    Left = 302
+    Height = 27
+    Top = 114
+    Width = 40
+    TabOrder = 40
+    Text = '50'
+  end
+  object edtWQSLVIA: TEdit
+    Left = 302
+    Height = 27
+    Top = 89
+    Width = 40
+    TabOrder = 41
+    Text = '50'
+  end
+  object edtWQSLR: TEdit
+    Left = 302
+    Height = 27
+    Top = 64
+    Width = 40
+    TabOrder = 42
+    Text = '50'
+  end
+  object edtWQSLS: TEdit
+    Left = 302
+    Height = 27
+    Top = 38
+    Width = 40
+    TabOrder = 43
+    Text = '50'
+  end
+  object chkexeQSLRDate: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 376
+    Width = 134
+    Caption = 'eQSL QSLR date'
+    TabOrder = 44
+  end
+  object chkexeQSLR: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 350
+    Width = 123
+    Caption = 'eQSL QSL rcvd'
+    TabOrder = 45
+  end
+  object chkexeQSLSDate: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 324
+    Width = 133
+    Caption = 'eQSL QSLS date'
+    TabOrder = 46
+  end
+  object chkexeQSLS: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 298
+    Width = 123
+    Caption = 'eQSL QSL sent'
+    TabOrder = 47
+  end
+  object chkexQSLRDate: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 271
+    Width = 119
+    Caption = 'QSL rcvd date'
+    TabOrder = 48
+  end
+  object chkexQSLSDate: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 244
+    Width = 119
+    Caption = 'QSL sent date'
+    TabOrder = 49
+  end
+  object chkexLQSLRDate: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 218
+    Width = 138
+    Caption = 'LoTW QSLR date'
+    TabOrder = 50
+  end
+  object chkexLQSLR: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 192
+    Width = 127
+    Caption = 'LoTW QSL rcvd'
+    TabOrder = 51
+  end
+  object chkexLQSLSDate: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 166
+    Width = 137
+    Caption = 'LoTW QSLS date'
+    TabOrder = 52
+  end
+  object chkexLQSLS: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 140
+    Width = 127
+    Caption = 'LoTW QSL sent'
+    TabOrder = 53
+  end
+  object chkexState: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 115
+    Width = 62
+    Caption = 'State'
+    TabOrder = 54
+  end
+  object chkexNote: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 89
+    Width = 60
+    Caption = 'Note'
+    TabOrder = 55
+  end
+  object chkexITU: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 64
+    Width = 48
+    Caption = 'ITU'
+    TabOrder = 56
+  end
+  object chkexWAZ: TCheckBox
+    Left = 368
+    Height = 24
+    Top = 39
+    Width = 58
+    Caption = 'WAZ'
+    TabOrder = 57
+  end
+  object edtWWAZ: TEdit
+    Left = 530
+    Height = 27
+    Top = 38
+    Width = 40
+    TabOrder = 58
+    Text = '50'
+  end
+  object edtWITU: TEdit
+    Left = 530
+    Height = 27
+    Top = 63
+    Width = 40
+    TabOrder = 59
+    Text = '50'
+  end
+  object edtWNote: TEdit
+    Left = 530
+    Height = 27
+    Top = 88
+    Width = 40
+    TabOrder = 60
+    Text = '50'
+  end
+  object edtWState: TEdit
+    Left = 530
+    Height = 27
+    Top = 113
+    Width = 40
+    TabOrder = 61
+    Text = '50'
+  end
+  object edtWLQSLS: TEdit
+    Left = 530
+    Height = 27
+    Top = 139
+    Width = 40
+    TabOrder = 62
+    Text = '50'
+  end
+  object edtWLQSLSDate: TEdit
+    Left = 530
+    Height = 27
+    Top = 165
+    Width = 40
+    TabOrder = 63
+    Text = '50'
+  end
+  object edtWLQSLR: TEdit
+    Left = 530
+    Height = 27
+    Top = 191
+    Width = 40
+    TabOrder = 64
+    Text = '50'
+  end
+  object edtWLQSLRDate: TEdit
+    Left = 530
+    Height = 27
+    Top = 217
+    Width = 40
+    TabOrder = 65
+    Text = '50'
+  end
+  object edtWQSLSDate: TEdit
+    Left = 530
+    Height = 27
+    Top = 243
+    Width = 40
+    TabOrder = 66
+    Text = '50'
+  end
+  object edtWQSLRDate: TEdit
+    Left = 530
+    Height = 27
+    Top = 270
+    Width = 40
+    TabOrder = 67
+    Text = '50'
+  end
+  object edtWeQSLS: TEdit
+    Left = 530
+    Height = 27
+    Top = 297
+    Width = 40
+    TabOrder = 68
+    Text = '50'
+  end
+  object edtWeQSLSDate: TEdit
+    Left = 530
+    Height = 27
+    Top = 323
+    Width = 40
+    TabOrder = 69
+    Text = '50'
+  end
+  object edtWeQSLR: TEdit
+    Left = 530
+    Height = 27
+    Top = 349
+    Width = 40
+    TabOrder = 70
+    Text = '50'
+  end
+  object edtWeQSLRDate: TEdit
+    Left = 530
+    Height = 27
+    Top = 375
+    Width = 40
+    TabOrder = 71
+    Text = '50'
+  end
+end
