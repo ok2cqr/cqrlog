@@ -21,18 +21,11 @@ restart_apparmor()
 
 if [ -f "$GLOBAL_MYSQL_FILE" ] 
 then
-  if `cat $GLOBAL_MYSQL_FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
-  then
-    LINES=`cat $GLOBAL_MYSQL_FILE | grep  -n  @{HOME}/.config/cqrlog/database/** | sed 's/\:.*//'`
-    LINES1=$((LINES-1))
-    LINES2=$((LINES+1))
-    head $GLOBAL_MYSQL_FILE -n $LINES1 > $FTMP
-    tail $GLOBAL_MYSQL_FILE -n +$LINES2 >> $FTMP
-    cat $FTMP > $GLOBAL_MYSQL_FILE
-    echo ""
-    echo Changes removed from $GLOBAL_MYSQL_FILE
-    echo ""    
-  fi
+  grep -v "@{HOME}/.config/cqrlog/database/" $FILE >> $FTMP
+  cat $FTMP > $FILE
+  echo ""
+  echo Changes removed from $GLOBAL_MYSQL_FILE
+  echo ""  
   
   if `cat $LOCAL_MYSQL_FILE | grep -q -E '\@\{HOME\}\/\.config\/cqrlog\/database\/\*\*\ rwk\,'`
   then
