@@ -3676,6 +3676,8 @@ end;
 procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
 var
   old : String;
+  LogId   : Integer;
+  LogName : String;
 begin
   with TfrmDBConnect.Create(self) do
   try
@@ -3685,11 +3687,19 @@ begin
     if ModalResult = mrOK then
     begin
       if old = dmData.qLogList.Fields[1].AsString then exit;
+
+      LogId   := dmData.qLogList.Fields[0].AsInteger;
+      LogName := dmData.qLogList.Fields[1].AsString;
+
       frmDXCluster.StopAllConnections;
       SaveSettings;
       dmData.CloseDatabases;
-      dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger);
-      dmData.LogName    := dmData.qLogList.Fields[1].AsString;
+
+      dmData.OpenDatabase(LogId);
+      dmData.RefreshLogList(LogId);
+
+      dmData.LogName := LogName;
+
       frmNewQSO.Caption := dmUtils.GetNewQSOCaption('New QSO');
       LoadSettings;
       ShowFields
