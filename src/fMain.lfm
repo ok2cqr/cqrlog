@@ -2014,6 +2014,7 @@ object frmMain: TfrmMain
     object acExADIF: TAction
       Caption = 'ADIF'
       OnExecute = acExADIFExecute
+      ShortCut = 16453
     end
     object acExHTML: TAction
       Caption = 'HTML'

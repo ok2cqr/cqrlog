@@ -1315,52 +1315,52 @@ LazarusResources.Add('TfrmMain','FORMDATA',[
   +#15'acSearchExecute'#8'ShortCut'#3'F@'#0#0#7'TAction'#15'acRegenDXCCStat'#7
   +'Caption'#6#23'Rebuild DXCC statistics'#4'Hint'#6'-Create new DXCC statistcs'
   +' from QSO in the LOG'#9'OnExecute'#7#22'acRegenDXCCStatExecute'#0#0#7'TActi'
-  +'on'#8'acExADIF'#7'Caption'#6#4'ADIF'#9'OnExecute'#7#15'acExADIFExecute'#0#0
-  +#7'TAction'#8'acExHTML'#7'Caption'#6#4'HTML'#9'OnExecute'#7#15'acExHTMLExecu'
-  +'te'#0#0#7'TAction'#11'acDXCluster'#7'Caption'#6#9'DXCluster'#9'OnExecute'#7
-  +#18'acDXClusterExecute'#0#0#7'TAction'#13'acShowToolBar'#7'Caption'#6#12'Sho'
-  +'w toolbar'#7'Checked'#9#9'OnExecute'#7#20'acShowToolBarExecute'#0#0#7'TActi'
-  +'on'#9'acButtons'#7'Caption'#6#12'Show buttons'#7'Checked'#9#9'OnExecute'#7
-  +#16'acButtonsExecute'#0#0#7'TAction'#9'acRefresh'#7'Caption'#6#12'Refresh da'
-  +'ta'#9'OnExecute'#7#16'acRefreshExecute'#0#0#7'TAction'#8'acQSLMgr'#7'Captio'
-  +'n'#6#18'QSL manager search'#9'OnExecute'#7#15'acQSLMgrExecute'#0#0#7'TActio'
-  +'n'#16'acDatabaseUpdate'#7'Caption'#6#15'Database update'#9'OnExecute'#7#23
-  +'acDatabaseUpdateExecute'#0#0#7'TAction'#14'acLabelsExport'#7'Caption'#6#25
-  +'Export for label printing'#9'OnExecute'#7#21'acLabelsExportExecute'#0#0#7'T'
-  +'Action'#9'acMarkQSL'#7'Caption'#6#14' Auto mark QSL'#9'OnExecute'#7#16'acMa'
-  +'rkQSLExecute'#0#0#7'TAction'#9'acDXCCCfm'#7'Caption'#6#4'DXCC'#10'ImageInde'
-  +'x'#2#8#9'OnExecute'#7#16'acDXCCCfmExecute'#8'ShortCut'#3'D@'#0#0#7'TAction'
-  +#8'acWAZCfm'#7'Caption'#6#3'WAZ'#9'OnExecute'#7#15'acWAZCfmExecute'#0#0#7'TA'
-  +'ction'#8'acITUCfm'#7'Caption'#6#3'ITU'#9'OnExecute'#7#15'acITUCfmExecute'#0
-  +#0#7'TAction'#16'acImportLoTWADIF'#7'Caption'#6#27'Import local LoTW ADIF fi'
-  +'le'#9'OnExecute'#7#23'acImportLoTWADIFExecute'#0#0#7'TAction'#22'acDownload'
-  +'DataFromLoTW'#7'Caption'#6'+Download and process data from LoTW website'#4
-  +'Hint'#6#23'Download data from LoTW'#9'OnExecute'#7#29'acDownloadDataFromLoT'
-  +'WExecute'#0#0#7'TAction'#19'acExportToLocalFile'#7'Caption'#6#29'Export QSO'
-  +'s to LoTW adif file'#9'OnExecute'#7#26'acExportToLocalFileExecute'#0#0#7'TA'
-  +'ction'#20'acUploadQSOToLoTWWeb'#7'Caption'#6#28'Upload QSOs to LoTW web pag'
-  +'e'#9'OnExecute'#7#27'acUploadQSOToLoTWWebExecute'#0#0#7'TAction'#11'acGroup'
-  +'Edit'#7'Caption'#6#10'Group edit'#9'OnExecute'#7#18'acGroupEditExecute'#0#0
-  +#7'TAction'#11'acSelRecord'#7'Caption'#6#13'Select record'#4'Hint'#6#21'Sele'
-  +'ct current record'#10'ImageIndex'#2#19#9'OnExecute'#7#18'acSelRecordExecute'
-  +#0#0#7'TAction'#13'acUnselRecord'#7'Caption'#6#15'Unselect record'#4'Hint'#6
-  +#23'Unselect current record'#10'ImageIndex'#2#20#9'OnExecute'#7#20'acUnselRe'
-  ,'cordExecute'#0#0#7'TAction'#8'acSelAll'#7'Caption'#6#10'Select all'#4'Hint'
-  +#6#18'Select all records'#10'ImageIndex'#2#21#9'OnExecute'#7#15'acSelAllExec'
-  +'ute'#0#0#7'TAction'#10'acUnselAll'#7'Caption'#6#12'Unselect all'#4'Hint'#6
-  +#20'Unselect all records'#10'ImageIndex'#2#22#9'OnExecute'#7#17'acUnselAllEx'
-  +'ecute'#0#0#7'TAction'#12'acCustomStat'#7'Caption'#6#16'Custom statistic'#9
-  +'OnExecute'#7#19'acCustomStatExecute'#0#0#7'TAction'#12'acImpQslMgrs'#7'Capt'
-  +'ion'#6#28'Import qsl managers database'#9'OnExecute'#7#19'acImpQslMgrsExecu'
-  +'te'#0#0#7'TAction'#8'acWACCfm'#7'Caption'#6#3'WAC'#9'OnExecute'#7#15'acWACC'
-  +'fmExecute'#0#0#7'TAction'#8'acWASCfm'#7'Caption'#6#3'WAS'#9'OnExecute'#7#15
-  +'acWASCfmExecute'#0#0#7'TAction'#12'acAddQSLMgrs'#7'Caption'#6#21'Auto add Q'
-  +'SL managers'#9'OnExecute'#7#19'acAddQSLMgrsExecute'#0#0#7'TAction'#12'acPnl'
-  +'Details'#7'Caption'#6#17'Show detail panel'#7'Checked'#9#9'OnExecute'#7#19
-  +'acPnlDetailsExecute'#0#0#7'TAction'#5'acSQL'#7'Caption'#6#11'SQL console'#9
-  +'OnExecute'#7#12'acSQLExecute'#0#0#7'TAction'#8'acAttach'#7'Caption'#6#15'Sh'
-  +'ow attachment'#4'Hint'#6#22'Call has an attachment'#10'ImageIndex'#2#26#9'O'
-  +'nExecute'#7#15'acAttachExecute'#0#0#7'TAction'#13'acEditDetails'#7'Caption'
+  +'on'#8'acExADIF'#7'Caption'#6#4'ADIF'#9'OnExecute'#7#15'acExADIFExecute'#8'S'
+  +'hortCut'#3'E@'#0#0#7'TAction'#8'acExHTML'#7'Caption'#6#4'HTML'#9'OnExecute'
+  +#7#15'acExHTMLExecute'#0#0#7'TAction'#11'acDXCluster'#7'Caption'#6#9'DXClust'
+  +'er'#9'OnExecute'#7#18'acDXClusterExecute'#0#0#7'TAction'#13'acShowToolBar'#7
+  +'Caption'#6#12'Show toolbar'#7'Checked'#9#9'OnExecute'#7#20'acShowToolBarExe'
+  +'cute'#0#0#7'TAction'#9'acButtons'#7'Caption'#6#12'Show buttons'#7'Checked'#9
+  +#9'OnExecute'#7#16'acButtonsExecute'#0#0#7'TAction'#9'acRefresh'#7'Caption'#6
+  +#12'Refresh data'#9'OnExecute'#7#16'acRefreshExecute'#0#0#7'TAction'#8'acQSL'
+  +'Mgr'#7'Caption'#6#18'QSL manager search'#9'OnExecute'#7#15'acQSLMgrExecute'
+  +#0#0#7'TAction'#16'acDatabaseUpdate'#7'Caption'#6#15'Database update'#9'OnEx'
+  +'ecute'#7#23'acDatabaseUpdateExecute'#0#0#7'TAction'#14'acLabelsExport'#7'Ca'
+  +'ption'#6#25'Export for label printing'#9'OnExecute'#7#21'acLabelsExportExec'
+  +'ute'#0#0#7'TAction'#9'acMarkQSL'#7'Caption'#6#14' Auto mark QSL'#9'OnExecut'
+  +'e'#7#16'acMarkQSLExecute'#0#0#7'TAction'#9'acDXCCCfm'#7'Caption'#6#4'DXCC'
+  +#10'ImageIndex'#2#8#9'OnExecute'#7#16'acDXCCCfmExecute'#8'ShortCut'#3'D@'#0#0
+  +#7'TAction'#8'acWAZCfm'#7'Caption'#6#3'WAZ'#9'OnExecute'#7#15'acWAZCfmExecut'
+  +'e'#0#0#7'TAction'#8'acITUCfm'#7'Caption'#6#3'ITU'#9'OnExecute'#7#15'acITUCf'
+  +'mExecute'#0#0#7'TAction'#16'acImportLoTWADIF'#7'Caption'#6#27'Import local '
+  +'LoTW ADIF file'#9'OnExecute'#7#23'acImportLoTWADIFExecute'#0#0#7'TAction'#22
+  +'acDownloadDataFromLoTW'#7'Caption'#6'+Download and process data from LoTW w'
+  +'ebsite'#4'Hint'#6#23'Download data from LoTW'#9'OnExecute'#7#29'acDownloadD'
+  +'ataFromLoTWExecute'#0#0#7'TAction'#19'acExportToLocalFile'#7'Caption'#6#29
+  +'Export QSOs to LoTW adif file'#9'OnExecute'#7#26'acExportToLocalFileExecute'
+  +#0#0#7'TAction'#20'acUploadQSOToLoTWWeb'#7'Caption'#6#28'Upload QSOs to LoTW'
+  +' web page'#9'OnExecute'#7#27'acUploadQSOToLoTWWebExecute'#0#0#7'TAction'#11
+  +'acGroupEdit'#7'Caption'#6#10'Group edit'#9'OnExecute'#7#18'acGroupEditExecu'
+  +'te'#0#0#7'TAction'#11'acSelRecord'#7'Caption'#6#13'Select record'#4'Hint'#6
+  +#21'Select current record'#10'ImageIndex'#2#19#9'OnExecute'#7#18'acSelRecord'
+  +'Execute'#0#0#7'TAction'#13'acUnselRecord'#7'Caption'#6#15'Unselect record'#4
+  +'Hint'#6#23'Unselect current record'#10'ImageIndex'#2#20#9'OnExecute'#7#20'a'
+  ,'cUnselRecordExecute'#0#0#7'TAction'#8'acSelAll'#7'Caption'#6#10'Select all'
+  +#4'Hint'#6#18'Select all records'#10'ImageIndex'#2#21#9'OnExecute'#7#15'acSe'
+  +'lAllExecute'#0#0#7'TAction'#10'acUnselAll'#7'Caption'#6#12'Unselect all'#4
+  +'Hint'#6#20'Unselect all records'#10'ImageIndex'#2#22#9'OnExecute'#7#17'acUn'
+  +'selAllExecute'#0#0#7'TAction'#12'acCustomStat'#7'Caption'#6#16'Custom stati'
+  +'stic'#9'OnExecute'#7#19'acCustomStatExecute'#0#0#7'TAction'#12'acImpQslMgrs'
+  +#7'Caption'#6#28'Import qsl managers database'#9'OnExecute'#7#19'acImpQslMgr'
+  +'sExecute'#0#0#7'TAction'#8'acWACCfm'#7'Caption'#6#3'WAC'#9'OnExecute'#7#15
+  +'acWACCfmExecute'#0#0#7'TAction'#8'acWASCfm'#7'Caption'#6#3'WAS'#9'OnExecute'
+  +#7#15'acWASCfmExecute'#0#0#7'TAction'#12'acAddQSLMgrs'#7'Caption'#6#21'Auto '
+  +'add QSL managers'#9'OnExecute'#7#19'acAddQSLMgrsExecute'#0#0#7'TAction'#12
+  +'acPnlDetails'#7'Caption'#6#17'Show detail panel'#7'Checked'#9#9'OnExecute'#7
+  +#19'acPnlDetailsExecute'#0#0#7'TAction'#5'acSQL'#7'Caption'#6#11'SQL console'
+  +#9'OnExecute'#7#12'acSQLExecute'#0#0#7'TAction'#8'acAttach'#7'Caption'#6#15
+  +'Show attachment'#4'Hint'#6#22'Call has an attachment'#10'ImageIndex'#2#26#9
+  +'OnExecute'#7#15'acAttachExecute'#0#0#7'TAction'#13'acEditDetails'#7'Caption'
   +#6#12'Edit details'#9'OnExecute'#7#20'acEditDetailsExecute'#0#0#7'TAction'#10
   +'acQSLImage'#10'ImageIndex'#2#27#9'OnExecute'#7#17'acQSLImageExecute'#0#0#7
   +'TAction'#5'acQRZ'#7'Caption'#6#17'Search on qrz.com'#10'ImageIndex'#2#28#9
