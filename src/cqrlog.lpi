@@ -82,7 +82,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="94">
+    <Units Count="95">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -119,6 +119,7 @@
         <Filename Value="fChangeLocator.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangeLocator"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit5>
       <Unit6>
         <Filename Value="dData.pas"/>
@@ -255,6 +256,7 @@
         <Filename Value="fNewDXCluster.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewDXCluster"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit26>
       <Unit27>
         <Filename Value="fDXCluster.pas"/>
@@ -292,6 +294,7 @@
         <Filename Value="fSendSpot.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSendSpot"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit32>
       <Unit33>
         <Filename Value="fQSODetails.pas"/>
@@ -336,6 +339,7 @@
         <Filename Value="fRefCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRefCall"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit39>
       <Unit40>
         <Filename Value="fBandMap.pas"/>
@@ -691,6 +695,12 @@
         <ComponentName Value="fraExportPref"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit93>
+      <Unit94>
+        <Filename Value="fExportPref.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmExportPref"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit94>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

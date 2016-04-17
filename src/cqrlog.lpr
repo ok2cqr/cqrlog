@@ -20,7 +20,7 @@ uses
 dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
 fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer, fRadioMemories, 
 fAddRadioMemory, fException, fDbError, fCommentToCall, fNewCommentToCall,
-fFindCommentToCall, frExportPref;
+fFindCommentToCall, frExportPref, fExportPref;
 var
   Splash : TfrmSplash;
 

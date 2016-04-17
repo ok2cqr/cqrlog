@@ -16,6 +16,7 @@ Legend:
   + all comments to callsign can be modified (NewQSO window -> File -> Comment to callsigns
   + transverter support added (you can set RX and TX offset for each band)
   + connection to database improved (MySQL 5.1, 5.5, 5.6, 5.7 and MariaDB 10.0.x, 10.1 should work)   
+  + you can choose which fields will be exported right before export 
   - CW type window was not sizeable - fixed
   - password to LoTW/eQSL could not have special characters - fixed
   - program crashed after opening Preferences when path to rigctl was empty - fixed

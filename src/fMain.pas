@@ -444,7 +444,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, fLogUploadStatus;
+  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, fLogUploadStatus, fExportPref;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -1679,6 +1679,15 @@ begin
   dlgSave.Filter     := 'ADIF|*.adi;*.ADI';
   if dlgSave.Execute then
   begin
+
+    frmExportPref := TfrmExportPref.Create(frmMain);
+    try
+      if frmExportPref.ShowModal = mrCancel then
+        exit
+    finally
+      FreeAndNil(frmExportPref)
+    end;
+
     with TfrmExportProgress.Create(self) do
     try
       FileName   := dlgSave.FileName;
@@ -1699,6 +1708,15 @@ begin
 
   if dlgSave.Execute then
   begin
+
+    frmExportPref := TfrmExportPref.Create(frmMain);
+    try
+      if frmExportPref.ShowModal = mrCancel then
+        exit
+    finally
+      FreeAndNil(frmExportPref)
+    end;
+
     with TfrmExportProgress.Create(self) do
     try
       FileName   := dlgSave.FileName;
