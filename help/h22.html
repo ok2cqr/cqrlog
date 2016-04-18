@@ -1,24 +1,31 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<title>CQRLOG - QSL Records</title>
+<html>
+<head>
+    <title>CQRLOG - QSL Records</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong>
-<font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-</td></tr></tbody></table>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h21.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h23.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h21.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h23.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
@@ -27,18 +34,19 @@ in Preferences. This autobackup function creates an ADIF file with a backup of y
 All QSL operations must be done from the QSO list (Ctrl-O from the logging screen).
 The QSO list has a dedicated QSL menu item in the upper menu bar.
 <ul>
-<li><strong>Send QSL</strong> - the sent QSL menu has following options:<br><br>
-<img src="img/h71.png" border="0"><br><br>
-<ul>
-<li>Buro (B) (a 'B' appears in the log, column 'QSL sent')</li>
-<li>Direct (D)</li>
-<li>eQSL(E)</li>
-<li>Manager (M)</li>
-<li>Do not send (N)</li>
-<li>Manager direct (MD)</li>
-<li>Manager buro (MB)</li>
-<li>Confirmad by email (CE)</li>
-</ul></ul>
+    <li><strong>Send QSL</strong> - the sent QSL menu has following options:<br><br>
+        <img src="img/h71.png" border="0"><br><br>
+        <ul>
+            <li>Buro (B) (a 'B' appears in the log, column 'QSL sent')</li>
+            <li>Direct (D)</li>
+            <li>eQSL(E)</li>
+            <li>Manager (M)</li>
+            <li>Do not send (N)</li>
+            <li>Manager direct (MD)</li>
+            <li>Manager buro (MB)</li>
+            <li>Confirmad by email (CE)</li>
+        </ul>
+</ul>
 If you want to send a QSL card, it is better to mark the QSO record with a similar mark
 which begins with <strong>'S'</strong> (Send). This can be done with the Ctrl-W shortcut.
 The QSO record will be marked with the default option <strong>'SB'</strong>
@@ -46,8 +54,10 @@ The QSO record will be marked with the default option <strong>'SB'</strong>
 choose an appropriate option. Once a QSL is complete (ready to go), press Ctrl-S.
 The 'S' letter disappears making it clearly visible that the QSL is complete and sent.
 <ul>
-<li><strong>Receive QSL</strong> - navigate to the record for the QSL card received.
-Press Ctrl-R and in the 'QSL_R' (QSL Received) field an 'X' will appear.</li></ul>
+    <li><strong>Receive QSL</strong> - navigate to the record for the QSL card received.
+        Press Ctrl-R and in the 'QSL_R' (QSL Received) field an 'X' will appear.
+    </li>
+</ul>
 <strong>QSL manager search</strong><br><br>
 <img src="img/h53.png" border="0"><br><br>
 When you choose this option A QSL manager window appears, in the lower left corner is
@@ -57,96 +67,84 @@ For LoTW operations see <a href=h7.html><strong>here</strong></a>.
 <a name="bh4"><h2><strong>QSL labels printing</strong></h2></a>
 
 <div align="justify">QSL label printing is accomplished with the gLabels software
-which is very powerful and allows you to print QSL labels of any size,
-any number, also a whole QSL card can be designed and printed in professional quality
-(printer depending). The gLabels software can be downloaded from
-http://glabels.sourceforge.net/. It contains numerous predefined templates of label sheets
-from many manufacturers. Most Linux distributions have gLabels in their repositories,
-the Slackware package can be downloaded from the OK1RR personal repository at
-<a href=http://www.ok1rr.com/download.php?list.10>
-<strong>www.ok1rr.com</strong></a>.</div><br>
-
-<strong>gLabels installation</strong><br><br>
-gLabels is designed for Gnome and can be installed directly into distributions using
-Gnome desktop manager. For KDE and other desktop managers, you need to install:
-
-<pre>GTK+-2.10.x
-LIBGNOME[UI]-2.16.x
-LIBXML-2.6.x
-LIBGLADE-2.6.x</pre>
-
-To be more specific, gLabels needs the following Gnome components which should be
-installed into KDE:<br>
-
-<pre>avahi-0.6.23-i486-1as.tgz
-gail-1.20.2-i486-1_rlw.tgz
-gconf-2.20.1-i686-7as.tgz
-gnome-keyring-2.20.3-i686-1dl.tgz
-gnome-vfs-2.20.1-i686-1dl.tgz
-libbonoboui-2.20.0-i686-1dl.tgz
-libbonobo-2.20.3-i686-1dl.tgz
-libgnomecanvas-2.20.1.1-i686-1dl.tgz
-libgnomeui-2.20.1.1-i686-1dl.tgz
-libgnome-2.20.1.1-i686-2dl.tgz
-orbit2-2.14.12-i686-1dl.tgz</pre>
+    which is very powerful and allows you to print QSL labels of any size,
+    any number, also a whole QSL card can be designed and printed in professional quality
+    (printer depending). The gLabels software can be downloaded from
+    http://glabels.sourceforge.net/. It contains numerous predefined templates of label sheets
+    from many manufacturers. Most Linux distributions have gLabels in their repositories.
+</div>
+<br>
 
 <div align="justify">The main task of CQRLOG is data preparation in a format (CSV) which
-can be processed by gLabels. Several QSOs on a single label are possible and
-gLabels provides all that we need. </div><br>
+    can be processed by gLabels. Several QSOs on a single label are possible and
+    gLabels provides all that we need.
+</div>
+<br>
 
 <strong>QSL label template</strong><br>
 <IMG src="img/h72.png"><br><br>
 <div align="justify">A template with data to be printed, its order, typeface, position etc.
-is needed to print your QSL labels. gLabels uses its own format for label design.
-The result is a binary file. The syntax can be derived from the label designer picture,
-you own label design can be derived from the example qsl.glabels included in the CQRLOG
-installation.</div><br>
+    is needed to print your QSL labels. gLabels uses its own format for label design.
+    The result is a binary file. The syntax can be derived from the label designer picture,
+    you own label design can be derived from the example qsl.glabels included in the CQRLOG
+    installation.
+</div>
+<br>
 
 <strong>Printing of individual QSL labels (default)</strong><br><br>
 <IMG src="img/h71.png"><br><br>
 <div align="justify">The QSO records should be properly marked. Records previously marked
-SB (Send Bureau), SM (Send Manager), SMB (Send Manager - Bureau), SD (Send Direct) or SMD
-(Send Manager- Direct) in any combination are exported.</div><br>
+    SB (Send Bureau), SM (Send Manager), SMB (Send Manager - Bureau), SD (Send Direct) or SMD
+    (Send Manager- Direct) in any combination are exported.
+</div>
+<br>
 <IMG src="img/h70.png"><br><br>
 <strong>Batch QSL label printing</strong>
 
 <div align="justify">This method can be used if no QSO records are marked.
-A filter can be set up, labels are printed for the filtered output and all such records
-are marked as 'QSL sent'. To make this option effective, check the box 'Export all QSOs'
-and 'Mark QSLs sent after export'. If you forget to check the 'Export all QSOs' box,
-no output will be generated unless there are previously marked QSO records (see above).
-If the 'Mark QSLs sent after export' remains unchecked, no QSO records will be marked as
-'QSL sent'.</div><br>
+    A filter can be set up, labels are printed for the filtered output and all such records
+    are marked as 'QSL sent'. To make this option effective, check the box 'Export all QSOs'
+    and 'Mark QSLs sent after export'. If you forget to check the 'Export all QSOs' box,
+    no output will be generated unless there are previously marked QSO records (see above).
+    If the 'Mark QSLs sent after export' remains unchecked, no QSO records will be marked as
+    'QSL sent'.
+</div>
+<br>
 
 <div align="justify">For both methods, the filtering potential can be utilized.
-For example, you can filter out all QSOs with DJ3 stations and print QSL labels for them.
-You will get such output:</div><br>
+    For example, you can filter out all QSOs with DJ3 stations and print QSL labels for them.
+    You will get such output:
+</div>
+<br>
 <IMG src="img/h73.png"><br>
 
 <div align="justify">There is no need to print QSL labels online on your printer. A very
-good and proven trick is to print the labels to a PDF file, check that for correctness and
-proper alignment against a real label sheet and then print it.</div>
+    good and proven trick is to print the labels to a PDF file, check that for correctness and
+    proper alignment against a real label sheet and then print it.
+</div>
 <br>
 <p align=center><img src=img/line.png></p>
 <a name="bh5"><h2><strong>Auto mark QSL</strong></h2></a>
 <IMG src="img/h74.png"><br><br>
 <div align="justify">This option allows you to set the QSL field for the first QSO with a
-particular station on a band, mode, band/mode or for the first band, mode, band/mode
-contact with a particular DXCC country regardless of the station.<br><br>
-<IMG src="img/h75.png"><br><br>
-It works in cooperation with the filters, however the test for the 'first QSO' is taken
-from the whole log. You can limit your selection to 2008 but if you worked this station
-in 1998 for first time, it will NOT be marked. This prevents you from sending multiple QSLs
-for an already confirmed contact on that band, mode or band+mode.</div>
+    particular station on a band, mode, band/mode or for the first band, mode, band/mode
+    contact with a particular DXCC country regardless of the station.<br><br>
+    <IMG src="img/h75.png"><br><br>
+    It works in cooperation with the filters, however the test for the 'first QSO' is taken
+    from the whole log. You can limit your selection to 2008 but if you worked this station
+    in 1998 for first time, it will NOT be marked. This prevents you from sending multiple QSLs
+    for an already confirmed contact on that band, mode or band+mode.
+</div>
 <p align=center><img src=img/line.png></p>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h21.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h23.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h21.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h23.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
-</div></body></html>
+</div></body>
+</html>

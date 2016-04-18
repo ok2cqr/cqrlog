@@ -1,24 +1,31 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<title>CQRLOG - DX Cluster Operation</title>
+<html>
+<head>
+    <title>CQRLOG - DX Cluster Operation</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong>
-<font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-</td></tr></tbody></table>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h20.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h22.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h20.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h22.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
@@ -38,131 +45,178 @@ cluster node by simply clicking the 'Connect' button. You should see the cluster
 messages indicating progress. You can enter any command into the 'Command' field
 (ie. SH/DX to display last spots, SH/U to see the users connected to the node etc.).
 <br><br>
-<table border="0" cellpadding="5" cellspacing="2"><tbody><tr><td valign="top">
-<img src="img/bulb.png"></td><td bgcolor="#ccffff" width="100%">
-<strong><font color="blue">Our tip:</font></strong> For a nice looking cluster window,
-choose a fixed-width font. We prefer Monospace Regular or Onuava but also Courier works
-nicely. Apple's Monaco font is also very nice and has a slashed zero.</td></tr></tbody></table>
-<br>
-<table border="0" cellpadding="5" cellspacing="2" width="99%"><tbody>
-<tr><td valign="top"><div align="justify">CQRLOG
-has some predefined cluster nodes, however you will probably need to
-set up a node of your preference. Click the 'Select' button and a list
-of cluster node appears (see below). Click the 'New' option. Another dialog
-appears (right). <br><br><img  border="0" src="img/h18.png"></div></td>
-<td valign="top"><img src="img/h19.png" border="0" align="top"><br>
-<div style="text-align: justify;">Enter
-the description (mostly the callsign). The 'Address' can be either an IP
-or the name (see examples in the list). The 'Port' is given by a number.
-Both address and port number can be obtained from the lists of DX cluster
-nodes which are widely available on the internet.
-<br><br><font color="red"><strong>Remember</strong></font> to put your callsign
-into the 'User name' field. This will enable <strong>autologin</strong>.
-The 'Password' column should remain empty in most cases because only few nodes
-are password protected.
-<br><br>A detailed list of DX Cluster nodes can be found
-<a href="http://www.dxcluster.info/telnet/index.php"><strong>here</strong></a>
-(page created by Jim, AD1C).
-</div></td></tr></tbody></table><br><br>
-<p align=center><img src=img/line.png></p>
-<table border="0" cellpadding="5" cellspacing="2" width="99%"><tbody>
-<tr><td valign="top">
-<a name="bh19"><h2><strong>Bandmap Operation</strong></h2></a>
-<img src="img/h64.png" border="0"></td><td valign="top"><div align="justify"><br><br>
-The main purpose of a bandmap is to combine the most interesting info from two sources - the DX
-Cluster and your personal notes. The bandmap combines a DX Cluster window with scratch
-pad memories available on many radios, however a band map is more comfortable by far - you
-don't need to manipulate subtle buttons on the radio panel, also the transceiver does
-not indicate what is in the scratch pad memory. The band map is operated from the keyboard
-and shows all at a glance.
-<br><br>A valuable addition is the 'entries aging' option. If the bandmap entry is 'too' old,
-it changes color and after another period it disappears. This is different from the usual
-DX Cluster windows which display details of stations you have already worked, that are QRT
-or are not very interesting to you from another reason. A band map provides frequency-sorted
-and highly filtered details which don't scroll away (like the DX Cluster window does).
-There are two levels of filtering:</div>
-<ul>
-<li>Spot filtering set up for the DX Cluster window</li>
-<li>Additional band map filtering capable of filtering out spots from momentarily unwanted
-modes, contries, zones or continents. CQRLOG has another filter allowing you to watch spots
-of special interest, ie. you are waiting for an expedition etc. You can set up another
-filter showing spots only on the active band (the band which the radio is on) and the
-actual mode (the mode the radio is on).</li>
-</ul>
-<div align="justify">You can add your own information by writing the call into the logging
-screen in the usual way (like logging). Then press <strong>Ctrl-A</strong> and the entry
-will be added to the band map. Your own entries are marked with an asterisk (here MD0CCE).
-You can return to the frequency anytime, the call will jump into its box in the same way
-as if clicked from the DX Cluster window. Click on any entry, you are on, prepared for
-QSO logging.<br><br>
-If the entry becomes older than the set time, it is displayed in a lighter color. Very old
-entries will disappear, also if you log the station, the corresponding entry disappears
-from the band map. The entries are always sorted by frequency.
-</div>
-</td></tr>
-</tbody>
-</table><br><br>
-<p align=center><img src=img/line.png></p>
-<table border="0" cellpadding="5" cellspacing="2" width="99%"><tbody>
-<tr><td valign="top">
-<a name="ch19"><h2><strong>Xplanet support</strong></h2></a>
-<img src="img/h65.png" border="0"></td><td valign="top">
-<div align="justify"><br><br>There is currently no other function than DX Cluster spot
-displaying in true azimuthal projection with correct angles (azimuth) and distances.
-Alternatively, a map without projection, ie. the globe as seen from space can be selected.</div>
-</td></tr>
-</tbody>
-</table><br><br>
-<p align=center><img src=img/line.png></p>
-<table border="0" cellpadding="5" cellspacing="2" width="99%"><tbody>
-<tr><td valign="top">
-<a name="ch20"><h2><strong>Propagation indicator</strong></h2></a>
-<img src="img/h110.png" border="0"></td><td valign="top"><div align="justify"><br><br>
-There is a simple window providing propagation indices as provided by the NOAA Space
-Weather Center. CQRLOG does not include a propagation forecast module but keen users
-can estimate many parameters just from the supplied data.</div>
-</td></tr>
-</tbody>
-</table><br><br>
-<p align=center><img src=img/line.png></p>
-<table border="0" cellpadding="5" cellspacing="2" width="99%"><tbody>
-<td><td valign="top">
-<a name="ch21"><h2><strong>Additional notes to a callsign</strong></h2></a>
-<img src="img/h112.png" border="0"><div align="justify"><br><br>
-CQRLOG provides virtually unlimited support for additional notes which can be attached
-to a particular callsign (ie. an electronic QSL, a map showing the position, text files
-with antenna details etc). Assuming that external viewers for the text, PDF, image
-(jpg, png, gif) and HTML files are <a href="h1.html#ch4">set up properly</a>, all these
-files can be displayed.<br><br>
-The main program tree contains the <strong>call_data</strong> subfolder where any callsign
-can have its own subfolder containing the files related to the call sign. The subfolder
-for a call sign must be created manually. If this subfolder exists, a special icon "Call
-has an attachment" appears at the bottom right corner of the <em>Comment to callsign</em>
-field in the main logging screen. Click this icon and another window
-<strong>Call attachment</strong> appears, showing the contents of the call sign subfolder.
-Highlight the file you want to view and either double click or use the View button to display
-the file. The number of call sign related subfolders in <strong>call_data</strong> is
-unlimited, also the call sign related subfolder may contain any number of files.</div>
-</td><td valign="middle"><img src="img/h113.png" border="0"><br><br>
-<div align="justify">If the folder contains a file named "qsl_call_front.png" or
-"qsl_call_front.jpg" (must be .png or .jpg), another icon "Call has a QSL image"
-(ie. the ok2cqr subfolder contains qsl_ok2cqr_front.jpg). Click this icon and a QSL browser
-appears showing the front of the QSL card. The "qsl_call_front.png" or "qsl_call_front.jpg"
-<strong>is mandatory</strong> but there can also be a reverse side of QSL card with the
-name "qsl_call_back.png" or "qsl_call_back.jpg". If this file is available, you can use
-the "Front" and "Back" tabs to display both sides of the QSL card.<br><br>
-<img src="img/h116.png" border="0"></div></td></tr>
-</tbody>
-</table><br><br>
-<p align=center><img src=img/line.png></p>
-<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h20.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h22.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+<table border="0" cellpadding="5" cellspacing="2">
+    <tbody>
+    <tr>
+        <td valign="top">
+            <img src="img/bulb.png"></td>
+        <td bgcolor="#ccffff" width="100%">
+            <strong><font color="blue">Our tip:</font></strong> For a nice looking cluster window,
+            choose a fixed-width font. We prefer Monospace Regular or Onuava but also Courier works
+            nicely. Apple's Monaco font is also very nice and has a slashed zero.
+        </td>
+    </tr>
+    </tbody>
 </table>
 <br>
-</div></body></html>
+<table border="0" cellpadding="5" cellspacing="2" width="99%">
+    <tbody>
+    <tr>
+        <td valign="top">
+            <div align="justify">CQRLOG
+                has some predefined cluster nodes, however you will probably need to
+                set up a node of your preference. Click the 'Select' button and a list
+                of cluster node appears (see below). Click the 'New' option. Another dialog
+                appears (right). <br><br><img border="0" src="img/h18.png"></div>
+        </td>
+        <td valign="top"><img src="img/h19.png" border="0" align="top"><br>
+            <div style="text-align: justify;">Enter
+                the description (mostly the callsign). The 'Address' can be either an IP
+                or the name (see examples in the list). The 'Port' is given by a number.
+                Both address and port number can be obtained from the lists of DX cluster
+                nodes which are widely available on the internet.
+                <br><br><font color="red"><strong>Remember</strong></font> to put your callsign
+                into the 'User name' field. This will enable <strong>autologin</strong>.
+                The 'Password' column should remain empty in most cases because only few nodes
+                are password protected.
+                <br><br>A detailed list of DX Cluster nodes can be found
+                <a href="http://www.dxcluster.info/telnet/index.php"><strong>here</strong></a>
+                (page created by Jim, AD1C).
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br><br>
+<p align=center><img src=img/line.png></p>
+<table border="0" cellpadding="5" cellspacing="2" width="99%">
+    <tbody>
+    <tr>
+        <td valign="top">
+            <a name="bh19"><h2><strong>Bandmap Operation</strong></h2></a>
+            <img src="img/h64.png" border="0"></td>
+        <td valign="top">
+            <div align="justify"><br><br>
+                The main purpose of a bandmap is to combine the most interesting info from two sources - the DX
+                Cluster and your personal notes. The bandmap combines a DX Cluster window with scratch
+                pad memories available on many radios, however a band map is more comfortable by far - you
+                don't need to manipulate subtle buttons on the radio panel, also the transceiver does
+                not indicate what is in the scratch pad memory. The band map is operated from the keyboard
+                and shows all at a glance.
+                <br><br>A valuable addition is the 'entries aging' option. If the bandmap entry is 'too' old,
+                it changes color and after another period it disappears. This is different from the usual
+                DX Cluster windows which display details of stations you have already worked, that are QRT
+                or are not very interesting to you from another reason. A band map provides frequency-sorted
+                and highly filtered details which don't scroll away (like the DX Cluster window does).
+                There are two levels of filtering:
+            </div>
+            <ul>
+                <li>Spot filtering set up for the DX Cluster window</li>
+                <li>Additional band map filtering capable of filtering out spots from momentarily unwanted
+                    modes, contries, zones or continents. CQRLOG has another filter allowing you to watch spots
+                    of special interest, ie. you are waiting for an expedition etc. You can set up another
+                    filter showing spots only on the active band (the band which the radio is on) and the
+                    actual mode (the mode the radio is on).
+                </li>
+            </ul>
+            <div align="justify">You can add your own information by writing the call into the logging
+                screen in the usual way (like logging). Then press <strong>Ctrl-A</strong> and the entry
+                will be added to the band map. Your own entries are marked with an asterisk (here MD0CCE).
+                You can return to the frequency anytime, the call will jump into its box in the same way
+                as if clicked from the DX Cluster window. Click on any entry, you are on, prepared for
+                QSO logging.<br><br>
+                If the entry becomes older than the set time, it is displayed in a lighter color. Very old
+                entries will disappear, also if you log the station, the corresponding entry disappears
+                from the band map. The entries are always sorted by frequency.
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br><br>
+<p align=center><img src=img/line.png></p>
+<table border="0" cellpadding="5" cellspacing="2" width="99%">
+    <tbody>
+    <tr>
+        <td valign="top">
+            <a name="ch19"><h2><strong>Xplanet support</strong></h2></a>
+            <img src="img/h65.png" border="0"></td>
+        <td valign="top">
+            <div align="justify"><br><br>There is currently no other function than DX Cluster spot
+                displaying in true azimuthal projection with correct angles (azimuth) and distances.
+                Alternatively, a map without projection, ie. the globe as seen from space can be selected.
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br><br>
+<p align=center><img src=img/line.png></p>
+<table border="0" cellpadding="5" cellspacing="2" width="99%">
+    <tbody>
+    <tr>
+        <td valign="top">
+            <a name="ch20"><h2><strong>Propagation indicator</strong></h2></a>
+            <img src="img/h110.png" border="0"></td>
+        <td valign="top">
+            <div align="justify"><br><br>
+                There is a simple window providing propagation indices as provided by the NOAA Space
+                Weather Center. CQRLOG does not include a propagation forecast module but keen users
+                can estimate many parameters just from the supplied data.
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br><br>
+<p align=center><img src=img/line.png></p>
+<table border="0" cellpadding="5" cellspacing="2" width="99%">
+    <tbody>
+    <td>
+    <td valign="top">
+        <a name="ch21"><h2><strong>Additional notes to a callsign</strong></h2></a>
+        <img src="img/h112.png" border="0">
+        <div align="justify"><br><br>
+            CQRLOG provides virtually unlimited support for additional notes which can be attached
+            to a particular callsign (ie. an electronic QSL, a map showing the position, text files
+            with antenna details etc). Assuming that external viewers for the text, PDF, image
+            (jpg, png, gif) and HTML files are <a href="h1.html#ch4">set up properly</a>, all these
+            files can be displayed.<br><br>
+            The main program tree contains the <strong>call_data</strong> subfolder where any callsign
+            can have its own subfolder containing the files related to the call sign. The subfolder
+            for a call sign must be created manually. If this subfolder exists, a special icon "Call
+            has an attachment" appears at the bottom right corner of the <em>Comment to callsign</em>
+            field in the main logging screen. Click this icon and another window
+            <strong>Call attachment</strong> appears, showing the contents of the call sign subfolder.
+            Highlight the file you want to view and either double click or use the View button to display
+            the file. The number of call sign related subfolders in <strong>call_data</strong> is
+            unlimited, also the call sign related subfolder may contain any number of files.
+        </div>
+    </td>
+    <td valign="middle"><img src="img/h113.png" border="0"><br><br>
+        <div align="justify">If the folder contains a file named "qsl_call_front.png" or
+            "qsl_call_front.jpg" (must be .png or .jpg), another icon "Call has a QSL image"
+            (ie. the ok2cqr subfolder contains qsl_ok2cqr_front.jpg). Click this icon and a QSL browser
+            appears showing the front of the QSL card. The "qsl_call_front.png" or "qsl_call_front.jpg"
+            <strong>is mandatory</strong> but there can also be a reverse side of QSL card with the
+            name "qsl_call_back.png" or "qsl_call_back.jpg". If this file is available, you can use
+            the "Front" and "Back" tabs to display both sides of the QSL card.<br><br>
+            <img src="img/h116.png" border="0"></div>
+    </td>
+    </tr>
+    </tbody>
+</table>
+<br><br>
+<p align=center><img src=img/line.png></p>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h20.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h22.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</div></body>
+</html>

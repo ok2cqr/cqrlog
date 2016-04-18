@@ -1,24 +1,31 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<title>CQRLOG - Supported Radio Types</title>
+<html>
+<head>
+    <title>CQRLOG - Supported Radio Types</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong>
-<font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-/td></tr></tbody></table>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
@@ -26,204 +33,249 @@ in Preferences. This autobackup function creates an ADIF file with a backup of y
 <strong><h2>Supported radio types</h2></strong>
 <br>
 <div style="text-align: justify;">
-The actual list of supported radios depends on the hamlib version.
-You can obtain the actual list using the command:
+    The actual list of supported radios depends on the hamlib version.
+    You can obtain the actual list using the command:
 <pre>
 rigctl --list > riglist.txt
 </pre>
-Remember, the <i>rigctl</i> executable must be on your path.<br>
-The snapshot version 1.2.7. supports the following radio types:
+    Remember, the <i>rigctl</i> executable must be on your path.<br>
+    The snapshot version 1.2.7. supports the following radio types:
 <pre>
-  Rig#	Mfg                 Model               Vers.   Status
-===================================================================
-  1701	Alinco              DX-77               0.7     Beta       
-  2506	AmQRP               DDS-60              0.1     Alpha      
-   508	AOR                 AR2700              0.5     Untested   
-   506	AOR                 AR3000A             0.5     Beta       
-   505	AOR                 AR3030              0.4     Untested   
-   504	AOR                 AR5000              0.5     Beta       
-   514	AOR                 AR5000A             0.5     Alpha      
-   503	AOR                 AR7030              0.4     Beta       
-   502	AOR                 AR8000              0.5     Untested   
-   501	AOR                 AR8200              0.5     Alpha      
-   513	AOR                 AR8600              0.5     Beta       
-  2503	Coding Technologies Digital World Travel0.1     Untested   
-   902	Drake               R-8A                0.5     Beta       
-   903	Drake               R-8B                0.5     Untested   
-  2303	DTTS Microwave SocieDttSP               0.1     Alpha      
-   221	Elecraft            K2                  0.6     Beta       
-   229	Elecraft            K3                  0.6     Beta       
-  2501	Elektor             Elektor 3/04        0.4     Stable     
-  2507	Elektor             Elektor SDR-USB     0.1     Beta       
-  2301	Flex-radio          SDR-1000            0.2     Untested   
-     1	Hamlib              Dummy               0.4     Beta       
-     2	Hamlib              NET rigctl          0.2     Beta       
-  1901	Hamlib              RPC rig             0.3     Beta       
-   354	Icom                IC ID-1             0.4     Untested   
-   303	Icom                IC-271              0.4     Untested   
-   304	Icom                IC-275              0.4.1   Beta       
-   306	Icom                IC-471              0.4     Untested   
-   307	Icom                IC-475              0.4.1   Beta       
-   360	Icom                IC-7000             0.4     Untested   
-   355	Icom                IC-703              0.4     Untested   
-   309	Icom                IC-706              0.4     Untested   
-   310	Icom                IC-706MkII          0.4     Untested   
-   311	Icom                IC-706MkIIG         0.4     Stable     
-   312	Icom                IC-707              0.4     Untested   
-   313	Icom                IC-718              0.4     Alpha      
-   314	Icom                IC-725              0.4.1   Beta       
-   315	Icom                IC-726              0.4     Stable     
-   316	Icom                IC-728              0.4     Untested   
-   319	Icom                IC-735              0.4.1   Beta       
-   320	Icom                IC-736              0.4     Untested   
-   321	Icom                IC-737              0.4     Untested   
-   323	Icom                IC-746              0.4     Untested   
-   346	Icom                IC-746PRO           0.4     Untested   
-   324	Icom                IC-751              0.4.1   Beta       
-   326	Icom                IC-756              0.4     Alpha      
-   327	Icom                IC-756PRO           0.4     Untested   
-   347	Icom                IC-756PROII         0.4     Alpha      
-   357	Icom                IC-756PROIII        0.4     Untested   
-   328	Icom                IC-761              0.4.1   Stable     
-   329	Icom                IC-765              0.4     Stable     
-   330	Icom                IC-775              0.4.1   Untested   
-   345	Icom                IC-78               0.4     Untested   
-   356	Icom                IC-7800             0.4     Untested   
-   331	Icom                IC-781              0.4.1   Untested   
-   332	Icom                IC-820H             0.4     Alpha      
-   334	Icom                IC-821H             0.4     Alpha      
-   344	Icom                IC-910              0.4     Beta       
-   335	Icom                IC-970              0.4     Untested   
-   402	Icom                IC-PCR100           0.5     Beta       
-   401	Icom                IC-PCR1000          0.5     Alpha      
-   336	Icom                IC-R10              0.4     Untested   
-   358	Icom                IC-R20              0.4     Untested   
-   340	Icom                IC-R7000            0.4.0   Alpha      
-   337	Icom                IC-R71              0.4     Untested   
-   341	Icom                IC-R7100            0.4.0   Untested   
-   338	Icom                IC-R72              0.4     Untested   
-   339	Icom                IC-R75              0.4     Beta       
-   343	Icom                IC-R9000            0.4     Untested   
-   342	Icom                ICR-8500            0.4.1   Beta       
-   605	JRC                 NRD-525             0.1     Alpha      
-   606	JRC                 NRD-535D            0.6     Stable     
-   607	JRC                 NRD-545 DSP         0.6     Beta       
-  1801	Kachina             505DSP              0.3     Alpha      
-   215	Kenwood             R-5000              0.6     Alpha      
-   217	Kenwood             TH-D7A              0.3     Alpha      
-   220	Kenwood             TH-F7E              0.3     Beta       
-   223	Kenwood             TH-G71              0.3     Beta       
-   226	Kenwood             TM-D700             0.3     Untested   
-   227	Kenwood             TM-V7               0.3     Beta       
-   230	Kenwood             TRC-80              0.6     Alpha      
-   225	Kenwood             TS-140S             0.6.1   Beta       
-   214	Kenwood             TS-2000             0.6.3   Beta       
-   202	Kenwood             TS-440              0.6.0.6 Alpha      
-   203	Kenwood             TS-450S             0.6     Beta       
-   228	Kenwood             TS-480              0.6.1   Untested   
-   201	Kenwood             TS-50S              0.6     Untested   
-   204	Kenwood             TS-570D             0.6.1   Stable     
-   216	Kenwood             TS-570S             0.6.1   Stable     
-   224	Kenwood             TS-680S             0.6.1   Beta       
-   205	Kenwood             TS-690S             0.6     Alpha      
-   206	Kenwood             TS-711              0.6.0.6 Untested   
-   207	Kenwood             TS-790              0.6.1   Alpha      
-   208	Kenwood             TS-811              0.6.0.6 Untested   
-   209	Kenwood             TS-850              0.6.0   Beta       
-   210	Kenwood             TS-870S             0.6.0   Beta       
-   222	Kenwood             TS-930              0.6     Untested   
-   211	Kenwood             TS-940S             0.6.0.6 Alpha      
-   213	Kenwood             TS-950SDX           0.6     Beta       
-  1004	Lowe                HF-235              0.3     Alpha      
-  2508	mRS                 miniVNA             0.1     Alpha      
-   353	Optoelectronics     OptoScan456         0.3     Beta       
-   352	Optoelectronics     OptoScan535         0.3     Beta       
-  1103	Racal               RA6790/GM           0.1     Untested   
-   804	Radio Shack         PRO-2052            0.3     Untested   
-  2401	RFT                 EKD-500             0.4     Alpha      
-  2502	SAT-Schneider       DRT1                0.2     Beta       
-  1402	Skanti              TRP8000             0.2     Untested   
-  2201	TAPR                DSP-10              0.2     Alpha      
-   351	Ten-Tec             Omni VI Plus        0.2     Beta       
-  1603	Ten-Tec             RX-320              0.5     Beta       
-  1604	Ten-Tec             RX-340              0.1     Untested   
-  1605	Ten-Tec             RX-350              0.1     Untested   
-  1607	Ten-Tec             TT-516 Argonaut V   0.2     Stable     
-  1602	Ten-Tec             TT-538 Jupiter      0.3     Alpha      
-  1601	Ten-Tec             TT-550              0.2     Beta       
-  1608	Ten-Tec             TT-565 Orion        0.4     Beta       
-  1611	Ten-Tec             TT-588 Omni VII     0.3     Alpha      
-   802	Uniden              BC245xlt            0.3     Untested   
-   806	Uniden              BC250D              0.3     Untested   
-   801	Uniden              BC780xlt            0.3     Untested   
-   803	Uniden              BC895xlt            0.3     Untested   
-   810	Uniden              BCD-396T            0.3     Alpha      
-   811	Uniden              BCD-996T            0.3     Alpha      
-  2601	Video4Linux         SW/FM radio         0.1     Untested   
-  1204	Watkins-Johnson     WJ-8888             0.2     Untested   
-  1501	Winradio            WR-1000             0.6     Untested   
-  1502	Winradio            WR-1500             0.6     Untested   
-  1503	Winradio            WR-1550             0.6     Untested   
-  1504	Winradio            WR-3100             0.6     Untested   
-  1505	Winradio            WR-3150             0.6     Untested   
-  1506	Winradio            WR-3500             0.6     Untested   
-  1507	Winradio            WR-3700             0.6     Untested   
-   117	Yaesu               FRG-100             0.4     Beta       
-   119	Yaesu               FRG-8800            0.2     Untested   
-   118	Yaesu               FRG-9600            0.2     Untested   
-   121	Yaesu               FT-100              0.4     Beta       
-   103	Yaesu               FT-1000D            0.0.6   Alpha      
-   124	Yaesu               FT-1000MP           0.1     Alpha      
-   129	Yaesu               FT-2000             0.21    Untested   
-   127	Yaesu               FT-450              0.21.1  Beta       
-   110	Yaesu               FT-736R             0.2     Untested   
-   105	Yaesu               FT-747GX            0.3     Alpha      
-   106	Yaesu               FT-757GX            0.4     Beta       
-   107	Yaesu               FT-757GXII          0.4     Stable     
-   109	Yaesu               FT-767GX            0.1     Alpha      
-   120	Yaesu               FT-817              0.5     Beta       
-   111	Yaesu               FT-840              0.1     Untested   
-   101	Yaesu               FT-847              0.4     Beta       
-   122	Yaesu               FT-857              0.3     Beta       
-   115	Yaesu               FT-890              0.1     Stable     
-   123	Yaesu               FT-897              0.3.2   Beta       
-   113	Yaesu               FT-900              0.1     Untested   
-   114	Yaesu               FT-920              0.3.4   Stable     
-   128	Yaesu               FT-950              0.21.1  Alpha      
-   116	Yaesu               FT-990              0.1     Alpha      
-   130	Yaesu               FTDX-9000           0.21    Untested   
-   125	Yaesu               MARK-V Field FT-10000.0.5   Alpha      
-   104	Yaesu               MARK-V FT-1000MP    0.0.5   Alpha      
-   126	Yaesu               VR-5000             0.2     Alpha      
-------------------------------------------------------------------
+  Rig#	Mfg                    Model                   Vers.          Status
+=============================================================================
+     1  Hamlib                 Dummy                   0.5             Beta
+     2  Hamlib                 NET rigctl              0.3             Beta
+   101  Yaesu                  FT-847                  0.5             Beta
+   103  Yaesu                  FT-1000D                0.0.6           Alpha
+   104  Yaesu                  MARK-V FT-1000MP        0.0.5           Alpha
+   105  Yaesu                  FT-747GX                0.4.1           Beta
+   106  Yaesu                  FT-757GX                0.4.1           Beta
+   107  Yaesu                  FT-757GXII              0.4             Stable
+   109  Yaesu                  FT-767GX                1.0             Stable
+   110  Yaesu                  FT-736R                 0.3             Stable
+   111  Yaesu                  FT-840                  0.1             Untested
+   113  Yaesu                  FT-900                  0.1             Untested
+   114  Yaesu                  FT-920                  2010-08-23      Stable
+   115  Yaesu                  FT-890                  0.1             Stable
+   116  Yaesu                  FT-990                  0.2.1           Alpha
+   117  Yaesu                  FRG-100                 0.4             Beta
+   118  Yaesu                  FRG-9600                0.2             Untested
+   119  Yaesu                  FRG-8800                0.2             Untested
+   120  Yaesu                  FT-817                  0.5.1           Beta
+   121  Yaesu                  FT-100                  0.4.1           Beta
+   122  Yaesu                  FT-857                  0.4             Beta
+   123  Yaesu                  FT-897                  0.3.3           Beta
+   124  Yaesu                  FT-1000MP               0.1.1           Beta
+   125  Yaesu                  MARK-V Field FT-1000MP  0.0.5           Alpha
+   126  Yaesu                  VR-5000                 0.2             Alpha
+   127  Yaesu                  FT-450                  0.22.1          Beta
+   128  Yaesu                  FT-950                  0.22.2          Stable
+   129  Yaesu                  FT-2000                 0.22.1          Stable
+   130  Yaesu                  FTDX-9000               0.22.1          Untested
+   131  Yaesu                  FT-980                  0.1             Alpha
+   132  Yaesu                  FT-DX5000               0.22            Alpha
+   133  Vertex Standard        VX-1700                 1.1             Alpha
+   201  Kenwood                TS-50S                  0.8             Untested
+   202  Kenwood                TS-440                  0.8.0.6.1       Alpha
+   203  Kenwood                TS-450S                 0.8.1           Beta
+   204  Kenwood                TS-570D                 0.8.2           Stable
+   205  Kenwood                TS-690S                 0.8.1           Beta
+   206  Kenwood                TS-711                  0.8.0.6.1       Untested
+   207  Kenwood                TS-790                  0.8.2           Alpha
+   208  Kenwood                TS-811                  0.8.0.6.1       Untested
+   209  Kenwood                TS-850                  0.8.1           Beta
+   210  Kenwood                TS-870S                 0.8.0           Beta
+   211  Kenwood                TS-940S                 0.8.0.6.1       Alpha
+   213  Kenwood                TS-950SDX               0.8             Beta
+   214  Kenwood                TS-2000                 0.8.4           Beta
+   215  Kenwood                R-5000                  0.6.1           Alpha
+   216  Kenwood                TS-570S                 0.8.1           Stable
+   217  Kenwood                TH-D7A                  0.5             Alpha
+   219  Kenwood                TH-F6A                  0.5             Beta
+   220  Kenwood                TH-F7E                  0.5.1           Beta
+   221  Elecraft               K2                      20120615        Beta
+   222  Kenwood                TS-930                  0.8             Untested
+   223  Kenwood                TH-G71                  0.5             Beta
+   224  Kenwood                TS-680S                 0.8.1           Beta
+   225  Kenwood                TS-140S                 0.8.1           Beta
+   226  Kenwood                TM-D700                 0.5             Beta
+   227  Kenwood                TM-V7                   0.5             Beta
+   228  Kenwood                TS-480                  0.8.5           Untested
+   229  Elecraft               K3/KX3                  20120615        Beta
+   230  Kenwood                TRC-80                  0.8             Alpha
+   231  Kenwood                TS-590S                 0.8.1           Beta
+   232  SigFox                 Transfox                20111223        Alpha
+   233  Kenwood                TH-D72A                 0.5.1           Alpha
+   234  Kenwood                TM-D710                 0.5             Untested
+   302  Icom                   IC-1275                 0.7             Beta
+   303  Icom                   IC-271                  0.7             Untested
+   304  Icom                   IC-275                  0.7.1           Beta
+   306  Icom                   IC-471                  0.7             Untested
+   307  Icom                   IC-475                  0.7.1           Beta
+   309  Icom                   IC-706                  0.7.1           Untested
+   310  Icom                   IC-706MkII              0.7.1           Untested
+   311  Icom                   IC-706MkIIG             0.7.2           Stable
+   312  Icom                   IC-707                  0.7             Untested
+   313  Icom                   IC-718                  0.7.1           Beta
+   314  Icom                   IC-725                  0.7.1           Stable
+   315  Icom                   IC-726                  0.7             Stable
+   316  Icom                   IC-728                  0.7             Untested
+   319  Icom                   IC-735                  0.7.1           Beta
+   320  Icom                   IC-736                  0.7             Untested
+   321  Icom                   IC-737                  0.7             Untested
+   322  Icom                   IC-738                  0.7             Untested
+   323  Icom                   IC-746                  0.7.1           Beta
+   324  Icom                   IC-751                  0.7.1           Beta
+   326  Icom                   IC-756                  0.7.1           Alpha
+   327  Icom                   IC-756PRO               0.7             Untested
+   328  Icom                   IC-761                  0.7.1           Stable
+   329  Icom                   IC-765                  0.7             Stable
+   330  Icom                   IC-775                  0.7.1           Untested
+   331  Icom                   IC-781                  0.7.1           Untested
+   332  Icom                   IC-820H                 0.7             Alpha
+   334  Icom                   IC-821H                 0.7             Alpha
+   335  Icom                   IC-970                  0.7             Untested
+   336  Icom                   IC-R10                  0.7             Untested
+   337  Icom                   IC-R71                  0.7             Untested
+   338  Icom                   IC-R72                  0.7             Untested
+   339  Icom                   IC-R75                  0.7             Beta
+   340  Icom                   IC-R7000                0.7.0           Alpha
+   341  Icom                   IC-R7100                0.7.0           Untested
+   342  Icom                   ICR-8500                0.7.1           Beta
+   343  Icom                   IC-R9000                0.7.1           Alpha
+   344  Icom                   IC-910                  0.7.1           Beta
+   345  Icom                   IC-78                   0.7             Untested
+   346  Icom                   IC-746PRO               0.7             Stable
+   347  Icom                   IC-756PROII             0.7             Alpha
+   351  Ten-Tec                Omni VI Plus            0.2             Beta
+   352  Optoelectronics        OptoScan535             0.3             Beta
+   353  Optoelectronics        OptoScan456             0.3             Beta
+   354  Icom                   IC ID-1                 0.7             Untested
+   355  Icom                   IC-703                  0.7             Untested
+   356  Icom                   IC-7800                 0.7.2           Untested
+   357  Icom                   IC-756PROIII            0.7.1           Beta
+   358  Icom                   IC-R20                  0.7             Untested
+   360  Icom                   IC-7000                 0.7.2           Beta
+   361  Icom                   IC-7200                 0.7             Beta
+   362  Icom                   IC-7700                 0.7.1           Stable
+   363  Icom                   IC-7600                 0.7             Beta
+   364  Ten-Tec                Delta II                0.1             Untested
+   365  Icom                   IC-92D                  0.7             Untested
+   366  Icom                   IC-R9500                0.7.1           Untested
+   367  Icom                   IC-7410                 0.7             Untested
+   368  Icom                   IC-9100                 0.7             Untested
+   369  Icom                   IC-RX7                  0.7             Untested
+   401  Icom                   IC-PCR1000              0.8             Beta
+   402  Icom                   IC-PCR100               0.8             Beta
+   403  Icom                   IC-PCR1500              0.8             Beta
+   404  Icom                   IC-PCR2500              0.8             Beta
+   501  AOR                    AR8200                  0.6.1           Alpha
+   502  AOR                    AR8000                  0.6.1           Beta
+   503  AOR                    AR7030                  0.4.1           Beta
+   504  AOR                    AR5000                  0.6.1           Beta
+   505  AOR                    AR3030                  0.4             Untested
+   506  AOR                    AR3000A                 0.5             Beta
+   508  AOR                    AR2700                  0.6             Untested
+   513  AOR                    AR8600                  0.6.1           Beta
+   514  AOR                    AR5000A                 0.6             Alpha
+   515  AOR                    AR7030 Plus             0.1             Beta
+   516  AOR                    SR2200                  0.1             Beta
+   605  JRC                    NRD-525                 0.1             Alpha
+   606  JRC                    NRD-535D                0.6             Stable
+   607  JRC                    NRD-545 DSP             0.6             Beta
+   801  Uniden                 BC780xlt                0.3             Untested
+   802  Uniden                 BC245xlt                0.3             Untested
+   803  Uniden                 BC895xlt                0.3             Untested
+   804  Radio Shack            PRO-2052                0.3             Untested
+   806  Uniden                 BC250D                  0.3             Untested
+   810  Uniden                 BCD-396T                0.3             Alpha
+   811  Uniden                 BCD-996T                0.3             Alpha
+   812  Uniden                 BC898T                  0.3             Untested
+   902  Drake                  R-8A                    0.5.1           Beta
+   903  Drake                  R-8B                    0.5             Untested
+  1004  Lowe                   HF-235                  0.3             Alpha
+  1103  Racal                  RA6790/GM               0.1             Untested
+  1105  Racal                  RA3702                  0.1             Alpha
+  1204  Watkins-Johnson        WJ-8888                 0.2             Untested
+  1402  Skanti                 TRP8000                 0.2             Untested
+  1404  Skanti                 TRP 8255 S R            0.1             Untested
+  1501  Winradio               WR-1000                 0.6             Untested
+  1502  Winradio               WR-1500                 0.6             Untested
+  1503  Winradio               WR-1550                 0.6             Untested
+  1504  Winradio               WR-3100                 0.6             Untested
+  1505  Winradio               WR-3150                 0.6             Untested
+  1506  Winradio               WR-3500                 0.6             Untested
+  1507  Winradio               WR-3700                 0.6             Untested
+  1601  Ten-Tec                TT-550                  0.2             Beta
+  1602  Ten-Tec                TT-538 Jupiter          0.6             Beta
+  1603  Ten-Tec                RX-320                  0.6             Stable
+  1604  Ten-Tec                RX-340                  0.3             Untested
+  1605  Ten-Tec                RX-350                  0.1             Untested
+  1607  Ten-Tec                TT-516 Argonaut V       0.2             Stable
+  1608  Ten-Tec                TT-565 Orion            0.5             Beta
+  1609  Ten-Tec                TT-585 Paragon          0.3             Beta
+  1611  Ten-Tec                TT-588 Omni VII         0.3             Alpha
+  1612  Ten-Tec                RX-331                  0.1             Beta
+  1613  Ten-Tec                TT-599 Eagle            0.4             Untested
+  1701  Alinco                 DX-77                   0.7             Beta
+  1801  Kachina                505DSP                  0.3             Alpha
+  1901  Hamlib                 RPC rig                 0.3             Beta
+  2201  TAPR                   DSP-10                  0.2             Alpha
+  2301  Flex-radio             SDR-1000                0.2             Untested
+  2303  DTTS Microwave Society DttSP IPC               0.2             Alpha
+  2304  DTTS Microwave Society DttSP UDP               0.2             Alpha
+  2401  RFT                    EKD-500                 0.4             Alpha
+  2501  Elektor                Elektor 3/04            0.4             Stable
+  2502  SAT-Schneider          DRT1                    0.2             Beta
+  2503  Coding Technologies    Digital World Traveller 0.1             Untested
+  2506  AmQRP                  DDS-60                  0.1             Alpha
+  2507  Elektor                Elektor SDR-USB         0.3.1           Stable
+  2508  mRS                    miniVNA                 0.1             Alpha
+  2509  SoftRock               Si570 AVR-USB           0.2             Beta
+  2511  KTH-SDR kit            Si570 PIC-USB           0.2             Beta
+  2512  FiFi                   FiFi-SDR                0.5             Beta
+  2513  AMSAT-UK               FUNcube Dongle          0.2             Beta
+  2514  N2ADR                  HiQSDR                  0.2             Untested
+  2601  Video4Linux            SW/FM radio             0.2.1           Beta
+  2602  Video4Linux2           SW/FM radio             0.2.1           Alpha
+  2701  Rohde&Schwarz          ESMC                    0.1             Alpha
+  2702  Rohde&Schwarz          EB200                   0.1             Untested
+  2801  Philips/Simoco         PRM8060                 0.1             Alpha
+  2901  ADAT www.adat.ch       ADT-200A                1.36            Beta
+ ------------------------------------------------------------------
 </pre>
-There's no standardized protocol to remotely control one's rig, be it a Ham radio
-transceiver, a SWL receiver, any kind of scanner or other mobile.
-Many manufacturers have designed their own proprietary protocol, implemented in
-some of their product family. Therefore, each rig family will require a Hamlib
-backend to set the VFO frequency, change mode and passband width, get current
-signal strength, etc.<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/note.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(234, 234, 234);">
-<strong><font color="blue">Note:</font></strong> If your radio is not on the list,
-it does not mean that it is not supported at all. The Elecraft K3 radio works as K2
-(Rig# 221), you could also try one of the Kenwood radios. The Ten-Tec Omni-VI uses the
-Icom IC-735 backend.</td></tr></tbody></table><br>
-New backends for Yaesu FTDX-9000, FT-2000, FT-950 and FT-450 are expected very soon.
-You can try the Kenwood radio instead or FT-1000MP.
-<br>
+    There's no standardized protocol to remotely control one's rig, be it a Ham radio
+    transceiver, a SWL receiver, any kind of scanner or other mobile.
+    Many manufacturers have designed their own proprietary protocol, implemented in
+    some of their product family. Therefore, each rig family will require a Hamlib
+    backend to set the VFO frequency, change mode and passband width, get current
+    signal strength, etc.<br><br>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/note.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(234, 234, 234);">
+                <strong><font color="blue">Note:</font></strong> If your radio is not on the list,
+                it does not mean that it is not supported at all. The Elecraft K3 radio works as K2
+                (Rig# 221), you could also try one of the Kenwood radios. The Ten-Tec Omni-VI uses the
+                Icom IC-735 backend.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
 </div>
 <p align=center><img src=img/line.png></p>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 
-</body></html>
+</body>
+</html>

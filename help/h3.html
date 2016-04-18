@@ -1,289 +1,296 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<title>CQRLOG - Maintenance</title>
+<html>
+<head>
+    <title>CQRLOG - Maintenance</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong>
-<font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-</td></tr></tbody></table>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h4.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h4.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>Maintenance</strong></h2>
 <div style="text-align: justify;">
-<a name=ah24><strong>ADIF import</strong></a><br><br>
-The main purpose is to add QSO records from other logging and/or contesting programs.
-You may need it if you migrate from another logger or if you are adding contacts made
-in a contest (any modern contesting program has the ADIF export facility, some older
-programs may need a third party conversion utility).
-<br><br>
-Go to QSO list (Ctrl+O on the main logging screen or File -> Show QSO list from the menu).
-<br><br>
-<img src="img/h39.png" border="0"><br><br>
-From the menu <strong>here</strong> choose File -> Import -> ADIF.<br><br>
-Click on 'ADIF' and an 'Open file' dialog appears.<br><br>
-<img src="img/h40.png" border="0"><br><br>Navigate to the file you want to import and
-click 'Open'. You will see a new dialog, click the 'Import' button here. You can also
-add a QTH profile and a note ('Remarks:') which will appear on any imported QSO record.
-Using this option, a portable, mobile or QRP operation can be clearly marked.<br><br>
-<img src="img/h41.png" border="0"><br><br>
-If you import a huge file, you will see a progress bar, however import of a small file
-is so fast that you never notice the progress indicator.<br><br>
-<img src="img/h42.png" border="0"><br><br>
-The previous window now shows the import completion, the number of imported records and
-the number of errors. If the ADIF file contains incorrect entries, they will be stored
-separately in the file <strong>errors.adi</strong> located in the 'log_data' subfolder.
-You can fix the errors manually and import again. <br><br>
-<img src="img/h43.png" border="0"><br><br>
-Duplicate entries (contacts already in the log) are indicated with a separate dialog
-allowing you to exclude or include these records.
-<p align=center><img src=img/line.png></p>
-<a name=ah25><strong>ADIF export</strong></a><br><br>
-Go to QSO list using Ctrl-O or choose the QSO list from the upper menu - item 'File'.<br><br>
-<img src=img/h39.png><br><br>
-From the QSO list, choose 'Export' in the menu - item 'File'.<br><br>
-<img src=img/h45.png><br><br>
-Choose 'ADIF'. An usual a dialog appears (depending on the desktop used). Choose a
-location and file name.<br><br>
-<p align=center><img src=img/line.png></p>
-<a name=ah26><strong>HTML export</strong></a><br><br>
-The same as above, only difference is to choose the 'HTML' option.<br><br>
-<p align=center><img src=img/line.png></p>
-<a name=ah27><strong>Program version update</strong></a><br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/exc.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
-<strong><font color="red">WARNING!</font></strong> Making a BACKUP of your log file
-before program update <strong><font color="red">is a MUST!</font></strong>
-</td></tr></tbody></table>
-Download the new version from the <a href=http://www.cqrlog.com><strong>CQRLOG web site</strong>
-</a> (other mirrors may appear later). Unpack the tarball into a temporary location and run the
-installer <pre>cqrlog_install.sh</pre>
-<img src="img/h48.png"><br><br>
-and choose 'Upgrade from previous version'.
-Run the program and perform the DXCC Statistics Rebuild. That's all.<br><br>
-The upgrade process will <strong>NOT overwrite</strong> your log file or your
-configuration.<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr><td valign="top">
-<img src="img/exc.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
-<strong><font color="red">WARNING!</font></strong> If you choose 'Complete new install',
-your log and configuration <strong><font color="red">will be overwritten!</font>
-</strong></td></tr></tbody></table>
-<p align=center><img src=img/line.png></p>
-<a name=ah28><strong>Country files update</strong></a><br><br>
-CQRLOG checks the country file version at startup and the update can be
-<strong>automated</strong> if you choose this option in <a href="h1.html#ch3">Preferences.</a>
-The automated update needs only a click 'Yes' in the update dialog to confirm it.
-<br><br><img src=img/h67.png><br><br>
-<strong>Manual update</strong><br><br>
-The country file set for CQRLOG is distributed as a tar.gz archive with a unique name,
-ie. cqrlog-cty080227.tar.gz. The number (here 080227) denotes the version number which
-is the same as the release date.<br><br>
-Contents of the country file set (8 files):
-<ul>
-<li>AreaOK1RR.tbl</li>
-<li>CallResolution.tbl</li>
-<li>Country.tab</li>
-<li>CountryDel.tab</li>
-<li>iota.tbl</li>
-<li>Exceptions.tbl</li>
-<li>Ambiguous.tbl</li>
-<li>README</li></ul>
-<strong>How to update Country files:</strong><br>
-<ol>
-<li>Unpack and copy all the files into the /ctyfiles folder in your CQRLOG main folder.
-The purpose of this folder is to store these files only, it is not bound to CQRLOG and
-does not affect its function.</li>
-<li>Start CQRLOG and select the 'Show QSO list' from the 'File' item in the main menu.
-You can also get there using shortcut Ctrl-O.</li>
-<li>If you are already in the QSO list, go to menu. Click the 'File' item, then the 'Import'
-option. Choose the DXCC data option, located at lowest position. A dialog appears,
-navigate to your /ctyfiles folder. Click the 'Open' button. All files are read and if
-the import completes, a small window with the message 'Import complete. Please restart
-program' appears. Click the OK button and quit CQRLOG.</li>
-<li>Restart CQRLOG. The update is finished.</li></ol>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/note.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
-<strong><font color="blue">Note:</font></strong> While opening your new country files
-[see 3.], you dont need to open a particular file. The 'Open' button starts a procedure
-which reads ALL files in the /ctyfiles folder.</td></tr></tbody></table>
-<br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/exc.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
-<strong><font color="red">WARNING!</font></strong> Don't attempt to create your own
-country files. This can result in the program crashing or incorrect statistics. If you
-find an incorrectly resolved station (no matter if current log or an old record), send
-a note directly to me: martin@ok1rr.com. <strong><font color="red">ALWAYS</font></strong>
-replace all files in the /ctyfiles folder! If you leave an old file or update only a single
-file from the new version, the resulting tables will become out-of-sync which leads to
-incorrect statistics. Also, the logger may not work properly.</td></tr></tbody></table>
-<br>
-NEW LOG FILE - you can create a new log file (crqlog.fdb) where you can import ADIF format
-QSO data. A new log file is created by CQRLOG automatically if the program does not find
-a cqrlog.fdb file in the /log_data folder. If you create a new log file, import the most
-recent country files set BEFORE any ADIF QSO data import! The best way is to erase all
-files in the /ctyfiles folder and copy the 8 files from your new archive.<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/exc.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
-<strong><font color="red">WARNING!</font></strong> If you update your country files or
-upgrade the CQRLOG version, <strong>always</strong> perform the 'Rebuild DXCC statistics'
-which is accessible from the QSO list screen.</td></tr></tbody></table><br>
-Some users have reported that their DXCC statistics became 'out of sync' and the
-actual DXCC scoring does not match the results reported by CQRLOG.<br><br> 
-Remember that a regular rebuild of your DXCC statistics is a matter of importance.
-Rebuild if you upgrade country files, rebuild also if you upgrade the program version!
-<p align=center><img src=img/line.png></p>
-<a name=ah29><strong>QSL Manager Database update</strong></a><br><br>
-Since version 0.8.0 CQRLOG uses its own QSL Manager database in a very simple, plain
-text format (CSV, semicolon separated). The update is very simple. The automated update
-checks the availability of a new version, downloads and unpacks the tar.gz file if
-available. The new version must be imported - go to QSO list (Ctrl+O or from menu
-<em>File -> Show QSO list</em>) and choose the <em>File -> Import -> Import
-qsl managers database</em>.<br><br>
-A manual update is also possible if you download a recent version from the CQRLOG site
-<a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>.<br><br>
-<img src=img/h107.png><br><br>
-The QSL Manager database format is as follows:<br>
+    <a name=ah24><strong>ADIF import</strong></a><br><br>
+    The main purpose is to add QSO records from other logging and/or contesting programs.
+    You may need it if you migrate from another logger or if you are adding contacts made
+    in a contest (any modern contesting program has the ADIF export facility, some older
+    programs may need a third party conversion utility).
+    <br><br>
+    Go to QSO list (Ctrl+O on the main logging screen or File -> Show QSO list from the menu).
+    <br><br>
+    <img src="img/h39.png" border="0"><br><br>
+    From the menu <strong>here</strong> choose File -> Import -> ADIF.<br><br>
+    Click on 'ADIF' and an 'Open file' dialog appears.<br><br>
+    <img src="img/h40.png" border="0"><br><br>Navigate to the file you want to import and
+    click 'Open'. You will see a new dialog, click the 'Import' button here. You can also
+    add a QTH profile and a note ('Remarks:') which will appear on any imported QSO record.
+    Using this option, a portable, mobile or QRP operation can be clearly marked.<br><br>
+    <img src="img/h41.png" border="0"><br><br>
+    If you import a huge file, you will see a progress bar, however import of a small file
+    is so fast that you never notice the progress indicator.<br><br>
+    <img src="img/h42.png" border="0"><br><br>
+    The previous window now shows the import completion, the number of imported records and
+    the number of errors. If the ADIF file contains incorrect entries, they will be stored
+    separately in the file <strong>errors.adi</strong> located in the 'log_data' subfolder.
+    You can fix the errors manually and import again. <br><br>
+    <img src="img/h43.png" border="0"><br><br>
+    Duplicate entries (contacts already in the log) are indicated with a separate dialog
+    allowing you to exclude or include these records.
+    <p align=center><img src=img/line.png></p>
+    <a name=ah25><strong>ADIF export</strong></a><br><br>
+    Go to QSO list using Ctrl-O or choose the QSO list from the upper menu - item 'File'.<br><br>
+    <img src=img/h39.png><br><br>
+    From the QSO list, choose 'Export' in the menu - item 'File'.<br><br>
+    <img src=img/h45.png><br><br>
+    Choose 'ADIF'. An usual a dialog appears (depending on the desktop used). Choose a
+    location and file name.<br><br>
+    <p align=center><img src=img/line.png></p>
+    <a name=ah26><strong>HTML export</strong></a><br><br>
+    The same as above, only difference is to choose the 'HTML' option.<br><br>
+    <p align=center><img src=img/line.png></p>
+    <strong>How to update Country files:</strong><br>
+    <ol>
+        <li>Unpack and copy all the files into the /ctyfiles folder in your CQRLOG main folder.
+            The purpose of this folder is to store these files only, it is not bound to CQRLOG and
+            does not affect its function.
+        </li>
+        <li>Start CQRLOG and select the 'Show QSO list' from the 'File' item in the main menu.
+            You can also get there using shortcut Ctrl-O.
+        </li>
+        <li>If you are already in the QSO list, go to menu. Click the 'File' item, then the 'Import'
+            option. Choose the DXCC data option, located at lowest position. A dialog appears,
+            navigate to your /ctyfiles folder. Click the 'Open' button. All files are read and if
+            the import completes, a small window with the message 'Import complete. Please restart
+            program' appears. Click the OK button and quit CQRLOG.
+        </li>
+        <li>Restart CQRLOG. The update is finished.</li>
+    </ol>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/note.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
+                <strong><font color="blue">Note:</font></strong> While opening your new country files
+                [see 3.], you dont need to open a particular file. The 'Open' button starts a procedure
+                which reads ALL files in the /ctyfiles folder.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/exc.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
+                <strong><font color="red">WARNING!</font></strong> Don't attempt to create your own
+                country files. This can result in the program crashing or incorrect statistics. If you
+                find an incorrectly resolved station (no matter if current log or an old record), send
+                a note directly to me: martin@ok1rr.com. <strong><font color="red">ALWAYS</font></strong>
+                replace all files in the /ctyfiles folder! If you leave an old file or update only a single
+                file from the new version, the resulting tables will become out-of-sync which leads to
+                incorrect statistics. Also, the logger may not work properly.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/exc.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
+                <strong><font color="red">WARNING!</font></strong> If you update your country files or
+                upgrade the CQRLOG version, <strong>always</strong> perform the 'Rebuild DXCC statistics'
+                which is accessible from the QSO list screen.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    Some users have reported that their DXCC statistics became 'out of sync' and the
+    actual DXCC scoring does not match the results reported by CQRLOG.<br><br>
+    Remember that a regular rebuild of your DXCC statistics is a matter of importance.
+    Rebuild if you upgrade country files, rebuild also if you upgrade the program version!
+    <p align=center><img src=img/line.png></p>
+    <a name=ah29><strong>QSL Manager Database update</strong></a><br><br>
+    Since version 0.8.0 CQRLOG uses its own QSL Manager database in a very simple, plain
+    text format (CSV, semicolon separated). The update is very simple. The automated update
+    checks the availability of a new version, downloads and unpacks the tar.gz file if
+    available. The new version must be imported - go to QSO list (Ctrl+O or from menu
+    <em>File -> Show QSO list</em>) and choose the <em>File -> Import -> Import
+    qsl managers database</em>.<br><br>
+    A manual update is also possible if you download a recent version from the CQRLOG site
+    <a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>.<br><br>
+    <img src=img/h107.png><br><br>
+    The QSL Manager database format is as follows:<br>
 <pre>
 call;qsl_manager;publishing_date
 Example:
 3D2BV;JA1PBV;2008-01
 </pre>
-You can maintain your own records but we carefully maintain this database with verified
-records from reliable sources (DX Bulletins). The database is updated monthly and the
-covered timespan of QSL Managers is limited to 10 years after publishing date. After
-this time, the expired records will be removed and stored in another file (archive)
-which will be available on the CQRLOG site
-<a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>.<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr><td valign="top">
-<img src="img/note.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
-<strong><font color="blue">Note:</font></strong> Because the QRZ.COM entries very often
-contain details useful for direct lookup but not suitable to print on QSL labels,
-choose the option <em>'Ignore QRZ.COM qsl info'</em> in the <em>Preferences ->
-New QSO</em> dialog. </td></tr></tbody></table>
-<br>
-If a station has more than one QSL Manager, click the small button to the left of the
-QSL VIA field.<br><br>
-<img src=img/h106.png><br><br>
-A popup window of selections appears:<br><br>
-<img src=img/h105.png><br><br>
-Navigate to the appropriate QSL manager, use the publishing date column or verify the
-QSL manager from another source. This ensures that the QSL label will contain the
-proper QSL manager.
-<p align=center><img src=img/line.png></p>
-<a name=ah30><strong>Statistics rebuilding</strong></a><br><br>
-<img src=img/h46.png><br><br>
-The only way to rebuild your statistics is <strong>from the QSO list</strong>.
-The 'Statistics' menu item has the 'Rebuild DXCC statistics' option (the similar option
-on the logging screen does NOT have a 'Rebuild' option).<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/exc.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
-<strong><font color="red">WARNING!</font></strong> The statistics rebuilding takes a long
-time if your log contains tens of thousands records!</td></tr></tbody></table><br>
-<img src=img/h46.png><br><br>
-A warning appears before the rebuilding process. If you answer 'Yes', be prepared for a
-long wait.<br><br>
-<img src=img/h47.png>
-<p align=center><img src=img/line.png></p>
-<a name=ah31><strong>Membership databases</strong></a><br><br>
-CQRLOG supports online tracking of up to 5 memberships simultaneously. The membership
-databases can also be used for filter creation, along with a date span (from-to).
-The tracking and filtering feature is not limited to membership, you can create your
-own databases using lists of your particular interests (short-term awards, local
-groups etc.). The databases have a pure text format with data columns separated by
-a semicolon ';'.<br><br>
-The default installation contains data of some 57 clubs: AFM, AGCW, ARKTIKA, A1-CLUB,
-A1-OP, CAV, CCT, CFO, CFT, CONVENIAT, CTC, CWJF, CWSP, DIG, DTC, EHSC, EPC, FFR, FIRAC,
-FISTS, FMC, FOC, GACW, GQRPC, HACWG, HHC, HH, HSC, HTC, JAIG, MARCONISTA, MCL, MFCA,
-MF, OKDXC, OKDXF, OTC-SARA, PRC, PRL, QCWA, RAFARS, RIA, RNARS, RRDXA, RTC, SHSC, SKCC,
-SPAR, SPDXC, TEN-TEN, TFC, UDXC, UFT, VHSC, VRK, WAP, 070-CLUB, 9ACWG.
-<br>You can go to<br>
-<pre>/home/~/cqrlog/members</pre>
-(the tilde ~ represents the name of your personal subdirectory within the 'home' folder).
-<br><br>
-Any membership file also contains a header consisting of two lines:
+    You can maintain your own records but we carefully maintain this database with verified
+    records from reliable sources (DX Bulletins). The database is updated monthly and the
+    covered timespan of QSL Managers is limited to 10 years after publishing date. After
+    this time, the expired records will be removed and stored in another file (archive)
+    which will be available on the CQRLOG site
+    <a href=http://www.cqrlog.com><strong>http://www.cqrlog.com</strong></a>.<br><br>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top">
+                <img src="img/note.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
+                <strong><font color="blue">Note:</font></strong> Because the HamQTH.com/QRZ.COM entries very often
+                contain details useful for direct lookup but not suitable to print on QSL labels,
+                choose the option <em>'Ignore HamQTH.com/QRZ.COM qsl info'</em> in the <em>Preferences ->
+                New QSO</em> dialog.
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    If a station has more than one QSL Manager, click the small button to the left of the
+    QSL VIA field.<br><br>
+    <img src=img/h106.png><br><br>
+    A popup window of selections appears:<br><br>
+    <img src=img/h105.png><br><br>
+    Navigate to the appropriate QSL manager, use the publishing date column or verify the
+    QSL manager from another source. This ensures that the QSL label will contain the
+    proper QSL manager.
+    <p align=center><img src=img/line.png></p>
+    <a name=ah30><strong>Statistics rebuilding</strong></a><br><br>
+    <img src=img/h46.png><br><br>
+    The only way to rebuild your statistics is <strong>from the QSO list</strong>.
+    The 'Statistics' menu item has the 'Rebuild DXCC statistics' option (the similar option
+    on the logging screen does NOT have a 'Rebuild' option).<br><br>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/exc.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
+                <strong><font color="red">WARNING!</font></strong> The statistics rebuilding takes a long
+                time if your log contains tens of thousands records!
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <img src=img/h46.png><br><br>
+    A warning appears before the rebuilding process. If you answer 'Yes', be prepared for a
+    long wait.<br><br>
+    <img src=img/h47.png>
+    <p align=center><img src=img/line.png></p>
+    <a name=ah31><strong>Membership databases</strong></a><br><br>
+    CQRLOG supports online tracking of up to 5 memberships simultaneously. The membership
+    databases can also be used for filter creation, along with a date span (from-to).
+    The tracking and filtering feature is not limited to membership, you can create your
+    own databases using lists of your particular interests (short-term awards, local
+    groups etc.). The databases have a pure text format with data columns separated by
+    a semicolon ';'.<br><br>
+    The default installation contains data of some 57 clubs: AFM, AGCW, ARKTIKA, A1-CLUB,
+    A1-OP, CAV, CCT, CFO, CFT, CONVENIAT, CTC, CWJF, CWSP, DIG, DTC, EHSC, EPC, FFR, FIRAC,
+    FISTS, FMC, FOC, GACW, GQRPC, HACWG, HHC, HH, HSC, HTC, JAIG, MARCONISTA, MCL, MFCA,
+    MF, OKDXC, OKDXF, OTC-SARA, PRC, PRL, QCWA, RAFARS, RIA, RNARS, RRDXA, RTC, SHSC, SKCC,
+    SPAR, SPDXC, TEN-TEN, TFC, UDXC, UFT, VHSC, VRK, WAP, 070-CLUB, 9ACWG.
+    <br>You can go to<br>
+    <pre>/home/~/.config/cqrlog/members</pre>
+    (the tilde ~ represents the name of your personal subdirectory within the 'home' folder).
+    <br><br>
+    Any membership file also contains a header consisting of two lines:
 <pre>HSC
 High Speed Club</pre>
-where the first line represents the <strong>short</strong> name of the club and the second
-line is the long <strong>club</strong> name. Both names must be in the header on separate
-lines. The first line must be the same as the filename without suffix, ie. the HSC
-membership list <strong>must</strong> be <pre>hsc.txt</pre> The mandatory suffix is
-<strong>.txt</strong> and the filename must be in <strong>lowercase</strong>.<br><br>
-You can examine the syntax which is more descriptive than this short example,
-however there are basically 3 types of membership list files:<br><br>
-<strong>1. Simple list of call signs.</strong> It does not contain any membership
-number or date limits. Syntax:<br><br>
-&nbsp;&nbsp;W5LGY<br>
-&nbsp;&nbsp;W5LJT<br>
-&nbsp;&nbsp;W5LKL<br>
-&nbsp;&nbsp;W5LP<br><br>
-ie. a <strong>single</strong> call per line.<br><br>
-<strong>2. List of call signs with membership numbers.</strong> Syntax:<br><br>
-&nbsp;&nbsp;DL5JAN;4603<br>
-&nbsp;&nbsp;DL5JBM;4746<br>
-&nbsp;&nbsp;DL5JBN;4642<br>
-&nbsp;&nbsp;DL5JBW;5740<br><br>
-ie. a <strong>single</strong> call and membership number per line. The call and the
-membership number are separated by a semicolon ';'.<br><br>
-<strong>3. List of call signs with membership numbers and date limits.</strong>Used
-for short term awards or time span limited memberships. Syntax:<br><br>
-&nbsp;&nbsp;6O2NG;533;1957-04;2005-03<br>
-&nbsp;&nbsp;6Y5SR;868;1966-03;1982-07<br>
-&nbsp;&nbsp;6Y5XG;331;1951-05;-<br>
-&nbsp;&nbsp;7J1AEF;1297;1976-06;-<br><br>
-ie. a <strong>single</strong> call, membership number and datelimits from-to, separated by
-a semicolon ';', per line. See above the two optins: 6O2NG with membership number 533 was
-a member of the club from April, 1957 to March, 2005. 6Y5XG with number 331 started his
-membership May, 1951 and is still a member. The dash instead of a date (separated from
-the begin date by a semicolon) denotes that the membership is still active. A dash can
-be used <strong>only</strong> in the field for 'to'.<br><br>
-<table width="100%" border="0" cellpadding="5" cellspacing="2"><tbody><tr>
-<td valign="top"><img src="img/exc.png"></td>
-<td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
-<strong><font color="red">WARNING!</font></strong> You must keep lists of your particular
-interests updated yourself! It is impossible for the authors to keep all these tables up-to-date,
-however if you update a list and would like to share it with others, you are welcome!
-</td></tr></tbody></table><br>
-<p align=center><img src=img/line.png></p>
-<a name=ah32><strong>Log backup</strong></a><br><br>
-Your log is in the file<br>
-<pre>/home/~/cqrlog/log_data/cqrlog.fdb</pre>
-(the tilde ~ represents the name of your personal subdirectory within the 'home' folder).
-<br><br>
-Backup this file, however it is big. If you want to save space, export your log into
-an ADIF file which is about half the size of the .fdb file. ADIF is also version
-independent. Zipped or tared ADIF files also have a reasonable size if your log
-contains several 100 000 records.
-<p align=center><img src=img/line.png></p>
+    where the first line represents the <strong>short</strong> name of the club and the second
+    line is the long <strong>club</strong> name. Both names must be in the header on separate
+    lines. The first line must be the same as the filename without suffix, ie. the HSC
+    membership list <strong>must</strong> be
+    <pre>hsc.txt</pre>
+    The mandatory suffix is
+    <strong>.txt</strong> and the filename must be in <strong>lowercase</strong>.<br><br>
+    You can examine the syntax which is more descriptive than this short example,
+    however there are basically 3 types of membership list files:<br><br>
+    <strong>1. Simple list of call signs.</strong> It does not contain any membership
+    number or date limits. Syntax:<br><br>
+    &nbsp;&nbsp;W5LGY<br>
+    &nbsp;&nbsp;W5LJT<br>
+    &nbsp;&nbsp;W5LKL<br>
+    &nbsp;&nbsp;W5LP<br><br>
+    ie. a <strong>single</strong> call per line.<br><br>
+    <strong>2. List of call signs with membership numbers.</strong> Syntax:<br><br>
+    &nbsp;&nbsp;DL5JAN;4603<br>
+    &nbsp;&nbsp;DL5JBM;4746<br>
+    &nbsp;&nbsp;DL5JBN;4642<br>
+    &nbsp;&nbsp;DL5JBW;5740<br><br>
+    ie. a <strong>single</strong> call and membership number per line. The call and the
+    membership number are separated by a semicolon ';'.<br><br>
+    <strong>3. List of call signs with membership numbers and date limits.</strong>Used
+    for short term awards or time span limited memberships. Syntax:<br><br>
+    &nbsp;&nbsp;6O2NG;533;1957-04;2005-03<br>
+    &nbsp;&nbsp;6Y5SR;868;1966-03;1982-07<br>
+    &nbsp;&nbsp;6Y5XG;331;1951-05;-<br>
+    &nbsp;&nbsp;7J1AEF;1297;1976-06;-<br><br>
+    ie. a <strong>single</strong> call, membership number and datelimits from-to, separated by
+    a semicolon ';', per line. See above the two optins: 6O2NG with membership number 533 was
+    a member of the club from April, 1957 to March, 2005. 6Y5XG with number 331 started his
+    membership May, 1951 and is still a member. The dash instead of a date (separated from
+    the begin date by a semicolon) denotes that the membership is still active. A dash can
+    be used <strong>only</strong> in the field for 'to'.<br><br>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/exc.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(255, 255, 204);">
+                <strong><font color="red">WARNING!</font></strong> You must keep lists of your particular
+                interests updated yourself! It is impossible for the authors to keep all these tables up-to-date,
+                however if you update a list and would like to share it with others, you are welcome!
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <p align=center><img src=img/line.png></p>
+    <a name=ah32><strong>Log backup</strong></a><br><br>
+    Your log is in the <br>
+    <pre>/home/~/.config/cqrlog/</pre>
+    (the tilde ~ represents the name of your personal subdirectory within the 'home' folder).
+    <br><br>
+    Backup this directory, however it is big. If you want to save space, export your log into
+    an ADIF file which is about half the size of the database directory. ADIF is also version
+    independent. Zipped or tared ADIF files also have a reasonable size if your log
+    contains several 100 000 records.
+    <p align=center><img src=img/line.png></p>
 </div>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h4.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h4.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
-</body></html>
+</body>
+</html>

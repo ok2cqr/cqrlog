@@ -1,118 +1,144 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en-us"><head>
-<title>CQRLOG - LoTW support</title></head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td align="justify" bgcolor="#ffffcc" valign="top"><strong>
-<font color="red">WARNING!</font></strong>
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-/td></tr></tbody></table>
+<html lang="en-us">
+<head>
+    <title>CQRLOG - LoTW support</title></head>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td align="justify" bgcolor="#ffffcc" valign="top"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td align="left" width="33%">&nbsp;&lt;<a href="h6.html"> Prev</a></td>
-<td align="center" width="33%">[<a href="index.html#aa">Menu</a>]</td>
-<td align="right" width="33%"><a href="h8.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td align="left" width="33%">&nbsp;&lt;<a href="h6.html"> Prev</a></td>
+        <td align="center" width="33%">[<a href="index.html#aa">Menu</a>]</td>
+        <td align="right" width="33%"><a href="h8.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div align=left><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align="center"><img src="img/line.png"></p><a name="bh4"></a><br><b><h2>LoTW support</h2></b>
 <p><strong>Preparation</strong></p>
 <div align=justify>We assume that you have a working LoTW Account. If you are new to LoTW,
-carefully read the instructions provided by the ARRL and set up your account.<br><br>
-Most important is the certificate. ARRL issues certificates (.tq8) which are bound to
-a particular machine and cannot be transferred to another place. If you receive a
-.tq8 certificate, it is <b>absolutely essential to convert it to more usual .p12</b>
-format which <strong>can</strong> be transferred. Do this immediately!<br><br>
-Download and install the latest LoTW utilities (<em>tqsl</em> and <em>tqslcert</em>).
-<p><strong>Setup</strong></p>
-<img src="img/h76.png"><br><br>
-<div align=justify>If you didn't do it already in the 'Preferences' setup procedure,
-provide your user name for LoTW and the password (this is <strong>not</strong> the
-password sent to US amateurs via postcard!).<br><br>
-Now you need to select a certificate corresponding to the QTH you used while making
-the QSOs you want to confirm. Check the certificates available by opening tqslcert
-which displays all certificates.</div><br>
-<img src="img/h78.png"><br><br>
-<div align=justify>Now select the proper certificate <strong><em>in tqsl</em></strong>.
-If you only have a single certificate, you don't need to make any selection, however note
-the name of the QTH which must be entered into CQRLOG.</div><br>
-<img src="img/h79.png"><br><br>
-<img src="img/h80.png"><br><br>
-<div align=justify>The QTH profile name here is 'Praha'. The callsign is added by default
-however only the name (here 'Praha') should be entered into <em>tqsl command line
-arguments:</em> column of the <em>QSL->LoTW->Export->Upload to LoTW</em> window.</div><br>
-<img src="img/h81.png"><br><br>
-<div align=justify>Once entered, the QTH name stays in the predefined command line.</div>
-<p><strong>LoTW file export and upload</strong></p>
-<div align=justify><strong>1. Select the QSO records</strong> you want to confirm.
+    carefully read the instructions provided by the ARRL and set up your account.<br><br>
+    Most important is the certificate. ARRL issues certificates (.tq8) which are bound to
+    a particular machine and cannot be transferred to another place. If you receive a
+    .tq8 certificate, it is <b>absolutely essential to convert it to more usual .p12</b>
+    format which <strong>can</strong> be transferred. Do this immediately!<br><br>
+    Download and install the latest LoTW utilities (<em>tqsl</em> and <em>tqslcert</em>).
+    <p><strong>Setup</strong></p>
+    <img src="img/h76.png"><br><br>
+    <div align=justify>If you didn't do it already in the 'Preferences' setup procedure,
+        provide your user name for LoTW and the password (this is <strong>not</strong> the
+        password sent to US amateurs via postcard!).<br><br>
+        Now you need to select a certificate corresponding to the QTH you used while making
+        the QSOs you want to confirm. Check the certificates available by opening tqslcert
+        which displays all certificates.
+    </div>
+    <br>
+    <img src="img/h78.png"><br><br>
+    <div align=justify>Now select the proper certificate <strong><em>in tqsl</em></strong>.
+        If you only have a single certificate, you don't need to make any selection, however note
+        the name of the QTH which must be entered into CQRLOG.
+    </div>
+    <br>
+    <img src="img/h79.png"><br><br>
+    <img src="img/h80.png"><br><br>
+    <div align=justify>The QTH profile name here is 'Praha'. The callsign is added by default
+        however only the name (here 'Praha') should be entered into <em>tqsl command line
+            arguments:</em> column of the <em>QSL->LoTW->Export->Upload to LoTW</em> window.
+    </div>
+    <br>
+    <img src="img/h81.png"><br><br>
+    <div align=justify>Once entered, the QTH name stays in the predefined command line.</div>
+    <p><strong>LoTW file export and upload</strong></p>
+    <div align=justify><strong>1. Select the QSO records</strong> you want to confirm.
 
-A suitable choice is a filter for date, QSL received etc.<br><br>
-Now, there are two possibilities:
-<blockquote>
-<strong>I. Export the selected records</strong> to a local ADIF file. This is useful
-if you don't want (or it is impossible) to upload your log to LoTW.
-Go to <em>QSL->LoTW->Export->Export QSOs to LoTW adif file</em><br><br>
-<img src="img/h82.png"><br><br>
-<div align=justify>Provide a file name in the <em>Export to:</em> field.</div><br>
-<img src="img/h83.png"><br><br>
-<div align=justify>If you want to mark the exported QSO records, do it now. Click
-the <em>Export</em> button and go to <em>Upload to LoTW menu</em> item. The ADIF file
-can be signed and uploaded later.<br><br>The other option is export, signing and upload
-your log to LoTW in a single step.<br><br>
-<strong>II. export, signing and upload your log to LoTW from CQRLOG</strong><br><br>
-Go to Upload to LoTW dialog and choose the QSO records which should be exported:</div><br>
-<img src="img/h84.png"><br><br>
-<div align=justify>Click the <em>Export & sign</em> button. You should see:<br>
+        A suitable choice is a filter for date, QSL received etc.<br><br>
+        Now, there are two possibilities:
+        <blockquote>
+            <strong>I. Export the selected records</strong> to a local ADIF file. This is useful
+            if you don't want (or it is impossible) to upload your log to LoTW.
+            Go to <em>QSL->LoTW->Export->Export QSOs to LoTW adif file</em><br><br>
+            <img src="img/h82.png"><br><br>
+            <div align=justify>Provide a file name in the <em>Export to:</em> field.</div>
+            <br>
+            <img src="img/h83.png"><br><br>
+            <div align=justify>If you want to mark the exported QSO records, do it now. Click
+                the <em>Export</em> button and go to <em>Upload to LoTW menu</em> item. The ADIF file
+                can be signed and uploaded later.<br><br>The other option is export, signing and upload
+                your log to LoTW in a single step.<br><br>
+                <strong>II. export, signing and upload your log to LoTW from CQRLOG</strong><br><br>
+                Go to Upload to LoTW dialog and choose the QSO records which should be exported:
+            </div>
+            <br>
+            <img src="img/h84.png"><br><br>
+            <div align=justify>Click the <em>Export & sign</em> button. You should see:<br>
 <pre>Signing adif file ...
 Signed ...
 If you did not see any errors, you can send signed file to LoTW
-website by pressing the Upload button</pre><br>
-Now click the <em>Upload</em> button. A message<br>
+website by pressing the Upload button</pre>
+                <br>
+                Now click the <em>Upload</em> button. A message<br>
 <pre>Uploading file ...
 Size: xxxxx
 Uploading was succesful<br></pre>
-</blockquote>
-This procedure can be checked in the following way: in the /cqrlog/lotw folder there should
-appear two new files - an ADIF file named date_time.adi (where date and time corresponding
-to the date and time of creation) and the signed file with the same file name but .tq8
-extension which is then uploaded to the LoTW site. Finally, you can check the
-<a href=https://p1k.arrl.org/lotwuser/default><strong>LoTW site</strong></a>.
-Log in and go to <em>Your Account -> Your Activity</em> and you should see your last
-upload with the date, time and file name.
-<br><br></div>
-<p><strong>LoTW files download and processing</strong></p>
-<div align=justify>The main purpose of the LoTW file processing (also download) is to
-mark existing QSO records as confirmed via LoTW. Files can be downloaded directly
-into CQRLOG or an already downloaded ADIF files can be processed.</div><br>
-<img src="img/h85.png"><br><br>
-<div align=justify>Both options are shown here. If the <em>Import local LoTW ADIF
-file</em> (already downloaded from the LoTW site) is processed, a simple progress
-indicator is shown.</div><br>
-<img src="img/h86.png"><br><br>
-If you choose <em>Download and process data from LoTW website</em> a progress
-indicator is displayed.</div><br><br>
+        </blockquote>
+        This procedure can be checked in the following way: in the /cqrlog/lotw folder there should
+        appear two new files - an ADIF file named date_time.adi (where date and time corresponding
+        to the date and time of creation) and the signed file with the same file name but .tq8
+        extension which is then uploaded to the LoTW site. Finally, you can check the
+        <a href=https://p1k.arrl.org/lotwuser/default><strong>LoTW site</strong></a>.
+        Log in and go to <em>Your Account -> Your Activity</em> and you should see your last
+        upload with the date, time and file name.
+        <br><br></div>
+    <p><strong>LoTW files download and processing</strong></p>
+    <div align=justify>The main purpose of the LoTW file processing (also download) is to
+        mark existing QSO records as confirmed via LoTW. Files can be downloaded directly
+        into CQRLOG or an already downloaded ADIF files can be processed.
+    </div>
+    <br>
+    <img src="img/h85.png"><br><br>
+    <div align=justify>Both options are shown here. If the <em>Import local LoTW ADIF
+        file</em> (already downloaded from the LoTW site) is processed, a simple progress
+        indicator is shown.
+    </div>
+    <br>
+    <img src="img/h86.png"><br><br>
+    If you choose <em>Download and process data from LoTW website</em> a progress
+    indicator is displayed.
+</div>
+<br><br>
 <img src="img/h87.png"><br><br>
 <div align=justify>The Size changes while downloading, if finished it indicates the
-total file size. When the download finishes, a summary appears and the import begins,
-showing the same progress indicator as above.</div><br>
+    total file size. When the download finishes, a summary appears and the import begins,
+    showing the same progress indicator as above.
+</div>
+<br>
 <img src="img/h88.png"><br><br>
 If the file is not accessible (due to server overload etc.), an error message is shown.
 Also if the file contains a record which is not in your log, a warning message appears.
 <p align="center"><img src="img/line.png"></p>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td align="left" width="33%">&nbsp;&lt;<a href="h6.html"> Prev</a></td>
-<td align="center" width="33%">[<a href="index.html#aa">Menu</a>]</td>
-<td align="right" width="33%"><a href="h8.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td align="left" width="33%">&nbsp;&lt;<a href="h6.html"> Prev</a></td>
+        <td align="center" width="33%">[<a href="index.html#aa">Menu</a>]</td>
+        <td align="right" width="33%"><a href="h8.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
-</body></html>
+</body>
+</html>

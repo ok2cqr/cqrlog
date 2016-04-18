@@ -1,90 +1,106 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<title>CQRLOG - QSO Record edit</title>
+<html>
+<head>
+    <title>CQRLOG - QSO Record edit</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong>
-<font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-</td></tr></tbody></table>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h26.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h26.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>QSO record edit</strong></h2>
 <div align="justify">Most editing operations can be done from the QSO list window
-which appears by pressing Ctrl-O or clicking the corresponding menu item from the
-logging screen.<br></div>
+    which appears by pressing Ctrl-O or clicking the corresponding menu item from the
+    logging screen.<br></div>
 <p><img src=img/h2.png></p>
 <div align="justify">The QSO list displays either all QSO records or a limited
-number (QSO since ... year), depending on the
-<a href="h1.html#ah2">Preferences -> Program</a> settings.<br></div>
+    number (QSO since ... year), depending on the
+    <a href="h1.html#ah2">Preferences -> Program</a> settings.<br></div>
 <p><img src=img/h89.png></p>
 <div align="justify">This window has a quite complex icon system which is explained here:<br></div>
 <p><img src=img/h77.png></p>
 <div align="justify">A single record can be edited (viewed, deleted) if you highlight
-it using mouse or up/down keys and click the corresponding button (it will be EA8FC
-in the example above). You will be returned to the QSO logging window which is now
-changed to an Edit window. This status is clearly marked with the red message
-<font color=#ff0000>(edit mode)</font> just behind the <em>Call</em> header which
-is also displayed in red. All fields can be edited. When you finish editing, you should
-save the chages using the ENTER key or by clicking the <em>Save QSO [enter]</em> button,
-in the same way that you do when you log a new contact.<br></div>
+    it using mouse or up/down keys and click the corresponding button (it will be EA8FC
+    in the example above). You will be returned to the QSO logging window which is now
+    changed to an Edit window. This status is clearly marked with the red message
+    <font color=#ff0000>(edit mode)</font> just behind the <em>Call</em> header which
+    is also displayed in red. All fields can be edited. When you finish editing, you should
+    save the chages using the ENTER key or by clicking the <em>Save QSO [enter]</em> button,
+    in the same way that you do when you log a new contact.<br></div>
 <p><img src=img/h93.png></p>
 <div align="justify">A QSO record can now be edited directly from the logging screen.
-The QSOs made in last few days <a href="h1.html#ah4">(see Preferences -> New QSO)</a>
-are displayed in the logging screen. Right click on the required record which appears
-in the logging screen, and select edit QSO, exactly as described above
-(here 5R8IC will be edited).<br></div>
+    The QSOs made in last few days <a href="h1.html#ah4">(see Preferences -> New QSO)</a>
+    are displayed in the logging screen. Right click on the required record which appears
+    in the logging screen, and select edit QSO, exactly as described above
+    (here 5R8IC will be edited).<br></div>
 <p><img src=img/h94.png></p>
 <div align="justify">You can also view the record and search in the QRZ database or
-look for the QSL manager in the IK3QAR QSL manager database.
-<p align=center><img src=img/line.png></p>
+    look for the QSL manager in the IK3QAR QSL manager database.
+    <p align=center><img src=img/line.png></p>
 
-<a name="grp"><h2><strong>Group edit</strong></h2></a>
-<div align="justify">A record can be tagged by clicking the corresponding icon or
-with the mouse - hold the Ctrl key on the keyboard and left click on the QSO record
-to be tagged.<br></div>
-<p><img src=img/h90.png></p>
-<div align="justify">Click the <em>Edit QSO</em> button and the group edit menu
-appears:<br></div>
-<p><img src=img/h91.png></p>
-<div align="justify">Choose the field to be edited from the pulldown menu:<br></div>
-<p><img src=img/h92.png></p>
-<div align="justify">The field name changes. Enter the value (word, string) which
-will appear in <strong>ALL</strong> tagged QSO records. Click the <em>Apply</em>
-button and the value in all tagged records will be changed to the value entered
-into <em>Value:</em> box. All values entered within a session are temporarily stored
-so you can list it with the "down arrow" button in the group edit menu.</div>
-<table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr>
-<td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font>
-There is no UNDO option!</strong> If you click the <em>Apply</em> button,
-there is no way to return to previous values! Make a backup before any group edit
-operation!</td></tr></tbody></table>
+    <a name="grp"><h2><strong>Group edit</strong></h2></a>
+    <div align="justify">A record can be tagged by clicking the corresponding icon or
+        with the mouse - hold the Ctrl key on the keyboard and left click on the QSO record
+        to be tagged.<br></div>
+    <p><img src=img/h90.png></p>
+    <div align="justify">Click the <em>Edit QSO</em> button and the group edit menu
+        appears:<br></div>
+    <p><img src=img/h91.png></p>
+    <div align="justify">Choose the field to be edited from the pulldown menu:<br></div>
+    <p><img src=img/h92.png></p>
+    <div align="justify">The field name changes. Enter the value (word, string) which
+        will appear in <strong>ALL</strong> tagged QSO records. Click the <em>Apply</em>
+        button and the value in all tagged records will be changed to the value entered
+        into <em>Value:</em> box. All values entered within a session are temporarily stored
+        so you can list it with the "down arrow" button in the group edit menu.
+    </div>
+    <table border="0" cellpadding="5" cellspacing="2" width="100%">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/exc.png"></td>
+            <td bgcolor=ffffcc valign="top" align="justify"><strong><font color="red">WARNING!</font>
+                There is no UNDO option!</strong> If you click the <em>Apply</em> button,
+                there is no way to return to previous values! Make a backup before any group edit
+                operation!
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-<p align=center><img src=img/line.png></p>
+    <p align=center><img src=img/line.png></p>
 
-<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h26.html">Next </a>&gt;</td>
-</tr>
-</tbody>
-</table>
-<br>
-</div></body></html>
+    <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+        <tr>
+            <td width="33%" align="left">&nbsp;&lt;<a href="h24.html"> Prev</a></td>
+            <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+            <td width="33%" align="right"><a href="h26.html">Next </a>&gt;</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+</div>
+</body>
+</html>

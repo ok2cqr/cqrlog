@@ -1,111 +1,112 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-<title>CQRLOG - Troubleshooting</title>
+<html>
+<head>
+    <title>CQRLOG - Troubleshooting</title>
 </head>
-<body><table border="0" cellpadding="5" cellspacing="2" width="100%">
-<tbody><tr><td valign="top"><img src="img/exc.png"></td>
-<td bgcolor=ffffcc valign="top" align="justify"><strong>
-<font color="red">WARNING!</font></strong> 
-Backup your data often! BACKUP your log directory at the end of EVERY session!
-All that you need to backup and store in a safe place is the log database directory
-located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
-in Preferences. This autobackup function creates an ADIF file with a backup of your log.
-</td></tr></tbody></table>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h4.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h6.html">Next </a>&gt;</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h4.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h6.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
 </table>
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>Troubleshooting</strong></h2>
 <div style="text-align: justify;">
-<a name="ah37"><em><strong>My radio control (CAT) does not work</strong></em><ul>
-<li><strong>Check your ports.</strong> You must be a member of the user group,
-which has permission to use ttyS* or ttyUSB* devices.</li>
-<li><strong>Check that your radio is properly set up </strong>
-<a href="h1.html#ah7"><em>(see here)</em></a>. Check that the radio type is properly
-set up <a href="h6.html"><em>(see here)</em></a>. Click the 'Settings' button and
-check the port settings - ttyS* or ttyUSB* number and <strong>all</strong>
-communication parameters.</li>
-<li><strong>Is the poll rate set too fast?</strong> Try a lower setting (higher number).</li>
-</ul><br>
-<p align=center><img src=img/line.png></p>
-<em><strong>When I click on a spot in the DX cluster window it populates the log
-but it does not move the rig to the new operating frequency.</strong> I am using
-an Icom 756 (original nonPro model).</strong></em><ul>
-<li>Set IF filters bandwidth to 0 (Preferences -> Modes tab).</li>
-</ul><br>
-<p align=center><img src=img/line.png></p>
-<a name="ah38"><em><strong>I'm unable to autologin to the Cluster</strong></em><ul>
-Open the DX cluster window and click the 'Select' button. In the
-<a href="h21.html#ah19"><strong>DX Cluster List</strong></a> choose the 'Edit' option.
-A dialog appears:<br><br>
-<img src="img/h55.png" border="0"></ul>
-<br>
-The 'User name:' field must be filled with your call sign.<br>
-<p align=center><img src=img/line.png></p>
-<a name="ah39"><em><strong>I get this error message when trying to load:</strong></em><ul>
-
-   <pre>"Can't load library: /home/ham/cqrlog/libfbembed.so.2.1.1
-   Press OK to ignore and risk data corruption.
-   Press Cancel to kill the program. </pre></ul>
- <p>The library <pre>libstdc++5</pre> is not installed.</p>
-<table border="0" cellpadding="5" cellspacing="2" width="100%"><tbody><tr>
-<td valign="top"><img src="img/note.png"></td>
-<td bgcolor=#eaeaea valign="top" align="justify"><strong><font color="blue">Note:</font>
-Since version 0.8.5 the libstdc++5</strong> does not need to be installed, it
-<strong>is already part of the installation</strong> and can be found in the /lib folder
-(file name libstdc++.so.5.0.7., size 737 192 B). If you get the above mentioned
-error message, check the /lib folder for presence of libstdc++.so.5.0.7.
-</td></tr></tbody></table>
+    <a name="ah37"><em><strong>My radio control (CAT) does not work</strong></em>
+        <ul>
+            <li><strong>Check your ports.</strong> You must be a member of the user group,
+                which has permission to use ttyS* or ttyUSB* devices.
+            </li>
+            <li><strong>Check that your radio is properly set up </strong>
+                <a href="h1.html#ah7"><em>(see here)</em></a>. Click the 'Settings' button and
+                check the port settings - ttyS* or ttyUSB* number and <strong>all</strong>
+                communication parameters.
+            </li>
+            <li><strong>Is the poll rate set too fast?</strong> Try a lower setting (higher number).</li>
+        </ul>
+        <br>
+        <p align=center><img src=img/line.png></p>
+        <em><strong>When I click on a spot in the DX cluster window it populates the log
+            but it does not move the rig to the new operating frequency.</strong> I am using
+            an Icom 756 (original nonPro model).</strong></em>
+        <ul>
+            <li>Set IF filters bandwidth to 0 (Preferences -> Modes tab).</li>
+        </ul>
+        <br>
+        <p align=center><img src=img/line.png></p>
+        <a name="ah38"><em><strong>I'm unable to autologin to the Cluster</strong></em>
+            <ul>
+                Open the DX cluster window and click the 'Select' button. In the
+                <a href="h21.html#ah19"><strong>DX Cluster List</strong></a> choose the 'Edit' option.
+                A dialog appears:<br><br>
+                <img src="img/h55.png" border="0"></ul>
+            <br>
+            The 'User name:' field must be filled with your call sign.<br>
+            <p align=center><img src=img/line.png></p>
 </div>
 <p align=center><img src=img/line.png></p>
 <a name="ah40"><em><strong>I have trouble with LoTW login getting the following error
-message:</strong></em><ul>
+    message:</strong></em>
+    <ul>
 <pre>PROGRESS shows:
 NOT logged
 Error: 0
 Error: ssl_none</pre>
-<p>Solution: libssl-dev must be installed</p></ul>
-<p align=center><img src=img/line.png></p>
-<a name="ah41"><em><strong>CQRLOG is very slow or does not run at all</strong></em><ul>
-<p align="justify">The accompanying problem is an abonormally high CPU load. The problem
-is instant polling of a non-existent (not responding) radio. Your radio setup is
-probably incorrect. Try to downoad a default cqrlog.cfg from the CQRLOG web site
-(www.cqrlog.com) and copy it into your /cqrlog/log_data folder. Backup your old
-cqrlog.cfg before if you want. The default cqrlog.cfg redirects all polling to the
-hamlib dummy radio (model=1] and the high CPU load should return to its
-normal values.<br><br>Then you should set up your radio again.
-Don't use too low a poll rate, a value of 300 is sufficient.</p></ul></div>
-<p align=center><img src=img/line.png></p>
-<a name="ah42"><em><strong>64 bit - CQRLOG won't install (won't run)</strong></em><ul>
-<p align="justify">32 bit libraries must be installed! If not, please install
-bug-buddy.i386 and all the libstdc.i386 packages. Also hamlib 32bit version
-has to be installed.</p></ul></div>
-<p align=center><img src=img/line.png></p>
-<a name="ah43"><em><strong>Disappearing fonts in the Radio Control Window</strong></em><ul>
-<p>If your Radio Control Window looks like this</p>
-<p><img src=img/h108.png></p>
-<p>go to Preferences -> Fonts and uncheck the 'Use default settings' option</p>
-<p><img src=img/h109.png></p>
-<div align="justify"><p>and set fonts manually. Choose any font of your preference
-which is present on your system (you will see it in the font choice pulldown dialog
-'Select font'). This fixes this problem.</p></ul></div>
-<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<tr>
-<td width="33%" align="left">&nbsp;&lt;<a href="h4.html"> Prev</a></td>
-<td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
-<td width="33%" align="right"><a href="h6.html">Next </a>&gt;</td>
-</tr>
-</tbody>
-</table>
-<br>
+        <p>Solution: libssl-dev must be installed</p></ul>
+    <p align=center><img src=img/line.png></p>
+    <a name="ah41"><em><strong>CQRLOG is very slow or does not run at all</strong></em>
+        <ul>
+            <p align="justify">The accompanying problem is an abonormally high CPU load. The problem
+                is instant polling of a non-existent (not responding) radio. Your radio setup is
+                probably incorrect. Try to downoad a default cqrlog.cfg from the CQRLOG web site
+                (www.cqrlog.com) and copy it into your /cqrlog/log_data folder. Backup your old
+                cqrlog.cfg before if you want. The default cqrlog.cfg redirects all polling to the
+                hamlib dummy radio (model=1] and the high CPU load should return to its
+                normal values.<br><br>Then you should set up your radio again.
+                Don't use too low a poll rate, a value of 300 is sufficient.</p></ul>
+        </div>
+            <p align=center><img src=img/line.png></p>
+            <a name="ah43"><em><strong>Disappearing fonts in the Radio Control Window</strong></em>
+                <ul>
+                    <p>If your Radio Control Window looks like this</p>
+                    <p><img src=img/h108.png></p>
+                    <p>go to Preferences -> Fonts and uncheck the 'Use default settings' option</p>
+                    <p><img src=img/h109.png></p>
+                    <div align="justify"><p>and set fonts manually. Choose any font of your preference
+                        which is present on your system (you will see it in the font choice pulldown dialog
+                        'Select font'). This fixes this problem.</p>
+                </ul>
+                </div>
+                <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+                    <tbody>
+                    <tr>
+                        <td width="33%" align="left">&nbsp;&lt;<a href="h4.html"> Prev</a></td>
+                        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+                        <td width="33%" align="right"><a href="h6.html">Next </a>&gt;</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br>
 
-</body></html>
+</body>
+</html>
