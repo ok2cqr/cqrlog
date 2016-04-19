@@ -21,8 +21,8 @@ restart_apparmor()
 
 if [ -f "$GLOBAL_MYSQL_FILE" ] 
 then
-  grep -v "@{HOME}/.config/cqrlog/database/" $FILE >> $FTMP
-  cat $FTMP > $FILE
+  grep -v "@{HOME}/.config/cqrlog/database/" $GLOBAL_MYSQL_FILE >> $FTMP
+  cat $FTMP > $GLOBAL_MYSQL_FILE
   echo ""
   echo Changes removed from $GLOBAL_MYSQL_FILE
   echo ""  
