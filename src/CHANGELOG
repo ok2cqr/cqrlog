@@ -30,6 +30,7 @@ Legend:
   - after change "Default frequencies", related button in TRX control window didn't go red - fixed
   - QSO count with active filter was wrong after delete or update
   - Remove dupes from the log didn't work - fixed
+  - QTH profile was not imported from ADIF - fixed
 
 1.9.1 (2015-11-28)
   + support sending CW via HamLib library added

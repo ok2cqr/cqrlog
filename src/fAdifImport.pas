@@ -108,7 +108,7 @@ type
     ERR_FILE : String;
     WrongRecNr : Integer;
     RecNR      : Integer;
-    GlobalProfile : Word;
+    GlobalProfile : Integer;
     NowDate : String;
     procedure WriteWrongADIF(lines : Array of String; error : String);
 
