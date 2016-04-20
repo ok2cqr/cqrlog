@@ -962,7 +962,7 @@
 =GB100MUC =GB2RWW =GB80GD =GB2PG =GB1ASC =GB4PAS|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB100TT =GB5MOB =GB4SPT =GB2MAD =GB4MNH =GB4JDF|Isle of Man, Special Station|EU|0|54.17N|4.50W|27|14||R|=114
 =GB125SR =GB2IOM =GB2WB =GB3GD =GB5TDC =MB100TT|Isle of Man, Special Station|EU|0|54.17N|4.50W|27|14||R|=114
-=GB1BAF =GB1WIW =GB4BB =GB4AFS =GB6RNLI|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
+=GB1BAF =GB1WIW =GB4BB =GB4AFS =GB6RNLI =GB4PCS =GB75ATC|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB1BD =GB1PC =GB2ATC =GB2SQN =GB2VEF =GB2BHM =GB2CHC|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB1BW =GB2GGM =GV0ANA =GV0DIV =GV0FRE =GB0RWM =GB0WIW =GB1JC|Wales, Special Station, Centenary of the Radio Society of Great Britain|EU|0|51.48N|3.18W|27|14||R|2013/07/05-2013/07/31=294
 =GB1CCC =GB1LSG =GB1SSL =GB1TDS =GB2000SET =GB0WHR|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
@@ -1857,6 +1857,7 @@
 =LU3ZO|Destacamento Naval Decepcion Base (Navy), 1de Mayo Bay, Foster Port, Deception Island, South Shetland Islands|AN|4|62.9833S|60.7167W|73|13||R|1953/01/01-1953/12/31=241
 =LU3ZS|Teniente de Navio Juan Camara Base (Navy), Meda Luna Island, Half Moon Island, Caleta Menguante, Livingston Island, South Shetland Islands|AN|4|62.36S|59.54W|73|13||R|1953/01/01-1953/12/31=241
 =LU3ZY|IAA Corbeta Uruguay Station, Morrell Island (Hewisen Point) Southern Thule, South Sandwich Islands|AN|2|59.450S|27.30W|73|13||R|=240
+=LU4AA/Z|IAA Base ‘Carlini’, Potter Bay, Bay of Guardia Nacional, Isla 25 de Mayo, South Shetland Islands|AN|4|62.2378S|58.6644W|73|13||R|=241
 =LU4MDR/Z|Bas Vicecomodoro Gustavo Marambio (Air Force), Marambio Island, (Seymour Island), Weddell Sea, Antarctica|AN|3|64.245S|56.6569W|73|13||R|1983/01/01-1983/12/31=13
 =LU4ZA|Destacamento Naval Orcadas del Sur Base (Navy), Laurie Island, Caletas Uruguay and Scotia Bays, South Orkney Islands|AN|3|60.7389S|44.7381W|73|13||R|1965/01/01-1965/12/31=238
 =LU4ZB|Destacamento Naval Melchior Base (Navy), Observatorio Island, Melchior Port, Principal Channel, Melchior Islands, Antarctica|AN|0|64.3333S|62.9833W|73|13||R|1956/01/01-1956/12/31=13
@@ -2692,13 +2693,13 @@
 =TO2FH|St. Pierre & Miquelon|NA|4|46.79N|56.20W|09|05||R|2010/05/18-2010/05/25=277
 =TO2FP|St. Pierre & Miquelon|NA|4|46.79N|56.20W|09|05||R|2010/05/19-2010/05/23=277
 =TO2HI|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|2008/11/16-2008/12/03=79
-=TO2M|Mayotte|AF|-3|12.7792S|45.2135E|53|39||R|2012/10/05-2012/10/18=169
+=TO2M|Mayotte|AF|-3|12.7792S|45.2135E|53|39||R|2012/10/04-2012/10/19=169
 =TO2M|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2015/10/17-2015/10/27=84
 =TO2OOO|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|1999/12/01-2000/01/31=79
 =TO2R =TO3R =TO5R|Reunion|AF|-4|21.15S|55.56E|53|39||R|=453
 =TO2T|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|=79
 =TO2TT|Mayotte|AF|-3|12.7792S|45.2135E|53|39||R|2013/10/03-2013/10/17=169
-=TO2U|St. Pierre & Miquelon|NA|4|46.79N|56.20W|09|05||R|2012/07/28-2012/07/29=277
+=TO2U|St. Pierre & Miquelon|NA|4|46.79N|56.20W|09|05||R|2012/07/20-2012/07/31=277
 =TO2Z|Reunion|AF|-4|21.15S|55.56E|53|39||R|2011/04/09-2011/04/22=453
 =TO3A|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2010/11/22-2010/11/30=516
 =TO3EME|French Guiana|SA|4|5N|52W|12|09||R|2008/05/01-2008/05/07=63
@@ -2734,6 +2735,7 @@
 =TO5DX|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2008/10/16-2008/10/28=516
 =TO5E|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2008/06/27-2008/07/06=516
 =TO5FJ|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2008/01/06-2008/01/20=516
+=TO5FP|St. Pierre & Miquelon|NA|4|46.79N|56.20W|09|05||R|2016/09/10-2016/09/20=277
 =TO5G|French Guiana|SA|4|5N|52W|12|09||R|2012/01/02-2012/01/07=63
 =TO5G|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|1998/05/01-1998/05/31=79
 =TO5GI|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|1995/03/20-1995/03/31=79
@@ -2791,8 +2793,9 @@
 =TO8UFT|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|=79
 =TO8YY|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2009/06/29-2009/07/08=516
 =TO8Z|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2008/10/25-2008/10/30=84
-=TO90IARU|Martinique|NA|4|14.6006N|61.00759W|11|08||R|=84
+=TO90IARU =TO972M|Martinique|NA|4|14.6006N|61.00759W|11|08||R|=84
 =TO90R|Reunion|AF|-4|21.15S|55.56E|53|39||R|2015/06/01-2015/12/31=453
+=TO972M|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2016/03/26-2016/03/27=84
 =TO9A|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2006/02/12-2006/02/20=84
 =TO9IS|French Guiana|SA|4|5N|52W|12|09||R|=63
 =TO9PL|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|1997/05/17-1997/06/09=213
@@ -3186,7 +3189,7 @@
 =VK0ED|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1981/01/01-1981/12/31=13
 =VK0EG|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1954/01/01-1954/12/31=13
 =VK0EH|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
-=VK0EK|Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|2016/03/06-2016/03/20=111
+=VK0EK|Heard Island, Atlas Cove (Spit Point)|AN|-5|53.1176S|73.5500E|68|39||R|2016/03/22-2016/04/11=111
 =VK0EM|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1959/01/01-1959/12/31=13
 =VK0ERZ|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0FB|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1964/01/01-1964/12/31=13
@@ -3434,6 +3437,7 @@
 =VK7FJ/LH =VK7GK/LH =VK8GH/LH =VK8GK/LH =VK8LK/LH|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|=147
 =VK7WI|Australia, Tasmania, News Broadcast Station|OC|-10|42.30S|147E|59|30||R|=150
 =VK9/G7VJR|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2014/12/26-2015/01/01=189
+=VK9/LB1GB|Cocos-Keeling Islands|OC|-6.5|12.4000S|96.8352E|54|29||R|=38
 =VK9/OH1VR =VK9/OH3JR =VK9/OG1M =VK9/OH3X|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2012/11/17-2012/11/27=147
 =VK9AA =VK9AW|Cocos-Keeling Islands|OC|-6.5|12.4000S|96.8352E|54|29||R|=38
 =VK9AAA|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2009/07/22-2009/07/29=189
