@@ -1,6 +1,39 @@
 <strong>New user?</strong> Please look to <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
 <hr>
 <br>
+<strong>CQRLOG 2.0.0 (2016-04-20)</strong><br>
+<ul style="list-style: square;text-align:left; color: blue;">
+  <li>MariaDB 10.1 support added</li>
+  <li>Frequency memories added</li>
+  <li>list of previous QSO should be much faster on older computers</li>	
+  <li>"Always overwrite only CQ, ITU zones, county and US state from callbook" option added</li>
+  <li>callbook is used for better DXCC and state recognition</li>
+  <li>new database connection error window with small how to</li>
+  <li>the db error window can open mysql.err</li>
+  <li>Do NOT upload changes to online logs" option to Rebuild membership added</li>
+  <li>all comments to callsign can be modified (NewQSO window -> File -> Comment to callsigns)</li>
+  <li>transverter support added (you can set RX and TX offset for each band)</li>
+  <li>connection to database improved (MySQL 5.1, 5.5, 5.6, 5.7 and MariaDB 10.0.x, 10.1 should work)</li>
+  <li>you can choose which fields will be exported also just before export</li>
+  <li>export has CTRL+E shortcut</li>
+
+</ul>
+<ul style="list-style: square;text-align:left; color: red;">
+  <li>CW type window was not sizeable - fixed</li>
+  <li>password to LoTW/eQSL could not have special characters - fixed</li>
+  <li>program crashed after opening Preferences when path to rigctl was empty - fixed</li>
+  <li>RBN monitor didn't show any data when RBN didn't send any operating mode</li>
+  <li>callbook data always replaced data from previous QSO - fixed</li>
+  <li>cqrlog didn't start with broken TRX/Rotor control configuration - fixed</li>
+  <li>fixed loading of MASTER.SCP after downloading new DXCC tables</li>
+  <li>QSO with mode in lower case was market as error and not imported - fixed</li>
+  <li>band map didn't show any data on SSB - fixed </li>
+  <li>after change "Default frequencies", related button in TRX control window didn't go red - fixed</li>
+  <li>QSO count with active filter was wrong after delete or update</li>
+  <li>Remove dupes from the log didn't work - fixed</li>
+  <li>QTH profile was not imported from ADIF - fixed</li>
+</ul>
+<br><br>
 <strong>CQRLOG 1.9.1 (2015-11-28)</strong><br>
 <ul style="list-style: square;text-align:left; color: blue;">
   <li>support sending CW via HamLib library added</li>

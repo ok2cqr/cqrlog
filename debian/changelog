@@ -1,3 +1,42 @@
+cqrlog (2.0.0-1) unstable; urgency=low
+
+  * MariaDB 10.1 support added
+  * Frequency memories added
+  * list of previous QSO should be much faster on older computers
+  * "Always overwrite only CQ, ITU zones, county and US state from 
+     callbook" option added
+  * callbook is used for better DXCC and state recognition
+  * new database connection error window with small how to
+  * the db error window can open mysql.err
+  * Do NOT upload changes to online logs" option to Rebuild membership 
+    added
+  * all comments to callsign can be modified (NewQSO window -> File 
+    -> Comment to callsigns)
+  * transverter support added (you can set RX and TX offset for each 
+    band)
+  * connection to database improved (MySQL 5.1, 5.5, 5.6, 5.7 and 
+    MariaDB 10.0.x, 10.1 should work)
+  * you can choose which fields will be exported also just before export
+  * export has CTRL+E shortcut
+  * CW type window was not sizeable - fixed
+  * password to LoTW/eQSL could not have special characters - fixed
+  * program crashed after opening Preferences when path to rigctl 
+    was empty - fixed
+  * RBN monitor didn't show any data when RBN didn't send any operating 
+    mode
+  * callbook data always replaced data from previous QSO - fixed
+  * cqrlog didn't start with broken TRX/Rotor control configuration
+  * fixed loading of MASTER.SCP after downloading new DXCC tables
+  * QSO with mode in lower case was market as error and not imported
+  * band map didn't show any data on SSB - fixed 
+  * after change "Default frequencies", related button in TRX control 
+    window didn't go red - fixed
+  * QSO count with active filter was wrong after delete or update
+  * Remove dupes from the log didn't work - fixed
+  * QTH profile was not imported from ADIF - fixed
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Wed, 20 Apr 2016 20:14:32 +0100
+
 cqrlog (1.9.1-3) unstable; urgency=low
 
   * fixed apparmor configuration
