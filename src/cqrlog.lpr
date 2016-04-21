@@ -4,7 +4,9 @@ program cqrlog;
 uses
   cmem,cthreads,uScrollBars,
   Interfaces, // this includes the LCL widgetset
-  Forms,sysutils,fMain,fPreferences,dUtils,fNewQSO,dialogs,fChangeLocator,dData,
+  Forms,sysutils,
+  Classes,
+  fMain,fPreferences,dUtils,fNewQSO,dialogs,fChangeLocator,dData,
   dDXCC,fMarkQSL,fDXCCStat,fSort,fFilter,fImportProgress,fImportTest,
   TAChartLazarusPkg,RunTimeTypeInfoControls,fSelectDXCC,fGrayline,fCallbook,
   fTRXControl,fFreq,fChangeFreq,fAdifImport,fSplash,fSearch,fQTHProfiles,
@@ -29,6 +31,10 @@ var
 {$R *.res}
 
 begin
+  // Fix default BidiMode
+  // see http://bugs.freepascal.org/view.php?id=22044
+  Application.BidiMode:= bdLeftToRight;
+
   Application.Initialize;
   Splash := TfrmSplash.create(application);
   Splash.show;

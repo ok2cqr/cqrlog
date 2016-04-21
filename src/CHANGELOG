@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+2.0.1
+  - fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"
+
 2.0.0 (2016-04-20)
   + program should work also with MariaDB 10.1
   + Frequency memories added
