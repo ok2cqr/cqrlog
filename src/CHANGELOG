@@ -6,6 +6,7 @@ Legend:
 
 2.0.1
   - fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"
+  - frequency memories didn't switch between AM and FM when radio is on USB or LSB - fixed
 
 2.0.0 (2016-04-20)
   + program should work also with MariaDB 10.1

@@ -4200,10 +4200,11 @@ begin
   if (mode='') then
     qFreqMem.SQL.Text := C_SEL + ' order by id'
   else begin
-    if ((mode='LSB') or (mode='USB')) then
+    if ((mode='LSB') or (mode='USB') or (mode='FM') or (mode='AM')) then
     begin
       qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('LSB') +') or ' +
-                           '(mode = ' + QuotedStr('USB') + ') order by id'
+                           '(mode = ' + QuotedStr('USB') + ') or (mode = ' + QuotedStr('FM') + ') or ' +
+                           '(mode = ' + QuotedStr('AM')+ ') order by id'
     end
     else
       qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
