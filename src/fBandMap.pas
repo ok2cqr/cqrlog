@@ -249,8 +249,15 @@ begin
             Continue
         end
         else begin
-          if BandMapItems[i].Mode<>FCurrentMode then
-            Continue
+          if ((FCurrentMode='CW') or (FCurrentMode='CWR')) then
+          begin
+            if (BandMapItems[i].Mode<>'CW') and (BandMapItems[i].Mode<>'CWR') then
+              Continue
+          end
+          else begin
+            if BandMapItems[i].Mode<>FCurrentMode then
+              Continue
+          end
         end
       end;
 
@@ -767,8 +774,15 @@ begin
             Continue
         end
         else begin
-          if BandMapItems[i].Mode<>FCurrentMode then
-            Continue
+          if ((FCurrentMode='CW') and (FCurrentMode='CWR')) then
+          begin
+            if (BandMapItems[i].Mode<>'CW') or (BandMapItems[i].Mode<>'CWR') then
+              Continue
+          end
+          else begin
+            if BandMapItems[i].Mode<>FCurrentMode then
+              Continue
+          end
         end
       end;
 
