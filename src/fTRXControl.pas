@@ -1043,7 +1043,11 @@ end;
 
 procedure TfrmTRXControl.CloseRigs;
 begin
+     if dmData.DebugLevel > 0  then
+        System.WriteLn('Closing rigs .. ');
 
+     if Assigned(radio) then
+        FreeAndNil(radio);
 end;
 
 procedure TfrmTRXControl.UpdateModeButtons(mode : String);

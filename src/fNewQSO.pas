@@ -1304,8 +1304,10 @@ begin
       frmTRXControl.Close;
       cqrini.WriteBool('Window','TRX',True)
     end
-    else
+    else begin
+      frmTRXControl.CloseRigs;
       cqrini.WriteBool('Window','TRX',False);
+    end;
 
     if frmRotControl.Showing then
     begin
