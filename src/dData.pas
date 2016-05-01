@@ -520,6 +520,8 @@ begin
 end;
 
 function TdmData.OpenConnections(host,port,user,pass : String) : Boolean;
+var
+  sql : String;
 begin
   Result := True;
 
@@ -568,6 +570,14 @@ begin
     LogUploadCon.Connected := True;
     BandMapCon.Connected   := True;
     RbnMonCon.Connected    := True;
+
+    sql := 'SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'+QuotedStr('ONLY_FULL_GROUP_BY')+','+QuotedStr('')+'));';
+
+    MainCon.ExecuteDirect(sql);
+    dbDXC.ExecuteDirect(sql);
+    LogUploadCon.ExecuteDirect(sql);
+    BandMapCon.ExecuteDirect(sql);
+    RbnMonCon.ExecuteDirect(sql)
   except
     on E : Exception do
     begin
