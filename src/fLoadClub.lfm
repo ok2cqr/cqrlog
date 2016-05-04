@@ -114,7 +114,7 @@ object frmLoadClub: TfrmLoadClub
   }
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.6.0.4'
   object Panel1: TPanel
     Left = 0
     Height = 45
@@ -151,4 +151,4 @@ object frmLoadClub: TfrmLoadClub
     left = 49
     top = 44
   end
-end
+end

@@ -165,7 +165,7 @@ begin
         else
           day := '01';
 
-        if not (TryStrToInt(month,imonth) or TryStrToInt(year,iyear) or TryStrToInt(day,iday)) then
+        if not (TryStrToInt(month,imonth) and TryStrToInt(year,iyear) and TryStrToInt(day,iday)) then
         begin
           mLoad.Lines.Add('Wrong date to encode!');
           mLoad.Lines.Add('Call: '+call);
@@ -173,6 +173,10 @@ begin
           mLoad.Lines.Add('From date: '+fromDate);
           Break
         end;
+
+        if (imonth = 0) then
+          month := '01';
+
         fromDate := year + '-' + month + '-' + day;
 
         if toDate='-' then
@@ -184,9 +188,9 @@ begin
           if Length(toDate)>7 then
             day := copy(toDate,9,2)
           else
-            day := IntToStr(DaysInAMonth(iYear,iMonth));
+            day := '0';
 
-          if not (TryStrToInt(month,imonth) or TryStrToInt(year,iyear) or TryStrToInt(day,iday)) then
+          if not (TryStrToInt(month,imonth) and TryStrToInt(year,iyear) and TryStrToInt(day,iday)) then
           begin
             mLoad.Lines.Add('Wrong date to encode!');
             mLoad.Lines.Add('Call: '+call);
@@ -194,6 +198,16 @@ begin
             mLoad.Lines.Add('To date: '+toDate);
             Break
           end;
+
+          if (imonth = 0) then
+          begin
+            month  := '12';
+            imonth := 12;
+          end;
+
+          if (iDay = 0) then
+            day := Format('%.*d', [2,DaysInAMonth(iYear,iMonth)]);
+
           toDate := year + '-' + month + '-' + day
         end
         else
