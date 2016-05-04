@@ -287,7 +287,7 @@ cqrlog (1.6.1-1) unstable; urgency=low
   * added "Always sort by QSO date" option to Search function
   * cursor is moved to last opened log in DB connection window
   * "Ask before creating a backup" option to "Auto backup" added
-  * program freezed for a few miliseconds with every bandmap 
+  * program freezed for a few milliseconds with every bandmap
     refresh - fixed
   * "MySQL server has gone away" problem fixed
   * mebership values collation were case sensistive - fixed
@@ -407,7 +407,7 @@ cqrlog (1.5.3-1) unstable; urgency=low
   * updated membership tables
   * fiexd program crash when editing DX cluster information
   * CW keys window doesn't show caption for F9 and F10 keys
-  * ADIF export ignored delimitter in TX_PWR (0.5 was exported 
+  * ADIF export ignored delimiter in TX_PWR (0.5 was exported
     as 05)
   * CQRLOG killed rigctld even when autostart was disabled
   * double click to spots listed with SH/DX didn't work
