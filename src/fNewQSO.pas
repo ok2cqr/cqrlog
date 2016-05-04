@@ -1395,7 +1395,7 @@ begin
       frmRBNMonitor.Close
     end
     else
-      cqrini.WriteBool('Window','CWType',False)
+      cqrini.WriteBool('Window','RBNMonitor',False)
   end
 end;
 
