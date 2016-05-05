@@ -4192,8 +4192,8 @@ end;
 
 procedure TdmUtils.GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
 begin
-  latitude  := RoundTo(latitude,-2);
-  longitude := RoundTo(longitude,-2);
+  latitude  := RoundTo(Extended(latitude),-2);
+  longitude := RoundTo(Extended(longitude),-2);
 
   if (latitude < 0) then
     lat := FloatToStr(latitude*-1)+'S'
