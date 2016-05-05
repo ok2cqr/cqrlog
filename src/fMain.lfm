@@ -143,6 +143,11 @@ object frmMain: TfrmMain
       end    
       item
         Width = 100
+      end    
+      item
+        Alignment = taRightJustify
+        BidiMode = bdRightToLeft
+        Width = 50
       end>
     SimplePanel = False
   end
@@ -223,7 +228,7 @@ object frmMain: TfrmMain
       Left = 8
       Height = 17
       Top = 8
-      Width = 73
+      Width = 77
       Alignment = taRightJustify
       Caption = 'QSO in log:'
       ParentColor = False
@@ -267,10 +272,10 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 717
+      Left = 716
       Height = 17
       Top = 8
-      Width = 74
+      Width = 75
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       Caption = 'DXCC CFM:'
@@ -320,21 +325,6 @@ object frmMain: TfrmMain
     Flat = False
     Images = imgMain1
     TabOrder = 3
-    object lblDateTime: TLabel
-      Left = 654
-      Height = 24
-      Top = 2
-      Width = 200
-      Align = alRight
-      Alignment = taRightJustify
-      AutoSize = False
-      Font.Color = clBlue
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-    end
     object ToolButton18: TToolButton
       Left = 314
       Top = 2
@@ -556,9 +546,9 @@ object frmMain: TfrmMain
       ShowHint = True
     end
     object ToolButton30: TToolButton
-      Left = 1
+      Left = 650
       Hint = 'Call has a QSL image'
-      Top = 24
+      Top = 2
       Action = acQSLImage
       ParentShowHint = False
       ShowHint = True
@@ -624,7 +614,7 @@ object frmMain: TfrmMain
       Left = 8
       Height = 17
       Top = 2
-      Width = 127
+      Width = 130
       Caption = 'Comment for QSO:'
       ParentColor = False
       ParentFont = False
@@ -633,7 +623,7 @@ object frmMain: TfrmMain
       Left = 8
       Height = 17
       Top = 29
-      Width = 48
+      Width = 49
       Caption = 'Award:'
       ParentColor = False
       ParentFont = False
@@ -642,14 +632,14 @@ object frmMain: TfrmMain
       Left = 141
       Height = 17
       Top = 2
-      Width = 90
+      Width = 91
       ParentColor = False
     end
     object dbtAward: TDBText
       Left = 58
       Height = 17
       Top = 29
-      Width = 68
+      Width = 69
       ParentColor = False
     end
     object Panel1: TPanel
@@ -666,7 +656,7 @@ object frmMain: TfrmMain
         Left = 7
         Height = 17
         Top = 2
-        Width = 72
+        Width = 73
         Caption = 'QS_S date:'
         ParentColor = False
         ParentFont = False
@@ -675,21 +665,21 @@ object frmMain: TfrmMain
         Left = 89
         Height = 17
         Top = 2
-        Width = 91
+        Width = 93
         ParentColor = False
       end
       object dbtQSLRDate: TDBText
         Left = 89
         Height = 17
         Top = 30
-        Width = 92
+        Width = 94
         ParentColor = False
       end
       object Label26: TLabel
         Left = 7
         Height = 17
         Top = 29
-        Width = 73
+        Width = 74
         Caption = 'QS_R date:'
         ParentColor = False
         ParentFont = False
@@ -709,7 +699,7 @@ object frmMain: TfrmMain
         Left = 7
         Height = 17
         Top = 3
-        Width = 114
+        Width = 115
         Caption = 'LoTW QS_S date:'
         ParentColor = False
         ParentFont = False
@@ -718,21 +708,21 @@ object frmMain: TfrmMain
         Left = 134
         Height = 17
         Top = 3
-        Width = 98
+        Width = 99
         ParentColor = False
       end
       object dbtLoTWQSLR: TDBText
         Left = 134
         Height = 17
         Top = 30
-        Width = 99
+        Width = 100
         ParentColor = False
       end
       object Label28: TLabel
         Left = 7
         Height = 17
         Top = 30
-        Width = 115
+        Width = 116
         Caption = 'LoTW QS_R date:'
         ParentColor = False
         ParentFont = False

@@ -120,7 +120,6 @@ type
     Label27: TLabel;
     Label28: TLabel;
     Label3:     TLabel;
-    lblDateTime: TLabel;
     lblDXCCCmf: TLabel;
     lblDXCC:    TLabel;
     lblQSOCount: TLabel;
@@ -773,7 +772,7 @@ begin
   sDate := '';
   Date  := dmUtils.GetDateTime(0);
   dmUtils.DateInRightFormat(date, tmp, sDate);
-  lblDateTime.Caption := sDate + '  ' + TimeToStr(Date) + '     ';
+  sbMain.Panels[4].Text := sDate + '  ' + TimeToStr(Date)
 end;
 
 procedure TfrmMain.acAboutExecute(Sender: TObject);
