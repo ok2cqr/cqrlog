@@ -257,7 +257,7 @@ begin
   mLoad.Clear;
   if not FileExists(SourceFile) then
   begin
-    mLoad.Lines.Add('Source file ' + SourceFile + ' doesnt exists!');
+    mLoad.Lines.Add('Source file ' + SourceFile + ' does not exist!');
     exit
   end;
   AssignFile(sF,SourceFile);

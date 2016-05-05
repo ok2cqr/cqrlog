@@ -1016,7 +1016,7 @@ var
 begin
   if not dmData.IsFilter then
   begin
-    msg := 'You do not have filter enabled!' + LineEnding+
+    msg := 'You do not have filter activated!' + LineEnding+
            'This could cause that you won''t have more callsigns on one label and ' +
            'only last 500 QSO will be printed.'+LineEnding+LineEnding+
            'Do you want to continue?';
@@ -1655,7 +1655,7 @@ begin
       if (tmp <> '') then
       begin
         dmData.IsFilter := True;
-        sbMain.Panels[2].Text := 'Filter is USED!';
+        sbMain.Panels[2].Text := 'Filter is ACTIVE!';
         RefreshQSODXCCCount;
         ShowFields
       end
