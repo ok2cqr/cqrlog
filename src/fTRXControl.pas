@@ -173,7 +173,7 @@ property RigCtldHost : String  read fRigCtldHost write fRigCtldHost;
 property Connected   : Boolean read RigConnected;
 //connect rigctld
 property RigPoll     : Word    read fRigPoll     write fRigPoll;
-//poll rate in miliseconds
+//poll rate in milliseconds
 }
 
  type

@@ -1210,7 +1210,7 @@ type
     function GetCipherAlgBits: integer; virtual;
 
     {:Return result value of verify remote side certificate. Look to OpenSSL
-     documentation for possible values. For example 0 is successfuly verified
+     documentation for possible values. For example 0 is successfully verified
      certificate, or 18 is self-signed certificate.}
     function GetVerifyCert: integer; virtual;
 

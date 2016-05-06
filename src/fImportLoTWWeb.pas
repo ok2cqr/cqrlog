@@ -132,7 +132,7 @@ begin
       http.Document.Seek(0,soBeginning);
       m.CopyFrom(http.Document,HTTP.Document.Size);
       http.Clear;
-      mStat.Lines.Add('File downloaded successfuly');
+      mStat.Lines.Add('File downloaded successfully');
       mStat.Lines.Add('File:');
       mStat.Lines.Add(AdifFile);
       Done := True;

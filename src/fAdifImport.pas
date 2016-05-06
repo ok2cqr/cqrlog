@@ -667,7 +667,7 @@ begin
       tr.Commit;
     dt := dt - now;
     DecodeTime(dt,hh,m,s,ms);
-    WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' miliseconds');
+    WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
     if chkLotOfQSO.Checked then
     begin
       sb.Panels[0].Text := 'Recreating indexes ...';

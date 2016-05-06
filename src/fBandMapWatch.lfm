@@ -16,7 +16,7 @@ object frmBandMapWatch: TfrmBandMapWatch
     Height = 65
     Top = 6
     Width = 361
-    Caption = ' DXCC (use ; as delimeter)'
+    Caption = ' DXCC (use ; as delimiter)'
     ClientHeight = 46
     ClientWidth = 357
     TabOrder = 0
@@ -33,7 +33,7 @@ object frmBandMapWatch: TfrmBandMapWatch
     Height = 64
     Top = 73
     Width = 361
-    Caption = ' WAZ zones (use ; as delimeter)'
+    Caption = ' WAZ zones (use ; as delimiter)'
     ClientHeight = 45
     ClientWidth = 357
     TabOrder = 1

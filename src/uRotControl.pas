@@ -69,7 +69,7 @@ type TRotControl = class
     property Connected   : Boolean read RotConnected;
     //connect rigctld
     property RotPoll     : Word    read fRotPoll     write fRotPoll;
-    //poll rate in miliseconds
+    //poll rate in milliseconds
     property LastError   : String  read fLastError;
     //last error during operation
 

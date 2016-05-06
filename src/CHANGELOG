@@ -196,7 +196,7 @@ Legend:
   + cursor is moved to last opened log in DB connection window
   + "Ask before creating a backup" option to "Auto backup" added
   + band map is much faster, a few optimalization added
-  - program freezed for a few miliseconds with every bandmap refresh - fixed
+  - program freezed for a few milliseconds with every bandmap refresh - fixed
   - "MySQL server has gone away" problem fixed
   - mebership values collation were case sensistive - fixed
   - ADIF import sometimes crashed with access vioalation, now will show what happened

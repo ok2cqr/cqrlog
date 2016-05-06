@@ -74,7 +74,7 @@ type TRigControl = class
     property Connected   : Boolean read RigConnected;
     //connect rigctld
     property RigPoll     : Word    read fRigPoll     write fRigPoll;
-    //poll rate in miliseconds
+    //poll rate in milliseconds
     property RigSendCWR  : Boolean read fRigSendCWR    write fRigSendCWR;
     //send CWR instead of CW
     property LastError   : String  read fLastError;

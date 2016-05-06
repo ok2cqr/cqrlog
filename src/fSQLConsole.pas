@@ -123,7 +123,7 @@ begin
   t := t - now;
   DecodeTime(t,h,m,s,ms);
   lblTime.Caption := 'It takes about '+IntToStr(m)+' minutes '+IntToStr(s)+ 'seconds '+
-                     IntToStr(ms)+' miliseconds'
+                     IntToStr(ms)+' milliseconds'
 end;
 
 procedure TfrmSQLConsole.acExportExecute(Sender: TObject);
