@@ -489,7 +489,6 @@ G3NKC;David
 GD3NKC;David
 G7VJR;Michael
 VE3LYC;Cezar
-US9PA;Toly
 G3NCN;John
 G4FAD;Rich
 GM0GAV;Gav
@@ -556,6 +555,7 @@ RX6CB;Ed
 JA1GZV;Moto
 EA4BB;Nando
 TZ6BB;Nando
+9Q6BB;Nando
 VE3KI;Rich
 W8ZR;Jim
 W4CI;Dave
