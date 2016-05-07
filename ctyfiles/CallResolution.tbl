@@ -1,6 +1,7 @@
 =0T6C =0T8C =0T705G =0T805P|Costa Rica Special Station|NA|6|10N|84W|11|07||R|2005/09/01-2005/09/30=308
 =1A0KM/IBYO =IBYO/1A0KM|Sovereign Military Order of Malta (no DXCC credit!)|EU|-1|41.9055N|12.4808E|28|15||R|=0
 =1A6SBO|U.S.A., CA (no DXCC credit!)|NA|8|35.47N|119.33W|06|03||R|=0
+=1U4UN|Kingdom Mediae Terrae Bir Tawil (no DXCC credit!)|AF|-2|21.726N|33.558E|38|34||R|2016/04/01-2016/12/31=0
 =2M0CPN =2M0GFC =2M0SEG =2M0SPX =GM1FGN =MM0SHF/P|Scotland, Shetlands|EU|0|60.40N|1.30W|27|14||R|=279
 =2MT|England, Marconi factory in New Street, Chelmsford, Essex|EU|0|51.717N|0.4858W|27|14||R|2001/12/01-2001/12/31=223
 =2O0RMR =2O0RWF =2O0TRR =2O0UAA =2O0WDS|Wales, Olympic Games and Paralympic Games|EU|0|51.48N|3.18W|27|14||R|2012/07/20-2012/09/09=294
@@ -147,7 +148,7 @@
 =4K2RRC =4K2OX =4K2FJL|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|=61
 =4K2YL|Mirny Base, Davis Sea Coast, Guillaume II. Coast, Antarctica|AN|-6|66.5519S|93.0147E|69|29||R|1988/12/01-1988/12/31=13
 =4L/AH0M|Georgia (no DXCC credit!)|AS|-4|41.72N|44.79E|29|21||R|=0
-=4L1QRQ =4L1QRQ/3|Russia (European), Moscow (Oblast) (MO), Club Station|EU|-3|55N|37E|29|16||R|-1995/01/01=54
+=4L1QRQ =4L1QRQ/3 =R85WTA|Russia (European), Moscow (Oblast) (MO), Club Station|EU|-3|55N|37E|29|16||R|-1995/01/01=54
 =4L8A|Georgia|AS|-4|41.72N|44.79E|29|21||R|1993/01/01-1993/12/31=75
 =4N4L|Bosnia-Herzegovina (no DXCC credit!)|EU|-1|43.86N|18.43E|28|15||R|=0
 =4O0A =4O1A =4O2A =4O5A =4O8A =4O9A =4O9T|Serbia|EU|-1|44.80N|20.47E|28|15||R|2007/05/15-2007/07/16=296
@@ -227,7 +228,7 @@
 =5X5GK|Uganda (no DXCC credit!)|AF|-3|0N|33E|48|37||R|-1984/08/27=0
 =6E4LM|Revilla Gigedo, Clarion Island|NA|7|18.3483N|114.7326W|10|06||R|2007/11/20-2007/11/21=204
 =6J5LM|Revilla Gigedo|NA|7|18.7928N|110.973W|10|06||R|1982/02/01-1982/02/28=204
-=6O/G4AAL =G4AAL/6O =6O0A =6O0F =6O4LS|Somalia (no DXCC credit!)|AF|-3|9.50N|44.00E|48|37||R|=0
+=6O/G4AAL =G4AAL/6O =6O0A =6O0F =6O0X =6O4LS|Somalia (no DXCC credit!)|AF|-3|9.50N|44.00E|48|37||R|=0
 =6P73M|Pakistan (no DXCC credit!)|AS|-5|31.56N|74.35E|41|21||R|2006/01/01-2006/12/31=0
 =6W/SP5DDJ|Senegal (no DXCC credit!)|AF|0|15N|16W|46|35||R|=0
 =7J1ADJ/JD1|Minami Torishima (Marcus Island)|OC|-10|24.286667N|153.980556E|90|27||R|1988/07/08-1989/01/24=177
@@ -590,6 +591,7 @@
 =EA0BAE =ED0BAE =EG0BOD|BAE Juan Carlos I. Base, Livingston Isl., South Shetland Islands|AN|4|62.6628S|60.3833W|73|13||R|=241
 =EA0JC|Spain, Madrid, Royal Palace, King of Spain Juan Carlos de Borbon|EU|-1|41.416N|3.70W|37|14||R|=281
 =EA1CYK/P =VP8/EA1CYK|BAE Refugie Gabriel de Castilla Base, Deception Isl., South Shetland Islands|AN|4|62.9808S|60.6833W|73|13||R|2011/12/01-2012/03/31=241
+=EA4FZR =EA4FZR/P|IAA Base ‘Carlini’, Potter Bay, Bay of Guardia Nacional, Isla 25 de Mayo, South Shetland Islands|AN|4|62.2378S|58.6644W|73|13||R|2016/02/14-2016/03/15=241
 =EA7DLF/P|BAE Refugie Gabriel de Castilla Base, Deception Isl., South Shetland Islands|AN|4|62.9808S|60.6833W|73|13||R|1995/01/01-1995/12/31=241
 =EA9/KP6AZ|Ceuta & Melilla (no DXCC credit!)|AF|-1|35.97N|5.47W|37|33||R|=0
 =EA9AQ =EA9BB =EA9BC =EA9BD =EA9BF =EA9BH|Spanish Morocco, Tetouan|AF|0|35.5717N|5.3720W|37|33||R|1947/01/01-1956/12/31=446
@@ -878,7 +880,7 @@
 =FR/DJ3OS =FR/DJ6SI =FR/DJ8CR =FR/DG4FCD|Glorioso Island (Iles Glorieuses) (no DXCC credit!)|AF|-3|11.5775S|47.2972E|53|39||R|1992/05/13-1992/05/20=0
 =FR/DJ3OS/G =FR/DJ6SI/G =FR/DJ8CR/G =FR/DG4FCD/G|Glorioso Island (Iles Glorieuses) (no DXCC credit!)|AF|-3|11.5775S|47.2972E|53|39||R|1992/05/13-1992/05/20=0
 =FR/G/DJ3OS =FR/G/DJ6SI =FR/G/DJ8CR =FR/G/DG4FCD|Glorioso Island (Iles Glorieuses) (no DXCC credit!)|AF|-3|11.5775S|47.2972E|53|39||R|1992/05/13-1992/05/20=0
-=FR/G/FH5EC|Glorioso Island (Iles Glorieuses) (no DXCC credit!)|AF|-3|11.5775S|47.2972E|53|39||R|1987/10/01-1987/10/31=0
+=FR/G/FH5EC =FR/G/FH4EC|Glorioso Island (Iles Glorieuses) (no DXCC credit!)|AF|-3|11.5775S|47.2972E|53|39||R|1987/10/01-1987/10/31=0
 =FR5EZ|Reunion (no DXCC credit!)|AF|-4|21.15S|55.56E|53|39||R|2009/04/01-2009/04/30=0
 =FR7ZD/G|Glorioso Island (Iles Glorieuses) (no DXCC credit!)|AF|-3|11.5775S|47.2972E|53|39||R|=0
 =FR7ZP|Glorioso Island (Iles Glorieuses)|AF|-3|11.5775S|47.2972E|53|39||R|1966/11/19-=99
@@ -964,7 +966,7 @@
 =GB125SR =GB2IOM =GB2WB =GB3GD =GB5TDC =MB100TT|Isle of Man, Special Station|EU|0|54.17N|4.50W|27|14||R|=114
 =GB1BAF =GB1WIW =GB4BB =GB4AFS =GB6RNLI =GB4PCS =GB75ATC|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB1BD =GB1PC =GB2ATC =GB2SQN =GB2VEF =GB2BHM =GB2CHC|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
-=GB1BW =GB2GGM =GV0ANA =GV0DIV =GV0FRE =GB0RWM =GB0WIW =GB1JC|Wales, Special Station, Centenary of the Radio Society of Great Britain|EU|0|51.48N|3.18W|27|14||R|2013/07/05-2013/07/31=294
+=GB1BW =GB2GGM =GV0ANA =GV0DIV =GV0FRE =GB0RWM =GB1JC|Wales, Special Station, Centenary of the Radio Society of Great Britain|EU|0|51.48N|3.18W|27|14||R|2013/07/05-2013/07/31=294
 =GB1CCC =GB1LSG =GB1SSL =GB1TDS =GB2000SET =GB0WHR|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB1FVT =GB1GEO =GB2DHS =GB2FBM =GB2IGB =GB5FHC|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB1HTW =GB4PAT =GB4RC =GB0AWS =GB8CCC =GB0PLB =GB6PLB =GB1PGW =GB2BEF =GB2MOP|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
@@ -996,7 +998,7 @@
 =GB2MOP =GB2RFS =GB4CI =GB0TTT =GB2TTA =GB5AFD|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB2NEF =GB2NL =GB2NTS =GB2OWM =GB2OYC =GB2PS =GB2RB|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2OL =GB4OL =GB75CC =GB2SWF =GB4SWF =GB0BSS =GB2BOL|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
-=GB2PBF =GB2SLH =GB6TAA =GB2GEO =GB1FH|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
+=GB2PBF =GB2SLH =GB6TAA =GB2GEO =GB1FH =GB0TTS =GB2M|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2RRL =GB2SSF =GB2STB =GB2TDS =GB2TI =GB2WBB =GB3GM|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2SB =GB3LER =GB3LER/B =GB2AES =GB2SUM|Scotland, Shetlands Special Station|EU|0|60.40N|1.30W|27|14||R|=279
 =GB2SIP =GB0RPO =GB2GGM =GB4SNF =GB2GSG =GB2CAM|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
@@ -1035,7 +1037,7 @@
 =GB8CA =GB8CF =GB8CI =GB0MOG =GB0GGR =GB8RUM =GB0AYR|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB8CM =GB8CN =GB8CO =GB8CY =GB8FF =GB8OO =GB93AM|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB8LMI|Jersey, Special Station, Les Minquiers Islands|EU|0|49.20N|2.11W|27|14||R|2008/07/23-2008/07/29=122
-=GB8OQE =GB0CVA =GB0GIW =GB0SOA =GB2HDG =GB2PRC|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
+=GB8OQE =GB0CVA =GB0GIW =GB0SOA =GB2HDG =GB2PRC =GB100CSW =GB2BYF =GB3LMW|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB90RSGB/11 =GB90RSGB/12 =GB90RSGB/22 =GB90RSGB/23|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|2003/07/01-2003/07/31=279
 =GB90RSGB/62 =GB90RSGB/72|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|2003/07/01-2003/07/31=294
 =GB90RSGB/82|Northern Ireland, Special Station|EU|0|54.61N|5.92W|27|14||R|2003/07/01-2003/07/31=265
@@ -1235,6 +1237,7 @@
 =HK0AB|Serrana Bank & Roncador Cay|NA|5|13.9814N|80.5787W|11|07||R|1974/03/01-1974/03/31=228
 =HK0NA|Malpelo Island|SA|5|3.9752N|81.5993W|12|09||R|2012/01/10-2012/02/06=161
 =HK1MW =HK1N =HK1T =HK6F|Malpelo Island|SA|5|3.9752N|81.5993W|12|09||R|2012/01/01-2012/01/10=161
+=HK1QQ/TT8|Chad (no DXCC credit!)|AF|-1|12.16N|15.09E|47|36||R|1967/01/01-1967/12/31=0
 =HK3JJH/0M =HK3JJH/0 =HK3JJH/HK0 =HK3JJH/HK0M|Malpelo Island|SA|5|3.9752N|81.5993W|12|09||R|1998/01/01-1999/12/31=161
 =HK3JJH/0M =HK3JJH/0 =HK3JJH/HK0 =HK3JJH/HK0M|Malpelo Island|SA|5|3.9752N|81.5993W|12|09||R|2001/01/01-2001/12/31=161
 =HK3JJH/HK0A|San Andres & Providencia|NA|6|12.59N|81.71W|11|07||R|=216
@@ -1492,7 +1495,7 @@
 =KB1TX/KC4|USN MARS McMurdo, Hut Point Peninsula, Ross Island, Antarctica|AN|-12|77.8481S|166.6683E|71|30||R|1991/01/01-1992/12/31=13
 =KB1UK/KC4|USN MARS Amundsen-Scott, South Pole, Antarctica|AN|-12|89.9975S|139.2728E|74|39||R|1994/01/01-1994/12/31=13
 =KB7BRJ/KC4|USN MARS Amundsen-Scott, South Pole, Antarctica|AN|-12|89.9975S|139.2728E|74|39||R|1995/01/01-1996/12/31=13
-=KC0PA/S0 =S0/KC0PA =S0/KA3KJH|Western Sahara (no DXCC credit!)|AF|0|27.16N|13.20W|37|33||R|=0
+=KC0PA/S0 =S0/KC0PA =S0/KA3KJH =S09A|Western Sahara (no DXCC credit!)|AF|0|27.16N|13.20W|37|33||R|=0
 =KC4/AA3GV|USN MARS Amundsen-Scott, South Pole, Antarctica|AN|-12|89.9975S|139.2728E|74|39||R|1994/01/01-1995/12/31=13
 =KC4/AB0KG|USN MARS McMurdo, Hut Point Peninsula, Ross Island, Antarctica|AN|-12|77.8481S|166.6683E|71|30||R|2001/01/08=13
 =KC4/AB5DP|USN MARS Amundsen-Scott, South Pole, Antarctica|AN|-12|89.9975S|139.2728E|74|39||R|1995/01/01-1996/12/31=13
@@ -1810,7 +1813,7 @@
 =LU1ZG|Destacamento Naval Orcadas del Sur Base (Navy), Laurie Island, Caletas Uruguay and Scotia Bays, South Orkney Islands|AN|3|60.7389S|44.7381W|73|13||R|1966/01/01-1966/12/31=238
 =LU1ZG|Destacamento Naval Orcadas del Sur Base (Navy), Laurie Island, Caletas Uruguay and Scotia Bays, South Orkney Islands|AN|3|60.7389S|44.7381W|73|13||R|1992/01/01-1992/12/31=238
 =LU1ZI|IAA Base ‘Carlini’, Potter Bay, Bay of Guardia Nacional, Isla 25 de Mayo, South Shetland Islands|AN|4|62.2378S|58.6644W|73|13||R|2016/02/14-2016/03/15=241
-=LU1ZI =AY1ZI =EA4FZR/P|IAA Teniente Jubany Base, Potter Bay, Bay of Guardia Nacional, Isla 25 de Mayo, South Shetland Islands|AN|4|62.2378S|58.6644W|73|13||R|=241
+=LU1ZI =AY1ZI|IAA Teniente Jubany Base, Potter Bay, Bay of Guardia Nacional, Isla 25 de Mayo, South Shetland Islands|AN|4|62.2378S|58.6644W|73|13||R|=241
 =LU1ZI/HF0POL|IAA Teniente Jubany Base, Potter Bay, Bay of Guardia Nacional, Isla 25 de Mayo, South Shetland Islands|AN|4|62.2378S|58.6644W|73|13||R|2000/06/03-2000/06/07=241
 =LU1ZL|Ellsworth Base (IAA), Barrera de Hielos Filchner, Luitpold Coast, Weddell Sea, Antarctica|AN|0|77.65S|41.0833W|73|13||R|1961/01/01-1961/12/31=13
 =LU1ZM =LU1ZV|Ejercito Esperanza (Army), Punta Foca, Choza and Aguila Coves, Esperanza Bay, San Martin Land, Antarctica|AN|0|63.395S|56.9961W|73|13||R|=13
@@ -2139,7 +2142,7 @@
 =PY7YS/0|St. Peter & St. Paul Rocks|SA|2|0.92N|29.34W|13|11||R|1975/01/01-1976/12/31=253
 =R/N7PLU|Russia (Asiatic), Irkutskaya oblast' (IR)|AS|-9|57.37N|106.00E|32|18||R|=15
 =R0000O =RA22OH =RC22OO |Russia (European), Arkhangel'skaya oblast' (AR), Winter Olympics 2014 Sochi|EU|-4|63.50N|43.00E|19|16||R|=54
-=R00BVB =RA0CGI/0 =RE0RAS =RI0BV/0 =RN4HIT/0|Russia (Asiatic)|AS|-9|53.80N|109.33E|32|18||R|=15
+=R00BVB =RA0CGI/0 =RE0RAS =RI0BV/0 =RN4HIT/0 =RZ5D/9|Russia (Asiatic)|AS|-9|53.80N|109.33E|32|18||R|=15
 =R01DTV|Russia (European), 12 years Federal State Unitary Enterprise "Russian Television and Radio Broadcasting Network" (RTRN)|EU|-4|55.70N|36.97E|29|16||R|=54
 =R0AEM|Russia (Asiatic), Norilsk, RAEM Memorial|AS|-8|64.313N|98.208E|32|18||R|=15
 =R0PA|Drifting Polar Ice, North Pole Mission 32 (no DXCC credit!)|NA|-5|72.11N|149.06W|75|40||R|=0
@@ -2159,7 +2162,7 @@
 =R100W|Russia (Asiatic), Respublika Bashkortostan (BA)|AS|-5|54.81N|56.08E|30|16||R|2009/11/01-2009/11/30=15
 =R100WWS|Russia (European), Bryanskaya oblast' (BR), 100th Anniversary of Russian Air Forces|EU|-4|52.95N|33.40E|29|16||R|2012/08/10-2012/08/18=54
 =R1050QB|Russia (European), Vologodskaya oblast' (VO), 1050th Anniversary of the founding of Belozersk Vologda|EU|-4|60.08N|40.45E|29|16||R|2012/08/01-2012/08/31=54
-=R10NRC =RU0ZM/9 =R15CWC/9 =R9/TA1FL =UA9MA/9/M|Russia (Asiatic)|AS|-8|53.50N|90.00E|31|18||R|=15
+=R10NRC =RU0ZM/9 =R15CWC/9 =R9/TA1FL =UA9MA/9/M =RP71BP =RP71KM =RP71MP =RT73GM|Russia (Asiatic)|AS|-8|53.50N|90.00E|31|18||R|=15
 =R10QRP|Russia (European), Smolenskaya oblast' (SM), district Ugransky, International meeting and days of activity of the Russian club RU-QRP|EU|-4|55.00N|33.00E|29|16||R|2012/08/01-2012/08/30=54
 =R10RLHA|Russia (European), Vologodskaya oblast' (VO), Celebration of the greatest generals and statesmen of Russia|EU|-4|60.08N|40.45E|29|16||R|=54
 =R110RAEM|Russia (Asiatic), Novosibirskaya oblast' (NS), 110 years of Ernst Krenkel|AS|-7|55.45N|79.55E|31|18||R|=15
@@ -2219,7 +2222,7 @@
 =R150SPA|Russia (European), Saratovskaya oblast' (SA), 150th Anniversary of the birth PA Stolypin|EU|-4|51.78N|46.73E|29|16||R|=54
 =R15CWC/0 =R7AL/0/P =UA7R/0 =UE70MA|Russia (Asiatic), Sakhalinskaya oblast' (SL)|AS|-11|50.55N|142.60E|34|19||R|=15
 =R15GGGR|Russia (European), Gorod Sankt Peterburg (SP), Celebration of the greatest generals and statesmen of Russia|EU|-4|59.95N|30.30E|29|16||R|=54
-=R160NA|Russia (Asiatic), Khabarovskiy kray (HK) Special Station|AS|-10|48.42N|135.14E|34|19||R|=15
+=R160NA =RP71DG =RP71H =RP71SD =RP71V =RT73CG =RT73SN =RV3DSA/0 =RZ55YG|Russia (Asiatic), Khabarovskiy kray (HK) Special Station|AS|-10|48.42N|135.14E|34|19||R|=15
 =R1812MB|Russia (European), Kaluzhskaya oblast' (KG), Memorial to the Battle of Maloyaroslavets 1812|EU|-4|54.43N|35.43E|29|16||R|=54
 =R1812SM|Russia (European), Smolenskaya oblast' (SM), 200th Anniversary of Russia's victory in the War of 1812|EU|-4|55.00N|33.00E|29|16||R|=54
 =R1895R|Russia (European), Gorod Sankt Peterburg (SP), 120 Years of Radio|EU|-4|59.95N|30.30E|29|16||R|2015/03/31-2015/04/30=54
@@ -2467,7 +2470,7 @@
 =RA3YV/ANT|Bryansk, Russia|EU|-3|53.27N|34.40E|29|16||R|2006/04/22=54
 =RA3ZZ/ANT|Shebekino, Russia|EU|-3|50.61N|36.58E|29|16||R|2006/04/22=54
 =RA4HKM/0/P =RA4HKM/0|Russia (Asiatic), Sakhalinskaya oblast' (SL), Kuril'skiye (Kuril) Islands|AS|-11|50.55N|142.60E|34|19||R|=15
-=RA4RU/9|Russia (Asiatic), Yamalo Nenetskiy avtonomnyy okrug (YN)|AS|-6|67.25N|74.67E|20|17||R|=15
+=RA4RU/9 =RP71KW =R8XW/8 =RP71GS =RP71LF =RP71SF|Russia (Asiatic), Yamalo Nenetskiy avtonomnyy okrug (YN)|AS|-6|67.25N|74.67E|20|17||R|=15
 =RA50VT|Russia (Asiatic), Altayskiy kray (AL), Pavlovka, 50th Anniversary of Valentina Tereskova flight, First Woman in the Space|AS|-7|52.77N|82.62E|31|18||R|=15
 =RA70MK =RA70WR|Russia (European), Volgogradskaya oblast' (VG), 70th Anniversary of the beginning of the defeat of the Nazi forces at Stalingrad|EU|-4|49.73N|44.12E|29|16||R|2013/01/01-2013/02/20=54
 =RA75PD|Russia (European), Moskovskaya oblast' (MO), 75th Anniversary flight crew ANT-25 running V.P. Chkalov in the U.S.|EU|-4|55.70N|36.97E|29|16||R|=54
@@ -2480,13 +2483,13 @@
 =RC2WCY =RM2O|Belarus|EU|-2|54N|28E|29|16||R|=27
 =RC80KEDR =RN80KEDR|Russia (European), Kaluzhskaya oblast' (KG)|EU|-4|54.43N|35.43E|29|16||R|2014/03/09-2014/04/14=54
 =RC80MO|Russia (European), Moskovskaya oblast' (MO), Pushkino, 80 years of the Moskovskaya oblast|EU|-3|56.00N|38.00E|29|16||R|=54
-=RC9XM/1|Russia (European), Nenetskiy avtonomnyy okrug (NO)|EU|-4|68.83N|54.83E|20|16||R|2010/01/21-=54
+=RC9XM/1 =R9XC/1|Russia (European), Nenetskiy avtonomnyy okrug (NO)|EU|-4|68.83N|54.83E|20|16||R|2010/01/21-=54
 =RD110RAEM|Russia (Asiatic), Krasnoyarskiy kray (KK), 110 years of Ernst Krenkel|AS|-8|59.88N|91.67E|32|18||R|2013/12/01-2013/12/31=15
 =RD22ED =RG22EM =RJ22EE|Russia (European), Respublika Karachayevo Cherkeskiya (KC), Winter Olympics 2014 Sochi|EU|-4|43.92N|41.78E|29|16||R|=54
 =RD22FU =RJ22DX|Kaliningrad (Koenigsberg)(KA) , Winter Olympics 2014 Sochi|EU|-3|54.427N|20.3058E|29|15||R|=126
 =RE0RAS|Russia (Asiatic), RARES Regional service, Central Siberia, Krasnoyarsk (KK)|AS|-7|56.01N|92.50E|32|18||R|=15
 =RE92C|Russia (European), Saratovskaya oblast (SA), Club Station|EU|-3|51.57N|46.00E|29|16||R|=54
-=RF3A/0|Russia (Asiatic), Respublika Sakha (Saha) (YA)|AS|-9|62.03N|129.73E|23|19||R|=15
+=RF3A/0 =RP71AS|Russia (Asiatic), Respublika Sakha (Saha) (YA)|AS|-9|62.03N|129.73E|23|19||R|=15
 =RG110RAEM|Russia (Asiatic), Chelyabinskaya oblast' (CB), 110 years of Ernst Krenkel|AS|-6|54.53N|60.33E|30|17||R|2013/12/01-2013/12/31=15
 =RG22TN |Russia (European), Novgorodskaya oblast' (NV), Winter Olympics 2014 Sochi|EU|-4|58.43N|32.38E|29|16||R|=54
 =RG22XN =RJ22GF =RL22GM =RQ22GA =RQ22OG|Russia (European), Lipetskaya oblast' (LP), Winter Olympics 2014 Sochi|EU|-4|52.70N|39.15E|29|16||R|=54
@@ -2550,6 +2553,7 @@
 =RP65FWW =RP65FZP =RP65DRO|Russia (European), Moskovskaya oblast' (MO), 65th anniversary of Moscow battle|EU|-3|56.00N|38.00E|29|16||R|=54
 =RP65TT|Russia (Asiatic)|AS|-7|51.79N|52.20E|30|16||R|=15
 =RP65UMF =R2015RR|Russia (Asiatic)|AS|-7|55.37N|86.07E|31|18||R|=15
+=RP71GI =RP71GM =RP71TK =RP71UF =RQ55YG =RT73EA =RT73EL|Russia (Asiatic), Orenburgskaya oblast' (OB)|AS|-6|52.13N|55.60E|30|16||R|=15
 =RQ110RAEM|Russia (Asiatic), Tomskaya oblast' (TO), 110 years of Ernst Krenkel|AS|-7|58.75N|82.13E|31|18||R|2013/12/01-2013/12/31=15
 =RQ2WCY|Latvia|EU|-2|57N|24E|29|15||R|1983/01/01-1983/12/31=145
 =RR110RAEM|Russia (Asiatic), Tyumenskaya oblast' (TN), 110 years of Ernst Krenkel|AS|-6|57.83N|69.00E|30|17||R|2013/12/01-2013/12/31=15
@@ -2565,6 +2569,7 @@
 =RT27NN =RT27PB =RT27PU =RT27PV =RT27TT =RT27WW|Russia (European), Respublika Tatarstan (TA), World University Games|EU|-4|55.55N|50.93E|29|16||R|2013/04/22-2013/07/17=54
 =RT6T|Russia (European), Stavropolskiy kray (ST), 1st Class|EU|-4|45.05N|43.27E|29|16||R|2010/01/21-=54
 =RT80KEDR|Russia (European), Moskovskaya oblast' (MO)|EU|-4|55.70N|36.97E|29|16||R|2014/03/09-2014/04/14=54
+=RT92KA|Russia (Asiatic), Anadyr, Alyumka Island|AS|-12|64.69N|177.62E|26|19||R|=15
 =RT9K/0 =UA0ZC/P|Russia (Asiatic), Dobrzhanskogo Isl., Shelikhova Bay Group|AS|-12|62.34222N|163.46585E|25|18||R|=15
 =RT9K/6 =RT9K/6/P|Russia (European), Respublika Adygeya (AD)|EU|-4|44.65N|40.00E|29|16||R|=54
 =RU110RAEM|Russia (Asiatic), Respublika Bashkortostan (BA), 110 years of Ernst Krenkel|AS|-6|54.47N|56.27E|30|16||R|2013/12/01-2013/12/31=15
@@ -2617,7 +2622,7 @@
 =ST0K|Sudan, Club Station|AF|-2|16N|33E|48|34||R|1995/01/01-=466
 =ST0R|Republic of South Sudan|AF|-3|4.85N|31.61E|48|34||R|2011/07/22-2011/08/10=521
 =SU1MB|Egypt (no DXCC credit!)|AF|-2|31N|31E|38|34||R|1985/01/01-1986/12/31=0
-=SV/A/DJ5CQ =SV/DJ5CQ =SV0BV/A =SY5MA|Mt. Athos (no DXCC credit!)|EU|-2|40.16N|24.33E|28|20||R|=0
+=SV/A/DJ5CQ =SV/DJ5CQ =SV0BV/A =SY5MA|Mount Athos (no DXCC credit!)|EU|-2|40.257N|24.245E|28|20||R|=0
 =SV0AH =SV0BL =SV0DX|Dodecanese|EU|-2|36.20N|28.00E|28|20||R|=45
 =SV0AP =SV0BC =SV0BP =SV0DT|Crete|EU|-2|35.30N|25.00E|28|20||R|=40
 =SV0BP =SV0DF =SV0DZ =SV0GF|Crete|EU|-2|35.30N|25.00E|28|20||R|=40
@@ -2626,7 +2631,7 @@
 =SV0II =SV0JG =SV0KY|Crete|EU|-2|35.30N|25.00E|28|20||R|=40
 =SV0LB =SV0WFF =SV0XAZ =SV0XBQ =SV0XBW|Crete|EU|-2|35.30N|25.00E|28|20||R|=40
 =SV0LK =SV0WBB =SV0WEE =SV0WKK|Crete|EU|-2|35.30N|25.00E|28|20||R|=40
-=SV0WE =SV0WF =SV0WU|Dodecanese|EU|-2|36.20N|28.00E|28|20||R|=45
+=SV0WE =SV0WF =SV0WU =SV0XCA/P|Dodecanese|EU|-2|36.20N|28.00E|28|20||R|=45
 =SV0WL =SV0WMM =SV0WR =SV0WXX|Crete|EU|-2|35.30N|25.00E|28|20||R|=40
 =SV1JG|Crete|EU|-2|35.30N|25.00E|28|20||R|1978/05/04-1978/05/09=40
 =SV1JG|Crete|EU|-2|35.30N|25.00E|28|20||R|1979/08/15-1979/08/26=40
@@ -2637,12 +2642,13 @@
 =SV1JG|Dodecanese|EU|-2|36.20N|28.00E|28|20||R|1984/08/11-1984/08/28=45
 =SV1JG|Dodecanese|EU|-2|36.20N|28.00E|28|20||R|1986/08/09-1986/09/01=45
 =SV1JG|Dodecanese|EU|-2|36.20N|28.00E|28|20||R|1988/03/25-1988/03/29=45
-=SV2/SV1RP/T|Mount Athos (no DXCC credit!)|EU|-2|40.16N|24.33E|28|20||R|=0
-=SV2ASP/A =SY1MA =SV1DB/A =SV1DC/A =SV1GA/A =SV1IW/A =SY2A|Mount Athos|EU|-2|40.16N|24.33E|28|20||R|=180
-=SV2TX/SY =SV2UF/SY =SV2WT/SY|Mt. Athos|EU|-2|40.16N|24.33E|28|20||R|1987/09/01-1987/09/30=180
+=SV2/SV1RP/T|Mount Athos (no DXCC credit!)|EU|-2|40.257N|24.245E|28|20||R|=0
+=SV2ASP =SV2ASP/A =SY1MA =SV1DB/A =SV1DC/A =SV1GA/A =SV1IW/A =SY2A|Mount Athos|EU|-2|40.257N|24.245E|28|20||R|=180
+=SV2TX/SY =SV2UF/SY =SV2WT/SY|Mount Athos|EU|-2|40.257N|24.245E|28|20||R|1987/09/01-1987/09/30=180
+=SV2RSG =SV2RSG/A|Mount Athos|EU|-2|40.257N|24.245E|28|20||R|=180
 =SV54FF|Greece, Central West Macedonia, Special Station Hellenic Flora-Fauna|EU|-2|40.80N|22.50E|28|20||R|=236
 =SX65AP|Dodecanese Special Station|EU|-2|36.20N|28.00E|28|20||R|=45
-=SY/DJ6SI|Mount Athos (no DXCC credit!)|EU|-2|40.16N|24.33E|28|20||R|1991/04/14-1991/04/18=0
+=SY/DJ6SI|Mount Athos (no DXCC credit!)|EU|-2|40.257N|24.245E|28|20||R|1991/04/14-1991/04/18=0
 =T31/T30DP|Central Kiribati (no DXCC credit!)|OC|-12|4.5291S|172.1838W|62|31||R|=0
 =T5/DL8YR =T5/EI5C =T5/LA4MQ =T5/N2BRX|Somalia (no DXCC credit!)|AF|-3|9.50N|44.00E|48|37||R|=0
 =T5/KJ6QO|Somalia (no DXCC credit!)|AF|-3|9.50N|44.00E|48|37||R|1993/03/11-1993/03/25=0
@@ -2650,6 +2656,7 @@
 =T77BL|San Marino (no DXCC credit!)|EU|-1|43.94N|12.44E|28|15||R|-2008-12-04=0
 =T88A =T8T|Principality of Seborga (no DXCC credit!)|EU|-1|43.82N|7.69E|28|15||R|1995/05/01-1995/12/31=0
 =TC100A =TC100GLB =TC100GP =TC100GS =TC100KT =TC100VKZL|Turkey, Istanbul, Edime (EU)|EU|-2|42N|28E|39|20||R|=390
+=TC101GLB =TC101GP =TC101GS =TC101KT =TC18MART|Turkey, Istanbul, Edime (EU)|EU|-2|42N|28E|39|20||R|=390
 =TC50TRAC/17G =TC50TRAC/34I|Turkey (EU) Special Station (T.R.A.C 50th Anniversary)|EU|-2|42N|28E|39|20||R|=390
 =TG7AA =TG9AC|Guatemala (no DXCC credit!)|NA|6|16N|92W|11|07||R|=0
 =TG9CH|Guatemala (no DXCC credit!)|NA|6|16N|92W|11|07||R|1978/11/24-1978/11/25=0
@@ -2808,6 +2815,9 @@
 =TT8/F5OIJ =TT8/TU4CO =TT8OBO =TT8PS =TT8ZH|Chad (no DXCC credit!)|AF|-1|12.16N|15.09E|47|36||R|=0
 =TT8PK|Chad (no DXCC credit!)|AF|-1|12.16N|15.09E|47|36||R|2005/05/01-2005/08/31=0
 =TT8PK|Chad (no DXCC credit!)|AF|-1|12.16N|15.09E|47|36||R|2006/10/04-2006/11/30=0
+=TT8PK|Chad|AF|-1|12.16N|15.09E|47|36||R|2004/03/15-2004/05/27=410
+=TT8PK|Chad|AF|-1|12.16N|15.09E|47|36||R|2005/12/27-2006/10/03=410
+=TT8PK|Chad|AF|-1|12.16N|15.09E|47|36||R|2007/01/01-2008/12/31=410
 =TU/3X0DEX =3X0DEX/TU|Ivory Coast (no DXCC credit!)|AF|0|5.33N|4.05W|46|35||R|=0
 =TX0A|French Guiana|SA|4|5N|52W|12|09||R|1988/03/26-1988/03/27=63
 =TX0AT|Chesterfield Islands|OC|-11|20.1749S|158.6848E|56|30||R|2002/10/15-2002/10/22=512
@@ -3015,6 +3025,8 @@
 =UK1PGO|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|1981/01/01-1984/05/01=61
 =UK1ZAA/P =UW3HY/1 =EK1P|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|=61
 =UN1ZZZ/7|Kazakhstan, Issyk (Esik), Almaty province|AS|-6|43.35N|77.467E|30|17||R|=130
+=UPOL6 =UPOL8 =UPOL13 =UPOL15|Drifting Polar Ice (no DXCC credit!)|AS|-5|84.0N|96.0E|75|19||R|=0
+=UPOL16 =UPOL19 =UPOL22 =UPOL24|Drifting Polar Ice (no DXCC credit!)|AS|-5|84.0N|96.0E|75|19||R|=0
 =US1A|Russia (European), Gorod Leningrad (SP) Special Station|EU|-3|59.94N|30.33E|29|16||R|1990/05/01-1990/05/31=54
 =UTV1|Uzbekistan|AS|-6|41N|69E|30|17||R|=292
 =UU6U|Russia (European), Astrakhanskaya oblast (AO)|EU|-3|46.21N|48.03E|29|16||R|=54
@@ -3097,6 +3109,7 @@
 =VI0DJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1985/01/01-1985/12/31=13
 =VI0MX|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VI103WIA|Western Australia, 2013 WIA AGM|OC|-8|32S|117E|58|29||R|2013/05/23-2013/05/27=150
+=VK0/K2ARB|Heard Island, Atlas Cove (Spit Point)|AN|-5|53.1176S|73.5500E|68|39||R|2016/03/22-2016/04/11=111
 =VK0/W3RS|ANARE Ionospherical Research Station, Holl Island, Donovan Islands, Antarctica|AN|-7|66.4167S|110.4E|70|29||R|1969/01/01-1969/12/31=13
 =VK0/W3RS|Ionospherical Research Stat., Donovan Isl., Antarctica|AN|0|66.25S|110.24E|69|29||R|1969/01/01-1969/12/31=13
 =VK0/ZL4DB =VK0M/ZL4DB/P =ZL4DB/VK0M =ZL4DB/P/VK0M|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2010/05/01-2010/09/31=153
@@ -3267,6 +3280,7 @@
 =VK0LC|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
 =VK0LD|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1999/11/01-1999/12/31=153
 =VK0LD|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1976/01/01-1977/12/31=13
+=VK0LD|Heard Island, Atlas Cove (Spit Point)|AN|-5|53.1176S|73.5500E|68|39||R|2016/04/04-2016/04/04=111
 =VK0LL|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1991/01/01-1992/12/31=13
 =VK0LO|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1982/01/01-1982/12/31=13
 =VK0MAP|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
@@ -3388,7 +3402,7 @@
 =VK0YL|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1985/01/01-1985/12/31=153
 =VK0ZA|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1987/01/01-1987/12/31=13
 =VK0ZPO|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1971/01/01-1971/12/31=13
-=VK100ANZAC|Australia, Western Australia (WA), Special Station|OC|-8|31.97S|115.82E|58|29||R|=150
+=VK100ANZAC|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|=189
 =VK1AC =VK1DJ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1954/01/01-1954/12/31=153
 =VK1ADS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1949/01/01-1949/12/31=153
 =VK1AJT =VK1RB =VK1RF|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1950/01/01-1950/12/31=153
@@ -3437,7 +3451,7 @@
 =VK7FJ/LH =VK7GK/LH =VK8GH/LH =VK8GK/LH =VK8LK/LH|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|=147
 =VK7WI|Australia, Tasmania, News Broadcast Station|OC|-10|42.30S|147E|59|30||R|=150
 =VK9/G7VJR|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2014/12/26-2015/01/01=189
-=VK9/LB1GB|Cocos-Keeling Islands|OC|-6.5|12.4000S|96.8352E|54|29||R|=38
+=VK9/LB1GB =VK6XL/9|Cocos-Keeling Islands|OC|-6.5|12.4000S|96.8352E|54|29||R|=38
 =VK9/OH1VR =VK9/OH3JR =VK9/OG1M =VK9/OH3X|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2012/11/17-2012/11/27=147
 =VK9AA =VK9AW|Cocos-Keeling Islands|OC|-6.5|12.4000S|96.8352E|54|29||R|=38
 =VK9AAA|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2009/07/22-2009/07/29=189
@@ -3949,14 +3963,13 @@
 =XV9TH|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2002/04/01-2002/04/30=247
 =XW1FA|Laos (no DXCC credit!)|AS|-7|20N|102E|49|26||R|=0
 =XW1UD|Laos|AS|-7|20N|102E|49|26||R|1999/01/01-1999/12/31=0
-=XY0Q =XY0Z|Myanmar (Burma) (no DXCC credit!)|AS|-6.5|17N|96E|49|26||R|1992/09/17-1992/09/19=0
 =XY1M|Myanmar (Burma) (no DXCC credit!)|AS|-6.5|17N|96E|49|26||R|2002/08/01-2002/08/31=0
 =XZ5A =XZ9A =XZ9B =XY0Q =XY0Z|Myanmar (Burma), Province of Kawthoolei, Karen National Union (no DXCC credit!)|AS|-6.5|17N|96E|49|26||R|=0
 =Y83ANT =Y88POL =Y90ANT|Georg-Forster-Station, Schirmacher Oasis, Princess Astrid Coast, Dronning Maud Land, Antarctica|AN|0|70.7667S|11.85E|67|38||R|=13
 =YA/G4AAL =G4AAL/YA =YA/KI4WDW =YA5Y|Afghanistan (no DXCC credit!)|AS|-4.5|34.53N|69.16E|40|21||R|=0
 =YA9XL|Afghanistan (no DXCC credit!)|AS|-4.5|34.53N|69.16E|40|21||R|1995/12/01-1996/01/31=0
 =YB0/K3JJG =YB1/VE3IR|Indonesia (no DXCC credit!)|OC|-7|6S|107E|54|28||R|=0
-=YI/F1PGP =YI/JA1DNG =YI/JA2SKN|Iraq (no DXCC credit!)|AS|-3|32N|45E|39|21||R|=0
+=YI/F1PGP =YI/JA2SKN|Iraq (no DXCC credit!)|AS|-3|32N|45E|39|21||R|=0
 =YI1AS =YI1LVB =YI2LVB =YI6SUL|Iraq (no DXCC credit!)|AS|-3|32N|45E|39|21||R|=0
 =YK/VE3MJQ =YK1KW =YK1OK =YK1PD|Syria (no DXCC credit!)|AS|-2|34N|36E|39|20||R|=0
 =YK1AO|Syria (no DXCC credit!)|AS|-2|34N|36E|39|20||R|2012/07/01-2012/07/31=0
@@ -3972,6 +3985,7 @@
 =ZA1KAD =ZA1ZA|Albania (no DXCC credit!)|EU|-1|41N|20E|28|15||R|=0
 =ZB2/4O3AL =ZB2/GB0SWR =ZB2FA =ZB2FU =ZB2GM =ZB2ID|Gibraltar (no DXCC credit!)|EU|-1|36.14N|5.35W|37|14||R|=0
 =ZC1AF =ZC1CL =G5KW/ZCI|Palestine - Transjordan|AS|-2|32N|35.1E|39|20||R|-1949/01/01=196
+=ZC6B =ZC6MPT =ZC6/F5PFP =ZC6/G3NOM =ZC6/OE3GEA|Palestine (no DXCC credit!)|AS|-2|31.52N|34.45E|39|20||R|=0
 =ZC6FK|Palestine|AS|-2|31.52N|34.45E|39|20||R|1946/01/01-1947/12/31=196
 =ZC8PM|Arab Palestine|AS|-2|32N|35.1E|39|20||R|1948/01/01-1948/12/31=196
 =ZD9/ZS1B|Gough Station|AF|0|40.3247S|9.9286W|66|38||R|1998/01/01-1998/12/31=274
