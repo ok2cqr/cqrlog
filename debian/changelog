@@ -1,5 +1,20 @@
 cqrlog (2.0.0-1) unstable; urgency=low
 
+  * fixed "TApplication.HandleException TControl.InvalidatePreferredSize
+    loop"
+  * frequency memories didn't switch between AM and FM when radio is on
+    USB or LSB - fixed
+  * bandmap didn't show CW spots when radio was in CWR mode - fixed
+  * statistics and filter with group by didn't work on MySQL 5.7 - fixed
+  * rigctld where not closed after closing cqrlog - fixed (Bill, WK2X)
+  * RBN monitor window was always opened after program started - fixed
+  * loading FromDate and ToDate from membership files fixed
+  * fixed compiling for ARM64, powerpc and other non x86 platforms
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 07 May 2016 08:23:48 +0100
+
+cqrlog (2.0.0-1) unstable; urgency=low
+
   * MariaDB 10.1 support added
   * Frequency memories added
   * list of previous QSO should be much faster on older computers

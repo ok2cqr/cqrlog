@@ -4,7 +4,7 @@ Legend:
   - bugfix
 --------------------
 
-2.0.1
+2.0.1 (2016-05-07)
   - fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"
   - frequency memories didn't switch between AM and FM when radio is on USB or LSB - fixed
   - bandmap didn't show CW spots when radio was in CWR mode - fixed
@@ -12,7 +12,7 @@ Legend:
   - rigctld where not closed after closing cqrlog - fixed (Bill, WK2X)
   - RBN monitor window was always opened after program started - fixed
   - loading FromDate and ToDate from membership files fixed
-  - fixed compiling for ARM64, powerpc and other ono x86 platforms
+  - fixed compiling for ARM64, powerpc and other non x86 platforms
 
 2.0.0 (2016-04-20)
   + program should work also with MariaDB 10.1

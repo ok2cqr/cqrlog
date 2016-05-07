@@ -1,6 +1,18 @@
 <strong>New user?</strong> Please look to <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
 <hr>
 <br>
+<strong>CQRLOG 2.0.1 (2016-05-07)</strong><br>
+<ul style="list-style: square;text-align:left; color: red;">
+  <li>fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"</li>
+  <li>frequency memories didn't switch between AM and FM when radio is on USB or LSB - fixed</li>
+  <li>bandmap didn't show CW spots when radio was in CWR mode - fixed</li>
+  <li>statistics and filter with group by didn't work on MySQL 5.7 - fixed</li>
+  <li>rigctld where not closed after closing cqrlog - fixed (Bill, WK2X)</li>
+  <li>RBN monitor window was always opened after program started - fixed</li>
+  <li>loading FromDate and ToDate from membership files fixed</li>
+  <li>fixed compiling for ARM64, powerpc and other non x86 platforms</li>
+</ul>
+<br><br>
 <strong>CQRLOG 2.0.0 (2016-04-20)</strong><br>
 <ul style="list-style: square;text-align:left; color: blue;">
   <li>MariaDB 10.1 support added</li>
@@ -16,7 +28,6 @@
   <li>connection to database improved (MySQL 5.1, 5.5, 5.6, 5.7 and MariaDB 10.0.x, 10.1 should work)</li>
   <li>you can choose which fields will be exported also just before export</li>
   <li>export has CTRL+E shortcut</li>
-
 </ul>
 <ul style="list-style: square;text-align:left; color: red;">
   <li>CW type window was not sizeable - fixed</li>
