@@ -1,4 +1,4 @@
-cqrlog (2.0.0-1) unstable; urgency=low
+cqrlog (2.0.1-1) unstable; urgency=low
 
   * fixed "TApplication.HandleException TControl.InvalidatePreferredSize
     loop"
