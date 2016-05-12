@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 FILE=/etc/apparmor.d/local/usr.sbin.mysqld
 IFILE=/etc/init.d/apparmor
 FTMP=`mktemp /tmp/tmp.XXXXXX`

@@ -1,3 +1,9 @@
+cqrlog (2.0.1-2) unstable; urgency=low
+
+  * fixed postrm script
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Thu, 12 May 2016 16:57:29 +0100
+ 
 cqrlog (2.0.1-1) unstable; urgency=low
 
   * fixed "TApplication.HandleException TControl.InvalidatePreferredSize
