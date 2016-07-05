@@ -498,8 +498,17 @@ begin
     Q1.Params[12].AsString  := d.QSL_VIA;
     Q1.Params[13].AsString  := d.IOTA;
     Q1.Params[14].AsString  := d.TX_PWR;
-    Q1.Params[15].AsString  := d.ITUZ;
-    Q1.Params[16].AsString  := d.CQZ;
+
+    if (d.ITUZ = '') then
+      Q1.Params[15].Clear
+    else
+      Q1.Params[15].AsString  := d.ITUZ;
+
+    if (d.CQZ = '') then
+      Q1.Params[16].Clear
+    else
+      Q1.Params[16].AsString  := d.CQZ;
+
     Q1.Params[17].AsString  := d.GRIDSQUARE;
     Q1.Params[18].AsString  := d.MY_GRIDSQUARE;
     Q1.Params[19].AsString  := d.COMMENT;

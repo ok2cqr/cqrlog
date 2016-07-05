@@ -117,7 +117,7 @@ object frmAdifImport: TfrmAdifImport
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.0.4'
   object Label1: TLabel
     Left = 6
     Height = 17
@@ -138,7 +138,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 6
     Height = 17
     Top = 30
-    Width = 46
+    Width = 47
     Caption = 'Errors:'
     ParentColor = False
   end
@@ -146,7 +146,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 152
     Height = 17
     Top = 30
-    Width = 71
+    Width = 73
     Caption = 'Importing:'
     ParentColor = False
   end
@@ -154,7 +154,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 64
     Height = 17
     Top = 30
-    Width = 59
+    Width = 60
     Alignment = taRightJustify
     Caption = 'lblErrors'
     ParentColor = False
@@ -163,7 +163,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 232
     Height = 17
     Top = 30
-    Width = 57
+    Width = 59
     Caption = 'lblCount'
     ParentColor = False
   end
@@ -190,7 +190,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 8
     Height = 17
     Top = 192
-    Width = 77
+    Width = 80
     Caption = 'QTH Profile'
     ParentColor = False
   end
@@ -232,7 +232,7 @@ object frmAdifImport: TfrmAdifImport
     Left = 8
     Height = 24
     Top = 88
-    Width = 293
+    Width = 301
     Caption = 'ADIF file contains more than 10 000 QSO'
     TabOrder = 3
   end
@@ -259,12 +259,14 @@ object frmAdifImport: TfrmAdifImport
   object tr: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 118
     top = 184
   end
   object Q1: TSQLQuery
     FieldDefs = <>
     Transaction = tr
+    Options = []
     Params = <>
     left = 170
     top = 184
@@ -272,6 +274,7 @@ object frmAdifImport: TfrmAdifImport
   object Q2: TSQLQuery
     FieldDefs = <>
     Transaction = tr
+    Options = []
     Params = <>
     left = 219
     top = 184
@@ -279,6 +282,7 @@ object frmAdifImport: TfrmAdifImport
   object Q3: TSQLQuery
     FieldDefs = <>
     Transaction = tr
+    Options = []
     Params = <>
     left = 267
     top = 184
@@ -286,6 +290,7 @@ object frmAdifImport: TfrmAdifImport
   object Q4: TSQLQuery
     FieldDefs = <>
     Transaction = tr
+    Options = []
     Params = <>
     left = 315
     top = 184
