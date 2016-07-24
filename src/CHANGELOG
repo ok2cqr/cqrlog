@@ -6,6 +6,7 @@ Legend:
 
 2.0.2
   + QSLMSG added to ADIF export for eQSL 
+  - TRX control set LSB to 60M instead of USB - fixed
 
 2.0.1 (2016-05-07)
   - fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"

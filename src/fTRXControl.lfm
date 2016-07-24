@@ -1,10 +1,10 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 396
+  Left = 395
   Height = 233
-  Top = 234
+  Top = 209
   Width = 339
   Caption = 'TRX control'
-  ClientHeight = 233
+  ClientHeight = 210
   ClientWidth = 339
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
@@ -155,13 +155,13 @@ object frmTRXControl: TfrmTRXControl
   LCLVersion = '1.6.0.4'
   object GroupBox2: TGroupBox
     Left = 256
-    Height = 233
+    Height = 210
     Top = 0
     Width = 83
     Align = alRight
     Caption = ' Mode '
-    ClientHeight = 214
-    ClientWidth = 79
+    ClientHeight = 192
+    ClientWidth = 81
     TabOrder = 0
     object btnCW: TButton
       Left = 14
@@ -229,13 +229,13 @@ object frmTRXControl: TfrmTRXControl
   end
   object Panel2: TPanel
     Left = 0
-    Height = 233
+    Height = 210
     Top = 0
     Width = 256
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel2'
-    ClientHeight = 233
+    ClientHeight = 210
     ClientWidth = 256
     TabOrder = 1
     object GroupBox1: TGroupBox
@@ -245,8 +245,8 @@ object frmTRXControl: TfrmTRXControl
       Width = 256
       Align = alTop
       Caption = ' Freq '
-      ClientHeight = 53
-      ClientWidth = 252
+      ClientHeight = 54
+      ClientWidth = 254
       TabOrder = 0
       object lblFreq: TLabel
         Left = 10
@@ -283,13 +283,13 @@ object frmTRXControl: TfrmTRXControl
     end
     object gbBand: TGroupBox
       Left = 0
-      Height = 135
+      Height = 112
       Top = 72
       Width = 256
       Align = alClient
       Caption = ' Band '
-      ClientHeight = 116
-      ClientWidth = 252
+      ClientHeight = 94
+      ClientWidth = 254
       TabOrder = 1
       object btn160m: TButton
         Left = 6
@@ -415,7 +415,7 @@ object frmTRXControl: TfrmTRXControl
     object Panel1: TPanel
       Left = 0
       Height = 26
-      Top = 207
+      Top = 184
       Width = 256
       Align = alBottom
       BevelOuter = bvNone
@@ -424,9 +424,9 @@ object frmTRXControl: TfrmTRXControl
       TabOrder = 2
       object rbRadio1: TRadioButton
         Left = 8
-        Height = 24
+        Height = 22
         Top = 2
-        Width = 56
+        Width = 50
         Caption = 'RIG: '
         Checked = True
         OnClick = rbRadio1Click
@@ -435,9 +435,9 @@ object frmTRXControl: TfrmTRXControl
       end
       object rbRadio2: TRadioButton
         Left = 160
-        Height = 24
+        Height = 22
         Top = 2
-        Width = 56
+        Width = 50
         Caption = 'RIG: '
         OnClick = rbRadio2Click
         TabOrder = 1
