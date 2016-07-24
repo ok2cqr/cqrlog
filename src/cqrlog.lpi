@@ -277,6 +277,7 @@
         <Filename Value="fWorking.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmWorking"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit29>
       <Unit30>
