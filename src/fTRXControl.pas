@@ -597,10 +597,14 @@ begin
   if not TryStrToCurr(lblFreq.Caption,tmp) then
     SetMode('LSB',GetBandWidth('SSB'))
   else begin
-    if tmp > 10 then
+    if (tmp > 5) and (tmp < 6) then
       SetMode('USB',GetBandWidth('SSB'))
-    else
-      SetMode('LSB',GetBandWidth('SSB'))
+    else begin
+      if tmp > 10 then
+        SetMode('USB',GetBandWidth('SSB'))
+      else
+        SetMode('LSB',GetBandWidth('SSB'))
+    end
   end
 end;
 
@@ -952,10 +956,14 @@ var
 begin
   if mode = 'SSB' then
   begin
-    if freq > 10000 then
+    if (freq > 5000) and (freq < 6000) then
       mode := 'USB'
-    else
-      mode := 'LSB'
+    else begin
+      if freq > 10000 then
+        mode := 'USB'
+      else
+        mode := 'LSB'
+    end
   end;
 
   if Assigned(radio) then
@@ -985,10 +993,14 @@ begin
   f := StrToFloat(freq);
   if mode = 'SSB' then
   begin
-    if f > 10000 then
+    if (f > 5000) and (f < 6000) then
       mode := 'USB'
-    else
-      mode := 'LSB'
+    else begin
+      if f > 10000 then
+        mode := 'USB'
+      else
+        mode := 'LSB'
+    end
   end;
 
   SetFreqModeBandWidth(f,mode,bandwidth)

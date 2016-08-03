@@ -174,7 +174,11 @@ type
     function  FindLib(const Path,LibName : String) : String;
     function  GetMysqldPath : String;
     function  TableExists(TableName : String) : Boolean;
+    function  GetSSLLib(LibName : String) : String;
+    function  GetMySQLLib : String;
+    function  GetDebugLevel : Integer;
 
+    procedure CreateDBConnections;
     procedure CreateViews;
     procedure PrepareBandDatabase;
     procedure PrepareDXClusterDatabase;
@@ -1065,25 +1069,10 @@ begin
   InitCriticalSection(csPreviousQSO);
   cqrini       := nil;
   IsSFilter    := False;
+  fDLLSSLName  := '';
+  fDLLUtilName := '';
 
-  fDebugLevel:=0;
-
-  if ParamCount>0 then
-  begin
-    param := LowerCase(ParamStr(1));
-    if Pos('debug',param) > 0 then
-    begin
-      if Pos('=',param) > 0 then
-      begin
-        if TryStrToInt(copy(param,Pos('=',param)+1,2),i) then
-          fDebugLevel:=i
-        else
-          fDebugLevel:=1
-      end
-      else
-        fDebugLevel := 1
-    end
-  end;
+  fDebugLevel := GetDebugLevel;
 
   Writeln('');
   Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
@@ -1091,57 +1080,20 @@ begin
     Writeln('**** CHANGE WITH --debug=1 PARAMETER ****');
   Writeln('');
 
-  fDLLSSLName  := '';
-  fDLLUtilName := '';
 
-  lib :=  FindLib('/usr/lib64/','libssl.so*');
-  if (lib = '') then
-    lib := FindLib('/lib64/','libssl.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/x86_64-linux-gnu/','libssl.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/i386-linux-gnu/','libssl.so*');
-  if (lib = '') then
-    lib :=  FindLib('/usr/lib/','libssl.so*');
-  if (lib = '') then
-    lib := FindLib('/lib/','libssl.so*');
+  fDLLSSLName := GetSSLLib('libssl');
+  if fDebugLevel>=1 then Writeln('Loading libssl: ',fDLLSSLName);
 
-  if fDebugLevel>=1 then Writeln('Loading libssl: ',lib);
-  if lib <> '' then
-    fDLLSSLName := lib;
+  fDLLUtilName := GetSSLLib('libcrypto');
+  if fDebugLevel>=1 then Writeln('Loading libcrypto: ',fDLLUtilName);
 
-  lib := FindLib('/usr/lib64/','libcrypto.so*');
-  if (lib = '') then
-    lib := FindLib('/lib64/','libcrypto.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/x86_64-linux-gnu/','libcrypto.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/i386-linux-gnu/','libcrypto.so*');
-  if (lib = '') then
-    lib :=  FindLib('/usr/lib/','libcrypto.so*');
-  if (lib = '') then
-    lib := FindLib('/lib/','libcrypto.so*');
+  DLLSSLName  := dmData.cDLLSSLName;
+  DLLUtilName := dmData.cDLLUtilName;
+  //^^this ugly hack is because FreePascal doesn't have anything like
+  // ./configure and I have to specify all dyn libs by hand
 
-  if fDebugLevel>=1 then Writeln('Loading libcrypto: ',lib);
-  if lib <> '' then
-    fDLLUtilName := lib;
 
-  lib := FindLib('/usr/lib64/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/lib64/','libmysqlclient.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/x86_64-linux-gnu/','libmysqlclient.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/i386-linux-gnu/','libmysqlclient.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib64/mysql/','libmysqlclient.so*');
-  if (lib = '') then
-    lib :=  FindLib('/usr/lib/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/lib/','libmysqlclient.so*');
-  if (lib='') then
-    lib := FindLib('/usr/lib/mysql/','libmysqlclient.so*');
-
+  lib := GetMySQLLib;
   if fDebugLevel>=1 then Writeln('Loading libmysqlclient: ',lib);
   if lib <> '' then
     InitialiseMySQL(lib);
@@ -1184,40 +1136,7 @@ begin
     Writeln('**********************************')
   end;
 
-
-  if fMySQLVersion < 5.5 then
-  begin
-    MainCon      := TMySQL51Connection.Create(self);
-    BandMapCon   := TMySQL51Connection.Create(self);
-    RbnMonCon    := TMySQL51Connection.Create(self);
-    LogUploadCon := TMySQL51Connection.Create(self);
-    dbDXC        := TMySQL51Connection.Create(self)
-  end
-  else  if fMySQLVersion < 5.6 then
-  begin
-    MainCon      := TMySQL55Connection.Create(self);
-    BandMapCon   := TMySQL55Connection.Create(self);
-    RbnMonCon    := TMySQL55Connection.Create(self);
-    LogUploadCon := TMySQL55Connection.Create(self);
-    dbDXC        := TMySQL55Connection.Create(self)
-  end
-  else begin
-    if fMySQLVersion < 5.7 then
-    begin
-      MainCon      := TMySQL56Connection.Create(self);
-      BandMapCon   := TMySQL56Connection.Create(self);
-      RbnMonCon    := TMySQL56Connection.Create(self);
-      LogUploadCon := TMySQL56Connection.Create(self);
-      dbDXC        := TMySQL56Connection.Create(self)
-    end
-    else begin
-      MainCon      := TMySQL57Connection.Create(self);
-      BandMapCon   := TMySQL57Connection.Create(self);
-      RbnMonCon    := TMySQL57Connection.Create(self);
-      LogUploadCon := TMySQL57Connection.Create(self);
-      dbDXC        := TMySQL57Connection.Create(self)
-    end
-  end;
+  CreateDBConnections;
 
   MainCon.KeepConnection := True;
   MainCon.Transaction := trmQ;
@@ -1241,12 +1160,6 @@ begin
   qRbnMon.Transaction      := trRbnMon;
   qRbnMon.DataBase         := RbnMonCon;
   trRbnMon.DataBase        := RbnMonCon;
-
-  DLLSSLName  := dmData.cDLLSSLName;
-  DLLUtilName := dmData.cDLLUtilName;
-
-  //^^this ugly hack is because FreePascal doesn't have anything like
-  // ./configure and I have to specify all dyn libs by hand
 
   FormatSettings.ShortDateFormat := 'yyyy-mm-dd';
 
@@ -1285,57 +1198,6 @@ begin
     Writeln('TConnection to MySQL:   ',FloatToStr(fMySQLVersion));
     Writeln('*')
   end;
-
-  {
-
-  if FileExistsUTF8('/usr/bin/mysqld') then
-    mysqld := '/usr/bin/mysqld';
-  if FileExistsUTF8('/usr/bin/mysqld_safe') then //Fedora
-    mysqld := '/usr/bin/mysqld_safe';
-  if FileExistsUTF8('/usr/sbin/mysqld') then //openSUSE
-    mysqld := '/usr/sbin/mysqld';
-  if mysqld = '' then  //don't know where mysqld is, so hopefully will be in  $PATH
-    mysqld := 'mysqld';
-
-  if FileExistsUTF8('/etc/apparmor.d/usr.sbin.mysqld') then
-  begin
-    l := TStringList.Create;
-    try
-      l.LoadFromFile('/etc/apparmor.d/usr.sbin.mysqld');
-      l.Text := UpperCase(l.Text);
-      if Pos(UpperCase('@{HOME}/.config/cqrlog/database/** rwk,'),l.Text) = 0 then
-      begin
-        info := 'It looks like apparmor is running in your system. CQRLOG needs to add this :'+
-                LineEnding+
-                '@{HOME}/.config/cqrlog/database/** rwk,'+
-                LineEnding+
-                'into /etc/apparmor.d/usr.sbin.mysqld'+
-                LineEnding+
-                LineEnding+
-                'You can do that by running /usr/share/cqrlog/cqrlog-apparmor-fix or you can add the line '+
-                'and restart apparmor manually.'+
-                LineEnding+
-                LineEnding+
-                'Click OK to continue (program may not work correctly) or Cancel and modify the file '+
-                'first.';
-         if Application.MessageBox(PChar(info),'Information ...',mb_OKCancel+mb_IconInformation) = idCancel then
-           Application.Terminate
-      end
-    finally
-      l.Free
-    end
-  end;
-
-  MySQLProcess := TProcess.Create(nil);
-  MySQLProcess.CommandLine := mysqld+' --defaults-file='+fHomeDir+'database/'+'my.cnf'+
-                              ' --default-storage-engine=MyISAM --datadir='+fHomeDir+'database/'+
-                              ' --socket='+fHomeDir+'database/sock'+
-                              ' --skip-grant-tables --port=64000 --key_buffer_size=32M'+
-                              ' --key_buffer_size=4096K';
-  if fDebugLevel>=1 then WriteLn(MySQLProcess.CommandLine);
-  MySQLProcess.Execute;
-  }
-  //StartMysqldProcess;
 
   tmrDBPing.Interval := CDB_PING_INT*1000;
   tmrDBPing.Enabled  := True
@@ -4401,6 +4263,110 @@ begin
   finally
     qBands.Close;
     trBands.Rollback
+  end
+end;
+
+procedure TdmData.CreateDBConnections;
+begin
+  if fMySQLVersion < 5.5 then
+  begin
+    MainCon      := TMySQL51Connection.Create(self);
+    BandMapCon   := TMySQL51Connection.Create(self);
+    RbnMonCon    := TMySQL51Connection.Create(self);
+    LogUploadCon := TMySQL51Connection.Create(self);
+    dbDXC        := TMySQL51Connection.Create(self)
+  end
+  else  if fMySQLVersion < 5.6 then
+  begin
+    MainCon      := TMySQL55Connection.Create(self);
+    BandMapCon   := TMySQL55Connection.Create(self);
+    RbnMonCon    := TMySQL55Connection.Create(self);
+    LogUploadCon := TMySQL55Connection.Create(self);
+    dbDXC        := TMySQL55Connection.Create(self)
+  end
+  else begin
+    if fMySQLVersion < 5.7 then
+    begin
+      MainCon      := TMySQL56Connection.Create(self);
+      BandMapCon   := TMySQL56Connection.Create(self);
+      RbnMonCon    := TMySQL56Connection.Create(self);
+      LogUploadCon := TMySQL56Connection.Create(self);
+      dbDXC        := TMySQL56Connection.Create(self)
+    end
+    else begin
+      MainCon      := TMySQL57Connection.Create(self);
+      BandMapCon   := TMySQL57Connection.Create(self);
+      RbnMonCon    := TMySQL57Connection.Create(self);
+      LogUploadCon := TMySQL57Connection.Create(self);
+      dbDXC        := TMySQL57Connection.Create(self)
+    end
+  end
+end;
+
+function TdmData.GetSSLLib(LibName : String) : String;
+var
+  lib : String;
+begin
+  lib :=  FindLib('/usr/lib64/',LibName+'.so*');
+  if (lib = '') then
+    lib := FindLib('/lib64/',LibName+'.so*');
+  if (lib='') then
+    lib := FindLib('/usr/lib/x86_64-linux-gnu/',LibName+'.so*');
+  if (lib='') then
+    lib := FindLib('/usr/lib/i386-linux-gnu/',LibName+'.so*');
+  if (lib = '') then
+    lib :=  FindLib('/usr/lib/',LibName+'.so*');
+  if (lib = '') then
+    lib := FindLib('/lib/',LibName+'.so*');
+
+  Result := Lib
+end;
+
+function TdmData.GetMySQLLib : String;
+var
+  lib : String;
+begin
+  lib := FindLib('/usr/lib64/','libmysqlclient.so*');
+  if (lib = '') then
+    lib := FindLib('/lib64/','libmysqlclient.so*');
+  if (lib = '') then
+    lib := FindLib('/usr/lib/x86_64-linux-gnu/','libmysqlclient.so*');
+  if (lib = '') then
+    lib := FindLib('/usr/lib/i386-linux-gnu/','libmysqlclient.so*');
+  if (lib = '') then
+    lib := FindLib('/usr/lib64/mysql/','libmysqlclient.so*');
+  if (lib = '') then
+    lib :=  FindLib('/usr/lib/','libmysqlclient.so*');
+  if (lib = '') then
+    lib := FindLib('/lib/','libmysqlclient.so*');
+  if (lib = '') then
+    lib := FindLib('/usr/lib/mysql/','libmysqlclient.so*');
+
+    Result := Lib
+end;
+
+function TdmData.GetDebugLevel : Integer;
+var
+  param : String;
+  i : Integer;
+begin
+  Result := 0;
+
+  if ParamCount>0 then
+  begin
+    param := LowerCase(ParamStr(1));
+    if Pos('debug',param) > 0 then
+    begin
+      if Pos('=',param) > 0 then
+      begin
+        if TryStrToInt(copy(param,Pos('=',param)+1,2),i) then
+          Result := i
+        else
+          Result := 1
+      end
+      else
+        Result := 1
+    end
   end
 end;
 

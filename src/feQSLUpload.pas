@@ -147,6 +147,8 @@ begin
       if (dmData.Q.FieldByName('remarks').AsString<>'') and cqrini.ReadBool('LoTW', 'ExpComment', True) then
       begin
         tmp := '<COMMENT' + dmUtils.StringToADIF(dmData.Q.FieldByName('remarks').AsString);
+        Writeln(f,tmp);
+        tmp := '<QSLMSG' + dmUtils.StringToADIF(dmData.Q.FieldByName('remarks').AsString);
         Writeln(f,tmp)
       end;
 

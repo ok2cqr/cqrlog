@@ -1565,12 +1565,16 @@ begin
           Result := 'RTTY'
         else
         begin
-          if tmp > 10 then
+          if (tmp > 5) and (tmp < 6) then
             Result := 'USB'
-          else
-            Result := 'LSB';
-        end;
-      end;
+          else begin
+            if tmp > 10 then
+              Result := 'USB'
+            else
+              Result := 'LSB'
+          end
+        end
+      end
     end
   finally
     dmData.qBands.Close;
