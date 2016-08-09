@@ -43,6 +43,7 @@ var
   frmBigSquareStat: TfrmBigSquareStat;
 
 implementation
+{$R *.lfm}
 
 { TfrmBigSquareStat }
 uses dUtils,dData, uMyIni, uVersion;
@@ -301,9 +302,6 @@ begin
   IpHtmlPanel1.Font.Color := clBlack;
   btnRefresh.Click
 end;
-
-initialization
-  {$I fBigSquareStat.lrs}
 
 end.
 

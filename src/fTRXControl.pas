@@ -211,6 +211,8 @@ var
   thRig : TRigThread;
 
 implementation
+{$R *.lfm}
+
 { TfrmTRXControl }
 uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories;
 
@@ -1202,9 +1204,6 @@ begin
   btn2MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','2cw',144050)/1000));
   btn70CMBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','70cw',430000)/1000))
 end;
-
-initialization
-  {$I fTRXControl.lrs}
 
 end.
 

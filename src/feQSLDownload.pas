@@ -41,6 +41,7 @@ var
   frmeQSLDownload : TfrmeQSLDownload;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, uMyIni, dData, fImportProgress, fPreferences;
 
@@ -239,9 +240,6 @@ begin
     Free
   end
 end;
-
-initialization
-  {$I feQSLDownload.lrs}
 
 end.
 

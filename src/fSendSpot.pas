@@ -42,6 +42,7 @@ var
   frmSendSpot: TfrmSendSpot;
 
 implementation
+{$R *.lfm}
 
 { TfrmSendSpot }
 
@@ -68,9 +69,6 @@ begin
       btnOK.Click;
   end;
 end;
-
-initialization
-  {$I fSendSpot.lrs}
 
 end.
 

@@ -49,6 +49,7 @@ var
   frmRebuildMembStat: TfrmRebuildMembStat;
 
 implementation
+{$R *.lfm}
 
 { TfrmRebuildMembStat }
 uses dUtils, dData, uMyIni, dLogUpload;
@@ -219,8 +220,6 @@ begin
   end
 end;
 
-initialization
-  {$I fRebuildMembStat.lrs}
 
 end.
 

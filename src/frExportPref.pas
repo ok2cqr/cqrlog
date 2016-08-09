@@ -98,6 +98,7 @@ type
   end;
 
 implementation
+{$R *.lfm}
 
 uses uMyIni;
 
@@ -254,9 +255,6 @@ begin
   edtWeQSLR.Text := cqrini.ReadString('Export', 'WeQSLR', '50');
   edtWeQSLRDate.Text := cqrini.ReadString('Export', 'WeQSLRDate', '50')
 end;
-
-initialization
-  {$I frExportPref.lrs}
 
 end.
 

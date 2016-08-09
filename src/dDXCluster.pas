@@ -110,6 +110,7 @@ var
   dmDXCluster: TdmDXCluster;
 
 implementation
+  {$R *.lfm}
 
 { TdmDXCluster }
 uses dUtils, dData, znacmech, uMyini;
@@ -1226,11 +1227,6 @@ begin
   end
 end;
 
-
-
-
-initialization
-  {$I dDXCluster.lrs}
 
 end.
 

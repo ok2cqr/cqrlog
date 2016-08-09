@@ -49,6 +49,7 @@ var
   frmSerialPort: TfrmSerialPort;
 
 implementation
+{$R *.lfm}
 
 { TfrmSerialPort }
 
@@ -76,9 +77,6 @@ begin
   end;
   ModalResult := mrOK;
 end;
-
-initialization
-  {$I fSerialPort.lrs}
 
 end.
 

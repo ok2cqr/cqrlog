@@ -39,11 +39,9 @@ var
   frmBandMapWatch: TfrmBandMapWatch;
 
 implementation
+{$R *.lfm}
 
 { TfrmBandMapWatch }
-
-initialization
-  {$I fBandMapWatch.lrs}
 
 end.
 

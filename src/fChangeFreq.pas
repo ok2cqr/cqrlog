@@ -47,6 +47,7 @@ var
   frmChangeFreq: TfrmChangeFreq;
 
 implementation
+{$R *.lfm}
 
 { TfrmChangeFreq }
 
@@ -105,9 +106,6 @@ begin
 
   ModalResult := mrOK;
 end;
-
-initialization
-  {$I fChangeFreq.lrs}
 
 end.
 

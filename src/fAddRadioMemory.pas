@@ -34,6 +34,7 @@ var
   frmAddRadioMemory: TfrmAddRadioMemory;
 
 implementation
+{$R *.lfm}
 
 { TfrmAddRadioMemory }
 

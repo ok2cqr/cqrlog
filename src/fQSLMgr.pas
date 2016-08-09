@@ -43,6 +43,7 @@ var
   frmQSLMgr: TfrmQSLMgr;
 
 implementation
+{$R *.lfm}
 
 { TfrmQSLMgr }
 
@@ -92,9 +93,6 @@ begin
   dmUtils.SaveWindowPos(frmQSLMgr);
   dmUtils.SaveForm(frmQSLMgr)
 end;
-
-initialization
-  {$I fQSLMgr.lrs}
 
 end.
 

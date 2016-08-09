@@ -45,6 +45,7 @@ var
   frmEnterFreq: TfrmEnterFreq;
 
 implementation
+{$R *.lfm}
 
 { TfrmEnterFreq }
 uses dUtils, fTRXControl, dData;
@@ -92,9 +93,6 @@ begin
     key := #0;
   end;
 end;
-
-initialization
-  {$I fEnterFreq.lrs}
 
 end.
 

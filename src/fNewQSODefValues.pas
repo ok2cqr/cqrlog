@@ -46,6 +46,7 @@ var
   frmNewQSODefValues : TfrmNewQSODefValues;
 
 implementation
+{$R *.lfm}
 
 { TfrmNewQSODefValues }
 
@@ -167,9 +168,6 @@ begin
     if lbValues.Items.Strings[i] <> '' then
       Result := Result + '|' +lbValues.Items.Strings[i]
 end;
-
-initialization
-  {$I fNewQSODefValues.lrs}
 
 end.
 

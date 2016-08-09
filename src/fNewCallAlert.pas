@@ -34,6 +34,7 @@ var
   frmNewCallAlert: TfrmNewCallAlert;
 
 implementation
+{$R *.lfm}
 
 uses dUtils;
 
@@ -62,9 +63,6 @@ procedure TfrmNewCallAlert.FormShow(Sender: TObject);
 begin
   edtCall.SetFocus
 end;
-
-initialization
-  {$I fNewCallAlert.lrs}
 
 end.
 

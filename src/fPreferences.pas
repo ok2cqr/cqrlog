@@ -1035,6 +1035,7 @@ var
   WinKeyerChanged : Boolean;
 
 implementation
+{$R *.lfm}
 
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
@@ -2873,9 +2874,6 @@ procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
 begin
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
 end;
-
-initialization
-  {$I fPreferences.lrs}
 
 end.
 

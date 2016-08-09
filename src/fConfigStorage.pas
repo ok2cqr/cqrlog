@@ -80,6 +80,7 @@ var
   frmConfigStorage: TfrmConfigStorage;
 
 implementation
+{$R *.lfm}
 
 { TfrmConfigStorage }
 
@@ -188,9 +189,6 @@ begin
   cqrini.LoadLocalSectionsList;
   ModalResult := mrOK
 end;
-
-initialization
-  {$I fConfigStorage.lrs}
 
 end.
 

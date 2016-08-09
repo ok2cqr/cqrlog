@@ -49,6 +49,7 @@ var
   frmQTHProfiles: TfrmQTHProfiles;
 
 implementation
+{$R *.lfm}
 
 { TfrmQTHProfiles }
 uses dData, fNewQTHProfile, dUtils;
@@ -204,9 +205,6 @@ begin
   btnApply.Visible  := True;
   btnClose.Caption  := 'Cancel'
 end;
-
-initialization
-  {$I fQTHProfiles.lrs}
 
 end.
 

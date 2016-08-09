@@ -34,6 +34,7 @@ var
   frmQSLViewer: TfrmQSLViewer;
 
 implementation
+{$R *.lfm}
 
 uses dData, dUtils;
 
@@ -80,9 +81,6 @@ procedure TfrmQSLViewer.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
   dmUtils.SaveWindowPos(frmQSLViewer)
 end;
-
-initialization
-  {$I fQSLViewer.lrs}
 
 end.
 

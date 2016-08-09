@@ -31,6 +31,7 @@ var
   frmCallAttachment: TfrmCallAttachment;
 
 implementation
+{$R *.lfm}
 
 uses dUtils,dData, uMyini;
 
@@ -81,9 +82,6 @@ procedure TfrmCallAttachment.flAttachDblClick(Sender: TObject);
 begin
   btnView.Click
 end;
-
-initialization
-  {$I fCallAttachment.lrs}
 
 end.
 

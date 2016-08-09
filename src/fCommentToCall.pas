@@ -44,6 +44,7 @@ var
   frmCommentToCall : TfrmCommentToCall;
 
 implementation
+{$R *.lfm}
 
 uses dData, dUtils, fNewCommentToCall, fFindCommentToCall;
 
@@ -171,9 +172,6 @@ begin
   dbgrdComment.Columns[1].Title.Caption := 'Callsign';
   dbgrdComment.Columns[2].Title.Caption := 'Note'
 end;
-
-initialization
-  {$I fCommentToCall.lrs}
 
 end.
 

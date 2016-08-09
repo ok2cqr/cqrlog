@@ -50,6 +50,7 @@ var
 
 
 implementation
+{$R *.lfm}
 
 { TfrmUpgrade }
 uses dUtils,dData, dDXCC;
@@ -79,9 +80,6 @@ begin
   FormActivate(nil);
   tmrUpgrade.Enabled := False;
 end;
-
-initialization
-  {$I fUpgrade.lrs}
 
 end.
 

@@ -54,6 +54,7 @@ var
   frmSelectDXCC: TfrmSelectDXCC;
 
 implementation
+{$R *.lfm}
 
 uses dData,dUtils, dDXCC;
 
@@ -171,9 +172,6 @@ begin
   if key = #13 then
     btnApply.Click
 end;
-
-initialization
-  {$I fSelectDXCC.lrs}
 
 end.
 

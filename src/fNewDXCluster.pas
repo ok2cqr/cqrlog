@@ -36,6 +36,7 @@ var
   frmNewDXCluster: TfrmNewDXCluster;
 
 implementation
+{$R *.lfm}
 
 { TfrmNewDXCluster }
 uses dUtils;
@@ -44,9 +45,6 @@ procedure TfrmNewDXCluster.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
 end;
-
-initialization
-  {$I fNewDXCluster.lrs}
 
 end.
 

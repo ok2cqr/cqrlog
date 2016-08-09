@@ -40,6 +40,7 @@ var
   frmBandMapFilter: TfrmBandMapFilter;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, uMyIni;
 
@@ -104,10 +105,6 @@ begin
 
   ModalResult := mrOK
 end;
-
-
-initialization
-  {$I fBandMapFilter.lrs}
 
 end.
 

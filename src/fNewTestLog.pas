@@ -95,6 +95,7 @@ var
   frmNewTestLog: TfrmNewTestLog;
 
 implementation
+{$R *.lfm}
 
 { TfrmNewTestLog }
 uses dData, dUtils;
@@ -150,9 +151,6 @@ begin
     cmbCategory.Enabled := False
   end
 end;
-
-initialization
-  {$I fNewTestLog.lrs}
 
 end.
 

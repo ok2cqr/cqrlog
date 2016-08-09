@@ -32,6 +32,7 @@ var
   frmNewLog: TfrmNewLog;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData;
 
@@ -70,9 +71,6 @@ begin
   end;
   ModalResult := mrOK
 end;
-
-initialization
-  {$I fNewLog.lrs}
 
 end.
 

@@ -58,7 +58,7 @@ var
   frmRadioMemories: TfrmRadioMemories;
 
 implementation
-
+{$R *.lfm}
 { TfrmRadioMemories }
 
 uses dUtils, fAddRadioMemory;
@@ -238,9 +238,6 @@ begin
   if sgrdMem.SortOrder = soDescending then
     result := -result
 end;
-
-initialization
-  {$I fRadioMemories.lrs}
 
 end.
 

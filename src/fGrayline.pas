@@ -93,6 +93,7 @@ type
 var
   frmGrayline : TfrmGrayline;
 implementation
+{$R *.lfm}
 
 { TfrmGrayline }
 
@@ -586,10 +587,6 @@ begin
   end;
   Refresh
 end;
-
-
-initialization
-  {$I fGrayline.lrs}
 
 end.
 

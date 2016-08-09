@@ -30,6 +30,7 @@ var
   frmGraphStat: TfrmGraphStat;
 
 implementation
+  {$R *.lfm}
 
 uses dData;
 
@@ -80,10 +81,6 @@ begin
   chrtStat.Foot.Visible := True;
   chrtStat.Legend.Visible := True;}
 end;
-
-
-initialization
-  {$I fGraphStat.lrs}
 
 end.
 

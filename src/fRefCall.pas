@@ -41,6 +41,7 @@ var
   frmRefCall: TfrmRefCall;
 
 implementation
+{$R *.lfm}
 
 { TfrmRefCall }
 uses dUtils;
@@ -70,9 +71,6 @@ procedure TfrmRefCall.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
 end;
-
-initialization
-  {$I fRefCall.lrs}
 
 end.
 

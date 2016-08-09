@@ -435,6 +435,7 @@ var
   frmMain: TfrmMain;
 
 implementation
+{$R *.lfm}
 
 { TfrmMain }
 uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCStat,
@@ -2196,9 +2197,6 @@ begin
       acQSLImage.Enabled := False
   end
 end;
-
-initialization
-  {$I fMain.lrs}
 
 end.
 

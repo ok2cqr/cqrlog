@@ -39,6 +39,7 @@ type
 var
   frmWorking: TfrmWorking;
 implementation
+{$R *.lfm}
 
 { TfrmWorking }
 uses dData, fMain, dUtils;
@@ -77,9 +78,6 @@ begin
   Reload;
   Close
 end;
-
-initialization
-  {$I fWorking.lrs}
 
 end.
 

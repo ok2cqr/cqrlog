@@ -52,6 +52,7 @@ var
   frmQSLExpPref : TfrmQSLExpPref;
 
 implementation
+{$R *.lfm}
 
 uses uMyIni;
 
@@ -126,10 +127,6 @@ begin
   cqrini.WriteBool('QSLExport', 'QSLMsg', chkQSLMsg.Checked);
   ModalResult := mrOK
 end;
-
-
-initialization
-  {$I fQSLExpPref.lrs}
 
 end.
 

@@ -44,6 +44,7 @@ var
   frmImportLoTWWeb: TfrmImportLoTWWeb;
 
 implementation
+{$R *.lfm}
 
 uses fPreferences, dUtils, dData, fImportProgress, uMyini;
 
@@ -241,9 +242,6 @@ begin
   end;
   Writeln(Value);
 end;
-
-initialization
-  {$I fImportLoTWWeb.lrs}
 
 end.
 

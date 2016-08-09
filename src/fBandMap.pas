@@ -154,6 +154,7 @@ var
   frmBandMap: TfrmBandMap;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, uMyIni, dData, fNewQSO, fBandMapFilter;
 
@@ -826,8 +827,6 @@ begin
   frmBandMap.OnlyLoTW := cqrini.ReadBool('BandMapFilter','OnlyLoTW',False);
   frmBandMap.OnlyEQSL := cqrini.ReadBool('BandMapFilter','OnlyeQSL',False)
 end;
-
-{$R *.lfm}
 
 end.
 

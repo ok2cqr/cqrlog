@@ -66,7 +66,7 @@ var
   frmImportProgress: TfrmImportProgress; 
 
 implementation
-
+{$R *.lfm}
 { TfrmImportProgress }
 
 uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload;
@@ -1310,10 +1310,6 @@ begin
     Close
   end
 end;
-
-initialization
-
-  {$I fImportProgress.lrs}
 
 end.
 

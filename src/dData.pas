@@ -347,6 +347,8 @@ var
 
 implementation
 
+  {$R *.lfm}
+
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
      fTRXControl, fRotControl, uVersion, dLogUpload, fDbError;
 
@@ -4369,9 +4371,6 @@ begin
     end
   end
 end;
-
-initialization
-  {$I dData.lrs}
 
 end.
 

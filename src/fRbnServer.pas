@@ -30,6 +30,7 @@ var
   frmRbnServer: TfrmRbnServer;
 
 implementation
+{$R *.lfm}
 
 { TfrmRbnServer }
 
@@ -50,9 +51,6 @@ begin
   end;
   ModalResult := mrOK
 end;
-
-initialization
-  {$I fRbnServer.lrs}
 
 end.
 

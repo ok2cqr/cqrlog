@@ -78,6 +78,7 @@ var
   frmDXCCStat: TfrmDXCCStat;
 
 implementation
+{$R *.lfm}
 
 { TfrmDXCCStat }
 uses dData, dUtils, dDXCC, uMyIni;
@@ -1209,9 +1210,6 @@ begin
     grdStat.Cells[grdStat.ColCount-1,y] := IntToStr(sum)
   end
 end;
-
-initialization
-  {$I fDXCCStat.lrs}
 
 end.
 

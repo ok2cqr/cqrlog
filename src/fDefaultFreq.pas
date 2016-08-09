@@ -107,6 +107,7 @@ var
   frmDefaultFreq: TfrmDefaultFreq;
 
 implementation
+{$R *.lfm}
 
 uses dData, uMyIni;
 
@@ -284,9 +285,6 @@ begin
   cqrini.WriteString('DefFreq','70fm',edt70fm.Text);
   ModalResult := mrOK
 end;
-
-initialization
-  {$I fDefaultFreq.lrs}
 
 end.
 

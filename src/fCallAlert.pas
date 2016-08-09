@@ -41,6 +41,7 @@ var
   frmCallAlert: TfrmCallAlert;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData, fNewCallAlert;
 
@@ -167,10 +168,6 @@ begin
   if dmData.trQ.Active then
     dmData.trQ.Rollback
 end;
-
-
-initialization
-  {$I fCallAlert.lrs}
 
 end.
 

@@ -42,6 +42,7 @@ var
   frmImportTest: TfrmImportTest;
 
 implementation
+{$R *.lfm}
 
 { TfrmImportTest }
 uses dData, dUtils, dDXCC;
@@ -234,9 +235,6 @@ begin
   dmUtils.SaveForm(self);
   //dmData.qImport.Close;
 end;
-
-initialization
-  {$I fImportTest.lrs}
 
 end.
 
