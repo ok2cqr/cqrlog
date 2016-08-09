@@ -5808,41 +5808,41 @@ begin
   case  cqrini.ReadInteger('CW','Type',0) of
     1 : begin
           CWint := TCWWinKeyerUSB.Create;
+          CWint.DebugMode := dmData.DebugLevel>=1;
           CWint.Port    := cqrini.ReadString('CW','wk_port','');
           CWint.Device  := cqrini.ReadString('CW','wk_port','');
           CWint.PortSpeed := 1200;
           CWint.Open;
           CWint.SetSpeed(cqrini.ReadInteger('CW','wk_speed',30));
-          CWint.DebugMode := dmData.DebugLevel>=1;
           sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','wk_speed',30)) + 'WPM'
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
+          CWint.DebugMode := dmData.DebugLevel>=1;
           CWint.Port    := cqrini.ReadString('CW','cw_port','');
           CWint.Device  := cqrini.ReadString('CW','cw_address','');
           CWint.PortSpeed := 0;
           CWint.Open;
           CWint.SetSpeed(cqrini.ReadInteger('CW','cw_speed',30));
-          CWint.DebugMode := dmData.DebugLevel>=1;
           sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
         end;
     3 : begin
           CWint := TCWK3NG.Create;
+          CWint.DebugMode := dmData.DebugLevel>=1;
           CWint.Port    := cqrini.ReadString('CW','K3NGPort','');
           CWint.Device  := cqrini.ReadString('CW','K3NGPort','');
           CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
           CWint.Open;
           CWint.SetSpeed(cqrini.ReadInteger('CW','K3NGSpeed',30));
-          CWint.DebugMode := dmData.DebugLevel>=1;
           sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30)) + 'WPM'
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
+          CWint.DebugMode := dmData.DebugLevel>=1;
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');
           CWint.Device := cqrini.ReadString('TRX1','host','localhost');
           CWint.Open;
           CWint.SetSpeed(cqrini.ReadInteger('CW','HamLibSpeed',30));
-          CWint.DebugMode := dmData.DebugLevel>=1;
           sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30)) + 'WPM'
         end
   end //case
