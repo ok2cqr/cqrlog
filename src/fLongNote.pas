@@ -30,6 +30,7 @@ var
   frmLongNote: TfrmLongNote; 
 
 implementation
+{$R *.lfm}
 
 { TfrmLongNote }
 uses dData, dUtils, uMyIni;
@@ -55,9 +56,6 @@ begin
   cqrini.WriteInteger('LongNote','Top',Top);
   cqrini.WriteInteger('LongNote','Left',Left)
 end;
-
-initialization
-  {$I fLongNote.lrs}
 
 end.
 

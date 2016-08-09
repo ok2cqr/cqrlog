@@ -39,6 +39,7 @@ var
   frmEditDetails: TfrmEditDetails;
 
 implementation
+{$R *.lfm}
 
 uses dData, dUtils, dDXCC;
 
@@ -137,9 +138,6 @@ begin
   ModalResult := mrOK
 end;
 
-
-initialization
-  {$I fEditDetails.lrs}
 
 end.
 

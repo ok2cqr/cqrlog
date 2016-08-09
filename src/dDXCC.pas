@@ -134,6 +134,7 @@ var
   dmDXCC: TdmDXCC;
 
 implementation
+  {$R *.lfm}
 
 { TdmDXCC }
 
@@ -1099,9 +1100,6 @@ begin
     end
   end
 end;
-
-initialization
-  {$I dDXCC.lrs}
 
 end.
 

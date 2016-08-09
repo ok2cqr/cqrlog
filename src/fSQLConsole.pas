@@ -74,6 +74,7 @@ var
   frmSQLConsole: TfrmSQLConsole;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData, uMyIni;
 
@@ -315,9 +316,6 @@ begin
     Write(aSQL[i],'|');
   Writeln('')
 end;
-
-initialization
-  {$I fSQLConsole.lrs}
 
 end.
 

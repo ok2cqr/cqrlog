@@ -60,6 +60,7 @@ var
   frmExLabelPrint: TfrmExLabelPrint;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC;
 { TfrmExLabelPrint }
@@ -510,9 +511,6 @@ procedure TfrmExLabelPrint.edtRemarksEnter(Sender: TObject);
 begin
   rbOwnRemarks.Checked := True
 end;
-
-initialization
-  {$I fExLabelPrint.lrs}
 
 end.
 

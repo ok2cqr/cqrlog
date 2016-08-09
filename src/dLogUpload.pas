@@ -64,6 +64,7 @@ var
   dmLogUpload: TdmLogUpload;
 
 implementation
+  {$R *.lfm}
 
 uses dData, dDXCluster, uMyIni;
 
@@ -732,9 +733,6 @@ begin
             cqrini.ReadBool('OnlineLog','ClUp',False) or
             cqrini.ReadBool('OnlineLog','HrUp',False)
 end;
-
-initialization
-  {$I dLogUpload.lrs}
 
 end.
 

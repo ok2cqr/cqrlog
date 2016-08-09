@@ -36,6 +36,7 @@ var
   frmDXClusterList: TfrmDXClusterList;
 
 implementation
+{$R *.lfm}
 
 { TfrmDXClusterList }
 uses dData, dUtils, fNewDXCluster;
@@ -158,9 +159,6 @@ begin
     Free
   end
 end;
-
-initialization
-  {$I fDXClusterList.lrs}
 
 end.
 

@@ -43,6 +43,7 @@ var
   frmNewQTHProfile: TfrmNewQTHProfile;
 
 implementation
+{$R *.lfm}
 
 { TfrmNewQTHProfile }
 uses dUtils, dData;
@@ -98,9 +99,6 @@ procedure TfrmNewQTHProfile.FormCreate(Sender: TObject);
 begin
   Editing := False
 end;
-
-initialization
-  {$I fNewQTHProfile.lrs}
 
 end.
 

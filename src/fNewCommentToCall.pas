@@ -31,6 +31,7 @@ var
   frmNewCommentToCall : TfrmNewCommentToCall;
 
 implementation
+{$R *.lfm}
 
 uses dData, dUtils;
 
@@ -69,9 +70,6 @@ procedure TfrmNewCommentToCall.FormShow(Sender : TObject);
 begin
   dmUtils.LoadFontSettings(frmNewCommentToCall)
 end;
-
-initialization
-  {$I fNewCommentToCall.lrs}
 
 end.
 

@@ -42,6 +42,7 @@ var
   frmCallbook: TfrmCallbook;
 
 implementation
+{$R *.lfm}
 
 { TfrmCallbook }
 
@@ -106,9 +107,6 @@ begin
     Close
   end;
 end;
-
-initialization
-  {$I fCallbook.lrs}
 
 end.
 

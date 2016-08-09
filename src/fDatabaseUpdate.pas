@@ -40,6 +40,7 @@ var
   frmDatabaseUpdate: TfrmDatabaseUpdate;
 
 implementation
+{$R *.lfm}
 
 { TfrmDatabaseUpdate }
 uses dUtils, dData, uMyIni;
@@ -387,9 +388,6 @@ begin
     QRZ.Start
   end
 end;
-
-initialization
-  {$I fDatabaseUpdate.lrs}
 
 end.
 

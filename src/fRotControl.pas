@@ -42,6 +42,7 @@ var
   frmRotControl: TfrmRotControl;
 
 implementation
+{$R *.lfm}
 
 { TfrmRotControl }
 
@@ -176,9 +177,6 @@ begin
     Az := 0;
   lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az)
 end;
-
-initialization
-  {$I fRotControl.lrs}
 
 end.
 

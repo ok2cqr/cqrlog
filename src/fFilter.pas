@@ -135,6 +135,7 @@ var
   frmFilter: TfrmFilter;
 
 implementation
+{$R *.lfm}
 
 { TfrmFilter }
 uses dData, dUtils,fSelectDXCC;
@@ -597,10 +598,6 @@ begin
     end;
   end;
 end;
-
-
-initialization
-  {$I fFilter.lrs}
 
 end.
 

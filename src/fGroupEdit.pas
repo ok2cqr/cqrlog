@@ -47,6 +47,7 @@ var
   frmGroupEdit: TfrmGroupEdit;
 
 implementation
+{$R *.lfm}
 
 { TfrmGroupEdit }
 uses dUtils, dData, dDXCC, fMain;
@@ -489,9 +490,6 @@ begin
     frmMain.acRefresh.Execute
   end;
 end;
-
-initialization
-  {$I fGroupEdit.lrs}
 
 end.
 

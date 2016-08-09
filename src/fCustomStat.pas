@@ -51,6 +51,7 @@ var
   p47,p76,p137,tmp,p5,p4           : Integer;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, fSelectDXCC, dData, uMyIni, dDXCC;
 { TfrmCustomStat }
@@ -261,9 +262,6 @@ procedure TfrmCustomStat.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self)
 end;
-
-initialization
-  {$I fCustomStat.lrs}
 
 end.
 

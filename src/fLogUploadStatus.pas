@@ -68,6 +68,7 @@ var
   frmLogUploadStatus: TfrmLogUploadStatus;
 
 implementation
+{$R *.lfm}
 
 uses dData, dUtils, uMyIni, fNewQSO;
 
@@ -448,9 +449,6 @@ begin
   UploadDataToOnlineLogs(upClubLog, True);
   UploadDataToOnlineLogs(upHrdLog, True)
 end;
-
-initialization
-  {$I fLogUploadStatus.lrs}
 
 end.
 

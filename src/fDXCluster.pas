@@ -160,7 +160,7 @@ var
   TelThread    : TTelThread;
 
 implementation
-
+{$R *.lfm}
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
@@ -1344,9 +1344,6 @@ begin
     LeaveCriticalSection(csDXCPref)
   end
 end;
-
-initialization
-  {$I fDXCluster.lrs}
 
 end.
 

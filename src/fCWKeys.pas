@@ -27,6 +27,7 @@ var
   frmCWKeys: TfrmCWKeys;
 
 implementation
+  {$R *.lfm}
 
 uses dUtils,fNewQSO;
 
@@ -54,9 +55,6 @@ procedure TfrmCWKeys.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmCWKeys)
 end;
-
-initialization
-  {$I fCWKeys.lrs}
 
 end.
 

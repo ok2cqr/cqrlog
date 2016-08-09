@@ -54,6 +54,7 @@ var
   frmSOTAExport : TfrmSOTAExport;
 
 implementation
+{$R *.lfm}
 
 uses dData,dUtils, uMyIni;
 
@@ -248,11 +249,6 @@ procedure TfrmSOTAExport.edtSotaEnter(Sender : TObject);
 begin
   rbSotaEdt.Checked := True
 end;
-
-
-
-initialization
-  {$I fSOTAExport.lrs}
 
 end.
 

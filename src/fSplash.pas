@@ -39,6 +39,7 @@ var
   frmSplash: TfrmSplash;
 
 implementation
+{$R *.lfm}
 
 uses uVersion;
 
@@ -76,9 +77,6 @@ begin
   Image1.Canvas.Font.Color := clRed;
   Image1.Canvas.TextRect(ATextRect, VersionPos.X, VersionPos.Y, cVERSION, VersionStyle)
 end;
-
-initialization
-  {$I fSplash.lrs}
 
 end.
 

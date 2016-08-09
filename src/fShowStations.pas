@@ -40,6 +40,7 @@ var
   frmShowStations: TfrmShowStations;
 
 implementation
+{$R *.lfm}
 
 { TfrmShowStations }
 
@@ -48,9 +49,6 @@ begin
   if dlgSave.Execute then
     m.Lines.SaveToFile(dlgSave.FileName);
 end;
-
-initialization
-  {$I fShowStations.lrs}
 
 end.
 

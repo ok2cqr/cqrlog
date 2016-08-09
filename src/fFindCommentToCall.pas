@@ -29,6 +29,7 @@ var
   frmFindCommentToCall : TfrmFindCommentToCall;
 
 implementation
+{$R *.lfm}
 
 uses dUtils;
 
@@ -48,9 +49,6 @@ procedure TfrmFindCommentToCall.FormShow(Sender : TObject);
 begin
   dmUtils.LoadFontSettings(frmFindCommentToCall)
 end;
-
-initialization
-  {$I fFindCommentToCall.lrs}
 
 end.
 

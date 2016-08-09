@@ -50,6 +50,7 @@ var
   frmeQSLUpload : TfrmeQSLUpload;
 
 implementation
+{$R *.lfm}
 
 uses dUtils,dData,uMyIni, fPreferences, uVersion;
 
@@ -373,10 +374,6 @@ begin
     m.Free
   end
 end;
-
-
-initialization
-  {$I feQSLUpload.lrs}
 
 end.
 

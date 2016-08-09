@@ -127,6 +127,7 @@ var
   frmAdifImport: TfrmAdifImport;
 
 implementation
+{$R *.lfm}
 
 uses dData, dUtils, dDXCC, fMain, uMyIni, uVersion;
 
@@ -757,10 +758,6 @@ begin
     CloseFile(f)
   end
 end;
-
-
-initialization
-{$I fAdifImport.lrs}
 
 end.
 

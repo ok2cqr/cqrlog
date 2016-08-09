@@ -43,6 +43,7 @@ var
   running : Boolean = False;
   
 implementation
+{$R *.lfm}
 
 { TfrmExportProgress }
 uses dUtils, dData, uMyini, dDXCC, uVersion;
@@ -1260,10 +1261,6 @@ begin
     Close
   end
 end;
-
-
-initialization
-  {$I fExportProgress.lrs}
 
 end.
 

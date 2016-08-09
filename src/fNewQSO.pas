@@ -645,6 +645,7 @@ var
   MinQSODetails : Boolean;
   
 implementation
+  {$R *.lfm}
 
 { TfrmNewQSO }
 
@@ -6034,8 +6035,5 @@ begin
   frmGrayline.kresli
 end;
 
-initialization
-  {$I fNewQSO.lrs}
-  
 end.
 

@@ -41,6 +41,7 @@ var
   frmCWType: TfrmCWType;
 
 implementation
+{$R *.lfm}
 
 { TfrmCWType }
 uses fNewQSO,dUtils,dData, uMyIni;
@@ -160,9 +161,6 @@ begin
   if Key = VK_ESCAPE then
     frmNewQSO.CWint.StopSending
 end;
-
-initialization
-  {$I fCWType.lrs}
 
 end.
 

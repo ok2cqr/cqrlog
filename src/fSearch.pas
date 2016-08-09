@@ -242,7 +242,7 @@ end;
 
 
 initialization
-  {$I fSearch.lrs}
+  {$R *.lfm}
 
 end.
 

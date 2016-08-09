@@ -126,6 +126,7 @@ var
   LClub5  : TClubInfo;
 
 implementation
+{$R *.lfm}
 
 { TfrmQSODetails }
 uses dUtils, dData, fNewQSO, uMyIni;
@@ -536,9 +537,6 @@ begin
   Result := StringReplace(Result,'%n',clubnr,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
 end;
-
-initialization
-  {$I fQSODetails.lrs}
 
 end.
 

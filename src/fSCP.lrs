@@ -1,8 +1,0 @@
-LazarusResources.Add('TfrmSCP','FORMDATA',[
-  'TPF0'#7'TfrmSCP'#6'frmSCP'#4'Left'#3#8#2#6'Height'#3#168#0#3'Top'#3#153#1#5
-  +'Width'#3#206#1#7'Caption'#6#19'Super check partial'#12'ClientHeight'#3#168#0
-  +#11'ClientWidth'#3#206#1#10'KeyPreview'#9#7'OnClose'#7#9'FormClose'#7'OnKeyU'
-  +'p'#7#9'FormKeyUp'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#8'0.9.30.2'#0#5
-  +'TMemo'#4'mSCP'#4'Left'#2#0#6'Height'#3#168#0#3'Top'#2#0#5'Width'#3#206#1#5
-  +'Align'#7#8'alClient'#8'TabOrder'#2#0#0#0#0
-]);

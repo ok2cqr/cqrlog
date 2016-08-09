@@ -1,9 +1,0 @@
-LazarusResources.Add('TdmUtils','FORMDATA',[
-  'TPF0'#8'TdmUtils'#7'dmUtils'#8'OnCreate'#7#16'DataModuleCreate'#14'OldCreate'
-  +'Order'#8#6'Height'#3','#1#16'HorizontalOffset'#3#199#1#14'VerticalOffset'#3
-  +#183#1#5'Width'#3#144#1#0#17'THTMLHelpDatabase'#12'HelpDatabase'#7'BaseURL'#6
-  +#19'file:///home/ok2cqr'#12'AutoRegister'#9#13'KeywordPrefix'#6#5'help/'#4'l'
-  +'eft'#2'J'#3'top'#2'('#0#0#22'THTMLBrowserHelpViewer'#10'HelpViewer'#13'Brow'
-  +'serParams'#6#2'%s'#12'AutoRegister'#9#4'left'#2'H'#3'top'#2'P'#0#0#11'TData'
-  +'Source'#11'Datasource1'#4'left'#2'P'#3'top'#3#176#0#0#0#0
-]);

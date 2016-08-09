@@ -59,6 +59,7 @@ var
   frmSplitSettings: TfrmSplitSettings;
 
 implementation
+{$R *.lfm}
 
 uses dData, uMyIni;
 
@@ -151,9 +152,6 @@ begin
     cmbSplit8.ItemIndex := 1
   end
 end;
-
-initialization
-  {$I fSplitSettings.lrs}
 
 end.
 

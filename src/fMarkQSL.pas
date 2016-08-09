@@ -44,6 +44,7 @@ var
   frmMarkQSL: TfrmMarkQSL;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData, dDXCC;
 
@@ -262,9 +263,6 @@ begin
   chgQSL.Width := chgQSL.Width+2;
   chgQSL.Width := chgQSL.Width-2
 end;
-
-initialization
-  {$I fMarkQSL.lrs}
 
 end.
 

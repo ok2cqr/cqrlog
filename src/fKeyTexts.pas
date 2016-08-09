@@ -134,6 +134,7 @@ var
   frmKeyTexts: TfrmKeyTexts;
 
 implementation
+{$R *.lfm}
 
 { TfrmKeyTexts }
 uses dData, dUtils, uMyIni;
@@ -207,9 +208,6 @@ begin
   cqrini.SaveToDisk;
   ModalResult := mrOK
 end;
-
-initialization
-  {$I fKeyTexts.lrs}
 
 end.
 

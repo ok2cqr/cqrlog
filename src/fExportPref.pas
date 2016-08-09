@@ -28,6 +28,7 @@ var
   frmExportPref : TfrmExportPref;
 
 implementation
+{$R *.lfm}
 
 uses dUtils;
 
@@ -44,9 +45,6 @@ begin
   fraExportPref1.SaveExportPref;
   ModalResult := mrOK
 end;
-
-initialization
-  {$I fExportPref.lrs}
 
 end.
 

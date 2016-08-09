@@ -72,6 +72,7 @@ var
   frmLoTWExport: TfrmLoTWExport;
 
 implementation
+{$R *.lfm}
 
 { TfrmLoTWExport }
 
@@ -450,9 +451,6 @@ begin
     Application.ProcessMessages
   end
 end;
-
-initialization
-  {$I fLoTWExport.lrs}
 
 end.
 

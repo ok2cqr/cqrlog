@@ -87,6 +87,7 @@ var
   frmWAZITUStat: TfrmWAZITUStat;
 
 implementation
+{$R *.lfm}
 
 { TfrmWAZITUStat }
 uses dUtils,dData, fQTHProfiles, fShowStations, uMyIni;
@@ -1095,10 +1096,6 @@ begin
                  end
     end; //case
 end;
-
-
-initialization
-  {$I fWAZITUStat.lrs}
 
 end.
 

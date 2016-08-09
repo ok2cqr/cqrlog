@@ -40,6 +40,7 @@ var
   frmSort: TfrmSort;
 
 implementation
+{$R *.lfm}
 
 { TfrmSort }
 
@@ -74,9 +75,6 @@ procedure TfrmSort.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self)
 end;
-
-initialization
-  {$I fSort.lrs}
 
 end.
 

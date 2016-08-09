@@ -51,6 +51,7 @@ var
   frmIOTAStat: TfrmIOTAStat;
 
 implementation
+{$R *.lfm}
 
 { TfrmIOTAStat }
 uses dData,dUtils, uMyIni;
@@ -182,9 +183,6 @@ begin
     dmData.trQ.Rollback
   end
 end;
-
-initialization
-  {$I fIOTAStat.lrs}
 
 end.
 

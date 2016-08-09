@@ -27,6 +27,7 @@ var
   frmSCP: TfrmSCP;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, fNewQSO;
 
@@ -48,9 +49,6 @@ begin
     key := 0
   end
 end;
-
-initialization
-  {$I fSCP.lrs}
 
 end.
 

@@ -33,6 +33,7 @@ var
   frmFreq: TfrmFreq;
 
 implementation
+{$R *.lfm}
 
 { TfrmFreq }
 uses dData, fChangeFreq, dUtils;
@@ -140,9 +141,6 @@ begin
   for i:=2 to dbgrdFreq.Columns.Count-1 do
     dbgrdFreq.Columns[i].DisplayFormat   := '#####0.000;;'
 end;
-
-initialization
-  {$I fFreq.lrs}
 
 end.
 

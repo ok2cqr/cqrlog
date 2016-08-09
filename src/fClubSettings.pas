@@ -74,6 +74,7 @@ var
   frmClubSettings: TfrmClubSettings;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData, uMyini;
 { TfrmClubSettings }
@@ -128,8 +129,6 @@ begin
   if cmbMainFields.Text = '' then
     cmbMainFields.ItemIndex := 0;
 end;
-initialization
-  {$I fClubSettings.lrs}
 
 end.
 

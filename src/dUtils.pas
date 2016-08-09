@@ -262,6 +262,7 @@ var
   dmUtils: TdmUtils;
 
 implementation
+  {$R *.lfm}
 
 { TdmUtils }
 uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini;
@@ -4329,9 +4330,6 @@ begin
   for i:=0 to Length(aColumns)-1 do
     aColumns[i].Exists := False
 end;
-
-initialization
-  {$I dUtils.lrs}
 
 
 end.

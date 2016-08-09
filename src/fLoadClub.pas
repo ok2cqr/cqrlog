@@ -56,6 +56,7 @@ var
 
 
 implementation
+{$R *.lfm}
 
 uses dUtils, dData, uMyIni;
 
@@ -314,9 +315,6 @@ begin
     CloseFile(sF)
   end
 end;
-
-initialization
-  {$I fLoadClub.lrs}
 
 end.
 

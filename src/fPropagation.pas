@@ -121,6 +121,7 @@ var
   frmPropagation: TfrmPropagation;
 
 implementation
+{$R *.lfm}
 
 { TfrmPropagation }
 uses dData, dUtils, uMyIni, fNewQSO;
@@ -499,9 +500,6 @@ procedure TfrmPropagation.RefreshPropagation;
 begin
   tmrPropTimer(nil)
 end;
-
-initialization
-  {$I fPropagation.lrs}
 
 end.
 

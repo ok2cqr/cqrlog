@@ -29,6 +29,7 @@ var
   frmDbError : TfrmDbError;
 
 implementation
+  {$R *.lfm}
 
 uses dUtils, dData;
 
@@ -43,9 +44,6 @@ procedure TfrmDbError.btnVisitFAQClick(Sender : TObject);
 begin
   dmUtils.RunOnBackgroud('xdg-open https://www.cqrlog.com/faq')
 end;
-
-initialization
-  {$I fDbError.lrs}
 
 end.
 

@@ -29,6 +29,7 @@ var
   frmChangeLocator: TfrmChangeLocator;
 
 implementation
+{$R *.lfm}
 
 { TfrmChangeLocator }
 
@@ -45,9 +46,6 @@ procedure TfrmChangeLocator.btnOKClick(Sender: TObject);
 begin
   ModalResult := mrOK;
 end;
-
-initialization
-  {$I fChangeLocator.lrs}
 
 end.
 

@@ -132,6 +132,7 @@ var
   frmRbnMonitor: TfrmRbnMonitor;
 
 implementation
+{$R *.lfm}
 
 uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO;
 
@@ -728,9 +729,6 @@ begin
     dmData.trRbnMon.Rollback
   end
 end;
-
-initialization
-  {$I fRbnMonitor.lrs}
 
 end.
 
