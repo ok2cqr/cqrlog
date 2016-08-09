@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmExLabelPrint','FORMDATA',[
   'TPF0'#16'TfrmExLabelPrint'#15'frmExLabelPrint'#4'Left'#3'0'#4#6'Height'#3#247
   +#1#3'Top'#3'O'#1#5'Width'#3#168#1#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'

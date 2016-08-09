@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmCallbook','FORMDATA',[
   'TPF0'#12'TfrmCallbook'#11'frmCallbook'#4'Left'#3'I'#2#6'Height'#3#167#1#3'To'
   +'p'#3#223#0#5'Width'#3#7#1#13'ActiveControl'#7#6'Panel1'#11'BorderIcons'#11

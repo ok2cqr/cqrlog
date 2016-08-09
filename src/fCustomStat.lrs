@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmCustomStat','FORMDATA',[
   'TPF0'#14'TfrmCustomStat'#13'frmCustomStat'#4'Left'#3#160#2#6'Height'#3#11#2#3
   +'Top'#3#184#0#5'Width'#3#12#3#13'ActiveControl'#7#11'pnlsettings'#7'Caption'

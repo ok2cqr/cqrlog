@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmBandMapWatch','FORMDATA',[
   'TPF0'#16'TfrmBandMapWatch'#15'frmBandMapWatch'#4'Left'#3'J'#2#6'Height'#3'O'
   +#1#3'Top'#3'L'#1#5'Width'#3#143#1#18'HorzScrollBar.Page'#3#142#1#18'VertScro'
@@ -11,7 +9,7 @@ LazarusResources.Add('TfrmBandMapWatch','FORMDATA',[
   +#2#0#0#5'TEdit'#7'edtDXCC'#4'Left'#2#6#6'Height'#2#27#3'Top'#2#9#5'Width'#3
   +'P'#1#8'TabOrder'#2#0#0#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#16#6'Height'
   +#2'@'#3'Top'#2'I'#5'Width'#3'i'#1#7'Caption'#6#31' WAZ zones (use ; as delim'
-  +'eter)'#12'ClientHeight'#2'-'#11'ClientWidth'#3'e'#1#8'TabOrder'#2#1#0#5'TEd'
+  +'iter)'#12'ClientHeight'#2'-'#11'ClientWidth'#3'e'#1#8'TabOrder'#2#1#0#5'TEd'
   +'it'#6'edtWAZ'#4'Left'#2#6#6'Height'#2#27#3'Top'#2#7#5'Width'#3'P'#1#8'TabOr'
   +'der'#2#0#0#0#0#9'TGroupBox'#9'GroupBox3'#4'Left'#2#16#6'Height'#2'A'#3'Top'
   +#3#141#0#5'Width'#3'i'#1#7'Caption'#6#31' ITU zones (use ; as delimiter)'#12

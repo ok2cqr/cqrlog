@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmGrayline','FORMDATA',[
   'TPF0'#12'TfrmGrayline'#11'frmGrayline'#4'Left'#3#243#2#6'Height'#3#248#0#3'T'
   +'op'#3'0'#1#5'Width'#3#163#1#7'Caption'#6#8'Grayline'#12'ClientHeight'#3#248

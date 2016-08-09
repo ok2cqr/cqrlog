@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TdmLogUpload','FORMDATA',[
   'TPF0'#12'TdmLogUpload'#11'dmLogUpload'#8'OnCreate'#7#16'DataModuleCreate'#9
   +'OnDestroy'#7#17'DataModuleDestroy'#14'OldCreateOrder'#8#6'Height'#3#245#0#16

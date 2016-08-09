@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmTRXControl','FORMDATA',[
   'TPF0'#14'TfrmTRXControl'#13'frmTRXControl'#4'Left'#3#139#1#6'Height'#3#233#0
   +#3'Top'#3#209#0#5'Width'#3'S'#1#7'Caption'#6#11'TRX control'#12'ClientHeight'

@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TdmUtils','FORMDATA',[
   'TPF0'#8'TdmUtils'#7'dmUtils'#8'OnCreate'#7#16'DataModuleCreate'#14'OldCreate'
   +'Order'#8#6'Height'#3','#1#16'HorizontalOffset'#3#199#1#14'VerticalOffset'#3

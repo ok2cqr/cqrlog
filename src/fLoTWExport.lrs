@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmLoTWExport','FORMDATA',[
   'TPF0'#14'TfrmLoTWExport'#13'frmLoTWExport'#4'Left'#3#231#1#6'Height'#3'%'#2#3
   +'Top'#3#221#0#5'Width'#3#221#1#8'HelpType'#7#9'htKeyword'#11'HelpKeyword'#6

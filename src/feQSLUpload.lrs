@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('TfrmeQSLUpload','FORMDATA',[
   'TPF0'#14'TfrmeQSLUpload'#13'frmeQSLUpload'#4'Left'#3#253#1#6'Height'#3#225#1
   +#3'Top'#3#9#1#5'Width'#3'?'#2#7'Caption'#6#21'Upload QSO to eQSL.cc'#12'Clie'
