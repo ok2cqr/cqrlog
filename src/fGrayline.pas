@@ -7,7 +7,7 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType;
+  lnet, lclType, LazFileUtils;
 
 type
   TRBNList = record

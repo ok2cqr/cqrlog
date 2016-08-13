@@ -11,8 +11,8 @@ uses
 
 type
   TDayNight = record
-    day   : String[10];
-    night : String[10]
+    day   : String;
+    night : String
 end;
 
 type
@@ -190,47 +190,47 @@ begin
 
     data := Child.FindNode('updated');
     if Assigned(data) then
-      frmPropagation.LastUpdate := data.FirstChild.NodeValue;
+      frmPropagation.LastUpdate := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('solarflux');
     if Assigned(data) then
-      frmPropagation.sfi := data.FirstChild.NodeValue;
+      frmPropagation.sfi := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('aindex');
     if Assigned(data) then
-      frmPropagation.a := data.FirstChild.NodeValue;
+      frmPropagation.a := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('kindex');
     if Assigned(data) then
-      frmPropagation.k := data.FirstChild.NodeValue;
+      frmPropagation.k := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('sunspots');
     if Assigned(data) then
-      frmPropagation.ssn := data.FirstChild.NodeValue;
+      frmPropagation.ssn := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('aurora');
     if Assigned(data) then
-      frmPropagation.aur := data.FirstChild.NodeValue;
+      frmPropagation.aur := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('latdegree');
     if Assigned(data) then
-      frmPropagation.lat := data.FirstChild.NodeValue;
+      frmPropagation.lat := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('magneticfield');
     if Assigned(data) then
-      frmPropagation.mag := data.FirstChild.NodeValue;
+      frmPropagation.mag := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('geomagfield');
     if Assigned(data) then
-      frmPropagation.geo := data.FirstChild.NodeValue;
+      frmPropagation.geo := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('signalnoise');
     if Assigned(data) then
-      frmPropagation.sigs := data.FirstChild.NodeValue;
+      frmPropagation.sigs := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('fof2');
     if Assigned(data) then
-      frmPropagation.fof2 := data.FirstChild.NodeValue;
+      frmPropagation.fof2 := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('calculatedconditions');
     if Assigned(data) then
@@ -240,30 +240,30 @@ begin
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '80m-40m') then
         begin
           if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
-            frmPropagation.b8040.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b8040.day := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else
-            frmPropagation.b8040.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b8040.night := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
         end;
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '30m-20m') then
         begin
           if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
-            frmPropagation.b3020.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b3020.day := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else
-            frmPropagation.b3020.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b3020.night := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
         end;
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '17m-15m') then
         begin
           if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
-            frmPropagation.b1715.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b1715.day := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else
-            frmPropagation.b1715.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b1715.night := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
         end;
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = '12m-10m') then
         begin
           if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'day') then
-            frmPropagation.b1210.day := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b1210.day := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else
-            frmPropagation.b1210.night := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.b1210.night := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
         end
       end
     end;
@@ -277,13 +277,13 @@ begin
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = 'E-Skip') then
         begin
           if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe') then
-            frmPropagation.skip_eu := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.skip_eu := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'north_america') then
-            frmPropagation.skip_na := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.skip_na := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe_6m') then
-            frmPropagation.skip_eu_6m := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.skip_eu_6m := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
           else if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe_4m') then
-            frmPropagation.skip_eu_4m := data.ChildNodes.Item[j].FirstChild.NodeValue
+            frmPropagation.skip_eu_4m := String(data.ChildNodes.Item[j].FirstChild.NodeValue)
         end
       end
     end

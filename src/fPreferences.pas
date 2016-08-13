@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, inifiles, DB, process, Spin, ColorBox, lcltype,
-  uCWKeying, frExportPref, types, fileutil;
+  uCWKeying, frExportPref, types, fileutil, LazFileUtils;
 
 type
 

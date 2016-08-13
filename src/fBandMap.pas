@@ -344,6 +344,7 @@ var
   s : String;
   c : TColor;
 begin
+  Result := 0;
   if BandMap.cti_vetu(s,c,c,i,ItemPos) then
   begin
     s := copy(s,2,Length(s)-1);
@@ -357,8 +358,6 @@ begin
       end
     end
   end
-  else
-    Result := 0
 end;
 
 function TBandMapThread.ItemExists(call,band,mode: String) : Integer;

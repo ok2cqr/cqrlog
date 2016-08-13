@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, StdCtrls, iniFiles,
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
-  XMLRead, DOM, sqlscript, BaseUnix, Unix;
+  XMLRead, DOM, sqlscript, BaseUnix, Unix, LazFileUtils;
 
 type
   TExplodeArray = array of string;

@@ -3,13 +3,14 @@ object dmDXCC: TdmDXCC
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
   Height = 214
-  HorizontalOffset = 690
-  VerticalOffset = 377
+  HorizontalOffset = 689
+  VerticalOffset = 352
   Width = 434
   object Q: TSQLQuery
     FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
+    Options = []
     Params = <>
     ParseSQL = False
     left = 168
@@ -18,12 +19,14 @@ object dmDXCC: TdmDXCC
   object trQ: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 168
     top = 80
   end
   object Q1: TSQLQuery
     FieldDefs = <>
     Transaction = trQ1
+    Options = []
     Params = <>
     ParseSQL = False
     left = 112
@@ -32,12 +35,14 @@ object dmDXCC: TdmDXCC
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 112
     top = 80
   end
   object qDXCCRef: TSQLQuery
     FieldDefs = <>
     Transaction = trDXCCRef
+    Options = []
     Params = <>
     ParseSQL = False
     left = 40
@@ -46,6 +51,7 @@ object dmDXCC: TdmDXCC
   object trDXCCRef: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 40
     top = 80
   end
@@ -62,6 +68,7 @@ object dmDXCC: TdmDXCC
   object qValid: TSQLQuery
     FieldDefs = <>
     Transaction = trValid
+    Options = []
     Params = <>
     left = 376
     top = 80
@@ -69,17 +76,20 @@ object dmDXCC: TdmDXCC
   object trValid: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 216
     top = 80
   end
   object trDeleted: TSQLTransaction
     Active = False
     Action = caNone
+    Options = []
     left = 221
     top = 24
   end
   object qDeleted: TSQLQuery
     FieldDefs = <>
+    Options = []
     Params = <>
     ParseSQL = False
     left = 376

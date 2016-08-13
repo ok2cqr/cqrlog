@@ -1762,7 +1762,7 @@ end;
 
 procedure TfrmMain.acQSL_RExecute(Sender: TObject);
 var
-  idx: integer;
+  idx : integer = 0;
   i: integer = 0;
 
   procedure MarkRec;

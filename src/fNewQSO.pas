@@ -2332,7 +2332,7 @@ procedure TfrmNewQSO.btnSaveClick(Sender: TObject);
 var
   tmp    : Integer;
   myloc  : String;
-  id     : LongInt;
+  id     : LongInt = 0;
   Delete : Boolean = False;
   ShowMain : Boolean = False;
   date     : TDate;

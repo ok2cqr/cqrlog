@@ -1,7 +1,7 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 395
+  Left = 394
   Height = 233
-  Top = 209
+  Top = 184
   Width = 339
   Caption = 'TRX control'
   ClientHeight = 210

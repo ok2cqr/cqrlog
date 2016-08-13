@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, StdCtrls, Grids, IpHtml, Ipfilebroker, db, BufDataset;
+  Dialogs, ExtCtrls, StdCtrls, Grids, IpHtml, Ipfilebroker, db, BufDataset,
+  LazFileUtils;
 
 type
 
@@ -286,7 +287,7 @@ end;
 
 procedure TfrmBigSquareStat.FormShow(Sender: TObject);
 begin
-  TmpFile := GetTempFileName(dmData.HomeDir,'square');
+  TmpFile := GetTempFileNameUTF8(dmData.HomeDir,'square');
   dmUtils.LoadForm(frmBigSquareStat);
   dmUtils.FillBandCombo(cmbBands);
   if cqrini.ReadInteger('SquareStat','Band',0) > cmbBands.Items.Count-1 then

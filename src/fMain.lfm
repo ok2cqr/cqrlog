@@ -1,13 +1,13 @@
 object frmMain: TfrmMain
-  Left = 334
+  Left = 333
   Height = 587
-  Top = 206
+  Top = 181
   Width = 854
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   ActiveControl = Panel2
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 587
+  ClientHeight = 564
   ClientWidth = 854
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
@@ -127,8 +127,8 @@ object frmMain: TfrmMain
   LCLVersion = '1.6.0.4'
   object sbMain: TStatusBar
     Left = 0
-    Height = 21
-    Top = 566
+    Height = 25
+    Top = 539
     Width = 854
     Panels = <    
       item
@@ -154,7 +154,7 @@ object frmMain: TfrmMain
   object pnlButtons: TPanel
     Left = 0
     Height = 40
-    Top = 526
+    Top = 499
     Width = 854
     Align = alBottom
     ClientHeight = 40
@@ -228,7 +228,7 @@ object frmMain: TfrmMain
       Left = 8
       Height = 17
       Top = 8
-      Width = 77
+      Width = 61
       Alignment = taRightJustify
       Caption = 'QSO in log:'
       ParentColor = False
@@ -272,10 +272,10 @@ object frmMain: TfrmMain
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 716
+      Left = 728
       Height = 17
       Top = 8
-      Width = 75
+      Width = 63
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       Caption = 'DXCC CFM:'
@@ -298,7 +298,7 @@ object frmMain: TfrmMain
   end
   object dbgrdMain: TDBGrid
     Left = 0
-    Height = 417
+    Height = 390
     Top = 56
     Width = 854
     Align = alClient
@@ -603,7 +603,7 @@ object frmMain: TfrmMain
   object pnlDetails: TPanel
     Left = 0
     Height = 53
-    Top = 473
+    Top = 446
     Width = 854
     Align = alBottom
     BevelOuter = bvNone
@@ -614,7 +614,7 @@ object frmMain: TfrmMain
       Left = 8
       Height = 17
       Top = 2
-      Width = 130
+      Width = 105
       Caption = 'Comment for QSO:'
       ParentColor = False
       ParentFont = False
@@ -623,7 +623,7 @@ object frmMain: TfrmMain
       Left = 8
       Height = 17
       Top = 29
-      Width = 49
+      Width = 39
       Caption = 'Award:'
       ParentColor = False
       ParentFont = False
@@ -632,14 +632,14 @@ object frmMain: TfrmMain
       Left = 141
       Height = 17
       Top = 2
-      Width = 91
+      Width = 73
       ParentColor = False
     end
     object dbtAward: TDBText
       Left = 58
       Height = 17
       Top = 29
-      Width = 69
+      Width = 54
       ParentColor = False
     end
     object Panel1: TPanel
@@ -656,7 +656,7 @@ object frmMain: TfrmMain
         Left = 7
         Height = 17
         Top = 2
-        Width = 73
+        Width = 59
         Caption = 'QS_S date:'
         ParentColor = False
         ParentFont = False
@@ -665,21 +665,21 @@ object frmMain: TfrmMain
         Left = 89
         Height = 17
         Top = 2
-        Width = 93
+        Width = 74
         ParentColor = False
       end
       object dbtQSLRDate: TDBText
         Left = 89
         Height = 17
         Top = 30
-        Width = 94
+        Width = 74
         ParentColor = False
       end
       object Label26: TLabel
         Left = 7
         Height = 17
         Top = 29
-        Width = 74
+        Width = 59
         Caption = 'QS_R date:'
         ParentColor = False
         ParentFont = False
@@ -699,7 +699,7 @@ object frmMain: TfrmMain
         Left = 7
         Height = 17
         Top = 3
-        Width = 115
+        Width = 93
         Caption = 'LoTW QS_S date:'
         ParentColor = False
         ParentFont = False
@@ -708,21 +708,21 @@ object frmMain: TfrmMain
         Left = 134
         Height = 17
         Top = 3
-        Width = 99
+        Width = 78
         ParentColor = False
       end
       object dbtLoTWQSLR: TDBText
         Left = 134
         Height = 17
         Top = 30
-        Width = 100
+        Width = 78
         ParentColor = False
       end
       object Label28: TLabel
         Left = 7
         Height = 17
         Top = 30
-        Width = 116
+        Width = 93
         Caption = 'LoTW QS_R date:'
         ParentColor = False
         ParentFont = False

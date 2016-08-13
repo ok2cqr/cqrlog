@@ -799,7 +799,7 @@ end;
 
 function TfrmTRXControl.GetFreqFromModeBand(band : Integer; smode : String) : String;
 var
-  freq : Currency;
+  freq : Currency = 0;
   mode   : Integer = 0;
 begin
   if smode = 'CW' then
