@@ -3466,7 +3466,7 @@ end;
 
 procedure TfrmNewQSO.acCWTypeExecute(Sender: TObject);
 begin
-  if Assigned(CWint) then
+  if (CWint<>nil) then
   begin
     frmCWType.edtSpeed.Value:= CWint.GetSpeed;
     frmCWType.Show
@@ -5802,7 +5802,7 @@ procedure TfrmNewQSO.InitializeCW;
 var
   KeyType: TKeyType;
 begin
-  if Assigned(CWint) then
+  if (CWint<>nil) then
     FreeAndNil(CWint);
 
   if dmData.DebugLevel>=1 then Writeln('CW init');
