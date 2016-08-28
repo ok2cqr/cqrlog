@@ -4,7 +4,7 @@ Legend:
   - bugfix
 --------------------
 
-2.0.2
+2.0.2 (2016-08-28)
   + QSLMSG added to ADIF export for eQSL
   - importing /MM stations from ADIF fixed (didn't work in Ubuntu 16.04 with MySQL 5.7)
   - TRX control set LSB to 60M instead of USB - fixed

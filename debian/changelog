@@ -1,3 +1,13 @@
+cqrlog (2.0.2-1) unstable; urgency=low
+
+  * QSLMSG added to ADIF export for eQSL
+  * importing /MM stations from ADIF fixed (didn't work in Ubuntu
+    16.04 with MySQL 5.7)
+  * TRX control set LSB to 60M instead of USB - fixed
+  * CW type window didn't show  - fixed
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 28 Aug 2016 18:51:43 +0100
+
 cqrlog (2.0.1-2) unstable; urgency=low
 
   * fixed postrm script
