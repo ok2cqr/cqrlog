@@ -117,6 +117,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkFillAwardField : TCheckBox;
     chkUseCallbookZonesEtc : TCheckBox;
     chkModeRelatedOnly : TCheckBox;
     chkTrxControlDebug : TCheckBox;
@@ -150,7 +151,6 @@ type
     chkRot1RunRotCtld: TCheckBox;
     chkRot2RunRotCtld: TCheckBox;
     chkShowDxcCountry : TCheckBox;
-    chkClearNewQSOFreq : TCheckBox;
     chkClearRIT : TCheckBox;
     chkCountry: TCheckBox;
     chkR1RunRigCtld: TCheckBox;
@@ -488,7 +488,6 @@ type
     edtRotor2: TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
-    edtFreqChange : TEdit;
     edtPoll1: TEdit;
     edtPoll2: TEdit;
     edtRot1Poll: TEdit;
@@ -774,7 +773,6 @@ type
     Label23: TLabel;
     Label24: TLabel;
     Label25: TLabel;
-    Label26 : TLabel;
     Label27: TLabel;
     Label28: TLabel;
     Label29: TLabel;
@@ -1074,14 +1072,10 @@ begin
   cqrini.WriteBool('NewQSO', 'AutoQQSLS', chkAutoQQSLS.Checked);
   cqrini.WriteBool('NewQSO', 'AllVariants', chkAllVariants.Checked);
   cqrini.WriteBool('NewQSO','ClearRIT',chkClearRIT.Checked);
-  if TryStrToCurr(edtFreqChange.Text,Freq) then
-    cqrini.WriteFloat('NewQSO','FreqChange',freq/1000)
-  else
-    cqrini.WriteFloat('NewQSO','FreqChange',0.010);
-  cqrini.WriteBool('NewQSO','ClearAfterFreqChange',chkClearNewQSOFreq.Checked);
   cqrini.WriteBool('NewQSO','UseCallBookData',chkUseCallBookData.Checked);
   cqrini.WriteBool('NewQSO','CapFirstQTHLetter',chkCapFirstQTHLetter.Checked);
   cqrini.WriteBool('NewQSO','UseCallbookZonesEtc',chkUseCallbookZonesEtc.Checked);
+  cqrini.WriteBool('NewQSO','FillAwardField',chkFillAwardField.Checked);
 
   cqrini.WriteString('Program', 'Proxy', edtProxy.Text);
   cqrini.WriteString('Program', 'Port', edtPort.Text);
@@ -2413,11 +2407,10 @@ begin
   chkAutoQQSLS.Checked := cqrini.ReadBool('NewQSO', 'AutoQQSLS', False);
   chkAllVariants.Checked := cqrini.ReadBool('NewQSO', 'AllVariants', False);
   chkClearRIT.Checked := cqrini.ReadBool('NewQSO','ClearRIT',False);
-  edtFreqChange.Text := FloatToStr(cqrini.ReadFloat('NewQSO','FreqChange',0.010)*1000);
-  chkClearNewQSOFreq.Checked := cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   chkUseCallBookData.Checked := cqrini.ReadBool('NewQSO','UseCallBookData',False);
   chkCapFirstQTHLetter.Checked := cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True);
   chkUseCallbookZonesEtc.Checked := cqrini.ReadBool('NewQSO','UseCallbookZonesEtc',True);
+  chkFillAwardField.Checked := cqrini.ReadBool('NewQSO','FillAwardField',True);
 
   edtProxy.Text := cqrini.ReadString('Program', 'Proxy', '');
   edtPort.Text := cqrini.ReadString('Program', 'Port', '');

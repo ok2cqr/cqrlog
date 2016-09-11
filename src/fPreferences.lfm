@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 649
     Top = 0
     Width = 752
-    ActivePage = tabDXCluster
+    ActivePage = tabNewQSO
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 10
+    TabIndex = 2
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -280,7 +280,7 @@ object frmPreferences: TfrmPreferences
         Left = 27
         Height = 17
         Top = 80
-        Width = 33
+        Width = 35
         Caption = 'QTH:'
         ParentColor = False
       end
@@ -380,7 +380,7 @@ object frmPreferences: TfrmPreferences
           Left = 270
           Height = 17
           Top = 9
-          Width = 36
+          Width = 38
           Caption = 'FREQ'
           ParentColor = False
         end
@@ -396,7 +396,7 @@ object frmPreferences: TfrmPreferences
           Left = 6
           Height = 17
           Top = 75
-          Width = 123
+          Width = 126
           Caption = 'Comment for QSO'
           ParentColor = False
         end
@@ -469,7 +469,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 256
-        Width = 275
+        Width = 279
         Caption = 'Use spacebar to move between fields'
         TabOrder = 1
       end
@@ -477,7 +477,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 304
-        Width = 215
+        Width = 219
         Caption = 'Refresh data after save QSO'
         TabOrder = 2
       end
@@ -485,7 +485,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 280
-        Width = 392
+        Width = 401
         Caption = 'Skip over mode and frequency when radio is connected'
         TabOrder = 3
       end
@@ -493,7 +493,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 328
-        Width = 339
+        Width = 350
         Caption = 'Enable auto search on HamQTH.com/QRZ.COM'
         TabOrder = 4
       end
@@ -501,7 +501,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 411
-        Width = 251
+        Width = 256
         Caption = 'Show recent QSO records for last '
         TabOrder = 5
       end
@@ -518,7 +518,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 349
-        Width = 289
+        Width = 298
         Caption = 'Ignore HamQTH.com/QRZ.COM qsl info'
         TabOrder = 7
       end
@@ -526,7 +526,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 38
         Top = 371
-        Width = 366
+        Width = 377
         Caption = 'If ''QSL via'' field contains other info than a call sign, '#10'move to ''Comment to QSO'' field'
         TabOrder = 8
       end
@@ -534,7 +534,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 176
-        Width = 272
+        Width = 279
         Caption = 'Enable auto mark QSO QSL__S field as'
         TabOrder = 9
       end
@@ -551,7 +551,7 @@ object frmPreferences: TfrmPreferences
         Left = 49
         Height = 24
         Top = 200
-        Width = 415
+        Width = 430
         Caption = 'Mark only QSO which are new country, new band country ...'
         TabOrder = 11
       end
@@ -559,7 +559,7 @@ object frmPreferences: TfrmPreferences
         Left = 49
         Height = 24
         Top = 225
-        Width = 396
+        Width = 408
         Caption = 'Mark only the first QSO, first band QSO, first mode QSO'
         TabOrder = 12
       end
@@ -567,7 +567,7 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 436
-        Width = 466
+        Width = 477
         Caption = 'In previous QSO list show also QSO with call/p, call/m, W6/call etc.'
         TabOrder = 13
       end
@@ -575,60 +575,41 @@ object frmPreferences: TfrmPreferences
         Left = 22
         Height = 24
         Top = 460
-        Width = 200
+        Width = 205
         Caption = 'Clear RIT after saving QSO'
         TabOrder = 14
-      end
-      object chkClearNewQSOFreq: TCheckBox
-        Left = 16
-        Height = 24
-        Top = 578
-        Width = 399
-        Caption = 'Clear New QSO window after freq is changed more then '
-        TabOrder = 15
-        Visible = False
-      end
-      object edtFreqChange: TEdit
-        Left = 416
-        Height = 27
-        Top = 576
-        Width = 64
-        TabOrder = 16
-        Text = 'edtFreqChange'
-        Visible = False
-      end
-      object Label26: TLabel
-        Left = 488
-        Height = 17
-        Top = 582
-        Width = 25
-        Caption = 'kHz'
-        ParentColor = False
-        Visible = False
       end
       object chkUseCallBookData: TCheckBox
         Left = 22
         Height = 24
         Top = 484
-        Width = 429
+        Width = 439
         Caption = 'Always overwrite info from previous QSO with callbook data'
-        TabOrder = 17
+        TabOrder = 15
       end
       object chkCapFirstQTHLetter: TCheckBox
         Left = 24
         Height = 24
         Top = 537
-        Width = 245
+        Width = 250
         Caption = 'Capitalise first letter in QTH field'
-        TabOrder = 18
+        TabOrder = 16
       end
       object chkUseCallbookZonesEtc: TCheckBox
         Left = 49
         Height = 24
         Top = 509
-        Width = 405
+        Width = 414
         Caption = 'Always overwrite only CQ, ITU zones, county and US state'
-        TabOrder = 19
+        TabOrder = 17
+      end
+      object chkFillAwardField: TCheckBox
+        Left = 24
+        Height = 24
+        Top = 563
+        Width = 266
+        Caption = 'Fill Award field from previous QSO '
+        TabOrder = 18
       end
     end
     object tabVisibleColumns: TTabSheet
@@ -639,7 +620,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 12
-        Width = 58
+        Width = 59
         Caption = 'Date'
         TabOrder = 0
       end
@@ -647,7 +628,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 43
-        Width = 79
+        Width = 80
         Caption = 'Time on'
         TabOrder = 1
       end
@@ -655,7 +636,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 75
-        Width = 82
+        Width = 83
         Caption = 'Time off'
         TabOrder = 2
       end
@@ -663,7 +644,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 107
-        Width = 79
+        Width = 81
         Caption = 'CallSign'
         TabOrder = 3
       end
@@ -687,7 +668,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 334
-        Width = 85
+        Width = 87
         Caption = 'QSL sent'
         TabOrder = 6
       end
@@ -695,7 +676,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 366
-        Width = 113
+        Width = 115
         Caption = 'QSL received'
         TabOrder = 7
       end
@@ -703,7 +684,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 203
-        Width = 83
+        Width = 84
         Caption = 'RST sent'
         TabOrder = 8
       end
@@ -711,7 +692,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 235
-        Width = 114
+        Width = 115
         Caption = 'RST Received'
         TabOrder = 9
       end
@@ -727,7 +708,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 299
-        Width = 55
+        Width = 57
         Caption = 'QTH'
         TabOrder = 11
       end
@@ -735,7 +716,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 12
-        Width = 115
+        Width = 118
         Caption = 'QSL manager'
         TabOrder = 12
       end
@@ -759,7 +740,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 107
-        Width = 58
+        Width = 59
         Caption = 'IOTA'
         TabOrder = 15
       end
@@ -767,7 +748,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 139
-        Width = 70
+        Width = 71
         Caption = 'Award'
         TabOrder = 16
       end
@@ -775,7 +756,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 171
-        Width = 73
+        Width = 75
         Caption = 'County'
         TabOrder = 17
       end
@@ -783,7 +764,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 203
-        Width = 69
+        Width = 70
         Caption = 'Power'
         TabOrder = 18
       end
@@ -791,7 +772,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 235
-        Width = 63
+        Width = 64
         Caption = 'DXCC'
         TabOrder = 19
       end
@@ -799,7 +780,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 267
-        Width = 143
+        Width = 146
         Caption = 'Comment to QSO'
         TabOrder = 20
       end
@@ -807,7 +788,7 @@ object frmPreferences: TfrmPreferences
         Left = 167
         Height = 24
         Top = 299
-        Width = 58
+        Width = 59
         Caption = 'WAZ'
         TabOrder = 21
       end
@@ -831,7 +812,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 12
-        Width = 164
+        Width = 166
         Caption = 'LoTW QSL send date'
         TabOrder = 24
       end
@@ -839,7 +820,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 43
-        Width = 189
+        Width = 191
         Caption = 'LoTW QSL received date'
         TabOrder = 25
       end
@@ -847,7 +828,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 75
-        Width = 127
+        Width = 129
         Caption = 'LoTW QSL sent'
         TabOrder = 26
       end
@@ -855,7 +836,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 107
-        Width = 155
+        Width = 157
         Caption = 'LoTW QSL received'
         TabOrder = 27
       end
@@ -863,7 +844,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 139
-        Width = 92
+        Width = 95
         Caption = 'Continent'
         TabOrder = 28
       end
@@ -871,7 +852,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 171
-        Width = 119
+        Width = 121
         Caption = 'QSL sent date'
         TabOrder = 29
       end
@@ -879,7 +860,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 203
-        Width = 147
+        Width = 149
         Caption = 'QSL received date'
         TabOrder = 30
       end
@@ -887,7 +868,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 235
-        Width = 93
+        Width = 95
         Caption = 'eQSL sent'
         TabOrder = 31
       end
@@ -895,7 +876,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 267
-        Width = 127
+        Width = 129
         Caption = 'eQSL sent date'
         TabOrder = 32
       end
@@ -903,7 +884,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 299
-        Width = 121
+        Width = 123
         Caption = 'eQSL received'
         TabOrder = 33
       end
@@ -911,7 +892,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 334
-        Width = 155
+        Width = 157
         Caption = 'eQSL received date'
         TabOrder = 34
       end
@@ -919,7 +900,7 @@ object frmPreferences: TfrmPreferences
         Left = 327
         Height = 24
         Top = 366
-        Width = 200
+        Width = 203
         Caption = 'Received QSL,LoTW,eQSL '
         TabOrder = 35
       end
@@ -927,7 +908,7 @@ object frmPreferences: TfrmPreferences
         Left = 357
         Height = 17
         Top = 392
-        Width = 166
+        Width = 172
         Caption = '(all values in one column)'
         ParentColor = False
       end
@@ -935,7 +916,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 395
-        Width = 119
+        Width = 122
         Caption = 'Country name'
         TabOrder = 36
       end
@@ -948,7 +929,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 19
-        Width = 78
+        Width = 79
         Caption = '136 kHz'
         TabOrder = 0
       end
@@ -956,7 +937,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 67
-        Width = 79
+        Width = 80
         Caption = '1.8 MHz'
         TabOrder = 1
       end
@@ -964,7 +945,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 99
-        Width = 79
+        Width = 80
         Caption = '3.5 MHz'
         TabOrder = 2
       end
@@ -972,7 +953,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 163
-        Width = 67
+        Width = 68
         Caption = '7 MHz'
         TabOrder = 3
       end
@@ -980,7 +961,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 195
-        Width = 87
+        Width = 88
         Caption = '10.1 MHz'
         TabOrder = 4
       end
@@ -988,7 +969,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 227
-        Width = 75
+        Width = 76
         Caption = '14 MHz'
         TabOrder = 5
       end
@@ -996,7 +977,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 259
-        Width = 75
+        Width = 76
         Caption = '18 MHz'
         TabOrder = 6
       end
@@ -1004,7 +985,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 291
-        Width = 75
+        Width = 76
         Caption = '21 MHz'
         TabOrder = 7
       end
@@ -1012,7 +993,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 323
-        Width = 75
+        Width = 76
         Caption = '24 MHz'
         TabOrder = 8
       end
@@ -1020,7 +1001,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 355
-        Width = 75
+        Width = 76
         Caption = '28 MHz'
         TabOrder = 9
       end
@@ -1028,7 +1009,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 67
-        Width = 75
+        Width = 76
         Caption = '50 MHz'
         TabOrder = 10
       end
@@ -1036,7 +1017,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 131
-        Width = 83
+        Width = 84
         Caption = '144 MHz'
         TabOrder = 11
       end
@@ -1044,7 +1025,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 195
-        Width = 83
+        Width = 84
         Caption = '430 MHz'
         TabOrder = 12
       end
@@ -1052,7 +1033,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 259
-        Width = 91
+        Width = 92
         Caption = '1260 MHz'
         TabOrder = 13
       end
@@ -1060,7 +1041,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 291
-        Width = 91
+        Width = 92
         Caption = '2300 MHz'
         TabOrder = 14
       end
@@ -1068,7 +1049,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 323
-        Width = 91
+        Width = 92
         Caption = '3400 MHz'
         TabOrder = 15
       end
@@ -1076,7 +1057,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 355
-        Width = 91
+        Width = 92
         Caption = '5650 MHz'
         TabOrder = 16
       end
@@ -1084,7 +1065,7 @@ object frmPreferences: TfrmPreferences
         Left = 310
         Height = 24
         Top = 67
-        Width = 72
+        Width = 73
         Caption = '10 GHz'
         TabOrder = 17
       end
@@ -1092,7 +1073,7 @@ object frmPreferences: TfrmPreferences
         Left = 310
         Height = 24
         Top = 99
-        Width = 72
+        Width = 73
         Caption = '24 GHz'
         TabOrder = 18
       end
@@ -1100,7 +1081,7 @@ object frmPreferences: TfrmPreferences
         Left = 310
         Height = 24
         Top = 131
-        Width = 72
+        Width = 73
         Caption = '47 GHz'
         TabOrder = 19
       end
@@ -1108,7 +1089,7 @@ object frmPreferences: TfrmPreferences
         Left = 310
         Height = 24
         Top = 163
-        Width = 72
+        Width = 73
         Caption = '76 GHz'
         TabOrder = 20
       end
@@ -1126,7 +1107,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 98
-        Width = 72
+        Width = 73
         Caption = '70MHz'
         TabOrder = 22
       end
@@ -1134,7 +1115,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 24
         Top = 131
-        Width = 67
+        Width = 68
         Caption = '5 MHz'
         TabOrder = 23
       end
@@ -1142,7 +1123,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 162
-        Width = 83
+        Width = 84
         Caption = '220 MHz'
         TabOrder = 24
       end
@@ -1150,7 +1131,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 227
-        Width = 83
+        Width = 84
         Caption = '900 MHz'
         TabOrder = 25
       end
@@ -1158,7 +1139,7 @@ object frmPreferences: TfrmPreferences
         Left = 166
         Height = 24
         Top = 19
-        Width = 78
+        Width = 79
         Caption = '472 kHz'
         TabOrder = 26
       end
@@ -1199,7 +1180,7 @@ object frmPreferences: TfrmPreferences
           Left = 5
           Height = 17
           Top = 7
-          Width = 145
+          Width = 148
           Caption = 'Path to rigctld binary:'
           ParentColor = False
         end
@@ -1222,7 +1203,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
@@ -1237,7 +1218,7 @@ object frmPreferences: TfrmPreferences
               Left = 216
               Height = 17
               Top = 16
-              Width = 159
+              Width = 163
               Caption = 'Device (e.g. /dev/ttyS0):'
               ParentColor = False
             end
@@ -1278,7 +1259,7 @@ object frmPreferences: TfrmPreferences
               Left = 269
               Height = 24
               Top = 71
-              Width = 186
+              Width = 187
               Caption = 'Use CWR instead of CW '
               OnChange = edtRadio2Change
               TabOrder = 2
@@ -1287,7 +1268,7 @@ object frmPreferences: TfrmPreferences
               Left = 269
               Height = 24
               Top = 98
-              Width = 241
+              Width = 248
               Caption = 'Run rigctld when program starts'
               TabOrder = 3
             end
@@ -1295,7 +1276,7 @@ object frmPreferences: TfrmPreferences
               Left = 6
               Height = 17
               Top = 71
-              Width = 212
+              Width = 218
               Caption = 'Extra command line arguments:'
               ParentColor = False
             end
@@ -1312,7 +1293,7 @@ object frmPreferences: TfrmPreferences
               Left = 504
               Height = 17
               Top = 17
-              Width = 89
+              Width = 91
               Caption = 'Port number:'
               ParentColor = False
             end
@@ -1354,7 +1335,7 @@ object frmPreferences: TfrmPreferences
                 Left = 126
                 Height = 17
                 Top = 9
-                Width = 61
+                Width = 62
                 Caption = 'Data bits'
                 ParentColor = False
               end
@@ -1370,7 +1351,7 @@ object frmPreferences: TfrmPreferences
                 Left = 11
                 Height = 17
                 Top = 72
-                Width = 74
+                Width = 77
                 Caption = 'Handshake'
                 ParentColor = False
               end
@@ -1505,7 +1486,7 @@ object frmPreferences: TfrmPreferences
                 Left = 130
                 Height = 17
                 Top = 72
-                Width = 27
+                Width = 28
                 Caption = 'DTR'
                 ParentColor = False
               end
@@ -1565,7 +1546,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
@@ -1911,7 +1892,7 @@ object frmPreferences: TfrmPreferences
         Left = 16
         Height = 24
         Top = 536
-        Width = 300
+        Width = 309
         Caption = 'Show communication with TRX in console'
         TabOrder = 4
       end
@@ -1919,7 +1900,7 @@ object frmPreferences: TfrmPreferences
         Left = 40
         Height = 17
         Top = 561
-        Width = 401
+        Width = 413
         Caption = 'You have to run cqrlog in console to see the debug messages'
         ParentColor = False
       end
@@ -1927,7 +1908,7 @@ object frmPreferences: TfrmPreferences
         Left = 16
         Height = 24
         Top = 504
-        Width = 327
+        Width = 332
         Caption = 'Switch only between mode related memories'
         TabOrder = 5
       end
@@ -1958,7 +1939,7 @@ object frmPreferences: TfrmPreferences
           Left = 5
           Height = 17
           Top = 7
-          Width = 148
+          Width = 150
           Caption = 'Path to rotctld binary:'
           ParentColor = False
         end
@@ -1981,7 +1962,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2314,7 +2295,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
@@ -2329,7 +2310,7 @@ object frmPreferences: TfrmPreferences
               Left = 117
               Height = 17
               Top = 15
-              Width = 159
+              Width = 163
               Caption = 'Device (e.g. /dev/ttyS0):'
               ParentColor = False
             end
@@ -2337,7 +2318,7 @@ object frmPreferences: TfrmPreferences
               Left = 7
               Height = 17
               Top = 15
-              Width = 95
+              Width = 97
               Caption = 'ROT ID model:'
               ParentColor = False
             end
@@ -2378,7 +2359,7 @@ object frmPreferences: TfrmPreferences
               Left = 269
               Height = 24
               Top = 98
-              Width = 244
+              Width = 250
               Caption = 'Run rotctld when program starts'
               TabOrder = 3
             end
@@ -2386,7 +2367,7 @@ object frmPreferences: TfrmPreferences
               Left = 6
               Height = 17
               Top = 71
-              Width = 212
+              Width = 218
               Caption = 'Extra command line arguments:'
               ParentColor = False
             end
@@ -2403,7 +2384,7 @@ object frmPreferences: TfrmPreferences
               Left = 437
               Height = 17
               Top = 15
-              Width = 89
+              Width = 91
               Caption = 'Port number:'
               ParentColor = False
             end
@@ -2453,7 +2434,7 @@ object frmPreferences: TfrmPreferences
                 Left = 126
                 Height = 17
                 Top = 9
-                Width = 61
+                Width = 62
                 Caption = 'Data bits'
                 ParentColor = False
               end
@@ -2469,7 +2450,7 @@ object frmPreferences: TfrmPreferences
                 Left = 11
                 Height = 17
                 Top = 72
-                Width = 74
+                Width = 77
                 Caption = 'Handshake'
                 ParentColor = False
               end
@@ -2604,7 +2585,7 @@ object frmPreferences: TfrmPreferences
                 Left = 130
                 Height = 17
                 Top = 72
-                Width = 27
+                Width = 28
                 Caption = 'DTR'
                 ParentColor = False
               end
@@ -2690,7 +2671,7 @@ object frmPreferences: TfrmPreferences
           Left = 77
           Height = 17
           Top = 18
-          Width = 72
+          Width = 76
           Caption = 'Bandwidth'
           ParentColor = False
         end
@@ -2716,7 +2697,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 43
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2724,7 +2705,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 75
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2742,7 +2723,7 @@ object frmPreferences: TfrmPreferences
           Left = 10
           Height = 17
           Top = 75
-          Width = 25
+          Width = 26
           Caption = 'SSB'
           ParentColor = False
         end
@@ -2768,7 +2749,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 106
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2776,7 +2757,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 139
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2820,7 +2801,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 170
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2846,7 +2827,7 @@ object frmPreferences: TfrmPreferences
           Left = 77
           Height = 17
           Top = 18
-          Width = 72
+          Width = 76
           Caption = 'Bandwidth'
           ParentColor = False
         end
@@ -2872,7 +2853,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 43
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2880,7 +2861,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 75
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2898,7 +2879,7 @@ object frmPreferences: TfrmPreferences
           Left = 10
           Height = 17
           Top = 75
-          Width = 25
+          Width = 26
           Caption = 'SSB'
           ParentColor = False
         end
@@ -2924,7 +2905,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 106
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2932,7 +2913,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 139
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2976,7 +2957,7 @@ object frmPreferences: TfrmPreferences
           Left = 169
           Height = 17
           Top = 170
-          Width = 17
+          Width = 18
           Caption = 'Hz'
           ParentColor = False
         end
@@ -2990,7 +2971,7 @@ object frmPreferences: TfrmPreferences
         Left = 9
         Height = 24
         Top = 12
-        Width = 138
+        Width = 141
         Caption = 'Use QTH Profiles'
         OnChange = chkUseProfilesChange
         TabOrder = 0
@@ -3016,7 +2997,7 @@ object frmPreferences: TfrmPreferences
           Left = 14
           Height = 17
           Top = 111
-          Width = 250
+          Width = 257
           Caption = 'Description of the profile will include:'
           ParentColor = False
         end
@@ -3052,7 +3033,7 @@ object frmPreferences: TfrmPreferences
           Left = 14
           Height = 24
           Top = 175
-          Width = 55
+          Width = 57
           Caption = 'QTH'
           OnClick = chkProfileQTHClick
           TabOrder = 3
@@ -3061,7 +3042,7 @@ object frmPreferences: TfrmPreferences
           Left = 14
           Height = 24
           Top = 207
-          Width = 47
+          Width = 48
           Caption = 'Rig'
           OnClick = chkProfileRigClick
           TabOrder = 4

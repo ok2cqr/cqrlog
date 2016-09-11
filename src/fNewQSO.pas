@@ -876,7 +876,7 @@ begin
       edtCounty.text := county;
     if (edtQSL_VIA.Text = '') then
       edtQSL_VIA.Text := qsl_via;
-    if (edtAward.Text = '') then
+    if (edtAward.Text = '') and cqrini.ReadBool('NewQSO','FillAwardField',True) then
       edtAward.Text := award;
     if (edtState.Text = '') then
       edtState.Text := state;
