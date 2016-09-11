@@ -620,8 +620,10 @@ begin
                           end;//something wrong with HamQTH server
                     400 : begin
                             Result := Response;
-                            if (Response = 'QSO already exists in the log') then
+                            if (Response = 'QSO already exists in the log')  then
                               Result := 'Already exists'
+                            else if (Response = 'QSO not found in the log!') then
+                              FatalError := False
                             else begin
                               FatalError := True; //QSO rejected
                               Result     := Response

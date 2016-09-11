@@ -3,6 +3,8 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.0.3
+  # 'QSO not found in the log!' doesn't stop QSO upload to HamQTH
 
 2.0.2 (2016-08-28)
   + QSLMSG added to ADIF export for eQSL
