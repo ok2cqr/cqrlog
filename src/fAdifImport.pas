@@ -740,12 +740,12 @@ begin
   else begin
     AssignFile(f,dmData.UsrHomeDir + ERR_FILE);
     Rewrite(f);
-    Writeln(f,'<ADIF_VER:5>2.2.1');
     Writeln(f,'ADIF export from CQRLOG for Linux version ' + dmData.VersionString);
     Writeln(f,'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
     Writeln(f,'Internet: http://www.cqrlog.com');
     Writeln(f,'');
     Writeln(f,'ERROR QSOs FROM ADIF IMPORT');
+    Writeln(f,'<ADIF_VER:5>2.2.1');
     Writeln(f, '<PROGRAMID:6>CQRLOG');
     Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
     Writeln(f,'');
