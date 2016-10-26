@@ -6,6 +6,7 @@ Legend:
 2.0.3
   + 'Fill Award field from previous QSO' option added
   - "Remarks" renamed to "Comment to QSO" in group edit
+  - Group edit of Comment to QSO was always converted to uppercase
   # 'QSO not found in the log!' doesn't stop QSO upload to HamQTH
 
 2.0.2 (2016-08-28)

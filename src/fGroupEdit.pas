@@ -347,7 +347,7 @@ begin
              cmbValue.SetFocus;
              exit
            end;
-           sql := 'remarks='+QuotedStr(UpperCase(cmbValue.Text))
+           sql := 'remarks='+QuotedStr(cmbValue.Text)
         end;
    23 : begin
           if (cmbValue.Text <> '') then

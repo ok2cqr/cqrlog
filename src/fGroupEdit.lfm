@@ -153,9 +153,9 @@ object frmGroupEdit: TfrmGroupEdit
     end
     object cmbField: TComboBox
       Left = 62
-      Height = 31
+      Height = 27
       Top = -1
-      Width = 144
+      Width = 242
       ItemHeight = 0
       Items.Strings = (
         'QSO date'
