@@ -1078,6 +1078,9 @@ begin
   edtPWR.Text  := cqrini.ReadString('TMPQSO','PWR',cqrini.ReadString(
                   'NewQSO','PWR','100'));
 
+  edtHisRST.Text := cqrini.ReadString('NewQSO', 'RST_S', '599');
+  edtMyRST.Text  := cqrini.ReadString('NewQSO', 'RST_R', '599');
+
   edtRemQSO.Text := cqrini.ReadString('NewQSO','RemQSO','');
 
   cbOffline.Checked := cqrini.ReadBool('TMPQSO','OFF',False);

@@ -8,7 +8,9 @@ Legend:
   + 'Fill Award field from previous QSO' option added
   - "Remarks" renamed to "Comment to QSO" in group edit
   - Group edit of Comment to QSO was always converted to uppercase
-  # 'QSO not found in the log!' doesn't stop QSO upload to HamQTH
+  - RST_S and RST_R default walues from Preferences have been ignored
+  # 'QSO not found in the log!' wonn't stop QSO upload to HamQTH
+
 
 2.0.2 (2016-08-28)
   + QSLMSG added to ADIF export for eQSL
