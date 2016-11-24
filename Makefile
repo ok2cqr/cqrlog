@@ -28,8 +28,12 @@ install:
 	install -d -v         $(datadir)/voice_keyer
 	install -d -v         $(datadir)/zipcodes
 	install -d -v         $(datadir)/images 
+	install -d -v         $(datadir)/images/icon/32x32 
+	install -d -v         $(datadir)/images/icon/64x64
+	install -d -v         $(datadir)/images/icon/128x128 
+	install -d -v         $(datadir)/images/icon/256x256 
 	install -d -v         $(sharedir)/pixmaps/cqrlog
-	install -d -v         $(sharedir)/icons
+	install -d -v         $(sharedir)/icons/cqrlog
 	install -d -v         $(sharedir)/applications
 	install -d -v         $(sharedir)/man/man1
 	install    -v -m 0755 src/cqrlog $(bindir)
@@ -43,10 +47,18 @@ install:
 	install    -v -m 0644 voice_keyer/README $(datadir)/voice_keyer/README
 	install    -v -m 0644 voice_keyer/F10.mp3 $(datadir)/voice_keyer/F10.mp3
 	install    -v -m 0644 zipcodes/* $(datadir)/zipcodes/
-	install    -v -m 0644 images/*   $(datadir)/images/
+#	install -v -m 0644 -t images/*   $(datadir)/images/
+	cp -v -R images/* $(datadir)/images
+	cp -v -R images/icon/* $(sharedir)/icons/cqrlog
+	cp -v -R images/icon/* $(sharedir)/pixmaps/cqrlog
+#	install    -v -m 0644 images/icon/32x32/*   $(datadir)/images/icon/32x32/
+#	install    -v -m 0644 images/icon/64x64/*   $(datadir)/images/icon/64x64/
+#	install    -v -m 0644 images/icon/128x128/*   $(datadir)/images/icon/128x128/
+#	install    -v -m 0644 images/icon/256x256/*   $(datadir)/images/icon/256x256/
+#	install    -v -m 0644 images/*   $(datadir)/images/
 	install    -v -m 0644 tools/cqrlog.desktop $(sharedir)/applications/cqrlog.desktop
-	install    -v -m 0644 images/cqrlog.png $(sharedir)/pixmaps/cqrlog/cqrlog.png
-	install    -v -m 0644 images/cqrlog.png $(sharedir)/icons/cqrlog.png  
+	install    -v -m 0644 images/icon/32x32/cqrlog.png $(sharedir)/pixmaps/cqrlog/cqrlog.png
+#	install    -v -m 0644 images/icon/* $(sharedir)/icons/cqrlog/
 	install    -v -m 0644 src/changelog.html $(datadir)/changelog.html
 	install    -v -m 0644 tools/cqrlog.1.gz $(sharedir)/man/man1/cqrlog.1.gz
 deb:

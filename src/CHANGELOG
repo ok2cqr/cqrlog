@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.0.3
+  + new icon courtesy by Serge, ON4AA	
   + 'Fill Award field from previous QSO' option added
   - "Remarks" renamed to "Comment to QSO" in group edit
   - Group edit of Comment to QSO was always converted to uppercase
