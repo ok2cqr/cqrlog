@@ -41,7 +41,7 @@ const
    NotExactly = 0; 
    Exactly    = 1; 
    ExNoEquals = 2; 
-   MaxCall = 100000;
+   MaxCall = 1000000;
 
 type
   { TdmDXCluster }
