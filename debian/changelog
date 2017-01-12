@@ -1,3 +1,14 @@
+cqrlog (2.0.3-1) unstable; urgency=low
+
+  * new icon courtesy by Serge, ON4AA
+  * 'Fill Award field from previous QSO' option added
+  * "Remarks" renamed to "Comment to QSO" in group edit
+  * Group edit of Comment to QSO was always converted to uppercase
+  * RST_S and RST_R default walues from Preferences have been ignored
+  * cqrlog crashed after recent DXCC tables update - fixed
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 28 Aug 2016 18:51:43 +0100
+
 cqrlog (2.0.2-1) unstable; urgency=low
 
   * QSLMSG added to ADIF export for eQSL

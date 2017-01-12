@@ -3,14 +3,14 @@ Legend:
   + new feature
   - bugfix
 --------------------
-2.0.3
+2.0.3 (2017-01-12)
   + new icon courtesy by Serge, ON4AA	
   + 'Fill Award field from previous QSO' option added
   - "Remarks" renamed to "Comment to QSO" in group edit
   - Group edit of Comment to QSO was always converted to uppercase
   - RST_S and RST_R default walues from Preferences have been ignored
+  - cqrlog crashed after recent DXCC tables update - fixed
   # 'QSO not found in the log!' wonn't stop QSO upload to HamQTH
-
 
 2.0.2 (2016-08-28)
   + QSLMSG added to ADIF export for eQSL
