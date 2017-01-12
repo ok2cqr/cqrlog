@@ -1,3 +1,9 @@
+cqrlog (2.0.4-1) unstable; urgency=low
+
+  * fixed crash after startup
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Thu, 12 Jan 2017 04:12:53 +0100
+
 cqrlog (2.0.3-1) unstable; urgency=low
 
   * new icon courtesy by Serge, ON4AA
