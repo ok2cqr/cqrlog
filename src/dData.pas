@@ -23,7 +23,7 @@ uses
   mysql57dyn, mysql57conn;
 
 const
-  MaxCall   = 100000;
+  MaxCall   = 1000000;
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 11;
   cDB_COMN_VER = 4;
