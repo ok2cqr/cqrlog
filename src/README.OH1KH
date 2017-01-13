@@ -240,7 +240,7 @@ WSJT-X support needs WSJT-X 1.5.0-rc1 or higer (must have UDP suport).
   New CW macro for this is %sm
   (Build 2123)
 	    
-
+- Fixed callsign buffer size after DXCC update lotw1.txt was too long. size 100 000 -> 1 000 000. Fix by Petr (v2.0.4)
 
 
 Issues resolved:
