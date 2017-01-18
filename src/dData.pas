@@ -282,6 +282,7 @@ type
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
     function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  CallNoteExists(Callsign : String) : Boolean;
+    function  GetNewLogNumber : Integer;
 
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
@@ -4369,6 +4370,49 @@ begin
       else
         Result := 1
     end
+  end
+end;
+
+function TdmData.GetNewLogNumber : Integer;
+const
+  C_SEL = 'select log_nr from cqrlog_common.log_list order by log_nr';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+  i  : Integer = 1;
+begin
+  Result := 0;
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    t.SQL.Text := C_SEL;
+    if fDebugLevel>=1 then Writeln(t.SQL.Text);
+    t.Open;
+
+    t.First;
+    while not t.EOF do
+    begin
+      if (i = t.Fields[0].AsInteger) then
+      begin
+        inc(i)
+      end
+      else begin
+        break
+      end;
+
+      t.Next
+    end;
+
+    Result := i
+  finally
+    t.Close;
+    tr.Rollback;
+    FreeAndNil(t);
+    FreeAndNil(tr)
   end
 end;
 

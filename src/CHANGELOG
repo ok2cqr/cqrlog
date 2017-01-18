@@ -3,6 +3,10 @@ Legend:
   + new feature
   - bugfix
 --------------------
+
+2.0.5
+  - new log number is choosen automatically
+
 2.0.4 (2017-01-12)
   - fixed crash after startup
 

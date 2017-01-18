@@ -11,12 +11,12 @@ object frmNewLog: TfrmNewLog
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.29'
+  LCLVersion = '1.6.0.4'
   object Label1: TLabel
     Left = 16
-    Height = 18
+    Height = 17
     Top = 9
-    Width = 82
+    Width = 87
     Caption = 'Log number:'
     ParentColor = False
   end
@@ -30,9 +30,9 @@ object frmNewLog: TfrmNewLog
   end
   object Label2: TLabel
     Left = 16
-    Height = 18
+    Height = 17
     Top = 65
-    Width = 69
+    Width = 71
     Caption = 'Log name:'
     ParentColor = False
   end

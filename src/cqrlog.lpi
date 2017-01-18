@@ -493,6 +493,7 @@
         <Filename Value="fNewLog.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewLog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit63>
       <Unit64>
