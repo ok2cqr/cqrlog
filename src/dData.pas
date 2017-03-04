@@ -4344,24 +4344,27 @@ end;
 function TdmData.GetMySQLLib : String;
 var
   lib : String;
+  Paths : TStringList;
 begin
-  lib := FindLib('/usr/lib64/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/lib64/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/usr/lib/x86_64-linux-gnu/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/usr/lib/i386-linux-gnu/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/usr/lib64/mysql/','libmysqlclient.so*');
-  if (lib = '') then
-    lib :=  FindLib('/usr/lib/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/lib/','libmysqlclient.so*');
-  if (lib = '') then
-    lib := FindLib('/usr/lib/mysql/','libmysqlclient.so*');
+  Paths := TStringList.Create;
+  try
+    Paths.Add('/usr/lib64/');
+    Paths.Add('/lib64/');
+    Paths.Add('/usr/lib/x86_64-linux-gnu/');
+    Paths.Add('/usr/lib/i386-linux-gnu/');
+    Paths.Add('/usr/lib64/mysql/');
+    Paths.Add('/usr/lib/');
+    Paths.Add('/lib/');
+    Paths.Add('/usr/lib/mysql/');
 
-    Result := Lib
+    Result := MyFindFile('libmariadbclient.so*', Paths);
+    if (Result='') then
+    begin
+      Result := MyFindFile('libmysqlclient.so*', Paths)
+    end
+  finally
+    FreeAndNil(Paths)
+  end
 end;
 
 function TdmData.GetDebugLevel : Integer;
