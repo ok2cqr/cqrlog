@@ -8,6 +8,9 @@ Legend:
   + new log number is choosen automatically
   - parity parameter for rigctld should be serial_parity
   - cqrlog had icon only in Gnome
+  # improved loading libraries for ssl, on Debian testing it 
+    loads libssl*1.0.* and ibcrypto*1.0.*, libssl-dev
+    is no longer need, libssl-1.0.* is new dependency   
 
 2.0.4 (2017-01-12)
   - fixed crash after startup

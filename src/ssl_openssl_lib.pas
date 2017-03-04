@@ -77,6 +77,7 @@ uses
 {$ENDIF}
   Classes,
   synafpc,
+  uMyFindFile,
 {$IFNDEF WIN32}
   SysUtils;
 {$ELSE}
@@ -1693,7 +1694,22 @@ function InitSSLInterface: Boolean;
 var
   s: string;
   x: integer;
+  Paths : TStringList;
 begin
+  Paths := TStringList.Create;
+  try
+    Paths.Add('/usr/lib64/');
+    Paths.Add('/lib64/');
+    Paths.Add('/usr/lib/x86_64-linux-gnu/');
+    Paths.Add('/usr/lib/i386-linux-gnu/');
+    Paths.Add('/usr/lib/');
+    Paths.Add('/lib/');
+
+    DLLSSLName  := MyFindFile('libssl*1.0.*', Paths);
+    DLLUtilName := MyFindFile('libcrypto*1.0.*', Paths);
+  finally
+    FreeAndNil(Paths);
+  end;
   SSLCS.Enter;
   try
     if not IsSSLloaded then

@@ -20,7 +20,7 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn;
+  mysql57dyn, mysql57conn, uMyFindFile;
 
 const
   MaxCall   = 1000000;
@@ -1041,14 +1041,22 @@ end;
 
 function TdmData.FindLib(const Path,LibName : String) : String;
 var
-  res       : Byte;
-  SearchRec : TSearchRec;
+  l : TStringList;
 begin
-  Result := '';
+  l:= FindAllFiles(Path, LibName, False);
+  if (l.Count=0) then
+  begin
+    Result := ''
+  end
+  else begin
+    Result := l.Strings[0]
+  end;
+  {
   res := FindFirst(Path + LibName, faAnyFile, SearchRec);
   try
     while Res = 0 do
     begin
+      Writeln(Path + SearchRec.Name);
       if FileExistsUTF8(Path + SearchRec.Name) then
       begin
         Result := (Path + SearchRec.Name);
@@ -1059,6 +1067,7 @@ begin
   finally
     FindClose(SearchRec)
   end
+ end; }
 end;
 
 procedure TdmData.DataModuleCreate(Sender: TObject);
@@ -1083,18 +1092,12 @@ begin
     Writeln('**** CHANGE WITH --debug=1 PARAMETER ****');
   Writeln('');
 
-
-  fDLLSSLName := GetSSLLib('libssl');
-  if fDebugLevel>=1 then Writeln('Loading libssl: ',fDLLSSLName);
-
-  fDLLUtilName := GetSSLLib('libcrypto');
-  if fDebugLevel>=1 then Writeln('Loading libcrypto: ',fDLLUtilName);
-
-  DLLSSLName  := dmData.cDLLSSLName;
-  DLLUtilName := dmData.cDLLUtilName;
-  //^^this ugly hack is because FreePascal doesn't have anything like
-  // ./configure and I have to specify all dyn libs by hand
-
+  if fDebugLevel>0 then
+  begin
+    Writeln('SSL libraries:');
+    Writeln('   ',DLLSSLName);
+    Writeln('   ',DLLUtilName)
+  end;
 
   lib := GetMySQLLib;
   if fDebugLevel>=1 then Writeln('Loading libmysqlclient: ',lib);
@@ -4310,17 +4313,30 @@ function TdmData.GetSSLLib(LibName : String) : String;
 var
   lib : String;
 begin
-  lib :=  FindLib('/usr/lib64/',LibName+'.so*');
+{
+Paths := TStringList.Create;
+Paths.Add('/usr/lib64/');
+Paths.Add('/lib64/');
+Paths.Add('/usr/lib/x86_64-linux-gnu/');
+Paths.Add('/usr/lib/i386-linux-gnu/');
+Paths.Add('/usr/lib/');
+Paths.Add('/lib/');
+
+DLLSSLName  := MyFindFile('libssl*1.0.*', Paths);
+DLLUtilName := MyFindFile('libcrypto*1.0.*', Paths);
+
+}
+  lib :=  FindLib('/usr/lib64/',LibName);
   if (lib = '') then
-    lib := FindLib('/lib64/',LibName+'.so*');
+    lib := FindLib('/lib64/',LibName);
   if (lib='') then
-    lib := FindLib('/usr/lib/x86_64-linux-gnu/',LibName+'.so*');
+    lib := FindLib('/usr/lib/x86_64-linux-gnu/',LibName);
   if (lib='') then
-    lib := FindLib('/usr/lib/i386-linux-gnu/',LibName+'.so*');
+    lib := FindLib('/usr/lib/i386-linux-gnu/',LibName);
   if (lib = '') then
-    lib :=  FindLib('/usr/lib/',LibName+'.so*');
+    lib :=  FindLib('/usr/lib/',LibName);
   if (lib = '') then
-    lib := FindLib('/lib/',LibName+'.so*');
+    lib := FindLib('/lib/',LibName);
 
   Result := Lib
 end;
