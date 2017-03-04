@@ -1701,12 +1701,13 @@ begin
     Paths.Add('/usr/lib64/');
     Paths.Add('/lib64/');
     Paths.Add('/usr/lib/x86_64-linux-gnu/');
-    Paths.Add('/usr/lib/i386-linux-gnu/');
+    Paths.Add('/lib/x86_64-linux-gnu/');
     Paths.Add('/usr/lib/');
     Paths.Add('/lib/');
+    Paths.Add('/usr/lib/i386-linux-gnu/');
 
     DLLSSLName  := MyFindFile('libssl*1.0.*', Paths);
-    DLLUtilName := MyFindFile('libcrypto*1.0.*', Paths);
+    DLLUtilName := MyFindFile('libcrypto*1.0.*', Paths)
   finally
     FreeAndNil(Paths);
   end;
