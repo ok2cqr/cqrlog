@@ -3900,11 +3900,11 @@ begin
 
   case cqrini.ReadInteger(section, 'Parity', 0) of
     0: arg := '';
-    1: arg := 'parity=None';
-    2: arg := 'parity=Odd';
-    3: arg := 'parity=Even';
-    4: arg := 'parity=Mark';
-    5: arg := 'parity=Space'
+    1: arg := 'serial_parity=None';
+    2: arg := 'serial_parity=Odd';
+    3: arg := 'serial_parity=Even';
+    4: arg := 'serial_parity=Mark';
+    5: arg := 'serial_parity=Space'
     else
       arg := ''
   end; //case
@@ -4005,11 +4005,11 @@ begin
 
   case cqrini.ReadInteger(section, 'Parity', 0) of
     0: arg := '';
-    1: arg := 'parity=None';
-    2: arg := 'parity=Odd';
-    3: arg := 'parity=Even';
-    4: arg := 'parity=Mark';
-    5: arg := 'parity=Space'
+    1: arg := 'serial_parity=None';
+    2: arg := 'serial_parity=Odd';
+    3: arg := 'serial_parity=Even';
+    4: arg := 'serial_parity=Mark';
+    5: arg := 'serial_parity=Space'
     else
       arg := ''
   end; //case
