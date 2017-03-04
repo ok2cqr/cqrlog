@@ -58,7 +58,7 @@ install:
 #	install    -v -m 0644 images/*   $(datadir)/images/
 	install    -v -m 0644 tools/cqrlog.desktop $(sharedir)/applications/cqrlog.desktop
 	install    -v -m 0644 images/icon/32x32/cqrlog.png $(sharedir)/pixmaps/cqrlog/cqrlog.png
-#	install    -v -m 0644 images/icon/* $(sharedir)/icons/cqrlog/
+	install    -v -m 0644 images/icon/128x128/cqrlog.png $(sharedir)/icons/cqrlog.png
 	install    -v -m 0644 src/changelog.html $(datadir)/changelog.html
 	install    -v -m 0644 tools/cqrlog.1.gz $(sharedir)/man/man1/cqrlog.1.gz
 deb:
