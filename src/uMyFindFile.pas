@@ -14,6 +14,7 @@ var
   l : TStringList;
   i : Integer;
 begin
+  Result := '';
   for i:=0 to Paths.Count-1 do
   begin
     l:= FindAllFiles(Paths.Strings[i], FileName, False);
