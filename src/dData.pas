@@ -174,7 +174,6 @@ type
     function  FindLib(const Path,LibName : String) : String;
     function  GetMysqldPath : String;
     function  TableExists(TableName : String) : Boolean;
-    function  GetSSLLib(LibName : String) : String;
     function  GetMySQLLib : String;
     function  GetDebugLevel : Integer;
 
@@ -335,7 +334,6 @@ type
     procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
     procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
     procedure OpenFreqMemories(mode : String);
-    procedure CheckApparmorConfig;
     procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
     procedure GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
   end;
@@ -4150,57 +4148,6 @@ begin
   GetCurrentFreqFromMem(freq,mode,bandwidth)
 end;
 
-procedure TdmData.CheckApparmorConfig;
-
-  function IsModified(FileName : String) : Boolean;
-  var
-    l : TStringList;
-  begin
-    Result := False;
-    l := TStringList.Create;
-    try
-      l.LoadFromFile(FileName);
-      l.Text := UpperCase(l.Text);
-      if Pos(UpperCase('@{HOME}/.config/cqrlog/database/** rwk,'),l.Text) = 0 then
-        Result := True
-    finally
-      l.Free
-    end
-  end;
-
-var
-  ShowInfo : Boolean = False;
-  MsgText  : String = '';
-begin
-  Writeln('Checking apparmor configuration');
-
-  if FileExistsUTF8('/etc/apparmor.d/usr.sbin.mysqld') then
-  begin
-    ShowInfo := IsModified('/etc/apparmor.d/usr.sbin.mysqld')
-  end;
-
-  if FileExistsUTF8('/etc/apparmor.d/local/usr.sbin.mysqld') then //debian
-  begin
-    ShowInfo := IsModified('/etc/apparmor.d/usr.sbin.mysqld')
-  end;
-
-
-  MsgText := 'It looks like apparmor is running in your system. CQRLOG needs to add this :'+
-             LineEnding+
-             '@{HOME}/.config/cqrlog/database/** rwk,'+
-             LineEnding+
-             'into /etc/apparmor.d/usr.sbin.mysqld'+
-             LineEnding+
-             LineEnding+
-             'You can do that by running /usr/share/cqrlog/cqrlog-apparmor-fix or you can add the line '+
-             'and restart apparmor manually.'+
-             LineEnding+
-             LineEnding+
-             'Click OK to continue (program may not work correctly) or Cancel and modify the file '+
-             'first.';
-  if Application.MessageBox(PChar(MsgText),'Information ...',mb_OKCancel+mb_IconInformation) = idCancel then
-    Application.Terminate
-end;
 
 procedure TdmData.SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
 const
@@ -4307,38 +4254,6 @@ begin
       dbDXC        := TMySQL57Connection.Create(self)
     end
   end
-end;
-
-function TdmData.GetSSLLib(LibName : String) : String;
-var
-  lib : String;
-begin
-{
-Paths := TStringList.Create;
-Paths.Add('/usr/lib64/');
-Paths.Add('/lib64/');
-Paths.Add('/usr/lib/x86_64-linux-gnu/');
-Paths.Add('/usr/lib/i386-linux-gnu/');
-Paths.Add('/usr/lib/');
-Paths.Add('/lib/');
-
-DLLSSLName  := MyFindFile('libssl*1.0.*', Paths);
-DLLUtilName := MyFindFile('libcrypto*1.0.*', Paths);
-
-}
-  lib :=  FindLib('/usr/lib64/',LibName);
-  if (lib = '') then
-    lib := FindLib('/lib64/',LibName);
-  if (lib='') then
-    lib := FindLib('/usr/lib/x86_64-linux-gnu/',LibName);
-  if (lib='') then
-    lib := FindLib('/usr/lib/i386-linux-gnu/',LibName);
-  if (lib = '') then
-    lib :=  FindLib('/usr/lib/',LibName);
-  if (lib = '') then
-    lib := FindLib('/lib/',LibName);
-
-  Result := Lib
 end;
 
 function TdmData.GetMySQLLib : String;
