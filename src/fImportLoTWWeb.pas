@@ -79,21 +79,17 @@ begin
     edtDateFrom.SetFocus;
     exit
   end;
-  //DLLSSLName  := dmData.cDLLSSLName;
-  //DLLUtilName := dmData.cDLLUtilName;
 
   cqrini.WriteString('LoTWImp','Call',edtCall.Text);
   AdifFile := dmData.HomeDir + 'lotw/'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
   QSOList  := TStringList.Create;
   http     := THTTPSend.Create;
-{
-  SSLLibFile  := dmData.DLLSSLName;
-  SSLUtilFile := dmData.DLLUtilName;
-  }
-  Writeln('DLLSSLName:',DLLSSLName);
-  Writeln('DLLUtilName:',DLLUtilName);
-  Writeln('SSLLibFile:',SSLLibFile);
-  Writeln('SSLUtilFile:',SSLLibFile);
+
+  if dmData.DebugLevel>=1 then
+  begin
+    Writeln('DLLSSLName:',DLLSSLName);
+    Writeln('DLLUtilName:',DLLUtilName)
+  end;
 
   m        := TFileStream.Create(AdifFile,fmCreate);
   try
@@ -128,7 +124,6 @@ begin
     http.Protocol := '1.1';
     if http.HTTPMethod('GET',url) then
     begin
-      Writeln('SSLLibfile:',SSLLibFile);
       mStat.Lines.Add('Connected to LoTW server');
       http.Document.Seek(0,soBeginning);
       m.CopyFrom(http.Document,HTTP.Document.Size);
@@ -173,7 +168,6 @@ begin
       begin
         http.Document.Seek(0,soBeginning);
         m.CopyFrom(http.Document,HTTP.Document.Size);
-        Writeln('SSLLibfile:',SSLLibFile);
         mStat.Lines.LoadFromStream(m)
       end;
       mStat.Lines.Add('NOT logged');
@@ -239,8 +233,7 @@ begin
       mStat.Lines.Strings[mStat.Lines.Count-1] := 'Size: '+ IntToStr(FileSize);
     Repaint;
     Application.ProcessMessages
-  end;
-  Writeln(Value);
+  end
 end;
 
 end.

@@ -115,7 +115,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.0.4'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 405
@@ -170,7 +170,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
         Left = 10
         Height = 17
         Top = 12
-        Width = 268
+        Width = 273
         Caption = 'Return QSL records received on or after '
         ParentColor = False
       end
@@ -185,7 +185,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
         Left = 6
         Height = 24
         Top = 39
-        Width = 394
+        Width = 404
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end
