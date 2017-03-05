@@ -2206,8 +2206,8 @@ object frmDBConnect: TfrmDBConnect
       Left = 18
       Height = 24
       Top = 114
-      Width = 111
-      Caption = 'Remeber me'
+      Width = 124
+      Caption = 'Remember me'
       OnChange = chkSavePassChange
       TabOrder = 4
     end
