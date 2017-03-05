@@ -465,7 +465,7 @@ type
      is set to @link(ErrTimeout).}
     function RecvBlock(Timeout: Integer): string; virtual;
 
-    {:Receive all data to stream, until some error occured. (for example timeout)}
+    {:Receive all data to stream, until some error occurred. (for example timeout)}
     procedure RecvStreamRaw(const Stream: TStream; Timeout: Integer); virtual;
 
     {:receive requested count of bytes to stream}

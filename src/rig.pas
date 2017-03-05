@@ -287,7 +287,7 @@ begin
   RIG_RESULT := rig_set_conf(RIG_P, token, frigport);
   if rig_result <> RIG_OK then
   begin
-    Writeln('An error has occured setting the rig pathname:',fRigPort);
+    Writeln('An error has occurred setting the rig pathname:',fRigPort);
     result := RIG_RESULT;
     exit;
   end;
@@ -298,7 +298,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token , fRigSerialSpeed);
     if rig_result <> RIG_OK then
     begin
-       Writeln('An error has occured setting the serial speed:',fRigSerialSpeed);
+       Writeln('An error has occurred setting the serial speed:',fRigSerialSpeed);
        result := RIG_RESULT;
        exit;
     end;
@@ -307,7 +307,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token, fRigDataBits);
     if rig_result <> RIG_OK then
     begin
-         Writeln('An error has occured setting the serial data bits:',fRigDataBits);
+         Writeln('An error has occurred setting the serial data bits:',fRigDataBits);
          result := RIG_RESULT;
          exit;
     end;
@@ -316,7 +316,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P,token , fRigStopBits);
     if rig_result <> RIG_OK then
     begin
-       Writeln('An error has occured setting the stop bits',fRigStopBits);
+       Writeln('An error has occurred setting the stop bits',fRigStopBits);
        result := RIG_RESULT;
        exit;
     end;
@@ -325,7 +325,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P,token , fRigSerialParity);
     if rig_result <> RIG_OK then
     begin
-       Writeln('An error has occured setting the Serial Parity:',fRigSerialParity);
+       Writeln('An error has occurred setting the Serial Parity:',fRigSerialParity);
        result := RIG_RESULT;
        exit;
     end;
@@ -334,7 +334,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P,token , fRigDTRState);
     if rig_result <> RIG_OK then
     begin
-       Writeln('An error has occured seting the DTR state:',fRigDTRState);
+       Writeln('An error has occurred seting the DTR state:',fRigDTRState);
        result := RIG_RESULT;
        exit;
     end;
@@ -352,7 +352,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token, fRigRTSState);
     if rig_result <> RIG_OK then
     begin
-       Writeln('An error has occured setting the RTS state:',fRigRTSState);
+       Writeln('An error has occurred setting the RTS state:',fRigRTSState);
        result := RIG_RESULT;
        exit
     end;
@@ -363,7 +363,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token, ftimeout);
     if rig_result <> RIG_OK then
     begin
-       showmessage('An error has occured setting the timeout');
+       showmessage('An error has occurred setting the timeout');
        result := RIG_RESULT;
        exit;
     end;
@@ -373,7 +373,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token, fretry);
     if rig_result <> RIG_OK then
     begin
-       showmessage('An error has occured setting the retries');
+       showmessage('An error has occurred setting the retries');
        result := RIG_RESULT;
        exit;
     end;
@@ -383,7 +383,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token, fpacing);
     if rig_result <> RIG_OK then
     begin
-       showmessage('An error has occured setting the pacing');
+       showmessage('An error has occurred setting the pacing');
        result := RIG_RESULT;
        exit;
     end;
@@ -393,7 +393,7 @@ begin
     RIG_RESULT := rig_set_conf(RIG_P, token, fdelay);
     if rig_result <> RIG_OK then
     begin
-       showmessage('An error has occured setting the write delay');
+       showmessage('An error has occurred setting the write delay');
        result := RIG_RESULT;
        exit;
     end;

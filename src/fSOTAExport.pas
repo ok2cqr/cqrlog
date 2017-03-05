@@ -223,7 +223,7 @@ begin
   except
     on E : Exception do
     begin
-      Application.MessageBox(Pchar('An error occured during export:'+LineEnding+E.Message),'Error ...',
+      Application.MessageBox(Pchar('An error occurred during export:'+LineEnding+E.Message),'Error ...',
                              mb_OK+mb_IconError)
     end
   end

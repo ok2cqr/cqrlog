@@ -170,7 +170,7 @@ begin
         Command := dmLogUpload.Q.FieldByName('cmd').AsString;
         if (Command<>'INSERT') and (Command<>'UPDATE') and (Command<>'DELETE') then
         begin
-          Writeln('Uknown command:',Command);
+          Writeln('Unknown command:',Command);
           dmLogUpload.Q.Next;
           Continue
         end;
