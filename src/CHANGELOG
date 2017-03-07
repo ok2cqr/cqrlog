@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 2.0.5
+  + sort by gridsquare added to filter
   + new log number is choosen automatically
   - parity parameter for rigctld should be serial_parity
   - cqrlog had icon only in Gnome
