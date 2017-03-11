@@ -1,6 +1,5 @@
 FOC_NAMES
 FOC names
-GW3SB;Chas
 G3ESY;Peter
 G2HKU;Ted
 G8VG;Pete
@@ -10,7 +9,6 @@ G3JUL;Geoff
 ZS1EL;Vidi
 G3LKZ;Owen
 K2TT;Bill
-PA0BW;Hein
 N9SW;Gene
 SM7BVO;Rolf
 G3OAY;Neil
@@ -38,7 +36,6 @@ PA0VDV;Joeke
 W9VNE;Jim
 K4BAI;John
 S50A;Tine
-F3AT;Ivan
 DJ5ZN;Klaus
 N3RD;Dave
 W3LPL;Frank
@@ -115,11 +112,9 @@ W0ZR;Tom
 K2LE;Andy
 P40LE;Andy
 GM4SID;Sid
-9A8W;Davor
 A45XR;Chris
 K7NJ;Riki
 LA3FL;Per
-G3BEX;John
 N2UU;Bob
 SM6BGA;Hans
 G4BUO;Dave
@@ -167,7 +162,6 @@ G3NKS;Derek
 K4LT;Doug
 DL4CF;Joe
 M0HVM;Joe
-N2KW;Allen
 G4SPY;Arnold
 G3ZYV;Dave
 K1GUP;Jerry
@@ -243,7 +237,6 @@ SV1AOW;Geo
 N2NT;Andy
 N8DCJ;Dan
 DJ6SI;Baldur
-LZ1AF;Dimiter
 VK4OQ;John
 N4AF;Howie
 OZ4FF;Karsten
@@ -291,7 +284,6 @@ VK3XU;Drew
 G4PPG;Jim
 EI6FR;Dec
 LY2PX;Willy
-G3ZRJ;Tony
 KF3B;Alan
 G0OPB;Tony
 G2NF;Tony
@@ -322,9 +314,7 @@ G3OLB;Tom
 N5AN;Bud
 K6RB;Rob
 M0GMT;Danny
-VE3NE;Lali
 LZ1MS;Rumen
-W6SJ;Randy
 N9RV;Pat
 NR7DX;Pat
 DJ4KW;Gerd
@@ -339,7 +329,6 @@ K1ZM;Jeff
 VY2ZM;Jeff
 K3NA;Eric
 K6VVA;Rick
-K5AY;Bob
 M0IKE;Dave
 SM6CNN;Anders
 DF3IAL;Anders
@@ -365,8 +354,6 @@ VQ9JC;Jim
 VQ94JC;Jim
 W1ZT;Geo
 G4FON;Ray
-G0RTN;Gerry
-GI0RTN;Gerry
 K8RD;Ed
 LU5OM;Manuel
 KR3E;Ed
@@ -454,7 +441,7 @@ N8NA;Karl
 W7GKF;Bill
 YO3FRI;Tina
 JE1TRV;Atsu
-G6PZ;Paul
+JS2AHG;Atsu
 M0PIE;Bob
 PA7RA;Rien
 VE7AHA;Andy
@@ -471,7 +458,6 @@ W2PTT;Prasad
 LA4XX;Hal
 OK1WF;Jarda
 OK5WF;Jarda
-G3XJS;Peter
 G5CL;Ryan
 K0VBU;Bill
 DJ5IL;Karl
@@ -517,6 +503,9 @@ G3WPH;Mike
 G3P;Mike
 DL6LBI;Ingo
 SM1TDE;Eric
+SD1A;Eric
+5X8EW;Eric
+9X2CW;Eric
 W5PEH;Pete
 W4EDE;Lee
 M0PCB;Iain
@@ -536,7 +525,6 @@ PA4N;Frank
 W0VX;David
 AC4CA;John
 G3LDI;Roger
-OE5MSM;Mike
 W9YXX;Bob
 VK6GX;Phil
 WB6BEE;Don
@@ -576,8 +564,6 @@ G0EFO;Mike
 ON4IZ;Doc
 DL1CW;Arno
 OK8EAO;Arno
-9A2WJ;Daki
-KD2AFI;Daki
 FG8NY;Jean
 F6JOE;Jean
 OZ1JHM;Jalmar
@@ -602,3 +588,14 @@ K5LN;Bill
 K1DW;Dallas
 VE5SDH;Summer
 G4LFU;Tony
+K3MD;John
+AE1T;Peter
+W3EEK;Carl
+G0PNM;Pete
+GK0PNM;Pete
+AD5A;Mike
+DU7ET;Bob
+DL6KVA;Axel
+OZ2A;Kim
+DF4XX;Kurt
+K8CQ;Jeff
