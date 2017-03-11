@@ -22,7 +22,7 @@ uses
 dLogUpload, fLogUploadStatus,frCWKeys, fCallAlert, fNewCallAlert,
 fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer, fRadioMemories, 
 fAddRadioMemory, fException, fDbError, fCommentToCall, fNewCommentToCall,
-fFindCommentToCall, frExportPref, fExportPref;
+fFindCommentToCall, frExportPref, fExportPref, fMoniWsjtx, fWkd1, fProp_DK0WCY;
 var
   Splash : TfrmSplash;
 
@@ -63,6 +63,10 @@ begin
   Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
   Application.CreateForm(TfrmCWType, frmCWType);
   Application.CreateForm(TfrmRbnMonitor, frmRbnMonitor);
+  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
+  Application.CreateForm(TfrmWorked_grids, frmWorked_grids);
+  Application.CreateForm(TfrmProp_DK0WCY , frmProp_DK0WCY );
+
 
   Splash.Update;
   application.ProcessMessages;

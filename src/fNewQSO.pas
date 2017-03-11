@@ -19,7 +19,8 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
-  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils;
+  uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
+  fMoniWsjtx, fWkd1,fProp_DK0WCY;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
@@ -52,7 +53,6 @@ type
     acCWType: TAction;
     acRemoteMode: TAction;
     acQSOBefore: TAction;
-    acProp: TAction;
     acCWFKey: TAction;
     acShowStatBar: TAction;
     acShowQSOB4: TAction;
@@ -70,6 +70,10 @@ type
     acRBNMonitor: TAction;
     acRemoteWsjt: TAction;
     acCommentToCallsign : TAction;
+    acMonitorWsjtx: TAction;
+    acLocatorMap: TAction;
+    acpDK0WCY: TAction;
+    acProp: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -102,6 +106,9 @@ type
     MenuItem91: TMenuItem;
     MenuItem92 : TMenuItem;
     MenuItem93 : TMenuItem;
+    mnuDK0WCY: TMenuItem;
+    mnuWsjtxmonitor: TMenuItem;
+    mnuLocatorMap: TMenuItem;
     mnuRemoteModeWsjt: TMenuItem;
     mnuOnlineLog: TMenuItem;
     MenuItem54: TMenuItem;
@@ -244,7 +251,6 @@ type
     MenuItem60: TMenuItem;
     MenuItem61: TMenuItem;
     MenuItem62: TMenuItem;
-    MenuItem63: TMenuItem;
     MenuItem64: TMenuItem;
     MenuItem65: TMenuItem;
     MenuItem66: TMenuItem;
@@ -316,9 +322,11 @@ type
     procedure acCommentToCallsignExecute(Sender : TObject);
     procedure acCWFKeyExecute(Sender: TObject);
     procedure acHotkeysExecute(Sender: TObject);
+    procedure acLocatorMapExecute(Sender: TObject);
     procedure acLogUploadStatusExecute(Sender: TObject);
+    procedure acMonitorWsjtxExecute(Sender: TObject);
     procedure acOpenLogExecute(Sender: TObject);
-    procedure acPropExecute(Sender: TObject);
+    procedure acpDK0WCYExecute(Sender: TObject);
     procedure acQSOListExecute(Sender: TObject);
     procedure acRBNMonitorExecute(Sender: TObject);
     procedure acRefreshTimeExecute(Sender: TObject);
@@ -334,6 +342,7 @@ type
     procedure acUploadToClubLogExecute(Sender: TObject);
     procedure acUploadToHamQTHExecute(Sender: TObject);
     procedure acUploadToHrdLogExecute(Sender: TObject);
+    procedure acPropExecute(Sender: TObject);
     procedure chkAutoModeChange(Sender: TObject);
     procedure cmbFreqExit(Sender: TObject);
     procedure cmbIOTAEnter(Sender: TObject);
@@ -523,9 +532,9 @@ type
     WhatUpNext : TWhereToUpload;
     UploadAll  : Boolean;
 
-    WsjtxSock             : TUDPBlockSocket;
-    WsjtxMode             : String;
-    WsjtxBand             : String;
+    //WsjtxSock             : TUDPBlockSocket;
+    //WsjtxMode             : String;          Moved to public
+    //WsjtxBand             : String;
     WsjtxRememberAutoMode : Boolean;
 
     procedure ShowDXCCInfo(ref_adif : Word = 0);
@@ -571,6 +580,11 @@ type
     UseSpaceBar : Boolean;
     CWint       : TCWDevice;
     ShowWin     : Boolean;
+
+    WsjtxSock             : TUDPBlockSocket;
+    WsjtxMode             : String;          //Moved from private
+    WsjtxBand             : String;
+
 
     ClearAfterFreqChange : Boolean;
     ChangeFreqLimit : Double;
@@ -1233,6 +1247,12 @@ begin
   if cqrini.ReadBool('Window','Prop',False) then
     frmPropagation.Show;
 
+  if cqrini.ReadBool('Window','pDK0WCY',False) then
+    frmProp_DK0WCY.Show;
+
+   if cqrini.ReadBool('Window','Worked_grids',False) then
+    frmWorked_grids.Show;
+
   if cqrini.ReadBool('Window','CWKeys',False) then
     acCWFKey.Execute;
 
@@ -1352,6 +1372,22 @@ begin
     end
     else
       cqrini.WriteBool('Window','Prop',False);
+
+    if frmProp_DK0WCY.Showing then
+    begin
+      frmProp_DK0WCY.Close;
+      cqrini.WriteBool('Window','pDK0WCY',True)
+    end
+    else
+      cqrini.WriteBool('Window','pDK0WCY',False);
+
+   if frmWorked_grids.Showing then
+    begin
+      frmWorked_grids.Close;
+      cqrini.WriteBool('Window','Worked_grids',True)
+    end
+    else
+      cqrini.WriteBool('Window','Worked_grids',False);
 
     if frmCWKeys.Showing then
     begin
@@ -1908,8 +1944,8 @@ var
   TXmode   : String;
 
   call  : String;
-  time1 : String;
-  time2 : String;
+  //time1 : String;
+  //time2 : String;
   sname : String;
   qth   : String;
   loc   : String;
@@ -1918,7 +1954,7 @@ var
   pwr   : String;
   rstS  : String;
   rstR  : String;
-  state : String;
+  //state : String;
   note  : String;
   date  : TDateTime;
   sDate : String='';
@@ -2016,7 +2052,7 @@ begin
           if dmData.DebugLevel>=1 then Writeln('HeartBeat Id:', ParStr);
 
           if lblCall.Font.Color = clRed then
-            lblCall.Font.Color    := clFuchsia
+            lblCall.Font.Color    := clBlue
           else
             lblCall.Font.Color    := clRed;
 
@@ -2101,7 +2137,7 @@ begin
               cmbFreq.Text := mhz;
             cmbMode.Text := TXmode;
             edtCall.Text := call;
-            edtCallExit(nil)
+            edtCallExit(nil)       //<----this fetches info from web
           end;
           //----------------------------------------------------
           if new then
@@ -2110,7 +2146,7 @@ begin
             old_ccall := '';
             old_cfreq := '';
             old_cmode := '';
-            //frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode)
+            frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode)
           end
         end; //Status
 
@@ -2121,15 +2157,14 @@ begin
           Repbuf := copy(Buf,RepStart,index-RepStart);  //Reply str head part
           new:= BoolBuf(index);
           RepStart := index;     //Reply new/old skip. Str tail start
-          if new then
+          if not new then
           begin
-            if dmData.DebugLevel>=1 then Writeln('New')
+            if dmData.DebugLevel>=1 then Writeln('Old decode!')
           end
-          else begin
-            if dmData.DebugLevel>=1 then Writeln('Old')
-          end;
-
-          //----------------------------------------------------
+          else
+           begin
+            if dmData.DebugLevel>=1 then Writeln('New decode:') ;
+         //----------------------------------------------------
           ParNum := UiFBuf(index);
           Min := ParNum div 60000;  //minutes from 00:00    UTC
           Hour := Min div 60;
@@ -2163,26 +2198,26 @@ begin
           Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
           if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
           if new and (WsjtxBand <>'')  and (WsjtxMode <>'')  and ((pos('CQ ',UpperCase(ParStr))=1) or
-            (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1)) {and (mnuMoniWsjtx.Visible)} then
-            //frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf);
+            (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1)) and (mnuWsjtxmonitor.Visible) then
+            frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf);
          //----------------------------------------------------
+         end; // New decode
        end; //Decode
 
     3 : begin //Clear
           ParStr := StFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
-          //frmMonWsjtx.WsjtxMemo.lines.Clear
+          frmMonWsjtx.WsjtxMemo.lines.Clear
         end; //Clear
 
-    5 : begin
+    5 : begin  //qso logged
           ParStr := StFBuf(index);
-          if dmData.DebugLevel>=1 then Writeln('Qso Logged Id:', ParStr);
+          if dmData.DebugLevel>=1 then Writeln('Qso Logging Id:', ParStr);
+          if dmData.DebugLevel>=1 then Writeln('edtCall before started logging #5:',edtCall.Text );
           //----------------------------------------------------
-          ClearAll;
+          //ClearAll;          THis removes QRZ data, not accepted!
           cbOffline.Checked := True;
           call  := '';
-          time1 := '';
-          time2 := '';
           sname := '';
           qth   := '';
           loc   := '';
@@ -2190,7 +2225,6 @@ begin
           mode  := '';
           rstS  := '';
           rstR  := '';
-          state := '';
           note  := '';
           pwr   := '';
 
@@ -2202,7 +2236,7 @@ begin
           //----------------------------------------------------
            if TryJulianDateToDateTime(DiFBuf(index),DTim)  then  //date (not used in cqrlog)
              if dmData.DebugLevel>=1 then Writeln('Date :',FormatDateTime('YYYY-MM-DD',DTim));
-          //----------------------------------------------------
+          //-----------------------------------------TIME-----------
            ParNum := UiFBuf(index);          //time
            Min  := ParNum div 60000;  //minutes from 00:00    UTC
            Hour := Min div 60;
@@ -2228,16 +2262,23 @@ begin
              ParNum := IFBuf(index);
              if dmData.DebugLevel>=1 then Writeln('offset :', IFBuf(index))
            end;
-          //----------------------------------------------------
+          //--------------------------------------------CALL--------
           call:= trim(StFBuf(index)); //to be sure...
-          if dmData.DebugLevel>=1 then Writeln('Call :', call);
-          edtCall.Text := call;
-          edtCallExit(nil);
-          //----------------------------------------------------
+          if dmData.DebugLevel>=1 then Writeln('Call decoded #5:', call,'  edtCall:',edtCall.Text );
+          if  edtCall.Text <> call then  //call (and web info) maybe there already ok from status packet
+                           Begin
+                             edtCall.Text := call;
+                             edtCallExit(nil);    //<--------this will fetch web info
+                             if dmData.DebugLevel>=1 then Writeln('Call was not there already');
+                             sleep(1000); // give time for web
+                           end;
+          //---------------------------------------------LOCATOR-------
           loc:= trim(StFBuf(index));
           if dmData.DebugLevel>=1 then Writeln('Grid :', loc);
           if dmUtils.IsLocOK(loc) then
-            edtGrid.Text := loc;
+              if pos(loc,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
+                             edtGrid.Text := loc; //replace qrz loc, otherwise keep it
+
           //----------------------------------------------------
           mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx
           case cqrini.ReadInteger('wsjt','freq',0) of
@@ -2294,16 +2335,19 @@ begin
            if dmData.DebugLevel>=1 then Writeln('Comments :', note);
            edtRemQSO.Text := note;
            //--------------------------------------------------
-           if dmData.DebugLevel>=1 then Writeln('Name :', sname);
            sname:= trim(StFBuf(index));
-           if dmData.DebugLevel>=1 then Writeln('Name :', sname);
-           if dmData.DebugLevel>=1 then Writeln('edtName :',edtName.Text );
-           if sname <>'' then  //if user does not give name edtName stays what qrz.com may have found
-             edtName.Text := sname;
-           edtNameExit(nil);
+           if dmData.DebugLevel>=1 then Writeln('Name :', sname,'  edtName :',edtName.Text);
+           if sname <>'' then  //if user gives name edtName from qrz.com get replaced
+            Begin
+              edtName.Text := sname;
+              edtNameExit(nil); //makes 1st ltr upcase
+            end;
+           if dmData.DebugLevel>=1 then Writeln('edtName before pressing save:',edtName.Text );
+
            //----------------------------------------------------
+           if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            btnSave.Click;
-           writeln('end loging');
+           if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging now ended');
          end; //QSO logged in
 
      6 : begin //Close
@@ -2315,6 +2359,218 @@ begin
     end //case
   end  //if WsjtxSock.lasterror=0 then
 end;
+{
+/*
+ * WSJT-X Message Formats  info fetch from wsjt-x 1.5.0-rc2 source
+ * ======================
+ *
+ * All messages are written or  read using the QDataStream derivatives
+ * defined below, note that we are using the default for floating
+ * point precision which means all are double precision i.e. 64-bit
+ * IEEE format.
+ *
+ *  Message is big endian format
+ *
+ *   Header format:
+ *
+ *      32-bit unsigned integer magic number 0xadbccbda
+ *      32-bit unsigned integer schema number
+ *
+ *   Payload format:
+ *
+ *      As per  the QDataStream format,  see below for version  used and
+ *      here:
+ *
+ *        http://doc.qt.io/qt-5/datastreamformat.html
+ *
+ *      for the serialization details for each type, at the time of
+ *      writing the above document is for Qt_5_0 format which is buggy
+ *      so we use Qt_5_2 format, differences are:
+ *
+ *      QDateTime:
+ *           QDate      qint64    Julian day number
+ *           QTime      quint32   Milli-seconds since midnight
+ *           timespec   quint8    0=local, 1=UTC, 2=Offset from UTC
+ *                                                 (seconds)
+ *                                3=time zone
+ *           offset     qint32    only present if timespec=2
+ *           timezone   several-fields only present if timespec=3
+ *
+ *      we will avoid using QDateTime fields with time zones for simplicity.
+ *
+ * Type utf8  is a  utf-8 byte  string formatted  as a  QByteArray for
+ * serialization purposes  (currently a quint32 size  followed by size
+ * bytes, no terminator is present or counted).
+ *
+ * The QDataStream format document linked above is not complete for
+ * the QByteArray serialization format, it is similar to the QString
+ * serialization format in that it differentiates between empty
+ * strings and null strings. Empty strings have a length of zero
+ * whereas null strings have a length field of 0xffffffff.
+ *
+ * Schema Version 1:
+ * -----------------
+ *
+ * Message       Direction Value                  Type
+ * ------------- --------- ---------------------- -----------
+ * Heartbeat     Out       0                      quint32
+ *                         Id (unique key)        utf8
+ *
+ *		The  heartbeat  message  is  sent  on  a  periodic  basis  every
+ *		NetworkMessage::pulse  seconds  (see  below).  This  message  is
+ *		intended to be used by server to detect the presence of a client
+ *		and  also   the  unexpected  disappearance  of   a  client.  The
+ *		message_aggregator reference server does just that.
+ *
+ *
+ * Status        Out       1                      quint32
+ *                         Id (unique key)        utf8
+ *                         Dial Frequency (Hz)    quint64
+ *                         Mode                   utf8
+ *                         DX call                utf8
+ *                         Report                 utf8
+ *                         Tx Mode                utf8
+ *                         Tx Enabled             bool
+ *                         Transmitting           bool
+ *
+ *		WSJT-X  sends this  status message  when various  internal state
+ *		changes to allow the server to  track the relevant state of each
+ *		client without the need for  polling commands. The current state
+ *		changes that generate status messages are:
+ *
+ *			Application start up,
+ *			"Enable Tx" button status changes,
+ *			Dial frequency changes,
+ *			Changes to the "DX Call" field,
+ *			Operating mode changes,
+ *			Transmit mode changed (in dual JT9+JT65 mode),
+ *			Changes to the "Rpt" spinner,
+ *			After an old decodes replay sequence (see Replay below),
+ *			When switching between Tx and Rx mode.
+ *
+ *
+ * Decode        Out       2                      quint32
+ *                         Id (unique key)        utf8
+ *                         New                    bool
+ *                         Time                   QTime
+ *                         snr                    qint32
+ *                         Delta time (S)         float (serialized as double)
+ *                         Delta frequency (Hz)   quint32
+ *                         Mode                   utf8
+ *                         Message                utf8
+ *
+ *			The decode message is send when  a new decode is completed, in
+ *			this case the 'New' field is true. It is also used in response
+ *			to  a "Replay"  message where  each  old decode  in the  "Band
+ *			activity" window, that  has not been erased, is  sent in order
+ *			as  a one  of  these  messages with  the  'New'  field set  to
+ *			false. See the "Replay" message below for details of usage.
+ *
+ *
+ * Clear         Out       3                      quint32
+ *                         Id (unique key)        utf8
+ *
+ *			This message is  send when all prior "Decode"  messages in the
+ *			"Band activity"  window have been discarded  and therefore are
+ *			no long available for actioning  with a "Reply" message. It is
+ *			sent when the user erases  the "Band activity" window and when
+ *			WSJT-X  closes down  normally. The  server should  discard all
+ *			decode messages upon receipt of this message.
+ *
+ *
+ * Reply         In        4                      quint32
+ *                         Id (target unique key) utf8
+ *                         Time                   QTime
+ *                         snr                    qint32
+ *                         Delta time (S)         float (serialized as double)
+ *                         Delta frequency (Hz)   quint32
+ *                         Mode                   utf8
+ *                         Message                utf8
+ *
+ *			In order for a server  to provide a useful cooperative service
+ *			to WSJT-X it  is possible for it to initiate  a QSO by sending
+ *			this message to a client. WSJT-X filters this message and only
+ *			acts upon it  if the message exactly describes  a prior decode
+ *			and that decode  is a CQ or QRZ message.   The action taken is
+ *			exactly equivalent to the user  double clicking the message in
+ *			the "Band activity" window. The  intent of this message is for
+ *			servers to be able to provide an advanced look up of potential
+ *			QSO partners, for example determining if they have been worked
+ *			before  or if  working them  may advance  some objective  like
+ *			award progress.  The  intention is not to  provide a secondary
+ *			user  interface for  WSJT-X,  it is  expected  that after  QSO
+ *			initiation the rest  of the QSO is carried  out manually using
+ *			the normal WSJT-X user interface.
+ *
+ *
+ * QSO Logged    Out       5                      quint32
+ *                         Id (unique key)        utf8
+ *                         Date & Time            QDateTime
+ *                         DX call                utf8
+ *                         DX grid                utf8
+ *                         Dial frequency (Hz)    quint64
+ *                         Mode                   utf8
+ *                         Report send            utf8
+ *                         Report received        utf8
+ *                         Tx power               utf8
+ *                         Comments               utf8
+ *                         Name                   utf8
+ *
+ *			The  QSO logged  message is  sent  to the  server(s) when  the
+ *			WSJT-X user accepts the "Log  QSO" dialog by clicking the "OK"
+ *			button.
+ *
+ *
+ * Close         Out       6                      quint32
+ *                         Id (unique key)        utf8
+ *
+ *			Close is sent by a client immediately prior to it shutting
+ *			down gracefully.
+ *
+ *
+ * Replay        In        7                      quint32
+ *                         Id (unique key)        utf8
+ *
+ *			When a server starts it may  be useful for it to determine the
+ *			state  of preexisting  clients. Sending  this message  to each
+ *			client as it is discovered  will cause that client (WSJT-X) to
+ *			send a "Decode" message for each decode currently in its "Band
+ *			activity"  window. Each  "Decode" message  sent will  have the
+ *			"New" flag set to false so that they can be distinguished from
+ *			new decodes. After  all the old decodes have  been broadcast a
+ *			"Status" message  is also broadcast.  If the server  wishes to
+ *			determine  the  status  of  a newly  discovered  client;  this
+ *			message should be used.
+ *
+ *
+ * Halt Tx       In        8
+ *                         Id (unique key)        utf8
+ *                         Auto Tx Only           bool
+ *
+ *			The server may stop a client from transmitting messages either
+ * 			immediately or at  the end of the  current transmission period
+ * 			using this message.
+ *
+ *
+ * Free Text     In        9
+ *                         Id (unique key)        utf8
+ *                         Text                   utf8
+ *                         Send                   bool
+ *
+ *			This message  allows the server  to set the current  free text
+ *			message content. Sending this  message is equivalent to typing
+ *			a new  message (old contents  are discarded) in to  the WSJT-X
+ *			free text message field or  "Tx5" field (both are updated) and
+ *			if the Send  flag is set then clicking the  "Now" radio button
+ *			for the  "Tx5" field  if tab  one is  current or  clicking the
+ *			"Free msg"  radio button  if tab  two is  current.  It  is the
+ *			responsibility  of  the sender  to  limit  the length  of  the
+ *			message text and to limit it to legal message characters.
+ */
+
+
+           }
+
 
 procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
@@ -2553,7 +2809,8 @@ begin
   else
     if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjt.Checked) then
      edtCall.SetFocus;
-  UploadAllQSOOnline
+  UploadAllQSOOnline;
+  if frmWorked_grids.Showing then frmWorked_grids.UpdateMap;
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
@@ -3540,11 +3797,6 @@ begin
   edtGrid.SelectAll
 end;
 
-procedure TfrmNewQSO.acPropExecute(Sender: TObject);
-begin
-  frmPropagation.Show
-end;
-
 procedure TfrmNewQSO.acQSOListExecute(Sender: TObject);
 begin
   frmMain.Show
@@ -3614,7 +3866,7 @@ begin
   if Assigned(CWint) then
   begin
     CWint.TuneStart;
-    ShowMessage('Tunning started .... '+LineEnding+LineEnding+'OK to abort');
+    ShowMessage('Tuning started .... '+LineEnding+LineEnding+'OK to abort');
     CWint.TuneStop
   end
 end;
@@ -3643,6 +3895,11 @@ begin
   frmLogUploadStatus.UploadDataToHrdLog
 end;
 
+procedure TfrmNewQSO.acPropExecute(Sender: TObject);
+begin
+   frmPropagation.Show
+end;
+
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
 begin
   UpdateFKeyLabels;
@@ -3654,9 +3911,19 @@ begin
   dmUtils.OpenInApp(dmData.HelpDir+'h20.html')
 end;
 
+procedure TfrmNewQSO.acLocatorMapExecute(Sender: TObject);
+begin
+  frmWorked_grids.Show;
+end;
+
 procedure TfrmNewQSO.acLogUploadStatusExecute(Sender: TObject);
 begin
   frmLogUploadStatus.Show
+end;
+
+procedure TfrmNewQSO.acMonitorWsjtxExecute(Sender: TObject);
+begin
+  frmMonWsjtx.Show
 end;
 
 procedure TfrmNewQSO.acBigSquareExecute(Sender: TObject);
@@ -3713,6 +3980,11 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmNewQSO.acpDK0WCYExecute(Sender: TObject);
+begin
+   frmProp_DK0WCY.Show
 end;
 
 procedure TfrmNewQSO.chkAutoModeChange(Sender: TObject);
@@ -3904,7 +4176,6 @@ begin
     AProcess.Free
   end
 end;
-
 
 procedure TfrmNewQSO.MenuItem84Click(Sender : TObject);
 begin
@@ -4664,6 +4935,7 @@ begin
     end;
   end;
 end;
+
 
 procedure TfrmNewQSO.mnuIOTAClick(Sender: TObject);
 begin
@@ -5962,8 +6234,9 @@ begin
                   WsjtxBand := '';
 
                   //Timer fetches only 1 UDP packet at time.
-                  tmrWsjtx.Interval := 1000;
-                  tmrWsjtx.Enabled  := True;
+                  tmrWsjtx.Interval := 250;          // must be less than 1000ms. Othewise too slow! There may be
+                  tmrWsjtx.Enabled  := True;         // 0-25 (abt) lines(packets) to handle during 10sek free period
+                                                     // of secs 50..60 of each minute.
 
                   // start UDP server
                   WsjtxSock := TUDPBlockSocket.Create;
@@ -5978,7 +6251,8 @@ begin
                   end;
                   WsjtxRememberAutoMode := chkAutoMode.Checked;
                   chkAutoMode.Checked   := False;
-                  //acMonitorWsjtxExecute(nil)
+                  mnuWsjtxmonitor.Visible := True; //we show "monitor" in view-submenu when active
+                  acMonitorWsjtxExecute(nil)
                 end
   end;
 
@@ -5996,6 +6270,8 @@ begin
   tmrWsjtx.Enabled          := False;
   mnuRemoteMode.Checked     := False;
   mnuRemoteModeWsjt.Checked := False;
+  mnuWsjtxmonitor.Visible := False;    //we do not show "monitor" in view-submenu when not active
+  frmMonWsjtx.Hide;                    // and close monitor
   lblCall.Caption           := 'Call:';
   lblCall.Font.Color        := clDefault;
   edtCall.Enabled           := True;
