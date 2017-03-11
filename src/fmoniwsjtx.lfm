@@ -1,0 +1,141 @@
+object frmMonWsjtx: TfrmMonWsjtx
+  Left = 561
+  Height = 327
+  Top = 26
+  Width = 454
+  Caption = 'Wsjt-x CQ-monitor'
+  ClientHeight = 327
+  ClientWidth = 454
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '1.6.4.0'
+  object lblBand: TLabel
+    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 61
+    Height = 15
+    Top = 18
+    Width = 33
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 50
+    BorderSpacing.Bottom = 5
+    Caption = 'Band'
+    ParentColor = False
+  end
+  object lblMode: TLabel
+    AnchorSideRight.Control = WsjtxMemo
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 358
+    Height = 15
+    Top = 18
+    Width = 35
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 50
+    BorderSpacing.Bottom = 5
+    Caption = 'Mode'
+    ParentColor = False
+  end
+  object WsjtxMemo: TRichMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 11
+    Height = 250
+    Top = 38
+    Width = 432
+    Font.Height = -13
+    Font.Name = 'Monospace'
+    HideSelection = False
+    OnChange = WsjtxMemoChange
+    OnDblClick = WsjtxMemoDblClick
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 0
+    WordWrap = False
+    ZoomFactor = 1
+  end
+  object chkHistory: TCheckBox
+    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = WsjtxMemo
+    Left = 179
+    Height = 23
+    Top = 14
+    Width = 96
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 1
+    Caption = 'no history'
+    TabOrder = 1
+  end
+  object chkmyAlert: TCheckBox
+    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideTop.Control = WsjtxMemo
+    AnchorSideTop.Side = asrBottom
+    Left = 11
+    Height = 23
+    Top = 292
+    Width = 76
+    BorderSpacing.Top = 4
+    Caption = 'MyAlert'
+    TabOrder = 2
+  end
+  object chkLocAlert: TCheckBox
+    AnchorSideTop.Control = WsjtxMemo
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = WsjtxMemo
+    AnchorSideRight.Side = asrBottom
+    Left = 364
+    Height = 23
+    Top = 292
+    Width = 79
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 4
+    Caption = 'LocAlert'
+    TabOrder = 3
+  end
+  object lblAlert1: TLabel
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = WsjtxMemo
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = EditAlert
+    Left = 160
+    Height = 15
+    Top = 296
+    Width = 27
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 8
+    Caption = 'Text'
+    ParentColor = False
+  end
+  object lblAlert2: TLabel
+    AnchorSideLeft.Control = EditAlert
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = WsjtxMemo
+    AnchorSideTop.Side = asrBottom
+    Left = 267
+    Height = 15
+    Top = 296
+    Width = 31
+    BorderSpacing.Top = 8
+    Caption = 'Alert'
+    ParentColor = False
+  end
+  object EditAlert: TEdit
+    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = WsjtxMemo
+    AnchorSideTop.Side = asrBottom
+    Left = 187
+    Height = 27
+    Top = 290
+    Width = 80
+    BorderSpacing.Top = 2
+    TabOrder = 4
+  end
+end

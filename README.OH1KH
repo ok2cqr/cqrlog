@@ -1,0 +1,18 @@
+10.3.2017 started  to move additions from 1.9.0
+
+ -moved wsjtx cq monitor
+ -moved worked locators
+ -moved propagation and renamed it to prop_DK0WCY to keep also original propagation
+
+  --fixed CQmonitor alert. Triggers now only once per decoding round, not every line.
+  --added modes qra64,iscat and msk144 to dUtils (now 42 modes)
+ -moved CW keys because of PgUP/PgDN buttons are handy
+  --messed up ac-list of offical propagation while adding dk0wcy. Fixed
+  --dk0wxy and worked grids now keep their open/close status and positions during restart 
+ -Worked_grids mode selector now fills from dUtils.cmbMode
+
+11.3.2017
+ - removed "clearall" from wsjtx decode #5(logging) I think this losts qrz data. (altough it does not at v1.9.0!) (2.0.4(013))
+ - Fixed #5 logging so that it does change edtcall (no refetch from web) if it is same as decoded call.
+ - Fixed #5 logging so that if QRz locator is 6 char adn the beginning is same as qsl locator the QRZ locator is keeped.(2.0.4(014))
+ - Fixed small error in locator compare (2.0.4(015))
