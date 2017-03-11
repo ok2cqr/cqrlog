@@ -1433,32 +1433,55 @@ begin
 end;
 
 procedure TdmData.SaveComment(call,text : String);
+const
+  C_SEL = 'select id_notes from notes where callsign = %s limit 1';
+  C_DEL = 'delete from notes where callsign = %s';
+  C_INS = 'insert into notes (callsign, longremarks) values (%s, %s)';
+  C_UPD = 'update notes set longremarks = %s where callsign = %s';
 begin
   text := Trim(text);
   if fDebugLevel >=1 then Writeln('Note:',text);
-  if (text = '') then
-    exit;
   qComment.Close;
   if trComment.Active then trComment.Rollback;
-  trComment.StartTransaction;
-  qComment.SQL.Text := 'SELECT id_notes FROM notes WHERE callsign = ' + QuotedStr(call) + ' LIMIT 1';
-  qComment.Open;
-  if qComment.Fields[0].IsNull then
-  begin
-    qComment.Close;
-    qComment.SQL.Text := 'INSERT INTO notes (callsign,longremarks) VALUES (' + QuotedStr(call) +
-                         ',' + QuotedStr(text) + ')';
-    if fDebugLevel >=1 then  Writeln(qComment.SQL.Text);
-    qComment.ExecSQL;
-    trComment.Commit
+
+  try try
+    trComment.StartTransaction;
+    qComment.SQL.Text := Format(C_SEL, [QuotedStr(call)]);
+    qComment.Open;
+
+    if (text = '') and (qComment.Fields[0].IsNull) then
+      exit; //nothing to save
+
+    if (text = '') and (not qComment.Fields[0].IsNull) then
+    begin                //user deleted the note
+      qComment.Close;
+      qComment.SQL.Text := Format(C_DEL, [QuotedStr(call)]);
+      qComment.ExecSQL;
+      exit
+    end;
+
+    if qComment.Fields[0].IsNull then
+    begin
+      qComment.Close;
+      qComment.SQL.Text := Format(C_INS, [QuotedStr(call), QuotedStr(text)]);
+      qComment.ExecSQL
+    end
+    else begin
+      qComment.Close;
+      qComment.SQL.Text := Format(C_UPD, [QuotedStr(text), QuotedStr(call)]);
+      qComment.ExecSQL
+    end
+  except
+    on E : Exception do
+    begin
+      ShowMessage('Error saving comment to QSO.'+LineEnding+E.Message);
+      trComment.Rollback
+    end
   end
-  else begin
-    qComment.Close;
-    qComment.SQL.Text := 'UPDATE notes SET longremarks = ' + QuotedStr(text) +
-                         ' WHERE callsign = ' + QuotedStr(call);
-    if fDebugLevel >=1 then writeln(qComment.SQL.Text);
-    qComment.ExecSQL;
-    trComment.Commit
+  finally
+    if trComment.Active then
+      trComment.Commit;
+    qComment.Close
   end
 end;
 
