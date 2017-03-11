@@ -5,9 +5,11 @@ Legend:
 --------------------
 
 2.0.5
+  + sort by gridsquare added to filter
   + new log number is choosen automatically
   - parity parameter for rigctld should be serial_parity
   - cqrlog had icon only in Gnome
+  - deleting Comment to callsign in New QSO window didn't work
   # improved loading libraries for ssl, on Debian testing it 
     loads libssl*1.0.* and ibcrypto*1.0.*, libssl-dev
     is no longer need, libssl-1.0.* is new dependency   

@@ -363,7 +363,8 @@ begin
      12 : OrderBy := ' ORDER By qsl_via,callsign,dxcc_ref';
      13 : OrderBy := ' ORDER By callsign,dxcc_ref';
      14 : OrderBy := ' ORDER BY waz';
-     15 : OrderBy := ' ORDER BY itu'
+     15 : OrderBy := ' ORDER BY itu';
+     16 : OrderBy := ' ORDER BY loc'
     end;//case
 
     case cmbGroupBy.ItemIndex of
