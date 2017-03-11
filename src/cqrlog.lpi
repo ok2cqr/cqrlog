@@ -764,14 +764,4 @@
       <CreateMakefileOnBuild Value="True"/>
     </Other>
   </CompilerOptions>
-  <Debugging>
-    <Exceptions Count="2">
-      <Item1>
-        <Name Value="ECodetoolError"/>
-      </Item1>
-      <Item2>
-        <Name Value="EFOpenError"/>
-      </Item2>
-    </Exceptions>
-  </Debugging>
 </CONFIG>

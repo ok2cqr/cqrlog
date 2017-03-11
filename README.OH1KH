@@ -16,3 +16,4 @@
  - Fixed #5 logging so that it does change edtcall (no refetch from web) if it is same as decoded call.
  - Fixed #5 logging so that if QRz locator is 6 char adn the beginning is same as qsl locator the QRZ locator is keeped.(2.0.4(014))
  - Fixed small error in locator compare (2.0.4(015))
+ - merged Petr's sort by gridsqr & deleting comment (2.0.4(016))
