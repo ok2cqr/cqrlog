@@ -17,3 +17,5 @@
  - Fixed #5 logging so that if QRz locator is 6 char adn the beginning is same as qsl locator the QRZ locator is keeped.(2.0.4(014))
  - Fixed small error in locator compare (2.0.4(015))
  - merged Petr's sort by gridsqr & deleting comment (2.0.4(016))
+ - Fixed decode #2 (wsjtx status) so that if call does not change new QRZ fetch is not done. So you may add your own notes to NewQSO
+   fields and they remain there during #5( wsjtx logging)

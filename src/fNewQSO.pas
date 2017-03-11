@@ -2129,15 +2129,23 @@ begin
           //----------------------------------------------------
           if TXEna and TXOn then
           begin
-            edtCall.Text := '';//clean grid like double ESC does
-            old_ccall := '';
-            old_cfreq := '';
-            old_cmode := '';
+            if  edtCall.Text <> call then  //call (and web info) maybe there already ok from pevious status packet
+                           Begin
+                             edtCall.Text := '';//clean grid like double ESC does
+                             old_ccall := '';
+                             old_cfreq := '';
+                             old_cmode := '';
+                             edtCall.Text := call;
+                             edtCallExit(nil);    //<--------this will fetch web info
+                             if dmData.DebugLevel>=1 then Writeln('Call was not there already');
+                             sleep(1000); // give time for web
+                           end;
+
+            //these can be altered always
             if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
-              cmbFreq.Text := mhz;
+            cmbFreq.Text := mhz;
             cmbMode.Text := TXmode;
-            edtCall.Text := call;
-            edtCallExit(nil)       //<----this fetches info from web
+
           end;
           //----------------------------------------------------
           if new then
