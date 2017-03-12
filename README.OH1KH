@@ -1,6 +1,34 @@
 10.3.2017 started  to move additions from 1.9.0
 
  -moved wsjtx cq monitor
+ 
+  Monitor has alert function. For that you need to make script that can do almost anything for alerting! 
+  
+  Setting audio alert play.
+  You need separate soundcard for wsjt-x and other for alerts. 1st might be inside
+  the PC 2nd may be your inside your rig or some kind of USB sound card (ham digi interface).
+
+  Move voice_alert.sh and wav files to ~/.config/cqrlog/voice_keyer  directory
+  Make sure you have 'aplay' installed.
+  Otherwise modify  voice_alert.sh to start your favorite player.
+  
+  ----------- voice_alert.sh -----start-------------------------
+  #!/bin/bash
+  # //audio file name (prefix) played on alert
+  # //1.st parameter can be:
+  #          'my'= ansver to my cq,
+  # //       'loc'=new main grid,
+  # //       'text'=text found from line Ex. 'w c' on text field fits to "New country"
+  # // create files you want to be played
+
+  # This scirpt is seeking names with '.wav' suffix! Change if needed    
+
+  #select audio card(if needed) and play alert message
+  
+  aplay ~/.config/cqrlog/voice_keyer/$1.wav
+  ----------- voice_alert.sh -----end-------------------------
+
+ 
  -moved worked locators
  -moved propagation and renamed it to prop_DK0WCY to keep also original propagation
 
@@ -9,13 +37,15 @@
  -moved CW keys because of PgUP/PgDN buttons are handy
   --messed up ac-list of offical propagation while adding dk0wcy. Fixed
   --dk0wxy and worked grids now keep their open/close status and positions during restart 
- -Worked_grids mode selector now fills from dUtils.cmbMode
+ -Worked_grids mode selector now fills selection list from dUtils.cmbMode
 
 11.3.2017
  - removed "clearall" from wsjtx decode #5(logging) I think this losts qrz data. (altough it does not at v1.9.0!) (2.0.4(013))
  - Fixed #5 logging so that it does change edtcall (no refetch from web) if it is same as decoded call.
- - Fixed #5 logging so that if QRz locator is 6 char adn the beginning is same as qsl locator the QRZ locator is keeped.(2.0.4(014))
+ - Fixed #5 logging so that if QRz locator is 6 char and the beginning is same as qsl locator the QRZ locator is keeped.(2.0.4(014))
  - Fixed small error in locator compare (2.0.4(015))
- - merged Petr's sort by gridsqr & deleting comment (2.0.4(016))
+ - merged Petr's "sort by gridsqr" & "deleting comment" (2.0.4(016))
  - Fixed decode #2 (wsjtx status) so that if call does not change new QRZ fetch is not done. So you may add your own notes to NewQSO
-   fields and they remain there during #5( wsjtx logging)
+   fields and they should remain there during #5( wsjtx logging) (2.0.4(017))
+   
+   
