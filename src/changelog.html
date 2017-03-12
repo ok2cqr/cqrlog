@@ -1,6 +1,23 @@
 <strong>New user?</strong> Please look to <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
 <hr>
 <br>
+<strong>CQRLOG 2.0.5 (2017-03-12)</strong><br>
+<ul style="list-style: square;text-align:left; color: blue;">
+  <li>sort by gridsquare added to filter</li>
+  <li>new log number is choosen automatically</li>
+</ul>
+<ul style="list-style: square;text-align:left; color: red;">
+  <li>parity parameter for rigctld should be serial_parity</li>
+  <li>cqrlog had icon only in Gnome</li>
+  <li>deleting Comment to callsign in New QSO window didn't work</li>
+</ul>
+<ul style="list-style: square;text-align:left; color: gray;">
+  <li>improved loading libraries for ssl, on Debian testing</li>
+      it loads libssl*1.0.* and ibcrypto*1.0.*, libssl-dev
+      is no longer need, libssl-1.0.* is new dependency
+  </li>
+</ul>
+<br><br>
 <strong>CQRLOG 2.0.4 (2017-01-12)</strong><br>
 <ul style="list-style: square;text-align:left; color: red;">
   <li>crash after program startup fixed</li>
@@ -71,205 +88,3 @@
   <li>Remove dupes from the log didn't work - fixed</li>
   <li>QTH profile was not imported from ADIF - fixed</li>
 </ul>
-<br><br>
-<strong>CQRLOG 1.9.1 (2015-11-28)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>support sending CW via HamLib library added</li>
-  <li>CW type window is not modal window anymore</li>
-  <li>RBN monitor added</li>
-  <li>TRX configuration improved (you can choose rig from a list instead of entering Hamlib rig ID)</li>
-  <li>Remote mode for wsjt added (thanks to Saku, OH1KH) </li>
-  <li>Auto connect to DX cluster added (must be enabled in Preferences)</li>
-  <li>New propagation data courtesy of Paul, N0NBH</li>
-  <li>WAZ and ITU zones are taken from callbook as well</li>
-  <li>export for SOTA version 2 added</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>Export configuration of opened log doesn't reflect recent changes - fixed</li>
-  <li>station that were not added to DX cluster window (because of filter criteria) were added to bandmap - fixed</li>
-  <li>station name and QTH is replaced automatically when callsign is edited during the QSO</li>
-  <li>after edit QSO QTH profile was set to wrong position</li>
-  <li>when trx was tuned on after program started, trx contol didn't work - fixed</li>
-  <li>fixed country recognition for e.g. OK2CQR/XE1, it's XE not OK</li>
-  <li>autobackup failed when QTH profile was not set</li>
-  <li>fixed libmysqlclient dependency</li>
-</ul>
-<br><br>
-<strong>CQRLOG 1.9.0 (2015-03-04)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>configuration can be stored into database or local computer only (Preferences -> Program -> Configure storage settings)</li>
-  <li>second directory path to auto backup added</li>
-  <li>Ignore changes caused by LoTW/eQSL upload or download option added</li>
-  <li>CQ and ITU zones are taken from previous QSO if exists</li>
-  <li>added new band map filter</li>
-  <li>CALLSIGN, BAND, MODE, FREQ macros to dxcluster allert command added</li>
-  <li>"Capitalise first letter in QTH field" option added</li>
-  <li>Propagation window improved, now shows more information (Saku, OH1KH)</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>after change of callsign, report, date or time, the QSO was still marked as uploaded to LotW/eQSL - fixed</li>
-  <li>LoTW upload - when Export all QSO was selected, only 500 QSO were exported - fixed</li>
-  <li>buttons caption in CW type window didn't use values from settings</li>
-  <li>online log upload of edited QSO fixed</li>
-  <li>uploading QSO to HamQTH fixed</li>
-  <li>downloading data for web dx cluster fixed</li>
-</ul>
-<br><br>
-<strong>CQRLOG 1.8.3 (2015-01-01)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>added support for setting the QTH Nickname in eQSL.cc download dialog (Florian, DF2ET)</li>
-  <li>buttons fom bottom of Preferences window moved to to right side</li>
-  <li>MariaDB 10 support added</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>Rebuild membership statistic dialog was broken - fixed</li>
-  <li>clock icon next to QSO time didn't work in offline mode - fixed</li>
-  <li>after saving Long note "Transaction already active" appeard - fixed</li>
-  <li>loading of dx prediction data fixed</li>
-  <li>sometimes eqsl_sentdate was not filled after upload - fixed</li>
-  <li>"Mark QSLs sent after export" in export for label printing didn't work - fixed</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: gray;">
-  <li>after program starts it's waiting for a MySQL server in a loop, every
-    second is trying to connect to local database, maximum is 8 tries</li>
-</ul>
-<br><br>
-<strong>CQRLOG 1.8.2 (2014-10-03)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>Select Modes in Preferences/New QSO for New QSO Form (Tom, DL7BJ)</li>
-  <li>Load default values for Frequency and Mode in Preferences/New QSO (Tom, DL7BJ)</li>
-  <li>uploading COMMENT field to eQSL is now configurable in Preferences</li>
-  <li>His RST and My RST changed to RST sent/RST rcvd</li>
-  <li>MySQL 5.6 support added</li>
-  <li>web dx cluster works again, it reads data from HamQTH.com</li>
-  <li>added Grayline offset option (sometimes Grayline is not accurate)</li>
-  <li>added button to refresh start and end time of QSO</li>
-  <li>added "Mark all QSO as uploaded to eQSL/LoTW" functions</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>sometimes program loaded configuration from different log - fixed</li>
-  <li>rotctld process still running when cqrlog was closed - fixed</li>
-  <li>export for SOTA website didn't work - fixed</li>
-  <li>upgrade problem with already existing tables fixed</li>
-  <li>LoTW/eQSL were not marked as sent/received after upload/download - fixed</li>
-  <li>Clear log function in Database connection window didn't work - fixed</li>
-  <li>sunrise and sunset times get blanked out when enter a call - fixed</li>
-  <li>export for QSL labels crashed when program has been running for more than 5 minutes - fixed</li>
-</ul>
-<br><br>
-
-<strong>CQRLOG 1.8.1 (2014-07-26)</strong><br>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>cqrlog crashed after hit ESC for the first time when no keying device was set</li>
-  <li>after hit enter in New QSO window, it took long time to save QSO - fixed</li>
-</ul>
-<br><br>
-
-<strong>CQRLOG 1.8.0 (2014-07-20)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>after click to "Upload all" qso to online logs, info about disabled services is not shown</li>
-  <li>added new optimized MySQL configuration file (log should be faster and won't show error about missing tables)</li>
-  <li>additional date formats for QSL label printing added (Tom, DL7BJ)</li>
-  <li>alert for for callsign on specific mode and band added</li>
-  <li>%h CW macro added (sends GM/GA/GE calculated from wkd station local time)</li>
-  <li>%rs CW macro added (sends RST_S and replace 9 with N)</li>
-  <li>design of gridlists can be changed in Preferences/Fonts/Gridlist settings (Tom, DL7BJ)</li>
-  <li>additional options to split RST (TX and RX) in three fields for QSL label printing (Tom, DL7BJ)</li>  
-  <li>K3NG key support added</li>
-  <li>"Use '+' key to add spots to band map" option added to Preferences -&gt; Band map</li>
-</ul>  
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>program crashed with error about Exceptions.tbl when started for the first time</li>
-  <li>Shift+F12 didn't cancel the filtr - fixed</li>
-  <li>"Filter is USED!" info wasn't canceled after click to Sort button (filter was disabled)</li>
-  <li>reading signal strength from RBN spots fixed</li>
-  <li>RBN default port is 7000 not 7300 - fixed</li>
-  <li>fixed a bug in DXCC statistics, mode 'Paper QSL only' (Tom, DL7BJ) </li>
-  <li>program crashed after close - fixed</li>
-  <li>program crashed after click to Cancel in DB connection window</li>
-  <li>sunrise, sunse and greeting info was broken - fixed</li>
-  <li>xplanet opened from the "New QSO Window" was not centred on own lattitude and longitude</li>
-</ul>
-<br><br>
-
-<strong>CQRLOG 1.7.4 (2014-04-13)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>F keys to CW type window added</li>
-  <li>address to RBN server can be changed in Preferences </li>
-  <li>full date (not only year,month) is supported in membership files</li>
-  <li>Close the "Status of log upload" window after successful upload added</li>
-  <li>moved to new LoTW url and updated upload routines </li>
-  <li>band button description is editable (Preferences -> TRX control -> Change default frequencies)</li>
-</ul>  
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>6W/MM0NDX was marked as uknown country instead of Senegal - fixed</li>
-  <li>after View QSO and CTRL+F2 fields was still read-only - fixed</li>
-  <li>QSL information was added to Commend to QSO even if it already exists</li>
-  <li>'+' character is now allowed in any field in New QSO window</li>
-  <li>log could not recover from a wrong upload of updated QSO - fixed</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: gray;">
-  <li>'+' as hotkey to add to bandmap function removed, use CTRL+A instead</li>
-  <li>any result from ClubLog with 'Skipping QSO' won't stop uploading of the log</li>
-</ul>
-<br><br>
-
-<strong>CQRLOG 1.7.3 (2014-02-04)</strong><br>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>TRX control didn't work - fixed</li>
-  <li>rotor control didn't work - fixed</li>
-</ul>
-<br><br>
-
-<strong>CQRLOG 1.7.2 (2014-02-03)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>after hitting ESC in any window opened from NewQSO, cursor will be returned to callsign edit field</li>
-  <li>frequency in New QSO and QSO list wondow is formated to 0.0000</li>
-  <li>added Help -> Keys and shortcut to menu in QSO window</li>
-</ul>  
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>RBN integration into GrayLine showed CW speed instead of signal strench - fixed</li>
-  <li>DXCC entity window didn't show when compiled in Debian Sid and Ubuntu 13.10 - fixed</li>
-  <li>when CQRLOG was run for the first time, two mysqld proccesses opened the same database - fixed</li>
-  <li>upload to ClubLog didn't work after enter QSO and delete - fixed (big thanks to Pawel, SQ5LTL)</li>
-  <li>TRX control window's layout was broken with some font sizes - fixed</li>
-</ul>
-<br><br>
-
-<strong>CQRLOG 1.7.1 (2014-01-26)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>"When TRX control is not active, use frequency and mode from NewQSO window" option to Preferences->Band map added</li>
-  <li>CTRL+N hotkey to QSO list window added (do NOT send QSL)</li>
-</ul>  
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>TRX control window was not sizeable - fixed</li>
-  <li>when ESC was pressed twice in Remote mode, log crashed - fixed</li>
-  <li>program crashed when freq was entered with comma as decimal separator - fixed</li>
-  <li>broken grid square statistic fixed</li>
-</ul>
-<br><br>
-
-
-<strong>CQRLOG 1.7.0 (2014-01-12)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>online QSO upload to HamQTH, ClubLog and HRDLog added</li>
-  <li>improved QSL managers import, should be faster a bit</li>
-  <li>"Long Path" button to Rotor Control added (Darek, SP2MKI)</li>
-  <li>COMMENT field is exported to eQSL server</li>
-  <li>Always overwrite info from previous QSO with callbook data option added</li>
-  <li>help updated</li>
-  <li>country files updated</li>
-  <li>membership files updated</li>
-  <li>layout improved (mostly new QSO window)</li>
-</ul>  
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>LoTW QSL RCVD was not imported when ADIF didn't include LOTW_QSLRDATE value - fixed</li>
-  <li>CONTESTIA mode was saved as CONSTESTI (increased max length of mode to 10 characters) - fixed</li>
-  <li>ReverseBeacon support in Gray line didn't work - fixed</li>
-  <li>after click to OK button in Preferences, bandmap stopped deleting old spots - fixed</li>
-  <li>bandmap was not updated when any spot was not added - fixed</li>
-  <li>station was added to bandmap when offline mode was activated - fixed</li>
-  <li>big square statistics didn't work in newer versions of distributions - fixed</li>
-  <li>QSO JT65* mode were not confirmed by eQSL - fixed</li>
-</ul>
-<br><br>
