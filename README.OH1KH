@@ -1,5 +1,8 @@
 10.3.2017 started  to move additions from 1.9.0
 
+ -You may find some help from this file. It is for 1.9.0 version and has "too much" for this 2.0.4
+  http://www.saunalahti.fi/sakny/CqrlogAdditions.pdf
+
  -moved wsjtx cq monitor
  
   Monitor has alert function. For that you need to make script that can do almost anything for alerting! 
@@ -16,7 +19,7 @@
   #!/bin/bash
   # //audio file name (prefix) played on alert
   # //1.st parameter can be:
-  #          'my'= ansver to my cq,
+  #          'my'= answer to my cq,
   # //       'loc'=new main grid,
   # //       'text'=text found from line Ex. 'w c' on text field fits to "New country"
   # // create files you want to be played
