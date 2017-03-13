@@ -51,4 +51,14 @@
  - Fixed decode #2 (wsjtx status) so that if call does not change new QRZ fetch is not done. So you may add your own notes to NewQSO
    fields and they should remain there during #5( wsjtx logging) (2.0.4(017))
    
+13.3.2017
+ - Added two missing files fwkd.lrs and richmemo/richmemopackage.lrs that git has left out from transfer. Without them fetched
+   source from github to fresh computer did not compile cqrlog.
    
+   Also tested how to handle richmemo. With these it compiled ok:
+   Then main screen of lazarus select "Package". From that menu select "Open package (.lpk)"
+   With file browser dialog find richmemopackage.lpk from richmemo folder and select it.
+   Package dialog opens.
+   Try to compile with button "compile". If it goes ok, (now should with all files) Press "Use" button and select "Add to procect".
+   
+   Now cqrlog should compile ok. (Note! Terms of lazarus menus are translated from Finnish to English. I do not know original terms)
