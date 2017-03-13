@@ -61,4 +61,8 @@
    Package dialog opens.
    Try to compile with button "compile". If it goes ok, (now should with all files) Press "Use" button and select "Add to procect".
    
-   Now cqrlog should compile ok. (Note! Terms of lazarus menus are translated from Finnish to English. I do not know original terms)
+   Now cqrlog should compile ok. (Note! Terms of lazarus menus are translated from Finnish to English. I do not know original terms)  
+
+ - Found bug in fMain.pas that allowed QSO edit while in wsjt-x remote causing error "Cannot focus disabled or invisible window".
+   Now fixed and asks now to close remote mode before editing (as fldigi remote does, too).
+   NOTE! This exist in original 2.0.4 too, I think ! (as I have not modified fMain.pas at this point when doing additions)
