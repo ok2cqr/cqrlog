@@ -1,3 +1,13 @@
+cqrlog (2.0.5-1) unstable; urgency=low
+
+  * sort by gridsquare added to filter
+  * new log number is choosen automatically
+  * parity parameter for rigctld should be serial_parity
+  * cqrlog had icon only in Gnome
+  * deleting Comment to callsign in New QSO window didn't work
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 12 Mar 2017 20:47:12 +0100
+
 cqrlog (2.0.4-1) unstable; urgency=low
 
   * fixed crash after startup

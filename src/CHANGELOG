@@ -4,7 +4,7 @@ Legend:
   - bugfix
 --------------------
 
-2.0.5
+2.0.5 (2017-03-12)
   + sort by gridsquare added to filter
   + new log number is choosen automatically
   - parity parameter for rigctld should be serial_parity
