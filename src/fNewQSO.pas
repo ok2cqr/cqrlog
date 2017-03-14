@@ -6277,7 +6277,11 @@ begin
   tmrFldigi.Enabled         := False;
   tmrWsjtx.Enabled          := False;
   mnuRemoteMode.Checked     := False;
-  mnuRemoteModeWsjt.Checked := False;
+  if (mnuRemoteModeWsjt.Checked = true ) then //if wsjtx remote we return state of newQSO/mode-auto as it was
+     begin
+       mnuRemoteModeWsjt.Checked:= False;
+       chkAutoMode.Checked:= WsjtxRememberAutoMode;
+     end;
   mnuWsjtxmonitor.Visible := False;    //we do not show "monitor" in view-submenu when not active
   frmMonWsjtx.Hide;                    // and close monitor
   lblCall.Caption           := 'Call:';

@@ -66,3 +66,8 @@
  - Found bug in fMain.pas that allowed QSO edit while in wsjt-x remote causing error "Cannot focus disabled or invisible window".
    Now fixed and asks now to close remote mode before editing (as fldigi remote does, too).
    NOTE! This exist in original 2.0.4 too, I think ! (as I have not modified fMain.pas at this point when doing additions)
+
+14.3.2017
+ - Returned (somehow, at some master version lost) function where disbling wsjt-x remote mode returns state of newQSO/Mode-AUTO selection.
+   All needed code was there, but restoring part was removed from source(??).
+ 
