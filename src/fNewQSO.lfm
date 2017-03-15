@@ -3338,9 +3338,9 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblCont: TLabel
-          Left = 167
+          Left = 168
           Height = 15
-          Top = 78
+          Top = 80
           Width = 27
           Caption = 'AAA'
           ParentColor = False

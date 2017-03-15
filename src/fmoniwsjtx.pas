@@ -212,10 +212,12 @@ var
   msgLoc,
   msgRes,
   mode,
-  freq :string;
+  freq: string;
   i,
   index      :integer;
   adif       :Word;
+
+  isDIRcall,            //CQ caller calling directed call
   isMyCall,
   HasNum,
   HasChr     :Boolean;
@@ -239,7 +241,10 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
       myAlert:='';
       MonitorLine :='';
-      if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count); index := 1;
+      isDIRcall:=false;
+
+      if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count);
+      index := 1;
 
       if dmData.DebugLevel>=1 then Write('Time-');
       msgTime := NextElement(Message,index);
@@ -283,6 +288,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                Begin //was shortie, so next must be call
                 if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 had no number+char.');
+                                               isDIRcall:=true;
                                                Write('Call-');
                                               end;
                 msgCall := NextElement(Message,index);
@@ -292,6 +298,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
           Begin //was shortie, so next must be call
             if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 length=<2.');
+                                               isDIRcall:=true;
                                                Write('Call-');
                                               end;
                 msgCall := NextElement(Message,index);
@@ -300,6 +307,9 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          //so we should have time, mode and call by now. That reamains locator, if exists
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement(Message,index);
+
+         if msgLoc = 'DX' then isDIRcall:=true; //old std. way to call DX
+
          if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
                msgLoc:='----';
          if length(msgLoc)=4 then
@@ -342,7 +352,12 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                end;
 
            msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
-           AddColorStr(' '+PadRight(msgRes,7)+' ',clDefault);
+           if isDIRcall then
+                 AddColorStr(' '+PadRight('*'+msgRes,7)+' ',clFuchsia)    //to warn directed call
+             else
+                 AddColorStr(' '+PadRight(msgRes,7)+' ',clBlack);
+
+
            adif :=  dmDXCC.AdifFromPfx(msgRes);
            freq := dmUtils.FreqFromBand(band, mode);
            msgRes:= dmDXCC.DXCCInfo(adif,freq,mode,i);    //wkd info
