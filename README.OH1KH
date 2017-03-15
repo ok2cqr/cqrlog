@@ -85,6 +85,9 @@
    I.E. To answer 'CQ DX' you must be in DIFFERENT CONTINENT than caller.(2.0.5(020))
 
  - small bugfix (2.0.5(021))
+
+ - seem to be hard to do... Addition to CQ monitor(2.0.5(020)) works when run inside lazarus, but not run from executive ?????
+   lets see if this finally works. Otherwise "Houston we have problem..."(2.0.5(022))
    
    
  
