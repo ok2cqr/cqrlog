@@ -24,6 +24,7 @@ type
     WsjtxMemo: TRichMemo;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormHide(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure WsjtxMemoChange(Sender: TObject);
     procedure WsjtxMemoDblClick(Sender: TObject);
@@ -161,13 +162,19 @@ procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
    dmUtils.SaveWindowPos(frmMonWsjtx);
-   frmMonWsjtx.hide;
 end;
 
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
 begin
   EditAlert.Text := '';
   LastWsjtLineTime:='';
+  dmUtils.LoadWindowPos(frmMonWsjtx);
+end;
+
+procedure TfrmMonWsjtx.FormHide(Sender: TObject);
+begin
+   dmUtils.SaveWindowPos(frmMonWsjtx);
+   frmMonWsjtx.hide;
 end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
@@ -217,7 +224,7 @@ var
   index      :integer;
   adif       :Word;
 
-  isDIRcall,            //CQ caller calling directed call
+  CallCqDir,            //CQ caller calling directed call
   isMyCall,
   HasNum,
   HasChr     :Boolean;
@@ -241,13 +248,15 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
       myAlert:='';
       MonitorLine :='';
-      isDIRcall:=false;
+      CallCqDir:=false;
 
       if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count);
       index := 1;
 
       if dmData.DebugLevel>=1 then Write('Time-');
       msgTime := NextElement(Message,index);
+
+      if dmData.DebugLevel>=1 then Writeln('DIR call stage0:',CallCqDir);
 
       if dmData.DebugLevel>=1 then Write('Mode-');
       msgMode := NextElement(Message,index);
@@ -288,7 +297,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                Begin //was shortie, so next must be call
                 if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 had no number+char.');
-                                               isDIRcall:=true;
+                                               CallCqDir:=true;
                                                Write('Call-');
                                               end;
                 msgCall := NextElement(Message,index);
@@ -298,7 +307,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
           Begin //was shortie, so next must be call
             if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 length=<2.');
-                                               isDIRcall:=true;
+                                               CallCqDir:=true;
                                                Write('Call-');
                                               end;
                 msgCall := NextElement(Message,index);
@@ -308,7 +317,9 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement(Message,index);
 
-         if msgLoc = 'DX' then isDIRcall:=true; //old std. way to call DX
+         if dmData.DebugLevel>=1 then Writeln('DIR call stage1:',CallCqDir);
+         if msgLoc = 'DX' then CallCqDir:=true; //old std. way to call DX
+         if dmData.DebugLevel>=1 then Writeln('DIR call stage2:',CallCqDir);
 
          if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
                msgLoc:='----';
@@ -351,8 +362,10 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                    end;
                end;
 
+
            msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
-           if isDIRcall then
+           if dmData.DebugLevel>=1 then Writeln('DIR call stage3:',CallCqDir);
+           if CallCqDir then
                  AddColorStr(' '+PadRight('*'+msgRes,7)+' ',clFuchsia)    //to warn directed call
              else
                  AddColorStr(' '+PadRight(msgRes,7)+' ',clBlack);

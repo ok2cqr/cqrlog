@@ -82,7 +82,9 @@
  - Added CQ monitor a function where asterisk *  is added CQ callers country code and printed in Fuchsia.
    This is to indicate that caller is calling directed CQ (DX, EU, AS, AF, OC, NA, SA etc.) and user should check that he is in dircected area
    before making answer to call.
-   I.E. To answer 'CQ DX' you must be in DIFFERENT CONTINENT than caller.
+   I.E. To answer 'CQ DX' you must be in DIFFERENT CONTINENT than caller.(2.0.5(020))
+
+ - small bugfix (2.0.5(021))
    
    
  
