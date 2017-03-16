@@ -89,5 +89,13 @@
  - seem to be hard to do... Addition to CQ monitor(2.0.5(020)) works when run inside lazarus, but not run from executive ?????
    lets see if this finally works. Otherwise "Houston we have problem..."(2.0.5(022))
    
-   
+16.3.2017
+
+ - Stupid programmer makes stupid errors. All fuzz with directed CQ call was because part of code was inside debug execption.
+   So it worked every time when run inside lazarus, or if started from terminal with debug=1. Fixed and should be ok now.
+
+ - Fixed state of newQSO/Mode-AUTO selection return in case where program was closed with CQ monitor (wsjt-x remote) left on.
+   Now returns previous state on next start when wsjt-x remote is not yet activated. We will not save remote mode over program
+   restart.(2.0.5(023))
+  
  

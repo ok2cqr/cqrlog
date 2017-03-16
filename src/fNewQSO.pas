@@ -1389,6 +1389,12 @@ begin
     else
       cqrini.WriteBool('Window','Worked_grids',False);
 
+   if frmMonWsjtx.Showing then
+     begin
+       DisableRemoteMode;    //hides monitor
+       frmMonWsjtx.Close;
+     end; //we do not open monitor at start, no need to save state
+
     if frmCWKeys.Showing then
     begin
       frmCWKeys.Close;
@@ -1944,8 +1950,6 @@ var
   TXmode   : String;
 
   call  : String;
-  //time1 : String;
-  //time2 : String;
   sname : String;
   qth   : String;
   loc   : String;
@@ -1954,7 +1958,6 @@ var
   pwr   : String;
   rstS  : String;
   rstR  : String;
-  //state : String;
   note  : String;
   date  : TDateTime;
   sDate : String='';
@@ -2205,9 +2208,10 @@ begin
           //----------------------------------------------------
           Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
           if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
-          if new and (WsjtxBand <>'')  and (WsjtxMode <>'')  and ((pos('CQ ',UpperCase(ParStr))=1) or
-            (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1)) and (mnuWsjtxmonitor.Visible) then
-            frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf);
+          if new and (WsjtxBand <>'')  and (WsjtxMode <>'')  and ((pos('CQ ',UpperCase(ParStr))=1)
+            or (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1))
+                and (mnuWsjtxmonitor.Visible) then
+                   frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf);
          //----------------------------------------------------
          end; // New decode
        end; //Decode

@@ -256,8 +256,6 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       if dmData.DebugLevel>=1 then Write('Time-');
       msgTime := NextElement(Message,index);
 
-      if dmData.DebugLevel>=1 then Writeln('DIR call stage0:',CallCqDir);
-
       if dmData.DebugLevel>=1 then Write('Mode-');
       msgMode := NextElement(Message,index);
 
@@ -295,31 +293,31 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                end
               else
                Begin //was shortie, so next must be call
+                CallCqDir:=true;
                 if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 had no number+char.');
-                                               CallCqDir:=true;
                                                Write('Call-');
                                               end;
                 msgCall := NextElement(Message,index);
                 end;
           end
-         else
-          Begin //was shortie, so next must be call
+         else   //length(msgCQ2)>2
+          Begin
+            CallCqDir:=true;
             if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 length=<2.');
-                                               CallCqDir:=true;
                                                Write('Call-');
-                                              end;
-                msgCall := NextElement(Message,index);
+                                          end;
+            msgCall := NextElement(Message,index); //was shortie, so next must be call
           end;
 
+         if dmData.DebugLevel>=1 then Writeln('DIR-CQ-call after CQ2:',CallCqDir);
          //so we should have time, mode and call by now. That reamains locator, if exists
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement(Message,index);
 
-         if dmData.DebugLevel>=1 then Writeln('DIR call stage1:',CallCqDir);
          if msgLoc = 'DX' then CallCqDir:=true; //old std. way to call DX
-         if dmData.DebugLevel>=1 then Writeln('DIR call stage2:',CallCqDir);
+         if dmData.DebugLevel>=1 then Writeln('DIR-CQ-call after old std DX',CallCqDir);
 
          if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
                msgLoc:='----';
@@ -338,7 +336,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                AddColorStr('  '+msgMode+' ',clOlive) //mode
             else
                AddColorStr('  '+msgMode+' ',clPurple);
-           if isMyCall then AddColorStr('=',clGreen) else AddColorStr(' ',clGreen);
+           if isMyCall then AddColorStr('=',clGreen) else AddColorStr(' ',clGreen);  //answer to me
            if frmWorked_grids.WkdCall(msgCall,band,mode) then
                    AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
                else
@@ -364,7 +362,6 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
 
            msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
-           if dmData.DebugLevel>=1 then Writeln('DIR call stage3:',CallCqDir);
            if CallCqDir then
                  AddColorStr(' '+PadRight('*'+msgRes,7)+' ',clFuchsia)    //to warn directed call
              else
