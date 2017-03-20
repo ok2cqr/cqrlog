@@ -161,6 +161,10 @@ end;
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
+   cqrini.WriteBool('MonWsjtx','NoHistory',chkHistory.Checked);
+   cqrini.WriteBool('MonWsjtx','MyAlert',chkmyAlert.Checked);
+   cqrini.WriteBool('MonWsjtx','LocAlert',chkLocAlert.Checked);
+   cqrini.WriteString('MonWsjtx','TextAlert',EditAlert.Text);
    dmUtils.SaveWindowPos(frmMonWsjtx);
 end;
 
@@ -179,6 +183,10 @@ end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
+   chkHistory.Checked := cqrini.ReadBool('MonWsjtx','NoHistory',False);
+   chkmyAlert.Checked := cqrini.ReadBool('MonWsjtx','MyAlert',False);
+   chkLocAlert.Checked:= cqrini.ReadBool('MonWsjtx','LocAlert',False);
+   EditAlert.Text := cqrini.ReadString('MonWsjtx','TextAlert','');
    dmUtils.LoadWindowPos(frmMonWsjtx);
    CleanWsjtxMemo;
 end;

@@ -6246,9 +6246,12 @@ begin
                   WsjtxBand := '';
 
                   //Timer fetches only 1 UDP packet at time.
-                  tmrWsjtx.Interval := 250;          // must be less than 1000ms. Othewise too slow! There may be
+                  tmrWsjtx.Interval := 150;          // must be less than 1000ms. Othewise too slow! There may be
                   tmrWsjtx.Enabled  := True;         // 0-25 (abt) lines(packets) to handle during 10sek free period
                                                      // of secs 50..60 of each minute.
+                                                     // And if receive buffer of wsjt-x is not erased for long time every
+                                                     // status request flushes everything wsjt-x have received
+                                                     // since last erase. Some times #"¤#%&¤ many packets.
 
                   // start UDP server
                   WsjtxSock := TUDPBlockSocket.Create;

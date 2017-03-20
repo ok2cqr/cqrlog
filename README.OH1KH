@@ -98,4 +98,17 @@
    Now returns previous state on next start when wsjt-x remote is not yet activated. We will not save remote mode over program
    restart.(2.0.5(023))
   
+20.3.2017
+
+ - Worked locator grid's selections "follow rig" and "show wkd only" are remembered over program restart.
+ - Wsjtx Monitor selection "no history" and all alerting settings are remembered over program restart.
+ - tmrWsjtx.Interval is decreased to 150ms. Affects UDP packet decoding.
+   There is a situation where more speed is needed most:
+   If monitor is started when wsjt-x itself has been running long time before it will send all decoded packets that are in 
+   receive buffer (I.E. contets of "Band Activity" window of wsjt-x) during answer to ststus request wsjtx monitor is asking 
+   to know what band and mode is in use.
+   This also speeds up normal period decoding giving user more time (from that 10sec gap between periods) to decide to whose
+   CQ call he is going to answer.
+
+   
  

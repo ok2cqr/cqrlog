@@ -133,7 +133,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideTop.Control = WsjtxMemo
     AnchorSideTop.Side = asrBottom
     Left = 187
-    Height = 27
+    Height = 32
     Top = 290
     Width = 80
     BorderSpacing.Top = 2

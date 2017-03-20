@@ -74,7 +74,7 @@ var
 implementation
 
 {$R *.lfm}
-Uses fNewQSO,fTRXControl,dData,dUtils;
+Uses fNewQSO,fTRXControl,dData,dUtils,uMyIni;
 
 { TfrmWorked_grids }
 
@@ -358,6 +358,7 @@ begin
   LocMapBase.Picture.Bitmap.Canvas,Rect(0,0,Width,Height));
 
   DrawBase(LocMap.canvas, False);
+
 end;
 
 procedure TfrmWorked_grids.SaveMapImageClose(Sender: TObject);
@@ -649,6 +650,8 @@ end;
 procedure TfrmWorked_grids.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmWorked_grids);
+  FollowRig.Checked := cqrini.ReadBool('Worked_grids','FollowRig',false);
+  ShoWkdOnly.Checked := cqrini.ReadBool('Worked_grids','ShowWkdOnly',false);
   AutoUpdate.enabled := True;
 end;
 
@@ -734,6 +737,8 @@ end;
 procedure TfrmWorked_grids.FormClose(Sender: TObject);
 begin
   AutoUpdate.enabled := False;
+  cqrini.WriteBool('Worked_grids','FollowRig',FollowRig.Checked);
+  cqrini.WriteBool('Worked_grids','ShowWkdOnly',ShoWkdOnly.Checked);
   dmUtils.SaveWindowPos(frmWorked_grids);
   frmWorked_grids.hide;
 end;
