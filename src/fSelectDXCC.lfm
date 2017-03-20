@@ -93,7 +93,7 @@ object frmSelectDXCC: TfrmSelectDXCC
       end
     end
     object tabDeleted: TTabSheet
-      Caption = 'Delted countries'
+      Caption = 'Deleted countries'
       ClientHeight = 420
       ClientWidth = 645
       object dbgrdDeleted: TDBGrid
