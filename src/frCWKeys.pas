@@ -23,6 +23,8 @@ type
     btnF7 : TButton;
     btnF8 : TButton;
     btnF9 : TButton;
+    btnPgUp: TButton;
+    btnPgDn: TButton;
     procedure FrameResize(Sender: TObject);
     procedure btnClicked(Sender: TObject);
   private
@@ -33,50 +35,88 @@ type
 
 implementation
 
-uses dUtils,fNewQSO, uMyIni;
+uses dUtils,fNewQSO, uMyIni,dData;
 
 {$R *.lfm}
 
 { TfraCWKeys }
 
-procedure TfraCWKeys.FrameResize(Sender: TObject);
+procedure TfraCWKeys.FrameResize(Sender: TObject);  //after adding 2 buttons this did not work! Why?
 var
   w, h, l, t: word;
   i: integer;
   c: word;
 begin
   h := Round(Height / 2) - 2;
-  w := Round(Width / 5) - 2;
+  w := Round(Width / 6) - 2;
   t := Round(Height / 2);
   c := 0;
 
   for i := 0 to ComponentCount - 1 do
-  begin
+   begin
+
     if (Components[i] is TButton) then
-    begin
-      (Components[i] as TButton).Height := h;
+     begin
+        (Components[i] as TButton).Height := h;
       (Components[i] as TButton).Width := w;
 
       (Components[i] as TButton).Left := c * w + 5;
       Inc(c);
-      if (Components[i] as TButton).TabOrder = 4 then
+      if (Components[i] as TButton).TabOrder = 5 then
         c := 0;
 
-      if (Components[i] as TButton).TabOrder > 4 then
+      if (Components[i] as TButton).TabOrder > 5 then
         (Components[i] as TButton).Top := t
-    end
-  end
+
+      //after adding 2 buttons this did not work before stop Lazarus, manual edit fCWKeys.lfm
+      //so that 1st new button (pgUp) was in order after btnF5's definition and start Lazarus again.
+      //So Tab order itself does not give TButtons their right places after resize if lfm-file
+      //component-order is not right!!!
+      //For loop picks them up in wrong order (added buttons last, if lfm not edited) and even
+      //loop gives all buttons proper Top/Left/Width/Height values according TabOrder they place
+      //themselfs wrong places into frame.
+      //Why?  Bug in Lazarus 1.2.6 ?
+
+     end
+   end
 end;
 
 procedure TfraCWKeys.btnClicked(Sender : TObject);
 var
   cwkey : String;
+  speed : integer;
 begin
   if Sender is TButton then
   begin
     cwkey := copy((Sender as TButton).Name,4,3);
-    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
-  end
+    if dmData.DebugLevel >=1 then Writeln('Button: ',cwkey);
+
+    case cwkey of
+    'PgU'      :begin
+                  if Assigned(frmNewQSO.CWint) then
+                  begin
+                    speed := frmNewQSO.CWint.GetSpeed+2;
+                    frmNewQSO.CWint.SetSpeed(speed);
+                    frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM'
+                  end
+                end;
+
+    'PgD'       :begin
+                    if Assigned(frmNewQSO.CWint) then
+                    begin
+                      speed := frmNewQSO.CWint.GetSpeed-2;
+                      frmNewQSO.CWint.SetSpeed(speed);
+                      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM'
+                    end
+                  end;
+    else
+      Begin
+        cwkey := copy((Sender as TButton).Name,4,3);
+        // works with contest addition - frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtHisRSTstxAdd.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+         frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+      end;
+    end;
+  end;
 end;
 
 procedure TfraCWKeys.UpdateFKeyLabels;

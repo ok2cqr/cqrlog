@@ -4,10 +4,10 @@ unit uVersion;
 interface
 
 const
-  cVERSION    = '2.0.5 (001)';
+  cVERSION    = '2.0.5 (024)';
   cMAJOR      = 2;
   cMINOR      = 0;
-  cRELEAS     = 5;
+  cRELEAS     = 4;
   cBUILD      = 0;
   cBUILD_DATE = '2017-03-12';
 

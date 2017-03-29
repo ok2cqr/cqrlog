@@ -1,0 +1,114 @@
+10.3.2017 started  to move additions from 1.9.0
+
+ -You may find some help from this file. It is for 1.9.0 version and has "too much" for this 2.0.4
+  http://www.saunalahti.fi/sakny/CqrlogAdditions.pdf
+
+ -moved wsjtx cq monitor
+  
+  If you want to start qso by double clicking callsign at wsjt-x CQ monitor you have to set
+  "Accept UDP requests" in tab "Reporting" at wsjt-x's configuration settings.
+ 
+  Monitor has alert function. For that you need to make script that can do almost anything for alerting! 
+  
+  Setting audio alert play.
+  You need separate soundcard for wsjt-x and other for alerts. 1st might be inside
+  the PC 2nd may be your inside your rig or some kind of USB sound card (ham digi interface).
+
+  Move voice_alert.sh and wav files to ~/.config/cqrlog/voice_keyer  directory
+  Make sure you have 'aplay' installed.
+  Otherwise modify  voice_alert.sh to start your favorite player.
+  
+  ----------- voice_alert.sh -----start-------------------------
+  #!/bin/bash
+  # //audio file name (prefix) played on alert
+  # //1.st parameter can be:
+  #          'my'= answer to my cq,
+  # //       'loc'=new main grid,
+  # //       'text'=text found from line Ex. 'w c' on text field fits to "New country"
+  # // create files you want to be played
+
+  # This scirpt is seeking names with '.wav' suffix! Change if needed    
+
+  #select audio card(if needed) and play alert message
+  
+  aplay ~/.config/cqrlog/voice_keyer/$1.wav
+  ----------- voice_alert.sh -----end-------------------------
+
+ 
+ -moved worked locators
+ -moved propagation and renamed it to prop_DK0WCY to keep also original propagation
+
+  --fixed CQmonitor alert. Triggers now only once per decoding round, not every line.
+  --added modes qra64,iscat and msk144 to dUtils (now 42 modes)
+ -moved CW keys because of PgUP/PgDN buttons are handy
+  --messed up ac-list of offical propagation while adding dk0wcy. Fixed
+  --dk0wxy and worked grids now keep their open/close status and positions during restart 
+ -Worked_grids mode selector now fills selection list from dUtils.cmbMode
+
+11.3.2017
+ - removed "clearall" from wsjtx decode #5(logging) I think this losts qrz data. (altough it does not at v1.9.0!) (2.0.4(013))
+ - Fixed #5 logging so that it does change edtcall (no refetch from web) if it is same as decoded call.
+ - Fixed #5 logging so that if QRz locator is 6 char and the beginning is same as qsl locator the QRZ locator is keeped.(2.0.4(014))
+ - Fixed small error in locator compare (2.0.4(015))
+ - merged Petr's "sort by gridsqr" & "deleting comment" (2.0.4(016))
+ - Fixed decode #2 (wsjtx status) so that if call does not change new QRZ fetch is not done. So you may add your own notes to NewQSO
+   fields and they should remain there during #5( wsjtx logging) (2.0.4(017))
+   
+13.3.2017
+ - Added two missing files fwkd.lrs and richmemo/richmemopackage.lrs that git has left out from transfer. Without them fetched
+   source from github to fresh computer did not compile cqrlog.
+   
+   Also tested how to handle richmemo. With these it compiled ok:
+   Then main screen of lazarus select "Package". From that menu select "Open package (.lpk)"
+   With file browser dialog find richmemopackage.lpk from richmemo folder and select it.
+   Package dialog opens.
+   Try to compile with button "compile". If it goes ok, (now should with all files) Press "Use" button and select "Add to procect".
+   
+   Now cqrlog should compile ok. (Note! Terms of lazarus menus are translated from Finnish to English. I do not know original terms)  
+
+ - Found bug in fMain.pas that allowed QSO edit while in wsjt-x remote causing error "Cannot focus disabled or invisible window".
+   Now fixed and asks now to close remote mode before editing (as fldigi remote does, too).
+
+14.3.2017
+ - Returned (somehow, at some master version lost) function where disbling wsjt-x remote mode returns state of newQSO/Mode-AUTO selection.
+   All needed code was there, but restoring part was removed from source(??).
+
+   NOTE! This exist in original 2.0.4 too, I think ! (as I have not modified fMain.pas at this point when doing additions)
+   
+ - Merged upstream/master. Version change 2.0.5, within brackets still my build version (2.0.5(019))
+ 
+15.3.2017
+
+ - Added CQ monitor a function where asterisk *  is added CQ callers country code and printed in Fuchsia.
+   This is to indicate that caller is calling directed CQ (DX, EU, AS, AF, OC, NA, SA etc.) and user should check that he is in dircected area
+   before making answer to call.
+   I.E. To answer 'CQ DX' you must be in DIFFERENT CONTINENT than caller.(2.0.5(020))
+
+ - small bugfix (2.0.5(021))
+
+ - seem to be hard to do... Addition to CQ monitor(2.0.5(020)) works when run inside lazarus, but not run from executive ?????
+   lets see if this finally works. Otherwise "Houston we have problem..."(2.0.5(022))
+   
+16.3.2017
+
+ - Stupid programmer makes stupid errors. All fuzz with directed CQ call was because part of code was inside debug execption.
+   So it worked every time when run inside lazarus, or if started from terminal with debug=1. Fixed and should be ok now.
+
+ - Fixed state of newQSO/Mode-AUTO selection return in case where program was closed with CQ monitor (wsjt-x remote) left on.
+   Now returns previous state on next start when wsjt-x remote is not yet activated. We will not save remote mode over program
+   restart.(2.0.5(023))
+  
+20.3.2017
+
+ - Worked locator grid's selections "follow rig" and "show wkd only" are remembered over program restart.
+ - Wsjtx Monitor selection "no history" and all alerting settings are remembered over program restart.
+ - tmrWsjtx.Interval is decreased to 150ms. Affects UDP packet decoding.
+   There is a situation where more speed is needed most:
+   If monitor is started when wsjt-x itself has been running long time before it will send all decoded packets that are in 
+   receive buffer (I.E. contets of "Band Activity" window of wsjt-x) during answer to ststus request wsjtx monitor is asking 
+   to know what band and mode is in use.
+   This also speeds up normal period decoding giving user more time (from that 10sec gap between periods) to decide to whose
+   CQ call he is going to answer.
+
+   
+ 
