@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ComCtrls, iniFiles, ExtCtrls, db, dateutils, FileUtil, LazFileUtils;
+  ComCtrls, iniFiles, ExtCtrls, db, dateutils, FileUtil, LazFileUtils,strutils;
 
 type
 
@@ -215,26 +215,82 @@ var
     end;
     if exRSTS then
     begin
-      tmp := '<RST_SENT' + dmUtils.StringToADIF(RSTS);
+      tmp := '<RST_SENT' + dmUtils.StringToADIF(ExtractWord(1,RSTS,[' ']));
       Write(f,tmp);
-      leng := leng + Length(tmp)
+      leng := leng + Length(tmp);
+      if leng>200 then
+       begin
+         Writeln(f);
+         leng := 0
+       end;
+      if length(RSTS)>3 then // there is something else
+      Begin
+          tmp:=ExtractWord(2,RSTS,[' ']);  //contest NR
+          if (tmp <>'') then
+            Begin
+               tmp := '<STX' + dmUtils.StringToADIF(tmp);
+               Write(f,tmp);
+               leng := leng + Length(tmp);
+               if leng>200 then
+               begin
+                 Writeln(f);
+                 leng := 0
+               end;
+            end;
+          tmp:=ExtractWord(3,RSTS,[' ']);   //Contest MSG
+          if (tmp <>'') then
+            Begin
+               tmp := '<STX_STRING' + dmUtils.StringToADIF(tmp);
+               Write(f,tmp);
+               leng := leng + Length(tmp);
+               if leng>200 then
+               begin
+                 Writeln(f);
+                 leng := 0
+               end;
+            end;
+      end;
     end;
-    if leng>200 then
-    begin
-      Writeln(f);
-      leng := 0
-    end;
+
     if exRSTR then
-    begin
-      tmp := '<RST_RCVD' + dmUtils.StringToADIF(RSTR);
-      Write(f,tmp);
-      leng := leng + Length(tmp)
-    end;
-    if leng>200 then
-    begin
-      Writeln(f);
-      leng := 0
-    end;
+      begin
+        tmp := '<RST_RCVD' + dmUtils.StringToADIF(ExtractWord(1,RSTR,[' ']));
+        Write(f,tmp);
+        leng := leng + Length(tmp);
+        if leng>200 then
+         begin
+           Writeln(f);
+           leng := 0
+         end;
+        if length(RSTR)>3 then // there is something else
+        Begin
+            tmp:=ExtractWord(2,RSTR,[' ']);  //contest NR
+            if (tmp <>'') then
+              Begin
+                 tmp := '<SRX' + dmUtils.StringToADIF(tmp);
+                 Write(f,tmp);
+                 leng := leng + Length(tmp);
+                 if leng>200 then
+                 begin
+                   Writeln(f);
+                   leng := 0
+                 end;
+              end;
+            tmp:=ExtractWord(3,RSTR,[' ']);   //Contest MSG
+            if (tmp <>'') then
+              Begin
+                 tmp := '<SRX_STRING' + dmUtils.StringToADIF(tmp);
+                 Write(f,tmp);
+                 leng := leng + Length(tmp);
+                 if leng>200 then
+                 begin
+                   Writeln(f);
+                   leng := 0
+                 end;
+              end;
+        end;
+      end;
+
     if exName then
     begin
       if Length(sName) > 0 then

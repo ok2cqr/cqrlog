@@ -2638,6 +2638,7 @@ begin
     Result := text;
 
   rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
+  rst_sh := StringReplace(rst_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
 
   Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);

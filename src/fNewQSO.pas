@@ -74,6 +74,8 @@ type
     acLocatorMap: TAction;
     acpDK0WCY: TAction;
     acProp: TAction;
+    acReminder: TAction;
+    acContest: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -98,6 +100,8 @@ type
     MenuItem56: TMenuItem;
     MenuItem57: TMenuItem;
     MenuItem58: TMenuItem;
+    MenuItem63: TMenuItem;
+    mnuReminder: TMenuItem;
     MenuItem86: TMenuItem;
     MenuItem87: TMenuItem;
     MenuItem88: TMenuItem;
@@ -320,6 +324,7 @@ type
     tmrStart: TTimer;
     procedure acBigSquareExecute(Sender: TObject);
     procedure acCommentToCallsignExecute(Sender : TObject);
+    procedure acContestExecute(Sender: TObject);
     procedure acCWFKeyExecute(Sender: TObject);
     procedure acHotkeysExecute(Sender: TObject);
     procedure acLocatorMapExecute(Sender: TObject);
@@ -332,6 +337,7 @@ type
     procedure acRefreshTimeExecute(Sender: TObject);
     procedure acRefreshTRXExecute(Sender: TObject);
     procedure acReloadCWExecute(Sender: TObject);
+    procedure acReminderExecute(Sender: TObject);
     procedure acRemoteWsjtExecute(Sender: TObject);
     procedure acRotControlExecute(Sender: TObject);
     procedure acSCPExecute(Sender : TObject);
@@ -562,7 +568,6 @@ type
     procedure SaveSettings;
     procedure ChangeCallBookCaption;
     procedure SendSpot;
-    procedure RunVK(key_pressed: String);
     procedure CreateAutoBackup();
     procedure RefreshInfoLabels;
     procedure FillDateTimeFields;
@@ -609,6 +614,7 @@ type
     procedure UploadAllQSOOnline;
     procedure ReturnToNewQSO;
     procedure InitializeCW;
+    procedure RunVK(key_pressed: String);
   end;
 
   type
@@ -668,7 +674,8 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
-     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall;
+     fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
+     fRemind, fContest;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1281,6 +1288,15 @@ begin
     thqsl.FreeOnTerminate := True;
     thqsl.Start
   end;
+
+  //this have to be done here when log is selected (settings at database)
+  frmReminder.chRemi.Checked := cqrini.ReadBool('Reminder','chRemi',False);
+  frmReminder.chUTRemi.Checked := cqrini.ReadBool('Reminder','chUTRemi',False);
+  frmReminder.RemindTimeSet.EditText := cqrini.ReadString('Reminder','RemindTimeSet','000');
+  frmReminder.RemindUThour.EditText := cqrini.ReadString('Reminder','RemindUThour','00:00');
+  frmReminder.RemiMemo.Lines.Clear;
+  frmReminder.RemiMemo.Lines.Add(cqrini.ReadString('Reminder','RemiMemo',''));
+  frmReminder.btCloseClick(nil);
 
   dmUtils.InsertQSL_S(cmbQSL_S);
   dmUtils.InsertQSL_R(cmbQSL_R);
@@ -3837,6 +3853,11 @@ begin
   InitializeCW
 end;
 
+procedure TfrmNewQSO.acReminderExecute(Sender: TObject);
+begin
+  frmReminder.OpenReminder;
+end;
+
 procedure TfrmNewQSO.acRemoteWsjtExecute(Sender: TObject);
 begin
   if mnuRemoteModeWsjt.Checked then
@@ -3956,6 +3977,11 @@ begin
   finally
     frmCommentToCall.Free
   end
+end;
+
+procedure TfrmNewQSO.acContestExecute(Sender: TObject);
+begin
+  frmContest.Show;
 end;
 
 procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
