@@ -110,5 +110,19 @@
    This also speeds up normal period decoding giving user more time (from that 10sec gap between periods) to decide to whose
    CQ call he is going to answer.
 
+22.3.2017
+
+ - modified NewQSO/Window listing to alpabethical order
+ - added two selections "Reminder" and "Contest" and made forms and units for them. See CqrlogAdditions2.pdf for details.
+   Tried to minimize changes to original cqrlog source code by doing these as separate units, but some modifications must 
+   done inside original cqrlog source code to make these new ones to work.
    
+   At same time I was thinking about moving wsjt-x decode inside of Wsjt-x monitor unit. It actually should belong to be there.
+   (maybe some day, maybe not...).
+
+1.4.2017
+
+ - added "No" checkbox to contest form. Changes tabulation order of  NRr,MSGr to MSGr,NRr for contest where there is just message
+   but no number. Note that you can feed only numbers to NRs and NRr fields.
+ 
  
