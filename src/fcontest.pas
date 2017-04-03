@@ -14,6 +14,7 @@ type
 
   TfrmContest = class(TForm)
     btSave: TButton;
+    chTrueRST: TCheckBox;
     chNoNr: TCheckBox;
     chSpace: TCheckBox;
     chLoc: TCheckBox;
@@ -35,6 +36,7 @@ type
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
     procedure chNoNrChange(Sender: TObject);
+    procedure chTrueRSTChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
       );
@@ -164,7 +166,7 @@ begin
   frmNewQSO.edtHisRST.Text:= edtRSTs.Text+' '+edtSTX.Text+' '+edtSTX2.Text;  //this should be ok before
   if chLoc.Checked  then
    Begin
-      frmNewQSO.edtMyRST.Text:= edtRSTr.Text+' '+edtSRX.Text+' '+edtSRX2.Text;
+      frmNewQSO.edtMyRST.Text:= edtRSTr.Text+' '+edtSRX.Text;
       frmNewQSO.edtGrid.Text := edtSRX2.Text;
    end
   else
@@ -177,17 +179,61 @@ begin
 end;
 
 procedure TfrmContest.chNoNrChange(Sender: TObject);
+var n,m,s,c:integer;
+  procedure swapTab;
+      Begin //swap
+       c:=n;
+       n:=m;
+       m:=c;
+       if (m<n) and (s>n) then    //must change n and s
+        begin
+              c:=n;
+              n:=s;
+              s:=c;
+        end;
+       if (n<m) and (s<m) then    //must change m and s
+        begin
+              c:=m;
+              m:=s;
+              s:=c;
+        end;
+
+      end ;
 begin
-  if (chNoNr.Checked) then
-                      Begin
-                       edtSRX.TabOrder:=2;
-                       edtSRX2.TabOrder:=1;
-                      end
-      else
-                      Begin
-                       edtSRX.TabOrder:=1;
-                       edtSRX2.TabOrder:=2;
-                      end
+ n := edtSRX.TabOrder;
+ m := edtSRX2.TabOrder;
+ s := btSave.TabOrder;
+
+ if (chNoNr.Checked) and (n < m ) then          //msg always gets smaller tab order
+                                    swapTab;
+
+ if (not chNoNr.Checked) and (m < n ) then  //msg always gets higher tab order
+                                    swapTab;
+ edtSRX.TabOrder:=n;
+ edtSRX2.TabOrder:=m;
+ btSave.TabOrder := s;
+
+end;
+
+procedure TfrmContest.chTrueRSTChange(Sender: TObject);
+begin
+  if chTrueRST.Checked then
+    Begin                   //true RST order
+     edtRSTs.TabOrder := 1;
+     edtRSTr.TabOrder := 2;
+     edtSRX.TabOrder :=  3;
+     edtSRX2.TabOrder := 4;
+     btSave.TabOrder :=  5;
+    end
+  else
+    Begin                     //contest order
+     edtSRX.TabOrder :=  1;
+     edtSRX2.TabOrder := 2;
+     btSave.TabOrder :=  3;
+     edtRSTr.TabOrder := 4;
+     edtRSTs.TabOrder := 5;
+    end;
+  frmContest.chNoNrChange(nil); //finally check Nr/MSG order
 end;
 
 procedure TfrmContest.edtCallKeyDown(Sender: TObject; var Key: Word;

@@ -174,6 +174,15 @@ object frmContest: TfrmContest
     OnChange = chNoNrChange
     TabOrder = 11
   end
+  object chTrueRST: TCheckBox
+    Left = 153
+    Height = 23
+    Top = 56
+    Width = 45
+    Caption = 'Tru'
+    OnChange = chTrueRSTChange
+    TabOrder = 12
+  end
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer

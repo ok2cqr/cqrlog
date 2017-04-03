@@ -125,4 +125,9 @@
  - added "No" checkbox to contest form. Changes tabulation order of  NRr,MSGr to MSGr,NRr for contest where there is just message
    but no number. Note that you can feed only numbers to NRs and NRr fields.
  
- 
+3.4.2017
+
+ - returned Contest/Msg is Loc checkbox function tu original meaning, I.E. when checked Msg is expected to be locator and placed 
+   now ONLY to New/QSO/Grid field (to together with received rst).
+ - added Contest/Tru checkbox for true reports exchange. Changes tabulation order so that it goes RSTs, RSTr, NRr, MSGr.
+   This might be useful in VHF, UHF, SHF Tropo, Es etc. openings (and maybe some contests, too) where you like fast qso logging.
