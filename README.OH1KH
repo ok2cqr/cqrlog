@@ -117,7 +117,7 @@
    Tried to minimize changes to original cqrlog source code by doing these as separate units, but some modifications must 
    done inside original cqrlog source code to make these new ones to work.
    
-   At same time I was thinking about moving wsjt-x decode inside of Wsjt-x monitor unit. It actually should belong to be there.
+   At same time I was thinking about moving wsjt-x decode inside of Wsjt-x monitor unit. It actually should be there.
    (maybe some day, maybe not...).
 
 1.4.2017
@@ -127,7 +127,16 @@
  
 3.4.2017
 
- - returned Contest/Msg is Loc checkbox function tu original meaning, I.E. when checked Msg is expected to be locator and placed 
-   now ONLY to New/QSO/Grid field (to together with received rst).
+ - returned Contest/Msg is Loc checkbox function to original meaning, I.E. when checked Msg is expected to be locator and placed 
+   now ONLY to New/QSO/Grid field (not together with received rst).
  - added Contest/Tru checkbox for true reports exchange. Changes tabulation order so that it goes RSTs, RSTr, NRr, MSGr.
    This might be useful in VHF, UHF, SHF Tropo, Es etc. openings (and maybe some contests, too) where you like fast qso logging.
+
+ - Added DXCluster additions.
+  -- ACalls toggle button does just the same as "Preferences/DXCluster/List of callsigns" I.E. opens alert calls list for edit:
+     This is easier and faster than using it via preferences. When edit list is closed alert remains active (button text is green)
+     Second press deactivates alert (button text is black).
+     Checkbox "Inc" changes alert to RegExp,so if any part of alert calls list fits to dx cluster's call it alerts.
+     Unchecked call must be exactly same. I.E. "Inc" checked with list call OF100FI alerts OF100FI/1, OF100FI/2 ..etc.
+  -- Typed command history. With Ctrl-Z you can scroll back 5 last commands (fix, if needed) and reuse them. (2.0.5(028))
+

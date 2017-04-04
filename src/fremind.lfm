@@ -1,7 +1,7 @@
 object frmReminder: TfrmReminder
-  Left = 516
+  Left = 545
   Height = 128
-  Top = 319
+  Top = 222
   Width = 599
   BorderStyle = bsDialog
   Caption = 'Reminder'
