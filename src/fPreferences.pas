@@ -467,6 +467,7 @@ type
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
+    edtWsjtIp: TEdit;
     edtCondxImageUrl: TEdit;
     edtBackupPath1: TEdit;
     edtR1Host : TEdit;
@@ -764,6 +765,7 @@ type
     Label204: TLabel;
     Label205: TLabel;
     Label206 : TLabel;
+    Label26: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1405,6 +1407,7 @@ begin
 
   cqrini.WriteString('wsjt','path',edtWsjtPath.Text);
   cqrini.WriteString('wsjt','port',edtWsjtPort.Text);
+  cqrini.WriteString('wsjt','ip',edtWsjtIp.Text);
   cqrini.WriteBool('wsjt','run',chkRunWsjt.Checked);
   cqrini.WriteInteger('wsjt', 'freq', rgWsjtFreqFrom.ItemIndex);
   cqrini.WriteString('wsjt', 'deffreq', edtWsjtDefaultFreq.Text);
@@ -2760,6 +2763,7 @@ begin
 
   edtWsjtPath.Text         := cqrini.ReadString('wsjt','path','');
   edtWsjtPort.Text         := cqrini.ReadString('wsjt','port','2237');
+  edtWsjtIp.Text           := cqrini.ReadString('wsjt','ip','127.0.0.1');
   chkRunWsjt.Checked       := cqrini.ReadBool('wsjt','run',False);
   rgWsjtFreqFrom.ItemIndex := cqrini.ReadInteger('wsjt', 'freq', 1);
   edtWsjtDefaultFreq.Text  := cqrini.ReadString('wsjt', 'deffreq', '3.600');

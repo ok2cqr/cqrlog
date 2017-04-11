@@ -140,3 +140,16 @@
      Unchecked call must be exactly same. I.E. "Inc" checked with list call OF100FI alerts OF100FI/1, OF100FI/2 ..etc.
   -- Typed command history. With Ctrl-Z you can scroll back 5 last commands (fix, if needed) and reuse them. (2.0.5(028))
 
+11.04.2017
+
+  - Added IP address field to preferences/fldigi-wsjtx settings of wsjt-x. Defaults to 127.0.0.1 (localhost) but can be changed.
+    There is no valid IP format check so you have to type right formatted address.
+    This setting can be used if you run wsjt-x on different computer than cqrlog. If so, put the IP address of cqrlog computer
+    to Wsjt-x's settings/reporting replacing there the default 127.0.0.1
+    At cqrlog computer put cqrlog/preferences/wsjtx-settings IP address to the same as it's own network IP address. No need to change
+    port numbers. Remember to open your firewalls on both computers to allow UDP traffic from 2237 port on your network.
+    Tested with two laptops on same WiFi local network:
+       cqrlog PC ip address 192.168.60.222, cqrlog setting/wsjt-x:  port 2237 address 192.168.60.222
+       wsjt-x PC ip address 192.168.60.223, wstt-x setting/reporting  port 2237 address 192.168.60.222 
+													(2.0.5(029))
+

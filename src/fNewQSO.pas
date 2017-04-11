@@ -6283,8 +6283,9 @@ begin
                   WsjtxSock := TUDPBlockSocket.Create;
                   {if dmData.DebugLevel>=1 then} Writeln('Socket created!');
                   try
-                    WsjtxSock.bind('127.0.0.1',cqrini.ReadString('wsjt','port','2237'));
-                    {if dmData.DebugLevel>=1 then }Writeln('Bind issued '+cqrini.ReadString('wsjt','port','2237'))
+                    WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
+                    {if dmData.DebugLevel>=1 then }Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
+                                                                        ':'+cqrini.ReadString('wsjt','port','2237'))
                   except
                       {if dmData.DebugLevel>=1 then} Writeln('Could not bind socket for wsjtx!');
                      DisableRemoteMode;
