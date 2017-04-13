@@ -1,4 +1,4 @@
-unit fMoniWsjtx;
+unit fMonWsjtx;
 
 {$mode objfpc}{$H+}
 
@@ -55,10 +55,11 @@ var
   MonitorLine        : string;                  // complete line as printed to monitor
 
 implementation
+{$R *.lfm}
 
 { TfrmMonWsjtx }
 
-Uses fNewQSO,dData,dUtils,dDXCC,fWkd1,uMyini;
+Uses fNewQSO,dData,dUtils,dDXCC,fWorkedGrids,uMyini;
 
 
 
@@ -330,7 +331,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
                msgLoc:='----';
          if length(msgLoc)=4 then
-            if (not frmWorked_grids.GridOK(msgLoc)) or (msgLoc = 'RR73') then //disble false used "RR73" being a loc
+            if (not frmWorkedGrids.GridOK(msgLoc)) or (msgLoc = 'RR73') then //disble false used "RR73" being a loc
                msgLoc:='----';
 
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
@@ -345,7 +346,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
             else
                AddColorStr('  '+msgMode+' ',clPurple);
            if isMyCall then AddColorStr('=',clGreen) else AddColorStr(' ',clGreen);  //answer to me
-           if frmWorked_grids.WkdCall(msgCall,band,mode) then
+           if frmWorkedGrids.WkdCall(msgCall,band,mode) then
                    AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
                else
                    AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clGreen);
@@ -353,7 +354,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                   AddColorStr(msgLoc,clDefault) //no loc
               else
                Begin
-                  i:=frmWorked_grids.WkdGrid(msgLoc,band,mode);
+                  i:= frmWorkedGrids.WkdGrid(msgLoc,band,mode);
                   case i of
                    0  : Begin
                              AddColorStr(UpperCase(msgLoc),clGreen); //not wkd
@@ -408,7 +409,6 @@ end;
 
 
 initialization
-  {$I fMoniWsjtx.lrs}
 
 end.
 

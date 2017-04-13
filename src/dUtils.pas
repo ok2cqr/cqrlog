@@ -754,7 +754,8 @@ end;
 procedure TdmUtils.FileCopy(const FileFrom, FileTo: string);
 var
   FromF, ToF: file;
-  NumRead, NumWritten: word;
+  NumRead : Word = 0;
+  NumWritten: Word = 0;
   Buffer: array[1..2048] of byte;
 begin
   AssignFile(FromF, FileFrom);

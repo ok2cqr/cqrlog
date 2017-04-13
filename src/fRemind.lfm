@@ -10,7 +10,7 @@ object frmReminder: TfrmReminder
   OnClose = FormClose
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.6.0.4'
   object RemiMemo: TMemo
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
@@ -30,9 +30,9 @@ object frmReminder: TfrmReminder
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Side = asrBottom
     Left = 222
-    Height = 23
+    Height = 24
     Top = 30
-    Width = 154
+    Width = 159
     BorderSpacing.Top = 5
     Caption = 'Remind again after '
     OnChange = chRemiChange
@@ -44,7 +44,7 @@ object frmReminder: TfrmReminder
     Left = 8
     Height = 16
     Top = 73
-    Width = 116
+    Width = 92
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 2
     Caption = 'Remember to:'
@@ -71,8 +71,8 @@ object frmReminder: TfrmReminder
     AnchorSideLeft.Control = chRemi
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = chRemi
-    Left = 376
-    Height = 32
+    Left = 381
+    Height = 27
     Top = 30
     Width = 56
     CharCase = ecNormal
@@ -89,26 +89,26 @@ object frmReminder: TfrmReminder
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = chRemi
     AnchorSideTop.Side = asrCenter
-    Left = 434
-    Height = 15
+    Left = 439
+    Height = 17
     Top = 34
-    Width = 53
+    Width = 56
     BorderSpacing.Left = 2
     Caption = 'minutes'
     ParentColor = False
   end
   object chUTRemi: TCheckBox
     Left = 222
-    Height = 23
+    Height = 24
     Top = 64
-    Width = 153
+    Width = 155
     Caption = 'Remind time (UTC) '
     OnChange = chUTRemiChange
     TabOrder = 4
   end
   object RemindUThour: TMaskEdit
     Left = 376
-    Height = 32
+    Height = 27
     Top = 57
     Width = 56
     CharCase = ecNormal
@@ -122,9 +122,9 @@ object frmReminder: TfrmReminder
   end
   object lblRemi1: TLabel
     Left = 0
-    Height = 28
+    Height = 27
     Top = 0
-    Width = 600
+    Width = 497
     Caption = '    Sitting is killing you!  Take a short walk!    '
     Color = clRed
     Font.Color = clYellow

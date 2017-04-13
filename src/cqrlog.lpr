@@ -21,8 +21,8 @@ uses
   fQSLExpPref, fRotControl, dLogUpload, fLogUploadStatus, frCWKeys, fCallAlert,
   fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer,
   fRadioMemories, fAddRadioMemory, fException, fDbError, fCommentToCall,
-  fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref, fMoniWsjtx,
-  fWkd1, fProp_DK0WCY, fRemind, fContest;
+  fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
+  fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx;
 var
   Splash : TfrmSplash;
 
@@ -64,10 +64,10 @@ begin
   Application.CreateForm(TfrmCWType, frmCWType);
   Application.CreateForm(TfrmRbnMonitor, frmRbnMonitor);
   Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
-  Application.CreateForm(TfrmWorked_grids, frmWorked_grids);
-  Application.CreateForm(TfrmProp_DK0WCY , frmProp_DK0WCY );
-  Application.CreateForm(TfrmReminder , frmReminder );
-  Application.CreateForm(TfrmContest , frmContest );
+  Application.CreateForm(TfrmWorkedGrids, frmWorkedGrids);
+  Application.CreateForm(TfrmPropDK0WCY, frmPropDK0WCY);
+  Application.CreateForm(TfrmReminder, frmReminder);
+  Application.CreateForm(TfrmContest, frmContest);
 
   Splash.Update;
   application.ProcessMessages;

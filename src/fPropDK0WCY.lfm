@@ -1,4 +1,4 @@
-object frmProp_DK0WCY: TfrmProp_DK0WCY
+object frmPropDK0WCY: TfrmPropDK0WCY
   Left = 978
   Height = 312
   Top = 169
@@ -12,18 +12,18 @@ object frmProp_DK0WCY: TfrmProp_DK0WCY
   OnDblClick = FormDblClick
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.6.0.4'
   object lblBoulAidx: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 80
-    Width = 92
+    Width = 97
     Caption = 'Boulder A-idx:'
     ParentColor = False
   end
   object lblCurKidx: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 140
     Width = 90
     Caption = 'Kiel cur K-idx:'
@@ -31,74 +31,74 @@ object frmProp_DK0WCY: TfrmProp_DK0WCY
   end
   object lblSolarFlx: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 180
-    Width = 65
+    Width = 69
     Caption = 'Solar flux:'
     ParentColor = False
   end
   object lblSunSNr: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 200
-    Width = 73
+    Width = 79
     Caption = 'Sunspot nr:'
     ParentColor = False
   end
   object lblGeomFi: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 240
-    Width = 91
+    Width = 95
     Caption = 'Geomag field:'
     ParentColor = False
   end
   object DBoulAidx: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 80
-    Width = 68
+    Width = 74
     Caption = 'DBoulAidx'
     ParentColor = False
   end
   object DCurKidx: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 140
-    Width = 61
+    Width = 65
     Caption = 'DCurKidx'
     ParentColor = False
     ParentFont = False
   end
   object DSolarFlx: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 180
-    Width = 62
+    Width = 66
     Caption = 'DSolarFlx'
     ParentColor = False
   end
   object DSunSNr: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 200
-    Width = 57
+    Width = 62
     Caption = 'DSunSNr'
     ParentColor = False
   end
   object DGeomFi: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 240
-    Width = 59
+    Width = 63
     Caption = 'DGeomFi'
     ParentColor = False
   end
   object lblInfo: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 60
-    Width = 41
+    Width = 45
     Caption = 'lblInfo'
     ParentColor = False
   end
@@ -154,15 +154,15 @@ object frmProp_DK0WCY: TfrmProp_DK0WCY
   end
   object lblSolAct: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 220
-    Width = 89
+    Width = 92
     Caption = 'Solar activity:'
     ParentColor = False
   end
   object lblKielAidx: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 100
     Width = 67
     Caption = 'Kiel A-idx:'
@@ -170,66 +170,66 @@ object frmProp_DK0WCY: TfrmProp_DK0WCY
   end
   object lblAurora: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 260
-    Width = 47
+    Width = 52
     Caption = 'Aurora:'
     ParentColor = False
   end
   object DKielAidx: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 100
-    Width = 64
+    Width = 67
     Caption = 'DKielAidx'
     ParentColor = False
   end
   object DSolAct: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 220
-    Width = 51
+    Width = 55
     Caption = 'DSolAct'
     ParentColor = False
   end
   object DAurora: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 260
-    Width = 53
+    Width = 59
     Caption = 'DAurora'
     ParentColor = False
   end
   object lblKiel3K: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 120
-    Width = 88
+    Width = 89
     Caption = 'Kiel 3-hour K:'
     ParentColor = False
   end
   object DKiel3K: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 120
-    Width = 52
+    Width = 53
     Caption = 'DKiel3K'
     ParentColor = False
     ParentFont = False
   end
   object lblInfoUTC: TLabel
     Left = 120
-    Height = 15
+    Height = 17
     Top = 5
-    Width = 67
+    Width = 72
     Caption = 'lblInfoUTC'
     ParentColor = False
   end
   object lblInfoFrom: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 25
-    Width = 73
+    Width = 81
     Caption = 'lblInfoFrom'
     ParentColor = False
     ParentFont = False
@@ -245,17 +245,17 @@ object frmProp_DK0WCY: TfrmProp_DK0WCY
   end
   object lblKidxG: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 160
-    Width = 98
+    Width = 101
     Caption = 'K-idx graph 3h:'
     ParentColor = False
   end
   object lblInfoDate: TLabel
     Left = 10
-    Height = 15
+    Height = 17
     Top = 5
-    Width = 72
+    Width = 78
     Caption = 'lblInfoDate'
     ParentColor = False
   end

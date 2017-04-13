@@ -47,6 +47,7 @@ var
   TimerValue: string;
 
 implementation
+{$R *.lfm}
 
 { TfrmReminder }
 
@@ -213,7 +214,6 @@ begin
 end;
 
 initialization
- {$I fremind.lrs}
 
 end.
 

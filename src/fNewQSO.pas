@@ -20,7 +20,7 @@ uses
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
   uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
-  fMoniWsjtx, fWkd1,fProp_DK0WCY;
+  fMonWsjtx, fWorkedGrids,fPropDK0WCY;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
@@ -101,6 +101,7 @@ type
     MenuItem57: TMenuItem;
     MenuItem58: TMenuItem;
     MenuItem63: TMenuItem;
+    MenuItem94 : TMenuItem;
     mnuReminder: TMenuItem;
     MenuItem86: TMenuItem;
     MenuItem87: TMenuItem;
@@ -110,7 +111,6 @@ type
     MenuItem91: TMenuItem;
     MenuItem92 : TMenuItem;
     MenuItem93 : TMenuItem;
-    mnuDK0WCY: TMenuItem;
     mnuWsjtxmonitor: TMenuItem;
     mnuLocatorMap: TMenuItem;
     mnuRemoteModeWsjt: TMenuItem;
@@ -1255,10 +1255,10 @@ begin
     frmPropagation.Show;
 
   if cqrini.ReadBool('Window','pDK0WCY',False) then
-    frmProp_DK0WCY.Show;
+    frmPropDK0WCY.Show;
 
-   if cqrini.ReadBool('Window','Worked_grids',False) then
-    frmWorked_grids.Show;
+   if cqrini.ReadBool('Window','WorkedGrids',False) then
+    frmWorkedGrids.Show;
 
   if cqrini.ReadBool('Window','CWKeys',False) then
     acCWFKey.Execute;
@@ -1389,21 +1389,21 @@ begin
     else
       cqrini.WriteBool('Window','Prop',False);
 
-    if frmProp_DK0WCY.Showing then
+    if frmPropDK0WCY.Showing then
     begin
-      frmProp_DK0WCY.Close;
+      frmPropDK0WCY.Close;
       cqrini.WriteBool('Window','pDK0WCY',True)
     end
     else
       cqrini.WriteBool('Window','pDK0WCY',False);
 
-   if frmWorked_grids.Showing then
+   if frmWorkedGrids.Showing then
     begin
-      frmWorked_grids.Close;
-      cqrini.WriteBool('Window','Worked_grids',True)
+      frmWorkedGrids.Close;
+      cqrini.WriteBool('Window','WorkedGrids',True)
     end
     else
-      cqrini.WriteBool('Window','Worked_grids',False);
+      cqrini.WriteBool('Window','WorkedGrids',False);
 
    if frmMonWsjtx.Showing then
      begin
@@ -2838,7 +2838,7 @@ begin
     if (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjt.Checked) then
      edtCall.SetFocus;
   UploadAllQSOOnline;
-  if frmWorked_grids.Showing then frmWorked_grids.UpdateMap;
+  if frmWorkedGrids.Showing then frmWorkedGrids.UpdateMap
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
@@ -3946,7 +3946,7 @@ end;
 
 procedure TfrmNewQSO.acLocatorMapExecute(Sender: TObject);
 begin
-  frmWorked_grids.Show;
+  frmWorkedGrids.Show
 end;
 
 procedure TfrmNewQSO.acLogUploadStatusExecute(Sender: TObject);
@@ -4022,7 +4022,7 @@ end;
 
 procedure TfrmNewQSO.acpDK0WCYExecute(Sender: TObject);
 begin
-   frmProp_DK0WCY.Show
+   frmPropDK0WCY.Show
 end;
 
 procedure TfrmNewQSO.chkAutoModeChange(Sender: TObject);

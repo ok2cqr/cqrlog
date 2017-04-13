@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="10"/>
+    <Version Value="9"/>
     <General>
       <Flags>
         <LRSInOutputDirectory Value="False"/>
@@ -11,12 +11,15 @@
       <AutoCreateForms Value="False"/>
       <Title Value="cqrlog"/>
       <Icon Value="0"/>
+      <Resources Count="1">
+        <Resource_0 FileName="../images/world_borders.png" Type="RCDATA" ResourceName="WORLD_BORDERS"/>
+      </Resources>
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2112"/>
+      <BuildNr Value="2138"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -82,7 +85,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="98">
+    <Units Count="100">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -716,21 +719,33 @@
         <UnitName Value="fMoniWsjtx"/>
       </Unit95>
       <Unit96>
-        <Filename Value="fwkd1.pas"/>
+        <Filename Value="fWorkedGrids.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmWorked_grids"/>
+        <ComponentName Value="frmWorkedGrids"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fWkd1"/>
       </Unit96>
       <Unit97>
-        <Filename Value="fprop_dk0wcy.pas"/>
+        <Filename Value="fPropDK0WCY.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmProp_DK0WCY"/>
+        <ComponentName Value="frmPropDK0WCY"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fProp_DK0WCY"/>
       </Unit97>
+      <Unit98>
+        <Filename Value="fContest.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmContest"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit98>
+      <Unit99>
+        <Filename Value="fMonWsjtx.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmMonWsjtx"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit99>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -1,20 +1,20 @@
 object frmContest: TfrmContest
-  Left = 1889
-  Height = 99
-  Top = 115
+  Left = 663
+  Height = 98
+  Top = 426
   Width = 696
   Caption = 'Contest'
-  ClientHeight = 99
+  ClientHeight = 98
   ClientWidth = 696
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.6.0.4'
   object edtCall: TEdit
     Left = 10
-    Height = 32
+    Height = 27
     Top = 27
     Width = 140
     CharCase = ecUppercase
@@ -25,7 +25,7 @@ object frmContest: TfrmContest
   end
   object edtRSTs: TEdit
     Left = 151
-    Height = 32
+    Height = 27
     Top = 27
     Width = 50
     OnKeyDown = edtCallKeyDown
@@ -33,7 +33,7 @@ object frmContest: TfrmContest
   end
   object edtSTX: TEdit
     Left = 202
-    Height = 32
+    Height = 27
     Top = 27
     Width = 50
     OnExit = edtSTXExit
@@ -43,7 +43,7 @@ object frmContest: TfrmContest
   end
   object edtSTX2: TEdit
     Left = 253
-    Height = 32
+    Height = 27
     Top = 27
     Width = 100
     OnExit = edtSTX2Exit
@@ -52,7 +52,7 @@ object frmContest: TfrmContest
   end
   object edtRSTr: TEdit
     Left = 370
-    Height = 32
+    Height = 27
     Top = 27
     Width = 50
     OnKeyDown = edtCallKeyDown
@@ -60,7 +60,7 @@ object frmContest: TfrmContest
   end
   object edtSRX: TEdit
     Left = 421
-    Height = 32
+    Height = 27
     Top = 27
     Width = 50
     OnExit = edtSRXExit
@@ -79,7 +79,7 @@ object frmContest: TfrmContest
   end
   object edtSRX2: TEdit
     Left = 472
-    Height = 32
+    Height = 27
     Top = 27
     Width = 100
     OnKeyDown = edtCallKeyDown
@@ -87,7 +87,7 @@ object frmContest: TfrmContest
   end
   object lblCall: TLabel
     Left = 16
-    Height = 15
+    Height = 17
     Top = 10
     Width = 25
     Caption = 'Call'
@@ -95,23 +95,23 @@ object frmContest: TfrmContest
   end
   object lblRSTs: TLabel
     Left = 160
-    Height = 15
+    Height = 17
     Top = 10
-    Width = 36
+    Width = 35
     Caption = 'RST s'
     ParentColor = False
   end
   object lblMSGs: TLabel
     Left = 256
-    Height = 15
+    Height = 17
     Top = 10
-    Width = 40
+    Width = 41
     Caption = 'MSG s'
     ParentColor = False
   end
   object lblRSTr: TLabel
     Left = 376
-    Height = 15
+    Height = 17
     Top = 10
     Width = 34
     Caption = 'RST r'
@@ -119,31 +119,31 @@ object frmContest: TfrmContest
   end
   object lblNRr: TLabel
     Left = 424
-    Height = 15
+    Height = 17
     Top = 10
-    Width = 28
+    Width = 29
     Caption = 'NR r'
     ParentColor = False
   end
   object lblMSGr: TLabel
     Left = 480
-    Height = 15
+    Height = 17
     Top = 10
-    Width = 38
+    Width = 40
     Caption = 'MSG r'
     ParentColor = False
   end
   object chNRInc: TCheckBox
     Left = 202
-    Height = 23
+    Height = 24
     Top = 56
-    Width = 45
+    Width = 46
     Caption = 'Inc'
     TabOrder = 8
   end
   object lblNRs: TLabel
     Left = 208
-    Height = 15
+    Height = 17
     Top = 10
     Width = 30
     Caption = 'NR s'
@@ -151,34 +151,34 @@ object frmContest: TfrmContest
   end
   object chLoc: TCheckBox
     Left = 472
-    Height = 23
+    Height = 24
     Top = 56
-    Width = 100
+    Width = 102
     Caption = 'MSG is LOC'
     TabOrder = 9
   end
   object chSpace: TCheckBox
     Left = 16
-    Height = 23
+    Height = 24
     Top = 56
-    Width = 111
+    Width = 114
     Caption = 'SPACE is TAB'
     TabOrder = 10
   end
   object chNoNr: TCheckBox
     Left = 424
-    Height = 23
+    Height = 24
     Top = 56
-    Width = 44
+    Width = 46
     Caption = 'No'
     OnChange = chNoNrChange
     TabOrder = 11
   end
   object chTrueRST: TCheckBox
     Left = 153
-    Height = 23
+    Height = 24
     Top = 56
-    Width = 45
+    Width = 48
     Caption = 'Tru'
     OnChange = chTrueRSTChange
     TabOrder = 12
@@ -186,7 +186,7 @@ object frmContest: TfrmContest
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer
-    left = 632
-    top = 64
+    left = 616
+    top = 8
   end
 end
