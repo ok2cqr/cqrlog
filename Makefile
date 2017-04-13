@@ -16,6 +16,8 @@ clean:
 	rm -rf debian/cqrlog
 	rm -f -v src/mysql/*.ppu src/mysq/*.bak src/mysql/*.o
 	rm -f -v tools/cqrlog.1.gz
+	rm -rf src/backup
+	rm -f -v src/richmemo/*.o src/richmemo/*.ppu src/richmemo/gtk2/*.ppu src/richmemo/gtk2/*.o
 	
 install:
 	install -d -v         $(bindir)
