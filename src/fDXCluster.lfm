@@ -1,14 +1,14 @@
 object frmDXCluster: TfrmDXCluster
-  Left = 497
-  Height = 219
-  Top = 548
-  Width = 564
+  Left = 702
+  Height = 367
+  Top = 436
+  Width = 709
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
   ActiveControl = pgDXCluster
   Caption = 'DXCluster'
-  ClientHeight = 219
-  ClientWidth = 564
+  ClientHeight = 367
+  ClientWidth = 709
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -121,20 +121,20 @@ object frmDXCluster: TfrmDXCluster
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.4.0'
   object pgDXCluster: TPageControl
     Left = 0
-    Height = 219
+    Height = 367
     Top = 0
-    Width = 564
+    Width = 709
     ActivePage = tabTelnet
     Align = alClient
     TabIndex = 1
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
-      ClientHeight = 188
-      ClientWidth = 560
+      ClientHeight = 338
+      ClientWidth = 699
       object Panel4: TPanel
         Left = 0
         Height = 36
@@ -216,69 +216,97 @@ object frmDXCluster: TfrmDXCluster
     end
     object tabTelnet: TTabSheet
       Caption = 'Telnet'
-      ClientHeight = 188
-      ClientWidth = 560
+      ClientHeight = 338
+      ClientWidth = 699
       object Panel1: TPanel
         Left = 0
         Height = 34
-        Top = 154
-        Width = 560
+        Top = 304
+        Width = 699
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 34
-        ClientWidth = 560
+        ClientWidth = 699
         TabOrder = 0
         object Label1: TLabel
           Left = 6
-          Height = 17
-          Top = 13
-          Width = 73
+          Height = 15
+          Top = 11
+          Width = 71
           Caption = 'Command:'
           ParentColor = False
         end
         object edtCommand: TEdit
-          Left = 88
-          Height = 27
-          Top = 8
+          AnchorSideLeft.Control = Label1
+          AnchorSideLeft.Side = asrBottom
+          Left = 79
+          Height = 32
+          Top = 3
           Width = 266
+          BorderSpacing.Left = 2
           OnKeyPress = edtCommandKeyPress
           TabOrder = 0
         end
         object Button1: TButton
-          Left = 471
+          AnchorSideLeft.Control = cbAlertRegExp
+          AnchorSideLeft.Side = asrBottom
+          Left = 462
           Height = 25
-          Top = 8
+          Top = 3
           Width = 85
-          Anchors = [akTop, akRight]
           BorderSpacing.InnerBorder = 4
           Caption = 'Help'
           OnClick = btnHelpClick
           TabOrder = 1
         end
         object Button2: TButton
-          Left = 367
+          Left = 328
           Height = 25
-          Top = 8
+          Top = -8
           Width = 75
           Caption = 'Button2'
           OnClick = Button2Click
           TabOrder = 2
           Visible = False
         end
+        object tbAlertCalls: TToggleBox
+          AnchorSideLeft.Control = edtCommand
+          AnchorSideLeft.Side = asrBottom
+          Left = 349
+          Height = 25
+          Top = 3
+          Width = 60
+          BorderSpacing.Left = 4
+          BorderSpacing.Right = 4
+          Caption = 'ACalls'
+          OnClick = tbAlertCallsClick
+          TabOrder = 3
+        end
+        object cbAlertRegExp: TCheckBox
+          AnchorSideLeft.Control = tbAlertCalls
+          AnchorSideLeft.Side = asrBottom
+          Left = 413
+          Height = 23
+          Top = 3
+          Width = 45
+          BorderSpacing.Right = 4
+          Caption = 'Inc'
+          TabOrder = 4
+        end
       end
       object Panel2: TPanel
         Left = 0
         Height = 30
         Top = 0
-        Width = 560
+        Width = 699
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 560
+        ClientWidth = 699
         TabOrder = 1
         object edtTelAddress: TEdit
           Left = 8
-          Height = 27
+          Height = 32
           Top = 1
           Width = 189
           TabOrder = 0
@@ -316,9 +344,9 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlTelnet: TPanel
         Left = 0
-        Height = 124
+        Height = 274
         Top = 30
-        Width = 560
+        Width = 699
         Align = alClient
         BevelOuter = bvNone
         Color = clWhite

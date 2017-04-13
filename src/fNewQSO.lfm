@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 429
+  Left = 469
   Height = 651
-  Top = 93
+  Top = 124
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -4029,6 +4029,24 @@ object frmNewQSO: TfrmNewQSO
     end
     object MenuItem67: TMenuItem
       Caption = 'Window'
+      object MenuItem71: TMenuItem
+        Action = acShowBandMap
+      end
+      object MenuItem63: TMenuItem
+        Action = acContest
+      end
+      object MenuItem73: TMenuItem
+        Action = acCWType
+      end
+      object MenuItem72: TMenuItem
+        Action = acCWFKey
+      end
+      object MenuItem80: TMenuItem
+        Action = acDetails
+      end
+      object MenuItem70: TMenuItem
+        Action = acDXCluster
+      end
       object MenuItem68: TMenuItem
         Action = acGrayline
         Bitmap.Data = {
@@ -4068,45 +4086,34 @@ object frmNewQSO: TfrmNewQSO
           0C00012200001101030001FFC4006C9BD3006999D1006596CE00
         }
       end
-      object MenuItem69: TMenuItem
-        Action = acTRXControl
+      object MenuItem52: TMenuItem
+        Action = acLogUploadStatus
       end
-      object MenuItem70: TMenuItem
-        Action = acDXCluster
-      end
-      object MenuItem75: TMenuItem
-        Action = acXplanet
-      end
-      object MenuItem71: TMenuItem
-        Action = acShowBandMap
-      end
-      object MenuItem72: TMenuItem
-        Action = acCWFKey
-      end
-      object MenuItem73: TMenuItem
-        Action = acCWType
+      object mnuDK0WCY: TMenuItem
+        Action = acpDK0WCY
+        Caption = 'Prop_DK0WCY'
       end
       object MenuItem74: TMenuItem
         Action = acProp
         Caption = 'Propgation'
       end
-      object MenuItem80: TMenuItem
-        Action = acDetails
+      object MenuItem38: TMenuItem
+        Action = acQSOList
       end
-      object MenuItem34: TMenuItem
-        Action = acSCP
+      object MenuItem91: TMenuItem
+        Action = acRBNMonitor
+      end
+      object mnuReminder: TMenuItem
+        Action = acReminder
       end
       object MenuItem37: TMenuItem
         Action = acRotControl
       end
-      object MenuItem38: TMenuItem
-        Action = acQSOList
+      object MenuItem34: TMenuItem
+        Action = acSCP
       end
-      object MenuItem52: TMenuItem
-        Action = acLogUploadStatus
-      end
-      object MenuItem91: TMenuItem
-        Action = acRBNMonitor
+      object MenuItem69: TMenuItem
+        Action = acTRXControl
       end
       object mnuWsjtxmonitor: TMenuItem
         Action = acMonitorWsjtx
@@ -4116,9 +4123,8 @@ object frmNewQSO: TfrmNewQSO
         Action = acLocatorMap
         Caption = 'Wkd locators'
       end
-      object mnuDK0WCY: TMenuItem
-        Action = acpDK0WCY
-        Caption = 'Prop_DK0WCY'
+      object MenuItem75: TMenuItem
+        Action = acXplanet
       end
     end
     object MenuItem3: TMenuItem
@@ -4824,6 +4830,16 @@ object frmNewQSO: TfrmNewQSO
       Category = 'Window'
       Caption = 'acpDK0WCY'
       OnExecute = acpDK0WCYExecute
+    end
+    object acReminder: TAction
+      Category = 'Window'
+      Caption = 'Reminder'
+      OnExecute = acReminderExecute
+    end
+    object acContest: TAction
+      Category = 'Window'
+      Caption = 'Contest'
+      OnExecute = acContestExecute
     end
   end
   object imgMain: TImageList

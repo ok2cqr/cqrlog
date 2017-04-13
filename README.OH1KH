@@ -110,5 +110,46 @@
    This also speeds up normal period decoding giving user more time (from that 10sec gap between periods) to decide to whose
    CQ call he is going to answer.
 
+22.3.2017
+
+ - modified NewQSO/Window listing to alpabethical order
+ - added two selections "Reminder" and "Contest" and made forms and units for them. See CqrlogAdditions2.pdf for details.
+   Tried to minimize changes to original cqrlog source code by doing these as separate units, but some modifications must 
+   done inside original cqrlog source code to make these new ones to work.
    
+   At same time I was thinking about moving wsjt-x decode inside of Wsjt-x monitor unit. It actually should be there.
+   (maybe some day, maybe not...).
+
+1.4.2017
+
+ - added "No" checkbox to contest form. Changes tabulation order of  NRr,MSGr to MSGr,NRr for contest where there is just message
+   but no number. Note that you can feed only numbers to NRs and NRr fields.
  
+3.4.2017
+
+ - returned Contest/Msg is Loc checkbox function to original meaning, I.E. when checked Msg is expected to be locator and placed 
+   now ONLY to New/QSO/Grid field (not together with received rst).
+ - added Contest/Tru checkbox for true reports exchange. Changes tabulation order so that it goes RSTs, RSTr, NRr, MSGr.
+   This might be useful in VHF, UHF, SHF Tropo, Es etc. openings (and maybe some contests, too) where you like fast qso logging.
+
+ - Added DXCluster additions.
+  -- ACalls toggle button does just the same as "Preferences/DXCluster/List of callsigns" I.E. opens alert calls list for edit:
+     This is easier and faster than using it via preferences. When edit list is closed alert remains active (button text is green)
+     Second press deactivates alert (button text is black).
+     Checkbox "Inc" changes alert to RegExp,so if any part of alert calls list fits to dx cluster's call it alerts.
+     Unchecked call must be exactly same. I.E. "Inc" checked with list call OF100FI alerts OF100FI/1, OF100FI/2 ..etc.
+  -- Typed command history. With Ctrl-Z you can scroll back 5 last commands (fix, if needed) and reuse them. (2.0.5(028))
+
+11.04.2017
+
+  - Added IP address field to preferences/fldigi-wsjtx settings of wsjt-x. Defaults to 127.0.0.1 (localhost) but can be changed.
+    There is no valid IP format check so you have to type right formatted address.
+    This setting can be used if you run wsjt-x on different computer than cqrlog. If so, put the IP address of cqrlog computer
+    to Wsjt-x's settings/reporting replacing there the default 127.0.0.1
+    At cqrlog computer put cqrlog/preferences/wsjtx-settings IP address to the same as it's own network IP address. No need to change
+    port numbers. Remember to open your firewalls on both computers to allow UDP traffic from 2237 port on your network.
+    Tested with two laptops on same WiFi local network:
+       cqrlog PC ip address 192.168.60.222, cqrlog setting/wsjt-x:  port 2237 address 192.168.60.222
+       wsjt-x PC ip address 192.168.60.223, wstt-x setting/reporting  port 2237 address 192.168.60.222 
+													(2.0.5(029))
+
