@@ -33,7 +33,6 @@ type
     btnWebConnect: TButton;
     Button1: TButton;
     Button2: TButton;
-    cbAlertRegExp: TCheckBox;
     dlgDXfnt: TFontDialog;
     edtCommand: TEdit;
     edtTelAddress: TEdit;
@@ -576,13 +575,12 @@ end;
 procedure TfrmDXCluster.tbAlertCallsClick(Sender: TObject);
 begin
   if tbAlertCalls.Checked then
-    Begin
-     tbAlertCalls.Font.Color := clGreen;
-     frmPreferences.btnAlertCallsignsClick(nil);
-    end
-   else
-     tbAlertCalls.Font.Color := clDefault;
-
+  begin
+    tbAlertCalls.Font.Color := clGreen;
+    frmPreferences.btnAlertCallsignsClick(nil);
+  end
+  else
+    tbAlertCalls.Font.Color := clDefault
 end;
 
 procedure TfrmDXCluster.tmrAutoConnectTimer(Sender: TObject);
@@ -1118,7 +1116,7 @@ begin
     end
   end;
 
-  if (dmDXCluster.IsAlertCall(call,band,mode,cbAlertRegExp.Checked)) and tbAlertCalls.Checked then
+  if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) and tbAlertCalls.Checked then
     dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
 
   if dmData.DebugLevel >=1 then

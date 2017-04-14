@@ -1,45 +1,45 @@
 object frmNewCallAlert: TfrmNewCallAlert
   Left = 334
-  Height = 198
+  Height = 358
   Top = 333
-  Width = 322
+  Width = 330
   BorderStyle = bsDialog
   Caption = 'New callsign alert'
-  ClientHeight = 198
-  ClientWidth = 322
+  ClientHeight = 358
+  ClientWidth = 330
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '1.6.0.4'
   object Label1: TLabel
     Left = 7
     Height = 17
     Top = 16
-    Width = 50
+    Width = 54
     Caption = 'Callsign'
     ParentColor = False
   end
   object edtCall: TEdit
     Left = 7
-    Height = 23
+    Height = 27
     Top = 40
     Width = 223
     CharCase = ecUppercase
     TabOrder = 0
   end
   object Label2: TLabel
-    Left = 8
+    Left = 9
     Height = 17
-    Top = 77
-    Width = 32
+    Top = 192
+    Width = 36
     Caption = 'Band'
     ParentColor = False
   end
   object Label3: TLabel
-    Left = 7
+    Left = 8
     Height = 17
-    Top = 138
-    Width = 37
+    Top = 253
+    Width = 39
     Caption = 'Mode'
     ParentColor = False
   end
@@ -63,9 +63,9 @@ object frmNewCallAlert: TfrmNewCallAlert
     TabOrder = 4
   end
   object cmbBand: TComboBox
-    Left = 7
-    Height = 23
-    Top = 102
+    Left = 8
+    Height = 29
+    Top = 217
     Width = 223
     CharCase = ecUppercase
     ItemHeight = 0
@@ -73,13 +73,25 @@ object frmNewCallAlert: TfrmNewCallAlert
     Text = 'CMBBAND'
   end
   object cmbMode: TComboBox
-    Left = 7
-    Height = 23
-    Top = 160
+    Left = 8
+    Height = 29
+    Top = 275
     Width = 223
     CharCase = ecUppercase
     ItemHeight = 0
     TabOrder = 2
     Text = 'CMBMODE'
+  end
+  object Memo1: TMemo
+    Left = 8
+    Height = 108
+    Top = 79
+    Width = 318
+    Enabled = False
+    Lines.Strings = (
+      'if RegExp is checked, you can use regular expressions e.g. IARU$ means all stations with IARU sufix, ^OK1[A..Z][X..Z]$ means only OK1AX, AY, AZ etc.'
+    )
+    ReadOnly = True
+    TabOrder = 5
   end
 end

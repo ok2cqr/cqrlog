@@ -94,7 +94,7 @@ type
     function  PfxFromADIF(adif : Word) : String;
     function  CountryFromADIF(adif : Word) : String;
     function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
-    function  IsAlertCall(const call,band,mode : String;rp :boolean) : Boolean;
+    function  IsAlertCall(const call,band,mode : String;RegExp :Boolean) : Boolean;
 
     procedure AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
     procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
@@ -1188,16 +1188,16 @@ begin
   end
 end;
 
-function TdmDXCluster.IsAlertCall(const call,band,mode : String;rp :boolean) : Boolean;
+function TdmDXCluster.IsAlertCall(const call,band,mode : String;RegExp :Boolean) : Boolean;
 const
    C_SEL = 'select * from call_alert where callsign = %s';
-   C_RGX_SEL ='select * from call_alert where %s regexp callsign';
+   C_RGX_SEL = 'select * from call_alert where callsign regexp %s';
 begin
   try
-    if rp then
+    if RegExp then
        qCallAlert.SQL.Text := Format(C_RGX_SEL,[QuotedStr(call)])
-      else
-    qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
+    else
+      qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
     if dmData.DebugLevel>=1 then Writeln(qCallAlert.SQL.Text);
     trCallAlert.StartTransaction;
     qCallAlert.Open;

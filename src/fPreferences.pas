@@ -117,6 +117,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkAllowRegExp : TCheckBox;
     chkFillAwardField : TCheckBox;
     chkUseCallbookZonesEtc : TCheckBox;
     chkModeRelatedOnly : TCheckBox;
@@ -1290,6 +1291,7 @@ begin
   cqrini.WriteBool('DXCluster', 'ConAfterRun', chkConToDXC.Checked);
   cqrini.WriteBool('DXCluster','ShowDxcCountry',chkShowDxcCountry.Checked);
   cqrini.WriteString('DXCluster','AlertCmd', edtAlertCmd.Text);
+  cqrini.WriteBool('DxCluster', 'AlertRegExp', chkAllowRegExp.Checked);
 
   cqrini.WriteBool('Fonts', 'UseDefault', chkUseDefaultSEttings.Checked);
   cqrini.WriteString('Fonts', 'Buttons', lblbFont.Caption);
@@ -2641,6 +2643,7 @@ begin
   chkConToDXC.Checked := cqrini.ReadBool('DXCluster', 'ConAfterRun', False);
   chkShowDxcCountry.Checked := cqrini.ReadBool('DXCluster','ShowDxcCountry',False);
   edtAlertCmd.Text := cqrini.ReadString('DXCluster','AlertCmd','');
+  chkAllowRegExp.Checked := cqrini.ReadBool('DxCluster', 'AlertRegExp', False);
 
   chkUseDefaultSEttings.Checked := cqrini.ReadBool('Fonts', 'UseDefault', True);
   lblbFont.Caption := cqrini.ReadString('Fonts', 'Buttons', 'Sans 10');
