@@ -12,7 +12,7 @@ object frmPropagation: TfrmPropagation
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   PopupMenu = popPropagation
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.6.0.4'
   object imgProp: TImage
     Left = 88
     Height = 26
@@ -96,7 +96,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 55
-      Width = 93
+      Width = 95
       Caption = 'Geomag field:'
       ParentColor = False
     end
@@ -112,7 +112,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 77
-      Width = 83
+      Width = 86
       Caption = 'Signal noise:'
       ParentColor = False
     end
@@ -120,7 +120,7 @@ object frmPropagation: TfrmPropagation
       Left = 105
       Height = 17
       Top = 77
-      Width = 44
+      Width = 45
       Caption = 'lblSigs'
       ParentColor = False
     end
@@ -128,7 +128,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 99
-      Width = 66
+      Width = 68
       Caption = 'Mag field:'
       ParentColor = False
     end
@@ -136,7 +136,7 @@ object frmPropagation: TfrmPropagation
       Left = 105
       Height = 17
       Top = 99
-      Width = 46
+      Width = 47
       Caption = 'lblMag'
       ParentColor = False
     end
@@ -154,7 +154,7 @@ object frmPropagation: TfrmPropagation
       Left = 13
       Height = 17
       Top = 8
-      Width = 34
+      Width = 36
       Caption = 'Band'
       ParentColor = False
     end
@@ -162,7 +162,7 @@ object frmPropagation: TfrmPropagation
       Left = 96
       Height = 17
       Top = 8
-      Width = 25
+      Width = 26
       Caption = 'Day'
       ParentColor = False
     end
@@ -170,7 +170,7 @@ object frmPropagation: TfrmPropagation
       Left = 157
       Height = 17
       Top = 8
-      Width = 37
+      Width = 39
       Caption = 'Night'
       ParentColor = False
     end
@@ -243,7 +243,7 @@ object frmPropagation: TfrmPropagation
       Left = 152
       Height = 17
       Top = 32
-      Width = 41
+      Width = 42
       Caption = 'lbl80n'
       ParentColor = False
     end
@@ -251,7 +251,7 @@ object frmPropagation: TfrmPropagation
       Left = 152
       Height = 17
       Top = 55
-      Width = 41
+      Width = 42
       Caption = 'lbl30n'
       ParentColor = False
     end
@@ -259,7 +259,7 @@ object frmPropagation: TfrmPropagation
       Left = 152
       Height = 17
       Top = 77
-      Width = 41
+      Width = 42
       Caption = 'lbl17n'
       ParentColor = False
     end
@@ -267,7 +267,7 @@ object frmPropagation: TfrmPropagation
       Left = 152
       Height = 17
       Top = 99
-      Width = 41
+      Width = 42
       Caption = 'lbl12n'
       ParentColor = False
     end
@@ -285,7 +285,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 8
-      Width = 51
+      Width = 52
       Caption = 'Aurora:'
       ParentColor = False
     end
@@ -293,7 +293,7 @@ object frmPropagation: TfrmPropagation
       Left = 72
       Height = 17
       Top = 8
-      Width = 35
+      Width = 36
       Caption = 'lblAu'
       ParentColor = False
     end
@@ -301,7 +301,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 32
-      Width = 61
+      Width = 63
       Caption = '6m ES EU'
       ParentColor = False
     end
@@ -309,7 +309,7 @@ object frmPropagation: TfrmPropagation
       Left = 86
       Height = 17
       Top = 32
-      Width = 69
+      Width = 72
       Caption = 'lbl6mEsEu'
       ParentColor = False
     end
@@ -317,7 +317,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 55
-      Width = 61
+      Width = 63
       Caption = '4m ES EU'
       ParentColor = False
     end
@@ -325,7 +325,7 @@ object frmPropagation: TfrmPropagation
       Left = 86
       Height = 17
       Top = 55
-      Width = 69
+      Width = 72
       Caption = 'lbl4mEsEu'
       ParentColor = False
     end
@@ -333,7 +333,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 77
-      Width = 61
+      Width = 63
       Caption = '2m ES EU'
       ParentColor = False
     end
@@ -341,7 +341,7 @@ object frmPropagation: TfrmPropagation
       Left = 86
       Height = 17
       Top = 77
-      Width = 69
+      Width = 72
       Caption = 'lbl2mEsEu'
       ParentColor = False
     end
@@ -349,7 +349,7 @@ object frmPropagation: TfrmPropagation
       Left = 8
       Height = 17
       Top = 99
-      Width = 64
+      Width = 65
       Caption = '2m ES NA'
       ParentColor = False
     end
@@ -357,7 +357,7 @@ object frmPropagation: TfrmPropagation
       Left = 86
       Height = 17
       Top = 99
-      Width = 72
+      Width = 73
       Caption = 'lbl2mEsNa'
       ParentColor = False
     end
@@ -365,7 +365,7 @@ object frmPropagation: TfrmPropagation
       Left = 112
       Height = 17
       Top = 8
-      Width = 65
+      Width = 67
       Caption = 'lblDegree'
       ParentColor = False
     end

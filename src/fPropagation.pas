@@ -210,7 +210,10 @@ begin
 
     data := Child.FindNode('aurora');
     if Assigned(data) then
-      frmPropagation.aur := String(data.FirstChild.NodeValue);
+    begin
+      if Assigned(data.FirstChild) then
+        frmPropagation.aur := String(data.FirstChild.NodeValue)
+    end;
 
     data := Child.FindNode('latdegree');
     if Assigned(data) then
