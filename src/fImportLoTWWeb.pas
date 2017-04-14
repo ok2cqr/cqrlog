@@ -189,16 +189,7 @@ end;
 
 procedure TfrmImportLoTWWeb.FormShow(Sender: TObject);
 begin
-  if not cqrini.ReadBool('LoTWImp','Max',False) then
-  begin
-    Height           := cqrini.ReadInteger('LoTWImp','Height',Height);
-    Width            := cqrini.ReadInteger('LoTWImp','Width',Width);
-    Top              := cqrini.ReadInteger('LoTWImp','Top',top);
-    Left             := cqrini.ReadInteger('LoTWImp','Left',left)
-  end
-  else begin
-    WindowState := wsMaximized
-  end;
+  dmUtils.LoadWindowPos(self);
   chkShowNew.Checked := cqrini.ReadBool('LoTWImp','ShowNewQSOs',True);
   edtDateFrom.Text   := cqrini.ReadString('LoTWImp','DateFrom','1990-01-01');
   edtCall.Text       := cqrini.ReadString('LoTWImp','Call',
@@ -209,19 +200,7 @@ end;
 procedure TfrmImportLoTWWeb.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 begin
-  if not (WindowState = wsMaximized) then
-  begin
-    cqrini.WriteInteger('LoTWImp','Height',Height);
-    cqrini.WriteInteger('LoTWImp','Width',Width);
-    cqrini.WriteInteger('LoTWImp','Top',Top);
-    cqrini.WriteInteger('LoTWImp','Left',Left);
-    cqrini.WriteBool('LoTWImp','Max', False);
-    cqrini.WriteString('LoTWImp','DateFrom',edtDateFrom.Text)
-  end
-  else begin
-    cqrini.WriteBool('LoTWImp','Max', True)
-  end;
-  cqrini.WriteBool('LoTWImp','ShowNewQSOs',chkShowNew.Checked)
+  dmUtils.SaveWindowPos(self)
 end;
 
 procedure TfrmImportLoTWWeb.SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);

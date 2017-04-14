@@ -1578,18 +1578,8 @@ end;
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   dmUtils.SaveForm(frmMain);
-  if not (WindowState = wsMaximized) then
-  begin
-    cqrini.WriteInteger('Main', 'Height', Height);
-    cqrini.WriteInteger('Main', 'Width', Width);
-    cqrini.WriteInteger('Main', 'Top', Top);
-    cqrini.WriteInteger('Main', 'Left', Left);
-    cqrini.WriteBool('Main', 'Max', False);
-    if dmData.DebugLevel>1 then Writeln('Saving window size a position (height|width|top|left):',
-    height,'|',Width,'|',top,'|',left)
-  end
-  else
-    cqrini.WriteBool('Main', 'Max', True);
+  dmUtils.SaveWindowPos(frmMain);
+
   cqrini.WriteBool('Main', 'Toolbar', toolMain.Visible);
   cqrini.WriteBool('Main', 'Buttons', pnlButtons.Visible);
   cqrini.WriteBool('Main', 'Details', pnlDetails.Visible);
@@ -1909,17 +1899,9 @@ begin
   toolMain.Visible   := cqrini.ReadBool('Main', 'Toolbar', True);
   pnlButtons.Visible := cqrini.ReadBool('Main', 'Buttons', True);
   pnlDetails.Visible := cqrini.ReadBool('Main', 'Details', True);
-  if not cqrini.ReadBool('Main', 'Max', False) then
-  begin
-    Height := cqrini.ReadInteger('Main', 'Height', Height);
-    Width  := cqrini.ReadInteger('Main', 'Width', Width);
-    Top    := cqrini.ReadInteger('Main', 'Top', 0);
-    Left   := cqrini.ReadInteger('Main', 'Left', 0);
-    if dmData.DebugLevel>1 then Writeln('Loading window size a position (height|width|top|left):',
-    height,'|',Width,'|',top,'|',left)
-  end
-  else
-    WindowState := wsMaximized;
+
+  dmUtils.LoadWindowPos(frmMain);
+
   CheckAttachment;
   mnuShowButtons.Checked := pnlButtons.Visible;
   mnuShowToolBar.Checked := toolMain.Visible

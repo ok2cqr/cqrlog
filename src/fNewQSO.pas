@@ -1171,10 +1171,8 @@ begin
   sbNewQSO.Panels[3].Text  := 'Ver. '+ dmData.VersionString;
   sbNewQSO.Panels[3].Width := 60;
 
-  Height      := cqrini.ReadInteger('NewQSO','Height',Height);
-  Width       := cqrini.ReadInteger('NewQSO','Width',Width);
-  Top         := cqrini.ReadInteger('NewQSO','Top',20);
-  Left        := cqrini.ReadInteger('NewQSO','Left',20);
+  dmUtils.LoadWindowPos(frmNewQSO);
+
   UseSpaceBar := cqrini.ReadBool('NewQSO','UseSpaceBar',False);
   dbgrdQSOBefore.Visible := cqrini.ReadBool('NewQSO','ShowGrd',True);
   sbNewQSO.Visible := cqrini.ReadBool('NewQSO','StatBar',True);
@@ -5573,10 +5571,7 @@ end;
 
 procedure TfrmNewQSO.SavePosition;
 begin
-  cqrini.WriteInteger('NewQSO','Height',Height);
-  cqrini.WriteInteger('NewQSO','Width',Width);
-  cqrini.WriteInteger('NewQSO','Top',Top);
-  cqrini.WriteInteger('NewQSO','Left',Left);
+  dmUtils.SaveWindowPos(frmNewQSO);
   cqrini.WriteBool('NewQSO','StatBar',sbNewQSO.Visible);
   cqrini.SaveToDisk
 end;
