@@ -6164,11 +6164,11 @@ end;
 
 procedure TfrmNewQSO.CreateAutoBackup();
 var
-  path1, path2 : String;
+  call, path1, path2 : String;
 begin
   path1 := cqrini.ReadString('Backup','Path',dmData.DataDir);
   path2 := cqrini.ReadString('Backup','Path1','');
-
+  call  := StringReplace(cqrini.ReadString('Station', 'Call', ''), '/', '_', [rfReplaceAll, rfIgnoreCase]);
   if not DirectoryExists(path1) then
     exit;
 
@@ -6180,7 +6180,7 @@ begin
     AutoBackup       := True;
     SecondBackupPath := Path2;
 
-    FileName         := Path1 + cqrini.ReadString('Station', 'Call', '');
+    FileName         := Path1 + call;
     if cqrini.ReadInteger('Backup', 'BackupType', 0) > 0 then
       FileName := FileName + '_backup.adi'
     else
