@@ -3,6 +3,17 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.1.0
+  + wsjt remote mode improvements (Saku, OH1KH)
+  + wsjt cq monitor added (Saku, OH1KH)
+  + worked grids map added (Saku, OH1KH)
+  + simple Contest window added (Saku, OH1KH)
+  + button to enable/disable callsign alert to dx cluster added (Saku, OH1KH)
+  + propagation from DK0WCY added (Saku, OH1KH)
+  + reminder added (Saku, OH1KH)
+  + CTRL+Z in dx cluster command line scrolls back last 5 commands (Saku, OH1KH)
+  + callsign for DX cluster alert can be defined using regular expressions (Saku, OH1KH)
+  - position storage of New QSO and LoTW import fixed
 
 2.0.5 (2017-03-12)
   + sort by gridsquare added to filter
