@@ -334,6 +334,8 @@ type
     procedure dbgrdMainColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer
       );
     procedure dbgrdMainColumnSized(Sender: TObject);
+    procedure dbgrdMainDrawColumnCell(Sender : TObject; const Rect : TRect;
+      DataCol : Integer; Column : TColumn; State : TGridDrawState);
     procedure dbgrdMainEnter(Sender: TObject);
     procedure dbgrdMainKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
       );
@@ -475,7 +477,9 @@ begin
       if frmRotControl.Showing then
         dmUtils.LoadFontSettings(frmRotControl);
       if frmQSODetails.Showing then
-        frmQSODetails.LoadFonts
+        frmQSODetails.LoadFonts;
+
+      dmData.LoadQSODateColorSettings
     end
   finally
     Free
@@ -1395,6 +1399,19 @@ end;
 procedure TfrmMain.dbgrdMainColumnSized(Sender: TObject);
 begin
   dmUtils.SaveForm(frmMain)
+end;
+
+procedure TfrmMain.dbgrdMainDrawColumnCell(Sender : TObject;
+  const Rect : TRect; DataCol : Integer; Column : TColumn;
+  State : TGridDrawState);
+begin
+  if dmData.UseQSOColor then
+  begin
+    if dmData.qCQRLOG.FieldByName('qsodate').AsDateTime < dmData.QSOColorDate then
+      dbgrdMain.Canvas.Font.Color := dmData.QSOColor
+  end;
+
+  dbgrdMain.DefaultDrawColumnCell(Rect,DataCol,Column,State)
 end;
 
 procedure TfrmMain.dbgrdMainEnter(Sender: TObject);

@@ -20,7 +20,7 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn, uMyFindFile;
+  mysql57dyn, mysql57conn, uMyFindFile, Graphics;
 
 const
   MaxCall   = 1000000;
@@ -219,7 +219,9 @@ type
     Zip2  : TZipCode;
     Zip3  : TZipCode;
 
-    //tstini : TMyIni;
+    UseQSOColor  : Boolean;
+    QSOColor     : TColor;
+    QSOColorDate : TDateTime;
 
     property DBName  : String read fDbName;
     property HomeDir : String read fHomeDir write fHomeDir; //~/.config/cqrlog
@@ -336,6 +338,7 @@ type
     procedure OpenFreqMemories(mode : String);
     procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
     procedure GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
+    procedure LoadQSODateColorSettings;
   end;
 
 var
@@ -776,7 +779,9 @@ begin
   OpenFreqMemories('');
 
   LoadClubsSettings;
-  LoadZipSettings
+  LoadZipSettings;
+
+  LoadQSODateColorSettings
 end;
 
 procedure TdmData.SaveConfigFile;
@@ -4376,6 +4381,23 @@ begin
     FreeAndNil(tr)
   end
 end;
+
+procedure TdmData.LoadQSODateColorSettings;
+begin
+  UseQSOColor  := cqrini.ReadBool('Program', 'QSODiffColor', False);
+  QSOColor     := cqrini.ReadInteger('Program', 'QSOColor', clBlack);
+
+  if UseQSOColor then
+  begin
+    if dmUtils.IsDateOK(cqrini.ReadString('Program', 'QSOColorDate', '')) then
+      QSOColorDate := dmUtils.StrToDateFormat(cqrini.ReadString('Program', 'QSOColorDate', ''))
+    else
+      QSOColorDate := dmUtils.StrToDateFormat('2050-12-31')
+  end
+  else
+    QSOColorDate := now
+end;
+
 
 end.
 

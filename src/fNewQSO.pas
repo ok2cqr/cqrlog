@@ -537,7 +537,6 @@ type
     adif : Word;
     WhatUpNext : TWhereToUpload;
     UploadAll  : Boolean;
-
     //WsjtxSock             : TUDPBlockSocket;
     //WsjtxMode             : String;          Moved to public
     //WsjtxBand             : String;
@@ -1177,6 +1176,8 @@ begin
   dbgrdQSOBefore.Visible := cqrini.ReadBool('NewQSO','ShowGrd',True);
   sbNewQSO.Visible := cqrini.ReadBool('NewQSO','StatBar',True);
   acShowStatBar.Checked := sbNewQSO.Visible;
+
+  dmData.LoadQSODateColorSettings;
 
   InitializeCW;
 
@@ -4238,7 +4239,9 @@ begin
       if frmQSODetails.Showing then
         frmQSODetails.LoadFonts;
       if frmRbnMonitor.Showing then
-        dmUtils.LoadFontSettings(frmRbnMonitor)
+        dmUtils.LoadFontSettings(frmRbnMonitor);
+
+      dmData.LoadQSODateColorSettings;
     end;
     ChangeCallBookCaption
   finally
@@ -4438,6 +4441,13 @@ begin
   begin
     dbgrdQSOBefore.Canvas.Font.Color := clRed
   end;
+
+  if dmData.UseQSOColor then
+  begin
+    if dmData.qQSOBefore.FieldByName('qsodate').AsDateTime < dmData.QSOColorDate then
+      dbgrdQSOBefore.Canvas.Font.Color := dmData.QSOColor
+  end;
+
   dbgrdQSOBefore.DefaultDrawColumnCell(Rect,DataCol,Column,State)
 end;
 

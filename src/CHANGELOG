@@ -13,6 +13,7 @@ Legend:
   + reminder added (Saku, OH1KH)
   + CTRL+Z in dx cluster command line scrolls back last 5 commands (Saku, OH1KH)
   + callsign for DX cluster alert can be defined using regular expressions (Saku, OH1KH)
+  + Show QSO older then user defined date with different color
   - position storage of New QSO and LoTW import fixed
   - auto backup didn't work for callsigns with / character fixed
 

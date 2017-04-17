@@ -344,6 +344,7 @@ object frmMain: TfrmMain
     OnCellClick = dbgrdMainCellClick
     OnColumnMoved = dbgrdMainColumnMoved
     OnColumnSized = dbgrdMainColumnSized
+    OnDrawColumnCell = dbgrdMainDrawColumnCell
     OnEnter = dbgrdMainEnter
     OnKeyUp = dbgrdMainKeyUp
   end

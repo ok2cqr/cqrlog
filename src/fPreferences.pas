@@ -71,6 +71,7 @@ type
     btnAlertCallsigns: TButton;
     btnCfgStorage: TButton;
     btnAddTrxMem : TButton;
+    btnSelectQSOColor : TButton;
     cb10m1: TCheckBox;
     cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
@@ -117,6 +118,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkQSOColor : TCheckBox;
     chkAllowRegExp : TCheckBox;
     chkFillAwardField : TCheckBox;
     chkUseCallbookZonesEtc : TCheckBox;
@@ -468,6 +470,8 @@ type
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
+    dlgColor : TColorDialog;
+    edtQSOColorDate : TEdit;
     edtWsjtIp: TEdit;
     edtCondxImageUrl: TEdit;
     edtBackupPath1: TEdit;
@@ -767,6 +771,8 @@ type
     Label205: TLabel;
     Label206 : TLabel;
     Label26: TLabel;
+    Label46 : TLabel;
+    Label47 : TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -867,6 +873,7 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    pnlQSOColor : TPanel;
     pgTRXControl: TPageControl;
     pgPreferences: TPageControl;
     Panel1: TPanel;
@@ -944,6 +951,7 @@ type
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnChangeDefModeClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
+    procedure btnSelectQSOColorClick(Sender : TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure btnBrowseBackupClick(Sender: TObject);
@@ -1017,6 +1025,7 @@ type
     procedure edtPoll2Exit(Sender: TObject);
     procedure edtPoll1Exit(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
+    procedure pnlQSOColorClick(Sender : TObject);
   private
     wasOnlineLogSupportEnabled : Boolean;
   public
@@ -1096,6 +1105,9 @@ begin
   cqrini.WriteFloat('Program', 'SunOffset', StrToCurr(edtSunOffset.Text));
   cqrini.WriteBool('Program', 'SysUTC', chkSysUTC.Checked);
   cqrini.WriteBool('Program','ShowMiles',chkShowMiles.Checked);
+  cqrini.WriteBool('Program', 'QSODiffColor', chkQSOColor.Checked);
+  cqrini.WriteInteger('Program', 'QSOColor', pnlQSOColor.Color);
+  cqrini.WriteString('Program', 'QSOColorDate', edtQSOColorDate.Text);
 
   cqrini.WriteBool('Columns', 'Date', chkDate.Checked);
   cqrini.WriteBool('Columns', 'time_on', chkTimeOn.Checked);
@@ -1923,6 +1935,13 @@ begin
     edtFldigiPath.Text := dlgOpen.FileName;
 end;
 
+procedure TfrmPreferences.btnSelectQSOColorClick(Sender : TObject);
+begin
+  dlgColor.Color := pnlQSOColor.Color;
+  if dlgColor.Execute then
+    pnlQSOColor.Color := dlgColor.Color
+end;
+
 procedure TfrmPreferences.btnChangeDefFreqClick(Sender: TObject);
 begin
   frmNewQSODefValues := TfrmNewQSODefValues.Create(frmPreferences);
@@ -2433,6 +2452,9 @@ begin
   edtSunOffset.Text := CurrToStr(cqrini.ReadFloat('Program', 'SunOffset', 0));
   chkSysUTC.Checked := cqrini.ReadBool('Program', 'SysUTC', True);
   chkShowMiles.Checked := cqrini.ReadBool('Program','ShowMiles',False);
+  chkQSOColor.Checked := cqrini.ReadBool('Program', 'QSODiffColor', False);
+  pnlQSOColor.Color := cqrini.ReadInteger('Program', 'QSOColor', clBlack);
+  edtQSOColorDate.Text := cqrini.ReadString('Program', 'QSOColorDate', '');
 
   if cqrini.ReadBool('Program', 'BandStatMHz', True) then
     rgStatistics.ItemIndex := 0
@@ -2873,6 +2895,11 @@ end;
 procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
 begin
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
+end;
+
+procedure TfrmPreferences.pnlQSOColorClick(Sender : TObject);
+begin
+  btnSelectQSOColor.Click
 end;
 
 end.
