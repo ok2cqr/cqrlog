@@ -139,6 +139,7 @@ object frmContest: TfrmContest
     Top = 56
     Width = 46
     Caption = 'Inc'
+    OnClick = chNRIncClick
     TabOrder = 8
   end
   object lblNRs: TLabel

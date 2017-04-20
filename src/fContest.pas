@@ -36,6 +36,7 @@ type
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
     procedure chNoNrChange(Sender: TObject);
+    procedure chNRIncClick(Sender : TObject);
     procedure chTrueRSTChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -209,6 +210,15 @@ begin
   edtSRX.TabOrder := n;
   edtSRX2.TabOrder := m;
   btSave.TabOrder := s
+end;
+
+procedure TfrmContest.chNRIncClick(Sender : TObject);
+begin
+  if chNRInc.Checked and (edtSTX.Text = '') then
+  begin
+    edtSTX.Text := '001';
+    edtCall.SetFocus
+  end
 end;
 
 procedure TfrmContest.chTrueRSTChange(Sender: TObject);
