@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType;
+  StdCtrls, ExtCtrls, LCLType, Buttons;
 
 type
 
@@ -14,6 +14,7 @@ type
 
   TfrmContest = class(TForm)
     btSave: TButton;
+    Button1 : TButton;
     chTrueRST: TCheckBox;
     chNoNr: TCheckBox;
     chSpace: TCheckBox;
@@ -35,6 +36,7 @@ type
     lblNRs: TLabel;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
+    procedure Button1Click(Sender : TObject);
     procedure chNoNrChange(Sender: TObject);
     procedure chNRIncClick(Sender : TObject);
     procedure chTrueRSTChange(Sender: TObject);
@@ -173,6 +175,12 @@ begin
   writeln('input finale');
   ChkSerialNrUpd(chNRInc.Checked);
   initInput;
+end;
+
+procedure TfrmContest.Button1Click(Sender : TObject);
+begin
+  frmNewQSO.ClearAll;
+  initInput
 end;
 
 procedure TfrmContest.chNoNrChange(Sender: TObject);

@@ -70,9 +70,10 @@ object frmContest: TfrmContest
   end
   object btSave: TButton
     Left = 592
-    Height = 32
-    Top = 27
-    Width = 83
+    Height = 29
+    Top = 8
+    Width = 79
+    AutoSize = True
     Caption = 'Save QSO'
     OnClick = btSaveClick
     TabOrder = 3
@@ -184,10 +185,19 @@ object frmContest: TfrmContest
     OnChange = chTrueRSTChange
     TabOrder = 12
   end
+  object Button1: TButton
+    Left = 592
+    Height = 29
+    Top = 48
+    Width = 79
+    Caption = 'Clear all'
+    OnClick = Button1Click
+    TabOrder = 13
+  end
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer
-    left = 616
-    top = 8
+    left = 472
+    top = 24
   end
 end
