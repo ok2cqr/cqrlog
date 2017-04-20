@@ -343,7 +343,7 @@ begin
   date := FormatDateTime('yyyy-mm-dd',now);
   Writeln(f, '<ADIF_VER:5>2.2.1');
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
-  Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
+  Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK7AN and Martin, OK1RR');
   Writeln(f);
   Writeln(f, 'Internet: http://www.cqrlog.com');
   Writeln(f);
