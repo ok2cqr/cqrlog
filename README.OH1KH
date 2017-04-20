@@ -152,4 +152,15 @@
        cqrlog PC ip address 192.168.60.222, cqrlog setting/wsjt-x:  port 2237 address 192.168.60.222
        wsjt-x PC ip address 192.168.60.223, wstt-x setting/reporting  port 2237 address 192.168.60.222 
 													(2.0.5(029))
+20.04.2017
 
+  - Changed contest form so that pressing 1xESC will return cursor to the end of previously typed callsign fro fixing. It also
+    stops CW keying if it is initiated (as it does on NewQSO).
+    New log seek (+qrz seek) is done again when leaving call field (tnx. note LA2FDA) 
+    2xESC returns also to call field, but clears previously typed callsign completely (as it does in NewQso).
+    This form is causing some focusing conflicts with NewQso form, but seems to work anyhow.
+    Needs attention of better skilled programmer.     (2.0.5(030))
+
+
+
+    

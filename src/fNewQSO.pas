@@ -521,7 +521,7 @@ type
     old_freq   : String;
     old_qslr   : String;
     posun      : String;
-    old_call   : String;
+
     old_time   : String;
     old_rsts   : String;
     old_rstr   : String;
@@ -589,6 +589,7 @@ type
     WsjtxMode             : String;          //Moved from private
     WsjtxBand             : String;
 
+    old_call   : String;               //Moved from private
 
     ClearAfterFreqChange : Boolean;
     ChangeFreqLimit : Double;
@@ -1151,7 +1152,7 @@ begin
   sbtnQSL.Visible    := False;
   ChangeDXCC := False;
   adif := 0;
-  FreqBefChange := frmTRXControl.GetFreqMHz
+  FreqBefChange := frmTRXControl.GetFreqMHz;
 end;
 
 procedure TfrmNewQSO.LoadSettings;
@@ -4533,10 +4534,12 @@ begin
     dmData.qQSOBefore.Last;
     dmUtils.LoadFontSettings(frmNewQSO)
   end;
+
   if fViewQSO or fEditQSO then
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount)
   else
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount+1);
+
   if (not (fViewQSO or fEditQSO)) then
   begin
     InsertNameQTH;
