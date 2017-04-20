@@ -314,7 +314,10 @@ begin
   edtRSTs.Text := trim(copy(frmNewQSO.edtHisRST.Text, 0, 3));
   //just pick  '599' or '59 '  if there happens to be more
   edtRSTr.Text := trim(copy(frmNewQSO.edtMyRST.Text, 0, 3));
-  edtSTX.Text := RSTstx;
+
+  if not ((edtSTX.Text <> '') and (RSTstx = ''))  then
+    edtSTX.Text := RSTstx;
+
   edtSTX2.Text := RSTstxAdd;
   edtSRX.Text := '';
   edtSRX2.Text := '';
@@ -322,7 +325,7 @@ begin
   frmContest.ShowOnTop;
   frmContest.SetFocus;
   edtCall.SetFocus;
-  EscFirstTime := True;
+  EscFirstTime := True
 end;
 
 procedure TfrmContest.ChkSerialNrUpd(IncNr: boolean);   // do we need serial nr inc
