@@ -34,6 +34,7 @@ type
     lblNRr: TLabel;
     lblMSGr: TLabel;
     lblNRs: TLabel;
+    btnHelp : TSpeedButton;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
     procedure Button1Click(Sender : TObject);
@@ -52,6 +53,7 @@ type
     procedure FormHide(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure btnHelpClick(Sender : TObject);
     procedure tmrESC2Timer(Sender: TObject);
   private
     { private declarations }
@@ -309,6 +311,11 @@ procedure TfrmContest.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmContest);
   InitInput;
+end;
+
+procedure TfrmContest.btnHelpClick(Sender : TObject);
+begin
+  ShowHelp
 end;
 
 procedure TfrmContest.tmrESC2Timer(Sender: TObject);
