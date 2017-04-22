@@ -2216,10 +2216,10 @@ begin
           ParNum :=  UiFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
           //----------------------------------------------------
-          mode := StFBuf(index);    //mode as letter: # @
+          mode := StFBuf(index);    //mode as letter: # @ &
           if dmData.DebugLevel>=1 then Writeln(mode);
           //----------------------------------------------------
-          ParStr := StFBuf(index);    //message
+          ParStr := trim(StFBuf(index));    //message          //MSK144 CQ has one space before CQ, need trim
           if dmData.DebugLevel>=1 then Writeln(ParStr);
           //----------------------------------------------------
           Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part

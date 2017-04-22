@@ -159,8 +159,12 @@
     New log seek (+qrz seek) is done again when leaving call field (tnx. note LA2FDA) 
     2xESC returns also to call field, but clears previously typed callsign completely (as it does in NewQso).
     This form is causing some focusing conflicts with NewQso form, but seems to work anyhow.
-    Needs attention of better skilled programmer.     (2.0.5(030))
+    Needs attention of better skilled programmer.   (2.0.5.(030))
 
+22.04.2017
 
+   - Fixed CQ Monitor so that it now shows also MSK144 cqs. Double click on callsign line does not initiate reply as it does with JT65/JT9
+     I do not know should it with MSK144 mode, but I investigate it more in future and fix it if UDP specs have reply allowed when using MSK144.
+     (2.0.5(31))
 
     
