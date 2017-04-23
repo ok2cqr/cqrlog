@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>CQRLOG - Supported Radio Types</title>
+</head>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
+<p align=center><img src=img/line.png></p>
+
+<p align="center">
+   <img src="img/contest.png">
+</p>
+<p>
+<b>RECOMMENDATION:</b> Make new log for each contest, do not allow qrz/hamqth search. It slows things.
+<b>Note:</b> This is <b>NOT</b> a contest logging add-on!!!
+It is meant to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
+</p><p>
+Form Contest is just a "child form" for NewQSO to make qso logging faster when working in contests.
+With Tru and Msg is Loc setting it is useful also in VHF, UHF, SHF Tropo, Es etc. openings for fast qso
+logging.
+</p>
+<p>
+<b>HOTKEYS</b> works like in <a href="h20.html">New QSO window</a>. 2xESC clears all fileds, F1..F10 send CW macros etc.
+</p>
+
+<p>
+Form Contest has following fields:<br>
+<ul>
+<li><b>Call</b> when you leave this field callsign is moved to NewQSO, to see if you have qso before.</li>
+<li><b>RST s</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
+<li><b>Tru</b> means you like to change true reports. Useful in some high band contests and Es and tropo openings.</li>
+<li><b>NR s</b> serial number to send. If <b>Inc</b> is checked it will auto increment. You may change this number at any time. Increment goes on from typed number.</li>
+<li><b>MSG s</b> sometimes you may need an additional message with number, or just a message with no number. On high band contests you may type your locator here.</li>
+<li><b>RST r</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
+<li><b>NR r</b> serial number you receive. No if no serial number then setting this changes tab order so that it jumps directly to MSG r from Call (and after that NR r). Note: you can feed only numbers to NR r field.</li>
+<li><b>MSG r</b> message you receive, if <b>MSG is LOC</b> is checked then message will be placed <b>ONLY</b> to NewQSO/Grid field <b>NOT</b> to received rst field</li>
+<li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears fields.</li>
+<li><b>Clear all</b> Clear all fields and prepare to enter new QSO</li>
+<li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field.
+Note! This prevents typing space (mainly to MSG fields).</li>
+</p>
+<p>
+TAB-key moves cursor between fields. So contest qso goes like this:
+type callsign-&gt;press TAB-&gt;type contest rxnumber-&gt;press TAB-&gt;type contest message-&gt;press ENTER.
+Or hit ENTER after rxnumber if no additional message is exchanged.
+</p>
+<p>Remember that pressing ENTER key at any field saves qso with existing values. How ever there must be
+callsign at least three characters long. Sent/Received number and message are not needed.</p>
+<p>
+Contest numbers and messages are saved in log into RST fields separated by spaces like. 599 001 MSG
+This has two benefits:
+<ul>
+<li> CW macros work without any programming change. If you set “send RST”-macro it sends also contest
+number and message, and when not in contest it sends just RST.
+How ever a small modification to original is made. If you use %rs for RST it will send 5NN. Now
+modified version sends also T for zero. So you will have 599 001 like 5NN TT1.</li>
+<li> Backup of logs work without any change. RST field just are a bit longer</li>
+</ul>
+</p>
+<p>
+ADIF export is modified so that it separates RST fields to right tags.<br><br>
+&lt;RST_SENT:3&gt;599&lt;STX:3&gt;001<br>
+&lt;RST_RCVD:3&gt;599&lt;SRX:3&gt;002<br>
+&lt;RST_SENT:3&gt;599&lt;STX:3&gt;003&lt;STX_STRING:2&gt;SA<br>
+&lt;RST_RCVD:3&gt;599&lt;SRX:3&gt;003&lt;SRX_STRING:2&gt;dd<br>
+&lt;RST_SENT:3&gt;599&lt;STX:3&gt;002&lt;STX_STRING:2&gt;SA<br>
+&lt;RST_RCVD:3&gt;599&lt;SRX:3&gt;003&lt;SRX_STRING:2&gt;kb<br>
+&lt;RST_SENT:3&gt;599&lt;STX:3&gt;001&lt;STX_STRING:2&gt;SA<br>
+&lt;RST_RCVD:3&gt;599&lt;SRX:3&gt;002&lt;SRX_STRING:2&gt;SB<br>
+</p>
+<p>
+HTML export will look like this:<br>
+<img src="img/contest_html_export.png">
+</p>
+<p>
+Most contests expect Cabrillo log format. There is no support for this. You have to make ADIF export of qsos
+and then use separate program if you want to send logs.</p><p>
+I found nice adif2cabrillo program for Linux from <a href="http://users.telenet.be/on4qz/" target="_blank">http://users.telenet.be/on4qz/</a> that supports ADIF importing.
+Starting is bit complicated: you have to have qt5 and (qmake-qt5 if your distro is Fedora) to be able to compile
+it.</p><p>
+Then there are no templates for different contests. You have to create them, but after that it serves you well!
+It accepts nicely exported ADIF format from cqrlog and dig out STX and SRX as expected.
+</p>
+<p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="index.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h20.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>

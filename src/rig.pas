@@ -2,7 +2,7 @@
 {***************************************************************************************************
 
 Copyright (C) <2008,2009> <Jeff K. Steinkamp>
-<2009> <Petr Hlozek,OK2CQR petr@ok2cqr.com>
+<2009> <Petr Hlozek,OK7AN petr@ok7an.com>
 A few bugfixes and changes.
 
 This program is free software; you can redistribute it and/or modify it under the

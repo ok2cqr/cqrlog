@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType;
+  StdCtrls, ExtCtrls, LCLType, Buttons;
 
 type
 
@@ -14,6 +14,7 @@ type
 
   TfrmContest = class(TForm)
     btSave: TButton;
+    Button1 : TButton;
     chTrueRST: TCheckBox;
     chNoNr: TCheckBox;
     chSpace: TCheckBox;
@@ -33,9 +34,12 @@ type
     lblNRr: TLabel;
     lblMSGr: TLabel;
     lblNRs: TLabel;
+    btnHelp : TSpeedButton;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
+    procedure Button1Click(Sender : TObject);
     procedure chNoNrChange(Sender: TObject);
+    procedure chNRIncClick(Sender : TObject);
     procedure chTrueRSTChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -49,6 +53,7 @@ type
     procedure FormHide(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure btnHelpClick(Sender : TObject);
     procedure tmrESC2Timer(Sender: TObject);
   private
     { private declarations }
@@ -91,13 +96,9 @@ begin
   begin
     if EscFirstTime then
     begin
-      //if edtCall.Text = '' then
-         frmNewQSO.old_call:='';             //this is stupid hack but only way to reproduce
-         frmNewQSO.edtName.Text :='';        //new seek from log (important to see if wkd before,
-         frmNewQSO.edtQth.Text  :='';        //and qrz, if one wants)
-         frmNewQSO.edtGrid.Text :='';        //otherwise we do not get cursor at the end of call
-         edtCall.SetFocus;
-      //else
+      if edtCall.Text = '' then
+        edtCall.SetFocus
+      else
       if Assigned(frmNewQSO.CWint) then
         frmNewQSO.CWint.StopSending;
       EscFirstTime := False;
@@ -105,13 +106,11 @@ begin
     end
     else begin   // esc second time
       frmNewQSO.ClearAll;
-      if dmData.DebugLevel >= 1 then
-         writeln('Clear all done next focus');
+      writeln('Clear all done nex focus');
       initInput;
       tmrESC2Timer(nil);
     end;
-
-     key := 0;
+    key := 0;
   end;
 
   //cw memories
@@ -175,10 +174,15 @@ begin
     frmNewQSO.edtMyRST.Text := edtRSTr.Text + ' ' + edtSRX.Text + ' ' + edtSRX2.Text;
 
   frmNewQSO.btnSave.Click;
-  if dmData.DebugLevel >= 1 then
-                       writeln('input finale');
+  writeln('input finale');
   ChkSerialNrUpd(chNRInc.Checked);
   initInput;
+end;
+
+procedure TfrmContest.Button1Click(Sender : TObject);
+begin
+  frmNewQSO.ClearAll;
+  initInput
 end;
 
 procedure TfrmContest.chNoNrChange(Sender: TObject);
@@ -216,6 +220,15 @@ begin
   edtSRX.TabOrder := n;
   edtSRX2.TabOrder := m;
   btSave.TabOrder := s
+end;
+
+procedure TfrmContest.chNRIncClick(Sender : TObject);
+begin
+  if chNRInc.Checked and (edtSTX.Text = '') then
+  begin
+    edtSTX.Text := '001';
+    edtCall.SetFocus
+  end
 end;
 
 procedure TfrmContest.chTrueRSTChange(Sender: TObject);
@@ -300,6 +313,11 @@ begin
   InitInput;
 end;
 
+procedure TfrmContest.btnHelpClick(Sender : TObject);
+begin
+  ShowHelp
+end;
+
 procedure TfrmContest.tmrESC2Timer(Sender: TObject);
 begin
   EscFirstTime := True; //time for double esc passed
@@ -311,39 +329,18 @@ begin
   edtRSTs.Text := trim(copy(frmNewQSO.edtHisRST.Text, 0, 3));
   //just pick  '599' or '59 '  if there happens to be more
   edtRSTr.Text := trim(copy(frmNewQSO.edtMyRST.Text, 0, 3));
-  edtSTX.Text := RSTstx;
+
+  if not ((edtSTX.Text <> '') and (RSTstx = ''))  then
+    edtSTX.Text := RSTstx;
+
   edtSTX2.Text := RSTstxAdd;
   edtSRX.Text := '';
   edtSRX2.Text := '';
   edtCall.Clear;
-  EscFirstTime := True;
-  {
-  Next 3 lines of procedure will cause
-  ----
-  either (dbg msg:input finale):
-
-  NOTE: Window with stalled focus found!, faking focus-out event
-  NOTE: Window with stalled focus found!, faking focus-out event
-  NOTE: Window with stalled focus found!, faking focus-out event
-  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
-  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
-  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
-  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
-  ----
-  or(dbg msg: Clear all done next focus ):
-
-  NOTE: Window with stalled focus found!, faking focus-out event
-  NOTE: Window with stalled focus found!, faking focus-out event
-
-  ----
-  All works, but this needs attention and I can not resolve this at the moment.
-
-  }
-
   frmContest.ShowOnTop;
   frmContest.SetFocus;
   edtCall.SetFocus;
-
+  EscFirstTime := True
 end;
 
 procedure TfrmContest.ChkSerialNrUpd(IncNr: boolean);   // do we need serial nr inc
