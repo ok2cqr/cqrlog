@@ -167,4 +167,13 @@
      I do not know should it with MSK144 mode, but I investigate it more in future and fix it if UDP specs have reply allowed when using MSK144.
      (2.0.5(31))
 
-    
+23.04.2017
+
+   - Changed Wsjtx decoding timer so that when UDP packets are available timer turns to HiSpeed (50ms, const value). When no more
+     Packets it turns to LoSpeed (1000ms).
+     This helps in situation where wsjt-x has been on band for long and then carlog/remote wsjt-x is turned on. At that point wsjt-x
+     will send all of it's buffered decodings at one go and there may be lots of old lines.
+     It also speeds up things during noraml decode period (secs 50 - 60 of minute) giving user more time to decide to whos CQ he
+     is going to answer.
+     Merged also latest changes from Master_ok2cqr                   (2.0.5(032))
+ 
