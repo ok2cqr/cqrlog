@@ -176,4 +176,8 @@
      It also speeds up things during noraml decode period (secs 50 - 60 of minute) giving user more time to decide to whos CQ he
      is going to answer.
      Merged also latest changes from Master_ok2cqr                   (2.0.5(032))
+
+   - Small bugfix. tmrWsjtx was enabled after disableremotemode was called causing program exeption when wsjt-x was closed before cqrlog.
+     (2.0.5(033))
+
  

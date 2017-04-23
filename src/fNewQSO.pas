@@ -2395,7 +2395,9 @@ begin
            DisableRemoteMode
          end //Close
     end; //case
-    tmrWsjtx.Enabled  := True;            // end of decode. Allow timer run again.
+     if mnuRemoteModeWsjt.Checked then         // must do this check. Otherwise at decode 6 ://Close  calling DisableRemoteMode
+                   tmrWsjtx.Enabled  := True;  // causes exception if wsjt-x is closed but cqrlog still running.
+                                               // Now end of decode and wsjt-x still running: Allow timer run again.
   end  //if WsjtxSock.lasterror=0 then
   else
    Begin
