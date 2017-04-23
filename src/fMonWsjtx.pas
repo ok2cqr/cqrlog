@@ -271,6 +271,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       case msgMode of
       '#'  : mode := 'JT65';
       '@'  : mode := 'JT9';
+      '&'  : mode := 'MSK144';
       else mode :='';
       end;
 
