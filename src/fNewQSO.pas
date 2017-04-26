@@ -539,10 +539,8 @@ type
     adif : Word;
     WhatUpNext : TWhereToUpload;
     UploadAll  : Boolean;
-    //WsjtxSock             : TUDPBlockSocket;
-    //WsjtxMode             : String;          Moved to public
-    //WsjtxBand             : String;
-    WsjtxRememberAutoMode : Boolean;
+
+    RememberAutoMode : Boolean;
 
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -573,7 +571,7 @@ type
     procedure RefreshInfoLabels;
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
-    procedure DisableRemoteMode;
+
     procedure CloseAllWindows;
     procedure onExcept(Sender: TObject; E: Exception);
     procedure DisplayCoordinates(latitude, Longitude : Currency);
@@ -591,13 +589,17 @@ type
     WsjtxMode             : String;          //Moved from private
     WsjtxBand             : String;
 
-    old_call   : String;               //Moved from private
+    old_call              : String;               //Moved from private
+
+    FldigiXmlRpc          : Boolean;
 
     ClearAfterFreqChange : Boolean;
     ChangeFreqLimit : Double;
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
+
+    procedure DisableRemoteMode;   //Moved from private
 
     procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
@@ -677,7 +679,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest;
+     fRemind, fContest,fXfldigi;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1617,6 +1619,11 @@ var
   Mask  : String='';
   data  : String = '';
 begin
+
+ if FldigiXmlRpc then
+    frmxfldigi.TimTime
+ else
+ Begin
   ID:=msgget(1238,IPC_CREAT or 438);
   If ID<0 then DoError('MsgGet');
   Buf.MType:=1024;
@@ -1844,7 +1851,9 @@ begin
       edtRemQSO.Text := note
     end;
     btnSave.Click
-  end
+  end;   //while msgrcv
+ end; //else fldigixmlrpc
+
 end;
 
 procedure TfrmNewQSO.tmrRadioTimer(Sender: TObject);
@@ -1855,13 +1864,20 @@ begin
   mode := '';
   freq := '';
   if Running then
-    exit;
+   exit;
   Running := True;
   try
     if (not (fViewQSO or fEditQSO)) then
     begin
       if (cbOffline.Checked and (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjt.Checked)) then
-        exit;
+        exit;   //offline, but not remote mode
+
+      if cbOffline.Checked
+        and ((mnuRemoteMode.Checked and (cqrini.ReadInteger('fldigi','freq',0) > 0))
+              or (mnuRemoteModeWsjt.Checked and (cqrini.ReadInteger('wsjt','freq',0) > 0))
+            ) then
+                  exit; //frequency from fldigi/wsjtx or their defaults
+
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
@@ -1892,7 +1908,8 @@ begin
     end
   finally
     Running := False
-  end
+  end;
+
 end;
 
 procedure TfrmNewQSO.tmrStartStartTimer(Sender: TObject);
@@ -2140,13 +2157,13 @@ begin
           ParStr := StFBuf(index);    //report
           if dmData.DebugLevel>=1 then Writeln('Report: ',ParStr);
           //----------------------------------------------------
-          case cqrini.ReadInteger('fldigi','TXmode',1) of
+          case cqrini.ReadInteger('wsjt','mode',1) of
             0 : begin
                   if not frmTRXControl.GetModeFreqNewQSO(TXmode,mhz) then
                     TXmode :='';
                 end;
-            1 : TXmode:= trim(StFBuf(index));
-            2 : TXmode := cqrini.ReadString('fldigi','defmode','RTTY')
+            1 : TXmode := trim(StFBuf(index));
+            2 : TXmode := cqrini.ReadString('wsjt','defmode','JT65')
           end;
           if dmData.DebugLevel>=1 then Writeln('TXmode: ',Txmode);
           //----------------------------------------------------
@@ -2354,7 +2371,7 @@ begin
                   if dmData.DebugLevel>=1 then Writeln('Mode :', mode);
                   cmbMode.Text := mode
                 end;
-            2 : cmbMode.Text := cqrini.ReadString('wsjt','defmode','RTTY')
+            2 : cmbMode.Text := cqrini.ReadString('wsjt','defmode','JT65')
            end;
            //----------------------------------------------------
            rstS:= trim(StFBuf(index));
@@ -6081,14 +6098,23 @@ var
 begin
   case RemoteType of
     rmtFldigi : begin
+                  if mnuRemoteModeWsjt.Checked then       //not both on at same time
+                     DisableRemoteMode;
                   mnuRemoteMode.Checked := True;
+                  RememberAutoMode := chkAutoMode.Checked;
+                  chkAutoMode.Checked   := False;
                   lblCall.Caption       := 'Remote mode!';
                   tmrFldigi.Interval    := cqrini.ReadInteger('fldigi','interval',2)*1000;
                   run                   := cqrini.ReadBool('fldigi','run',False);
                   path                  := cqrini.ReadString('fldigi','path','');
-                  tmrFldigi.Enabled     := True
+                  FldigiXmlRpc          := cqrini.ReadBool('fldigi','xmlrpc',False);
+                  tmrFldigi.Enabled     := true;
+                  if FldigiXmlRpc then
+                     frmxfldigi.Visible := true;
                 end;
     rmtWsjt   : begin
+                  if mnuRemoteMode.Checked then          //not both on at same time
+                     DisableRemoteMode;
                   mnuRemoteModeWsjt.Checked := True;
                   lblCall.Caption           := 'Wsjtx remote';
                   path                      := cqrini.ReadString('wsjt','path','');
@@ -6116,7 +6142,7 @@ begin
                      DisableRemoteMode;
                      exit
                   end;
-                  WsjtxRememberAutoMode := chkAutoMode.Checked;
+                  RememberAutoMode := chkAutoMode.Checked;
                   chkAutoMode.Checked   := False;
                   mnuWsjtxmonitor.Visible := True; //we show "monitor" in view-submenu when active
                   acMonitorWsjtxExecute(nil)
@@ -6136,13 +6162,12 @@ begin
   tmrFldigi.Enabled         := False;
   tmrWsjtx.Enabled          := False;
   mnuRemoteMode.Checked     := False;
-  if (mnuRemoteModeWsjt.Checked = true ) then //if wsjtx remote we return state of newQSO/mode-auto as it was
-     begin
-       mnuRemoteModeWsjt.Checked:= False;
-       chkAutoMode.Checked:= WsjtxRememberAutoMode;
-     end;
+  mnuRemoteModeWsjt.Checked:= False;
+  chkAutoMode.Checked:= RememberAutoMode;
   mnuWsjtxmonitor.Visible := False;    //we do not show "monitor" in view-submenu when not active
   frmMonWsjtx.Hide;                    // and close monitor
+  if FldigiXmlRpc then
+     frmxfldigi.Visible     := false;
   lblCall.Caption           := 'Call:';
   lblCall.Font.Color        := clDefault;
   edtCall.Enabled           := True;

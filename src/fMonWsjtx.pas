@@ -167,6 +167,7 @@ begin
    cqrini.WriteBool('MonWsjtx','LocAlert',chkLocAlert.Checked);
    cqrini.WriteString('MonWsjtx','TextAlert',EditAlert.Text);
    dmUtils.SaveWindowPos(frmMonWsjtx);
+   frmNewQSO.DisableRemoteMode;
 end;
 
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);

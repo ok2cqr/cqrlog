@@ -180,4 +180,8 @@
    - Small bugfix. tmrWsjtx was enabled after disableremotemode was called causing program exeption when wsjt-x was closed before cqrlog.
      (2.0.5(033))
 
- 
+26.04.2017
+
+    -Added alternative fldigi remote using XmlRpc. Allows fldigi to run on other networked PC than cqrlog. For more details see: CqrlogAdditions2.pdf
+    -fixed some minor bugs on remote/frequency selection. (2.0.5(034))
+    

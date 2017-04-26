@@ -22,7 +22,7 @@ uses
   fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer,
   fRadioMemories, fAddRadioMemory, fException, fDbError, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
-  fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx;
+  fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi;
 var
   Splash : TfrmSplash;
 
@@ -68,6 +68,7 @@ begin
   Application.CreateForm(TfrmPropDK0WCY, frmPropDK0WCY);
   Application.CreateForm(TfrmReminder, frmReminder);
   Application.CreateForm(TfrmContest, frmContest);
+  Application.CreateForm(Tfrmxfldigi, frmxfldigi);
 
   Splash.Update;
   application.ProcessMessages;
