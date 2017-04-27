@@ -472,6 +472,7 @@ type
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
     dlgColor : TColorDialog;
+    edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
     edtWsjtIp: TEdit;
     edtCondxImageUrl: TEdit;
@@ -547,7 +548,6 @@ type
     edtDefaultRST: TEdit;
     edtGrayLineOffset: TEdit;
     edtSunOffset: TEdit;
-    edtLoadFromFldigi1: TSpinEdit;
     edtOffset: TEdit;
     edtCWAddress: TEdit;
     edtCWPort: TEdit;
@@ -778,6 +778,7 @@ type
     Label47 : TLabel;
     Label48: TLabel;
     Label49: TLabel;
+    Label50: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1426,6 +1427,7 @@ begin
   cqrini.WriteString('fldigi','port',edtFldigiPort.Text);
   cqrini.WriteString('fldigi','ip',edtFldigiIp.Text);
   cqrini.WriteBool('fldigi', 'xmlrpc', chkFldXmlRpc.Checked);
+  cqrini.WriteInteger('fldigi', 'dropSyErr', edtDropSyncErr.Value);
 
   cqrini.WriteString('wsjt','path',edtWsjtPath.Text);
   cqrini.WriteString('wsjt','port',edtWsjtPort.Text);
@@ -2795,6 +2797,7 @@ begin
   edtFldigiPort.Text := cqrini.ReadString('fldigi','port','7362');
   edtFldigiIp.Text :=  cqrini.ReadString('fldigi','ip','127.0.0.1');
   chkFldXmlRpc.Checked := cqrini.ReadBool('fldigi', 'xmlrpc', False);
+  edtDropSyncErr.Value:= cqrini.ReadInteger('fldigi', 'dropSyErr', 3);
 
 
   edtWsjtPath.Text         := cqrini.ReadString('wsjt','path','');

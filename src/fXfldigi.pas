@@ -82,6 +82,7 @@ var
   frmxfldigi    : Tfrmxfldigi;
   xmlsock       : TTCPBlockSocket;
   fLog          : array [0 .. 1] of fLogEntry;
+  SyncErrCnt    : integer = 0;
 
 implementation
 { Tfrmxfldigi }
@@ -212,6 +213,7 @@ var
    Fdes,
    opmode :string;
    SockOK :Boolean;
+   Drop   :integer;
 
 begin
   frmNewQSO.tmrFldigi.Enabled := false;
@@ -309,6 +311,19 @@ begin
 
      fLog[old] := fLog[new];
      frmNewQSO.tmrFldigi.Enabled := true;
+
+     Drop := cqrini.ReadInteger('fldigi', 'dropSyErr', 3);
+     if (not SockOK) and (Drop >0) then
+            Begin                        //remote mode will be disabled if >5 timer rounds with sync error
+              inc(SyncErrCnt);           //fldigi may then be closed by operator.
+              if SyncErrCnt > Drop then  //Leaves "Socket error, check fldigi!" to NewQSO's "Comment QSO" field
+                     Begin
+                      SyncErrCnt := 0;
+                      frmNewQSO.DisableRemoteMode;
+                     end;
+            end
+        else
+            SyncErrCnt := 0;
 end;
 
 procedure Tfrmxfldigi.FormCreate(Sender: TObject);

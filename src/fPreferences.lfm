@@ -1255,8 +1255,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 363
-          ClientWidth = 637
+          ClientHeight = 388
+          ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
             Height = 333
@@ -1598,8 +1598,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 363
-          ClientWidth = 637
+          ClientHeight = 388
+          ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
             Height = 333
@@ -2014,8 +2014,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 363
-          ClientWidth = 557
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
             Height = 333
@@ -2347,8 +2347,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 363
-          ClientWidth = 557
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
             Height = 341
@@ -5751,23 +5751,23 @@ object frmPreferences: TfrmPreferences
         ClientWidth = 695
         TabOrder = 0
         object Label91: TLabel
-          Left = 25
+          Left = 40
           Height = 15
-          Top = 272
+          Top = 274
           Width = 216
           Caption = 'Try to load QSO from fldigi every '
           ParentColor = False
         end
         object Label92: TLabel
-          Left = 331
+          Left = 310
           Height = 15
-          Top = 272
+          Top = 274
           Width = 53
           Caption = 'seconds'
           ParentColor = False
         end
         object edtLoadFromFldigi: TSpinEdit
-          Left = 267
+          Left = 257
           Height = 32
           Top = 266
           Width = 50
@@ -5956,10 +5956,27 @@ object frmPreferences: TfrmPreferences
         object chkFldXmlRpc: TCheckBox
           Left = 576
           Height = 23
-          Top = 266
+          Top = 268
           Width = 105
           Caption = 'Use XmlRpc'
           TabOrder = 10
+        end
+        object edtDropSyncErr: TSpinEdit
+          Left = 518
+          Height = 32
+          Top = 266
+          Width = 50
+          MaxValue = 20
+          TabOrder = 11
+          Value = 2
+        end
+        object Label50: TLabel
+          Left = 380
+          Height = 15
+          Top = 274
+          Width = 138
+          Caption = 'Drop after  SyncErr >'
+          ParentColor = False
         end
       end
       object GroupBox51: TGroupBox
