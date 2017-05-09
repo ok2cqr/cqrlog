@@ -167,6 +167,7 @@ begin
    cqrini.WriteBool('MonWsjtx','LocAlert',chkLocAlert.Checked);
    cqrini.WriteString('MonWsjtx','TextAlert',EditAlert.Text);
    dmUtils.SaveWindowPos(frmMonWsjtx);
+   frmNewQSO.DisableRemoteMode;
 end;
 
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
@@ -271,6 +272,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       case msgMode of
       '#'  : mode := 'JT65';
       '@'  : mode := 'JT9';
+      '&'  : mode := 'MSK144';
       else mode :='';
       end;
 

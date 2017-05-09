@@ -96,9 +96,13 @@ begin
   begin
     if EscFirstTime then
     begin
-      if edtCall.Text = '' then
-        edtCall.SetFocus
-      else
+      //if edtCall.Text = '' then
+         frmNewQSO.old_call:='';             //this is stupid hack but only way to reproduce
+         frmNewQSO.edtName.Text :='';        //new seek from log (important to see if wkd before,
+         frmNewQSO.edtQth.Text  :='';        //and qrz, if one wants)
+         frmNewQSO.edtGrid.Text :='';        //otherwise we do not get cursor at the end of call
+         edtCall.SetFocus;
+      //else
       if Assigned(frmNewQSO.CWint) then
         frmNewQSO.CWint.StopSending;
       EscFirstTime := False;
@@ -106,7 +110,8 @@ begin
     end
     else begin   // esc second time
       frmNewQSO.ClearAll;
-      writeln('Clear all done nex focus');
+      if dmData.DebugLevel >= 1 then
+         writeln('Clear all done next focus');
       initInput;
       tmrESC2Timer(nil);
     end;
@@ -174,7 +179,8 @@ begin
     frmNewQSO.edtMyRST.Text := edtRSTr.Text + ' ' + edtSRX.Text + ' ' + edtSRX2.Text;
 
   frmNewQSO.btnSave.Click;
-  writeln('input finale');
+  if dmData.DebugLevel >= 1 then
+                       writeln('input finale');
   ChkSerialNrUpd(chNRInc.Checked);
   initInput;
 end;
@@ -337,10 +343,33 @@ begin
   edtSRX.Text := '';
   edtSRX2.Text := '';
   edtCall.Clear;
+  EscFirstTime := True;
+  {
+  Next 3 lines of procedure will cause
+  ----
+  either (dbg msg:input finale):
+
+  NOTE: Window with stalled focus found!, faking focus-out event
+  NOTE: Window with stalled focus found!, faking focus-out event
+  NOTE: Window with stalled focus found!, faking focus-out event
+  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
+  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
+  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
+  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
+  ----
+  or(dbg msg: Clear all done next focus ):
+
+  NOTE: Window with stalled focus found!, faking focus-out event
+  NOTE: Window with stalled focus found!, faking focus-out event
+
+  ----
+  All works, but this needs attention and I can not resolve this at the moment.
+
+  }
+
   frmContest.ShowOnTop;
   frmContest.SetFocus;
   edtCall.SetFocus;
-  EscFirstTime := True
 end;
 
 procedure TfrmContest.ChkSerialNrUpd(IncNr: boolean);   // do we need serial nr inc

@@ -1,0 +1,291 @@
+object frmxfldigi: Tfrmxfldigi
+  Left = 435
+  Height = 193
+  Top = 58
+  Width = 347
+  Caption = 'frmxfldigi'
+  ClientHeight = 193
+  ClientWidth = 347
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnHide = FormHide
+  OnShow = FormShow
+  LCLVersion = '1.6.4.0'
+  object lbCall: TLabel
+    Left = 8
+    Height = 15
+    Top = 32
+    Width = 72
+    AutoSize = False
+    Caption = '-call'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbFreq: TLabel
+    Left = 88
+    Height = 15
+    Top = 32
+    Width = 56
+    AutoSize = False
+    Caption = '-Freq'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbMode: TLabel
+    Left = 160
+    Height = 15
+    Top = 32
+    Width = 51
+    AutoSize = False
+    Caption = '-Mode'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbRstS: TLabel
+    Left = 224
+    Height = 15
+    Top = 32
+    Width = 43
+    AutoSize = False
+    Caption = '-rstS'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbRstR: TLabel
+    Left = 296
+    Height = 15
+    Top = 32
+    Width = 43
+    AutoSize = False
+    Caption = '-rstR'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbName: TLabel
+    Left = 8
+    Height = 15
+    Top = 74
+    Width = 72
+    AutoSize = False
+    Caption = '-name'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbQth: TLabel
+    Left = 88
+    Height = 15
+    Top = 74
+    Width = 123
+    AutoSize = False
+    Caption = '-qth'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbGrid: TLabel
+    Left = 224
+    Height = 15
+    Top = 74
+    Width = 64
+    AutoSize = False
+    Caption = '-grid'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbStat: TLabel
+    Left = 296
+    Height = 15
+    Top = 74
+    Width = 27
+    AutoSize = False
+    Caption = '-st'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbComm: TLabel
+    Left = 8
+    Height = 15
+    Top = 128
+    Width = 232
+    AutoSize = False
+    Caption = '-comment QSO'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbCoun: TLabel
+    Left = 256
+    Height = 15
+    Top = 128
+    Width = 75
+    AutoSize = False
+    Caption = '-county'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbTrx: TLabel
+    Left = 307
+    Height = 15
+    Top = 160
+    Width = 32
+    AutoSize = False
+    Caption = '-RX'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object lbHeader: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 68
+    Height = 15
+    Top = 0
+    Width = 211
+    Caption = 'Data received from fldigi xmlrpc'
+    ParentColor = False
+  end
+  object btSaveQSO: TButton
+    Left = 8
+    Height = 25
+    Top = 152
+    Width = 232
+    Caption = 'Save this QSO'
+    Font.Color = clRed
+    Font.Style = [fsBold]
+    OnClick = btSaveQSOClick
+    ParentFont = False
+    TabOrder = 0
+    Visible = False
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 15
+    Top = 104
+    Width = 96
+    Caption = 'Comment QSO'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 256
+    Height = 15
+    Top = 104
+    Width = 46
+    Caption = 'County'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 256
+    Height = 15
+    Top = 160
+    Width = 32
+    AutoSize = False
+    Caption = 'Rig'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 8
+    Height = 15
+    Top = 56
+    Width = 39
+    Caption = 'Name'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label5: TLabel
+    Left = 88
+    Height = 15
+    Top = 56
+    Width = 28
+    Caption = 'QTH'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label6: TLabel
+    Left = 224
+    Height = 15
+    Top = 56
+    Width = 27
+    Caption = 'Grid'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label7: TLabel
+    Left = 296
+    Height = 15
+    Top = 56
+    Width = 34
+    Caption = 'State'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label8: TLabel
+    Left = 8
+    Height = 15
+    Top = 16
+    Width = 25
+    Caption = 'Call'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label9: TLabel
+    Left = 88
+    Height = 15
+    Top = 16
+    Width = 27
+    Caption = 'Freq'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label10: TLabel
+    Left = 160
+    Height = 15
+    Top = 16
+    Width = 35
+    Caption = 'Mode'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label11: TLabel
+    Left = 224
+    Height = 15
+    Top = 16
+    Width = 30
+    Caption = 'RSTs'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label12: TLabel
+    Left = 296
+    Height = 15
+    Top = 16
+    Width = 28
+    Caption = 'RSTr'
+    Font.Color = clBlue
+    ParentColor = False
+    ParentFont = False
+  end
+end

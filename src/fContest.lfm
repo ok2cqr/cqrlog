@@ -1,7 +1,7 @@
 object frmContest: TfrmContest
-  Left = 663
+  Left = 474
   Height = 111
-  Top = 426
+  Top = 429
   Width = 696
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
@@ -13,12 +13,13 @@ object frmContest: TfrmContest
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.4.0'
   object edtCall: TEdit
     Left = 10
-    Height = 27
+    Height = 32
     Top = 27
     Width = 140
+    AutoSelect = False
     CharCase = ecUppercase
     OnExit = edtCallExit
     OnKeyDown = edtCallKeyDown
@@ -27,7 +28,7 @@ object frmContest: TfrmContest
   end
   object edtRSTs: TEdit
     Left = 151
-    Height = 27
+    Height = 32
     Top = 27
     Width = 50
     OnKeyDown = edtCallKeyDown
@@ -35,7 +36,7 @@ object frmContest: TfrmContest
   end
   object edtSTX: TEdit
     Left = 202
-    Height = 27
+    Height = 32
     Top = 27
     Width = 50
     OnExit = edtSTXExit
@@ -45,7 +46,7 @@ object frmContest: TfrmContest
   end
   object edtSTX2: TEdit
     Left = 253
-    Height = 27
+    Height = 32
     Top = 27
     Width = 100
     OnExit = edtSTX2Exit
@@ -54,7 +55,7 @@ object frmContest: TfrmContest
   end
   object edtRSTr: TEdit
     Left = 370
-    Height = 27
+    Height = 32
     Top = 27
     Width = 50
     OnKeyDown = edtCallKeyDown
@@ -62,7 +63,7 @@ object frmContest: TfrmContest
   end
   object edtSRX: TEdit
     Left = 421
-    Height = 27
+    Height = 32
     Top = 27
     Width = 50
     OnExit = edtSRXExit
@@ -72,17 +73,16 @@ object frmContest: TfrmContest
   end
   object btSave: TButton
     Left = 592
-    Height = 29
+    Height = 30
     Top = 8
-    Width = 79
-    AutoSize = True
+    Width = 80
     Caption = 'Save QSO'
     OnClick = btSaveClick
     TabOrder = 3
   end
   object edtSRX2: TEdit
     Left = 472
-    Height = 27
+    Height = 32
     Top = 27
     Width = 100
     OnKeyDown = edtCallKeyDown
@@ -90,7 +90,7 @@ object frmContest: TfrmContest
   end
   object lblCall: TLabel
     Left = 16
-    Height = 17
+    Height = 15
     Top = 10
     Width = 25
     Caption = 'Call'
@@ -98,23 +98,23 @@ object frmContest: TfrmContest
   end
   object lblRSTs: TLabel
     Left = 160
-    Height = 17
+    Height = 15
     Top = 10
-    Width = 35
+    Width = 36
     Caption = 'RST s'
     ParentColor = False
   end
   object lblMSGs: TLabel
     Left = 256
-    Height = 17
+    Height = 15
     Top = 10
-    Width = 41
+    Width = 40
     Caption = 'MSG s'
     ParentColor = False
   end
   object lblRSTr: TLabel
     Left = 376
-    Height = 17
+    Height = 15
     Top = 10
     Width = 34
     Caption = 'RST r'
@@ -122,32 +122,32 @@ object frmContest: TfrmContest
   end
   object lblNRr: TLabel
     Left = 424
-    Height = 17
+    Height = 15
     Top = 10
-    Width = 29
+    Width = 28
     Caption = 'NR r'
     ParentColor = False
   end
   object lblMSGr: TLabel
     Left = 480
-    Height = 17
+    Height = 15
     Top = 10
-    Width = 40
+    Width = 38
     Caption = 'MSG r'
     ParentColor = False
   end
   object chNRInc: TCheckBox
     Left = 202
-    Height = 24
+    Height = 23
     Top = 56
-    Width = 46
+    Width = 45
     Caption = 'Inc'
     OnClick = chNRIncClick
     TabOrder = 8
   end
   object lblNRs: TLabel
     Left = 208
-    Height = 17
+    Height = 15
     Top = 10
     Width = 30
     Caption = 'NR s'
@@ -155,43 +155,43 @@ object frmContest: TfrmContest
   end
   object chLoc: TCheckBox
     Left = 472
-    Height = 24
+    Height = 23
     Top = 56
-    Width = 102
+    Width = 100
     Caption = 'MSG is LOC'
     TabOrder = 9
   end
   object chSpace: TCheckBox
     Left = 16
-    Height = 24
+    Height = 23
     Top = 56
-    Width = 114
+    Width = 111
     Caption = 'SPACE is TAB'
     TabOrder = 10
   end
   object chNoNr: TCheckBox
     Left = 424
-    Height = 24
+    Height = 23
     Top = 56
-    Width = 46
+    Width = 44
     Caption = 'No'
     OnChange = chNoNrChange
     TabOrder = 11
   end
   object chTrueRST: TCheckBox
     Left = 153
-    Height = 24
+    Height = 23
     Top = 56
-    Width = 48
+    Width = 45
     Caption = 'Tru'
     OnChange = chTrueRSTChange
     TabOrder = 12
   end
   object Button1: TButton
     Left = 592
-    Height = 29
+    Height = 30
     Top = 48
-    Width = 79
+    Width = 80
     Caption = 'Clear all'
     OnClick = Button1Click
     TabOrder = 13

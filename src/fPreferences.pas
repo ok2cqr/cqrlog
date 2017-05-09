@@ -118,6 +118,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkFldXmlRpc: TCheckBox;
     chkQSOColor : TCheckBox;
     chkAllowRegExp : TCheckBox;
     chkFillAwardField : TCheckBox;
@@ -471,6 +472,7 @@ type
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
     dlgColor : TColorDialog;
+    edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
     edtWsjtIp: TEdit;
     edtCondxImageUrl: TEdit;
@@ -546,7 +548,6 @@ type
     edtDefaultRST: TEdit;
     edtGrayLineOffset: TEdit;
     edtSunOffset: TEdit;
-    edtLoadFromFldigi1: TSpinEdit;
     edtOffset: TEdit;
     edtCWAddress: TEdit;
     edtCWPort: TEdit;
@@ -560,8 +561,10 @@ type
     edtWinMaxSpeed: TSpinEdit;
     edtK3NGPort: TEdit;
     edtK3NGSpeed: TSpinEdit;
+    edtFldigiIp: TEdit;
     edtWsjtPath: TEdit;
     edtWsjtPort: TEdit;
+    edtFldigiPort: TEdit;
     edtXRefresh: TEdit;
     edtXLastSpots: TEdit;
     edtXTop: TEdit;
@@ -773,6 +776,9 @@ type
     Label26: TLabel;
     Label46 : TLabel;
     Label47 : TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1418,6 +1424,10 @@ begin
   cqrini.WriteInteger('fldigi', 'interval', edtLoadFromFldigi.Value);
   cqrini.WriteBool('fldigi', 'run', chkRunFldigi.Checked);
   cqrini.WriteString('fldigi', 'path', edtFldigiPath.Text);
+  cqrini.WriteString('fldigi','port',edtFldigiPort.Text);
+  cqrini.WriteString('fldigi','ip',edtFldigiIp.Text);
+  cqrini.WriteBool('fldigi', 'xmlrpc', chkFldXmlRpc.Checked);
+  cqrini.WriteInteger('fldigi', 'dropSyErr', edtDropSyncErr.Value);
 
   cqrini.WriteString('wsjt','path',edtWsjtPath.Text);
   cqrini.WriteString('wsjt','port',edtWsjtPort.Text);
@@ -2782,9 +2792,13 @@ begin
   edtDefaultRST.Text := cqrini.ReadString('fldigi', 'defrst', '599');
   rgRSTFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'rst', 0);
   edtLoadFromFldigi.Value := cqrini.ReadInteger('fldigi', 'interval', 2);
-
   chkRunFldigi.Checked := cqrini.ReadBool('fldigi', 'run', False);
   edtFldigiPath.Text := cqrini.ReadString('fldigi', 'path', '');
+  edtFldigiPort.Text := cqrini.ReadString('fldigi','port','7362');
+  edtFldigiIp.Text :=  cqrini.ReadString('fldigi','ip','127.0.0.1');
+  chkFldXmlRpc.Checked := cqrini.ReadBool('fldigi', 'xmlrpc', False);
+  edtDropSyncErr.Value:= cqrini.ReadInteger('fldigi', 'dropSyErr', 3);
+
 
   edtWsjtPath.Text         := cqrini.ReadString('wsjt','path','');
   edtWsjtPort.Text         := cqrini.ReadString('wsjt','port','2237');

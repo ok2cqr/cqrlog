@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <General>
       <Flags>
         <LRSInOutputDirectory Value="False"/>
@@ -85,7 +85,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="100">
+    <Units Count="101">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -746,6 +746,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit99>
+      <Unit100>
+        <Filename Value="fXfldigi.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmxfldigi"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit100>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -764,6 +771,11 @@
         <OptimizationLevel Value="2"/>
       </Optimizations>
     </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+      </Debugging>
+    </Linking>
     <Other>
       <Verbosity>
         <ShowNotes Value="False"/>

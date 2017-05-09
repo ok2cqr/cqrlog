@@ -152,4 +152,43 @@
        cqrlog PC ip address 192.168.60.222, cqrlog setting/wsjt-x:  port 2237 address 192.168.60.222
        wsjt-x PC ip address 192.168.60.223, wstt-x setting/reporting  port 2237 address 192.168.60.222 
 													(2.0.5(029))
+20.04.2017
 
+  - Changed contest form so that pressing 1xESC will return cursor to the end of previously typed callsign fro fixing. It also
+    stops CW keying if it is initiated (as it does on NewQSO).
+    New log seek (+qrz seek) is done again when leaving call field (tnx. note LA2FDA) 
+    2xESC returns also to call field, but clears previously typed callsign completely (as it does in NewQso).
+    This form is causing some focusing conflicts with NewQso form, but seems to work anyhow.
+    Needs attention of better skilled programmer.   (2.0.5.(030))
+
+22.04.2017
+
+   - Fixed CQ Monitor so that it now shows also MSK144 cqs. Double click on callsign line does not initiate reply as it does with JT65/JT9
+     I do not know should it with MSK144 mode, but I investigate it more in future and fix it if UDP specs have reply allowed when using MSK144.
+     (2.0.5(31))
+
+23.04.2017
+
+   - Changed Wsjtx decoding timer so that when UDP packets are available timer turns to HiSpeed (50ms, const value). When no more
+     Packets it turns to LoSpeed (1000ms).
+     This helps in situation where wsjt-x has been on band for long and then carlog/remote wsjt-x is turned on. At that point wsjt-x
+     will send all of it's buffered decodings at one go and there may be lots of old lines.
+     It also speeds up things during noraml decode period (secs 50 - 60 of minute) giving user more time to decide to whos CQ he
+     is going to answer.
+     Merged also latest changes from Master_ok2cqr                   (2.0.5(032))
+
+   - Small bugfix. tmrWsjtx was enabled after disableremotemode was called causing program exeption when wsjt-x was closed before cqrlog.
+     (2.0.5(033))
+
+26.04.2017
+
+    -Added alternative fldigi remote using XmlRpc. Allows fldigi to run on other networked PC than cqrlog. For more details see: CqrlogAdditions2.pdf
+    -fixed some minor bugs on remote/frequency selection. (2.0.5(034))
+
+27.04.2017
+
+    -Added new parameter "Drop after SyncErr >" to preferences / fldigi. This automates remote mode closing when fldigi is closed. But as it
+     may affect also (in slow PCs) when fldigi is started by cqrlog it is user defineable. 0 disables it and 1-20 means timer rounds until drop
+     the remote mode. Timer round period is adjustable with "Try to load QSO from fldigi"-parameter.
+     When remote mode close happens by Sync error limit it leaves to NewQSO field "Comment QSO" text "Socket error, check fldigi!" (2.0.5(035))
+    

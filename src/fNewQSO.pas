@@ -25,6 +25,8 @@ uses
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
   cMyLoc   = 'My grid (to change press CTRL+L) ';
+  wHiSpeed = 50;       // udp polling speeds (tmrWsjtx)
+  wLoSpeed = 1000;
 
 type
   TRemoteModeType = (rmtFldigi, rmtWsjt);
@@ -521,7 +523,7 @@ type
     old_freq   : String;
     old_qslr   : String;
     posun      : String;
-    old_call   : String;
+
     old_time   : String;
     old_rsts   : String;
     old_rstr   : String;
@@ -537,10 +539,8 @@ type
     adif : Word;
     WhatUpNext : TWhereToUpload;
     UploadAll  : Boolean;
-    //WsjtxSock             : TUDPBlockSocket;
-    //WsjtxMode             : String;          Moved to public
-    //WsjtxBand             : String;
-    WsjtxRememberAutoMode : Boolean;
+
+    RememberAutoMode : Boolean;
 
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -571,7 +571,7 @@ type
     procedure RefreshInfoLabels;
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
-    procedure DisableRemoteMode;
+
     procedure CloseAllWindows;
     procedure onExcept(Sender: TObject; E: Exception);
     procedure DisplayCoordinates(latitude, Longitude : Currency);
@@ -589,12 +589,17 @@ type
     WsjtxMode             : String;          //Moved from private
     WsjtxBand             : String;
 
+    old_call              : String;               //Moved from private
+
+    FldigiXmlRpc          : Boolean;
 
     ClearAfterFreqChange : Boolean;
     ChangeFreqLimit : Double;
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
+
+    procedure DisableRemoteMode;   //Moved from private
 
     procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
@@ -674,7 +679,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest;
+     fRemind, fContest,fXfldigi;
 
 procedure TQSLTabThread.Execute;
 var
@@ -1151,7 +1156,7 @@ begin
   sbtnQSL.Visible    := False;
   ChangeDXCC := False;
   adif := 0;
-  FreqBefChange := frmTRXControl.GetFreqMHz
+  FreqBefChange := frmTRXControl.GetFreqMHz;
 end;
 
 procedure TfrmNewQSO.LoadSettings;
@@ -1614,6 +1619,11 @@ var
   Mask  : String='';
   data  : String = '';
 begin
+
+ if FldigiXmlRpc then
+    frmxfldigi.TimTime
+ else
+ Begin
   ID:=msgget(1238,IPC_CREAT or 438);
   If ID<0 then DoError('MsgGet');
   Buf.MType:=1024;
@@ -1841,7 +1851,9 @@ begin
       edtRemQSO.Text := note
     end;
     btnSave.Click
-  end
+  end;   //while msgrcv
+ end; //else fldigixmlrpc
+
 end;
 
 procedure TfrmNewQSO.tmrRadioTimer(Sender: TObject);
@@ -1852,13 +1864,20 @@ begin
   mode := '';
   freq := '';
   if Running then
-    exit;
+   exit;
   Running := True;
   try
     if (not (fViewQSO or fEditQSO)) then
     begin
       if (cbOffline.Checked and (not mnuRemoteMode.Checked) and (not mnuRemoteModeWsjt.Checked)) then
-        exit;
+        exit;   //offline, but not remote mode
+
+      if cbOffline.Checked
+        and ((mnuRemoteMode.Checked and (cqrini.ReadInteger('fldigi','freq',0) > 0))
+              or (mnuRemoteModeWsjt.Checked and (cqrini.ReadInteger('wsjt','freq',0) > 0))
+            ) then
+                  exit; //frequency from fldigi/wsjtx or their defaults
+
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
@@ -1889,7 +1908,8 @@ begin
     end
   finally
     Running := False
-  end
+  end;
+
 end;
 
 procedure TfrmNewQSO.tmrStartStartTimer(Sender: TObject);
@@ -2047,10 +2067,18 @@ var
     inc(index)
   end;
 
+
 begin
   Buf := Wsjtxsock.RecvPacket(100);
   if WsjtxSock.lasterror=0 then
   begin
+     if ( tmrWsjtx.Interval = wLoSpeed ) then
+       Begin
+            tmrWsjtx.Enabled  := False;
+            tmrWsjtx.Interval := wHiSpeed;    //  timer has now dynamic value. Now we got data. Expecting more that one packet.
+                                              //  setting HiSpeed ON
+            if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to HiSpeed');
+       end;
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
     RepStart := index; //for possibly reply creation
     if dmData.DebugLevel>=1 then Write('Header position:',index);
@@ -2129,13 +2157,13 @@ begin
           ParStr := StFBuf(index);    //report
           if dmData.DebugLevel>=1 then Writeln('Report: ',ParStr);
           //----------------------------------------------------
-          case cqrini.ReadInteger('fldigi','TXmode',1) of
+          case cqrini.ReadInteger('wsjt','mode',1) of
             0 : begin
                   if not frmTRXControl.GetModeFreqNewQSO(TXmode,mhz) then
                     TXmode :='';
                 end;
-            1 : TXmode:= trim(StFBuf(index));
-            2 : TXmode := cqrini.ReadString('fldigi','defmode','RTTY')
+            1 : TXmode := trim(StFBuf(index));
+            2 : TXmode := cqrini.ReadString('wsjt','defmode','JT65')
           end;
           if dmData.DebugLevel>=1 then Writeln('TXmode: ',Txmode);
           //----------------------------------------------------
@@ -2215,10 +2243,10 @@ begin
           ParNum :=  UiFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
           //----------------------------------------------------
-          mode := StFBuf(index);    //mode as letter: # @
+          mode := StFBuf(index);    //mode as letter: # @ &
           if dmData.DebugLevel>=1 then Writeln(mode);
           //----------------------------------------------------
-          ParStr := StFBuf(index);    //message
+          ParStr := trim(StFBuf(index));    //message          //MSK144 CQ has one space before CQ, need trim
           if dmData.DebugLevel>=1 then Writeln(ParStr);
           //----------------------------------------------------
           Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
@@ -2343,7 +2371,7 @@ begin
                   if dmData.DebugLevel>=1 then Writeln('Mode :', mode);
                   cmbMode.Text := mode
                 end;
-            2 : cmbMode.Text := cqrini.ReadString('wsjt','defmode','RTTY')
+            2 : cmbMode.Text := cqrini.ReadString('wsjt','defmode','JT65')
            end;
            //----------------------------------------------------
            rstS:= trim(StFBuf(index));
@@ -2383,221 +2411,29 @@ begin
            //wsjtx closed maybe need to disable remote mode  ?
            DisableRemoteMode
          end //Close
-    end //case
+    end; //case
+     if mnuRemoteModeWsjt.Checked then         // must do this check. Otherwise at decode 6 ://Close  calling DisableRemoteMode
+                   tmrWsjtx.Enabled  := True;  // causes exception if wsjt-x is closed but cqrlog still running.
+                                               // Now end of decode and wsjt-x still running: Allow timer run again.
   end  //if WsjtxSock.lasterror=0 then
+  else
+   Begin
+      if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UDP packets. Is HiSpeed still on?
+       Begin
+         if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to LoSpeed');
+         tmrWsjtx.Enabled  := False;
+         tmrWsjtx.Interval := wLoSpeed;       // turn it off then
+         tmrWsjtx.Enabled  := True;
+       end;
+   end;
+   {
+   The latest message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
+   https://sourceforge.net/p/wsjt/wsjt/HEAD/tree/branches/wsjtx/NetworkMessage.hpp
+
+   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
+   to construct a recipe to replicate an issue.
+    }
 end;
-{
-/*
- * WSJT-X Message Formats  info fetch from wsjt-x 1.5.0-rc2 source
- * ======================
- *
- * All messages are written or  read using the QDataStream derivatives
- * defined below, note that we are using the default for floating
- * point precision which means all are double precision i.e. 64-bit
- * IEEE format.
- *
- *  Message is big endian format
- *
- *   Header format:
- *
- *      32-bit unsigned integer magic number 0xadbccbda
- *      32-bit unsigned integer schema number
- *
- *   Payload format:
- *
- *      As per  the QDataStream format,  see below for version  used and
- *      here:
- *
- *        http://doc.qt.io/qt-5/datastreamformat.html
- *
- *      for the serialization details for each type, at the time of
- *      writing the above document is for Qt_5_0 format which is buggy
- *      so we use Qt_5_2 format, differences are:
- *
- *      QDateTime:
- *           QDate      qint64    Julian day number
- *           QTime      quint32   Milli-seconds since midnight
- *           timespec   quint8    0=local, 1=UTC, 2=Offset from UTC
- *                                                 (seconds)
- *                                3=time zone
- *           offset     qint32    only present if timespec=2
- *           timezone   several-fields only present if timespec=3
- *
- *      we will avoid using QDateTime fields with time zones for simplicity.
- *
- * Type utf8  is a  utf-8 byte  string formatted  as a  QByteArray for
- * serialization purposes  (currently a quint32 size  followed by size
- * bytes, no terminator is present or counted).
- *
- * The QDataStream format document linked above is not complete for
- * the QByteArray serialization format, it is similar to the QString
- * serialization format in that it differentiates between empty
- * strings and null strings. Empty strings have a length of zero
- * whereas null strings have a length field of 0xffffffff.
- *
- * Schema Version 1:
- * -----------------
- *
- * Message       Direction Value                  Type
- * ------------- --------- ---------------------- -----------
- * Heartbeat     Out       0                      quint32
- *                         Id (unique key)        utf8
- *
- *		The  heartbeat  message  is  sent  on  a  periodic  basis  every
- *		NetworkMessage::pulse  seconds  (see  below).  This  message  is
- *		intended to be used by server to detect the presence of a client
- *		and  also   the  unexpected  disappearance  of   a  client.  The
- *		message_aggregator reference server does just that.
- *
- *
- * Status        Out       1                      quint32
- *                         Id (unique key)        utf8
- *                         Dial Frequency (Hz)    quint64
- *                         Mode                   utf8
- *                         DX call                utf8
- *                         Report                 utf8
- *                         Tx Mode                utf8
- *                         Tx Enabled             bool
- *                         Transmitting           bool
- *
- *		WSJT-X  sends this  status message  when various  internal state
- *		changes to allow the server to  track the relevant state of each
- *		client without the need for  polling commands. The current state
- *		changes that generate status messages are:
- *
- *			Application start up,
- *			"Enable Tx" button status changes,
- *			Dial frequency changes,
- *			Changes to the "DX Call" field,
- *			Operating mode changes,
- *			Transmit mode changed (in dual JT9+JT65 mode),
- *			Changes to the "Rpt" spinner,
- *			After an old decodes replay sequence (see Replay below),
- *			When switching between Tx and Rx mode.
- *
- *
- * Decode        Out       2                      quint32
- *                         Id (unique key)        utf8
- *                         New                    bool
- *                         Time                   QTime
- *                         snr                    qint32
- *                         Delta time (S)         float (serialized as double)
- *                         Delta frequency (Hz)   quint32
- *                         Mode                   utf8
- *                         Message                utf8
- *
- *			The decode message is send when  a new decode is completed, in
- *			this case the 'New' field is true. It is also used in response
- *			to  a "Replay"  message where  each  old decode  in the  "Band
- *			activity" window, that  has not been erased, is  sent in order
- *			as  a one  of  these  messages with  the  'New'  field set  to
- *			false. See the "Replay" message below for details of usage.
- *
- *
- * Clear         Out       3                      quint32
- *                         Id (unique key)        utf8
- *
- *			This message is  send when all prior "Decode"  messages in the
- *			"Band activity"  window have been discarded  and therefore are
- *			no long available for actioning  with a "Reply" message. It is
- *			sent when the user erases  the "Band activity" window and when
- *			WSJT-X  closes down  normally. The  server should  discard all
- *			decode messages upon receipt of this message.
- *
- *
- * Reply         In        4                      quint32
- *                         Id (target unique key) utf8
- *                         Time                   QTime
- *                         snr                    qint32
- *                         Delta time (S)         float (serialized as double)
- *                         Delta frequency (Hz)   quint32
- *                         Mode                   utf8
- *                         Message                utf8
- *
- *			In order for a server  to provide a useful cooperative service
- *			to WSJT-X it  is possible for it to initiate  a QSO by sending
- *			this message to a client. WSJT-X filters this message and only
- *			acts upon it  if the message exactly describes  a prior decode
- *			and that decode  is a CQ or QRZ message.   The action taken is
- *			exactly equivalent to the user  double clicking the message in
- *			the "Band activity" window. The  intent of this message is for
- *			servers to be able to provide an advanced look up of potential
- *			QSO partners, for example determining if they have been worked
- *			before  or if  working them  may advance  some objective  like
- *			award progress.  The  intention is not to  provide a secondary
- *			user  interface for  WSJT-X,  it is  expected  that after  QSO
- *			initiation the rest  of the QSO is carried  out manually using
- *			the normal WSJT-X user interface.
- *
- *
- * QSO Logged    Out       5                      quint32
- *                         Id (unique key)        utf8
- *                         Date & Time            QDateTime
- *                         DX call                utf8
- *                         DX grid                utf8
- *                         Dial frequency (Hz)    quint64
- *                         Mode                   utf8
- *                         Report send            utf8
- *                         Report received        utf8
- *                         Tx power               utf8
- *                         Comments               utf8
- *                         Name                   utf8
- *
- *			The  QSO logged  message is  sent  to the  server(s) when  the
- *			WSJT-X user accepts the "Log  QSO" dialog by clicking the "OK"
- *			button.
- *
- *
- * Close         Out       6                      quint32
- *                         Id (unique key)        utf8
- *
- *			Close is sent by a client immediately prior to it shutting
- *			down gracefully.
- *
- *
- * Replay        In        7                      quint32
- *                         Id (unique key)        utf8
- *
- *			When a server starts it may  be useful for it to determine the
- *			state  of preexisting  clients. Sending  this message  to each
- *			client as it is discovered  will cause that client (WSJT-X) to
- *			send a "Decode" message for each decode currently in its "Band
- *			activity"  window. Each  "Decode" message  sent will  have the
- *			"New" flag set to false so that they can be distinguished from
- *			new decodes. After  all the old decodes have  been broadcast a
- *			"Status" message  is also broadcast.  If the server  wishes to
- *			determine  the  status  of  a newly  discovered  client;  this
- *			message should be used.
- *
- *
- * Halt Tx       In        8
- *                         Id (unique key)        utf8
- *                         Auto Tx Only           bool
- *
- *			The server may stop a client from transmitting messages either
- * 			immediately or at  the end of the  current transmission period
- * 			using this message.
- *
- *
- * Free Text     In        9
- *                         Id (unique key)        utf8
- *                         Text                   utf8
- *                         Send                   bool
- *
- *			This message  allows the server  to set the current  free text
- *			message content. Sending this  message is equivalent to typing
- *			a new  message (old contents  are discarded) in to  the WSJT-X
- *			free text message field or  "Tx5" field (both are updated) and
- *			if the Send  flag is set then clicking the  "Now" radio button
- *			for the  "Tx5" field  if tab  one is  current or  clicking the
- *			"Free msg"  radio button  if tab  two is  current.  It  is the
- *			responsibility  of  the sender  to  limit  the length  of  the
- *			message text and to limit it to legal message characters.
- */
-
-
-           }
-
 
 procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
@@ -4533,10 +4369,12 @@ begin
     dmData.qQSOBefore.Last;
     dmUtils.LoadFontSettings(frmNewQSO)
   end;
+
   if fViewQSO or fEditQSO then
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount)
   else
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount+1);
+
   if (not (fViewQSO or fEditQSO)) then
   begin
     InsertNameQTH;
@@ -6260,14 +6098,23 @@ var
 begin
   case RemoteType of
     rmtFldigi : begin
+                  if mnuRemoteModeWsjt.Checked then       //not both on at same time
+                     DisableRemoteMode;
                   mnuRemoteMode.Checked := True;
+                  RememberAutoMode := chkAutoMode.Checked;
+                  chkAutoMode.Checked   := False;
                   lblCall.Caption       := 'Remote mode!';
                   tmrFldigi.Interval    := cqrini.ReadInteger('fldigi','interval',2)*1000;
                   run                   := cqrini.ReadBool('fldigi','run',False);
                   path                  := cqrini.ReadString('fldigi','path','');
-                  tmrFldigi.Enabled     := True
+                  FldigiXmlRpc          := cqrini.ReadBool('fldigi','xmlrpc',False);
+                  tmrFldigi.Enabled     := true;
+                  if FldigiXmlRpc then
+                     frmxfldigi.Visible := true;
                 end;
     rmtWsjt   : begin
+                  if mnuRemoteMode.Checked then          //not both on at same time
+                     DisableRemoteMode;
                   mnuRemoteModeWsjt.Checked := True;
                   lblCall.Caption           := 'Wsjtx remote';
                   path                      := cqrini.ReadString('wsjt','path','');
@@ -6277,12 +6124,11 @@ begin
                   WsjtxBand := '';
 
                   //Timer fetches only 1 UDP packet at time.
-                  tmrWsjtx.Interval := 150;          // must be less than 1000ms. Othewise too slow! There may be
-                  tmrWsjtx.Enabled  := True;         // 0-25 (abt) lines(packets) to handle during 10sek free period
-                                                     // of secs 50..60 of each minute.
-                                                     // And if receive buffer of wsjt-x is not erased for long time every
-                                                     // status request flushes everything wsjt-x have received
-                                                     // since last erase. Some times #"¤#%&¤ many packets.
+                  tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do
+                  tmrWsjtx.Enabled  := True;          //  so timer can run more seldom.
+                                                      //  When first UDP packet is received it will turn timer to wHiSpeed
+                                                      //  for fast handling and when there is no more data wLoSpeed is turned
+                                                      //  on again.
 
                   // start UDP server
                   WsjtxSock := TUDPBlockSocket.Create;
@@ -6296,7 +6142,7 @@ begin
                      DisableRemoteMode;
                      exit
                   end;
-                  WsjtxRememberAutoMode := chkAutoMode.Checked;
+                  RememberAutoMode := chkAutoMode.Checked;
                   chkAutoMode.Checked   := False;
                   mnuWsjtxmonitor.Visible := True; //we show "monitor" in view-submenu when active
                   acMonitorWsjtxExecute(nil)
@@ -6316,13 +6162,12 @@ begin
   tmrFldigi.Enabled         := False;
   tmrWsjtx.Enabled          := False;
   mnuRemoteMode.Checked     := False;
-  if (mnuRemoteModeWsjt.Checked = true ) then //if wsjtx remote we return state of newQSO/mode-auto as it was
-     begin
-       mnuRemoteModeWsjt.Checked:= False;
-       chkAutoMode.Checked:= WsjtxRememberAutoMode;
-     end;
+  mnuRemoteModeWsjt.Checked:= False;
+  chkAutoMode.Checked:= RememberAutoMode;
   mnuWsjtxmonitor.Visible := False;    //we do not show "monitor" in view-submenu when not active
   frmMonWsjtx.Hide;                    // and close monitor
+  if FldigiXmlRpc then
+     frmxfldigi.Visible     := false;
   lblCall.Caption           := 'Call:';
   lblCall.Font.Color        := clDefault;
   edtCall.Enabled           := True;
