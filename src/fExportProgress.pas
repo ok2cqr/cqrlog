@@ -323,7 +323,7 @@ var
     begin
       if Length(QSLS) > 0 then
       begin
-        if Pos('S',QSLS) > 1 then
+        if Pos('S',QSLS) > 0 then
           tmp := '<QSL_SENT' + dmUtils.StringToADIF('R')
         else
           tmp := '<QSL_SENT' + dmUtils.StringToADIF('Y')
