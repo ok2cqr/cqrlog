@@ -191,4 +191,11 @@
      may affect also (in slow PCs) when fldigi is started by cqrlog it is user defineable. 0 disables it and 1-20 means timer rounds until drop
      the remote mode. Timer round period is adjustable with "Try to load QSO from fldigi"-parameter.
      When remote mode close happens by Sync error limit it leaves to NewQSO field "Comment QSO" text "Socket error, check fldigi!" (2.0.5(035))
-    
+
+15.05.2017
+
+    -Fixed bug in Contest form that left reports sent/rcvd 599 when modes SSB,AM,FM because getting them wrong from
+     NewQSO form after it's ClearAll. Now cuts reports to have only 2 first numbers (usually 59) when focus
+     exits from edtCall-field of Contest form.
+    -Added "Allow regular expressions" checkbox to "Alert Calls"-form. Works in parallel with preferences/DXCluster
+     corresponding checkbox. (No need to open preferences for change of that)           (2.05.(036))    

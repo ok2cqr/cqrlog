@@ -8,7 +8,7 @@ object frmCallAlert: TfrmCallAlert
   ClientWidth = 534
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '1.6.4.0'
   object dbgrdCallAlert: TDBGrid
     Left = 0
     Height = 383
@@ -64,6 +64,16 @@ object frmCallAlert: TfrmCallAlert
       Anchors = [akRight, akBottom]
       Cancel = True
       TabOrder = 3
+    end
+    object chkAlertRegExp: TCheckBox
+      Left = 320
+      Height = 23
+      Hint = 'When INCluded is selected you get alert when text in list fits to ANY part of received dxCall'
+      Top = 13
+      Width = 98
+      Caption = 'AlwRegExp'
+      OnChange = chkAlertRegExpChange
+      TabOrder = 4
     end
   end
   object ActionList1: TActionList
