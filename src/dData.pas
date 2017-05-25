@@ -25,7 +25,7 @@ uses
 const
   MaxCall   = 1000000;
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 11;
+  cDB_MAIN_VER = 12;
   cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -3244,6 +3244,18 @@ begin
         Q1.SQL.Add('  mode varchar(6) NOT NULL,');
         Q1.SQL.Add('  bandwidth int NOT NULL');
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit
+      end;
+
+      if old_version < 12 then
+      begin
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table cqrlog_main change loc loc varchar(10) default ' + QuotedStr('');
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'alter table cqrlog_main change my_loc my_loc varchar(10) default ' + QuotedStr('');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit

@@ -14,6 +14,7 @@ Legend:
   + CTRL+Z in dx cluster command line scrolls back last 5 commands (Saku, OH1KH)
   + callsign for DX cluster alert can be defined using regular expressions (Saku, OH1KH)
   + Show QSO older then user defined date with different color
+  - grid field can store 10 charactes (was 6)
   - position storage of New QSO and LoTW import fixed
   - auto backup didn't work for callsigns with / character fixed
 
