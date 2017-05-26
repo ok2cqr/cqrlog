@@ -60,7 +60,6 @@ object dmData: TdmData
   end
   object scCommon: TSQLScript
     Transaction = trmQ
-    UseDollarString = False
     Directives.Strings = (
       'SET TERM'
       'COMMIT'
@@ -159,7 +158,6 @@ object dmData: TdmData
   end
   object scLog: TSQLScript
     Transaction = trmQ
-    UseDollarString = False
     Directives.Strings = (
       'SET TERM'
       'COMMIT'
@@ -687,7 +685,6 @@ object dmData: TdmData
   end
   object scViews: TSQLScript
     Transaction = trmQ
-    UseDollarString = False
     Directives.Strings = (
       'SET TERM'
       'COMMIT'
@@ -723,7 +720,6 @@ object dmData: TdmData
     top = 16
   end
   object scQSLExport: TSQLScript
-    UseDollarString = False
     Directives.Strings = (
       'SET TERM'
       'COMMIT'
@@ -777,7 +773,6 @@ object dmData: TdmData
   end
   object scOnlineLogTriggers: TSQLScript
     Transaction = trmQ
-    UseDollarString = False
     Directives.Strings = (
       'SET TERM'
       'COMMIT'
@@ -813,7 +808,6 @@ object dmData: TdmData
     top = 24
   end
   object scMySQLConfig: TSQLScript
-    UseDollarString = False
     Directives.Strings = (
       'SET TERM'
       'COMMIT'
