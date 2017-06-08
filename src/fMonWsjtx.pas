@@ -13,6 +13,7 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
+    chkmyAll: TCheckBox;
     chkHistory: TCheckBox;
     chkmyAlert: TCheckBox;
     chkLocAlert: TCheckBox;
@@ -164,6 +165,7 @@ procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
    cqrini.WriteBool('MonWsjtx','NoHistory',chkHistory.Checked);
    cqrini.WriteBool('MonWsjtx','MyAlert',chkmyAlert.Checked);
+   cqrini.WriteBool('MonWsjtx','MyAll',chkmyAll.Checked);
    cqrini.WriteBool('MonWsjtx','LocAlert',chkLocAlert.Checked);
    cqrini.WriteString('MonWsjtx','TextAlert',EditAlert.Text);
    dmUtils.SaveWindowPos(frmMonWsjtx);
@@ -187,6 +189,7 @@ procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
    chkHistory.Checked := cqrini.ReadBool('MonWsjtx','NoHistory',False);
    chkmyAlert.Checked := cqrini.ReadBool('MonWsjtx','MyAlert',False);
+   chkmyAll.Checked := cqrini.ReadBool('MonWsjtx','MyAll',False);
    chkLocAlert.Checked:= cqrini.ReadBool('MonWsjtx','LocAlert',False);
    EditAlert.Text := cqrini.ReadString('MonWsjtx','TextAlert','');
    dmUtils.LoadWindowPos(frmMonWsjtx);
@@ -252,6 +255,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
        Added.. may be also "mycall" something, but we count just those with proper locator.
        12:34 # MYCALL CA1LL AA11
+       If "MyAlert"+"All" selected alerts/prints all lines beginning with mycall
 
        Fixed stupid cq handling "CQ 000 PA7ZZ JO22 !where?" decodes now ok.
       }
@@ -270,9 +274,11 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       msgMode := NextElement(Message,index);
 
       case msgMode of
+      chr(36) : mode := 'JT4';
       '#'  : mode := 'JT65';
       '@'  : mode := 'JT9';
       '&'  : mode := 'MSK144';
+      ':'  : mode := 'QRA64';
       else mode :='';
       end;
 
@@ -335,6 +341,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          if length(msgLoc)=4 then
             if (not frmWorkedGrids.GridOK(msgLoc)) or (msgLoc = 'RR73') then //disble false used "RR73" being a loc
                msgLoc:='----';
+
+         if ( isMyCall and chkMyAlert.Checked and chkmyAll.Checked and (msgLoc='----') ) then msgLoc:='<!!>';//locator for "ALL-MY"
 
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
          Begin                                        //and other combinations (CQs) will print, too

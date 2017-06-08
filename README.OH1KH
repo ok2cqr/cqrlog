@@ -199,3 +199,13 @@
      exits from edtCall-field of Contest form.
     -Added "Allow regular expressions" checkbox to "Alert Calls"-form. Works in parallel with preferences/DXCluster
      corresponding checkbox. (No need to open preferences for change of that)           (2.05.(036))    
+
+08.06.2017
+
+    -Wsjtx Cq monitor: 
+ 	- Added JT4 and QRA64 mode letters.
+	- Added checkbox "ALL" to "MyAlert" (as option). Alerts all lines decoded that begin with MyCall.
+          Often now you get directly report as answer to your CQ. Even the R-report, that is not correct.
+          Checking ALL together with MyAlert you will get alert also from report, RRR and 73-lines.
+	  Without ALL checked you get alert just if your call is first on line and valid locator as last on line,
+          that is the protocol specified way to answer to CQ.       (2.05.(037))

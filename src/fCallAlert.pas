@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, db, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, DBGrids, ExtCtrls, StdCtrls, ActnList, LCLType, uMyIni;
+  Dialogs, DBGrids, ExtCtrls, StdCtrls, ActnList, LCLType;
 
 type
 
@@ -22,7 +22,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    chkAllowRegExp: TCheckBox;
+    chkAlertRegExp: TCheckBox;
     dsrCallAlert: TDataSource;
     dbgrdCallAlert: TDBGrid;
     Panel1: TPanel;
@@ -54,12 +54,7 @@ begin
   dmUtils.LoadForm(self);
   dsrCallAlert.DataSet := dmData.Q;
   RefreshCallsignList();
-<<<<<<< HEAD
   chkAlertRegExp.Checked := cqrini.ReadBool('DxCluster', 'AlertRegExp', False);
-=======
-
-  chkAllowRegExp.Checked := cqrini.ReadBool('DxCluster', 'AlertRegExp', False)
->>>>>>> upstream/master
 end;
 
 procedure TfrmCallAlert.acNewExecute(Sender: TObject);
@@ -178,9 +173,6 @@ procedure TfrmCallAlert.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
   dmUtils.SaveForm(self);
   dmData.Q.Close;
-
-  cqrini.WriteBool('DxCluster', 'AlertRegExp', chkAllowRegExp.Checked);
-
   if dmData.trQ.Active then
     dmData.trQ.Rollback
 end;

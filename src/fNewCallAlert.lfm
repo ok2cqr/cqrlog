@@ -1,27 +1,27 @@
 object frmNewCallAlert: TfrmNewCallAlert
   Left = 334
-  Height = 208
+  Height = 358
   Top = 333
   Width = 330
   BorderStyle = bsDialog
   Caption = 'New callsign alert'
-  ClientHeight = 208
+  ClientHeight = 358
   ClientWidth = 330
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.6.0.4'
   object Label1: TLabel
     Left = 7
-    Height = 20
+    Height = 17
     Top = 16
-    Width = 50
+    Width = 54
     Caption = 'Callsign'
     ParentColor = False
   end
   object edtCall: TEdit
     Left = 7
-    Height = 26
+    Height = 27
     Top = 40
     Width = 223
     CharCase = ecUppercase
@@ -29,17 +29,17 @@ object frmNewCallAlert: TfrmNewCallAlert
   end
   object Label2: TLabel
     Left = 9
-    Height = 20
-    Top = 72
-    Width = 32
+    Height = 17
+    Top = 192
+    Width = 36
     Caption = 'Band'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 8
-    Height = 20
-    Top = 133
-    Width = 36
+    Height = 17
+    Top = 253
+    Width = 39
     Caption = 'Mode'
     ParentColor = False
   end
@@ -64,8 +64,8 @@ object frmNewCallAlert: TfrmNewCallAlert
   end
   object cmbBand: TComboBox
     Left = 8
-    Height = 26
-    Top = 97
+    Height = 29
+    Top = 217
     Width = 223
     CharCase = ecUppercase
     ItemHeight = 0
@@ -74,8 +74,8 @@ object frmNewCallAlert: TfrmNewCallAlert
   end
   object cmbMode: TComboBox
     Left = 8
-    Height = 26
-    Top = 155
+    Height = 29
+    Top = 275
     Width = 223
     CharCase = ecUppercase
     ItemHeight = 0
@@ -83,9 +83,9 @@ object frmNewCallAlert: TfrmNewCallAlert
     Text = 'CMBMODE'
   end
   object Memo1: TMemo
-    Left = 7
+    Left = 8
     Height = 108
-    Top = 192
+    Top = 79
     Width = 318
     Enabled = False
     Lines.Strings = (
@@ -93,6 +93,5 @@ object frmNewCallAlert: TfrmNewCallAlert
     )
     ReadOnly = True
     TabOrder = 5
-    Visible = False
   end
 end
