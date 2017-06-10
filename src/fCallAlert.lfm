@@ -2,10 +2,10 @@ object frmCallAlert: TfrmCallAlert
   Left = 343
   Height = 433
   Top = 241
-  Width = 534
+  Width = 727
   Caption = 'Callsign alert'
   ClientHeight = 433
-  ClientWidth = 534
+  ClientWidth = 727
   OnClose = FormClose
   OnShow = FormShow
   LCLVersion = '1.6.4.0'
@@ -13,7 +13,7 @@ object frmCallAlert: TfrmCallAlert
     Left = 0
     Height = 383
     Top = 0
-    Width = 534
+    Width = 727
     Align = alClient
     Color = clWindow
     Columns = <>
@@ -25,11 +25,11 @@ object frmCallAlert: TfrmCallAlert
     Left = 0
     Height = 50
     Top = 383
-    Width = 534
+    Width = 727
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 50
-    ClientWidth = 534
+    ClientWidth = 727
     TabOrder = 1
     object Button1: TButton
       Left = 17
@@ -56,7 +56,7 @@ object frmCallAlert: TfrmCallAlert
       TabOrder = 2
     end
     object Button4: TButton
-      Left = 448
+      Left = 641
       Height = 25
       Top = 11
       Width = 75
@@ -65,14 +65,14 @@ object frmCallAlert: TfrmCallAlert
       Cancel = True
       TabOrder = 3
     end
-    object chkAlertRegExp: TCheckBox
+    object chkAllowRegExp: TCheckBox
       Left = 320
       Height = 23
-      Hint = 'When INCluded is selected you get alert when text in list fits to ANY part of received dxCall'
       Top = 13
-      Width = 98
-      Caption = 'AlwRegExp'
-      OnChange = chkAlertRegExpChange
+      Width = 201
+      Caption = 'Allow partially callsign alert'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
     end
   end
