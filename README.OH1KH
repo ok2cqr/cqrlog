@@ -191,4 +191,21 @@
      may affect also (in slow PCs) when fldigi is started by cqrlog it is user defineable. 0 disables it and 1-20 means timer rounds until drop
      the remote mode. Timer round period is adjustable with "Try to load QSO from fldigi"-parameter.
      When remote mode close happens by Sync error limit it leaves to NewQSO field "Comment QSO" text "Socket error, check fldigi!" (2.0.5(035))
-    
+
+15.05.2017
+
+    -Fixed bug in Contest form that left reports sent/rcvd 599 when modes SSB,AM,FM because getting them wrong from
+     NewQSO form after it's ClearAll. Now cuts reports to have only 2 first numbers (usually 59) when focus
+     exits from edtCall-field of Contest form.
+    -Added "Allow regular expressions" checkbox to "Alert Calls"-form. Works in parallel with preferences/DXCluster
+     corresponding checkbox. (No need to open preferences for change of that)           (2.05.(036))    
+
+08.06.2017
+
+    -Wsjtx Cq monitor: 
+ 	- Added JT4 and QRA64 mode letters.
+	- Added checkbox "ALL" to "MyAlert" (as option). Alerts all lines decoded that begin with MyCall.
+          Often now you get directly report as answer to your CQ. Even the R-report, that is not correct.
+          Checking ALL together with MyAlert you will get alert also from report, RRR and 73-lines.
+	  Without ALL checked you get alert just if your call is first on line and valid locator as last on line,
+          that is the protocol specified way to answer to CQ.       (2.05.(037))
