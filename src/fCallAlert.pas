@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, db, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, DBGrids, ExtCtrls, StdCtrls, ActnList, LCLType, uMyIni;
+  Dialogs, DBGrids, ExtCtrls, StdCtrls, ActnList, LCLType;
 
 type
 
@@ -22,7 +22,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    chkAllowRegExp: TCheckBox;
+    chkAlertRegExp: TCheckBox;
     dsrCallAlert: TDataSource;
     dbgrdCallAlert: TDBGrid;
     Panel1: TPanel;
@@ -30,6 +30,7 @@ type
     procedure acDeleteExecute(Sender: TObject);
     procedure acEditExecute(Sender: TObject);
     procedure acNewExecute(Sender: TObject);
+    procedure chkAlertRegExpChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
   private
@@ -44,7 +45,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, fNewCallAlert;
+uses dUtils, dData, fNewCallAlert, uMyIni;
 
 { TfrmCallAlert }
 
@@ -53,8 +54,7 @@ begin
   dmUtils.LoadForm(self);
   dsrCallAlert.DataSet := dmData.Q;
   RefreshCallsignList();
-
-  chkAllowRegExp.Checked := cqrini.ReadBool('DxCluster', 'AlertRegExp', False)
+  chkAlertRegExp.Checked := cqrini.ReadBool('DxCluster', 'AlertRegExp', False);
 end;
 
 procedure TfrmCallAlert.acNewExecute(Sender: TObject);
@@ -84,6 +84,11 @@ begin
     FreeAndNil(F)
   end;
   dbgrdCallAlert.SetFocus
+end;
+
+procedure TfrmCallAlert.chkAlertRegExpChange(Sender: TObject);
+begin
+  cqrini.WriteBool('DxCluster', 'AlertRegExp', chkAlertRegExp.Checked);
 end;
 
 procedure TfrmCallAlert.acEditExecute(Sender: TObject);
@@ -168,12 +173,11 @@ procedure TfrmCallAlert.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
   dmUtils.SaveForm(self);
   dmData.Q.Close;
-
-  cqrini.WriteBool('DxCluster', 'AlertRegExp', chkAllowRegExp.Checked);
-
   if dmData.trQ.Active then
     dmData.trQ.Rollback
 end;
+
+
 
 end.
 
