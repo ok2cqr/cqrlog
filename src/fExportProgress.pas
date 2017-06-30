@@ -46,7 +46,7 @@ implementation
 {$R *.lfm}
 
 { TfrmExportProgress }
-uses dUtils, dData, uMyIni, dDXCC, uVersion;
+uses dUtils, dData, uMyini, dDXCC, uVersion;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -326,12 +326,7 @@ var
         if Pos('S',QSLS) > 0 then
           tmp := '<QSL_SENT' + dmUtils.StringToADIF('R')
         else
-        begin
-          if Pos('N',QSLS)=1 then
-            tmp := '<QSL_SENT' + dmUtils.StringToADIF('I')
-          else
           tmp := '<QSL_SENT' + dmUtils.StringToADIF('Y')
-        end
       end
       else
         tmp := '<QSL_SENT' + dmUtils.StringToADIF('N');

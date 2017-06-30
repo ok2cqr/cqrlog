@@ -159,6 +159,14 @@ end;
 procedure TfrmContest.edtCallExit(Sender: TObject);
 begin
   frmNewQSO.edtCall.Text := edtCall.Text;
+
+  case frmNewQSO.cmbMode.Items[frmNewQSO.cmbMode.ItemIndex] of            //report in NEwQSO changes to 59 to late (after passing cmbMode)
+  'SSB','AM','FM' : Begin
+                         edtRSTs.Text := copy(edtRSTs.Text,0,2);
+                         edtRSTr.Text := copy(edtRSTr.Text,0,2);
+                    end;
+  end;
+
   frmNewQSO.edtHisRST.Text := edtRSTs.Text + ' ' + edtSTX.Text + ' ' + edtSTX2.Text;
   //so that CW macros work
   frmNewQSO.edtCallExit(nil);
@@ -331,6 +339,7 @@ begin
 end;
 
 procedure TfrmContest.InitInput;
+
 begin
   edtRSTs.Text := trim(copy(frmNewQSO.edtHisRST.Text, 0, 3));
   //just pick  '599' or '59 '  if there happens to be more

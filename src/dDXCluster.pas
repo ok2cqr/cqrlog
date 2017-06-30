@@ -1192,12 +1192,15 @@ function TdmDXCluster.IsAlertCall(const call,band,mode : String;RegExp :Boolean)
 const
    C_SEL = 'select * from call_alert where callsign = %s';
    C_RGX_SEL = 'select * from call_alert where callsign regexp %s';
+   // for OH1KH :
+   //   C_RGX_SEL = 'select * from call_alert where %s regexp callsign ';
+
 begin
   try
     if RegExp then
        qCallAlert.SQL.Text := Format(C_RGX_SEL,[QuotedStr(call)])
     else
-      qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
+       qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
     if dmData.DebugLevel>=1 then Writeln(qCallAlert.SQL.Text);
     trCallAlert.StartTransaction;
     qCallAlert.Open;
