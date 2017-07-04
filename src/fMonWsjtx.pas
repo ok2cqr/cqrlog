@@ -270,9 +270,12 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       msgMode := NextElement(Message,index);
 
       case msgMode of
+      chr(36) : mode := 'JT4';
       '#'  : mode := 'JT65';
       '@'  : mode := 'JT9';
       '&'  : mode := 'MSK144';
+      ':'  : mode := 'QRA64';
+      chr(126): mode := 'FT8';
       else mode :='';
       end;
 

@@ -2243,7 +2243,7 @@ begin
           ParNum :=  UiFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
           //----------------------------------------------------
-          mode := StFBuf(index);    //mode as letter: # @ &
+          mode := StFBuf(index);    //mode as letter: # @ & etc...
           if dmData.DebugLevel>=1 then Writeln(mode);
           //----------------------------------------------------
           ParStr := trim(StFBuf(index));    //message          //MSK144 CQ has one space before CQ, need trim
