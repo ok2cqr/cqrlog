@@ -45,7 +45,7 @@ object frmLogUploadStatus: TfrmLogUploadStatus
     left = 48
     top = 24
     object acClearMessages: TAction
-      Caption = 'Clear mesages'
+      Caption = 'Clear messages'
       OnExecute = acClearMessagesExecute
     end
     object acFontSettings: TAction
