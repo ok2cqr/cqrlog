@@ -1973,6 +1973,7 @@ var
   index    : Integer;
   ParNum   : Integer;
   MsgType  : Integer;
+  Sec      : Integer;
   Min      : Integer;
   Hour     : Integer;
   RepStart : integer;
@@ -2221,17 +2222,22 @@ begin
          //----------------------------------------------------
           ParNum := UiFBuf(index);
           Min := ParNum div 60000;  //minutes from 00:00    UTC
+          Sec := (ParNum - Min * 60000 ) div 1000;
           Hour := Min div 60;
           Min := Min - Hour * 60;
           TimeLine :='';
           if length(intToStr(Hour)) = 1 then
-            TimeLine := TimeLine + '0'+ intToStr(Hour) +':'
+            TimeLine := TimeLine + '0'+ intToStr(Hour)
           else
-            TimeLine :=TimeLine + intToStr(Hour) +':';
+            TimeLine :=TimeLine + intToStr(Hour);
           if length(intToStr(Min)) = 1 then
-            TimeLine := TimeLine + '0' + intToStr(Min) +' '
+            TimeLine := TimeLine + '0' + intToStr(Min)
           else
             TimeLine := TimeLine + intToStr(Min);
+          if length(intToStr(Sec)) = 1 then
+            TimeLine := TimeLine + '0' + intToStr(Sec)
+          else
+            TimeLine := TimeLine + intToStr(Sec);
           if dmData.DebugLevel>=1 then Writeln(TimeLine);
           //----------------------------------------------------
           ParNum :=  IFBuf(index);

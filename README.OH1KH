@@ -233,4 +233,10 @@
        and is harder to learn than programming languages.
        If you want properly tested version (from daily use as testing) look from "cqrlog.devel"
        
-       
+17.07.2017
+
+     - Fixed timestamp at wsjt-decode from HH:MM to HHMMSS. This effects to CQ-monitor display and also
+       makes "no history" selection work with modes where period is less than minute long.      
+       Found out that double click on CQ-monitor line now initiates qso when FT8 is in use.
+       Assume that it happens also with MSK144 as this fix is happened because new wsjtx version has 
+       corrected UDP message.								(2.0.5.039)
