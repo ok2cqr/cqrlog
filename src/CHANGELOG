@@ -14,6 +14,9 @@ Legend:
   + CTRL+Z in dx cluster command line scrolls back last 5 commands (Saku, OH1KH)
   + callsign for DX cluster alert can be defined using regular expressions (Saku, OH1KH)
   + Show QSO older then user defined date with different color
+  + JT4, JT9 and FT8 modes added (Saku, OH1KH)
+  + CQ monitor window improved (Saku, OH1KH)
+  + dx cluster alert now allows partial callsigns (e.g. OL200, OK etc.)
   - grid field can store 10 charactes (was 6)
   - position storage of New QSO and LoTW import fixed
   - auto backup didn't work for callsigns with / character fixed
