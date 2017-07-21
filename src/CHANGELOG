@@ -20,6 +20,7 @@ Legend:
   - grid field can store 10 charactes (was 6)
   - position storage of New QSO and LoTW import fixed
   - auto backup didn't work for callsigns with / character fixed
+  - even CQ/ITU zone 0 from QRZ replaced zone from log - fixed
 
 2.0.5 (2017-03-12)
   + sort by gridsquare added to filter
