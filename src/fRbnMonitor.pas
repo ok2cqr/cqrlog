@@ -102,6 +102,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure FormShow(Sender: TObject);
     procedure sgRbnDblClick(Sender: TObject);
     procedure sgRbnDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
@@ -563,6 +564,16 @@ begin
   FreeAndNil(lTelnet);
   DoneCriticalsection(csRbnMonitor);
   FreeAndNil(slRbnSpots)
+end;
+
+procedure TfrmRbnMonitor.FormKeyUp(Sender : TObject; var Key : Word;
+  Shift : TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmRbnMonitor.FormShow(Sender: TObject);
