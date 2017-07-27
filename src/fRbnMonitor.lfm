@@ -7,11 +7,13 @@ object frmRbnMonitor: TfrmRbnMonitor
   Caption = 'RBN Monitor'
   ClientHeight = 602
   ClientWidth = 665
+  KeyPreview = True
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.4.0'
   object ToolBar1: TToolBar
     Left = 0
     Height = 25

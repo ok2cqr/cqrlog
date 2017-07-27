@@ -269,6 +269,18 @@ export.<br><br>
 This dialog allows an easy setup of the DX cluster spot filtering. Check the bands you want
 to display. If you want to supress (ie. filter out) spots for some DX countries, put
 its prefixes in the box below. Use a semicolon as a separator.
+<p>
+<strong>Callsign alert</strong> - allows you to enter callsigns that you are interested in. Eg. some special station for an award etc.<br>
+<strong>Run this command when callsign is potted:</strong> will run select command when any of callsigns you've enter appears in the cluster.<br>
+E.g. use this if you want to see small window with information:<br><br>
+<i> zenity --info --text='Callsign $CALLSIGN detected at $FREQ $MODE' --title=Info</i><br><br>
+You have to install zenity, first. <i>(Thans to SV2RCK for the tip!)</i>
+</p>
+<p>
+<strong>Show country name in the DX cluster spot</strong> - next to every spot, you will se the coutry name of the DX station<br>
+<strong>Connect to DX cluster after program startup</strong> - after log is opened, cqrlog will connect to your default cluster. Please remember that
+username and password(if needed) have to be filled in the cluster list.
+</p>
 <p align=center><img src=img/line.png></p>
 <a name=ah12><h2><strong>Fonts</strong></h2></a>
 <img src=img/h15.png border=0><br><br>

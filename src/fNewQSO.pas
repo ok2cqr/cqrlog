@@ -5507,13 +5507,13 @@ begin
       end
     end;  //county
 
-    if ((c_itu<>'') or ReplaceZonesEtc) and (c_callsign = edtCall.Text) then
+    if (c_itu<>'') and ReplaceZonesEtc and (c_callsign = edtCall.Text) and (c_itu<>'0')then
     begin
       edtITU.Text    := c_itu;
       lblITU.Caption := c_itu
     end;
 
-    if ((c_waz<>'') or ReplaceZonesEtc) and (c_callsign = edtCall.Text) then
+    if (c_waz<>'') and ReplaceZonesEtc and (c_callsign = edtCall.Text) and (c_waz<>'0') then
     begin
       edtWAZ.Text    := c_waz;
       lblWAZ.Caption := c_waz
