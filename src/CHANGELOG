@@ -17,6 +17,7 @@ Legend:
   + JT4, JT9 and FT8 modes added (Saku, OH1KH)
   + CQ monitor window improved (Saku, OH1KH)
   + dx cluster alert now allows partial callsigns (e.g. OL200, OK etc.)
+  + dx cluster window improved	
   - grid field can store 10 charactes (was 6)
   - position storage of New QSO and LoTW import fixed
   - auto backup didn't work for callsigns with / character fixed

@@ -121,7 +121,7 @@ object frmDXCluster: TfrmDXCluster
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.4.0'
   object pgDXCluster: TPageControl
     Left = 0
     Height = 367
@@ -192,7 +192,6 @@ object frmDXCluster: TfrmDXCluster
           Anchors = [akTop, akRight]
           BorderSpacing.InnerBorder = 4
           Caption = 'Font'
-          OnClick = btnFontClick
           TabOrder = 3
         end
       end
@@ -269,20 +268,6 @@ object frmDXCluster: TfrmDXCluster
           TabOrder = 2
           Visible = False
         end
-        object tbAlertCalls: TToggleBox
-          AnchorSideLeft.Control = edtCommand
-          AnchorSideLeft.Side = asrBottom
-          Left = 544
-          Height = 25
-          Top = 3
-          Width = 60
-          Anchors = [akRight, akBottom]
-          BorderSpacing.Left = 4
-          BorderSpacing.Right = 4
-          Caption = 'Alerts'
-          OnClick = tbAlertCallsClick
-          TabOrder = 3
-        end
       end
       object Panel2: TPanel
         Left = 0
@@ -321,14 +306,13 @@ object frmDXCluster: TfrmDXCluster
           OnClick = btnTelConnectClick
           TabOrder = 2
         end
-        object btnFont1: TButton
-          Left = 402
+        object btnPreferences: TButton
+          Left = 384
           Height = 25
           Top = 1
-          Width = 75
-          BorderSpacing.InnerBorder = 4
-          Caption = 'Font'
-          OnClick = btnFontClick
+          Width = 104
+          Caption = 'Preferences'
+          OnClick = btnPreferencesClick
           TabOrder = 3
         end
       end
@@ -364,5 +348,46 @@ object frmDXCluster: TfrmDXCluster
     OnTimer = tmrAutoConnectTimer
     left = 246
     top = 68
+  end
+  object popPreferences: TPopupMenu
+    left = 385
+    top = 112
+    object mnuCallalert: TMenuItem
+      Caption = 'Callsign alert enabled'
+      Checked = True
+      ShowAlwaysCheckable = True
+      OnClick = mnuCallalertClick
+    end
+    object MenuItem1: TMenuItem
+      Action = acCallAlert
+    end
+    object MenuItem2: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem3: TMenuItem
+      Action = acFont
+    end
+    object MenuItem4: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem5: TMenuItem
+      Action = acProgPref
+    end
+  end
+  object acPreferences: TActionList
+    left = 393
+    top = 185
+    object acFont: TAction
+      Caption = 'Font'
+      OnExecute = acFontExecute
+    end
+    object acCallAlert: TAction
+      Caption = 'List of alerted callsigns'
+      OnExecute = acCallAlertExecute
+    end
+    object acProgPref: TAction
+      Caption = 'Preferences'
+      OnExecute = acProgPrefExecute
+    end
   end
 end

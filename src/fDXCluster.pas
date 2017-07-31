@@ -18,38 +18,52 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
   ExtCtrls, ComCtrls, StdCtrls, Buttons, httpsend, jakozememo,
-  db, lcltype, dynlibs, lNetComponents, lnet;
+  db, lcltype, Menus, ActnList, dynlibs, lNetComponents, lnet;
 
 type
   { TfrmDXCluster }
 
   TfrmDXCluster = class(TForm)
+    acPreferences : TActionList;
+    acFont : TAction;
+    acCallAlert : TAction;
+    acProgPref : TAction;
     btnClear: TButton;
     btnFont: TButton;
-    btnFont1: TButton;
     btnHelp: TButton;
     btnSelect: TButton;
     btnTelConnect: TButton;
     btnWebConnect: TButton;
     Button1: TButton;
     Button2: TButton;
+    btnPreferences : TButton;
     dlgDXfnt: TFontDialog;
     edtCommand: TEdit;
     edtTelAddress: TEdit;
     Label1: TLabel;
     lblInfo: TLabel;
+    MenuItem1 : TMenuItem;
+    MenuItem2 : TMenuItem;
+    MenuItem3 : TMenuItem;
+    MenuItem4 : TMenuItem;
+    MenuItem5 : TMenuItem;
+    mnuCallalert : TMenuItem;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel4: TPanel;
     pgDXCluster: TPageControl;
     pnlTelnet: TPanel;
     pnlWeb: TPanel;
+    popPreferences : TPopupMenu;
     tabTelnet: TTabSheet;
     tabWeb: TTabSheet;
     tmrAutoConnect: TTimer;
     tmrSpots: TTimer;
-    tbAlertCalls: TToggleBox;
+    procedure acCallAlertExecute(Sender : TObject);
+    procedure acFontExecute(Sender : TObject);
+    procedure acProgPrefExecute(Sender : TObject);
     procedure Button2Click(Sender: TObject);
+    procedure btnPreferencesClick(Sender : TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
@@ -58,13 +72,12 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
-    procedure btnFontClick(Sender: TObject);
     procedure btnSelectClick(Sender: TObject);
     procedure btnTelConnectClick(Sender: TObject);
     procedure btnWebConnectClick(Sender: TObject);
     procedure edtCommandKeyPress(Sender: TObject; var Key: char);
+    procedure mnuCallalertClick(Sender : TObject);
    procedure tmrAutoConnectTimer(Sender: TObject);
-    procedure tbAlertCallsClick(Sender: TObject);
     procedure tmrSpotsTimer(Sender: TObject);
   private
     telDesc    : String;
@@ -124,6 +137,7 @@ type
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
+    procedure ChangeCallAlertCaption;
 
     function  ShowSpot(spot : String; var sColor : Integer; var Country : String; FromTelnet : Boolean = True) : Boolean;
     function  GetFreq(spot : String) : String;
@@ -316,6 +330,42 @@ begin
   }
 end;
 
+procedure TfrmDXCluster.btnPreferencesClick(Sender : TObject);
+var
+  p : TPoint;
+begin
+  mnuCallalert.Checked := cqrini.ReadBool('DXCluster', 'AlertEnabled', False);
+  ChangeCallAlertCaption;
+
+  p.x := 10;
+  p.y := 10;
+  p := btnPreferences.ClientToScreen(p);
+  popPreferences.PopUp(p.x, p.y)
+end;
+
+procedure TfrmDXCluster.acProgPrefExecute(Sender : TObject);
+begin
+  frmNewQSO.acPreferences.Execute
+end;
+
+procedure TfrmDXCluster.acFontExecute(Sender : TObject);
+begin
+  dlgDXfnt.Font.Name := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
+  dlgDXfnt.Font.Size := cqrini.ReadInteger('DXCluster','FontSize',12);
+  if dlgDXfnt.Execute then
+  begin
+    cqrini.WriteString('DXCluster','Font',dlgDXfnt.Font.Name);
+    cqrini.WriteInteger('DXCluster','FontSize',dlgDXfnt.Font.Size);
+    WebSpots.nastav_font(dlgDXfnt.Font);
+    TelSpots.nastav_font(dlgDXfnt.Font)
+  end
+end;
+
+procedure TfrmDXCluster.acCallAlertExecute(Sender : TObject);
+begin
+  frmPreferences.btnAlertCallsignsClick(nil)
+end;
+
 procedure TfrmDXCluster.FormCreate(Sender: TObject);
 begin
   InitCriticalSection(csTelnet);
@@ -467,6 +517,9 @@ begin
   telPass := cqrini.ReadString('DXCluster','Pass','');
   edtTelAddress.Text := telDesc;
 
+  mnuCallalert.Checked := cqrini.ReadBool('DXCluster', 'AlertEnabled', False);
+  ChangeCallAlertCaption;
+
   if cqrini.ReadBool('DXCluster', 'ConAfterRun', False) then
     tmrAutoConnect.Enabled := True
 end;
@@ -474,19 +527,6 @@ end;
 procedure TfrmDXCluster.btnClearClick(Sender: TObject);
 begin
   WebSpots.smaz_vse;
-end;
-
-procedure TfrmDXCluster.btnFontClick(Sender: TObject);
-begin
-  dlgDXfnt.Font.Name := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
-  dlgDXfnt.Font.Size := cqrini.ReadInteger('DXCluster','FontSize',12);
-  if dlgDXfnt.Execute then
-  begin
-    cqrini.WriteString('DXCluster','Font',dlgDXfnt.Font.Name);
-    cqrini.WriteInteger('DXCluster','FontSize',dlgDXfnt.Font.Size);
-    WebSpots.nastav_font(dlgDXfnt.Font);
-    TelSpots.nastav_font(dlgDXfnt.Font)
-  end
 end;
 
 procedure TfrmDXCluster.btnSelectClick(Sender: TObject);
@@ -572,15 +612,12 @@ begin
    edtCommand.Clear
   end;
 end;
-procedure TfrmDXCluster.tbAlertCallsClick(Sender: TObject);
+
+procedure TfrmDXCluster.mnuCallalertClick(Sender : TObject);
 begin
-  if tbAlertCalls.Checked then
-  begin
-    tbAlertCalls.Font.Color := clGreen;
-    frmPreferences.btnAlertCallsignsClick(nil);
-  end
-  else
-    tbAlertCalls.Font.Color := clDefault
+  mnuCallalert.Checked := not mnuCallalert.Checked;
+  cqrini.WriteBool('DXCluster', 'AlertEnabled', mnuCallalert.Checked);
+  ChangeCallAlertCaption
 end;
 
 procedure TfrmDXCluster.tmrAutoConnectTimer(Sender: TObject);
@@ -1116,7 +1153,7 @@ begin
     end
   end;
 
-  if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) and tbAlertCalls.Checked then
+  if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) and mnuCallalert.Checked then
     dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
 
   if dmData.DebugLevel >=1 then
@@ -1401,6 +1438,14 @@ begin
   finally
     LeaveCriticalSection(csDXCPref)
   end
+end;
+
+procedure TfrmDXCluster.ChangeCallAlertCaption;
+begin
+  if mnuCallalert.Checked then
+    mnuCallalert.Caption := 'Callsign alert enabled'
+  else
+    mnuCallalert.Caption := 'Enable callsign alert'
 end;
 
 end.
