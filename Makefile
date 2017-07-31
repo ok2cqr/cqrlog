@@ -37,6 +37,7 @@ install:
 	install -d -v         $(sharedir)/pixmaps/cqrlog
 	install -d -v         $(sharedir)/icons/cqrlog
 	install -d -v         $(sharedir)/applications
+	install -d -v         $(sharedir)/appdata
 	install -d -v         $(sharedir)/man/man1
 	install    -v -m 0755 src/cqrlog $(bindir)
 	install    -v -m 0755 tools/cqrlog-apparmor-fix $(datadir)/cqrlog-apparmor-fix
@@ -59,6 +60,7 @@ install:
 #	install    -v -m 0644 images/icon/256x256/*   $(datadir)/images/icon/256x256/
 #	install    -v -m 0644 images/*   $(datadir)/images/
 	install    -v -m 0644 tools/cqrlog.desktop $(sharedir)/applications/cqrlog.desktop
+	install    -v -m 0644 tools/cqrlog.appdata.xml $(sharedir)/appdata/cqrlog.appdata.xml
 	install    -v -m 0644 images/icon/32x32/cqrlog.png $(sharedir)/pixmaps/cqrlog/cqrlog.png
 	install    -v -m 0644 images/icon/128x128/cqrlog.png $(sharedir)/icons/cqrlog.png
 	install    -v -m 0644 src/changelog.html $(datadir)/changelog.html
