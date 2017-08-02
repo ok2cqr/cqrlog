@@ -21,7 +21,6 @@ GM3X;Clive
 VK2AYD;Dave
 G3LHJ;Derrick
 G3SXW;Roger
-G3RPB;Keith
 W1YL;Ellen
 N3RS;Sig
 K3ZO;Fred
@@ -64,7 +63,6 @@ G3TXF;Nigel
 ZD9XF;Nigel
 K4XU;Dick
 W1OT;Tony
-GW3KDB;Pete
 I3BLF;Jack
 DJ3KR;Juergen
 PR7PO;Alex
@@ -76,7 +74,6 @@ K9WA;Jim
 G4BUE;Chris
 G4E;Chris
 GW3KGV;Ken
-ZL1AH;John
 G3VMW;Steve
 M2X;Steve
 9J2BO;Brian
@@ -217,7 +214,6 @@ G0BQV;Mary
 G3SED;Mike
 K9DX;John
 G3PQC;Doug
-G3MRC;Joe
 G0ORH;Ken
 M3I;Ken
 G3YXX;David
@@ -271,7 +267,6 @@ G3ZGC;Richard
 VE3VA;Jeff
 G5LP;Lionel
 G5L;Lionel
-G4VHH;Fred
 K4UEE;Bob
 K5RC;Tom
 KZ5D;Art
@@ -392,12 +387,13 @@ K5EX;Ben
 N0AV;Jim
 WB2YIP;Chuck
 ZL2IFB;Gary
+ZM4G;Gary
+G4IFB;Gary
 MD0CCE;Bob
 MD2C;Bob
 K2UV;Warren
 K0PFX;Mel
 G3ROO;Ian
-K1ON;Larry
 KJ9I;Dave
 AA3B;Bud
 VK2IA;Bernd
@@ -417,6 +413,7 @@ G9W;Mark
 G3VCN;Paul
 G4HMC;David
 OK2CQR;Petr
+OK7AN;Petr
 G3TBK;Dave
 M7W;Dave
 IK0YGJ;Carlo
@@ -487,6 +484,8 @@ K5TF;Dick
 N6TT;Steve
 5T0JL;Jean
 5T1MM;Jean
+5T2MM;Jean
+5T3MM;Jean
 G3BJ;Don
 K2NV;Tony
 TF3DC;Oskar
@@ -509,6 +508,7 @@ SD1A;Eric
 W5PEH;Pete
 W4EDE;Lee
 M0PCB;Iain
+AD5XI;Iain
 VP2MXI;Iain
 WA1FCN;Bob
 DL5YL;Tina
@@ -599,3 +599,14 @@ DL6KVA;Axel
 OZ2A;Kim
 DF4XX;Kurt
 K8CQ;Jeff
+W4WJ;Don
+VE7SV;Dale
+CE2AWW;Dale
+LY5A;Jonas
+K5WK;Ken
+ZL3CW;Jacky
+ZM1A;Jacky
+G4WQI;Dean
+W4HG;Wayne
+K8JPM;Bob
+UA9BA;Willy
