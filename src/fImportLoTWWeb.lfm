@@ -115,7 +115,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.4.0'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 405
@@ -183,9 +183,9 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
       end
       object chkShowNew: TCheckBox
         Left = 6
-        Height = 24
+        Height = 22
         Top = 39
-        Width = 404
+        Width = 402
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end

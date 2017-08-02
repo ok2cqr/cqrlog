@@ -71,6 +71,7 @@ var
   Count : Word = 0;
 begin
   Done := False;
+  FileSize := 0;
   mStat.Clear;
   Application.ProcessMessages;
   if not dmUtils.IsDateOK(edtDateFrom.Text) then
