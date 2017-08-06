@@ -3,7 +3,7 @@ Legend:
   + new feature
   - bugfix
 --------------------
-2.1.0
+2.1.0 (2017-08-06)
   + wsjt remote mode improvements (Saku, OH1KH)
   + wsjt cq monitor added (Saku, OH1KH)
   + worked grids map added (Saku, OH1KH)

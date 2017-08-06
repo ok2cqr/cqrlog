@@ -1,3 +1,23 @@
+cqrlog (2.1.0-1) unstable; urgency=low
+
+  * wsjt remote mode improvements (Saku, OH1KH)
+  * wsjt cq monitor added (Saku, OH1KH)
+  * worked grids map added (Saku, OH1KH)
+  * simple Contest window added (Saku, OH1KH)
+  * dx cluster window improved
+  * propagation from DK0WCY added (Saku, OH1KH)
+  * reminder added (Saku, OH1KH)
+  * CTRL+Z in dx cluster command line scrolls back last
+    5 commands (Saku, OH1KH)
+  * callsign for DX cluster alert can be defined using
+    regular expressions (Saku, OH1KH)
+  * dx cluster alert now allows partial callsigns
+    (e.g. OL200, OK etc.)
+  * Show QSO older then user defined date with different color
+  * JT4, JT9 and FT8 modes added (Saku, OH1KH)
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 06 Aug 2017 18:00:36 +0100
+
 cqrlog (2.0.5-1) unstable; urgency=low
 
   * sort by gridsquare added to filter
