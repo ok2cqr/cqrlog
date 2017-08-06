@@ -1,9 +1,12 @@
 #!/bin/bash
  
-VERSION=2.0.5
+VERSION=`cat ../src/uVersion.pas | grep cVERSION`
+VERSION="$(echo -e "${VERSION}" | sed -e 's/^[[:space:]]*//')"
+VERSION="${VERSION:15:5}"
 # cqrlog version
 
-FINAL=/home/ok2cqr/projects/final_cqrlog/
+mkdir ~/tmp/cqrlog_build_$VERSION -p
+FINAL=~/tmp/cqrlog_build_$VERSION
 #whre would you like to store final build files
 
 #****************************************
