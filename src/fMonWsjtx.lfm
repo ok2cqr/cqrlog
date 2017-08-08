@@ -139,4 +139,15 @@ object frmMonWsjtx: TfrmMonWsjtx
     BorderSpacing.Top = 2
     TabOrder = 4
   end
+  object chkmyAll: TCheckBox
+    AnchorSideLeft.Control = chkmyAlert
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = chkmyAlert
+    Left = 87
+    Height = 23
+    Top = 292
+    Width = 43
+    Caption = 'All'
+    TabOrder = 5
+  end
 end

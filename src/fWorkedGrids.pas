@@ -53,7 +53,7 @@ type
     function RecordCount: string;
     function WkdGrid(loc, band, mode: string): integer;
     //returns 0=not wkd, 1=main grid wkd, 2=wkd
-    function WkdCall(call, band, mode: string): boolean;  //returns wkd=true
+    function WkdCall(call, band, mode: string): integer;  //returns wkd this b+m=1, this b=2, any b+m=3
     function GridOK(Loc: string): boolean;
     procedure UpdateMap;
   end;
@@ -216,25 +216,59 @@ begin
     Writeln('WkdGrid is:', WkdGrid);
 end;
 
-function TfrmWorkedGrids.WkdCall(call, band, mode: string): boolean;
+function TfrmWorkedGrids.WkdCall(call, band, mode: string): integer;
 begin
-  WkdCall := False;
+  WkdCall := 0;
   dmData.Q.Close;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
+
+
   dmData.Q.SQL.Text := 'select callsign from ' + LogTable + ' where band=' +
     chr(39) + band + chr(39) + ' and mode=' + chr(39) +
     mode + chr(39) + ' and callsign=' + chr(39) + call + chr(39);
   if dmData.DebugLevel >= 1 then
-    Writeln(dmData.Q.SQL.Text);
+    Writeln('Wkd test 1:',dmData.Q.SQL.Text);
   try
     dmData.Q.Open;
     if dmData.Q.Fields[0].AsString <> '' then
-      WkdCall := True;
+      WkdCall := 1; //worked in this band and mode
     dmData.Q.Close;
   finally
     dmData.trQ.Rollback;
   end;
+
+if  WkdCall = 0 then
+ begin
+   dmData.Q.SQL.Text := 'select callsign from ' + LogTable + ' where band=' +
+    chr(39) + band + chr(39) + ' and callsign=' + chr(39) + call + chr(39);
+  if dmData.DebugLevel >= 1 then
+    Writeln('Wkd test 2:',dmData.Q.SQL.Text);
+  try
+    dmData.Q.Open;
+    if dmData.Q.Fields[0].AsString <> '' then
+      WkdCall := 2; //worked in this band but not this mode
+    dmData.Q.Close;
+  finally
+    dmData.trQ.Rollback;
+  end;
+ end;
+
+if  WkdCall = 0 then
+ begin
+   dmData.Q.SQL.Text := 'select callsign from ' + LogTable + ' where callsign=' + chr(39) + call + chr(39);
+  if dmData.DebugLevel >= 1 then
+    Writeln('Wkd test 3:',dmData.Q.SQL.Text);
+  try
+    dmData.Q.Open;
+    if dmData.Q.Fields[0].AsString <> '' then
+      WkdCall := 3; //worked in any band and mode
+    dmData.Q.Close;
+  finally
+    dmData.trQ.Rollback;
+  end;
+end;
+
   if dmData.DebugLevel >= 1 then
     Writeln('WkdCall is:', WkdCall);
 end;

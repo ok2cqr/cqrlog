@@ -240,3 +240,12 @@
        Found out that double click on CQ-monitor line now initiates qso when FT8 is in use.
        Assume that it happens also with MSK144 as this fix is happened because new wsjtx version has 
        corrected UDP message.								(2.0.5.039)
+
+27.07.2017
+
+     - More informative CQ-monitor by colours of callsign.
+       Red lowcase   = worked this band and mode
+       Fuchsia upcase = worked this band, but not this mode
+       Maroon upcase = worked on any other band and mode
+       Green upcase  = never worked before on any band       
+                                                                              (2.0.5.(040))

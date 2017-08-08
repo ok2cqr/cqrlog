@@ -13,6 +13,7 @@ type
   { TfrmMonWsjtx }
 
   TfrmMonWsjtx = class(TForm)
+    chkmyAll: TCheckBox;
     chkHistory: TCheckBox;
     chkmyAlert: TCheckBox;
     chkLocAlert: TCheckBox;
@@ -164,6 +165,7 @@ procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
    cqrini.WriteBool('MonWsjtx','NoHistory',chkHistory.Checked);
    cqrini.WriteBool('MonWsjtx','MyAlert',chkmyAlert.Checked);
+   cqrini.WriteBool('MonWsjtx','MyAll',chkmyAll.Checked);
    cqrini.WriteBool('MonWsjtx','LocAlert',chkLocAlert.Checked);
    cqrini.WriteString('MonWsjtx','TextAlert',EditAlert.Text);
    dmUtils.SaveWindowPos(frmMonWsjtx);
@@ -187,6 +189,7 @@ procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
    chkHistory.Checked := cqrini.ReadBool('MonWsjtx','NoHistory',False);
    chkmyAlert.Checked := cqrini.ReadBool('MonWsjtx','MyAlert',False);
+   chkmyAll.Checked := cqrini.ReadBool('MonWsjtx','MyAll',False);
    chkLocAlert.Checked:= cqrini.ReadBool('MonWsjtx','LocAlert',False);
    EditAlert.Text := cqrini.ReadString('MonWsjtx','TextAlert','');
    dmUtils.LoadWindowPos(frmMonWsjtx);
@@ -252,6 +255,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
        Added.. may be also "mycall" something, but we count just those with proper locator.
        12:34 # MYCALL CA1LL AA11
+       If "MyAlert"+"All" selected alerts/prints all lines beginning with mycall
 
        Fixed stupid cq handling "CQ 000 PA7ZZ JO22 !where?" decodes now ok.
       }
@@ -276,6 +280,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
       '&'  : mode := 'MSK144';
       ':'  : mode := 'QRA64';
       chr(126): mode := 'FT8';
+
       else mode :='';
       end;
 
@@ -339,6 +344,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
             if (not frmWorkedGrids.GridOK(msgLoc)) or (msgLoc = 'RR73') then //disble false used "RR73" being a loc
                msgLoc:='----';
 
+         if ( isMyCall and chkMyAlert.Checked and chkmyAll.Checked and (msgLoc='----') ) then msgLoc:='<!!>';//locator for "ALL-MY"
+
          if not ( (msgLoc='----') and isMyCall ) then //if mycall: line must have locator to print(I.E. Answer to my CQ)
          Begin                                        //and other combinations (CQs) will print, too
            if chkHistory.Checked and (msgTime <> LastWsjtLineTime) then CleanWsjtxMemo;
@@ -350,11 +357,18 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                AddColorStr('  '+msgMode+' ',clOlive) //mode
             else
                AddColorStr('  '+msgMode+' ',clPurple);
+
            if isMyCall then AddColorStr('=',clGreen) else AddColorStr(' ',clGreen);  //answer to me
-           if frmWorkedGrids.WkdCall(msgCall,band,mode) then
-                   AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed)
-               else
-                   AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clGreen);
+
+           i:= frmWorkedGrids.WkdCall(msgCall,band,mode);
+                  case i of
+                   1  :  AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clRed);
+                   2  :  AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clFuchsia);
+                   3  :  AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clMaroon);
+                   else
+                     AddColorStr(PadRight(UpperCase(msgCall),9)+' ',clGreen);
+                  end;
+
            if msgLoc='----' then
                   AddColorStr(msgLoc,clDefault) //no loc
               else
