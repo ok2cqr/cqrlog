@@ -55,6 +55,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     OnChange = WsjtxMemoChange
     OnDblClick = WsjtxMemoDblClick
     ParentFont = False
+    PopupMenu = popColors
     ReadOnly = True
     TabOrder = 0
     WordWrap = False
@@ -65,11 +66,11 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Side = asrCenter
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = WsjtxMemo
-    Left = 179
+    Left = 182
     Height = 23
     Top = 14
-    Width = 96
-    Anchors = [akLeft, akRight, akBottom]
+    Width = 91
+    Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 1
     Caption = 'no history'
     TabOrder = 1
@@ -149,5 +150,46 @@ object frmMonWsjtx: TfrmMonWsjtx
     Width = 43
     Caption = 'All'
     TabOrder = 5
+  end
+  object popCBox: TColorBox
+    AnchorSideTop.Control = WsjtxMemo
+    AnchorSideRight.Control = WsjtxMemo
+    AnchorSideRight.Side = asrBottom
+    Left = 343
+    Height = 31
+    Top = 38
+    Width = 100
+    Anchors = [akTop, akRight]
+    ItemHeight = 0
+    OnSelect = popCBoxSelect
+    TabOrder = 6
+    Visible = False
+  end
+  object popColors: TPopupMenu
+    left = 104
+    top = 88
+    object cmHead: TMenuItem
+      Caption = 'Set color of:'
+      object cmNever: TMenuItem
+        Caption = 'Qso never'
+        OnClick = cmNeverClick
+      end
+      object cmBand: TMenuItem
+        Caption = 'Qso other mode'
+        OnClick = cmBandClick
+      end
+      object cmAny: TMenuItem
+        Caption = 'Qso other band'
+        OnClick = cmAnyClick
+      end
+      object cmHere: TMenuItem
+        Caption = 'Qso before'
+        OnClick = cmHereClick
+      end
+      object cmCancel: TMenuItem
+        Caption = 'Cancel'
+        OnClick = cmCancelClick
+      end
+    end
   end
 end
