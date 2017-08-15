@@ -248,4 +248,13 @@
        Fuchsia upcase = worked this band, but not this mode
        Maroon upcase = worked on any other band and mode
        Green upcase  = never worked before on any band       
-                                                                              (2.0.5.(040))
+                                                                              (2.0.5.(040))12.08.2017
+
+    - WSJTX CQ monitor: Now green text is also bold
+								(2.1.0(104))
+
+    - WSJTX CQ monitor: User selectable colours. Right click on monitor form shows selection popup menu. 
+      "Cancel" at selection popup menu hides color box in case of no new selection.
+      Otherwise new selection changes color and hides color box.
+								(2.1.0(105))
+
