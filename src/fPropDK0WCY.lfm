@@ -12,93 +12,127 @@ object frmPropDK0WCY: TfrmPropDK0WCY
   OnDblClick = FormDblClick
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.4.0'
   object lblBoulAidx: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblInfo
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 80
-    Width = 97
+    Height = 15
+    Top = 75
+    Width = 92
+    BorderSpacing.Top = 5
     Caption = 'Boulder A-idx:'
     ParentColor = False
   end
   object lblCurKidx: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblKiel3K
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 140
+    Height = 15
+    Top = 135
     Width = 90
+    BorderSpacing.Top = 5
     Caption = 'Kiel cur K-idx:'
     ParentColor = False
   end
   object lblSolarFlx: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblKidxG
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 180
-    Width = 69
+    Height = 15
+    Top = 175
+    Width = 65
+    BorderSpacing.Top = 5
     Caption = 'Solar flux:'
     ParentColor = False
   end
   object lblSunSNr: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblSolarFlx
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 200
-    Width = 79
+    Height = 15
+    Top = 195
+    Width = 73
+    BorderSpacing.Top = 5
     Caption = 'Sunspot nr:'
     ParentColor = False
   end
   object lblGeomFi: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblSolAct
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 240
-    Width = 95
+    Height = 15
+    Top = 235
+    Width = 91
+    BorderSpacing.Top = 5
     Caption = 'Geomag field:'
     ParentColor = False
   end
   object DBoulAidx: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblBoulAidx
     Left = 120
-    Height = 17
-    Top = 80
-    Width = 74
+    Height = 15
+    Top = 75
+    Width = 68
     Caption = 'DBoulAidx'
     ParentColor = False
   end
   object DCurKidx: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblCurKidx
     Left = 120
-    Height = 17
-    Top = 140
-    Width = 65
+    Height = 15
+    Top = 135
+    Width = 61
     Caption = 'DCurKidx'
     ParentColor = False
     ParentFont = False
   end
   object DSolarFlx: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblSolarFlx
     Left = 120
-    Height = 17
-    Top = 180
-    Width = 66
+    Height = 15
+    Top = 175
+    Width = 62
     Caption = 'DSolarFlx'
     ParentColor = False
   end
   object DSunSNr: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblSunSNr
     Left = 120
-    Height = 17
-    Top = 200
-    Width = 62
+    Height = 15
+    Top = 195
+    Width = 57
     Caption = 'DSunSNr'
     ParentColor = False
   end
   object DGeomFi: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblGeomFi
     Left = 120
-    Height = 17
-    Top = 240
-    Width = 63
+    Height = 15
+    Top = 235
+    Width = 59
     Caption = 'DGeomFi'
     ParentColor = False
   end
   object lblInfo: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = Panel1
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 60
-    Width = 45
+    Height = 15
+    Top = 55
+    Width = 41
+    BorderSpacing.Top = 5
     Caption = 'lblInfo'
     ParentColor = False
   end
@@ -153,83 +187,113 @@ object frmPropDK0WCY: TfrmPropDK0WCY
     ParentShowHint = False
   end
   object lblSolAct: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblSunSNr
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 220
-    Width = 92
+    Height = 15
+    Top = 215
+    Width = 89
+    BorderSpacing.Top = 5
     Caption = 'Solar activity:'
     ParentColor = False
   end
   object lblKielAidx: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblBoulAidx
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 100
+    Height = 15
+    Top = 95
     Width = 67
+    BorderSpacing.Top = 5
     Caption = 'Kiel A-idx:'
     ParentColor = False
   end
   object lblAurora: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblGeomFi
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 260
-    Width = 52
+    Height = 15
+    Top = 255
+    Width = 47
+    BorderSpacing.Top = 5
     Caption = 'Aurora:'
     ParentColor = False
   end
   object DKielAidx: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblKielAidx
     Left = 120
-    Height = 17
-    Top = 100
-    Width = 67
+    Height = 15
+    Top = 95
+    Width = 64
     Caption = 'DKielAidx'
     ParentColor = False
   end
   object DSolAct: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblSolAct
     Left = 120
-    Height = 17
-    Top = 220
-    Width = 55
+    Height = 15
+    Top = 215
+    Width = 51
     Caption = 'DSolAct'
     ParentColor = False
   end
   object DAurora: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblAurora
     Left = 120
-    Height = 17
-    Top = 260
-    Width = 59
+    Height = 15
+    Top = 255
+    Width = 53
     Caption = 'DAurora'
     ParentColor = False
   end
   object lblKiel3K: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblKielAidx
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 120
-    Width = 89
+    Height = 15
+    Top = 115
+    Width = 88
+    BorderSpacing.Top = 5
     Caption = 'Kiel 3-hour K:'
     ParentColor = False
   end
   object DKiel3K: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblKiel3K
     Left = 120
-    Height = 17
-    Top = 120
-    Width = 53
+    Height = 15
+    Top = 115
+    Width = 52
     Caption = 'DKiel3K'
     ParentColor = False
     ParentFont = False
   end
   object lblInfoUTC: TLabel
+    AnchorSideLeft.Control = ImageKidx
+    AnchorSideTop.Control = lblInfoDate
     Left = 120
-    Height = 17
+    Height = 15
     Top = 5
-    Width = 72
+    Width = 67
     Caption = 'lblInfoUTC'
     ParentColor = False
   end
   object lblInfoFrom: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblInfoDate
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
+    Height = 15
     Top = 25
-    Width = 81
+    Width = 73
+    BorderSpacing.Top = 5
     Caption = 'lblInfoFrom'
     ParentColor = False
     ParentFont = False
@@ -238,32 +302,48 @@ object frmPropDK0WCY: TfrmPropDK0WCY
     OnMouseLeave = lblInfoFromMouseLeave
   end
   object ImageKidx: TImage
+    AnchorSideLeft.Control = lblKiel3K
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblKidxG
+    AnchorSideTop.Side = asrCenter
     Left = 120
     Height = 20
-    Top = 157
+    Top = 152
     Width = 72
+    BorderSpacing.Left = 22
   end
   object lblKidxG: TLabel
+    AnchorSideLeft.Control = lblInfoDate
+    AnchorSideTop.Control = lblCurKidx
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 17
-    Top = 160
-    Width = 101
+    Height = 15
+    Top = 155
+    Width = 98
+    BorderSpacing.Top = 5
     Caption = 'K-idx graph 3h:'
     ParentColor = False
   end
   object lblInfoDate: TLabel
+    AnchorSideTop.Control = Owner
     Left = 10
-    Height = 17
+    Height = 15
     Top = 5
-    Width = 78
+    Width = 72
+    BorderSpacing.Top = 5
     Caption = 'lblInfoDate'
     ParentColor = False
   end
   object Panel1: TPanel
-    Left = 60
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = lblInfoFrom
+    AnchorSideTop.Side = asrBottom
+    Left = 64
     Height = 5
     Top = 45
     Width = 100
+    BorderSpacing.Top = 5
     TabOrder = 0
   end
   object tmrProp: TTimer
