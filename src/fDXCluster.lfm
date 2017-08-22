@@ -1,13 +1,13 @@
 object frmDXCluster: TfrmDXCluster
-  Left = 702
-  Height = 367
-  Top = 436
+  Left = 129
+  Height = 445
+  Top = 116
   Width = 709
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
   ActiveControl = pgDXCluster
   Caption = 'DXCluster'
-  ClientHeight = 367
+  ClientHeight = 445
   ClientWidth = 709
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -124,7 +124,7 @@ object frmDXCluster: TfrmDXCluster
   LCLVersion = '1.6.4.0'
   object pgDXCluster: TPageControl
     Left = 0
-    Height = 367
+    Height = 445
     Top = 0
     Width = 709
     ActivePage = tabTelnet
@@ -133,16 +133,16 @@ object frmDXCluster: TfrmDXCluster
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
-      ClientHeight = 336
-      ClientWidth = 705
+      ClientHeight = 416
+      ClientWidth = 699
       object Panel4: TPanel
         Left = 0
         Height = 36
-        Top = 152
-        Width = 560
+        Top = 365
+        Width = 699
         Align = alBottom
         ClientHeight = 36
-        ClientWidth = 560
+        ClientWidth = 699
         TabOrder = 0
         object lblInfo: TLabel
           Left = 10
@@ -152,9 +152,9 @@ object frmDXCluster: TfrmDXCluster
           ParentColor = False
         end
         object btnWebConnect: TButton
-          Left = 471
+          Left = 610
           Height = 25
-          Top = 6
+          Top = 8
           Width = 84
           Anchors = [akTop, akRight]
           BorderSpacing.InnerBorder = 4
@@ -163,7 +163,7 @@ object frmDXCluster: TfrmDXCluster
           TabOrder = 0
         end
         object btnClear: TButton
-          Left = 389
+          Left = 528
           Height = 25
           Top = 6
           Width = 75
@@ -185,7 +185,7 @@ object frmDXCluster: TfrmDXCluster
           Visible = False
         end
         object btnFont: TButton
-          Left = 309
+          Left = 448
           Height = 25
           Top = 6
           Width = 75
@@ -197,9 +197,9 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlWeb: TPanel
         Left = 0
-        Height = 152
+        Height = 365
         Top = 0
-        Width = 560
+        Width = 699
         Align = alClient
         Alignment = taLeftJustify
         BevelInner = bvLowered
@@ -215,31 +215,31 @@ object frmDXCluster: TfrmDXCluster
     end
     object tabTelnet: TTabSheet
       Caption = 'Telnet'
-      ClientHeight = 336
-      ClientWidth = 705
+      ClientHeight = 416
+      ClientWidth = 699
       object Panel1: TPanel
         Left = 0
         Height = 34
-        Top = 302
-        Width = 705
+        Top = 382
+        Width = 699
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 34
-        ClientWidth = 705
+        ClientWidth = 699
         TabOrder = 0
         object Label1: TLabel
           Left = 6
-          Height = 17
+          Height = 15
           Top = 11
-          Width = 74
+          Width = 71
           Caption = 'Command:'
           ParentColor = False
         end
         object edtCommand: TEdit
           AnchorSideLeft.Control = Label1
           AnchorSideLeft.Side = asrBottom
-          Left = 82
-          Height = 27
+          Left = 79
+          Height = 32
           Top = 3
           Width = 266
           BorderSpacing.Left = 2
@@ -248,7 +248,7 @@ object frmDXCluster: TfrmDXCluster
         end
         object Button1: TButton
           AnchorSideLeft.Side = asrBottom
-          Left = 616
+          Left = 610
           Height = 25
           Top = 3
           Width = 85
@@ -259,7 +259,7 @@ object frmDXCluster: TfrmDXCluster
           TabOrder = 1
         end
         object Button2: TButton
-          Left = 328
+          Left = 528
           Height = 25
           Top = -8
           Width = 75
@@ -268,20 +268,39 @@ object frmDXCluster: TfrmDXCluster
           TabOrder = 2
           Visible = False
         end
+        object trChatSize: TTrackBar
+          AnchorSideLeft.Control = edtCommand
+          AnchorSideTop.Control = Panel1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideBottom.Side = asrBottom
+          Cursor = crSizeWE
+          Left = 79
+          Height = 52
+          Top = -9
+          Width = 263
+          Max = 100
+          Min = 2
+          OnChange = trChatSizeChange
+          Position = 20
+          ScalePos = trLeft
+          OnClick = trChatSizeClick
+          TabOrder = 3
+          Visible = False
+        end
       end
       object Panel2: TPanel
         Left = 0
         Height = 30
         Top = 0
-        Width = 705
+        Width = 699
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 705
+        ClientWidth = 699
         TabOrder = 1
         object edtTelAddress: TEdit
           Left = 8
-          Height = 27
+          Height = 32
           Top = 1
           Width = 189
           TabOrder = 0
@@ -318,14 +337,27 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlTelnet: TPanel
         Left = 0
-        Height = 272
+        Height = 352
         Top = 30
-        Width = 705
+        Width = 699
         Align = alClient
         BevelOuter = bvNone
+        ClientHeight = 352
+        ClientWidth = 699
         Color = clWhite
         ParentColor = False
         TabOrder = 2
+        object pnlChat: TPanel
+          Left = 0
+          Height = 80
+          Top = 0
+          Width = 699
+          Align = alTop
+          BevelOuter = bvNone
+          Color = 13890552
+          ParentColor = False
+          TabOrder = 0
+        end
       end
     end
   end
@@ -364,6 +396,10 @@ object frmDXCluster: TfrmDXCluster
     object MenuItem2: TMenuItem
       Caption = '-'
     end
+    object MenuItem6: TMenuItem
+      Action = acChatSize
+      Caption = 'Chat Size'
+    end
     object MenuItem3: TMenuItem
       Action = acFont
     end
@@ -388,6 +424,10 @@ object frmDXCluster: TfrmDXCluster
     object acProgPref: TAction
       Caption = 'Preferences'
       OnExecute = acProgPrefExecute
+    end
+    object acChatSize: TAction
+      Caption = 'acChatSize'
+      OnExecute = acChatSizeExecute
     end
   end
 end
