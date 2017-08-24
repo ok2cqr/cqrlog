@@ -41,7 +41,6 @@ const
    NotExactly = 0; 
    Exactly    = 1; 
    ExNoEquals = 2; 
-   MaxCall = 1000000;
 
 type
   { TdmDXCluster }
@@ -79,12 +78,9 @@ type
 
     //procedure VyhodnotZnacku(znacka : String; datum : TDateTime; var pfx, country, cont, ITU, WAZ, posun, lat, long : String);
   public
-    dxCallArray : Array [0..MaxCall] of String[20];
-
     function  LetterFromMode(mode : String) : String;
     function  DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
-    function  UsesLotw(call : String) : Boolean;
     function  UseseQSL(call : String) : Boolean;
     function  id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
                                posun, ITU, lat, long: string) : Word; overload;
@@ -857,9 +853,6 @@ begin
 
   qBands.SQL.Text := 'SELECT * FROM bands ORDER BY b_begin';
   qDXCCRef.SQL.Text  := 'SELECT * FROM dxcc_ref ORDER BY adif';
-
-  for i:=0 to MaxCall-1 do
-    dxCallArray[i] := dmData.CallArray[i]
 end;
 
 procedure TdmDXCluster.DataModuleDestroy(Sender: TObject);
@@ -972,44 +965,6 @@ begin
     uhej := sez1;
     sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data'+PathDelim+'country_del.tab',chy1));
     LoadDXCCRefArray
-  finally
-    LeaveCriticalsection(csDX)
-  end
-end;
-
-function TdmDXCluster.UsesLotw(call : String) : Boolean;
-var
-  i : Integer;
-  h : Integer;
-begin
-  EnterCriticalsection(csDX);
-  try
-    Result := False;
-    if call = '' then
-      exit;
-    call := dmUtils.GetIDCall(UpperCase(call));
-    for i:=0 to MaxCall-1 do
-    begin
-      if dxCallArray[i] = '' then
-        Break;
-      h := Ord(dxCallArray[i][1]);
-      if h = Ord(Call[1]) then
-      begin
-        if dxCallArray[i] = call then
-        begin
-          if dmData.DebugLevel>=1 then Writeln('Found - '+dxCallArray[i]);
-          Result := True;
-          Break
-        end
-      end
-      else begin
-        if h > Ord(Call[1]) then
-        begin
-          if dmData.DebugLevel>=1 then Writeln('NOT found - '+dxCallArray[i]);
-          Break
-        end
-      end
-    end
   finally
     LeaveCriticalsection(csDX)
   end

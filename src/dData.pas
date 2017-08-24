@@ -23,7 +23,6 @@ uses
   mysql57dyn, mysql57conn, uMyFindFile, Graphics;
 
 const
-  MaxCall   = 1000000;
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 12;
   cDB_COMN_VER = 4;
@@ -202,7 +201,7 @@ type
     dbDXC        : TSQLConnection;
 
     eQSLUsers : Array of ShortString;
-    CallArray : Array [0..MaxCall] of String[20];
+    CallArray : Array of String[20];
     IsFilter  : Boolean;
     IsSFilter : Boolean; //Search filter
     //search function uses filter function but user doesn't need to know about it
@@ -2681,20 +2680,27 @@ begin
 end;
 {$ENDIF}
 procedure TdmData.LoadLoTWCalls;
+
+  procedure GrowArray(NextIndex: integer);
+  begin
+    if NextIndex >= Length(CallArray) then
+      SetLength(CallArray, Length(CallArray) * 2);
+  end;
+
 var
   i : Integer;
   f : TextFile;
   a : String;
 begin
-  for i:=0 to MaxCall-1 do
-    CallArray[i] := '';
+  SetLength(CallArray, 1);
+  i := 0;
   if FileExists(fHomeDir+'lotw1.txt') then
   begin
     AssignFile(f,fHomeDir+'lotw1.txt');
     Reset(f);
-    i := 0;
     while not Eof(f) do
     begin
+      GrowArray(i);
       Readln(f,a);
       CallArray[i] := a;
       inc(i)
@@ -2702,6 +2708,7 @@ begin
     if fDebugLevel>=1 then Writeln('Loaded ',i,' LoTW users');
     CloseFile(f)
   end;
+  SetLength(CallArray, i); //Shrink the array
 end;
 
 procedure TdmData.LoadMasterSCP;
@@ -2761,7 +2768,7 @@ begin
   if call = '' then
     exit;
   call := dmUtils.GetIDCall(UpperCase(call));
-  for i:=0 to MaxCall-1 do
+  for i:=0 to High(CallArray) do
   begin
     if CallArray[i] = '' then
       Break;
@@ -2770,7 +2777,7 @@ begin
     begin
       if CallArray[i] = call then
       begin
-        if fDebugLevel>=1 then Writeln('Nalezeno - '+CallArray[i]);
+        if fDebugLevel>=1 then Writeln('Found - ' + CallArray[i]);
         Result := True;
         Break
       end
@@ -2778,7 +2785,7 @@ begin
     else begin
       if h > Ord(Call[1]) then
       begin
-        if fDebugLevel>=1 then Writeln('NEnalezeno - '+CallArray[i]);
+        if fDebugLevel>=1 then Writeln('NOT found - ' + CallArray[i]);
         Break
       end
     end
