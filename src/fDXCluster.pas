@@ -921,7 +921,7 @@ begin
   if tmp > 0 then
     freq[tmp] := FormatSettings.DecimalSeparator;
 
-  isLoTW := dmDXCluster.UsesLotw(call);
+  isLoTW := dmData.UsesLotw(call);
   isEQSL := dmDXCluster.UseseQSL(call);
 
   if cfgUseBackColor then

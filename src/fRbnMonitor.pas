@@ -339,7 +339,7 @@ begin
       end;
       Writeln(mode);
 
-      if dmDXCluster.UsesLotw(dxstn) then
+      if dmData.UsesLotw(dxstn) then
         LoTW := 'L'
       else
         LoTW := '';
