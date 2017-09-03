@@ -29,13 +29,13 @@ uses
   // RTL/FCL
   Types, Classes, SysUtils,
   // LCL
-  LCLType, Controls, Graphics, LazUTF8, StdCtrls, LCLProc,
+  LCLType, Controls, Graphics, StdCtrls, LCLProc,
   // Gtk2 widget
   Gtk2Int, Gtk2Def,
   GTK2WinApiWindow, Gtk2Globals, Gtk2Proc,
   gdk2pixbuf, Gtk2WSStdCtrls,
   // RichMemo
-  RichMemo, WSRichMemo, RichMemoUtils;
+  RichMemo, WSRichMemo, RichMemoUtils, LazUTF8;
 
 const
   TagNameNumeric = 'numeric';
