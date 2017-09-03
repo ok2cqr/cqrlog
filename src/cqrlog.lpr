@@ -20,7 +20,7 @@ uses
   fBigSquareStat, feQSLDownload, feQSLUpload, fSOTAExport, fNewQSODefValues,
   fQSLExpPref, fRotControl, dLogUpload, fLogUploadStatus, frCWKeys, fCallAlert,
   fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer,
-  fRadioMemories, fAddRadioMemory, fException, fDbError, fCommentToCall,
+  fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi;
 var
@@ -63,12 +63,12 @@ begin
   Application.CreateForm(TfrmLogUploadStatus, frmLogUploadStatus);
   Application.CreateForm(TfrmCWType, frmCWType);
   Application.CreateForm(TfrmRbnMonitor, frmRbnMonitor);
-  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
   Application.CreateForm(TfrmWorkedGrids, frmWorkedGrids);
   Application.CreateForm(TfrmPropDK0WCY, frmPropDK0WCY);
   Application.CreateForm(TfrmReminder, frmReminder);
   Application.CreateForm(TfrmContest, frmContest);
   Application.CreateForm(Tfrmxfldigi, frmxfldigi);
+  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
 
   Splash.Update;
   application.ProcessMessages;

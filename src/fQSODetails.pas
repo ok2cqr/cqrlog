@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
-  ExtCtrls, jakozememo, lcltype;
+  ExtCtrls, lcltype, uColorMemo;
 
 type
 
@@ -115,7 +115,7 @@ type
   
 var
   frmQSODetails: TfrmQSODetails;
-  Details : TJakomemo;
+  Details : TColorMemo;
   Liota   : Tiota;
   Lwaz    : Twazitu;
   Litu    : Twazitu;
@@ -168,7 +168,7 @@ begin
   f := TFont.Create;
   try
     f.Name := cqrini.ReadString('Fonts','Buttons','Sans 10');
-    Details.nastav_font(f)
+    Details.SetFont(f)
   finally
     f.Free
   end
@@ -203,17 +203,17 @@ end;
 procedure TfrmQSODetails.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmQSODetails);
-  Details             := Tjakomemo.Create(pnlDetails);
+  Details             := TColorMemo.Create(pnlDetails);
   Details.parent      := pnlDetails;
-  Details.autoscroll  := True;
+  Details.AutoScroll  := True;
   Details.Align       := alClient;
-  Details.nastav_jazyk(1);
+  Details.setLanguage(1);
   LoadFonts
 end;
 
 procedure TfrmQSODetails.ClearAll;
 begin
-  Details.smaz_vse
+  Details.RemoveAllLines
 end;
 
 procedure TfrmQSODetails.ClearStat;
@@ -243,26 +243,26 @@ procedure TfrmQSODetails.ShowInfo;
 begin
   if (not Showing) or (frmNewQSO.mnuRemoteMode.Checked) then
     exit;
-  Details.zakaz_kresleni(true);
+  Details.DisableAutoRepaint(true);
   try
     ClearAll;
     if Lwaz.Text = '' then
       ShowWAZInfo
     else
-      Details.pridej_vetu(Lwaz.Text,Lwaz.Color,clWhite,0);
+      Details.AddLine(Lwaz.Text,Lwaz.Color,clWhite,0);
     if Litu.Text = '' then
       ShowITUInfo
     else
-      Details.pridej_vetu(Litu.Text,Litu.Color,clWhite,0);
+      Details.AddLine(Litu.Text,Litu.Color,clWhite,0);
     if Liota.Text = '' then
       ShowIOTAInfo
     else begin
-      Details.pridej_vetu(Liota.Text,Liota.Color,clWhite,0);
-      Details.pridej_vetu(Liota.island,Liota.color,clWhite,0);
+      Details.AddLine(Liota.Text,Liota.Color,clWhite,0);
+      Details.AddLine(Liota.island,Liota.color,clWhite,0);
     end;
     ShowClubInfo;
   finally
-    Details.zakaz_kresleni(false)
+    Details.DisableAutoRepaint(false)
   end;
 end;
 
@@ -280,7 +280,7 @@ begin
     3 : Lwaz.Color := cqrini.ReadInteger('Zones','QSLWAZ',0);
     4 : Lwaz.Color := clBlack
   end;
-  Details.pridej_vetu(Lwaz.Text,Lwaz.Color,clWhite,0)
+  Details.AddLine(Lwaz.Text,Lwaz.Color,clWhite,0)
 end;
 
 procedure TfrmQSODetails.ShowITUInfo;
@@ -297,7 +297,7 @@ begin
     3 : Litu.Color := cqrini.ReadInteger('Zones','QSLITU',0);
     4 : Litu.Color := clBlack
   end;
-  Details.pridej_vetu(Litu.Text,Litu.Color,clWhite,0)
+  Details.AddLine(Litu.Text,Litu.Color,clWhite,0)
 end;
 
 procedure TfrmQSODetails.ShowIOTAInfo;
@@ -314,36 +314,36 @@ begin
     2 : Liota.Color := cqrini.ReadInteger('IOTA','QSLIOTA',0);
     3 : Liota.Color := clBlack
   end; //case
-  Details.pridej_vetu(Liota.Text,Liota.color,clWhite,0);
-  Details.pridej_vetu(Liota.island,Liota.color,clWhite,0)
+  Details.AddLine(Liota.Text,Liota.color,clWhite,0);
+  Details.AddLine(Liota.island,Liota.color,clWhite,0)
 end;
 
 procedure TfrmQSODetails.ShowClubInfo;
 begin
-  Details.zakaz_kresleni(true);
+  Details.DisableAutoRepaint(true);
   try
     if LClub1.Text <> '' then
     begin
-      Details.pridej_vetu(LClub1.Text,LClub1.Color,clWhite,0);
+      Details.AddLine(LClub1.Text,LClub1.Color,clWhite,0);
     end;
     if LClub2.Text <> '' then
     begin
-      Details.pridej_vetu(LClub2.Text,LClub2.Color,clWhite,0);
+      Details.AddLine(LClub2.Text,LClub2.Color,clWhite,0);
     end;
     if LClub3.Text <> '' then
     begin
-      Details.pridej_vetu(LClub3.Text,LClub3.Color,clWhite,0);
+      Details.AddLine(LClub3.Text,LClub3.Color,clWhite,0);
     end;
     if LClub4.Text <> '' then
     begin
-      Details.pridej_vetu(LClub4.Text,LClub4.Color,clWhite,0);
+      Details.AddLine(LClub4.Text,LClub4.Color,clWhite,0);
     end;
     if LClub5.Text <> '' then
     begin
-      Details.pridej_vetu(LClub5.Text,LClub5.Color,clWhite,0);
+      Details.AddLine(LClub5.Text,LClub5.Color,clWhite,0);
     end;
   finally
-    Details.zakaz_kresleni(false)
+    Details.DisableAutoRepaint(false)
   end
 end;
 

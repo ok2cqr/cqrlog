@@ -118,7 +118,7 @@ object frmQSODetails: TfrmQSODetails
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '1.6.4.0'
   object pnlDetails: TPanel
     Left = 0
     Height = 210

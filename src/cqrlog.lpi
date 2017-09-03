@@ -19,7 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2153"/>
+      <BuildNr Value="2178"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -85,7 +85,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="101">
+    <Units Count="100">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -670,89 +670,78 @@
         <HasResources Value="True"/>
       </Unit88>
       <Unit89>
-        <Filename Value="fdberror.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmDbError"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fDbError"/>
-      </Unit89>
-      <Unit90>
         <Filename Value="fCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCommentToCall"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit90>
-      <Unit91>
+      </Unit89>
+      <Unit90>
         <Filename Value="fNewCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewCommentToCall"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit91>
-      <Unit92>
+      </Unit90>
+      <Unit91>
         <Filename Value="fFindCommentToCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmFindCommentToCall"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit92>
-      <Unit93>
+      </Unit91>
+      <Unit92>
         <Filename Value="frExportPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fraExportPref"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit93>
-      <Unit94>
+      </Unit92>
+      <Unit93>
         <Filename Value="fExportPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmExportPref"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit94>
-      <Unit95>
-        <Filename Value="fmoniwsjtx.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmMonWsjtx"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fMoniWsjtx"/>
-      </Unit95>
-      <Unit96>
+      </Unit93>
+      <Unit94>
         <Filename Value="fWorkedGrids.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmWorkedGrids"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit96>
-      <Unit97>
+      </Unit94>
+      <Unit95>
         <Filename Value="fPropDK0WCY.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmPropDK0WCY"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit97>
-      <Unit98>
+      </Unit95>
+      <Unit96>
         <Filename Value="fContest.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmContest"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit98>
-      <Unit99>
+      </Unit96>
+      <Unit97>
         <Filename Value="fMonWsjtx.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMonWsjtx"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit99>
-      <Unit100>
+      </Unit97>
+      <Unit98>
         <Filename Value="fXfldigi.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmxfldigi"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit100>
+      </Unit98>
+      <Unit99>
+        <Filename Value="uColorMemo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit99>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -773,7 +762,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
+        <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
     </Linking>
     <Other>
