@@ -25,8 +25,6 @@ uses
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
   cMyLoc   = 'My grid (to change press CTRL+L) ';
-  wHiSpeed = 50;       // udp polling speeds (tmrWsjtx)
-  wLoSpeed = 1000;
 
 type
   TRemoteModeType = (rmtFldigi, rmtWsjt);
@@ -541,7 +539,6 @@ type
     UploadAll  : Boolean;
 
     RememberAutoMode : Boolean;
-
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
     procedure ChangeReports;
@@ -588,6 +585,8 @@ type
     WsjtxSock             : TUDPBlockSocket;
     WsjtxMode             : String;          //Moved from private
     WsjtxBand             : String;
+    wHiSpeed              : integer;      // when packets received :udp polling speeds (tmrWsjtx)
+    wLoSpeed              : integer;     // when running idle
 
     old_call              : String;               //Moved from private
 
@@ -1999,6 +1998,8 @@ var
   sDate : String='';
   Mask  : String='';
 
+
+
   function UiFBuf(var index:integer):uint32;
   begin
     Result := $01000000*ord(Buf[index])
@@ -2070,7 +2071,11 @@ var
 
 
 begin
-  Buf := Wsjtxsock.RecvPacket(100);
+  if Wsjtxsock.WaitingData > 0 then
+  Begin
+  while Wsjtxsock.WaitingData > 0 do     //test for clear all datagrams ready at one go
+  begin
+  Buf := Wsjtxsock.RecvPacket(1000);
   if WsjtxSock.lasterror=0 then
   begin
      if ( tmrWsjtx.Interval = wLoSpeed ) then
@@ -2148,9 +2153,11 @@ begin
           if ParStr<>WsjtxMode then
           begin
             new :=true;
-            WsjtxMode := ParStr
+            WsjtxMode := ParStr;
+            if (WsjtxMode = 'FT8') or (WsjtxMode = 'MSK144') then
+                wLoSpeed  := 500  else  wLoSpeed  := 1500;
           end;
-          if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode);
+          if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode, '  wLoSpeed:',wLoSpeed );
            //----------------------------------------------------
           call := trim(StFBuf(index)); //to be sure...
           if dmData.DebugLevel>=1 then Writeln('Call :', call);
@@ -2415,13 +2422,16 @@ begin
            ParStr := StFBuf(index);
            if dmData.DebugLevel>=1 then Writeln('Close Id:', ParStr);
            //wsjtx closed maybe need to disable remote mode  ?
-           DisableRemoteMode
+           DisableRemoteMode;
+           Exit;
          end //Close
     end; //case
      if mnuRemoteModeWsjt.Checked then         // must do this check. Otherwise at decode 6 ://Close  calling DisableRemoteMode
                    tmrWsjtx.Enabled  := True;  // causes exception if wsjt-x is closed but cqrlog still running.
                                                // Now end of decode and wsjt-x still running: Allow timer run again.
-  end  //if WsjtxSock.lasterror=0 then
+   end;  //if WsjtxSock.lasterror=0 then
+  end;  // while datagrams in buffer
+  end //waiting data
   else
    Begin
       if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UDP packets. Is HiSpeed still on?
@@ -4084,6 +4094,8 @@ begin
         dmUtils.LoadFontSettings(frmRbnMonitor);
       if frmPropDK0WCY.Showing then
         dmUtils.LoadFontSettings(frmPropDK0WCY);
+      if frmMonWsjtx.Showing then
+        dmUtils.LoadFontSettings(frmMonWsjtx);
 
       dmData.LoadQSODateColorSettings;
     end;
@@ -6122,7 +6134,7 @@ begin
                 end;
     rmtWsjt   : begin
                   if mnuRemoteMode.Checked then          //not both on at same time
-                     DisableRemoteMode;
+                  DisableRemoteMode;
                   mnuRemoteModeWsjt.Checked := True;
                   lblCall.Caption           := 'Wsjtx remote';
                   path                      := cqrini.ReadString('wsjt','path','');
@@ -6130,6 +6142,8 @@ begin
 
                   WsjtxMode := '';    //will be set by type1 'status'-message
                   WsjtxBand := '';
+                  wHiSpeed  := 20;    //mS
+                  wLoSpeed  := 1500;  //will be shorter when FT8 or MSK144 mode change in decode/status
 
                   //Timer fetches only 1 UDP packet at time.
                   tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do

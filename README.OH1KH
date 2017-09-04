@@ -248,4 +248,20 @@
        Fuchsia upcase = worked this band, but not this mode
        Maroon upcase = worked on any other band and mode
        Green upcase  = never worked before on any band       
-                                                                              (2.0.5.(040))
+                                                        (2.0.5.040)
+04.09.2017
+     - Update for wsjtx cq-monitor:
+        User can now:
+         Resize monitor window
+         Change infomative colors
+         Change font and it's size
+       All changes are saved.
+     - Monitor can be closed, but wsjtx remote stays on now.If you do not like monitoing, but need 
+       remote for logging. Reopen monitor from NewQso/window when wsjtx-remote is active.
+     - New checkbox "noTxt". If you like CQ-monitor alerts, but do not need any text display.
+         Drops the richmemo printing/scrolling routine that has known problem (slowness, high cpu usage)
+         when cqrlog has run several hours with cq-monitor open on busy FT8 band like 20m)
+     - Faster wsjtx-decode (fNewQso.pas) Better now for FT8 cq-monitoring.
+     - New SQL routines for CQ-monitor information fetch (fWorkedGrids.pas)    
+                                                                                 (2.0.5.041)
+                                                                                 
