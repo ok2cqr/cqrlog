@@ -1408,11 +1408,10 @@ begin
     else
       cqrini.WriteBool('Window','WorkedGrids',False);
 
-   if frmMonWsjtx.Showing then
+   if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
      begin
-       DisableRemoteMode;    //hides monitor
        frmMonWsjtx.Close;
-     end; //we do not open monitor at start, no need to save state
+     end;
 
     if frmCWKeys.Showing then
     begin
@@ -1997,8 +1996,8 @@ var
   date  : TDateTime;
   sDate : String='';
   Mask  : String='';
-
-
+  FirstWord: String;
+  MyCall : String;
 
   function UiFBuf(var index:integer):uint32;
   begin
@@ -2069,10 +2068,10 @@ var
     inc(index)
   end;
 
-
 begin
   if Wsjtxsock.WaitingData > 0 then
   Begin
+  MyCall := UpperCase(cqrini.ReadString('Station', 'Call', ''));
   while Wsjtxsock.WaitingData > 0 do     //test for clear all datagrams ready at one go
   begin
   Buf := Wsjtxsock.RecvPacket(1000);
@@ -2208,7 +2207,7 @@ begin
             old_ccall := '';
             old_cfreq := '';
             old_cmode := '';
-            frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode)
+            if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode)
           end
         end; //Status
 
@@ -2263,10 +2262,13 @@ begin
           if dmData.DebugLevel>=1 then Writeln(ParStr);
           //----------------------------------------------------
           Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
+          FirstWord := copy(ParStr,1,pos(' ',ParStr)-1);
           if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
-          if new and (WsjtxBand <>'')  and (WsjtxMode <>'')  and ((pos('CQ ',UpperCase(ParStr))=1)
-            or (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1))
-                and (mnuWsjtxmonitor.Visible) then
+          //if new and (WsjtxBand <>'')  and (WsjtxMode <>'')  and ((pos('CQ ',UpperCase(ParStr))=1)
+           // or (pos(UpperCase(cqrini.ReadString('Station', 'Call', '')),UpperCase(ParStr))=1))
+           if new and (WsjtxBand <>'')  and (WsjtxMode <>'')
+             and ((FirstWord = 'CQ') or (pos (FirstWord,MyCall) > 0))
+                and ( (frmMonWsjtx <> nil) and frmMonWsjtx.Showing ) then
                    frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf);
          //----------------------------------------------------
          end; // New decode
@@ -2275,7 +2277,7 @@ begin
     3 : begin //Clear
           ParStr := StFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
-          frmMonWsjtx.WsjtxMemo.lines.Clear
+          if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then frmMonWsjtx.WsjtxMemo.lines.Clear
         end; //Clear
 
     5 : begin  //qso logged
@@ -3258,6 +3260,7 @@ begin
     else
       CreateAutoBackup()
   end;
+  DisableRemoteMode;
   CloseAllWindows;
   SaveSettings;
   dmData.CloseDatabases
@@ -3807,7 +3810,9 @@ end;
 
 procedure TfrmNewQSO.acMonitorWsjtxExecute(Sender: TObject);
 begin
-  frmMonWsjtx.Show
+  if (frmMonWsjtx = nil) then Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
+  frmMonWsjtx.Show;
+  cqrini.WriteBool('Window','MonWsjtx',true);
 end;
 
 procedure TfrmNewQSO.acBigSquareExecute(Sender: TObject);
@@ -4094,8 +4099,7 @@ begin
         dmUtils.LoadFontSettings(frmRbnMonitor);
       if frmPropDK0WCY.Showing then
         dmUtils.LoadFontSettings(frmPropDK0WCY);
-      if frmMonWsjtx.Showing then
-        dmUtils.LoadFontSettings(frmMonWsjtx);
+      if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then dmUtils.LoadFontSettings(frmMonWsjtx);
 
       dmData.LoadQSODateColorSettings;
     end;
@@ -6167,7 +6171,7 @@ begin
                   RememberAutoMode := chkAutoMode.Checked;
                   chkAutoMode.Checked   := False;
                   mnuWsjtxmonitor.Visible := True; //we show "monitor" in view-submenu when active
-                  acMonitorWsjtxExecute(nil)
+                  if cqrini.ReadBool('Window','MonWsjtx',true) then acMonitorWsjtxExecute(nil)
                 end
   end;
 
@@ -6181,15 +6185,25 @@ end;
 
 procedure TfrmNewQSO.DisableRemoteMode;
 begin
-  tmrFldigi.Enabled         := False;
-  tmrWsjtx.Enabled          := False;
-  mnuRemoteMode.Checked     := False;
-  mnuRemoteModeWsjt.Checked:= False;
+  if  mnuRemoteModeWsjt.Checked then
+  begin
+      tmrWsjtx.Enabled          := False;
+      mnuWsjtxmonitor.Visible := False;    //we do not show "monitor" in view-submenu when not active
+      if (frmMonWsjtx <> nil) then
+       begin
+        if frmMonWsjtx.Showing then frmMonWsjtx.hide // and close monitor
+         else cqrini.WriteBool('Window','MonWsjtx',false);
+        FreeAndNil(frmMonWsjtx); //to release flooding richmemo
+       end;
+      mnuRemoteModeWsjt.Checked:= False;
+  end;
+  if mnuRemoteMode.Checked then
+  begin
+     tmrFldigi.Enabled         := False;
+     if FldigiXmlRpc then frmxfldigi.Visible := false;
+     mnuRemoteMode.Checked     := False;
+  end ;
   chkAutoMode.Checked:= RememberAutoMode;
-  mnuWsjtxmonitor.Visible := False;    //we do not show "monitor" in view-submenu when not active
-  frmMonWsjtx.Hide;                    // and close monitor
-  if FldigiXmlRpc then
-     frmxfldigi.Visible     := false;
   lblCall.Caption           := 'Call:';
   lblCall.Font.Color        := clDefault;
   edtCall.Enabled           := True;

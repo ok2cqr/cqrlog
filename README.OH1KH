@@ -264,4 +264,38 @@
      - Faster wsjtx-decode (fNewQso.pas) Better now for FT8 cq-monitoring.
      - New SQL routines for CQ-monitor information fetch (fWorkedGrids.pas)    
                                                                                  (2.0.5.041)
+08.09.2017
+
+   - CQ-monitor now remembers showing state. I.E if closed while last wsjtxremote use will be closed on next
+     program start and wsjtxremote initiate.
+								(2.1.0(116))
+
+11.09.2017
+   - more study with richmemo slowness when on for long time. This does not solve the original problem that
+     exists (now 99% sure) at richmemo/lazarus code.
+     Now CQ-monitor form is created at the time it is needed (opened), not at program start.
+     When wsjt-remote is closed it will also distroy CQ-monitor form.(releases memory used by richmemo, too)
+     Closing CQ-monitor while wsjt-remote stays still on does not distroy form.
+     This way slowness (CPU load while richmemo printing) can be resolved without closing wsjtx & cqrlog.
+
+     Just drop wsjt-remote off and start it again! Slowness (and CPUload) has gone !
+
+     With this change richmemo slow printing changed so that lines are not slowly dropping. They appear fast,
+     but time between wsjt-x decode end and lines appearing to CQ-monitor increases. It is harder to notice,
+     but opening a terimal with "top -H -p $(pidof cqrlog) -d 0,2" you can easily find out when CPU load
+     starts to stay >90% while decoding
+								(2.1.0(117))
+20.09.2017
+   - CQ-monitor:  Country names (cut to length 15) are now displayed instead of callsign prefixes.
+     Extended CQs (CQ DX, CQ AS, CQ AF .. etc) are now compared against own continent. If "CQ DX" caller
+     callsign is from same continent as your call a "*" is added in front of country name and it is printed
+     with "CQ ext" color defined.
+     Same if "CQ AS" is called and your continent is not AS, and so on.
+     If continent cannot be compaired (CQ extension is something special) same "*" and "CQ ext" color is used.
+     This is to notify you to consider if answering follows good working practise and ham spirit rules.
+   - "My Alert" is now compared oppsite way: First word of decoded line is compared against your cqrlog/
+     preferences/station callsign. This should fit now also when you are using extended callsign XX/YOURCALL or
+     YOURCALL/XX in your log as wsjt-x traffic uses always plain callsigns during qsos.
+								(2.1.0(118))
+
                                                                                  
