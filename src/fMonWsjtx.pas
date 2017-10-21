@@ -56,7 +56,7 @@ type
     procedure AddColorStr(s: string; const col: TColor = clBlack);
     procedure RunVA(Afile: String);
     procedure WsjtxMemoScroll;
-    { private declarations }
+   { private declarations }
   public
     procedure CleanWsjtxMemo;
     function NextElement(Message:string;var index:integer):String;
@@ -306,13 +306,13 @@ procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
 begin
   EditAlert.Text := '';
   LastWsjtLineTime:='';
-end;
+  end;
 
 procedure TfrmMonWsjtx.FormHide(Sender: TObject);
 begin
    dmUtils.SaveWindowPos(frmMonWsjtx);
    frmMonWsjtx.hide;
-end;
+  end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
@@ -361,6 +361,8 @@ begin
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message,band,Reply:string);
+const
+  CountryLen = 15;     //length of printed country name in monitor
 var
   msgTime,
   msgMode,
@@ -370,7 +372,11 @@ var
   msgLoc,
   msgRes,
   mode,
-  freq: string;
+  freq,
+  CqDir: string;
+
+  mycont, cont, country, waz, posun, itu, pfx,lat,long  : string;
+
   i, index   :integer;
   adif       :Word;
 
@@ -396,11 +402,21 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
 
        Fixed stupid cq handling "CQ 000 PA7ZZ JO22 !where?" decodes now ok.
       }
+      mycont  := '';
+      cont    := '';
+      country := '';
+      waz     := '';
+      posun   := '';
+      itu     := '';
+      lat     := '';
+      long    := '';
 
       myAlert:='';
       MonitorLine :='';
       CallCqDir:=false;
+      CqDir := '';
 
+      adif := dmDXCC.id_country( UpperCase(cqrini.ReadString('Station', 'Call', '')),'',Now(),pfx, mycont, country, WAZ, posun, ITU, lat, long);
       if dmData.DebugLevel>=1 then Writeln('Memo Lines count is now:',WsjtxMemo.lines.count);
       index := 1;
 
@@ -425,7 +441,8 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
         Begin
          if dmData.DebugLevel>=1 then Write('Cq1-'); //this is checked by newQSO to be MYCall or CQ
          msgCQ1 := NextElement(Message,index);
-         isMyCall :=  msgCQ1 = UpperCase(cqrini.ReadString('Station', 'Call', ''));
+         //isMyCall :=  msgCQ1 = UpperCase(cqrini.ReadString('Station', 'Call', ''));
+         isMyCall := pos(msgCQ1,UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0 ;
          if dmData.DebugLevel>=1 then Write('Cq2-');
          msgCQ2 := NextElement(Message,index);
          if length(msgCQ2)>2 then   // if longer than 2 may be call, otherwise is addition DX AS EU etc.
@@ -450,6 +467,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
               else
                Begin //was shortie, so next must be call
                 CallCqDir:=true;
+                CqDir := msgCQ2;
                 if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 had no number+char.');
                                                Write('Call-');
@@ -460,6 +478,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          else   //length(msgCQ2)>2
           Begin
             CallCqDir:=true;
+            CqDir := msgCQ2;
             if dmData.DebugLevel>=1 then  Begin
                                                Writeln('CQ2 length=<2.');
                                                Write('Call-');
@@ -472,7 +491,11 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement(Message,index);
 
-         if msgLoc = 'DX' then CallCqDir:=true; //old std. way to call DX
+         if msgLoc = 'DX' then
+            Begin
+              CallCqDir:=true; //old std. way to call DX
+              CqDir := msgLoc;
+            end;
          if dmData.DebugLevel>=1 then Writeln('DIR-CQ-call after old std DX:',CallCqDir);
 
          if length(msgLoc)<4 then   //no locator if less than 4,  may be "DX" or something
@@ -542,13 +565,30 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
                   end;
                end;
 
-           msgRes := dmDXCC.id_country(msgCall,now());    //country prefix
-           if CallCqDir then
-                 AddColorStr(' '+PadRight('*'+msgRes,7)+' ',extCqCall)    //to warn directed call
-             else
-                 AddColorStr(' '+PadRight(msgRes,7)+' ',clBlack);
+           adif := dmDXCC.id_country(msgCall,'',Now(),pfx, cont, msgRes, WAZ, posun, ITU, lat, long);
+           if (pos(',',msgRes)) > 0 then msgRes := copy (msgRes,1,pos(',',msgRes)-1);
 
-           adif :=  dmDXCC.AdifFromPfx(msgRes);
+           if dmData.DebugLevel>=1 then Writeln('My continent is:',mycont,'  His continent is:',cont);
+           if CallCqDir then
+             if ((mycont <>'') and (cont <> '')) then //we can do some comparisons of continents
+              Begin
+                   if ((CqDir = 'DX') and (mycont = cont)) then
+                       //I'm not DX for caller: color to warn directed call
+                      AddColorStr(' '+copy(PadRight('*'+msgRes,CountryLen),1,CountryLen)+' ',extCqCall)
+                    else  //calling specified continent
+                     if ((CqDir <> 'DX') and (CqDir <> mycont)) then
+                      //CQ NOT directed to my continent: color to warn directed call
+                      AddColorStr(' '+copy(PadRight('*'+msgRes,CountryLen),1,CountryLen)+' ',extCqCall)
+                      else  // should be ok to answer this directed cq
+                       AddColorStr(' '+copy(PadRight(msgRes,CountryLen),1,CountryLen)+' ',clBlack)
+              end
+             else
+                // we can not compare continents, but it is directed cq. Best to warn with color anyway
+                AddColorStr(' '+copy(PadRight('*'+msgRes,CountryLen),1,CountryLen)+' ',extCqCall)
+           else
+              // should be ok to answer this is not directed cq
+              AddColorStr(' '+copy(PadRight(msgRes,CountryLen),1,CountryLen)+' ',clBlack);
+
            freq := dmUtils.FreqFromBand(band, mode);
            msgRes:= dmDXCC.DXCCInfo(adif,freq,mode,i);    //wkd info
 

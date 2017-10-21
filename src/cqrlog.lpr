@@ -68,7 +68,7 @@ begin
   Application.CreateForm(TfrmReminder, frmReminder);
   Application.CreateForm(TfrmContest, frmContest);
   Application.CreateForm(Tfrmxfldigi, frmxfldigi);
-  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
+
 
   Splash.Update;
   application.ProcessMessages;
