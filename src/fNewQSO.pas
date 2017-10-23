@@ -3260,7 +3260,7 @@ begin
     else
       CreateAutoBackup()
   end;
-  DisableRemoteMode;
+  if mnuRemoteModeWsjt.Checked or mnuRemoteMode.Checked then DisableRemoteMode;
   CloseAllWindows;
   SaveSettings;
   dmData.CloseDatabases
@@ -6122,11 +6122,11 @@ var
 begin
   case RemoteType of
     rmtFldigi : begin
+                  RememberAutoMode := chkAutoMode.Checked;
+                  chkAutoMode.Checked   := False;
                   if mnuRemoteModeWsjt.Checked then       //not both on at same time
                      DisableRemoteMode;
                   mnuRemoteMode.Checked := True;
-                  RememberAutoMode := chkAutoMode.Checked;
-                  chkAutoMode.Checked   := False;
                   lblCall.Caption       := 'Remote mode!';
                   tmrFldigi.Interval    := cqrini.ReadInteger('fldigi','interval',2)*1000;
                   run                   := cqrini.ReadBool('fldigi','run',False);
@@ -6137,6 +6137,8 @@ begin
                      frmxfldigi.Visible := true;
                 end;
     rmtWsjt   : begin
+                  RememberAutoMode := chkAutoMode.Checked;
+                  chkAutoMode.Checked   := False;
                   if mnuRemoteMode.Checked then          //not both on at same time
                   DisableRemoteMode;
                   mnuRemoteModeWsjt.Checked := True;
@@ -6168,8 +6170,6 @@ begin
                      DisableRemoteMode;
                      exit
                   end;
-                  RememberAutoMode := chkAutoMode.Checked;
-                  chkAutoMode.Checked   := False;
                   mnuWsjtxmonitor.Visible := True; //we show "monitor" in view-submenu when active
                   if cqrini.ReadBool('Window','MonWsjtx',true) then acMonitorWsjtxExecute(nil)
                 end

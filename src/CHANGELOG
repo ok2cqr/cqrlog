@@ -3,6 +3,34 @@ Legend:
   + new feature
   - bugfix
 --------------------
+
+
+2.1.0 (23.10.2017)
+   -WSJTXremote / NewQso: Bugfix "mode: Auto" checkbox state was not correctly returned after program restart.
+   +WSJTX Monitor:More specific print out for extended cq direction to help operator decide should he answer this cq or not 
+				
+2.1.0 (20.09.2017)
+   +CQ-monitor:  Country names (cut to length 15) are now displayed instead of callsign prefixes.
+   +Extended CQs (CQ DX, CQ AS, CQ AF .. etc) are now compared against own continent. If "CQ DX" caller
+     callsign is from same continent as your call a "*" is added in front of country name and it is printed
+     with "CQ ext" color defined.
+     If continent cannot be compaired (CQ extension is something special) same "*" and "CQ ext" color is used.
+     This is to notify you to consider if answering follows good working practise and ham spirit rules.
+   +"My Alert" is now compared oppsite way: First word of decoded line is compared against your cqrlog/
+     preferences/station callsign. This should fit now also when you are using extended callsign XX/YOURCALL or
+     YOURCALL/XX in your log as wsjt-x traffic uses always plain callsigns during qsos.
+
+2.1.0 (11.09.2017)
+   + Now CQ-monitor form is created at the time it is needed (opened), not at program start.
+   + When wsjt-remote is closed it will also distroy CQ-monitor form.(releases memory used by richmemo, too)
+      Just drop wsjt-remote off and start it again! Slowness (and CPUload) has gone !
+      Closing CQ-monitor while wsjt-remote stays still on does not distroy form.
+	
+2.1.0 (08.09.2017)
+   + CQ-monitor now remembers showing state. I.E if closed while last wsjtxremote use will be closed on next
+      program start and wsjtxremote initiate.
+
+
 2.1.0 (2017-08-06)
   + wsjt remote mode improvements (Saku, OH1KH)
   + wsjt cq monitor added (Saku, OH1KH)
