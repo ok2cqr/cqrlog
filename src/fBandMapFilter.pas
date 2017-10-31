@@ -17,6 +17,7 @@ type
     btnCancel: TButton;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
+    chkShowActiveBandFil: TCheckBox;
     edtDate: TEdit;
     edtLastHours: TEdit;
     edtTime: TEdit;
@@ -56,7 +57,9 @@ begin
   edtTime.Text      := cqrini.ReadString('BandMapFilter','LastTime','');
 
   chkOnlyeQSL.Checked := cqrini.ReadBool('BandMapFilter','OnlyeQSL',False);
-  chkOnlyLoTW.Checked := cqrini.ReadBool('BandMapFilter','OnlyLoTW',False)
+  chkOnlyLoTW.Checked := cqrini.ReadBool('BandMapFilter','OnlyLoTW',False) ;
+
+  chkShowActiveBandFil.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
 end;
 
 procedure TfrmBandMapFilter.FormClose(Sender: TObject;
@@ -102,6 +105,8 @@ begin
 
   cqrini.WriteBool('BandMapFilter','OnlyeQSL',chkOnlyeQSL.Checked);
   cqrini.WriteBool('BandMapFilter','OnlyLoTW',chkOnlyLoTW.Checked);
+
+  cqrini.WriteBool('BandMap', 'OnlyActiveBand', chkShowActiveBandFil.Checked);
 
   ModalResult := mrOK
 end;
