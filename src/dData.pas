@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 12;
+  cDB_MAIN_VER = 13;
   cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -3275,6 +3275,13 @@ begin
       Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate';
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL;
+      if old_version >= 13 then
+      begin
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate_asc';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+      end;
       trQ1.Commit;
 
       CreateViews;
