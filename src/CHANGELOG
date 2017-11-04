@@ -3,6 +3,9 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.1.0 (04.11.2017)
+   #fixed some help files to be a bit more up to date (Saku, OH1KH)
+   -dUtils: BandToFrequency: 630M definition was missing. (Saku, OH1KH)
 2.1.0 (29.10.2017)
    +coped "Show only active band" checkbox to Band map filter for quick access. (Saku, OH1KH)
    +Added "Re/Set" button to Export "Choose fields to export" dialog for set/reset all check boxes in one go. (Saku, OH1KH)

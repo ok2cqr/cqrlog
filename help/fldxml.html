@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>CQRLOG - Supported Radio Types</title>
+</head>
+<body>
+<script>
+function goForward() {
+    window.history.forward();
+}
+function goBack() {
+    window.history.back();
+}
+</script>
+
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h1.html#ch2"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h1.html#ch3">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
+<p align=center><img src=img/line.png></p>
+
+
+<a name=fl1><h2><strong>fldigi XmlRpc remote</strong></h2></a>
+
+    <ul style="margin-left: 40px;">
+        <li><a href="fldxml.html#fl2">Settings</a></li>
+        <li><a href="fldxml.html#fl3">Use</a></li>
+        <li><a href="fldxml.html#fl4">Some notes</a></li>
+        <li><a href="fldxml.html#fl5">Starting fldigi and wsjt-x via cqrlog</a></li>
+    </ul>
+
+<p>XmlRpc remote connection to fldigi is an alternative way to transfer qso data to cqrlog.</br>
+With XmlRpc cqrlog acts as client what is opposite way compared to wsjt-x remote where cqrlog acts like
+server. Because of this cqrlog can not know if “save to log” button is pressed at fldigi because it tells it’s information only
+when asked.</br>
+This leads to situation where fldigi logging can not be used to act like indicator to cqrlog to save qso and <b>saving must be done by operator on cqrlogs side</b>.
+
+<p>There are two ways to save qso:</br><ul>
+<li/>Press “save qso” on cqrlog’s NewQSO form <b>and</b> press save on fldigi. You get entry to both logs.</br>
+<li/>Press “Save this qso” on cqrlog XmlRpc form. You get qso <b>saved to cqrlog</b> and fldigi entry is <b>cleared</b>, but <b>not saved</b>.</br>
+</ul>
+</p>
+<p>When using XmlRPC:</br><ul>
+<li/> You get qrz/HamQth data immediately after adding call to fldigi’s call field</br>
+<li/> You see qso before/dxcc statistics from cqrlog before firing TX the first time</br>
+<li/> You can run fldigi on other computer than cqrlog if they have common network. WiFi, wired, or even internet(when you should use openVPN to make secured tunnel between sites)</br>
+</ul>
+</p>
+<a name=fl2><h3>Settings</h3></a>
+<p><img src="img/fxml5.png"  width="401" height="281">
+  <br clear="left"/>
+</img>
+In cqrlog’s preferences/fldigi/wsjt interface there are some new settings. Port and Address for fldigi network connection and
+selection to use XmlRpC.</br>With selection you can choose “the old way” for fldigi remote, or the XmlRpc way. Port number should be ok, but IP address may change depending your needs.
+</br>Address is normally 127.0.0.1 (localhost) if you run fldigi on same PC than cqrlog.
+</br>If you have fldigi running on other PC put here the IP address of fldigi-PC. There is no IP address validation, so you have to type correctly formatted
+address.</br>
+If you use fldigi on other PC remember to open firewall at fldigi-PC side for TCP traffic to port 7362 from your local network.</p>
+
+<p>Parameter &quot;Drop after SyncErr &gt;&quot; automates remote mode closing when fldigi is closed. But as it may affect also (in slow PCs) fldigi started by cqrlog it can be changed. 0 disables, 1-20 means timer rounds until drop.
+ When closing happens it leaves text &quot;Socket error, check fldigi!&quot; to NewQSO field &quot;Comment QSO&quot;.
+ </p><p> In all cases fldigi must be started from command line with parameter: <b>fldigi --xmlrpc-server-port 7362</b>
+</br>When closing fldgi properly and answering YES to save setup changes the next start should open xmlrpc server without parameters from usual icon.</p>
+
+<a name=fl3><h3>Use</h3></a>
+<p><img src="img/fxml9.png"  width="446" height="117">
+  <br clear="left"/>
+</img>
+</p>
+<p>When you have activated fldigi remote and checked “Use XmlRpc” at preferences, texts that you type to
+fldigi logging sheet (or select from monitor with right click) are transferred to cqrlog by polling fldigi with speed you have set on
+preferences “Try to load QSO from fldigi every X seconds”.
+</br>When remote for fldigi is opened a new status form is shown. It shows data that have been received from
+fldigi. If you can’t see any changes you have to check port and address settings (both fldigi and cqrlog) and firewall settings.
+</br>There is more information about XmlRpc
+at:<br/>
+<a href="http://www.w1hkj.com/FldigiHelp-3.21/html/xmlrpc_control_page.html">http://www.w1hkj.com/FldigiHelp-3.21/html/xmlrpc_control_page.html</a></p>
+
+<p>If everything is OK you should see something like this:</br>
+<p><img src="img/fxml8.png" width="643" height="274">
+  <br clear="left"/>
+</img>
+</p>
+<a name=fl4><h3>Some notes</h3></a>
+<ul>
+<li/>fldigi’s <b>pr </b>(Province) is transferred to cqrlog’s <b>County</b></br>
+<li/>fldigi’s Country is not transferred</br>
+<li/><b>Save this qso</b> is <b>shown after</b> you have <b>call, time on, rst_in, rst_out</b> and <font color="#ff0000">TX fired once </font>it hides again when qso data is cleared.</br>
+<li/><b>Save this qso</b> <font color="#ff0000"><b>saves only to cqrlog</b></font>, fldigi’s qso data is just cleared.</br>
+</ul>
+<a name=fl5><h3>Starting fldigi and wsjt-x via cqrlog</h3></a>
+<p>You can set preferences so that cqrlog will start fldigi and/or wsjt-x programs for you when you enter remote mode. This is very handy, but doing that has also one risk.
+<br/>When fldigi or wsjt-x has been started as a child process of cqrlog they will die at the moment cqrlog crashes for some reason.
+<br/>If you start them manually as processes of their own and then activate remote mode from cqrlog they keep on running if cqrlog
+dies. You can finish your ongoing qso, start cqrlog again, set remote mode on and then log the qso in normal manner.</p>
+
+
+
+
+
+<p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h1.html#ch2"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h1.html#ch3">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>
