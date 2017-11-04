@@ -16,6 +16,14 @@ object fraExportPref: TfraExportPref
     Caption = 'Profile'
     TabOrder = 0
   end
+  object chkAscTime: TCheckBox
+    Left = 6
+    Height = 21
+    Top = 375
+    Width = 192
+    Caption = 'Most recent entries on top'
+    TabOrder = 72
+  end
   object chkExCont: TCheckBox
     Left = 6
     Height = 24

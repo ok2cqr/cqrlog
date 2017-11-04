@@ -30,6 +30,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnCallClick(Sender: TObject);
     procedure btnDateTimeClick(Sender: TObject);
+    procedure btnDateTimeClickAsc(Sender: TObject);
   private
     procedure DisableFilter;
   public
@@ -59,6 +60,15 @@ begin
   dmData.SortType := stDate;
   dmData.qCQRLOG.Close;
   dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(cDB_LIMIT);
+  dmData.RefreshMainDatabase()
+end;
+
+procedure TfrmSort.btnDateTimeClickAsc(Sender: TObject);
+begin
+  DisableFilter;
+  dmData.SortType := stDate;
+  dmData.qCQRLOG.Close;
+  dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate_asc LIMIT '+IntToStr(cDB_LIMIT);
   dmData.RefreshMainDatabase()
 end;
 

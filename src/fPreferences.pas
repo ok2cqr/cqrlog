@@ -254,6 +254,7 @@ type
     chkexTimeoff1: TCheckBox;
     chkexTimeon1: TCheckBox;
     chkexWAZ1: TCheckBox;
+    chkexAscTime: TCheckBox;
     chkFreq3: TCheckBox;
     chkFreq4: TCheckBox;
     chkFreq5: TCheckBox;

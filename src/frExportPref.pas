@@ -49,6 +49,7 @@ type
     chkexTimeon : TCheckBox;
     chkexWAZ : TCheckBox;
     chkProfile : TCheckBox;
+    chkAscTime : TCheckBox;
     edtWAward : TEdit;
     edtWCall : TEdit;
     edtWCounty : TEdit;
@@ -141,6 +142,7 @@ begin
   cqrini.WriteBool('Export', 'eQSLSDate', chkexeQSLSDate.Checked);
   cqrini.WriteBool('Export', 'eQSLR', chkexeQSLR.Checked);
   cqrini.WriteBool('Export', 'eQSLRDate', chkexeQSLRDate.Checked);
+  cqrini.WriteBool('Export', 'AscTime', chkAscTime.Checked);
 
   cqrini.WriteString('Export', 'WDate', edtWDate.Text);
   cqrini.WriteString('Export', 'Wtime_on', edtWTimeOn.Text);
@@ -218,6 +220,7 @@ begin
   chkexeQSLSDate.Checked := cqrini.ReadBool('Export', 'eQSLSDate', False);
   chkexeQSLR.Checked := cqrini.ReadBool('Export', 'eQSLR', False);
   chkexeQSLRDate.Checked := cqrini.ReadBool('Export', 'eQSLRDate', False);
+  chkAscTime.Checked := cqrini.ReadBool('Export', 'AscTime', False);
 
   edtWDate.Text := cqrini.ReadString('Export', 'WDate', '50');
   edtWTimeOn.Text := cqrini.ReadString('Export', 'Wtime_on', '50');

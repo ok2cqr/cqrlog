@@ -25,7 +25,7 @@ type
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate: Boolean);
+                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
 
@@ -85,7 +85,7 @@ procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCal
                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                              ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                              ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                             ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate: Boolean);
+                             ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime: Boolean);
 begin
   exDate    := cqrini.ReadBool('Export','Date',True);
   exTimeOn  := cqrini.ReadBool('Export','time_on',True);
@@ -123,7 +123,8 @@ begin
   ExeQslS     := cqrini.ReadBool('Export','eQSLS',False);
   ExeQslSDate := cqrini.ReadBool('Export','eQSLSDate',False);
   ExeQslR     := cqrini.ReadBool('Export','eQSLR',False);
-  ExeQslRDate := cqrini.ReadBool('Export','eQSLRDate',False)
+  ExeQslRDate := cqrini.ReadBool('Export','eQSLRDate',False);
+  exAscTime   := cqrini.ReadBool('Export','AscTime',False);
 end;
 
 procedure TfrmExportProgress.ExportADIF;
@@ -145,7 +146,7 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime : Boolean;
   Source : TDataSet;
   FirstBackupPath : String;
 
@@ -598,14 +599,14 @@ begin
                     ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                     ExCounty,ExDXCC,ExRemarks,ExWAZ,ExITU,ExNote,ExState,ExProfile,
                     ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                    ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate)
+                    ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime)
   else begin
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
     ExQSLVIA := True;ExIOTA := True;ExAward := True;ExLoc := True;ExMyLoc := True;ExPower := True;
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExCont := True;
-    ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True;
+    ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; exAscTime := False;
 
     if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
       CreateDirUTF8(dmData.HomeDir + 'tmp');
@@ -633,7 +634,10 @@ begin
     if AutoBackup or (not dmData.IsFilter) then
     begin
       dmData.Q.Close;
-      dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
+      if exAscTime then
+        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
+      else
+        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
       dmData.trQ.StartTransaction;
       dmData.Q.Open;
       Source := dmData.Q
@@ -786,7 +790,7 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, exState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate, ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime : Boolean;
 
   procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
@@ -1026,7 +1030,7 @@ begin
                   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate);
+                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime);
 
   AssignFile(f, FileName);
   Rewrite(f);
@@ -1217,7 +1221,10 @@ begin
   if not dmData.IsFilter then
   begin
     dmData.Q.Close;
-    dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
+    if exAscTime then
+      dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
+    else
+      dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
     Source := dmData.Q
