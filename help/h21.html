@@ -44,6 +44,28 @@ The color coding and spot filtering is set up in the
 cluster node by simply clicking the 'Connect' button. You should see the cluster node
 messages indicating progress. You can enter any command into the 'Command' field
 (ie. SH/DX to display last spots, SH/U to see the users connected to the node etc.).
+
+
+<h3><a name="m4"></a>DXCluster Chat</h3>
+<p><img src="img/misc12.png" name="12"  width="458" height="388">
+</img>
+<br/>DXCluster window has now “overlay” as chat RX window. All lines that begins with “YOURCALL DE”, but do not end to cluster prompt “&gt;” are copied to this window.<br/>
+Time(your local PC time) and caller’s call are added in from of text line. This works only in Telnet session, not Web session<br/>
+No more lost chats that are run over with the flood of DxSpots while you are visiting kitchen to get a cup of coffee. DXChat uses the call you have used for logging in to DXCluster (that can be different as your current log settings call).</p>
+<p><img src="img/misc14.png" name="14"  width="362" height="307">
+</img>
+<br/>The size of Chat window, relative to Dx spot window can be adjusted pressing first button “Preferences” and then selecting “Chat size” from there. After doing that “Command:”-cell  at bottom of window is replaced with size slider.<br/>
+<img src="img/misc13.png" name="13"  width="209" height="121">
+</img>
+<br/>Pressing the slider knob with mouse-left button and moving slider will reduce the size of  chat window. When mouse button is released “Command:”-cell returns and Chat window remains selected size.</p>
+<p><font color="#ff0066">If you have never used Chat window before default size </font><font color="#ff0066">will be </font><font color="#ff0066">2 (=invisible)</font>.<br/>
+Resize via “preferences”-button if you want to see it. <br/>
+If you do not like this Chat window you can move/leave it to minimum size (2). Then it takes just horizontal 2px amount from DXSpot window.</p>
+<p>While minimized to up Chat window still receives all lines addressed to your logon call (and not having  “&gt;”-prompt at the end of line).<br/>
+So any time you like you can make it larger and chat lines are there to check.</p>
+
+
+
 <br><br>
 <table border="0" cellpadding="5" cellspacing="2">
     <tbody>
@@ -158,13 +180,30 @@ messages indicating progress. You can enter any command into the 'Command' field
         <td valign="top">
             <a name="ch20"><h2><strong>Propagation indicator</strong></h2></a>
             <img src="img/h110.png" border="0"></td>
-        <td valign="top">
+            </img>
+            <td valign="top">
             <div align="justify"><br><br>
                 There is a simple window providing propagation indices as provided by the NOAA Space
                 Weather Center. CQRLOG does not include a propagation forecast module but keen users
                 can estimate many parameters just from the supplied data.
             </div>
         </td>
+        <td valign="top">
+	<h3 ><a name="m1"></a>Prop_DK0WCY</h3>
+	<p><img src="img/misc3.png" name="3" width="150" height="226">
+	</img>
+        </td>
+        <td valign="top">
+        <div align="justify"><br><br>
+        This propagation form is an alternative showing details from dk0wcy page with 3 hour graphical
+	display of K-index. The Kiel information is lot more exact  for use in Europe than Boulder’s.
+	As Boulder information at dk0wcy is one days old, top of form shows time when information is 
+	read from dk0wcy web page.
+	” Indices of”- shows the age of Boulder data. Kiel information is up to date as they are produced by dk0wcy. There is also
+	link to dk0wcy web page. By clicking it page opens to default browser.
+	</div>
+        </td>
+        
     </tr>
     </tbody>
 </table>

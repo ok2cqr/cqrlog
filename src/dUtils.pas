@@ -1163,6 +1163,11 @@ begin
     Result := '0.139';
     exit;
   end;
+  if band = '630M' then
+  begin
+    Result := '0.472';
+    exit;
+  end;
   if band = '160M' then
   begin
     if (mode = 'CW') then
