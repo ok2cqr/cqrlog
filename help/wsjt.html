@@ -62,7 +62,9 @@ These will show you that UDP link is alive between these programs.</font></p>
 <p >Wsjt-x CQ-monitor form opens when you select ”Remote mode for wsjtx” from ”File” of NewQSO window.</p>
 <p >You can close this window and reopen it later via NewQSO/Window/Wsjt-x monitor that is visible only when
 remote mode is selected. While it is closed it will not update it’s contents.<br/>
-Only remote logging and call qrz/hamqth seek are used then.</p>
+Only remote logging and call qrz/hamqth seek are used then.
+</br>If UPD port opening for remote fails "NewQSO/Comment to qso" will have text “Could not bind socket for wsjtx!"
+</p>
 <p ><img src="img/wsjt20.png" name="20" width="353" height="83">
 </img></p>
 Top line will show band and mode that is in use, Checking ”<b>no history”</b> will clean monitor on every decoded RX-period. If not checked form will show also older Cqs (scrolling) to see what you missed while having a coffee break :). Only 15 lines, how ever.
@@ -76,15 +78,31 @@ Checking <b>“flw”</b> new part of monitor opens. This will make easier to fo
  That box uses same font and size as CQ-monitor.
  </br></br>Line contains:  <b>decoding_period_time</b> | <b>delta_frequency</b>  | <b>the_message</b>.  
  </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
+ </br>Line color turns red from default color when corresponding response period is over.
+ </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.
+ </br>
+ </br>CQ-monitor has known problem of color printing (richmemo unit) that causes CPU load to grow slowly during online hours. For so far solution for this  has not been found.
+ </br>
+ </br>How ever you can drop CPU load by just setting NewQSO/File/remote mode for wsjt to OFF and then immediately back to ON. This releases previously used memory and CPU load returns to normal and is a very fast fix that can be done during a reciving period.
+ </br>
+ </br>CQ-monitor has now 20 lines (if “no history” unchecked). Automatic scrollbars are visible if needed.
+
+
 <p>Line of CQ-monitor contains: 
 <ul>
 	<li/> time</br>
 	<li/> mode symbol. Same that wsjt-x uses.</br>
 	<li/> callsign with color and low/Upcase coding.</br>
 	<li/> locator grid with color and low/Upcase coding </br>
-	<li/> country name (cut to 15chrs). Overlayed with “CQ:xx” and <b>different color</b> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br/>
-This is set as warning for you to check that you are in directed area before answering to his/her CQ.<br/>
-I.E. <b>In case of </b><i><b>CQ DX</b></i> <b>you should be in DIFFERENT CONTINENT as the CQ caller </b>to be a valid DX for him. Program does not warn you if it thinks you are real DX for caller. Otherwise it does.</br>
+	<li/> caller’s country name (cut to 15chrs) Overlayed with “<font color="#ff0066"><b>CQ:xx</b></font>”
+	 and <font color="#ff0066"><b>different color</b></font> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br/>
+	<font color="#ff0066"><b>This is set as warning for you </b></font> to check that you are in directed area before answering to his/her CQ.
+	<br/>I.E. <font color="#ff0066"><b>In case of CQ DX you should be in DIFFERENT CONTINENT as the CQ caller</b></font>
+	to be a valid DX for him. Program does not warn you if it thinks you are real DX for caller. Otherwise
+	it does.
+	<br/><a href="https://en.wikipedia.org/wiki/CQ_(call)">https://en.wikipedia.org/wiki/CQ_(call)</a> says:
+	 In amateur radio usage, a CQ call can be qualified by appending more letters, as in CQ DX (meaning &quot;
+	<i> calling all stations located in a<u> different continent </u> to the caller</i>&quot;). See also:  <a href="http://www.mapability.com/ei8ic/maps/continent.php">http://www.mapability.com/ei8ic/maps/continent.php</a> for continents.
 	<li/> information of DXCC status compared to your logged qsos.</br>
 </ul></p>
 

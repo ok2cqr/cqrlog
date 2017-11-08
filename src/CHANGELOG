@@ -3,6 +3,9 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.1.0 (08.11.2017)
+   #More  help file fixing (Saku, OH1KH)
+   -dUtils: 630M definition still missing in GetAdifBandFromFreq and  C_RBN_BANDS. Thanks for NO3M.(Saku, OH1KH)
 2.1.0 (04.11.2017)
    #fixed some help files to be a bit more up to date (Saku, OH1KH)
    -dUtils: BandToFrequency: 630M definition was missing. (Saku, OH1KH)
