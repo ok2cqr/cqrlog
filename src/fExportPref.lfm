@@ -17,6 +17,10 @@ object frmExportPref: TfrmExportPref
       Height = 23
       Width = 67
     end
+    inherited chkAscTime: TCheckBox
+      Height = 23
+      Width = 196
+    end
     inherited chkExCont: TCheckBox
       Height = 23
       Width = 89
@@ -306,9 +310,9 @@ object frmExportPref: TfrmExportPref
     TabOrder = 2
   end
   object btnReSet: TButton
-    Left = 16
+    Left = 640
     Height = 25
-    Top = 392
+    Top = 96
     Width = 75
     Caption = 'Re/Set All'
     OnClick = btnReSetClick
