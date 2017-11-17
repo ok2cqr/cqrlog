@@ -463,7 +463,7 @@ begin
 
 procedure TfrmMonWsjtx.FormHide(Sender: TObject);
 begin
-   //decodetest(true);  //for exception decode tests
+   //decodetest(true);  //release these for decode tests
    //decodetest(false);
    dmUtils.SaveWindowPos(frmMonWsjtx);
    frmMonWsjtx.hide;
@@ -541,10 +541,13 @@ Begin
        AddDecodedMessage('175200 # OF1KH CA1LL AA11','20M','reply');     //set first you log call
        AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22','20M','reply'); //!where?" decodes now ok.
        AddDecodedMessage('175200 ~ CQ NO EU RZ3DX','20M','reply');  // for dbg
+       AddDecodedMessage('201045 ~ CQ KAZAKHSTAN','20M','reply'); // yet another bright cq idea of users
+       AddDecodedMessage('201045 ~ CQ WHO EVER' ,'20M','reply'); // a guess for next idea
      end
     else
       Begin
-       ShowMessage('175200 # CQ OH1LL KP11'+sLineBreak+
+       ShowMessage('Test with CQ extensions:'+sLineBreak+
+       '175200 # CQ OH1LL KP11'+sLineBreak+
        '175200 @ CQ DX OH1DX KP11'+sLineBreak+
        '175200 @ CQ NA RV3NA'+sLineBreak+
        '175200 @ CQ USA RV3USA'+sLineBreak+
@@ -552,7 +555,9 @@ Begin
        '175200 @ CQ OH1LL DX'+sLineBreak+
        '175200 # OF1KH CA1LL AA11'+sLineBreak+
        '175200 # CQ 000 PA7ZZ JO22'+sLineBreak+
-       '175200 ~ CQ NO EU RZ3DX');  // for dbg
+       '175200 ~ CQ NO EU RZ3DX'+sLineBreak+
+       '201045 ~ CQ KAZAKHSTAN'+sLineBreak+
+       '201045 ~ CQ WHO EVER');  // for dbg
      end;
 end;
 procedure TfrmMonWsjtx.AddFollowedMessage(Message,Reply:string);
@@ -603,14 +608,17 @@ Begin
             i:=0;
             HasNum:=false;
             HasChr:=false;
-            repeat
-             begin
-             inc(i);
-             if ((Call[i]>='0') and (Call[i]<='9')) then HasNum:=true;
-             if ((Call[i]>='A') and (Call[i]<='Z')) then HasChr:=true;
-              if dmData.DebugLevel>=1 then Writeln('CHR Count now:', i,' len,num,chr:',length(Call),',',HasNum,',',HasChr);
-             end;
-            until (i >= length(Call));
+            if (Call<>'') then
+            begin
+             repeat
+              begin
+               inc(i);
+               if ((Call[i]>='0') and (Call[i]<='9')) then HasNum:=true;
+               if ((Call[i]>='A') and (Call[i]<='Z')) then HasChr:=true;
+               if dmData.DebugLevel>=1 then Writeln('CHR Count now:', i,' len,num,chr:',length(Call),',',HasNum,',',HasChr);
+              end;
+             until (i >= length(Call));
+            end;
      OkCall :=  HasNum and HasChr and (i > 2);
      if dmData.DebugLevel>=1 then Writeln('Call ',call,' valid: ',OkCall);
 end;
@@ -734,10 +742,14 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
             if  not (OkCall(msgCall)) then  msgCall := NextElement(Message,index);
           end;
 
+         //how ever if we do not have callsign because some crazy cq calling way
+         if (msgCall='') then msgCall:='NOCALL';
+
          if dmData.DebugLevel>=1 then Writeln('DIR-CQ-call after CQ2:',CallCqDir);
          //so we should have time, mode and call by now. That reamains locator, if exists
          if dmData.DebugLevel>=1 then Write('Loc-');
          msgLoc := NextElement(Message,index);
+
 
          if msgLoc = 'DX' then
             Begin
