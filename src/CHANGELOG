@@ -3,6 +3,10 @@ Legend:
   + new feature
   - bugfix
 --------------------
+
+2.2.0
+  - parsing RBN spots fixed
+
 2.1.0 (12.11.2017)
    -"Re/Set" button in Export "Choose fields to export" position conflicts with "Most recent entries on top" checkbox. Moved.(Saku, OH1KH) 
    +CQ monitor: Alert checkboxes to buttons (Saku, OH1KH)

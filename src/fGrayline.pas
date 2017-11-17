@@ -224,6 +224,37 @@ procedure TRBNThread.AddToList(spot : String);
     end;
   end;
 
+  procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
+  var
+    i : Integer;
+    y : Integer;
+    b : Array of String[50];
+    p : Integer=0;
+  begin
+    SetLength(b,1);
+    for i:=1 to Length(spot) do
+    begin
+      if spot[i]<>' ' then
+        b[p] := b[p]+spot[i]
+      else begin
+        if (b[p]<>'') then
+        begin
+          inc(p);
+          SetLength(b,p+1)
+        end
+      end
+    end;
+
+    spotter := b[2];
+    i := pos('-', spotter);
+    if i > 0 then
+      spotter := copy(spotter, 1, i-1);
+    dxstn := b[4];
+    freq  := b[3];
+    mode  := b[5];
+    stren := b[6]
+  end;
+
 var
   spotter : String;
   call    : String;
@@ -235,9 +266,10 @@ var
   band    : String;
   tmp     : Integer;
   wCall   : String;
+  mode    : String;
   latitude, longitude: Currency;
 begin
-  call := trim(copy(spot,27,12));
+  ParseSpot(spot, spotter, call, freq, mode, stren);
 
   if watchFor<>'' then
   begin
@@ -251,11 +283,6 @@ begin
       if (call <> watchFor) then exit;
     end
   end;
-
-  spotter := trim(copy(spot,7,Pos('-',spot)-7));
-  freq    := trim(copy(spot,18,9));
-
-  stren   := trim(copy(spot,Pos('dB',spot)-4,4));
 
   if dmData.DebugLevel>=1 then
   begin
