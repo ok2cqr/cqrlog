@@ -3,11 +3,8 @@ Legend:
   + new feature
   - bugfix
 --------------------
-
-2.2.0
-  - parsing RBN spots fixed
-
 2.1.0 (12.11.2017)
+   -CQ-monitor: Calling CQ SOMETEXT without own call (!!!???!) caused porgram halt. Fixed these to NOCALL(Saku, OH1KH)
    -"Re/Set" button in Export "Choose fields to export" position conflicts with "Most recent entries on top" checkbox. Moved.(Saku, OH1KH) 
    +CQ monitor: Alert checkboxes to buttons (Saku, OH1KH)
    +CQ monitor: Text search can now switch to call search (only call checked, not whole line).Wildcards and multiple (,) separated search items. (Saku, OH1KH)
