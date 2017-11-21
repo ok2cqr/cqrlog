@@ -280,8 +280,40 @@ begin
 end;
 
 procedure TRBNThread.Execute;
+
+  procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
+  var
+    i : Integer;
+    y : Integer;
+    b : Array of String[50];
+    p : Integer=0;
+  begin
+    SetLength(b,1);
+    for i:=1 to Length(spot) do
+    begin
+      if spot[i]<>' ' then
+        b[p] := b[p]+spot[i]
+      else begin
+        if (b[p]<>'') then
+        begin
+          inc(p);
+          SetLength(b,p+1)
+        end
+      end
+    end;
+
+    spotter := b[2];
+    i := pos('-', spotter);
+    if i > 0 then
+      spotter := copy(spotter, 1, i-1);
+    dxstn := b[4];
+    freq  := b[3];
+    mode  := b[5];
+    stren := b[6]
+  end;
+
 var
-  spot : String;
+  spot    : String;
   spotter : String;
   freq    : String;
   stren   : String;
@@ -316,28 +348,7 @@ begin
         Continue
       end;
 
-      if (Pos('-',copy(spot,1,17))>0) then
-        spotter := trim(copy(spot,7,Pos('-',spot)-7))
-      else
-        spotter := trim(copy(spot,7,Pos(':',spot)-7));
-
-      freq    := trim(copy(spot,18,9));
-      stren   := trim(copy(spot,Pos('dB',spot)-4,4));
-
-      Writeln(spotter);
-      Writeln(freq);
-
-      dxstn    := copy(spot,Pos('.',spot)+3,Length(spot)-Pos('.',spot)-1);
-      dxstn    := trim(dxstn);
-      dxstn    := trim(copy(dxstn,1,Pos(' ',dxstn)));
-
-      mode    := trim(copy(spot,41,6));
-      Writeln(mode);
-      if (Pos(','+mode+',',','+C_RBN_MODES+',') = 0) then //some rbn nodes doesn't have mode value
-      begin
-        mode := frmRbnMonitor.getModeFromFreq(freq)
-      end;
-      Writeln(mode);
+      ParseSpot(spot, spotter, dxstn, freq, mode, stren);
 
       if dmData.UsesLotw(dxstn) then
         LoTW := 'L'
