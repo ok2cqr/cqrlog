@@ -1145,41 +1145,36 @@ end;
 
 function TdmDXCluster.IsAlertCall(const call,band,mode : String;RegExp :Boolean) : Boolean;
 const
+   //with complete call search %s or "call_alert/callsign" can be target. No difference.
    C_SEL = 'select * from call_alert where callsign = %s';
-   C_RGX_SEL = 'select * from call_alert where callsign regexp %s';
+   //with "pertial callsigns" %s is target and column "call_alert/callsign" contains regexp condition
+   C_RGX_SEL = 'select * from call_alert where %s regexp callsign';
 begin
+  Result := False;
   try
     if RegExp then
        qCallAlert.SQL.Text := Format(C_RGX_SEL,[QuotedStr(call)])
     else
       qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
-    if dmData.DebugLevel>=1 then Writeln(qCallAlert.SQL.Text);
+    if dmData.DebugLevel>=1 then Writeln('Alert: ',qCallAlert.SQL.Text);
     trCallAlert.StartTransaction;
     qCallAlert.Open;
-    if qCallAlert.RecordCount = 0 then
-    begin
-      Result := False
-    end
-    else begin
-      Result := False;
+    if qCallAlert.RecordCount > 0 then
+   begin
+      if dmData.DebugLevel>=1 then Writeln('Alert: Call hits with ', qCallAlert.RecordCount,' records');
       qCallAlert.First;
-      while not qCallAlert.Eof do
+      while ( (not qCallAlert.Eof) and (not Result) ) do
       begin
-        if (qCallAlert.Fields[2].AsString='') and (qCallAlert.Fields[3].AsString='') then
-        begin
-          Result := True;
-          Break
-        end
-        else begin
-           if (band = qCallAlert.Fields[2].AsString) and (mode = qCallAlert.Fields[3].AsString) then
-           begin
-             Result := True;
-             Break
-           end
-        end;
+        Result :=(    (qCallAlert.Fields[2].AsString=''   ) and (qCallAlert.Fields[3].AsString='')
+                   or (qCallAlert.Fields[2].AsString= band) and (qCallAlert.Fields[3].AsString='')
+                   or (qCallAlert.Fields[2].AsString='')    and (qCallAlert.Fields[3].AsString= mode)
+                   or (qCallAlert.Fields[2].AsString= band) and (qCallAlert.Fields[3].AsString= mode)
+                 );
         qCallAlert.Next
-      end
-    end
+      end;
+      if dmData.DebugLevel>=1 then Writeln('Alert: Mode and/or band ',Result,
+                            ' Band:',qCallAlert.Fields[2].AsString,' Mode:',qCallAlert.Fields[3].AsString);
+    end;
   finally
     qCallAlert.Close;
     trCallAlert.Rollback;
