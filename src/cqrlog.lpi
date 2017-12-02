@@ -748,7 +748,7 @@
     <Version Value="11"/>
     <SearchPaths>
       <Libraries Value="$(LazarusDir)/lcl"/>
-      <OtherUnitFiles Value="lnet/lib;richmemo;richmemo/gtk2"/>
+      <OtherUnitFiles Value="lnet/lib;richmemo;richmemo/gtk2;synapse"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
