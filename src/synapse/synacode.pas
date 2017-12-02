@@ -1,9 +1,9 @@
 {==============================================================================|
-| Project : Ararat Synapse                                       | 002.001.004 |
+| Project : Ararat Synapse                                       | 002.002.003 |
 |==============================================================================|
 | Content: Coding and decoding support                                         |
 |==============================================================================|
-| Copyright (c)1999-2003, Lukas Gebauer                                        |
+| Copyright (c)1999-2013, Lukas Gebauer                                        |
 | All rights reserved.                                                         |
 |                                                                              |
 | Redistribution and use in source and binary forms, with or without           |
@@ -33,7 +33,7 @@
 | DAMAGE.                                                                      |
 |==============================================================================|
 | The Initial Developer of the Original Code is Lukas Gebauer (Czech Republic).|
-| Portions created by Lukas Gebauer are Copyright (c)2000-2003.                |
+| Portions created by Lukas Gebauer are Copyright (c)2000-2013.                |
 | All Rights Reserved.                                                         |
 |==============================================================================|
 | Contributor(s):                                                              |
@@ -49,6 +49,20 @@
 {$Q-}
 {$R-}
 {$H+}
+{$TYPEDADDRESS OFF}
+
+{$IFDEF CIL}
+  {$DEFINE SYNACODE_NATIVE}
+{$ENDIF}
+{$IFDEF FPC_BIG_ENDIAN}
+  {$DEFINE SYNACODE_NATIVE}
+{$ENDIF}
+
+{$IFDEF UNICODE}
+  {$WARN IMPLICIT_STRING_CAST OFF}
+  {$WARN IMPLICIT_STRING_CAST_LOSS OFF}
+  {$WARN SUSPICIOUS_TYPECAST OFF}
+{$ENDIF}
 
 unit synacode;
 
@@ -66,12 +80,11 @@ const
   ['=', '(', ')', '[', ']', '<', '>', ':', ';', ',', '@', '/', '?', '\',
     '"', '_'];
   NonAsciiChar: TSpecials =
-  [Char(0)..Char(31), Char(127)..Char(255)];
+  [#0..#31, #127..#255];
   URLFullSpecialChar: TSpecials =
   [';', '/', '?', ':', '@', '=', '&', '#', '+'];
   URLSpecialChar: TSpecials =
-  [#$00..#$20, '_', '<', '>', '"', '%', '{', '}', '|', '\', '^', '~', '[', ']',
-    '`', #$7F..#$FF];
+  [#$00..#$20, '<', '>', '"', '%', '{', '}', '|', '\', '^', '[', ']', '`', #$7F..#$FF];
   TableBase64 =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
   TableBase64mod =
@@ -212,6 +225,9 @@ function HMAC_SHA1(Text, Key: AnsiString): AnsiString;
  by repeating "value" until length is "Len".}
 function SHA1LongHash(const Value: AnsiString; Len: integer): AnsiString;
 
+{:Returns a binary string with a RSA-MD4 hashing of "Value" string.}
+function MD4(const Value: AnsiString): AnsiString;
+
 implementation
 
 const
@@ -319,14 +335,14 @@ const
     );
 
 procedure ArrByteToLong(var ArByte: Array of byte; var ArLong: Array of Integer);
-{$IFDEF CIL}
+{$IFDEF SYNACODE_NATIVE}
 var
   n: integer;
 {$ENDIF}
 begin
   if (High(ArByte) + 1) > ((High(ArLong) + 1) * 4) then
     Exit;
-  {$IFDEF CIL}
+  {$IFDEF SYNACODE_NATIVE}
   for n := 0 to ((high(ArByte) + 1) div 4) - 1 do
     ArLong[n] := ArByte[n * 4 + 0]
       + (ArByte[n * 4 + 1] shl 8)
@@ -338,14 +354,14 @@ begin
 end;
 
 procedure ArrLongToByte(var ArLong: Array of Integer; var ArByte: Array of byte);
-{$IFDEF CIL}
+{$IFDEF SYNACODE_NATIVE}
 var
   n: integer;
 {$ENDIF}
 begin
   if (High(ArByte) + 1) < ((High(ArLong) + 1) * 4) then
     Exit;
-  {$IFDEF CIL}
+  {$IFDEF SYNACODE_NATIVE}
   for n := 0 to high(ArLong) do
   begin
     ArByte[n * 4 + 0] := ArLong[n] and $000000FF;
@@ -359,14 +375,11 @@ begin
 end;
 
 type
-  TMD5Ctx = record
+  TMDCtx = record
     State: array[0..3] of Integer;
     Count: array[0..1] of Integer;
     BufAnsiChar: array[0..63] of Byte;
     BufLong: array[0..15] of Integer;
-//    case Integer of
-//      0: (BufAnsiChar: array[0..63] of Byte);
-//      1: (BufLong: array[0..15] of Integer);
   end;
   TSHA1Ctx= record
     Hi, Lo: integer;
@@ -374,10 +387,9 @@ type
     Index: integer;
     Hash: array[0..4] of Integer;
     HashByte: array[0..19] of byte;
-//    case Integer of
-//      0: (Hash: array[0..4] of Integer);
-//      1: (HashByte: array[0..19] of byte);
   end;
+
+  TMDTransform = procedure(var Buf: array of LongInt; const Data: array of LongInt);
 
 {==============================================================================}
 
@@ -847,20 +859,20 @@ end;
 
 {==============================================================================}
 
-procedure MD5Init(var MD5Context: TMD5Ctx);
+procedure MDInit(var MDContext: TMDCtx);
 var
   n: integer;
 begin
-  MD5Context.Count[0] := 0;
-  MD5Context.Count[1] := 0;
-  for n := 0 to high(MD5Context.BufAnsiChar) do
-    MD5Context.BufAnsiChar[n] := 0;
-  for n := 0 to high(MD5Context.BufLong) do
-    MD5Context.BufLong[n] := 0;
-  MD5Context.State[0] := Integer($67452301);
-  MD5Context.State[1] := Integer($EFCDAB89);
-  MD5Context.State[2] := Integer($98BADCFE);
-  MD5Context.State[3] := Integer($10325476);
+  MDContext.Count[0] := 0;
+  MDContext.Count[1] := 0;
+  for n := 0 to high(MDContext.BufAnsiChar) do
+    MDContext.BufAnsiChar[n] := 0;
+  for n := 0 to high(MDContext.BufLong) do
+    MDContext.BufLong[n] := 0;
+  MDContext.State[0] := Integer($67452301);
+  MDContext.State[1] := Integer($EFCDAB89);
+  MDContext.State[2] := Integer($98BADCFE);
+  MDContext.State[3] := Integer($10325476);
 end;
 
 procedure MD5Transform(var Buf: array of LongInt; const Data: array of LongInt);
@@ -975,15 +987,15 @@ begin
 end;
 
 //fixed by James McAdams
-procedure MD5Update(var MD5Context: TMD5Ctx; const Data: AnsiString);
+procedure MDUpdate(var MDContext: TMDCtx; const Data: AnsiString; transform: TMDTransform);
 var
   Index, partLen, InputLen, I: integer;
-{$IFDEF CIL}
+{$IFDEF SYNACODE_NATIVE}
   n: integer;
 {$ENDIF}
 begin
   InputLen := Length(Data);
-  with MD5Context do
+  with MDContext do
   begin
     Index := (Count[0] shr 3) and $3F;
     Inc(Count[0], InputLen shl 3);
@@ -994,26 +1006,26 @@ begin
     if InputLen >= partLen then
     begin
       ArrLongToByte(BufLong, BufAnsiChar);
-      {$IFDEF CIL}
+      {$IFDEF SYNACODE_NATIVE}
       for n := 1 to partLen do
         BufAnsiChar[index - 1 + n] := Ord(Data[n]);
       {$ELSE}
       Move(Data[1], BufAnsiChar[Index], partLen);
       {$ENDIF}
       ArrByteToLong(BufAnsiChar, BufLong);
-      MD5Transform(State, Buflong);
+      Transform(State, Buflong);
       I := partLen;
   		while I + 63 < InputLen do
       begin
         ArrLongToByte(BufLong, BufAnsiChar);
-        {$IFDEF CIL}
+        {$IFDEF SYNACODE_NATIVE}
         for n := 1 to 64 do
           BufAnsiChar[n - 1] := Ord(Data[i + n]);
         {$ELSE}
         Move(Data[I+1], BufAnsiChar, 64);
         {$ENDIF}
         ArrByteToLong(BufAnsiChar, BufLong);
-        MD5Transform(State, Buflong);
+        Transform(State, Buflong);
 	  	  inc(I, 64);
 		  end;
       Index := 0;
@@ -1021,7 +1033,7 @@ begin
     else
       I := 0;
     ArrLongToByte(BufLong, BufAnsiChar);
-    {$IFDEF CIL}
+    {$IFDEF SYNACODE_NATIVE}
     for n := 1 to InputLen-I do
       BufAnsiChar[Index + n - 1] := Ord(Data[i + n]);
     {$ELSE}
@@ -1031,7 +1043,7 @@ begin
   end
 end;
 
-function MD5Final(var MD5Context: TMD5Ctx): AnsiString;
+function MDFinal(var MDContext: TMDCtx; transform: TMDTransform): AnsiString;
 var
   Cnt: Word;
   P: Byte;
@@ -1041,7 +1053,7 @@ var
 begin
   for I := 0 to 15 do
     Digest[I] := I + 1;
-  with MD5Context do
+  with MDContext do
   begin
     Cnt := (Count[0] shr 3) and $3F;
     P := Cnt;
@@ -1054,7 +1066,7 @@ begin
         BufAnsiChar[P + n] := 0;
       ArrByteToLong(BufAnsiChar, BufLong);
 //      FillChar(BufAnsiChar[P], Cnt, #0);
-      MD5Transform(State, BufLong);
+      Transform(State, BufLong);
       ArrLongToByte(BufLong, BufAnsiChar);
       for n := 0 to 55 do
         BufAnsiChar[n] := 0;
@@ -1070,7 +1082,7 @@ begin
     end;
     BufLong[14] := Count[0];
     BufLong[15] := Count[1];
-    MD5Transform(State, BufLong);
+    Transform(State, BufLong);
     ArrLongToByte(State, Digest);
 //    Move(State, Digest, 16);
     Result := '';
@@ -1084,11 +1096,11 @@ end;
 
 function MD5(const Value: AnsiString): AnsiString;
 var
-  MD5Context: TMD5Ctx;
+  MDContext: TMDCtx;
 begin
-  MD5Init(MD5Context);
-  MD5Update(MD5Context, Value);
-  Result := MD5Final(MD5Context);
+  MDInit(MDContext);
+  MDUpdate(MDContext, Value, @MD5Transform);
+  Result := MDFinal(MDContext, @MD5Transform);
 end;
 
 {==============================================================================}
@@ -1097,7 +1109,7 @@ function HMAC_MD5(Text, Key: AnsiString): AnsiString;
 var
   ipad, opad, s: AnsiString;
   n: Integer;
-  MD5Context: TMD5Ctx;
+  MDContext: TMDCtx;
 begin
   if Length(Key) > 64 then
     Key := md5(Key);
@@ -1108,14 +1120,14 @@ begin
     ipad[n] := AnsiChar(Byte(ipad[n]) xor Byte(Key[n]));
     opad[n] := AnsiChar(Byte(opad[n]) xor Byte(Key[n]));
   end;
-  MD5Init(MD5Context);
-  MD5Update(MD5Context, ipad);
-  MD5Update(MD5Context, Text);
-  s := MD5Final(MD5Context);
-  MD5Init(MD5Context);
-  MD5Update(MD5Context, opad);
-  MD5Update(MD5Context, s);
-  Result := MD5Final(MD5Context);
+  MDInit(MDContext);
+  MDUpdate(MDContext, ipad, @MD5Transform);
+  MDUpdate(MDContext, Text, @MD5Transform);
+  s := MDFinal(MDContext, @MD5Transform);
+  MDInit(MDContext);
+  MDUpdate(MDContext, opad, @MD5Transform);
+  MDUpdate(MDContext, s, @MD5Transform);
+  Result := MDFinal(MDContext, @MD5Transform);
 end;
 
 {==============================================================================}
@@ -1125,17 +1137,17 @@ var
   cnt, rest: integer;
   l: integer;
   n: integer;
-  MD5Context: TMD5Ctx;
+  MDContext: TMDCtx;
 begin
   l := length(Value);
   cnt := Len div l;
   rest := Len mod l;
-  MD5Init(MD5Context);
+  MDInit(MDContext);
   for n := 1 to cnt do
-    MD5Update(MD5Context, Value);
+    MDUpdate(MDContext, Value, @MD5Transform);
   if rest > 0 then
-    MD5Update(MD5Context, Copy(Value, 1, rest));
-  Result := MD5Final(MD5Context);
+    MDUpdate(MDContext, Copy(Value, 1, rest), @MD5Transform);
+  Result := MDFinal(MDContext, @MD5Transform);
 end;
 
 {==============================================================================}
@@ -1364,6 +1376,89 @@ begin
   if rest > 0 then
     SHA1Update(SHA1Context, Copy(Value, 1, rest));
   Result := SHA1Final(SHA1Context);
+end;
+
+{==============================================================================}
+
+procedure MD4Transform(var Buf: array of LongInt; const Data: array of LongInt);
+var
+  A, B, C, D: LongInt;
+  function LRot32(a, b: longint): longint;
+  begin
+    Result:= (a shl b) or (a shr (32 - b));
+  end;
+begin
+  A := Buf[0];
+  B := Buf[1];
+  C := Buf[2];
+  D := Buf[3];
+
+  A:= LRot32(A + (D xor (B and (C xor D))) + Data[ 0], 3);
+  D:= LRot32(D + (C xor (A and (B xor C))) + Data[ 1], 7);
+  C:= LRot32(C + (B xor (D and (A xor B))) + Data[ 2], 11);
+  B:= LRot32(B + (A xor (C and (D xor A))) + Data[ 3], 19);
+  A:= LRot32(A + (D xor (B and (C xor D))) + Data[ 4], 3);
+  D:= LRot32(D + (C xor (A and (B xor C))) + Data[ 5], 7);
+  C:= LRot32(C + (B xor (D and (A xor B))) + Data[ 6], 11);
+  B:= LRot32(B + (A xor (C and (D xor A))) + Data[ 7], 19);
+  A:= LRot32(A + (D xor (B and (C xor D))) + Data[ 8], 3);
+  D:= LRot32(D + (C xor (A and (B xor C))) + Data[ 9], 7);
+  C:= LRot32(C + (B xor (D and (A xor B))) + Data[10], 11);
+  B:= LRot32(B + (A xor (C and (D xor A))) + Data[11], 19);
+  A:= LRot32(A + (D xor (B and (C xor D))) + Data[12], 3);
+  D:= LRot32(D + (C xor (A and (B xor C))) + Data[13], 7);
+  C:= LRot32(C + (B xor (D and (A xor B))) + Data[14], 11);
+  B:= LRot32(B + (A xor (C and (D xor A))) + Data[15], 19);
+
+  A:= LRot32(A + ((B and C) or (B and D) or (C and D)) + Data[ 0] + longint($5a827999), 3);
+  D:= LRot32(D + ((A and B) or (A and C) or (B and C)) + Data[ 4] + longint($5a827999), 5);
+  C:= LRot32(C + ((D and A) or (D and B) or (A and B)) + Data[ 8] + longint($5a827999), 9);
+  B:= LRot32(B + ((C and D) or (C and A) or (D and A)) + Data[12] + longint($5a827999), 13);
+  A:= LRot32(A + ((B and C) or (B and D) or (C and D)) + Data[ 1] + longint($5a827999), 3);
+  D:= LRot32(D + ((A and B) or (A and C) or (B and C)) + Data[ 5] + longint($5a827999), 5);
+  C:= LRot32(C + ((D and A) or (D and B) or (A and B)) + Data[ 9] + longint($5a827999), 9);
+  B:= LRot32(B + ((C and D) or (C and A) or (D and A)) + Data[13] + longint($5a827999), 13);
+  A:= LRot32(A + ((B and C) or (B and D) or (C and D)) + Data[ 2] + longint($5a827999), 3);
+  D:= LRot32(D + ((A and B) or (A and C) or (B and C)) + Data[ 6] + longint($5a827999), 5);
+  C:= LRot32(C + ((D and A) or (D and B) or (A and B)) + Data[10] + longint($5a827999), 9);
+  B:= LRot32(B + ((C and D) or (C and A) or (D and A)) + Data[14] + longint($5a827999), 13);
+  A:= LRot32(A + ((B and C) or (B and D) or (C and D)) + Data[ 3] + longint($5a827999), 3);
+  D:= LRot32(D + ((A and B) or (A and C) or (B and C)) + Data[ 7] + longint($5a827999), 5);
+  C:= LRot32(C + ((D and A) or (D and B) or (A and B)) + Data[11] + longint($5a827999), 9);
+  B:= LRot32(B + ((C and D) or (C and A) or (D and A)) + Data[15] + longint($5a827999), 13);
+
+  A:= LRot32(A + (B xor C xor D) + Data[ 0] + longint($6ed9eba1), 3);
+  D:= LRot32(D + (A xor B xor C) + Data[ 8] + longint($6ed9eba1), 9);
+  C:= LRot32(C + (D xor A xor B) + Data[ 4] + longint($6ed9eba1), 11);
+  B:= LRot32(B + (C xor D xor A) + Data[12] + longint($6ed9eba1), 15);
+  A:= LRot32(A + (B xor C xor D) + Data[ 2] + longint($6ed9eba1), 3);
+  D:= LRot32(D + (A xor B xor C) + Data[10] + longint($6ed9eba1), 9);
+  C:= LRot32(C + (D xor A xor B) + Data[ 6] + longint($6ed9eba1), 11);
+  B:= LRot32(B + (C xor D xor A) + Data[14] + longint($6ed9eba1), 15);
+  A:= LRot32(A + (B xor C xor D) + Data[ 1] + longint($6ed9eba1), 3);
+  D:= LRot32(D + (A xor B xor C) + Data[ 9] + longint($6ed9eba1), 9);
+  C:= LRot32(C + (D xor A xor B) + Data[ 5] + longint($6ed9eba1), 11);
+  B:= LRot32(B + (C xor D xor A) + Data[13] + longint($6ed9eba1), 15);
+  A:= LRot32(A + (B xor C xor D) + Data[ 3] + longint($6ed9eba1), 3);
+  D:= LRot32(D + (A xor B xor C) + Data[11] + longint($6ed9eba1), 9);
+  C:= LRot32(C + (D xor A xor B) + Data[ 7] + longint($6ed9eba1), 11);
+  B:= LRot32(B + (C xor D xor A) + Data[15] + longint($6ed9eba1), 15);
+
+  Inc(Buf[0], A);
+  Inc(Buf[1], B);
+  Inc(Buf[2], C);
+  Inc(Buf[3], D);
+end;
+
+{==============================================================================}
+
+function MD4(const Value: AnsiString): AnsiString;
+var
+  MDContext: TMDCtx;
+begin
+  MDInit(MDContext);
+  MDUpdate(MDContext, Value, @MD4Transform);
+  Result := MDFinal(MDContext, @MD4Transform);
 end;
 
 {==============================================================================}

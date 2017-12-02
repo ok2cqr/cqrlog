@@ -1,9 +1,9 @@
 {==============================================================================|
-| Project : Ararat Synapse                                       | 005.001.000 |
+| Project : Ararat Synapse                                       | 005.002.003 |
 |==============================================================================|
 | Content: Socket Independent Platform Layer                                   |
 |==============================================================================|
-| Copyright (c)1999-2003, Lukas Gebauer                                        |
+| Copyright (c)1999-2013, Lukas Gebauer                                        |
 | All rights reserved.                                                         |
 |                                                                              |
 | Redistribution and use in source and binary forms, with or without           |
@@ -33,10 +33,11 @@
 | DAMAGE.                                                                      |
 |==============================================================================|
 | The Initial Developer of the Original Code is Lukas Gebauer (Czech Republic).|
-| Portions created by Lukas Gebauer are Copyright (c)2001-2003.                |
+| Portions created by Lukas Gebauer are Copyright (c)2001-2013.                |
 | All Rights Reserved.                                                         |
 |==============================================================================|
 | Contributor(s):                                                              |
+|   Tomas Hajny (OS2 support)                                                  |
 |==============================================================================|
 | History: see HISTORY.HTM from distribution package                           |
 |          (Found at URL: http://www.ararat.cz/synapse/)                       |
@@ -48,20 +49,38 @@ unit synsock;
 
 {$MINENUMSIZE 4}
 
-{$IFDEF CIL}
-  {$I ssdotnet.pas}
-{$ENDIF}
-
+//old Delphi does not have MSWINDOWS define.
 {$IFDEF WIN32}
-  {$I sswin32.pas}
-{$ELSE}
-  {$IFDEF FPC}
-    {$I ssfpc.pas}
-  {$ELSE}
-    {$I sslinux.pas}
+  {$IFNDEF MSWINDOWS}
+    {$DEFINE MSWINDOWS}
   {$ENDIF}
 {$ENDIF}
 
+{$IFDEF CIL}
+  {$I ssdotnet.inc}
+{$ELSE}
+  {$IFDEF MSWINDOWS}
+    {$I sswin32.inc}
+  {$ELSE}
+    {$IFDEF WINCE}
+      {$I sswin32.inc}  //not complete yet!
+    {$ELSE}
+      {$IFDEF FPC}
+       {$IFDEF OS2}
+         {$I ssos2ws1.inc}
+       {$ELSE OS2}
+        {$I ssfpc.inc}
+       {$ENDIF OS2}
+      {$ELSE}
+        {$I sslinux.inc}
+      {$ENDIF}
+    {$ENDIF}
+  {$ENDIF}
+{$ENDIF}
+{$IFDEF POSIX}
+//Posix.SysSocket
+   {$I ssposix.inc} //experimental!
+{$ENDIF}
 
 end.
 

@@ -472,10 +472,10 @@ begin
   FFullResult := TStringList.Create;
   FDataStream := TMemoryStream.Create;
   FSock := TTCPBlockSocket.Create;
-  //FSock.Owner := self;
+  FSock.Owner := self;
   FSock.ConvertLineEnd := True;
   FDSock := TTCPBlockSocket.Create;
-  //FDSock.Owner := self;
+  FDSock.Owner := self;
   FFtpList := TFTPList.Create;
   FTimeout := 300000;
   FTargetPort := cFtpProtocol;
@@ -1961,4 +1961,4 @@ begin
   end;
 end;
 
-end.
+end.
