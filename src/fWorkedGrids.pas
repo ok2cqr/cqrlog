@@ -163,20 +163,20 @@ end;
 function TfrmWorkedGrids.RecordCount: string;
 begin
 
-  dmData.Q1.Close;
-  if dmData.trQ1.Active then
-    dmData.trQ1.Rollback;
-  dmData.Q1.SQL.Text := 'select count(callsign) from ' + LogTable;
-  dmData.trQ1.StartTransaction;
+  dmData.W1.Close;
+  if dmData.trW1.Active then
+    dmData.trW1.Rollback;
+  dmData.W1.SQL.Text := 'select count(callsign) from ' + LogTable;
+  dmData.trW1.StartTransaction;
   try
-    dmData.Q1.Open;
-    RecordCount := dmData.Q1.Fields[0].AsString;
+    dmData.W1.Open;
+    RecordCount := dmData.W1.Fields[0].AsString;
     if (RecordCount = '') then
       RecordCount := '0';
-    dmData.Q1.Close;
+    dmData.W1.Close;
 
   finally
-    dmData.trQ1.Rollback;
+    dmData.trW1.Rollback;
   end;
 end;
 
@@ -196,11 +196,11 @@ var
 begin
   if dmData.DebugLevel >= 1 then Writeln('Start WkdGrid');
   WkdGrid := 0;
-  dmData.Q.Close;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
+  dmData.W.Close;
+  if dmData.trW.Active then dmData.trW.Rollback;
 
   try
-    dmData.Q.SQL.Text := 'select count(loc) as '+chr(39)+'sum'+chr(39)+' from '+LogTable+
+    dmData.W.SQL.Text := 'select count(loc) as '+chr(39)+'sum'+chr(39)+' from '+LogTable+
                           ' where loc like '+chr(39)+copy(loc, 1, 4)+ '%'+chr(39)+
                           ' and band='+chr(39)+band+chr(39)+' and mode='+chr(39)+mode+chr(39)+
                           'union all '+
@@ -223,18 +223,18 @@ begin
                           ' where loc like '+chr(39)+copy(loc, 1, 2)+ '%'+chr(39);
 
     if dmData.DebugLevel >= 1 then Write('loc query: ');
-    dmData.Q.Open;
+    dmData.W.Open;
     i := 1;
-    while not dmData.Q.Eof do
+    while not dmData.W.Eof do
               begin
-               if dmData.DebugLevel >= 1 then writeln(dmData.Q.FieldByName('sum').AsInteger);
-               if (dmData.Q.FieldByName('sum').AsInteger > 0 ) and (WkdGrid = 0) then WkdGrid := i;
+               if dmData.DebugLevel >= 1 then writeln(dmData.W.FieldByName('sum').AsInteger);
+               if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdGrid = 0) then WkdGrid := i;
                inc(i);
-               dmData.Q.Next;
+               dmData.W.Next;
               end;
-     dmData.Q.Close;
+     dmData.W.Close;
   finally
-    dmData.trQ.Rollback;
+    dmData.trW.Rollback;
   end;
    if dmData.DebugLevel >= 1 then  Writeln('WkdGrid is:', WkdGrid);
 end;
@@ -250,10 +250,10 @@ var
 begin
   if dmData.DebugLevel >= 1 then Writeln('Start WkdCall');
   WkdCall := 0;
-  dmData.Q.Close;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
+  dmData.W.Close;
+  if dmData.trW.Active then dmData.trW.Rollback;
   try
-     dmData.Q.SQL.Text := 'select count(callsign) as '+chr(39)+'sum'+chr(39)+' from '+LogTable+
+     dmData.W.SQL.Text := 'select count(callsign) as '+chr(39)+'sum'+chr(39)+' from '+LogTable+
                           ' where callsign='+chr(39)+call+chr(39)+
                           ' and band='+chr(39)+band+chr(39)+' and mode='+chr(39)+mode+chr(39)+
                           'union all '+
@@ -265,18 +265,18 @@ begin
                           ' where callsign='+chr(39)+call+chr(39);
 
     if dmData.DebugLevel >= 1 then Write('call query: ');
-    dmData.Q.Open;
+    dmData.W.Open;
     i := 1;
-    while not dmData.Q.Eof do
+    while not dmData.W.Eof do
               begin
-               if dmData.DebugLevel >= 1 then writeln(dmData.Q.FieldByName('sum').AsInteger);
-               if (dmData.Q.FieldByName('sum').AsInteger > 0 ) and (WkdCall = 0) then WkdCall := i;
+               if dmData.DebugLevel >= 1 then writeln(dmData.W.FieldByName('sum').AsInteger);
+               if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdCall = 0) then WkdCall := i;
                inc(i);
-               dmData.Q.Next;
+               dmData.W.Next;
               end;
-    dmData.Q.Close;
+    dmData.W.Close;
     finally
-      dmData.trQ.Rollback;
+      dmData.trW.Rollback;
     end;
   if dmData.DebugLevel >= 1 then  Writeln('WkdCall is:', WkdCall);
 end;
@@ -621,9 +621,9 @@ begin
     SQLCfm[2] := ' and (eqsl_qsl_rcvd=' + chr(39) + 'E' + chr(39) +
       ' or lotw_qslr=' + chr(39) + 'L' + chr(39) + ' or qsl_r=' + chr(39) + 'Q' + chr(39) + ')';
 
-    dmData.Q.Close;
-    if dmData.trQ.Active then
-      dmData.trQ.Rollback;
+    dmData.W.Close;
+    if dmData.trW.Active then
+      dmData.trW.Rollback;
 
     if BandSelector.ItemIndex > 0 then //band selected
     begin
@@ -644,15 +644,15 @@ begin
     GridCount := 0;
     MainGridCount := 0;
     MainGridStream := '';
-    dmData.trQ.StartTransaction;
+    dmData.trW.StartTransaction;
     try
       for c := 1 to 2 do
       begin
-        dmData.Q.SQL.Text := SQLCfm[0] + SQLCfm[c];
-        dmData.Q.Open;
-        while not dmData.Q.EOF do
+        dmData.W.SQL.Text := SQLCfm[0] + SQLCfm[c];
+        dmData.W.Open;
+        while not dmData.W.EOF do
         begin
-          Grid := dmData.Q.FieldByName('lo').AsString;
+          Grid := dmData.W.FieldByName('lo').AsString;
 
           if ZooMap.Visible then  //coming from zoomed grid
           begin
@@ -669,46 +669,46 @@ begin
           end;
 
 
-          dmData.Q.Next;
+          dmData.W.Next;
         end;
-        dmData.Q.Close;
+        dmData.W.Close;
       end;
 
       //distinct sub grid count
-      dmData.Q.SQL.Text := 'select distinct' + copy(SQLCfm[0], 7, length(SQLCfm[0]));
-      dmData.Q.Open;
-      while not dmData.Q.EOF do
+      dmData.W.SQL.Text := 'select distinct' + copy(SQLCfm[0], 7, length(SQLCfm[0]));
+      dmData.W.Open;
+      while not dmData.W.EOF do
       begin
         Inc(GridCount);
-        dmData.Q.Next;
+        dmData.W.Next;
       end;
-      dmData.Q.Close;
+      dmData.W.Close;
 
       MaxRowId := RecordCount;
       if (BandSelector.ItemIndex > 0) then
       begin
         qsocount := 0;
-        dmData.Q.SQL.Text := 'select loc from ' + LogTable + ' where band=' + chr(39) +
+        dmData.W.SQL.Text := 'select loc from ' + LogTable + ' where band=' + chr(39) +
           BandSelector.items[BandSelector.ItemIndex] + chr(39) +
           SQLExtension;
 
         if dmData.DebugLevel >= 1 then
-          Write(dmData.Q.SQL.Text);
+          Write(dmData.W.SQL.Text);
 
-        dmData.Q.Open;
-        while not dmData.Q.EOF do
+        dmData.W.Open;
+        while not dmData.W.EOF do
         begin
           Inc(qsocount);
-          dmData.Q.Next;
+          dmData.W.Next;
         end;
-        dmData.Q.Close;
+        dmData.W.Close;
         BandQsoCount := IntToStr(qsocount);
       end
       else begin
         BandQsoCount := MaxRowId;
       end;
     finally
-      dmData.trQ.Rollback;
+      dmData.trW.Rollback;
     end;
     if (BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) then
       //both must be set

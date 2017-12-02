@@ -3,8 +3,15 @@ Legend:
   + new feature
   - bugfix
 --------------------
-2.1.0 (12.11.2017)
+
+2.1.0 (02.12.2017)
+   -Alert calls: regexp, band&mode combinations and help file fixed (Saku, OH1KH)
+   -dData: Created few query/transaction pairs more to avoid conflicts with open transactions  (Saku, OH1KH)
+
+2.1.0 (17.11.2017)
    -CQ-monitor: Calling CQ SOMETEXT without own call (!!!???!) caused porgram halt. Fixed these to NOCALL(Saku, OH1KH)
+
+2.1.0 (12.11.2017)
    -"Re/Set" button in Export "Choose fields to export" position conflicts with "Most recent entries on top" checkbox. Moved.(Saku, OH1KH) 
    +CQ monitor: Alert checkboxes to buttons (Saku, OH1KH)
    +CQ monitor: Text search can now switch to call search (only call checked, not whole line).Wildcards and multiple (,) separated search items. (Saku, OH1KH)
@@ -13,15 +20,19 @@ Legend:
    +CQ monitor: Improved UDP socket opening (reuse) and closing. (Saku, OH1KH)
    +remote wsjt: Short cut key Ctrl+J (Saku, OH1KH)
    #help files updated (Saku, OH1KH)
+
 2.1.0 (08.11.2017)
    #More  help file fixing (Saku, OH1KH)
    -dUtils: 630M definition still missing in GetAdifBandFromFreq and  C_RBN_BANDS. Thanks for NO3M. (Saku, OH1KH)
+
 2.1.0 (04.11.2017)
    #fixed some help files to be a bit more up to date (Saku, OH1KH)
    -dUtils: BandToFrequency: 630M definition was missing. (Saku, OH1KH)
+
 2.1.0 (29.10.2017)
    +coped "Show only active band" checkbox to Band map filter for quick access. (Saku, OH1KH)
    +Added "Re/Set" button to Export "Choose fields to export" dialog for set/reset all check boxes in one go. (Saku, OH1KH)
+
 2.1.0 (23.10.2017)
    -WSJTXremote / NewQso: Bugfix "mode: Auto" checkbox state was not correctly returned after program restart. (Saku, OH1KH)
    +WSJTX Monitor:More specific print out for extended cq (Saku, OH1KH)

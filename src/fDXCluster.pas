@@ -1233,8 +1233,9 @@ begin
     end
   end;
 
-  if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) and mnuCallalert.Checked then
-    dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
+  if  mnuCallalert.Checked then // do not run IsAlertCall unless alert is selected
+    if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) then
+        dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
 
   if dmData.DebugLevel >=1 then
   begin

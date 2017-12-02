@@ -45,10 +45,46 @@ cluster node by simply clicking the 'Connect' button. You should see the cluster
 messages indicating progress. You can enter any command into the 'Command' field
 (ie. SH/DX to display last spots, SH/U to see the users connected to the node etc.).
 
-
+<h3><a name="m40">Callsign Alert</a></h3>
+<p><img src="img/misc40.png" name="40"  width="458" height="388">
+</img>
+</br></br>Callsign alert is enabled from dialog that opens pressing DXCluster window's "preferences"-button. For setting up the alert itself see 
+<a href=h1.html#ah11>Preferences/DXCluster</a>. From same dialog as setting up alert also the list of alerted callsigns opens.
+</p><img src="img/misc41.png" name="41"  width="458" height="388">
+</img>
+<img src="img/misc42.png" name="42"  width="300" height="200">
+</img>
+<p>
+Callsign alert window allows <b>adding</b>, <b>deleting</b> and <b>editing</b> callsigns that should activate the alarm.
+</br>Usage is quite straight: just add all new callsigns you want to alert. For more specific alerts set also band and mode that you want to produce the alarm.
+</p>
+<img src="img/misc43.png" name="43"  width="380" height="260">
+</img>
+<img src="img/misc44.png" name="44"  width="380" height="260">
+</img>
+<p>
+There is also checkbox "<b>Allow partialy callsign alert</b>" that allows many different kind of alerting conditions using regular expressions (regexp).
+</br>As an example from the image of callsign alert window you can see different regexp variations for some alert conditions. 
+</br>In order they will alert as follows:
+</br>
+<li> calls having numbers 1,2 or 3  @30M/all mode</li>
+<li> calls having number 4 @40M/SSB</li>
+<li> calls having number 6 @40M/CW</li>
+<li> calls having numbers 7 or 9 @17M/SSB</li>
+<li> all calls @2M/all mode</li>
+<li> calls starting with EA @40M/RTTY</li>
+<li> calls starting with VK @all bands/all modes</li>
+<li> calls starting with XF1IM basicly this is whole call, but can have also suffix extensios like /M /P etc all bands/all modes</li>
+<li> calls starting with ZL all bands/all modes</li>
+</br>
+For more information how to use regexp delimiters see: <a href=https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended>https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended</a>
+</p>
 <h3><a name="m4"></a>DXCluster Chat</h3>
 <p><img src="img/misc12.png" name="12"  width="458" height="388">
 </img>
+</br>
+
+</p>
 <br/>DXCluster window has now “overlay” as chat RX window. All lines that begins with “YOURCALL DE”, but do not end to cluster prompt “&gt;” are copied to this window.<br/>
 Time(your local PC time) and caller’s call are added in from of text line. This works only in Telnet session, not Web session<br/>
 No more lost chats that are run over with the flood of DxSpots while you are visiting kitchen to get a cup of coffee. DXChat uses the call you have used for logging in to DXCluster (that can be different as your current log settings call).</p>
