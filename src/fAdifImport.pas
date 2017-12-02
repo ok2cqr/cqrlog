@@ -328,6 +328,8 @@ begin
 
     d.IOTA  := Trim(d.IOTA);
     d.IOTA  := UpperCase(d.IOTA);
+    d.NAME  := Copy(d.NAME, 1 ,40);
+    d.QTH   := Copy(d.QTH, 1, 60);
 
     d.QSL_VIA := UpperCase(d.QSL_VIA);
     if Pos('QSL VIA',d.QSL_VIA) > 0 then
