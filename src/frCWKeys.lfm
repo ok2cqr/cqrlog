@@ -7,8 +7,8 @@ object fraCWKeys: TfraCWKeys
   ClientWidth = 818
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 1280
-  DesignTop = 722
+  DesignLeft = 1483
+  DesignTop = 817
   object btnF1: TButton
     Left = 0
     Height = 32
