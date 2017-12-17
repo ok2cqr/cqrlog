@@ -6,7 +6,7 @@ object frmNewQSO: TfrmNewQSO
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 628
+  ClientHeight = 651
   ClientWidth = 807
   Font.Height = 8
   Icon.Data = {
@@ -2135,11 +2135,11 @@ object frmNewQSO: TfrmNewQSO
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.8.0.6'
   object sbNewQSO: TStatusBar
     Left = 0
-    Height = 17
-    Top = 611
+    Height = 21
+    Top = 630
     Width = 807
     Panels = <    
       item
@@ -2159,7 +2159,7 @@ object frmNewQSO: TfrmNewQSO
   object Panel1: TPanel
     Left = 0
     Height = 499
-    Top = 112
+    Top = 131
     Width = 807
     Align = alBottom
     Caption = 'Panel1'
@@ -2189,52 +2189,52 @@ object frmNewQSO: TfrmNewQSO
         TabOrder = 0
         object Label11: TLabel
           Left = 256
-          Height = 15
+          Height = 17
           Top = 194
-          Width = 139
+          Width = 144
           Caption = 'Comment to callsign:'
           ParentColor = False
           ParentFont = False
         end
         object Label10: TLabel
           Left = 112
-          Height = 15
+          Height = 17
           Top = 55
-          Width = 32
+          Width = 35
           Caption = 'QTH:'
           ParentColor = False
           ParentFont = False
         end
         object Label9: TLabel
           Left = 16
-          Height = 15
+          Height = 17
           Top = 55
-          Width = 43
+          Width = 44
           Caption = 'Name:'
           ParentColor = False
           ParentFont = False
         end
         object Label8: TLabel
           Left = 448
-          Height = 15
+          Height = 17
           Top = 8
-          Width = 57
+          Width = 58
           Caption = 'RST rcvd'
           ParentColor = False
           ParentFont = False
         end
         object Label7: TLabel
           Left = 343
-          Height = 15
+          Height = 17
           Top = 8
-          Width = 57
+          Width = 58
           Caption = 'RST sent'
           ParentColor = False
           ParentFont = False
         end
         object lblCall: TLabel
           Left = 16
-          Height = 15
+          Height = 17
           Top = 8
           Width = 29
           Caption = 'Call:'
@@ -2243,88 +2243,88 @@ object frmNewQSO: TfrmNewQSO
         end
         object Label5: TLabel
           Left = 136
-          Height = 15
+          Height = 17
           Top = 8
-          Width = 69
+          Width = 75
           Caption = 'Frequency:'
           ParentColor = False
           ParentFont = False
         end
         object Label4: TLabel
           Left = 234
-          Height = 15
+          Height = 17
           Top = 8
-          Width = 39
+          Width = 43
           Caption = 'Mode:'
           ParentColor = False
           ParentFont = False
         end
         object Label3: TLabel
           Left = 172
-          Height = 15
+          Height = 17
           Top = 248
-          Width = 62
+          Width = 65
           Caption = 'End time:'
           ParentColor = False
           ParentFont = False
         end
         object Label2: TLabel
           Left = 103
-          Height = 15
+          Height = 17
           Top = 248
-          Width = 69
+          Width = 72
           Caption = 'Start time:'
           ParentColor = False
           ParentFont = False
         end
         object Label1: TLabel
           Left = 16
-          Height = 15
+          Height = 17
           Top = 248
-          Width = 35
+          Width = 37
           Caption = 'Date:'
           ParentColor = False
           ParentFont = False
         end
         object Label15: TLabel
           Left = 258
-          Height = 15
+          Height = 17
           Top = 55
-          Width = 33
+          Width = 34
           Caption = 'GRID'
           ParentColor = False
           ParentFont = False
         end
         object Label12: TLabel
           Left = 338
-          Height = 15
+          Height = 17
           Top = 55
-          Width = 30
+          Width = 32
           Caption = 'PWR'
           ParentColor = False
           ParentFont = False
         end
         object Label18: TLabel
           Left = 405
-          Height = 15
+          Height = 17
           Top = 55
-          Width = 40
+          Width = 43
           Caption = 'QSL_S'
           ParentColor = False
           ParentFont = False
         end
         object Label19: TLabel
           Left = 468
-          Height = 15
+          Height = 17
           Top = 55
-          Width = 41
+          Width = 44
           Caption = 'QSL_R'
           ParentColor = False
           ParentFont = False
         end
         object Label13: TLabel
           Left = 16
-          Height = 15
+          Height = 17
           Top = 99
           Width = 22
           Caption = 'ITU'
@@ -2333,72 +2333,72 @@ object frmNewQSO: TfrmNewQSO
         end
         object Label20: TLabel
           Left = 397
-          Height = 15
+          Height = 17
           Top = 99
-          Width = 40
+          Width = 45
           Caption = 'Award'
           ParentColor = False
           ParentFont = False
         end
         object Label21: TLabel
           Left = 12
-          Height = 15
+          Height = 17
           Top = 147
-          Width = 61
+          Width = 64
           Caption = 'DXCC ref.'
           ParentColor = False
           ParentFont = False
         end
         object Label22: TLabel
           Left = 60
-          Height = 15
+          Height = 17
           Top = 99
-          Width = 30
+          Width = 33
           Caption = 'WAZ'
           ParentColor = False
           ParentFont = False
         end
         object lblIOTA: TLabel
           Left = 127
-          Height = 15
+          Height = 17
           Top = 99
-          Width = 30
+          Width = 33
           Caption = 'IOTA'
           ParentColor = False
           ParentFont = False
         end
         object Label17: TLabel
           Left = 261
-          Height = 15
+          Height = 17
           Top = 99
-          Width = 46
+          Width = 49
           Caption = 'County'
           ParentColor = False
           ParentFont = False
         end
         object Label23: TLabel
           Left = 111
-          Height = 15
+          Height = 17
           Top = 147
-          Width = 117
+          Width = 124
           Caption = 'Comment to QSO:'
           ParentColor = False
           ParentFont = False
         end
         object lblQSLVia: TLabel
           Left = 419
-          Height = 15
+          Height = 17
           Top = 147
-          Width = 51
+          Width = 55
           Caption = 'QSL VIA'
           ParentColor = False
           ParentFont = False
         end
         object lblQSOTakes: TLabel
           Left = 12
-          Height = 15
+          Height = 17
           Top = 303
-          Width = 72
+          Width = 75
           Caption = 'QSO takes '
           ParentColor = False
           ParentFont = False
@@ -2406,9 +2406,9 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblQSLMgr: TLabel
           Left = 406
-          Height = 15
+          Height = 17
           Top = 194
-          Width = 133
+          Width = 141
           Caption = 'QSL manager found!'
           Font.Color = clRed
           ParentColor = False
@@ -2417,18 +2417,18 @@ object frmNewQSO: TfrmNewQSO
         end
         object Label25: TLabel
           Left = 210
-          Height = 15
+          Height = 17
           Top = 99
-          Width = 34
+          Width = 36
           Caption = 'State'
           ParentColor = False
           ParentFont = False
         end
         object lblCfmLoTW: TLabel
           Left = 12
-          Height = 15
+          Height = 17
           Top = 199
-          Width = 157
+          Width = 167
           Caption = 'QSO confirmed by LoTW'
           Font.Color = clRed
           ParentColor = False
@@ -2437,9 +2437,9 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblQSLRcvdDate: TLabel
           Left = 95
-          Height = 15
+          Height = 17
           Top = 226
-          Width = 81
+          Width = 85
           Caption = 'QSL rcvd on '
           Font.Color = clRed
           ParentColor = False
@@ -2992,9 +2992,9 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 26
           object cbOffline: TCheckBox
             Left = -3
-            Height = 23
+            Height = 22
             Top = 4
-            Width = 69
+            Width = 73
             Caption = 'Offline'
             OnChange = cbOfflineChange
             TabOrder = 0
@@ -3084,9 +3084,9 @@ object frmNewQSO: TfrmNewQSO
         end
         object chkAutoMode: TCheckBox
           Left = 277
-          Height = 23
+          Height = 22
           Top = 4
-          Width = 63
+          Width = 64
           Caption = 'AUTO'
           Checked = True
           OnChange = chkAutoModeChange
@@ -3201,15 +3201,15 @@ object frmNewQSO: TfrmNewQSO
         Width = 548
         Align = alBottom
         Caption = 'DXCC stat.'
-        ClientHeight = 125
-        ClientWidth = 546
+        ClientHeight = 122
+        ClientWidth = 544
         ParentFont = False
         TabOrder = 1
         object sgrdStatistic: TStringGrid
           Left = 0
-          Height = 125
+          Height = 122
           Top = 0
-          Width = 546
+          Width = 544
           Align = alClient
           ColCount = 2
           DefaultColWidth = 35
@@ -3242,8 +3242,8 @@ object frmNewQSO: TfrmNewQSO
         Top = 274
         Width = 240
         Caption = ' Callbook (qrz.com) '
-        ClientHeight = 138
-        ClientWidth = 238
+        ClientHeight = 135
+        ClientWidth = 236
         ParentFont = False
         TabOrder = 0
         object mCallBook: TMemo
@@ -3262,39 +3262,39 @@ object frmNewQSO: TfrmNewQSO
         Top = 0
         Width = 240
         Caption = 'DXCC info'
-        ClientHeight = 253
-        ClientWidth = 238
+        ClientHeight = 250
+        ClientWidth = 236
         ParentFont = False
         TabOrder = 1
         object Label26: TLabel
           Left = 1
-          Height = 15
+          Height = 17
           Top = 3
-          Width = 54
+          Width = 59
           Caption = 'Country:'
           ParentColor = False
         end
         object Label27: TLabel
           Left = 126
-          Height = 15
+          Height = 17
           Top = 95
-          Width = 40
+          Width = 42
           Caption = 'DXCC:'
           ParentColor = False
           ParentFont = False
         end
         object Label28: TLabel
           Left = 10
-          Height = 15
+          Height = 17
           Top = 78
-          Width = 34
+          Width = 37
           Caption = 'WAZ:'
           ParentColor = False
           ParentFont = False
         end
         object Label29: TLabel
           Left = 19
-          Height = 15
+          Height = 17
           Top = 95
           Width = 26
           Caption = 'ITU:'
@@ -3303,98 +3303,98 @@ object frmNewQSO: TfrmNewQSO
         end
         object Label30: TLabel
           Left = 126
-          Height = 15
+          Height = 17
           Top = 78
-          Width = 34
+          Width = 37
           Caption = 'Cont:'
           ParentColor = False
           ParentFont = False
         end
         object lblWAZ: TLabel
           Left = 48
-          Height = 15
+          Height = 17
           Top = 78
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
         end
         object lblITU: TLabel
           Left = 48
-          Height = 15
+          Height = 17
           Top = 95
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
         end
         object lblDXCC: TLabel
           Left = 169
-          Height = 15
+          Height = 17
           Top = 95
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
         end
         object lblCont: TLabel
           Left = 168
-          Height = 15
+          Height = 17
           Top = 80
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
         end
         object Label31: TLabel
           Left = 18
-          Height = 15
+          Height = 17
           Top = 113
-          Width = 26
+          Width = 28
           Caption = 'LAT:'
           ParentColor = False
           ParentFont = False
         end
         object Label32: TLabel
           Left = 126
-          Height = 15
+          Height = 17
           Top = 113
-          Width = 41
+          Width = 44
           Caption = 'LONG:'
           ParentColor = False
         end
         object lblLat: TLabel
           Left = 48
-          Height = 15
+          Height = 17
           Top = 113
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
         end
         object lblLong: TLabel
           Left = 169
-          Height = 15
+          Height = 17
           Top = 113
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
         end
         object Label33: TLabel
           Left = 8
-          Height = 15
+          Height = 17
           Top = 132
-          Width = 36
+          Width = 38
           Caption = 'DIST.:'
           ParentColor = False
           ParentFont = False
         end
         object lblQRA: TLabel
           Left = 48
-          Height = 15
+          Height = 17
           Top = 132
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
@@ -3402,17 +3402,17 @@ object frmNewQSO: TfrmNewQSO
         end
         object Label34: TLabel
           Left = 126
-          Height = 15
+          Height = 17
           Top = 132
-          Width = 37
+          Width = 40
           Caption = 'AZIM:'
           ParentColor = False
         end
         object lblAzi: TLabel
           Left = 169
-          Height = 15
+          Height = 17
           Top = 132
-          Width = 27
+          Width = 30
           Caption = 'AAA'
           ParentColor = False
           ParentFont = False
@@ -3430,9 +3430,9 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblGreeting: TLabel
           Left = 189
-          Height = 15
+          Height = 17
           Top = 179
-          Width = 43
+          Width = 48
           Caption = 'GE/GM'
           Font.Color = clRed
           ParentColor = False
@@ -3593,45 +3593,45 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblLocSunRise: TLabel
           Left = 38
-          Height = 15
+          Height = 17
           Top = 227
-          Width = 90
+          Width = 95
           Caption = 'lblLocSunRise'
           ParentColor = False
           ParentFont = False
         end
         object lblLocSunSet: TLabel
           Left = 156
-          Height = 15
+          Height = 17
           Top = 227
-          Width = 83
+          Width = 89
           Caption = 'lblLocSunSet'
           ParentColor = False
           ParentFont = False
         end
         object lblTarSunRise: TLabel
           Left = 28
-          Height = 15
+          Height = 17
           Top = 155
-          Width = 87
+          Width = 92
           Caption = 'lblTarSunRise'
           ParentColor = False
           ParentFont = False
         end
         object lblTarSunSet: TLabel
           Left = 149
-          Height = 15
+          Height = 17
           Top = 155
-          Width = 80
+          Width = 86
           Caption = 'lblTarSunSet'
           ParentColor = False
           ParentFont = False
         end
         object Label14: TLabel
           Left = 10
-          Height = 15
+          Height = 17
           Top = 202
-          Width = 38
+          Width = 40
           Caption = 'Local:'
           ParentColor = False
           ParentFont = False
@@ -3679,7 +3679,7 @@ object frmNewQSO: TfrmNewQSO
       TabOrder = 2
       object lblQSONr: TLabel
         Left = 63
-        Height = 15
+        Height = 17
         Top = 9
         Width = 8
         Caption = '0'
@@ -3688,29 +3688,29 @@ object frmNewQSO: TfrmNewQSO
       end
       object Label24: TLabel
         Left = 7
-        Height = 15
+        Height = 17
         Top = 9
-        Width = 48
+        Width = 53
         Caption = 'QSO nr.'
         ParentColor = False
         ParentFont = False
       end
       object lblCountryInfo: TLabel
         Left = 480
-        Height = 15
+        Height = 17
         Top = 8
-        Width = 24
+        Width = 129
         Alignment = taRightJustify
-        Caption = 'aaa'
+        Caption = 'New band country!'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object lblAmbiguous: TLabel
         Left = 656
-        Height = 15
+        Height = 17
         Top = 8
-        Width = 114
+        Width = 123
         Caption = 'Ambiguous prefix'
         Font.Color = clRed
         ParentColor = False
@@ -3719,16 +3719,16 @@ object frmNewQSO: TfrmNewQSO
       end
       object Label6: TLabel
         Left = 99
-        Height = 15
+        Height = 17
         Top = 9
-        Width = 85
+        Width = 90
         Caption = 'QTH profile:  '
         ParentColor = False
         ParentFont = False
       end
       object cmbProfiles: TComboBox
         Left = 187
-        Height = 32
+        Height = 27
         Top = 3
         Width = 281
         ItemHeight = 0
@@ -3741,7 +3741,7 @@ object frmNewQSO: TfrmNewQSO
   end
   object dbgrdQSOBefore: TDBGrid
     Left = 0
-    Height = 112
+    Height = 131
     Top = 0
     Width = 807
     Align = alClient
@@ -3935,42 +3935,6 @@ object frmNewQSO: TfrmNewQSO
       end
       object mnuPreferences: TMenuItem
         Action = acPreferences
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          200000000000000400006400000064000000000000000000000000000000CF84
-          55FFD58351FFD17D4BFFBC6D3EFF000000000000000000000000000000000000
-          00000E295C00033CA2000442BB00033DA5000121580000000000D18B61FFDFA4
-          81FFEAC2ABFFEAC0A8FFDC9971FFC7794BFF6B6B6B006B6B6B006B6B6B004261
-          97002664C8002177E6000579EA000164DD00054DBC0001215800DB976FFFEDC8
-          B3FFE7B89BFFE6B498FFEAC3ABFFDE9C73FFC97F4FFFBCBCBC00BDBDBD00124D
-          B400639DF400187FFF000076F8000076EE000368E100033EA500DD9F79FFEDCC
-          B7FFE8BDA3FFE4B192FFE6B69AFFEAC3ACFFDE9C74FFD08658FFB9B9B9000542
-          BC00AECDFE00FFFFFF00FFFFFF00FFFFFF00187FEF000442BB00B78668FFE6B3
-          94FFEECCB8FFE9BEA5FFE5B394FFE6B79BFFEAC4ADFFDE9E78FFD0875AFF154D
-          B3008DB5F6004D92FF001177FF002186FF00408AEB00033BA10000000000B786
-          6BFFE6B498FFEECDBAFFE9BFA5FFE5B496FFE7B99DFFEBC6AEFFDE9F79FFC780
-          5AFF3C75D1008DB5F700B8D6FE0072A8F5002C6AC900021D5000000000000000
-          0000B8896CFFE6B799FFEECEBBFFE9C0A7FFE8BDA3FFECC8B3FFDFA481FFD38D
-          62FF819CCF002860C5000442BC00033DA4000120570000000000000000000000
-          000000000000D9AB8FFFE6B79CFFEFCFBCFFEECEBAFFE2AE8CFFD29B7BFF8888
-          88FFD5AB9100ECECEC0084848400000000000000000000000000000000000000
-          000000000000BBBBBB00E4B69BFFE7B99CFFE6B698FFD8A98CFFD2D2D2FFB5B5
-          B5FF898989FF878787FF858585FF808080FF5959590000000000000000000000
-          000000000000C1C1C100F1F1F100E6B292FFDBA989FF929292FFC7C7C7FFCCCC
-          CCFFC7C7C7FFC6C6C6FFC3C3C3FFC0C0C0FF848484FF59595900000000000000
-          000000000000C7C7C700F2F2F200E4E4E400E3E3E300BCBCBC00939393FFD4D4
-          D4FFC8C8C8FFBCBCBCFFBABABAFFC2C2C2FFC4C4C4FF828282FF000000000000
-          000000000000CDCDCD00F3F3F300F5CCB200F5CCB200F5CBAF00969696FFDDDD
-          DDFFC5C5C5FF949494FF8E8E8EFFACACACFFD7D7D7FF878787FF000000000000
-          000000000000D1D1D100F3F3F300F3F3F300F2F2F200F2F2F200989898FFE4E4
-          E4FFCFCFCFFF979797FFA9A9A9008E8E8EFF8C8C8CFF8A8A8AFF000000000000
-          000000000000D6D6D600D3D3D300CFCFCF00CCCCCC00C8C8C8009C9C9CFFE2E2
-          E2FFE7E7E7FFB9B9B9FF939393FF000000000000000000000000000000000000
-          00000000000000000000000000000000000000000000000000006C6C6C009B9B
-          9BFFE4E4E4FFEEEEEEFF969696FF000000000000000000000000E003EA00E003
-          EA00189500001895000000000000000000000000000000000000000000006C6C
-          6C009A9A9EFF9B9B9BFF999999FF000000000000000000000000
-        }
         OnClick = acPreferencesExecute
       end
       object MenuItem2: TMenuItem
@@ -3978,42 +3942,6 @@ object frmNewQSO: TfrmNewQSO
       end
       object mnuClose: TMenuItem
         Action = acClose
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFF8500FF00
-          000000009700FFFFFF0000000400FFFFFF00FFFFFF00FFFF0D00F6EFAC000000
-          000000FFFF00000000000F5991FF0C578FFF125B91FF0B568EFF989898FF7070
-          70FF535353FF505050FF4E4E4EFF4B4B4BFF494949FF464646FF444444FF2466
-          9CFF3173A7FF3C7BAEFF4683B4FF4D89B9FF3D7DACFF0B568EFF00000000FFFF
-          D500575757FFA1A1A1FFA1A1A1FFA2A2A2FFA3A3A3FFA3A3A3FFA4A4A4FF2E6E
-          A4FF77AAD1FF77AAD2FF72A6D0FF689FCCFF3F7EADFF0E5890FFD900000000FF
-          FF005B5B5BFFA0A0A0FF3B723FFF9FA0A0FFA2A2A2FFA2A2A2FFA3A3A3FF3573
-          A9FF7CAED3FF5A99C8FF5394C6FF5795C7FF407FADFF125B93FF000000000000
-          FF005F5F5FFF9F9F9FFF3C7540FF357038FFA1A1A1FFA1A1A1FFA2A2A2FF3C78
-          AFFF81B2D6FF619ECBFF5999C8FF5D9AC9FF4280AEFF185F97FF36813DFF337D
-          3AFF307836FF2D7433FF48904FFF458E4BFF38723CFFA0A0A0FFA1A1A1FF447D
-          B3FF87B6D8FF66A2CEFF609DCBFF629ECBFF4482B0FF1E639BFF3A8641FF88CA
-          91FF83C78CFF7FC587FF7AC282FF76C07EFF468E4CFF3A733EFFA0A0A0FF4B83
-          B9FF8CBADAFF6DA7D0FF65A5D0FF5EB3DEFF4684B0FF2468A0FF3D8A45FF8ECD
-          98FF7CC586FF77C280FF72BF7BFF73BF7BFF78C180FF488F4EFF537E56FF5388
-          BEFF93BEDCFF74ACD3FF62B7E0FF4AD3FEFF418AB7FF2B6DA5FF408F49FF93D1
-          9EFF90CF99FF8CCC95FF88CA91FF83C78CFF509757FF407B45FF9E9E9EFF598D
-          C3FF97C2DFFF7BB2D6FF73AED5FF5DC3ECFF4A87B2FF3372AAFF43934CFF4190
-          4AFF3E8C47FF3C8844FF5CA364FF599F60FF44824AFF9D9D9DFF9D9D9DFF5F91
-          C8FF9DC6E1FF82B7D9FF7CB3D6FF7DB2D6FF4E88B3FF3A78B0FF010203000405
-          2100767676FF999999FF3C8944FF48894EFF9B9B9BFF9C9C9CFF9C9C9CFF6595
-          CBFFA1CAE2FF88BCDBFF82B8D9FF83B8D9FF508AB4FF427DB5FFF2F3F400F6F7
-          F800797979FF989898FF519058FF989998FF9A9A9AFF9B9B9BFF9B9B9BFF6B99
-          CFFFA6CDE4FF8EC0DEFF88BCDBFF8ABCDBFF528CB5FF4A83BBFF838485008788
-          89007C7C7CFF989898FF989898FF999999FF999999FF9A9A9AFF9A9A9AFF6E9C
-          D2FFA9D0E6FFAAD0E6FF97C6E0FF90C1DDFF558EB6FF5188C0FF42B1C10052D1
-          F0007F7F7FFF7D7D7DFF7B7B7BFF797979FF767676FF747474FF717171FF709D
-          D3FF6E9DD5FF86B1DBFFAAD2E7FFA8CFE5FF578FB7FF588DC5FF000000000000
-          000002030400060708000A0BFF0000B510000201030002040300050404000001
-          7D00020300006F9DD5FF6C9BD3FF84B0D9FF5990B8FF5F92CAFF636363006363
-          630063636300636363006363630063636300636363006363FF00001108000C00
-          0C00012200001101030001FFC4006C9BD3FF6999D1FF6596CEFF
-        }
         OnClick = acCloseExecute
       end
     end
@@ -4051,42 +3979,6 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem68: TMenuItem
         Action = acGrayline
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFF8500FF00
-          000000009700FFFFFF0000000400FFFFFF00FFFFFF00FFFF0D00F6EFAC000000
-          000000FFFF00000000000F5991000C578F00125B91000B568E00989898007070
-          700053535300505050004E4E4E004B4B4B004949490046464600444444002466
-          9C003173A7003C7BAE004683B4004D89B9003D7DAC000B568E0000000000FFFF
-          D50057575700A1A1A100A1A1A10013D1EEFF06D0EEFF00D2ECFF00D2ECFF07D0
-          EDFF0FD0EDFF77AAD20072A6D000689FCC003F7EAD000E589000D900000000FF
-          FF005B5B5B00A0A0A00004D0EDFF45E1F4FF68E9F9FF63E9FBFF57E9FAFF53E7
-          F9FF3AE0F4FF05D0EDFF5394C6005795C700407FAD00125B9300000000000000
-          FF005F5F5F0007D1EDFF6EE9F8FF73EBFAFF4DE6F8FF46E6F9FF4CE7FBFF4EE6
-          F9FF60E9FAFF5EE7F7FF08D1EDFF5D9AC9004280AE00185F970036813D00337D
-          3A0006D0EDFF6AE7F5FF8EEEFBFF40E2F6FF3BE3F7FF43E5F9FF48E6FAFF43E5
-          F9FF3EE3F7FF6FEBFAFF4FE3F4FF0ED0EEFF4482B0001E639B003A86410088CA
-          910004CFEDFFA8F2FBFF9BEFF9FF7AEBF8FF5BE6F7FF4CE5F7FF47E5F9FF3CE3
-          F8FF37E2F6FF4AE4F7FF87EEFAFF07D0EEFF4684B0002468A0003D8A45008ECD
-          980001D2ECFFBCF5FBFF98EEF8FF93EEF9FF9CEFF9FF9FF0FAFFA0F1FAFF90EE
-          F9FF77EAF8FF66E7F6FFA4F1FCFF01D2ECFF418AB7002B6DA500408F490093D1
-          9E0001D2ECFFC1F6FCFF8CEBF7FF94EDF8FF9AEFF9FF9EEFF9FF9FF0F9FF9DEF
-          F9FF8FEDF8FF73E8F6FFAEF3FCFF01D2ECFF4A87B2003372AA0043934C004190
-          4A0004CFEDFFB2F3FBFF93ECF8FF92EDF7FF95EEF8FF96EEF8FF97EEF8FF93ED
-          F8FF93EDF8FF95EDF8FFAFF2FAFF07D0EEFF4E88B3003A78B000010203000405
-          21000CD1ECFF71E7F5FFA3F1FAFF8EECF7FF94EDF8FF8DECF7FF92EDF7FF95ED
-          F8FF8CECF7FFAFF2FAFF6BE7F4FF19D3EEFF508AB400427DB500F2F3F400F6F7
-          F8007979790006D0ECFFA2EFF9FFB0F2FBFF90ECF7FF86EAF6FF8CEBF6FF99ED
-          F7FFC6F5FBFF9BEFF9FF06D0EDFF8ABCDB00528CB5004A83BB00838485008788
-          89007C7C7C009898980005D0EDFF77E8F5FFD3F8FCFFD4F7FCFFD1F7FDFFC6F6
-          FBFF75E7F5FF09D1EDFF97C6E00090C1DD00558EB6005188C00042B1C10052D1
-          F0007F7F7F007D7D7D007B7B7B0014D1EEFF06D0EDFF01D2ECFF02D2ECFF06D0
-          EEFF09CFECFF86B1DB00AAD2E700A8CFE500578FB700588DC500000000000000
-          000002030400060708000A0BFF0000B510000201030002040300050404000001
-          7D00020300006F9DD5006C9BD30084B0D9005990B8005F92CA00636363006363
-          630063636300636363006363630063636300636363006363FF00001108000C00
-          0C00012200001101030001FFC4006C9BD3006999D1006596CE00
-        }
       end
       object MenuItem52: TMenuItem
         Action = acLogUploadStatus
@@ -4216,42 +4108,6 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem6: TMenuItem
         Action = acGrayline
         Caption = 'Show grayline'
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFF8500FF00
-          000000009700FFFFFF0000000400FFFFFF00FFFFFF00FFFF0D00F6EFAC000000
-          000000FFFF00000000000F5991000C578F00125B91000B568E00989898007070
-          700053535300505050004E4E4E004B4B4B004949490046464600444444002466
-          9C003173A7003C7BAE004683B4004D89B9003D7DAC000B568E0000000000FFFF
-          D50057575700A1A1A100A1A1A10013D1EEFF06D0EEFF00D2ECFF00D2ECFF07D0
-          EDFF0FD0EDFF77AAD20072A6D000689FCC003F7EAD000E589000D900000000FF
-          FF005B5B5B00A0A0A00004D0EDFF45E1F4FF68E9F9FF63E9FBFF57E9FAFF53E7
-          F9FF3AE0F4FF05D0EDFF5394C6005795C700407FAD00125B9300000000000000
-          FF005F5F5F0007D1EDFF6EE9F8FF73EBFAFF4DE6F8FF46E6F9FF4CE7FBFF4EE6
-          F9FF60E9FAFF5EE7F7FF08D1EDFF5D9AC9004280AE00185F970036813D00337D
-          3A0006D0EDFF6AE7F5FF8EEEFBFF40E2F6FF3BE3F7FF43E5F9FF48E6FAFF43E5
-          F9FF3EE3F7FF6FEBFAFF4FE3F4FF0ED0EEFF4482B0001E639B003A86410088CA
-          910004CFEDFFA8F2FBFF9BEFF9FF7AEBF8FF5BE6F7FF4CE5F7FF47E5F9FF3CE3
-          F8FF37E2F6FF4AE4F7FF87EEFAFF07D0EEFF4684B0002468A0003D8A45008ECD
-          980001D2ECFFBCF5FBFF98EEF8FF93EEF9FF9CEFF9FF9FF0FAFFA0F1FAFF90EE
-          F9FF77EAF8FF66E7F6FFA4F1FCFF01D2ECFF418AB7002B6DA500408F490093D1
-          9E0001D2ECFFC1F6FCFF8CEBF7FF94EDF8FF9AEFF9FF9EEFF9FF9FF0F9FF9DEF
-          F9FF8FEDF8FF73E8F6FFAEF3FCFF01D2ECFF4A87B2003372AA0043934C004190
-          4A0004CFEDFFB2F3FBFF93ECF8FF92EDF7FF95EEF8FF96EEF8FF97EEF8FF93ED
-          F8FF93EDF8FF95EDF8FFAFF2FAFF07D0EEFF4E88B3003A78B000010203000405
-          21000CD1ECFF71E7F5FFA3F1FAFF8EECF7FF94EDF8FF8DECF7FF92EDF7FF95ED
-          F8FF8CECF7FFAFF2FAFF6BE7F4FF19D3EEFF508AB400427DB500F2F3F400F6F7
-          F8007979790006D0ECFFA2EFF9FFB0F2FBFF90ECF7FF86EAF6FF8CEBF6FF99ED
-          F7FFC6F5FBFF9BEFF9FF06D0EDFF8ABCDB00528CB5004A83BB00838485008788
-          89007C7C7C009898980005D0EDFF77E8F5FFD3F8FCFFD4F7FCFFD1F7FDFFC6F6
-          FBFF75E7F5FF09D1EDFF97C6E00090C1DD00558EB6005188C00042B1C10052D1
-          F0007F7F7F007D7D7D007B7B7B0014D1EEFF06D0EDFF01D2ECFF02D2ECFF06D0
-          EEFF09CFECFF86B1DB00AAD2E700A8CFE500578FB700588DC500000000000000
-          000002030400060708000A0BFF0000B510000201030002040300050404000001
-          7D00020300006F9DD5006C9BD30084B0D9005990B8005F92CA00636363006363
-          630063636300636363006363630063636300636363006363FF00001108000C00
-          0C00012200001101030001FFC4006C9BD3006999D1006596CE00
-        }
         OnClick = acGraylineExecute
       end
     end
@@ -5368,42 +5224,6 @@ object frmNewQSO: TfrmNewQSO
     top = 32
     object MenuItem41: TMenuItem
       Action = acViewQSO
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000000000000000
-        0000000000000000000000000000000000002A2A2A00424242003D3D3D002020
-        200000731E00037B1E0000020000000000000000000000000000000000006B6B
-        6BFF6B6B6BFF6B6B6BFF6B6B6BFF6B6B6BFF6B6B6BFF6B6B6BFF6B6B6BFF6B6B
-        6BFF6B6B6BFF6A6C6AFF59795AFF5F7360FF676D67FF00000000000000002E5A
-        330061BB6BFF60B66AFF6EB075FF8FA792FF878E87FFBCBCBCFFBDBDBDFF8D8D
-        8DFF829A83FF549658FF65AD6DFF3E8D43FF2C612EFF00000000000000005156
-        510067C272FF87CB8FFF78C380FFD9D9D9FF898989FFB9B9B9FFB9B9B9FF8B8B
-        8BFFCBD1CCFF4E9E54FF79BB7FFF44944CFF1074280000040100000000005454
-        540095AD980073C67CFFC1DFC5FFDBDBDBFF858585FFB5B5B5FFB7B7B7FF8A8A
-        8AFFD5D5D5FFCADBCBFF5AA760FF70B57F003CA05C00007C2400000000000000
-        00005C685E0070C17AFFEEEEEEFFDCDCDCFF818181FF838383FF848484FF8686
-        86FFD7D7D7FFDBE4DCFF549C5AFF46A568000785340000010000838383007F7F
-        7F0095959500A4B1A5FFEFEFEFFFDEDEDEFFDDDDDDFFDCDCDCFFDBDBDBFFDADA
-        DAFFD9D9D9FFEBEBEBFF778378FF188E45004E4E4E0043434300BDBDBD00E2E2
-        E200D2D2D200B4B4B4FFF0F0F0FFF3C1A2FFF2C09FFFF2BE9BFFF2BB99FFF2BA
-        96FFF1B895FFECECECFF848484FFC0C0C000D2D2D20060606000C2C2C200E9E9
-        E900D6D6D600BBBBBBFFF1F1F1FFE1E1E1FFE0E0E0FFDFDFDFFFDEDEDEFFDDDD
-        DDFFDCDCDCFFEDEDEDFF8C8C8CFFC6C6C600DDDDDD006A6A6A00A1A1A100AEAE
-        AE00B3B3B300C1C1C1FFF1F1F1FFF5C8ACFFF3C7AAFFF3C5A6FFF3C3A3FFF3C0
-        9FFFF2BE9DFFEEEEEEFF939393FF838383007878780069696900000000000000
-        000067676700C7C7C7FFF2F2F2FFE4E4E4FFE3E3E3FFE2E2E2FFE1E1E1FFE0E0
-        E0FFDFDFDFFFEFEFEFFF9B9B9BFF474747000000000000000000000000006363
-        6300C3C3C300CDCDCDFFF3F3F3FFF5CCB2FFF5CCB2FFF5CBAFFFF5C9ACFFF3C8
-        AAFFF3C5A7FFEFEFEFFFA2A2A2FF797979003737370000000000000000006464
-        6400DCDCDC00D1D1D1FFF3F3F3FFF3F3F3FFF2F2F2FFF2F2F2FFF2F2F2FFF1F1
-        F1FFF1F1F1FFF0F0F0FFA9A9A9FFB7B7B7004343430000000000000000000000
-        00007F7F7F00D6D6D6FFD3D3D3FFCFCFCFFFCCCCCCFFC8C8C8FFC4C4C4FFAFAF
-        AFFF747474FF8E8E8EFFB1B1B1FF636363000000000000000000000000000000
-        000000000000222222000B0B0B0002020200B7B7B700E5E5E500E4E4E4009E9E
-        9E009A9A9AFF0A0A0A001C1C1C000000000000000000000000004804EA004804
-        EA005055D9005055D90000000000000000004F4F4F0095959500939393004A4A
-        4A003939E7FF0000000000000000000000000000000000000000
-      }
       OnClick = acViewQSOExecute
     end
     object MenuItem42: TMenuItem
@@ -5411,42 +5231,6 @@ object frmNewQSO: TfrmNewQSO
     end
     object MenuItem43: TMenuItem
       Action = acEditQSO
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000000000000000
-        00000000000000000000103B52FF275E85FF4987BBFF427B9EFF3B454D002020
-        200000731E00037B1E0000020000000000000000000000000000000000006B6B
-        6BFF6B6B6BFF6B6B6BFF2C6583FF94C7F9FF91C9F9FF4185C9FF2064A7FF606E
-        79FF6B6B6BFF6A6C6AFF59795AFF5F7360FF676D67FF00000000000000002E5A
-        330061BB6BFF60B66AFF4389AAFFE0F2FFFF549AD8FF1A7ABEFF4998C5FF3D83
-        BCFF759791FF549658FF65AD6DFF3E8D43FF2C612EFF00000000000000005156
-        510067C272FF87CB8FFF55A08BFF7AB6D5FF90B7D1FF55C9E4FF5BDFF5FF78D0
-        EDFF4D99D9FF4B9C66FF79BB7FFF44944CFF1074280000040100000000005454
-        540095AD980073C67CFFC1DFC5FF9CBECFFF73B7D4FFC2F6FDFF63DFF7FF5DE2
-        F8FF79D3F0FF4897DAFF56A46FFF70B57F003CA05C00007C2400000000000000
-        00005C685E0070C17AFFEEEEEEFFDCDCDCFF5E8293FF77CBE7FFC7F7FDFF5EDC
-        F5FF5AE1F7FF7BD4F1FF4395D5FF43A07F000785340000010000838383007F7F
-        7F0095959500A4B1A5FFEFEFEFFFDEDEDEFFDDDDDDFFA6CFDCFF79D3EEFFC7F7
-        FDFF5FDCF5FF5BE2F7FF7AD6F2FF3C98D1FF4C5A660043434300BDBDBD00E2E2
-        E200D2D2D200B4B4B4FFF0F0F0FFF3C1A2FFF2C09FFFF2BE9BFFB8BAAEFF7DD4
-        EDFFC4F6FDFF6CDDF6FF6DCAEDFF63A3D7FF669FD2FF5E687000C2C2C200E9E9
-        E900D6D6D600BBBBBBFFF1F1F1FFE1E1E1FFE0E0E0FFDFDFDFFFDEDEDEFF9FD0
-        DFFF80D5EEFFB2E3F9FF8BC0E7FFAED3F6FFC4E0FCFF669DCFFFA1A1A100AEAE
-        AE00B3B3B300C1C1C1FFF1F1F1FFF5C8ACFFF3C7AAFFF3C5A6FFF3C3A3FFF3C0
-        9FFFA8BCB6FF77BEE7FFB4D2F0FFE5F3FFFFACD2EFFF4B88BEFF000000000000
-        000067676700C7C7C7FFF2F2F2FFE4E4E4FFE3E3E3FFE2E2E2FFE1E1E1FFE0E0
-        E0FFDFDFDFFFB1DAE9FF58A5D8FF85B1DBFF469DD0FF10374D00000000006363
-        6300C3C3C300CDCDCDFFF3F3F3FFF5CCB2FFF5CCB2FFF5CBAFFFF5C9ACFFF3C8
-        AAFFF3C5A7FFEFEFEFFFA2A2A2FF797979003737370000000000000000006464
-        6400DCDCDC00D1D1D1FFF3F3F3FFF3F3F3FFF2F2F2FFF2F2F2FFF2F2F2FFF1F1
-        F1FFF1F1F1FFF0F0F0FFA9A9A9FFB7B7B7004343430000000000000000000000
-        00007F7F7F00D6D6D6FFD3D3D3FFCFCFCFFFCCCCCCFFC8C8C8FFC4C4C4FFAFAF
-        AFFF747474FF8E8E8EFFB1B1B1FF636363000000000000000000000000000000
-        000000000000222222000B0B0B0002020200B7B7B700E5E5E500E4E4E4009E9E
-        9E009A9A9AFF0A0A0A001C1C1C00000000000000000000000000C803EA00C803
-        EA00987221009872210000000000000000004F4F4F0095959500939393004A4A
-        4A003939E7FF0000000000000000000000000000000000000000
-      }
       OnClick = acEditQSOExecute
     end
     object MenuItem44: TMenuItem
