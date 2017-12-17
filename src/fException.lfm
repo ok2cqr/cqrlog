@@ -8,7 +8,7 @@ object frmException: TfrmException
   ClientHeight = 429
   ClientWidth = 719
   Position = poDesktopCenter
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.8.0.6'
   object Panel1: TPanel
     Left = 633
     Height = 429
@@ -79,7 +79,7 @@ object frmException: TfrmException
         'and try to reproduce what you did. '
         ''
         'When the this error message appears again, copy related part of console output and paste '
-        'it to CQRLOG forum at https://www.cqrlog.com or send it directly to petr@ok2cqr.com '
+        'it to CQRLOG forum at https://www.cqrlog.com or send it directly to petr@ok7an.com '
         'with short information what you did. '
         ''
         'Thank you!'

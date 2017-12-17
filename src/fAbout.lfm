@@ -8,7 +8,7 @@ object frmAbout: TfrmAbout
   ClientHeight = 232
   ClientWidth = 404
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.8.0.6'
   object Image1: TImage
     Left = 8
     Height = 128
@@ -841,8 +841,8 @@ object frmAbout: TfrmAbout
     Left = 72
     Height = 17
     Top = 143
-    Width = 325
-    Caption = 'Petr Hlozek, OK2CQR && Martin Kratoska, OK1RR'
+    Width = 316
+    Caption = 'Petr Hlozek, OK7AN && Martin Kratoska, OK1RR'
     ParentColor = False
   end
   object Label5: TLabel
@@ -854,7 +854,7 @@ object frmAbout: TfrmAbout
     ParentColor = False
   end
   object lblLink: TLabel
-    Left = 176
+    Left = 184
     Height = 17
     Top = 167
     Width = 163
