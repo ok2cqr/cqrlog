@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>CQRLOG - Supported Radio Types</title>
+</head>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
+
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h27.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h1.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
+<p align=center><img src=img/line.png></p>
+
+<h2><strong>Voice messages</strong></h2><p>
+Voice keying can be used in same way as CW messages.</br>
+Either pressing function keys F1 .. F10 when "NewQso"-window is active, or clicking buttons F1 .. F10 from "CWkeys"-window.</br>
+</br>
+If mode is SSB, FM or AM  then voice messages will be sent. Otherwise CW messages will be sent.
+</p><p>
+When F-key is pressed, or button clicked, program will execute a script at ~/.config/cqrlog/voice_keyer/voice_keyer.sh with Fkey name (F1 .. F10) as 1st parameter.
+</br> Script will then do what user wants to happen with that key/button. It can be anything, not just playing a voice recording.
+</p><p>
+Here is a sample of script. Modfy it against your needs:
+
+<pre>
+#!/bin/bash
+# install sox with all soundformats support
+# Use "rec F1.mp3" to record F1 message. End recording with Ctrl-C.
+# same with F2.mp3 Etc....
+# you may use also mpg123 or what ever terminal mode player you wish
+
+# cqrlog "TRX control"/"Extra command line arguments" add following
+# text  "-p /dev/ttyXXX -P YYY" (you may already have some text there) 
+# Where  XXX os the same device as you have in "TRX control"/"Device"
+# and YYY is the line you have connected (via relay or transistor) to
+# your rig's PTT (usually DTR or RTS)
+# At "TRX control"/"Radio xxx serial parameters set handshake none
+# and at least your YYY (DTR or RTS) to "Unset"
+
+if ! ps aux | grep -q '[m]pg123'
+then
+  #ptt via rigctld on
+  echo 'T1' | nc --send-only -t 127.0.0.1 4532
+  #select audio card (if more than one)
+  #export AUDIODEV=hw:1,0
+  #play F-key message
+  mpg123 ~/.config/cqrlog/voice_keyer/$1.mp3
+else
+  #halt playing message (if pressed while playing)
+  killall mpg123
+fi
+  #ptt via rigctld off
+  echo 'T0' | nc --send-only -t 127.0.0.1 4532
+#end of script
+</pre>
+</p>
+
+
+
+
+<p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h27.html"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h1.html">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>

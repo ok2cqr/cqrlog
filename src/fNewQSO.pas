@@ -4599,7 +4599,7 @@ begin
 
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
   begin
-    if (cmbMode.Text='SSB') then
+    if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
       RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
       if Assigned(CWint) then

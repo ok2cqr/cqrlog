@@ -112,6 +112,10 @@ begin
     else
       Begin
         cwkey := copy((Sender as TButton).Name,4,3);
+        if ((frmNewQSO.cmbMode.Text='SSB') or (frmNewQSO.cmbMode.Text='FM') or (frmNewQSO.cmbMode.Text='AM')) then
+           frmNewQSO.RunVK(cwkey)
+        else
+        if Assigned(frmNewQSO.CWint) then
         // works with contest addition - frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtHisRSTstxAdd.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
          frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
       end;
