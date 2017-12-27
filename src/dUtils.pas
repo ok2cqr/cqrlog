@@ -3062,7 +3062,10 @@ begin
         zip := GetTagValue(m.Text, '<zip>');
         address := GetTagValue(m.Text, '<fname>') + ' ' + GetTagValue(m.Text, '<name>') +
           LineEnding + GetTagValue(m.Text, '<addr1>') + LineEnding +
-          GetTagValue(m.Text, '<addr2>') + ' ' + zip + ' ' + state;
+          GetTagValue(m.Text, '<addr2>');
+        if (state <> '') then
+          address := address + ', ' + state;
+        address := address + ' ' + zip;
         county := GetTagValue(m.Text, '<county>');
         grid := UpperCase(GetTagValue(m.Text, '<grid>'));
         qsl := GetTagValue(m.Text, '<qslmgr>');
@@ -3778,7 +3781,10 @@ begin
         tmp := GetTagValue(m.Text, '<adr_street3>');
         if tmp <> '' then
           address := address + tmp + LineEnding;
-        address := address + GetTagValue(m.Text, '<adr_city>') + ' ' + zip + ' ' + state;
+        address := address + GetTagValue(m.Text, '<adr_city>');
+        if (state <> '') then
+          address := address + ', ' + state;
+        address := address + ' ' + zip;
         county := GetTagValue(m.Text, '<us_county>');
         grid := UpperCase(GetTagValue(m.Text, '<grid>'));
         qsl := GetTagValue(m.Text, '<qsl_via>');
