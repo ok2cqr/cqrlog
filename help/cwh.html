@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us">
+<head>
+    <title>CQRLOG - cwdaemon setup</title></head>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td align="justify" bgcolor="ffffcc" valign="top"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td align="left" width="33%">&nbsp;&lt;<a href="h1.html"> Prev</a></td>
+        <td align="center" width="33%">[<a href="index.html#aa">Menu</a>]</td>
+        <td align="right" width="33%"><a href="h1.html#ch2">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
+<p align="center"><img src="img/line.png"></p>
+<strong>HamLib CW setup</strong><br><br>
+
+CW through HamLib does not need any special settings.
+</br>It uses same TCP port as your <strong>Radio one</strong>'s CAT control.
+Only setting is default keying speed.
+</p><p>If you are not sure can your rig send CW via rigctld (HamLib) you may check it by opening console
+while cqrlog is running and typing command:</br>
+<strong>telnet localhost 4532</strong>
+</br>
+After getting connected type command:
+<strong>\dump_caps</strong>
+</br>
+You get several lines, one with text: <strong><pre>Can send Morse:	Y</pre></strong>
+</br>As you may guess Y means rig can send CW, N means it can not.
+</p><p>
+Commands used for HamLib CW are:
+<li>L KEYSPD NN  (where NN is the keying speed in wpm)</li>
+<li>b TEXT       (TEXT is the text to be sent as CW)</li>
+</p>
+<p align="center"><img src="img/line.png"></p>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td align="left" width="33%">&nbsp;&lt;<a href="h1.html"> Prev</a></td>
+        <td align="center" width="33%">[<a href="index.html#aa">Menu</a>]</td>
+        <td align="right" width="33%"><a href="h1.html#ch2">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>
