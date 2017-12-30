@@ -4,7 +4,7 @@ Legend:
   - bugfix
 --------------------
 
-2.2.0
+2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)
   + CQ-monitor now remembers showing state.(Saku, OH1KH)
   + "My Alert" is now compared oppsite way: This should fit also compound callsign XX/YOURCALL or YOURCALL/XX (Saku, OH1KH)
