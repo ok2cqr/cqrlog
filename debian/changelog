@@ -1,3 +1,28 @@
+cqrlog (2.2.0-1) unstable; urgency=low
+
+  * wsjt remote mode improvements (Saku, OH1KH)
+  * CQ-monitor now remembers showing state (Saku, OH1KH)
+  * "My Alert" is now compared oppsite way: This should fit
+    also compound callsign XX/YOURCALL or YOURCALL/XX (Saku, OH1KH)
+  * CQ-monitor:  Country names (cut to length 15) are now displayed
+    instead of callsign prefixes. (Saku, OH1KH)
+  * "Show only active band" checkbox addec to Band map filter for
+    quick access. (Saku, OH1KH)
+  * "Re/Set" button added to Export "Choose fields to export" dialog
+    for set/reset all check boxes in one go. (Saku, OH1KH)
+  * a lot of CQ monitor improvements (Saku, OH1KH)
+  * remote wsjt: Short cut key Ctrl+J (Saku, OH1KH)
+  * help files updated (Saku, OH1KH)
+  * Voice keyer works now also with FM and AM modes and also from
+    CWkeys window (Saku, OH1KH)
+  * QSO in QSO list window can be sorted in ascending date/time order
+    (oldes QSO first). (Jörg, DL8DTL)
+  * CQRLOG should work correcly on HiDPI monitors
+  * 630M definition was missing. (Saku, OH1KH)
+  * ADIF upload didn't work when name or QTH were too long
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 30 Dec 2017 06:08:12 +0100
+
 cqrlog (2.1.0-1) unstable; urgency=low
 
   * wsjt remote mode improvements (Saku, OH1KH)
