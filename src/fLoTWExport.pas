@@ -195,18 +195,32 @@ begin
 end;
 
 procedure TfrmLoTWExport.tmrLoTWTimer(Sender: TObject);
+var
+  OutputLines: TStringList;
 begin
   if not AProcess.Running then
   begin
-    mStat.Lines.Add('Signed ...');
-    mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
-                    ' pressing Upload button');
+    OutputLines := TStringList.Create;
+    try
+      OutputLines.LoadFromStream(Aprocess.Output);
+      mStat.Lines.AddStrings(OutputLines);
+      OutputLines.LoadFromStream(Aprocess.Stderr);
+      mStat.Lines.AddStrings(OutputLines);
+    finally
+      OutputLines.Free;
+    end;
+
+    if Aprocess.ExitCode = 0 then begin
+      mStat.Lines.Add('Signed ...');
+      mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
+                      ' pressing Upload button');
+      btnUpload.Enabled := True;
+    end;
     grbWebExport.Enabled := True;
     grbTqsl.Enabled      := True;
     pnlUpload.Enabled    := True;
     pnlClose.Enabled     := True;
     tmrLoTW.Enabled      := False;
-    btnUpload.Enabled    := True
   end
 end;
 
