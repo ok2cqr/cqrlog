@@ -147,22 +147,26 @@ var
 //     Rres,
      buffer,
      MResp    : String;
+     xmlok    : boolean;
 
 begin
+    xmlok   := false;
     xmlsock := TTCPBlockSocket.Create;
     xmlsock.Connect(cqrini.ReadString('fldigi','ip','127.0.0.1'),cqrini.ReadString('fldigi','port','7362'));
 
     if xmlsock.LastError = 0 then
     begin
+         xmlok   := true;
+         if dmData.DebugLevel>=1 then Writeln('Connected to fldigi');
          data := xmlstart + LogItemCmd + xmlend;
          cl   := length(data);
          data := header + IntToStr(cl) + #13#10#13#10 + data;
          MResp  := '';
          buffer := '';
-         Tout := 1000;  // timeout
+         Tout := 1500;  // timeout
 
          xmlsock.SendString(data);
-          //if dmData.DebugLevel>=1 then Writeln('Sent: ',LogItemCmd );
+          if dmData.DebugLevel>=1 then Writeln('Sent: ',LogItemCmd );
 
           // Keep looping...
          repeat
@@ -176,6 +180,7 @@ begin
               end;
          until ((buffer = '') or (Tout < 1 ));
         xmlsock.free;
+        if dmData.DebugLevel>=1 then Writeln('Disconnected  fldigi');
 
         if  ( (length(MResp) > 0) and (pos('fault',MResp) = 0 ) )  then   //response does not incl word "fault"
          Begin
@@ -184,7 +189,7 @@ begin
           Rend :=0;
           Rstart := pos('<value>',MResp);          // parse actual value from xml headers
           Rend   := pos('</value>',MResp);
-          //if dmData.DebugLevel>=1 then writeln ('RS:',Rstart,' RE:',Rend,' XR:', Mresp[Rstart]);
+          if dmData.DebugLevel>=1 then writeln ('RS:',Rstart,' RE:',Rend,' XR:', Mresp[Rstart]);
           if (Rstart > 0 ) and (Rend > 0) then
              Begin
                  Rstart:=rstart+7; //actual start of reponse value
@@ -197,13 +202,16 @@ begin
 
          end
        else
+        Begin
          if dmData.DebugLevel>=1 then writeln ('Fldigi XMLerr: ',MResp);
-     end
-
+        end;
+    end  //xmlsock.LastError = 0
     else
+     Begin
       if dmData.DebugLevel>=1 then writeln ('Socket error. Status: ',xmlsock.LastError);
+     end;
 
-    Result := (xmlsock.LastError = 0);
+    Result := xmlok;
 end;
 
 procedure Tfrmxfldigi.TimTime;
@@ -362,7 +370,7 @@ end;
 procedure Tfrmxfldigi.btSaveQSOClick(Sender: TObject);
 var s :string;
 begin
-  frmNewQSO.btnSave.Click;
+  frmNewQSO.SaveRemote;
   PollFldigi('log.clear',s);
 end;
 
