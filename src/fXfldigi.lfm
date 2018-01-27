@@ -1,7 +1,7 @@
 object frmxfldigi: Tfrmxfldigi
-  Left = 435
+  Left = 39
   Height = 193
-  Top = 58
+  Top = 15
   Width = 347
   Caption = 'frmxfldigi'
   ClientHeight = 193

@@ -3,6 +3,10 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.2.0 (2017-01-27)
+  - all remote loggings keep "qso_dxcc" boolean false
+  - wsjtx logging take start and stop times to log (before just stop time)
+  - fldigi remote socket checking fixed
 
 2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)
