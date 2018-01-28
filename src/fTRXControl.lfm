@@ -1,11 +1,11 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 394
-  Height = 233
-  Top = 184
-  Width = 339
+  Left = 361
+  Height = 345
+  Top = 233
+  Width = 376
   Caption = 'TRX control'
-  ClientHeight = 210
-  ClientWidth = 339
+  ClientHeight = 322
+  ClientWidth = 376
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
     0000400000000100200000000000001000006400000064000000000000000000
@@ -154,13 +154,13 @@ object frmTRXControl: TfrmTRXControl
   OnShow = FormShow
   LCLVersion = '1.6.4.0'
   object GroupBox2: TGroupBox
-    Left = 256
-    Height = 210
+    Left = 293
+    Height = 322
     Top = 0
     Width = 83
     Align = alRight
     Caption = ' Mode '
-    ClientHeight = 194
+    ClientHeight = 306
     ClientWidth = 81
     TabOrder = 0
     object btnCW: TButton
@@ -220,33 +220,60 @@ object frmTRXControl: TfrmTRXControl
     object btnMemDwn: TButton
       Left = 11
       Height = 25
-      Top = 172
-      Width = 54
+      Top = 176
+      Width = 57
       Caption = 'M dwn'
       OnClick = btnMemDwnClick
       TabOrder = 6
     end
+    object btPon: TButton
+      Left = 11
+      Height = 25
+      Top = 208
+      Width = 57
+      Caption = 'P-ON'
+      OnClick = btPonClick
+      TabOrder = 7
+    end
+    object btPoff: TButton
+      Left = 11
+      Height = 25
+      Top = 240
+      Width = 57
+      Caption = 'P-OFF'
+      OnClick = btPoffClick
+      TabOrder = 8
+    end
+    object btPstby: TButton
+      Left = 11
+      Height = 25
+      Top = 272
+      Width = 57
+      Caption = 'P-STB'
+      OnClick = btPstbyClick
+      TabOrder = 9
+    end
   end
   object Panel2: TPanel
     Left = 0
-    Height = 210
+    Height = 322
     Top = 0
-    Width = 256
+    Width = 293
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel2'
-    ClientHeight = 210
-    ClientWidth = 256
+    ClientHeight = 322
+    ClientWidth = 293
     TabOrder = 1
     object GroupBox1: TGroupBox
       Left = 0
       Height = 72
       Top = 0
-      Width = 256
+      Width = 293
       Align = alTop
       Caption = ' Freq '
       ClientHeight = 56
-      ClientWidth = 254
+      ClientWidth = 291
       TabOrder = 0
       object lblFreq: TLabel
         Left = 10
@@ -263,7 +290,7 @@ object frmTRXControl: TfrmTRXControl
         ParentFont = False
       end
       object btnVFOA: TButton
-        Left = -1
+        Left = 0
         Height = 25
         Top = -1
         Width = 32
@@ -283,13 +310,13 @@ object frmTRXControl: TfrmTRXControl
     end
     object gbBand: TGroupBox
       Left = 0
-      Height = 112
+      Height = 224
       Top = 72
-      Width = 256
+      Width = 293
       Align = alClient
       Caption = ' Band '
-      ClientHeight = 96
-      ClientWidth = 254
+      ClientHeight = 208
+      ClientWidth = 291
       TabOrder = 1
       object btn160m: TButton
         Left = 6
@@ -415,12 +442,12 @@ object frmTRXControl: TfrmTRXControl
     object Panel1: TPanel
       Left = 0
       Height = 26
-      Top = 184
-      Width = 256
+      Top = 296
+      Width = 293
       Align = alBottom
       BevelOuter = bvNone
       ClientHeight = 26
-      ClientWidth = 256
+      ClientWidth = 293
       TabOrder = 2
       object rbRadio1: TRadioButton
         Left = 8
