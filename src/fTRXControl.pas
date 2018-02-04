@@ -43,27 +43,30 @@ type
     btn70cm: TButton;
     btn80m: TButton;
     btnCW: TButton;
-    btnMemUp: TButton;
     btnMemDwn: TButton;
+    btnMemUp: TButton;
     btnSSB: TButton;
     btnRTTY: TButton;
     btnAM: TButton;
     btnFM: TButton;
     btnVFOA: TButton;
     btnVFOB: TButton;
-    btPon: TButton;
     btPoff: TButton;
+    btPon: TButton;
     btPstby: TButton;
     gbBand: TGroupBox;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
+    gbVfo: TGroupBox;
+    gbMode: TGroupBox;
     GroupBox4: TGroupBox;
     lblFreq: TLabel;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
     mnuMem: TMainMenu;
-    Panel1: TPanel;
-    Panel2: TPanel;
+    pnlRig: TPanel;
+    pnlMain: TPanel;
+    pnlPower: TPanel;
     rbRadio1: TRadioButton;
     rbRadio2: TRadioButton;
     tmrRadio : TTimer;
@@ -97,6 +100,8 @@ type
     procedure btnFMClick(Sender: TObject);
     procedure btnRTTYClick(Sender: TObject);
     procedure btnSSBClick(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
+    procedure MenuItem4Click(Sender: TObject);
     procedure rbRadio1Click(Sender: TObject);
     procedure rbRadio2Click(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
@@ -616,6 +621,28 @@ begin
   end
 end;
 
+procedure TfrmTRXControl.MenuItem3Click(Sender: TObject);
+begin
+      if pnlPower.Visible then
+        Begin
+         pnlPower.Visible:= false;
+         Menuitem3.Checked:= false;
+        end
+       else
+        Begin
+         pnlPower.Visible:= true;
+         btPonClick(nil); //setting buttons visible sends PwrOn to sync button colors
+         Menuitem3.Checked:= true;
+        end;
+      cqrini.WriteBool('TRX','PowerButtons',pnlPower.Visible);
+end;
+
+procedure TfrmTRXControl.MenuItem4Click(Sender: TObject);
+begin
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 5);  //set DXCuster tab active. Number may change if preferences page change
+  frmNewQSO.acPreferences.Execute
+end;
+
 procedure TfrmTRXControl.rbRadio1Click(Sender: TObject);
 begin
   InicializeRig
@@ -807,8 +834,11 @@ begin
   tmrRadio.Enabled  := True;
   Result := True;
 
+  pnlPower.Visible  := cqrini.ReadBool('TRX','PowerButtons',False);
+  Menuitem3.Checked := pnlPower.Visible;
+  if pnlPower.Visible then btPonClick(nil);
                             // all rigs do not support rigctld power switching
-  btPonClick(nil);          //so we just put pwr button ON and send rigctld PWR ON cmd
+                            //so we just put pwr button ON and send rigctld PWR ON cmd
                             //if rig does not support it that makes no harm.
                             //if supports we do know pwr state from now on.
 
