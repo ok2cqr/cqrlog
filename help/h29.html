@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>CQRLOG </title>
+</head>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h1.html#ch7"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h20.html#ah16">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
+<p align=center><img src=img/line.png></p>
+
+
+<h2><strong>Start and stop scripts</strong></h2><p>
+
+     "Run at cqrlog start" and "Run at cqrlog stop" calls to scripts:</br>
+      ~/.config/cqrlog/start.sh</br>
+     ~/.config/cqrlog/stop.sh</br></p><p>
+     They are called when program is up/goes down and rigctld is still running.
+     You can do anything with them. </br>
+     If you have PC controlled relay box you can  start  your coffee maker when cqrlog starts and when cqlog is closed
+     switch coffee maker off  :D :D :D</br>
+     If you have rotctld yuo can turn your antenna to start direction.
+     With rigctld you can power your rig, or/and set your favorite frequency and mode when cqrlog starts.
+     </br>At cqrlog closing phase 1000ms (1sec) wait time is added so that script can access to rigctld before it goes down.
+     This should be enough to execute a command.<br>
+     Some examples for script with rigctld commands (for more consult "man rigctld"):</br><pre>
+     ---------------------------------------------
+     #!/bin/bash
+     # remove # from beginning of line you want to take in use:
+     #echo -n -e '\x87'0 |  nc localhost 4532 #Turns rig power OFF
+     #echo -n -e '\x87'1 |  nc localhost 4532 #Turns rig power ON
+     #echo -n -e '\x87'2 |  nc localhost 4532 #Turns rig power STANDBY
+     #echo -n -e F 3510000 |  nc localhost 4532 # Set frequency to 3.510Mhz
+     #echo -n -e M USB 0 |  nc localhost 4532 #Set mode USB with default filter width
+     #echo -n -e M CW 500 |  nc localhost 4532 #Set mode CW with 500Hz filter (must be installed)
+     exit
+     ---------------------------------------------
+     </pre>
+     For stop.sh it is just a copy of start.sh with different lines selected (# removed from start)
+     </br>
+     Remember to chmod a+x start.sh and stop.sh to make them execute for all.
+     </p><p> NOTE: Your rig may not start with rigctld power-on command if it is totally powered of (CPU is not running). 
+     </br>In that case try to set it to stand by-state at closing time. Then it may start again with power-on command.
+</p>
+<p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="left">&nbsp;&lt;<a href="h1.html#ch7"> Prev</a></td>
+        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="right"><a href="h20.html#ah16">Next </a>&gt;</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>

@@ -127,9 +127,9 @@ object frmDXCluster: TfrmDXCluster
     Height = 445
     Top = 0
     Width = 709
-    ActivePage = tabTelnet
+    ActivePage = tabWeb
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
@@ -138,7 +138,7 @@ object frmDXCluster: TfrmDXCluster
       object Panel4: TPanel
         Left = 0
         Height = 36
-        Top = 365
+        Top = 380
         Width = 699
         Align = alBottom
         ClientHeight = 36
@@ -189,6 +189,7 @@ object frmDXCluster: TfrmDXCluster
           Height = 25
           Top = 6
           Width = 75
+          Action = acFont
           Anchors = [akTop, akRight]
           BorderSpacing.InnerBorder = 4
           Caption = 'Font'
@@ -197,7 +198,7 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlWeb: TPanel
         Left = 0
-        Height = 365
+        Height = 380
         Top = 0
         Width = 699
         Align = alClient

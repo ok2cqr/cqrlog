@@ -3,6 +3,11 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.2.0 (2018-01-28)
+  - DXCluster/WEB Font button not connected to acFont (no action). Fixed
+  + TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig
+  + Start and stop scripts. Called when cqrlog is up and running and before closing all down.
+  + Corresponding help file updates
 2.2.0 (2017-01-27)
   - all remote loggings keep "qso_dxcc" boolean false
   - wsjtx logging take start and stop times to log (before just stop time)
