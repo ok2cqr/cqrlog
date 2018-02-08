@@ -118,9 +118,11 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkConToDXC: TCheckBox;
     chkFldXmlRpc: TCheckBox;
     chkQSOColor : TCheckBox;
     chkFillAwardField : TCheckBox;
+    chkShowDxcCountry: TCheckBox;
     chkUseCallbookZonesEtc : TCheckBox;
     chkModeRelatedOnly : TCheckBox;
     chkTrxControlDebug : TCheckBox;
@@ -153,7 +155,6 @@ type
     chkIgnoreBandFreq : TCheckBox;
     chkRot1RunRotCtld: TCheckBox;
     chkRot2RunRotCtld: TCheckBox;
-    chkShowDxcCountry : TCheckBox;
     chkClearRIT : TCheckBox;
     chkCountry: TCheckBox;
     chkR1RunRigCtld: TCheckBox;
@@ -202,7 +203,6 @@ type
     chkNewDXCCTables: TCheckBox;
     chkShow4M: TCheckBox;
     chkDeleteAfterQSO: TCheckBox;
-    chkConToDXC: TCheckBox;
     chkAutoSearch: TCheckBox;
     chkShowXplanet: TCheckBox;
     chkCloseXplanet: TCheckBox;
@@ -472,6 +472,7 @@ type
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
     dlgColor : TColorDialog;
+    edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
     edtWsjtIp: TEdit;
@@ -645,14 +646,15 @@ type
     GroupBox44: TGroupBox;
     GroupBox45: TGroupBox;
     GroupBox46: TGroupBox;
-    GroupBox47: TGroupBox;
+    gbDXCAlert: TGroupBox;
     GroupBox48: TGroupBox;
     GroupBox49: TGroupBox;
-    GroupBox5: TGroupBox;
+    gbDXCColor: TGroupBox;
     GroupBox50: TGroupBox;
     GroupBox51: TGroupBox;
     GroupBox52: TGroupBox;
-    GroupBox6: TGroupBox;
+    gbDXCConnect: TGroupBox;
+    gbDXCSpots: TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
@@ -779,6 +781,7 @@ type
     Label48: TLabel;
     Label49: TLabel;
     Label50: TLabel;
+    Label51: TLabel;
     lbl: TLabel;
     Label19: TLabel;
     Label2: TLabel;
@@ -1036,6 +1039,7 @@ type
     wasOnlineLogSupportEnabled : Boolean;
   public
     { public declarations }
+    ActPageIdx : integer;
   end;
 
 var
@@ -1309,6 +1313,7 @@ begin
   cqrini.WriteBool('DXCluster', 'ConAfterRun', chkConToDXC.Checked);
   cqrini.WriteBool('DXCluster','ShowDxcCountry',chkShowDxcCountry.Checked);
   cqrini.WriteString('DXCluster','AlertCmd', edtAlertCmd.Text);
+  cqrini.WriteString('DXCluster','StartCmd', edtStartConCmd.Text);
 
   cqrini.WriteBool('Fonts', 'UseDefault', chkUseDefaultSEttings.Checked);
   cqrini.WriteString('Fonts', 'Buttons', lblbFont.Caption);
@@ -1605,6 +1610,7 @@ procedure TfrmPreferences.FormCreate(Sender: TObject);
 begin
   dmUtils.InsertQSL_S(cmbQSL_S);
   dmUtils.InsertFreq(cmbFreq);
+  ActPageIdx := 0; //tabProgram
 end;
 
 
@@ -1622,6 +1628,7 @@ procedure TfrmPreferences.FormCloseQuery(Sender: TObject; var CanClose: boolean)
 begin
   cqrini.WriteInteger('Pref', 'Top', Top);
   cqrini.WriteInteger('Pref', 'Left', Left);
+  cqrini.WriteInteger('Pref', 'ActPageIdx', pgPreferences.ActivePageIndex);
 end;
 
 procedure TfrmPreferences.chkUseProfilesChange(Sender: TObject);
@@ -2264,6 +2271,8 @@ begin
   TRXChanged := True
 end;
 
+
+
 procedure TfrmPreferences.cmbHanshakeR1Change(Sender : TObject);
 begin
   TRXChanged := True
@@ -2414,6 +2423,7 @@ begin
   dmData.InsertProfiles(cmbProfiles, False);
   Top := cqrini.ReadInteger('Pref', 'Top', 20);
   Left := cqrini.ReadInteger('Pref', 'Left', 20);
+  ActPageIdx := cqrini.ReadInteger('Pref', 'ActPageIdx', 0);
 
   edtCall.Text := cqrini.ReadString('Station', 'Call', '');
   edtName.Text := cqrini.ReadString('Station', 'Name', '');
@@ -2674,6 +2684,7 @@ begin
   chkConToDXC.Checked := cqrini.ReadBool('DXCluster', 'ConAfterRun', False);
   chkShowDxcCountry.Checked := cqrini.ReadBool('DXCluster','ShowDxcCountry',False);
   edtAlertCmd.Text := cqrini.ReadString('DXCluster','AlertCmd','');
+  edtStartConCmd.Text := cqrini.ReadString('DXCluster','StartCmd','');
 
   chkUseDefaultSEttings.Checked := cqrini.ReadBool('Fonts', 'UseDefault', True);
   lblbFont.Caption := cqrini.ReadString('Fonts', 'Buttons', 'Sans 10');
@@ -2885,7 +2896,9 @@ begin
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
-  WinKeyerChanged := False
+  WinKeyerChanged := False;
+
+  pgPreferences.ActivePageIndex := ActPageIdx;    //set wanted tab for showing when open. ActTab is public variable.
 end;
 
 procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);
