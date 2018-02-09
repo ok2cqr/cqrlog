@@ -191,6 +191,7 @@ var
   ThChat       : String;
   ChBckColor   : Integer;
   TelThread    : TTelThread;
+  SentStartCmd : Boolean;
 
 implementation
 {$R *.lfm}
@@ -348,7 +349,6 @@ var
 begin
   mnuCallalert.Checked := cqrini.ReadBool('DXCluster', 'AlertEnabled', False);
   ChangeCallAlertCaption;
-
   p.x := 10;
   p.y := 10;
   p := btnPreferences.ClientToScreen(p);
@@ -357,6 +357,7 @@ end;
 
 procedure TfrmDXCluster.acProgPrefExecute(Sender : TObject);
 begin
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 10);  //set DXCuster tab active. Number may change if preferences page change
   frmNewQSO.acPreferences.Execute
 end;
 
@@ -445,6 +446,7 @@ begin
           HistCmd[HistPtr]:=''
         end;
   until HistPtr =0;
+  SentStartCmd :=false;
 end;
 
 procedure TfrmDXCluster.FormKeyUp(Sender: TObject; var Key: Word;
@@ -599,7 +601,7 @@ begin
   begin
     StopAllConnections;
     btnTelConnect.Caption := 'Connect';
-    ConWeb := False
+    ConWeb := False;
   end
   else begin
     ConnectToTelnet;
@@ -640,6 +642,13 @@ begin
     edtCommand.Clear;
     edtCommand.Text := GetHistCmd;
     edtCommand.SelStart := Length(edtCommand.Text);
+  end;
+  if key=#19 then
+  Begin
+    key := #0;
+    cqrini.WriteString('DXCluster','StartCmd',edtCommand.Text);
+    if dmData.DebugLevel>=1 then  writeln('ClusterStarCommand:_',edtCommand.Text,'_saved');
+    edtCommand.Clear;
   end;
   if key=#13 then
   begin
@@ -729,6 +738,13 @@ begin
         Begin
           Chline := '';
           if dmData.DebugLevel>=1 then Writeln('Chat : line is cluster prompt!');
+          //send start command at first prompt
+          if not SentStartCmd and (cqrini.ReadString('DXCluster','StartCmd','') <> '') then
+            begin
+               SendCommand(cqrini.ReadString('DXCluster','StartCmd',''));
+               if dmData.DebugLevel>=1 then  writeln('Sent DXCluster connect start command');
+               SentStartCmd := true;
+            end;
         end;
       end;
 
@@ -873,6 +889,7 @@ begin
     if lTelnet.Connected then
       lTelnet.Disconnect;
     ConTelnet := False;
+    SentStartCmd := False;
   end;
 end;
 
@@ -1233,10 +1250,15 @@ begin
     end
   end;
 
-  if  mnuCallalert.Checked then // do not run IsAlertCall unless alert is selected
+  if  ( mnuCallalert.Checked and ConTelnet ) then // do not run IsAlertCall unless alert is selected
+                                                   // and connected to telnet cluster
     if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) then
+      Begin
+        if dmData.DebugLevel >=1 then
+            Writeln('--------------------------------------------Call alerting is: ',call);
         dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
-
+        call :='';
+      end;
   if dmData.DebugLevel >=1 then
   begin
     Writeln('Color: ',ColorToString(sColor));

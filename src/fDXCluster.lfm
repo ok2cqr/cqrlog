@@ -1,13 +1,13 @@
 object frmDXCluster: TfrmDXCluster
   Left = 129
-  Height = 445
+  Height = 424
   Top = 116
   Width = 709
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
   ActiveControl = pgDXCluster
   Caption = 'DXCluster'
-  ClientHeight = 445
+  ClientHeight = 424
   ClientWidth = 709
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -124,16 +124,16 @@ object frmDXCluster: TfrmDXCluster
   LCLVersion = '1.6.4.0'
   object pgDXCluster: TPageControl
     Left = 0
-    Height = 445
+    Height = 424
     Top = 0
     Width = 709
-    ActivePage = tabWeb
+    ActivePage = tabTelnet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
-      ClientHeight = 416
+      ClientHeight = 395
       ClientWidth = 699
       object Panel4: TPanel
         Left = 0
@@ -192,7 +192,6 @@ object frmDXCluster: TfrmDXCluster
           Action = acFont
           Anchors = [akTop, akRight]
           BorderSpacing.InnerBorder = 4
-          Caption = 'Font'
           TabOrder = 3
         end
       end
@@ -216,12 +215,12 @@ object frmDXCluster: TfrmDXCluster
     end
     object tabTelnet: TTabSheet
       Caption = 'Telnet'
-      ClientHeight = 416
+      ClientHeight = 395
       ClientWidth = 699
       object Panel1: TPanel
         Left = 0
         Height = 34
-        Top = 382
+        Top = 361
         Width = 699
         Align = alBottom
         BevelOuter = bvNone
@@ -337,12 +336,12 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlTelnet: TPanel
         Left = 0
-        Height = 352
+        Height = 331
         Top = 30
         Width = 699
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 352
+        ClientHeight = 331
         ClientWidth = 699
         Color = clWhite
         ParentColor = False
