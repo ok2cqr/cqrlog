@@ -6195,6 +6195,8 @@ var
   tries: integer = 10;
 
 begin
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 20);  //set fldigi/wsjt tab active.
+
   case RemoteType of
     rmtFldigi : begin
                   RememberAutoMode := chkAutoMode.Checked;
