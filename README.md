@@ -23,4 +23,5 @@ Dependencies
 -------------
 
 Build-Depends: lazarus, lcl, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk2, fp-units-db, fp-units-math, fp-units-net
+
 Depends: libssl-dev, mysql-server | mariadb-server, mysql-client | mariadb-client, libhamlib2 (>= 1.2.10), libhamlib-utils (>= 1.2.10)
