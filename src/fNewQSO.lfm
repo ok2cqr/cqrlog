@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
   Left = 574
   Height = 651
-  Top = 234
+  Top = 206
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2994,7 +2994,7 @@ object frmNewQSO: TfrmNewQSO
             Left = -2
             Height = 24
             Top = 4
-            Width = 51
+            Width = 75
             Caption = 'Offline'
             OnChange = cbOfflineChange
             TabOrder = 0

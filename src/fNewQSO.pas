@@ -25,6 +25,8 @@ uses
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
   cMyLoc   = 'My grid (to change press CTRL+L) ';
+  cQSLMgrVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat';
+  cCntyVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
 
 type
   TRemoteModeType = (rmtFldigi, rmtWsjt);
@@ -686,60 +688,30 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
 
 procedure TQSLTabThread.Execute;
 var
-  HTTP   : THTTPSend;
-  m      : TStringList;
+  data   : string;
   FileDate : TDateTime;
 begin
   FreeOnTerminate := True;
-  http   := THTTPSend.Create;
-  m      := TStringList.Create;
-  try
-    HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
-    HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
-    HTTP.UserName  := cqrini.ReadString('Program','User','');
-    HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat') then
-    begin
-      m.LoadFromStream(HTTP.Document);
-      FileDate := dmUtils.MyStrToDate(trim(m.Text));
-      if FileDate > dmUtils.GetLastQSLUpgradeDate then
-      begin
-        Synchronize(@frmNewQSO.SynQSLTab)
-      end
-    end
-  finally
-    http.Free;
-    m.Free
+  if dmUtils.GetDataFromHttp(cQSLMgrVersionCheckUrl, data) then
+  begin
+    FileDate := dmUtils.MyStrToDate(data);
+    if FileDate > dmUtils.GetLastQSLUpgradeDate then
+      Synchronize(@frmNewQSO.SynQSLTab)
   end
 end;
 
 
 procedure TDXCCTabThread.Execute;
 var
-  HTTP   : THTTPSend;
-  m      : TStringList;
+  data   : string;
   FileDate : TDateTime;
 begin
   FreeOnTerminate := True;
-  http   := THTTPSend.Create;
-  m      := TStringList.Create;
-  try
-    HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
-    HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
-    HTTP.UserName  := cqrini.ReadString('Program','User','');
-    HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat') then
-    begin
-      m.LoadFromStream(HTTP.Document);
-      FileDate := dmUtils.MyStrToDate(trim(m.Text));
-      if FileDate > dmUtils.GetLastUpgradeDate then
-      begin
+  if dmUtils.GetDataFromHttp(cCntyVersionCheckUrl, data) then
+  begin
+    FileDate := dmUtils.MyStrToDate(data);
+    if FileDate > dmUtils.GetLastUpgradeDate then
         Synchronize(@frmNewQSO.SynDXCCTab)
-      end;
-    end;
-  finally
-    http.Free;
-    m.Free
   end
 end;
 

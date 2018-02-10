@@ -5,6 +5,7 @@ object dmUtils: TdmUtils
   HorizontalOffset = 455
   VerticalOffset = 439
   Width = 400
+  PPI = 96
   object HelpDatabase: THTMLHelpDatabase
     BaseURL = 'file:///home/ok2cqr'
     AutoRegister = True

@@ -256,6 +256,7 @@ type
     function  GetDescKeyFromCode(key : Word) : String;
     function  EncodeURLData(data : String) : String;
     function  GetRigIdFromComboBoxItem(ItemText : String) : String;
+    function  GetDataFromHttp(Url : String; var data : String) : Boolean;
 end;
 
 var
@@ -4349,5 +4350,30 @@ begin
     aColumns[i].Exists := False
 end;
 
+function TdmUtils.GetDataFromHttp(Url : String; var data : String) : Boolean;
+var
+  HTTP   : THTTPSend;
+  m      : TStringList;
+begin
+  Result := False;
+  data   := '';
+  http   := THTTPSend.Create;
+  m      := TStringList.Create;
+  try
+    HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
+    HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
+    HTTP.UserName  := cqrini.ReadString('Program','User','');
+    HTTP.Password  := cqrini.ReadString('Program','Passwd','');
+    if HTTP.HTTPMethod('GET', Url) then
+    begin
+      m.LoadFromStream(HTTP.Document);
+      data   := trim(m.Text);
+      Result := True
+    end
+  finally
+    http.Free;
+    m.Free
+  end
+end;
 
 end.
