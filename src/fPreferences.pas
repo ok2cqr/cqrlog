@@ -1596,6 +1596,9 @@ begin
   frmTRXControl.rbRadio2.Caption := edtRadio2.Text;
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
+  if ((frmNewQSO.sbNewQSO.Panels[0].Text = '') or (frmNewQSO.sbNewQSO.Panels[0].Text = cMyLoc)) then
+    frmNewQSO.sbNewQSO.Panels[0].Text := cMyLoc + edtLoc.Text;
+
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
   frmDXCluster.ReloadSettings;
