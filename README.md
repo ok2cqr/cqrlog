@@ -13,7 +13,7 @@ operation and maintenance. More at https://www.cqrlog.com/
 How to contribute?
 -------------------
 
-You have to have Lazarus 1.6.4, fpc 3.0.2 compiler, MySQL server and clinet installed.
+You have to have Lazarus 1.8, fpc 3.0.4 compiler, MySQL server and clinet installed.
 CQRLOG is developed on Ubuntu 16.04, Lazarus and FreePascal are available in my pesronal repo  https://launchpad.net/~ok2cqr/+archive/lazarus
 
 Compile with make and install with make DESTDIR=/home/yourusername/where_you_want_to_have_it install. If you are 
@@ -22,4 +22,6 @@ going to change the source code, fork the repo, do the changes, commit them and 
 Dependencies
 -------------
 
-libmysql-dev
+Build-Depends: lazarus, lcl, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk2, fp-units-db, fp-units-math, fp-units-net
+
+Depends: libssl-dev, mysql-server | mariadb-server, mysql-client | mariadb-client, libhamlib2 (>= 1.2.10), libhamlib-utils (>= 1.2.10)
