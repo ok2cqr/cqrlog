@@ -84,6 +84,7 @@ type
     chkAutoMode: TCheckBox;
     dbgrdQSOBefore: TDBGrid;
     lblQSLRcvdDate: TLabel;
+    mCountry : TMemo;
     MenuItem32 : TMenuItem;
     MenuItem33 : TMenuItem;
     MenuItem34 : TMenuItem;
@@ -179,7 +180,6 @@ type
     Label23: TLabel;
     Label24: TLabel;
     Label25: TLabel;
-    Label26: TLabel;
     Label27: TLabel;
     Label28: TLabel;
     Label29: TLabel;
@@ -217,7 +217,6 @@ type
     MainMenu1: TMainMenu;
     mCallBook: TMemo;
     mComment: TMemo;
-    mCountry: TMemo;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
@@ -298,6 +297,7 @@ type
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
+    Panel5 : TPanel;
     Panel6: TPanel;
     pnlOffline: TPanel;
     popEditQSO: TPopupMenu;

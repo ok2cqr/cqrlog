@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 381
+  Left = 574
   Height = 651
-  Top = 124
+  Top = 234
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2991,10 +2991,10 @@ object frmNewQSO: TfrmNewQSO
           ClientWidth = 80
           TabOrder = 26
           object cbOffline: TCheckBox
-            Left = -3
-            Height = 22
+            Left = -2
+            Height = 24
             Top = 4
-            Width = 73
+            Width = 51
             Caption = 'Offline'
             OnChange = cbOfflineChange
             TabOrder = 0
@@ -3084,9 +3084,9 @@ object frmNewQSO: TfrmNewQSO
         end
         object chkAutoMode: TCheckBox
           Left = 277
-          Height = 22
+          Height = 24
           Top = 4
-          Width = 64
+          Width = 66
           Caption = 'AUTO'
           Checked = True
           OnChange = chkAutoModeChange
@@ -3266,14 +3266,6 @@ object frmNewQSO: TfrmNewQSO
         ClientWidth = 236
         ParentFont = False
         TabOrder = 1
-        object Label26: TLabel
-          Left = 1
-          Height = 17
-          Top = 3
-          Width = 59
-          Caption = 'Country:'
-          ParentColor = False
-        end
         object Label27: TLabel
           Left = 126
           Height = 17
@@ -3338,9 +3330,9 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblCont: TLabel
-          Left = 168
+          Left = 169
           Height = 17
-          Top = 80
+          Top = 78
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3636,13 +3628,26 @@ object frmNewQSO: TfrmNewQSO
           ParentColor = False
           ParentFont = False
         end
-        object mCountry: TMemo
-          Left = 62
-          Height = 70
-          Top = 3
-          Width = 164
-          ParentFont = False
+        object Panel5: TPanel
+          Left = 0
+          Height = 76
+          Top = 0
+          Width = 236
+          Align = alTop
+          BevelOuter = bvNone
+          Caption = 'Panel5'
+          ClientHeight = 76
+          ClientWidth = 236
           TabOrder = 0
+          object mCountry: TMemo
+            Left = 0
+            Height = 76
+            Top = 0
+            Width = 236
+            Align = alClient
+            ParentFont = False
+            TabOrder = 0
+          end
         end
       end
       object btnSave: TButton
@@ -3680,7 +3685,7 @@ object frmNewQSO: TfrmNewQSO
       object lblQSONr: TLabel
         Left = 63
         Height = 17
-        Top = 9
+        Top = 8
         Width = 8
         Caption = '0'
         ParentColor = False
@@ -3689,7 +3694,7 @@ object frmNewQSO: TfrmNewQSO
       object Label24: TLabel
         Left = 7
         Height = 17
-        Top = 9
+        Top = 8
         Width = 53
         Caption = 'QSO nr.'
         ParentColor = False
@@ -3720,7 +3725,7 @@ object frmNewQSO: TfrmNewQSO
       object Label6: TLabel
         Left = 99
         Height = 17
-        Top = 9
+        Top = 8
         Width = 90
         Caption = 'QTH profile:  '
         ParentColor = False
@@ -3728,7 +3733,7 @@ object frmNewQSO: TfrmNewQSO
       end
       object cmbProfiles: TComboBox
         Left = 187
-        Height = 27
+        Height = 29
         Top = 3
         Width = 281
         ItemHeight = 0
