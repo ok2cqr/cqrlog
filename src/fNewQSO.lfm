@@ -8,7 +8,6 @@ object frmNewQSO: TfrmNewQSO
   Caption = 'New QSO ... (CQRLOG for Linux)'
   ClientHeight = 651
   ClientWidth = 807
-  Font.Height = 8
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2857,7 +2856,6 @@ object frmNewQSO: TfrmNewQSO
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
           AutoSize = False
-          Font.Height = 8
           ItemHeight = 0
           ItemIndex = 1
           Items.Strings = (
