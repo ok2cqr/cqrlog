@@ -4524,7 +4524,7 @@ begin
     if cmbQSL_S.Text = 'B' then
       cmbQSL_S.Text := 'MD'
   end;
-  if (not (fEditQSO or fViewQSO)) or (old_call<>edtCall.Text) then
+  if (old_call<>edtCall.Text) then
   begin
     idcall := dmUtils.GetIDCall(edtCall.Text);
     sbNewQSO.Panels[1].Text := cRefCall + idcall
