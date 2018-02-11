@@ -527,7 +527,9 @@ var
   ErrorCount  : Word = 0;
   l           : TStringList;
   t_lotw : TDateTime;
-  t1,t2  : TDateTime;
+  t_lotw_min,t_lotw_max  : TDateTime;
+  t_log : TDateTime;
+
 begin
   if dmData.trQ.Active then
     dmData.trQ.RollBack;
@@ -814,11 +816,15 @@ begin
               t_lotw := EncodeTime(StrToInt(copy(time_on,1,2)),
                         StrToInt(copy(time_on,3,2)),0,0);
 
-              t1 := t_lotw-5/1440;
-              t2 := t_lotw+5/1440;
+              t_log := EncodeTime(StrToInt(copy(dmData.Q.Fields[0].AsString,1,2)),
+                        StrToInt(copy(dmData.Q.Fields[0].AsString,4,2)),0,0);
 
-              if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_lotw),' | ',TimeToStr(t1),'|',TimeToStr(t2));
-              if (t_lotw >=t1) and (t_lotw<=t2)  then
+              t_lotw_min := t_lotw-5/1440;
+              t_lotw_max := t_lotw+5/1440;
+
+              if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_log),' | ',TimeToStr(t_lotw_min),'|',TimeToStr(t_lotw_max));
+
+              if (t_log >=t_lotw_min) and (t_log<=t_lotw_max)  then
               begin
                 if (dmData.Q.Fields[1].AsString <> 'L') then
                 begin
@@ -1412,7 +1418,7 @@ begin
 
         ImportMembeshipFileToDatabase(l, ClubFileName);
 
-        //dmMembership.SaveLastMembershipUpdateDate(ClubFileName, now());
+        dmMembership.SaveLastMembershipUpdateDate(ClubFileName, now());
       end
     end
   except
