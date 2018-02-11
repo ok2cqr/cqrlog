@@ -21,6 +21,11 @@ uses
   LazFileUtils;
 
 type
+  TImportProgressType = (imptRegenerateDXCC, imptImportDXCCTables, imptDownloadDXCCData, imptImportLoTWAdif,
+                         imptImportQSLMgrs, imptDownloadQSLData, imptInsertQSLManagers, imptImporteQSLAdif,
+                         imptRemoveDupes, imptUpdateMembershipFiles);
+
+type
 
   { TfrmImportProgress }
 
@@ -47,13 +52,14 @@ type
     procedure InsertQSLManagers;
     procedure ImporteQSLAdif;
     procedure RemoveDupes;
+    procedure UpdateMembershipFiles;
 
     procedure SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 
   public
-    ImportType : Integer;  // 0 - regenerate dxcc stat; 1 -  dxcc tables import; 2 - cqrlog for win; 3 - dwnload dxcc data
-    FileName   : String;   // 4 - import lotw adif file; 5 - import QSLmanagers; 6 - download qsl managers
-                           // 7 - insert QSL managers
+    ImportType : TImportProgressType;
+    FileName   : String;
+
     Directory  : String;
     CloseAfImport : Boolean;
     LoTWShowNew : Boolean;
@@ -70,7 +76,7 @@ implementation
 {$R *.lfm}
 { TfrmImportProgress }
 
-uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload;
+uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership;
 
 procedure TfrmImportProgress.FormActivate(Sender: TObject);
 begin
@@ -79,15 +85,16 @@ begin
   begin
     running := True;
     case ImportType of
-      0 : RegenerateDXCCStat;
-      1 : ImportDXCCTables;
-      3 : DownloadDXCCData;
-      4 : ImportLoTWAdif;
-      5 : ImportQSLMgrs;
-      6 : DownloadQSLData;
-      7 : InsertQSLManagers;
-      8 : ImporteQSLAdif;
-      9 : RemoveDupes
+      imptRegenerateDXCC : RegenerateDXCCStat;
+      imptImportDXCCTables : ImportDXCCTables;
+      imptDownloadDXCCData : DownloadDXCCData;
+      imptImportLoTWAdif : ImportLoTWAdif;
+      imptImportQSLMgrs : ImportQSLMgrs;
+      imptDownloadQSLData  : DownloadQSLData;
+      imptInsertQSLManagers : InsertQSLManagers;
+      imptImporteQSLAdif : ImporteQSLAdif;
+      imptRemoveDupes : RemoveDupes;
+      imptUpdateMembershipFiles : UpdateMembershipFiles
     end // case
   end
 end;
@@ -1310,6 +1317,112 @@ begin
     dmData.trQ.Commit;
     Close
   end
+end;
+
+procedure TfrmImportProgress.UpdateMembershipFiles;
+
+  procedure SaveMembershipFile(l : TStringList; ClubFileName : String);
+  begin
+    if not DirectoryExistsUTF8(dmData.HomeDir + 'members') then
+      CreateDirUTF8(dmData.HomeDir + 'members');
+    l.SaveToFile(dmData.HomeDir + 'members' + DirectorySeparator + ClubFileName)
+  end;
+
+  procedure ImportMembeshipFileToDatabase(l : TStringList; ClubFileName : String);
+  const
+    C_INS = 'insert into %s (club_nr,clubcall,fromdate,todate) values (:club_nr, :clubcall, :fromdate, :todate)';
+  var
+    ClubTableName : String;
+    i : Integer;
+    y : Integer;
+    ClubLine : TMembershipLine;
+  begin
+    ClubTableName := dmMembership.GetClubTableName(ClubFileName);
+    pBarProg.Position := 0;
+    pBarProg.Max := l.Count-1;
+
+    dmData.q.Close;
+    try try
+      dmData.trQ.StartTransaction;
+      for i:=0 to l.Count-1 do
+      begin
+        //ship file header
+        if (i < 2) then
+          Continue;
+
+        ClubLine := dmMembership.GetMembershipStructure(l.Strings[i]);
+
+        dmData.Q.SQL.Text := Format(C_INS, [ClubTableName]);
+        dmData.Q.Prepare;
+        dmData.Q.Params[0].AsString := ClubLine.club_nr;
+        dmData.Q.Params[1].AsString := ClubLine.club_call;
+        dmData.Q.Params[2].AsString := ClubLine.fromdate;
+        dmData.Q.Params[3].AsString := ClubLine.todate;
+        dmData.Q.ExecSQL;
+        pBarProg.StepIt;
+        Application.ProcessMessages
+      end
+    except
+      on E : Exception do
+      begin
+        Application.MessageBox(PChar('ERROR:' + LineEnding + LineEnding + E.ToString), 'Error', mb_OK + mb_IconError);
+        dmData.trQ.Rollback
+      end
+    end
+    finally
+      dmData.Q.Close;
+      if dmData.trQ.Active then
+        dmData.trQ.Commit
+    end
+  end;
+
+var
+  i : Integer;
+  ClubFileNameWithPath : String;
+  ClubFileName : String;
+  data : String;
+  l : TStringList;
+begin
+  Application.ProcessMessages;
+  l := TStringList.Create;
+  try try
+    for i:=0 to dmMembership.ListOfMembershipFilesForUpdate.Count-1 do
+    begin
+      if (dmMembership.ListOfMembershipFilesForUpdate.Strings[i] = '') then
+        Continue;
+
+      l.Clear;
+      ClubFileNameWithPath := dmMembership.ListOfMembershipFilesForUpdate.Strings[i];
+      ClubFileName := ExtractFileName(ClubFileNameWithPath);
+
+      lblComment.Caption := 'Downloading ' + ClubFileName;
+      Application.ProcessMessages;
+
+      if dmUtils.GetDataFromHttp(Format(C_MEMBERSHIP_DOWNLOAD_URL,[ClubFileName]), data) then
+      begin
+        l.Add(data);
+
+        lblComment.Caption := 'Importing ' + ClubFileName;
+        Application.ProcessMessages;
+
+        SaveMembershipFile(l, ClubFileName);
+        //without loading again whole data was in one line only
+        l.Clear;
+        l.LoadFromFile(dmData.HomeDir + 'members' + DirectorySeparator + ClubFileName);
+
+        ImportMembeshipFileToDatabase(l, ClubFileName);
+
+        //dmMembership.SaveLastMembershipUpdateDate(ClubFileName, now());
+      end
+    end
+  except
+    on E : Exception do
+      Application.MessageBox(PChar('ERROR:' + LineEnding + LineEnding + E.ToString), 'Error', mb_OK + mb_IconError)
+  end
+  finally
+    FreeAndNil(l)
+  end;
+  Close
 end;
 
 end.

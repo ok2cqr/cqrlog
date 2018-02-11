@@ -513,7 +513,7 @@ begin
     try
       lblComment.Caption := 'Importing DXCC data ...';
       Directory  := ExtractFilePath(dlgOpen.FileName);
-      ImportType := 1;
+      ImportType := imptImportDXCCTables;
       ShowModal
     finally
       Free
@@ -989,7 +989,7 @@ begin
       lblComment.Caption := 'Importing QSL mangers ...';
       Directory  := ExtractFilePath(dlgOpen.FileName);
       FileName   := dlgOpen.FileName;
-      ImportType := 5;
+      ImportType := imptImportQSLMgrs;
       ShowModal
     finally
       Free
@@ -1006,7 +1006,7 @@ begin
     with TfrmImportProgress.Create(self) do
     try
       FileName   := dlgOpen.FileName;
-      ImportType := 4;
+      ImportType := imptImportLoTWAdif;
       ShowModal
     finally
       Free;
@@ -1242,7 +1242,7 @@ begin
     end;
     with TfrmImportProgress.Create(self) do
     try
-      ImportType := 9;
+      ImportType := imptRemoveDupes;
       ShowModal
     finally
       Free
@@ -1612,7 +1612,7 @@ begin
 
   with TfrmImportProgress.Create(self) do
   try
-    ImportType := 7;
+    ImportType := imptInsertQSLManagers;
     ShowModal
   finally
     acRefresh.Execute;
@@ -1827,7 +1827,7 @@ begin
   end;
   with TfrmImportProgress.Create(self) do
   try
-    ImportType := 0;
+    ImportType := imptRegenerateDXCC;
     ShowModal
   finally
     Free

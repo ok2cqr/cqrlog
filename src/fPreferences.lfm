@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 647
     Top = 0
     Width = 752
-    ActivePage = tabStation
+    ActivePage = tabMemebership
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 1
+    TabIndex = 14
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -1255,7 +1255,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
@@ -1598,7 +1598,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
@@ -2014,7 +2014,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2347,7 +2347,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
@@ -4344,6 +4344,24 @@ object frmPreferences: TfrmPreferences
           TabOrder = 3
         end
       end
+      object chkCheckMembershipUpdate: TCheckBox
+        Left = 14
+        Height = 24
+        Top = 452
+        Width = 408
+        Caption = 'Check for updated list of members when program starts'
+        TabOrder = 5
+      end
+      object btnForceMembershipUpdate: TButton
+        Left = 503
+        Height = 29
+        Top = 448
+        Width = 95
+        AutoSize = True
+        Caption = 'Update now'
+        OnClick = btnForceMembershipUpdateClick
+        TabOrder = 6
+      end
     end
     object tabBandMap: TTabSheet
       Caption = 'Bandmap'
@@ -5749,7 +5767,7 @@ object frmPreferences: TfrmPreferences
           Height = 112
           Top = 5
           Width = 543
-          ClientHeight = 108
+          ClientHeight = 93
           ClientWidth = 539
           TabOrder = 7
           object Label95: TLabel
@@ -5867,7 +5885,7 @@ object frmPreferences: TfrmPreferences
           Height = 107
           Top = 9
           Width = 557
-          ClientHeight = 103
+          ClientHeight = 88
           ClientWidth = 553
           TabOrder = 0
           object Label202: TLabel
@@ -6016,7 +6034,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 366
+        ClientHeight = 351
         ClientWidth = 604
         TabOrder = 0
         object Label93: TLabel

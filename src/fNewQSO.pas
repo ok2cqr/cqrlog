@@ -578,6 +578,11 @@ type
     procedure DisplayCoordinates(latitude, Longitude : Currency);
     procedure DrawGrayline;
 
+    procedure CheckForExternalTablesUpdate;
+    procedure CheckForDXCCTablesUpdate;
+    procedure CheckForQslManagersUpdate;
+    procedure CheckForMembershipUpdate;
+
     function CheckFreq(freq : String) : String;
   public
     QTHfromCb   : Boolean;
@@ -644,6 +649,7 @@ type
       procedure Execute; override;
   end;
 
+
 var
   frmNewQSO    : TfrmNewQSO;
 
@@ -684,7 +690,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest,fXfldigi;
+     fRemind, fContest, fXfldigi, dMembership;
 
 procedure TQSLTabThread.Execute;
 var
@@ -715,6 +721,7 @@ begin
   end
 end;
 
+
 procedure TfrmNewQSO.SynDXCCTab;
 begin
   if Application.MessageBox('New DXCC tables are available. Do you want to download and install it?','Question ...',
@@ -724,7 +731,7 @@ begin
     try
       Caption            := 'Downloading DXCC data ...';
       lblComment.Caption := 'Downloading DXCC data ...';
-      ImportType := 3;
+      ImportType := imptDownloadDXCCData;
       ShowModal;
     finally
       Free
@@ -743,7 +750,7 @@ begin
     try
       Caption            := 'Downloading QSL managers ...';
       lblComment.Caption := 'Downloading QSL managers ...';
-      ImportType := 6;
+      ImportType := imptDownloadQSLData;
       ShowModal;
     finally
       Free
@@ -1135,9 +1142,6 @@ begin
 end;
 
 procedure TfrmNewQSO.LoadSettings;
-var
-  Tab   : TDXCCTabThread;
-  thqsl : TQSLTabThread;
 begin
   dmUtils.ModifyXplanetConf;
   dmUtils.LoadFontSettings(frmNewQSO);
@@ -1254,19 +1258,7 @@ begin
   if cqrini.ReadBool('Window','RBNMonitor',False) then
     acRBNMonitor.Execute;
 
-  if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
-  begin
-    Tab := TDXCCTabThread.Create(True);
-    Tab.FreeOnTerminate := True;
-    Tab.Start
-  end;
-
-  if cqrini.ReadBool('Program','CheckQSLTabs',True) then
-  begin
-    thqsl := TQSLTabThread.Create(True);
-    thqsl.FreeOnTerminate := True;
-    thqsl.Start
-  end;
+  CheckForExternalTablesUpdate;
 
   //this have to be done here when log is selected (settings at database)
   frmReminder.chRemi.Checked := cqrini.ReadBool('Reminder','chRemi',False);
@@ -4496,11 +4488,10 @@ begin
     if cmbQSL_S.Text = 'B' then
       cmbQSL_S.Text := 'MD'
   end;
-  if (old_call<>edtCall.Text) then
-  begin
-    idcall := dmUtils.GetIDCall(edtCall.Text);
-    sbNewQSO.Panels[1].Text := cRefCall + idcall
-  end;
+
+  idcall := dmUtils.GetIDCall(edtCall.Text);
+  sbNewQSO.Panels[1].Text := cRefCall + idcall;
+
   if (not(fEditQSO or fViewQSO)) then
   begin
     if SearchQRZ then
@@ -6320,6 +6311,43 @@ begin
   frmGrayline.d   := lblLong.Caption;
   frmGrayline.pfx := lblDXCC.Caption;
   frmGrayline.kresli
+end;
+
+procedure TfrmNewQSO.CheckForExternalTablesUpdate;
+begin
+  CheckForDXCCTablesUpdate;
+  CheckForQslManagersUpdate;
+  CheckForMembershipUpdate
+end;
+
+procedure TfrmNewQSO.CheckForDXCCTablesUpdate;
+var
+  Tab   : TDXCCTabThread;
+begin
+  if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
+  begin
+    Tab := TDXCCTabThread.Create(True);
+    Tab.FreeOnTerminate := True;
+    Tab.Start
+  end
+end;
+
+procedure TfrmNewQSO.CheckForQslManagersUpdate;
+var
+  thqsl : TQSLTabThread;
+begin
+  if cqrini.ReadBool('Program','CheckQSLTabs',True) then
+  begin
+    thqsl := TQSLTabThread.Create(True);
+    thqsl.FreeOnTerminate := True;
+    thqsl.Start
+  end
+end;
+
+procedure TfrmNewQSO.CheckForMembershipUpdate;
+begin
+  if cqrini.ReadBool('Clubs', 'CheckForUpdate', False) then
+    dmMembership.CheckForMembershipUpdate
 end;
 
 end.

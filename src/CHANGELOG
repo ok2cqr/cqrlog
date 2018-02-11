@@ -3,21 +3,18 @@ Legend:
   + new feature
   - bugfix
 --------------------
-2.2.0 (2018-02-09)
-  + when remote preferences open to fldigi/wsjt tab (Saku, OH1KH)
-2.2.0 (2018-02-08)
-  + StartConnectCommand  DXCluster/telnet; set with Ctrl-S and preferences (Saku, OH1KH)
-  + Open stright to right tab of preferences when called from DXCluster or TRXconrol (Saku, OH1KH) 
-  + Corresponding help file updates (Saku, OH1KH)
-2.2.0 (2018-01-28)
-  - DXCluster/WEB Font button not connected to acFont (no action). Fixed (Saku, OH1KH)
+2.3.0
   + TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig (Saku, OH1KH)
   + Start and stop scripts. Called when cqrlog is up and running and before closing all down. (Saku, OH1KH)
-  + Corresponding help file updates (Saku, OH1KH)
-2.2.0 (2017-01-27)
-  - all remote loggings keep "qso_dxcc" boolean false (Saku, OH1KH)
+  + StartConnectCommand added to DXCluster (Saku, OH1KH)
+  + when remote preferences open to fldigi/wsjt tab (Saku, OH1KH)
+  + auto update membership files added (has to be enabled in Prefereces, first)
+
+  - DXCluster/WEB Font button not connected to acFont (no action). Fixed (Saku, OH1KH)
   - wsjtx logging take start and stop times to log (before just stop time) (Saku, OH1KH)
   - fldigi remote socket checking fixed (Saku, OH1KH)
+
+
 2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)
   + CQ-monitor now remembers showing state.(Saku, OH1KH)

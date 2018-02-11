@@ -146,7 +146,7 @@ begin
       with TfrmImportProgress.Create(self) do
       try
         FileName    := AdifFile;
-        ImportType  := 4;
+        ImportType  := imptImportLoTWAdif;
         LoTWShowNew := chkShowNew.Checked;
         ShowModal;
         QSOList.Text := LoTWQSOList.Text;

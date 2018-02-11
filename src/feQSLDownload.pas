@@ -176,7 +176,7 @@ begin
             with TfrmImportProgress.Create(self) do
             try
               FileName    := AdifFile;
-              ImportType  := 8;
+              ImportType  := imptImporteQSLAdif;
               eQSLShowNew := chkShowNew.Checked;
               ShowModal;
               QSOList.Text := eQSLQSOList.Text;

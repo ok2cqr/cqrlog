@@ -401,7 +401,7 @@ begin
     try
       lblComment.Caption := 'Importing DXCC data ...';
       Directory  := dmData.fHomeDir + 'ctyfiles' + PathDelim;
-      ImportType := 1;
+      ImportType := imptImportDXCCTables;
       ShowModal
     finally
       Free
@@ -412,7 +412,7 @@ begin
       lblComment.Caption := 'Importing QSL data ...';
       Directory     := dmData.fHomeDir + 'ctyfiles' + PathDelim;
       FileName      := Directory+'qslmgr.csv';
-      ImportType    := 5;
+      ImportType    := imptImportQSLMgrs;
       CloseAfImport := True;
       ShowModal
     finally

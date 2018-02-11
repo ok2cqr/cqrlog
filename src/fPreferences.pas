@@ -72,6 +72,7 @@ type
     btnCfgStorage: TButton;
     btnAddTrxMem : TButton;
     btnSelectQSOColor : TButton;
+    btnForceMembershipUpdate : TButton;
     cb10m1: TCheckBox;
     cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
@@ -118,6 +119,7 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkCheckMembershipUpdate : TCheckBox;
     chkConToDXC: TCheckBox;
     chkFldXmlRpc: TCheckBox;
     chkQSOColor : TCheckBox;
@@ -967,6 +969,7 @@ type
     procedure btnChangeDefaultFreqClick(Sender: TObject);
     procedure btnKeyTextClick(Sender: TObject);
     procedure btnSplitClick(Sender: TObject);
+    procedure btnForceMembershipUpdateClick(Sender : TObject);
     procedure chkClUpEnabledChange(Sender: TObject);
     procedure chkHaUpEnabledChange(Sender: TObject);
     procedure chkHrUpEnabledChange(Sender: TObject);
@@ -1037,6 +1040,8 @@ type
     procedure pnlQSOColorClick(Sender : TObject);
   private
     wasOnlineLogSupportEnabled : Boolean;
+
+    procedure SaveClubSection;
   public
     { public declarations }
     ActPageIdx : integer;
@@ -1061,7 +1066,7 @@ implementation
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
-  fRadioMemories;
+  fRadioMemories, dMembership;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1344,11 +1349,7 @@ begin
   cqrini.WriteInteger('IOTA', 'QSLIOTA', clboxQSLIOTA.Selected);
   cqrini.WriteBool('IOTA', 'ShowIOTAInfo', chkShowIOTAInfo.Checked);
 
-  cqrini.WriteString('Clubs', 'First', cmbFirstClub.Text);
-  cqrini.WriteString('Clubs', 'Second', cmbSecondClub.Text);
-  cqrini.WriteString('Clubs', 'Third', cmbThirdClub.Text);
-  cqrini.WriteString('Clubs', 'Fourth', cmbFourthClub.Text);
-  cqrini.WriteString('Clubs', 'Fifth', cmbFifthClub.Text);
+  SaveClubSection;
 
   cqrini.WriteString('BandMap', 'BandFont', lblBandMapFont.Font.Name);
   cqrini.WriteInteger('BandMap', 'FontSize', fbandSize);
@@ -2126,6 +2127,12 @@ begin
     end;
 end;
 
+procedure TfrmPreferences.btnForceMembershipUpdateClick(Sender : TObject);
+begin
+  SaveClubSection;
+  dmMembership.CheckForMembershipUpdate
+end;
+
 procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
 begin
   edtClUserName.Enabled := chkClUpEnabled.Checked;
@@ -2723,6 +2730,7 @@ begin
   cmbThirdClub.Text := cqrini.ReadString('Clubs', 'Third', '');
   cmbFourthClub.Text := cqrini.ReadString('Clubs', 'Fourth', '');
   cmbFifthClub.Text := cqrini.ReadString('Clubs', 'Fifth', '');
+  chkCheckMembershipUpdate.Checked := cqrini.ReadBool('Clubs', 'CheckForUpdate', False);
 
   lblBandMapFont.Font.Name := cqrini.ReadString('BandMap', 'BandFont', 'Monospace');
   lblBandMapFont.Font.Size := cqrini.ReadInteger('BandMap', 'FontSize', 8);
@@ -2928,6 +2936,16 @@ end;
 procedure TfrmPreferences.pnlQSOColorClick(Sender : TObject);
 begin
   btnSelectQSOColor.Click
+end;
+
+procedure TfrmPreferences.SaveClubSection;
+begin
+  cqrini.WriteString('Clubs', 'First', cmbFirstClub.Text);
+  cqrini.WriteString('Clubs', 'Second', cmbSecondClub.Text);
+  cqrini.WriteString('Clubs', 'Third', cmbThirdClub.Text);
+  cqrini.WriteString('Clubs', 'Fourth', cmbFourthClub.Text);
+  cqrini.WriteString('Clubs', 'Fifth', cmbFifthClub.Text);
+  cqrini.WriteBool('Clubs', 'CheckForUpdate', chkCheckMembershipUpdate.Checked)
 end;
 
 end.

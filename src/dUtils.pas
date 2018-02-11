@@ -257,6 +257,8 @@ type
     function  EncodeURLData(data : String) : String;
     function  GetRigIdFromComboBoxItem(ItemText : String) : String;
     function  GetDataFromHttp(Url : String; var data : String) : Boolean;
+    function  MyStrToDateTime(DateTime : String) : TDateTime;
+    function  MyDateTimeToStr(DateTime : TDateTime) : String;
 end;
 
 var
@@ -4375,5 +4377,36 @@ begin
     m.Free
   end
 end;
+
+function TdmUtils.MyStrToDateTime(DateTime : String) : TDateTime;
+var
+  tmp: string;
+begin
+  tmp := FormatSettings.ShortDateFormat;
+  try
+    FormatSettings.ShortDateFormat := 'YYYY-MM-DD';
+    try
+      Result := StrToDateTime(DateTime)
+    except
+      Result := StrToDate('1980-01-01 00:00:01')
+    end
+  finally
+    FormatSettings.ShortDateFormat := tmp
+  end
+end;
+
+function TdmUtils.MyDateTimeToStr(DateTime : TDateTime) : String;
+var
+  tmp: string;
+begin
+  tmp := FormatSettings.ShortDateFormat;
+  try
+    FormatSettings.ShortDateFormat := 'YYYY-MM-DD';
+    Result := DateTimeToStr(DateTime)
+  finally
+    FormatSettings.ShortDateFormat := tmp
+  end
+end;
+
 
 end.

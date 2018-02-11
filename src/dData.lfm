@@ -6,6 +6,7 @@ object dmData: TdmData
   HorizontalOffset = 406
   VerticalOffset = 62
   Width = 822
+  PPI = 96
   object dsrMain: TDataSource
     DataSet = qCQRLOG
     left = 304
@@ -45,7 +46,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = mQBeforeOpen
     Transaction = trmQ
-    Options = []
     Params = <>
     ParseSQL = False
     left = 632
@@ -54,7 +54,6 @@ object dmData: TdmData
   object trmQ: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 632
     top = 144
   end
@@ -433,7 +432,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = qLogListBeforeOpen
     Transaction = trLogList
-    Options = []
     Params = <>
     ParseSQL = False
     left = 528
@@ -442,7 +440,6 @@ object dmData: TdmData
   object trLogList: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 528
     top = 288
   end
@@ -455,7 +452,6 @@ object dmData: TdmData
     PacketRecords = 100
     FieldDefs = <>
     Transaction = trmQ
-    Options = []
     Params = <>
     ParseSQL = False
     left = 632
@@ -464,7 +460,6 @@ object dmData: TdmData
   object trSQLConsole: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 632
     top = 288
   end
@@ -476,7 +471,6 @@ object dmData: TdmData
   object qQSLMgr: TSQLQuery
     FieldDefs = <>
     Transaction = trQSLMgr
-    Options = []
     Params = <>
     ParseSQL = False
     left = 152
@@ -485,14 +479,12 @@ object dmData: TdmData
   object trQSLMgr: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 152
     top = 288
   end
   object qCallBook: TSQLQuery
     FieldDefs = <>
     Transaction = trCallBook
-    Options = []
     Params = <>
     left = 24
     top = 80
@@ -500,14 +492,12 @@ object dmData: TdmData
   object trCallBook: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 24
     top = 144
   end
   object trLongNote: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 728
     top = 144
   end
@@ -515,7 +505,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = qLongNoteBeforeOpen
     Transaction = trLongNote
-    Options = []
     Params = <>
     left = 728
     top = 80
@@ -523,7 +512,6 @@ object dmData: TdmData
   object qProfiles: TSQLQuery
     FieldDefs = <>
     Transaction = trProfiles
-    Options = []
     Params = <>
     ParseSQL = False
     left = 88
@@ -532,14 +520,12 @@ object dmData: TdmData
   object trProfiles: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 88
     top = 144
   end
   object qIOTAList: TSQLQuery
     FieldDefs = <>
     Transaction = trIOTAList
-    Options = []
     Params = <>
     ParseSQL = False
     left = 24
@@ -548,14 +534,12 @@ object dmData: TdmData
   object trIOTAList: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 24
     top = 288
   end
   object trBands: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 88
     top = 288
   end
@@ -563,7 +547,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
     Transaction = trBands
-    Options = []
     Params = <>
     ParseSQL = False
     left = 88
@@ -572,14 +555,12 @@ object dmData: TdmData
   object trDXClusters: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 224
     top = 144
   end
   object qDXClusters: TSQLQuery
     FieldDefs = <>
     Transaction = trDXClusters
-    Options = []
     Params = <>
     ParseSQL = False
     left = 224
@@ -588,14 +569,12 @@ object dmData: TdmData
   object trComment: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 224
     top = 288
   end
   object qComment: TSQLQuery
     FieldDefs = <>
     Transaction = trComment
-    Options = []
     Params = <>
     ParseSQL = False
     left = 224
@@ -604,14 +583,12 @@ object dmData: TdmData
   object trException: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 472
     top = 288
   end
   object qException: TSQLQuery
     FieldDefs = <>
     Transaction = trException
-    Options = []
     Params = <>
     ParseSQL = False
     left = 472
@@ -620,14 +597,12 @@ object dmData: TdmData
   object trQSOBefore: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 304
     top = 288
   end
   object qQSOBefore: TSQLQuery
     FieldDefs = <>
     Transaction = trQSOBefore
-    Options = []
     Params = <>
     ParseSQL = False
     left = 304
@@ -636,7 +611,6 @@ object dmData: TdmData
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 528
     top = 144
   end
@@ -644,7 +618,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
-    Options = []
     Params = <>
     ParseSQL = False
     left = 528
@@ -653,7 +626,6 @@ object dmData: TdmData
   object trQ: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 472
     top = 144
   end
@@ -661,7 +633,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
-    Options = []
     Params = <>
     ParseSQL = False
     left = 472
@@ -670,7 +641,6 @@ object dmData: TdmData
   object trCQRLOG: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 304
     top = 144
   end
@@ -679,7 +649,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = qCQRLOGBeforeOpen
     Transaction = trCQRLOG
-    Options = []
     Params = <>
     ParseSQL = False
     left = 304
@@ -906,41 +875,35 @@ object dmData: TdmData
   end
   object qBandMapFil: TSQLQuery
     FieldDefs = <>
-    Options = []
     Params = <>
     left = 728
     top = 216
   end
   object trBandMapFil: TSQLTransaction
     Active = False
-    Options = []
     left = 728
     top = 288
   end
   object qRbnMon: TSQLQuery
     FieldDefs = <>
-    Options = []
     Params = <>
     left = 152
     top = 80
   end
   object trRbnMon: TSQLTransaction
     Active = False
-    Options = []
     left = 152
     top = 144
   end
   object qFreqMem: TSQLQuery
     FieldDefs = <>
     Transaction = trFreqMem
-    Options = []
     Params = <>
     left = 368
     top = 216
   end
   object trFreqMem: TSQLTransaction
     Active = False
-    Options = []
     left = 368
     top = 288
   end
@@ -948,7 +911,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = WBeforeOpen
     Transaction = trW
-    Options = []
     Params = <>
     left = 368
     top = 80
@@ -956,7 +918,6 @@ object dmData: TdmData
   object trW: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 368
     top = 144
   end
@@ -964,7 +925,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = W1BeforeOpen
     Transaction = trW1
-    Options = []
     Params = <>
     left = 416
     top = 80
@@ -972,7 +932,6 @@ object dmData: TdmData
   object trW1: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 416
     top = 144
   end
@@ -980,7 +939,6 @@ object dmData: TdmData
     FieldDefs = <>
     BeforeOpen = Q2BeforeOpen
     Transaction = trQ2
-    Options = []
     Params = <>
     ParseSQL = False
     left = 576
@@ -989,7 +947,6 @@ object dmData: TdmData
   object trQ2: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 576
     top = 144
   end
