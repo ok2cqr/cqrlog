@@ -1880,6 +1880,7 @@ begin
     Paths.Add('/usr/lib/x86_64-linux-gnu/');
     Paths.Add('/lib/x86_64-linux-gnu/');
     Paths.Add('/usr/lib/i386-linux-gnu/');
+    Paths.Add('/lib/i386-linux-gnu/');
     Paths.Add('/usr/lib/');
     Paths.Add('/lib/');
 
