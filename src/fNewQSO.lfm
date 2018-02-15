@@ -2161,7 +2161,6 @@ object frmNewQSO: TfrmNewQSO
     Top = 120
     Width = 807
     Align = alBottom
-    Caption = 'Panel1'
     ClientHeight = 518
     ClientWidth = 807
     TabOrder = 0
@@ -2775,13 +2774,12 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 0
         end
         object cmbMode: TComboBox
-          Left = 232
-          Height = 27
+          Left = 234
+          Height = 29
           Top = 25
           Width = 111
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           Items.Strings = (
             'SSB'
@@ -2841,12 +2839,11 @@ object frmNewQSO: TfrmNewQSO
         end
         object cmbQSL_S: TComboBox
           Left = 397
-          Height = 27
+          Height = 29
           Top = 74
           Width = 64
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           ItemIndex = 1
           Items.Strings = (
@@ -2869,12 +2866,11 @@ object frmNewQSO: TfrmNewQSO
         end
         object cmbQSL_R: TComboBox
           Left = 468
-          Height = 27
+          Height = 29
           Top = 74
           Width = 64
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           Items.Strings = (
             ''
@@ -2933,12 +2929,11 @@ object frmNewQSO: TfrmNewQSO
         end
         object cmbFreq: TComboBox
           Left = 132
-          Height = 27
+          Height = 29
           Top = 25
           Width = 93
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           OnChange = cmbFreqChange
           OnEnter = cmbFreqEnter
@@ -3030,10 +3025,9 @@ object frmNewQSO: TfrmNewQSO
         end
         object cmbIOTA: TComboBox
           Left = 102
-          Height = 27
+          Height = 29
           Top = 125
           Width = 100
-          BorderSpacing.InnerBorder = -1
           CharCase = ecUppercase
           ItemHeight = 0
           OnChange = cmbIOTAChange
