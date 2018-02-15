@@ -1,12 +1,12 @@
 object frmNewQSO: TfrmNewQSO
   Left = 574
-  Height = 651
+  Height = 659
   Top = 206
   Width = 807
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 651
+  ClientHeight = 659
   ClientWidth = 807
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
@@ -2138,7 +2138,7 @@ object frmNewQSO: TfrmNewQSO
   object sbNewQSO: TStatusBar
     Left = 0
     Height = 21
-    Top = 630
+    Top = 638
     Width = 807
     Panels = <    
       item
@@ -2157,41 +2157,40 @@ object frmNewQSO: TfrmNewQSO
   end
   object Panel1: TPanel
     Left = 0
-    Height = 499
-    Top = 131
+    Height = 518
+    Top = 120
     Width = 807
     Align = alBottom
     Caption = 'Panel1'
-    ClientHeight = 499
+    ClientHeight = 518
     ClientWidth = 807
     TabOrder = 0
     object Panel3: TPanel
       Left = 1
-      Height = 466
+      Height = 485
       Top = 32
       Width = 548
       Align = alClient
       BevelOuter = bvNone
-      Caption = 'Panel3'
-      ClientHeight = 466
+      ClientHeight = 485
       ClientWidth = 548
       TabOrder = 0
       object Panel6: TPanel
         Left = 0
-        Height = 325
+        Height = 344
         Top = 0
         Width = 548
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 325
+        ClientHeight = 344
         ClientWidth = 548
         TabOrder = 0
         object Label11: TLabel
           Left = 256
           Height = 17
-          Top = 194
-          Width = 144
-          Caption = 'Comment to callsign:'
+          Top = 213
+          Width = 140
+          Caption = 'Comment to callsign'
           ParentColor = False
           ParentFont = False
         end
@@ -2205,83 +2204,83 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object Label9: TLabel
-          Left = 16
+          Left = 12
           Height = 17
           Top = 55
-          Width = 44
-          Caption = 'Name:'
+          Width = 40
+          Caption = 'Name'
           ParentColor = False
           ParentFont = False
         end
         object Label8: TLabel
           Left = 448
           Height = 17
-          Top = 8
+          Top = 7
           Width = 58
           Caption = 'RST rcvd'
           ParentColor = False
           ParentFont = False
         end
         object Label7: TLabel
-          Left = 343
+          Left = 353
           Height = 17
-          Top = 8
+          Top = 7
           Width = 58
           Caption = 'RST sent'
           ParentColor = False
           ParentFont = False
         end
         object lblCall: TLabel
-          Left = 16
+          Left = 12
           Height = 17
-          Top = 8
-          Width = 29
-          Caption = 'Call:'
+          Top = 7
+          Width = 25
+          Caption = 'Call'
           ParentColor = False
           ParentFont = False
         end
         object Label5: TLabel
           Left = 136
           Height = 17
-          Top = 8
-          Width = 75
-          Caption = 'Frequency:'
+          Top = 7
+          Width = 71
+          Caption = 'Frequency'
           ParentColor = False
           ParentFont = False
         end
         object Label4: TLabel
           Left = 234
           Height = 17
-          Top = 8
-          Width = 43
-          Caption = 'Mode:'
+          Top = 7
+          Width = 39
+          Caption = 'Mode'
           ParentColor = False
           ParentFont = False
         end
         object Label3: TLabel
           Left = 172
           Height = 17
-          Top = 248
-          Width = 65
-          Caption = 'End time:'
+          Top = 265
+          Width = 61
+          Caption = 'End time'
           ParentColor = False
           ParentFont = False
         end
         object Label2: TLabel
           Left = 103
           Height = 17
-          Top = 248
-          Width = 72
-          Caption = 'Start time:'
+          Top = 265
+          Width = 68
+          Caption = 'Start time'
           ParentColor = False
           ParentFont = False
         end
         object Label1: TLabel
           Left = 16
           Height = 17
-          Top = 248
-          Width = 37
-          Caption = 'Date:'
+          Top = 265
+          Width = 33
+          Caption = 'Date'
           ParentColor = False
           ParentFont = False
         end
@@ -2324,7 +2323,7 @@ object frmNewQSO: TfrmNewQSO
         object Label13: TLabel
           Left = 16
           Height = 17
-          Top = 99
+          Top = 106
           Width = 22
           Caption = 'ITU'
           ParentColor = False
@@ -2333,7 +2332,7 @@ object frmNewQSO: TfrmNewQSO
         object Label20: TLabel
           Left = 397
           Height = 17
-          Top = 99
+          Top = 106
           Width = 45
           Caption = 'Award'
           ParentColor = False
@@ -2342,7 +2341,7 @@ object frmNewQSO: TfrmNewQSO
         object Label21: TLabel
           Left = 12
           Height = 17
-          Top = 147
+          Top = 159
           Width = 64
           Caption = 'DXCC ref.'
           ParentColor = False
@@ -2351,7 +2350,7 @@ object frmNewQSO: TfrmNewQSO
         object Label22: TLabel
           Left = 60
           Height = 17
-          Top = 99
+          Top = 106
           Width = 33
           Caption = 'WAZ'
           ParentColor = False
@@ -2360,7 +2359,7 @@ object frmNewQSO: TfrmNewQSO
         object lblIOTA: TLabel
           Left = 127
           Height = 17
-          Top = 99
+          Top = 106
           Width = 33
           Caption = 'IOTA'
           ParentColor = False
@@ -2369,7 +2368,7 @@ object frmNewQSO: TfrmNewQSO
         object Label17: TLabel
           Left = 261
           Height = 17
-          Top = 99
+          Top = 106
           Width = 49
           Caption = 'County'
           ParentColor = False
@@ -2378,7 +2377,7 @@ object frmNewQSO: TfrmNewQSO
         object Label23: TLabel
           Left = 111
           Height = 17
-          Top = 147
+          Top = 159
           Width = 124
           Caption = 'Comment to QSO:'
           ParentColor = False
@@ -2387,7 +2386,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQSLVia: TLabel
           Left = 419
           Height = 17
-          Top = 147
+          Top = 159
           Width = 55
           Caption = 'QSL VIA'
           ParentColor = False
@@ -2396,7 +2395,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQSOTakes: TLabel
           Left = 12
           Height = 17
-          Top = 303
+          Top = 319
           Width = 75
           Caption = 'QSO takes '
           ParentColor = False
@@ -2406,7 +2405,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQSLMgr: TLabel
           Left = 406
           Height = 17
-          Top = 194
+          Top = 213
           Width = 141
           Caption = 'QSL manager found!'
           Font.Color = clRed
@@ -2417,7 +2416,7 @@ object frmNewQSO: TfrmNewQSO
         object Label25: TLabel
           Left = 210
           Height = 17
-          Top = 99
+          Top = 106
           Width = 36
           Caption = 'State'
           ParentColor = False
@@ -2426,9 +2425,9 @@ object frmNewQSO: TfrmNewQSO
         object lblCfmLoTW: TLabel
           Left = 12
           Height = 17
-          Top = 199
-          Width = 167
-          Caption = 'QSO confirmed by LoTW'
+          Top = 212
+          Width = 122
+          Caption = 'QSO cfm by LoTW'
           Font.Color = clRed
           ParentColor = False
           ParentFont = False
@@ -2437,7 +2436,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQSLRcvdDate: TLabel
           Left = 95
           Height = 17
-          Top = 226
+          Top = 238
           Width = 85
           Caption = 'QSL rcvd on '
           Font.Color = clRed
@@ -2449,7 +2448,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 423
           Height = 22
           Hint = 'Call has an attachment'
-          Top = 296
+          Top = 314
           Width = 23
           Glyph.Data = {
             C6070000424DC607000000000000360000002800000016000000160000000100
@@ -2524,7 +2523,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 399
           Height = 23
           Hint = 'Call has a QSL image'
-          Top = 295
+          Top = 313
           Width = 23
           Glyph.Data = {
             36090000424D3609000000000000360000002800000018000000180000000100
@@ -2610,7 +2609,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 485
           Height = 23
           Hint = 'Opens qrz.com callsing profile in webbrowser'
-          Top = 295
+          Top = 313
           Width = 23
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
@@ -2656,7 +2655,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 463
           Height = 23
           Hint = 'LoTW user'
-          Top = 295
+          Top = 313
           Width = 23
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
@@ -2700,9 +2699,8 @@ object frmNewQSO: TfrmNewQSO
         object edtDXCCRef: TEdit
           Left = 12
           Height = 27
-          Top = 163
+          Top = 179
           Width = 64
-          AutoSize = False
           CharCase = ecUppercase
           OnEnter = edtDXCCRefEnter
           OnExit = edtDXCCRefExit
@@ -2713,7 +2711,7 @@ object frmNewQSO: TfrmNewQSO
         object mComment: TMemo
           Left = 256
           Height = 80
-          Top = 214
+          Top = 233
           Width = 276
           Lines.Strings = (
             ''
@@ -2726,9 +2724,8 @@ object frmNewQSO: TfrmNewQSO
         object edtQTH: TEdit
           Left = 111
           Height = 27
-          Top = 71
+          Top = 74
           Width = 136
-          AutoSize = False
           OnEnter = edtQTHEnter
           OnExit = edtQTHExit
           OnKeyDown = edtQTHKeyDown
@@ -2737,31 +2734,28 @@ object frmNewQSO: TfrmNewQSO
         object edtName: TEdit
           Left = 12
           Height = 27
-          Top = 71
+          Top = 74
           Width = 92
-          AutoSize = False
           OnEnter = edtNameEnter
           OnExit = edtNameExit
           OnKeyDown = edtNameKeyDown
           TabOrder = 5
         end
         object edtMyRST: TEdit
-          Left = 442
+          Left = 446
           Height = 27
-          Top = 24
-          Width = 90
-          AutoSize = False
+          Top = 25
+          Width = 86
           OnEnter = edtMyRSTEnter
           OnExit = edtMyRSTExit
           OnKeyDown = edtMyRSTKeyDown
           TabOrder = 4
         end
         object edtHisRST: TEdit
-          Left = 343
+          Left = 353
           Height = 27
-          Top = 24
-          Width = 90
-          AutoSize = False
+          Top = 25
+          Width = 82
           OnEnter = edtHisRSTEnter
           OnExit = edtHisRSTExit
           OnKeyDown = edtHisRSTKeyDown
@@ -2770,9 +2764,8 @@ object frmNewQSO: TfrmNewQSO
         object edtCall: TEdit
           Left = 12
           Height = 27
-          Top = 24
+          Top = 25
           Width = 115
-          AutoSize = False
           CharCase = ecUppercase
           OnChange = edtCallChange
           OnEnter = edtCallEnter
@@ -2784,11 +2777,11 @@ object frmNewQSO: TfrmNewQSO
         object cmbMode: TComboBox
           Left = 232
           Height = 27
-          Top = 24
-          Width = 100
+          Top = 25
+          Width = 111
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          AutoSize = False
+          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           Items.Strings = (
             'SSB'
@@ -2827,9 +2820,8 @@ object frmNewQSO: TfrmNewQSO
         object edtGrid: TEdit
           Left = 256
           Height = 27
-          Top = 71
-          Width = 66
-          AutoSize = False
+          Top = 74
+          Width = 72
           CharCase = ecUppercase
           OnEnter = edtGridEnter
           OnExit = edtGridExit
@@ -2838,11 +2830,10 @@ object frmNewQSO: TfrmNewQSO
           Text = 'JO80OB'
         end
         object edtPWR: TEdit
-          Left = 327
+          Left = 336
           Height = 27
-          Top = 71
-          Width = 64
-          AutoSize = False
+          Top = 74
+          Width = 55
           CharCase = ecUppercase
           OnEnter = edtPWREnter
           OnKeyDown = edtPWRKeyDown
@@ -2851,11 +2842,11 @@ object frmNewQSO: TfrmNewQSO
         object cmbQSL_S: TComboBox
           Left = 397
           Height = 27
-          Top = 71
+          Top = 74
           Width = 64
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          AutoSize = False
+          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           ItemIndex = 1
           Items.Strings = (
@@ -2873,18 +2864,17 @@ object frmNewQSO: TfrmNewQSO
           )
           OnEnter = cmbQSL_SEnter
           OnKeyDown = cmbQSL_SKeyDown
-          ParentFont = False
           TabOrder = 9
           Text = 'MD'
         end
         object cmbQSL_R: TComboBox
           Left = 468
           Height = 27
-          Top = 71
+          Top = 74
           Width = 64
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          AutoSize = False
+          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           Items.Strings = (
             ''
@@ -2900,7 +2890,7 @@ object frmNewQSO: TfrmNewQSO
         object edtITU: TEdit
           Left = 12
           Height = 27
-          Top = 115
+          Top = 125
           Width = 38
           AutoSize = False
           CharCase = ecUppercase
@@ -2912,9 +2902,8 @@ object frmNewQSO: TfrmNewQSO
         object edtAward: TEdit
           Left = 392
           Height = 27
-          Top = 115
+          Top = 125
           Width = 140
-          AutoSize = False
           OnEnter = edtAwardEnter
           OnExit = edtAwardExit
           OnKeyDown = edtAwardKeyDown
@@ -2923,7 +2912,7 @@ object frmNewQSO: TfrmNewQSO
         object edtWAZ: TEdit
           Left = 56
           Height = 27
-          Top = 115
+          Top = 125
           Width = 42
           AutoSize = False
           CharCase = ecUppercase
@@ -2935,9 +2924,8 @@ object frmNewQSO: TfrmNewQSO
         object edtCounty: TEdit
           Left = 256
           Height = 27
-          Top = 115
+          Top = 125
           Width = 126
-          AutoSize = False
           OnEnter = edtCountyEnter
           OnExit = edtCountyExit
           OnKeyDown = edtCountyKeyDown
@@ -2946,11 +2934,11 @@ object frmNewQSO: TfrmNewQSO
         object cmbFreq: TComboBox
           Left = 132
           Height = 27
-          Top = 24
+          Top = 25
           Width = 93
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
-          AutoSize = False
+          BorderSpacing.InnerBorder = -1
           ItemHeight = 0
           OnChange = cmbFreqChange
           OnEnter = cmbFreqEnter
@@ -2961,18 +2949,17 @@ object frmNewQSO: TfrmNewQSO
         object edtQSL_VIA: TEdit
           Left = 414
           Height = 27
-          Top = 163
+          Top = 179
           Width = 96
-          AutoSize = False
           CharCase = ecUppercase
           OnEnter = edtQSL_VIAEnter
           OnKeyDown = edtQSL_VIAKeyDown
           TabOrder = 20
         end
         object btnDXCCRef: TButton
-          Left = 74
+          Left = 76
           Height = 27
-          Top = 163
+          Top = 179
           Width = 24
           BorderSpacing.InnerBorder = 4
           Caption = '...'
@@ -2982,16 +2969,16 @@ object frmNewQSO: TfrmNewQSO
         object pnlOffline: TPanel
           Left = 16
           Height = 24
-          Top = 220
+          Top = 233
           Width = 80
           BevelOuter = bvNone
           ClientHeight = 24
           ClientWidth = 80
           TabOrder = 26
           object cbOffline: TCheckBox
-            Left = -2
+            Left = 0
             Height = 24
-            Top = 4
+            Top = 2
             Width = 75
             Caption = 'Offline'
             OnChange = cbOfflineChange
@@ -3001,7 +2988,7 @@ object frmNewQSO: TfrmNewQSO
         object btnQSLMgr: TButton
           Left = 510
           Height = 27
-          Top = 163
+          Top = 179
           Width = 24
           BorderSpacing.InnerBorder = 4
           Caption = '...'
@@ -3011,9 +2998,8 @@ object frmNewQSO: TfrmNewQSO
         object edtDate: TEdit
           Left = 12
           Height = 27
-          Top = 267
+          Top = 286
           Width = 86
-          AutoSize = False
           OnEnter = edtDateEnter
           OnExit = edtDateExit
           OnKeyDown = edtDateKeyDown
@@ -3023,9 +3009,8 @@ object frmNewQSO: TfrmNewQSO
         object edtStartTime: TEdit
           Left = 113
           Height = 27
-          Top = 267
+          Top = 286
           Width = 48
-          AutoSize = False
           OnEnter = edtStartTimeEnter
           OnExit = edtStartTimeExit
           OnKeyDown = edtStartTimeKeyDown
@@ -3035,9 +3020,8 @@ object frmNewQSO: TfrmNewQSO
         object edtEndTime: TEdit
           Left = 172
           Height = 27
-          Top = 267
+          Top = 286
           Width = 48
-          AutoSize = False
           OnEnter = edtEndTimeEnter
           OnExit = edtEndTimeExit
           OnKeyDown = edtEndTimeKeyDown
@@ -3047,9 +3031,9 @@ object frmNewQSO: TfrmNewQSO
         object cmbIOTA: TComboBox
           Left = 102
           Height = 27
-          Top = 115
+          Top = 125
           Width = 100
-          AutoSize = False
+          BorderSpacing.InnerBorder = -1
           CharCase = ecUppercase
           ItemHeight = 0
           OnChange = cmbIOTAChange
@@ -3061,9 +3045,8 @@ object frmNewQSO: TfrmNewQSO
         object edtRemQSO: TEdit
           Left = 111
           Height = 27
-          Top = 163
+          Top = 179
           Width = 290
-          AutoSize = False
           OnEnter = edtRemQSOEnter
           OnKeyDown = edtRemQSOKeyDown
           TabOrder = 19
@@ -3071,9 +3054,8 @@ object frmNewQSO: TfrmNewQSO
         object edtState: TEdit
           Left = 210
           Height = 27
-          Top = 115
+          Top = 125
           Width = 38
-          AutoSize = False
           CharCase = ecUppercase
           OnEnter = edtStateEnter
           OnExit = edtStateExit
@@ -3095,7 +3077,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 509
           Height = 23
           Hint = 'Opens HamQTH.com callsing profile in webbrowser'
-          Top = 295
+          Top = 313
           Width = 23
           Font.Color = clBlue
           Font.Height = 16
@@ -3141,7 +3123,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 444
           Height = 23
           Hint = 'eQSL user'
-          Top = 295
+          Top = 313
           Width = 23
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
@@ -3185,7 +3167,7 @@ object frmNewQSO: TfrmNewQSO
         object sbtnRefreshTime: TSpeedButton
           Left = 227
           Height = 22
-          Top = 270
+          Top = 288
           Width = 23
           Action = acRefreshTime
           ShowHint = True
@@ -3195,7 +3177,7 @@ object frmNewQSO: TfrmNewQSO
       object GroupBox2: TGroupBox
         Left = 0
         Height = 141
-        Top = 325
+        Top = 344
         Width = 548
         Align = alBottom
         Caption = 'DXCC stat.'
@@ -3213,7 +3195,6 @@ object frmNewQSO: TfrmNewQSO
           DefaultColWidth = 35
           FixedCols = 0
           FixedRows = 0
-          Font.Height = 8
           ParentFont = False
           RowCount = 4
           TabOrder = 0
@@ -3225,19 +3206,19 @@ object frmNewQSO: TfrmNewQSO
     end
     object Panel2: TPanel
       Left = 549
-      Height = 466
+      Height = 485
       Top = 32
       Width = 257
       Align = alRight
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 484
-      ClientHeight = 466
+      ClientHeight = 485
       ClientWidth = 257
       TabOrder = 1
       object grbCallBook: TGroupBox
         Left = 9
         Height = 154
-        Top = 274
+        Top = 288
         Width = 240
         Caption = ' Callbook (qrz.com) '
         ClientHeight = 135
@@ -3256,18 +3237,18 @@ object frmNewQSO: TfrmNewQSO
       end
       object GroupBox1: TGroupBox
         Left = 9
-        Height = 269
+        Height = 280
         Top = 0
         Width = 240
         Caption = 'DXCC info'
-        ClientHeight = 250
+        ClientHeight = 261
         ClientWidth = 236
         ParentFont = False
         TabOrder = 1
         object Label27: TLabel
           Left = 126
           Height = 17
-          Top = 95
+          Top = 105
           Width = 42
           Caption = 'DXCC:'
           ParentColor = False
@@ -3276,7 +3257,7 @@ object frmNewQSO: TfrmNewQSO
         object Label28: TLabel
           Left = 10
           Height = 17
-          Top = 78
+          Top = 88
           Width = 37
           Caption = 'WAZ:'
           ParentColor = False
@@ -3285,7 +3266,7 @@ object frmNewQSO: TfrmNewQSO
         object Label29: TLabel
           Left = 19
           Height = 17
-          Top = 95
+          Top = 105
           Width = 26
           Caption = 'ITU:'
           ParentColor = False
@@ -3294,7 +3275,7 @@ object frmNewQSO: TfrmNewQSO
         object Label30: TLabel
           Left = 126
           Height = 17
-          Top = 78
+          Top = 88
           Width = 37
           Caption = 'Cont:'
           ParentColor = False
@@ -3303,7 +3284,7 @@ object frmNewQSO: TfrmNewQSO
         object lblWAZ: TLabel
           Left = 48
           Height = 17
-          Top = 78
+          Top = 88
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3312,7 +3293,7 @@ object frmNewQSO: TfrmNewQSO
         object lblITU: TLabel
           Left = 48
           Height = 17
-          Top = 95
+          Top = 105
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3321,7 +3302,7 @@ object frmNewQSO: TfrmNewQSO
         object lblDXCC: TLabel
           Left = 169
           Height = 17
-          Top = 95
+          Top = 105
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3330,7 +3311,7 @@ object frmNewQSO: TfrmNewQSO
         object lblCont: TLabel
           Left = 169
           Height = 17
-          Top = 78
+          Top = 88
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3339,7 +3320,7 @@ object frmNewQSO: TfrmNewQSO
         object Label31: TLabel
           Left = 18
           Height = 17
-          Top = 113
+          Top = 123
           Width = 28
           Caption = 'LAT:'
           ParentColor = False
@@ -3348,7 +3329,7 @@ object frmNewQSO: TfrmNewQSO
         object Label32: TLabel
           Left = 126
           Height = 17
-          Top = 113
+          Top = 123
           Width = 44
           Caption = 'LONG:'
           ParentColor = False
@@ -3356,7 +3337,7 @@ object frmNewQSO: TfrmNewQSO
         object lblLat: TLabel
           Left = 48
           Height = 17
-          Top = 113
+          Top = 123
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3365,7 +3346,7 @@ object frmNewQSO: TfrmNewQSO
         object lblLong: TLabel
           Left = 169
           Height = 17
-          Top = 113
+          Top = 123
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3374,7 +3355,7 @@ object frmNewQSO: TfrmNewQSO
         object Label33: TLabel
           Left = 8
           Height = 17
-          Top = 132
+          Top = 142
           Width = 38
           Caption = 'DIST.:'
           ParentColor = False
@@ -3383,7 +3364,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQRA: TLabel
           Left = 48
           Height = 17
-          Top = 132
+          Top = 142
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3393,7 +3374,7 @@ object frmNewQSO: TfrmNewQSO
         object Label34: TLabel
           Left = 126
           Height = 17
-          Top = 132
+          Top = 142
           Width = 40
           Caption = 'AZIM:'
           ParentColor = False
@@ -3401,7 +3382,7 @@ object frmNewQSO: TfrmNewQSO
         object lblAzi: TLabel
           Left = 169
           Height = 17
-          Top = 132
+          Top = 142
           Width = 30
           Caption = 'AAA'
           ParentColor = False
@@ -3411,7 +3392,7 @@ object frmNewQSO: TfrmNewQSO
         object lblHisTime: TLabel
           Left = 8
           Height = 20
-          Top = 179
+          Top = 188
           Width = 162
           AutoSize = False
           Caption = 'AAAAAAAAAAAAAA'
@@ -3421,7 +3402,7 @@ object frmNewQSO: TfrmNewQSO
         object lblGreeting: TLabel
           Left = 189
           Height = 17
-          Top = 179
+          Top = 188
           Width = 48
           Caption = 'GE/GM'
           Font.Color = clRed
@@ -3431,7 +3412,7 @@ object frmNewQSO: TfrmNewQSO
         object SpeedButton1: TSpeedButton
           Left = 6
           Height = 22
-          Top = 153
+          Top = 162
           Width = 23
           Flat = True
           Glyph.Data = {
@@ -3473,7 +3454,7 @@ object frmNewQSO: TfrmNewQSO
         object SpeedButton2: TSpeedButton
           Left = 126
           Height = 22
-          Top = 224
+          Top = 235
           Width = 23
           Flat = True
           Glyph.Data = {
@@ -3508,7 +3489,7 @@ object frmNewQSO: TfrmNewQSO
         object SpeedButton3: TSpeedButton
           Left = 8
           Height = 22
-          Top = 224
+          Top = 235
           Width = 23
           Flat = True
           Glyph.Data = {
@@ -3550,7 +3531,7 @@ object frmNewQSO: TfrmNewQSO
         object SpeedButton4: TSpeedButton
           Left = 126
           Height = 22
-          Top = 153
+          Top = 162
           Width = 23
           Flat = True
           Glyph.Data = {
@@ -3584,7 +3565,7 @@ object frmNewQSO: TfrmNewQSO
         object lblLocSunRise: TLabel
           Left = 38
           Height = 17
-          Top = 227
+          Top = 238
           Width = 95
           Caption = 'lblLocSunRise'
           ParentColor = False
@@ -3593,7 +3574,7 @@ object frmNewQSO: TfrmNewQSO
         object lblLocSunSet: TLabel
           Left = 156
           Height = 17
-          Top = 227
+          Top = 238
           Width = 89
           Caption = 'lblLocSunSet'
           ParentColor = False
@@ -3602,7 +3583,7 @@ object frmNewQSO: TfrmNewQSO
         object lblTarSunRise: TLabel
           Left = 28
           Height = 17
-          Top = 155
+          Top = 164
           Width = 92
           Caption = 'lblTarSunRise'
           ParentColor = False
@@ -3611,7 +3592,7 @@ object frmNewQSO: TfrmNewQSO
         object lblTarSunSet: TLabel
           Left = 149
           Height = 17
-          Top = 155
+          Top = 164
           Width = 86
           Caption = 'lblTarSunSet'
           ParentColor = False
@@ -3620,7 +3601,7 @@ object frmNewQSO: TfrmNewQSO
         object Label14: TLabel
           Left = 10
           Height = 17
-          Top = 202
+          Top = 213
           Width = 40
           Caption = 'Local:'
           ParentColor = False
@@ -3628,21 +3609,22 @@ object frmNewQSO: TfrmNewQSO
         end
         object Panel5: TPanel
           Left = 0
-          Height = 76
+          Height = 88
           Top = 0
           Width = 236
           Align = alTop
           BevelOuter = bvNone
           Caption = 'Panel5'
-          ClientHeight = 76
+          ClientHeight = 88
           ClientWidth = 236
           TabOrder = 0
           object mCountry: TMemo
             Left = 0
-            Height = 76
-            Top = 0
+            Height = 86
+            Top = 2
             Width = 236
             Align = alClient
+            BorderSpacing.Top = 2
             ParentFont = False
             TabOrder = 0
           end
@@ -3651,7 +3633,7 @@ object frmNewQSO: TfrmNewQSO
       object btnSave: TButton
         Left = 9
         Height = 25
-        Top = 432
+        Top = 448
         Width = 125
         BorderSpacing.InnerBorder = 4
         Caption = 'Save QSO [enter]'
@@ -3659,9 +3641,9 @@ object frmNewQSO: TfrmNewQSO
         TabOrder = 2
       end
       object btnCancel: TButton
-        Left = 137
+        Left = 136
         Height = 25
-        Top = 432
+        Top = 448
         Width = 120
         BorderSpacing.InnerBorder = 4
         Caption = 'Quit program'
@@ -3744,7 +3726,7 @@ object frmNewQSO: TfrmNewQSO
   end
   object dbgrdQSOBefore: TDBGrid
     Left = 0
-    Height = 131
+    Height = 120
     Top = 0
     Width = 807
     Align = alClient
