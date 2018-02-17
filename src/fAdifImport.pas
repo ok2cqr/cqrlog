@@ -41,7 +41,7 @@ type Tnejakyzaznam=record
       LOTW_QSLSDATE:string[10];
       LOTW_QSL_RCVD:string[2];
       LOTW_QSL_SENT:string[2];
-      MODE:string[10];
+      MODE:string[12];
       MY_GRIDSQUARE:string[6];
       NAME:string[50];
       NOTES:string[250];
