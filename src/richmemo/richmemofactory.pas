@@ -10,6 +10,7 @@ interface
 {$ifdef LCLGtk2}{$undef NoRichMemo}{$endif}
 {$ifdef LCLCocoa}{$undef NoRichMemo}{$endif}
 {$ifdef LCLQt}{$undef NoRichMemo}{$endif}
+{$ifdef LCLQt5}{$undef NoRichMemo}{$endif}
 
 uses
   WSLCLClasses,
