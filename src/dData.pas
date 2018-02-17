@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 13;
+  cDB_MAIN_VER = 14;
   cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -3051,6 +3051,8 @@ procedure TdmData.UpgradeMainDatabase(old_version : Integer);
 var
   err : Boolean = False;
 begin
+  if fDebugLevel>=1 then Writeln('[UpgradeMainDatabase] Old version: ', old_version,  '  cDB_MAIN_VER: ', cDB_MAIN_VER);
+
   if old_version < cDB_MAIN_VER then
   begin
     if trQ1.Active then trQ1.Rollback;
@@ -3151,13 +3153,13 @@ begin
           Q1.SQL.Add('  qsodate date NULL,');
           Q1.SQL.Add('  time_on varchar(5) NULL,');
           Q1.SQL.Add('  callsign varchar(20) NULL,');
-          Q1.SQL.Add('  mode varchar(10) NULL,');
+          Q1.SQL.Add('  mode varchar(12) NULL,');
           Q1.SQL.Add('  freq numeric(10,4) NULL,');
           Q1.SQL.Add('  band varchar(6) NULL,');
           Q1.SQL.Add('  old_qsodate date NULL,');
           Q1.SQL.Add('  old_time_on varchar(5) NULL,');
           Q1.SQL.Add('  old_callsign varchar(20) NULL,');
-          Q1.SQL.Add('  old_mode varchar(10) NULL,');
+          Q1.SQL.Add('  old_mode varchar(12) NULL,');
           Q1.SQL.Add('  old_freq numeric(10,4) NULL,');
           Q1.SQL.Add('  old_band varchar(6) NULL');
           Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
@@ -3247,7 +3249,7 @@ begin
         Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
         Q1.SQL.Add('  callsign varchar(20) NOT NULL,');
         Q1.SQL.Add('  band varchar(6) NULL,');
-        Q1.SQL.Add('  mode varchar(6) NULL');
+        Q1.SQL.Add('  mode varchar(12) NULL');
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -3271,7 +3273,7 @@ begin
         Q1.SQL.Add('CREATE TABLE freqmem (');
         Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
         Q1.SQL.Add('  freq numeric(10,4) NOT NULL,');
-        Q1.SQL.Add('  mode varchar(6) NOT NULL,');
+        Q1.SQL.Add('  mode varchar(12) NOT NULL,');
         Q1.SQL.Add('  bandwidth int NOT NULL');
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
@@ -3291,21 +3293,44 @@ begin
         trQ1.Commit
       end;
 
-      trQ1.StartTransaction;
-      Q1.SQL.Text := 'drop view view_cqrlog_main_by_callsign';
-      if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-      Q1.ExecSQL;
-      Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate';
-      if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-      Q1.ExecSQL;
-      if old_version >= 13 then
+      if old_version <= 13 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate_asc';
+        Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(12) not null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
+        trQ1.Commit
       end;
-      trQ1.Commit;
+
+      if TableExists('view_cqrlog_main_by_callsign') then
+      begin
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'drop view view_cqrlog_main_by_callsign';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit
+      end;
+
+      if TableExists('view_cqrlog_main_by_qsodate') then
+      begin
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit
+      end;
+
+      if old_version >= 13 then
+      begin
+        if TableExists('view_cqrlog_main_by_qsodate_asc') then
+         begin
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate_asc';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit
+        end;
+      end;
 
       CreateViews;
 
