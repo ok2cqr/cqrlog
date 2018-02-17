@@ -3153,13 +3153,13 @@ begin
           Q1.SQL.Add('  qsodate date NULL,');
           Q1.SQL.Add('  time_on varchar(5) NULL,');
           Q1.SQL.Add('  callsign varchar(20) NULL,');
-          Q1.SQL.Add('  mode varchar(12) NULL,');
+          Q1.SQL.Add('  mode varchar(10) NULL,');
           Q1.SQL.Add('  freq numeric(10,4) NULL,');
           Q1.SQL.Add('  band varchar(6) NULL,');
           Q1.SQL.Add('  old_qsodate date NULL,');
           Q1.SQL.Add('  old_time_on varchar(5) NULL,');
           Q1.SQL.Add('  old_callsign varchar(20) NULL,');
-          Q1.SQL.Add('  old_mode varchar(12) NULL,');
+          Q1.SQL.Add('  old_mode varchar(10) NULL,');
           Q1.SQL.Add('  old_freq numeric(10,4) NULL,');
           Q1.SQL.Add('  old_band varchar(6) NULL');
           Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
@@ -3249,7 +3249,7 @@ begin
         Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
         Q1.SQL.Add('  callsign varchar(20) NOT NULL,');
         Q1.SQL.Add('  band varchar(6) NULL,');
-        Q1.SQL.Add('  mode varchar(12) NULL');
+        Q1.SQL.Add('  mode varchar(10) NULL');
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -3273,7 +3273,7 @@ begin
         Q1.SQL.Add('CREATE TABLE freqmem (');
         Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
         Q1.SQL.Add('  freq numeric(10,4) NOT NULL,');
-        Q1.SQL.Add('  mode varchar(12) NOT NULL,');
+        Q1.SQL.Add('  mode varchar(10) NOT NULL,');
         Q1.SQL.Add('  bandwidth int NOT NULL');
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
@@ -3293,12 +3293,37 @@ begin
         trQ1.Commit
       end;
 
-      if old_version <= 13 then
+      if old_version < 14 then
       begin
         trQ1.StartTransaction;
         Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(12) not null';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table log_changes change mode mode varchar(12) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table log_changes change old_mode old_mode varchar(12) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table call_alert change mode mode varchar(12) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table freqmem change mode mode varchar(12) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
         trQ1.Commit
       end;
 
@@ -3320,16 +3345,13 @@ begin
         trQ1.Commit
       end;
 
-      if old_version >= 13 then
+      if TableExists('view_cqrlog_main_by_qsodate_asc') then
       begin
-        if TableExists('view_cqrlog_main_by_qsodate_asc') then
-         begin
-          trQ1.StartTransaction;
-          Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate_asc';
-          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-          Q1.ExecSQL;
-          trQ1.Commit
-        end;
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate_asc';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit
       end;
 
       CreateViews;
