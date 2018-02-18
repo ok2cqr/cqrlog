@@ -10,6 +10,8 @@ Legend:
   + when remote preferences open to fldigi/wsjt tab (Saku, OH1KH)
   + auto update membership files added (has to be enabled in Prefereces, first)
   + mode field can now store 12 characters (was 10), added mode DIGITALVOICE (Jonas, SM2VSD)
+  + eQSL ADIF import now also uses submodes from the ADIF specification to match qsos in log (Jonas, SM2VSD)
+  + eQSL ADIf import now also uses timestamp from log (+/-60min) together with timestamp from eQSL to match qsos (Jonas, SM2VSD)
 
   - DXCluster/WEB Font button not connected to acFont (no action). Fixed (Saku, OH1KH)
   - wsjtx logging take start and stop times to log (before just stop time) (Saku, OH1KH)
