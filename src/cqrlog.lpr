@@ -22,7 +22,8 @@ uses
   fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer,
   fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
-  fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi, dMembership;
+  fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
+  dMembership, dSatellite;
 var
   Splash : TfrmSplash;
 
@@ -69,6 +70,7 @@ begin
   Application.CreateForm(TfrmContest, frmContest);
   Application.CreateForm(Tfrmxfldigi, frmxfldigi);
   Application.CreateForm(TdmMembership, dmMembership);
+  Application.CreateForm(TdmSatellite, dmSatellite);
 
 
   Splash.Update;

@@ -76,7 +76,7 @@ implementation
 {$R *.lfm}
 { TfrmImportProgress }
 
-uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership;
+uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership, dSatellite;
 
 procedure TfrmImportProgress.FormActivate(Sender: TObject);
 begin
@@ -266,6 +266,20 @@ begin
       DeleteFileUTF8(dmData.HomeDir+'dxcc_data'+PathDelim+'us_states.tab');
       CopyFile(Directory+'us_states.tab',dmData.HomeDir+'dxcc_data'+PathDelim+'us_states.tab')
       //reloading is in dmDXCC.ReloadDXCCTables
+    end;
+
+    if FileExistsUTF8(Directory + C_SATELLITE_LIST) then
+    begin
+      DeleteFileUTF8(dmData.HomeDir + C_SATELLITE_LIST);
+      CopyFile(Directory + C_SATELLITE_LIST, dmData.HomeDir + C_SATELLITE_LIST);
+      dmSatellite.LoadSatellitesFromFile
+    end;
+
+    if FileExistsUTF8(Directory + C_PROP_MODE_LIST) then
+    begin
+      DeleteFileUTF8(dmData.HomeDir + C_PROP_MODE_LIST);
+      CopyFile(Directory + C_PROP_MODE_LIST, dmData.HomeDir + C_PROP_MODE_LIST);
+      dmSatellite.LoadPropModesFromFile
     end;
 
     lblComment.Caption := 'Importing IOTA table ...';

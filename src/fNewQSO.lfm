@@ -2176,12 +2176,12 @@ object frmNewQSO: TfrmNewQSO
       TabOrder = 0
       object Panel6: TPanel
         Left = 0
-        Height = 344
+        Height = 485
         Top = 0
         Width = 548
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 344
+        ClientHeight = 485
         ClientWidth = 548
         TabOrder = 0
         object Label11: TLabel
@@ -2197,8 +2197,8 @@ object frmNewQSO: TfrmNewQSO
           Left = 112
           Height = 17
           Top = 55
-          Width = 35
-          Caption = 'QTH:'
+          Width = 31
+          Caption = 'QTH'
           ParentColor = False
           ParentFont = False
         end
@@ -2377,8 +2377,8 @@ object frmNewQSO: TfrmNewQSO
           Left = 111
           Height = 17
           Top = 159
-          Width = 124
-          Caption = 'Comment to QSO:'
+          Width = 120
+          Caption = 'Comment to QSO'
           ParentColor = False
           ParentFont = False
         end
@@ -3167,34 +3167,122 @@ object frmNewQSO: TfrmNewQSO
           ShowHint = True
           ParentShowHint = False
         end
-      end
-      object GroupBox2: TGroupBox
-        Left = 0
-        Height = 141
-        Top = 344
-        Width = 548
-        Align = alBottom
-        Caption = 'DXCC stat.'
-        ClientHeight = 122
-        ClientWidth = 544
-        ParentFont = False
-        TabOrder = 1
-        object sgrdStatistic: TStringGrid
+        object pgDetails: TPageControl
           Left = 0
-          Height = 122
-          Top = 0
-          Width = 544
-          Align = alClient
-          ColCount = 2
-          DefaultColWidth = 35
-          FixedCols = 0
-          FixedRows = 0
-          ParentFont = False
-          RowCount = 4
-          TabOrder = 0
-          TitleFont.Color = clBlue
-          TitleFont.Height = 8
-          TitleStyle = tsNative
+          Height = 143
+          Top = 342
+          Width = 548
+          ActivePage = tabDXCCStat
+          Align = alBottom
+          TabIndex = 0
+          TabOrder = 28
+          object tabDXCCStat: TTabSheet
+            Caption = 'DXCC statistic'
+            ClientHeight = 112
+            ClientWidth = 544
+            object sgrdStatistic: TStringGrid
+              Left = 0
+              Height = 112
+              Top = 0
+              Width = 544
+              Align = alClient
+              ColCount = 2
+              DefaultColWidth = 35
+              FixedCols = 0
+              FixedRows = 0
+              ParentFont = False
+              RowCount = 4
+              TabOrder = 0
+              TitleFont.Color = clBlue
+              TitleFont.Height = 8
+              TitleStyle = tsNative
+            end
+          end
+          object tabSatellite: TTabSheet
+            Caption = 'Satellite'
+            ClientHeight = 112
+            ClientWidth = 544
+            object cmbPropagation: TComboBox
+              Left = 8
+              Height = 31
+              Top = 78
+              Width = 272
+              ItemHeight = 0
+              OnChange = cmbPropagationChange
+              ParentFont = False
+              Style = csDropDownList
+              TabOrder = 0
+            end
+            object Label16: TLabel
+              Left = 8
+              Height = 17
+              Top = 56
+              Width = 86
+              Caption = 'Propagation'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label26: TLabel
+              Left = 8
+              Height = 17
+              Top = 3
+              Width = 56
+              Caption = 'Satellite'
+              ParentColor = False
+              ParentFont = False
+            end
+            object cmbSatellite: TComboBox
+              Left = 8
+              Height = 31
+              Top = 23
+              Width = 272
+              ItemHeight = 0
+              OnChange = cmbSatelliteChange
+              ParentFont = False
+              Style = csDropDownList
+              TabOrder = 1
+            end
+            object Label35: TLabel
+              Left = 296
+              Height = 17
+              Top = 3
+              Width = 90
+              Caption = 'RX frequency'
+              ParentColor = False
+              ParentFont = False
+            end
+            object edtRXFreq: TEdit
+              Left = 296
+              Height = 27
+              Top = 23
+              Width = 128
+              OnChange = cmbPropagationChange
+              ParentFont = False
+              TabOrder = 2
+              Text = 'edtRXFreq'
+            end
+            object btnClearSatellite: TButton
+              Left = 472
+              Height = 29
+              Top = 78
+              Width = 66
+              Anchors = [akRight, akBottom]
+              AutoSize = True
+              BorderSpacing.Left = 10
+              BorderSpacing.Right = 10
+              Caption = 'Clear all'
+              OnClick = btnClearSatelliteClick
+              TabOrder = 3
+            end
+            object Label36: TLabel
+              Left = 431
+              Height = 17
+              Top = 29
+              Width = 31
+              Caption = 'MHz'
+              ParentColor = False
+            end
+          end
         end
       end
     end
@@ -3738,26 +3826,26 @@ object frmNewQSO: TfrmNewQSO
     Interval = 2000
     OnTimer = tmrStartTimer
     OnStartTimer = tmrStartStartTimer
-    left = 448
-    top = 504
+    left = 728
+    top = 480
   end
   object tmrEnd: TTimer
     Enabled = False
     OnTimer = tmrEndTimer
     OnStartTimer = tmrEndStartTimer
-    left = 504
-    top = 504
+    left = 656
+    top = 480
   end
   object tmrRadio: TTimer
     Enabled = False
     OnTimer = tmrRadioTimer
-    left = 320
-    top = 552
+    left = 560
+    top = 32
   end
   object MainMenu1: TMainMenu
     Images = imgMain1
-    left = 256
-    top = 528
+    left = 128
+    top = 32
     object mnuFile: TMenuItem
       Caption = 'File'
       object MenuItem82: TMenuItem
@@ -4402,8 +4490,8 @@ object frmNewQSO: TfrmNewQSO
   end
   object ActionList1: TActionList
     Images = imgMain
-    left = 32
-    top = 504
+    left = 488
+    top = 32
     object acClose: TAction
       Category = 'File'
       Caption = 'Close'
@@ -4679,8 +4767,8 @@ object frmNewQSO: TfrmNewQSO
     end
   end
   object imgMain: TImageList
-    left = 200
-    top = 504
+    left = 264
+    top = 32
     Bitmap = {
       4C6910000000100000001000000010C4E70010C4E700C88B4DFFC88C4FFFC88C
       4FFFC88C4FFFC88C4FFFC88D4FFFC98C4FFFC78B4FFFC5894BFFC4763BFF4104
@@ -5269,8 +5357,8 @@ object frmNewQSO: TfrmNewQSO
     end
   end
   object imgMain1: TImageList
-    left = 336
-    top = 480
+    left = 344
+    top = 32
     Bitmap = {
       4C69140000001000000010000000C803EA00C803EA00009B0000009B00000000
       000000000000000000000000000000000000000000003939E7FF000000000000
@@ -5918,31 +6006,31 @@ object frmNewQSO: TfrmNewQSO
   object tmrESC: TTimer
     Enabled = False
     OnTimer = tmrESCTimer
-    left = 144
-    top = 520
+    left = 736
+    top = 32
   end
   object tmrFldigi: TTimer
     Enabled = False
     OnTimer = tmrFldigiTimer
-    left = 96
-    top = 544
+    left = 408
+    top = 32
   end
   object tmrRotor: TTimer
     Enabled = False
     Interval = 500
-    left = 400
-    top = 552
+    left = 200
+    top = 32
   end
   object tmrUploadAll: TTimer
     Enabled = False
     OnTimer = tmrUploadAllTimer
-    left = 488
-    top = 560
+    left = 40
+    top = 32
   end
   object tmrWsjtx: TTimer
     Enabled = False
     OnTimer = tmrWsjtxTimer
-    left = 599
-    top = 469
+    left = 584
+    top = 480
   end
 end

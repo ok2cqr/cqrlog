@@ -12,6 +12,9 @@ type
   { TfraExportPref }
 
   TfraExportPref = class(TFrame)
+    chkExRXFreq : TCheckBox;
+    chkExSat : TCheckBox;
+    chkExPropagation : TCheckBox;
     chkexAward : TCheckBox;
     chkexCall : TCheckBox;
     chkExCont : TCheckBox;
@@ -50,6 +53,7 @@ type
     chkexWAZ : TCheckBox;
     chkProfile : TCheckBox;
     chkAscTime : TCheckBox;
+    edtWProp : TEdit;
     edtWAward : TEdit;
     edtWCall : TEdit;
     edtWCounty : TEdit;
@@ -72,6 +76,8 @@ type
     edtWName : TEdit;
     edtWNote : TEdit;
     edtWPower : TEdit;
+    edtWRxFreq : TEdit;
+    edtWSatName : TEdit;
     edtWQSLR : TEdit;
     edtWQSLRDate : TEdit;
     edtWQSLS : TEdit;
@@ -143,6 +149,9 @@ begin
   cqrini.WriteBool('Export', 'eQSLR', chkexeQSLR.Checked);
   cqrini.WriteBool('Export', 'eQSLRDate', chkexeQSLRDate.Checked);
   cqrini.WriteBool('Export', 'AscTime', chkAscTime.Checked);
+  cqrini.WriteBool('Export', 'Prop', chkExPropagation.Checked);
+  cqrini.WriteBool('Export', 'RxFreq', chkExRXFreq.Checked);
+  cqrini.WriteBool('Export', 'SatName', chkExSat.Checked);
 
   cqrini.WriteString('Export', 'WDate', edtWDate.Text);
   cqrini.WriteString('Export', 'Wtime_on', edtWTimeOn.Text);
@@ -178,7 +187,10 @@ begin
   cqrini.WriteString('Export', 'WeQSLS', edtWeQSLS.Text);
   cqrini.WriteString('Export', 'WeQSLSDate', edtWeQSLSDate.Text);
   cqrini.WriteString('Export', 'WeQSLR', edtWeQSLR.Text);
-  cqrini.WriteString('Export', 'WeQSLRDate', edtWeQSLRDate.Text)
+  cqrini.WriteString('Export', 'WeQSLRDate', edtWeQSLRDate.Text);
+  cqrini.WriteString('Export', 'WProp', edtWProp.Text);
+  cqrini.WriteString('Export', 'WRxFreq', edtWRxFreq.Text);
+  cqrini.WriteString('Export', 'WSatName', edtWSatName.Text);
 end;
 
 procedure TfraExportPref.LoadExportPref;
@@ -221,6 +233,10 @@ begin
   chkexeQSLR.Checked := cqrini.ReadBool('Export', 'eQSLR', False);
   chkexeQSLRDate.Checked := cqrini.ReadBool('Export', 'eQSLRDate', False);
   chkAscTime.Checked := cqrini.ReadBool('Export', 'AscTime', False);
+  chkExPropagation.Checked := cqrini.ReadBool('Export', 'Prop', False);
+  chkExRXFreq.Checked := cqrini.ReadBool('Export', 'RxFreq', False);
+  chkExSat.Checked := cqrini.ReadBool('Export', 'SatName', False);
+
 
   edtWDate.Text := cqrini.ReadString('Export', 'WDate', '50');
   edtWTimeOn.Text := cqrini.ReadString('Export', 'Wtime_on', '50');
@@ -256,7 +272,10 @@ begin
   edtWeQSLS.Text := cqrini.ReadString('Export', 'WeQSLS', '50');
   edtWeQSLSDate.Text := cqrini.ReadString('Export', 'WeQSLSDate', '50');
   edtWeQSLR.Text := cqrini.ReadString('Export', 'WeQSLR', '50');
-  edtWeQSLRDate.Text := cqrini.ReadString('Export', 'WeQSLRDate', '50')
+  edtWeQSLRDate.Text := cqrini.ReadString('Export', 'WeQSLRDate', '50');
+  edtWProp.Text := cqrini.ReadString('Export', 'WProp', '50');
+  edtWRxFreq.Text := cqrini.ReadString('Export', 'WRxFreq', '50');
+  edtWSatName.Text := cqrini.ReadString('Export', 'WSatName', '50')
 end;
 
 end.

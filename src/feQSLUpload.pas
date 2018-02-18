@@ -145,6 +145,15 @@ begin
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(dmData.Q.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
 
+      if (dmData.Q1.FieldByName('prop_mode').AsString <> '') then
+        Writeln(f, '<PROP_MODE' + dmUtils.StringToADIF(dmData.Q1.FieldByName('prop_mode').AsString));
+
+      if (dmData.Q1.FieldByName('satellite').AsString <> '') then
+        Writeln(f, '<SAT_NAME' + dmUtils.StringToADIF(dmData.Q1.FieldByName('satellite').AsString));
+
+      if (dmData.Q1.FieldByName('rxfreq').AsString <> '') then
+        Writeln(f, '<FREQ_RX' + dmUtils.StringToADIF(dmData.Q1.FieldByName('rxfreq').AsString));
+
       if (dmData.Q.FieldByName('remarks').AsString<>'') and cqrini.ReadBool('LoTW', 'ExpComment', True) then
       begin
         tmp := '<COMMENT' + dmUtils.StringToADIF(dmData.Q.FieldByName('remarks').AsString);

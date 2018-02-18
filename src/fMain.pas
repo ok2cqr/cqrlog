@@ -2108,7 +2108,10 @@ begin
   ChangeVis('EQSL_QSL_RCVD',cqrini.ReadBool('Columns','eQSLQSLR',False));
   ChangeVis('EQSL_QSLRDATE',cqrini.ReadBool('Columns','eQSLQSLRDate',False));
   ChangeVis('QSLR',cqrini.ReadBool('Columns','QSLRAll',False));
-  ChangeVis('COUNTRY',cqrini.ReadBool('Columns','Country',False))
+  ChangeVis('COUNTRY',cqrini.ReadBool('Columns','Country',False));
+  ChangeVis('PROP_MODE', cqrini.ReadBool('Columns', 'Propagation', False));
+  ChangeVis('RXFREQ', cqrini.ReadBool('Columns', 'RXFreq', False));
+  ChangeVis('SATELLITE', cqrini.ReadBool('Columns', 'SatelliteName', False))
 end;
 
 procedure TfrmMain.MarkQSLSend(symbol: string);

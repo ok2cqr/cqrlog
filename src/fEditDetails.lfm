@@ -1,7 +1,7 @@
 object frmEditDetails: TfrmEditDetails
-  Left = 374
+  Left = 635
   Height = 219
-  Top = 241
+  Top = 263
   Width = 294
   ActiveControl = edtQSLSDate
   BorderIcons = [biSystemMenu]
@@ -148,36 +148,36 @@ object frmEditDetails: TfrmEditDetails
   }
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30'
+  LCLVersion = '1.8.0.6'
   object Label1: TLabel
     Left = 8
-    Height = 18
+    Height = 17
     Top = 14
-    Width = 91
+    Width = 95
     Caption = 'QSL sent date'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 152
-    Height = 18
+    Height = 17
     Top = 14
-    Width = 119
+    Width = 123
     Caption = 'QSL received date'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 8
-    Height = 18
+    Height = 17
     Top = 72
-    Width = 127
+    Width = 134
     Caption = 'LoTWQSL sent date'
     ParentColor = False
   end
   object Label4: TLabel
     Left = 152
-    Height = 18
+    Height = 17
     Top = 72
-    Width = 131
+    Width = 137
     Caption = 'LoTW QSL rcvd date'
     ParentColor = False
   end
@@ -230,17 +230,17 @@ object frmEditDetails: TfrmEditDetails
   end
   object Label5: TLabel
     Left = 8
-    Height = 18
+    Height = 17
     Top = 128
-    Width = 99
+    Width = 103
     Caption = 'eQSL sent date'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 152
-    Height = 18
+    Height = 17
     Top = 128
-    Width = 99
+    Width = 103
     Caption = 'eQSL rcvd date'
     ParentColor = False
   end
