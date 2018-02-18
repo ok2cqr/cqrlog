@@ -18,6 +18,7 @@ clean:
 	rm -f -v tools/cqrlog.1.gz
 	rm -rf src/backup
 	rm -f -v src/richmemo/*.o src/richmemo/*.ppu src/richmemo/gtk2/*.ppu src/richmemo/gtk2/*.o
+	rm -f -v tools/adif_hash_generator tools/adif_hash_generator.lpi tools/adif_hash_generator.lps
 	
 install:
 	install -d -v         $(bindir)
