@@ -74,6 +74,9 @@ type Tnejakyzaznam=record
       STATE:string[3];
       AWARD:string[250];
       POWER:String[10];
+      PROP_MODE : String[30];
+      SAT_NAME : String[30];
+      FREQ_RX  : String[30];
      end;
 type
 
@@ -243,7 +246,10 @@ function TfrmAdifImport.zpracuj(h:longint;var data:string;var D:Tnejakyzaznam):b
       h_APP_CQRLOG_COUNTY:d.APP_CQRLOG_COUNTY:=data;
       h_CQZ:d.CQZ:=data;
       h_STATE:d.STATE:=data;
-      h_AWARD:d.AWARD:=data
+      h_AWARD:d.AWARD:=data;
+      h_PROP_MODE : d.PROP_MODE := data;
+      h_SAT_NAME : d.SAT_NAME := data;
+      h_FREQ_RX : d.FREQ_RX := data
       else
         begin{ writeln('Neznam...>',pom,'<');zpracuj:=false;exit;}end;
     end;//case
@@ -275,6 +281,7 @@ var
   profile    : String;
   dxcc_adif  : Integer;
   len        : Integer=0;
+  RxFreq : Double = 0;
 begin
   Result := True;
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
@@ -478,12 +485,12 @@ begin
                    'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                    'remarks,county,adif,idcall,award,band,state,cont,profile,lotw_qslsdate,lotw_qsls,'+
                    'lotw_qslrdate,lotw_qslr,qsls_date,qslr_date,eqsl_qslsdate,eqsl_qsl_sent,'+
-                   'eqsl_qslrdate,eqsl_qsl_rcvd) values('+
+                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq) values('+
                    ':qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,:qth,'+
                    ':qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:itu,:waz,:loc,:my_loc,:remarks,:county,:adif,'+
                    ':idcall,:award,:band,:state,:cont,:profile,:lotw_qslsdate,:lotw_qsls,:lotw_qslrdate,'+
                    ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
-                   ':eqsl_qsl_rcvd)';
+                   ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq)';
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
@@ -600,6 +607,13 @@ begin
         Q1.Params[37].AsString  := ''
       end
     end;
+    Q1.Params[38].AsString := d.PROP_MODE;
+    Q1.Params[39].AsString := d.SAT_NAME;
+    if TryStrToFloat(d.FREQ_RX, RxFreq) then
+      Q1.Params[40].AsFloat := RxFreq
+    else
+      Q1.Params[40].AsFloat := 0;
+
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
     inc(RecNR);

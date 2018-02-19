@@ -1,26 +1,26 @@
 object fraExportPref: TfraExportPref
   Left = 0
-  Height = 414
+  Height = 480
   Top = 0
-  Width = 596
-  ClientHeight = 414
-  ClientWidth = 596
+  Width = 595
+  ClientHeight = 480
+  ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 623
-  DesignTop = 214
+  DesignLeft = 590
+  DesignTop = 201
   object chkProfile: TCheckBox
     Left = 6
     Height = 24
-    Top = 326
-    Width = 71
+    Top = 324
+    Width = 72
     Caption = 'Profile'
     TabOrder = 0
   end
   object chkAscTime: TCheckBox
     Left = 6
-    Height = 21
-    Top = 375
-    Width = 192
+    Height = 24
+    Top = 440
+    Width = 207
     Caption = 'Most recent entries on top'
     TabOrder = 72
   end
@@ -28,7 +28,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 296
-    Width = 92
+    Width = 95
     Caption = 'Continent'
     TabOrder = 1
   end
@@ -36,7 +36,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 270
-    Width = 55
+    Width = 57
     Caption = 'QTH'
     TabOrder = 2
   end
@@ -52,7 +52,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 217
-    Width = 83
+    Width = 84
     Caption = 'RST rcvd'
     TabOrder = 4
   end
@@ -60,7 +60,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 191
-    Width = 83
+    Width = 84
     Caption = 'RST sent'
     TabOrder = 5
   end
@@ -92,7 +92,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 89
-    Width = 82
+    Width = 83
     Caption = 'Time off'
     TabOrder = 9
   end
@@ -100,7 +100,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 64
-    Width = 79
+    Width = 80
     Caption = 'Time on'
     TabOrder = 10
   end
@@ -108,7 +108,7 @@ object fraExportPref: TfraExportPref
     Left = 6
     Height = 24
     Top = 38
-    Width = 58
+    Width = 59
     Caption = 'Date'
     TabOrder = 11
   end
@@ -204,7 +204,7 @@ object fraExportPref: TfraExportPref
     Left = 110
     Height = 17
     Top = 12
-    Width = 41
+    Width = 42
     Caption = 'Width'
     ParentColor = False
   end
@@ -220,7 +220,7 @@ object fraExportPref: TfraExportPref
     Left = 302
     Height = 17
     Top = 12
-    Width = 41
+    Width = 42
     Caption = 'Width'
     ParentColor = False
   end
@@ -236,7 +236,7 @@ object fraExportPref: TfraExportPref
     Left = 528
     Height = 17
     Top = 12
-    Width = 41
+    Width = 42
     Caption = 'Width'
     ParentColor = False
   end
@@ -244,7 +244,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 39
-    Width = 85
+    Width = 87
     Caption = 'QSL sent'
     TabOrder = 22
   end
@@ -252,7 +252,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 64
-    Width = 113
+    Width = 115
     Caption = 'QSL received'
     TabOrder = 23
   end
@@ -260,7 +260,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 89
-    Width = 115
+    Width = 118
     Caption = 'QSL manager'
     TabOrder = 24
   end
@@ -284,7 +284,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 166
-    Width = 58
+    Width = 59
     Caption = 'IOTA'
     TabOrder = 27
   end
@@ -292,7 +292,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 192
-    Width = 70
+    Width = 71
     Caption = 'Award'
     TabOrder = 28
   end
@@ -300,7 +300,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 217
-    Width = 73
+    Width = 75
     Caption = 'County'
     TabOrder = 29
   end
@@ -308,7 +308,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 243
-    Width = 69
+    Width = 70
     Caption = 'Power'
     TabOrder = 30
   end
@@ -316,7 +316,7 @@ object fraExportPref: TfraExportPref
     Left = 174
     Height = 24
     Top = 270
-    Width = 63
+    Width = 64
     Caption = 'DXCC'
     TabOrder = 31
   end
@@ -420,7 +420,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 376
-    Width = 134
+    Width = 136
     Caption = 'eQSL QSLR date'
     TabOrder = 44
   end
@@ -428,7 +428,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 350
-    Width = 123
+    Width = 126
     Caption = 'eQSL QSL rcvd'
     TabOrder = 45
   end
@@ -436,7 +436,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 324
-    Width = 133
+    Width = 135
     Caption = 'eQSL QSLS date'
     TabOrder = 46
   end
@@ -444,7 +444,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 298
-    Width = 123
+    Width = 126
     Caption = 'eQSL QSL sent'
     TabOrder = 47
   end
@@ -452,7 +452,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 271
-    Width = 119
+    Width = 121
     Caption = 'QSL rcvd date'
     TabOrder = 48
   end
@@ -460,7 +460,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 244
-    Width = 119
+    Width = 121
     Caption = 'QSL sent date'
     TabOrder = 49
   end
@@ -468,7 +468,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 218
-    Width = 138
+    Width = 139
     Caption = 'LoTW QSLR date'
     TabOrder = 50
   end
@@ -476,7 +476,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 192
-    Width = 127
+    Width = 129
     Caption = 'LoTW QSL rcvd'
     TabOrder = 51
   end
@@ -484,7 +484,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 166
-    Width = 137
+    Width = 138
     Caption = 'LoTW QSLS date'
     TabOrder = 52
   end
@@ -492,7 +492,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 140
-    Width = 127
+    Width = 129
     Caption = 'LoTW QSL sent'
     TabOrder = 53
   end
@@ -524,7 +524,7 @@ object fraExportPref: TfraExportPref
     Left = 368
     Height = 24
     Top = 39
-    Width = 58
+    Width = 59
     Caption = 'WAZ'
     TabOrder = 57
   end
@@ -638,6 +638,54 @@ object fraExportPref: TfraExportPref
     Top = 375
     Width = 40
     TabOrder = 71
+    Text = '50'
+  end
+  object chkExPropagation: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 350
+    Width = 112
+    Caption = 'Propagation'
+    TabOrder = 73
+  end
+  object chkExSat: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 378
+    Width = 123
+    Caption = 'Satellite name'
+    TabOrder = 74
+  end
+  object chkExRXFreq: TCheckBox
+    Left = 6
+    Height = 24
+    Top = 410
+    Width = 116
+    Caption = 'RX frequency'
+    TabOrder = 75
+  end
+  object edtWProp: TEdit
+    Left = 160
+    Height = 27
+    Top = 349
+    Width = 40
+    TabOrder = 76
+    Text = '50'
+  end
+  object edtWSatName: TEdit
+    Left = 160
+    Height = 27
+    Top = 377
+    Width = 40
+    TabOrder = 77
+    Text = '50'
+  end
+  object edtWRxFreq: TEdit
+    Left = 160
+    Height = 27
+    Top = 407
+    Width = 40
+    TabOrder = 78
     Text = '50'
   end
 end

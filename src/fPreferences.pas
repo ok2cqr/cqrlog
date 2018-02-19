@@ -119,6 +119,10 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    chkRXFreq : TCheckBox;
+    chkSatellite : TCheckBox;
+    chkPropagation : TCheckBox;
+    chkSatelliteMode : TCheckBox;
     chkCheckMembershipUpdate : TCheckBox;
     chkConToDXC: TCheckBox;
     chkFldXmlRpc: TCheckBox;
@@ -1103,6 +1107,7 @@ begin
   cqrini.WriteBool('NewQSO','CapFirstQTHLetter',chkCapFirstQTHLetter.Checked);
   cqrini.WriteBool('NewQSO','UseCallbookZonesEtc',chkUseCallbookZonesEtc.Checked);
   cqrini.WriteBool('NewQSO','FillAwardField',chkFillAwardField.Checked);
+  cqrini.WriteBool('NewQSO','SatelliteMode', chkSatelliteMode.Checked);
 
   cqrini.WriteString('Program', 'Proxy', edtProxy.Text);
   cqrini.WriteString('Program', 'Port', edtPort.Text);
@@ -1161,6 +1166,9 @@ begin
   cqrini.WriteBool('Columns', 'eQSLQSLRDate', chkeQSLRcvdDate.Checked);
   cqrini.WriteBool('Columns', 'QSLRAll', chkQSLRAll.Checked);
   cqrini.WriteBool('Columns', 'Country', chkCountry.Checked);
+  cqrini.WriteBool('Columns', 'Propagation', chkPropagation.Checked);
+  cqrini.WriteBool('Columns', 'SatelliteName', chkSatellite.Checked);
+  cqrini.WriteBool('Columns', 'RXFreq', chkRXFreq.Checked);
 
   cqrini.WriteBool('Bands', '137kHz', cb136kHz.Checked);
   cqrini.WriteBool('Bands', '472kHz', cb472kHz.Checked);
@@ -1565,6 +1573,14 @@ begin
 
   frmNewQSO.ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   frmNewQSO.ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
+
+
+  if not chkSatelliteMode.Checked then
+  begin
+     frmNewQSO.btnClearSatelliteClick(nil);
+     frmNewQSO.pgDetails.TabIndex := 0
+  end;
+  frmNewQSO.pgDetails.Pages[1].TabVisible  := chkSatelliteMode.Checked;
 
   if ReloadFreq then
     dmUtils.InsertFreq(frmNewQSO.cmbFreq);
@@ -2464,6 +2480,7 @@ begin
   chkCapFirstQTHLetter.Checked := cqrini.ReadBool('NewQSO','CapFirstQTHLetter',True);
   chkUseCallbookZonesEtc.Checked := cqrini.ReadBool('NewQSO','UseCallbookZonesEtc',True);
   chkFillAwardField.Checked := cqrini.ReadBool('NewQSO','FillAwardField',True);
+  chkSatelliteMode.Checked := cqrini.ReadBool('NewQSO','SatelliteMode', False);
 
   edtProxy.Text := cqrini.ReadString('Program', 'Proxy', '');
   edtPort.Text := cqrini.ReadString('Program', 'Port', '');
@@ -2527,6 +2544,9 @@ begin
   chkeQSLRcvdDate.Checked := cqrini.ReadBool('Columns', 'eQSLQSLRDate', False);
   chkQSLRAll.Checked := cqrini.ReadBool('Columns', 'QSLRAll', False);
   chkCountry.Checked := cqrini.ReadBool('Columns', 'Country', False);
+  chkPropagation.Checked := cqrini.ReadBool('Columns', 'Propagation', False);
+  chkSatellite.Checked := cqrini.ReadBool('Columns', 'SatelliteName', False);
+  chkRXFreq.Checked := cqrini.ReadBool('Columns', 'RXFreq', False);
 
   cb136kHz.Checked := cqrini.ReadBool('Bands', '137kHz', False);
   cb472kHz.Checked := cqrini.ReadBool('Bands', '472kHz', False);

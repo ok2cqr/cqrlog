@@ -12,7 +12,7 @@ object frmLoTWExport: TfrmLoTWExport
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.8.0.6'
   object pgLoTWExport: TPageControl
     Left = 0
     Height = 509
@@ -32,7 +32,7 @@ object frmLoTWExport: TfrmLoTWExport
         Top = 6
         Width = 459
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 84
+        ClientHeight = 69
         ClientWidth = 455
         TabOrder = 0
         object rbFileExportAll: TRadioButton
@@ -60,7 +60,7 @@ object frmLoTWExport: TfrmLoTWExport
         Top = 96
         Width = 459
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 101
+        ClientHeight = 86
         ClientWidth = 455
         TabOrder = 1
         object Label1: TLabel
@@ -96,7 +96,7 @@ object frmLoTWExport: TfrmLoTWExport
         Top = 206
         Width = 459
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 101
+        ClientHeight = 86
         ClientWidth = 455
         TabOrder = 2
         object chkFileMarkAfterExport: TCheckBox
@@ -136,7 +136,7 @@ object frmLoTWExport: TfrmLoTWExport
           Left = 14
           Height = 24
           Top = 6
-          Width = 134
+          Width = 137
           Caption = ' Export all QSOs'
           TabOrder = 0
         end
@@ -144,7 +144,7 @@ object frmLoTWExport: TfrmLoTWExport
           Left = 14
           Height = 24
           Top = 31
-          Width = 361
+          Width = 374
           Caption = 'Export only QSOs which have never been uploaded'
           Checked = True
           TabOrder = 1
@@ -164,7 +164,7 @@ object frmLoTWExport: TfrmLoTWExport
           Left = 6
           Height = 17
           Top = 7
-          Width = 202
+          Width = 207
           Caption = 'tqsl command line arguments:'
           ParentColor = False
         end
@@ -172,7 +172,7 @@ object frmLoTWExport: TfrmLoTWExport
           Left = 14
           Height = 34
           Top = 56
-          Width = 311
+          Width = 323
           Caption = '"your qth name" means the qth which you have '#10'defined in tqsl QTH profile'
           ParentColor = False
         end

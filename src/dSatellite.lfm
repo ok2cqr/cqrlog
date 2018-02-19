@@ -1,0 +1,10 @@
+object dmSatellite: TdmSatellite
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  OldCreateOrder = False
+  Height = 280
+  HorizontalOffset = 909
+  VerticalOffset = 410
+  Width = 296
+  PPI = 96
+end

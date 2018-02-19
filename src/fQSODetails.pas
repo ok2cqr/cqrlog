@@ -436,7 +436,6 @@ begin
     frmDate  := dmData.Q.Fields[3].AsString;
     toDate   := dmData.Q.Fields[4].AsString;
 
-    Writeln('ClubNR:',ClubNR);
     case num of
       1 : fClubNR1 := ClubNR;
       2 : fClubNR2 := ClubNR;

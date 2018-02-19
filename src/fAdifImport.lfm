@@ -117,7 +117,7 @@ object frmAdifImport: TfrmAdifImport
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.8.0.6'
   object Label1: TLabel
     Left = 6
     Height = 17
@@ -259,14 +259,12 @@ object frmAdifImport: TfrmAdifImport
   object tr: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 118
     top = 184
   end
   object Q1: TSQLQuery
     FieldDefs = <>
     Transaction = tr
-    Options = []
     Params = <>
     left = 170
     top = 184
@@ -274,7 +272,6 @@ object frmAdifImport: TfrmAdifImport
   object Q2: TSQLQuery
     FieldDefs = <>
     Transaction = tr
-    Options = []
     Params = <>
     left = 219
     top = 184
@@ -282,7 +279,6 @@ object frmAdifImport: TfrmAdifImport
   object Q3: TSQLQuery
     FieldDefs = <>
     Transaction = tr
-    Options = []
     Params = <>
     left = 267
     top = 184
@@ -290,7 +286,6 @@ object frmAdifImport: TfrmAdifImport
   object Q4: TSQLQuery
     FieldDefs = <>
     Transaction = tr
-    Options = []
     Params = <>
     left = 315
     top = 184

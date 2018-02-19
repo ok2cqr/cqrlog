@@ -25,7 +25,7 @@ type
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime: Boolean);
+                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
 
@@ -85,7 +85,7 @@ procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCal
                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                              ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                              ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                             ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime: Boolean);
+                             ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName: Boolean);
 begin
   exDate    := cqrini.ReadBool('Export','Date',True);
   exTimeOn  := cqrini.ReadBool('Export','time_on',True);
@@ -125,6 +125,9 @@ begin
   ExeQslR     := cqrini.ReadBool('Export','eQSLR',False);
   ExeQslRDate := cqrini.ReadBool('Export','eQSLRDate',False);
   exAscTime   := cqrini.ReadBool('Export','AscTime',False);
+  exProp      := cqrini.ReadBool('Export', 'Prop', False);
+  exRxFreq    := cqrini.ReadBool('Export', 'RxFreq', False);
+  exSatName   := cqrini.ReadBool('Export', 'SatName', False)
 end;
 
 procedure TfrmExportProgress.ExportADIF;
@@ -146,14 +149,14 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
   Source : TDataSet;
   FirstBackupPath : String;
 
   procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,cont,
-                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate  : String);
+                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq  : String);
 
   begin
     leng := 0;
@@ -587,6 +590,18 @@ var
       tmp := copy(eQslRDate,1,4) + copy(eQslRDate,6,2) + copy(eQslRDate,9,2);
       Writeln(f,'<EQSL_QSLRDATE'+dmUtils.StringToADIF(tmp))
     end;
+    if (exProp and (PropMode <> '')) then
+    begin
+      Writeln(f, '<PROP_MODE'+dmUtils.StringToADIF(PropMode))
+    end;
+    if (exRxFreq and ((RxFreq <> '0') or (RxFreq <> ''))) then
+    begin
+      Writeln(f, '<FREQ_RX'+dmUtils.StringToADIF(RxFreq))
+    end;
+    if (exSatName and (Satellite<>'')) then
+    begin
+      Writeln(f, '<SAT_NAME'+dmUtils.StringToADIF(Satellite))
+    end;
 
     Writeln(f);
     Write(f,'<EOR>');
@@ -599,7 +614,7 @@ begin
                     ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                     ExCounty,ExDXCC,ExRemarks,ExWAZ,ExITU,ExNote,ExState,ExProfile,
                     ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                    ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime)
+                    ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,exProp, exRxFreq, exSatName)
   else begin
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
@@ -607,6 +622,7 @@ begin
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExCont := True;
     ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; exAscTime := False;
+    exProp := True; exRxFreq := True; exSatName := True;
 
     if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
       CreateDirUTF8(dmData.HomeDir + 'tmp');
@@ -713,7 +729,10 @@ begin
                  Source.Fields[41].AsString,
                  eqsl_qslsdate,
                  Source.Fields[43].AsString,
-                 eqsl_qslrdate
+                 eqsl_qslrdate,
+                 Source.FieldByName('prop_mode').AsString,
+                 Source.FieldByName('satellite').AsString,
+                 FloatToStr(Source.FieldByName('RxFreq').AsFloat)
                   );
           pBarProg.StepIt;
           if (i mod 100 = 0) then
@@ -790,12 +809,12 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, exState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate, ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
 
   procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,cont,
-                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate: String);
+                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq  : String);
 
   begin
     Writeln(f,'<tr>');
@@ -1020,6 +1039,27 @@ var
       Write(f,'<td>'+eQslRDate+'</td>')
     end;
 
+    if exProp then
+    begin
+      if (PropMode <> '') then
+        PropMode := '&nbsp';
+      Writeln(f, '<td>'+PropMode+'</td>')
+    end;
+
+    if exRxFreq then
+    begin
+      if (RxFreq = '') then
+        RxFreq := '&nbsp;';
+      Writeln(f, '<td>'+RxFreq+'</td>')
+    end;
+
+    if exSatName  then
+    begin
+      if (Satellite = '') then
+        Satellite := '&nbsp;';
+      Writeln(f, '<td>'+Satellite+'</td>')
+    end;
+
     Writeln(f,'</tr>')
   end;
 begin
@@ -1030,7 +1070,7 @@ begin
                   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime);
+                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName);
 
   AssignFile(f, FileName);
   Rewrite(f);
@@ -1211,6 +1251,18 @@ begin
     Write(f,'<td width="'+cqrini.ReadString('Export','WeQslRDate','50')+
           '" bgcolor="#333366" class="hlava"><div align="center" class="popis">eQSL_QSLR date</div></td>');
 
+  if exProp then
+    Write(f,'<td width="'+cqrini.ReadString('Export','WProp','50')+
+          '" bgcolor="#333366" class="hlava"><div align="center" class="popis">Prop. mode</div></td>');
+
+  if exRxFreq then
+    Write(f,'<td width="'+cqrini.ReadString('Export','WRxFreq','50')+
+          '" bgcolor="#333366" class="hlava"><div align="center" class="popis">RX freq</div></td>');
+
+  if exSatName  then
+    Write(f,'<td width="'+cqrini.ReadString('Export','WSatName','50')+
+        '" bgcolor="#333366" class="hlava"><div align="center" class="popis">Satellite</div></td>');
+
 
   Writeln(f,'</tr>');
                 
@@ -1302,7 +1354,10 @@ begin
                Source.Fields[41].AsString,
                eqsl_qslsdate,
                Source.Fields[43].AsString,
-               eqsl_qslrdate
+               eqsl_qslrdate,
+               Source.FieldByName('prop_mode').AsString,
+               Source.FieldByName('satellite').AsString,
+               FloatToStr(Source.FieldByName('RxFreq').AsFloat)
              );
       pBarProg.StepIt;
       if (i mod 100 = 0) then

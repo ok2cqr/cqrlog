@@ -4348,6 +4348,15 @@ begin
   aColumns[37].FieldName := 'COUNTRY';
   aColumns[37].Visible   := cqrini.ReadBool('Columns','Country',False);
 
+  aColumns[38].FieldName := 'PROP_MODE';
+  aColumns[38].Visible   := cqrini.ReadBool('Columns', 'Propagation', False);
+
+  aColumns[39].FieldName := 'RXFREQ';
+  aColumns[39].Visible   := cqrini.ReadBool('Columns', 'RXFreq', False);
+
+  aColumns[40].FieldName := 'SATELLITE';
+  aColumns[40].Visible   := cqrini.ReadBool('Columns', 'SatelliteName', False);
+
   for i:=0 to Length(aColumns)-1 do
     aColumns[i].Exists := False
 end;
