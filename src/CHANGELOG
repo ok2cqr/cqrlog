@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  - fixed eQSL upload bug (Saku, OH1KH)
   + TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig (Saku, OH1KH)
   + Start and stop scripts. Called when cqrlog is up and running and before closing all down. (Saku, OH1KH)
   + StartConnectCommand added to DXCluster (Saku, OH1KH)
