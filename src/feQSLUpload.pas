@@ -77,13 +77,13 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then dmData.trQ.Rollback;
   if rbWebExportNotExported.Checked then
-    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks '+
+    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq '+
                          'from cqrlog_main where eqsl_qslsdate is null'
   else begin
     if dmData.IsFilter then
       dmData.Q.SQL.Text := dmData.qCQRLOG.SQL.Text
     else
-      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks '+
+      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq '+
                            'from cqrlog_main'
   end;
   dmData.Q.Open;
@@ -145,14 +145,14 @@ begin
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(dmData.Q.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
 
-      if (dmData.Q1.FieldByName('prop_mode').AsString <> '') then
-        Writeln(f, '<PROP_MODE' + dmUtils.StringToADIF(dmData.Q1.FieldByName('prop_mode').AsString));
+      if (dmData.Q.FieldByName('prop_mode').AsString <> '') then
+        Writeln(f, '<PROP_MODE' + dmUtils.StringToADIF(dmData.Q.FieldByName('prop_mode').AsString));
 
-      if (dmData.Q1.FieldByName('satellite').AsString <> '') then
-        Writeln(f, '<SAT_NAME' + dmUtils.StringToADIF(dmData.Q1.FieldByName('satellite').AsString));
+      if (dmData.Q.FieldByName('satellite').AsString <> '') then
+        Writeln(f, '<SAT_NAME' + dmUtils.StringToADIF(dmData.Q.FieldByName('satellite').AsString));
 
-      if (dmData.Q1.FieldByName('rxfreq').AsString <> '') then
-        Writeln(f, '<FREQ_RX' + dmUtils.StringToADIF(dmData.Q1.FieldByName('rxfreq').AsString));
+      if (dmData.Q.FieldByName('rxfreq').AsString <> '') then
+        Writeln(f, '<FREQ_RX' + dmUtils.StringToADIF(dmData.Q.FieldByName('rxfreq').AsString));
 
       if (dmData.Q.FieldByName('remarks').AsString<>'') and cqrini.ReadBool('LoTW', 'ExpComment', True) then
       begin
