@@ -1974,6 +1974,7 @@ var
   RepStart : integer;
   ParDou   : Double;
   Dtim     : TDateTime;
+  Dfreq    : Integer;
   new      : Boolean;
   TXEna    : Boolean;
   TXOn     : Boolean;
@@ -2255,7 +2256,7 @@ begin
           ParDou := DouFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('delta time:',ParDou);
           //----------------------------------------------------
-          ParNum :=  UiFBuf(index);
+          Dfreq :=  UiFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
           //----------------------------------------------------
           mode := StFBuf(index);    //mode as letter: # @ & etc...
@@ -2273,7 +2274,7 @@ begin
                //if CQ or Mycall
                if ((FirstWord = 'CQ') or (pos (FirstWord,MyCall) > 0)) then
                 Begin
-                    frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf)
+                    frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf,Dfreq)
                 end
                else  //if followed call
                Begin

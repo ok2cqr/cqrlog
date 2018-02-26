@@ -77,7 +77,7 @@ type
   public
     procedure CleanWsjtxMemo;
     function NextElement(Message:string;var index:integer):String;
-    procedure AddDecodedMessage(Message,Band,Reply:string);
+    procedure AddDecodedMessage(Message,Band,Reply:string;Dfreq:integer);
     procedure AddFollowedMessage(Message,Reply:string);
     procedure NewBandMode(Band,Mode:string);
     { public declarations }
@@ -532,17 +532,17 @@ Begin
        //split message it can be: (note: when testing remember continent compare set calls to be non dx]
     if (i) then
      Begin
-       AddDecodedMessage('175200 # CQ OH1LL KP11','20M','reply');      //normal cq
-       AddDecodedMessage('175200 @ CQ DX OH1DX KP11','20M','reply');   //directed cq
-       AddDecodedMessage('175200 @ CQ NA RV3NA','20M','reply');      //call and continents/prefixes  no loc
-       AddDecodedMessage('175200 @ CQ USA RV3USA','20M','reply');      //call and continents/prefixes
-       AddDecodedMessage('175200 @ CQ USA RV3USL KO30','20M','reply');      //call and continents/prefixes
-       AddDecodedMessage('175200 @ CQ OH1LL DX','20M','reply');         //old official cq dx
-       AddDecodedMessage('175200 # OF1KH CA1LL AA11','20M','reply');     //set first you log call
-       AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22','20M','reply'); //!where?" decodes now ok.
-       AddDecodedMessage('175200 ~ CQ NO EU RZ3DX','20M','reply');  // for dbg
-       AddDecodedMessage('201045 ~ CQ KAZAKHSTAN','20M','reply'); // yet another bright cq idea of users
-       AddDecodedMessage('201045 ~ CQ WHO EVER' ,'20M','reply'); // a guess for next idea
+       AddDecodedMessage('175200 # CQ OH1LL KP11','20M','reply',0);      //normal cq
+       AddDecodedMessage('175200 @ CQ DX OH1DX KP11','20M','reply',0);   //directed cq
+       AddDecodedMessage('175200 @ CQ NA RV3NA','20M','reply',0);      //call and continents/prefixes  no loc
+       AddDecodedMessage('175200 @ CQ USA RV3USA','20M','reply',0);      //call and continents/prefixes
+       AddDecodedMessage('175200 @ CQ USA RV3USL KO30','20M','reply',0);      //call and continents/prefixes
+       AddDecodedMessage('175200 @ CQ OH1LL DX','20M','reply',0);         //old official cq dx
+       AddDecodedMessage('175200 # OF1KH CA1LL AA11','20M','reply',0);     //set first you log call
+       AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22','20M','reply',0); //!where?" decodes now ok.
+       AddDecodedMessage('175200 ~ CQ NO EU RZ3DX','20M','reply',0);  // for dbg
+       AddDecodedMessage('201045 ~ CQ KAZAKHSTAN','20M','reply',0); // yet another bright cq idea of users
+       AddDecodedMessage('201045 ~ CQ WHO EVER' ,'20M','reply',0); // a guess for next idea
      end
     else
       Begin
@@ -573,7 +573,7 @@ Begin
   tmrFollow.Enabled:=true;
 end;
 
-procedure TfrmMonWsjtx.AddDecodedMessage(Message,band,Reply:string);
+procedure TfrmMonWsjtx.AddDecodedMessage(Message,band,Reply:string;Dfreq:integer);
 const
   CountryLen = 15;     //length of printed country name in monitor
 var
@@ -775,7 +775,9 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
            RepArr[WsjtxMemo.lines.count] := Reply;  //corresponding reply string to array
            //start printing
            if dmData.DebugLevel>=1 then Writeln('Start adding richmemo lines');
-           AddColorStr(msgTime,clDefault); //time
+           if (chkHistory.Checked ) then
+                  AddColorStr(PadLeft(IntToStr(Dfreq),6))
+             else AddColorStr(msgTime,clDefault); //time
            AddColorStr('  '+msgMode+' ',clDefault); //mode
 
            if isMyCall then AddColorStr('=',wkdnever) else AddColorStr(' ',wkdnever);  //answer to me
