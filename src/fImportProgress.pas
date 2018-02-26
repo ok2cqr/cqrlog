@@ -1046,12 +1046,14 @@ var
   call     : String;
   band     : String;
   mode     : String;
+  submode  : String;
   qsodate  : String;
   time_on  : String;
   qslr     : String;
   PosCall     : Word;
   PosBand     : Word;
   PosMode     : Word;
+  PosSubmode  : Word;
   PosQsoDate  : Word;
   PosTime_on  : Word;
   PosQslr     : Word;
@@ -1059,6 +1061,11 @@ var
   qso_in_log  : Boolean = False;
   ErrorCount  : Word = 0;
   l           : TStringList;
+  t_eQSL      : TDateTime;
+  t_eQSL_min  : TDateTime;
+  t_eQSL_max  : TDateTime;
+  t_log       : TDateTime;
+
 begin
   l := TStringList.Create;
   if dmData.trQ.Active then
@@ -1090,6 +1097,7 @@ begin
       call     := '';
       band     := '';
       mode     := '';
+      submode  := '';
       qsodate  := '';
       time_on  := '';
       qslr     := '';
@@ -1104,6 +1112,7 @@ begin
         PosCall     := Pos('<CALL:',a);
         PosBand     := Pos('<BAND:',a);
         PosMode     := Pos('<MODE:',a);
+        PosSubmode  := Pos('<SUBMODE:',a);
         PosQsoDate  := Pos('<QSO_DATE:8:D',a);
         PosTime_on  := Pos('<TIME_ON:',a);
         PosQslr     := Pos('<QSL_RCVD:',a);
@@ -1146,6 +1155,19 @@ begin
           end;
           Size := StrToInt(sSize);
           mode := copy(orig,PosMode+1,Size)
+        end;
+
+        if PosSubmode > 0 then
+        begin
+          sSize   := '';
+          PosSubmode := PosSubmode + 9;
+          while not (a[PosSubmode] = '>') do
+          begin
+            sSize := sSize + a[PosSubmode];
+            inc(PosSubmode)
+          end;
+          Size := StrToInt(sSize);
+          submode := copy(orig,PosSubmode+1,Size)
         end;
 
         if PosQsoDate > 0 then
@@ -1192,15 +1214,17 @@ begin
 
         if PosEOR > 0 then
         begin
-          band := UpperCase(band);
-          mode := UpperCase(mode);
-          qslr := UpperCase(qslr);
-          call := UpperCase(call);
+          band    := UpperCase(band);
+          mode    := UpperCase(mode);
+          submode := UpperCase(submode);
+          qslr    := UpperCase(qslr);
+          call    := UpperCase(call);
           if dmData.DebugLevel >= 1 then
           begin
             Writeln('Call:     ',call);
             Writeln('Band:     ',band);
             Writeln('Mode:     ',mode);
+            Writeln('Submode:  ',submode);
             Writeln('QSO_date: ',qsodate);
             Writeln('Time_on:  ',time_on);
             Writeln('QSLR:     ',qslr);
@@ -1212,9 +1236,9 @@ begin
 
           dmData.Q.Close;
 
-          if (mode='JT65') then
+          if (mode='JT65') then  //since implementing submodes below, this can most probably be removed
           begin
-            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
+            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd,time_on from cqrlog_main ' +
                                  'where (qsodate ='+QuotedStr(qsodate)+') '+
                                  'and ((mode = ' + QuotedStr('JT65') + ') or (mode='+QuotedStr('JT65A')+') '+
                                  'or (mode='+QuotedStr('JT65B')+') or (mode='+QuotedStr('JT65C')+')) '+
@@ -1222,9 +1246,10 @@ begin
                                  'and (callsign = ' + QuotedStr(call) + ')'
           end
           else begin
-            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd from cqrlog_main ' +
+            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd,time_on from cqrlog_main ' +
                                  'where (qsodate ='+QuotedStr(qsodate)+') '+
-                                 'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ') '+
+                                 'and ((mode = ' + QuotedStr(mode) + ') or (mode = ' + QuotedStr(submode) + ')) '+
+                                 'and (band = ' + QuotedStr(band) + ') '+
                                  'and (callsign = ' + QuotedStr(call) + ')'
           end;
           if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
@@ -1234,19 +1259,35 @@ begin
           while not dmData.Q.Eof do
           begin
             qso_in_log := False;
-            if eQSLShowNew and (dmData.Q.Fields[1].AsString <> 'E') then  //this qso is already confirmed
-              eQSLQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
-            if (dmData.Q.Fields[1].AsString <> 'E') then
+
+            t_eQSL := EncodeTime(StrToInt(copy(time_on,1,2)),
+                      StrToInt(copy(time_on,3,2)),0,0);
+
+            t_log  := EncodeTime(StrToInt(copy(dmData.Q.Fields[2].AsString,1,2)),
+                      StrToInt(copy(dmData.Q.Fields[2].AsString,4,2)),0,0);
+
+            t_eQSL_min := t_eQSL-60/1440;
+            t_eQSL_max := t_eQSL+60/1440;
+
+            if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_log),' | ',TimeToStr(t_eQSL_min),'|',TimeToStr(t_eQSL_max));
+
+            if (t_log >=t_eQSL_min) and (t_log<=t_eQSL_max)  then
             begin
-              dmData.Q1.Close;
-              dmData.Q1.SQL.Clear;
-              dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
-              dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
-              dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
-              if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
-              dmData.Q1.ExecSQL
+              if eQSLShowNew and (dmData.Q.Fields[1].AsString <> 'E') then
+                eQSLQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
+              if (dmData.Q.Fields[1].AsString <> 'E') then
+              begin
+                dmData.Q1.Close;
+                dmData.Q1.SQL.Clear;
+                dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
+                dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
+                dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
+                if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
+                dmData.Q1.ExecSQL
+              end;
+              qso_in_log := True;
+              Break //should only be one qso confirmed, if we have several answers we stop looping those if found one match
             end;
-            qso_in_log := True;
             dmData.Q.Next
           end;
           if not qso_in_log then
@@ -1255,6 +1296,7 @@ begin
             l.Add('Call:     '+call);
             l.Add('Band:     '+band);
             l.Add('Mode:     '+mode);
+            l.Add('Mode:     '+submode);
             l.Add('QSO_date: '+qsodate);
             l.Add('Time_on:  '+time_on);
             l.Add('------------------------------------------------');

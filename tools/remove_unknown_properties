@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#################################################
+# removes properties added by Lazarus 1.8.0     #
+# this script has to be used when compile with  #
+# old Lazarus before running Makefile           #
+# DO NOT COMMIT THESE CHANGES TO THE REPOSITORY #
+#################################################
+
+for f in `ls ../src/*.lfm`;
+do
+  echo $f
+  sed -i '/PPI =/d' $f
+  sed -i '/UseDollarString =/d' $f
+done
+echo "UseDollarString and PPI properties removed"
