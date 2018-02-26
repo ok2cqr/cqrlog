@@ -65,9 +65,12 @@ remote mode is selected. While it is closed it will not update it’s contents.<
 Only remote logging and call qrz/hamqth seek are used then.
 </br>If UPD port opening for remote fails "NewQSO/Comment to qso" will have text “Could not bind socket for wsjtx!"
 </p>
+<p ><img src="img/wsjt22.png" name="22" width="353" height="282">
+</img></p>
+Top line will show band and mode that is in use, Checking ”<b>no history”</b> will clean monitor on every decoded RX-period. Timestamp at the start of line also changes to DeltaFrequency (waterfall position of station) then, as no history is collected and so no time stamp is needed.
+</br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
 <p ><img src="img/wsjt20.png" name="20" width="353" height="83">
 </img></p>
-Top line will show band and mode that is in use, Checking ”<b>no history”</b> will clean monitor on every decoded RX-period. If not checked form will show also older Cqs (scrolling) to see what you missed while having a coffee break :). Only 15 lines, how ever.
 If you do not want any information texts, just alerts, you can check “<b>noTxt”</b> to prevent richmemo text updates and minimize window (or drop it completely down with (<b>_</b>) while alerts are still working.</p>
 <p ><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img></p>
@@ -105,7 +108,76 @@ Checking <b>“flw”</b> new part of monitor opens. This will make easier to fo
 	<i> calling all stations located in a<u> different continent </u> to the caller</i>&quot;). See also:  <a href="http://www.mapability.com/ei8ic/maps/continent.php">http://www.mapability.com/ei8ic/maps/continent.php</a> for continents.
 	<li/> information of DXCC status compared to your logged qsos.</br>
 </ul></p>
+<p>If you want to see a bit more in country name you may try to create this script and run it from console. Remember to set execute bit (chmod +x) to script file to get it running. This script will fix some long country names and change comma-space combinations
+ to dot (as CQ-monitor cuts contry name if it sees comma). That way you will see a bit more info in 15chr long country name of CQ-monitor.
+<pre>
+--------------cut here---------------------------------------------------------
+#/bin/sh
+cd ~/.config/cqrlog/ctyfiles
 
+# fix long names to these 3 files--------------------------------
+# /-----Existing name now------/new-name/ file to read > file to write
+# Do plain Germany
+ sed s/"Federal Republic of Germany"/Germany/g Country.tab > /tmp/fixme.txt
+ mv /tmp/fixme.txt Country.tab 
+ sed s/"Federal Republic of Germany"/Germany/g CallResolution.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt CallResolution.tbl
+ sed s/"Federal Republic of Germany"/Germany/g  AreaOK1RR.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt AreaOK1RR.tbl
+
+#Next replacement round-----------------------------------------
+#Do plain name to all "Rebublic of"
+ sed s/"Republic of "//g Country.tab > /tmp/fixme.txt
+ mv /tmp/fixme.txt Country.tab 
+ sed s/"Republic of "//g CallResolution.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt CallResolution.tbl
+ sed s/"Republic of "//g  AreaOK1RR.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt AreaOK1RR.tbl
+
+#Next replacement round-----------------------------------------
+#Do replacement ", " to "." Comma cuts name in CQ-monitor, replace with dot for more data
+ sed s/", "/./g Country.tab > /tmp/fixme.txt
+ mv /tmp/fixme.txt Country.tab 
+ sed s/", "/./g CallResolution.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt CallResolution.tbl
+ sed s/", "/./g  AreaOK1RR.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt AreaOK1RR.tbl
+
+#Next replacement round-----------------------------------------
+#Do replace USA
+ sed s/"USA - "/"US:"/g AreaOK1RR.tbl > /tmp/fixme.txt
+ mv /tmp/fixme.txt AreaOK1RR.tbl
+
+
+#Next replacement round-----------------------------------------
+# add your own definitions same way using sed  under this line
+
+
+
+
+
+
+#--------------------------done---------------------------------
+#remind to reload fixed files to cqrlog-------------------------
+ echo '------------------------------------------------------------'
+ echo 'Run now:  Window->QSOlist->File->"Import DXCC data"'   
+ echo 'From dialog select: ".config/cqrlog/ctyfiles" folder open'
+ echo 'Press "Open"'
+ echo ''
+ echo 'You need to run this script after every DXCC upgrade received'
+ echo ''
+ echo 'If you do not like the results delete files:'
+ echo '  CallResolution.tbl'
+ echo '  Country.tab'
+ echo '  AreaOK1RR.tbl'
+ echo '  cqrlog-cty.tar.gz'
+ echo 'from ~/.config/cqrlog/ctyfiles/ directory, then'
+ echo 'run CQRLOG again and confirm auto upgrade'
+ echo '------------------------------------------------------------'
+
+#done
+--------------cut here---------------------------------------------------------
+</pre>
 <h3><a name="w2"></a>Colors &amp; fonts</h3>
 <p>
 CQ-monitor has a new design. Window is adjustable and font + size can be changed.<br/>
@@ -185,7 +257,8 @@ to happen when alert is issued.<br/>
 <b>NOTE: Try to keep
 script running time as short as possible.</b></p>
 <p >voice_alert.sh:<br/>
---------------------------------------------------------------------------<br/>
+<pre>
+--------------cut here---------------------------------------------------------
 #!/bin/bash<br/>
 #
 //audio file name (prefix) played on alert<br/>
@@ -203,6 +276,8 @@ is seeking names with '.wav' suffix! Change if needed <br/>
 audio card(if needed) and play alert message</p>
 <p>aplay ~/.config/cqrlog/voice_keyer/$1.wav</p>
 
+--------------cut here---------------------------------------------------------
+</pre>
 <h3><a name="w4">Starting qso from wsjtx-monitor</h3>
 <p>You can start Wsjt-x qso by double click a CQ-monitor’s line. Wsjt-x will move to callers QRG and initiate TX.</p>
 <p><img src="img/wsjt4.png" name="4" width="466" height="353">
