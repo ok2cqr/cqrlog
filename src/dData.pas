@@ -993,13 +993,17 @@ begin
   //us states
   if not FileExistsUTF8(d+'us_states.tab') then
     CopyFile(s+'us_states.tab',d+'us_states.tab');
-
   if not FileExistsUTF8(fHomeDir+'lotw1.txt') then
     CopyFile(s+'lotw1.txt',fHomeDir+'lotw1.txt',True);
   if not FileExistsUTF8(fHomeDir+'eqsl.txt') then
     CopyFile(s+'eqsl.txt',fHomeDir+'eqsl.txt',True);
   if not FileExistsUTF8(fHomeDir+'MASTER.SCP') then
-    CopyFile(s+'MASTER.SCP',fHomeDir+'MASTER.SCP',True)
+    CopyFile(s+'MASTER.SCP',fHomeDir+'MASTER.SCP',True);
+
+  if not FileExistsUTF8(fHomeDir+'sat_name.tab') then
+    CopyFile(s+'sat_name.tab', fHomeDir+'sat_name.tab');
+  if not FileExistsUTF8(fHomeDir+'prop_mode.tab') then
+    CopyFile(s+'prop_mode.tab', fHomeDir+'prop_mode.tab')
 end;
 
 procedure TdmData.PrepareDXCCData;

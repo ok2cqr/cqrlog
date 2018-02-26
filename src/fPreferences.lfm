@@ -1287,7 +1287,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
@@ -1630,7 +1630,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
@@ -2046,7 +2046,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
@@ -2379,7 +2379,7 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
@@ -3139,18 +3139,28 @@ object frmPreferences: TfrmPreferences
       ClientWidth = 748
       inline fraExportSettings: TfraExportPref
         Left = 16
-        Height = 414
+        Height = 504
         Top = 8
-        Width = 596
-        ClientHeight = 414
-        ClientWidth = 596
+        Width = 640
+        ClientHeight = 504
+        ClientWidth = 640
         DesignLeft = 623
         DesignTop = 214
         inherited chkProfile: TCheckBox
           Top = 326
         end
         inherited chkAscTime: TCheckBox
-          Top = 375
+          Left = 8
+          Top = 448
+        end
+        inherited edtWProp: TEdit
+          Width = 40
+        end
+        inherited edtWSatName: TEdit
+          Width = 40
+        end
+        inherited edtWRxFreq: TEdit
+          Width = 40
         end
       end
     end

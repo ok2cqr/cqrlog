@@ -3853,7 +3853,8 @@ procedure TfrmNewQSO.btnClearSatelliteClick(Sender : TObject);
 begin
   cmbPropagation.ItemIndex := 0;
   cmbSatellite.ItemIndex   := 0;
-  edtRXFreq.Clear
+  edtRXFreq.Clear;
+  cmbSatelliteChange(nil)
 end;
 
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);

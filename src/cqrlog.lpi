@@ -704,6 +704,7 @@
         <Filename Value="fExportPref.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmExportPref"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit93>
       <Unit94>
@@ -765,7 +766,7 @@
     <Version Value="11"/>
     <SearchPaths>
       <Libraries Value="$(LazarusDir)/lcl"/>
-      <OtherUnitFiles Value="lnet/lib;richmemo;richmemo/gtk2;synapse"/>
+      <OtherUnitFiles Value="lnet/lib;richmemo;richmemo/gtk2;synapse;richmemo/qt"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>

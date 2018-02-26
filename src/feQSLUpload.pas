@@ -77,12 +77,14 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then dmData.trQ.Rollback;
   if rbWebExportNotExported.Checked then
-    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,prop_mode,satellite,rxfreq,remarks from cqrlog_main where eqsl_qslsdate is null'
+    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq '+
+                         'from cqrlog_main where eqsl_qslsdate is null'
   else begin
     if dmData.IsFilter then
       dmData.Q.SQL.Text := dmData.qCQRLOG.SQL.Text
     else
-      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,prop_mode,satellite,rxfreq,remarks from cqrlog_main'
+      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq '+
+                           'from cqrlog_main'
   end;
   dmData.Q.Open;
   dmData.Q.First;
@@ -138,8 +140,10 @@ begin
       Writeln(f,tmp);
 
       tmp := '<RST_SENT' + dmUtils.StringToADIF(dmData.Q.FieldByName('rst_s').AsString);
+      Writeln(f,tmp);
 
       tmp := '<RST_RCVD' + dmUtils.StringToADIF(dmData.Q.FieldByName('rst_r').AsString);
+      Writeln(f,tmp);
 
       if (dmData.Q.FieldByName('prop_mode').AsString <> '') then
         Writeln(f, '<PROP_MODE' + dmUtils.StringToADIF(dmData.Q.FieldByName('prop_mode').AsString));
