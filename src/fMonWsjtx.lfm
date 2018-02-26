@@ -10,7 +10,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnCreate = FormCreate
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.8.0.6'
   object lblBand: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
