@@ -42,6 +42,7 @@ type
     cmbGroupBy: TComboBox;
     cmbLoTW_qsls: TComboBox;
     cmbSort: TComboBox;
+    cmbBandSelector: TComboBox;
     edtCont: TEdit;
     edtPwrFrom : TEdit;
     edtPwrTo : TEdit;
@@ -71,6 +72,7 @@ type
     GroupBox15: TGroupBox;
     GroupBox16: TGroupBox;
     GroupBox17 : TGroupBox;
+    GroupBox18: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
@@ -91,6 +93,7 @@ type
     Label18 : TLabel;
     Label19 : TLabel;
     Label2: TLabel;
+    Label20: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -120,6 +123,8 @@ type
     procedure btnLoadClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure btnSelectDXCCClick(Sender: TObject);
+    procedure cmbBandSelectorChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
@@ -470,6 +475,44 @@ begin
   finally
     frmSelectDXCC.Free
   end
+end;
+
+procedure TfrmFilter.cmbBandSelectorChange(Sender: TObject);
+var
+  Band :String;
+begin
+  if (cmbBandSelector.ItemIndex < 1 ) then
+   Begin
+     edtFreqFrom.Text:='';
+     edtFreqTo.Text := edtFreqFrom.Text;
+   end
+   else
+   Begin
+     Band:= cmbBandSelector.items[cmbBandSelector.ItemIndex];
+     if (band<>'') then
+      begin
+           dmData.qBands.Close;
+           dmData.qBands.SQL.Text := 'select band,b_begin,b_end from cqrlog_common.bands where band="'+Band+'"';
+           dmData.qBands.Open;
+
+           if (dmData.qBands.RecordCount > 0) then
+            begin
+              if (dmData.qBands.FieldByName('band').AsString = Band) then
+               Begin
+                 edtFreqFrom.Text:=dmData.qBands.FieldByName('b_begin').AsString;
+                 edtFreqTo.Text := dmData.qBands.FieldByName('b_end').AsString;
+               end;
+            end;
+           dmData.qBands.Close;
+      end;
+    end;
+
+end;
+
+procedure TfrmFilter.FormCreate(Sender: TObject);
+begin
+  dmUtils.InsertBands(cmbBandSelector);
+  cmbBandSelector.Items.Insert(0, ''); //to be sure
 end;
 
 procedure TfrmFilter.FormKeyUp(Sender: TObject; var Key: Word;
