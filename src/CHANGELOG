@@ -4,8 +4,6 @@ Legend:
   - bugfix
 --------------------
 2.3.0
-<<<<<<< HEAD
-=======
   + CQ-monitor Delta Freqyency instead of Time when "no history" checked (Saku, OH1KH)
   + TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig (Saku, OH1KH)
   + Start and stop scripts. Called when cqrlog is up and running and before closing all down. (Saku, OH1KH)
@@ -23,6 +21,7 @@ Legend:
   - fldigi remote socket checking fixed (Saku, OH1KH)
   - loading libbsl library didn't work on 32bit system - fixed
   - LoTW import bug when having multiple QSOs with the same station, on the same band and day fixed (Jonas, SM2VSD)
+  - export QSO for LoTW to local adif file fixed
 
 2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)
