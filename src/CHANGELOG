@@ -4,9 +4,9 @@ Legend:
   - bugfix
 --------------------
 2.3.0
-  - QSO/Filter. Text "X.x MHz" to clarify input format of freq. Band selector added. Fixed all sizes and anchors  (Saku, OH1KH)
+
+  + Band selector to Filter windows added (Saku, OH1KH)
   + CQ-monitor Delta Freqyency instead of Time when "no history" checked (Saku, OH1KH)
-  - fixed eQSL upload bug (Saku, OH1KH)
   + TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig (Saku, OH1KH)
   + Start and stop scripts. Called when cqrlog is up and running and before closing all down. (Saku, OH1KH)
   + StartConnectCommand added to DXCluster (Saku, OH1KH)
@@ -18,11 +18,13 @@ Legend:
   + eQSL ADIf import now also uses timestamp from log (+/-60min) together with timestamp from eQSL to match qsos (Jonas, SM2VSD)
   
 
+  - QSO Filter layout fixed (Saku, OH1KH)
   - DXCluster/WEB Font button not connected to acFont (no action). Fixed (Saku, OH1KH)
   - wsjtx logging take start and stop times to log (before just stop time) (Saku, OH1KH)
   - fldigi remote socket checking fixed (Saku, OH1KH)
   - loading libbsl library didn't work on 32bit system - fixed
   - LoTW import bug when having multiple QSOs with the same station, on the same band and day fixed (Jonas, SM2VSD)
+  - export QSO for LoTW to local adif file fixed
 
 2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)

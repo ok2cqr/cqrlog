@@ -16,8 +16,8 @@ type
   TfrmLoTWExport = class(TForm)
     btnClose: TButton;
     btnFileBrowse: TButton;
-    btnFileExport: TButton;
     btnExportSign: TButton;
+    btnFileExport : TButton;
     btnUpload: TButton;
     btnHelp: TButton;
     chkFileMarkAfterExport: TCheckBox;
@@ -366,7 +366,7 @@ begin
   if dmData.trQ1.Active then
     dmData.trQ1.RollBack;
   dmData.Q1.Close;
-  if (dmData.IsFilter and rbWebExportAll.Checked) then
+  if (dmData.IsFilter and (rbWebExportAll.Checked or rbFileExportAll.Checked)) then
   begin
     dmData.Q1.SQL.Text := dmData.qCQRLOG.SQL.Text
   end
@@ -379,7 +379,6 @@ begin
   dmData.trQ1.StartTransaction;
   if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
   dmData.Q1.Open();
-
   if MarkAfter then
     dmData.trQ.StartTransaction;
   try
@@ -445,7 +444,6 @@ begin
         dmData.Q.SQL.Text := 'update cqrlog_main set lotw_qsls = ' + QuotedStr('Y') +
                              ',lotw_qslsdate = ' + QuotedStr(date) + ' where id_cqrlog_main = '+
                              dmData.Q1.FieldByName('id_cqrlog_main').AsString;
-        if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
         dmData.Q.ExecSQL
       end;
       dmData.Q1.Next
@@ -456,11 +454,11 @@ begin
       Result := 1
     end
   finally
+   if MarkAfter  and (pgLoTWExport.ActivePageIndex = 0)  then
+      dmData.trQ.Commit;
     dmData.Q1.Close();
     dmData.trQ1.Rollback;
-    CloseFile(f);
-    if MarkAfter  and (pgLoTWExport.ActivePageIndex = 0)  then
-      dmData.trQ.Commit
+    CloseFile(f)
   end
 end;
 
