@@ -40,6 +40,7 @@ type
     tbFollow: TToggleBox;
     tbTCAlert: TToggleBox;
     tmrFollow: TTimer;
+    tmrCqPeriod: TTimer;
     WsjtxMemo: TRichMemo;
     procedure cbflwChange(Sender: TObject);
     procedure chkHistoryChange(Sender: TObject);
@@ -64,8 +65,8 @@ type
     procedure tbmyAllChange(Sender: TObject);
     procedure tbmyAlrtChange(Sender: TObject);
     procedure tbTCAlertChange(Sender: TObject);
+    procedure tmrCqPeriodTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
-    procedure WsjtxMemoChange(Sender: TObject);
     procedure WsjtxMemoDblClick(Sender: TObject);
   private
     procedure FocusLastLine;
@@ -106,7 +107,7 @@ var
   EditedText         : string;                  //holds editAlert after finished (loose focus)
   Ssearch,Sfull      : String;
   Spos               : integer;
-  Sdelim             : char = ',';
+
 
 implementation
 {$R *.lfm}
@@ -415,16 +416,20 @@ begin
     end;
 end;
 
+procedure TfrmMonWsjtx.tmrCqPeriodTimer(Sender: TObject);
+begin
+  tmrCqPeriod.Enabled := false;
+  if (chkHistory.Checked ) then
+                  WsjtxMemo.SetRangeColor(0,length(WsjtxMemo.Text),clSilver);
+end;
+
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
+
 begin
    tmrFollow.Enabled := false;
-   edtFollow.Font.Color := clRed;
-end;
-
-procedure TfrmMonWsjtx.WsjtxMemoChange(Sender: TObject);
-begin
-
-end;
+   if (tbFollow.Checked ) then
+                  edtFollow.Font.Color := clSilver;
+  end;
 
 procedure TfrmMonWsjtx.cmCqDxClick(Sender: TObject);
 begin
@@ -560,22 +565,25 @@ Begin
        '201045 ~ CQ WHO EVER');  // for dbg
      end;
 end;
+
 procedure TfrmMonWsjtx.AddFollowedMessage(Message,Reply:string);
 Begin
   if dmData.DebugLevel>=1 then Writeln('Follow line:',Message);
   tmrFollow.Enabled:=false;
   edtFollow.Font.Color := clDefault;
   edtFollow.Text := Message;
-  if ((lblMode.Caption ='FT8') or (lblMode.Caption ='MSK144')) then
-    tmrFollow.Interval:= 15000
+   if ((lblMode.Caption ='FT8') or (lblMode.Caption ='MSK144')) then
+    tmrFollow.Interval:= 15500
    else
-    tmrFollow.Interval:= 60000;
+    tmrFollow.Interval:= 60500;
   tmrFollow.Enabled:=true;
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message,band,Reply:string;Dfreq:integer);
 const
   CountryLen = 15;     //length of printed country name in monitor
+  CallLen    = 10;     //max len of callsign
+  Sdelim     = ',';    //separator of several text alerts
 var
   msgTime,
   msgMode,
@@ -664,6 +672,7 @@ end;
 //-----------------------------------------------------------------------------------------
 Begin   //TfrmMonWsjtx.AddDecodedMessage
 
+      tmrCqPeriod.Enabled:=false;
 
       mycont  := '';
       cont    := '';
@@ -783,12 +792,12 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
            if isMyCall then AddColorStr('=',wkdnever) else AddColorStr(' ',wkdnever);  //answer to me
 
                   case frmWorkedGrids.WkdCall(msgCall,band,mode) of
-                   0  :  AddColorStr(PadRight(UpperCase(msgCall),9)+' ',wkdnever);
-                   1  :  AddColorStr(PadRight(LowerCase(msgCall),9)+' ',wkdhere);
-                   2  :  AddColorStr(PadRight(UpperCase(msgCall),9)+' ',wkdband);
-                   3  :  AddColorStr(PadRight(UpperCase(msgCall),9)+' ',wkdany);
+                   0  :  AddColorStr(PadRight(UpperCase(msgCall),CallLen)+' ',wkdnever);
+                   1  :  AddColorStr(PadRight(LowerCase(msgCall),CallLen)+' ',wkdhere);
+                   2  :  AddColorStr(PadRight(UpperCase(msgCall),CallLen)+' ',wkdband);
+                   3  :  AddColorStr(PadRight(UpperCase(msgCall),CallLen)+' ',wkdany);
                    else
-                     AddColorStr(PadRight(LowerCase(msgCall),9)+' ',clDefault);  //should not happen
+                     AddColorStr(PadRight(LowerCase(msgCall),CallLen)+' ',clDefault);  //should not happen
                   end;
 
            if msgLoc='----' then
@@ -879,6 +888,7 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
               begin
                 if (EditedText <>'') then
                  begin
+                     if dmData.DebugLevel>=1 then Writeln('Alert text search');
                      Sfull := EditedText;
                      Spos := pos(Sdelim,Sfull);       //delimiter for several search variants
                      if (Spos > 0) then //many variants
@@ -908,6 +918,11 @@ Begin   //TfrmMonWsjtx.AddDecodedMessage
          end;//printing out  line
         end;  //continued
 
+   if ((lblMode.Caption ='FT8') or (lblMode.Caption ='MSK144')) then
+    tmrCqPeriod.Interval:= 15500
+   else
+    tmrCqPeriod.Interval:= 60500;
+  tmrCqPeriod.Enabled:=true;
 end;
 
 

@@ -4,7 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
-
+  + Cq-monitor: Overtimed entries turn silvergray in Follow and "no history" (Saku, OH1KH)
   + Band selector to Filter windows added (Saku, OH1KH)
   + CQ-monitor Delta Freqyency instead of Time when "no history" checked (Saku, OH1KH)
   + TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig (Saku, OH1KH)

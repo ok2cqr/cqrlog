@@ -66,12 +66,19 @@ Only remote logging and call qrz/hamqth seek are used then.
 </br>If UPD port opening for remote fails "NewQSO/Comment to qso" will have text “Could not bind socket for wsjtx!"
 </p>
 <p ><img src="img/wsjt22.png" name="22" width="353" height="282">
+</img>
+<img src="img/wsjt23.png" name="22" width="353" height="282">
 </img></p>
-Top line will show band and mode that is in use, Checking ”<b>no history”</b> will clean monitor on every decoded RX-period. Timestamp at the start of line also changes to DeltaFrequency (waterfall position of station) then, as no history is collected and so no time stamp is needed.
+Top line will show band and mode that is in use, Checking <b>"no history”</b> will clean monitor on every decoded RX-period.
+</br>Timestamp at the start of line also changes to DeltaFrequency 
+(waterfall position of station) then, as no history is collected and so no time stamp is needed.
+</br>If there are no CQ lines during period then old monitor lines will turn to silver gray indicating that right period of possible answer is passed. This happens ONLY if <b>"no history”</b> is checked. If not, colors stay as they are.
+</br>CQ-lines turning to silver gray does not disable double click answering property. It is just informative color change. 
 </br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
+
 <p ><img src="img/wsjt20.png" name="20" width="353" height="83">
 </img></p>
-If you do not want any information texts, just alerts, you can check “<b>noTxt”</b> to prevent richmemo text updates and minimize window (or drop it completely down with (<b>_</b>) while alerts are still working.</p>
+If you do not want any information texts, just alerts, you can check “<b>noTxt”</b> to prevent richmemo text updates and minimize window or drop it completely down with (<b>_</b>) while alerts are still working.</p>
 <p ><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img></p>
 Checking <b>“flw”</b> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
@@ -81,7 +88,7 @@ Checking <b>“flw”</b> new part of monitor opens. This will make easier to fo
  That box uses same font and size as CQ-monitor.
  </br></br>Line contains:  <b>decoding_period_time</b> | <b>delta_frequency</b>  | <b>the_message</b>.  
  </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
- </br>Line color turns red from default color when corresponding response period is over.
+ </br>Line color turns silver gray from default color (black) when corresponding response period is over.
  </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.
  </br>
  </br>CQ-monitor has known problem of color printing (richmemo unit) that causes CPU load to grow slowly during online hours. For so far solution for this  has not been found.
@@ -223,16 +230,16 @@ highest priority. Alert is executed only once per every decoding section.</p>
 	callsign give alerts. There are stations that answer to CQ directly
 	with report, so this wakes you up also then. When using FT8 this
 	might be little annoying but is easy to check off.</br>
-	<li/>”<b>Text [ ]Alert</b>” will alert if text-in-text if typed text, case
-	sensitive, compared to complete monitor line.
+	<li/>”<b>Text [ ]Alert</b>” will alert if typed text, case
+	sensitive, fits into part of complete monitor line (text-in-text).
 	<br/> <b>Example:</b> alert from new country by setting “w c” string to text alert. It fits
 	in to the middle of “New country” string. Text can have spaces,
 	but not at start or at end.<br/>
 	Press button <b>“Text”</b> to change to call alerts.<br/>
-	”<b>Call [ ]Alert</b>” will alert if text-in-text if typed text, upcase, fits callsign of
+	”<b>Call [ ]Alert</b>” will alert if typed text, (converts to upcase when alert activated), fits callsign of
 	monitor line. As option, one asterisk can be used at start or end to
 	indicate starts-with or ends-with search. Several search strings can
-	be inserted with comma separation.<br/>
+	be inserted for call alert with comma separation.<br/>
 	Press button <b>“Call”</b> to change to text alerts.</p>
 	<p>Text you have typed is read only after you leave edit box. Then
 	spaces from start and end are removed and in case of “call alert”
