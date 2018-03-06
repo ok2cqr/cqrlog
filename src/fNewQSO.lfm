@@ -6,7 +6,7 @@ object frmNewQSO: TfrmNewQSO
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 636
+  ClientHeight = 659
   ClientWidth = 807
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
@@ -3178,7 +3178,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 28
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
-            ClientHeight = 114
+            ClientHeight = 111
             ClientWidth = 538
             object sgrdStatistic: TStringGrid
               Left = 0
@@ -3200,7 +3200,7 @@ object frmNewQSO: TfrmNewQSO
           end
           object tabSatellite: TTabSheet
             Caption = 'Satellite'
-            ClientHeight = 114
+            ClientHeight = 111
             ClientWidth = 538
             object cmbPropagation: TComboBox
               Left = 8

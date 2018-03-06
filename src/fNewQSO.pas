@@ -2280,7 +2280,7 @@ begin
                Begin
                   if dmData.DebugLevel>=1 then Writeln('++++++in Follow!');
                   if (frmMonWsjtx.tbFollow.Checked and (pos(frmMonWsjtx.edtFollowCall.Text,ParStr) > pos(' ',ParStr)) ) then  //not first word
-                     frmMonWsjtx.AddFollowedMessage(Timeline+' '+intToStr(ParNum)+' '+ParStr,Repbuf);
+                     frmMonWsjtx.AddFollowedMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf);
                end;
              end;
 

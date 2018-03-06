@@ -54,7 +54,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Font.Height = -13
     Font.Name = 'Monospace'
     HideSelection = False
-    OnChange = WsjtxMemoChange
     OnDblClick = WsjtxMemoDblClick
     ParentFont = False
     PopupMenu = popColors
@@ -369,7 +368,13 @@ object frmMonWsjtx: TfrmMonWsjtx
   object tmrFollow: TTimer
     Enabled = False
     OnTimer = tmrFollowTimer
-    left = 155
-    top = 378
+    left = 200
+    top = 120
+  end
+  object tmrCqPeriod: TTimer
+    Enabled = False
+    OnTimer = tmrCqPeriodTimer
+    left = 184
+    top = 176
   end
 end
