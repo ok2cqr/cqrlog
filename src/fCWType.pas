@@ -88,22 +88,24 @@ var
   tmp   : String = '';
   i     : Integer = 0;
   mess  : String = '';
+  CWkey : char;
 begin
-  if key <> '' then
-    key := UpperCase(key)[1];
-  if (key in ['A'..'Z']) or (key in ['0'..'9']) or (key = '=') or
-   (key = '?') or (key = ',') or (key='.') or (key='/') or (key = ' ') or
-   (key = '<') or (key = '>') or (key = ':') or (key = ')') or (key = '(') or
-   (key = ';') or (key = '@') or (key = 'ß') or (key ='Ü') or (key ='Ö') or
-   (key = 'Ä') then
+  CWkey :=key;
+  if CWkey <> '' then
+    CWkey := UpperCase(CWkey)[1];
+  if (CWkey in ['A'..'Z']) or (CWkey in ['0'..'9']) or (CWkey = '=') or
+   (CWkey = '?') or (CWkey = ',') or (CWkey='.') or (CWkey='/') or (CWkey = ' ') or
+   (CWkey = '<') or (CWkey = '>') or (CWkey = ':') or (CWkey = ')') or (CWkey = '(') or
+   (CWkey = ';') or (CWkey = '@') or (CWkey = 'ß') or (CWkey ='Ü') or (CWkey ='Ö') or
+   (CWkey = 'Ä') then
   begin
     if rgMode.ItemIndex = 0 then //letter mode
-      frmNewQSO.CWint.SendText(key)
+      frmNewQSO.CWint.SendText(CWkey)
     else begin                   //word mode
       if (Pos(' ',m.Text) = 0) and (rgMode.ItemIndex=1) then  //fist word is send character by character
-        frmNewQSO.CWint.SendText(key)
+        frmNewQSO.CWint.SendText(CWkey)
       else begin
-        if (key = ' ') then
+        if (CWkey = ' ') then
         begin
           tmp := '';
           mess := m.Text;

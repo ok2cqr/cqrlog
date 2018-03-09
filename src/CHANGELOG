@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  - CWtype/letter mode: doubling a .. z removed (Saku, OH1KH)
   + Cq-monitor: Overtimed entries turn silvergray in Follow and "no history" (Saku, OH1KH)
   + Band selector to Filter windows added (Saku, OH1KH)
   + CQ-monitor Delta Freqyency instead of Time when "no history" checked (Saku, OH1KH)
