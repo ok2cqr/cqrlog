@@ -10,7 +10,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnCreate = FormCreate
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '1.8.0.6'
+  LCLVersion = '1.8.2.0'
   object lblBand: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -247,6 +247,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 3
       BorderSpacing.Right = 3
+      OnDblClick = edtFollowDblClick
       ReadOnly = True
       TabOrder = 1
     end
