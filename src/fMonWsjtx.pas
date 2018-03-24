@@ -54,6 +54,7 @@ type
     procedure EditAlertExit(Sender: TObject);
     procedure edtFollowCallEnter(Sender: TObject);
     procedure edtFollowCallExit(Sender: TObject);
+    procedure edtFollowDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormHide(Sender: TObject);
@@ -107,6 +108,7 @@ var
   EditedText         : string;                  //holds editAlert after finished (loose focus)
   Ssearch,Sfull      : String;
   Spos               : integer;
+  RepFlw             : String [255];            //reply in case of follow line double click
 
 
 implementation
@@ -257,7 +259,20 @@ begin
   cqrini.WriteString('MonWsjtx','FollowCall',edtFollowCall.Text);
 end;
 
+procedure TfrmMonWsjtx.edtFollowDblClick(Sender: TObject);
+var
+   reply : string;
+begin
+  if dmData.DebugLevel>=1 then Writeln('Clicked follow line gives: ',RepFlw);
+  reply := RepFlw;
 
+  if (length(reply) > 11 ) and (reply[12] = #$02) then //we should have proper reply
+               Begin
+                reply[12] := #$04;    //quick hack: change message type from 2 to 4
+                if dmData.DebugLevel>=1 then Writeln('Changed message type from 2 to 4. Sending...');
+                frmNewQSO.Wsjtxsock.SendString(reply);
+               end;
+end;
 
 procedure TfrmMonWsjtx.cmBandClick(Sender: TObject);
 begin
@@ -431,6 +446,7 @@ begin
                   edtFollow.Font.Color := clSilver;
   end;
 
+
 procedure TfrmMonWsjtx.cmCqDxClick(Sender: TObject);
 begin
        popColorDlg.Color:=extCqCall;
@@ -572,6 +588,7 @@ Begin
   tmrFollow.Enabled:=false;
   edtFollow.Font.Color := clDefault;
   edtFollow.Text := Message;
+  RepFlw := Reply;
    if ((lblMode.Caption ='FT8') or (lblMode.Caption ='MSK144')) then
     tmrFollow.Interval:= 15500
    else

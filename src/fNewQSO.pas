@@ -326,6 +326,7 @@ type
     sbtnRefreshTime: TSpeedButton;
     tabDXCCStat : TTabSheet;
     tabSatellite : TTabSheet;
+    tmrWsjtSpd: TTimer;
     tmrWsjtx: TTimer;
     tmrUploadAll: TTimer;
     tmrFldigi: TTimer;
@@ -518,6 +519,7 @@ type
     procedure tmrStartStartTimer(Sender: TObject);
     procedure tmrStartTimer(Sender: TObject);
     procedure tmrUploadAllTimer(Sender: TObject);
+    procedure tmrWsjtSpdTimer(Sender: TObject);
     procedure tmrWsjtxTimer(Sender: TObject);
   private
     StartRun : Boolean;
@@ -600,6 +602,7 @@ type
     procedure CheckForMembershipUpdate;
 
     function CheckFreq(freq : String) : String;
+
   public
     QTHfromCb   : Boolean;
     FromDXC     : Boolean;
@@ -612,7 +615,6 @@ type
     WsjtxBand             : String;
     wHiSpeed              : integer;      // when packets received :udp polling speeds (tmrWsjtx)
     wLoSpeed              : integer;     // when running idle
-
     old_call              : String;               //Moved from private
 
     FldigiXmlRpc          : Boolean;
@@ -1958,6 +1960,43 @@ begin
   end
 end;
 
+procedure TfrmNewQSO.tmrWsjtSpdTimer(Sender: TObject);
+var
+  Hour,Min,Sec,HSec : word;
+begin
+   if (WsjtxMode='FT8') then
+    begin
+     DecodeTime(Time,Hour,Min,Sec,HSec);
+     //if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>FT8 mode - Sec is: ',Sec);
+     case Sec of
+       13,28,43,58 :
+                     begin  //set hispeed  decode time is coming
+                        if ( tmrWsjtx.Interval = wLoSpeed ) then
+                          begin
+                           if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                           tmrWsjtx.Interval := wHiSpeed;
+                           if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>Setting UDP decode to FT8 HiSpeed ', tmrWsjtx.Interval);
+                          end;
+                     end;
+       2,17,32,47  :
+                     begin //set lospeed  decode time is over
+                         if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
+                          Begin
+                           if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                           tmrWsjtx.Interval := wLoSpeed;
+                           if dmData.DebugLevel>=1 then Writeln('<<<<<<<<<<<<<<<<<<Setting UDP decode to FT8 LoSpeed ', tmrWsjtx.Interval);
+                          end;
+                      end;
+       end;
+    end
+   else
+      if (  tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
+       Begin
+         tmrWsjtx.Interval := wLoSpeed;       // turn it off then
+         if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to LoSpeed not in FT8 mode ',tmrWsjtx.Interval);
+       end;
+end;
+
 procedure TfrmNewQSO.tmrWsjtxTimer(Sender: TObject);
 var
   Buf      : String;
@@ -2070,9 +2109,13 @@ begin
   if WsjtxDecodeRunning then
    begin
      if dmData.DebugLevel>=1 then Writeln('WsjtDecode already running!');
-     exit;
+     Exit;
    end
-     else WsjtxDecodeRunning := true;   //do not jump here if already running
+     else
+     Begin
+       WsjtxDecodeRunning := true;   //do not jump here if already running
+       tmrWsjtx.Enabled:= false;
+     end;
   if Wsjtxsock.WaitingData > 0 then
   Begin
   MyCall := UpperCase(cqrini.ReadString('Station', 'Call', ''));
@@ -2081,13 +2124,7 @@ begin
   Buf := Wsjtxsock.RecvPacket(1000);
   if WsjtxSock.lasterror=0 then
   begin
-     if ( tmrWsjtx.Interval = wLoSpeed ) then
-       Begin
-            tmrWsjtx.Enabled  := False;
-            tmrWsjtx.Interval := wHiSpeed;    //  timer has now dynamic value. Now we got data. Expecting more that one packet.
-                                              //  setting HiSpeed ON
-            if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to HiSpeed');
-       end;
+
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
     RepStart := index; //for possibly reply creation
     if dmData.DebugLevel>=1 then Write('Header position:',index);
@@ -2157,10 +2194,8 @@ begin
           begin
             new :=true;
             WsjtxMode := ParStr;
-            if (WsjtxMode = 'FT8') or (WsjtxMode = 'MSK144') then
-                wLoSpeed  := 500  else  wLoSpeed  := 1500;
           end;
-          if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode, '  wLoSpeed:',wLoSpeed );
+          if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode);
            //----------------------------------------------------
           call := trim(StFBuf(index)); //to be sure...
           if dmData.DebugLevel>=1 then Writeln('Call :', call);
@@ -2475,26 +2510,17 @@ begin
                                                // Now end of decode and wsjt-x still running: Allow timer run again.
    end;  //if WsjtxSock.lasterror=0 then
   end;  // while datagrams in buffer
-  end //waiting data
-  else
-   Begin
-      if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UDP packets. Is HiSpeed still on?
-       Begin
-         if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to LoSpeed');
-         tmrWsjtx.Enabled  := False;
-         tmrWsjtx.Interval := wLoSpeed;       // turn it off then
-         tmrWsjtx.Enabled  := True;
-       end;
-   end;
-   {
-   The latest message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-   https://sourceforge.net/p/wsjt/wsjt/HEAD/tree/branches/wsjtx/NetworkMessage.hpp
-
-   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
-   to construct a recipe to replicate an issue.
-    }
+  end; //waiting data
   WsjtxDecodeRunning := false;
+  tmrWsjtx.Enabled:=true;
 end;
+{
+  The latest message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
+  https://sourceforge.net/p/wsjt/wsjt/HEAD/tree/branches/wsjtx/NetworkMessage.hpp
+
+  The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
+  to construct a recipe to replicate an issue.
+   }
 
 procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
@@ -6267,15 +6293,13 @@ begin
 
                   WsjtxMode := '';    //will be set by type1 'status'-message
                   WsjtxBand := '';
-                  wHiSpeed  := 20;    //mS
-                  wLoSpeed  := 1500;  //will be shorter when FT8 or MSK144 mode change in decode/status
+                  wHiSpeed  := 10;    //mS will be shorter when FT8
+                  wLoSpeed  := 1000;
 
 
                   tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do
                   tmrWsjtx.Enabled  := True;          //  so timer can run more seldom.
-                                                      //  When first UDP packet is received it will turn timer to wHiSpeed
-                                                      //  for fast handling and when there is no more data wLoSpeed is turned
-                                                      //  on again.
+                  tmrWsjtSpd.Enabled:= True;
 
                   // start UDP server  http://synapse.ararat.cz/doc/help/blcksock.TBlockSocket.html
                   WsjtxSock := TUDPBlockSocket.Create;
@@ -6320,6 +6344,7 @@ begin
   if  mnuRemoteModeWsjt.Checked then
   begin
       tmrWsjtx.Enabled := False;
+      tmrWsjtSpd.Enabled:=false;
       while ((WsjtxDecodeRunning) and (tries > 0)) do
       begin
         dec(tries);
