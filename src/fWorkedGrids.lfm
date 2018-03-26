@@ -15,7 +15,7 @@ object frmWorkedGrids: TfrmWorkedGrids
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poDefault
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.8.2.0'
   object LocMap: TImage
     Left = 16
     Height = 361
