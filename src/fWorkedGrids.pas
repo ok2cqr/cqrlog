@@ -430,10 +430,7 @@ begin
   LogBand := ' ';
   LogTable := 'cqrlog_main';  //assume table name is this always
 
-  dmUtils.InsertModes(WsMode);
-  WsMode.Items.Insert(0, 'any');
-  WsMode.Items.Insert(1, 'JT9+JT65');
-  WsMode.ItemIndex := 0;
+  //mode selector updates now @ FormShow
 
   dmUtils.InsertBands(BandSelector);
   BandSelector.Items.Insert(0, 'all');
@@ -738,7 +735,12 @@ begin
   FollowRig.Checked := cqrini.ReadBool('Worked_grids', 'FollowRig', False);
   ShoWkdOnly.Checked := cqrini.ReadBool('Worked_grids', 'ShowWkdOnly', False);
   AutoUpdate.Enabled := True;
-  BandSelectorChange(nil)
+  BandSelectorChange(nil);
+  //we need this here. Otherwise user digital modes are not shown
+  dmUtils.InsertModes(WsMode);
+  WsMode.Items.Insert(0, 'any');
+  WsMode.Items.Insert(1, 'JT9+JT65');
+  WsMode.ItemIndex := 0;
 end;
 
 procedure TfrmWorkedGrids.LocMapClick(Sender: TObject);
