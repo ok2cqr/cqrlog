@@ -1,7 +1,7 @@
 object frmFilter: TfrmFilter
-  Left = 121
+  Left = 272
   Height = 658
-  Top = 35
+  Top = 79
   Width = 817
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
@@ -121,10 +121,10 @@ object frmFilter: TfrmFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.8.0.6'
-  object Label10: TLabel
+  LCLVersion = '1.8.2.0'
+  object lblProf: TLabel
     AnchorSideTop.Control = cmbProfile
-    AnchorSideRight.Control = Label15
+    AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 215
     Height = 15
@@ -134,9 +134,9 @@ object frmFilter: TfrmFilter
     Caption = 'Profile:'
     ParentColor = False
   end
-  object Label11: TLabel
+  object lblMember: TLabel
     AnchorSideTop.Control = cmbMembers
-    AnchorSideRight.Control = Label15
+    AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 176
     Height = 15
@@ -146,9 +146,9 @@ object frmFilter: TfrmFilter
     Caption = 'Membership:'
     ParentColor = False
   end
-  object Label12: TLabel
+  object lblGrpBy: TLabel
     AnchorSideTop.Control = cmbGroupBy
-    AnchorSideRight.Control = Label15
+    AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 198
     Height = 15
@@ -158,7 +158,7 @@ object frmFilter: TfrmFilter
     Caption = 'Group by:'
     ParentColor = False
   end
-  object Label15: TLabel
+  object lblSortBy: TLabel
     AnchorSideTop.Control = cmbSort
     AnchorSideRight.Control = cmbSort
     AnchorSideRight.Side = asrBottom
@@ -171,7 +171,7 @@ object frmFilter: TfrmFilter
     Caption = 'Sort by:'
     ParentColor = False
   end
-  object GroupBox1: TGroupBox
+  object gbCallsign: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 12
@@ -185,8 +185,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 0
     object edtCallSign: TEdit
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = GroupBox1
+      AnchorSideLeft.Control = gbCallsign
+      AnchorSideTop.Control = gbCallsign
       Left = 8
       Height = 32
       Top = 6
@@ -252,7 +252,7 @@ object frmFilter: TfrmFilter
     OnClick = btnCancelClick
     TabOrder = 2
   end
-  object GroupBox2: TGroupBox
+  object gbDxcc: TGroupBox
     AnchorSideTop.Side = asrBottom
     Left = 12
     Height = 114
@@ -265,8 +265,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 3
     object edtDXCC: TEdit
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = GroupBox2
+      AnchorSideLeft.Control = gbDxcc
+      AnchorSideTop.Control = gbDxcc
       Left = 8
       Height = 32
       Top = 13
@@ -291,10 +291,10 @@ object frmFilter: TfrmFilter
       TabOrder = 1
     end
   end
-  object GroupBox3: TGroupBox
-    AnchorSideLeft.Control = GroupBox18
+  object gbFreq: TGroupBox
+    AnchorSideLeft.Control = gbBand
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Control = gbCallsign
     Left = 332
     Height = 114
     Top = 4
@@ -328,8 +328,8 @@ object frmFilter: TfrmFilter
       ParentColor = False
     end
     object edtFreqFrom: TEdit
-      AnchorSideTop.Control = GroupBox3
-      AnchorSideRight.Control = GroupBox3
+      AnchorSideTop.Control = gbFreq
+      AnchorSideRight.Control = gbFreq
       AnchorSideRight.Side = asrBottom
       Left = 51
       Height = 32
@@ -352,10 +352,10 @@ object frmFilter: TfrmFilter
       TabOrder = 1
     end
   end
-  object GroupBox4: TGroupBox
-    AnchorSideLeft.Control = GroupBox3
+  object gbMode: TGroupBox
+    AnchorSideLeft.Control = gbFreq
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Control = gbCallsign
     Left = 492
     Height = 114
     Top = 4
@@ -366,8 +366,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 5
     object cmbMode: TComboBox
-      AnchorSideLeft.Control = GroupBox4
-      AnchorSideTop.Control = GroupBox4
+      AnchorSideLeft.Control = gbMode
+      AnchorSideTop.Control = gbMode
       Left = 6
       Height = 32
       Top = 6
@@ -379,10 +379,10 @@ object frmFilter: TfrmFilter
       TabOrder = 0
     end
   end
-  object GroupBox5: TGroupBox
-    AnchorSideLeft.Control = GroupBox4
+  object gbDate: TGroupBox
+    AnchorSideLeft.Control = gbMode
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Control = gbCallsign
     Left = 652
     Height = 114
     Top = 4
@@ -415,8 +415,8 @@ object frmFilter: TfrmFilter
       ParentColor = False
     end
     object edtDateFrom: TEdit
-      AnchorSideTop.Control = GroupBox5
-      AnchorSideRight.Control = GroupBox5
+      AnchorSideTop.Control = gbDate
+      AnchorSideRight.Control = gbDate
       AnchorSideRight.Side = asrBottom
       Left = 51
       Height = 32
@@ -441,9 +441,9 @@ object frmFilter: TfrmFilter
       TabOrder = 1
     end
   end
-  object GroupBox6: TGroupBox
+  object gbLoc: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Control = gbCallsign
     AnchorSideTop.Side = asrBottom
     Left = 12
     Height = 114
@@ -456,8 +456,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 7
     object edtLocator: TEdit
-      AnchorSideLeft.Control = GroupBox6
-      AnchorSideTop.Control = GroupBox6
+      AnchorSideLeft.Control = gbLoc
+      AnchorSideTop.Control = gbLoc
       Left = 8
       Height = 32
       Top = 6
@@ -493,10 +493,10 @@ object frmFilter: TfrmFilter
       TabStop = True
     end
   end
-  object GroupBox7: TGroupBox
-    AnchorSideLeft.Control = GroupBox15
+  object gbQth: TGroupBox
+    AnchorSideLeft.Control = gbCounty
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox12
+    AnchorSideTop.Control = gbAward
     Left = 332
     Height = 114
     Top = 376
@@ -532,8 +532,8 @@ object frmFilter: TfrmFilter
       TabOrder = 1
     end
     object edtQTH: TEdit
-      AnchorSideLeft.Control = GroupBox7
-      AnchorSideTop.Control = GroupBox7
+      AnchorSideLeft.Control = gbQth
+      AnchorSideTop.Control = gbQth
       Left = 6
       Height = 32
       Top = 6
@@ -543,10 +543,10 @@ object frmFilter: TfrmFilter
       TabOrder = 2
     end
   end
-  object GroupBox8: TGroupBox
-    AnchorSideLeft.Control = GroupBox2
+  object gbQsl: TGroupBox
+    AnchorSideLeft.Control = gbDxcc
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox2
+    AnchorSideTop.Control = gbDxcc
     Left = 172
     Height = 114
     Top = 252
@@ -556,72 +556,55 @@ object frmFilter: TfrmFilter
     ClientHeight = 98
     ClientWidth = 472
     TabOrder = 9
-    object Label5: TLabel
+    object lblVia: TLabel
       AnchorSideLeft.Control = edtQSLVia
-      AnchorSideBottom.Control = edtQSLVia
+      AnchorSideTop.Control = edtQSLVia
+      AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 29
+      Left = 9
       Height = 15
-      Top = -2
+      Top = 45
       Width = 22
-      Anchors = [akLeft, akBottom]
-      BorderSpacing.Bottom = 32
+      BorderSpacing.Left = 1
       Caption = 'VIA'
       ParentColor = False
     end
-    object Label6: TLabel
-      AnchorSideLeft.Control = cmbQSL_S
-      AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = Label5
-      Left = 189
-      Height = 15
-      Top = -2
-      Width = 32
-      Caption = 'Send'
-      ParentColor = False
-    end
-    object Label7: TLabel
-      AnchorSideLeft.Control = cmbQSL_R
-      AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = cmbQSL_S
+    object lblRcvdC: TLabel
       AnchorSideTop.Side = asrBottom
-      Left = 176
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = cmbQSL_R
+      AnchorSideBottom.Side = asrBottom
+      Left = 155
       Height = 15
-      Top = 46
-      Width = 59
+      Top = 63
+      Width = 9
+      Anchors = [akRight, akBottom]
       BorderSpacing.Top = 1
-      Caption = 'Received'
+      Caption = 'R'
       ParentColor = False
+      ParentFont = False
     end
-    object Label13: TLabel
-      AnchorSideLeft.Control = cmbeQSL_qsls
-      AnchorSideTop.Control = Label5
-      Left = 274
-      Height = 15
-      Top = -2
-      Width = 66
-      Caption = 'eQSL Sent'
-      ParentColor = False
-    end
-    object Label14: TLabel
-      AnchorSideLeft.Control = cmbLoTW_qslr
+    object lblLoTW: TLabel
       AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = Label7
+      AnchorSideRight.Control = cmbLoTW_qsls
+      AnchorSideRight.Side = asrBottom
       Left = 360
       Height = 15
-      Top = 46
-      Width = 99
-      Caption = 'LoTW Received'
+      Top = 45
+      Width = 36
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 70
+      Caption = 'LoTW'
       ParentColor = False
     end
     object edtQSLVia: TEdit
-      AnchorSideLeft.Control = GroupBox8
-      AnchorSideTop.Control = GroupBox8
-      Left = 29
+      AnchorSideLeft.Control = gbQsl
+      AnchorSideTop.Control = gbQsl
+      Left = 8
       Height = 32
       Top = 13
       Width = 120
-      BorderSpacing.Left = 29
+      BorderSpacing.Left = 8
       BorderSpacing.Top = 13
       CharCase = ecUppercase
       TabOrder = 0
@@ -630,24 +613,25 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = edtQSLVia
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = edtQSLVia
-      Left = 172
+      Left = 168
       Height = 32
       Top = 13
       Width = 66
       AutoSize = False
-      BorderSpacing.Left = 23
+      BorderSpacing.Left = 40
       ItemHeight = 0
       TabOrder = 1
     end
     object cmbQSL_R: TComboBox
       AnchorSideLeft.Control = cmbQSL_S
-      AnchorSideTop.Control = Label7
+      AnchorSideTop.Control = cmbQSL_S
       AnchorSideTop.Side = asrBottom
-      Left = 172
+      Left = 168
       Height = 32
-      Top = 61
+      Top = 46
       Width = 66
       AutoSize = False
+      BorderSpacing.Top = 1
       ItemHeight = 0
       TabOrder = 2
     end
@@ -655,12 +639,12 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = cmbeQSL_qsls
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = cmbeQSL_qsls
-      Left = 376
+      Left = 400
       Height = 32
       Top = 13
       Width = 66
       AutoSize = False
-      BorderSpacing.Left = 36
+      BorderSpacing.Left = 50
       Font.Height = 8
       ItemHeight = 0
       ItemIndex = 0
@@ -675,12 +659,14 @@ object frmFilter: TfrmFilter
     end
     object cmbLoTW_qslr: TComboBox
       AnchorSideLeft.Control = cmbLoTW_qsls
-      AnchorSideTop.Control = cmbQSL_R
-      Left = 376
+      AnchorSideTop.Control = cmbLoTW_qsls
+      AnchorSideTop.Side = asrBottom
+      Left = 400
       Height = 32
-      Top = 61
+      Top = 46
       Width = 66
       AutoSize = False
+      BorderSpacing.Top = 1
       ItemHeight = 0
       ItemIndex = 0
       Items.Strings = (
@@ -694,14 +680,13 @@ object frmFilter: TfrmFilter
     object cmbeQSL_qsls: TComboBox
       AnchorSideLeft.Control = cmbQSL_S
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = Label13
-      AnchorSideTop.Side = asrBottom
-      Left = 274
+      AnchorSideTop.Control = cmbQSL_S
+      Left = 284
       Height = 32
       Top = 13
       Width = 66
       AutoSize = False
-      BorderSpacing.Left = 36
+      BorderSpacing.Left = 50
       Font.Height = 8
       ItemHeight = 0
       ItemIndex = 0
@@ -716,12 +701,14 @@ object frmFilter: TfrmFilter
     end
     object cmbeQSL_qslr: TComboBox
       AnchorSideLeft.Control = cmbeQSL_qsls
-      AnchorSideTop.Control = cmbQSL_R
-      Left = 274
+      AnchorSideTop.Control = cmbeQSL_qsls
+      AnchorSideTop.Side = asrBottom
+      Left = 284
       Height = 32
-      Top = 61
+      Top = 46
       Width = 66
       AutoSize = False
+      BorderSpacing.Top = 1
       ItemHeight = 0
       Items.Strings = (
         ''
@@ -731,33 +718,102 @@ object frmFilter: TfrmFilter
       Style = csDropDownList
       TabOrder = 6
     end
-    object Label16: TLabel
-      AnchorSideLeft.Control = cmbeQSL_qslr
-      AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = Label7
-      Left = 259
+    object lblEqsl: TLabel
+      AnchorSideRight.Control = cmbeQSL_qsls
+      AnchorSideRight.Side = asrBottom
+      Left = 247
       Height = 15
-      Top = 46
-      Width = 96
-      Caption = 'eQSL Received'
+      Top = 45
+      Width = 33
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 70
+      Caption = 'eQSL'
       ParentColor = False
     end
-    object Label17: TLabel
-      AnchorSideLeft.Control = cmbLoTW_qsls
-      AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = Label5
-      Left = 375
+    object lblSentC: TLabel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbQSL_S
+      AnchorSideRight.Side = asrBottom
+      Left = 156
       Height = 15
-      Top = -2
-      Width = 69
-      Caption = 'LoTW Sent'
+      Top = 14
+      Width = 8
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 1
+      Caption = 'S'
+      ParentBidiMode = False
       ParentColor = False
+      ParentFont = False
+    end
+    object lblSentE: TLabel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbQSL_S
+      AnchorSideRight.Control = lblEqsl
+      AnchorSideRight.Side = asrBottom
+      Left = 272
+      Height = 15
+      Top = 14
+      Width = 8
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 1
+      Caption = 'S'
+      ParentBidiMode = False
+      ParentColor = False
+      ParentFont = False
+    end
+    object lblSentL: TLabel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbQSL_S
+      AnchorSideRight.Control = lblLoTW
+      AnchorSideRight.Side = asrBottom
+      Left = 388
+      Height = 15
+      Top = 14
+      Width = 8
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 1
+      Caption = 'S'
+      ParentBidiMode = False
+      ParentColor = False
+      ParentFont = False
+    end
+    object lblRcvdE: TLabel
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = lblEqsl
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = cmbQSL_R
+      AnchorSideBottom.Side = asrBottom
+      Left = 271
+      Height = 15
+      Top = 63
+      Width = 9
+      Anchors = [akRight, akBottom]
+      BorderSpacing.Top = 1
+      Caption = 'R'
+      ParentColor = False
+      ParentFont = False
+    end
+    object lblRcvdL: TLabel
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = lblLoTW
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = cmbQSL_R
+      AnchorSideBottom.Side = asrBottom
+      Left = 387
+      Height = 15
+      Top = 63
+      Width = 9
+      Anchors = [akRight, akBottom]
+      BorderSpacing.Top = 1
+      Caption = 'R'
+      ParentColor = False
+      ParentFont = False
     end
   end
-  object GroupBox9: TGroupBox
-    AnchorSideLeft.Control = GroupBox14
+  object gbContinent: TGroupBox
+    AnchorSideLeft.Control = gbZones
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox6
+    AnchorSideTop.Control = gbLoc
     Left = 492
     Height = 114
     Top = 128
@@ -767,9 +823,10 @@ object frmFilter: TfrmFilter
     ClientHeight = 98
     ClientWidth = 152
     TabOrder = 10
+    OnClick = gbContinentClick
     object edtCont: TEdit
-      AnchorSideLeft.Control = GroupBox9
-      AnchorSideTop.Control = GroupBox9
+      AnchorSideLeft.Control = gbContinent
+      AnchorSideTop.Control = gbContinent
       Left = 6
       Height = 32
       Top = 6
@@ -779,10 +836,10 @@ object frmFilter: TfrmFilter
       TabOrder = 0
     end
   end
-  object GroupBox10: TGroupBox
-    AnchorSideLeft.Control = GroupBox7
+  object gbIota: TGroupBox
+    AnchorSideLeft.Control = gbQth
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox12
+    AnchorSideTop.Control = gbAward
     Left = 492
     Height = 114
     Top = 376
@@ -792,9 +849,10 @@ object frmFilter: TfrmFilter
     ClientHeight = 98
     ClientWidth = 312
     TabOrder = 11
+    OnClick = gbIotaClick
     object edtIOTA: TEdit
-      AnchorSideLeft.Control = GroupBox10
-      AnchorSideTop.Control = GroupBox10
+      AnchorSideLeft.Control = gbIota
+      AnchorSideTop.Control = gbIota
       Left = 6
       Height = 32
       Top = 6
@@ -843,10 +901,10 @@ object frmFilter: TfrmFilter
       TabOrder = 3
     end
   end
-  object GroupBox11: TGroupBox
-    AnchorSideLeft.Control = GroupBox8
+  object gbRemarks: TGroupBox
+    AnchorSideLeft.Control = gbQsl
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox8
+    AnchorSideTop.Control = gbQsl
     Left = 652
     Height = 114
     Top = 252
@@ -881,9 +939,9 @@ object frmFilter: TfrmFilter
       TabOrder = 1
     end
     object edtRemarks: TEdit
-      AnchorSideLeft.Control = GroupBox11
+      AnchorSideLeft.Control = gbRemarks
       AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = GroupBox11
+      AnchorSideTop.Control = gbRemarks
       Left = 5
       Height = 32
       Top = 13
@@ -892,9 +950,9 @@ object frmFilter: TfrmFilter
       TabOrder = 2
     end
   end
-  object GroupBox12: TGroupBox
+  object gbAward: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = GroupBox2
+    AnchorSideTop.Control = gbDxcc
     AnchorSideTop.Side = asrBottom
     Left = 12
     Height = 114
@@ -932,8 +990,8 @@ object frmFilter: TfrmFilter
       TabOrder = 1
     end
     object edtDiplom: TEdit
-      AnchorSideLeft.Control = GroupBox12
-      AnchorSideTop.Control = GroupBox12
+      AnchorSideLeft.Control = gbAward
+      AnchorSideTop.Control = gbAward
       Left = 6
       Height = 32
       Top = 6
@@ -943,10 +1001,10 @@ object frmFilter: TfrmFilter
       TabOrder = 2
     end
   end
-  object GroupBox13: TGroupBox
-    AnchorSideLeft.Control = GroupBox6
+  object gbMyLoc: TGroupBox
+    AnchorSideLeft.Control = gbLoc
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox6
+    AnchorSideTop.Control = gbLoc
     Left = 172
     Height = 114
     Top = 128
@@ -957,8 +1015,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 14
     object edtMyLoc: TEdit
-      AnchorSideLeft.Control = GroupBox13
-      AnchorSideTop.Control = GroupBox13
+      AnchorSideLeft.Control = gbMyLoc
+      AnchorSideTop.Control = gbMyLoc
       Left = 8
       Height = 32
       Top = 6
@@ -994,10 +1052,10 @@ object frmFilter: TfrmFilter
       TabStop = True
     end
   end
-  object GroupBox14: TGroupBox
-    AnchorSideLeft.Control = GroupBox13
+  object gbZones: TGroupBox
+    AnchorSideLeft.Control = gbMyLoc
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox6
+    AnchorSideTop.Control = gbLoc
     Left = 332
     Height = 114
     Top = 128
@@ -1031,8 +1089,8 @@ object frmFilter: TfrmFilter
       ParentColor = False
     end
     object edtWAZ: TEdit
-      AnchorSideTop.Control = GroupBox14
-      AnchorSideRight.Control = GroupBox14
+      AnchorSideTop.Control = gbZones
+      AnchorSideRight.Control = gbZones
       AnchorSideRight.Side = asrBottom
       Left = 101
       Height = 32
@@ -1070,10 +1128,10 @@ object frmFilter: TfrmFilter
     TabOrder = 16
     Text = 'cmbProfile'
   end
-  object GroupBox15: TGroupBox
-    AnchorSideLeft.Control = GroupBox12
+  object gbCounty: TGroupBox
+    AnchorSideLeft.Control = gbAward
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox12
+    AnchorSideTop.Control = gbAward
     Left = 172
     Height = 114
     Top = 376
@@ -1084,8 +1142,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 17
     object edtCounty: TEdit
-      AnchorSideLeft.Control = GroupBox15
-      AnchorSideTop.Control = GroupBox15
+      AnchorSideLeft.Control = gbCounty
+      AnchorSideTop.Control = gbCounty
       Left = 6
       Height = 32
       Top = 6
@@ -1206,10 +1264,10 @@ object frmFilter: TfrmFilter
     OnClick = btnLoadClick
     TabOrder = 22
   end
-  object GroupBox16: TGroupBox
-    AnchorSideLeft.Control = GroupBox9
+  object gbState: TGroupBox
+    AnchorSideLeft.Control = gbContinent
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox6
+    AnchorSideTop.Control = gbLoc
     Left = 652
     Height = 114
     Top = 128
@@ -1220,8 +1278,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 23
     object edtState: TEdit
-      AnchorSideLeft.Control = GroupBox16
-      AnchorSideTop.Control = GroupBox16
+      AnchorSideLeft.Control = gbState
+      AnchorSideTop.Control = gbState
       Left = 6
       Height = 32
       Top = 6
@@ -1267,7 +1325,7 @@ object frmFilter: TfrmFilter
   end
   object GroupBox17: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = GroupBox12
+    AnchorSideTop.Control = gbAward
     AnchorSideTop.Side = asrBottom
     Left = 12
     Height = 114
@@ -1327,10 +1385,10 @@ object frmFilter: TfrmFilter
       ParentColor = False
     end
   end
-  object GroupBox18: TGroupBox
-    AnchorSideLeft.Control = GroupBox1
+  object gbBand: TGroupBox
+    AnchorSideLeft.Control = gbCallsign
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Control = gbCallsign
     Left = 172
     Height = 114
     Top = 4
@@ -1341,8 +1399,8 @@ object frmFilter: TfrmFilter
     ClientWidth = 152
     TabOrder = 26
     object cmbBandSelector: TComboBox
-      AnchorSideLeft.Control = GroupBox18
-      AnchorSideTop.Control = GroupBox18
+      AnchorSideLeft.Control = gbBand
+      AnchorSideTop.Control = gbBand
       Left = 6
       Height = 32
       Top = 6
