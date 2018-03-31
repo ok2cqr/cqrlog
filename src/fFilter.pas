@@ -63,42 +63,44 @@ type
     edtFreqTo: TEdit;
     edtQTH: TEdit;
     edtITU: TEdit;
-    GroupBox1: TGroupBox;
-    GroupBox10: TGroupBox;
-    GroupBox11: TGroupBox;
-    GroupBox12: TGroupBox;
-    GroupBox13: TGroupBox;
-    GroupBox14: TGroupBox;
-    GroupBox15: TGroupBox;
-    GroupBox16: TGroupBox;
+    gbCallsign: TGroupBox;
+    gbIota: TGroupBox;
+    gbRemarks: TGroupBox;
+    gbAward: TGroupBox;
+    gbMyLoc: TGroupBox;
+    gbZones: TGroupBox;
+    gbCounty: TGroupBox;
+    gbState: TGroupBox;
     GroupBox17 : TGroupBox;
-    GroupBox18: TGroupBox;
-    GroupBox2: TGroupBox;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
-    GroupBox5: TGroupBox;
-    GroupBox6: TGroupBox;
-    GroupBox7: TGroupBox;
-    GroupBox8: TGroupBox;
-    GroupBox9: TGroupBox;
+    gbBand: TGroupBox;
+    gbDxcc: TGroupBox;
+    gbFreq: TGroupBox;
+    gbMode: TGroupBox;
+    gbDate: TGroupBox;
+    gbLoc: TGroupBox;
+    gbQth: TGroupBox;
+    gbQsl: TGroupBox;
+    gbContinent: TGroupBox;
     Label1: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
-    Label16 : TLabel;
-    Label17 : TLabel;
+    lblProf: TLabel;
+    lblMember: TLabel;
+    lblGrpBy: TLabel;
+    lblLoTW: TLabel;
+    lblRcvdE: TLabel;
+    lblRcvdL: TLabel;
+    lblSentC: TLabel;
+    lblSentE: TLabel;
+    lblSentL: TLabel;
+    lblSortBy: TLabel;
+    lblEqsl : TLabel;
     Label18 : TLabel;
     Label19 : TLabel;
     Label2: TLabel;
     Label20: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
+    lblVia: TLabel;
+    lblRcvdC: TLabel;
     Label8: TLabel;
     Label9: TLabel;
     dlgOpen: TOpenDialog;
@@ -131,6 +133,8 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure edtDateFromExit(Sender: TObject);
     procedure edtDateToExit(Sender: TObject);
+    procedure gbIotaClick(Sender: TObject);
+    procedure gbContinentClick(Sender: TObject);
   private
   public
     tmp : String;
@@ -422,6 +426,16 @@ begin
     tmp := edtDateTo.Text;
     edtDateTo.Text := copy(tmp,1,4) + '-' + copy(tmp,5,2) + '-' + copy(tmp,7,2)
   end
+end;
+
+procedure TfrmFilter.gbIotaClick(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmFilter.gbContinentClick(Sender: TObject);
+begin
+
 end;
 
 procedure TfrmFilter.btnCancelClick(Sender: TObject);
