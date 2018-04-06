@@ -889,7 +889,8 @@ var
   iMax     : Integer;
   i        : Integer;
   clat,clong : Currency;
-  stColor  : String = '';
+  stColor,
+  BGRcolor : String;
   tmp      : String;
 begin
   EnterCriticalsection(csDX);
@@ -897,10 +898,17 @@ begin
     if  cqrini.ReadBool('xplanet','UseDefColor',True) then
       sColor := cqrini.ReadInteger('xplanet','color',clWhite);
     iMax      := cqrini.ReadInteger('xplanet','LastSpots',20);
-    if cqrini.ReadInteger('xplanet','ShowFrom',0) > 0 then exit;
+    //this is not needed here as check of cfgShowFrom is done already in fDXCluster !!
+      //if cqrini.ReadInteger('xplanet','ShowFrom',0) > 0 then exit;
+    //removing it allows "universal use"
     dmUtils.GetRealCoordinate(lat,long,clat,clong);
-    stColor := IntToHex(sColor,8);
-    stColor := '0x'+Copy(stColor,3,Length(stColor)-2);
+    BGRcolor := IntToHex(sColor,8);   //this reverses RGB to BGR !!
+    stColor := '0x'
+      + copy(BGRcolor,7,2)  //R
+      + copy(BGRcolor,5,2)  //G
+      + copy(BGRcolor,3,2); //B
+    if dmData.DebugLevel >= 1 then
+       Writeln('Color for xplanet:',stColor);
     tmp := CurrToStr(clat)+' '+CurrToStr(clong)+' "'+call+'" color='+stColor;
     l := TStringList.Create;
     l.Clear;
@@ -909,7 +917,7 @@ begin
     try
       for i:= 0 to l.Count-1 do
       begin
-        if Pos('"'+call+'"',l.Strings[i]) > 0 then
+        if Pos(call,l.Strings[i]) > 0 then   //we do no need quotation marks: compares without
         begin
           l.Delete(i);
           break

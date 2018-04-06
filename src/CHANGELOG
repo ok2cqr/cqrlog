@@ -4,6 +4,8 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  - xplanet support/DXCluster was reversing colors RGB to BGR (Saku, OH1KH)
+  + Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)
   - Filter section QSL. Controls over group box. Tighter setting of controls (Saku, OH1KH)
   - Worked grids map: Mode selector did not load user's additions (digimodes) (Saku, OH1KH)
   - CWtype/letter mode: doubling a .. z removed (Saku, OH1KH)

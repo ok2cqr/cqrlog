@@ -810,7 +810,7 @@ begin
   frmBandMap.xplanetFile     := dmData.HomeDir+'xplanet/marker';
   frmBandMap.OnlyCurrBand    := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   frmBandMap.OnlyCurrMode    := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
-  frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) > 0);
+  frmBandMap.DoXplanetExport := (cqrini.ReadInteger('xplanet','ShowFrom',0) = 1); //dxclust =0, wsjt=2
 
   if cqrini.ReadBool('BandMapFilter','ShowAll',True) then
     frmBandMap.DateFilterType := dftShowAll;
