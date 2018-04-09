@@ -44,11 +44,14 @@ With Tru and Msg is Loc setting it is useful also in VHF, UHF, SHF Tropo, Es etc
 logging.
 </p>
 <p>
-<b>HOTKEYS</b> works like in <a href="h20.html">New QSO window</a>. 2xESC clears all fileds, F1..F10 send CW macros etc.
+<b>HOTKEYS</b> work like in <a href="h20.html">New QSO window</a>.
+<ul><li> <b>2x ESC</b> clears all fileds</li>
+<li>Note: <b>1x ESC</b> returns cursor back to Call-field (if cursor is in some of the other fields like RSTr) and places cursor at the end of callsign for possible repairs.</li>
+<li> <b> F1..F10 </b>send CW macros etc.</li></ul>
 </p>
 
 <p>
-Form Contest has following fields:<br>
+Form Contest has following fields and checkboxes:<br>
 <ul>
 <li><b>Call</b> when you leave this field callsign is moved to NewQSO, to see if you have qso before.</li>
 <li><b>RST s</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
@@ -61,14 +64,14 @@ Form Contest has following fields:<br>
 <li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears fields.</li>
 <li><b>Clear all</b> Clear all fields and prepare to enter new QSO</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field.
-Note! This prevents typing space (mainly to MSG fields).</li>
+Note! This prevents typing space (mainly to MSG fields).</li></ul>
 </p>
 <p>
-TAB-key moves cursor between fields. So contest qso goes like this:
+<b>TAB-key</b> moves cursor between fields. So contest qso goes like this:
 type callsign-&gt;press TAB-&gt;type contest rxnumber-&gt;press TAB-&gt;type contest message-&gt;press ENTER.
 Or hit ENTER after rxnumber if no additional message is exchanged.
 </p>
-<p>Remember that pressing ENTER key at any field saves qso with existing values. How ever there must be
+<p>Remember that pressing <b>ENTER</b> key at any field saves qso with existing values. How ever there must be
 callsign at least three characters long. Sent/Received number and message are not needed.</p>
 <p>
 Contest numbers and messages are saved in log into RST fields separated by spaces like. 599 001 MSG
@@ -97,11 +100,14 @@ HTML export will look like this:<br>
 <img src="img/contest_html_export.png">
 </p>
 <p>
-Most contests expect Cabrillo log format. There is no support for this. You have to make ADIF export of qsos
+</br>
+Most contests expect <b>Cabrillo</b> log format. <b>There is no support for this. You have to make ADIF export of qsos</b>
 and then use separate program if you want to send logs.</p><p>
-I found nice adif2cabrillo program for Linux from <a href="http://users.telenet.be/on4qz/" target="_blank">http://users.telenet.be/on4qz/</a> that supports ADIF importing.
-Starting is bit complicated: you have to have qt5 and (qmake-qt5 if your distro is Fedora) to be able to compile
-it.</p><p>
+</br>
+I found nice <b>adif2cabrillo</b> program for Linux from <a href="http://users.telenet.be/on4qz/a2c/index.html" target="_blank">http://users.telenet.be/on4qz/</a> that supports ADIF importing.
+</p></p>Starting is bit complicated: 
+</br>You need to compile it from source. Qt5 with qmake (called qmake-qt5 if your distro is Fedora) is needed to be able to compile
+it.</br>
 Then there are no templates for different contests. You have to create them, but after that it serves you well!
 It accepts nicely exported ADIF format from cqrlog and dig out STX and SRX as expected.
 </p>

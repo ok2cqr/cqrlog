@@ -42,7 +42,7 @@
         
     </ul>
 <p>From New QSO / File select 'Remote mode for wsjt'</p>
-<img src="img/wsjt2.png" name="2" width="139" height="238" border="0"/>
+<img src="img/wsjt2.png" name="2" width="144" height="238" border="0"/>
 <p> Remote mode for WSJT-X-communication is made via UDP dtatgrams that and is supported from WSJT-X 1.5.0 program upwards.<br/>
 Cqrlog supports WSJT-X UDP remote mode since version 1.9.1 
 </p>
@@ -51,7 +51,7 @@ Cqrlog supports WSJT-X UDP remote mode since version 1.9.1
 number after text “Wsjt-x remote” text. Also color of text changes while receiving packets.<br/>
 These will show you that UDP link is alive between these programs.</font></p>
 <p>New QSO / Window list</p>
-<img src="img/wsjt1.png" name="1" width="140" height="282" border="0"/>
+<img src="img/wsjt1.png" name="1" width="144" height="282" border="0"/>
 <p>“ Wsjtx monitor “ is visible only if WSJT-X remote mode is selected. Others can be found from there all the time.</font></p>
 
 
@@ -77,16 +77,41 @@ Top line will show band and mode that is in use, Checking <b>"no history”</b> 
 </br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
 
 <p ><img src="img/wsjt20.png" name="20" width="353" height="83">
-</img></p>
-If you do not want any information texts, just alerts, you can check “<b>noTxt”</b> to prevent richmemo text updates and minimize window or drop it completely down with (<b>_</b>) while alerts are still working.</p>
-<p ><img src="img/wsjt21.png" name="21" width="363" height="282">
+</img>
+<img src="img/wsjt30.png" name="30" width="353" height="83">
+</img></p><p>
+If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent richmemo text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
+</br>
+If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 
+How ever there are some limitations compared to CQ-monitor:
+</br><li><strong>color back</strong> can not change lower case letters of Band Activity line in case call or locator is worked. Just font color is changed</li>
+<li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
+<li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
+</br>
+With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
+</br></p><p>
+<img src="img/wsjt34.png" name="34" width="353" height="282">
+</img>
+<img src="img/wsjt33.png" name="33" width="353" height="282">
+</img></p><p>
+If you are able to use <strong>color back</strong> feature you may want to change some Wsjt-x color settings and maybe check "CQ only" checbox at Main window. Selecting also font to some of "mono"+ "bold" ones from "Configuration/General/Decoded Text Font" could make a better view.</p>
+<p>
+<ul><strong>A word of warning:</strong></ul>  In current Wsjt-x devel version 1.9.0-rc3 r8592 selecting <strong>CQ only</strong> will <strong>disable Generating of Std messages</strong> by double click either <strong>followed</strong> message line or Wsjt-x <strong>map's non-cq lines</strong>.
+</br>This <strong>does not</strong> happen if <strong>CQ only</strong> is <strong>uncheked</strong>. Unchecking it after not working double click does not help if Band Activiy window does not contain that line from which  <strong>Wsjt map</strong> or <strong>follow</strong> line was created.
+</br>That is because Wsjt-x must found equal line from Band activity and UDP command that produces Std General messages creation. 
+</br> This may change in future devel versions or in official release of 1.9.0, but at the moment you should be aware of that.</p>
+<p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
+ Wsjtx will produce again last periods decode (wsjt map will show it double) and after that you can have effect for double click.
+</p><p><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img></p>
 Checking <b>“flw”</b> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
-</br>You are able to type a callsing, a part of it (text-in-text search) or you can push right mouse button down and paint any call from wsjtx main screen or from CQ-monitor and drag  and drop callsing to the left side
- edit box.
-</br> After pressing <b>“Follow”</b> (turns green) the call is checked to be written in upcase letters and spaces are trimmed from start and end. Next decoding periods will show a line at right side box if that call is as originating (2nd) callsign and the line is not CQ or for YOUR Call.
- That box uses same font and size as CQ-monitor.
- </br></br>Line contains:  <b>decoding_period_time</b> | <b>delta_frequency</b>  | <b>the_message</b>.  
+</br>Type in a callsing. The callsign is checked to be written in upcase letters and spaces are trimmed away. Pressing RETURN at the end of typing turns <strong>Follow</strong> button ON (green).
+You can also toggle  <b>Follow</b> button ON and OFF by mouse clicks (turns green/red) 
+</br>When <b>Follow</b> turns ON then during next decoding periods follow line (at right side of follow call edit)
+shows decoded lines where that <b>followed callsign is the originating (2nd) callsign</b> and the line is <b>not CQ</b> or not <b>to YOUR Call</b>(destination). That box uses same font and size as CQ-monitor.
+</br>You can also paint any call from WSJT-X main window or CQ-monitor, drag it over Follow callsign field, and drop it there. Follow callsign field can have previous call (it is erased) or empty.
+ Dropping also activates <b>Follow button</b> ON (turns green).
+</br></br>Line contains:  <b>decoding_period_time</b> | <b>delta_frequency</b>  | <b>the_message</b>.  
  </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
  </br>Line color turns silver gray from default color (black) when corresponding response period is over.
  </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.
@@ -96,7 +121,7 @@ Checking <b>“flw”</b> new part of monitor opens. This will make easier to fo
  </br>
  </br>How ever you can drop CPU load by just setting NewQSO/File/remote mode for wsjt to OFF and then immediately back to ON. This releases previously used memory and CPU load returns to normal and is a very fast fix that can be done during a reciving period.
  </br>
- </br>CQ-monitor has now 20 lines (if “no history” unchecked). Automatic scrollbars are visible if needed.
+ </br>CQ-monitor has now 30 lines (if “no history” unchecked). Automatic scrollbars are visible if needed.
 
 
 <p>Line of CQ-monitor contains: 
@@ -185,7 +210,32 @@ cd ~/.config/cqrlog/ctyfiles
 
 #done
 --------------cut here---------------------------------------------------------
-</pre>
+</pre></p>
+<p><img src="img/wsjt29.png" name="29" width="144" height="383">
+</img><img src="img/wsjt35.png" name="35" width="144" height="383">
+</img>
+</p>
+<p>CQ-monitor can be turned to "Band map"- type Wsjt-x map by checking "<strong>Map</strong>". It hides all other controls.
+How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Exception is that <strong>Text alert</strong> does not find continents and comments like "New country","QSL needed" etc.
+</br>Map-mode shows all traffic on band. Colors of callsigns and locators are same than in CQ-monitor. If call is not in parentheses it is a CQ-call.
+ Calls in parentheses have qso if there is no locator shown. If locator is shown they are answering to someones CQ.
+</br> 
+</br>As also all other lines than CQs are compared against your log entries this mode will eat more of cpu cycles than CQ-monitor.
+</br>Map-mode does not save history, it clears itself always at start of new decoding period if there is something new to show. Otherwise lines are turned gray as in CQ-monitor.
+</br></br>You can initiate qso same way as in CQ-monitor by double click on line  <strong>without </strong> parentheses.
+ Double click on line  <strong>with </strong> parentheses loads call to Std messages of Wsjt-x and sets frequency, but  <strong>does not initiate TX</strong>.
+</br>This is a new property of Wsjt-x 1.9.0-rc3 and up. With previous versions this does not make any action.
+</p><p> <strong>ColorBackCQs </strong> selection work so that all CQs are printed (colored) at Wsjt-x Band Activity window and rest of the traffic appear to Wsjt-x band map.
+</p>
+<p><img src="img/wsjt31.png" name="31" width="453" height="383">
+</img><img src="img/wsjt32.png" name="32" width="253" height="283">
+</img></p>
+<p>Button <strong>Name73</strong> becomes visible when at least one decoded UDP message from WSJT-X is received and <strong>Name</srtong> field of NewQSO</strong> has content.
+</br>Pressing this button will send a FreeTextMessage to WSJT-X containing "TU HISNAME 73" Where HISNAME is text from NewQSO/Name field. This will not start TX.
+</br>FreeTextMessage length is limited to 13 characters. "Tu " and " 73" will take 6 of them. So name can be only 7 char long. If it is longer it is not sent to WSJT-X and button disappears after pressing to indicate that name is too long.
+</br>Button disappears also on next decode when NewQSO/Name becomes empty. If you do not like to use generated FreeTextMessage you can double click WSJT-X's button <strong>TX5</strong> to get back  standard "CALL MYCALL 73" message.
+</br>This button is made just for testing reply-UDP messages as new WSJT-X will use more of these kind of messages, like callsing coloring in Band activity window by external request.
+</p>
 <h3><a name="w2"></a>Colors &amp; fonts</h3>
 <p>
 CQ-monitor has a new design. Window is adjustable and font + size can be changed.<br/>

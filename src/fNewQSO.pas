@@ -619,8 +619,10 @@ type
 
     FldigiXmlRpc          : Boolean;
 
-    ClearAfterFreqChange : Boolean;
-    ChangeFreqLimit : Double;
+    ClearAfterFreqChange  : Boolean;
+    ChangeFreqLimit       : Double;
+    RepHead                :String;                //the heading for possible reply commands created
+                                                  //includes message type #0 (change it)
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -1967,24 +1969,24 @@ begin
    if (WsjtxMode='FT8') then
     begin
      DecodeTime(Time,Hour,Min,Sec,HSec);
-     //if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>FT8 mode - Sec is: ',Sec);
+     if dmData.DebugLevel>=1 then Writeln(' Timer FT8 mode - Sec is: ',Sec);
      case Sec of
        13,28,43,58 :
                      begin  //set hispeed  decode time is coming
                         if ( tmrWsjtx.Interval = wLoSpeed ) then
                           begin
-                           if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                           if dmData.DebugLevel>=1 then Writeln ('Timer >> Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
                            tmrWsjtx.Interval := wHiSpeed;
-                           if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>Setting UDP decode to FT8 HiSpeed ', tmrWsjtx.Interval);
+                           if dmData.DebugLevel>=1 then Writeln(' Timer >> Setting UDP decode to FT8 HiSpeed ', tmrWsjtx.Interval);
                           end;
                      end;
        2,17,32,47  :
                      begin //set lospeed  decode time is over
                          if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
                           Begin
-                           if dmData.DebugLevel>=1 then Writeln('>>>>>>>>>>>>>>>>>Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                           if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
                            tmrWsjtx.Interval := wLoSpeed;
-                           if dmData.DebugLevel>=1 then Writeln('<<<<<<<<<<<<<<<<<<Setting UDP decode to FT8 LoSpeed ', tmrWsjtx.Interval);
+                           if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT8 LoSpeed ', tmrWsjtx.Interval);
                           end;
                       end;
        end;
@@ -2005,6 +2007,7 @@ var
   TimeLine : String;
   Repbuf   : String;
   index    : Integer;
+  tmpindex : Integer;
   ParNum   : Integer;
   MsgType  : Integer;
   Sec      : Integer;
@@ -2049,7 +2052,7 @@ var
   var
     P : uint32;
   begin
-    P := UiFBuf(index);                 //string length;
+    P := UiFBuf(index);                 //string length;   4bytes
     if P = $FFFFFFFF then               //exeption: empty Qstring len: $FFFF FFFF content: empty
     begin
       Result := ''
@@ -2104,6 +2107,7 @@ var
     Result := ord(Buf[index]) = 1;
     inc(index)
   end;
+//-------------------------------------------------------------------
 
 begin
   if WsjtxDecodeRunning then
@@ -2127,6 +2131,7 @@ begin
 
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
     RepStart := index; //for possibly reply creation
+
     if dmData.DebugLevel>=1 then Write('Header position:',index);
     index:=index+4;  // skip QT header
 
@@ -2136,6 +2141,13 @@ begin
     MsgType :=  UiFBuf(index);
     if dmData.DebugLevel>=1 then Write(' Message type:', MsgType,' ');
     lblCall.Caption       := 'Wsjt-x remote #'+intToStr(MsgType);   //changed to see last received msgtype
+
+    tmpindex := index;
+    ParStr := StFBuf(index);       //read ID to get index point to RepHead end
+    RepHead := copy(Buf,1,index-1);
+    RepHead[12] := #0;             //Ready made reply header with #0 command (lobyte of uint32)
+    index := tmpindex;             //return pointer back
+
     case MsgType of
 
 
@@ -2313,9 +2325,8 @@ begin
                 end
                else  //if followed call
                Begin
-                  if dmData.DebugLevel>=1 then Writeln('++++++in Follow!');
-                  if (frmMonWsjtx.tbFollow.Checked and (pos(frmMonWsjtx.edtFollowCall.Text,ParStr) > pos(' ',ParStr)) ) then  //not first word
-                     frmMonWsjtx.AddFollowedMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf);
+                  if dmData.DebugLevel>=1 then Writeln('Other Decode');
+                  frmMonWsjtx.AddOtherMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf);
                end;
              end;
 
@@ -6303,12 +6314,12 @@ begin
 
                   // start UDP server  http://synapse.ararat.cz/doc/help/blcksock.TBlockSocket.html
                   WsjtxSock := TUDPBlockSocket.Create;
-                  {if dmData.DebugLevel>=1 then} Writeln('Socket created!');
+                  if dmData.DebugLevel>=1 then Writeln('Socket created!');
                   WsjtxSock.EnableReuse(true);
-                  {if dmData.DebugLevel>=1 then} Writeln('Reuse enabled!');
+                  if dmData.DebugLevel>=1 then Writeln('Reuse enabled!');
                   try
                     WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
-                    {if dmData.DebugLevel>=1 then }Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
+                    if dmData.DebugLevel>=1 then Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
                                                                         ':'+cqrini.ReadString('wsjt','port','2237'));
                      // On bind failure try to rebind every second
                      while ((WsjtxSock.LastError <> 0) and (tries > 0 )) do
