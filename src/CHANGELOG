@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  - grid map: loc and qso counters fixed. Default start fixed as all/any. Default save as jpg (Saku, OH1KH)
   - xplanet support/DXCluster was reversing colors RGB to BGR (Saku, OH1KH)
   + Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)
   - Filter section QSL. Controls over group box. Tighter setting of controls (Saku, OH1KH)

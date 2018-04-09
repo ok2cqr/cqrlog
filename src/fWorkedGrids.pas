@@ -63,6 +63,7 @@ var
   frmWorkedGrids: TfrmWorkedGrids; //Main form
   MaxRowId,                    //rows in table (Number of qsos in log database)
   BandQsoCount,                //Number of qsos on selected band
+  FullQsoCount,                  //Number of all qsos
   LogTable,                    //Table name found from database file (own call ad locator)
   LogBand,                     //Band that is selected for worked locators
   LogSave,                     //Default File name for saving image
@@ -200,27 +201,27 @@ begin
   if dmData.trW.Active then dmData.trW.Rollback;
 
   try
-    dmData.W.SQL.Text := 'select count(loc) as '+chr(39)+'sum'+chr(39)+' from '+LogTable+
-                          ' where loc like '+chr(39)+copy(loc, 1, 4)+ '%'+chr(39)+
-                          ' and band='+chr(39)+band+chr(39)+' and mode='+chr(39)+mode+chr(39)+
+    dmData.W.SQL.Text := 'select count(loc) as '+#39+'sum'+#39+' from '+LogTable+
+                          ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+chr(39)+copy(loc, 1, 4)+ '%'+chr(39)+
-                          ' and band='+chr(39)+band+chr(39)+
+                          ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+
+                          ' and band='+#39+band+#39+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+chr(39)+copy(loc, 1, 4)+ '%'+chr(39)+
+                          ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+chr(39)+copy(loc, 1, 2)+ '%'+chr(39)+
-                          ' and band='+chr(39)+band+chr(39)+' and mode='+chr(39)+mode+chr(39)+
+                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+chr(39)+copy(loc, 1, 2)+ '%'+chr(39)+
-                          ' and band='+chr(39)+band+chr(39)+
+                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+
+                          ' and band='+#39+band+#39+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+chr(39)+copy(loc, 1, 2)+ '%'+chr(39);
+                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39;
 
     if dmData.DebugLevel >= 1 then Write('loc query: ');
     dmData.W.Open;
@@ -253,16 +254,16 @@ begin
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
   try
-     dmData.W.SQL.Text := 'select count(callsign) as '+chr(39)+'sum'+chr(39)+' from '+LogTable+
-                          ' where callsign='+chr(39)+call+chr(39)+
-                          ' and band='+chr(39)+band+chr(39)+' and mode='+chr(39)+mode+chr(39)+
+     dmData.W.SQL.Text := 'select count(callsign) as '+#39+'sum'+#39+' from '+LogTable+
+                          ' where callsign='+#39+call+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+
                           'union all '+
                           'select count(callsign) from '+LogTable+
-                          ' where callsign='+chr(39)+call+chr(39)+
-                          ' and band='+chr(39)+band+chr(39)+
+                          ' where callsign='+#39+call+#39+
+                          ' and band='+#39+band+#39+
                           'union all '+
                           'select count(callsign) from '+LogTable+
-                          ' where callsign='+chr(39)+call+chr(39);
+                          ' where callsign='+#39+call+#39;
 
     if dmData.DebugLevel >= 1 then Write('call query: ');
     dmData.W.Open;
@@ -434,7 +435,7 @@ begin
 
   dmUtils.InsertBands(BandSelector);
   BandSelector.Items.Insert(0, 'all');
-  BandSelector.ItemIndex := 4;
+  BandSelector.ItemIndex := 0;
 
   frmWorkedGrids.Caption := Caption + ' ' + dmData.LogName + ' ' + LogBand;
 
@@ -459,20 +460,21 @@ begin
     AddSize := 20;
     aWidth := LocMap.Picture.Bitmap.Width;
     aHeight := LocMap.Picture.Bitmap.Height + AddSize;
-    AddText := dmData.LogName + ' ' + LogBand + ' ' + WsMode.items[WsMode.ItemIndex] + '  ' +
+    AddText := 'Log:'+dmData.LogName + ' Band:' + LogBand + ' Mode:' + WsMode.items[WsMode.ItemIndex] + '  ' +
       IntToStr(MainGridCount) + 'main/' + IntToStr(
-      GridCount) + 'sub grids     ' + dmData.DBName +
-      '     ' + BandQsoCount + '/' + MaxRowId + 'qsos';
+      GridCount) + 'sub grids  Db:' + dmData.DBName +
+      '     ' + BandQsoCount + '/' + FullQsoCount + 'qsos';
   end
   else begin
     AddSize := 40;
     aWidth := ZooMap.Picture.Bitmap.Width;
     aHeight := ZooMap.Picture.Bitmap.Height + AddSize;
-    AddText := dmData.LogName + '     ' + LogBand + ' ' +
-      WsMode.items[WsMode.ItemIndex] + '    ' + LogMainGrid +
-      ' -> ' + IntToStr(GridCount) + 'subgrids';
-    AddText1 := dmData.DBName + '    ' + BandQsoCount + '/' + MaxRowId + 'qsos';
+    AddText := 'Log:'+dmData.LogName + ' Band:' + LogBand + ' Mode:' + WsMode.items[WsMode.ItemIndex] + ' Main Grid:' +
+                LogMainGrid + ' ' + IntToStr(GridCount) + 'sub grids';
+    AddText1 := 'Db:'+dmData.DBName + '  ' + BandQsoCount + '/' + FullQsoCount + 'qsos';
   end;
+
+
 
   Bmp := TBitmap.Create;
   try try
@@ -507,9 +509,9 @@ end;
 procedure TfrmWorkedGrids.SaveMapClick(Sender: TObject);
 begin
   if LocMap.Visible then
-    SaveMapImage.FileName := LogSave + '.bmp'
+    SaveMapImage.FileName := LogSave + '.jpg'
   else
-    SaveMapImage.FileName := LogSave + '_' + LogMainGrid + '.bmp';
+    SaveMapImage.FileName := LogSave + '_' + LogMainGrid + '.jpg';
   SaveMapImage.Execute
 end;
 
@@ -579,8 +581,10 @@ end;
 
 procedure TfrmWorkedGrids.BandSelectorChange(Sender: TObject);   //update map(s)
 var
-  MainGridStream, SQLExtension, Grid: string;
-  qsocount, c: integer;
+  SQLModeTail,
+  SQLBand,
+  Grid: string;
+  c: integer;
   SQLCfm: array [0 .. 2] of string;
 begin
   //no updates if band and mode are not set
@@ -602,21 +606,21 @@ begin
 
     case WsMode.ItemIndex of
       //any
-      0: SQLExtension := '';
+      0: SQLModeTail := '';
       //JT9+JT65
-      1: SQLExtension := ' and ((mode=' + chr(39) + 'JT9' + chr(39) +
-          ') or ( mode=' + chr(39) + 'JT65' + chr(39) + '))';
+      1: SQLModeTail := ' and ((mode=' + #39 + 'JT9' + #39 +
+          ') or ( mode=' + #39 + 'JT65' + #39 + '))';
       else  // all others
-        SQLExtension := ' and mode=' + chr(39) + WsMode.items[WsMode.ItemIndex] + chr(39);
+        SQLModeTail := ' and mode=' + #39 + WsMode.items[WsMode.ItemIndex] + #39;
     end;
 
 
     //1:not (at all) confirmed grids
-    SQLCfm[1] := ' and eqsl_qsl_rcvd<>' + chr(39) + 'E' + chr(39) +
-      ' and lotw_qslr<>' + chr(39) + 'L' + chr(39) + ' and qsl_r<>' + chr(39) + 'Q' + chr(39);
+    SQLCfm[1] := ' and eqsl_qsl_rcvd<>' + #39 + 'E' + #39 +
+      ' and lotw_qslr<>' + #39 + 'L' + #39 + ' and qsl_r<>' + #39 + 'Q' + #39;
     //2:some way confirmed grids
-    SQLCfm[2] := ' and (eqsl_qsl_rcvd=' + chr(39) + 'E' + chr(39) +
-      ' or lotw_qslr=' + chr(39) + 'L' + chr(39) + ' or qsl_r=' + chr(39) + 'Q' + chr(39) + ')';
+    SQLCfm[2] := ' and (eqsl_qsl_rcvd=' + #39 + 'E' + #39 +
+      ' or lotw_qslr=' + #39 + 'L' + #39 + ' or qsl_r=' + #39 + 'Q' + #39 + ')';
 
     dmData.W.Close;
     if dmData.trW.Active then
@@ -626,21 +630,18 @@ begin
     begin
       //0:the base query string
       SQLCfm[0] := 'select upper(left(loc,4)) as lo from ' + LogTable +
-        ' where band=' + chr(39) + BandSelector.items[BandSelector.ItemIndex] +
-        chr(39) + 'and loc<>' + chr(39) + chr(39) + SQLExtension;
+        ' where band=' + #39 + BandSelector.items[BandSelector.ItemIndex] +
+        #39 + 'and loc<>' + #39 + #39 + SQLModeTail;
     end
-    else begin //band "all"
-      SQLCfm[0] := 'select upper(left(loc,4)) lo from ' + LogTable +
-        ' where loc<>' + chr(39) + chr(39) + SQLExtension;
+    else begin //band "all"                 //as
+      SQLCfm[0] := 'select upper(left(loc,4)) as lo from ' + LogTable +
+        ' where loc<>' + #39 + #39 + SQLModeTail;
     end;
     if ZooMap.Visible then  //coming from zoomed grid
     begin
-      SQLCfm[0] := SQLCfm[0] + ' and loc like ' + chr(39) + LogMainGrid + '%' + chr(39);
+      SQLCfm[0] := SQLCfm[0] + ' and loc like ' + #39 + LogMainGrid + '%' + #39;
     end;
 
-    GridCount := 0;
-    MainGridCount := 0;
-    MainGridStream := '';
     dmData.trW.StartTransaction;
     try
       for c := 1 to 2 do
@@ -659,51 +660,38 @@ begin
             MarkGrid(Grid, c = 2, LocMap.canvas, False);
           end;
 
-          if (GridOK(Grid)) and (pos(copy(Grid, 1, 2), MainGridStream) = 0) then
-          begin
-            Inc(MainGridCount);
-            MainGridStream := MainGridStream + ',' + copy(Grid, 1, 2);
-          end;
-
-
           dmData.W.Next;
         end;
         dmData.W.Close;
       end;
 
-      //distinct sub grid count
-      dmData.W.SQL.Text := 'select distinct' + copy(SQLCfm[0], 7, length(SQLCfm[0]));
+      //locator counts
+      dmData.W.SQL.Text := 'select count(distinct upper(left(loc,2))) as main,count(distinct upper(left(loc,4))) as sub'+
+                           copy(SQLCfm[0],pos('from', SQLCfm[0])-1,length(SQLCfm[0]));
       dmData.W.Open;
-      while not dmData.W.EOF do
-      begin
-        Inc(GridCount);
-        dmData.W.Next;
-      end;
+      if not dmData.W.EOF then
+       Begin
+         GridCount := dmData.W.FieldByName('sub').AsInteger;
+         MainGridCount := dmData.W.FieldByName('main').AsInteger;
+         Nrgrids.Caption := IntToStr(MainGridCount) + 'main/' + IntToStr(GridCount) + 'sub grids';
+       end;
       dmData.W.Close;
 
-      MaxRowId := RecordCount;
-      if (BandSelector.ItemIndex > 0) then
-      begin
-        qsocount := 0;
-        dmData.W.SQL.Text := 'select loc from ' + LogTable + ' where band=' + chr(39) +
-          BandSelector.items[BandSelector.ItemIndex] + chr(39) +
-          SQLExtension;
+      //qso counts;
+      if BandSelector.ItemIndex > 0 then   //some of bands
+        SQLBand := ' and band=' + #39 + BandSelector.items[BandSelector.ItemIndex] + #39 + SQLModeTail
+        else   //can be else than 0, means all bands
+        SQLBand := SQLModeTail;
 
-        if dmData.DebugLevel >= 1 then
-          Write(dmData.W.SQL.Text);
+      dmData.W.SQL.Text := 'select count(callsign) as qso from cqrlog_main where callsign<>'+#39+#39+
+                            'union all select count(callsign) from cqrlog_main where callsign<>'+#39+#39 + SQLBand ;
+      dmData.W.Open;
+      if not dmData.W.EOF then FullQsoCount := dmData.W.FieldByName('qso').AsString;
+      dmData.W.Next;
+      if not dmData.W.EOF then BandQsoCount := dmData.W.FieldByName('qso').AsString;
+      Nrqsos.Caption := BandQsoCount + '/' + FullQsoCount + 'qsos';
+      dmData.W.Close;
 
-        dmData.W.Open;
-        while not dmData.W.EOF do
-        begin
-          Inc(qsocount);
-          dmData.W.Next;
-        end;
-        dmData.W.Close;
-        BandQsoCount := IntToStr(qsocount);
-      end
-      else begin
-        BandQsoCount := MaxRowId;
-      end;
     finally
       dmData.trW.Rollback;
     end;
@@ -711,16 +699,13 @@ begin
       //both must be set
     begin
       LogSave := 'Wkd_locs_' + dmData.LogName + '_' +
-        BandSelector.items[BandSelector.ItemIndex];
+        BandSelector.items[BandSelector.ItemIndex] + '_' + WsMode.items[WsMode.ItemIndex];
       LogBand := BandSelector.items[BandSelector.ItemIndex];
       frmWorkedGrids.Caption :=
         'Worked locator grids ' + dmData.LogName + ' ' + LogBand + ' ' + WsMode.items[WsMode.ItemIndex];
     end;
 
-    Nrgrids.Caption := IntToStr(MainGridCount) + 'main/' + IntToStr(
-      GridCount) + 'sub grids';
     Nrstatus.Caption := dmData.LogName;
-    Nrqsos.Caption := BandQsoCount + '/' + MaxRowId + 'qsos';
     Nrgrids.Visible := True;
     Nrstatus.Visible := True;
     Nrqsos.Visible := True;
@@ -735,12 +720,12 @@ begin
   FollowRig.Checked := cqrini.ReadBool('Worked_grids', 'FollowRig', False);
   ShoWkdOnly.Checked := cqrini.ReadBool('Worked_grids', 'ShowWkdOnly', False);
   AutoUpdate.Enabled := True;
-  BandSelectorChange(nil);
   //we need this here. Otherwise user digital modes are not shown
   dmUtils.InsertModes(WsMode);
   WsMode.Items.Insert(0, 'any');
   WsMode.Items.Insert(1, 'JT9+JT65');
   WsMode.ItemIndex := 0;
+  BandSelectorChange(nil);
 end;
 
 procedure TfrmWorkedGrids.LocMapClick(Sender: TObject);
