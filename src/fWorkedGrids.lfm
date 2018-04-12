@@ -28,14 +28,13 @@ object frmWorkedGrids: TfrmWorkedGrids
     AnchorSideLeft.Control = LocMap
     AnchorSideTop.Control = Owner
     Left = 16
-    Height = 27
+    Height = 31
     Hint = 'Band selector'
-    Top = 25
+    Top = 23
     Width = 124
     Anchors = []
     BorderSpacing.Top = 25
     ItemHeight = 0
-    ItemIndex = 4
     Items.Strings = (
       'all'
       '2190M'
@@ -57,7 +56,6 @@ object frmWorkedGrids: TfrmWorkedGrids
     OnChange = BandSelectorChange
     Style = csDropDownList
     TabOrder = 0
-    Text = '80M'
   end
   object BandLabel: TLabel
     AnchorSideLeft.Control = BandSelector
