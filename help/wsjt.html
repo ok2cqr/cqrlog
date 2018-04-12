@@ -70,8 +70,8 @@ Only remote logging and call qrz/hamqth seek are used then.
 <img src="img/wsjt23.png" name="22" width="353" height="282">
 </img></p>
 Top line will show band and mode that is in use, Checking <b>"no history”</b> will clean monitor on every decoded RX-period.
-</br>Timestamp at the start of line also changes to DeltaFrequency 
-(waterfall position of station) then, as no history is collected and so no time stamp is needed.
+</br>Timestamp and mode letter at the start of line are also replaced by DeltaFrequency (waterfall position of station) and Snr dB value 
+ then, as no history is collected and so time stamp has no meaning.
 </br>If there are no CQ lines during period then old monitor lines will turn to silver gray indicating that right period of possible answer is passed. This happens ONLY if <b>"no history”</b> is checked. If not, colors stay as they are.
 </br>CQ-lines turning to silver gray does not disable double click answering property. It is just informative color change. 
 </br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
@@ -111,7 +111,7 @@ You can also toggle  <b>Follow</b> button ON and OFF by mouse clicks (turns gree
 shows decoded lines where that <b>followed callsign is the originating (2nd) callsign</b> and the line is <b>not CQ</b> or not <b>to YOUR Call</b>(destination). That box uses same font and size as CQ-monitor.
 </br>You can also paint any call from WSJT-X main window or CQ-monitor, drag it over Follow callsign field, and drop it there. Follow callsign field can have previous call (it is erased) or empty.
  Dropping also activates <b>Follow button</b> ON (turns green).
-</br></br>Line contains:  <b>decoding_period_time</b> | <b>delta_frequency</b>  | <b>the_message</b>.  
+</br></br>Line contains:  <b>decoding_period_time</b> | <b>snr</b>  | <b>delta_frequency</b>  | <b>the_message</b>.  
  </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
  </br>Line color turns silver gray from default color (black) when corresponding response period is over.
  </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.
@@ -213,19 +213,22 @@ cd ~/.config/cqrlog/ctyfiles
 </pre></p>
 <p><img src="img/wsjt29.png" name="29" width="144" height="383">
 </img><img src="img/wsjt35.png" name="35" width="144" height="383">
+</img><img src="img/wsjt36.png" name="35" width="144" height="383">
 </img>
 </p>
 <p>CQ-monitor can be turned to "Band map"- type Wsjt-x map by checking "<strong>Map</strong>". It hides all other controls.
 How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Exception is that <strong>Text alert</strong> does not find continents and comments like "New country","QSL needed" etc.
-</br>Map-mode shows all traffic on band. Colors of callsigns and locators are same than in CQ-monitor. If call is not in parentheses it is a CQ-call.
- Calls in parentheses have qso if there is no locator shown. If locator is shown they are answering to someones CQ.
+</br>Map-mode shows all traffic on band. Colors of callsigns and locators are same than in CQ-monitor. If call is <strong>not in parentheses</strong> it is a <strong>CQ</strong>-call.
+ <strong>Calls in parentheses have qso</strong> if there is no locator shown. If locator is shown they are answering to someones CQ.
+</br>If station is calling <strong>directed CQ</strong> that is <strong>not directed to you</strong> (same as in CQ-monitor, but in short form)  <strong>the direction </strong> is shown at the and of line.
 </br> 
 </br>As also all other lines than CQs are compared against your log entries this mode will eat more of cpu cycles than CQ-monitor.
 </br>Map-mode does not save history, it clears itself always at start of new decoding period if there is something new to show. Otherwise lines are turned gray as in CQ-monitor.
 </br></br>You can initiate qso same way as in CQ-monitor by double click on line  <strong>without </strong> parentheses.
  Double click on line  <strong>with </strong> parentheses loads call to Std messages of Wsjt-x and sets frequency, but  <strong>does not initiate TX</strong>.
 </br>This is a new property of Wsjt-x 1.9.0-rc3 and up. With previous versions this does not make any action.
-</p><p> <strong>ColorBackCQs </strong> selection work so that all CQs are printed (colored) at Wsjt-x Band Activity window and rest of the traffic appear to Wsjt-x band map.
+</p><p><strong>dB</strong> selection shows station snr report, like it shows up in Band Activity of wsjt-x.
+</br><strong>ColorBackCQs </strong> selection work so that all <strong>CQs</strong> are printed (colored) <strong>back to Wsjt-x</strong> Band Activity window and <strong>rest of the traffic</strong> will appear to Wsjt-x <strong>band map</strong>.
 </p>
 <p><img src="img/wsjt31.png" name="31" width="453" height="383">
 </img><img src="img/wsjt32.png" name="32" width="253" height="283">

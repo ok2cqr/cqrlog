@@ -348,18 +348,35 @@ object frmMonWsjtx: TfrmMonWsjtx
   end
   object chkCbCQ: TCheckBox
     AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 236
+    Left = 5
     Height = 23
     Top = 353
     Width = 118
     Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 5
     BorderSpacing.Bottom = 12
     Caption = 'ColorBackCQs'
     OnChange = chkCbCQChange
     TabOrder = 7
+    Visible = False
+  end
+  object chkdB: TCheckBox
+    AnchorSideLeft.Control = chkCbCQ
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 124
+    Height = 23
+    Top = 353
+    Width = 43
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 1
+    BorderSpacing.Bottom = 12
+    Caption = 'dB'
+    OnChange = chkdBChange
+    TabOrder = 8
     Visible = False
   end
   object popColors: TPopupMenu

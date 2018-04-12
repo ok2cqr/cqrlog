@@ -2015,6 +2015,7 @@ var
   Hour     : Integer;
   RepStart : integer;
   ParDou   : Double;
+  Snr      : integer;
   Dtim     : TDateTime;
   Dfreq    : Integer;
   new      : Boolean;
@@ -2297,7 +2298,7 @@ begin
             TimeLine := TimeLine + intToStr(Sec);
           if dmData.DebugLevel>=1 then Writeln(TimeLine);
           //----------------------------------------------------
-          ParNum :=  IFBuf(index);
+          Snr :=  IFBuf(index);
           if dmData.DebugLevel>=1 then Writeln('snr:',ParNum );
           //----------------------------------------------------
           ParDou := DouFBuf(index);
@@ -2321,12 +2322,12 @@ begin
                //if CQ or Mycall
                if ((FirstWord = 'CQ') or (pos (FirstWord,MyCall) > 0)) then
                 Begin
-                    frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf,Dfreq)
+                    frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf,Dfreq,Snr)
                 end
                else  //if followed call
                Begin
                   if dmData.DebugLevel>=1 then Writeln('Other Decode');
-                  frmMonWsjtx.AddOtherMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf);
+                  frmMonWsjtx.AddOtherMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf,Snr);
                end;
              end;
 
