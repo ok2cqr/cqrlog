@@ -16,6 +16,7 @@ type
     btFtxtName: TButton;
     chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
+    chkdB: TCheckBox;
     chkMap: TCheckBox;
     EditAlert: TEdit;
     edtFollow: TEdit;
@@ -49,6 +50,7 @@ type
     procedure btFtxtNameClick(Sender: TObject);
     procedure chkCbCQChange(Sender: TObject);
     procedure cbflwChange(Sender: TObject);
+    procedure chkdBChange(Sender: TObject);
     procedure chkHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
@@ -100,9 +102,9 @@ type
   public
     procedure CleanWsjtxMemo;
     function NextElement(Message: string; var index: integer): string;
-    procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq: integer);
-    procedure AddFollowedMessage(Message, Reply: string);
-    procedure AddOtherMessage(Message, Reply: string);
+    procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
+    procedure AddFollowedMessage(Message, Reply: string;snr:integer);
+    procedure AddOtherMessage(Message, Reply: string;Snr:integer);
     procedure NewBandMode(Band, Mode: string);
     procedure SendFreeText(MyText: string);
     procedure ColorBack(Myitem:string;Mycolor:Tcolor;bkg:Boolean=false);
@@ -467,6 +469,7 @@ begin
   WsjtxMemo.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not WsjtxMemo.Visible;
   chkCbCQ.Visible := chkMap.Checked;
+  chkdB.Visible := chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -489,6 +492,7 @@ begin
       chknoTxt.Visible := False;
       chknoTxt.Checked := False;
       chkCbCQ.Checked := cqrini.ReadBool('MonWsjtx', 'ColorBacCQkMap', False);
+      chkdB.Checked := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
       //map mode allows text printing. Printing stays on when return to monitor mode.
       chkHistory.Visible := False;
     end
@@ -528,6 +532,11 @@ begin
     WsjtxMemo.BorderSpacing.Bottom := 51;
     pnlFollow.Visible := False;
   end;
+end;
+
+procedure TfrmMonWsjtx.chkdBChange(Sender: TObject);
+begin
+  cqrini.WriteBool('MonWsjtx', 'ShowdB', chkdB.Checked);
 end;
 
 procedure TfrmMonWsjtx.btFtxtNameClick(Sender: TObject);
@@ -811,24 +820,24 @@ begin
   //split message it can be: (note: when testing remember continent compare set calls to be non dx]
   if (i) then
   begin
-    AddDecodedMessage('175200 # CQ OH1LL KP11', '20M', 'reply', 0);      //normal cq
-    AddDecodedMessage('175200 @ CQ DX OH1DX KP11', '20M', 'reply', 0);   //directed cq
-    AddDecodedMessage('175200 @ CQ NA RV3NA', '20M', 'reply', 0);
+    AddDecodedMessage('175200 # CQ OH1LL KP11', '20M', 'reply', 0, 0);      //normal cq
+    AddDecodedMessage('175200 @ CQ DX OH1DX KP11', '20M', 'reply', 0, 0);   //directed cq
+    AddDecodedMessage('175200 @ CQ NA RV3NA', '20M', 'reply', 0, 0);
     //call and continents/prefixes  no loc
-    AddDecodedMessage('175200 @ CQ USA RV3USA', '20M', 'reply', 0);
+    AddDecodedMessage('175200 @ CQ USA RV3USA', '20M', 'reply', 0, 0);
     //call and continents/prefixes
-    AddDecodedMessage('175200 @ CQ USA RV3USL KO30', '20M', 'reply', 0);
+    AddDecodedMessage('175200 @ CQ USA RV3USL KO30', '20M', 'reply', 0, 0);
     //call and continents/prefixes
-    AddDecodedMessage('175200 @ CQ OH1LL DX', '20M', 'reply', 0);
+    AddDecodedMessage('175200 @ CQ OH1LL DX', '20M', 'reply', 0, 0);
     //old official cq dx
-    AddDecodedMessage('175200 # OF1KH CA1LL AA11', '20M', 'reply', 0);
+    AddDecodedMessage('175200 # OF1KH CA1LL AA11', '20M', 'reply', 0, 0);
     //set first you log call
-    AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22', '20M', 'reply', 0);
+    AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22', '20M', 'reply', 0, 0);
     //!where?" decodes now ok.
-    AddDecodedMessage('175200 ~ CQ NO EU RZ3DX', '20M', 'reply', 0);  // for dbg
-    AddDecodedMessage('201045 ~ CQ KAZAKHSTAN', '20M', 'reply', 0);
+    AddDecodedMessage('175200 ~ CQ NO EU RZ3DX', '20M', 'reply', 0, 0);  // for dbg
+    AddDecodedMessage('201045 ~ CQ KAZAKHSTAN', '20M', 'reply', 0, 0);
     // yet another bright cq idea of users
-    AddDecodedMessage('201045 ~ CQ WHO EVER', '20M', 'reply', 0);
+    AddDecodedMessage('201045 ~ CQ WHO EVER', '20M', 'reply', 0, 0);
     // a guess for next idea
   end
   else
@@ -844,16 +853,16 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string);
+procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
 var
   List1: TStringList;
 begin
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
   if tbFollow.Checked and (trim(edtFollowCall.Text)='') then tbFollow.Checked:=false; //must have a call
 
-   if (frmMonWsjtx.tbFollow.Checked and (pos(edtFollowCall.Text, Message) > 0)) then
+   if (tbFollow.Checked and (pos(edtFollowCall.Text, Message) > 0)) then
     //first check
-    AddFollowedMessage(Message, Reply)
+    AddFollowedMessage(Message, Reply,Snr)
   else
   if chkMap.Checked then
   begin
@@ -905,15 +914,19 @@ begin
       PrintCall(msgCall);
       if msgLoc = '' then
       begin
-        AddColorStr(#32#32#32#32#41#13#10, clDefault);
+        AddColorStr(#32#32#32#32#41, clDefault);
         //make not-CQ indicator stop + new line
       end
       else
       begin
         PrintLoc(msgLoc, '', '');
-        AddColorStr(#41#13#10, clDefault);  //make not-CQ indicator stop + new line
+        AddColorStr(#41, clDefault);  //make not-CQ indicator stop + new line
         if frmWorkedGrids.GridOK(msgLoc) then  AddXpList(msgCall,msgLoc);
       end;
+
+      if chkdB.Checked then AddColorStr(PadLeft(IntToStr(Snr),3)+#13#10)
+       else AddColorStr(#13#10);
+
       if dmData.DebugLevel >= 1 then
         Writeln('NL written and scroll if needed+alerts');
       WsjtxMemoScroll; // if neeeded
@@ -923,7 +936,7 @@ begin
 
 end;
 
-procedure TfrmMonWsjtx.AddFollowedMessage(Message, Reply: string);
+procedure TfrmMonWsjtx.AddFollowedMessage(Message, Reply: string;snr:integer);
 var
   a: TExplodeArray;
   i, b: integer;
@@ -944,13 +957,11 @@ begin
   then
   begin
     tmrFollow.Enabled := False;
-    if CurMode = 'FT8' then
-      tmrFollow.Interval := 16000
-    else
-      tmrFollow.Interval := 61000;
+    if CurMode = 'FT8' then tmrFollow.Interval := 16000 else tmrFollow.Interval := 61000;
     tmrFollow.Enabled := True;
+
     edtFollow.Font.Color := clDefault;
-    edtFollow.Text := Message;
+    edtFollow.Text := copy(message,1,6)+' '+IntToStr(Snr)+copy(message,7,length(message));
     RepFlw := Reply;
   end;
 end;
@@ -1249,13 +1260,11 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq: integer);
+procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
 
 var
-  msgMode, msgCQ1, msgCQ2, msgRes, freq, CqDir: string;
-
+  msgMode, msgCQ1, msgCQ2, msgRes, freq, CqDir,
   mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
-
   i, index: integer;
   adif: word;
 
@@ -1269,9 +1278,14 @@ var
       ColorBack('CQ '+CqDir, extCqCall)
     else
     Begin
-      AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6), extCqCall);
-      AddColorStr(' CQ:', clBlack);
-      AddColorStr(CqDir + ' ', extCqCall);
+      if not  chkMap.Checked then
+        Begin
+          AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6), extCqCall);
+          AddColorStr(' CQ:', clBlack);
+          AddColorStr(CqDir + ' ', extCqCall);
+        end
+       else
+          AddColorStr(' '+CqDir, extCqCall);
     end;
   end;
 
@@ -1425,10 +1439,9 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       if (not chkMap.Checked) then
       begin
         if (chkHistory.Checked) then
-          AddColorStr(PadLeft(IntToStr(Dfreq), 6))
+          AddColorStr(PadLeft(IntToStr(Dfreq), 5)+PadLeft(IntToStr(Snr),4)+ ' ', clDefault)
         else
-          AddColorStr(msgTime, clDefault); //time
-        AddColorStr('  ' + msgMode + ' ', clDefault); //mode
+          AddColorStr(msgTime+'  ' + msgMode + ' ', clDefault); //time + mode;
       end;
 
       if isMyCall then
@@ -1446,6 +1459,8 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
        end
       else
         PrintLoc(msgLoc, timeToAlert, msgTime,chkCbCQ.Checked);
+
+       if (chkdB.Checked and chkMap.Checked and (not chkCbCQ.Checked) ) then AddColorStr(PadLeft(IntToStr(Snr),4));
 
       if frmWorkedGrids.GridOK(msgLoc) then AddXpList(msgCall,msgLoc);
 
