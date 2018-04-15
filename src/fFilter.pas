@@ -133,8 +133,6 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure edtDateFromExit(Sender: TObject);
     procedure edtDateToExit(Sender: TObject);
-    procedure gbIotaClick(Sender: TObject);
-    procedure gbContinentClick(Sender: TObject);
   private
   public
     tmp : String;
@@ -426,16 +424,6 @@ begin
     tmp := edtDateTo.Text;
     edtDateTo.Text := copy(tmp,1,4) + '-' + copy(tmp,5,2) + '-' + copy(tmp,7,2)
   end
-end;
-
-procedure TfrmFilter.gbIotaClick(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmFilter.gbContinentClick(Sender: TObject);
-begin
-
 end;
 
 procedure TfrmFilter.btnCancelClick(Sender: TObject);
