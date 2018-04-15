@@ -4,12 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
-  - grid map: loc and qso counters fixed. Default start fixed as all/any. Default save as jpg (Saku, OH1KH)
-  - xplanet support/DXCluster was reversing colors RGB to BGR (Saku, OH1KH)
   + Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)
-  - Filter section QSL. Controls over group box. Tighter setting of controls (Saku, OH1KH)
-  - Worked grids map: Mode selector did not load user's additions (digimodes) (Saku, OH1KH)
-  - CWtype/letter mode: doubling a .. z removed (Saku, OH1KH)
   + Cq-monitor: Overtimed entries turn silvergray in Follow and "no history" (Saku, OH1KH)
   + Band selector to Filter windows added (Saku, OH1KH)
   + CQ-monitor Delta Freqyency instead of Time when "no history" checked (Saku, OH1KH)
@@ -23,7 +18,11 @@ Legend:
   + eQSL ADIF import now also uses submodes from the ADIF specification to match qsos in log (Jonas, SM2VSD)
   + eQSL ADIf import now also uses timestamp from log (+/-60min) together with timestamp from eQSL to match qsos (Jonas, SM2VSD)
   
-
+  - CWtype/letter mode: doubling a .. z removed (Saku, OH1KH)
+  - Worked grids map: Mode selector did not load user's additions (digimodes) (Saku, OH1KH)
+  - Filter section QSL. Controls over group box. Tighter setting of controls (Saku, OH1KH)
+  - xplanet support/DXCluster was reversing colors RGB to BGR (Saku, OH1KH)
+  - grid map: loc and qso counters fixed. Default start fixed as all/any. Default save as jpg (Saku, OH1KH)
   - QSO Filter layout fixed (Saku, OH1KH)
   - DXCluster/WEB Font button not connected to acFont (no action). Fixed (Saku, OH1KH)
   - wsjtx logging take start and stop times to log (before just stop time) (Saku, OH1KH)

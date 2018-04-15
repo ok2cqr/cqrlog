@@ -22,10 +22,6 @@ uses
 type
   TExplodeArray = Array of String;
 
-const
-  cFromDate     = '1945-01-01';
-  cToDate       = '2050-12-31';
-
 type
 
   { TfrmLoadClub }
@@ -58,7 +54,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, uMyIni;
+uses dUtils, dData, uMyIni, dMembership;
 
 { TfrmLoadClub }
 
@@ -112,6 +108,11 @@ var
   day      : String;
   iday     : Integer;
 begin
+  if (FileExists(dmData.MembersDir + SourceFile)) then
+    SourceFile := dmData.MembersDir + SourceFile
+  else
+    SourceFile := dmData.GlobalMembersDir + SourceFile;
+
   mLoad.Clear;
   if not FileExists(SourceFile) then
   begin
@@ -212,11 +213,11 @@ begin
           toDate := year + '-' + month + '-' + day
         end
         else
-          toDate := cToDate
+          toDate := C_CLUB_DEFAULT_DATE_TO
       end
       else begin
-        fromDate := cFromDate;
-        toDate   := cToDate
+        fromDate := C_CLUB_DEFAULT_DATE_FROM;
+        toDate   := C_CLUB_DEFAULT_DATE_TO
       end;
       if clubnr='' then
         clubnr := call;

@@ -333,6 +333,7 @@
         <Filename Value="fClubSettings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmClubSettings"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit37>
       <Unit38>
@@ -793,4 +794,11 @@
       <CreateMakefileOnBuild Value="True"/>
     </Other>
   </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="1">
+      <Item1>
+        <Name Value="EInterfaceCritical"/>
+      </Item1>
+    </Exceptions>
+  </Debugging>
 </CONFIG>

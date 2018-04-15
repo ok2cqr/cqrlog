@@ -76,7 +76,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, uMyini;
+uses dUtils, dData, uMyini, dMembership;
 { TfrmClubSettings }
 
 procedure TfrmClubSettings.btnOKClick(Sender: TObject);
@@ -104,25 +104,20 @@ end;
 
 procedure TfrmClubSettings.FormShow(Sender: TObject);
 begin
-  edtNewInfo.Text           := cqrini.ReadString(ClubStr+'Club','NewInfo',
-                               'New %s member! (%c #%n)');
-  edtNewBandInfo.Text       := cqrini.ReadString(ClubStr+'Club','NewBandInfo',
-                               'New band %s member! (%c #%n)');
-  edtNewModeInfo.Text       := cqrini.ReadString(ClubStr+'Club','NewModeInfo',
-                               'New mode %s member! (%c #%n)');
-  edtQSLNeededInfo.Text     := cqrini.ReadString(ClubStr+'Club','QSLNeededInfo',
-                               'QSL needed for %s member! (%c #%n)');
-  edtAlreadyCmfInfo.Text    := cqrini.ReadString(ClubStr+'Club','AlreadyConfirmedInfo',
-                               'Already confirmed %s member! (%c #%n)');
-  cmbClubFields.Text        := cqrini.ReadString(Clubstr+'Club','ClubFields','');
-  cmbMainFields.Text        := cqrini.ReadString(Clubstr+'Club','MainFields','');
-  cmbStoreFileds.Text       := cqrini.ReadString(Clubstr+'Club','StoreFields','');
-  edtStoreText.Text         := cqrini.ReadString(Clubstr+'Club','StoreText','');
-  cmbNewColor.Selected     := cqrini.ReadInteger(Clubstr+'Club','NewColor',clRed);
-  cmbBandColor.Selected    := cqrini.ReadInteger(Clubstr+'Club','BandColor',clBlue);
-  cmbModeColor.Selected    := cqrini.ReadInteger(Clubstr+'Club','ModeColor',clLime);
-  cmbQSLColor.Selected     := cqrini.ReadInteger(Clubstr+'Club','QSLColor',clFuchsia);
-  cmbAlreadyColor.Selected := cqrini.ReadInteger(Clubstr+'Club','AlreadyColor',0);
+  edtNewInfo.Text           := cqrini.ReadString(ClubStr+'Club', 'NewInfo', C_CLUB_MSG_NEW);
+  edtNewBandInfo.Text       := cqrini.ReadString(ClubStr+'Club', 'NewBandInfo', C_CLUB_MSG_BAND);
+  edtNewModeInfo.Text       := cqrini.ReadString(ClubStr+'Club', 'NewModeInfo', C_CLUB_MSG_MODE);
+  edtQSLNeededInfo.Text     := cqrini.ReadString(ClubStr+'Club', 'QSLNeededInfo', C_CLUB_MSG_QSL);
+  edtAlreadyCmfInfo.Text    := cqrini.ReadString(ClubStr+'Club', 'AlreadyConfirmedInfo', C_CLUB_MSG_CFM);
+  cmbClubFields.Text        := cqrini.ReadString(Clubstr+'Club', 'ClubFields', C_CLUB_DEFAULT_CLUB_FIELD);
+  cmbMainFields.Text        := cqrini.ReadString(Clubstr+'Club', 'MainFields', C_CLUB_DEFAULT_MAIN_FIELD);
+  cmbStoreFileds.Text       := cqrini.ReadString(Clubstr+'Club', 'StoreFields','');
+  edtStoreText.Text         := cqrini.ReadString(Clubstr+'Club', 'StoreText','');
+  cmbNewColor.Selected     := cqrini.ReadInteger(Clubstr+'Club', 'NewColor', C_CLUB_COLOR_NEW);
+  cmbBandColor.Selected    := cqrini.ReadInteger(Clubstr+'Club', 'BandColor', C_CLUB_COLOR_BAND);
+  cmbModeColor.Selected    := cqrini.ReadInteger(Clubstr+'Club', 'ModeColor', C_CLUB_COLOR_MODE);
+  cmbQSLColor.Selected     := cqrini.ReadInteger(Clubstr+'Club', 'QSLColor', C_CLUB_COLOR_QSL);
+  cmbAlreadyColor.Selected := cqrini.ReadInteger(Clubstr+'Club', 'AlreadyColor', C_CLUB_COLOR_CFM);
   dmUtils.LoadFontSettings(self);
   if cmbClubFields.Text = '' then
     cmbClubFields.ItemIndex := 0;
