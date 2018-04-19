@@ -88,6 +88,7 @@ type TRigControl = class
 
     function  GetCurrVFO  : TVFO;
     function  GetModePass : TRigMode;
+    function  GetPassOnly : word;
     function  GetModeOnly : String;
     function  GetFreqHz   : Double;
     function  GetFreqKHz  : Double;
@@ -267,6 +268,10 @@ end;
 function TRigControl.GetModeOnly : String;
 begin
   result := fMode.mode
+end;
+function TRigControl.GetPassOnly : word;
+begin
+  result := fMode.pass
 end;
 
 function TRigControl.GetFreqHz : Double;

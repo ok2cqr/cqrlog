@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  + TRXcontrol: M_Wri-button. Sets memory entry from current rig frequency and mode  (Saku, OH1KH)
   - grid map: loc and qso counters fixed. Default start fixed as all/any. Default save as jpg (Saku, OH1KH)
   - xplanet support/DXCluster was reversing colors RGB to BGR (Saku, OH1KH)
   + Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)
