@@ -1,7 +1,7 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 1644
+  Left = 804
   Height = 277
-  Top = 305
+  Top = 52
   Width = 307
   Anchors = []
   Caption = 'TRX control'
@@ -153,7 +153,7 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.8.2.0'
   object gbMode: TGroupBox
     Left = 240
     Height = 254
@@ -262,6 +262,21 @@ object frmTRXControl: TfrmTRXControl
       Caption = 'M dwn'
       OnClick = btnMemDwnClick
       TabOrder = 6
+    end
+    object btnMemWri: TButton
+      AnchorSideLeft.Control = gbMode
+      AnchorSideTop.Control = btnMemDwn
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 6
+      Height = 25
+      Top = 158
+      Width = 51
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 1
+      Caption = 'M Wri'
+      OnClick = btnMemWriClick
+      TabOrder = 7
     end
   end
   object pnlMain: TPanel

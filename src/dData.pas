@@ -969,6 +969,7 @@ begin
   //us states
   if not FileExistsUTF8(d+'us_states.tab') then
     CopyFile(s+'us_states.tab',d+'us_states.tab');
+
   if not FileExistsUTF8(fHomeDir+'lotw1.txt') then
     CopyFile(s+'lotw1.txt',fHomeDir+'lotw1.txt',True);
   if not FileExistsUTF8(fHomeDir+'eqsl.txt') then
@@ -4125,7 +4126,7 @@ begin
       qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
   end;
 
-  if fDebugLevel>=1 then Writeln(qFreqMem.SQL.Text);
+  if fDebugLevel>=1 then Writeln('FreqmemSql:',qFreqMem.SQL.Text);
   trFreqMem.StartTransaction;
   qFreqMem.Open;
 
@@ -4133,7 +4134,8 @@ begin
   fLastMemId := qFreqMem.Fields[0].AsInteger;
 
   qFreqMem.First;
-  fFirstMemId := qFreqMem.Fields[0].AsInteger
+  fFirstMemId := qFreqMem.Fields[0].AsInteger;
+  if fDebugLevel>=1 then Writeln('FreqmemFirst:',fFirstMemId,'  FreqmemLast:',fLastMemId);
 end;
 
 procedure TdmData.GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
@@ -4148,7 +4150,8 @@ begin
      freq      := 0;
      mode      := 'CW';
      bandwidth := 0
-  end
+  end;
+  if fDebugLevel>=1 then Writeln('Freq:',freq,' mode:',mode,' bandwidth:',bandwidth);
 end;
 
 procedure TdmData.GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
