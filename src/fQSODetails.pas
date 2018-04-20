@@ -129,7 +129,7 @@ implementation
 {$R *.lfm}
 
 { TfrmQSODetails }
-uses dUtils, dData, fNewQSO, uMyIni;
+uses dUtils, dData, fNewQSO, uMyIni, dMembership;
 
 {
  %l - long club name
@@ -407,11 +407,11 @@ begin
   if data = '' then
     exit;
   case num of
-    1 : begin Club := dmData.Club1; ClubInfo := @LClub1 end;
-    2 : begin Club := dmData.Club2; ClubInfo := @LClub2 end;
-    3 : begin Club := dmData.Club3; ClubInfo := @LClub3 end;
-    4 : begin Club := dmData.Club4; ClubInfo := @LClub4 end;
-    5 : begin Club := dmData.Club5; ClubInfo := @LClub5 end
+    1 : begin Club := dmMembership.Club1; ClubInfo := @LClub1 end;
+    2 : begin Club := dmMembership.Club2; ClubInfo := @LClub2 end;
+    3 : begin Club := dmMembership.Club3; ClubInfo := @LClub3 end;
+    4 : begin Club := dmMembership.Club4; ClubInfo := @LClub4 end;
+    5 : begin Club := dmMembership.Club5; ClubInfo := @LClub5 end
   end;
   if Club.Name = '' then
     exit;

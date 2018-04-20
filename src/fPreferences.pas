@@ -1046,6 +1046,8 @@ type
     wasOnlineLogSupportEnabled : Boolean;
 
     procedure SaveClubSection;
+    procedure LoadMebershipCombo;
+    procedure LoadMembersFromCombo(ClubComboText, ClubNumber : String);
   public
     { public declarations }
     ActPageIdx : integer;
@@ -1678,82 +1680,27 @@ end;
 
 procedure TfrmPreferences.btnLoadFifthClick(Sender: TObject);
 begin
-  if cmbFifthClub.Text = '' then
-    exit;
-  with TfrmLoadClub.Create(self) do
-    try
-      TypOfLoad := 0;
-      DBnum := '5';
-      SourceFile := dmData.MembersDir + LowerCase(
-        copy(cmbFifthClub.Text, 1, Pos(';', cmbFifthClub.Text) - 1)) + '.txt';
-      ShowModal
-    finally
-      Free
-    end;
+  LoadMembersFromCombo(cmbFifthClub.Text, '5')
 end;
 
 procedure TfrmPreferences.btnLoadFirstClick(Sender: TObject);
 begin
-  if cmbFirstClub.Text = '' then
-    exit;
-  with TfrmLoadClub.Create(self) do
-    try
-      TypOfLoad := 0;
-      DBnum := '1';
-      SourceFile := dmData.MembersDir + LowerCase(
-        copy(cmbFirstClub.Text, 1, Pos(';', cmbFirstClub.Text) - 1)) + '.txt';
-      ShowModal
-    finally
-      Free
-    end;
+  LoadMembersFromCombo(cmbFirstClub.Text, '1')
 end;
 
 procedure TfrmPreferences.btnLoadFourthClick(Sender: TObject);
 begin
-  if cmbFourthClub.Text = '' then
-    exit;
-  with TfrmLoadClub.Create(self) do
-    try
-      TypOfLoad := 0;
-      DBnum := '4';
-      SourceFile := dmData.MembersDir + LowerCase(
-        copy(cmbFourthClub.Text, 1, Pos(';', cmbFourthClub.Text) - 1)) + '.txt';
-      ShowModal;
-    finally
-      Free
-    end;
+  LoadMembersFromCombo(cmbFourthClub.Text, '4')
 end;
 
 procedure TfrmPreferences.btnLoadSecondClick(Sender: TObject);
 begin
-  if cmbSecondClub.Text = '' then
-    exit;
-  with TfrmLoadClub.Create(self) do
-    try
-      TypOfLoad := 0;
-      DBnum := '2';
-      SourceFile := dmData.MembersDir + LowerCase(
-        copy(cmbSecondClub.Text, 1, Pos(';', cmbSecondClub.Text) - 1)) + '.txt';
-      ShowModal
-    finally
-      Free
-    end;
+  LoadMembersFromCombo(cmbSecondClub.Text, '2')
 end;
 
 procedure TfrmPreferences.btnLoadThirdClick(Sender: TObject);
 begin
-  if cmbThirdClub.Text = '' then
-    exit;
-  with TfrmLoadClub.Create(self) do
-    try
-      TypOfLoad := 0;
-      DBnum := '3';
-      SourceFile := dmData.MembersDir + LowerCase(
-        copy(cmbThirdClub.Text, 1, Pos(';', cmbThirdClub.Text) - 1)) + '.txt';
-      ShowModal
-    finally
-      Free
-    end;
+  LoadMembersFromCombo(cmbThirdClub.Text, '3')
 end;
 
 procedure TfrmPreferences.btnSelbFontClick(Sender: TObject);
@@ -2425,22 +2372,15 @@ var
   i: integer;
 begin
   dmUtils.LoadFontSettings(self);
-  dmUtils.ReadMemberList(cmbFirstClub);
-  dmUtils.ReadZipList(cmbFirstZip);
   dmUtils.InsertModes(cmbDefaultMode);
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertModes(cmbWsjtDefaultMode);
   cmbDefaultMode.ReadOnly     := True;
   cmbWsjtDefaultMode.ReadOnly := True;
 
-  for i := 0 to cmbFirstClub.Items.Count - 1 do
-  begin
-    cmbSecondClub.Items.Add(cmbFirstClub.Items[i]);
-    cmbThirdClub.Items.Add(cmbFirstClub.Items[i]);
-    cmbFourthClub.Items.Add(cmbFirstClub.Items[i]);
-    cmbFifthClub.Items.Add(cmbFirstClub.Items[i]);
-  end;
+  LoadMebershipCombo;
 
+  dmUtils.ReadZipList(cmbFirstZip);
   for i := 0 to cmbFirstZip.Items.Count - 1 do
   begin
     cmbSecondZip.Items.Add(cmbFirstZip.Items[i]);
@@ -2862,11 +2802,11 @@ begin
   edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'firefox');
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
 
-  edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', '1945-01-01');
-  edtClub2Date.Text := cqrini.ReadString('SecondClub', 'DateFrom', '1945-01-01');
-  edtClub3Date.Text := cqrini.ReadString('ThirdClub', 'DateFrom', '1945-01-01');
-  edtClub4Date.Text := cqrini.ReadString('FourthClub', 'DateFrom', '1945-01-01');
-  edtClub5Date.Text := cqrini.ReadString('FifthClub', 'DateFrom', '1945-01-01');
+  edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
+  edtClub2Date.Text := cqrini.ReadString('SecondClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
+  edtClub3Date.Text := cqrini.ReadString('ThirdClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
+  edtClub4Date.Text := cqrini.ReadString('FourthClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
+  edtClub5Date.Text := cqrini.ReadString('FifthClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
 
   edtCbUser.Text := cqrini.ReadString('CallBook', 'CBUser', '');
   edtCbPass.Text := cqrini.ReadString('CallBook', 'CBPass', '');
@@ -2966,6 +2906,66 @@ begin
   cqrini.WriteString('Clubs', 'Fourth', cmbFourthClub.Text);
   cqrini.WriteString('Clubs', 'Fifth', cmbFifthClub.Text);
   cqrini.WriteBool('Clubs', 'CheckForUpdate', chkCheckMembershipUpdate.Checked)
+end;
+
+procedure TfrmPreferences.LoadMebershipCombo;
+var
+  i : Integer;
+  Club1 : String;
+  Club2 : String;
+  Club3 : String;
+  Club4 : String;
+  Club5 : String;
+begin
+  Club1 := cmbFirstClub.Text;
+  Club2 := cmbSecondClub.Text;
+  Club3 := cmbThirdClub.Text;
+  Club4 := cmbFourthClub.Text;
+  Club5 := cmbFifthClub.Text;
+
+  cmbSecondClub.Items.Clear;
+  cmbThirdClub.Items.Clear;
+  cmbFourthClub.Items.Clear;
+  cmbFifthClub.Items.Clear;
+
+  dmMembership.ReadMemberList(cmbFirstClub);
+  for i := 0 to cmbFirstClub.Items.Count - 1 do
+  begin
+    cmbSecondClub.Items.Add(cmbFirstClub.Items[i]);
+    cmbThirdClub.Items.Add(cmbFirstClub.Items[i]);
+    cmbFourthClub.Items.Add(cmbFirstClub.Items[i]);
+    cmbFifthClub.Items.Add(cmbFirstClub.Items[i]);
+  end;
+
+  cmbFirstClub.ItemIndex  := cmbFirstClub.Items.IndexOf(Club1);
+  cmbSecondClub.ItemIndex := cmbSecondClub.Items.IndexOf(Club2);
+  cmbThirdClub.ItemIndex  := cmbThirdClub.Items.IndexOf(Club3);
+  cmbFourthClub.ItemIndex := cmbFourthClub.Items.IndexOf(Club4);
+  cmbFifthClub.ItemIndex  := cmbFifthClub.Items.IndexOf(Club5)
+end;
+
+procedure TfrmPreferences.LoadMembersFromCombo(ClubComboText, ClubNumber : String);
+var
+  MemberFileName : String;
+begin
+  if (ClubComboText = '') or (Pos('---', ClubComboText) > 0) then
+    exit;
+
+  MemberFileName := dmMembership.GetClubFileName(ClubComboText);
+  with TfrmLoadClub.Create(self) do
+  try
+    TypOfLoad := 0;
+    DBnum := ClubNumber;
+    SourceFile := MemberFileName;
+    ShowModal
+  finally
+    Free
+  end;
+
+  if not FileExists(dmData.MembersDir + MemberFileName) then
+    CopyFile(dmData.GlobalMembersDir + MemberFileName, dmData.MembersDir + MemberFileName);
+
+  LoadMebershipCombo
 end;
 
 end.

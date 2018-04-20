@@ -42,27 +42,6 @@ type
 end;
 
 type
-  TClub = record
-    Name           : String;
-    LongName       : String;
-    NewInfo        : String;
-    NewBandInfo    : String;
-    NewModeInfo    : String;
-    QSLNeededInfo  : String;
-    AlreadyCfmInfo : String;
-    ClubField      : String;
-    MainFieled     : String;
-    StoreField     : String;
-    StoreText      : String;
-    NewColor       : Integer;
-    BandColor      : Integer;
-    ModeColor      : Integer;
-    QSLColor       : Integer;
-    AlreadyColor   : Integer;
-    DateFrom       : String;
-  end;
-
-type
   TZipCode  = record
     Name       : String;
     LongName   : String;
@@ -159,6 +138,7 @@ type
     fHomeDir : String;
     fDataDir : String;
     fMembersDir : String;
+    fGlobalMembersDir : String;
     fDebugLevel : Integer;
     fOrderBy : String;
     fVersionString : String;
@@ -217,11 +197,6 @@ type
     //if he wants to use export, program use the same functions for filter enabled
 
     Ascening  : Boolean;
-    Club1     : TClub;
-    Club2     : TClub;
-    Club3     : TClub;
-    Club4     : TClub;
-    Club5     : TClub;
 
     Zip1  : TZipCode;
     Zip2  : TZipCode;
@@ -237,6 +212,7 @@ type
     property DataDir : String read fDataDir write fDataDir;
     property ShareDir   : String read fShareDir write fShareDir;
     property MembersDir : String read fMembersDir;
+    property GlobalMembersDir : string read fGlobalMembersDir;
     property ZipCodeDir : String read fZipCodeDir;
     property UsrHomeDir : String read fUsrHomeDir;
     property DebugLevel : Integer read fDebugLevel write fDebugLevel;
@@ -362,7 +338,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -927,11 +903,11 @@ begin
   if not DirectoryExistsUTF8(fHomeDir+'database') then
     CreateDir(fHomeDir+'database');
 
-  if DirectoryExistsUTF8(fHomeDir+'members') then
-    fMembersDir := fHomeDir+'members'+PathDelim
-  else
-    fMembersDir := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
-                   PathDelim+'members'+PathDelim);
+  if not DirectoryExistsUTF8(fHomeDir+'members') then
+    CreateDirUTF8(fHomeDir+'members');
+  fMembersDir := fHomeDir+'members'+PathDelim;
+  fGlobalMembersDir := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
+                       PathDelim+'members'+PathDelim);
 
   if DirectoryExistsUTF8(fHomeDir+'zipcodes') then
     fZipCodeDir := fHomeDir+'zipcodes'+PathDelim
@@ -2184,114 +2160,23 @@ begin
 end;
 
 procedure TdmData.LoadClubsSettings;
-var
-  tmp    : String;
 begin
-  tmp := cqrini.ReadString('Clubs','First','');
-  Club1.Name     := copy(tmp,1,Pos(';',tmp)-1);
-  Club1.LongName := copy(tmp,Pos(';',tmp)+1,Length(tmp)-Pos(';',tmp)+1);
-  Club1.NewInfo        := cqrini.ReadString('FirstClub','NewInfo','');
-  Club1.NewBandInfo    := cqrini.ReadString('FirstClub','NewBandInfo','');
-  Club1.NewModeInfo    := cqrini.ReadString('FirstClub','NewModeInfo','');
-  Club1.QSLNeededInfo  := cqrini.ReadString('FirstClub','QSLNeededInfo','');
-  Club1.AlreadyCfmInfo := cqrini.ReadString('FirstClub','AlreadyConfirmedInfo','');
-  Club1.ClubField      := cqrini.ReadString('FirstClub','ClubFields','');
-  Club1.MainFieled     := cqrini.ReadString('FirstClub','MainFields','');
-  Club1.StoreField     := cqrini.ReadString('FirstClub','StoreFields','');
-  Club1.StoreText      := cqrini.ReadString('FirstClub','StoreText','');
-  Club1.NewColor       := cqrini.ReadInteger('FirstClub','NewColor',0);
-  Club1.BandColor      := cqrini.ReadInteger('FirstClub','BandColor',0);
-  Club1.ModeColor      := cqrini.ReadInteger('FirstClub','ModeColor',0);
-  Club1.QSLColor       := cqrini.ReadInteger('FirstClub','QSLColor',0);
-  Club1.AlreadyColor   := cqrini.ReadInteger('FirstClub','AlreadyColor',0);
-  Club1.DateFrom       := cqrini.ReadString('FirstClub','DateFrom','1945-01-01');
+  dmMembership.LoadClubSettings(1, dmMembership.Club1);
+  dmMembership.LoadClubSettings(2, dmMembership.Club2);
+  dmMembership.LoadClubSettings(3, dmMembership.Club3);
+  dmMembership.LoadClubSettings(4, dmMembership.Club4);
+  dmMembership.LoadClubSettings(5, dmMembership.Club5);
 
-  tmp := cqrini.ReadString('Clubs','Second','');
-  Club2.Name     := copy(tmp,1,Pos(';',tmp)-1);
-  Club2.LongName := copy(tmp,Pos(';',tmp)+1,Length(tmp)-Pos(';',tmp)+1);
-  Club2.NewInfo        := cqrini.ReadString('SecondClub','NewInfo','');
-  Club2.NewBandInfo    := cqrini.ReadString('SecondClub','NewBandInfo','');
-  Club2.NewModeInfo    := cqrini.ReadString('SecondClub','NewModeInfo','');
-  Club2.QSLNeededInfo  := cqrini.ReadString('SecondClub','QSLNeededInfo','');
-  Club2.AlreadyCfmInfo := cqrini.ReadString('SecondClub','AlreadyConfirmedInfo','');
-  Club2.ClubField      := cqrini.ReadString('SecondClub','ClubFields','');
-  Club2.MainFieled     := cqrini.ReadString('SecondClub','MainFields','');
-  Club2.StoreField     := cqrini.ReadString('SecondClub','StoreFields','');
-  Club2.StoreText      := cqrini.ReadString('SecondClub','StoreText','');
-  Club2.NewColor       := cqrini.ReadInteger('SecondClub','NewColor',0);
-  Club2.BandColor      := cqrini.ReadInteger('SecondClub','BandColor',0);
-  Club2.ModeColor      := cqrini.ReadInteger('SecondClub','ModeColor',0);
-  Club2.QSLColor       := cqrini.ReadInteger('SecondClub','QSLColor',0);
-  Club2.AlreadyColor   := cqrini.ReadInteger('SecondClub','AlreadyColor',0);
-  Club2.DateFrom       := cqrini.ReadString('SecondClub','DateFrom','1945-01-01');
-
-  tmp := cqrini.ReadString('Clubs','Third','');
-  Club3.Name     := copy(tmp,1,Pos(';',tmp)-1);
-  Club3.LongName := copy(tmp,Pos(';',tmp)+1,Length(tmp)-Pos(';',tmp)+1);
-  Club3.NewInfo        := cqrini.ReadString('ThirdClub','NewInfo','');
-  Club3.NewBandInfo    := cqrini.ReadString('ThirdClub','NewBandInfo','');
-  Club3.NewModeInfo    := cqrini.ReadString('ThirdClub','NewModeInfo','');
-  Club3.QSLNeededInfo  := cqrini.ReadString('ThirdClub','QSLNeededInfo','');
-  Club3.AlreadyCfmInfo := cqrini.ReadString('ThirdClub','AlreadyConfirmedInfo','');
-  Club3.ClubField      := cqrini.ReadString('ThirdClub','ClubFields','');
-  Club3.MainFieled     := cqrini.ReadString('ThirdClub','MainFields','');
-  Club3.StoreField     := cqrini.ReadString('ThirdClub','StoreFields','');
-  Club3.StoreText      := cqrini.ReadString('ThirdClub','StoreText','');
-  Club3.NewColor       := cqrini.ReadInteger('ThirdClub','NewColor',0);
-  Club3.BandColor      := cqrini.ReadInteger('ThirdClub','BandColor',0);
-  Club3.ModeColor      := cqrini.ReadInteger('ThirdClub','ModeColor',0);
-  Club3.QSLColor       := cqrini.ReadInteger('ThirdClub','QSLColor',0);
-  Club3.AlreadyColor   := cqrini.ReadInteger('ThirdClub','AlreadyColor',0);
-  Club3.DateFrom       := cqrini.ReadString('ThirdClub','DateFrom','1945-01-01');
-
-  tmp := cqrini.ReadString('Clubs','Fourth','');
-  Club4.Name     := copy(tmp,1,Pos(';',tmp)-1);
-  Club4.LongName := copy(tmp,Pos(';',tmp)+1,Length(tmp)-Pos(';',tmp)+1);
-  Club4.NewInfo        := cqrini.ReadString('FourthClub','NewInfo','');
-  Club4.NewBandInfo    := cqrini.ReadString('FourthClub','NewBandInfo','');
-  Club4.NewModeInfo    := cqrini.ReadString('FourthClub','NewModeInfo','');
-  Club4.QSLNeededInfo  := cqrini.ReadString('FourthClub','QSLNeededInfo','');
-  Club4.AlreadyCfmInfo := cqrini.ReadString('FourthClub','AlreadyConfirmedInfo','');
-  Club4.ClubField      := cqrini.ReadString('FourthClub','ClubFields','');
-  Club4.MainFieled     := cqrini.ReadString('FourthClub','MainFields','');
-  Club4.StoreField     := cqrini.ReadString('FourthClub','StoreFields','');
-  Club4.StoreText      := cqrini.ReadString('FourthClub','StoreText','');
-  Club4.NewColor       := cqrini.ReadInteger('FourthClub','NewColor',0);
-  Club4.BandColor      := cqrini.ReadInteger('FourthClub','BandColor',0);
-  Club4.ModeColor      := cqrini.ReadInteger('FourthClub','ModeColor',0);
-  Club4.QSLColor       := cqrini.ReadInteger('FourthClub','QSLColor',0);
-  Club4.AlreadyColor   := cqrini.ReadInteger('FourthClub','AlreadyColor',0);
-  Club4.DateFrom       := cqrini.ReadString('FourthClub','DateFrom','1945-01-01');
-
-  tmp := cqrini.ReadString('Clubs','Fifth','');
-  Club5.Name     := copy(tmp,1,Pos(';',tmp)-1);
-  Club5.LongName := copy(tmp,Pos(';',tmp)+1,Length(tmp)-Pos(';',tmp)+1);
-  Club5.NewInfo        := cqrini.ReadString('FifthClub','NewInfo','');
-  Club5.NewBandInfo    := cqrini.ReadString('FifthClub','NewBandInfo','');
-  Club5.NewModeInfo    := cqrini.ReadString('FifthClub','NewModeInfo','');
-  Club5.QSLNeededInfo  := cqrini.ReadString('FifthClub','QSLNeededInfo','');
-  Club5.AlreadyCfmInfo := cqrini.ReadString('FifthClub','AlreadyConfirmedInfo','');
-  Club5.ClubField      := cqrini.ReadString('FifthClub','ClubFields','');
-  Club5.MainFieled     := cqrini.ReadString('FifthClub','MainFields','');
-  Club5.StoreField     := cqrini.ReadString('FifthClub','StoreFields','');
-  Club5.StoreText      := cqrini.ReadString('FifthClub','StoreText','');
-  Club5.NewColor       := cqrini.ReadInteger('FifthClub','NewColor',0);
-  Club5.BandColor      := cqrini.ReadInteger('FifthClub','BandColor',0);
-  Club5.ModeColor      := cqrini.ReadInteger('FifthClub','ModeColor',0);
-  Club5.QSLColor       := cqrini.ReadInteger('FifthClub','QSLColor',0);
-  Club5.AlreadyColor   := cqrini.ReadInteger('FifthClub','AlreadyColor',0);
-  Club5.DateFrom       := cqrini.ReadString('FifthClub','DateFrom','1945-01-01');
-
-  if Club1.MainFieled = 'call' then
-    Club1.MainFieled := 'idcall';
-  if Club2.MainFieled = 'call' then
-    Club2.MainFieled := 'idcall';
-  if Club3.MainFieled = 'call' then
-    Club3.MainFieled := 'idcall';
-  if Club4.MainFieled = 'call' then
-    Club4.MainFieled := 'idcall';
-  if Club5.MainFieled = 'call' then
-    Club5.MainFieled := 'idcall'
+  if dmMembership.Club1.MainFieled = 'call' then
+    dmMembership.Club1.MainFieled := 'idcall';
+  if dmMembership.Club2.MainFieled = 'call' then
+    dmMembership.Club2.MainFieled := 'idcall';
+  if dmMembership.Club3.MainFieled = 'call' then
+    dmMembership.Club3.MainFieled := 'idcall';
+  if dmMembership.Club4.MainFieled = 'call' then
+    dmMembership.Club4.MainFieled := 'idcall';
+  if dmMembership.Club5.MainFieled = 'call' then
+    dmMembership.Club5.MainFieled := 'idcall'
 end;
 
 procedure TdmData.LoadZipSettings;

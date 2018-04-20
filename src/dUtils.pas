@@ -153,7 +153,6 @@ type
     procedure EnterFreq;
     procedure LoadFontSettings(aForm: TForm);
     procedure LoadBandLabelSettins;
-    procedure ReadMemberList(cmbMemebers: TComboBox);
     procedure SortList(l: TStringList);
     procedure RunXplanet;
     procedure CloseXplanet;
@@ -175,6 +174,7 @@ type
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadVisibleColumnsConfiguration(var aColumns : array of TVisibleColumn);
+    procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
 
 
     function  StrToDateFormat(sDate : String) : TDateTime;
@@ -2076,43 +2076,6 @@ begin
   begin
     //Writeln('Lat:  ',latitude);
     //Writeln('Long: ',longitude);
-  end;
-end;
-
-procedure TdmUtils.ReadMemberList(cmbMemebers: TComboBox);
-var
-  res: byte;
-  SearchRec: TSearchRec;
-  f: TextFile;
-  ShortName: string = '';
-  LongName: string = '';
-  Ts: TStringList;
-  i: integer = 0;
-begin
-  cmbMemebers.Clear;
-  cmbMemebers.Items.Add('');
-  Ts := TStringList.Create;
-  try
-    res := FindFirst(dmData.MembersDir + '*.txt', faAnyFile, SearchRec);
-    while Res = 0 do
-    begin
-      if FileExists(dmData.MembersDir + SearchRec.Name) then
-      begin
-        AssignFile(f, dmData.MembersDir + SearchRec.Name);
-        Reset(f);
-        ReadLn(f, ShortName);
-        ReadLn(f, LongName);
-        Ts.Add(ShortName + ';' + LongName);
-        CloseFile(f);
-      end;
-      Res := FindNext(SearchRec);
-    end;
-    Ts.Sort;
-    for i := 0 to Ts.Count - 1 do
-      cmbMemebers.Items.Add(Ts.Strings[i])
-  finally
-    FindClose(SearchRec);
-    Ts.Free
   end;
 end;
 
@@ -4417,5 +4380,25 @@ begin
   end
 end;
 
+procedure TdmUtils.LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
+var
+  res: byte;
+  SearchRec: TSearchRec;
+begin
+  ListOfFiles.Clear;
+  try
+    res := FindFirst(Path + Mask, faAnyFile, SearchRec);
+    while res = 0 do
+    begin
+      if FileExists(Path + SearchRec.Name) then
+        ListOfFiles.Add(Path + SearchRec.Name);
+
+      Res := FindNext(SearchRec)
+    end;
+    ListOfFiles.Sort;
+  finally
+    FindClose(SearchRec)
+  end
+end;
 
 end.

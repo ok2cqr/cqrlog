@@ -133,8 +133,6 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure edtDateFromExit(Sender: TObject);
     procedure edtDateToExit(Sender: TObject);
-    procedure gbIotaClick(Sender: TObject);
-    procedure gbContinentClick(Sender: TObject);
   private
   public
     tmp : String;
@@ -147,7 +145,7 @@ implementation
 {$R *.lfm}
 
 { TfrmFilter }
-uses dData, dUtils,fSelectDXCC;
+uses dData, dUtils,fSelectDXCC, dMembership;
 
 procedure TfrmFilter.btnOKClick(Sender: TObject);
 var
@@ -428,16 +426,6 @@ begin
   end
 end;
 
-procedure TfrmFilter.gbIotaClick(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmFilter.gbContinentClick(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmFilter.btnCancelClick(Sender: TObject);
 begin
   Close
@@ -463,16 +451,16 @@ begin
   cmbProfile.Items.Insert(0,'Any profile');
   cmbProfile.ItemIndex := 0;
   cmbMembers.Items.Add('');
-  if dmData.Club1.Name <> '' then
-    cmbMembers.Items.Add('1;'+dmData.Club1.Name+';'+dmData.Club1.LongName);
-  if dmData.Club2.Name <> '' then
-    cmbMembers.Items.Add('2;'+dmData.Club2.Name+';'+dmData.Club2.LongName);
-  if dmData.Club3.Name <> '' then
-    cmbMembers.Items.Add('3;'+dmData.Club3.Name+';'+dmData.Club3.LongName);
-  if dmData.Club4.Name <> '' then
-    cmbMembers.Items.Add('4;'+dmData.Club4.Name+';'+dmData.Club4.LongName);
-  if dmData.Club5.Name <> '' then
-    cmbMembers.Items.Add('5;'+dmData.Club5.Name+';'+dmData.Club5.LongName);
+  if dmMembership.Club1.Name <> '' then
+    cmbMembers.Items.Add('1;'+dmMembership.Club1.Name+';'+dmMembership.Club1.LongName);
+  if dmMembership.Club2.Name <> '' then
+    cmbMembers.Items.Add('2;'+dmMembership.Club2.Name+';'+dmMembership.Club2.LongName);
+  if dmMembership.Club3.Name <> '' then
+    cmbMembers.Items.Add('3;'+dmMembership.Club3.Name+';'+dmMembership.Club3.LongName);
+  if dmMembership.Club4.Name <> '' then
+    cmbMembers.Items.Add('4;'+dmMembership.Club4.Name+';'+dmMembership.Club4.LongName);
+  if dmMembership.Club5.Name <> '' then
+    cmbMembers.Items.Add('5;'+dmMembership.Club5.Name+';'+dmMembership.Club5.LongName);
   cmbMembers.ItemIndex := 0;
   cmbSort.ItemIndex := 0
 end;

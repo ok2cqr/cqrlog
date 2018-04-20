@@ -5,16 +5,51 @@ unit dMembership;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, LazFileUtils, Forms, LCLType, dateutils;
+  Classes, SysUtils, FileUtil, LResources, LazFileUtils, Forms, LCLType, dateutils, StdCtrls, Graphics;
 
 const
   C_CLUB_COUNT = 5;
   C_CLUB_UPDATE_SECTION = 'ClubUpdates';
   C_LIST_OF_CLUBS : array[1..C_CLUB_COUNT] of string = ('First', 'Second', 'Third', 'Fourth', 'Fifth');
-  C_MEMBERSHIP_VERSION_CHECK_URL = 'https://cqrlog.com/members/script/mtime.php?file=';
+  C_MEMBERSHIP_VERSION_CHECK_URL = 'https://cqrlog.com/members/script/mtime.php?file=%s';
   C_MEMBERSHIP_DOWNLOAD_URL = 'https://cqrlog.com/members/%s';
   C_FROM_DATE = '1945-01-01';
   C_TO_DATE   = '2050-12-31';
+  C_CLUB_MSG_NEW = 'New %s member! (%c #%n)';
+  C_CLUB_MSG_BAND = 'New band %s member! (%c #%n)';
+  C_CLUB_MSG_MODE = 'New mode %s member! (%c #%n)';
+  C_CLUB_MSG_QSL = 'QSL needed for %s member! (%c #%n)';
+  C_CLUB_MSG_CFM = 'Already confirmed %s member! (%c #%n)';
+  C_CLUB_COLOR_NEW = clRed;
+  C_CLUB_COLOR_BAND = clBlue;
+  C_CLUB_COLOR_MODE = clLime;
+  C_CLUB_COLOR_QSL = clFuchsia;
+  C_CLUB_COLOR_CFM = clBlack;
+  C_CLUB_DEFAULT_CLUB_FIELD = 'clubcall';
+  C_CLUB_DEFAULT_MAIN_FIELD = 'call';
+  C_CLUB_DEFAULT_DATE_FROM = '1945-01-01';
+  C_CLUB_DEFAULT_DATE_TO = '2050-12-31';
+type
+  TClub = record
+    Name           : String;
+    LongName       : String;
+    NewInfo        : String;
+    NewBandInfo    : String;
+    NewModeInfo    : String;
+    QSLNeededInfo  : String;
+    AlreadyCfmInfo : String;
+    ClubField      : String;
+    MainFieled     : String;
+    StoreField     : String;
+    StoreText      : String;
+    NewColor       : Integer;
+    BandColor      : Integer;
+    ModeColor      : Integer;
+    QSLColor       : Integer;
+    AlreadyColor   : Integer;
+    DateFrom       : String;
+  end;
+
 
 type TMembershipLine = record
     club_nr : String[20];
@@ -34,12 +69,20 @@ type
     procedure PrepareListOfMembershipFilesForUpdate;
 
     function  GetMessageWithListOfUpdatedFiles : String;
+    function GetComboClubNameFromFile(ClubFile : String) : String;
   public
     ListOfMembershipFilesForUpdate : TStringList;
+    Club1     : TClub;
+    Club2     : TClub;
+    Club3     : TClub;
+    Club4     : TClub;
+    Club5     : TClub;
 
     procedure CheckForMembershipUpdate(Force : Boolean = False);
     procedure SaveLastMembershipUpdateDate(FileName : String; LastUpdateDate : TDateTime);
     procedure SynMembeshipUpdates;
+    procedure ReadMemberList(cmbMemebers: TComboBox);
+    procedure LoadClubSettings(ClubNr : Integer; var Club : TClub);
 
     function  GetLastMembershipUpdateDate(FileName : String) : TDateTime;
     function  GetClubFileName(Club : String) : String;
@@ -79,7 +122,7 @@ uses uMyIni, dUtils, dData, fImportProgress;
       for i:=0 to ClubFileNames.Count-1 do
       begin
         ClubFileName := ExtractFileName(ClubFileNames.Strings[i]);
-        if dmUtils.GetDataFromHttp(C_MEMBERSHIP_VERSION_CHECK_URL+ClubFileName, data) then
+        if dmUtils.GetDataFromHttp(Format(C_MEMBERSHIP_VERSION_CHECK_URL, [ClubFileName]), data) then
         begin
           FileDate := dmUtils.MyStrToDateTime(data);
           if FileDate > dmMembership.GetLastMembershipUpdateDate(ClubFileName) then
@@ -179,7 +222,6 @@ end;
 function TdmMembership.GetClubSourceFileNameWithPath(Club : String) : String;
 var
   ClubFileName : String;
-  MemDir : String;
 begin
   Result := '';
 
@@ -188,16 +230,14 @@ begin
 
   ClubFileName := GetClubFileName(Club);
 
-  MemDir := dmData.HomeDir+'members'+PathDelim;
-  if FileExistsUTF8(MemDir + ClubFileName) then
+  if FileExistsUTF8(dmData.MembersDir + ClubFileName) then
   begin
-    Result := MemDir + ClubFileName;
+    Result := dmData.MembersDir + ClubFileName;
     exit
   end;
 
-  MemDir := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+PathDelim+'members'+PathDelim);
-  if FileExistsUTF8(MemDir + ClubFileName) then
-    Result := MemDir + ClubFileName
+  if FileExistsUTF8(dmData.GlobalMembersDir + ClubFileName) then
+    Result := dmData.GlobalMembersDir + ClubFileName
 end;
 
 function TdmMembership.GetClubFileName(Club : String) : String;
@@ -341,6 +381,84 @@ begin
       break
     end
   end
+end;
+
+function TdmMembership.GetComboClubNameFromFile(ClubFile : String) : String;
+var
+  f : TextFile;
+  ShortName : String;
+  LongName  : String;
+begin
+  AssignFile(f, ClubFile);
+  try
+    Reset(f);
+    ReadLn(f, ShortName);
+    ReadLn(f, LongName);
+
+    Result := ShortName + ';' + LongName
+  finally
+    CloseFile(f)
+  end
+end;
+
+procedure TdmMembership.ReadMemberList(cmbMemebers: TComboBox);
+var
+  l: TStringList;
+  i: integer = 0;
+  ClubName : String;
+begin
+  cmbMemebers.Clear;
+  cmbMemebers.Items.Add('');
+  l := TStringList.Create;
+  try
+    dmUtils.LoadListOfFiles(dmData.MembersDir, '*.txt', l);
+    if l.Count > 0 then
+    begin
+      cmbMemebers.Items.Add('--- Local files ---');
+      for i:=0 to l.Count-1 do
+        cmbMemebers.Items.Add(GetComboClubNameFromFile(l.Strings[i]))
+    end;
+
+    dmUtils.LoadListOfFiles(dmData.GlobalMembersDir, '*.txt', l);
+    if l.Count > 0 then
+    begin
+      cmbMemebers.Items.Add('--- Global files ---');
+      for i:=0 to l.Count-1 do
+      begin
+        ClubName := GetComboClubNameFromFile(l.Strings[i]);
+        if (cmbMemebers.Items.IndexOf(ClubName) = -1) then
+          cmbMemebers.Items.Add(ClubName)
+      end
+    end
+  finally
+    l.Free
+  end
+end;
+
+procedure TdmMembership.LoadClubSettings(ClubNr : Integer; var Club : TClub);
+var
+  Section , ClubText: String;
+begin
+  ClubText := cqrini.ReadString('Clubs', C_LIST_OF_CLUBS[ClubNr], '');
+
+  Section := C_LIST_OF_CLUBS[ClubNr] + 'Club';
+  Club.Name           := copy(ClubText, 1, Pos(';', ClubText)-1);
+  Club.LongName       := copy(ClubText, Pos(';', ClubText)+1, Length(ClubText) - Pos(';', ClubText)+1);
+  Club.NewInfo        := cqrini.ReadString(Section, 'NewInfo', C_CLUB_MSG_NEW);
+  Club.NewBandInfo    := cqrini.ReadString(Section , 'NewBandInfo', C_CLUB_MSG_BAND);
+  Club.NewModeInfo    := cqrini.ReadString(Section , 'NewModeInfo', C_CLUB_MSG_MODE);
+  Club.QSLNeededInfo  := cqrini.ReadString(Section , 'QSLNeededInfo', C_CLUB_MSG_QSL);
+  Club.AlreadyCfmInfo := cqrini.ReadString(Section , 'AlreadyConfirmedInfo', C_CLUB_MSG_CFM);
+  Club.ClubField      := cqrini.ReadString(Section , 'ClubFields', C_CLUB_DEFAULT_CLUB_FIELD);
+  Club.MainFieled     := cqrini.ReadString(Section , 'MainFields', C_CLUB_DEFAULT_MAIN_FIELD);
+  Club.StoreField     := cqrini.ReadString(Section , 'StoreFields', '');
+  Club.StoreText      := cqrini.ReadString(Section , 'StoreText', '');
+  Club.NewColor       := cqrini.ReadInteger(Section, 'NewColor', C_CLUB_COLOR_NEW);
+  Club.BandColor      := cqrini.ReadInteger(Section, 'BandColor', C_CLUB_COLOR_BAND);
+  Club.ModeColor      := cqrini.ReadInteger(Section, 'ModeColor', C_CLUB_COLOR_MODE);
+  Club.QSLColor       := cqrini.ReadInteger(Section, 'QSLColor', C_CLUB_COLOR_QSL);
+  Club.AlreadyColor   := cqrini.ReadInteger(Section, 'AlreadyColor', C_CLUB_COLOR_QSL);
+  Club.DateFrom       := cqrini.ReadString(Section, 'DateFrom', C_CLUB_DEFAULT_DATE_FROM)
 end;
 
 end.

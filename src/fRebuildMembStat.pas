@@ -52,23 +52,23 @@ implementation
 {$R *.lfm}
 
 { TfrmRebuildMembStat }
-uses dUtils, dData, uMyIni, dLogUpload;
+uses dUtils, dData, uMyIni, dLogUpload, dMembership;
 
 
 procedure TfrmRebuildMembStat.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmRebuildMembStat);
-  chkRebClub1.Caption := dmData.Club1.LongName;
-  chkRebClub2.Caption := dmData.Club2.LongName;
-  chkRebClub3.Caption := dmData.Club3.LongName;
-  chkRebClub4.Caption := dmData.Club4.LongName;
-  chkRebClub5.Caption := dmData.Club5.LongName;
+  chkRebClub1.Caption := dmMembership.Club1.LongName;
+  chkRebClub2.Caption := dmMembership.Club2.LongName;
+  chkRebClub3.Caption := dmMembership.Club3.LongName;
+  chkRebClub4.Caption := dmMembership.Club4.LongName;
+  chkRebClub5.Caption := dmMembership.Club5.LongName;
 
-  edtSince1.Text := dmData.Club1.DateFrom;
-  edtSince2.Text := dmData.Club2.DateFrom;
-  edtSince3.Text := dmData.Club3.DateFrom;
-  edtSince4.Text := dmData.Club4.DateFrom;
-  edtSince5.Text := dmData.Club5.DateFrom;
+  edtSince1.Text := dmMembership.Club1.DateFrom;
+  edtSince2.Text := dmMembership.Club2.DateFrom;
+  edtSince3.Text := dmMembership.Club3.DateFrom;
+  edtSince4.Text := dmMembership.Club4.DateFrom;
+  edtSince5.Text := dmMembership.Club5.DateFrom;
 
   chkRebClub1.Enabled := chkRebClub1.Caption<>'';
   edtSince1.Enabled   := chkRebClub1.Caption<>'';
@@ -163,35 +163,35 @@ begin
 
     if chkRebClub1.Checked then
     begin
-      UpdateClub(dmData.Club1,'1',edtSince1.Text);
+      UpdateClub(dmMembership.Club1,'1',edtSince1.Text);
       lblDone1.Visible := True;
       Application.ProcessMessages
     end;
 
     if chkRebClub2.Checked then
     begin
-      UpdateClub(dmData.Club2,'2',edtSince2.Text);
+      UpdateClub(dmMembership.Club2,'2',edtSince2.Text);
       lblDone2.Visible := True;
       Application.ProcessMessages
     end;
 
     if chkRebClub3.Checked then
     begin
-      UpdateClub(dmData.Club3,'3',edtSince3.Text);
+      UpdateClub(dmMembership.Club3,'3',edtSince3.Text);
       lblDone3.Visible := True;
       Application.ProcessMessages
     end;
 
     if chkRebClub4.Checked then
     begin
-      UpdateClub(dmData.Club4,'4',edtSince4.Text);
+      UpdateClub(dmMembership.Club4,'4',edtSince4.Text);
       lblDone4.Visible := True;
       Application.ProcessMessages
     end;
 
     if chkRebClub5.Checked then
     begin
-      UpdateClub(dmData.Club5,'5',edtSince5.Text);
+      UpdateClub(dmMembership.Club5,'5',edtSince5.Text);
       lblDone5.Visible := True;
       Application.ProcessMessages
     end

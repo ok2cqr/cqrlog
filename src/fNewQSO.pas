@@ -1211,12 +1211,6 @@ begin
     frmRotControl.BringToFront
   end;
 
-  if cqrini.ReadBool('Window','Dxcluster',False) then
-  begin
-    frmDXCluster.Show;
-    frmDXCluster.BringToFront
-  end;
-
   if frmTRXControl.Showing then
   begin
     if frmTRXControl.rbRadio1.Checked then
@@ -1281,10 +1275,17 @@ begin
   if cqrini.ReadBool('Window','CWType',False) then
     acCWType.Execute;
 
+
+  CheckForExternalTablesUpdate;
+
   if cqrini.ReadBool('Window','RBNMonitor',False) then
     acRBNMonitor.Execute;
 
-  CheckForExternalTablesUpdate;
+  if cqrini.ReadBool('Window','Dxcluster',False) then
+  begin
+    frmDXCluster.Show;
+    frmDXCluster.BringToFront
+  end;
 
   pgDetails.Pages[1].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
 
@@ -5782,19 +5783,19 @@ begin
   frmQSODetails.mode     := cmbMode.Text;
   frmQSODetails.freq     := cmbFreq.Text;
   frmQSODetails.ClubDate := edtDate.Text;
-  if dmData.Club1.MainFieled = 'idcall' then
+  if dmMembership.Club1.MainFieled = 'idcall' then
     frmQSODetails.ClubData1 := idcall;
 
-  if dmData.Club2.MainFieled = 'idcall' then
+  if dmMembership.Club2.MainFieled = 'idcall' then
     frmQSODetails.ClubData2 := idcall;
 
-  if dmData.Club3.MainFieled = 'idcall' then
+  if dmMembership.Club3.MainFieled = 'idcall' then
     frmQSODetails.ClubData3 := idcall;
 
-  if dmData.Club4.MainFieled = 'idcall' then
+  if dmMembership.Club4.MainFieled = 'idcall' then
     frmQSODetails.ClubData4 := idcall;
 
-  if dmData.Club5.MainFieled = 'idcall' then
+  if dmMembership.Club5.MainFieled = 'idcall' then
     frmQSODetails.ClubData5 := idcall;
 end;
 
@@ -5803,19 +5804,19 @@ begin
   frmQSODetails.mode     := cmbMode.Text;
   frmQSODetails.freq     := cmbFreq.Text;
   frmQSODetails.ClubDate := edtDate.Text;
-  if dmData.Club1.MainFieled = 'qth' then
+  if dmMembership.Club1.MainFieled = 'qth' then
     frmQSODetails.ClubData1 := edtQTH.Text;
 
-  if dmData.Club2.MainFieled = 'qth' then
+  if dmMembership.Club2.MainFieled = 'qth' then
     frmQSODetails.ClubData2 := edtQTH.Text;
 
-  if dmData.Club3.MainFieled = 'qth' then
+  if dmMembership.Club3.MainFieled = 'qth' then
     frmQSODetails.ClubData3 := edtQTH.Text;
 
-  if dmData.Club4.MainFieled = 'qth' then
+  if dmMembership.Club4.MainFieled = 'qth' then
     frmQSODetails.ClubData4 := edtQTH.Text;
 
-  if dmData.Club5.MainFieled = 'qth' then
+  if dmMembership.Club5.MainFieled = 'qth' then
     frmQSODetails.ClubData5 := edtQTH.Text;
 end;
 
@@ -5824,19 +5825,19 @@ begin
   frmQSODetails.mode     := cmbMode.Text;
   frmQSODetails.freq     := cmbFreq.Text;
   frmQSODetails.ClubDate := edtDate.Text;
-  if dmData.Club1.MainFieled = 'award' then
+  if dmMembership.Club1.MainFieled = 'award' then
     frmQSODetails.ClubData1 := edtAward.Text;
 
-  if dmData.Club2.MainFieled = 'award' then
+  if dmMembership.Club2.MainFieled = 'award' then
     frmQSODetails.ClubData2 := edtAward.Text;
 
-  if dmData.Club3.MainFieled = 'award' then
+  if dmMembership.Club3.MainFieled = 'award' then
     frmQSODetails.ClubData3 := edtAward.Text;
 
-  if dmData.Club4.MainFieled = 'award' then
+  if dmMembership.Club4.MainFieled = 'award' then
     frmQSODetails.ClubData4 := edtAward.Text;
 
-  if dmData.Club5.MainFieled = 'award' then
+  if dmMembership.Club5.MainFieled = 'award' then
     frmQSODetails.ClubData5 := edtAward.Text;
 end;
 
@@ -5845,19 +5846,19 @@ begin
   frmQSODetails.mode     := cmbMode.Text;
   frmQSODetails.freq     := cmbFreq.Text;
   frmQSODetails.ClubDate := edtDate.Text;
-  if dmData.Club1.MainFieled = 'county' then
+  if dmMembership.Club1.MainFieled = 'county' then
     frmQSODetails.ClubData1 := edtCounty.Text;
 
-  if dmData.Club2.MainFieled = 'county' then
+  if dmMembership.Club2.MainFieled = 'county' then
     frmQSODetails.ClubData2 := edtCounty.Text;
 
-  if dmData.Club3.MainFieled = 'county' then
+  if dmMembership.Club3.MainFieled = 'county' then
     frmQSODetails.ClubData3 := edtCounty.Text;
 
-  if dmData.Club4.MainFieled = 'county' then
+  if dmMembership.Club4.MainFieled = 'county' then
     frmQSODetails.ClubData4 := edtCounty.Text;
 
-  if dmData.Club5.MainFieled = 'county' then
+  if dmMembership.Club5.MainFieled = 'county' then
     frmQSODetails.ClubData5 := edtCounty.Text;
 end;
 
@@ -5911,19 +5912,19 @@ begin
   frmQSODetails.mode     := cmbMode.Text;
   frmQSODetails.freq     := cmbFreq.Text;
   frmQSODetails.ClubDate := edtDate.Text;
-  if dmData.Club1.MainFieled = 'state' then
+  if dmMembership.Club1.MainFieled = 'state' then
     frmQSODetails.ClubData1 := edtState.Text;
 
-  if dmData.Club2.MainFieled = 'state' then
+  if dmMembership.Club2.MainFieled = 'state' then
     frmQSODetails.ClubData2 := edtState.Text;
 
-  if dmData.Club3.MainFieled = 'state' then
+  if dmMembership.Club3.MainFieled = 'state' then
     frmQSODetails.ClubData3 := edtState.Text;
 
-  if dmData.Club4.MainFieled = 'state' then
+  if dmMembership.Club4.MainFieled = 'state' then
     frmQSODetails.ClubData4 := edtState.Text;
 
-  if dmData.Club5.MainFieled = 'state' then
+  if dmMembership.Club5.MainFieled = 'state' then
     frmQSODetails.ClubData5 := edtState.Text;
 end;
 
