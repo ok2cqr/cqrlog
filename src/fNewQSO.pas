@@ -5152,7 +5152,6 @@ begin
 
     for i:=0 to dbgrdQSOBefore.Columns.Count-1 do
     begin
-      Writeln(dbgrdQSOBefore.Columns[i].DisplayName);
       if fDefault then
       begin
         dbgrdQSOBefore.Columns[i].Title.Font.Name := 'default';
