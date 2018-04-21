@@ -2616,7 +2616,13 @@ begin
     exit
   end;
 
-  //SaveGrid;
+  if (dmUtils.GetBandFromFreq(cmbFreq.Text) = '') then
+  begin
+    Application.MessageBox('You must enter correct frequency (in MHz)', 'Error', MB_ICONERROR + MB_OK);
+    cmbFreq.SetFocus;
+    exit
+  end;
+
   dmData.SaveComment(edtCall.Text,mComment.Text);
 
   myloc := sbNewQSO.Panels[0].Text;
