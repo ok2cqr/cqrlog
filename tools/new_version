@@ -1,10 +1,12 @@
 #!/bin/bash
- 
-VERSION=`cat ../src/uVersion.pas | grep cVERSION`
-VERSION="$(echo -e "${VERSION}" | sed -e 's/^[[:space:]]*//')"
-VERSION="${VERSION:15:5}"
-# cqrlog version
 
+if [ $1 = "beta" ]; then
+   VERSION=`date '+%Y%m%d'`
+else
+   VERSION=`cat ../src/uVersion.pas | grep cVERSION`
+   VERSION="$(echo -e "${VERSION}" | sed -e 's/^[[:space:]]*//')"
+   VERSION="${VERSION:15:5}"
+fi
 mkdir ~/tmp/cqrlog_build_$VERSION -p
 FINAL=~/tmp/cqrlog_build_$VERSION
 #whre would you like to store final build files
