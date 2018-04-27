@@ -98,6 +98,8 @@ type
     procedure LoadFormPos(FormMode: string);
     procedure CqPeriodTimerStart;
     procedure AddXpList(call,loc:string);
+    procedure Setbitmap(bm:TBitmap;col:Tcolor);
+    procedure SetAllbitmaps;
     { private declarations }
   public
     procedure CleanWsjtxMemo;
@@ -121,6 +123,10 @@ const
 //type
   //TReplyArray = array of string [255];
 
+  //color bitmap size
+  bmW = 10;
+  bmH = 10;
+
 var
   frmMonWsjtx: TfrmMonWsjtx;
   MaxLines: integer = 41;        //Max monitor lines text will show MaxLines-1 lines
@@ -140,6 +146,11 @@ var
   wkdband: Tcolor;
   wkdany: Tcolor;
   wkdnever: Tcolor;
+  bmHere,
+  bmBand,
+  bmAny,
+  bmNever,
+  bmExt   :Tbitmap;
   EditedText: string;
   //holds editAlert after finished (loose focus)
   Ssearch, Sfull: string;
@@ -311,6 +322,7 @@ begin
   else
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
+
 end;
 
 procedure TfrmMonWsjtx.cmNeverClick(Sender: TObject);
@@ -321,6 +333,7 @@ begin
   begin
     wkdNever := (popColorDlg.Color);
     cqrini.WriteString('MonWsjtx', 'wkdnever', ColorToString(wkdnever));
+    SetAllbitmaps;
   end;
 end;
 
@@ -397,6 +410,7 @@ begin
   begin
     wkdBand := (popColorDlg.Color);
     cqrini.WriteString('MonWsjtx', 'wkdband', ColorToString(wkdband));
+    SetAllbitmaps;
   end;
 
 end;
@@ -409,6 +423,7 @@ begin
   begin
     wkdAny := (popColorDlg.Color);
     cqrini.WriteString('MonWsjtx', 'wkdany', ColorToString(wkdany));
+    SetAllbitmaps;
   end;
 
 end;
@@ -421,6 +436,7 @@ begin
   begin
     wkdHere := (popColorDlg.Color);
     cqrini.WriteString('MonWsjtx', 'wkdhere', ColorToString(wkdhere));
+    SetAllbitmaps;
   end;
 
 end;
@@ -697,8 +713,11 @@ begin
   popColorDlg.Color := extCqCall;
   popColorDlg.Title := 'Extended CQ (DX, NA, SA ...) - color';
   if popColorDlg.Execute then
+   Begin
     extCqCall := (popColorDlg.Color);
-  cqrini.WriteString('MonWsjtx', 'extCqCall', ColorToString(extCqCall));
+    cqrini.WriteString('MonWsjtx', 'extCqCall', ColorToString(extCqCall));
+    SetAllbitmaps;
+   end;
 end;
 
 procedure TfrmMonWsjtx.cmFontClick(Sender: TObject);
@@ -726,6 +745,13 @@ begin
   EditAlert.Text := '';
   EditedText := '';
   LastWsjtLineTime := '';
+
+    bmHere := TBitmap.Create;
+    bmBand := TBitmap.Create;
+    bmAny  := TBitmap.Create;
+    bmNever := TBitmap.Create;
+    bmExt := TBitmap.Create;
+
 end;
 
 procedure TfrmMonWsjtx.FormDropFiles(Sender: TObject;
@@ -740,13 +766,42 @@ procedure TfrmMonWsjtx.FormHide(Sender: TObject);
 begin
   //decodetest(true);  //release these for decode tests
   //decodetest(false);
+  exit;
   LockMap := True;
   if chkMap.Checked then
     SaveFormPos('Map')
   else
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
+  writeln('------------- hide form');
   frmMonWsjtx.hide;
+end;
+procedure TfrmMonWsjtx.Setbitmap(bm:TBitmap;col:Tcolor);
+Begin
+  with bm do
+  Begin
+   Width  := bmW;
+   Height := bmH;
+    with Canvas do
+     Begin
+        Brush.Style := bsSolid;
+        Brush.Color := Col;
+        FillRect(0,0,bmW,bmH);
+     end;
+  end;
+end;
+procedure TfrmMonWsjtx.SetAllbitmaps;
+Begin
+   Setbitmap(bmHere, wkdhere);
+   cmHere.Bitmap := bmHere;
+   Setbitmap(bmBand, wkdband);
+   cmBand.Bitmap := bmBand;
+   Setbitmap(bmAny, wkdAny);
+   cmAny.Bitmap := bmAny;
+   Setbitmap(bmNever, wkdnever);
+   cmNever.Bitmap := bmNever;
+   Setbitmap(bmExt, extCqCall);
+   cmCqDX.Bitmap := bmExt;
 end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
@@ -769,6 +824,7 @@ begin
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
+  SetAllbitmaps;
   edtFollow.Font.Name := WsjtxMemo.Font.Name;
   edtFollow.Font.Size := WsjtxMemo.Font.Size;
   cbflw.Checked := cqrini.ReadBool('MonWsjtx', 'FollowShow', False);
