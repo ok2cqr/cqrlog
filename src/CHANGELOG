@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  - Preferences button in eQSL up&dn load opened wrong tab
   + TRXcontrol: M_Wri-button. Sets memory entry from current rig frequency and mode  (Saku, OH1KH)
   + Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)
   + Cq-monitor: Overtimed entries turn silvergray in Follow and "no history" (Saku, OH1KH)
