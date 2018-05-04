@@ -250,9 +250,9 @@ end;
 
 procedure TfrmeQSLUpload.btnPreferencesClick(Sender : TObject);
 begin
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 18);  //set lotw tab active. Number may change if preferences page change
   with TfrmPreferences.Create(self) do
   try
-    pgPreferences.ActivePage := tabLoTW;
     ShowModal
   finally
     Free
