@@ -2507,6 +2507,7 @@ begin
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging now ended');
+           frmMonWsjtx.DblClickCall :='';
          end; //QSO logged in
 
      6 : begin //Close
@@ -3926,7 +3927,7 @@ end;
 
 procedure TfrmNewQSO.acMonitorWsjtxExecute(Sender: TObject);
 begin
-  if (frmMonWsjtx = nil) then Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
+  if (frmMonWsjtx = nil) then  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
   frmMonWsjtx.Show;
   cqrini.WriteBool('Window','MonWsjtx',true);
 end;
