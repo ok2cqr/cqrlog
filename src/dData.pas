@@ -1081,6 +1081,7 @@ begin
   fDebugLevel := GetDebugLevel;
 
   Writeln('');
+  Writeln('Cqrlog Ver:',cVERSION,' Date:',cBUILD_DATE);
   Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
   if fDebugLevel=0 then
     Writeln('**** CHANGE WITH --debug=1 PARAMETER ****');

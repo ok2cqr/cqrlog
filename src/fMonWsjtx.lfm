@@ -16,7 +16,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   object lblBand: TLabel
     AnchorSideTop.Control = Owner
     Left = 32
-    Height = 15
+    Height = 17
     Top = 12
     Width = 33
     BorderSpacing.Left = 30
@@ -29,10 +29,10 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 523
-    Height = 15
+    Left = 522
+    Height = 17
     Top = 12
-    Width = 35
+    Width = 36
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 12
     BorderSpacing.Right = 30
@@ -128,8 +128,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 243
-      Height = 32
-      Top = 6
+      Height = 34
+      Top = 5
       Width = 100
       BorderSpacing.Bottom = 4
       OnEnter = EditAlertEnter
@@ -232,8 +232,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideRight.Control = pnlFollow
       AnchorSideRight.Side = asrBottom
       Left = 155
-      Height = 32
-      Top = 6
+      Height = 34
+      Top = 5
       Width = 427
       Align = alCustom
       Anchors = [akTop, akLeft, akRight]
@@ -250,8 +250,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
       Left = 72
-      Height = 32
-      Top = 6
+      Height = 34
+      Top = 5
       Width = 80
       BorderSpacing.Left = 3
       OnChange = edtFollowCallChange
@@ -281,10 +281,10 @@ object frmMonWsjtx: TfrmMonWsjtx
   object cbflw: TCheckBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = chkHistory
-    Left = 161
+    Left = 160
     Height = 23
     Top = 6
-    Width = 48
+    Width = 49
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 6
     BorderSpacing.Right = 2
@@ -299,7 +299,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     Left = 324
     Height = 23
     Top = 6
-    Width = 53
+    Width = 54
     BorderSpacing.Left = 1
     BorderSpacing.Top = 6
     Caption = 'Map'
@@ -338,7 +338,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideTop.Control = chknoTxt
     AnchorSideTop.Side = asrBottom
     Left = 56
-    Height = 15
+    Height = 17
     Top = 34
     Width = 479
     BorderSpacing.Top = 5
@@ -378,6 +378,19 @@ object frmMonWsjtx: TfrmMonWsjtx
     OnChange = chkdBChange
     TabOrder = 8
     Visible = False
+  end
+  object chkStopTx: TCheckBox
+    AnchorSideLeft.Control = chkMap
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    Left = 378
+    Height = 23
+    Top = 6
+    Width = 49
+    BorderSpacing.Top = 6
+    Caption = 'sTx'
+    OnChange = chkStopTxChange
+    TabOrder = 9
   end
   object popColors: TPopupMenu
     left = 104

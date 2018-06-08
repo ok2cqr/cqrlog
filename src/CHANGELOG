@@ -4,6 +4,8 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  + Added version NR and buld date to start of cqrlog (before DEBUG LEVEL)(Saku, OH1KH)
+  + wsjt-x: stop TX if split answer to CQ not accepted by caller (Saku, OH1KH)
   - Preferences button in eQSL up&dn load opened wrong tab
   + TRXcontrol: M_Wri-button. Sets memory entry from current rig frequency and mode  (Saku, OH1KH)
   + Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)

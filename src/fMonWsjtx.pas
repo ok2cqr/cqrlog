@@ -14,6 +14,7 @@ type
 
   TfrmMonWsjtx = class(TForm)
     btFtxtName: TButton;
+    chkStopTx: TCheckBox;
     chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
     chkdB: TCheckBox;
@@ -53,6 +54,7 @@ type
     procedure chkdBChange(Sender: TObject);
     procedure chkHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
+    procedure chkStopTxChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
     procedure cmBandClick(Sender: TObject);
     procedure cmCqDxClick(Sender: TObject);
@@ -102,6 +104,7 @@ type
     procedure SetAllbitmaps;
     { private declarations }
   public
+    DblClickCall  :string;   //callsign that is called by doubleclick
     procedure CleanWsjtxMemo;
     function NextElement(Message: string; var index: integer): string;
     procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
@@ -168,6 +171,7 @@ var
   LockMap: boolean;
   LockFlw: boolean;
   PCallColor :Tcolor;  //color that was last used fro callsign printing, will be used in xplanet
+
 
 implementation
 
@@ -303,14 +307,34 @@ end;
 procedure TfrmMonWsjtx.WsjtxMemoDblClick(Sender: TObject);
 var
   i: byte;
+  s:string;
+
 begin
+    s := trim(WsjtxMemo.Lines.Strings[WsjtxMemo.Caretpos.Y]);
+    if chkMap.checked then
+    Begin
+      if (pos('(',s) = 0) then
+          //call is 1st item in line
+          DblClickCall := ExtractWord(1,s,[' '])
+       else
+         //call in qso, TX not fired std messages only created
+         DblClickCall :='';
+    end
+   else //if Cq-monitor
+    //call is 3rd item in line
+    DblClickCall := ExtractWord(3,s,[' ']);
+
   if dmData.DebugLevel >= 1 then
   begin
-    Write('Clicked line no:', WsjtxMemo.Caretpos.Y, ' Array gives:');
+    Writeln('Clicked line no:', WsjtxMemo.Caretpos.Y);
+    write('Array gives:');
     for i := 1 to length(RepArr[WsjtxMemo.Caretpos.Y]) do
       Write('x', HexStr(Ord(RepArr[WsjtxMemo.Caretpos.Y][i]), 2));
     writeln();
+    writeln('Line is:',s,'  Call is:',DblClickCall);
   end;
+
+
   SendReply(RepArr[WsjtxMemo.Caretpos.Y]);
 end;
 
@@ -530,6 +554,11 @@ begin
   end;
 end;
 
+procedure TfrmMonWsjtx.chkStopTxChange(Sender: TObject);
+begin
+  cqrini.WriteBool('MonWsjtx', 'StopTX', chkStopTx.Checked);
+end;
+
 
 procedure TfrmMonWsjtx.cbflwChange(Sender: TObject);
 begin
@@ -745,6 +774,7 @@ begin
   EditAlert.Text := '';
   EditedText := '';
   LastWsjtLineTime := '';
+  DblClickCall :='';
 
     bmHere := TBitmap.Create;
     bmBand := TBitmap.Create;
@@ -812,6 +842,7 @@ begin
   dmUtils.LoadFontSettings(frmMonWsjtx);
   chkHistory.Checked := cqrini.ReadBool('MonWsjtx', 'NoHistory', False);
   chknoTxt.Checked := cqrini.ReadBool('MonWsjtx', 'NoTxt', False);
+  chkStopTx.Checked := cqrini.ReadBool('MonWsjtx', 'StopTX',  False );
   tbmyAlrt.Checked := cqrini.ReadBool('MonWsjtx', 'MyAlert', False);
   tbmyAll.Checked := cqrini.ReadBool('MonWsjtx', 'MyAll', False);
   tbLocAlert.Checked := cqrini.ReadBool('MonWsjtx', 'LocAlert', False);
@@ -913,6 +944,21 @@ procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
 var
   List1: TStringList;
 begin
+  //to stop transmitting if CQ answered,split called, stn answers to someone else (can be set with checkbox chkStopTx)
+  //here check if DblClickCall is set then if it exist in message: stop tx and clear DblClickCall
+  //DblClickCall is set at doubleclick of monitor line event
+  if (( DblClickCall <> '' ) and chkStopTx.Checked ) then  //stop requested
+   if (pos(DblClickCall,Message)> 0) then  //and call is call answered
+   Begin
+     if dmData.DebugLevel >= 1 then Writeln('Disbling TX, DBLClicked call answered to someone else');
+     RepBuf := frmNewQSO.RepHead;
+     RepBuf[12] := #8; //Halt TX
+     RepBuf := RepBuf +#0;
+     frmNewQSO.Wsjtxsock.SendString(RepBuf);
+
+     DblClickCall := '';
+   end;
+
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
   if tbFollow.Checked and (trim(edtFollowCall.Text)='') then tbFollow.Checked:=false; //must have a call
 
@@ -1502,6 +1548,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
       if isMyCall then
         begin
+         DblClickCall := '';
          if not chkCbCQ.Checked then AddColorStr('=', wkdnever);
         end
       else
