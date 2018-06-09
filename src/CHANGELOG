@@ -4,7 +4,6 @@ Legend:
   - bugfix
 --------------------
 2.3.0
-  + Added version NR and buld date to start of cqrlog (before DEBUG LEVEL)(Saku, OH1KH)
   + wsjt-x: stop TX if split answer to CQ not accepted by caller (Saku, OH1KH)
   - Preferences button in eQSL up&dn load opened wrong tab
   + TRXcontrol: M_Wri-button. Sets memory entry from current rig frequency and mode  (Saku, OH1KH)
@@ -34,6 +33,7 @@ Legend:
   - loading libbsl library didn't work on 32bit system - fixed
   - LoTW import bug when having multiple QSOs with the same station, on the same band and day fixed (Jonas, SM2VSD)
   - export QSO for LoTW to local adif file fixed
+  - problem with number rewrite in report field fixed	
 
 2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)

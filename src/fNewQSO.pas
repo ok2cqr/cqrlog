@@ -378,8 +378,10 @@ type
     procedure edtEndTimeEnter(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
     procedure edtHisRSTExit(Sender: TObject);
+    procedure edtHisRSTKeyPress(Sender : TObject; var Key : char);
     procedure edtITUEnter(Sender: TObject);
     procedure edtMyRSTExit(Sender: TObject);
+    procedure edtMyRSTKeyPress(Sender : TObject; var Key : char);
     procedure edtNameEnter(Sender: TObject);
     procedure edtPWREnter(Sender: TObject);
     procedure edtQSL_VIAEnter(Sender: TObject);
@@ -600,6 +602,8 @@ type
     procedure CheckForDXCCTablesUpdate;
     procedure CheckForQslManagersUpdate;
     procedure CheckForMembershipUpdate;
+
+    procedure SelTextFix(Edit : TEdit; var Key : Char);
 
     function CheckFreq(freq : String) : String;
 
@@ -4060,6 +4064,11 @@ begin
   edtHisRST.SelLength := 0
 end;
 
+procedure TfrmNewQSO.edtHisRSTKeyPress(Sender : TObject; var Key : char);
+begin
+  SelTextFix(edtHisRST, Key)
+end;
+
 procedure TfrmNewQSO.edtITUEnter(Sender: TObject);
 begin
   edtITU.SelectAll
@@ -4069,6 +4078,11 @@ procedure TfrmNewQSO.edtMyRSTExit(Sender: TObject);
 begin
   edtMyRST.SelStart  := 0;
   edtMyRST.SelLength := 0
+end;
+
+procedure TfrmNewQSO.edtMyRSTKeyPress(Sender : TObject; var Key : char);
+begin
+  SelTextFix(edtMyRST, Key)
 end;
 
 procedure TfrmNewQSO.edtNameEnter(Sender: TObject);
@@ -6471,6 +6485,26 @@ begin
   if cqrini.ReadBool('Clubs', 'CheckForUpdate', False) then
     dmMembership.CheckForMembershipUpdate
 end;
+
+//at least in Ubuntu 18.04 when user wanted to rewrite the second auto-selected
+//number in a report, it wrote the number to the end of the report
+//it worked fine in Ubuntu Gnome but doesn't in Debian, probably someting
+//with GTK versions
+procedure TfrmNewQSO.SelTextFix(Edit : TEdit; var Key : Char);
+var
+  ch : Char;
+begin
+  if Edit.SelText <> '' then
+  begin
+    ch := upcase(Key);
+    if (ch in ['A'..'Z']) or (ch in ['0'..'9']) then
+    begin
+      Edit.SelText := Key;
+      Key := #0
+    end
+  end
+end;
+
 
 end.
 
