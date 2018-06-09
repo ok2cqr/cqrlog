@@ -180,7 +180,6 @@ type
     procedure UpgradeCommonDatabase(old_version : Integer);
     procedure PrepareMysqlConfigFile;
     procedure DeleteOldConfigFiles;
-    procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
     procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
   public
     MainCon      : TSQLConnection;
@@ -308,8 +307,6 @@ type
     procedure CreateQSLTmpTable;
     procedure DropQSLTmpTable;
     procedure StartMysqldProcess;
-    procedure EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
-    procedure DisableOnlineLogSupport;
     procedure DeleteCallAlert(const id : Integer);
     procedure AddCallAlert(const callsign, band, mode : String);
     procedure EditCallAlert(const id : Integer; const callsign, band, mode : String);
@@ -325,6 +322,7 @@ type
     procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
     procedure GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
     procedure LoadQSODateColorSettings;
+    procedure PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
   end;
 
 var
@@ -3518,114 +3516,6 @@ begin
       mode := 'RTTY';
   end;
   Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
-end;
-
-procedure TdmData.EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
-const
-  C_DEL = 'DELETE FROM %s';
-var
-  t  : TSQLQuery;
-  tr : TSQLTransaction;
-  i  : Integer;
-begin
-  t := TSQLQuery.Create(nil);
-  tr := TSQLTransaction.Create(nil);
-  try
-    t.Transaction := tr;
-    tr.DataBase   := MainCon;
-    t.DataBase    := MainCon;
-    if RemoveOldChanges then
-    begin
-      try
-        tr.StartTransaction;
-        t.SQL.Text := Format(C_DEL,['upload_status']);
-        if fDebugLevel>=1 then Writeln(t.SQL.Text);
-        t.ExecSQL;
-
-        t.SQL.Text := Format(C_DEL,['log_changes']);
-        if fDebugLevel>=1 then Writeln(t.SQL.Text);
-        t.ExecSQL;
-
-        tr.Commit
-      except
-        on E : Exception do
-        begin
-          Writeln('EnableOnlineLogSupport:',E.Message);
-          tr.Rollback;
-          exit
-        end
-      end
-    end;
-
-    try
-      tr.StartTransaction;
-      t.SQL.Text := '';
-      for i:=0 to scOnlineLogTriggers.Script.Count-1 do
-      begin
-        if Pos(';',scOnlineLogTriggers.Script.Strings[i]) = 0 then
-          t.SQL.Add(scOnlineLogTriggers.Script.Strings[i])
-        else begin
-          t.SQL.Add(scOnlineLogTriggers.Script.Strings[i]);
-          if fDebugLevel>=1 then Writeln(t.SQL.Text);
-          t.ExecSQL;
-          t.SQL.Text := ''
-        end
-      end;
-
-      if RemoveOldChanges then
-        PrepareEmptyLogUploadStatusTables(t,tr)
-
-    except
-      on E : Exception do
-      begin
-        Writeln('EnableOnlineLogSupport:',E.Message);
-        tr.Rollback
-      end
-    end
-  finally
-    t.Close;
-    FreeAndNil(t);
-    FreeAndNil(tr)
-  end
-end;
-
-procedure TdmData.DisableOnlineLogSupport;
-const
-  C_DROP = 'DROP TRIGGER IF EXISTS %s';
-var
-  t  : TSQLQuery;
-  tr : TSQLTransaction;
-  i  : Integer;
-begin
-  t := TSQLQuery.Create(nil);
-  tr := TSQLTransaction.Create(nil);
-  try
-    t.Transaction := tr;
-    tr.DataBase   := MainCon;
-    t.DataBase    := MainCon;
-
-    try
-      t.SQL.Text := Format(C_DROP,['cqrlog_main_bd']);
-      if fDebugLevel>=1 then Writeln(t.SQL.Text);
-      t.ExecSQL;
-
-      t.SQL.Text := Format(C_DROP,['cqrlog_main_ai']);
-      if fDebugLevel>=1 then Writeln(t.SQL.Text);
-      t.ExecSQL;
-
-      t.SQL.Text := Format(C_DROP,['cqrlog_main_bu']);
-      if fDebugLevel>=1 then Writeln(t.SQL.Text);
-      t.ExecSQL;
-
-      tr.Commit
-    except
-      tr.Rollback
-    end
-  finally
-    t.Close;
-    FreeAndNil(t);
-    FreeAndNil(tr)
-  end
 end;
 
 function TdmData.TriggersExistsOnCqrlog_main : Boolean;

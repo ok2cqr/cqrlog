@@ -1072,7 +1072,7 @@ implementation
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
-  fRadioMemories, dMembership;
+  fRadioMemories, dMembership, dLogUpload;
 
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
@@ -1597,14 +1597,14 @@ begin
   if (not (chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked)) then
   begin
     if wasOnlineLogSupportEnabled then
-      dmData.DisableOnlineLogSupport
+      dmLogUpload.DisableOnlineLogSupport
   end
   else begin
     if not wasOnlineLogSupportEnabled then
     begin
       if dmData.TriggersExistsOnCqrlog_main then
-        dmData.DisableOnlineLogSupport;
-      dmData.EnableOnlineLogSupport
+        dmLogUpload.DisableOnlineLogSupport;
+      dmLogUpload.EnableOnlineLogSupport
     end
   end;
 

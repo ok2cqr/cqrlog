@@ -162,7 +162,7 @@ begin
       dmData.trQ1.StartTransaction;
       try
         if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
-          dmData.DisableOnlineLogSupport;
+          dmLogUpload.DisableOnlineLogSupport;
 
         dmData.Q1.Open();
         dmData.Q1.First;
@@ -184,7 +184,7 @@ begin
         dmData.trQ.Commit;
         dmData.trQ1.Rollback;
         if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
-          dmData.EnableOnlineLogSupport(False)
+          dmLogUpload.EnableOnlineLogSupport(False)
       end
     end
   finally

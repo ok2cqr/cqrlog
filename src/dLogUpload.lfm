@@ -6,11 +6,11 @@ object dmLogUpload: TdmLogUpload
   HorizontalOffset = 367
   VerticalOffset = 237
   Width = 331
+  PPI = 96
   object Q: TSQLQuery
     FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
-    Options = []
     Params = <>
     left = 224
     top = 24
@@ -18,14 +18,12 @@ object dmLogUpload: TdmLogUpload
   object trQ: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 272
     top = 24
   end
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 272
     top = 88
   end
@@ -33,7 +31,6 @@ object dmLogUpload: TdmLogUpload
     FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
-    Options = []
     Params = <>
     ParseSQL = False
     left = 224
@@ -43,7 +40,6 @@ object dmLogUpload: TdmLogUpload
     FieldDefs = <>
     BeforeOpen = Q2BeforeOpen
     Transaction = trQ2
-    Options = []
     Params = <>
     left = 224
     top = 146
@@ -51,7 +47,6 @@ object dmLogUpload: TdmLogUpload
   object trQ2: TSQLTransaction
     Active = False
     Action = caNone
-    Options = []
     left = 272
     top = 146
   end

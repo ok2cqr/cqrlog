@@ -555,7 +555,7 @@ begin
   AssignFile(f,FileName);
   try
     if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
-      dmData.DisableOnlineLogSupport;
+      dmLogUpload.DisableOnlineLogSupport;
 
     dmData.trQ1.StartTransaction;
     dmData.trQ.StartTransaction;
@@ -922,7 +922,7 @@ begin
     l.Free;
     CloseFile(f);
     if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
-      dmData.EnableOnlineLogSupport(False)
+      dmLogUpload.EnableOnlineLogSupport(False)
   end;
   Close
 end;
@@ -1074,7 +1074,7 @@ begin
     dmData.trQ1.RollBack;
 
   if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
-    dmData.DisableOnlineLogSupport;
+    dmLogUpload.DisableOnlineLogSupport;
 
   dmData.trQ1.StartTransaction;
   dmData.trQ.StartTransaction;
@@ -1320,7 +1320,7 @@ begin
   finally
     l.Free;
     if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
-      dmData.EnableOnlineLogSupport(False);
+      dmLogUpload.EnableOnlineLogSupport(False);
     Close
   end
 end;

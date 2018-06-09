@@ -52,7 +52,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils,dData,uMyIni, fPreferences, uVersion;
+uses dUtils,dData,uMyIni, fPreferences, uVersion, dLogUpload;
 
 procedure TfrmeQSLUpload.SockCallBack(Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 begin
@@ -224,7 +224,7 @@ begin
   FileName := dmData.HomeDir+'eQSL'+PathDelim+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
   try
     if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
-      dmData.DisableOnlineLogSupport;
+      dmLogUpload.DisableOnlineLogSupport;
 
     if ExportData(FileName) then
     begin
@@ -244,7 +244,7 @@ begin
 
   finally
     if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
-      dmData.EnableOnlineLogSupport(False)
+      dmLogUpload.EnableOnlineLogSupport(False)
   end
 end;
 

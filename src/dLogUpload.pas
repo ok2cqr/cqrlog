@@ -58,6 +58,8 @@ type
     procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
     procedure MarkAsUploaded(LogName : String; id_log_changes : Integer);
     procedure MarkAsUpDeleted(id_log_upload : Integer);
+    procedure DisableOnlineLogSupport;
+    procedure EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
   end;
 
 var
@@ -735,6 +737,115 @@ begin
             cqrini.ReadBool('OnlineLog','ClUp',False) or
             cqrini.ReadBool('OnlineLog','HrUp',False)
 end;
+
+procedure TdmLogUpload.DisableOnlineLogSupport;
+const
+  C_DROP = 'DROP TRIGGER IF EXISTS %s';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+  i  : Integer;
+begin
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := dmData.MainCon;
+    t.DataBase    := dmData.MainCon;
+
+    try
+      t.SQL.Text := Format(C_DROP,['cqrlog_main_bd']);
+      if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
+      t.ExecSQL;
+
+      t.SQL.Text := Format(C_DROP,['cqrlog_main_ai']);
+      if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
+      t.ExecSQL;
+
+      t.SQL.Text := Format(C_DROP,['cqrlog_main_bu']);
+      if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
+      t.ExecSQL;
+
+      tr.Commit
+    except
+      tr.Rollback
+    end
+  finally
+    t.Close;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
+end;
+
+procedure TdmLogUpload.EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
+const
+  C_DEL = 'DELETE FROM %s';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+  i  : Integer;
+begin
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := dmData.MainCon;
+    t.DataBase    := dmData.MainCon;
+    if RemoveOldChanges then
+    begin
+      try
+        tr.StartTransaction;
+        t.SQL.Text := Format(C_DEL,['upload_status']);
+        if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
+        t.ExecSQL;
+
+        t.SQL.Text := Format(C_DEL,['log_changes']);
+        if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
+        t.ExecSQL;
+
+        tr.Commit
+      except
+        on E : Exception do
+        begin
+          Writeln('EnableOnlineLogSupport:',E.Message);
+          tr.Rollback;
+          exit
+        end
+      end
+    end;
+
+    try
+      tr.StartTransaction;
+      t.SQL.Text := '';
+      for i:=0 to dmData.scOnlineLogTriggers.Script.Count-1 do
+      begin
+        if Pos(';', dmData.scOnlineLogTriggers.Script.Strings[i]) = 0 then
+          t.SQL.Add(dmData.scOnlineLogTriggers.Script.Strings[i])
+        else begin
+          t.SQL.Add(dmData.scOnlineLogTriggers.Script.Strings[i]);
+          if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
+          t.ExecSQL;
+          t.SQL.Text := ''
+        end
+      end;
+
+      if RemoveOldChanges then
+        dmData.PrepareEmptyLogUploadStatusTables(t,tr)
+
+    except
+      on E : Exception do
+      begin
+        Writeln('EnableOnlineLogSupport:',E.Message);
+        tr.Rollback
+      end
+    end
+  finally
+    t.Close;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
+end;
+
 
 end.
 

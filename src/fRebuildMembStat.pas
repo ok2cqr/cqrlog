@@ -159,7 +159,7 @@ begin
   Application.ProcessMessages;
   try try
     if chkIgnoreChanges.Checked and dmLogUpload.LogUploadEnabled then
-      dmData.DisableOnlineLogSupport;
+      dmLogUpload.DisableOnlineLogSupport;
 
     if chkRebClub1.Checked then
     begin
@@ -215,7 +215,7 @@ begin
       dmData.trQ.Commit;
 
     if chkIgnoreChanges.Checked and dmLogUpload.LogUploadEnabled then
-      dmData.EnableOnlineLogSupport(False);
+      dmLogUpload.EnableOnlineLogSupport(False);
     lblInfo.Caption := 'Done ...'
   end
 end;
