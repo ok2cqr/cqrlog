@@ -3746,6 +3746,8 @@ begin
   t := TSQLQuery.Create(nil);
   tr := TSQLTransaction.Create(nil);
   try try
+    dmLogUpload.DisableOnlineLogSupport;
+
     t.Transaction := tr;
     tr.DataBase   := MainCon;
     t.DataBase    := MainCon;
@@ -3765,6 +3767,10 @@ begin
     t.Close;
     if tr.Active then
       tr.Commit;
+
+    if dmLogUpload.LogUploadEnabled then
+      dmLogUpload.EnableOnlineLogSupport(False);
+
     FreeAndNil(t);
     FreeAndNil(tr)
   end
@@ -3784,6 +3790,8 @@ begin
   t := TSQLQuery.Create(nil);
   tr := TSQLTransaction.Create(nil);
   try try
+    dmLogUpload.DisableOnlineLogSupport;
+
     t.Transaction := tr;
     tr.DataBase   := MainCon;
     t.DataBase    := MainCon;
@@ -3803,6 +3811,10 @@ begin
     t.Close;
     if tr.Active then
       tr.Commit;
+
+    if dmLogUpload.LogUploadEnabled then
+      dmLogUpload.EnableOnlineLogSupport(False);
+
     FreeAndNil(t);
     FreeAndNil(tr)
   end

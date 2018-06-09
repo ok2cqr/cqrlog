@@ -33,7 +33,8 @@ Legend:
   - loading libbsl library didn't work on 32bit system - fixed
   - LoTW import bug when having multiple QSOs with the same station, on the same band and day fixed (Jonas, SM2VSD)
   - export QSO for LoTW to local adif file fixed
-  - problem with number rewrite in report field fixed	
+  - problem with number rewrite in report field fixed
+  - after edit call/freq/mode/rst_s/rst_r qso were uploaded and deleted from online log several times - fixed	
 
 2.2.0 (2017-30-12)
   + wsjt remote mode improvements (Saku, OH1KH)
