@@ -1,3 +1,56 @@
+cqrlog (2.3.0-1) unstable; urgency=low
+
+  * wsjt-x: stop TX if split answer to CQ not accepted by 
+    caller (Saku, OH1KH)
+  * TRXcontrol: M_Wri-button. Sets memory entry from current 
+    rig frequency and mode  (Saku, OH1KH)  
+  * Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet 
+    support. (Saku, OH1KH)  
+  * Cq-monitor: Overtimed entries turn silvergray in Follow and 
+    "no history" (Saku, OH1KH)  
+  * Band selector to Filter windows added (Saku, OH1KH)
+  * CQ-monitor Delta Freqyency instead of Time when "no history" 
+    checked (Saku, OH1KH)  
+  * TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends 
+    corrsponding rigctld cmds to current rig (Saku, OH1KH)  
+  * Start and stop scripts. Called when cqrlog is up and running 
+    and before closing all down. (Saku, OH1KH)  
+  * StartConnectCommand added to DXCluster (Saku, OH1KH)
+  * when remote preferences open to fldigi/wsjt tab (Saku, OH1KH)
+  * auto update membership files added (has to be enabled in 
+    Prefereces, first)  
+  * mode field can now store 12 characters (was 10), added mode 
+    DIGITALVOICE (Jonas, SM2VSD)  
+  * support for satellite QSO added
+  * eQSL ADIF import now also uses submodes from the ADIF specification 
+    to match qsos in log (Jonas, SM2VSD)  
+  * eQSL ADIf import now also uses timestamp from log (+/-60min) together 
+    with timestamp from eQSL to match qsos (Jonas, SM2VSD)  
+  * CWtype/letter mode: doubling a .. z removed (Saku, OH1KH)
+  * Worked grids map: Mode selector did not load user's additions 
+    (digimodes) (Saku, OH1KH)  
+  * Filter section QSL. Controls over group box. Tighter setting of 
+    controls (Saku, OH1KH)  
+  * xplanet support/DXCluster was reversing colors RGB to BGR 
+    (Saku, OH1KH)  
+  * grid map: loc and qso counters fixed. Default start fixed as all/any. 
+    Default save as jpg (Saku, OH1KH) 
+  * QSO Filter layout fixed (Saku, OH1KH)
+  * DXCluster/WEB Font button not connected to acFont (no action). 
+    Fixed (Saku, OH1KH)  
+  * wsjtx logging take start and stop times to log (before just stop 
+    time) (Saku, OH1KH)  
+  * fldigi remote socket checking fixed (Saku, OH1KH)
+  * loading libbsl library didn't work on 32bit system - fixed
+  * LoTW import bug when having multiple QSOs with the same station, 
+    on the same band and day fixed (Jonas, SM2VSD)  
+  * export QSO for LoTW to local adif file fixed
+  * problem with number rewrite in report field fixed
+  * after edit call/freq/mode/rst_s/rst_r qso were uploaded and deleted 
+    from online log several times - fixed  
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 17 Jul 2018 13:55:28 +0100
+
 cqrlog (2.2.0-1) unstable; urgency=low
 
   * wsjt remote mode improvements (Saku, OH1KH)

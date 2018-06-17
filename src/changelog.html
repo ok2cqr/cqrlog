@@ -1,132 +1,176 @@
-<strong>New user?</strong> Please look at <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
-<hr>
-<br>
-<strong>CQRLOG 2.2.0 (2017-12-30)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>wsjt remote mode improvements (Saku, OH1KH)</li>
-  <li>CQ-monitor now remembers showing state (Saku, OH1KH)</li>
-  <li>"My Alert" is now compared oppsite way: This should fit also compound callsign XX/YOURCALL or YOURCALL/XX (Saku, OH1KH)</li>
-  <li>CQ-monitor:  Country names (cut to length 15) are now displayed instead of callsign prefixes. (Saku, OH1KH)</li>
-  <li>"Show only active band" checkbox addec to Band map filter for quick access. (Saku, OH1KH)</li>
-  <li>"Re/Set" button added to Export "Choose fields to export" dialog for set/reset all check boxes in one go. (Saku, OH1KH)</li>
-  <li>a lot of CQ monitor improvements (Saku, OH1KH)</li>
-  <li>remote wsjt: Short cut key Ctrl+J (Saku, OH1KH)</li>
-  <li>help files updated (Saku, OH1KH)</li>
-  <li>Voice keyer works now also with FM and AM modes and also from CWkeys windows. (Saku, OH1KH)</li>
-  <li>QSO in QSO list window can be sorted in ascending date/time order (oldes QSO first). (Jörg, DL8DTL)</li>
-  <li>CQRLOG should work correcly on HiDPI monitors</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>630M definition was missing in some functions (Saku, OH1KH)</li>
-  <li>ADIF upload didn't work when name or QTH were too long</li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.1.0 (2017-08-06)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>wsjt remote mode improvements (Saku, OH1KH)</li>
-  <li>wsjt cq monitor added (Saku, OH1KH)</li>
-  <li>worked grids map added (Saku, OH1KH)</li>
-  <li>simple Contest window added (Saku, OH1KH)</li>
-  <li>dx cluster window improved</li>
-  <li>propagation from DK0WCY added (Saku, OH1KH)</li>
-  <li>reminder added (Saku, OH1KH)</li>
-  <li>CTRL+Z in dx cluster command line scrolls back last 5 commands (Saku, OH1KH)</li>
-  <li>callsign for DX cluster alert can be defined using regular expressions (Saku, OH1KH)</li>
-  <li>dx cluster alert now allows partial callsigns (e.g. OL200, OK etc.)</li>
-  <li>Show QSO older then user defined date with different color</li>
-  <li>JT4, JT9 and FT8 modes added (Saku, OH1KH)</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>grid field can store 10 charactes (was 6)</li>
-  <li>position storage of New QSO and LoTW import fixed</li>
-  <li>auto backup didn't work for callsigns with / character fixed</li>
-  <li>even CQ/ITU zone 0 from QRZ replaced zone from log - fixed</li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.0.5 (2017-03-12)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>sort by gridsquare added to filter</li>
-  <li>new log number is choosen automatically</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>parity parameter for rigctld should be serial_parity</li>
-  <li>cqrlog had icon only in Gnome</li>
-  <li>deleting Comment to callsign in New QSO window didn't work</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: gray;">
-  <li>improved loading libraries for ssl, on Debian testing</li>
-      it loads libssl*1.0.* and ibcrypto*1.0.*, libssl-dev
-      is no longer need, libssl-1.0.* is new dependency
-  </li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.0.4 (2017-01-12)</strong><br>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>crash after program startup fixed</li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.0.3 (2017-01-12)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>new icon courtesy by Serge, ON4AA</li>
-  <li>'Fill Award field from previous QSO' option added</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>"Remarks" renamed to "Comment to QSO" in group edit</li>
-  <li>Group edit of Comment to QSO was always converted to uppercase</li>
-  <li>RST_S and RST_R default walues from Preferences have been ignored</li>
-  <li>cqrlog crashed after recent DXCC tables update - fixed</li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.0.2 (2016-08-28)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>QSLMSG added to ADIF export for eQSL</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>CW type window didn't show  - fixed</li>
-  <li>TRX control set LSB to 60M instead of USB - fixed</li>
-  <li>CW type window didn't show  - fixed</li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.0.1 (2016-05-07)</strong><br>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"</li>
-  <li>frequency memories didn't switch between AM and FM when radio is on USB or LSB - fixed</li>
-  <li>bandmap didn't show CW spots when radio was in CWR mode - fixed</li>
-  <li>statistics and filter with group by didn't work on MySQL 5.7 - fixed</li>
-  <li>rigctld where not closed after closing cqrlog - fixed (Bill, WK2X)</li>
-  <li>RBN monitor window was always opened after program started - fixed</li>
-  <li>loading FromDate and ToDate from membership files fixed</li>
-  <li>fixed compiling for ARM64, powerpc and other non x86 platforms</li>
-</ul>
-<br><br>
-<strong>CQRLOG 2.0.0 (2016-04-20)</strong><br>
-<ul style="list-style: square;text-align:left; color: blue;">
-  <li>MariaDB 10.1 support added</li>
-  <li>Frequency memories added</li>
-  <li>list of previous QSO should be much faster on older computers</li>	
-  <li>"Always overwrite only CQ, ITU zones, county and US state from callbook" option added</li>
-  <li>callbook is used for better DXCC and state recognition</li>
-  <li>new database connection error window with small how to</li>
-  <li>the db error window can open mysql.err</li>
-  <li>Do NOT upload changes to online logs" option to Rebuild membership added</li>
-  <li>all comments to callsign can be modified (NewQSO window -> File -> Comment to callsigns)</li>
-  <li>transverter support added (you can set RX and TX offset for each band)</li>
-  <li>connection to database improved (MySQL 5.1, 5.5, 5.6, 5.7 and MariaDB 10.0.x, 10.1 should work)</li>
-  <li>you can choose which fields will be exported also just before export</li>
-  <li>export has CTRL+E shortcut</li>
-</ul>
-<ul style="list-style: square;text-align:left; color: red;">
-  <li>CW type window was not sizeable - fixed</li>
-  <li>password to LoTW/eQSL could not have special characters - fixed</li>
-  <li>program crashed after opening Preferences when path to rigctl was empty - fixed</li>
-  <li>RBN monitor didn't show any data when RBN didn't send any operating mode</li>
-  <li>callbook data always replaced data from previous QSO - fixed</li>
-  <li>cqrlog didn't start with broken TRX/Rotor control configuration - fixed</li>
-  <li>fixed loading of MASTER.SCP after downloading new DXCC tables</li>
-  <li>QSO with mode in lower case was market as error and not imported - fixed</li>
-  <li>band map didn't show any data on SSB - fixed </li>
-  <li>after change "Default frequencies", related button in TRX control window didn't go red - fixed</li>
-  <li>QSO count with active filter was wrong after delete or update</li>
-  <li>Remove dupes from the log didn't work - fixed</li>
-  <li>QTH profile was not imported from ADIF - fixed</li>
-</ul>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>List of changes in CQRLOG</title>
+  </head>
+  <body>
+    <strong>New user?</strong> Please look at <strong>Help -> Keys and shortcuts</strong> to find out how to operate CQRLOG from keyboard.
+    <hr>
+    <br>
+    <strong>CQRLOG 2.3.0 (2018-06-17)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>wsjt-x: stop TX if split answer to CQ not accepted by caller (Saku, OH1KH)</li>
+      <li>TRXcontrol: M_Wri-button. Sets memory entry from current rig frequency and mode  (Saku, OH1KH)</li>
+      <li>Wsjt-x CQ-monitor: new features Wsjt-map ColorBack and xplanet support. (Saku, OH1KH)</li>
+      <li>Cq-monitor: Overtimed entries turn silvergray in Follow and "no history" (Saku, OH1KH)</li>
+      <li>Band selector to Filter windows added (Saku, OH1KH)</li>
+      <li>CQ-monitor Delta Freqyency instead of Time when "no history" checked (Saku, OH1KH)</li>
+      <li>TRXConterol window. Buttons for Power ON/OFF/STANDBY. Sends corrsponding rigctld cmds to current rig (Saku, OH1KH)</li>
+      <li>Start and stop scripts. Called when cqrlog is up and running and before closing all down. (Saku, OH1KH)</li>
+      <li>StartConnectCommand added to DXCluster (Saku, OH1KH)</li>
+      <li>when remote preferences open to fldigi/wsjt tab (Saku, OH1KH)</li>
+      <li>auto update membership files added (has to be enabled in Prefereces, first)</li>
+      <li>mode field can now store 12 characters (was 10), added mode DIGITALVOICE (Jonas, SM2VSD)</li>
+      <li>support for satellite QSO added</li>
+      <li>eQSL ADIF import now also uses submodes from the ADIF specification to match qsos in log (Jonas, SM2VSD)</li>
+      <li>eQSL ADIf import now also uses timestamp from log (+/-60min) together with timestamp from eQSL to match qsos (Jonas, SM2VSD)</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>CWtype/letter mode: doubling a .. z removed (Saku, OH1KH)</li>
+      <li>Worked grids map: Mode selector did not load user's additions (digimodes) (Saku, OH1KH)</li>
+      <li>Filter section QSL. Controls over group box. Tighter setting of controls (Saku, OH1KH)</li>
+      <li>xplanet support/DXCluster was reversing colors RGB to BGR (Saku, OH1KH)</li>
+      <li>grid map: loc and qso counters fixed. Default start fixed as all/any. Default save as jpg (Saku, OH1KH)</li>
+      <li>QSO Filter layout fixed (Saku, OH1KH)</li>
+      <li>DXCluster/WEB Font button not connected to acFont (no action). Fixed (Saku, OH1KH)</li>
+      <li>wsjtx logging take start and stop times to log (before just stop time) (Saku, OH1KH)</li>
+      <li>fldigi remote socket checking fixed (Saku, OH1KH)</li>
+      <li>loading libbsl library didn't work on 32bit system - fixed</li>
+      <li>LoTW import bug when having multiple QSOs with the same station, on the same band and day fixed (Jonas, SM2VSD)</li>
+      <li>export QSO for LoTW to local adif file fixed</li>
+      <li>problem with number rewrite in report field fixed</li>
+      <li>after edit call/freq/mode/rst_s/rst_r qso were uploaded and deleted from online log several times - fixed</li>
+    </ul>
+    <br><br>
+    <br>
+    <strong>CQRLOG 2.2.0 (2017-12-30)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>wsjt remote mode improvements (Saku, OH1KH)</li>
+      <li>CQ-monitor now remembers showing state (Saku, OH1KH)</li>
+      <li>"My Alert" is now compared oppsite way: This should fit also compound callsign XX/YOURCALL or YOURCALL/XX (Saku, OH1KH)</li>
+      <li>CQ-monitor:  Country names (cut to length 15) are now displayed instead of callsign prefixes. (Saku, OH1KH)</li>
+      <li>"Show only active band" checkbox addec to Band map filter for quick access. (Saku, OH1KH)</li>
+      <li>"Re/Set" button added to Export "Choose fields to export" dialog for set/reset all check boxes in one go. (Saku, OH1KH)</li>
+      <li>a lot of CQ monitor improvements (Saku, OH1KH)</li>
+      <li>remote wsjt: Short cut key Ctrl+J (Saku, OH1KH)</li>
+      <li>help files updated (Saku, OH1KH)</li>
+      <li>Voice keyer works now also with FM and AM modes and also from CWkeys windows. (Saku, OH1KH)</li>
+      <li>QSO in QSO list window can be sorted in ascending date/time order (oldes QSO first). (Jörg, DL8DTL)</li>
+      <li>CQRLOG should work correcly on HiDPI monitors</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>630M definition was missing in some functions (Saku, OH1KH)</li>
+      <li>ADIF upload didn't work when name or QTH were too long</li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.1.0 (2017-08-06)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>wsjt remote mode improvements (Saku, OH1KH)</li>
+      <li>wsjt cq monitor added (Saku, OH1KH)</li>
+      <li>worked grids map added (Saku, OH1KH)</li>
+      <li>simple Contest window added (Saku, OH1KH)</li>
+      <li>dx cluster window improved</li>
+      <li>propagation from DK0WCY added (Saku, OH1KH)</li>
+      <li>reminder added (Saku, OH1KH)</li>
+      <li>CTRL+Z in dx cluster command line scrolls back last 5 commands (Saku, OH1KH)</li>
+      <li>callsign for DX cluster alert can be defined using regular expressions (Saku, OH1KH)</li>
+      <li>dx cluster alert now allows partial callsigns (e.g. OL200, OK etc.)</li>
+      <li>Show QSO older then user defined date with different color</li>
+      <li>JT4, JT9 and FT8 modes added (Saku, OH1KH)</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>grid field can store 10 charactes (was 6)</li>
+      <li>position storage of New QSO and LoTW import fixed</li>
+      <li>auto backup didn't work for callsigns with / character fixed</li>
+      <li>even CQ/ITU zone 0 from QRZ replaced zone from log - fixed</li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.0.5 (2017-03-12)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>sort by gridsquare added to filter</li>
+      <li>new log number is choosen automatically</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>parity parameter for rigctld should be serial_parity</li>
+      <li>cqrlog had icon only in Gnome</li>
+      <li>deleting Comment to callsign in New QSO window didn't work</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: gray;">
+      <li>improved loading libraries for ssl, on Debian testing</li>
+          it loads libssl*1.0.* and ibcrypto*1.0.*, libssl-dev
+          is no longer need, libssl-1.0.* is new dependency
+      </li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.0.4 (2017-01-12)</strong><br>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>crash after program startup fixed</li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.0.3 (2017-01-12)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>new icon courtesy by Serge, ON4AA</li>
+      <li>'Fill Award field from previous QSO' option added</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>"Remarks" renamed to "Comment to QSO" in group edit</li>
+      <li>Group edit of Comment to QSO was always converted to uppercase</li>
+      <li>RST_S and RST_R default walues from Preferences have been ignored</li>
+      <li>cqrlog crashed after recent DXCC tables update - fixed</li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.0.2 (2016-08-28)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>QSLMSG added to ADIF export for eQSL</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>CW type window didn't show  - fixed</li>
+      <li>TRX control set LSB to 60M instead of USB - fixed</li>
+      <li>CW type window didn't show  - fixed</li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.0.1 (2016-05-07)</strong><br>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>fixed "TApplication.HandleException TControl.InvalidatePreferredSize loop"</li>
+      <li>frequency memories didn't switch between AM and FM when radio is on USB or LSB - fixed</li>
+      <li>bandmap didn't show CW spots when radio was in CWR mode - fixed</li>
+      <li>statistics and filter with group by didn't work on MySQL 5.7 - fixed</li>
+      <li>rigctld where not closed after closing cqrlog - fixed (Bill, WK2X)</li>
+      <li>RBN monitor window was always opened after program started - fixed</li>
+      <li>loading FromDate and ToDate from membership files fixed</li>
+      <li>fixed compiling for ARM64, powerpc and other non x86 platforms</li>
+    </ul>
+    <br><br>
+    <strong>CQRLOG 2.0.0 (2016-04-20)</strong><br>
+    <ul style="list-style: square;text-align:left; color: blue;">
+      <li>MariaDB 10.1 support added</li>
+      <li>Frequency memories added</li>
+      <li>list of previous QSO should be much faster on older computers</li>
+      <li>"Always overwrite only CQ, ITU zones, county and US state from callbook" option added</li>
+      <li>callbook is used for better DXCC and state recognition</li>
+      <li>new database connection error window with small how to</li>
+      <li>the db error window can open mysql.err</li>
+      <li>Do NOT upload changes to online logs" option to Rebuild membership added</li>
+      <li>all comments to callsign can be modified (NewQSO window -> File -> Comment to callsigns)</li>
+      <li>transverter support added (you can set RX and TX offset for each band)</li>
+      <li>connection to database improved (MySQL 5.1, 5.5, 5.6, 5.7 and MariaDB 10.0.x, 10.1 should work)</li>
+      <li>you can choose which fields will be exported also just before export</li>
+      <li>export has CTRL+E shortcut</li>
+    </ul>
+    <ul style="list-style: square;text-align:left; color: red;">
+      <li>CW type window was not sizeable - fixed</li>
+      <li>password to LoTW/eQSL could not have special characters - fixed</li>
+      <li>program crashed after opening Preferences when path to rigctl was empty - fixed</li>
+      <li>RBN monitor didn't show any data when RBN didn't send any operating mode</li>
+      <li>callbook data always replaced data from previous QSO - fixed</li>
+      <li>cqrlog didn't start with broken TRX/Rotor control configuration - fixed</li>
+      <li>fixed loading of MASTER.SCP after downloading new DXCC tables</li>
+      <li>QSO with mode in lower case was market as error and not imported - fixed</li>
+      <li>band map didn't show any data on SSB - fixed </li>
+      <li>after change "Default frequencies", related button in TRX control window didn't go red - fixed</li>
+      <li>QSO count with active filter was wrong after delete or update</li>
+      <li>Remove dupes from the log didn't work - fixed</li>
+      <li>QTH profile was not imported from ADIF - fixed</li>
+    </ul>
+  </body>
+</html>  
