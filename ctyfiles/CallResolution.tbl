@@ -49,6 +49,7 @@
 =3D2CI =3D2CY|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32||R|2001/10/01-2001/10/10=489
 =3D2CJ|Rotuma|OC|-12|12.4993S|177.0474E|56|32||R|2011/09/01-2011/09/30=460
 =3D2CR|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32||R|1989/01/01-1989/12/31=489
+=3D2CR|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32||R|2018/05/15-2018/06/30=489
 =3D2CT =3D2CU|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32||R|1994/03/26-1994/04/02=489
 =3D2CT =3D2CU|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32||R|1995/03/24-1995/04/03=489
 =3D2DD/P|Rotuma|OC|-12|12.4993S|177.0474E|56|32||R|2013/09/27-2013/10/11=460
@@ -189,12 +190,12 @@
 =4U/YU3PR =YU3PR/4U =KW5O/4U =4U/KW5O|Syria, UN Forces Canadian Contingent - Golan Heights|AS|-2|33.27N|35.74E|39|20||R|=384
 =4U/YU4OO =YU4OO/4U|Jordan|AS|-2|32.02N|35.98E|39|20||R|=342
 =4U0G|Switzerland|EU|-1|47.0N|8.0E|28|14||R|1999/01/01-2000/12/31=287
-=4U0R =4U1A =4U2U =4U1WED =4U10NPT|UN Austria, Vienna IARC|EU|-1|48.13N|16.22E|28|15||R|=206
-=4U0WFP =4U4F =4U5F =4U6F =4U7F =4U8F =4U7FOC =4U8FOC|Italy, Rome, World Food Programme Headquarters|EU|-1|41.9N|12.5E|28|15||R|=248
+=4U0R =4U1A =4U2U =4U1WED =4U10NPT =4U18FIFA|UN Austria, Vienna IARC|EU|-1|48.13N|16.22E|28|15||R|=206
+=4U0WFP =4U4F =4U5F =4U6F =4U7F =4U8F =4U7FOC =4U8FOC =4U80FOC|Italy, Rome, World Food Programme Headquarters|EU|-1|41.9N|12.5E|28|15||R|=248
 =4U150ITU|ITU Geneva, 150th Anniversary|EU|-1|46.2231N|6.1183E|28|14||R|2015/05/16-2015/05/18=117
 =4U1AIDS|Switzerland, UNAIDS HQ Geneva|EU|-1|47.0N|8.0E|28|14||R|2009/12/01-2009/12/07=287
 =4U1ET|Timor Leste|OC|-8|8.5812S|125.5728E|54|28||R|2000/03/01-=511
-=4U1GSC =4U13FEB|Italy, Brindisi, United Nations Global Service Centre (UNGSC)|EU|-1|40.635N|17.940E|28|15||R|=248
+=4U1GSC =4U13FEB =4U29MAY|Italy, Brindisi, United Nations Global Service Centre (UNGSC)|EU|-1|40.635N|17.940E|28|15||R|=248
 =4U1SCO =4U60UO|France, UNESCO HQ Paris|EU|-1|49N|2E|27|14||R|=227
 =4U1SU|Palestine - Gaza|AS|-2|31.52N|34.45E|39|20||R|1965/01/01-1965/12/31=196
 =4U1UP|Costa Rica Special Station|NA|6|10N|84W|11|07||R|1984/01/01-1984/12/31=308
@@ -279,7 +280,7 @@
 =9M1CSQ|East Malaysia, Sarawak, 100th Anniversary of Scouting|OC|-8|1.58N|110.32E|54|28||R|2008/05/17-2008/12/31=46
 =9M1CSS|East Malaysia, Sabah, 100th Anniversary of Scouting|OC|-8|5.98N|116.08E|54|28||R|2008/05/17-2008/12/31=46
 =9M2/G3TMA/6|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|=46
-=9M2/PG5M|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2007/04/19-2007/04/23=247
+=9M2/PG5M|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2007/04/19-2007/04/23=247
 =9M2/PG5M/6|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|2007/11/15-=46
 =9M4CBP =9M4CCB =9M4CRB =9M4RSA|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|=46
 =9M4CHQ|East Malaysia, Sarawak, Batu Lintang, Kuching|OC|-8|1.58N|110.32E|54|28||R|=46
@@ -290,12 +291,12 @@
 =9M4LHM|East Malaysia, Sarawak, Tg. Dato|OC|-8|1.58N|110.32E|54|28||R|=46
 =9M4LHS =9M4SAB =9M4SEB =9M4SJS =9M4SJQ|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|=46
 =9M4LTW|East Malaysia, Sabah, Tawau|OC|-8|5.98N|116.08E|54|28||R|=46
-=9M4SDX|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2007/03/09-2007/03/20=247
+=9M4SDX|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2007/03/09-2007/03/20=247
 =9M4SEA|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|2008/11/20-2008/11/23=46
 =9M4SHQ =9M4SMO =9M4SMS =9M4SMY =9M4STA =9M4CWS|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|=46
 =9M4SJE|East Malaysia, Sarawak, Scouts Association of Malaysia (Sarawak Branch)|OC|-8|1.58N|110.32E|54|28||R|=46
-=9M4SLL|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2012/08/07-2012/08/13=247
-=9M4SLL|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2013/03/10-2013/03/18=247
+=9M4SLL|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2012/08/07-2012/08/13=247
+=9M4SLL|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2013/03/10-2013/03/18=247
 =9M4STA|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|2010/01/15-2010/01/18=46
 =9M4SWK|East Malaysia, Sarawak, IPG Kampus Batu Lintang, Kuching|OC|-8|1.58N|110.32E|54|28||R|=46
 =9M50MF|West Malaysia|AS|-8|3.53N|102.18E|54|28||R|2007/08/30-2007/09/01=299
@@ -304,15 +305,15 @@
 =9M51SB|East Malaysia, Sabah Di Bawah Bayu|OC|-8|5.98N|116.08E|54|28||R|=46
 =9M57MS =9M58MS =9M59MS =9M60MS|East Malaysia, Sabah|OC|-8|5.98N|116.08E|54|28||R|=46
 =9M57MW =9M58MW =9M59MW =9M60MQ|East Malaysia, Sarawak, Kuching|OC|-8|1.58N|110.32E|54|28||R|=46
-=9M6/LA6VM =9M6/LA7XK =9M6/LA9DL|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2008/04/18-2008/04/25=247
-=9M6/N1UR|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2008/03/22-2008/03/30=247
-=9M6/OH2YY|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2012/03/23-2012/03/26=247
+=9M6/LA6VM =9M6/LA7XK =9M6/LA9DL|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2008/04/18-2008/04/25=247
+=9M6/N1UR|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2008/03/22-2008/03/30=247
+=9M6/OH2YY|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2012/03/23-2012/03/26=247
 =9M6/PA0RRS/2|West Malaysia|AS|-8|3.53N|102.18E|54|28||R|=299
-=9M6HX|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|1998/08/11-1998/08/19=247
-=9M6OO/P =9M6OO|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|1997/08/14-1997/08/18=247
-=9M6OO/P =9M6OO|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|1999/11/11-1999/11/17=247
-=9M6PO =9M6US/0|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|=247
-=9M6TCR =9M6TPR|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|1997/03/21-1997/03/28=247
+=9M6HX|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|1998/08/11-1998/08/19=247
+=9M6OO/P =9M6OO|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|1997/08/14-1997/08/18=247
+=9M6OO/P =9M6OO|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|1999/11/11-1999/11/17=247
+=9M6PO =9M6US/0|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|=247
+=9M6TCR =9M6TPR|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|1997/03/21-1997/03/28=247
 =9N1II|Nepal (no DXCC credit!)|AS|-5.75|27.675N|85.342E|42|22||R|=0
 =9Q0AR|Democratic Republic of the Congo (no DXCC credit!)|AF|-1|4.18S|15.21E|52|36||R|=0
 =9U/EA1FH|Burundi (no DXCC credit!)|AF|-3|3.31S|29.31E|52|36||R|1995/01/01-1996/12/31=0
@@ -374,9 +375,9 @@
 =AU8JCB =AU9JCB =AT0JCB|India Special Station, Jagadish Chandra Bose birthdate|AS|-5.5|29N|77E|41|22||R|2007/11/25-2007/12/02=324
 =AX0DIK/AM =AX0DIK/P|Polar Airplane Dick Smith (no DXCC credit!)|AN||+||R|1989/01/01-1989/12/31=0|||
 =AX0HI|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1983/01/01-1983/12/31=111
-=AX0KW =AX0LD|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1970/01/01-1970/12/31=153
-=AX0LD|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2000/01/25-2000/01/26=153
-=AX0NE|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1988/01/01-1988/12/31=153
+=AX0KW =AX0LD|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1970/01/01-1970/12/31=153
+=AX0LD|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2000/01/25-2000/01/26=153
+=AX0NE|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1988/01/01-1988/12/31=153
 =AX9AC =AX9DM|Papua Territory|OC|-10|9.4S|147.1E|51|28||R|1970/01/01-1970/12/31=198
 =AX9GN =AX9KA =VK9GG =VK9KA|Territory of New Guinea|OC|-10|9.4S|147.1E|51|28||R|1970/01/01-1970/12/31=198
 =AX9YL|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2000/10/05-2000/10/12=189
@@ -967,7 +968,7 @@
 =GB0HFC =GB0OS =GB2ZET =GB4SI =GB999SPC =GM4WSB/P =GB2HMC|Scotland, Shetlands|EU|0|60.40N|1.30W|27|14||R|=279
 =GB0HHW =GB2LS =GB0KKS =GB1FRS =GB0FSG =GB4DTD|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB0HLT =GB0NAW =GB100GGM =GB10SOTA =GB60DITP =GB2CC =GB4POW|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
-=GB0HMM =GB0SGC =GB1LW =GB4SLC|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
+=GB0HMM =GB0SGC =GB1LW =GB4SLC =GB0PGG =GB4UKG|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB0KGS =GB0SHP =GB8RU =GB0BWT =GB1EPC =GB5BBS|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB0LTM =GB0MFG =GB1OL =GB0BAJ =GB2IMM =GB2LTH =GB2MDG|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB0ML =GB0MPA =GB0MWL =GB0NEW =GB0PSG =GB100BP|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
@@ -1011,11 +1012,11 @@
 =GB2GSS =GB2IMD =GB2LNP =GB2LSA =GB2MIL =GB4HFH|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB2GU =GB50LIB =GB2FG|Guernsey, Special Station|EU|0|49.47N|2.56W|27|14||R|=106
 =GB2IGS =GB2IOC =GB2IOG =GB2IOT =GB2JUNO =GB2KDS|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
-=GB2IL =GB5BIG =GB5SPD =GB0SHC =GB0MFD =GB8GLM|Northern Ireland, Special Station|EU|0|54.61N|5.92W|27|14||R|=265
+=GB2IL =GB5BIG =GB5SPD =GB0SHC =GB0MFD =GB8GLM =GB106TBC|Northern Ireland, Special Station|EU|0|54.61N|5.92W|27|14||R|=265
 =GB2JTA|Guernsey, Special Station|EU|0|49.47N|2.56W|27|14||R|2012/10/20-2012/10/21=106
 =GB2KHL =GB2LAY =GB2LBN =GB2LCL =GB2LCP =GB2LMG|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2LHI =GB50JS =GB8CSL =GB2LNM =GB2LO =GB0EPC =GB2EPC|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
-=GB2LL =GB2MRI =GB2NIC =GB2NTU =GB2TCA =GB50AAD|Northern Ireland, Special Station|EU|0|54.61N|5.92W|27|14||R|=265
+=GB2LL =GB2MRI =GB2NIC =GB2NTU =GB2TCA =GB50AAD =GB4SOS =GB9RAF|Northern Ireland, Special Station|EU|0|54.61N|5.92W|27|14||R|=265
 =GB2LP =GB2LT =GB2LTN =GB2MAS =GB2MOD =GB10SP =GB2LXX =GB2ZE|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2MHL =GB4LRG =GB4TMS =GB0FHI =GB8MD =GB0RME =GB4BOJ|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB2MLM =GB2RSC =GB2RTB =GB2SDD =GB2TD =GB2VK =GB4XT|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
@@ -1023,7 +1024,7 @@
 =GB2MOP =GB2RFS =GB4CI =GB0TTT =GB2TTA =GB5AFD =GB3HLS =GB4NTB|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
 =GB2NEF =GB2NL =GB2NTS =GB2OWM =GB2OYC =GB2PS =GB2RB|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2OL =GB4OL =GB75CC =GB2SWF =GB4SWF =GB0BSS =GB2BOL|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
-=GB2PBF =GB6TAA =GB2GEO =GB1FH =GB0TTS =GB2M|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
+=GB2PBF =GB6TAA =GB2GEO =GB1FH =GB0TTS =GB2M =GB2JCM|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2RRL =GB2SSF =GB2STB =GB2TDS =GB2TI =GB2WBB =GB3GM|Scotland, Special Station|EU|0|55.88N|4.23W|27|14||R|=279
 =GB2SB =GB2SLH =GB3LER =GB3LER/B =GB2AES =GB2SUM =GS3BSQ|Scotland, Shetlands Special Station|EU|0|60.40N|1.30W|27|14||R|=279
 =GB2SIP =GB0RPO =GB2GGM =GB4SNF =GB2GSG =GB2CAM|Wales, Special Station|EU|0|51.48N|3.18W|27|14||R|=294
@@ -2324,7 +2325,7 @@
 =R1SRR|Russia (European), Russian Amateur Radio Union H.Q. Sankt-Peterburg|EU|-3|59.94N|30.33E|29|16||R|=54
 =R1YL/ANT =R3CA/ANT =R3RRC/ANT|Patriot Hills Base (ANI/ALE), Ellsworth Land, Antarctica|AN|5|80.3167S|81.25W|74|13||R|=13
 =R1ZSM|K 21 - Katyusha Submarine, Severomorsk, Russia (European), Murmanskaya oblast (MU), Club Station|EU|-3|68.97N|33.11E|19|16||R|=54
-=R2/N6TCZ =RA/DK2AI =RA/EU1FY/P =UE2AT|Kaliningrad (Koenigsberg)(KA)|EU|-3|54.427N|20.3058E|29|15||R|=126
+=R2/N6TCZ =RA/DK2AI =RA/EU1FY/P =UE2AT =RA2FO/N|Kaliningrad (Koenigsberg)(KA)|EU|-3|54.427N|20.3058E|29|15||R|=126
 =R2/R6AF =R01DTV/2 =R310A/2 =UF1M/2 =R110 =R1255F =UE08F|Kaliningrad (Koenigsberg)(KA)|EU|-3|54.427N|20.3058E|29|15||R|=126
 =R2009IT|Russia (European), Moskovskaya oblast' (MO), Memorial Day of the aerobatic team "Russian Knights", commander Hero of Russia, Guards Colonel Igor V. Tkachenko|EU|-4|55.70N|36.97E|29|16||R|=54
 =R200BB =R200BP =R200BS|Russia (European), Moskovskaya oblast' (MO), 200th Anniversary of Russia's victory in the War of 1812|EU|-4|55.70N|36.97E|29|16||R|=54
@@ -2400,7 +2401,7 @@
 =R3RRC|Russia (European), Russian Robinson Club H.Q. Lipetsk city (LP)|EU|-3|52.37N|39.35E|29|16||R|=54
 =R3RRC/0 =RV3MA/0|Drifting Polar Ice (no DXCC credit!)|AS|-5|89.9833N|84.05E|23|19||R|1999/04/01-1999/04/30=0
 =R3SRR =R2SRR|Russia (European), Russian Amateur Radio Union H.Q. Moscow|EU|-3|55.45N|37.35E|29|16||R|=54
-=R3SRR/2 =R5K/2 =R10RLHA/2 =R21GGGR =R22GGGR|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
+=R3SRR/2 =R5K/2 =R10RLHA/2 =R21GGGR =R22GGGR|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
 =R3VHF|Russia (European), VHF Committee of Russian Amateur Radio Union|EU|-3|55.45N|37.35E|29|16||R|=54
 =R400DR|Russia (European), Tverskaya oblast' (TV), 400th Anniversary of the House of Romanovs|EU|-4|57.15N|34.62E|29|16||R|=54
 =R400NO|Russia (European), Novgorodskaya oblast' (NV), 400th Anniversary of the Nizhny Novgorod Militia|EU|-4|58.43N|32.38E|29|16||R|=54
@@ -2422,7 +2423,7 @@
 =R55SAT|Kazakhstan, Kyzylorda Province, Baikonur Cosmodrome|AS|-6|45.6295N|63.3026E|30|17||R|=130
 =R55TV|Russia (Asiatic), Chelyabinskaya oblast' (CB)|AS|-6|55.16N|61.44E|30|17||R|2013/07/16-2013/07/17=15
 =R5CC =UE28AFG|Russia (European), Voronezhskaya oblast' (VH)|EU|-3|51.72N|39.28E|29|16||R|=54
-=R60FW =RA/DL6KV =R1336FO =R680FBO|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
+=R60FW =RA/DL6KV =R1336FO =R680FBO|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
 =R60PRC|Russia (European), Moskovskaya oblast' (MO), 60th Anniversary of Pushkin Radio Club|EU|-4|55.70N|36.97E|29|16||R|=54
 =R60SKV|Russia (European), Vologodskaya oblast' (VO), 60 years of RO DOSAAF Vologda shooting club|EU|-4|60.08N|40.45E|29|16||R|=54
 =R65GGGR|Russia (European), Krasnodarskiy kray (KR), Celebration of the greatest generals and statesmen of Russia|EU|-4|45.37N|39.43E|29|16||R|=54
@@ -2781,7 +2782,7 @@
 =TO3T|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2007/05/26-2007/05/27=84
 =TO3W|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2006/03/25-2006/03/26=84
 =TO3X|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2012/04/16-2012/04/30=516
-=TO3Z|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|2017/03/04-2017/03/05=79
+=TO3Z|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|=79
 =TO4A|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2004/11/27-2004/11/28=84
 =TO4C|Martinique|NA|4|14.6006N|61.00759W|11|08||R|=84
 =TO4D|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|2009/11/28-2009/11/29=79
@@ -2811,7 +2812,7 @@
 =TO5FP =TO200SPM|St. Pierre & Miquelon|NA|4|46.79N|56.20W|09|05||R|=277
 =TO5G|French Guiana|SA|4|5N|52W|12|09||R|2012/01/02-2012/01/07=63
 =TO5G|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|1998/05/01-1998/05/31=79
-=TO5GI|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|1995/03/20-1995/03/31=79
+=TO5GI|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|=79
 =TO5J|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2007/07/14-2007/07/27=84
 =TO5M|Martinique|NA|4|14.6006N|61.00759W|11|08||R|1993/03/06-1993/03/28=84
 =TO5M|Reunion|AF|-4|21.15S|55.56E|53|39||R|2004/10/23-2004/11/15=453
@@ -2869,7 +2870,7 @@
 =TO8UFT|Guadeloupe Island|NA|4|15.9977N|61.7182W|11|08||R|=79
 =TO8YY|St. Barthelemy (St. Bart's) Island|NA|4|17.8976N|62.8282W|11|08||R|2009/06/29-2009/07/08=516
 =TO8Z|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2008/10/25-2008/10/30=84
-=TO90IARU =TO972M|Martinique|NA|4|14.6006N|61.00759W|11|08||R|=84
+=TO90IARU =TO972A =TO972M|Martinique|NA|4|14.6006N|61.00759W|11|08||R|=84
 =TO90R|Reunion|AF|-4|21.15S|55.56E|53|39||R|2015/06/01-2015/12/31=453
 =TO9A|Martinique|NA|4|14.6006N|61.00759W|11|08||R|2006/02/12-2006/02/20=84
 =TO9IS|French Guiana|SA|4|5N|52W|12|09||R|=63
@@ -2973,7 +2974,7 @@
 =TY/3X0HSN =TY/DL6GBO =TY/ST0DX|Benin (Dahomey) (no DXCC credit!)|AF|0|6.49N|2.63E|46|35||R|=0
 =U0AER =U0AFX =U0AJH =U0AJI =U0CR =U0GZ|Drifting Polar Ice (no DXCC credit!)|AS|-5|72.11N|149.06W|75|40||R|1979/01/01-1979/12/31=0
 =U1MIR =U2MIR =U3MIR =U4MIR =U5MIR =U6MIR|Russia (European), Cosmonaut|EU|-3|56N|37E|29|16||R|=54
-=U2A =U2R|Kaliningrad (Koenigsberg)|EU|-2|54.427N|20.3058E|29|15||R|=126
+=U2A =U2R|Kaliningrad (Koenigsberg)|EU|-3|54.427N|20.3058E|29|15||R|=126
 =U50B =U50C =U50D|Russia (European)|EU|-3|56N|37E|29|16||R|-1993/12/31=54
 =U56MM|S 56 Submarine, Vladivostok, Russia (Asiatic)|AS|-10|43.13N|131.91E|34|19||R|=15
 =U5ARTEK|Ukraine, Pioneers' Youth Camp, Crimea (KR)|EU|-2|45.00N|34.00E|29|16||R|=288
@@ -3024,11 +3025,11 @@
 =UA1PAM|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|1981/01/01-1984/12/31=61
 =UA1PBN/1|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|=61
 =UA1QV/ANT|Vologda, Russia|EU|-3|59.23N|39.91E|29|16||R|2006/04/22=54
-=UA2AA =UA2AG =UA2AJ =UA2AN =UA2AO =UA2AR|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
-=UA2AW =UA2BA =UA2BD =UA2BG =UA2CM|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
-=UA2CN =UA2CX =UA2CY =UA2CZ =UA2DC|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
-=UA2DJ =UA2DK =UA2DM =UA2DV =UA2EC|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
-=UA2WJ =RN2FS =RV2FA =RV2FW =RW2CW =RZ2BA|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
+=UA2AA =UA2AG =UA2AJ =UA2AN =UA2AO =UA2AR|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
+=UA2AW =UA2BA =UA2BD =UA2BG =UA2CM|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
+=UA2CN =UA2CX =UA2CY =UA2CZ =UA2DC|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
+=UA2DJ =UA2DK =UA2DM =UA2DV =UA2EC|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
+=UA2WJ =RN2FS =RV2FA =RV2FW =RW2CW =RZ2BA|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
 =UA30CE|Russia (Asiatic), Chelyabinsk|AS|-6|54.53N|60.33E|30|17||R|1975/01/14-1975/01/15=15
 =UA30CE|Russia (European), Kazan|EU|-4|55.55N|50.93E|29|16||R|1975/05/09-=54
 =UA30KR =UA30NS =UA30SW|Russia (Asiatic)|AS|-8|59.88N|91.67E|32|18||R|-1976/01/01=15
@@ -3057,8 +3058,8 @@
 =UE23RRC|Russia (Asiatic), Kamchatskaya oblast' (KT), Kambalnyy Island (Toporkov)|AS|-12|51.0853N|156.6997E|35|19||R|2016/08/14-2016/08/18=15
 =UE23RRC/P|Russia (Asiatic), Kamchatskaya oblast' (KT), Paramushir Isl. (Kuril'skiye Islands)|AS|-12|50.6833N|156.1167E|35|19||R|2016/08/16-2016/08/17=15
 =UE25AFG|Russia (European), Voronezhskaya oblast' (VH), 25th Anniversary of a withdrawal of Soviet troops from Afghanistan|EU|-3|51.72N|39.28E|29|16||R|=54
-=UE2BF =UE2GC =UE2IT =UE2MW =UE2SK =RY1AAA/2|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|2015/01/01-2015/04/30=126
-=UE2FBF|B-413 Submarine, Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|=126
+=UE2BF =UE2GC =UE2IT =UE2MW =UE2SK =RY1AAA/2|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|2015/01/01-2015/04/30=126
+=UE2FBF|B-413 Submarine, Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|=126
 =UE2RFF =UE3RFF =UE5RFF|Russia (European), World Flora Fauna Expedition|EU|-3|56.00N|38.00E|29|16||R|=54
 =UE3DPK =UE3AOM/P =UE4CGP|Russia (European), Moskovskaya oblast' (MO), 65th anniversary of Moscow battle|EU|-3|56.00N|38.00E|29|16||R|=54
 =UE3DUT =UE3DPS =UE3DXZ =UE3DLM|Russia (European), Moskovskaya oblast' (MO), 65th anniversary of Moscow battle|EU|-3|56.00N|38.00E|29|16||R|=54
@@ -3115,7 +3116,7 @@
 =UV3CC/UA1P|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|=61
 =UW0IH/M|Molodezhnaya Base, Alasheyev Bight, Enderby Land, Antarctica|AN|-6|67.6717S|45.8558E|69|39||R|1968/01/01-1970/12/31=13
 =UW0IH/M|Novolazarevskaya Base, Schirmacher Oasis, Princess Astrid Coast, Dronning Maud Land, Antarctica|AN|0|70.7739S|11.865E|67|38||R|=13
-=UW2F|Kaliningrad (Koenigsberg)|EU|-2|54.43N|20.31E|29|15||R|-2001/04/30=126
+=UW2F|Kaliningrad (Koenigsberg)|EU|-3|54.43N|20.31E|29|15||R|-2001/04/30=126
 =UW3DR/R|Russia (European), Moskovskaya oblast' (MO)|EU|-4|55.70N|36.97E|29|16||R|-1992/05/01=54
 =UX4L =UY4L =UZ4L =EN4L =ER4L =LY4L =LY7L|Russia (European), Ul'yanovsk (UL)|EU|-4|53.95N|47.92E|29|16||R|-1991/08/31=54
 =UZ3DD/1|Franz Josef Land [Russian Territory] (FJ)|EU|-3|80.81N|55.13E|75|40||R|1985/08/01-1985/08/31=61
@@ -3173,6 +3174,7 @@
 =VE3FAL|MV James Whalen Tug Boat, Ontario, Canada|NA|5|43.646N|79.38W|04|04||R|=1
 =VE3OOG/KC4|Fuchs Sound Camp, Loubet Coast, Antarctica|AN|0|67.3667S|68.6W|73|30||R|1994/01/01-1995/12/31=13
 =VE4OY/8Z4|Saudi Arabia/Iraq Neutral Zone (no DXCC credit!)|As|-3|29.12N|46.52E|39|21||R|=0
+=VE7ACN/VE2|Canada, Quebec (QU),Harrington Island|NA|4|55N|72.30W|04|02||R|2018/04/10-2018/04/17=1
 =VE7CGG/P|Mount Vinson Base, Vinson Massif, Ellsworth Land, Antarctica|AN|0|78.5333S|86.0167W|72|12||R|1994/01/01-1995/12/31=13
 =VE7CGG/P|Mount Vinson Base, Vinson Massif, Ellsworth Land, Antarctica|AN|0|78.5333S|86.0167W|72|12||R|1997/01/01-1997/12/31=13
 =VE7CRW/VE8 =XM2ZP|Canada, Quebec (QU)|NA|4|55N|72.30W|09|02||R|1990/10/01-1990/10/31=1
@@ -3195,7 +3197,7 @@
 =VI9ANZAC|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2016/05/27-2016/05/29=189
 =VK0/W3RS|ANARE Ionospherical Research Station, Holl Island, Donovan Islands, Antarctica|AN|-7|66.4167S|110.4E|70|29||R|1969/01/01-1969/12/31=13
 =VK0/W3RS|Ionospherical Research Stat., Donovan Isl., Antarctica|AN|0|66.25S|110.24E|69|29||R|1969/01/01-1969/12/31=13
-=VK0/ZL4DB =VK0M/ZL4DB/P =ZL4DB/VK0M =ZL4DB/P/VK0M|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2010/05/01-2010/09/30=153
+=VK0/ZL4DB =VK0M/ZL4DB/P =ZL4DB/VK0M =ZL4DB/P/VK0M|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2010/05/01-2010/09/30=153
 =VK0AB|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1956/01/01-1956/12/31=13
 =VK0AB|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1979/01/01-1979/12/31=13
 =VK0AB|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1981/01/01-1981/12/31=13
@@ -3203,16 +3205,17 @@
 =VK0AB|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1960/01/01-1960/12/31=13
 =VK0AC|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1998/01/01-1998/12/31=13
 =VK0AC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1982/01/01-1982/12/31=13
-=VK0AC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1977/01/01-1977/12/31=153
+=VK0AC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1977/01/01-1977/12/31=153
 =VK0AD|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1984/01/01-1984/12/31=13
 =VK0AE|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1985/01/01-1985/12/31=13
-=VK0AE|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1989/01/01-1989/12/31=153
+=VK0AE|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1989/01/01-1989/12/31=153
 =VK0AE =VK0AK =VK0BH =VK0CH|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0AF|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1985/01/01-1985/12/31=13
 =VK0AF|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1959/01/01-1959/12/31=13
 =VK0AG|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|2005/01/01-2006/12/31=13
 =VK0AH|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1966/01/01-1966/12/31=13
 =VK0AI|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1985/01/01-1985/12/31=13
+=VK0AI|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2018/03/01-2018/12/31=153
 =VK0AJ|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1981/01/01-1981/12/31=13
 =VK0AJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1987/01/01-1987/12/31=13
 =VK0AK|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1985/01/01-1985/12/31=13
@@ -3221,12 +3224,12 @@
 =VK0AL|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1985/01/01-1985/12/31=13
 =VK0AM|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0AN|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1983/01/01-1983/12/31=13
-=VK0AN|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1982/01/01-1982/12/31=153
+=VK0AN|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1982/01/01-1982/12/31=153
 =VK0AN|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1982/01/01-1982/12/31=13
-=VK0ANARE|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1997/01/01-1997/12/31=153
-=VK0ANARE =VI0ANARE =VK0GW =VK0IA|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|=153
+=VK0ANARE|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1997/01/01-1997/12/31=153
+=VK0ANARE =VI0ANARE =VK0GW =VK0IA|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|=153
 =VK0AP|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
-=VK0AP|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1982/01/01-1983/12/31=153
+=VK0AP|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1982/01/01-1983/12/31=153
 =VK0AQ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0AR|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1985/01/01-1985/12/31=13
 =VK0AS|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
@@ -3234,13 +3237,13 @@
 =VK0AST|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1982/01/01-1982/12/31=13
 =VK0AT|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1956/01/01-1956/12/31=13
 =VK0AU|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1982/01/01-1982/12/31=13
-=VK0AU|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1973/01/01-1973/12/31=153
-=VK0AU|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1983/01/01-1983/12/31=153
-=VK0AVT|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2005/11/23-2005/11/25=153
+=VK0AU|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1973/01/01-1973/12/31=153
+=VK0AU|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1983/01/01-1983/12/31=153
+=VK0AVT|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2005/11/23-2005/11/25=153
 =VK0AW|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1961/01/01-1961/12/31=13
 =VK0AW|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1958/01/01-1958/12/31=13
 =VK0BA|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
-=VK0BB|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1962/01/01-1962/12/31=153
+=VK0BB|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1962/01/01-1962/12/31=153
 =VK0BC|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1979/01/01-1979/12/31=13
 =VK0BE|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1963/01/01-1963/12/31=13
 =VK0BFG|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
@@ -3250,15 +3253,15 @@
 =VK0CC|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1977/01/01-1977/12/31=13
 =VK0CC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1971/01/01-1971/12/31=13
 =VK0CC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1990/01/01-1990/12/31=13
-=VK0CC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1959/01/01-1959/12/31=153
-=VK0CC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1991/01/01-1991/12/31=153
+=VK0CC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1959/01/01-1959/12/31=153
+=VK0CC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1991/01/01-1991/12/31=153
 =VK0CC|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1975/01/01-1975/12/31=13
 =VK0CE|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1986/01/01-1986/12/31=13
 =VK0CG|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1974/01/01-1975/12/31=13
-=VK0CK|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1983/01/01-1983/12/31=153
+=VK0CK|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1983/01/01-1983/12/31=153
 =VK0CK =VK0CL|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1991/01/01-1992/12/31=13
 =VK0CR|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1967/01/01-1967/12/31=111
-=VK0CR|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1967/01/01-1967/12/31=153
+=VK0CR|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1967/01/01-1967/12/31=153
 =VK0CS|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1967/01/01-1967/12/31=13
 =VK0CS =VK0JH =VK0MJ =VI0MX|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0CT|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
@@ -3267,15 +3270,15 @@
 =VK0DA|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0DA|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1958/01/01-1958/12/31=13
 =VK0DA|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1986/12/01-1987/01/31=111
-=VK0DB|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
+=VK0DB|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
 =VK0DC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1963/01/01-1963/12/31=13
-=VK0DC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1964/01/01-1964/12/31=153
+=VK0DC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1964/01/01-1964/12/31=153
 =VK0DE|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0DJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0DM|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1960/01/01-1960/12/31=13
-=VK0DM|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1974/01/01-1974/12/31=153
+=VK0DM|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1974/01/01-1974/12/31=153
 =VK0DS|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
-=VK0DS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1959/01/01-1959/12/31=153
+=VK0DS|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1959/01/01-1959/12/31=153
 =VK0DS|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1962/01/01-1962/12/31=13
 =VK0DW|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1962/01/01-1962/12/31=13
 =VK0DW|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1961/01/01-1961/12/31=13
@@ -3291,15 +3294,15 @@
 =VK0FB|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1964/01/01-1964/12/31=13
 =VK0FPS|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1994/01/01-1995/12/31=13
 =VK0FT|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1961/01/01-1961/12/31=13
-=VK0FX|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1961/01/01-1961/12/31=153
+=VK0FX|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1961/01/01-1961/12/31=153
 =VK0FY|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
-=VK0FZ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1961/01/01-1961/12/31=153
+=VK0FZ|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1961/01/01-1961/12/31=153
 =VK0GB|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1960/01/01-1960/12/31=13
 =VK0GC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
-=VK0GC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1983/01/01-1983/12/31=153
-=VK0GC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1985/01/01-1985/12/31=153
-=VK0GC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1987/01/01-1987/12/31=153
-=VK0GC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1989/01/01-1990/12/31=153
+=VK0GC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1983/01/01-1983/12/31=153
+=VK0GC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1985/01/01-1985/12/31=153
+=VK0GC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1987/01/01-1987/12/31=153
+=VK0GC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1989/01/01-1990/12/31=153
 =VK0GC|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1964/01/01-1964/12/31=13
 =VK0GD|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0GH|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1960/01/01-1960/12/31=13
@@ -3317,7 +3320,7 @@
 =VK0HD|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1981/01/01-1981/12/31=13
 =VK0HM|Heard Island (no DXCC credit!)|AN|-5|53.1176S|73.5500E|68|39||R|1971/01/01-1971/02/28=0
 =VK0HW|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1981/01/01-1981/12/31=13
-=VK0IB|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
+=VK0IB|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
 =VK0IC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0ID|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1960/01/01-1960/12/31=13
 =VK0IJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1958/01/01-1958/12/31=13
@@ -3325,20 +3328,20 @@
 =VK0IM|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1979/01/01-1979/12/31=13
 =VK0IN|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0IR|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1997/01/14-1997/01/27=111
-=VK0IT|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
+=VK0IT|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
 =VK0IX|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1994/01/01-1995/12/31=13
 =VK0JC|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1978/01/01-1980/12/31=13
 =VK0JC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1960/01/01-1960/12/31=13
 =VK0JC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1979/01/01-1979/12/31=13
-=VK0JC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1978/01/01-1978/12/31=153
+=VK0JC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1978/01/01-1978/12/31=153
 =VK0JH|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1960/01/01-1960/12/31=13
 =VK0JH|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1982/01/01-1982/12/31=13
 =VK0JJJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|2013/02/05-2014/02/28=13
 =VK0JLX|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0JM =VK0NB =VK0SR =VK0TF|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0JP|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1981/01/01-1981/12/31=13
-=VK0JR|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1962/01/01-1962/12/31=153
-=VK0JR|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1990/01/01-1990/12/31=153
+=VK0JR|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1962/01/01-1962/12/31=153
+=VK0JR|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1990/01/01-1990/12/31=153
 =VK0JS|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1983/01/01-1983/12/31=111
 =VK0JS/9 =VK9LX/9 =VK9AA/9 =VK3CBV/9|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|=189
 =VK0JV|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
@@ -3346,22 +3349,22 @@
 =VK0JW|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1962/01/01-1962/12/31=13
 =VK0JW|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1968/01/01-1968/12/31=13
 =VK0KB|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1969/01/01-1969/12/31=13
-=VK0KBB =VK0TL|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|=153
+=VK0KBB =VK0TL|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|=153
 =VK0KC|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0KC|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1990/01/01-1991/10/02=13
-=VK0KEV|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2010/10/31-2012/07/31=153
+=VK0KEV|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2010/10/31-2012/07/31=153
 =VK0KH|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
-=VK0KH|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1979/01/01-1980/12/31=153
+=VK0KH|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1979/01/01-1980/12/31=153
 =VK0KH|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1965/01/01-1965/12/31=13
-=VK0KJ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1968/01/01-1969/12/31=153
+=VK0KJ|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1968/01/01-1969/12/31=153
 =VK0KMT|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
-=VK0KMT|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2001/01/01-2001/12/31=153
+=VK0KMT|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2001/01/01-2001/12/31=153
 =VK0KS|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1981/01/01-1981/12/31=13
-=VK0KS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
-=VK0KT|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1958/01/01-1958/12/31=153
-=VK0KW|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1969/01/01-1970/12/31=153
+=VK0KS|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
+=VK0KT|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1958/01/01-1958/12/31=153
+=VK0KW|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1969/01/01-1970/12/31=153
 =VK0LC|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
-=VK0LD|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1999/11/01-1999/12/31=153
+=VK0LD|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1999/11/01-1999/12/31=153
 =VK0LD|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1976/01/01-1977/12/31=13
 =VK0LD =VK0/K2ARB|Heard Island, Atlas Cove (Spit Point)|AN|-5|53.1176S|73.5500E|68|39||R|2016/03/22-2016/04/11=111
 =VK0LL|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1991/01/01-1992/12/31=13
@@ -3373,30 +3376,30 @@
 =VK0MD|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1983/01/01-1983/12/31=111
 =VK0MG|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
 =VK0MH|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1961/01/01-1961/12/31=13
-=VK0MH|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2014/10/01-2015/04/30=153
-=VK0MI|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1966/01/01-1966/12/31=153
+=VK0MH|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2014/10/01-2015/04/30=153
+=VK0MI|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1966/01/01-1966/12/31=153
 =VK0MJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1986/01/01-1986/12/31=13
 =VK0ML|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1985/01/01-1985/12/31=13
-=VK0ML|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
-=VK0ML|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1988/01/01-1988/12/31=153
-=VK0MM|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2000/01/01-2000/12/16=153
+=VK0ML|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
+=VK0ML|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1988/01/01-1988/12/31=153
+=VK0MM|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2000/01/01-2000/12/16=153
 =VK0MP|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1989/01/01-1990/12/31=13
-=VK0MQI|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2002/01/01-2003/03/16=153
-=VK0MT =AX0MT|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|2005/01/01-2005/03/31=153
+=VK0MQI|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2002/01/01-2003/03/16=153
+=VK0MT =AX0MT|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|2005/01/01-2005/03/31=153
 =VK0MX|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0MX|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1973/01/01-1975/12/31=13
 =VK0MZ|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1971/01/01-1971/12/31=13
 =VK0NAA|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1985/01/01-1985/12/31=13
 =VK0NE|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1992/01/01-1993/12/31=13
-=VK0NE|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
-=VK0NE|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1988/01/01-1988/12/31=153
-=VK0NE|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1992/01/01-1992/12/31=153
+=VK0NE|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1980/01/01-1980/12/31=153
+=VK0NE|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1988/01/01-1988/12/31=153
+=VK0NE|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1992/01/01-1992/12/31=153
 =VK0NL|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1961/01/01-1961/12/31=13
 =VK0NL|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1963/01/01-1963/12/31=111
 =VK0NL|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1983/01/01-1983/12/31=111
 =VK0NR|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
 =VK0NS|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1982/01/01-1982/12/31=13
-=VK0OF|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
+=VK0OF|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
 =VK0PB|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1985/01/01-1985/12/31=13
 =VK0PD|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1990/01/01-1990/12/31=13
 =VK0PD|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1990/01/01-1992/12/31=13
@@ -3404,7 +3407,7 @@
 =VK0PF|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1971/01/01-1971/12/31=13
 =VK0PF|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1981/01/01-1981/12/31=13
 =VK0PK|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1958/01/01-1958/12/31=13
-=VK0PK|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1979/01/01-1979/12/31=153
+=VK0PK|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1979/01/01-1979/12/31=153
 =VK0PM|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1960/01/01-1960/12/31=13
 =VK0PM|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1983/01/01-1983/12/31=13
 =VK0PM|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1960/01/01-1960/12/31=13
@@ -3417,22 +3420,22 @@
 =VK0RB|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1981/01/01-1981/12/31=13
 =VK0RB|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
 =VK0RC|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
-=VK0RC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1972/01/01-1972/12/31=153
+=VK0RC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1972/01/01-1972/12/31=153
 =VK0RC|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1986/01/01-1986/12/31=13
 =VK0RD|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0RD|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1981/01/01-1981/12/31=13
 =VK0RE|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1983/01/01-1983/12/31=13
 =VK0RE|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1983/01/01-1983/12/31=13
-=VK0RF|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1961/01/01-1961/12/31=153
+=VK0RF|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1961/01/01-1961/12/31=153
 =VK0RH|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|=13
 =VK0RH|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1980/01/01-1980/12/31=13
 =VK0RH|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1959/01/01-1959/12/31=13
-=VK0RL|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
+=VK0RL|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
 =VK0RM|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1969/01/01-1969/12/31=13
 =VK0RM|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1980/01/01-1980/12/31=111
 =VK0RO|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1958/01/01-1958/12/31=13
 =VK0RP|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1986/01/01-1986/12/31=13
-=VK0RS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|=153
+=VK0RS|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|=153
 =VK0RT|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1959/01/01-1959/12/31=13
 =VK0RT|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1959/01/01-1960/12/31=13
 =VK0RT|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
@@ -3443,22 +3446,22 @@
 =VK0SJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1980/01/01-1982/12/31=13
 =VK0SJ|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1987/01/01-1987/12/31=13
 =VK0SJ|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1983/01/01-1983/12/31=111
-=VK0SJ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1982/01/01-1982/12/31=153
-=VK0SJ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1986/01/01-1986/12/31=153
+=VK0SJ|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1982/01/01-1982/12/31=153
+=VK0SJ|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1986/01/01-1986/12/31=153
 =VK0ST|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1981/01/01-1981/12/31=13
 =VK0SW|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1978/01/01-1978/12/31=13
 =VK0SW|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
 =VK0TB|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|=13
 =VK0TB|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1976/01/01-1977/12/31=13
-=VK0TC|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1958/01/01-1958/12/31=153
+=VK0TC|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1958/01/01-1958/12/31=153
 =VK0TC|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
-=VK0TH =AX0TH =AX/VK0TH|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|=153
-=VK0TM|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1971/01/01-1971/12/31=153
-=VK0TO|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1965/01/01-1965/12/31=153
+=VK0TH =AX0TH =AX/VK0TH|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|=153
+=VK0TM|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1971/01/01-1971/12/31=153
+=VK0TO|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1965/01/01-1965/12/31=153
 =VK0TO|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1967/01/01-1967/12/31=13
 =VK0TS|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1999/01/01-2000/01/31=13
 =VK0TS|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1999/09/01-1999/12/31=13
-=VK0TS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1997/01/01-1997/12/31=153
+=VK0TS|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1997/01/01-1997/12/31=153
 =VK0TW|ANARE Davis, Vestfold Hills, Ingrid Christensen Coast, Princess Elizabeth Land, Antarctica|AN|-5|68.5772S|77.9725E|69|39||R|1987/01/01-1987/12/31=13
 =VK0TW|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|1982/01/01-1982/12/31=13
 =VK0URS|ANARE Ionospherical Research Station, Holl Island, Donovan Islands, Antarctica|AN|-7|66.4167S|110.4E|70|29||R|1969/01/01-1969/12/31=13
@@ -3473,36 +3476,36 @@
 =VK0WE|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
 =VK0WF|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1983/01/01-1983/12/31=111
 =VK0WF|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
-=VK0WG =VK1EM|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|=153
-=VK0WH|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
-=VK0WH|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1996/01/01-1996/12/31=153
+=VK0WG =VK1EM|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|=153
+=VK0WH|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1960/01/01-1960/12/31=153
+=VK0WH|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1996/01/01-1996/12/31=153
 =VK0WR|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|=111
 =VK0WS|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
-=VK0WW|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1973/01/01-1973/12/31=153
+=VK0WW|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1973/01/01-1973/12/31=153
 =VK0WW|ANARE Richard Casey, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-11|66.2833S|110.5197E|70|29||R|=13
 =VK0WW|ANARE Wilkes Station, Stonehocker Point, Vincennes Bay, Budd Coast, Wilkes Land, Antarctica|AN|-7|66.25S|110.5333E|69|39||R|1961/01/01-1961/12/31=13
 =VK0WY|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1961/01/01-1961/12/31=13
-=VK0YL|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1985/01/01-1985/12/31=153
+=VK0YL|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1985/01/01-1985/12/31=153
 =VK0ZA|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1987/01/01-1987/12/31=13
 =VK0ZPO|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1971/01/01-1971/12/31=13
 =VK100ANZAC|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|=189
-=VK1AC =VK1DJ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1954/01/01-1954/12/31=153
-=VK1ADS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1949/01/01-1949/12/31=153
-=VK1AJT =VK1RB =VK1RF|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1950/01/01-1950/12/31=153
+=VK1AC =VK1DJ|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1954/01/01-1954/12/31=153
+=VK1ADS|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1949/01/01-1949/12/31=153
+=VK1AJT =VK1RB =VK1RF|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1950/01/01-1950/12/31=153
 =VK1AWI|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1956/01/01-1956/12/31=13
-=VK1BS =VK1WO|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1951/01/01-1951/12/31=153
+=VK1BS =VK1WO|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1951/01/01-1951/12/31=153
 =VK1DY|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1954/01/01-1954/12/31=111
 =VK1HV =VK1PG =VK1YG|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1950/01/01-1950/12/31=111
-=VK1IJ|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1956/01/01-1956/12/31=153
+=VK1IJ|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1956/01/01-1956/12/31=153
 =VK1NL|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1951/01/01-1957/12/31=111
 =VK1PG|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1945/01/01-1945/12/31=111
 =VK1PG =VK1VU|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1949/01/01-1951/12/31=111
 =VK1PN|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1952/01/01-1952/12/31=111
 =VK1RA =VK1VR =VK1FE|ANARE Heard Island Station|AN|-5|53.1176S|73.5500E|68|39||R|1949/01/01-1949/12/31=111
-=VK1RD|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1949/01/01-1949/12/31=153
-=VK1RG|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1953/01/01-1953/12/31=153
+=VK1RD|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1949/01/01-1949/12/31=153
+=VK1RG|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1953/01/01-1953/12/31=153
 =VK1VH|ANARE Douglas Mawson Station, Holme Bay, Mawson Coast, Mac Robertson Land, Antarctica|AN|-5|67.6047S|62.8708E|69|39||R|1955/01/01-1955/12/31=13
-=VK1ZM|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1955/01/01-1955/12/31=153
+=VK1ZM|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1955/01/01-1955/12/31=153
 =VK2015TDF|Australia, Western Australia (WA), Special Station - Tour De Freedom 1000 Bike Ride|OC|-8|31.97S|115.82E|58|29||R|=150
 =VK2ACC/9|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2010/02/04-2010/02/09=189
 =VK2ADY/VK0|Heard Island (no DXCC credit!)|AN|-5|53.1176S|73.5500E|68|39||R|1966/07/01-1966/07/31=0
@@ -3535,6 +3538,7 @@
 =VK4RAN|HMAS Diamantina Frigate, Brisbane, Australia|OC|-10|27.47S|153.03E|59|30||R|=150
 =VK4WIA|Australia, Queensland, News Broadcast Station|OC|-10|25S|150E|55|30||R|=150
 =VK5CP/9|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2012/01/19-2012/01/24=147
+=VK5MAV/9|Australia, Cato Reef|OC|-10|23.25S|155.5333E|55|30||R|2018/04/09-2018/04/18=150
 =VK5WI|South Australia, News Broadcast Station|OC|-9.5|34S|135E|59|30||R|=150
 =VK6WIA|Western Australia, News Broadcast Station|OC|-8|32S|117E|58|29||R|=150
 =VK6XL/9 =VK9/LB1GB|Cocos-Keeling Islands|OC|-6.5|12.4000S|96.8352E|54|29||R|=38
@@ -3593,7 +3597,7 @@
 =VK9OL|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2016/05/21-2016/05/29=147
 =VK9PAS|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2016/05/23-2016/05/30=189
 =VK9PC|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|2016/05/25-2016/06/07=189
-=VK9PH|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|=189
+=VK9PH =VK4HNS/9|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32||R|=189
 =VK9PL|Papua Territory|OC|-10|9.4S|147.1E|51|28||R|1965/01/01-1965/12/31=198
 =VK9PN|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2012/05/23-2012/05/30=147
 =VK9RO|Papua Territory|OC|-10|9.4S|147.1E|51|28||R|1960/01/01-1960/12/31=198
@@ -3604,7 +3608,7 @@
 =VK9WL|Territory of New Guinea|OC|-10|9.4S|147.1E|51|28||R|1949/01/01-1949/12/31=198
 =VK9XL =VK9XL/LH|Lord Howe Island (no DXCC credit!)|OC|-10|31.53231S|159.03809E|60|30||R|1996/02/01-1996/03/31=0
 =VK9YL|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2002/09/15-2002/09/29=147
-=VK9YQS/0 =VK9YQS|ANARE Macquarie Island Station|AN|-11|54.6167S|158.85E|60|30||R|1989/01/01-1989/12/31=153
+=VK9YQS/0 =VK9YQS|ANARE Macquarie Island Station|AN|-10|54.6167S|158.85E|60|30||R|1989/01/01-1989/12/31=153
 =VK9YQS/LH =AX2APX/LH =AX3DHT/LH|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|=147
 =VK9YY|Territory of New Guinea|OC|-10|9.4S|147.1E|51|28||R|1952/01/01-1952/12/31=198
 =VK9ZLH|Lord Howe Island|OC|-10|31.53231S|159.03809E|60|30||R|2005/01/01-2008/12/31=147
@@ -3963,6 +3967,7 @@
 =VU3BPZ/A|Maitri Base, Schirmacher Oasis, Princess Astrid Coast, Queen Maud Land, Antarctica|AN|0|70.7658S|11.7358E|67|38||R|2004/01/01-2006/12/31=13
 =VU3DEN|Maitri Base, Schirmacher Oasis, Princess Astrid Coast, Queen Maud Land, Antarctica|AN|0|70.7658S|11.7358E|67|38||R|1995/01/01-1995/12/31=13
 =VU3DEN/P|Maitri Base, Schirmacher Oasis, Princess Astrid Coast, Queen Maud Land, Antarctica|AN|0|70.7658S|11.7358E|67|38||R|1995/01/01-1995/12/31=13
+=VU3EBX|Laccadive Islands (Lakshadweep)|AS|-5.5|10.9394N|72.2914E|41|22||R|=142
 =VU3FRK|Andaman & Nicobar Islands|AS|-5.5|11.6672N|92.7629E|49|26||R|2006/04/18-2006/04/25=11
 =VU3HKQ|Maitri Base, Schirmacher Oasis, Princess Astrid Coast, Queen Maud Land, Antarctica|AN|0|70.7658S|11.7358E|67|38||R|1993/01/01-1994/12/31=13
 =VU3HKQ/A|Maitri Base, Schirmacher Oasis, Princess Astrid Coast, Queen Maud Land, Antarctica|AN|0|70.7658S|11.7358E|67|38||R|1993/01/01-1994/12/31=13
@@ -4066,7 +4071,7 @@
 =XR9JA|Capitan Arturo Prat Base, Guesalaga Peninsula, Discovery Bay, Greenwich Island, South Shetland Islands|AN|4|62.5S|59.6833W|73|13||R|2010/02/12-2010/03/26=241
 =XU3DWC =XU6RTM|Cambodia (Kampuchea) (no DXCC credit!)|AS|-8|12N|105E|49|26||R|=0
 =XV4BP =XV5/K6NHW =XV5/K8HNW =XV5/W6LWA|Vietnam (no DXCC credit!)|AS|-7|11N|107E|49|26||R|=0
-=XV9TH|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.3734N|113.8223E|50|26||R|2002/04/01-2002/04/30=247
+=XV9TH|Spratly Isl., Pulau Layang Layang (Swallow Reef)|AS|-7|7.36689N|113.84581E|50|26||R|2002/04/01-2002/04/30=247
 =XW1FA|Laos (no DXCC credit!)|AS|-7|20N|102E|49|26||R|=0
 =XW1UD|Laos|AS|-7|20N|102E|49|26||R|1999/01/01-1999/12/31=0
 =XY1M|Myanmar (Burma) (no DXCC credit!)|AS|-6.5|17N|96E|49|26||R|2002/08/01-2002/08/31=0
@@ -4193,9 +4198,7 @@
 =ZS1IS|Walvis Bay|AF|-2|22.94S|14.51E|57|38||R|1989/08/01-1989/09/28=488
 =ZS2ER/1 =DF9KH/ZS1 =DK9KX/ZS1 =DL8CM/ZS1 =V51DM/ZS1 =ZS9A/1|Penguin Island|AF|-2|33.20S|18.40E|57|38||R|1990/07/01-1990/07/31=493
 =ZS2MI|Prince Edward & Marion Islands|AF|-3|46.90S|37.74E|57|38||R|=201
-=ZS2MI =ZS8D =ZS8IR =ZS8MI|Marion Station, Prince Edward & Marion Islands|AF|-3|46.9125S|37.7436E|57|38||R|=201
 =ZS3LK/3|Walvis Bay|AF|-2|22.6S|14.3E|57|38||R|1977/09/01-1994/02/28=488
-=ZS3LK/3|Walvis Bay|AF|-2|22.94S|14.51E|57|38||R|1978/01/01-1980/12/31=488
 =ZS4P|Lesotho (Basutoland)|AF|-2|29S|27E|57|38||R|-1948/12/31=432
 =ZS6KX/7 =ZS7KX|SANAE IV Base, Vesleskarvet, Princess Martha Coast, Dronning Maud Land, Antarctica|AN|-2|71.6736S|2.8289W|67|38||R|=13
 =ZS6ZU/2|Marion Station, Prince Edward & Marion Islands|AF|-3|46.9125S|37.7436E|57|38||R|-1955/12/31=201
@@ -4221,6 +4224,7 @@
 =ZS7B|SANAE Echo Base (Emergency Base), Fimbul Ice Shelf, Antarctica|AN|-2|70.3S|2.4W|67|38||R|1999/01/01-1999/12/31=13
 =ZS7B|SANAE IV Base, Vesleskarvet, Princess Martha Coast, Dronning Maud Land, Antarctica|AN|-2|71.6736S|2.8289W|67|38||R|1998/01/01-1999/12/31=13
 =ZS7BYRD|SANAE IV Base, Vesleskarvet, Princess Martha Coast, Dronning Maud Land, Antarctica|AN|-2|71.6736S|2.8289W|67|38||R|2008/01/01-2008/02/29=13
+=ZS8D =ZS8IR =ZS8MI|Marion Station, Prince Edward & Marion Islands|AF|-3|46.9125S|37.7436E|57|38||R|=201
 =ZS9/DK7PE =ZS9/W6KG =ZS9A =ZS9H =ZS9S|Walvis Bay|AF|-2|22.94S|14.51E|57|38||R|1977/09/01-1994/02/28=488
 =ZS9/ZS6AIS|Walvis Bay (no DXCC credit!)|AF|-2|22.94S|14.51E|57|38||R|=0
 =ZS9AAA/1|Penguin Island|AF|-2|33.20S|18.40E|57|38||R|1990/07/01-1990/07/31=493

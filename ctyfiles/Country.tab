@@ -9,7 +9,7 @@
 3D2|Fiji|OC|-12|18.1163S|178.4243E|56|32|176||
 3D2(C)|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32|489||1989/01/01-
 3D2(R)|Rotuma Island|OC|-12|12.4993S|177.0474E|56|32|460||1989/01/01-
-3DA|Swaziland|AF|-2|26.32S|31.14E|57|38|468||
+3DA|The Kingdom of eSwatini (Swaziland)|AF|-2|26.32S|31.14E|57|38|468||
 3V|Tunisia|AF|-1|36.85N|10.16E|37|33|474||
 3W|Viet Nam|AS|-7|21.04N|105.82E|49|26|293||
 3X|Guinea|AF|0|9.54N|13.67W|46|35|107||
@@ -148,7 +148,7 @@ H40|Temotu Province|OC|-11|10.71S|166.0E|51|32|507||1998/04/01-
 HA|Hungary|EU|-1|47.52N|19.06E|28|15|239||
 HB|Switzerland|EU|-1|46.20N|6.14E|28|14|287||
 HB0|Liechtenstein|EU|-1|47.15N|9.53E|28|14|251||
-HC|Ecuador|SA|6|0.19S|78.49W|12|10|120||
+HC|Ecuador|SA|5|0.19S|78.49W|12|10|120||
 HC8|Galapagos Islands|SA|6|0.84S|91.05W|12|10|71||
 HH|Haiti|NA|5|18.54N|72.32W|11|08|78||
 HI|Dominican Rep.|NA|4|18.49N|69.91W|11|08|72||
@@ -261,7 +261,7 @@ TY|Benin|AF|-1|6.49N|2.63E|46|35|416||1960/08/01-
 TZ|Mali|AF|0|12.64N|7.99W|46|35|442||1960/06/20-
 UA(AS)|Russia (Asiatic)|AS|-7|56.03N|93.05E|32|18|15||
 UA(EU)|Russia (European)|EU|-4|56.00N|38.00E|29|16|54||
-UA(K)|Kaliningrad (Koenigsberg)|EU|-2|54.427N|20.3058E|29|15|126||
+UA(K)|Kaliningrad (Koenigsberg)|EU|-3|54.427N|20.3058E|29|15|126||
 UK|Uzbekistan|AS|-5|41.26N|69.22E|30|17|292||
 UN|Kazakhstan|AS|-5|43N|77E|29-31|17|130||
 UT|Ukraine|EU|-2|50.20N|30.33E|29|16|288||
@@ -275,7 +275,7 @@ V8|Brunei Darussalam|OC|-8|4.95N|114.94E|54|28|345||
 VE|Canada|NA|5|45.41N|75.65W|04|04|1||
 VK|Australia|OC|-10|35.27S|149.13E|59|30|150||
 VK0(H)|Heard Island|AN|-5|53.1176S|73.5500E|68|39|111||
-VK0(M)|Macquarie Island|AN|-11|54.6167S|158.85E|60|30|153||1963/09/16-
+VK0(M)|Macquarie Island|AN|-10|54.6167S|158.85E|60|30|153||1963/09/16-
 VK9(C)|Cocos (Keeling) Islands|OC|-6.5|12.4000S|96.8352E|54|29|38||
 VK9(L)|Lord Howe Island|OC|-10.5|31.53231S|159.03809E|60|30|147||
 VK9(M)|Mellish Reef|OC|-10|17.4398S|155.8609E|56|30|171||
