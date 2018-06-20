@@ -4,6 +4,7 @@ Legend:
   - bugfix
 --------------------
 2.3.0
+  - Wsjt-x remote used nonexisting variable if CQ-monitor was closed (Saku, OH1KH)
   + wsjt-x: stop TX if split answer to CQ not accepted by caller (Saku, OH1KH)
   - Preferences button in eQSL up&dn load opened wrong tab
   + TRXcontrol: M_Wri-button. Sets memory entry from current rig frequency and mode  (Saku, OH1KH)
