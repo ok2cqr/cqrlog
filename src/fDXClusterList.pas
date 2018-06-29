@@ -87,7 +87,7 @@ procedure TfrmDXClusterList.btnDeleteClick(Sender: TObject);
 var
   id : Integer;
 begin
-  if Application.MessageBox('Do you realy want to delete this dxcluster?',
+  if Application.MessageBox('Do you really want to delete this dxcluster?',
                             'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
     exit;
 

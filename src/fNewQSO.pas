@@ -2239,6 +2239,15 @@ begin
           //----------------------------------------------------
           if TXEna and TXOn then
           begin
+            if dmData.DebugLevel>=1 then Writeln('Status: TxEna, TxOn, DXCall is:',call);
+            if (frmMonWsjtx <> nil) then   //CQ-monitor exist
+               if (frmMonWsjtx.DblClickCall <> call) then   //this works now also when calling started from wsjt-x main screen 2click
+                                            begin    //we do not try to work same station any more as with 2click before
+                                              if frmMonWsjtx.chkStopTx.Checked then frmMonWsjtx.DblClickCall := call
+                                                else frmMonWsjtx.DblClickCall :='';
+                                              if dmData.DebugLevel>=1 then Writeln('Change 2click call to:',frmMonWsjtx.DblClickCall);
+                                            end;
+
             if  edtCall.Text <> call then  //call (and web info) maybe there already ok from pevious status packet
                            Begin
                              edtCall.Text := '';//clean grid like double ESC does

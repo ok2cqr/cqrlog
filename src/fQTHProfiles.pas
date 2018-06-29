@@ -97,7 +97,7 @@ begin
     Application.MessageBox('This profiles is used by QSOs and cannot be deleted.','Information ...',
                            mb_OK + mb_IconInformation)
   else begin
-    if Application.MessageBox('Do you realy want to delete this profile?','Question ...', mb_YesNo +
+    if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo +
                               mb_IconQuestion) = idYes then
     begin
       dmData.Q.Close();
