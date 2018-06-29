@@ -4,7 +4,6 @@ Legend:
   - bugfix
 --------------------
 2.3.0
-  # Auto backup: can also prevent accidental closing of cqrlog. Text informations added (Saku, OH1KH)
   - Wsjt-x remote used nonexisting variable if CQ-monitor was closed (Saku, OH1KH)
   + wsjt-x: stop TX if split answer to CQ not accepted by caller (Saku, OH1KH)
   - Preferences button in eQSL up&dn load opened wrong tab
