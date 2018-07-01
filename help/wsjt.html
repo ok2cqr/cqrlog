@@ -77,11 +77,10 @@ Top line will show band and mode that is in use, Checking <b>"noHst”</b> (no h
 </br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
 </br></br>Checking <b>"sTx”</b> (Stop TX) will fix missing Wsjt-x property: If you answer to someone's CQ at same frequency Wsjt-x will stop your TX if CQ-caller answers to someone else than you. How ever Wsjt-x developing team has
  decided that if you anśwer to CQ caller on other frequency (split) your TX remains on even if the answer was directed to someone else.
- To reduce band QRM caused by you, you may check <b>sTx</b> to stop your TX if answer was not for you. This requires that you have initiated answering by doubleclicking a line of CQ-monitor or Wsjtx-Map.
+ To reduce band QRM caused by you, you may check <b>sTx</b> to stop your TX if answer was not for you.
 </br><ul><strong>A word of warning:</strong></ul>
-In some cases your TX may be shut down after you have first tried to answer someones CQ but got no answer and CQ caller has continued calling CQ. Then if you start calling your CQ or answer to someone else by double clicking
- <b>line of wsjt-x main screen</b> your TX is shut down when the CQ caller you first answered gets a qso. That is because CQ-monitor has no indication that you have given up answering to CQ caller whose decoded line you double clicked in CQ-monitor at fist place
-  and now he answers to someone else than you.
+In some cases your TX may be shut down after you have first tried to answer someones CQ but got no answer and CQ caller has continued calling CQ. Then if you start calling your CQ your TX is shut down when the CQ caller that you first tried to catch gets a qso.
+ That is because CQ-monitor has no indication that you have given up answering to that CQ caller and started your own CQ. Unless you do not clear wsjt-x's Std Msgs with F4 (on wsjt-x main screen) before starting your CQ.
 </br>
 
 <p ><img src="img/wsjt20.png" name="20" width="353" height="83">

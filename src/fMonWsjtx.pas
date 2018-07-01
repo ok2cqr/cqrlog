@@ -331,7 +331,7 @@ begin
     for i := 1 to length(RepArr[WsjtxMemo.Caretpos.Y]) do
       Write('x', HexStr(Ord(RepArr[WsjtxMemo.Caretpos.Y][i]), 2));
     writeln();
-    writeln('Line is:',s,'  Call is:',DblClickCall);
+    writeln('Line is:',s,#13+' 2click Call is:',DblClickCall);
   end;
 
 
@@ -557,6 +557,11 @@ end;
 procedure TfrmMonWsjtx.chkStopTxChange(Sender: TObject);
 begin
   cqrini.WriteBool('MonWsjtx', 'StopTX', chkStopTx.Checked);
+  if chkStopTx.Checked = false then
+    begin
+      DblClickCall := '';
+      if dmData.DebugLevel>=1 then Writeln('Reset 2click call: sTx unchecked');
+    end;
 end;
 
 
@@ -950,7 +955,7 @@ begin
   if (( DblClickCall <> '' ) and chkStopTx.Checked ) then  //stop requested
    if (pos(DblClickCall,Message)> 0) then  //and call is call answered
    Begin
-     if dmData.DebugLevel >= 1 then Writeln('Disbling TX, DBLClicked call answered to someone else');
+     if dmData.DebugLevel >= 1 then Writeln('Disabling TX, 2click call answered to someone else');
      RepBuf := frmNewQSO.RepHead;
      RepBuf[12] := #8; //Halt TX
      RepBuf := RepBuf +#0;
@@ -1549,6 +1554,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       if isMyCall then
         begin
          DblClickCall := '';
+         if dmData.DebugLevel >= 1 then  Writeln('Reset 2click call: answered to me');
          if not chkCbCQ.Checked then AddColorStr('=', wkdnever);
         end
       else

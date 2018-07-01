@@ -680,7 +680,7 @@ begin
   begin
     if dbgrdMain.SelectedRows.Count < 1 then
     begin
-      if Application.MessageBox('Do you realy want to delete this QSO?',
+      if Application.MessageBox('Do you really want to delete this QSO?',
         'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
         exit;
       dmData.qCQRLOG.DisableControls;
@@ -706,7 +706,7 @@ begin
     end
     else
     begin
-      if Application.MessageBox('Do you realy want to delete selected QSOs?',
+      if Application.MessageBox('Do you really want to delete selected QSOs?',
         'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
         exit;
       dmData.qCQRLOG.DisableControls;
