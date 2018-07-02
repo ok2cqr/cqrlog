@@ -781,6 +781,7 @@ type
     Label204: TLabel;
     Label205: TLabel;
     Label206 : TLabel;
+    Label207: TLabel;
     Label26: TLabel;
     Label46 : TLabel;
     Label47 : TLabel;
