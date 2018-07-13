@@ -3373,7 +3373,7 @@ begin
   begin
     if cqrini.ReadBool('Backup','AskFirst',False) then
     begin
-      case Application.MessageBox('Do you want to backup your data?','Question ...',mb_YesNoCancel+mb_IconQuestion) of
+      case Application.MessageBox('Do you want to backup your data?'+#13+#13+'("Cancel" = Do not exit cqrlog)','Exit & backup',mb_YesNoCancel+mb_IconQuestion) of
         idCancel : begin
                      CloseAction := caNone;
                      exit
