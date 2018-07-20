@@ -698,7 +698,7 @@ const
   CR = #13;
   LF = #10;
 var
-  sStart, sStop, SkimCallStartPos, SkimCallStopPos: Integer;
+  sStart, sStop, SkimCallStartPos, SkimCallStopPos, SkimParserAnchor: Integer;
   stmp, tmp, Chline, Skimline, SkimCall, SkimFreq, SkimMode: String;
   itmp, itmp2 : Integer;
   buffer : String;
@@ -748,7 +748,7 @@ begin
         end;
       end;
     if Pos('TO ALL DE SKIMMER',UpperCase(tmp)) > 0 then
-      Begin
+      Begin //Handle Double Click in CwSkimmer via Telnet Commands
         Skimline := tmp;
         SkimCallStartPos := Pos('"',Skimline) + 1;
         SkimCallStopPos := Pos('"',copy(Skimline,SkimCallStartPos,Length(Skimline)-SkimCallStartPos));
@@ -772,6 +772,15 @@ begin
       finally
         LeaveCriticalsection(csTelnet);
         if dmData.DebugLevel>=1 then Writeln('Leave critical section On Receive')
+      end;
+      if (Pos('-#:',UpperCase(tmp)) > 0) then
+      begin //Handle Spot from Skimmer
+        Skimline := tmp;
+        SkimParserAnchor := Pos('-#:',UpperCase(Skimline));
+        SkimCall := copy(Skimline,SkimParserAnchor + 15 , 16);
+        SkimCall := copy(SkimCall,0, Pos(' ',SkimCall) - 1);
+        SkimFreq := copy(Skimline,SkimParserAnchor + 6, 7);
+        Writeln('CAll: ' + SkimCall + ' Freq: ' + SkimFreq);
       end
     end
     else begin
