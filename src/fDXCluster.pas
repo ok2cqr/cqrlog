@@ -698,11 +698,11 @@ const
   CR = #13;
   LF = #10;
 var
-  sStart, sStop: Integer;
-  tmp, Chline: String;
-  itmp : Integer;
+  sStart, sStop, SkimCallStartPos, SkimCallStopPos: Integer;
+  stmp, tmp, Chline, Skimline, SkimCall, SkimFreq, SkimMode: String;
+  itmp, itmp2 : Integer;
   buffer : String;
-  f : Double;
+  f, etmp : Double;
 begin
   if lTelnet.GetMessage(buffer) = 0 then
     exit;
@@ -747,7 +747,20 @@ begin
             end;
         end;
       end;
-
+    if Pos('TO ALL DE SKIMMER',UpperCase(tmp)) > 0 then
+      Begin
+        Skimline := tmp;
+        SkimCallStartPos := Pos('"',Skimline) + 1;
+        SkimCallStopPos := Pos('"',copy(Skimline,SkimCallStartPos,Length(Skimline)-SkimCallStartPos));
+        SkimCall := copy(Skimline,SkimCallStartPos,SkimCallStopPos - 1);
+        SkimFreq := copy(Skimline,Pos('at ',Skimline) + 3,Length(Skimline)-Pos('at ',Skimline));
+        if NOT TryStrToFloat(SkimFreq,etmp) then
+           exit;
+        if (not dmData.BandModFromFreq(SkimFreq,SkimMode,stmp)) or (SkimMode='') then
+           exit;
+        if dmData.DebugLevel>=1 then WriteLn('Call: ' + SkimCall + ', Freq: ' + SkimFreq + ', Mode: ' + SkimMode);
+        frmNewQSO.NewQSOFromSpot(SkimCall,SkimFreq,SkimMode);
+      end;
     itmp := Pos('DX DE',UpperCase(tmp));
     if (itmp > 0) or TryStrToFloat(copy(tmp,1,Pos(' ',tmp)-1),f)  then
     begin
