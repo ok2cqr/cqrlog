@@ -699,8 +699,8 @@ const
   LF = #10;
 var
   sStart, sStop, SkimCallStartPos, SkimCallStopPos, SkimParserAnchor: Integer;
-  stmp, tmp, Chline, Skimline, SkimCall, SkimFreq, SkimMode: String;
-  itmp, itmp2 : Integer;
+  stmp, tmp, Chline, Skimline, SkimCall, SkimFreq, SkimMode, prefix, waz, itu, cont, lat, long: String;
+  itmp, itmp2, QSLState, SkimCTYid : Integer;
   buffer : String;
   f, etmp : Double;
 begin
@@ -774,13 +774,43 @@ begin
         if dmData.DebugLevel>=1 then Writeln('Leave critical section On Receive')
       end;
       if (Pos('-#:',UpperCase(tmp)) > 0) then
-      begin //Handle Spot from Skimmer
+      Begin //Handle Spot from Skimmer
         Skimline := tmp;
         SkimParserAnchor := Pos('-#:',UpperCase(Skimline));
         SkimCall := copy(Skimline,SkimParserAnchor + 15 , 16);
         SkimCall := copy(SkimCall,0, Pos(' ',SkimCall) - 1);
         SkimFreq := copy(Skimline,SkimParserAnchor + 6, 7);
-        Writeln('CAll: ' + SkimCall + ' Freq: ' + SkimFreq);
+        if NOT TryStrToFloat(SkimFreq,etmp) then
+           exit;
+        if (not dmData.BandModFromFreq(SkimFreq,SkimMode,stmp)) or (SkimMode='') then
+           exit;
+        if dmData.DebugLevel>=1 then Writeln('CAll: ' + SkimCall + ' Freq: ' + SkimFreq);
+        SkimCTYid := dmDXCluster.id_country(SkimCall,now,stmp,stmp,stmp,stmp,stmp,stmp,stmp);
+        dmDXCluster.DXCCInfo(SkimCTYid,FloatToStr(etmp/1000),SkimMode,QSLState);
+        if dmData.DebugLevel>=1 then Writeln('QSLState: ' + FloatToStr(QSLState));
+        case QSLState of
+          0:
+            begin
+              lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' DUPE' + #13 + #10);
+              if dmData.DebugLevel>=1 then Writeln('DUPE');
+            end;
+          1:
+            begin
+              lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' NEWCTY' + #13 + #10);
+              if dmData.DebugLevel>=1 then Writeln('NEWCTY');
+            end;
+          2:
+            begin
+              lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' BNDCTY' + #13 + #10);
+              if dmData.DebugLevel>=1 then Writeln('BNDCTY');
+            end;
+          4:
+            begin
+              lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' NOTCFM' + #13 + #10);
+              if dmData.DebugLevel>=1 then Writeln('NOTCFM');
+            end;
+          else
+        end;
       end
     end
     else begin
