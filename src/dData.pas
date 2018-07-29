@@ -3499,7 +3499,7 @@ begin
     trBands.RollBack;
   trBands.StartTransaction;
   qBands.Open;
-  Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
+  if dmData.DebugLevel>=1 then Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
   if qBands.RecordCount = 0 then
     exit;
   band := qBands.Fields[1].AsString;
@@ -3515,7 +3515,7 @@ begin
     else
       mode := 'RTTY';
   end;
-  Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
+  if dmData.DebugLevel>=1 then Writeln('TdmData.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
 end;
 
 function TdmData.TriggersExistsOnCqrlog_main : Boolean;

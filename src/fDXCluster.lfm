@@ -402,6 +402,24 @@ object frmDXCluster: TfrmDXCluster
     object MenuItem3: TMenuItem
       Action = acFont
     end
+    object MenuItem8: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem7: TMenuItem
+      Caption = 'CW Skimmer'
+      object mnuSkimAllowFreq: TMenuItem
+        Caption = 'Allow Set Frequency'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = mnuSkimAllowFreqClick
+      end
+      object mnuSkimQSLCheck: TMenuItem
+        Caption = 'Send QSL State to Skimmer'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = mnuSkimQSLCheckClick
+      end
+    end
     object MenuItem4: TMenuItem
       Caption = '-'
     end
