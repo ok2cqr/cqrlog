@@ -69,6 +69,8 @@ var
   RSTstxAdd: string = ''; //contest mode additional string store
   //RSTsrx         :string = '';
   EscFirstTime: boolean = False;
+   Gs : char = #124; //Gs msg group separator, halfspace in CW msg
+   Rs : char = #46 ; // _string identifier, does not effect cw msg stripped/added in Adif exp/imp
 
 implementation
 
@@ -157,6 +159,8 @@ end;
 
 
 procedure TfrmContest.edtCallExit(Sender: TObject);
+var
+  s :string;
 begin
   frmNewQSO.edtCall.Text := edtCall.Text;
 
@@ -166,25 +170,44 @@ begin
                          edtRSTr.Text := copy(edtRSTr.Text,0,2);
                     end;
   end;
+  //move things to new qso so that CW macros work before saving
+  s:='';
+  if edtSTX.Text<>''  then  s:=  Gs + edtSTX.Text;
+  if edtSTX2.Text<>'' then  s := s + Gs + edtSTX2.Text;
+  frmNewQSO.edtHisRST.Text := edtRSTs.Text + s;
 
-  frmNewQSO.edtHisRST.Text := edtRSTs.Text + ' ' + edtSTX.Text + ' ' + edtSTX2.Text;
-  //so that CW macros work
   frmNewQSO.edtCallExit(nil);
   frmContest.ShowOnTop;
   frmContest.SetFocus;
 end;
 
 procedure TfrmContest.btSaveClick(Sender: TObject);
+var
+   s :string;
 begin
-  frmNewQSO.edtHisRST.Text := edtRSTs.Text + ' ' + edtSTX.Text + ' ' + edtSTX2.Text;
+  edtSTX.Text := trim(edtSTX.Text);
+  edtSRX.Text := trim(edtSRX.Text);
+
+  //adding Rs to end of STX2 indicates that it is STX_STRING/SRX_STRING.
+  // it can be seen at QSO list page but it does not affect CW memories output as appended at qso save
+  //and will stripped when ADIF export happens.
+  //ADIF import will add Rs if STX/SRX_STRING imported and added to reports so it will be again export compatible
+  s:='';
+  if edtSTX.Text<>''  then  s:=  Gs + edtSTX.Text;
+  if edtSTX2.Text<>'' then  s := s + Gs + edtSTX2.Text+Rs;
+  frmNewQSO.edtHisRST.Text := edtRSTs.Text + s;
   //this should be ok before
   if chLoc.Checked then
-  begin
-    frmNewQSO.edtMyRST.Text := edtRSTr.Text + ' ' + edtSRX.Text;
-    frmNewQSO.edtGrid.Text := edtSRX2.Text;
-  end
+    begin
+      frmNewQSO.edtMyRST.Text := edtRSTr.Text + Gs + edtSRX.Text;
+      frmNewQSO.edtGrid.Text := edtSRX2.Text;
+    end
+
   else
-    frmNewQSO.edtMyRST.Text := edtRSTr.Text + ' ' + edtSRX.Text + ' ' + edtSRX2.Text;
+   Begin
+    if edtSRX.Text<>''  then frmNewQSO.edtMyRST.Text := edtRSTr.Text + Gs + edtSRX.Text;
+    if edtSRX2.Text<>'' then frmNewQSO.edtMyRST.Text := frmNewQSO.edtMyRST.Text+ Gs + edtSRX2.Text+Rs;
+   end;
 
   frmNewQSO.btnSave.Click;
   if dmData.DebugLevel >= 1 then

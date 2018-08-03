@@ -282,6 +282,10 @@ var
   dxcc_adif  : Integer;
   len        : Integer=0;
   RxFreq : Double = 0;
+
+   Gs : char = #124; //Gs msg group separator, halfspace in CW msg
+   Rs : char = #46 ; // 'RS' _string identifier, does not effect cw msg stripped/added in Adif exp/imp
+
 begin
   Result := True;
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
@@ -452,7 +456,7 @@ begin
       dmData.Q.Open;
       if dmData.Q.Fields[0].AsInteger > 0 then
       begin
-        if Application.MessageBox('It looks like this QSOs are in the log.'#13'Do you really want to inport it again?',
+        if Application.MessageBox('It looks like QSO(s) are in the log.'#13'Do you really want to import again?',
                                   'Question',MB_ICONQUESTION + MB_YESNO) = idNo then
         begin
           btnImport.Enabled := True;
@@ -499,8 +503,21 @@ begin
     Q1.Params[3].AsString   := d.CALL;
     Q1.Params[4].AsFloat    := StrToFloat(freq);
     Q1.Params[5].AsString   := d.MODE;
+
+    //combine contest messages to reports if any
     Q1.Params[6].AsString   := d.RST_SENT;
+    d.STX :=trim(d.STX);       //just to be sure
+    d.STX_STRING :=trim(d.STX_STRING);
+
+    if (d.STX <> '') then Q1.Params[6].AsString          := Q1.Params[6].AsString+Gs+d.STX;
+    if (d.STX_STRING <> '') then Q1.Params[6].AsString   := Q1.Params[6].AsString+Gs+d.STX_STRING+Rs; //add msg marker '-'
+
     Q1.Params[7].AsString   := d.RST_RCVD;
+    d.SRX :=trim(d.SRX);      //just to be sure
+    d.SRX_STRING :=trim(d.SRX_STRING);
+    if (d.SRX <> '') then Q1.Params[7].AsString          := Q1.Params[7].AsString+Gs+d.SRX;
+    if (d.SRX_STRING <> '') then Q1.Params[7].AsString   := Q1.Params[7].AsString+Gs+d.SRX_STRING+Rs; //add msg marker '-'
+
     Q1.Params[8].AsString   := d.NAME;
     Q1.Params[9].AsString   := d.QTH;
     Q1.Params[10].AsString  := d.QSL_SENT;
