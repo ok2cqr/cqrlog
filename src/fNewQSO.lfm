@@ -4054,7 +4054,7 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem74: TMenuItem
         Action = acProp
-        Caption = 'Propgation'
+        Caption = 'Propagation'
       end
       object MenuItem94: TMenuItem
         Action = acpDK0WCY
