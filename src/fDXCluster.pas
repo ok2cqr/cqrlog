@@ -44,11 +44,15 @@ type
     Label1: TLabel;
     lblInfo: TLabel;
     MenuItem1 : TMenuItem;
+    mnuSkimQSLCheck: TMenuItem;
     MenuItem2 : TMenuItem;
     MenuItem3 : TMenuItem;
     MenuItem4 : TMenuItem;
     MenuItem5 : TMenuItem;
     MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    mnuSkimAllowFreq: TMenuItem;
     mnuCallalert : TMenuItem;
     Panel1: TPanel;
     Panel2: TPanel;
@@ -82,6 +86,8 @@ type
     procedure btnWebConnectClick(Sender: TObject);
     procedure edtCommandKeyPress(Sender: TObject; var Key: char);
     procedure mnuCallalertClick(Sender : TObject);
+    procedure mnuSkimAllowFreqClick(Sender: TObject);
+    procedure mnuSkimQSLCheckClick(Sender: TObject);
    procedure tmrAutoConnectTimer(Sender: TObject);
     procedure tmrSpotsTimer(Sender: TObject);
     procedure trChatSizeChange(Sender: TObject);
@@ -348,6 +354,8 @@ var
   p : TPoint;
 begin
   mnuCallalert.Checked := cqrini.ReadBool('DXCluster', 'AlertEnabled', False);
+  mnuSkimAllowFreq.Checked := cqrini.ReadBool('Skimmer', 'AllowFreqEnable', False);
+  mnuSkimQSLCheck.Checked := cqrini.ReadBool('Skimmer', 'QSLEnable', False);
   ChangeCallAlertCaption;
   p.x := 10;
   p.y := 10;
@@ -556,6 +564,9 @@ begin
   edtTelAddress.Text := telDesc;
 
   mnuCallalert.Checked := cqrini.ReadBool('DXCluster', 'AlertEnabled', False);
+  mnuSkimAllowFreq.Checked := cqrini.ReadBool('Skimmer', 'AllowFreqEnable', False);
+  mnuSkimQSLCheck.Checked := cqrini.ReadBool('Skimmer', 'QSLEnable', False);
+
   ChangeCallAlertCaption;
 
   if cqrini.ReadBool('DXCluster', 'ConAfterRun', False) then
@@ -666,6 +677,18 @@ begin
   ChangeCallAlertCaption
 end;
 
+procedure TfrmDXCluster.mnuSkimAllowFreqClick(Sender: TObject);
+begin
+  mnuSkimAllowFreq.Checked := not mnuSkimAllowFreq.Checked;
+  cqrini.WriteBool('Skimmer', 'AllowFreqEnable', mnuSkimAllowFreq.Checked);
+end;
+
+procedure TfrmDXCluster.mnuSkimQSLCheckClick(Sender: TObject);
+begin
+  mnuSkimQSLCheck.Checked := not mnuSkimQSLCheck.Checked;
+  cqrini.WriteBool('Skimmer', 'QSLEnable', mnuSkimQSLCheck.Checked);
+end;
+
 procedure TfrmDXCluster.tmrAutoConnectTimer(Sender: TObject);
 begin
   tmrAutoConnect.Enabled := False;
@@ -698,11 +721,11 @@ const
   CR = #13;
   LF = #10;
 var
-  sStart, sStop: Integer;
-  tmp, Chline: String;
-  itmp : Integer;
+  sStart, sStop, SkimCallStartPos, SkimCallStopPos, SkimParserAnchor: Integer;
+  stmp, tmp, Chline, Skimline, SkimCall, SkimFreq, SkimMode, prefix: String;
+  itmp, itmp2, QSLState, SkimCTYid : Integer;
   buffer : String;
-  f : Double;
+  f, etmp : Double;
 begin
   if lTelnet.GetMessage(buffer) = 0 then
     exit;
@@ -747,7 +770,23 @@ begin
             end;
         end;
       end;
-
+    if  (mnuSkimAllowFreq.Checked) then
+      Begin
+      if Pos('TO ALL DE SKIMMER',UpperCase(tmp)) > 0 then
+        Begin //Handle Double Click in CwSkimmer via Telnet Commands
+          Skimline := tmp;
+          SkimCallStartPos := Pos('"',Skimline) + 1;
+          SkimCallStopPos := Pos('"',copy(Skimline,SkimCallStartPos,Length(Skimline)-SkimCallStartPos));
+          SkimCall := copy(Skimline,SkimCallStartPos,SkimCallStopPos - 1);
+          SkimFreq := copy(Skimline,Pos('at ',Skimline) + 3,Length(Skimline)-Pos('at ',Skimline));
+          if NOT TryStrToFloat(SkimFreq,etmp) then
+             exit;
+          if (not dmData.BandModFromFreq(SkimFreq,SkimMode,stmp)) or (SkimMode='') then
+             exit;
+          if dmData.DebugLevel>=1 then WriteLn('Call: ' + SkimCall + ', Freq: ' + SkimFreq + ', Mode: ' + SkimMode);
+          frmNewQSO.NewQSOFromSpot(SkimCall,SkimFreq,SkimMode);
+        end;
+    end;
     itmp := Pos('DX DE',UpperCase(tmp));
     if (itmp > 0) or TryStrToFloat(copy(tmp,1,Pos(' ',tmp)-1),f)  then
     begin
@@ -759,7 +798,49 @@ begin
       finally
         LeaveCriticalsection(csTelnet);
         if dmData.DebugLevel>=1 then Writeln('Leave critical section On Receive')
-      end
+      end;
+      if  (mnuSkimQSLCheck.Checked) then
+      Begin
+        if (Pos('-#:',UpperCase(tmp)) > 0) then
+        Begin //Handle Spot from Skimmer
+          Skimline := tmp;
+          SkimParserAnchor := Pos('-#:',UpperCase(Skimline));
+          SkimCall := copy(Skimline,SkimParserAnchor + 15 , 16);
+          SkimCall := copy(SkimCall,0, Pos(' ',SkimCall) - 1);
+          SkimFreq := copy(Skimline,SkimParserAnchor + 6, 7);
+          if NOT TryStrToFloat(SkimFreq,etmp) then
+             exit;
+          if (not dmData.BandModFromFreq(SkimFreq,SkimMode,stmp)) or (SkimMode='') then
+             exit;
+          if dmData.DebugLevel>=1 then Writeln('CAll: ' + SkimCall + ' Freq: ' + SkimFreq);
+          SkimCTYid := dmDXCluster.id_country(SkimCall,now,stmp,stmp,stmp,stmp,stmp,stmp,stmp);
+          dmDXCluster.DXCCInfo(SkimCTYid,FloatToStr(etmp/1000),SkimMode,QSLState);
+          if dmData.DebugLevel>=1 then Writeln('QSLState: ' + FloatToStr(QSLState));
+          case QSLState of
+            0:
+              begin
+                lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' DUPE' + #13 + #10);
+                if dmData.DebugLevel>=1 then Writeln('DUPE');
+              end;
+            1:
+              begin
+                lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' NEWCTY' + #13 + #10);
+                if dmData.DebugLevel>=1 then Writeln('NEWCTY');
+              end;
+            2:
+              begin
+                lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' BNDCTY' + #13 + #10);
+                if dmData.DebugLevel>=1 then Writeln('BNDCTY');
+              end;
+            4:
+              begin
+                lTelnet.SendMessage('SKIMMER/STATUS ' + SkimCall + ' ' + SkimFreq + ' NOTCFM' + #13 + #10);
+                if dmData.DebugLevel>=1 then Writeln('NOTCFM');
+              end;
+            else
+          end;
+        end;
+      end;
     end
     else begin
       if (Pos('LOGIN',UpperCase(tmp)) > 0) and (telUser <> '') then
