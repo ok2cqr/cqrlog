@@ -18,5 +18,6 @@ install:
   - sudo make install OS_TARGET=linux CPU_TARGET=x86_64 INSTALL_PREFIX=/usr	
 
 script:
+  - cd ok2cqr/cqrlog	
   - make	
 
