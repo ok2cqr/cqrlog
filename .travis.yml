@@ -18,7 +18,6 @@ install:
   - sudo make install OS_TARGET=linux CPU_TARGET=x86_64 INSTALL_PREFIX=/usr	
 
 script:
-  - cd $TRAVIS_BUILD_DIR 	
-  - la -la
+  - cd $TRAVIS_BUILD_DIR 	  
   - make	
 
