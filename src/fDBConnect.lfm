@@ -1,11 +1,11 @@
 object frmDBConnect: TfrmDBConnect
   Left = 499
-  Height = 552
-  Top = 194
-  Width = 369
+  Height = 587
+  Top = 218
+  Width = 357
   Caption = 'Database connection'
-  ClientHeight = 552
-  ClientWidth = 369
+  ClientHeight = 587
+  ClientWidth = 357
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2126,204 +2126,278 @@ object frmDBConnect: TfrmDBConnect
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.8.2.0'
   object grbLogin: TGroupBox
     Left = 0
-    Height = 192
+    Height = 202
     Top = 0
-    Width = 369
+    Width = 357
     Align = alTop
+    AutoSize = True
+    BorderSpacing.InnerBorder = 10
     Caption = ' MySQL server '
-    ClientHeight = 173
-    ClientWidth = 365
+    ChildSizing.LeftRightSpacing = 10
+    ClientHeight = 183
+    ClientWidth = 353
     TabOrder = 0
     Visible = False
     object edtServer: TEdit
-      Left = 14
+      AnchorSideTop.Control = lblServerName
+      AnchorSideTop.Side = asrBottom
+      Left = 10
       Height = 27
-      Top = 25
+      Top = 19
       Width = 168
+      BorderSpacing.Top = 2
       TabOrder = 0
       Text = 'localhost'
     end
-    object Label1: TLabel
-      Left = 14
+    object lblServerName: TLabel
+      Left = 10
       Height = 17
-      Top = 9
-      Width = 89
+      Top = 0
+      Width = 87
       Caption = 'Server name:'
       ParentColor = False
     end
-    object Label2: TLabel
-      Left = 218
+    object lblPort: TLabel
+      Left = 214
       Height = 17
-      Top = 9
+      Top = 0
       Width = 34
       Caption = 'Port:'
       ParentColor = False
     end
     object edtPort: TEdit
-      Left = 218
+      AnchorSideLeft.Control = edtServer
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lblPort
+      AnchorSideTop.Side = asrBottom
+      Left = 213
       Height = 27
-      Top = 25
+      Top = 19
       Width = 80
+      BorderSpacing.Left = 35
+      BorderSpacing.Top = 2
       TabOrder = 1
       Text = '3306'
     end
-    object Label3: TLabel
-      Left = 14
+    object lblUserName: TLabel
+      AnchorSideTop.Control = edtServer
+      AnchorSideTop.Side = asrBottom
+      Left = 10
       Height = 17
-      Top = 61
-      Width = 76
+      Top = 52
+      Width = 75
+      BorderSpacing.Top = 6
       Caption = 'User name:'
       ParentColor = False
     end
     object edtUser: TEdit
-      Left = 14
+      AnchorSideTop.Control = lblUserName
+      AnchorSideTop.Side = asrBottom
+      Left = 10
       Height = 27
-      Top = 79
+      Top = 71
       Width = 168
+      BorderSpacing.Top = 2
       TabOrder = 2
     end
-    object Label4: TLabel
-      Left = 218
+    object lblPassword: TLabel
+      AnchorSideTop.Control = edtPort
+      AnchorSideTop.Side = asrBottom
+      Left = 214
       Height = 17
-      Top = 61
-      Width = 71
+      Top = 52
+      Width = 70
+      BorderSpacing.Top = 6
       Caption = 'Password:'
       ParentColor = False
     end
     object edtPass: TEdit
-      Left = 218
+      AnchorSideLeft.Control = edtUser
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lblPassword
+      AnchorSideTop.Side = asrBottom
+      Left = 213
       Height = 27
-      Top = 79
+      Top = 71
       Width = 132
+      BorderSpacing.Left = 35
+      BorderSpacing.Top = 2
       EchoMode = emPassword
       PasswordChar = '*'
       TabOrder = 3
     end
     object chkSavePass: TCheckBox
-      Left = 18
+      AnchorSideTop.Control = edtUser
+      AnchorSideTop.Side = asrBottom
+      Left = 14
       Height = 24
-      Top = 114
+      Top = 104
       Width = 124
+      BorderSpacing.Top = 6
       Caption = 'Remember me'
       OnChange = chkSavePassChange
       TabOrder = 4
     end
     object btnConnect: TButton
-      Left = 42
-      Height = 25
-      Top = 143
-      Width = 83
+      AnchorSideTop.Control = chkSavePass
+      AnchorSideTop.Side = asrBottom
+      Left = 38
+      Height = 29
+      Top = 134
+      Width = 90
+      AutoSize = True
+      BorderSpacing.Top = 6
       Caption = 'Connect'
+      Constraints.MinWidth = 90
       OnClick = btnConnectClick
       TabOrder = 5
     end
     object btnDisconnect: TButton
-      Left = 206
-      Height = 25
-      Top = 143
-      Width = 87
+      AnchorSideTop.Control = chkAutoConn
+      AnchorSideTop.Side = asrBottom
+      Left = 202
+      Height = 29
+      Top = 134
+      Width = 90
+      AutoSize = True
+      BorderSpacing.Top = 6
       Caption = 'Disconnect'
+      Constraints.MinWidth = 90
       OnClick = btnDisconnectClick
       TabOrder = 6
     end
     object chkAutoConn: TCheckBox
-      Left = 206
+      AnchorSideTop.Control = edtPass
+      AnchorSideTop.Side = asrBottom
+      Left = 202
       Height = 24
-      Top = 114
-      Width = 118
+      Top = 104
+      Width = 115
+      BorderSpacing.Top = 6
       Caption = 'Auto connect'
       TabOrder = 7
     end
   end
   object Panel1: TPanel
     Left = 0
-    Height = 334
-    Top = 218
-    Width = 369
+    Height = 341
+    Top = 246
+    Width = 357
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel1'
-    ClientHeight = 334
-    ClientWidth = 369
+    ClientHeight = 341
+    ClientWidth = 357
     TabOrder = 1
     object Panel2: TPanel
-      Left = 276
-      Height = 313
+      Left = 225
+      Height = 307
       Top = 0
-      Width = 93
+      Width = 132
       Align = alRight
+      AutoSize = True
+      BorderSpacing.InnerBorder = 10
       BevelOuter = bvNone
-      ClientHeight = 313
-      ClientWidth = 93
+      ClientHeight = 307
+      ClientWidth = 132
       TabOrder = 0
       object btnNewLog: TButton
-        Left = 9
-        Height = 25
-        Top = 112
-        Width = 75
+        AnchorSideTop.Control = btnCancel
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 29
+        Top = 104
+        Width = 100
+        AutoSize = True
+        BorderSpacing.Top = 30
         Caption = 'New log'
+        Constraints.MinWidth = 100
         Enabled = False
         OnClick = btnNewLogClick
         TabOrder = 1
       end
       object btnEditLog: TButton
-        Left = 9
-        Height = 25
-        Top = 137
-        Width = 75
+        AnchorSideTop.Control = btnNewLog
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 29
+        Top = 139
+        Width = 100
+        AutoSize = True
+        BorderSpacing.Top = 6
         Caption = 'Edit log'
+        Constraints.MinWidth = 100
         Enabled = False
         OnClick = btnEditLogClick
         TabOrder = 2
       end
       object btnDeleteLog: TButton
-        Left = 9
-        Height = 25
-        Top = 162
-        Width = 75
+        AnchorSideTop.Control = btnEditLog
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 29
+        Top = 174
+        Width = 100
+        AutoSize = True
+        BorderSpacing.Top = 6
         Caption = 'Delete log'
+        Constraints.MinWidth = 100
         Enabled = False
         OnClick = btnDeleteLogClick
         TabOrder = 3
       end
       object btnOpenLog: TButton
-        Left = 9
-        Height = 25
+        Left = 12
+        Height = 29
         Top = 10
-        Width = 75
+        Width = 100
+        AutoSize = True
+        BorderSpacing.Left = 12
+        BorderSpacing.Top = 10
         Caption = 'Open log'
+        Constraints.MinWidth = 100
         Enabled = False
         OnClick = btnOpenLogClick
         TabOrder = 0
       end
       object btnCancel: TButton
-        Left = 9
-        Height = 25
-        Top = 48
-        Width = 75
+        AnchorSideTop.Control = btnOpenLog
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 29
+        Top = 45
+        Width = 100
+        AutoSize = True
+        BorderSpacing.Top = 6
         Cancel = True
         Caption = 'Cancel'
+        Constraints.MinWidth = 100
         OnClick = btnCancelClick
         TabOrder = 4
       end
       object btnUtils: TButton
-        Left = 9
-        Height = 25
-        Top = 214
-        Width = 75
+        AnchorSideTop.Control = btnDeleteLog
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 29
+        Top = 233
+        Width = 100
+        AutoSize = True
+        BorderSpacing.Top = 30
         Caption = 'Utils'
+        Constraints.MinWidth = 100
         OnClick = btnUtilsClick
         TabOrder = 5
       end
     end
     object dbgrdLogs: TDBGrid
       Left = 0
-      Height = 313
+      Height = 307
       Top = 0
-      Width = 276
+      Width = 225
       Align = alClient
       Color = clWindow
       Columns = <>
@@ -2333,40 +2407,46 @@ object frmDBConnect: TfrmDBConnect
       TitleStyle = tsNative
     end
     object Panel4: TPanel
-      Left = 0
-      Height = 21
-      Top = 313
-      Width = 369
+      Left = 5
+      Height = 24
+      Top = 312
+      Width = 352
       Align = alBottom
+      AutoSize = True
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Bottom = 5
       BevelOuter = bvNone
-      ClientHeight = 21
-      ClientWidth = 369
+      ClientHeight = 24
+      ClientWidth = 352
       TabOrder = 2
       object chkAutoOpen: TCheckBox
-        Left = 8
+        Left = 0
         Height = 24
-        Top = -1
-        Width = 272
+        Top = 0
+        Width = 267
         Caption = 'Open recent log after program start'
         TabOrder = 0
       end
     end
   end
   object Panel3: TPanel
-    Left = 0
-    Height = 26
-    Top = 192
-    Width = 369
+    Left = 10
+    Height = 24
+    Top = 212
+    Width = 337
     Align = alTop
+    AutoSize = True
+    BorderSpacing.Around = 10
     BevelOuter = bvNone
-    ClientHeight = 26
-    ClientWidth = 369
+    ClientHeight = 24
+    ClientWidth = 337
     TabOrder = 2
     object chkSaveToLocal: TCheckBox
-      Left = 12
+      Left = 0
       Height = 24
-      Top = 2
-      Width = 231
+      Top = 0
+      Width = 227
       Caption = 'Save log data to local machine'
       OnClick = chkSaveToLocalClick
       TabOrder = 0
@@ -2379,8 +2459,8 @@ object frmDBConnect: TfrmDBConnect
     top = 400
   end
   object popUtils: TPopupMenu
-    left = 312
-    top = 472
+    left = 264
+    top = 520
     object MenuItem1: TMenuItem
       Caption = 'Configuration'
       object mnuExport: TMenuItem
