@@ -89,11 +89,13 @@ type
     cmbSatellite : TComboBox;
     dbgrdQSOBefore: TDBGrid;
     edtRXFreq : TEdit;
-    Label16 : TLabel;
-    Label26 : TLabel;
-    Label35 : TLabel;
+    lblCallbookInformation : TLabel;
+    lblPropagation : TLabel;
+    lblStatellite : TLabel;
+    lblRXFreq : TLabel;
     Label36 : TLabel;
     lblQSLRcvdDate: TLabel;
+    mCallBook : TMemo;
     mCountry : TMemo;
     MenuItem32 : TMenuItem;
     MenuItem33 : TMenuItem;
@@ -165,45 +167,44 @@ type
     edtState: TEdit;
     edtWAZ: TEdit;
     GroupBox1: TGroupBox;
-    grbCallBook: TGroupBox;
     imgMain: TImageList;
     imgMain1: TImageList;
-    Label1: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
+    lblDate: TLabel;
+    lblQTH: TLabel;
+    lblCommentToCallsign: TLabel;
+    lblPwr: TLabel;
+    lblItuEdit: TLabel;
+    lblLocalCaption: TLabel;
     lblTarSunSet: TLabel;
     lblTarSunRise: TLabel;
     lblLocSunSet: TLabel;
     lblLocSunRise: TLabel;
-    Label15: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label2: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
-    Label23: TLabel;
-    Label24: TLabel;
-    Label25: TLabel;
-    Label27: TLabel;
-    Label28: TLabel;
-    Label29: TLabel;
-    Label3: TLabel;
-    Label30: TLabel;
-    Label31: TLabel;
-    Label32: TLabel;
-    Label33: TLabel;
-    Label34: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    Label9: TLabel;
+    lblGrid: TLabel;
+    lblCounty: TLabel;
+    lblQSLS: TLabel;
+    lblQSLR: TLabel;
+    lblStartTime: TLabel;
+    lblAward: TLabel;
+    lblDXCCRef: TLabel;
+    lblWazEdit: TLabel;
+    lblCommentToQSO: TLabel;
+    lblQSONrDesc: TLabel;
+    lblState: TLabel;
+    lblDXCCCaption: TLabel;
+    lblWAZCaption: TLabel;
+    lblITUCaption: TLabel;
+    lblEndTime: TLabel;
+    lblContCaption: TLabel;
+    lblLatCaption: TLabel;
+    lblLongCaption: TLabel;
+    lblDistCaption: TLabel;
+    lblAzim: TLabel;
+    lblMode: TLabel;
+    lblFrequency: TLabel;
+    blbQTHProfile: TLabel;
+    lblRstSent: TLabel;
+    lblRSTRcvd: TLabel;
+    lblName: TLabel;
     lblAmbiguous: TLabel;
     lblAzi: TLabel;
     lblCall: TLabel;
@@ -224,7 +225,6 @@ type
     lblQSOTakes: TLabel;
     lblWAZ: TLabel;
     MainMenu1: TMainMenu;
-    mCallBook: TMemo;
     mComment: TMemo;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
@@ -314,10 +314,10 @@ type
     sbNewQSO: TStatusBar;
     sbtneQSL : TSpeedButton;
     sgrdStatistic : TStringGrid;
-    SpeedButton1: TSpeedButton;
+    btnSunRise: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
+    btnSunSet: TSpeedButton;
     sbtnAttach: TSpeedButton;
     sbtnQSL: TSpeedButton;
     sbtnQRZ: TSpeedButton;
@@ -6043,9 +6043,9 @@ end;
 procedure TfrmNewQSO.ChangeCallBookCaption;
 begin
   if cqrini.ReadBool('Callbook','HamQTH',True) then
-    grbCallBook.Caption := 'Callbook (HamQTH.com)'
+    lblCallbookInformation.Caption := 'Callbook (HamQTH.com):'
   else
-    grbCallBook.Caption := 'Callbook (qrz.com)'
+    lblCallbookInformation.Caption := 'Callbook (qrz.com):'
 end;
 
 procedure TfrmNewQSO.CalculateLocalSunRiseSunSet;
