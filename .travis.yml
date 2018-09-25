@@ -1,0 +1,25 @@
+language: cpp
+compiler: gcc
+sudo: require
+dist: trusty
+
+before_install:
+  - wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%201.8.4/fpc-src_3.0.4-2_amd64.deb/download -O fpc-src_3.0.4-2_amd64.deb
+  - wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%201.8.4/fpc_3.0.4-3_amd64.deb/download -O fpc_3.0.4-3_amd64.deb
+  - wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%201.8.4/lazarus-project_1.8.4-0_amd64.deb/download -O lazarus-project_1.8.4-0_amd64.deb	
+
+install:
+  - sudo dpkg -i fpc_3.0.4-3_amd64.deb
+  - sudo dpkg -i fpc-src_3.0.4-2_amd64.deb
+  - sudo apt-get -y install libgtk2.0-dev
+  - sudo dpkg -i lazarus-project_1.8.4-0_amd64.deb
+  - cd /usr/share/fpcsrc/3.0.4/
+  - sudo make clean all OS_TARGET=linux CPU_TARGET=x86_64 || true
+  - sudo make install OS_TARGET=linux CPU_TARGET=x86_64 INSTALL_PREFIX=/usr	
+
+script:
+  - cd $TRAVIS_BUILD_DIR 	  
+  - make	
+  - make install DESTDIR=$(readlink -f appdir) ; find appdir/
+
+

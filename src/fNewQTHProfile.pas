@@ -18,11 +18,11 @@ type
     chkVisible: TCheckBox;
     edtProfNr: TEdit;
     edtLocator: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
+    lblLocator: TLabel;
+    lblQTH: TLabel;
+    lblEquipment: TLabel;
+    lblRemarks: TLabel;
+    lblProfileNumber: TLabel;
     mRemarks: TMemo;
     mEquipment: TMemo;
     mQTH: TMemo;
@@ -91,8 +91,7 @@ procedure TfrmNewQTHProfile.FormShow(Sender: TObject);
 begin
   if Editing then
     OldProf := edtProfNr.Text;
-  edtProfNr.SetFocus;
-  Writeln('old ',OldProf);
+  edtProfNr.SetFocus
 end;
 
 procedure TfrmNewQTHProfile.FormCreate(Sender: TObject);

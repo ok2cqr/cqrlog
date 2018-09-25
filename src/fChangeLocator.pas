@@ -16,7 +16,7 @@ type
     btnOK: TButton;
     btnStorno: TButton;
     edtLocator: TEdit;
-    Label1: TLabel;
+    lblEnterLocator: TLabel;
     procedure btnOKClick(Sender: TObject);
     procedure edtLocatorKeyPress(Sender: TObject; var Key: char);
   private
@@ -39,12 +39,12 @@ begin
   begin
     btnOK.Click;
     Key := #0
-  end;
+  end
 end;
 
 procedure TfrmChangeLocator.btnOKClick(Sender: TObject);
 begin
-  ModalResult := mrOK;
+  ModalResult := mrOK
 end;
 
 end.

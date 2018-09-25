@@ -86,7 +86,6 @@ uses
 {$ENDIF}
   Classes,
   synafpc,
-  uMyFindFile,
 {$IFNDEF MSWINDOWS}
   {$IFDEF FPC}
    {$IFDEF UNIX}
@@ -1872,29 +1871,6 @@ begin
       exit;
     end;
   {/pf}
-
-  Paths := TStringList.Create;
-  try
-    Paths.Add('/usr/lib64/');
-    Paths.Add('/lib64/');
-    Paths.Add('/usr/lib/x86_64-linux-gnu/');
-    Paths.Add('/lib/x86_64-linux-gnu/');
-    Paths.Add('/usr/lib/i386-linux-gnu/');
-    Paths.Add('/lib/i386-linux-gnu/');
-    Paths.Add('/usr/lib/');
-    Paths.Add('/lib/');
-
-    DLLSSLName  := MyFindFile('libssl*1.0.*', Paths);
-    DLLUtilName := MyFindFile('libcrypto*1.0.*', Paths);
-
-    if (DLLSSLName = '') then
-    begin
-      DLLSSLName  := MyFindFile('libssl*1.1*', Paths);
-      DLLUtilName := MyFindFile('libcrypto*1.1*', Paths)
-    end
-  finally
-    FreeAndNil(Paths)
-  end;
 
   SSLCS.Enter;
   try

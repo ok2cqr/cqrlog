@@ -31,10 +31,10 @@ type
     edtPort: TEdit;
     edtServer: TEdit;
     grbLogin: TGroupBox;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+    lblServerName: TLabel;
+    lblPort: TLabel;
+    lblUserName: TLabel;
+    lblPassword: TLabel;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
