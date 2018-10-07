@@ -74,13 +74,13 @@ Or hit ENTER after rxnumber if no additional message is exchanged.
 <p>Remember that pressing <b>ENTER</b> key at any field saves qso with existing values. How ever there must be
 callsign at least three characters long. Sent/Received number and message are not needed.</p>
 <p>
-Contest numbers and messages are saved in log into RST fields separated by spaces like. 599 001 MSG
+Contest numbers and messages are saved in log into RST fields separated by | like. 599|001|MSG
 This has two benefits:
 <ul>
-<li> CW macros work without any programming change. If you set “send RST”-macro it sends also contest
+<li> CW macros work without any programming change. | is half space in CW-macros. If you set “send RST”-macro it sends also contest
 number and message, and when not in contest it sends just RST.
 How ever a small modification to original is made. If you use %rs for RST it will send 5NN. Now
-modified version sends also T for zero. So you will have 599 001 like 5NN TT1.</li>
+modified version sends also T for zero. So you will have 599|001 like 5NN|TT1.</li>
 <li> Backup of logs work without any change. RST field just are a bit longer</li>
 </ul>
 </p>

@@ -463,6 +463,7 @@ end;
 
 procedure TfrmMain.acPreferencesExecute(Sender: TObject);
 begin
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 3);  //set visible colums tab active. Number may change if preferences page change
   with TfrmPreferences.Create(self) do
   try
     ShowModal;

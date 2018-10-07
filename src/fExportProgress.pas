@@ -153,10 +153,83 @@ var
   Source : TDataSet;
   FirstBackupPath : String;
 
-  procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
-                     QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
-                     Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,cont,
-                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq  : String);
+   Gs : char = #124; //Gs msg group separator, halfspace in CW msg
+   Rs : char = #46 ; // 'RS' _string identifier, does not effect cw msg stripped/added in Adif exp/imp
+
+ //----------------------------------------------------------------------
+      Procedure ContestMsg(Cnr,Msg :string);
+      var Cmsg:string;
+        // tmp, leng, f :used as globals from parent
+      Begin
+         Cmsg := Cnr+'_STRING';
+         if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write('full:',Cnr,':',Msg,': has ',WordCount(Msg,[Gs]),' words.');
+
+         tmp:=trim(ExtractWord(2,Msg,[Gs]));  //contest NR
+         if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' word#2:',tmp);
+                   if (tmp[length(tmp)] = Rs) then  //there is just msg, no serial nr  ('-' exist)
+                    Begin
+                       tmp :=copy(tmp,1,length(tmp)-1);  //remove msg marker from end of string
+                       if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' JustMsgStripped:',tmp);
+                       if (tmp <>'') then
+                       Begin
+                        tmp := Cmsg + dmUtils.StringToADIF(tmp);
+                        Write(f,tmp);
+                        if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' Wrote#2m:',tmp);
+                        leng := leng + Length(tmp);
+                        if leng>200 then
+                        begin
+                         Writeln(f);
+                         leng := 0
+                        end;
+                       end;
+                    end
+                   else
+                    Begin
+                     if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' Serilanr:',tmp);
+                     if (tmp <>'') then
+                     Begin     //there is serial nr
+                       tmp := Cnr + dmUtils.StringToADIF(tmp);
+                       Write(f,tmp);
+                       if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' Wrote#2s:',tmp);
+                       leng := leng + Length(tmp);
+                       if leng>200 then
+                       begin
+                         Writeln(f);
+                         leng := 0
+                       end;
+                     end;
+                    end;
+           if WordCount(Msg,[Gs])>2 then
+           Begin
+            tmp:=trim(ExtractWord(3,Msg,[Gs]));   //Contest MSG
+            if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' word#3:',tmp);
+            if (tmp[length(tmp)] = Rs) then     // (Rs exist)
+            Begin
+              tmp :=copy(tmp,1,length(tmp)-1); //remove msg marker from end of string
+              if (tmp <>'') then
+              Begin
+                 if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' MsgAfterNrStripped:',tmp);
+                 tmp := Cmsg + dmUtils.StringToADIF(tmp);
+                 Write(f,tmp);
+                 if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then write(' Wrote#3m:',tmp);
+                 leng := leng + Length(tmp);
+                 if leng>200 then
+                 begin
+                   Writeln(f);
+                   leng := 0
+                 end;
+              end;
+            end;
+         end;
+      if (dmData.DebugLevel >= 1) or (dmData.DebugLevel = -1) then writeln('<EOL>');
+      tmp:='';
+      end;
+  //----------------------------------------------------------------------
+
+procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
+                    QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
+                    Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,cont,
+                    QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq  : String);
 
   begin
     leng := 0;
@@ -217,9 +290,10 @@ var
       Writeln(f);
       leng := 0
     end;
+
     if exRSTS then
     begin
-      tmp := '<RST_SENT' + dmUtils.StringToADIF(ExtractWord(1,RSTS,[' ']));
+      tmp := '<RST_SENT' + dmUtils.StringToADIF(ExtractWord(1,RSTS,[Gs]));   //this defines only 1st part (rst)
       Write(f,tmp);
       leng := leng + Length(tmp);
       if leng>200 then
@@ -227,38 +301,13 @@ var
          Writeln(f);
          leng := 0
        end;
-      if length(RSTS)>3 then // there is something else
-      Begin
-          tmp:=ExtractWord(2,RSTS,[' ']);  //contest NR
-          if (tmp <>'') then
-            Begin
-               tmp := '<STX' + dmUtils.StringToADIF(tmp);
-               Write(f,tmp);
-               leng := leng + Length(tmp);
-               if leng>200 then
-               begin
-                 Writeln(f);
-                 leng := 0
-               end;
-            end;
-          tmp:=ExtractWord(3,RSTS,[' ']);   //Contest MSG
-          if (tmp <>'') then
-            Begin
-               tmp := '<STX_STRING' + dmUtils.StringToADIF(tmp);
-               Write(f,tmp);
-               leng := leng + Length(tmp);
-               if leng>200 then
-               begin
-                 Writeln(f);
-                 leng := 0
-               end;
-            end;
-      end;
+      if WordCount(RSTS,[Gs])>1 then // there is something else too
+               ContestMsg('<STX',RSTS);
     end;
 
     if exRSTR then
       begin
-        tmp := '<RST_RCVD' + dmUtils.StringToADIF(ExtractWord(1,RSTR,[' ']));
+        tmp := '<RST_RCVD' + dmUtils.StringToADIF(ExtractWord(1,RSTR,[Gs]));  //this defines only 1st part (rst)
         Write(f,tmp);
         leng := leng + Length(tmp);
         if leng>200 then
@@ -266,33 +315,8 @@ var
            Writeln(f);
            leng := 0
          end;
-        if length(RSTR)>3 then // there is something else
-        Begin
-            tmp:=ExtractWord(2,RSTR,[' ']);  //contest NR
-            if (tmp <>'') then
-              Begin
-                 tmp := '<SRX' + dmUtils.StringToADIF(tmp);
-                 Write(f,tmp);
-                 leng := leng + Length(tmp);
-                 if leng>200 then
-                 begin
-                   Writeln(f);
-                   leng := 0
-                 end;
-              end;
-            tmp:=ExtractWord(3,RSTR,[' ']);   //Contest MSG
-            if (tmp <>'') then
-              Begin
-                 tmp := '<SRX_STRING' + dmUtils.StringToADIF(tmp);
-                 Write(f,tmp);
-                 leng := leng + Length(tmp);
-                 if leng>200 then
-                 begin
-                   Writeln(f);
-                   leng := 0
-                 end;
-              end;
-        end;
+        if WordCount(RSTR,[Gs])>1 then // there is something else too
+                 ContestMsg('<SRX',RSTR);
       end;
 
     if exName then
