@@ -1859,6 +1859,7 @@ begin
     1: proj := ' -projection azimuthal -background ' + dmData.HomeDir +
         'xplanet' + PathDelim + 'bck.png';
     2: proj := ' -projection azimuthal';
+    3: proj := ' -projection rectangular';
   end; //case
 
   cmd := edtXplanetPath.Text + ' -config ' + dmData.HomeDir +
