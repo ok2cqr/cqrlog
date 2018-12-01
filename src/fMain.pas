@@ -1757,6 +1757,7 @@ begin
       lblFileName.Caption := dlgOpen.FileName;
       lblErrors.Caption := '0';
       lblCount.Caption := '0';
+      lblFilteredOutCount.Caption := '0';
       ShowModal
     finally
       Free

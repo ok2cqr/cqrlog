@@ -17,9 +17,13 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, lcltype, ComCtrls, iniFiles, sqldb, dateutils;
+  Buttons, lcltype, ComCtrls, ExtCtrls, EditBtn, iniFiles, sqldb, dateutils,
+  strutils;
 
 {$include uADIFhash.pas}
+
+type
+  TDateString = string[10]; //Date in yyyy-mm-dd format
 
 type Tnejakyzaznam=record
       st:longint; // pocet pridanych polozek;
@@ -85,25 +89,34 @@ type
   TfrmAdifImport = class(TForm)
     btnImport: TButton;
     btnClose: TButton;
+    chkFilterDateRange: TCheckBox;
     chkLotOfQSO: TCheckBox;
     cmbProfiles: TComboBox;
+    edtDateFrom: TDateEdit;
+    edtDateTo: TDateEdit;
     edtRemarks: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    lblFilteredOut: TLabel;
+    lblFilteredOutCount: TLabel;
+    lblDateFrom: TLabel;
+    lblDateTo: TLabel;
     lblErrorLog: TLabel;
     lblComplete: TLabel;
     lblCount: TLabel;
     lblErrors: TLabel;
     lblFileName: TLabel;
+    pnlFilterDateRange: TPanel;
     Q1: TSQLQuery;
     Q2: TSQLQuery;
     Q3: TSQLQuery;
     Q4: TSQLQuery;
     sb: TStatusBar;
     tr: TSQLTransaction;
+    procedure chkFilterDateRangeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnImportClick(Sender: TObject);
@@ -113,6 +126,10 @@ type
     RecNR      : Integer;
     GlobalProfile : Integer;
     NowDate : String;
+    FFilteredOutRecNr: integer;
+    FFilterByDate: boolean;
+    FFilterDateRange: array [0..1] of TDateString;
+    function ValidateFilter: boolean;
     procedure WriteWrongADIF(lines : Array of String; error : String);
 
     function pochash(aaa:String):longint;
@@ -133,6 +150,10 @@ implementation
 {$R *.lfm}
 
 uses dData, dUtils, dDXCC, fMain, uMyIni, uVersion;
+
+resourcestring
+  INVALID_DATE_RANGE_ENTERED = 'Invalid date range is entered';
+
 
 function TfrmAdifImport.pochash(aaa:String):longint;
 var z,x:longint;
@@ -282,6 +303,13 @@ var
   dxcc_adif  : Integer;
   len        : Integer=0;
   RxFreq : Double = 0;
+
+  function IsQsoDateInRange: boolean;
+  begin
+    Result := (not FFilterByDate) or
+      ((FFilterDateRange[0] <= d.QSO_DATE) and (d.QSO_DATE <= FFilterDateRange[1]));
+  end;
+
 begin
   Result := True;
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
@@ -298,6 +326,11 @@ begin
       d.FREQ := dmUtils.FreqFromBand(d.BAND,d.MODE);
 
     d.QSO_DATE      := dmUtils.ADIFDateToDate(d.QSO_DATE);
+    if not IsQsoDateInRange then
+    begin
+      Inc(FFilteredOutRecNr);
+      exit;
+    end;
     d.LOTW_QSLSDATE := dmUtils.ADIFDateToDate(d.LOTW_QSLSDATE);
     d.LOTW_QSLRDATE := dmUtils.ADIFDateToDate(d.LOTW_QSLRDATE);
     d.QSLSDATE      := dmUtils.ADIFDateToDate(d.QSLSDATE);
@@ -643,6 +676,9 @@ begin
   GlobalProfile := dmData.GetNRFromProfile(cmbProfiles.Text);
   RecNR := 0;
   WrongRecNr := 0;
+  FFilteredOutRecNr := 0;
+  if not ValidateFilter then
+    exit;
   try try
     system.assign(sou,lblFileName.Caption);
     system.reset(sou);
@@ -694,6 +730,9 @@ begin
     dt := dt - now;
     DecodeTime(dt,hh,m,s,ms);
     WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
+    lblFilteredOut.Visible := FFilterByDate;
+    lblFilteredOutCount.Visible := FFilterByDate;
+    lblFilteredOutCount.Caption := IntToStr(FFilteredOutRecNr);
     if chkLotOfQSO.Checked then
     begin
       sb.Panels[0].Text := 'Recreating indexes ...';
@@ -704,6 +743,23 @@ begin
     sb.Panels[0].Text := 'Done ...';
     lblComplete.Visible := True
   end
+end;
+
+function TfrmAdifImport.ValidateFilter: boolean;
+begin
+  Result := true;
+  FFilterByDate := chkFilterDateRange.Checked;
+  if FFilterByDate then
+  begin
+    FFilterDateRange[0] := IfThen(edtDateFrom.Date <> NullDate, dmUtils.MyDateToStr(edtDateFrom.Date));
+    FFilterDateRange[1] := IfThen(edtDateTo.Date <> NullDate, dmUtils.MyDateToStr(edtDateTo.Date));
+    if not ((Length(FFilterDateRange[0]) > 0) and (Length(FFilterDateRange[1]) > 0) and
+      (FFilterDateRange[0] <= FFilterDateRange[1])) then
+    begin
+      MessageDlg(Caption, INVALID_DATE_RANGE_ENTERED, mtError, [mbOK], 0);
+      Result := false;
+    end;
+  end;
 end;
 
 procedure TfrmAdifImport.FormCreate(Sender: TObject);
@@ -727,6 +783,11 @@ begin
   finally
     FormatSettings.TimeSeparator := tmp
   end
+end;
+
+procedure TfrmAdifImport.chkFilterDateRangeChange(Sender: TObject);
+begin
+  pnlFilterDateRange.Enabled := chkFilterDateRange.Checked;
 end;
 
 procedure TfrmAdifImport.FormShow(Sender: TObject);
