@@ -5,6 +5,7 @@ Legend:
 --------------------
 2.3.1
   # update sat_name.tab with newest lotw satellite list (Andy, DL7AOP)
+  # some layout changes and code refactoring
   + feature to select rectangular geometry in the xplanet preferences (Andy, DL7AOP)
   + ADIF import: implement filter by date range (gl-bars)
   + Initial Skimmer Support (Olli, DH2WQ)
