@@ -3648,7 +3648,7 @@ begin
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
     req := 'http://www.hamqth.com/xml.php?u=' + cqrini.ReadString('CallBook', 'CBUser', '') +
-      '&p=' + cqrini.ReadString('CallBook', 'CBPass', '') + '&prg=cqrlog';
+      '&p=' + EncodeURLData(cqrini.ReadString('CallBook', 'CBPass', '')) + '&prg=cqrlog';
     //Writeln(req);
     if not HTTP.HTTPMethod('GET', req) then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
