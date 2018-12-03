@@ -336,6 +336,8 @@ AS-200|Shikoku Coastal Islands|JA|
 AS-201|Sea of Marmara Isl.|TA|
 AS-202|Hawar Isl.|A9|
 AS-203|Sea of Okhotsk Coast group (Shelikhova Bay group)|UA(AS)|
+AS-204|Kuril'skiye Island North|UA(AS)|
+AS-205|Bering Sea Coast East|UA(AS)|
 EU-001|Dodecanese|SV5|SV5
 EU-002|Aland Islands|OH0|OH0
 EU-003|Eastern Azores group|CT8|CT8
@@ -530,6 +532,8 @@ EU-189|Isle of Rockall|GM|
 EU-190|Viktoriya Isl.|R1(F)|
 EU-191|Fericirii Isl|YO|
 EU-191|Fericirii Isl|UT|
+EU-192|Kataja Island|OH|
+EU-192|Kataja Island|SM|
 NA-001|Great Bahama Bank group|C6|
 NA-002|Caicos Islands|VP5|
 NA-003|Turks Islands|VP5|
@@ -785,6 +789,8 @@ NA-245|Rocas Alijos Islands|XE|
 NA-246|Tamaulipas State group|XE|
 NA-247|St. Maarten’s Coastal Islands|PJ7|
 NA-248|Nunavut (Devon) Island (Melville Island group)|VE|
+NA-249|Puerto Rico's Coastal Islands|KP4|KP4
+NA-250|Yakutat County Group, Coastal Groups|KL|
 OC-001|Australia|VK|
 OC-002|Christmas Island|VK9(X)|VK9X
 OC-003|Cocos (Keeling) Islands|VK9(C)|VK9C
@@ -1086,6 +1092,7 @@ OC-294|Sandy Island|VK|
 OC-295|Sebatik Island|YB|
 OC-295|Sebatik Island|9M6|
 OC-296|Tobi and Helen|T8|
+OC-297|Morane Atoll|FO|
 SA-001|Easter Island|CE0(A)|
 SA-002|Falkland Islands|VP8(F)|
 SA-003|Fernando De Noronha Archipelago|PY0(F)|PY0F
