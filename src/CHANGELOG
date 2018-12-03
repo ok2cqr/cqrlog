@@ -3,6 +3,8 @@ Legend:
   + new feature
   - bugfix
 --------------------
+2.3.1
+  - fixed bug with CTRL+END and/or CTRL+HOME
 2.3.0
   # Auto backup: can also prevent accidental closing of cqrlog. Text informations added (Saku, OH1KH)
   - Wsjt-x remote used nonexisting variable if CQ-monitor was closed (Saku, OH1KH)
