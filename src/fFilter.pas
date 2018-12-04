@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, MaskEdit, lcltype, inifiles;
+  Buttons, MaskEdit, lcltype, ExtDlgs, EditBtn, inifiles;
 
 type
 
@@ -30,6 +30,7 @@ type
     btnLoad: TButton;
     btnSelectDXCC: TButton;
     btnHelp: TButton;
+    chkNot: TCheckBox;
     chkIOTAOnly: TCheckBox;
     cmbLoTW_qslr: TComboBox;
     cmbeQSL_qslr : TComboBox;
@@ -43,13 +44,13 @@ type
     cmbLoTW_qsls: TComboBox;
     cmbSort: TComboBox;
     cmbBandSelector: TComboBox;
+    edtDateFrom: TDateEdit;
     edtCont: TEdit;
+    edtDateTo: TDateEdit;
     edtPwrFrom : TEdit;
     edtPwrTo : TEdit;
     edtState: TEdit;
     edtCounty: TEdit;
-    edtDateFrom: TEdit;
-    edtDateTo: TEdit;
     edtIOTA: TEdit;
     edtRemarks: TEdit;
     edtDiplom: TEdit;
@@ -393,6 +394,7 @@ begin
       16 : grb_by := 'GROUP BY club_nr5'
     end; //case
 
+    if chkNot.Checked then tmp:= 'NOT( '+tmp+' )';
     tmp := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE ' + tmp + ' ' + grb_by +' ' + OrderBy;
 
     dmData.qCQRLOG.Close;
@@ -583,7 +585,8 @@ begin
       cmbeQSL_qsls.Text := filini.ReadString('eQSL','eqsl_qsl_sent','');
       cmbeQSL_qslr.Text := filini.ReadString('eQSL','eqsl_qsl_rcvd','');
       edtPwrFrom.Text   := filini.ReadString('Power','power_from','');
-      edtPwrTo.Text     := filini.ReadString('Power','power_to','')
+      edtPwrTo.Text     := filini.ReadString('Power','power_to','');
+      chkNot.Checked    := filini.ReadBool('not','not',False);
     finally
       filini.Free
     end
@@ -638,7 +641,8 @@ begin
       filini.WriteString('eQSL','eqsl_qsl_sent',cmbeQSL_qsls.Text);
       filini.WriteString('eQSL','eqsl_qsl_rcvd',cmbeQSL_qslr.Text) ;
       filini.WriteString('Power','power_from',edtPwrFrom.Text);
-      filini.WriteString('Power','power_to',edtPwrTo.Text)
+      filini.WriteString('Power','power_to',edtPwrTo.Text);
+      filini.WriteBool('not','not',chkNot.Checked);
     finally
       filini.Free
     end;
