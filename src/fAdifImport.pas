@@ -125,6 +125,8 @@ type
     WrongRecNr : Integer;
     RecNR      : Integer;
     GlobalProfile : Integer;
+    FMyPower: String;
+    FMyLoc: String;
     NowDate : String;
     FFilteredOutRecNr: integer;
     FFilterByDate: boolean;
@@ -285,8 +287,6 @@ procedure TfrmAdifImport.smazzaznam(var d:Tnejakyzaznam);
 
 function TfrmAdifImport.novyzaznam(var d:Tnejakyzaznam; var err : String) : Boolean;
 var
-  MyPower : String;
-  MyLoc   : String;
   Lines   : Array of String;
   pAr : TExplodeArray;
   pProf : String;
@@ -314,11 +314,8 @@ begin
   Result := True;
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
   begin
-    MyPower := cqrini.ReadString('NewQSO','PWR','5 W');
-    MyLoc   := cqrini.ReadString('Station','LOC','');
-
     if not dmUtils.IsLocOK(d.MY_GRIDSQUARE) then
-      d.MY_GRIDSQUARE := MyLoc;
+      d.MY_GRIDSQUARE := FMyLoc;
     d.CALL := UpperCase(d.CALL);
     if (d.MODE = 'USB') or (d.MODE ='LSB') then
       d.MODE := 'SSB';
@@ -378,10 +375,7 @@ begin
     if edtRemarks.Text <> '' then
       d.COMMENT := edtRemarks.Text + ' ' + d.COMMENT;
     if d.TX_PWR = '' then
-      d.TX_PWR := MyPower;
-
-    Writeln('d.TX_PWR:',d.TX_PWR);
-    Writeln('MyPower: ',MyPower);
+      d.TX_PWR := FMyPower;
 
     d.MODE := UpperCase(d.MODE);
 
@@ -563,7 +557,6 @@ begin
     Q1.Params[25].AsString  := d.STATE;
     Q1.Params[26].AsString  := UpperCase(d.CONT);
     Q1.Params[27].AsInteger := StrToInt(profile);
-    Writeln(1);
     if dmUtils.IsDateOK(d.LOTW_QSLSDATE) then
     begin
       Q1.Params[28].AsString  := d.LOTW_QSLSDATE;
@@ -580,7 +573,6 @@ begin
         Q1.Params[29].AsString := ''
       end
     end;
-    Writeln(2);
     if dmUtils.IsDateOK(d.LOTW_QSLRDATE) then
     begin
       Q1.Params[30].AsString  := d.LOTW_QSLRDATE;
@@ -597,7 +589,6 @@ begin
         Q1.Params[31].AsString  := ''
       end
     end;
-    Writeln(3);
     if dmUtils.IsDateOK(d.QSLSDATE) then
       Q1.Params[32].AsString  := d.QSLSDATE
     else
@@ -606,7 +597,6 @@ begin
       Q1.Params[33].AsString  := d.QSLRDATE
     else
       Q1.Params[33].Clear;
-    Writeln(4);
     if dmUtils.IsDateOK(d.EQSL_QSLSDATE) then
     begin
       Q1.Params[34].AsString  := d.EQSL_QSLSDATE;
@@ -623,7 +613,6 @@ begin
         Q1.Params[35].AsString  := ''
       end
     end;
-        Writeln(5);
     if dmUtils.IsDateOK(d.EQSL_QSLRDATE) then
     begin
       Q1.Params[36].AsString  := d.EQSL_QSLRDATE;
@@ -650,9 +639,9 @@ begin
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
     inc(RecNR);
-    lblCount.Caption := IntToStr(RecNR);
     if (RecNR mod 100 = 0) then
     begin
+      lblCount.Caption := IntToStr(RecNR);
       Repaint;
       Application.ProcessMessages
     end
@@ -674,6 +663,8 @@ var
 begin
   lblComplete.Visible := False;
   GlobalProfile := dmData.GetNRFromProfile(cmbProfiles.Text);
+  FMyPower := cqrini.ReadString('NewQSO', 'PWR', '5 W');
+  FMyLoc   := cqrini.ReadString('Station', 'LOC', '');
   RecNR := 0;
   WrongRecNr := 0;
   FFilteredOutRecNr := 0;
@@ -730,6 +721,7 @@ begin
     dt := dt - now;
     DecodeTime(dt,hh,m,s,ms);
     WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
+    lblCount.Caption := IntToStr(RecNR);
     lblFilteredOut.Visible := FFilterByDate;
     lblFilteredOutCount.Visible := FFilterByDate;
     lblFilteredOutCount.Caption := IntToStr(FFilteredOutRecNr);
