@@ -1102,20 +1102,13 @@ begin
   isLoTW := dmData.UsesLotw(call);
   isEQSL := dmDXCluster.UseseQSL(call);
 
-  if cfgUseBackColor then
-  begin
-    if isLoTW then
-      ThBckColor := cfgBckColor
-    else
-      ThBckColor := clWhite
-  end;
-
-  if ThBckColor = clWhite then
-  begin
-    if cfgeUseBackColor then
-      if isEQSL then
-        ThBckColor := cfgeBckColor
-  end;
+  //DXCluster - default Backgroundcolor white
+  //case lotw and eqsl is given, lotw will win
+  ThBckColor := clWhite;
+  if cfgeUseBackColor and isEQSL then
+    ThBckColor := cfgeBckColor;
+  if cfgUseBackColor and isLoTW then
+    ThBckColor := cfgBckColor;
 
   if not TryStrToFloat(freq,kmitocet) then
   begin
