@@ -1427,6 +1427,7 @@ var
   time    : String = '';
   id1     : Integer = 0;
   call    : String = '';
+  counted : Integer = 0;
 begin
   if StrToInt(lblQSOCount.Caption) = 0 then
      exit;
@@ -1444,6 +1445,7 @@ begin
     dmData.qCQRLOG.Open;
     dmData.qCQRLOG.Last
   end;
+
   if ((key = VK_HOME) and (Shift = [ssCtrl])) and (not dmData.IsFilter) then
   begin
     dmData.trCQRLOG.Rollback;
@@ -1455,6 +1457,7 @@ begin
     dmData.trCQRLOG.StartTransaction;
     dmData.qCQRLOG.Open
   end;
+
   if (((key = VK_UP) or (key = 33)) and dmData.qCQRLOG.BOF) and (not dmData.IsFilter) then
   begin
     id      := dmData.qCQRLOG.Fields[0].AsInteger;
@@ -1469,32 +1472,36 @@ begin
     dmData.trQ1.StartTransaction;
     dmData.Q1.Open;
     id1 := dmData.Q1.Fields[0].AsInteger;
-    dmData.trQ1.Rollback;
     dmData.Q1.Close;
+    dmData.trQ1.Rollback;
     ///////
     if id1=id then //we are on the begining of dataset
       exit;
-    dmData.qCQRLOG.Close;
-    dmData.trCQRLOG.Rollback;
-    dmData.trCQRLOG.StartTransaction;
+
+    // count
     if dmData.SortType =  stDate then
-      dmData.qCQRLOG.SQL.Text := 'select count(*) from (select * from cqrlog_main where (qsodate = '+QuotedStr(DateToStr(qsodate))+
+      dmData.Q1.SQL.Text := 'select count(*) from (select * from cqrlog_main where (qsodate = '+QuotedStr(DateToStr(qsodate))+
                     'and time_on >= '+QuotedStr(time)+') or qsodate > '+QuotedStr(DateToStr(qsodate))+
                     ' order by qsodate, time_on LIMIT '+IntToStr(cDB_LIMIT)+') as foo order by qsodate DESC,time_on DESC'
     else
-      dmData.qCQRLOG.SQL.Text := 'select count(*) from (select * from cqrlog_main where callsign <= ' +QuotedStr(call)+
+      dmData.Q1.SQL.Text := 'select count(*) from (select * from cqrlog_main where callsign <= ' +QuotedStr(call)+
                     ' order by callsign DESC LIMIT '+IntToStr(cDB_LIMIT)+') as foo order by callsign';
-    dmData.qCQRLOG.Open;
-    if dmData.qCQRLOG.Fields[0].AsInteger < cDB_LIMIT then
+    dmData.trQ1.StartTransaction;
+    dmData.Q1.Open;
+    counted := dmData.Q1.Fields[0].AsInteger;
+    dmData.Q1.Close;
+    dmData.trQ1.Rollback;
+
+    dmData.qCQRLOG.Close;
+    dmData.trCQRLOG.Rollback;
+    if counted < cDB_LIMIT then
     begin
-      dmData.qCQRLOG.Close;
       if dmData.SortType =  stDate then
         dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(cDB_LIMIT)
       else
         dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_callsign LIMIT '+IntToStr(cDB_LIMIT)
     end
     else begin
-      dmData.qCQRLOG.Close;
       if dmData.SortType =  stDate then
         dmData.qCQRLOG.SQL.Text := 'select * from (select * from view_cqrlog_main_by_qsodate where (qsodate = '+QuotedStr(DateToStr(qsodate))+
                       'and time_on >= '+QuotedStr(time)+') or qsodate > '+QuotedStr(DateToStr(qsodate))+
@@ -1503,6 +1510,7 @@ begin
         dmData.qCQRLOG.SQL.Text := 'select * from (select * from view_cqrlog_main_by_callsign where callsign <= '+QuotedStr(call) +
                       ' order by callsign DESC LIMIT ' + IntToStr(cDB_LIMIT) + ') as foo order by callsign'
     end;
+    dmData.trCQRLOG.StartTransaction;
     dmData.qCQRLOG.Open;
     dmData.QueryLocate(dmData.qCQRLOG,'id_cqrlog_main',id,False)
   end;
@@ -1526,18 +1534,25 @@ begin
     ///////
     if id1=id then //we are on the end of dataset
       exit;
-    dmData.qCQRLOG.Close;
+
+    //count
     if dmData.SortType =  stDate then
-      dmData.qCQRLOG.SQL.Text := 'select count(*) from cqrlog_main where (qsodate = '+QuotedStr(DateToStr(qsodate))+
+      dmData.Q1.SQL.Text := 'select count(*) from cqrlog_main where (qsodate = '+QuotedStr(DateToStr(qsodate))+
                     'and time_on <= '+QuotedStr(time)+') or qsodate < '+QuotedStr(DateToStr(qsodate))+
                     ' order by qsodate DESC, time_on DESC LIMIT '+IntToStr(cDB_LIMIT)
     else
-      dmData.qCQRLOG.SQL.Text := 'select count(*) from cqrlog_main where callsign >= '+QuotedStr(call)+
+      dmData.Q1.SQL.Text := 'select count(*) from cqrlog_main where callsign >= '+QuotedStr(call)+
                     ' order by callsign LIMIT '+IntToStr(cDB_LIMIT);
-    dmData.qCQRLOG.Open;
-    if dmData.qCQRLOG.Fields[0].AsInteger < cDB_LIMIT then
+    dmData.trQ1.StartTransaction;
+    dmData.Q1.Open;
+    counted := dmData.Q1.Fields[0].AsInteger;
+    dmData.Q1.Close;
+    dmData.trQ1.Rollback;
+
+    dmData.qCQRLOG.Close;
+    dmData.trCQRLOG.Rollback;
+    if counted < cDB_LIMIT then
     begin
-      dmData.qCQRLOG.Close;
       if dmData.SortType =  stDate then
         dmData.qCQRLOG.SQL.Text := 'select * from (select * from view_cqrlog_main_by_qsodate order by qsodate, time_on LIMIT '+
                        IntToStr(cDB_LIMIT)+') as foo order by qsodate DESC,time_on DESC'
@@ -1546,7 +1561,6 @@ begin
                       IntToStr(cDB_LIMIT)+') as foo order by callsign'
     end
     else begin
-      dmData.qCQRLOG.Close;
       if dmData.SortType =  stDate then
         dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate where (qsodate = '+QuotedStr(DateToStr(qsodate))+
                       'and time_on <= '+QuotedStr(time)+') or qsodate < '+QuotedStr(DateToStr(qsodate))+
@@ -1555,9 +1569,11 @@ begin
         dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_callsign where (callsign >= '+QuotedStr(call)+
                       ') LIMIT '+IntToStr(cDB_LIMIT)
     end;
+    dmData.trCQRLOG.StartTransaction;
     dmData.qCQRLOG.Open;
     dmData.QueryLocate(dmData.qCQRLOG,'id_cqrlog_main',id,False)
   end;
+
   CheckAttachment
 end;
 
