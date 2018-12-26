@@ -997,6 +997,10 @@ begin
     finally
       List1.Free;
     end;
+    //remove < > from call here (wsjtx v2.0)
+      msgCall := StringReplace(msgCall,'<','',[rfReplaceAll]);
+      msgCall := StringReplace(msgCall,'>','',[rfReplaceAll]);
+
     if dmData.DebugLevel >= 1 then
       Writeln('Other call:', msgCall, '    loc:', msgLoc);
     if (not frmWorkedGrids.GridOK(msgLoc)) or (msgLoc = 'RR73') then
@@ -1499,6 +1503,10 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     if (msgCall = '') then
       msgCall := 'NOCALL';
 
+    //remove < > from call here (wsjtx v2.0)
+      msgCall := StringReplace(msgCall,'<','',[rfReplaceAll]);
+      msgCall := StringReplace(msgCall,'>','',[rfReplaceAll]);
+
     if dmData.DebugLevel >= 1 then
       Writeln('DIR-CQ-call after CQ2:', CallCqDir);
     //so we should have time, mode and call by now. That reamains locator, if exists
@@ -1527,7 +1535,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       Writeln('LOCATOR IS:', msgLoc);
     if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
       (msgLoc = '----')) then
-      msgLoc := '<!!>';//locator for "ALL-MY"
+      msgLoc := '*QSO';//locator for "ALL-MY"
 
     if not ((msgLoc = '----') and isMyCall) then
       //if mycall: line must have locator to print(I.E. Answer to my CQ)
