@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 137
+  Left = 243
   Height = 709
-  Top = 355
+  Top = 64
   Width = 809
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2194,14 +2194,14 @@ object frmNewQSO: TfrmNewQSO
         TabOrder = 0
         object lblCommentToCallsign: TLabel
           AnchorSideLeft.Control = lblCounty
-          AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblCfmLoTW
+          AnchorSideTop.Control = edtDXCCRef
+          AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Side = asrBottom
           Left = 258
           Height = 17
           Top = 236
           Width = 135
-          Anchors = [akLeft, akBottom]
+          BorderSpacing.Top = 5
           Caption = 'Comment to callsign'
           Layout = tlBottom
           ParentColor = False
@@ -2299,7 +2299,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           Left = 156
           Height = 17
-          Top = 286
+          Top = 283
           Width = 24
           BorderSpacing.Top = 6
           Caption = '&End'
@@ -2313,7 +2313,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           Left = 103
           Height = 17
-          Top = 286
+          Top = 283
           Width = 31
           BorderSpacing.Top = 6
           Caption = '&Start'
@@ -2327,7 +2327,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 12
           Height = 17
-          Top = 286
+          Top = 283
           Width = 31
           BorderSpacing.Top = 5
           Caption = 'Date'
@@ -2491,15 +2491,16 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblQSOTakes: TLabel
-          AnchorSideLeft.Control = edtStartTime
-          AnchorSideTop.Side = asrCenter
+          AnchorSideLeft.Control = pnlOffline
+          AnchorSideTop.Control = edtDate
+          AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = pnlOffline
           AnchorSideBottom.Side = asrBottom
-          Left = 103
+          Left = 12
           Height = 17
-          Top = 264
+          Top = 341
           Width = 72
-          Anchors = [akLeft, akBottom]
+          BorderSpacing.Top = 5
           Caption = 'QSO takes '
           Layout = tlBottom
           ParentColor = False
@@ -2509,7 +2510,7 @@ object frmNewQSO: TfrmNewQSO
         object lblQSLMgr: TLabel
           AnchorSideLeft.Control = edtQSL_VIA
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblCfmLoTW
+          AnchorSideBottom.Control = lblCommentToCallsign
           AnchorSideBottom.Side = asrBottom
           Left = 402
           Height = 17
@@ -2559,12 +2560,12 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblCfmLoTW
           AnchorSideBottom.Side = asrBottom
-          Left = 149
+          Left = 154
           Height = 17
           Top = 236
           Width = 81
           Anchors = [akLeft, akBottom]
-          BorderSpacing.Left = 20
+          BorderSpacing.Left = 25
           Caption = 'QSL rcvd on '
           Font.Color = clRed
           Layout = tlBottom
@@ -3220,14 +3221,13 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 18
         end
         object pnlOffline: TPanel
-          AnchorSideLeft.Control = lblCfmLoTW
-          AnchorSideTop.Side = asrBottom
+          AnchorSideLeft.Control = edtDXCCRef
+          AnchorSideTop.Control = mComment
           Left = 12
           Height = 23
-          Top = 258
+          Top = 255
           Width = 69
           AutoSize = True
-          BorderSpacing.Top = 5
           BevelOuter = bvNone
           ClientHeight = 23
           ClientWidth = 69
@@ -3272,7 +3272,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 12
           Height = 34
-          Top = 305
+          Top = 302
           Width = 86
           BorderSpacing.Top = 2
           OnEnter = edtDateEnter
@@ -3288,7 +3288,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           Left = 103
           Height = 34
-          Top = 305
+          Top = 302
           Width = 48
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3305,7 +3305,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           Left = 156
           Height = 34
-          Top = 305
+          Top = 302
           Width = 48
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3498,7 +3498,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 209
           Height = 20
-          Top = 309
+          Top = 306
           Width = 20
           Action = acRefreshTime
           AutoSize = True
@@ -3519,7 +3519,7 @@ object frmNewQSO: TfrmNewQSO
           ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight]
-          BorderSpacing.Top = 22
+          BorderSpacing.Top = 25
           TabIndex = 0
           TabOrder = 28
           object tabDXCCStat: TTabSheet
@@ -4243,27 +4243,27 @@ object frmNewQSO: TfrmNewQSO
         object mCallBook: TMemo
           AnchorSideLeft.Control = Panel5
           AnchorSideLeft.Side = asrCenter
-          AnchorSideBottom.Control = Panel5
+          AnchorSideTop.Control = lblCallbookInformation
+          AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 125
-          Top = 313
+          Height = 126
+          Top = 312
           Width = 247
           Align = alBottom
-          Anchors = [akLeft, akBottom]
+          Anchors = [akTop, akLeft, akRight]
           ParentFont = False
           ScrollBars = ssAutoBoth
           TabOrder = 1
         end
         object lblCallbookInformation: TLabel
           AnchorSideLeft.Control = Panel5
+          AnchorSideTop.Control = SpeedButton3
           AnchorSideTop.Side = asrBottom
-          AnchorSideBottom.Control = mCallBook
           Left = 3
           Height = 17
-          Top = 296
+          Top = 295
           Width = 61
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 3
           BorderSpacing.Top = 5
           Caption = 'Callbook:'
