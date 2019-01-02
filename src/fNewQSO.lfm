@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 243
+  Left = 393
   Height = 709
-  Top = 64
+  Top = 6
   Width = 809
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -4355,7 +4355,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 491
+        Left = 483
         Height = 17
         Top = 11
         Width = 123
@@ -4374,7 +4374,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 624
+        Left = 616
         Height = 17
         Top = 11
         Width = 114
@@ -4391,30 +4391,29 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideLeft.Control = lblQSONr
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Side = asrCenter
-        AnchorSideRight.Control = cmbProfiles
         AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 112
+        Left = 102
         Height = 17
         Top = 11
-        Width = 78
-        Anchors = [akLeft, akRight, akBottom]
-        BorderSpacing.Left = 30
-        BorderSpacing.Right = 10
+        Width = 85
+        Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 20
         Caption = 'QTH profile:  '
         Layout = tlBottom
         ParentColor = False
         ParentFont = False
       end
       object cmbProfiles: TComboBox
+        AnchorSideLeft.Control = blbQTHProfile
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Panel4
         AnchorSideTop.Side = asrCenter
-        Left = 200
+        Left = 192
         Height = 34
         Top = 2
         Width = 281
-        Anchors = [akTop]
+        BorderSpacing.Left = 5
         ItemHeight = 0
         OnChange = cmbProfilesChange
         ParentFont = False
