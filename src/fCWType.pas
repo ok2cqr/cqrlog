@@ -97,7 +97,7 @@ begin
    (CWkey = '?') or (CWkey = ',') or (CWkey='.') or (CWkey='/') or (CWkey = ' ') or
    (CWkey = '<') or (CWkey = '>') or (CWkey = ':') or (CWkey = ')') or (CWkey = '(') or
    (CWkey = ';') or (CWkey = '@') or (CWkey = 'ß') or (CWkey ='Ü') or (CWkey ='Ö') or
-   (CWkey = 'Ä') then
+   (CWkey = 'Ä') or (CWkey ='^') then
   begin
     if rgMode.ItemIndex = 0 then //letter mode
       frmNewQSO.CWint.SendText(CWkey)
