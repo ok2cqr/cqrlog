@@ -1,54 +1,59 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 660
-  Height = 388
-  Top = 50
+  Left = 1704
+  Height = 372
+  Top = 231
   Width = 590
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
-  ClientHeight = 388
+  ClientHeight = 372
   ClientWidth = 590
   OnClose = FormClose
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '1.8.4.0'
   object lblBand: TLabel
+    AnchorSideLeft.Control = WsjtxMemo
     AnchorSideTop.Control = Owner
-    Left = 32
+    AnchorSideBottom.Side = asrBottom
+    Left = 12
     Height = 17
     Top = 12
     Width = 33
-    BorderSpacing.Left = 30
+    BorderSpacing.Left = 10
     BorderSpacing.Top = 12
-    BorderSpacing.Bottom = 5
     Caption = 'Band'
+    Layout = tlBottom
     ParentColor = False
   end
   object lblMode: TLabel
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = WsjtxMemo
     AnchorSideRight.Side = asrBottom
-    Left = 522
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
+    Left = 542
     Height = 17
     Top = 12
     Width = 36
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     BorderSpacing.Top = 12
-    BorderSpacing.Right = 30
-    BorderSpacing.Bottom = 5
+    BorderSpacing.Right = 10
     Caption = 'Mode'
+    Layout = tlBottom
     ParentColor = False
   end
   object chkHistory: TCheckBox
     AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Owner
     AnchorSideRight.Control = chknoTxt
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
     Left = 211
     Height = 23
     Top = 6
     Width = 56
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     BorderSpacing.Top = 6
     BorderSpacing.Right = 1
     Caption = 'nHst'
@@ -58,12 +63,14 @@ object frmMonWsjtx: TfrmMonWsjtx
   object chknoTxt: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Owner
     AnchorSideRight.Side = asrCenter
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
     Left = 268
     Height = 23
     Top = 6
     Width = 55
+    Anchors = [akLeft, akBottom]
     BorderSpacing.Top = 6
     Caption = 'nTxt'
     OnChange = chknoTxtChange
@@ -77,7 +84,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Control = pnlFollow
     Left = 2
     Height = 45
-    Top = 294
+    Top = 278
     Width = 586
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -214,7 +221,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 2
     Height = 45
-    Top = 341
+    Top = 325
     Width = 586
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -279,13 +286,14 @@ object frmMonWsjtx: TfrmMonWsjtx
     end
   end
   object cbflw: TCheckBox
-    AnchorSideTop.Control = Owner
     AnchorSideRight.Control = chkHistory
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
     Left = 160
     Height = 23
     Top = 6
     Width = 49
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     BorderSpacing.Top = 6
     BorderSpacing.Right = 2
     Caption = 'Flw'
@@ -295,11 +303,13 @@ object frmMonWsjtx: TfrmMonWsjtx
   object chkMap: TCheckBox
     AnchorSideLeft.Control = chknoTxt
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Owner
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
     Left = 324
     Height = 23
     Top = 6
     Width = 54
+    Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 1
     BorderSpacing.Top = 6
     Caption = 'Map'
@@ -312,7 +322,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideRight.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 2
-    Height = 307
+    Height = 291
     Top = 30
     Width = 586
     Align = alClient
@@ -333,7 +343,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     ZoomFactor = 1
   end
   object lblInfo: TLabel
-    AnchorSideLeft.Control = WsjtxMemo
+    AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = chknoTxt
     AnchorSideTop.Side = asrBottom
@@ -352,7 +362,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 5
     Height = 23
-    Top = 353
+    Top = 337
     Width = 118
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 5
@@ -369,7 +379,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 124
     Height = 23
-    Top = 353
+    Top = 337
     Width = 43
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 1
@@ -382,11 +392,13 @@ object frmMonWsjtx: TfrmMonWsjtx
   object chkStopTx: TCheckBox
     AnchorSideLeft.Control = chkMap
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = Owner
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
     Left = 378
     Height = 23
     Top = 6
     Width = 49
+    Anchors = [akLeft, akBottom]
     BorderSpacing.Top = 6
     Caption = 'sTx'
     OnChange = chkStopTxChange
