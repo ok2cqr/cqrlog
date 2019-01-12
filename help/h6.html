@@ -22,7 +22,7 @@
     <tbody>
     <tr>
         <td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
-        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
         <td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
     </tr>
     </tbody>
@@ -39,9 +39,9 @@
 rigctl --list > riglist.txt
 </pre>
     Remember, the <i>rigctl</i> executable must be on your path.<br>
-    The snapshot version 1.2.7. supports the following radio types:
+    The snapshot version 3.1. supports the following radio types:
 <pre>
-  Rig#	Mfg                    Model                   Vers.          Status
+  Rig#  Mfg                    Model                   Vers.          Status
 =============================================================================
      1  Hamlib                 Dummy                   0.5             Beta
      2  Hamlib                 NET rigctl              0.3             Beta
@@ -49,7 +49,7 @@ rigctl --list > riglist.txt
    103  Yaesu                  FT-1000D                0.0.6           Alpha
    104  Yaesu                  MARK-V FT-1000MP        0.0.5           Alpha
    105  Yaesu                  FT-747GX                0.4.1           Beta
-   106  Yaesu                  FT-757GX                0.4.1           Beta
+   106  Yaesu                  FT-757GX                0.5.0           Beta
    107  Yaesu                  FT-757GXII              0.4             Stable
    109  Yaesu                  FT-767GX                1.0             Stable
    110  Yaesu                  FT-736R                 0.3             Stable
@@ -57,56 +57,62 @@ rigctl --list > riglist.txt
    113  Yaesu                  FT-900                  0.1             Untested
    114  Yaesu                  FT-920                  2010-08-23      Stable
    115  Yaesu                  FT-890                  0.1             Stable
-   116  Yaesu                  FT-990                  0.2.1           Alpha
-   117  Yaesu                  FRG-100                 0.4             Beta
+   116  Yaesu                  FT-990                  0.2.2           Alpha
+   117  Yaesu                  FRG-100                 0.5             Beta
    118  Yaesu                  FRG-9600                0.2             Untested
    119  Yaesu                  FRG-8800                0.2             Untested
    120  Yaesu                  FT-817                  0.5.1           Beta
    121  Yaesu                  FT-100                  0.4.1           Beta
-   122  Yaesu                  FT-857                  0.4             Beta
+   122  Yaesu                  FT-857                  0.5             Beta
    123  Yaesu                  FT-897                  0.3.3           Beta
    124  Yaesu                  FT-1000MP               0.1.1           Beta
    125  Yaesu                  MARK-V Field FT-1000MP  0.0.5           Alpha
    126  Yaesu                  VR-5000                 0.2             Alpha
-   127  Yaesu                  FT-450                  0.22.1          Beta
-   128  Yaesu                  FT-950                  0.22.2          Stable
-   129  Yaesu                  FT-2000                 0.22.1          Stable
-   130  Yaesu                  FTDX-9000               0.22.1          Untested
+   127  Yaesu                  FT-450                  0.23.1          Beta
+   128  Yaesu                  FT-950                  0.23.2          Stable
+   129  Yaesu                  FT-2000                 0.23.1          Stable
+   130  Yaesu                  FTDX-9000               0.23.1          Untested
    131  Yaesu                  FT-980                  0.1             Alpha
-   132  Yaesu                  FT-DX5000               0.22            Alpha
+   132  Yaesu                  FT-DX5000               0.23            Alpha
    133  Vertex Standard        VX-1700                 1.1             Alpha
-   201  Kenwood                TS-50S                  0.8             Untested
-   202  Kenwood                TS-440                  0.8.0.6.1       Alpha
-   203  Kenwood                TS-450S                 0.8.1           Beta
-   204  Kenwood                TS-570D                 0.8.2           Stable
-   205  Kenwood                TS-690S                 0.8.1           Beta
-   206  Kenwood                TS-711                  0.8.0.6.1       Untested
-   207  Kenwood                TS-790                  0.8.2           Alpha
-   208  Kenwood                TS-811                  0.8.0.6.1       Untested
-   209  Kenwood                TS-850                  0.8.1           Beta
-   210  Kenwood                TS-870S                 0.8.0           Beta
-   211  Kenwood                TS-940S                 0.8.0.6.1       Alpha
-   213  Kenwood                TS-950SDX               0.8             Beta
-   214  Kenwood                TS-2000                 0.8.4           Beta
+   134  Yaesu                  FT-1200                 0.23.1          Stable
+   135  Yaesu                  FT-991                  0.23.4          Beta
+   201  Kenwood                TS-50S                  0.9             Untested
+   202  Kenwood                TS-440                  0.9.0.6.1       Alpha
+   203  Kenwood                TS-450S                 0.9.1           Beta
+   204  Kenwood                TS-570D                 0.9.2           Stable
+   205  Kenwood                TS-690S                 0.9.1           Beta
+   206  Kenwood                TS-711                  0.9.0.6.1       Untested
+   207  Kenwood                TS-790                  0.9.2           Alpha
+   208  Kenwood                TS-811                  0.9.0.6.1       Untested
+   209  Kenwood                TS-850                  0.9.1           Beta
+   210  Kenwood                TS-870S                 0.9.0           Beta
+   211  Kenwood                TS-940S                 0.9.7           Alpha
+   213  Kenwood                TS-950SDX               0.9             Beta
+   214  Kenwood                TS-2000                 0.9.4           Beta
    215  Kenwood                R-5000                  0.6.1           Alpha
-   216  Kenwood                TS-570S                 0.8.1           Stable
+   216  Kenwood                TS-570S                 0.9.1           Stable
    217  Kenwood                TH-D7A                  0.5             Alpha
    219  Kenwood                TH-F6A                  0.5             Beta
    220  Kenwood                TH-F7E                  0.5.1           Beta
    221  Elecraft               K2                      20120615        Beta
-   222  Kenwood                TS-930                  0.8             Untested
+   222  Kenwood                TS-930                  0.9             Untested
    223  Kenwood                TH-G71                  0.5             Beta
-   224  Kenwood                TS-680S                 0.8.1           Beta
-   225  Kenwood                TS-140S                 0.8.1           Beta
+   224  Kenwood                TS-680S                 0.9.1           Beta
+   225  Kenwood                TS-140S                 0.9.1           Beta
    226  Kenwood                TM-D700                 0.5             Beta
    227  Kenwood                TM-V7                   0.5             Beta
-   228  Kenwood                TS-480                  0.8.5           Untested
-   229  Elecraft               K3/KX3                  20120615        Beta
-   230  Kenwood                TRC-80                  0.8             Alpha
-   231  Kenwood                TS-590S                 0.8.1           Beta
+   228  Kenwood                TS-480                  0.9.5           Untested
+   229  Elecraft               K3/KX3                  20161116        Beta
+   230  Kenwood                TRC-80                  0.9             Alpha
+   231  Kenwood                TS-590S                 0.9.1           Beta
    232  SigFox                 Transfox                20111223        Alpha
    233  Kenwood                TH-D72A                 0.5.1           Alpha
-   234  Kenwood                TM-D710                 0.5             Untested
+   234  Kenwood                TM-D710                 0.6b            Beta
+   236  FlexRadio              6xxx                    20130717        Beta
+   237  Kenwood                TS-590SG                0.9.1           Beta
+   238  Elecraft               XG3                     20150101        Beta
+   239  Kenwood                TS-990s                 0.9.1           Beta
    302  Icom                   IC-1275                 0.7             Beta
    303  Icom                   IC-271                  0.7             Untested
    304  Icom                   IC-275                  0.7.1           Beta
@@ -165,6 +171,11 @@ rigctl --list > riglist.txt
    367  Icom                   IC-7410                 0.7             Untested
    368  Icom                   IC-9100                 0.7             Untested
    369  Icom                   IC-RX7                  0.7             Untested
+   370  Icom                   IC-7100                 0.7             Untested
+   371  Icom                   ID-5100                 0.7             Untested
+   372  Icom                   IC-2730                 0.7             Untested
+   373  Icom                   IC-7300                 0.7.2           Stable
+   374  Microtelecom           Perseus                 0.7.0           Alpha
    401  Icom                   IC-PCR1000              0.8             Beta
    402  Icom                   IC-PCR100               0.8             Beta
    403  Icom                   IC-PCR1500              0.8             Beta
@@ -206,20 +217,20 @@ rigctl --list > riglist.txt
   1505  Winradio               WR-3150                 0.6             Untested
   1506  Winradio               WR-3500                 0.6             Untested
   1507  Winradio               WR-3700                 0.6             Untested
+  1509  Winradio               WR-G313                 0.1             Alpha
   1601  Ten-Tec                TT-550                  0.2             Beta
-  1602  Ten-Tec                TT-538 Jupiter          0.6             Beta
+  1602  Ten-Tec                TT-538 Jupiter          0.7             Beta
   1603  Ten-Tec                RX-320                  0.6             Stable
   1604  Ten-Tec                RX-340                  0.3             Untested
   1605  Ten-Tec                RX-350                  0.1             Untested
   1607  Ten-Tec                TT-516 Argonaut V       0.2             Stable
   1608  Ten-Tec                TT-565 Orion            0.5             Beta
   1609  Ten-Tec                TT-585 Paragon          0.3             Beta
-  1611  Ten-Tec                TT-588 Omni VII         0.3             Alpha
+  1611  Ten-Tec                TT-588 Omni VII         0.5             Stable
   1612  Ten-Tec                RX-331                  0.1             Beta
   1613  Ten-Tec                TT-599 Eagle            0.4             Untested
   1701  Alinco                 DX-77                   0.7             Beta
   1801  Kachina                505DSP                  0.3             Alpha
-  1901  Hamlib                 RPC rig                 0.3             Beta
   2201  TAPR                   DSP-10                  0.2             Alpha
   2301  Flex-radio             SDR-1000                0.2             Untested
   2303  DTTS Microwave Society DttSP IPC               0.2             Alpha
@@ -227,22 +238,30 @@ rigctl --list > riglist.txt
   2401  RFT                    EKD-500                 0.4             Alpha
   2501  Elektor                Elektor 3/04            0.4             Stable
   2502  SAT-Schneider          DRT1                    0.2             Beta
-  2503  Coding Technologies    Digital World Traveller 0.1             Untested
+  2503  Coding Technologies    Digital World Traveller 0.2             Untested
   2506  AmQRP                  DDS-60                  0.1             Alpha
-  2507  Elektor                Elektor SDR-USB         0.3.1           Stable
+  2507  Elektor                Elektor SDR-USB         0.3.2           Stable
   2508  mRS                    miniVNA                 0.1             Alpha
-  2509  SoftRock               Si570 AVR-USB           0.2             Beta
-  2511  KTH-SDR kit            Si570 PIC-USB           0.2             Beta
-  2512  FiFi                   FiFi-SDR                0.5             Beta
-  2513  AMSAT-UK               FUNcube Dongle          0.2             Beta
-  2514  N2ADR                  HiQSDR                  0.2             Untested
+  2509  SoftRock               Si570 AVR-USB           0.3             Beta
+  2511  KTH-SDR kit            Si570 PIC-USB           0.3             Beta
+  2512  FiFi                   FiFi-SDR                0.6             Beta
+  2513  AMSAT-UK               FUNcube Dongle          0.3             Beta
+  2514  N2ADR                  HiQSDR                  0.1             Untested
+  2515  Funkamatuer            FA-SDR                  0.2             Alpha
+  2516  AE9RB                  Si570 Peaberry V1       0.3             Beta
+  2517  AE9RB                  Si570 Peaberry V2       0.2             Beta
+  2518  AMSAT-UK               FUNcube Dongle Pro+     0.3             Beta
   2601  Video4Linux            SW/FM radio             0.2.1           Beta
   2602  Video4Linux2           SW/FM radio             0.2.1           Alpha
   2701  Rohde&Schwarz          ESMC                    0.1             Alpha
   2702  Rohde&Schwarz          EB200                   0.1             Untested
   2801  Philips/Simoco         PRM8060                 0.1             Alpha
   2901  ADAT www.adat.ch       ADT-200A                1.36            Beta
- ------------------------------------------------------------------
+  3001  Icom                   IC-M700PRO              0.1             Alpha
+  3002  Icom                   IC-M802                 0.1             Untested
+  3003  Icom                   IC-M710                 0.1             Untested
+
+------------------------------------------------------------------
 </pre>
     There's no standardized protocol to remotely control one's rig, be it a Ham radio
     transceiver, a SWL receiver, any kind of scanner or other mobile.
@@ -270,7 +289,7 @@ rigctl --list > riglist.txt
     <tbody>
     <tr>
         <td width="33%" align="left">&nbsp;&lt;<a href="h5.html"> Prev</a></td>
-        <td width="33%" align="center">[<a href="index.html#aa">Menu</a>]</td>
+        <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
         <td width="33%" align="right"><a href="h7.html">Next </a>&gt;</td>
     </tr>
     </tbody>
