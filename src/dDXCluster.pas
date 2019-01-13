@@ -915,7 +915,7 @@ begin
     if FileExists(dmData.HomeDir + 'xplanet'+PathDelim+'marker') then
       l.LoadFromFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
     try
-      for i:= 0 to l.Count-1 do
+      for i:= 0 to l.Count-1 do // for loop try to find call and delete old position before adding the new
       begin
         if Pos(call,l.Strings[i]) > 0 then   //we do no need quotation marks: compares without
         begin
@@ -928,7 +928,7 @@ begin
       begin
         iMax := l.Count - iMax; // how many lines to delete?
         for i:= 0 to iMax-1 do
-          l.Delete(i)
+          l.Delete(0) // delete always index 0, this is always the oldest entry
       end;
       try
         l.SaveToFile(dmData.HomeDir + 'xplanet'+PathDelim+'marker');
