@@ -774,8 +774,8 @@ end;
 procedure TfrmTRXControl.FormCloseQuery(Sender : TObject; var CanClose : boolean
   );
 begin
-  if Assigned(radio) then
-    FreeAndNil(radio)
+  //closing this causes rig control fade if only TRXControl window is closed while program still running
+    // if Assigned(radio) then  FreeAndNil(radio)
 end;
 
 procedure TfrmTRXControl.FormCreate(Sender: TObject);
