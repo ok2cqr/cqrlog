@@ -108,6 +108,8 @@ type TRigControl = class
     procedure PwrOn;
     procedure PwrOff;
     procedure PwrStBy;
+    procedure PttOn;
+    procedure PttOff;
 end;
 
 implementation
@@ -242,6 +244,14 @@ end;
 procedure TRigControl.ClearRit;
 begin
   RigCommand.Add('J 0')
+end;
+procedure TRigControl.PttOn;
+begin
+  RigCommand.Add('T 1')
+end;
+procedure TRigControl.PttOff;
+begin
+  RigCommand.Add('T 0')
 end;
 procedure TRigControl.PwrOn;
 begin
