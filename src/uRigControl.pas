@@ -532,7 +532,7 @@ begin
     RigCommand.Clear
   end
   else begin
-    cmd := 'fmv'+LineEnding;
+    cmd := 'fm'+LineEnding;
     if DebugMode then Writeln('Sending: '+cmd);
     rcvdFreqMode.SendMessage(cmd)
   end
