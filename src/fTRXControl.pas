@@ -166,6 +166,7 @@ type
     procedure LoadButtonCaptions;
     procedure SetDebugMode(DebugMode : Boolean);
     procedure LoadBandButtons;
+    procedure HLTune(start:boolean);
   end;
 
 {
@@ -221,12 +222,40 @@ property RigPoll     : Word    read fRigPoll     write fRigPoll;
 var
   frmTRXControl: TfrmTRXControl;
   thRig : TRigThread;
+  ModeWas : String;  //store mode while tuning with AM
+  BwWas : integer;
+  Tuning  : Boolean = false;
 
 implementation
 {$R *.lfm}
 
 { TfrmTRXControl }
 uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories;
+
+procedure TfrmTRXControl.HLTune(start:boolean);
+Begin
+  if Assigned(radio) then
+   Begin
+    if start then
+     Begin
+      if not Tuning then
+        begin
+          ModeWas := GetActualMode;
+          BwWas := GetBandWidth(ModeWas);
+          SetMode('AM',0);
+          radio.PttOn;
+          Tuning :=true;
+        end;
+     end
+    else
+     begin
+          radio.PttOff;
+          if Tuning then SetMode(ModeWas, BwWas);
+          Tuning :=false;
+     end;
+   end;
+end;
+
 
 procedure TRigThread.Execute;
 
