@@ -1,13 +1,13 @@
 object frmMain: TfrmMain
-  Left = 211
-  Height = 642
-  Top = 342
+  Left = 38
+  Height = 626
+  Top = 49
   Width = 874
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   ActiveControl = Panel2
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 617
+  ClientHeight = 601
   ClientWidth = 874
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
@@ -159,11 +159,14 @@ object frmMain: TfrmMain
   LCLVersion = '1.8.4.0'
   object sbMain: TStatusBar
     AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 19
-    Top = 598
+    Top = 582
     Width = 874
-    Anchors = [akTop, akLeft, akRight, akBottom]
     Panels = <    
       item
         Text = 'QSO:'
@@ -188,13 +191,14 @@ object frmMain: TfrmMain
   object pnlButtons: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner
-    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Control = sbMain
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 40
-    Top = 558
+    Top = 536
     Width = 874
     Align = alBottom
+    BorderSpacing.Bottom = 6
     ClientHeight = 40
     ClientWidth = 874
     ParentColor = False
@@ -411,8 +415,9 @@ object frmMain: TfrmMain
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideBottom.Control = pnlDetails
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 423
+    Height = 403
     Top = 69
     Width = 874
     Align = alClient
@@ -713,13 +718,12 @@ object frmMain: TfrmMain
     AnchorSideBottom.Control = pnlButtons
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 66
-    Top = 492
+    Height = 64
+    Top = 472
     Width = 874
     Align = alBottom
-    Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvNone
-    ClientHeight = 66
+    ClientHeight = 64
     ClientWidth = 874
     TabOrder = 5
     object lblCommentForQSO: TLabel
@@ -780,12 +784,12 @@ object frmMain: TfrmMain
     end
     object Panel1: TPanel
       Left = 444
-      Height = 66
+      Height = 64
       Top = 0
       Width = 186
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 66
+      ClientHeight = 64
       ClientWidth = 186
       TabOrder = 0
       object lblQSLSDate: TLabel
@@ -847,12 +851,12 @@ object frmMain: TfrmMain
     end
     object Panel3: TPanel
       Left = 630
-      Height = 66
+      Height = 64
       Top = 0
       Width = 244
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 66
+      ClientHeight = 64
       ClientWidth = 244
       TabOrder = 1
       object lblLoTWQSLSDate: TLabel
