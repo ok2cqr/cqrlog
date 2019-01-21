@@ -454,7 +454,8 @@ begin
       dmData.Q.Open;
       l.Text := dmData.Q.Fields[0].AsString;
       l.SaveToFile(dlgSave.FileName);
-      ShowMessage('Config file saved to '+dlgSave.FileName)
+      ShowMessage('Config file saved to '+dlgSave.FileName
+      +#10+#13+#10+#13+'Warning !'+#10+#13+'File may contain passwords'+#10+#13+'in plain text format')
     finally
       dmData.Q.Close;
       dmData.trQ.Rollback;
