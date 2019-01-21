@@ -24,7 +24,6 @@ type
     edtFollow: TEdit;
     edtFollowCall: TEdit;
     lblInfo: TLabel;
-    pnlMonitor: TPanel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
     sgMonitor: TStringGrid;
@@ -50,7 +49,6 @@ type
     tbTCAlert: TToggleBox;
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
-    WsjtxMemo: TRichMemo;
     procedure btFtxtNameClick(Sender: TObject);
     procedure chkCbCQChange(Sender: TObject);
     procedure cbflwChange(Sender: TObject);
@@ -282,10 +280,10 @@ procedure TfrmMonWsjtx.CleanWsjtxMemo;
 var
   l: integer;
 begin
-  WsjtxMemo.Lines.Clear;
-  for l := 0 to Maxlines - 1 do
-    RepArr[l] := '';
-  for l:= sgMonitor.rowcount - 1 downto 1 do
+  // WsjtxMemo.Lines.Clear;
+  //for l := 0 to Maxlines - 1 do
+  //  RepArr[l] := '';
+  for l:= sgMonitor.rowcount - 1 downto 0 do
     sgMonitor.DeleteRow(l);
 end;
 
@@ -307,6 +305,7 @@ end;
 
 procedure TfrmMonWsjtx.FocusLastLine;
 begin
+  {
   with WsjtxMemo do
   begin
     SelStart := GetTextLen;
@@ -314,6 +313,7 @@ begin
     ScrollBy(0, Lines.Count);
     Refresh;
   end;
+  }
   sgMonitor.Col:= sgMonitor.colcount - 1; // set focus on last column
   sgMonitor.Row:=sgMonitor.rowcount -1;  // set focus on last row
   sgMonitor.SetFocus;
@@ -323,6 +323,7 @@ procedure TfrmMonWsjtx.WsjtxMemoScroll;
 var
   i: integer;
 begin
+  { REPLY buffer needs attention, perhaps!!!!!!!!!!!!!!
   with WsjtxMemo do
   begin
     //scroll buffer if needed
@@ -337,6 +338,7 @@ begin
       FocusLastLine;
     end;
   end;
+  }
 end;
 
 procedure TfrmMonWsjtx.SendReply(reply: string);
@@ -359,6 +361,7 @@ var
   s:string;
 
 begin
+  { REPLY needs attention also here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     s := trim(WsjtxMemo.Lines.Strings[WsjtxMemo.Caretpos.Y]);
     if chkMap.checked then
     Begin
@@ -385,6 +388,7 @@ begin
 
 
   SendReply(RepArr[WsjtxMemo.Caretpos.Y]);
+  }
 end;
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -555,8 +559,8 @@ procedure TfrmMonWsjtx.chkMapChange(Sender: TObject);
 var
   i: integer;
 begin
-  WsjtxMemo.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
-  lblInfo.Visible := not WsjtxMemo.Visible;
+  sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
+  lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
@@ -621,7 +625,7 @@ begin
   if cbflw.Checked then
   begin
     //WsjtxMemo.BorderSpacing.Bottom := 96;
-    pnlMonitor.BorderSpacing.Bottom := 96;
+    sgMonitor.BorderSpacing.Bottom := 96;
     pnlFollow.Visible := True;
     edtFollow.Text := '';
     ;
@@ -630,7 +634,7 @@ begin
   begin
     tbFollow.Checked := False;
     //WsjtxMemo.BorderSpacing.Bottom := 51;
-    pnlMonitor.BorderSpacing.Bottom := 51;
+    sgMonitor.BorderSpacing.Bottom := 51;
     pnlFollow.Visible := False;
   end;
 end;
@@ -666,8 +670,8 @@ end;
 procedure TfrmMonWsjtx.chknoTxtChange(Sender: TObject);
 begin
   cqrini.WriteBool('MonWsjtx', 'NoTxt', chknoTxt.Checked);
-  WsjtxMemo.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
-  lblInfo.Visible := not WsjtxMemo.Visible;
+  sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
+  lblInfo.Visible := not sgMonitor.Visible;
 end;
 
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
@@ -785,7 +789,9 @@ procedure TfrmMonWsjtx.tmrCqPeriodTimer(Sender: TObject);
 begin
   tmrCqPeriod.Enabled := False;
   if (chkHistory.Checked) then
-    WsjtxMemo.SetRangeColor(0, length(WsjtxMemo.Text), clSilver);
+
+    //graying all needs attention!
+    //WsjtxMemo.SetRangeColor(0, length(WsjtxMemo.Text), clSilver);
 
 end;
 
@@ -827,12 +833,13 @@ begin
   begin
     cqrini.WriteString('MonWsjtx', 'Font', popFontDlg.Font.Name);
     cqrini.WriteInteger('MonWsjtx', 'FontSize', popFontDlg.Font.Size);
-    WsjtxMemo.Font.Name := popFontDlg.Font.Name;
-    WsjtxMemo.Font.Size := popFontDlg.Font.Size;
+    //WsjtxMemo.Font.Name := popFontDlg.Font.Name;
+    //WsjtxMemo.Font.Size := popFontDlg.Font.Size;
     edtFollow.Font.Name := popFontDlg.Font.Name;
     edtFollow.Font.Size := popFontDlg.Font.Size;
     sgMonitor.Font.Name := popFontDlg.Font.Name;
     sgMonitor.Font.Size := popFontDlg.Font.Size;
+    sgMonitor.DefaultRowHeight:= sgMonitor.Font.Size + sgMonitor.Font.Size div 2;
     CleanWsjtxMemo;
     edtFollow.Text := '';
   end;
@@ -911,8 +918,8 @@ end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
-  WsjtxMemo.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', 'Monospace');
-  WsjtxMemo.Font.Size := cqrini.ReadInteger('MonWsjtx', 'FontSize', 10);
+  //WsjtxMemo.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', 'Monospace');
+  //WsjtxMemo.Font.Size := cqrini.ReadInteger('MonWsjtx', 'FontSize', 10);
   dmUtils.LoadWindowPos(frmMonWsjtx);
   dmUtils.LoadFontSettings(frmMonWsjtx);
   //overrides font loading
@@ -935,8 +942,8 @@ begin
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
   SetAllbitmaps;
-  edtFollow.Font.Name := WsjtxMemo.Font.Name;
-  edtFollow.Font.Size := WsjtxMemo.Font.Size;
+  edtFollow.Font.Name := sgMonitor.Font.Name;
+  edtFollow.Font.Size := sgMonitor.Font.Size;
   cbflw.Checked := cqrini.ReadBool('MonWsjtx', 'FollowShow', False);
   tbFollow.Checked := cqrini.ReadBool('MonWsjtx', 'Follow', False);
   edtFollowCall.Text := uppercase(cqrini.ReadString('MonWsjtx', 'FollowCall', ''));
@@ -948,7 +955,7 @@ begin
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
   //DL7OAP
-  sgMonitor.DefaultRowHeight:=16;
+  sgMonitor.DefaultRowHeight:= sgMonitor.Font.Size + sgMonitor.Font.Size div 2;
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1092,8 +1099,9 @@ begin
         CleanWsjtxMemo;
       LastWsjtLineTime := msgTime;
       if dmData.DebugLevel >= 1 then
-        Writeln('Add reply array:', WsjtxMemo.Lines.Count);
-      RepArr[WsjtxMemo.Lines.Count] := Reply;  //corresponding reply string to array
+         //Reply needs attention!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Writeln('Add reply array:', WsjtxMemo.Lines.Count);
+      //RepArr[WsjtxMemo.Lines.Count] := Reply;  //corresponding reply string to array
       //start printing
       AddColorStr(#40, clDefault);  //make not-CQ indicator start
       if dmData.DebugLevel >= 1 then
@@ -1544,7 +1552,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
   if dmData.DebugLevel >= 1 then
-    Writeln('Memo Lines count is now:', WsjtxMemo.Lines.Count);
+    //Writeln('Memo Lines count is now:', WsjtxMemo.Lines.Count);
   index := 1;
 
   if dmData.DebugLevel >= 1 then
@@ -1663,7 +1671,8 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         (msgTime <> LastWsjtLineTime) then
         CleanWsjtxMemo;
       LastWsjtLineTime := msgTime;
-      if not chkCbCQ.Checked then RepArr[WsjtxMemo.Lines.Count] := Reply;  //corresponding reply string to array
+      //REPLY needs attention !!!!!!!!!!!!!!!!!!!!!!!
+      //if not chkCbCQ.Checked then RepArr[WsjtxMemo.Lines.Count] := Reply;  //corresponding reply string to array
 
       //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
       if dmData.DebugLevel >= 1 then

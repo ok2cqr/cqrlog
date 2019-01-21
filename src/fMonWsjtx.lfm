@@ -1,11 +1,11 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 338
-  Height = 661
-  Top = 112
+  Left = 99
+  Height = 333
+  Top = 92
   Width = 582
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
-  ClientHeight = 661
+  ClientHeight = 333
   ClientWidth = 582
   OnClose = FormClose
   OnCreate = FormCreate
@@ -14,7 +14,6 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnShow = FormShow
   LCLVersion = '1.8.4.0'
   object lblBand: TLabel
-    AnchorSideLeft.Control = WsjtxMemo
     AnchorSideTop.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 12
@@ -29,7 +28,6 @@ object frmMonWsjtx: TfrmMonWsjtx
   end
   object lblMode: TLabel
     AnchorSideLeft.Side = asrBottom
-    AnchorSideRight.Control = WsjtxMemo
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = lblBand
     AnchorSideBottom.Side = asrBottom
@@ -84,7 +82,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Control = pnlFollow
     Left = 2
     Height = 45
-    Top = 567
+    Top = 239
     Width = 578
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -221,7 +219,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 2
     Height = 45
-    Top = 614
+    Top = 286
     Width = 578
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -336,7 +334,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 5
     Height = 23
-    Top = 626
+    Top = 298
     Width = 118
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 5
@@ -353,7 +351,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 124
     Height = 23
-    Top = 626
+    Top = 298
     Width = 43
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 1
@@ -378,126 +376,86 @@ object frmMonWsjtx: TfrmMonWsjtx
     OnChange = chkStopTxChange
     TabOrder = 8
   end
-  object pnlMonitor: TPanel
-    Left = 1
-    Height = 570
+  object sgMonitor: TStringGrid
+    Left = 2
+    Height = 252
     Top = 30
-    Width = 580
-    Align = alTop
-    BorderSpacing.Left = 1
+    Width = 578
+    Align = alClient
+    AutoEdit = False
+    AutoFillColumns = True
+    BorderSpacing.Left = 2
     BorderSpacing.Top = 30
-    BorderSpacing.Right = 1
-    Caption = 'pnlMonitor'
-    ClientHeight = 570
-    ClientWidth = 580
+    BorderSpacing.Right = 2
+    BorderSpacing.Bottom = 51
+    BorderStyle = bsNone
+    ColCount = 7
+    Columns = <    
+      item
+        DropDownRows = 0
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'dFreq'
+        Width = 51
+      end    
+      item
+        DropDownRows = 0
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Snr'
+        Width = 35
+      end    
+      item
+        DropDownRows = 0
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'call'
+        Width = 135
+      end    
+      item
+        Alignment = taRightJustify
+        DropDownRows = 0
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Gr'
+        Width = 28
+      end    
+      item
+        DropDownRows = 0
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'id'
+        Width = 27
+      end    
+      item
+        DropDownRows = 0
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Country'
+        Width = 143
+      end    
+      item
+        DropDownRows = 0
+        ReadOnly = True
+        Title.Caption = 'DXCC status'
+        Width = 159
+      end>
+    FixedCols = 0
+    FixedRows = 0
+    GridLineWidth = 0
+    ParentFont = False
+    PopupMenu = popColors
     TabOrder = 9
-    object sgMonitor: TStringGrid
-      AnchorSideLeft.Control = pnlMonitor
-      AnchorSideTop.Control = WsjtxMemo
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = pnlMonitor
-      AnchorSideRight.Side = asrBottom
-      Left = 1
-      Height = 251
-      Top = 293
-      Width = 578
-      Anchors = [akTop, akLeft, akRight]
-      AutoEdit = False
-      AutoFillColumns = True
-      BorderStyle = bsNone
-      ColCount = 7
-      Columns = <      
-        item
-          DropDownRows = 0
-          ReadOnly = True
-          SizePriority = 0
-          Title.Caption = 'dFreq'
-          Width = 51
-        end      
-        item
-          DropDownRows = 0
-          ReadOnly = True
-          SizePriority = 0
-          Title.Caption = 'Snr'
-          Width = 35
-        end      
-        item
-          DropDownRows = 0
-          ReadOnly = True
-          SizePriority = 0
-          Title.Caption = 'call'
-          Width = 135
-        end      
-        item
-          Alignment = taRightJustify
-          DropDownRows = 0
-          ReadOnly = True
-          SizePriority = 0
-          Title.Caption = 'Gr'
-          Width = 28
-        end      
-        item
-          DropDownRows = 0
-          ReadOnly = True
-          SizePriority = 0
-          Title.Caption = 'id'
-          Width = 27
-        end      
-        item
-          DropDownRows = 0
-          ReadOnly = True
-          SizePriority = 0
-          Title.Caption = 'Country'
-          Width = 143
-        end      
-        item
-          DropDownRows = 0
-          ReadOnly = True
-          Title.Caption = 'DXCC status'
-          Width = 159
-        end>
-      FixedCols = 0
-      FixedRows = 0
-      GridLineWidth = 0
-      ParentFont = False
-      PopupMenu = popColors
-      TabOrder = 0
-      OnDrawCell = sgMonitorDrawCell
-      ColWidths = (
-        51
-        35
-        135
-        28
-        27
-        143
-        159
-      )
-    end
-    object WsjtxMemo: TRichMemo
-      AnchorSideLeft.Control = pnlMonitor
-      AnchorSideTop.Control = pnlMonitor
-      AnchorSideRight.Control = pnlMonitor
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Side = asrBottom
-      Left = 3
-      Height = 292
-      Top = 1
-      Width = 574
-      Align = alTop
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      Font.Height = -13
-      Font.Name = 'Monospace'
-      HideSelection = False
-      OnDblClick = WsjtxMemoDblClick
-      ParentFont = False
-      PopupMenu = popColors
-      ReadOnly = True
-      ScrollBars = ssAutoBoth
-      TabOrder = 1
-      WordWrap = False
-      ZoomFactor = 1
-    end
+    OnDrawCell = sgMonitorDrawCell
+    ColWidths = (
+      51
+      35
+      135
+      28
+      27
+      143
+      159
+    )
   end
   object popColors: TPopupMenu
     left = 104
