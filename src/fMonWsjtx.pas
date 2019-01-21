@@ -242,6 +242,8 @@ begin
       MonitorLine := MonitorLine + s[i];
   end;
   if not chknoTxt.Checked then
+   begin
+    {
     with WsjtxMemo do
     begin
       if s <> '' then
@@ -259,7 +261,9 @@ begin
         SelText := '';
       end;
       //FocusLastLine;
-      if r > -1 then
+    end;
+     }
+     if r > -1 then
         Begin
              sgMonitor.Cells[c,r]:= trim(s);
              sgMonitorAttributes[c,r].FG_Color:=col;
@@ -269,7 +273,7 @@ begin
 
              //sgMonitorAttributes[c,r].BG_Color:=col;
         end;
-    end;
+   end;
 
 end;
 
@@ -1326,9 +1330,13 @@ Begin
             Mycolor := clDefault;
           end;
       end; //case
-   end; //not ----
-
-
+   end //not ----
+  else
+   begin
+     p:=1;
+     Mycolor := clDefault;
+   end;
+ {
  if p=1 then  //print one go
   Begin
     if  chknoTxt.Checked or PCB then
@@ -1349,7 +1357,7 @@ Begin
      end;
 
 //upper will go lower will stay after RM remove
-
+}
   if  chknoTxt.Checked or PCB then
        begin
         if p=1 then
