@@ -2355,7 +2355,8 @@ begin
           if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
           if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
            Begin
-             frmMonWsjtx.WsjtxMemo.lines.Clear;
+             //frmMonWsjtx.WsjtxMemo.lines.Clear;
+             frmMonWsjtx.CleanWsjtxMemo;
              frmMonWsjtx.edtFollow.Text := '';
            end;
         end; //Clear

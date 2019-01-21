@@ -76,8 +76,11 @@ type
     procedure FormHide(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure chknoTxtChange(Sender: TObject);
+    procedure sgMonitorDblClick(Sender: TObject);
     procedure sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure sgMonitorSelectCell(Sender: TObject; aCol, aRow: Integer;
+      var CanSelect: Boolean);
     procedure tbAlertChange(Sender: TObject);
     procedure tbFollowChange(Sender: TObject);
     procedure tbLocAlertChange(Sender: TObject);
@@ -86,7 +89,6 @@ type
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
-    procedure WsjtxMemoDblClick(Sender: TObject);
   private
     procedure FocusLastLine;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
@@ -117,6 +119,8 @@ type
     procedure SendFreeText(MyText: string);
     procedure ColorBack(Myitem:string;Mycolor:Tcolor;bkg:Boolean=false);
     procedure BufDebug(MyHeader,MyBuf:string);
+    function HexStrToStr(const HexStr: string): string;
+    function StrToHexStr(const S: string): string;
     { public declarations }
   end;
 
@@ -181,6 +185,8 @@ var
   //DL7OAP: restricted to a maximum of 100 entries actuall
   //TODO DL7OAP: look for a way to have it dynamic or limit to MaxLines = 41 ?
   sgMonitorAttributes : array [0..6,0..99] of TsgMonitorAttributes;
+  sgRow : integer;
+  sgRowOk : boolean = false;
 
 
 implementation
@@ -241,26 +247,7 @@ begin
   end;
   if not chknoTxt.Checked then
    begin
-    {
-    with WsjtxMemo do
-    begin
-      if s <> '' then
-      begin
-        SelStart := Length(Text);
-        SelText := s;
-        SelLength := Length(s);
-        if col = wkdnever then
-          SetRangeParams(SelStart, SelLength, [tmm_Styles, tmm_Color],
-            '', 0, col, [fsBold], [])
-        else
-          SetRangeColor(SelStart, SelLength, col);
-        // deselect inserted string and position cursor at the end of the text
-        SelStart := Length(Text);
-        SelText := '';
-      end;
-      //FocusLastLine;
-    end;
-     }
+
      if r > -1 then
         Begin
              sgMonitor.Cells[c,r]:= trim(s);
@@ -323,7 +310,9 @@ procedure TfrmMonWsjtx.WsjtxMemoScroll;
 var
   i: integer;
 begin
-  { REPLY buffer needs attention, perhaps!!!!!!!!!!!!!!
+  {We need scrolling routine when maxlines , now 100, gets on.
+
+
   with WsjtxMemo do
   begin
     //scroll buffer if needed
@@ -354,42 +343,41 @@ begin
     //if dmData.DebugLevel >= 1 then BufDebug('Send data buffer contains:',reply);
   end;
 end;
-
-procedure TfrmMonWsjtx.WsjtxMemoDblClick(Sender: TObject);
+procedure TfrmMonWsjtx.sgMonitorDblClick(Sender: TObject);
 var
   i: byte;
-  s:string;
-
 begin
-  { REPLY needs attention also here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    s := trim(WsjtxMemo.Lines.Strings[WsjtxMemo.Caretpos.Y]);
+ if  sgRowOK then
+  Begin
     if chkMap.checked then
     Begin
-      if (pos('(',s) = 0) then
+      //map mode needs fixing !!!!!!!!!!!!!!!!!!
+     {  if (pos('(',s) = 0) then
           //call is 1st item in line
           DblClickCall := ExtractWord(1,s,[' '])
        else
          //call in qso, TX not fired std messages only created
          DblClickCall :='';
+         }
     end
    else //if Cq-monitor
-    //call is 3rd item in line
-    DblClickCall := ExtractWord(3,s,[' ']);
+    //call is 3rd column[2]
+    DblClickCall := sgMonitor.Cells[2,sgRow];
 
   if dmData.DebugLevel >= 1 then
   begin
-    Writeln('Clicked line no:', WsjtxMemo.Caretpos.Y);
-    write('Array gives:');
-    for i := 1 to length(RepArr[WsjtxMemo.Caretpos.Y]) do
-      Write('x', HexStr(Ord(RepArr[WsjtxMemo.Caretpos.Y][i]), 2));
+    Writeln('Clicked line no:', sgRow);
+    write('Array gives ', length(sgMonitor.Cells[7,sgRow]),' :');
+    for i := 1 to length(sgMonitor.Cells[7,sgRow]) do
+      Write('x', HexStr(Ord(sgMonitor.Cells[2,sgRow][i]), 2));
     writeln();
-    writeln('Line is:',s,#13+' 2click Call is:',DblClickCall);
+    writeln('Line is:',sgRow,#13+' 2click Call is:',DblClickCall);
   end;
-
-
-  SendReply(RepArr[WsjtxMemo.Caretpos.Y]);
-  }
+  SendReply(HexStrToStr(sgMonitor.Cells[7,sgRow]));
+  sgRowOk := false;
+  end; //sgRowOK
 end;
+
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
@@ -674,6 +662,7 @@ begin
   lblInfo.Visible := not sgMonitor.Visible;
 end;
 
+
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 //DL7OAP: complete procedure for the coloring, this function is called every time
@@ -685,6 +674,14 @@ begin
     sgMonitor.Canvas.Font.Style:=[fsBold];
   sgMonitor.Canvas.Fillrect(aRect); // fills cell with backcolor, text is lost in this moment
   sgMonitor.Canvas.TextRect(aRect, aRect.Left + 1, aRect.Top + 1, sgMonitor.Cells[ACol, ARow]); //refills the text
+end;
+
+procedure TfrmMonWsjtx.sgMonitorSelectCell(Sender: TObject; aCol,
+  aRow: Integer; var CanSelect: Boolean);
+begin
+  //we need just row info
+  sgRow:= aRow;
+  sgRowOk := true;
 end;
 
 procedure TfrmMonWsjtx.tbAlertChange(Sender: TObject);
@@ -1027,7 +1024,25 @@ begin
       '201045 ~ CQ WHO EVER');  // for dbg
   end;
 end;
+ function TfrmMonWsjtx.HexStrToStr(const HexStr: string): string;
+var
+  ResultLen: Integer;
+begin
+  ResultLen := Length(HexStr) div 2;
+  SetLength(Result, ResultLen);
+  if ResultLen > 0 then
+    SetLength(Result, HexToBin(Pointer(HexStr), Pointer(Result), ResultLen));
+end;
 
+function TfrmMonWsjtx.StrToHexStr(const S: string): string;
+var
+  ResultLen: Integer;
+begin
+  ResultLen := Length(S) * 2;
+  SetLength(Result, ResultLen);
+  if ResultLen > 0 then
+    BinToHex(Pointer(S), Pointer(Result), Length(S));
+end;
 procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
 var
   List1: TStringList;
@@ -1099,9 +1114,8 @@ begin
         CleanWsjtxMemo;
       LastWsjtLineTime := msgTime;
       if dmData.DebugLevel >= 1 then
-         //Reply needs attention!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //Writeln('Add reply array:', WsjtxMemo.Lines.Count);
-      //RepArr[WsjtxMemo.Lines.Count] := Reply;  //corresponding reply string to array
+         Writeln('Other: Add reply array:', sgMonitor.rowCount-1);
+        sgMonitor.Cells[7, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
       //start printing
       AddColorStr(#40, clDefault);  //make not-CQ indicator start
       if dmData.DebugLevel >= 1 then
@@ -1671,12 +1685,10 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         (msgTime <> LastWsjtLineTime) then
         CleanWsjtxMemo;
       LastWsjtLineTime := msgTime;
-      //REPLY needs attention !!!!!!!!!!!!!!!!!!!!!!!
-      //if not chkCbCQ.Checked then RepArr[WsjtxMemo.Lines.Count] := Reply;  //corresponding reply string to array
 
       //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
       if dmData.DebugLevel >= 1 then
-        Writeln('Start adding richmemo lines');
+        Writeln('Start adding monitor lines');
 
       if (not chkMap.Checked) then
       begin
@@ -1691,6 +1703,13 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
           sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, msgMode]);
          end;
       end;
+      //Reply added here as sgMonitor row is now created
+      if not chkCbCQ.Checked then
+       Begin
+        sgMonitor.Cells[7, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
+        if dmData.DebugLevel >= 1 then
+         Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(Reply),':',length(sgMonitor.Cells[7, sgMonitor.rowCount-1]));
+       end;
 
       if isMyCall then
         begin

@@ -389,7 +389,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     BorderSpacing.Right = 2
     BorderSpacing.Bottom = 51
     BorderStyle = bsNone
-    ColCount = 7
+    ColCount = 8
     Columns = <    
       item
         DropDownRows = 0
@@ -439,6 +439,11 @@ object frmMonWsjtx: TfrmMonWsjtx
         ReadOnly = True
         Title.Caption = 'DXCC status'
         Width = 159
+      end    
+      item
+        Title.Caption = 'RawReply'
+        Width = 0
+        Visible = False
       end>
     FixedCols = 0
     FixedRows = 0
@@ -446,7 +451,9 @@ object frmMonWsjtx: TfrmMonWsjtx
     ParentFont = False
     PopupMenu = popColors
     TabOrder = 9
+    OnDblClick = sgMonitorDblClick
     OnDrawCell = sgMonitorDrawCell
+    OnSelectCell = sgMonitorSelectCell
     ColWidths = (
       51
       35
@@ -455,6 +462,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       27
       143
       159
+      0
     )
   end
   object popColors: TPopupMenu
