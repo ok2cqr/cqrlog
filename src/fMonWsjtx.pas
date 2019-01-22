@@ -250,7 +250,7 @@ begin
 
      if r > -1 then
         Begin
-             sgMonitor.Cells[c,r]:= trim(s);
+             sgMonitor.Cells[c,r]:= s;  //trim ??
              sgMonitorAttributes[c,r].FG_Color:=col;
              sgMonitorAttributes[c,r].isBold:=false;
              if ((col = wkdnever) and ((c > 1) and (c< 5))) then
@@ -576,6 +576,9 @@ begin
       chkdB.Checked := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
       //map mode allows text printing. Printing stays on when return to monitor mode.
       chkHistory.Visible := False;
+      sgMonitor.Columns.Items[0].Visible:= false;
+      sgMonitor.Columns.Items[1].Visible:= false;
+      sgMonitor.Columns.Items[6].Visible:= false;
     end
     else
     begin   //Cq
@@ -590,6 +593,9 @@ begin
       cbflw.Visible := True;
       chknoTxt.Visible := True;
       chkHistory.Visible := True;
+      sgMonitor.Columns.Items[0].Visible:= true;
+      sgMonitor.Columns.Items[1].Visible:= true;
+      sgMonitor.Columns.Items[6].Visible:= true;
     end;
     CleanWsjtxMemo;
   end;
@@ -1046,6 +1052,7 @@ end;
 procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
 var
   List1: TStringList;
+
 begin
   //to stop transmitting if CQ answered,split called, stn answers to someone else (can be set with checkbox chkStopTx)
   //here check if DblClickCall is set then if it exist in message: stop tx and clear DblClickCall
@@ -1110,35 +1117,28 @@ begin
       myAlert := '';
       MonitorLine := '';
 
-      if (msgTime <> LastWsjtLineTime) then
-        CleanWsjtxMemo;
+      if (msgTime <> LastWsjtLineTime) then  CleanWsjtxMemo;
       LastWsjtLineTime := msgTime;
+      if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+       else sgMonitor.Columns.Items[1].Visible:= false;
+      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , ['',PadLeft(IntToStr(Snr),3)]);
       if dmData.DebugLevel >= 1 then
          Writeln('Other: Add reply array:', sgMonitor.rowCount-1);
         sgMonitor.Cells[7, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
-      //start printing
-      AddColorStr(#40, clDefault);  //make not-CQ indicator start
+      //start printing Map mode
       if dmData.DebugLevel >= 1 then
-        Writeln('Start Other printing');
-      PrintCall(msgCall);
-      if msgLoc = '' then
-      begin
-        AddColorStr(#32#32#32#32#41, clDefault);
-        //make not-CQ indicator stop + new line
-      end
-      else
+        Writeln('Start Other printing, Map mode');
+      PrintCall(#40+msgcall);  //make not-CQ indicator start
+      if msgLoc <> '' then
       begin
         PrintLoc(msgLoc, '', '');
-        AddColorStr(#41, clDefault);  //make not-CQ indicator stop + new line
         if frmWorkedGrids.GridOK(msgLoc) then  AddXpList(msgCall,msgLoc);
       end;
-
-      if chkdB.Checked then AddColorStr(PadLeft(IntToStr(Snr),3)+#13#10)
-       else AddColorStr(#13#10);
+      AddColorStr(#41, clDefault,5, sgMonitor.rowCount-1);//make not-CQ indicator stop
 
       if dmData.DebugLevel >= 1 then
-        Writeln('NL written and scroll if needed+alerts');
-      WsjtxMemoScroll; // if neeeded
+        Writeln('all written Next alerts');
+
       TryAlerts;
     end;
   end;
@@ -1358,28 +1358,7 @@ Begin
      p:=1;
      Mycolor := clDefault;
    end;
- {
- if p=1 then  //print one go
-  Begin
-    if  chknoTxt.Checked or PCB then
-          ColorBack(L1+L2,Mycolor)
-    else  AddColorStr(L1+L2, Mycolor);
-  end
-    else   //print 2 parts
-     begin
-       if  chknoTxt.Checked or PCB then
-         Begin
-           ColorBack(UpperCase(L1+L2),Mycolor,True);
-         end
-       else
-         Begin
-           AddColorStr(L1, Mycolor);
-           AddColorStr(L2, wkdnever);
-         end;
-     end;
 
-//upper will go lower will stay after RM remove
-}
   if  chknoTxt.Checked or PCB then
        begin
         if p=1 then
@@ -1390,18 +1369,19 @@ Begin
            Begin
             ColorBack(UpperCase(L1+L2),Mycolor,True);
            end;
+       end
+   else
+       begin
+        AddColorStr(L1, Mycolor,3,sgMonitor.rowCount-1);
+        if p=1 then
+          Begin
+            AddColorStr(L2, Mycolor,4,sgMonitor.rowCount-1);
+          end
+        else
+          Begin
+            AddColorStr(L2, wkdnever,4,sgMonitor.rowCount-1);
+          end;
        end;
-
-  AddColorStr(L1, Mycolor,3,sgMonitor.rowCount-1);
-  if p=1 then
-    Begin
-      AddColorStr(L2, Mycolor,4,sgMonitor.rowCount-1);
-    end
-  else
-    Begin
-      AddColorStr(L2, wkdnever,4,sgMonitor.rowCount-1);
-    end;
-
 end;
 
 function TfrmMonWsjtx.OkCall(Call: string): boolean;
@@ -1530,13 +1510,9 @@ var
       if not  chkMap.Checked then
         Begin
           AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,5,sgMonitor.rowCount-1);
-          AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6), extCqCall);
-          AddColorStr(' CQ:', clBlack);
-          AddColorStr(CqDir + ' ', extCqCall);
         end
        else
-          //sg def also here
-          AddColorStr(' '+CqDir, extCqCall);
+          AddColorStr(' '+CqDir, extCqCall,5,sgMonitor.rowCount-1);
     end;
   end;
 
@@ -1690,19 +1666,19 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       if dmData.DebugLevel >= 1 then
         Writeln('Start adding monitor lines');
 
-      if (not chkMap.Checked) then
-      begin
-        if (chkHistory.Checked) then
+      if (not ChkCbCq.Checked) then      //was chkmap
+       begin
+        if (chkHistory.Checked)  then
          Begin
-          AddColorStr(PadLeft(IntToStr(Dfreq), 5)+PadLeft(IntToStr(Snr),4)+ ' ', clDefault);
-          sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 5), PadLeft(IntToStr(Snr),4)]);
+          sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 4), PadLeft(IntToStr(Snr),3)]);
          end
         else
          Begin
-          AddColorStr(msgTime+'  ' + msgMode + ' ', clDefault); //time + mode;
+          //time + mode;
           sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, msgMode]);
          end;
-      end;
+       end;
+
       //Reply added here as sgMonitor row is now created
       if not chkCbCQ.Checked then
        Begin
@@ -1715,29 +1691,16 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         begin
          DblClickCall := '';
          if dmData.DebugLevel >= 1 then  Writeln('Reset 2click call: answered to me');
-         if not chkCbCQ.Checked then AddColorStr('=', wkdnever,2,sgMonitor.rowCount-1);
+         PrintCall('='+msgCall,chkCbCQ.Checked);
+         //if not chkCbCQ.Checked then PrintCall('='+msgCall,chkCbCQ.Checked)
+         //   else PrintCall(msgCall,chkCbCQ.Checked); //results colorback only
         end
       else
-         if not chkCbCQ.Checked then AddColorStr(' ', wkdnever);  //answer to me
+          PrintCall(' '+msgCall,chkCbCQ.Checked);
+         //if not chkCbCQ.Checked then PrintCall(' '+msgCall,chkCbCQ.Checked)  //answer to me
+         //   else PrintCall(msgCall,chkCbCQ.Checked); //results colorback only
 
-      PrintCall(msgCall,chkCbCQ.Checked);
       PrintLoc(msgLoc, timeToAlert, msgTime,chkCbCQ.Checked);
-{
-   finding ---- is now included in PrintLoc
-
-   if msgLoc = '----' then
-       Begin
-        if not chkCbCQ.Checked then AddColorStr(msgLoc, clDefault); //no loc
-        sgMonitor.Cells[3, sgMonitor.rowCount-1]:= copy(msgloc,1,2);
-        sgMonitor.Cells[4, sgMonitor.rowCount-1]:= copy(msgloc,3,2);
-       end
-      else
-       Begin
-        PrintLoc(msgLoc, timeToAlert, msgTime,chkCbCQ.Checked);
-       end;
-}
-
-       if (chkdB.Checked and chkMap.Checked and (not chkCbCQ.Checked) ) then AddColorStr(PadLeft(IntToStr(Snr),4));
 
       if frmWorkedGrids.GridOK(msgLoc) then AddXpList(msgCall,msgLoc);
 
@@ -1799,7 +1762,6 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
       if not chkCbCQ.Checked then
         Begin
-           AddColorStr(#13#10, clDefault);  //make new line
            WsjtxMemoScroll; // if needed
            sgMonitor.AutoSizeColumns;
            sgMonitor.Col:= 0;

@@ -1,11 +1,11 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 99
-  Height = 333
-  Top = 92
+  Left = 35
+  Height = 362
+  Top = 197
   Width = 582
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
-  ClientHeight = 333
+  ClientHeight = 362
   ClientWidth = 582
   OnClose = FormClose
   OnCreate = FormCreate
@@ -82,7 +82,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Control = pnlFollow
     Left = 2
     Height = 45
-    Top = 239
+    Top = 268
     Width = 578
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -219,7 +219,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 2
     Height = 45
-    Top = 286
+    Top = 315
     Width = 578
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
@@ -334,7 +334,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 5
     Height = 23
-    Top = 298
+    Top = 327
     Width = 118
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 5
@@ -351,7 +351,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideBottom.Side = asrBottom
     Left = 124
     Height = 23
-    Top = 298
+    Top = 327
     Width = 43
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 1
@@ -378,7 +378,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   end
   object sgMonitor: TStringGrid
     Left = 2
-    Height = 252
+    Height = 281
     Top = 30
     Width = 578
     Align = alClient
@@ -497,8 +497,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     end
   end
   object popColorDlg: TColorDialog
-    Width = 572
-    Height = 315
     Title = 'Choose color'
     Color = clBlack
     CustomColors.Strings = (
