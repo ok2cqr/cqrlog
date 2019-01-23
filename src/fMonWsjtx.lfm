@@ -441,6 +441,9 @@ object frmMonWsjtx: TfrmMonWsjtx
         Width = 159
       end    
       item
+        DropDownRows = 0
+        MinSize = 0
+        MaxSize = 500
         Title.Caption = 'RawReply'
         Width = 0
         Visible = False
@@ -448,6 +451,8 @@ object frmMonWsjtx: TfrmMonWsjtx
     FixedCols = 0
     FixedRows = 0
     GridLineWidth = 0
+    HeaderHotZones = []
+    HeaderPushZones = []
     ParentFont = False
     PopupMenu = popColors
     TabOrder = 9
