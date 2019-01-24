@@ -389,10 +389,12 @@ object frmMonWsjtx: TfrmMonWsjtx
     BorderSpacing.Right = 2
     BorderSpacing.Bottom = 51
     BorderStyle = bsNone
-    ColCount = 8
+    ColCount = 9
     Columns = <    
       item
         DropDownRows = 0
+        MinSize = 5
+        MaxSize = 5
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'dFreq'
@@ -400,15 +402,27 @@ object frmMonWsjtx: TfrmMonWsjtx
       end    
       item
         DropDownRows = 0
+        MinSize = 4
+        MaxSize = 4
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'Snr'
         Width = 35
       end    
       item
+        Alignment = taRightJustify
         DropDownRows = 0
-        MinSize = 5
-        MaxSize = 5
+        MinSize = 1
+        MaxSize = 1
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Fill'
+        Width = 25
+      end    
+      item
+        DropDownRows = 0
+        MinSize = 12
+        MaxSize = 12
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'call'
@@ -417,6 +431,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       item
         Alignment = taRightJustify
         DropDownRows = 0
+        MinSize = 2
+        MaxSize = 2
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'Gr'
@@ -424,6 +440,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       end    
       item
         DropDownRows = 0
+        MinSize = 2
+        MaxSize = 2
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'id'
@@ -431,21 +449,26 @@ object frmMonWsjtx: TfrmMonWsjtx
       end    
       item
         DropDownRows = 0
+        MinSize = 15
+        MaxSize = 15
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'Country'
-        Width = 143
+        Width = 178
       end    
       item
         DropDownRows = 0
+        MinSize = 20
+        MaxSize = 200
         ReadOnly = True
         Title.Caption = 'DXCC status'
-        Width = 159
+        Width = 99
       end    
       item
         DropDownRows = 0
         MinSize = 0
-        MaxSize = 500
+        MaxSize = 512
+        ReadOnly = True
         Title.Caption = 'RawReply'
         Width = 0
         Visible = False
@@ -463,11 +486,12 @@ object frmMonWsjtx: TfrmMonWsjtx
     ColWidths = (
       51
       35
+      25
       135
       28
       27
-      143
-      159
+      178
+      99
       0
     )
   end

@@ -178,7 +178,7 @@ var
   LockMap: boolean;
   LockFlw: boolean;
   PCallColor :Tcolor;  //color that was last used fro callsign printing, will be used in xplanet
-  sgMonitorAttributes : array [0..6,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
+  sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
 implementation
@@ -266,7 +266,7 @@ procedure TfrmMonWsjtx.setDefaultColorSgMonitorAttributes;
 var
   i, j: integer;
 begin
-  for i:= 0 to 6 do
+  for i:= 0 to 7 do
   begin
        for j:=0 to MaxLinesSgMonitor - 1 do
        begin
@@ -288,7 +288,7 @@ begin
     // scroll grid: by delete oldest entry in the grid
     sgMonitor.DeleteRow(0);
     // scroll array: by shift sgMonitorAttributes array -1
-    for i:= 0 to 6 do
+    for i:= 0 to 7 do
     begin
          for j:=0 to MaxLinesSgMonitor - 2 do
          begin
@@ -319,25 +319,15 @@ var
   i: byte;
 begin
 
-  DblClickCall := sgMonitor.Cells[2,sgMonitor.row];
-  if chkMap.checked then
-  Begin
-      //call may include space,(,= for printing purposes. Have to strip away
-      DblClickCall := trim(DblClickCall);
-      DblClickCall := StringReplace(DblClickCall,'(','',[rfReplaceAll]);
-      DblClickCall := StringReplace(DblClickCall,'=','',[rfReplaceAll]);
-  end;
+  DblClickCall := sgMonitor.Cells[3,sgMonitor.row];
 
   if LocalDbg then
   begin
-    Writeln('Clicked line no:', sgMonitor.row);
-    write('Array gives ', length(sgMonitor.Cells[7,sgMonitor.row]),' :');
-    for i := 1 to length(sgMonitor.Cells[7,sgMonitor.row]) do
-      Write('x', HexStr(Ord(sgMonitor.Cells[7,sgMonitor.row][i]), 2));
-    writeln();
-    writeln('Line is:',sgMonitor.row,#13+' 2click Call is:',DblClickCall);
+    Writeln('Clicked line no:', sgMonitor.row, ' 2click Call is:',DblClickCall);
+    BufDebug('Array gives '+INtToStr(length(sgMonitor.Cells[8,sgMonitor.row]))+' :',
+             HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
   end;
-  SendReply(HexStrToStr(sgMonitor.Cells[7,sgMonitor.row]));
+  SendReply(HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
 end;
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -536,7 +526,7 @@ begin
       chkHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
       sgMonitor.Columns.Items[1].Visible:= false;
-      sgMonitor.Columns.Items[6].Visible:= false;
+      sgMonitor.Columns.Items[7].Visible:= false;
     end
     else
     begin   //Cq
@@ -553,7 +543,7 @@ begin
       chkHistory.Visible := True;
       sgMonitor.Columns.Items[0].Visible:= true;
       sgMonitor.Columns.Items[1].Visible:= true;
-      sgMonitor.Columns.Items[6].Visible:= true;
+      sgMonitor.Columns.Items[7].Visible:= true;
     end;
     clearSgMonitor;
   end;
@@ -914,9 +904,9 @@ begin
   sgMonitor.DefaultRowHeight:= sgMonitor.Font.Size + sgMonitor.Font.Size div 2;
 
   //set debug rules for this form
-  LocalDbg := ((dmData.DebugLevel >= 1) or ((dmData.DebugLevel and -4) = -4 ));
-  Writeln('++++++++++++++++++++++++++++++++++++++++++++++++++++++ ',LocalDbg);
-
+  LocalDbg := dmData.DebugLevel >= 1 ;
+  if dmData.DebugLevel < 0 then
+        LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1081,22 +1071,24 @@ begin
       //Snr
       if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
        else sgMonitor.Columns.Items[1].Visible:= false;
-      sgMonitor.Cells[1, sgMonitor.rowCount-1]:= PadLeft(IntToStr(Snr),3);
+      sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
+                         //PadLeft(IntToStr(Snr),3);
 
       if LocalDbg then
          Writeln('Other: Add reply array:', sgMonitor.rowCount-1);
-        sgMonitor.Cells[7, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
+        sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
       //start printing Map mode
       if LocalDbg then
         Writeln('Start Other printing, Map mode');
-      PrintCall(#40+msgcall);  //make not-CQ indicator start
+      AddColorStr('(', clDefault,2, sgMonitor.rowCount-1);//make in-qso indicator start
+      PrintCall(msgcall);  //make not-CQ indicator start
       if msgLoc <> '' then
       begin
         PrintLoc(msgLoc, '', '');
         if frmWorkedGrids.GridOK(msgLoc) then  AddXpList(msgCall,msgLoc);
       end;
       //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
-      AddColorStr(#41, PCallColor,5, sgMonitor.rowCount-1);//make not-CQ indicator stop
+      AddColorStr(')', PCallColor,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
       if LocalDbg then
         Writeln('all written Next alerts');
@@ -1213,11 +1205,9 @@ var    i:integer;
 
 begin
   //repbuf holds the call in monitor/map-printed format
-  RepBuf := PadRight(UpperCase(Pcall), CallFieldLen);
+  //RepBuf := PadRight(UpperCase(Pcall), CallFieldLen);
   //call may include space,(,= for printing purposes. Have to strip away
   Pcall := trim(Pcall);
-  Pcall := StringReplace(Pcall,'(','',[rfReplaceAll]);
-  Pcall := StringReplace(Pcall,'=','',[rfReplaceAll]);
   //We have plain callsign now for database search and coloback printing
   i:= frmWorkedGrids.WkdCall(Pcall, CurBand, CurMode);
   case i of
@@ -1244,7 +1234,7 @@ begin
 
  if (chknoTxt.Checked or PCB) then    //returns color to wsjtx Band activity window
         ColorBack(Pcall,PCallColor)
-   else   AddColorStr(RepBuf + ' ', PCallColor,2,sgMonitor.rowCount-1);
+   else   AddColorStr(Pcall, PCallColor,3,sgMonitor.rowCount-1);
 
    //if LocalDbg then BufDebug('color buffer contains:',RepBuf);
     {
@@ -1336,9 +1326,9 @@ Begin
        end
    else
        begin
-        AddColorStr(L1, Mycolor,3,sgMonitor.rowCount-1);
-        if p=1 then AddColorStr(L2, Mycolor,4,sgMonitor.rowCount-1)
-         else AddColorStr(L2, wkdnever,4,sgMonitor.rowCount-1);
+        AddColorStr(L1, Mycolor,4,sgMonitor.rowCount-1);
+        if p=1 then AddColorStr(L2, Mycolor,5,sgMonitor.rowCount-1)
+         else AddColorStr(L2, wkdnever,5,sgMonitor.rowCount-1);
        end;
 end;
 
@@ -1466,10 +1456,10 @@ var
     Begin
       if not  chkMap.Checked then
         Begin
-          AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,5,sgMonitor.rowCount-1);
+          AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
         end
        else
-          AddColorStr(' '+CqDir, extCqCall,5,sgMonitor.rowCount-1);
+          AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
     end;
   end;
 
@@ -1639,23 +1629,20 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       //Reply added here as sgMonitor row is now created
       if (not chkCbCQ.Checked) and (not chknoTxt.Checked) then
        Begin
-        sgMonitor.Cells[7, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
+        sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
         if LocalDbg then
-         Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(Reply),':',length(sgMonitor.Cells[7, sgMonitor.rowCount-1]));
+         Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(Reply),':',length(sgMonitor.Cells[8, sgMonitor.rowCount-1]));
        end;
 
       if isMyCall then
         begin
          DblClickCall := '';
          if LocalDbg then  Writeln('Reset 2click call: answered to me');
-         PrintCall('='+msgCall,chkCbCQ.Checked);
-         //if not chkCbCQ.Checked then PrintCall('='+msgCall,chkCbCQ.Checked)
-         //   else PrintCall(msgCall,chkCbCQ.Checked); //results colorback only
+         PrintCall(msgCall,chkCbCQ.Checked);
+         if not chkCbCQ.Checked then AddColorStr('=', PcallColor,2 ,sgMonitor.rowCount-1);
         end
       else
-          PrintCall(' '+msgCall,chkCbCQ.Checked);
-         //if not chkCbCQ.Checked then PrintCall(' '+msgCall,chkCbCQ.Checked)  //answer to me
-         //   else PrintCall(msgCall,chkCbCQ.Checked); //results colorback only
+          PrintCall(msgCall,chkCbCQ.Checked);
 
       PrintLoc(msgLoc, timeToAlert, msgTime,chkCbCQ.Checked);
 
@@ -1685,7 +1672,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
             end
             else  // should be ok to answer this directed cq
              if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-              AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,5, sgMonitor.rowCount-1);
+              AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1);
            end
           else
            begin
@@ -1696,7 +1683,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
           // should be ok to answer this is not directed cq
             if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
                 Begin
-                 AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,5, sgMonitor.rowCount-1);
+                 AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,6, sgMonitor.rowCount-1);
                 end;
       if (not chkMap.Checked) then
        begin
@@ -1706,13 +1693,13 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         if LocalDbg then
           Writeln('Looking this>', msgRes[1], '< from:', msgRes);
         case msgRes[1] of
-          'U': AddColorStr(cont + ':' + msgRes, wkdhere,6 ,sgMonitor.rowCount-1);       //Unknown
-          'C': AddColorStr(cont + ':' + msgRes, wkdAny,6 ,sgMonitor.rowCount-1);        //Confirmed
-          'Q': AddColorStr(cont + ':' + msgRes, clTeal,6 ,sgMonitor.rowCount-1);        //Qsl needed
-          'N': AddColorStr(cont + ':' + msgRes, wkdnever,6 ,sgMonitor.rowCount-1);      //New something
+          'U': AddColorStr(cont + ':' + msgRes, wkdhere,7 ,sgMonitor.rowCount-1);       //Unknown
+          'C': AddColorStr(cont + ':' + msgRes, wkdAny,7 ,sgMonitor.rowCount-1);        //Confirmed
+          'Q': AddColorStr(cont + ':' + msgRes, clTeal,7 ,sgMonitor.rowCount-1);        //Qsl needed
+          'N': AddColorStr(cont + ':' + msgRes, wkdnever,7 ,sgMonitor.rowCount-1);      //New something
 
           else
-            AddColorStr(msgRes, clDefault,6 ,sgMonitor.rowCount-1);     //something else...can't be
+            AddColorStr(msgRes, clDefault,7 ,sgMonitor.rowCount-1);     //something else...can't be
         end;
 
       end; //Map mode
@@ -1720,7 +1707,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       if not (chkCbCQ.Checked or chknoTxt.Checked) then
         Begin
            scrollSgMonitor; // if needed
-           sgMonitor.AutoSizeColumns;
+           //sgMonitor.AutoSizeColumns;
 
            //this hides column selector (red dotted frame)
            sgMonitor.Col:= 7;
