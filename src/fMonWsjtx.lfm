@@ -1,7 +1,7 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 35
+  Left = 16
   Height = 362
-  Top = 197
+  Top = 216
   Width = 582
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
@@ -407,6 +407,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       end    
       item
         DropDownRows = 0
+        MinSize = 5
+        MaxSize = 5
         ReadOnly = True
         SizePriority = 0
         Title.Caption = 'call'
@@ -458,7 +460,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     TabOrder = 9
     OnDblClick = sgMonitorDblClick
     OnDrawCell = sgMonitorDrawCell
-    OnSelectCell = sgMonitorSelectCell
     ColWidths = (
       51
       35

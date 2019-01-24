@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, RichMemo, strutils,
+  StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, strutils,
   process, Types;
 
 type
@@ -79,8 +79,6 @@ type
     procedure sgMonitorDblClick(Sender: TObject);
     procedure sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
-    procedure sgMonitorSelectCell(Sender: TObject; aCol, aRow: Integer;
-      var CanSelect: Boolean);
     procedure tbAlertChange(Sender: TObject);
     procedure tbFollowChange(Sender: TObject);
     procedure tbLocAlertChange(Sender: TObject);
@@ -92,7 +90,7 @@ type
   private
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
-    procedure WsjtxMemoScroll;
+    procedure scrollSgMonitor;
     procedure decodetest(i: boolean);
     procedure PrintCall(Pcall: string;PCB:Boolean=false);  // prints colored call
     procedure PrintLoc(PLoc, tTa, mT: string;PCB:Boolean=false);  // prints colored loc
@@ -106,10 +104,11 @@ type
     procedure AddXpList(call,loc:string);
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
+    procedure setDefaultColorSgMonitorAttributes;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
-    procedure CleanWsjtxMemo;
+    procedure clearSgMonitor;
     function NextElement(Message: string; var index: integer): string;
     procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
@@ -124,9 +123,10 @@ type
   end;
 
 const
-  CountryLen = 15;               //length of printed country name in monitor
-  CallFieldLen = 10;               //max len of callsign
-  Sdelim = ',';              //separator of several text alerts
+  MaxLinesSgMonitor = 50;  //max lines in sgmonitor grid
+  CountryLen = 15;         //length of printed country name in monitor
+  CallFieldLen = 10;       //max len of callsign
+  Sdelim = ',';            //separator of several text alerts
 
   //color bitmap size
   bmW = 10;
@@ -142,9 +142,6 @@ end;
 
 var
   frmMonWsjtx: TfrmMonWsjtx;
-  MaxLines: integer = 41;        //Max monitor lines text will show MaxLines-1 lines
-  //RepArr: TReplyArray;  //static array for reply strings: set max same as MaxLines
-  RepArr : array [0 .. 41] of String [255];
   LastWsjtLineTime: string;                  //time of last printed line
   myAlert: string;
   //alert name moved to script as 1st parameter
@@ -181,11 +178,7 @@ var
   LockMap: boolean;
   LockFlw: boolean;
   PCallColor :Tcolor;  //color that was last used fro callsign printing, will be used in xplanet
-  //DL7OAP: restricted to a maximum of 100 entries actuall
-  //TODO DL7OAP: look for a way to have it dynamic or limit to MaxLines = 41 ?
-  sgMonitorAttributes : array [0..6,0..99] of TsgMonitorAttributes;
-  sgRow : integer;
-  sgRowOk : boolean = false;
+  sgMonitorAttributes : array [0..6,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
 implementation
@@ -257,23 +250,25 @@ begin
 
 end;
 
-procedure TfrmMonWsjtx.CleanWsjtxMemo;
-
+procedure TfrmMonWsjtx.clearSgMonitor;
+//removes all rows in stringgrid
+//initialize the array
 var
   l: integer;
 begin
   for l:= sgMonitor.rowcount - 1 downto 0 do
     sgMonitor.DeleteRow(l);
+  setDefaultColorSgMonitorAttributes;
 end;
 
-procedure setDefaultColorSgMonitorAttributes;
+procedure TfrmMonWsjtx.setDefaultColorSgMonitorAttributes;
 //DL7OAP: initialize sgMonitorAttributes to default colors
 var
   i, j: integer;
 begin
   for i:= 0 to 6 do
   begin
-       for j:=0 to 99 do
+       for j:=0 to MaxLinesSgMonitor - 1 do
        begin
           sgMonitorAttributes[i,j].FG_Color:=clBlack;
           sgMonitorAttributes[i,j].BG_Color:=clWhite;
@@ -282,29 +277,27 @@ begin
   end;
 end;
 
-
-procedure TfrmMonWsjtx.WsjtxMemoScroll;
+procedure TfrmMonWsjtx.scrollSgMonitor;
+//when MaxLinesSgMonitor is reached scrolling have to be done
 var
-  i: integer;
+  i,j: integer;
 begin
-  {We need scrolling routine when maxlines , now 100, gets on.
-
-
-  with WsjtxMemo do
+  // -2 to have 1 row for the next addmessage left
+  if (sgMonitor.RowCount >= MaxLinesSgMonitor - 2) then
   begin
-    //scroll buffer if needed
-    if Lines.Count >= MaxLines then
+    // scroll grid: by delete oldest entry in the grid
+    sgMonitor.DeleteRow(0);
+    // scroll array: by shift sgMonitorAttributes array -1
+    for i:= 0 to 6 do
     begin
-      repeat
-        Lines.Delete(0);
-        for i := 0 to MaxLines - 2 do
-          RepArr[i] := RepArr[i + 1];
-      until Lines.Count <= Maxlines;
-      RepArr[MaxLines - 1] := '';
-      FocusLastLine;
-    end;
+         for j:=0 to MaxLinesSgMonitor - 2 do
+         begin
+            sgMonitorAttributes[i,j].FG_Color:=sgMonitorAttributes[i,j+1].FG_Color;
+            sgMonitorAttributes[i,j].BG_Color:=sgMonitorAttributes[i,j+1].BG_Color;
+            sgMonitorAttributes[i,j].isBold:=sgMonitorAttributes[i,j+1].isBold;
+         end;
+      end;
   end;
-  }
 end;
 
 procedure TfrmMonWsjtx.SendReply(reply: string);
@@ -320,36 +313,32 @@ begin
     //if LocalDbg then BufDebug('Send data buffer contains:',reply);
   end;
 end;
+
 procedure TfrmMonWsjtx.sgMonitorDblClick(Sender: TObject);
 var
   i: byte;
 begin
- if  sgRowOK then
-  Begin
-    DblClickCall := sgMonitor.Cells[2,sgRow];
-    if chkMap.checked then
-    Begin
-        //call may include space,(,= for printing purposes. Have to strip away
-        DblClickCall := trim(DblClickCall);
-        DblClickCall := StringReplace(DblClickCall,'(','',[rfReplaceAll]);
-        DblClickCall := StringReplace(DblClickCall,'=','',[rfReplaceAll]);
-    end;
 
+  DblClickCall := sgMonitor.Cells[2,sgMonitor.row];
+  if chkMap.checked then
+  Begin
+      //call may include space,(,= for printing purposes. Have to strip away
+      DblClickCall := trim(DblClickCall);
+      DblClickCall := StringReplace(DblClickCall,'(','',[rfReplaceAll]);
+      DblClickCall := StringReplace(DblClickCall,'=','',[rfReplaceAll]);
+  end;
 
   if LocalDbg then
   begin
-    Writeln('Clicked line no:', sgRow);
-    write('Array gives ', length(sgMonitor.Cells[7,sgRow]),' :');
-    for i := 1 to length(sgMonitor.Cells[7,sgRow]) do
-      Write('x', HexStr(Ord(sgMonitor.Cells[7,sgRow][i]), 2));
+    Writeln('Clicked line no:', sgMonitor.row);
+    write('Array gives ', length(sgMonitor.Cells[7,sgMonitor.row]),' :');
+    for i := 1 to length(sgMonitor.Cells[7,sgMonitor.row]) do
+      Write('x', HexStr(Ord(sgMonitor.Cells[7,sgMonitor.row][i]), 2));
     writeln();
-    writeln('Line is:',sgRow,#13+' 2click Call is:',DblClickCall);
+    writeln('Line is:',sgMonitor.row,#13+' 2click Call is:',DblClickCall);
   end;
-  SendReply(HexStrToStr(sgMonitor.Cells[7,sgRow]));
-  sgRowOk := false;
-  end; //sgRowOK
+  SendReply(HexStrToStr(sgMonitor.Cells[7,sgMonitor.row]));
 end;
-
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
@@ -391,7 +380,6 @@ procedure TfrmMonWsjtx.edtFollowCallChange(Sender: TObject);
 begin
   edtFollowCall.Text:=trim(UpperCase(edtFollowCall.Text));        //no spaces  upcase
 end;
-
 
 procedure TfrmMonWsjtx.edtFollowCallEnter(Sender: TObject);
 begin
@@ -462,7 +450,6 @@ begin
     cqrini.WriteString('MonWsjtx', 'wkdany', ColorToString(wkdany));
     SetAllbitmaps;
   end;
-
 end;
 
 procedure TfrmMonWsjtx.cmHereClick(Sender: TObject);
@@ -475,7 +462,6 @@ begin
     cqrini.WriteString('MonWsjtx', 'wkdhere', ColorToString(wkdhere));
     SetAllbitmaps;
   end;
-
 end;
 
 procedure TfrmMonWsjtx.chkHistoryChange(Sender: TObject);
@@ -569,7 +555,7 @@ begin
       sgMonitor.Columns.Items[1].Visible:= true;
       sgMonitor.Columns.Items[6].Visible:= true;
     end;
-    CleanWsjtxMemo;
+    clearSgMonitor;
   end;
 end;
 
@@ -590,7 +576,6 @@ begin
     cqrini.WriteBool('MonWsjtx', 'FollowShow', cbflw.Checked);
   if cbflw.Checked then
   begin
-    //WsjtxMemo.BorderSpacing.Bottom := 96;
     sgMonitor.BorderSpacing.Bottom := 96;
     pnlFollow.Visible := True;
     edtFollow.Text := '';
@@ -599,7 +584,6 @@ begin
   else
   begin
     tbFollow.Checked := False;
-    //WsjtxMemo.BorderSpacing.Bottom := 51;
     sgMonitor.BorderSpacing.Bottom := 51;
     pnlFollow.Visible := False;
   end;
@@ -652,14 +636,6 @@ begin
     sgMonitor.Canvas.Font.Style:=[fsBold];
   sgMonitor.Canvas.Fillrect(aRect); // fills cell with backcolor, text is lost in this moment
   sgMonitor.Canvas.TextRect(aRect, aRect.Left + 1, aRect.Top + 1, sgMonitor.Cells[ACol, ARow]); //refills the text
-end;
-
-procedure TfrmMonWsjtx.sgMonitorSelectCell(Sender: TObject; aCol,
-  aRow: Integer; var CanSelect: Boolean);
-begin
-  //we need just row info
-  sgRow:= aRow;
-  sgRowOk := true;
 end;
 
 procedure TfrmMonWsjtx.tbAlertChange(Sender: TObject);
@@ -761,13 +737,23 @@ begin
 end;
 
 procedure TfrmMonWsjtx.tmrCqPeriodTimer(Sender: TObject);
+var
+  i, j: integer;
 begin
   tmrCqPeriod.Enabled := False;
   if (chkHistory.Checked) then
-
+  begin
     //graying all needs attention!
-    //WsjtxMemo.SetRangeColor(0, length(WsjtxMemo.Text), clSilver);
-
+    for i:= 0 to 6 do
+    begin
+         for j:=0 to MaxLinesSgMonitor - 1 do
+         begin
+            sgMonitorAttributes[i,j].FG_Color:=clSilver;
+            sgMonitorAttributes[i,j].BG_Color:=clWhite;
+            sgMonitorAttributes[i,j].isBold:=false;
+         end;
+    end;
+  end;
 end;
 
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
@@ -808,14 +794,12 @@ begin
   begin
     cqrini.WriteString('MonWsjtx', 'Font', popFontDlg.Font.Name);
     cqrini.WriteInteger('MonWsjtx', 'FontSize', popFontDlg.Font.Size);
-    //WsjtxMemo.Font.Name := popFontDlg.Font.Name;
-    //WsjtxMemo.Font.Size := popFontDlg.Font.Size;
     edtFollow.Font.Name := popFontDlg.Font.Name;
     edtFollow.Font.Size := popFontDlg.Font.Size;
     sgMonitor.Font.Name := popFontDlg.Font.Name;
     sgMonitor.Font.Size := popFontDlg.Font.Size;
     sgMonitor.DefaultRowHeight:= sgMonitor.Font.Size + sgMonitor.Font.Size div 2;
-    CleanWsjtxMemo;
+    clearSgMonitor;
     edtFollow.Text := '';
   end;
 end;
@@ -823,7 +807,6 @@ end;
 procedure TfrmMonWsjtx.FormCreate(Sender: TObject);
 begin
   LockMap := True;
-  //SetLength(RepArr, MaxLines); //set reply buffer to maxlines
   EditAlert.Text := '';
   EditedText := '';
   LastWsjtLineTime := '';
@@ -893,8 +876,6 @@ end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin
-  //WsjtxMemo.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', 'Monospace');
-  //WsjtxMemo.Font.Size := cqrini.ReadInteger('MonWsjtx', 'FontSize', 10);
   dmUtils.LoadWindowPos(frmMonWsjtx);
   dmUtils.LoadFontSettings(frmMonWsjtx);
   //overrides font loading
@@ -939,13 +920,12 @@ begin
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
-
 begin
   lblBand.Caption := Band;
   lblMode.Caption := Mode;
   CurBand := Band;
   CurMode := Mode;
-  CleanWsjtxMemo;
+  clearSgMonitor;
   edtFollow.Text := '';
 end;
 
@@ -1093,9 +1073,10 @@ begin
     begin
       myAlert := '';
       MonitorLine := '';
+
       //this insets space to hidden 1st column  and starts a row
       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [' ']);
-      if (msgTime <> LastWsjtLineTime) then  CleanWsjtxMemo;
+      if (msgTime <> LastWsjtLineTime) then  clearSgMonitor;
       LastWsjtLineTime := msgTime;
       //Snr
       if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
@@ -1155,6 +1136,7 @@ begin
     RepFlw := Reply;
   end;
 end;
+
 procedure TfrmMonWsjtx.BufDebug(MyHeader,MyBuf:string);
 var l,i,f: integer;
 Begin
@@ -1182,7 +1164,6 @@ end;
 
 procedure TfrmMonWsjtx.ColorBack(Myitem:string;Mycolor:Tcolor;bkg:Boolean=false);
 var r,g,b : char;
-
 Begin     //"print" back to wsjt-x Band activity (color line there)
     r:=chr(Red(Mycolor));
     g:=chr(Green(Mycolor));
@@ -1635,7 +1616,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
       if (chkHistory.Checked or chkMap.Checked) and
         (msgTime <> LastWsjtLineTime) then
-        CleanWsjtxMemo;
+        clearSgMonitor;
       LastWsjtLineTime := msgTime;
 
       //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
@@ -1738,14 +1719,13 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
       if not (chkCbCQ.Checked or chknoTxt.Checked) then
         Begin
-           //WsjtxMemoScroll; // if needed
-           //sgMonitor.AutoSizeColumns;
+           scrollSgMonitor; // if needed
+           sgMonitor.AutoSizeColumns;
 
            //this hides column selector (red dotted frame)
            sgMonitor.Col:= 7;
            sgMonitor.Row:=sgMonitor.rowcount -1;
 
-           //sgMonitor.SetFocus;
         end;
 
       TryAlerts;

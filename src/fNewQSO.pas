@@ -2356,7 +2356,7 @@ begin
           if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
            Begin
              //frmMonWsjtx.WsjtxMemo.lines.Clear;
-             frmMonWsjtx.CleanWsjtxMemo;
+             frmMonWsjtx.clearSgMonitor;
              frmMonWsjtx.edtFollow.Text := '';
            end;
         end; //Clear

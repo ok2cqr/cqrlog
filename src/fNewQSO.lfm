@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 393
+  Left = 282
   Height = 709
-  Top = 6
+  Top = 0
   Width = 809
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2650,17 +2650,15 @@ object frmNewQSO: TfrmNewQSO
           ParentShowHint = False
         end
         object sbtnQSL: TSpeedButton
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
+          AnchorSideTop.Control = sbtneQSL
           AnchorSideRight.Control = sbtneQSL
-          Left = 411
+          Left = 407
           Height = 23
           Hint = 'Call has a QSL image'
-          Top = 337
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 2
+          BorderSpacing.Right = 3
           Glyph.Data = {
             36090000424D3609000000000000360000002800000018000000180000000100
             2000000000000009000064000000640000000000000000000000FFFFFF00FFFF
@@ -2742,17 +2740,15 @@ object frmNewQSO: TfrmNewQSO
           ParentShowHint = False
         end
         object sbtnQRZ: TSpeedButton
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
+          AnchorSideTop.Control = sbtnHamQTH
           AnchorSideRight.Control = sbtnHamQTH
-          Left = 486
+          Left = 485
           Height = 23
           Hint = 'Opens qrz.com callsing profile in webbrowser'
-          Top = 337
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 2
+          BorderSpacing.Right = 3
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000064000000640000000000000000000000F5F2E9FFF5F2
@@ -2795,18 +2791,15 @@ object frmNewQSO: TfrmNewQSO
         end
         object sbtnLoTW: TSpeedButton
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
+          AnchorSideTop.Control = sbtnQRZ
           AnchorSideRight.Control = sbtnQRZ
-          Left = 461
+          Left = 459
           Height = 23
           Hint = 'LoTW user'
-          Top = 337
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
-          BorderSpacing.Left = 2
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 2
+          BorderSpacing.Right = 3
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
@@ -3393,11 +3386,10 @@ object frmNewQSO: TfrmNewQSO
           Left = 511
           Height = 23
           Hint = 'Opens HamQTH.com callsing profile in webbrowser'
-          Top = 337
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
-          BorderSpacing.Left = 2
-          BorderSpacing.Top = 2
+          BorderSpacing.Top = 3
           Font.Color = clBlue
           Font.Height = 16
           Font.Style = [fsBold]
@@ -3440,18 +3432,15 @@ object frmNewQSO: TfrmNewQSO
         end
         object sbtneQSL: TSpeedButton
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
+          AnchorSideTop.Control = sbtnLoTW
           AnchorSideRight.Control = sbtnLoTW
-          Left = 436
+          Left = 433
           Height = 23
           Hint = 'eQSL user'
-          Top = 337
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
-          BorderSpacing.Left = 2
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 2
+          BorderSpacing.Right = 3
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
@@ -3513,22 +3502,22 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = Panel6
           Left = 0
-          Height = 150
-          Top = 361
+          Height = 135
+          Top = 376
           Width = 545
           ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight]
-          BorderSpacing.Top = 25
+          BorderSpacing.Top = 40
           TabIndex = 0
           TabOrder = 28
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
-            ClientHeight = 119
+            ClientHeight = 104
             ClientWidth = 535
             object sgrdStatistic: TStringGrid
               Left = 0
-              Height = 119
+              Height = 104
               Top = 0
               Width = 535
               Align = alClient
@@ -3546,7 +3535,7 @@ object frmNewQSO: TfrmNewQSO
           end
           object tabSatellite: TTabSheet
             Caption = 'Satellite'
-            ClientHeight = 119
+            ClientHeight = 104
             ClientWidth = 535
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
