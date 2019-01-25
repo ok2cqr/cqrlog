@@ -105,6 +105,7 @@ type
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
     procedure setDefaultColorSgMonitorAttributes;
+    procedure setMonitorColumnHW;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -187,7 +188,7 @@ implementation
 
 { TfrmMonWsjtx }
 
-uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyini, dDXCluster;
+uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster;
 
 procedure TfrmMonWsjtx.RunVA(Afile: string);
 const
@@ -200,9 +201,10 @@ begin
 
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := 'bash ' + dmData.HomeDir + cAlert + ' ' + Afile;
+    AProcess.Executable:=dmData.HomeDir + cAlert;
+    AProcess.Parameters.Add(AFile);
     if LocalDbg then
-      Writeln('Command line: ', AProcess.CommandLine);
+      Writeln('Command line: ', AProcess.Executable + ' ' + AFile );
     AProcess.Execute
   finally
     AProcess.Free
@@ -298,6 +300,19 @@ begin
          end;
       end;
   end;
+end;
+procedure TfrmMonWsjtx.setMonitorColumnHW;
+Var
+  FSz : integer;
+  i   : integer;
+Begin
+  with (frmMonWsjtx.sgMonitor) do
+   begin
+      FSz := Font.Size;
+      DefaultRowHeight:= FSz + FSz div 2;
+      for i:=0 to 6 do
+         ColWidths[i] := Columns.Items[i].maxSize * FSz;
+   end;
 end;
 
 procedure TfrmMonWsjtx.SendReply(reply: string);
@@ -788,7 +803,7 @@ begin
     edtFollow.Font.Size := popFontDlg.Font.Size;
     sgMonitor.Font.Name := popFontDlg.Font.Name;
     sgMonitor.Font.Size := popFontDlg.Font.Size;
-    sgMonitor.DefaultRowHeight:= sgMonitor.Font.Size + sgMonitor.Font.Size div 2;
+    setMonitorColumnHW;
     clearSgMonitor;
     edtFollow.Text := '';
   end;
@@ -901,7 +916,8 @@ begin
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
   //DL7OAP
-  sgMonitor.DefaultRowHeight:= sgMonitor.Font.Size + sgMonitor.Font.Size div 2;
+  setMonitorColumnHW;
+  sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
 
   //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
@@ -996,6 +1012,7 @@ begin
   if ResultLen > 0 then
     BinToHex(Pointer(S), Pointer(Result), Length(S));
 end;
+
 procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
 var
   List1: TStringList;
@@ -1065,9 +1082,9 @@ begin
       MonitorLine := '';
 
       //this insets space to hidden 1st column  and starts a row
-      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [' ']);
       if (msgTime <> LastWsjtLineTime) then  clearSgMonitor;
       LastWsjtLineTime := msgTime;
+      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [' ']);
       //Snr
       if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
        else sgMonitor.Columns.Items[1].Visible:= false;
@@ -1080,7 +1097,7 @@ begin
       //start printing Map mode
       if LocalDbg then
         Writeln('Start Other printing, Map mode');
-      AddColorStr('(', clDefault,2, sgMonitor.rowCount-1);//make in-qso indicator start
+      AddColorStr('(', clBlack,2, sgMonitor.rowCount-1);//make in-qso indicator start
       PrintCall(msgcall);  //make not-CQ indicator start
       if msgLoc <> '' then
       begin
@@ -1088,7 +1105,7 @@ begin
         if frmWorkedGrids.GridOK(msgLoc) then  AddXpList(msgCall,msgLoc);
       end;
       //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
-      AddColorStr(')', PCallColor,6, sgMonitor.rowCount-1);//make in-qso indicator stop
+      AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
       if LocalDbg then
         Writeln('all written Next alerts');
@@ -1708,10 +1725,6 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         Begin
            scrollSgMonitor; // if needed
            //sgMonitor.AutoSizeColumns;
-
-           //this hides column selector (red dotted frame)
-           sgMonitor.Col:= 7;
-           sgMonitor.Row:=sgMonitor.rowcount -1;
 
         end;
 
