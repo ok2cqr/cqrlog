@@ -42,7 +42,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     Layout = tlBottom
     ParentColor = False
   end
-  object chkHistory: TCheckBox
+  object chknoHistory: TCheckBox
     AnchorSideLeft.Side = asrCenter
     AnchorSideRight.Control = chknoTxt
     AnchorSideBottom.Control = lblBand
@@ -55,7 +55,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     BorderSpacing.Top = 6
     BorderSpacing.Right = 1
     Caption = 'nHst'
-    OnChange = chkHistoryChange
+    OnChange = chknoHistoryChange
     TabOrder = 0
   end
   object chknoTxt: TCheckBox
@@ -284,7 +284,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     end
   end
   object cbflw: TCheckBox
-    AnchorSideRight.Control = chkHistory
+    AnchorSideRight.Control = chknoHistory
     AnchorSideBottom.Control = lblBand
     AnchorSideBottom.Side = asrBottom
     Left = 156
@@ -422,7 +422,6 @@ object frmMonWsjtx: TfrmMonWsjtx
       end    
       item
         DropDownRows = 0
-        MinSize = 10
         MaxSize = 10
         ReadOnly = True
         SizePriority = 0

@@ -29,7 +29,7 @@ type
     sgMonitor: TStringGrid;
     tbAlert: TToggleBox;
     chknoTxt: TCheckBox;
-    chkHistory: TCheckBox;
+    chknoHistory: TCheckBox;
     cmCqDx: TMenuItem;
     cmFont: TMenuItem;
     popFontDlg: TFontDialog;
@@ -53,7 +53,7 @@ type
     procedure chkCbCQChange(Sender: TObject);
     procedure cbflwChange(Sender: TObject);
     procedure chkdBChange(Sender: TObject);
-    procedure chkHistoryChange(Sender: TObject);
+    procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
@@ -244,7 +244,7 @@ begin
              sgMonitor.Cells[c,r]:= s;  //trim ??
              sgMonitorAttributes[c,r].FG_Color:=col;
              sgMonitorAttributes[c,r].isBold:=false;
-             if ((col = wkdnever) and ((c > 1) and (c< 5))) then
+             if ((col = wkdnever) and ((c > 2) and (c < 6))) then
                sgMonitorAttributes[c,r].isBold:=true
 
              //sgMonitorAttributes[c,r].BG_Color:=col;
@@ -469,9 +469,9 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.chkHistoryChange(Sender: TObject);
+procedure TfrmMonWsjtx.chknoHistoryChange(Sender: TObject);
 begin
-  cqrini.WriteBool('MonWsjtx', 'NoHistory', chkHistory.Checked);
+  cqrini.WriteBool('MonWsjtx', 'NoHistory', chknoHistory.Checked);
 end;
 
 procedure TfrmMonWsjtx.SaveFormPos(FormMode: string);
@@ -538,7 +538,7 @@ begin
       chkCbCQ.Checked := cqrini.ReadBool('MonWsjtx', 'ColorBacCQkMap', False);
       chkdB.Checked := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
       //map mode allows text printing. Printing stays on when return to monitor mode.
-      chkHistory.Visible := False;
+      chknoHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
       sgMonitor.Columns.Items[1].Visible:= false;
       sgMonitor.Columns.Items[7].Visible:= false;
@@ -555,7 +555,7 @@ begin
       pnlAlert.Visible := True;
       cbflw.Visible := True;
       chknoTxt.Visible := True;
-      chkHistory.Visible := True;
+      chknoHistory.Visible := True;
       sgMonitor.Columns.Items[0].Visible:= true;
       sgMonitor.Columns.Items[1].Visible:= true;
       sgMonitor.Columns.Items[7].Visible:= true;
@@ -746,10 +746,9 @@ var
   i, j: integer;
 begin
   tmrCqPeriod.Enabled := False;
-  if (chkHistory.Checked) then
+  if (chknoHistory.Checked) then
   begin
-    //graying all needs attention!
-    for i:= 0 to 6 do
+    for i:= 0 to 7 do
     begin
          for j:=0 to MaxLinesSgMonitor - 1 do
          begin
@@ -887,7 +886,7 @@ begin
   sgMonitor.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', 'Monospace');
   sgMonitor.Font.Size := cqrini.ReadInteger('MonWsjtx', 'FontSize', 10);
 
-  chkHistory.Checked := cqrini.ReadBool('MonWsjtx', 'NoHistory', False);
+  chknoHistory.Checked := cqrini.ReadBool('MonWsjtx', 'NoHistory', False);
   chknoTxt.Checked := cqrini.ReadBool('MonWsjtx', 'NoTxt', False);
   chkStopTx.Checked := cqrini.ReadBool('MonWsjtx', 'StopTX',  False );
   tbmyAlrt.Checked := cqrini.ReadBool('MonWsjtx', 'MyAlert', False);
@@ -1140,7 +1139,7 @@ begin
     if CurMode = 'FT8' then tmrFollow.Interval := 16000 else tmrFollow.Interval := 61000;
     tmrFollow.Enabled := True;
 
-    edtFollow.Font.Color := clDefault;
+    edtFollow.Font.Color := clBlack;
     edtFollow.Text := copy(message,1,6)+' '+IntToStr(Snr)+copy(message,7,length(message));
     RepFlw := Reply;
   end;
@@ -1243,7 +1242,7 @@ begin
        end;
     else
       Begin
-        PCallColor :=clDefault;
+        PCallColor :=clBlack;
       end;
       //should not happen
   end;
@@ -1268,12 +1267,17 @@ end;
 procedure TfrmMonWsjtx.PrintLoc(PLoc, tTa, mT: string;PCB:Boolean=false);
 var L1,L2:String;     //locator main
        p :integer = 0;    //locator sub
-Mycolor  :Tcolor = clDefault;     //color main. color sub sub is same, or else wkdnever
+Mycolor  :Tcolor = clBlack;     //color main. color sub sub is same, or else wkdnever
 
 Begin
   L1:= UpperCase(copy(PLoc, 1, 2));
   L2:= copy(PLoc, 3, 2);
-  if not (PLoc = '----') then
+  if (PLoc = '----') then
+   begin
+     p:=1;
+     Mycolor := clBlack;
+   end
+  else
    Begin
       case frmWorkedGrids.WkdGrid(PLoc, CurBand, CurMode) of
         //returns 0=not wkd
@@ -1326,15 +1330,10 @@ Begin
           Begin
             L1:= lowerCase(L1);//should not happen
             p:=1;
-            Mycolor := clDefault;
+            Mycolor := clBlack;
           end;
       end; //case
-   end //not ----
-  else
-   begin
-     p:=1;
-     Mycolor := clDefault;
-   end;
+   end; // ----  *QSO
 
   if  (chknoTxt.Checked or PCB) then
        begin
@@ -1621,7 +1620,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       //if mycall: line must have locator to print(I.E. Answer to my CQ)
     begin                                        //and other combinations (CQs) will print, too
 
-      if (chkHistory.Checked or chkMap.Checked) and
+      if (chknoHistory.Checked or chkMap.Checked) and
         (msgTime <> LastWsjtLineTime) then
         clearSgMonitor;
       LastWsjtLineTime := msgTime;
@@ -1632,7 +1631,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
       if (not ChkCbCq.Checked) and (not chknoTxt.Checked) then      //was chkmap
        begin
-        if (chkHistory.Checked)  then
+        if (chknoHistory.Checked)  then
          Begin
           sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 4), PadLeft(IntToStr(Snr),3)]);
          end
@@ -1716,7 +1715,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
           'N': AddColorStr(cont + ':' + msgRes, wkdnever,7 ,sgMonitor.rowCount-1);      //New something
 
           else
-            AddColorStr(msgRes, clDefault,7 ,sgMonitor.rowCount-1);     //something else...can't be
+            AddColorStr(msgRes, clBlack,7 ,sgMonitor.rowCount-1);     //something else...can't be
         end;
 
       end; //Map mode
