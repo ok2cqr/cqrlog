@@ -758,6 +758,7 @@ begin
          end;
     end;
   end;
+  sgMonitor.Repaint;
 end;
 
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
@@ -1220,10 +1221,8 @@ procedure TfrmMonWsjtx.PrintCall(Pcall: string;PCB:Boolean=false);
 var    i:integer;
 
 begin
-  //repbuf holds the call in monitor/map-printed format
-  //RepBuf := PadRight(UpperCase(Pcall), CallFieldLen);
-  //call may include space,(,= for printing purposes. Have to strip away
   Pcall := trim(Pcall);
+  RepBuf := Pcall;
   //We have plain callsign now for database search and coloback printing
   i:= frmWorkedGrids.WkdCall(Pcall, CurBand, CurMode);
   case i of
@@ -1231,7 +1230,7 @@ begin
         PCallColor :=wkdnever;
        end;
     1: Begin
-        RepBuf := LowerCase(RepBuf);
+        RepBuf := LowerCase(Pcall);
         PCallColor :=wkdhere;
        end;
     2: Begin
@@ -1248,9 +1247,9 @@ begin
   end;
  if LocalDbg then Writeln(' Callsign WB4 status is: ',i);
 
- if (chknoTxt.Checked or PCB) then    //returns color to wsjtx Band activity window
+ if (chknoTxt.Checked or PCB) then    //returns color to wsjtx Band activity window needs upcase
         ColorBack(Pcall,PCallColor)
-   else   AddColorStr(Pcall, PCallColor,3,sgMonitor.rowCount-1);
+   else   AddColorStr(RepBuf, PCallColor,3,sgMonitor.rowCount-1);
 
    //if LocalDbg then BufDebug('color buffer contains:',RepBuf);
     {
