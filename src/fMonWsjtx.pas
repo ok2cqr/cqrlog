@@ -1230,7 +1230,7 @@ begin
         PCallColor :=wkdnever;
        end;
     1: Begin
-        RepBuf := LowerCase(Pcall);
+        RepBuf := LowerCase(RepBuf);
         PCallColor :=wkdhere;
        end;
     2: Begin
@@ -1503,8 +1503,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
   adif := dmDXCC.id_country(
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
-  if LocalDbg then
-    //Writeln('Memo Lines count is now:', WsjtxMemo.Lines.Count);
+
   index := 1;
 
   if LocalDbg then
