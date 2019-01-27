@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, strutils,
+  StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
   process, Types;
 
 type
@@ -110,7 +110,6 @@ type
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
     procedure clearSgMonitor;
-    function NextElement(Message: string; var index: integer): string;
     procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
     procedure AddOtherMessage(Message, Reply: string;Snr:integer);
@@ -472,8 +471,26 @@ end;
 procedure TfrmMonWsjtx.chknoHistoryChange(Sender: TObject);
 begin
   cqrini.WriteBool('MonWsjtx', 'NoHistory', chknoHistory.Checked);
+  with sgMonitor do
+   Begin
+    if chknoHistory.Checked then
+      Begin
+        Columns.Items[0].maxSize := 4;
+        Columns.Items[0].minSize := 4;
+        Columns.Items[1].maxSize := 3;
+        Columns.Items[1].minSize := 3;
+      end
+     else
+      Begin
+       Columns.Items[0].maxSize := 6;
+       Columns.Items[0].minSize := 6;
+       Columns.Items[1].maxSize := 1;
+       Columns.Items[1].minSize := 1;
+      end;
+    setMonitorColumnHW;
+    clearSgMonitor;
+  end;
 end;
-
 procedure TfrmMonWsjtx.SaveFormPos(FormMode: string);
 
 begin
@@ -935,26 +952,6 @@ begin
   edtFollow.Text := '';
 end;
 
-function TfrmMonWsjtx.NextElement(Message: string; var index: integer): string;
-  //detach next element from Message. Move index pointer, do not touch message string itself
-
-begin
-  Result := '';
-  if Message <> '' then
-  begin
-    while (Message[index] = ' ') and (index <= length(Message)) do
-      Inc(index);
-    while (Message[index] <> ' ') and (index <= length(Message)) do
-    begin
-      Result := Result + Message[index];
-      Inc(index);
-    end;
-    UpperCase(trim(Result));  //to be surely fixed
-  end;
-
-  if LocalDbg then
-    Writeln('Result:', Result, ' index of msg:', index);
-end;
 //-----------------------------------------------------------------------------------------
 procedure TfrmMonWsjtx.decodetest(i: boolean);           // run execptions for debug
 begin
@@ -1459,6 +1456,7 @@ var
   mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
   i, index: integer;
   adif: word;
+  msgList: TStringList;
 
   CallCqDir,            //CQ caller calling directed call
   HasNum, HasChr: boolean;
@@ -1498,21 +1496,23 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
   CallCqDir := False;
   CqDir := '';
 
-
-
   adif := dmDXCC.id_country(
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
 
-  index := 1;
+  index:=0;
+  msgList:=TStringList.Create;
+  msgList.Linebreak:=' '; // space delimiter
+  msgList.Text:=Message;
 
   if LocalDbg then
     Write('Time-');
-  msgTime := NextElement(Message, index);
+  msgTime := msgList[index];
 
   if LocalDbg then
     Write('Mode-');
-  msgMode := NextElement(Message, index);
+  inc(index);
+  msgMode := msgList[index];
 
   case msgMode of
     chr(36): CurMode := 'JT4';
@@ -1531,12 +1531,14 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
   begin
     if LocalDbg then
       Write('Cq1-'); //this is checked by newQSO to be MYCall or CQ
-    msgCQ1 := NextElement(Message, index);
+    inc(index);
+    msgCQ1 := msgList[index];
     isMyCall := pos(msgCQ1, UpperCase(cqrini.ReadString('Station',
       'Call', ''))) > 0;
     if LocalDbg then
       Write('Cq2-');
-    msgCQ2 := NextElement(Message, index);
+    inc(index);
+    msgCQ2 := msgList[index];
     if length(msgCQ2) > 2 then
       // if longer than 2 may be call, otherwise is addition DX AS EU etc.
     begin
@@ -1555,10 +1557,17 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
           Writeln('CQ2 had no number+char.');
           Write('Call-');
         end;
-        msgCall := NextElement(Message, index);
-        //!! if sill no call
-        if not (OkCall(msgCall)) then
-          msgCall := NextElement(Message, index);
+        inc(index);
+        if index < msgList.Count then begin
+          msgCall := msgList[index];
+          //!! if sill no call
+          if not (OkCall(msgCall)) then begin
+            inc(index);
+            if index < msgList.Count then begin
+              msgCall := msgList[index];
+            end;
+          end;
+        end;
       end;
     end
     else   //length(msgCQ2)<2
@@ -1570,10 +1579,13 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         Writeln('CQ2 length=<2.');
         Write('Call-');
       end;
-      msgCall := NextElement(Message, index); //was shortie, so next must be call
+      inc(index);
+      msgCall := msgList[index]; //was shortie, so next must be call
       //!! if sill no call
-      if not (OkCall(msgCall)) then
-        msgCall := NextElement(Message, index);
+      if not (OkCall(msgCall)) then begin
+        inc(index);
+        msgCall := msgList[index];
+      end;
     end;
 
     //how ever if we do not have callsign because some crazy cq calling way
@@ -1589,7 +1601,11 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     //so we should have time, mode and call by now. That reamains locator, if exists
     if LocalDbg then
       Write('Loc-');
-    msgLoc := NextElement(Message, index);
+    inc(index);
+    if index < msgList.Count then
+       msgLoc := msgList[index]
+    else
+       msgLoc := '----';
 
 
     if msgLoc = 'DX' then
