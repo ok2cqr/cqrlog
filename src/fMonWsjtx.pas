@@ -106,6 +106,7 @@ type
     procedure SetAllbitmaps;
     procedure setDefaultColorSgMonitorAttributes;
     procedure setMonitorColumnHW;
+    procedure scrollSgMonitorToLastLine;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -245,10 +246,7 @@ begin
              sgMonitorAttributes[c,r].isBold:=false;
              if ((col = wkdnever) and ((c > 2) and (c < 6))) then
                sgMonitorAttributes[c,r].isBold:=true
-
-             //sgMonitorAttributes[c,r].BG_Color:=col;
         end;
-
 end;
 
 procedure TfrmMonWsjtx.clearSgMonitor;
@@ -262,6 +260,12 @@ begin
   setDefaultColorSgMonitorAttributes;
   if LocalDbg then
         Writeln('sgMonitor clear finished');
+end;
+
+procedure TfrmMonWsjtx.scrollSgMonitorToLastLine;
+//scrolls down, so last line is in view in sgMonitor
+begin
+  sgMonitor.TopRow:= sgMonitor.RowCount-sgMonitor.VisibleRowCount;
 end;
 
 procedure TfrmMonWsjtx.setDefaultColorSgMonitorAttributes;
@@ -302,6 +306,7 @@ begin
       end;
   end;
 end;
+
 procedure TfrmMonWsjtx.setMonitorColumnHW;
 Var
   FSz : integer;
@@ -594,7 +599,6 @@ begin
     end;
 end;
 
-
 procedure TfrmMonWsjtx.cbflwChange(Sender: TObject);
 begin
   if not LockFlw then
@@ -648,7 +652,6 @@ begin
   sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not sgMonitor.Visible;
 end;
-
 
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
@@ -1005,6 +1008,7 @@ begin
       );  // for dbg
   end;
 end;
+
  function TfrmMonWsjtx.HexStrToStr(const HexStr: string): string;
 var
   ResultLen: Integer;
@@ -1134,7 +1138,7 @@ begin
       TryAlerts;
     end;
   end;
-
+  scrollSgMonitorToLastLine;
 end;
 
 procedure TfrmMonWsjtx.AddFollowedMessage(Message, Reply: string;snr:integer);
@@ -1375,12 +1379,10 @@ Begin
 end;
 
 function TfrmMonWsjtx.isItACall(Call: string): boolean;
+// must have number and letter and length >= 3
 var
   HasNum, HasChr, NoRprt: boolean;
   i: integer;
-  //must have number and letter and length >= 3
-  //and is not locator. Some special calls may fail -> OH60AB
-
 begin
   i := 0;
   HasNum := False;
@@ -1388,20 +1390,17 @@ begin
   NoRprt := (pos('R-',Call) + pos('R+',Call)) < 1; //R-repots are not calls
   if (Call <> '') then
   begin
-   if not frmWorkedGrids.GridOK(Call) then
-    begin
-        repeat
-          begin
-            inc(i);
-            if ((Call[i] >= '0') and (Call[i] <= '9')) then
-              HasNum := True;
-            if ((Call[i] >= 'A') and (Call[i] <= 'Z')) then
-              HasChr := True;
-            if LocalDbg then
-              Writeln('CHR Count now:', i, ' len,num,chr:', length(Call), ',', HasNum, ',', HasChr);
-          end;
-        until (i >= length(Call));
-    end;
+    repeat
+      begin
+        inc(i);
+        if ((Call[i] >= '0') and (Call[i] <= '9')) then
+          HasNum := True;
+        if ((Call[i] >= 'A') and (Call[i] <= 'Z')) then
+          HasChr := True;
+        if LocalDbg then
+          Writeln('CHR Count now:', i, ' len,num,chr:', length(Call), ',', HasNum, ',', HasChr);
+      end;
+    until (i >= length(Call));
   end;
 
   isItACall := HasNum and HasChr and NoRprt and (i > 2);
@@ -1489,7 +1488,6 @@ begin
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
-// TODO DL7OAP: procedure isItACall is to be sharpen or to replace by a allready existing calldetect-function
 var
   msgMode, msgCQ1, msgCQ2, msgRes, freq, CqDir,
   mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
@@ -1641,7 +1639,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
     //if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
     //how about always *QSO, not just when alerts?
-      if (isMyCall and (msgLocator = '----')) then
+    if (isMyCall and (msgLocator = '----')) then
       msgLocator := '*QSO';//locator for "ALL-MY"
 
     if not ((msgLocator = '----') and isMyCall) then
@@ -1764,6 +1762,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
     end;//printing out  line
   end;  //continued
+  scrollSgMonitorToLastLine;
 end;
 
 
