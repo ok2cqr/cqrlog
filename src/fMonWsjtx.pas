@@ -1298,62 +1298,68 @@ Begin
      Mycolor := clBlack;
    end
   else
-   Begin
-      case frmWorkedGrids.WkdGrid(PLoc, CurBand, CurMode) of
-        //returns 0=not wkd
-        //        1=full grid this band and mode
-        //        2=full grid this band but NOT this mode
-        //        3=full grid any other band/mode
-        //        4=main grid this band and mode
-        //        5=main grid this band but NOT this mode
-        //        6=main grid any other band/mode
-        0:Begin
-            //not wkd
-            p:=1;
-            Mycolor := wkdnever;
-            if tbLocAlert.Checked and (tTa <> mT) then
-            myAlert := 'loc';    //locator alert
-          end;
-        1:Begin
-            //grid wkd
-            p:=1;
-            L1:= lowerCase(L1);
-            Mycolor := wkdhere;
-          end;
-        2:Begin
-            //grid wkd band
-            p:=1;
-            Mycolor := wkdband;
-          end;
-        3:Begin
-            //grid wkd any
-            p:=1;
-            Mycolor := wkdany;
-          end;
-        4:Begin
-            //maingrid wkd
-            p:=2;
-            L1:= lowerCase(L1);
-            Mycolor := wkdhere;
-           end;
-        5:Begin
-            //maingrid wkd band
-            p:=2;
-            Mycolor := wkdband;
-          end;
-        6:Begin
-            //maingrid wkd any
-            p:=2;
-            Mycolor := wkdany;
-          end;
-        else
-          Begin
-            L1:= lowerCase(L1);//should not happen
-            p:=1;
-            Mycolor := clBlack;
-          end;
-      end; //case
-   end; // ----  *QSO
+    if (PLoc = '*QSO') then
+     begin
+       p:=1;
+       Mycolor := wkdnever;
+     end
+    else
+     Begin
+        case frmWorkedGrids.WkdGrid(PLoc, CurBand, CurMode) of
+          //returns 0=not wkd
+          //        1=full grid this band and mode
+          //        2=full grid this band but NOT this mode
+          //        3=full grid any other band/mode
+          //        4=main grid this band and mode
+          //        5=main grid this band but NOT this mode
+          //        6=main grid any other band/mode
+          0:Begin
+              //not wkd
+              p:=1;
+              Mycolor := wkdnever;
+              if tbLocAlert.Checked and (tTa <> mT) then
+              myAlert := 'loc';    //locator alert
+            end;
+          1:Begin
+              //grid wkd        PrintLoc
+              p:=1;
+              L1:= lowerCase(L1);
+              Mycolor := wkdhere;
+            end;
+          2:Begin
+              //grid wkd band
+              p:=1;
+              Mycolor := wkdband;
+            end;
+          3:Begin
+              //grid wkd any
+              p:=1;
+              Mycolor := wkdany;
+            end;
+          4:Begin
+              //maingrid wkd
+              p:=2;
+              L1:= lowerCase(L1);
+              Mycolor := wkdhere;
+             end;
+          5:Begin
+              //maingrid wkd band
+              p:=2;
+              Mycolor := wkdband;
+            end;
+          6:Begin
+              //maingrid wkd any
+              p:=2;
+              Mycolor := wkdany;
+            end;
+          else
+            Begin
+              L1:= lowerCase(L1);//should not happen
+              p:=1;
+              Mycolor := clBlack;
+            end;
+        end; //case
+     end; // ----  *QSO
 
   if  (chknoTxt.Checked or PCB) then
        begin
@@ -1370,7 +1376,7 @@ end;
 
 function TfrmMonWsjtx.isItACall(Call: string): boolean;
 var
-  HasNum, HasChr: boolean;
+  HasNum, HasChr, NoRprt: boolean;
   i: integer;
   //must have number and letter and length >= 3
   //and is not locator. Some special calls may fail -> OH60AB
@@ -1379,6 +1385,7 @@ begin
   i := 0;
   HasNum := False;
   HasChr := False;
+  NoRprt := (pos('R-',Call) + pos('R+',Call)) < 1; //R-repots are not calls
   if (Call <> '') then
   begin
    if not frmWorkedGrids.GridOK(Call) then
@@ -1397,7 +1404,7 @@ begin
     end;
   end;
 
-  isItACall := HasNum and HasChr and (i > 2);
+  isItACall := HasNum and HasChr and NoRprt and (i > 2);
 
   if LocalDbg then
     Writeln('Call ', call, ' valid: ', isItACall);
