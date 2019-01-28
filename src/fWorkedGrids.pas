@@ -72,8 +72,12 @@ var
   MainGridCount,               //Number of Maingrids (achrs) from query result
   GridCount: integer;    //Number of subgrids (4chrs) from query result
   Changes: boolean;   //changes in rig mode/band
-
-
+  daylimit : String;  //sql extension when log seek wB4 limited from preferences
+  wb4c,
+  wb4l,
+  logname  : string;       //previous states of settings for autoupdate.
+  wb4lc,
+  wb4cc    : boolean;
 implementation
 
 {$R *.lfm}
@@ -84,35 +88,40 @@ uses fNewQSO, fTRXControl, dData, dUtils, uMyIni;
 
 function TfrmWorkedGrids.GridOK(Loc: string): boolean;
 var
-  i: integer;
+  i :  integer;
+r1  : boolean = true;
+r2  : boolean = true;
+r3  : boolean = true;
+
 begin
-  Result := True;
   Loc := trim(UpCase(Loc));
-  if Length(Loc) mod 2 = 0 then
+  //works with 4 or 6 chr locators, but fails with special callsigns that look like locator -> OH60AB
+  if ((Length(Loc) = 4) or (Length(Loc) = 6)) then
   begin
     for i := 1 to length(loc) do
     begin
       case i of
         1, 2, 5, 6: case Loc[i] of
-            'A'..'R':
-            begin {OK!}
-            end;
-            else
-              Result := False;
-          end;
-        3, 4, 7, 8: case Loc[i] of
-            '0'..'9':
-            begin {OK!}
-            end;
-            else
-              Result := False;
-          end;
-      end;
-    end;
+                        'A'..'R': begin
+                                    //OK
+                                  end;
+                    else
+                      r2 := false;
+                    end;
+             3, 4 : case Loc[i] of
+                        '0'..'9':begin
+                                  //OK
+                                 end;
+                    else
+                      r3:= false;
+                    end;
+      end; //case
+    end; //for i
   end
   else begin
-    Result := False;
+    r1 := false;
   end;
+  Result := r1 and r2 and r3;
 end;
 
 procedure TfrmWorkedGrids.ToRigMode(mode: string);
@@ -197,31 +206,36 @@ var
 begin
   if dmData.DebugLevel >= 1 then Writeln('Start WkdGrid');
   WkdGrid := 0;
+  if cqrini.ReadBool('wsjt','wb4CLoc', False) then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
+     else
+            daylimit :='';
+
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
 
   try
     dmData.W.SQL.Text := 'select count(loc) as '+#39+'sum'+#39+' from '+LogTable+
                           ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
                           ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+
-                          ' and band='+#39+band+#39+
+                          ' and band='+#39+band+#39+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+
+                          ' where loc like '+#39+copy(loc, 1, 4)+ '%'+#39+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
                           ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+
-                          ' and band='+#39+band+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
                           'union all '+
                           'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39;
+                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+
+                          ' and band='+#39+band+#39+daylimit+
+                          'union all '+
+                          'select count(loc) from '+LogTable+
+                          ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+daylimit ;
 
     if dmData.DebugLevel >= 1 then Write('loc query: ');
     dmData.W.Open;
@@ -248,22 +262,29 @@ function TfrmWorkedGrids.WkdCall(call, band, mode: string): integer;
 
 var
   i : integer;
+  daylimit : String;
+
 begin
   if dmData.DebugLevel >= 1 then Writeln('Start WkdCall');
+  if cqrini.ReadBool('wsjt','wb4CCall', False) then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39 //default date check all qsos
+     else
+            daylimit :='';
+
   WkdCall := 0;
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
   try
      dmData.W.SQL.Text := 'select count(callsign) as '+#39+'sum'+#39+' from '+LogTable+
                           ' where callsign='+#39+call+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
                           'union all '+
                           'select count(callsign) from '+LogTable+
                           ' where callsign='+#39+call+#39+
-                          ' and band='+#39+band+#39+
+                          ' and band='+#39+band+#39+daylimit+
                           'union all '+
                           'select count(callsign) from '+LogTable+
-                          ' where callsign='+#39+call+#39;
+                          ' where callsign='+#39+call+#39+daylimit;
 
     if dmData.DebugLevel >= 1 then Write('call query: ');
     dmData.W.Open;
@@ -523,6 +544,23 @@ begin
     Writeln('WkdGrids-TimerTick. FlwRig stage0 is:', FollowRig.Checked);
   AutoUpdate.Enabled := False;
 
+  if ((logname <> dmData.LogName)  //need to update map because of changes
+    or (wb4c <>  cqrini.ReadString('wsjt', 'wb4calldate','1900-01-01'))
+    or (wb4l <>  cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01'))
+    or (wb4lc <> cqrini.ReadBool('wsjt','wb4CLoc', False))
+    or (wb4cc <> cqrini.ReadBool('wsjt','wb4CCall', False))
+    ) then
+      Begin
+        Changes := true;
+        logname := dmData.LogName;
+        wb4c:=cqrini.ReadString('wsjt', 'wb4calldate','1900-01-01');
+        wb4l:=cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01');
+        wb4lc:=cqrini.ReadBool('wsjt','wb4CLoc', False);
+        wb4cc:=cqrini.ReadBool('wsjt','wb4CCall', False);
+        if dmData.DebugLevel >= 1 then
+           Writeln('WkdGrids-changes detected');
+      end;
+
   if FollowRig.Checked then
   begin
     if dmData.DebugLevel >= 1 then
@@ -604,6 +642,11 @@ begin
         DrawBase(LocMap.canvas, False);
     end;
 
+    if cqrini.ReadBool('wsjt','wb4CLoc', False) then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
+     else
+            daylimit :='';
+
     case WsMode.ItemIndex of
       //any
       0: SQLModeTail := '';
@@ -646,7 +689,7 @@ begin
     try
       for c := 1 to 2 do
       begin
-        dmData.W.SQL.Text := SQLCfm[0] + SQLCfm[c];
+        dmData.W.SQL.Text := SQLCfm[0] + SQLCfm[c]+daylimit;
         dmData.W.Open;
         while not dmData.W.EOF do
         begin
@@ -667,7 +710,7 @@ begin
 
       //locator counts
       dmData.W.SQL.Text := 'select count(distinct upper(left(loc,2))) as main,count(distinct upper(left(loc,4))) as sub'+
-                           copy(SQLCfm[0],pos('from', SQLCfm[0])-1,length(SQLCfm[0]));
+                           copy(SQLCfm[0],pos('from', SQLCfm[0])-1,length(SQLCfm[0]))+daylimit;
       dmData.W.Open;
       if not dmData.W.EOF then
        Begin
@@ -677,14 +720,19 @@ begin
        end;
       dmData.W.Close;
 
+      if cqrini.ReadBool('wsjt','wb4CCall', False) then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4calldate','1900-01-01')+#39 //default date check all qsos
+         else
+            daylimit :='';
+
       //qso counts;
       if BandSelector.ItemIndex > 0 then   //some of bands
         SQLBand := ' and band=' + #39 + BandSelector.items[BandSelector.ItemIndex] + #39 + SQLModeTail
         else   //can be else than 0, means all bands
         SQLBand := SQLModeTail;
 
-      dmData.W.SQL.Text := 'select count(callsign) as qso from cqrlog_main where callsign<>'+#39+#39+
-                            'union all select count(callsign) from cqrlog_main where callsign<>'+#39+#39 + SQLBand ;
+      dmData.W.SQL.Text := 'select count(callsign) as qso from cqrlog_main where callsign<>'+#39+#39+daylimit+
+                            'union all select count(callsign) from cqrlog_main where callsign<>'+#39+#39 + SQLBand +daylimit ;
       dmData.W.Open;
       if not dmData.W.EOF then FullQsoCount := dmData.W.FieldByName('qso').AsString;
       dmData.W.Next;

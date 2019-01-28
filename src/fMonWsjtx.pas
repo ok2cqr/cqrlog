@@ -94,7 +94,7 @@ type
     procedure decodetest(i: boolean);
     procedure PrintCall(Pcall: string;PCB:Boolean=false);  // prints colored call
     procedure PrintLoc(PLoc, tTa, mT: string;PCB:Boolean=false);  // prints colored loc
-    function OkCall(Call: string): boolean;
+    function isItACall(Call: string): boolean;
     procedure SendReply(reply: string);
     procedure TryCallAlert(S: string);
     procedure TryAlerts;
@@ -170,7 +170,7 @@ var
   //reply in case of follow line double click
 
   msgCall: string;
-  msgLoc: string;
+  msgLocator: string;
   msgTime: string;
   isMyCall: boolean;
   CurMode: string = '';
@@ -854,8 +854,8 @@ end;
 
 procedure TfrmMonWsjtx.FormHide(Sender: TObject);
 begin
-  //decodetest(true);  //release these for decode tests
-  //decodetest(false);
+  decodetest(true);  //release these for decode tests
+  decodetest(false);
   exit;
   LockMap := True;
   if chkMap.Checked then
@@ -954,7 +954,10 @@ end;
 
 //-----------------------------------------------------------------------------------------
 procedure TfrmMonWsjtx.decodetest(i: boolean);           // run execptions for debug
+var
+  mycall : string;
 begin
+  mycall := UpperCase(cqrini.ReadString('Station', 'Call', ''));
   //split message it can be: (note: when testing remember continent compare set calls to be non dx]
   if (i) then
   begin
@@ -968,15 +971,18 @@ begin
     //call and continents/prefixes
     AddDecodedMessage('175200 @ CQ OH1LL DX', '20M', 'reply', 0, 0);
     //old official cq dx
-    AddDecodedMessage('175200 # OF1KH CA1LL AA11', '20M', 'reply', 0, 0);
-    //set first you log call
+    AddDecodedMessage('175200 # '+mycall+' CA1LL AA11', '20M', 'reply', 0, 0);
     AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22', '20M', 'reply', 0, 0);
-    //!where?" decodes now ok.
+    AddDecodedMessage('175200 # CQ ASOC PA7ZZ JO22', '20M', 'reply', 0, 0);
     AddDecodedMessage('175200 ~ CQ NO EU RZ3DX', '20M', 'reply', 0, 0);  // for dbg
+    //ignore these, no callers callsign
     AddDecodedMessage('201045 ~ CQ KAZAKHSTAN', '20M', 'reply', 0, 0);
-    // yet another bright cq idea of users
     AddDecodedMessage('201045 ~ CQ WHO EVER', '20M', 'reply', 0, 0);
-    // a guess for next idea
+    // some special
+    AddDecodedMessage('175200 @ CQ EA7/DL8FCL', '20M', 'reply', 0, 0);
+    AddDecodedMessage('175200 @ CQ <AA2019CALL>', '20M', 'reply', 0, 0);
+    // this will fail, it is like real locator
+    AddDecodedMessage('175200 @ CQ <OH60AB> KP01', '20M', 'reply', 0, 0);
   end
   else
   begin
@@ -984,10 +990,16 @@ begin
       '175200 # CQ OH1LL KP11' + sLineBreak + '175200 @ CQ DX OH1DX KP11' + sLineBreak +
       '175200 @ CQ NA RV3NA' + sLineBreak + '175200 @ CQ USA RV3USA' + sLineBreak +
       '175200 @ CQ USA RV3USL KO30' + sLineBreak + '175200 @ CQ OH1LL DX' + sLineBreak +
-      '175200 # OF1KH CA1LL AA11' + sLineBreak +
+      '175200 # '+mycall+' CA1LL AA11' + sLineBreak +
       '175200 # CQ 000 PA7ZZ JO22' + sLineBreak +
+      '175200 # CQ ASOC PA7ZZ JO22'   + sLineBreak +
       '175200 ~ CQ NO EU RZ3DX' + sLineBreak + '201045 ~ CQ KAZAKHSTAN' + sLineBreak +
-      '201045 ~ CQ WHO EVER');  // for dbg
+      '201045 ~ CQ WHO EVER' + sLineBreak +
+      '175200 @ CQ EA7/DL8FCL'  + sLineBreak +
+      '175200 @ CQ <AA2019CALL>' + sLineBreak +
+      'This fails (similar to locator)'     + sLineBreak +
+      '175200 @ CQ <OH60AB> KP01'
+      );  // for dbg
   end;
 end;
  function TfrmMonWsjtx.HexStrToStr(const HexStr: string): string;
@@ -1012,8 +1024,8 @@ end;
 
 procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
 var
-  List1: TStringList;
-
+  msgList: TStringList;
+  index: integer;
 begin
   //to stop transmitting if CQ answered,split called, stn answers to someone else (can be set with checkbox chkStopTx)
   //here check if DblClickCall is set then if it exist in message: stop tx and clear DblClickCall
@@ -1042,38 +1054,38 @@ begin
     CqPeriodTimerStart;
     if LocalDbg then Writeln('Other line:', Message);
     msgCall := '';
-    msgLoc := '';
+    msgLocator := '';
     isMyCall := False;
-    List1 := TStringList.Create;
-    try
-      List1.Delimiter := ' ';
-      List1.DelimitedText := Message;
-      //without IFs you get easily out of bounds when unexpected decode results happen
-      if (List1.Count > 0) then
-        msgTime := List1[0];
-      // if (List1.Count > 1) then deltafreq:=List1[1]
-      if (List1.Count > 2) then
-        isMyCall := pos(List1[2], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0;
-      if (List1.Count > 3) then
-        msgCall := List1[3];
-      if LocalDbg then
-        Writeln('List index:', List1.Count);
-      if (List1.Count > 4) then
-        msgLoc := List1[4] //avoid out of index in certain compound call lines
-    finally
-      List1.Free;
+    index:=0;
+    msgList := TStringList.Create;
+    msgList.Delimiter := ' ';
+    msgList.DelimitedText := Message;
+
+    while index < msgList.Count do
+    begin
+      if index=1 then
+        msgTime := msgList[index];
+      if index=2 then
+        isMyCall := pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0;
+      if index=3 then
+        msgCall := msgList[index];
+      if index=4 then
+        msgLocator := msgList[index]; //avoid out of index in certain compound call lines
+      inc(index);
     end;
+    msgList.Free;
+
     //remove < > from call here (wsjtx v2.0)
-      msgCall := StringReplace(msgCall,'<','',[rfReplaceAll]);
-      msgCall := StringReplace(msgCall,'>','',[rfReplaceAll]);
+    msgCall := StringReplace(msgCall,'<','',[rfReplaceAll]);
+    msgCall := StringReplace(msgCall,'>','',[rfReplaceAll]);
 
     if LocalDbg then
-      Writeln('Other call:', msgCall, '    loc:', msgLoc);
-    if (not frmWorkedGrids.GridOK(msgLoc)) or (msgLoc = 'RR73') then
+      Writeln('Other call:', msgCall, '    loc:', msgLocator);
+    if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then
       //disble false used "RR73" being a loc
-      msgLoc := '';
+      msgLocator := '';
 
-    if OkCall(msgCall) then
+    if isItACall(msgCall) then
     begin
       myAlert := '';
       MonitorLine := '';
@@ -1096,10 +1108,10 @@ begin
         Writeln('Start Other printing, Map mode');
       AddColorStr('(', clBlack,2, sgMonitor.rowCount-1);//make in-qso indicator start
       PrintCall(msgcall);  //make not-CQ indicator start
-      if msgLoc <> '' then
+      if msgLocator <> '' then
       begin
-        PrintLoc(msgLoc, '', '');
-        if frmWorkedGrids.GridOK(msgLoc) then  AddXpList(msgCall,msgLoc);
+        PrintLoc(msgLocator, '', '');
+        if frmWorkedGrids.GridOK(msgLocator) then  AddXpList(msgCall,msgLocator);
       end;
       //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
       AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
@@ -1344,31 +1356,39 @@ Begin
        end;
 end;
 
-function TfrmMonWsjtx.OkCall(Call: string): boolean;
+function TfrmMonWsjtx.isItACall(Call: string): boolean;
 var
   HasNum, HasChr: boolean;
   i: integer;
+  //must have number and letter and length >= 3
+  //and is not locator. Some special calls may fail -> OH60AB
+
 begin
   i := 0;
   HasNum := False;
   HasChr := False;
   if (Call <> '') then
   begin
-    repeat
-      begin
-        Inc(i);
-        if ((Call[i] >= '0') and (Call[i] <= '9')) then
-          HasNum := True;
-        if ((Call[i] >= 'A') and (Call[i] <= 'Z')) then
-          HasChr := True;
-        if LocalDbg then
-          Writeln('CHR Count now:', i, ' len,num,chr:', length(Call), ',', HasNum, ',', HasChr);
-      end;
-    until (i >= length(Call));
+   if not frmWorkedGrids.GridOK(Call) then
+    begin
+        repeat
+          begin
+            inc(i);
+            if ((Call[i] >= '0') and (Call[i] <= '9')) then
+              HasNum := True;
+            if ((Call[i] >= 'A') and (Call[i] <= 'Z')) then
+              HasChr := True;
+            if LocalDbg then
+              Writeln('CHR Count now:', i, ' len,num,chr:', length(Call), ',', HasNum, ',', HasChr);
+          end;
+        until (i >= length(Call));
+    end;
   end;
-  OkCall := HasNum and HasChr and (i > 2);
+
+  isItACall := HasNum and HasChr and (i > 2);
+
   if LocalDbg then
-    Writeln('Call ', call, ' valid: ', OkCall);
+    Writeln('Call ', call, ' valid: ', isItACall);
 end;
 
 procedure TfrmMonWsjtx.TryCallAlert(S: string);
@@ -1450,7 +1470,7 @@ begin
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
-
+// TODO DL7OAP: procedure isItACall is to be sharpen or to replace by a allready existing calldetect-function
 var
   msgMode, msgCQ1, msgCQ2, msgRes, freq, CqDir,
   mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
@@ -1458,7 +1478,7 @@ var
   adif: word;
   msgList: TStringList;
 
-  CallCqDir,            //CQ caller calling directed call
+  isCallCqDir,            //CQ caller calling directed call
   HasNum, HasChr: boolean;
   //-----------------------------------------------------------------------------------------
   procedure extcqprint;  //this is used 3 times below
@@ -1473,6 +1493,22 @@ var
         end
        else
           AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
+    end;
+  end;
+
+  //-----------------------------------------------------------------------------------------
+  function getCurMode(sMode: String): String;
+  // function getCurMode converts a wsjtx binary mode in human readable ham mode
+  begin
+    getCurMode:='';
+    case sMode of
+      chr(36) : getCurMode := 'JT4';
+      '#'     : getCurMode := 'JT65';
+      '@'     : getCurMode := 'JT9';
+      '&'     : getCurMode := 'MSK144';
+      ':'     : getCurMode := 'QRA64';
+      '+'     : getCurMode := 'T10';
+      chr(126): getCurMode := 'FT8';
     end;
   end;
 
@@ -1493,144 +1529,101 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
   myAlert := '';
   MonitorLine := '';
-  CallCqDir := False;
-  CqDir := '';
 
   adif := dmDXCC.id_country(
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
+
+  if LocalDbg then Writeln('Message IS:', Message);
+  //remove < > from Message here (wsjtx v2.0)
+  Message := StringReplace(Message,'<','',[rfReplaceAll]);
+  Message := StringReplace(Message,'>','',[rfReplaceAll]);
+  if LocalDbg then Writeln('Message after filter IS:', Message);
 
   index:=0;
   msgList:=TStringList.Create;
   msgList.Linebreak:=' '; // space delimiter
   msgList.Text:=Message;
 
-  if LocalDbg then
-    Write('Time-');
-  msgTime := msgList[index];
+  msgCall:='NOCALL';     // call of the received station
+  msgLocator:='----';    // locator of the received station
+  CqDir := '';           // only filled when received station is CQ DX or CQ continent/regionDX with the label of continent or region (DX, EU, OC, AS, etc)
 
-  if LocalDbg then
-    Write('Mode-');
-  inc(index);
-  msgMode := msgList[index];
+  // messages with less then 4 and more then 6 entries should not happen
+  // and will be ignored
+  if (msgList.count >= 4) and (msgList.count <= 6) then begin
+    while index < msgList.count do
+    begin
+      // identify time
+      if index = 0 then msgTime := msgList[index];
 
-  case msgMode of
-    chr(36): CurMode := 'JT4';
-    '#': CurMode := 'JT65';
-    '@': CurMode := 'JT9';
-    '&': CurMode := 'MSK144';
-    ':': CurMode := 'QRA64';
-    '+': CurMode := 'T10';
-    chr(126): CurMode := 'FT8';
+      // identify mode
+      if index = 1 then
+      begin
+        msgMode:=msgList[index];
+        CurMode:=getCurMode(msgMode);
+      end;
 
-    else
-      CurMode := '';
+      // identify if it is my own call, otherwise it is a CQ call. this is checked by newQSO to be MYCall or CQ
+      if index = 2 then
+      begin
+        isMyCall:=pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0
+      end;
+
+      // identify if its a call or a DX/continent/region
+      // if its not a call and not a 2 length string, it will be ignored
+      if index = 3 then
+      begin
+        if isItACall(msgList[index]) then
+          msgCall:=msgList[index]
+        else if msgList[index].Length < 5 then //extensions 4chr and below with wsjt-x v2.0
+          CqDir:=msgList[index] else
+           if msgList.count = 4 then
+             if isItACall(msgList[index]) then
+                     msgCall:=msgList[index] // may be special call CQ <AA2019ABC>
+      end;
+
+      // identify if its a call, a DX (old style) or a Locator
+      // if its match to nothing it will be ignored
+      if index = 4 then
+      begin
+        if msgList[index] = 'DX' then
+          CqDir:='DX'
+        else if frmWorkedGrids.GridOK(msgList[index]) AND (msgList[index] <> 'RR73') then
+          msgLocator:=msgList[index]
+        else if isItACall(msgList[index]) then
+          msgCall:=msgList[index]
+      end;
+
+      // identify if its a call or a Locator
+      // if its match to nothing it will be ignored
+      if index = 5 then
+      begin
+        if frmWorkedGrids.GridOK(msgList[index]) AND (msgList[index] <> 'RR73') then
+          msgLocator:=msgList[index]
+        else if isItACall(msgList[index]) then
+          msgCall:=msgList[index]
+      end;
+
+      inc(index);
+    end;
+    msgList.Free;
   end;
 
-  if CurMode <> '' then //mode is known; we can continue
+  // collecting content for variables msgTime, msgMode, msgCall, msgLocator, CqDir is done
+  // now starts the filling and prepartion of the new column in wsjtx monitor
+
+  if (CurMode <> '') AND (msgCall <> 'NOCALL') then //mode and call is known; we can continue
   begin
-    if LocalDbg then
-      Write('Cq1-'); //this is checked by newQSO to be MYCall or CQ
-    inc(index);
-    msgCQ1 := msgList[index];
-    isMyCall := pos(msgCQ1, UpperCase(cqrini.ReadString('Station',
-      'Call', ''))) > 0;
-    if LocalDbg then
-      Write('Cq2-');
-    inc(index);
-    msgCQ2 := msgList[index];
-    if length(msgCQ2) > 2 then
-      // if longer than 2 may be call, otherwise is addition DX AS EU etc.
-    begin
-      if (OkCall(msgCQ2)) then
-      begin // it may be real call
-        msgCall := msgCQ2;
-        if LocalDbg then
-          Writeln('msgCQ2>2(lrs+num) is Call-', 'Result:', msgCall, ' index of msg:', index);
-      end
-      else
-      begin //was shortie, so next must be call
-        CallCqDir := True;
-        CqDir := msgCQ2;
-        if LocalDbg then
-        begin
-          Writeln('CQ2 had no number+char.');
-          Write('Call-');
-        end;
-        inc(index);
-        if index < msgList.Count then begin
-          msgCall := msgList[index];
-          //!! if sill no call
-          if not (OkCall(msgCall)) then begin
-            inc(index);
-            if index < msgList.Count then begin
-              msgCall := msgList[index];
-            end;
-          end;
-        end;
-      end;
-    end
-    else   //length(msgCQ2)<2
-    begin
-      CallCqDir := True;
-      CqDir := msgCQ2;
-      if LocalDbg then
-      begin
-        Writeln('CQ2 length=<2.');
-        Write('Call-');
-      end;
-      inc(index);
-      msgCall := msgList[index]; //was shortie, so next must be call
-      //!! if sill no call
-      if not (OkCall(msgCall)) then begin
-        inc(index);
-        msgCall := msgList[index];
-      end;
-    end;
-
-    //how ever if we do not have callsign because some crazy cq calling way
-    if (msgCall = '') then
-      msgCall := 'NOCALL';
-
-    //remove < > from call here (wsjtx v2.0)
-      msgCall := StringReplace(msgCall,'<','',[rfReplaceAll]);
-      msgCall := StringReplace(msgCall,'>','',[rfReplaceAll]);
 
     if LocalDbg then
-      Writeln('DIR-CQ-call after CQ2:', CallCqDir);
-    //so we should have time, mode and call by now. That reamains locator, if exists
-    if LocalDbg then
-      Write('Loc-');
-    inc(index);
-    if index < msgList.Count then
-       msgLoc := msgList[index]
-    else
-       msgLoc := '----';
+      Writeln('LOCATOR IS:', msgLocator);
 
-
-    if msgLoc = 'DX' then
-    begin
-      CallCqDir := True; //old std. way to call DX
-      CqDir := msgLoc;
-    end;
-    if LocalDbg then
-      Writeln('DIR-CQ-call after old std DX:', CallCqDir);
-
-    if ((length(msgLoc) < 4) or (length(msgLoc) > 4)) then
-      //no locator; different than 4,  may be "DX" or something
-      msgLoc := '----';
-    if length(msgLoc) = 4 then
-      if (not frmWorkedGrids.GridOK(msgLoc)) or (msgLoc = 'RR73') then
-        //disble false used "RR73" being a loc
-        msgLoc := '----';
-
-    if LocalDbg then
-      Writeln('LOCATOR IS:', msgLoc);
     if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
-      (msgLoc = '----')) then
-      msgLoc := '*QSO';//locator for "ALL-MY"
+      (msgLocator = '----')) then
+      msgLocator := '*QSO';//locator for "ALL-MY"
 
-    if not ((msgLoc = '----') and isMyCall) then
+    if not ((msgLocator = '----') and isMyCall) then
       //if mycall: line must have locator to print(I.E. Answer to my CQ)
     begin                                        //and other combinations (CQs) will print, too
 
@@ -1674,9 +1667,9 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       else
           PrintCall(msgCall,chkCbCQ.Checked);
 
-      PrintLoc(msgLoc, timeToAlert, msgTime,chkCbCQ.Checked);
+      PrintLoc(msgLocator, timeToAlert, msgTime,chkCbCQ.Checked);
 
-      if frmWorkedGrids.GridOK(msgLoc) then AddXpList(msgCall,msgLoc);
+      if frmWorkedGrids.GridOK(msgLocator) then AddXpList(msgCall,msgLocator);
 
         adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
           msgRes, WAZ, posun, ITU, lat, long);
@@ -1685,7 +1678,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
 
         if LocalDbg then
           Writeln('My continent is:', mycont, '  His continent is:', cont);
-        if CallCqDir then
+        if CqDir <> '' then
           if ((mycont <> '') and (cont <> '')) then
             //we can do some comparisons of continents
           begin
