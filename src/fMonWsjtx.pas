@@ -260,6 +260,8 @@ begin
   for l:= sgMonitor.rowcount - 1 downto 0 do
     sgMonitor.DeleteRow(l);
   setDefaultColorSgMonitorAttributes;
+  if LocalDbg then
+        Writeln('sgMonitor clear finished');
 end;
 
 procedure TfrmMonWsjtx.setDefaultColorSgMonitorAttributes;
@@ -552,6 +554,7 @@ begin
       cbflw.Visible := False;
       chknoTxt.Visible := False;
       chknoTxt.Checked := False;
+      chknoHistory.Checked := True;
       chkCbCQ.Checked := cqrini.ReadBool('MonWsjtx', 'ColorBacCQkMap', False);
       chkdB.Checked := cqrini.ReadBool('MonWsjtx', 'ShowdB', False);
       //map mode allows text printing. Printing stays on when return to monitor mode.
@@ -854,8 +857,8 @@ end;
 
 procedure TfrmMonWsjtx.FormHide(Sender: TObject);
 begin
-  decodetest(true);  //release these for decode tests
-  decodetest(false);
+  //decodetest(true);  //release these for decode tests
+  //decodetest(false);
   exit;
   LockMap := True;
   if chkMap.Checked then
@@ -1057,14 +1060,22 @@ begin
     msgLocator := '';
     isMyCall := False;
     index:=0;
+
+    if LocalDbg then Writeln('O Message is:', Message);
+    //remove < > from Message here (wsjtx v2.0)
+    Message := StringReplace(Message,'<','',[rfReplaceAll]);
+    Message := StringReplace(Message,'>','',[rfReplaceAll]);
+    if LocalDbg then Writeln('O Message after filter is:', Message);
+
     msgList := TStringList.Create;
     msgList.Delimiter := ' ';
     msgList.DelimitedText := Message;
 
     while index < msgList.Count do
     begin
-      if index=1 then
+      if index=0 then
         msgTime := msgList[index];
+      //index=1 -> delta freq
       if index=2 then
         isMyCall := pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0;
       if index=3 then
@@ -1075,25 +1086,26 @@ begin
     end;
     msgList.Free;
 
-    //remove < > from call here (wsjtx v2.0)
-    msgCall := StringReplace(msgCall,'<','',[rfReplaceAll]);
-    msgCall := StringReplace(msgCall,'>','',[rfReplaceAll]);
 
     if LocalDbg then
       Writeln('Other call:', msgCall, '    loc:', msgLocator);
-    if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then
-      //disble false used "RR73" being a loc
-      msgLocator := '';
+    if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
+            msgLocator := '';
 
     if isItACall(msgCall) then
     begin
       myAlert := '';
       MonitorLine := '';
 
-      //this insets space to hidden 1st column  and starts a row
-      if (msgTime <> LastWsjtLineTime) then  clearSgMonitor;
+      //starts a row
+      if (msgTime <> LastWsjtLineTime) then
+         Begin
+               if LocalDbg then
+                           Writeln('---O msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+              clearSgMonitor;
+            end;
       LastWsjtLineTime := msgTime;
-      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [' ']);
+      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
       //Snr
       if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
        else sgMonitor.Columns.Items[1].Visible:= false;
@@ -1117,7 +1129,7 @@ begin
       AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
       if LocalDbg then
-        Writeln('all written Next alerts');
+        Writeln('all written in other Next alerts');
 
       TryAlerts;
     end;
@@ -1534,11 +1546,11 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
 
-  if LocalDbg then Writeln('Message IS:', Message);
+  if LocalDbg then Writeln('D Message is:', Message);
   //remove < > from Message here (wsjtx v2.0)
   Message := StringReplace(Message,'<','',[rfReplaceAll]);
   Message := StringReplace(Message,'>','',[rfReplaceAll]);
-  if LocalDbg then Writeln('Message after filter IS:', Message);
+  if LocalDbg then Writeln('D Message after filter is:', Message);
 
   index:=0;
   msgList:=TStringList.Create;
@@ -1619,17 +1631,24 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);
 
-    if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
-      (msgLocator = '----')) then
+
+    //if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
+    //how about always *QSO, not just when alerts?
+      if (isMyCall and (msgLocator = '----')) then
       msgLocator := '*QSO';//locator for "ALL-MY"
 
     if not ((msgLocator = '----') and isMyCall) then
       //if mycall: line must have locator to print(I.E. Answer to my CQ)
     begin                                        //and other combinations (CQs) will print, too
 
-      if (chknoHistory.Checked or chkMap.Checked) and
+
+    if (chknoHistory.Checked or chkMap.Checked) and
         (msgTime <> LastWsjtLineTime) then
-        clearSgMonitor;
+            Begin
+               if LocalDbg then
+                           Writeln('+++D msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+              clearSgMonitor;
+            end;
       LastWsjtLineTime := msgTime;
 
       //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
