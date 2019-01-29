@@ -1762,7 +1762,7 @@ begin
     lblqFont.Font.Name := dlgFont.Font.Name;
     lblqFont.Font.Size := fqSize;
     lblQSOList.Font.Name := dlgFont.Font.Name;
-    lblQSOList.Font.Size := fgSize;
+    lblQSOList.Font.Size := fqSize;
   end;
 end;
 
@@ -1775,7 +1775,7 @@ begin
     lblgFont.Font.Name := dlgFont.Font.Name;
     lblgFont.Font.Size := fgSize;
     lblStatistics.Font.Name := dlgFont.Font.Name;
-    lblStatistics.Font.Size := fqSize;
+    lblStatistics.Font.Size := fgSize;
   end;
 end;
 
