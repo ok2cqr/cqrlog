@@ -1,7 +1,7 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 16
+  Left = 183
   Height = 362
-  Top = 216
+  Top = 70
   Width = 582
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
@@ -14,9 +14,10 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnShow = FormShow
   LCLVersion = '1.8.4.0'
   object lblBand: TLabel
+    AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 12
+    Left = 10
     Height = 17
     Top = 12
     Width = 33
@@ -28,10 +29,11 @@ object frmMonWsjtx: TfrmMonWsjtx
   end
   object lblMode: TLabel
     AnchorSideLeft.Side = asrBottom
+    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = lblBand
     AnchorSideBottom.Side = asrBottom
-    Left = 534
+    Left = 536
     Height = 17
     Top = 12
     Width = 36
@@ -377,6 +379,10 @@ object frmMonWsjtx: TfrmMonWsjtx
     TabOrder = 8
   end
   object sgMonitor: TStringGrid
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideBottom.Control = pnlFollow
     Left = 2
     Height = 281
     Top = 30

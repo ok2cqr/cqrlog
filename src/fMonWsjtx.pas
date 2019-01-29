@@ -107,6 +107,7 @@ type
     procedure setDefaultColorSgMonitorAttributes;
     procedure setMonitorColumnHW;
     procedure scrollSgMonitorToLastLine;
+    function  LineFilter(L: string):string;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -247,6 +248,18 @@ begin
              if ((col = wkdnever) and ((c > 2) and (c < 6))) then
                sgMonitorAttributes[c,r].isBold:=true
         end;
+end;
+function TfrmMonWsjtx.LineFilter(L: string):string;
+Begin
+   if LocalDbg then Writeln('D Message is:', L);
+  //remove < > from Message here (wsjtx v2.0)
+  L := StringReplace(L,'<','',[rfReplaceAll]);
+  L := StringReplace(L,'>','',[rfReplaceAll]);
+  //cut message if there is a decode note like 'a2'
+  //175200 ~ OH1KH DL2BQV JO73                     a2'
+  if pos('    ',L) > 11 then L := copy(L,1,pos('    ',L));
+  if LocalDbg then Writeln('D Message after filter is:', L);
+  LineFilter := L;
 end;
 
 procedure TfrmMonWsjtx.clearSgMonitor;
@@ -977,7 +990,8 @@ begin
     //call and continents/prefixes
     AddDecodedMessage('175200 @ CQ OH1LL DX', '20M', 'reply', 0, 0);
     //old official cq dx
-    AddDecodedMessage('175200 # '+mycall+' CA1LL AA11', '20M', 'reply', 0, 0);
+    AddDecodedMessage('175200 ~ '+mycall+' DL2BQV JO73                     a2', '20M', 'reply', 0, 0);
+    AddDecodedMessage('175200 ~ '+mycall+' DL2BQV RR73', '20M', 'reply', 0, 0);
     AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22', '20M', 'reply', 0, 0);
     AddDecodedMessage('175200 # CQ ASOC PA7ZZ JO22', '20M', 'reply', 0, 0);
     AddDecodedMessage('175200 ~ CQ NO EU RZ3DX', '20M', 'reply', 0, 0);  // for dbg
@@ -996,14 +1010,14 @@ begin
       '175200 # CQ OH1LL KP11' + sLineBreak + '175200 @ CQ DX OH1DX KP11' + sLineBreak +
       '175200 @ CQ NA RV3NA' + sLineBreak + '175200 @ CQ USA RV3USA' + sLineBreak +
       '175200 @ CQ USA RV3USL KO30' + sLineBreak + '175200 @ CQ OH1LL DX' + sLineBreak +
-      '175200 # '+mycall+' CA1LL AA11' + sLineBreak +
+      '175200 # '+mycall+' DL2BQV JO73                     a2' + sLineBreak +
+      '175200 # '+mycall+' DL2BQV RR73' + sLineBreak +
       '175200 # CQ 000 PA7ZZ JO22' + sLineBreak +
       '175200 # CQ ASOC PA7ZZ JO22'   + sLineBreak +
       '175200 ~ CQ NO EU RZ3DX' + sLineBreak + '201045 ~ CQ KAZAKHSTAN' + sLineBreak +
       '201045 ~ CQ WHO EVER' + sLineBreak +
       '175200 @ CQ EA7/DL8FCL'  + sLineBreak +
       '175200 @ CQ <AA2019CALL>' + sLineBreak +
-      'This fails (similar to locator)'     + sLineBreak +
       '175200 @ CQ <OH60AB> KP01'
       );  // for dbg
   end;
@@ -1065,11 +1079,7 @@ begin
     isMyCall := False;
     index:=0;
 
-    if LocalDbg then Writeln('O Message is:', Message);
-    //remove < > from Message here (wsjtx v2.0)
-    Message := StringReplace(Message,'<','',[rfReplaceAll]);
-    Message := StringReplace(Message,'>','',[rfReplaceAll]);
-    if LocalDbg then Writeln('O Message after filter is:', Message);
+    Message := LineFilter(Message);
 
     msgList := TStringList.Create;
     msgList.Delimiter := ' ';
@@ -1387,7 +1397,7 @@ begin
   i := 0;
   HasNum := False;
   HasChr := False;
-  NoRprt := (pos('R-',Call) + pos('R+',Call)) < 1; //R-repots are not calls
+  NoRprt := (pos('R-',Call) + pos('R+',Call) + pos('RR73',Call)) < 1; //R-repots and RR73 are not calls
   if (Call <> '') then
   begin
     repeat
@@ -1551,11 +1561,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
 
-  if LocalDbg then Writeln('D Message is:', Message);
-  //remove < > from Message here (wsjtx v2.0)
-  Message := StringReplace(Message,'<','',[rfReplaceAll]);
-  Message := StringReplace(Message,'>','',[rfReplaceAll]);
-  if LocalDbg then Writeln('D Message after filter is:', Message);
+  Message := LineFilter(Message);
 
   index:=0;
   msgList:=TStringList.Create;
