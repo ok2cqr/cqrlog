@@ -4266,8 +4266,8 @@ begin
         dmUtils.LoadFontSettings(frmRbnMonitor);
       if frmPropDK0WCY.Showing then
         dmUtils.LoadFontSettings(frmPropDK0WCY);
-      if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then dmUtils.LoadFontSettings(frmMonWsjtx);
-
+      if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
+                         dmUtils.LoadFontSettings(frmMonWsjtx);
       dmData.LoadQSODateColorSettings;
     end;
     ChangeCallBookCaption
