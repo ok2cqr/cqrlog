@@ -2549,7 +2549,7 @@ begin
 end;
 {
   The latest message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-  https://sourceforge.net/p/wsjt/wsjt/HEAD/tree/branches/wsjtx/NetworkMessage.hpp
+  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
   to construct a recipe to replicate an issue.
