@@ -1600,10 +1600,7 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
         if isItACall(msgList[index]) then
           msgCall:=msgList[index]
         else if msgList[index].Length < 5 then //extensions 4chr and below with wsjt-x v2.0
-          CqDir:=msgList[index] else
-           if msgList.count = 4 then
-             if isItACall(msgList[index]) then
-                     msgCall:=msgList[index] // may be special call CQ <AA2019ABC>
+          CqDir:=msgList[index];
       end;
 
       // identify if its a call, a DX (old style) or a Locator
