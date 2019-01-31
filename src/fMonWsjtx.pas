@@ -112,6 +112,8 @@ type
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
     procedure clearSgMonitor;
+    procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
+    procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
     procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
     procedure AddOtherMessage(Message, Reply: string;Snr:integer);
@@ -1495,6 +1497,25 @@ begin
     timeToAlert := msgTime;
     RunVA(myAlert); //play bash script
   end;
+end;
+
+procedure TfrmMonWsjtx.AddCqCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
+Begin
+       if LocalDbg then
+         Begin
+           Writeln;
+           Writeln('-------+++++++++ in AddCQ :', Message);
+           Writeln;
+         end;
+end;
+
+procedure TfrmMonWsjtx.AddMyCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
+begin
+     if LocalDbg then Begin
+           Writeln;
+           Writeln('-------+++++++++ in AddMyCall :', Message);
+           Writeln;
+         end;
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
