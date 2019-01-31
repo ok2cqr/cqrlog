@@ -1395,33 +1395,37 @@ end;
 
 function TfrmMonWsjtx.isItACall(Call: string): boolean;
 // must have number and letter and length >= 3
+// must not have + .
+// looks not like a 4 digit locator example AA00
 var
-  HasNum, HasChr, NoRprt: boolean;
+  HasNum, HasChr, NoRprt, HasSpecialSymbol, LooksLikeALocator: boolean;
   i: integer;
 begin
-  i := 0;
   HasNum := False;
   HasChr := False;
+  HasSpecialSymbol := False;
+  LooksLikeALocator := False;
   NoRprt := (pos('R-',Call) + pos('R+',Call) + pos('RR73',Call)) < 1; //R-repots and RR73 are not calls
-  if (Call <> '') then
+  Call:=Upcase(Call);
+  if (Call.length > 2) then  // its not empty and >= 3 letters
   begin
-    repeat
-      begin
-        inc(i);
-        if ((Call[i] >= '0') and (Call[i] <= '9')) then
-          HasNum := True;
-        if ((Call[i] >= 'A') and (Call[i] <= 'Z')) then
-          HasChr := True;
-        if LocalDbg then
-          Writeln('CHR Count now:', i, ' len,num,chr:', length(Call), ',', HasNum, ',', HasChr);
-      end;
-    until (i >= length(Call));
+    for i:= 1 to length(Call) do
+    begin
+      if (Call[i] in ['0'..'9']) then
+        HasNum := True;
+      if (Call[i] in ['A'..'Z']) then
+        HasChr := True;
+      if Call[i] in ['+','.'] then
+        HasSpecialSymbol := True;
+    end;
+    // check if it is a small locator with 4 digits format AA00
+    If (Call[1] in ['A'..'R']) and (Call[2] in ['A'..'R'])
+      and (Call[3] in ['0'..'9']) and (Call[4] in ['0'..'9']) and (Call.length = 4) then
+      LooksLikeALocator:=True;
   end;
 
-  isItACall := HasNum and HasChr and NoRprt and (i > 2);
+  isItACall := HasNum and HasChr and not HasSpecialSymbol and not LooksLikeALocator and  NoRprt;
 
-  if LocalDbg then
-    Writeln('Call ', call, ' valid: ', isItACall);
 end;
 
 procedure TfrmMonWsjtx.TryCallAlert(S: string);
