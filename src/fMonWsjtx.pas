@@ -108,6 +108,9 @@ type
     procedure setMonitorColumnHW;
     procedure scrollSgMonitorToLastLine;
     function  LineFilter(L: string):string;
+    procedure PrintDecodedMessage(msgtime,freq,msgmode,msgCall,msgLocator,msgRes,mycont,cqdir,Reply:string; CountryLen,Dfreq,Snr:integer);
+    function getCurMode(sMode: String): String;
+    procedure extcqprint(CqDir,msgRes:string; extCqCall:Tcolor; CountryLen:integer);
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -1529,36 +1532,6 @@ var
   isCallCqDir,            //CQ caller calling directed call
   HasNum, HasChr: boolean;
   //-----------------------------------------------------------------------------------------
-  procedure extcqprint;  //this is used 3 times below
-
-  begin
-    if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
-    else
-    Begin
-      if not  chkMap.Checked then
-        Begin
-          AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
-        end
-       else
-          AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
-    end;
-  end;
-
-  //-----------------------------------------------------------------------------------------
-  function getCurMode(sMode: String): String;
-  // function getCurMode converts a wsjtx binary mode in human readable ham mode
-  begin
-    getCurMode:='';
-    case sMode of
-      chr(36) : getCurMode := 'JT4';
-      '#'     : getCurMode := 'JT65';
-      '@'     : getCurMode := 'JT9';
-      '&'     : getCurMode := 'MSK144';
-      ':'     : getCurMode := 'QRA64';
-      '+'     : getCurMode := 'T10';
-      chr(126): getCurMode := 'FT8';
-    end;
-  end;
 
   //-----------------------------------------------------------------------------------------
 begin   //TfrmMonWsjtx.AddDecodedMessage
@@ -1666,11 +1639,6 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     if (isMyCall and (msgLocator = '----')) then
       msgLocator := '*QSO';//locator for "ALL-MY"
 
-    if not ((msgLocator = '----') and isMyCall) then
-      //if mycall: line must have locator to print(I.E. Answer to my CQ)
-    begin                                        //and other combinations (CQs) will print, too
-
-
     if (chknoHistory.Checked or chkMap.Checked) and
         (msgTime <> LastWsjtLineTime) then
             Begin
@@ -1680,116 +1648,162 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
             end;
       LastWsjtLineTime := msgTime;
 
-      //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
-      if LocalDbg then
-        Writeln('Start adding monitor lines');
-
-      if (not ChkCbCq.Checked) and (not chknoTxt.Checked) then      //was chkmap
-       begin
-        if (chknoHistory.Checked)  then
-         Begin
-          sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 4), PadLeft(IntToStr(Snr),3)]);
-         end
-        else
-         Begin
-          //time + mode;
-          sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, msgMode]);
-         end;
-       end;
-
-      //Reply added here as sgMonitor row is now created
-      if (not chkCbCQ.Checked) and (not chknoTxt.Checked) then
-       Begin
-        sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
-        if LocalDbg then
-         Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(Reply),':',length(sgMonitor.Cells[8, sgMonitor.rowCount-1]));
-       end;
-
-      if isMyCall then
-        begin
-         DblClickCall := '';
-         if LocalDbg then  Writeln('Reset 2click call: answered to me');
-         PrintCall(msgCall,chkCbCQ.Checked);
-         if not chkCbCQ.Checked then AddColorStr('=', PcallColor,2 ,sgMonitor.rowCount-1);
-        end
-      else
-          PrintCall(msgCall,chkCbCQ.Checked);
-
-      PrintLoc(msgLocator, timeToAlert, msgTime,chkCbCQ.Checked);
-
-      if frmWorkedGrids.GridOK(msgLocator) then AddXpList(msgCall,msgLocator);
-
-        adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
-          msgRes, WAZ, posun, ITU, lat, long);
-        if (pos(',', msgRes)) > 0 then
-          msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
-
-        if LocalDbg then
-          Writeln('My continent is:', mycont, '  His continent is:', cont);
-        if CqDir <> '' then
-          if ((mycont <> '') and (cont <> '')) then
-            //we can do some comparisons of continents
-          begin
-            if ((CqDir = 'DX') and (mycont = cont)) then
-            begin
-              //I'm not DX for caller: color to warn directed call
-              extcqprint;
-            end
-            else  //calling specified continent
-            if ((CqDir <> 'DX') and (CqDir <> mycont)) then
-            begin
-              //CQ NOT directed to my continent: color to warn directed call
-              extcqprint;
-            end
-            else  // should be ok to answer this directed cq
-             if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-              AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1);
-           end
-          else
-           begin
-            // we can not compare continents, but it is directed cq. Best to warn with color anyway
-            extcqprint;
-           end
-        else
-          // should be ok to answer this is not directed cq
-            if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-                Begin
-                 AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,6, sgMonitor.rowCount-1);
-                end;
-      if (not chkMap.Checked) then
-       begin
-        freq := dmUtils.FreqFromBand(CurBand, CurMode);
-        msgRes := dmDXCC.DXCCInfo(adif, freq, CurMode, i);    //wkd info
-
-        if LocalDbg then
-          Writeln('Looking this>', msgRes[1], '< from:', msgRes);
-        case msgRes[1] of
-          'U': AddColorStr(cont + ':' + msgRes, wkdhere,7 ,sgMonitor.rowCount-1);       //Unknown
-          'C': AddColorStr(cont + ':' + msgRes, wkdAny,7 ,sgMonitor.rowCount-1);        //Confirmed
-          'Q': AddColorStr(cont + ':' + msgRes, clTeal,7 ,sgMonitor.rowCount-1);        //Qsl needed
-          'N': AddColorStr(cont + ':' + msgRes, wkdnever,7 ,sgMonitor.rowCount-1);      //New something
-
-          else
-            AddColorStr(msgRes, clBlack,7 ,sgMonitor.rowCount-1);     //something else...can't be
-        end;
-
-      end; //Map mode
-
-      if not (chkCbCQ.Checked or chknoTxt.Checked) then
+    //if mycall: line must have locator to print(I.E. Answer to my CQ)
+    //and other combinations (CQs) will print, too
+    if not ((msgLocator = '----') and isMyCall) then
         Begin
-           scrollSgMonitor; // if needed
-           //sgMonitor.AutoSizeColumns;
-
+            PrintDecodedMessage(msgtime,freq,msgmode,msgCall,msgLocator,msgRes,mycont,cqdir,Reply,CountryLen,Dfreq,Snr);
+            TryAlerts;
         end;
 
-      TryAlerts;
-
-    end;//printing out  line
   end;  //continued
   scrollSgMonitorToLastLine;
 end;
+procedure TfrmMonWsjtx.PrintDecodedMessage(msgtime,freq,msgmode,msgCall,msgLocator,msgRes,mycont,cqdir,Reply:string; CountryLen,Dfreq,Snr:integer);
+Var
+  cont, country, waz, posun, itu, pfx, lat, long: string;
+  adif : word;
+  i : integer;
+begin
+  cont := '';
+  country := '';
+  waz := '';
+  posun := '';
+  itu := '';
+  lat := '';
+  long := '';
+   //++++++++++++++++++++++++++++start printing++++++++++++++++++++++++++++++++
+   if LocalDbg then
+     Writeln('Start adding monitor lines');
 
+   if (not ChkCbCq.Checked) and (not chknoTxt.Checked) then      //was chkmap
+    begin
+     if (chknoHistory.Checked)  then
+      Begin
+       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [PadLeft(IntToStr(Dfreq), 4), PadLeft(IntToStr(Snr),3)]);
+      end
+     else
+      Begin
+       //time + mode;
+       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, msgMode]);
+      end;
+    end;
 
+   //Reply added here as sgMonitor row is now created
+   if (not chkCbCQ.Checked) and (not chknoTxt.Checked) then
+    Begin
+     sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
+     if LocalDbg then
+      Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(Reply),':',length(sgMonitor.Cells[8, sgMonitor.rowCount-1]));
+    end;
+
+   if isMyCall then
+     begin
+      DblClickCall := '';
+      if LocalDbg then  Writeln('Reset 2click call: answered to me');
+      PrintCall(msgCall,chkCbCQ.Checked);
+      if not chkCbCQ.Checked then AddColorStr('=', PcallColor,2 ,sgMonitor.rowCount-1);
+     end
+   else
+       PrintCall(msgCall,chkCbCQ.Checked);
+
+   PrintLoc(msgLocator, timeToAlert, msgTime,chkCbCQ.Checked);
+
+   if frmWorkedGrids.GridOK(msgLocator) then AddXpList(msgCall,msgLocator);
+
+     adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
+       msgRes, WAZ, posun, ITU, lat, long);
+     if (pos(',', msgRes)) > 0 then
+       msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
+
+     if LocalDbg then
+       Writeln('My continent is:', mycont, '  His continent is:', cont);
+     if CqDir <> '' then
+       if ((mycont <> '') and (cont <> '')) then
+         //we can do some comparisons of continents
+       begin
+         if ((CqDir = 'DX') and (mycont = cont)) then
+         begin
+           //I'm not DX for caller: color to warn directed call
+           extcqprint(CqDir,msgRes,extCqCall,CountryLen);
+         end
+         else  //calling specified continent
+         if ((CqDir <> 'DX') and (CqDir <> mycont)) then
+         begin
+           //CQ NOT directed to my continent: color to warn directed call
+           extcqprint(CqDir,msgRes,extCqCall,CountryLen);
+         end
+         else  // should be ok to answer this directed cq
+          if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
+           AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1);
+        end
+       else
+        begin
+         // we can not compare continents, but it is directed cq. Best to warn with color anyway
+         extcqprint(CqDir,msgRes,extCqCall,CountryLen);
+        end
+     else
+       // should be ok to answer this is not directed cq
+         if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
+             Begin
+              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,6, sgMonitor.rowCount-1);
+             end;
+   if (not chkMap.Checked) then
+    begin
+     freq := dmUtils.FreqFromBand(CurBand, CurMode);
+     msgRes := dmDXCC.DXCCInfo(adif, freq, CurMode, i);    //wkd info
+
+     if LocalDbg then
+       Writeln('Looking this>', msgRes[1], '< from:', msgRes);
+     case msgRes[1] of
+       'U': AddColorStr(cont + ':' + msgRes, wkdhere,7 ,sgMonitor.rowCount-1);       //Unknown
+       'C': AddColorStr(cont + ':' + msgRes, wkdAny,7 ,sgMonitor.rowCount-1);        //Confirmed
+       'Q': AddColorStr(cont + ':' + msgRes, clTeal,7 ,sgMonitor.rowCount-1);        //Qsl needed
+       'N': AddColorStr(cont + ':' + msgRes, wkdnever,7 ,sgMonitor.rowCount-1);      //New something
+
+       else
+         AddColorStr(msgRes, clBlack,7 ,sgMonitor.rowCount-1);     //something else...can't be
+     end;
+
+   end; //Map mode
+
+   if not (chkCbCQ.Checked or chknoTxt.Checked) then
+     Begin
+        scrollSgMonitor; // if needed
+        //sgMonitor.AutoSizeColumns;
+
+     end;
+
+ end;//printing out  line
+procedure TfrmMonWsjtx.extcqprint(CqDir,msgRes:string; extCqCall:Tcolor; CountryLen:integer);
+
+  begin
+    if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
+    else
+    Begin
+      if not  chkMap.Checked then
+        Begin
+          AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
+        end
+       else
+          AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
+    end;
+  end;
+
+function TfrmMonWsjtx.getCurMode(sMode: String): String;
+  // function getCurMode converts a wsjtx binary mode in human readable ham mode
+  begin
+    getCurMode:='';
+    case sMode of
+      chr(36) : getCurMode := 'JT4';
+      '#'     : getCurMode := 'JT65';
+      '@'     : getCurMode := 'JT9';
+      '&'     : getCurMode := 'MSK144';
+      ':'     : getCurMode := 'QRA64';
+      '+'     : getCurMode := 'T10';
+      chr(126): getCurMode := 'FT8';
+    end;
+  end;
 
 initialization
 
