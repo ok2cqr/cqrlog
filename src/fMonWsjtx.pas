@@ -117,7 +117,6 @@ type
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
-    //procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
     procedure AddOtherMessage(Message, Reply: string;Snr:integer);
     procedure NewBandMode(Band, Mode: string);
@@ -990,31 +989,29 @@ begin
   //split message it can be: (note: when testing remember continent compare set calls to be non dx]
   if (i) then
   begin
-    { this needs fixing !!!!!!!!!!!!!!!!
-    AddDecodedMessage('175200 # CQ OH1LL KP11', '20M', 'reply', 0, 0);      //normal cq
-    AddDecodedMessage('175200 @ CQ DX OH1DX KP11', '20M', 'reply', 0, 0);   //directed cq
-    AddDecodedMessage('175200 @ CQ NA RV3NA', '20M', 'reply', 0, 0);
+    AddCqCallMessage('175200','#','20M','CQ OH1LL KP11','reply', 0, 0);      //normal cq
+    AddCqCallMessage('175200','@','20M','CQ DX OH1DX KP11','reply', 0, 0);   //directed cq
+    AddCqCallMessage('175200','@','20M','CQ NA RV3NA','reply', 0, 0);
     //call and continents/prefixes  no loc
-    AddDecodedMessage('175200 @ CQ USA RV3USA', '20M', 'reply', 0, 0);
+    AddCqCallMessage('175200','@','20M','CQ USA RV3USA','reply', 0, 0);
     //call and continents/prefixes
-    AddDecodedMessage('175200 @ CQ USA RV3USL KO30', '20M', 'reply', 0, 0);
+    AddCqCallMessage('175200','@','20M','CQ USA RV3USL KO30','reply', 0, 0);
     //call and continents/prefixes
-    AddDecodedMessage('175200 @ CQ OH1LL DX', '20M', 'reply', 0, 0);
+    AddCqCallMessage('175200','@','20M','CQ OH1LL DX','reply', 0, 0);
     //old official cq dx
-    AddDecodedMessage('175200 ~ '+mycall+' DL2BQV JO73                     a2', '20M', 'reply', 0, 0);
-    AddDecodedMessage('175200 ~ '+mycall+' DL2BQV RR73', '20M', 'reply', 0, 0);
-    AddDecodedMessage('175200 # CQ 000 PA7ZZ JO22', '20M', 'reply', 0, 0);
-    AddDecodedMessage('175200 # CQ ASOC PA7ZZ JO22', '20M', 'reply', 0, 0);
-    AddDecodedMessage('175200 ~ CQ NO EU RZ3DX', '20M', 'reply', 0, 0);  // for dbg
+    AddMyCallMessage('175200','~','20M',mycall+' DL2BQV JO73                     a2','reply', 0, 0);
+    AddMyCallMessage('175200','~','20M',mycall+' DL2BQV RR73','reply', 0, 0);
+    AddCqCallMessage('175200','#','20M','CQ 000 PA7ZZ JO22','reply', 0, 0);
+    AddCqCallMessage('175200','#','20M','CQ ASOC PA7ZZ JO22','reply', 0, 0);
+    AddCqCallMessage('175200','~','20M','CQ NO EU RZ3DX','reply', 0, 0);  // for dbg
     //ignore these, no callers callsign
-    AddDecodedMessage('201045 ~ CQ KAZAKHSTAN', '20M', 'reply', 0, 0);
-    AddDecodedMessage('201045 ~ CQ WHO EVER', '20M', 'reply', 0, 0);
+    AddCqCallMessage('201045','~','20M','CQ KAZAKHSTAN','reply', 0, 0);
+    AddCqCallMessage('201045','~','20M','CQ WHO EVER','reply', 0, 0);
     // some special
-    AddDecodedMessage('175200 @ CQ EA7/DL8FCL', '20M', 'reply', 0, 0);
-    AddDecodedMessage('175200 @ CQ <AA2019CALL>', '20M', 'reply', 0, 0);
+    AddCqCallMessage('175200','@','20M','CQ EA7/DL8FCL','reply', 0, 0);
+    AddCqCallMessage('175200','@','20M','CQ <AA2019CALL>','reply', 0, 0);
     // this will fail, it is like real locator
-    AddDecodedMessage('175200 @ CQ <OH60AB> KP01', '20M', 'reply', 0, 0);
-    }
+    AddCqCallMessage('175200','@','20M','CQ <OH60AB> KP01','reply', 0, 0);
   end
   else
   begin
