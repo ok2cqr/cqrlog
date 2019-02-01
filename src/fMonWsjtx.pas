@@ -1396,16 +1396,18 @@ end;
 function TfrmMonWsjtx.isItACall(Call: string): boolean;
 // must have number and letter and length >= 3
 // must not have + .
-// looks not like a 4 digit locator example AA00
+// looks not like a 4 digit locator example AA00, RR73 or report R+00 or R-00
+// ends to letter
 var
-  HasNum, HasChr, NoRprt, HasSpecialSymbol, LooksLikeALocator: boolean;
+  HasNum, HasChr, EndsLtr, HasSpecialSymbol, LooksLikeALocator: boolean;
   i: integer;
 begin
   HasNum := False;
   HasChr := False;
   HasSpecialSymbol := False;
   LooksLikeALocator := False;
-  NoRprt := (pos('R-',Call) + pos('R+',Call) + pos('RR73',Call)) < 1; //R-repots and RR73 are not calls
+  EndsLtr := (Call[length(Call)] in ['A'..'Z']);
+            //special case has '/' and ends number not implemented
   Call:=Upcase(Call);
   if (Call.length > 2) then  // its not empty and >= 3 letters
   begin
@@ -1419,12 +1421,12 @@ begin
         HasSpecialSymbol := True;
     end;
     // check if it is a small locator with 4 digits format AA00
-    If (Call[1] in ['A'..'R']) and (Call[2] in ['A'..'R'])
+    If (Call[1] in ['A'..'R']) // and (Call[2] in ['A'..'R'])  leaving this out makes hit also to reports R+00, R-00
       and (Call[3] in ['0'..'9']) and (Call[4] in ['0'..'9']) and (Call.length = 4) then
       LooksLikeALocator:=True;
   end;
 
-  isItACall := HasNum and HasChr and not HasSpecialSymbol and not LooksLikeALocator and  NoRprt;
+  isItACall := HasNum and HasChr and not HasSpecialSymbol and not LooksLikeALocator and  EndsLtr;
 
 end;
 
