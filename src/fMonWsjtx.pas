@@ -1405,6 +1405,10 @@ function TfrmMonWsjtx.isItACall(Call: string): boolean;
 // must not have + .
 // looks not like a 4 digit locator example AA00, RR73 or report R+00 or R-00
 // ends to letter
+// special case has '/' and will be passthrough
+// TODO - special case with end with number like DL7OAP/8 are not implemented.
+//        Can number at end happen in WSJT-X? I only now that it is used in APRS.
+// TODO - strings like 10W 20W 15M 80M are identified as call. is this possible?
 var
   HasNum, HasChr, EndsLtr, HasSpecialSymbol, LooksLikeALocator: boolean;
   i: integer;
@@ -1414,7 +1418,6 @@ begin
   HasSpecialSymbol := False;
   LooksLikeALocator := False;
   EndsLtr := (Call[length(Call)] in ['A'..'Z']);
-            //special case has '/' and ends number not implemented
   Call:=Upcase(Call);
   if (Call.length > 2) then  // its not empty and >= 3 letters
   begin
@@ -1428,12 +1431,15 @@ begin
         HasSpecialSymbol := True;
     end;
     // check if it is a small locator with 4 digits format AA00
-    If (Call[1] in ['A'..'R']) // and (Call[2] in ['A'..'R'])  leaving this out makes hit also to reports R+00, R-00
-      and (Call[3] in ['0'..'9']) and (Call[4] in ['0'..'9']) and (Call.length = 4) then
+    // RR73 is sort out as locator, too
+    // leaving out the proof of Call[2] makes it hit also to reports R+00, R-00
+    If (Call[1] in ['A'..'R']) and (Call[3] in ['0'..'9'])
+      and (Call[4] in ['0'..'9']) and (Call.length = 4) then
       LooksLikeALocator:=True;
   end;
 
-  isItACall := HasNum and HasChr and not HasSpecialSymbol and not LooksLikeALocator and  EndsLtr;
+  isItACall := HasNum and HasChr and not HasSpecialSymbol
+    and not LooksLikeALocator and  EndsLtr;
 
 end;
 
