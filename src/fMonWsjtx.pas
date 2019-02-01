@@ -117,7 +117,7 @@ type
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
-    procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
+    //procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
     procedure AddOtherMessage(Message, Reply: string;Snr:integer);
     procedure NewBandMode(Band, Mode: string);
@@ -990,6 +990,7 @@ begin
   //split message it can be: (note: when testing remember continent compare set calls to be non dx]
   if (i) then
   begin
+    { this needs fixing !!!!!!!!!!!!!!!!
     AddDecodedMessage('175200 # CQ OH1LL KP11', '20M', 'reply', 0, 0);      //normal cq
     AddDecodedMessage('175200 @ CQ DX OH1DX KP11', '20M', 'reply', 0, 0);   //directed cq
     AddDecodedMessage('175200 @ CQ NA RV3NA', '20M', 'reply', 0, 0);
@@ -1013,6 +1014,7 @@ begin
     AddDecodedMessage('175200 @ CQ <AA2019CALL>', '20M', 'reply', 0, 0);
     // this will fail, it is like real locator
     AddDecodedMessage('175200 @ CQ <OH60AB> KP01', '20M', 'reply', 0, 0);
+    }
   end
   else
   begin
@@ -1513,13 +1515,6 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
-Begin
-       if LocalDbg then Writeln('Satrt AddCQCallMessage');
-       Message:=LineFilter(Message);
-
-end;
-
 procedure TfrmMonWsjtx.AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
 begin
      if LocalDbg then Writeln('Start AddMyCallMessage');
@@ -1543,7 +1538,8 @@ begin
          end;
 end;
 
-procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
+procedure TfrmMonWsjtx.AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
+//procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
 var
   i, index: integer;
   msgMode : string;
@@ -1553,6 +1549,15 @@ var
   HasNum, HasChr: boolean;
 
 begin
+
+  if LocalDbg then Writeln('Satrt AddCQCallMessage');
+   isMyCall:= false;
+   Dfreq:=Df;
+   Snr :=Sr;
+   RepBuf := Reply;
+   msgTime:=Time;
+   CurMode:=getCurMode(mode);
+   Message:=LineFilter(Message);
 
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
   CqPeriodTimerStart;
@@ -1573,8 +1578,6 @@ begin
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
 
-  Message := LineFilter(Message);
-
   index:=0;
   msgList:=TStringList.Create;
   msgList.Linebreak:=' '; // space delimiter
@@ -1584,33 +1587,20 @@ begin
   msgLocator:='----';    // locator of the received station
   CqDir := '';           // only filled when received station is CQ DX or CQ continent/regionDX with the label of continent or region (DX, EU, OC, AS, etc)
 
-  // messages with less then 4 and more then 6 entries should not happen
+  //NOTE: For now on we do not have time and mode in Message, they are separate parameters
+  // That is 2 less to all indexes.
+  // msgList[0] should alway be 'CQ'
+
+  // messages with less then 2 and more then 4 entries should not happen
   // and will be ignored
-  if (msgList.count >= 4) and (msgList.count <= 6) then begin
+  if (msgList.count >= 2) and (msgList.count <= 4) then begin
     while index < msgList.count do
     begin
-      // identify time
-      if index = 0 then msgTime := msgList[index];
-
-      // identify mode
-      if index = 1 then
-      begin
-        msgMode:=msgList[index];
-        CurMode:=getCurMode(msgMode);
-      end;
-
-      // identify if it is my own call, otherwise it is a CQ call. this is checked by newQSO to be MYCall or CQ
-      {
-      if index = 2 then
-      begin
-        isMyCall:=pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0
-      end;
-      }    // moved to AddMYCallMessage
-      isMyCall :=false;
+      // index 0 = CQ
 
       // identify if its a call or a DX/continent/region
       // if its not a call and not a 2 length string, it will be ignored
-      if index = 3 then
+      if index = 1 then
       begin
         if isItACall(msgList[index]) then
           msgCall:=msgList[index]
@@ -1620,7 +1610,7 @@ begin
 
       // identify if its a call, a DX (old style) or a Locator
       // if its match to nothing it will be ignored
-      if index = 4 then
+      if index = 2 then
       begin
         if msgList[index] = 'DX' then
           CqDir:='DX'
@@ -1632,14 +1622,13 @@ begin
 
       // identify if its a call or a Locator
       // if its match to nothing it will be ignored
-      if index = 5 then
+      if index = 3 then
       begin
         if frmWorkedGrids.GridOK(msgList[index]) AND (msgList[index] <> 'RR73') then
           msgLocator:=msgList[index]
         else if isItACall(msgList[index]) then
           msgCall:=msgList[index]
       end;
-
       inc(index);
     end;
     msgList.Free;
@@ -1654,35 +1643,18 @@ begin
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);
 
-    {
-    //if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
-    //how about always *QSO, not just when alerts?
-    if (isMyCall and (msgLocator = '----')) then
-      msgLocator := '*QSO';//locator for "ALL-MY"
-     } //  // moved to AddMYCallMessage
-
     if (chknoHistory.Checked or chkMap.Checked) and
         (msgTime <> LastWsjtLineTime) then
             Begin
                if LocalDbg then
-                           Writeln('+++D msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+                           Writeln('Msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
               clearSgMonitor;
             end;
-      LastWsjtLineTime := msgTime;
 
-     {
-    //if mycall: line must have locator to print(I.E. Answer to my CQ)
-    //and other combinations (CQs) will print, too
-    if not ((msgLocator = '----') and isMyCall) then
-        Begin
-            RepBuf := Reply;
-            PrintDecodedMessage;
-            TryAlerts;
-        end;
-     } // moved to AddMYCallMessage
-     RepBuf := Reply;
-     PrintDecodedMessage;
-     TryAlerts;
+      LastWsjtLineTime := msgTime;
+      RepBuf := Reply;
+      PrintDecodedMessage;
+      TryAlerts;
 
   end;  //continued
   scrollSgMonitorToLastLine;

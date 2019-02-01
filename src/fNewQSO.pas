@@ -2336,20 +2336,15 @@ begin
              Begin
                //if CQ or Mycall    (Message is in ParStr)
                if (FirstWord = 'CQ') then
-                            frmMonWsjtx.AddCqCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr);
-               if (pos (FirstWord,MyCall) > 0) then
-                             frmMonWsjtx.AddMyCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr);
-    //remove this part ----------
-               if ((FirstWord = 'CQ') or (pos (FirstWord,MyCall) > 0)) then
-                Begin
-                    frmMonWsjtx.AddDecodedMessage(Timeline+' '+mode+' '+ParStr,WsjtxBand,Repbuf,Dfreq,Snr)
-                end
-    //remove this part ----------
-               else  //if followed call
-               Begin
-                  if dmData.DebugLevel>=1 then Writeln('Other Decode');
-                  frmMonWsjtx.AddOtherMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf,Snr);
-               end;
+                            frmMonWsjtx.AddCqCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
+                  else if (pos (FirstWord,MyCall) > 0) then
+                             frmMonWsjtx.AddMyCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
+
+                   else  //if followed call
+                   Begin
+                      if dmData.DebugLevel>=1 then Writeln('Other Decode');
+                      frmMonWsjtx.AddOtherMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf,Snr);
+                   end;
              end;
 
          //----------------------------------------------------
