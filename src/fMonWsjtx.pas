@@ -108,15 +108,15 @@ type
     procedure setMonitorColumnHW;
     procedure scrollSgMonitorToLastLine;
     function  LineFilter(L: string):string;
-    procedure PrintDecodedMessage(msgtime,freq,msgmode,msgCall,msgLocator,msgRes,mycont,cqdir,Reply:string; CountryLen,Dfreq,Snr:integer);
+    procedure PrintDecodedMessage;
     function getCurMode(sMode: String): String;
-    procedure extcqprint(CqDir,msgRes:string; extCqCall:Tcolor; CountryLen:integer);
+    procedure extcqprint;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
     procedure clearSgMonitor;
-    procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
-    procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
+    procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
+    procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddDecodedMessage(Message, Band, Reply: string; Dfreq,Snr: integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
     procedure AddOtherMessage(Message, Reply: string;Snr:integer);
@@ -179,6 +179,11 @@ var
   msgCall: string;
   msgLocator: string;
   msgTime: string;
+  msgRes :string;
+  CqDir : string;
+  mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
+  adif : word;
+  Dfreq,Snr:integer;
   isMyCall: boolean;
   CurMode: string = '';
   CurBand: string = '';
@@ -1508,39 +1513,46 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.AddCqCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
+procedure TfrmMonWsjtx.AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
 Begin
-       if LocalDbg then
-         Begin
-           Writeln;
-           Writeln('-------+++++++++ in AddCQ :', Message);
-           Writeln;
-         end;
+       if LocalDbg then Writeln('Satrt AddCQCallMessage');
+       Message:=LineFilter(Message);
+
 end;
 
-procedure TfrmMonWsjtx.AddMyCallMessage(Time,mode,WsjtxBand,Message,Repbuf:string; Dfreq,Snr:integer);
+procedure TfrmMonWsjtx.AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
 begin
-     if LocalDbg then Begin
-           Writeln;
-           Writeln('-------+++++++++ in AddMyCall :', Message);
-           Writeln;
+     if LocalDbg then Writeln('Start AddMyCallMessage');
+     isMyCall:= true;
+     Dfreq:=Df;
+     Snr :=Sr;
+     RepBuf := Reply;
+     msgTime:=Time;
+     CurMode:=getCurMode(mode);
+     Message:=LineFilter(Message);
+     msgCall := ExtractWord(2,Message,[' ']);
+     msgLocator := ExtractWord(3,Message,[' ']);
+
+     if LocalDbg then  Writeln('caller:', msgCall, '  loc:', msgLocator);
+     if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
+            msgLocator := '*QSO'; //if not real loc it is report, RRR, or 73
+     if IsItACall(msgCall) then
+         Begin
+            PrintDecodedMessage;
+            TryAlerts;
          end;
 end;
 
 procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
 var
-  msgMode, msgCQ1, msgCQ2, msgRes, freq, CqDir,
-  mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
   i, index: integer;
-  adif: word;
-  msgList: TStringList;
+  msgMode : string;
+  msgList : TStringList;
 
   isCallCqDir,            //CQ caller calling directed call
   HasNum, HasChr: boolean;
-  //-----------------------------------------------------------------------------------------
 
-  //-----------------------------------------------------------------------------------------
-begin   //TfrmMonWsjtx.AddDecodedMessage
+begin
 
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
   CqPeriodTimerStart;
@@ -1588,10 +1600,13 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
       end;
 
       // identify if it is my own call, otherwise it is a CQ call. this is checked by newQSO to be MYCall or CQ
+      {
       if index = 2 then
       begin
         isMyCall:=pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0
       end;
+      }    // moved to AddMYCallMessage
+      isMyCall :=false;
 
       // identify if its a call or a DX/continent/region
       // if its not a call and not a 2 length string, it will be ignored
@@ -1639,11 +1654,12 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);
 
-
+    {
     //if (isMyCall and tbmyAlrt.Checked and tbmyAll.Checked and
     //how about always *QSO, not just when alerts?
     if (isMyCall and (msgLocator = '----')) then
       msgLocator := '*QSO';//locator for "ALL-MY"
+     } //  // moved to AddMYCallMessage
 
     if (chknoHistory.Checked or chkMap.Checked) and
         (msgTime <> LastWsjtLineTime) then
@@ -1654,22 +1670,27 @@ begin   //TfrmMonWsjtx.AddDecodedMessage
             end;
       LastWsjtLineTime := msgTime;
 
+     {
     //if mycall: line must have locator to print(I.E. Answer to my CQ)
     //and other combinations (CQs) will print, too
     if not ((msgLocator = '----') and isMyCall) then
         Begin
-            PrintDecodedMessage(msgtime,freq,msgmode,msgCall,msgLocator,msgRes,mycont,cqdir,Reply,CountryLen,Dfreq,Snr);
+            RepBuf := Reply;
+            PrintDecodedMessage;
             TryAlerts;
         end;
+     } // moved to AddMYCallMessage
+     RepBuf := Reply;
+     PrintDecodedMessage;
+     TryAlerts;
 
   end;  //continued
   scrollSgMonitorToLastLine;
 end;
-procedure TfrmMonWsjtx.PrintDecodedMessage(msgtime,freq,msgmode,msgCall,msgLocator,msgRes,mycont,cqdir,Reply:string; CountryLen,Dfreq,Snr:integer);
+procedure TfrmMonWsjtx.PrintDecodedMessage;
 Var
-  cont, country, waz, posun, itu, pfx, lat, long: string;
-  adif : word;
   i : integer;
+  freq :string;
 begin
   cont := '';
   country := '';
@@ -1691,16 +1712,16 @@ begin
      else
       Begin
        //time + mode;
-       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, msgMode]);
+       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, CurMode]);
       end;
     end;
 
    //Reply added here as sgMonitor row is now created
    if (not chkCbCQ.Checked) and (not chknoTxt.Checked) then
     Begin
-     sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
+     sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(RepBuf);  //corresponding reply string to array in hex
      if LocalDbg then
-      Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(Reply),':',length(sgMonitor.Cells[8, sgMonitor.rowCount-1]));
+      Writeln('Decode Add reply array:', sgMonitor.rowCount-1,'len:',length(RepBuf),':',length(sgMonitor.Cells[8, sgMonitor.rowCount-1]));
     end;
 
    if isMyCall then
@@ -1731,13 +1752,13 @@ begin
          if ((CqDir = 'DX') and (mycont = cont)) then
          begin
            //I'm not DX for caller: color to warn directed call
-           extcqprint(CqDir,msgRes,extCqCall,CountryLen);
+           extcqprint;
          end
          else  //calling specified continent
          if ((CqDir <> 'DX') and (CqDir <> mycont)) then
          begin
            //CQ NOT directed to my continent: color to warn directed call
-           extcqprint(CqDir,msgRes,extCqCall,CountryLen);
+           extcqprint;
          end
          else  // should be ok to answer this directed cq
           if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
@@ -1746,7 +1767,7 @@ begin
        else
         begin
          // we can not compare continents, but it is directed cq. Best to warn with color anyway
-         extcqprint(CqDir,msgRes,extCqCall,CountryLen);
+         extcqprint;
         end
      else
        // should be ok to answer this is not directed cq
@@ -1781,7 +1802,7 @@ begin
      end;
 
  end;//printing out  line
-procedure TfrmMonWsjtx.extcqprint(CqDir,msgRes:string; extCqCall:Tcolor; CountryLen:integer);
+procedure TfrmMonWsjtx.extcqprint;
 
   begin
     if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
