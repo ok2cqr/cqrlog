@@ -1590,8 +1590,6 @@ begin
   msgLocator:='----';    // locator of the received station
   CqDir := '';           // only filled when received station is CQ DX or CQ continent/regionDX with the label of continent or region (DX, EU, OC, AS, etc)
 
-  //NOTE: For now on we do not have time and mode in Message, they are separate parameters
-  // That is 2 less to all indexes.
   // msgList[0] should alway be 'CQ'
 
   // messages with less then 2 and more then 4 entries should not happen

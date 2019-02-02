@@ -621,6 +621,7 @@ type
     wHiSpeed              : integer;      // when packets received :udp polling speeds (tmrWsjtx)
     wLoSpeed              : integer;     // when running idle
     old_call              : String;               //Moved from private
+    was_call              : String;            //holds recent edtCallsign.text before it was cleared
 
     FldigiXmlRpc          : Boolean;
 
@@ -628,6 +629,7 @@ type
     ChangeFreqLimit       : Double;
     RepHead                :String;                //the heading for possible reply commands created
                                                   //includes message type #0 (change it)
+    ContestNr             : integer;              //wsjtx 2.0 contest type definition in status msg
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -1004,6 +1006,7 @@ var
   sTimeOn  : String = '';
   sTimeOff : String = '';
   ShowRecentQSOs : Boolean = False;
+  ShowB4call     : Boolean = False;
   RecentQSOCount : Integer = 0;
   since  : String;
   lat,long : Currency;
@@ -1126,6 +1129,7 @@ begin
 
   ShowRecentQSOs := cqrini.ReadBool('NewQSO','ShowRecentQSOs',False);
   RecentQSOCount := cqrini.ReadInteger('NewQSO','RecQSOsNum',5);
+  ShowB4call :=  cqrini.ReadBool('NewQSO','ShowB4call',False);
   if NOT cbOffline.Checked then
   begin
     date := dmUtils.GetDateTime(0);
@@ -1143,6 +1147,8 @@ begin
     dmData.trQSOBefore.Rollback;
     dmData.qQSOBefore.SQL.Text := 'select * from view_cqrlog_main_by_qsodate where qsodate >= '+QuotedStr(since)+
                                    ' order by qsodate,time_on';
+       if ShowB4call then dmData.qQSOBefore.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE callsign = '+
+                                    QuotedStr(was_call)+' ORDER BY qsodate,time_on';
     if dmData.DebugLevel>=1 then Writeln(dmData.qQSOBefore.SQL.Text);
     dmData.trQSOBefore.StartTransaction;
     dmData.qQSOBefore.Open;
@@ -2006,21 +2012,26 @@ begin
 end;
 
 procedure TfrmNewQSO.tmrWsjtxTimer(Sender: TObject);
+const
+  ContestName : array [0..6] of string = ( '','NA VHF','EU VHF','FIELD DAY','RTTY RU','FOX','HOUND' );
+
 var
+
   Buf      : String;
   Fdes     : String;
   ParStr   : String;
+  ParDou   : Double;
+  ParBool  : Boolean;
+  ParNum   : Integer;
   TimeLine : String;
   Repbuf   : String;
   index    : Integer;
   tmpindex : Integer;
-  ParNum   : Integer;
   MsgType  : Integer;
   Sec      : Integer;
   Min      : Integer;
   Hour     : Integer;
   RepStart : integer;
-  ParDou   : Double;
   Snr      : integer;
   Dtim     : TDateTime;
   Dfreq    : Integer;
@@ -2045,8 +2056,11 @@ var
   Mask  : String='';
   FirstWord: String;
   MyCall : String;
+  OpCall : String;
+  ExchR  : String;
+  ExchS  : String;
 
-  function UiFBuf(var index:integer):uint32;
+  function ui32Buf(var index:integer):uint32;
   begin
     Result := $01000000*ord(Buf[index])
               + $00010000*ord(Buf[index+1])
@@ -2055,11 +2069,11 @@ var
     index := index+4                        //point to next element
   end;
 
-  function StFBuf(var index:integer):String;
+  function StrBuf(var index:integer):String;
   var
     P : uint32;
   begin
-    P := UiFBuf(index);                 //string length;   4bytes
+    P := ui32Buf(index);                 //string length;   4bytes
     if P = $FFFFFFFF then               //exeption: empty Qstring len: $FFFF FFFF content: empty
     begin
       Result := ''
@@ -2070,40 +2084,31 @@ var
     end
   end;
 
- function DUiFBuf(var index:integer):uint64;
+ function ui64Buf(var index:integer):uint64;
  var
     lo,hi    :uint32;
  begin
-    hi :=  UiFBuf(index);
-    lo :=  UiFBuf(index);
+    hi :=  ui32Buf(index);
+    lo :=  ui32Buf(index);
     Result := $100000000 * hi + lo
  end;
 
-  function DouFBuf(var index:integer):Double;  //this does not work!!
-  var
-    b8: QWord;              //8 bytes integer
-    d8: Double absolute b8; //8 bytes double
-    buffer : array [0 .. 7] of byte;
-    i : Integer;
-  Begin
-    for i:=0 to 7 do
-      buffer[i]:=ord(buf[index+i]);
-    index:= index+8;
-    b8 := BEtoN(PQWord(@buffer[0])^);
-    Result := b8
-  end;
+  function DoubleBuf(var index:integer):Double; //this does not work either but moves index right amount!!
+   Begin
+     Result := ui64Buf(index);
+   end;
 
-  function DiFBuf(var index:integer):int64;
+  function int64Buf(var index:integer):int64;
   begin
-     REsult := DUiFBuf(index)
+     REsult := ui64Buf(index)
   end;
 
-  function IFBuf(var index:integer):int32;
+  function int32Buf(var index:integer):int32;
   begin
-    Result := UiFBuf(index)
+    Result := ui32Buf(index)
   end;
 
-  function BFBuf(var index:integer):uint8;
+  function ui8Buf(var index:integer):uint8;
   begin
     Result := ord(Buf[index]);
     inc(index)
@@ -2139,18 +2144,19 @@ begin
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
     RepStart := index; //for possibly reply creation
 
+    if dmData.DebugLevel>=1 then Writeln('-----------------------decode start---------------------------------');
     if dmData.DebugLevel>=1 then Write('Header position:',index);
     index:=index+4;  // skip QT header
 
-    ParNum :=  UiFBuf(index);
+    ParNum :=  ui32Buf(index);
     if dmData.DebugLevel>=1 then Write(' Schema number:',ParNum);
 
-    MsgType :=  UiFBuf(index);
+    MsgType :=  ui32Buf(index);
     if dmData.DebugLevel>=1 then Write(' Message type:', MsgType,' ');
     lblCall.Caption       := 'Wsjt-x remote #'+intToStr(MsgType);   //changed to see last received msgtype
 
     tmpindex := index;
-    ParStr := StFBuf(index);       //read ID to get index point to RepHead end
+    ParStr := StrBuf(index);       //read ID to get index point to RepHead end
     RepHead := copy(Buf,1,index-1);
     RepHead[12] := #0;             //Ready made reply header with #0 command (lobyte of uint32)
     index := tmpindex;             //return pointer back
@@ -2159,7 +2165,7 @@ begin
 
 
     0 : begin //Heartbeat
-          ParStr := StFBuf(index);
+          ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('HeartBeat Id:', ParStr);
 
           if lblCall.Font.Color = clRed then
@@ -2181,10 +2187,10 @@ begin
 
     1 : begin //Status
           new := false;
-          ParStr := StFBuf(index);
+          ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Status Id:', ParStr);
           //----------------------------------------------------
-          mhz := IntToStr(DUiFBuf(index));
+          mhz := IntToStr(ui64Buf(index));
           case cqrini.ReadInteger('wsjt','freq',0) of
             0 : begin
                   if not frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
@@ -2208,7 +2214,7 @@ begin
           end;
           if dmData.DebugLevel>=1 then Writeln('Band :', WsjtxBand);
           //----------------------------------------------------
-          ParStr := StFBuf(index);
+          ParStr := StrBuf(index);
           if ParStr<>WsjtxMode then
           begin
             new :=true;
@@ -2216,10 +2222,10 @@ begin
           end;
           if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode);
            //----------------------------------------------------
-          call := trim(StFBuf(index)); //to be sure...
+          call := trim(StrBuf(index)); //to be sure...
           if dmData.DebugLevel>=1 then Writeln('Call :', call);
          //----------------------------------------------------
-          ParStr := StFBuf(index);    //report
+          ParStr := StrBuf(index);    //report
           if dmData.DebugLevel>=1 then Writeln('Report: ',ParStr);
           //----------------------------------------------------
           case cqrini.ReadInteger('wsjt','mode',1) of
@@ -2227,7 +2233,7 @@ begin
                   if not frmTRXControl.GetModeFreqNewQSO(TXmode,mhz) then
                     TXmode :='';
                 end;
-            1 : TXmode := trim(StFBuf(index));
+            1 : TXmode := trim(StrBuf(index));
             2 : TXmode := cqrini.ReadString('wsjt','defmode','JT65')
           end;
           if dmData.DebugLevel>=1 then Writeln('TXmode: ',Txmode);
@@ -2237,6 +2243,30 @@ begin
           //----------------------------------------------------
           TXOn := BoolBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Transmitting: ',TXOn);
+          //----------------------------------------------------
+          ParBool:= BoolBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('Decoding: ', ParBool);
+          Parnum := int32Buf(index);
+          if dmData.DebugLevel>=1 then Writeln('Rx DF: ',Parnum);
+          Parnum := int32Buf(index);
+          if dmData.DebugLevel>=1 then Writeln('Tx DF: ',Parnum);
+          Parstr := StrBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('DE call: ',Parstr);
+          Parstr := StrBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('DE grid: ',Parstr);
+          Parstr := StrBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('DX grid: ',Parstr);
+          ParBool:= BoolBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('Tx Watchdog: ', ParBool);
+          Parstr := StrBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('Sub-mode: ',Parstr);
+          ParBool:= BoolBuf(index);
+          if dmData.DebugLevel>=1 then Writeln('Fast mode: ', ParBool);
+          ContestNr := ui8Buf(index);
+          if dmData.DebugLevel>=1 then Writeln('Contest nr: ', ContestNr);
+
+
+
           //----------------------------------------------------
           if TXEna and TXOn then
           begin
@@ -2280,7 +2310,7 @@ begin
 
 
     2 : begin //Decode
-          ParStr := StFBuf(index);
+          ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Decode Id:', ParStr);
           Repbuf := copy(Buf,RepStart,index-RepStart);  //Reply str head part
           new:= BoolBuf(index);
@@ -2293,7 +2323,7 @@ begin
            begin
             if dmData.DebugLevel>=1 then Writeln('New decode:') ;
          //----------------------------------------------------
-          ParNum := UiFBuf(index);
+          ParNum := ui32Buf(index);
           Min := ParNum div 60000;  //minutes from 00:00    UTC
           Sec := (ParNum - Min * 60000 ) div 1000;
           Hour := Min div 60;
@@ -2313,19 +2343,19 @@ begin
             TimeLine := TimeLine + intToStr(Sec);
           if dmData.DebugLevel>=1 then Writeln(TimeLine);
           //----------------------------------------------------
-          Snr :=  IFBuf(index);
+          Snr :=  int32Buf(index);
           if dmData.DebugLevel>=1 then Writeln('snr:',ParNum );
           //----------------------------------------------------
-          ParDou := DouFBuf(index);
+          ParDou := DoubleBuf(index);
           if dmData.DebugLevel>=1 then Writeln('delta time:',ParDou);
           //----------------------------------------------------
-          Dfreq :=  UiFBuf(index);
+          Dfreq :=  ui32Buf(index);
           if dmData.DebugLevel>=1 then Writeln('DeltaFreq:', ParNum);
           //----------------------------------------------------
-          mode := StFBuf(index);    //mode as letter: # @ & etc...
+          mode := StrBuf(index);    //mode as letter: # @ & etc...
           if dmData.DebugLevel>=1 then Writeln(mode);
           //----------------------------------------------------
-          ParStr := trim(StFBuf(index));    //message          //MSK144 CQ has one space before CQ, need trim
+          ParStr := trim(StrBuf(index));    //message          //MSK144 CQ has one space before CQ, need trim
           if dmData.DebugLevel>=1 then Writeln(ParStr);
           //----------------------------------------------------
           Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
@@ -2352,18 +2382,17 @@ begin
        end; //Decode
 
     3 : begin //Clear
-          ParStr := StFBuf(index);
+          ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Clear Id:', ParStr);
           if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
            Begin
-             //frmMonWsjtx.WsjtxMemo.lines.Clear;
              frmMonWsjtx.clearSgMonitor;
              frmMonWsjtx.edtFollow.Text := '';
            end;
         end; //Clear
 
     5 : begin  //qso logged
-          ParStr := StFBuf(index);
+          ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Qso Logging Id:', ParStr);
           if dmData.DebugLevel>=1 then Writeln('edtCall before started logging #5:',edtCall.Text );
           //----------------------------------------------------
@@ -2386,11 +2415,11 @@ begin
           //edtDate.Text:=sDate;
 
           //----------------------------------------------------
-           if TryJulianDateToDateTime(DiFBuf(index),DTim)  then  //date (not used in cqrlog)
+           if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date (not used in cqrlog)
              if dmData.DebugLevel>=1 then Writeln('End Date :',FormatDateTime('YYYY-MM-DD',DTim));
            // we do not use end date:
           //-----------------------------------------TIME-----------
-           ParNum := UiFBuf(index);    //set qso end time
+           ParNum := ui32Buf(index);    //set qso end time
            Min  := ParNum div 60000;  //minutes from 00:00    UTC
            Hour := Min div 60;
            Min  := Min - Hour * 60;
@@ -2406,16 +2435,16 @@ begin
            if dmData.DebugLevel>=1 then Writeln('End Time: ',TimeLine);
            edtEndTime.Text := TimeLine;
            //----------------------------------------------------
-           ParNum := BFBuf(index);  //timespec local/utc   (not used in cqrlog)
+           ParNum := ui8Buf(index);  //timespec local/utc   (not used in cqrlog)
            if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
            //----------------------------------------------------
            if ParNum = 2 then  // time offset  (not used in cqrlog)
            begin
-             ParNum := IFBuf(index);
-             if dmData.DebugLevel>=1 then Writeln('offset :', IFBuf(index))
+             ParNum := int32Buf(index);
+             if dmData.DebugLevel>=1 then Writeln('offset :', int32Buf(index))
            end;
           //--------------------------------------------CALL--------
-          call:= trim(StFBuf(index)); //to be sure...
+          call:= trim(StrBuf(index)); //to be sure...
           if dmData.DebugLevel>=1 then Writeln('Call decoded #5:', call,'  edtCall:',edtCall.Text );
           if  edtCall.Text <> call then  //call (and web info) maybe there already ok from status packet
                            Begin
@@ -2425,14 +2454,14 @@ begin
                              sleep(1000); // give time for web
                            end;
           //---------------------------------------------LOCATOR-------
-          loc:= trim(StFBuf(index));
+          loc:= trim(StrBuf(index));
           if dmData.DebugLevel>=1 then Writeln('Grid :', loc);
           if dmUtils.IsLocOK(loc) then
               if pos(loc,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
                              edtGrid.Text := loc; //replace qrz loc, otherwise keep it
 
           //----------------------------------------------------
-          mhz := IntToStr(DUiFBuf(index));   // in Hz here from wsjtx
+          mhz := IntToStr(ui64Buf(index));   // in Hz here from wsjtx
           case cqrini.ReadInteger('wsjt','freq',0) of
             0 : begin
                   if  frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
@@ -2464,30 +2493,30 @@ begin
                     cmbMode.Text := mode
                 end;
             1 : begin
-                  mode:= trim(StFBuf(index));
+                  mode:= trim(StrBuf(index));
                   if dmData.DebugLevel>=1 then Writeln('Mode :', mode);
                   cmbMode.Text := mode
                 end;
             2 : cmbMode.Text := cqrini.ReadString('wsjt','defmode','JT65')
            end;
            //----------------------------------------------------
-           rstS:= trim(StFBuf(index));
+           rstS:= trim(StrBuf(index));
            if dmData.DebugLevel>=1 then Writeln('RSTs :', rstS);
            edtHisRST.Text := rstS;
            //----------------------------------------------------
-           rstR:= trim(StFBuf(index));
+           rstR:= trim(StrBuf(index));
            if dmData.DebugLevel>=1 then Writeln('RSTr :', rstR);
            edtMyRST.Text := rstR;
            //----------------------------------------------------
-           pwr:= trim(StFBuf(index));
+           pwr:= trim(StrBuf(index));
            if dmData.DebugLevel>=1 then Writeln('Pwr :', pwr);
            edtPWR.Text := pwr;
            //----------------------------------------------------
-           note:= trim(StFBuf(index));
+           note:= trim(StrBuf(index));
            if dmData.DebugLevel>=1 then Writeln('Comments :', note);
            edtRemQSO.Text := note;
            //--------------------------------------------------
-           sname:= trim(StFBuf(index));
+           sname:= trim(StrBuf(index));
            if dmData.DebugLevel>=1 then Writeln('Name :', sname,'  edtName :',edtName.Text);
            if sname <>'' then  //if user gives name edtName from qrz.com get replaced
             Begin
@@ -2496,13 +2525,13 @@ begin
             end;
            if dmData.DebugLevel>=1 then Writeln('edtName before pressing save:',edtName.Text );
           //----------------------------------------------------
-           if TryJulianDateToDateTime(DiFBuf(index),DTim)  then  //date (not used in cqrlog)
+           if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date (not used in cqrlog)
            //start date used
            dmUtils.DateInRightFormat(DTim,Mask,sDate);
            edtDate.Text:=sDate;
            if dmData.DebugLevel>=1 then Writeln('Start Date :',sDate);
           //-----------------------------------------TIME-----------
-           ParNum := UiFBuf(index);    //set qso start time
+           ParNum := ui32Buf(index);    //set qso start time
            Min  := ParNum div 60000;  //minutes from 00:00    UTC
            Hour := Min div 60;
            Min  := Min - Hour * 60;
@@ -2517,8 +2546,20 @@ begin
              TimeLine := TimeLine + intToStr(Min);
            if dmData.DebugLevel>=1 then Writeln('Start Time: ',TimeLine);
            edtStartTime.Text := TimeLine;
+            //----------------------------------------------------
+           ParNum := ui8Buf(index);  //timespec local/utc   (not used in cqrlog)
+           if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
            //----------------------------------------------------
-
+           OpCall := trim(StrBuf(index));  //operator callsign (in contest, club etc.)
+           ExchR :=  trim(StrBuf(index));  //fake, this is actually "My call". Not used
+           ExchR :=  trim(StrBuf(index));  //fake, this is actually "My grid". Not used
+           ExchS :=  trim(StrBuf(index));  //contest exchange sent. report + others
+           ExchR :=  trim(StrBuf(index));  //contest exchange received. report + others
+           //----------------------------------------------------
+           // until we get proper database fields contest name and exchange info is added
+           // as "comment to qso" to exist somewhere in logged qso.
+           if ContestNr > 0 then
+              edtRemQSO.Text := ContestName[ContestNr]+'=S:'+ExchS+'/R:'+ExchR+' '+edtRemQSO.Text;
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
@@ -2531,25 +2572,36 @@ begin
          end; //QSO logged in
 
      6 : begin //Close
-           ParStr := StFBuf(index);
+           ParStr := StrBuf(index);
            if dmData.DebugLevel>=1 then Writeln('Close Id:', ParStr);
            //wsjtx closed maybe need to disable remote mode  ?
            WsjtxDecodeRunning :=false;
            DisableRemoteMode;
            Exit;
-         end //Close
+         end; //Close
+
+     10 : Begin   //WSPRDecode. Not implemented
+            if dmData.DebugLevel>=1 then Writeln(' WSPRDecode. Not implemented');
+          end;    //WSPRDecode
+
+     12 : Begin   //Logged ADIF. Not implemented
+            if dmData.DebugLevel>=1 then Writeln(' Logged ADIF. Not implemented');
+          end;    //Logged ADIF
+
     end; //case
      if mnuRemoteModeWsjt.Checked then         // must do this check. Otherwise at decode 6 ://Close  calling DisableRemoteMode
                    tmrWsjtx.Enabled  := True;  // causes exception if wsjt-x is closed but cqrlog still running.
                                                // Now end of decode and wsjt-x still running: Allow timer run again.
-   end;  //if WsjtxSock.lasterror=0 then
-  end;  // while datagrams in buffer
+     if dmData.DebugLevel>=1 then Writeln('-----------------------decode end-----------------------------------');
+     end;  //if WsjtxSock.lasterror=0 then
+   end;  // while datagrams in buffer
   end; //waiting data
   WsjtxDecodeRunning := false;
   tmrWsjtx.Enabled:=true;
+
 end;
 {
-  The latest message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
+  The latest UDP message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
   https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
@@ -2572,7 +2624,8 @@ begin
   old_sat    := '';
   old_rxfreq := '';
   WhatUpNext := upHamQTH;
-  UploadAll  := False
+  UploadAll  := False;
+  was_call   := '';
 end;
 
 procedure TfrmNewQSO.btnSaveClick(Sender: TObject);
@@ -2797,6 +2850,7 @@ begin
     UnsetEditLabel;
   dmData.qQSOBefore.Close;
   fEditQSO := False;
+  was_call := edtCall.Text;
   edtCall.Text := ''; //calls Clear.All
   old_ccall := '';
   old_cfreq := '';
