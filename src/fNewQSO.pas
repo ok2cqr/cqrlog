@@ -2373,7 +2373,7 @@ begin
                    else  //if followed call
                    Begin
                       if dmData.DebugLevel>=1 then Writeln('Other Decode');
-                      frmMonWsjtx.AddOtherMessage(Timeline+' '+intToStr(Dfreq)+' '+ParStr,Repbuf,Snr);
+                      frmMonWsjtx.AddOtherMessage(Timeline,ParStr,Repbuf,DFreq,Snr);
                    end;
              end;
 

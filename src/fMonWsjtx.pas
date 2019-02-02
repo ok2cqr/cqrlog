@@ -118,7 +118,7 @@ type
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddFollowedMessage(Message, Reply: string;snr:integer);
-    procedure AddOtherMessage(Message, Reply: string;Snr:integer);
+    procedure AddOtherMessage(Time,Message, Reply: string;Df,Sr:integer);
     procedure NewBandMode(Band, Mode: string);
     procedure SendFreeText(MyText: string);
     procedure ColorBack(Myitem:string;Mycolor:Tcolor;bkg:Boolean=false);
@@ -260,14 +260,14 @@ begin
 end;
 function TfrmMonWsjtx.LineFilter(L: string):string;
 Begin
-   if LocalDbg then Writeln('D Message is:', L);
+   if LocalDbg then Writeln('F incoming Message is:', L);
   //remove < > from Message here (wsjtx v2.0)
   L := StringReplace(L,'<','',[rfReplaceAll]);
   L := StringReplace(L,'>','',[rfReplaceAll]);
   //cut message if there is a decode note like 'a2'
   //175200 ~ OH1KH DL2BQV JO73                     a2'
   if pos('    ',L) > 11 then L := copy(L,1,pos('    ',L));
-  if LocalDbg then Writeln('D Message after filter is:', L);
+  if LocalDbg then Writeln('F Message after filter is:', L);
   LineFilter := L;
 end;
 
@@ -1052,7 +1052,7 @@ begin
     BinToHex(Pointer(S), Pointer(Result), Length(S));
 end;
 
-procedure TfrmMonWsjtx.AddOtherMessage(Message, Reply: string;Snr:integer);
+procedure TfrmMonWsjtx.AddOtherMessage(Time,Message, Reply: string;Df,Sr:integer);
 var
   msgList: TStringList;
   index: integer;
@@ -1083,6 +1083,9 @@ begin
   begin
     CqPeriodTimerStart;
     if LocalDbg then Writeln('Other line:', Message);
+    msgTime := Time;
+    Dfreq := Df;
+    Snr := Sr;
     msgCall := '';
     msgLocator := '';
     isMyCall := False;
@@ -1097,13 +1100,10 @@ begin
     while index < msgList.Count do
     begin
       if index=0 then
-        msgTime := msgList[index];
-      //index=1 -> delta freq
-      if index=2 then
         isMyCall := pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0;
-      if index=3 then
+      if index=1 then
         msgCall := msgList[index];
-      if index=4 then
+      if index=2 then
         msgLocator := msgList[index]; //avoid out of index in certain compound call lines
       inc(index);
     end;
@@ -1152,8 +1152,10 @@ begin
       AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
       if LocalDbg then
-        Writeln('all written in other Next alerts');
-
+        Begin
+         Writeln('All written in Addother. Next alerts');
+         Writeln;
+        end;
       TryAlerts;
     end;
   end;
@@ -1412,32 +1414,34 @@ var
 begin
   HasNum := False;
   HasChr := False;
-  HasSpecialSymbol := False;
-  LooksLikeALocator := False;
-  EndsLtr := (Call[length(Call)] in ['A'..'Z']);
-  Call:=Upcase(Call);
-  if (Call.length > 2) then  // its not empty and >= 3 letters
-  begin
-    for i:= 1 to length(Call) do
+  if Call <>'' then   //returns false if empty call
+  Begin
+    HasSpecialSymbol := False;
+    LooksLikeALocator := False;
+    EndsLtr := (Call[length(Call)] in ['A'..'Z']);
+    Call:=Upcase(Call);
+    if (Call.length > 2) then  // its not empty and >= 3 letters
     begin
-      if (Call[i] in ['0'..'9']) then
-        HasNum := True;
-      if (Call[i] in ['A'..'Z']) then
-        HasChr := True;
-      if Call[i] in ['+','.'] then
-        HasSpecialSymbol := True;
+      for i:= 1 to length(Call) do
+      begin
+        if (Call[i] in ['0'..'9']) then
+          HasNum := True;
+        if (Call[i] in ['A'..'Z']) then
+          HasChr := True;
+        if Call[i] in ['+','.'] then
+          HasSpecialSymbol := True;
+      end;
+      // check if it is a small locator with 4 digits format AA00
+      // RR73 is sort out as locator, too
+      // leaving out the proof of Call[2] makes it hit also to reports R+00, R-00
+      If (Call[1] in ['A'..'R']) and (Call[3] in ['0'..'9'])
+        and (Call[4] in ['0'..'9']) and (Call.length = 4) then
+        LooksLikeALocator:=True;
     end;
-    // check if it is a small locator with 4 digits format AA00
-    // RR73 is sort out as locator, too
-    // leaving out the proof of Call[2] makes it hit also to reports R+00, R-00
-    If (Call[1] in ['A'..'R']) and (Call[3] in ['0'..'9'])
-      and (Call[4] in ['0'..'9']) and (Call.length = 4) then
-      LooksLikeALocator:=True;
+
+    isItACall := HasNum and HasChr and not HasSpecialSymbol
+      and not LooksLikeALocator and  EndsLtr;
   end;
-
-  isItACall := HasNum and HasChr and not HasSpecialSymbol
-    and not LooksLikeALocator and  EndsLtr;
-
 end;
 
 procedure TfrmMonWsjtx.TryCallAlert(S: string);
@@ -1537,6 +1541,11 @@ begin
      if IsItACall(msgCall) then
          Begin
             PrintDecodedMessage;
+            if LocalDbg then
+              Begin
+               Writeln('All written in AddMy. Next alerts');
+               Writeln;
+              end;
             TryAlerts;
          end;
 end;
@@ -1553,7 +1562,7 @@ var
 
 begin
 
-  if LocalDbg then Writeln('Satrt AddCQCallMessage');
+  if LocalDbg then Writeln('Start AddCQCallMessage');
    isMyCall:= false;
    Dfreq:=Df;
    Snr :=Sr;
@@ -1655,6 +1664,11 @@ begin
       LastWsjtLineTime := msgTime;
       RepBuf := Reply;
       PrintDecodedMessage;
+      if LocalDbg then
+        Begin
+         Writeln('All written in AddCq. Next alerts');
+         Writeln;
+        end;
       TryAlerts;
 
   end;  //continued
