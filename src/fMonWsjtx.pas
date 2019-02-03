@@ -1415,12 +1415,12 @@ begin
   EndsLtr := False;
   if Call <>'' then   //returns false if empty call
   Begin
+    Call:=Upcase(Call);
     HasSpecialSymbol := False;
     LooksLikeALocator := False;
     If (Call[length(Call)] in ['A'..'Z']) then EndsLtr:= True;
-    // number at end is ok when / is in call. example R4UAL/6
-    If (Call[length(Call)] in ['0'..'9']) AND (pos('/',CALL)> 0) then EndsLtr:= True;
-    Call:=Upcase(Call);
+    // number at end is ok when / is in suffix side of call. example R4UAL/6
+    If (Call[length(Call)] in ['0'..'9']) AND (pos('/',Call)> (length(Call) div 2)) then EndsLtr:= True;
     if (Call.length > 2) then  // its not empty and >= 3 letters
     begin
       for i:= 1 to length(Call) do
