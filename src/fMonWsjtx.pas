@@ -178,13 +178,14 @@ var
   msgCall: string;
   msgLocator: string;
   msgTime: string;
+  msgMode : string;  //mode in wsjt-x 1chr form
   msgRes :string;
   CqDir : string;
   mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
   adif : word;
   Dfreq,Snr:integer;
   isMyCall: boolean;
-  CurMode: string = '';
+  CurMode: string = '';   //mode in human readable format
   CurBand: string = '';
   LockMap: boolean;
   LockFlw: boolean;
@@ -963,6 +964,7 @@ begin
   //DL7OAP
   setMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
+  chknoHistoryChange(nil); // sure to get historu settings right
 
   //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
@@ -1531,6 +1533,7 @@ begin
      Snr :=Sr;
      RepBuf := Reply;
      msgTime:=Time;
+     msgMode := mode;
      CurMode:=getCurMode(mode);
      Message:=LineFilter(Message);
      msgCall := ExtractWord(2,Message,[' ']);
@@ -1555,7 +1558,6 @@ procedure TfrmMonWsjtx.AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string
 //procedure TfrmMonWsjtx.AddDecodedMessage(Message, band, Reply: string; Dfreq,Snr: integer);
 var
   i, index: integer;
-  msgMode : string;
   msgList : TStringList;
 
   isCallCqDir,            //CQ caller calling directed call
@@ -1569,6 +1571,7 @@ begin
    Snr :=Sr;
    RepBuf := Reply;
    msgTime:=Time;
+   msgMode := mode;
    CurMode:=getCurMode(mode);
    Message:=LineFilter(Message);
 
@@ -1700,7 +1703,7 @@ begin
      else
       Begin
        //time + mode;
-       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, CurMode]);
+       sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgTime, msgMode]);
       end;
     end;
 
