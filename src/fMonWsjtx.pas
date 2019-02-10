@@ -1409,12 +1409,13 @@ function TfrmMonWsjtx.isItACall(Call: string): boolean;
 // special case has '/' and will be passthrough
 // TODO - strings like 10W 20W 15M 80M are identified as call. is this possible?
 var
-  HasNum, HasChr, EndsLtr, HasSpecialSymbol, LooksLikeALocator: boolean;
+  HasNum, HasChr, EndsLtr, HasSpecialSymbol, LooksLikeALocator, HasCorrectNumAtBegin: boolean;
   i: integer;
 begin
   HasNum := False;
   HasChr := False;
   EndsLtr := False;
+  HasCorrectNumAtBegin := True;
   if Call <>'' then   //returns false if empty call
   Begin
     Call:=Upcase(Call);
@@ -1440,10 +1441,15 @@ begin
       If (Call[1] in ['A'..'R']) and (Call[3] in ['0'..'9'])
         and (Call[4] in ['0'..'9']) and (Call.length = 4) then
         LooksLikeALocator:=True;
+      // check numbers at beginning
+      If (length(Call) = 3) and (Call[1] in ['0'..'9']) then
+        HasCorrectNumAtBegin := False;
+      If (length(Call) > 3) and (Call[1] in ['0'..'9']) and (Call[2] in ['0'..'9']) then
+        HasCorrectNumAtBegin := False;
     end;
 
     isItACall := HasNum and HasChr and not HasSpecialSymbol
-      and not LooksLikeALocator and  EndsLtr;
+      and not LooksLikeALocator and EndsLtr and HasCorrectNumAtBegin;
   end;
 end;
 
