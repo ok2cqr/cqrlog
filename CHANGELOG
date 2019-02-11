@@ -4,13 +4,13 @@ Legend:
   - bugfix
 --------------------
 2.3.1
-  # update sat_name.tab with newest lotw satellite list (Andy, DL7AOP)
+  # update sat_name.tab with newest lotw satellite list (Andy, DL7OAP)
   # some layout changes and code refactoring
-  + feature to select rectangular geometry in the xplanet preferences (Andy, DL7AOP)
+  + feature to select rectangular geometry in the xplanet preferences (Andy, DL7OAP)
   + ADIF import: implement filter by date range (gl-bars)
   + Initial Skimmer Support (Olli, DH2WQ)
   - fixed bug with CTRL+END and/or CTRL+HOME
-  - fixed encoding passwords for HamQTH - (Andy, DL7AOP)
+  - fixed encoding passwords for HamQTH - (Andy, DL7OAP)
 
 2.3.0 (2018-06-17)
   # Auto backup: can also prevent accidental closing of cqrlog. Text informations added (Saku, OH1KH)
