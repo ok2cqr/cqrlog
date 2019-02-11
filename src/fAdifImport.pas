@@ -25,7 +25,7 @@ uses
 type
   TDateString = string[10]; //Date in yyyy-mm-dd format
 
-type Tnejakyzaznam=record
+type TnewQSOEntry=record   //represents a new qso entry in the log
       st:longint; // pocet pridanych polozek;
       BAND:string[10];
       CALL:string[30];
@@ -89,6 +89,7 @@ type
   TfrmAdifImport = class(TForm)
     btnImport: TButton;
     btnClose: TButton;
+    chkNoCheckOnDuplicates: TCheckBox;
     chkFilterDateRange: TCheckBox;
     chkLotOfQSO: TCheckBox;
     cmbProfiles: TComboBox;
@@ -134,11 +135,11 @@ type
     function ValidateFilter: boolean;
     procedure WriteWrongADIF(lines : Array of String; error : String);
 
-    function pochash(aaa:String):longint;
-    function vratzaznam(var vstup,prik,data:string):boolean;
-    function zpracuj(h:longint;var data:string;var D:Tnejakyzaznam):boolean;
-    procedure smazzaznam(var d:Tnejakyzaznam);
-    function novyzaznam(var d:Tnejakyzaznam; var err : String) : Boolean;
+    function generateAdifTagHash(aaa:String):longint;
+    function getNextAdifTag(var vstup,prik,data:string):boolean;
+    function fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry):boolean;
+    procedure initializeTypeVariable(var d:TnewQSOEntry);
+    function saveNewEntryFromADIFinDatabase(var d:TnewQSOEntry; var err : String) : Boolean;
 
     { private declarations }
   public
@@ -157,7 +158,7 @@ resourcestring
   INVALID_DATE_RANGE_ENTERED = 'Invalid date range is entered';
 
 
-function TfrmAdifImport.pochash(aaa:String):longint;
+function TfrmAdifImport.generateAdifTagHash(aaa:String):longint;
 var z,x:longint;
 begin
   x:=0;
@@ -167,17 +168,21 @@ begin
     x:=x xor (x shr 16);
     x:=x and $FFFF;
   end;
-  pochash:=x;
+  generateAdifTagHash:=x;
 end;
 
-function TfrmAdifImport.vratzaznam(var vstup,prik,data:string):boolean;
+function TfrmAdifImport.getNextAdifTag(var vstup,prik,data:string):boolean;
+// vstup - remaining text have to be searched for next tag
+// prik -
+// data - deliveres back the extracted ADIF information of the tag
+
 var z,x:longint;
     aaa:string;
     i : Integer;
     slen : String = '';
     DataLen : Word = 0;
   begin
-    vratzaznam:=false;
+    getNextAdifTag:=false;
     z:=pos('<',vstup);
     if z=0 then exit;// neni dalsi zaznam - mizim.
 
@@ -186,6 +191,7 @@ var z,x:longint;
     x:=pos('>',aaa);
     if (x=0) then exit; // zaznam nebyl ukoncen ... mizim
 
+    //detect length of ADIF Data
     for i:=z+1 to x do
     begin
       if (aaa[i] in ['0'..'9']) then
@@ -210,16 +216,16 @@ var z,x:longint;
       vstup:=''
     end
     else begin
-        data:=copy(aaa,1,DataLen);
-        vstup:=copy(aaa,z,length(aaa))
+      data:=copy(aaa,1,DataLen);
+      vstup:=copy(aaa,z,length(aaa))
     end;
-    vratzaznam:=true
+    getNextAdifTag:=true
   end;
 
-function TfrmAdifImport.zpracuj(h:longint;var data:string;var D:Tnejakyzaznam):boolean;
+function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry):boolean;
   begin
-    if (h=h_EOH) or (h=h_EOR) then begin zpracuj:=false;exit;end;
-    zpracuj:=true;
+    if (h=h_EOH) or (h=h_EOR) then begin fillTypeVariableWithTagData:=false;exit;end;
+    fillTypeVariableWithTagData:=true;
     data := trim(data);
     case h of
       h_BAND:d.BAND:=data;
@@ -274,18 +280,19 @@ function TfrmAdifImport.zpracuj(h:longint;var data:string;var D:Tnejakyzaznam):b
       h_SAT_NAME : d.SAT_NAME := data;
       h_FREQ_RX : d.FREQ_RX := data
       else
-        begin{ writeln('Neznam...>',pom,'<');zpracuj:=false;exit;}end;
+        begin{ writeln('Neznam...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}end;
     end;//case
     d.st:=d.st+1;
   end;
 
 
-procedure TfrmAdifImport.smazzaznam(var d:Tnejakyzaznam);
-  begin
-    fillchar(d,sizeof(d),0);
-  end;
+procedure TfrmAdifImport.initializeTypeVariable(var d:TnewQSOEntry);
+// fills the type with 0 values
+begin
+  fillchar(d,sizeof(d),0);
+end;
 
-function TfrmAdifImport.novyzaznam(var d:Tnejakyzaznam; var err : String) : Boolean;
+function TfrmAdifImport.saveNewEntryFromADIFinDatabase(var d:TnewQSOEntry; var err : String) : Boolean;
 var
   Lines   : Array of String;
   pAr : TExplodeArray;
@@ -294,7 +301,6 @@ var
   pQTH : String;
   pEq  : String;
   pNote : String;
-  First : Boolean = False;
   freq  : String = '';
   Band  : String;
   dxcc,id_waz,id_itu : String;
@@ -314,6 +320,7 @@ begin
   Result := True;
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
   begin
+    //filling and optimize data in variable d
     if not dmUtils.IsLocOK(d.MY_GRIDSQUARE) then
       d.MY_GRIDSQUARE := FMyLoc;
     d.CALL := UpperCase(d.CALL);
@@ -390,7 +397,7 @@ begin
       Application.ProcessMessages;
       Result := False;
       SetLength(Lines,0);
-      smazzaznam(d);
+      initializeTypeVariable(d);
       exit
     end;
 
@@ -463,9 +470,10 @@ begin
       else
         profile := '0'
     end;
-    if First then
+
+    // begin proof if qso allready exist in log
+    if Not chkNoCheckOnDuplicates.Checked then
     begin
-      First := False;
       dmData.Q.Close;
       dmData.Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main WHERE qsodate = ' + QuotedStr(d.QSO_DATE) +
                            ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL);
@@ -479,7 +487,7 @@ begin
       dmData.Q.Open;
       if dmData.Q.Fields[0].AsInteger > 0 then
       begin
-        if Application.MessageBox('It looks like this QSOs are in the log.'#13'Do you really want to inport it again?',
+        if Application.MessageBox('It looks like this QSOs are in the log.'#13'Do you really want to import it again?',
                                   'Question',MB_ICONQUESTION + MB_YESNO) = idNo then
         begin
           btnImport.Enabled := True;
@@ -491,6 +499,7 @@ begin
       dmData.Q.Close();
       dmData.trQ.Rollback
     end;
+
     if Pos(',',d.FREQ) > 0 then
       d.FREQ[Pos(',',d.FREQ)] := '.';
     freq := FormatFloat('0.0000;;',StrToFloat(d.FREQ));
@@ -646,15 +655,15 @@ begin
       Application.ProcessMessages
     end
   end;
-  smazzaznam(d)
+  initializeTypeVariable(d)
 end;
 
 procedure TfrmAdifImport.btnImportClick(Sender: TObject);
 var
-  sou:textfile;
-  aaa,prik,data:String;
+  textFileIn:textfile;         //the ADIF file
+  oneTextRow,adifTag,data:String;
   h:longint;
-  D:Tnejakyzaznam;
+  D:TnewQSOEntry;
   err : Boolean = False;
   dt : TDateTime;
   hh,m,s,ms : Word;
@@ -671,9 +680,9 @@ begin
   if not ValidateFilter then
     exit;
   try try
-    system.assign(sou,lblFileName.Caption);
-    system.reset(sou);
-    smazzaznam(d);
+    system.assign(textFileIn,lblFileName.Caption);
+    system.reset(textFileIn);
+    initializeTypeVariable(d);
     if chkLotOfQSO.Checked then
     begin
       sb.Panels[0].Text := 'Deleting indexes ...';
@@ -686,23 +695,23 @@ begin
     sb.Panels[0].Text := 'Importing data ...';
     Application.ProcessMessages;
     Repaint;
-    while not eof(sou) do
+    while not eof(textFileIn) do
     begin
-      readln(sou,aaa);
-      if Pos('<EOH>',UpperCase(aaa)) > 0 then
+      readln(textFileIn,oneTextRow);
+      if Pos('<EOH>',UpperCase(oneTextRow)) > 0 then
         tmp := ''
       else
-        tmp := tmp + aaa;
-      while vratzaznam(aaa,prik,data) do
+        tmp := tmp + oneTextRow;
+      while getNextAdifTag(oneTextRow,adifTag,data) do
       begin
-        h:=pochash(prik);
+        h:=generateAdifTagHash(adifTag);
         if (h=h_EOH) or (h=h_EOR) then
         begin
-          if not novyzaznam(d,ErrText) then
+          if not saveNewEntryFromADIFinDatabase(d,ErrText) then
             WriteWrongADIF(tmp,ErrText);
           tmp:=''
         end;
-        zpracuj(h,data,d)
+        fillTypeVariableWithTagData(h,data,d)
       end;
     end
   except
@@ -715,7 +724,7 @@ begin
     end
   end
   finally
-    closeFile(sou);
+    closeFile(textFileIn);
     if not err then
       tr.Commit;
     dt := dt - now;
@@ -734,7 +743,7 @@ begin
     end;
     sb.Panels[0].Text := 'Done ...';
     lblComplete.Visible := True
-  end
+  end;
 end;
 
 function TfrmAdifImport.ValidateFilter: boolean;
