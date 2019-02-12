@@ -1400,7 +1400,6 @@ Begin
          else AddColorStr(L2, wkdnever,5,sgMonitor.rowCount-1);
        end;
 end;
-
 function TfrmMonWsjtx.isItACall(Call: string): boolean;
 
 var
@@ -1445,11 +1444,33 @@ begin
        ) then exit(false);
 
   //call must end with letter unless it has '/' at the suffix side of compound call
-  // OH1KH/OH0, OH1KH/0 passes, OH0/OH1KH1 fails.
-  // Special case KH6/K1A or K1A/KH6 is a problem !!
   If (
          (Call[length(Call)] in ['0'..'9']) and
-         ( pos('/',Call)<5)
+          (
+            (
+              (pos('/',Call)<5) and
+              (length(Call)>7)
+             )
+             or
+            (
+              (pos('/',Call)<4) and
+              (length(Call)<8)
+             )
+           )
+      ) then exit(false);
+
+  //special case kh6/k1a variations k1a/kh6 kh6/kh6  k1a/k1a
+  if (
+        (
+         (length(Call)=7) and
+         (pos('/',Call)=4)
+        )
+      and
+       not
+        (
+          (isItACall(ExtractWord(1,Call,['/']))) xor
+          (isItACall(ExtractWord(2,Call,['/'])))
+        )
       ) then exit(false);
 
   // Call has letters and numbers and does not have special charcters
@@ -1464,7 +1485,6 @@ begin
   // if pased this far
   exit(true);
 end;
-
 procedure TfrmMonWsjtx.TryCallAlert(S: string);
 
 begin
