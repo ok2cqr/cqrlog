@@ -1402,55 +1402,67 @@ Begin
 end;
 
 function TfrmMonWsjtx.isItACall(Call: string): boolean;
-// must have number and letter and length >= 3
-// must not have + . ?
-// looks not like a 4 digit locator example AA00, RR73 or report R+00 or R-00
-// ends to letter
-// special case has '/' and will be passthrough
-// TODO - strings like 10W 20W 15M 80M are identified as call. is this possible?
+
 var
-  HasNum, HasChr, EndsLtr, HasSpecialSymbol, LooksLikeALocator, HasCorrectNumAtBegin: boolean;
-  i: integer;
+  i      : integer;
+  HasNum,
+  HasChr : boolean;
+
 begin
   HasNum := False;
   HasChr := False;
-  EndsLtr := False;
-  HasCorrectNumAtBegin := True;
-  if Call <>'' then   //returns false if empty call
-  Begin
-    Call:=Upcase(Call);
-    HasSpecialSymbol := False;
-    LooksLikeALocator := False;
-    If (Call[length(Call)] in ['A'..'Z']) then EndsLtr:= True;
-    // number at end is ok when / is in suffix side of call. example R4UAL/6
-    If (Call[length(Call)] in ['0'..'9']) AND (pos('/',Call)> (length(Call) div 2)) then EndsLtr:= True;
-    if (Call.length > 2) then  // its not empty and >= 3 letters
-    begin
-      for i:= 1 to length(Call) do
-      begin
-        if (Call[i] in ['0'..'9']) then
-          HasNum := True;
-        if (Call[i] in ['A'..'Z']) then
-          HasChr := True;
-        if Call[i] in ['+','.','?'] then
-          HasSpecialSymbol := True;
-      end;
-      // check if it is a small locator with 4 digits format AA00
-      // RR73 is sort out as locator, too
-      // leaving out the proof of Call[2] makes it hit also to reports R+00, R-00
-      If (Call[1] in ['A'..'R']) and (Call[3] in ['0'..'9'])
-        and (Call[4] in ['0'..'9']) and (Call.length = 4) then
-        LooksLikeALocator:=True;
-      // check numbers at beginning
-      If (length(Call) = 3) and (Call[1] in ['0'..'9']) then
-        HasCorrectNumAtBegin := False;
-      If (length(Call) > 3) and (Call[1] in ['0'..'9']) and (Call[2] in ['0'..'9']) then
-        HasCorrectNumAtBegin := False;
-    end;
 
-    isItACall := HasNum and HasChr and not HasSpecialSymbol
-      and not LooksLikeALocator and EndsLtr and HasCorrectNumAtBegin;
-  end;
+  // remove spaces, convert upcase. Just for sure (should not need that);
+  Call:=Upcase(trim(Call));
+
+  //returns false if empty call or shorter than 3
+  if (length(Call) < 3) then exit(false);
+
+  // check numbers at beginning
+  If (
+       (
+         (length(Call) = 3) and
+         (Call[1] in ['0'..'9'])
+       )
+       or
+       (
+         (length(Call) > 3) and
+         (Call[1] in ['0'..'9']) and
+         (Call[2] in ['0'..'9'])
+       )
+      ) then exit(false);
+
+  // check if it is a small locator with 4 digits format AA00, RR73 or report R+00, R-00
+    If (
+         (Call.length = 4) and
+         (Call[1] in ['A'..'R']) and
+          (
+           (Call[2] in ['A'..'R']) or
+           (Call[2] in ['+','-'])
+          ) and
+         (Call[3] in ['0'..'9']) and
+         (Call[4] in ['0'..'9'])
+       ) then exit(false);
+
+  //call must end with letter unless it has '/' at the suffix side of compound call
+  // OH1KH/OH0, OH1KH/0 passes, OH0/OH1KH1 fails.
+  // Special case KH6/K1A or K1A/KH6 is a problem !!
+  If (
+         (Call[length(Call)] in ['0'..'9']) and
+         ( pos('/',Call)<5)
+      ) then exit(false);
+
+  // Call has letters and numbers and does not have special charcters
+  for i:= 1 to length(Call) do
+      begin
+        if (Call[i] in ['0'..'9']) then HasNum := True;
+        if (Call[i] in ['A'..'Z']) then HasChr := True;
+        if Call[i] in ['+','.','?'] then exit(false);
+      end;
+   if not (HasNum and HasChr) then exit(false);
+
+  // if pased this far
+  exit(true);
 end;
 
 procedure TfrmMonWsjtx.TryCallAlert(S: string);
