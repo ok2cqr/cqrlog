@@ -717,6 +717,7 @@ begin
   begin
     tbFollow.Font.Color := clGreen;
     tbFollow.Font.Style := [fsBold];
+    cqrini.WriteString('MonWsjtx', 'FollowCall', edtFollowCall.Text);
   end
   else
   begin
