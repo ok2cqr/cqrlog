@@ -713,7 +713,7 @@ procedure TfrmMonWsjtx.tbFollowChange(Sender: TObject);
 begin
   if not LockFlw then
     cqrini.WriteBool('MonWsjtx', 'Follow', tbFollow.Checked);
-  if tbFollow.Checked then
+  if ( tbFollow.Checked and (edtFollowCall.Text <>'')) then
   begin
     tbFollow.Font.Color := clGreen;
     tbFollow.Font.Style := [fsBold];
