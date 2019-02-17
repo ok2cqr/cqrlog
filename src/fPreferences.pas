@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, inifiles, DB, process, Spin, ColorBox, lcltype,
-  uCWKeying, frExportPref, types, fileutil, LazFileUtils;
+  Calendar, EditBtn, uCWKeying, frExportPref, types, fileutil, LazFileUtils;
 
 type
 
@@ -119,6 +119,8 @@ type
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
+    cgLimit: TCheckGroup;
+    chkShowB4call: TCheckBox;
     chkRXFreq : TCheckBox;
     chkSatellite : TCheckBox;
     chkPropagation : TCheckBox;
@@ -477,6 +479,8 @@ type
     cmbDataBitsR1: TComboBox;
     cl10db : TColorBox;
     cmbModelRig1: TComboBox;
+    DateEditCall: TDateEdit;
+    DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
@@ -1002,6 +1006,8 @@ type
     procedure cmbSpeedR2Change(Sender : TObject);
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
+    procedure DateEditCallEditingDone(Sender: TObject);
+    procedure DateEditLocEditingDone(Sender: TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
     procedure edtR1RigCtldPortChange(Sender : TObject);
@@ -1098,6 +1104,7 @@ begin
   cqrini.WriteBool('NewQSO', 'SkipModeFreq', chkSkipModeFreq.Checked);
   cqrini.WriteBool('NewQSO', 'AutoSearch', chkAutoSearch.Checked);
   cqrini.WriteBool('NewQSO', 'ShowRecentQSOs', chkShowRecentQSOs.Checked);
+  cqrini.Writebool('NewQSO', 'ShowB4call', chkShowB4call.Checked);
   cqrini.WriteString('NewQSO', 'RecQSOsNum', edtRecetQSOs.Text);
   cqrini.WriteBool('NewQSO', 'IgnoreQRZ', chkIgnoreQRZQSL.Checked);
   cqrini.WriteBool('NewQSO', 'MvToRem', chkMvToRem.Checked);
@@ -1453,6 +1460,10 @@ begin
   cqrini.WriteString('wsjt', 'deffreq', edtWsjtDefaultFreq.Text);
   cqrini.WriteInteger('wsjt', 'mode', rgWsjtModeFrom.ItemIndex);
   cqrini.WriteString('wsjt', 'defmode', cmbWsjtDefaultMode.Text);
+  cqrini.WriteString('wsjt', 'wb4calldate', DateEditCall.Text);
+  cqrini.WriteString('wsjt', 'wb4locdate', DateEditLoc.Text);
+  cqrini.WriteBool('wsjt','wb4CCall', cgLimit.Checked[0]);
+  cqrini.WriteBool('wsjt','wb4CLoc', cgLimit.Checked[1]);
 
   if edtBackupPath.Text <> '' then
     if edtBackupPath.Text[Length(edtBackupPath.Text)] <> PathDelim then
@@ -1751,7 +1762,7 @@ begin
     lblqFont.Font.Name := dlgFont.Font.Name;
     lblqFont.Font.Size := fqSize;
     lblQSOList.Font.Name := dlgFont.Font.Name;
-    lblQSOList.Font.Size := fgSize;
+    lblQSOList.Font.Size := fqSize;
   end;
 end;
 
@@ -1764,7 +1775,7 @@ begin
     lblgFont.Font.Name := dlgFont.Font.Name;
     lblgFont.Font.Size := fgSize;
     lblStatistics.Font.Name := dlgFont.Font.Name;
-    lblStatistics.Font.Size := fqSize;
+    lblStatistics.Font.Size := fgSize;
   end;
 end;
 
@@ -2098,6 +2109,8 @@ begin
   dmMembership.CheckForMembershipUpdate
 end;
 
+
+
 procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
 begin
   edtClUserName.Enabled := chkClUpEnabled.Checked;
@@ -2303,6 +2316,16 @@ begin
   TRXChanged := True
 end;
 
+procedure TfrmPreferences.DateEditCallEditingDone(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmPreferences.DateEditLocEditingDone(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
 begin
   WinKeyerChanged := True
@@ -2410,6 +2433,7 @@ begin
   chkSkipModeFreq.Checked := cqrini.ReadBool('NewQSO', 'SkipModeFreq', True);
   chkAutoSearch.Checked := cqrini.ReadBool('NewQSO', 'AutoSearch', False);
   chkShowRecentQSOs.Checked := cqrini.ReadBool('NewQSO', 'ShowRecentQSOs', False);
+  chkShowB4call.Checked := cqrini.ReadBool('NewQSO', 'ShowB4call', False);
   edtRecetQSOs.Text := cqrini.ReadString('NewQSO', 'RecQSOsNum', '5');
   chkIgnoreQRZQSL.Checked := cqrini.ReadBool('NewQSO', 'IgnoreQRZ', False);
   chkMvToRem.Checked := cqrini.ReadBool('NewQSO', 'MvToRem', True);
@@ -2790,6 +2814,12 @@ begin
   edtWsjtDefaultFreq.Text  := cqrini.ReadString('wsjt', 'deffreq', '3.600');
   rgWsjtModeFrom.ItemIndex := cqrini.ReadInteger('wsjt', 'mode', 1);
   cmbWsjtDefaultMode.Text  := cqrini.ReadString('wsjt', 'defmode', 'JT65');
+  DateEditCall.Text := cqrini.ReadString('wsjt', 'wb4calldate', '1900-01-01'); //sure all qsos by default :-)
+  DateEditLoc.Text := cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01');
+  cgLimit.Checked[0] := cqrini.ReadBool('wsjt','wb4CCall', False);
+  cgLimit.Checked[1] := cqrini.ReadBool('wsjt','wb4CLoc', False);
+
+
 
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
