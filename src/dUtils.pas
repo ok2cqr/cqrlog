@@ -1833,7 +1833,8 @@ begin
     end;
     ////////////////////////////////////////////////////////
     //statistics
-    if (aForm.Components[i] is TStringGrid) then
+    if (aForm.Components[i] is TStringGrid)
+      and not ((aForm.Components[i] as TStringGrid).Name = 'sgMonitor') then
     begin
       (aForm.Components[i] as TStringGrid).Font.Name := fGrids;
       (aForm.Components[i] as TStringGrid).Font.Size := fgSize;
