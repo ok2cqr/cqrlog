@@ -2142,6 +2142,12 @@ begin
   begin
 
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
+    if index < 1 then
+             begin
+              if dmData.DebugLevel>=1 then Writeln(index,':--------Not wjst message!!------------');
+              lblCall.Caption:= 'Not wjst msg!';
+              break;
+             end;
     RepStart := index; //for possibly reply creation
 
     if dmData.DebugLevel>=1 then Writeln('-----------------------decode start---------------------------------');
