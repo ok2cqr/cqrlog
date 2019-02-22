@@ -117,7 +117,7 @@ type
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
-    procedure AddFollowedMessage(Message, Reply: string;snr:integer);
+    procedure AddFollowedMessage(Message, Reply: string;Df,Sr:integer);
     procedure AddOtherMessage(Time,Message, Reply: string;Df,Sr:integer);
     procedure NewBandMode(Band, Mode: string);
     procedure SendFreeText(MyText: string);
@@ -713,7 +713,7 @@ procedure TfrmMonWsjtx.tbFollowChange(Sender: TObject);
 begin
   if not LockFlw then
     cqrini.WriteBool('MonWsjtx', 'Follow', tbFollow.Checked);
-  if ( tbFollow.Checked and (edtFollowCall.Text <>'')) then
+  if  tbFollow.Checked  then
   begin
     tbFollow.Font.Color := clGreen;
     tbFollow.Font.Style := [fsBold];
@@ -879,6 +879,7 @@ procedure TfrmMonWsjtx.FormDropFiles(Sender: TObject;
   const FileNames: array of String);
 begin
   edtFollowCall.Clear;
+  tbFollow.SetFocus;
   tbFollow.Checked:=True;
 end;
 
@@ -1060,9 +1061,12 @@ var
   msgList: TStringList;
   index: integer;
 begin
+  Message := LineFilter(Message);
+
   //to stop transmitting if CQ answered,split called, stn answers to someone else (can be set with checkbox chkStopTx)
   //here check if DblClickCall is set then if it exist in message: stop tx and clear DblClickCall
   //DblClickCall is set at doubleclick of monitor line event
+
   if (( DblClickCall <> '' ) and chkStopTx.Checked ) then  //stop requested
    if (pos(DblClickCall,Message)> 0) then  //and call is call answered
    Begin
@@ -1078,121 +1082,115 @@ begin
   btFtxtName.Visible := ((frmNewQSO.RepHead <> '') and (frmNewQSO.edtName.Text <> ''));
   if tbFollow.Checked and (trim(edtFollowCall.Text)='') then tbFollow.Checked:=false; //must have a call
 
-   if (tbFollow.Checked and (pos(edtFollowCall.Text, Message) > 0)) then
-    //first check
-    AddFollowedMessage(Message, Reply,Snr)
-  else
-  if chkMap.Checked then
-  begin
-    CqPeriodTimerStart;
-    if LocalDbg then Writeln('Other line:', Message);
-    msgTime := Time;
-    Dfreq := Df;
-    Snr := Sr;
-    msgCall := '';
-    msgLocator := '';
-    isMyCall := False;
-    index:=0;
+  if (tbFollow.Checked and (pos(edtFollowCall.Text, Message) > 0)) then
+    AddFollowedMessage(Message, Reply,Df,Sr)    //first check
+ else
+    if chkMap.Checked then
+        begin
+          CqPeriodTimerStart;
+          if LocalDbg then Writeln('Other line:', Message);
+          msgTime := Time;
+          Dfreq := Df;
+          Snr := Sr;
+          msgCall := '';
+          msgLocator := '';
+          isMyCall := False;
+          index:=0;
 
-    Message := LineFilter(Message);
+          msgList := TStringList.Create;
+          msgList.Delimiter := ' ';
+          msgList.DelimitedText := Message;
 
-    msgList := TStringList.Create;
-    msgList.Delimiter := ' ';
-    msgList.DelimitedText := Message;
-
-    while index < msgList.Count do
-    begin
-      if index=0 then
-        isMyCall := pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0;
-      if index=1 then
-        msgCall := msgList[index];
-      if index=2 then
-        msgLocator := msgList[index]; //avoid out of index in certain compound call lines
-      inc(index);
-    end;
-    msgList.Free;
+          while index < msgList.Count do
+          begin
+            if index=0 then
+              isMyCall := pos(msgList[index], UpperCase(cqrini.ReadString('Station', 'Call', ''))) > 0;
+            if index=1 then
+              msgCall := msgList[index];
+            if index=2 then
+              msgLocator := msgList[index]; //avoid out of index in certain compound call lines
+            inc(index);
+          end;
+          msgList.Free;
 
 
-    if LocalDbg then
-      Writeln('Other call:', msgCall, '    loc:', msgLocator);
-    if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
-            msgLocator := '';
+          if LocalDbg then
+            Writeln('Other call:', msgCall, '    loc:', msgLocator);
+          if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
+                  msgLocator := '';
 
-    if isItACall(msgCall) then
-    begin
-      myAlert := '';
-      MonitorLine := '';
+          if isItACall(msgCall) then
+          begin
+            myAlert := '';
+            MonitorLine := '';
 
-      //starts a row
-      if (msgTime <> LastWsjtLineTime) then
-         Begin
-               if LocalDbg then
-                           Writeln('---O msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
-              clearSgMonitor;
+            //starts a row
+            if (msgTime <> LastWsjtLineTime) then
+               Begin
+                     if LocalDbg then
+                                 Writeln('---O msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+                    clearSgMonitor;
+                  end;
+            LastWsjtLineTime := msgTime;
+            sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
+            //Snr
+            if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+             else sgMonitor.Columns.Items[1].Visible:= false;
+            sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
+                               //PadLeft(IntToStr(Snr),3);
+
+            if LocalDbg then
+               Writeln('Other: Add reply array:', sgMonitor.rowCount-1);
+              sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
+            //start printing Map mode
+            if LocalDbg then
+              Writeln('Start Other printing, Map mode');
+            AddColorStr('(', clBlack,2, sgMonitor.rowCount-1);//make in-qso indicator start
+            PrintCall(msgcall);  //make not-CQ indicator start
+            if msgLocator <> '' then
+            begin
+              PrintLoc(msgLocator, '', '');
+              if frmWorkedGrids.GridOK(msgLocator) then  AddXpList(msgCall,msgLocator);
             end;
-      LastWsjtLineTime := msgTime;
-      sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
-      //Snr
-      if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
-       else sgMonitor.Columns.Items[1].Visible:= false;
-      sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
-                         //PadLeft(IntToStr(Snr),3);
+            //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
+            AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
-      if LocalDbg then
-         Writeln('Other: Add reply array:', sgMonitor.rowCount-1);
-        sgMonitor.Cells[8, sgMonitor.rowCount-1]:= StrToHexStr(Reply);  //corresponding reply string to array in hex
-      //start printing Map mode
-      if LocalDbg then
-        Writeln('Start Other printing, Map mode');
-      AddColorStr('(', clBlack,2, sgMonitor.rowCount-1);//make in-qso indicator start
-      PrintCall(msgcall);  //make not-CQ indicator start
-      if msgLocator <> '' then
-      begin
-        PrintLoc(msgLocator, '', '');
-        if frmWorkedGrids.GridOK(msgLocator) then  AddXpList(msgCall,msgLocator);
-      end;
-      //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
-      AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
-
-      if LocalDbg then
-        Begin
-         Writeln('All written in Addother. Next alerts');
-         Writeln;
-        end;
-      TryAlerts;
-    end;
-  end;
+            if LocalDbg then
+              Begin
+               Writeln('All written in Addother. Next alerts');
+               Writeln;
+              end;
+            TryAlerts;
+          end;
+        end;  //chkMap.Checked
   scrollSgMonitorToLastLine;
 end;
 
-procedure TfrmMonWsjtx.AddFollowedMessage(Message, Reply: string;snr:integer);
+procedure TfrmMonWsjtx.AddFollowedMessage(Message, Reply: string;Df,Sr:integer);
 var
-  a: TExplodeArray;
-  i, b: integer;
-  ok: boolean;
+  msgList: TStringList;
 begin
-  if LocalDbg then
-    writeln('Follow stage#1 passed:', Message);
-  b := 0;
-  SetLength(a, 0);
-  a := dmUtils.Explode(' ', Message);
-  for i := 0 to (Length(a) - 1) do
-    if (edtFollowCall.Text = a[i]) then
-      b := i;
-  writeln('Follow stage#2 result. Found at:', b + 1, '  LastItem:', i + 1);
-  if ((i = 2) and (b = 2)   //message is just time[0] dfreq[1] and followcall[2]
-    or (i > 2) and (b > 2))
-  //message is time[0] dfreq[1] and call[2] followcall[3]..[or up]
-  then
-  begin
-    tmrFollow.Enabled := False;
-    if CurMode = 'FT8' then tmrFollow.Interval := 16000 else tmrFollow.Interval := 61000;
-    tmrFollow.Enabled := True;
+  if LocalDbg then writeln('Follow stage#1 passed:', Message);
 
-    edtFollow.Font.Color := clBlack;
-    edtFollow.Text := copy(message,1,6)+' '+IntToStr(Snr)+copy(message,7,length(message));
-    RepFlw := Reply;
-  end;
+  msgList:=TStringList.Create;
+  msgList.Linebreak:=' '; // space delimiter
+  msgList.Text:=Message;
+
+  if (( msgList.Count < 2 ) and (pos(edtFollowCall.Text,msgList[0])>0))//1 items: Fcall exist: "OH1KH/IMAGE"
+   or (( msgList.Count > 1 ) and (pos(edtFollowCall.Text,msgList[0])=0))//2 or more items and Fcall is not 1st
+     then
+          begin
+            edtFollow.Font.Color := clBlack;
+            edtFollow.Text := IntToStr(Df)+' '+IntToStr(Sr)+' '+message;
+            if (( msgList.Count > 1 ) and (pos(edtFollowCall.Text,msgList[1])>0)) then RepFlw := Reply;
+               //only if Fcall is second, do reply
+               //otherwise not sure to get right call for reply
+
+            tmrFollow.Enabled := False;
+            if CurMode = 'FT8' then tmrFollow.Interval := 16000 else tmrFollow.Interval := 61000;
+            tmrFollow.Enabled := True;
+          end;
+  msgList.Free;
 end;
 
 procedure TfrmMonWsjtx.BufDebug(MyHeader,MyBuf:string);
