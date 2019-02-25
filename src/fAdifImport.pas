@@ -136,13 +136,13 @@ type
     procedure WriteWrongADIF(lines : Array of String; error : String);
 
     function generateAdifTagHash(aaa:String):longint;
-    function getNextAdifTag(var vstup,prik,data:string):boolean;
     function fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry):boolean;
     procedure initializeTypeVariable(var d:TnewQSOEntry);
     function saveNewEntryFromADIFinDatabase(var d:TnewQSOEntry; var err : String) : Boolean;
 
     { private declarations }
   public
+    function getNextAdifTag(var vstup,prik,data:string):boolean;
     { public declarations }
   end; 
 
@@ -173,7 +173,7 @@ end;
 
 function TfrmAdifImport.getNextAdifTag(var vstup,prik,data:string):boolean;
 // vstup - remaining text have to be searched for next tag
-// prik -
+// prik - deliveres back the extracted ADIF tag name
 // data - deliveres back the extracted ADIF information of the tag
 
 var z,x:longint;

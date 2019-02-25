@@ -4554,6 +4554,13 @@ object frmNewQSO: TfrmNewQSO
       object mnuRemoteModeWsjt: TMenuItem
         Action = acRemoteWsjt
         ShortCut = 16458
+        OnClick = acRemoteWsjtExecute
+      end
+      object mnuRemoteModeN1MM: TMenuItem
+        Action = acRemoteModeN1MM
+        Caption = 'Remote mode for N1MM logger'
+        ShortCut = 16459
+        OnClick = acRemoteModeN1MMExecute
       end
       object MenuItem59: TMenuItem
         Caption = '-'
@@ -5369,6 +5376,11 @@ object frmNewQSO: TfrmNewQSO
       Category = 'Window'
       Caption = 'Contest'
       OnExecute = acContestExecute
+    end
+    object acRemoteModeN1MM: TAction
+      Category = 'File'
+      Caption = 'N1MM'
+      OnExecute = acRemoteModeN1MMExecute
     end
   end
   object imgMain: TImageList
@@ -6644,5 +6656,11 @@ object frmNewQSO: TfrmNewQSO
     OnTimer = tmrWsjtSpdTimer
     left = 392
     top = 720
+  end
+  object tmrN1MM: TTimer
+    Enabled = False
+    OnTimer = tmrN1MMTimer
+    left = 584
+    top = 200
   end
 end
