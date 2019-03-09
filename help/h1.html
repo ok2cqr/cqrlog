@@ -21,9 +21,7 @@
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
-        <td width="33%" align="left">&nbsp;&lt;<a href="index.html"> Prev</a></td>
         <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
-        <td width="33%" align="right"><a href="h29.html">Next </a>&gt;</td>
     </tr>
     </tbody>
 </table>
@@ -58,6 +56,8 @@
         <li><a href="h1.html#ch1">CW interface</a></li>
         <li><a href="h1.html#ch2">fldigi interface</a></li>
         <li><a href="fldxml.html">fldigi XmlRpc remote</a></li>
+        <li><a href="h1.html#ch2b">wsjt-x interface</a></li>        
+        <li><a href="h1.html#ch2c">N1MM interface</a></li>        
         <li><a href="h1.html#ch3">Exit & Auto backup</a></li>
         <li><a href="h1.html#ch4">External viewers</a></li>
         <li><a href="h1.html#ch5">Callbook support</a></li>
@@ -130,28 +130,34 @@
     active, the default frequency does not appear on the logging screen. The preset RST values
     will apppear in their corresponding boxes.
     <br><br>
-    The <em>Change default values</em> button allows you to change the frequencies available in
+    The <strong>Change default values</strong> button allows you to change the frequencies available in
     the drop down menu in the NewQSO window. Very useful if you have favourite frequencies
     and don't have the radio connected to the computer.<br>
-    The <em>'Use spacebar to move between fields'</em> is very interesting and probably the
+    The <strong>'Use spacebar to move between fields'</strong> is very interesting and probably the
     most natural way but it works only if you are moving forwards. To move between fields,
     there are two other generic possibilities (TAB key and up/down arrow keys) which
-    remain unaffected even if you check the spacebar option. The <em>'Refresh data after
-    save QSO'</em> affects the data displayed in the QSO List (Ctrl-O). If checked, each
+    remain unaffected even if you check the spacebar option. </br>
+    The <strong>'Refresh data after save QSO'</strong> affects the data displayed in the QSO List (Ctrl-O). If checked, each
     QSO appears in this list immediately after logging, however the refresh procedure is
-    quite slow. To save time, keep this box unchecked. The <em>'Skip over mode and frequency
-    when radio is connected'</em> is very important if the radio control is active.
-    The <em>'Show detail window'</em> option enables an extra window to appear at program start.
-    The <em>'Enable auto search on HamQTH.com/QRZ.COM'</em> switches on the automated search
+    quite slow. To save time, keep this box unchecked. </br>
+    The <strong>'Skip over mode and frequency when radio is connected'</strong> is very important if the radio control is active.</br>
+    The <strong>'Show detail window'</strong> option enables an extra window to appear at program start.</br>
+    The <strong>'Enable auto search on HamQTH.com/QRZ.COM'</strong> switches on the automated search
     for HamQTH/QRZ callbook data for any worked station. This option does the same as F6 on the
     logging screen, however it can be rather slow depending on the HamQTH.com/QRZ.COM server
-    availability. The <em>'Show recent QSO records for last ** days'</em> limits the QSO records
+    availability.</br> 
+    The <strong>'Show recent QSO records for last ** days'</strong> limits the QSO records
     listed in the logging screen. Do not set the number of days too high, a high number can
-    cause program speed issues! The default value of 5 days is appropriate for most cases.
-    The <em>In previous QSO list show also QSO with call/p</em> etc. means you can see
+    cause program speed issues! The default value of 5 days is appropriate for most cases.</br>
+    The <strong>instead show QSOs B4 with logged call</strong> changes recent QSO records to list of worked before list with just logged callsign.
+    I.E. Same list you can see while you have edited a new call, but not yet saved as logged qso. This works only, as option, if
+     <em>'Show recent QSO records for last ** days'</em> is first checked.</br>
+    The <strong>In previous QSO list show also QSO with call/p</strong> etc. means you can see
     previous QSO with a station even if he was active from another country with his
     call/prefix. E.g. if you enter OK2CQR, you'll also see previous QSOs with him when he
-    was OM/OK2CQR, SP/OK2CQR etc.
+    was OM/OK2CQR, SP/OK2CQR etc.</br>
+    The <strong>Enable satellite mode</strong> Opens second tab 'Satellte' to NewQSO/DXCC statistic view. There you can select used satellite name,
+     RX frequency and also propagation mode for logged qso.</br>
 </div>
 <br>
 <img src=img/h25.png border=0><br><br>
@@ -221,7 +227,9 @@
 <a name="mem"><strong>Add/Modify memory</strong></a><br><br>
 You can define your own favourite frequencis and swich between them directly in New QSO window using ALT+V (Mem down)
 and
-ALT+B (Mem up). These keys are used in N6TR clones to switch between bands.
+ALT+B (Mem up). These keys are used in N6TR clones to switch between bands.<br>
+You can also switch between memory frequencies with TRXControl's <b>M up</b> and <b>M dwn</b> buttons and set rig frequencies
+ by double clicking rows in TRXControl's Add/Modify memory list.
 <br><br>
 <img src="img/radio_memory.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
@@ -316,8 +324,19 @@ converted records appears.<br><br><img src=img/h38.png border=0><br><br>
         <td valign="top">
             <img src="img/note.png"></td>
         <td bgcolor=#eaeaea valign="top" align="justify"><strong>
-            <font color="blue">Note:</font></strong> All files in the <em>'membership'</em> subfolder
-            are displayed. If you create your own database, put it into this subfolder!
+            <font color="blue">Note:</font></strong> There are 2 places where membership list files are stored.
+            <br><strong>--Global files--</strong> are stored in /usr/share/cqrlog/members folder and will be 
+            updated with cqrlog version updates.
+            <br><strong>--Local files--</strong>, a place where you can save your own membership list files, is
+            ~/.config/cqrlog/members folder.
+            <br>List files there are saved over cqrlog version updates. Folder ~/.config is hidden so you must configure your
+            file browser to 'show hidden files and folders' to see it.
+            <br><br>When creating your own member list files you can use one of Global files as example.
+            <br>File name must have extension ".txt" and be a plain text file written with linux editor that ends lines to "\n", in hex #0A (LF character).
+            <br>Editors that use "\r\n", in hex #0D#0A (CR+LF charactes) [Windows style linefeeds] do not produce a working list file.
+            <br>1st line is membership list name, 2nd a short description. Do not put any additional spaces after name and description.
+            <br>It can lead to situaton where Club member list selection does not stay in preferences over cqrlog restart.
+            <br>3rd and following lines are CALLSIGN;membership_number. One pair for a line. No spaces, semicolon as delimiter.  Note ONLY CAPS written callsigns will work.
         </td>
     </tr>
     </tbody>
@@ -374,26 +393,26 @@ displayed in the 'Details' window.<br><br>
 contesting programs, however it is also great in a general logging program. It contains
 a mix of filtered DX Cluster spots and your own entries where you can store call and
 frequency of a station which you can't work just now but you want to return to later.<br><br>
-A very useful option of the Band Map is the <em>'entries aging'</em>.
+A very useful option of the Band Map is the <strong>'entries aging'</strong>.
 Depending on the time left since entry 'birth', the color changes to lighter tone until
 the entry disappears. There are two levels between appearance and disappearance of the entry.
 The times of these two levels and the time of disappearance can be set. If you change
 the aging times, restart CQRLOG. Remember that a program restart will be needed to make
 the changes take effect!<br><br>
 The spots can be color coded to highlight new countries, new band countries etc., in
-the same way as in the DX Cluster window - check the <em>'Use the same color as the spot'</em>
+the same way as in the DX Cluster window - check the <strong>'Use the same color as the spot'</strong>
 option. If this option remains unchecked, all entries are shown in black (with aging
 to dark grey and light grey) and your own entries, <strong>made with Ctrl-A</strong>
 or the <strong>Big Plus key</strong> on the numerical keyboard, are shown in blue.
-Also, another set of <em>Watched</em> and <em>Ignored</em> entries can be defined.<br><br>
-The content of the Band map can be stored if leaving the log. Check the <em>'Save band
-    map after close'</em> option.<br><br>The <em>'Show only active mode'</em> and <em>'Show
-    only active band'</em> options providing an additional level of cluster spot filtering.
+Also, another set of <strong>Watched</strong> and <strong>Ignored</strong> entries can be defined.<br><br>
+The content of the Band map can be stored if leaving the log. Check the <strong>'Save band
+    map after close'</strong> option.<br><br>The <strong>'Show only active mode'</strong> and <strong>'Show
+    only active band'</strong> options providing an additional level of cluster spot filtering.
 When checked, the Band Map will show only spots for the mode or band which the radio is on.
 The spots are sorted by frequency, so you will see what is on the band - at a glance.
 No doubt you will prefer this over the DX Cluster window which contains a mess of rolling
-spots, often hard to 'catch'. Finally, if the <em>'Delete station from band map after
-    QSO'</em> option is checked, the entry with a worked station disappers from the Band Map.
+spots, often hard to 'catch'. Finally, if the <strong>'Delete station from band map after
+    QSO'</strong> option is checked, the entry with a worked station disappers from the Band Map.
 If such a station is spotted again, it will appear again in the Band Map.
 <a name=bh2><h2><strong>xplanet support</strong></h2></a>
 <img src=img/h66.png border=0><br><br>
@@ -435,7 +454,7 @@ There are no known dependencies issues.<br><br>
             type without any projection is very nice, however the very distant points will not be
             visible, also spots or band map entries of distant DX locations will disappear.
             Angles should be true because the globe is 'centered' on your location. Distances
-            are <em>not true</em> because of the lack of projection. This eye candy is
+            are <strong>not true</strong> because of the lack of projection. This eye candy is
             therefore good for those who do not work DX stations.
         </li>
         <li><strong>Azimuthal</strong> - is the usual directional map which you will find
@@ -466,7 +485,7 @@ There are no known dependencies issues.<br><br>
     <img src="img/h76.png"><br><br>
     Provide your user name for eQSL/LoTW and the password (this is <strong>not</strong>
     the password sent to US amateurs via postcard!). Choose if you want to include LoTW
-    confirmation in the statistics and <em>New country</em> and <em>New band country</em>
+    confirmation in the statistics and <strong>New country</strong> and <strong>New band country</strong>
     info messages.<br><br>
     <a name=ch1><h2><strong>CW interface</strong></h2></a>
     <img src="img/h95.png"><br><br>
@@ -488,27 +507,49 @@ There are no known dependencies issues.<br><br>
     <a href=h26.html><strong>here</strong></a>.
     <br><br>
     <a name=ch2><h2><strong>fldigi interface</strong></h2></a>
-    First, <em>fldigi</em> must be installed and functional.
+    First, <strong>fldigi</strong> must be installed and functional.
     Preferences must be set up to operate with fldigi. Set up the path to fldigi, and if you wish
     to start it when CQRLOG switches to remote mode. Other parameters including the way that
     the CQRLOG - fldigi combo should handle the frequency, mode and RST. CQRLOG also loads
     the fldigi contents to keep the data, so the 'polling' period should be set up.
     The 2 seconds interval is a very acceptable default.<br><br>
-    <img src="img/h101.png"><br><br>
+    
     The way the CQRLOG - fldigi combo handles the frequency, mode and RST is rather important.
     Keep in mind that CQRLOG operates in remote mode which means that the logger is offline
     and therefore does not display the actual frequency and mode on the logging screen. If
-    you properly set up the <em>fldigi</em> mode and frequency control, both are correctly
-    displayed in the <em>fldigi</em> window. <strong>Choose the fldigi</strong> option in
-    <em>Frequency from</em>, <em>Mode from</em> and <em>RST from</em> boxes and you don't
+    you properly set up the <strong>fldigi</strong> mode and frequency control, both are correctly
+    displayed in the <strong>fldigi</strong> window. <strong>Choose the fldigi</strong> option in
+    <strong>Frequency from</strong>, <strong>Mode from</strong> and <strong>RST from</strong> boxes and you don't
     need to watch the logger, except the QSO list in the upper portion of the logging screen.
     When logging/saving a contact, frequency, mode and RST should appear correctly in this QSO list.
     If you choose the CQRLOG option, you must set the mode in CQRLOG which seems less sensible.
     <br><br>See also:<a href="fldxml.html#fl1"> Using fldigi withXmlRpc remote mode</a><br>
-
-
+    <br><br>
+    <a name=ch2b></a>
+    <img src="img/h101.png"><br><br>
+    <h2><strong>wsjt-x interface</strong></h2>
+    Setting wsjt-x interface is mainly same as setting fldigi. How ever communication is done via UDP frames and so the IP address and Port must be specified.
+    <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2237</strong> for port. These are set in wsjt-x settings/reporting and if changed there, must also to be changed here.
+    <br>
+    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    <br><br>
+    Using <strong> WB4 chk starts from</strong> it is possible to limit log search starting from given date for callsign and/or locator.
+    <br>Setting checkbox will apply given date as start date. Otherwise, when unchecked, whole log is searched through.
+    <br>These limits will affect to callsign and/or locator coloring in wsjt-x monitor and worked grids map summary counts and grid painting.    
+    <br>
+    WB4 can be handy when working <strong>ARRL International Grid Chase </strong>or <strong>ARRL RTTY-FT8</strong> like contests if one does not like to create separate log for that purpose.
+    <br><br><img src="img/h101b.png"><br><br>
+    Pressing calendar icon is easy way to set date. Double click on selected date closes calendar and sets the date. Pressing ESC closes calendar, but does not set date. Date can also be typed in manually.
+    <br><br>
+    <a name=ch2c></a>
+    <h2><strong>N1MM interface</strong></h2>
+    Setting of N1MM interface is similar as wsjt-x interface. Only IP address and PORT have to be set if they are not defaults.
+    <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2333</strong> for port. These are set in wsjt-x, or js8call, settings/reporting and if changed there, must also to be changed here.
+    <br>
+    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    <br><br>
     <a name=ch3><h2><strong>Exit & Auto backup</strong></h2></a>
-    To increase the safety of your log data, CQRLOG is equipped with an <em>Auto backup</em>
+    To increase the safety of your log data, CQRLOG is equipped with an <strong>Auto backup</strong>
     option which allows you to export (ADIF) and store the log data in a safe location.
     The ADIF format was choosen because of its text format. The output file can be compressed
     in tar.gz format.<br><br>
@@ -535,15 +576,15 @@ There are no known dependencies issues.<br><br>
     CQRLOG can receive spots from RBN and show them on the Gray line map. It's very nice to
     see where your signal has been decoded especially when you are calling CQ on an empty band.<br><br>
     <img src="img/h1114.png"><br><br>
-    <em>Login:</em> - your user name to log in to RBN. It's usually your own callsign.<br>
-    <em>Watch for:</em> the callsign you are watching for, also usually your own callsign.
+    <strong>Login:</strong> - your user name to log in to RBN. It's usually your own callsign.<br>
+    <strong>Watch for:</strong> the callsign you are watching for, also usually your own callsign.
     If you leave this field empty, every spot will be shown on the grayline map.<br>
-    <em>Auto connect after open the log</em> - check this option if you want to autoconnect
+    <strong>Auto connect after open the log</strong> - check this option if you want to autoconnect
     to RBN when the program starts, you won't have to worry about it and CQRLOG will do
     it for you automatically.
-    <em>Signal strength</em> How strong you are will be clear very quickly when you look
+    <strong>Signal strength</strong> How strong you are will be clear very quickly when you look
     at the map with the dots in different colours. Which colour will be used can be set here.<br>
-    <em>Delete old information after XX seconds</em> The dots won't stay on the map forever.
+    <strong>Delete old information after XX seconds</strong> The dots won't stay on the map forever.
     180 seconds (3 minutes) is a good default value. Please note, it also depends on the band,
     if you change band, dots will always be deleted. All data is band related.<br>
     <a name=ch7><h2><strong>Online log upload support</strong></h2></a>
@@ -555,7 +596,7 @@ There are no known dependencies issues.<br><br>
     used when you registered. HRDLog.net needs only user name and the code you got by e-mail.
     You can set different color for each service. This color will be used for status messages
     which will inform you about upload progress.
-    <em>Upload QSO data immediately after save, update or delete</em> means that every
+    <strong>Upload QSO data immediately after save, update or delete</strong> means that every
     insert/update or delete will be uploaded automatically. But if you change something in
     QSO list window with hot keys e.g. CTRL+S, CTRL+W etc. and/or download data
     from eQSL/LoTW, changes won't be uploaded. All will be uploaded after you save/delete QSO
@@ -568,8 +609,8 @@ There are no known dependencies issues.<br><br>
         <li>import this adif file to the website of online log you are going to use
             (if you are using HamQTH, please wait untill the email about a successful import arrives)
         </li>
-        <li>open QSO list window, click to <em>Online log</em> menu and choose
-            <em>Mark QSO as uploaded to all logs</em>, CQRLOG marks all QSO as uploaded
+        <li>open QSO list window, click to <strong>Online log</strong> menu and choose
+            <strong>Mark QSO as uploaded to all logs</strong>, CQRLOG marks all QSO as uploaded
         </li>
     </ul>
     That's all, Now if you insert/edit or delete a QSO, it will also be uploaded to the online log.
@@ -588,9 +629,7 @@ There are no known dependencies issues.<br><br>
 <table width="100%" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
-        <td width="33%" align="left">&nbsp;&lt;<a href="index.html"> Prev</a></td>
         <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
-        <td width="33%" align="right"><a href="h29.html">Next </a>&gt;</td>
     </tr>
     </tbody>
 </table>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>CQRLOG - fldigi XmlRpc</title>
+</head>
+<body>
+<script>
+function goForward() {
+    window.history.forward();
+}
+function goBack() {
+    window.history.back();
+}
+</script>
+
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td bgcolor=ffffcc valign="top" align="justify"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+            /td>
+    </tr>
+    </tbody>
+</table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
+<p align=center><img src=img/line.png></p>
+
+
+<a name=fl1><h2><strong>N1MM logger remote</strong></h2></a>
+<img src="img/n1mm1.png" name="1"  border="0"/>
+<p>N1MM logger remote connection is just for copying logged qso infromation from other program like wsjt-x or js8call (or similars that support this kind of logging) to cqrlog.
+There is no other finctionality than just transfer the logged data.
+</br>Remote mode is activated from NewQSO/File selection list, or pressing Ctrl+K when NewQSO window is focused.
+</p><p>
+<img src="img/n1mm3.png" name="3"  border="0"/>
+</br>Settings must be done at wsjt-x or js8call Settings/reporting. At least checking the checkbox. Port and address values can be defaults.
+</p><p>
+<img src="img/n1mm2.png" name="2"  border="0"/></br>
+No indication of logging can be seen unless user has set "cqrlog/preferences/NewQSO/Show recent qso records for last X days" active.</br>
+If this is set, after pressing "OK" at companion program's logging window logged qso will appear to cqrlog's NewQSO recent qsos list.
+</p><p>
+N1MM remote can not be used at same time as fldigi or wsjt remotes.</br> How ever if you allow N1MM logger support at wsjt-x and js8call settings and choose remote mode for N1MM from cqrlog you can keep both programs running at same time if your rigctld settings support that. 
+See: <a href="img/setting_rigctld_for_all_programs.pdf">setting_rigctld_for_all_programs</a>,  and log qsos from both programs to cqrlog without problems.
+</p><p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>
