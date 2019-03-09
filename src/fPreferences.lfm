@@ -1,7 +1,7 @@
 object frmPreferences: TfrmPreferences
-  Left = 165
+  Left = 105
   Height = 659
-  Top = 73
+  Top = 33
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
@@ -20,10 +20,10 @@ object frmPreferences: TfrmPreferences
     Height = 659
     Top = 0
     Width = 752
-    ActivePage = tabNewQSO
+    ActivePage = tabFldigi1
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 20
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2202,8 +2202,8 @@ object frmPreferences: TfrmPreferences
         Height = 392
         Top = 99
         Width = 567
-        ActivePage = tabRot2
-        TabIndex = 1
+        ActivePage = tabRot1
+        TabIndex = 0
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
@@ -2222,7 +2222,7 @@ object frmPreferences: TfrmPreferences
               Left = 117
               Height = 17
               Top = 15
-              Width = 159
+              Width = 157
               Caption = 'Device (e.g. /dev/ttyS0):'
               ParentColor = False
             end
@@ -2230,7 +2230,7 @@ object frmPreferences: TfrmPreferences
               Left = 7
               Height = 17
               Top = 15
-              Width = 95
+              Width = 94
               Caption = 'ROT ID model:'
               ParentColor = False
             end
@@ -2238,13 +2238,13 @@ object frmPreferences: TfrmPreferences
               Left = 345
               Height = 17
               Top = 15
-              Width = 61
+              Width = 58
               Caption = 'Poll rate:'
               ParentColor = False
             end
             object edtRot1Device: TEdit
               Left = 117
-              Height = 27
+              Height = 34
               Top = 35
               Width = 205
               OnChange = edtRadio1Change
@@ -2252,7 +2252,7 @@ object frmPreferences: TfrmPreferences
             end
             object edtRot1ID: TEdit
               Left = 6
-              Height = 27
+              Height = 34
               Top = 35
               Width = 87
               OnChange = edtRadio1Change
@@ -2260,7 +2260,7 @@ object frmPreferences: TfrmPreferences
             end
             object edtRot1Poll: TEdit
               Left = 341
-              Height = 27
+              Height = 34
               Top = 35
               Width = 80
               OnChange = edtRadio1Change
@@ -2269,9 +2269,9 @@ object frmPreferences: TfrmPreferences
             end
             object chkRot1RunRotCtld: TCheckBox
               Left = 269
-              Height = 24
+              Height = 23
               Top = 98
-              Width = 244
+              Width = 235
               Caption = 'Run rotctld when program starts'
               TabOrder = 3
             end
@@ -2279,13 +2279,13 @@ object frmPreferences: TfrmPreferences
               Left = 6
               Height = 17
               Top = 71
-              Width = 212
+              Width = 209
               Caption = 'Extra command line arguments:'
               ParentColor = False
             end
             object edtRot1RotCtldArgs: TEdit
               Left = 6
-              Height = 27
+              Height = 34
               Top = 95
               Width = 255
               OnChange = edtR1RigCtldArgsChange
@@ -2296,13 +2296,13 @@ object frmPreferences: TfrmPreferences
               Left = 437
               Height = 17
               Top = 15
-              Width = 89
+              Width = 84
               Caption = 'Port number:'
               ParentColor = False
             end
             object edtRot1RotCtldPort: TEdit
               Left = 437
-              Height = 27
+              Height = 34
               Top = 35
               Width = 80
               OnChange = edtR1RigCtldPortChange
@@ -2319,7 +2319,7 @@ object frmPreferences: TfrmPreferences
             end
             object edtRot1Host: TEdit
               Left = 285
-              Height = 27
+              Height = 34
               Top = -17
               Width = 128
               TabOrder = 7
@@ -2338,7 +2338,7 @@ object frmPreferences: TfrmPreferences
                 Left = 11
                 Height = 17
                 Top = 9
-                Width = 86
+                Width = 84
                 Caption = 'Serial speed:'
                 ParentColor = False
               end
@@ -2346,7 +2346,7 @@ object frmPreferences: TfrmPreferences
                 Left = 126
                 Height = 17
                 Top = 9
-                Width = 61
+                Width = 59
                 Caption = 'Data bits'
                 ParentColor = False
               end
@@ -2354,7 +2354,7 @@ object frmPreferences: TfrmPreferences
                 Left = 246
                 Height = 17
                 Top = 9
-                Width = 61
+                Width = 57
                 Caption = 'Stop bits'
                 ParentColor = False
               end
@@ -2362,7 +2362,7 @@ object frmPreferences: TfrmPreferences
                 Left = 11
                 Height = 17
                 Top = 72
-                Width = 74
+                Width = 73
                 Caption = 'Handshake'
                 ParentColor = False
               end
@@ -2370,13 +2370,13 @@ object frmPreferences: TfrmPreferences
                 Left = 357
                 Height = 17
                 Top = 9
-                Width = 40
+                Width = 37
                 Caption = 'Parity'
                 ParentColor = False
               end
               object cmbHanshakeRot1: TComboBox
                 Left = 11
-                Height = 27
+                Height = 29
                 Top = 94
                 Width = 107
                 ItemHeight = 0
@@ -2394,7 +2394,7 @@ object frmPreferences: TfrmPreferences
               end
               object cmbParityRot1: TComboBox
                 Left = 357
-                Height = 27
+                Height = 29
                 Top = 33
                 Width = 109
                 ItemHeight = 0
@@ -2414,7 +2414,7 @@ object frmPreferences: TfrmPreferences
               end
               object cmbDataBitsRot1: TComboBox
                 Left = 126
-                Height = 27
+                Height = 29
                 Top = 33
                 Width = 107
                 ItemHeight = 0
@@ -2434,7 +2434,7 @@ object frmPreferences: TfrmPreferences
               end
               object cmbStopBitsRot1: TComboBox
                 Left = 246
-                Height = 27
+                Height = 29
                 Top = 33
                 Width = 100
                 ItemHeight = 0
@@ -2453,7 +2453,7 @@ object frmPreferences: TfrmPreferences
               end
               object cmbSpeedRot1: TComboBox
                 Left = 11
-                Height = 27
+                Height = 29
                 Top = 33
                 Width = 107
                 ItemHeight = 0
@@ -2477,7 +2477,7 @@ object frmPreferences: TfrmPreferences
               end
               object cmbDTRRot1: TComboBox
                 Left = 126
-                Height = 27
+                Height = 29
                 Top = 94
                 Width = 107
                 ItemHeight = 0
@@ -2503,7 +2503,7 @@ object frmPreferences: TfrmPreferences
               end
               object cmbRTSRot1: TComboBox
                 Left = 246
-                Height = 27
+                Height = 29
                 Top = 94
                 Width = 100
                 ItemHeight = 0
@@ -2523,7 +2523,7 @@ object frmPreferences: TfrmPreferences
                 Left = 246
                 Height = 17
                 Top = 72
-                Width = 25
+                Width = 24
                 Caption = 'RTS'
                 ParentColor = False
               end
@@ -2531,7 +2531,7 @@ object frmPreferences: TfrmPreferences
           end
           object edtRotor1: TEdit
             Left = 146
-            Height = 27
+            Height = 34
             Top = 11
             Width = 94
             OnChange = edtRadio1Change
@@ -6373,9 +6373,9 @@ object frmPreferences: TfrmPreferences
         end
       end
       object GroupBox51: TGroupBox
-        Left = 12
+        Left = 16
         Height = 264
-        Top = 339
+        Top = 336
         Width = 724
         Caption = 'Reading data from wsjtx'
         ClientHeight = 246
@@ -6385,9 +6385,9 @@ object frmPreferences: TfrmPreferences
           Left = 8
           Height = 107
           Top = 9
-          Width = 557
+          Width = 480
           ClientHeight = 105
-          ClientWidth = 555
+          ClientWidth = 478
           TabOrder = 0
           object Label202: TLabel
             AnchorSideLeft.Control = edtWsjtPath
@@ -6427,43 +6427,43 @@ object frmPreferences: TfrmPreferences
             TabOrder = 1
           end
           object btnFldigiPath1: TButton
-            AnchorSideLeft.Control = edtWsjtPath
             AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = edtWsjtPath
-            Left = 456
+            AnchorSideRight.Control = edtWsjtPath
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Control = edtWsjtPath
+            Left = 376
             Height = 25
-            Top = 66
+            Top = 36
             Width = 75
-            BorderSpacing.Left = 5
+            Anchors = [akRight, akBottom]
             Caption = 'Browse'
             TabOrder = 2
           end
         end
-        object Label203: TLabel
+        object lblwsjtport: TLabel
           AnchorSideLeft.Control = edtWsjtPort
           AnchorSideLeft.Side = asrCenter
           AnchorSideBottom.Control = edtWsjtPort
           AnchorSideBottom.Side = asrBottom
-          Left = 617
+          Left = 601
           Height = 17
           Top = 2
-          Width = 30
+          Width = 63
           Anchors = [akLeft, akBottom]
           BorderSpacing.Bottom = 35
-          Caption = 'Port:'
+          Caption = 'Wsjt port:'
           ParentColor = False
         end
         object edtWsjtPort: TEdit
-          AnchorSideLeft.Side = asrCenter
-          AnchorSideTop.Control = GroupBox51
-          AnchorSideRight.Control = GroupBox51
+          AnchorSideLeft.Control = edtN1MMPort
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtN1MMPort
           AnchorSideRight.Side = asrBottom
           Left = 592
           Height = 34
           Top = 20
           Width = 80
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 20
+          BorderSpacing.Left = 16
           BorderSpacing.Right = 50
           TabOrder = 1
         end
@@ -6547,7 +6547,7 @@ object frmPreferences: TfrmPreferences
           TabOrder = 5
         end
         object edtWsjtIp: TEdit
-          AnchorSideTop.Control = Label26
+          AnchorSideTop.Control = lblwsjtaddr
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = edtWsjtPort
           AnchorSideRight.Side = asrBottom
@@ -6559,17 +6559,17 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 2
           TabOrder = 6
         end
-        object Label26: TLabel
+        object lblwsjtaddr: TLabel
           AnchorSideLeft.Control = edtWsjtIp
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = edtWsjtPort
           AnchorSideTop.Side = asrBottom
-          Left = 603
+          Left = 598
           Height = 17
           Top = 56
-          Width = 56
+          Width = 66
           BorderSpacing.Top = 2
-          Caption = 'Address:'
+          Caption = 'Wsjt addr:'
           ParentColor = False
         end
         object cgLimit: TCheckGroup
@@ -6638,6 +6638,58 @@ object frmPreferences: TfrmPreferences
             Text = '    .  .  '
           end
         end
+        object edtN1MMPort: TEdit
+          AnchorSideLeft.Control = GroupBox52
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox51
+          AnchorSideRight.Side = asrBottom
+          Left = 496
+          Height = 34
+          Top = 20
+          Width = 80
+          BorderSpacing.Left = 8
+          BorderSpacing.Top = 20
+          TabOrder = 8
+        end
+        object lbln1mmport: TLabel
+          AnchorSideLeft.Control = edtN1MMPort
+          AnchorSideLeft.Side = asrCenter
+          AnchorSideBottom.Control = edtN1MMPort
+          AnchorSideBottom.Side = asrBottom
+          Left = 498
+          Height = 17
+          Top = 2
+          Width = 76
+          Anchors = [akLeft, akBottom]
+          BorderSpacing.Bottom = 35
+          Caption = 'N1MM port:'
+          ParentColor = False
+        end
+        object edtn1mmIp: TEdit
+          AnchorSideLeft.Control = edtN1MMPort
+          AnchorSideTop.Control = lbln1mmaddr
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Side = asrBottom
+          Left = 496
+          Height = 34
+          Top = 75
+          Width = 81
+          BorderSpacing.Top = 2
+          TabOrder = 9
+        end
+        object lbln1mmaddr: TLabel
+          AnchorSideLeft.Control = edtn1mmIp
+          AnchorSideLeft.Side = asrCenter
+          AnchorSideTop.Control = edtN1MMPort
+          AnchorSideTop.Side = asrBottom
+          Left = 497
+          Height = 17
+          Top = 56
+          Width = 79
+          BorderSpacing.Top = 2
+          Caption = 'N1MM addr:'
+          ParentColor = False
+        end
       end
     end
     object tabAutoBackup: TTabSheet
@@ -6649,7 +6701,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 352
+        ClientHeight = 368
         ClientWidth = 606
         TabOrder = 0
         object Label93: TLabel

@@ -638,7 +638,7 @@ procedure TfrmMain.acEditQSOExecute(Sender: TObject);
 begin
   if dmData.qCQRLOG.RecordCount > 0 then
   begin
-    if (frmNewQSO.mnuRemoteMode.Checked) or (frmNewQSO.mnuRemoteModeWsjt.Checked) then
+    if frmNewQSO.AnyRemoteOn then
     begin
       Application.MessageBox('Log is in remote mode, please disable it.','Info ...',mb_ok + mb_IconInformation);
       exit
@@ -730,7 +730,7 @@ procedure TfrmMain.acViewExecute(Sender: TObject);
 begin
   if dmData.qCQRLOG.RecordCount = 0 then
     exit;
-  if (frmNewQSO.mnuRemoteMode.Checked) or (frmNewQSO.mnuRemoteModeWsjt.Checked) then
+  if frmNewQSO.AnyRemoteOn then
   begin
       Application.MessageBox('Log is in remote mode, please disable it.','Info ...',mb_ok + mb_IconInformation);
     exit
