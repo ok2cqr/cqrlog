@@ -1581,6 +1581,15 @@ begin
             msgLocator := '*QSO'; //if not real loc it is report, RRR, or 73
      if IsItACall(msgCall) then
          Begin
+            if (chknoHistory.Checked or chkMap.Checked) and
+                     (msgTime <> LastWsjtLineTime) then
+                  Begin
+                     if LocalDbg then
+                                 Writeln('Msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+                    clearSgMonitor;
+                  end;
+
+            LastWsjtLineTime := msgTime;
             PrintDecodedMessage;
             if LocalDbg then
               Begin
