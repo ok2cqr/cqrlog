@@ -29,12 +29,12 @@
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <h2><strong>CW interface</strong></h2>
-<li align=justify>Assuming that your CW interface is properly set up and working,
+    Assuming that your CW interface is properly set up and working,
     you can add and/or edit your CW messages.<br><br>
     First, set up your CW messages. In the upper menu bar on the logging screen,
-    click on the 'CW' item.<br><br>
+    click on the 'File' item.<br><br>
     <img src=img/h96.png><br><br>
-    Choose the 'Messages' option. In the resulting window, edit your CW messages which
+    Choose the 'CW Messages' option. In the resulting window, edit your CW messages which
     will be played if you press the corresponding F key (in the logging screen).
     You can set up to 10 predefined messages:<br><br>
     <img src=img/h97.png><br><br>
@@ -45,6 +45,7 @@
             <td bgcolor=#ffffcc valign="top">
                 %mc - my callsign<br>
                 %mn - my name<br>
+                %ml - my locator<br>
                 %mq - my qth<br>
                 %r - rst to be sent<br>
                 %n - his name<br>
@@ -75,10 +76,17 @@
         </li>
     </ul>
     These modes are common on professional keyboard keyers.<br><br>
+    CWTyping area allows paste (copy in editor/paste to CWType) and drop (select in editor and drag with mouse left button pressed and drop on CWType area).<br><br>
+    <strong>NOTE!</strong> CW sending has limited buffer space depending keyer type and rig model(if Hamlib keying is in use). There is no feedback from buffer
+     overflow so do not paste/drop long texts to CWTyping area. With Icom rigs and HamLib keying buffer overflow will stop cw message sending indicating that operator should check the length of message.
+      This is tested to work with IC7300. Same should happen with Kenwood rigs and HamLib keying, but this is not tested and may not work in same way.
+      <br> Other keyers may indicate buffer overflow in different ways.
+      <br><br> <strong>Same warning  </strong>with manual typing in word mode: If your typing speed is faster than cw sending you may hit send buffer limit at some moment.<br><br>
     The <strong>keying speed</strong> can be changed with PgUp (QRQ) and PgDn (QRS) keys
-    in 2 WPM steps. In the 'CW type' window, it can also be changed with the small arrow
-    buttons to the right of the speed display. The actual speed is always displayed in
-    the status line of the logging screen.<br><br>
+    in 2 WPM steps when NewQSO window is active. In the 'CW type' window when cursor is in text typing area same PgUP/PgDN keys work. Speed can also be changed with the small arrow
+    buttons to the right of the speed display. The actual speed is always displayed in the status line of the logging screen and in CWType windows speed selector.<br><br>
+    The<strong> ESC </strong>key stops running transmit. This may not be supported in all keyers and rigs and is mainly usefull when using word mode or pasted/dropped text.<br><br>
+    <strong>NOTE!</strong> Some special characters like Ä (A with dots) etc. May not be supported in CWType direct from keypress. For example Hamlib keying with Icom rig sends A with dots when typing 3 characters ^AA and you have to find out the way suitable for your setup.<br><br>
     <img src=img/h99.png><br><br>
     Setup howtos for both <a href=cwd.html><strong>cwdaemon</strong></a> and
     <a href=wkusb.html><strong>Winkey USB</strong></a> are available.<br><br>

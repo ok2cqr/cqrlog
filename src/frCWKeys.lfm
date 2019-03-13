@@ -1,14 +1,14 @@
 object fraCWKeys: TfraCWKeys
   Left = 0
-  Height = 65
+  Height = 97
   Top = 0
-  Width = 818
-  ClientHeight = 65
-  ClientWidth = 818
+  Width = 823
+  ClientHeight = 97
+  ClientWidth = 823
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 1483
-  DesignTop = 817
+  DesignLeft = 347
+  DesignTop = 175
   object btnF1: TButton
     Left = 0
     Height = 32
@@ -16,6 +16,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F1'
     OnClick = btnClicked
+    OnMouseEnter = btnF1MouseEnter
+    OnMouseLeave = btnF1MouseLeave
     TabOrder = 0
   end
   object btnF2: TButton
@@ -25,6 +27,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F2'
     OnClick = btnClicked
+    OnMouseEnter = btnF2MouseEnter
+    OnMouseLeave = btnF2MouseLeave
     TabOrder = 1
   end
   object btnF3: TButton
@@ -34,6 +38,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F3'
     OnClick = btnClicked
+    OnMouseEnter = btnF3MouseEnter
+    OnMouseLeave = btnF3MouseLeave
     TabOrder = 2
   end
   object btnF4: TButton
@@ -43,6 +49,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F4'
     OnClick = btnClicked
+    OnMouseEnter = btnF4MouseEnter
+    OnMouseLeave = btnF4MouseLeave
     TabOrder = 3
   end
   object btnF5: TButton
@@ -52,6 +60,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F5'
     OnClick = btnClicked
+    OnMouseEnter = btnF5MouseEnter
+    OnMouseLeave = btnF5MouseLeave
     TabOrder = 4
   end
   object btnPgUp: TButton
@@ -61,6 +71,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'PgUp'
     OnClick = btnClicked
+    OnMouseEnter = btnPgUpMouseEnter
+    OnMouseLeave = btnPgUpMouseLeave
     TabOrder = 5
   end
   object btnF6: TButton
@@ -70,6 +82,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F6'
     OnClick = btnClicked
+    OnMouseEnter = btnF6MouseEnter
+    OnMouseLeave = btnF6MouseLeave
     TabOrder = 6
   end
   object btnF7: TButton
@@ -79,6 +93,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F7'
     OnClick = btnClicked
+    OnMouseEnter = btnF7MouseEnter
+    OnMouseLeave = btnF7MouseLeave
     TabOrder = 7
   end
   object btnF8: TButton
@@ -88,6 +104,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F8'
     OnClick = btnClicked
+    OnMouseEnter = btnF8MouseEnter
+    OnMouseLeave = btnF8MouseLeave
     TabOrder = 8
   end
   object btnF9: TButton
@@ -97,6 +115,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F9'
     OnClick = btnClicked
+    OnMouseEnter = btnF9MouseEnter
+    OnMouseLeave = btnF9MouseLeave
     TabOrder = 9
   end
   object btnF10: TButton
@@ -106,6 +126,8 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'F10'
     OnClick = btnClicked
+    OnMouseEnter = btnF10MouseEnter
+    OnMouseLeave = btnF10MouseLeave
     TabOrder = 10
   end
   object btnPgDn: TButton
@@ -115,6 +137,24 @@ object fraCWKeys: TfraCWKeys
     Width = 136
     Caption = 'PgDn'
     OnClick = btnClicked
+    OnMouseEnter = btnPgDnMouseEnter
+    OnMouseLeave = btnPgDnMouseLeave
     TabOrder = 11
+  end
+  object lblToShowMouseOverTextCwKeys: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 6
+    Height = 17
+    Top = 78
+    Width = 4
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    BorderSpacing.Bottom = 2
+    Caption = ' '
+    ParentColor = False
   end
 end
