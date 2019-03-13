@@ -2589,6 +2589,7 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; Q
  %mc - my callsign
  %mn - my name
  %mq - my qth
+ %ml - my locator
  %nr - qso number
 
  %r  - rst send
@@ -2604,11 +2605,13 @@ use this function to prepare every text wee need to send
 
 var
   mycall : String = '';
+  myloc  : String = '';
   myname : String = '';
   myqth  : String = '';
   rst_sh : String = '';
 begin
   mycall := cqrini.ReadString('Station', 'Call', '');
+  myloc := cqrini.ReadString('Station', 'LOC', '');
   myname := cqrini.ReadString('Station', 'Name', '');
   myqth := cqrini.ReadString('Station', 'QTH', '');
   if key <> '' then
@@ -2620,6 +2623,7 @@ begin
   rst_sh := StringReplace(rst_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
 
   Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
+  Result := StringReplace(Result,'%ml',myloc,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
   Result := StringReplace(Result,'%nr',QSONR,[rfReplaceAll, rfIgnoreCase]);
