@@ -2086,6 +2086,8 @@ var
   Buf      : String;
   Fdes     : String;
   ParStr   : String;
+  Par2Str  : String;
+  Fox2Line: integer;
   ParDou   : Double;
   ParBool  : Boolean;
   ParNum   : Integer;
@@ -2206,7 +2208,7 @@ begin
   Buf := Wsjtxsock.RecvPacket(1000);
   if WsjtxSock.lasterror=0 then
   begin
-
+    Fox2Line := 0;
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
     if index < 1 then
              begin
@@ -2430,25 +2432,37 @@ begin
           ParStr := trim(StrBuf(index));    //message          //MSK144 CQ has one space before CQ, need trim
           if dmData.DebugLevel>=1 then Writeln(ParStr);
           //----------------------------------------------------
-          Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart);  //Reply str tail part
-          FirstWord := copy(ParStr,1,pos(' ',ParStr)-1);
-          if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
-           //if monitor runs ok
-           if ( new and (frmMonWsjtx <> nil) and frmMonWsjtx.Showing and (WsjtxBand <>'')  and (WsjtxMode <>'')) then
-             Begin
-               //if CQ or Mycall    (Message is in ParStr)
-               if (FirstWord = 'CQ') then
-                            frmMonWsjtx.AddCqCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
-                  else if (pos (FirstWord,MyCall) > 0) then
-                             frmMonWsjtx.AddMyCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
+          if (pos('; ',ParStr)>0) then  //fox decode has 2 items per line separated by '; '
+            Begin
+             Fox2Line :=2;
+             Par2Str := copy(ParStr,pos(';',ParStr)+2,length(ParStr));
+             ParStr := copy(ParStr,1,pos(';',ParStr)-1);
+            end;
+           repeat
+            Begin
+              if (Fox2Line = 0) then Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart)  //Reply str tail part
+                else  Repbuf := '';  //only if it is not Fox 2 line
+              FirstWord := copy(ParStr,1,pos(' ',ParStr)-1);
+              if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
+               //if monitor runs ok
+               if ( new and (frmMonWsjtx <> nil) and frmMonWsjtx.Showing and (WsjtxBand <>'')  and (WsjtxMode <>'')) then
+                 Begin
+                   //if CQ or Mycall    (Message is in ParStr)
+                   if (FirstWord = 'CQ') then
+                                frmMonWsjtx.AddCqCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
+                      else if (pos (FirstWord,MyCall) > 0) then
+                                 frmMonWsjtx.AddMyCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
 
-                   else  //if followed call
-                   Begin
-                      if dmData.DebugLevel>=1 then Writeln('Other Decode');
-                      frmMonWsjtx.AddOtherMessage(Timeline,ParStr,Repbuf,DFreq,Snr);
-                   end;
+                       else  //if followed call
+                       Begin
+                          if dmData.DebugLevel>=1 then Writeln('Other Decode');
+                          frmMonWsjtx.AddOtherMessage(Timeline,ParStr,Repbuf,DFreq,Snr);
+                       end;
+                 end;
+               if (Fox2Line = 2) then  ParStr := Par2Str; //run again with 2nd part of line
+               dec(Fox2Line);
              end;
-
+            until (Fox2line < 1);
          //----------------------------------------------------
          end; // New decode
        end; //Decode

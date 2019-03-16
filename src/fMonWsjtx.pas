@@ -1563,6 +1563,8 @@ begin
 end;
 
 procedure TfrmMonWsjtx.AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
+var
+   Fox73    : boolean;
 begin
      if LocalDbg then Writeln('Start AddMyCallMessage');
      isMyCall:= true;
@@ -1576,10 +1578,20 @@ begin
      msgCall := ExtractWord(2,Message,[' ']);
      msgLocator := ExtractWord(3,Message,[' ']);
 
+     Fox73 := ((msgCall = 'RR73') and (msgLocator =''));
+
      if LocalDbg then  Writeln('caller:', msgCall, '  loc:', msgLocator);
      if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
             msgLocator := '*QSO'; //if not real loc it is report, RRR, or 73
-     if IsItACall(msgCall) then
+
+     if Fox73 then
+       Begin
+          if LocalDbg then Writeln('Fox said 73, log qso!');
+          msgCall:= 'LOG';
+          msgLocator := '*QSO';
+       end;
+
+     if (IsItACall(msgCall) or Fox73 ) then
          Begin
             if (chknoHistory.Checked or chkMap.Checked) and
                      (msgTime <> LastWsjtLineTime) then
