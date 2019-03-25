@@ -1855,6 +1855,8 @@ var
   lat, long: currency;
   AProcess: TProcess;
   proj: string = '';
+  index: integer;
+  paramList : TStringList;
 begin
   if not FileExists(edtXplanetPath.Text) then
   begin
@@ -1880,14 +1882,25 @@ begin
     3: proj := ' -projection rectangular';
   end; //case
 
-  cmd := edtXplanetPath.Text + ' -config ' + dmData.HomeDir +
+  cmd :=' -config ' + dmData.HomeDir +
     'xplanet' + PathDelim + 'geoconfig -window ' + myloc +
     ' -glare 28 -light_time -range 2.5 ' + wait + ' ' + geom +
     ' -window_title "CQRLOG - xplanet" ' + proj;
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cmd;
-    Writeln('Command line: ', AProcess.CommandLine);
+    AProcess.Executable := edtXplanetPath.Text;
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ' ';
+    paramList.DelimitedText := cmd;
+    AProcess.Parameters.Clear;
+    while index < paramList.Count do
+    begin
+      AProcess.Parameters.Add(paramList[index]);
+      inc(index);
+    end;
+    paramList.Free;
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute;
   finally
     AProcess.Free;
@@ -2407,8 +2420,8 @@ begin
   dmUtils.InsertModes(cmbDefaultMode);
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertModes(cmbWsjtDefaultMode);
-  cmbDefaultMode.ReadOnly     := True;
-  cmbWsjtDefaultMode.ReadOnly := True;
+  cmbDefaultMode.Style := csDropDownList;
+  cmbWsjtDefaultMode.Style := csDropDownList;
 
   LoadMebershipCombo;
 

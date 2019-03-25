@@ -2409,14 +2409,26 @@ end;
 procedure TdmUtils.RunXplanet;
 var
   AProcess: TProcess;
+  index     :integer;
+  paramList :TStringList;
 begin
+  if dmData.DebugLevel>=1 then Writeln('RunXplanet - start');
+  if (GetXplanetCommand = '') then exit;
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := GetXplanetCommand;
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
-    if (AProcess.CommandLine = '') then
-      exit;
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ' ';
+    paramList.DelimitedText := GetXplanetCommand;
+    AProcess.Parameters.Clear;
+    while index < paramList.Count do
+    begin
+      if (index = 0) then AProcess.Executable := paramList[index]
+        else AProcess.Parameters.Add(paramList[index]);
+      inc(index);
+    end;
+    paramList.Free;
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute;
   finally
     AProcess.Free;
@@ -2429,10 +2441,10 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := 'killall xplanet';
+    AProcess.Executable  := 'killall';
+    AProcess.Parameters.Add('xplanet');
     AProcess.Options := [poNoConsole, poNewProcessGroup];
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute;
   finally
     AProcess.Free
@@ -2503,11 +2515,13 @@ begin
   SetCurrentDir(TargetDir);
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := 'tar -xvzf ' + FileName;
+    AProcess.Parameters.Clear;
+    AProcess.Executable := 'tar';
+    AProcess.Parameters.Add('-xvzf');
+    AProcess.Parameters.Add(FileName);
     AProcess.Options := [poNoConsole, poNewProcessGroup, poWaitOnExit];
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
-    try
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+   try
       AProcess.Execute;
     except
       Result := False
@@ -2892,12 +2906,24 @@ end;
 procedure TdmUtils.ExecuteCommand(cmd: string);
 var
   AProcess: TProcess;
+  index     :integer;
+  paramList : TStringList;
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cmd;
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ' ';
+    paramList.DelimitedText := cmd;
+    AProcess.Parameters.Clear;
+    while index < paramList.Count do
+    begin
+      if (index = 0) then AProcess.Executable := paramList[index]
+        else AProcess.Parameters.Add(paramList[index]);
+      inc(index);
+    end;
+    paramList.Free;
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Options := AProcess.Options + [poWaitOnExit];
     AProcess.Execute
   finally
@@ -2960,14 +2986,26 @@ end;
 procedure TdmUtils.RunOnBackgroud(path: string);
 var
   AProcess: TProcess;
+  index     :integer;
+  paramList : TStringList;
 begin
+  if dmData.DebugLevel>=1 then Writeln('RunOnBackgroud -start');
+  if (path = '') then exit;
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := path;
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
-    if (AProcess.CommandLine = '') then
-      exit;
+      index:=0;
+      paramList := TStringList.Create;
+      paramList.Delimiter := ' ';
+      paramList.DelimitedText := path;
+      AProcess.Parameters.Clear;
+      while index < paramList.Count do
+      begin
+        if (index = 0) then AProcess.Executable := paramList[index]
+          else AProcess.Parameters.Add(paramList[index]);
+        inc(index);
+      end;
+      paramList.Free;
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -3308,10 +3346,9 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
-      ' http://www.qrz.com/db/' + GetIDCall(call);
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Parameters.Add('http://www.qrz.com/db/' + GetIDCall(call));
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -3777,10 +3814,9 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
-      ' http://www.hamqth.com/' + GetIDCall(call);
-    if dmData.DebugLevel >= 1 then
-      Writeln('Command line: ', AProcess.CommandLine);
+    AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Parameters.Add(' http://www.hamqth.com/' + GetIDCall(call));
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free

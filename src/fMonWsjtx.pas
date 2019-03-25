@@ -162,11 +162,6 @@ var
   wkdband: Tcolor;
   wkdany: Tcolor;
   wkdnever: Tcolor;
-  bmHere,
-  bmBand,
-  bmAny,
-  bmNever,
-  bmExt   :Tbitmap;
   EditedText: string;
   //holds editAlert after finished (loose focus)
   Ssearch, Sfull: string;
@@ -213,9 +208,9 @@ begin
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable:=dmData.HomeDir + cAlert;
+    AProcess.Parameters.Clear;
     AProcess.Parameters.Add(AFile);
-    if LocalDbg then
-      Writeln('Command line: ', AProcess.Executable + ' ' + AFile );
+    if LocalDbg then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -384,6 +379,31 @@ begin
   dmUtils.SaveWindowPos(frmMonWsjtx);
 
 end;
+ 
+procedure TfrmMonWsjtx.Setbitmap(bm: TBitmap; col: Tcolor);
+begin
+ with bm do
+  Begin
+    Width  := bmW + 2;
+    Height := bmH + 2;
+    with Canvas do
+     Begin
+        Brush.Style := bsSolid;
+        if col = clBlack then Pen.Color := clFuchsia else Pen.Color := clBlack;
+        Brush.Color := col;
+        Rectangle(0, 0, bmW, bmH);
+     end;
+  end;
+end;
+
+procedure TfrmMonWsjtx.SetAllbitmaps;
+Begin
+   Setbitmap(cmHere.Bitmap, wkdhere);
+   Setbitmap(cmBand.Bitmap, wkdband);
+   Setbitmap(cmAny.Bitmap, wkdAny);
+   Setbitmap(cmNever.Bitmap, wkdnever);
+   Setbitmap(cmCqDX.Bitmap, extCqCall);
+end;
 
 procedure TfrmMonWsjtx.cmNeverClick(Sender: TObject);
 begin
@@ -396,7 +416,54 @@ begin
     SetAllbitmaps;
   end;
 end;
+procedure TfrmMonWsjtx.cmBandClick(Sender: TObject);
+begin
+  popColorDlg.Color := wkdBand;
+  popColorDlg.Title := 'Qso on this band, but not this mode - color';
+  if popColorDlg.Execute then
+  begin
+    wkdBand := (popColorDlg.Color);
+    cqrini.WriteString('MonWsjtx', 'wkdband', ColorToString(wkdband));
+    SetAllbitmaps;
+  end;
 
+end;
+
+procedure TfrmMonWsjtx.cmAnyClick(Sender: TObject);
+begin
+  popColorDlg.Color := wkdAny;
+  popColorDlg.Title := 'Qso on some other band/mode - color';
+  if popColorDlg.Execute then
+  begin
+    wkdAny := (popColorDlg.Color);
+    cqrini.WriteString('MonWsjtx', 'wkdany', ColorToString(wkdany));
+    SetAllbitmaps;
+  end;
+end;
+
+procedure TfrmMonWsjtx.cmHereClick(Sender: TObject);
+begin
+  popColorDlg.Color := wkdHere;
+  popColorDlg.Title := 'Qso on this band and mode - color';
+  if popColorDlg.Execute then
+  begin
+    wkdHere := (popColorDlg.Color);
+    cqrini.WriteString('MonWsjtx', 'wkdhere', ColorToString(wkdhere));
+    SetAllbitmaps;
+  end;
+end;
+
+procedure TfrmMonWsjtx.cmCqDxClick(Sender: TObject);
+begin
+  popColorDlg.Color := extCqCall;
+  popColorDlg.Title := 'Extended CQ (DX, NA, SA ...) - color';
+  if popColorDlg.Execute then
+   Begin
+    extCqCall := (popColorDlg.Color);
+    cqrini.WriteString('MonWsjtx', 'extCqCall', ColorToString(extCqCall));
+    SetAllbitmaps;
+   end;
+end;
 procedure TfrmMonWsjtx.EditAlertEnter(Sender: TObject);
 begin
   tbAlert.Checked := False;
@@ -461,42 +528,7 @@ begin
   SendReply(RepFlw);
 end;
 
-procedure TfrmMonWsjtx.cmBandClick(Sender: TObject);
-begin
-  popColorDlg.Color := wkdBand;
-  popColorDlg.Title := 'Qso on this band, but not this mode - color';
-  if popColorDlg.Execute then
-  begin
-    wkdBand := (popColorDlg.Color);
-    cqrini.WriteString('MonWsjtx', 'wkdband', ColorToString(wkdband));
-    SetAllbitmaps;
-  end;
 
-end;
-
-procedure TfrmMonWsjtx.cmAnyClick(Sender: TObject);
-begin
-  popColorDlg.Color := wkdAny;
-  popColorDlg.Title := 'Qso on some other band/mode - color';
-  if popColorDlg.Execute then
-  begin
-    wkdAny := (popColorDlg.Color);
-    cqrini.WriteString('MonWsjtx', 'wkdany', ColorToString(wkdany));
-    SetAllbitmaps;
-  end;
-end;
-
-procedure TfrmMonWsjtx.cmHereClick(Sender: TObject);
-begin
-  popColorDlg.Color := wkdHere;
-  popColorDlg.Title := 'Qso on this band and mode - color';
-  if popColorDlg.Execute then
-  begin
-    wkdHere := (popColorDlg.Color);
-    cqrini.WriteString('MonWsjtx', 'wkdhere', ColorToString(wkdhere));
-    SetAllbitmaps;
-  end;
-end;
 
 procedure TfrmMonWsjtx.chknoHistoryChange(Sender: TObject);
 begin
@@ -825,17 +857,6 @@ begin
   tmrCqPeriod.Enabled := True;
 end;
 
-procedure TfrmMonWsjtx.cmCqDxClick(Sender: TObject);
-begin
-  popColorDlg.Color := extCqCall;
-  popColorDlg.Title := 'Extended CQ (DX, NA, SA ...) - color';
-  if popColorDlg.Execute then
-   Begin
-    extCqCall := (popColorDlg.Color);
-    cqrini.WriteString('MonWsjtx', 'extCqCall', ColorToString(extCqCall));
-    SetAllbitmaps;
-   end;
-end;
 
 procedure TfrmMonWsjtx.cmFontClick(Sender: TObject);
 begin
@@ -864,11 +885,11 @@ begin
   LastWsjtLineTime := '';
   DblClickCall :='';
 
-  bmHere := TBitmap.Create;
-  bmBand := TBitmap.Create;
-  bmAny  := TBitmap.Create;
-  bmNever := TBitmap.Create;
-  bmExt := TBitmap.Create;
+  cmHere.Bitmap := TBitmap.Create;
+  cmBand.Bitmap := TBitmap.Create;
+  cmAny.Bitmap  := TBitmap.Create;
+  cmNever.Bitmap := TBitmap.Create;
+  cmCqDX.Bitmap := TBitmap.Create;
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
@@ -898,34 +919,6 @@ begin
   frmMonWsjtx.hide;
 end;
 
-procedure TfrmMonWsjtx.Setbitmap(bm:TBitmap;col:Tcolor);
-Begin
-  with bm do
-  Begin
-   Width  := bmW;
-   Height := bmH;
-    with Canvas do
-     Begin
-        Brush.Style := bsSolid;
-        Brush.Color := Col;
-        FillRect(0,0,bmW,bmH);
-     end;
-  end;
-end;
-
-procedure TfrmMonWsjtx.SetAllbitmaps;
-Begin
-   Setbitmap(bmHere, wkdhere);
-   cmHere.Bitmap := bmHere;
-   Setbitmap(bmBand, wkdband);
-   cmBand.Bitmap := bmBand;
-   Setbitmap(bmAny, wkdAny);
-   cmAny.Bitmap := bmAny;
-   Setbitmap(bmNever, wkdnever);
-   cmNever.Bitmap := bmNever;
-   Setbitmap(bmExt, extCqCall);
-   cmCqDX.Bitmap := bmExt;
-end;
 
 procedure TfrmMonWsjtx.FormShow(Sender: TObject);
 begin

@@ -282,6 +282,8 @@ end;
 procedure TfrmLoTWExport.btnExportSignClick(Sender: TObject);
 var
   tmp : String;
+  paramList :TStringList;
+  index,
   res : Integer;
 begin
   MarkAfter := False;
@@ -316,9 +318,20 @@ begin
   mStat.Lines.Add('Signing adif file ...');
   Application.ProcessMessages;
 
-  AProcess.CommandLine := StringReplace(edtTqsl.Text,'%f',FileName,[]);
+  index:=0;
+  paramList := TStringList.Create;
+  paramList.Delimiter := ' ';
+  paramList.DelimitedText := StringReplace(edtTqsl.Text,'%f',FileName,[]);
+  AProcess.Parameters.Clear;
+  while index < paramList.Count do
+  begin
+    if (index = 0) then AProcess.Executable := paramList[index]
+      else AProcess.Parameters.Add(paramList[index]);
+    inc(index);
+  end;
+  paramList.Free;
   AProcess.Options := [poUsePipes];
-  if dmData.DebugLevel >=1 then Writeln(AProcess.CommandLine);
+  if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
   AProcess.Execute;
 
   grbWebExport.Enabled := False;

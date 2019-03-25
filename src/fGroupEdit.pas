@@ -55,44 +55,44 @@ uses dUtils, dData, dDXCC, fMain;
 procedure TfrmGroupEdit.cmbFieldChange(Sender: TObject);
 begin
   cmbValue.Clear;
-  cmbValue.ReadOnly := False;
+  cmbValue.Style:= csDropDown;
   case cmbField.ItemIndex of
      5 : begin
            dmUtils.InsertModes(cmbValue);
-           cmbValue.ReadOnly := True
+           cmbValue.Style:=csDropDownList;
          end;
     10 : begin
            dmUtils.InsertQSL_S(cmbValue);
            cmbValue.ItemIndex := 0;
-           cmbValue.ReadOnly := True
+           cmbValue.Style:=csDropDownList;
          end;
     11 : begin
            dmUtils.InsertQSL_R(cmbValue);
            cmbValue.ItemIndex := 0;
-           cmbValue.ReadOnly := True
+           cmbValue.Style:=csDropDownList;
          end;
  18,28 : begin
            cmbValue.Items.Add('Y');
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
-           cmbValue.ReadOnly  := True
+           cmbValue.Style:=csDropDownList;
          end;
     19 : begin
            cmbValue.Items.Add('L');
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
-           cmbValue.ReadOnly  := True
+           cmbValue.Style:=csDropDownList;
          end;
     25 : begin
            dmData.InsertProfiles(cmbValue,False);
            cmbValue.ItemIndex := 0;
-           cmbValue.ReadOnly  := True
+           cmbValue.Style:=csDropDownList;
          end;
     30 : begin
            cmbValue.Items.Add('E');
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
-           cmbValue.ReadOnly  := True
+           cmbValue.Style:=csDropDownList;
          end
    end
 end;

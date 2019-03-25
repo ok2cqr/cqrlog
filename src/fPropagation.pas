@@ -276,7 +276,7 @@ begin
       for j:=0 to data.ChildNodes.Count-1 do
       begin
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = 'vhf-aurora') then
-           frmPropagation.vhf_aur := data.ChildNodes.Item[j].FirstChild.NodeValue;
+           frmPropagation.vhf_aur := String(data.ChildNodes.Item[j].FirstChild.NodeValue);
         if (data.ChildNodes.Item[j].Attributes.Item[0].NodeValue = 'E-Skip') then
         begin
           if (data.ChildNodes.Item[j].Attributes.Item[1].NodeValue = 'europe') then

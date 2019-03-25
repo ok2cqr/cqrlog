@@ -1,33 +1,49 @@
 object frmAbout: TfrmAbout
-  Left = 666
-  Height = 292
-  Top = 286
-  Width = 406
+  Left = 495
+  Height = 294
+  Top = 58
+  Width = 453
   BorderStyle = bsDialog
   Caption = 'About CQRLOG'
-  ClientHeight = 292
-  ClientWidth = 406
+  ClientHeight = 294
+  ClientWidth = 453
   OnShow = FormShow
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.0.4'
   object PageControl1: TPageControl
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 292
+    Height = 294
     Top = 0
-    Width = 406
+    Width = 453
     ActivePage = tabAbout
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object tabAbout: TTabSheet
+      AnchorSideLeft.Control = PageControl1
+      AnchorSideTop.Control = PageControl1
+      AnchorSideRight.Control = PageControl1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = PageControl1
+      AnchorSideBottom.Side = asrBottom
       Caption = 'About'
-      ClientHeight = 261
-      ClientWidth = 402
+      ClientHeight = 263
+      ClientWidth = 443
       object Image1: TImage
+        AnchorSideLeft.Control = tabAbout
+        AnchorSideTop.Control = tabAbout
         Left = 8
         Height = 128
-        Top = 8
+        Top = 6
         Width = 128
         AutoSize = True
+        BorderSpacing.Left = 8
+        BorderSpacing.Top = 6
         Picture.Data = {
           1754506F727461626C654E6574776F726B47726170686963D762000089504E47
           0D0A1A0A0000000D4948445200000080000000800806000000C33E61CB00000A
@@ -825,10 +841,14 @@ object frmAbout: TfrmAbout
         Stretch = True
       end
       object Label1: TLabel
-        Left = 164
-        Height = 62
-        Top = 8
-        Width = 223
+        AnchorSideLeft.Control = Image1
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Image1
+        Left = 184
+        Height = 64
+        Top = 6
+        Width = 250
+        BorderSpacing.Left = 48
         Caption = 'CQRLOG'
         Font.Height = -54
         Font.Style = [fsBold]
@@ -836,41 +856,58 @@ object frmAbout: TfrmAbout
         ParentFont = False
       end
       object Bevel1: TBevel
-        Left = 11
+        AnchorSideLeft.Control = Image1
+        AnchorSideTop.Control = Image1
+        AnchorSideTop.Side = asrBottom
+        Left = 8
         Height = 8
-        Top = 136
-        Width = 437
+        Top = 137
+        Width = 426
+        BorderSpacing.Top = 3
         Shape = bsTopLine
       end
       object Label2: TLabel
+        AnchorSideLeft.Control = Image1
         Left = 8
         Height = 17
         Top = 152
-        Width = 58
+        Width = 54
         Caption = 'Authors:'
         ParentColor = False
       end
       object Label3: TLabel
-        Left = 75
+        AnchorSideLeft.Control = Label2
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label2
+        Left = 77
         Height = 17
         Top = 152
-        Width = 312
+        Width = 304
+        BorderSpacing.Left = 15
         Caption = 'Petr Hlozek, OK7AN && Martin Kratoska, OK1RR'
         ParentColor = False
       end
       object Label5: TLabel
+        AnchorSideLeft.Control = Image1
+        AnchorSideTop.Control = Label2
+        AnchorSideTop.Side = asrBottom
         Left = 8
         Height = 17
-        Top = 184
-        Width = 165
+        Top = 185
+        Width = 160
+        BorderSpacing.Top = 16
         Caption = 'Home page and support:'
         ParentColor = False
       end
       object lblLink: TLabel
+        AnchorSideLeft.Control = Label5
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = Label5
         Left = 184
         Height = 17
-        Top = 184
-        Width = 158
+        Top = 185
+        Width = 146
+        BorderSpacing.Left = 16
         Caption = 'http://www.cqrlog.com'
         Font.Color = clBlue
         Font.Style = [fsUnderline]
@@ -880,8 +917,9 @@ object frmAbout: TfrmAbout
         OnMouseEnter = lblLinkMouseEnter
       end
       object btnChangelog: TButton
-        Left = 8
-        Height = 29
+        AnchorSideLeft.Control = Image1
+        Left = 9
+        Height = 33
         Top = 224
         Width = 90
         AutoSize = True
@@ -892,10 +930,14 @@ object frmAbout: TfrmAbout
         TabOrder = 0
       end
       object btnClose: TButton
-        Left = 297
-        Height = 29
-        Top = 224
+        AnchorSideTop.Control = btnChangelog
+        AnchorSideRight.Control = Label1
+        AnchorSideRight.Side = asrBottom
+        Left = 343
+        Height = 33
+        Top = 225
         Width = 90
+        Anchors = [akTop, akRight]
         AutoSize = True
         BorderSpacing.Around = 1
         Cancel = True
@@ -905,20 +947,26 @@ object frmAbout: TfrmAbout
         TabOrder = 1
       end
       object lblVerze: TLabel
-        Left = 224
+        AnchorSideTop.Control = Label1
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = Label1
+        AnchorSideRight.Side = asrBottom
+        Left = 271
         Height = 18
-        Top = 80
+        Top = 86
         Width = 163
         Alignment = taRightJustify
+        Anchors = [akTop, akRight]
         AutoSize = False
+        BorderSpacing.Top = 16
         Caption = 'lblVerze'
         ParentColor = False
       end
     end
     object tabContributors: TTabSheet
       Caption = 'Contributors'
-      ClientHeight = 261
-      ClientWidth = 402
+      ClientHeight = 263
+      ClientWidth = 443
       object mContributors: TMemo
         Left = 0
         Height = 261
