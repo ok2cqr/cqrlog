@@ -876,9 +876,9 @@ begin
   begin
     p := TProcess.Create(nil);
     try
-      if dmData.DebugLevel>=1 then Writeln('Command: ',p.CommandLine);
-      p.CommandLine := 'kill '+pid;
-      if fDebugLevel>=1 then Writeln(p.CommandLine);
+      p.Executable := 'kill';
+      p.Parameters.Add(pid);
+      if (dmData.DebugLevel>=1) or (fDebugLevel>=1) then Writeln('p.Executable: ',p.Executable,' Parameters: ',p.Parameters.Text);
       p.Execute;
       if OnStart then
         Sleep(3000);
@@ -3377,15 +3377,30 @@ var
   mysqld    : String;
   Connected : Boolean = False;
   Tryies    : Word = 0;
+  index     :integer;
+  paramList :TStringList;
+
 begin
   mysqld := GetMysqldPath;
   PrepareMysqlConfigFile;
   MySQLProcess := TProcess.Create(nil);
-  MySQLProcess.CommandLine := mysqld+' --defaults-file='+fHomeDir+'database/'+'mysql.cnf'+
+  MySQLProcess.Executable := mysqld;
+  index:=0;
+  paramList := TStringList.Create;
+  paramList.Delimiter := ' ';
+  paramList.DelimitedText := (' --defaults-file='+fHomeDir+'database/'+'mysql.cnf'+
                               ' --datadir='+fHomeDir+'database/'+
                               ' --socket='+fHomeDir+'database/sock'+
-                              ' --port=64000';
-  if fDebugLevel >= 1 then Writeln(MySQLProcess.CommandLine);
+                              ' --port=64000');
+  MySQLProcess.Parameters.Clear;
+  while index < paramList.Count do
+  begin
+    MySQLProcess.Parameters.Add(paramList[index]);
+    inc(index);
+  end;
+  paramList.Free;
+
+  if dmData.DebugLevel>=1 then Writeln('MySQLProcess.Executable: ',MySQLProcess.Executable,' Parameters: ',MySQLProcess.Parameters.Text);
   MySQLProcess.Execute;
 
   if MainCon.Connected then

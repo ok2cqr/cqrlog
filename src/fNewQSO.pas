@@ -4378,10 +4378,10 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := cqrini.ReadString('Program','WebBrowser','firefox')+
-                            ' http://www.ik3qar.it/manager/man_result.php?call='+
-                            dmData.qQSOBefore.Fields[4].AsString;
-    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+    AProcess.Executable := cqrini.ReadString('Program','WebBrowser','firefox');
+    AProcess.Parameters.Add('http://www.ik3qar.it/manager/man_result.php?call='+
+                            dmData.qQSOBefore.Fields[4].AsString);
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -6294,13 +6294,26 @@ end;
 procedure TfrmNewQSO.RunST(script: String);   //run start stop script
 var
    AProcess: TProcess;
+   index     : integer;
+   paramList : TStringList;
 begin
   if not FileExists(dmData.HomeDir + script) then
   exit;
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := 'bash ' + dmData.HomeDir + script;
-    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+    AProcess.Executable := 'bash';
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ' ';
+    paramList.DelimitedText := dmData.HomeDir + script;
+    AProcess.Parameters.Clear;
+    while index < paramList.Count do
+    begin
+      AProcess.Parameters.Add(paramList[index]);
+      inc(index);
+    end;
+    paramList.Free;
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -6318,8 +6331,11 @@ begin
   
   AProcess := TProcess.Create(nil);
   try
-    AProcess.CommandLine := 'bash ' + dmData.HomeDir + cVoiceKeyer  +' '+ key_pressed;
-    if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+    AProcess.Executable := 'bash';
+    AProcess.Parameters.Clear;
+    AProcess.Parameters.Add(dmData.HomeDir + cVoiceKeyer);
+    AProcess.Parameters.Add(key_pressed);
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -6486,7 +6502,7 @@ begin
                         DisableRemoteMode;
                   mnuRemoteMode.Checked := True;
                   AnyRemoteOn := True;
-                  lblCall.Caption       := 'Remote mode!';
+                  lblCall.Caption       := 'Fldigi remote';
                   tmrFldigi.Interval    := cqrini.ReadInteger('fldigi','interval',2)*1000;
                   run                   := cqrini.ReadBool('fldigi','run',False);
                   path                  := cqrini.ReadString('fldigi','path','');

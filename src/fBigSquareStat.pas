@@ -156,7 +156,6 @@ begin
                               ' group by lll order by loc';
         dmData.Q1.Open;
 
-
         db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
         try
           db.FieldDefs.Clear;

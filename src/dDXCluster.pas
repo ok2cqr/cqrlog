@@ -1130,6 +1130,8 @@ end;
 procedure TdmDXCluster.RunCallAlertCmd(call,band,mode,freq : String);
 var
   AProcess : TProcess;
+  paramList :TStringList;
+  index     :integer;
   cmd      : String;
 begin
   cmd := cqrini.ReadString('DXCluster','AlertCmd','');
@@ -1141,9 +1143,19 @@ begin
       cmd := StringReplace(cmd,'$BAND',band,[rfReplaceAll, rfIgnoreCase]);
       cmd := StringReplace(cmd,'$MODE',mode,[rfReplaceAll, rfIgnoreCase]);
       cmd := StringReplace(cmd,'$FREQ',freq,[rfReplaceAll, rfIgnoreCase]);
-
-      AProcess.CommandLine := cmd;
-      if dmData.DebugLevel>=1 then Writeln('Command line: ',AProcess.CommandLine);
+      index:=0;
+      paramList := TStringList.Create;
+      paramList.Delimiter := ' ';
+      paramList.DelimitedText := cmd;
+      AProcess.Parameters.Clear;
+      while index < paramList.Count do
+      begin
+        if (index = 0) then AProcess.Executable := paramList[index]
+          else AProcess.Parameters.Add(paramList[index]);
+        inc(index);
+      end;
+      paramList.Free;
+      if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
       AProcess.Execute
     finally
       AProcess.Free

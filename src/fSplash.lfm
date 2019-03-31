@@ -1,13 +1,13 @@
 object frmSplash: TfrmSplash
-  Left = 526
-  Height = 272
-  Top = 198
-  Width = 407
+  Left = 675
+  Height = 280
+  Top = 178
+  Width = 421
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Starting CQRLOG ...'
-  ClientHeight = 272
-  ClientWidth = 407
+  ClientHeight = 280
+  ClientWidth = 421
   Font.Color = clHighlight
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
@@ -2128,13 +2128,18 @@ object frmSplash: TfrmSplash
   }
   OnCreate = FormCreate
   Position = poDesktopCenter
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.0.4'
   object Image1: TImage
-    Left = 0
-    Height = 272
-    Top = 0
-    Width = 407
-    Align = alClient
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 11
+    Height = 262
+    Top = 9
+    Width = 399
     OnPaint = Image1Paint
     Picture.Data = {
       1754506F727461626C654E6574776F726B4772617068696380AE010089504E47

@@ -52,6 +52,7 @@ begin
   Repaint
 end;
 
+
 procedure TfrmSplash.Image1Paint(Sender: TObject);
 const
   VersionPos: TPoint = (X:320; Y:243);
@@ -66,7 +67,8 @@ const
      Wordbreak  : False;
      Opaque     : False;
      SystemFont : False;
-     RightToLeft: False
+     RightToLeft: False;
+     EndEllipsis: False
    );
 var
   ATextRect: TRect;

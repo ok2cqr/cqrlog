@@ -160,12 +160,17 @@ procedure TfrmContest.edtCallExit(Sender: TObject);
 begin
   frmNewQSO.edtCall.Text := edtCall.Text;
 
-  case frmNewQSO.cmbMode.Items[frmNewQSO.cmbMode.ItemIndex] of            //report in NEwQSO changes to 59 to late (after passing cmbMode)
-  'SSB','AM','FM' : Begin
-                         edtRSTs.Text := copy(edtRSTs.Text,0,2);
-                         edtRSTr.Text := copy(edtRSTr.Text,0,2);
-                    end;
-  end;
+  //report in NEwQSO changes to 59 to late (after passing cmbMode)
+  //NOTE! if mode is not in list program dies! In that case skip next
+  if frmNewQSO.cmbMode.ItemIndex >=0 then
+   begin
+     case frmNewQSO.cmbMode.Items[frmNewQSO.cmbMode.ItemIndex] of
+          'SSB','AM','FM' : Begin
+                                 edtRSTs.Text := copy(edtRSTs.Text,0,2);
+                                 edtRSTr.Text := copy(edtRSTr.Text,0,2);
+                            end;
+     end;
+   end;
 
   frmNewQSO.edtHisRST.Text := edtRSTs.Text + ' ' + edtSTX.Text + ' ' + edtSTX2.Text;
   //so that CW macros work

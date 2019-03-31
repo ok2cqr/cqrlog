@@ -103,13 +103,24 @@ end;
 
 function TRotControl.StartRotctld : Boolean;
 var
-  cmd : String;
+   index     : integer;
+   paramList : TStringList;
 begin
-
-  cmd := fRotCtldPath + ' ' +RotCtldArgs;
   if DebugMode then Writeln('Starting RotCtld ...');
-  if fDebugMode then Writeln(cmd);
-  rotProcess.CommandLine := cmd;
+
+  rotProcess.Executable := fRotCtldPath;
+  index:=0;
+  paramList := TStringList.Create;
+  paramList.Delimiter := ' ';
+  paramList.DelimitedText := RotCtldArgs;
+  rotProcess.Parameters.Clear;
+  while index < paramList.Count do
+  begin
+    rotProcess.Parameters.Add(paramList[index]);
+    inc(index);
+  end;
+  paramList.Free;
+  if DebugMode then Writeln('rotProcess.Executable: ',rotProcess.Executable,' Parameters: ',rotProcess.Parameters.Text);
 
   try
     rotProcess.Execute;

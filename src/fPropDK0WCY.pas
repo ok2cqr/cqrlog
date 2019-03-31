@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Buttons, httpsend, LCLType, ftpsend,
-  lazutf8sysutils, lclintf;
+  LazSysUtils, lclintf;
 
 type
 
