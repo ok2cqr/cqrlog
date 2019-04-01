@@ -13,7 +13,8 @@ type
   { TfrmWorkedGrids }
 
   TfrmWorkedGrids = class(TForm)
-    ZooIlbl: TImage;
+    LocMap: TImage;
+    LocMapBase: TImage;
     modeLabel: TLabel;
     FollowRig: TCheckBox;
     WsMode: TComboBox;
@@ -22,15 +23,14 @@ type
     AutoUpdate: TTimer;
     Nrgrids: TLabel;
     Nrqsos: TLabel;
-    LocMapBase: TImage;
-    ZooMap: TImage;
     ShoWkdOnly: TCheckBox;
     SaveMapImage: TSaveDialog;
     SaveMap: TButton;
-    LocMap: TImage;
     BandLabel: TLabel;
+    ZooMap: TImage;
     procedure BandSelectorChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure LocMapChangeBounds(Sender: TObject);
     procedure LocMapClick(Sender: TObject);
     procedure LocMapMouseMove(Sender: TObject; Shift: TShiftState; X, Y: integer);
     procedure ShoWkdOnlyClick(Sender: TObject);
@@ -40,12 +40,18 @@ type
     procedure SaveMapClick(Sender: TObject);
     procedure AutoUpdateTimer(Sender: TObject);
     procedure WsModeChange(Sender: TObject);
+    procedure ZooMapChangeBounds(Sender: TObject);
     procedure ZooMapClick(Sender: TObject);
   private
     { private declarations }
-    procedure DrawBase(BCanvas: TCanvas; SubBase: boolean);
+    procedure DrawFullMap;
+    procedure DrawSubMap;
+    procedure DrawGridLines(BCanvas: TCanvas; SubBase: boolean);
+    procedure UpdateGridData;
+    procedure UpdateGrids;
     procedure MarkGrid(LocGrid: string; Cfmd: boolean; MCanvas: TCanvas;
       SubBase: boolean);
+    procedure MapChangeBounds(Map:Timage);
   public
     { public declarations }
     procedure ToRigMode(mode: string);
@@ -59,6 +65,9 @@ type
     procedure UpdateMap;
   end;
 
+const
+  FullMap : Boolean = false;
+  SubMap  : Boolean = true;
 var
   frmWorkedGrids: TfrmWorkedGrids; //Main form
   MaxRowId,                    //rows in table (Number of qsos in log database)
@@ -67,7 +76,7 @@ var
   LogTable,                    //Table name found from database file (own call ad locator)
   LogBand,                     //Band that is selected for worked locators
   LogSave,                     //Default File name for saving image
-  LogMainGrid: string;    //first 2 letters of locator grid clicked from map
+  LockMainGrid: string;    //first 2 letters of locator grid clicked from map
   MouseX, MouseY,              //Mouse position on loc map rounded to grids up/right corner
   MainGridCount,               //Number of Maingrids (achrs) from query result
   GridCount: integer;    //Number of subgrids (4chrs) from query result
@@ -78,13 +87,20 @@ var
   logname  : string;       //previous states of settings for autoupdate.
   wb4lc,
   wb4cc    : boolean;
+  LocalDbg : boolean;
+  SubW     : integer;   //subgrid size on map (in pixels)
+  SubH     : integer;
+  TrueSizeW,            //streched image pointing area
+  TrueSizeH:integer ;
+  BmpTmp   : TBitmap;
+
 implementation
 
 {$R *.lfm}
 uses fNewQSO, fTRXControl, dData, dUtils, uMyIni;
 
 { TfrmWorkedGrids }
-
+ //441H      753W
 
 function TfrmWorkedGrids.GridOK(Loc: string): boolean;
 var
@@ -133,19 +149,19 @@ procedure TfrmWorkedGrids.ToRigMode(mode: string);
 var
   i: integer;
 begin
-  if dmData.DebugLevel >= 1 then
+  if LocalDbg then
     Writeln('ToRigMode was index:', WsMode.ItemIndex);
   i := WsMode.Items.Count;
   Changes := True;
   repeat
     begin
       Dec(i);
-      if dmData.DebugLevel >= 1 then
+      if LocalDbg then
         Writeln('looping now:', i);
     end;
   until (WsMode.Items[i] = mode) or (i = 0);
   WsMode.ItemIndex := i;
-  if dmData.DebugLevel >= 1 then
+  if LocalDbg then
     Writeln('Result:', i, '  ', WsMode.Items[WsMode.ItemIndex]);
 end;
 
@@ -153,26 +169,25 @@ procedure TfrmWorkedGrids.ToRigBand(band: string);
 var
   i: integer;
 begin
-  if dmData.DebugLevel >= 1 then
+  if LocalDbg then
     Writeln('ToRigBand was index:', WsMode.ItemIndex);
   i := BandSelector.Items.Count;
   Changes := True;
   repeat
     begin
       Dec(i);
-      if dmData.DebugLevel >= 1 then
+      if LocalDbg then
         Writeln('looping now:', i);
     end;
   until (BandSelector.Items[i] = band) or (i = 0);
   BandSelector.ItemIndex := i;
-  if dmData.DebugLevel >= 1 then
+  if LocalDbg then
     Writeln('Result:', i, '  ', BandSelector.Items[BandSelector.ItemIndex]);
 end;
 
 procedure TfrmWorkedGrids.UpdateMap;
-
 begin
-  BandSelectorChange(AutoUpdate);   //update map(s)
+  UpdateGridData;   //update map(s)
 end;
 
 function TfrmWorkedGrids.RecordCount: string;
@@ -209,7 +224,7 @@ var
   i : integer;
 
 begin
-  if dmData.DebugLevel >= 1 then Writeln('Start WkdGrid');
+  if LocalDbg then Writeln('Start WkdGrid');
   WkdGrid := 0;
   if cqrini.ReadBool('wsjt','wb4CLoc', False) then
             daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
@@ -242,12 +257,12 @@ begin
                           'select count(loc) from '+LogTable+
                           ' where loc like '+#39+copy(loc, 1, 2)+ '%'+#39+daylimit ;
 
-    if dmData.DebugLevel >= 1 then Write('loc query: ');
+    if LocalDbg then Write('loc query: ');
     dmData.W.Open;
     i := 1;
     while not dmData.W.Eof do
               begin
-               if dmData.DebugLevel >= 1 then writeln(dmData.W.FieldByName('sum').AsInteger);
+               if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
                if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdGrid = 0) then WkdGrid := i;
                inc(i);
                dmData.W.Next;
@@ -256,7 +271,7 @@ begin
   finally
     dmData.trW.Rollback;
   end;
-   if dmData.DebugLevel >= 1 then  Writeln('WkdGrid is:', WkdGrid);
+   if LocalDbg then  Writeln('WkdGrid is:', WkdGrid);
 end;
 
 function TfrmWorkedGrids.WkdCall(call, band, mode: string): integer;
@@ -270,7 +285,7 @@ var
   daylimit : String;
 
 begin
-  if dmData.DebugLevel >= 1 then Writeln('Start WkdCall');
+  if LocalDbg then Writeln('Start WkdCall');
   if cqrini.ReadBool('wsjt','wb4CCall', False) then
             daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39 //default date check all qsos
      else
@@ -291,12 +306,12 @@ begin
                           'select count(callsign) from '+LogTable+
                           ' where callsign='+#39+call+#39+daylimit;
 
-    if dmData.DebugLevel >= 1 then Write('call query: ');
+    if LocalDbg then Write('call query: ');
     dmData.W.Open;
     i := 1;
     while not dmData.W.Eof do
               begin
-               if dmData.DebugLevel >= 1 then writeln(dmData.W.FieldByName('sum').AsInteger);
+               if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
                if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdCall = 0) then WkdCall := i;
                inc(i);
                dmData.W.Next;
@@ -305,9 +320,9 @@ begin
     finally
       dmData.trW.Rollback;
     end;
-  if dmData.DebugLevel >= 1 then  Writeln('WkdCall is:', WkdCall);
+  if LocalDbg then  Writeln('WkdCall is:', WkdCall);
 end;
-
+//mark grid worked with confirmed status (red/green)
 procedure TfrmWorkedGrids.MarkGrid(LocGrid: string; Cfmd: boolean; MCanvas: TCanvas;
   SubBase: boolean);
 
@@ -332,10 +347,7 @@ begin
   if SubBase then
   begin
     Pwidth := 4;
-    if Cfmd then
-      Pcolor := clLime
-    else
-      Pcolor := clred;
+    if Cfmd then  Pcolor := clLime else Pcolor := clred;
     Mheight := 200;
     ltrbase := 48;
     Grid1 := 3;
@@ -354,7 +366,7 @@ begin
     if subBase then
     begin
       brush.Color := Pcolor;
-      FillRect(v + 3, h + 3, v + 38, h + 18);
+      FillRect(v + 3, h + 3, v + 36, h + 16);
     end
     else begin
       Rectangle(v + 2, h + 2, v + 39, h + 19);
@@ -381,25 +393,85 @@ begin
     end;
   end;
 end;
+procedure TfrmWorkedGrids.DrawFullMap;
+begin
+   BmpTmp := TBitmap.Create;
+   BmpTmp.Width := LocMapBase.Picture.Bitmap.Width;
+   BmpTmp.Height := LocMapBase.Picture.Bitmap.Height;
+   BmpTmp.Canvas.CopyRect(Rect(0, 0, BmpTmp.Width, BmpTmp.Height), LocMapBase.Picture.Bitmap.Canvas, Rect(0, 0, BmpTmp.Width, BmpTmp.Height));
+   UpdateGrids;
+   if not ShoWkdOnly.Checked then DrawGridLines(BmpTmp.canvas, FullMap);
+   LocMap.Picture.Bitmap.SetSize(TrueSizeW, TrueSizeH); //finally visible streched grid map
+   LocMap.Picture.Bitmap.Canvas.StretchDraw(Rect(0, 0, TrueSizeW, TrueSizeH), BmpTmp);
+   BmpTmp.Clear;
+   BmpTmp.Free;
+end;
 
+procedure TfrmWorkedGrids.DrawSubMap;
+var
+  Bmp : TBitmap;
+  ww,
+  hh: integer;
 
-procedure TfrmWorkedGrids.DrawBase(BCanvas: TCanvas; SubBase: boolean);
+begin
+  if (BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) then  //both must be set
+  begin
+    ww := 0;
+    hh := 0;
+    Bmp := TBitmap.Create; //holds copy of one grid from full base map
+    Bmp.Width := 40;
+    Bmp.Height := 20;
+    Bmp.Canvas.CopyRect(Rect(0, 0, 40,20),
+      LocMapBase.Picture.Bitmap.Canvas,
+      Rect(MouseX*40, MouseY*20, MouseX*40 + 41, MouseY*20 + 21));
+
+    BmpTmp := TBitmap.Create; //holds std size stretched bmp with added subgrid base
+    BmpTmp.Width:=401;
+    BmpTmp.Height:=201;
+    BmpTmp.Canvas.StretchDraw( Rect(0, 0, BmpTmp.Width, BmpTmp.Height), Bmp);
+    Bmp.Clear;
+    Bmp.Free;
+
+    with BmpTmp.Canvas do   //write main grid letters to submap
+     begin
+      Brush.style := bsClear;
+      font.Color := $00EBFA;
+      Font.Style := [fsBold];
+      font.Size := 80;
+      GetTextSize(LockMainGrid, ww, hh);
+      TextOut((Width-ww) div 2, (Height-hh) div 2, LockMainGrid);
+    end;
+
+    UpdateGrids;
+
+    DrawGridLines(BmpTmp.Canvas, SubMap);
+    ZooMap.Picture.Bitmap.SetSize(TrueSizeW, TrueSizeH); //finally visible streched subgrid map
+    ZooMap.Picture.Bitmap.Canvas.StretchDraw(Rect(0, 0, TrueSizeW, TrueSizeH), BmpTmp);
+    BmpTmp.Clear;
+    BmpTmp.Free;
+  end;
+
+end;
+
+//draws grid or subgrid lines over std size map image canvas and mark grids
+procedure TfrmWorkedGrids.DrawGridLines(BCanvas: TCanvas; SubBase: boolean);
 
 var
   v, vc, h, hc, Bwidth, Bheight, ltrbase: integer;
 
 begin
-
+  //full size map
   Bwidth := 720;
   Bheight := 360;
-  ltrbase := 65;
+  ltrbase := 65; //adds grid letters AA-RR
 
+  //subgrid map
   if SubBase then
-  begin
-    Bwidth := 400;
-    Bheight := 200;
-    ltrbase := 48;
-  end;
+              begin
+                Bwidth := 400;
+                Bheight := 200;
+                ltrbase := 48; //adds subgrid numbers 00-99
+              end;
 
   with BCanvas do
   begin
@@ -442,6 +514,12 @@ procedure TfrmWorkedGrids.FormCreate(Sender: TObject);
 var
   ImgStream : TResourceStream;
 begin
+  //set debug rules for this form
+  LocalDbg := dmData.DebugLevel >= 1 ;
+  if dmData.DebugLevel < 0 then
+        LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
+
+  //load map base image
   ImgStream := TResourceStream.Create(HINSTANCE,'WORLD_BORDERS',RT_RCDATA);
   try
     LocMapBase.Picture.LoadFromStream(ImgStream)
@@ -466,9 +544,34 @@ begin
   frmWorkedGrids.Caption := Caption + ' ' + dmData.LogName + ' ' + LogBand;
 
   LocMap.Canvas.CopyRect(Rect(0, 0, Width, Height),
-  LocMapBase.Picture.Bitmap.Canvas, Rect(0, 0, Width, Height));
+     LocMapBase.Picture.Bitmap.Canvas,
+     Rect(0, 0, Width, Height));
 
-  DrawBase(LocMap.canvas, False)
+  DrawGridLines(LocMap.canvas, FullMap);
+  if LocalDbg then Writeln ('Grid map created');
+end;
+
+procedure TfrmWorkedGrids.FormShow(Sender: TObject);
+begin
+  dmUtils.LoadWindowPos(frmWorkedGrids);
+  FollowRig.Checked := cqrini.ReadBool('Worked_grids', 'FollowRig', False);
+  ShoWkdOnly.Checked := cqrini.ReadBool('Worked_grids', 'ShowWkdOnly', False);
+  AutoUpdate.Enabled := True;
+  //we need this here. Otherwise user digital modes are not shown
+  dmUtils.InsertModes(WsMode);
+  WsMode.Items.Insert(0, 'any');
+  WsMode.Items.Insert(1, 'JT9+JT65');
+  WsMode.ItemIndex := 0;
+  UpdateGridData;
+end;
+
+procedure TfrmWorkedGrids.FormClose(Sender: TObject);
+begin
+  AutoUpdate.Enabled := False;
+  cqrini.WriteBool('Worked_grids', 'FollowRig', FollowRig.Checked);
+  cqrini.WriteBool('Worked_grids', 'ShowWkdOnly', ShoWkdOnly.Checked);
+  dmUtils.SaveWindowPos(frmWorkedGrids);
+  frmWorkedGrids.hide;
 end;
 
 procedure TfrmWorkedGrids.SaveMapImageClose(Sender: TObject);
@@ -496,11 +599,9 @@ begin
     aWidth := ZooMap.Picture.Bitmap.Width;
     aHeight := ZooMap.Picture.Bitmap.Height + AddSize;
     AddText := 'Log:'+dmData.LogName + ' Band:' + LogBand + ' Mode:' + WsMode.items[WsMode.ItemIndex] + ' Main Grid:' +
-                LogMainGrid + ' ' + IntToStr(GridCount) + 'sub grids';
+                LockMainGrid + ' ' + IntToStr(GridCount) + 'sub grids';
     AddText1 := 'Db:'+dmData.DBName + '  ' + BandQsoCount + '/' + FullQsoCount + 'qsos';
   end;
-
-
 
   Bmp := TBitmap.Create;
   try try
@@ -537,7 +638,7 @@ begin
   if LocMap.Visible then
     SaveMapImage.FileName := LogSave + '.jpg'
   else
-    SaveMapImage.FileName := LogSave + '_' + LogMainGrid + '.jpg';
+    SaveMapImage.FileName := LogSave + '_' + LockMainGrid + '.jpg';
   SaveMapImage.Execute
 end;
 
@@ -545,7 +646,7 @@ procedure TfrmWorkedGrids.AutoUpdateTimer(Sender: TObject);
 var
   mode, band: string;
 begin
-  if dmData.DebugLevel >= 1 then
+  if LocalDbg then
     Writeln('WkdGrids-TimerTick. FlwRig stage0 is:', FollowRig.Checked);
   AutoUpdate.Enabled := False;
 
@@ -562,15 +663,15 @@ begin
         wb4l:=cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01');
         wb4lc:=cqrini.ReadBool('wsjt','wb4CLoc', False);
         wb4cc:=cqrini.ReadBool('wsjt','wb4CCall', False);
-        if dmData.DebugLevel >= 1 then
+        if LocalDbg then
            Writeln('WkdGrids-changes detected');
       end;
 
   if FollowRig.Checked then
   begin
-    if dmData.DebugLevel >= 1 then
+    if LocalDbg then
       Writeln(' FlwRig stage 1 is:', FollowRig.Checked);
-    if dmData.DebugLevel >= 1 then
+    if LocalDbg then
       Writeln(' FlwRig getmode returns(st-m-b):', frmTRXControl.GetModeBand(
         mode, band), ' ', mode, ' ', band);
     if (frmTRXControl.GetModeBand(mode, band)) and (band <> '') then
@@ -583,7 +684,7 @@ begin
       //empty frmNewQSO.WsjtxMode causes crash. Happens if "follow rig" checked before wsjtx starts.
       if frmNewQSO.mnuRemoteModeWsjt.Checked and (frmNewQSO.WsjtxMode <> '') then
         mode := frmNewQSO.WsjtxMode;
-      if dmData.DebugLevel >= 1 then
+      if LocalDbg then
         Writeln('Follow rig mode: ', mode, ' Band: ', band);
       if WsMode.ItemIndex < 0 then
         ToRigMode(mode)
@@ -599,30 +700,27 @@ begin
     end;
   end;
 
-  if (BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) and Changes then
-    //both must be set
-  begin
-    BandSelectorChange(AutoUpdate);   //update map(s)
-  end;
+  if ((BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) and Changes) then UpdateGridData;   //update map(s)
   AutoUpdate.Enabled := True;
 end;
 
 procedure TfrmWorkedGrids.WsModeChange(Sender: TObject);
 begin
-  if (BandSelector.ItemIndex >= 0) then
-    BandSelectorChange(WsMode);
+  if (BandSelector.ItemIndex >= 0) then UpdateGridData;
 end;
 
 
-procedure TfrmWorkedGrids.ZooMapClick(Sender: TObject);
+
+procedure TfrmWorkedGrids.BandSelectorChange(Sender: TObject);
+Begin
+    UpdateGridData;
+end;
+procedure TfrmWorkedGrids.UpdateGridData;
 begin
-  ZooMap.Visible := False;
-  ZooILbl.Visible := False;
-  ShoWkdOnlyClick(ZooMap);
-  LocMap.Visible := True;
+    if not ZooMap.Visible then DrawFullMap else DrawSubMap;
 end;
 
-procedure TfrmWorkedGrids.BandSelectorChange(Sender: TObject);   //update map(s)
+procedure TfrmWorkedGrids.UpdateGrids;
 var
   SQLModeTail,
   SQLBand,
@@ -635,17 +733,6 @@ begin
   begin
     AutoUpdate.Enabled := False;
     Changes := False;
-    //clean map if caller is not zoomed grid(=visible)
-    if ZooMap.Visible then
-    begin
-      LocMapClick(BandSelector);
-    end
-    else begin
-      LocMap.Canvas.CopyRect(Rect(0, 0, Width, Height),
-        LocMapBase.Picture.Bitmap.Canvas, Rect(0, 0, Width, Height));
-      if not ShoWkdOnly.Checked then
-        DrawBase(LocMap.canvas, False);
-    end;
 
     if cqrini.ReadBool('wsjt','wb4CLoc', False) then
             daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01')+#39 //default date check all qsos
@@ -687,7 +774,7 @@ begin
     end;
     if ZooMap.Visible then  //coming from zoomed grid
     begin
-      SQLCfm[0] := SQLCfm[0] + ' and loc like ' + #39 + LogMainGrid + '%' + #39;
+      SQLCfm[0] := SQLCfm[0] + ' and loc like ' + #39 + LockMainGrid + '%' + #39;
     end;
 
     dmData.trW.StartTransaction;
@@ -695,19 +782,12 @@ begin
       for c := 1 to 2 do
       begin
         dmData.W.SQL.Text := SQLCfm[0] + SQLCfm[c]+daylimit;
+        if LocalDbg then writeln(  dmData.W.SQL.Text);
         dmData.W.Open;
         while not dmData.W.EOF do
         begin
           Grid := dmData.W.FieldByName('lo').AsString;
-
-          if ZooMap.Visible then  //coming from zoomed grid
-          begin
-            MarkGrid(Grid, c = 2, ZooMap.canvas, True);
-          end
-          else begin
-            MarkGrid(Grid, c = 2, LocMap.canvas, False);
-          end;
-
+          MarkGrid(Grid, c = 2, BmpTmp.canvas, ZooMap.Visible);
           dmData.W.Next;
         end;
         dmData.W.Close;
@@ -748,16 +828,12 @@ begin
     finally
       dmData.trW.Rollback;
     end;
-    if (BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) then
-      //both must be set
-    begin
-      LogSave := 'Wkd_locs_' + dmData.LogName + '_' +
-        BandSelector.items[BandSelector.ItemIndex] + '_' + WsMode.items[WsMode.ItemIndex];
-      LogBand := BandSelector.items[BandSelector.ItemIndex];
-      frmWorkedGrids.Caption :=
-        'Worked locator grids ' + dmData.LogName + ' ' + LogBand + ' ' + WsMode.items[WsMode.ItemIndex];
-    end;
 
+    LogSave := 'Wkd_locs_' + dmData.LogName + '_' +
+      BandSelector.items[BandSelector.ItemIndex] + '_' + WsMode.items[WsMode.ItemIndex];
+    LogBand := BandSelector.items[BandSelector.ItemIndex];
+    frmWorkedGrids.Caption :=
+      'Worked locator grids ' + dmData.LogName + ' ' + LogBand + ' ' + WsMode.items[WsMode.ItemIndex];
     Nrstatus.Caption := dmData.LogName;
     Nrgrids.Visible := True;
     Nrstatus.Visible := True;
@@ -766,112 +842,73 @@ begin
     AutoUpdate.Enabled := True;
   end;
 end;
-
-procedure TfrmWorkedGrids.FormShow(Sender: TObject);
+procedure TfrmWorkedGrids.ZooMapChangeBounds(Sender: TObject);
 begin
-  dmUtils.LoadWindowPos(frmWorkedGrids);
-  FollowRig.Checked := cqrini.ReadBool('Worked_grids', 'FollowRig', False);
-  ShoWkdOnly.Checked := cqrini.ReadBool('Worked_grids', 'ShowWkdOnly', False);
-  AutoUpdate.Enabled := True;
-  //we need this here. Otherwise user digital modes are not shown
-  dmUtils.InsertModes(WsMode);
-  WsMode.Items.Insert(0, 'any');
-  WsMode.Items.Insert(1, 'JT9+JT65');
-  WsMode.ItemIndex := 0;
-  BandSelectorChange(nil);
+   MapChangeBounds(ZooMap);
+   Changes := True;  //updating map may give better sharpness
+end;
+procedure TfrmWorkedGrids.LocMapChangeBounds(Sender: TObject);
+Begin
+  MapChangeBounds(LocMap);
+  Changes := True;  //updating map may give better sharpness
+end;
+procedure TfrmWorkedGrids.MapChangeBounds(Map:Timage);
+begin
+  with Map do
+   Begin
+     //original size 721x361   2:1  TrueSize is area where mouse postion is valid
+     if  Width/Height < 2 then //base ratio to width
+        Begin
+          TrueSizeW := Width;
+          TrueSizeH := TrueSizeW div 2;
+        end
+     else   //base ratio to height
+       Begin
+         TrueSizeH := Height;
+         TrueSizeW := TrueSizeH * 2;
+       end;
+     //subgrid size on TrueSize map
+     SubW := round (TrueSizeW / 18 );
+     SubH := round (TrueSizeH / 18);
+   end;
+  //if LocalDbg then writeln('MapSz: ', Width,'x',Height,' TrueSz: ',TrueSizeW,'x',TrueSizeH,' SubSz:',SubW,'x',SubH);
 end;
 
 procedure TfrmWorkedGrids.LocMapClick(Sender: TObject);
 
-var
-  Bmp: TBitmap;
-  aWidth, aHeight, ww, hh: integer;
+Begin
+   LockMainGrid := chr((MouseX) + 65) + chr((17 - MouseY) + 65);
+   LocMap.Visible := False;
+   ZooMap.Visible := True;
+   DrawSubMap;
+end;
 
+procedure TfrmWorkedGrids.ZooMapClick(Sender: TObject);
 begin
-
-  if (BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) then  //both must be set
-  begin
-    ww := 0;
-    hh := 0;
-    aWidth := 40;
-    aHeight := 20;
-    Bmp := TBitmap.Create;
-    Bmp.Width := aWidth;
-    Bmp.Height := aHeight;
-    Bmp.Canvas.CopyRect(Rect(0, 0, aWidth, aHeight),
-      LocMapBase.Picture.Bitmap.Canvas,
-      Rect(MouseX, MouseY, MouseX + aWidth + 1, MouseY + aHeight + 1));
-    ZooMap.Picture.Bitmap.SetSize(ZooMap.Width, ZooMap.Height);
-    ZooMap.Picture.Bitmap.Canvas.StretchDraw(
-      Rect(0, 0, ZooMap.Picture.Bitmap.Width, ZooMap.Picture.Bitmap.Height), Bmp);
-    Bmp.Free;
-    DrawBase(ZooMap.Canvas, True);
-
-    if Sender <> BandSelector then //to avoid BandSelector looping when ZooMap active
-    begin
-      LogMainGrid := chr((MouseX) div 40 + 65) + chr((340 - MouseY) div 20 + 65);
-      LocMap.Visible := False;
-      ZooMap.Visible := True;
-      ZooILbl.Visible := True;
-      with ZooIlbl.Canvas do
-        //had to make this grapic as cqrlog controls font size of window after wkd-map
-      begin
-        //position saved/loaded as other forms and I'm too lazy to dig out how to avoid it
-        Clear;
-        Brush.Color := clBackground;
-        FillRect(0, 0, Width, Height);
-        Brush.style := bsClear;
-        font.Color := clBlack;
-        Font.Style := [fsBold];
-        font.Size := 54;
-        repeat            //fit the text to canvas
-          begin
-            font.Size := font.Size - 1;
-            GetTextSize(LogMainGrid, ww, hh);
-            if dmData.DebugLevel >= 1 then
-              Writeln('Font size:', font.Size);
-          end;
-        until (ww <= Width) and (hh <= Height);
-        TextOut(1, 1, LogMainGrid);
-      end;
-
-      BandSelectorChange(LocMap);
-    end;
-
-  end;
-
+  ZooMap.Visible := False;
+  ShoWkdOnlyClick(ZooMap);
+  LocMap.Visible := True;
 end;
 
 procedure TfrmWorkedGrids.LocMapMouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: integer);
 begin
-  MouseX := (X div 40) * 40;
-  MouseY := (Y div 20) * 20;
+  if not ZooMap.Visible then  //position locks to clicked FullMap grid
+   Begin
+      if X > TrueSizeW-SubW div 2 then X:= TrueSizeW-SubW div 2; //to half way of last grid
+      if Y > TrueSizeH-SubH div 2 then Y:= TrueSizeH-SubH div 2;
+      MouseX := (X div SubW);
+      MouseY := (Y div SubH);
+      //if LocalDbg then writeln('Mouse at:', X,'x',Y,' Sub size:',SubW,'x',SubH,' Sub grid:',MouseX,'x',MouseY);
+  end;
 end;
 
 procedure TfrmWorkedGrids.ShoWkdOnlyClick(Sender: TObject);
 begin
-  if (BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) then
-    //both must be set
-  begin
-    BandSelectorChange(BandSelector);
-  end
-  else begin
-    LocMap.Canvas.CopyRect(Rect(0, 0, Width, Height),
-      LocMapBase.Picture.Bitmap.Canvas, Rect(0, 0, Width, Height));
-    if not ShoWkdOnly.Checked then
-      DrawBase(LocMap.canvas, False);
-  end;
+  if ((BandSelector.ItemIndex >= 0) and (WsMode.ItemIndex >= 0) and not ZooMap.Visible ) then UpdateGridData
+   else DrawFullMap;
 end;
 
-procedure TfrmWorkedGrids.FormClose(Sender: TObject);
-begin
-  AutoUpdate.Enabled := False;
-  cqrini.WriteBool('Worked_grids', 'FollowRig', FollowRig.Checked);
-  cqrini.WriteBool('Worked_grids', 'ShowWkdOnly', ShoWkdOnly.Checked);
-  dmUtils.SaveWindowPos(frmWorkedGrids);
-  frmWorkedGrids.hide;
-end;
 
 initialization
 

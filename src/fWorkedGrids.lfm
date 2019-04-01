@@ -1,40 +1,27 @@
 object frmWorkedGrids: TfrmWorkedGrids
-  Left = 129
-  Height = 441
-  Top = 120
-  Width = 753
+  Left = 250
+  Height = 432
+  Top = 341
+  Width = 721
   VertScrollBar.Visible = False
+  Anchors = []
   Caption = 'Worked locator grids'
-  ClientHeight = 441
-  ClientWidth = 753
-  Constraints.MaxHeight = 441
-  Constraints.MaxWidth = 753
-  Constraints.MinHeight = 441
-  Constraints.MinWidth = 753
+  ClientHeight = 432
+  ClientWidth = 721
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poDefault
-  LCLVersion = '1.8.4.0'
-  object LocMap: TImage
-    AnchorSideLeft.Control = LocMapBase
-    AnchorSideTop.Control = LocMapBase
-    Left = 16
-    Height = 361
-    Top = 73
-    Width = 721
-    OnClick = LocMapClick
-    OnMouseMove = LocMapMouseMove
-  end
+  LCLVersion = '2.0.0.4'
   object BandSelector: TComboBox
-    AnchorSideLeft.Control = BandLabel
+    AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = BandLabel
     AnchorSideTop.Side = asrBottom
-    Left = 16
+    Left = 3
     Height = 29
-    Hint = 'Band selector'
-    Top = 21
-    Width = 124
+    Top = 22
+    Width = 86
+    BorderSpacing.Left = 3
     BorderSpacing.Top = 2
     ItemHeight = 0
     Items.Strings = (
@@ -62,66 +49,39 @@ object frmWorkedGrids: TfrmWorkedGrids
   object BandLabel: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
-    Left = 16
+    Left = 3
     Height = 17
-    Top = 2
+    Top = 3
     Width = 76
-    BorderSpacing.Left = 16
-    BorderSpacing.Top = 2
+    BorderSpacing.Left = 3
+    BorderSpacing.Top = 3
     Caption = 'Select band'
     ParentColor = False
   end
   object SaveMap: TButton
     AnchorSideTop.Control = BandSelector
+    AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 609
+    Left = 632
     Height = 27
-    Top = 21
-    Width = 128
+    Top = 23
+    Width = 86
     Anchors = [akTop, akRight]
-    BorderSpacing.Right = 16
-    Caption = 'Save map image'
+    BorderSpacing.Right = 3
+    Caption = 'Save image'
     OnClick = SaveMapClick
     OnEnter = SaveMapClick
     TabOrder = 1
-  end
-  object ZooMap: TImage
-    AnchorSideLeft.Control = LocMapBase
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = LocMapBase
-    AnchorSideTop.Side = asrCenter
-    Left = 176
-    Height = 201
-    Top = 153
-    Width = 401
-    OnClick = ZooMapClick
-    Visible = False
-  end
-  object LocMapBase: TImage
-    AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Nrgrids
-    AnchorSideTop.Side = asrBottom
-    AnchorSideBottom.Side = asrBottom
-    Left = 16
-    Height = 361
-    Top = 73
-    Width = 721
-    BorderSpacing.Top = 3
-    BorderSpacing.Bottom = 5
-    OnClick = LocMapClick
-    OnMouseMove = LocMapMouseMove
-    Visible = False
   end
   object Nrstatus: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = BandSelector
     AnchorSideTop.Side = asrBottom
-    Left = 348
+    Left = 332
     Height = 17
-    Top = 53
+    Top = 54
     Width = 56
     Alignment = taCenter
     BorderSpacing.Top = 3
@@ -131,15 +91,15 @@ object frmWorkedGrids: TfrmWorkedGrids
     Visible = False
   end
   object Nrgrids: TLabel
-    AnchorSideLeft.Control = BandSelector
+    AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = BandSelector
     AnchorSideTop.Side = asrBottom
-    Left = 26
+    Left = 3
     Height = 17
-    Top = 53
+    Top = 54
     Width = 47
     Alignment = taCenter
-    BorderSpacing.Left = 10
+    BorderSpacing.Left = 3
     BorderSpacing.Top = 3
     BorderSpacing.Bottom = 2
     Caption = 'Nrgrids'
@@ -151,16 +111,16 @@ object frmWorkedGrids: TfrmWorkedGrids
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = BandSelector
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = SaveMap
+    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 682
+    Left = 673
     Height = 17
-    Top = 53
+    Top = 54
     Width = 45
-    Alignment = taCenter
+    Alignment = taRightJustify
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 3
-    BorderSpacing.Right = 10
+    BorderSpacing.Right = 3
     BorderSpacing.Bottom = 2
     Caption = 'Nrqsos'
     Layout = tlBottom
@@ -168,67 +128,114 @@ object frmWorkedGrids: TfrmWorkedGrids
     Visible = False
   end
   object WsMode: TComboBox
-    AnchorSideLeft.Control = BandSelector
+    AnchorSideLeft.Control = modeLabel
     AnchorSideTop.Control = BandSelector
-    Left = 181
+    AnchorSideTop.Side = asrCenter
+    Left = 105
     Height = 33
-    Top = 21
-    Width = 128
-    BorderSpacing.Left = 165
+    Top = 20
+    Width = 86
+    BorderSpacing.Top = 2
     ItemHeight = 0
     OnChange = WsModeChange
     Style = csDropDownList
     TabOrder = 3
   end
   object modeLabel: TLabel
-    AnchorSideLeft.Control = WsMode
-    AnchorSideBottom.Control = BandLabel
+    AnchorSideLeft.Control = BandSelector
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BandLabel
     AnchorSideBottom.Side = asrBottom
-    Left = 181
+    Left = 105
     Height = 17
-    Top = 2
+    Top = 3
     Width = 81
-    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 16
     Caption = 'Select mode'
     ParentColor = False
   end
   object FollowRig: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
+    AnchorSideLeft.Control = WsMode
+    AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = BandSelector
     AnchorSideTop.Side = asrCenter
-    Left = 331
+    Left = 194
     Height = 23
-    Top = 24
-    Width = 90
-    Caption = 'Follow rig'
+    Top = 25
+    Width = 70
+    BorderSpacing.Left = 3
+    Caption = 'Flw rig'
     TabOrder = 4
-  end
-  object ZooIlbl: TImage
-    AnchorSideLeft.Control = ZooMap
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideBottom.Control = ZooMap
-    Left = 320
-    Height = 80
-    Top = 73
-    Width = 112
-    Anchors = [akLeft, akBottom]
-    Visible = False
   end
   object ShoWkdOnly: TCheckBox
     AnchorSideTop.Control = BandSelector
     AnchorSideTop.Side = asrCenter
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 464
+    AnchorSideRight.Control = SaveMap
+    Left = 545
     Height = 23
-    Top = 24
-    Width = 124
+    Top = 25
+    Width = 84
+    Align = alCustom
     Anchors = [akTop, akRight]
-    BorderSpacing.Right = 165
-    Caption = 'Show wkd only'
+    BorderSpacing.Right = 3
+    Caption = 'Wkd grid'
     OnClick = ShoWkdOnlyClick
     TabOrder = 2
+  end
+  object ZooMap: TImage
+    AnchorSideLeft.Control = LocMap
+    AnchorSideTop.Control = LocMap
+    AnchorSideRight.Control = LocMap
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = LocMap
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 361
+    Top = 71
+    Width = 721
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    AutoSize = True
+    OnChangeBounds = ZooMapChangeBounds
+    OnClick = ZooMapClick
+    Proportional = True
+    Stretch = True
+    Visible = False
+  end
+  object LocMapBase: TImage
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Nrstatus
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 361
+    Top = 71
+    Width = 721
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Proportional = True
+    Visible = False
+  end
+  object LocMap: TImage
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Nrstatus
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 361
+    Top = 71
+    Width = 721
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    AutoSize = True
+    OnChangeBounds = LocMapChangeBounds
+    OnClick = LocMapClick
+    OnMouseMove = LocMapMouseMove
+    Proportional = True
+    Stretch = True
   end
   object SaveMapImage: TSaveDialog
     OnClose = SaveMapImageClose
