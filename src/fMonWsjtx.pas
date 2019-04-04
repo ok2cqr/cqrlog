@@ -650,7 +650,7 @@ begin
   if chkStopTx.Checked = false then
     begin
       DblClickCall := '';
-      if dmData.DebugLevel>=1 then Writeln('Reset 2click call: sTx unchecked');
+      if LocalDbg then Writeln('Reset 2click call: sTx unchecked');
     end;
 end;
 
