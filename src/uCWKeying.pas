@@ -682,7 +682,7 @@ begin
   if DebugMode then
      Writeln('CWint connected to hamlib');
 
-  tcp.SendMessage('fm'+LineEnding);
+  tcp.SendMessage('fmv'+LineEnding);
   SetSpeed(fSpeed)
 end;
 
