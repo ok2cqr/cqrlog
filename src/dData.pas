@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 15;
+  cDB_MAIN_VER = 16;
   cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -3194,6 +3194,52 @@ begin
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
+      end;
+
+      if (old_version < 16) then
+      begin
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table cqrlog_main add stx varchar(6) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table cqrlog_main add srx varchar(6) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table cqrlog_main add stx_string varchar(50) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table cqrlog_main add srx_string varchar(50) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table cqrlog_main add contestname varchar(40) null';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'alter table log_changes modify cmd varchar(20)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
+        trQ1.StartTransaction;
+        Q1.SQL.Text := 'ALTER TABLE freqmem ADD COLUMN IF NOT EXISTS info varchar(25)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        trQ1.Commit;
+
       end;
 
       if TableExists('view_cqrlog_main_by_callsign') then
