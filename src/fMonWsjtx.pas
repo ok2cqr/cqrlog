@@ -1570,6 +1570,7 @@ begin
      Message:=LineFilter(Message);
      msgCall := ExtractWord(2,Message,[' ']);
      msgLocator := ExtractWord(3,Message,[' ']);
+     CqDir := ''; // Must be reseted here, otherwise will print old CQ DIR from previous decoded line
 
      Fox73 := ((msgCall = 'RR73') and (msgLocator =''));
 
