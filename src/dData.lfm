@@ -2,10 +2,10 @@ object dmData: TdmData
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
-  Height = 606
-  HorizontalOffset = 406
-  VerticalOffset = 62
-  Width = 822
+  Height = 674
+  HorizontalOffset = 149
+  VerticalOffset = 254
+  Width = 1024
   PPI = 96
   object dsrMain: TDataSource
     DataSet = qCQRLOG
@@ -220,7 +220,12 @@ object dmData: TdmData
       '            eqsl_qslrdate date default null,'
       '            rxfreq NUMERIC(10,4) NULL,'
       '            satellite VARCHAR(30) DEFAULT '''','
-      '            prop_mode VARCHAR(30) DEFAULT '''''
+      '            prop_mode VARCHAR(30) DEFAULT '''','
+      '            contestname VARCHAR(40) NULL,'
+      '            stx VARCHAR(6) NULL,'
+      '            srx VARCHAR(6) NULL,'
+      '            stx_string VARCHAR(50) NULL,'
+      '            srx_string VARCHAR(50) NULL'
       ');'
       'CREATE INDEX main_index ON cqrlog_main(qsodate DESC,time_on DESC);'
       'CREATE INDEX callsign ON cqrlog_main(callsign);'
@@ -370,7 +375,7 @@ object dmData: TdmData
       'CREATE TABLE log_changes ('
       '  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
       '  id_cqrlog_main int(11) NULL,'
-      '  cmd varchar(10) NOT NULL,'
+      '  cmd varchar(20) NOT NULL,'
       '  qsodate date NULL,'
       '  time_on varchar(5) NULL,'
       '  callsign varchar(20) NULL,'
@@ -413,7 +418,8 @@ object dmData: TdmData
       '       id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
       '       freq numeric(10,4) NOT NULL,'
       '       mode varchar(12) NOT NULL,'
-      '       bandwidth int NOT NULL'
+      '       bandwidth int NOT NULL,'
+      '       info varchar(25) NULL'
       ') COLLATE ''utf8_bin'';'
       ''
     )
@@ -608,7 +614,7 @@ object dmData: TdmData
     Transaction = trQSOBefore
     Params = <>
     ParseSQL = False
-    left = 304
+    left = 299
     top = 216
   end
   object trQ1: TSQLTransaction
@@ -674,13 +680,13 @@ object dmData: TdmData
     Script.Strings = (
       'CREATE VIEW view_cqrlog_main_by_qsodate AS SELECT id_cqrlog_main,qsodate,time_on,time_off,callsign, freq,mode,rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,county,'
       'award,remarks, band, dxcc_id.dxcc_ref AS dxcc_ref ,qso_dxcc, profile,idcall, state, lotw_qslsdate, lotw_qslrdate,lotw_qsls, lotw_qslr, cont, qsls_date,qslr_date,club_nr1,club_nr2,club_nr3,'
-      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country, rxfreq, satellite, prop_mode FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by qsodate DESC, time_on DESC;'
+      'club_nr4, club_nr5, eqsl_qsl_sent, eqsl_qslsdate, eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country, rxfreq, satellite, prop_mode, srx, stx, srx_string, stx_string, contestname FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by qsodate DESC, time_on DESC;'
       'CREATE VIEW view_cqrlog_main_by_qsodate_asc AS SELECT id_cqrlog_main,qsodate,time_on,time_off,callsign, freq,mode,rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,county,'
       'award,remarks, band, dxcc_id.dxcc_ref AS dxcc_ref ,qso_dxcc, profile,idcall, state, lotw_qslsdate, lotw_qslrdate,lotw_qsls, lotw_qslr, cont, qsls_date,qslr_date,club_nr1,club_nr2,club_nr3,'
-      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country, rxfreq, satellite, prop_mode FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by qsodate ASC, time_on ASC;'
+      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country, rxfreq, satellite, prop_mode, srx, stx, srx_string, stx_string, contestname FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by qsodate ASC, time_on ASC;'
       'CREATE VIEW view_cqrlog_main_by_callsign AS SELECT id_cqrlog_main,qsodate,time_on,time_off,callsign, freq,mode,rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,county,'
       'award,remarks, band, dxcc_id.dxcc_ref AS dxcc_ref ,qso_dxcc, profile,idcall, state, lotw_qslsdate, lotw_qslrdate,lotw_qsls, lotw_qslr, cont, qsls_date,qslr_date,club_nr1,club_nr2,club_nr3,'
-      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country, rxfreq, satellite, prop_mode FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by callsign;'
+      'club_nr4,club_nr5,eqsl_qsl_sent,eqsl_qslsdate,eqsl_qsl_rcvd,eqsl_qslrdate,concat(qsl_r,lotw_qslr,eqsl_qsl_rcvd) as qslr,dxcc_id.country, rxfreq, satellite, prop_mode, srx, stx, srx_string, stx_string, contestname FROM cqrlog_main JOIN dxcc_id ON dxcc_id.adif = cqrlog_main.adif order by callsign;'
     )
     Terminator = ';'
     CommentsinSQL = True
