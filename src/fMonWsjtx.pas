@@ -64,7 +64,6 @@ type
     procedure cmNeverClick(Sender: TObject);
     procedure EditAlertEnter(Sender: TObject);
     procedure EditAlertExit(Sender: TObject);
-    procedure edtFollowCallChange(Sender: TObject);
     procedure edtFollowCallEnter(Sender: TObject);
     procedure edtFollowCallExit(Sender: TObject);
     procedure edtFollowCallKeyDown(Sender: TObject; var Key: word;
@@ -475,11 +474,6 @@ begin
   cqrini.WriteBool('MonWsjtx', 'Follow', tbFollow.Checked);
   EditAlert.Text := trim(EditAlert.Text);
   EditedText := EditAlert.Text;
-end;
-
-procedure TfrmMonWsjtx.edtFollowCallChange(Sender: TObject);
-begin
-  edtFollowCall.Text:=trim(UpperCase(edtFollowCall.Text));        //no spaces  upcase
 end;
 
 procedure TfrmMonWsjtx.edtFollowCallEnter(Sender: TObject);

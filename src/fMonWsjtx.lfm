@@ -12,7 +12,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnDropFiles = FormDropFiles
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.0.0.4'
   object lblBand: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -261,7 +261,6 @@ object frmMonWsjtx: TfrmMonWsjtx
       Top = 5
       Width = 80
       BorderSpacing.Left = 3
-      OnChange = edtFollowCallChange
       OnEnter = edtFollowCallEnter
       OnExit = edtFollowCallExit
       OnKeyDown = edtFollowCallKeyDown
