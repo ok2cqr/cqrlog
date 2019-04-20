@@ -55,15 +55,19 @@ type
     btPoff: TButton;
     btPon: TButton;
     btPstby: TButton;
+    edtMemNr: TEdit;
     gbBand: TGroupBox;
-    gbVfo: TGroupBox;
+    gbFreq: TGroupBox;
     gbMode: TGroupBox;
+    gbInfo: TGroupBox;
+    gbVfo: TGroupBox;
     GroupBox4: TGroupBox;
     lblFreq: TLabel;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
+    mnuOpenMem: TMenuItem;
+    mnuPref: TMenuItem;
+    mnuAddMod: TMenuItem;
+    mnuShowPwr: TMenuItem;
+    mnuProgPref: TMenuItem;
     mnuMem: TMainMenu;
     pnlRig: TPanel;
     pnlMain: TPanel;
@@ -75,6 +79,8 @@ type
     procedure btnMemWriClick(Sender: TObject);
     procedure btnMemDwnClick(Sender: TObject);
     procedure btnMemUpClick(Sender: TObject);
+    procedure btnVFOAClick(Sender: TObject);
+    procedure btnVFOBClick(Sender: TObject);
     procedure btPoffClick(Sender: TObject);
     procedure btPonClick(Sender: TObject);
     procedure btPstbyClick(Sender: TObject);
@@ -102,8 +108,8 @@ type
     procedure btnFMClick(Sender: TObject);
     procedure btnRTTYClick(Sender: TObject);
     procedure btnSSBClick(Sender: TObject);
-    procedure MenuItem3Click(Sender: TObject);
-    procedure MenuItem4Click(Sender: TObject);
+    procedure mnuShowPwrClick(Sender: TObject);
+    procedure mnuProgPrefClick(Sender: TObject);
     procedure rbRadio1Click(Sender: TObject);
     procedure rbRadio2Click(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
@@ -143,6 +149,8 @@ type
     }
     AutoMode  : Boolean;
     //Running   : Boolean;
+    infosetstage : integer;
+    infosetfreq  : String;
     procedure SynTRX;
 
     function  GetFreqFromModeBand(band : Integer;smode : String) : String;
@@ -166,6 +174,7 @@ type
     procedure LoadButtonCaptions;
     procedure SetDebugMode(DebugMode : Boolean);
     procedure LoadBandButtons;
+    function ListModeClose : Boolean;
     procedure HLTune(start:boolean);
   end;
 
@@ -225,6 +234,7 @@ var
   ModeWas : String;  //store mode while tuning with AM
   BwWas : integer;
   Tuning  : Boolean = false;
+  MemRelated : boolean;
 
 implementation
 {$R *.lfm}
@@ -342,6 +352,8 @@ var
   b : String = '';
   f : Double;
   m : String;
+  oldG : integer;
+  mG   : integer;
 begin
   if Assigned(radio) then
   begin
@@ -353,6 +365,23 @@ begin
   lblFreq.Caption := FormatFloat(empty_freq+';;',f);
   UpdateModeButtons(m);
   ClearButtonsColor;
+  // this waits5 rig polls before lock freq set by memory. After that if freq chanfǵes (by vfo knob) clean info text
+  // stupid but works quite well
+  case infosetstage  of
+      4: begin
+           infosetfreq:= lblFreq.Caption;
+           inc(infosetstage);
+         end;
+      5: begin
+           if  (infosetfreq <> lblFreq.Caption) then
+               begin
+                 edtMemNr.Text:='';
+                 infosetstage:=0;
+               end;
+         end;
+      else
+        if  ((infosetstage > 0)  and (infosetstage < 4)) then inc(infosetstage);
+  end;
   if (f = 0) then
   begin
     if cqrini.ReadBool('BandMap','UseNewQSOFreqMode',False) then
@@ -377,14 +406,35 @@ begin
   end;
 
   m := radio.GetRawMode;
-  if (m<>old_mode) then
-  begin
-    if not (((old_mode='LSB') or (old_mode='USB')) and ((m='LSB') or (m='USB'))) then
-    begin
-      old_mode := m;
-      dmData.OpenFreqMemories(old_mode)
-    end
-  end;
+
+  if MemRelated <> cqrini.ReadBool('TRX','MemModeRelated',False) then  //user changed settings
+     begin
+      MemRelated := cqrini.ReadBool('TRX','MemModeRelated',False);
+      dmData.OpenFreqMemories(m);
+     end
+    else
+      begin
+        if MemRelated then   //use related settings;
+        begin
+           //Group1 'LSB','USB','FM','AM'
+           //Group2 'RTTY','PKTLSB','PKTUSB','PKTFM','DATA'
+           case old_mode of
+                'LSB','USB','FM','AM'                      : oldG:=1;
+                'RTTY','PKTLSB','PKTUSB','PKTFM','DATA'    : oldG:=2;
+              else oldG:=0; //CW  or unlisted
+           end;
+           case m of
+                'LSB','USB','FM','AM'                      : mG:=1;
+                'RTTY','PKTLSB','PKTUSB','PKTFM','DATA'    : mG:=2;
+              else mG:=0; //CW  or unlisted
+           end;
+         if (oldG<>mG)then
+          begin
+            old_mode := m;
+            dmData.OpenFreqMemories(old_mode)
+          end
+        end;
+     end;
 
   if (b='') then
     b := dmUtils.GetBandFromFreq(lblFreq.Caption);
@@ -468,6 +518,7 @@ begin
   rbRadio1.Caption := cqrini.ReadString('TRX1','Desc','Radio 1');
   rbRadio2.Caption := cqrini.ReadString('TRX2','Desc','Radio 2');
   old_mode := '';
+  MemRelated := cqrini.ReadBool('TRX','MemModeRelated',False);
 end;
 
 procedure TfrmTRXControl.btn10mClick(Sender: TObject);
@@ -479,7 +530,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(8,mode);
   SetModeFreq(mode,freq);
-  btn10m.Font.Color := clRed; 
+  btn10m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn12mClick(Sender: TObject);
@@ -491,7 +543,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(7,mode);
   SetModeFreq(mode,freq);
-  btn12m.Font.Color := clRed; 
+  btn12m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn15mClick(Sender: TObject);
@@ -503,7 +556,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(6,mode);
   SetModeFreq(mode,freq);
-  btn15m.Font.Color := clRed; 
+  btn15m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn160mClick(Sender: TObject);
@@ -515,7 +569,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(0,mode);
   SetModeFreq(mode,freq);
-  btn160m.Font.Color := clRed; 
+  btn160m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn17mClick(Sender: TObject);
@@ -527,7 +582,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(5,mode);
   SetModeFreq(mode,freq);
-  btn17m.Font.Color := clRed; 
+  btn17m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn20mClick(Sender: TObject);
@@ -539,7 +595,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(4,mode);
   SetModeFreq(mode,freq);
-  btn20m.Font.Color := clRed; 
+  btn20m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn2mClick(Sender: TObject);
@@ -551,7 +608,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(10,mode);
   SetModeFreq(mode,freq);
-  btn2m.Font.Color := clRed; 
+  btn2m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn30mClick(Sender: TObject);
@@ -563,7 +621,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(3,mode);
   SetModeFreq(mode,freq);
-  btn30m.Font.Color := clRed; 
+  btn30m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn40mClick(Sender: TObject);
@@ -575,7 +634,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(2,mode);
   SetModeFreq(mode,freq);
-  btn40m.Font.Color := clRed; 
+  btn40m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn6mClick(Sender: TObject);
@@ -587,7 +647,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(9,mode);
   SetModeFreq(mode,freq);
-  btn6m.Font.Color := clRed; 
+  btn6m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn70cmClick(Sender: TObject);
@@ -599,7 +660,8 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(11,mode);
   SetModeFreq(mode,freq);
-  btn70cm.Font.Color := clRed; 
+  btn70cm.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
 procedure TfrmTRXControl.btn80mClick(Sender: TObject);
@@ -611,33 +673,28 @@ begin
   mode := GetActualMode; 
   freq := GetFreqFromModeBand(1,mode);
   SetModeFreq(mode,freq);
-  btn80m.Font.Color := clRed; 
+  btn80m.Font.Color := clRed;
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btnAMClick(Sender: TObject);
+procedure TfrmTRXControl.btnVFOAClick(Sender: TObject);
 begin
-  SetMode('AM',GetBandWidth('AM'))
+  if Assigned(radio) then radio.SetCurrVfo(VFOA);
 end;
-
+procedure TfrmTRXControl.btnVFOBClick(Sender: TObject);
+begin
+  if Assigned(radio) then radio.SetCurrVfo(VFOB);
+end;
 procedure TfrmTRXControl.btnCWClick(Sender: TObject);
 begin
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   SetMode('CW',GetBandWidth('CW'))
 end;
-
-procedure TfrmTRXControl.btnFMClick(Sender: TObject);
-begin
-  SetMode('FM',GetBandWidth('FM'))
-end;
-
-procedure TfrmTRXControl.btnRTTYClick(Sender: TObject);
-begin
-  SetMode('RTTY',GetBandWidth('RTTY'))
-end;
-
 procedure TfrmTRXControl.btnSSBClick(Sender: TObject);
 var
   tmp : Currency;
 begin
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   if not TryStrToCurr(lblFreq.Caption,tmp) then
     SetMode('LSB',GetBandWidth('SSB'))
   else begin
@@ -651,24 +708,39 @@ begin
     end
   end
 end;
+procedure TfrmTRXControl.btnRTTYClick(Sender: TObject);
+begin
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
+  SetMode('RTTY',GetBandWidth('RTTY'))
+end;
+procedure TfrmTRXControl.btnAMClick(Sender: TObject);
+begin
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
+  SetMode('AM',GetBandWidth('AM'))
+end;
+procedure TfrmTRXControl.btnFMClick(Sender: TObject);
+begin
+  frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
+  SetMode('FM',GetBandWidth('FM'))
+end;
 
-procedure TfrmTRXControl.MenuItem3Click(Sender: TObject);
+procedure TfrmTRXControl.mnuShowPwrClick(Sender: TObject);
 begin
       if pnlPower.Visible then
         Begin
          pnlPower.Visible:= false;
-         Menuitem3.Checked:= false;
+         mnuShowPwr.Checked:= false;
         end
        else
         Begin
          pnlPower.Visible:= true;
          btPonClick(nil); //setting buttons visible sends PwrOn to sync button colors
-         Menuitem3.Checked:= true;
+         mnuShowPwr.Checked:= true;
         end;
       cqrini.WriteBool('TRX','PowerButtons',pnlPower.Visible);
 end;
 
-procedure TfrmTRXControl.MenuItem4Click(Sender: TObject);
+procedure TfrmTRXControl.mnuProgPrefClick(Sender: TObject);
 begin
   cqrini.WriteInteger('Pref', 'ActPageIdx', 5);  //set DXCuster tab active. Number may change if preferences page change
   frmNewQSO.acPreferences.Execute
@@ -696,20 +768,49 @@ begin
     thRig.Terminate;
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
+function TfrmTRXControl.ListModeClose : boolean;
+
+Begin
+   Result :=false;
+      if (frmRadioMemories <> nil) then
+       if  (frmRadioMemories.ShowMode) then   //is open in show list mode
+        begin
+          FreeAndNil(frmRadioMemories);
+          Result :=true;
+        end;
+end;
 
 procedure TfrmTRXControl.acAddModMemExecute(Sender: TObject);
+
 begin
-  frmRadioMemories := TfrmRadioMemories.Create(frmTRXControl);
-  try
-    dmData.LoadFreqMemories(frmRadioMemories.sgrdMem);
-    frmRadioMemories.ShowModal;
-    if frmRadioMemories.ModalResult = mrOK then
-    begin
-      dmData.StoreFreqMemories(frmRadioMemories.sgrdMem)
-    end
-  finally
-    FreeAndNil(frmRadioMemories)
-  end
+    ListModeClose;
+    frmRadioMemories := TfrmRadioMemories.Create(frmTRXControl);
+     if Sender = mnuOpenMem  then    //show only
+      Begin
+         frmRadioMemories.Show;
+         frmRadioMemories.Panel1.Visible:=false;
+         frmRadioMemories.ShowMode := True;
+         try
+          dmData.LoadFreqMemories(frmRadioMemories.sgrdMem);
+         except
+          on E: Exception do
+          ShowMessage( 'Could not load memories: '+ E.ClassName + #13#10 + E.Message );
+         end;
+      end
+    else
+     begin
+      try
+         dmData.LoadFreqMemories(frmRadioMemories.sgrdMem);
+         frmRadioMemories.ShowModal;
+         if frmRadioMemories.ModalResult = mrOK then
+          begin
+            dmData.StoreFreqMemories(frmRadioMemories.sgrdMem)
+          end
+      finally
+        FreeAndNil(frmRadioMemories);
+      end;
+     end;
+
 end;
 
 procedure TfrmTRXControl.btnMemWriClick(Sender: TObject);
@@ -724,12 +825,13 @@ begin
   Dfreq := radio.GetFreqkHz;
   if Dfreq > 0 then
   begin
+      ListModeClose;
       frmRadioMemories := TfrmRadioMemories.Create(frmTRXControl);
       try
         dmData.LoadFreqMemories(frmRadioMemories.sgrdMem);
         bandwidth:= radio.GetPassOnly;
         mode     := radio.GetRawMode;
-        freq     := FloatToStrF(Dfreq,ffFixed,15,0);
+        freq     := FloatToStrF(Dfreq,ffGeneral,15,0);
         if (mode<>'') then
          begin
           frmRadioMemories.sgrdMem.RowCount := frmRadioMemories.sgrdMem.RowCount + 1;
@@ -737,11 +839,13 @@ begin
           frmRadioMemories.sgrdMem.Cells[1,frmRadioMemories.sgrdMem.RowCount-1] := mode;
           frmRadioMemories.sgrdMem.Cells[2,frmRadioMemories.sgrdMem.RowCount-1] := IntToStr(bandwidth);
           dmData.StoreFreqMemories(frmRadioMemories.sgrdMem);
-          lblFreq.Caption:='MemW OK';
+          edtMemNr.Font.Color:= clRed;
+          edtMemNr.Text:='MW ok';
+          infosetstage:=1;
          end
       finally
-        FreeAndNil(frmRadioMemories)
-      end
+        FreeAndNil(frmRadioMemories);
+      end;
   end;
 end;
 
@@ -750,8 +854,10 @@ var
   freq      : Double;
   mode      : String;
   bandwidth : Integer;
+  info      : String;
 begin
-  dmData.GetNextFreqFromMem(freq,mode,bandwidth);
+  dmData.GetNextFreqFromMem(freq,mode,bandwidth,info);
+  if dmData.DebugLevel>=1 then writeln('--------------FMWI',freq,' ',mode,' ',bandwidth,' ',info);
   if freq > 0 then
     SetFreqModeBandWidth(freq,mode,bandwidth)
 end;
@@ -761,8 +867,9 @@ var
   freq      : Double;
   mode      : String;
   bandwidth : Integer;
+  info      : String;
 begin
-  dmData.GetPreviousFreqFromMem(freq,mode,bandwidth);
+  dmData.GetPreviousFreqFromMem(freq,mode,bandwidth,info);
   if freq > 0 then
     SetFreqModeBandWidth(freq,mode,bandwidth)
 end;
@@ -851,6 +958,7 @@ var
   port   : Integer;
   poll   : Integer;
 begin
+
   if Assigned(radio) then
   begin
     FreeAndNil(radio);
@@ -899,7 +1007,7 @@ begin
   Result := True;
 
   pnlPower.Visible  := cqrini.ReadBool('TRX','PowerButtons',False);
-  Menuitem3.Checked := pnlPower.Visible;
+  mnuShowPwr.Checked := pnlPower.Visible;
   if pnlPower.Visible then btPonClick(nil);
                             // all rigs do not support rigctld power switching
                             //so we just put pwr button ON and send rigctld PWR ON cmd
@@ -1145,7 +1253,6 @@ begin
 
   SetFreqModeBandWidth(f,mode,bandwidth)
 end;
-
 function TfrmTRXControl.GetModeFreqNewQSO(var mode,freq : String) : Boolean;
 begin
   Result := False;
@@ -1175,7 +1282,8 @@ begin
   btn10m.Font.Color   := COLOR_WINDOWTEXT; 
   btn6m.Font.Color    := COLOR_WINDOWTEXT; 
   btn2m.Font.Color    := COLOR_WINDOWTEXT; 
-  btn70cm.Font.Color  := COLOR_WINDOWTEXT
+  btn70cm.Font.Color  := COLOR_WINDOWTEXT;
+
 end;
 
 function TfrmTRXControl.GetModeBand(var mode,band : String) : Boolean;
@@ -1222,7 +1330,8 @@ begin
            btnAM.Font.Color := clRed
          else
            if mode = 'FM' then
-             btnFM.Font.Color := clRed
+             btnFM.Font.Color := clRed;
+
 end;
 
 procedure TfrmTRXControl.Split(Up : Integer);

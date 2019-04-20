@@ -16,11 +16,13 @@ type
     Button1: TButton;
     Button2: TButton;
     cmbMode: TComboBox;
+    edtInfo: TEdit;
     edtFreq: TEdit;
     edtWidth: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
+    lblFreq: TLabel;
+    lblMode: TLabel;
+    lblWidth: TLabel;
+    lblInfo: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender : TObject);
     procedure FormShow(Sender: TObject);

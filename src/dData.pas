@@ -179,7 +179,7 @@ type
     procedure UpgradeCommonDatabase(old_version : Integer);
     procedure PrepareMysqlConfigFile;
     procedure DeleteOldConfigFiles;
-    procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+    procedure GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
   public
     MainCon      : TSQLConnection;
     BandMapCon   : TSQLConnection;
@@ -316,8 +316,8 @@ type
     procedure RemoveLoTWUploadedFlag(id : Integer);
     procedure StoreFreqMemories(grid : TStringGrid);
     procedure LoadFreqMemories(grid : TStringGrid);
-    procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
-    procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+    procedure GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
+    procedure GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
     procedure OpenFreqMemories(mode : String);
     procedure SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
     procedure GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
@@ -329,7 +329,7 @@ var
   dmData : TdmData;
   handle : THandle;
   reg    : TRegExpr;
-
+  MemNR  : array of integer;
 
 implementation
 
@@ -1153,7 +1153,7 @@ begin
   end;
 
   tmrDBPing.Interval := CDB_PING_INT*1000;
-  tmrDBPing.Enabled  := True
+  tmrDBPing.Enabled  := True;
 end;
 
 procedure TdmData.DataModuleDestroy(Sender: TObject);
@@ -3122,7 +3122,8 @@ begin
         Q1.SQL.Add('  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,');
         Q1.SQL.Add('  freq numeric(10,4) NOT NULL,');
         Q1.SQL.Add('  mode varchar(10) NOT NULL,');
-        Q1.SQL.Add('  bandwidth int NOT NULL');
+        Q1.SQL.Add('  bandwidth int NOT NULL,');
+        Q1.SQL.Add('  info varchar(25) NULL');      //null makes log backward compatible with old cqrlogs
         Q1.SQL.Add(') COLLATE '+QuotedStr('utf8_bin')+';');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
@@ -3974,7 +3975,7 @@ end;
 
 procedure TdmData.StoreFreqMemories(grid : TStringGrid);
 const
-  C_INS = 'insert into freqmem (freq,mode,bandwidth) values (:freq,:mode,:bandwidth)';
+  C_INS = 'insert into freqmem (freq,mode,bandwidth,info) values (:freq,:mode,:bandwidth,:info)';
   C_DEL = 'delete from freqmem';
 var
   i : Integer;
@@ -3990,6 +3991,7 @@ begin
       Q.Params[0].AsFloat   := StrToFloat(grid.Cells[0,i]);
       Q.Params[1].AsString  := grid.Cells[1,i];
       Q.Params[2].AsInteger := StrToInt(grid.Cells[2,i]);
+      Q.Params[3].AsString  := grid.Cells[3,i];
       Q.ExecSQL
     end
   except
@@ -4005,7 +4007,7 @@ end;
 
 procedure TdmData.LoadFreqMemories(grid : TStringGrid);
 const
-  C_SEL = 'select freq,mode,bandwidth from freqmem order by id';
+  C_SEL = 'select freq,mode,bandwidth,info from freqmem order by id';
 begin
   try
     grid.RowCount := 1;
@@ -4018,6 +4020,7 @@ begin
       grid.Cells[0,grid.RowCount-1] := FloatToStrF(Q.Fields[0].AsFloat,ffFixed,15,3);
       grid.Cells[1,grid.RowCount-1] := Q.Fields[1].AsString;
       grid.Cells[2,grid.RowCount-1] := IntToStr(Q.Fields[2].AsInteger);
+      grid.Cells[3,grid.RowCount-1] := Q.Fields[3].AsString;
       Q.Next
     end
   finally
@@ -4028,54 +4031,89 @@ end;
 
 procedure TdmData.OpenFreqMemories(mode : String);
 const
-  C_SEL = 'select id,freq,mode,bandwidth from freqmem';
+  C_SEL = 'select id,freq,mode,bandwidth,info from freqmem';
+var
+  c : integer;
 begin
   qFreqMem.Close;
   if trFreqMem.Active then
     trFreqMem.Rollback;
 
-  if (mode='') then
-    qFreqMem.SQL.Text := C_SEL + ' order by id'
-  else begin
-    if ((mode='LSB') or (mode='USB') or (mode='FM') or (mode='AM')) then
-    begin
-      qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('LSB') +') or ' +
-                           '(mode = ' + QuotedStr('USB') + ') or (mode = ' + QuotedStr('FM') + ') or ' +
-                           '(mode = ' + QuotedStr('AM')+ ') order by id'
-    end
-    else
-      qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
-  end;
+  if not cqrini.ReadBool('TRX','MemModeRelated',False) then mode:='';   //use related settings!!
 
+  if (mode='') then qFreqMem.SQL.Text := C_SEL + ' order by id'
+  else
+   begin
+    case mode of
+         'LSB','USB','FM','AM'     :qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('LSB') +') or ' +
+                                                           '(mode = ' + QuotedStr('USB') + ') or (mode = ' + QuotedStr('FM') + ') or ' +
+                                                           '(mode = ' + QuotedStr('AM')+ ') order by id';
+         'RTTY','PKTLSB','PKTUSB',
+         'PKTFM','DATA'            :qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('RTTY') +') or ' +
+                                                           '(mode = ' + QuotedStr('PKTLSB') + ') or (mode = ' + QuotedStr('PKTUSB') + ') or ' +
+                                                           '(mode = ' + QuotedStr('PKTFM') + ') or (mode = ' + QuotedStr('DATA')+ ') order by id';
+     else
+      qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
+    end;
+   end;
   if fDebugLevel>=1 then Writeln('FreqmemSql:',qFreqMem.SQL.Text);
   trFreqMem.StartTransaction;
   qFreqMem.Open;
 
+  qFreqMem.First;
+  qFreqMem.prior;
+  fFirstMemId := qFreqMem.Fields[0].AsInteger;
+
+  c:=-1;
+  setLength(MemNR,qFreqMem.RecordCount+1);
+  repeat
+    begin
+      inc(c);
+       MemNR[c]:= qFreqMem.Fields[0].AsInteger;
+       if fDebugLevel>=1 then Writeln('FreqmemNR:',c,'=',MemNR[c]);
+       qFreqMem.Next;
+    end;
+   until qFreqMem.Eof;
+
   qFreqMem.Last;
   fLastMemId := qFreqMem.Fields[0].AsInteger;
 
-  qFreqMem.First;
-  fFirstMemId := qFreqMem.Fields[0].AsInteger;
+
   if fDebugLevel>=1 then Writeln('FreqmemFirst:',fFirstMemId,'  FreqmemLast:',fLastMemId);
 end;
 
-procedure TdmData.GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+procedure TdmData.GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
+var
+   c: integer;
 begin
-  if (qFreqMem.RecordCount > 0) then
+  if qFreqMem.Active and (qFreqMem.RecordCount > 0) then
   begin
     freq      := qFreqMem.Fields[1].AsFloat;
     mode      := qFreqMem.Fields[2].AsString;
-    bandwidth := qFreqMem.Fields[3].AsInteger
+    bandwidth := qFreqMem.Fields[3].AsInteger;
+    info      := qFreqMem.Fields[4].AsString;
+    frmTRXControl.edtMemNr.Font.Color:= clDefault; // May be red if previous was "None"
+    if info='' then
+          begin
+            for c:=0 to  qFreqMem.RecordCount do
+                if MemNR[c]= qFreqMem.Fields[0].AsInteger then break;
+            frmTRXControl.edtMemNr.Text := IntToStr(c+1)+' of '+ IntToStr(qFreqMem.RecordCount );
+            end
+               else frmTRXControl.edtMemNr.Text := info;
+    frmTRXControl.infosetstage :=1;
   end
   else begin
      freq      := 0;
      mode      := 'CW';
-     bandwidth := 0
+     bandwidth := 0;
+     frmTRXControl.edtMemNr.Font.Color:= clRed;
+     frmTRXControl.edtMemNr.Text := 'None';
+     frmTRXControl.infosetstage :=1;
   end;
   if fDebugLevel>=1 then Writeln('Freq:',freq,' mode:',mode,' bandwidth:',bandwidth);
 end;
 
-procedure TdmData.GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+procedure TdmData.GetPreviousFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
 begin
   if not qFreqMem.Active then
   begin
@@ -4085,16 +4123,17 @@ begin
   else begin
     //if qFreqMem.Bof then  doesn't work because when it's on the first record, it has to call Prior again to be sure that
     //it's really first - that caused user has to click twice to get on the end of the table
+    if fDebugLevel>=1 then writeln('-----------UP---', qFreqMem.Fields[0].AsInteger,' ',   fFirstMemId);
     if (fFirstMemId = qFreqMem.Fields[0].AsInteger) then
       qFreqMem.Last
     else
       qFreqMem.Prior
   end;
-  GetCurrentFreqFromMem(freq,mode,bandwidth)
+  GetCurrentFreqFromMem(freq,mode,bandwidth,info)
 end;
 
 
-procedure TdmData.GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer);
+procedure TdmData.GetNextFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
 begin
   if not qFreqMem.Active then
   begin
@@ -4103,12 +4142,13 @@ begin
   end
   else begin
     //if qFreqMem.Eof then the same problem like with Bof()
+    if fDebugLevel>=1 then writeln('-----------DN---', qFreqMem.Fields[0].AsInteger,' ',   fLastMemId);
     if (fLastMemId = qFreqMem.Fields[0].AsInteger) then
       qFreqMem.First
     else
       qFreqMem.Next
   end;
-  GetCurrentFreqFromMem(freq,mode,bandwidth)
+  GetCurrentFreqFromMem(freq,mode,bandwidth,info)
 end;
 
 

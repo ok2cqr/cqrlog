@@ -1,85 +1,149 @@
 object frmAddRadioMemory: TfrmAddRadioMemory
-  Left = 420
-  Height = 204
-  Top = 260
+  Left = 32
+  Height = 222
+  Top = 235
   Width = 308
   BorderStyle = bsDialog
   Caption = 'New memory'
-  ClientHeight = 204
+  ClientHeight = 222
   ClientWidth = 308
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.4.4.0'
-  object Label1: TLabel
-    Left = 16
+  LCLVersion = '1.8.4.0'
+  object lblFreq: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 12
     Height = 17
-    Top = 16
+    Top = 2
     Width = 112
+    BorderSpacing.Left = 12
+    BorderSpacing.Top = 2
     Caption = 'Frequency in kHz'
     ParentColor = False
   end
   object edtFreq: TEdit
-    Left = 16
-    Height = 27
-    Top = 40
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = lblFreq
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 34
+    Top = 19
     Width = 192
+    BorderSpacing.Left = 12
     TabOrder = 0
     Text = '0'
   end
-  object Label2: TLabel
-    Left = 16
+  object lblMode: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = edtFreq
+    AnchorSideTop.Side = asrBottom
+    Left = 12
     Height = 17
-    Top = 80
-    Width = 39
+    Top = 55
+    Width = 36
+    BorderSpacing.Left = 12
+    BorderSpacing.Top = 2
     Caption = 'Mode'
     ParentColor = False
   end
   object cmbMode: TComboBox
-    Left = 16
-    Height = 29
-    Top = 104
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = lblMode
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 34
+    Top = 72
     Width = 192
     AutoComplete = True
     AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    BorderSpacing.Left = 12
     CharCase = ecUppercase
     ItemHeight = 0
     TabOrder = 1
     Text = 'CMBMODE'
   end
-  object Label3: TLabel
-    Left = 16
+  object lblWidth: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = cmbMode
+    AnchorSideTop.Side = asrBottom
+    Left = 12
     Height = 17
-    Top = 144
-    Width = 102
+    Top = 108
+    Width = 100
+    BorderSpacing.Left = 12
+    BorderSpacing.Top = 2
     Caption = 'Bandwidth (Hz)'
     ParentColor = False
   end
   object edtWidth: TEdit
-    Left = 16
-    Height = 27
-    Top = 172
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = lblWidth
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 34
+    Top = 125
     Width = 112
+    BorderSpacing.Left = 12
     TabOrder = 2
     Text = '0'
   end
   object Button1: TButton
-    Left = 224
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 221
     Height = 25
-    Top = 16
+    Top = 6
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 12
     Caption = 'OK'
     OnClick = Button1Click
     TabOrder = 3
   end
   object Button2: TButton
-    Left = 224
+    AnchorSideTop.Control = Button1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 221
     Height = 25
-    Top = 48
+    Top = 37
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 12
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 4
+  end
+  object lblInfo: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = edtWidth
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 17
+    Top = 161
+    Width = 25
+    BorderSpacing.Left = 12
+    BorderSpacing.Top = 2
+    Caption = 'Info'
+    ParentColor = False
+  end
+  object edtInfo: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = lblInfo
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 34
+    Top = 178
+    Width = 284
+    BorderSpacing.Left = 12
+    MaxLength = 25
+    TabOrder = 5
   end
 end
