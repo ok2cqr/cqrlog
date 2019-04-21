@@ -2,10 +2,10 @@ object dmData: TdmData
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
-  Height = 674
-  HorizontalOffset = 149
-  VerticalOffset = 254
-  Width = 1024
+  Height = 606
+  HorizontalOffset = 408
+  VerticalOffset = 52
+  Width = 822
   PPI = 96
   object dsrMain: TDataSource
     DataSet = qCQRLOG
