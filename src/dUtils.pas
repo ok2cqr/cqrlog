@@ -2490,6 +2490,10 @@ begin
     older := FileAge(dir + 'CallResolution.tbl');
   if older < FileAge(dir + 'Country.tab') then
     older := FileAge(dir + 'Country.tab');
+  if older < FileAge(dir + 'prop_mode.tab') then
+    older := FileAge(dir + 'prop_mode.tab');
+  if older < FileAge(dir + 'sat_name.tab') then
+    older := FileAge(dir + 'sat_name.tab');
   Result := FileDateToDateTime(older) + 1;
 end;
 
