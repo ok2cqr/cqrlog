@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Buttons, httpsend, LCLType, ftpsend,
-  LazSysUtils, lclintf;
+  lclintf;
 
 type
 
@@ -153,8 +153,8 @@ begin
       frmPropDK0WCY.time :=
         copy(frmPropDK0WCY.time, 1, Pos('</th>', frmPropDK0WCY.time) - 1);
       frmPropDK0WCY.time := frmPropDK0WCY.time;
-      frmPropDK0WCY.UTC := TimeToStr(nowUTC());
-      frmPropDK0WCY.date := DateToStr(nowUTC());
+      frmPropDK0WCY.UTC := TimeToStr(dmUtils.GetDateTime(0));
+      frmPropDK0WCY.date := DateToStr(dmUtils.GetDateTime(0));
 
       p := Pos('>Boulder A', tmp);
       frmPropDK0WCY.ab := trim(copy(tmp, p + 44, 18));
