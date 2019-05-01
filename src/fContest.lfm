@@ -1,23 +1,26 @@
 object frmContest: TfrmContest
   Left = 474
-  Height = 111
-  Top = 429
-  Width = 696
+  Height = 127
+  Top = 155
+  Width = 688
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
-  ClientHeight = 111
-  ClientWidth = 696
+  ClientHeight = 127
+  ClientWidth = 688
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.0.0.4'
   object edtCall: TEdit
-    Left = 10
-    Height = 32
-    Top = 27
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideTop.Control = lblCall
+    AnchorSideTop.Side = asrBottom
+    Left = 17
+    Height = 34
+    Top = 53
     Width = 140
     AutoSelect = False
     CharCase = ecUppercase
@@ -27,182 +30,255 @@ object frmContest: TfrmContest
     TabOrder = 0
   end
   object edtRSTs: TEdit
-    Left = 151
-    Height = 32
-    Top = 27
+    AnchorSideLeft.Control = edtCall
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtCall
+    Left = 157
+    Height = 34
+    Top = 53
     Width = 50
     OnKeyDown = edtCallKeyDown
     TabOrder = 5
   end
   object edtSTX: TEdit
-    Left = 202
-    Height = 32
-    Top = 27
+    AnchorSideLeft.Control = edtRSTs
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtRSTs
+    Left = 207
+    Height = 34
+    Hint = 'contest serial number sent, max 6 characters'
+    Top = 53
     Width = 50
+    MaxLength = 6
     OnExit = edtSTXExit
     OnKeyDown = edtCallKeyDown
     OnKeyPress = edtSTXKeyPress
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 6
   end
-  object edtSTX2: TEdit
-    Left = 253
-    Height = 32
-    Top = 27
+  object edtSTX_str: TEdit
+    AnchorSideLeft.Control = edtSTX
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtSTX
+    Left = 257
+    Height = 34
+    Hint = 'contest exchange message sent, max 50 characters'
+    Top = 53
     Width = 100
-    OnExit = edtSTX2Exit
+    MaxLength = 50
+    OnExit = edtSTX_strExit
     OnKeyDown = edtCallKeyDown
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 7
   end
   object edtRSTr: TEdit
-    Left = 370
-    Height = 32
-    Top = 27
+    AnchorSideLeft.Control = edtSTX_str
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtSTX_str
+    Left = 373
+    Height = 34
+    Top = 53
     Width = 50
+    BorderSpacing.Left = 16
     OnKeyDown = edtCallKeyDown
     TabOrder = 4
   end
   object edtSRX: TEdit
-    Left = 421
-    Height = 32
-    Top = 27
+    AnchorSideLeft.Control = edtRSTr
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtRSTr
+    Left = 423
+    Height = 34
+    Hint = 'contest serial number received, max 6 characters'
+    Top = 53
     Width = 50
+    MaxLength = 6
     OnExit = edtSRXExit
     OnKeyDown = edtCallKeyDown
     OnKeyPress = edtSTXKeyPress
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 1
   end
   object btSave: TButton
-    Left = 592
+    AnchorSideLeft.Control = edtSRX2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblMSGr
+    Left = 589
     Height = 30
-    Top = 8
+    Top = 36
     Width = 80
+    BorderSpacing.Left = 16
     Caption = 'Save QSO'
     OnClick = btSaveClick
     TabOrder = 3
   end
   object edtSRX2: TEdit
-    Left = 472
-    Height = 32
-    Top = 27
+    AnchorSideLeft.Control = edtSRX
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtRSTr
+    Left = 473
+    Height = 34
+    Hint = 'contest exchange message sent, max 50 characters'
+    Top = 53
     Width = 100
+    CharCase = ecUppercase
+    MaxLength = 50
     OnKeyDown = edtCallKeyDown
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
   end
   object lblCall: TLabel
-    Left = 16
-    Height = 15
-    Top = 10
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideTop.Control = cmbContestName
+    AnchorSideTop.Side = asrBottom
+    Left = 17
+    Height = 17
+    Top = 36
     Width = 25
+    BorderSpacing.Top = 1
     Caption = 'Call'
     ParentColor = False
   end
   object lblRSTs: TLabel
-    Left = 160
-    Height = 15
-    Top = 10
+    AnchorSideTop.Control = lblCall
+    Left = 161
+    Height = 17
+    Top = 36
     Width = 36
     Caption = 'RST s'
     ParentColor = False
   end
   object lblMSGs: TLabel
-    Left = 256
-    Height = 15
-    Top = 10
-    Width = 40
+    AnchorSideTop.Control = lblNRs
+    Left = 257
+    Height = 17
+    Top = 36
+    Width = 41
     Caption = 'MSG s'
     ParentColor = False
   end
   object lblRSTr: TLabel
-    Left = 376
-    Height = 15
-    Top = 10
+    AnchorSideTop.Control = lblMSGs
+    Left = 377
+    Height = 17
+    Top = 36
     Width = 34
     Caption = 'RST r'
     ParentColor = False
   end
   object lblNRr: TLabel
-    Left = 424
-    Height = 15
-    Top = 10
+    AnchorSideTop.Control = lblRSTr
+    Left = 425
+    Height = 17
+    Top = 36
     Width = 28
     Caption = 'NR r'
     ParentColor = False
   end
   object lblMSGr: TLabel
-    Left = 480
-    Height = 15
-    Top = 10
-    Width = 38
+    AnchorSideTop.Control = lblNRr
+    Left = 481
+    Height = 17
+    Top = 36
+    Width = 39
     Caption = 'MSG r'
     ParentColor = False
   end
   object chNRInc: TCheckBox
-    Left = 202
+    AnchorSideLeft.Control = edtSTX
+    AnchorSideTop.Control = chTrueRST
+    Left = 207
     Height = 23
-    Top = 56
+    Top = 87
     Width = 45
     Caption = 'Inc'
     OnClick = chNRIncClick
     TabOrder = 8
+    TabStop = False
   end
   object lblNRs: TLabel
-    Left = 208
-    Height = 15
-    Top = 10
+    AnchorSideTop.Control = lblRSTs
+    Left = 209
+    Height = 17
+    Top = 36
     Width = 30
     Caption = 'NR s'
     ParentColor = False
   end
   object chLoc: TCheckBox
-    Left = 472
+    AnchorSideLeft.Control = edtSRX2
+    AnchorSideTop.Control = chNoNr
+    Left = 473
     Height = 23
-    Top = 56
-    Width = 100
+    Top = 87
+    Width = 101
     Caption = 'MSG is LOC'
     TabOrder = 9
+    TabStop = False
   end
   object chSpace: TCheckBox
-    Left = 16
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideTop.Control = edtCall
+    AnchorSideTop.Side = asrBottom
+    Left = 17
     Height = 23
-    Top = 56
+    Top = 87
     Width = 111
     Caption = 'SPACE is TAB'
     TabOrder = 10
+    TabStop = False
   end
   object chNoNr: TCheckBox
-    Left = 424
+    AnchorSideLeft.Control = edtSRX
+    AnchorSideTop.Control = chNRInc
+    Left = 423
     Height = 23
-    Top = 56
+    Top = 87
     Width = 44
     Caption = 'No'
     OnChange = chNoNrChange
     TabOrder = 11
+    TabStop = False
   end
   object chTrueRST: TCheckBox
-    Left = 153
+    AnchorSideLeft.Control = edtRSTs
+    AnchorSideTop.Control = chSpace
+    Left = 157
     Height = 23
-    Top = 56
+    Top = 87
     Width = 45
     Caption = 'Tru'
     OnChange = chTrueRSTChange
     TabOrder = 12
+    TabStop = False
   end
   object Button1: TButton
-    Left = 592
+    AnchorSideLeft.Control = btSave
+    AnchorSideTop.Control = btSave
+    AnchorSideTop.Side = asrBottom
+    Left = 589
     Height = 30
-    Top = 48
+    Top = 68
     Width = 80
+    BorderSpacing.Top = 2
     Caption = 'Clear all'
     OnClick = Button1Click
     TabOrder = 13
   end
   object btnHelp: TSpeedButton
-    Left = 672
-    Height = 22
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 663
+    Height = 25
     Hint = 'Help'
-    Top = 89
-    Width = 23
-    Anchors = [akRight, akBottom]
+    Top = 0
+    Width = 25
+    Anchors = [akTop, akRight, akBottom]
     Glyph.Data = {
       F6030000424DF6030000000000003600000028000000100000000F0000000100
       200000000000C003000064000000640000000000000000000000FFFFFF00FFFF
@@ -239,10 +315,267 @@ object frmContest: TfrmContest
     }
     OnClick = btnHelpClick
   end
+  object lblContestName: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = cmbContestName
+    Left = 17
+    Height = 17
+    Top = 1
+    Width = 87
+    BorderSpacing.Left = 17
+    Caption = 'Contestname'
+    ParentColor = False
+  end
+  object cmbContestName: TComboBox
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    Left = 110
+    Height = 34
+    Hint = 'contestname, choose ADIF contest_id via combobox or type freestyle max 40 characters'
+    Top = 1
+    Width = 432
+    AutoComplete = True
+    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 1
+    ItemHeight = 0
+    Items.Strings = (
+      '070-160M-SPRINT'
+      '070-3-DAY'
+      '070-31-FLAVORS'
+      '070-40M-SPRINT'
+      '070-80M-SPRINT'
+      '070-PSKFEST'
+      '070-ST-PATS-DAY'
+      '070-VALENTINE-SPRINT'
+      '10-RTTY'
+      '1010-OPEN-SEASON'
+      '7QP'
+      'AL-QSO-PARTY'
+      'ALL-ASIAN-DX-CW'
+      'ALL-ASIAN-DX-PHONE'
+      'ANARTS-RTTY'
+      'ANATOLIAN-RTTY'
+      'AP-SPRINT'
+      'AR-QSO-PARTY'
+      'ARI-DX'
+      'ARRL-10'
+      'ARRL-160'
+      'ARRL-222'
+      'ARRL-DX-CW'
+      'ARRL-DX-SSB'
+      'ARRL-EME'
+      'ARRL-FIELD-DAY'
+      'ARRL-RR-CW'
+      'ARRL-RR-RTTY'
+      'ARRL-RR-SSB'
+      'ARRL-RTTY'
+      'ARRL-SCR'
+      'ARRL-SS-CW'
+      'ARRL-SS-SSB'
+      'ARRL-UHF-AUG'
+      'ARRL-VHF-JAN'
+      'ARRL-VHF-JUN'
+      'ARRL-VHF-SEP'
+      'AZ-QSO-PARTY'
+      'BARTG-RTTY'
+      'BARTG-SPRINT'
+      'BC-QSO-PARTY'
+      'CA-QSO-PARTY'
+      'CIS-DX'
+      'CO-QSO-PARTY'
+      'CQ-160-CW'
+      'CQ-160-SSB'
+      'CQ-M'
+      'CQ-VHF'
+      'CQ-WPX-CW'
+      'CQ-WPX-RTTY'
+      'CQ-WPX-SSB'
+      'CQ-WW-CW'
+      'CQ-WW-RTTY'
+      'CQ-WW-SSB'
+      'CT-QSO-PARTY'
+      'CVA-DX-CW'
+      'CVA-DX-SSB'
+      'CWOPS-CW-OPEN'
+      'CWOPS-CWT'
+      'DARC-WAEDC-CW'
+      'DARC-WAEDC-RTTY'
+      'DARC-WAEDC-SSB'
+      'DARC-WAG'
+      'DE-QSO-PARTY'
+      'DL-DX-RTTY'
+      'DMC-RTTY'
+      'EA-CNCW'
+      'EA-DME'
+      'EA-PSK63'
+      'EA-RTTY (import-only)'
+      'EA-SMRE-CW'
+      'EA-SMRE-SSB'
+      'EA-VHF-ATLANTIC'
+      'EA-VHF-COM'
+      'EA-VHF-COSTA-SOL'
+      'EA-VHF-EA'
+      'EA-VHF-EA1RCS'
+      'EA-VHF-QSL'
+      'EA-VHF-SADURNI'
+      'EA-WW-RTTY'
+      'EPC-PSK63'
+      'EU Sprint'
+      'EU-HF'
+      'EU-PSK-DX'
+      'EUCW160M'
+      'FALL SPRINT'
+      'FL-QSO-PARTY'
+      'GA-QSO-PARTY'
+      'HA-DX'
+      'HELVETIA'
+      'HI-QSO-PARTY'
+      'HOLYLAND'
+      'IA-QSO-PARTY'
+      'IARU-FIELD-DAY'
+      'IARU-HF'
+      'ID-QSO-PARTY'
+      'IL QSO Party'
+      'IN-QSO-PARTY'
+      'JARTS-WW-RTTY'
+      'JIDX-CW'
+      'JIDX-SSB'
+      'JT-DX-RTTY'
+      'KS-QSO-PARTY'
+      'KY-QSO-PARTY'
+      'LA-QSO-PARTY'
+      'LDC-RTTY'
+      'LZ DX'
+      'MAR-QSO-PARTY'
+      'MD-QSO-PARTY'
+      'ME-QSO-PARTY'
+      'MI-QSO-PARTY'
+      'MIDATLANTIC-QSO-PARTY'
+      'MN-QSO-PARTY'
+      'MO-QSO-PARTY'
+      'MS-QSO-PARTY'
+      'MT-QSO-PARTY'
+      'NA-SPRINT-CW'
+      'NA-SPRINT-RTTY'
+      'NA-SPRINT-SSB'
+      'NAQP-CW'
+      'NAQP-RTTY'
+      'NAQP-SSB'
+      'NC-QSO-PARTY'
+      'ND-QSO-PARTY'
+      'NE-QSO-PARTY'
+      'NEQP'
+      'NH-QSO-PARTY'
+      'NJ-QSO-PARTY'
+      'NM-QSO-PARTY'
+      'NRAU-BALTIC-CW'
+      'NRAU-BALTIC-SSB'
+      'NV-QSO-PARTY'
+      'NY-QSO-PARTY'
+      'OCEANIA-DX-CW'
+      'OCEANIA-DX-SSB'
+      'OH-QSO-PARTY'
+      'OK-DX-RTTY'
+      'OK-OM-DX'
+      'OK-QSO-PARTY'
+      'OMISS-QSO-PARTY'
+      'ON-QSO-PARTY'
+      'OR-QSO-PARTY'
+      'PA-QSO-PARTY'
+      'PACC'
+      'PSK-DEATHMATCH'
+      'QC-QSO-PARTY'
+      'RAC (import-only)'
+      'RAC-CANADA-DAY'
+      'RAC-CANADA-WINTER'
+      'RDAC'
+      'RDXC'
+      'REF-160M'
+      'REF-CW'
+      'REF-SSB'
+      'REP-PORTUGAL-DAY-HF'
+      'RI-QSO-PARTY'
+      'RSGB-160'
+      'RSGB-21/28-CW'
+      'RSGB-21/28-SSB'
+      'RSGB-80M-CC'
+      'RSGB-AFS-CW'
+      'RSGB-AFS-SSB'
+      'RSGB-CLUB-CALLS'
+      'RSGB-COMMONWEALTH'
+      'RSGB-IOTA'
+      'RSGB-LOW-POWER'
+      'RSGB-NFD'
+      'RSGB-ROPOCO'
+      'RSGB-SSB-FD'
+      'RUSSIAN-RTTY'
+      'SAC-CW'
+      'SAC-SSB'
+      'SARTG-RTTY'
+      'SC-QSO-PARTY'
+      'SCC-RTTY'
+      'SD-QSO-PARTY'
+      'SMP-AUG'
+      'SMP-MAY'
+      'SP-DX-RTTY'
+      'SPAR-WINTER-FD'
+      'SPDXContest'
+      'SPRING SPRINT'
+      'SR-MARATHON'
+      'STEW-PERRY'
+      'SUMMER SPRINT'
+      'TARA-GRID-DIP'
+      'TARA-RTTY'
+      'TARA-RUMBLE'
+      'TARA-SKIRMISH'
+      'TEN-RTTY'
+      'TMC-RTTY'
+      'TN-QSO-PARTY'
+      'TX-QSO-PARTY'
+      'UBA-DX-CW'
+      'UBA-DX-SSB'
+      'UK-DX-BPSK63'
+      'UK-DX-RTTY'
+      'UKR-CHAMP-RTTY'
+      'UKRAINIAN DX'
+      'UKSMG-6M-MARATHON'
+      'UKSMG-SUMMER-ES'
+      'URE-DX  (import-only)'
+      'US-COUNTIES-QSO'
+      'UT-QSO-PARTY'
+      'VA-QSO-PARTY'
+      'VENEZ-IND-DAY'
+      'VIRGINIA QSO PARTY (import-only)'
+      'VOLTA-RTTY'
+      'WA-QSO-PARTY'
+      'WI-QSO-PARTY'
+      'WIA-HARRY ANGEL'
+      'WIA-JMMFD'
+      'WIA-OCDX'
+      'WIA-REMEMBRANCE'
+      'WIA-ROSS HULL'
+      'WIA-TRANS TASMAN'
+      'WIA-VHF/UHF FD'
+      'WIA-VK SHIRES'
+      'WINTER SPRINT'
+      'WV-QSO-PARTY'
+      'WY-QSO-PARTY'
+      'XE-INTL-RTTY'
+      'YOHFDX'
+      'YUDXC'
+    )
+    MaxLength = 40
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 14
+    TabStop = False
+  end
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer
-    left = 472
-    top = 24
+    left = 544
+    top = 8
   end
 end

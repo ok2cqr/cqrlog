@@ -1,7 +1,7 @@
 object frmFilter: TfrmFilter
-  Left = 272
+  Left = 161
   Height = 658
-  Top = 79
+  Top = 20
   Width = 817
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
@@ -121,7 +121,7 @@ object frmFilter: TfrmFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.0.4'
   object lblProf: TLabel
     AnchorSideTop.Control = cmbProfile
     AnchorSideRight.Control = lblSortBy
@@ -223,13 +223,15 @@ object frmFilter: TfrmFilter
     end
   end
   object btnOK: TButton
-    AnchorSideLeft.Control = btnSave
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = cmbSort
-    Left = 725
+    AnchorSideRight.Control = gbIota
+    AnchorSideRight.Side = asrBottom
+    Left = 731
     Height = 26
     Top = 500
     Width = 75
+    Anchors = [akTop, akRight]
     BorderSpacing.Left = 6
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
@@ -240,7 +242,7 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Control = btnOK
     AnchorSideTop.Control = btnOK
     AnchorSideTop.Side = asrBottom
-    Left = 725
+    Left = 731
     Height = 26
     Top = 532
     Width = 75
@@ -357,12 +359,12 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbCallsign
     Left = 492
-    Height = 114
+    Height = 56
     Top = 4
     Width = 154
     BorderSpacing.Left = 6
     Caption = ' Mode '
-    ClientHeight = 96
+    ClientHeight = 38
     ClientWidth = 152
     TabOrder = 5
     object cmbMode: TComboBox
@@ -370,11 +372,10 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = gbMode
       Left = 6
       Height = 32
-      Top = 6
+      Top = 0
       Width = 130
       AutoSize = False
       BorderSpacing.Left = 6
-      BorderSpacing.Top = 6
       ItemHeight = 0
       TabOrder = 0
     end
@@ -834,16 +835,16 @@ object frmFilter: TfrmFilter
     end
   end
   object gbContinent: TGroupBox
-    AnchorSideLeft.Control = gbZones
+    AnchorSideLeft.Control = gbContestEx
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbLoc
-    Left = 492
-    Height = 114
+    Left = 652
+    Height = 56
     Top = 128
     Width = 154
     BorderSpacing.Left = 6
     Caption = ' Continent '
-    ClientHeight = 96
+    ClientHeight = 38
     ClientWidth = 152
     TabOrder = 10
     object edtCont: TEdit
@@ -851,10 +852,9 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = gbContinent
       Left = 6
       Height = 34
-      Top = 6
+      Top = 0
       Width = 95
       BorderSpacing.Left = 6
-      BorderSpacing.Top = 6
       TabOrder = 0
     end
   end
@@ -1216,7 +1216,7 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Control = btnOK
     AnchorSideTop.Control = btnCancel
     AnchorSideTop.Side = asrBottom
-    Left = 725
+    Left = 731
     Height = 26
     Top = 564
     Width = 75
@@ -1258,14 +1258,14 @@ object frmFilter: TfrmFilter
     TabOrder = 20
   end
   object btnSave: TButton
-    AnchorSideLeft.Control = cmbSort
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = cmbSort
-    Left = 631
+    AnchorSideLeft.Control = btClear
+    AnchorSideTop.Control = btClear
+    AnchorSideTop.Side = asrBottom
+    Left = 650
     Height = 26
-    Top = 500
-    Width = 88
-    BorderSpacing.Left = 155
+    Top = 531
+    Width = 75
+    BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
     Caption = 'Save filter'
     OnClick = btnSaveClick
@@ -1275,10 +1275,10 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Control = btnSave
     AnchorSideTop.Control = btnSave
     AnchorSideTop.Side = asrBottom
-    Left = 631
+    Left = 650
     Height = 26
-    Top = 532
-    Width = 88
+    Top = 563
+    Width = 75
     BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
     Caption = 'Load filter'
@@ -1286,35 +1286,36 @@ object frmFilter: TfrmFilter
     TabOrder = 22
   end
   object gbState: TGroupBox
-    AnchorSideLeft.Control = gbContinent
+    AnchorSideLeft.Control = gbContestEx
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = gbLoc
+    AnchorSideTop.Control = gbContinent
+    AnchorSideTop.Side = asrBottom
     Left = 652
-    Height = 114
-    Top = 128
+    Height = 56
+    Top = 184
     Width = 154
     BorderSpacing.Left = 6
     Caption = ' State '
-    ClientHeight = 96
+    ClientHeight = 38
     ClientWidth = 152
     TabOrder = 23
     object edtState: TEdit
       AnchorSideLeft.Control = gbState
       AnchorSideTop.Control = gbState
+      AnchorSideRight.Side = asrBottom
       Left = 6
       Height = 34
-      Top = 6
+      Top = 0
       Width = 95
       BorderSpacing.Left = 6
-      BorderSpacing.Top = 6
       CharCase = ecUppercase
       TabOrder = 0
     end
   end
   object cmbSort: TComboBox
-    AnchorSideLeft.Control = GroupBox17
+    AnchorSideLeft.Control = gbPower
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = GroupBox17
+    AnchorSideTop.Control = gbPower
     Left = 276
     Height = 34
     Top = 500
@@ -1344,7 +1345,7 @@ object frmFilter: TfrmFilter
     TabOrder = 24
     Text = 'DXCC'
   end
-  object GroupBox17: TGroupBox
+  object gbPower: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = gbAward
     AnchorSideTop.Side = asrBottom
@@ -1380,8 +1381,8 @@ object frmFilter: TfrmFilter
       TabOrder = 0
     end
     object edtPwrFrom: TEdit
-      AnchorSideTop.Control = GroupBox17
-      AnchorSideRight.Control = GroupBox17
+      AnchorSideTop.Control = gbPower
+      AnchorSideRight.Control = gbPower
       AnchorSideRight.Side = asrBottom
       Left = 61
       Height = 34
@@ -1431,7 +1432,6 @@ object frmFilter: TfrmFilter
       ItemHeight = 0
       OnChange = cmbBandSelectorChange
       TabOrder = 0
-      Text = 'cmbBandSelector'
     end
     object Label20: TLabel
       AnchorSideLeft.Control = cmbBandSelector
@@ -1447,29 +1447,452 @@ object frmFilter: TfrmFilter
     end
   end
   object chkNot: TCheckBox
-    AnchorSideTop.Control = btnLoad
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = btnLoad
+    AnchorSideLeft.Control = cmbSort
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = cmbSort
     AnchorSideRight.Side = asrBottom
-    Left = 665
+    Left = 479
     Height = 23
-    Top = 564
-    Width = 54
-    Anchors = [akTop, akRight]
-    BorderSpacing.Top = 6
-    Caption = 'NOT'
+    Top = 500
+    Width = 154
+    BorderSpacing.Left = 3
+    Caption = 'Reverse filter (NOT)'
     TabOrder = 27
+  end
+  object gbContestEx: TGroupBox
+    AnchorSideLeft.Control = gbZones
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = gbZones
+    Left = 492
+    Height = 114
+    Top = 128
+    Width = 154
+    BorderSpacing.Left = 6
+    Caption = 'Contest Exchange'
+    ClientHeight = 96
+    ClientWidth = 152
+    TabOrder = 28
+    object edtSTX: TEdit
+      AnchorSideLeft.Control = gbContestEx
+      AnchorSideTop.Control = gbContestEx
+      Left = 6
+      Height = 34
+      Hint = 'search for contest send serial number'
+      Top = 6
+      Width = 60
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object edtSRX: TEdit
+      AnchorSideLeft.Control = gbContestEx
+      AnchorSideTop.Control = edtSTX
+      AnchorSideTop.Side = asrBottom
+      Left = 6
+      Height = 34
+      Hint = 'search for contest received serial number'
+      Top = 41
+      Width = 60
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object edtSTXstr: TEdit
+      AnchorSideTop.Control = edtSTX
+      AnchorSideRight.Control = gbContestEx
+      AnchorSideRight.Side = asrBottom
+      Left = 86
+      Height = 34
+      Hint = 'search for contest send message exchange'
+      Top = 6
+      Width = 60
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 6
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object edtSRXstr: TEdit
+      AnchorSideTop.Control = edtSTXstr
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = edtSTXstr
+      AnchorSideRight.Side = asrBottom
+      Left = 86
+      Height = 34
+      Hint = 'search for contest received message exchange'
+      Top = 41
+      Width = 60
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object lblContExS: TLabel
+      AnchorSideLeft.Control = gbContestEx
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = edtSTX
+      AnchorSideTop.Side = asrCenter
+      Left = 72
+      Height = 17
+      Top = 15
+      Width = 8
+      Alignment = taCenter
+      Caption = 'S'
+      ParentColor = False
+    end
+    object lblContxR: TLabel
+      AnchorSideLeft.Control = gbContestEx
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = edtSRX
+      AnchorSideTop.Side = asrCenter
+      Left = 72
+      Height = 17
+      Top = 50
+      Width = 9
+      Alignment = taCenter
+      Caption = 'R'
+      ParentColor = False
+    end
+    object lblContNR: TLabel
+      AnchorSideLeft.Control = edtSRX
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = edtSRX
+      AnchorSideTop.Side = asrBottom
+      Left = 29
+      Height = 17
+      Top = 75
+      Width = 15
+      Alignment = taCenter
+      Caption = 'Nr'
+      ParentColor = False
+    end
+    object lblContMsg: TLabel
+      AnchorSideLeft.Control = edtSRXstr
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = edtSRXstr
+      AnchorSideTop.Side = asrBottom
+      Left = 103
+      Height = 17
+      Top = 75
+      Width = 27
+      Alignment = taCenter
+      Caption = 'Msg'
+      ParentColor = False
+    end
+  end
+  object gbContName: TGroupBox
+    AnchorSideLeft.Control = gbFreq
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = gbMode
+    AnchorSideTop.Side = asrBottom
+    Left = 492
+    Height = 56
+    Top = 60
+    Width = 154
+    BorderSpacing.Left = 6
+    Caption = 'Contest name'
+    ClientHeight = 38
+    ClientWidth = 152
+    TabOrder = 29
+    object cmbContestName: TComboBox
+      AnchorSideLeft.Control = gbContName
+      AnchorSideTop.Control = gbContName
+      Left = 6
+      Height = 34
+      Hint = 'contestname, choose ADIF contest_id via combobox or type freestyle max 40 characters'
+      Top = 0
+      Width = 90
+      AutoComplete = True
+      AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+      BorderSpacing.Left = 6
+      ItemHeight = 0
+      Items.Strings = (
+        '070-160M-SPRINT'
+        '070-3-DAY'
+        '070-31-FLAVORS'
+        '070-40M-SPRINT'
+        '070-80M-SPRINT'
+        '070-PSKFEST'
+        '070-ST-PATS-DAY'
+        '070-VALENTINE-SPRINT'
+        '10-RTTY'
+        '1010-OPEN-SEASON'
+        '7QP'
+        'AL-QSO-PARTY'
+        'ALL-ASIAN-DX-CW'
+        'ALL-ASIAN-DX-PHONE'
+        'ANARTS-RTTY'
+        'ANATOLIAN-RTTY'
+        'AP-SPRINT'
+        'AR-QSO-PARTY'
+        'ARI-DX'
+        'ARRL-10'
+        'ARRL-160'
+        'ARRL-222'
+        'ARRL-DX-CW'
+        'ARRL-DX-SSB'
+        'ARRL-EME'
+        'ARRL-FIELD-DAY'
+        'ARRL-RR-CW'
+        'ARRL-RR-RTTY'
+        'ARRL-RR-SSB'
+        'ARRL-RTTY'
+        'ARRL-SCR'
+        'ARRL-SS-CW'
+        'ARRL-SS-SSB'
+        'ARRL-UHF-AUG'
+        'ARRL-VHF-JAN'
+        'ARRL-VHF-JUN'
+        'ARRL-VHF-SEP'
+        'AZ-QSO-PARTY'
+        'BARTG-RTTY'
+        'BARTG-SPRINT'
+        'BC-QSO-PARTY'
+        'CA-QSO-PARTY'
+        'CIS-DX'
+        'CO-QSO-PARTY'
+        'CQ-160-CW'
+        'CQ-160-SSB'
+        'CQ-M'
+        'CQ-VHF'
+        'CQ-WPX-CW'
+        'CQ-WPX-RTTY'
+        'CQ-WPX-SSB'
+        'CQ-WW-CW'
+        'CQ-WW-RTTY'
+        'CQ-WW-SSB'
+        'CT-QSO-PARTY'
+        'CVA-DX-CW'
+        'CVA-DX-SSB'
+        'CWOPS-CW-OPEN'
+        'CWOPS-CWT'
+        'DARC-WAEDC-CW'
+        'DARC-WAEDC-RTTY'
+        'DARC-WAEDC-SSB'
+        'DARC-WAG'
+        'DE-QSO-PARTY'
+        'DL-DX-RTTY'
+        'DMC-RTTY'
+        'EA-CNCW'
+        'EA-DME'
+        'EA-PSK63'
+        'EA-RTTY (import-only)'
+        'EA-SMRE-CW'
+        'EA-SMRE-SSB'
+        'EA-VHF-ATLANTIC'
+        'EA-VHF-COM'
+        'EA-VHF-COSTA-SOL'
+        'EA-VHF-EA'
+        'EA-VHF-EA1RCS'
+        'EA-VHF-QSL'
+        'EA-VHF-SADURNI'
+        'EA-WW-RTTY'
+        'EPC-PSK63'
+        'EU Sprint'
+        'EU-HF'
+        'EU-PSK-DX'
+        'EUCW160M'
+        'FALL SPRINT'
+        'FL-QSO-PARTY'
+        'GA-QSO-PARTY'
+        'HA-DX'
+        'HELVETIA'
+        'HI-QSO-PARTY'
+        'HOLYLAND'
+        'IA-QSO-PARTY'
+        'IARU-FIELD-DAY'
+        'IARU-HF'
+        'ID-QSO-PARTY'
+        'IL QSO Party'
+        'IN-QSO-PARTY'
+        'JARTS-WW-RTTY'
+        'JIDX-CW'
+        'JIDX-SSB'
+        'JT-DX-RTTY'
+        'KS-QSO-PARTY'
+        'KY-QSO-PARTY'
+        'LA-QSO-PARTY'
+        'LDC-RTTY'
+        'LZ DX'
+        'MAR-QSO-PARTY'
+        'MD-QSO-PARTY'
+        'ME-QSO-PARTY'
+        'MI-QSO-PARTY'
+        'MIDATLANTIC-QSO-PARTY'
+        'MN-QSO-PARTY'
+        'MO-QSO-PARTY'
+        'MS-QSO-PARTY'
+        'MT-QSO-PARTY'
+        'NA-SPRINT-CW'
+        'NA-SPRINT-RTTY'
+        'NA-SPRINT-SSB'
+        'NAQP-CW'
+        'NAQP-RTTY'
+        'NAQP-SSB'
+        'NC-QSO-PARTY'
+        'ND-QSO-PARTY'
+        'NE-QSO-PARTY'
+        'NEQP'
+        'NH-QSO-PARTY'
+        'NJ-QSO-PARTY'
+        'NM-QSO-PARTY'
+        'NRAU-BALTIC-CW'
+        'NRAU-BALTIC-SSB'
+        'NV-QSO-PARTY'
+        'NY-QSO-PARTY'
+        'OCEANIA-DX-CW'
+        'OCEANIA-DX-SSB'
+        'OH-QSO-PARTY'
+        'OK-DX-RTTY'
+        'OK-OM-DX'
+        'OK-QSO-PARTY'
+        'OMISS-QSO-PARTY'
+        'ON-QSO-PARTY'
+        'OR-QSO-PARTY'
+        'PA-QSO-PARTY'
+        'PACC'
+        'PSK-DEATHMATCH'
+        'QC-QSO-PARTY'
+        'RAC (import-only)'
+        'RAC-CANADA-DAY'
+        'RAC-CANADA-WINTER'
+        'RDAC'
+        'RDXC'
+        'REF-160M'
+        'REF-CW'
+        'REF-SSB'
+        'REP-PORTUGAL-DAY-HF'
+        'RI-QSO-PARTY'
+        'RSGB-160'
+        'RSGB-21/28-CW'
+        'RSGB-21/28-SSB'
+        'RSGB-80M-CC'
+        'RSGB-AFS-CW'
+        'RSGB-AFS-SSB'
+        'RSGB-CLUB-CALLS'
+        'RSGB-COMMONWEALTH'
+        'RSGB-IOTA'
+        'RSGB-LOW-POWER'
+        'RSGB-NFD'
+        'RSGB-ROPOCO'
+        'RSGB-SSB-FD'
+        'RUSSIAN-RTTY'
+        'SAC-CW'
+        'SAC-SSB'
+        'SARTG-RTTY'
+        'SC-QSO-PARTY'
+        'SCC-RTTY'
+        'SD-QSO-PARTY'
+        'SMP-AUG'
+        'SMP-MAY'
+        'SP-DX-RTTY'
+        'SPAR-WINTER-FD'
+        'SPDXContest'
+        'SPRING SPRINT'
+        'SR-MARATHON'
+        'STEW-PERRY'
+        'SUMMER SPRINT'
+        'TARA-GRID-DIP'
+        'TARA-RTTY'
+        'TARA-RUMBLE'
+        'TARA-SKIRMISH'
+        'TEN-RTTY'
+        'TMC-RTTY'
+        'TN-QSO-PARTY'
+        'TX-QSO-PARTY'
+        'UBA-DX-CW'
+        'UBA-DX-SSB'
+        'UK-DX-BPSK63'
+        'UK-DX-RTTY'
+        'UKR-CHAMP-RTTY'
+        'UKRAINIAN DX'
+        'UKSMG-6M-MARATHON'
+        'UKSMG-SUMMER-ES'
+        'URE-DX  (import-only)'
+        'US-COUNTIES-QSO'
+        'UT-QSO-PARTY'
+        'VA-QSO-PARTY'
+        'VENEZ-IND-DAY'
+        'VIRGINIA QSO PARTY (import-only)'
+        'VOLTA-RTTY'
+        'WA-QSO-PARTY'
+        'WI-QSO-PARTY'
+        'WIA-HARRY ANGEL'
+        'WIA-JMMFD'
+        'WIA-OCDX'
+        'WIA-REMEMBRANCE'
+        'WIA-ROSS HULL'
+        'WIA-TRANS TASMAN'
+        'WIA-VHF/UHF FD'
+        'WIA-VK SHIRES'
+        'WINTER SPRINT'
+        'WV-QSO-PARTY'
+        'WY-QSO-PARTY'
+        'XE-INTL-RTTY'
+        'YOHFDX'
+        'YUDXC'
+      )
+      MaxLength = 40
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      TabStop = False
+    end
+    object cbIncConName: TCheckBox
+      AnchorSideLeft.Control = cmbContestName
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbContestName
+      AnchorSideTop.Side = asrCenter
+      Left = 97
+      Height = 23
+      Top = 6
+      Width = 45
+      BorderSpacing.Left = 1
+      Caption = 'inc'
+      TabOrder = 1
+    end
+  end
+  object btClear: TButton
+    AnchorSideTop.Control = btnOK
+    AnchorSideRight.Control = btnOK
+    Left = 650
+    Height = 25
+    Top = 500
+    Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Right = 3
+    Caption = 'Clear filter'
+    OnClick = btClearClick
+    TabOrder = 30
+  end
+  object chkRemember: TCheckBox
+    AnchorSideLeft.Control = cmbGroupBy
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = cmbGroupBy
+    Left = 479
+    Height = 23
+    Top = 540
+    Width = 131
+    BorderSpacing.Left = 3
+    Caption = 'Remember filter'
+    OnChange = chkRememberChange
+    TabOrder = 31
   end
   object dlgOpen: TOpenDialog
     Filter = 'filter *.fil|*.fil'
-    left = 501
-    top = 488
+    left = 32
+    top = 616
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.fil'
     Filter = 'filter *.fil|*.fil'
     Options = [ofOverwritePrompt, ofNoTestFileCreate, ofEnableSizing, ofViewDetail]
-    left = 557
-    top = 488
+    left = 80
+    top = 616
   end
 end

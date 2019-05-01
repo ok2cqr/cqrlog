@@ -1,7 +1,7 @@
 object frmSQLConsole: TfrmSQLConsole
-  Left = 423
+  Left = 122
   Height = 455
-  Top = 229
+  Top = 250
   Width = 660
   HelpType = htKeyword
   HelpKeyword = 'help/h27.html'
@@ -12,7 +12,7 @@ object frmSQLConsole: TfrmSQLConsole
   OnClose = FormClose
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '2.0.0.4'
   inline mSQL: TSynMemo
     Cursor = crIBeam
     Left = 0
@@ -31,26 +31,13 @@ object frmSQLConsole: TfrmSQLConsole
     Gutter.Width = 57
     Gutter.MouseActions = <    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccAny
         ClickDir = cdDown
-        Command = 13
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcOnMainGutterClick
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbRight
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 12
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcContextMenu
       end>
     Highlighter = SynSQLSyn1
     Keystrokes = <    
@@ -476,134 +463,89 @@ object frmSQLConsole: TfrmSQLConsole
       end>
     MouseActions = <    
       item
-        Shift = []
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 1
+        Command = emcStartSelections
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
         Shift = [ssShift]
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 1
+        Command = emcStartSelections
         MoveCaret = True
         Option = 1
-        Priority = 0
       end    
       item
         Shift = [ssAlt]
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 3
+        Command = emcStartColumnSelections
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
         Shift = [ssShift, ssAlt]
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 3
+        Command = emcStartColumnSelections
         MoveCaret = True
         Option = 1
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbRight
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 12
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcContextMenu
       end    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccDouble
         ClickDir = cdDown
-        Command = 6
+        Command = emcSelectWord
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccTriple
         ClickDir = cdDown
-        Command = 7
+        Command = emcSelectLine
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccQuad
         ClickDir = cdDown
-        Command = 8
+        Command = emcSelectPara
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbMiddle
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 10
+        Command = emcPasteSelection
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
         Shift = [ssCtrl]
         ShiftMask = [ssShift, ssAlt, ssCtrl]
-        Button = mbLeft
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 11
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcMouseLink
       end>
+    MouseTextActions = <>
     MouseSelActions = <    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 9
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcStartDragMove
       end>
     Lines.Strings = (
       ''
     )
+    VisibleSpecialChars = [vscSpace, vscTabAtLast]
     RightEdge = 0
+    SelectedColor.BackPriority = 50
+    SelectedColor.ForePriority = 50
+    SelectedColor.FramePriority = 50
+    SelectedColor.BoldPriority = 50
+    SelectedColor.ItalicPriority = 50
+    SelectedColor.UnderlinePriority = 50
+    SelectedColor.StrikeOutPriority = 50
     inline TSynGutterPartList
       object TSynGutterMarks
         Width = 24
+        MouseActions = <>
       end
       object TSynGutterLineNumber
         Width = 17
@@ -617,35 +559,28 @@ object frmSQLConsole: TfrmSQLConsole
       end
       object TSynGutterChanges
         Width = 4
+        MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
       end
       object TSynGutterSeparator
         Width = 2
+        MouseActions = <>
+        MarkupInfo.Background = clWhite
+        MarkupInfo.Foreground = clGray
       end
       object TSynGutterCodeFolding
         MouseActions = <        
           item
-            Shift = []
-            ShiftMask = []
             Button = mbRight
-            ClickCount = ccSingle
-            ClickDir = cdUp
-            Command = 16
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcCodeFoldContextMenu
           end        
           item
-            Shift = []
             ShiftMask = [ssShift]
             Button = mbMiddle
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 14
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcCodeFoldCollaps
           end        
           item
             Shift = [ssShift]
@@ -653,58 +588,36 @@ object frmSQLConsole: TfrmSQLConsole
             Button = mbMiddle
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 14
-            MoveCaret = False
+            Command = emcCodeFoldCollaps
             Option = 1
-            Priority = 0
           end        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 0
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcNone
           end>
         MarkupInfo.Background = clNone
         MarkupInfo.Foreground = clGray
         MouseActionsExpanded = <        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 14
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcCodeFoldCollaps
           end>
         MouseActionsCollapsed = <        
           item
             Shift = [ssCtrl]
             ShiftMask = [ssCtrl]
-            Button = mbLeft
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 15
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcCodeFoldExpand
           end        
           item
-            Shift = []
             ShiftMask = [ssCtrl]
-            Button = mbLeft
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 15
-            MoveCaret = False
+            Command = emcCodeFoldExpand
             Option = 1
-            Priority = 0
           end>
       end
     end
@@ -718,6 +631,7 @@ object frmSQLConsole: TfrmSQLConsole
     Color = clWindow
     Columns = <>
     DataSource = dsrSQL
+    Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAutoSizeColumns]
     ReadOnly = True
     TabOrder = 1
     TitleStyle = tsNative
@@ -737,8 +651,8 @@ object frmSQLConsole: TfrmSQLConsole
     end
     object ToolButton2: TToolButton
       Left = 24
+      Height = 22
       Top = 2
-      Width = 8
       Caption = 'ToolButton2'
       Style = tbsSeparator
     end
@@ -754,8 +668,8 @@ object frmSQLConsole: TfrmSQLConsole
     end
     object ToolButton5: TToolButton
       Left = 78
+      Height = 22
       Top = 2
-      Width = 8
       Caption = 'ToolButton5'
       Style = tbsSeparator
     end
@@ -771,8 +685,8 @@ object frmSQLConsole: TfrmSQLConsole
     end
     object ToolButton8: TToolButton
       Left = 132
+      Height = 22
       Top = 2
-      Width = 8
       Caption = 'ToolButton8'
       Style = tbsSeparator
     end
@@ -783,8 +697,8 @@ object frmSQLConsole: TfrmSQLConsole
     end
     object ToolButton10: TToolButton
       Left = 163
+      Height = 22
       Top = 2
-      Width = 8
       Caption = 'ToolButton10'
       Style = tbsSeparator
     end
@@ -835,26 +749,11 @@ object frmSQLConsole: TfrmSQLConsole
   object SynSQLSyn1: TSynSQLSyn
     DefaultFilter = 'SQL Files (*.sql)|*.sql'
     Enabled = False
-    CommentAttri.FrameEdges = sfeAround
-    DataTypeAttri.FrameEdges = sfeAround
-    DefaultPackageAttri.FrameEdges = sfeAround
-    ExceptionAttri.FrameEdges = sfeAround
-    FunctionAttri.FrameEdges = sfeAround
-    IdentifierAttri.FrameEdges = sfeAround
-    KeyAttri.FrameEdges = sfeAround
-    NumberAttri.FrameEdges = sfeAround
-    PLSQLAttri.FrameEdges = sfeAround
-    SpaceAttri.FrameEdges = sfeAround
-    SQLPlusAttri.FrameEdges = sfeAround
-    StringAttri.FrameEdges = sfeAround
-    SymbolAttri.FrameEdges = sfeAround
-    TableNameAttri.FrameEdges = sfeAround
-    VariableAttri.FrameEdges = sfeAround
     SQLDialect = sqlInterbase6
     left = 392
     top = 56
   end
-  object dsrSQL: TDatasource
+  object dsrSQL: TDataSource
     DataSet = dmData.qSQLConsole
     left = 400
     top = 288
@@ -1139,8 +1038,9 @@ object frmSQLConsole: TfrmSQLConsole
   end
   object SynAutoComplete1: TSynAutoComplete
     EndOfTokenChr = '()[].'
-    Editor = mSQL
     ShortCut = 8224
+    ExecCommandID = ecSynAutoCompletionExecute
+    Editor = mSQL
     left = 536
     top = 56
   end

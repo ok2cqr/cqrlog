@@ -1,13 +1,13 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 156
+  Left = 279
   Height = 709
-  Top = 0
-  Width = 809
+  Top = 64
+  Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   Caption = 'New QSO ... (CQRLOG for Linux)'
   ClientHeight = 684
-  ClientWidth = 809
+  ClientWidth = 997
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2143,7 +2143,7 @@ object frmNewQSO: TfrmNewQSO
     Left = 0
     Height = 19
     Top = 665
-    Width = 809
+    Width = 997
     Panels = <    
       item
         Width = 50
@@ -2161,36 +2161,41 @@ object frmNewQSO: TfrmNewQSO
   end
   object Panel1: TPanel
     AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
     Left = 0
     Height = 551
     Top = 114
-    Width = 809
+    Width = 997
     Align = alBottom
     ClientHeight = 551
-    ClientWidth = 809
+    ClientWidth = 997
     TabOrder = 0
     object Panel3: TPanel
       AnchorSideLeft.Control = Panel1
       Left = 1
       Height = 511
       Top = 39
-      Width = 545
+      Width = 733
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 511
-      ClientWidth = 545
+      ClientWidth = 733
       TabOrder = 0
       object Panel6: TPanel
         AnchorSideLeft.Control = Panel3
+        AnchorSideTop.Control = Panel3
         Left = 0
         Height = 511
         Top = 0
-        Width = 545
+        Width = 733
         Align = alClient
+        Anchors = [akTop, akLeft, akRight]
         BorderSpacing.InnerBorder = 2
         BevelOuter = bvNone
         ClientHeight = 511
-        ClientWidth = 545
+        ClientWidth = 733
+        ParentShowHint = False
         TabOrder = 0
         object lblCommentToCallsign: TLabel
           AnchorSideLeft.Control = lblCounty
@@ -3493,7 +3498,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 0
           Height = 135
           Top = 376
-          Width = 545
+          Width = 733
           ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight]
@@ -3503,12 +3508,12 @@ object frmNewQSO: TfrmNewQSO
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
             ClientHeight = 104
-            ClientWidth = 535
+            ClientWidth = 723
             object sgrdStatistic: TStringGrid
               Left = 0
               Height = 104
               Top = 0
-              Width = 535
+              Width = 723
               Align = alClient
               ColCount = 2
               DefaultColWidth = 35
@@ -3525,7 +3530,7 @@ object frmNewQSO: TfrmNewQSO
           object tabSatellite: TTabSheet
             Caption = 'Satellite'
             ClientHeight = 104
-            ClientWidth = 535
+            ClientWidth = 723
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
               AnchorSideTop.Control = lblPropagation
@@ -3637,12 +3642,163 @@ object frmNewQSO: TfrmNewQSO
             end
           end
         end
+        object gbContest: TGroupBox
+          AnchorSideLeft.Control = mComment
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Panel6
+          Left = 554
+          Height = 231
+          Top = 0
+          Width = 380
+          Anchors = [akTop, akLeft, akBottom]
+          BorderSpacing.Left = 20
+          Caption = 'Contest'
+          ClientHeight = 213
+          ClientWidth = 378
+          TabOrder = 29
+          Visible = False
+          object lblContestName: TLabel
+            AnchorSideLeft.Control = gbContest
+            AnchorSideTop.Control = gbContest
+            Left = 3
+            Height = 17
+            Top = 3
+            Width = 87
+            BorderSpacing.Left = 3
+            BorderSpacing.Top = 3
+            Caption = 'Contestname'
+            ParentColor = False
+          end
+          object lblContestSerialSent: TLabel
+            AnchorSideLeft.Control = lblContestName
+            AnchorSideTop.Control = edtContestName
+            AnchorSideTop.Side = asrBottom
+            Left = 3
+            Height = 17
+            Top = 63
+            Width = 69
+            BorderSpacing.Top = 6
+            Caption = 'Serial sent'
+            ParentColor = False
+          end
+          object lblContestSerialReceived: TLabel
+            AnchorSideLeft.Control = lblContestName
+            AnchorSideTop.Control = edtContestSerialSent
+            AnchorSideTop.Side = asrBottom
+            Left = 3
+            Height = 17
+            Top = 123
+            Width = 69
+            BorderSpacing.Top = 6
+            Caption = 'Serial rcvd'
+            ParentColor = False
+          end
+          object lblContestExchangeMessageSent: TLabel
+            AnchorSideLeft.Control = lblContestSerialSent
+            AnchorSideLeft.Side = asrBottom
+            AnchorSideTop.Control = lblContestSerialSent
+            Left = 81
+            Height = 17
+            Top = 63
+            Width = 59
+            BorderSpacing.Left = 9
+            Caption = 'Msg sent'
+            ParentColor = False
+          end
+          object lblContestExchangeMessageReceived: TLabel
+            AnchorSideLeft.Control = lblContestExchangeMessageSent
+            AnchorSideTop.Control = lblContestSerialReceived
+            Left = 81
+            Height = 17
+            Top = 123
+            Width = 59
+            Caption = 'Msg rcvd'
+            ParentColor = False
+          end
+          object edtContestName: TEdit
+            AnchorSideLeft.Control = lblContestName
+            AnchorSideTop.Control = lblContestName
+            AnchorSideTop.Side = asrBottom
+            Left = 3
+            Height = 34
+            Hint = 'name of contest, max 40 characters allowed'
+            Top = 23
+            Width = 372
+            BorderSpacing.Top = 3
+            MaxLength = 40
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            TextHint = 'max 40 characters'
+          end
+          object edtContestSerialSent: TEdit
+            AnchorSideLeft.Control = lblContestName
+            AnchorSideTop.Control = lblContestSerialSent
+            AnchorSideTop.Side = asrBottom
+            Left = 3
+            Height = 34
+            Hint = 'serial number sent of contest, max 6 characters'
+            Top = 83
+            Width = 64
+            BorderSpacing.Top = 3
+            MaxLength = 6
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+          end
+          object edtContestSerialReceived: TEdit
+            AnchorSideLeft.Control = lblContestName
+            AnchorSideTop.Control = lblContestSerialReceived
+            AnchorSideTop.Side = asrBottom
+            Left = 3
+            Height = 34
+            Hint = 'rserial number received of contest, max 6 characters'
+            Top = 146
+            Width = 64
+            BorderSpacing.Top = 6
+            MaxLength = 6
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+          end
+          object edtContestExchangeMessageSent: TEdit
+            AnchorSideLeft.Control = lblContestExchangeMessageSent
+            AnchorSideTop.Control = edtContestSerialSent
+            AnchorSideTop.Side = asrCenter
+            Left = 81
+            Height = 34
+            Hint = 'contest exchange message sent, max 50 characters'
+            Top = 83
+            Width = 292
+            BorderSpacing.Top = 6
+            MaxLength = 50
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+            TextHint = 'max 50 characters'
+          end
+          object edtContestExchangeMessageReceived: TEdit
+            AnchorSideLeft.Control = lblContestExchangeMessageReceived
+            AnchorSideTop.Control = edtContestSerialReceived
+            AnchorSideTop.Side = asrCenter
+            Left = 81
+            Height = 34
+            Hint = 'contest exchange message received, max 50 characters'
+            Top = 146
+            Width = 292
+            MaxLength = 50
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 4
+            TextHint = 'max 50 characters'
+          end
+        end
       end
     end
     object Panel2: TPanel
       AnchorSideTop.Control = Panel1
       AnchorSideRight.Control = Panel1
-      Left = 546
+      Left = 734
       Height = 511
       Top = 39
       Width = 262
@@ -4288,12 +4444,13 @@ object frmNewQSO: TfrmNewQSO
       Left = 1
       Height = 38
       Top = 1
-      Width = 807
+      Width = 995
       Align = alTop
+      Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 38
-      ClientWidth = 807
+      ClientWidth = 995
       TabOrder = 2
       object lblQSONr: TLabel
         AnchorSideLeft.Control = lblQSONrDesc
@@ -4404,7 +4561,7 @@ object frmNewQSO: TfrmNewQSO
     Left = 0
     Height = 114
     Top = 0
-    Width = 809
+    Width = 997
     Align = alClient
     Color = clWindow
     Columns = <>
@@ -6469,7 +6626,7 @@ object frmNewQSO: TfrmNewQSO
   object tmrN1MM: TTimer
     Enabled = False
     OnTimer = tmrN1MMTimer
-    left = 584
-    top = 200
+    left = 800
+    top = 32
   end
 end

@@ -176,7 +176,7 @@ var
   msgRes :string;
   CqDir : string;
   mycont, cont, country, waz, posun, itu, pfx, lat, long: string;
-  adif : word;
+  dxcc_number_adif : word;
   Dfreq,Snr:integer;
   isMyCall: boolean;
   CurMode: string = '';   //mode in human readable format
@@ -819,6 +819,7 @@ var
   i, j: integer;
 begin
   tmrCqPeriod.Enabled := False;
+  if LocalDbg then Writeln('Period timer hit the time!');
   if (chknoHistory.Checked) then
   begin
     for i:= 0 to 7 do
@@ -842,15 +843,19 @@ begin
 end;
 
 procedure TfrmMonWsjtx.CqPeriodTimerStart;
+var
+    tmr: integer;
 begin
   tmrCqPeriod.Enabled := False;
-  if CurMode = 'FT8' then
-    tmrCqPeriod.Interval := 16000
-  else
-    tmrCqPeriod.Interval := 61000;
+  tmr := 61000;
+  case CurMode of
+       'FT8': tmr := 16000;
+       'FT4': tmr := 6500;
+  end;
+  tmrCqPeriod.Interval := tmr;
+  if LocalDbg then Writeln('Period timer set to: ',tmr);
   tmrCqPeriod.Enabled := True;
 end;
-
 
 procedure TfrmMonWsjtx.cmFontClick(Sender: TObject);
 begin
@@ -1636,7 +1641,7 @@ begin
   myAlert := '';
   MonitorLine := '';
 
-  adif := dmDXCC.id_country(
+  dxcc_number_adif := dmDXCC.id_country(
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
     mycont, country, WAZ, posun, ITU, lat, long);
 
@@ -1775,7 +1780,7 @@ begin
 
    if frmWorkedGrids.GridOK(msgLocator) then AddXpList(msgCall,msgLocator);
 
-     adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
+     dxcc_number_adif := dmDXCC.id_country(msgCall, '', Now(), pfx, cont,
        msgRes, WAZ, posun, ITU, lat, long);
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
@@ -1815,7 +1820,7 @@ begin
    if (not chkMap.Checked) then
     begin
      freq := dmUtils.FreqFromBand(CurBand, CurMode);
-     msgRes := dmDXCC.DXCCInfo(adif, freq, CurMode, i);    //wkd info
+     msgRes := dmDXCC.DXCCInfo(dxcc_number_adif, freq, CurMode, i);    //wkd info
 
      if LocalDbg then
        Writeln('Looking this>', msgRes[1], '< from:', msgRes);
@@ -1864,8 +1869,9 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       '@'     : getCurMode := 'JT9';
       '&'     : getCurMode := 'MSK144';
       ':'     : getCurMode := 'QRA64';
-      '+'     : getCurMode := 'T10';
+      '+'     : getCurMode := 'FT4';
       chr(126): getCurMode := 'FT8';
+      //'+'     : getCurMode := 'T10';
     end;
   end;
 

@@ -239,12 +239,14 @@ begin
 
     lblComment.Caption := 'Importing LoTW and eQSL users ...';
     Application.ProcessMessages;
+
     if FileExistsUTF8(Directory+'lotw1.txt') then
     begin
       DeleteFileUTF8(dmData.HomeDir+'lotw1.txt');
       CopyFile(Directory+'lotw1.txt',dmData.HomeDir+'lotw1.txt');
       dmData.LoadLoTWCalls
     end;
+
     if FileExistsUTF8(Directory+'eqsl.txt') then
     begin
       DeleteFileUTF8(dmData.HomeDir+'eqsl.txt');
@@ -280,6 +282,12 @@ begin
       DeleteFileUTF8(dmData.HomeDir + C_PROP_MODE_LIST);
       CopyFile(Directory + C_PROP_MODE_LIST, dmData.HomeDir + C_PROP_MODE_LIST);
       dmSatellite.LoadPropModesFromFile
+    end;
+
+    if FileExistsUTF8(Directory + 'ContestName.tab') then
+    begin
+      DeleteFileUTF8(dmData.HomeDir + 'ContestName.tab');
+      CopyFile(Directory + 'ContestName.tab', dmData.HomeDir + 'ContestName.tab');
     end;
 
     lblComment.Caption := 'Importing IOTA table ...';

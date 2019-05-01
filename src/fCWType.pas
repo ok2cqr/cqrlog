@@ -127,7 +127,8 @@ end;
 procedure TfrmCWType.btnF1MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF1MouseLeave(Sender: TObject);
@@ -138,19 +139,22 @@ end;
 procedure TfrmCWType.btnF2Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF10MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF10Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF10MouseLeave(Sender: TObject);
@@ -161,13 +165,15 @@ end;
 procedure TfrmCWType.btnF1Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF2MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF2MouseLeave(Sender: TObject);
@@ -178,13 +184,15 @@ end;
 procedure TfrmCWType.btnF3Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF3MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'')
+       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF3MouseLeave(Sender: TObject);
@@ -195,13 +203,15 @@ end;
 procedure TfrmCWType.btnF4Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF4MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
-                           frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'')
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF4MouseLeave(Sender: TObject);
@@ -212,13 +222,15 @@ end;
 procedure TfrmCWType.btnF5Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF5MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
-                           frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'')
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF5MouseLeave(Sender: TObject);
@@ -229,13 +241,15 @@ end;
 procedure TfrmCWType.btnF6Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF6MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
-                         frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF6MouseLeave(Sender: TObject);
@@ -246,13 +260,15 @@ end;
 procedure TfrmCWType.btnF7Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF7MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
-                         frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'')
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF7MouseLeave(Sender: TObject);
@@ -263,13 +279,15 @@ end;
 procedure TfrmCWType.btnF8Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF8MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
-                     frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF8MouseLeave(Sender: TObject);
@@ -280,13 +298,15 @@ end;
 procedure TfrmCWType.btnF9Click(Sender: TObject);
 begin
   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
 
 procedure TfrmCWType.btnF9MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
-                     frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfrmCWType.btnF9MouseLeave(Sender: TObject);
@@ -495,7 +515,8 @@ begin
   if (key >= VK_F1) and (key <= VK_F10) then
   begin
     frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(key),frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
   end;
 
   if Key = VK_ESCAPE then
