@@ -2984,7 +2984,7 @@ begin
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'ALTER TABLE freqmem ADD COLUMN IF NOT EXISTS info varchar(25)';
+        Q1.SQL.Text := 'ALTER TABLE freqmem ADD COLUMN info varchar(25)';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
