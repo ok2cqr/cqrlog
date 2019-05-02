@@ -43,17 +43,24 @@
         <tbody>
         <tr>
             <td bgcolor=#ffffcc valign="top">
-                %mc - my callsign<br>
-                %mn - my name<br>
-                %ml - my locator<br>
-                %mq - my qth<br>
-                %r - rst to be sent<br>
-                %n - his name<br>
-                %c - his callsign<br>
-                | - half space<br>
-                %h - greetings (GM/GA/GE) calculated from local time of worked station<br>
-                %rs - rst to be sent, 9 replaced with N<br>
-
+            <ul>
+		<li>%mc - my callsign</li>
+		<li>%mn - my name</li>
+		<li>%mq - my qth</li>
+		<li>%ml - my locator</li>
+		<li>%r  - rst send</li>
+		<li>%rs - rst send sends N instead of 9<br>(sends also 0 as T, but that does not exist in normal report)</li>
+		<br>
+		<li>%n  - name</li>
+		<li>%c  - callsign</li>
+		<li>%h - greeting GM/GA/GE calculated from the %c station location time</li>
+		<br>
+		<li>%xn  - contest exchenge serial number</li>
+		<li>%xm  - contest exchange message</li>
+		<li>%xns - contest exchenge serial number sends 9->N and 0->T</li>
+		<li>%xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.<br>
+		(May be used always instead of %rs as if serNR and Message are empty just sends plain report.)</li>
+	    </ul>
             </td>
         </tr>
         </tbody>

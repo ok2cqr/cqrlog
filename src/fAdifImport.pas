@@ -64,6 +64,7 @@ type TnewQSOEntry=record   //represents a new qso entry in the log
       SRX_STRING:string[250];
       STX:string[6];
       STX_STRING:string[250];
+      CONTEST_ID:string[250];
       TIME_OFF:string[5];
       TIME_ON:string[5];
       TX_PWR:string[5];
@@ -87,29 +88,30 @@ type
   { TfrmAdifImport }
 
   TfrmAdifImport = class(TForm)
-    btnImport: TButton;
     btnClose: TButton;
-    chkNoCheckOnDuplicates: TCheckBox;
+    btnImport: TButton;
     chkFilterDateRange: TCheckBox;
     chkLotOfQSO: TCheckBox;
+    chkNoCheckOnDuplicates: TCheckBox;
     cmbProfiles: TComboBox;
     edtDateFrom: TDateEdit;
     edtDateTo: TDateEdit;
     edtRemarks: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    lblFilteredOut: TLabel;
-    lblFilteredOutCount: TLabel;
-    lblDateFrom: TLabel;
-    lblDateTo: TLabel;
-    lblErrorLog: TLabel;
+    lbFile: TLabel;
     lblComplete: TLabel;
     lblCount: TLabel;
+    lblDateFrom: TLabel;
+    lblError: TLabel;
+    lblErrorLog: TLabel;
     lblErrors: TLabel;
     lblFileName: TLabel;
+    lblFilteredOut: TLabel;
+    lblFilteredOutCount: TLabel;
+    lblImport: TLabel;
+    lblDateTo: TLabel;
+    lblQthProfile: TLabel;
+    lblRemaks: TLabel;
+    pnlAll: TPanel;
     pnlFilterDateRange: TPanel;
     Q1: TSQLQuery;
     Q2: TSQLQuery;
@@ -122,6 +124,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnImportClick(Sender: TObject);
   private
+    AbortImport : boolean;
     ERR_FILE : String;
     WrongRecNr : Integer;
     RecNR      : Integer;
@@ -265,6 +268,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_SRX_STRING:d.SRX_STRING:=data;
       h_STX:d.STX:=data;
       h_STX_STRING:d.STX_STRING:=data;
+      h_CONTEST_ID:d.CONTEST_ID:=data;
       h_TIME_OFF:d.TIME_OFF:=data;
       h_TIME_ON:d.TIME_ON:=data;
       h_TX_PWR:d.TX_PWR:=data;
@@ -477,24 +481,30 @@ begin
       dmData.Q.Close;
       dmData.Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main WHERE qsodate = ' + QuotedStr(d.QSO_DATE) +
                            ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL);
-      if dmData.DebugLevel >=1 then
-      begin
-        Writeln(dmData.Q.SQL.Text)
-      end;
+
+      if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
       if dmData.trQ.Active then
         dmData.trQ.Rollback;
       dmData.trQ.StartTransaction;
       dmData.Q.Open;
       if dmData.Q.Fields[0].AsInteger > 0 then
       begin
-        if Application.MessageBox('It looks like this QSOs are in the log.'#13'Do you really want to import it again?',
-                                  'Question',MB_ICONQUESTION + MB_YESNO) = idNo then
-        begin
-          btnImport.Enabled := True;
-          dmData.Q.Close();
-          dmData.trQ.Rollback;
-          exit
-        end
+        case Application.MessageBox('It looks like this QSO is in the log.'#13'Do you really want to import it again?',
+                                  'Question',MB_ICONQUESTION +  MB_YESNOCANCEL) of
+        idNo        :begin
+                      btnImport.Enabled := True;
+                      dmData.Q.Close();
+                      dmData.trQ.Rollback;
+                      exit;
+                     end;
+        idCancel    :begin
+                      btnImport.Enabled := True;
+                      dmData.Q.Close();
+                      dmData.trQ.Rollback;
+                      AbortImport :=true;
+                      exit;
+                     end;
+        end;
       end;
       dmData.Q.Close();
       dmData.trQ.Rollback
@@ -521,12 +531,13 @@ begin
                    'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                    'remarks,county,adif,idcall,award,band,state,cont,profile,lotw_qslsdate,lotw_qsls,'+
                    'lotw_qslrdate,lotw_qslr,qsls_date,qslr_date,eqsl_qslsdate,eqsl_qsl_sent,'+
-                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq) values('+
+                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string, srx_string, contestname) values('+
                    ':qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,:qth,'+
                    ':qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:itu,:waz,:loc,:my_loc,:remarks,:county,:adif,'+
                    ':idcall,:award,:band,:state,:cont,:profile,:lotw_qslsdate,:lotw_qsls,:lotw_qslrdate,'+
                    ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
-                   ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq)';
+                   ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq, :stx, :srx, :stx_string, :srx_string,'+
+                   ':contestname)';
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
@@ -645,6 +656,12 @@ begin
     else
       Q1.Params[40].AsFloat := 0;
 
+    Q1.Params[41].AsString := d.STX;
+    Q1.Params[42].AsString := d.SRX;
+    Q1.Params[43].AsString := d.STX_STRING;
+    Q1.Params[44].AsString := d.SRX_STRING;
+    Q1.Params[45].AsString := d.CONTEST_ID;
+
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
     inc(RecNR);
@@ -670,6 +687,7 @@ var
   ErrText : String = '';
   tmp : String='';
 begin
+  AbortImport := false;
   lblComplete.Visible := False;
   GlobalProfile := dmData.GetNRFromProfile(cmbProfiles.Text);
   FMyPower := cqrini.ReadString('NewQSO', 'PWR', '5 W');
@@ -695,14 +713,14 @@ begin
     sb.Panels[0].Text := 'Importing data ...';
     Application.ProcessMessages;
     Repaint;
-    while not eof(textFileIn) do
+    while not eof(textFileIn) and not (AbortImport)do
     begin
       readln(textFileIn,oneTextRow);
       if Pos('<EOH>',UpperCase(oneTextRow)) > 0 then
         tmp := ''
       else
         tmp := tmp + oneTextRow;
-      while getNextAdifTag(oneTextRow,adifTag,data) do
+      while getNextAdifTag(oneTextRow,adifTag,data) and not (AbortImport) do
       begin
         h:=generateAdifTagHash(adifTag);
         if (h=h_EOH) or (h=h_EOR) then
@@ -729,7 +747,7 @@ begin
       tr.Commit;
     dt := dt - now;
     DecodeTime(dt,hh,m,s,ms);
-    WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
+    if dmData.DebugLevel >=1 then WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
     lblCount.Caption := IntToStr(RecNR);
     lblFilteredOut.Visible := FFilterByDate;
     lblFilteredOutCount.Visible := FFilterByDate;
@@ -803,7 +821,7 @@ var
   i : Integer;
 begin
     for i:= 0 to Length(lines)-1 do
-      WriteLn(lines[i]);
+      if dmData.DebugLevel >=1 then WriteLn(lines[i]);
 
   if FileExists(dmData.UsrHomeDir + ERR_FILE) then
   begin
@@ -838,4 +856,5 @@ begin
 end;
 
 end.
+
 

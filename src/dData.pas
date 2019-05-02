@@ -273,13 +273,15 @@ type
                       loc, my_loc,county,award,remarks : String; adif : Integer;
                       idcall,state,cont : String; qso_dxcc : Boolean; profile : Integer;
                       nclub1,nclub2,nclub3,nclub4,nclub5, PropMode, Satellite : String;
-                      RxFreq : Currency);
+                      RxFreq : Currency;srx : String;stx : String;srx_string : String;stx_string : String;
+                      contestname : String);
 
     procedure EditQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
                       loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,cont : String;
                       qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
-                      RxFreq : Currency; idx : LongInt);
+                      RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
+                      contestname : String);
     procedure SaveComment(call,text : String);
     procedure DeleteComment(id : Integer);
     procedure PrepareImport;
@@ -1282,7 +1284,8 @@ procedure TdmData.SaveQSO(date : TDateTime; time_on,time_off,call : String; freq
                  loc, my_loc,county,award,remarks : String; adif : Integer;
                  idcall,state,cont : String; qso_dxcc : Boolean; profile : Integer;
                  nclub1,nclub2,nclub3,nclub4,nclub5, PropMode, Satellite : String;
-                 RxFreq : Currency);
+                 RxFreq : Currency;srx : String;stx : String;srx_string : String;stx_string : String;
+                 contestname : String);
 var
   qsodate : String;
   band    : String;
@@ -1317,7 +1320,8 @@ begin
   Q.SQL.Text :=  'insert into cqrlog_main (qsodate,time_on,time_off,callsign,freq,mode,'+
                  'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                  'county,award,remarks,adif,idcall,state,qso_dxcc,band,profile,cont,club_nr1,'+
-                 'club_nr2,club_nr3,club_nr4,club_nr5, prop_mode, satellite, rxfreq) values('+QuotedStr(qsodate) +
+                 'club_nr2,club_nr3,club_nr4,club_nr5, prop_mode, satellite, rxfreq, srx, stx,'+
+                 'srx_string, stx_string, contestname) values('+QuotedStr(qsodate) +
                  ','+QuotedStr(time_on)+','+QuotedStr(time_off)+
                  ','+QuotedStr(call)+','+FloatToStr(freq)+
                  ','+QuotedStr(mode)+','+QuotedStr(rst_s)+
@@ -1335,7 +1339,7 @@ begin
                  ','+QuotedStr(band)+','+ IntToStr(profile) +','+QuotedStr(cont)+
                  ','+QuotedStr(nclub1)+','+QuotedStr(nclub2)+','+QuotedStr(nclub3)+
                  ','+QuotedStr(nclub4)+','+QuotedStr(nclub5)+','+QuotedStr(PropMode)+','+QuotedStr(Satellite)+','+rx_freq+
-                 ')';
+                 ','+QuotedStr(srx)+','+QuotedStr(stx)+','+QuotedStr(srx_string)+','+QuotedStr(stx_string)+','+QuotedStr(contestname)+')';
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
   Q.ExecSQL;
@@ -1346,7 +1350,8 @@ procedure TdmData.EditQSO(date : TDateTime; time_on,time_off,call : String; freq
                  rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
                  loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,cont : String;
                  qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
-                 RxFreq : Currency; idx : LongInt);
+                 RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
+                 contestname : String);
 var
   qsodate : String;
   band    : String;
@@ -1388,7 +1393,8 @@ begin
            ', qth = ' + QuotedStr(Trim(qth)) + ', award = ' + QuotedStr(award) +', band = ' + QuotedStr(band) +
            ', profile = ' + IntToStr(profile) + ', idcall = ' + QuotedStr(idcall) + ', state=' + QuotedStr(state) +
            ', cont = ' + QuotedStr(cont)+ ', prop_mode = ' + QuotedStr(PropMode) + ', satellite = ' + QuotedStr(Satellite)+
-           ', rxfreq = ' + rx_freq +
+           ', rxfreq = ' + rx_freq + ', stx = ' + QuotedStr(stx)+ ', stx_string = ' + QuotedStr(stx_string) + ', srx = ' + QuotedStr(srx)+
+           ', srx_string = ' + QuotedStr(srx_string) + ', contestname = ' + QuotedStr(contestname)+
            ' where id_cqrlog_main = ' + IntToStr(idx);
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
@@ -2292,264 +2298,6 @@ begin
   end
 end;
 
-{$IFDEF CONTEST}
-
-procedure TdmData.CreateContestDatabase(FileName : String);
-begin
-  fContestDataFile := FileName+'.fdb';
-  ContestDatabase.DatabaseName := fContestDataFile;
-  Writeln(ContestDatabase.DatabaseName);
-  ContestDatabase.CreateDatabase();
-  try
-    ContestDataBase.Connected := True;
-    dsCQRTest.SQL.Clear;
-    trCQRTest.StartTransaction;
-    dsCQRTest.SQL.Add('CREATE GENERATOR gid_main;');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    trCQRTest.Commit;
-
-    dsCQRTest.SQL.Clear;
-
-    trCQRTest.StartTransaction;
-    dsCQRTest.SQL.Add('CREATE TABLE cqrtest (');
-    dsCQRTest.SQL.Add('             id_cqrtest INTEGER NOT NULL PRIMARY KEY,');
-    dsCQRTest.SQL.Add('             qsodate  VARCHAR(10),');
-    dsCQRTest.SQL.Add('             time_on  VARCHAR(5),');
-    dsCQRTest.SQL.Add('             qso_nr   INTEGER,');
-    dsCQRTest.SQL.Add('             call     VARCHAR(20),');
-    dsCQRTest.SQL.Add('             freq     NUMERIC(10,4),');
-    dsCQRTest.SQL.Add('             mode     VARCHAR(8),');
-    dsCQRTest.SQL.Add('             rst_s    VARCHAR(20),');
-    dsCQRTest.SQL.Add('             rst_r    VARCHAR(20),');
-    dsCQRTest.SQL.Add('             exch1    VARCHAR(20),');
-    dsCQRTest.SQL.Add('             exch2    VARCHAR(20),');
-    dsCQRTest.SQL.Add('             mult1    VARCHAR(1),');
-    dsCQRTest.SQL.Add('             mult2    VARCHAR(1),');
-    dsCQRTest.SQL.Add('             name     VARCHAR(20),');
-    dsCQRTest.SQL.Add('             qth      VARCHAR(20),');
-    dsCQRTest.SQL.Add('             points   INTEGER,');
-    dsCQRTest.SQL.Add('             power    VARCHAR(10),');
-    dsCQRTest.SQL.Add('             waz      VARCHAR(2),');
-    dsCQRTest.SQL.Add('             itu      VARCHAR(2),');
-    dsCQRTest.SQL.Add('             band     VARCHAR(10),');
-    dsCQRTest.SQL.Add('             wpx      VARCHAR(20),');
-    dsCQRTest.SQL.Add('             state    VARCHAR(20),');
-    dsCQRTest.SQL.Add('             iota     VARCHAR(6),');
-    dsCQRTest.SQL.Add('             dxcc_ref VARCHAR(20)');
-    dsCQRTest.SQL.Add(');');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    dsCQRTest.SQL.Clear;
-
-    dsCQRTest.SQL.Add('CREATE TABLE version (');
-    dsCQRTest.SQL.Add('       major INTEGER DEFAULT ' + IntToStr(major));
-    dsCQRTest.SQL.Add(');');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    dsCQRTest.SQL.Clear;
-
-    dsCQRTest.SQL.Add('CREATE INDEX dxcc_ref ON cqrtest (dxcc_ref);');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    dsCQRTest.SQL.Clear;
-    dsCQRTest.SQL.Add('CREATE INDEX qsodate ON cqrtest (qsodate);');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    dsCQRTest.SQL.Clear;
-    dsCQRTest.SQL.Add('CREATE INDEX call ON cqrtest (call);');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    trCQRTest.Commit;
-    dsCQRTest.SQL.Clear;
-
-    trCQRTest.StartTransaction;
-    dsCQRTest.SQL.Add('CREATE OR ALTER TRIGGER bi_cqrtest FOR cqrtest');
-    dsCQRTest.SQL.Add('ACTIVE BEFORE INSERT');
-    dsCQRTest.SQL.Add(' POSITION 0');
-    dsCQRTest.SQL.Add('AS');
-    dsCQRTest.SQL.Add('BEGIN');
-    dsCQRTest.SQL.Add('  if ((new.id_cqrtest is null) or (new.id_cqrtest = 0)) then');
-    dsCQRTest.SQL.Add('  BEGIN');
-    dsCQRTest.SQL.Add('    new.id_cqrtest = gen_id( gid_main, 1 );');
-    dsCQRTest.SQL.Add('  END');
-    dsCQRTest.SQL.Add('END');
-    if fDebugLevel>=1 then  Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.ExecSQL;
-    trCQRTest.Commit;
-    dsCQRTest.SQL.Clear
-  finally
-    ContestDatabase.Connected := False
-  end
-end;
-
-function TdmData.OpenContestDatabase(FileName : String) : Boolean;
-begin
-  Result := True;
-  try
-    fContestDataFile := FileName;
-    ContestDatabase.DatabaseName := fContestDataDir + fContestDataFile;
-    Writeln(ContestDatabase.DatabaseName);
-    ContestDatabase.Connected    := True;
-    dsCQRTest.Close;
-    dsCQRTest.SQL.Text := 'SELECT * FROM cqrtest ORDER BY qsodate,time_on,id_cqrtest';
-    if fDebugLevel>=1 then Writeln(dsCQRTest.SQL.Text);
-    dsCQRTest.Open;
-    dsCQRTest.Last
-  except
-    on E : Exception do
-    begin
-      Application.MessageBox(PChar('Cannot open database!'+#13+E.Message),'Error ...',mb_OK + mb_IconError);
-      Result := False
-    end
-  end
-end;
-
-procedure TdmData.DeleteContestQSO(id : LongInt);
-begin
-  Qc.Close;
-  Qc.SQL.Text := 'delete from cqrtest where id_cqrtest = ' + IntToStr(id);
-  if fDebugLevel>=1 then Writeln(Qc.SQL.Text);
-  trQc.StartTransaction;
-  dmData.Qc.ExecSQL;
-  trQc.Commit;
-  Qc.SQL.Clear
-end;
-procedure TdmData.SaveContestQSO(date : TDateTime;time_on,call,rst_s,rst_r,exch1,exch2,freq,mode,
-                             waz,itu,dxcc_ref : String);
-var
-  qsodate : String;
-  nr : Integer;
-  band : String;
-  iota : String = '';
-  sname : String = '';
-  qth  : String = '';
-  state : String = '';
-  cexch1 : String = '';
-  cexch2 : String = '';
-begin
-  dsCQRTest.Last;
-  band := IntToStr(dmUtils.GetBandFromFreq(freq))+'M';
-  if waz = '' then
-    WAZ := 'null';
-  if itu = '' then
-    ITU := 'null';
-  dsCQRTest.Last;
-  nr := dsCQRTest.Fields[3].AsInteger + 1;
-
-  cexch1 := UpperCase(trim(dmData.tstini.ReadString('Details','Exch1','None')));
-  cexch2 := UpperCase(trim(dmData.tstini.ReadString('Details','Exch2','None')));
-
-  if cexch1 = 'NONE' then
-    exch1 := ''
-  else if cexch1 = 'WAZ ZONE' then
-    waz := exch1
-  else if cexch1 = 'ITU ZONE' then
-    itu := exch1
-  else if cexch1 = 'IOTA' then
-    iota := exch1
-  else if cexch1 = 'NAME' then
-    sname := exch1
-  else if cexch1 = 'QTH' then
-    qth := exch1
-  else if cexch1 = 'STATE' then
-    state := exch1;
-
-  if cexch2 = 'NONE' then
-    exch2 := ''
-  else if cexch2 = 'WAZ ZONE' then
-    waz := exch2
-  else if cexch2 = 'ITU ZONE' then
-    itu := exch2
-  else if cexch2 = 'IOTA' then
-    iota := exch2
-  else if cexch2 = 'NAME' then
-    sname := exch2
-  else if cexch2 = 'QTH' then
-    qth := exch2
-  else if cexch2 = 'STATE' then
-    state := exch2;
-
-  trQc.StartTransaction;
-  qsodate := (FormatDateTime('YYYY-MM-DD',date));
-  //date : TDateTime;time_on,call,rst_s,nr_s,rst_r,nr_r,exch1,exch2,freq,band,mode,waz,itu
-  Qc.SQL.Text := 'insert into cqrtest (qsodate,time_on,call,rst_s,rst_r,exch1,exch2,'+
-                 'freq,band,mode,waz,itu,dxcc_ref,qso_nr,name,qth,iota,state) values (' + QuotedStr(qsodate) +
-                 ',' + QuotedStr(time_on) + ',' + QuotedStr(call) +
-                 ',' + QuotedStr(rst_s)+ ',' + QuotedStr(rst_r) +
-                 ',' + QuotedStr(exch1) + ',' + QuotedStr(exch2) +
-                 ',' + freq + ',' + QuotedStr(band) + ',' + QuotedStr(mode) +
-                 ',' + waz + ',' + itu + ',' + QuotedStr(dxcc_ref) + ',' + IntToStr(nr) +
-                 ','+QuotedStr(sName) + ','+QuotedStr(qth)+','+QuotedStr(iota)+','+QuotedStr(state)+')';
-  if fDebugLevel >=1 then Writeln(Qc.SQL.Text);
-  Qc.ExecSQL;
-  trQc.Commit
-end;
-
-procedure TdmData.EditTestQSO(qsodate,time_on,call,freq,mode,rst_s,rst_r,exch1,exch2,sname,qth,power,
-                      waz,itu,wpx,state,iota : String;points : Integer;mult1,mult2 : Boolean;
-                      id : LongInt);
-var
-  m1 : String = '';
-  m2 : String = '';
-begin
-  if mult1 then
-    m1 := 'X';
-  if mult2 then
-    m2 := 'X';
-  Qc.Close;
-  Qc.SQL.Text := 'update cqrtest set qsodate='+QuotedStr(qsodate)+',time_on='+QuotedStr(time_on)+
-                 ',call='+QuotedStr(call)+',freq='+freq+',mode='+QuotedStr(mode)+',rst_s='+QuotedStr(rst_s)+
-                 ',rst_r='+QuotedStr(rst_r)+',exch1='+QuotedStr(exch1)+',exch2='+QuotedStr(exch2)+',name='+QuotedStr(sname)+
-                 ',qth='+QuotedStr(qth)+',power='+QuotedStr(power)+',waz='+QuotedStr(waz)+',itu='+QuotedStr(itu)+
-                 ',wpx='+QuotedStr(wpx)+',state='+QuotedStr(state)+',iota='+QuotedStr(iota)+',points='+IntToStr(points)+
-                 ',mult1='+QuotedStr(m1)+',mult2='+QuotedStr(m2) + ' where id_cqrtest = '+IntToStr(id);
-  if fDebugLevel>=1 then Writeln(Qc.SQL.Text);
-  trQc.StartTransaction;
-  Qc.ExecSQL;
-  trQc.Commit;
-  Qc.Close()
-end;
-
-procedure TdmData.GetLastExchange(call : String; var exch : String; var CurPos : TCurPos);
-var
-  ex1 : Boolean;
-  ex2 : Boolean;
-  e1 : String = '';
-  e2 : String = '';
-begin
-  exch   := '';
-  CurPos := cpEnd;
-
-  e1 := UpperCase(trim(tstini.ReadString('Details','Exch1','None')));
-  e2 := UpperCase(trim(tstini.ReadString('Details','Exch2','None')));
-  ex1 := (e1 <> 'NONE') and (e1 <> 'QSO NUMBER');
-  ex2 := (e2 <> 'NONE') and (e2 <> 'QSO NUMBER');
-
-  if not (ex1 or ex2) then
-    exit;
-  Qc.Close;
-  Qc.SQL.Text := 'select exch1,exch2 from cqrtest where call = '+QuotedStr(call);
-  if fDebugLevel>=1 then Writeln(Qc.SQL.Text);
-  trQc.StartTransaction;
-  Qc.Open();
-  if Qc.Fields.AsString[0] <> '' then
-  begin
-    if ex1 and ex2 then
-      exch := Qc.Fields.AsString[0] + ' ' + Qc.Fields.AsString[1]
-    else begin
-      if ex1 then
-        exch := Qc.Fields.AsString[0];
-      if ex2 then
-      begin
-        exch   := ' ' + Qc.Fields.AsString[1];
-        CurPos := cpBegin
-      end
-    end
-  end;
-  Qc.Close(etmRollback)
-end;
-{$ENDIF}
 procedure TdmData.LoadLoTWCalls;
 
   procedure GrowArray(NextIndex: integer);
@@ -3235,11 +2983,23 @@ begin
         Q1.ExecSQL;
         trQ1.Commit;
 
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'ALTER TABLE freqmem ADD COLUMN info varchar(25)';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit;
+        //Here we need something. All Beta testers have this already added
+        //either Try/finally/end  to skip error,
+        //or testing the exixtence of "info" before running alter
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'alter table freqmem add info varchar(25) null';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        try
+          if fDebugLevel>=1 then Writeln( 'On Try add info');
+          Q1.ExecSQL;
+        except
+          // will only be executed in case of an exception as debug info
+          on E: EDatabaseError do
+            if fDebugLevel>=1 then Writeln( 'Database error: '+ E.ClassName + #13#10 + E.Message );
+          on E: Exception do
+            if fDebugLevel>=1 then Writeln( 'Error: '+ E.ClassName + #13#10 + E.Message );
+        end;
+        trQ1.Commit
 
       end;
 

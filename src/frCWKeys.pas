@@ -105,13 +105,15 @@ end;
 procedure TfraCWKeys.btnF1MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF10MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF10MouseLeave(Sender: TObject);
@@ -127,7 +129,8 @@ end;
 procedure TfraCWKeys.btnF2MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF2MouseLeave(Sender: TObject);
@@ -138,7 +141,8 @@ end;
 procedure TfraCWKeys.btnF3MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF3MouseLeave(Sender: TObject);
@@ -149,7 +153,8 @@ end;
 procedure TfraCWKeys.btnF4MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+     frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF4MouseLeave(Sender: TObject);
@@ -160,7 +165,8 @@ end;
 procedure TfraCWKeys.btnF5MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF5MouseLeave(Sender: TObject);
@@ -171,7 +177,8 @@ end;
 procedure TfraCWKeys.btnF6MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF6MouseLeave(Sender: TObject);
@@ -182,7 +189,8 @@ end;
 procedure TfraCWKeys.btnF7MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF7MouseLeave(Sender: TObject);
@@ -193,7 +201,8 @@ end;
 procedure TfraCWKeys.btnF8MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF8MouseLeave(Sender: TObject);
@@ -204,7 +213,8 @@ end;
 procedure TfraCWKeys.btnF9MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
-                             frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
 procedure TfraCWKeys.btnF9MouseLeave(Sender: TObject);
@@ -274,8 +284,9 @@ begin
            frmNewQSO.RunVK(cwkey)
         else
         if Assigned(frmNewQSO.CWint) then
-        // works with contest addition - frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtHisRSTstx.Text,frmNewQSO.edtHisRSTstxAdd.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
-         frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+         frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,
+         frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+         frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
       end;
     end;
   end;

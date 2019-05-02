@@ -6,115 +6,115 @@ object fraExportPref: TfraExportPref
   ClientHeight = 480
   ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 590
-  DesignTop = 201
+  DesignLeft = 87
+  DesignTop = 319
   object chkProfile: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 324
-    Width = 72
+    Width = 63
     Caption = 'Profile'
     TabOrder = 0
   end
   object chkAscTime: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 440
-    Width = 207
+    Width = 185
     Caption = 'Most recent entries on top'
     TabOrder = 72
   end
   object chkExCont: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 296
-    Width = 95
+    Width = 85
     Caption = 'Continent'
     TabOrder = 1
   end
   object chkexQTH: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 270
-    Width = 57
+    Width = 51
     Caption = 'QTH'
     TabOrder = 2
   end
   object chkexName: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 243
-    Width = 66
+    Width = 61
     Caption = 'Name'
     TabOrder = 3
   end
   object chkexRSTR: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 217
-    Width = 84
+    Width = 80
     Caption = 'RST rcvd'
     TabOrder = 4
   end
   object chkexRSTS: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 191
-    Width = 84
+    Width = 79
     Caption = 'RST sent'
     TabOrder = 5
   end
   object chkexFreq: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 165
-    Width = 57
+    Width = 52
     Caption = 'Freq'
     TabOrder = 6
   end
   object chkexMode: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 139
-    Width = 65
+    Width = 58
     Caption = 'Mode'
     TabOrder = 7
   end
   object chkexCall: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 114
-    Width = 51
+    Width = 47
     Caption = 'Call'
     TabOrder = 8
   end
   object chkexTimeoff: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 89
-    Width = 83
+    Width = 74
     Caption = 'Time off'
     TabOrder = 9
   end
   object chkexTimeon: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 64
-    Width = 80
+    Width = 74
     Caption = 'Time on'
     TabOrder = 10
   end
   object chkexDate: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 38
-    Width = 59
+    Width = 54
     Caption = 'Date'
     TabOrder = 11
   end
   object edtWDate: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 37
     Width = 40
     TabOrder = 12
@@ -122,7 +122,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWTimeOn: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 64
     Width = 40
     TabOrder = 13
@@ -130,7 +130,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWTimeOff: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 88
     Width = 40
     TabOrder = 14
@@ -138,7 +138,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWCall: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 113
     Width = 40
     TabOrder = 15
@@ -146,7 +146,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWMode: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 139
     Width = 40
     TabOrder = 16
@@ -154,7 +154,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWFreq: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 166
     Width = 40
     TabOrder = 17
@@ -162,7 +162,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWRstS: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 190
     Width = 40
     TabOrder = 18
@@ -170,7 +170,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWRstR: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 217
     Width = 40
     TabOrder = 19
@@ -178,7 +178,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWName: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 243
     Width = 40
     TabOrder = 20
@@ -186,7 +186,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWQTH: TEdit
     Left = 110
-    Height = 27
+    Height = 32
     Top = 269
     Width = 40
     TabOrder = 21
@@ -194,143 +194,143 @@ object fraExportPref: TfraExportPref
   end
   object Label46: TLabel
     Left = 6
-    Height = 17
+    Height = 15
     Top = 12
-    Width = 33
+    Width = 27
     Caption = 'Field'
     ParentColor = False
   end
   object Label49: TLabel
     Left = 110
-    Height = 17
+    Height = 15
     Top = 12
-    Width = 42
+    Width = 36
     Caption = 'Width'
     ParentColor = False
   end
   object Label47: TLabel
     Left = 174
-    Height = 17
+    Height = 15
     Top = 12
-    Width = 33
+    Width = 27
     Caption = 'Field'
     ParentColor = False
   end
   object Label50: TLabel
     Left = 302
-    Height = 17
+    Height = 15
     Top = 12
-    Width = 42
+    Width = 36
     Caption = 'Width'
     ParentColor = False
   end
   object Label48: TLabel
     Left = 366
-    Height = 17
+    Height = 15
     Top = 12
-    Width = 33
+    Width = 27
     Caption = 'Field'
     ParentColor = False
   end
   object Label51: TLabel
     Left = 528
-    Height = 17
+    Height = 15
     Top = 12
-    Width = 42
+    Width = 36
     Caption = 'Width'
     ParentColor = False
   end
   object chkexQSLS: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 39
-    Width = 87
+    Width = 80
     Caption = 'QSL sent'
     TabOrder = 22
   end
   object chkexQSLR: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 64
-    Width = 115
+    Width = 105
     Caption = 'QSL received'
     TabOrder = 23
   end
   object chkexQSLVIA: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 89
-    Width = 118
+    Width = 108
     Caption = 'QSL manager'
     TabOrder = 24
   end
   object chkexLoc: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 114
-    Width = 79
+    Width = 71
     Caption = 'Locator'
     TabOrder = 25
   end
   object chkexMyLoc: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 139
-    Width = 98
+    Width = 88
     Caption = 'My locator'
     TabOrder = 26
   end
   object chkexIOTA: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 166
-    Width = 59
+    Width = 53
     Caption = 'IOTA'
     TabOrder = 27
   end
   object chkexAward: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 192
-    Width = 71
+    Width = 64
     Caption = 'Award'
     TabOrder = 28
   end
   object chkexCounty: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 217
-    Width = 75
+    Width = 69
     Caption = 'County'
     TabOrder = 29
   end
   object chkexPower: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 243
-    Width = 70
+    Width = 62
     Caption = 'Power'
     TabOrder = 30
   end
   object chkexDXCC: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 270
-    Width = 64
+    Width = 58
     Caption = 'DXCC'
     TabOrder = 31
   end
   object chkexRemarks: TCheckBox
     Left = 174
-    Height = 24
+    Height = 23
     Top = 297
-    Width = 85
+    Width = 77
     Caption = 'Remarks'
     TabOrder = 32
   end
   object edtWRemarks: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 296
     Width = 40
     TabOrder = 33
@@ -338,7 +338,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWDXCC: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 270
     Width = 40
     TabOrder = 34
@@ -346,7 +346,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWPower: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 243
     Width = 40
     TabOrder = 35
@@ -354,7 +354,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWCounty: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 217
     Width = 40
     TabOrder = 36
@@ -362,7 +362,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWAward: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 191
     Width = 40
     TabOrder = 37
@@ -370,7 +370,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWIOTA: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 165
     Width = 40
     TabOrder = 38
@@ -378,7 +378,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWMyLoc: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 139
     Width = 40
     TabOrder = 39
@@ -386,7 +386,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWLoc: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 114
     Width = 40
     TabOrder = 40
@@ -394,7 +394,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWQSLVIA: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 89
     Width = 40
     TabOrder = 41
@@ -402,7 +402,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWQSLR: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 64
     Width = 40
     TabOrder = 42
@@ -410,7 +410,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWQSLS: TEdit
     Left = 302
-    Height = 27
+    Height = 32
     Top = 38
     Width = 40
     TabOrder = 43
@@ -418,119 +418,119 @@ object fraExportPref: TfraExportPref
   end
   object chkexeQSLRDate: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 376
-    Width = 136
+    Width = 124
     Caption = 'eQSL QSLR date'
     TabOrder = 44
   end
   object chkexeQSLR: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 350
-    Width = 126
+    Width = 116
     Caption = 'eQSL QSL rcvd'
     TabOrder = 45
   end
   object chkexeQSLSDate: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 324
-    Width = 135
+    Width = 124
     Caption = 'eQSL QSLS date'
     TabOrder = 46
   end
   object chkexeQSLS: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 298
-    Width = 126
+    Width = 115
     Caption = 'eQSL QSL sent'
     TabOrder = 47
   end
   object chkexQSLRDate: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 271
-    Width = 121
+    Width = 112
     Caption = 'QSL rcvd date'
     TabOrder = 48
   end
   object chkexQSLSDate: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 244
-    Width = 121
+    Width = 111
     Caption = 'QSL sent date'
     TabOrder = 49
   end
   object chkexLQSLRDate: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 218
-    Width = 139
+    Width = 126
     Caption = 'LoTW QSLR date'
     TabOrder = 50
   end
   object chkexLQSLR: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 192
-    Width = 129
+    Width = 118
     Caption = 'LoTW QSL rcvd'
     TabOrder = 51
   end
   object chkexLQSLSDate: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 166
-    Width = 138
+    Width = 126
     Caption = 'LoTW QSLS date'
     TabOrder = 52
   end
   object chkexLQSLS: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 140
-    Width = 129
+    Width = 117
     Caption = 'LoTW QSL sent'
     TabOrder = 53
   end
   object chkexState: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 115
-    Width = 62
+    Width = 58
     Caption = 'State'
     TabOrder = 54
   end
   object chkexNote: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 89
-    Width = 60
+    Width = 54
     Caption = 'Note'
     TabOrder = 55
   end
   object chkexITU: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 64
-    Width = 48
+    Width = 46
     Caption = 'ITU'
     TabOrder = 56
   end
   object chkexWAZ: TCheckBox
     Left = 368
-    Height = 24
+    Height = 23
     Top = 39
-    Width = 59
+    Width = 53
     Caption = 'WAZ'
     TabOrder = 57
   end
   object edtWWAZ: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 38
     Width = 40
     TabOrder = 58
@@ -538,7 +538,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWITU: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 63
     Width = 40
     TabOrder = 59
@@ -546,7 +546,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWNote: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 88
     Width = 40
     TabOrder = 60
@@ -554,7 +554,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWState: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 113
     Width = 40
     TabOrder = 61
@@ -562,7 +562,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWLQSLS: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 139
     Width = 40
     TabOrder = 62
@@ -570,7 +570,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWLQSLSDate: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 165
     Width = 40
     TabOrder = 63
@@ -578,7 +578,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWLQSLR: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 191
     Width = 40
     TabOrder = 64
@@ -586,7 +586,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWLQSLRDate: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 217
     Width = 40
     TabOrder = 65
@@ -594,7 +594,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWQSLSDate: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 243
     Width = 40
     TabOrder = 66
@@ -602,7 +602,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWQSLRDate: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 270
     Width = 40
     TabOrder = 67
@@ -610,7 +610,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWeQSLS: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 297
     Width = 40
     TabOrder = 68
@@ -618,7 +618,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWeQSLSDate: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 323
     Width = 40
     TabOrder = 69
@@ -626,7 +626,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWeQSLR: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 349
     Width = 40
     TabOrder = 70
@@ -634,7 +634,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWeQSLRDate: TEdit
     Left = 530
-    Height = 27
+    Height = 32
     Top = 375
     Width = 40
     TabOrder = 71
@@ -642,31 +642,31 @@ object fraExportPref: TfraExportPref
   end
   object chkExPropagation: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 350
-    Width = 112
+    Width = 98
     Caption = 'Propagation'
     TabOrder = 73
   end
   object chkExSat: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 378
-    Width = 123
+    Width = 112
     Caption = 'Satellite name'
     TabOrder = 74
   end
   object chkExRXFreq: TCheckBox
     Left = 6
-    Height = 24
+    Height = 23
     Top = 410
-    Width = 116
+    Width = 107
     Caption = 'RX frequency'
     TabOrder = 75
   end
   object edtWProp: TEdit
     Left = 160
-    Height = 27
+    Height = 32
     Top = 349
     Width = 40
     TabOrder = 76
@@ -674,7 +674,7 @@ object fraExportPref: TfraExportPref
   end
   object edtWSatName: TEdit
     Left = 160
-    Height = 27
+    Height = 32
     Top = 377
     Width = 40
     TabOrder = 77
@@ -682,10 +682,21 @@ object fraExportPref: TfraExportPref
   end
   object edtWRxFreq: TEdit
     Left = 160
-    Height = 27
+    Height = 32
     Top = 407
     Width = 40
     TabOrder = 78
     Text = '50'
+  end
+  object chkexContest: TCheckBox
+    Left = 174
+    Height = 23
+    Hint = 'ADIF Fields SRX, STX, SRX_STRING, STX_STRING AND CONTEST_ID'
+    Top = 324
+    Width = 72
+    Caption = 'Contest'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 79
   end
 end

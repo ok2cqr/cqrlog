@@ -25,7 +25,7 @@ type
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName: Boolean);
+                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName, exContest: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
 
@@ -85,7 +85,7 @@ procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCal
                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                              ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                              ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                             ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName: Boolean);
+                             ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName, exContest: Boolean);
 begin
   exDate    := cqrini.ReadBool('Export','Date',True);
   exTimeOn  := cqrini.ReadBool('Export','time_on',True);
@@ -111,6 +111,7 @@ begin
   exWAZ     := cqrini.ReadBool('Export','WAZ',False);
   exITU     := cqrini.ReadBool('Export','ITU',False);
   exNote    := cqrini.ReadBool('Export','Note',False);
+  exContest := cqrini.ReadBool('Export','Contest',False);
   ExProfile := cqrini.ReadBool('Export','Profile',False);
   exState   := cqrini.ReadBool('Export','State',False);
   ExLQslS     := cqrini.ReadBool('Export','LQSLS',False);
@@ -149,14 +150,15 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName, exContest : Boolean;
   Source : TDataSet;
   FirstBackupPath : String;
 
   procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,cont,
-                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq  : String);
+                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
+                     srx, stx_string, srx_string, contestname : String);
 
   begin
     leng := 0;
@@ -212,88 +214,52 @@ var
       Writeln(f);
       leng := 0
     end;
-    if leng>200 then
-    begin
-      Writeln(f);
-      leng := 0
-    end;
     if exRSTS then
     begin
       tmp := '<RST_SENT' + dmUtils.StringToADIF(ExtractWord(1,RSTS,[' ']));
       Write(f,tmp);
       leng := leng + Length(tmp);
-      if leng>200 then
-       begin
-         Writeln(f);
-         leng := 0
-       end;
-      if length(RSTS)>3 then // there is something else
-      Begin
-          tmp:=ExtractWord(2,RSTS,[' ']);  //contest NR
-          if (tmp <>'') then
-            Begin
-               tmp := '<STX' + dmUtils.StringToADIF(tmp);
-               Write(f,tmp);
-               leng := leng + Length(tmp);
-               if leng>200 then
-               begin
-                 Writeln(f);
-                 leng := 0
-               end;
-            end;
-          tmp:=ExtractWord(3,RSTS,[' ']);   //Contest MSG
-          if (tmp <>'') then
-            Begin
-               tmp := '<STX_STRING' + dmUtils.StringToADIF(tmp);
-               Write(f,tmp);
-               leng := leng + Length(tmp);
-               if leng>200 then
-               begin
-                 Writeln(f);
-                 leng := 0
-               end;
-            end;
-      end;
     end;
-
     if exRSTR then
       begin
         tmp := '<RST_RCVD' + dmUtils.StringToADIF(ExtractWord(1,RSTR,[' ']));
         Write(f,tmp);
         leng := leng + Length(tmp);
-        if leng>200 then
-         begin
-           Writeln(f);
-           leng := 0
-         end;
-        if length(RSTR)>3 then // there is something else
-        Begin
-            tmp:=ExtractWord(2,RSTR,[' ']);  //contest NR
-            if (tmp <>'') then
-              Begin
-                 tmp := '<SRX' + dmUtils.StringToADIF(tmp);
-                 Write(f,tmp);
-                 leng := leng + Length(tmp);
-                 if leng>200 then
-                 begin
-                   Writeln(f);
-                   leng := 0
-                 end;
-              end;
-            tmp:=ExtractWord(3,RSTR,[' ']);   //Contest MSG
-            if (tmp <>'') then
-              Begin
-                 tmp := '<SRX_STRING' + dmUtils.StringToADIF(tmp);
-                 Write(f,tmp);
-                 leng := leng + Length(tmp);
-                 if leng>200 then
-                 begin
-                   Writeln(f);
-                   leng := 0
-                 end;
-              end;
-        end;
       end;
+    //DL7OAP Contest Fields
+    if exContest then
+    begin
+      if Length(stx) > 0 then
+      begin
+        tmp := '<STX' + dmUtils.StringToADIF(stx);
+        Write(f,tmp);
+        leng := leng + Length(tmp)
+      end;
+      if Length(srx) > 0 then
+      begin
+        tmp := '<SRX' + dmUtils.StringToADIF(srx);
+        Write(f,tmp);
+        leng := leng + Length(tmp)
+      end;
+      if Length(stx_string) > 0 then
+      begin
+        tmp := '<STX_STRING' + dmUtils.StringToADIF(stx_string);
+        Write(f,tmp);
+        leng := leng + Length(tmp)
+      end;
+      if Length(srx_string) > 0 then
+      begin
+        tmp := '<SRX_STRING' + dmUtils.StringToADIF(srx_string);
+        Write(f,tmp);
+        leng := leng + Length(tmp)
+      end;
+      if Length(contestname) > 0 then
+      begin
+        tmp := '<CONTEST_ID' + dmUtils.StringToADIF(contestname);
+        Write(f,tmp);
+        leng := leng + Length(tmp)
+      end;
+    end;
 
     if exName then
     begin
@@ -614,7 +580,7 @@ begin
                     ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                     ExCounty,ExDXCC,ExRemarks,ExWAZ,ExITU,ExNote,ExState,ExProfile,
                     ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                    ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,exProp, exRxFreq, exSatName)
+                    ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,exProp, exRxFreq, exSatName, exContest)
   else begin
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
@@ -622,7 +588,7 @@ begin
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExCont := True;
     ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; exAscTime := False;
-    exProp := True; exRxFreq := True; exSatName := True;
+    exProp := True; exRxFreq := True; exSatName := True; exContest := True;
 
     if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
       CreateDirUTF8(dmData.HomeDir + 'tmp');
@@ -732,7 +698,12 @@ begin
                  eqsl_qslrdate,
                  Source.FieldByName('prop_mode').AsString,
                  Source.FieldByName('satellite').AsString,
-                 FloatToStr(Source.FieldByName('RxFreq').AsFloat)
+                 FloatToStr(Source.FieldByName('RxFreq').AsFloat),
+                 Source.FieldByName('stx').AsString,
+                 Source.FieldByName('srx').AsString,
+                 Source.FieldByName('stx_string').AsString,
+                 Source.FieldByName('srx_string').AsString,
+                 Source.FieldByName('contestname').AsString
                   );
           pBarProg.StepIt;
           if (i mod 100 = 0) then
@@ -809,12 +780,13 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, exState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate, ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName, exContest : Boolean;
 
   procedure SaveData(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,cont,
-                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq  : String);
+                     QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
+                     srx, stx_string, srx_string, contestname  : String);
 
   begin
     Writeln(f,'<tr>');
@@ -1060,6 +1032,29 @@ var
       Writeln(f, '<td>'+Satellite+'</td>')
     end;
 
+    if exContest then
+    begin
+      if (contestname='') then
+         contestname:='&nbsp;';
+      Writeln(f, '<td>'+contestname+'</td>');
+
+      if (srx='') then
+         srx:='&nbsp;';
+      Writeln(f, '<td>'+srx+'</td>');
+
+      if (srx_string='') then
+               srx_string:='&nbsp;';
+      Writeln(f, '<td>'+srx_string+'</td>');
+
+      if (stx='') then
+         stx:='&nbsp;';
+      Writeln(f, '<td>'+stx+'</td>');
+
+      if (stx_string='') then
+         stx_string:='&nbsp;';
+      Writeln(f, '<td>'+stx_string+'</td>');
+    end;
+
     Writeln(f,'</tr>')
   end;
 begin
@@ -1070,7 +1065,7 @@ begin
                   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExPower,
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExCont,ExQSLSDate,ExQSLRDate,
-                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName);
+                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName, exContest);
 
   AssignFile(f, FileName);
   Rewrite(f);
@@ -1263,6 +1258,20 @@ begin
     Write(f,'<td width="'+cqrini.ReadString('Export','WSatName','50')+
         '" bgcolor="#333366" class="hlava"><div align="center" class="popis">Satellite</div></td>');
 
+  if exContest then
+  begin
+    //DL7OAP new Contest fields
+    Write(f,'<td width=50'+
+      '" bgcolor="#333366" class="hlava"><div align="center" class="popis">Contestname</div></td>');
+    Write(f,'<td width=50'+
+      '" bgcolor="#333366" class="hlava"><div align="center" class="popis">SRX</div></td>');
+    Write(f,'<td width=50'+
+      '" bgcolor="#333366" class="hlava"><div align="center" class="popis">SRX_STRING</div></td>');
+    Write(f,'<td width=50'+
+      '" bgcolor="#333366" class="hlava"><div align="center" class="popis">STX</div></td>');
+    Write(f,'<td width=50'+
+      '" bgcolor="#333366" class="hlava"><div align="center" class="popis">STX_STRING</div></td>');
+  end;
 
   Writeln(f,'</tr>');
                 
@@ -1357,7 +1366,12 @@ begin
                eqsl_qslrdate,
                Source.FieldByName('prop_mode').AsString,
                Source.FieldByName('satellite').AsString,
-               FloatToStr(Source.FieldByName('RxFreq').AsFloat)
+               FloatToStr(Source.FieldByName('RxFreq').AsFloat),
+               Source.FieldByName('stx').AsString,
+               Source.FieldByName('srx').AsString,
+               Source.FieldByName('stx_string').AsString,
+               Source.FieldByName('srx_string').AsString,
+               Source.FieldByName('contestname').AsString
              );
       pBarProg.StepIt;
       if (i mod 100 = 0) then
