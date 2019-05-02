@@ -33,14 +33,22 @@
     <a name="ah37"><em><strong>My radio control (CAT) does not work</strong></em>
         <ul>
             <li><strong>Check your ports.</strong> You must be a member of the user group,
-                which has permission to use ttyS* or ttyUSB* devices.
+                which has permission to use ttyS* or ttyUSB* devices.<br>
+                Open command console and give "ls -l your serial port name" and "groups" commands.<br>
+                There must be same group, usually "dialout" in both results.<br><br>
+                [saku@hamtpad ~]$ ls -l /dev/ttyUSB0<br>
+		crw-rw----. 1 root <strong>dialout</strong> 188, 0 13. 4. 09:39 /dev/ttyUSB0<br>
+		[saku@hamtpad ~]$ groups<br>
+		saku <strong>dialout</strong> lock<br>
+		[saku@hamtpad ~]$<br><br>
+		If not try google with "your_linux_distribution_name add user to dial group" to get information how to do the fix.<br>
             </li>
             <li><strong>Check that your radio is properly set up </strong>
                 <a href="h1.html#ah7"><em>(see here)</em></a>. Click the 'Settings' button and
                 check the port settings - ttyS* or ttyUSB* number and <strong>all</strong>
                 communication parameters.
             </li>
-            <li><strong>Is the poll rate set too fast?</strong> Try a lower setting (higher number).</li>
+            <li><strong>Is the poll rate set too fast?</strong> Try a lower setting (higher number). Your qsos usually lasts longer than 5 seconds so even ẃith value 5000 the right frequency is there before you save your qso.</li>
         </ul>
         <br>
         <p align=center><img src=img/line.png></p>

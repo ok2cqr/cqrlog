@@ -120,6 +120,11 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    chkSTX: TCheckBox;
+    chkSRX: TCheckBox;
+    chkSTX_str: TCheckBox;
+    chkSRX_str: TCheckBox;
+    chkContestName: TCheckBox;
     chkShowB4call: TCheckBox;
     chkRXFreq : TCheckBox;
     chkSatellite : TCheckBox;
@@ -1183,6 +1188,11 @@ begin
   cqrini.WriteBool('Columns', 'Propagation', chkPropagation.Checked);
   cqrini.WriteBool('Columns', 'SatelliteName', chkSatellite.Checked);
   cqrini.WriteBool('Columns', 'RXFreq', chkRXFreq.Checked);
+  cqrini.WriteBool('Columns', 'ContestName', chkContestName.Checked);
+  cqrini.WriteBool('Columns', 'STX', chkSTX.Checked);
+  cqrini.WriteBool('Columns', 'SRX', chkSRX.Checked);
+  cqrini.WriteBool('Columns', 'ContMsgSent', chkSTX_str.Checked);
+  cqrini.WriteBool('Columns', 'ContMsgRcvd', chkSRX_str.Checked);
 
   cqrini.WriteBool('Bands', '137kHz', cb136kHz.Checked);
   cqrini.WriteBool('Bands', '472kHz', cb472kHz.Checked);
@@ -2533,6 +2543,11 @@ begin
   chkPropagation.Checked := cqrini.ReadBool('Columns', 'Propagation', False);
   chkSatellite.Checked := cqrini.ReadBool('Columns', 'SatelliteName', False);
   chkRXFreq.Checked := cqrini.ReadBool('Columns', 'RXFreq', False);
+  chkContestName.Checked := cqrini.ReadBool('Columns', 'ContestName', False);
+  chkSTX.Checked := cqrini.ReadBool('Columns', 'STX', False);
+  chkSRX.Checked := cqrini.ReadBool('Columns', 'SRX', False);
+  chkSTX_str.Checked := cqrini.ReadBool('Columns', 'ContMsgSent', False);
+  chkSRX_str.Checked := cqrini.ReadBool('Columns', 'ContMsgRcvd', False);
 
   cb136kHz.Checked := cqrini.ReadBool('Bands', '137kHz', False);
   cb472kHz.Checked := cqrini.ReadBool('Bands', '472kHz', False);

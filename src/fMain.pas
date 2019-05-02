@@ -2102,7 +2102,12 @@ begin
   ChangeVis('COUNTRY',cqrini.ReadBool('Columns','Country',False));
   ChangeVis('PROP_MODE', cqrini.ReadBool('Columns', 'Propagation', False));
   ChangeVis('RXFREQ', cqrini.ReadBool('Columns', 'RXFreq', False));
-  ChangeVis('SATELLITE', cqrini.ReadBool('Columns', 'SatelliteName', False))
+  ChangeVis('SATELLITE', cqrini.ReadBool('Columns', 'SatelliteName', False));
+  ChangeVis('CONTESTNAME', cqrini.ReadBool('Columns', 'ContestName', False));
+  ChangeVis('STX',cqrini.ReadBool('Columns', 'STX', False));
+  ChangeVis('SRX',cqrini.ReadBool('Columns', 'SRX', False));
+  ChangeVis('STX_STRING',cqrini.ReadBool('Columns', 'ContMsgSent', False));
+  ChangeVis('SRX_STRING',cqrini.ReadBool('Columns', 'ContMsgRcvd', False));
 end;
 
 procedure TfrmMain.MarkQSLSend(symbol: string);

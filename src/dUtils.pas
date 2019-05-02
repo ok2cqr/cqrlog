@@ -38,14 +38,14 @@ const
     ':', '|', '-', '=', '+', '@', '#', '*', '%', '_', '(', ')', '$', '<', '>'];
   empty_freq = '0.00000';
   empty_azimuth = '0.0';
-  cMaxModes = 45; //was 39 //was 42
+  cMaxModes = 46; //last added FT4
   cModes: array [0..cMaxModes] of string =
     ('CW', 'SSB', 'AM', 'FM', 'RTTY', 'SSTV', 'PACTOR', 'PSK', 'ATV', 'CLOVER', 'GTOR', 'MTOR',
     'PSK31', 'HELL', 'MT63',
     'QRSS', 'CWQ', 'BPSK31', 'MFSK', 'JT44', 'FSK44', 'WSJT', 'AMTOR',
     'THROB', 'BPSK63', 'PACKET',
     'OLIVIA', 'MFSK16', 'JT4','JT6M', 'JT65', 'JT65A', 'JT65B', 'JT65C',
-    'JT9', 'QRA64', 'ISCAT', 'MSK144', 'FT8', 'FSK441', 'PSK125',
+    'JT9', 'QRA64', 'ISCAT', 'MSK144', 'FT8', 'FT4', 'FSK441', 'PSK125',
     'PSK63', 'WSPR', 'PSK250', 'ROS', 'DIGITALVOICE');
   cMaxBandsCount = 27; //26 bands
 
@@ -227,7 +227,7 @@ type
     function  ExtractZipCode(qth : String; Position : Integer) : String;
     function  GetLabelBand(freq : String) : String;
     function  GetAdifBandFromFreq(MHz : string): String;
-    function  GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+    function  GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text: String) : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
     function  CallTrim(call : String) : String;
@@ -2494,6 +2494,8 @@ begin
     older := FileAge(dir + 'prop_mode.tab');
   if older < FileAge(dir + 'sat_name.tab') then
     older := FileAge(dir + 'sat_name.tab');
+  if older < FileAge(dir + 'ContestName.tab') then
+    older := FileAge(dir + 'ContestName.tab');
   Result := FileDateToDateTime(older) + 1;
 end;
 
@@ -2602,20 +2604,24 @@ begin
   Result := LowerCase(GetBandFromFreq(freq));
 end;
 
-function TdmUtils.GetCWMessage(Key,call,rst_s,HisName,HelloMsg, text : String; QSONR : String = '') : String;
+function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text : String) : String;
 {
  %mc - my callsign
  %mn - my name
  %mq - my qth
  %ml - my locator
- %nr - qso number
-
  %r  - rst send
- %rs - rst send sends N instead of 9
+ %rs - rst send sends N instead of 9 (sends also 0 as T, but does not exist in normal report)
+
  %n  - name
  %c  - callsign
+ %h - greeting GM/GA/GE calculated from the %c station location time
 
- %h - greeting GM/GA/GE calculated from the station location time
+ %xn  - contest exchenge serial number
+ %xm  - contest exchange message
+ %xns - contest exchenge serial number sends 9->N and 0->T
+ %xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.
+        Can be used "always" as if serNR and/or Message are empty just sends plain report.
 
 if text is not empty and we didn't send any key (F1 etc.) we can
 use this function to prepare every text wee need to send
@@ -2627,6 +2633,9 @@ var
   myname : String = '';
   myqth  : String = '';
   rst_sh : String = '';
+  stx_sh : String = '';
+  con_ex : String = '';
+
 begin
   mycall := cqrini.ReadString('Station', 'Call', '');
   myloc := cqrini.ReadString('Station', 'LOC', '');
@@ -2637,22 +2646,33 @@ begin
   else
     Result := text;
 
-  rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
-  rst_sh := StringReplace(rst_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
+    rst_sh := StringReplace(rst_s,'9','N',[rfReplaceAll, rfIgnoreCase]);
+    rst_sh := StringReplace(rst_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
 
-  Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%ml',myloc,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%nr',QSONR,[rfReplaceAll, rfIgnoreCase]);
+    stx_sh := StringReplace(stx,'9','N',[rfReplaceAll, rfIgnoreCase]);
+    stx_sh := StringReplace(stx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
 
-  Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
-  Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
+    con_ex := rst_sh;
+    if stx_sh <>'' then con_ex:=con_ex+' '+stx_sh;
+    if stx_str <>'' then con_ex:=con_ex+' '+stx_str;
 
-  if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
+    Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%ml',myloc,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%xrs',con_ex,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%xns',stx_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xn',stx,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xm',stx_str,[rfReplaceAll, rfIgnoreCase]);
+
+    if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
 end;
 
 function TdmUtils.RigGetcmd(r : String) : String;

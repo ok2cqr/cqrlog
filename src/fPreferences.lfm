@@ -1,7 +1,7 @@
 object frmPreferences: TfrmPreferences
-  Left = 105
+  Left = 169
   Height = 659
-  Top = 33
+  Top = 65
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
@@ -14,16 +14,16 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.0.0.4'
   object pgPreferences: TPageControl
     Left = 160
     Height = 659
     Top = 0
     Width = 752
-    ActivePage = tabFldigi1
+    ActivePage = tabVisibleColumns
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 20
+    TabIndex = 3
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -838,332 +838,554 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 628
       ClientWidth = 742
       object chkDate: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = tabVisibleColumns
+        AnchorSideTop.Control = tabVisibleColumns
+        Left = 18
         Height = 23
-        Top = 12
+        Top = 6
         Width = 57
+        BorderSpacing.Left = 18
+        BorderSpacing.Top = 6
         Caption = 'Date'
         TabOrder = 0
       end
       object chkTimeOn: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkDate
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 43
+        Top = 32
         Width = 79
+        BorderSpacing.Top = 3
         Caption = 'Time on'
         TabOrder = 1
       end
       object chkTimeOff: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkTimeOn
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 75
+        Top = 58
         Width = 80
+        BorderSpacing.Top = 3
         Caption = 'Time off'
         TabOrder = 2
       end
       object chkCallSign: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkTimeOff
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 107
+        Top = 84
         Width = 79
+        BorderSpacing.Top = 3
         Caption = 'CallSign'
         TabOrder = 3
       end
       object chkMode: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkCallSign
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 139
+        Top = 110
         Width = 62
+        BorderSpacing.Top = 3
         Caption = 'Mode'
         TabOrder = 4
       end
       object chkFreq: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkMode
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 171
+        Top = 136
         Width = 54
+        BorderSpacing.Top = 3
         Caption = 'Freq'
         TabOrder = 5
       end
       object chkQSL_S: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkQTH
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 334
+        Top = 266
         Width = 83
+        BorderSpacing.Top = 3
         Caption = 'QSL sent'
         TabOrder = 6
       end
       object chkQSL_R: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkQSL_S
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 366
+        Top = 292
         Width = 111
+        BorderSpacing.Top = 3
         Caption = 'QSL received'
         TabOrder = 7
       end
       object chkRST_S: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkFreq
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 203
+        Top = 162
         Width = 83
+        BorderSpacing.Top = 3
         Caption = 'RST sent'
         TabOrder = 8
       end
       object chkRST_R: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkRST_S
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 235
+        Top = 188
         Width = 114
+        BorderSpacing.Top = 3
         Caption = 'RST Received'
         TabOrder = 9
       end
       object chkName: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkRST_R
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 267
+        Top = 214
         Width = 65
+        BorderSpacing.Top = 3
         Caption = 'Name'
         TabOrder = 10
       end
       object chkQTH: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkName
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 299
+        Top = 240
         Width = 54
+        BorderSpacing.Top = 3
         Caption = 'QTH'
         TabOrder = 11
       end
       object chkQSL_VIA: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkDate
+        Left = 163
         Height = 23
-        Top = 12
+        Top = 6
         Width = 113
+        BorderSpacing.Left = 145
         Caption = 'QSL manager'
         TabOrder = 12
       end
       object chkLoc: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkQSL_VIA
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 43
+        Top = 32
         Width = 74
+        BorderSpacing.Top = 3
         Caption = 'Locator'
         TabOrder = 13
       end
       object chkMyLoc: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkLoc
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 75
+        Top = 58
         Width = 95
+        BorderSpacing.Top = 3
         Caption = 'My locator'
         TabOrder = 14
       end
       object chkIOTA: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkMyLoc
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 107
+        Top = 84
         Width = 56
+        BorderSpacing.Top = 3
         Caption = 'IOTA'
         TabOrder = 15
       end
       object chkAward: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkIOTA
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 139
+        Top = 110
         Width = 66
+        BorderSpacing.Top = 3
         Caption = 'Award'
         TabOrder = 16
       end
       object chkCounty: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkAward
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 171
+        Top = 136
         Width = 72
+        BorderSpacing.Top = 3
         Caption = 'County'
         TabOrder = 17
       end
       object chkPower: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkCounty
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 203
+        Top = 162
         Width = 66
+        BorderSpacing.Top = 3
         Caption = 'Power'
         TabOrder = 18
       end
       object chkDXCC: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkPower
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 235
+        Top = 188
         Width = 62
+        BorderSpacing.Top = 3
         Caption = 'DXCC'
         TabOrder = 19
       end
       object chkRemarks: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkDXCC
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 267
+        Top = 214
         Width = 139
+        BorderSpacing.Top = 3
         Caption = 'Comment to QSO'
         TabOrder = 20
       end
       object chkWAZ: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkRemarks
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 299
+        Top = 240
         Width = 56
+        BorderSpacing.Top = 3
         Caption = 'WAZ'
         TabOrder = 21
       end
       object chkITU: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkWAZ
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 334
+        Top = 266
         Width = 48
+        BorderSpacing.Top = 3
         Caption = 'ITU'
         TabOrder = 22
       end
       object chkState: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkITU
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 366
+        Top = 292
         Width = 60
+        BorderSpacing.Top = 3
         Caption = 'State'
         TabOrder = 23
       end
       object chkLoTWQSLSDate: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkDate
+        Left = 308
         Height = 23
-        Top = 12
+        Top = 6
         Width = 159
+        BorderSpacing.Left = 145
         Caption = 'LoTW QSL send date'
         TabOrder = 24
       end
       object chkLoTWQSLRDate: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLSDate
+        AnchorSideTop.Control = chkLoTWQSLSDate
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 43
+        Top = 32
         Width = 184
+        BorderSpacing.Top = 3
         Caption = 'LoTW QSL received date'
         TabOrder = 25
       end
       object chkLoTWQSLS: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLSDate
+        AnchorSideTop.Control = chkLoTWQSLRDate
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 75
+        Top = 58
         Width = 123
+        BorderSpacing.Top = 3
         Caption = 'LoTW QSL sent'
         TabOrder = 26
       end
       object chkLoTWQSLR: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLSDate
+        AnchorSideTop.Control = chkLoTWQSLS
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 107
+        Top = 84
         Width = 151
+        BorderSpacing.Top = 3
         Caption = 'LoTW QSL received'
         TabOrder = 27
       end
       object chkCont: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkLoTWQSLR
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 139
+        Top = 110
         Width = 89
+        BorderSpacing.Top = 3
         Caption = 'Continent'
         TabOrder = 28
       end
       object chkQSLSentDate: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkCont
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 171
+        Top = 136
         Width = 116
+        BorderSpacing.Top = 3
         Caption = 'QSL sent date'
         TabOrder = 29
       end
       object chkQSLRcvdDate: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkQSLSentDate
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 203
+        Top = 162
         Width = 144
+        BorderSpacing.Top = 3
         Caption = 'QSL received date'
         TabOrder = 30
       end
       object chkeQSLSent: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkQSLRcvdDate
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 235
+        Top = 188
         Width = 91
+        BorderSpacing.Top = 3
         Caption = 'eQSL sent'
         TabOrder = 31
       end
       object chkeQSLSentDate: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkeQSLSent
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 267
+        Top = 214
         Width = 124
+        BorderSpacing.Top = 3
         Caption = 'eQSL sent date'
         TabOrder = 32
       end
       object chkeQSLRcvd: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkeQSLSentDate
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 299
+        Top = 240
         Width = 119
+        BorderSpacing.Top = 3
         Caption = 'eQSL received'
         TabOrder = 33
       end
       object chkeQSLRcvdDate: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkeQSLRcvd
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 334
+        Top = 266
         Width = 152
+        BorderSpacing.Top = 3
         Caption = 'eQSL received date'
         TabOrder = 34
       end
       object chkQSLRAll: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkLoTWQSLS
+        AnchorSideTop.Control = chkeQSLRcvdDate
+        AnchorSideTop.Side = asrBottom
+        Left = 308
         Height = 23
-        Top = 366
+        Top = 292
         Width = 195
+        BorderSpacing.Top = 3
         Caption = 'Received QSL,LoTW,eQSL '
         TabOrder = 35
       end
       object Label16: TLabel
-        Left = 357
+        AnchorSideLeft.Control = chkLoTWQSLSDate
+        AnchorSideTop.Control = chkQSLRAll
+        AnchorSideTop.Side = asrBottom
+        Left = 329
         Height = 17
-        Top = 392
+        Top = 315
         Width = 169
+        BorderSpacing.Left = 21
         Caption = '(all values in one column)'
         ParentColor = False
       end
       object chkCountry: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkQSL_R
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 395
+        Top = 318
         Width = 118
+        BorderSpacing.Top = 3
         Caption = 'Country name'
         TabOrder = 36
       end
       object chkPropagation: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkCountry
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 424
+        Top = 344
         Width = 104
+        BorderSpacing.Top = 3
         Caption = 'Propagation'
         TabOrder = 37
       end
       object chkSatellite: TCheckBox
-        Left = 167
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkState
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 424
+        Top = 318
         Width = 121
+        BorderSpacing.Top = 3
         Caption = 'Satellite name'
         TabOrder = 38
       end
       object chkRXFreq: TCheckBox
-        Left = 327
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkSatellite
+        AnchorSideTop.Side = asrBottom
+        Left = 163
         Height = 23
-        Top = 424
+        Top = 344
         Width = 113
+        BorderSpacing.Top = 3
         Caption = 'RX frequency'
         TabOrder = 39
+      end
+      object chkContestName: TCheckBox
+        AnchorSideLeft.Control = chkLoTWQSLSDate
+        AnchorSideTop.Control = chkQSLRAll
+        AnchorSideTop.Side = asrBottom
+        Left = 308
+        Height = 23
+        Top = 344
+        Width = 117
+        BorderSpacing.Top = 29
+        Caption = 'Contest name'
+        TabOrder = 40
+      end
+      object chkSTX: TCheckBox
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkPropagation
+        AnchorSideTop.Side = asrBottom
+        Left = 18
+        Height = 23
+        Top = 370
+        Width = 114
+        BorderSpacing.Top = 3
+        Caption = 'SerialNR sent'
+        TabOrder = 41
+      end
+      object chkSRX: TCheckBox
+        AnchorSideLeft.Control = chkDate
+        AnchorSideTop.Control = chkSTX
+        AnchorSideTop.Side = asrBottom
+        Left = 18
+        Height = 23
+        Top = 396
+        Width = 114
+        BorderSpacing.Top = 3
+        Caption = 'SerialNR rcvd'
+        TabOrder = 42
+      end
+      object chkSTX_str: TCheckBox
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkRXFreq
+        AnchorSideTop.Side = asrBottom
+        Left = 163
+        Height = 23
+        Top = 370
+        Width = 118
+        BorderSpacing.Top = 3
+        Caption = 'ContMSG sent'
+        TabOrder = 43
+      end
+      object chkSRX_str: TCheckBox
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkSTX_str
+        AnchorSideTop.Side = asrBottom
+        Left = 163
+        Height = 23
+        Top = 396
+        Width = 118
+        BorderSpacing.Top = 3
+        Caption = 'ContMSG rcvd'
+        TabOrder = 44
       end
     end
     object tabBands: TTabSheet
@@ -3327,57 +3549,45 @@ object frmPreferences: TfrmPreferences
         DesignLeft = 623
         DesignTop = 214
         inherited chkProfile: TCheckBox
-          Height = 23
           Top = 326
           Width = 67
         end
         inherited chkAscTime: TCheckBox
           Left = 8
-          Height = 23
           Top = 448
           Width = 197
         end
         inherited chkExCont: TCheckBox
-          Height = 23
           Width = 89
         end
         inherited chkexQTH: TCheckBox
-          Height = 23
           Width = 54
         end
         inherited chkexName: TCheckBox
-          Height = 23
           Width = 65
         end
         inherited chkexRSTR: TCheckBox
-          Height = 23
           Width = 83
         end
         inherited chkexRSTS: TCheckBox
-          Height = 23
           Width = 83
         end
         inherited chkexFreq: TCheckBox
-          Height = 23
           Width = 54
         end
         inherited chkexMode: TCheckBox
-          Height = 23
           Width = 62
         end
         inherited chkexCall: TCheckBox
-          Height = 23
+          Width = 51
         end
         inherited chkexTimeoff: TCheckBox
-          Height = 23
           Width = 80
         end
         inherited chkexTimeon: TCheckBox
-          Height = 23
           Width = 79
         end
         inherited chkexDate: TCheckBox
-          Height = 23
           Width = 57
         end
         inherited edtWDate: TEdit
@@ -3411,65 +3621,60 @@ object frmPreferences: TfrmPreferences
           Height = 34
         end
         inherited Label46: TLabel
+          Height = 17
           Width = 31
         end
         inherited Label49: TLabel
+          Height = 17
           Width = 38
         end
         inherited Label47: TLabel
+          Height = 17
           Width = 31
         end
         inherited Label50: TLabel
+          Height = 17
           Width = 38
         end
         inherited Label48: TLabel
+          Height = 17
           Width = 31
         end
         inherited Label51: TLabel
+          Height = 17
           Width = 38
         end
         inherited chkexQSLS: TCheckBox
-          Height = 23
           Width = 83
         end
         inherited chkexQSLR: TCheckBox
-          Height = 23
           Width = 111
         end
         inherited chkexQSLVIA: TCheckBox
-          Height = 23
           Width = 113
         end
         inherited chkexLoc: TCheckBox
-          Height = 23
           Width = 74
         end
         inherited chkexMyLoc: TCheckBox
-          Height = 23
           Width = 95
         end
         inherited chkexIOTA: TCheckBox
-          Height = 23
           Width = 56
         end
         inherited chkexAward: TCheckBox
-          Height = 23
           Width = 66
         end
         inherited chkexCounty: TCheckBox
-          Height = 23
           Width = 72
         end
         inherited chkexPower: TCheckBox
-          Height = 23
           Width = 66
         end
         inherited chkexDXCC: TCheckBox
-          Height = 23
           Width = 62
         end
         inherited chkexRemarks: TCheckBox
-          Height = 23
           Width = 83
         end
         inherited edtWRemarks: TEdit
@@ -3506,58 +3711,45 @@ object frmPreferences: TfrmPreferences
           Height = 34
         end
         inherited chkexeQSLRDate: TCheckBox
-          Height = 23
           Width = 130
         end
         inherited chkexeQSLR: TCheckBox
-          Height = 23
           Width = 120
         end
         inherited chkexeQSLSDate: TCheckBox
-          Height = 23
           Width = 129
         end
         inherited chkexeQSLS: TCheckBox
-          Height = 23
           Width = 120
         end
         inherited chkexQSLRDate: TCheckBox
-          Height = 23
           Width = 116
         end
         inherited chkexQSLSDate: TCheckBox
-          Height = 23
           Width = 116
         end
         inherited chkexLQSLRDate: TCheckBox
-          Height = 23
           Width = 133
         end
         inherited chkexLQSLR: TCheckBox
-          Height = 23
           Width = 123
         end
         inherited chkexLQSLSDate: TCheckBox
-          Height = 23
           Width = 132
         end
         inherited chkexLQSLS: TCheckBox
-          Height = 23
           Width = 123
         end
         inherited chkexState: TCheckBox
-          Height = 23
           Width = 60
         end
         inherited chkexNote: TCheckBox
-          Height = 23
           Width = 57
         end
         inherited chkexITU: TCheckBox
-          Height = 23
+          Width = 48
         end
         inherited chkexWAZ: TCheckBox
-          Height = 23
           Width = 56
         end
         inherited edtWWAZ: TEdit
@@ -3603,15 +3795,12 @@ object frmPreferences: TfrmPreferences
           Height = 34
         end
         inherited chkExPropagation: TCheckBox
-          Height = 23
           Width = 104
         end
         inherited chkExSat: TCheckBox
-          Height = 23
           Width = 121
         end
         inherited chkExRXFreq: TCheckBox
-          Height = 23
           Width = 113
         end
         inherited edtWProp: TEdit
@@ -3622,6 +3811,9 @@ object frmPreferences: TfrmPreferences
         end
         inherited edtWRxFreq: TEdit
           Height = 34
+        end
+        inherited chkexContest: TCheckBox
+          Width = 76
         end
       end
     end
@@ -6701,7 +6893,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 368
+        ClientHeight = 352
         ClientWidth = 606
         TabOrder = 0
         object Label93: TLabel
@@ -7680,8 +7872,6 @@ object frmPreferences: TfrmPreferences
     top = 208
   end
   object dlgColor: TColorDialog
-    Width = 565
-    Height = 295
     Color = clBlack
     CustomColors.Strings = (
       'ColorA=000000'
