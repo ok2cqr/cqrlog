@@ -89,7 +89,18 @@ type
     cmbPropagation : TComboBox;
     cmbSatellite : TComboBox;
     dbgrdQSOBefore: TDBGrid;
+    edtContestExchangeMessageReceived: TEdit;
+    edtContestExchangeMessageSent: TEdit;
+    edtContestSerialReceived: TEdit;
+    edtContestSerialSent: TEdit;
+    edtContestName: TEdit;
     edtRXFreq : TEdit;
+    gbContest: TGroupBox;
+    lblContestExchangeMessageReceived: TLabel;
+    lblContestExchangeMessageSent: TLabel;
+    lblContestSerialReceived: TLabel;
+    lblContestSerialSent: TLabel;
+    lblContestName: TLabel;
     lblCallbookInformation : TLabel;
     lblPropagation : TLabel;
     lblStatellite : TLabel;
@@ -1881,6 +1892,7 @@ var
   prik,
   data:string;
   chkDuplicates:Boolean;
+  i:longint;
 
 begin
   tmrN1MM.Enabled:=false;
@@ -1895,6 +1907,9 @@ begin
       if N1MMSock.lasterror=0 then
        begin
         if dmData.DebugLevel>=1 then writeln(Buf);
+        //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
+        //qso_date will then replace this
+        edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
         repeat
           begin
             if frmAdifImport.getNextAdifTag(Buf,prik,data) then
@@ -1904,8 +1919,17 @@ begin
                                            writeln(data);
                                           end;
                                            case uppercase(prik) of
-                                            'CALL' : edtCall.Text := uppercase(data);
-                                            'GRIDSQUARE' : edtGrid.Text := uppercase(data);
+                                            'CALL' : Begin
+                                                          edtCall.Text := uppercase(data);
+                                                          edtCallExit(nil);   //does info fetch
+                                                          sleep(1500);
+                                                     end;
+                                            'GRIDSQUARE' :Begin
+                                                               data := uppercase(data);
+                                                               if dmUtils.IsLocOK(data) then
+                                                                  if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
+                                                                                edtGrid.Text := data; //replace qrz loc, otherwise keep it
+                                                          end;
                                             'MODE' : cmbMode.Text := uppercase(data);
                                             //now this overrides MODE, if exists
                                             'SUBMODE' : cmbMode.Text := uppercase(data);
@@ -1923,6 +1947,17 @@ begin
                                              'NAME'   : edtName.Text := data;
                                              'QTH'    : edtQTH.Text := data;
                                              'COMMENT': edtRemQSO.Text := data;
+                                             'IOTA'   : cmbIOTA.Text := data;
+                                             'STATE'  : edtState.Text := data;
+                                             'CQZ'    : edtWaz.Text := data;
+                                             'ITUZ'   : edtITU.Text := data;
+                                             'CONTEST_ID':  edtContestName.Text := data;
+                                             'STX': edtContestSerialSent.Text := data;
+                                             'SRX': edtContestSerialReceived.Text := data;
+                                              //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
+                                             'STX_STRING':edtContestExchangeMessageSent.Text := data;
+                                              //same with SRX
+                                             'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
                                           end; //case
               end;  //repeat
         until Buf = '';
@@ -2044,39 +2079,67 @@ procedure TfrmNewQSO.tmrWsjtSpdTimer(Sender: TObject);
 var
   Hour,Min,Sec,HSec : word;
 begin
-   if (WsjtxMode='FT8') then
-    begin
-     DecodeTime(Time,Hour,Min,Sec,HSec);
-     if dmData.DebugLevel>=1 then Writeln(' Timer FT8 mode - Sec is: ',Sec);
-     case Sec of
-       13,28,43,58 :
-                     begin  //set hispeed  decode time is coming
-                        if ( tmrWsjtx.Interval = wLoSpeed ) then
-                          begin
-                           if dmData.DebugLevel>=1 then Writeln ('Timer >> Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
-                           tmrWsjtx.Interval := wHiSpeed;
-                           if dmData.DebugLevel>=1 then Writeln(' Timer >> Setting UDP decode to FT8 HiSpeed ', tmrWsjtx.Interval);
-                          end;
-                     end;
-       2,17,32,47  :
-                     begin //set lospeed  decode time is over
-                         if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
-                          Begin
-                           if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
-                           tmrWsjtx.Interval := wLoSpeed;
-                           if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT8 LoSpeed ', tmrWsjtx.Interval);
-                          end;
-                      end;
-       end;
-    end
-   else
-      if (  tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
-       Begin
-         tmrWsjtx.Interval := wLoSpeed;       // turn it off then
-         if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to LoSpeed not in FT8 mode ',tmrWsjtx.Interval);
-       end;
-end;
+  case WsjtxMode of
 
+   'FT4':begin
+           DecodeTime(Time,Hour,Min,Sec,HSec);
+           if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
+           case Sec of
+            4,10,16,22,28,34,40,46,52,58  :
+                           begin  //set hispeed  decode time is coming
+                              if ( tmrWsjtx.Interval = wLoSpeed ) then
+                                begin
+                                 if dmData.DebugLevel>=1 then Writeln ('Timer >> Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                                 tmrWsjtx.Interval := wHiSpeed;
+                                 if dmData.DebugLevel>=1 then Writeln(' Timer >> Setting UDP decode to FT HiSpeed ', tmrWsjtx.Interval);
+                                end;
+                           end;
+            0,6,12,18,24,30,36,42,48,54  :
+                           begin //set lospeed  decode time is over
+                               if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
+                                Begin
+                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                                 tmrWsjtx.Interval := wLoSpeed;
+                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
+                                end;
+                            end;
+             end;
+          end;
+
+   'FT8':begin
+           DecodeTime(Time,Hour,Min,Sec,HSec);
+           if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
+           case Sec of
+             13,28,43,58 :
+                           begin  //set hispeed  decode time is coming
+                              if ( tmrWsjtx.Interval = wLoSpeed ) then
+                                begin
+                                 if dmData.DebugLevel>=1 then Writeln ('Timer >> Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                                 tmrWsjtx.Interval := wHiSpeed;
+                                 if dmData.DebugLevel>=1 then Writeln(' Timer >> Setting UDP decode to FT HiSpeed ', tmrWsjtx.Interval);
+                                end;
+                           end;
+             2,17,32,47  :
+                           begin //set lospeed  decode time is over
+                               if ( tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
+                                Begin
+                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
+                                 tmrWsjtx.Interval := wLoSpeed;
+                                 if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
+                                end;
+                            end;
+             end;
+          end;
+
+   else   Begin
+            if (  tmrWsjtx.Interval = wHiSpeed ) then  //we did not have UFT8-mode. Is HiSpeed still on?
+             Begin
+               tmrWsjtx.Interval := wLoSpeed;       // turn it off then
+               if dmData.DebugLevel>=1 then Writeln('Setting UDP decode to LoSpeed not in FT mode ',tmrWsjtx.Interval);
+             end;
+            end;
+   end;
+end;
 procedure TfrmNewQSO.tmrWsjtxTimer(Sender: TObject);
 const
   ContestName : array [0..6] of string = ( '','NA VHF','EU VHF','FIELD DAY','RTTY RU','FOX','HOUND' );
@@ -2494,16 +2557,14 @@ begin
           rstR  := '';
           note  := '';
           pwr   := '';
-
-          //date := dmUtils.GetDateTime(0);
           edtDate.Clear;
-          //dmUtils.DateInRightFormat(date,Mask,sDate);
-          //edtDate.Text:=sDate;
-
           //----------------------------------------------------
-           if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date (not used in cqrlog)
+           if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date
              if dmData.DebugLevel>=1 then Writeln('End Date :',FormatDateTime('YYYY-MM-DD',DTim));
-           // we do not use end date:
+           // we use end date here because dmData.QSLMgrFound() needs date.
+           //if not set causes  "'' is not valid date error" sometimes (usually at first logged qso)
+           //edtDate.Text is reset later below to be real qso start date
+           edtDate.Text := FormatDateTime('YYYY-MM-DD',DTim);
           //-----------------------------------------TIME-----------
            ParNum := ui32Buf(index);    //set qso end time
            Min  := ParNum div 60000;  //minutes from 00:00    UTC
@@ -2611,7 +2672,7 @@ begin
             end;
            if dmData.DebugLevel>=1 then Writeln('edtName before pressing save:',edtName.Text );
           //----------------------------------------------------
-           if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date (not used in cqrlog)
+           if TryJulianDateToDateTime(int64Buf(index),DTim)  then
            //start date used
            dmUtils.DateInRightFormat(DTim,Mask,sDate);
            edtDate.Text:=sDate;
@@ -2642,10 +2703,57 @@ begin
            ExchS :=  trim(StrBuf(index));  //contest exchange sent. report + others
            ExchR :=  trim(StrBuf(index));  //contest exchange received. report + others
            //----------------------------------------------------
-           // until we get proper database fields contest name and exchange info is added
-           // as "comment to qso" to exist somewhere in logged qso.
-           if ContestNr > 0 then
-              edtRemQSO.Text := ContestName[ContestNr]+'=S:'+ExchS+'/R:'+ExchR+' '+edtRemQSO.Text;
+           {
+           These wsjt-x will return as contest number:
+             *       0 -> NONE
+             *       1 -> NA VHF
+             *       2 -> EU VHF
+             *       3 -> FIELD DAY
+             *       4 -> RTTY RU
+             *       5 -> FOX
+             *       6 -> HOUND
+             }
+
+           case ContestNr of
+                1         :Begin //NA VHF  EX:locator-4chr
+                            edtContestName.Text := ContestName[ContestNr];
+                            edtContestExchangeMessageReceived.Text := ExchR;
+                            edtContestExchangeMessageSent.Text := ExchS;
+                            edtHisRST.Text := ' '; // NA-VHF has no proper reports (!?!)
+                            edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
+                           end;
+                2         :Begin  //EU VHF    EX:RS-2chr/serial-4chr/ /locator
+                             edtContestName.Text := ContestName[ContestNr];
+                             edtContestSerialReceived.Text := copy(ExchR,3,4);  //serialNr
+                             edtContestExchangeMessageReceived.Text:= copy(ExchR,8,6); //exMsg=locator
+                             edtContestSerialSent.Text := copy(ExchS,3,4);  //serialNr
+                             edtContestExchangeMessageSent.Text:= copy(ExchS,8,6); //exMsg=locator
+                             edtHisRST.Text := edtHisRST.Text+' '; // fake space here. Otherwise qso edit sets xx9 for reports
+                             edtMyRST.Text := edtMyRST.Text+' ';
+                           end;
+                3         :Begin  //FIELD DAY EX:TXnrClass/ /state
+                            edtContestName.Text := ContestName[ContestNr];
+                            edtContestExchangeMessageReceived.Text := ExchR;
+                            edtContestExchangeMessageSent.Text := ExchS;
+                            edtHisRST.Text := ' '; // FD has no proper reports (!?!)
+                            edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
+                           end;
+                4         :Begin  //RTTY RU   EX:RST-3chr/ /serial-4chr[or] state(not numbers)
+                            edtContestName.Text := ContestName[ContestNr];
+                            if  (ExchS[5] in [ 'A' .. 'Z' ]) then
+                              edtContestExchangeMessageSent.Text:= copy(ExchS,5,length(ExchS)) //exMsg=state
+                             else
+                              edtContestSerialSent.Text := copy(ExchS,5,length(ExchS)); //serialNr
+                            if  (ExchR[5] in [ 'A' .. 'Z' ]) then
+                              edtContestExchangeMessageReceived.Text:= copy(ExchR,5,length(ExchR)) //exMsg=state
+                             else
+                              edtContestSerialReceived.Text := copy(ExchR,5,length(ExchR)); //serialNr
+                           end;
+                5,6       : edtContestName.Text := ContestName[ContestNr]+'-QSO';
+           end;
+           case ContestNr of
+                1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+           end;
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
@@ -2839,7 +2947,12 @@ begin
                    dmSatellite.GetPropShortName(cmbPropagation.Text),
                    dmSatellite.GetSatShortName(cmbSatellite.Text),
                    RxFreq,
-                   id);
+                   id,
+                   edtContestSerialReceived.Text,
+                   edtContestSerialSent.Text,
+                   edtContestExchangeMessageReceived.Text,
+                   edtContestExchangeMessageSent.Text,
+                   edtContestName.Text);
     if (old_call<>edtCall.Text) or (old_mode<>cmbMode.Text) or (StrToFloat(old_freq)<>StrToFloat(cmbFreq.Text)) or
        (old_date<>StrToDate(edtDate.Text)) or (old_time<>edtStartTime.Text) or (old_rsts<>edtHisRST.Text) or
        (old_rstr<>edtMyRST.Text) then
@@ -2926,7 +3039,12 @@ begin
                    frmQSODetails.ClubNR5,
                    dmSatellite.GetPropShortName(cmbPropagation.Text),
                    dmSatellite.GetSatShortName(cmbSatellite.Text),
-                   RxFreq
+                   RxFreq,
+                   edtContestSerialReceived.Text,
+                   edtContestSerialSent.Text,
+                   edtContestExchangeMessageReceived.Text,
+                   edtContestExchangeMessageSent.Text,
+                   edtContestName.Text
                    )
   end;
   if fEditQSO and (not fromNewQSO) then
@@ -4896,7 +5014,9 @@ begin
       RunVK(dmUtils.GetDescKeyFromCode(Key))
     else
       if Assigned(CWint) then
-        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),edtCall.Text,edtHisRST.Text,edtName.Text,lblGreeting.Caption,''));
+        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
+          frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+          frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
     key := 0
   end;
 
@@ -5675,7 +5795,12 @@ begin
     end;
     dmSatellite.GetListOfSatellites(cmbSatellite, dmData.qQSOBefore.FieldByName('satellite').AsString);
     dmSatellite.GetListOfPropModes(cmbPropagation, dmData.qQSOBefore.FieldByName('prop_mode').AsString);
-    edtRXFreq.Text := FloatToStr(dmData.qQSOBefore.FieldByName('rxfreq').AsFloat)
+    edtRXFreq.Text := FloatToStr(dmData.qQSOBefore.FieldByName('rxfreq').AsFloat);
+    edtContestName.Text := dmData.qQSOBefore.FieldByName('contestname').AsString;
+    edtContestSerialSent.Text := dmData.qQSOBefore.FieldByName('stx').AsString;
+    edtContestSerialReceived.Text := dmData.qQSOBefore.FieldByName('srx').AsString;
+    edtContestExchangeMessageSent.Text := dmData.qQSOBefore.FieldByName('stx_string').AsString;
+    edtContestExchangeMessageReceived.Text := dmData.qQSOBefore.FieldByName('srx_string').AsString;
   end
   else begin
     cmbProfiles.Text := dmData.GetProfileText(dmData.qCQRLOG.FieldByName('profile').AsInteger);
@@ -5708,6 +5833,11 @@ begin
     edtAward.Text     := dmData.qCQRLOG.FieldByName('award').AsString;
     edtState.Text     := dmData.qCQRLOG.FieldByName('state').AsString;
     lotw_qslr         := dmData.qCQRLOG.FieldByName('lotw_qslr').AsString;
+    edtContestName.Text := dmData.qCQRLOG.FieldByName('contestname').AsString;
+    edtContestSerialSent.Text := dmData.qCQRLOG.FieldByName('stx').AsString;
+    edtContestSerialReceived.Text := dmData.qCQRLOG.FieldByName('srx').AsString;
+    edtContestExchangeMessageSent.Text := dmData.qCQRLOG.FieldByName('stx_string').AsString;
+    edtContestExchangeMessageReceived.Text := dmData.qCQRLOG.FieldByName('srx_string').AsString;
     if lotw_qslr = 'L' then
     begin
       lblCfmLoTW.Caption := 'QSO confirmed by LoTW ' + dmData.qCQRLOG.FieldByName('lotw_qslrdate').AsString;
@@ -6758,4 +6888,5 @@ end;
 
 
 end.
+
 

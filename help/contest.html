@@ -35,7 +35,7 @@
 </p>
 <p>
 <b>RECOMMENDATION:</b> Make new log for each contest, do not allow qrz/hamqth search. It slows things.
-<b>Note:</b> This is <b>NOT</b> a contest logging add-on!!!
+<b>Note:</b> This is <b>NOT</b> a contest logging add-on!!! It is a contest-notepad.
 It is meant to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
 </p><p>
 Form Contest is just a "child form" for NewQSO to make qso logging faster when working in contests.
@@ -73,18 +73,13 @@ Or hit ENTER after rxnumber if no additional message is exchanged.
 <p>Remember that pressing <b>ENTER</b> key at any field saves qso with existing values. How ever there must be
 callsign at least three characters long. Sent/Received number and message are not needed.</p>
 <p>
-Contest numbers and messages are saved in log into RST fields separated by spaces like. 599 001 MSG
-This has two benefits:
-<ul>
-<li> CW macros work without any programming change. If you set “send RST”-macro it sends also contest
-number and message, and when not in contest it sends just RST.
-How ever a small modification to original is made. If you use %rs for RST it will send 5NN. Now
-modified version sends also T for zero. So you will have 599 001 like 5NN TT1.</li>
-<li> Backup of logs work without any change. RST field just are a bit longer</li>
-</ul>
+Contest numbers and messages are saved in log into their own columns. Use <b>preferences/Visible columns</b> to show them in <b>Qso list</b>.
+For editing a qso these columns appear to <b>NewQSO</b> window when <b>contest</b> window is open and NewQso window is streched horizontally (DXCCinfo may override them).
+<br> 
+CW macros Have some new items. Look them from <a href="h26.html">CW Operation</a>
 </p>
 <p>
-ADIF export is modified so that it separates RST fields to right tags.<br><br>
+ADIF exports fields to right tags.<br><br>
 &lt;RST_SENT:3&gt;599&lt;STX:3&gt;001<br>
 &lt;RST_RCVD:3&gt;599&lt;SRX:3&gt;002<br>
 &lt;RST_SENT:3&gt;599&lt;STX:3&gt;003&lt;STX_STRING:2&gt;SA<br>

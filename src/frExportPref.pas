@@ -12,6 +12,7 @@ type
   { TfraExportPref }
 
   TfraExportPref = class(TFrame)
+    chkexContest: TCheckBox;
     chkExRXFreq : TCheckBox;
     chkExSat : TCheckBox;
     chkExPropagation : TCheckBox;
@@ -152,6 +153,7 @@ begin
   cqrini.WriteBool('Export', 'Prop', chkExPropagation.Checked);
   cqrini.WriteBool('Export', 'RxFreq', chkExRXFreq.Checked);
   cqrini.WriteBool('Export', 'SatName', chkExSat.Checked);
+  cqrini.WriteBool('Export', 'Contest', chkexContest.Checked);
 
   cqrini.WriteString('Export', 'WDate', edtWDate.Text);
   cqrini.WriteString('Export', 'Wtime_on', edtWTimeOn.Text);
@@ -236,6 +238,7 @@ begin
   chkExPropagation.Checked := cqrini.ReadBool('Export', 'Prop', False);
   chkExRXFreq.Checked := cqrini.ReadBool('Export', 'RxFreq', False);
   chkExSat.Checked := cqrini.ReadBool('Export', 'SatName', False);
+  chkexContest.Checked := cqrini.ReadBool('Export', 'Contest', False);
 
 
   edtWDate.Text := cqrini.ReadString('Export', 'WDate', '50');

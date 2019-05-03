@@ -16,10 +16,13 @@ type
     btnOK : TButton;
     btnCancel : TButton;
     btnReSet: TButton;
+    CheckBox1: TCheckBox;
     fraExportPref1 : TfraExportPref;
     procedure btnOKClick(Sender : TObject);
     procedure btnReSetClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender : TObject);
+    procedure fraExportPref1Click(Sender: TObject);
   private
     { private declarations }
   public
@@ -43,6 +46,11 @@ begin
   fraExportPref1.LoadExportPref
 end;
 
+procedure TfrmExportPref.fraExportPref1Click(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmExportPref.btnOKClick(Sender : TObject);
 begin
   fraExportPref1.SaveExportPref;
@@ -56,6 +64,11 @@ begin
       if fraExportPref1.Components[i] is TCheckbox then
          tcheckbox(fraExportPref1.Components[i]).checked := AllChk;
     AllChk := not AllChk;
+end;
+
+procedure TfrmExportPref.FormCreate(Sender: TObject);
+begin
+
 end;
 
 end.

@@ -35,6 +35,7 @@ const h_SRX = 6056;
 const h_SRX_STRING = 59227;
 const h_STX = 6072;
 const h_STX_STRING = 61787;
+const h_CONTEST_ID = 33914;
 const h_TIME_OFF = 39033;
 const h_TIME_ON = 62223;
 const h_TX_PWR = 21722;
