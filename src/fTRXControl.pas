@@ -63,6 +63,8 @@ type
     gbVfo: TGroupBox;
     GroupBox4: TGroupBox;
     lblFreq: TLabel;
+    mnuShowInfo: TMenuItem;
+    mnuShowVfo: TMenuItem;
     mnuOpenMem: TMenuItem;
     mnuPref: TMenuItem;
     mnuAddMod: TMenuItem;
@@ -108,8 +110,10 @@ type
     procedure btnFMClick(Sender: TObject);
     procedure btnRTTYClick(Sender: TObject);
     procedure btnSSBClick(Sender: TObject);
+    procedure mnuShowInfoClick(Sender: TObject);
     procedure mnuShowPwrClick(Sender: TObject);
     procedure mnuProgPrefClick(Sender: TObject);
+    procedure mnuShowVfoClick(Sender: TObject);
     procedure rbRadio1Click(Sender: TObject);
     procedure rbRadio2Click(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
@@ -519,6 +523,10 @@ begin
   rbRadio2.Caption := cqrini.ReadString('TRX2','Desc','Radio 2');
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX','MemModeRelated',False);
+  gbInfo.Visible := cqrini.ReadBool('TRX','MemShowInfo',gbInfo.Visible) ;
+  mnuShowInfo.Checked := gbInfo.Visible;
+  gbVfo.Visible := cqrini.ReadBool('TRX','ShowVfo',gbVfo.Visible);
+  mnuShowVfo.Checked :=  gbVfo.Visible;
 end;
 
 procedure TfrmTRXControl.btn10mClick(Sender: TObject);
@@ -708,6 +716,14 @@ begin
     end
   end
 end;
+
+procedure TfrmTRXControl.mnuShowInfoClick(Sender: TObject);
+begin
+  gbInfo.Visible := not gbInfo.Visible;
+  mnuShowInfo.Checked := gbInfo.Visible;
+  cqrini.WriteBool('TRX','MemShowInfo',gbInfo.Visible)
+end;
+
 procedure TfrmTRXControl.btnRTTYClick(Sender: TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
@@ -744,6 +760,13 @@ procedure TfrmTRXControl.mnuProgPrefClick(Sender: TObject);
 begin
   cqrini.WriteInteger('Pref', 'ActPageIdx', 5);  //set DXCuster tab active. Number may change if preferences page change
   frmNewQSO.acPreferences.Execute
+end;
+
+procedure TfrmTRXControl.mnuShowVfoClick(Sender: TObject);
+begin
+  gbVfo.Visible := not gbVfo.Visible;
+  mnuShowVfo.Checked :=  gbVfo.Visible;
+  cqrini.WriteBool('TRX','ShowVfo',gbVfo.Visible)
 end;
 
 procedure TfrmTRXControl.rbRadio1Click(Sender: TObject);
