@@ -80,6 +80,7 @@ type
     acMarkAllHrdLog: TAction;
     acMarkAll: TAction;
     acMarkAlleQSL: TAction;
+    acAutoSizeColumns: TAction;
     acUploadAllToLoTW: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
@@ -290,6 +291,7 @@ type
     ToolButton34 : TToolButton;
     ToolButton35 : TToolButton;
     ToolButton36 : TToolButton;
+    ToolButton37: TToolButton;
     toolMain:   TToolBar;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
@@ -326,6 +328,7 @@ type
     procedure acRemoveDupesExecute(Sender: TObject);
     procedure acSOTAExportExecute(Sender : TObject);
     procedure acSQLExecute(Sender: TObject);
+    procedure acAutoSizeColumnsExecute(Sender: TObject);
     procedure acUploadAllToLoTWExecute(Sender: TObject);
     procedure acUploadToAllExecute(Sender: TObject);
     procedure acUploadToClubLogExecute(Sender: TObject);
@@ -625,6 +628,7 @@ begin
     end //case
   end
 end;
+
 
 procedure TfrmMain.acNewQSOExecute(Sender: TObject);
 begin
@@ -1360,6 +1364,26 @@ begin
   end
 end;
 
+procedure TfrmMain.acAutoSizeColumnsExecute(Sender: TObject);
+var
+   AutoSz :boolean;
+begin
+  AutoSz :=  cqrini.ReadBool('Main', 'AutoSizeColumns', false);
+  //called from formShow (with nil) just sets saved value.
+  if Sender <> nil then  AutoSz := not AutoSz;
+  cqrini.WriteBool('Main', 'AutoSizeColumns', AutoSz);
+  if AutoSz then
+  begin
+    ToolButton37.ImageIndex:=33;
+    dbgrdMain.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColumnMove,dgColLines,dgRowLines,dgTabs,dgRowSelect,dgAlwaysShowSelection,dgConfirmDelete,dgCancelOnExit,dgMultiselect,dgAutoSizeColumns];
+  end
+ else
+  Begin
+      ToolButton37.ImageIndex:=34;
+      dbgrdMain.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColumnMove,dgColLines,dgRowLines,dgTabs,dgRowSelect,dgAlwaysShowSelection,dgConfirmDelete,dgCancelOnExit,dgMultiselect];
+  end;
+end;
+
 procedure TfrmMain.acUploadAllToLoTWExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to mark all QSO as uploaded to LoTW?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
@@ -1912,7 +1936,9 @@ begin
 
   CheckAttachment;
   mnuShowButtons.Checked := pnlButtons.Visible;
-  mnuShowToolBar.Checked := toolMain.Visible
+  mnuShowToolBar.Checked := toolMain.Visible;
+  //Sets AutoSizeColumns to saved value
+  acAutoSizeColumnsExecute(nil);
 end;
 
 procedure TfrmMain.ShowFields;

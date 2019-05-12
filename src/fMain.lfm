@@ -1,13 +1,13 @@
 object frmMain: TfrmMain
-  Left = 38
+  Left = 266
   Height = 626
-  Top = 49
+  Top = 52
   Width = 874
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   ActiveControl = Panel2
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 603
+  ClientHeight = 601
   ClientWidth = 874
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
@@ -156,7 +156,7 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.2.0'
   object sbMain: TStatusBar
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner
@@ -164,8 +164,8 @@ object frmMain: TfrmMain
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 17
-    Top = 586
+    Height = 19
+    Top = 582
     Width = 874
     Panels = <    
       item
@@ -195,7 +195,7 @@ object frmMain: TfrmMain
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 40
-    Top = 540
+    Top = 536
     Width = 874
     Align = alBottom
     BorderSpacing.Bottom = 6
@@ -208,7 +208,7 @@ object frmMain: TfrmMain
       AnchorSideLeft.Control = pnlButtons
       AnchorSideTop.Control = pnlButtons
       Left = 10
-      Height = 32
+      Height = 33
       Top = 5
       Width = 130
       Action = acNewQSO
@@ -224,7 +224,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideTop.Side = asrCenter
       Left = 150
-      Height = 32
+      Height = 33
       Top = 5
       Width = 130
       Action = acView
@@ -238,7 +238,7 @@ object frmMain: TfrmMain
       AnchorSideRight.Control = pnlButtons
       AnchorSideRight.Side = asrBottom
       Left = 734
-      Height = 32
+      Height = 33
       Top = 5
       Width = 130
       Action = acClose
@@ -253,7 +253,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnClose
       Left = 594
-      Height = 32
+      Height = 33
       Top = 5
       Width = 130
       Action = acDeleteQSO
@@ -268,7 +268,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnDeleteQSO
       Left = 454
-      Height = 32
+      Height = 33
       Top = 5
       Width = 130
       Action = acSort
@@ -284,7 +284,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideTop.Side = asrCenter
       Left = 290
-      Height = 32
+      Height = 33
       Top = 5
       Width = 130
       Action = acEditQSO
@@ -299,7 +299,7 @@ object frmMain: TfrmMain
     AnchorSideTop.Control = toolMain
     AnchorSideRight.Control = toolMain
     Left = 0
-    Height = 36
+    Height = 38
     Top = 31
     Width = 874
     Align = alTop
@@ -307,7 +307,7 @@ object frmMain: TfrmMain
     BorderSpacing.Top = 5
     BorderSpacing.InnerBorder = 5
     BevelOuter = bvNone
-    ClientHeight = 36
+    ClientHeight = 38
     ClientWidth = 874
     TabOrder = 1
     object lblQSOInLog: TLabel
@@ -315,9 +315,9 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = Panel2
       AnchorSideTop.Side = asrCenter
       Left = 10
-      Height = 15
+      Height = 17
       Top = 11
-      Width = 67
+      Width = 72
       Alignment = taRightJustify
       BorderSpacing.Left = 10
       Caption = 'QSO in log:'
@@ -330,10 +330,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblQSOInLog
       AnchorSideBottom.Side = asrBottom
-      Left = 87
-      Height = 15
+      Left = 92
+      Height = 17
       Top = 11
-      Width = 40
+      Width = 45
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = '10000'
@@ -348,10 +348,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Control = Panel2
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = lblQSOInLog
-      Left = 419
-      Height = 15
+      Left = 417
+      Height = 17
       Top = 11
-      Width = 36
+      Width = 40
       Caption = 'DXCC:'
       Layout = tlBottom
       ParentColor = False
@@ -362,10 +362,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblDXCCWorked
       AnchorSideBottom.Side = asrBottom
-      Left = 465
-      Height = 15
+      Left = 467
+      Height = 17
       Top = 11
-      Width = 24
+      Width = 27
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = '238'
@@ -377,10 +377,10 @@ object frmMain: TfrmMain
     object lblDXCCConfirmed: TLabel
       AnchorSideTop.Control = lblQSOInLog
       AnchorSideRight.Control = lblDXCCCmf
-      Left = 736
-      Height = 15
+      Left = 728
+      Height = 17
       Top = 11
-      Width = 65
+      Width = 73
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 10
@@ -397,7 +397,7 @@ object frmMain: TfrmMain
       AnchorSideBottom.Side = asrBottom
       Left = 811
       Height = 17
-      Top = 9
+      Top = 11
       Width = 53
       Anchors = [akRight, akBottom]
       AutoSize = False
@@ -417,14 +417,14 @@ object frmMain: TfrmMain
     AnchorSideBottom.Control = pnlDetails
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 409
-    Top = 67
+    Height = 403
+    Top = 69
     Width = 874
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
     Color = clWindow
     Columns = <>
-    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiselect, dgAutoSizeColumns]
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiselect]
     PopupMenu = popWebSearch
     Scrollbars = ssAutoBoth
     TabOrder = 2
@@ -710,6 +710,15 @@ object frmMain: TfrmMain
       Caption = 'ToolButton36'
       Style = tbsSeparator
     end
+    object ToolButton37: TToolButton
+      Left = 649
+      Hint = 'AutoSize column width'
+      Top = 2
+      Action = acAutoSizeColumns
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
   end
   object pnlDetails: TPanel
     AnchorSideLeft.Control = Owner
@@ -719,7 +728,7 @@ object frmMain: TfrmMain
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 64
-    Top = 476
+    Top = 472
     Width = 874
     Align = alBottom
     BevelOuter = bvNone
@@ -730,9 +739,9 @@ object frmMain: TfrmMain
       AnchorSideLeft.Control = pnlDetails
       AnchorSideTop.Control = pnlDetails
       Left = 10
-      Height = 15
+      Height = 17
       Top = 10
-      Width = 113
+      Width = 122
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Comment for QSO:'
@@ -745,9 +754,9 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = lblCommentForQSO
       AnchorSideTop.Side = asrBottom
       Left = 10
-      Height = 15
-      Top = 35
-      Width = 42
+      Height = 17
+      Top = 37
+      Width = 44
       BorderSpacing.Top = 10
       Caption = 'Award:'
       Layout = tlBottom
@@ -759,10 +768,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblCommentForQSO
       AnchorSideBottom.Side = asrBottom
-      Left = 133
-      Height = 15
+      Left = 142
+      Height = 17
       Top = 10
-      Width = 80
+      Width = 85
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Layout = tlBottom
@@ -773,10 +782,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblAward
       AnchorSideBottom.Side = asrBottom
-      Left = 62
-      Height = 15
-      Top = 35
-      Width = 59
+      Left = 64
+      Height = 17
+      Top = 37
+      Width = 61
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Layout = tlBottom
@@ -796,9 +805,9 @@ object frmMain: TfrmMain
         AnchorSideLeft.Control = Panel1
         AnchorSideTop.Control = Panel1
         Left = 7
-        Height = 15
+        Height = 17
         Top = 10
-        Width = 66
+        Width = 70
         BorderSpacing.Left = 7
         BorderSpacing.Top = 10
         Caption = 'QS_S date:'
@@ -811,10 +820,10 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblQSLSDate
         AnchorSideBottom.Side = asrBottom
-        Left = 85
-        Height = 15
+        Left = 89
+        Height = 17
         Top = 10
-        Width = 81
+        Width = 85
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 12
         Layout = tlBottom
@@ -825,10 +834,10 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblQSLRDate
         AnchorSideBottom.Side = asrBottom
-        Left = 85
-        Height = 15
-        Top = 35
-        Width = 81
+        Left = 90
+        Height = 17
+        Top = 37
+        Width = 86
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 12
         Layout = tlBottom
@@ -839,9 +848,9 @@ object frmMain: TfrmMain
         AnchorSideTop.Control = lblQSLSDate
         AnchorSideTop.Side = asrBottom
         Left = 7
-        Height = 15
-        Top = 35
-        Width = 66
+        Height = 17
+        Top = 37
+        Width = 71
         BorderSpacing.Top = 10
         Caption = 'QS_R date:'
         Layout = tlBottom
@@ -863,9 +872,9 @@ object frmMain: TfrmMain
         AnchorSideLeft.Control = Panel3
         AnchorSideTop.Control = Panel3
         Left = 7
-        Height = 15
+        Height = 17
         Top = 10
-        Width = 103
+        Width = 110
         BorderSpacing.Left = 7
         BorderSpacing.Top = 10
         Caption = 'LoTW QS_S date:'
@@ -878,10 +887,10 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblLoTWQSLSDate
         AnchorSideBottom.Side = asrBottom
-        Left = 127
-        Height = 15
+        Left = 134
+        Height = 17
         Top = 10
-        Width = 86
+        Width = 90
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 17
         Layout = tlBottom
@@ -893,10 +902,10 @@ object frmMain: TfrmMain
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblLoTWQSLRDate
         AnchorSideBottom.Side = asrBottom
-        Left = 127
-        Height = 15
-        Top = 35
-        Width = 86
+        Left = 135
+        Height = 17
+        Top = 37
+        Width = 91
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 17
         BorderSpacing.Top = 10
@@ -907,9 +916,9 @@ object frmMain: TfrmMain
         AnchorSideTop.Control = lblLoTWQSLSDate
         AnchorSideTop.Side = asrBottom
         Left = 7
-        Height = 15
-        Top = 35
-        Width = 103
+        Height = 17
+        Top = 37
+        Width = 111
         BorderSpacing.Top = 10
         Caption = 'LoTW QS_R date:'
         Layout = tlBottom
@@ -1883,6 +1892,11 @@ object frmMain: TfrmMain
       Caption = 'Mark all QSO as uploded to LoTW'
       OnExecute = acUploadAllToLoTWExecute
     end
+    object acAutoSizeColumns: TAction
+      Caption = 'AutoSizeColumns'
+      ImageIndex = 34
+      OnExecute = acAutoSizeColumnsExecute
+    end
   end
   object tmrTime: TTimer
     OnTimer = tmrTimeTimer
@@ -2417,7 +2431,7 @@ object frmMain: TfrmMain
     left = 176
     top = 232
     Bitmap = {
-      4C69210000001000000010000000C803EA00C803EA00009B0000009B00000000
+      4C69230000001000000010000000C803EA00C803EA00009B0000009B00000000
       000000000000000000000000000000000000000000003939E7FF000000000000
       0000000000000000000000000000472F2200D3A98700DCA77B00DCA67A00DAA4
       7A00D8A27900D5A07600D49E7500D29D7300CF9A72009A9A9AFFCB966F00C994
@@ -3473,7 +3487,71 @@ object frmMain: TfrmMain
       00FFEA8638FFFAE1CEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFF5C39BFFE87B26FFF5C3
       9BFFFFFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-      FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4F7DBD5F4F3CAC0F4FFFFFFF4FFFF
+      FFF4FFFFFFF4FFFFFFF4FFFFFFF4FFFFFFF4FFFFFFF4FFFFFFF4FFFFFFF4FFFF
+      FFF4F1C0B3F4F8E2DDF4FFFFFFF4FFFFFFFFF0B9ACFFF4CBC2FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFBFAFFF9E7E4FFFCF4F2FFFFFFFFFFFFFF
+      FFFFF1C1B5FFF2C2B6FFFFFFFFFFFFFEFEFFEB9981FFF3CBC1FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFF2C3B8FFE5660EFFF0B9ABFFFFFFFFFFFFFF
+      FFFFF2C2B6FFECA28DFFFFFFFEFFFDF8F7FFE77543FFF3CAC0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFBEDEAFFE6733EFFE56500FFEA967CFFFFFEFEFFFFFF
+      FFFFF2C2B7FFE77A4CFFFEF9F9FFF8E3DFFFE5660DFFF3C9BFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFEFDFFEEAB99FFECA28DFFE56500FFE6733FFFFDF8F6FFFFFF
+      FFFFF2C3B8FFE56713FFF9E5E1FFF3C7BCFFE56500FFF3C8BEFFFFFFFFFFFFFF
+      FFFFFFFFFFFFF7DAD4FFF1BDB1FFF7DBD5FFE56502FFE56711FFF9E5E1FFFFFF
+      FFFFF2C4B9FFE56500FFF3C9BFFFEDAA97FFE56500FFF3C7BDFFFFFFFFFFFFFF
+      FFFFFDF8F7FFEC9E88FFFDF7F5FFFBF0EEFFE66B28FFE56500FFF4CCC3FFFFFF
+      FFFFF2C5BAFFE56500FFEEAA97FFE77C51FFE56500FFF3C7BCFFFFFFFFFFFFFF
+      FFFFF1C0B4FFF0BCAFFFF9E7E4FFF9E4E0FFE7794BFFE56500FFEEAD9BFFFFFF
+      FFFFF2C6BBFFE56500FFE77542FFE66B26FFE56500FFF2C6BBFFFFFFFFFFFAEC
+      E9FFEB9B82FFF1C0B4FFF1C0B4FFF1C0B4FFEA8E70FFE56500FFE98867FFFEFD
+      FCFFF3C6BCFFE56500FFE66C28FFECA08AFFE56500FFF2C5BAFFFFFDFDFFEDA8
+      96FFFAEAE7FFFFFFFFFFFFFFFFFFFFFFFFFFF3C6BCFFE56500FFE66D2CFFFCF2
+      F0FFF3C7BDFFE56500FFECA089FFF3C6BCFFE56500FFF0B6A8FFF0B6A8FFE989
+      69FFF7DBD4FFFFFFFFFFFFFFFFFFFBF0EEFFEEAA98FFE56500FFE56503FFEFB2
+      A2FFF0BBAEFFE56500FFF2C6BBFFF9E5E1FFE56712FFF0BBAEFFF9E5E1FFF9E5
+      E1FFFBF0EEFFFFFFFFFFFFFFFFFFFDF7F5FFF9E5E1FFF9E5E1FFF9E5E1FFF9E6
+      E1FFF2C4BAFFE56504FFF8E1DDFFFEF9F8FFE77747FFF2C2B7FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE
+      FEFFF3C9BFFFE66F34FFFCF4F2FFFFFEFEFFEB9A81FFE98C6DFFEEAC9AFFEEAA
+      98FFEDA997FFEDA895FFEDA794FFEDA793FFEDA794FFEDA794FFEDA794FFEDA8
+      95FFE98D6FFFEA9377FFFFFDFDFFFFFFFFFFF2C1B6FFF1BCAFFFFDF8F7FFFDF9
+      F8FFFEF9F8FFFEFAF9FFFEFAFAFFFEFBFAFFFEFBFAFFFEFBFAFFFEFBFAFFFEFB
+      FAFFF3C8BEFFF0B9ACFFFFFFFFFFFFFFFFFFF8E1DCFFF2C1B5FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFF4CCC2FFF6DAD3FFFFFFFFFFFFFFFFF4F7DBD5F4F3CAC0F4FFFFFFF4FFFF
+      FFF4FAFAFFF4E0E0FEF4DFDFFEF4DFDFFEF4E6E6FFF4FDFDFFF4FFFFFFF4FFFF
+      FFF4F1C0B3F4F8E2DDF4FFFFFFF4FFFFFFFFF0B9ACFFF4CBC2FFF7F7FFFFBCBC
+      FEFF5656FDFF3333FDFF3A3AFDFF3832FCFF2E1FFBFF6E6EFDFFCFCFFEFFFDFD
+      FFFFF1C1B5FFF2C2B6FFFFFFFFFFFFFEFEFFEB9981FFD9A9C2FF6B6BFDFF6B6B
+      FDFFCECEFEFFF4F4FFFFFAFAFFFFEDBDB9FFD65E6AFFAD70CCFF4D4DFDFF8E8E
+      FEFFE7B4B6FFECA28DFFFFFFFEFFFDF8F7FFDD716BFF4E22F2FFA6A6FEFFF7F7
+      FFFFFFFFFFFFFFFFFFFFFBEDEAFFE6733EFFE56500FFEA967CFFD3D2FDFF1B1B
+      FDFF7F3CDEFFE57955FFFEF9F9FFF8E3DFFF9441CEFF7D7DFDFFFCFCFFFFFFFF
+      FFFFFFFFFFFFFFFEFDFFEEAB99FFECA28DFFE56500FFCF6384FF514BFBFF9797
+      FEFF4D4DFDFFBA53A5FFF9E5E1FFE5C4D2FF3211F9FFD8C2E3FFFFFFFFFFFFFF
+      FFFFFFFFFFFFF7DAD4FFF1BDB1FFF6DBD5FFB950A5FF4519F5FFA7A3FBFFFDFD
+      FFFFB9B0F5FF6227EBFFF1C9C3FFBD9EDFFF5F26ECFFF1C7C0FFFFFFFFFFFFFF
+      FFFFFDF8F7FFEC9E88FFFDF6F5FFCBC6F9FF3113F9FFA848BAFFF2CBC6FFFFFF
+      FFFFE4C2D1FF2C0EF9FFD9A5BCFFAB67C7FF7A33DFFFF3C7BCFFFFFFFFFFFFFF
+      FFFFF1C0B4FFF0BCAFFFCBC6F9FF3429FBFFB851A7FFE56506FFEEAD9BFFFFFF
+      FFFFEEC5C2FF3311F8FFCB6A95FFA951BDFF7A33DFFFF2C6BBFFFFFFFFFFFAEC
+      E9FFEB9A82FFBD80C3FF342AFBFFC5AEE4FFE98E71FFE56500FFE98867FFFEFD
+      FCFFEFC6C3FF3311F8FFCA608DFFB492DFFF6E2DE6FFF1C5BCFFFFFDFDFFECA7
+      96FFC6AFE6FF3737FDFFCDCDFEFFFFFFFFFFF3C6BCFFE56500FFE66D2CFFFCF2
+      F0FFEAC5CBFF2D0FF9FFD399BAFFDEC2DBFF2C0EFAFFE0B3C3FFEEB6ABFF9846
+      CDFF302FFDFFCDCDFEFFFFFFFFFFFBF0EEFFEEAA98FFE56500FFE56503FFEFB2
+      A2FFC7AFE5FF4C1DF2FFEFC5C1FFF8E5E2FF7D38DEFF968AF4FF9E7FE6FF5252
+      FDFFDEDEFEFFFFFFFFFFFFFFFFFFFDF7F5FFF9E5E1FFF9E5E1FFF9E5E1FFF0DC
+      E1FF6861FAFFA849BAFFF8E1DDFFFEF9F8FFD16F8DFF2A0DFAFF4747FDFFE5E5
+      FEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFBFFFFA6A6
+      FEFF5F27ECFFDE6C5CFFFCF4F2FFFFFEFEFFEB9A82FFB858ABFF3731FCFF9682
+      EFFFDC9EAEFFECA696FFEDA794FFEDA793FFEAA394FFD097BBFF796AF5FF523D
+      F7FFD06A8AFFEA9377FFFFFDFDFFFFFFFFFFF2C1B6FFF0BCB0FFE6E4FDFF8C8C
+      FEFF2E1FFBFF786EF8FF867FF8FF877FF9FF685DF9FF3732FCFFA5A5FEFFF4F3
+      FDFFF3C8BEFFF0B9ACFFFFFFFFFFFFFFFFFFF8E1DCFFF2C1B5FFFFFFFFFFFEFE
+      FFFFE6E6FFFFBDBDFEFFBCBCFEFFBCBCFEFFC6C6FEFFEEEEFFFFFFFFFFFFFFFF
+      FFFFF4CCC2FFF6DAD3FFFFFFFFFF
     }
   end
   object tmrUploadAll: TTimer
