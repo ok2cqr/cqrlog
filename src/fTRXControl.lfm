@@ -153,7 +153,7 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.2.0'
   object gbMode: TGroupBox
     AnchorSideLeft.Control = gbVfo
     AnchorSideTop.Control = gbVfo
@@ -643,6 +643,7 @@ object frmTRXControl: TfrmTRXControl
       ClientHeight = 28
       ClientWidth = 197
       TabOrder = 3
+      Visible = False
       object edtMemNr: TEdit
         AnchorSideLeft.Control = gbInfo
         AnchorSideTop.Control = gbInfo
@@ -680,6 +681,7 @@ object frmTRXControl: TfrmTRXControl
     ClientHeight = 30
     ClientWidth = 76
     TabOrder = 2
+    Visible = False
     object btnVFOA: TButton
       AnchorSideLeft.Control = gbVfo
       AnchorSideTop.Control = gbVfo
@@ -724,6 +726,14 @@ object frmTRXControl: TfrmTRXControl
       object mnuAddMod: TMenuItem
         Action = acAddModMem
         Caption = 'Add/Modify memories'
+      end
+      object mnuShowInfo: TMenuItem
+        Caption = 'Show Mem Info'
+        OnClick = mnuShowInfoClick
+      end
+      object mnuShowVfo: TMenuItem
+        Caption = 'Show Vfo'
+        OnClick = mnuShowVfoClick
       end
       object mnuShowPwr: TMenuItem
         Caption = 'Show Pwr buttons'
