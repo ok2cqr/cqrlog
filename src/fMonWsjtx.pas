@@ -850,7 +850,7 @@ begin
   tmr := 61000;
   case CurMode of
        'FT8': tmr := 16000;
-       'FT4': tmr := 6500;
+       'FT4': tmr := 8000;
   end;
   tmrCqPeriod.Interval := tmr;
   if LocalDbg then Writeln('Period timer set to: ',tmr);
