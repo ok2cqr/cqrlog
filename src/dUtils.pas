@@ -38,13 +38,13 @@ const
     ':', '|', '-', '=', '+', '@', '#', '*', '%', '_', '(', ')', '$', '<', '>'];
   empty_freq = '0.00000';
   empty_azimuth = '0.0';
-  cMaxModes = 46; //last added FT4
+  cMaxModes = 47; //last added FT4 and JS8
   cModes: array [0..cMaxModes] of string =
     ('CW', 'SSB', 'AM', 'FM', 'RTTY', 'SSTV', 'PACTOR', 'PSK', 'ATV', 'CLOVER', 'GTOR', 'MTOR',
     'PSK31', 'HELL', 'MT63',
     'QRSS', 'CWQ', 'BPSK31', 'MFSK', 'JT44', 'FSK44', 'WSJT', 'AMTOR',
     'THROB', 'BPSK63', 'PACKET',
-    'OLIVIA', 'MFSK16', 'JT4','JT6M', 'JT65', 'JT65A', 'JT65B', 'JT65C',
+    'OLIVIA', 'MFSK16', 'JS8', 'JT4','JT6M', 'JT65', 'JT65A', 'JT65B', 'JT65C',
     'JT9', 'QRA64', 'ISCAT', 'MSK144', 'FT8', 'FT4', 'FSK441', 'PSK125',
     'PSK63', 'WSPR', 'PSK250', 'ROS', 'DIGITALVOICE');
   cMaxBandsCount = 27; //26 bands

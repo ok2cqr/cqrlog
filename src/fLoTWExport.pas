@@ -426,6 +426,12 @@ begin
         tmp := '<SUBMODE:3>JS8';
         Writeln(f,tmp);
       end
+      else if (dmData.Q1.FieldByName('mode').AsString = 'FT4') then begin
+        tmp := '<MODE:4>MFSK';
+        Writeln(f,tmp);
+        tmp := '<SUBMODE:3>FT4';
+        Writeln(f,tmp);
+      end
       else begin
         tmp := '<MODE' + dmUtils.StringToADIF(dmData.Q1.FieldByName('mode').AsString);
         Writeln(f,tmp);
