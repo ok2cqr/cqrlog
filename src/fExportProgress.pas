@@ -194,7 +194,12 @@ var
     end;
     if exMode then
     begin
-      tmp := '<MODE' + dmUtils.StringToADIF(Mode);
+      if (Mode = 'JS8') then
+        tmp := '<MODE:4>MFSK<SUBMODE:3>JS8'
+      else if (Mode = 'FT4') then
+        tmp := '<MODE:4>MFSK<SUBMODE:3>FT4'
+      else
+        tmp := '<MODE' + dmUtils.StringToADIF(Mode);
       Write(f,tmp);
       leng := leng + Length(tmp)
     end;
