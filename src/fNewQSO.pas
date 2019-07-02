@@ -2506,14 +2506,14 @@ begin
               if (Fox2Line = 0) then Repbuf := Repbuf+copy(Buf,RepStart,index-RepStart)  //Reply str tail part
                 else  Repbuf := '';  //only if it is not Fox 2 line
               FirstWord := copy(ParStr,1,pos(' ',ParStr)-1);
-              if dmData.DebugLevel>=1 then Writeln('Orig:',length(Buf),' Re:',length(RepBuf)); //should be 1 less
+              if dmData.DebugLevel>=1 then Writeln('Origin:',length(Buf),' Reply:',length(RepBuf),' FirstWd>',FirstWord,'<');//should be 1 less
                //if monitor runs ok
                if ( new and (frmMonWsjtx <> nil) and frmMonWsjtx.Showing and (WsjtxBand <>'')  and (WsjtxMode <>'')) then
                  Begin
                    //if CQ or Mycall    (Message is in ParStr)
                    if (FirstWord = 'CQ') then
                                 frmMonWsjtx.AddCqCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
-                      else if (pos (FirstWord,MyCall) > 0) then
+                      else if (pos (MyCall,FirstWord) > 0) then  //this order passes '<MyCall>' and MyCall
                                  frmMonWsjtx.AddMyCallMessage(Timeline,mode,WsjtxBand,ParStr,Repbuf,Dfreq,Snr)
 
                        else  //if followed call
