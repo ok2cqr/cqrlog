@@ -25,3 +25,34 @@ Dependencies
 Build-Depends: lazarus, lcl, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk2, fp-units-db, fp-units-math, fp-units-net
 
 Depends: libssl-dev, mysql-server | mariadb-server, mysql-client | mariadb-client, libhamlib2 (>= 1.2.10), libhamlib-utils (>= 1.2.10)
+
+Running build with Docker
+-------------------------
+
+If you do not want to install the dependencies into your main machine, you can do the build
+in a Docker container.  You need to mount into that Docker container this directory and
+also the target directory where you want to put the alpha version of `cqrlog` you are
+building.
+
+This also helps if you want to build, e.g., on a Debian Stretch machine.  Attempts at
+native builds on that platform have failed.  Using a reasonably recent Ubuntu inside our
+Docker-based build environment, makes the build work even on Debian Stretch.
+
+That bad news is, you have to [install Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) (CE is fine).
+
+That done, you can prepare an Ubuntu Docker image with the build tools as follows:
+
+    (cd docker-build && docker build -t this.registry.is.invalid/cqrlog-build .)
+
+(In case you wonder: There is no need to use a Docker registry, so we provide a registry
+host that is guaranteed to not exist.)
+
+Then, run the build itself with
+
+    sudo mkdir -p /usr/local/cqrlog-alpha &&
+    docker run -ti -u root -v $(pwd):/home/cqrlog/build \
+      -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha this.registry.is.invalid/cqrlog-build
+
+To use your build, make sure that you have no instance of `cqrlog` running, backup
+`$HOME/.config/cqrlog` (if you ever used `cqrlog` before), add
+`/usr/local/cqrlog-alpha/usr/bin` to your `$PATH` and start `cqrlog` from there.
