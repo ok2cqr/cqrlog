@@ -4508,7 +4508,7 @@ end;
 
 procedure TfrmNewQSO.MenuItem84Click(Sender : TObject);
 begin
-  sbtnHamQTH.Click
+  dmUtils.ShowHamQTHInBrowser(dmData.qQSOBefore.Fields[4].AsString)
 end;
 
 procedure TfrmNewQSO.acNewQSOExecute(Sender: TObject);
