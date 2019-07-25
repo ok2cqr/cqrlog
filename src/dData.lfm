@@ -3,8 +3,8 @@ object dmData: TdmData
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
   Height = 606
-  HorizontalOffset = 408
-  VerticalOffset = 52
+  HorizontalOffset = 381
+  VerticalOffset = 87
   Width = 822
   PPI = 96
   object dsrMain: TDataSource
@@ -811,7 +811,7 @@ object dmData: TdmData
       ''
       '# Use UTF-8 encoding for tables'
       'character_set_server=utf8'
-      'collation_server=utf8_general_ci'
+      'collation_server=utf8_bin'
       ''
       '# use InnoDB for transactions and better crash recovery'
       'default_storage_engine=innodb'
