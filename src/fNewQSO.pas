@@ -383,7 +383,9 @@ type
     procedure cmbIOTAEnter(Sender: TObject);
     procedure cmbPropagationChange(Sender : TObject);
     procedure cmbQSL_REnter(Sender: TObject);
+    procedure cmbQSL_RExit(Sender: TObject);
     procedure cmbQSL_SEnter(Sender: TObject);
+    procedure cmbQSL_SExit(Sender: TObject);
     procedure cmbSatelliteChange(Sender : TObject);
     procedure dbgrdQSOBeforeColumnSized(Sender: TObject);
     procedure edtAwardEnter(Sender: TObject);
@@ -4320,9 +4322,19 @@ begin
   cmbQSL_R.SelectAll
 end;
 
+procedure TfrmNewQSO.cmbQSL_RExit(Sender: TObject);
+begin
+  cmbQSL_R.Text := trim(cmbQSL_R.Text);
+end;
+
 procedure TfrmNewQSO.cmbQSL_SEnter(Sender: TObject);
 begin
   cmbQSL_S.SelectAll
+end;
+
+procedure TfrmNewQSO.cmbQSL_SExit(Sender: TObject);
+begin
+  cmbQSL_S.Text := trim(cmbQSL_S.Text);
 end;
 
 procedure TfrmNewQSO.cmbSatelliteChange(Sender : TObject);

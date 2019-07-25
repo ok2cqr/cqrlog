@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 108
+  Left = 27
   Height = 709
-  Top = 153
+  Top = 173
   Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -3092,6 +3092,7 @@ object frmNewQSO: TfrmNewQSO
             'SPE'
           )
           OnEnter = cmbQSL_SEnter
+          OnExit = cmbQSL_SExit
           OnKeyDown = cmbQSL_SKeyDown
           TabOrder = 9
           Text = 'MD'
@@ -3118,6 +3119,7 @@ object frmNewQSO: TfrmNewQSO
             ''
           )
           OnEnter = cmbQSL_REnter
+          OnExit = cmbQSL_RExit
           OnKeyDown = cmbQSL_RKeyDown
           TabOrder = 10
         end
