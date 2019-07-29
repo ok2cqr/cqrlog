@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="10"/>
     <General>
       <Flags>
         <LRSInOutputDirectory Value="False"/>
@@ -19,7 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2192"/>
+      <BuildNr Value="2193"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -31,6 +31,7 @@
     </PublishOptions>
     <RunParams>
       <local>
+        <FormatVersion Value="1"/>
         <CommandLineParams Value="--DEBUG=1"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
@@ -40,21 +41,6 @@
           <Variable1 Name="HEAPTRC" Value="1"/>
         </UserOverrides>
       </environment>
-      <FormatVersion Value="2"/>
-      <Modes Count="1">
-        <Mode0 Name="default">
-          <local>
-            <CommandLineParams Value="--DEBUG=1"/>
-            <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
-          </local>
-          <environment>
-            <UserOverrides Count="2">
-              <Variable0 Name="FIREBIRD" Value="/home/ok2cqr/projekty/cqrlog/testing"/>
-              <Variable1 Name="HEAPTRC" Value="1"/>
-            </UserOverrides>
-          </environment>
-        </Mode0>
-      </Modes>
     </RunParams>
     <RequiredPackages Count="10">
       <Item1>
@@ -249,12 +235,14 @@
         <Filename Value="fQTHProfiles.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmQTHProfiles"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit22>
       <Unit23>
         <Filename Value="fNewQTHProfile.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewQTHProfile"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit23>
       <Unit24>

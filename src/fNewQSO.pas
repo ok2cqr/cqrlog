@@ -5368,7 +5368,7 @@ end;
 
 procedure TfrmNewQSO.ShowFields;
 var
-  aColumns : array of TVisibleColumn;
+  aColumns : TColumnVisibleArray;
   i : Integer;
   y : Integer;
 
@@ -5381,8 +5381,7 @@ begin
   dbgrdQSOBefore.DataSource := dmData.dsrQSOBefore;
   dbgrdQSOBefore.ResetColWidths;
   LoadGrid;
-  SetLength(aColumns,41);
-  dmUtils.LoadVisibleColumnsConfiguration(aColumns);
+  aColumns := dmUtils.LoadVisibleColumnsConfiguration();
 
   fQsoGr   := cqrini.ReadString('Fonts','QGrids','Sans 10');
   fqSize   := cqrini.ReadInteger('Fonts','qSize',10);

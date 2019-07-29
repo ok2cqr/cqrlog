@@ -31,6 +31,9 @@ type
     Exists    : Boolean;
   end;
 
+type
+  TColumnVisibleArray = array of TVisibleColumn;
+
 const
   MyWhiteSpace = [#0..#31];
   AllowedCallChars = ['A'..'Z', '0'..'9', '/'];
@@ -173,7 +176,6 @@ type
     procedure OpenInApp(what : String);
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
-    procedure LoadVisibleColumnsConfiguration(var aColumns : array of TVisibleColumn);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
 
 
@@ -259,6 +261,8 @@ type
     function  GetDataFromHttp(Url : String; var data : String) : Boolean;
     function  MyStrToDateTime(DateTime : String) : TDateTime;
     function  MyDateTimeToStr(DateTime : TDateTime) : String;
+    function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
+
 end;
 
 var
@@ -4261,10 +4265,14 @@ begin
     long := FloatToStr(longitude)
 end;
 
-procedure TdmUtils.LoadVisibleColumnsConfiguration(var aColumns : Array of TVisibleColumn);
+function TdmUtils.LoadVisibleColumnsConfiguration : TColumnVisibleArray;
+const
+  COLUMN_COUNT = 46;
 var
   i : Integer;
+  aColumns : TColumnVisibleArray;
 begin
+  SetLength(aColumns, COLUMN_COUNT);
 
   aColumns[0].FieldName := 'QSODATE';
   aColumns[0].Visible   := cqrini.ReadBool('Columns','qsodate',True);
@@ -4386,8 +4394,25 @@ begin
   aColumns[40].FieldName := 'SATELLITE';
   aColumns[40].Visible   := cqrini.ReadBool('Columns', 'SatelliteName', False);
 
+  aColumns[41].FieldName := 'SRX';
+  aColumns[41].Visible   := cqrini.ReadBool('Columns', 'SRX', False);
+
+  aColumns[42].FieldName := 'STX';
+  aColumns[42].Visible   := cqrini.ReadBool('Columns', 'STX', False);
+
+  aColumns[43].FieldName := 'SRX_STRING';
+  aColumns[43].Visible   := cqrini.ReadBool('Columns', 'ContMsgRcvd', False);
+
+  aColumns[44].FieldName := 'STX_STRING';
+  aColumns[44].Visible   := cqrini.ReadBool('Columns', 'ContMsgSent', False);
+
+  aColumns[45].FieldName := 'CONTESTNAME';
+  aColumns[45].Visible   := cqrini.ReadBool('Columns', 'ContestName', False);
+
   for i:=0 to Length(aColumns)-1 do
-    aColumns[i].Exists := False
+    aColumns[i].Exists := False;
+
+  Result := aColumns;
 end;
 
 function TdmUtils.GetDataFromHttp(Url : String; var data : String) : Boolean;
