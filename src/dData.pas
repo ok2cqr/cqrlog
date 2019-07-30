@@ -163,6 +163,7 @@ type
     function  GetMysqldPath : String;
     function  TableExists(TableName : String) : Boolean;
     function  GetDebugLevel : Integer;
+    function  FieldExists(TableName, FieldName : String) : Boolean;
 
     procedure CreateDBConnections;
     procedure CreateViews;
@@ -2947,35 +2948,51 @@ begin
 
       if (old_version < 16) then
       begin
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add stx varchar(6) null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit;
+        if (not FieldExists('cqrlog_main', 'stx')) then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'alter table cqrlog_main add stx varchar(6) null';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
+        end;
 
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add srx varchar(6) null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit;
+        if (not FieldExists('cqrlog_main', 'srx')) then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'alter table cqrlog_main add srx varchar(6) null';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
+        end;
 
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add stx_string varchar(50) null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit;
 
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add srx_string varchar(50) null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit;
+        if (not FieldExists('cqrlog_main', 'stx_string')) then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'alter table cqrlog_main add stx_string varchar(50) null';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
+        end;
 
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add contestname varchar(40) null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit;
+        if (not FieldExists('cqrlog_main', 'srx_string')) then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'alter table cqrlog_main add srx_string varchar(50) null';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
+        end;
+
+        if (not FieldExists('cqrlog_main', 'contestname')) then
+        begin
+          trQ1.StartTransaction;
+          Q1.SQL.Text := 'alter table cqrlog_main add contestname varchar(40) null';
+          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+          Q1.ExecSQL;
+          trQ1.Commit;
+        end;
 
         trQ1.StartTransaction;
         Q1.SQL.Text := 'alter table log_changes modify cmd varchar(20)';
@@ -2983,24 +3000,13 @@ begin
         Q1.ExecSQL;
         trQ1.Commit;
 
-        //Here we need something. All Beta testers have this already added
-        //either Try/finally/end  to skip error,
-        //or testing the exixtence of "info" before running alter
+        if (not FieldExists('freqmem', 'info')) then
+        begin
           trQ1.StartTransaction;
           Q1.SQL.Text := 'alter table freqmem add info varchar(25) null';
-          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        try
-          if fDebugLevel>=1 then Writeln( 'On Try add info');
           Q1.ExecSQL;
-        except
-          // will only be executed in case of an exception as debug info
-          on E: EDatabaseError do
-            if fDebugLevel>=1 then Writeln( 'Database error: '+ E.ClassName + #13#10 + E.Message );
-          on E: Exception do
-            if fDebugLevel>=1 then Writeln( 'Error: '+ E.ClassName + #13#10 + E.Message );
+          trQ1.Commit
         end;
-        trQ1.Commit
-
       end;
 
       if TableExists('view_cqrlog_main_by_callsign') then
@@ -3480,6 +3486,34 @@ begin
     FreeAndNil(tr)
   end
 end;
+
+function TdmData.FieldExists(TableName, FieldName : String) : Boolean;
+const
+  C_SEL = 'select column_name from information_schema.columns where table_schema=%s and table_name=%s and column_name=%s';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+begin
+  Result := True;
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    t.SQL.Text := Format(C_SEL,[QuotedStr(fDBName),QuotedStr(TableName), QuotedStr(FieldName)]);
+    if fDebugLevel>=1 then Writeln(t.SQL.Text);
+    t.Open;
+    Result := t.RecordCount>0
+  finally
+    t.Close;
+    tr.Rollback;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
+end;
+
 
 procedure TdmData.PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
 var
