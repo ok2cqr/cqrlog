@@ -1784,6 +1784,8 @@ begin
        msgRes, WAZ, posun, ITU, lat, long);
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
+     //case of USA print it only. Forget state. It is not shown full and may be bogus
+     if pos('USA',upcase(msgRes))>0 then msgRes := 'USA';
 
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
