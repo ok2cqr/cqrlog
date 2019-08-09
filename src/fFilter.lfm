@@ -1,7 +1,7 @@
 object frmFilter: TfrmFilter
-  Left = 161
+  Left = -187
   Height = 658
-  Top = 20
+  Top = 162
   Width = 817
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
@@ -121,7 +121,7 @@ object frmFilter: TfrmFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.2.0'
   object lblProf: TLabel
     AnchorSideTop.Control = cmbProfile
     AnchorSideRight.Control = lblSortBy
@@ -931,7 +931,7 @@ object frmFilter: TfrmFilter
     Top = 252
     Width = 154
     BorderSpacing.Left = 6
-    Caption = 'Remarks'
+    Caption = 'Comment to QSO'
     ClientHeight = 96
     ClientWidth = 152
     TabOrder = 12
