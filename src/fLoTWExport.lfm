@@ -1,7 +1,7 @@
 object frmLoTWExport: TfrmLoTWExport
-  Left = 487
+  Left = 153
   Height = 549
-  Top = 221
+  Top = 93
   Width = 477
   HelpType = htKeyword
   HelpKeyword = 'help/h7.html'
@@ -12,8 +12,10 @@ object frmLoTWExport: TfrmLoTWExport
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.8.0.6'
+  LCLVersion = '2.0.2.0'
   object pgLoTWExport: TPageControl
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
     Left = 0
     Height = 509
     Top = 0
@@ -23,99 +25,139 @@ object frmLoTWExport: TfrmLoTWExport
     TabIndex = 1
     TabOrder = 0
     object tabLocalFile: TTabSheet
+      AnchorSideLeft.Control = pgLoTWExport
+      AnchorSideTop.Control = pgLoTWExport
       Caption = 'Export to local file'
       ClientHeight = 478
-      ClientWidth = 473
+      ClientWidth = 467
       object GroupBox1: TGroupBox
-        Left = 7
+        AnchorSideLeft.Control = tabLocalFile
+        AnchorSideTop.Control = tabLocalFile
+        Left = 0
         Height = 88
-        Top = 6
-        Width = 459
+        Top = 0
+        Width = 461
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 84
-        ClientWidth = 455
+        ClientHeight = 86
+        ClientWidth = 459
         TabOrder = 0
         object rbFileExportAll: TRadioButton
+          AnchorSideLeft.Control = GroupBox1
+          AnchorSideTop.Control = GroupBox1
           Left = 14
-          Height = 24
+          Height = 23
           Top = 6
-          Width = 137
+          Width = 131
+          BorderSpacing.Left = 14
+          BorderSpacing.Top = 6
           Caption = ' Export all QSOs'
           Checked = True
           TabOrder = 0
           TabStop = True
         end
         object rbFileExportNotExported: TRadioButton
+          AnchorSideLeft.Control = rbFileExportAll
+          AnchorSideTop.Control = rbFileExportAll
+          AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 24
-          Top = 39
-          Width = 374
+          Height = 23
+          Top = 29
+          Width = 358
           Caption = 'Export only QSOs which have never been uploaded'
           TabOrder = 1
         end
       end
       object GroupBox2: TGroupBox
-        Left = 7
+        AnchorSideLeft.Control = GroupBox3
+        AnchorSideTop.Control = GroupBox3
+        AnchorSideTop.Side = asrBottom
+        Left = 0
         Height = 105
-        Top = 160
-        Width = 459
+        Top = 156
+        Width = 460
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 101
-        ClientWidth = 455
+        BorderSpacing.Top = 6
+        ClientHeight = 103
+        ClientWidth = 458
         TabOrder = 1
         object Label1: TLabel
+          AnchorSideLeft.Control = GroupBox2
+          AnchorSideTop.Control = GroupBox2
           Left = 14
           Height = 17
           Top = 4
-          Width = 69
+          Width = 63
+          BorderSpacing.Left = 14
+          BorderSpacing.Top = 4
           Caption = 'Export to:'
           ParentColor = False
         end
         object edtFileName: TEdit
+          AnchorSideLeft.Control = Label1
+          AnchorSideTop.Control = Label1
+          AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 27
-          Top = 23
-          Width = 431
+          Height = 34
+          Top = 21
+          Width = 434
           Anchors = [akTop, akLeft, akRight]
           TabOrder = 0
         end
         object btnFileBrowse: TButton
-          Left = 379
-          Height = 29
-          Top = 56
+          AnchorSideTop.Control = edtFileName
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = edtFileName
+          AnchorSideRight.Side = asrBottom
+          Left = 384
+          Height = 33
+          Top = 59
           Width = 64
           Anchors = [akTop, akRight]
           AutoSize = True
+          BorderSpacing.Top = 4
           Caption = 'Browse'
           OnClick = btnFileBrowseClick
           TabOrder = 1
         end
       end
       object GroupBox3: TGroupBox
-        Left = 8
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = GroupBox1
+        AnchorSideTop.Side = asrBottom
+        Left = 0
         Height = 56
-        Top = 96
-        Width = 459
+        Top = 94
+        Width = 461
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 52
-        ClientWidth = 455
+        BorderSpacing.Top = 6
+        ClientHeight = 54
+        ClientWidth = 459
         TabOrder = 2
         object chkFileMarkAfterExport: TCheckBox
-          Left = 13
-          Height = 24
+          AnchorSideLeft.Control = GroupBox3
+          AnchorSideTop.Control = GroupBox3
+          AnchorSideTop.Side = asrCenter
+          Left = 14
+          Height = 23
           Top = 16
-          Width = 273
+          Width = 260
+          BorderSpacing.Left = 14
           Caption = 'Mark QSOs as exported after export'
           TabOrder = 0
         end
       end
       object btnFileExport: TButton
-        Left = 380
-        Height = 49
-        Top = 272
-        Width = 79
+        AnchorSideTop.Control = GroupBox2
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = GroupBox2
+        AnchorSideRight.Side = asrBottom
+        Left = 382
+        Height = 53
+        Top = 267
+        Width = 78
         Anchors = [akTop, akRight]
         AutoSize = True
+        BorderSpacing.Top = 6
         BorderSpacing.InnerBorder = 10
         Caption = 'Export'
         OnClick = btnFileExportClick
@@ -125,29 +167,38 @@ object frmLoTWExport: TfrmLoTWExport
     object tabUpload: TTabSheet
       Caption = 'Upload to LoTW'
       ClientHeight = 478
-      ClientWidth = 473
+      ClientWidth = 467
       object grbWebExport: TGroupBox
+        AnchorSideLeft.Control = tabUpload
+        AnchorSideTop.Control = tabUpload
         Left = 0
         Height = 88
         Top = 0
-        Width = 473
+        Width = 467
         Align = alTop
-        ClientHeight = 84
-        ClientWidth = 469
+        ClientHeight = 86
+        ClientWidth = 465
         TabOrder = 0
         object rbWebExportAll: TRadioButton
+          AnchorSideLeft.Control = grbWebExport
+          AnchorSideTop.Control = grbWebExport
           Left = 14
-          Height = 24
-          Top = 6
-          Width = 137
+          Height = 23
+          Top = 7
+          Width = 131
+          BorderSpacing.Left = 14
+          BorderSpacing.Top = 7
           Caption = ' Export all QSOs'
           TabOrder = 0
         end
         object rbWebExportNotExported: TRadioButton
+          AnchorSideLeft.Control = rbWebExportAll
+          AnchorSideTop.Control = rbWebExportAll
+          AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 24
-          Top = 31
-          Width = 374
+          Height = 23
+          Top = 30
+          Width = 358
           Caption = 'Export only QSOs which have never been uploaded'
           Checked = True
           TabOrder = 1
@@ -155,88 +206,114 @@ object frmLoTWExport: TfrmLoTWExport
         end
       end
       object grbTqsl: TGroupBox
+        AnchorSideLeft.Control = grbWebExport
+        AnchorSideTop.Control = grbWebExport
         Left = 0
         Height = 128
         Top = 88
-        Width = 473
+        Width = 467
         Align = alTop
-        ClientHeight = 124
-        ClientWidth = 469
+        ClientHeight = 126
+        ClientWidth = 465
         TabOrder = 1
         object Label2: TLabel
-          Left = 6
+          AnchorSideLeft.Control = grbTqsl
+          AnchorSideTop.Control = grbTqsl
+          Left = 14
           Height = 17
-          Top = 7
-          Width = 207
+          Top = 6
+          Width = 199
+          BorderSpacing.Left = 14
+          BorderSpacing.Top = 6
           Caption = 'tqsl command line arguments:'
           ParentColor = False
         end
         object Label3: TLabel
+          AnchorSideLeft.Control = edtTqsl
+          AnchorSideTop.Control = edtTqsl
+          AnchorSideTop.Side = asrBottom
           Left = 14
           Height = 34
-          Top = 56
-          Width = 323
+          Top = 57
+          Width = 315
           Caption = '"your qth name" means the qth which you have '#10'defined in tqsl QTH profile'
           ParentColor = False
         end
         object edtTqsl: TEdit
+          AnchorSideLeft.Control = Label2
+          AnchorSideTop.Control = Label2
+          AnchorSideTop.Side = asrBottom
           Left = 14
-          Height = 27
-          Top = 29
+          Height = 34
+          Top = 23
           Width = 424
           TabOrder = 0
           Text = '/usr/bin/tqsl -d -l "your qth name" %f -x'
         end
       end
       object GroupBox6: TGroupBox
+        AnchorSideLeft.Control = grbTqsl
+        AnchorSideTop.Control = grbTqsl
         Left = 0
         Height = 262
         Top = 216
-        Width = 473
+        Width = 467
         Align = alClient
         Caption = ' Upload '
-        ClientHeight = 243
-        ClientWidth = 469
+        ClientHeight = 244
+        ClientWidth = 465
         TabOrder = 2
         object mStat: TMemo
+          AnchorSideLeft.Control = GroupBox6
+          AnchorSideTop.Control = GroupBox6
           Left = 0
-          Height = 205
+          Height = 206
           Top = 0
-          Width = 469
+          Width = 465
           Align = alClient
           Lines.Strings = (
             ''
           )
+          OnChange = mStatChange
           ReadOnly = True
           ScrollBars = ssAutoBoth
           TabOrder = 0
         end
         object pnlUpload: TPanel
+          AnchorSideLeft.Control = GroupBox6
+          AnchorSideBottom.Control = GroupBox6
           Left = 0
           Height = 38
-          Top = 205
-          Width = 469
+          Top = 206
+          Width = 465
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 38
-          ClientWidth = 469
+          ClientWidth = 465
           TabOrder = 1
           object btnExportSign: TButton
-            Left = 211
+            AnchorSideTop.Control = btnUpload
+            AnchorSideRight.Control = btnUpload
+            Left = 215
             Height = 25
             Top = 8
             Width = 115
             Anchors = [akTop, akRight]
+            BorderSpacing.Right = 20
             Caption = 'Export && sign'
             OnClick = btnExportSignClick
             TabOrder = 0
           end
           object btnUpload: TButton
-            Left = 339
+            AnchorSideTop.Control = pnlUpload
+            AnchorSideRight.Control = pnlUpload
+            AnchorSideRight.Side = asrBottom
+            Left = 350
             Height = 25
             Top = 8
             Width = 115
             Anchors = [akTop, akRight]
+            BorderSpacing.Top = 8
             Caption = 'Upload'
             Enabled = False
             OnClick = btnUploadClick
@@ -247,6 +324,9 @@ object frmLoTWExport: TfrmLoTWExport
     end
   end
   object pnlClose: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 40
     Top = 509
@@ -264,22 +344,30 @@ object frmLoTWExport: TfrmLoTWExport
       ParentColor = False
     end
     object btnClose: TButton
-      Left = 400
+      AnchorSideTop.Control = pnlClose
+      AnchorSideRight.Control = pnlClose
+      AnchorSideRight.Side = asrBottom
+      Left = 397
       Height = 25
       Top = 8
       Width = 75
       Anchors = [akTop, akRight]
+      BorderSpacing.Top = 8
+      BorderSpacing.Right = 5
       Cancel = True
       Caption = 'Close'
       ModalResult = 2
       TabOrder = 0
     end
     object btnHelp: TButton
-      Left = 320
+      AnchorSideTop.Control = btnClose
+      AnchorSideRight.Control = btnClose
+      Left = 302
       Height = 25
       Top = 8
       Width = 75
       Anchors = [akTop, akRight]
+      BorderSpacing.Right = 20
       Caption = 'Help'
       OnClick = btnHelpClick
       TabOrder = 1

@@ -53,6 +53,7 @@ type
     procedure btnFileBrowseClick(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
     procedure btnUploadClick(Sender: TObject);
+    procedure mStatChange(Sender: TObject);
     procedure tmrLoTWTimer(Sender: TObject);
   private
     FileName  : String;
@@ -192,6 +193,17 @@ begin
     l.Free;
     m.Free
   end
+end;
+
+procedure TfrmLoTWExport.mStatChange(Sender: TObject);
+begin
+   with mStat do
+     begin
+      SelStart := GetTextLen;
+      SelLength := 0;
+      ScrollBy(0, Lines.Count);
+      Refresh;
+     end;
 end;
 
 procedure TfrmLoTWExport.tmrLoTWTimer(Sender: TObject);
