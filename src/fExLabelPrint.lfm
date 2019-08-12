@@ -1,7 +1,7 @@
 object frmExLabelPrint: TfrmExLabelPrint
-  Left = 1072
-  Height = 503
-  Top = 335
+  Left = 25
+  Height = 522
+  Top = 101
   Width = 424
   HelpType = htKeyword
   HelpKeyword = 'help/h22.html#bh4'
@@ -9,43 +9,60 @@ object frmExLabelPrint: TfrmExLabelPrint
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Export for label printing'
-  ClientHeight = 503
+  ClientHeight = 522
   ClientWidth = 424
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '2.0.2.0'
   object Label1: TLabel
+    AnchorSideLeft.Control = gchkExport
+    AnchorSideTop.Control = edtQSOsToLabel
+    AnchorSideTop.Side = asrCenter
     Left = 5
     Height = 17
-    Top = 137
-    Width = 36
+    Top = 139
+    Width = 34
+    BorderSpacing.Top = 11
     Caption = 'Print '
     ParentColor = False
   end
   object Label2: TLabel
-    Left = 96
+    AnchorSideLeft.Control = edtQSOsToLabel
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtQSOsToLabel
+    AnchorSideTop.Side = asrCenter
+    Left = 94
     Height = 17
-    Top = 137
-    Width = 121
+    Top = 139
+    Width = 119
+    BorderSpacing.Left = 4
     Caption = 'QSOs on one label'
     ParentColor = False
   end
   object lblProgress: TLabel
+    AnchorSideLeft.Control = chkMarkSent
+    AnchorSideTop.Control = chkMarkSent
+    AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 20
-    Top = 432
+    Top = 431
     Width = 412
     Alignment = taCenter
     AutoSize = False
+    BorderSpacing.Top = 5
     ParentColor = False
   end
   object gchkExport: TCheckGroup
+    AnchorSideLeft.Control = chkAllQSOs
+    AnchorSideTop.Control = chkAllQSOs
+    AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 96
-    Top = 33
+    Top = 28
     Width = 412
     AutoFill = True
+    BorderSpacing.Top = 2
     Caption = ' Export QSLs marked as '
     ChildSizing.LeftRightSpacing = 6
     ChildSizing.TopBottomSpacing = 6
@@ -55,8 +72,8 @@ object frmExLabelPrint: TfrmExLabelPrint
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 77
-    ClientWidth = 408
+    ClientHeight = 78
+    ClientWidth = 410
     Columns = 2
     Items.Strings = (
       'SB - (Buro)'
@@ -71,134 +88,203 @@ object frmExLabelPrint: TfrmExLabelPrint
     }
   end
   object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = GroupBox2
+    AnchorSideTop.Control = GroupBox2
+    AnchorSideTop.Side = asrBottom
     Left = 5
-    Height = 81
-    Top = 304
+    Height = 97
+    Top = 303
     Width = 412
     Caption = ' Export to '
-    ClientHeight = 62
-    ClientWidth = 408
+    ClientHeight = 79
+    ClientWidth = 410
     TabOrder = 1
     object edtBrowse: TButton
-      Left = 310
+      AnchorSideTop.Control = edtFile
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = edtFile
+      AnchorSideRight.Side = asrBottom
+      Left = 320
       Height = 25
-      Top = 31
+      Top = 43
       Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 3
       Caption = 'Browse'
       OnClick = edtBrowseClick
       TabOrder = 0
     end
     object edtFile: TEdit
-      Left = 9
-      Height = 27
-      Top = 7
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = GroupBox1
+      Left = 16
+      Height = 34
+      Top = 6
       Width = 379
+      BorderSpacing.Top = 6
       TabOrder = 1
     end
   end
   object edtQSOsToLabel: TEdit
-    Left = 40
-    Height = 27
-    Top = 134
+    AnchorSideLeft.Control = Label1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = gchkExport
+    AnchorSideTop.Side = asrBottom
+    Left = 42
+    Height = 34
+    Top = 130
     Width = 48
+    BorderSpacing.Left = 3
+    BorderSpacing.Top = 6
     OnExit = edtQSOsToLabelExit
     TabOrder = 2
     Text = '6'
   end
   object GroupBox2: TGroupBox
+    AnchorSideLeft.Control = Label1
+    AnchorSideTop.Control = edtQSOsToLabel
+    AnchorSideTop.Side = asrBottom
     Left = 5
     Height = 136
-    Top = 168
+    Top = 167
     Width = 412
+    BorderSpacing.Top = 3
     Caption = ' Remarks '
-    ClientHeight = 117
-    ClientWidth = 408
+    ClientHeight = 118
+    ClientWidth = 410
     TabOrder = 3
     object rbQSORemarks: TRadioButton
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GroupBox2
       Left = 9
-      Height = 24
-      Top = 0
-      Width = 188
-      Caption = 'Print remarks from QSO'
+      Height = 23
+      Top = 3
+      Width = 198
+      BorderSpacing.Left = 9
+      BorderSpacing.Top = 3
+      Caption = 'Print ''Comment(s) to QSO'''
       Checked = True
       TabOrder = 0
       TabStop = True
     end
     object rbOwnRemarks: TRadioButton
+      AnchorSideLeft.Control = rbQSORemarks
+      AnchorSideTop.Control = rbQSORemarks
+      AnchorSideTop.Side = asrBottom
       Left = 9
-      Height = 24
-      Top = 23
-      Width = 172
+      Height = 23
+      Top = 26
+      Width = 170
       Caption = 'Print my own remarks'
       TabOrder = 1
     end
     object edtRemarks: TEdit
-      Left = 9
-      Height = 27
-      Top = 57
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = rbOwnRemarks
+      AnchorSideTop.Side = asrBottom
+      Left = 17
+      Height = 34
+      Top = 52
       Width = 376
+      BorderSpacing.Top = 3
       OnEnter = edtRemarksEnter
       TabOrder = 2
     end
     object chkRemoveSep: TCheckBox
+      AnchorSideLeft.Control = rbOwnRemarks
+      AnchorSideTop.Control = edtRemarks
+      AnchorSideTop.Side = asrBottom
       Left = 9
-      Height = 24
-      Top = 86
-      Width = 263
+      Height = 23
+      Top = 87
+      Width = 256
+      BorderSpacing.Top = 1
       Caption = 'Remove separator (;) from remarks'
       TabOrder = 3
     end
   end
   object chkMarkSent: TCheckBox
+    AnchorSideLeft.Control = GroupBox1
+    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Side = asrBottom
     Left = 5
-    Height = 24
-    Top = 392
-    Width = 216
+    Height = 23
+    Top = 403
+    Width = 208
+    BorderSpacing.Top = 3
     Caption = 'Mark QSLs sent after export'
     TabOrder = 4
   end
   object btnExport: TButton
-    Left = 16
+    AnchorSideLeft.Control = lblProgress
+    AnchorSideTop.Control = lblProgress
+    AnchorSideTop.Side = asrBottom
+    Left = 11
     Height = 25
-    Top = 464
+    Top = 463
     Width = 75
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 12
     Caption = 'Export'
     OnClick = btnExportClick
     TabOrder = 5
   end
   object btnHelp: TButton
-    Left = 152
+    AnchorSideLeft.Control = lblProgress
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = lblProgress
+    AnchorSideTop.Side = asrBottom
+    Left = 174
     Height = 25
-    Top = 464
+    Top = 463
     Width = 75
+    BorderSpacing.Top = 12
     Caption = 'Help'
     OnClick = btnHelpClick
     TabOrder = 6
   end
   object Cancel: TButton
-    Left = 312
+    AnchorSideTop.Control = lblProgress
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = lblProgress
+    AnchorSideRight.Side = asrBottom
+    Left = 336
     Height = 25
-    Top = 464
+    Top = 463
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 12
+    BorderSpacing.Right = 6
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 7
   end
   object chkAllQSOs: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
     Left = 5
-    Height = 24
-    Top = 8
-    Width = 131
+    Height = 23
+    Top = 3
+    Width = 127
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 3
     Caption = 'Export all QSOs'
     OnChange = chkAllQSOsChange
     TabOrder = 8
   end
   object btnExportFieldsPref: TButton
-    Left = 224
+    AnchorSideLeft.Control = Label2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtQSOsToLabel
+    AnchorSideTop.Side = asrCenter
+    Left = 229
     Height = 25
-    Top = 134
+    Top = 135
     Width = 184
+    BorderSpacing.Left = 16
     Caption = 'Choose fields for export'
     OnClick = btnExportFieldsPrefClick
     TabOrder = 9
@@ -206,7 +292,7 @@ object frmExLabelPrint: TfrmExLabelPrint
   object dlgSave: TSaveDialog
     DefaultExt = '.csv'
     Filter = 'CSV files|*.csv'
-    left = 319
-    top = 256
+    left = 360
+    top = 192
   end
 end

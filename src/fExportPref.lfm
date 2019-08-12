@@ -1,7 +1,7 @@
 object frmExportPref: TfrmExportPref
-  Left = 386
+  Left = 491
   Height = 495
-  Top = 108
+  Top = 32
   Width = 737
   BorderStyle = bsDialog
   Caption = 'Choose fields to export'
@@ -9,10 +9,20 @@ object frmExportPref: TfrmExportPref
   ClientWidth = 737
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.8.0.6'
+  LCLVersion = '2.0.2.0'
   inline fraExportPref1: TfraExportPref
     Left = 8
     Top = 8
+    inherited chkexCounty: TCheckBox
+      Top = 217
+    end
+    inherited chkexRemarks: TCheckBox
+      Left = 176
+      OnChange = nil
+    end
+    inherited chkexContest: TCheckBox
+      Left = 176
+    end
   end
   object btnOK: TButton
     Left = 640
