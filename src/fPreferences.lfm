@@ -5,7 +5,10 @@ object frmPreferences: TfrmPreferences
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
+  HorzScrollBar.Page = 761
+  VertScrollBar.Page = 450
   ActiveControl = lbPreferences
+  AutoScroll = True
   BorderIcons = [biSystemMenu]
   Caption = 'Preferences'
   ClientHeight = 659
@@ -14,7 +17,7 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.2.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 659
@@ -22,13 +25,10 @@ object frmPreferences: TfrmPreferences
     Width = 752
     ActivePage = tabVisibleColumns
     Align = alClient
-    Anchors = [akLeft, akRight, akBottom]
     TabIndex = 3
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
-      AnchorSideLeft.Control = pgPreferences
-      AnchorSideTop.Control = pgPreferences
       Caption = 'Program'
       ClientHeight = 628
       ClientWidth = 742
@@ -386,11 +386,7 @@ object frmPreferences: TfrmPreferences
       end
     end
     object tabNewQSO: TTabSheet
-      AnchorSideLeft.Control = pgPreferences
-      AnchorSideTop.Control = pgPreferences
-      AnchorSideRight.Control = pgPreferences
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = pgPreferences
       AnchorSideBottom.Side = asrBottom
       Caption = 'New QSO'
       ClientHeight = 628
@@ -1670,8 +1666,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
-          ClientWidth = 637
+          ClientHeight = 388
+          ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
             Height = 333
@@ -2013,8 +2009,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
-          ClientWidth = 637
+          ClientHeight = 388
+          ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
             Height = 333
@@ -2429,8 +2425,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
-          ClientWidth = 557
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
             Height = 333
@@ -2762,8 +2758,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
-          ClientWidth = 557
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
             Height = 341
@@ -6415,7 +6411,7 @@ object frmPreferences: TfrmPreferences
           Height = 112
           Top = 5
           Width = 543
-          ClientHeight = 110
+          ClientHeight = 94
           ClientWidth = 541
           TabOrder = 7
           object Label95: TLabel
@@ -6578,7 +6574,7 @@ object frmPreferences: TfrmPreferences
           Height = 107
           Top = 9
           Width = 480
-          ClientHeight = 105
+          ClientHeight = 89
           ClientWidth = 478
           TabOrder = 0
           object Label202: TLabel
@@ -7762,8 +7758,6 @@ object frmPreferences: TfrmPreferences
     end
   end
   object Panel1: TPanel
-    AnchorSideTop.Control = Owner
-    AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 912
     Height = 659
@@ -7819,9 +7813,6 @@ object frmPreferences: TfrmPreferences
     end
   end
   object lbPreferences: TListBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideBottom.Control = Owner
     Left = 0
     Height = 659
     Top = 0

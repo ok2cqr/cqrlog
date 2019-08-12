@@ -5,7 +5,10 @@ object frmMain: TfrmMain
   Width = 874
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
+  HorzScrollBar.Page = 672
+  VertScrollBar.Page = 248
   ActiveControl = Panel2
+  AutoScroll = True
   Caption = 'CQRLOG for Linux'
   ClientHeight = 601
   ClientWidth = 874
@@ -158,10 +161,7 @@ object frmMain: TfrmMain
   OnShow = FormShow
   LCLVersion = '2.0.2.0'
   object sbMain: TStatusBar
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 19
@@ -189,9 +189,6 @@ object frmMain: TfrmMain
     SimplePanel = False
   end
   object pnlButtons: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideBottom.Control = sbMain
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 40
@@ -295,9 +292,6 @@ object frmMain: TfrmMain
     end
   end
   object Panel2: TPanel
-    AnchorSideLeft.Control = toolMain
-    AnchorSideTop.Control = toolMain
-    AnchorSideRight.Control = toolMain
     Left = 0
     Height = 38
     Top = 31
@@ -411,17 +405,13 @@ object frmMain: TfrmMain
     end
   end
   object dbgrdMain: TDBGrid
-    AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideBottom.Control = pnlDetails
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 403
     Top = 69
     Width = 874
     Align = alClient
-    Anchors = [akLeft, akRight, akBottom]
     Color = clWindow
     Columns = <>
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiselect]
@@ -437,8 +427,6 @@ object frmMain: TfrmMain
     OnKeyUp = dbgrdMainKeyUp
   end
   object toolMain: TToolBar
-    AnchorSideLeft.Control = sbMain
-    AnchorSideTop.Control = sbMain
     Left = 0
     Height = 26
     Top = 0
@@ -721,10 +709,7 @@ object frmMain: TfrmMain
     end
   end
   object pnlDetails: TPanel
-    AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideBottom.Control = pnlButtons
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 64
