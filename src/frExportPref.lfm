@@ -326,7 +326,6 @@ object fraExportPref: TfraExportPref
     Top = 297
     Width = 110
     Caption = 'Cmnt to QSO'
-    OnChange = chkexRemarksChange
     TabOrder = 32
   end
   object edtWRemarks: TEdit
