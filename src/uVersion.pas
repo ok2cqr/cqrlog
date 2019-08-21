@@ -9,7 +9,7 @@ const
   cMINOR      = 3;
   cRELEAS     = 0;
   cBUILD      = 3;
-  cBUILD_DATE = '2019-07-26';
+  cBUILD_DATE = '2019-08-21';
 
 implementation
 

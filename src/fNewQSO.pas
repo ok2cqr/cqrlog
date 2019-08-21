@@ -1893,8 +1893,10 @@ var
   Buf,
   prik,
   data:string;
-  chkDuplicates:Boolean;
+  chkDuplicates,
+  c_lock: boolean;
   i:longint;
+  l:integer;
 
 begin
   tmrN1MM.Enabled:=false;
@@ -1908,62 +1910,82 @@ begin
       if dmData.DebugLevel>=1 then Writeln('N1MM read data');
       if N1MMSock.lasterror=0 then
        begin
-        if dmData.DebugLevel>=1 then writeln(Buf);
-        //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
-        //qso_date will then replace this
-        edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
-        repeat
-          begin
-            if frmAdifImport.getNextAdifTag(Buf,prik,data) then
-              if dmData.DebugLevel>=1 then
-                                          Begin
-                                           write(prik,'->');
-                                           writeln(data);
-                                          end;
-                                           case uppercase(prik) of
-                                            'CALL' : Begin
-                                                          edtCall.Text := uppercase(data);
-                                                          edtCallExit(nil);   //does info fetch
-                                                          sleep(1500);
-                                                     end;
-                                            'GRIDSQUARE' :Begin
-                                                               data := uppercase(data);
-                                                               if dmUtils.IsLocOK(data) then
-                                                                  if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
-                                                                                edtGrid.Text := data; //replace qrz loc, otherwise keep it
+       //check data.  Is there string '<adif_ver'? Might then be wsjt-x's UDP
+       if pos('<ADIF_VER',uppercase (Buf)) > 0 then
+         Begin
+         if dmData.DebugLevel>=1 then writeln('adif_ver found');
+           Begin //cut all before '<adif_data' away and continue then
+             data := copy(Buf,pos('<ADIF_VER',uppercase (Buf)),length(Buf));
+             Buf := data;
+           end;
+         end;
+        //check now that at least tag '<call:' is found. If not throw away...
+        if pos('<CALL:',uppercase (Buf)) > 0 then
+         Begin
+          if dmData.DebugLevel>=1 then writeln(Buf);
+          //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
+          //qso_date will then replace this
+          edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
+          repeat
+            begin
+              if frmAdifImport.getNextAdifTag(Buf,prik,data) then
+                if dmData.DebugLevel>=1 then
+                                            Begin
+                                             write(prik,'->');
+                                             writeln(data);
+                                            end;
+                                             case uppercase(prik) of
+                                              'CALL' : Begin
+                                                            edtCall.Text := uppercase(data);
+                                                            c_lock :=false;
+                                                            edtCallExit(nil);   //does info fetch
+                                                            for l:=1 to 50 do  //wait for web response 5sec timeout
+                                                            Begin
+                                                              if (( not c_lock) and c_running )then c_lock := true;
+                                                              sleep(100);
+                                                              Application.ProcessMessages;
+                                                              if ( c_lock and (not c_running ))then break;
+                                                            end;
                                                           end;
-                                            'MODE' : cmbMode.Text := uppercase(data);
-                                            //now this overrides MODE, if exists
-                                            'SUBMODE' : cmbMode.Text := uppercase(data);
-                                            'FREQ' : cmbFreq.Text := data;
-                                            'RST_SENT' : edtHisRST.Text := data;
-                                            'RST_RCVD' : edtMyRST.Text := data;
-                                            'QSO_DATE' : Begin
-                                                          edtDate.Text := copy(data,1,4)+'-'+
-                                                                          copy(data,5,2)+'-'+
-                                                                          copy(data,7,2);
-                                                     end;
-                                             'TIME_ON' : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                             'TIME_OFF': edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                             'TX_PWR' : edtPWR.Text := data;
-                                             'NAME'   : edtName.Text := data;
-                                             'QTH'    : edtQTH.Text := data;
-                                             'COMMENT': edtRemQSO.Text := data;
-                                             'IOTA'   : cmbIOTA.Text := data;
-                                             'STATE'  : edtState.Text := data;
-                                             'CQZ'    : edtWaz.Text := data;
-                                             'ITUZ'   : edtITU.Text := data;
-                                             'CONTEST_ID':  edtContestName.Text := data;
-                                             'STX': edtContestSerialSent.Text := data;
-                                             'SRX': edtContestSerialReceived.Text := data;
-                                              //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
-                                             'STX_STRING':edtContestExchangeMessageSent.Text := data;
-                                              //same with SRX
-                                             'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
-                                          end; //case
-              end;  //repeat
-        until Buf = '';
-        SaveRemote;
+                                              'GRIDSQUARE' :Begin
+                                                                 data := uppercase(data);
+                                                                 if dmUtils.IsLocOK(data) then
+                                                                    if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
+                                                                                  edtGrid.Text := data; //replace qrz loc, otherwise keep it
+                                                            end;
+                                              'MODE' : cmbMode.Text := uppercase(data);
+                                              //now this overrides MODE, if exists
+                                              'SUBMODE' : cmbMode.Text := uppercase(data);
+                                              'FREQ' : cmbFreq.Text := data;
+                                              'RST_SENT' : edtHisRST.Text := data;
+                                              'RST_RCVD' : edtMyRST.Text := data;
+                                              'QSO_DATE' : Begin
+                                                            edtDate.Text := copy(data,1,4)+'-'+
+                                                                            copy(data,5,2)+'-'+
+                                                                            copy(data,7,2);
+                                                       end;
+                                               'TIME_ON' : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                               'TIME_OFF': edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                               'TX_PWR' : edtPWR.Text := data;
+                                               'NAME'   : if edtName.Text='' then edtName.Text := data;
+                                               'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
+                                               'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
+                                               'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
+                                               'STATE'  : if edtState.Text='' then edtState.Text := data;
+                                               'CQZ'    : edtWaz.Text := data;
+                                               'ITUZ'   : edtITU.Text := data;
+                                               'CONTEST_ID':  edtContestName.Text := data;
+                                               'STX': edtContestSerialSent.Text := data;
+                                               'SRX': edtContestSerialReceived.Text := data;
+                                                //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
+                                               'STX_STRING':edtContestExchangeMessageSent.Text := data;
+                                                //same with SRX
+                                               'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
+                                            end; //case
+                end;  //repeat
+          until Buf = '';
+          SaveRemote;
+         end; // has tag call
        end; //lasterror=0
     end;  // while waiting data
   end;  //if waiting data
