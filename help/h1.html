@@ -551,6 +551,15 @@ There are no known dependencies issues.<br><br>
     <br>
     Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
     <br><br>
+    At WSJT-X 2.1.0 settings N1MM remote is renamed to "Secondary UDP server (deprecated)" and it is reported to be removed completely in future. Because of that it is now possible to set cqrlog's N1MM port to wsjt-x UDP server port number. WSJT-X 2.1.x UDP frames contain message #12 that
+     includes log information in ADIF format and N1MM remote can now parse that from binary data if you do not like to have monitoring properties (using wsjt remote) but want just qso logging (using N1MM remote).
+    <br><br>
+    N1MM remote has now better support for QRZ/HamQTH info fetch. If this is not allowed in preferences, or if there is no reponse from Web max waiting time (timeout)  is 5 seconds (You can not remove this property, so be patient. You can not have new qso for logging during 5 seconds!).
+    <br>While having qso you can write some notes like Name, QTH, Comment to QSO, etc. to NewQSO and it will saved with qso data during next wsjt-x "log qso/OK" event. They will not be overwritten by possible Qrz/HamQth info.
+    <br><br>
+    <strong>NOTE !!</strong> Wstx- does not send contest -name, -number and -string in ADIF logging datagram. Contest exchanges are placed to regular rst_s and rst_r strings. So cqrlog can not fill proper contest columns when logging is done with ADIF datagram using N1MM remote. 
+    <br><br>
+    
     <a name=ch3><h2><strong>Exit & Auto backup</strong></h2></a>
     To increase the safety of your log data, CQRLOG is equipped with an <strong>Auto backup</strong>
     option which allows you to export (ADIF) and store the log data in a safe location.
