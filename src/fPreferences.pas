@@ -487,6 +487,10 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtDataMode2: TEdit;
+    edtDataMode1: TEdit;
+    edtCMD2: TEdit;
+    edtCMD1: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
@@ -788,6 +792,10 @@ type
     Label200: TLabel;
     Label201: TLabel;
     Label202: TLabel;
+    Label203: TLabel;
+    Label208: TLabel;
+    Label209: TLabel;
+    Label26: TLabel;
     lbln1mmport: TLabel;
     lbln1mmaddr: TLabel;
     lblwsjtport: TLabel;
@@ -1299,12 +1307,16 @@ begin
   cqrini.WriteInteger('Band1', 'RTTY', edtRTTY1.Value);
   cqrini.WriteInteger('Band1', 'AM', edtAM1.Value);
   cqrini.WriteInteger('Band1', 'FM', edtFM1.Value);
+  cqrini.WriteString('Band1', 'Datacmd', edtCMD1.Text);
+  cqrini.WriteString('Band1', 'Datamode', edtDataMode1.Text);
 
   cqrini.WriteInteger('Band2', 'CW', edtCW2.Value);
   cqrini.WriteInteger('Band2', 'SSB', edtSSB2.Value);
   cqrini.WriteInteger('Band2', 'RTTY', edtRTTY2.Value);
   cqrini.WriteInteger('Band2', 'AM', edtAM2.Value);
   cqrini.WriteInteger('Band2', 'FM', edtFM2.Value);
+  cqrini.WriteString('Band2', 'Datacmd', edtCMD2.Text);
+  cqrini.WriteString('Band2', 'Datamode', edtDataMode2.Text);
 
   cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
 
@@ -2662,12 +2674,16 @@ begin
   edtRTTY1.Value := cqrini.ReadInteger('Band1', 'RTTY', 500);
   edtAM1.Value := cqrini.ReadInteger('Band1', 'AM', 3000);
   edtFM1.Value := cqrini.ReadInteger('Band1', 'FM', 2500);
+  edtCMD1.Text := cqrini.ReadString('Band1', 'Datacmd', 'RTTY');
+  edtDataMode1.Text := cqrini.ReadString('Band1', 'Datamode', 'RTTY');
 
   edtCW2.Value := cqrini.ReadInteger('Band2', 'CW', 500);
   edtSSB2.Value := cqrini.ReadInteger('Band2', 'SSB', 1800);
   edtRTTY2.Value := cqrini.ReadInteger('Band2', 'RTTY', 500);
   edtAM2.Value := cqrini.ReadInteger('Band2', 'AM', 3000);
   edtFM2.Value := cqrini.ReadInteger('Band2', 'FM', 2500);
+  edtCMD2.Text := cqrini.ReadString('Band2', 'Datacmd', 'RTTY');
+  edtDataMode2.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY');
 
   edtDigiModes.Text := cqrini.ReadString('Modes', 'Digi', '');
 
@@ -2933,6 +2949,14 @@ begin
   edtRTTY1.Width := 60;
   edtAM1.Width := 60;
   edtFM1.Width := 60;
+  edtCMD1.Width := 60;
+
+  edtCW2.Width := 60;
+  edtSSB2.Width := 60;
+  edtRTTY2.Width := 60;
+  edtAM2.Width := 60;
+  edtFM2.Width := 60;
+  edtCMD2.Width := 60;
 
   chkSysUTCClick(nil);
   TRXChanged      := False;

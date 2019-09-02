@@ -1,12 +1,12 @@
 object frmPreferences: TfrmPreferences
-  Left = 169
+  Left = 129
   Height = 659
-  Top = 65
+  Top = 2
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 761
-  VertScrollBar.Page = 450
+  HorzScrollBar.Page = 833
+  VertScrollBar.Page = 496
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 659
     Top = 0
     Width = 752
-    ActivePage = tabVisibleColumns
+    ActivePage = tabModes
     Align = alClient
-    TabIndex = 3
+    TabIndex = 7
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -3098,7 +3098,7 @@ object frmPreferences: TfrmPreferences
       object GroupBox35: TGroupBox
         Left = 14
         Height = 73
-        Top = 267
+        Top = 392
         Width = 561
         Caption = ' User defined digital modes (use , as delimitter)'
         ClientHeight = 55
@@ -3115,11 +3115,11 @@ object frmPreferences: TfrmPreferences
       end
       object GroupBox37: TGroupBox
         Left = 14
-        Height = 224
+        Height = 341
         Top = 11
         Width = 208
         Caption = ' Radio one '
-        ClientHeight = 206
+        ClientHeight = 323
         ClientWidth = 206
         TabOrder = 1
         object Label28: TLabel
@@ -3191,17 +3191,17 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
         end
         object Label32: TLabel
-          Left = 11
+          Left = 13
           Height = 17
-          Top = 106
-          Width = 32
-          Caption = 'RTTY'
+          Top = 192
+          Width = 34
+          Caption = 'DATA'
           ParentColor = False
         end
         object edtRTTY1: TSpinEdit
-          Left = 77
+          Left = 76
           Height = 34
-          Top = 102
+          Top = 183
           Width = 81
           Increment = 50
           MaxValue = 3000
@@ -3225,9 +3225,9 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
         end
         object edtAM1: TSpinEdit
-          Left = 77
+          Left = 76
           Height = 34
-          Top = 133
+          Top = 102
           Width = 81
           Increment = 100
           MaxValue = 6000
@@ -3235,9 +3235,9 @@ object frmPreferences: TfrmPreferences
           Value = 3000
         end
         object Label33: TLabel
-          Left = 11
+          Left = 10
           Height = 17
-          Top = 139
+          Top = 106
           Width = 21
           Caption = 'AM'
           ParentColor = False
@@ -3245,7 +3245,7 @@ object frmPreferences: TfrmPreferences
         object Label34: TLabel
           Left = 11
           Height = 17
-          Top = 170
+          Top = 139
           Width = 20
           Caption = 'FM'
           ParentColor = False
@@ -3253,7 +3253,7 @@ object frmPreferences: TfrmPreferences
         object edtFM1: TSpinEdit
           Left = 77
           Height = 34
-          Top = 166
+          Top = 133
           Width = 81
           Increment = 100
           MaxValue = 6000
@@ -3263,19 +3263,49 @@ object frmPreferences: TfrmPreferences
         object Label39: TLabel
           Left = 169
           Height = 17
-          Top = 170
+          Top = 192
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
+        object Label26: TLabel
+          Left = 77
+          Height = 17
+          Top = 216
+          Width = 53
+          Caption = 'Rig cmd'
+          ParentColor = False
+        end
+        object edtCMD1: TEdit
+          Left = 76
+          Height = 34
+          Top = 232
+          Width = 80
+          TabOrder = 5
+        end
+        object Label208: TLabel
+          Left = 76
+          Height = 17
+          Top = 264
+          Width = 72
+          Caption = 'Data mode'
+          ParentColor = False
+        end
+        object edtDataMode1: TEdit
+          Left = 77
+          Height = 34
+          Top = 280
+          Width = 80
+          TabOrder = 6
+        end
       end
       object GroupBox39: TGroupBox
         Left = 246
-        Height = 224
+        Height = 341
         Top = 11
         Width = 208
         Caption = ' Radio two '
-        ClientHeight = 206
+        ClientHeight = 323
         ClientWidth = 206
         TabOrder = 2
         object Label110: TLabel
@@ -3349,15 +3379,15 @@ object frmPreferences: TfrmPreferences
         object Label118: TLabel
           Left = 11
           Height = 17
-          Top = 106
-          Width = 32
-          Caption = 'RTTY'
+          Top = 192
+          Width = 34
+          Caption = 'DATA'
           ParentColor = False
         end
         object edtRTTY2: TSpinEdit
           Left = 77
           Height = 34
-          Top = 102
+          Top = 183
           Width = 81
           Increment = 50
           MaxValue = 3000
@@ -3383,7 +3413,7 @@ object frmPreferences: TfrmPreferences
         object edtAM2: TSpinEdit
           Left = 77
           Height = 34
-          Top = 133
+          Top = 104
           Width = 81
           Increment = 100
           MaxValue = 6000
@@ -3393,15 +3423,15 @@ object frmPreferences: TfrmPreferences
         object Label121: TLabel
           Left = 11
           Height = 17
-          Top = 139
+          Top = 106
           Width = 21
           Caption = 'AM'
           ParentColor = False
         end
         object Label122: TLabel
-          Left = 11
+          Left = 10
           Height = 17
-          Top = 170
+          Top = 139
           Width = 20
           Caption = 'FM'
           ParentColor = False
@@ -3409,7 +3439,7 @@ object frmPreferences: TfrmPreferences
         object edtFM2: TSpinEdit
           Left = 77
           Height = 34
-          Top = 166
+          Top = 136
           Width = 81
           Increment = 100
           MaxValue = 6000
@@ -3419,10 +3449,40 @@ object frmPreferences: TfrmPreferences
         object Label123: TLabel
           Left = 169
           Height = 17
-          Top = 170
+          Top = 192
           Width = 17
           Caption = 'Hz'
           ParentColor = False
+        end
+        object Label203: TLabel
+          Left = 77
+          Height = 17
+          Top = 216
+          Width = 53
+          Caption = 'Rig cmd'
+          ParentColor = False
+        end
+        object Label209: TLabel
+          Left = 77
+          Height = 17
+          Top = 264
+          Width = 72
+          Caption = 'Data mode'
+          ParentColor = False
+        end
+        object edtCMD2: TEdit
+          Left = 77
+          Height = 34
+          Top = 232
+          Width = 80
+          TabOrder = 5
+        end
+        object edtDataMode2: TEdit
+          Left = 77
+          Height = 34
+          Top = 280
+          Width = 80
+          TabOrder = 6
         end
       end
     end
@@ -3546,270 +3606,13 @@ object frmPreferences: TfrmPreferences
         DesignTop = 214
         inherited chkProfile: TCheckBox
           Top = 326
-          Width = 67
         end
         inherited chkAscTime: TCheckBox
           Left = 8
           Top = 448
-          Width = 197
-        end
-        inherited chkExCont: TCheckBox
-          Width = 89
-        end
-        inherited chkexQTH: TCheckBox
-          Width = 54
-        end
-        inherited chkexName: TCheckBox
-          Width = 65
-        end
-        inherited chkexRSTR: TCheckBox
-          Width = 83
-        end
-        inherited chkexRSTS: TCheckBox
-          Width = 83
-        end
-        inherited chkexFreq: TCheckBox
-          Width = 54
-        end
-        inherited chkexMode: TCheckBox
-          Width = 62
-        end
-        inherited chkexCall: TCheckBox
-          Width = 51
-        end
-        inherited chkexTimeoff: TCheckBox
-          Width = 80
-        end
-        inherited chkexTimeon: TCheckBox
-          Width = 79
-        end
-        inherited chkexDate: TCheckBox
-          Width = 57
-        end
-        inherited edtWDate: TEdit
-          Height = 34
-        end
-        inherited edtWTimeOn: TEdit
-          Height = 34
-        end
-        inherited edtWTimeOff: TEdit
-          Height = 34
-        end
-        inherited edtWCall: TEdit
-          Height = 34
-        end
-        inherited edtWMode: TEdit
-          Height = 34
-        end
-        inherited edtWFreq: TEdit
-          Height = 34
-        end
-        inherited edtWRstS: TEdit
-          Height = 34
-        end
-        inherited edtWRstR: TEdit
-          Height = 34
-        end
-        inherited edtWName: TEdit
-          Height = 34
-        end
-        inherited edtWQTH: TEdit
-          Height = 34
-        end
-        inherited Label46: TLabel
-          Height = 17
-          Width = 31
-        end
-        inherited Label49: TLabel
-          Height = 17
-          Width = 38
-        end
-        inherited Label47: TLabel
-          Height = 17
-          Width = 31
-        end
-        inherited Label50: TLabel
-          Height = 17
-          Width = 38
-        end
-        inherited Label48: TLabel
-          Height = 17
-          Width = 31
-        end
-        inherited Label51: TLabel
-          Height = 17
-          Width = 38
-        end
-        inherited chkexQSLS: TCheckBox
-          Width = 83
-        end
-        inherited chkexQSLR: TCheckBox
-          Width = 111
-        end
-        inherited chkexQSLVIA: TCheckBox
-          Width = 113
-        end
-        inherited chkexLoc: TCheckBox
-          Width = 74
-        end
-        inherited chkexMyLoc: TCheckBox
-          Width = 95
-        end
-        inherited chkexIOTA: TCheckBox
-          Width = 56
-        end
-        inherited chkexAward: TCheckBox
-          Width = 66
-        end
-        inherited chkexCounty: TCheckBox
-          Width = 72
-        end
-        inherited chkexPower: TCheckBox
-          Width = 66
-        end
-        inherited chkexDXCC: TCheckBox
-          Width = 62
         end
         inherited chkexRemarks: TCheckBox
           Width = 83
-        end
-        inherited edtWRemarks: TEdit
-          Height = 34
-        end
-        inherited edtWDXCC: TEdit
-          Height = 34
-        end
-        inherited edtWPower: TEdit
-          Height = 34
-        end
-        inherited edtWCounty: TEdit
-          Height = 34
-        end
-        inherited edtWAward: TEdit
-          Height = 34
-        end
-        inherited edtWIOTA: TEdit
-          Height = 34
-        end
-        inherited edtWMyLoc: TEdit
-          Height = 34
-        end
-        inherited edtWLoc: TEdit
-          Height = 34
-        end
-        inherited edtWQSLVIA: TEdit
-          Height = 34
-        end
-        inherited edtWQSLR: TEdit
-          Height = 34
-        end
-        inherited edtWQSLS: TEdit
-          Height = 34
-        end
-        inherited chkexeQSLRDate: TCheckBox
-          Width = 130
-        end
-        inherited chkexeQSLR: TCheckBox
-          Width = 120
-        end
-        inherited chkexeQSLSDate: TCheckBox
-          Width = 129
-        end
-        inherited chkexeQSLS: TCheckBox
-          Width = 120
-        end
-        inherited chkexQSLRDate: TCheckBox
-          Width = 116
-        end
-        inherited chkexQSLSDate: TCheckBox
-          Width = 116
-        end
-        inherited chkexLQSLRDate: TCheckBox
-          Width = 133
-        end
-        inherited chkexLQSLR: TCheckBox
-          Width = 123
-        end
-        inherited chkexLQSLSDate: TCheckBox
-          Width = 132
-        end
-        inherited chkexLQSLS: TCheckBox
-          Width = 123
-        end
-        inherited chkexState: TCheckBox
-          Width = 60
-        end
-        inherited chkexNote: TCheckBox
-          Width = 57
-        end
-        inherited chkexITU: TCheckBox
-          Width = 48
-        end
-        inherited chkexWAZ: TCheckBox
-          Width = 56
-        end
-        inherited edtWWAZ: TEdit
-          Height = 34
-        end
-        inherited edtWITU: TEdit
-          Height = 34
-        end
-        inherited edtWNote: TEdit
-          Height = 34
-        end
-        inherited edtWState: TEdit
-          Height = 34
-        end
-        inherited edtWLQSLS: TEdit
-          Height = 34
-        end
-        inherited edtWLQSLSDate: TEdit
-          Height = 34
-        end
-        inherited edtWLQSLR: TEdit
-          Height = 34
-        end
-        inherited edtWLQSLRDate: TEdit
-          Height = 34
-        end
-        inherited edtWQSLSDate: TEdit
-          Height = 34
-        end
-        inherited edtWQSLRDate: TEdit
-          Height = 34
-        end
-        inherited edtWeQSLS: TEdit
-          Height = 34
-        end
-        inherited edtWeQSLSDate: TEdit
-          Height = 34
-        end
-        inherited edtWeQSLR: TEdit
-          Height = 34
-        end
-        inherited edtWeQSLRDate: TEdit
-          Height = 34
-        end
-        inherited chkExPropagation: TCheckBox
-          Width = 104
-        end
-        inherited chkExSat: TCheckBox
-          Width = 121
-        end
-        inherited chkExRXFreq: TCheckBox
-          Width = 113
-        end
-        inherited edtWProp: TEdit
-          Height = 34
-        end
-        inherited edtWSatName: TEdit
-          Height = 34
-        end
-        inherited edtWRxFreq: TEdit
-          Height = 34
-        end
-        inherited chkexContest: TCheckBox
-          Width = 76
         end
       end
     end
