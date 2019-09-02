@@ -1490,10 +1490,12 @@ begin
             usermode:=cqrini.ReadString('Band1', 'Datamode', 'RTTY');
           end;
 
+  Write('------rigmodecmd',mode);
+
   if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
      mode := usercmd;
 
-  //Writeln('------rigmodecmd',mode);
+  Writeln('----',mode);
 
   end;
 
