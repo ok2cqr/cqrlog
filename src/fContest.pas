@@ -65,9 +65,6 @@ type
     { public declarations }
   end;
 
-const
-  C_CONTEST_LIST_FILE_NAME = 'ContestName.tab';
-
 var
   frmContest: TfrmContest;
   RSTstx: string = ''; //contest mode serial numbers store
@@ -342,27 +339,9 @@ begin
 end;
 
 procedure TfrmContest.FormCreate(Sender: TObject);
-var
-    ListOfContests : TStringList;
-    s: string;
-    Contestfile :TextFile;
 begin
   frmContest.KeyPreview := True;
-  // loading the contest list from ~/.config/cqrlog/ContestNames.tab
-  // Format of File   CONTEST_ID|CONTEST_DESCRIPTION
-  // see ADIF 3.0.9 http://www.adif.org/309/ADIF_309.htm#Contest_ID
-  // File have to be UTF8 without BOM
-  ListOfContests:= TStringList.Create;
-  ListOfContests.Clear;
-  ListOfContests.Sorted:=True;
-  if FileExists(dmData.HomeDir + C_CONTEST_LIST_FILE_NAME) then
-  begin
-       ListOfContests.LoadFromFile(dmData.HomeDir + C_CONTEST_LIST_FILE_NAME);
-       cmbContestName.Clear;
-       cmbContestName.Items := ListOfContests;
-       cmbContestName.Items.Insert(0,'');
-  end;
-  ListOfContests.Free;
+  dmUtils.InsertContests(cmbContestName);
 end;
 
 procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
