@@ -70,6 +70,7 @@ const
   C_RBN_BANDS = '630M,160M,80M,40M,30M,20M,17M,15M,12M,10M,6M,2M';
   C_RBN_MODES = 'CW,RTTY,PSK31';
 
+  C_CONTEST_LIST_FILE_NAME = 'ContestName.tab';
 
 type
 
@@ -133,6 +134,7 @@ type
     property GrayLineOffset: currency read fGraylineOffset write fGrayLineOffset;
     property SysUTC: boolean read fSysUTC write fSysUTC;
 
+    procedure InsertContests(cmbContestName: TComboBox);
     procedure InsertModes(cmbMode: TComboBox);
     procedure InsertQSL_S(QSL_S: TComboBox);
     procedure InsertQSL_R(QSL_R: TcomboBox);
@@ -556,7 +558,28 @@ begin
   USstates[49] := 'WV, West Virginia';
   USstates[50] := 'WY, Wyoming';
 end;
-
+procedure TdmUtils.InsertContests(cmbContestName: TComboBox);
+var
+    ListOfContests : TStringList;
+    s: string;
+    Contestfile :TextFile;
+begin
+  // loading the contest list from ~/.config/cqrlog/ContestNames.tab
+  // Format of File   CONTEST_ID|CONTEST_DESCRIPTION
+  // see ADIF 3.0.9 http://www.adif.org/309/ADIF_309.htm#Contest_ID
+  // File have to be UTF8 without BOM
+  ListOfContests:= TStringList.Create;
+  ListOfContests.Clear;
+  ListOfContests.Sorted:=True;
+  if FileExists(dmData.HomeDir + C_CONTEST_LIST_FILE_NAME) then
+  begin
+       ListOfContests.LoadFromFile(dmData.HomeDir + C_CONTEST_LIST_FILE_NAME);
+       cmbContestName.Clear;
+       cmbContestName.Items := ListOfContests;
+       cmbContestName.Items.Insert(0,'');
+  end;
+  ListOfContests.Free;
+end;
 procedure TdmUtils.InsertModes(cmbMode: TComboBox);
 var
   i: integer;

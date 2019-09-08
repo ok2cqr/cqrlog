@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, lcltype;
+  ExtCtrls, lcltype, strutils;
 
 type
 
@@ -93,7 +93,11 @@ begin
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
-         end
+         end;
+    32 : begin
+           dmUtils.InsertContests(cmbValue);
+           cmbValue.Style:=csDropDown;
+         end;
    end
 end;
 {eQSL sent        28
@@ -456,6 +460,13 @@ begin
             sql := 'eqsl_qsl_rcvd='+QuotedStr('E')+',eqsl_qslrdate='+
                    QuotedStr(cmbValue.Text)
         end;
+   32 : begin
+           if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Contest name field?',
+              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+             exit;
+           sql := 'contestname='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
+         end;
+
 {eQSL sent        28
  eQSL sent date   29
  eQSL rcvd        30
