@@ -1086,6 +1086,7 @@ begin
   mCallBook.Clear;
   dmData.qQSOBefore.Close;
   lblIOTA.Font.Color := clDefault;
+  idcall := ''; //OH1KH: this line fixes issue #201 but does it something wrong elsewhere? (I did not notice)
   if frmQSODetails.Showing then
   begin
     frmQSODetails.ClearAll;
