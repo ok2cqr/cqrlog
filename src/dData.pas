@@ -3204,7 +3204,8 @@ begin
   paramList.DelimitedText := (' --defaults-file='+fHomeDir+'database/'+'mysql.cnf'+
                               ' --datadir='+fHomeDir+'database/'+
                               ' --socket='+fHomeDir+'database/sock'+
-                              ' --port=64000');
+                              ' --port=64000'+
+                              ' --secure-file-priv='+fHomeDir+'database');
   MySQLProcess.Parameters.Clear;
   while index < paramList.Count do
   begin
