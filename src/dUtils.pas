@@ -2398,6 +2398,7 @@ end;
 function TdmUtils.GetXplanetCommand: string;
 var
   myloc: string = '';
+  customloc: string = '';
   lat, long: currency;
   wait: string;
   geom: string;
@@ -2406,6 +2407,7 @@ begin
   Result := '';
   Result := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
   myloc := cqrini.ReadString('Station', 'LOC', '');
+  customloc := cqrini.ReadString('xplanet', 'loc', '');
   if not FileExists(Result) then
   begin
     Result := '';
@@ -2415,7 +2417,12 @@ begin
     cqrini.ReadString('xplanet', 'height', '100') + '+' +
     cqrini.ReadString('xplanet', 'left', '10') +
     '+' + cqrini.ReadString('xplanet', 'top', '10');
-  if IsLocOK(myloc) then
+  if IsLocOK(customloc) then
+  begin
+    CoordinateFromLocator(CompleteLoc(customloc), lat, long);
+    myloc := ' -longitude ' + CurrToStr(long) + ' -latitude ' + CurrToStr(lat);
+  end
+  else if IsLocOK(myloc) then
   begin
     CoordinateFromLocator(CompleteLoc(myloc), lat, long);
     myloc := ' -longitude ' + CurrToStr(long) + ' -latitude ' + CurrToStr(lat);
