@@ -588,6 +588,7 @@ type
     edtXTop: TEdit;
     edtXWidth: TEdit;
     edtXHeight: TEdit;
+    edtXplanetLoc: TEdit;
     edtXplanetPath: TEdit;
     edtFirst: TEdit;
     edtSecond: TEdit;
@@ -1414,6 +1415,7 @@ begin
   cqrini.WriteInteger('xplanet', 'ShowFrom', rgShowFrom.ItemIndex);
   cqrini.WriteInteger('xplanet', 'color', cmbXplanetColor.Selected);
   cqrini.WriteBool('xplanet', 'UseDefColor', chkXplanetColor.Checked);
+  cqrini.WriteString('xplanet', 'loc', edtXplanetLoc.Text);
 
   cqrini.WriteString('ZipCode', 'First', cmbFirstZip.Text);
   cqrini.WriteString('ZipCode', 'FirstSaveTo', cmbFirstSaveTo.Text);
@@ -1877,7 +1879,12 @@ begin
 
   geom := ' -geometry ' + edtXWidth.Text + 'x' + edtXHeight.Text +
     '+' + edtXLeft.Text + '+' + edtXTop.Text;
-  if dmUtils.IsLocOK(edtLoc.Text) then
+  if dmUtils.IsLocOK(edtXplanetLoc.Text) then
+  begin
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(edtXplanetLoc.Text), lat, long);
+    myloc := ' -longitude ' + CurrToStr(long) + ' -latitude ' + CurrToStr(lat);
+  end
+  else if dmUtils.IsLocOK(edtLoc.Text) then
   begin
     dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(edtLoc.Text), lat, long);
     myloc := ' -longitude ' + CurrToStr(long) + ' -latitude ' + CurrToStr(lat);
@@ -2787,6 +2794,7 @@ begin
   rgShowFrom.ItemIndex := cqrini.ReadInteger('xplanet', 'ShowFrom', 0);
   cmbXplanetColor.Selected := cqrini.ReadInteger('xplanet', 'color', clWhite);
   chkXplanetColor.Checked := cqrini.ReadBool('xplanet', 'UseDefColor', True);
+  edtXplanetLoc.Text := cqrini.ReadString('xplanet', 'loc', '');
 
   cmbFirstZip.Text := cqrini.ReadString('ZipCode', 'First', '');
   cmbFirstSaveTo.Text := cqrini.ReadString('ZipCode', 'FirstSaveTo', '');

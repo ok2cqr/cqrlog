@@ -5475,6 +5475,23 @@ object frmPreferences: TfrmPreferences
         Caption = 'Use this xplanet font color'
         TabOrder = 9
       end
+      object GroupBox53: TGroupBox
+        Left = 14
+        Height = 89
+        Top = 424
+        Width = 521
+        Caption = ' Center locator for xplanet (if different from default)'
+        ClientHeight = 63
+        ClientWidth = 515
+        TabOrder = 0
+        object edtXplanetLoc: TEdit
+          Left = 6
+          Height = 25
+          Top = 15
+          Width = 96
+          TabOrder = 0
+        end
+      end
     end
     object tabZipCode: TTabSheet
       Caption = 'Zip code tracking'
