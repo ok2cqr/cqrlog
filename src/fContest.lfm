@@ -13,7 +13,7 @@ object frmContest: TfrmContest
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.4.0'
   object edtCall: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideTop.Control = lblCall
@@ -124,8 +124,8 @@ object frmContest: TfrmContest
     Hint = 'contest exchange message sent, max 50 characters'
     Top = 53
     Width = 100
-    CharCase = ecUppercase
     MaxLength = 50
+    OnChange = edtSRX2Change
     OnKeyDown = edtCallKeyDown
     ParentShowHint = False
     ShowHint = True
@@ -323,16 +323,16 @@ object frmContest: TfrmContest
     Left = 17
     Height = 17
     Top = 1
-    Width = 87
+    Width = 91
     BorderSpacing.Left = 17
-    Caption = 'Contestname'
+    Caption = 'Contest name'
     ParentColor = False
   end
   object cmbContestName: TComboBox
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
-    Left = 110
+    Left = 114
     Height = 34
     Hint = 'contestname, choose ADIF contest_id via combobox or type freestyle max 40 characters'
     Top = 1

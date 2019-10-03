@@ -45,7 +45,8 @@ logging.
 <p>
 <b>HOTKEYS</b> work like in <a href="h20.html">New QSO window</a>.
 <ul><li> <b>2x ESC</b> clears all fileds</li>
-<li>Note: <b>1x ESC</b> returns cursor back to Call-field (if cursor is in some of the other fields like RSTr) and places cursor at the end of callsign for possible repairs.</li>
+<li>Note: <b>1x ESC</b> returns cursor back to Call-field (if cursor is in some of the other fields like RSTr) and places cursor at the end of callsign for possible repairs.<br>
+  It also halts CW memory output if it is just running.</li>
 <li> <b> F1..F10 </b>send CW macros etc.</li></ul>
 </p>
 
@@ -59,7 +60,7 @@ Form Contest has following fields and checkboxes:<br>
 <li><b>MSG s</b> sometimes you may need an additional message with number, or just a message with no number. On high band contests you may type your locator here.</li>
 <li><b>RST r</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
 <li><b>NR r</b> serial number you receive. No if no serial number then setting this changes tab order so that it jumps directly to MSG r from Call (and after that NR r). Note: you can feed only numbers to NR r field.</li>
-<li><b>MSG r</b> message you receive, if <b>MSG is LOC</b> is checked then message will be placed <b>ONLY</b> to NewQSO/Grid field <b>NOT</b> to received rst field</li>
+<li><b>MSG r</b> message you receive, if <b>MSG is LOC</b> is checked then message will be placed <b>ALSO</b> to NewQSO/Grid field <b>AND</b> to received msg field</li>
 <li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears fields.</li>
 <li><b>Clear all</b> Clear all fields and prepare to enter new QSO</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field.
@@ -71,7 +72,7 @@ type callsign-&gt;press TAB-&gt;type contest rxnumber-&gt;press TAB-&gt;type con
 Or hit ENTER after rxnumber if no additional message is exchanged.
 </p>
 <p>Remember that pressing <b>ENTER</b> key at any field saves qso with existing values. How ever there must be
-callsign at least three characters long. Sent/Received number and message are not needed.</p>
+callsign of least three characters long. Sent/Received number and message are not needed.</p>
 <p>
 Contest numbers and messages are saved in log into their own columns. Use <b>preferences/Visible columns</b> to show them in <b>Qso list</b>.
 For editing a qso these columns appear to <b>NewQSO</b> window when <b>contest</b> window is open and NewQso window is streched horizontally (DXCCinfo may override them).

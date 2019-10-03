@@ -234,6 +234,7 @@ object frmGroupEdit: TfrmGroupEdit
       Top = 34
       Width = 312
       ItemHeight = 0
+      OnChange = cmbValueChange
       TabOrder = 1
     end
   end

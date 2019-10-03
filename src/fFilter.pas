@@ -143,6 +143,8 @@ type
     procedure btnSelectDXCCClick(Sender: TObject);
     procedure chkRememberChange(Sender: TObject);
     procedure cmbBandSelectorChange(Sender: TObject);
+    procedure edtLocatorChange(Sender: TObject);
+    procedure edtMyLocChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -622,6 +624,24 @@ begin
       end;
     end;
 
+end;
+
+procedure TfrmFilter.edtLocatorChange(Sender: TObject);
+begin
+   if rbExactlyLoc.Checked then
+   Begin
+     edtLocator.Text:=dmUtils.StdFormatLocator(edtLocator.Text);
+     edtLocator.SelStart := Length(edtLocator.Text);
+   end;
+end;
+
+procedure TfrmFilter.edtMyLocChange(Sender: TObject);
+begin
+  if rbExactlyMyLoc.Checked then
+   Begin
+     edtMyLoc.Text:=dmUtils.StdFormatLocator(edtMyLoc.Text);
+     edtMyLoc.SelStart := Length(edtMyLoc.Text);
+   end;
 end;
 
 procedure TfrmFilter.FormKeyUp(Sender: TObject; var Key: Word;

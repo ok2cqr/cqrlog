@@ -285,8 +285,11 @@ begin
     HTTP.MimeType := 'multipart/form-data; boundary=' + Bound;
     //eQSL server can handle only 1000QSO per minute
     HTTP.Timeout := 100000*((QSOCount div 1000)+1);
-    Writeln('Timeout:',HTTP.Timeout div 1000, 's');
-    Writeln('QSO count:',QSOCount);
+    if dmData.DebugLevel>=1 then
+     begin
+        Writeln('Timeout:',HTTP.Timeout div 1000, 's');
+        Writeln('QSO count:',QSOCount);
+     end;
     Result := HTTP.HTTPMethod('POST', URL);
     if Result then
       ResultData.LoadFromStream(HTTP.Document)

@@ -1,7 +1,7 @@
 object frmExLabelPrint: TfrmExLabelPrint
-  Left = 25
+  Left = 709
   Height = 522
-  Top = 101
+  Top = 11
   Width = 424
   HelpType = htKeyword
   HelpKeyword = 'help/h22.html#bh4'
@@ -14,7 +14,7 @@ object frmExLabelPrint: TfrmExLabelPrint
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.4.0'
   object Label1: TLabel
     AnchorSideLeft.Control = gchkExport
     AnchorSideTop.Control = edtQSOsToLabel
