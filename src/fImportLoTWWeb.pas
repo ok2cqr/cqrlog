@@ -73,6 +73,7 @@ begin
   Done := False;
   FileSize := 0;
   mStat.Clear;
+  mStat.Lines.Add(''); //needed for QT5. Otherwise SockCallBack  mStat.Lines.Count-1 gives error when there are no lines. Gtk2 works ok!
   Application.ProcessMessages;
   if not dmUtils.IsDateOK(edtDateFrom.Text) then
   begin
