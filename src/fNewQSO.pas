@@ -4288,6 +4288,7 @@ begin
       LogName := dmData.qLogList.Fields[1].AsString;
 
       frmDXCluster.StopAllConnections;
+      CloseAllWindows;         //fixes issue #163
       SaveSettings;
       dmData.CloseDatabases;
 
