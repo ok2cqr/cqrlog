@@ -604,7 +604,7 @@ type
     procedure UpdateFKeyLabels;
     procedure ClearStatGrid;
     procedure LoadSettings;
-    procedure SaveSettings;
+
     procedure ChangeCallBookCaption;
     procedure SendSpot;
     procedure CreateAutoBackup();
@@ -612,7 +612,7 @@ type
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
 
-    procedure CloseAllWindows;
+
     procedure onExcept(Sender: TObject; E: Exception);
     procedure DisplayCoordinates(latitude, Longitude : Currency);
     procedure DrawGrayline;
@@ -677,6 +677,8 @@ type
     procedure InitializeCW;
     procedure RunVK(key_pressed: String);
     procedure RunST(script: String);
+    procedure SaveSettings;
+    procedure CloseAllWindows;
   end;
 
   type
