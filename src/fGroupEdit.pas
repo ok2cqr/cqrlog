@@ -35,6 +35,7 @@ type
     Panel1: TPanel;
     procedure btnApplyClick(Sender: TObject);
     procedure cmbFieldChange(Sender: TObject);
+    procedure cmbValueChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -98,8 +99,17 @@ begin
            dmUtils.InsertContests(cmbValue);
            cmbValue.Style:=csDropDown;
          end;
-   end
+   end;
+  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  lblInfo.Repaint;
 end;
+
+procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
+begin
+  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  lblInfo.Repaint;
+end;
+
 {eQSL sent        28
  eQSL sent date   29
  eQSL rcvd        30
@@ -107,7 +117,9 @@ end;
  }
 procedure TfrmGroupEdit.FormShow(Sender: TObject);
 begin
-  dmUtils.LoadFontSettings(self)
+  dmUtils.LoadFontSettings(self);
+  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  lblInfo.Repaint;
 end;
 
 procedure TfrmGroupEdit.btnApplyClick(Sender: TObject);
@@ -500,6 +512,8 @@ begin
     dmData.qCQRLOG.EnableControls;
     frmMain.acRefresh.Execute
   end;
+  lblInfo.Caption := 'Edit done! (Press Cancel to exit)';
+  lblInfo.Repaint;
 end;
 
 end.
