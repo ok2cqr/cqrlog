@@ -18,12 +18,13 @@ type
     edtLocator: TEdit;
     lblEnterLocator: TLabel;
     procedure btnOKClick(Sender: TObject);
+    procedure edtLocatorChange(Sender: TObject);
     procedure edtLocatorKeyPress(Sender: TObject; var Key: char);
   private
     { private declarations }
   public
     { public declarations }
-  end; 
+  end;
 
 var
   frmChangeLocator: TfrmChangeLocator;
@@ -32,6 +33,7 @@ implementation
 {$R *.lfm}
 
 { TfrmChangeLocator }
+uses dUtils;
 
 procedure TfrmChangeLocator.edtLocatorKeyPress(Sender: TObject; var Key: char);
 begin
@@ -45,6 +47,12 @@ end;
 procedure TfrmChangeLocator.btnOKClick(Sender: TObject);
 begin
   ModalResult := mrOK
+end;
+
+procedure TfrmChangeLocator.edtLocatorChange(Sender: TObject);
+begin
+  edtLocator.Text := dmUtils.StdFormatLocator(edtLocator.Text);
+  edtLocator.SelStart := Length(edtLocator.Text);
 end;
 
 end.

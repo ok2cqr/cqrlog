@@ -14,12 +14,12 @@ object frmChangeLocator: TfrmChangeLocator
   ClientHeight = 108
   ClientWidth = 236
   Position = poMainFormCenter
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.2.0'
   object lblEnterLocator: TLabel
     Left = 8
     Height = 17
     Top = 8
-    Width = 125
+    Width = 120
     Caption = 'Enter your locator:'
     ParentColor = False
   end
@@ -27,11 +27,11 @@ object frmChangeLocator: TfrmChangeLocator
     AnchorSideTop.Control = lblEnterLocator
     AnchorSideTop.Side = asrBottom
     Left = 8
-    Height = 27
+    Height = 34
     Top = 27
     Width = 216
     BorderSpacing.Top = 2
-    CharCase = ecUppercase
+    OnChange = edtLocatorChange
     OnKeyPress = edtLocatorKeyPress
     TabOrder = 0
   end
@@ -39,8 +39,8 @@ object frmChangeLocator: TfrmChangeLocator
     AnchorSideTop.Control = edtLocator
     AnchorSideTop.Side = asrBottom
     Left = 8
-    Height = 37
-    Top = 64
+    Height = 41
+    Top = 71
     Width = 64
     AutoSize = True
     BorderSpacing.Top = 10
@@ -54,9 +54,9 @@ object frmChangeLocator: TfrmChangeLocator
     AnchorSideTop.Control = edtLocator
     AnchorSideTop.Side = asrBottom
     Left = 160
-    Height = 37
-    Top = 64
-    Width = 64
+    Height = 41
+    Top = 71
+    Width = 68
     AutoSize = True
     BorderSpacing.Top = 10
     BorderSpacing.InnerBorder = 4

@@ -242,7 +242,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_EQSL_QSL_RCVD:d.EQSL_QSL_RCVD:=data;
       h_EQSL_QSL_SENT:d.EQSL_QSL_SENT:=data;
       h_FREQ:d.FREQ:=data;
-      h_GRIDSQUARE:d.GRIDSQUARE:=data;
+      h_GRIDSQUARE:d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
       h_IOTA:d.IOTA:=data;
       h_ITUZ:d.ITUZ:=data;
       h_LOTW_QSLRDATE:d.LOTW_QSLRDATE:=data;
@@ -250,7 +250,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_LOTW_QSL_RCVD:d.LOTW_QSL_RCVD:=data;
       h_LOTW_QSL_SENT:d.LOTW_QSL_SENT:=data;
       h_MODE:d.MODE:=data;
-      h_MY_GRIDSQUARE:d.MY_GRIDSQUARE:=data;
+      h_MY_GRIDSQUARE:d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
       h_NAME:d.NAME:=data;
       h_NOTES:d.NOTES:=data;
       h_PFX:d.PFX:=data;

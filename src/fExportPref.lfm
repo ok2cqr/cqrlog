@@ -1,55 +1,70 @@
 object frmExportPref: TfrmExportPref
-  Left = 491
-  Height = 495
-  Top = 32
-  Width = 737
+  Left = 232
+  Height = 502
+  Top = 131
+  Width = 931
   BorderStyle = bsDialog
   Caption = 'Choose fields to export'
-  ClientHeight = 495
-  ClientWidth = 737
+  ClientHeight = 502
+  ClientWidth = 931
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '2.0.2.0'
-  inline fraExportPref1: TfraExportPref
-    Left = 8
-    Top = 8
-    inherited chkexCounty: TCheckBox
-      Top = 217
-    end
-    inherited chkexRemarks: TCheckBox
-      Left = 176
-      OnChange = nil
-    end
-    inherited chkexContest: TCheckBox
-      Left = 176
-    end
-  end
+  LCLVersion = '2.0.4.0'
   object btnOK: TButton
-    Left = 640
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 844
     Height = 25
-    Top = 16
+    Top = 36
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 36
+    BorderSpacing.Right = 12
     Caption = 'OK'
     OnClick = btnOKClick
-    TabOrder = 1
+    TabOrder = 0
   end
   object btnCancel: TButton
-    Left = 640
+    AnchorSideLeft.Control = btnOK
+    AnchorSideTop.Control = btnOK
+    AnchorSideTop.Side = asrBottom
+    Left = 844
     Height = 25
-    Top = 56
+    Top = 73
     Width = 75
+    BorderSpacing.Top = 12
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 2
+    TabOrder = 1
   end
   object btnReSet: TButton
-    Left = 640
+    AnchorSideLeft.Control = btnOK
+    AnchorSideTop.Control = btnCancel
+    AnchorSideTop.Side = asrBottom
+    Left = 844
     Height = 25
-    Top = 96
+    Top = 110
     Width = 75
+    BorderSpacing.Top = 12
     Caption = 'Re/Set All'
     OnClick = btnReSetClick
+    TabOrder = 2
+  end
+  inline fraExportPref1: TfraExportPref
+    Left = 8
+    Top = 8
     TabOrder = 3
+    DesignLeft = 1719
+    DesignTop = 168
+    inherited lblField1: TLabel
+      AnchorSideLeft.Control = fraExportPref1
+      AnchorSideTop.Control = fraExportPref1
+    end
+    inherited chkAutoColumn: TCheckBox
+      OnChange = chkAutoColumnChange
+    end
   end
 end

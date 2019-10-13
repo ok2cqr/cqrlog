@@ -14,6 +14,14 @@ type
   TfrmQSLExpPref = class(TForm)
     btnOK : TButton;
     btnCancel : TButton;
+    chkContestname: TCheckBox;
+    chkPropagation: TCheckBox;
+    chkContestNrS: TCheckBox;
+    chkContestMsgS: TCheckBox;
+    chkContestNrR: TCheckBox;
+    chkContestMsgR: TCheckBox;
+    chkSatellite: TCheckBox;
+    chkDistance: TCheckBox;
     chkQSLMsg : TCheckBox;
     chkBand : TCheckBox;
     chkAward : TCheckBox;
@@ -37,6 +45,7 @@ type
     chkTimeOn : TCheckBox;
     cbxDateFormat: TComboBox;
     GroupBox1 : TGroupBox;
+    lblDateFormat: TLabel;
     tgSplitRST_S: TToggleBox;
     tgSplitRST_R: TToggleBox;
     procedure btnOKClick(Sender : TObject);
@@ -74,29 +83,49 @@ begin
   chkName.Checked     := cqrini.ReadBool('QSLExport', 'Name', False);
   chkQTH.Checked      := cqrini.ReadBool('QSLExport', 'QTH', False);
   chkBand.Checked     := cqrini.ReadBool('QSLExport', 'Band', True);
+  chkPropagation.Checked := cqrini.ReadBool('QSLExport', 'Propagation', False);
+  chkSatellite.Checked := cqrini.ReadBool('QSLExport', 'Satellite', False);
+  chkContestname.Checked := cqrini.ReadBool('QSLExport', 'ContestName', False);
   chkQSL_S.Checked    := cqrini.ReadBool('QSLExport', 'QSL_S', False);
   chkQSL_R.Checked    := cqrini.ReadBool('QSLExport', 'QSL_R', False);
   chkQSL_VIA.Checked  := cqrini.ReadBool('QSLExport', 'QSL_VIA', True);
   chkLoc.Checked      := cqrini.ReadBool('QSLExport', 'Locator', False);
   chkMyLoc.Checked    := cqrini.ReadBool('QSLExport', 'MyLoc', False);
+  chkDistance.Checked := cqrini.ReadBool('QSLExport', 'Distance', False);
   chkIOTA.Checked     := cqrini.ReadBool('QSLExport', 'IOTA', False);
   chkAward.Checked    := cqrini.ReadBool('QSLExport', 'Award', False);
   chkPower.Checked    := cqrini.ReadBool('QSLExport', 'Power', False);
   chkRemarks.Checked  := cqrini.ReadBool('QSLExport', 'Remarks', True);
   chkQSLMsg.Checked   := cqrini.ReadBool('QSLExport', 'QSLMsg', True);
+  chkContestNrS.Checked := cqrini.ReadBool('QSLExport', 'ContestNrS',False );
+  chkContestMsgS.Checked := cqrini.ReadBool('QSLExport', 'ContestMsgS',False );
+  chkContestNrR.Checked := cqrini.ReadBool('QSLExport', 'ContestNrR', False);
+  chkContestMsgR.Checked := cqrini.ReadBool('QSLExport', 'ContestMsgR', False);
   tgSplit_Click(Sender);
 end;
 
 procedure TfrmQSLExpPref.tgSplit_Click(Sender: TObject);
 begin
   if tgSplitRST_S.Checked = True then
-    tgSplitRST_S.Color := clLime
+    begin
+      tgSplitRST_S.Font.Color := clGreen;
+      tgSplitRST_S.Font.Style :=[fsBold];
+    end
   else
-    tgSplitRST_S.Color := clDefault;
+   begin
+      tgSplitRST_S.Font.Color := clDefault;
+      tgSplitRST_S.Font.Style :=[];
+    end;
   if tgSplitRST_R.Checked = True then
-    tgSplitRST_R.Color := clLime
+    begin
+      tgSplitRST_R.Font.Color := clGreen;
+      tgSplitRST_R.Font.Style :=[fsBold];
+    end
   else
-    tgSplitRST_R.Color := clDefault;
+   begin
+      tgSplitRST_R.Font.Color := clDefault;
+      tgSplitRST_R.Font.Style :=[];
+    end;
 end;
 
 procedure TfrmQSLExpPref.btnOKClick(Sender : TObject);
@@ -115,16 +144,25 @@ begin
   cqrini.WriteBool('QSLExport', 'Name', chkName.Checked);
   cqrini.WriteBool('QSLExport', 'QTH', chkQTH.Checked);
   cqrini.WriteBool('QSLExport', 'Band', chkBand.Checked);
+  cqrini.WriteBool('QSLExport', 'Propagation', chkPropagation.Checked);
+  cqrini.WriteBool('QSLExport', 'Satellite', chkSatellite.Checked);
+  cqrini.WriteBool('QSLExport', 'ContestName', chkContestname.Checked);
   cqrini.WriteBool('QSLExport', 'QSL_S', chkQSL_S.Checked);
   cqrini.WriteBool('QSLExport', 'QSL_R', chkQSL_R.Checked);
   cqrini.WriteBool('QSLExport', 'QSL_VIA', chkQSL_VIA.Checked);
   cqrini.WriteBool('QSLExport', 'Locator', chkLoc.Checked);
   cqrini.WriteBool('QSLExport', 'MyLoc', chkMyLoc.Checked);
+  cqrini.WriteBool('QSLExport', 'Distance', chkDistance.Checked);
   cqrini.WriteBool('QSLExport', 'IOTA', chkIOTA.Checked);
   cqrini.WriteBool('QSLExport', 'Award', chkAward.Checked);
   cqrini.WriteBool('QSLExport', 'Power', chkPower.Checked);
   cqrini.WriteBool('QSLExport', 'Remarks', chkRemarks.Checked);
   cqrini.WriteBool('QSLExport', 'QSLMsg', chkQSLMsg.Checked);
+  cqrini.WriteBool('QSLExport', 'ContestNrS', chkContestNrS.Checked);
+  cqrini.WriteBool('QSLExport', 'ContestMsgS', chkContestMsgS.Checked);
+  cqrini.WriteBool('QSLExport', 'ContestNrR', chkContestNrR.Checked);
+  cqrini.WriteBool('QSLExport', 'ContestMsgR', chkContestMsgR.Checked);
+  cqrini.SaveToDisk;
   ModalResult := mrOK
 end;
 

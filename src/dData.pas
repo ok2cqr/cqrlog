@@ -257,6 +257,7 @@ type
     function  LogExists(nr : Word) : Boolean;
     function  GetProperDBName(nr : Word) : String;
     function  GetQSOCount : Integer;
+    procedure GetQSODistanceSum(var SumDist:int64;var LongestDist:integer;var MainLocCount:Integer);
     function  UseseQSL(call : String) : Boolean;
     function  QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
@@ -1333,7 +1334,8 @@ begin
                  ','+QuotedStr(qsl_r)+','+QuotedStr(qsl_via)+
                  ','+QuotedStr(iota)+','+QuotedStr(pwr)+
                  ','+sITU+','+sWAZ+
-                 ','+QuotedStr(loc)+','+QuotedStr(my_loc)+
+                    //here we make final check that for now on locator writing format is by std in database
+                 ','+QuotedStr(dmUtils.StdFormatLocator(loc))+','+QuotedStr(dmUtils.StdFormatLocator(my_loc))+
                  //','+QuotedStr(dmUtils.MyTrim(county))+',' + QuotedStr(dmUtils.MyTrim(award)) + ','+QuotedStr(dmUtils.MyTrim(remarks))+
                  ','+QuotedStr(trim(county))+',' + QuotedStr(trim(award)) + ','+QuotedStr(trim(remarks))+
                  ','+IntToStr(adif)+','+ QuotedStr(idcall) + ','+ QuotedStr(state) +','+IntToStr(changed)+
@@ -1903,6 +1905,15 @@ end;
 
 function TdmData.QSLMgrFound(call,date : String; var qsl_via : String) : Boolean;
 begin
+   // dmData.QSLMgrFound() needs date. if not set causes mysterious
+   // "'' is not valid date error" sometimes. (usually at first logged qso)
+   // So cheking both exist is needed.
+  if (call = '') or (date = '') then
+   Begin
+     Result := False;
+     Exit;
+   end;
+
   qsl_via := '';
   trQSLMgr.StartTransaction;
   qQSLMgr.SQL.Text := 'select * from cqrlog_common.qslmgr where (callsign = '+QuotedStr(call)+
@@ -2458,7 +2469,79 @@ begin
   if call = eQSLUsers[i] then
     Result := True
 end;
+procedure TdmData.GetQSODistanceSum(var SumDist:int64; var LongestDist:integer;var MainLocCount:Integer);
 
+var
+   qrb,
+   qrc,
+   Myloc,
+   loc :String;
+
+  procedure HandleRecord;
+   Begin
+        Myloc := Q.Fields[0].AsString;
+        if length(Myloc) = 4 then Myloc := Myloc +'LL';
+        loc := Q.Fields[1].AsString;
+        if length(loc) = 4 then loc := loc +'LL';
+        dmUtils.DistanceFromLocator(Myloc,loc,qrb,qrc);
+        if StrToIntDef(qrb,0) > LongestDist then  LongestDist := StrToIntDef(qrb,0);
+        SumDist:= SumDist + StrToIntDef(qrb,0);
+  end;
+
+begin
+  SumDist :=0;
+  LongestDist :=0;
+  MainLocCount := 0;
+
+  Q.Close;
+  if trQ.Active then
+    trQ.RollBack;
+
+  if IsFilter then
+  begin
+    Q.SQL.Text := StringReplace(dmData.qCQRLOG.SQL.Text,'*','my_loc,loc',[]);
+    trQ.StartTransaction;
+    try
+      Q.Open;
+      while not Q.Eof do
+       begin
+        HandleRecord;
+        Q.Next;
+       end
+    finally
+      Q.Close;
+      trQ.RollBack
+    end
+  end
+  else begin
+    Q.SQL.Text := 'SELECT my_loc,loc FROM cqrlog_main';
+    trQ.StartTransaction;
+    try
+      Q.Open;
+      while not Q.Eof do
+       begin
+        HandleRecord;
+        Q.Next;
+       end
+    finally
+      Q.Close;
+      trQ.RollBack
+    end
+  end;
+  if pos('WHERE', Q.SQL.Text) > 0 then
+    Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" AND '
+      + copy(Q.SQL.Text, pos('WHERE', Q.SQL.Text)+5, length(Q.SQL.Text))
+   else
+    Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" ';
+   trQ.StartTransaction;
+    try
+      Q.Open;
+      MainLocCount := Q.Fields[0].AsInteger
+    finally
+      Q.Close;
+      trQ.RollBack
+    end
+end;
 function TdmData.GetQSOCount : Integer;
 begin
   Q.Close;
@@ -3104,7 +3187,7 @@ begin
         Q.SQL.Add(scQSLExport.Script.Strings[i])
       else begin
         Q.SQL.Add(scQSLExport.Script.Strings[i]);
-        if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
+        if fDebugLevel>=1 then Writeln(Q.SQL.Text);
         Q.ExecSQL;
         Q.SQL.Text := ''
       end

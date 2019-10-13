@@ -35,6 +35,7 @@ type
     Panel1: TPanel;
     procedure btnApplyClick(Sender: TObject);
     procedure cmbFieldChange(Sender: TObject);
+    procedure cmbValueChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -100,6 +101,16 @@ begin
          end;
    end
 end;
+
+procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
+begin
+  if (cmbField.ItemIndex=23) or (cmbField.ItemIndex=24) then
+   begin
+     cmbValue.Text :=dmUtils.StdFormatLocator(cmbValue.Text);
+     cmbValue.SelStart := Length(cmbValue.Text);
+   end;
+end;
+
 {eQSL sent        28
  eQSL sent date   29
  eQSL rcvd        30
@@ -371,7 +382,7 @@ begin
               exit
             end
           end;
-          sql := 'my_loc='+QuotedStr(UpperCase(cmbValue.Text))
+          sql := 'my_loc='+QuotedStr(cmbValue.Text)
         end;
    24 : begin
           if (cmbValue.Text <> '') then
@@ -391,7 +402,7 @@ begin
               exit
             end
           end;
-          sql := 'loc='+QuotedStr(UpperCase(cmbValue.Text))
+          sql := 'loc='+QuotedStr(cmbValue.Text)
         end;
    25 : begin
           sql := 'profile=' + IntToStr(dmData.GetNRFromProfile(cmbValue.Text))

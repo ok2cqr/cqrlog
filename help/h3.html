@@ -69,13 +69,31 @@
     When <b>OK</b> is pressed export begins.<br><br>
     <p align=center><img src=img/line.png></p>
     <a name=ah26><strong>HTML export</strong></a><br><br>
-    The same as above, only difference is to choose the 'HTML' option.<br><br>
+    The same as above, only difference is to set column names and widths (in character counts). Note that contest Nr and Msg column names will get "R" or "S" added as last letter of column name.
+    <br><br>
+    <img src=img/h45d.png><br><br>
+    If "HTML auto size columns" is checked width setting is ignored and column width is set by longest text (in header or data).
+    <br><br>
+    <img src=img/h45e.png><br><br>
+    Choose the 'HTML' option from QSO list Export menu.<br><br>
     <p align=center><img src=img/line.png></p>
     <p><a name=ah27><strong>Program version update:</strong></a><br><br>
     Ubuntu 16.04, 17.10, 18.04 users can use CQRLOG’s repository on Launchpad. To add repository to your system, put into terminal this:<br/>
     <br>sudo add-apt-repository ppa:ok2cqr/ppa;sudo apt-get update;sudo apt-get install cqrlog<br>
     <br>For those who does not use Ubuntu, load install package, or binaries, from: Cqrlog.com <a href="https://www.cqrlog.com/download" target="_new"> download page.</a><br>
     <br>The binaries should work in any distribution. Please don't forget to install MySQL server, MySQL client, Hamlib libraries and if LoTW support is desired, trustedqsl package and libssl-devel must be installed.</p>
+    <table width="100%" border="0" cellpadding="5" cellspacing="2">
+        <tbody>
+        <tr>
+            <td valign="top"><img src="img/note.png"></td>
+            <td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
+                <strong><font color="blue">Note:</font></strong> Very often Cqrlog version update requires just file /usr/bin/cqrlog change to latest version. If your package manager does not support latest version and you have well running old version in use just copy folder ~/.config/cqrlog with all files and subfolders to safe place as backup. Copy also 
+                /usr/bin/cqrlog to same place. Then download the tgz file "Complete application directory for other distributions", extract file /usr/bin/cqrlog from there and copy it to your /usr/bin folder (you need to use root priveleges I.E sudo for that).
+                If everything works you have latest version. If not, just copy back your saved folder ~/.config/cqrlog and the old /usr/bin/cqrlog.
+            </td>
+        </tr>
+        </tbody>
+    </table>
     <p align=center><img src=img/line.png></p>    
     <a name=ah28><strong>How to update Country files:</strong></a><br>
     <ol>

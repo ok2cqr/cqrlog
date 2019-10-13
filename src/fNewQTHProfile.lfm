@@ -1,7 +1,7 @@
 object frmNewQTHProfile: TfrmNewQTHProfile
-  Left = 548
-  Height = 404
-  Top = 298
+  Left = 522
+  Height = 425
+  Top = 146
   Width = 395
   HorzScrollBar.Page = 394
   VertScrollBar.Page = 403
@@ -9,19 +9,19 @@ object frmNewQTHProfile: TfrmNewQTHProfile
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'frmNewQTHProfile'
-  ClientHeight = 404
+  ClientHeight = 425
   ClientWidth = 395
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.4.0'
   object lblLocator: TLabel
     AnchorSideTop.Control = edtProfNr
     AnchorSideTop.Side = asrBottom
     Left = 9
     Height = 17
-    Top = 69
-    Width = 53
+    Top = 76
+    Width = 48
     BorderSpacing.Top = 10
     Caption = 'Locator'
     ParentColor = False
@@ -31,8 +31,8 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 9
     Height = 17
-    Top = 125
-    Width = 29
+    Top = 139
+    Width = 28
     BorderSpacing.Top = 10
     Caption = 'QTH'
     ParentColor = False
@@ -42,8 +42,8 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 177
     Height = 17
-    Top = 69
-    Width = 73
+    Top = 68
+    Width = 70
     BorderSpacing.Top = 10
     Caption = 'Equipment'
     ParentColor = False
@@ -53,8 +53,8 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 9
     Height = 17
-    Top = 244
-    Width = 59
+    Top = 258
+    Width = 57
     BorderSpacing.Top = 10
     Caption = 'Remarks'
     ParentColor = False
@@ -64,7 +64,7 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     Left = 9
     Height = 17
     Top = 13
-    Width = 100
+    Width = 95
     BorderSpacing.Bottom = 2
     Caption = 'Profile number'
     ParentColor = False
@@ -73,12 +73,12 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = lblLocator
     AnchorSideTop.Side = asrBottom
     Left = 8
-    Height = 27
-    Top = 88
+    Height = 34
+    Top = 95
     Width = 92
     BorderSpacing.Top = 2
-    CharCase = ecUppercase
     MaxLength = 6
+    OnChange = edtLocatorChange
     TabOrder = 1
   end
   object mQTH: TMemo
@@ -86,7 +86,7 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 9
     Height = 90
-    Top = 144
+    Top = 158
     Width = 150
     BorderSpacing.Top = 2
     MaxLength = 250
@@ -98,7 +98,7 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 177
     Height = 146
-    Top = 88
+    Top = 87
     Width = 208
     BorderSpacing.Top = 2
     MaxLength = 250
@@ -110,7 +110,7 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 9
     Height = 90
-    Top = 263
+    Top = 277
     Width = 376
     BorderSpacing.Top = 2
     ScrollBars = ssAutoBoth
@@ -120,8 +120,8 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = mRemarks
     AnchorSideTop.Side = asrBottom
     Left = 28
-    Height = 31
-    Top = 363
+    Height = 35
+    Top = 377
     Width = 60
     AutoSize = True
     BorderSpacing.Top = 10
@@ -135,9 +135,9 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = mRemarks
     AnchorSideTop.Side = asrBottom
     Left = 288
-    Height = 31
-    Top = 363
-    Width = 60
+    Height = 35
+    Top = 377
+    Width = 62
     AutoSize = True
     BorderSpacing.Top = 10
     BorderSpacing.InnerBorder = 1
@@ -149,9 +149,9 @@ object frmNewQTHProfile: TfrmNewQTHProfile
   end
   object chkVisible: TCheckBox
     Left = 177
-    Height = 24
+    Height = 23
     Top = 35
-    Width = 149
+    Width = 146
     Caption = 'Show profile in list'
     Checked = True
     State = cbChecked
@@ -161,11 +161,12 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = lblProfileNumber
     AnchorSideTop.Side = asrBottom
     Left = 9
-    Height = 27
+    Height = 34
     Top = 32
     Width = 93
     BorderSpacing.Top = 2
     CharCase = ecUppercase
+    NumbersOnly = True
     OnKeyDown = edtProfNrKeyDown
     TabOrder = 0
   end
