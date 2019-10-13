@@ -12,7 +12,11 @@ type
   { TfraExportPref }
 
   TfraExportPref = class(TFrame)
-    chkexContest: TCheckBox;
+    chkAutoColumn: TCheckBox;
+    chkexContestName: TCheckBox;
+    chkexContestMsg: TCheckBox;
+    chkexContestNr: TCheckBox;
+    chkexDistance: TCheckBox;
     chkExRXFreq : TCheckBox;
     chkExSat : TCheckBox;
     chkExPropagation : TCheckBox;
@@ -54,6 +58,36 @@ type
     chkexWAZ : TCheckBox;
     chkProfile : TCheckBox;
     chkAscTime : TCheckBox;
+    edtWAward1: TEdit;
+    edtWCall1: TEdit;
+    edtWContestMsg1: TEdit;
+    edtWContestName1: TEdit;
+    edtWContestNr1: TEdit;
+    edtWCounty1: TEdit;
+    edtWDistance1: TEdit;
+    edtWDXCC1: TEdit;
+    edtWeQSLR1: TEdit;
+    edtWeQSLRDate1: TEdit;
+    edtWeQSLS1: TEdit;
+    edtWeQSLSDate1: TEdit;
+    edtWIOTA1: TEdit;
+    edtWITU1: TEdit;
+    edtWLoc1: TEdit;
+    edtWLQSLR1: TEdit;
+    edtWLQSLRDate1: TEdit;
+    edtWLQSLS1: TEdit;
+    edtWLQSLSDate1: TEdit;
+    edtWMyLoc1: TEdit;
+    edtWNote1: TEdit;
+    edtWPower1: TEdit;
+    edtWProfile: TEdit;
+    edtWContinent1: TEdit;
+    edtWProfile1: TEdit;
+    edtWDate1: TEdit;
+    edtWDistance: TEdit;
+    edtWFreq1: TEdit;
+    edtWMode1: TEdit;
+    edtWName1: TEdit;
     edtWProp : TEdit;
     edtWAward : TEdit;
     edtWCall : TEdit;
@@ -77,7 +111,22 @@ type
     edtWName : TEdit;
     edtWNote : TEdit;
     edtWPower : TEdit;
+    edtWContestName: TEdit;
+    edtWContestNr: TEdit;
+    edtWContestMsg: TEdit;
+    edtWProp1: TEdit;
+    edtWQSLR1: TEdit;
+    edtWQSLRDate1: TEdit;
+    edtWQSLS1: TEdit;
+    edtWQSLSDate1: TEdit;
+    edtWQSLVIA1: TEdit;
+    edtWQTH1: TEdit;
+    edtWRemarks1: TEdit;
+    edtWRstR1: TEdit;
+    edtWRstS1: TEdit;
     edtWRxFreq : TEdit;
+    edtWContinent: TEdit;
+    edtWRxFreq1: TEdit;
     edtWSatName : TEdit;
     edtWQSLR : TEdit;
     edtWQSLRDate : TEdit;
@@ -88,22 +137,38 @@ type
     edtWRemarks : TEdit;
     edtWRstR : TEdit;
     edtWRstS : TEdit;
+    edtWSatName1: TEdit;
     edtWState : TEdit;
+    edtWState1: TEdit;
     edtWTimeOff : TEdit;
+    edtWTimeOff1: TEdit;
     edtWTimeOn : TEdit;
+    edtWTimeOn1: TEdit;
     edtWWAZ : TEdit;
-    Label46 : TLabel;
-    Label47 : TLabel;
-    Label48 : TLabel;
-    Label49 : TLabel;
-    Label50 : TLabel;
-    Label51 : TLabel;
+    edtWWAZ1: TEdit;
+    lblField1 : TLabel;
+    lblField2 : TLabel;
+    lblField3 : TLabel;
+    lblWidth1 : TLabel;
+    lblWidth2 : TLabel;
+    lblWidth3 : TLabel;
+    lblHTML1: TLabel;
+    lblHTML2: TLabel;
+    lblHTML3: TLabel;
   private
     { private declarations }
   public
     procedure SaveExportPref;
     procedure LoadExportPref;
   end;
+{
+NOTE !!!
+If you update any component property of this frame (.lfm), but do not add or remove any component,
+changes do not update to inheriting form(s).
+Only 100% sure way to update all to inheriting form is to delete frame from form and then add it
+again with lazarus GUI toolbar "form" button. When this is done all form actions linked to frame components
+are lost and they must be relinked again manually.
+}
 
 implementation
 {$R *.lfm}
@@ -127,6 +192,7 @@ begin
   cqrini.WriteBool('Export', 'QSL_VIA', chkexQSLVIA.Checked);
   cqrini.WriteBool('Export', 'Locator', chkexLoc.Checked);
   cqrini.WriteBool('Export', 'MyLoc', chkexMyLoc.Checked);
+  cqrini.WriteBool('Export', 'Distance', chkexDistance.Checked);
   cqrini.WriteBool('Export', 'IOTA', chkexIOTA.Checked);
   cqrini.WriteBool('Export', 'Award', chkexAward.Checked);
   cqrini.WriteBool('Export', 'County', chkexCounty.Checked);
@@ -142,7 +208,7 @@ begin
   cqrini.WriteBool('Export', 'LQSLSDate', chkexLQSLSDate.Checked);
   cqrini.WriteBool('Export', 'LQSLR', chkexLQSLR.Checked);
   cqrini.WriteBool('Export', 'LQSLRDate', chkexLQSLRDate.Checked);
-  cqrini.WriteBool('Export', 'Cont', chkExCont.Checked);
+  cqrini.WriteBool('Export', 'Continent', chkExCont.Checked);
   cqrini.WriteBool('Export', 'QSLSDate', chkexQSLSDate.Checked);
   cqrini.WriteBool('Export', 'QSLRDate', chkexQSLRDate.Checked);
   cqrini.WriteBool('Export', 'eQSLS', chkexeQSLS.Checked);
@@ -153,8 +219,12 @@ begin
   cqrini.WriteBool('Export', 'Prop', chkExPropagation.Checked);
   cqrini.WriteBool('Export', 'RxFreq', chkExRXFreq.Checked);
   cqrini.WriteBool('Export', 'SatName', chkExSat.Checked);
-  cqrini.WriteBool('Export', 'Contest', chkexContest.Checked);
+  cqrini.WriteBool('Export', 'Contestname', chkexContestName.Checked);
+  cqrini.WriteBool('Export', 'ContestNr', chkexContestNr.Checked);
+  cqrini.WriteBool('Export', 'ContestMsg', chkexContestMsg.Checked);
+  cqrini.WriteBool('Export', 'HTMLAutoColumn', chkAutoColumn.Checked);
 
+  //group "none"
   cqrini.WriteString('Export', 'WDate', edtWDate.Text);
   cqrini.WriteString('Export', 'Wtime_on', edtWTimeOn.Text);
   cqrini.WriteString('Export', 'Wtime_off', edtWTimeOff.Text);
@@ -170,6 +240,7 @@ begin
   cqrini.WriteString('Export', 'WQSL_VIA', edtWQSLVIA.Text);
   cqrini.WriteString('Export', 'WLocator', edtWLoc.Text);
   cqrini.WriteString('Export', 'WMyLoc', edtWMyLoc.Text);
+  cqrini.WriteString('Export', 'WDistance', edtWDistance.Text);
   cqrini.WriteString('Export', 'WIOTA', edtWIOTA.Text);
   cqrini.WriteString('Export', 'WAward', edtWAward.Text);
   cqrini.WriteString('Export', 'WCounty', edtWCounty.Text);
@@ -193,6 +264,101 @@ begin
   cqrini.WriteString('Export', 'WProp', edtWProp.Text);
   cqrini.WriteString('Export', 'WRxFreq', edtWRxFreq.Text);
   cqrini.WriteString('Export', 'WSatName', edtWSatName.Text);
+  cqrini.WriteString('Export', 'WContinent', edtWContinent.Text);
+  cqrini.WriteString('Export', 'WProfile', edtWProfile.Text);
+  cqrini.WriteString('Export', 'WContestName', edtWContestName.Text);
+  cqrini.WriteString('Export', 'WContestNr', edtWContestNr.Text);
+  cqrini.WriteString('Export', 'WContestMsg', edtWContestMsg.Text);
+  cqrini.WriteString('Export', 'WDate', edtWDate.Text);
+  cqrini.WriteString('Export', 'Wtime_on', edtWTimeOn.Text);
+  cqrini.WriteString('Export', 'Wtime_off', edtWTimeOff.Text);
+  cqrini.WriteString('Export', 'WCallSign', edtWCall.Text);
+  cqrini.WriteString('Export', 'WMode', edtWMode.Text);
+  cqrini.WriteString('Export', 'WFreq', edtWFreq.Text);
+  cqrini.WriteString('Export', 'WRST_S', edtWRstS.Text);
+  cqrini.WriteString('Export', 'WRST_R', edtWRstR.Text);
+  cqrini.WriteString('Export', 'WName', edtWName.Text);
+  cqrini.WriteString('Export', 'WQTH', edtWQTH.Text);
+  cqrini.WriteString('Export', 'WQSL_S', edtWQSLS.Text);
+  cqrini.WriteString('Export', 'WQSL_R', edtWQSLR.Text);
+  cqrini.WriteString('Export', 'WQSL_VIA', edtWQSLVIA.Text);
+  cqrini.WriteString('Export', 'WLocator', edtWLoc.Text);
+  cqrini.WriteString('Export', 'WMyLoc', edtWMyLoc.Text);
+  cqrini.WriteString('Export', 'WDistance', edtWDistance.Text);
+  cqrini.WriteString('Export', 'WIOTA', edtWIOTA.Text);
+  cqrini.WriteString('Export', 'WAward', edtWAward.Text);
+  cqrini.WriteString('Export', 'WCounty', edtWCounty.Text);
+  cqrini.WriteString('Export', 'WPower', edtWPower.Text);
+  cqrini.WriteString('Export', 'WDXCC', edtWDXCC.Text);
+  cqrini.WriteString('Export', 'WRemarks', edtWRemarks.Text);
+  cqrini.WriteString('Export', 'WWAZ', edtWWAZ.Text);
+  cqrini.WriteString('Export', 'WITU', edtWITU.Text);
+  cqrini.WriteString('Export', 'WNote', edtWNote.Text);
+  cqrini.WriteString('Export', 'WState', edtWState.Text);
+  cqrini.WriteString('Export', 'WLQSLS', edtWLQSLS.Text);
+  cqrini.WriteString('Export', 'WLQSLSDate', edtWLQSLSDate.Text);
+  cqrini.WriteString('Export', 'WLQSLR', edtWLQSLR.Text);
+  cqrini.WriteString('Export', 'WLQSLRDate', edtWLQSLRDate.Text);
+  cqrini.WriteString('Export', 'WQSLSDate', edtWQSLSDate.Text);
+  cqrini.WriteString('Export', 'WQSLRDate', edtWQSLRDate.Text);
+  cqrini.WriteString('Export', 'WeQSLS', edtWeQSLS.Text);
+  cqrini.WriteString('Export', 'WeQSLSDate', edtWeQSLSDate.Text);
+  cqrini.WriteString('Export', 'WeQSLR', edtWeQSLR.Text);
+  cqrini.WriteString('Export', 'WeQSLRDate', edtWeQSLRDate.Text);
+  cqrini.WriteString('Export', 'WProp', edtWProp.Text);
+  cqrini.WriteString('Export', 'WRxFreq', edtWRxFreq.Text);
+  cqrini.WriteString('Export', 'WSatName', edtWSatName.Text);
+  cqrini.WriteString('Export', 'WContinent', edtWContinent.Text);
+  cqrini.WriteString('Export', 'WProfile', edtWProfile.Text);
+  cqrini.WriteString('Export', 'WContestName', edtWContestName.Text);
+  cqrini.WriteString('Export', 'WContestNr', edtWContestNr.Text);
+  cqrini.WriteString('Export', 'WContestMsg', edtWContestMsg.Text);
+
+  //group "one"
+  cqrini.WriteString('Export', 'WDate1', edtWDate1.Text);
+  cqrini.WriteString('Export', 'Wtime_on1', edtWTimeOn1.Text);
+  cqrini.WriteString('Export', 'Wtime_off1', edtWTimeOff1.Text);
+  cqrini.WriteString('Export', 'WCallSign1', edtWCall1.Text);
+  cqrini.WriteString('Export', 'WMode1', edtWMode1.Text);
+  cqrini.WriteString('Export', 'WFreq1', edtWFreq1.Text);
+  cqrini.WriteString('Export', 'WRST_S1', edtWRstS1.Text);
+  cqrini.WriteString('Export', 'WRST_R1', edtWRstR1.Text);
+  cqrini.WriteString('Export', 'WName1', edtWName1.Text);
+  cqrini.WriteString('Export', 'WQTH1', edtWQTH1.Text);
+  cqrini.WriteString('Export', 'WQSL_S1', edtWQSLS1.Text);
+  cqrini.WriteString('Export', 'WQSL_R1', edtWQSLR1.Text);
+  cqrini.WriteString('Export', 'WQSL_VIA1', edtWQSLVIA1.Text);
+  cqrini.WriteString('Export', 'WLocator1', edtWLoc1.Text);
+  cqrini.WriteString('Export', 'WMyLoc1', edtWMyLoc1.Text);
+  cqrini.WriteString('Export', 'WDistance1', edtWDistance1.Text);
+  cqrini.WriteString('Export', 'WIOTA1', edtWIOTA1.Text);
+  cqrini.WriteString('Export', 'WAward1', edtWAward1.Text);
+  cqrini.WriteString('Export', 'WCounty1', edtWCounty1.Text);
+  cqrini.WriteString('Export', 'WPower1', edtWPower1.Text);
+  cqrini.WriteString('Export', 'WDXCC1', edtWDXCC1.Text);
+  cqrini.WriteString('Export', 'WRemarks1', edtWRemarks1.Text);
+  cqrini.WriteString('Export', 'WWAZ1', edtWWAZ1.Text);
+  cqrini.WriteString('Export', 'WITU1', edtWITU1.Text);
+  cqrini.WriteString('Export', 'WNote1', edtWNote1.Text);
+  cqrini.WriteString('Export', 'WState1', edtWState1.Text);
+  cqrini.WriteString('Export', 'WLQSLS1', edtWLQSLS1.Text);
+  cqrini.WriteString('Export', 'WLQSLSDate1', edtWLQSLSDate1.Text);
+  cqrini.WriteString('Export', 'WLQSLR1', edtWLQSLR1.Text);
+  cqrini.WriteString('Export', 'WLQSLRDate1', edtWLQSLRDate1.Text);
+  cqrini.WriteString('Export', 'WQSLSDate1', edtWQSLSDate1.Text);
+  cqrini.WriteString('Export', 'WQSLRDate1', edtWQSLRDate1.Text);
+  cqrini.WriteString('Export', 'WeQSLS1', edtWeQSLS1.Text);
+  cqrini.WriteString('Export', 'WeQSLSDate1', edtWeQSLSDate1.Text);
+  cqrini.WriteString('Export', 'WeQSLR1', edtWeQSLR1.Text);
+  cqrini.WriteString('Export', 'WeQSLRDate1', edtWeQSLRDate1.Text);
+  cqrini.WriteString('Export', 'WProp1', edtWProp1.Text);
+  cqrini.WriteString('Export', 'WRxFreq1', edtWRxFreq1.Text);
+  cqrini.WriteString('Export', 'WSatName1', edtWSatName1.Text);
+  cqrini.WriteString('Export', 'WContinent1', edtWContinent1.Text);
+  cqrini.WriteString('Export', 'WProfile1', edtWProfile1.Text);
+  cqrini.WriteString('Export', 'WContestName1', edtWContestName1.Text);
+  cqrini.WriteString('Export', 'WContestNr1', edtWContestNr1.Text);
+  cqrini.WriteString('Export', 'WContestMsg1', edtWContestMsg1.Text);
 end;
 
 procedure TfraExportPref.LoadExportPref;
@@ -212,6 +378,7 @@ begin
   chkexQSLVIA.Checked := cqrini.ReadBool('Export', 'QSL_VIA', True);
   chkexLoc.Checked := cqrini.ReadBool('Export', 'Locator', False);
   chkexMyLoc.Checked := cqrini.ReadBool('Export', 'MyLoc', False);
+  chkexDistance.Checked := cqrini.ReadBool('Export', 'Distance', False);
   chkexIOTA.Checked := cqrini.ReadBool('Export', 'IOTA', False);
   chkexAward.Checked := cqrini.ReadBool('Export', 'Award', False);
   chkexCounty.Checked := cqrini.ReadBool('Export', 'County', False);
@@ -227,7 +394,7 @@ begin
   chkexLQSLSDate.Checked := cqrini.ReadBool('Export', 'LQSLSDate', False);
   chkexLQSLR.Checked := cqrini.ReadBool('Export', 'LQSLR', False);
   chkexLQSLRDate.Checked := cqrini.ReadBool('Export', 'LQSLRDate', False);
-  chkExCont.Checked := cqrini.ReadBool('Export', 'Cont', False);
+  chkExCont.Checked := cqrini.ReadBool('Export', 'Continent', False);
   chkexQSLSDate.Checked := cqrini.ReadBool('Export', 'QSLSDate', False);
   chkexQSLRDate.Checked := cqrini.ReadBool('Export', 'QSLRDate', False);
   chkexeQSLS.Checked := cqrini.ReadBool('Export', 'eQSLS', False);
@@ -238,47 +405,104 @@ begin
   chkExPropagation.Checked := cqrini.ReadBool('Export', 'Prop', False);
   chkExRXFreq.Checked := cqrini.ReadBool('Export', 'RxFreq', False);
   chkExSat.Checked := cqrini.ReadBool('Export', 'SatName', False);
-  chkexContest.Checked := cqrini.ReadBool('Export', 'Contest', False);
+  chkexContestName.Checked := cqrini.ReadBool('Export', 'Contestname', False);
+  chkexContestNr.Checked := cqrini.ReadBool('Export', 'ContestNr',False);
+  chkexContestMsg.Checked := cqrini.ReadBool('Export', 'ContestMsg', False);
+  chkAutoColumn.Checked := cqrini.ReadBool('Export', 'HTMLAutoColumn', False);
 
 
-  edtWDate.Text := cqrini.ReadString('Export', 'WDate', '50');
-  edtWTimeOn.Text := cqrini.ReadString('Export', 'Wtime_on', '50');
-  edtWTimeOff.Text := cqrini.ReadString('Export', 'Wtime_off', '50');
-  edtWCall.Text := cqrini.ReadString('Export', 'WCallSign', '50');
-  edtWMode.Text := cqrini.ReadString('Export', 'WMode', '50');
-  edtWFreq.Text := cqrini.ReadString('Export', 'WFreq', '50');
-  edtWRstS.Text := cqrini.ReadString('Export', 'WRST_S', '50');
-  edtWRstR.Text := cqrini.ReadString('Export', 'WRST_R', '30');
-  edtWName.Text := cqrini.ReadString('Export', 'WName', '50');
-  edtWQTH.Text := cqrini.ReadString('Export', 'WQTH', '80');
-  edtWQSLS.Text := cqrini.ReadString('Export', 'WQSL_S', '10');
-  edtWQSLR.Text := cqrini.ReadString('Export', 'WQSL_R', '10');
-  edtWQSLVIA.Text := cqrini.ReadString('Export', 'WQSL_VIA', '20');
-  edtWLoc.Text := cqrini.ReadString('Export', 'WLocator', '30');
-  edtWMyLoc.Text := cqrini.ReadString('Export', 'WMyLoc', '30');
-  edtWIOTA.Text := cqrini.ReadString('Export', 'WIOTA', '40');
-  edtWAward.Text := cqrini.ReadString('Export', 'WAward', '40');
-  edtWCounty.Text := cqrini.ReadString('Export', 'WCounty', '40');
-  edtWPower.Text := cqrini.ReadString('Export', 'WPower', '40');
-  edtWDXCC.Text := cqrini.ReadString('Export', 'WDXCC', '40');
+  //group "none"
+  edtWDate.Text := cqrini.ReadString('Export', 'WDate', '10');
+  edtWTimeOn.Text := cqrini.ReadString('Export', 'Wtime_on', '5');
+  edtWTimeOff.Text := cqrini.ReadString('Export', 'Wtime_off', '5');
+  edtWCall.Text := cqrini.ReadString('Export', 'WCallSign', '10');
+  edtWMode.Text := cqrini.ReadString('Export', 'WMode', '6');
+  edtWFreq.Text := cqrini.ReadString('Export', 'WFreq', '10');
+  edtWRstS.Text := cqrini.ReadString('Export', 'WRST_S', '4');
+  edtWRstR.Text := cqrini.ReadString('Export', 'WRST_R', '4');
+  edtWName.Text := cqrini.ReadString('Export', 'WName', '20');
+  edtWQTH.Text := cqrini.ReadString('Export', 'WQTH', '20');
+  edtWQSLS.Text := cqrini.ReadString('Export', 'WQSL_S', '2');
+  edtWQSLR.Text := cqrini.ReadString('Export', 'WQSL_R', '2');
+  edtWQSLVIA.Text := cqrini.ReadString('Export', 'WQSL_VIA', '10');
+  edtWLoc.Text := cqrini.ReadString('Export', 'WLocator', '6');
+  edtWMyLoc.Text := cqrini.ReadString('Export', 'WMyLoc', '6');
+  edtWDistance.Text := cqrini.ReadString('Export', 'WDistance', '5');
+  edtWIOTA.Text := cqrini.ReadString('Export', 'WIOTA', '7');
+  edtWAward.Text := cqrini.ReadString('Export', 'WAward', '10');
+  edtWCounty.Text := cqrini.ReadString('Export', 'WCounty', '10');
+  edtWPower.Text := cqrini.ReadString('Export', 'WPower', '4');
+  edtWDXCC.Text := cqrini.ReadString('Export', 'WDXCC', '4');
   edtWRemarks.Text := cqrini.ReadString('Export', 'WRemarks', '100');
-  edtWWAZ.Text := cqrini.ReadString('Export', 'WWAZ', '20');
-  edtWITU.Text := cqrini.ReadString('Export', 'WITU', '20');
-  edtWNote.Text := cqrini.ReadString('Export', 'WNote', '40');
-  edtWState.Text := cqrini.ReadString('Export', 'WState', '40');
-  edtWLQSLS.Text := cqrini.ReadString('Export', 'WLQSLS', '50');
-  edtWLQSLSDate.Text := cqrini.ReadString('Export', 'WLQSLSDate', '50');
-  edtWLQSLR.Text := cqrini.ReadString('Export', 'WLQSLR', '50');
-  edtWLQSLRDate.Text := cqrini.ReadString('Export', 'WLQSLRDate', '50');
-  edtWQSLSDate.Text := cqrini.ReadString('Export', 'WQSLSDate', '50');
-  edtWQSLRDate.Text := cqrini.ReadString('Export', 'WQSLRDate', '50');
-  edtWeQSLS.Text := cqrini.ReadString('Export', 'WeQSLS', '50');
-  edtWeQSLSDate.Text := cqrini.ReadString('Export', 'WeQSLSDate', '50');
-  edtWeQSLR.Text := cqrini.ReadString('Export', 'WeQSLR', '50');
-  edtWeQSLRDate.Text := cqrini.ReadString('Export', 'WeQSLRDate', '50');
-  edtWProp.Text := cqrini.ReadString('Export', 'WProp', '50');
-  edtWRxFreq.Text := cqrini.ReadString('Export', 'WRxFreq', '50');
-  edtWSatName.Text := cqrini.ReadString('Export', 'WSatName', '50')
+  edtWWAZ.Text := cqrini.ReadString('Export', 'WWAZ', '3');
+  edtWITU.Text := cqrini.ReadString('Export', 'WITU', '3');
+  edtWNote.Text := cqrini.ReadString('Export', 'WNote', '50');
+  edtWState.Text := cqrini.ReadString('Export', 'WState', '10');
+  edtWLQSLS.Text := cqrini.ReadString('Export', 'WLQSLS', '2');
+  edtWLQSLSDate.Text := cqrini.ReadString('Export', 'WLQSLSDate', '10');
+  edtWLQSLR.Text := cqrini.ReadString('Export', 'WLQSLR', '2');
+  edtWLQSLRDate.Text := cqrini.ReadString('Export', 'WLQSLRDate', '10');
+  edtWQSLSDate.Text := cqrini.ReadString('Export', 'WQSLSDate', '10');
+  edtWQSLRDate.Text := cqrini.ReadString('Export', 'WQSLRDate', '10');
+  edtWeQSLS.Text := cqrini.ReadString('Export', 'WeQSLS', '2');
+  edtWeQSLSDate.Text := cqrini.ReadString('Export', 'WeQSLSDate', '10');
+  edtWeQSLR.Text := cqrini.ReadString('Export', 'WeQSLR', '2');
+  edtWeQSLRDate.Text := cqrini.ReadString('Export', 'WeQSLRDate', '10');
+  edtWProp.Text := cqrini.ReadString('Export', 'WProp', '6');
+  edtWRxFreq.Text := cqrini.ReadString('Export', 'WRxFreq', '10');
+  edtWSatName.Text := cqrini.ReadString('Export', 'WSatName', '10');
+  edtWContinent.Text := cqrini.ReadString('Export', 'WContinent', '2');
+  edtWProfile.Text := cqrini.ReadString('Export', 'WProfile', '20');
+  edtWContestName.Text := cqrini.ReadString('Export', 'WContestName', '20');
+  edtWContestNr.Text := cqrini.ReadString('Export', 'WContestNr', '4');
+  edtWContestMsg.Text := cqrini.ReadString('Export', 'WContestMsg', '10');
+
+  //group "one"
+  edtWDate1.Text := cqrini.ReadString('Export', 'WDate1', 'Date');
+  edtWTimeOn1.Text := cqrini.ReadString('Export', 'Wtime_on1', 'Time on');
+  edtWTimeOff1.Text := cqrini.ReadString('Export', 'Wtime_off1', 'Time off');
+  edtWCall1.Text := cqrini.ReadString('Export', 'WCallSign1', 'Call');
+  edtWMode1.Text := cqrini.ReadString('Export', 'WMode1', 'Mode');
+  edtWFreq1.Text := cqrini.ReadString('Export', 'WFreq1', 'Freq');
+  edtWRstS1.Text := cqrini.ReadString('Export', 'WRST_S1', 'RSTs');
+  edtWRstR1.Text := cqrini.ReadString('Export', 'WRST_R1', 'RSTr');
+  edtWName1.Text := cqrini.ReadString('Export', 'WName1', 'Name');
+  edtWQTH1.Text := cqrini.ReadString('Export', 'WQTH1', 'QTH');
+  edtWQSLS1.Text := cqrini.ReadString('Export', 'WQSL_S1', 'QSLs');
+  edtWQSLR1.Text := cqrini.ReadString('Export', 'WQSL_R1', 'QSLr');
+  edtWQSLVIA1.Text := cqrini.ReadString('Export', 'WQSL_VIA1', 'QSL via');
+  edtWLoc1.Text := cqrini.ReadString('Export', 'WLocator1', 'Loc');
+  edtWMyLoc1.Text := cqrini.ReadString('Export', 'WMyLoc1', 'MyLoc');
+  edtWDistance1.Text := cqrini.ReadString('Export', 'WDistance1', 'QRB');
+  edtWIOTA1.Text := cqrini.ReadString('Export', 'WIOTA1', 'IOTA');
+  edtWAward1.Text := cqrini.ReadString('Export', 'WAward1', 'Award');
+  edtWCounty1.Text := cqrini.ReadString('Export', 'WCounty1', 'County');
+  edtWPower1.Text := cqrini.ReadString('Export', 'WPower1', 'Pwr');
+  edtWDXCC1.Text := cqrini.ReadString('Export', 'WDXCC1', 'DXCC');
+  edtWRemarks1.Text := cqrini.ReadString('Export', 'WRemarks1', 'Cmnt');
+  edtWWAZ1.Text := cqrini.ReadString('Export', 'WWAZ1', 'WAZ');
+  edtWITU1.Text := cqrini.ReadString('Export', 'WITU1', 'ITU');
+  edtWNote1.Text := cqrini.ReadString('Export', 'WNote1', 'Note');
+  edtWState1.Text := cqrini.ReadString('Export', 'WState1', 'State');
+  edtWLQSLS1.Text := cqrini.ReadString('Export', 'WLQSLS1', 'LQSLs');
+  edtWLQSLSDate1.Text := cqrini.ReadString('Export', 'WLQSLSDate1', 'LQSLSdat');
+  edtWLQSLR1.Text := cqrini.ReadString('Export', 'WLQSLR1', 'LQSLr');
+  edtWLQSLRDate1.Text := cqrini.ReadString('Export', 'WLQSLRDate1', 'LQSLRdat');
+  edtWQSLSDate1.Text := cqrini.ReadString('Export', 'WQSLSDate1', 'QSLSdat');
+  edtWQSLRDate1.Text := cqrini.ReadString('Export', 'WQSLRDate1', 'QSLRdat');
+  edtWeQSLS1.Text := cqrini.ReadString('Export', 'WeQSLS1', 'eQSLs');
+  edtWeQSLSDate1.Text := cqrini.ReadString('Export', 'WeQSLSDate1', 'eQSLSdat');
+  edtWeQSLR1.Text := cqrini.ReadString('Export', 'WeQSLR1', 'eQSLr');
+  edtWeQSLRDate1.Text := cqrini.ReadString('Export', 'WeQSLRDate1', 'eQSLRdat');
+  edtWProp1.Text := cqrini.ReadString('Export', 'WProp1', 'Propag');
+  edtWRxFreq1.Text := cqrini.ReadString('Export', 'WRxFreq1', 'RX Freq');
+  edtWSatName1.Text := cqrini.ReadString('Export', 'WSatName1', 'Satellite');
+  edtWContinent1.Text := cqrini.ReadString('Export', 'WContinent1', 'Contin');
+  edtWProfile1.Text := cqrini.ReadString('Export', 'WProfile1', 'Profile');
+  edtWContestName1.Text := cqrini.ReadString('Export', 'WContestName1', 'Contest');
+  edtWContestNr1.Text := cqrini.ReadString('Export', 'WContestNr1', 'Cont Nr');
+  edtWContestMsg1.Text := cqrini.ReadString('Export', 'WContestMsg1', 'Cont Msg');
+
 end;
 
 end.

@@ -100,14 +100,20 @@ begin
            cmbValue.Style:=csDropDown;
          end;
    end;
-  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
-  lblInfo.Repaint;
+   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+   lblInfo.Repaint;
 end;
 
 procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
 begin
   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
   lblInfo.Repaint;
+
+  if (cmbField.ItemIndex=23) or (cmbField.ItemIndex=24) then
+  begin
+    cmbValue.Text :=dmUtils.StdFormatLocator(cmbValue.Text);
+    cmbValue.SelStart := Length(cmbValue.Text);
+  end;
 end;
 
 {eQSL sent        28
@@ -383,7 +389,7 @@ begin
               exit
             end
           end;
-          sql := 'my_loc='+QuotedStr(UpperCase(cmbValue.Text))
+          sql := 'my_loc='+QuotedStr(cmbValue.Text)
         end;
    24 : begin
           if (cmbValue.Text <> '') then
@@ -403,7 +409,7 @@ begin
               exit
             end
           end;
-          sql := 'loc='+QuotedStr(UpperCase(cmbValue.Text))
+          sql := 'loc='+QuotedStr(cmbValue.Text)
         end;
    25 : begin
           sql := 'profile=' + IntToStr(dmData.GetNRFromProfile(cmbValue.Text))

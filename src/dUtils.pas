@@ -264,7 +264,7 @@ type
     function  MyStrToDateTime(DateTime : String) : TDateTime;
     function  MyDateTimeToStr(DateTime : TDateTime) : String;
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
-
+    function  StdFormatLocator(loc:string):String;
 end;
 
 var
@@ -1045,6 +1045,18 @@ begin
   end
   else
     Result := False;
+end;
+function TdmUtils.StdFormatLocator(loc:string):String;
+// Format locator to standard form BL11bh16 See:
+// https://en.wikipedia.org/wiki/Maidenhead_Locator_System#Description_of_the_system
+// Check TEdit CharCase to be ecNormal, othewise you get runtime error!
+var
+  s :String;
+begin
+  if loc = '' then exit;
+  s :=  Upcase(copy(loc,1,4));
+  s:= s + lowercase(copy(loc,5,6));   //max loc length 10 in database
+  Result := trim(s);
 end;
 
 procedure TdmUtils.GetCoordinate(pfx: string; var latitude, longitude: currency);

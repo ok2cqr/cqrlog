@@ -26,6 +26,7 @@ type
     mRemarks: TMemo;
     mEquipment: TMemo;
     mQTH: TMemo;
+    procedure edtLocatorChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
@@ -97,6 +98,12 @@ end;
 procedure TfrmNewQTHProfile.FormCreate(Sender: TObject);
 begin
   Editing := False
+end;
+
+procedure TfrmNewQTHProfile.edtLocatorChange(Sender: TObject);
+begin
+  edtLocator.Text := dmUtils.StdFormatLocator(edtLocator.Text);
+  edtLocator.SelStart := Length(edtLocator.Text);
 end;
 
 end.

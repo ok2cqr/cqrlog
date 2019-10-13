@@ -62,7 +62,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC;
+uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC,fMain;
 { TfrmExLabelPrint }
 
 procedure TfrmExLabelPrint.edtQSOsToLabelExit(Sender: TObject);
@@ -117,6 +117,12 @@ begin
     inc(Result);
   if cqrini.ReadBool('QSLExport', 'band', True) then
     inc(Result);
+  if cqrini.ReadBool('QSLExport', 'Propagation', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'Satellite',  True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'ContestName',  True) then
+    inc(Result);
   if cqrini.ReadBool('QSLExport', 'QSL_S', True) then
     inc(Result);
   if cqrini.ReadBool('QSLExport', 'QSL_R', True) then
@@ -136,7 +142,15 @@ begin
   if cqrini.ReadBool('QSLExport', 'Remarks', True) then
     inc(Result);
   if cqrini.ReadBool('QSLExport', 'QSLMsg', True) then
-    inc(Result)
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'ContestNrS', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'ContestMsgS', True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'ContestNrR',  True) then
+    inc(Result);
+  if cqrini.ReadBool('QSLExport', 'ContestMsgR',  True) then
+    inc(Result);
 end;
 
 function TfrmExLabelPrint.Rep(what : String) : String;
@@ -156,13 +170,16 @@ begin
     dmData.trQ.StartTransaction;
     dmData.Q.Close;
     dmData.Q.SQL.Text := 'insert into qslexport (idcall,id_cqrlog_main,dxcc,qsodate,time_on,time_off,callsign,freq,mode,rst_s,rst_r, '+
-                         'name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,loc,my_loc,award,remarks,band,qslmsg) values('+
+                         'name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,loc,my_loc,award,remarks,band,qslmsg,prop_mode,satellite,'+
+                         'contestname,stx,stx_string,srx,srx_string) values('+
                          ':idcall,:id_cqrlog_main,:dxcc,:qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,'+
-                         ':qth,:qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:loc,:my_loc,:award,:remarks,:band,:qslmsg)';
+                         ':qth,:qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:loc,:my_loc,:award,:remarks,:band,:qslmsg,:prop_mode,:satellite,'+
+                         ':contestname,:stx,:stx_string,:srx,:srx_string)';
     if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
     dmData.qCQRLOG.First;
     while not dmData.qCQRLOG.Eof do
     begin
+
       DoExp := False;
       if chkAllQSOs.Checked then
         DoExp := True
@@ -178,11 +195,13 @@ begin
         if (dmData.qCQRLOG.Fields[11].AsString = 'SMB') and (gchkExport.Checked[4]) then
           DoExp := True
       end;
+
       if (not DoExp) or (dmData.qCQRLOG.FieldByName('band').AsString='') then
       begin
         dmData.qCQRLOG.Next;
         Continue
       end;
+
       dmData.Q.Prepare;
 
       dmData.Q.ParamByName('id_cqrlog_main').AsInteger := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
@@ -239,14 +258,21 @@ begin
       dmData.Q.ParamByName('award').AsString      := Rep(dmData.qCQRLOG.FieldByName('award').AsString);
       dmData.Q.ParamByName('band').AsString       := dmData.qCQRLOG.FieldByName('band').AsString;
       dmData.Q.ParamByName('qslmsg').AsString     := Rep(qsl_msg);
-
+      dmData.Q.ParamByName('prop_mode').AsString  := dmData.qCQRLOG.FieldByName('prop_mode').AsString;
+      dmData.Q.ParamByName('satellite').AsString  := dmData.qCQRLOG.FieldByName('satellite').AsString;
+      dmData.Q.ParamByName('contestname').AsString := dmData.qCQRLOG.FieldByName('contestname').AsString;
+      dmData.Q.ParamByName('stx').AsString        := dmData.qCQRLOG.FieldByName('stx').AsString;
+      dmData.Q.ParamByName('stx_string').AsString := dmData.qCQRLOG.FieldByName('stx_string').AsString;
+      dmData.Q.ParamByName('srx').AsString        := dmData.qCQRLOG.FieldByName('srx').AsString;
+      dmData.Q.ParamByName('srx_string').AsString := dmData.qCQRLOG.FieldByName('srx_string').AsString;
       dmData.Q.ExecSQL;
       dmData.qCQRLOG.Next
     end
   finally
     dmData.trQ.Commit;
     dmData.qCQRLOG.EnableControls
-  end
+  end;
+
 end;
 
 procedure TfrmExLabelPrint.btnExportClick(Sender: TObject);
@@ -312,6 +338,7 @@ var
       Write(f,dmData.Q.FieldByName('mode').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'Freq', True) then
       Write(f,FloatToStr(dmData.Q.FieldByName('freq').AsFloat),C_SEP);
+
     if cqrini.ReadBool('QSLExport', 'RST_S', True) then
     begin
       if not cqrini.ReadBool('QSLExport','SplitRST_S',False) then
@@ -344,6 +371,12 @@ var
       Write(f,dmData.Q.FieldByName('qth').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'band', True) then
       Write(f,dmData.Q.FieldByName('band').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Propagation', True) then
+      Write(f,dmData.Q.FieldByName('prop_mode').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Satellite',  True) then
+      Write(f,dmData.Q.FieldByName('satellite').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'ContestName',  True) then
+      Write(f, dmData.Q.FieldByName('contestname').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'QSL_S', True) then
       Write(f,dmData.Q.FieldByName('qsl_s').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'QSL_R', True) then
@@ -354,6 +387,8 @@ var
       Write(f,dmData.Q.FieldByName('loc').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'MyLoc', True) then
       Write(f,dmData.Q.FieldByName('my_loc').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'Distance', True) then
+      Write(f,frmMain.CalcQrb(dmData.Q.FieldByName('my_loc').AsString,dmData.Q.FieldByName('loc').AsString,False),C_SEP);
     if cqrini.ReadBool('QSLExport', 'IOTA', True) then
       Write(f,dmData.Q.FieldByName('iota').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'award', True) then
@@ -363,7 +398,16 @@ var
     if cqrini.ReadBool('QSLExport', 'Remarks', True) then
       Write(f,dmData.Q.FieldByName('remarks').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'QSLMsg', True) then
-      Write(f,dmData.Q.FieldByName('qslmsg').AsString,C_SEP)
+      Write(f,dmData.Q.FieldByName('qslmsg').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'ContestNrS', True) then
+      Write(f,dmData.Q.FieldByName('stx').AsString ,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'ContestMsgS', True) then
+      Write(f,dmData.Q.FieldByName('stx_string').AsString,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'ContestNrR',  True) then
+      Write(f,dmData.Q.FieldByName('srx').AsString ,C_SEP);
+    if cqrini.ReadBool('QSLExport', 'ContestMsgR',  True) then
+      Write(f,dmData.Q.FieldByName('srx_string').AsString ,C_SEP);
+
   end;
 
 begin
@@ -384,6 +428,7 @@ begin
   end;
 
   FieldCount := GetExpFieldCount;
+  if dmData.DebugLevel >= 1 then Writeln('Field count: ', FieldCount);
   dmData.CreateQSLTmpTable;
   LoadDataToTempDB;
 //  FieldCount := GetExpFieldCount;
@@ -396,6 +441,7 @@ begin
     dmData.trQ1.StartTransaction;
     dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,idcall';
     dmData.Q.Open;
+
     while not dmData.Q.Eof do
     begin
       if chkMarkSent.Checked then

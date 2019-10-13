@@ -120,6 +120,7 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    chkDistance: TCheckBox;
     chkSTX: TCheckBox;
     chkSRX: TCheckBox;
     chkSTX_str: TCheckBox;
@@ -616,7 +617,7 @@ type
     edtName: TEdit;
     edtRST_R: TEdit;
     dlgFont: TFontDialog;
-    fraExportSettings : TfraExportPref;
+    fraExportPref1: TfraExportPref;
     gbProfiles1: TGroupBox;
     grbSerialR2: TGroupBox;
     grbSerialR3: TGroupBox;
@@ -673,6 +674,7 @@ type
     GroupBox52: TGroupBox;
     gbDXCConnect: TGroupBox;
     gbDXCSpots: TGroupBox;
+    GroupBox53: TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
@@ -1019,6 +1021,7 @@ type
     procedure DateEditCallEditingDone(Sender: TObject);
     procedure DateEditLocEditingDone(Sender: TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
+    procedure edtLocChange(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
     procedure edtR1RigCtldPortChange(Sender : TObject);
     procedure edtR2RigCtldArgsChange(Sender : TObject);
@@ -1030,6 +1033,7 @@ type
     procedure edtWinMinSpeedChange(Sender: TObject);
     procedure edtWinPortChange(Sender: TObject);
     procedure edtWinSpeedChange(Sender: TObject);
+    procedure edtXplanetLocChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
     procedure btnDefineProfileClick(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
@@ -1057,6 +1061,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtPoll2Exit(Sender: TObject);
     procedure edtPoll1Exit(Sender: TObject);
+    procedure Panel1Click(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
     procedure pnlQSOColorClick(Sender : TObject);
   private
@@ -1164,6 +1169,7 @@ begin
   cqrini.WriteBool('Columns', 'QSL_VIA', chkQSL_VIA.Checked);
   cqrini.WriteBool('Columns', 'Locator', chkLoc.Checked);
   cqrini.WriteBool('Columns', 'MyLoc', chkMyLoc.Checked);
+  cqrini.WriteBool('Columns', 'Distance', chkDistance.Checked);
   cqrini.WriteBool('Columns', 'IOTA', chkIOTA.Checked);
   cqrini.WriteBool('Columns', 'Award', chkAward.Checked);
   cqrini.WriteBool('Columns', 'Power', chkPower.Checked);
@@ -1579,7 +1585,7 @@ begin
     frmNewQSO.InitializeCW
   end;
 
-  fraExportSettings.SaveExportPref;
+  fraExportPref1.SaveExportPref;
 
   dmUtils.TimeOffset := StrToCurr(edtOffset.Text);
   dmUtils.GrayLineOffset := StrToCurr(edtGrayLineOffset.Text);
@@ -2368,6 +2374,12 @@ begin
   WinKeyerChanged := True
 end;
 
+procedure TfrmPreferences.edtLocChange(Sender: TObject);
+begin
+  edtLoc.Text := dmUtils.StdFormatLocator(edtLoc.Text);
+  edtLoc.SelStart := Length(edtLoc.Text);
+end;
+
 procedure TfrmPreferences.edtR1RigCtldArgsChange(Sender: TObject);
 begin
   TRXChanged := True
@@ -2422,6 +2434,12 @@ end;
 procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
 begin
   WinKeyerChanged := True
+end;
+
+procedure TfrmPreferences.edtXplanetLocChange(Sender: TObject);
+begin
+  edtXplanetLoc.Text := dmUtils.StdFormatLocator(edtXplanetLoc.Text);
+  edtXplanetLoc.SelStart := Length(edtXplanetLoc.Text);
 end;
 
 procedure TfrmPreferences.lbPreferencesClick(Sender: TObject);
@@ -2525,6 +2543,7 @@ begin
   chkQSL_VIA.Checked := cqrini.ReadBool('Columns', 'QSL_VIA', False);
   chkLoc.Checked := cqrini.ReadBool('Columns', 'Locator', False);
   chkMyLoc.Checked := cqrini.ReadBool('Columns', 'MyLoc', False);
+  chkDistance.Checked := cqrini.ReadBool('Columns', 'Distance', False);
   chkIOTA.Checked := cqrini.ReadBool('Columns', 'IOTA', False);
   chkAward.Checked := cqrini.ReadBool('Columns', 'Award', False);
   chkCounty.Checked := cqrini.ReadBool('Columns', 'County', False);
@@ -2933,7 +2952,7 @@ begin
 
   wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked;
 
-  fraExportSettings.LoadExportPref;
+  fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
   edtCW1.Width := 60;
@@ -2963,6 +2982,11 @@ var
 begin
   if not TryStrToInt(edtPoll1.Text, tmp) then
     edtPoll1.Text := '500';
+end;
+
+procedure TfrmPreferences.Panel1Click(Sender: TObject);
+begin
+
 end;
 
 procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
