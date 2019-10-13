@@ -99,16 +99,21 @@ begin
            dmUtils.InsertContests(cmbValue);
            cmbValue.Style:=csDropDown;
          end;
-   end
+   end;
+   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+   lblInfo.Repaint;
 end;
 
 procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
 begin
+  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  lblInfo.Repaint;
+
   if (cmbField.ItemIndex=23) or (cmbField.ItemIndex=24) then
-   begin
-     cmbValue.Text :=dmUtils.StdFormatLocator(cmbValue.Text);
-     cmbValue.SelStart := Length(cmbValue.Text);
-   end;
+  begin
+    cmbValue.Text :=dmUtils.StdFormatLocator(cmbValue.Text);
+    cmbValue.SelStart := Length(cmbValue.Text);
+  end;
 end;
 
 {eQSL sent        28
@@ -118,7 +123,9 @@ end;
  }
 procedure TfrmGroupEdit.FormShow(Sender: TObject);
 begin
-  dmUtils.LoadFontSettings(self)
+  dmUtils.LoadFontSettings(self);
+  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  lblInfo.Repaint;
 end;
 
 procedure TfrmGroupEdit.btnApplyClick(Sender: TObject);
@@ -511,6 +518,8 @@ begin
     dmData.qCQRLOG.EnableControls;
     frmMain.acRefresh.Execute
   end;
+  lblInfo.Caption := 'Edit done! (Press Cancel to exit)';
+  lblInfo.Repaint;
 end;
 
 end.
