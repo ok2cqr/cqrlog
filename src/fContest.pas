@@ -157,6 +157,11 @@ begin
     key := 0;
   end;
 
+  if ((Shift = [ssCtrl]) and (key = VK_A)) then
+  begin
+    frmNewQSO.acAddToBandMap.Execute;
+    key := 0
+  end;
 end;
 
 
