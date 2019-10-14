@@ -1,7 +1,7 @@
 object frmTRXControl: TfrmTRXControl
-  Left = 877
+  Left = 0
   Height = 321
-  Top = 3
+  Top = 0
   Width = 284
   Anchors = []
   Caption = 'TRX control'
@@ -203,7 +203,7 @@ object frmTRXControl: TfrmTRXControl
       Height = 25
       Top = 50
       Width = 51
-      Caption = 'RTTY'
+      Caption = 'DATA'
       OnClick = btnRTTYClick
       TabOrder = 2
     end
