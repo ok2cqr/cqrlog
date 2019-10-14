@@ -1,17 +1,17 @@
 object frmMain: TfrmMain
-  Left = 266
-  Height = 626
-  Top = 52
-  Width = 874
+  Left = -14
+  Height = 669
+  Top = 498
+  Width = 986
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   HorzScrollBar.Page = 672
-  VertScrollBar.Page = 248
+  VertScrollBar.Page = 272
   ActiveControl = Panel2
   AutoScroll = True
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 601
-  ClientWidth = 874
+  ClientHeight = 644
+  ClientWidth = 986
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
   Icon.Data = {
@@ -159,14 +159,14 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.4.0'
   object sbMain: TStatusBar
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 19
-    Top = 582
-    Width = 874
+    Top = 625
+    Width = 986
     Panels = <    
       item
         Text = 'QSO:'
@@ -192,12 +192,12 @@ object frmMain: TfrmMain
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 40
-    Top = 536
-    Width = 874
+    Top = 579
+    Width = 986
     Align = alBottom
     BorderSpacing.Bottom = 6
     ClientHeight = 40
-    ClientWidth = 874
+    ClientWidth = 986
     ParentColor = False
     TabOrder = 0
     OnClick = pnlButtonsClick
@@ -234,7 +234,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideRight.Control = pnlButtons
       AnchorSideRight.Side = asrBottom
-      Left = 734
+      Left = 846
       Height = 33
       Top = 5
       Width = 130
@@ -249,7 +249,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnClose
-      Left = 594
+      Left = 706
       Height = 33
       Top = 5
       Width = 130
@@ -264,7 +264,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnDeleteQSO
-      Left = 454
+      Left = 566
       Height = 33
       Top = 5
       Width = 130
@@ -295,14 +295,14 @@ object frmMain: TfrmMain
     Left = 0
     Height = 38
     Top = 31
-    Width = 874
+    Width = 986
     Align = alTop
     AutoSize = True
     BorderSpacing.Top = 5
     BorderSpacing.InnerBorder = 5
     BevelOuter = bvNone
     ClientHeight = 38
-    ClientWidth = 874
+    ClientWidth = 986
     TabOrder = 1
     object lblQSOInLog: TLabel
       AnchorSideLeft.Control = Panel2
@@ -342,7 +342,7 @@ object frmMain: TfrmMain
       AnchorSideLeft.Control = Panel2
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = lblQSOInLog
-      Left = 417
+      Left = 473
       Height = 17
       Top = 11
       Width = 40
@@ -356,7 +356,7 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblDXCCWorked
       AnchorSideBottom.Side = asrBottom
-      Left = 467
+      Left = 523
       Height = 17
       Top = 11
       Width = 27
@@ -371,7 +371,7 @@ object frmMain: TfrmMain
     object lblDXCCConfirmed: TLabel
       AnchorSideTop.Control = lblQSOInLog
       AnchorSideRight.Control = lblDXCCCmf
-      Left = 728
+      Left = 840
       Height = 17
       Top = 11
       Width = 73
@@ -389,7 +389,7 @@ object frmMain: TfrmMain
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = lblDXCCConfirmed
       AnchorSideBottom.Side = asrBottom
-      Left = 811
+      Left = 923
       Height = 17
       Top = 11
       Width = 53
@@ -408,9 +408,9 @@ object frmMain: TfrmMain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 403
+    Height = 422
     Top = 69
-    Width = 874
+    Width = 986
     Align = alClient
     Color = clWindow
     Columns = <>
@@ -430,7 +430,7 @@ object frmMain: TfrmMain
     Left = 0
     Height = 26
     Top = 0
-    Width = 874
+    Width = 986
     BorderWidth = 4
     EdgeOuter = esRaised
     Flat = False
@@ -712,13 +712,13 @@ object frmMain: TfrmMain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 64
-    Top = 472
-    Width = 874
+    Height = 88
+    Top = 491
+    Width = 986
     Align = alBottom
     BevelOuter = bvNone
-    ClientHeight = 64
-    ClientWidth = 874
+    ClientHeight = 88
+    ClientWidth = 986
     TabOrder = 5
     object lblCommentForQSO: TLabel
       AnchorSideLeft.Control = pnlDetails
@@ -753,12 +753,12 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblCommentForQSO
       AnchorSideBottom.Side = asrBottom
-      Left = 142
+      Left = 138
       Height = 17
       Top = 10
       Width = 85
       Anchors = [akLeft, akBottom]
-      BorderSpacing.Left = 10
+      BorderSpacing.Left = 6
       Layout = tlBottom
       ParentColor = False
     end
@@ -777,23 +777,22 @@ object frmMain: TfrmMain
       ParentColor = False
     end
     object Panel1: TPanel
-      Left = 444
-      Height = 64
+      Left = 566
+      Height = 62
       Top = 0
-      Width = 186
+      Width = 210
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 64
-      ClientWidth = 186
+      ClientHeight = 62
+      ClientWidth = 210
       TabOrder = 0
       object lblQSLSDate: TLabel
         AnchorSideLeft.Control = Panel1
         AnchorSideTop.Control = Panel1
-        Left = 7
+        Left = 0
         Height = 17
         Top = 10
         Width = 70
-        BorderSpacing.Left = 7
         BorderSpacing.Top = 10
         Caption = 'QS_S date:'
         Layout = tlBottom
@@ -805,12 +804,12 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblQSLSDate
         AnchorSideBottom.Side = asrBottom
-        Left = 89
+        Left = 76
         Height = 17
         Top = 10
         Width = 85
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 12
+        BorderSpacing.Left = 6
         Layout = tlBottom
         ParentColor = False
       end
@@ -819,12 +818,12 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblQSLRDate
         AnchorSideBottom.Side = asrBottom
-        Left = 90
+        Left = 77
         Height = 17
         Top = 37
         Width = 86
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 12
+        BorderSpacing.Left = 6
         Layout = tlBottom
         ParentColor = False
       end
@@ -832,7 +831,7 @@ object frmMain: TfrmMain
         AnchorSideLeft.Control = lblQSLSDate
         AnchorSideTop.Control = lblQSLSDate
         AnchorSideTop.Side = asrBottom
-        Left = 7
+        Left = 0
         Height = 17
         Top = 37
         Width = 71
@@ -844,23 +843,22 @@ object frmMain: TfrmMain
       end
     end
     object Panel3: TPanel
-      Left = 630
-      Height = 64
+      Left = 776
+      Height = 62
       Top = 0
-      Width = 244
+      Width = 210
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 64
-      ClientWidth = 244
+      ClientHeight = 62
+      ClientWidth = 210
       TabOrder = 1
       object lblLoTWQSLSDate: TLabel
         AnchorSideLeft.Control = Panel3
         AnchorSideTop.Control = Panel3
-        Left = 7
+        Left = 0
         Height = 17
         Top = 10
         Width = 110
-        BorderSpacing.Left = 7
         BorderSpacing.Top = 10
         Caption = 'LoTW QS_S date:'
         Layout = tlBottom
@@ -872,12 +870,12 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblLoTWQSLSDate
         AnchorSideBottom.Side = asrBottom
-        Left = 134
+        Left = 116
         Height = 17
         Top = 10
         Width = 90
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 17
+        BorderSpacing.Left = 6
         Layout = tlBottom
         ParentColor = False
       end
@@ -887,20 +885,21 @@ object frmMain: TfrmMain
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblLoTWQSLRDate
         AnchorSideBottom.Side = asrBottom
-        Left = 135
+        Left = 117
         Height = 17
         Top = 37
         Width = 91
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 17
+        BorderSpacing.Left = 6
         BorderSpacing.Top = 10
         Layout = tlBottom
         ParentColor = False
       end
       object lblLoTWQSLRDate: TLabel
+        AnchorSideLeft.Control = lblLoTWQSLSDate
         AnchorSideTop.Control = lblLoTWQSLSDate
         AnchorSideTop.Side = asrBottom
-        Left = 7
+        Left = 0
         Height = 17
         Top = 37
         Width = 111
@@ -909,6 +908,100 @@ object frmMain: TfrmMain
         Layout = tlBottom
         ParentColor = False
         ParentFont = False
+      end
+    end
+    object pnlDistance: TPanel
+      Left = 0
+      Height = 26
+      Top = 62
+      Width = 986
+      Align = alBottom
+      ClientHeight = 26
+      ClientWidth = 986
+      TabOrder = 2
+      Visible = False
+      object lblDistance: TLabel
+        AnchorSideLeft.Control = pnlDistance
+        AnchorSideTop.Control = pnlDistance
+        AnchorSideTop.Side = asrCenter
+        Left = 11
+        Height = 17
+        Top = 5
+        Width = 61
+        BorderSpacing.Left = 10
+        Caption = 'Distance:'
+        ParentColor = False
+        Visible = False
+      end
+      object lblDist: TLabel
+        AnchorSideLeft.Control = lblDistance
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = lblDistance
+        AnchorSideTop.Side = asrCenter
+        AnchorSideBottom.Side = asrBottom
+        Left = 78
+        Height = 17
+        Top = 5
+        Width = 42
+        BorderSpacing.Left = 6
+        Caption = 'lblDist'
+        ParentColor = False
+      end
+      object lblLongest: TLabel
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = lblDistance
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = pnlDistance
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Side = asrBottom
+        Left = 908
+        Height = 17
+        Top = 5
+        Width = 67
+        Anchors = [akTop, akRight]
+        BorderSpacing.Right = 10
+        Caption = 'lblLongest'
+        ParentColor = False
+      end
+      object lblLongestDist: TLabel
+        AnchorSideTop.Control = lblDistance
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = lblLongest
+        Left = 815
+        Height = 17
+        Top = 5
+        Width = 87
+        Anchors = [akTop, akRight]
+        BorderSpacing.Right = 6
+        Caption = 'Longest QSO:'
+        ParentColor = False
+      end
+      object lblSumDistances: TLabel
+        AnchorSideLeft.Side = asrCenter
+        AnchorSideTop.Control = lblDistance
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = lblSumDist
+        Left = 354
+        Height = 17
+        Top = 5
+        Width = 94
+        Anchors = [akTop, akRight]
+        BorderSpacing.Right = 6
+        Caption = 'Total distance:'
+        ParentColor = False
+      end
+      object lblSumDist: TLabel
+        AnchorSideLeft.Control = pnlDistance
+        AnchorSideLeft.Side = asrCenter
+        AnchorSideTop.Control = lblDistance
+        AnchorSideTop.Side = asrCenter
+        AnchorSideBottom.Side = asrBottom
+        Left = 454
+        Height = 17
+        Top = 5
+        Width = 79
+        Caption = 'lblSumDist  '
+        ParentColor = False
       end
     end
   end

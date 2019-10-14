@@ -1,209 +1,303 @@
 object frmQSLExpPref: TfrmQSLExpPref
-  Left = 489
-  Height = 383
-  Top = 323
-  Width = 517
+  Left = 519
+  Height = 450
+  Top = 42
+  Width = 530
   Caption = 'Choose fields for export'
-  ClientHeight = 383
-  ClientWidth = 517
+  ClientHeight = 450
+  ClientWidth = 530
   OnShow = FormShow
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '2.0.4.0'
   object GroupBox1: TGroupBox
-    Left = 8
-    Height = 368
-    Top = 8
-    Width = 416
-    ClientHeight = 364
-    ClientWidth = 412
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 6
+    Height = 434
+    Top = 12
+    Width = 418
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 12
+    ClientHeight = 432
+    ClientWidth = 416
     TabOrder = 0
     object chkTimeOn: TCheckBox
+      AnchorSideLeft.Control = chkDate
+      AnchorSideTop.Control = chkDate
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 43
+      Height = 23
+      Top = 68
       Width = 79
+      BorderSpacing.Top = 3
       Caption = 'Time on'
       Checked = True
       State = cbChecked
       TabOrder = 0
     end
     object chkDate: TCheckBox
+      AnchorSideLeft.Control = lblDateFormat
+      AnchorSideTop.Control = lblDateFormat
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 12
-      Width = 58
+      Height = 23
+      Top = 42
+      Width = 57
+      BorderSpacing.Top = 11
       Caption = 'Date'
       Checked = True
       State = cbChecked
       TabOrder = 1
     end
     object chkTimeOff: TCheckBox
+      AnchorSideLeft.Control = chkTimeOn
+      AnchorSideTop.Control = chkTimeOn
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 75
-      Width = 82
+      Height = 23
+      Top = 94
+      Width = 80
+      BorderSpacing.Top = 3
       Caption = 'Time off'
       TabOrder = 2
     end
     object chkCallSign: TCheckBox
+      AnchorSideLeft.Control = chkTimeOff
+      AnchorSideTop.Control = chkTimeOff
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 107
+      Height = 23
+      Top = 120
       Width = 79
+      BorderSpacing.Top = 3
       Caption = 'CallSign'
       Checked = True
       State = cbChecked
       TabOrder = 3
     end
     object chkMode: TCheckBox
+      AnchorSideLeft.Control = chkCallSign
+      AnchorSideTop.Control = chkCallSign
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 139
-      Width = 65
+      Height = 23
+      Top = 146
+      Width = 62
+      BorderSpacing.Top = 3
       Caption = 'Mode'
       Checked = True
       State = cbChecked
       TabOrder = 4
     end
     object chkFreq: TCheckBox
+      AnchorSideLeft.Control = chkCallSign
+      AnchorSideTop.Control = chkMode
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 171
-      Width = 57
+      Height = 23
+      Top = 172
+      Width = 54
+      BorderSpacing.Top = 3
       Caption = 'Freq'
       TabOrder = 5
     end
     object chkRST_S: TCheckBox
+      AnchorSideLeft.Control = chkFreq
+      AnchorSideTop.Control = chkFreq
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 203
+      Height = 23
+      Top = 206
       Width = 83
+      BorderSpacing.Top = 11
       Caption = 'RST sent'
       Checked = True
       State = cbChecked
       TabOrder = 6
     end
     object chkRST_R: TCheckBox
+      AnchorSideLeft.Control = chkRST_S
+      AnchorSideTop.Control = chkRST_S
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 235
+      Height = 23
+      Top = 241
       Width = 82
+      BorderSpacing.Top = 12
       Caption = 'RST Rec.'
       TabOrder = 7
     end
     object chkName: TCheckBox
+      AnchorSideLeft.Control = chkRST_R
+      AnchorSideTop.Control = chkRST_R
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 267
-      Width = 66
+      Height = 23
+      Top = 276
+      Width = 65
+      BorderSpacing.Top = 12
       Caption = 'Name'
       TabOrder = 8
     end
     object chkQTH: TCheckBox
+      AnchorSideLeft.Control = chkName
+      AnchorSideTop.Control = chkName
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 299
-      Width = 55
+      Height = 23
+      Top = 302
+      Width = 54
+      BorderSpacing.Top = 3
       Caption = 'QTH'
       TabOrder = 9
     end
     object chkQSL_S: TCheckBox
+      AnchorSideLeft.Control = cbxDateFormat
+      AnchorSideTop.Control = cbxDateFormat
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 43
-      Width = 85
+      Height = 23
+      Top = 42
+      Width = 83
+      BorderSpacing.Top = 3
       Caption = 'QSL sent'
       TabOrder = 10
     end
     object chkQSL_VIA: TCheckBox
+      AnchorSideLeft.Control = chkQSL_R
+      AnchorSideTop.Control = chkQSL_R
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 107
-      Width = 115
+      Height = 23
+      Top = 94
+      Width = 113
+      BorderSpacing.Top = 3
       Caption = 'QSL manager'
       Checked = True
       State = cbChecked
       TabOrder = 11
     end
     object chkLoc: TCheckBox
+      AnchorSideLeft.Control = chkQSL_VIA
+      AnchorSideTop.Control = chkQSL_VIA
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 139
-      Width = 79
+      Height = 23
+      Top = 120
+      Width = 74
+      BorderSpacing.Top = 3
       Caption = 'Locator'
       TabOrder = 12
     end
     object chkMyLoc: TCheckBox
+      AnchorSideLeft.Control = chkLoc
+      AnchorSideTop.Control = chkLoc
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 171
-      Width = 98
+      Height = 23
+      Top = 146
+      Width = 95
+      BorderSpacing.Top = 3
       Caption = 'My locator'
       TabOrder = 13
     end
     object chkIOTA: TCheckBox
+      AnchorSideLeft.Control = chkDistance
+      AnchorSideTop.Control = chkDistance
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 203
-      Width = 58
+      Height = 23
+      Top = 198
+      Width = 56
+      BorderSpacing.Top = 3
       Caption = 'IOTA'
       TabOrder = 14
     end
     object chkAward: TCheckBox
+      AnchorSideLeft.Control = chkIOTA
+      AnchorSideTop.Control = chkIOTA
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 235
-      Width = 70
+      Height = 23
+      Top = 224
+      Width = 66
+      BorderSpacing.Top = 3
       Caption = 'Award'
       TabOrder = 15
     end
     object chkPower: TCheckBox
+      AnchorSideLeft.Control = chkAward
+      AnchorSideTop.Control = chkAward
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 267
-      Width = 69
+      Height = 23
+      Top = 250
+      Width = 66
+      BorderSpacing.Top = 3
       Caption = 'Power'
       TabOrder = 16
     end
     object chkRemarks: TCheckBox
+      AnchorSideLeft.Control = chkPower
+      AnchorSideTop.Control = chkPower
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 299
-      Width = 243
+      Height = 23
+      Top = 276
+      Width = 236
+      BorderSpacing.Top = 3
       Caption = 'Comment to QSO/own comment'
       TabOrder = 17
     end
     object chkQSL_R: TCheckBox
+      AnchorSideLeft.Control = chkQSL_S
+      AnchorSideTop.Control = chkQSL_S
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 75
-      Width = 113
+      Height = 23
+      Top = 68
+      Width = 111
+      BorderSpacing.Top = 3
       Caption = 'QSL received'
       TabOrder = 18
     end
     object chkQSLMsg: TCheckBox
+      AnchorSideLeft.Control = chkRemarks
+      AnchorSideTop.Control = chkRemarks
+      AnchorSideTop.Side = asrBottom
       Left = 166
-      Height = 24
-      Top = 333
-      Width = 187
+      Height = 23
+      Top = 302
+      Width = 183
+      BorderSpacing.Top = 3
       Caption = 'QSL message (PSE/TNX)'
       TabOrder = 19
     end
     object chkBand: TCheckBox
+      AnchorSideLeft.Control = chkQTH
+      AnchorSideTop.Control = chkQTH
+      AnchorSideTop.Side = asrBottom
       Left = 14
-      Height = 24
-      Top = 333
-      Width = 60
+      Height = 23
+      Top = 328
+      Width = 59
+      BorderSpacing.Top = 3
       Caption = 'Band'
       Checked = True
       State = cbChecked
       TabOrder = 20
     end
     object cbxDateFormat: TComboBox
+      AnchorSideLeft.Control = lblDateFormat
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lblDateFormat
+      AnchorSideTop.Side = asrCenter
       Left = 166
-      Height = 29
+      Height = 34
       Hint = 'Change the format of date  for export'
-      Top = 6
+      Top = 5
       Width = 232
+      BorderSpacing.Left = 73
+      BorderSpacing.Top = 6
       ItemHeight = 0
       ItemIndex = 0
       Items.Strings = (
@@ -222,11 +316,16 @@ object frmQSLExpPref: TfrmQSLExpPref
       Text = 'yyyy-mm-dd'
     end
     object tgSplitRST_S: TToggleBox
-      Left = 102
-      Height = 24
+      AnchorSideLeft.Control = chkRST_S
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = chkRST_S
+      AnchorSideTop.Side = asrCenter
+      Left = 100
+      Height = 32
       Hint = 'Split RST in three fields.'
-      Top = 203
-      Width = 50
+      Top = 201
+      Width = 60
+      BorderSpacing.Left = 3
       Caption = 'Split'
       OnClick = tgSplit_Click
       ParentShowHint = False
@@ -234,32 +333,154 @@ object frmQSLExpPref: TfrmQSLExpPref
       TabOrder = 22
     end
     object tgSplitRST_R: TToggleBox
-      Left = 102
-      Height = 24
+      AnchorSideLeft.Control = chkRST_R
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = chkRST_R
+      AnchorSideTop.Side = asrCenter
+      Left = 99
+      Height = 32
       Hint = 'Split RST in three fields.'
-      Top = 235
-      Width = 50
+      Top = 236
+      Width = 60
+      BorderSpacing.Left = 3
       Caption = 'Split'
       OnClick = tgSplit_Click
       ParentShowHint = False
       ShowHint = True
       TabOrder = 23
     end
+    object lblDateFormat: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      Left = 14
+      Height = 17
+      Top = 14
+      Width = 79
+      BorderSpacing.Left = 14
+      BorderSpacing.Top = 14
+      Caption = 'Date format'
+      ParentColor = False
+    end
+    object chkDistance: TCheckBox
+      AnchorSideLeft.Control = chkMyLoc
+      AnchorSideTop.Control = chkMyLoc
+      AnchorSideTop.Side = asrBottom
+      Left = 166
+      Height = 23
+      Top = 172
+      Width = 83
+      BorderSpacing.Top = 3
+      Caption = 'Distance'
+      TabOrder = 24
+    end
+    object chkPropagation: TCheckBox
+      AnchorSideLeft.Control = chkBand
+      AnchorSideTop.Control = chkBand
+      AnchorSideTop.Side = asrBottom
+      Left = 14
+      Height = 23
+      Top = 354
+      Width = 104
+      BorderSpacing.Top = 3
+      Caption = 'Propagation'
+      TabOrder = 25
+    end
+    object chkSatellite: TCheckBox
+      AnchorSideLeft.Control = chkPropagation
+      AnchorSideTop.Control = chkPropagation
+      AnchorSideTop.Side = asrBottom
+      Left = 14
+      Height = 23
+      Top = 380
+      Width = 80
+      BorderSpacing.Top = 3
+      Caption = 'Satellite'
+      TabOrder = 26
+    end
+    object chkContestname: TCheckBox
+      AnchorSideLeft.Control = chkSatellite
+      AnchorSideTop.Control = chkSatellite
+      AnchorSideTop.Side = asrBottom
+      Left = 14
+      Height = 23
+      Top = 406
+      Width = 119
+      BorderSpacing.Top = 3
+      Caption = 'Contest Name'
+      TabOrder = 27
+    end
+    object chkContestNrS: TCheckBox
+      AnchorSideLeft.Control = chkQSLMsg
+      AnchorSideTop.Control = chkQSLMsg
+      AnchorSideTop.Side = asrBottom
+      Left = 166
+      Height = 23
+      Top = 328
+      Width = 128
+      BorderSpacing.Top = 3
+      Caption = 'Contest Nr Sent'
+      TabOrder = 28
+    end
+    object chkContestMsgS: TCheckBox
+      AnchorSideLeft.Control = chkContestNrS
+      AnchorSideTop.Control = chkContestNrS
+      AnchorSideTop.Side = asrBottom
+      Left = 166
+      Height = 23
+      Top = 354
+      Width = 140
+      BorderSpacing.Top = 3
+      Caption = 'Contest Msg Sent'
+      TabOrder = 29
+    end
+    object chkContestNrR: TCheckBox
+      AnchorSideLeft.Control = chkContestMsgS
+      AnchorSideTop.Control = chkContestMsgS
+      AnchorSideTop.Side = asrBottom
+      Left = 166
+      Height = 23
+      Top = 380
+      Width = 131
+      BorderSpacing.Top = 3
+      Caption = 'Contest Nr Rcvd'
+      TabOrder = 30
+    end
+    object chkContestMsgR: TCheckBox
+      AnchorSideLeft.Control = chkContestNrR
+      AnchorSideTop.Control = chkContestNrR
+      AnchorSideTop.Side = asrBottom
+      Left = 166
+      Height = 23
+      Top = 406
+      Width = 139
+      BorderSpacing.Top = 3
+      Caption = 'ContestMsg Rcvd'
+      TabOrder = 31
+    end
   end
   object btnOK: TButton
-    Left = 432
+    AnchorSideTop.Control = GroupBox1
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 437
     Height = 25
-    Top = 8
+    Top = 12
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Right = 18
     Caption = 'OK'
     OnClick = btnOKClick
     TabOrder = 1
   end
   object btnCancel: TButton
-    Left = 432
+    AnchorSideLeft.Control = btnOK
+    AnchorSideTop.Control = btnOK
+    AnchorSideTop.Side = asrBottom
+    Left = 437
     Height = 25
-    Top = 40
+    Top = 43
     Width = 75
+    BorderSpacing.Top = 6
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2

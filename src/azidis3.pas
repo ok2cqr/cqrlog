@@ -80,6 +80,9 @@ end;{isloc}
 
 procedure VzdalenostAAzimut(loc1,loc2 : String;var azim,qrb : String);
 begin
+  loc1:=Upcase(loc1);
+  loc2:=Upcase(loc2);
+
   if ((not isloc(loc1)) or (not isloc(loc2))) then
   begin
     azim := '';
@@ -93,6 +96,7 @@ begin
 end;
 procedure LocToCoordinate(loc : String; var Latitude, Longitude : Real);
 begin
+  loc:=Upcase(loc);
   Latitude  := dely(loc);
   Longitude := delx(loc)
 end;

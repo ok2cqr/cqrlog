@@ -49,7 +49,9 @@ begin
   InitCriticalSection(crit);
   fIniFileName := IniFile;
   ini  := TMemIniFile.Create(IniFile);
-  lini := TMemIniFile.Create(LocalIniFile)
+  lini := TMemIniFile.Create(LocalIniFile);
+  ini.CacheUpdates :=false;    //should be as default, but is it?
+  lini.CacheUpdates :=false;
 end;
 
 function TMyIni.ReadString(const Section, Ident, Default: string): string;

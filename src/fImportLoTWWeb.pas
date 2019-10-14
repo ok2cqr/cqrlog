@@ -125,21 +125,18 @@ begin
     http.Protocol := '1.1';
     if http.HTTPMethod('GET',url) then
     begin
-      mStat.Lines.Add('Connected to LoTW server');
       http.Document.Seek(0,soBeginning);
       m.CopyFrom(http.Document,HTTP.Document.Size);
       http.Clear;
       mStat.Lines.Add('File downloaded successfully');
-      mStat.Lines.Add('File:');
-      mStat.Lines.Add(AdifFile);
+      mStat.Lines.Add('File: '+ AdifFile);
       Done := True;
       Repaint;
       Application.ProcessMessages;
       mStat.Lines.Add('Preparing import ....');
       if not FileExists(AdifFile) then
       begin
-        mStat.Lines.Add('File: ');
-        mStat.Lines.Add(AdifFile);
+        mStat.Lines.Add('File: '+ AdifFile);
         mStat.Lines.Add('DOES NOT exist!');
         exit
       end;
@@ -203,17 +200,26 @@ procedure TfrmImportLoTWWeb.FormCloseQuery(Sender: TObject;
 begin
   dmUtils.SaveWindowPos(self)
 end;
-
 procedure TfrmImportLoTWWeb.SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 begin
-  if Reason = HR_ReadCount then
-  begin
-    FileSize := FileSize + StrToInt(Value);
-    if not Done then
-      mStat.Lines.Strings[mStat.Lines.Count-1] := 'Size: '+ IntToStr(FileSize);
-    Repaint;
-    Application.ProcessMessages
-  end
+  case Reason of
+      HR_Connect :  Begin
+                     if dmData.DebugLevel>=1 then Writeln( 'Connected to LoTW server');
+                     mStat.Lines.Add('Connected to LoTW server');
+                     mStat.Lines.Add('Downloading...');
+                     Repaint;
+                     Application.ProcessMessages
+                    end;
+
+      HR_ReadCount: begin
+                      FileSize := FileSize + StrToInt(Value);
+                      if not Done then
+                        mStat.Lines.Strings[mStat.Lines.Count-1] := 'Downloading size: '+ IntToStr(FileSize);
+                      Repaint;
+                      Application.ProcessMessages
+                    end;
+
+  end;
 end;
 
 end.

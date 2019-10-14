@@ -1,14 +1,14 @@
 object frmGroupEdit: TfrmGroupEdit
-  Left = 585
+  Left = 454
   Height = 146
-  Top = 316
-  Width = 385
+  Top = 357
+  Width = 436
   ActiveControl = btnApply
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Group edit'
   ClientHeight = 146
-  ClientWidth = 385
+  ClientWidth = 436
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
     0000400000000100200000000000001000006400000064000000000000000000
@@ -148,46 +148,67 @@ object frmGroupEdit: TfrmGroupEdit
   }
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '2.0.4.0'
   object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
     Left = 0
     Height = 108
     Top = 0
-    Width = 385
+    Width = 436
     Align = alClient
-    ClientHeight = 104
-    ClientWidth = 381
+    ClientHeight = 106
+    ClientWidth = 434
     TabOrder = 0
     object Label1: TLabel
-      Left = 10
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = cmbField
+      AnchorSideTop.Side = asrCenter
+      Left = 12
       Height = 17
-      Top = 7
-      Width = 37
+      Top = 9
+      Width = 35
+      BorderSpacing.Left = 12
       Caption = 'Field:'
       ParentColor = False
     end
     object Label2: TLabel
-      Left = 10
+      AnchorSideLeft.Control = Label1
+      AnchorSideTop.Control = cmbValue
+      AnchorSideTop.Side = asrCenter
+      Left = 12
       Height = 17
-      Top = 39
-      Width = 43
+      Top = 44
+      Width = 40
       Caption = 'Value:'
       ParentColor = False
     end
     object lblInfo: TLabel
-      Left = 6
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = GroupBox1
+      AnchorSideBottom.Side = asrBottom
+      Left = 197
       Height = 17
-      Top = 68
-      Width = 45
+      Top = 83
+      Width = 41
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Top = 6
+      BorderSpacing.Bottom = 6
       Caption = 'lblInfo'
       ParentColor = False
-      Visible = False
     end
     object cmbField: TComboBox
-      Left = 62
-      Height = 31
-      Top = -1
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = GroupBox1
+      Left = 96
+      Height = 29
+      Top = 3
       Width = 242
+      BorderSpacing.Top = 3
       ItemHeight = 0
       Items.Strings = (
         'QSO date'
@@ -222,44 +243,63 @@ object frmGroupEdit: TfrmGroupEdit
         'eQSL sent date'
         'eQSL rcvd'
         'eQSL rcvd date'
+        'Contest name'
       )
       OnChange = cmbFieldChange
       Style = csDropDownList
       TabOrder = 0
     end
     object cmbValue: TComboBox
-      Left = 62
-      Height = 29
-      Top = 34
+      AnchorSideLeft.Control = cmbField
+      AnchorSideTop.Control = cmbField
+      AnchorSideTop.Side = asrBottom
+      Left = 96
+      Height = 34
+      Top = 35
       Width = 312
+      BorderSpacing.Top = 3
       ItemHeight = 0
+      OnChange = cmbValueChange
       TabOrder = 1
     end
   end
   object Panel1: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideBottom.Control = Owner
     Left = 0
     Height = 38
     Top = 108
-    Width = 385
+    Width = 436
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 38
-    ClientWidth = 385
+    ClientWidth = 436
     TabOrder = 1
     object btnApply: TButton
-      Left = 64
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 60
       Height = 25
-      Top = 8
+      Top = 7
       Width = 75
+      BorderSpacing.Left = 60
       Caption = 'Apply'
       OnClick = btnApplyClick
       TabOrder = 0
     end
     object btnCancel: TButton
-      Left = 256
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 301
       Height = 25
-      Top = 9
+      Top = 7
       Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 60
       Cancel = True
       Caption = 'Cancel'
       ModalResult = 2

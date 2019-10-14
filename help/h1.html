@@ -120,7 +120,7 @@
     is of high importance because it determines your accurate position (ie. you don't need to enter
     your exact coordinates). The QRA Locator is used in beam heading and distance computation as
     well as the start point of the simplified path to the other station which appears on the
-    grayline map.
+    grayline map.<br>Locator writing format is forced to "AB12cd" that follows definition  https://en.wikipedia.org/wiki/Maidenhead_Locator_System#Description_of_the_system 
 </div>
 <p align=center><img src=img/line.png></p>
 <a name=ah4><h2><strong>New QSO</strong></h2></a>
@@ -169,7 +169,9 @@
 <img src=img/h8.png border=0><br><br>
 <div align=justify>
     Checked columns are visible in the previous QSO list appearing at the top of the
-    logging screen.
+    logging screen. Except "Distance" that makes calculated distances visible at QSO list panel area.
+    <br>Display of distances requires that preferences/station/locator is set and applied (automatic) to every qso and that at least 4 digit locator (when "ll" is added as 5 and 6th char) of destination station is logged.
+    Sometimes importing logs from other logging program may leave my locator unset. In this case QSO list/File/Group edit must be used for updating my locator field.
 </div>
 <p align=center><img src=img/line.png></p>
 <a name=ah6><h2><strong>Bands</strong></h2></a>
@@ -244,8 +246,8 @@ changed at any time, however a program restart will probably be needed to make t
 take effect.<br><br>
 <strong>User definable digital modes</strong> can be set up in a separate box. Use comma
 as a separator, ie. BPSK31,QPSK64,OLIVIA,CONTESTIA etc.<br>
-Some TRX like ICOM don't have support for this in HamLib. To get mode settings work, set
-all values to 0 (zero).
+Some <strong>TRX like ICOM don't have support for this in HamLib. To get mode settings work, set
+all values to 0 (zero).</strong>
 <p align=center><img src=img/line.png></p>
 <a name=ah9><h2><strong>QTH Profiles</strong></h2></a>
 <img src=img/h12.png border=0><br><br>
@@ -274,8 +276,14 @@ for each operation.
 </table>
 <br><br>
 This option allows an easy setup of the log fields to be exported into ADIF or HTML format.
-Only checked fields are exported. The 'Width' option denotes the column size in the HTML
-export.<br><br>
+Only checked fields are exported. The 'Column' option names columns at header line. 'Width' option denotes the column width in approx. count of 16px characters. 
+Both options affect only for the HTML export. 
+<br>Width setting is ignored if "HTML auto column width" is checked when longest text in column (column name or data) sets the column width.
+<br>Distances are not exported when doing log backup at cqlog closing phase. They will be calculated and exported (if selected) in ADIF, HTML and QSL label printing.
+ Calculation of distances requires that preferences/station/locator is set and applied (automatic) to every qso and that at least 4 digit locator
+  (in case "ll" is added as 5 and 6th char to get the center of grid) of destination station logged. Sometimes importing logs from other logging program may leave own station locator unset. In this case QSO list/File/Group edit must be used for updating "my locator" field.
+
+<br><br>
 <a name=ah11><h2><strong>DX cluster</strong></h2></a>
 <img src=img/h14.png border=0><br><br>
 This dialog allows an easy setup of the DX cluster spot filtering. Check the bands you want
@@ -471,6 +479,8 @@ There are no known dependencies issues.<br><br>
             the main xplanet window as a square.
         </li>
     </ul>
+    The center locator for the xplanet window can be customized by configuring in on 
+    this page. In case the field is empty the default locator of the station is used.<br><br>
     The xplanet window currently has no other function than to display spots or band
     map entries in the azimuthal projection or 3D-like picture.
     <br><br>
@@ -569,7 +579,7 @@ There are no known dependencies issues.<br><br>
     Of course, the export and compression takes some time, depending on the log size (QSO count).
     If you are not in a hurry, allow the program 2-3 minutes to perform this safety measure.
     We reccomend you backup your log to your hard drive from there it should be copied to
-    other media (your server, USB flash, a memory card etc.).
+    other media (your server, USB flash, a memory card etc.).<br>Distances are not exported in backup phase. So do not expect to find them from backup file.
     </br></br><img src="img/h119.png"><br><br>
     Check both "Enable autobackup after program ends" and "Ask before creating a backup" to prevent closing cqrlog accidently. Answering <strong>"Cancel"</strong> to question returns to NewQso without backup.
     <a name=ch4><h2><strong>External viewers</strong></h2></a>

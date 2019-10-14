@@ -1,702 +1,1783 @@
 object fraExportPref: TfraExportPref
   Left = 0
-  Height = 480
+  Height = 481
   Top = 0
-  Width = 595
-  ClientHeight = 480
-  ClientWidth = 595
+  Width = 834
+  ClientHeight = 481
+  ClientWidth = 834
   TabOrder = 0
-  DesignLeft = 87
-  DesignTop = 293
+  DesignLeft = 362
+  DesignTop = 277
   object chkProfile: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkExCont
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 324
+    Height = 28
+    Top = 421
     Width = 67
+    AutoSize = False
     Caption = 'Profile'
-    TabOrder = 0
+    TabOrder = 126
   end
   object chkAscTime: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkProfile
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 440
+    Height = 28
+    Top = 449
     Width = 197
+    AutoSize = False
     Caption = 'Most recent entries on top'
-    TabOrder = 72
+    TabOrder = 132
   end
   object chkExCont: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkExRXFreq
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 296
+    Height = 28
+    Top = 393
     Width = 89
+    AutoSize = False
     Caption = 'Continent'
-    TabOrder = 1
+    TabOrder = 117
   end
   object chkexQTH: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexName
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 270
+    Height = 28
+    Top = 281
     Width = 54
+    AutoSize = False
     Caption = 'QTH'
-    TabOrder = 2
+    TabOrder = 81
   end
   object chkexName: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexRSTR
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 243
+    Height = 28
+    Top = 253
     Width = 65
+    AutoSize = False
     Caption = 'Name'
-    TabOrder = 3
+    TabOrder = 72
   end
   object chkexRSTR: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexRSTS
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 217
+    Height = 28
+    Top = 225
     Width = 83
+    AutoSize = False
     Caption = 'RST rcvd'
-    TabOrder = 4
+    TabOrder = 63
   end
   object chkexRSTS: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexFreq
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 191
+    Height = 28
+    Top = 197
     Width = 83
+    AutoSize = False
     Caption = 'RST sent'
-    TabOrder = 5
+    TabOrder = 54
   end
   object chkexFreq: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexMode
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 165
+    Height = 28
+    Top = 169
     Width = 54
+    AutoSize = False
     Caption = 'Freq'
-    TabOrder = 6
+    TabOrder = 45
   end
   object chkexMode: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexCall
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 139
+    Height = 28
+    Top = 141
     Width = 62
+    AutoSize = False
     Caption = 'Mode'
-    TabOrder = 7
+    TabOrder = 36
   end
   object chkexCall: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexTimeoff
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 114
+    Height = 28
+    Top = 113
     Width = 51
+    AutoSize = False
     Caption = 'Call'
-    TabOrder = 8
+    TabOrder = 27
   end
   object chkexTimeoff: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexTimeon
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 89
+    Height = 28
+    Top = 85
     Width = 80
+    AutoSize = False
     Caption = 'Time off'
-    TabOrder = 9
+    TabOrder = 18
   end
   object chkexTimeon: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexDate
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 64
+    Height = 28
+    Top = 57
     Width = 79
+    AutoSize = False
     Caption = 'Time on'
-    TabOrder = 10
+    TabOrder = 9
   end
   object chkexDate: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = lblField1
+    AnchorSideTop.Side = asrBottom
     Left = 6
-    Height = 23
-    Top = 38
+    Height = 28
+    Top = 29
     Width = 57
+    AutoSize = False
     Caption = 'Date'
-    TabOrder = 11
+    TabOrder = 0
   end
   object edtWDate: TEdit
-    Left = 110
-    Height = 34
-    Top = 37
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexDate
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 29
     Width = 40
-    TabOrder = 12
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 2
     Text = '50'
   end
   object edtWTimeOn: TEdit
-    Left = 110
-    Height = 34
-    Top = 64
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexTimeon
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 57
     Width = 40
-    TabOrder = 13
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 11
     Text = '50'
   end
   object edtWTimeOff: TEdit
-    Left = 110
-    Height = 34
-    Top = 88
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexTimeoff
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 85
     Width = 40
-    TabOrder = 14
-    Text = '50'
-  end
-  object edtWCall: TEdit
-    Left = 110
-    Height = 34
-    Top = 113
-    Width = 40
-    TabOrder = 15
-    Text = '50'
-  end
-  object edtWMode: TEdit
-    Left = 110
-    Height = 34
-    Top = 139
-    Width = 40
-    TabOrder = 16
-    Text = '50'
-  end
-  object edtWFreq: TEdit
-    Left = 110
-    Height = 34
-    Top = 166
-    Width = 40
-    TabOrder = 17
-    Text = '50'
-  end
-  object edtWRstS: TEdit
-    Left = 110
-    Height = 34
-    Top = 190
-    Width = 40
-    TabOrder = 18
-    Text = '50'
-  end
-  object edtWRstR: TEdit
-    Left = 110
-    Height = 34
-    Top = 217
-    Width = 40
-    TabOrder = 19
-    Text = '50'
-  end
-  object edtWName: TEdit
-    Left = 110
-    Height = 34
-    Top = 243
-    Width = 40
+    AutoSize = False
+    NumbersOnly = True
     TabOrder = 20
     Text = '50'
   end
-  object edtWQTH: TEdit
-    Left = 110
-    Height = 34
-    Top = 269
+  object edtWCall: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexCall
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 113
     Width = 40
-    TabOrder = 21
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 29
     Text = '50'
   end
-  object Label46: TLabel
+  object edtWMode: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexMode
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 141
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 38
+    Text = '50'
+  end
+  object edtWFreq: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexFreq
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 169
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 47
+    Text = '50'
+  end
+  object edtWRstS: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexRSTS
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 197
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 56
+    Text = '50'
+  end
+  object edtWRstR: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexRSTR
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 225
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 65
+    Text = '50'
+  end
+  object edtWName: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexName
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 253
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 74
+    Text = '50'
+  end
+  object edtWQTH: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkexQTH
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 281
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 83
+    Text = '50'
+  end
+  object lblField1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
     Left = 6
-    Height = 17
-    Top = 12
-    Width = 31
+    Height = 23
+    Top = 6
+    Width = 50
+    AutoSize = False
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
     Caption = 'Field'
     ParentColor = False
   end
-  object Label49: TLabel
-    Left = 110
-    Height = 17
-    Top = 12
-    Width = 38
+  object lblWidth1: TLabel
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 228
+    Height = 23
+    Top = 6
+    Width = 50
+    AutoSize = False
     Caption = 'Width'
     ParentColor = False
   end
-  object Label47: TLabel
-    Left = 174
-    Height = 17
-    Top = 12
-    Width = 31
+  object lblField2: TLabel
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 278
+    Height = 23
+    Top = 6
+    Width = 50
+    AutoSize = False
     Caption = 'Field'
     ParentColor = False
   end
-  object Label50: TLabel
-    Left = 302
-    Height = 17
-    Top = 12
-    Width = 38
+  object lblWidth2: TLabel
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 510
+    Height = 23
+    Top = 6
+    Width = 50
+    AutoSize = False
     Caption = 'Width'
     ParentColor = False
   end
-  object Label48: TLabel
-    Left = 366
-    Height = 17
-    Top = 12
-    Width = 31
+  object lblField3: TLabel
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 560
+    Height = 23
+    Top = 6
+    Width = 50
+    AutoSize = False
     Caption = 'Field'
     ParentColor = False
   end
-  object Label51: TLabel
-    Left = 528
-    Height = 17
-    Top = 12
-    Width = 38
+  object lblWidth3: TLabel
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 782
+    Height = 23
+    Top = 6
+    Width = 50
+    AutoSize = False
     Caption = 'Width'
     ParentColor = False
   end
   object chkexQSLS: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 39
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = lblField2
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 29
     Width = 83
+    AutoSize = False
     Caption = 'QSL sent'
-    TabOrder = 22
+    TabOrder = 3
   end
   object chkexQSLR: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 64
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexQSLS
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 57
     Width = 111
+    AutoSize = False
     Caption = 'QSL received'
-    TabOrder = 23
+    TabOrder = 12
   end
   object chkexQSLVIA: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 89
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexQSLR
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 85
     Width = 113
+    AutoSize = False
     Caption = 'QSL manager'
-    TabOrder = 24
+    TabOrder = 21
   end
   object chkexLoc: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 114
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexQSLVIA
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 113
     Width = 74
+    AutoSize = False
     Caption = 'Locator'
-    TabOrder = 25
-  end
-  object chkexMyLoc: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 139
-    Width = 95
-    Caption = 'My locator'
-    TabOrder = 26
-  end
-  object chkexIOTA: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 166
-    Width = 56
-    Caption = 'IOTA'
-    TabOrder = 27
-  end
-  object chkexAward: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 192
-    Width = 66
-    Caption = 'Award'
-    TabOrder = 28
-  end
-  object chkexCounty: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 216
-    Width = 72
-    Caption = 'County'
-    TabOrder = 29
-  end
-  object chkexPower: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 243
-    Width = 66
-    Caption = 'Power'
     TabOrder = 30
   end
+  object chkexMyLoc: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexLoc
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 141
+    Width = 95
+    AutoSize = False
+    Caption = 'My locator'
+    TabOrder = 39
+  end
+  object chkexIOTA: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = lblField3
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 29
+    Width = 56
+    AutoSize = False
+    Caption = 'IOTA'
+    TabOrder = 6
+  end
+  object chkexAward: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexDistance
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 197
+    Width = 66
+    AutoSize = False
+    Caption = 'Award'
+    TabOrder = 57
+  end
+  object chkexCounty: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexAward
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 225
+    Width = 72
+    AutoSize = False
+    Caption = 'County'
+    TabOrder = 66
+  end
+  object chkexPower: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexCounty
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 253
+    Width = 66
+    AutoSize = False
+    Caption = 'Power'
+    TabOrder = 75
+  end
   object chkexDXCC: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 270
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexPower
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 281
     Width = 62
+    AutoSize = False
     Caption = 'DXCC'
-    TabOrder = 31
+    TabOrder = 84
   end
   object chkexRemarks: TCheckBox
-    Left = 174
-    Height = 23
-    Top = 297
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexDXCC
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 309
     Width = 110
+    AutoSize = False
     Caption = 'Cmnt to QSO'
-    TabOrder = 32
+    TabOrder = 93
   end
   object edtWRemarks: TEdit
-    Left = 302
-    Height = 34
-    Top = 296
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexRemarks
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 309
     Width = 40
-    TabOrder = 33
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 95
     Text = '50'
   end
   object edtWDXCC: TEdit
-    Left = 302
-    Height = 34
-    Top = 270
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexDXCC
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 281
     Width = 40
-    TabOrder = 34
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 86
     Text = '50'
   end
   object edtWPower: TEdit
-    Left = 302
-    Height = 34
-    Top = 243
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexPower
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 253
     Width = 40
-    TabOrder = 35
-    Text = '50'
-  end
-  object edtWCounty: TEdit
-    Left = 302
-    Height = 34
-    Top = 217
-    Width = 40
-    TabOrder = 36
-    Text = '50'
-  end
-  object edtWAward: TEdit
-    Left = 302
-    Height = 34
-    Top = 191
-    Width = 40
-    TabOrder = 37
-    Text = '50'
-  end
-  object edtWIOTA: TEdit
-    Left = 302
-    Height = 34
-    Top = 165
-    Width = 40
-    TabOrder = 38
-    Text = '50'
-  end
-  object edtWMyLoc: TEdit
-    Left = 302
-    Height = 34
-    Top = 139
-    Width = 40
-    TabOrder = 39
-    Text = '50'
-  end
-  object edtWLoc: TEdit
-    Left = 302
-    Height = 34
-    Top = 114
-    Width = 40
-    TabOrder = 40
-    Text = '50'
-  end
-  object edtWQSLVIA: TEdit
-    Left = 302
-    Height = 34
-    Top = 89
-    Width = 40
-    TabOrder = 41
-    Text = '50'
-  end
-  object edtWQSLR: TEdit
-    Left = 302
-    Height = 34
-    Top = 64
-    Width = 40
-    TabOrder = 42
-    Text = '50'
-  end
-  object edtWQSLS: TEdit
-    Left = 302
-    Height = 34
-    Top = 38
-    Width = 40
-    TabOrder = 43
-    Text = '50'
-  end
-  object chkexeQSLRDate: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 376
-    Width = 130
-    Caption = 'eQSL QSLR date'
-    TabOrder = 44
-  end
-  object chkexeQSLR: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 350
-    Width = 120
-    Caption = 'eQSL QSL rcvd'
-    TabOrder = 45
-  end
-  object chkexeQSLSDate: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 324
-    Width = 129
-    Caption = 'eQSL QSLS date'
-    TabOrder = 46
-  end
-  object chkexeQSLS: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 298
-    Width = 120
-    Caption = 'eQSL QSL sent'
-    TabOrder = 47
-  end
-  object chkexQSLRDate: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 271
-    Width = 116
-    Caption = 'QSL rcvd date'
-    TabOrder = 48
-  end
-  object chkexQSLSDate: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 244
-    Width = 116
-    Caption = 'QSL sent date'
-    TabOrder = 49
-  end
-  object chkexLQSLRDate: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 218
-    Width = 133
-    Caption = 'LoTW QSLR date'
-    TabOrder = 50
-  end
-  object chkexLQSLR: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 192
-    Width = 123
-    Caption = 'LoTW QSL rcvd'
-    TabOrder = 51
-  end
-  object chkexLQSLSDate: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 166
-    Width = 132
-    Caption = 'LoTW QSLS date'
-    TabOrder = 52
-  end
-  object chkexLQSLS: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 140
-    Width = 123
-    Caption = 'LoTW QSL sent'
-    TabOrder = 53
-  end
-  object chkexState: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 115
-    Width = 60
-    Caption = 'State'
-    TabOrder = 54
-  end
-  object chkexNote: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 89
-    Width = 57
-    Caption = 'Note'
-    TabOrder = 55
-  end
-  object chkexITU: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 64
-    Width = 48
-    Caption = 'ITU'
-    TabOrder = 56
-  end
-  object chkexWAZ: TCheckBox
-    Left = 368
-    Height = 23
-    Top = 39
-    Width = 56
-    Caption = 'WAZ'
-    TabOrder = 57
-  end
-  object edtWWAZ: TEdit
-    Left = 530
-    Height = 34
-    Top = 38
-    Width = 40
-    TabOrder = 58
-    Text = '50'
-  end
-  object edtWITU: TEdit
-    Left = 530
-    Height = 34
-    Top = 63
-    Width = 40
-    TabOrder = 59
-    Text = '50'
-  end
-  object edtWNote: TEdit
-    Left = 530
-    Height = 34
-    Top = 88
-    Width = 40
-    TabOrder = 60
-    Text = '50'
-  end
-  object edtWState: TEdit
-    Left = 530
-    Height = 34
-    Top = 113
-    Width = 40
-    TabOrder = 61
-    Text = '50'
-  end
-  object edtWLQSLS: TEdit
-    Left = 530
-    Height = 34
-    Top = 139
-    Width = 40
-    TabOrder = 62
-    Text = '50'
-  end
-  object edtWLQSLSDate: TEdit
-    Left = 530
-    Height = 34
-    Top = 165
-    Width = 40
-    TabOrder = 63
-    Text = '50'
-  end
-  object edtWLQSLR: TEdit
-    Left = 530
-    Height = 34
-    Top = 191
-    Width = 40
-    TabOrder = 64
-    Text = '50'
-  end
-  object edtWLQSLRDate: TEdit
-    Left = 530
-    Height = 34
-    Top = 217
-    Width = 40
-    TabOrder = 65
-    Text = '50'
-  end
-  object edtWQSLSDate: TEdit
-    Left = 530
-    Height = 34
-    Top = 243
-    Width = 40
-    TabOrder = 66
-    Text = '50'
-  end
-  object edtWQSLRDate: TEdit
-    Left = 530
-    Height = 34
-    Top = 270
-    Width = 40
-    TabOrder = 67
-    Text = '50'
-  end
-  object edtWeQSLS: TEdit
-    Left = 530
-    Height = 34
-    Top = 297
-    Width = 40
-    TabOrder = 68
-    Text = '50'
-  end
-  object edtWeQSLSDate: TEdit
-    Left = 530
-    Height = 34
-    Top = 323
-    Width = 40
-    TabOrder = 69
-    Text = '50'
-  end
-  object edtWeQSLR: TEdit
-    Left = 530
-    Height = 34
-    Top = 349
-    Width = 40
-    TabOrder = 70
-    Text = '50'
-  end
-  object edtWeQSLRDate: TEdit
-    Left = 530
-    Height = 34
-    Top = 375
-    Width = 40
-    TabOrder = 71
-    Text = '50'
-  end
-  object chkExPropagation: TCheckBox
-    Left = 6
-    Height = 23
-    Top = 350
-    Width = 104
-    Caption = 'Propagation'
-    TabOrder = 73
-  end
-  object chkExSat: TCheckBox
-    Left = 6
-    Height = 23
-    Top = 378
-    Width = 121
-    Caption = 'Satellite name'
-    TabOrder = 74
-  end
-  object chkExRXFreq: TCheckBox
-    Left = 6
-    Height = 23
-    Top = 410
-    Width = 113
-    Caption = 'RX frequency'
-    TabOrder = 75
-  end
-  object edtWProp: TEdit
-    Left = 160
-    Height = 34
-    Top = 349
-    Width = 40
-    TabOrder = 76
-    Text = '50'
-  end
-  object edtWSatName: TEdit
-    Left = 160
-    Height = 34
-    Top = 377
-    Width = 40
+    AutoSize = False
+    NumbersOnly = True
     TabOrder = 77
     Text = '50'
   end
-  object edtWRxFreq: TEdit
-    Left = 160
-    Height = 34
-    Top = 407
+  object edtWCounty: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexCounty
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 225
     Width = 40
-    TabOrder = 78
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 68
     Text = '50'
   end
-  object chkexContest: TCheckBox
-    Left = 174
-    Height = 23
+  object edtWAward: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexAward
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 197
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 59
+    Text = '50'
+  end
+  object edtWIOTA: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexIOTA
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 29
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 8
+    Text = '50'
+  end
+  object edtWMyLoc: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexMyLoc
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 141
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 41
+    Text = '50'
+  end
+  object edtWLoc: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexLoc
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 113
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 32
+    Text = '50'
+  end
+  object edtWQSLVIA: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexQSLVIA
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 85
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 23
+    Text = '50'
+  end
+  object edtWQSLR: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexQSLR
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 57
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 14
+    Text = '50'
+  end
+  object edtWQSLS: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexQSLS
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 29
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 5
+    Text = '50'
+  end
+  object chkexeQSLRDate: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexeQSLR
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 421
+    Width = 130
+    AutoSize = False
+    Caption = 'eQSL QSLR date'
+    TabOrder = 129
+  end
+  object chkexeQSLR: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexeQSLSDate
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 393
+    Width = 120
+    AutoSize = False
+    Caption = 'eQSL QSL rcvd'
+    TabOrder = 123
+  end
+  object chkexeQSLSDate: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexeQSLS
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 365
+    Width = 129
+    AutoSize = False
+    Caption = 'eQSL QSLS date'
+    TabOrder = 114
+  end
+  object chkexeQSLS: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexQSLRDate
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 337
+    Width = 120
+    AutoSize = False
+    Caption = 'eQSL QSL sent'
+    TabOrder = 105
+  end
+  object chkexQSLRDate: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexQSLSDate
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 309
+    Width = 116
+    AutoSize = False
+    Caption = 'QSL rcvd date'
+    TabOrder = 96
+  end
+  object chkexQSLSDate: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexLQSLRDate
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 281
+    Width = 116
+    AutoSize = False
+    Caption = 'QSL sent date'
+    TabOrder = 87
+  end
+  object chkexLQSLRDate: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexLQSLR
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 253
+    Width = 133
+    AutoSize = False
+    Caption = 'LoTW QSLR date'
+    TabOrder = 78
+  end
+  object chkexLQSLR: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexLQSLSDate
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 225
+    Width = 123
+    AutoSize = False
+    Caption = 'LoTW QSL rcvd'
+    TabOrder = 69
+  end
+  object chkexLQSLSDate: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexLQSLS
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 197
+    Width = 132
+    AutoSize = False
+    Caption = 'LoTW QSLS date'
+    TabOrder = 60
+  end
+  object chkexLQSLS: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexState
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 169
+    Width = 123
+    AutoSize = False
+    Caption = 'LoTW QSL sent'
+    TabOrder = 51
+  end
+  object chkexState: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexNote
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 141
+    Width = 60
+    AutoSize = False
+    Caption = 'State'
+    TabOrder = 42
+  end
+  object chkexNote: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexITU
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 113
+    Width = 57
+    AutoSize = False
+    Caption = 'Note'
+    TabOrder = 33
+  end
+  object chkexITU: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexWAZ
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 85
+    Width = 48
+    AutoSize = False
+    Caption = 'ITU'
+    TabOrder = 24
+  end
+  object chkexWAZ: TCheckBox
+    AnchorSideLeft.Control = lblField3
+    AnchorSideTop.Control = chkexIOTA
+    AnchorSideTop.Side = asrBottom
+    Left = 560
+    Height = 28
+    Top = 57
+    Width = 56
+    AutoSize = False
+    Caption = 'WAZ'
+    TabOrder = 15
+  end
+  object edtWWAZ: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexWAZ
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 57
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 17
+    Text = '50'
+  end
+  object edtWITU: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexITU
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 85
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 26
+    Text = '50'
+  end
+  object edtWNote: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexNote
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 113
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 35
+    Text = '50'
+  end
+  object edtWState: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexState
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 141
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 44
+    Text = '50'
+  end
+  object edtWLQSLS: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexLQSLS
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 169
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 53
+    Text = '50'
+  end
+  object edtWLQSLSDate: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexLQSLSDate
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 197
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 62
+    Text = '50'
+  end
+  object edtWLQSLR: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexLQSLR
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 225
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 71
+    Text = '50'
+  end
+  object edtWLQSLRDate: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexLQSLRDate
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 253
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 80
+    Text = '50'
+  end
+  object edtWQSLSDate: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexQSLSDate
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 281
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 89
+    Text = '50'
+  end
+  object edtWQSLRDate: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexQSLRDate
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 309
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 98
+    Text = '50'
+  end
+  object edtWeQSLS: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexeQSLS
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 337
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 107
+    Text = '50'
+  end
+  object edtWeQSLSDate: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexeQSLSDate
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 365
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 116
+    Text = '50'
+  end
+  object edtWeQSLR: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexeQSLR
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 393
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 125
+    Text = '50'
+  end
+  object edtWeQSLRDate: TEdit
+    AnchorSideLeft.Control = lblWidth3
+    AnchorSideTop.Control = chkexeQSLRDate
+    AnchorSideTop.Side = asrCenter
+    Left = 782
+    Height = 28
+    Top = 421
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 131
+    Text = '50'
+  end
+  object chkExPropagation: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkexQTH
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 28
+    Top = 309
+    Width = 104
+    AutoSize = False
+    Caption = 'Propagation'
+    TabOrder = 90
+  end
+  object chkExSat: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkExPropagation
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 28
+    Top = 337
+    Width = 121
+    AutoSize = False
+    Caption = 'Satellite name'
+    TabOrder = 99
+  end
+  object chkExRXFreq: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkExSat
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 28
+    Top = 365
+    Width = 113
+    AutoSize = False
+    Caption = 'RX frequency'
+    TabOrder = 108
+  end
+  object edtWProp: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkExPropagation
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 309
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 92
+    Text = '50'
+  end
+  object edtWSatName: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkExSat
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 337
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 101
+    Text = '50'
+  end
+  object edtWRxFreq: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkExRXFreq
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 365
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 110
+    Text = '50'
+  end
+  object chkexContestName: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexRemarks
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
     Hint = 'ADIF Fields SRX, STX, SRX_STRING, STX_STRING AND CONTEST_ID'
-    Top = 324
-    Width = 76
-    Caption = 'Contest'
+    Top = 337
+    Width = 135
+    AutoSize = False
+    Caption = 'Contest name'
     ParentShowHint = False
     ShowHint = True
+    TabOrder = 102
+  end
+  object chkexDistance: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexMyLoc
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Top = 169
+    Width = 83
+    AutoSize = False
+    Caption = 'Distance'
+    TabOrder = 48
+  end
+  object edtWDistance: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexDistance
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 169
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 50
+    Text = '50'
+  end
+  object edtWContinent: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkExCont
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 393
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 119
+    Text = '50'
+  end
+  object edtWProfile: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = chkProfile
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 421
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 128
+    Text = '50'
+  end
+  object chkexContestNr: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexContestName
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Hint = 'ADIF Fields SRX, STX, SRX_STRING, STX_STRING AND CONTEST_ID'
+    Top = 365
+    Width = 135
+    AutoSize = False
+    Caption = 'Contest nr'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 111
+  end
+  object chkexContestMsg: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkexContestNr
+    AnchorSideTop.Side = asrBottom
+    Left = 278
+    Height = 28
+    Hint = 'ADIF Fields SRX, STX, SRX_STRING, STX_STRING AND CONTEST_ID'
+    Top = 393
+    Width = 135
+    AutoSize = False
+    Caption = 'Contest msg'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 120
+  end
+  object edtWContestName: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexContestName
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 337
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 104
+    Text = '50'
+  end
+  object edtWContestNr: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexContestNr
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 365
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 113
+    Text = '50'
+  end
+  object edtWContestMsg: TEdit
+    AnchorSideLeft.Control = lblWidth2
+    AnchorSideTop.Control = chkexContestMsg
+    AnchorSideTop.Side = asrCenter
+    Left = 510
+    Height = 28
+    Top = 393
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 122
+    Text = '50'
+  end
+  object chkAutoColumn: TCheckBox
+    AnchorSideLeft.Control = lblField2
+    AnchorSideTop.Control = chkAscTime
+    Left = 278
+    Height = 28
+    Top = 449
+    Width = 197
+    AutoSize = False
+    Caption = 'HTML auto column width'
+    TabOrder = 133
+  end
+  object edtWDate1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexDate
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 29
+    Width = 75
+    AutoSize = False
+    TabOrder = 1
+    Text = 'Date'
+  end
+  object edtWTimeOn1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexTimeon
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 57
+    Width = 75
+    AutoSize = False
+    TabOrder = 10
+    Text = 'Time on'
+  end
+  object edtWTimeOff1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexTimeoff
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 85
+    Width = 75
+    AutoSize = False
+    TabOrder = 19
+    Text = 'Time off'
+  end
+  object edtWCall1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexCall
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 113
+    Width = 75
+    AutoSize = False
+    TabOrder = 28
+    Text = 'Call'
+  end
+  object edtWMode1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexMode
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 141
+    Width = 75
+    AutoSize = False
+    TabOrder = 37
+    Text = 'Mode'
+  end
+  object edtWFreq1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexFreq
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 169
+    Width = 75
+    AutoSize = False
+    TabOrder = 46
+    Text = 'Freq'
+  end
+  object edtWRstS1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexRSTS
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 197
+    Width = 75
+    AutoSize = False
+    TabOrder = 55
+    Text = 'RSTs'
+  end
+  object edtWRstR1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexRSTR
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 225
+    Width = 75
+    AutoSize = False
+    TabOrder = 64
+    Text = 'RSTr'
+  end
+  object edtWName1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexName
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 253
+    Width = 75
+    AutoSize = False
+    TabOrder = 73
+    Text = 'Name'
+  end
+  object edtWQTH1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkexQTH
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 281
+    Width = 75
+    AutoSize = False
+    TabOrder = 82
+    Text = 'QTH'
+  end
+  object lblHTML1: TLabel
+    AnchorSideLeft.Control = lblField1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 146
+    Height = 23
+    Top = 6
+    Width = 82
+    AutoSize = False
+    BorderSpacing.Left = 90
+    Caption = 'Column'
+    ParentColor = False
+  end
+  object edtWProp1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkExPropagation
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 309
+    Width = 75
+    AutoSize = False
+    TabOrder = 91
+    Text = 'Propag'
+  end
+  object edtWSatName1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkExSat
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 337
+    Width = 75
+    AutoSize = False
+    TabOrder = 100
+    Text = 'Satellite'
+  end
+  object edtWRxFreq1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkExRXFreq
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 365
+    Width = 75
+    AutoSize = False
+    TabOrder = 109
+    Text = 'RX Freq'
+  end
+  object edtWContinent1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkExCont
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 393
+    Width = 75
+    AutoSize = False
+    TabOrder = 118
+    Text = 'Contin'
+  end
+  object edtWProfile1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkProfile
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 421
+    Width = 75
+    AutoSize = False
+    TabOrder = 127
+    Text = 'Profile'
+  end
+  object lblHTML2: TLabel
+    AnchorSideLeft.Control = lblField2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 418
+    Height = 23
+    Top = 6
+    Width = 92
+    AutoSize = False
+    BorderSpacing.Left = 90
+    Caption = 'Column'
+    ParentColor = False
+  end
+  object edtWRemarks1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexRemarks
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 309
+    Width = 75
+    AutoSize = False
+    TabOrder = 94
+    Text = 'Cmnt'
+  end
+  object edtWDXCC1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexDXCC
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 281
+    Width = 75
+    AutoSize = False
+    TabOrder = 85
+    Text = 'DXCC'
+  end
+  object edtWPower1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexPower
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 253
+    Width = 75
+    AutoSize = False
+    TabOrder = 76
+    Text = 'Pwr'
+  end
+  object edtWCounty1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexCounty
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 225
+    Width = 75
+    AutoSize = False
+    TabOrder = 67
+    Text = 'County'
+  end
+  object edtWAward1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexAward
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 197
+    Width = 75
+    AutoSize = False
+    TabOrder = 58
+    Text = 'Award'
+  end
+  object edtWMyLoc1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexMyLoc
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 141
+    Width = 75
+    AutoSize = False
+    TabOrder = 40
+    Text = 'MyLoc'
+  end
+  object edtWLoc1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexLoc
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 113
+    Width = 75
+    AutoSize = False
+    TabOrder = 31
+    Text = 'Loc'
+  end
+  object edtWQSLVIA1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexQSLVIA
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 85
+    Width = 75
+    AutoSize = False
+    TabOrder = 22
+    Text = 'QSL via'
+  end
+  object edtWQSLR1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexQSLR
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 57
+    Width = 75
+    AutoSize = False
+    TabOrder = 13
+    Text = 'QSLr'
+  end
+  object edtWQSLS1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexQSLS
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 29
+    Width = 75
+    AutoSize = False
+    TabOrder = 4
+    Text = 'QSLs'
+  end
+  object edtWDistance1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexDistance
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 169
+    Width = 75
+    AutoSize = False
+    TabOrder = 49
+    Text = 'QRB'
+  end
+  object edtWContestName1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexContestName
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 337
+    Width = 75
+    AutoSize = False
+    TabOrder = 103
+    Text = 'Contest'
+  end
+  object edtWContestNr1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexContestNr
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 365
+    Width = 75
+    AutoSize = False
+    TabOrder = 112
+    Text = 'Cont Nr'
+  end
+  object edtWContestMsg1: TEdit
+    AnchorSideLeft.Control = lblHTML2
+    AnchorSideTop.Control = chkexContestMsg
+    AnchorSideTop.Side = asrCenter
+    Left = 418
+    Height = 28
+    Top = 393
+    Width = 75
+    AutoSize = False
+    TabOrder = 121
+    Text = 'Cont Msg'
+  end
+  object lblHTML3: TLabel
+    AnchorSideLeft.Control = lblField3
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblField1
+    Left = 700
+    Height = 23
+    Top = 6
+    Width = 82
+    AutoSize = False
+    BorderSpacing.Left = 90
+    Caption = 'Column'
+    ParentColor = False
+  end
+  object edtWIOTA1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexIOTA
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 29
+    Width = 75
+    AutoSize = False
+    TabOrder = 7
+    Text = 'IOTA'
+  end
+  object edtWWAZ1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexWAZ
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 57
+    Width = 75
+    AutoSize = False
+    TabOrder = 16
+    Text = 'WAZ'
+  end
+  object edtWITU1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexITU
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 85
+    Width = 75
+    AutoSize = False
+    TabOrder = 25
+    Text = 'ITU'
+  end
+  object edtWNote1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexNote
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 113
+    Width = 75
+    AutoSize = False
+    TabOrder = 34
+    Text = 'Note'
+  end
+  object edtWState1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexState
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 141
+    Width = 75
+    AutoSize = False
+    TabOrder = 43
+    Text = 'State'
+  end
+  object edtWLQSLS1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexLQSLS
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 169
+    Width = 75
+    AutoSize = False
+    TabOrder = 52
+    Text = 'LQSLs'
+  end
+  object edtWLQSLSDate1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexLQSLSDate
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 197
+    Width = 75
+    AutoSize = False
+    TabOrder = 61
+    Text = 'LQSLSdat'
+  end
+  object edtWLQSLR1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexLQSLR
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 225
+    Width = 75
+    AutoSize = False
+    TabOrder = 70
+    Text = 'LQSLr'
+  end
+  object edtWLQSLRDate1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexLQSLRDate
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 253
+    Width = 75
+    AutoSize = False
     TabOrder = 79
+    Text = 'LQSLRdat'
+  end
+  object edtWQSLSDate1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexQSLSDate
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 281
+    Width = 75
+    AutoSize = False
+    TabOrder = 88
+    Text = 'QSLSdat'
+  end
+  object edtWQSLRDate1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexQSLRDate
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 309
+    Width = 75
+    AutoSize = False
+    TabOrder = 97
+    Text = 'QSLRdat'
+  end
+  object edtWeQSLS1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexeQSLS
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 337
+    Width = 75
+    AutoSize = False
+    TabOrder = 106
+    Text = 'eQSLs'
+  end
+  object edtWeQSLSDate1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexeQSLSDate
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 365
+    Width = 75
+    AutoSize = False
+    TabOrder = 115
+    Text = 'eQSLSdat'
+  end
+  object edtWeQSLR1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexeQSLR
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 393
+    Width = 75
+    AutoSize = False
+    TabOrder = 124
+    Text = 'eQSLR'
+  end
+  object edtWeQSLRDate1: TEdit
+    AnchorSideLeft.Control = lblHTML3
+    AnchorSideTop.Control = chkexeQSLRDate
+    AnchorSideTop.Side = asrCenter
+    Left = 700
+    Height = 28
+    Top = 421
+    Width = 75
+    AutoSize = False
+    TabOrder = 130
+    Text = 'qQSLRdat'
   end
 end
