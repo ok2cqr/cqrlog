@@ -90,7 +90,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, fNewLog;
+uses dData, dUtils, fNewLog, fDXCluster,fNewQSO;
 
 { TfrmDBConnect }
 
@@ -364,12 +364,24 @@ end;
 
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
 begin
+  //writeln('OpenFromMenu:',OpenFromMenu);
   if chkSaveToLocal.Checked then
   begin
     if RemoteMySQL then
     begin
       if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
       begin
+        if  OpenFromMenu then  //close existing log
+         Begin
+          frmDXCluster.StopAllConnections;
+          frmNewQSO.SaveSettings;
+          frmNewQSO.CloseAllWindows;
+          dmData.CloseDatabases;
+          RemoteMySQL :=false;
+          OpenFromMenu:=false;
+          SaveLogin;
+          LoadLogin;
+         end;
         dmData.StartMysqldProcess;
         Sleep(3000);
         btnConnectClick(nil)
@@ -382,7 +394,19 @@ begin
     end;
     grbLogin.Visible := False
   end
-  else  begin
+  else
+  begin
+    if  OpenFromMenu then  //close existing log
+         Begin
+          frmDXCluster.StopAllConnections;
+          frmNewQSO.SaveSettings;
+          frmNewQSO.CloseAllWindows;
+          dmData.CloseDatabases;
+          RemoteMySQL :=True;
+          OpenFromMenu:=false;
+          SaveLogin;
+          LoadLogin;
+         end;
     grbLogin.Visible := True
   end
 end;
