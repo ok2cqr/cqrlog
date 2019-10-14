@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, ExtCtrls, StdCtrls, ComCtrls, DBGrids, Buttons, LCLType, IniFiles, process,
-  Grids, DBCtrls, dLogUpload;
+  Grids, DBCtrls, dLogUpload,db;
 
 type
 
@@ -112,6 +112,10 @@ type
     Image1:     TImage;
     imgMain:    TImageList;
     imgMain1:   TImageList;
+    lblDist: TLabel;
+    lblDistance: TLabel;
+    lblLongest: TLabel;
+    lblLongestDist: TLabel;
     lblQSOInLog:     TLabel;
     lblDXCCWorked:     TLabel;
     lblCommentForQSO:    TLabel;
@@ -124,6 +128,8 @@ type
     lblDXCCCmf: TLabel;
     lblDXCC:    TLabel;
     lblQSOCount: TLabel;
+    lblSumDist: TLabel;
+    lblSumDistances: TLabel;
     MenuItem1:  TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem100: TMenuItem;
@@ -263,6 +269,7 @@ type
     dlgOpen:    TOpenDialog;
     Panel1:     TPanel;
     Panel3: TPanel;
+    pnlDistance: TPanel;
     pnlDetails: TPanel;
     pnlButtons: TPanel;
     Panel2:     TPanel;
@@ -423,16 +430,17 @@ type
   private
     InRefresh  : Boolean;
     WhatUpNext : TWhereToUpload;
-
+    DistColumnIndex :integer;
     procedure ChechkSelRecords;
     { private declarations }
   public
+    ShowWidths : Boolean;
     procedure RefreshQSODXCCCount;
     procedure MarkQSLSend(symbol: string);
     procedure ShowFields;
     procedure ReloadGrid;
     procedure CheckAttachment;
-
+    function CalcQrb(Myloc,loc:string;showUnits:boolean):string;
     { public declarations }
   end;
 
@@ -449,7 +457,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, fLogUploadStatus, fExportPref;
+  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, fLogUploadStatus, fExportPref,uVersion;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -458,10 +466,30 @@ begin
 end;
 
 procedure TfrmMain.RefreshQSODXCCCount;
+var
+   SumDist: int64;
+   Longest,
+   MainLocCount : integer;
+   qrb,
+   qrc,
+   Myloc,
+   loc          : String;
 begin
   lblQSOCount.Caption := IntToStr(dmData.GetQSOCount);
   lblDXCC.Caption     := IntToStr(dmDXCC.DXCCCount);
-  lblDXCCCmf.Caption  := IntToStr(dmDXCC.DXCCCmfCount)
+  lblDXCCCmf.Caption  := IntToStr(dmDXCC.DXCCCmfCount);
+  if pnlDistance.Visible then
+   Begin
+    dmData.GetQSODistanceSum(SumDist,Longest,MainLocCount);
+    if cqrini.ReadBool('Program','ShowMiles',False) then
+      lblSumDist.Caption := FloatToStr(dmUtils.KmToMiles(SumDist)) + 'mi'
+     else
+      lblSumDist.Caption := IntToStr(SumDist) + 'km';
+    if cqrini.ReadBool('Program','ShowMiles',False) then
+      lblLongest.Caption := FloatToStr(dmUtils.KmToMiles(Longest)) + 'mi'
+     else
+       lblLongest.Caption := IntToStr(Longest) + 'km';
+   end;
 end;
 
 procedure TfrmMain.acPreferencesExecute(Sender: TObject);
@@ -604,8 +632,9 @@ var
 begin
   tmp   := '';
   sDate := '';
-  dmUtils.DateInRightFormat(now, tmp, sDate);
-  sbMain.Panels[0].Text := sDate;
+  dmUtils.DateInRightFormat(now , tmp, sDate);
+  //sbMain.Panels[0].Text :=sDate;              //why we have 2 timers for showing date in panel???
+  sbMain.Panels[0].Text :=uVersion.cBUILD_DATE;
 end;
 
 procedure TfrmMain.tmrUploadAllTimer(Sender: TObject);
@@ -781,7 +810,7 @@ begin
   sDate := '';
   Date  := dmUtils.GetDateTime(0);
   dmUtils.DateInRightFormat(date, tmp, sDate);
-  sbMain.Panels[4].Text := sDate + '  ' + TimeToStr(Date)
+  sbMain.Panels[4].Text := sDate + '  ' + TimeToStr(Date);
 end;
 
 procedure TfrmMain.acAboutExecute(Sender: TObject);
@@ -1073,7 +1102,7 @@ begin
     while not dbgrdMain.DataSource.DataSet.EOF do
     begin
       dbgrdMain.SelectedRows.CurrentRowSelected := True;
-      dbgrdMain.DataSource.DataSet.Next
+      dbgrdMain.DataSource.DataSet.Next;
     end
   finally
     dbgrdMain.DataSource.Dataset.EnableControls;
@@ -1660,6 +1689,8 @@ begin
   end;
   dmData.IsFilter  := False;
   dmData.IsSFilter := False;
+  lblDist.Caption :='';
+  lblDistance.Visible:=(lblDist.Caption <>'');
   RefreshQSODXCCCount
 end;
 
@@ -1670,6 +1701,9 @@ end;
 
 procedure TfrmMain.acCreateFilterExecute(Sender: TObject);
 begin
+  lblDist.Caption :='';
+  lblDistance.Visible:=(lblDist.Caption <>'');
+
   with TfrmFilter.Create(self) do
   try
     ShowModal;
@@ -1700,7 +1734,7 @@ begin
   dlgSave.Filter     := 'ADIF|*.adi;*.ADI';
   if dlgSave.Execute then
   begin
-
+    ShowWidths:=false;
     frmExportPref := TfrmExportPref.Create(frmMain);
     try
       if frmExportPref.ShowModal = mrCancel then
@@ -1729,7 +1763,7 @@ begin
 
   if dlgSave.Execute then
   begin
-
+    ShowWidths:=true;
     frmExportPref := TfrmExportPref.Create(frmMain);
     try
       if frmExportPref.ShowModal = mrCancel then
@@ -1910,6 +1944,10 @@ begin
   dbtQSLSDate.DataField  := 'qsls_date';
   dbtQSLRDate.DataField  := 'qslr_date';
 
+  lblDist.Caption := '';
+  lblSumDist.Caption := '';
+  lblLongest.Caption := '';
+
   sbMain.Panels[1].Text := 'Ver. ' + dmData.VersionString;
   sbMain.Panels[1].Width := 140;
   tmrTime.Enabled := True;
@@ -2028,6 +2066,7 @@ procedure TfrmMain.ShowFields;
         dbgrdMain.Columns[i].Alignment := taCenter;
         dbgrdMain.Columns[i].Title.Alignment := taCenter;
       end;
+
       if (UpperCase(dbgrdMain.Columns[i].DisplayName) = 'WAZ') then
       begin
         dbgrdMain.Columns[i].Alignment := taCenter;
@@ -2086,6 +2125,8 @@ procedure TfrmMain.ShowFields;
   end;
 
 begin
+  pnlDistance.Visible := cqrini.ReadBool('Columns', 'Distance', False);
+
   dbgrdMain.DataSource := dmData.dsrMain;
   dbgrdMain.ResetColWidths;
   dmUtils.LoadForm(frmMain);
@@ -2195,14 +2236,28 @@ end;
 
 procedure TfrmMain.ChechkSelRecords;
 begin
+
   if dbgrdMain.SelectedRows.Count > 1 then
+   begin
+    lblDist.Visible :=False;
+    lblDistance.Visible:=False;
     sbMain.Panels[3].Text := IntToStr(dbgrdMain.SelectedRows.Count) + ' records selected'
+   end
   else
+   begin
     sbMain.Panels[3].Text := '';
+    lblDist.Visible :=True;
+    lblDistance.Visible:=True;
+   end;
 end;
 
 procedure TfrmMain.CheckAttachment;
+var
+   qrb:String;
+   f :integer;
+
 begin
+
   if not dmData.qCQRLOG.Active then
     exit;
   if dmData.qCQRLOG.RecordCount = 0 then
@@ -2219,9 +2274,34 @@ begin
       acQSLImage.Enabled := True
     else
       acQSLImage.Enabled := False
-  end
+  end;
+
+  if pnlDistance.Visible then
+   begin
+      qrb := CalcQrb(dmData.qCQRLOG.Fields[19].AsString,dmData.qCQRLOG.Fields[18].AsString,True);
+      lblDistance.Visible:=(qrb<>'') and (sbMain.Panels[3].Text = '');
+      lblDist.Caption := qrb
+   end
 end;
+function TfrmMain.CalcQrb(Myloc,loc:string;showUnits:boolean):string;
+ var
+  qrb,             //distance
+  qrc: String;      //direction
+  Begin
+     if length(Myloc) = 4 then Myloc := Myloc +'LL';
+     if length(loc) = 4 then loc := loc +'LL';
+     qrb:='';
+     dmUtils.DistanceFromLocator(Myloc,loc,qrb,qrc);
+     if qrb <>'' then
+      if cqrini.ReadBool('Program','ShowMiles',False) then
+        Begin
+         qrb :=  FloatToStr(dmUtils.KmToMiles(StrToInt(qrb)));
+         if showUnits then qrb:= qrb + 'mi';
+        end
+     else
+         if showUnits then qrb := qrb + 'km';
+     Result := qrb;
+  end;
 
 end.
-
 

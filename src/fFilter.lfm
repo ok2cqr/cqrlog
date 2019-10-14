@@ -1,7 +1,7 @@
 object frmFilter: TfrmFilter
-  Left = -187
+  Left = 0
   Height = 658
-  Top = 162
+  Top = 115
   Width = 817
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
@@ -488,7 +488,7 @@ object frmFilter: TfrmFilter
       Width = 95
       BorderSpacing.Left = 8
       BorderSpacing.Top = 6
-      CharCase = ecUppercase
+      OnChange = edtLocatorChange
       TabOrder = 0
     end
     object rbIncludeLoc: TRadioButton
@@ -1044,7 +1044,7 @@ object frmFilter: TfrmFilter
       Width = 95
       BorderSpacing.Left = 8
       BorderSpacing.Top = 6
-      CharCase = ecUppercase
+      OnChange = edtMyLocChange
       TabOrder = 0
     end
     object rbIncludeMyLoc: TRadioButton

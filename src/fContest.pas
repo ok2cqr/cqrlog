@@ -46,6 +46,7 @@ type
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure edtCallKeyPress(Sender: TObject; var Key: char);
+    procedure edtSRX2Change(Sender: TObject);
     procedure edtSRXExit(Sender: TObject);
     procedure edtSTX_strExit(Sender: TObject);
     procedure edtSTXExit(Sender: TObject);
@@ -316,6 +317,14 @@ begin
     key := #0;
 end;
 
+procedure TfrmContest.edtSRX2Change(Sender: TObject);
+begin
+  if chLoc.Checked then
+  begin
+   edtSRX2.Text := dmUtils.StdFormatLocator(edtSRX2.Text);
+   edtSRX2.SelStart := Length(edtSRX2.Text);
+  end;
+end;
 procedure TfrmContest.edtSRXExit(Sender: TObject);
 begin
   ChkSerialNrUpd(False); //just save it

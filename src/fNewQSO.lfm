@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 35
+  Left = 159
   Height = 709
-  Top = 64
+  Top = 208
   Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2137,7 +2137,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.4.0'
   object sbNewQSO: TStatusBar
     AnchorSideBottom.Side = asrBottom
     Left = 0
@@ -3027,15 +3027,14 @@ object frmNewQSO: TfrmNewQSO
           Width = 72
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
-          CharCase = ecUppercase
           MaxLength = 10
+          OnChange = edtGridChange
           OnEnter = edtGridEnter
           OnExit = edtGridExit
           OnKeyDown = edtGridKeyDown
           ParentShowHint = False
           ShowHint = True
           TabOrder = 7
-          Text = 'JO80OB'
         end
         object edtPWR: TEdit
           AnchorSideLeft.Control = edtGrid
@@ -3557,11 +3556,11 @@ object frmNewQSO: TfrmNewQSO
           Height = 135
           Top = 376
           Width = 938
-          ActivePage = tabDXCCStat
+          ActivePage = tabSatellite
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 40
-          TabIndex = 0
+          TabIndex = 1
           TabOrder = 28
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
@@ -3664,11 +3663,10 @@ object frmNewQSO: TfrmNewQSO
               Width = 128
               BorderSpacing.Left = 10
               BorderSpacing.Top = 2
-              OnChange = cmbPropagationChange
+              OnChange = edtRXFreqChange
               OnExit = edtRXFreqExit
               ParentFont = False
               TabOrder = 2
-              Text = 'edtRXFreq'
             end
             object btnClearSatellite: TButton
               AnchorSideLeft.Control = edtRXFreq

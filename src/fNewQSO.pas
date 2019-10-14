@@ -393,6 +393,7 @@ type
     procedure edtDateEnter(Sender: TObject);
     procedure edtDXCCRefEnter(Sender: TObject);
     procedure edtEndTimeEnter(Sender: TObject);
+    procedure edtGridChange(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
     procedure edtHisRSTExit(Sender: TObject);
     procedure edtHisRSTKeyPress(Sender : TObject; var Key : char);
@@ -404,6 +405,7 @@ type
     procedure edtQSL_VIAEnter(Sender: TObject);
     procedure edtQTHEnter(Sender: TObject);
     procedure edtRemQSOEnter(Sender: TObject);
+    procedure edtRXFreqChange(Sender: TObject);
     procedure edtRXFreqExit(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
     procedure edtStateEnter(Sender: TObject);
@@ -625,6 +627,7 @@ type
     procedure SelTextFix(Edit : TEdit; var Key : Char);
 
     function CheckFreq(freq : String) : String;
+    procedure WaitWeb(secs:integer);
 
   public
     QTHfromCb   : Boolean;
@@ -720,6 +723,7 @@ var
   c_ErrMsg    : String;
   c_SyncText  : String;
   c_running   : Boolean = False;
+  c_lock      : Boolean = False;
   Azimuth     : String;
 
   minimalize    : Boolean;
@@ -741,6 +745,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite;
+
 
 procedure TQSLTabThread.Execute;
 var
@@ -770,7 +775,19 @@ begin
         Synchronize(@frmNewQSO.SynDXCCTab)
   end
 end;
-
+procedure TfrmNewQSO.WaitWeb(secs:integer);
+var
+   l:integer;
+Begin
+  //set c_lock false before calling info fetch!
+  for l:=1 to secs*10 do  //wait for web response sec timeout
+  Begin
+    if (( not c_lock) and c_running )then c_lock := true;
+    sleep(100);
+    Application.ProcessMessages;
+    if ( c_lock and (not c_running ))then break;
+  end;
+end;
 
 procedure TfrmNewQSO.SynDXCCTab;
 begin
@@ -1076,6 +1093,7 @@ begin
   QTHfromCb := False;
   lblAmbiguous.Visible := False;
   old_call := '';
+  idcall  := '';   //without this 2ESC when cursor is at cmbfreq(Auto=unchecked) restores club->award text after clearall
   old_time := '';
   old_rstr := '';
   old_rsts := '';
@@ -1896,8 +1914,7 @@ var
   Buf,
   prik,
   data:string;
-  chkDuplicates,
-  c_lock: boolean;
+  chkDuplicates :boolean;
   i:longint;
   l:integer;
 
@@ -1942,13 +1959,7 @@ begin
                                                             edtCall.Text := uppercase(data);
                                                             c_lock :=false;
                                                             edtCallExit(nil);   //does info fetch
-                                                            for l:=1 to 50 do  //wait for web response 5sec timeout
-                                                            Begin
-                                                              if (( not c_lock) and c_running )then c_lock := true;
-                                                              sleep(100);
-                                                              Application.ProcessMessages;
-                                                              if ( c_lock and (not c_running ))then break;
-                                                            end;
+                                                            WaitWeb(5);  //wait for web response 5sec timeout
                                                           end;
                                               'GRIDSQUARE' :Begin
                                                                  data := uppercase(data);
@@ -2450,9 +2461,10 @@ begin
                              old_cfreq := '';
                              old_cmode := '';
                              edtCall.Text := call;
+                             c_lock:=False;
                              edtCallExit(nil);    //<--------this will fetch web info
                              if dmData.DebugLevel>=1 then Writeln('Call was not there already');
-                             sleep(1000); // give time for web
+                             WaitWeb(2); // give time for web
                            end;
 
             //these can be altered always
@@ -2623,9 +2635,10 @@ begin
           if  edtCall.Text <> call then  //call (and web info) maybe there already ok from status packet
                            Begin
                              edtCall.Text := call;
+                             c_lock:=False;
                              edtCallExit(nil);    //<--------this will fetch web info
                              if dmData.DebugLevel>=1 then Writeln('Call was not there already');
-                             sleep(1000); // give time for web
+                             WaitWeb(2); // give time for web
                            end;
           //---------------------------------------------LOCATOR-------
           loc:= trim(StrBuf(index));
@@ -4089,6 +4102,12 @@ begin
   edtEndTime.SelectAll
 end;
 
+procedure TfrmNewQSO.edtGridChange(Sender: TObject);
+begin
+  edtGrid.Text := dmUtils.StdFormatLocator(edtGrid.Text);
+  edtGrid.SelStart := Length(edtGrid.Text);
+end;
+
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
 begin
   edtGrid.SelectAll
@@ -4290,6 +4309,7 @@ begin
       LogName := dmData.qLogList.Fields[1].AsString;
 
       frmDXCluster.StopAllConnections;
+      CloseAllWindows;         //fixes issue #163
       SaveSettings;
       dmData.CloseDatabases;
 
@@ -4437,6 +4457,21 @@ end;
 procedure TfrmNewQSO.edtRemQSOEnter(Sender: TObject);
 begin
   edtRemQSO.SelectAll
+end;
+
+procedure TfrmNewQSO.edtRXFreqChange(Sender: TObject);
+begin
+  //prevents typing in too large number value for database
+  if (length(edtRXFreq.Text)>6) then
+    if ( (pos(',',edtRXFreq.Text) = 0) and (pos('.',edtRXFreq.Text) = 0) )then
+     begin
+         edtRXFreq.Text:= copy(edtRXFreq.Text,1,6);
+         edtRXFreq.SelStart := Length(edtRXFreq.Text);
+     end;
+  //no jokes...
+  if (pos('999999.9999',edtRXFreq.Text)>0) or (pos('999999,9999',edtRXFreq.Text)>0) then
+    edtRXFreq.Text:= '';
+  frmNewQSO.cmbPropagationChange(nil);
 end;
 
 procedure TfrmNewQSO.edtRXFreqExit(Sender: TObject);
@@ -4991,11 +5026,11 @@ begin
             edtCall.SetFocus
         end
         else
-          edtCall.Text := ''; // OnChange calls ClearAll;
+         edtCall.Text := ''; // OnChange calls ClearAll;
         EscFirstTime := False;
         old_ccall := '';
         old_cfreq := '';
-        old_cmode := ''
+        old_cmode := '';
       end
       else begin
         if Assigned(CWint) then
