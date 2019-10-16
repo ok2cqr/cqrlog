@@ -1341,18 +1341,19 @@ begin
   btnAM.Font.Color    := COLOR_WINDOWTEXT;
   btnFM.Font.Color    := COLOR_WINDOWTEXT;
 
-  usermode := 'RTTY';
   if cqrini.ReadInteger('TRX', 'ActiveRig', 1) = 2 then
           usermode:=cqrini.ReadString('Band2', 'Datacmd', 'RTTY')
          else
           usermode:=cqrini.ReadString('Band1', 'Datacmd', 'RTTY');
 
-  if mode = 'CW' then btnCW.Font.Color := clRed;
-  if mode = 'SSB' then btnSSB.Font.Color := clRed;
-  if mode = 'AM' then btnAM.Font.Color := clRed;
-  if mode = 'FM' then btnFM.Font.Color := clRed;
-  if mode = usermode then btnRTTY.Font.Color := clRed;
-
+  if mode = usermode then btnRTTY.Font.Color := clRed
+     else
+       case mode of
+        'CW' : btnCW.Font.Color := clRed;
+        'SSB' : btnSSB.Font.Color := clRed;
+        'AM' : btnAM.Font.Color := clRed;
+        'FM' : btnFM.Font.Color := clRed;
+       end;
 end;
 
 procedure TfrmTRXControl.Split(Up : Integer);

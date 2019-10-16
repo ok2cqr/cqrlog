@@ -782,14 +782,18 @@ begin
 end;
 function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
 var
-   NrRig:String;
+   NrRig,
+   DatCmd:String;
 Begin
-   if frmTRXControl.rbRadio1.Checked then
-      NrRig := 'Band1'
+   if cqrini.ReadInteger('TRX', 'ActiveRig', 1) = 2 then
+      NrRig := 'Band2'
      else
-      NrRig := 'Band2';
+      NrRig := 'Band1';
 
-   if cqrini.ReadBool('Modes', 'Rig2Data', False) and (mode = cqrini.ReadString(NrRig, 'Datacmd', 'RTTY')) then
+   DatCmd :=  upcase(cqrini.ReadString(NrRig, 'Datacmd', 'RTTY'));
+   if (DatCmd = 'USB') or (DatCmd = 'LSB') then DatCmd := 'SSB'; //this is what RigControl responses
+
+   if cqrini.ReadBool('Modes', 'Rig2Data', False) and (mode = DatCmd) then
             Result := cqrini.ReadString(NrRig, 'Datamode', 'RTTY')
      else   Result := mode;
 end;
@@ -4980,10 +4984,7 @@ begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) and (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
     begin
       if chkAutoMode.Checked then
-        if cqrini.ReadBool('Modes', 'Rig2Data', False) and
-             (mode = cqrini.ReadString('Band2', 'Datacmd', 'RTTY')) then
-                  cmbMode.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY')
-           else   cmbMode.Text := mode;
+        cmbMode.Text := RigCmd2DataMode(mode);
       cmbFreq.Text := freq;
       edtHisRST.SetFocus;
       edtHisRST.SelStart  := 1;
@@ -6186,10 +6187,7 @@ begin
     edtCall.Text := call;
     cmbFreq.Text := freq;
     if chkAutoMode.Checked then
-       if cqrini.ReadBool('Modes', 'Rig2Data', False) and
-             (mode = cqrini.ReadString('Band2', 'Datacmd', 'RTTY')) then
-                  cmbMode.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY')
-           else   cmbMode.Text := mode;
+       cmbMode.Text := RigCmd2DataMode(mode);
     freq := FloatToStr(etmp);
     if not FromRbn then
       mode := dmUtils.GetModeFromFreq(freq);

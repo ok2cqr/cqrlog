@@ -239,15 +239,20 @@ You can also switch between memory frequencies with TRXControl's <b>M up</b> and
 <img src="img/h121.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
-Here you can set up the default bandwidth for any of the supported modes (CW - SSB - RTTY - AM - FM).
+Here you can set up the default bandwidth for any of the supported modes (CW - SSB - DATA - AM - FM).
 If your radio is tuned to the corresponding band segment or if you switch the mode on the radio
 control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be
 changed at any time, however a program restart will probably be needed to make the changes
-take effect.<br><br>
-<strong>User definable digital modes</strong> can be set up in a separate box. Use comma
-as a separator, ie. BPSK31,QPSK64,OLIVIA,CONTESTIA etc.<br>
-Some <strong>TRX like ICOM don't have support for this in HamLib. To get mode settings work, set
-all values to 0 (zero).</strong>
+take effect.
+<br><strong>Some TRX like don't have support for setting bandwith in HamLib. To get mode bandwidth setting to rig default, set
+value to 0 (zero).</strong>
+<br><br>You can define data mode and corresponding rig mode command by your needs. Data mode effects to bands/frequencies settings and that way to DXCluster spot colors.
+<br>Here we have setting PKTUSB / FT8 as Icom rig needs command PKTUSB for running FT8 and we like to see FT8 DX spots colored by our wkd/needs.
+<br>At NewQSO window right click of checbox "Auto"(mode) allows selection where mode received from rig is converted back to user data mode. (Auto+RigMode2DataMode)
+<br>Some cases this may be bad. Example: you work fone qsos(SSB) and SSTV qsos using rig mode USB. Then setting Auto+RigMode2DataMode leads all fone qsos set as mode SSTV.
+<br><br><strong>User definable digital modes</strong> can be set up in a separate box. Use comma
+as a separator, ie. MYMODE1,MYMODE2 etc.<br>
+
 <p align=center><img src=img/line.png></p>
 <a name=ah9><h2><strong>QTH Profiles</strong></h2></a>
 <img src=img/h12.png border=0><br><br>
