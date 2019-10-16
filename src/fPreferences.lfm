@@ -1,12 +1,12 @@
 object frmPreferences: TfrmPreferences
-  Left = 129
+  Left = 119
   Height = 659
-  Top = 2
+  Top = 89
   Width = 1000
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 833
-  VertScrollBar.Page = 496
+  HorzScrollBar.Page = 761
+  VertScrollBar.Page = 450
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -17,15 +17,15 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.4.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 659
     Top = 0
     Width = 752
-    ActivePage = tabModes
+    ActivePage = tabVisibleColumns
     Align = alClient
-    TabIndex = 7
+    TabIndex = 3
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -3594,11 +3594,10 @@ object frmPreferences: TfrmPreferences
     object tabExport: TTabSheet
       Caption = 'Export'
       ClientHeight = 628
-      ClientWidth = 840
+      ClientWidth = 742
       inline fraExportPref1: TfraExportPref
         Top = 8
         Width = 640
-        ClientHeight = 504
         ClientWidth = 640
         DesignLeft = 623
         DesignTop = 214
@@ -3609,12 +3608,12 @@ object frmPreferences: TfrmPreferences
           Left = 8
           Top = 448
         end
-        inherited chkexRemarks: TCheckBox
-          Width = 83
-        end
         inherited lblField1: TLabel
           AnchorSideLeft.Control = fraExportPref1
           AnchorSideTop.Control = fraExportPref1
+        end
+        inherited chkexRemarks: TCheckBox
+          Width = 83
         end
       end
     end
@@ -5034,7 +5033,7 @@ object frmPreferences: TfrmPreferences
     object tabXplanet: TTabSheet
       Caption = 'xplanet support'
       ClientHeight = 628
-      ClientWidth = 840
+      ClientWidth = 742
       object GroupBox21: TGroupBox
         Left = 14
         Height = 89

@@ -127,6 +127,8 @@ type
     MenuItem58: TMenuItem;
     MenuItem63: TMenuItem;
     MenuItem94 : TMenuItem;
+    MenuItem95: TMenuItem;
+    MenuItem96: TMenuItem;
     mnuRemoteModeN1MM: TMenuItem;
     mnuReminder: TMenuItem;
     MenuItem86: TMenuItem;
@@ -324,6 +326,7 @@ type
     Panel6: TPanel;
     pnlOffline: TPanel;
     popEditQSO: TPopupMenu;
+    popMode: TPopupMenu;
     sbNewQSO: TStatusBar;
     sbtneQSL : TSpeedButton;
     sgrdStatistic : TStringGrid;
@@ -420,6 +423,8 @@ type
     procedure MenuItem45Click(Sender: TObject);
     procedure MenuItem46Click(Sender: TObject);
     procedure MenuItem84Click(Sender : TObject);
+    procedure MenuItem95Click(Sender: TObject);
+    procedure MenuItem96Click(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
     procedure acRemoteModeExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
@@ -529,6 +534,7 @@ type
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
+    procedure popModePopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnQSLClick(Sender: TObject);
     procedure sbtnQRZClick(Sender: TObject);
@@ -1594,6 +1600,7 @@ begin
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
+  if cqrini.ReadBool('Modes', 'Rig2Data', False) then chkAutoMode.Font.Color:=clRed;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -2029,7 +2036,10 @@ begin
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
-          cmbMode.Text := mode;
+          if cqrini.ReadBool('Modes', 'Rig2Data', False) and
+             (mode = cqrini.ReadString('Band2', 'Datacmd', 'RTTY')) then
+                  cmbMode.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY')
+           else   cmbMode.Text := mode;
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
@@ -4580,6 +4590,23 @@ procedure TfrmNewQSO.MenuItem84Click(Sender : TObject);
 begin
   dmUtils.ShowHamQTHInBrowser(dmData.qQSOBefore.Fields[4].AsString)
 end;
+procedure TfrmNewQSO.popModePopup(Sender: TObject);
+begin
+    MenuItem96.RadioItem:= cqrini.ReadBool('Modes', 'Rig2Data', False);
+    MenuItem95.RadioItem:= not  MenuItem96.RadioItem;
+end;
+
+procedure TfrmNewQSO.MenuItem95Click(Sender: TObject);
+begin
+     chkAutoMode.Font.Color:=clDefault;
+     cqrini.WriteBool('Modes', 'Rig2Data', False);
+end;
+
+procedure TfrmNewQSO.MenuItem96Click(Sender: TObject);
+begin
+    chkAutoMode.Font.Color:=clRed;
+    cqrini.WriteBool('Modes', 'Rig2Data', True);
+end;
 
 procedure TfrmNewQSO.acNewQSOExecute(Sender: TObject);
 begin
@@ -4941,7 +4968,10 @@ begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) and (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
     begin
       if chkAutoMode.Checked then
-        cmbMode.Text := mode;
+        if cqrini.ReadBool('Modes', 'Rig2Data', False) and
+             (mode = cqrini.ReadString('Band2', 'Datacmd', 'RTTY')) then
+                  cmbMode.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY')
+           else   cmbMode.Text := mode;
       cmbFreq.Text := freq;
       edtHisRST.SetFocus;
       edtHisRST.SelStart  := 1;
@@ -5379,8 +5409,6 @@ begin
   frmMain.Show;
   frmMain.BringToFront;
 end;
-
-
 
 procedure TfrmNewQSO.sbtnAttachClick(Sender: TObject);
 begin
@@ -6146,7 +6174,10 @@ begin
     edtCall.Text := call;
     cmbFreq.Text := freq;
     if chkAutoMode.Checked then
-      cmbMode.Text := mode;
+       if cqrini.ReadBool('Modes', 'Rig2Data', False) and
+             (mode = cqrini.ReadString('Band2', 'Datacmd', 'RTTY')) then
+                  cmbMode.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY')
+           else   cmbMode.Text := mode;
     freq := FloatToStr(etmp);
     if not FromRbn then
       mode := dmUtils.GetModeFromFreq(freq);

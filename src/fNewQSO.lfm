@@ -1,7 +1,7 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 159
+  Left = 27
   Height = 709
-  Top = 208
+  Top = 114
   Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2137,6 +2137,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
+  PopupMenu = popMode
   LCLVersion = '2.0.4.0'
   object sbNewQSO: TStatusBar
     AnchorSideBottom.Side = asrBottom
@@ -3415,13 +3416,13 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = cmbMode
           AnchorSideRight.Side = asrBottom
-          Left = 285
+          Left = 292
           Height = 23
           Top = 1
-          Width = 63
+          Width = 56
           Anchors = [akTop, akRight]
           BorderSpacing.Left = 4
-          Caption = 'AUTO'
+          Caption = 'Auto'
           Checked = True
           OnChange = chkAutoModeChange
           State = cbChecked
@@ -6681,5 +6682,18 @@ object frmNewQSO: TfrmNewQSO
     OnTimer = tmrN1MMTimer
     left = 800
     top = 32
+  end
+  object popMode: TPopupMenu
+    OnPopup = popModePopup
+    left = 872
+    top = 32
+    object MenuItem95: TMenuItem
+      Caption = 'Auto'
+      OnClick = MenuItem95Click
+    end
+    object MenuItem96: TMenuItem
+      Caption = 'Auto+RigCmd2DataMode'
+      OnClick = MenuItem96Click
+    end
   end
 end
