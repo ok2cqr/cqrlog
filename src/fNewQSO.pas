@@ -634,6 +634,7 @@ type
 
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
+    function RigCmd2DataMode(mode:String):String;
 
   public
     QTHfromCb   : Boolean;
@@ -779,6 +780,20 @@ begin
         Synchronize(@frmNewQSO.SynDXCCTab)
   end
 end;
+function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
+var
+   NrRig:String;
+Begin
+   if frmTRXControl.rbRadio1.Checked then
+      NrRig := 'Band1'
+     else
+      NrRig := 'Band2';
+
+   if cqrini.ReadBool('Modes', 'Rig2Data', False) and (mode = cqrini.ReadString(NrRig, 'Datacmd', 'RTTY')) then
+            Result := cqrini.ReadString(NrRig, 'Datamode', 'RTTY')
+     else   Result := mode;
+end;
+
 procedure TfrmNewQSO.WaitWeb(secs:integer);
 var
    l:integer;
@@ -2036,10 +2051,7 @@ begin
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
-          if cqrini.ReadBool('Modes', 'Rig2Data', False) and
-             (mode = cqrini.ReadString('Band2', 'Datacmd', 'RTTY')) then
-                  cmbMode.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY')
-           else   cmbMode.Text := mode;
+           cmbMode.Text := RigCmd2DataMode(mode);
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
