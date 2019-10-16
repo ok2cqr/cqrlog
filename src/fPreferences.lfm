@@ -7587,7 +7587,6 @@ object frmPreferences: TfrmPreferences
     ClientHeight = 659
     ClientWidth = 88
     TabOrder = 1
-    OnClick = Panel1Click
     object btnOK: TButton
       AnchorSideLeft.Control = Panel1
       AnchorSideLeft.Side = asrCenter

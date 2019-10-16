@@ -1069,7 +1069,6 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtPoll2Exit(Sender: TObject);
     procedure edtPoll1Exit(Sender: TObject);
-    procedure Panel1Click(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
     procedure pnlQSOColorClick(Sender : TObject);
   private
@@ -3006,11 +3005,6 @@ var
 begin
   if not TryStrToInt(edtPoll1.Text, tmp) then
     edtPoll1.Text := '500';
-end;
-
-procedure TfrmPreferences.Panel1Click(Sender: TObject);
-begin
-
 end;
 
 procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
