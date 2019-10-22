@@ -5557,175 +5557,313 @@ object frmPreferences: TfrmPreferences
       Caption = 'LoTW/eQSL support'
       ClientHeight = 628
       ClientWidth = 840
-      object Label10: TLabel
+      object lblLoTWBkg: TLabel
+        AnchorSideLeft.Control = cmbLoTWBckColor
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = cmbLoTWBckColor
         Left = 271
         Height = 34
-        Top = 282
+        Top = 360
         Width = 327
+        BorderSpacing.Left = 6
         Caption = 'color as a background in DX cluster and band map'#10'for stations using LoTW'
         ParentColor = False
       end
       object chkIncLoTWDXCC: TCheckBox
-        Left = 15
+        AnchorSideLeft.Control = gbeQSL
+        AnchorSideTop.Control = gbeQSL
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 182
+        Top = 278
         Width = 423
+        BorderSpacing.Top = 6
         Caption = 'Include LoTW and eQSL confirmed countries in DXCC statistic'
         TabOrder = 0
       end
       object chkNewQSOLoTW: TCheckBox
-        Left = 15
+        AnchorSideLeft.Control = chkIncLoTWDXCC
+        AnchorSideTop.Control = chkIncLoTWDXCC
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 206
+        Top = 307
         Width = 593
+        BorderSpacing.Top = 6
         Caption = 'Use LoTW and eQSL confirmed countries for New country or New band country etc. info'
         TabOrder = 1
       end
-      object GroupBox28: TGroupBox
-        Left = 15
+      object gbLoTW: TGroupBox
+        AnchorSideLeft.Control = tabLoTW
+        AnchorSideTop.Control = tabLoTW
+        Left = 12
         Height = 72
-        Top = 6
-        Width = 513
+        Top = 3
+        Width = 516
+        BorderSpacing.Left = 12
+        BorderSpacing.Top = 3
         Caption = ' Data for access to ARRL LoTW website '
         ClientHeight = 54
-        ClientWidth = 511
+        ClientWidth = 514
         TabOrder = 2
-        object Label80: TLabel
-          Left = 14
+        object lblLoUsr: TLabel
+          AnchorSideLeft.Control = gbLoTW
+          AnchorSideTop.Control = gbLoTW
+          Left = 6
           Height = 17
-          Top = 15
+          Top = 6
           Width = 75
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 6
           Caption = 'User name:'
           ParentColor = False
         end
-        object Label81: TLabel
-          Left = 254
+        object lblLoTWpass: TLabel
+          AnchorSideTop.Control = lblLoUsr
+          AnchorSideRight.Control = edtLoTWPass
+          Left = 320
           Height = 17
-          Top = 15
+          Top = 6
           Width = 69
+          Anchors = [akTop, akRight]
+          BorderSpacing.Right = 6
           Caption = 'Password: '
           ParentColor = False
         end
         object edtLoTWName: TEdit
-          Left = 97
+          AnchorSideLeft.Control = lblLoUsr
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = lblLoUsr
+          Left = 87
           Height = 34
-          Top = 12
+          Top = 6
           Width = 88
+          BorderSpacing.Left = 6
           TabOrder = 0
         end
         object edtLoTWPass: TEdit
-          Left = 334
+          AnchorSideTop.Control = lblLoUsr
+          AnchorSideRight.Control = gbLoTW
+          AnchorSideRight.Side = asrBottom
+          Left = 395
           Height = 34
-          Top = 12
+          Top = 6
           Width = 104
+          Anchors = [akTop, akRight]
+          BorderSpacing.Right = 15
           EchoMode = emPassword
           PasswordChar = '*'
           TabOrder = 1
         end
       end
       object chkShowLoTWInfo: TCheckBox
-        Left = 15
+        AnchorSideLeft.Control = chkNewQSOLoTW
+        AnchorSideTop.Control = chkNewQSOLoTW
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 243
+        Top = 336
         Width = 398
+        BorderSpacing.Top = 6
         Caption = 'Show info in New QSO window if station uses LoTW/eQSL'
         TabOrder = 3
       end
       object chkShowBckLoTW: TCheckBox
-        Left = 15
+        AnchorSideLeft.Control = chkShowLoTWInfo
+        AnchorSideTop.Control = chkShowLoTWInfo
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 282
+        Top = 365
         Width = 83
+        BorderSpacing.Top = 6
         Caption = 'Use this '
         TabOrder = 4
       end
       object cmbLoTWBckColor: TColorBox
-        Left = 103
+        AnchorSideLeft.Control = chkShowBckLoTW
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = chkShowBckLoTW
+        AnchorSideTop.Side = asrCenter
+        Left = 101
         Height = 33
-        Top = 277
+        Top = 360
         Width = 164
         DefaultColorColor = clMoneyGreen
         NoneColorColor = clMoneyGreen
         Selected = clMoneyGreen
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        BorderSpacing.Left = 6
         ItemHeight = 0
         TabOrder = 5
       end
-      object GroupBox36: TGroupBox
-        Left = 15
-        Height = 72
-        Top = 91
+      object gbeQSL: TGroupBox
+        AnchorSideLeft.Control = gbLoTW
+        AnchorSideTop.Control = gbLoTW
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 191
+        Top = 81
         Width = 513
+        BorderSpacing.Top = 6
         Caption = ' Data for access to eQSL website '
-        ClientHeight = 54
+        ClientHeight = 173
         ClientWidth = 511
         TabOrder = 6
-        object Label108: TLabel
-          Left = 14
+        object lbleQSLUsr: TLabel
+          AnchorSideLeft.Control = gbeQSL
+          AnchorSideTop.Control = gbeQSL
+          Left = 6
           Height = 17
-          Top = 15
+          Top = 6
           Width = 75
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 6
           Caption = 'User name:'
           ParentColor = False
         end
-        object Label109: TLabel
-          Left = 254
+        object lbleQSLPass: TLabel
+          AnchorSideTop.Control = lbleQSLUsr
+          AnchorSideRight.Control = edteQSLPass
+          Left = 320
           Height = 17
-          Top = 15
+          Top = 6
           Width = 69
+          Anchors = [akTop, akRight]
+          BorderSpacing.Right = 6
           Caption = 'Password: '
           ParentColor = False
         end
         object edteQSLName: TEdit
-          Left = 97
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = lbleQSLUsr
+          Left = 87
           Height = 34
-          Top = 12
+          Top = 6
           Width = 88
+          BorderSpacing.Left = 6
           TabOrder = 0
         end
         object edteQSLPass: TEdit
-          Left = 334
+          AnchorSideTop.Control = lbleQSLUsr
+          AnchorSideRight.Control = gbeQSL
+          AnchorSideRight.Side = asrBottom
+          Left = 395
           Height = 34
-          Top = 12
+          Top = 6
           Width = 104
+          Anchors = [akTop, akRight]
+          BorderSpacing.Right = 12
           EchoMode = emPassword
           PasswordChar = '*'
           TabOrder = 1
         end
+        object lbleQSLStartAddr: TLabel
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideTop.Control = edteQSLName
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 17
+          Top = 46
+          Width = 456
+          BorderSpacing.Top = 6
+          Caption = 'eQSL download start address prefix. Your user data is added  as suffix.'
+          ParentColor = False
+        end
+        object edteQSLStartAddr: TEdit
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideTop.Control = lbleQSLStartAddr
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = gbeQSL
+          AnchorSideRight.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 69
+          Width = 493
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Top = 6
+          BorderSpacing.Right = 12
+          TabOrder = 2
+        end
+        object lbleQSLDnlAddr: TLabel
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideTop.Control = edteQSLStartAddr
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 17
+          Top = 109
+          Width = 432
+          BorderSpacing.Top = 6
+          Caption = 'eQSL download file address prefix. Adi filename is added as suffix.'
+          ParentColor = False
+        end
+        object edteQSLDnlAddr: TEdit
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideTop.Control = lbleQSLDnlAddr
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = gbeQSL
+          AnchorSideRight.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 132
+          Width = 493
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Top = 6
+          BorderSpacing.Right = 12
+          TabOrder = 3
+        end
       end
       object chkShowBckEQSL: TCheckBox
-        Left = 15
+        AnchorSideLeft.Control = chkShowBckLoTW
+        AnchorSideTop.Control = chkShowBckLoTW
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 328
+        Top = 400
         Width = 83
+        BorderSpacing.Top = 12
         Caption = 'Use this '
         TabOrder = 7
       end
       object cmbeQSLBckColor: TColorBox
-        Left = 103
+        AnchorSideLeft.Control = chkShowBckEQSL
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = chkShowBckEQSL
+        AnchorSideTop.Side = asrCenter
+        Left = 101
         Height = 33
-        Top = 323
+        Top = 395
         Width = 164
         DefaultColorColor = clSkyBlue
         NoneColorColor = clMoneyGreen
         Selected = clSkyBlue
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        BorderSpacing.Left = 6
         ItemHeight = 0
         TabOrder = 8
       end
-      object Label128: TLabel
+      object lbleQSLBkg: TLabel
+        AnchorSideLeft.Control = cmbeQSLBckColor
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = cmbeQSLBckColor
         Left = 271
         Height = 34
-        Top = 328
+        Top = 395
         Width = 327
+        BorderSpacing.Left = 6
         Caption = 'color as a background in DX cluster and band map'#10'for stations using eQSL'
         ParentColor = False
       end
       object chkExpCommet: TCheckBox
-        Left = 16
+        AnchorSideLeft.Control = chkShowBckEQSL
+        AnchorSideTop.Control = chkShowBckEQSL
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 376
+        Top = 435
         Width = 315
+        BorderSpacing.Top = 12
         Caption = 'Upload to eQSL also data in COMMENT field '
         TabOrder = 9
       end
