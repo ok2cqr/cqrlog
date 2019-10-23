@@ -374,9 +374,10 @@ begin
         if  OpenFromMenu then  //close existing log
          Begin
           frmDXCluster.StopAllConnections;
-          frmNewQSO.SaveSettings;
           frmNewQSO.CloseAllWindows;
+          frmNewQSO.SaveSettings;
           dmData.CloseDatabases;
+          frmNewQSO.DBServerChanged :=True;
           RemoteMySQL :=false;
           OpenFromMenu:=false;
           SaveLogin;
@@ -398,14 +399,15 @@ begin
   begin
     if  OpenFromMenu then  //close existing log
          Begin
-          frmDXCluster.StopAllConnections;
-          frmNewQSO.SaveSettings;
-          frmNewQSO.CloseAllWindows;
-          dmData.CloseDatabases;
-          RemoteMySQL :=True;
-          OpenFromMenu:=false;
-          SaveLogin;
-          LoadLogin;
+            frmDXCluster.StopAllConnections;
+            frmNewQSO.CloseAllWindows;
+            frmNewQSO.SaveSettings;
+            dmData.CloseDatabases;
+            frmNewQSO.DBServerChanged :=True;
+            RemoteMySQL :=True;
+            OpenFromMenu:=false;
+            SaveLogin;
+            LoadLogin;
          end;
     grbLogin.Visible := True
   end
