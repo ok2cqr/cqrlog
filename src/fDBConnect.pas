@@ -363,8 +363,6 @@ begin
 end;
 
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
-const
-     myClose :TCloseaction = caFree;
 begin
   //writeln('OpenFromMenu:',OpenFromMenu);
   if chkSaveToLocal.Checked then
