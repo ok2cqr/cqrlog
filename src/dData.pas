@@ -1073,6 +1073,9 @@ var
   c      : TConnectionName;
   MySQLVer : String;
   param    : String;
+  AProcess: TProcess;
+  AStringList: TStringList;
+
 begin
   InitCriticalSection(csPreviousQSO);
   cqrini       := nil;
@@ -1088,6 +1091,23 @@ begin
   if fDebugLevel=0 then
     Writeln('**** CHANGE WITH --debug=1 PARAMETER ****');
   Writeln('');
+
+  Writeln('OS:');
+  AProcess := TProcess.Create(nil);
+  AStringList := TStringList.Create;
+  Try
+  AProcess.Executable := 'cat';
+  AProcess.Parameters.Add('/proc/version');
+  AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
+  AProcess.Execute;
+  AStringList.LoadFromStream(AProcess.Output);
+  for i:=0 to pred(AStringList.Count) do
+    writeln(AStringList[i]);
+  except
+    writeln('Could not get Linux version! [tried: cat /proc/version]');
+  end;
+  AStringList.Free;
+  AProcess.Free;
 
   if fDebugLevel>0 then
   begin

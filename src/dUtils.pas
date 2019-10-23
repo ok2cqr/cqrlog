@@ -1053,6 +1053,7 @@ function TdmUtils.StdFormatLocator(loc:string):String;
 var
   s :String;
 begin
+  Result := loc;
   if loc = '' then exit;
   s :=  Upcase(copy(loc,1,4));
   s:= s + lowercase(copy(loc,5,6));   //max loc length 10 in database
