@@ -746,6 +746,9 @@ var
   UseDefaultColor : Boolean;
   DefaultColor    : Integer;
   MaxXplanetSpots : Integer;
+  myloc: string = '';
+  mycall: string = '';
+  lat, long: currency;
 begin
   UseDefaultColor := cqrini.ReadBool('xplanet','UseDefColor',True);
   DefaultColor    := cqrini.ReadInteger('xplanet','color',clWhite);
@@ -754,6 +757,15 @@ begin
   DeleteFile(FxplanetFile);
 
   l := TStringList.Create;
+  myloc := cqrini.ReadString('Station', 'LOC', '');
+  mycall := cqrini.ReadString('Station', 'Call', '');
+  xColor := IntToHex(DefaultColor,8);
+  xColor := '0x'+Copy(xColor,3,Length(xColor)-2);
+  if dmUtils.IsLocOK(myloc) then
+  begin
+     dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc), lat, long);
+     l.Add(CurrToStr(lat)+' '+CurrToStr(long)+' "'+mycall+'" color='+xColor);
+  end;
   try
     for i:=1 to MAX_ITEMS do
     begin
