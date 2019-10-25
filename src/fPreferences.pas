@@ -120,6 +120,7 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    chkShowOwnPos: TCheckBox;
     chkDistance: TCheckBox;
     chkSTX: TCheckBox;
     chkSRX: TCheckBox;
@@ -1437,6 +1438,7 @@ begin
   cqrini.WriteInteger('xplanet', 'color', cmbXplanetColor.Selected);
   cqrini.WriteBool('xplanet', 'UseDefColor', chkXplanetColor.Checked);
   cqrini.WriteString('xplanet', 'loc', edtXplanetLoc.Text);
+  cqrini.WriteBool('xplanet', 'ShowOwnPos', chkShowOwnPos.Checked);
 
   cqrini.WriteString('ZipCode', 'First', cmbFirstZip.Text);
   cqrini.WriteString('ZipCode', 'FirstSaveTo', cmbFirstSaveTo.Text);
@@ -2170,7 +2172,6 @@ begin
 end;
 
 
-
 procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
 begin
   edtClUserName.Enabled := chkClUpEnabled.Checked;
@@ -2835,6 +2836,7 @@ begin
   cmbXplanetColor.Selected := cqrini.ReadInteger('xplanet', 'color', clWhite);
   chkXplanetColor.Checked := cqrini.ReadBool('xplanet', 'UseDefColor', True);
   edtXplanetLoc.Text := cqrini.ReadString('xplanet', 'loc', '');
+  chkShowOwnPos.Checked := cqrini.ReadBool('xplanet', 'ShowOwnPos', False);
 
   cmbFirstZip.Text := cqrini.ReadString('ZipCode', 'First', '');
   cmbFirstSaveTo.Text := cqrini.ReadString('ZipCode', 'FirstSaveTo', '');
