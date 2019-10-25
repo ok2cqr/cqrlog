@@ -116,6 +116,7 @@ begin
       if (dmData.Q.Fields[0].AsInteger = 0) then
       begin
         dmData.Q.Close;
+        dmData.trQ.Rollback;
         dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
@@ -192,6 +193,7 @@ begin
       if (dmData.Q.Fields[0].AsInteger = 0) then
       begin
         dmData.Q.Close;
+        dmData.trQ.Rollback;
         dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
@@ -228,6 +230,7 @@ begin
       if (dmData.Q.Fields[0].AsInteger = 0) then
       begin
         dmData.Q.Close;
+        dmData.trQ.Rollback;
         dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
