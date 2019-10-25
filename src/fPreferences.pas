@@ -120,6 +120,7 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    chkShowOwnPos: TCheckBox;
     chkDistance: TCheckBox;
     chkSTX: TCheckBox;
     chkSRX: TCheckBox;
@@ -492,6 +493,8 @@ type
     edtDataMode1: TEdit;
     edtCMD2: TEdit;
     edtCMD1: TEdit;
+    edteQSLDnlAddr: TEdit;
+    edteQSLStartAddr: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
@@ -646,7 +649,7 @@ type
     GroupBox25: TGroupBox;
     GroupBox26: TGroupBox;
     GroupBox27: TGroupBox;
-    GroupBox28: TGroupBox;
+    gbLoTW: TGroupBox;
     GroupBox29: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox30: TGroupBox;
@@ -655,7 +658,7 @@ type
     GroupBox33: TGroupBox;
     GroupBox34: TGroupBox;
     GroupBox35: TGroupBox;
-    GroupBox36: TGroupBox;
+    gbeQSL: TGroupBox;
     GroupBox37: TGroupBox;
     GroupBox38: TGroupBox;
     GroupBox39: TGroupBox;
@@ -683,7 +686,9 @@ type
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
     Label1: TLabel;
-    Label10: TLabel;
+    lbleQSLDnlAddr: TLabel;
+    lbleQSLStartAddr: TLabel;
+    lblLoTWBkg: TLabel;
     Label100: TLabel;
     Label101: TLabel;
     Label102: TLabel;
@@ -692,8 +697,8 @@ type
     Label105: TLabel;
     Label106: TLabel;
     Label107: TLabel;
-    Label108: TLabel;
-    Label109: TLabel;
+    lbleQSLUsr: TLabel;
+    lbleQSLPass: TLabel;
     Label11: TLabel;
     Label110: TLabel;
     Label111: TLabel;
@@ -714,7 +719,7 @@ type
     Label125: TLabel;
     Label126: TLabel;
     Label127: TLabel;
-    Label128: TLabel;
+    lbleQSLBkg: TLabel;
     Label129: TLabel;
     Label13: TLabel;
     Label130: TLabel;
@@ -864,7 +869,7 @@ type
     lblEdits: TLabel;
     lblStatistics: TLabel;
     lblQSOList: TLabel;
-    Label81: TLabel;
+    lblLoTWpass: TLabel;
     Label82: TLabel;
     Label83: TLabel;
     Label84: TLabel;
@@ -904,7 +909,7 @@ type
     Label78: TLabel;
     Label79: TLabel;
     Label8: TLabel;
-    Label80: TLabel;
+    lblLoUsr: TLabel;
     Label9: TLabel;
     lbleFont1: TLabel;
     lbPreferences: TListBox;
@@ -1433,6 +1438,7 @@ begin
   cqrini.WriteInteger('xplanet', 'color', cmbXplanetColor.Selected);
   cqrini.WriteBool('xplanet', 'UseDefColor', chkXplanetColor.Checked);
   cqrini.WriteString('xplanet', 'loc', edtXplanetLoc.Text);
+  cqrini.WriteBool('xplanet', 'ShowOwnPos', chkShowOwnPos.Checked);
 
   cqrini.WriteString('ZipCode', 'First', cmbFirstZip.Text);
   cqrini.WriteString('ZipCode', 'FirstSaveTo', cmbFirstSaveTo.Text);
@@ -1453,6 +1459,8 @@ begin
   cqrini.WriteInteger('LoTW', 'BckColor', cmbLoTWBckColor.Selected);
   cqrini.WriteString('LoTW', 'eQSLName', edteQSLName.Text);
   cqrini.WriteString('LoTW', 'eQSLPass', edteQSLPass.Text);
+  cqrini.WriteString('LoTW', 'eQSLStartAddr',edteQSLStartAddr.Text);
+  cqrini.WriteString('LoTW', 'eQSLDnlAddr',edteQSLDnlAddr.Text);
   cqrini.WriteBool('LoTW', 'eUseBackColor', chkShowBckEQSL.Checked);
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
   cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
@@ -2164,7 +2172,6 @@ begin
 end;
 
 
-
 procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
 begin
   edtClUserName.Enabled := chkClUpEnabled.Checked;
@@ -2829,6 +2836,7 @@ begin
   cmbXplanetColor.Selected := cqrini.ReadInteger('xplanet', 'color', clWhite);
   chkXplanetColor.Checked := cqrini.ReadBool('xplanet', 'UseDefColor', True);
   edtXplanetLoc.Text := cqrini.ReadString('xplanet', 'loc', '');
+  chkShowOwnPos.Checked := cqrini.ReadBool('xplanet', 'ShowOwnPos', False);
 
   cmbFirstZip.Text := cqrini.ReadString('ZipCode', 'First', '');
   cmbFirstSaveTo.Text := cqrini.ReadString('ZipCode', 'FirstSaveTo', '');
@@ -2849,6 +2857,8 @@ begin
   cmbLoTWBckColor.Selected := cqrini.ReadInteger('LoTW', 'BckColor', clMoneyGreen);
   edteQSLName.Text := cqrini.ReadString('LoTW', 'eQSLName', '');
   edteQSLPass.Text := cqrini.ReadString('LoTW', 'eQSLPass', '');
+  edteQSLStartAddr.Text := cqrini.ReadString('LoTW', 'eQSLStartAddr','http://www.eqsl.cc/qslcard/DownloadInBox.cfm');
+  edteQSLDnlAddr.Text := cqrini.ReadString('LoTW', 'eQSLDnlAddr','http://www.eqsl.cc/downloadedfiles/');
   chkShowBckEQSL.Checked := cqrini.ReadBool('LoTW', 'eUseBackColor', True);
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
   chkExpCommet.Checked := cqrini.ReadBool('LoTW', 'ExpComment', True);

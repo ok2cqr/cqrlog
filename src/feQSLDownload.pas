@@ -6,7 +6,7 @@ interface
 
 uses
   Classes,SysUtils,FileUtil,LResources,Forms,Controls,Graphics,Dialogs,StdCtrls,
-  ExtCtrls, blcksock, httpsend, synacode;
+  ExtCtrls, blcksock, httpsend, synacode, LazFileUtils;
 
 type
 
@@ -77,7 +77,9 @@ end;
 
 procedure TfrmeQSLDownload.btnDownloadClick(Sender : TObject);
 const
-  CDWNLD = '<LI><A HREF="downloadedfiles/';
+  //it is better to seek the file suffix than the old way
+  CDWNLD = '.adi">';
+
 var
   user : String = '';
   pass : String = '';
@@ -89,6 +91,7 @@ var
   Count : Word = 0;
   l     : TStringlist;
   tmp   : String;
+  i     : integer;
 begin
   Done := False;
   mStat.Clear;
@@ -119,7 +122,7 @@ begin
       mStat.Lines.Add('User name or password is not set!');
       exit
     end;
-    url := 'http://www.eqsl.cc/qslcard/DownloadInBox.cfm'+
+    url := cqrini.ReadString('LoTW', 'eQSLStartAddr','http://www.eqsl.cc/qslcard/DownloadInBox.cfm')+
            '?UserName='+user+
            '&Password='+EncodeURL(pass)+
            '&QTHNickname='+EncodeURL(edtQTH.Text)+
@@ -137,7 +140,7 @@ begin
     begin
       http.Document.Seek(0,soBeginning);
       l.LoadFromStream(http.Document);
-      Writeln(l.Text);
+      if dmData.DebugLevel>0 then  Writeln(l.Text);
       http.Clear;
       if (pos('Error: No such Username/Password found',l.Text) > 0) then
       begin
@@ -147,10 +150,18 @@ begin
       else begin
         if Pos(CDWNLD,l.Text) > 0 then
         begin
-          tmp := copy(l.Text,Pos(CDWNLD,l.Text)+Length(CDWNLD),100);
-          tmp := copy(tmp,1,Pos('"',tmp)-1);
-          url := 'http://www.eqsl.cc/qslcard/downloadedfiles/'+tmp;
-          Writeln('url: ',url);
+          //First find the line where link is
+          for i:=0 to pred(l.Count) do
+           begin
+            if Pos(CDWNLD,l[i])>0 then //then parse filename
+             Begin
+                  tmp := copy(l[i],pos('HREF="',l[i])+6,length(l[i])); //start point
+                  tmp := copy(l[i],1,pos('.adi"',l[i])+3); //endpoint
+                  tmp := ExtractFileNameOnly(tmp)+ExtractFileExt(tmp);
+             end;
+           end;
+          url := cqrini.ReadString('LoTW', 'eQSLDnlAddr','http://www.eqsl.cc/downloadedfiles/')+tmp;
+          if dmData.DebugLevel>0 then  Writeln('url: ',url);
           mStat.Lines.Add('File will be downloaded from:');
           mStat.Lines.Add(url);
           FileSize := 0;
@@ -159,8 +170,7 @@ begin
           begin
             http.Document.Seek(0,soBeginning);
             m.CopyFrom(http.Document,http.Document.Size);
-            mStat.Lines.Add('File downloaded successfully');
-            mStat.Lines.Add('File:');
+            mStat.Lines.Add('File downloaded successfully as local file:');
             mStat.Lines.Add(AdifFile);
             Done := True;
             Repaint;
