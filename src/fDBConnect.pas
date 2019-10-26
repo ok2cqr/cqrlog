@@ -495,12 +495,15 @@ var
   db : String;
   l  : TStringList;
 begin
+  writeln('here',dmData.LogName,' ',dmData.qLogList.Fields[1].AsString);
   if dlgOpen.Execute then
   begin
     db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
+    writeln('------db--',db);
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
     dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
+    writeln('-----trq-----',  dmData.Q.SQL.Text);
     dmData.trQ.StartTransaction;
     l := TStringList.Create;
     try try
