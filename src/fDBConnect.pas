@@ -242,6 +242,12 @@ end;
 
 procedure TfrmDBConnect.btnDeleteLogClick(Sender: TObject);
 begin
+  if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+      Begin
+         ShowMessage('Open log can not be deleted!' +
+           sLineBreak + 'Switch logs fist or delete log before opening it!' );
+      exit;
+      end;
   if dmData.qLogList.Fields[0].AsInteger = 1 then
   begin
     Application.MessageBox('You can not delete the first log!','Info ...',mb_ok +
@@ -495,6 +501,12 @@ var
   db : String;
   l  : TStringList;
 begin
+   if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+      Begin
+         ShowMessage('Importing settings to open log may not always take effect!' +
+           sLineBreak + 'Switch logs fist or import settings before opening the log!' );
+      exit;
+      end;
   if dlgOpen.Execute then
   begin
     db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
