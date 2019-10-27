@@ -60,7 +60,7 @@ if [ "$1" != "beta" ]; then
    dpkg-buildpackage -rfakeroot -i -I
    make clean
    cd ..
-   tar -cvf cqrlog_$VERSION.deb.src.tar cqrlog*.orig.tar.gz cqrlog*.debian.tar.gz cqrlog*.debian.tar.xz cqrlog*.changes cqrlog*.dsc
+   tar -cvf cqrlog_$VERSION.deb.src.tar cqrlog*.orig.tar.gz cqrlog*.debian.tar.xz cqrlog*.changes cqrlog*.dsc
    gzip -v9 cqrlog_$VERSION.deb.src.tar
 
    pwd
