@@ -242,6 +242,12 @@ end;
 
 procedure TfrmDBConnect.btnDeleteLogClick(Sender: TObject);
 begin
+  if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+      Begin
+         ShowMessage('Open log can not be deleted!' +
+           sLineBreak + 'Switch logs fist or delete log before opening it!' );
+      exit;
+      end;
   if dmData.qLogList.Fields[0].AsInteger = 1 then
   begin
     Application.MessageBox('You can not delete the first log!','Info ...',mb_ok +
@@ -495,15 +501,18 @@ var
   db : String;
   l  : TStringList;
 begin
-  writeln('here',dmData.LogName,' ',dmData.qLogList.Fields[1].AsString);
+   if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+      Begin
+         ShowMessage('Importing settings to open log may not always take effect!' +
+           sLineBreak + 'Switch logs fist or import settings before opening the log!' );
+      exit;
+      end;
   if dlgOpen.Execute then
   begin
     db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
-    writeln('------db--',db);
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
     dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
-    writeln('-----trq-----',  dmData.Q.SQL.Text);
     dmData.trQ.StartTransaction;
     l := TStringList.Create;
     try try
