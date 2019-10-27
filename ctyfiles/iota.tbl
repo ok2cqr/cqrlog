@@ -336,8 +336,10 @@ AS-200|Shikoku Coastal Islands|JA|
 AS-201|Sea of Marmara Isl.|TA|
 AS-202|Hawar Isl.|A9|
 AS-203|Sea of Okhotsk Coast group (Shelikhova Bay group)|UA(AS)|
-AS-204|Kuril'skiye Island North|UA(AS)|
+AS-204|Kuril'skiye Islands North|UA(AS)|
 AS-205|Bering Sea Coast East|UA(AS)|
+AS-206|Honshu’s Coastal Islands East|JA|
+AS-207|Chukchi Sea Coast Centre group|UA(AS)|
 EU-001|Dodecanese|SV5|SV5
 EU-002|Aland Islands|OH0|OH0
 EU-003|Eastern Azores group|CT8|CT8
@@ -789,7 +791,7 @@ NA-245|Rocas Alijos Islands|XE|
 NA-246|Tamaulipas State group|XE|
 NA-247|St. Maarten’s Coastal Islands|PJ7|
 NA-248|Nunavut (Devon) Island (Melville Island group)|VE|
-NA-249|Puerto Rico's Coastal Islands|KP4|KP4
+NA-249|Puerto Rico's Coastal Islands|KP4
 NA-250|Yakutat County Group, Coastal Groups|KL|
 OC-001|Australia|VK|
 OC-002|Christmas Island|VK9(X)|VK9X
@@ -1093,6 +1095,9 @@ OC-295|Sebatik Island|YB|
 OC-295|Sebatik Island|9M6|
 OC-296|Tobi and Helen|T8|
 OC-297|Morane Atoll|FO|
+OC-298|Tatakoto Atoll|FO|
+OC-299|Yap East group|V6|
+OC-300|McKean and Nikumaroro Atolls|T31|
 SA-001|Easter Island|CE0(A)|
 SA-002|Falkland Islands|VP8(F)|
 SA-003|Fernando De Noronha Archipelago|PY0(F)|PY0F
@@ -1194,4 +1199,5 @@ SA-096|Chubut Province North group|LU|
 SA-097|Diego Ramirez Islands|CE|
 SA-098|Arequipa / Moquegua / Tacna Department group|OA|
 SA-099|Curacao|PJ2|PJ2
-SA-100|Arica and Parinacota/Tarapaca Region group|CE|CE1
+SA-100|Arica and Parinacota/Tarapaca Region group|CE|
+SA-101|Alejandro Selkirk Island|CE0(Z)|

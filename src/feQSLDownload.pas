@@ -176,6 +176,8 @@ begin
             Repaint;
             Application.ProcessMessages;
             mStat.Lines.Add('Preparing import ....');
+            Repaint;
+            Application.ProcessMessages;
             if not FileExists(AdifFile) then
             begin
               mStat.Lines.Add('File: ');
@@ -195,6 +197,8 @@ begin
               Free
             end;
             mStat.Lines.Add('Import complete ...');
+            Repaint;
+            Application.ProcessMessages;
             if chkShowNew.Checked then
             begin
               mStat.Lines.Add('');
