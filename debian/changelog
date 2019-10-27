@@ -1,3 +1,24 @@
+cqrlog (2.4.0-1) unstable; urgency=low
+
+  * update sat_name.tab with newest lotw satellite list 
+    (Andy, DL7OAP)
+  * some layout changes and code refactoring
+  * feature to select rectangular geometry in the xplanet 
+    preferences (Andy, DL7OAP)
+  * ADIF import: implement filter by date range (gl-bars)	
+  * Initial Skimmer Support (Olli, DH2WQ)
+  * Show own position on xplanet (Florian, DF2ET)
+  * Add to bandpmap works also in Contest window (Saku, OH1KH)
+  * WSJT integration improved (Saku, OH1KH)
+  * N1MM Remote mode improved (Saku, OH1KH)
+  * fixed bug with CTRL+END and/or CTRL+HOME
+  * fixed encoding passwords for HamQTH - (Andy, DL7OAP)
+  * AutoMark QSL issue fixed (Andy, DL7AOP)
+  * eQSL download fixed (Saku, OH1KH)
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 27 Oct 2019 07:55:33 +0100
+
+
 cqrlog (2.3.0-1) unstable; urgency=low
 
   * wsjt-x: stop TX if split answer to CQ not accepted by 
