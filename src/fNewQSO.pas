@@ -2207,6 +2207,7 @@ var
   TXOn     : Boolean;
   i        : word;
   TXmode   : String;
+  RemoteName :String;
 
   call  : String;
   sname : String;
@@ -2227,13 +2228,19 @@ var
   ExchR  : String;
   ExchS  : String;
 
+  Procedure MoveIndex(m:integer);    //within Buf limits
+  Begin
+    if (index+m <= length(Buf) ) then
+     index := index+m;
+  end;
+
   function ui32Buf(var index:integer):uint32;
   begin
     Result := $01000000*ord(Buf[index])
               + $00010000*ord(Buf[index+1])
               + $00000100*ord(Buf[index+2])
               + ord(Buf[index+3]);         // 32-bit unsigned int BigEndian
-    index := index+4                        //point to next element
+    MoveIndex(4);                 //point to next element
   end;
 
   function StrBuf(var index:integer):String;
@@ -2247,7 +2254,7 @@ var
     end
     else begin
       Result := copy(Buf,index,P);        //string content
-      index := index + P                 //point to next element
+      MoveIndex(P);              //point to next element
     end
   end;
 
@@ -2278,13 +2285,13 @@ var
   function ui8Buf(var index:integer):uint8;
   begin
     Result := ord(Buf[index]);
-    inc(index)
+    MoveIndex(1)
   end;
 
   function BoolBuf(var index:integer):Boolean;
   begin
     Result := ord(Buf[index]) = 1;
-    inc(index)
+    MoveIndex(1)
   end;
 //-------------------------------------------------------------------
 
@@ -2319,7 +2326,7 @@ begin
 
     if dmData.DebugLevel>=1 then Writeln('-----------------------decode start---------------------------------');
     if dmData.DebugLevel>=1 then Write('Header position:',index);
-    index:=index+4;  // skip QT header
+    MoveIndex(4);  // skip QT header
 
     ParNum :=  ui32Buf(index);
     if dmData.DebugLevel>=1 then Write(' Schema number:',ParNum);
@@ -2329,7 +2336,7 @@ begin
     lblCall.Caption       := 'Wsjt-x remote #'+intToStr(MsgType);   //changed to see last received msgtype
 
     tmpindex := index;
-    ParStr := StrBuf(index);       //read ID to get index point to RepHead end
+    RemoteName := StrBuf(index);       //read remote name to get index point to RepHead end
     RepHead := copy(Buf,1,index-1);
     RepHead[12] := #0;             //Ready made reply header with #0 command (lobyte of uint32)
     index := tmpindex;             //return pointer back
@@ -2735,62 +2742,67 @@ begin
            ParNum := ui8Buf(index);  //timespec local/utc   (not used in cqrlog)
            if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
            //----------------------------------------------------
-           OpCall := trim(StrBuf(index));  //operator callsign (in contest, club etc.)
-           ExchR :=  trim(StrBuf(index));  //fake, this is actually "My call". Not used
-           ExchR :=  trim(StrBuf(index));  //fake, this is actually "My grid". Not used
-           ExchS :=  trim(StrBuf(index));  //contest exchange sent. report + others
-           ExchR :=  trim(StrBuf(index));  //contest exchange received. report + others
-           //----------------------------------------------------
-           {
-           These wsjt-x will return as contest number:
-             *       0 -> NONE
-             *       1 -> NA VHF
-             *       2 -> EU VHF
-             *       3 -> FIELD DAY
-             *       4 -> RTTY RU
-             *       5 -> FOX
-             *       6 -> HOUND
-             }
+           if dmData.DebugLevel>=1 then Writeln('Remote name: ', RemoteName);
+           if RemoteName = 'WSJT-X' then   //no contest in JTDX
+            begin
+                 if dmData.DebugLevel>=1 then Writeln('Tail logging part entered');
+                 OpCall := trim(StrBuf(index));  //operator callsign (in contest, club etc.)
+                 ExchR :=  trim(StrBuf(index));  //fake, this is actually "My call". Not used
+                 ExchR :=  trim(StrBuf(index));  //fake, this is actually "My grid". Not used
+                 ExchS :=  trim(StrBuf(index));  //contest exchange sent. report + others
+                 ExchR :=  trim(StrBuf(index));  //contest exchange received. report + others
+                 //----------------------------------------------------
+                 {
+                 These wsjt-x will return as contest number:
+                   *       0 -> NONE
+                   *       1 -> NA VHF
+                   *       2 -> EU VHF
+                   *       3 -> FIELD DAY
+                   *       4 -> RTTY RU
+                   *       5 -> FOX
+                   *       6 -> HOUND
+                   }
 
-           case ContestNr of
-                1         :Begin //NA VHF  EX:locator-4chr
-                            edtContestName.Text := ContestName[ContestNr];
-                            edtContestExchangeMessageReceived.Text := ExchR;
-                            edtContestExchangeMessageSent.Text := ExchS;
-                            edtHisRST.Text := ' '; // NA-VHF has no proper reports (!?!)
-                            edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
-                           end;
-                2         :Begin  //EU VHF    EX:RS-2chr/serial-4chr/ /locator
-                             edtContestName.Text := ContestName[ContestNr];
-                             edtContestSerialReceived.Text := copy(ExchR,3,4);  //serialNr
-                             edtContestExchangeMessageReceived.Text:= copy(ExchR,8,6); //exMsg=locator
-                             edtContestSerialSent.Text := copy(ExchS,3,4);  //serialNr
-                             edtContestExchangeMessageSent.Text:= copy(ExchS,8,6); //exMsg=locator
-                             edtHisRST.Text := edtHisRST.Text+' '; // fake space here. Otherwise qso edit sets xx9 for reports
-                             edtMyRST.Text := edtMyRST.Text+' ';
-                           end;
-                3         :Begin  //FIELD DAY EX:TXnrClass/ /state
-                            edtContestName.Text := ContestName[ContestNr];
-                            edtContestExchangeMessageReceived.Text := ExchR;
-                            edtContestExchangeMessageSent.Text := ExchS;
-                            edtHisRST.Text := ' '; // FD has no proper reports (!?!)
-                            edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
-                           end;
-                4         :Begin  //RTTY RU   EX:RST-3chr/ /serial-4chr[or] state(not numbers)
-                            edtContestName.Text := ContestName[ContestNr];
-                            if  (ExchS[5] in [ 'A' .. 'Z' ]) then
-                              edtContestExchangeMessageSent.Text:= copy(ExchS,5,length(ExchS)) //exMsg=state
-                             else
-                              edtContestSerialSent.Text := copy(ExchS,5,length(ExchS)); //serialNr
-                            if  (ExchR[5] in [ 'A' .. 'Z' ]) then
-                              edtContestExchangeMessageReceived.Text:= copy(ExchR,5,length(ExchR)) //exMsg=state
-                             else
-                              edtContestSerialReceived.Text := copy(ExchR,5,length(ExchR)); //serialNr
-                           end;
-                5,6       : edtContestName.Text := ContestName[ContestNr]+'-QSO';
-           end;
-           case ContestNr of
-                1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+                 case ContestNr of
+                      1         :Begin //NA VHF  EX:locator-4chr
+                                  edtContestName.Text := ContestName[ContestNr];
+                                  edtContestExchangeMessageReceived.Text := ExchR;
+                                  edtContestExchangeMessageSent.Text := ExchS;
+                                  edtHisRST.Text := ' '; // NA-VHF has no proper reports (!?!)
+                                  edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
+                                 end;
+                      2         :Begin  //EU VHF    EX:RS-2chr/serial-4chr/ /locator
+                                   edtContestName.Text := ContestName[ContestNr];
+                                   edtContestSerialReceived.Text := copy(ExchR,3,4);  //serialNr
+                                   edtContestExchangeMessageReceived.Text:= copy(ExchR,8,6); //exMsg=locator
+                                   edtContestSerialSent.Text := copy(ExchS,3,4);  //serialNr
+                                   edtContestExchangeMessageSent.Text:= copy(ExchS,8,6); //exMsg=locator
+                                   edtHisRST.Text := edtHisRST.Text+' '; // fake space here. Otherwise qso edit sets xx9 for reports
+                                   edtMyRST.Text := edtMyRST.Text+' ';
+                                 end;
+                      3         :Begin  //FIELD DAY EX:TXnrClass/ /state
+                                  edtContestName.Text := ContestName[ContestNr];
+                                  edtContestExchangeMessageReceived.Text := ExchR;
+                                  edtContestExchangeMessageSent.Text := ExchS;
+                                  edtHisRST.Text := ' '; // FD has no proper reports (!?!)
+                                  edtMyRST.Text := ' ';  // fake space here. Otherwise qso edit sets 599 for reports
+                                 end;
+                      4         :Begin  //RTTY RU   EX:RST-3chr/ /serial-4chr[or] state(not numbers)
+                                  edtContestName.Text := ContestName[ContestNr];
+                                  if  (ExchS[5] in [ 'A' .. 'Z' ]) then
+                                    edtContestExchangeMessageSent.Text:= copy(ExchS,5,length(ExchS)) //exMsg=state
+                                   else
+                                    edtContestSerialSent.Text := copy(ExchS,5,length(ExchS)); //serialNr
+                                  if  (ExchR[5] in [ 'A' .. 'Z' ]) then
+                                    edtContestExchangeMessageReceived.Text:= copy(ExchR,5,length(ExchR)) //exMsg=state
+                                   else
+                                    edtContestSerialReceived.Text := copy(ExchR,5,length(ExchR)); //serialNr
+                                 end;
+                      5,6       : edtContestName.Text := ContestName[ContestNr]+'-QSO';
+                 end;
+                 case ContestNr of
+                      1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+                 end;
            end;
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
