@@ -8,7 +8,7 @@ object frmeQSLDownload: TfrmeQSLDownload
   ClientWidth = 489
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '1.8.2.0'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 407
@@ -16,14 +16,14 @@ object frmeQSLDownload: TfrmeQSLDownload
     Width = 489
     Align = alClient
     Caption = 'Progress'
-    ClientHeight = 389
-    ClientWidth = 487
+    ClientHeight = 388
+    ClientWidth = 485
     TabOrder = 0
     object mStat: TMemo
       Left = 0
-      Height = 389
+      Height = 388
       Top = 0
-      Width = 487
+      Width = 485
       Align = alClient
       ScrollBars = ssAutoBoth
       TabOrder = 0
@@ -56,29 +56,29 @@ object frmeQSLDownload: TfrmeQSLDownload
       Width = 489
       Anchors = [akTop, akLeft, akRight]
       Caption = ' '
-      ClientHeight = 102
-      ClientWidth = 487
+      ClientHeight = 101
+      ClientWidth = 485
       TabOrder = 1
       object Label3: TLabel
         Left = 10
         Height = 17
         Top = 12
-        Width = 259
+        Width = 268
         Caption = 'Return QSL records received on or after '
         ParentColor = False
       end
       object edtDateFrom: TEdit
         Left = 278
-        Height = 34
+        Height = 27
         Top = 7
         Width = 85
         TabOrder = 0
       end
       object chkShowNew: TCheckBox
         Left = 10
-        Height = 23
+        Height = 24
         Top = 72
-        Width = 382
+        Width = 394
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end
@@ -86,13 +86,13 @@ object frmeQSLDownload: TfrmeQSLDownload
         Left = 10
         Height = 17
         Top = 40
-        Width = 98
+        Width = 99
         Caption = 'QTH Nickname'
         ParentColor = False
       end
       object edtQTH: TEdit
         Left = 278
-        Height = 34
+        Height = 27
         Top = 40
         Width = 184
         TabOrder = 2
