@@ -2208,6 +2208,7 @@ var
   i        : word;
   TXmode   : String;
   RemoteName :String;
+  BufEnd     : Boolean;
 
   call  : String;
   sname : String;
@@ -2230,12 +2231,23 @@ var
 
   Procedure MoveIndex(m:integer);    //within Buf limits
   Begin
-    if (index+m <= length(Buf) ) then
      index := index+m;
+     if (index >= length(Buf) ) then
+      Begin
+       //we can not find anything from Buf any more
+       index := length(Buf);
+       BufEnd :=true;
+      end
+     else BufEnd := false;
   end;
 
   function ui32Buf(var index:integer):uint32;
   begin
+    if BufEnd then
+      Begin
+       Result := 0;
+       exit;
+      end;
     Result := $01000000*ord(Buf[index])
               + $00010000*ord(Buf[index+1])
               + $00000100*ord(Buf[index+2])
@@ -2247,6 +2259,11 @@ var
   var
     P : uint32;
   begin
+    if BufEnd then
+      Begin
+       Result := '';
+       exit;
+      end;
     P := ui32Buf(index);                 //string length;   4bytes
     if P = $FFFFFFFF then               //exeption: empty Qstring len: $FFFF FFFF content: empty
     begin
@@ -2274,7 +2291,7 @@ var
 
   function int64Buf(var index:integer):int64;
   begin
-     REsult := ui64Buf(index)
+     Result := ui64Buf(index)
   end;
 
   function int32Buf(var index:integer):int32;
@@ -2284,12 +2301,22 @@ var
 
   function ui8Buf(var index:integer):uint8;
   begin
+    if BufEnd then
+      Begin
+       Result := 0;
+       exit;
+      end;
     Result := ord(Buf[index]);
     MoveIndex(1)
   end;
 
   function BoolBuf(var index:integer):Boolean;
   begin
+    if BufEnd then
+      Begin
+       Result := false;
+       exit;
+      end;
     Result := ord(Buf[index]) = 1;
     MoveIndex(1)
   end;
@@ -2315,6 +2342,7 @@ begin
   if WsjtxSock.lasterror=0 then
   begin
     Fox2Line := 0;
+    BufEnd := false;
     index := pos(#$ad+#$bc+#$cb+#$da,Buf); //QTheader: magic number 0xadbccbda
     if index < 1 then
              begin
