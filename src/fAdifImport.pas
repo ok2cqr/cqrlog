@@ -387,6 +387,7 @@ begin
       d.COMMENT := edtRemarks.Text + ' ' + d.COMMENT;
     if d.TX_PWR = '' then
       d.TX_PWR := FMyPower;
+    d.COMMENT := copy(d.COMMENT, 1, 200);
 
     d.MODE := UpperCase(d.MODE);
 
