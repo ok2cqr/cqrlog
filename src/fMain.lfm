@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = -14
+  Left = 81
   Height = 669
-  Top = 498
+  Top = 72
   Width = 986
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
@@ -2488,6 +2488,7 @@ object frmMain: TfrmMain
   end
   object popWebSearch: TPopupMenu
     Images = frmNewQSO.imgMain1
+    OnPopup = popWebSearchPopup
     left = 314
     top = 216
     object MenuItem89: TMenuItem
@@ -2503,6 +2504,10 @@ object frmMain: TfrmMain
     object mnuIK3AQR: TMenuItem
       Caption = 'Search on IK3QAR qsl manager page'
       OnClick = mnuIK3AQRClick
+    end
+    object mnueQSLView: TMenuItem
+      Caption = 'View eQSL'
+      OnClick = mnueQSLViewClick
     end
   end
   object imgMain1: TImageList

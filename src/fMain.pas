@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, ExtCtrls, StdCtrls, ComCtrls, DBGrids, Buttons, LCLType, IniFiles, process,
-  Grids, DBCtrls, dLogUpload,db;
+  Grids, DBCtrls, dLogUpload,db,synacode;
 
 type
 
@@ -133,6 +133,7 @@ type
     MenuItem1:  TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem100: TMenuItem;
+    mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
@@ -374,6 +375,7 @@ type
     procedure acWACCfmExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
+    procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
     procedure mnuIOTAStatClick(Sender: TObject);
@@ -384,6 +386,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure mnuOQRSClick(Sender : TObject);
+    procedure popWebSearchPopup(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure acAboutExecute(Sender: TObject);
     procedure acCallBookExecute(Sender: TObject);
@@ -800,6 +803,12 @@ begin
   MarkQSLSend('OQRS')
 end;
 
+procedure TfrmMain.popWebSearchPopup(Sender: TObject);
+begin
+  mnueQSLView.Visible := pos('E',dmData.qCQRLOG.FieldByName('qsl_r').AsString)>0;
+  //writeln(dmData.qCQRLOG.FieldByName('callsign').AsString,' ',dmData.qCQRLOG.FieldByName('qsl_r').AsString );
+end;
+
 procedure TfrmMain.Timer1Timer(Sender: TObject);
 var
   sDate: string;
@@ -1174,6 +1183,63 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmMain.mnueQSLViewClick(Sender: TObject);
+var
+  AProcess: TProcess;
+  url,
+  Username,//        The callsign of the recipient of the eQSL
+  Password,//        The password of the user's account
+  CallsignFrom,//    The callsign of the sender of the eQSL
+  QSOYear,//         YYYY OR YY format date of the QSO
+  QSOMonth,//        MM format
+  QSODay,//          DD format
+  QSOHour,//         HH format (24-hour time)
+  QSOMinute,//       MM format
+  QSOBand,//         20m, 80M, 70cm, etc. (case insensitive)
+  QSOMode:String;//         Must match exactly and should be an ADIF-compatible mode
+begin
+    Username := cqrini.ReadString('LoTW','eQSLName','');
+    Password := cqrini.ReadString('LoTW','eQSLPass','');
+    if (Username = '') or (Password='') then
+    begin
+      //msgbox here('User name or password is not set!');
+      exit
+    end;
+    CallsignFrom :=  dmData.qCQRLOG.FieldByName('callsign').AsString;
+    QSOYear :=       copy(dmData.qCQRLOG.FieldByName('qsodate').AsString,1,4);
+    QSOMonth:=       copy(dmData.qCQRLOG.FieldByName('qsodate').AsString,6,2);
+    QSODay  :=       copy(dmData.qCQRLOG.FieldByName('qsodate').AsString,9,2);
+    QSOHour :=       copy(dmData.qCQRLOG.FieldByName('time_on').AsString,1,2);
+    QSOMinute :=     copy(dmData.qCQRLOG.FieldByName('time_on').AsString,4,2);
+    QSOBand :=       dmData.qCQRLOG.FieldByName('band').AsString;
+    QSOMode :=       dmData.qCQRLOG.FieldByName('mode').AsString;
+    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+
+    url := 'https://www.eQSL.cc/qslcard/GeteQSL.cfm'+
+           '?UserName='+Username+
+           '&Password='+EncodeURL(Password)+
+           '&CallsignFrom='+CallsignFrom+
+           '&QSOYear='+QSOYear+
+           '&QSOMonth='+QSOMonth +
+           '&QSODay='+QSODay+
+           '&QSOHour='+QSOHour +
+           '&QSOMinute='+QSOMinute+
+           '&QSOBand='+QSOBand+
+           '&QSOMode='+QSOMode;
+
+  if dmData.DebugLevel>=1 then Writeln(url);
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Parameters.Add(url);
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    AProcess.Execute
+  finally
+    AProcess.Free
+  end
+
 end;
 
 procedure TfrmMain.mnuIK3AQRClick(Sender: TObject);
