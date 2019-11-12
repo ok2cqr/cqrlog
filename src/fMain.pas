@@ -805,9 +805,12 @@ end;
 
 procedure TfrmMain.popWebSearchPopup(Sender: TObject);
 begin
-  mnueQSLView.Visible := pos('E',dmData.qCQRLOG.FieldByName('qsl_r').AsString)>0;
-  //writeln(dmData.qCQRLOG.FieldByName('callsign').AsString,' ',dmData.qCQRLOG.FieldByName('qsl_r').AsString );
-end;
+    mnueQSLView.Visible :=  ((pos('E',dmData.qCQRLOG.FieldByName('eqsl_qsl_rcvd').AsString)>0)
+                             and (dbgrdMain.SelectedRows.Count = 1));
+    if dmData.DebugLevel>=1 then writeln( dbgrdMain.SelectedRows.Count,' ',
+                                         dmData.qCQRLOG.FieldByName('callsign').AsString,' ',
+                                         dmData.qCQRLOG.FieldByName('eqsl_qsl_rcvd').AsString );
+ end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
 var
