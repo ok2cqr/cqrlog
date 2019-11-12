@@ -127,6 +127,7 @@ type
     MenuItem58: TMenuItem;
     MenuItem63: TMenuItem;
     MenuItem94 : TMenuItem;
+    mnueQSLView: TMenuItem;
     mnuRemoteModeN1MM: TMenuItem;
     mnuReminder: TMenuItem;
     MenuItem86: TMenuItem;
@@ -526,9 +527,11 @@ type
     procedure mCommentKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
       );
     procedure mCommentKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
+    procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnQSLClick(Sender: TObject);
     procedure sbtnQRZClick(Sender: TObject);
@@ -5392,6 +5395,23 @@ begin
   end;
 end;
 
+procedure TfrmNewQSO.mnueQSLViewClick(Sender: TObject);
+var
+  QSOmode:String;
+begin
+    QSOMode :=       dmData.qQSOBefore.FieldByName('mode').AsString;
+    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+
+    frmMain.eQSLView( dmData.qQSOBefore.FieldByName('callsign').AsString,
+        fail        dmData.qQSOBefore.FieldByName('qsodate').AsString,
+          fail      dmData.qQSOBefore.FieldByName('qsodate').AsString,
+          fail      dmData.qQSOBefore.FieldByName('qsodate').AsString,
+          fail      dmData.qQSOBefore.FieldByName('time_on').AsString,
+          fail      dmData.qQSOBefore.FieldByName('time_on').AsString,
+              dmData.qQSOBefore.FieldByName('band').AsString,
+              QSOMode);
+end;
+
 
 procedure TfrmNewQSO.mnuIOTAClick(Sender: TObject);
 begin
@@ -5418,6 +5438,13 @@ begin
     frmMain.WindowState := wsNormal;
   frmMain.Show;
   frmMain.BringToFront;
+end;
+
+procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
+begin
+    mnueQSLView.Visible :=  pos('E',dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString)>0;
+    if dmData.DebugLevel>=1 then writeln(dmData.qQSOBefore.FieldByName('callsign').AsString,' ',
+                                         dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString )
 end;
 
 

@@ -2507,6 +2507,7 @@ object frmMain: TfrmMain
     end
     object mnueQSLView: TMenuItem
       Caption = 'View eQSL'
+      Visible = False
       OnClick = mnueQSLViewClick
     end
   end

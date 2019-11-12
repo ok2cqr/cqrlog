@@ -5959,6 +5959,7 @@ object frmNewQSO: TfrmNewQSO
   end
   object popEditQSO: TPopupMenu
     Images = imgMain1
+    OnPopup = popEditQSOPopup
     left = 656
     top = 32
     object MenuItem41: TMenuItem
@@ -5990,6 +5991,11 @@ object frmNewQSO: TfrmNewQSO
     object MenuItem46: TMenuItem
       Caption = 'Search on IK3QAR qsl manager page'
       OnClick = MenuItem46Click
+    end
+    object mnueQSLView: TMenuItem
+      Caption = 'View eQSL'
+      Visible = False
+      OnClick = mnueQSLViewClick
     end
   end
   object imgMain1: TImageList
