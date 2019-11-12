@@ -421,9 +421,6 @@ type
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
-    procedure MenuItem45Click(Sender: TObject);
-    procedure MenuItem46Click(Sender: TObject);
-    procedure MenuItem84Click(Sender : TObject);
     procedure MenuItem95Click(Sender: TObject);
     procedure MenuItem96Click(Sender: TObject);
     procedure mnuQrzClick(Sender: TObject);

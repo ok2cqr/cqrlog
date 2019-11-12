@@ -5,12 +5,12 @@ object frmNewQSO: TfrmNewQSO
   Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 1158
+  HorzScrollBar.Page = 997
   VertScrollBar.Page = 620
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
   ClientHeight = 671
-  ClientWidth = 1158
+  ClientWidth = 997
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
