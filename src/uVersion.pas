@@ -8,8 +8,8 @@ const
   cMAJOR      = 2;
   cMINOR      = 4;
   cRELEAS     = 0;
-  cBUILD      = 2;
   cBUILD_DATE = '2019-11-04';
+  cBUILD      = 1;
 
 implementation
 

@@ -186,13 +186,13 @@ var
     if ExDate then
     begin
       tmp := copy(qsodate,1,4) + copy(qsodate,6,2) + copy(qsodate,9,2);
-      tmp := '<QSO_DATE'+ dmUtils.StringToADIF(tmp);
+      tmp := dmUtils.StringToADIF('<QSO_DATE',tmp);
       SaveTag(tmp,leng);
     end;
     if ExTimeOn then
     begin
       tmp := copy(TimeOn,1,2) + copy(TimeOn,4,2);
-      tmp := '<TIME_ON'+ dmUtils.StringToADIF(tmp);
+      tmp := dmUtils.StringToADIF('<TIME_ON',tmp);
       SaveTag(tmp,leng);
     end;
     if ExTimeOff then
@@ -200,12 +200,12 @@ var
       if dmUtils.IsTimeOK(TimeOff) then
       begin
         tmp := copy(TimeOff,1,2) + copy(TimeOff,4,2);
-        tmp := '<TIME_OFF'+ dmUtils.StringToADIF(tmp);
+        tmp := dmUtils.StringToADIF('<TIME_OFF',tmp);
         SaveTag(tmp,leng);
       end;
     end;
     if ExCall then
-      SaveTag('<CALL' + dmUtils.StringToADIF(dmUtils.RemoveSpaces(call)),leng);
+      SaveTag(dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(call)),leng);
     if exMode then
     begin
       if (Mode = 'JS8') then
@@ -213,170 +213,170 @@ var
       else if (Mode = 'FT4') then
         tmp := '<MODE:4>MFSK<SUBMODE:3>FT4'
       else
-        tmp := '<MODE' + dmUtils.StringToADIF(Mode);
-      SaveTag(tmp,leng);
+        tmp := '<MODE';
+      SaveTag(dmUtils.StringToADIF(tmp,Mode),leng);
     end;
     if exFreq then
     begin
       if pos(',',freq) > 0 then
         freq[pos(',',freq)] := '.';
-      SaveTag('<FREQ' + dmUtils.StringToADIF(Freq),leng);
-      SaveTag('<BAND' + dmUtils.StringToADIF(dmUtils.GetAdifBandFromFreq(Freq)),leng);
+      SaveTag(dmUtils.StringToADIF('<FREQ',Freq),leng);
+      SaveTag(dmUtils.StringToADIF('<BAND',dmUtils.GetAdifBandFromFreq(Freq)),leng);
     end;
     if exRSTS then
-      SaveTag('<RST_SENT' + dmUtils.StringToADIF(ExtractWord(1,RSTS,[' '])),leng);
+      SaveTag(dmUtils.StringToADIF('<RST_SENT',ExtractWord(1,RSTS,[' '])),leng);
     if exRSTR then
-        SaveTag('<RST_RCVD' + dmUtils.StringToADIF(ExtractWord(1,RSTR,[' '])),leng);
+        SaveTag(dmUtils.StringToADIF('<RST_RCVD',ExtractWord(1,RSTR,[' '])),leng);
     if exContestname then
     begin
        if Length(contestname) > 0 then
-        SaveTag('<CONTEST_ID' + dmUtils.StringToADIF(contestname),leng);
+        SaveTag(dmUtils.StringToADIF('<CONTEST_ID',contestname),leng);
     end;
     if exContestNr then
     begin
      if Length(stx) > 0 then
-       SaveTag('<STX' + dmUtils.StringToADIF(stx),leng);
+       SaveTag(dmUtils.StringToADIF('<STX',stx),leng);
      if Length(srx) > 0 then
-        SaveTag('<SRX' + dmUtils.StringToADIF(srx),leng);
+        SaveTag(dmUtils.StringToADIF('<SRX',srx),leng);
     end;
     if exContestMsg then
     begin
       if Length(stx_string) > 0 then
-        SaveTag('<STX_STRING' + dmUtils.StringToADIF(stx_string),leng);
+        SaveTag(dmUtils.StringToADIF('<STX_STRING',stx_string),leng);
        if Length(srx_string) > 0 then
-        SaveTag('<SRX_STRING' + dmUtils.StringToADIF(srx_string),leng);
+        SaveTag(dmUtils.StringToADIF('<SRX_STRING',srx_string),leng);
     end;
     if exName then
       if Length(sName) > 0 then
-        SaveTag('<NAME' + dmUtils.StringToADIF(sName),leng);
+        SaveTag(dmUtils.StringToADIF('<NAME',sName),leng);
     if exQTH then
       if Length(QTH) > 0 then
-        SaveTag('<QTH' + dmUtils.StringToADIF(QTH),leng);
+        SaveTag(dmUtils.StringToADIF('<QTH',QTH),leng);
     if exQSLS then
     begin
       if Length(QSLS) > 0 then
       begin
         if Pos('S',QSLS) > 0 then
-          SaveTag('<QSL_SENT' + dmUtils.StringToADIF('R'),leng)
+          SaveTag(dmUtils.StringToADIF('<QSL_SENT','R'),leng)
         else
         begin
           if Pos('N',QSLS)=1 then
-            SaveTag('<QSL_SENT' + dmUtils.StringToADIF('I'),leng)
+            SaveTag(dmUtils.StringToADIF('<QSL_SENT','I'),leng)
           else
-          SaveTag('<QSL_SENT' + dmUtils.StringToADIF('Y'),leng)
+          SaveTag(dmUtils.StringToADIF('<QSL_SENT','Y'),leng)
         end
       end
       else
-        SaveTag('<QSL_SENT' + dmUtils.StringToADIF('N'),leng);
+        SaveTag(dmUtils.StringToADIF('<QSL_SENT','N'),leng);
     end;
     if exQSLR then
     begin
       if Length(QSLR) > 0 then
-        SaveTag('<QSL_RCVD' + dmUtils.StringToADIF('Y'),leng)
+        SaveTag(dmUtils.StringToADIF('<QSL_RCVD','Y'),leng)
       else
-        SaveTag('<QSL_RCVD' + dmUtils.StringToADIF('N'),leng);
+        SaveTag(dmUtils.StringToADIF('<QSL_RCVD','N'),leng);
     end;
     if ExQSLVIA and (Length(QSLVIA) > 0) then
-        SaveTag('<QSL_VIA' + dmUtils.StringToADIF(QSLVIA),leng);
+        SaveTag(dmUtils.StringToADIF('<QSL_VIA',QSLVIA),leng);
     if exIOTA and (Length(IOTA) > 0 )then
-        SaveTag('<IOTA' + dmUtils.StringToADIF(IOTA),leng);
+        SaveTag(dmUtils.StringToADIF('<IOTA',IOTA),leng);
     if exLoc then
        if dmUtils.IsLocOK(Loc) then
-        SaveTag('<GRIDSQUARE' + dmUtils.StringToADIF(dmUtils.StdFormatLocator(Loc)),leng);
+        SaveTag(dmUtils.StringToADIF('<GRIDSQUARE',dmUtils.StdFormatLocator(Loc)),leng);
    if exMyLoc then
       if dmUtils.IsLocOK(MyLoc) then
-        SaveTag('<MY_GRIDSQUARE' + dmUtils.StringToADIF(dmUtils.StdFormatLocator(MyLoc)),leng);
+        SaveTag(dmUtils.StringToADIF('<MY_GRIDSQUARE',dmUtils.StdFormatLocator(MyLoc)),leng);
    if ExDistance then
     begin
       dmUtils.DistanceFromLocator(MyLoc,Loc,qrb,qrc);
       if qrb <> '' then
-        SaveTag('<DISTANCE' + dmUtils.StringToADIF(qrb),leng);
+        SaveTag(dmUtils.StringToADIF('<DISTANCE',qrb),leng);
     end;
     if exAward and (Length(Award) > 0)  then
-        SaveTag('<AWARD' + dmUtils.StringToADIF(Award),leng);
+        SaveTag(dmUtils.StringToADIF('<AWARD',Award),leng);
     if exPower then
     begin
       Power := dmUtils.ExtractPower(Power);
       if Length(Power) > 0  then
-        SaveTag('<TX_PWR' + dmUtils.StringToADIF(Power),leng);
+        SaveTag(dmUtils.StringToADIF('<TX_PWR',Power),leng);
     end;
     if exDXCC and (Length(DXCC) > 0 ) then
       begin
-        SaveTag('<APP_CQRLOG_DXCC' + dmUtils.StringToADIF(dxcc),leng);
-        SaveTag('<DXCC'+dmUtils.StringToADIF(IntToStr(dmDXCC.AdifFromPfx(dxcc))),leng);
+        SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_DXCC',dxcc),leng);
+        SaveTag(dmUtils.StringToADIF('<DXCC',IntToStr(dmDXCC.AdifFromPfx(dxcc))),leng);
     if ExRemarks and (Length(Remarks) > 0)  then
-        SaveTag('<COMMENT' + dmUtils.StringToADIF(Trim(Remarks)),leng);
+        SaveTag(dmUtils.StringToADIF('<COMMENT',Trim(Remarks)),leng);
 
     Note := dmData.GetComment(call);
     if Length(note) > 0 then
-        SaveTag('<NOTES' + dmUtils.StringToADIF(Trim(note)),leng);
+        SaveTag(dmUtils.StringToADIF('<NOTES',Trim(note)),leng);
 
     if ExITU and (Length(ITU) > 0) then
-     SaveTag('<ITUZ'+ dmUtils.StringToADIF(ITU),leng);
+     SaveTag(dmUtils.StringToADIF('<ITUZ',ITU),leng);
     if ExWAZ and (Length(WAZ) > 0) then
-     SaveTag('<CQZ'+ dmUtils.StringToADIF(WAZ),leng);
+     SaveTag(dmUtils.StringToADIF('<CQZ',WAZ),leng);
     if ExState and (Length(State) > 0) then
-      SaveTag('<STATE'+ dmUtils.StringToADIF(State),leng);
+      SaveTag(dmUtils.StringToADIF('<STATE',State),leng);
     if ExCounty and (Length(County) > 0) then
-      SaveTag('<CNTY'+ dmUtils.StringToADIF(County),leng);
+      SaveTag(dmUtils.StringToADIF('<CNTY',County),leng);
     if exQSLS and ( Length(QSLS) > 0 ) then
-      SaveTag('<APP_CQRLOG_QSLS' + dmUtils.StringToADIF(QSLS),leng);
+      SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_QSLS',QSLS),leng);
     if exQSLR and ( Length(QSLR) > 0 ) then
-      SaveTag('<APP_CQRLOG_QSLR' + dmUtils.StringToADIF(QSLR),leng);
+      SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_QSLR',QSLR),leng);
     if ExProfile and (profile<>'0') and (profile<>'-1') then
     begin
       Writeln(f);
       leng := 0;
       tmp := dmData.GetExportProfileText(StrToInt(profile));
       tmp := Trim(tmp);
-      SaveTag('<APP_CQRLOG_PROFILE' + dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_PROFILE',tmp),leng);
     end;
     if ExLQslS and (Length(LQslS) > 0) then
-      SaveTag('<LOTW_QSL_SENT'+dmUtils.StringToADIF(LQslS),leng);
+      SaveTag(dmUtils.StringToADIF('<LOTW_QSL_SENT',LQslS),leng);
     if ExLQslSDate and (LQslSDate <> '') then
     begin
       tmp := copy(LQslSDate,1,4) + copy(LQslSDate,6,2) + copy(LQslSDate,9,2);
-      SaveTag('<LOTW_QSLSDATE'+dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<LOTW_QSLSDATE',tmp),leng);
     end;
     if ExLQslR and (LQslR = 'L') then
-     SaveTag('<LOTW_QSL_RCVD'+dmUtils.StringToADIF('Y'),leng);
+     SaveTag(dmUtils.StringToADIF('<LOTW_QSL_RCVD','Y'),leng);
     if ExLQslRDate and (LQslRDate <> '') then
     begin
       tmp := copy(LQslRDate,1,4) + copy(LQslRDate,6,2) + copy(LQslRDate,9,2);
-      SaveTag('<LOTW_QSLRDATE'+dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<LOTW_QSLRDATE',tmp),leng);
     end;
     if ExContinent and (continent <> '') then
       SaveTag('<CONT:2>'+continent,leng);
     if ExQSLSDate and (QSLSDate<>'') then
     begin
       tmp := copy(QSLSDate,1,4) + copy(QSLSDate,6,2) + copy(QSLSDate,9,2);
-      SaveTag('<QSLSDATE'+dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<QSLSDATE',tmp),leng);
     end;
     if ExQSLRDate and (QSLRDate<>'') then
     begin
       tmp := copy(QSLRDate,1,4) + copy(QSLRDate,6,2) + copy(QSLRDate,9,2);
-      SaveTag('<QSLRDATE'+dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<QSLRDATE',tmp),leng);
     end;
     if ExeQslS and (Length(eQslS) > 0) then
-      SaveTag('<EQSL_QSL_SENT'+dmUtils.StringToADIF(eQslS),leng);
+      SaveTag(dmUtils.StringToADIF('<EQSL_QSL_SENT',eQslS),leng);
     if ExeQslSDate and (eQslSDate <> '') then
     begin
       tmp := copy(eQslSDate,1,4) + copy(eQslSDate,6,2) + copy(eQslSDate,9,2);
-      SaveTag('<EQSL_QSLSDATE'+dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<EQSL_QSLSDATE',tmp),leng);
     end;
     if ExeQslR and (eQslR = 'E') then
-     SaveTag('<EQSL_QSL_RCVD'+dmUtils.StringToADIF('Y'),leng);
+     SaveTag(dmUtils.StringToADIF('<EQSL_QSL_RCVD','Y'),leng);
     if ExeQslRDate and (eQslRDate <> '') then
     begin
       tmp := copy(eQslRDate,1,4) + copy(eQslRDate,6,2) + copy(eQslRDate,9,2);
-      SaveTag('<EQSL_QSLRDATE'+dmUtils.StringToADIF(tmp),leng);
+      SaveTag(dmUtils.StringToADIF('<EQSL_QSLRDATE',tmp),leng);
     end;
     if (exProp and (PropMode <> '')) then
-       SaveTag('<PROP_MODE'+dmUtils.StringToADIF(PropMode),leng);
+       SaveTag(dmUtils.StringToADIF('<PROP_MODE',PropMode),leng);
     if (exRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
-       SaveTag('<FREQ_RX'+dmUtils.StringToADIF(RxFreq),leng);
+       SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
     if (exSatName and (Satellite<>'')) then
-       SaveTag('<SAT_NAME'+dmUtils.StringToADIF(Satellite),leng);
+       SaveTag(dmUtils.StringToADIF('<SAT_NAME',Satellite),leng);
     end;
 
     Writeln(f);
@@ -416,7 +416,8 @@ begin   //TfrmExportProgress
   Writeln(f);
   Writeln(f, 'Internet: http://www.cqrlog.com');
   Writeln(f);
-  Writeln(f, '<ADIF_VER:5>2.2.1');
+  Writeln(f, '<ADIF_VER:5>3.1.0');
+  Writeln(f,'<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
   Writeln(f, '<PROGRAMID:6>CQRLOG');
   Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
   Writeln(f, '<EOH>');

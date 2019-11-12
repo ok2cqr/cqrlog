@@ -380,7 +380,8 @@ begin
   end;
 
   date := FormatDateTime('yyyy-mm-dd',now);
-  Writeln(f, '<ADIF_VER:5>2.2.1');
+  Writeln(f, '<ADIF_VER:5>3.1.0');
+  Writeln(f, '<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
   Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK7AN and Martin, OK1RR');
   Writeln(f);
@@ -421,15 +422,15 @@ begin
       end;
       tmp :=  dmData.Q1.FieldByName('qsodate').AsString;
       tmp := copy(tmp,1,4) + copy(tmp,6,2) +copy(tmp,9,2);
-      tmp := '<QSO_DATE'+ dmUtils.StringToADIF(tmp);
+      tmp := dmUtils.StringToADIF('<QSO_DATE',tmp);
       Writeln(f, tmp);
 
       tmp := dmData.Q1.FieldByName('time_on').AsString;
       tmp := copy(tmp,1,2) + copy(tmp,4,2);
-      tmp := '<TIME_ON'+ dmUtils.StringToADIF(tmp);
+      tmp := dmUtils.StringToADIF('<TIME_ON',tmp);
       Writeln(f, tmp);
 
-      tmp := '<CALL' + dmUtils.StringToADIF(dmUtils.RemoveSpaces(dmData.Q1.FieldByName('callsign').AsString));
+      tmp := dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(dmData.Q1.FieldByName('callsign').AsString));
       Writeln(f,tmp);
 
       if (dmData.Q1.FieldByName('mode').AsString = 'JS8') then begin
@@ -445,31 +446,31 @@ begin
         Writeln(f,tmp);
       end
       else begin
-        tmp := '<MODE' + dmUtils.StringToADIF(dmData.Q1.FieldByName('mode').AsString);
+        tmp := dmUtils.StringToADIF('<MODE',dmData.Q1.FieldByName('mode').AsString);
         Writeln(f,tmp);
       end;
 
 
-      tmp := '<BAND' + dmUtils.StringToADIF(dmData.Q1.FieldByName('band').AsString);
+      tmp :=dmUtils.StringToADIF( '<BAND' , dmData.Q1.FieldByName('band').AsString);
       Writeln(f,tmp);
 
-      tmp := '<FREQ' + dmUtils.StringToADIF(dmData.Q1.FieldByName('freq').AsString);
+      tmp := dmUtils.StringToADIF('<FREQ' , dmData.Q1.FieldByName('freq').AsString);
       Writeln(f,tmp);
 
-      tmp := '<RST_SENT' + dmUtils.StringToADIF(dmData.Q1.FieldByName('rst_s').AsString);
+      tmp := dmUtils.StringToADIF('<RST_SENT' , dmData.Q1.FieldByName('rst_s').AsString);
       Writeln(f,tmp);
 
-      tmp := '<RST_RCVD' + dmUtils.StringToADIF(dmData.Q1.FieldByName('rst_r').AsString);
+      tmp := dmUtils.StringToADIF('<RST_RCVD' ,dmData.Q1.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
 
       if (dmData.Q1.FieldByName('prop_mode').AsString <> '') then
-        Writeln(f, '<PROP_MODE' + dmUtils.StringToADIF(dmData.Q1.FieldByName('prop_mode').AsString));
+        Writeln(f, dmUtils.StringToADIF('<PROP_MODE' ,dmData.Q1.FieldByName('prop_mode').AsString));
 
       if (dmData.Q1.FieldByName('satellite').AsString <> '') then
-        Writeln(f, '<SAT_NAME' + dmUtils.StringToADIF(dmData.Q1.FieldByName('satellite').AsString));
+        Writeln(f, dmUtils.StringToADIF('<SAT_NAME' ,dmData.Q1.FieldByName('satellite').AsString));
 
       if (dmData.Q1.FieldByName('rxfreq').AsString <> '') then
-        Writeln(f, '<FREQ_RX' + dmUtils.StringToADIF(dmData.Q1.FieldByName('rxfreq').AsString));
+        Writeln(f, dmUtils.StringToADIF('<FREQ_RX' , dmData.Q1.FieldByName('rxfreq').AsString));
 
       Writeln(f,'<EOR>');
       Writeln(f);
