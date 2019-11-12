@@ -218,7 +218,7 @@ type
     MenuItem86: TMenuItem;
     MenuItem87: TMenuItem;
     MenuItem88 : TMenuItem;
-    MenuItem89 : TMenuItem;
+    mnuHamQth : TMenuItem;
     MenuItem90 : TMenuItem;
     MenuItem91 : TMenuItem;
     MenuItem92 : TMenuItem;
@@ -444,7 +444,7 @@ type
     procedure ReloadGrid;
     procedure CheckAttachment;
     function  CalcQrb(Myloc,loc:string;showUnits:boolean):string;
-    procedure eQSLView(CallsignFrom,QSOYear,QSOMonth,QSODay,QSOHour,QSOMinute,QSOBand,QSOMode:String);
+    procedure eQSLView(QSODate,QSOTime,CallsignFrom,QSOBand,QSOMode:String);
     { public declarations }
   end;
 
@@ -1196,39 +1196,42 @@ begin
     QSOMode :=       dmData.qCQRLOG.FieldByName('mode').AsString;
     if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
 
-    eQSLView( dmData.qCQRLOG.FieldByName('callsign').AsString,
-           fail   dmData.qCQRLOG.FieldByName('qsodate').AsString,
-           fail     dmData.qCQRLOG.FieldByName('qsodate').AsString,
-            fail    dmData.qCQRLOG.FieldByName('qsodate').AsString,
-            fail    dmData.qCQRLOG.FieldByName('time_on').AsString,
-           fail     dmData.qCQRLOG.FieldByName('time_on').AsString,
+    eQSLView( dmData.qCQRLOG.FieldByName('qsodate').AsString,
+              dmData.qCQRLOG.FieldByName('time_on').AsString,
+              dmData.qCQRLOG.FieldByName('callsign').AsString,
               dmData.qCQRLOG.FieldByName('band').AsString,
               QSOMode);
 
 end;
-procedure TfrmMain.eQSLView(CallsignFrom,QSOYear,QSOMonth,QSODay,QSOHour,QSOMinute,QSOBand,QSOMode:String);
+procedure TfrmMain.eQSLView(QSODate,QSOTime,CallsignFrom,QSOBand,QSOMode:String);
 var
   AProcess: TProcess;
-  url,
-  Username,//        The callsign of the recipient of the eQSL
-  Password //        The password of the user's account
-  : String;//        The callsign of the sender of the eQSL
-           //        YYYY OR YY format date of the QSO
-           //        MM format
-           //        DD format
-           //        HH format (24-hour time)
-           //        MM format
-           //        20m, 80M, 70cm, etc. (case insensitive)
-           //        Must match exactly and should be an ADIF-compatible mode
+  url,      //        https://www.eQSL.cc/qslcard/GeteQSL.cfm
+  Username, //        The callsign of the recipient of the eQSL
+  Password, //        The password of the user's account
+            //        The callsign of the sender of the eQSL
+  QSOYear,  //        YYYY OR YY format date of the QSO
+  QSOMonth, //        MM format
+  QSODay,   //        DD format
+  QSOHour,  //        HH format (24-hour time)
+  QSOMinute //        MM format
+            //        20m, 80M, 70cm, etc. (case insensitive) band
+            //        Must match exactly and should be an ADIF-compatible mode
+  : String;
 begin
     Username := cqrini.ReadString('LoTW','eQSLName','');
     Password := cqrini.ReadString('LoTW','eQSLPass','');
     if (Username = '') or (Password='') then
     begin
-      //msgbox here('User name or password is not set!');
+      MessageDlg(Caption, ' eQSL Username or Password not set!'+#10+
+                          '(see: preferences|LoTW/eQSL support)', mtError, [mbOK], 0);
       exit
     end;
-
+    QSOYear := copy(QSODate,1,4);
+    QSOMonth:= copy(QSODate,6,2);
+    QSOday  := copy(QSODate,9,2);
+    QSOHour := copy(QSOTime,1,2);
+    QSOMinute:= copy(QSOTime,4,2);
     url := 'https://www.eQSL.cc/qslcard/GeteQSL.cfm'+
            '?UserName='+Username+
            '&Password='+EncodeURL(Password)+

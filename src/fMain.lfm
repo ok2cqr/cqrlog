@@ -2491,22 +2491,26 @@ object frmMain: TfrmMain
     OnPopup = popWebSearchPopup
     left = 314
     top = 216
-    object MenuItem89: TMenuItem
+    object mnuHamQth: TMenuItem
       Action = acHamQTH
+      ImageIndex = 19
     end
     object MenuItem88: TMenuItem
       Caption = '-'
     end
     object mnuQRZ: TMenuItem
       Action = acQRZ
+      ImageIndex = 20
       OnClick = acQRZExecute
     end
     object mnuIK3AQR: TMenuItem
       Caption = 'Search on IK3QAR qsl manager page'
+      ImageIndex = 22
       OnClick = mnuIK3AQRClick
     end
     object mnueQSLView: TMenuItem
       Caption = 'View eQSL'
+      ImageIndex = 21
       Visible = False
       OnClick = mnueQSLViewClick
     end
