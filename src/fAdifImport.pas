@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Buttons, lcltype, ComCtrls, ExtCtrls, EditBtn, iniFiles, sqldb, dateutils,
-  strutils;
+  strutils, LazUTF8;
 
 {$include uADIFhash.pas}
 
@@ -26,7 +26,7 @@ type
   TDateString = string[10]; //Date in yyyy-mm-dd format
 
 type TnewQSOEntry=record   //represents a new qso entry in the log
-      st:longint; // pocet pridanych polozek;
+      st:longint; // pocet pridanych polozek  number of items added;
       BAND:string[10];
       CALL:string[30];
       CNTY:string[50];
@@ -187,12 +187,12 @@ var z,x:longint;
   begin
     getNextAdifTag:=false;
     z:=pos('<',vstup);
-    if z=0 then exit;// neni dalsi zaznam - mizim.
+    if z=0 then exit;//  there is no other record - disappearing.
 
     aaa:=copy(vstup,z+1,length(vstup));
     z:=pos(':',aaa);
     x:=pos('>',aaa);
-    if (x=0) then exit; // zaznam nebyl ukoncen ... mizim
+    if (x=0) then exit; //  the record was not terminated ... disappearing
 
     //detect length of ADIF Data
     for i:=z+1 to x do
@@ -204,24 +204,43 @@ var z,x:longint;
       DataLen := 0
     else
       DataLen := StrToInt(slen);
+    //if dmData.DebugLevel >=1 then Write('Got length:',DataLen);
 
     if z<>0 then
-      prik:=copy(aaa,1,z-1)
+      prik:=trim(copy(aaa,1,z-1))
     else
-      prik:=copy(aaa,1,x-1);
+      prik:=trim(copy(aaa,1,x-1));
 
     aaa:=copy(aaa,x+1,length(aaa));
 
     z:=pos('<',aaa);
+    i:= pos('_INTL',upcase(prik));
+    //if dmData.DebugLevel >=1 then Write(' pos INTL:',i);
     if z=0 then
     begin
-      data:=copy(aaa,1,DataLen);
+      if i>0 then  //tags with '_intl' have UTF8 charactes
+       Begin
+        prik:= copy(prik,1,i-1); //remove '_INTL'
+        data:=UTF8copy(aaa,1,DataLen);
+        //if dmData.DebugLevel >=1 then Write(' as UTF8');
+       end
+      else
+        data:=copy(aaa,1,DataLen);
       vstup:=''
     end
     else begin
-      data:=copy(aaa,1,DataLen);
+      if i>0 then  //tags with '_intl' have UTF8 charactes
+       Begin
+        prik:= copy(prik,1,i-1); //remove '_INTL'
+        data:=UTF8copy(aaa,1,DataLen);
+        //if dmData.DebugLevel >=1 then Write(' as UTF8');
+       end
+      else
+        data:=copy(aaa,1,DataLen);
       vstup:=copy(aaa,z,length(aaa))
     end;
+    data :=trim(data);
+    //if dmData.DebugLevel >=1 then Writeln(' for tag:',prik,' with data:',data);
     getNextAdifTag:=true
   end;
 
@@ -284,7 +303,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_SAT_NAME : d.SAT_NAME := data;
       h_FREQ_RX : d.FREQ_RX := data
       else
-        begin{ writeln('Neznam...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}end;
+        begin{ writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}end;
     end;//case
     d.st:=d.st+1;
   end;
@@ -842,7 +861,8 @@ begin
     Writeln(f,'Internet: http://www.cqrlog.com');
     Writeln(f,'');
     Writeln(f,'ERROR QSOs FROM ADIF IMPORT');
-    Writeln(f,'<ADIF_VER:5>2.2.1');
+    Writeln(f,'<ADIF_VER:5>3.1.0');
+    Writeln(f,'<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
     Writeln(f, '<PROGRAMID:6>CQRLOG');
     Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
     Writeln(f,'');
