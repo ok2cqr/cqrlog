@@ -36,6 +36,10 @@
     in a contest (any modern contesting program has the ADIF export facility, some older
     programs may need a third party conversion utility).
     <br><br>
+    Cqrlog now follows ADIF 3.1.0 specification of special UTF8 characters. Mainly they can be found from Name, QTH, Comment and Notes fields. Specification says that when there is special character(s) some adif tags may have suffix _INTL to show this. Like &lt;QTH_INTL:6&gt;Pyhtää
+    <br>If pure ASCII charcters are found the usual tag format is used. Like &lt;QTH:4&gt;Pori
+    <br>Every time special UTF8 character is found in tags, where specification allows, UTF8 printing routines are used and the _INTL suffix is added.
+    <br>At import side tags with suffix _INTL are read with UTF8 routines. Without _INTL with normal ASCII routines. This makes importing backward compatible with old cqrlog exports that have set tag lenght wrong if there has been special UTF8 characters in tag data.<br><br>
     Go to QSO list (Ctrl+O on the main logging screen or File -> Show QSO list from the menu).
     <br><br>
     <img src="img/h39.png" border="0"><br><br>
@@ -43,8 +47,10 @@
     Click on 'ADIF' and an 'Open file' dialog appears.<br><br>
     <img src="img/h40.png" border="0"><br><br>Navigate to the file you want to import and
     click 'Open'. You will see a new dialog, click the 'Import' button here. You can also
-    add a QTH profile and a note ('Remarks:') which will appear on any imported QSO record.
-    Using this option, a portable, mobile or QRP operation can be clearly marked.<br><br>
+    add a QTH profile and a note ('Comment to QSO(s):') which will appear on every imported QSO record.
+    Using this option, a portable, mobile or QRP operation can be clearly marked.
+    <br>
+    You can also filter by date range of adif file records. Checking "No check for duplicates" and "ADIF file contains..." may speed up big ADIF imports.<br><br>
     <img src="img/h41.png" border="0"><br><br>
     If you import a huge file, you will see a progress bar, however import of a small file
     is so fast that you never notice the progress indicator.<br><br>
