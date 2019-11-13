@@ -449,6 +449,7 @@
         <Filename Value="fKeyTexts.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmKeyTexts"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit51>
       <Unit52>
