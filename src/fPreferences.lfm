@@ -1,5 +1,5 @@
 object frmPreferences: TfrmPreferences
-  Left = 1603
+  Left = 140
   Height = 659
   Top = 73
   Width = 1098
@@ -1678,8 +1678,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 361
-          ClientWidth = 637
+          ClientHeight = 388
+          ClientWidth = 643
           object GroupBox3: TGroupBox
             Left = 16
             Height = 333
@@ -2021,8 +2021,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 361
-          ClientWidth = 637
+          ClientHeight = 388
+          ClientWidth = 643
           object GroupBox4: TGroupBox
             Left = 16
             Height = 333
@@ -2437,8 +2437,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 1
         object tabRot1: TTabSheet
           Caption = 'Rotor one'
-          ClientHeight = 361
-          ClientWidth = 557
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox42: TGroupBox
             Left = 14
             Height = 333
@@ -2770,8 +2770,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabRot2: TTabSheet
           Caption = 'Rotor two'
-          ClientHeight = 361
-          ClientWidth = 557
+          ClientHeight = 388
+          ClientWidth = 563
           object GroupBox43: TGroupBox
             Left = 8
             Height = 341
