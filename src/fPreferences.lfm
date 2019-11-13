@@ -1,12 +1,12 @@
 object frmPreferences: TfrmPreferences
-  Left = 100
+  Left = 160
   Height = 659
-  Top = 114
+  Top = 49
   Width = 1098
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 863
-  VertScrollBar.Page = 489
+  HorzScrollBar.Page = 771
+  VertScrollBar.Page = 618
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 659
     Top = 0
     Width = 850
-    ActivePage = tabLoTW
+    ActivePage = tabCWInterface
     Align = alClient
-    TabIndex = 18
+    TabIndex = 19
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -4426,288 +4426,437 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 628
       ClientWidth = 840
       object GroupBox11: TGroupBox
-        Left = 14
+        AnchorSideLeft.Control = tabMemebership
+        AnchorSideTop.Control = tabMemebership
+        Left = 18
         Height = 80
-        Top = 8
+        Top = 6
         Width = 584
+        BorderSpacing.Left = 18
+        BorderSpacing.Top = 6
         Caption = 'First club'
         ClientHeight = 62
         ClientWidth = 582
         TabOrder = 0
         object cmbFirstClub: TComboBox
-          Left = 14
+          AnchorSideLeft.Control = GroupBox11
+          AnchorSideTop.Control = GroupBox11
+          AnchorSideTop.Side = asrCenter
+          Left = 12
           Height = 33
-          Top = 7
+          Top = 15
           Width = 293
+          BorderSpacing.Left = 12
           ItemHeight = 0
           Style = csDropDownList
           TabOrder = 0
         end
         object btnSetFirst: TButton
-          Left = 493
+          AnchorSideLeft.Control = btnLoadFirst
+          AnchorSideTop.Control = btnLoadFirst
+          AnchorSideTop.Side = asrBottom
+          Left = 495
           Height = 25
           Top = 31
           Width = 75
+          BorderSpacing.Top = 3
           BorderSpacing.InnerBorder = 4
           Caption = 'Settings'
           OnClick = btnSetFirstClick
           TabOrder = 1
         end
         object btnLoadFirst: TButton
-          Left = 493
+          AnchorSideTop.Control = GroupBox11
+          AnchorSideRight.Control = GroupBox11
+          AnchorSideRight.Side = asrBottom
+          Left = 495
           Height = 25
-          Top = 0
+          Top = 3
           Width = 75
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 3
+          BorderSpacing.Right = 12
           BorderSpacing.InnerBorder = 4
           Caption = 'Load'
           OnClick = btnLoadFirstClick
           TabOrder = 2
         end
         object Label103: TLabel
-          Left = 325
+          AnchorSideLeft.Control = cmbFirstClub
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbFirstClub
+          AnchorSideTop.Side = asrCenter
+          Left = 317
           Height = 17
-          Top = 17
+          Top = 23
           Width = 39
+          BorderSpacing.Left = 12
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub1Date: TEdit
-          Left = 372
+          AnchorSideLeft.Control = Label103
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbFirstClub
+          AnchorSideTop.Side = asrCenter
+          Left = 368
           Height = 34
-          Top = 11
+          Top = 14
           Width = 96
+          BorderSpacing.Left = 12
           TabOrder = 3
         end
       end
       object GroupBox12: TGroupBox
-        Left = 14
+        AnchorSideLeft.Control = GroupBox11
+        AnchorSideTop.Control = GroupBox11
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 80
-        Top = 96
+        Top = 92
         Width = 584
+        BorderSpacing.Top = 6
         Caption = 'Second club'
         ClientHeight = 62
         ClientWidth = 582
         TabOrder = 1
         object cmbSecondClub: TComboBox
-          Left = 14
+          AnchorSideLeft.Control = GroupBox12
+          AnchorSideTop.Control = GroupBox12
+          AnchorSideTop.Side = asrCenter
+          Left = 12
           Height = 33
-          Top = 7
+          Top = 15
           Width = 293
+          BorderSpacing.Left = 12
           ItemHeight = 0
           Style = csDropDownList
           TabOrder = 0
         end
         object btnSetSecond: TButton
-          Left = 493
+          AnchorSideLeft.Control = btnLoadSecond
+          AnchorSideTop.Control = btnLoadSecond
+          AnchorSideTop.Side = asrBottom
+          Left = 495
           Height = 25
           Top = 31
           Width = 75
+          BorderSpacing.Top = 3
           BorderSpacing.InnerBorder = 4
           Caption = 'Settings'
           OnClick = btnSetSecondClick
           TabOrder = 1
         end
         object btnLoadSecond: TButton
-          Left = 493
+          AnchorSideTop.Control = GroupBox12
+          AnchorSideRight.Control = GroupBox12
+          AnchorSideRight.Side = asrBottom
+          Left = 495
           Height = 25
-          Top = -1
+          Top = 3
           Width = 75
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 3
+          BorderSpacing.Right = 12
           BorderSpacing.InnerBorder = 4
           Caption = 'Load'
           OnClick = btnLoadSecondClick
           TabOrder = 2
         end
         object Label104: TLabel
-          Left = 325
+          AnchorSideLeft.Control = cmbSecondClub
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbSecondClub
+          AnchorSideTop.Side = asrCenter
+          Left = 317
           Height = 17
-          Top = 15
+          Top = 23
           Width = 39
+          BorderSpacing.Left = 12
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub2Date: TEdit
-          Left = 372
+          AnchorSideLeft.Control = Label104
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbSecondClub
+          AnchorSideTop.Side = asrCenter
+          Left = 368
           Height = 34
-          Top = 11
+          Top = 14
           Width = 96
+          BorderSpacing.Left = 12
           TabOrder = 3
         end
       end
       object GroupBox13: TGroupBox
-        Left = 14
+        AnchorSideLeft.Control = GroupBox12
+        AnchorSideTop.Control = GroupBox12
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 80
-        Top = 184
+        Top = 178
         Width = 584
+        BorderSpacing.Top = 6
         Caption = 'Third club'
         ClientHeight = 62
         ClientWidth = 582
         TabOrder = 2
         object cmbThirdClub: TComboBox
-          Left = 14
+          AnchorSideLeft.Control = GroupBox13
+          AnchorSideTop.Control = GroupBox13
+          AnchorSideTop.Side = asrCenter
+          Left = 12
           Height = 33
-          Top = 7
+          Top = 15
           Width = 293
+          BorderSpacing.Left = 12
           ItemHeight = 0
           Style = csDropDownList
           TabOrder = 0
         end
         object btnSetThird: TButton
-          Left = 493
+          AnchorSideLeft.Control = btnLoadThird
+          AnchorSideTop.Control = btnLoadThird
+          AnchorSideTop.Side = asrBottom
+          Left = 495
           Height = 25
           Top = 31
           Width = 75
+          BorderSpacing.Top = 3
           BorderSpacing.InnerBorder = 4
           Caption = 'Settings'
           OnClick = btnSetThirdClick
           TabOrder = 1
         end
         object btnLoadThird: TButton
-          Left = 493
+          AnchorSideTop.Control = GroupBox13
+          AnchorSideRight.Control = GroupBox13
+          AnchorSideRight.Side = asrBottom
+          Left = 495
           Height = 25
-          Top = -1
+          Top = 3
           Width = 75
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 3
+          BorderSpacing.Right = 12
           BorderSpacing.InnerBorder = 4
           Caption = 'Load'
           OnClick = btnLoadThirdClick
           TabOrder = 2
         end
         object Label105: TLabel
-          Left = 325
+          AnchorSideLeft.Control = cmbThirdClub
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbThirdClub
+          AnchorSideTop.Side = asrCenter
+          Left = 317
           Height = 17
-          Top = 15
+          Top = 23
           Width = 39
+          BorderSpacing.Left = 12
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub3Date: TEdit
-          Left = 372
+          AnchorSideLeft.Control = Label105
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbThirdClub
+          AnchorSideTop.Side = asrCenter
+          Left = 368
           Height = 34
-          Top = 11
+          Top = 14
           Width = 96
+          BorderSpacing.Left = 12
           TabOrder = 3
         end
       end
       object GroupBox14: TGroupBox
-        Left = 14
+        AnchorSideLeft.Control = GroupBox13
+        AnchorSideTop.Control = GroupBox13
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 80
-        Top = 272
+        Top = 264
         Width = 584
+        BorderSpacing.Top = 6
         Caption = 'Fourth club'
         ClientHeight = 62
         ClientWidth = 582
         TabOrder = 3
         object cmbFourthClub: TComboBox
-          Left = 14
+          AnchorSideLeft.Control = GroupBox14
+          AnchorSideTop.Control = GroupBox14
+          AnchorSideTop.Side = asrCenter
+          Left = 12
           Height = 33
-          Top = 7
+          Top = 15
           Width = 293
+          BorderSpacing.Left = 12
           ItemHeight = 0
           Style = csDropDownList
           TabOrder = 0
         end
         object btnSetFourth: TButton
-          Left = 493
+          AnchorSideLeft.Control = btnLoadFourth
+          AnchorSideTop.Control = btnLoadFourth
+          AnchorSideTop.Side = asrBottom
+          Left = 495
           Height = 25
           Top = 31
           Width = 75
+          BorderSpacing.Top = 3
           BorderSpacing.InnerBorder = 4
           Caption = 'Settings'
           OnClick = btnSetFourthClick
           TabOrder = 1
         end
         object btnLoadFourth: TButton
-          Left = 493
+          AnchorSideTop.Control = GroupBox14
+          AnchorSideRight.Control = GroupBox14
+          AnchorSideRight.Side = asrBottom
+          Left = 495
           Height = 25
-          Top = -1
+          Top = 3
           Width = 75
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 3
+          BorderSpacing.Right = 12
           BorderSpacing.InnerBorder = 4
           Caption = 'Load'
           OnClick = btnLoadFourthClick
           TabOrder = 2
         end
         object Label106: TLabel
-          Left = 325
+          AnchorSideLeft.Control = cmbFourthClub
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbFourthClub
+          AnchorSideTop.Side = asrCenter
+          Left = 317
           Height = 17
-          Top = 15
+          Top = 23
           Width = 39
+          BorderSpacing.Left = 12
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub4Date: TEdit
-          Left = 372
+          AnchorSideLeft.Control = Label106
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbFourthClub
+          AnchorSideTop.Side = asrCenter
+          Left = 368
           Height = 34
-          Top = 11
+          Top = 14
           Width = 96
+          BorderSpacing.Left = 12
           TabOrder = 3
         end
       end
       object GroupBox15: TGroupBox
-        Left = 14
+        AnchorSideLeft.Control = GroupBox14
+        AnchorSideTop.Control = GroupBox14
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 80
-        Top = 360
+        Top = 350
         Width = 584
+        BorderSpacing.Top = 6
         Caption = 'Fifth club'
         ClientHeight = 62
         ClientWidth = 582
         TabOrder = 4
         object cmbFifthClub: TComboBox
-          Left = 14
+          AnchorSideLeft.Control = GroupBox15
+          AnchorSideTop.Control = GroupBox15
+          AnchorSideTop.Side = asrCenter
+          Left = 12
           Height = 33
-          Top = 7
+          Top = 15
           Width = 293
+          BorderSpacing.Left = 12
           ItemHeight = 0
           Style = csDropDownList
           TabOrder = 0
         end
         object btnSetFifth: TButton
-          Left = 493
+          AnchorSideLeft.Control = btnLoadFifth
+          AnchorSideTop.Control = btnLoadFifth
+          AnchorSideTop.Side = asrBottom
+          Left = 495
           Height = 25
           Top = 31
           Width = 75
+          BorderSpacing.Top = 3
           BorderSpacing.InnerBorder = 4
           Caption = 'Settings'
           OnClick = btnSetFifthClick
           TabOrder = 1
         end
         object btnLoadFifth: TButton
-          Left = 493
+          AnchorSideTop.Control = GroupBox15
+          AnchorSideRight.Control = GroupBox15
+          AnchorSideRight.Side = asrBottom
+          Left = 495
           Height = 25
-          Top = -1
+          Top = 3
           Width = 75
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 3
+          BorderSpacing.Right = 12
           BorderSpacing.InnerBorder = 4
           Caption = 'Load'
           OnClick = btnLoadFifthClick
           TabOrder = 2
         end
         object Label107: TLabel
-          Left = 325
+          AnchorSideLeft.Control = cmbFifthClub
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbFifthClub
+          AnchorSideTop.Side = asrCenter
+          Left = 317
           Height = 17
-          Top = 15
+          Top = 23
           Width = 39
+          BorderSpacing.Left = 12
           Caption = 'Since:'
           ParentColor = False
         end
         object edtClub5Date: TEdit
-          Left = 372
+          AnchorSideLeft.Control = Label107
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbFifthClub
+          AnchorSideTop.Side = asrCenter
+          Left = 368
           Height = 34
-          Top = 11
+          Top = 14
           Width = 96
+          BorderSpacing.Left = 12
           TabOrder = 3
         end
       end
       object chkCheckMembershipUpdate: TCheckBox
-        Left = 14
+        AnchorSideLeft.Control = GroupBox15
+        AnchorSideTop.Control = GroupBox15
+        AnchorSideTop.Side = asrBottom
+        Left = 18
         Height = 23
-        Top = 452
+        Top = 456
         Width = 391
+        BorderSpacing.Top = 26
         Caption = 'Check for updated list of members when program starts'
         TabOrder = 5
       end
       object btnForceMembershipUpdate: TButton
-        Left = 503
+        AnchorSideTop.Control = chkCheckMembershipUpdate
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = GroupBox14
+        AnchorSideRight.Side = asrBottom
+        Left = 508
         Height = 33
-        Top = 448
+        Top = 451
         Width = 94
+        Anchors = [akTop, akRight]
         AutoSize = True
         Caption = 'Update now'
         OnClick = btnForceMembershipUpdateClick
@@ -5223,12 +5372,12 @@ object frmPreferences: TfrmPreferences
         Top = 424
         Width = 521
         Caption = ' Center locator for xplanet (if different from default)'
-        ClientHeight = 46
-        ClientWidth = 515
+        ClientHeight = 54
+        ClientWidth = 519
         TabOrder = 0
         object edtXplanetLoc: TEdit
           Left = 6
-          Height = 25
+          Height = 34
           Top = 15
           Width = 96
           OnChange = edtXplanetLocChange
@@ -5239,7 +5388,7 @@ object frmPreferences: TfrmPreferences
         Left = 14
         Height = 23
         Top = 504
-        Width = 254
+        Width = 245
         Caption = 'Show own position within xplanet'
         TabOrder = 11
       end
@@ -6151,21 +6300,28 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 628
       ClientWidth = 840
       object GroupBox31: TGroupBox
-        Left = 12
+        AnchorSideLeft.Control = tabFldigi1
+        AnchorSideTop.Control = tabFldigi1
+        Left = 6
         Height = 328
         Top = 6
         Width = 724
+        BorderSpacing.Left = 6
+        BorderSpacing.Top = 6
         Caption = ' Reading data from fldigi'
         ClientHeight = 310
         ClientWidth = 722
         TabOrder = 0
         object Label91: TLabel
           AnchorSideLeft.Control = GroupBox31
+          AnchorSideTop.Control = rgFreqFrom
+          AnchorSideTop.Side = asrBottom
           Left = 10
           Height = 17
-          Top = 273
+          Top = 270
           Width = 216
           BorderSpacing.Left = 10
+          BorderSpacing.Top = 26
           Caption = 'Try to load QSO from fldigi every '
           ParentColor = False
         end
@@ -6176,7 +6332,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 296
           Height = 17
-          Top = 273
+          Top = 270
           Width = 53
           BorderSpacing.Left = 10
           Caption = 'seconds'
@@ -6189,7 +6345,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 236
           Height = 34
-          Top = 264
+          Top = 261
           Width = 50
           BorderSpacing.Left = 10
           MinValue = 1
@@ -6197,11 +6353,15 @@ object frmPreferences: TfrmPreferences
           Value = 2
         end
         object rgFreqFrom: TRadioGroup
-          Left = 25
+          AnchorSideLeft.Control = GroupBox34
+          AnchorSideTop.Control = GroupBox34
+          AnchorSideTop.Side = asrBottom
+          Left = 12
           Height = 114
-          Top = 135
+          Top = 130
           Width = 209
           AutoFill = True
+          BorderSpacing.Top = 12
           Caption = ' Frequency from '
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
@@ -6226,21 +6386,27 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = rgFreqFrom
           AnchorSideBottom.Side = asrBottom
-          Left = 148
+          Left = 134
           Height = 34
-          Top = 210
+          Top = 204
           Width = 81
           Anchors = [akRight, akBottom]
-          BorderSpacing.Right = 5
-          BorderSpacing.Bottom = 5
+          BorderSpacing.Right = 6
+          BorderSpacing.Bottom = 6
           TabOrder = 2
         end
         object rgModeFrom: TRadioGroup
-          Left = 257
+          AnchorSideLeft.Control = rgFreqFrom
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox34
+          AnchorSideTop.Side = asrBottom
+          Left = 239
           Height = 114
-          Top = 135
+          Top = 130
           Width = 224
           AutoFill = True
+          BorderSpacing.Left = 18
+          BorderSpacing.Top = 12
           Caption = ' Mode from '
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
@@ -6264,23 +6430,29 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = rgModeFrom
           AnchorSideBottom.Side = asrBottom
-          Left = 348
+          Left = 329
           Height = 27
-          Top = 217
+          Top = 211
           Width = 128
           Anchors = [akRight, akBottom]
           AutoSize = False
-          BorderSpacing.Right = 5
-          BorderSpacing.Bottom = 5
+          BorderSpacing.Right = 6
+          BorderSpacing.Bottom = 6
           ItemHeight = 0
           TabOrder = 4
         end
         object rgRSTFrom: TRadioGroup
-          Left = 496
+          AnchorSideLeft.Control = rgModeFrom
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox34
+          AnchorSideTop.Side = asrBottom
+          Left = 481
           Height = 114
-          Top = 135
+          Top = 130
           Width = 185
           AutoFill = True
+          BorderSpacing.Left = 18
+          BorderSpacing.Top = 12
           Caption = ' RST from '
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
@@ -6303,26 +6475,30 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = rgRSTFrom
           AnchorSideBottom.Side = asrBottom
-          Left = 595
+          Left = 579
           Height = 34
-          Top = 210
+          Top = 204
           Width = 81
           Anchors = [akRight, akBottom]
-          BorderSpacing.Right = 5
-          BorderSpacing.Bottom = 5
+          BorderSpacing.Right = 6
+          BorderSpacing.Bottom = 6
           TabOrder = 6
         end
         object GroupBox34: TGroupBox
-          Left = 25
+          AnchorSideLeft.Control = GroupBox31
+          AnchorSideTop.Control = GroupBox31
+          Left = 12
           Height = 112
-          Top = 5
+          Top = 6
           Width = 543
-          ClientHeight = 94
+          BorderSpacing.Left = 12
+          BorderSpacing.Top = 6
+          ClientHeight = 110
           ClientWidth = 541
           TabOrder = 7
           object Label95: TLabel
             AnchorSideLeft.Control = edtFldigiPath
-            AnchorSideBottom.Control = btnFldigiPath
+            AnchorSideBottom.Control = edtFldigiPath
             Left = 20
             Height = 17
             Top = 49
@@ -6361,9 +6537,10 @@ object frmPreferences: TfrmPreferences
             AnchorSideLeft.Control = edtFldigiPath
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = edtFldigiPath
+            AnchorSideTop.Side = asrCenter
             Left = 438
             Height = 25
-            Top = 71
+            Top = 76
             Width = 75
             BorderSpacing.Left = 2
             Caption = 'Browse'
@@ -6372,29 +6549,27 @@ object frmPreferences: TfrmPreferences
           end
         end
         object edtFldigiPort: TEdit
-          AnchorSideLeft.Side = asrCenter
-          AnchorSideTop.Control = GroupBox31
-          AnchorSideRight.Control = GroupBox31
+          AnchorSideLeft.Control = GroupBox34
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox34
           AnchorSideRight.Side = asrBottom
-          Left = 592
+          Left = 581
           Height = 34
-          Top = 25
+          Top = 28
           Width = 80
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 25
-          BorderSpacing.Right = 50
+          BorderSpacing.Left = 26
+          BorderSpacing.Top = 22
           TabOrder = 8
         end
         object edtFldigiIp: TEdit
+          AnchorSideLeft.Control = edtFldigiPort
           AnchorSideTop.Control = Label48
           AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = edtFldigiPort
           AnchorSideRight.Side = asrBottom
-          Left = 591
+          Left = 581
           Height = 34
-          Top = 80
-          Width = 81
-          Anchors = [akTop, akRight]
+          Top = 83
+          Width = 80
           BorderSpacing.Top = 2
           TabOrder = 9
         end
@@ -6403,9 +6578,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = edtFldigiPort
           AnchorSideTop.Side = asrBottom
-          Left = 603
+          Left = 593
           Height = 17
-          Top = 61
+          Top = 64
           Width = 56
           BorderSpacing.Top = 2
           Caption = 'Address:'
@@ -6416,9 +6591,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Side = asrCenter
           AnchorSideBottom.Control = edtFldigiPort
           AnchorSideBottom.Side = asrBottom
-          Left = 617
+          Left = 606
           Height = 17
-          Top = 7
+          Top = 10
           Width = 30
           Anchors = [akLeft, akBottom]
           BorderSpacing.Bottom = 35
@@ -6432,7 +6607,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 597
           Height = 23
-          Top = 270
+          Top = 267
           Width = 105
           BorderSpacing.Left = 10
           Caption = 'Use XmlRpc'
@@ -6445,7 +6620,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 537
           Height = 34
-          Top = 264
+          Top = 261
           Width = 50
           BorderSpacing.Left = 10
           MaxValue = 20
@@ -6459,7 +6634,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 389
           Height = 17
-          Top = 273
+          Top = 270
           Width = 138
           BorderSpacing.Left = 40
           Caption = 'Drop after  SyncErr >'
@@ -6467,20 +6642,28 @@ object frmPreferences: TfrmPreferences
         end
       end
       object GroupBox51: TGroupBox
-        Left = 16
+        AnchorSideLeft.Control = GroupBox31
+        AnchorSideTop.Control = GroupBox31
+        AnchorSideTop.Side = asrBottom
+        Left = 6
         Height = 264
-        Top = 336
+        Top = 340
         Width = 724
+        BorderSpacing.Top = 6
         Caption = 'Reading data from wsjtx'
         ClientHeight = 246
         ClientWidth = 722
         TabOrder = 1
         object GroupBox52: TGroupBox
-          Left = 8
+          AnchorSideLeft.Control = GroupBox51
+          AnchorSideTop.Control = GroupBox51
+          Left = 12
           Height = 107
-          Top = 9
+          Top = 6
           Width = 480
-          ClientHeight = 89
+          BorderSpacing.Left = 12
+          BorderSpacing.Top = 6
+          ClientHeight = 105
           ClientWidth = 478
           TabOrder = 0
           object Label202: TLabel
@@ -6537,13 +6720,12 @@ object frmPreferences: TfrmPreferences
         object lblwsjtport: TLabel
           AnchorSideLeft.Control = edtWsjtPort
           AnchorSideLeft.Side = asrCenter
-          AnchorSideBottom.Control = edtWsjtPort
+          AnchorSideTop.Control = lbln1mmport
           AnchorSideBottom.Side = asrBottom
-          Left = 601
+          Left = 605
           Height = 17
-          Top = 2
+          Top = 6
           Width = 63
-          Anchors = [akLeft, akBottom]
           BorderSpacing.Bottom = 35
           Caption = 'Wsjt port:'
           ParentColor = False
@@ -6553,20 +6735,25 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = edtN1MMPort
           AnchorSideRight.Side = asrBottom
-          Left = 592
+          Left = 596
           Height = 34
-          Top = 20
+          Top = 24
           Width = 80
           BorderSpacing.Left = 16
-          BorderSpacing.Right = 50
           TabOrder = 1
         end
         object rgWsjtModeFrom: TRadioGroup
-          Left = 226
+          AnchorSideLeft.Control = rgWsjtFreqFrom
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox52
+          AnchorSideTop.Side = asrBottom
+          Left = 218
           Height = 114
-          Top = 120
+          Top = 125
           Width = 272
           AutoFill = True
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 12
           Caption = ' Mode from '
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
@@ -6586,11 +6773,16 @@ object frmPreferences: TfrmPreferences
           TabOrder = 2
         end
         object rgWsjtFreqFrom: TRadioGroup
-          Left = 11
+          AnchorSideLeft.Control = GroupBox51
+          AnchorSideTop.Control = GroupBox52
+          AnchorSideTop.Side = asrBottom
+          Left = 12
           Height = 114
-          Top = 121
+          Top = 125
           Width = 200
           AutoFill = True
+          BorderSpacing.Left = 12
+          BorderSpacing.Top = 12
           Caption = ' Frequency from '
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
@@ -6615,9 +6807,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = rgWsjtFreqFrom
           AnchorSideBottom.Side = asrBottom
-          Left = 125
+          Left = 126
           Height = 34
-          Top = 196
+          Top = 200
           Width = 81
           Anchors = [akRight, akBottom]
           BorderSpacing.Right = 5
@@ -6629,9 +6821,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = rgWsjtModeFrom
           AnchorSideBottom.Side = asrBottom
-          Left = 365
+          Left = 357
           Height = 27
-          Top = 202
+          Top = 207
           Width = 128
           Anchors = [akRight, akBottom]
           AutoSize = False
@@ -6645,9 +6837,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = edtWsjtPort
           AnchorSideRight.Side = asrBottom
-          Left = 591
+          Left = 595
           Height = 34
-          Top = 75
+          Top = 79
           Width = 81
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 2
@@ -6658,20 +6850,26 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = edtWsjtPort
           AnchorSideTop.Side = asrBottom
-          Left = 598
+          Left = 602
           Height = 17
-          Top = 56
+          Top = 60
           Width = 66
           BorderSpacing.Top = 2
           Caption = 'Wsjt addr:'
           ParentColor = False
         end
         object cgLimit: TCheckGroup
-          Left = 512
+          AnchorSideLeft.Control = rgWsjtModeFrom
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox52
+          AnchorSideTop.Side = asrBottom
+          Left = 496
           Height = 114
-          Top = 121
+          Top = 125
           Width = 200
           AutoFill = True
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 12
           Caption = 'WB4 chk starts from'
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
@@ -6735,26 +6933,26 @@ object frmPreferences: TfrmPreferences
         object edtN1MMPort: TEdit
           AnchorSideLeft.Control = GroupBox52
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = GroupBox51
+          AnchorSideTop.Control = GroupBox52
           AnchorSideRight.Side = asrBottom
-          Left = 496
+          Left = 500
           Height = 34
-          Top = 20
+          Top = 24
           Width = 80
           BorderSpacing.Left = 8
-          BorderSpacing.Top = 20
+          BorderSpacing.Top = 18
           TabOrder = 8
         end
         object lbln1mmport: TLabel
-          AnchorSideLeft.Control = edtN1MMPort
-          AnchorSideLeft.Side = asrCenter
-          AnchorSideBottom.Control = edtN1MMPort
+          AnchorSideLeft.Control = GroupBox52
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = GroupBox52
           AnchorSideBottom.Side = asrBottom
-          Left = 498
+          Left = 504
           Height = 17
-          Top = 2
+          Top = 6
           Width = 76
-          Anchors = [akLeft, akBottom]
+          BorderSpacing.Left = 12
           BorderSpacing.Bottom = 35
           Caption = 'N1MM port:'
           ParentColor = False
@@ -6764,9 +6962,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lbln1mmaddr
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
-          Left = 496
+          Left = 500
           Height = 34
-          Top = 75
+          Top = 79
           Width = 81
           BorderSpacing.Top = 2
           TabOrder = 9
@@ -6776,9 +6974,9 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = edtN1MMPort
           AnchorSideTop.Side = asrBottom
-          Left = 497
+          Left = 501
           Height = 17
-          Top = 56
+          Top = 60
           Width = 79
           BorderSpacing.Top = 2
           Caption = 'N1MM addr:'
@@ -6795,7 +6993,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 352
+        ClientHeight = 368
         ClientWidth = 606
         TabOrder = 0
         object Label93: TLabel
