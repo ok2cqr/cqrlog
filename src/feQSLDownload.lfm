@@ -1,130 +1,180 @@
 object frmeQSLDownload: TfrmeQSLDownload
-  Left = 461
-  Height = 609
-  Top = 137
-  Width = 489
+  Left = 518
+  Height = 606
+  Top = 83
+  Width = 481
   Caption = 'Download data from eQSL.cc'
-  ClientHeight = 609
-  ClientWidth = 489
+  ClientHeight = 606
+  ClientWidth = 481
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.4.0'
   object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Panel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 407
+    Height = 408
     Top = 152
-    Width = 489
+    Width = 481
     Align = alClient
+    Anchors = [akTop, akLeft, akRight]
     Caption = 'Progress'
-    ClientHeight = 388
-    ClientWidth = 485
+    ClientHeight = 390
+    ClientWidth = 479
     TabOrder = 0
     object mStat: TMemo
       Left = 0
-      Height = 388
+      Height = 390
       Top = 0
-      Width = 485
+      Width = 479
       Align = alClient
       ScrollBars = ssAutoBoth
       TabOrder = 0
     end
   end
   object Panel1: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
     Left = 0
     Height = 152
     Top = 0
-    Width = 489
+    Width = 481
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 152
-    ClientWidth = 489
+    ClientWidth = 481
     TabOrder = 1
     object btnDownload: TButton
-      Left = 88
+      AnchorSideLeft.Control = GroupBox5
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = GroupBox5
+      AnchorSideTop.Side = asrBottom
+      Left = 71
       Height = 25
-      Top = 120
-      Width = 329
+      Top = 126
+      Width = 338
       Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
       Caption = 'Download data from eQSL website'
       OnClick = btnDownloadClick
       TabOrder = 0
     end
     object GroupBox5: TGroupBox
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Panel1
       Left = 0
       Height = 120
       Top = 0
-      Width = 489
+      Width = 480
       Anchors = [akTop, akLeft, akRight]
       Caption = ' '
-      ClientHeight = 101
-      ClientWidth = 485
+      ClientHeight = 102
+      ClientWidth = 478
       TabOrder = 1
       object Label3: TLabel
-        Left = 10
+        AnchorSideLeft.Control = GroupBox5
+        AnchorSideTop.Control = edtDateFrom
+        AnchorSideTop.Side = asrCenter
+        Left = 12
         Height = 17
-        Top = 12
-        Width = 268
+        Top = 9
+        Width = 259
+        BorderSpacing.Left = 12
         Caption = 'Return QSL records received on or after '
         ParentColor = False
       end
       object edtDateFrom: TEdit
-        Left = 278
-        Height = 27
-        Top = 7
+        AnchorSideLeft.Control = Label3
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox5
+        Left = 277
+        Height = 34
+        Top = 0
         Width = 85
+        BorderSpacing.Left = 6
         TabOrder = 0
       end
       object chkShowNew: TCheckBox
-        Left = 10
-        Height = 24
-        Top = 72
-        Width = 394
+        AnchorSideLeft.Control = Label4
+        AnchorSideTop.Control = edtQTH
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 23
+        Top = 74
+        Width = 382
+        BorderSpacing.Top = 3
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end
       object Label4: TLabel
-        Left = 10
+        AnchorSideLeft.Control = Label3
+        AnchorSideTop.Control = edtQTH
+        AnchorSideTop.Side = asrCenter
+        Left = 12
         Height = 17
-        Top = 40
-        Width = 99
+        Top = 46
+        Width = 98
         Caption = 'QTH Nickname'
         ParentColor = False
       end
       object edtQTH: TEdit
-        Left = 278
-        Height = 27
-        Top = 40
+        AnchorSideLeft.Control = edtDateFrom
+        AnchorSideTop.Control = edtDateFrom
+        AnchorSideTop.Side = asrBottom
+        Left = 277
+        Height = 34
+        Top = 37
         Width = 184
+        BorderSpacing.Top = 3
         TabOrder = 2
       end
     end
   end
   object Panel2: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 50
-    Top = 559
-    Width = 489
+    Height = 46
+    Top = 560
+    Width = 481
     Align = alBottom
     BevelOuter = bvNone
-    ClientHeight = 50
-    ClientWidth = 489
+    ClientHeight = 46
+    ClientWidth = 481
     TabOrder = 2
     object btnClose: TButton
-      Left = 402
+      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 397
       Height = 25
-      Top = 13
+      Top = 11
       Width = 72
       Anchors = [akTop, akRight]
+      BorderSpacing.Right = 12
       Cancel = True
       Caption = 'Close'
       ModalResult = 2
       TabOrder = 0
     end
     object btnPreferences: TButton
-      Left = 8
+      AnchorSideLeft.Control = Panel2
+      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Side = asrCenter
+      Left = 12
       Height = 25
-      Top = 13
+      Top = 11
       Width = 96
+      BorderSpacing.Left = 12
       Caption = 'Preferences'
       OnClick = btnPreferencesClick
       TabOrder = 1
