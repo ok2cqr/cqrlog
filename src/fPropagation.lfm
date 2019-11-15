@@ -1,7 +1,7 @@
 object frmPropagation: TfrmPropagation
-  Left = 503
+  Left = 571
   Height = 153
-  Top = 455
+  Top = 383
   Width = 630
   Caption = 'Propagation'
   ClientHeight = 153
