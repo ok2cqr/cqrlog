@@ -1232,7 +1232,7 @@ begin
     QSOday  := copy(QSODate,9,2);
     QSOHour := copy(QSOTime,1,2);
     QSOMinute:= copy(QSOTime,4,2);
-    url := 'https://www.eQSL.cc/qslcard/GeteQSL.cfm'+
+    url := cqrini.ReadString('LoTW', 'eQSViewAddr','https://www.eQSL.cc/qslcard/GeteQSL.cfm')+
            '?UserName='+Username+
            '&Password='+EncodeURL(Password)+
            '&CallsignFrom='+CallsignFrom+
