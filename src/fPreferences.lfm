@@ -5720,7 +5720,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Control = cmbLoTWBckColor
         Left = 271
         Height = 34
-        Top = 360
+        Top = 429
         Width = 327
         BorderSpacing.Left = 6
         Caption = 'color as a background in DX cluster and band map'#10'for stations using LoTW'
@@ -5732,7 +5732,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 278
+        Top = 347
         Width = 423
         BorderSpacing.Top = 6
         Caption = 'Include LoTW and eQSL confirmed countries in DXCC statistic'
@@ -5744,7 +5744,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 307
+        Top = 376
         Width = 593
         BorderSpacing.Top = 6
         Caption = 'Use LoTW and eQSL confirmed countries for New country or New band country etc. info'
@@ -5819,7 +5819,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 336
+        Top = 405
         Width = 398
         BorderSpacing.Top = 6
         Caption = 'Show info in New QSO window if station uses LoTW/eQSL'
@@ -5831,7 +5831,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 365
+        Top = 434
         Width = 83
         BorderSpacing.Top = 6
         Caption = 'Use this '
@@ -5844,7 +5844,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrCenter
         Left = 101
         Height = 33
-        Top = 360
+        Top = 429
         Width = 164
         DefaultColorColor = clMoneyGreen
         NoneColorColor = clMoneyGreen
@@ -5859,13 +5859,13 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Control = gbLoTW
         AnchorSideTop.Side = asrBottom
         Left = 12
-        Height = 191
+        Height = 260
         Top = 81
-        Width = 513
+        Width = 516
         BorderSpacing.Top = 6
         Caption = ' Data for access to eQSL website '
-        ClientHeight = 173
-        ClientWidth = 511
+        ClientHeight = 242
+        ClientWidth = 514
         TabOrder = 6
         object lbleQSLUsr: TLabel
           AnchorSideLeft.Control = gbeQSL
@@ -5882,7 +5882,7 @@ object frmPreferences: TfrmPreferences
         object lbleQSLPass: TLabel
           AnchorSideTop.Control = lbleQSLUsr
           AnchorSideRight.Control = edteQSLPass
-          Left = 320
+          Left = 323
           Height = 17
           Top = 6
           Width = 69
@@ -5906,7 +5906,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lbleQSLUsr
           AnchorSideRight.Control = gbeQSL
           AnchorSideRight.Side = asrBottom
-          Left = 395
+          Left = 398
           Height = 34
           Top = 6
           Width = 104
@@ -5937,7 +5937,7 @@ object frmPreferences: TfrmPreferences
           Left = 6
           Height = 34
           Top = 69
-          Width = 493
+          Width = 496
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Top = 6
           BorderSpacing.Right = 12
@@ -5964,11 +5964,38 @@ object frmPreferences: TfrmPreferences
           Left = 6
           Height = 34
           Top = 132
-          Width = 493
+          Width = 496
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Top = 6
           BorderSpacing.Right = 12
           TabOrder = 3
+        end
+        object lbleQSLViewAddr: TLabel
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideTop.Control = edteQSLDnlAddr
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 17
+          Top = 172
+          Width = 390
+          BorderSpacing.Top = 6
+          Caption = 'eQSL view address prefix. Your user data is added  as suffix.'
+          ParentColor = False
+        end
+        object edteQSLViewAddr: TEdit
+          AnchorSideLeft.Control = lbleQSLUsr
+          AnchorSideTop.Control = lbleQSLViewAddr
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = gbeQSL
+          AnchorSideRight.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 195
+          Width = 496
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Top = 6
+          BorderSpacing.Right = 12
+          TabOrder = 4
         end
       end
       object chkShowBckEQSL: TCheckBox
@@ -5977,7 +6004,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 400
+        Top = 469
         Width = 83
         BorderSpacing.Top = 12
         Caption = 'Use this '
@@ -5990,7 +6017,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrCenter
         Left = 101
         Height = 33
-        Top = 395
+        Top = 464
         Width = 164
         DefaultColorColor = clSkyBlue
         NoneColorColor = clMoneyGreen
@@ -6006,7 +6033,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Control = cmbeQSLBckColor
         Left = 271
         Height = 34
-        Top = 395
+        Top = 464
         Width = 327
         BorderSpacing.Left = 6
         Caption = 'color as a background in DX cluster and band map'#10'for stations using eQSL'
@@ -6018,7 +6045,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 435
+        Top = 504
         Width = 315
         BorderSpacing.Top = 12
         Caption = 'Upload to eQSL also data in COMMENT field '
