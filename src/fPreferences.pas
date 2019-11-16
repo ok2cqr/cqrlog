@@ -2845,8 +2845,8 @@ begin
   cmbLoTWBckColor.Selected := cqrini.ReadInteger('LoTW', 'BckColor', clMoneyGreen);
   edteQSLName.Text := cqrini.ReadString('LoTW', 'eQSLName', '');
   edteQSLPass.Text := cqrini.ReadString('LoTW', 'eQSLPass', '');
-  edteQSLStartAddr.Text := cqrini.ReadString('LoTW', 'eQSLStartAddr','http://www.eqsl.cc/qslcard/DownloadInBox.cfm');
-  edteQSLDnlAddr.Text := cqrini.ReadString('LoTW', 'eQSLDnlAddr','http://www.eqsl.cc/downloadedfiles/');
+  edteQSLStartAddr.Text := cqrini.ReadString('LoTW', 'eQSLStartAddr','https://www.eqsl.cc/qslcard/DownloadInBox.cfm');
+  edteQSLDnlAddr.Text := cqrini.ReadString('LoTW', 'eQSLDnlAddr','https://www.eqsl.cc/downloadedfiles/');
   edteQSLViewAddr.Text := cqrini.ReadString('LoTW', 'eQSViewAddr','https://www.eQSL.cc/qslcard/GeteQSL.cfm');
   chkShowBckEQSL.Checked := cqrini.ReadBool('LoTW', 'eUseBackColor', True);
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
