@@ -376,7 +376,7 @@ begin
   else
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
-
+  //commit and save USstate file here
 end;
  
 procedure TfrmMonWsjtx.Setbitmap(bm: TBitmap; col: Tcolor);
@@ -964,6 +964,9 @@ begin
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
         LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
+  // check here if we have USstate file for this date.
+  //if not create one (it could be "ini" file that is in memory while runnig)
+  //if it exist the open it for use here.
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1865,6 +1868,10 @@ procedure TfrmMonWsjtx.extcqprint;
           AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
     end;
   end;
+//do copy of extcqprint to print USstate instead with worked/notworked user def color
+//
+// here
+//
 
 function TfrmMonWsjtx.getCurMode(sMode: String): String;
   // function getCurMode converts a wsjtx binary mode in human readable ham mode

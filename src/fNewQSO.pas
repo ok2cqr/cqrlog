@@ -4303,9 +4303,6 @@ begin
   if (frmMonWsjtx = nil) then  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
   frmMonWsjtx.Show;
   cqrini.WriteBool('Window','MonWsjtx',true);
-  // check here if we have USstate file for this date.
-  //if not create one (it could be "ini" file that is in memory while runnig)
-  //if it exist the open it for use here.
 end;
 
 procedure TfrmNewQSO.acBigSquareExecute(Sender: TObject);
