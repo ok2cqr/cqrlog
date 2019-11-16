@@ -1463,7 +1463,7 @@ begin
   cqrini.WriteString('LoTW', 'eQSLPass', edteQSLPass.Text);
   cqrini.WriteString('LoTW', 'eQSLStartAddr',edteQSLStartAddr.Text);
   cqrini.WriteString('LoTW', 'eQSLDnlAddr',edteQSLDnlAddr.Text);
-  cqrini.WriteString('LoTW', 'eQSViewAddr',edteQSLDnlAddr.Text);
+  cqrini.WriteString('LoTW', 'eQSViewAddr',edteQSLViewAddr.Text);
   cqrini.WriteBool('LoTW', 'eUseBackColor', chkShowBckEQSL.Checked);
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
   cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
