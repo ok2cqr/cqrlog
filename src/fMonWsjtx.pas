@@ -1786,7 +1786,12 @@ begin
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
      //case of USA print it only. Forget state. It is not shown full and may be bogus
      if pos('USA',upcase(msgRes))=1 then msgRes := 'USA';
-
+     //do here seek for callsign in local USstate file if call does not exist there
+     //do a qrz/hamcomm fetc to get state and write it to local file. Set commit file change flag if state revd.
+     //if state is in local file then take it from there.
+     //now state should be there add it to msgres that has USA. Use special charcter like @ to make
+     //definition of text alert easier.
+     //State could also be printed to DX warning column instead of adding it to country column with user color "worked" or "not worked" (green /red)
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
      if CqDir <> '' then

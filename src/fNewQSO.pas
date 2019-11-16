@@ -2137,6 +2137,8 @@ begin
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
                                  tmrWsjtx.Interval := wLoSpeed;
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
+                                 //If USstate file needs commit,
+                                 //do it now and reset commit flag
                                 end;
                             end;
              end;
@@ -4301,6 +4303,9 @@ begin
   if (frmMonWsjtx = nil) then  Application.CreateForm(TfrmMonWsjtx, frmMonWsjtx);
   frmMonWsjtx.Show;
   cqrini.WriteBool('Window','MonWsjtx',true);
+  // check here if we have USstate file for this date.
+  //if not create one (it could be "ini" file that is in memory while runnig)
+  //if it exist the open it for use here.
 end;
 
 procedure TfrmNewQSO.acBigSquareExecute(Sender: TObject);
