@@ -150,8 +150,6 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
-    procedure edtDateFromExit(Sender: TObject);
-    procedure edtDateToExit(Sender: TObject);
   private
     procedure saveFilter(filename:String);
     procedure loadFilter(filename:string);
@@ -176,8 +174,12 @@ var
   grb_by    : String = '';
   p         : TExplodeArray;
   i         : Integer = 0;
+  Mask      : String = '';
+  sDate     : String = '';
 begin
   if chkRemember.Checked then saveFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
+  //if empty date-to make it as today NOTE that empty calendar is not empty string!
+  if edtDateTo.Text = '    -  -  ' then edtDateTo.Date := now;
 
   tmp := '';
   if (edtCallSign.Text <> '') then
@@ -232,8 +234,10 @@ begin
       tmp := tmp + ' (UPPER(srx_string) = ' + QuotedStr(upcase(edtSRXstr.Text))+')';
       tmp := tmp + ' AND'
     end;
-  if (edtDateFrom.Text <> '') then
+  if (edtDateFrom.Text <> '    -  -  ') then   //NOTE that empty calendar is not empty string!
   begin
+    //if empty date-to make it as today
+    if edtDateTo.Text = '    -  -  ' then edtDateTo.Date := now;
     tmp := tmp + ' (qsodate >= ' + QuotedStr(edtDateFrom.Text) + ') AND (qsodate <= ' +
                 QuotedStr(edtDateTo.Text) + ')';
     tmp := tmp + ' AND'
@@ -462,24 +466,6 @@ begin
   ModalResult := mrOK;
 end;
 
-procedure TfrmFilter.edtDateFromExit(Sender: TObject);
-begin
-  if Length(edtDateFrom.Text)=8 then
-  begin
-    tmp := edtDateFrom.Text;
-    edtDateFrom.Text := copy(tmp,1,4) + '-' + copy(tmp,5,2) + '-' + copy(tmp,7,2)
-  end
-end;
-
-procedure TfrmFilter.edtDateToExit(Sender: TObject);
-begin
-  if Length(edtDateTo.Text)=8 then
-  begin
-    tmp := edtDateTo.Text;
-    edtDateTo.Text := copy(tmp,1,4) + '-' + copy(tmp,5,2) + '-' + copy(tmp,7,2)
-  end
-end;
-
 procedure TfrmFilter.btnCancelClick(Sender: TObject);
 begin
   Close
@@ -533,12 +519,9 @@ end;
 //creates and shows itself in every opening
 
 procedure TfrmFilter.FormShow(Sender: TObject);
-var
-  Mask, sDate : String;
+
 begin
   dmUtils.LoadFontSettings(self);
-  Mask  := '';
-  sDate := '';
   dmUtils.InsertQSL_S(cmbQSL_S);
   cmbQSL_S.Items.Insert(9,'S');
   cmbQSL_S.Items.Add('Empty');
@@ -546,8 +529,7 @@ begin
   cmbQSL_R.Items.Add('Empty');
   dmUtils.InsertModes(cmbMode);
   cmbMode.Items.Insert(0,'');
-  dmUtils.DateInRightFormat(now,Mask,sDate);
-  edtDateTo.Text       := sDate;
+
   dmData.InsertProfiles(cmbProfile,True);
   cmbProfile.Text := dmData.GetDefaultProfileText;
   cmbProfile.Items.Insert(0,'Any profile');
@@ -626,6 +608,7 @@ begin
 
 end;
 
+
 procedure TfrmFilter.edtLocatorChange(Sender: TObject);
 begin
    if rbExactlyLoc.Checked then
@@ -671,7 +654,7 @@ begin
       edtFreqTo.Text           := '';
       cmbMode.Text             := '';
       edtDateFrom.Text         := '';
-      edtDateTo.Text           := dmUtils.MyDateToStr(now);
+      edtDateTo.Text           := '';
       edtLocator.Text          := '';
       edtQTH.Text              := '';
       cmbQSL_S.Text            := '';
@@ -738,8 +721,11 @@ begin
       filini.WriteString('freq','freq_from',edtFreqFrom.Text);
       filini.WriteString('freq','freq_to',edtFreqTo.Text);
       filini.WriteString('mode','mode',cmbMode.Text);
-      filini.WriteString('date','date_from',edtDateFrom.Text);
-      filini.WriteString('date','date_to',edtDateTo.Text);
+      //NOTE that empty calendar is not empty string!
+      if edtDateFrom.Text = '    -  -  ' then filini.WriteString('date','date_from','')
+       else filini.WriteString('date','date_from',edtDateFrom.Text);
+      if edtDateTo.Text = '    -  -  ' then  filini.WriteString('date','date_to','')
+       else filini.WriteString('date','date_to',edtDateTo.Text);
       filini.WriteString('locator','locator',edtLocator.Text);
       filini.WriteBool('locator','exactly',rbExactlyLoc.Checked);
       filini.WriteString('qth','qth',edtQTH.Text);
@@ -796,7 +782,7 @@ var
       edtFreqTo.Text          := filini.ReadString('freq','freq_to','');
       cmbMode.Text            := filini.ReadString('mode','mode','');
       edtDateFrom.Text        := filini.ReadString('date','date_from','');
-      edtDateTo.Text          := filini.ReadString('date','date_to',dmUtils.MyDateToStr(now));
+      edtDateTo.Text          := filini.ReadString('date','date_to','');
       edtLocator.Text         := filini.ReadString('locator','locator','');
       rbIncludeLoc.Checked    := not filini.ReadBool('locator','exactly',True);
       edtQTH.Text             := filini.ReadString('qth','qth','');

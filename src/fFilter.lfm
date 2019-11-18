@@ -121,7 +121,7 @@ object frmFilter: TfrmFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.4.0'
   object lblProf: TLabel
     AnchorSideTop.Control = cmbProfile
     AnchorSideRight.Control = lblSortBy
@@ -429,7 +429,7 @@ object frmFilter: TfrmFilter
       Height = 34
       Top = 19
       Width = 114
-      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames, dsStartMonday]
       DateOrder = doYMd
       DateFormat = 'YMD'
       ButtonWidth = 23
@@ -451,8 +451,7 @@ object frmFilter: TfrmFilter
       Height = 34
       Top = 59
       Width = 114
-      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
-      DefaultToday = True
+      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames, dsStartMonday]
       DateOrder = doYMd
       DateFormat = 'YMD'
       ButtonWidth = 23
@@ -1377,7 +1376,6 @@ object frmFilter: TfrmFilter
       Height = 34
       Top = 40
       Width = 95
-      OnExit = edtDateToExit
       TabOrder = 0
     end
     object edtPwrFrom: TEdit
@@ -1391,7 +1389,6 @@ object frmFilter: TfrmFilter
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 6
       BorderSpacing.Right = 6
-      OnExit = edtDateFromExit
       TabOrder = 1
     end
     object Label19: TLabel
