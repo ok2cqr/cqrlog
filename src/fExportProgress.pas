@@ -22,7 +22,7 @@ type
   private
     procedure FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
                               ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
-                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExDistance,ExPower,
+                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq,
@@ -82,7 +82,7 @@ begin
 end;
 procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
                               ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
-                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExDistance,ExPower,
+                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq,
@@ -103,6 +103,7 @@ begin
   exQSLVIA  := cqrini.ReadBool('Export','QSL_VIA',True);
   exLoc     := cqrini.ReadBool('Export','Locator',False);
   exMyLoc   := cqrini.ReadBool('Export','MyLoc',False);
+  exOperator:= cqrini.ReadBool('Export','Operator',False);
   ExDistance:= cqrini.ReadBool('Export','Distance',False);
   exIOTA    := cqrini.ReadBool('Export','IOTA',False);
   exAward   := cqrini.ReadBool('Export','Award',False);
@@ -152,7 +153,7 @@ var
   qslr_date     : String;
   ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode : Boolean;
   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR : Boolean;
-  ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExDistance,ExPower : Boolean;
+  ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower : Boolean;
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate : Boolean;
   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
@@ -176,7 +177,7 @@ var
 
   //------------------------------------------------------
   procedure SaveDataA(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
-                     QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
+                     QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,Op,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,continent,
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
                      srx, stx_string, srx_string, contestname : String);
@@ -285,7 +286,9 @@ var
         SaveTag(dmUtils.StringToADIF('<GRIDSQUARE',dmUtils.StdFormatLocator(Loc)),leng);
    if exMyLoc then
       if dmUtils.IsLocOK(MyLoc) then
-        SaveTag(dmUtils.StringToADIF('<MY_GRIDSQUARE',dmUtils.StdFormatLocator(MyLoc)),leng);
+        SaveTag('<MY_GRIDSQUARE' + dmUtils.StringToADIF(dmUtils.StdFormatLocator(MyLoc)),leng);
+   if exOperator then
+      SaveTag('<OPERATOR' + dmUtils.StringToADIF(cqrini.ReadString('Station', 'Call', '')),leng);
    if ExDistance then
     begin
       dmUtils.DistanceFromLocator(MyLoc,Loc,qrb,qrc);
@@ -389,7 +392,7 @@ begin   //TfrmExportProgress
   if ExportType <> 2 then
                FieldsForExport(ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
                               ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
-                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExDistance,ExPower,
+                              ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq,
@@ -397,7 +400,7 @@ begin   //TfrmExportProgress
  else begin    //adif backup
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
-    ExQSLVIA := True;ExIOTA := True;ExAward := True;ExLoc := True;ExMyLoc := True;ExDistance := False;ExPower := True;
+    ExQSLVIA := True;ExIOTA := True;ExAward := True;ExLoc := True;ExMyLoc := True;ExOperator := True;ExDistance := False;ExPower := True;
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExContinent := True;
     ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; exAscTime := False;
@@ -492,6 +495,7 @@ begin   //TfrmExportProgress
                  Source.Fields[17].AsString,  //waz
                  Source.Fields[18].AsString, //loc
                  Source.Fields[19].AsString, //myloc
+                 cqrini.ReadString('Station', 'Call', ''), //operator
                  Source.Fields[20].AsString, //county
                  Source.Fields[21].AsString, //award
                  Source.Fields[22].AsString, //remarks
@@ -596,7 +600,7 @@ var
 
   ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode  : Boolean;
   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR  : Boolean;
-  ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExDistance,ExPower  : Boolean;
+  ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower  : Boolean;
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, exState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate, ExQSLRDate : Boolean;
   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
@@ -639,7 +643,7 @@ var
  //-----------------------------------------------------------
 
   procedure SaveDataH(qsodate,TimeOn,TimeOff,Call,Freq,Mode,RSTS,RSTR,sName,
-                     QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,County,
+                     QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,Op,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,continent,
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
                      srx, stx_string, srx_string, contestname  : String);
@@ -735,6 +739,16 @@ var
       if Myloc = '' then
         Myloc := '&nbsp;';
       Writeln(f,SetData('WMyLoc', '6' ,MyLOC));
+    end;
+
+    if exOperator then
+    begin
+      tmp := cqrini.ReadString('Station', 'Call', '');
+      if tmp = '' then
+        Op := '&nbsp;'
+      else
+        Op := tmp;
+      Writeln(f,SetData('WOperator', '10' ,tmp));
     end;
 
     if exDistance then
@@ -960,7 +974,7 @@ begin
   dmData.GetQSODistanceSum(QSODistSum,LongestQSO,MainLocSum);
   FieldsForExport(ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
                   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
-                  ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExDistance,ExPower,
+                  ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName,
@@ -1109,6 +1123,8 @@ begin
     Writeln(f,SetTHWidth('WLocator','6', 'WLocator1', 'Loc'));
   if exMyLoc then
     Writeln(f,SetTHWidth('WMyLoc','6', 'WMyLoc1', 'MyLoc'));
+  if exOperator then
+    Writeln(f,SetTHWidth('WOperator','10', 'WOperator1', 'Operator'));
   if ExDistance then
     Writeln(f,SetTHWidth('WDistance','5', 'WDistance1', 'QRB'));
   if ExPower then
@@ -1243,6 +1259,7 @@ begin
                Source.Fields[17].AsString,  //waz
                Source.Fields[18].AsString, //loc
                Source.Fields[19].AsString, //myloc
+               cqrini.ReadString('Station', 'Call', ''), //operator
                Source.Fields[20].AsString, //county
                Source.Fields[21].AsString, //award
                Source.Fields[22].AsString, //remarks
