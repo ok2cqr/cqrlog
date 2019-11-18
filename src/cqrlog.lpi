@@ -23,14 +23,14 @@
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <MacroValues Count="1">
-      <Macro1 Name="LCLWidgetType" Value="qt5"/>
+      <Macro3 Name="LCLWidgetType" Value="gtk2"/>
     </MacroValues>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
       <SharedMatrixOptions Count="3">
-        <Item1 ID="364409174580" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+        <Item1 ID="364409174580" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
         <Item2 ID="890734883088" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk3"/>
-        <Item3 ID="102898540782" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item3 ID="102898540782" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
