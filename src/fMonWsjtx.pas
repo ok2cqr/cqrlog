@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types;
+  process, Types, iniFiles;
 
 type
 
@@ -186,6 +186,10 @@ var
   PCallColor :Tcolor;  //color that was last used fro callsign printing, will be used in xplanet
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
+
+  USstate : TStringList;
+  crit : TRTLCriticalSection;
+  StateFile : String;
 
 implementation
 
@@ -376,7 +380,7 @@ begin
   else
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
-  //commit and save USstate file here
+  //commit and save USstates file here
 end;
  
 procedure TfrmMonWsjtx.Setbitmap(bm: TBitmap; col: Tcolor);
@@ -967,6 +971,18 @@ begin
   // check here if we have USstate file for this date.
   //if not create one (it could be "ini" file that is in memory while runnig)
   //if it exist the open it for use here.
+
+  InitCriticalSection(crit);
+  USstate := TStringList.Create;
+  StateFile :=  dmData.HomeDir+'fcc'+PathDelim+'states.ini';
+
+  if FileExists(StateFile) then
+   Begin
+    write('loading...');
+    USstate.LoadFromFile(StateFile);
+    writeln(USState.Count);
+   end;
+
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1788,13 +1804,25 @@ begin
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
      //case of USA print it only. Forget state. It is not shown full and may be bogus
-     if pos('USA',upcase(msgRes))=1 then msgRes := 'USA';
-     //do here seek for callsign in local USstate file if call does not exist there
-     //do a qrz/hamcomm fetc to get state and write it to local file. Set commit file change flag if state revd.
-     //if state is in local file then take it from there.
-     //now state should be there add it to msgres that has USA. Use special charcter like @ to make
-     //definition of text alert easier.
-     //State could also be printed to DX warning column instead of adding it to country column with user color "worked" or "not worked" (green /red)
+     if pos('USA',upcase(msgRes))=1 then
+       begin
+        EnterCriticalsection(crit);
+        try
+         msgRes := 'USA-'+USstate.ValueFromIndex[ USstate.IndexOfName(msgCall)];
+        finally
+          LeaveCriticalsection(crit)
+        end;
+         //do here seek for callsign in local USstate file if call does not exist there
+         //do a qrz/hamcomm fetc to get state and write it to local file. Set commit file change flag if state revd.
+         //if state is in local file then take it from there.
+         //now state should be there add it to msgres that has USA. Use special charcter like @ to make
+         //definition of text alert easier.
+         //State could also be printed to DX warning column instead of adding it to country column with user color "worked" or "not worked" (green /red)
+
+
+
+       end;
+
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
      if CqDir <> '' then
