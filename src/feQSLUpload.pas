@@ -326,7 +326,7 @@ begin
   lblInfo.Caption := '';
   Application.ProcessMessages;
   mStat.Lines.Add('');
-  url  := 'http://www.eqsl.cc/qslcard/ImportADIF.cfm';
+  url  := 'https://www.eqsl.cc/qslcard/ImportADIF.cfm';
   mStat.Lines.Add('eQSL server can process about 1000 QSO per minute. If you have ');
   mStat.Lines.Add('a lot of QSO to upload, it will take long time. So please be patient.');
   mStat.Lines.Add('');
