@@ -40,6 +40,7 @@ type
     chkexLQSLSDate : TCheckBox;
     chkexMode : TCheckBox;
     chkexMyLoc : TCheckBox;
+    chkexOperator: TCheckBox;
     chkexName : TCheckBox;
     chkexNote : TCheckBox;
     chkexPower : TCheckBox;
@@ -192,6 +193,7 @@ begin
   cqrini.WriteBool('Export', 'QSL_VIA', chkexQSLVIA.Checked);
   cqrini.WriteBool('Export', 'Locator', chkexLoc.Checked);
   cqrini.WriteBool('Export', 'MyLoc', chkexMyLoc.Checked);
+  cqrini.WriteBool('Export', 'Operator', chkexOperator.Checked);
   cqrini.WriteBool('Export', 'Distance', chkexDistance.Checked);
   cqrini.WriteBool('Export', 'IOTA', chkexIOTA.Checked);
   cqrini.WriteBool('Export', 'Award', chkexAward.Checked);
@@ -378,6 +380,7 @@ begin
   chkexQSLVIA.Checked := cqrini.ReadBool('Export', 'QSL_VIA', True);
   chkexLoc.Checked := cqrini.ReadBool('Export', 'Locator', False);
   chkexMyLoc.Checked := cqrini.ReadBool('Export', 'MyLoc', False);
+  chkexOperator.Checked := cqrini.ReadBool('Export', 'Operator', False);
   chkexDistance.Checked := cqrini.ReadBool('Export', 'Distance', False);
   chkexIOTA.Checked := cqrini.ReadBool('Export', 'IOTA', False);
   chkexAward.Checked := cqrini.ReadBool('Export', 'Award', False);
