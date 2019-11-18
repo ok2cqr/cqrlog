@@ -286,9 +286,9 @@ var
         SaveTag(dmUtils.StringToADIF('<GRIDSQUARE',dmUtils.StdFormatLocator(Loc)),leng);
    if exMyLoc then
       if dmUtils.IsLocOK(MyLoc) then
-        SaveTag('<MY_GRIDSQUARE' + dmUtils.StringToADIF(dmUtils.StdFormatLocator(MyLoc)),leng);
+        SaveTag(dmUtils.StringToADIF('<MY_GRIDSQUARE',dmUtils.StdFormatLocator(MyLoc)),leng);
    if exOperator then
-      SaveTag('<OPERATOR' + dmUtils.StringToADIF(cqrini.ReadString('Station', 'Call', '')),leng);
+      SaveTag(dmUtils.StringToADIF('<OPERATOR',cqrini.ReadString('Station', 'Call', '')),leng);
    if ExDistance then
     begin
       dmUtils.DistanceFromLocator(MyLoc,Loc,qrb,qrc);
