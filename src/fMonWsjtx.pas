@@ -660,9 +660,18 @@ end;
 procedure TfrmMonWsjtx.chkUSStateChange(Sender: TObject);
 const
      C_STATEFILE = 'ctyfiles/fcc_states.tab';
+     C_STATESOURCE ='ctyfiles/EN.dat       ';
+     C_STATEADDR ='http://wireless.fcc.gov/uls/data/complete/l_amat.zip                      ';
+     //adding spaces here allows address change in runtime file with binary edit if needed
+     //strip them with trim() before use
 var
   StateFile,
-  msg       : String;
+  msg ,
+  call,
+  HasState        : String;
+  StateSourceIn    : Textfile;
+  BuildFile        : TIniFile;
+  i,c                :integer;
 begin
   cqrini.WriteBool('MonWsjtx', 'USStates', chkUSState.Checked);
   if chkUSState.Checked then
@@ -673,7 +682,7 @@ begin
           StateFile :=  dmData.HomeDir+C_STATEFILE;
           if FileExists(StateFile) then
              Begin
-              if LocalDbg then Write('loading...');
+              if LocalDbg then Writeln('loading...');
               USstate.LoadFromFile(StateFile);
               if LocalDbg then writeln(USState.Count);
              end
@@ -682,7 +691,45 @@ begin
                msg := StateFile+#13+'States information file not found!'+#13+'Should we try to load it from FCC?';
                if Application.MessageBox(PChar(msg),'Question...',MB_ICONQUESTION + MB_YESNO) = mrYes then
                      begin
-                       Application.MessageBox('When we have code for it first!','Info',MB_OK);
+                      //fcc load here
+                      //unzip here
+
+
+                       StateFile :=  dmData.HomeDir+trim(C_STATESOURCE);
+                       if FileExists(StateFile) then
+                        Begin
+                          USState.Clear;
+                          BuildFile :=  TIniFile.Create(C_STATEFILE,[]);
+                          AssignFile(StateSourceIn,StateFile);
+                          if LocalDbg then Writeln('Source file found. Loading...');
+                          try
+                            reset(StateSourceIn);
+                            c:=0;
+                            while not eof(StateSourceIn) do
+                            begin
+                              readln(StateSourceIn, msg);
+                              call:=ExtractDelimited(5,msg,['|']);
+                              HasState:=ExtractDelimited(18,msg,['|']);
+                              BuildFile.WriteString('state',call,HasState);
+                              inc(c);
+                             end;
+                             CloseFile(StateSourceIn);
+                             if LocalDbg then Writeln('Read ',c,' records from source');
+                             BuildFile.ReadSectionValues('state',USState);
+                             if LocalDbg then Writeln('Added ',USState.Count,' records');
+                             BuildFile.Destroy;
+                           except
+                            on E: EInOutError do
+                             writeln('File handling error occurred. Details: ', E.Message);
+                           end;
+                        end
+                       else
+                        Begin
+                           msg := StateFile+#13+'States information file not found!'+#13+'You need try again!';
+                           Application.MessageBox(PChar(msg),'Info',MB_OK);
+                        end;
+
+                        Application.MessageBox('When we have code for it first!','Info',MB_OK);
                        chkUSState.Checked := false;
                        exit;
                      end
@@ -1860,7 +1907,7 @@ begin
               //EnterCriticalsection(crit);
               try
                us:= USstate.IndexOfName(msgCall);
-               if us > -1 then
+               if us >= 0 then
                  begin
                   Stat := USstate.ValueFromIndex[us];
                   us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
