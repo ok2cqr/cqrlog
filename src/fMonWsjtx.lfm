@@ -12,7 +12,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnDropFiles = FormDropFiles
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.4.0'
   object lblBand: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -54,7 +54,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Top = 6
     Width = 56
     Anchors = [akRight, akBottom]
-    BorderSpacing.Top = 6
     BorderSpacing.Right = 1
     Caption = 'nHst'
     OnChange = chknoHistoryChange
@@ -71,7 +70,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Top = 6
     Width = 55
     Anchors = [akLeft, akBottom]
-    BorderSpacing.Top = 6
     Caption = 'nTxt'
     OnChange = chknoTxtChange
     TabOrder = 1
@@ -293,7 +291,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Top = 6
     Width = 49
     Anchors = [akRight, akBottom]
-    BorderSpacing.Top = 6
     BorderSpacing.Right = 2
     Caption = 'Flw'
     OnChange = cbflwChange
@@ -310,7 +307,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Width = 54
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 1
-    BorderSpacing.Top = 6
     Caption = 'Map'
     OnChange = chkMapChange
     TabOrder = 5
@@ -372,7 +368,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Top = 6
     Width = 49
     Anchors = [akLeft, akBottom]
-    BorderSpacing.Top = 6
     Caption = 'sTx'
     OnChange = chkStopTxChange
     TabOrder = 8
@@ -498,6 +493,20 @@ object frmMonWsjtx: TfrmMonWsjtx
       119
       0
     )
+  end
+  object chkUSState: TCheckBox
+    AnchorSideRight.Control = cbflw
+    AnchorSideBottom.Control = lblBand
+    AnchorSideBottom.Side = asrBottom
+    Left = 103
+    Height = 23
+    Top = 6
+    Width = 51
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 2
+    Caption = 'USs'
+    OnChange = chkUSStateChange
+    TabOrder = 10
   end
   object popColors: TPopupMenu
     left = 104

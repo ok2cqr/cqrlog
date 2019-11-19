@@ -61,6 +61,7 @@ type
                                                         //        (3=main grid wkd, 4=wkd ) this band but NOT this mode
                                                         //        (5=main grid wkd, 6=wkd ) any other band or mode
     function WkdCall(call, band, mode: string): integer;  //returns wkd this b+m=1, this b=2, any b+m=3
+    function WkdState(state, band, mode: string): integer;
     function GridOK(Loc: string): boolean;
     procedure UpdateMap;
   end;
@@ -322,6 +323,55 @@ begin
     end;
   if LocalDbg then  Writeln('WkdCall is:', WkdCall);
 end;
+function TfrmWorkedGrids.WkdState(state, band, mode: string): integer;
+//returns 0=not wkd
+//        1= this band and mode
+//        2=this band but NOT this mode
+//        3=any other band or mode
+
+var
+  i : integer;
+  daylimit : String;
+
+begin
+  if LocalDbg then Writeln('Start WkdState');
+  if cqrini.ReadBool('wsjt','wb4CCall', False) then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39 //default date check all qsos
+     else
+            daylimit :='';
+
+  WkdState := 0;
+  dmData.W.Close;
+  if dmData.trW.Active then dmData.trW.Rollback;
+  try
+     dmData.W.SQL.Text := 'select count(state) as '+#39+'sum'+#39+' from '+LogTable+
+                          ' where state='+#39+state+#39+
+                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
+                          'union all '+
+                          'select count(state) from '+LogTable+
+                          ' where state='+#39+state+#39+
+                          ' and band='+#39+band+#39+daylimit+
+                          'union all '+
+                          'select count(state) from '+LogTable+
+                          ' where state='+#39+state+#39+daylimit;
+
+    if LocalDbg then Write('state query: ');
+    dmData.W.Open;
+    i := 1;
+    while not dmData.W.Eof do
+              begin
+               if LocalDbg then writeln(dmData.W.FieldByName('sum').AsInteger);
+               if (dmData.W.FieldByName('sum').AsInteger > 0 ) and (WkdState = 0) then WkdState := i;
+               inc(i);
+               dmData.W.Next;
+              end;
+    dmData.W.Close;
+    finally
+      dmData.trW.Rollback;
+    end;
+  if LocalDbg then  Writeln('WkdState is:', WkdState);
+end;
+
 //mark grid worked with confirmed status (red/green)
 procedure TfrmWorkedGrids.MarkGrid(LocGrid: string; Cfmd: boolean; MCanvas: TCanvas;
   SubBase: boolean);
