@@ -15,7 +15,7 @@ type
 
   TfrmMonWsjtx = class(TForm)
     btFtxtName: TButton;
-    chkUSState: TCheckBox;
+    chkUState: TCheckBox;
     chkStopTx: TCheckBox;
     chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
@@ -57,7 +57,7 @@ type
     procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
-    procedure chkUSStateChange(Sender: TObject);
+    procedure chkUStateChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
     procedure cmBandClick(Sender: TObject);
     procedure cmCqDxClick(Sender: TObject);
@@ -189,7 +189,8 @@ var
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
-  USstate : TStringList;
+  UState : TStringList;
+  URState : TStringList; // runtime found calls=states expecting them occur many times. faster to find.
   //crit : TRTLCriticalSection;
 
 
@@ -383,7 +384,8 @@ begin
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
 
-  FreeAndNil(USstate);
+  FreeAndNil(UState);
+  FreeAndNil(URState);
   //DoneCriticalsection(crit)
 end;
  
@@ -595,7 +597,7 @@ begin
   lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
-  chkUSState.Visible:= not chkMap.Checked;
+  chkUState.Visible:= not chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -657,13 +659,9 @@ begin
     end;
 end;
 
-procedure TfrmMonWsjtx.chkUSStateChange(Sender: TObject);
+procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
 const
      C_STATEFILE = 'ctyfiles/fcc_states.tab';
-     C_STATESOURCE ='ctyfiles/EN.dat       ';
-     C_STATEADDR ='http://wireless.fcc.gov/uls/data/complete/l_amat.zip                      ';
-     //adding spaces here allows address change in runtime file with binary edit if needed
-     //strip them with trim() before use
 var
   StateFile,
   msg ,
@@ -673,74 +671,28 @@ var
   BuildFile        : TIniFile;
   i,c                :integer;
 begin
-  cqrini.WriteBool('MonWsjtx', 'USStates', chkUSState.Checked);
-  if chkUSState.Checked then
+  cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
+  if chkUState.Checked then
     Begin
       if LocalDbg then  Writeln('State check activated');
-      if  USState.Count = 0 then  //load file
+      if  UState.Count = 0 then  //load file
         Begin
           StateFile :=  dmData.HomeDir+C_STATEFILE;
           if FileExists(StateFile) then
              Begin
               if LocalDbg then Writeln('loading...');
-              USstate.LoadFromFile(StateFile);
-              if LocalDbg then writeln(USState.Count);
+              UState.LoadFromFile(StateFile);
+              if LocalDbg then writeln(UState.Count);
              end
-           else // no file: inform and ask if load it. if not uncheck USStete and return
+           else // no file: inform and ask if load it.uncheck USStete and return
              begin
-               msg := StateFile+#13+'States information file not found!'+#13+'Should we try to load it from FCC?';
-               if Application.MessageBox(PChar(msg),'Question...',MB_ICONQUESTION + MB_YESNO) = mrYes then
-                     begin
-                      //fcc load here
-                      //unzip here
-
-
-                       StateFile :=  dmData.HomeDir+trim(C_STATESOURCE);
-                       if FileExists(StateFile) then
-                        Begin
-                          USState.Clear;
-                          BuildFile :=  TIniFile.Create(C_STATEFILE,[]);
-                          AssignFile(StateSourceIn,StateFile);
-                          if LocalDbg then Writeln('Source file found. Loading...');
-                          try
-                            reset(StateSourceIn);
-                            c:=0;
-                            while not eof(StateSourceIn) do
-                            begin
-                              readln(StateSourceIn, msg);
-                              call:=ExtractDelimited(5,msg,['|']);
-                              HasState:=ExtractDelimited(18,msg,['|']);
-                              BuildFile.WriteString('state',call,HasState);
-                              inc(c);
-                             end;
-                             CloseFile(StateSourceIn);
-                             if LocalDbg then Writeln('Read ',c,' records from source');
-                             BuildFile.ReadSectionValues('state',USState);
-                             if LocalDbg then Writeln('Added ',USState.Count,' records');
-                             BuildFile.Destroy;
-                           except
-                            on E: EInOutError do
-                             writeln('File handling error occurred. Details: ', E.Message);
-                           end;
-                        end
-                       else
-                        Begin
-                           msg := StateFile+#13+'States information file not found!'+#13+'You need try again!';
-                           Application.MessageBox(PChar(msg),'Info',MB_OK);
-                        end;
-
-                        Application.MessageBox('When we have code for it first!','Info',MB_OK);
-                       chkUSState.Checked := false;
-                       exit;
-                     end
-                  else
-                     Begin
-                       chkUSState.Checked := false;
-                       exit;
-                     end;
+               msg := StateFile+#13+'States information file not found!'+#13+'Try to load it from FCC with external script';
+               Application.MessageBox(PChar(msg),'Info',MB_OK);
+               chkUState.Checked := false;
+               exit;
              end;
         end
-       else  if LocalDbg then Writeln('Already loaded:',USState.Count);
+       else  if LocalDbg then Writeln('Already loaded:',UState.Count);
     end;
 
 
@@ -988,7 +940,8 @@ begin
   DblClickCall :='';
 
    //InitCriticalSection(crit);
-  USstate := TStringList.Create;
+  UState := TStringList.Create;
+  URState := TStringList.Create;
 
   cmHere.Bitmap := TBitmap.Create;
   cmBand.Bitmap := TBitmap.Create;
@@ -1048,7 +1001,7 @@ begin
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
-  chkUSState.Checked:= cqrini.ReadBool('MonWsjtx', 'USStates', False);
+  chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
   SetAllbitmaps;
   edtFollow.Font.Name := sgMonitor.Font.Name;
   edtFollow.Font.Size := sgMonitor.Font.Size;
@@ -1062,7 +1015,7 @@ begin
   LockMap := False; //last thing to do
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
-  chkUSState.Visible:= not chkMap.Checked;
+  chkUState.Visible:= not chkMap.Checked;
   //DL7OAP
   setMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
@@ -1902,14 +1855,26 @@ begin
      if pos('USA',upcase(msgRes))=1 then
        begin
         msgRes := 'USA';
-         if chkUSState.Checked then
+         if chkUState.Checked then
           begin
               //EnterCriticalsection(crit);
               try
-               us:= USstate.IndexOfName(msgCall);
+               us:= URState.IndexOfName(msgCall);   //seek runtime list first
                if us >= 0 then
+                Stat := URState.ValueFromIndex[us]
+               else
+                Begin
+                  us:= UState.IndexOfName(msgCall); // seek from fcc data
+                  if us >= 0 then
+                   begin
+                   Stat := UState.ValueFromIndex[us];
+                   URState.Add(msgCall+'='+Stat);   //put to runtime list
+                   end
+                  else  Stat:='';
+                end;
+
+               if Stat <>''  then
                  begin
-                  Stat := USstate.ValueFromIndex[us];
                   us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
                    case us of
                         0: Begin
@@ -1938,6 +1903,7 @@ begin
               finally
                 //LeaveCriticalsection(crit)
               end;
+
           end;
        end;
      if LocalDbg then
@@ -1959,7 +1925,9 @@ begin
          end
          else  // should be ok to answer this directed cq
           if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-           AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
+           //AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
+           //space prefix is for what? forgot that
+            AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
         end
        else
         begin
@@ -2013,10 +1981,6 @@ procedure TfrmMonWsjtx.extcqprint;
           AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
     end;
   end;
-//do copy of extcqprint to print USstate instead with worked/notworked user def color
-//
-// here
-//
 
 function TfrmMonWsjtx.getCurMode(sMode: String): String;
   // function getCurMode converts a wsjtx binary mode in human readable ham mode

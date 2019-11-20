@@ -494,18 +494,18 @@ object frmMonWsjtx: TfrmMonWsjtx
       0
     )
   end
-  object chkUSState: TCheckBox
+  object chkUState: TCheckBox
     AnchorSideRight.Control = cbflw
     AnchorSideBottom.Control = lblBand
     AnchorSideBottom.Side = asrBottom
-    Left = 103
+    Left = 105
     Height = 23
     Top = 6
-    Width = 51
+    Width = 49
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 2
-    Caption = 'USs'
-    OnChange = chkUSStateChange
+    Caption = 'USt'
+    OnChange = chkUStateChange
     TabOrder = 10
   end
   object popColors: TPopupMenu
