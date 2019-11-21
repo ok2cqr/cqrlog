@@ -2172,6 +2172,8 @@ begin
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
                                  tmrWsjtx.Interval := wLoSpeed;
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
+                                 //If USstate file needs commit,
+                                 //do it now and reset commit flag
                                 end;
                             end;
              end;

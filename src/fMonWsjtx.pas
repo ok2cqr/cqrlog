@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types;
+  process, Types, iniFiles, LCLType;
 
 type
 
@@ -15,6 +15,7 @@ type
 
   TfrmMonWsjtx = class(TForm)
     btFtxtName: TButton;
+    chkUState: TCheckBox;
     chkStopTx: TCheckBox;
     chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
@@ -56,6 +57,7 @@ type
     procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
+    procedure chkUStateChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
     procedure cmBandClick(Sender: TObject);
     procedure cmCqDxClick(Sender: TObject);
@@ -186,6 +188,11 @@ var
   PCallColor :Tcolor;  //color that was last used fro callsign printing, will be used in xplanet
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
+
+  UState : TStringList;
+  URState : TStringList; // runtime found calls=states expecting them occur many times. faster to find.
+  //crit : TRTLCriticalSection;
+
 
 implementation
 
@@ -377,6 +384,9 @@ begin
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
 
+  FreeAndNil(UState);
+  FreeAndNil(URState);
+  //DoneCriticalsection(crit)
 end;
  
 procedure TfrmMonWsjtx.Setbitmap(bm: TBitmap; col: Tcolor);
@@ -587,6 +597,7 @@ begin
   lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
+  chkUState.Visible:= not chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -646,6 +657,50 @@ begin
       DblClickCall := '';
       if LocalDbg then Writeln('Reset 2click call: sTx unchecked');
     end;
+end;
+
+procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
+const
+     C_STATEFILE = 'ctyfiles/fcc_states.tab';
+var
+  StateFile,
+  msg ,
+  call,
+  HasState        : String;
+  StateSourceIn    : Textfile;
+  BuildFile        : TIniFile;
+  i,c                :integer;
+begin
+  cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
+  if chkUState.Checked then
+    Begin
+      if LocalDbg then  Writeln('State check activated');
+      if  UState.Count = 0 then  //load file
+        Begin
+          StateFile :=  dmData.HomeDir+C_STATEFILE;
+          if FileExists(StateFile) then
+             Begin
+              if LocalDbg then Writeln('loading...');
+              UState.LoadFromFile(StateFile);
+              if LocalDbg then writeln(UState.Count);
+             end
+           else // no file: inform and ask if load it.uncheck USStete and return
+             begin
+               msg := StateFile+#13+'States information file not found!'+#13+'Try to load it from FCC with external script';
+               Application.MessageBox(PChar(msg),'Info',MB_OK);
+               chkUState.Checked := false;
+               exit;
+             end;
+        end
+       else  if LocalDbg then Writeln('Already loaded:',UState.Count);
+    end;
+
+
+
+
+
+
+
 end;
 
 procedure TfrmMonWsjtx.cbflwChange(Sender: TObject);
@@ -884,6 +939,10 @@ begin
   LastWsjtLineTime := '';
   DblClickCall :='';
 
+   //InitCriticalSection(crit);
+  UState := TStringList.Create;
+  URState := TStringList.Create;
+
   cmHere.Bitmap := TBitmap.Create;
   cmBand.Bitmap := TBitmap.Create;
   cmAny.Bitmap  := TBitmap.Create;
@@ -942,6 +1001,7 @@ begin
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
+  chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
   SetAllbitmaps;
   edtFollow.Font.Name := sgMonitor.Font.Name;
   edtFollow.Font.Size := sgMonitor.Font.Size;
@@ -955,15 +1015,17 @@ begin
   LockMap := False; //last thing to do
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
+  chkUState.Visible:= not chkMap.Checked;
   //DL7OAP
   setMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
-  chknoHistoryChange(nil); // sure to get historu settings right
+  chknoHistoryChange(nil); // sure to get history settings right
 
   //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
         LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
+
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1731,8 +1793,12 @@ begin
 end;
 procedure TfrmMonWsjtx.PrintDecodedMessage;
 Var
-  i : integer;
-  freq :string;
+   i,
+   us  : integer;
+  freq,
+  Stat :string;
+StatClr: Tcolor;
+
 begin
   cont := '';
   country := '';
@@ -1785,8 +1851,65 @@ begin
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
      //case of USA print it only. Forget state. It is not shown full and may be bogus
-     if pos('USA',upcase(msgRes))=1 then msgRes := 'USA';
+     StatClr :=clBlack;
+     if pos('USA',upcase(msgRes))=1 then
+       begin
+        msgRes := 'USA';
+         if chkUState.Checked then
+          begin
+              //EnterCriticalsection(crit);
+              try
+               us:= URState.IndexOfName(msgCall);   //seek runtime list first
+               if us >= 0 then
+                Begin
+                  Stat := URState.ValueFromIndex[us];
+                  if LocalDbg then  Writeln('State found from runtime stringlist');
+                end
+               else
+                Begin
+                  us:= UState.IndexOfName(msgCall); // seek from fcc data
+                  if us >= 0 then
+                   begin
+                   Stat := UState.ValueFromIndex[us];
+                   URState.Add(msgCall+'='+Stat);   //put to runtime list
+                   if LocalDbg then  Writeln('State found from fcc stringlist, added to runtime');
+                   end
+                  else  Stat:='';
+                end;
 
+               if Stat <>''  then
+                 begin
+                  us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
+                   case us of
+                        0: Begin
+                            StatClr :=wkdnever;
+                           end;
+                        1: Begin
+                            Stat := LowerCase(Stat);
+                            StatClr :=wkdhere;
+                           end;
+                        2: Begin
+                            StatClr :=wkdband;
+                           end;
+                        3: Begin
+                             StatClr :=wkdany;
+                           end;
+                        else
+                          Begin
+                            StatClr :=clBlack;
+                          end;
+                          //should not happen
+                      end;
+
+                  if LocalDbg then Writeln(' State WB4 status is: ',us);
+                  msgRes := 'USA-'+Stat;
+                 end
+              finally
+                //LeaveCriticalsection(crit)
+              end;
+
+          end;
+       end;
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
      if CqDir <> '' then
@@ -1806,7 +1929,9 @@ begin
          end
          else  // should be ok to answer this directed cq
           if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-           AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1);
+           //AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
+           //space prefix is for what? forgot that
+            AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
         end
        else
         begin
@@ -1817,7 +1942,7 @@ begin
        // should be ok to answer this is not directed cq
          if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
              Begin
-              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,6, sgMonitor.rowCount-1);
+              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', StatClr,6, sgMonitor.rowCount-1);
              end;
    if (not chkMap.Checked) then
     begin
