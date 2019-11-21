@@ -1861,7 +1861,10 @@ begin
               try
                us:= URState.IndexOfName(msgCall);   //seek runtime list first
                if us >= 0 then
-                Stat := URState.ValueFromIndex[us]
+                Begin
+                  Stat := URState.ValueFromIndex[us];
+                  if LocalDbg then  Writeln('State found from runtime stringlist');
+                end
                else
                 Begin
                   us:= UState.IndexOfName(msgCall); // seek from fcc data
@@ -1869,6 +1872,7 @@ begin
                    begin
                    Stat := UState.ValueFromIndex[us];
                    URState.Add(msgCall+'='+Stat);   //put to runtime list
+                   if LocalDbg then  Writeln('State found from fcc stringlist, added to runtime');
                    end
                   else  Stat:='';
                 end;
