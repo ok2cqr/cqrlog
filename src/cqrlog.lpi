@@ -448,6 +448,7 @@
         <Filename Value="fKeyTexts.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmKeyTexts"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit51>
       <Unit52>
@@ -819,6 +820,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
+        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
     </Linking>
