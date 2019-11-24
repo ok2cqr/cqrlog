@@ -1982,6 +1982,9 @@ begin
                                                'NAME'   : if edtName.Text='' then edtName.Text := data;
                                                'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
                                                'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
+                                               'NAME_INTL'   : if edtName.Text='' then edtName.Text := data;
+                                               'QTH_INTL'    : if edtQTH.Text='' then edtQTH.Text := data;
+                                               'COMMENT_INTL': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
                                                'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
                                                'STATE'  : if edtState.Text='' then edtState.Text := data;
                                                'CQZ'    : edtWaz.Text := data;
