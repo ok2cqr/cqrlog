@@ -491,6 +491,7 @@ type
     dlgColor : TColorDialog;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
+    edteQSLViewAddr: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
@@ -684,6 +685,7 @@ type
     Label1: TLabel;
     lbleQSLDnlAddr: TLabel;
     lbleQSLStartAddr: TLabel;
+    lbleQSLViewAddr: TLabel;
     lblLoTWBkg: TLabel;
     Label100: TLabel;
     Label101: TLabel;
@@ -1450,6 +1452,7 @@ begin
   cqrini.WriteString('LoTW', 'eQSLPass', edteQSLPass.Text);
   cqrini.WriteString('LoTW', 'eQSLStartAddr',edteQSLStartAddr.Text);
   cqrini.WriteString('LoTW', 'eQSLDnlAddr',edteQSLDnlAddr.Text);
+  cqrini.WriteString('LoTW', 'eQSViewAddr',edteQSLViewAddr.Text);
   cqrini.WriteBool('LoTW', 'eUseBackColor', chkShowBckEQSL.Checked);
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
   cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
@@ -2842,8 +2845,9 @@ begin
   cmbLoTWBckColor.Selected := cqrini.ReadInteger('LoTW', 'BckColor', clMoneyGreen);
   edteQSLName.Text := cqrini.ReadString('LoTW', 'eQSLName', '');
   edteQSLPass.Text := cqrini.ReadString('LoTW', 'eQSLPass', '');
-  edteQSLStartAddr.Text := cqrini.ReadString('LoTW', 'eQSLStartAddr','http://www.eqsl.cc/qslcard/DownloadInBox.cfm');
-  edteQSLDnlAddr.Text := cqrini.ReadString('LoTW', 'eQSLDnlAddr','http://www.eqsl.cc/downloadedfiles/');
+  edteQSLStartAddr.Text := cqrini.ReadString('LoTW', 'eQSLStartAddr','https://www.eqsl.cc/qslcard/DownloadInBox.cfm');
+  edteQSLDnlAddr.Text := cqrini.ReadString('LoTW', 'eQSLDnlAddr','https://www.eqsl.cc/downloadedfiles/');
+  edteQSLViewAddr.Text := cqrini.ReadString('LoTW', 'eQSViewAddr','https://www.eQSL.cc/qslcard/GeteQSL.cfm');
   chkShowBckEQSL.Checked := cqrini.ReadBool('LoTW', 'eUseBackColor', True);
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
   chkExpCommet.Checked := cqrini.ReadBool('LoTW', 'ExpComment', True);

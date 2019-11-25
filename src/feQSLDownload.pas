@@ -122,7 +122,7 @@ begin
       mStat.Lines.Add('User name or password is not set!');
       exit
     end;
-    url := cqrini.ReadString('LoTW', 'eQSLStartAddr','http://www.eqsl.cc/qslcard/DownloadInBox.cfm')+
+    url := cqrini.ReadString('LoTW', 'eQSLStartAddr','https://www.eqsl.cc/qslcard/DownloadInBox.cfm')+
            '?UserName='+user+
            '&Password='+EncodeURL(pass)+
            '&QTHNickname='+EncodeURL(edtQTH.Text)+
@@ -160,7 +160,7 @@ begin
                   tmp := ExtractFileNameOnly(tmp)+ExtractFileExt(tmp);
              end;
            end;
-          url := cqrini.ReadString('LoTW', 'eQSLDnlAddr','http://www.eqsl.cc/downloadedfiles/')+tmp;
+          url := cqrini.ReadString('LoTW', 'eQSLDnlAddr','https://www.eqsl.cc/downloadedfiles/')+tmp;
           if dmData.DebugLevel>0 then  Writeln('url: ',url);
           mStat.Lines.Add('File will be downloaded from:');
           mStat.Lines.Add(url);

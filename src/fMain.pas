@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, ExtCtrls, StdCtrls, ComCtrls, DBGrids, Buttons, LCLType, IniFiles, process,
-  Grids, DBCtrls, dLogUpload,db;
+  Grids, DBCtrls, dLogUpload,db,synacode;
 
 type
 
@@ -133,6 +133,7 @@ type
     MenuItem1:  TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem100: TMenuItem;
+    mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
@@ -217,7 +218,7 @@ type
     MenuItem86: TMenuItem;
     MenuItem87: TMenuItem;
     MenuItem88 : TMenuItem;
-    MenuItem89 : TMenuItem;
+    mnuHamQth : TMenuItem;
     MenuItem90 : TMenuItem;
     MenuItem91 : TMenuItem;
     MenuItem92 : TMenuItem;
@@ -374,6 +375,7 @@ type
     procedure acWACCfmExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
+    procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
     procedure mnuIOTAStatClick(Sender: TObject);
@@ -384,6 +386,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure mnuOQRSClick(Sender : TObject);
+    procedure popWebSearchPopup(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure acAboutExecute(Sender: TObject);
     procedure acCallBookExecute(Sender: TObject);
@@ -440,7 +443,8 @@ type
     procedure ShowFields;
     procedure ReloadGrid;
     procedure CheckAttachment;
-    function CalcQrb(Myloc,loc:string;showUnits:boolean):string;
+    function  CalcQrb(Myloc,loc:string;showUnits:boolean):string;
+    procedure eQSLView(QSODate,QSOTime,CallsignFrom,QSOBand,QSOMode:String);
     { public declarations }
   end;
 
@@ -799,6 +803,15 @@ procedure TfrmMain.mnuOQRSClick(Sender : TObject);
 begin
   MarkQSLSend('OQRS')
 end;
+
+procedure TfrmMain.popWebSearchPopup(Sender: TObject);
+begin
+    mnueQSLView.Visible :=  ((pos('E',dmData.qCQRLOG.FieldByName('eqsl_qsl_rcvd').AsString)>0)
+                             and (dbgrdMain.SelectedRows.Count = 1));
+    if dmData.DebugLevel>=1 then writeln( dbgrdMain.SelectedRows.Count,' ',
+                                         dmData.qCQRLOG.FieldByName('callsign').AsString,' ',
+                                         dmData.qCQRLOG.FieldByName('eqsl_qsl_rcvd').AsString );
+ end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
 var
@@ -1174,6 +1187,74 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmMain.mnueQSLViewClick(Sender: TObject);
+var
+  QSOmode:String;
+begin
+    QSOMode :=       dmData.qCQRLOG.FieldByName('mode').AsString;
+    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+
+    eQSLView( dmData.qCQRLOG.FieldByName('qsodate').AsString,
+              dmData.qCQRLOG.FieldByName('time_on').AsString,
+              dmData.qCQRLOG.FieldByName('callsign').AsString,
+              dmData.qCQRLOG.FieldByName('band').AsString,
+              QSOMode);
+
+end;
+procedure TfrmMain.eQSLView(QSODate,QSOTime,CallsignFrom,QSOBand,QSOMode:String);
+var
+  AProcess: TProcess;
+  url,      //        https://www.eQSL.cc/qslcard/GeteQSL.cfm
+  Username, //        The callsign of the recipient of the eQSL
+  Password, //        The password of the user's account
+            //        The callsign of the sender of the eQSL
+  QSOYear,  //        YYYY OR YY format date of the QSO
+  QSOMonth, //        MM format
+  QSODay,   //        DD format
+  QSOHour,  //        HH format (24-hour time)
+  QSOMinute //        MM format
+            //        20m, 80M, 70cm, etc. (case insensitive) band
+            //        Must match exactly and should be an ADIF-compatible mode
+  : String;
+begin
+    Username := cqrini.ReadString('LoTW','eQSLName','');
+    Password := cqrini.ReadString('LoTW','eQSLPass','');
+    if (Username = '') or (Password='') then
+    begin
+      MessageDlg(Caption, ' eQSL Username or Password not set!'+#10+
+                          '(see: preferences|LoTW/eQSL support)', mtError, [mbOK], 0);
+      exit
+    end;
+    QSOYear := copy(QSODate,1,4);
+    QSOMonth:= copy(QSODate,6,2);
+    QSOday  := copy(QSODate,9,2);
+    QSOHour := copy(QSOTime,1,2);
+    QSOMinute:= copy(QSOTime,4,2);
+    url := cqrini.ReadString('LoTW', 'eQSViewAddr','https://www.eQSL.cc/qslcard/GeteQSL.cfm')+
+           '?UserName='+Username+
+           '&Password='+EncodeURL(Password)+
+           '&CallsignFrom='+CallsignFrom+
+           '&QSOYear='+QSOYear+
+           '&QSOMonth='+QSOMonth +
+           '&QSODay='+QSODay+
+           '&QSOHour='+QSOHour +
+           '&QSOMinute='+QSOMinute+
+           '&QSOBand='+QSOBand+
+           '&QSOMode='+QSOMode;
+
+  if dmData.DebugLevel>=1 then Writeln(url);
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Parameters.Add(url);
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    AProcess.Execute
+  finally
+    AProcess.Free
+  end
+
 end;
 
 procedure TfrmMain.mnuIK3AQRClick(Sender: TObject);

@@ -39,7 +39,7 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="--DEBUG=0"/>
+        <CommandLineParams Value="--DEBUG=1"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>
@@ -52,7 +52,7 @@
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="--DEBUG=0"/>
+            <CommandLineParams Value="--DEBUG=1"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
           <environment>
@@ -448,6 +448,7 @@
         <Filename Value="fKeyTexts.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmKeyTexts"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit51>
       <Unit52>
@@ -819,6 +820,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
+        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
     </Linking>
