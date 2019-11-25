@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types, iniFiles, LCLType;
+  process, Types, iniFiles, LCLType, ComCtrls;
 
 type
 
@@ -27,6 +27,7 @@ type
     lblInfo: TLabel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
+    pgbBuildStates: TProgressBar;
     sgMonitor: TStringGrid;
     tbAlert: TToggleBox;
     chknoTxt: TCheckBox;
@@ -112,6 +113,7 @@ type
     procedure PrintDecodedMessage;
     function getCurMode(sMode: String): String;
     procedure extcqprint;
+    procedure BuildFccState;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -138,6 +140,9 @@ const
   //color bitmap size
   bmW = 10;
   bmH = 10;
+
+  C_STATEFILE = 'ctyfiles/fcc_states.tab';
+  C_STATE_SOURCE = 'ctyfiles/EN.dat';
 
 //DL7OAP: define type for grid coloring
 type
@@ -660,10 +665,10 @@ begin
 end;
 
 procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
-const
-     C_STATEFILE = 'ctyfiles/fcc_states.tab';
+
 var
   StateFile,
+  SourceFile,
   msg ,
   call,
   HasState        : String;
@@ -678,6 +683,7 @@ begin
       if  UState.Count = 0 then  //load file
         Begin
           StateFile :=  dmData.HomeDir+C_STATEFILE;
+          SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
           if FileExists(StateFile) then
              Begin
               if LocalDbg then Writeln('loading...');
@@ -686,10 +692,47 @@ begin
              end
            else // no file: inform and ask if load it.uncheck USStete and return
              begin
-               msg := StateFile+#13+'States information file not found!'+#13+'Try to load it from FCC with external script';
-               Application.MessageBox(PChar(msg),'Info',MB_OK);
-               chkUState.Checked := false;
-               exit;
+               if FileExists(SourceFile) then
+                Begin
+                  msg := 'Source file '+SourceFile+' found!'+#13+#13+'Should the '+StateFile+#13+'to be built from source file ?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Build from source EN.dat');
+                     Application.ProcessMessages;
+                     BuildFccState;
+                     //delete EN.dat
+                     chkUStateChange(nil); //recall
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('Build from source denied!');
+                     chkUState.Checked := false;
+                     exit;
+                   end;
+                end
+                else
+                Begin
+                  msg := 'Neither '+StateFile+#13+
+                          'nor '+SourceFile+' found!'+#13+#13+
+                          'Try to load zipped source from fcc ?'+#13+#13+
+                          '(http://wireless.fcc.gov/uls/data/complete/l_amat.zip)'+#13+
+                          'Command line tools "wget" and "unzip" must be available.';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Load and unzip from fcc');
+                     //call wget, wait result
+                     //call unzip, wait result
+                     //call build
+                     //delete EN.dat
+                     //can we call again ourself here
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('load from fcc denied!');
+                     chkUState.Checked := false;
+                     exit;
+                   end;
+                end;
              end;
         end
        else  if LocalDbg then Writeln('Already loaded:',UState.Count);
@@ -2001,7 +2044,117 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       //'+'     : getCurMode := 'T10';
     end;
   end;
+procedure  TfrmMonWsjtx.BuildFccState;
+var
+  tfIn,tfOUT,dupOut: TextFile;
+  s,t: string;
+  call,state,ids,Ocall,Ostate :string;
+  id,Oid,r,p,d,i,x : longint;
+  FccEn        :TStringList;
 
+begin
+  pgbBuildStates.Visible:=True;
+  Ocall:='call';
+  Ostate:='state';
+  Oid:=0;
+  r:=0;
+  p:=0;
+  d:=0;
+  x:=0;
+
+
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
+  AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
+  try
+    reset(tfIn);
+    rewrite(dupOut);
+    FccEn := TStringList.Create;
+    FccEn.Sorted:=False;
+    FccEn.Duplicates:=dupAccept;
+    pgbBuildStates.StepIt;
+    if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
+    while not eof(tfIn) do
+    begin
+     readln(tfIn, s);
+     inc(r);
+      call := ExtractDelimited(5,s,['|']);
+      ids := ExtractDelimited(2,s,['|']);
+      state := ExtractDelimited(18,s,['|']);
+     if ( (call<>'') and (state<>'') and (ids <>'')) then  FccEn.Add(call+'-'+ids+'='+state)
+      else
+        begin
+         writeln(dupOut, call+'-'+ids+'='+state);
+         inc(x);
+        end;
+    end;
+   except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  CloseFile(tfIn);
+  CloseFile(dupOut);
+  pgbBuildStates.StepIt;
+  if LocalDbg then Writeln('Sorting...');
+  FccEn.Sort;
+
+  pgbBuildStates.StepIt;
+  if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
+
+  AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_dupes.txt');
+  try
+    reset(tfIn);
+    rewrite(tfOut);
+    rewrite(dupOut);
+    for i:=0 to  FccEn.Count-1 do
+    begin
+      s:= FccEn.Strings[i];
+      t := ExtractWord(1,s,['=']);
+      call := ExtractWord(1,t,['-']);
+      id := StrToIntDef(ExtractWord(2,t,['-']),-1);
+      state := ExtractWord(2,s,['=']);
+
+      if ( (call<>'') and (state<>'') and (id >=0)) then
+      begin
+        if call<> Ocall then
+         Begin
+           writeln(tfOut,Ocall,'=',Ostate);//write old call=state if next call is different
+           Ocall:=call;
+           Oid := id;
+           Ostate := state;
+           inc(p);
+         end
+         else
+          Begin  //if they are same calls
+            writeln(dupOut,Ocall,'=',Ostate);//write old call=state to dupe list
+            inc(d);
+            if id > Oid then  //if id is bigger than old id save call and state as old
+                              //should remain finally the higest id call to print
+                              //needs one extra line to end of file to get all printed
+             begin
+              Ocall:=call;
+              Oid := id;
+              Ostate := state;
+             end;
+
+          end;
+       end;
+      end;
+    pgbBuildStates.StepIt;
+    writeln(tfOut,Ocall,'=',Ostate);   //last remaining
+    FreeAndNil(FccEn);
+    CloseFile(tfOut);
+    CloseFile(dupOut);
+  except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  if LocalDbg then Writeln('Read:       ',r,' lines.');
+  if LocalDbg then Writeln('Rejected:   ',x,' lines.');
+  if LocalDbg then Writeln('Written:    ',p,' lines.');
+  if LocalDbg then Writeln('Duplicates: ',d,' lines.');
+  pgbBuildStates.Visible:=False;
+end;
 initialization
 
 end.
