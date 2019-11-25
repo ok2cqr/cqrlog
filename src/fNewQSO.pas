@@ -129,6 +129,7 @@ type
     MenuItem94 : TMenuItem;
     MenuItem95: TMenuItem;
     MenuItem96: TMenuItem;
+    mnueQSLView: TMenuItem;
     mnuRemoteModeN1MM: TMenuItem;
     mnuReminder: TMenuItem;
     MenuItem86: TMenuItem;
@@ -264,12 +265,12 @@ type
     MenuItem29: TMenuItem;
     MenuItem30: TMenuItem;
     MenuItem31: TMenuItem;
-    MenuItem41: TMenuItem;
+    mnuViewQso: TMenuItem;
     MenuItem42: TMenuItem;
-    MenuItem43: TMenuItem;
+    mnuEditQso: TMenuItem;
     MenuItem44: TMenuItem;
-    MenuItem45: TMenuItem;
-    MenuItem46: TMenuItem;
+    mnuQrz: TMenuItem;
+    mnuIK3QAR: TMenuItem;
     MenuItem47: TMenuItem;
     MenuItem48: TMenuItem;
     MenuItem49: TMenuItem;
@@ -298,7 +299,7 @@ type
     MenuItem81: TMenuItem;
     MenuItem82: TMenuItem;
     MenuItem83: TMenuItem;
-    MenuItem84 : TMenuItem;
+    mnuHamQth : TMenuItem;
     MenuItem85 : TMenuItem;
     mnuQSOBefore: TMenuItem;
     mnuRemoteMode: TMenuItem;
@@ -420,11 +421,11 @@ type
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
-    procedure MenuItem45Click(Sender: TObject);
-    procedure MenuItem46Click(Sender: TObject);
-    procedure MenuItem84Click(Sender : TObject);
     procedure MenuItem95Click(Sender: TObject);
     procedure MenuItem96Click(Sender: TObject);
+    procedure mnuQrzClick(Sender: TObject);
+    procedure mnuIK3QARClick(Sender: TObject);
+    procedure mnuHamQthClick(Sender : TObject);
     procedure MenuItem9Click(Sender: TObject);
     procedure acRemoteModeExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
@@ -531,10 +532,12 @@ type
     procedure mCommentKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
       );
     procedure mCommentKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
     procedure popModePopup(Sender: TObject);
+    procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnQSLClick(Sender: TObject);
     procedure sbtnQRZClick(Sender: TObject);
@@ -2008,6 +2011,9 @@ begin
                                                'NAME'   : if edtName.Text='' then edtName.Text := data;
                                                'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
                                                'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
+                                               'NAME_INTL'   : if edtName.Text='' then edtName.Text := data;
+                                               'QTH_INTL'    : if edtQTH.Text='' then edtQTH.Text := data;
+                                               'COMMENT_INTL': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
                                                'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
                                                'STATE'  : if edtState.Text='' then edtState.Text := data;
                                                'CQZ'    : edtWaz.Text := data;
@@ -4621,12 +4627,12 @@ begin
   ShowHelp
 end;
 
-procedure TfrmNewQSO.MenuItem45Click(Sender: TObject);
+procedure TfrmNewQSO.mnuQrzClick(Sender: TObject);
 begin
   dmUtils.ShowQRZInBrowser(dmData.qQSOBefore.Fields[4].AsString)
 end;
 
-procedure TfrmNewQSO.MenuItem46Click(Sender: TObject);
+procedure TfrmNewQSO.mnuIK3QARClick(Sender: TObject);
 var
    AProcess: TProcess;
 begin
@@ -4642,7 +4648,7 @@ begin
   end
 end;
 
-procedure TfrmNewQSO.MenuItem84Click(Sender : TObject);
+procedure TfrmNewQSO.mnuHamQthClick(Sender : TObject);
 begin
   dmUtils.ShowHamQTHInBrowser(dmData.qQSOBefore.Fields[4].AsString)
 end;
@@ -5435,6 +5441,20 @@ begin
   end;
 end;
 
+procedure TfrmNewQSO.mnueQSLViewClick(Sender: TObject);
+var
+  QSOmode:String;
+begin
+    QSOMode :=       dmData.qQSOBefore.FieldByName('mode').AsString;
+    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+
+    frmMain.eQSLView( dmData.qQSOBefore.FieldByName('qsodate').AsString,
+                      dmData.qQSOBefore.FieldByName('time_on').AsString,
+                      dmData.qQSOBefore.FieldByName('callsign').AsString,
+                      dmData.qQSOBefore.FieldByName('band').AsString,
+                      QSOMode);
+end;
+
 
 procedure TfrmNewQSO.mnuIOTAClick(Sender: TObject);
 begin
@@ -5461,6 +5481,13 @@ begin
     frmMain.WindowState := wsNormal;
   frmMain.Show;
   frmMain.BringToFront;
+end;
+
+procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
+begin
+    mnueQSLView.Visible :=  pos('E',dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString)>0;
+    if dmData.DebugLevel>=1 then writeln(dmData.qQSOBefore.FieldByName('callsign').AsString,' ',
+                                         dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString )
 end;
 
 procedure TfrmNewQSO.sbtnAttachClick(Sender: TObject);

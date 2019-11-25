@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, StdCtrls, iniFiles,
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
-  XMLRead, DOM, sqlscript, BaseUnix, Unix, LazFileUtils;
+  XMLRead, DOM, sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8;
 
 type
   TExplodeArray = array of string;
@@ -71,6 +71,13 @@ const
   C_RBN_MODES = 'CW,RTTY,PSK31';
 
   C_CONTEST_LIST_FILE_NAME = 'ContestName.tab';
+
+  Adif_intls: array[0 .. 18] of string = (
+    'ADDRESS_INTL', 'COUNTRY_INTL',   'COMMENT_INTL',    'MY_ANTENNA_INTL',
+    'MY_CITY_INTL', 'MY_COUNTRY_INTL','MY_NAME_INTL',    'MY_POSTAL_CODE_INTL',
+    'MY_RIG_INTL',  'MY_SIG_INTL',    'MY_SIG_INFO_INTL','MY_STREET_INTL',
+    'NAME_INTL',    'NOTES_INTL',     'QSLMSG_INTL',     'QTH_INTL',
+    'RIG_INTL',     'SIG_INTL',       'SIG_INFO_INTL');
 
 type
 
@@ -205,7 +212,7 @@ type
     function  StripHTML(S: string): string;
     function  ExtractQTH( qth : String) : String;
     function  GetModeFromFreq(freq : String) : String;
-    function  StringToADIF(text : String) : String;
+    function  StringToADIF(ATag, Text : String) : String;
     function  MyTrim(text : String) : String;
     function  ReplaceSpace(txt : String) : String;
     function  ReplaceEnter(txt : String) : String;
@@ -1637,9 +1644,38 @@ begin
   end;
 end;
 
-function TdmUtils.StringToADIF(Text: string): string;
+function TdmUtils.StringToADIF(ATag,Text: string): string;
+var
+   t:string;
+   i:integer;
+   b:boolean;
 begin
-  Result := ':' + IntToStr(Length(Text)) + '>' + Text;
+
+  if UTF8Length(Text) <> Length(Text) then
+   Begin
+      t:= copy(Atag,2,length(ATag)); // leave '<'
+      b :=false;
+      for i:=0 to 18 do
+        if pos(uppercase(t),adif_intls[i]) > 0 then
+          Begin
+            b:=true;
+            break;
+          end;
+    if b then // tag in _intl allowed list
+      begin
+       Result := ATag+'_INTL:' + IntToStr(UTF8Length(Text)) + '>' + Text
+      end
+     else
+      begin
+       Result := ATag+':' + IntToStr(Length(Text)) + '>' + Text;
+      end;
+   end
+  else
+   begin
+    Result := ATag+':' + IntToStr(Length(Text)) + '>' + Text;
+   end;
+
+  //if dmData.DebugLevel >=1 then Writeln(Result);
 end;
 
 function TdmUtils.MyTrim(Text: string): string;
