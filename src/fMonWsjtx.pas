@@ -27,7 +27,6 @@ type
     lblInfo: TLabel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
-    pgbBuildStates: TProgressBar;
     sgMonitor: TStringGrid;
     tbAlert: TToggleBox;
     chknoTxt: TCheckBox;
@@ -2053,7 +2052,6 @@ var
   FccEn        :TStringList;
 
 begin
-  pgbBuildStates.Visible:=True;
   Ocall:='call';
   Ostate:='state';
   Oid:=0;
@@ -2071,7 +2069,6 @@ begin
     FccEn := TStringList.Create;
     FccEn.Sorted:=False;
     FccEn.Duplicates:=dupAccept;
-    pgbBuildStates.StepIt;
     if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
     while not eof(tfIn) do
     begin
@@ -2093,11 +2090,9 @@ begin
   end;
   CloseFile(tfIn);
   CloseFile(dupOut);
-  pgbBuildStates.StepIt;
   if LocalDbg then Writeln('Sorting...');
   FccEn.Sort;
 
-  pgbBuildStates.StepIt;
   if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
 
   AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
@@ -2140,7 +2135,6 @@ begin
           end;
        end;
       end;
-    pgbBuildStates.StepIt;
     writeln(tfOut,Ocall,'=',Ostate);   //last remaining
     FreeAndNil(FccEn);
     CloseFile(tfOut);
@@ -2153,7 +2147,6 @@ begin
   if LocalDbg then Writeln('Rejected:   ',x,' lines.');
   if LocalDbg then Writeln('Written:    ',p,' lines.');
   if LocalDbg then Writeln('Duplicates: ',d,' lines.');
-  pgbBuildStates.Visible:=False;
 end;
 initialization
 

@@ -508,19 +508,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     OnChange = chkUStateChange
     TabOrder = 10
   end
-  object pgbBuildStates: TProgressBar
-    AnchorSideLeft.Control = Owner
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = Owner
-    AnchorSideTop.Side = asrCenter
-    Left = 187
-    Height = 72
-    Top = 145
-    Width = 208
-    Step = 25
-    TabOrder = 11
-    Visible = False
-  end
   object popColors: TPopupMenu
     left = 104
     top = 88
