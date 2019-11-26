@@ -204,7 +204,7 @@ implementation
 
 { TfrmMonWsjtx }
 
-uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster;
+uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster,fProgress;
 
 procedure TfrmMonWsjtx.RunVA(Afile: string);
 const
@@ -2059,7 +2059,8 @@ begin
   p:=0;
   d:=0;
   x:=0;
-
+  frmProgress.Show;
+  frmProgress.DoInit(40,10);
 
   AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
   AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
@@ -2070,6 +2071,7 @@ begin
     FccEn.Sorted:=False;
     FccEn.Duplicates:=dupAccept;
     if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
+    frmProgress.DoStep;
     while not eof(tfIn) do
     begin
      readln(tfIn, s);
@@ -2091,8 +2093,9 @@ begin
   CloseFile(tfIn);
   CloseFile(dupOut);
   if LocalDbg then Writeln('Sorting...');
+  frmProgress.DoStep;
   FccEn.Sort;
-
+  frmProgress.DoStep;
   if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
 
   AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
@@ -2135,6 +2138,7 @@ begin
           end;
        end;
       end;
+    frmProgress.DoStep;
     writeln(tfOut,Ocall,'=',Ostate);   //last remaining
     FreeAndNil(FccEn);
     CloseFile(tfOut);
@@ -2147,6 +2151,7 @@ begin
   if LocalDbg then Writeln('Rejected:   ',x,' lines.');
   if LocalDbg then Writeln('Written:    ',p,' lines.');
   if LocalDbg then Writeln('Duplicates: ',d,' lines.');
+  frmProgress.Hide;
 end;
 initialization
 
