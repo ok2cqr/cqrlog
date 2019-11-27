@@ -1,7 +1,7 @@
 object frmContest: TfrmContest
-  Left = 474
+  Left = 263
   Height = 127
-  Top = 155
+  Top = 339
   Width = 688
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
@@ -274,11 +274,11 @@ object frmContest: TfrmContest
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 660
-    Height = 22
+    Height = 25
     Hint = 'Help'
     Top = 3
     Width = 25
-    Anchors = [akTop, akRight, akBottom]
+    Anchors = [akTop, akRight]
     BorderSpacing.Top = 3
     BorderSpacing.Right = 3
     Glyph.Data = {
