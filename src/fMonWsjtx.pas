@@ -113,6 +113,7 @@ type
     function getCurMode(sMode: String): String;
     procedure extcqprint;
     procedure BuildFccState;
+    procedure downLoadInit;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -210,7 +211,7 @@ procedure TfrmMonWsjtx.RunVA(Afile: string);
 const
   cAlert = 'voice_keyer/voice_alert.sh';
 var
-  AProcess: TProcess;
+   AProcess: TProcess;
 begin
   if not FileExists(dmData.HomeDir + cAlert) then
     exit;
@@ -719,11 +720,11 @@ begin
                   if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
                    Begin
                      if LocalDbg then Writeln('Load and unzip from fcc');
-                     //call wget, wait result
-                     //call unzip, wait result
-                     //call build
-                     //delete EN.dat
-                     //can we call again ourself here
+                     msg:='If you have overseas connection to fcc.gov' +#13+
+                          'loading may take over 5 minutes!';
+                     Application.MessageBox(PChar(msg),'Info',MB_ICONINFORMATION);
+                     downLoadInit;
+                     chkUStateChange(nil); //recall
                    end
                    else
                    Begin
@@ -2071,7 +2072,7 @@ begin
     FccEn.Sorted:=False;
     FccEn.Duplicates:=dupAccept;
     if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
-    frmProgress.DoStep;
+    frmProgress.DoStep('Reading file...');;
     while not eof(tfIn) do
     begin
      readln(tfIn, s);
@@ -2093,9 +2094,9 @@ begin
   CloseFile(tfIn);
   CloseFile(dupOut);
   if LocalDbg then Writeln('Sorting...');
-  frmProgress.DoStep;
+  frmProgress.DoStep('Sorting...(May take some time!)');
   FccEn.Sort;
-  frmProgress.DoStep;
+  frmProgress.DoStep('Writing file...');
   if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
 
   AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
@@ -2138,7 +2139,7 @@ begin
           end;
        end;
       end;
-    frmProgress.DoStep;
+    frmProgress.DoStep('Done !');
     writeln(tfOut,Ocall,'=',Ostate);   //last remaining
     FreeAndNil(FccEn);
     CloseFile(tfOut);
@@ -2153,6 +2154,61 @@ begin
   if LocalDbg then Writeln('Duplicates: ',d,' lines.');
   frmProgress.Hide;
 end;
+
+procedure  TfrmMonWsjtx.downLoadInit;
+const
+  url = 'http://wireless.fcc.gov/uls/data/complete/l_amat.zip                    ';//space to fix this with binary editor if needed
+  C_MYZIP = 'ctyfiles/l_amat.zip';
+  var
+    DProcess: TProcess;
+  begin
+    if LocalDbg then Writeln('downloadinit start');
+    frmProgress.DoInit(30,10);
+    frmProgress.DoStep('Loading from fcc.gov');
+    if LocalDbg then Writeln('Next create DProcess');
+    DProcess := TProcess.Create(nil);
+    try
+     try
+      if LocalDbg then Writeln('Next DProcess wget parameters');
+      DProcess.Executable  := 'wget';
+      DProcess.Parameters.Add('-q');
+      DProcess.Parameters.Add('-nd');
+      DProcess.Parameters.Add('-O'+dmData.HomeDir+C_MYZIP);
+      DProcess.Parameters.Add(trim(url));
+      DProcess.Options:=[poWaitOnExit];
+      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+      DProcess.Execute;
+     finally
+      DProcess.Free
+     end;
+    except
+    on E :EExternal do
+     writeln('Error Details: ', E.Message);
+    end;
+
+    frmProgress.DoStep('Unzipping EN.dat');
+    try
+     try
+      DProcess := TProcess.Create(nil);
+      if LocalDbg then Writeln('Next DProcess unzip parameters');
+      DProcess.Executable  := 'unzip';
+      DProcess.Parameters.Add('-o');
+      DProcess.Parameters.Add('-d'+dmData.HomeDir+'ctyfiles/');
+      DProcess.Parameters.Add(dmData.HomeDir+C_MYZIP);
+      DProcess.Parameters.Add('EN.dat');
+      DProcess.Options:=[poWaitOnExit];
+      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+      DProcess.Execute;
+     finally
+      DProcess.Free
+     end;
+    except
+    on E :EExternal do
+     writeln('Error Details: ', E.Message);
+    end;
+    frmProgress.DoStep('Done !');
+end;
+
 initialization
 
 end.
