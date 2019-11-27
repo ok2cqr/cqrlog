@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types, iniFiles, LCLType, ComCtrls;
+  process, Types, iniFiles, LCLType, ComCtrls,dateutils;
 
 type
 
@@ -686,6 +686,21 @@ begin
           SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
           if FileExists(StateFile) then
              Begin
+              if (DaysBetween(now,FileDateTodateTime(FileAge(StateFile)))) > 90 then
+                Begin //over 3 month old
+                 msg := 'Source file '+StateFile+' is over 90 days old.'+#13+#13+'Should it be updated?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                    Begin
+                     DeleteFile(StateFile);
+                     if FileExists(SourceFile) then DeleteFile(SourceFile);
+                     chkUStateChange(nil); //recall
+                     if not FileExists(StateFile) then
+                      begin
+                        chkUState.Checked := false;
+                        exit;
+                      end;
+                    end;
+                end;
               if LocalDbg then Writeln('loading...');
               UState.LoadFromFile(StateFile);
               if LocalDbg then writeln(UState.Count);
@@ -702,6 +717,7 @@ begin
                      BuildFccState;
                      //delete EN.dat
                      chkUStateChange(nil); //recall
+                     exit;
                    end
                    else
                    Begin
@@ -721,10 +737,16 @@ begin
                    Begin
                      if LocalDbg then Writeln('Load and unzip from fcc');
                      msg:='If you have overseas connection to fcc.gov' +#13+
-                          'loading may take over 5 minutes!';
-                     Application.MessageBox(PChar(msg),'Info',MB_ICONINFORMATION);
+                          'loading may take over 5 minutes!'+#13+#13+
+                          'cqrlog is halted during that time.';
+                     if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then
+                      Begin
+                        chkUState.Checked := false;
+                        exit;
+                      end;
                      downLoadInit;
                      chkUStateChange(nil); //recall
+                     exit;
                    end
                    else
                    Begin
@@ -737,13 +759,6 @@ begin
         end
        else  if LocalDbg then Writeln('Already loaded:',UState.Count);
     end;
-
-
-
-
-
-
-
 end;
 
 procedure TfrmMonWsjtx.cbflwChange(Sender: TObject);
@@ -2161,8 +2176,13 @@ const
   C_MYZIP = 'ctyfiles/l_amat.zip';
   var
     DProcess: TProcess;
+    F:File;
+
   begin
     if LocalDbg then Writeln('downloadinit start');
+    if FileExists(dmData.HomeDir+C_MYZIP) then
+      DeleteFile(dmData.HomeDir+C_MYZIP);
+    frmProgress.Show;
     frmProgress.DoInit(30,10);
     frmProgress.DoStep('Loading from fcc.gov');
     if LocalDbg then Writeln('Next create DProcess');
@@ -2171,7 +2191,7 @@ const
      try
       if LocalDbg then Writeln('Next DProcess wget parameters');
       DProcess.Executable  := 'wget';
-      DProcess.Parameters.Add('-q');
+      //DProcess.Parameters.Add('-q');
       DProcess.Parameters.Add('-nd');
       DProcess.Parameters.Add('-O'+dmData.HomeDir+C_MYZIP);
       DProcess.Parameters.Add(trim(url));
@@ -2207,6 +2227,7 @@ const
      writeln('Error Details: ', E.Message);
     end;
     frmProgress.DoStep('Done !');
+    frmProgress.Hide;
 end;
 
 initialization

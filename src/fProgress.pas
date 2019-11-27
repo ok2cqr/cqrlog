@@ -55,7 +55,6 @@ begin
   p.position:=0;
   p.max:=max;
   p.step:=step;
-
 end;
 end.
 
