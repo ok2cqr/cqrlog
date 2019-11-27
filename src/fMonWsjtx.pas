@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types, iniFiles, LCLType;
+  process, Types, iniFiles, LCLType, ComCtrls,dateutils;
 
 type
 
@@ -112,6 +112,8 @@ type
     procedure PrintDecodedMessage;
     function getCurMode(sMode: String): String;
     procedure extcqprint;
+    procedure BuildFccState;
+    procedure downLoadInit;
     { private declarations }
   public
     DblClickCall  :string;   //callsign that is called by doubleclick
@@ -138,6 +140,9 @@ const
   //color bitmap size
   bmW = 10;
   bmH = 10;
+
+  C_STATEFILE = 'ctyfiles/fcc_states.tab';
+  C_STATE_SOURCE = 'ctyfiles/EN.dat';
 
 //DL7OAP: define type for grid coloring
 type
@@ -200,13 +205,13 @@ implementation
 
 { TfrmMonWsjtx }
 
-uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster;
+uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster,fProgress;
 
 procedure TfrmMonWsjtx.RunVA(Afile: string);
 const
   cAlert = 'voice_keyer/voice_alert.sh';
 var
-  AProcess: TProcess;
+   AProcess: TProcess;
 begin
   if not FileExists(dmData.HomeDir + cAlert) then
     exit;
@@ -660,10 +665,10 @@ begin
 end;
 
 procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
-const
-     C_STATEFILE = 'ctyfiles/fcc_states.tab';
+
 var
   StateFile,
+  SourceFile,
   msg ,
   call,
   HasState        : String;
@@ -678,29 +683,82 @@ begin
       if  UState.Count = 0 then  //load file
         Begin
           StateFile :=  dmData.HomeDir+C_STATEFILE;
+          SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
           if FileExists(StateFile) then
              Begin
+              if (DaysBetween(now,FileDateTodateTime(FileAge(StateFile)))) > 90 then
+                Begin //over 3 month old
+                 msg := 'Source file '+StateFile+' is over 90 days old.'+#13+#13+'Should it be updated?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                    Begin
+                     DeleteFile(StateFile);
+                     if FileExists(SourceFile) then DeleteFile(SourceFile);
+                     chkUStateChange(nil); //recall
+                     if not FileExists(StateFile) then
+                      begin
+                        chkUState.Checked := false;
+                        exit;
+                      end;
+                    end;
+                end;
               if LocalDbg then Writeln('loading...');
               UState.LoadFromFile(StateFile);
               if LocalDbg then writeln(UState.Count);
              end
            else // no file: inform and ask if load it.uncheck USStete and return
              begin
-               msg := StateFile+#13+'States information file not found!'+#13+'Try to load it from FCC with external script';
-               Application.MessageBox(PChar(msg),'Info',MB_OK);
-               chkUState.Checked := false;
-               exit;
+               if FileExists(SourceFile) then
+                Begin
+                  msg := 'Source file '+SourceFile+' found!'+#13+#13+'Should the '+StateFile+#13+'to be built from source file ?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Build from source EN.dat');
+                     Application.ProcessMessages;
+                     BuildFccState;
+                     //delete EN.dat
+                     chkUStateChange(nil); //recall
+                     exit;
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('Build from source denied!');
+                     chkUState.Checked := false;
+                     exit;
+                   end;
+                end
+                else
+                Begin
+                  msg := 'Neither '+StateFile+#13+
+                          'nor '+SourceFile+' found!'+#13+#13+
+                          'Try to load zipped source from fcc ?'+#13+#13+
+                          '(http://wireless.fcc.gov/uls/data/complete/l_amat.zip)'+#13+
+                          'Command line tools "wget" and "unzip" must be available.';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Load and unzip from fcc');
+                     msg:='If you have overseas connection to fcc.gov' +#13+
+                          'loading may take over 5 minutes!'+#13+#13+
+                          'cqrlog is halted during that time.';
+                     if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then
+                      Begin
+                        chkUState.Checked := false;
+                        exit;
+                      end;
+                     downLoadInit;
+                     chkUStateChange(nil); //recall
+                     exit;
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('load from fcc denied!');
+                     chkUState.Checked := false;
+                     exit;
+                   end;
+                end;
              end;
         end
        else  if LocalDbg then Writeln('Already loaded:',UState.Count);
     end;
-
-
-
-
-
-
-
 end;
 
 procedure TfrmMonWsjtx.cbflwChange(Sender: TObject);
@@ -2001,6 +2059,176 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       //'+'     : getCurMode := 'T10';
     end;
   end;
+procedure  TfrmMonWsjtx.BuildFccState;
+var
+  tfIn,tfOUT,dupOut: TextFile;
+  s,t: string;
+  call,state,ids,Ocall,Ostate :string;
+  id,Oid,r,p,d,i,x : longint;
+  FccEn        :TStringList;
+
+begin
+  Ocall:='call';
+  Ostate:='state';
+  Oid:=0;
+  r:=0;
+  p:=0;
+  d:=0;
+  x:=0;
+  frmProgress.Show;
+  frmProgress.DoInit(40,10);
+
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
+  AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
+  try
+    reset(tfIn);
+    rewrite(dupOut);
+    FccEn := TStringList.Create;
+    FccEn.Sorted:=False;
+    FccEn.Duplicates:=dupAccept;
+    if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
+    frmProgress.DoStep('Reading file...');;
+    while not eof(tfIn) do
+    begin
+     readln(tfIn, s);
+     inc(r);
+      call := ExtractDelimited(5,s,['|']);
+      ids := ExtractDelimited(2,s,['|']);
+      state := ExtractDelimited(18,s,['|']);
+     if ( (call<>'') and (state<>'') and (ids <>'')) then  FccEn.Add(call+'-'+ids+'='+state)
+      else
+        begin
+         writeln(dupOut, call+'-'+ids+'='+state);
+         inc(x);
+        end;
+    end;
+   except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  CloseFile(tfIn);
+  CloseFile(dupOut);
+  if LocalDbg then Writeln('Sorting...');
+  frmProgress.DoStep('Sorting...(May take some time!)');
+  FccEn.Sort;
+  frmProgress.DoStep('Writing file...');
+  if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
+
+  AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_dupes.txt');
+  try
+    reset(tfIn);
+    rewrite(tfOut);
+    rewrite(dupOut);
+    for i:=0 to  FccEn.Count-1 do
+    begin
+      s:= FccEn.Strings[i];
+      t := ExtractWord(1,s,['=']);
+      call := ExtractWord(1,t,['-']);
+      id := StrToIntDef(ExtractWord(2,t,['-']),-1);
+      state := ExtractWord(2,s,['=']);
+
+      if ( (call<>'') and (state<>'') and (id >=0)) then
+      begin
+        if call<> Ocall then
+         Begin
+           writeln(tfOut,Ocall,'=',Ostate);//write old call=state if next call is different
+           Ocall:=call;
+           Oid := id;
+           Ostate := state;
+           inc(p);
+         end
+         else
+          Begin  //if they are same calls
+            writeln(dupOut,Ocall,'=',Ostate);//write old call=state to dupe list
+            inc(d);
+            if id > Oid then  //if id is bigger than old id save call and state as old
+                              //should remain finally the higest id call to print
+                              //needs one extra line to end of file to get all printed
+             begin
+              Ocall:=call;
+              Oid := id;
+              Ostate := state;
+             end;
+
+          end;
+       end;
+      end;
+    frmProgress.DoStep('Done !');
+    writeln(tfOut,Ocall,'=',Ostate);   //last remaining
+    FreeAndNil(FccEn);
+    CloseFile(tfOut);
+    CloseFile(dupOut);
+  except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  if LocalDbg then Writeln('Read:       ',r,' lines.');
+  if LocalDbg then Writeln('Rejected:   ',x,' lines.');
+  if LocalDbg then Writeln('Written:    ',p,' lines.');
+  if LocalDbg then Writeln('Duplicates: ',d,' lines.');
+  frmProgress.Hide;
+end;
+
+procedure  TfrmMonWsjtx.downLoadInit;
+const
+  url = 'http://wireless.fcc.gov/uls/data/complete/l_amat.zip                    ';//space to fix this with binary editor if needed
+  C_MYZIP = 'ctyfiles/l_amat.zip';
+  var
+    DProcess: TProcess;
+    F:File;
+
+  begin
+    if LocalDbg then Writeln('downloadinit start');
+    if FileExists(dmData.HomeDir+C_MYZIP) then
+      DeleteFile(dmData.HomeDir+C_MYZIP);
+    frmProgress.Show;
+    frmProgress.DoInit(30,10);
+    frmProgress.DoStep('Loading from fcc.gov');
+    if LocalDbg then Writeln('Next create DProcess');
+    DProcess := TProcess.Create(nil);
+    try
+     try
+      if LocalDbg then Writeln('Next DProcess wget parameters');
+      DProcess.Executable  := 'wget';
+      //DProcess.Parameters.Add('-q');
+      DProcess.Parameters.Add('-nd');
+      DProcess.Parameters.Add('-O'+dmData.HomeDir+C_MYZIP);
+      DProcess.Parameters.Add(trim(url));
+      DProcess.Options:=[poWaitOnExit];
+      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+      DProcess.Execute;
+     finally
+      DProcess.Free
+     end;
+    except
+    on E :EExternal do
+     writeln('Error Details: ', E.Message);
+    end;
+
+    frmProgress.DoStep('Unzipping EN.dat');
+    try
+     try
+      DProcess := TProcess.Create(nil);
+      if LocalDbg then Writeln('Next DProcess unzip parameters');
+      DProcess.Executable  := 'unzip';
+      DProcess.Parameters.Add('-o');
+      DProcess.Parameters.Add('-d'+dmData.HomeDir+'ctyfiles/');
+      DProcess.Parameters.Add(dmData.HomeDir+C_MYZIP);
+      DProcess.Parameters.Add('EN.dat');
+      DProcess.Options:=[poWaitOnExit];
+      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+      DProcess.Execute;
+     finally
+      DProcess.Free
+     end;
+    except
+    on E :EExternal do
+     writeln('Error Details: ', E.Message);
+    end;
+    frmProgress.DoStep('Done !');
+    frmProgress.Hide;
+end;
 
 initialization
 
