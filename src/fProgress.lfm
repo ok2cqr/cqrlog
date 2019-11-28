@@ -20,6 +20,7 @@ object frmProgress: TfrmProgress
     Width = 200
     BorderSpacing.Top = 6
     Max = 40
+    Smooth = True
     TabOrder = 0
   end
   object lblInfo: TLabel
