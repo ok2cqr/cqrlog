@@ -23,6 +23,9 @@ type
   public
    procedure DoStep(info:string = '');
    procedure DoInit(max,step:integer);
+   procedure DoJump(i:integer);
+   procedure DoPos(i:integer);
+   procedure DoPros(i:integer);
   end;
 
 var
@@ -47,6 +50,24 @@ procedure TfrmProgress.DoStep(info:string = '');
 begin
   lblInfo.Caption:=info;
   p.StepIt;
+  repaint;
+  Application.ProcessMessages;
+end;
+procedure TfrmProgress.DoJump(i:integer);
+begin
+  p.Position:=p.Position + i;
+  repaint;
+  Application.ProcessMessages;
+end;
+procedure TfrmProgress.DoPos(i:integer);
+begin
+  p.Position:= i;
+  repaint;
+  Application.ProcessMessages;
+end;
+procedure TfrmProgress.DoPros(i:integer);
+begin
+  p.Position:= (p.max * i)  div 100;
   repaint;
   Application.ProcessMessages;
 end;

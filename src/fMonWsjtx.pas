@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types, iniFiles, LCLType, ComCtrls,dateutils;
+  process, Types, iniFiles, LCLType, ComCtrls, dateutils, BaseUnix;
 
 type
 
@@ -48,6 +48,7 @@ type
     tbmyAlrt: TToggleBox;
     tbFollow: TToggleBox;
     tbTCAlert: TToggleBox;
+    tmrFCC: TTimer;
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
@@ -87,8 +88,11 @@ type
     procedure tbmyAlrtChange(Sender: TObject);
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
+    procedure tmrFCCTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
   private
+    DProcess: TProcess;
+
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -143,6 +147,10 @@ const
 
   C_STATEFILE = 'ctyfiles/fcc_states.tab';
   C_STATE_SOURCE = 'ctyfiles/EN.dat';
+  C_URL = 'http://wireless.fcc.gov/uls/data/complete/l_amat.zip                    ';//space to fix this with binary editor if needed
+  //C_URL ='http://localhost/l_amat.zip'; //for testing;
+  C_MYZIP = 'ctyfiles/l_amat.zip';
+  C_MY_SCRIPT = 'ctyfiles/fcc_get.sh';
 
 //DL7OAP: define type for grid coloring
 type
@@ -224,7 +232,7 @@ begin
     if LocalDbg then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
-    AProcess.Free
+    FreeAndNil(Aprocess);
   end;
 end;
 
@@ -694,7 +702,7 @@ begin
                      DeleteFile(StateFile);
                      if FileExists(SourceFile) then DeleteFile(SourceFile);
                      chkUStateChange(nil); //recall
-                     if not FileExists(StateFile) then
+                     if not FileExists(StateFile) then  //when back here should have new StateFile
                       begin
                         chkUState.Checked := false;
                         exit;
@@ -713,10 +721,11 @@ begin
                   if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
                    Begin
                      if LocalDbg then Writeln('Build from source EN.dat');
+                     chkUState.Checked := false;
                      Application.ProcessMessages;
                      BuildFccState;
                      //delete EN.dat
-                     chkUStateChange(nil); //recall
+                     chkUState.Checked := True; //causes recall
                      exit;
                    end
                    else
@@ -737,15 +746,20 @@ begin
                    Begin
                      if LocalDbg then Writeln('Load and unzip from fcc');
                      msg:='If you have overseas connection to fcc.gov' +#13+
-                          'loading may take over 5 minutes!'+#13+#13+
-                          'cqrlog is halted during that time.';
+                          'loading may take over 5 minutes!';
                      if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then
                       Begin
                         chkUState.Checked := false;
                         exit;
                       end;
+                     chkUState.Checked := false;
                      downLoadInit;
-                     chkUStateChange(nil); //recall
+                     if LocalDbg then Writeln('Build from source EN.dat');
+                     sleep(1000);                  //otherwise EN.dat is not there yet ???
+                     Application.ProcessMessages;
+                     sleep(1000);
+                     BuildFccState;
+                     chkUState.Checked := True; //causes recall
                      exit;
                    end
                    else
@@ -948,6 +962,30 @@ begin
   sgMonitor.Repaint;
 end;
 
+procedure TfrmMonWsjtx.tmrFCCTimer(Sender: TObject);
+Var
+  sz : integer;
+begin
+  tmrFcc.Enabled:=False;
+
+          if DProcess <> nil then
+            Begin
+              if LocalDbg then Writeln('Dprocess 1 running');
+             if FileExists(dmData.HomeDir+C_MYZIP) then
+              Begin
+                sz:=FileSize(dmData.HomeDir+C_MYZIP) div 1000000;
+                frmProgress.lblInfo.Caption:= 'Loading from fcc.gov '+IntToStr(sz)+'M';
+                frmProgress.DoPos(sz)
+              end;
+             tmrFcc.Enabled:=True;
+            end
+           else
+            Begin
+             frmProgress.Hide;
+             tmrFcc.Enabled:=False;
+            end;
+
+end;
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
 begin
   tmrFollow.Enabled := False;
@@ -1010,6 +1048,7 @@ begin
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
   sgMonitor.DefaultDrawing:= True; // setting to true to use DrawCell-Event for coloring
+
 end;
 
 procedure TfrmMonWsjtx.FormDropFiles(Sender: TObject;
@@ -2077,17 +2116,20 @@ begin
   x:=0;
   frmProgress.Show;
   frmProgress.DoInit(40,10);
-
+  sleep(1000);                //otherwise progressbar is empty??
+  Application.ProcessMessages;
   AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
   AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
-  try
+  frmProgress.DoPos(1);
+   try
     reset(tfIn);
     rewrite(dupOut);
     FccEn := TStringList.Create;
     FccEn.Sorted:=False;
     FccEn.Duplicates:=dupAccept;
     if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
-    frmProgress.DoStep('Reading file...');;
+    frmProgress.DoStep('Reading file...');
+
     while not eof(tfIn) do
     begin
      readln(tfIn, s);
@@ -2171,63 +2213,50 @@ begin
 end;
 
 procedure  TfrmMonWsjtx.downLoadInit;
-const
-  url = 'http://wireless.fcc.gov/uls/data/complete/l_amat.zip                    ';//space to fix this with binary editor if needed
-  C_MYZIP = 'ctyfiles/l_amat.zip';
-  var
-    DProcess: TProcess;
-    F:File;
+var
+  f :textfile;
 
   begin
     if LocalDbg then Writeln('downloadinit start');
-    if FileExists(dmData.HomeDir+C_MYZIP) then
-      DeleteFile(dmData.HomeDir+C_MYZIP);
     frmProgress.Show;
-    frmProgress.DoInit(30,10);
+    frmProgress.DoInit(155,1);
     frmProgress.DoStep('Loading from fcc.gov');
-    if LocalDbg then Writeln('Next create DProcess');
+    if FileExists(dmData.HomeDir+C_MYZIP) then DeleteFile(dmData.HomeDir+C_MYZIP);
+
+    if not FileExists(dmData.HomeDir+C_MY_SCRIPT) then
+       Begin
+        if LocalDbg then Writeln('Next create script wget + unzip');
+        AssignFile(f,dmData.HomeDir+C_MY_SCRIPT);
+        ReWrite(f);
+            Writeln(f,'#!/bin/bash');
+            Writeln(f,'wget -q -nd -O'+dmData.HomeDir+C_MYZIP+' '+trim(C_URL));
+            Writeln(f,'unzip -q -o -d'+dmData.HomeDir+'ctyfiles/ '+dmData.HomeDir+C_MYZIP+' EN.dat');
+            Writeln(f,'exit');
+        CloseFile(f);
+        if LocalDbg then Writeln('Next chmod script');
+        fpChmod (dmData.HomeDir+C_MY_SCRIPT,&777);
+       end ;
+
+    if LocalDbg then Writeln('Next run script');
+
     DProcess := TProcess.Create(nil);
+    tmrFCC.Enabled:=True;
+
     try
      try
-      if LocalDbg then Writeln('Next DProcess wget parameters');
-      DProcess.Executable  := 'wget';
-      //DProcess.Parameters.Add('-q');
-      DProcess.Parameters.Add('-nd');
-      DProcess.Parameters.Add('-O'+dmData.HomeDir+C_MYZIP);
-      DProcess.Parameters.Add(trim(url));
-      DProcess.Options:=[poWaitOnExit];
+      if LocalDbg then Writeln('Next DProcess run script');
+      DProcess.Executable  := '/bin/bash';
+      DProcess.Parameters.Add(dmData.HomeDir+C_MY_SCRIPT);
       if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
       DProcess.Execute;
      finally
-      DProcess.Free
+      FreeAndNil(Dprocess);
      end;
     except
     on E :EExternal do
      writeln('Error Details: ', E.Message);
     end;
 
-    frmProgress.DoStep('Unzipping EN.dat');
-    try
-     try
-      DProcess := TProcess.Create(nil);
-      if LocalDbg then Writeln('Next DProcess unzip parameters');
-      DProcess.Executable  := 'unzip';
-      DProcess.Parameters.Add('-o');
-      DProcess.Parameters.Add('-d'+dmData.HomeDir+'ctyfiles/');
-      DProcess.Parameters.Add(dmData.HomeDir+C_MYZIP);
-      DProcess.Parameters.Add('EN.dat');
-      DProcess.Options:=[poWaitOnExit];
-      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
-      DProcess.Execute;
-     finally
-      DProcess.Free
-     end;
-    except
-    on E :EExternal do
-     writeln('Error Details: ', E.Message);
-    end;
-    frmProgress.DoStep('Done !');
-    frmProgress.Hide;
 end;
 
 initialization

@@ -586,4 +586,10 @@ object frmMonWsjtx: TfrmMonWsjtx
     left = 224
     top = 144
   end
+  object tmrFCC: TTimer
+    Enabled = False
+    OnTimer = tmrFCCTimer
+    left = 104
+    top = 144
+  end
 end
