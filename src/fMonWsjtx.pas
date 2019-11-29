@@ -92,7 +92,7 @@ type
     procedure tmrFollowTimer(Sender: TObject);
   private
     DProcess: TProcess;
-
+    DPstarted : integer;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -715,23 +715,21 @@ begin
              end
            else // no file: inform and ask if load it.uncheck USStete and return
              begin
+               chkUState.Checked := false;
                if FileExists(SourceFile) then
                 Begin
                   msg := 'Source file '+SourceFile+' found!'+#13+#13+'Should the '+StateFile+#13+'to be built from source file ?';
                   if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
                    Begin
                      if LocalDbg then Writeln('Build from source EN.dat');
-                     chkUState.Checked := false;
                      Application.ProcessMessages;
                      BuildFccState;
-                     //delete EN.dat
                      chkUState.Checked := True; //causes recall
                      exit;
                    end
                    else
                    Begin
                      if LocalDbg then Writeln('Build from source denied!');
-                     chkUState.Checked := false;
                      exit;
                    end;
                 end
@@ -747,25 +745,13 @@ begin
                      if LocalDbg then Writeln('Load and unzip from fcc');
                      msg:='If you have overseas connection to fcc.gov' +#13+
                           'loading may take over 5 minutes!';
-                     if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then
-                      Begin
-                        chkUState.Checked := false;
-                        exit;
-                      end;
-                     chkUState.Checked := false;
+                     if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
                      downLoadInit;
-                     if LocalDbg then Writeln('Build from source EN.dat');
-                     sleep(1000);                  //otherwise EN.dat is not there yet ???
-                     Application.ProcessMessages;
-                     sleep(1000);
-                     BuildFccState;
-                     chkUState.Checked := True; //causes recall
                      exit;
                    end
                    else
                    Begin
                      if LocalDbg then Writeln('load from fcc denied!');
-                     chkUState.Checked := false;
                      exit;
                    end;
                 end;
@@ -969,20 +955,41 @@ begin
   tmrFcc.Enabled:=False;
 
           if DProcess <> nil then
-            Begin
               if LocalDbg then Writeln('Dprocess 1 running');
-             if FileExists(dmData.HomeDir+C_MYZIP) then
+
+          if DPstarted = 1 then
+           begin
+             if (FileExists(dmData.HomeDir+C_MYZIP)) and not (FileExists(dmData.HomeDir+C_STATE_SOURCE)) then
               Begin
                 sz:=FileSize(dmData.HomeDir+C_MYZIP) div 1000000;
                 frmProgress.lblInfo.Caption:= 'Loading from fcc.gov '+IntToStr(sz)+'M';
-                frmProgress.DoPos(sz)
+                frmProgress.DoPos(sz);
+                if LocalDbg then Writeln('Loading from fcc');
+              end
+             else
+              begin
+               if LocalDbg then Writeln('unzip ... ');
+               frmProgress.lblInfo.Caption:= 'Unzip ...';
+               frmProgress.DoJump(1);
+               inc(DPStarted);
               end;
              tmrFcc.Enabled:=True;
             end
+
            else
-            Begin
-             frmProgress.Hide;
-             tmrFcc.Enabled:=False;
+
+           Begin
+             if LocalDbg then Writeln('inc DPstarted');
+             inc(DPstarted);
+             if DPstarted > 3 then
+              begin
+               if LocalDbg then Writeln('DPstarted > 3');
+               frmProgress.Hide;
+               tmrFcc.Enabled:=False;
+               DPstarted:=0;
+               chkUState.Checked:=True; //causes recall
+              end
+              else tmrFcc.Enabled:=True;
             end;
 
 end;
@@ -1048,7 +1055,7 @@ begin
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
   sgMonitor.DefaultDrawing:= True; // setting to true to use DrawCell-Event for coloring
-
+  DPstarted :=0;
 end;
 
 procedure TfrmMonWsjtx.FormDropFiles(Sender: TObject;
@@ -2116,11 +2123,11 @@ begin
   x:=0;
   frmProgress.Show;
   frmProgress.DoInit(40,10);
-  sleep(1000);                //otherwise progressbar is empty??
+  frmProgress.DoStep('Reading file...');
+  sleep(100);
   Application.ProcessMessages;
   AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
   AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
-  frmProgress.DoPos(1);
    try
     reset(tfIn);
     rewrite(dupOut);
@@ -2128,7 +2135,6 @@ begin
     FccEn.Sorted:=False;
     FccEn.Duplicates:=dupAccept;
     if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
-    frmProgress.DoStep('Reading file...');
 
     while not eof(tfIn) do
     begin
@@ -2223,8 +2229,8 @@ var
     frmProgress.DoStep('Loading from fcc.gov');
     if FileExists(dmData.HomeDir+C_MYZIP) then DeleteFile(dmData.HomeDir+C_MYZIP);
 
-    if not FileExists(dmData.HomeDir+C_MY_SCRIPT) then
-       Begin
+    if FileExists(dmData.HomeDir+C_MY_SCRIPT) then DeleteFile( dmData.HomeDir+C_MY_SCRIPT);
+
         if LocalDbg then Writeln('Next create script wget + unzip');
         AssignFile(f,dmData.HomeDir+C_MY_SCRIPT);
         ReWrite(f);
@@ -2235,12 +2241,13 @@ var
         CloseFile(f);
         if LocalDbg then Writeln('Next chmod script');
         fpChmod (dmData.HomeDir+C_MY_SCRIPT,&777);
-       end ;
+
 
     if LocalDbg then Writeln('Next run script');
 
     DProcess := TProcess.Create(nil);
     tmrFCC.Enabled:=True;
+    DPstarted:=1;
 
     try
      try
