@@ -1,148 +1,216 @@
 object frmPropagation: TfrmPropagation
-  Left = 526
-  Height = 148
-  Top = 402
-  Width = 534
+  Left = 571
+  Height = 153
+  Top = 383
+  Width = 630
   Caption = 'Propagation'
-  ClientHeight = 148
-  ClientWidth = 534
+  ClientHeight = 153
+  ClientWidth = 630
   KeyPreview = True
   OnClose = FormClose
   OnDblClick = FormDblClick
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   PopupMenu = popPropagation
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '2.0.4.0'
   object imgProp: TImage
-    Left = 88
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 0
     Height = 26
-    Top = 128
+    Top = 0
     Width = 42
   end
   object pnlCondxValues: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
     Left = 0
     Height = 128
     Top = 0
-    Width = 168
+    Width = 192
     BevelOuter = bvNone
     ClientHeight = 128
-    ClientWidth = 168
+    ClientWidth = 192
     TabOrder = 0
     object lblSFI: TLabel
-      Left = 48
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label3
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrCenter
+      Left = 36
       Height = 17
-      Top = 8
+      Top = 6
       Width = 24
+      BorderSpacing.Left = 36
       Caption = '111'
       ParentColor = False
     end
     object Label3: TLabel
-      Left = 8
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = pnlCondxValues
+      Left = 6
       Height = 17
-      Top = 8
+      Top = 6
       Width = 24
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
       Caption = 'SFI:'
       ParentColor = False
     end
     object lblSSN: TLabel
-      Left = 128
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label4
+      AnchorSideTop.Side = asrCenter
+      Left = 126
       Height = 17
-      Top = 8
+      Top = 6
       Width = 24
+      BorderSpacing.Left = 126
       Caption = '100'
       ParentColor = False
     end
     object Label4: TLabel
-      Left = 88
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label3
+      AnchorSideTop.Side = asrCenter
+      Left = 90
       Height = 17
-      Top = 8
-      Width = 31
+      Top = 6
+      Width = 30
+      BorderSpacing.Left = 90
+      BorderSpacing.Top = 2
       Caption = 'SSN:'
       ParentColor = False
     end
     object lblKIndex: TLabel
-      Left = 110
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label7
+      AnchorSideTop.Side = asrCenter
+      Left = 126
       Height = 17
-      Top = 32
+      Top = 29
       Width = 9
+      BorderSpacing.Left = 126
       Caption = 'K'
       ParentColor = False
     end
     object Label2: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label3
+      AnchorSideTop.Control = Label3
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 32
-      Width = 14
+      Top = 29
+      Width = 13
+      BorderSpacing.Top = 6
       Caption = 'A:'
       ParentColor = False
     end
     object lblAIndex: TLabel
-      Left = 32
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label2
+      AnchorSideTop.Side = asrCenter
+      Left = 36
       Height = 17
-      Top = 32
-      Width = 10
+      Top = 29
+      Width = 9
+      BorderSpacing.Left = 36
       Caption = 'A'
       ParentColor = False
     end
     object Label7: TLabel
-      Left = 86
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label2
+      Left = 90
       Height = 17
-      Top = 32
+      Top = 29
       Width = 13
+      BorderSpacing.Left = 90
       Caption = 'K:'
       ParentColor = False
     end
     object Label10: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label2
+      AnchorSideTop.Control = Label2
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 55
-      Width = 95
+      Top = 52
+      Width = 91
+      BorderSpacing.Top = 6
       Caption = 'Geomag field:'
       ParentColor = False
     end
     object lblGF: TLabel
-      Left = 105
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label10
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrBottom
+      Left = 126
       Height = 17
-      Top = 55
-      Width = 35
+      Top = 52
+      Width = 34
+      BorderSpacing.Left = 126
+      BorderSpacing.Right = 24
       Caption = 'lblGF'
       ParentColor = False
     end
     object Label11: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label10
+      AnchorSideTop.Control = Label10
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 77
-      Width = 86
+      Top = 75
+      Width = 83
+      BorderSpacing.Top = 6
       Caption = 'Signal noise:'
       ParentColor = False
     end
     object lblSigs: TLabel
-      Left = 105
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label11
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrBottom
+      Left = 126
       Height = 17
-      Top = 77
-      Width = 45
+      Top = 75
+      Width = 43
+      BorderSpacing.Left = 126
       Caption = 'lblSigs'
       ParentColor = False
     end
     object Label12: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label11
+      AnchorSideTop.Control = Label11
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 99
-      Width = 68
+      Top = 98
+      Width = 64
+      BorderSpacing.Top = 6
       Caption = 'Mag field:'
       ParentColor = False
     end
     object lblMag: TLabel
-      Left = 105
+      AnchorSideLeft.Control = pnlCondxValues
+      AnchorSideTop.Control = Label12
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrBottom
+      Left = 126
       Height = 17
-      Top = 99
-      Width = 47
+      Top = 98
+      Width = 44
+      BorderSpacing.Left = 126
       Caption = 'lblMag'
       ParentColor = False
     end
   end
   object pnlHfCondx: TPanel
-    Left = 168
+    AnchorSideLeft.Control = pnlCondxValues
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = pnlCondxValues
+    Left = 192
     Height = 128
     Top = 0
     Width = 208
@@ -151,230 +219,331 @@ object frmPropagation: TfrmPropagation
     ClientWidth = 208
     TabOrder = 1
     object Label1: TLabel
-      Left = 13
+      AnchorSideLeft.Control = pnlHfCondx
+      AnchorSideTop.Control = pnlHfCondx
+      Left = 6
       Height = 17
-      Top = 8
-      Width = 36
+      Top = 6
+      Width = 33
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
       Caption = 'Band'
       ParentColor = False
     end
     object Label5: TLabel
-      Left = 96
+      AnchorSideLeft.Control = Label9
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label1
+      Left = 93
       Height = 17
-      Top = 8
+      Top = 6
       Width = 26
+      BorderSpacing.Left = 24
       Caption = 'Day'
       ParentColor = False
     end
     object Label6: TLabel
-      Left = 157
+      AnchorSideLeft.Control = Label5
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlHfCondx
+      Left = 152
       Height = 17
-      Top = 8
-      Width = 39
+      Top = 6
+      Width = 35
+      BorderSpacing.Left = 33
+      BorderSpacing.Top = 6
       Caption = 'Night'
       ParentColor = False
     end
     object Label9: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label1
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 32
-      Width = 62
+      Top = 29
+      Width = 63
+      BorderSpacing.Top = 6
       Caption = '80m-40m'
       ParentColor = False
     end
     object Label13: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label9
+      AnchorSideTop.Control = Label9
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 55
-      Width = 62
+      Top = 52
+      Width = 63
+      BorderSpacing.Top = 6
       Caption = '30m-20m'
       ParentColor = False
     end
     object Label14: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label13
+      AnchorSideTop.Control = Label13
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 77
-      Width = 62
+      Top = 75
+      Width = 63
+      BorderSpacing.Top = 6
       Caption = '17m-15m'
       ParentColor = False
     end
     object Label15: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label14
+      AnchorSideTop.Control = Label14
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 17
-      Top = 99
-      Width = 62
+      Top = 98
+      Width = 63
+      BorderSpacing.Top = 6
       Caption = '12m-10m'
       ParentColor = False
     end
     object lbl80d: TLabel
-      Left = 94
+      AnchorSideLeft.Control = Label5
+      AnchorSideTop.Control = Label9
+      Left = 93
       Height = 17
-      Top = 32
-      Width = 42
+      Top = 29
+      Width = 40
       Caption = 'lbl80d'
       ParentColor = False
     end
     object lbl30d: TLabel
-      Left = 94
+      AnchorSideLeft.Control = Label5
+      AnchorSideTop.Control = Label13
+      Left = 93
       Height = 17
-      Top = 55
-      Width = 42
+      Top = 52
+      Width = 40
       Caption = 'lbl30d'
       ParentColor = False
     end
     object lbl17d: TLabel
-      Left = 94
+      AnchorSideLeft.Control = Label5
+      AnchorSideTop.Control = Label14
+      Left = 93
       Height = 17
-      Top = 77
-      Width = 42
+      Top = 75
+      Width = 40
       Caption = 'lbl17d'
       ParentColor = False
       ParentFont = False
     end
     object lbl12d: TLabel
-      Left = 94
+      AnchorSideLeft.Control = Label5
+      AnchorSideTop.Control = Label15
+      Left = 93
       Height = 17
-      Top = 99
-      Width = 42
+      Top = 98
+      Width = 40
       Caption = 'lbl12d'
       ParentColor = False
     end
     object lbl80n: TLabel
+      AnchorSideLeft.Control = Label6
+      AnchorSideTop.Control = lbl80d
       Left = 152
       Height = 17
-      Top = 32
-      Width = 42
+      Top = 29
+      Width = 40
       Caption = 'lbl80n'
       ParentColor = False
     end
     object lbl30n: TLabel
+      AnchorSideLeft.Control = Label6
+      AnchorSideTop.Control = lbl30d
       Left = 152
       Height = 17
-      Top = 55
-      Width = 42
+      Top = 52
+      Width = 40
       Caption = 'lbl30n'
       ParentColor = False
     end
     object lbl17n: TLabel
+      AnchorSideLeft.Control = Label6
+      AnchorSideTop.Control = lbl17d
       Left = 152
       Height = 17
-      Top = 77
-      Width = 42
+      Top = 75
+      Width = 40
       Caption = 'lbl17n'
       ParentColor = False
     end
     object lbl12n: TLabel
+      AnchorSideLeft.Control = Label6
+      AnchorSideTop.Control = lbl12d
       Left = 152
       Height = 17
-      Top = 99
-      Width = 42
+      Top = 98
+      Width = 40
       Caption = 'lbl12n'
       ParentColor = False
     end
   end
   object pnlVhfCondx: TPanel
-    Left = 368
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = pnlHfCondx
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 416
     Height = 128
     Top = 0
-    Width = 174
+    Width = 214
+    Anchors = [akTop, akRight]
     BevelOuter = bvNone
     ClientHeight = 128
-    ClientWidth = 174
+    ClientWidth = 214
     TabOrder = 2
     object Label8: TLabel
-      Left = 8
+      AnchorSideLeft.Control = pnlVhfCondx
+      AnchorSideTop.Control = pnlVhfCondx
+      Left = 12
       Height = 17
-      Top = 8
-      Width = 52
+      Top = 6
+      Width = 47
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 6
       Caption = 'Aurora:'
       ParentColor = False
     end
     object lblAu: TLabel
-      Left = 72
+      AnchorSideLeft.Control = Label8
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label8
+      Left = 68
       Height = 17
-      Top = 8
-      Width = 36
+      Top = 6
+      Width = 33
+      BorderSpacing.Left = 9
       Caption = 'lblAu'
       ParentColor = False
     end
     object Label16: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label8
+      AnchorSideTop.Control = Label8
+      AnchorSideTop.Side = asrBottom
+      Left = 12
       Height = 17
-      Top = 32
+      Top = 29
       Width = 63
+      BorderSpacing.Top = 6
       Caption = '6m ES EU'
       ParentColor = False
     end
     object lbl6mEsEu: TLabel
-      Left = 86
+      AnchorSideLeft.Control = Label16
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label16
+      Left = 81
       Height = 17
-      Top = 32
-      Width = 72
+      Top = 29
+      Width = 68
+      BorderSpacing.Left = 6
       Caption = 'lbl6mEsEu'
       ParentColor = False
     end
     object Label17: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label8
+      AnchorSideTop.Control = Label16
+      AnchorSideTop.Side = asrBottom
+      Left = 12
       Height = 17
-      Top = 55
+      Top = 52
       Width = 63
+      BorderSpacing.Top = 6
       Caption = '4m ES EU'
       ParentColor = False
     end
     object lbl4mEsEu: TLabel
-      Left = 86
+      AnchorSideLeft.Control = Label17
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label17
+      Left = 81
       Height = 17
-      Top = 55
-      Width = 72
+      Top = 52
+      Width = 68
+      BorderSpacing.Left = 6
       Caption = 'lbl4mEsEu'
       ParentColor = False
     end
     object Label18: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label8
+      AnchorSideTop.Control = Label17
+      AnchorSideTop.Side = asrBottom
+      Left = 12
       Height = 17
-      Top = 77
+      Top = 75
       Width = 63
+      BorderSpacing.Top = 6
       Caption = '2m ES EU'
       ParentColor = False
     end
     object lbl2mEsEu: TLabel
-      Left = 86
+      AnchorSideLeft.Control = Label18
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label18
+      Left = 81
       Height = 17
-      Top = 77
-      Width = 72
+      Top = 75
+      Width = 68
+      BorderSpacing.Left = 6
       Caption = 'lbl2mEsEu'
       ParentColor = False
     end
     object Label19: TLabel
-      Left = 8
+      AnchorSideLeft.Control = Label8
+      AnchorSideTop.Control = Label18
+      AnchorSideTop.Side = asrBottom
+      Left = 12
       Height = 17
-      Top = 99
-      Width = 65
+      Top = 98
+      Width = 64
+      BorderSpacing.Top = 6
       Caption = '2m ES NA'
       ParentColor = False
     end
     object lbl2mEsNa: TLabel
-      Left = 86
+      AnchorSideLeft.Control = Label19
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label19
+      Left = 82
       Height = 17
-      Top = 99
-      Width = 73
+      Top = 98
+      Width = 70
+      BorderSpacing.Left = 6
       Caption = 'lbl2mEsNa'
       ParentColor = False
     end
     object lblDegree: TLabel
+      AnchorSideLeft.Control = Label8
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Label8
       Left = 112
       Height = 17
-      Top = 8
-      Width = 67
+      Top = 6
+      Width = 63
+      BorderSpacing.Left = 53
       Caption = 'lblDegree'
       ParentColor = False
     end
   end
   object sbInfo: TStatusBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 21
-    Top = 127
-    Width = 534
+    Height = 33
+    Top = 120
+    Width = 630
+    AutoSize = False
     Panels = <>
   end
   object tmrProp: TTimer
@@ -384,8 +553,8 @@ object frmPropagation: TfrmPropagation
     top = 408
   end
   object popPropagation: TPopupMenu
-    left = 248
-    top = 8
+    left = 64
+    top = 128
     object mnuRefresh: TMenuItem
       Caption = 'Refresh'
       OnClick = mnuRefreshClick
