@@ -178,291 +178,242 @@ var
   sDate     : String = '';
 begin
   if chkRemember.Checked then saveFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
-  //if empty date-to make it as today NOTE that empty calendar is not empty string!
-  if edtDateTo.Text = '    -  -  ' then edtDateTo.Date := now;
+  //if empty date-to make it as today. NOTE that empty calendar.Text is not empty string, but Date is =0!
+  if edtDateTo.Date = 0 then edtDateTo.Date := now;
 
   tmp := '';
   if (edtCallSign.Text <> '') then
-  begin
-    if rbExactlyCall.Checked then
-      tmp := ' (callsign = ' + QuotedStr(edtCallSign.Text)+')'
-    else
-      tmp := ' (callsign LIKE ''%' + edtCallSign.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
-  if (edtDXCC.Text <> '') then
-  begin
-    tmp := tmp + ' (dxcc_ref = '+ QuotedStr(edtDXCC.Text)+')';
-    tmp := tmp + ' AND'
-  end;
-  if ((edtFreqFrom.Text <> '') and (edtFreqTo.Text <> '')) then
-  begin
-    tmp := tmp + ' (freq >= ' + edtFreqFrom.Text + ') AND '+
-                 ' (freq <= ' + edtFreqTo.Text + ')';
-    tmp := tmp + ' AND'
-  end;
-  if (cmbMode.Text <> '') then
-  begin
-    tmp := tmp + ' (mode = ' + QuotedStr(cmbMode.Text)+')';
-    tmp := tmp + ' AND'
-  end;
+                                begin
+                                  if rbExactlyCall.Checked then   tmp := ' (callsign = ' + QuotedStr(edtCallSign.Text)+') AND'
+                                  else
+                                    tmp := ' (callsign LIKE ''%' + edtCallSign.Text + '%'') AND';
+                                end;
+
+  if (edtDXCC.Text <> '') then tmp := tmp + ' (dxcc_ref = '+ QuotedStr(edtDXCC.Text)+') AND';
+
+  if   ((edtFreqFrom.Text <> '')
+   and (edtFreqTo.Text <> ''))     then tmp := tmp + ' (freq >= ' + edtFreqFrom.Text + ') AND '+
+                                                     ' (freq <= ' + edtFreqTo.Text + ') AND';
+
+  if (cmbMode.Text <> '') then   tmp := tmp + ' (mode = ' + QuotedStr(cmbMode.Text)+') AND';
+
   if ( cmbContestName.Text <> '') then
-  begin
-    if cbIncConName.Checked then
-       tmp := tmp + ' (UPPER(contestname) LIKE ''%' + upcase(cmbContestName.Text) + '%'')'
-      else
-       tmp := tmp + ' (UPPER(contestname) = ' + QuotedStr(upcase(cmbContestName.Text))+')';
-    tmp := tmp + ' AND'
-  end;
-  if (edtSTX.Text <> '') then
-  begin
-    tmp := tmp + ' (stx = ' + QuotedStr(edtSTX.Text)+')';
-    tmp := tmp + ' AND'
-  end;
-  if (edtSRX.Text <> '') then
-    begin
-      tmp := tmp + ' (srx = ' + QuotedStr(edtSRX.Text)+')';
-      tmp := tmp + ' AND'
-    end;
-  if (edtSTXstr.Text <> '') then
-    begin
-      tmp := tmp + ' (UPPER(stx_string) = ' + QuotedStr(upcase(edtSTXstr.Text))+')';
-      tmp := tmp + ' AND'
-    end;
-  if (edtSRXstr.Text <> '') then
-    begin
-      tmp := tmp + ' (UPPER(srx_string) = ' + QuotedStr(upcase(edtSRXstr.Text))+')';
-      tmp := tmp + ' AND'
-    end;
-  if (edtDateFrom.Text <> '    -  -  ') then   //NOTE that empty calendar is not empty string!
-  begin
-    //if empty date-to make it as today
-    if edtDateTo.Text = '    -  -  ' then edtDateTo.Date := now;
-    tmp := tmp + ' (qsodate >= ' + QuotedStr(edtDateFrom.Text) + ') AND (qsodate <= ' +
-                QuotedStr(edtDateTo.Text) + ')';
-    tmp := tmp + ' AND'
-  end;
+                                      begin
+                                        if cbIncConName.Checked then
+                                           tmp := tmp + ' (UPPER(contestname) LIKE ''%' +
+                                                         upcase(cmbContestName.Text) + '%'') AND'
+                                          else
+                                           tmp := tmp + ' (UPPER(contestname) = ' +
+                                                        QuotedStr(upcase(cmbContestName.Text))+') AND';
+                                        end;
+
+  if (edtSTX.Text <> '') then tmp := tmp + ' (stx = ' + QuotedStr(edtSTX.Text)+') AND';
+
+  if (edtSRX.Text <> '') then  tmp := tmp + ' (srx = ' + QuotedStr(edtSRX.Text)+') AND';
+
+  if (edtSTXstr.Text <> '') then  tmp := tmp + ' (UPPER(stx_string) = ' + QuotedStr(upcase(edtSTXstr.Text))+') AND';
+
+  if (edtSRXstr.Text <> '') then  tmp := tmp + ' (UPPER(srx_string) = ' + QuotedStr(upcase(edtSRXstr.Text))+') AND';
+
+  //NOTE that empty calendar.Text is not empty string, but Date is =0!
+  if edtDateFrom.Date <> 0 then tmp := tmp + ' (qsodate >= ' + QuotedStr(dmUtils.MyDateToStr(edtDateFrom.Date)) +
+                                             ') AND (qsodate <= ' + QuotedStr(dmUtils.MyDateToStr(edtDateTo.Date)) +
+                                             ') AND';
+
   if (edtLocator.Text <> '') then
-  begin
-    if rbExactlyLoc.Checked then
-      tmp := tmp + ' (loc = ' + QuotedStr(edtLocator.Text)+')'
-    else
-      tmp := tmp + ' (loc LIKE ''%' + edtLocator.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
+                                  begin
+                                    if rbExactlyLoc.Checked then
+                                      tmp := tmp + ' (loc = ' + QuotedStr(edtLocator.Text)+') AND'
+                                    else
+                                      tmp := tmp + ' (loc LIKE ''%' + edtLocator.Text + '%'') AND';
+                                  end;
   if (edtQTH.Text <> '') then
-  begin
-    if rbExactlyQth.Checked then
-      tmp := tmp + ' (qth = ' + QuotedStr(edtQTH.Text)+')'
-    else
-      tmp := tmp + ' (qth LIKE ''%' + edtQTH.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
-  if (edtQSLVia.Text <> '') then
-  begin
-    tmp := tmp + ' (qsl_via = ' + QuotedStr(edtQSLVia.Text)+')';
-    tmp := tmp + ' AND'
-  end;
+                                  begin
+                                    if rbExactlyQth.Checked then
+                                      tmp := tmp + ' (qth = ' + QuotedStr(edtQTH.Text)+') AND'
+                                    else
+                                      tmp := tmp + ' (qth LIKE ''%' + edtQTH.Text + '%'') AND';
+                                  end;
+
+  if (edtQSLVia.Text <> '') then  tmp := tmp + ' (qsl_via = ' + QuotedStr(edtQSLVia.Text)+') AND';
+
   if (cmbQSL_S.Text <> '') then
-  begin
-    if cmbQSL_S.Text = 'S' then
-      tmp := tmp + ' (qsl_s LIKE ''%' + cmbQSL_S.Text + '%'')'
-    else begin
-      if cmbQSL_S.Text = 'Empty' then
-        tmp := tmp + '((qsl_s = ' + QuotedStr('')+') or (qsl_s is null))'
-      else
-        tmp := tmp + '(qsl_s = ' + QuotedStr(cmbQSL_S.Text)+')'
-    end;
-    tmp := tmp + ' AND'
-  end;
+                                  begin
+                                    if cmbQSL_S.Text = 'S' then
+                                      tmp := tmp + ' (qsl_s LIKE ''%' + cmbQSL_S.Text + '%'') AND'
+                                    else
+                                     begin
+                                      if cmbQSL_S.Text = 'Empty' then
+                                        tmp := tmp + '((qsl_s = ' + QuotedStr('')+') or (qsl_s is null)) AND'
+                                      else
+                                        tmp := tmp + '(qsl_s = ' + QuotedStr(cmbQSL_S.Text)+') AND'
+                                     end;
+                                  end;
   if (cmbQSL_R.Text <> '') then
-  begin
-    if cmbQSL_R.Text = 'Empty' then
-      tmp := tmp + '((qsl_r = ' + QuotedStr('')+') or (qsl_r is null))'
-    else
-      tmp := tmp + '(qsl_r = ' + QuotedStr(cmbQSL_R.Text)+')';
-    tmp := tmp + ' AND'
-  end;
+                                  begin
+                                    if cmbQSL_R.Text = 'Empty' then
+                                      tmp := tmp + '((qsl_r = ' + QuotedStr('')+') or (qsl_r is null)) AND'
+                                    else
+                                      tmp := tmp + '(qsl_r = ' + QuotedStr(cmbQSL_R.Text)+') AND';
+                                  end;
   if (edtIOTA.Text <> '') then
-  begin
-    if rbExactlyIOTA.Checked then
-      tmp := tmp + ' (iota = ' + QuotedStr(edtIOTA.Text)+')'
-    else
-      tmp := tmp + ' (iota LIKE ''%' + edtIOTA.Text + '%'')';
-    tmp := tmp + ' AND'
-  end;
-  if chkIOTAOnly.Checked then
-  begin
-    tmp := tmp + ' (iota IS NOT NULL)';
-    tmp := tmp + ' AND'
-  end;
+                                  begin
+                                    if rbExactlyIOTA.Checked then
+                                      tmp := tmp + ' (iota = ' + QuotedStr(edtIOTA.Text)+') AND'
+                                     else
+                                      tmp := tmp + ' (iota LIKE ''%' + edtIOTA.Text + '%'') AND';
+                                  end;
+
+  if chkIOTAOnly.Checked then tmp := tmp + ' (iota IS NOT NULL) AND';
+
   if (edtReMarks.Text <> '') then
-  begin
-    if rbExactlyRem.Checked then
-      tmp := tmp + ' (remarks = ' + QuotedStr(edtRemarks.Text)+')'
-    else
-      tmp := tmp + ' (remarks LIKE ''%' + edtRemarks.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
+                                  begin
+                                    if rbExactlyRem.Checked then
+                                      tmp := tmp + ' (remarks = ' + QuotedStr(edtRemarks.Text)+') AND'
+                                     else
+                                      tmp := tmp + ' (remarks LIKE ''%' + edtRemarks.Text + '%'') AND';
+                                  end;
   if (edtDiplom.Text <> '') then
-  begin
-    if rbExactlyDiplom.Checked then
-      tmp := tmp + ' (award = ' + QuotedStr(edtDiplom.Text)+')'
-    else
-      tmp := tmp + ' (award LIKE ''%' + edtDiplom.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
+                                  begin
+                                    if rbExactlyDiplom.Checked then
+                                      tmp := tmp + ' (award = ' + QuotedStr(edtDiplom.Text)+') AND'
+                                     else
+                                      tmp := tmp + ' (award LIKE ''%' + edtDiplom.Text + '%'') AND';
+                                  end;
   if (edtMyLoc.Text <> '') then
-  begin
-    if rbExactlyMyLoc.Checked then
-      tmp := tmp + ' (my_loc = ' + QuotedStr(edtMyLoc.Text)+')'
-    else
-      tmp := tmp + ' (my_loc LIKE ''%' + edtMyLoc.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
-  if (edtWAZ.Text <> '') then
-  begin
-    tmp := tmp + ' (waz = ' + edtWAZ.Text + ')';
-    tmp := tmp + ' AND';
-  end;
-  if (edtITU.Text <> '') then
-  begin
-    tmp := tmp + ' (itu = ' + edtITU.Text + ')';
-    tmp := tmp + ' AND';
-  end;
+                                  begin
+                                    if rbExactlyMyLoc.Checked then
+                                      tmp := tmp + ' (my_loc = ' + QuotedStr(edtMyLoc.Text)+') AND'
+                                     else
+                                      tmp := tmp + ' (my_loc LIKE ''%' + edtMyLoc.Text + '%'') AND';
+                                  end;
+
+  if (edtWAZ.Text <> '') then  tmp := tmp + ' (waz = ' + edtWAZ.Text + ') AND';
+
+  if (edtITU.Text <> '') then tmp := tmp + ' (itu = ' + edtITU.Text + ') AND';
+
   if (edtCounty.Text <> '') then
-  begin
-    if rbExactlyCounty.Checked then
-      tmp := tmp + ' (county = ' + QuotedStr(edtCounty.Text)+')'
-    else
-      tmp := tmp + ' (county LIKE ''%' + edtCounty.Text + '%'')';
-    tmp := tmp + ' AND';
-  end;
+                                  begin
+                                    if rbExactlyCounty.Checked then
+                                      tmp := tmp + ' (county = ' + QuotedStr(edtCounty.Text)+') AND'
+                                     else
+                                      tmp := tmp + ' (county LIKE ''%' + edtCounty.Text + '%'') AND';
+                                  end;
 
-  if edtState.Text <> '' then
-  begin
-    tmp := tmp + ' (state = ' + QuotedStr(edtState.Text)+')';
-    tmp := tmp + ' AND';
-  end;
+  if edtState.Text <> '' then tmp := tmp + ' (state = ' + QuotedStr(edtState.Text)+') AND';
 
-  if cmbProfile.ItemIndex > 0 then
-  begin
-    tmp := tmp + '(profile = ' + IntToStr(dmData.GetNRFromProfile(cmbProfile.Text)) + ')';
-    tmp := tmp + ' AND';
-  end;
-  
+  if cmbProfile.ItemIndex > 0 then tmp := tmp + '(profile = ' + IntToStr(dmData.GetNRFromProfile(cmbProfile.Text)) +
+                                                ') AND';
+
   if cmbLoTW_qsls.ItemIndex > 0 then
-  begin
-    if cmbLoTW_qsls.ItemIndex = 1 then
-      tmp := tmp + ' (lotw_qsls='+QuotedStr('Y')+') AND'
-    else
-      tmp := tmp +  '(lotw_qsls <> '+QuotedStr('Y')+') AND'
-  end;
+                                  begin
+                                    if cmbLoTW_qsls.ItemIndex = 1 then
+                                      tmp := tmp + ' (lotw_qsls='+QuotedStr('Y')+') AND'
+                                     else
+                                      tmp := tmp +  '(lotw_qsls <> '+QuotedStr('Y')+') AND'
+                                  end;
   
   if cmbLoTW_qslr.ItemIndex > 0 then
-  begin
-    if cmbLoTW_qslr.ItemIndex = 1 then
-      tmp := tmp + ' (lotw_qslr='+QuotedStr('L')+') AND'
-    else
-      tmp := tmp + ' (lotw_qslr <> '+QuotedStr('L')+') AND'
-  end;
+                                  begin
+                                    if cmbLoTW_qslr.ItemIndex = 1 then
+                                      tmp := tmp + ' (lotw_qslr='+QuotedStr('L')+') AND'
+                                     else
+                                      tmp := tmp + ' (lotw_qslr <> '+QuotedStr('L')+') AND'
+                                  end;
 
   if edtCont.Text <> '' then
-  begin
-    if pos(';',edtCont.Text) > 0 then
-    begin
-      SetLength(p,0);
-      p := dmUtils.Explode(';',edtCont.Text);
-      for i:=0 to Length(p)-1 do
-        tmp := tmp + ' (cont = '+QuotedStr(p[i])+') OR'
-    end
-    else
-      tmp := tmp + ' (cont = '+QuotedStr(edtCont.Text)+') AND'
-  end;
+                                  begin
+                                    if pos(';',edtCont.Text) > 0 then
+                                    begin
+                                      SetLength(p,0);
+                                      p := dmUtils.Explode(';',edtCont.Text);
+                                      for i:=0 to Length(p)-1 do
+                                        tmp := tmp + ' (cont = '+QuotedStr(p[i])+') OR'
+                                    end
+                                    else
+                                      tmp := tmp + ' (cont = '+QuotedStr(edtCont.Text)+') AND'
+                                  end;
 
   if cmbeQSL_qsls.ItemIndex > 0 then
-  begin
-    if cmbeQSL_qsls.ItemIndex = 1 then
-      tmp := tmp + ' (eqsl_qsl_sent = '+QuotedStr('Y')+') AND'
-    else
-      tmp := tmp +  '(eqsl_qsl_sent <> '+QuotedStr('Y')+') AND'
-  end;
+                                  begin
+                                    if cmbeQSL_qsls.ItemIndex = 1 then
+                                      tmp := tmp + ' (eqsl_qsl_sent = '+QuotedStr('Y')+') AND'
+                                     else
+                                      tmp := tmp +  '(eqsl_qsl_sent <> '+QuotedStr('Y')+') AND'
+                                  end;
 
   if cmbeQSL_qslr.ItemIndex > 0 then
-  begin
-    if cmbeQSL_qslr.ItemIndex = 1 then
-      tmp := tmp + ' (eqsl_qsl_rcvd = '+QuotedStr('E')+') AND'
-    else
-      tmp := tmp + ' (eqsl_qsl_rcvd <> '+QuotedStr('E')+') AND'
-  end;
+                                  begin
+                                    if cmbeQSL_qslr.ItemIndex = 1 then
+                                      tmp := tmp + ' (eqsl_qsl_rcvd = '+QuotedStr('E')+') AND'
+                                     else
+                                      tmp := tmp + ' (eqsl_qsl_rcvd <> '+QuotedStr('E')+') AND'
+                                  end;
 
-  if ((edtPwrFrom.Text <> '') and (edtPwrTo.Text <> '')) then
-  begin
-    tmp := tmp + ' (pwr >= ' + edtPwrFrom.Text + ') AND '+
-                 ' (pwr <= ' + edtPwrTo.Text + ')';
-    tmp := tmp + ' AND'
-  end;
+  if ((edtPwrFrom.Text <> '') and (edtPwrTo.Text <> '')) then  tmp := tmp + ' (pwr >= ' + edtPwrFrom.Text + ') AND '+
+                                                                            ' (pwr <= ' + edtPwrTo.Text + ') AND';
 
-  if cmbMembers.ItemIndex >0 then
-    tmp := tmp + ' (club_nr'+IntToStr(cmbMembers.ItemIndex)+' <> '+QuotedStr('')+') AND';
+
+  if cmbMembers.ItemIndex >0 then tmp := tmp + ' (club_nr'+IntToStr(cmbMembers.ItemIndex)+' <> '+
+                                               QuotedStr('')+') AND';
 
   if (tmp <> '') then
-  begin
-    tmp := Trim(tmp);
-    tmp := copy(tmp,1,Length(tmp)-3);
+                      begin
+                        tmp := Trim(tmp);
+                        tmp := copy(tmp,1,Length(tmp)-3);
 
-    case cmbSort.ItemIndex of
-      0 : OrderBy := '';  //Already set in view   OrderBy := ' ORDER BY qsodate,time_on';
-      1 : OrderBy := ' ORDER BY callsign';
-      2 : OrderBy := ' ORDER BY mode';
-      3 : OrderBy := ' ORDER BY freq';
-      4 : OrderBy := ' ORDER BY name';
-      5 : OrderBy := ' ORDER BY qth';
-      6 : OrderBy := ' ORDER BY dxcc_ref';
-      7 : OrderBy := ' ORDER BY award';
-      8 : OrderBy := ' ORDER BY state';
-      9 : OrderBy := ' ORDER BY county';
-     10 : OrderBy := ' ORDER BY dxcc_ref';
-     11 : OrderBy := ' ORDER BY dxcc_ref,callsign';
-     12 : OrderBy := ' ORDER By qsl_via,callsign,dxcc_ref';
-     13 : OrderBy := ' ORDER By callsign,dxcc_ref';
-     14 : OrderBy := ' ORDER BY waz';
-     15 : OrderBy := ' ORDER BY itu';
-     16 : OrderBy := ' ORDER BY loc'
-    end;//case
+                        case cmbSort.ItemIndex of
+                          0 : OrderBy := '';  //Already set in view   OrderBy := ' ORDER BY qsodate,time_on';
+                          1 : OrderBy := ' ORDER BY callsign';
+                          2 : OrderBy := ' ORDER BY mode';
+                          3 : OrderBy := ' ORDER BY freq';
+                          4 : OrderBy := ' ORDER BY name';
+                          5 : OrderBy := ' ORDER BY qth';
+                          6 : OrderBy := ' ORDER BY dxcc_ref';
+                          7 : OrderBy := ' ORDER BY award';
+                          8 : OrderBy := ' ORDER BY state';
+                          9 : OrderBy := ' ORDER BY county';
+                         10 : OrderBy := ' ORDER BY dxcc_ref';
+                         11 : OrderBy := ' ORDER BY dxcc_ref,callsign';
+                         12 : OrderBy := ' ORDER By qsl_via,callsign,dxcc_ref';
+                         13 : OrderBy := ' ORDER By callsign,dxcc_ref';
+                         14 : OrderBy := ' ORDER BY waz';
+                         15 : OrderBy := ' ORDER BY itu';
+                         16 : OrderBy := ' ORDER BY loc'
+                        end;//case
 
-    case cmbGroupBy.ItemIndex of
-      1  : grb_by := 'GROUP BY dxcc_ref';
-      2  : grb_by := 'GROUP BY remarks';
-      3  : grb_by := 'GROUP BY award';
-      4  : grb_by := 'GROUP BY callsign';
-      5  : grb_by := 'GROUP BY idcall';
-      6  : grb_by := 'GROUP BY loc';
-      7  : grb_by := 'GROUP BY iota';
-      8  : grb_by := 'GROUP BY waz';
-      9  : grb_by := 'GROUP BY itu';
-      10 : grb_by := 'GROUP BY state';
-      11 : grb_by := 'GROUP BY county';
-      12 : grb_by := 'GROUP BY club_nr1';
-      13 : grb_by := 'GROUP BY club_nr2';
-      14 : grb_by := 'GROUP BY club_nr3';
-      15 : grb_by := 'GROUP BY club_nr4';
-      16 : grb_by := 'GROUP BY club_nr5'
-    end; //case
+                        case cmbGroupBy.ItemIndex of
+                          1  : grb_by := 'GROUP BY dxcc_ref';
+                          2  : grb_by := 'GROUP BY remarks';
+                          3  : grb_by := 'GROUP BY award';
+                          4  : grb_by := 'GROUP BY callsign';
+                          5  : grb_by := 'GROUP BY idcall';
+                          6  : grb_by := 'GROUP BY loc';
+                          7  : grb_by := 'GROUP BY iota';
+                          8  : grb_by := 'GROUP BY waz';
+                          9  : grb_by := 'GROUP BY itu';
+                          10 : grb_by := 'GROUP BY state';
+                          11 : grb_by := 'GROUP BY county';
+                          12 : grb_by := 'GROUP BY club_nr1';
+                          13 : grb_by := 'GROUP BY club_nr2';
+                          14 : grb_by := 'GROUP BY club_nr3';
+                          15 : grb_by := 'GROUP BY club_nr4';
+                          16 : grb_by := 'GROUP BY club_nr5'
+                        end; //case
 
-    if chkNot.Checked then tmp:= 'NOT( '+tmp+' )';
-    tmp := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE ' + tmp + ' ' + grb_by +' ' + OrderBy;
+                        if chkNot.Checked then tmp:= 'NOT( '+tmp+' )';
+                        tmp := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE ' + tmp + ' ' + grb_by +' ' + OrderBy;
 
-    dmData.qCQRLOG.Close;
-    dmData.qCQRLOG.SQL.Text := tmp;
-    if dmData.DebugLevel >=1 then
-      Writeln(tmp);
-    if dmData.trCQRLOG.Active then
-      dmData.trCQRLOG.Rollback;
-    dmData.trCQRLOG.StartTransaction;
-    dmData.qCQRLOG.Open;
-    dmData.qCQRLOG.Last
-  end;
+                        dmData.qCQRLOG.Close;
+                        dmData.qCQRLOG.SQL.Text := tmp;
+                        if dmData.DebugLevel >=1 then
+                          Writeln(tmp);
+                        if dmData.trCQRLOG.Active then
+                          dmData.trCQRLOG.Rollback;
+                        dmData.trCQRLOG.StartTransaction;
+                        dmData.qCQRLOG.Open;
+                        dmData.qCQRLOG.Last
+                      end;
   ModalResult := mrOK;
 end;
 
@@ -653,8 +604,10 @@ begin
       edtFreqFrom.Text         := '';
       edtFreqTo.Text           := '';
       cmbMode.Text             := '';
-      edtDateFrom.Text         := '';
-      edtDateTo.Text           := '';
+      edtDateFrom.Text         := '';    //
+      edtDateFrom.Date         := 0;     //I think one (date or Text) is enough, but for sure ...
+      edtDateTo.Text           := '';    //
+      edtDateTo.Date           := 0;     //
       edtLocator.Text          := '';
       edtQTH.Text              := '';
       cmbQSL_S.Text            := '';
@@ -721,11 +674,11 @@ begin
       filini.WriteString('freq','freq_from',edtFreqFrom.Text);
       filini.WriteString('freq','freq_to',edtFreqTo.Text);
       filini.WriteString('mode','mode',cmbMode.Text);
-      //NOTE that empty calendar is not empty string!
-      if edtDateFrom.Text = '    -  -  ' then filini.WriteString('date','date_from','')
-       else filini.WriteString('date','date_from',edtDateFrom.Text);
-      if edtDateTo.Text = '    -  -  ' then  filini.WriteString('date','date_to','')
-       else filini.WriteString('date','date_to',edtDateTo.Text);
+      //NOTE that empty calendar is not empty string, but date is 0!
+      if edtDateFrom.Date = 0 then filini.WriteString('date','date_from','')
+       else filini.WriteString('date','date_from',dmUtils.MyDateToStr(edtDateFrom.Date));
+      if edtDateTo.Date = 0 then  filini.WriteString('date','date_to','')
+       else filini.WriteString('date','date_to',dmUtils.MyDateToStr(edtDateTo.Date));
       filini.WriteString('locator','locator',edtLocator.Text);
       filini.WriteBool('locator','exactly',rbExactlyLoc.Checked);
       filini.WriteString('qth','qth',edtQTH.Text);
@@ -781,6 +734,7 @@ var
       edtFreqFrom.Text        := filini.ReadString('freq','freq_from','');
       edtFreqTo.Text          := filini.ReadString('freq','freq_to','');
       cmbMode.Text            := filini.ReadString('mode','mode','');
+      //I think setting just .Text sets also .Date in case of empty
       edtDateFrom.Text        := filini.ReadString('date','date_from','');
       edtDateTo.Text          := filini.ReadString('date','date_to','');
       edtLocator.Text         := filini.ReadString('locator','locator','');

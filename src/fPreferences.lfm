@@ -6984,14 +6984,13 @@ object frmPreferences: TfrmPreferences
             Height = 34
             Top = 6
             Width = 128
-            CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+            CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames, dsStartMonday]
             DateOrder = doYMd
             ButtonWidth = 23
             Anchors = [akTop, akRight]
             AutoSize = False
             NumGlyphs = 1
             MaxLength = 10
-            OnEditingDone = DateEditCallEditingDone
             TabOrder = 2
             Text = '    .  .  '
           end
@@ -7004,7 +7003,7 @@ object frmPreferences: TfrmPreferences
             Height = 34
             Top = 50
             Width = 128
-            CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+            CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames, dsStartMonday]
             DateOrder = doYMd
             ButtonWidth = 23
             Anchors = [akTop, akRight]
@@ -7012,7 +7011,6 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Top = 10
             NumGlyphs = 1
             MaxLength = 10
-            OnEditingDone = DateEditLocEditingDone
             TabOrder = 3
             Text = '    .  .  '
           end
