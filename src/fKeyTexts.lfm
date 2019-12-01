@@ -1,7 +1,7 @@
 object frmKeyTexts: TfrmKeyTexts
-  Left = 441
+  Left = 440
   Height = 558
-  Top = 183
+  Top = 169
   Width = 594
   HelpType = htKeyword
   HelpKeyword = 'help/h26.html'
@@ -119,7 +119,7 @@ object frmKeyTexts: TfrmKeyTexts
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.28'
+  LCLVersion = '2.0.4.0'
   object Panel1: TPanel
     Left = 0
     Height = 34
@@ -131,28 +131,42 @@ object frmKeyTexts: TfrmKeyTexts
     ClientWidth = 594
     TabOrder = 0
     object btnOK: TButton
-      Left = 136
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = btnHelp
+      Left = 149
       Height = 25
-      Top = 9
+      Top = 5
       Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 36
       Caption = 'OK'
       OnClick = btnOKClick
       TabOrder = 0
     end
     object btnHelp: TButton
-      Left = 272
+      AnchorSideLeft.Control = Panel1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 260
       Height = 25
-      Top = 9
+      Top = 5
       Width = 75
       Caption = 'Help'
       OnClick = btnHelpClick
       TabOrder = 1
     end
     object btnCancel: TButton
-      Left = 416
+      AnchorSideLeft.Control = btnHelp
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 371
       Height = 25
-      Top = 9
+      Top = 5
       Width = 75
+      BorderSpacing.Left = 36
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 2
@@ -163,49 +177,49 @@ object frmKeyTexts: TfrmKeyTexts
     Height = 524
     Top = 0
     Width = 594
-    ActivePage = tabRunMode
+    ActivePage = tabSPMode
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 1
     object tabRunMode: TTabSheet
       Caption = 'RUN'
-      ClientHeight = 489
-      ClientWidth = 588
+      ClientHeight = 493
+      ClientWidth = 584
       object GroupBox1: TGroupBox
         Left = 8
         Height = 88
         Top = 8
         Width = 273
         Caption = ' F1 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 0
         object Label1: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label2: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF1: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF1: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -217,35 +231,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 104
         Width = 273
         Caption = ' F2 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 1
         object Label3: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label4: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF2: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF2: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -257,35 +271,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 200
         Width = 273
         Caption = ' F3 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 2
         object Label5: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label6: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF3: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF3: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -297,35 +311,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 296
         Width = 273
         Caption = ' F4 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 3
         object Label7: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label8: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF4: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF4: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -337,35 +351,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 392
         Width = 273
         Caption = ' F5 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 4
         object Label9: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label10: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF5: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF5: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -377,35 +391,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 8
         Width = 269
         Caption = ' F6 '
-        ClientHeight = 69
-        ClientWidth = 265
+        ClientHeight = 70
+        ClientWidth = 267
         TabOrder = 5
         object Label11: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label12: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF6: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF6: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -417,35 +431,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 104
         Width = 273
         Caption = ' F7 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 6
         object Label13: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label14: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF7: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF7: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -457,35 +471,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 200
         Width = 273
         Caption = ' F8 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 7
         object Label15: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label16: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF8: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF8: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -497,35 +511,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 296
         Width = 273
         Caption = ' F9 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 8
         object Label33: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label34: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF9: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF9: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -537,35 +551,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 392
         Width = 273
         Caption = ' F10 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 9
         object Label35: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label36: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtF10: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtCapF10: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -574,43 +588,43 @@ object frmKeyTexts: TfrmKeyTexts
     end
     object tabSPMode: TTabSheet
       Caption = 'S&&P'
-      ClientHeight = 489
-      ClientWidth = 588
+      ClientHeight = 493
+      ClientWidth = 584
       object GroupBox9: TGroupBox
         Left = 8
         Height = 88
         Top = 8
         Width = 273
         Caption = ' F1 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 0
         object Label17: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label18: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF1: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF1: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -622,35 +636,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 104
         Width = 273
         Caption = ' F2 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 1
         object Label19: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label20: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF2: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF2: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -662,35 +676,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 200
         Width = 273
         Caption = ' F3 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 2
         object Label21: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label22: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF3: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF3: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -702,35 +716,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 296
         Width = 273
         Caption = ' F4 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 3
         object Label23: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label24: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF4: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF4: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -742,35 +756,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 392
         Width = 273
         Caption = ' F5 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 4
         object Label25: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label26: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF5: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF5: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -782,35 +796,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 8
         Width = 273
         Caption = ' F6 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 5
         object Label27: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label28: TLabel
           Left = 62
-          Height = 18
+          Height = 17
           Top = 119
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF6: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF6: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -822,35 +836,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 104
         Width = 273
         Caption = ' F7 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 6
         object Label29: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label30: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF7: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF7: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -862,35 +876,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 200
         Width = 273
         Caption = ' F8 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 7
         object Label31: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label32: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF8: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF8: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -902,35 +916,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 296
         Width = 273
         Caption = ' F9 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 8
         object Label37: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label38: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF9: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF9: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
@@ -942,35 +956,35 @@ object frmKeyTexts: TfrmKeyTexts
         Top = 392
         Width = 273
         Caption = ' F10 '
-        ClientHeight = 69
-        ClientWidth = 269
+        ClientHeight = 70
+        ClientWidth = 271
         TabOrder = 9
         object Label39: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 7
-          Width = 59
+          Width = 58
           Caption = 'Caption: '
           ParentColor = False
         end
         object Label40: TLabel
           Left = 14
-          Height = 18
+          Height = 17
           Top = 39
-          Width = 45
+          Width = 44
           Caption = 'Macro:'
           ParentColor = False
         end
         object edtSPF10: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 31
           Width = 176
           TabOrder = 0
         end
         object edtSPCapF10: TEdit
           Left = 78
-          Height = 27
+          Height = 34
           Top = 0
           Width = 88
           TabOrder = 1
