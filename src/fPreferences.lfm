@@ -6931,7 +6931,6 @@ object frmPreferences: TfrmPreferences
             AutoSize = False
             NumGlyphs = 1
             MaxLength = 10
-            OnEditingDone = DateEditCallEditingDone
             TabOrder = 2
             Text = '    .  .  '
           end
@@ -6952,7 +6951,6 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Top = 10
             NumGlyphs = 1
             MaxLength = 10
-            OnEditingDone = DateEditLocEditingDone
             TabOrder = 3
             Text = '    .  .  '
           end
