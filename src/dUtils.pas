@@ -178,6 +178,7 @@ type
     procedure LoadWindowPos(a: TForm);
     procedure ShowQSLWithExtViewer(Call: string);
     procedure ShowQRZInBrowser(call: string);
+    procedure ShowLocatorMapInBrowser(locator: string);
     procedure LoadBandsSettings;
     procedure FillBandCombo(cmb : TComboBox);
     procedure ShowHamQTHInBrowser(call : String);
@@ -3455,6 +3456,21 @@ begin
   try
     AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
     AProcess.Parameters.Add('http://www.qrz.com/db/' + GetIDCall(call));
+    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    AProcess.Execute
+  finally
+    AProcess.Free
+  end;
+end;
+
+procedure TdmUtils.ShowLocatorMapInBrowser(locator: string);
+var
+  AProcess: TProcess;
+begin
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Parameters.Add('https://www.k7fry.com/grid/?qth=' + locator);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally

@@ -1033,8 +1033,6 @@ type
     procedure cmbSpeedR2Change(Sender : TObject);
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
-    procedure DateEditCallEditingDone(Sender: TObject);
-    procedure DateEditLocEditingDone(Sender: TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
@@ -2378,16 +2376,6 @@ end;
 procedure TfrmPreferences.cmbStopBitsR2Change(Sender : TObject);
 begin
   TRXChanged := True
-end;
-
-procedure TfrmPreferences.DateEditCallEditingDone(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmPreferences.DateEditLocEditingDone(Sender: TObject);
-begin
-
 end;
 
 procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);

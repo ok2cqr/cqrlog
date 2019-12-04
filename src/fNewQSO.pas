@@ -332,6 +332,7 @@ type
     sbtneQSL : TSpeedButton;
     sgrdStatistic : TStringGrid;
     btnSunRise: TSpeedButton;
+    sbtnLocatorMap: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     btnSunSet: TSpeedButton;
@@ -539,6 +540,7 @@ type
     procedure popModePopup(Sender: TObject);
     procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
+    procedure sbtnLocatorMapClick(Sender: TObject);
     procedure sbtnQSLClick(Sender: TObject);
     procedure sbtnQRZClick(Sender: TObject);
     procedure sbtnHamQTHClick(Sender : TObject);
@@ -1090,10 +1092,11 @@ begin
     edtDate.ReadOnly  := False;
     mComment.ReadOnly := False;
   end;
-  sbtnQRZ.Visible    := False;
-  sbtnLoTW.Visible   := False;
-  sbtneQSL.Visible   := False;
-  sbtnHamQTH.Visible := False;
+  sbtnQRZ.Visible        := False;
+  sbtnLoTW.Visible       := False;
+  sbtneQSL.Visible       := False;
+  sbtnHamQTH.Visible     := False;
+  sbtnLocatorMap.Visible := False;
   TabUsed    := False;
   fromNewQSO := False;
   FromDXC  := False;
@@ -3462,7 +3465,8 @@ end;
 
 procedure TfrmNewQSO.edtGridExit(Sender: TObject);
 begin
-  CalculateDistanceEtc
+  CalculateDistanceEtc;
+  sbtnLocatorMap.Visible := True;
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
@@ -5526,6 +5530,11 @@ begin
   dmUtils.ShowHamQTHInBrowser(edtCall.Text)
 end;
 
+procedure TfrmNewQSO.sbtnLocatorMapClick(Sender: TObject);
+begin
+  dmUtils.ShowLocatorMapInBrowser(edtGrid.Text)
+end;
+
 procedure TfrmNewQSO.tmrESCTimer(Sender: TObject);
 begin
   EscFirstTime   := False;
@@ -6059,6 +6068,7 @@ begin
   if fViewQSO then
     old_call := '';
   edtCallExit(nil);
+  edtGridExit(nil);
   lblWAZ.Caption := edtWAZ.Text;
   lblITU.Caption := edtITU.Text;
   btnSave.Enabled := not fViewQSO;
