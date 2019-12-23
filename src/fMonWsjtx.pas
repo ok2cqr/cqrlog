@@ -1228,7 +1228,7 @@ begin
   if (( DblClickCall <> '' ) and chkStopTx.Checked ) then  //stop requested
    if (pos(DblClickCall,Message)> 0) then  //and call is call answered
    Begin
-     if LocalDbg then Writeln('Disabling TX, 2click call answered to someone else');
+     if LocalDbg then Writeln('Disabling TX, 2click call ',DblClickCall,' answered to someone else');
      RepBuf := frmNewQSO.RepHead;
      RepBuf[12] := #8; //Halt TX
      RepBuf := RepBuf +#0;
