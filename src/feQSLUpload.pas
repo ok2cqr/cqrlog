@@ -195,7 +195,20 @@ end;
 procedure TfrmeQSLUpload.FormShow(Sender : TObject);
 begin
   dmUtils.LoadWindowPos(frmeQSLUpload);
-  edtQTH.Text := cqrini.ReadString('eQSL','QTH','')
+  edtQTH.Text := cqrini.ReadString('eQSL','QTH','');
+  if dmData.IsFilter then
+    begin
+      rbWebExportNotExported.Caption:='Export all QSOs which have never been uploaded (bypass filter results)';
+      rbWebExportAll.Caption:='Export QSOs from filter result';
+      rbWebExportAll.Checked:=true;
+    end
+   else
+    begin
+      rbWebExportNotExported.Caption:='Export only QSOs which have never been uploaded';
+      rbWebExportAll.Caption:='Export all QSOs in log';
+      rbWebExportNotExported.Checked:=true;
+    end;
+
 end;
 
 procedure TfrmeQSLUpload.FormClose(Sender : TObject;
