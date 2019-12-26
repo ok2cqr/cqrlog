@@ -1336,6 +1336,8 @@ begin
 
   if (( msgList.Count < 2 ) and (pos(edtFollowCall.Text,msgList[0])>0))//1 items: Fcall exist: "OH1KH/IMAGE"
    or (( msgList.Count > 1 ) and (pos(edtFollowCall.Text,msgList[0])=0))//2 or more items and Fcall is not 1st
+    or (( msgList.Count > 1 ) and (pos(edtFollowCall.Text,msgList[0])=1) //special call is 1st and second is
+       and frmWorkedGrids.GridOK(msgList[1]) )                                         //locator like "F5MYK/MM OJ12"
      then
           begin
             edtFollow.Font.Color := clBlack;
