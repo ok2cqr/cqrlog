@@ -11,9 +11,8 @@ cqrlog: src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 clean:
-	rm -f -v src/*.o src/*.ppu src/*.bak src/lnet/lib/*.ppu src/lnet/lib/*.o src/lnet/lib/*.bak src/cqrlog src/cqrlog.compiled debian/cqrlog.* src/ipc/*.o src/ipc/*.ppu src/cqrlog.or
+	rm -f -v src/*.o src/*.ppu src/*.bak src/lnet/lib/*.ppu src/lnet/lib/*.o src/lnet/lib/*.bak src/cqrlog src/cqrlog.compiled src/ipc/*.o src/ipc/*.ppu src/cqrlog.or
 	rm -f -v src/*.lrs src/*.ps src/*.lrt src/*.rsh  src/*.rst src/*.a src/synapse/*.a src/synapse/*.o src/synapse/*.ppu
-	rm -rf debian/cqrlog
 	rm -f -v src/mysql/*.ppu src/mysq/*.bak src/mysql/*.o
 	rm -f -v tools/cqrlog.1.gz
 	rm -rf src/backup
