@@ -31,7 +31,7 @@ type
     Bevel4: TBevel;
     btnBrowseBackup1: TButton;
     btnDefineProfile1: TButton;
-    btnFldigiPath1: TButton;
+    btnWsjtPath: TButton;
     btnSecondLoad: TButton;
     btnFrequencies1: TButton;
     btnLoadFifth: TButton;
@@ -997,6 +997,7 @@ type
     procedure btnCfgStorageClick(Sender: TObject);
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnChangeDefModeClick(Sender: TObject);
+    procedure btnWsjtPathClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
     procedure btnSelectQSOColorClick(Sender : TObject);
     procedure Button1Click(Sender: TObject);
@@ -2043,6 +2044,13 @@ begin
   finally
     FreeAndNil(frmNewQSODefValues);
   end;
+end;
+
+procedure TfrmPreferences.btnWsjtPathClick(Sender: TObject);
+begin
+  dlgOpen.Title := 'Locate wsjtx binary ...';
+  if dlgOpen.Execute then
+    edtWsjtPath.Text := dlgOpen.FileName;
 end;
 
 procedure TfrmPreferences.btnAlertCallsignsClick(Sender: TObject);
