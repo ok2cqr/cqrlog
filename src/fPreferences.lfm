@@ -6730,7 +6730,7 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Around = 5
             TabOrder = 1
           end
-          object btnFldigiPath1: TButton
+          object btnWsjtPath: TButton
             AnchorSideLeft.Side = asrBottom
             AnchorSideRight.Control = edtWsjtPath
             AnchorSideRight.Side = asrBottom
@@ -6741,6 +6741,7 @@ object frmPreferences: TfrmPreferences
             Width = 75
             Anchors = [akRight, akBottom]
             Caption = 'Browse'
+            OnClick = btnWsjtPathClick
             TabOrder = 2
           end
         end
