@@ -1,9 +1,6 @@
-
+ ------------------WARNINGS--------------------------------
 ----------------------------------------------------------   
-----------------------------------------------------------   
-------------------WARNINGS--------------------------------
-----------------------------------------------------------   
-----------------------------------------------------------   
+   
 This is NOT official release !
 
    ALWAYS ... 
@@ -16,12 +13,10 @@ This is NOT official release !
    rm -rf ~/.config/cqrlog
    cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
    
-----------------------------------------------------------   
-----------------------------------------------------------   
+  
 -----------YOU HAVE BEEN WARNED!--------------------------
 ----------------------------------------------------------   
-----------------------------------------------------------   
-
+   
    
 Latest cqrlog alpha test binaries can be found from this folder.
 This folder holds ready compiled binary files of source "loc_testing" that is the version of cqrlog that I am using myself daily.
@@ -33,8 +28,8 @@ libqt5pas is a library that bridges between Qt5 and your Lazarus application.
 Newer distros have working versions available in their repositories.
 
 Using your distros repository:
-Fedora, Mageia - sudo dnf install qt5pas<enter>
-Ubuntu, Debian - sudo apt install libqt5pas1 <enter>
+   - Fedora, Mageia - sudo dnf install qt5pas<enter>
+   - Ubuntu, Debian - sudo apt install libqt5pas1 <enter>
 
 Note that some long term release distributions, ie Ubuntu 18.04 have an incompatible version of libqt5pas 
 (even though it appears to have the same version number as later distros!). 
@@ -42,6 +37,7 @@ You will see an error message and a crash if your app uses TMemo.
 You should install the downloaded packages mentioned below or build your own new version of the library.
 
 BINARIES:
+---------
 
  cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )
  cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)
@@ -51,42 +47,36 @@ BINARIES:
 All binaries must be copied over complete, working, official installation. These do not work alone.
 
 
-------------------INSTALL--------------------------------
+------------------INSTALL--------------------------
+---------------------------------------------------  
  
 (you need to become root (sudo) using sudo to do following):
 
 -------------INSTALL NEW HELP FILES----------------
+---------------------------------------------------
 
-Your /usr/share should usually contain folder cqrlog, if so, do install help files with console commands:
+Your /usr/share should usually contain folder cqrlog, if so, do install help files.
 
- cd /usr/share/cqrlog
- sudo tar vxf /your/download/folder/help.tgz
+  - cd /usr/share/cqrlog
+  - sudo tar vxf /your/download/folder/help.tgz
 
 
-------------THEN INSTALL THE CQRLOG ITSELF---------------
-cd /tmp
- unzip /your/download/folder/cqr5.zip  (or cqr2.zip)
+------------THEN INSTALL THE CQRLOG ITSELF---------
+---------------------------------------------------   
+
+  - cd /tmp
+  - unzip /your/download/folder/cqr5.zip  (or cqr2.zip)
 
 
 Then just copy '/tmp/cqrlog'  over your existing 'cqrlog' (usually in /usr/bin folder)
-when first savin the old one to cqrlog_old that you can copy back if new one does not work.
+when first saving the old one to cqrlog_old that you can copy back if new one does not work.
 Then check execution rights.
-Console commands:
 
- sudo cp /usr/bin/cqrlog /usr/bin/cqrlog_old
- sudo cp /tmp/cqrlog /usr/bin/
- sudo chmod a+x /usr/bin/cqrlog
-
-
-Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
+ - sudo cp /usr/bin/cqrlog /usr/bin/cqrlog_old
+ - sudo cp /tmp/cqrlog /usr/bin/
+ - sudo chmod a+x /usr/bin/cqrlog
 
 
-All kind of reports are welcome. 
-You can send them them to mycallsign
-at sral
-dot fi
-
-At this moment I am mostly interested to get reports for these (that are new features):
 
 QT5 VERSION
 
@@ -146,6 +136,10 @@ RTTY MODE IS DATA
     and you have to set "preferences/bands/frequencies" "DATA" column to correspond your data mode.
     By defaut it points to RTTY frequencies.
 
+
+Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
+
+All kind of reports are welcome. You can send them them to mycallsign at sral dot fi
 
      
 
