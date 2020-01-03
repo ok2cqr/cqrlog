@@ -1,10 +1,10 @@
- ------------------WARNINGS--------------------------------
-----------------------------------------------------------   
+------------------WARNINGS-----------------
+===========================================
    
-This is NOT official release !
+**This is NOT official release !**
 
-   ALWAYS ... 
-   REPEAT: ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!
+   ALWAYS !
+   REPEAT: **ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!**
    
    Simplest way is to copy whole folder with console command:
    cp -a ~/.config/cqrlog ~/.config/cqrlog_save
@@ -14,8 +14,8 @@ This is NOT official release !
    cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
    
   
------------YOU HAVE BEEN WARNED!--------------------------
-----------------------------------------------------------   
+-----------YOU HAVE BEEN WARNED!------------
+============================================
    
    
 Latest cqrlog alpha test binaries can be found from this folder.
@@ -39,21 +39,21 @@ You should install the downloaded packages mentioned below or build your own new
 BINARIES:
 ---------
 
- cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )
- cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)
- help.tgz  holds latest help files
+  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )**
+  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
+  - **help.tgz  holds latest help files**
 
 
-All binaries must be copied over complete, working, official installation. These do not work alone.
+**All binaries must be copied over complete, working, official installation. These do not work alone.**
+========================================================================================================
 
 
-------------------INSTALL--------------------------
----------------------------------------------------  
- 
+
+## ------------------INSTALL--------------------------
+
 (you need to become root (sudo) using sudo to do following):
 
--------------INSTALL NEW HELP FILES----------------
----------------------------------------------------
+#### -------------INSTALL NEW HELP FILES----------------
 
 Your /usr/share should usually contain folder cqrlog, if so, do install help files.
 
@@ -61,8 +61,7 @@ Your /usr/share should usually contain folder cqrlog, if so, do install help fil
   - sudo tar vxf /your/download/folder/help.tgz
 
 
-------------THEN INSTALL THE CQRLOG ITSELF---------
----------------------------------------------------   
+#### ------------THEN INSTALL THE CQRLOG ITSELF---------
 
   - cd /tmp
   - unzip /your/download/folder/cqr5.zip  (or cqr2.zip)
@@ -76,7 +75,8 @@ Then check execution rights.
  - sudo cp /tmp/cqrlog /usr/bin/
  - sudo chmod a+x /usr/bin/cqrlog
 
-
+## ABOUT:
+ (what is new)
 
 QT5 VERSION
 
