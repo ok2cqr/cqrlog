@@ -1,3 +1,9 @@
+This source is for my local testing purposes. It holds the version I am using by myself daily.
+Official current source and all my different devel branches are grouped together in this branch.
+In folder "compiled" there are also binary files that you can try if you like to test, too.
+
+
+
 What is CQRLOG?
 ---------------
 
