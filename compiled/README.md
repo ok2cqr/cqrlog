@@ -6,12 +6,14 @@
    ALWAYS !
    REPEAT: **ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!**
    
-   Simplest way is to copy whole folder with console command:
-   cp -a ~/.config/cqrlog ~/.config/cqrlog_save
+   Simplest way is to copy whole folder with console command
+   
+    - cp -a ~/.config/cqrlog ~/.config/cqrlog_save
 
-   After doing this, if you ever need to restore old settings and logs, just give console commands:
-   rm -rf ~/.config/cqrlog
-   cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
+   After doing this, if you ever need to restore old settings and logs, just give console commands
+   
+    - rm -rf ~/.config/cqrlog
+    - cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
    
   
 -----------YOU HAVE BEEN WARNED!------------
