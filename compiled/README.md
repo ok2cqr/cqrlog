@@ -42,6 +42,7 @@ BINARIES:
 ---------
 
   - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )**
+  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (like official release of cqrlog, poorly tested)**
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
   - **help.tgz  holds latest help files**
 
