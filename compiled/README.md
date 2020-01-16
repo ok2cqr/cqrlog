@@ -112,9 +112,11 @@ CQ MONITOR USA STATES
     The runtime list is cleared when you close wsjt-remote (and reopen it). 
     So that is the way to find out has it any speed improvement for CQ decodes.
 
-    If you want debug dump star with:
-    cqrlog debug=-4
-    That gives a bit less text. Just CQ-monitor related debugs
+    If you want debug dump start with:
+
+      cqrlog debug=-4
+
+    That gives a bit less debug text. Just CQ-monitor related debugs. Note that value is "minus 4"!
 
 RTTY MODE IS DATA
 
