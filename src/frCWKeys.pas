@@ -5,7 +5,7 @@ unit frCWKeys;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,ActnList;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,ActnList, LCLType;
 
 type
 
@@ -250,46 +250,31 @@ end;
 procedure TfraCWKeys.btnClicked(Sender : TObject);
 var
   cwkey : String;
-  speed : integer;
+  Key   : Word;
 begin
   if Sender is TButton then
   begin
-    cwkey := copy((Sender as TButton).Name,4,3);
-    if dmData.DebugLevel >=1 then Writeln('Button: ',cwkey);
-
+    cwkey := copy((Sender as TButton).Name,4,4);
     case cwkey of
-    'PgU'      :begin
-                  if Assigned(frmNewQSO.CWint) then
-                  begin
-                    speed := frmNewQSO.CWint.GetSpeed+2;
-                    frmNewQSO.CWint.SetSpeed(speed);
-                    frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM';
-                    if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
-                  end
-                end;
-
-    'PgD'       :begin
-                    if Assigned(frmNewQSO.CWint) then
-                    begin
-                      speed := frmNewQSO.CWint.GetSpeed-2;
-                      frmNewQSO.CWint.SetSpeed(speed);
-                      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM';
-                      if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
-                    end
-                  end;
-    else
-      Begin
-        cwkey := copy((Sender as TButton).Name,4,3);
-        if ((frmNewQSO.cmbMode.Text='SSB') or (frmNewQSO.cmbMode.Text='FM') or (frmNewQSO.cmbMode.Text='AM')) then
-           frmNewQSO.RunVK(cwkey)
-        else
-        if Assigned(frmNewQSO.CWint) then
-         frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,frmNewQSO.edtHisRST.Text,
-         frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-         frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      'F1'  :    Key := VK_F1;
+      'F2'  :    Key := VK_F2;
+      'F3'  :    Key := VK_F3;
+      'F4'  :    Key := VK_F4;
+      'F5'  :    Key := VK_F5;
+      'F6'  :    Key := VK_F6;
+      'F7'  :    Key := VK_F7;
+      'F8'  :    Key := VK_F8;
+      'F9'  :    Key := VK_F9;
+      'F10' :    Key := VK_F10;
+      'PgUp':    Key := 33; //PgUp
+      'PgDn':    Key := 34; //PgDn
+      else
+       Key := 0; // in case of failure. Should not happen...
       end;
-    end;
+    //if dmData.DebugLevel >=1 then Writeln('CW keys button: ',cwkey,' Key: ',Key);
+    frmNewQSO.FormKeyDown(nil,Key,[]);
   end;
+
 end;
 
 procedure TfraCWKeys.UpdateFKeyLabels;

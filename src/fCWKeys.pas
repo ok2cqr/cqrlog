@@ -18,7 +18,7 @@ type
     procedure FormKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure FormShow(Sender: TObject);
   private
-    procedure SendCWMessage(cwkey : String);
+
   public
     { public declarations }
   end; 
@@ -33,13 +33,6 @@ uses dUtils,fNewQSO;
 
 { TfrmCWKeys }
 
-procedure TfrmCWKeys.SendCWMessage(cwkey : String);
-begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(cwkey,frmNewQSO.edtCall.Text,
-      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
-end;
-
 procedure TfrmCWKeys.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmCWKeys)
@@ -48,8 +41,7 @@ end;
 procedure TfrmCWKeys.FormKeyUp(Sender : TObject; var Key : Word;
   Shift : TShiftState);
 begin
-  if (Sender is TButton) then
-    ShowMessage('JO')
+  frmNewQSO.FormKeyDown(Sender,Key,Shift);
 end;
 
 procedure TfrmCWKeys.FormShow(Sender: TObject);

@@ -341,6 +341,7 @@ type
     sbtnRefreshTime: TSpeedButton;
     tabDXCCStat : TTabSheet;
     tabSatellite : TTabSheet;
+    tmrFkeyRelease: TTimer;
     tmrN1MM: TTimer;
     tmrWsjtSpd: TTimer;
     tmrWsjtx: TTimer;
@@ -541,6 +542,7 @@ type
     procedure tmrESCTimer(Sender: TObject);
     procedure tmrEndStartTimer(Sender: TObject);
     procedure tmrEndTimer(Sender: TObject);
+    procedure tmrFkeyReleaseTimer(Sender: TObject);
     procedure tmrFldigiTimer(Sender: TObject);
     procedure tmrN1MMTimer(Sender: TObject);
     procedure tmrRadioTimer(Sender: TObject);
@@ -640,6 +642,7 @@ type
     UseSpaceBar : Boolean;
     CWint       : TCWDevice;
     ShowWin     : Boolean;
+    LastFkey    : QWord;
 
     WsjtxSock             : TUDPBlockSocket;
     N1MMSock              : TUDPBlockSocket;
@@ -1641,6 +1644,12 @@ begin
     lblQSOTakes.Caption := 'QSO takes ' + IntToStr(h) + ' hours, ' + IntToStr(m) +
                            ' minutes, ' + IntToStr(s) + ' seconds'
   end
+end;
+
+procedure TfrmNewQSO.tmrFkeyReleaseTimer(Sender: TObject);
+begin
+  LastFkey := 0;
+  tmrFkeyRelease.Enabled:=False;
 end;
 
 procedure TfrmNewQSO.tmrFldigiTimer(Sender: TObject);
@@ -5082,7 +5091,11 @@ begin
       end
       else begin
         if Assigned(CWint) then
-          CWint.StopSending;
+          Begin
+           CWint.StopSending;
+           tmrFkeyRelease.Enabled:=false;
+           LastFKey := 0;
+          end;
         EscFirstTime   := True;
         tmrESC.Enabled := True
       end
@@ -5129,16 +5142,47 @@ begin
   end;
 
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
-  begin
-    if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
-      RunVK(dmUtils.GetDescKeyFromCode(Key))
-    else
-      if Assigned(CWint) then
-        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
-          frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-          frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+  Begin
+   if LastFkey = 0 then
+    begin
+      LastFKey := Key;   //LastKey resets by timer or ESC
+      if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
+       begin
+        tmrFkeyRelease.Interval:=2000; //suggestion for voice key repeat delay
+        tmrFkeyRelease.Enabled:=true;
+        RunVK(dmUtils.GetDescKeyFromCode(Key));
+       end
+      else
+        if Assigned(CWint) then
+         Begin
+          speed := CWint.GetSpeed;
+          //standard word PARIS  ->                 P             A         R            I         S
+          //element (dit time) count in "paris" 1+1+3+1+3+1 +3 +1+1+3 +3 +1+1+3+1+1 +3 +1+1+1 +3 1+1+1+1+1  +7 = 49
+          //one elemetduration is then  60000ms/wpm*49 elements
+          //average elements per letter in standar word "paris" is then ~10 elements
+          //so element duration (dit duration) is:
+          //120wpm ->   60000ms/(120*49) =  10ms/element
+          //2wpm   ->   60000mc/(2*49)   = 612ms/element
+          //
+          //F-key repeat delay is then --> (character count * 10elements * 60000ms)/(wpm*49)
+
+          tmp:= dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
+            frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+            frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
+
+          //suggestion for cw key repeat delay. It is not the best, but better than without
+          //it does not add remaining delay from previous F-key if it lets second F-key go through.
+          //no way to get remaining timer value (hw?) to add for new one
+
+          tmrFkeyRelease.Interval:=length(tmp)* 10 * 60000 div (speed*49);
+          if dmData.DebugLevel >=1 then Writeln('F-key repeat delay:', tmrFkeyRelease.Interval);
+          tmrFkeyRelease.Enabled:=true;
+          CWint.SendText(tmp);
+          end;
+      end;
     key := 0
   end;
+
 
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
@@ -6665,7 +6709,7 @@ begin
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
-          CWint.DebugMode := dmData.DebugLevel>=1;
+          CWint.DebugMode := true;//dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');

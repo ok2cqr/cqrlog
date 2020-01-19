@@ -5,7 +5,7 @@ unit uCWKeying;
 interface
 
 uses
-  Classes, SysUtils, synaser, synautil, lNet, lNetComponents;
+  Classes, SysUtils, synaser, synautil, lNet, lNetComponents, Forms;
 
 type TKeyType   = (ktCWdaemon, ktWinKeyer);
 type TKeyStatus = (ksReady, ksBusy);
@@ -716,9 +716,9 @@ begin
        Writeln('HLresp MSG:|',Rmsg,'|');
 
   //at this point no proper buffer overflow handling implemented.
-  //RPRT -9 comes here too late and can not control sed loop
+  //RPRT -9 comes here too late and can not control send loop
   //Now just tries stop CW so that operator knows he is sending too long text and resuld may be chaos
-  if pos('RPRT -9',Rmsg)>0 then  StopSending;
+  //if pos('RPRT -9',Rmsg)>0 then  StopSending;
 end;
 
 
@@ -774,7 +774,8 @@ begin
 end;
 
 procedure TCWHamLib.SendText(text : String);
-var c:integer;
+var  c:integer;
+  tout: integer;
 
 begin
    if text<>'' then
@@ -786,11 +787,17 @@ begin
         repeat
           Begin
             Rmsg :='';
-            tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
-            if fDebugMode then
-               Begin
-                 Writeln('Sending HL-block:',copy(text,1,10));
-               end;
+            tout :=0;
+            if fDebugMode then  Writeln('Sending HL-block:',copy(text,1,10));
+            repeat
+              begin
+                tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
+                sleep(100);
+                Application.ProcessMessages;
+                inc(tout);
+              end;
+            until ((pos('RPRT 0',Rmsg)=1) or (tout > 50));
+            if fDebugMode then  Writeln('Timeout: ',tout);
             text := copy(text,11,length(text));
             c:= length(text);
           end;
@@ -798,8 +805,18 @@ begin
         end
         else
          Begin
-           tcp.SendMessage('b'+text+LineEnding);
-           if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
+            Rmsg :='';
+            tout :=0;
+            if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
+            repeat
+              begin
+                tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
+                sleep(100);
+                Application.ProcessMessages;
+                inc(tout);
+              end;
+            until ((pos('RPRT 0',Rmsg)=1) or (tout > 50));
+            if fDebugMode then  Writeln('Timeout: ',tout);
          end;
        end
         else  if fDebugMode then  Writeln('Empty message!');
