@@ -775,8 +775,8 @@ end;
 
 procedure TCWHamLib.SendText(text : String);
 const
-     _REPEATS = 3; //times
-     _TIMEOUT = 3; //seconds
+     _REPEATS = 2; //times
+     _TIMEOUT = 10; //10-milliseconds
 var  c,
   tout,
   rpt : integer;
@@ -784,10 +784,11 @@ var  c,
 //-----------------------------------------------------------------------------------
 Procedure SendToHamlib;
 Begin
-  Rmsg :='RPRT -9';
-            tout :=_TIMEOUT;
+            //if pos('RPRT -9',Rmsg)>0 then sleep(2000); //wait 2 seconds before rpt (no way to poll HamLib when buffer is free)
+            tout :=_TIMEOUT; //used away in sleep(10) bloks
             rpt := _REPEATS;
-            while ((pos('RPRT -9',Rmsg)>0) and (rpt > 0)) do
+
+            while (rpt > 0) do
               Begin
                  if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
                  tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
@@ -800,6 +801,13 @@ Begin
                     end;
                   until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
                   if fDebugMode then  Writeln('Timeout left (ms/s): ',tout,'/',_TIMEOUT);
+                  if pos('RPRT -9',Rmsg)>0 then
+                    Begin
+                      dec(rpt);
+                      sleep(2000);
+                    end
+                   else
+                    rpt :=0;
               end;
            if fDebugMode then  Writeln('Repeats left: ',rpt,'/',_REPEATS);
 end;
