@@ -542,7 +542,6 @@ type
     procedure tmrESCTimer(Sender: TObject);
     procedure tmrEndStartTimer(Sender: TObject);
     procedure tmrEndTimer(Sender: TObject);
-    procedure tmrFkeyReleaseTimer(Sender: TObject);
     procedure tmrFldigiTimer(Sender: TObject);
     procedure tmrN1MMTimer(Sender: TObject);
     procedure tmrRadioTimer(Sender: TObject);
@@ -642,7 +641,7 @@ type
     UseSpaceBar : Boolean;
     CWint       : TCWDevice;
     ShowWin     : Boolean;
-    LastFkey    : QWord;
+    LastFkey    : Word;
 
     WsjtxSock             : TUDPBlockSocket;
     N1MMSock              : TUDPBlockSocket;
@@ -1644,11 +1643,6 @@ begin
     lblQSOTakes.Caption := 'QSO takes ' + IntToStr(h) + ' hours, ' + IntToStr(m) +
                            ' minutes, ' + IntToStr(s) + ' seconds'
   end
-end;
-
-procedure TfrmNewQSO.tmrFkeyReleaseTimer(Sender: TObject);
-begin
-  LastFkey := 0;
 end;
 
 procedure TfrmNewQSO.tmrFldigiTimer(Sender: TObject);
@@ -5065,7 +5059,6 @@ procedure TfrmNewQSO.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
     LastFKey := 0;
-    writeln('cleared lastkey');
 end;
 procedure TfrmNewQSO.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -6689,7 +6682,7 @@ begin
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
-          CWint.DebugMode := true;//dmData.DebugLevel>=1;
+          CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');
