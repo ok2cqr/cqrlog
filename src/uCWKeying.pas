@@ -774,52 +774,56 @@ begin
 end;
 
 procedure TCWHamLib.SendText(text : String);
-var  c:integer;
-  tout: integer;
+const
+     _REPEATS = 3; //times
+     _TIMEOUT = 3; //seconds
+var  c,
+  tout,
+  rpt : integer;
 
+//-----------------------------------------------------------------------------------
+Procedure SendToHamlib;
+Begin
+  Rmsg :='RPRT -9';
+            tout :=_TIMEOUT;
+            rpt := _REPEATS;
+            while ((pos('RPRT -9',Rmsg)>0) and (rpt > 0)) do
+              Begin
+                 if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
+                 tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
+                 dec(rpt);
+                  repeat
+                    begin
+                      sleep(10);
+                      Application.ProcessMessages;
+                      dec(tout);
+                    end;
+                  until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
+                  if fDebugMode then  Writeln('Timeout left (ms/s): ',tout,'/',_TIMEOUT);
+              end;
+           if fDebugMode then  Writeln('Repeats left: ',rpt,'/',_REPEATS);
+end;
+//-----------------------------------------------------------------------------------
 begin
    if text<>'' then
-       begin
+     begin
         c:= length(text);
         if c>10 then
          Begin
         //different rigs support different length of b-command. 10chr should be safe for all
         repeat
           Begin
-            Rmsg :='';
-            tout :=0;
-            if fDebugMode then  Writeln('Sending HL-block:',copy(text,1,10));
-            repeat
-              begin
-                tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
-                sleep(100);
-                Application.ProcessMessages;
-                inc(tout);
-              end;
-            until ((pos('RPRT 0',Rmsg)=1) or (tout > 50));
-            if fDebugMode then  Writeln('Timeout: ',tout);
+            if fDebugMode then  Write('Block ');
+            SendToHamlib;
             text := copy(text,11,length(text));
             c:= length(text);
           end;
         until c=0;
         end
         else
-         Begin
-            Rmsg :='';
-            tout :=0;
-            if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
-            repeat
-              begin
-                tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
-                sleep(100);
-                Application.ProcessMessages;
-                inc(tout);
-              end;
-            until ((pos('RPRT 0',Rmsg)=1) or (tout > 50));
-            if fDebugMode then  Writeln('Timeout: ',tout);
-         end;
-       end
-        else  if fDebugMode then  Writeln('Empty message!');
+         SendToHamlib
+      end
+     else  if fDebugMode then  Writeln('Empty message!');
 end;
 
 procedure TCWHamLib.Close;

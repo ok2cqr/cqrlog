@@ -2135,6 +2135,7 @@ object frmNewQSO: TfrmNewQSO
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   LCLVersion = '2.0.4.0'
@@ -6838,12 +6839,6 @@ object frmNewQSO: TfrmNewQSO
     Enabled = False
     OnTimer = tmrN1MMTimer
     left = 800
-    top = 32
-  end
-  object tmrFkeyRelease: TTimer
-    Enabled = False
-    OnTimer = tmrFkeyReleaseTimer
-    left = 888
     top = 32
   end
 end
