@@ -50,7 +50,6 @@ type
     procedure btnPgDnMouseLeave(Sender: TObject);
     procedure btnPgUpMouseEnter(Sender: TObject);
     procedure btnPgUpMouseLeave(Sender: TObject);
-    procedure FrameMouseEnter(Sender: TObject);
     procedure FrameResize(Sender: TObject);
     procedure btnClicked(Sender: TObject);
   private
@@ -240,11 +239,6 @@ end;
 procedure TfraCWKeys.btnPgUpMouseLeave(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:='';
-end;
-
-procedure TfraCWKeys.FrameMouseEnter(Sender: TObject);
-begin
-
 end;
 
 procedure TfraCWKeys.btnClicked(Sender : TObject);

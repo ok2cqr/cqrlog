@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls,frCWKeys;
+  StdCtrls, ExtCtrls,frCWKeys,LCLType;
 
 type
 
@@ -15,6 +15,7 @@ type
   TfrmCWKeys = class(TForm)
     fraCWKeys : TfraCWKeys;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure FormShow(Sender: TObject);
   private
@@ -38,10 +39,22 @@ begin
   dmUtils.SaveWindowPos(frmCWKeys)
 end;
 
+procedure TfrmCWKeys.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   case Key of
+   VK_F1 .. VK_F10,
+   33,
+   34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
+   VK_ESCAPE       : frmNewQSO.CWint.StopSending;
+   end;
+end;
+
 procedure TfrmCWKeys.FormKeyUp(Sender : TObject; var Key : Word;
   Shift : TShiftState);
 begin
-  frmNewQSO.FormKeyDown(Sender,Key,Shift);
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+                      frmNewQSO.FormKeyUp(Sender,Key,Shift);
 end;
 
 procedure TfrmCWKeys.FormShow(Sender: TObject);

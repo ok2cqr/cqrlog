@@ -62,12 +62,14 @@ type
     procedure btnPgUpMouseLeave(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
     procedure btnCloseClick(Sender: TObject);
     procedure edtSpeedChange(Sender: TObject);
     procedure fraCWKeys1Resize(Sender: TObject);
     procedure mChange(Sender: TObject);
+    procedure mKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure mKeyPress(Sender: TObject; var Key: char);
     procedure mKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure rgModeClick(Sender: TObject);
@@ -111,17 +113,28 @@ begin
   m.SetFocus;
 end;
 
-procedure TfrmCWType.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if key = 27 then
-    frmNewQSO.CWint.StopSending
-end;
-
 procedure TfrmCWType.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   cqrini.WriteInteger('CW','Mode',rgMode.ItemIndex);
   dmUtils.SaveWindowPos(frmCWType)
+end;
+
+procedure TfrmCWType.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  case Key of
+   VK_F1 .. VK_F10,
+   33,
+   34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
+   VK_ESCAPE       : frmNewQSO.CWint.StopSending;
+   end;
+end;
+
+procedure TfrmCWType.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+                      frmNewQSO.FormKeyUp(Sender,Key,Shift);
 end;
 
 procedure TfrmCWType.btnF1MouseEnter(Sender: TObject);
@@ -488,6 +501,17 @@ begin
   l:=#0;
 end;
 
+procedure TfrmCWType.mKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+  );
+begin
+  case Key of
+   VK_F1 .. VK_F10,
+   33,
+   34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
+   VK_ESCAPE       : frmNewQSO.CWint.StopSending;
+   end;
+end;
+
 procedure TfrmCWType.mKeyPress(Sender: TObject; var Key: char);
 begin
   if key  = #$0D then
@@ -498,29 +522,9 @@ begin
 end;
 
 procedure TfrmCWType.mKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-
 begin
-  if key = 33 then//pgup
-  begin
-    SetSpeed(2);
-    key := 0
-  end;
-
-  if key = 34 then//pgup
-  begin
-    SetSpeed(-2);
-    key := 0
-  end;
-
-  if (key >= VK_F1) and (key <= VK_F10) then
-  begin
-    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(key),frmNewQSO.edtCall.Text,
-       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
-  end;
-
-  if Key = VK_ESCAPE then
-    frmNewQSO.CWint.StopSending
+    if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+                      frmNewQSO.FormKeyUp(Sender,Key,Shift);
 end;
 
 procedure TfrmCWType.rgModeClick(Sender: TObject);

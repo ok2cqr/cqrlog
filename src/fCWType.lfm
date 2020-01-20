@@ -115,9 +115,10 @@ object frmCWType: TfrmCWType
   }
   OnClose = FormClose
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.4.0'
   object pnlBottom: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner
@@ -188,6 +189,7 @@ object frmCWType: TfrmCWType
     Width = 846
     Anchors = [akTop, akLeft, akRight, akBottom]
     OnChange = mChange
+    OnKeyDown = mKeyDown
     OnKeyPress = mKeyPress
     OnKeyUp = mKeyUp
     ParentFont = False

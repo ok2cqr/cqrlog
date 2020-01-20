@@ -5058,7 +5058,11 @@ end;
 procedure TfrmNewQSO.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-    LastFKey := 0;
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+  Begin
+   LastFKey := 0;
+   writeln('lasstkey cleared');
+  end;
 end;
 procedure TfrmNewQSO.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -6682,7 +6686,7 @@ begin
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
-          CWint.DebugMode := dmData.DebugLevel>=1;
+          CWint.DebugMode := true;//dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');

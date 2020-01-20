@@ -1,19 +1,27 @@
 object frmCWKeys: TfrmCWKeys
-  Left = 392
-  Height = 67
-  Top = 566
-  Width = 682
+  Left = 253
+  Height = 93
+  Top = 106
+  Width = 820
   Caption = 'CW keys'
-  ClientHeight = 67
-  ClientWidth = 682
+  ClientHeight = 93
+  ClientWidth = 820
   KeyPreview = True
   OnClose = FormClose
+  OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '2.0.4.0'
   inline fraCWKeys: TfraCWKeys
-    Height = 67
+    Height = 93
+    Width = 820
     Align = alClient
-    ClientHeight = 67
+    ClientHeight = 93
+    ClientWidth = 820
+    inherited lblToShowMouseOverTextCwKeys: TLabel
+      AnchorSideLeft.Control = fraCWKeys
+      AnchorSideBottom.Control = fraCWKeys
+      Top = 74
+    end
   end
 end

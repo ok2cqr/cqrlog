@@ -119,6 +119,7 @@ type
 
   TCWHamLib = class(TCWDevice)
     private
+      AllowCW : Boolean;
       fActive : Boolean;
       fSpeed  : Word;
       tcp     : TLTCPComponent;
@@ -712,13 +713,7 @@ procedure TCWHamLib.OnReceived(aSocket: TLSocket);
 
 begin
   if aSocket.GetMessage(Rmsg) > 0 then
-    if DebugMode then
-       Writeln('HLresp MSG:|',Rmsg,'|');
-
-  //at this point no proper buffer overflow handling implemented.
-  //RPRT -9 comes here too late and can not control send loop
-  //Now just tries stop CW so that operator knows he is sending too long text and resuld may be chaos
-  //if pos('RPRT -9',Rmsg)>0 then  StopSending;
+    if DebugMode then Writeln('HLresp MSG:|',Rmsg,'|');
 end;
 
 
@@ -765,6 +760,7 @@ end;
 
 procedure TCWHamLib.StopSending;
 begin
+  AllowCW := false;
   //not implemented in hamlib command set
   //sending 0xFF as text works with Icom
   tcp.SendMessage('b'+#$0FF+LineEnding);
@@ -775,23 +771,23 @@ end;
 
 procedure TCWHamLib.SendText(text : String);
 const
-     _REPEATS = 2; //times
+     _REPEATS = 500; //times
      _TIMEOUT = 10; //10-milliseconds
-var  c,
+var
+  c, i,
   tout,
   rpt : integer;
 
 //-----------------------------------------------------------------------------------
-Procedure SendToHamlib;
+Procedure SendToHamlib(t:string);
 Begin
-            //if pos('RPRT -9',Rmsg)>0 then sleep(2000); //wait 2 seconds before rpt (no way to poll HamLib when buffer is free)
             tout :=_TIMEOUT; //used away in sleep(10) bloks
             rpt := _REPEATS;
 
-            while (rpt > 0) do
+            while ((rpt > 0) and AllowCW) do
               Begin
-                 if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
-                 tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
+                 if fDebugMode then  Writeln('Sending HL-message:','b'+t+LineEnding);
+                 tcp.SendMessage('b'+t+LineEnding);
                  dec(rpt);
                   repeat
                     begin
@@ -800,36 +796,37 @@ Begin
                       dec(tout);
                     end;
                   until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
-                  if fDebugMode then  Writeln('Timeout left (ms/s): ',tout,'/',_TIMEOUT);
+                  if fDebugMode then  Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')');
                   if pos('RPRT -9',Rmsg)>0 then
                     Begin
                       dec(rpt);
-                      sleep(2000);
+                      sleep(100);
                     end
                    else
                     rpt :=0;
               end;
-           if fDebugMode then  Writeln('Repeats left: ',rpt,'/',_REPEATS);
+           if fDebugMode then  Writeln('Repeats left: ',rpt,'(/',_REPEATS,')');
 end;
 //-----------------------------------------------------------------------------------
 begin
    if text<>'' then
      begin
+       AllowCW := true;
+        //different rigs support different length of b-command. 10chr should be safe for all
         c:= length(text);
         if c>10 then
          Begin
-        //different rigs support different length of b-command. 10chr should be safe for all
-        repeat
-          Begin
-            if fDebugMode then  Write('Block ');
-            SendToHamlib;
-            text := copy(text,11,length(text));
-            c:= length(text);
-          end;
-        until c=0;
-        end
+            i := 1;
+            if fDebugMode then  Writeln('Ltr send: ');
+            repeat
+              Begin
+                SendToHamlib(text[i]);
+                inc(i);
+              end;
+            until (i > c);
+         end
         else
-         SendToHamlib
+         SendToHamlib(text);
       end
      else  if fDebugMode then  Writeln('Empty message!');
 end;
