@@ -5142,7 +5142,7 @@ begin
   Begin
    if LastFkey = 0 then
     begin
-      LastFKey := Key;   //LastKey resets by  KeyUp
+      if (Sender <> nil ) then LastFKey := Key;   //LastKey resets by  KeyUp. Nil sender is a mouse click on button
       if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
        begin
         RunVK(dmUtils.GetDescKeyFromCode(Key));
