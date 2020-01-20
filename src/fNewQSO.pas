@@ -5058,11 +5058,7 @@ end;
 procedure TfrmNewQSO.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
-  Begin
-   LastFKey := 0;
-   writeln('lasstkey cleared');
-  end;
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then LastFKey := 0;
 end;
 procedure TfrmNewQSO.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
