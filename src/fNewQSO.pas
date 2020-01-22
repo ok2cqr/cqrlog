@@ -3810,6 +3810,8 @@ procedure TfrmNewQSO.cmbModeChange(Sender: TObject);
 begin
   ShowCountryInfo;
   ChangeReports;
+  //flush CW buffer when entering to CW (specially HamLib keyer)
+  if ((Assigned(CWint)) and (cmbMode.Text='CW'))then CWint.StopSending;
 end;
 
 procedure TfrmNewQSO.cmbModeEnter(Sender: TObject);
@@ -5089,10 +5091,7 @@ begin
         old_cmode := '';
       end
       else begin
-        if Assigned(CWint) then
-          Begin
-           CWint.StopSending;
-          end;
+        if Assigned(CWint) then CWint.StopSending;
         EscFirstTime   := True;
         tmrESC.Enabled := True
       end
@@ -5148,11 +5147,13 @@ begin
         RunVK(dmUtils.GetDescKeyFromCode(Key));
        end
       else
+       Begin
         if (cmbMode.Text='CW')  then
           if Assigned(CWint) then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
             frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+       end;
       end;
     key := 0
   end;
