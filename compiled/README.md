@@ -79,7 +79,7 @@ Then check execution rights.
  - sudo chmod a+x /usr/bin/cqrlog
 
 ## ABOUT:
- (what is new)
+ (what is new and not included in official cqrlog GitHub source)
 
 QT5 VERSION
 
