@@ -83,64 +83,73 @@ Then check execution rights.
 
 QT5 VERSION
 
-  - If you try QT5 compiled version you may need to install qt5pas library. When running that
-    version please note if you find clipping or wrong positions at windows.
+  - If you try QT5 compiled version you may need to install qt5pas library. 
+    When running that version please note if you find clipping or wrong positions at windows.
     Check also how GTK2 version shows up, they are little bit different. GTK may show up ok, but QT5 has
     clipping (usually in that way).
    
 CQ MONITOR USA STATES
 
+  - separate source for this can be found from branch "states"
   - CQ-monitor checbox "USt" that allows USA states to monitored wsjt-CQs
-
-  - when you check it at first time it suggests loading from fcc.gov it should
-    suggest same after 90 days of usage to update data.
-
-    How the update works? 
-
-    You can make it happen again if you delete files
-    "EN.dat" and "fcc_states.tab" from folder ~/.config/cqrlog/ctyfiles.
-    If you delete just file "fcc_states.tab" you can make only the rebuld part to run again.
-
-  - US callsign=state (fcc_states.tab) file is over 10Mb and ist is loaded to RAM for runtime.
+  - when you check it at first time it suggests loading from fcc.gov it should suggest same after 90 days of usage to update data.
+   - US callsign=state (fcc_states.tab) file is over 10Mb and ist is loaded to RAM for runtime.
     Seeking a callsingn from there takes some time.
 
-    How it works when there are many USA stations on band at every decode?
+   How the update works? 
+   
+   You can make it happen again if you delete files
+   "EN.dat" and "fcc_states.tab" from folder ~/.config/cqrlog/ctyfiles.
+   If you delete just file "fcc_states.tab" you can make only the rebuld part to run again.
 
-    Conditions here are so poor that I can hear only few USA stations for every now and then (but lot of europeans)
-    There is another runtime list that grows up from decoded callsigns=states. The idea is that there are just
-    several stations on band at same time and so seeking from runtimelist first may give faster response times.
-    The runtime list is cleared when you close wsjt-remote (and reopen it). 
-    So that is the way to find out has it any speed improvement for CQ decodes.
+   How it works when there are many USA stations on band at every decode?
 
-    If you want debug dump start with:
+   Conditions here are so poor that I can hear only few USA stations for every now and then (but lot of europeans)
+   There is another runtime list that grows up from decoded callsigns=states. The idea is that there are just
+   several stations on band at same time and so seeking from runtimelist first may give faster response times.
+   The runtime list is cleared when you close wsjt-remote (and reopen it). 
+   So that is the way to find out has it any speed improvement for CQ decodes.
 
-      cqrlog debug=-4
+   If you want debug dump start with:
 
-    That gives a bit less debug text. Just CQ-monitor related debugs. Note that value is "minus 4"!
+    cqrlog debug=-4
+
+   That gives a bit less debug text. Just CQ-monitor related debugs. Note that value is "minus 4"!
 
 RTTY MODE IS DATA
 
-  - At preferences/Modes you will see a new "DATA" that replaces the old "RTTY". Defaults for that are
+   - separate source for this can be found from branch "rtty_data"
+   - At preferences/Modes you will see a new "DATA" that replaces the old "RTTY". Defaults for that are
     rig cmd:RTTY data mode:RTTY that acts like pervious cqrlogs.
-    
-    You can state your own "data mode" and command that is used with rig when that mode is in use.
-    They can be different now. The "thing" is that your data mode is now used with DXCluster spots
-    like RTTY was used before.
-    I have now settings (for IC7300) DATA bandwidth: 0 Hz, Rig cmd:PKTUSB and data mode: FT8
-    So I will get DXCluster FT8 spots colored now against my log.
 
-    There is one known problem: 
-    When you push "DATA" (former RTTY) button at TRXControl the "Rig cmd" will be sent to your rig.
-    That is ok, but when your rig sends back them mode (that is same as "Rig cmd") it is converted
-    back to "Data mode" at NeWQSO.
-    Imagine you set data mode to SSTV and rig cmd to USB. Sending that to rig is ok, but when rig
-    returns mode also all your USB fone qsos will be set as SSTV.
-    That's why it only works properly with rigs that have separate data mode to use.
+   You can state your own "data mode" and command that is used with rig when that mode is in use.
+   They can be different now. The "thing" is that your data mode is now used with DXCluster spots
+   like RTTY was used before.
+   I have now settings (for IC7300) DATA bandwidth: 0 Hz, Rig cmd:PKTUSB and data mode: FT8
+   So I will get DXCluster FT8 spots colored now against my log.
 
-    Same way "preferences/TRXcontrol/Change defaut frequencies" now points to "DATA" instead of "RTTY",
-    and you have to set "preferences/bands/frequencies" "DATA" column to correspond your data mode.
-    By defaut it points to RTTY frequencies.
+   There is one known problem: 
+   When you push "DATA" (former RTTY) button at TRXControl the "Rig cmd" will be sent to your rig.
+   That is ok, but when your rig sends back them mode (that is same as "Rig cmd") it is converted
+   back to "Data mode" at NeWQSO.
+   Imagine you set data mode to SSTV and rig cmd to USB. Sending that to rig is ok, but when rig
+   returns mode also all your USB fone qsos will be set as SSTV.
+   That's why it only works properly with rigs that have separate data mode to use.
 
+   Same way "preferences/TRXcontrol/Change defaut frequencies" now points to "DATA" instead of "RTTY",
+   and you have to set "preferences/bands/frequencies" "DATA" column to correspond your data mode.
+   By defaut it points to RTTY frequencies.
+
+LOG OR DATABASE SERVER CHANGE
+
+  - separate source for this can be found from branch "remote_local_db_switch"
+  - prevent to kill open log (NewQSO/File/Open or create new log/Delete log)
+  - prevent to load settings to open log (NewQSO/File/Open or create new log/Utils/Configuration/Import)
+  - log change should work now better (NewQSO/File/Open or create new log/Open)
+  - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
+  
+  
+  
 
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 
