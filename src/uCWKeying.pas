@@ -710,10 +710,12 @@ begin
 end;
 
 procedure TCWHamLib.OnReceived(aSocket: TLSocket);
-
 begin
   if aSocket.GetMessage(Rmsg) > 0 then
-    if DebugMode then Writeln('HLresp MSG:|',Rmsg,'|');
+   begin
+    Rmsg := StringReplace(Rmsg,LineEnding,' ',[rfReplaceAll]);
+    if DebugMode then Writeln('HLresp MSG:',Rmsg,':');
+   end;
 end;
 
 
@@ -772,7 +774,7 @@ end;
 procedure TCWHamLib.SendText(text : String);
 const
      _REPEATS = 500; //times
-     _TIMEOUT = 10; //10-milliseconds
+     _TIMEOUT = 20; //x10-milliseconds
 var
   c, i,
   tout,
@@ -786,7 +788,8 @@ Begin
 
             while ((rpt > 0) and AllowCW) do
               Begin
-                 if fDebugMode then  Writeln('Sending HL-message:','b'+t+LineEnding);
+                 if fDebugMode then  Writeln('HLsend MSG:','b'+t+':');
+                 Rmsg:='';
                  tcp.SendMessage('b'+t+LineEnding);
                  dec(rpt);
                   repeat
@@ -797,15 +800,16 @@ Begin
                     end;
                   until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
                   if fDebugMode then  Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')');
-                  if pos('RPRT -9',Rmsg)>0 then
+                  if fDebugMode then  Writeln('     Repeats left: ',rpt,'(/',_REPEATS,')');
+                  if pos('-9',Rmsg)>0 then
                     Begin
                       dec(rpt);
-                      sleep(100);
+                      sleep(300);
                     end
                    else
                     rpt :=0;
               end;
-           if fDebugMode then  Writeln('Repeats left: ',rpt,'(/',_REPEATS,')');
+
 end;
 //-----------------------------------------------------------------------------------
 begin

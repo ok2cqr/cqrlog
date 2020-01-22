@@ -5148,7 +5148,8 @@ begin
         RunVK(dmUtils.GetDescKeyFromCode(Key));
        end
       else
-        if Assigned(CWint) then
+        if (cmbMode.Text='CW')  then
+          if Assigned(CWint) then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
             frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
