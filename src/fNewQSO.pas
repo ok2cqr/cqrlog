@@ -5148,8 +5148,7 @@ begin
        end
       else
        Begin
-        if (cmbMode.Text='CW')  then
-          if Assigned(CWint) then
+          if Assigned(CWint) and (cmbMode.Text='CW') then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
             frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
