@@ -115,9 +115,10 @@ object frmCWType: TfrmCWType
   }
   OnClose = FormClose
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.4.0'
   object pnlBottom: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner
@@ -188,8 +189,9 @@ object frmCWType: TfrmCWType
     Width = 846
     Anchors = [akTop, akLeft, akRight, akBottom]
     OnChange = mChange
+    OnKeyDown = FormKeyDown
     OnKeyPress = mKeyPress
-    OnKeyUp = mKeyUp
+    OnKeyUp = FormKeyUp
     ParentFont = False
     ScrollBars = ssAutoBoth
     TabOrder = 1
@@ -234,8 +236,9 @@ object frmCWType: TfrmCWType
       MaxValue = 99
       MinValue = 5
       OnChange = edtSpeedChange
+      OnMouseLeave = edtSpeedMouseLeave
       TabOrder = 0
-      Value = 5
+      Value = 15
     end
     object rgMode: TRadioGroup
       AnchorSideLeft.Control = pnlTop
