@@ -149,8 +149,15 @@ LOG OR DATABASE SERVER CHANGE
   - prevent to load settings to open log (NewQSO/File/Open or create new log/Utils/Configuration/Import)
   - log change should work now better (NewQSO/File/Open or create new log/Open)
   - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
-  
-  
+
+CW KEYS AND HAMLIB INTERFACE
+
+  - F1 .. F10 CW-keys (from keyboard) works now from NewQSO, CWKeys and CWType windows
+  - CW is now sent only if rig mode (NewQSO/mode selector) is set to CW
+  - Moving rig from other mode to CW sends stopkeying (specially Hamlib/rig buffer may contain old morse in some cases)
+  - source code is cleaned up (removed duplicate blocks, etc.)
+  - tried to make Hamlib keyer handshake better. Now messages up tp 10 characters are sent by one hamlib command, longer messages are sent letter by letter
+  - tested with WinKeyer and Hamlib keyer modes (I have no other keyers)
   
 
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
