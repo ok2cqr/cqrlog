@@ -6683,7 +6683,7 @@ begin
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
-          CWint.DebugMode := true;//dmData.DebugLevel>=1;
+          CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');

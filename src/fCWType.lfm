@@ -189,9 +189,9 @@ object frmCWType: TfrmCWType
     Width = 846
     Anchors = [akTop, akLeft, akRight, akBottom]
     OnChange = mChange
-    OnKeyDown = mKeyDown
+    OnKeyDown = FormKeyDown
     OnKeyPress = mKeyPress
-    OnKeyUp = mKeyUp
+    OnKeyUp = FormKeyUp
     ParentFont = False
     ScrollBars = ssAutoBoth
     TabOrder = 1
@@ -236,8 +236,9 @@ object frmCWType: TfrmCWType
       MaxValue = 99
       MinValue = 5
       OnChange = edtSpeedChange
+      OnMouseLeave = edtSpeedMouseLeave
       TabOrder = 0
-      Value = 5
+      Value = 15
     end
     object rgMode: TRadioGroup
       AnchorSideLeft.Control = pnlTop
