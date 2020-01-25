@@ -6639,6 +6639,7 @@ end;
 procedure TfrmNewQSO.InitializeCW;
 var
   KeyType: TKeyType;
+  UseSpeed: integer;
 begin
   if (CWint<>nil) then
     FreeAndNil(CWint);
@@ -6653,9 +6654,7 @@ begin
           CWint.Port    := cqrini.ReadString('CW','wk_port','');
           CWint.Device  := cqrini.ReadString('CW','wk_port','');
           CWint.PortSpeed := 1200;
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','wk_speed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','wk_speed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
@@ -6665,9 +6664,7 @@ begin
           CWint.Port    := cqrini.ReadString('CW','cw_port','');
           CWint.Device  := cqrini.ReadString('CW','cw_address','');
           CWint.PortSpeed := 0;
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','cw_speed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','cw_speed',30);
         end;
     3 : begin
           CWint := TCWK3NG.Create;
@@ -6677,9 +6674,7 @@ begin
           CWint.Port    := cqrini.ReadString('CW','K3NGPort','');
           CWint.Device  := cqrini.ReadString('CW','K3NGPort','');
           CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','K3NGSpeed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
@@ -6688,11 +6683,13 @@ begin
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');
           CWint.Device := cqrini.ReadString('TRX1','host','localhost');
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','HamLibSpeed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','HamLibSpeed',30);
         end
-  end //case
+  end; //case
+  CWint.Open;
+  CWint.SetSpeed(UseSpeed);
+  sbNewQSO.Panels[2].Text := IntToStr(UseSpeed) + 'WPM';
+  if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
