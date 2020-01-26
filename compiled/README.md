@@ -153,6 +153,7 @@ LOG OR DATABASE SERVER CHANGE
 CW KEYS AND HAMLIB INTERFACE
 
   - F1 .. F10 CW-keys (from keyboard) works now from NewQSO, CWKeys and CWType windows
+  - F1 .. F10 keyboard auto repeat disabled (long keypress do not fill CW buffers)
   - CW is now sent only if rig mode (NewQSO/mode selector) is set to CW
   - Moving rig from other mode to CW sends stopkeying (specially Hamlib/rig buffer may contain old morse in some cases)
   - source code is cleaned up (removed duplicate blocks, etc.)
@@ -165,4 +166,3 @@ Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC
 All kind of reports are welcome. You can send them them to mycallsign at sral dot fi
 
      
-
