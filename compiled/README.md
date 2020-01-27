@@ -80,8 +80,11 @@ Then check execution rights.
 
 ## ABOUT:
 
- What is new and not included in official cqrlog GitHub source.
- These binaries also include latest official source. To see changes there look at https://github.com/ok2cqr/cqrlog/commits/master
+ What is new and not included in official cqrlog GitHub source is listed below.
+ To see updates in this alpha version look at https://github.com/OH1KH/cqrlog/commits/loc_testing
+ 
+ These binaries also include latest official source updates.
+ To see official updates look at https://github.com/ok2cqr/cqrlog/commits/master
 
 QT5 VERSION
 
