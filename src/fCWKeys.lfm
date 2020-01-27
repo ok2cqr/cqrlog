@@ -3,7 +3,7 @@ object frmCWKeys: TfrmCWKeys
   Height = 93
   Top = 106
   Width = 820
-  Caption = 'CW keys'
+  Caption = 'Memory keys'
   ClientHeight = 93
   ClientWidth = 820
   KeyPreview = True

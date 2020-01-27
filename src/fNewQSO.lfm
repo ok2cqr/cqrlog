@@ -4827,9 +4827,11 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem73: TMenuItem
         Action = acCWType
+        Visible = False
       end
       object MenuItem72: TMenuItem
         Action = acCWFKey
+        Caption = 'Memory keys'
       end
       object MenuItem80: TMenuItem
         Action = acDetails
