@@ -26,12 +26,15 @@ type
   TfrmSendSpot = class(TForm)
     btnOK: TButton;
     btnCancel: TButton;
+    btnModRst: TButton;
+    btnLoc: TButton;
     edtSpot: TEdit;
     Label1: TLabel;
     procedure FormActivate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtSpotEnter(Sender: TObject);
     procedure edtSpotKeyPress(Sender: TObject; var Key: char);
+    procedure tbModRstClick(Sender: TObject);
   private
     { private declarations }
   public
@@ -68,6 +71,11 @@ begin
     if (edtSpot.Text <> '') then
       btnOK.Click;
   end;
+end;
+
+procedure TfrmSendSpot.tbModRstClick(Sender: TObject);
+begin
+  if tbModRst
 end;
 
 end.

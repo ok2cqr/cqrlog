@@ -2171,23 +2171,23 @@ object frmNewQSO: TfrmNewQSO
     TabOrder = 0
     object Panel3: TPanel
       Left = 1
-      Height = 511
-      Top = 39
+      Height = 537
+      Top = 13
       Width = 938
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 511
+      ClientHeight = 537
       ClientWidth = 938
       TabOrder = 0
       object Panel6: TPanel
         Left = 0
-        Height = 511
+        Height = 537
         Top = 0
         Width = 938
         Align = alClient
         BorderSpacing.InnerBorder = 2
         BevelOuter = bvNone
-        ClientHeight = 511
+        ClientHeight = 537
         ClientWidth = 938
         ParentShowHint = False
         TabOrder = 0
@@ -3553,7 +3553,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtDate
           AnchorSideTop.Side = asrBottom
           Left = 0
-          Height = 135
+          Height = 161
           Top = 376
           Width = 938
           ActivePage = tabSatellite
@@ -3564,7 +3564,7 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 28
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
-            ClientHeight = 104
+            ClientHeight = 130
             ClientWidth = 928
             object sgrdStatistic: TStringGrid
               Left = 0
@@ -3586,7 +3586,7 @@ object frmNewQSO: TfrmNewQSO
           end
           object tabSatellite: TTabSheet
             Caption = 'Satellite'
-            ClientHeight = 104
+            ClientHeight = 130
             ClientWidth = 928
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
@@ -3703,13 +3703,13 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = Panel6
           Left = 554
-          Height = 231
+          Height = 257
           Top = 0
           Width = 380
           Anchors = [akTop, akLeft, akBottom]
           BorderSpacing.Left = 20
           Caption = 'Contest'
-          ClientHeight = 213
+          ClientHeight = 239
           ClientWidth = 378
           TabOrder = 29
           Visible = False
@@ -3857,7 +3857,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 355
           Height = 23
           Hint = 'Show locator on map'
-          Top = 302
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 3
@@ -3906,13 +3906,13 @@ object frmNewQSO: TfrmNewQSO
     end
     object Panel2: TPanel
       Left = 939
-      Height = 511
-      Top = 39
+      Height = 537
+      Top = 13
       Width = 262
       Align = alRight
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 484
-      ClientHeight = 511
+      ClientHeight = 537
       ClientWidth = 262
       TabOrder = 1
       object GroupBox1: TGroupBox
@@ -4517,7 +4517,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 7
         Height = 35
-        Top = 470
+        Top = 496
         Width = 130
         Anchors = [akLeft, akBottom]
         AutoSize = True
@@ -4534,7 +4534,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 143
         Height = 35
-        Top = 470
+        Top = 496
         Width = 113
         Anchors = [akRight, akBottom]
         AutoSize = True
@@ -4548,14 +4548,14 @@ object frmNewQSO: TfrmNewQSO
     end
     object Panel4: TPanel
       Left = 1
-      Height = 38
+      Height = 12
       Top = 1
       Width = 1200
       Align = alTop
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 38
+      ClientHeight = 12
       ClientWidth = 1200
       TabOrder = 2
       object lblQSONr: TLabel
@@ -4566,7 +4566,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 74
         Height = 17
-        Top = 11
+        Top = -2
         Width = 8
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 6
@@ -4581,7 +4581,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Side = asrCenter
         Left = 16
         Height = 17
-        Top = 11
+        Top = -2
         Width = 48
         BorderSpacing.Left = 6
         BorderSpacing.Around = 10
@@ -4598,7 +4598,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 483
         Height = 17
-        Top = 11
+        Top = -2
         Width = 123
         Alignment = taRightJustify
         Anchors = [akLeft, akBottom]
@@ -4617,7 +4617,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 616
         Height = 17
-        Top = 11
+        Top = -2
         Width = 114
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 10
@@ -4636,7 +4636,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideBottom.Side = asrBottom
         Left = 102
         Height = 17
-        Top = 11
+        Top = -2
         Width = 85
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 20
@@ -4652,7 +4652,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Side = asrCenter
         Left = 192
         Height = 34
-        Top = 2
+        Top = -11
         Width = 281
         BorderSpacing.Left = 5
         ItemHeight = 0
