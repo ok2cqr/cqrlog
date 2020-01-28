@@ -163,6 +163,10 @@ CW KEYS AND HAMLIB INTERFACE
   - tried to make Hamlib keyer handshake better. Now messages up tp 10 characters are sent by one hamlib command, longer messages are sent letter by letter
   - tested with WinKeyer and Hamlib keyer modes (I have no other keyers)
   
+ADDITIONAL DXCLUSTER SPOT INFO
+
+  - added buttons "+Mode_Rst" and "+Locators" for quick adding mode and sent rst and/or locators to DXcluster spot to be sent.
+    Pressing Ctrl-W will create spot from last logged qso, or from NewQSO window if NewQSO/Call has callsign entered. Spot is send by pressing enter or click OK (If telnet DXCluster is connected)
 
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 
