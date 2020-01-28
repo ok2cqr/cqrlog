@@ -42,21 +42,25 @@ The color coding and spot filtering is set up in the
 luster node by simply clicking the 'Connect' button. You should see the cluster node
 messages indicating progress. You can enter any command into the 'Command' field
 (ie. SH/DX to display last spots, SH/U to see the users connected to the node etc.).
-</p><p>
+</p><img src="img/h4b.png" border="0"><br><br><p>
+With <b>Ctrl-W</b> you can send a spot to DXCluster if you are connected. If NewQSO is empty the spot is generated from last logged call from current log. If there is a call entered in NewQSO/Call field it will be used for spot generation.
+Additionally you can add used Mode and RST sent by pressing button <b>+Mode_Rst</b> and/or add locators by pressing button <b>+Locators</b>.
+<br>Both strings can be added only once. To edit or delete added strings you must use keyboard's delete button. When spot looks good <b>press enter</b> or click button <b>OK</b> and it will be sent.
+<br><br>
 With <b>Ctrl-Z</b> you can scroll back 5 last used DXCluster commands. It is very handy if you make error
  in cluster command. You do not have to retype everything, just Ctrl-Z and then fix the command and send it again.
-</br> With <b>Ctrl-S</b> you can save the DXCluster command that you have typed, but not yet sent to dxcluster.
+<br><br> With <b>Ctrl-S</b> you can save the DXCluster command that you have typed, but not yet sent to dxcluster.
  Command disappears from "command"-line and is saved as StartConnectionCommand. It will be sent to dxcluster as
  first command after connection is established. You can set it for example sh/dx 50 to get your Bandmap
  populated right away when connected.
- </br>You can type this command to "command"-line and save it with Ctrl-S when you are not connected, but it will be saved also when you are connected to DXCluster (then it is not sent to DXCluster, just saved).
-</br>To remove saved StartConnectionCommand just press Ctrl-S when "command"-line is empty.
-</br> This command can be set also via <a href="h1.html#ah11"><b>Preferences/DXCluster</b></a>.
+ <br>You can type this command to "command"-line and save it with Ctrl-S when you are not connected, but it will be saved also when you are connected to DXCluster (then it is not sent to DXCluster, just saved).
+<br>To remove saved StartConnectionCommand just press Ctrl-S when "command"-line is empty.
+<br> This command can be set also via <a href="h1.html#ah11"><b>Preferences/DXCluster</b></a>.
 </p>
 <h3><a name="m40">Callsign Alert</a></h3>
 <p><img src="img/misc40.png" name="40"  width="458" height="388">
 </img>
-</br></br>Callsign alert is enabled from dialog that opens pressing DXCluster window's "preferences"-button. For setting up the alert itself see 
+<br><br>Callsign alert is enabled from dialog that opens pressing DXCluster window's "preferences"-button. For setting up the alert itself see 
 <a href=h1.html#ah11>Preferences/DXCluster</a>. From same dialog as setting up alert also the list of alerted callsigns opens.
 </p><img src="img/misc41.png" name="41"  width="458" height="388">
 </img>
@@ -64,7 +68,7 @@ With <b>Ctrl-Z</b> you can scroll back 5 last used DXCluster commands. It is ver
 </img>
 <p>
 Callsign alert window allows <b>adding</b>, <b>deleting</b> and <b>editing</b> callsigns that should activate the alarm.
-</br>Usage is quite straight: just add all new callsigns you want to alert. For more specific alerts set also band and mode that you want to produce the alarm.
+<br>Usage is quite straight: just add all new callsigns you want to alert. For more specific alerts set also band and mode that you want to produce the alarm.
 </p>
 <img src="img/misc43.png" name="43"  width="380" height="260">
 </img>
@@ -72,9 +76,9 @@ Callsign alert window allows <b>adding</b>, <b>deleting</b> and <b>editing</b> c
 </img>
 <p>
 There is also checkbox "<b>Allow partialy callsign alert</b>" that allows many different kind of alerting conditions using regular expressions (regexp).
-</br>As an example from the image of callsign alert window you can see different regexp variations for some alert conditions. 
-</br>In order they will alert as follows:
-</br>
+<br>As an example from the image of callsign alert window you can see different regexp variations for some alert conditions. 
+<br>In order they will alert as follows:
+<br>
 <li> calls having numbers 1,2 or 3  @30M/all mode</li>
 <li> calls having number 4 @40M/SSB</li>
 <li> calls having number 6 @40M/CW</li>
@@ -84,13 +88,13 @@ There is also checkbox "<b>Allow partialy callsign alert</b>" that allows many d
 <li> calls starting with VK @all bands/all modes</li>
 <li> calls starting with XF1IM basicly this is whole call, but can have also suffix extensios like /M /P etc all bands/all modes</li>
 <li> calls starting with ZL all bands/all modes</li>
-</br>
+<br>
 For more information how to use regexp delimiters see: <a href=https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended>https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended</a>
 </p>
 <h3><a name="m4"></a>DXCluster Chat</h3>
 <p><img src="img/misc12.png" name="12"  width="458" height="388">
 </img>
-</br>
+<br>
 
 </p>
 <br/>DXCluster window has now “overlay” as chat RX window. All lines that begins with “YOURCALL DE”, but do not end to cluster prompt “&gt;” are copied to this window.<br/>
@@ -212,8 +216,8 @@ So any time you like you can make it larger and chat lines are there to check.</
             <div align="justify"><br><br>There is currently no other function than DX Cluster spot
                 displaying in true azimuthal projection with correct angles (azimuth) and distances.
                 Alternatively, a map without projection, ie. the globe as seen from space can be selected.
-                </br>With Wsjt-x as source same colors are used as with CQ-monitor and station locations are shown <b>only</b> if locator is known.
-                </br> See also settings in <a href="h1.html#bh2"> Preferences/xplanet support</a> 
+                <br>With Wsjt-x as source same colors are used as with CQ-monitor and station locations are shown <b>only</b> if locator is known.
+                <br> See also settings in <a href="h1.html#bh2"> Preferences/xplanet support</a> 
             </div>
         </td>
     </tr>
