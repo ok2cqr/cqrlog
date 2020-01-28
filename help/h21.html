@@ -25,16 +25,16 @@
     </tr>
     </tbody>
 </table>
-</br>
+<br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <a name="ah19"><h2><strong>DX Cluster Operation</strong></h2></a>
-<img src="img/h4.png" border="0"></br></br>
+<img src="img/h4.png" border="0"><br><br>
 There are two basic options - web cluster and the usual DX cluster with
 telnet options. The web cluster method is good for monitoring. There is no
 internal node setup, but you can't spot. CQRLOG downloads the spots at
 regular intervals, the interval is fixed and cannot be changed.
-</br></br>Telnet cluster is fully featured. You can also set up your
+<br><br>Telnet cluster is fully featured. You can also set up your
 preferences on the node. The Command line box is used for all commands,
 settings etc. with one exception - the Tilde key (~) is used for spotting.
 The color coding and spot filtering is set up in the
@@ -42,25 +42,25 @@ The color coding and spot filtering is set up in the
 luster node by simply clicking the 'Connect' button. You should see the cluster node
 messages indicating progress. You can enter any command into the 'Command' field
 (ie. SH/DX to display last spots, SH/U to see the users connected to the node etc.).
-</p><img src="img/h4b.png" border="0"></br></br><p>
+</p><img src="img/h4b.png" border="0"><br><br><p>
 With <b>Ctrl-W</b> you can send a spot to DXCluster if you are connected. If NewQSO is empty the spot is generated from last logged call from current log. If there is a call entered in NewQSO/Call field it will be used for spot generation.
 Additionally you can add used Mode and RST sent by pressing button <b>+Mode_Rst</b> and/or add locators by pressing button <b>+Locators</b>.
-</br>Both strings can be added only once. To edit or delete added strings you must use keyboard's delete button. When spot looks good <b>press enter</b> or click button <b>OK</b> and it will be sent.
-</br></br>
+<br>Both strings can be added only once. To edit or delete added strings you must use keyboard's delete button. When spot looks good <b>press enter</b> or click button <b>OK</b> and it will be sent.
+<br><br>
 With <b>Ctrl-Z</b> you can scroll back 5 last used DXCluster commands. It is very handy if you make error
  in cluster command. You do not have to retype everything, just Ctrl-Z and then fix the command and send it again.
-</br></br> With <b>Ctrl-S</b> you can save the DXCluster command that you have typed, but not yet sent to dxcluster.
+<br><br> With <b>Ctrl-S</b> you can save the DXCluster command that you have typed, but not yet sent to dxcluster.
  Command disappears from "command"-line and is saved as StartConnectionCommand. It will be sent to dxcluster as
  first command after connection is established. You can set it for example sh/dx 50 to get your Bandmap
  populated right away when connected.
- </br>You can type this command to "command"-line and save it with Ctrl-S when you are not connected, but it will be saved also when you are connected to DXCluster (then it is not sent to DXCluster, just saved).
-</br>To remove saved StartConnectionCommand just press Ctrl-S when "command"-line is empty.
-</br> This command can be set also via <a href="h1.html#ah11"><b>Preferences/DXCluster</b></a>.
+ <br>You can type this command to "command"-line and save it with Ctrl-S when you are not connected, but it will be saved also when you are connected to DXCluster (then it is not sent to DXCluster, just saved).
+<br>To remove saved StartConnectionCommand just press Ctrl-S when "command"-line is empty.
+<br> This command can be set also via <a href="h1.html#ah11"><b>Preferences/DXCluster</b></a>.
 </p>
 <h3><a name="m40">Callsign Alert</a></h3>
 <p><img src="img/misc40.png" name="40"  width="458" height="388">
 </img>
-</br></br>Callsign alert is enabled from dialog that opens pressing DXCluster window's "preferences"-button. For setting up the alert itself see 
+<br><br>Callsign alert is enabled from dialog that opens pressing DXCluster window's "preferences"-button. For setting up the alert itself see 
 <a href=h1.html#ah11>Preferences/DXCluster</a>. From same dialog as setting up alert also the list of alerted callsigns opens.
 </p><img src="img/misc41.png" name="41"  width="458" height="388">
 </img>
@@ -68,7 +68,7 @@ With <b>Ctrl-Z</b> you can scroll back 5 last used DXCluster commands. It is ver
 </img>
 <p>
 Callsign alert window allows <b>adding</b>, <b>deleting</b> and <b>editing</b> callsigns that should activate the alarm.
-</br>Usage is quite straight: just add all new callsigns you want to alert. For more specific alerts set also band and mode that you want to produce the alarm.
+<br>Usage is quite straight: just add all new callsigns you want to alert. For more specific alerts set also band and mode that you want to produce the alarm.
 </p>
 <img src="img/misc43.png" name="43"  width="380" height="260">
 </img>
@@ -76,9 +76,9 @@ Callsign alert window allows <b>adding</b>, <b>deleting</b> and <b>editing</b> c
 </img>
 <p>
 There is also checkbox "<b>Allow partialy callsign alert</b>" that allows many different kind of alerting conditions using regular expressions (regexp).
-</br>As an example from the image of callsign alert window you can see different regexp variations for some alert conditions. 
-</br>In order they will alert as follows:
-</br>
+<br>As an example from the image of callsign alert window you can see different regexp variations for some alert conditions. 
+<br>In order they will alert as follows:
+<br>
 <li> calls having numbers 1,2 or 3  @30M/all mode</li>
 <li> calls having number 4 @40M/SSB</li>
 <li> calls having number 6 @40M/CW</li>
@@ -88,33 +88,33 @@ There is also checkbox "<b>Allow partialy callsign alert</b>" that allows many d
 <li> calls starting with VK @all bands/all modes</li>
 <li> calls starting with XF1IM basicly this is whole call, but can have also suffix extensios like /M /P etc all bands/all modes</li>
 <li> calls starting with ZL all bands/all modes</li>
-</br>
+<br>
 For more information how to use regexp delimiters see: <a href=https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended>https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended</a>
 </p>
 <h3><a name="m4"></a>DXCluster Chat</h3>
 <p><img src="img/misc12.png" name="12"  width="458" height="388">
 </img>
-</br>
+<br>
 
 </p>
-</br/>DXCluster window has now “overlay” as chat RX window. All lines that begins with “YOURCALL DE”, but do not end to cluster prompt “&gt;” are copied to this window.</br/>
-Time(your local PC time) and caller’s call are added in from of text line. This works only in Telnet session, not Web session</br/>
+<br/>DXCluster window has now “overlay” as chat RX window. All lines that begins with “YOURCALL DE”, but do not end to cluster prompt “&gt;” are copied to this window.<br/>
+Time(your local PC time) and caller’s call are added in from of text line. This works only in Telnet session, not Web session<br/>
 No more lost chats that are run over with the flood of DxSpots while you are visiting kitchen to get a cup of coffee. DXChat uses the call you have used for logging in to DXCluster (that can be different as your current log settings call).</p>
 <p><img src="img/misc14.png" name="14"  width="362" height="307">
 </img>
-</br/>The size of Chat window, relative to Dx spot window can be adjusted pressing first button “Preferences” and then selecting “Chat size” from there. After doing that “Command:”-cell  at bottom of window is replaced with size slider.</br/>
+<br/>The size of Chat window, relative to Dx spot window can be adjusted pressing first button “Preferences” and then selecting “Chat size” from there. After doing that “Command:”-cell  at bottom of window is replaced with size slider.<br/>
 <img src="img/misc13.png" name="13"  width="209" height="121">
 </img>
-</br/>Pressing the slider knob with mouse-left button and moving slider will reduce the size of  chat window. When mouse button is released “Command:”-cell returns and Chat window remains selected size.</p>
-<p><font color="#ff0066">If you have never used Chat window before default size </font><font color="#ff0066">will be </font><font color="#ff0066">2 (=invisible)</font>.</br/>
-Resize via “preferences”-button if you want to see it. </br/>
+<br/>Pressing the slider knob with mouse-left button and moving slider will reduce the size of  chat window. When mouse button is released “Command:”-cell returns and Chat window remains selected size.</p>
+<p><font color="#ff0066">If you have never used Chat window before default size </font><font color="#ff0066">will be </font><font color="#ff0066">2 (=invisible)</font>.<br/>
+Resize via “preferences”-button if you want to see it. <br/>
 If you do not like this Chat window you can move/leave it to minimum size (2). Then it takes just horizontal 2px amount from DXSpot window.</p>
-<p>While minimized to up Chat window still receives all lines addressed to your logon call (and not having  “&gt;”-prompt at the end of line).</br/>
+<p>While minimized to up Chat window still receives all lines addressed to your logon call (and not having  “&gt;”-prompt at the end of line).<br/>
 So any time you like you can make it larger and chat lines are there to check.</p>
 
 
 
-</br></br>
+<br><br>
 <table border="0" cellpadding="5" cellspacing="2">
     <tbody>
     <tr>
@@ -128,7 +128,7 @@ So any time you like you can make it larger and chat lines are there to check.</
     </tr>
     </tbody>
 </table>
-</br>
+<br>
 <table border="0" cellpadding="5" cellspacing="2" width="99%">
     <tbody>
     <tr>
@@ -137,19 +137,19 @@ So any time you like you can make it larger and chat lines are there to check.</
                 has some predefined cluster nodes, however you will probably need to
                 set up a node of your preference. Click the 'Select' button and a list
                 of cluster node appears (see below). Click the 'New' option. Another dialog
-                appears (right). </br></br><img border="0" src="img/h18.png"></div>
+                appears (right). <br><br><img border="0" src="img/h18.png"></div>
         </td>
-        <td valign="top"><img src="img/h19.png" border="0" align="top"></br>
+        <td valign="top"><img src="img/h19.png" border="0" align="top"><br>
             <div style="text-align: justify;">Enter
                 the description (mostly the callsign). The 'Address' can be either an IP
                 or the name (see examples in the list). The 'Port' is given by a number.
                 Both address and port number can be obtained from the lists of DX cluster
                 nodes which are widely available on the internet.
-                </br></br><font color="red"><strong>Remember</strong></font> to put your callsign
+                <br><br><font color="red"><strong>Remember</strong></font> to put your callsign
                 into the 'User name' field. This will enable <strong>autologin</strong>.
                 The 'Password' column should remain empty in most cases because only few nodes
                 are password protected.
-                </br></br>A detailed list of DX Cluster nodes can be found
+                <br><br>A detailed list of DX Cluster nodes can be found
                 <a href="http://www.dxcluster.info/telnet/index.php"><strong>here</strong></a>
                 (page created by Jim, AD1C).
             </div>
@@ -157,7 +157,7 @@ So any time you like you can make it larger and chat lines are there to check.</
     </tr>
     </tbody>
 </table>
-</br></br>
+<br><br>
 <p align=center><img src=img/line.png></p>
 <table border="0" cellpadding="5" cellspacing="2" width="99%">
     <tbody>
@@ -166,14 +166,14 @@ So any time you like you can make it larger and chat lines are there to check.</
             <a name="bh19"><h2><strong>Bandmap Operation</strong></h2></a>
             <img src="img/h64.png" border="0"></td>
         <td valign="top">
-            <div align="justify"></br></br>
+            <div align="justify"><br><br>
                 The main purpose of a bandmap is to combine the most interesting info from two sources - the DX
                 Cluster and your personal notes. The bandmap combines a DX Cluster window with scratch
                 pad memories available on many radios, however a band map is more comfortable by far - you
                 don't need to manipulate subtle buttons on the radio panel, also the transceiver does
                 not indicate what is in the scratch pad memory. The band map is operated from the keyboard
                 and shows all at a glance.
-                </br></br>A valuable addition is the 'entries aging' option. If the bandmap entry is 'too' old,
+                <br><br>A valuable addition is the 'entries aging' option. If the bandmap entry is 'too' old,
                 it changes color and after another period it disappears. This is different from the usual
                 DX Cluster windows which display details of stations you have already worked, that are QRT
                 or are not very interesting to you from another reason. A band map provides frequency-sorted
@@ -194,7 +194,7 @@ So any time you like you can make it larger and chat lines are there to check.</
                 will be added to the band map. Your own entries are marked with an asterisk (here MD0CCE).
                 You can return to the frequency anytime, the call will jump into its box in the same way
                 as if clicked from the DX Cluster window. Click on any entry, you are on, prepared for
-                QSO logging.</br></br>
+                QSO logging.<br><br>
                 If the entry becomes older than the set time, it is displayed in a lighter color. Very old
                 entries will disappear, also if you log the station, the corresponding entry disappears
                 from the band map. The entries are always sorted by frequency.
@@ -203,7 +203,7 @@ So any time you like you can make it larger and chat lines are there to check.</
     </tr>
     </tbody>
 </table>
-</br></br>
+<br><br>
 <p align=center><img src=img/line.png></p>
 <table border="0" cellpadding="5" cellspacing="2" width="99%">
     <tbody>
@@ -213,17 +213,17 @@ So any time you like you can make it larger and chat lines are there to check.</
     </tr><tr>    
         <td valign="top">
                  <img src="img/h65.png" border="0"> <img src="img/h165.png" border="0">
-            <div align="justify"></br></br>There is currently no other function than DX Cluster spot
+            <div align="justify"><br><br>There is currently no other function than DX Cluster spot
                 displaying in true azimuthal projection with correct angles (azimuth) and distances.
                 Alternatively, a map without projection, ie. the globe as seen from space can be selected.
-                </br>With Wsjt-x as source same colors are used as with CQ-monitor and station locations are shown <b>only</b> if locator is known.
-                </br> See also settings in <a href="h1.html#bh2"> Preferences/xplanet support</a> 
+                <br>With Wsjt-x as source same colors are used as with CQ-monitor and station locations are shown <b>only</b> if locator is known.
+                <br> See also settings in <a href="h1.html#bh2"> Preferences/xplanet support</a> 
             </div>
         </td>
     </tr>
     </tbody>
 </table>
-</br></br>
+<br><br>
 <p align=center><img src=img/line.png></p>
 <table border="0" cellpadding="5" cellspacing="2" width="99%">
     <tbody>
@@ -233,7 +233,7 @@ So any time you like you can make it larger and chat lines are there to check.</
             <img src="img/h110.png" border="0"></td>
             </img>
             <td valign="top">
-            <div align="justify"></br></br>
+            <div align="justify"><br><br>
                 There is a simple window providing propagation indices as provided by the NOAA Space
                 Weather Center. CQRLOG does not include a propagation forecast module but keen users
                 can estimate many parameters just from the supplied data.
@@ -245,7 +245,7 @@ So any time you like you can make it larger and chat lines are there to check.</
 	</img>
         </td>
         <td valign="top">
-        <div align="justify"></br></br>
+        <div align="justify"><br><br>
         This propagation form is an alternative showing details from dk0wcy page with 3 hour graphical
 	display of K-index. The Kiel information is lot more exact  for use in Europe than Boulder’s.
 	As Boulder information at dk0wcy is one days old, top of form shows time when information is 
@@ -258,7 +258,7 @@ So any time you like you can make it larger and chat lines are there to check.</
     </tr>
     </tbody>
 </table>
-</br></br>
+<br><br>
 <p align=center><img src=img/line.png></p>
 <table border="0" cellpadding="5" cellspacing="2" width="99%">
     <tbody>
@@ -266,12 +266,12 @@ So any time you like you can make it larger and chat lines are there to check.</
     <td valign="top">
         <a name="ch21"><h2><strong>Additional notes to a callsign</strong></h2></a>
         <img src="img/h112.png" border="0">
-        <div align="justify"></br></br>
+        <div align="justify"><br><br>
             CQRLOG provides virtually unlimited support for additional notes which can be attached
             to a particular callsign (ie. an electronic QSL, a map showing the position, text files
             with antenna details etc). Assuming that external viewers for the text, PDF, image
             (jpg, png, gif) and HTML files are <a href="h1.html#ch4">set up properly</a>, all these
-            files can be displayed.</br></br>
+            files can be displayed.<br><br>
             The main program tree contains the <strong>call_data</strong> subfolder where any callsign
             can have its own subfolder containing the files related to the call sign. The subfolder
             for a call sign must be created manually. If this subfolder exists, a special icon "Call
@@ -283,20 +283,20 @@ So any time you like you can make it larger and chat lines are there to check.</
             unlimited, also the call sign related subfolder may contain any number of files.
         </div>
     </td>
-    <td valign="middle"><img src="img/h113.png" border="0"></br></br>
+    <td valign="middle"><img src="img/h113.png" border="0"><br><br>
         <div align="justify">If the folder contains a file named "qsl_call_front.png" or
             "qsl_call_front.jpg" (must be .png or .jpg), another icon "Call has a QSL image"
             (ie. the ok2cqr subfolder contains qsl_ok2cqr_front.jpg). Click this icon and a QSL browser
             appears showing the front of the QSL card. The "qsl_call_front.png" or "qsl_call_front.jpg"
             <strong>is mandatory</strong> but there can also be a reverse side of QSL card with the
             name "qsl_call_back.png" or "qsl_call_back.jpg". If this file is available, you can use
-            the "Front" and "Back" tabs to display both sides of the QSL card.</br></br>
+            the "Front" and "Back" tabs to display both sides of the QSL card.<br><br>
             <img src="img/h116.png" border="0"></div>
     </td>
     </tr>
     </tbody>
 </table>
-</br></br>
+<br><br>
 <p align=center><img src=img/line.png></p>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
     <tbody>
@@ -305,6 +305,6 @@ So any time you like you can make it larger and chat lines are there to check.</
     </tr>
     </tbody>
 </table>
-</br>
+<br>
 </div></body>
 </html>
