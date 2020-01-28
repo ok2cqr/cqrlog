@@ -1,13 +1,13 @@
 object frmSendSpot: TfrmSendSpot
-  Left = 644
+  Left = 841
   Height = 116
-  Top = 286
-  Width = 328
+  Top = 237
+  Width = 395
   HorzScrollBar.Page = 307
   VertScrollBar.Page = 106
   Caption = 'Send spot'
   ClientHeight = 116
-  ClientWidth = 328
+  ClientWidth = 395
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -114,7 +114,7 @@ object frmSendSpot: TfrmSendSpot
     FFFF
   }
   OnActivate = FormActivate
-  OnShow = FormShow
+  Position = poScreenCenter
   LCLVersion = '2.0.4.0'
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
@@ -137,7 +137,7 @@ object frmSendSpot: TfrmSendSpot
     Left = 6
     Height = 34
     Top = 41
-    Width = 316
+    Width = 383
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 12
@@ -149,7 +149,7 @@ object frmSendSpot: TfrmSendSpot
   object btnOK: TButton
     AnchorSideTop.Control = btnCancel
     AnchorSideRight.Control = btnCancel
-    Left = 160
+    Left = 227
     Height = 30
     Top = 81
     Width = 75
@@ -165,7 +165,7 @@ object frmSendSpot: TfrmSendSpot
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = edtSpot
     AnchorSideRight.Side = asrBottom
-    Left = 247
+    Left = 314
     Height = 30
     Top = 81
     Width = 75
@@ -180,13 +180,14 @@ object frmSendSpot: TfrmSendSpot
   object btnModRst: TButton
     AnchorSideTop.Control = btnLoc
     AnchorSideRight.Control = btnLoc
-    Left = 116
+    Left = 183
     Height = 30
     Top = 5
     Width = 100
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 6
     Caption = '+Mode_Rst'
+    OnClick = btnModRstClick
     TabOrder = 3
   end
   object btnLoc: TButton
@@ -194,12 +195,13 @@ object frmSendSpot: TfrmSendSpot
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = edtSpot
     AnchorSideRight.Side = asrBottom
-    Left = 222
+    Left = 289
     Height = 30
     Top = 5
     Width = 100
     Anchors = [akTop, akRight]
     Caption = '+Locators'
+    OnClick = btnLocClick
     TabOrder = 4
   end
 end
