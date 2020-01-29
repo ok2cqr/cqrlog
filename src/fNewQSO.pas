@@ -6535,7 +6535,7 @@ begin
       f := f*1000;
       tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + edtCall.Text;
       ModRst := cmbMode.Text+' '+edtHisRst.Text;
-      HMLoc := edtGrid.Text+'<>'+copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
+      HMLoc := edtGrid.Text+'<'+dmSatellite.GetPropShortName(cmbPropagation.Text)+'>'+copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
     end;
   end
   else begin
@@ -6552,13 +6552,13 @@ begin
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,my_loc FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
     dmData.Q.Open();
     ModRst  := dmData.Q.Fields[0].AsString+' '+dmData.Q.Fields[1].AsString;
-    HMLoc   := dmData.Q.Fields[2].AsString+'<>'+dmData.Q.Fields[3].AsString;
+    HMLoc   := dmData.Q.Fields[2].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[4].AsString;
     dmData.Q.Close();
     dmData.trQ.Rollback;
 
