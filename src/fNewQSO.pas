@@ -413,6 +413,7 @@ type
     procedure edtStateEnter(Sender: TObject);
     procedure edtWAZEnter(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormWindowStateChange(Sender: TObject);
     procedure lblAziChangeBounds(Sender: TObject);
     procedure lblQRAChangeBounds(Sender: TObject);
@@ -640,6 +641,7 @@ type
     UseSpaceBar : Boolean;
     CWint       : TCWDevice;
     ShowWin     : Boolean;
+    LastFkey    : Word;
 
     WsjtxSock             : TUDPBlockSocket;
     N1MMSock              : TUDPBlockSocket;
@@ -1524,6 +1526,14 @@ end;
 
 procedure TfrmNewQSO.SaveSettings;
 begin
+
+  if Assigned(CWint) then
+  begin
+    Menuitem73.Visible:=False;
+    CWint.Close;
+    FreeAndNil(CWint)
+  end ;
+
   cqrini.DeleteKey('TMPQSO','OFF');
   cqrini.DeleteKey('TMPQSO','FREQ');
   cqrini.DeleteKey('TMPQSO','Mode');
@@ -1535,12 +1545,6 @@ begin
     dmUtils.CloseXplanet;
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
-
-  if Assigned(CWint) then
-  begin
-    CWint.Close;
-    FreeAndNil(CWint)
-  end
 end;
 
 procedure TfrmNewQSO.FormShow(Sender: TObject);
@@ -3808,6 +3812,8 @@ procedure TfrmNewQSO.cmbModeChange(Sender: TObject);
 begin
   ShowCountryInfo;
   ChangeReports;
+  //flush CW buffer when entering to CW (specially HamLib keyer)
+  if ((Assigned(CWint)) and (cmbMode.Text='CW'))then CWint.StopSending;
 end;
 
 procedure TfrmNewQSO.cmbModeEnter(Sender: TObject);
@@ -4123,6 +4129,7 @@ begin
     ShowWindows
   end
 end;
+
 
 procedure TfrmNewQSO.edtCallChange(Sender: TObject);
 begin
@@ -5052,6 +5059,11 @@ begin
   CheckQSLImage
 end;
 
+procedure TfrmNewQSO.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then LastFKey := 0;
+end;
 procedure TfrmNewQSO.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
@@ -5081,8 +5093,7 @@ begin
         old_cmode := '';
       end
       else begin
-        if Assigned(CWint) then
-          CWint.StopSending;
+        if Assigned(CWint) then CWint.StopSending;
         EscFirstTime   := True;
         tmrESC.Enabled := True
       end
@@ -5129,16 +5140,25 @@ begin
   end;
 
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
-  begin
-    if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
-      RunVK(dmUtils.GetDescKeyFromCode(Key))
-    else
-      if Assigned(CWint) then
-        CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
-          frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-          frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+  Begin
+   if LastFkey = 0 then
+    begin
+      if (Sender <> nil ) then LastFKey := Key;   //LastKey resets by  KeyUp. Nil sender is a mouse click on button
+      if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
+       begin
+        RunVK(dmUtils.GetDescKeyFromCode(Key));
+       end
+      else
+       Begin
+          if Assigned(CWint) and (cmbMode.Text='CW') then
+          CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
+            frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+            frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+       end;
+      end;
     key := 0
   end;
+
 
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
@@ -6621,60 +6641,68 @@ end;
 procedure TfrmNewQSO.InitializeCW;
 var
   KeyType: TKeyType;
+  UseSpeed: integer;
+  KeyerType: integer;
 begin
   if (CWint<>nil) then
-    FreeAndNil(CWint);
+   Begin
+    Menuitem73.Visible:=False;
+    sbNewQSO.Panels[2].Text := '';
+    CWint.Close;
+    FreeAndNil(CWint)
+   end;
 
-  if dmData.DebugLevel>=1 then Writeln('CW init');
-  case  cqrini.ReadInteger('CW','Type',0) of
+  KeyerType :=  cqrini.ReadInteger('CW','Type',0);
+  if dmData.DebugLevel>=1 then Writeln('CW init keyer type:',KeyerType);
+  case  KeyerType of
     1 : begin
           CWint := TCWWinKeyerUSB.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port    := cqrini.ReadString('CW','wk_port','');
           CWint.Device  := cqrini.ReadString('CW','wk_port','');
           CWint.PortSpeed := 1200;
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','wk_speed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','wk_speed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port    := cqrini.ReadString('CW','cw_port','');
           CWint.Device  := cqrini.ReadString('CW','cw_address','');
           CWint.PortSpeed := 0;
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','cw_speed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','cw_speed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','cw_speed',30);
         end;
     3 : begin
           CWint := TCWK3NG.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port    := cqrini.ReadString('CW','K3NGPort','');
           CWint.Device  := cqrini.ReadString('CW','K3NGPort','');
           CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','K3NGSpeed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30)) + 'WPM'
+          UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');
           CWint.Device := cqrini.ReadString('TRX1','host','localhost');
-          CWint.Open;
-          CWint.SetSpeed(cqrini.ReadInteger('CW','HamLibSpeed',30));
-          sbNewQSO.Panels[2].Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30)) + 'WPM'
-        end
-  end //case
+          UseSpeed := cqrini.ReadInteger('CW','HamLibSpeed',30);
+        end;
+  end; //case
+  if KeyerType > 0 then
+   Begin
+     Menuitem73.Visible:=True; //set CWType in Window menu visible
+     CWint.Open;
+     CWint.SetSpeed(UseSpeed);
+     sbNewQSO.Panels[2].Text := IntToStr(UseSpeed) + 'WPM';
+     if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
+   end;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);

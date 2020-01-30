@@ -60,8 +60,10 @@ type
     procedure btnPgUpClick(Sender: TObject);
     procedure btnPgUpMouseEnter(Sender: TObject);
     procedure btnPgUpMouseLeave(Sender: TObject);
+    procedure edtSpeedMouseLeave(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
     procedure btnCloseClick(Sender: TObject);
@@ -69,7 +71,6 @@ type
     procedure fraCWKeys1Resize(Sender: TObject);
     procedure mChange(Sender: TObject);
     procedure mKeyPress(Sender: TObject; var Key: char);
-    procedure mKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure rgModeClick(Sender: TObject);
   private
     { private declarations }
@@ -111,17 +112,28 @@ begin
   m.SetFocus;
 end;
 
-procedure TfrmCWType.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if key = 27 then
-    frmNewQSO.CWint.StopSending
-end;
-
 procedure TfrmCWType.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   cqrini.WriteInteger('CW','Mode',rgMode.ItemIndex);
   dmUtils.SaveWindowPos(frmCWType)
+end;
+
+procedure TfrmCWType.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  case Key of
+   VK_F1 .. VK_F10,
+   33,
+   34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
+   VK_ESCAPE       : frmNewQSO.CWint.StopSending;
+   end;
+end;
+
+procedure TfrmCWType.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
+                      frmNewQSO.FormKeyUp(Sender,Key,Shift);
 end;
 
 procedure TfrmCWType.btnF1MouseEnter(Sender: TObject);
@@ -138,7 +150,9 @@ end;
 
 procedure TfrmCWType.btnF2Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -152,7 +166,9 @@ end;
 
 procedure TfrmCWType.btnF10Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -164,7 +180,9 @@ end;
 
 procedure TfrmCWType.btnF1Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -183,7 +201,9 @@ end;
 
 procedure TfrmCWType.btnF3Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -202,7 +222,9 @@ end;
 
 procedure TfrmCWType.btnF4Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -221,7 +243,9 @@ end;
 
 procedure TfrmCWType.btnF5Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -240,7 +264,9 @@ end;
 
 procedure TfrmCWType.btnF6Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -259,7 +285,9 @@ end;
 
 procedure TfrmCWType.btnF7Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -278,7 +306,9 @@ end;
 
 procedure TfrmCWType.btnF8Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -297,7 +327,9 @@ end;
 
 procedure TfrmCWType.btnF9Click(Sender: TObject);
 begin
-  frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
+  m.SetFocus; //after click focus back to memo
+  if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
 end;
@@ -344,6 +376,10 @@ begin
   frmCWType.lblToShowMouseOverText.Caption:='';
 end;
 
+procedure TfrmCWType.edtSpeedMouseLeave(Sender: TObject);
+begin
+   m.SetFocus; //after click focus back to memo
+end;
 
 procedure TfrmCWType.FormShow(Sender: TObject);
 begin
@@ -369,7 +405,6 @@ procedure TfrmCWType.edtSpeedChange(Sender: TObject);
 begin
   frmNewQSO.CWint.SetSpeed(edtSpeed.Value);
   frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtSpeed.Value)+'WPM';
-
 end;
 procedure TfrmCWType.fraCWKeys1Resize(Sender: TObject);
  var
@@ -423,7 +458,8 @@ Begin
    if msg<>'' then
     Begin
      if LocalDbg then Writeln('Blocksend out:'+msg);
-     frmNewQSO.CWint.SendText(msg);
+     if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+       frmNewQSO.CWint.SendText(msg);
     end;
    WasMemoLen :=length(m.lines.text);
 end;
@@ -459,7 +495,8 @@ begin
             case rgMode.ItemIndex of
 
                  0:               Begin
-                                       frmNewQSO.CWint.SendText(l); //letter mode
+                                       if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+                                         frmNewQSO.CWint.SendText(l); //letter mode
                                        WasMemoLen :=length(m.lines.text);
                                   end;
                  1:               Begin  //word mode , first word is send character by character
@@ -474,7 +511,8 @@ begin
                                       end
                                     else
                                       Begin
-                                      frmNewQSO.CWint.SendText(l);
+                                      if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
+                                       frmNewQSO.CWint.SendText(l);
                                       WasMemoLen :=length(m.lines.text);
                                       end;
                                   end;
@@ -495,32 +533,6 @@ begin
     blocksend;
     Switch2Word := false;
    end;
-end;
-
-procedure TfrmCWType.mKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-
-begin
-  if key = 33 then//pgup
-  begin
-    SetSpeed(2);
-    key := 0
-  end;
-
-  if key = 34 then//pgup
-  begin
-    SetSpeed(-2);
-    key := 0
-  end;
-
-  if (key >= VK_F1) and (key <= VK_F10) then
-  begin
-    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(key),frmNewQSO.edtCall.Text,
-       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
-  end;
-
-  if Key = VK_ESCAPE then
-    frmNewQSO.CWint.StopSending
 end;
 
 procedure TfrmCWType.rgModeClick(Sender: TObject);
