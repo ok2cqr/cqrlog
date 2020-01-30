@@ -6523,6 +6523,8 @@ procedure TfrmNewQSO.SendSpot;
 var
   call : String;
   tmp  : String;
+  ModRst,
+  HMLoc :String;
   f    : Currency;
   freq : String;
 begin
@@ -6531,7 +6533,9 @@ begin
     if TryStrToCurr(cmbFreq.Text,f) then
     begin
       f := f*1000;
-      tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + edtCall.Text
+      tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + edtCall.Text;
+      ModRst := cmbMode.Text+' '+edtHisRst.Text;
+      HMLoc := edtGrid.Text+'<'+dmSatellite.GetPropShortName(cmbPropagation.Text)+'>'+copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
     end;
   end
   else begin
@@ -6546,7 +6550,18 @@ begin
     freq := FloatToStrF(dmData.Q.Fields[1].AsCurrency*1000,ffFixed,8,1);
     dmData.Q.Close();
     dmData.trQ.Rollback;
-    tmp  := 'DX ' + freq + ' ' + call
+    tmp  := 'DX ' + freq + ' ' + call;
+
+    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.trQ.StartTransaction;
+    if dmData.DebugLevel >=1 then
+      Writeln(dmData.Q.SQL.Text);
+    dmData.Q.Open();
+    ModRst  := dmData.Q.Fields[0].AsString+' '+dmData.Q.Fields[1].AsString;
+    HMLoc   := dmData.Q.Fields[2].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[4].AsString;
+    dmData.Q.Close();
+    dmData.trQ.Rollback;
+
   end;
   if (call = '') and (edtCall.Text = '') then
   exit;
@@ -6554,6 +6569,8 @@ begin
   with TfrmSendSpot.Create(self) do
   try
     edtSpot.Text := tmp + ' ';
+    ModeRst      :=' '+ModRst;
+    HisMyLoc     :=' '+HMLoc;
     ShowModal;
     if ModalResult = mrOK then
     begin
