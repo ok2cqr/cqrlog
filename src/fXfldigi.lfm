@@ -3,14 +3,14 @@ object frmxfldigi: Tfrmxfldigi
   Height = 193
   Top = 15
   Width = 347
-  Caption = 'frmxfldigi'
+  Caption = 'fldigi xmlrpc'
   ClientHeight = 193
   ClientWidth = 347
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.0.4.0'
   object lbCall: TLabel
     Left = 8
     Height = 15
@@ -148,7 +148,7 @@ object frmxfldigi: Tfrmxfldigi
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
     Left = 68
-    Height = 15
+    Height = 17
     Top = 0
     Width = 211
     Caption = 'Data received from fldigi xmlrpc'
@@ -169,7 +169,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label1: TLabel
     Left = 8
-    Height = 15
+    Height = 17
     Top = 104
     Width = 96
     Caption = 'Comment QSO'
@@ -179,7 +179,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label2: TLabel
     Left = 256
-    Height = 15
+    Height = 17
     Top = 104
     Width = 46
     Caption = 'County'
@@ -200,7 +200,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label4: TLabel
     Left = 8
-    Height = 15
+    Height = 17
     Top = 56
     Width = 39
     Caption = 'Name'
@@ -210,7 +210,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label5: TLabel
     Left = 88
-    Height = 15
+    Height = 17
     Top = 56
     Width = 28
     Caption = 'QTH'
@@ -220,7 +220,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label6: TLabel
     Left = 224
-    Height = 15
+    Height = 17
     Top = 56
     Width = 27
     Caption = 'Grid'
@@ -230,7 +230,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label7: TLabel
     Left = 296
-    Height = 15
+    Height = 17
     Top = 56
     Width = 34
     Caption = 'State'
@@ -240,7 +240,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label8: TLabel
     Left = 8
-    Height = 15
+    Height = 17
     Top = 16
     Width = 25
     Caption = 'Call'
@@ -250,9 +250,9 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label9: TLabel
     Left = 88
-    Height = 15
+    Height = 17
     Top = 16
-    Width = 27
+    Width = 28
     Caption = 'Freq'
     Font.Color = clBlue
     ParentColor = False
@@ -260,9 +260,9 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label10: TLabel
     Left = 160
-    Height = 15
+    Height = 17
     Top = 16
-    Width = 35
+    Width = 36
     Caption = 'Mode'
     Font.Color = clBlue
     ParentColor = False
@@ -270,7 +270,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label11: TLabel
     Left = 224
-    Height = 15
+    Height = 17
     Top = 16
     Width = 30
     Caption = 'RSTs'
@@ -280,7 +280,7 @@ object frmxfldigi: Tfrmxfldigi
   end
   object Label12: TLabel
     Left = 296
-    Height = 15
+    Height = 17
     Top = 16
     Width = 28
     Caption = 'RSTr'

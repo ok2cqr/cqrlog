@@ -5,7 +5,7 @@ unit uCWKeying;
 interface
 
 uses
-  Classes, SysUtils, synaser, synautil, lNet, lNetComponents;
+  Classes, SysUtils, synaser, synautil, lNet, lNetComponents, Forms;
 
 type TKeyType   = (ktCWdaemon, ktWinKeyer);
 type TKeyStatus = (ksReady, ksBusy);
@@ -119,6 +119,7 @@ type
 
   TCWHamLib = class(TCWDevice)
     private
+      AllowCW : Boolean;
       fActive : Boolean;
       fSpeed  : Word;
       tcp     : TLTCPComponent;
@@ -709,16 +710,12 @@ begin
 end;
 
 procedure TCWHamLib.OnReceived(aSocket: TLSocket);
-
 begin
   if aSocket.GetMessage(Rmsg) > 0 then
-    if DebugMode then
-       Writeln('HLresp MSG:|',Rmsg,'|');
-
-  //at this point no proper buffer overflow handling implemented.
-  //RPRT -9 comes here too late and can not control sed loop
-  //Now just tries stop CW so that operator knows he is sending too long text and resuld may be chaos
-  if pos('RPRT -9',Rmsg)>0 then  StopSending;
+   begin
+    Rmsg := StringReplace(Rmsg,LineEnding,' ',[rfReplaceAll]);
+    if DebugMode then Writeln('HLresp MSG:',Rmsg,':');
+   end;
 end;
 
 
@@ -765,6 +762,7 @@ end;
 
 procedure TCWHamLib.StopSending;
 begin
+  AllowCW := false;
   //not implemented in hamlib command set
   //sending 0xFF as text works with Icom
   tcp.SendMessage('b'+#$0FF+LineEnding);
@@ -774,35 +772,67 @@ begin
 end;
 
 procedure TCWHamLib.SendText(text : String);
-var c:integer;
+const
+     _REPEATS = 500; //times
+     _TIMEOUT = 20; //x10-milliseconds
+var
+  c, i,
+  tout,
+  rpt : integer;
 
+//-----------------------------------------------------------------------------------
+Procedure SendToHamlib(t:string);
+Begin
+            tout :=_TIMEOUT; //used away in sleep(10) bloks
+            rpt := _REPEATS;
+
+            while ((rpt > 0) and AllowCW) do
+              Begin
+                 if fDebugMode then  Writeln('HLsend MSG:','b'+t+':');
+                 Rmsg:='';
+                 tcp.SendMessage('b'+t+LineEnding);
+                 dec(rpt);
+                  repeat
+                    begin
+                      sleep(10);
+                      Application.ProcessMessages;
+                      dec(tout);
+                    end;
+                  until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
+                  if fDebugMode then  Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')');
+                  if fDebugMode then  Writeln('     Repeats left: ',rpt,'(/',_REPEATS,')');
+                  if pos('-9',Rmsg)>0 then
+                    Begin
+                      dec(rpt);
+                      sleep(300);
+                    end
+                   else
+                    rpt :=0;
+              end;
+
+end;
+//-----------------------------------------------------------------------------------
 begin
    if text<>'' then
-       begin
+     begin
+       AllowCW := true;
+        //different rigs support different length of b-command. 10chr should be safe for all
         c:= length(text);
         if c>10 then
          Begin
-        //different rigs support different length of b-command. 10chr should be safe for all
-        repeat
-          Begin
-            Rmsg :='';
-            tcp.SendMessage('b'+copy(text,1,10)+LineEnding);
-            if fDebugMode then
-               Begin
-                 Writeln('Sending HL-block:',copy(text,1,10));
-               end;
-            text := copy(text,11,length(text));
-            c:= length(text);
-          end;
-        until c=0;
-        end
+            i := 1;
+            if fDebugMode then  Writeln('Ltr send: ');
+            repeat
+              Begin
+                SendToHamlib(text[i]);
+                inc(i);
+              end;
+            until (i > c);
+         end
         else
-         Begin
-           tcp.SendMessage('b'+text+LineEnding);
-           if fDebugMode then  Writeln('Sending HL-message:','b'+text+LineEnding);
-         end;
-       end
-        else  if fDebugMode then  Writeln('Empty message!');
+         SendToHamlib(text);
+      end
+     else  if fDebugMode then  Writeln('Empty message!');
 end;
 
 procedure TCWHamLib.Close;
