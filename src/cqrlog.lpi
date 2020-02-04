@@ -323,6 +323,7 @@
         <Filename Value="fSendSpot.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSendSpot"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit32>
       <Unit33>
