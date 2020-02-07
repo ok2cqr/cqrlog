@@ -2135,6 +2135,7 @@ object frmNewQSO: TfrmNewQSO
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   PopupMenu = popMode
@@ -3858,7 +3859,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 355
           Height = 23
           Hint = 'Show locator on map'
-          Top = 302
+          Top = 338
           Width = 23
           Anchors = [akTop, akRight]
           BorderSpacing.Top = 3
@@ -4827,9 +4828,11 @@ object frmNewQSO: TfrmNewQSO
       end
       object MenuItem73: TMenuItem
         Action = acCWType
+        Visible = False
       end
       object MenuItem72: TMenuItem
         Action = acCWFKey
+        Caption = 'Memory keys'
       end
       object MenuItem80: TMenuItem
         Action = acDetails

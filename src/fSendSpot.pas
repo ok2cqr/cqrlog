@@ -26,29 +26,34 @@ type
   TfrmSendSpot = class(TForm)
     btnOK: TButton;
     btnCancel: TButton;
+    btnModRst: TButton;
+    btnLoc: TButton;
     edtSpot: TEdit;
     Label1: TLabel;
+    procedure btnLocClick(Sender: TObject);
+    procedure btnModRstClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure edtSpotEnter(Sender: TObject);
     procedure edtSpotKeyPress(Sender: TObject; var Key: char);
   private
     { private declarations }
   public
+    ModeRst,
+    HisMyLoc  :String;
     { public declarations }
   end; 
 
 var
   frmSendSpot: TfrmSendSpot;
 
+
 implementation
 {$R *.lfm}
 
 { TfrmSendSpot }
+uses dUtils;
 
-procedure TfrmSendSpot.FormShow(Sender: TObject);
-begin
-end;
+
 
 procedure TfrmSendSpot.edtSpotEnter(Sender: TObject);
 begin
@@ -59,6 +64,18 @@ end;
 procedure TfrmSendSpot.FormActivate(Sender: TObject);
 begin
   edtSpot.SetFocus;
+end;
+
+procedure TfrmSendSpot.btnModRstClick(Sender: TObject);
+begin
+  if pos(ModeRst, edtSpot.Text) = 0 then
+    edtSpot.Text := edtSpot.Text+ ' '+ModeRst;
+end;
+
+procedure TfrmSendSpot.btnLocClick(Sender: TObject);
+begin
+  if pos(HisMyLoc,  edtSpot.Text ) = 0 then
+    edtSpot.Text := edtSpot.Text+ ' '+HisMyLoc;
 end;
 
 procedure TfrmSendSpot.edtSpotKeyPress(Sender: TObject; var Key: char);

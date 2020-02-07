@@ -2549,7 +2549,7 @@ begin
     end
   end;
   if pos('WHERE', Q.SQL.Text) > 0 then
-    Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" AND '
+       Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM view_cqrlog_main_by_qsodate WHERE left(loc,4) <> "" AND '
       + copy(Q.SQL.Text, pos('WHERE', Q.SQL.Text)+5, length(Q.SQL.Text))
    else
     Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" ';

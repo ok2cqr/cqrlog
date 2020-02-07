@@ -39,7 +39,7 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="--DEBUG=1"/>
+        <CommandLineParams Value="--DEBUG=0"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>
@@ -52,7 +52,7 @@
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="--DEBUG=1"/>
+            <CommandLineParams Value="--DEBUG=0"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
           <environment>
@@ -105,7 +105,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="106">
+    <Units Count="108">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -324,6 +324,7 @@
         <Filename Value="fSendSpot.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSendSpot"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit32>
       <Unit33>
@@ -801,6 +802,17 @@
         <Filename Value="azidis3.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit105>
+      <Unit106>
+        <Filename Value="fCWKeys.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmCWKeys"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit106>
+      <Unit107>
+        <Filename Value="fCWKeys.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit107>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
