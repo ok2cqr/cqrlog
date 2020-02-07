@@ -3466,11 +3466,13 @@ end;
 procedure TdmUtils.ShowLocatorMapInBrowser(locator: string);
 var
   AProcess: TProcess;
+  myloc: string = '';
 begin
+  myloc := cqrini.ReadString('Station', 'LOC', '');
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
-    AProcess.Parameters.Add('https://www.k7fry.com/grid/?qth=' + locator);
+    AProcess.Parameters.Add('https://www.k7fry.com/grid/?qth=' + locator + '&from=' + myloc);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally

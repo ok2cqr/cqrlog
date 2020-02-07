@@ -25,8 +25,8 @@ type
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
-                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq,
-                              exSatName, exContinent, exContestName, exContestNr, exContesMsg: Boolean);
+                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
+                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
 
@@ -85,36 +85,36 @@ procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCal
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
-                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq,
-                              exSatName, exContinent, exContestName, exContestNr, exContesMsg: Boolean);
+                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
+                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg: Boolean);
 begin
-  exDate    := cqrini.ReadBool('Export','Date',True);
-  exTimeOn  := cqrini.ReadBool('Export','time_on',True);
-  exTimeOff := cqrini.ReadBool('Export','time_off',False);
-  exCall    := cqrini.ReadBool('Export','CallSign',True);
-  exMode    := cqrini.ReadBool('Export','Mode',True);
-  exFreq    := cqrini.ReadBool('Export','Freq',True);
-  exRSTS    := cqrini.ReadBool('Export','RST_S',True);
-  exRSTR    := cqrini.ReadBool('Export','RST_R',True);
-  exName    := cqrini.ReadBool('Export','Name',True);
-  exQTH     := cqrini.ReadBool('Export','QTH',True);
-  exQSLS    := cqrini.ReadBool('Export','QSL_S',True);
-  exQSLR    := cqrini.ReadBool('Export','QSL_R',True);
-  exQSLVIA  := cqrini.ReadBool('Export','QSL_VIA',True);
-  exLoc     := cqrini.ReadBool('Export','Locator',False);
-  exMyLoc   := cqrini.ReadBool('Export','MyLoc',False);
-  exOperator:= cqrini.ReadBool('Export','Operator',False);
+  ExDate    := cqrini.ReadBool('Export','Date',True);
+  ExTimeOn  := cqrini.ReadBool('Export','time_on',True);
+  ExTimeOff := cqrini.ReadBool('Export','time_off',False);
+  ExCall    := cqrini.ReadBool('Export','CallSign',True);
+  ExMode    := cqrini.ReadBool('Export','Mode',True);
+  ExFreq    := cqrini.ReadBool('Export','Freq',True);
+  ExRSTS    := cqrini.ReadBool('Export','RST_S',True);
+  ExRSTR    := cqrini.ReadBool('Export','RST_R',True);
+  ExName    := cqrini.ReadBool('Export','Name',True);
+  ExQTH     := cqrini.ReadBool('Export','QTH',True);
+  ExQSLS    := cqrini.ReadBool('Export','QSL_S',True);
+  ExQSLR    := cqrini.ReadBool('Export','QSL_R',True);
+  ExQSLVIA  := cqrini.ReadBool('Export','QSL_VIA',True);
+  ExLoc     := cqrini.ReadBool('Export','Locator',False);
+  ExMyLoc   := cqrini.ReadBool('Export','MyLoc',False);
+  ExOperator:= cqrini.ReadBool('Export','Operator',False);
   ExDistance:= cqrini.ReadBool('Export','Distance',False);
-  exIOTA    := cqrini.ReadBool('Export','IOTA',False);
-  exAward   := cqrini.ReadBool('Export','Award',False);
-  exCounty  := cqrini.ReadBool('Export','County',False);
-  exPower   := cqrini.ReadBool('Export','Power',False);
-  exDXCC    := cqrini.ReadBool('Export','DXCC',False);
-  exRemarks := cqrini.ReadBool('Export','Remarks',False);
-  exWAZ     := cqrini.ReadBool('Export','WAZ',False);
-  exITU     := cqrini.ReadBool('Export','ITU',False);
-  exNote    := cqrini.ReadBool('Export','Note',False);
-  exState   := cqrini.ReadBool('Export','State',False);
+  ExIOTA    := cqrini.ReadBool('Export','IOTA',False);
+  ExAward   := cqrini.ReadBool('Export','Award',False);
+  ExCounty  := cqrini.ReadBool('Export','County',False);
+  ExPower   := cqrini.ReadBool('Export','Power',False);
+  ExDXCC    := cqrini.ReadBool('Export','DXCC',False);
+  ExRemarks := cqrini.ReadBool('Export','Remarks',False);
+  ExWAZ     := cqrini.ReadBool('Export','WAZ',False);
+  ExITU     := cqrini.ReadBool('Export','ITU',False);
+  ExNote    := cqrini.ReadBool('Export','Note',False);
+  ExState   := cqrini.ReadBool('Export','State',False);
   ExLQslS     := cqrini.ReadBool('Export','LQSLS',False);
   ExLQslSDate := cqrini.ReadBool('Export','LQSLSDate',False);
   ExLQslR     := cqrini.ReadBool('Export','LQSLR',False);
@@ -125,15 +125,15 @@ begin
   ExeQslSDate := cqrini.ReadBool('Export','eQSLSDate',False);
   ExeQslR     := cqrini.ReadBool('Export','eQSLR',False);
   ExeQslRDate := cqrini.ReadBool('Export','eQSLRDate',False);
-  exAscTime   := cqrini.ReadBool('Export','AscTime',False);
-  exProp      := cqrini.ReadBool('Export', 'Prop', False);
-  exRxFreq    := cqrini.ReadBool('Export', 'RxFreq', False);
-  exSatName   := cqrini.ReadBool('Export', 'SatName', False);
-  exContinent := cqrini.ReadBool('Export', 'Continent', False);
-  exProfile   := cqrini.ReadBool('Export', 'Profile', False);
-  exContestName := cqrini.ReadBool('Export', 'Contestname', False);
-  exContestNr   := cqrini.ReadBool('Export', 'ContestNr',False);
-  exContesMsg   := cqrini.ReadBool('Export', 'ContestMsg', False);
+  ExAscTime   := cqrini.ReadBool('Export','AscTime',False);
+  ExProp      := cqrini.ReadBool('Export', 'Prop', False);
+  ExRxFreq    := cqrini.ReadBool('Export', 'RxFreq', False);
+  ExSatName   := cqrini.ReadBool('Export', 'SatName', False);
+  ExContinent := cqrini.ReadBool('Export', 'Continent', False);
+  ExProfile   := cqrini.ReadBool('Export', 'Profile', False);
+  ExContestName := cqrini.ReadBool('Export', 'Contestname', False);
+  ExContestNr   := cqrini.ReadBool('Export', 'ContestNr',False);
+  ExContesMsg   := cqrini.ReadBool('Export', 'ContestMsg', False);
 
 end;
 
@@ -156,8 +156,8 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower : Boolean;
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
-  exContinent, exContestName, exContestNr, exContestMsg : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
+  ExContinent, ExContestName, ExContestNr, ExContestMsg : Boolean;
   Source : TDataSet;
   FirstBackupPath : String;
   qrb,             //distance
@@ -207,7 +207,7 @@ var
     end;
     if ExCall then
       SaveTag(dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(call)),leng);
-    if exMode then
+    if ExMode then
     begin
       if (Mode = 'JS8') then
         tmp := '<MODE:4>MFSK<SUBMODE:3>JS8'
@@ -217,43 +217,43 @@ var
         tmp := '<MODE';
       SaveTag(dmUtils.StringToADIF(tmp,Mode),leng);
     end;
-    if exFreq then
+    if ExFreq then
     begin
       if pos(',',freq) > 0 then
         freq[pos(',',freq)] := '.';
       SaveTag(dmUtils.StringToADIF('<FREQ',Freq),leng);
       SaveTag(dmUtils.StringToADIF('<BAND',dmUtils.GetAdifBandFromFreq(Freq)),leng);
     end;
-    if exRSTS then
+    if ExRSTS then
       SaveTag(dmUtils.StringToADIF('<RST_SENT',ExtractWord(1,RSTS,[' '])),leng);
-    if exRSTR then
+    if ExRSTR then
         SaveTag(dmUtils.StringToADIF('<RST_RCVD',ExtractWord(1,RSTR,[' '])),leng);
-    if exContestname then
+    if ExContestname then
     begin
        if Length(contestname) > 0 then
         SaveTag(dmUtils.StringToADIF('<CONTEST_ID',contestname),leng);
     end;
-    if exContestNr then
+    if ExContestNr then
     begin
      if Length(stx) > 0 then
        SaveTag(dmUtils.StringToADIF('<STX',stx),leng);
      if Length(srx) > 0 then
         SaveTag(dmUtils.StringToADIF('<SRX',srx),leng);
     end;
-    if exContestMsg then
+    if ExContestMsg then
     begin
       if Length(stx_string) > 0 then
         SaveTag(dmUtils.StringToADIF('<STX_STRING',stx_string),leng);
        if Length(srx_string) > 0 then
         SaveTag(dmUtils.StringToADIF('<SRX_STRING',srx_string),leng);
     end;
-    if exName then
+    if ExName then
       if Length(sName) > 0 then
         SaveTag(dmUtils.StringToADIF('<NAME',sName),leng);
-    if exQTH then
+    if ExQTH then
       if Length(QTH) > 0 then
         SaveTag(dmUtils.StringToADIF('<QTH',QTH),leng);
-    if exQSLS then
+    if ExQSLS then
     begin
       if Length(QSLS) > 0 then
       begin
@@ -270,7 +270,7 @@ var
       else
         SaveTag(dmUtils.StringToADIF('<QSL_SENT','N'),leng);
     end;
-    if exQSLR then
+    if ExQSLR then
     begin
       if Length(QSLR) > 0 then
         SaveTag(dmUtils.StringToADIF('<QSL_RCVD','Y'),leng)
@@ -279,15 +279,15 @@ var
     end;
     if ExQSLVIA and (Length(QSLVIA) > 0) then
         SaveTag(dmUtils.StringToADIF('<QSL_VIA',QSLVIA),leng);
-    if exIOTA and (Length(IOTA) > 0 )then
+    if ExIOTA and (Length(IOTA) > 0 )then
         SaveTag(dmUtils.StringToADIF('<IOTA',IOTA),leng);
-    if exLoc then
+    if ExLoc then
        if dmUtils.IsLocOK(Loc) then
         SaveTag(dmUtils.StringToADIF('<GRIDSQUARE',dmUtils.StdFormatLocator(Loc)),leng);
-   if exMyLoc then
+   if ExMyLoc then
       if dmUtils.IsLocOK(MyLoc) then
         SaveTag(dmUtils.StringToADIF('<MY_GRIDSQUARE',dmUtils.StdFormatLocator(MyLoc)),leng);
-   if exOperator then
+   if ExOperator then
       SaveTag(dmUtils.StringToADIF('<OPERATOR',cqrini.ReadString('Station', 'Call', '')),leng);
    if ExDistance then
     begin
@@ -295,25 +295,27 @@ var
       if qrb <> '' then
         SaveTag(dmUtils.StringToADIF('<DISTANCE',qrb),leng);
     end;
-    if exAward and (Length(Award) > 0)  then
+    if ExAward and (Length(Award) > 0)  then
         SaveTag(dmUtils.StringToADIF('<AWARD',Award),leng);
-    if exPower then
+    if ExPower then
     begin
       Power := dmUtils.ExtractPower(Power);
       if Length(Power) > 0  then
         SaveTag(dmUtils.StringToADIF('<TX_PWR',Power),leng);
     end;
-    if exDXCC and (Length(DXCC) > 0 ) then
+    if ExDXCC and (Length(DXCC) > 0 ) then
       begin
         SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_DXCC',dxcc),leng);
         SaveTag(dmUtils.StringToADIF('<DXCC',IntToStr(dmDXCC.AdifFromPfx(dxcc))),leng);
+      end;
     if ExRemarks and (Length(Remarks) > 0)  then
         SaveTag(dmUtils.StringToADIF('<COMMENT',Trim(Remarks)),leng);
-
-    Note := dmData.GetComment(call);
-    if Length(note) > 0 then
+    if ExNote then
+     Begin
+      Note := dmData.GetComment(call);
+      if (Length(note) > 0) then
         SaveTag(dmUtils.StringToADIF('<NOTES',Trim(note)),leng);
-
+     end;
     if ExITU and (Length(ITU) > 0) then
      SaveTag(dmUtils.StringToADIF('<ITUZ',ITU),leng);
     if ExWAZ and (Length(WAZ) > 0) then
@@ -322,9 +324,9 @@ var
       SaveTag(dmUtils.StringToADIF('<STATE',State),leng);
     if ExCounty and (Length(County) > 0) then
       SaveTag(dmUtils.StringToADIF('<CNTY',County),leng);
-    if exQSLS and ( Length(QSLS) > 0 ) then
+    if ExQSLS and ( Length(QSLS) > 0 ) then
       SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_QSLS',QSLS),leng);
-    if exQSLR and ( Length(QSLR) > 0 ) then
+    if ExQSLR and ( Length(QSLR) > 0 ) then
       SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_QSLR',QSLR),leng);
     if ExProfile and (profile<>'0') and (profile<>'-1') then
     begin
@@ -374,13 +376,13 @@ var
       tmp := copy(eQslRDate,1,4) + copy(eQslRDate,6,2) + copy(eQslRDate,9,2);
       SaveTag(dmUtils.StringToADIF('<EQSL_QSLRDATE',tmp),leng);
     end;
-    if (exProp and (PropMode <> '')) then
+    if (ExProp and (PropMode <> '')) then
        SaveTag(dmUtils.StringToADIF('<PROP_MODE',PropMode),leng);
-    if (exRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
+    if (ExRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
        SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
-    if (exSatName and (Satellite<>'')) then
+    if (ExSatName and (Satellite<>'')) then
        SaveTag(dmUtils.StringToADIF('<SAT_NAME',Satellite),leng);
-    end;
+
 
     Writeln(f);
     Write(f,'<EOR>');
@@ -395,16 +397,16 @@ begin   //TfrmExportProgress
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
-                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq,
-                              exSatName, exContinent, exContestName, exContestNr, exContestMsg)
+                              ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
+                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContestMsg)
  else begin    //adif backup
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
     ExQSLVIA := True;ExIOTA := True;ExAward := True;ExLoc := True;ExMyLoc := True;ExOperator := True;ExDistance := False;ExPower := True;
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExContinent := True;
-    ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; exAscTime := False;
-    exProp := True; exRxFreq := True; exSatName := True; exContestname := True; exContestnr := True; exContestmsg := True;
+    ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; ExAscTime := False;
+    ExProp := True; ExRxFreq := True; ExSatName := True; ExContestname := True; ExContestnr := True; ExContestmsg := True;
 
     if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
       CreateDirUTF8(dmData.HomeDir + 'tmp');
@@ -433,7 +435,7 @@ begin   //TfrmExportProgress
     if AutoBackup or (not dmData.IsFilter) then
     begin
       dmData.Q.Close;
-      if exAscTime then
+      if ExAscTime then
         dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
       else
         dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
@@ -601,10 +603,10 @@ var
   ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode  : Boolean;
   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR  : Boolean;
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower  : Boolean;
-  ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, exState, ExProfile : Boolean;
+  ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate, ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime,exProp, exRxFreq, exSatName : Boolean;
-  exContinent, exContestName, exContestNr, exContestMsg : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
+  ExContinent, ExContestName, ExContestNr, ExContestMsg : Boolean;
   //-----------------------------------------------------------
   function ColumnWidth(ItemWidth:String):String;
   var i : integer;
@@ -713,7 +715,7 @@ var
       Writeln(f,SetData('WQSL_VIA', '10' ,QSLVIA));
     end;
 
-    if exIOTA then
+    if ExIOTA then
     begin
       if IOTA = '' then
         iota:= '&nbsp;';
@@ -734,14 +736,14 @@ var
       Writeln(f,SetData('WLocator', '6' ,loc));
     end;
 
-    if exMyLoc then
+    if ExMyLoc then
     begin
       if Myloc = '' then
         Myloc := '&nbsp;';
       Writeln(f,SetData('WMyLoc', '6' ,MyLOC));
     end;
 
-    if exOperator then
+    if ExOperator then
     begin
       tmp := cqrini.ReadString('Station', 'Call', '');
       if tmp = '' then
@@ -751,7 +753,7 @@ var
       Writeln(f,SetData('WOperator', '10' ,tmp));
     end;
 
-    if exDistance then
+    if ExDistance then
     begin
       qrb:='';
       dmUtils.DistanceFromLocator(Myloc,loc,qrb,qrc);
@@ -803,7 +805,7 @@ var
       Writeln(f,SetData('WITU', '3' ,ITU));
     end;
 
-    if exState then
+    if ExState then
     begin
       if state = '' then
         state := '&nbsp;';
@@ -893,21 +895,21 @@ var
       Writeln(f,SetData( 'WeQSLRDate', '10',eQslRDate));
     end;
 
-    if exProp then
+    if ExProp then
     begin
       if (PropMode = '') then
         PropMode := '&nbsp;';
       Writeln(f, SetData( 'WProp', '6',PropMode));
     end;
 
-    if exRxFreq then
+    if ExRxFreq then
     begin
       if ((RxFreq = '') or (RxFreq = '0')) then
         RxFreq := '&nbsp;';
       Writeln(f, SetData( 'WRxFreq', '10',RxFreq));
     end;
 
-    if exSatName  then
+    if ExSatName  then
     begin
       if (Satellite = '') then
         Satellite := '&nbsp;';
@@ -929,35 +931,35 @@ var
       Writeln(f, SetData( 'WProfile', '20',tmp));
     end;
 
-    if exContestname then
+    if ExContestname then
     begin
       if (contestname='') then
          contestname:='&nbsp;';
       Writeln(f, SetData('WContestName', '20' ,contestname));
     end;
 
-    if exContestnr then
+    if ExContestnr then
     begin
       if (srx='') then
          srx:='&nbsp;';
       Writeln(f, SetData('WContestNr', '4' ,srx));
     end;
 
-    if exContestmsg then
+    if ExContestmsg then
     begin
       if (srx_string='') then
                srx_string:='&nbsp;';
       Writeln(f, SetData('WContestMsg', '10' ,srx_string));
     end;
 
-    if exContestnr then
+    if ExContestnr then
     begin
       if (stx='') then
          stx:='&nbsp;';
       Writeln(f, SetData('WContestNr', '4' ,stx));
     end;
 
-    if exContestmsg then
+    if ExContestmsg then
     begin
       if (stx_string='') then
          stx_string:='&nbsp;';
@@ -977,8 +979,8 @@ begin
                   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
-                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,exAscTime, exProp, exRxFreq, exSatName,
-                  exContinent, exContestname, exContestnr, exContestmsg);
+                  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime, ExProp, ExRxFreq, ExSatName,
+                  ExContinent, ExContestname, ExContestnr, ExContestmsg);
 
   AssignFile(f, FileName);
   Rewrite(f);
@@ -1115,15 +1117,15 @@ begin
     Writeln(f,SetTHWidth('WQSL_R','2', 'WQSL_R1', 'QSLr'));
   if ExQSLVIA then
     Writeln(f,SetTHWidth('WQSL_VIA','10', 'WQSL_VIA1', 'QSL via'));
-  if exIOTA then
+  if ExIOTA then
     Writeln(f,SetTHWidth('WIOTA','7', 'WIOTA1', 'IOTA'));
   if ExAward then
     Writeln(f,SetTHWidth('WAward','10', 'WAward1', 'Award'));
   if ExLoc then
     Writeln(f,SetTHWidth('WLocator','6', 'WLocator1', 'Loc'));
-  if exMyLoc then
+  if ExMyLoc then
     Writeln(f,SetTHWidth('WMyLoc','6', 'WMyLoc1', 'MyLoc'));
-  if exOperator then
+  if ExOperator then
     Writeln(f,SetTHWidth('WOperator','10', 'WOperator1', 'Operator'));
   if ExDistance then
     Writeln(f,SetTHWidth('WDistance','5', 'WDistance1', 'QRB'));
@@ -1139,7 +1141,7 @@ begin
     Writeln(f,SetTHWidth('WWAZ','3', 'WWAZ1', 'WAZ'));
   if ExITU then
     Writeln(f,SetTHWidth('WITU','3', 'WITU1', 'ITU'));
-  if exState then
+  if ExState then
     Writeln(f,SetTHWidth('WState','10', 'WState1', 'State'));
   if ExNote then
     Writeln(f,SetTHWidth('WNote','50', 'WNote1', 'Note'));
@@ -1165,23 +1167,23 @@ begin
     Writeln(f,SetTHWidth('WeQslR','2', 'WeQSLR1', 'eQSLr'));
   if ExeQslRDate then
     Writeln(f,SetTHWidth('WeQslRDate','10', 'WeQSLRDate1', 'eQSLRdat'));
-  if exProp then
+  if ExProp then
     Writeln(f,SetTHWidth('WProp','6', 'WProp1', 'Propag'));
-  if exRxFreq then
+  if ExRxFreq then
     Writeln(f,SetTHWidth('WRxFreq','10', 'WRxFreq1', 'RX Freq'));
-  if exSatName  then
+  if ExSatName  then
     Writeln(f,SetTHWidth('WSatName','10', 'WSatName1', 'Satellite'));
-  if exProfile  then
+  if ExProfile  then
     Writeln(f,SetTHWidth( 'WProfile', 'Profile', 'WProfile1', 'Profile'));
-  if exContestname  then
+  if ExContestname  then
     Writeln(f,SetTHWidth( 'WContestName', 'Contest', 'WContestName1', ''));
-  if exContestnr  then
+  if ExContestnr  then
     Writeln(f,SetTHWidth( 'WContestNr', 'Cont Nr' , 'WContestNr1'+'R', 'Cont Nr'+'R'));
-  if exContestmsg  then
+  if ExContestmsg  then
     Writeln(f,SetTHWidth( 'WContestMsg', 'Cont Msg', 'WContestMsg1'+'R', 'Cont Msg'+'R'));
-  if exContestnr  then
+  if ExContestnr  then
      Writeln(f,SetTHWidth( 'WContestNr', 'Cont Nr' , 'WContestNr1'+'S', 'Cont Nr'+'S'));
-   if exContestmsg  then
+   if ExContestmsg  then
      Writeln(f,SetTHWidth( 'WContestMsg', 'Cont Msg', 'WContestMsg1'+'S', 'Cont Msg'+'S'));
 
 
@@ -1195,7 +1197,7 @@ begin
   if not dmData.IsFilter then
   begin
     dmData.Q.Close;
-    if exAscTime then
+    if ExAscTime then
       dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
     else
       dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';

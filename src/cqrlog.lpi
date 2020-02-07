@@ -105,7 +105,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="108">
+    <Units Count="110">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -323,6 +323,7 @@
         <Filename Value="fSendSpot.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSendSpot"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit32>
       <Unit33>
@@ -811,6 +812,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit107>
+      <Unit108>
+        <Filename Value="fCWKeys.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmCWKeys"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit108>
+      <Unit109>
+        <Filename Value="fCWKeys.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit109>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
