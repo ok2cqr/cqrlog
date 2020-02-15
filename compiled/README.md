@@ -168,6 +168,9 @@ ADDITIONAL DXCLUSTER SPOT INFO (included now in cofficial source)
   - added buttons "+Mode_Rst" and "+Locators" for quick adding mode and sent rst and/or locators to DXcluster spot to be sent.
     Pressing Ctrl-W will create spot from last logged qso, or from NewQSO window if NewQSO/Call has callsign entered. Spot is send by pressing enter or click OK (If telnet DXCluster is connected)
 
+DOUBLE CLICK ON DXSPOT OR BANDMAP ITEM NOW MOVES CALL TO CONTEST FORM IF IT IS OPEN
+  - ver 2.4.0(111)
+  
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 
 All kind of reports are welcome. You can send them them to mycallsign at sral dot fi
