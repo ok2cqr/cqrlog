@@ -6253,7 +6253,13 @@ begin
     freq := FloatToStr(etmp);
     frmTRXControl.SetModeFreq(mode,freq);
     edtCallExit(nil);
-    BringToFront
+    BringToFront;
+    if frmContest.Showing then
+     Begin
+     //this makes "double round" setting new qso but works with minimal code
+     frmContest.edtCall.Text:=frmNewQSO.edtCall.Text;
+     frmContest.edtCallExit(nil);
+     end
   end
 end;
 
