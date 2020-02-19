@@ -5,12 +5,12 @@ object frmNewQSO: TfrmNewQSO
   Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 997
+  HorzScrollBar.Page = 850
   VertScrollBar.Page = 620
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
   ClientHeight = 671
-  ClientWidth = 997
+  ClientWidth = 850
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -3934,7 +3934,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblContCaption
           AnchorSideTop.Control = lblContCaption
           AnchorSideTop.Side = asrBottom
-          Left = 122
+          Left = 131
           Height = 17
           Top = 115
           Width = 40
@@ -3977,11 +3977,11 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = Panel5
           AnchorSideTop.Side = asrBottom
-          Left = 122
+          Left = 131
           Height = 17
           Top = 93
           Width = 34
-          BorderSpacing.Left = 48
+          BorderSpacing.Left = 57
           BorderSpacing.Top = 5
           Caption = 'Cont:'
           Layout = tlBottom
@@ -4026,7 +4026,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = lblDXCCCaption
           AnchorSideBottom.Side = asrBottom
-          Left = 165
+          Left = 174
           Height = 17
           Top = 115
           Width = 27
@@ -4043,7 +4043,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblContCaption
           AnchorSideBottom.Side = asrBottom
-          Left = 165
+          Left = 174
           Height = 17
           Top = 93
           Width = 27
@@ -4072,7 +4072,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblContCaption
           AnchorSideTop.Control = lblDXCCCaption
           AnchorSideTop.Side = asrBottom
-          Left = 122
+          Left = 131
           Height = 17
           Top = 137
           Width = 41
@@ -4101,7 +4101,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblLongCaption
           AnchorSideBottom.Side = asrBottom
-          Left = 165
+          Left = 174
           Height = 17
           Top = 137
           Width = 27
@@ -4145,7 +4145,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblContCaption
           AnchorSideTop.Control = lblLongCaption
           AnchorSideTop.Side = asrBottom
-          Left = 122
+          Left = 131
           Height = 17
           Top = 159
           Width = 38
@@ -4159,7 +4159,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblAzim
           AnchorSideBottom.Side = asrBottom
-          Left = 165
+          Left = 174
           Height = 17
           Top = 159
           Width = 27
@@ -4186,16 +4186,16 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblGreeting: TLabel
+          AnchorSideLeft.Control = lblHisTime
           AnchorSideLeft.Side = asrBottom
-          AnchorSideRight.Control = lblTarSunSet
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = lblHisTime
           AnchorSideBottom.Side = asrBottom
-          Left = 186
+          Left = 181
           Height = 17
           Top = 223
           Width = 44
-          Anchors = [akRight, akBottom]
+          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 12
           Caption = 'GE/GM'
           Font.Color = clRed
@@ -4254,7 +4254,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = SpeedButton3
           AnchorSideBottom.Side = asrBottom
-          Left = 123
+          Left = 132
           Height = 22
           Top = 268
           Width = 23
@@ -4341,7 +4341,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = btnSunRise
           AnchorSideBottom.Side = asrBottom
-          Left = 122
+          Left = 131
           Height = 22
           Top = 192
           Width = 23
@@ -4398,7 +4398,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = SpeedButton3
           AnchorSideBottom.Side = asrBottom
-          Left = 151
+          Left = 160
           Height = 17
           Top = 273
           Width = 83
@@ -4432,7 +4432,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = btnSunRise
           AnchorSideBottom.Side = asrBottom
-          Left = 150
+          Left = 159
           Height = 17
           Top = 197
           Width = 80

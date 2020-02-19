@@ -673,6 +673,7 @@ type
     procedure ShowQSO;
     procedure NewQSO;
     procedure ClearAll;
+    procedure ClearGrayLineMapLine;
     procedure SavePosition;
     procedure NewQSOFromSpot(call,freq,mode : String;FromRbn : Boolean = False);
     procedure SetEditLabel;
@@ -1040,7 +1041,17 @@ begin
   lblCont.Caption := cont;
   edtDXCCRef.Text := pfx;
   lblLat.Caption  := lat;
-  lblLong.Caption := long
+  lblLong.Caption := long;
+  if (pfx='!') or (pfx='#') then ClearGrayLineMapLine;
+end;
+procedure TfrmNewQSO.ClearGrayLineMapLine;
+var
+  lat,long :currency;
+Begin
+  dmUtils.CoordinateFromLocator(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6),lat,long);
+  lat := lat*-1;
+  frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
+  frmGrayline.Refresh;
 end;
 
 procedure TfrmNewQSO.ClearAll;
@@ -1207,10 +1218,8 @@ begin
   end;
   ChangeCallBookCaption;
   ClearStatGrid;
-  dmUtils.CoordinateFromLocator(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6),lat,long);
-  lat := lat*-1;
-  frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
-  frmGrayline.Refresh;
+  ClearGrayLineMapLine;
+
   if not AnyRemoteOn then
     edtCall.SetFocus;
   if not (fEditQSO or fViewQSO or cbOffline.Checked) then
@@ -5369,7 +5378,7 @@ begin
   ShowCountryInfo;
   ShowStatistic(adif);
   CalculateDistanceEtc;
-  if frmGrayline.Showing then
+  if (( frmGrayline.Showing ) and (edtCall.Text<>'')) then
     DrawGrayline;
   CheckStateClub
 end;
@@ -5819,6 +5828,7 @@ var
   //delta : Currency;
   inUTC : Boolean;
   SunDelta : Currency = 0;
+
 begin
   inUTC := cqrini.ReadBool('Program','SunUTC',False);
   //delta := cqrini.ReadFloat('Program','offset',0);
@@ -5829,15 +5839,17 @@ begin
     SunDelta := cqrini.ReadFloat('Program','SunOffset',0);
 
   //SunDelta := cqrini.ReadFloat('Program','SunOffset',0);
+
+  myloc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
   if lblDXCC.Caption = '!' then
   begin
     lblQRA.Caption := '';
     lblAzi.Caption := '';
-    exit
+    ClearGrayLineMapLine; //case entered loc for /MM is wiped or changed after first entry
+    if not (dmUtils.IsLocOK(edtGrid.Text) and dmUtils.IsLocOK(myloc)) then exit;
   end;
   qra   := '';
   azim  := '';
-  myloc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
   if (dmUtils.IsLocOK(edtGrid.Text) and dmUtils.IsLocOK(myloc)) then
   begin
     dmUtils.DistanceFromLocator(myloc,edtGrid.Text, qra, azim);
