@@ -445,6 +445,10 @@ begin
         tmp := '<SUBMODE:3>FT4';
         Writeln(f,tmp);
       end
+      else if (dmData.Q1.FieldByName('mode').AsString = 'PACKET') then begin
+        tmp := '<MODE:3>PKT';
+        Writeln(f,tmp);
+      end
       else begin
         tmp := dmUtils.StringToADIF('<MODE',dmData.Q1.FieldByName('mode').AsString);
         Writeln(f,tmp);
