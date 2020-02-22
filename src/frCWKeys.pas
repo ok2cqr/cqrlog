@@ -267,7 +267,7 @@ begin
       end;
     //if dmData.DebugLevel >=1 then Writeln('CW keys button: ',cwkey,' Key: ',Key);
     frmNewQSO.FormKeyDown(nil,Key,[]);
-    SetFocus;
+    if cqrini.ReadBool('CW','EnterSaves',false) then SetFocus;
   end;
 
 end;
