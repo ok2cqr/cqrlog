@@ -267,6 +267,7 @@ begin
       end;
     //if dmData.DebugLevel >=1 then Writeln('CW keys button: ',cwkey,' Key: ',Key);
     frmNewQSO.FormKeyDown(nil,Key,[]);
+    SetFocus;
   end;
 
 end;

@@ -41,12 +41,16 @@ end;
 
 procedure TfrmCWKeys.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+var
+   mykey :char = #13;
+
 begin
    case Key of
    VK_F1 .. VK_F10,
    33,
    34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
    VK_ESCAPE       : frmNewQSO.CWint.StopSending;
+   13              : frmNewQSO.FormKeyPress(Sender,mykey);
    end;
 end;
 
