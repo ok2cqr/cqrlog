@@ -8,7 +8,7 @@ object frmKeyTexts: TfrmKeyTexts
   ActiveControl = pgCWTexts
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'CW messages'
+  Caption = 'CW Messages'
   ClientHeight = 625
   ClientWidth = 594
   Icon.Data = {
