@@ -50,7 +50,7 @@ begin
    33,
    34              : frmNewQSO.FormKeyDown(Sender,Key,Shift);
    VK_ESCAPE       : frmNewQSO.CWint.StopSending;
-   13              : if cqrini.ReadBool('CW','EnterSaves',false) then frmNewQSO.FormKeyPress(Sender,mykey);
+   13              : if (cqrini.ReadInteger('CW','EnterFunction',1)=2) then frmNewQSO.FormKeyPress(Sender,mykey);
    end;
 end;
 
