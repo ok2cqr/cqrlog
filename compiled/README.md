@@ -171,6 +171,10 @@ ADDITIONAL DXCLUSTER SPOT INFO (included now in official source)
 DOUBLE CLICK ON DXSPOT OR BANDMAP ITEM NOW MOVES CALL TO CONTEST FORM IF IT IS OPEN (included now in official source)
   - ver 2.4.0(111)
   
+ENTER PRESSED WHEN MEMORY KEYS FORM IS ACTIVE EITHER REPEATS LAST CLICKED MEMORY OR SAVES QSO
+  - ver 2.4.0(112)
+  - ENTER function selectable in key macros from (NewQSO/CW memories)
+  
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 
 All kind of reports are welcome. You can send them them to mycallsign at sral dot fi
