@@ -69,7 +69,6 @@ type
     GroupBox19: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox20: TGroupBox;
-    ENTER: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
@@ -112,7 +111,6 @@ type
     Label39: TLabel;
     Label4: TLabel;
     Label40: TLabel;
-    lblEnter: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -120,16 +118,13 @@ type
     Label9: TLabel;
     pgCWTexts: TPageControl;
     Panel1: TPanel;
-    rbRepeat: TRadioButton;
-    rbSave: TRadioButton;
+    rgEnter: TRadioGroup;
     tabRunMode: TTabSheet;
     tabSPMode: TTabSheet;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
-    procedure rbRepeatChange(Sender: TObject);
-    procedure rbSaveChange(Sender: TObject);
   private
     { private declarations }
   public
@@ -173,7 +168,7 @@ begin
   edtCapF8.text  := cqrini.ReadString(section,'CapF8','F8');
   edtCapF9.text  := cqrini.ReadString(section,'CapF9','F9');
   edtCapF10.text := cqrini.ReadString(section,'CapF10','F10');
-  rbSave.Checked := cqrini.ReadBool(section,'EnterSaves',false);
+  rgEnter.ItemIndex := cqrini.ReadInteger(section,'EnterFunction',1);
 end;
 
 procedure TfrmKeyTexts.FormClose(Sender: TObject; var CloseAction: TCloseAction
@@ -212,25 +207,9 @@ begin
   cqrini.WriteString(section,'CapF8',edtCapF8.Text);
   cqrini.WriteString(section,'CapF9',edtCapF9.Text);
   cqrini.WriteString(section,'CapF10',edtCapF10.Text);
-  cqrini.WriteBool(section,'EnterSaves',rbSave.Checked);
+  cqrini.WriteInteger(section,'EnterFunction',rgEnter.ItemIndex);
   cqrini.SaveToDisk;
   ModalResult := mrOK
-end;
-
-procedure TfrmKeyTexts.rbRepeatChange(Sender: TObject);
-begin
-  if rbRepeat.Checked then
-    Begin
-      rbSave.Checked:=false;
-    end;
-end;
-
-procedure TfrmKeyTexts.rbSaveChange(Sender: TObject);
-begin
-  if rbSave.Checked then
-    Begin
-      rbRepeat.Checked:=false;
-    end;
 end;
 
 end.

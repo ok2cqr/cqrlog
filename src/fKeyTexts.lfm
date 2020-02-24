@@ -1,6 +1,6 @@
 object frmKeyTexts: TfrmKeyTexts
   Left = 451
-  Height = 599
+  Height = 625
   Top = 45
   Width = 594
   HelpType = htKeyword
@@ -9,7 +9,7 @@ object frmKeyTexts: TfrmKeyTexts
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Key macros'
-  ClientHeight = 599
+  ClientHeight = 625
   ClientWidth = 594
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -123,7 +123,7 @@ object frmKeyTexts: TfrmKeyTexts
   object Panel1: TPanel
     Left = 0
     Height = 34
-    Top = 565
+    Top = 591
     Width = 594
     Align = alBottom
     BevelOuter = bvNone
@@ -174,7 +174,7 @@ object frmKeyTexts: TfrmKeyTexts
   end
   object pgCWTexts: TPageControl
     Left = 0
-    Height = 565
+    Height = 591
     Top = 0
     Width = 594
     ActivePage = tabRunMode
@@ -183,7 +183,7 @@ object frmKeyTexts: TfrmKeyTexts
     TabOrder = 1
     object tabRunMode: TTabSheet
       Caption = 'RUN'
-      ClientHeight = 534
+      ClientHeight = 560
       ClientWidth = 584
       object GroupBox1: TGroupBox
         AnchorSideLeft.Control = tabRunMode
@@ -625,71 +625,43 @@ object frmKeyTexts: TfrmKeyTexts
           TabOrder = 1
         end
       end
-      object ENTER: TGroupBox
-        AnchorSideLeft.Control = GroupBox1
+      object rgEnter: TRadioGroup
+        AnchorSideLeft.Control = tabRunMode
+        AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = GroupBox5
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = GroupBox17
         AnchorSideRight.Side = asrBottom
-        Left = 6
-        Height = 44
+        AnchorSideBottom.Control = tabRunMode
+        AnchorSideBottom.Side = asrBottom
+        Left = 135
+        Height = 78
         Top = 476
-        Width = 567
-        Anchors = [akTop, akLeft, akRight]
+        Width = 314
+        Anchors = [akTop, akLeft, akBottom]
+        AutoFill = True
         BorderSpacing.Top = 6
-        Caption = 'ENTER'
-        ClientHeight = 26
-        ClientWidth = 565
+        BorderSpacing.Bottom = 6
+        Caption = 'When "Memory keys" form is active ENTER'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 60
+        ClientWidth = 312
+        Items.Strings = (
+          'repeats last clicked (focused) memory '
+          'is ignored'
+          'saves qso'
+        )
         TabOrder = 10
-        object lblEnter: TLabel
-          AnchorSideLeft.Control = ENTER
-          AnchorSideTop.Control = ENTER
-          AnchorSideTop.Side = asrCenter
-          Left = 6
-          Height = 17
-          Top = 5
-          Width = 248
-          BorderSpacing.Left = 6
-          Caption = 'When "Memory keys" is active ENTER'
-          ParentColor = False
-        end
-        object rbRepeat: TRadioButton
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ENTER
-          AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = rbSave
-          Left = 310
-          Height = 23
-          Top = 2
-          Width = 140
-          Anchors = [akTop, akRight]
-          BorderSpacing.Right = 12
-          Caption = 'Repeats last click'
-          Checked = True
-          OnChange = rbRepeatChange
-          TabOrder = 0
-        end
-        object rbSave: TRadioButton
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ENTER
-          AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ENTER
-          AnchorSideRight.Side = asrBottom
-          Left = 462
-          Height = 23
-          Top = 2
-          Width = 97
-          Anchors = [akTop, akRight]
-          BorderSpacing.Right = 6
-          Caption = 'Saves QSO'
-          OnChange = rbSaveChange
-          TabOrder = 1
-        end
       end
     end
     object tabSPMode: TTabSheet
       Caption = 'S&&P'
-      ClientHeight = 534
+      ClientHeight = 560
       ClientWidth = 584
       object GroupBox9: TGroupBox
         Left = 8
