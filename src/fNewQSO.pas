@@ -85,10 +85,14 @@ type
     acUploadToHamQTH: TAction;
     acTune : TAction;
     btnClearSatellite : TButton;
+    cbTxLo: TCheckBox;
+    cbRxLo: TCheckBox;
     chkAutoMode: TCheckBox;
     cmbPropagation : TComboBox;
     cmbSatellite : TComboBox;
     dbgrdQSOBefore: TDBGrid;
+    edtTXLO: TEdit;
+    edtRXLO: TEdit;
     edtContestExchangeMessageReceived: TEdit;
     edtContestExchangeMessageSent: TEdit;
     edtContestSerialReceived: TEdit;
@@ -96,6 +100,8 @@ type
     edtContestName: TEdit;
     edtRXFreq : TEdit;
     gbContest: TGroupBox;
+    Label38: TLabel;
+    Label37: TLabel;
     lblContestExchangeMessageReceived: TLabel;
     lblContestExchangeMessageSent: TLabel;
     lblContestSerialReceived: TLabel;
@@ -341,6 +347,7 @@ type
     sbtnRefreshTime: TSpeedButton;
     tabDXCCStat : TTabSheet;
     tabSatellite : TTabSheet;
+    tabLOConfig: TTabSheet;
     tmrN1MM: TTimer;
     tmrWsjtSpd: TTimer;
     tmrWsjtx: TTimer;
@@ -380,6 +387,8 @@ type
     procedure acUploadToHrdLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure btnClearSatelliteClick(Sender : TObject);
+    procedure cbRxLoChange(Sender: TObject);
+    procedure cbTxLoChange(Sender: TObject);
     procedure chkAutoModeChange(Sender: TObject);
     procedure cmbFreqExit(Sender: TObject);
     procedure cmbIOTAEnter(Sender: TObject);
@@ -409,8 +418,10 @@ type
     procedure edtRemQSOEnter(Sender: TObject);
     procedure edtRXFreqChange(Sender: TObject);
     procedure edtRXFreqExit(Sender: TObject);
+    procedure edtRXLOExit(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
     procedure edtStateEnter(Sender: TObject);
+    procedure edtTXLOExit(Sender: TObject);
     procedure edtWAZEnter(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -1141,6 +1152,11 @@ begin
   dmSatellite.GetListOfPropModes(cmbPropagation, old_prop);
   edtRXFreq.Text := old_rxfreq;
 
+  cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
+  edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
+  cbRxLo.Checked := cqrini.ReadBool('NewQSO', 'UseRXLO', False);
+  edtRXLO.Text   := cqrini.ReadString('NewQSO', 'RXLO', '');
+
   if cbOffline.Checked then
   begin
     edtStartTime.Text := sTimeOn;
@@ -1280,6 +1296,12 @@ begin
   else begin
     tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
   end;
+
+  cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
+  edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
+  cbRxLo.Checked := cqrini.ReadBool('NewQSO', 'UseRXLO', False);
+  edtRXLO.Text   := cqrini.ReadString('NewQSO', 'RXLO', '');
+
 
   if frmRotControl.Showing then
   begin
@@ -4292,6 +4314,32 @@ begin
   cmbSatelliteChange(nil)
 end;
 
+procedure TfrmNewQSO.cbRxLoChange(Sender: TObject);
+var
+  tmp: double = 0.0;
+begin
+  cqrini.WriteBool('NewQSO', 'UseRXLO', cbRxLo.Checked);
+  if not (cbRxLo.Checked) then
+    edtRXFreq.Text := '';
+//  begin
+//    if not TryStrToFloat(edtRXLO.Text, tmp) then
+//      edtRXLO.Text := '0.0';
+//  end;
+//  cqrini.WriteString('NewQSO', 'RXLO', edtRXLO.Text);
+end;
+
+procedure TfrmNewQSO.cbTxLoChange(Sender: TObject);
+var
+  tmp: double = 0.0;
+begin
+  cqrini.WriteBool('NewQSO', 'UseTXLO', cbTxLo.Checked);
+//  begin
+//    if not TryStrToFloat(edtTXLO.Text, tmp) then
+//      edtTXLO.Text := '0.0';
+//  end;
+//  cqrini.WriteString('NewQSO', 'TXLO', edtTXLO.Text);
+end;
+
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
 begin
   UpdateFKeyLabels;
@@ -4534,6 +4582,17 @@ begin
   edtRXFreq.Text := CheckFreq(edtRXFreq.Text);
 end;
 
+procedure TfrmNewQSO.edtRXLOExit(Sender: TObject);
+var
+  tmp: double = 0.0;
+begin
+  begin
+    if not TryStrToFloat(edtRXLO.Text, tmp) then
+      edtRXLO.Text := '0.0';
+  end;
+  cqrini.WriteString('NewQSO', 'RXLO', edtRXLO.Text);
+end;
+
 procedure TfrmNewQSO.edtStartTimeEnter(Sender: TObject);
 begin
   edtStartTime.SelectAll
@@ -4542,6 +4601,17 @@ end;
 procedure TfrmNewQSO.edtStateEnter(Sender: TObject);
 begin
   edtState.SelectAll
+end;
+
+procedure TfrmNewQSO.edtTXLOExit(Sender: TObject);
+var
+  tmp: double = 0.0;
+begin
+  begin
+    if not TryStrToFloat(edtTXLO.Text, tmp) then
+      edtTXLO.Text := '0.0';
+  end;
+  cqrini.WriteString('NewQSO', 'TXLO', edtTXLO.Text);
 end;
 
 procedure TfrmNewQSO.edtWAZEnter(Sender: TObject);

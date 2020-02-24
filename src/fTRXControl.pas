@@ -358,14 +358,29 @@ var
   m : String;
   oldG : integer;
   mG   : integer;
+  txlo : double = 0.0;
+  rxlo : double = 0.0;
 begin
   if Assigned(radio) then
   begin
     f := radio.GetFreqMHz;
-    m := radio.GetModeOnly
+    m := radio.GetModeOnly;
+    if cqrini.ReadBool('NewQSO','UseTXLO',False) then
+    begin
+      if not TryStrToFloat(cqrini.ReadString('NewQSO','TXLO',''),txlo) then
+        txlo := 0;
+    end;
+    if cqrini.ReadBool('NewQSO','UseRXLO',False) then
+    begin
+      if not TryStrToFloat(cqrini.ReadString('NewQSO','RXLO',''),rxlo) then
+        rxlo := 0;
+      if (f + rxlo <> 0) then
+        frmNewQSO.edtRXFreq.Text := FloatToStr((f + rxlo));
+    end;
   end
   else
     f := 0;
+    f := f + txlo;
   lblFreq.Caption := FormatFloat(empty_freq+';;',f);
   UpdateModeButtons(m);
   ClearButtonsColor;
