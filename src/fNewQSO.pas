@@ -4315,29 +4315,15 @@ begin
 end;
 
 procedure TfrmNewQSO.cbRxLoChange(Sender: TObject);
-var
-  tmp: double = 0.0;
 begin
   cqrini.WriteBool('NewQSO', 'UseRXLO', cbRxLo.Checked);
   if not (cbRxLo.Checked) then
     edtRXFreq.Text := '';
-//  begin
-//    if not TryStrToFloat(edtRXLO.Text, tmp) then
-//      edtRXLO.Text := '0.0';
-//  end;
-//  cqrini.WriteString('NewQSO', 'RXLO', edtRXLO.Text);
 end;
 
 procedure TfrmNewQSO.cbTxLoChange(Sender: TObject);
-var
-  tmp: double = 0.0;
 begin
   cqrini.WriteBool('NewQSO', 'UseTXLO', cbTxLo.Checked);
-//  begin
-//    if not TryStrToFloat(edtTXLO.Text, tmp) then
-//      edtTXLO.Text := '0.0';
-//  end;
-//  cqrini.WriteString('NewQSO', 'TXLO', edtTXLO.Text);
 end;
 
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
