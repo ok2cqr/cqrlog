@@ -3698,6 +3698,83 @@ object frmNewQSO: TfrmNewQSO
               ParentColor = False
             end
           end
+          object tabLOConfig: TTabSheet
+            Caption = 'LO Config'
+            ClientHeight = 146
+            ClientWidth = 934
+            object cbTxLo: TCheckBox
+              Left = 8
+              Height = 23
+              Top = 16
+              Width = 98
+              Caption = 'Use TX LO:'
+              OnChange = cbTxLoChange
+              TabOrder = 0
+            end
+            object cbRxLo: TCheckBox
+              AnchorSideTop.Control = cbTxLo
+              Left = 8
+              Height = 23
+              Top = 48
+              Width = 99
+              BorderSpacing.Top = 32
+              Caption = 'Use RX LO:'
+              OnChange = cbRxLoChange
+              TabOrder = 1
+            end
+            object edtTXLO: TEdit
+              AnchorSideLeft.Control = cbTxLo
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = cbTxLo
+              AnchorSideTop.Side = asrCenter
+              Left = 111
+              Height = 25
+              Top = 15
+              Width = 80
+              BorderSpacing.Left = 5
+              OnExit = edtTXLOExit
+              TabOrder = 2
+            end
+            object edtRXLO: TEdit
+              AnchorSideLeft.Control = cbRxLo
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = cbRxLo
+              AnchorSideTop.Side = asrCenter
+              Left = 112
+              Height = 25
+              Top = 47
+              Width = 80
+              BorderSpacing.Left = 5
+              OnExit = edtRXLOExit
+              TabOrder = 3
+            end
+            object Label37: TLabel
+              AnchorSideLeft.Control = edtTXLO
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = edtTXLO
+              AnchorSideTop.Side = asrCenter
+              Left = 197
+              Height = 17
+              Top = 19
+              Width = 31
+              BorderSpacing.Left = 6
+              Caption = 'MHz'
+              ParentColor = False
+            end
+            object Label38: TLabel
+              AnchorSideLeft.Control = edtRXLO
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = edtRXLO
+              AnchorSideTop.Side = asrCenter
+              Left = 198
+              Height = 17
+              Top = 51
+              Width = 31
+              BorderSpacing.Left = 6
+              Caption = 'MHz'
+              ParentColor = False
+            end
+          end
         end
         object gbContest: TGroupBox
           AnchorSideLeft.Control = mComment
