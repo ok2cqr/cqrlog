@@ -83,8 +83,11 @@ Then check execution rights.
  What is new and not included in official cqrlog GitHub source is listed below.
  To see updates in this alpha version look at https://github.com/OH1KH/cqrlog/commits/loc_testing
  
- These binaries also include latest official source updates.
- To see official updates look at https://github.com/ok2cqr/cqrlog/commits/master
+ These binaries also include latest official source updates up to commit:
+ 
+  #245
+ 
+ To see what are the latest official updates look at https://github.com/ok2cqr/cqrlog/commits/master
 
 QT5 VERSION
 
@@ -153,24 +156,6 @@ LOG OR DATABASE SERVER CHANGE
   - log change should work now better (NewQSO/File/Open or create new log/Open)
   - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
 
-CW KEYS AND HAMLIB INTERFACE (included now in official source)
-
-  - F1 .. F10 CW-keys (from keyboard) works now from NewQSO, CWKeys and CWType windows
-  - F1 .. F10 keyboard auto repeat disabled (long keypress do not fill CW buffers)
-  - CW is now sent only if rig mode (NewQSO/mode selector) is set to CW
-  - Moving rig from other mode to CW sends stopkeying (specially Hamlib/rig buffer may contain old morse in some cases)
-  - source code is cleaned up (removed duplicate blocks, etc.)
-  - tried to make Hamlib keyer handshake better. Now messages up tp 10 characters are sent by one hamlib command, longer messages are sent letter by letter
-  - tested with WinKeyer and Hamlib keyer modes (I have no other keyers)
-  
-ADDITIONAL DXCLUSTER SPOT INFO (included now in official source)
-
-  - added buttons "+Mode_Rst" and "+Locators" for quick adding mode and sent rst and/or locators to DXcluster spot to be sent.
-    Pressing Ctrl-W will create spot from last logged qso, or from NewQSO window if NewQSO/Call has callsign entered. Spot is send by pressing enter or click OK (If telnet DXCluster is connected)
-
-DOUBLE CLICK ON DXSPOT OR BANDMAP ITEM NOW MOVES CALL TO CONTEST FORM IF IT IS OPEN (included now in official source)
-  - ver 2.4.0(111)
-  
 ENTER PRESSED WHEN MEMORY KEYS FORM IS ACTIVE EITHER REPEATS LAST CLICKED MEMORY OR SAVES QSO
   - ver 2.4.0(112)
   - ENTER function selectable in key macros from (NewQSO/CW memories)

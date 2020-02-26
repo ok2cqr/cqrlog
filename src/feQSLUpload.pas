@@ -131,8 +131,26 @@ begin
       tmp := dmUtils.StringToADIF('<CALL' ,dmUtils.RemoveSpaces(dmData.Q.FieldByName('callsign').AsString));
       Writeln(f,tmp);
 
-      tmp :=  dmUtils.StringToADIF('<MODE' ,dmData.Q.FieldByName('mode').AsString);
-      Writeln(f,tmp);
+      if (dmData.Q.FieldByName('mode').AsString = 'JS8') then begin
+        tmp := '<MODE:4>MFSK';
+        Writeln(f,tmp);
+        tmp := '<SUBMODE:3>JS8';
+        Writeln(f,tmp);
+      end
+      else if (dmData.Q.FieldByName('mode').AsString = 'FT4') then begin
+        tmp := '<MODE:4>MFSK';
+        Writeln(f,tmp);
+        tmp := '<SUBMODE:3>FT4';
+        Writeln(f,tmp);
+      end
+      else if (dmData.Q.FieldByName('mode').AsString = 'PACKET') then begin
+        tmp := '<MODE:3>PKT';
+        Writeln(f,tmp);
+      end
+      else begin
+        tmp := dmUtils.StringToADIF('<MODE',dmData.Q.FieldByName('mode').AsString);
+        Writeln(f,tmp);
+      end;
 
       tmp := dmUtils.StringToADIF('<BAND' ,dmData.Q.FieldByName('band').AsString);
       Writeln(f,tmp);
