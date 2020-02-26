@@ -1628,8 +1628,13 @@ begin
   begin
      frmNewQSO.btnClearSatelliteClick(nil);
      frmNewQSO.pgDetails.TabIndex := 0
+  end
+  else
+  begin
+     frmNewQSO.pgDetails.TabIndex := 1
   end;
   frmNewQSO.pgDetails.Pages[1].TabVisible  := chkSatelliteMode.Checked;
+  frmNewQSO.pgDetails.Pages[2].TabVisible  := chkSatelliteMode.Checked;
 
   if ReloadFreq then
     dmUtils.InsertFreq(frmNewQSO.cmbFreq);
