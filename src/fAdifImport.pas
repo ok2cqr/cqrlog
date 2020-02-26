@@ -246,7 +246,9 @@ var z,x:longint;
 
 function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry):boolean;
   begin
-    if (h=h_EOH) or (h=h_EOR) then begin fillTypeVariableWithTagData:=false;exit;end;
+    if (h=h_EOH) or (h=h_EOR) then begin
+      fillTypeVariableWithTagData:=false;exit;
+    end;
     fillTypeVariableWithTagData:=true;
     data := trim(data);
     case h of
@@ -268,7 +270,17 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_LOTW_QSLSDATE:d.LOTW_QSLSDATE:=data;
       h_LOTW_QSL_RCVD:d.LOTW_QSL_RCVD:=data;
       h_LOTW_QSL_SENT:d.LOTW_QSL_SENT:=data;
-      h_MODE:d.MODE:=data;
+      // DL7OAP: because MODE-field in cqrlog database does not match completely
+      // with MODE field of ADIF specification, we have to transfer the
+      // ADIF MODES/SUBMODES (JS8, FT4, PKT) to MODE-field in cqrlog database
+      h_MODE: begin
+        if data = 'PKT' then d.MODE:='PACKET'
+        else d.MODE:=data
+      end;
+      h_SUBMODE: begin
+        if data = 'FT4' then d.MODE:=data;
+        if data = 'JS8' then d.MODE:=data
+      end;
       h_MY_GRIDSQUARE:d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
       h_NAME:d.NAME:=data;
       h_NOTES:d.NOTES:=data;
@@ -299,11 +311,12 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_CQZ:d.CQZ:=data;
       h_STATE:d.STATE:=data;
       h_AWARD:d.AWARD:=data;
-      h_PROP_MODE : d.PROP_MODE := data;
-      h_SAT_NAME : d.SAT_NAME := data;
-      h_FREQ_RX : d.FREQ_RX := data
-      else
-        begin{ writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}end;
+      h_PROP_MODE:d.PROP_MODE:=data;
+      h_SAT_NAME:d.SAT_NAME:=data;
+      h_FREQ_RX:d.FREQ_RX:=data
+    else begin
+        { writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}
+      end;
     end;//case
     d.st:=d.st+1;
   end;
@@ -314,6 +327,7 @@ procedure TfrmAdifImport.initializeTypeVariable(var d:TnewQSOEntry);
 begin
   fillchar(d,sizeof(d),0);
 end;
+
 
 function TfrmAdifImport.saveNewEntryFromADIFinDatabase(var d:TnewQSOEntry; var err : String) : Boolean;
 var

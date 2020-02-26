@@ -34,8 +34,8 @@
     First, set up your CW messages. In the upper menu bar on the logging screen,
     click on the 'File' item.<br><br>
     <img src=img/h96.png><br><br>
-    Choose the 'CW Messages' option. In the resulting window, edit your CW messages which
-    will be played if you press the corresponding F key (in the logging screen).
+    Choose the <strong>CW Messages</strong> option. By using the form opened you can edit your CW messages that
+    will be sent when you press the corresponding <strong>F</strong>-key(s).
     You can set up to 10 predefined messages:<br><br>
     <img src=img/h97.png><br><br>
     There are some predefined macros which you can use in your messages:<br><br>
@@ -67,10 +67,11 @@
     </table>
     <p><img src="img/misc8.png" name="8"  width="500" height="85">
    </img>
-   <br/>CW keys from has new buttons PgUp and PgDn that are not configurable. They alter CW speed in same way as keyboard keys PgUp and PgDn that some, specially laptop computers, do not have.</p>
-   <p>When using external keyboard, and CW keys-form with mouse, you always have to first focus NewQso-form to be active and then press PgUp / PgDn keys. Now you can do it from same focused CW-keys form that you launch memories with mouse.</p>
-
-    Another option 'CW type' is a powerful keyboard keyer with 3 operation modes:<br><br>
+   </p><p><strong>Memory keys</strong> form has buttons PgUp and PgDn that are not configurable. They alter CW speed in same way as keyboard keys PgUp and PgDn that some, specially laptop computers, may not even have.
+   <br>When using <strong>Memory keys</strong>-form with mouse, or keyboard, you are able to lauch memories by mouse click or by  <strong>F</strong>-key press from keyboard keys. Same with PgUp and PgDn, both are working, keys and mouse click.
+   <br>You can select what happens when <strong>Memory keys</strong>-form is active and <strong>ENTER</strong> (also called Return) key is pressed, <strong>repeat last clicked memory</strong> (send focused button text)
+   , <strong>ignore it</strong> (do nothing) or <strong>save qso</strong>, by selecting that with ENTER section radio buttons in <strong> CW Messages</strong> definition form.</p>
+    Another form <strong>CW type</strong> is a powerful keyboard keyer with 3 operation modes:<br></p>
     <img src=img/h98.png><br><br>
     <ul>
         <li><strong>letter mode</strong> - the character of the corresponding keyboard key is
@@ -84,14 +85,13 @@
     </ul>
     These modes are common on professional keyboard keyers.<br><br>
     CWTyping area allows paste (copy in editor/paste to CWType) and drop (select in editor and drag with mouse left button pressed and drop on CWType area).<br><br>
-    <strong>NOTE!</strong> CW sending has limited buffer space depending keyer type and rig model(if Hamlib keying is in use). There is no feedback from buffer
-     overflow so do not paste/drop long texts to CWTyping area. With Icom rigs and HamLib keying buffer overflow will stop cw message sending indicating that operator should check the length of message.
-      This is tested to work with IC7300. Same should happen with Kenwood rigs and HamLib keying, but this is not tested and may not work in same way.
-      <br> Other keyers may indicate buffer overflow in different ways.
-      <br><br> <strong>Same warning  </strong>with manual typing in word mode: If your typing speed is faster than cw sending you may hit send buffer limit at some moment.<br><br>
+    <strong>NOTE!</strong> CW sending has limited buffer space depending keyer type and rig model. Be aware that pasting a very long text to CWType area may lead to CW keyer buffer overflow. When Hamlib keying is in use it will send words under 10 characters as one command, but if text to be sent is longer it will send all letter by letter (1 chr per one command).
+     This is tested to work with IC7300. Same should happen with Kenwoodother rigs and HamLib keying, but this is not tested and may not work in same way.
+      
+      <br><br> <strong>Same warning  </strong>with manual typing in word mode: If your typing speed is faster than cw sending you may hit send buffer limit sooner or later.<br><br>
     The <strong>keying speed</strong> can be changed with PgUp (QRQ) and PgDn (QRS) keys
-    in 2 WPM steps when NewQSO window is active. In the 'CW type' window when cursor is in text typing area same PgUP/PgDN keys work. Speed can also be changed with the small arrow
-    buttons to the right of the speed display. The actual speed is always displayed in the status line of the logging screen and in CWType windows speed selector.<br><br>
+    in 2 WPM steps when <strong>NewQSO</strong>-form is active. In the <strong>CW type</strong>-form when cursor is in text typing area same PgUP/PgDN keys work. Speed can also be changed with the small arrow
+    buttons to the right of the speed display. The actual speed is always displayed in the status line of the <strong>New QSO</strong>-form and in <strong>CWType</strong>-forms speed selector.<br><br>
     The<strong> ESC </strong>key stops running transmit. This may not be supported in all keyers and rigs and is mainly usefull when using word mode or pasted/dropped text.<br><br>
     <strong>NOTE!</strong> Some special characters like Ä (A with dots) etc. May not be supported in CWType direct from keypress. For example Hamlib keying with Icom rig sends A with dots when typing 3 characters ^AA and you have to find out the way suitable for your setup.<br><br>
     <img src=img/h99.png><br><br>

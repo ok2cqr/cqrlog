@@ -118,6 +118,7 @@ type
     Label9: TLabel;
     pgCWTexts: TPageControl;
     Panel1: TPanel;
+    rgEnter: TRadioGroup;
     tabRunMode: TTabSheet;
     tabSPMode: TTabSheet;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -166,7 +167,8 @@ begin
   edtCapF7.text  := cqrini.ReadString(section,'CapF7','F7');
   edtCapF8.text  := cqrini.ReadString(section,'CapF8','F8');
   edtCapF9.text  := cqrini.ReadString(section,'CapF9','F9');
-  edtCapF10.text  := cqrini.ReadString(section,'CapF10','F10')
+  edtCapF10.text := cqrini.ReadString(section,'CapF10','F10');
+  rgEnter.ItemIndex := cqrini.ReadInteger(section,'EnterFunction',1);
 end;
 
 procedure TfrmKeyTexts.FormClose(Sender: TObject; var CloseAction: TCloseAction
@@ -205,6 +207,7 @@ begin
   cqrini.WriteString(section,'CapF8',edtCapF8.Text);
   cqrini.WriteString(section,'CapF9',edtCapF9.Text);
   cqrini.WriteString(section,'CapF10',edtCapF10.Text);
+  cqrini.WriteInteger(section,'EnterFunction',rgEnter.ItemIndex);
   cqrini.SaveToDisk;
   ModalResult := mrOK
 end;

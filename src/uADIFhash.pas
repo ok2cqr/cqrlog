@@ -17,6 +17,7 @@ const h_LOTW_QSLSDATE = 47204;
 const h_LOTW_QSL_RCVD = 39926;
 const h_LOTW_QSL_SENT = 40262;
 const h_MODE = 45093;
+const h_SUBMODE = 20190;
 const h_MY_GRIDSQUARE = 30286;
 const h_NAME = 44781;
 const h_NOTES = 38270;
