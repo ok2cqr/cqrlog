@@ -3558,11 +3558,11 @@ object frmNewQSO: TfrmNewQSO
           Height = 135
           Top = 376
           Width = 938
-          ActivePage = tabSatellite
+          ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 40
-          TabIndex = 1
+          TabIndex = 0
           TabOrder = 28
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
