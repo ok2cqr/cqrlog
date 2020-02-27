@@ -2976,6 +2976,7 @@ begin
   WinKeyerChanged := False;
 
   pgPreferences.ActivePageIndex := ActPageIdx;    //set wanted tab for showing when open. ActTab is public variable.
+  lbPreferences.ItemIndex := ActPageIdx;
 end;
 
 procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);
