@@ -197,7 +197,17 @@ begin
 end;
 
 procedure TRotControl.SetAzimuth(azim : String);
+var
+  az: double;
 begin
+  if fDebugMode then writeln('Requested Az:',azim);
+  if TryStrToFloat(azim,az) then
+   Begin
+    az:=az + AzMin; //this sets cqrlog 0deg to rotator Min deg
+    if az>AzMax then az:=AzMax; //if direction is more than Max do not try to turn over limit;
+    azim:=FloatToStr(az);
+  end;
+  if fDebugMode then writeln('Requested fixed Az:',azim);
   RotCommand.Add('P '+azim+' 0'+LineEnding )
 end;
 
@@ -224,6 +234,8 @@ begin
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
         if fDebugMode then writeln('Az:',fAzimut);
+        fAzimut := fAzimut + AzMin * -1;
+        if fDebugMode then writeln('Fixed Az:',fAzimut);
        end;
     if Resp.IndexOf('dump_caps=')>-1 then //properties
        Begin
