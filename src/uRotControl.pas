@@ -5,7 +5,7 @@ unit uRotControl;
 interface
 
 uses
-  Classes, SysUtils, Process, ExtCtrls, lNetComponents, lnet;
+  Classes, SysUtils, Process, ExtCtrls, lNetComponents, lnet, strutils;
 
 {type TRigMode =  record
     mode : String[10];
@@ -74,7 +74,6 @@ type TRotControl = class
     //last error during operation
 
     function  GetAzimut   : Double;
-    function  GetLine1(const cSeparator, inString: String) : String;
 
     procedure SetAzimuth(azim : String);
 
@@ -204,16 +203,30 @@ end;
 
 procedure TRotControl.OnReceivedRcvdAzimut(aSocket: TLSocket);
 var
-  msg : String;
-  tmp : String;
+  msg  : String;
+  tmp  : String;
+  Resp : TStringList=nil;
+  i    : integer;
   Az   : Double;
 begin
   if aSocket.GetMessage(msg) > 0 then
   begin
-    tmp:= GetLine1(LineEnding,msg);
-    if TryStrToFloat(tmp,Az) then
-        fAzimut := Az
-  end
+    writeln('msg:',msg);
+    Resp := TStringList.create;
+    Resp.Delimiter := LineEnding;
+    Resp.DelimitedText:=msg;
+    if Resp.IndexOf('get_pos:')>-1 then //it is position
+       Begin
+          i:= Resp.IndexOf('Azimuth:');
+          if i>0 then
+             if Resp.Count>i+1 then
+               if TryStrToFloat(Resp[i+1],Az) then fAzimut := Az
+       end;
+    if Resp.IndexOf('Caps dump')>-1 then //it is properties
+       Begin
+       end;
+  end;
+    FreeAndNil(Resp);
 end;
 
 procedure TRotControl.OnRotPollTimer(Sender: TObject);
@@ -233,7 +246,7 @@ begin
     RotCommand.Clear
   end
   else begin
-    rcvdAzimut.SendMessage('p'+LineEnding)
+    rcvdAzimut.SendMessage('+p'+LineEnding)
   end
 end;
 
@@ -245,11 +258,6 @@ begin
   tmrRotPoll.Enabled := False;
   rcvdAzimut.Disconnect();
   RotConnected
-end;
-
-function TRotControl.GetLine1(const cSeparator, inString: String) : String;
-begin
-  result := Copy(inString, 1, Pos(cSeparator, inString)-1);
 end;
 
 
