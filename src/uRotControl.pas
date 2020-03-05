@@ -80,6 +80,10 @@ type TRotControl = class
     procedure Restart;
 end;
 
+var
+   AzMax,
+   AzMin      :Double;
+
 implementation
 
 constructor TRotControl.Create;
@@ -182,7 +186,8 @@ begin
     if fDebugMode then Writeln('Connected to ',fRotCtldHost,':',fRotCtldPort);
     result := True;
     tmrRotPoll.Interval := fRotPoll;
-    tmrRotPoll.Enabled  := True
+    tmrRotPoll.Enabled  := True;
+    RotCommand.Add('+\dump_caps'+LineEnding)
   end
   else begin
     if fDebugMode then Writeln('NOT connected to ',fRotCtldHost,':',fRotCtldPort);
@@ -206,24 +211,25 @@ var
   msg  : String;
   tmp  : String;
   Resp : TStringList=nil;
-  i    : integer;
   Az   : Double;
 begin
   if aSocket.GetMessage(msg) > 0 then
   begin
-    writeln('msg:',msg);
+    msg:=StringReplace(msg,#09,#32,[rfReplaceAll]); //convert TAB to SPACE
+    msg:=StringReplace(DelSpace(msg),':','=',[rfReplaceAll]); //remove SPACES, convert : to =
     Resp := TStringList.create;
     Resp.Delimiter := LineEnding;
     Resp.DelimitedText:=msg;
-    if Resp.IndexOf('get_pos:')>-1 then //it is position
+    if Resp.IndexOf('get_pos=')>-1 then //position
        Begin
-          i:= Resp.IndexOf('Azimuth:');
-          if i>0 then
-             if Resp.Count>i+1 then
-               if TryStrToFloat(Resp[i+1],Az) then fAzimut := Az
+        if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
+        if fDebugMode then writeln('Az:',fAzimut);
        end;
-    if Resp.IndexOf('Caps dump')>-1 then //it is properties
+    if Resp.IndexOf('dump_caps=')>-1 then //properties
        Begin
+        if TryStrToFloat(Resp.Values['MinAzimuth'],Az) then AzMin := Az;
+        if TryStrToFloat(Resp.Values['MaxAzimuth'],Az) then AzMax := Az;
+        if fDebugMode then writeln('AzMin:',AzMin,LineEnding,'AzMax:',AzMax);
        end;
   end;
     FreeAndNil(Resp);
