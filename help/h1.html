@@ -226,16 +226,29 @@
 </div>
 <br>
 <img src=img/h100.png border=0><br>
-<p align=center><img src=img/line.png></p>
+
+<h2><strong>ROT Control</strong></h2></a>
+<img src=img/h10b.png border=0><br><br>
 <br>
+Setting up Rotator control is very similar to setting up Rig control.
+<br><br><strong>Note:</strong>
+<br>At start Rot control asks AzMin and AzMax values from rotator with command <strong>'+\dump_state'</strong>. Normally these values are defined by rotator type.
+<br>How ever it is possible to change them with
+ <strong>Extra command line arguments</strong> . Using string <strong> --set-conf=min_az=10,max_az=355</strong>  you can set rotator so that cqrlog will never turn it below 10deg or over 355deg.
+ <br>Some rotators may have turn from -180deg to 180deg, like Hamlib Dummy test rotator. In that case if AzMin is negative cqrlog will set it's 0deg point to that negative value pointed by AzMin.
+  If AzMin is 0 or positive cqrlog's degrees equal to rotator's degrees.
+ 
+<p>See also <a href="h30.html">Operation: TRX/ROT Control</a>
+</p><p align=center><img src=img/line.png></p>
+<p> 
 <a name="mem"><strong>Add/Modify memory</strong></a><br><br>
 You can define your own favourite frequencis and swich between them directly in New QSO window using ALT+V (Mem down)
 and
 ALT+B (Mem up). These keys are used in N6TR clones to switch between bands.<br>
 You can also switch between memory frequencies with TRXControl's <b>M up</b> and <b>M dwn</b> buttons and set rig frequencies
  by double clicking rows in TRXControl's Add/Modify memory list.
-</p><p>See also <a href="h30.html">Operation: TRXControl</a>
-</p> 
+
+</p>
 <img src="img/h121.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
