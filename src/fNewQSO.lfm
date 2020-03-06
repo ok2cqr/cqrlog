@@ -3698,6 +3698,22 @@ object frmNewQSO: TfrmNewQSO
               Caption = 'MHz'
               ParentColor = False
             end
+            object cbSpotRX: TCheckBox
+              AnchorSideLeft.Control = lblStatellite
+              AnchorSideTop.Control = cmbPropagation
+              Left = 8
+              Height = 23
+              Hint = 'Use RX frequency from the Satellite tab instead of Frequency for DX spots'
+              Top = 106
+              Width = 233
+              BorderSpacing.Top = 35
+              Caption = 'Use RX frequency for DX spots'
+              Color = clNone
+              OnChange = cbSpotRXChange
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 4
+            end
           end
           object tabLOConfig: TTabSheet
             Caption = 'LO Config'

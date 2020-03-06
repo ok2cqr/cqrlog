@@ -382,7 +382,7 @@ begin
   end
   else
     f := 0;
-    f := f + txlo;
+  f := f + txlo;
   lblFreq.Caption := FormatFloat(empty_freq+';;',f);
   UpdateModeButtons(m);
   ClearButtonsColor;
