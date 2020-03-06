@@ -209,7 +209,7 @@ begin
     if az>AzMax then az:=AzMax; //if direction is more than Max do not try to turn over limit;
     azim:=FloatToStr(az);
   end;
-  if fDebugMode then writeln('Requested fixed Az:',azim);
+  if fDebugMode then writeln('Requested fixed Az:',azim,'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
   RotCommand.Add('P '+azim+' 0'+LineEnding )
 end;
 
@@ -235,15 +235,16 @@ begin
     if Resp.IndexOf('get_pos=')>-1 then //position
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
-        if fDebugMode then writeln('Az:',fAzimut);
+        if fDebugMode then writeln('Az:',FloatToStr(fAzimut));
+
         if AzMin<0 then fAzimut := fAzimut - AzMin; //case when rotator 0 (AzMin) is negative degrees
-        if fDebugMode then writeln('Fixed Az:',fAzimut);
+        if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
        end;
     if Resp.IndexOf('dump_state=')>-1 then //properties
        Begin
         if TryStrToFloat(Resp.Values['MinimumAzimuth'],Az) then AzMin := Az;
         if TryStrToFloat(Resp.Values['MaximumAzimuth'],Az) then AzMax := Az;
-        if fDebugMode then writeln('AzMin:',AzMin,LineEnding,'AzMax:',AzMax);
+        if fDebugMode then writeln('AzMin:',FloatToStr(AzMin),LineEnding,'AzMax:',FloatToStr(AzMax));
        end;
   end;
     FreeAndNil(Resp);
