@@ -5,7 +5,7 @@ unit uRotControl;
 interface
 
 uses
-  Classes, SysUtils, Process, ExtCtrls, lNetComponents, lnet;
+  Classes, SysUtils, Process, ExtCtrls, lNetComponents, lnet, strutils;
 
 {type TRigMode =  record
     mode : String[10];
@@ -74,12 +74,15 @@ type TRotControl = class
     //last error during operation
 
     function  GetAzimut   : Double;
-    function  GetLine1(const cSeparator, inString: String) : String;
 
     procedure SetAzimuth(azim : String);
 
     procedure Restart;
 end;
+
+var
+   AzMax,
+   AzMin      :Double;
 
 implementation
 
@@ -183,7 +186,8 @@ begin
     if fDebugMode then Writeln('Connected to ',fRotCtldHost,':',fRotCtldPort);
     result := True;
     tmrRotPoll.Interval := fRotPoll;
-    tmrRotPoll.Enabled  := True
+    tmrRotPoll.Enabled  := True;
+    RotCommand.Add('+\dump_state'+LineEnding)
   end
   else begin
     if fDebugMode then Writeln('NOT connected to ',fRotCtldHost,':',fRotCtldPort);
@@ -193,7 +197,19 @@ begin
 end;
 
 procedure TRotControl.SetAzimuth(azim : String);
+var
+  az: double;
 begin
+  if fDebugMode then writeln('Requested Az:',azim);
+  if TryStrToFloat(azim,az) then
+   Begin
+    if az>360 then az:= az-360; // this should not happen by cqrlog
+    if AzMin<0 then az:=az + AzMin; //this sets cqrlog 0deg to rotator's Min deg
+    if AzMin>0 then if az<AzMin then az:=AzMin; //When Min is set over 0deg do not try drive under it
+    if az>AzMax then az:=AzMax; //if direction is more than Max do not try to turn over limit;
+    azim:=FloatToStr(az);
+  end;
+  if fDebugMode then writeln('Requested fixed Az:',azim,'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
   RotCommand.Add('P '+azim+' 0'+LineEnding )
 end;
 
@@ -204,16 +220,34 @@ end;
 
 procedure TRotControl.OnReceivedRcvdAzimut(aSocket: TLSocket);
 var
-  msg : String;
-  tmp : String;
+  msg  : String;
+  tmp  : String;
+  Resp : TStringList=nil;
   Az   : Double;
 begin
   if aSocket.GetMessage(msg) > 0 then
   begin
-    tmp:= GetLine1(LineEnding,msg);
-    if TryStrToFloat(tmp,Az) then
-        fAzimut := Az
-  end
+    msg:=StringReplace(msg,#09,#32,[rfReplaceAll]); //convert TAB to SPACE
+    msg:=StringReplace(DelSpace(msg),':','=',[rfReplaceAll]); //remove SPACES, convert : to =
+    Resp := TStringList.create;
+    Resp.Delimiter := LineEnding;
+    Resp.DelimitedText:=msg;
+    if Resp.IndexOf('get_pos=')>-1 then //position
+       Begin
+        if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
+        if fDebugMode then writeln('Az:',FloatToStr(fAzimut));
+
+        if AzMin<0 then fAzimut := fAzimut - AzMin; //case when rotator 0 (AzMin) is negative degrees
+        if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
+       end;
+    if Resp.IndexOf('dump_state=')>-1 then //properties
+       Begin
+        if TryStrToFloat(Resp.Values['MinimumAzimuth'],Az) then AzMin := Az;
+        if TryStrToFloat(Resp.Values['MaximumAzimuth'],Az) then AzMax := Az;
+        if fDebugMode then writeln('AzMin:',FloatToStr(AzMin),LineEnding,'AzMax:',FloatToStr(AzMax));
+       end;
+  end;
+    FreeAndNil(Resp);
 end;
 
 procedure TRotControl.OnRotPollTimer(Sender: TObject);
@@ -233,7 +267,7 @@ begin
     RotCommand.Clear
   end
   else begin
-    rcvdAzimut.SendMessage('p'+LineEnding)
+    rcvdAzimut.SendMessage('+p'+LineEnding)
   end
 end;
 
@@ -245,11 +279,6 @@ begin
   tmrRotPoll.Enabled := False;
   rcvdAzimut.Disconnect();
   RotConnected
-end;
-
-function TRotControl.GetLine1(const cSeparator, inString: String) : String;
-begin
-  result := Copy(inString, 1, Pos(cSeparator, inString)-1);
 end;
 
 
