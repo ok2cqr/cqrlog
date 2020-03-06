@@ -187,7 +187,7 @@ begin
     result := True;
     tmrRotPoll.Interval := fRotPoll;
     tmrRotPoll.Enabled  := True;
-    RotCommand.Add('+\dump_caps'+LineEnding)
+    RotCommand.Add('+\dump_state'+LineEnding)
   end
   else begin
     if fDebugMode then Writeln('NOT connected to ',fRotCtldHost,':',fRotCtldPort);
@@ -203,7 +203,9 @@ begin
   if fDebugMode then writeln('Requested Az:',azim);
   if TryStrToFloat(azim,az) then
    Begin
-    az:=az + AzMin; //this sets cqrlog 0deg to rotator Min deg
+    if az>360 then az:= az-360; // this should not happen by cqrlog
+    if AzMin<0 then az:=az + AzMin; //this sets cqrlog 0deg to rotator's Min deg
+    if AzMin>0 then if az<AzMin then az:=AzMin; //When Min is set over 0deg do not try drive under it
     if az>AzMax then az:=AzMax; //if direction is more than Max do not try to turn over limit;
     azim:=FloatToStr(az);
   end;
@@ -234,13 +236,13 @@ begin
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
         if fDebugMode then writeln('Az:',fAzimut);
-        fAzimut := fAzimut + AzMin * -1;
+        if AzMin<0 then fAzimut := fAzimut - AzMin; //case when rotator 0 (AzMin) is negative degrees
         if fDebugMode then writeln('Fixed Az:',fAzimut);
        end;
-    if Resp.IndexOf('dump_caps=')>-1 then //properties
+    if Resp.IndexOf('dump_state=')>-1 then //properties
        Begin
-        if TryStrToFloat(Resp.Values['MinAzimuth'],Az) then AzMin := Az;
-        if TryStrToFloat(Resp.Values['MaxAzimuth'],Az) then AzMax := Az;
+        if TryStrToFloat(Resp.Values['MinimumAzimuth'],Az) then AzMin := Az;
+        if TryStrToFloat(Resp.Values['MaximumAzimuth'],Az) then AzMax := Az;
         if fDebugMode then writeln('AzMin:',AzMin,LineEnding,'AzMax:',AzMax);
        end;
   end;
