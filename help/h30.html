@@ -44,7 +44,7 @@ TRX Control window Shows current frequency and buttons allow change of Band, mod
 <br>Default setting for power buttons is hidden. You can change it via dropdown menu "Preferences".
 <br><br><b>M_up</b> and <b>M_dwn</b> buttons select next/previous entry from memory list. <b>M_Wri</b> adds entry to memory list from current rig frequency and mode and info field shows<b> "MW ok"</b>.
 <br>
-<br><br><b>NOTE!!!</b> <br>Check "pereferences/TRXcontor/Switch only between mode related memories"<br>Cqrlog TRXcontrol memories are categorized by mode (groups). CW, SSB(=AM+USB+LSB+FM), RTTY(=RTTY+DATA+PKTLSB+PKTUSB+PKTFM)[no mode selector for PKT*  but you may "M wri" them anyway]. 
+<br><br><b>NOTE!!!</b> <br>Check <b>pereferences/TRXcontrol/Switch only between mode related memories</b><br>Cqrlog TRXcontrol memories are categorized by mode (groups). CW, SSB(=AM+USB+LSB+FM), RTTY(=RTTY+DATA+PKTLSB+PKTUSB+PKTFM)[no mode selector for PKT*  but you may "M wri" them anyway]. 
 So do not wonder if you get smaller amount of memories than in your list when pressing <b>M_up</b> and <b>M_dwn</b> with "Show mode related" checked.
 <br><br>
 <img src="img/h122.png" name="9"  width="393" height="367">
@@ -57,12 +57,24 @@ So do not wonder if you get smaller amount of memories than in your list when pr
  <br>Deleting a memory line, or all lines, do not have any further warning questions (Are you sure?). In case you deleted something wrong just close window with  <b>Cancel</b>. No changes are recorded then.
 <br>Closing <b>Add/Modify memories</b> is done with buttons <b>OK</b> or <b>Cancel</b>. Closing <b> Open memory list</b> window must be done using <b>x</b> at top right corner of window.
 <br> <b> Open memory list</b> closes also if <b>Add/Modify memories</b> is opened. They can not be open at same time.
+<br><br> If you make changes to <b>preferences/TRXControl</b> after that just select another radio (even if not existing) from radio buttons <b>Radio 1</b> , <b>Radio 2</b>. Then select back the previous radio and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
 
-</p><p>See also <a href="h1.html#ah7">setting up TRXControl</a>
+</p><p>See also <a href="h1.html#ah7">setting up TRX/ROTControl</a>
 </p>
-<p align=center><img src=img/line.png></p>
-<br>
-<table width="100%" border="0" cellpadding="2" cellspacing="2">
+<p>
+<h3 ><a name="m3"></a>Rot Control</h3>
+</p>
+<p>
+
+From NewQSO/Window you can open <strong>Rotor control</strong> window.
+<p><img src="img/h121a.png" name="7"  width="353" height="367">
+</p>
+Window shows current position of rotor, Buttons to set Short/Long path direction and radio buttons to select rotor 1 or rotor 2.
+<br><br> When you have filled a call to NewQSO callsign field and moved away from that field DXCC info part is filled against call prefix, and/or locator grid if entered.
+ At that point, when DXCC/AZIM shows a value it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your rotator will turn your antenna to that direction.
+<br><br> If you make changes to <b>preferences/Rot Control</b> after that just select another rotator (even if not existing) from radio buttons <b>Rotor 1</b> , <b>Rotor 2</b>. Then select back the previous rotor and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
+</p><p>See also <a href="h1.html#ah7">setting up TRX/ROTControl</a>
+</p><table width="100%" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
         <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
