@@ -87,6 +87,7 @@ type
     btnClearSatellite : TButton;
     cbTxLo: TCheckBox;
     cbRxLo: TCheckBox;
+    cbSpotRX: TCheckBox;
     chkAutoMode: TCheckBox;
     cmbPropagation : TComboBox;
     cmbSatellite : TComboBox;
@@ -389,6 +390,7 @@ type
     procedure btnClearSatelliteClick(Sender : TObject);
     procedure cbRxLoChange(Sender: TObject);
     procedure cbTxLoChange(Sender: TObject);
+    procedure cbSpotRXChange(Sender: TObject);
     procedure chkAutoModeChange(Sender: TObject);
     procedure cmbFreqExit(Sender: TObject);
     procedure cmbIOTAEnter(Sender: TObject);
@@ -1163,6 +1165,8 @@ begin
   dmSatellite.GetListOfPropModes(cmbPropagation, old_prop);
   edtRXFreq.Text := old_rxfreq;
 
+  cbSpotRX.Checked := cqrini.ReadBool('DXCluster', 'SpotRX', False);
+
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
   cbRxLo.Checked := cqrini.ReadBool('NewQSO', 'UseRXLO', False);
@@ -1311,6 +1315,7 @@ begin
   cbRxLo.Checked := cqrini.ReadBool('NewQSO', 'UseRXLO', False);
   edtRXLO.Text   := cqrini.ReadString('NewQSO', 'RXLO', '');
 
+  cbSpotRX.Checked := cqrini.ReadBool('DXCluster', 'SpotRX', False);
 
   if frmRotControl.Showing then
   begin
@@ -4337,6 +4342,11 @@ begin
   cqrini.WriteBool('NewQSO', 'UseTXLO', cbTxLo.Checked);
 end;
 
+procedure TfrmNewQSO.cbSpotRXChange(Sender: TObject);
+begin
+  cqrini.WriteBool('DXCluster', 'SpotRX', cbSpotRX.Checked);
+end;
+
 procedure TfrmNewQSO.acCWFKeyExecute(Sender: TObject);
 begin
   UpdateFKeyLabels;
@@ -6628,6 +6638,8 @@ begin
   begin
     if TryStrToCurr(cmbFreq.Text,f) then
     begin
+      if (cqrini.ReadBool('DXCluster','SpotRX',False)) then
+        f := StrToCurr(edtRXFreq.Text);
       f := f*1000;
       tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + edtCall.Text;
       ModRst := cmbMode.Text+' '+edtHisRst.Text;
