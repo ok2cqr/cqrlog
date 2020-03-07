@@ -81,8 +81,11 @@ type TRotControl = class
 end;
 
 var
-   AzMax,
-   AzMin      :Double;
+   //most used defaults
+   AzMax  :Double = 360;
+   AzMin  :Double = 0;
+   FAzMax :Double = 360;
+   FAzMin :Double = 0;
 
 implementation
 
@@ -187,7 +190,8 @@ begin
     result := True;
     tmrRotPoll.Interval := fRotPoll;
     tmrRotPoll.Enabled  := True;
-    RotCommand.Add('+\dump_state'+LineEnding)
+    RotCommand.Add('+\dump_caps'+LineEnding);  //factory values
+    RotCommand.Add('+\dump_state'+LineEnding); //user defined limits
   end
   else begin
     if fDebugMode then Writeln('NOT connected to ',fRotCtldHost,':',fRotCtldPort);
@@ -204,9 +208,13 @@ begin
   if TryStrToFloat(azim,az) then
    Begin
     if az>360 then az:= az-360; // this should not happen by cqrlog
-    if AzMin<0 then az:=az + AzMin; //this sets cqrlog 0deg to rotator's Min deg
-    if AzMin>0 then if az<AzMin then az:=AzMin; //When Min is set over 0deg do not try drive under it
-    if az>AzMax then az:=AzMax; //if direction is more than Max do not try to turn over limit;
+
+    if FAzMin< 0 then   //-180 ..0.. 180 rotator case
+      if az>180 then az := az-360;  //west results negative -180 .. 0   East is positive 0 .. 180
+
+    if az<AzMin then az:=AzMin; //user limted minimum value by config parameters
+    if az>AzMax then az:=AzMax; //user limted maximum value by config parameters
+
     azim:=FloatToStr(az);
   end;
   if fDebugMode then writeln('Requested fixed Az:',azim,'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
@@ -236,15 +244,21 @@ begin
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
         if fDebugMode then writeln('Az:',FloatToStr(fAzimut));
-
-        if AzMin<0 then fAzimut := fAzimut - AzMin; //case when rotator 0 (AzMin) is negative degrees
+        if FAzMin<0 then if fAzimut<>0 then fAzimut:= 360+fAzimut;     //south stop -180..0..180 type rotor
+        if fAzimut>360 then fAzimut:= fAzimut-360;   //some rotators turn over 360 deg and -180..0.180 calculations may result, too
         if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
        end;
-    if Resp.IndexOf('dump_state=')>-1 then //properties
+    if Resp.IndexOf('dump_state=')>-1 then //user limits
        Begin
         if TryStrToFloat(Resp.Values['MinimumAzimuth'],Az) then AzMin := Az;
         if TryStrToFloat(Resp.Values['MaximumAzimuth'],Az) then AzMax := Az;
         if fDebugMode then writeln('AzMin:',FloatToStr(AzMin),LineEnding,'AzMax:',FloatToStr(AzMax));
+       end;
+    if Resp.IndexOf('dump_caps=')>-1 then //factory properties
+       Begin
+        if TryStrToFloat(Resp.Values['MinAzimuth'],Az) then FAzMin := Az;
+        if TryStrToFloat(Resp.Values['MaxAzimuth'],Az) then FAzMax := Az;
+        if fDebugMode then writeln('FactoryAzMin:',FloatToStr(FAzMin),LineEnding,'FactoryAzMax:',FloatToStr(FAzMax));
        end;
   end;
     FreeAndNil(Resp);
