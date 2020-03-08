@@ -2446,9 +2446,9 @@ object frmPreferences: TfrmPreferences
         Height = 392
         Top = 118
         Width = 657
-        ActivePage = tabRot2
+        ActivePage = tabRot1
         BorderSpacing.Top = 24
-        TabIndex = 1
+        TabIndex = 0
         TabOrder = 1
         object tabRot1: TTabSheet
           AnchorSideLeft.Control = pgROTControl

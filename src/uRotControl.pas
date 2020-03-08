@@ -84,8 +84,8 @@ var
    //most used defaults
    AzMax  :Double = 360;
    AzMin  :Double = 0;
-   FAzMax :Double = 360;
-   FAzMin :Double = 0;
+   //FAzMax :Double = 360;
+   //FAzMin :Double = 0;
 
 implementation
 
@@ -126,7 +126,7 @@ begin
     inc(index);
   end;
   paramList.Free;
-  if DebugMode then Writeln('rotProcess.Executable: ',rotProcess.Executable,' Parameters: ',rotProcess.Parameters.Text);
+  if DebugMode then Writeln('rotProcess.Executable: ',rotProcess.Executable,LineEnding,'Parameters:',LineEnding,rotProcess.Parameters.Text);
 
   try
     rotProcess.Execute;
@@ -135,7 +135,7 @@ begin
     on E : Exception do
     begin
       if fDebugMode then
-        Writeln('Starting rigctld E: ',E.Message);
+        Writeln('Starting rotctld E: ',E.Message);
       fLastError := E.Message;
       Result     := False;
       exit
@@ -175,10 +175,11 @@ begin
       if fDebugMode then Writeln('rotctld failed to start!');
       Result := False;
       exit
-    end
-  end;
+    end else
+     if fDebugMode then Writeln('rotctld started!');
+  end else
+     if fDebugMode then Writeln('Not started rotctld process. (Run is set FALSE)');
 
-  if fDebugMode then Writeln('rotctld started!');
 
   rcvdAzimut.Host := fRotCtldHost;
   rcvdAzimut.Port := fRotCtldPort;
@@ -186,15 +187,15 @@ begin
   //rcvdAzimut.Connect(fRotCtldHost,fRotCtldPort);
   if rcvdAzimut.Connect(fRotCtldHost,fRotCtldPort) then
   begin
-    if fDebugMode then Writeln('Connected to ',fRotCtldHost,':',fRotCtldPort);
+    if fDebugMode then Writeln('Connected to rotctld @ ',fRotCtldHost,':',fRotCtldPort);
     result := True;
     tmrRotPoll.Interval := fRotPoll;
     tmrRotPoll.Enabled  := True;
     RotCommand.Add('+\dump_caps'+LineEnding);  //factory values
-    RotCommand.Add('+\dump_state'+LineEnding); //user defined limits
+    //RotCommand.Add('+\dump_state'+LineEnding); //user defined limits
   end
   else begin
-    if fDebugMode then Writeln('NOT connected to ',fRotCtldHost,':',fRotCtldPort);
+    if fDebugMode then Writeln('NOT connected to rotctld @ ',fRotCtldHost,':',fRotCtldPort);
     fLastError := ERR_MSG;
     Result     := False
   end
@@ -209,7 +210,7 @@ begin
    Begin
     if az>360 then az:= az-360; // this should not happen by cqrlog
 
-    if FAzMin< 0 then   //-180 ..0.. 180 rotator case
+    if AzMin< 0 then   //-180 ..0.. 180 rotator case
       if az>180 then az := az-360;  //west results negative -180 .. 0   East is positive 0 .. 180
 
     if az<AzMin then az:=AzMin; //user limted minimum value by config parameters
@@ -244,7 +245,7 @@ begin
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
         if fDebugMode then writeln('Az:',FloatToStr(fAzimut));
-        if FAzMin<0 then if fAzimut<>0 then fAzimut:= 360+fAzimut;     //south stop -180..0..180 type rotor
+        if AzMin<0 then if fAzimut<>0 then fAzimut:= 360+fAzimut;     //south stop -180..0..180 type rotor
         if fAzimut>360 then fAzimut:= fAzimut-360;   //some rotators turn over 360 deg and -180..0.180 calculations may result, too
         if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
        end;
@@ -254,12 +255,21 @@ begin
         if TryStrToFloat(Resp.Values['MaximumAzimuth'],Az) then AzMax := Az;
         if fDebugMode then writeln('AzMin:',FloatToStr(AzMin),LineEnding,'AzMax:',FloatToStr(AzMax));
        end;
+    {
     if Resp.IndexOf('dump_caps=')>-1 then //factory properties
        Begin
         if TryStrToFloat(Resp.Values['MinAzimuth'],Az) then FAzMin := Az;
         if TryStrToFloat(Resp.Values['MaxAzimuth'],Az) then FAzMax := Az;
         if fDebugMode then writeln('FactoryAzMin:',FloatToStr(FAzMin),LineEnding,'FactoryAzMax:',FloatToStr(FAzMax));
        end;
+       }
+
+
+
+       //set error responses here !!!!
+
+
+
   end;
     FreeAndNil(Resp);
 end;
@@ -305,7 +315,7 @@ begin
   begin
     if rotProcess.Running then
     begin
-      if DebugMode then Writeln('1a');
+      if DebugMode then Writeln('RotProcess terminating');
       rotProcess.Terminate(excode)
     end
   end;
