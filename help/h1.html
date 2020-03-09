@@ -232,15 +232,14 @@
 <br>
 Setting up Rotator control is very similar to setting up Rig control.
 <br><br><strong>Note:</strong>
-<br>At start Rot control asks Factory FAzMin and FAzMax values from rotctld with command <strong>'+\dump_caps'</strong>. These values are defined by rotator type.
-<br>Next Rot control asks turning limits AzMin and AzMax values from rotctld with command <strong>'+\dump_state'</strong>.
- That makes user possible to set turning limits less than rotator full turn with
- <strong>Extra command line arguments</strong> .
- <br>Using string <strong> --set-conf=min_az=10,max_az=355</strong>  you can set rotator so that cqrlog will never turn it below 10deg or over 355deg.
- <br>Rotctld knows rotators with turn from -180deg-0deg-180deg (south stop), like Hamlib Dummy test rotator.
+
+<br>Rot control asks turning limits AzMin and AzMax values from rotctld with command <strong>'+\dump_state'</strong>.
+ That makes user possible to set turning limits other than rotator default turn with
+ <strong>Extra command line arguments</strong>. Using string <strong> --set-conf=min_az=10,max_az=355</strong>  you can set rotator so that cqrlog will never turn it below 10deg or over 355deg.
+ </p><p>Rotctld knows rotators with turn from -180deg-0deg-180deg (south stop), like Hamlib Dummy test rotator.
  <br>Most of rotators are with turn 0deg - 360deg.
- <br>Some are with turn 0deg - over 360 deg. With them cqrlog never uses bigger value than 360, but reads position right if rotor sends over 360 deg value (360 is subtracted).
- 
+ <br>Some are with turn 0deg - >360 deg. With them cqrlog never drives values over 360, but reads position right if rotor sends over 360 deg value (sent_value-360 = cqrlog display).
+</p> 
 <p>See also <a href="h30.html">Operation: TRX/ROT Control</a>
 </p><p align=center><img src=img/line.png></p>
 <p> 
