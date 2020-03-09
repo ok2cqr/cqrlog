@@ -1383,6 +1383,9 @@ begin
   end;
 
   pgDetails.Pages[1].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
+  pgDetails.Pages[2].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
+  if cqrini.ReadBool('NewQSO','SatelliteMode',False) then
+    frmNewQSO.pgDetails.TabIndex := 1;
 
   //this have to be done here when log is selected (settings at database)
   frmReminder.chRemi.Checked := cqrini.ReadBool('Reminder','chRemi',False);
