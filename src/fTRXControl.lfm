@@ -1,12 +1,24 @@
 object frmTRXControl: TfrmTRXControl
+<<<<<<< HEAD
   Left = 0
   Height = 321
   Top = 0
   Width = 284
+||||||| merged common ancestors
+  Left = 877
+  Height = 321
+  Top = 3
+  Width = 284
+=======
+  Left = 732
+  Height = 326
+  Top = 19
+  Width = 275
+>>>>>>> rotator_contol
   Anchors = []
   Caption = 'TRX control'
-  ClientHeight = 296
-  ClientWidth = 284
+  ClientHeight = 301
+  ClientWidth = 275
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
     0000400000000100200000000000001000006400000064000000000000000000
@@ -161,14 +173,14 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
-    Left = 205
-    Height = 243
+    Left = 196
+    Height = 238
     Top = 48
     Width = 78
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 1
     Caption = ' Mode '
-    ClientHeight = 225
+    ClientHeight = 220
     ClientWidth = 76
     TabOrder = 0
     object btnCW: TButton
@@ -278,46 +290,61 @@ object frmTRXControl: TfrmTRXControl
   object pnlMain: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
-    Left = 0
-    Height = 296
+    AnchorSideRight.Control = gbMode
+    Left = 1
+    Height = 301
     Top = 0
-    Width = 200
+    Width = 194
     Align = alLeft
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 1
+    BorderSpacing.Right = 1
     BevelOuter = bvNone
     Caption = 'pnlMain'
-    ClientHeight = 296
-    ClientWidth = 200
+    ClientHeight = 301
+    ClientWidth = 194
     TabOrder = 1
     object gbFreq: TGroupBox
       AnchorSideLeft.Control = pnlMain
       AnchorSideTop.Control = pnlMain
+      AnchorSideRight.Control = pnlMain
       Left = 1
-      Height = 59
-      Top = 0
-      Width = 199
+      Height = 64
+      Top = 1
+      Width = 192
       Align = alTop
       BorderSpacing.Left = 1
+      BorderSpacing.Top = 1
+      BorderSpacing.Right = 1
       Caption = ' Freq '
-      ClientHeight = 41
-      ClientWidth = 197
+      ClientHeight = 46
+      ClientWidth = 190
       TabOrder = 0
       object lblFreq: TLabel
+        AnchorSideLeft.Control = gbFreq
+        AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = gbFreq
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = gbFreq
         AnchorSideRight.Side = asrBottom
-        Left = -44
-        Height = 49
-        Top = 1
-        Width = 235
+        AnchorSideBottom.Control = gbFreq
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 39
+        Top = 4
+        Width = 184
         Alignment = taRightJustify
-        Anchors = [akTop, akRight]
+        Anchors = [akTop, akLeft, akRight, akBottom]
         AutoSize = False
-        BorderSpacing.Top = 1
-        BorderSpacing.Right = 6
+        BorderSpacing.Left = 3
+        BorderSpacing.Top = 3
+        BorderSpacing.Right = 3
+        BorderSpacing.Bottom = 3
         Caption = '0.0000'
         Font.Color = clBlue
         Font.Height = 30
         Font.Style = [fsBold]
+        Layout = tlCenter
         ParentColor = False
         ParentFont = False
       end
@@ -325,17 +352,18 @@ object frmTRXControl: TfrmTRXControl
     object gbBand: TGroupBox
       AnchorSideLeft.Control = pnlMain
       AnchorSideTop.Control = gbInfo
+      AnchorSideRight.Control = pnlMain
       Left = 1
-      Height = 159
-      Top = 111
-      Width = 199
+      Height = 158
+      Top = 117
+      Width = 192
       Align = alClient
-      Anchors = [akTop, akLeft, akBottom]
       BorderSpacing.Left = 1
       BorderSpacing.Top = 3
+      BorderSpacing.Right = 1
       Caption = ' Band '
-      ClientHeight = 141
-      ClientWidth = 197
+      ClientHeight = 140
+      ClientWidth = 190
       TabOrder = 1
       object btn160m: TButton
         AnchorSideLeft.Control = gbBand
@@ -401,7 +429,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = btn15m
         AnchorSideTop.Side = asrBottom
-        Left = 70
+        Left = 67
         Height = 25
         Top = 84
         Width = 56
@@ -416,7 +444,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = btn17m
         AnchorSideTop.Side = asrBottom
-        Left = 70
+        Left = 67
         Height = 25
         Top = 58
         Width = 56
@@ -431,7 +459,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = btn20m
         AnchorSideTop.Side = asrBottom
-        Left = 70
+        Left = 67
         Height = 25
         Top = 32
         Width = 56
@@ -445,7 +473,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideLeft.Control = gbBand
         AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = gbBand
-        Left = 70
+        Left = 67
         Height = 25
         Top = 6
         Width = 56
@@ -459,7 +487,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Control = gbBand
         AnchorSideRight.Control = gbBand
         AnchorSideRight.Side = asrBottom
-        Left = 135
+        Left = 128
         Height = 25
         Top = 6
         Width = 56
@@ -476,7 +504,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = gbBand
         AnchorSideRight.Side = asrBottom
-        Left = 135
+        Left = 128
         Height = 25
         Top = 32
         Width = 56
@@ -493,7 +521,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = gbBand
         AnchorSideRight.Side = asrBottom
-        Left = 135
+        Left = 128
         Height = 25
         Top = 84
         Width = 56
@@ -510,7 +538,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = gbBand
         AnchorSideRight.Side = asrBottom
-        Left = 135
+        Left = 128
         Height = 25
         Top = 58
         Width = 56
@@ -530,12 +558,12 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideBottom.Side = asrBottom
         Left = 0
         Height = 30
-        Top = 111
-        Width = 197
+        Top = 110
+        Width = 190
         Anchors = [akLeft, akRight, akBottom]
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 197
+        ClientWidth = 190
         TabOrder = 12
         Visible = False
         object btPon: TButton
@@ -554,7 +582,7 @@ object frmTRXControl: TfrmTRXControl
           AnchorSideLeft.Control = pnlPower
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = pnlPower
-          Left = 70
+          Left = 67
           Height = 25
           Top = 0
           Width = 56
@@ -567,7 +595,7 @@ object frmTRXControl: TfrmTRXControl
           AnchorSideTop.Control = pnlPower
           AnchorSideRight.Control = pnlPower
           AnchorSideRight.Side = asrBottom
-          Left = 135
+          Left = 128
           Height = 25
           Top = 0
           Width = 56
@@ -587,12 +615,12 @@ object frmTRXControl: TfrmTRXControl
       AnchorSideBottom.Side = asrBottom
       Left = 0
       Height = 26
-      Top = 270
-      Width = 200
+      Top = 275
+      Width = 194
       Align = alBottom
       BevelOuter = bvNone
       ClientHeight = 26
-      ClientWidth = 200
+      ClientWidth = 194
       ParentBidiMode = False
       TabOrder = 2
       object rbRadio1: TRadioButton
@@ -615,7 +643,7 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Control = pnlRig
         AnchorSideRight.Control = pnlRig
         AnchorSideRight.Side = asrBottom
-        Left = 136
+        Left = 130
         Height = 23
         Top = 1
         Width = 57
@@ -632,16 +660,18 @@ object frmTRXControl: TfrmTRXControl
     object gbInfo: TGroupBox
       AnchorSideLeft.Control = pnlMain
       AnchorSideTop.Control = gbFreq
+      AnchorSideRight.Control = pnlMain
       Left = 1
       Height = 46
-      Top = 62
-      Width = 199
+      Top = 68
+      Width = 192
       Align = alTop
       BorderSpacing.Left = 1
       BorderSpacing.Top = 3
+      BorderSpacing.Right = 1
       Caption = 'Mem Info'
       ClientHeight = 28
-      ClientWidth = 197
+      ClientWidth = 190
       TabOrder = 3
       Visible = False
       object edtMemNr: TEdit
@@ -653,7 +683,7 @@ object frmTRXControl: TfrmTRXControl
         Left = 6
         Height = 27
         Top = 0
-        Width = 185
+        Width = 178
         Anchors = [akTop, akLeft, akRight]
         AutoSize = False
         AutoSelect = False
@@ -671,7 +701,7 @@ object frmTRXControl: TfrmTRXControl
     AnchorSideTop.Control = pnlMain
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 205
+    Left = 196
     Height = 48
     Top = 0
     Width = 78
@@ -711,12 +741,12 @@ object frmTRXControl: TfrmTRXControl
     Enabled = False
     Interval = 500
     OnTimer = tmrRadioTimer
-    left = 80
-    top = 16
+    left = 96
+    top = 112
   end
   object mnuMem: TMainMenu
     left = 40
-    top = 16
+    top = 112
     object mnuPref: TMenuItem
       Caption = 'Preferences'
       object mnuOpenMem: TMenuItem
@@ -747,8 +777,8 @@ object frmTRXControl: TfrmTRXControl
     end
   end
   object acMem: TActionList
-    left = 56
-    top = 16
+    left = 64
+    top = 112
     object acAddModMem: TAction
       Caption = 'Add/Modify memory'
       OnExecute = acAddModMemExecute

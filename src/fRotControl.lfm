@@ -1,33 +1,44 @@
 object frmRotControl: TfrmRotControl
-  Left = 405
-  Height = 167
-  Top = 282
-  Width = 214
+  Left = 165
+  Height = 163
+  Top = 55
+  Width = 187
+  Anchors = []
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
   Caption = 'Rotor control'
-  ClientHeight = 167
-  ClientWidth = 214
+  ClientHeight = 163
+  ClientWidth = 187
   KeyPreview = True
   OnClose = FormClose
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '2.0.4.0'
   object ButtonShortP: TButton
-    Left = 16
+    AnchorSideLeft.Control = GroupBox2
+    AnchorSideTop.Control = GroupBox2
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 25
-    Top = 80
+    Top = 71
     Width = 75
+    BorderSpacing.Top = 6
     Caption = 'Short Path'
     OnClick = ButtonShortPClick
     TabOrder = 1
   end
   object rbRotor1: TRadioButton
-    Left = 16
-    Height = 24
+    AnchorSideLeft.Control = ButtonShortP
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 6
+    Height = 23
     Top = 128
     Width = 60
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Top = 12
+    BorderSpacing.Bottom = 12
     Caption = 'ROT: '
     Checked = True
     OnClick = rbRotor1Click
@@ -35,43 +46,77 @@ object frmRotControl: TfrmRotControl
     TabStop = True
   end
   object rbRotor2: TRadioButton
-    Left = 112
-    Height = 24
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = ButtonLongP
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 121
+    Height = 23
     Top = 128
     Width = 60
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Top = 12
+    BorderSpacing.Bottom = 12
     Caption = 'ROT: '
     OnClick = rbRotor2Click
     TabOrder = 3
   end
   object GroupBox2: TGroupBox
-    Left = 8
-    Height = 72
-    Top = 0
-    Width = 197
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 6
+    Height = 64
+    Top = 1
+    Width = 175
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 6
     Caption = 'Azimuth'
-    ClientHeight = 53
-    ClientWidth = 193
+    ClientHeight = 46
+    ClientWidth = 173
     TabOrder = 0
     object lblAzimuth: TLabel
-      Left = 10
-      Height = 49
-      Top = -1
-      Width = 168
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GroupBox2
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = GroupBox2
+      AnchorSideBottom.Side = asrBottom
+      Left = 3
+      Height = 40
+      Top = 3
+      Width = 167
       Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = False
+      BorderSpacing.Left = 3
+      BorderSpacing.Top = 3
+      BorderSpacing.Right = 3
+      BorderSpacing.Bottom = 3
       Caption = '0.0'
       Font.Color = clBlue
       Font.Height = 30
       Font.Style = [fsBold]
+      Layout = tlCenter
       ParentColor = False
       ParentFont = False
     end
   end
   object ButtonLongP: TButton
-    Left = 120
+    AnchorSideTop.Control = GroupBox2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = GroupBox2
+    AnchorSideRight.Side = asrBottom
+    Left = 106
     Height = 25
-    Top = 80
+    Top = 71
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 6
     Caption = 'LongPath'
     OnClick = ButtonLongPClick
     TabOrder = 4
@@ -80,7 +125,7 @@ object frmRotControl: TfrmRotControl
     Enabled = False
     Interval = 500
     OnTimer = tmrRotorTimer
-    left = 80
-    top = 120
+    left = 24
+    top = 24
   end
 end
