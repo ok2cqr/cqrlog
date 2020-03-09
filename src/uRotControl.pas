@@ -5,7 +5,7 @@ unit uRotControl;
 interface
 
 uses
-  Classes, SysUtils, Process, ExtCtrls, lNetComponents, lnet, strutils;
+  Classes, SysUtils, Process, ExtCtrls, lNetComponents, lnet, strutils, graphics;
 
 {type TRigMode =  record
     mode : String[10];
@@ -74,7 +74,7 @@ type TRotControl = class
     //last error during operation
 
     function  GetAzimut   : Double;
-
+    procedure StopRot;
     procedure SetAzimuth(azim : String);
 
     procedure Restart;
@@ -84,10 +84,12 @@ var
    //most used defaults
    AzMax  :Double = 360;
    AzMin  :Double = 0;
-   //FAzMax :Double = 360;
-   //FAzMin :Double = 0;
+   UseState,
+   WarnFix: boolean;
 
 implementation
+
+uses fRotControl, uMyIni;
 
 constructor TRotControl.Create;
 begin
@@ -188,11 +190,20 @@ begin
   if rcvdAzimut.Connect(fRotCtldHost,fRotCtldPort) then
   begin
     if fDebugMode then Writeln('Connected to rotctld @ ',fRotCtldHost,':',fRotCtldPort);
+    AzMin:=0;    //defaullt limits
+    AzMax:=360;
+    UseState:=False;
+    WarnFix:=False;
     result := True;
     tmrRotPoll.Interval := fRotPoll;
     tmrRotPoll.Enabled  := True;
-    RotCommand.Add('+\dump_caps'+LineEnding);  //factory values
-    //RotCommand.Add('+\dump_state'+LineEnding); //user defined limits
+
+    UseState := ( (cqrini.ReadBool('ROT1', 'RotAzMinMax', False) and (frmRotControl.rbRotor1.Checked)) or
+                  (cqrini.ReadBool('ROT2', 'RotAzMinMax', False) and (frmRotControl.rbRotor2.Checked)) );
+
+    if UseState then RotCommand.Add('+\dump_state'+LineEnding); //user defined limits
+                       //RotCommand.Add('+\dump_caps'+LineEnding);  //factory values
+
   end
   else begin
     if fDebugMode then Writeln('NOT connected to rotctld @ ',fRotCtldHost,':',fRotCtldPort);
@@ -203,18 +214,24 @@ end;
 
 procedure TRotControl.SetAzimuth(azim : String);
 var
-  az: double;
+  az,
+  azz: double;
+
 begin
   if fDebugMode then writeln('Requested Az:',azim);
   if TryStrToFloat(azim,az) then
    Begin
+    azz := az;
     if az>360 then az:= az-360; // this should not happen by cqrlog
 
-    if AzMin< 0 then   //-180 ..0.. 180 rotator case
-      if az>180 then az := az-360;  //west results negative -180 .. 0   East is positive 0 .. 180
+    //if follow \dump_state and rotor type is -180 .. 180
+    //west results negative -180 .. 0   East is positive 0 .. 180
+    if (UseState and (AzMin<0 ) and (az>180)) then az := az-360;
 
     if az<AzMin then az:=AzMin; //user limted minimum value by config parameters
     if az>AzMax then az:=AzMax; //user limted maximum value by config parameters
+
+    WarnFix := azz<>az ;//P command is fixed, warn about it
 
     azim:=FloatToStr(az);
   end;
@@ -225,6 +242,10 @@ end;
 function TRotControl.GetAzimut   : Double;
 begin
   result := fAzimut
+end;
+procedure TRotControl.StopRot ;
+begin
+  rcvdAzimut.SendMessage('S'+LineEnding);
 end;
 
 procedure TRotControl.OnReceivedRcvdAzimut(aSocket: TLSocket);
@@ -238,6 +259,18 @@ begin
   begin
     msg:=StringReplace(msg,#09,#32,[rfReplaceAll]); //convert TAB to SPACE
     msg:=StringReplace(DelSpace(msg),':','=',[rfReplaceAll]); //remove SPACES, convert : to =
+
+    if pos('RPRT-',msg)>0 then
+        frmRotControl.pnlBtns.Color:=clRed
+      else
+        if WarnFix then
+         begin
+          frmRotControl.pnlBtns.Color:=clYellow;
+          WarnFix := False;
+         end
+         else
+          frmRotControl.pnlBtns.Color:=clDefault;
+    frmRotControl.pnlBtns.Repaint;
     Resp := TStringList.create;
     Resp.Delimiter := LineEnding;
     Resp.DelimitedText:=msg;
@@ -245,7 +278,7 @@ begin
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
         if fDebugMode then writeln('Az:',FloatToStr(fAzimut));
-        if AzMin<0 then if fAzimut<>0 then fAzimut:= 360+fAzimut;     //south stop -180..0..180 type rotor
+        if ( UseState and (AzMin<0 )) then if fAzimut<>0 then fAzimut:= 360+fAzimut;    //south stop -180..0..180 type rotor
         if fAzimut>360 then fAzimut:= fAzimut-360;   //some rotators turn over 360 deg and -180..0.180 calculations may result, too
         if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
        end;

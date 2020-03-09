@@ -120,6 +120,8 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    chkRot1AzMinMax: TCheckBox;
+    chkRot2AzMinMax: TCheckBox;
     chkShowOwnPos: TCheckBox;
     chkDistance: TCheckBox;
     chkSTX: TCheckBox;
@@ -1282,6 +1284,7 @@ begin
   cqrini.WriteString('ROT1', 'RotCtldPort', edtRot1RotCtldPort.Text);
   cqrini.WriteString('ROT1', 'ExtraRotCtldArgs', edtRot1RotCtldArgs.Text);
   cqrini.WriteBool('ROT1', 'RunRotCtld', chkRot1RunRotCtld.Checked);
+  cqrini.WriteBool('ROT1', 'RotAzMinMax', chkRot1AzMinMax.Checked);
   cqrini.WriteString('ROT1', 'host', edtRot1Host.Text);
   cqrini.WriteInteger('ROT1', 'SerialSpeed', cmbSpeedRot1.ItemIndex);
   cqrini.WriteInteger('ROT1', 'DataBits', cmbDataBitsRot1.ItemIndex);
@@ -1298,6 +1301,7 @@ begin
   cqrini.WriteString('ROT2', 'RotCtldPort', edtRot2RotCtldPort.Text);
   cqrini.WriteString('ROT2', 'ExtraRotCtldArgs', edtRot2RotCtldArgs.Text);
   cqrini.WriteBool('ROT2', 'RunRotCtld', chkRot2RunRotCtld.Checked);
+  cqrini.WriteBool('ROT2', 'RotAzMinMax', chkRot2AzMinMax.Checked);
   cqrini.WriteString('ROT2', 'host', edtRot2Host.Text);
   cqrini.WriteInteger('ROT2', 'SerialSpeed', cmbSpeedRot2.ItemIndex);
   cqrini.WriteInteger('ROT2', 'DataBits', cmbDataBitsRot2.ItemIndex);
@@ -2678,6 +2682,7 @@ begin
   edtRot1RotCtldPort.Text := cqrini.ReadString('ROT1', 'RotCtldPort', '4533');
   edtRot1RotCtldArgs.Text := cqrini.ReadString('ROT1', 'ExtraRotCtldArgs', '');
   chkRot1RunRotCtld.Checked := cqrini.ReadBool('ROT1', 'RunRotCtld', False);
+  chkRot1AzMinMax.Checked := cqrini.ReadBool('ROT1', 'RotAzMinMax', False);
   edtRot1Host.Text := cqrini.ReadString('ROT1', 'host', 'localhost');
   cmbSpeedRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'SerialSpeed', 0);
   cmbDataBitsRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'DataBits', 0);
@@ -2693,6 +2698,7 @@ begin
   edtRot2RotCtldPort.Text := cqrini.ReadString('ROT2', 'RotCtldPort', '4533');
   edtRot2RotCtldArgs.Text := cqrini.ReadString('ROT2', 'ExtraRotCtldArgs', '');
   chkRot2RunRotCtld.Checked := cqrini.ReadBool('ROT2', 'RunRotCtld', False);
+  chkRot2AzMinMax.Checked := cqrini.ReadBool('ROT2', 'RotAzMinMax', False);
   edtRot2Host.Text := cqrini.ReadString('ROT2', 'host', 'localhost');
   cmbSpeedRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'SerialSpeed', 0);
   cmbDataBitsRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'DataBits', 0);

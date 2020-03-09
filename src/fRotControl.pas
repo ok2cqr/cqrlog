@@ -13,15 +13,18 @@ type
   { TfrmRotControl }
 
   TfrmRotControl = class(TForm)
-    ButtonShortP: TButton;
-    ButtonLongP: TButton;
+    btnLongP: TButton;
+    btnShortP: TButton;
+    btnStop: TButton;
     GroupBox2: TGroupBox;
     lblAzimuth: TLabel;
+    pnlBtns: TPanel;
     rbRotor1: TRadioButton;
     rbRotor2: TRadioButton;
     tmrRotor: TTimer;
-    procedure ButtonShortPClick(Sender: TObject);
-    procedure ButtonLongPClick(Sender: TObject);
+    procedure btnShortPClick(Sender: TObject);
+    procedure btnLongPClick(Sender: TObject);
+    procedure btnStopClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -92,12 +95,12 @@ begin
   end
 end;
 
-procedure TfrmRotControl.ButtonShortPClick(Sender: TObject);
+procedure TfrmRotControl.btnShortPClick(Sender: TObject);
 begin
    rotor.SetAzimuth(fNewQSO.Azimuth)
 end;
 
-procedure TfrmRotControl.ButtonLongPClick(Sender: TObject);
+procedure TfrmRotControl.btnLongPClick(Sender: TObject);
 var
     LAzimuth : String = '';
     SAz : Double = 0 ;
@@ -110,6 +113,11 @@ begin
       LAz := SAz + 180;
    Lazimuth := FloatToStr(LAz);
    rotor.SetAzimuth(LAzimuth)
+end;
+
+procedure TfrmRotControl.btnStopClick(Sender: TObject);
+begin
+  rotor.StopRot;
 end;
 
 function TfrmRotControl.InicializeRot : Boolean;

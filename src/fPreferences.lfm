@@ -1,7 +1,7 @@
 object frmPreferences: TfrmPreferences
-  Left = 106
+  Left = 135
   Height = 659
-  Top = 31
+  Top = 114
   Width = 1098
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
@@ -2533,11 +2533,10 @@ object frmPreferences: TfrmPreferences
             object chkRot1RunRotCtld: TCheckBox
               AnchorSideLeft.Control = edtRot1RotCtldArgs
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = edtRot1RotCtldArgs
-              AnchorSideTop.Side = asrCenter
+              AnchorSideTop.Control = lblExtaArgs1
               Left = 285
               Height = 23
-              Top = 104
+              Top = 81
               Width = 235
               BorderSpacing.Left = 24
               Caption = 'Run rotctld when program starts'
@@ -2856,6 +2855,17 @@ object frmPreferences: TfrmPreferences
               TabOrder = 6
               Text = 'cmbModelRot1'
             end
+            object chkRot1AzMinMax: TCheckBox
+              AnchorSideLeft.Control = chkRot1RunRotCtld
+              AnchorSideTop.Control = chkRot1RunRotCtld
+              AnchorSideTop.Side = asrBottom
+              Left = 285
+              Height = 23
+              Top = 104
+              Width = 276
+              Caption = 'Use rotctrld \dump:state info for limits'
+              TabOrder = 7
+            end
           end
           object edtRotor1: TEdit
             AnchorSideLeft.Control = tabRot1
@@ -2978,11 +2988,10 @@ object frmPreferences: TfrmPreferences
             object chkRot2RunRotCtld: TCheckBox
               AnchorSideLeft.Control = edtRot2RotCtldArgs
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = edtRot2RotCtldArgs
-              AnchorSideTop.Side = asrCenter
+              AnchorSideTop.Control = lblExtaArgs2
               Left = 285
               Height = 23
-              Top = 104
+              Top = 81
               Width = 235
               BorderSpacing.Left = 24
               Caption = 'Run rotctld when program starts'
@@ -3301,6 +3310,17 @@ object frmPreferences: TfrmPreferences
               ItemHeight = 0
               TabOrder = 6
               Text = 'cmbModelRot2'
+            end
+            object chkRot2AzMinMax: TCheckBox
+              AnchorSideLeft.Control = chkRot2RunRotCtld
+              AnchorSideTop.Control = chkRot2RunRotCtld
+              AnchorSideTop.Side = asrBottom
+              Left = 285
+              Height = 23
+              Top = 104
+              Width = 276
+              Caption = 'Use rotctrld \dump:state info for limits'
+              TabOrder = 7
             end
           end
           object edtRotor2: TEdit
