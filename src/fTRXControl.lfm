@@ -1,20 +1,8 @@
 object frmTRXControl: TfrmTRXControl
-<<<<<<< HEAD
-  Left = 0
-  Height = 321
-  Top = 0
-  Width = 284
-||||||| merged common ancestors
-  Left = 877
-  Height = 321
-  Top = 3
-  Width = 284
-=======
   Left = 732
   Height = 326
   Top = 19
   Width = 275
->>>>>>> rotator_contol
   Anchors = []
   Caption = 'TRX control'
   ClientHeight = 301
@@ -215,7 +203,7 @@ object frmTRXControl: TfrmTRXControl
       Height = 25
       Top = 50
       Width = 51
-      Caption = 'DATA'
+      Caption = 'RTTY'
       OnClick = btnRTTYClick
       TabOrder = 2
     end
