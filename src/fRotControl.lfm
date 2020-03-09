@@ -1,13 +1,13 @@
 object frmRotControl: TfrmRotControl
-  Left = 699
-  Height = 179
-  Top = 94
-  Width = 207
+  Left = 165
+  Height = 163
+  Top = 55
+  Width = 187
   Anchors = []
   BorderIcons = [biSystemMenu]
   Caption = 'Rotor control'
-  ClientHeight = 179
-  ClientWidth = 207
+  ClientHeight = 163
+  ClientWidth = 187
   KeyPreview = True
   OnClose = FormClose
   OnDestroy = FormDestroy
@@ -34,7 +34,7 @@ object frmRotControl: TfrmRotControl
     AnchorSideBottom.Side = asrBottom
     Left = 6
     Height = 23
-    Top = 144
+    Top = 128
     Width = 60
     Anchors = [akLeft, akBottom]
     BorderSpacing.Top = 12
@@ -51,9 +51,9 @@ object frmRotControl: TfrmRotControl
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 141
+    Left = 121
     Height = 23
-    Top = 144
+    Top = 128
     Width = 60
     Anchors = [akRight, akBottom]
     BorderSpacing.Top = 12
@@ -70,14 +70,14 @@ object frmRotControl: TfrmRotControl
     Left = 6
     Height = 64
     Top = 1
-    Width = 195
+    Width = 175
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 1
     BorderSpacing.Right = 6
     Caption = 'Azimuth'
     ClientHeight = 46
-    ClientWidth = 193
+    ClientWidth = 173
     TabOrder = 0
     object lblAzimuth: TLabel
       AnchorSideLeft.Control = GroupBox2
@@ -89,7 +89,7 @@ object frmRotControl: TfrmRotControl
       Left = 3
       Height = 40
       Top = 3
-      Width = 187
+      Width = 167
       Alignment = taRightJustify
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = False
@@ -111,7 +111,7 @@ object frmRotControl: TfrmRotControl
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = GroupBox2
     AnchorSideRight.Side = asrBottom
-    Left = 126
+    Left = 106
     Height = 25
     Top = 71
     Width = 75
