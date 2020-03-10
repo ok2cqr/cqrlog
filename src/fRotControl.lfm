@@ -1,7 +1,7 @@
 object frmRotControl: TfrmRotControl
-  Left = 174
+  Left = 151
   Height = 195
-  Top = 56
+  Top = 84
   Width = 189
   Anchors = []
   BorderIcons = [biSystemMenu]
@@ -20,7 +20,7 @@ object frmRotControl: TfrmRotControl
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 6
-    Height = 81
+    Height = 73
     Top = 1
     Width = 177
     Anchors = [akTop, akLeft, akRight]
@@ -28,7 +28,7 @@ object frmRotControl: TfrmRotControl
     BorderSpacing.Top = 1
     BorderSpacing.Right = 6
     Caption = 'Azimuth'
-    ClientHeight = 63
+    ClientHeight = 55
     ClientWidth = 175
     TabOrder = 0
     object lblAzimuth: TLabel
@@ -39,21 +39,21 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = GroupBox2
       AnchorSideBottom.Side = asrBottom
-      Left = 3
-      Height = 35
-      Top = 25
-      Width = 169
+      Left = 1
+      Height = 38
+      Top = 16
+      Width = 173
       Alignment = taRightJustify
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = False
-      BorderSpacing.Left = 3
-      BorderSpacing.Right = 3
-      BorderSpacing.Bottom = 3
+      BorderSpacing.Left = 1
+      BorderSpacing.Right = 1
+      BorderSpacing.Bottom = 1
       Caption = '0.0'
       Font.Color = clBlue
       Font.Height = 30
       Font.Style = [fsBold]
-      Layout = tlCenter
+      Layout = tlBottom
       ParentColor = False
       ParentFont = False
     end
@@ -64,8 +64,8 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
       Left = 3
-      Height = 12
-      Top = 13
+      Height = 6
+      Top = 10
       Width = 169
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 3
@@ -76,12 +76,12 @@ object frmRotControl: TfrmRotControl
       AnchorSideLeft.Control = GroupBox2
       AnchorSideTop.Control = GroupBox2
       Left = 3
-      Height = 13
+      Height = 10
       Top = 0
       Width = 3
       BorderSpacing.Left = 3
       Caption = ' '
-      Font.Height = 10
+      Font.Height = 8
       ParentColor = False
       ParentFont = False
     end
@@ -90,14 +90,14 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
       Left = 169
-      Height = 13
+      Height = 10
       Top = 0
       Width = 3
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 3
       Caption = ' '
-      Font.Height = 10
+      Font.Height = 8
       ParentColor = False
       ParentFont = False
     end
@@ -111,13 +111,13 @@ object frmRotControl: TfrmRotControl
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 6
-    Height = 101
-    Top = 88
+    Height = 109
+    Top = 80
     Width = 177
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 6
     BorderSpacing.Bottom = 6
-    ClientHeight = 101
+    ClientHeight = 109
     ClientWidth = 177
     TabOrder = 1
     object rbRotor1: TRadioButton
@@ -126,7 +126,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Side = asrBottom
       Left = 7
       Height = 23
-      Top = 71
+      Top = 79
       Width = 69
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
@@ -145,7 +145,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Side = asrBottom
       Left = 101
       Height = 23
-      Top = 71
+      Top = 79
       Width = 69
       Anchors = [akRight, akBottom]
       BorderSpacing.Top = 12
