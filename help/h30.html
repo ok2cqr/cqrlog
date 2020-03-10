@@ -69,11 +69,12 @@ So do not wonder if you get smaller amount of memories than in your list when pr
 From NewQSO/Window you can open <strong>Rotor control</strong> window.
 <p><img src="img/h121a.png" name="121a"> <img src="img/h121b.png" name="121b">  <img src="img/h121c.png" name="121c">
 </p>
-Window shows current position of rotor, Buttons to set Short/Long path direction and radio buttons to select rotor 1 or rotor 2.
+Window shows current position of rotor with progress bar and numerical display, buttons to set Short/Long path direction, rotation stop button and radio buttons to select rotor 1 or rotor 2.<br>Small numbers on top of form shows current rotator limits. Usually this is 0 -360, but may be also -180 - 180, or user defined limits.
 <br><br> When you have filled a call to NewQSO callsign field and moved away from that field DXCC info part is filled against call prefix, and/or locator grid if entered.
  At that point, when DXCC/AZIM shows a value it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your rotator will turn your antenna to that direction.
 <br>Pressing <b>Stop button</b> stops rotator turning.</p>
-<p>If error message is received from rotctld button box turns red. If requested turn command is ok, but az_min or az_maz limits prevent antenna to reach requested direction button box will turn yellow. The length of color flash depends poll rate and is error permanent or not.
+<p>If error message is received from rotctld button box turns red. If requested turn command is ok, but az_min or az_maz limits change sent postion from true position 
+(then antenna may not reach requested direction) button box will turn yellow. The length of color flash depends poll rate and is error permanent or not.
 <br>
 <br>If you make changes to <b>preferences/Rot Control</b> after that just select another rotator (even if not existing) from radio buttons <b>Rotor 1</b> , <b>Rotor 2</b>. Then select back the previous rotor and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
 </p><p>See also <a href="h1.html#ah7">setting up TRX/ROTControl</a>
