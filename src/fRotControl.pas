@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType;
+  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls;
 
 type
 
@@ -17,8 +17,11 @@ type
     btnShortP: TButton;
     btnStop: TButton;
     GroupBox2: TGroupBox;
+    lblAzmin: TLabel;
     lblAzimuth: TLabel;
+    lblAzmax: TLabel;
     pnlBtns: TPanel;
+    pbAz: TProgressBar;
     rbRotor1: TRadioButton;
     rbRotor2: TRadioButton;
     tmrRotor: TTimer;
@@ -39,6 +42,7 @@ type
     { public declarations }
     procedure SynROT;
     function  InicializeRot : Boolean;
+    procedure UpdateAZdisp(Az,AzMin,AzMax:Double);
   end;
 
 var
@@ -118,6 +122,17 @@ end;
 procedure TfrmRotControl.btnStopClick(Sender: TObject);
 begin
   rotor.StopRot;
+end;
+procedure TfrmRotControl.UpdateAZdisp(Az,AzMin,AzMax:Double);
+Begin
+  lblAzMin.Caption:=FloatToStrF(AzMin, fffixed, 3, 0);
+  lblAzMax.Caption:=FloatToStrF(AzMax, fffixed, 3, 0);
+  pbAz.Min:=round(AzMin);
+  pbAz.Max:=round(AzMax);
+  pbAz.Smooth:=True;
+  pbAz.Step:=1;
+  pbAz.Enabled:=True;
+  pbAz.Position:=round(Az);
 end;
 
 function TfrmRotControl.InicializeRot : Boolean;

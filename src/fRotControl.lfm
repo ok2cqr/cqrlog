@@ -1,13 +1,13 @@
 object frmRotControl: TfrmRotControl
-  Left = 85
-  Height = 178
-  Top = 89
-  Width = 196
+  Left = 174
+  Height = 195
+  Top = 56
+  Width = 189
   Anchors = []
   BorderIcons = [biSystemMenu]
   Caption = 'Rotor control'
-  ClientHeight = 178
-  ClientWidth = 196
+  ClientHeight = 195
+  ClientWidth = 189
   KeyPreview = True
   OnClose = FormClose
   OnDestroy = FormDestroy
@@ -20,33 +20,33 @@ object frmRotControl: TfrmRotControl
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 6
-    Height = 64
+    Height = 81
     Top = 1
-    Width = 184
+    Width = 177
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 1
     BorderSpacing.Right = 6
     Caption = 'Azimuth'
-    ClientHeight = 46
-    ClientWidth = 182
+    ClientHeight = 63
+    ClientWidth = 175
     TabOrder = 0
     object lblAzimuth: TLabel
       AnchorSideLeft.Control = GroupBox2
-      AnchorSideTop.Control = GroupBox2
+      AnchorSideTop.Control = pbAz
+      AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = GroupBox2
       AnchorSideBottom.Side = asrBottom
       Left = 3
-      Height = 40
-      Top = 3
-      Width = 176
+      Height = 35
+      Top = 25
+      Width = 169
       Alignment = taRightJustify
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = False
       BorderSpacing.Left = 3
-      BorderSpacing.Top = 3
       BorderSpacing.Right = 3
       BorderSpacing.Bottom = 3
       Caption = '0.0'
@@ -54,6 +54,50 @@ object frmRotControl: TfrmRotControl
       Font.Height = 30
       Font.Style = [fsBold]
       Layout = tlCenter
+      ParentColor = False
+      ParentFont = False
+    end
+    object pbAz: TProgressBar
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = lblAzmin
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 3
+      Height = 12
+      Top = 13
+      Width = 169
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 3
+      BorderSpacing.Right = 3
+      TabOrder = 0
+    end
+    object lblAzmin: TLabel
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GroupBox2
+      Left = 3
+      Height = 13
+      Top = 0
+      Width = 3
+      BorderSpacing.Left = 3
+      Caption = ' '
+      Font.Height = 10
+      ParentColor = False
+      ParentFont = False
+    end
+    object lblAzmax: TLabel
+      AnchorSideTop.Control = GroupBox2
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 169
+      Height = 13
+      Top = 0
+      Width = 3
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 3
+      Caption = ' '
+      Font.Height = 10
       ParentColor = False
       ParentFont = False
     end
@@ -68,13 +112,13 @@ object frmRotControl: TfrmRotControl
     AnchorSideBottom.Side = asrBottom
     Left = 6
     Height = 101
-    Top = 71
-    Width = 184
+    Top = 88
+    Width = 177
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 6
     BorderSpacing.Bottom = 6
     ClientHeight = 101
-    ClientWidth = 184
+    ClientWidth = 177
     TabOrder = 1
     object rbRotor1: TRadioButton
       AnchorSideLeft.Control = pnlBtns
@@ -99,7 +143,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = pnlBtns
       AnchorSideBottom.Side = asrBottom
-      Left = 108
+      Left = 101
       Height = 23
       Top = 71
       Width = 69
@@ -128,7 +172,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideTop.Control = pnlBtns
       AnchorSideRight.Control = pnlBtns
       AnchorSideRight.Side = asrBottom
-      Left = 102
+      Left = 95
       Height = 25
       Top = 7
       Width = 75
@@ -144,7 +188,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = btnShortP
       AnchorSideTop.Side = asrBottom
-      Left = 17
+      Left = 13
       Height = 25
       Top = 38
       Width = 150
@@ -158,7 +202,7 @@ object frmRotControl: TfrmRotControl
     Enabled = False
     Interval = 500
     OnTimer = tmrRotorTimer
-    left = 24
-    top = 24
+    left = 80
+    top = 168
   end
 end
