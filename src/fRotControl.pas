@@ -42,7 +42,7 @@ type
     { public declarations }
     procedure SynROT;
     function  InicializeRot : Boolean;
-    procedure UpdateAZdisp(Az,AzMin,AzMax:Double);
+    procedure UpdateAZdisp(Az,AzMin,AzMax:Double;UseState:Boolean);
   end;
 
 var
@@ -123,7 +123,7 @@ procedure TfrmRotControl.btnStopClick(Sender: TObject);
 begin
   rotor.StopRot;
 end;
-procedure TfrmRotControl.UpdateAZdisp(Az,AzMin,AzMax:Double);
+procedure TfrmRotControl.UpdateAZdisp(Az,AzMin,AzMax:Double;UseState:boolean);
 Begin
   lblAzMin.Caption:=FloatToStrF(AzMin, fffixed, 3, 0);
   lblAzMax.Caption:=FloatToStrF(AzMax, fffixed, 3, 0);
@@ -132,6 +132,8 @@ Begin
   pbAz.Smooth:=True;
   pbAz.Step:=1;
   pbAz.Enabled:=True;
+  if (UseState and (AzMin<0 ) and (az>180)) then az := az-360;
+
   pbAz.Position:=round(Az);
 end;
 
