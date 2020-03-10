@@ -281,7 +281,7 @@ begin
         if ( UseState and (AzMin<0 )) then if fAzimut<>0 then fAzimut:= 360+fAzimut;    //south stop -180..0..180 type rotor
         if fAzimut>360 then fAzimut:= fAzimut-360;   //some rotators turn over 360 deg and -180..0.180 calculations may result, too
         if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
-        frmRotControl.UpdateAZdisp(fAzimut,AzMin,AzMax);
+        frmRotControl.UpdateAZdisp(fAzimut,AzMin,AzMax,UseState);
        end;
     if Resp.IndexOf('dump_state=')>-1 then //user limits
        Begin
