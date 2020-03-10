@@ -233,7 +233,7 @@ object frmSOTAExport: TfrmSOTAExport
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.csv'
-    Filter = 'CVS file|*.csv'
+    Filter = 'CSV file|*.csv'
     left = 449
     top = 208
   end
