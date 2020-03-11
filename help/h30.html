@@ -67,16 +67,23 @@ So do not wonder if you get smaller amount of memories than in your list when pr
 <p>
 
 From NewQSO/Window you can open <strong>Rotor control</strong> window.
-<p><img src="img/h121a.png" name="121a"> <img src="img/h121b.png" name="121b">  <img src="img/h121c.png" name="121c">
+<p><img src="img/h121a.png" name="121a"> <img src="img/h121b.png" name="121b">  
+<img src="img/h121e.png" name="121e"> <img src="img/h121c.png" name="121c"> <img src="img/h121d.png" name="121d">
 </p>
-Window shows current position of rotor with progress bar and numerical display, buttons to set Short/Long path direction, rotation stop button and radio buttons to select rotor 1 or rotor 2.<br>Small numbers on top of form shows current rotator limits. Usually this is 0..360, but may be also -180..180 depending on rotor model, or other user defined limits.
-<br><br> When you have filled a call to <b>NewQSO</b> callsign field and moved away from that field <b>DXCC info</b> part is filled against call prefix, and/or locator grid if entered.
- At that point, when <b>DXCC/AZIM</b> shows a value it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your rotator will turn your antenna to that direction.
-<br>Pressing <b>Stop button</b> stops rotator turning.</p>
-<p>Progress bar displays Az value relative to AzLimits (if Use \dump_state is checked in preferences) so do not wonder if it some cases may look different than numerical true direction display. If error message is received from rotctld button area turns red. If requested turn command is ok, but az_min or az_maz limits change requested postion from true position 
-(then antenna may not always reach requested direction) button area will turn yellow. The length of color flash depends poll rate and is error permanent or not.
+Window shows current position of rotor with <b>numerical display, Short and Long path Buttons and radio buttons to select rotor 1 or rotor 2</b>.
+<br>User can resize window and select <b>additional bar display, direction and stop buttons</b>.
+<br>Small numbers on top of bar display shows current rotor limits. Usually this is 0..360, but may be also -180..180 depending on rotor model, or other user defined limits.
+<br>Direction drive buttons run rotor until stop button is pressed or maximum 15sec time limit is reached.
+<br><br> When a call is entered to <b>NewQSO</b> callsign field and cursor is moved away from that field <b>DXCC info</b> part gets filled against call prefix and/or locator grid,
+ then, when <b>DXCC/AZIM</b> shows a value, it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your ro
+ tor will turn your antenna to that direction.
+<br>Pressing <b>Stop button</b> stops rotor turning started either with path or turn buttons.</p>
+<p>Progress bar displays Az value relative to AzLimits (if Use \dump_state is checked in preferences) so do not wonder if it in some cases may look different than numerical true direction display. 
+<br>If error message is received from rotctld button area turns red. If requested turn command is ok, but az_min or az_maz limits change requested direction from true direction 
+(then antenna may not always reach requested direction) button area will turn yellow as warning sign.
+<br>The length of color flash depends on poll rate and is error permanent or not.
 <br>
-<br>If you make changes to <b>preferences/Rot Control</b> after that just select another rotator (even if not existing) from radio buttons <b>Rotor 1</b> , <b>Rotor 2</b>. Then select back the previous rotor and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
+<br>If you make changes to <b>preferences/Rot Control</b> after that just select another rotor (even if not existing) from radio buttons <b>Rotor 1</b> , <b>Rotor 2</b>. Then select back the previous rotor and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
 </p><p>See also <a href="h1.html#ah7">setting up TRX/ROTControl</a>
 </p><table width="100%" border="0" cellpadding="2" cellspacing="2">
     <tbody>
