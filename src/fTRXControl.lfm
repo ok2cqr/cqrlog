@@ -317,10 +317,10 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = gbFreq
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 4
         Height = 39
         Top = 4
-        Width = 184
+        Width = 183
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akRight, akBottom]
         AutoSize = False
@@ -755,7 +755,6 @@ object frmTRXControl: TfrmTRXControl
       end
       object mnuShowPwr: TMenuItem
         Caption = 'Show Pwr buttons'
-        Checked = True
         OnClick = mnuShowPwrClick
       end
       object mnuProgPref: TMenuItem

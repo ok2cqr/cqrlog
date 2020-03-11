@@ -6,25 +6,37 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls;
+  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls, Menus;
 
 type
 
   { TfrmRotControl }
 
   TfrmRotControl = class(TForm)
+    btnLeft: TButton;
     btnLongP: TButton;
+    btnRight: TButton;
     btnShortP: TButton;
     btnStop: TButton;
-    GroupBox2: TGroupBox;
-    lblAzmin: TLabel;
+    gbAzimuth: TGroupBox;
     lblAzimuth: TLabel;
     lblAzmax: TLabel;
-    pnlBtns: TPanel;
+    lblAzmin: TLabel;
+    MainMenu1: TMainMenu;
+    MenuItem1: TMenuItem;
+    mnuMinMax: TMenuItem;
+    mnuDirbtns: TMenuItem;
+    mnuStopbtn: TMenuItem;
+    mnuPreferences: TMenuItem;
     pbAz: TProgressBar;
+    pnlMinMax: TPanel;
+    pnlBtns: TPanel;
     rbRotor1: TRadioButton;
     rbRotor2: TRadioButton;
+    tmrStopRot: TTimer;
     tmrRotor: TTimer;
+    procedure btnLeftClick(Sender: TObject);
+    procedure btnRightClick(Sender: TObject);
     procedure btnShortPClick(Sender: TObject);
     procedure btnLongPClick(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
@@ -32,9 +44,14 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure mnuDirbtnsClick(Sender: TObject);
+    procedure mnuMinMaxClick(Sender: TObject);
+    procedure mnuPreferencesClick(Sender: TObject);
+    procedure mnuStopbtnClick(Sender: TObject);
     procedure rbRotor1Click(Sender: TObject);
     procedure rbRotor2Click(Sender: TObject);
     procedure tmrRotorTimer(Sender: TObject);
+    procedure tmrStopRotTimer(Sender: TObject);
   private
     { private declarations }
     rotor : TRotControl;
@@ -59,7 +76,44 @@ procedure TfrmRotControl.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmRotControl);
   rbRotor1.Caption := cqrini.ReadString('ROT1','Desc','Rotor 1');
-  rbRotor2.Caption := cqrini.ReadString('ROT2','Desc','Rotor 2')
+  rbRotor2.Caption := cqrini.ReadString('ROT2','Desc','Rotor 2');
+  btnLeft.Visible:=cqrini.ReadBool('ROT','DirBtns',False);
+  btnRight.Visible:=cqrini.ReadBool('ROT','DirBtns',False);
+  mnuDirBtns.Checked:=cqrini.ReadBool('ROT','DirBtns',False);;
+  pnlMinMax.Visible:=cqrini.ReadBool('ROT','MinMax',False);
+  mnuMinMax.Checked:=cqrini.ReadBool('ROT','MinMax',False);;
+  btnStop.Visible:=cqrini.ReadBool('ROT','Stopbtn',False);
+  mnuStopbtn.Checked:=cqrini.ReadBool('ROT','Stopbtn',False);
+  if pnlMinMax.Visible then gbAzimuth.Height:=70;
+end;
+
+procedure TfrmRotControl.mnuDirbtnsClick(Sender: TObject);
+begin
+   mnuDirbtns.Checked:= not mnuDirbtns.Checked;
+   btnLeft.Visible:=mnuDirbtns.Checked;
+   btnRight.Visible:=mnuDirbtns.Checked;
+   cqrini.WriteBool('ROT','DirBtns',mnuDirbtns.Visible);
+end;
+
+procedure TfrmRotControl.mnuMinMaxClick(Sender: TObject);
+begin
+  mnuMinMax.Checked:= not mnuMinMax.Checked;
+  if mnuMinMax.Checked then gbAzimuth.Height:=70 else gbAzimuth.Height:=50;
+  pnlMinMax.Visible:=mnuMinMax.Checked;
+  cqrini.WriteBool('ROT','MinMax',pnlMinMax.Visible);
+end;
+
+procedure TfrmRotControl.mnuPreferencesClick(Sender: TObject);
+begin
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 6);  //set RotConrol tab active. Number may change if preferences page change
+  frmNewQSO.acPreferences.Execute
+end;
+
+procedure TfrmRotControl.mnuStopbtnClick(Sender: TObject);
+begin
+  mnuStopbtn.Checked:= not  mnuStopbtn.Checked;
+  btnStop.Visible:=mnuStopbtn.Checked;
+  cqrini.WriteBool('ROT','Stopbtn',btnStop.Visible);
 end;
 
 procedure TfrmRotControl.rbRotor1Click(Sender: TObject);
@@ -101,27 +155,69 @@ end;
 
 procedure TfrmRotControl.btnShortPClick(Sender: TObject);
 begin
-   rotor.SetAzimuth(fNewQSO.Azimuth)
+   if fNewQSO.Azimuth<>'' then
+      rotor.SetAzimuth(fNewQSO.Azimuth)
 end;
-
 procedure TfrmRotControl.btnLongPClick(Sender: TObject);
 var
     LAzimuth : String = '';
     SAz : Double = 0 ;
     LAz : Double = 0 ;
 begin
-   SAz := StrToFloat(fNewQSO.Azimuth);
-   if SAz >180 then
-      LAz := SAz - 180
-   else
-      LAz := SAz + 180;
-   Lazimuth := FloatToStr(LAz);
-   rotor.SetAzimuth(LAzimuth)
+   if fNewQSO.Azimuth<>'' then
+   begin
+     SAz := StrToFloat(fNewQSO.Azimuth);
+     if SAz >180 then
+        LAz := SAz - 180
+     else
+        LAz := SAz + 180;
+     Lazimuth := FloatToStr(LAz);
+     rotor.SetAzimuth(LAzimuth)
+   end;
+end;
+procedure TfrmRotControl.btnLeftClick(Sender: TObject);
+begin
+   rotor.LeftRot;
+   tmrStopRot.Enabled:=True;
+   btnLeft.Font.Color:=clGreen;
+   btnLeft.Font.Style:=btnLeft.Font.Style+[fsBold];
+   btnLeft.Repaint;
+end;
+
+procedure TfrmRotControl.btnRightClick(Sender: TObject);
+begin
+   rotor.RightRot;
+   tmrStopRot.Enabled:=True;
+   btnRight.Font.Color:=clGreen;
+   btnRight.Font.Style:=btnRight.Font.Style+[fsBold];
+   btnRight.Repaint;
 end;
 
 procedure TfrmRotControl.btnStopClick(Sender: TObject);
 begin
+  btnStop.Font.Color:=clRed;
+  btnStop.Font.Style:=btnStop.Font.Style+[fsBold];
+  btnStop.Repaint;
+
+  tmrStopRot.Enabled:=False;
   rotor.StopRot;
+  btnLeft.Font.Color:=clDefault;
+  btnLeft.Font.Style:=btnLeft.Font.Style-[fsBold];
+  btnLeft.Repaint;
+  btnRight.Font.Color:=clDefault;
+  btnRight.Font.Style:=btnRight.Font.Style-[fsBold];
+  btnRight.Repaint;
+  Application.ProcessMessages;
+  sleep(300);
+  Application.ProcessMessages;
+  btnStop.Font.Color:=clDefault;
+  btnStop.Font.Style:=btnStop.Font.Style-[fsBold];
+  btnStop.Repaint;
+end;
+
+procedure TfrmRotControl.tmrStopRotTimer(Sender: TObject);
+begin
+  btnStopClick(nil);
 end;
 procedure TfrmRotControl.UpdateAZdisp(Az,AzMin,AzMax:Double;UseState:boolean);
 Begin

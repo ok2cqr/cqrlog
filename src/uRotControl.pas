@@ -75,6 +75,8 @@ type TRotControl = class
 
     function  GetAzimut   : Double;
     procedure StopRot;
+    procedure LeftRot;
+    procedure RightRot;
     procedure SetAzimuth(azim : String);
 
     procedure Restart;
@@ -247,7 +249,14 @@ procedure TRotControl.StopRot ;
 begin
   rcvdAzimut.SendMessage('S'+LineEnding);
 end;
-
+procedure TRotControl.LeftRot ;
+begin
+  rcvdAzimut.SendMessage('M 8 1'+LineEnding);
+end;
+procedure TRotControl.RightRot ;
+begin
+  rcvdAzimut.SendMessage('M 16 1'+LineEnding);
+end;
 procedure TRotControl.OnReceivedRcvdAzimut(aSocket: TLSocket);
 var
   msg  : String;
@@ -267,9 +276,14 @@ begin
          begin
           frmRotControl.pnlBtns.Color:=clYellow;
           WarnFix := False;
+          if fDebugMode then writeln(copy(msg,pos('RPRT',msg),7));
          end
-         else
+        else
+         begin
           frmRotControl.pnlBtns.Color:=clDefault;
+          if fDebugMode then writeln(copy(msg,pos('RPRT',msg),7));
+         end;
+
     frmRotControl.pnlBtns.Repaint;
     Resp := TStringList.create;
     Resp.Delimiter := LineEnding;
