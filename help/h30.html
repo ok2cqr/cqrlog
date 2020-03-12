@@ -44,7 +44,7 @@ TRX Control window Shows current frequency and buttons allow change of Band, mod
 <br>Default setting for power buttons is hidden. You can change it via dropdown menu "Preferences".
 <br><br><b>M_up</b> and <b>M_dwn</b> buttons select next/previous entry from memory list. <b>M_Wri</b> adds entry to memory list from current rig frequency and mode and info field shows<b> "MW ok"</b>.
 <br>
-<br><br><b>NOTE!!!</b> <br>Check "pereferences/TRXcontor/Switch only between mode related memories"<br>Cqrlog TRXcontrol memories are categorized by mode (groups). CW, SSB(=AM+USB+LSB+FM), RTTY(=RTTY+DATA+PKTLSB+PKTUSB+PKTFM)[no mode selector for PKT*  but you may "M wri" them anyway]. 
+<br><br><b>NOTE!!!</b> <br>Check <b>pereferences/TRXcontrol/Switch only between mode related memories</b><br>Cqrlog TRXcontrol memories are categorized by mode (groups). CW, SSB(=AM+USB+LSB+FM), RTTY(=RTTY+DATA+PKTLSB+PKTUSB+PKTFM)[no mode selector for PKT*  but you may "M wri" them anyway]. 
 So do not wonder if you get smaller amount of memories than in your list when pressing <b>M_up</b> and <b>M_dwn</b> with "Show mode related" checked.
 <br><br>
 <img src="img/h122.png" name="9"  width="393" height="367">
@@ -57,12 +57,35 @@ So do not wonder if you get smaller amount of memories than in your list when pr
  <br>Deleting a memory line, or all lines, do not have any further warning questions (Are you sure?). In case you deleted something wrong just close window with  <b>Cancel</b>. No changes are recorded then.
 <br>Closing <b>Add/Modify memories</b> is done with buttons <b>OK</b> or <b>Cancel</b>. Closing <b> Open memory list</b> window must be done using <b>x</b> at top right corner of window.
 <br> <b> Open memory list</b> closes also if <b>Add/Modify memories</b> is opened. They can not be open at same time.
+<br><br> If you make changes to <b>preferences/TRXControl</b> after that just select another radio (even if not existing) from radio buttons <b>Radio 1</b> , <b>Radio 2</b>. Then select back the previous radio and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
 
-</p><p>See also <a href="h1.html#ah7">setting up TRXControl</a>
+</p><p>See also <a href="h1.html#ah7">setting up TRX/ROTControl</a>
 </p>
-<p align=center><img src=img/line.png></p>
+<p>
+<h3 ><a name="m3"></a>Rot Control</h3>
+</p>
+<p>
+
+From NewQSO/Window you can open <strong>Rotor control</strong> window.
+<p><img src="img/h121a.png" name="121a"> <img src="img/h121b.png" name="121b">  
+<img src="img/h121e.png" name="121e"> <img src="img/h121c.png" name="121c"> <img src="img/h121d.png" name="121d">
+</p>
+Window shows current position of rotor with <b>numerical display, Short and Long path Buttons and radio buttons to select rotor 1 or rotor 2</b>.
+<br>User can resize window and select <b>additional bar display, direction and stop buttons</b>.
+<br>Small numbers on top of bar display shows current rotor limits. Usually this is 0..360, but may be also -180..180 depending on rotor model, or other user defined limits.
+<br>Direction drive buttons run rotor until stop button is pressed or maximum 15sec time limit is reached.
+<br><br> When a call is entered to <b>NewQSO</b> callsign field and cursor is moved away from that field <b>DXCC info</b> part gets filled against call prefix and/or locator grid,
+ then, when <b>DXCC/AZIM</b> shows a value, it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your ro
+ tor will turn your antenna to that direction.
+<br>Pressing <b>Stop button</b> stops rotor turning started either with path or turn buttons.</p>
+<p>Progress bar displays Az value relative to AzLimits (if Use \dump_state is checked in preferences) so do not wonder if it in some cases may look different than numerical true direction display. 
+<br>If error message is received from rotctld button area turns red. If requested turn command is ok, but az_min or az_maz limits change requested direction from true direction 
+(then antenna may not always reach requested direction) button area will turn yellow as warning sign.
+<br>The length of color flash depends on poll rate and is error permanent or not.
 <br>
-<table width="100%" border="0" cellpadding="2" cellspacing="2">
+<br>If you make changes to <b>preferences/Rot Control</b> after that just select another rotor (even if not existing) from radio buttons <b>Rotor 1</b> , <b>Rotor 2</b>. Then select back the previous rotor and new values are read. It is possible also reload settings from <b>NewQSO/File/Refresh TRX/ROT control</b>.</p>
+</p><p>See also <a href="h1.html#ah7">setting up TRX/ROTControl</a>
+</p><table width="100%" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
         <td width="33%" align="center">[<a href="index_right.html">Menu</a>]</td>
