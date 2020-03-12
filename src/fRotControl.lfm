@@ -1,7 +1,7 @@
 object frmRotControl: TfrmRotControl
-  Left = 1848
+  Left = 99
   Height = 211
-  Top = 182
+  Top = 46
   Width = 192
   Anchors = []
   BorderIcons = [biSystemMenu]

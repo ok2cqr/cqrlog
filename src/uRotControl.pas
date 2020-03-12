@@ -192,7 +192,7 @@ begin
   if rcvdAzimut.Connect(fRotCtldHost,fRotCtldPort) then
   begin
     if fDebugMode then Writeln('Connected to rotctld @ ',fRotCtldHost,':',fRotCtldPort);
-    AzMin:=0;    //defaullt limits
+    AzMin:=0;    //default limits
     AzMax:=360;
     UseState:=False;
     WarnFix:=False;
@@ -292,16 +292,17 @@ begin
        Begin
         if TryStrToFloat(Resp.Values['Azimuth'],Az) then fAzimut := Az;
         if fDebugMode then writeln('Az:',FloatToStr(fAzimut));
-        if ( UseState and (AzMin<0 )) then if fAzimut<>0 then fAzimut:= 360+fAzimut;    //south stop -180..0..180 type rotor
-        if fAzimut>360 then fAzimut:= fAzimut-360;   //some rotators turn over 360 deg and -180..0.180 calculations may result, too
-        if fDebugMode then writeln('Fixed Az:',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
         frmRotControl.UpdateAZdisp(fAzimut,AzMin,AzMax,UseState);
+        if (UseState and (AzMin<0 ) and (fAzimut<0)) then fAzimut:=fAzimut+360;  //south stop -180..0..180 type rotor zero deg at AzMin -180
+        if fAzimut>360 then fAzimut:= fAzimut-360;   //some rotators turn over 360 deg and -180..0.180 calculations may result, too
+        if fDebugMode then writeln('Fixed Az(',UseState,'):',FloatToStr(fAzimut),'  (AzMin:',FloatToStr(AzMin),' AzMax:',FloatToStr(AzMax),')');
        end;
     if Resp.IndexOf('dump_state=')>-1 then //user limits
        Begin
         if TryStrToFloat(Resp.Values['MinimumAzimuth'],Az) then AzMin := Az;
         if TryStrToFloat(Resp.Values['MaximumAzimuth'],Az) then AzMax := Az;
         if fDebugMode then writeln('AzMin:',FloatToStr(AzMin),LineEnding,'AzMax:',FloatToStr(AzMax));
+        frmRotControl.UpdateAZdisp(0,AzMin,AzMax,True);
        end;
   end;
     FreeAndNil(Resp);
@@ -367,3 +368,92 @@ end;
 
 end.
 
+{
+Hamlib 4.0-git known rotator factory limits 2020-03.10
+
+[saku@hamtpad rotators]$ grep -r 'max_az =' * > /tmp/hi ;grep -r 'min_az =' * >> /tmp/hi;sort < /tmp/hi
+amsat/if100.c:    .max_az =           360,
+amsat/if100.c:    .min_az =           0,
+ars/ars.c:    .max_az =     360,
+ars/ars.c:    .max_az =     360,
+ars/ars.c:    .min_az =     0,
+ars/ars.c:    .min_az =     0,
+celestron/celestron.c:    .max_az =     360.0,
+celestron/celestron.c:    .min_az =     0.0,
+cnctrk/cnctrk.c:    .max_az =     360,
+cnctrk/cnctrk.c:    .min_az =     0,
+easycomm/easycomm.c:    .max_az =     360.0,
+easycomm/easycomm.c:    .max_az =     360.0,
+easycomm/easycomm.c:    .max_az =     360.0,
+easycomm/easycomm.c:    .min_az =     0.0,
+easycomm/easycomm.c:    .min_az =     0.0,
+easycomm/easycomm.c:    .min_az =     0.0,
+ether6/ether6.c:    .max_az =     360,
+ether6/ether6.c:    .min_az =     0.,
+ether6/ether6.c:    rs->max_az = max_az;
+ether6/ether6.c:    rs->min_az = min_az;
+fodtrack/fodtrack.c:    .max_az =     450,
+fodtrack/fodtrack.c:    .min_az =     0,
+gs232a/gs232a.c:    .max_az =     450.0,  /* vary according to rotator type */
+gs232a/gs232a.c:    .max_az =     450.0,  /* vary according to rotator type */
+gs232a/gs232a.c:    .max_az =     450.0,  /* vary according to rotator type */
+gs232a/gs232a.c:    .min_az =     -180.0,
+gs232a/gs232a.c:    .min_az =     -180.0,
+gs232a/gs232a.c:    .min_az =     -180.0,
+gs232a/gs232b.c:    .max_az = 450.0,    /* vary according to rotator type */
+gs232a/gs232b.c:    .min_az = -180.0,
+gs232a/gs232.c:    .max_az =     360.0,  /* vary according to rotator type */
+gs232a/gs232.c:    .max_az =     450.0,  /* vary according to rotator type */
+gs232a/gs232.c:    .max_az =     450.0,  /* vary according to rotator type */
+gs232a/gs232.c:    .max_az =     450.0,  /* vary according to rotator type */
+gs232a/gs232.c:    .min_az =     -180.0,
+gs232a/gs232.c:    .min_az =     -180.0,
+gs232a/gs232.c:    .min_az =     -180.0,
+gs232a/gs232.c:    .min_az =     -180.0,
+heathkit/hd1780.c:    .max_az =             180,
+heathkit/hd1780.c:    .min_az =             -180,
+ioptron/rot_ioptron.c:    .max_az =     360.0,
+ioptron/rot_ioptron.c:    .min_az =     0.0,
+m2/rc2800.c:    .max_az =     360.0,
+m2/rc2800.c:    .min_az =     0.0,
+meade/meade.c:    .max_az =    360.,
+meade/meade.c:    .min_az =      0.,
+prosistel/prosistel.c:    .max_az =     360.0,
+prosistel/prosistel.c:    .min_az =     0.0,
+rotorez/rotorez.c:    .max_az =       359.9,
+rotorez/rotorez.c:    .max_az =           360,
+rotorez/rotorez.c:    .max_az =           360,
+rotorez/rotorez.c:    .max_az =           360,
+rotorez/rotorez.c:    .max_az =           360,
+rotorez/rotorez.c:    .min_az =           0,
+rotorez/rotorez.c:    .min_az =           0,
+rotorez/rotorez.c:    .min_az =           0,
+rotorez/rotorez.c:    .min_az =           0,
+rotorez/rotorez.c:    .min_az =       0,
+sartek/sartek.c:    .max_az =             360,
+sartek/sartek.c:    .min_az =             0,
+spid/spid.c:    .max_az =            540.0,
+spid/spid.c:    .max_az =            540.0,
+spid/spid.c:    .max_az =            540.0,
+spid/spid.c:    .min_az =            -180.0,
+spid/spid.c:    .min_az =            -180.0,
+spid/spid.c:    .min_az =            -180.0,
+ts7400/ts7400.c:    .max_az =     180.,
+ts7400/ts7400.c:    .min_az =     -180.,
+
+
+v4.0-git has parameter "-o" that user can use to set offset for rotor. Setting this affects also to Azmin,
+Azmax shown by \dump_state (Azmin & Azmax shown by \dump_caps shows always factory limits).
+That means that rotor zero degrees have to be recalculated to know antenna true heading that cqrlog needs.
+It would be easy if offset just be the only way to change AzMin AzMax of \dump_state.
+But user can also set random values for AzMin AzMax of \dump_state with --set-conf parameter if he needs to
+limit turning. This may cause that rotor full turn is not 360 degrees, and we can not trust anything for
+calculating antenna true heading for cqrlog.
+
+Quite impossible situation.
+
+And there is third parameter "south_zero" that makes rotor "upside down" and it is not making this any easier either.
+
+At the moment, if AzMin(\dump_state) is negative we have just assume that it is -180 (south end) to make
+conversion to 0..360 true heading.
+}
