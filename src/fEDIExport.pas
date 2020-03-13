@@ -26,6 +26,7 @@ type
     edtAntennaHeightGroundLevel: TEdit;
     edtTxPower: TEdit;
     Label1: TLabel;
+    lblError: TLabel;
     lblAntennaHeight: TLabel;
     lblAntennaHeightSeaLevel: TLabel;
     lblAntennaHeightGroundLevel: TLabel;
@@ -62,6 +63,7 @@ uses dData,dUtils,dDXCC, uMyIni;
 procedure TfrmEDIExport.FormShow(Sender : TObject);
 begin
   dmUtils.LoadWindowPos(self);
+  lblError.Visible := False;
   edtFileName.Text  := cqrini.ReadString('EdiExport','FileName','');
   if edtFileName.Text='' then
     dlgSave.InitialDir := dmData.UsrHomeDir
@@ -162,6 +164,7 @@ var
   callsign_list : TStringList;
   dupe       : String;
   cont, WAZ, posun, ITU, lat, long, pfx, country: string;
+  message : String;
 begin
   SaveSettings;
   date := dmUtils.GetDateTime(0);
@@ -233,6 +236,38 @@ begin
     pbExport.Max := dmData.Q.RecordCount;
     while not dmData.Q.Eof do
     begin
+      // Check for missing mandatory fields
+      if (dmData.Q.FieldByName('rst_s').AsString = '') then
+      begin
+        pbExport.StepIt;
+        dmData.Q.Next;
+        Continue;
+      end;
+      if (dmData.Q.FieldByName('rst_r').AsString = '') then
+      begin
+        pbExport.StepIt;
+        dmData.Q.Next;
+        Continue;
+      end;
+      if (dmData.Q.FieldByName('stx').AsString = '') then
+      begin
+        pbExport.StepIt;
+        dmData.Q.Next;
+        Continue;
+      end;
+      if (dmData.Q.FieldByName('srx').AsString = '') then
+      begin
+        pbExport.StepIt;
+        dmData.Q.Next;
+        Continue;
+      end;
+      loc := UpperCase(dmData.Q.FieldByName('srx_string').AsString);
+      if (loc = '') then
+      begin
+        pbExport.StepIt;
+        dmData.Q.Next;
+        Continue;
+      end;
       i := i+1;
       if (i = 1)
       then
@@ -240,12 +275,6 @@ begin
       if (i = dmData.Q.RecordCount)
       then
          enddate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
-      loc := UpperCase(dmData.Q.FieldByName('srx_string').AsString);
-      if (loc = '') then
-      begin
-        Application.MessageBox('Invalid grid locator in record!','Error ...',mb_OK+mb_IconError);
-        exit
-      end;
       if length(loc) = 4 then loc := loc +'LL';
       qrb:='';
       dmUtils.DistanceFromLocator(myloc,loc, qrb, qrc);
@@ -272,28 +301,6 @@ begin
               dupe := 'D'
       else
               callsign_list.Add(dmData.Q.FieldByName('callsign').AsString);
-
-      // Check for missing mandatory fields
-      if (dmData.Q.FieldByName('rst_s').AsString = '') then
-      begin
-        Application.MessageBox('Invalid sent RST in record!','Error ...',mb_OK+mb_IconError);
-        exit
-      end;
-      if (dmData.Q.FieldByName('rst_r').AsString = '') then
-      begin
-        Application.MessageBox('Invalid received RST in record!','Error ...',mb_OK+mb_IconError);
-        exit
-      end;
-      if (dmData.Q.FieldByName('stx').AsString = '') then
-      begin
-        Application.MessageBox('Invalid sent exchange in record!','Error ...',mb_OK+mb_IconError);
-        exit
-      end;
-      if (dmData.Q.FieldByName('srx').AsString = '') then
-      begin
-        Application.MessageBox('Invalid received exchange in record!','Error ...',mb_OK+mb_IconError);
-        exit
-      end;
 
       s.Add(RightStr(StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]),6)+';'+
             StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+';'+
@@ -384,7 +391,18 @@ begin
         Application.MessageBox(Pchar('An error occurred during export:'+LineEnding+E.Message),'Error ...',
                                mb_OK+mb_IconError)
       end
+  end;
+  if ((pbExport.Max - i) > 0) then
+  begin
+    lblError.Caption := IntToStr(pbExport.Max - i)+' of '+IntToStr(pbExport.Max)+' entries were ignored! Please check log entries.';
+    lblError.Font.Color := clRed;
+    lblError.Visible := True;
   end
+  else
+  begin
+    lblError.Caption := IntToStr(pbExport.Max)+' entries were exported.';
+    lblError.Visible := True;
+  end;
 end;
 
 end.

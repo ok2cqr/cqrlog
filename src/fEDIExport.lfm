@@ -216,6 +216,15 @@ object frmEDIExport: TfrmEDIExport
     NumbersOnly = True
     TabOrder = 4
   end
+  object lblError: TLabel
+    Left = 8
+    Height = 17
+    Top = 344
+    Width = 98
+    Caption = 'Error message'
+    ParentColor = False
+    Visible = False
+  end
   object dlgSave: TSaveDialog
     DefaultExt = '.edi'
     Filter = 'EDI file|*.edi'
