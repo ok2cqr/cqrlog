@@ -489,9 +489,12 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtClub: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
+    edtMailingAddress: TEdit;
+    edtZipCity: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
@@ -621,6 +624,7 @@ type
     edtName: TEdit;
     edtRST_R: TEdit;
     dlgFont: TFontDialog;
+    edtEmail: TEdit;
     fraExportPref1: TfraExportPref;
     gbProfiles1: TGroupBox;
     grbSerialR2: TGroupBox;
@@ -673,16 +677,23 @@ type
     GroupBox48: TGroupBox;
     GroupBox49: TGroupBox;
     gbDXCColor: TGroupBox;
+    GroupBox5: TGroupBox;
     GroupBox50: TGroupBox;
     GroupBox51: TGroupBox;
     GroupBox52: TGroupBox;
     gbDXCConnect: TGroupBox;
     gbDXCSpots: TGroupBox;
     GroupBox53: TGroupBox;
+    GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
     Label1: TLabel;
+    Label10: TLabel;
+    Label108: TLabel;
+    Label26: TLabel;
+    Label80: TLabel;
+    Label81: TLabel;
     lbleQSLDnlAddr: TLabel;
     lbleQSLStartAddr: TLabel;
     lbleQSLViewAddr: TLabel;
@@ -1112,6 +1123,10 @@ begin
   cqrini.WriteString('Station', 'Name', edtName.Text);
   cqrini.WriteString('Station', 'QTH', edtQTH.Text);
   cqrini.WriteString('Station', 'LOC', edtLoc.Text);
+  cqrini.WriteString('Station', 'MailingAddress', edtMailingAddress.Text);
+  cqrini.WriteString('Station', 'ZipCity', edtZipCity.Text);
+  cqrini.WriteString('Station', 'Email', edtEmail.Text);
+  cqrini.WriteString('Station', 'Club', edtClub.Text);
 
   cqrini.WriteString('NewQSO', 'RST_S', edtRST_S.Text);
   cqrini.WriteString('NewQSO', 'RST_R', edtRST_R.Text);
@@ -2486,6 +2501,10 @@ begin
   edtName.Text := cqrini.ReadString('Station', 'Name', '');
   edtQTH.Text := cqrini.ReadString('Station', 'QTH', '');
   edtLoc.Text := cqrini.ReadString('Station', 'LOC', '');
+  edtMailingAddress.Text := cqrini.ReadString('Station', 'MailingAddress', '');
+  edtZipCity.Text := cqrini.ReadString('Station', 'ZipCity', '');
+  edtEmail.Text := cqrini.ReadString('Station', 'Email', '');
+  edtClub.Text := cqrini.ReadString('Station', 'Club', '');
 
   edtRST_S.Text := cqrini.ReadString('NewQSO', 'RST_S', '599');
   edtRST_R.Text := cqrini.ReadString('NewQSO', 'RST_R', '599');

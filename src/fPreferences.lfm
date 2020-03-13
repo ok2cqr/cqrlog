@@ -321,68 +321,160 @@ object frmPreferences: TfrmPreferences
     object tabStation: TTabSheet
       Caption = 'Station'
       ClientHeight = 628
-      ClientWidth = 840
-      object Label1: TLabel
-        Left = 11
-        Height = 17
-        Top = 48
-        Width = 43
-        Caption = 'Name:'
-        ParentColor = False
-      end
-      object Label2: TLabel
-        Left = 27
-        Height = 17
-        Top = 80
-        Width = 32
-        Caption = 'QTH:'
-        ParentColor = False
-      end
-      object Label3: TLabel
-        Left = 27
-        Height = 17
+      ClientWidth = 846
+      object GroupBox5: TGroupBox
+        Left = 16
+        Height = 168
         Top = 16
-        Width = 29
-        Caption = 'Call:'
-        ParentColor = False
-      end
-      object Label4: TLabel
-        Left = 28
-        Height = 17
-        Top = 112
-        Width = 26
-        Caption = 'Loc:'
-        ParentColor = False
-      end
-      object edtName: TEdit
-        Left = 86
-        Height = 34
-        Top = 43
-        Width = 128
-        TabOrder = 1
-      end
-      object edtQTH: TEdit
-        Left = 86
-        Height = 34
-        Top = 75
-        Width = 128
-        TabOrder = 2
-      end
-      object edtCall: TEdit
-        Left = 86
-        Height = 34
-        Top = 11
-        Width = 128
-        CharCase = ecUppercase
+        Width = 312
+        Caption = 'General'
+        ClientHeight = 142
+        ClientWidth = 306
         TabOrder = 0
+        object Label4: TLabel
+          Left = 104
+          Height = 17
+          Top = 112
+          Width = 28
+          Caption = 'Loc:'
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 103
+          Height = 17
+          Top = 16
+          Width = 29
+          Caption = 'Call:'
+          ParentColor = False
+        end
+        object edtCall: TEdit
+          Left = 147
+          Height = 25
+          Top = 11
+          Width = 128
+          CharCase = ecUppercase
+          TabOrder = 0
+        end
+        object Label1: TLabel
+          Left = 88
+          Height = 17
+          Top = 48
+          Width = 44
+          Caption = 'Name:'
+          ParentColor = False
+        end
+        object edtName: TEdit
+          Left = 147
+          Height = 25
+          Top = 43
+          Width = 128
+          TabOrder = 1
+        end
+        object Label2: TLabel
+          Left = 98
+          Height = 17
+          Top = 80
+          Width = 34
+          Caption = 'QTH:'
+          ParentColor = False
+        end
+        object edtQTH: TEdit
+          Left = 147
+          Height = 25
+          Top = 75
+          Width = 128
+          TabOrder = 2
+        end
+        object edtLoc: TEdit
+          Left = 147
+          Height = 25
+          Top = 107
+          Width = 128
+          OnChange = edtLocChange
+          TabOrder = 3
+        end
       end
-      object edtLoc: TEdit
-        Left = 86
-        Height = 34
-        Top = 107
-        Width = 128
-        OnChange = edtLocChange
-        TabOrder = 3
+      object GroupBox6: TGroupBox
+        Left = 16
+        Height = 196
+        Top = 208
+        Width = 312
+        Caption = 'Contest Info'
+        ClientHeight = 170
+        ClientWidth = 306
+        TabOrder = 1
+        object Label10: TLabel
+          Left = 20
+          Height = 17
+          Top = 45
+          Width = 112
+          Caption = 'Mailing Address:'
+          ParentColor = False
+        end
+        object edtMailingAddress: TEdit
+          Left = 147
+          Height = 25
+          Top = 40
+          Width = 128
+          OnChange = edtLocChange
+          TabOrder = 0
+        end
+        object Label26: TLabel
+          Left = 76
+          Height = 17
+          Top = 77
+          Width = 56
+          Caption = 'ZIP City:'
+          ParentColor = False
+        end
+        object edtZipCity: TEdit
+          Left = 147
+          Height = 25
+          Top = 72
+          Width = 128
+          OnChange = edtLocChange
+          TabOrder = 1
+        end
+        object Label80: TLabel
+          Left = 86
+          Height = 17
+          Top = 109
+          Width = 46
+          Caption = 'E-Mail:'
+          ParentColor = False
+        end
+        object edtEmail: TEdit
+          Left = 147
+          Height = 25
+          Top = 104
+          Width = 128
+          OnChange = edtLocChange
+          TabOrder = 2
+        end
+        object Label81: TLabel
+          Left = 8
+          Height = 17
+          Top = 141
+          Width = 124
+          Caption = 'Club Membership:'
+          ParentColor = False
+        end
+        object edtClub: TEdit
+          Left = 147
+          Height = 25
+          Top = 136
+          Width = 128
+          OnChange = edtLocChange
+          TabOrder = 3
+        end
+        object Label108: TLabel
+          Left = 8
+          Height = 17
+          Top = 8
+          Width = 150
+          Caption = '(used for EDI exports)'
+          ParentColor = False
+        end
       end
     end
     object tabNewQSO: TTabSheet
