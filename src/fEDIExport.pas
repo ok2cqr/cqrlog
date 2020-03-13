@@ -185,10 +185,12 @@ begin
 
   if not dmData.IsFilter then
   begin
-    if Application.MessageBox('You didn''t set any filter. Do you want to export all QSO?','Question ...',
-                              mb_YesNo+mb_IconQuestion) = mrYes then
-      AllQSO := True
-    else
+      Application.MessageBox('You must filter a single band to export!','Error ...',mb_OK+mb_IconError);
+      exit
+  end;
+  if (dmData.qCQRLOG.FieldByName('band').AsString = '') then
+  begin
+      Application.MessageBox('You must filter a single band to export!','Error ...',mb_OK+mb_IconError);
       exit
   end;
   if FileExistsUTF8(edtFileName.Text) then
@@ -239,6 +241,11 @@ begin
       then
          enddate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
       loc := UpperCase(dmData.Q.FieldByName('srx_string').AsString);
+      if (loc = '') then
+      begin
+        Application.MessageBox('Invalid grid locator in record!','Error ...',mb_OK+mb_IconError);
+        exit
+      end;
       if length(loc) = 4 then loc := loc +'LL';
       qrb:='';
       dmUtils.DistanceFromLocator(myloc,loc, qrb, qrc);
@@ -265,6 +272,28 @@ begin
               dupe := 'D'
       else
               callsign_list.Add(dmData.Q.FieldByName('callsign').AsString);
+
+      // Check for missing mandatory fields
+      if (dmData.Q.FieldByName('rst_s').AsString = '') then
+      begin
+        Application.MessageBox('Invalid sent RST in record!','Error ...',mb_OK+mb_IconError);
+        exit
+      end;
+      if (dmData.Q.FieldByName('rst_r').AsString = '') then
+      begin
+        Application.MessageBox('Invalid received RST in record!','Error ...',mb_OK+mb_IconError);
+        exit
+      end;
+      if (dmData.Q.FieldByName('stx').AsString = '') then
+      begin
+        Application.MessageBox('Invalid sent exchange in record!','Error ...',mb_OK+mb_IconError);
+        exit
+      end;
+      if (dmData.Q.FieldByName('srx').AsString = '') then
+      begin
+        Application.MessageBox('Invalid received exchange in record!','Error ...',mb_OK+mb_IconError);
+        exit
+      end;
 
       s.Add(RightStr(StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]),6)+';'+
             StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+';'+
