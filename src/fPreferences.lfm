@@ -3321,7 +3321,61 @@ object frmPreferences: TfrmPreferences
               Width = 276
               Caption = 'Use rotctrld \dump:state info for limits'
               TabOrder = 7
+              Top = 35
+              Width = 200
+              ItemHeight = 0
+              TabOrder = 6
+              Text = 'cmbModelRot2'
             end
+            object chkRot2AzMinMax: TCheckBox
+              AnchorSideLeft.Control = chkRot2RunRotCtld
+              AnchorSideTop.Control = chkRot2RunRotCtld
+              AnchorSideTop.Side = asrBottom
+              Left = 285
+              Height = 23
+              Top = 104
+              Width = 276
+              Caption = 'Use rotctrld \dump:state info for limits'
+              TabOrder = 7
+            end
+          end
+          object edtRotor2: TEdit
+            AnchorSideLeft.Control = tabRot2
+            AnchorSideTop.Control = tabRot2
+            Left = 140
+            Height = 34
+            Top = 12
+            Width = 94
+            BorderSpacing.Left = 140
+            BorderSpacing.Top = 12
+            OnChange = edtRadio1Change
+            TabOrder = 1
+          end
+          object pnl2Host: TPanel
+            AnchorSideLeft.Control = edtRotor2
+            AnchorSideLeft.Side = asrBottom
+            AnchorSideTop.Control = edtRotor2
+            AnchorSideTop.Side = asrCenter
+            Left = 246
+            Height = 34
+            Top = 12
+            Width = 59
+            BorderSpacing.Left = 12
+            BevelOuter = bvNone
+            Caption = 'Host:'
+            TabOrder = 2
+          end
+          object edtRot2Host: TEdit
+            AnchorSideLeft.Control = pnl2Host
+            AnchorSideLeft.Side = asrBottom
+            AnchorSideTop.Control = pnl2Host
+            AnchorSideTop.Side = asrCenter
+            Left = 305
+            Height = 34
+            Top = 12
+            Width = 128
+            TabOrder = 3
+            Text = 'edtRot2Host'
           end
           object edtRotor2: TEdit
             AnchorSideLeft.Control = tabRot2
