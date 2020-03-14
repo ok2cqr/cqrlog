@@ -120,6 +120,8 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    chkRot1AzMinMax: TCheckBox;
+    chkRot2AzMinMax: TCheckBox;
     chkShowOwnPos: TCheckBox;
     chkDistance: TCheckBox;
     chkSTX: TCheckBox;
@@ -423,6 +425,8 @@ type
     cmbDataBitsR2: TComboBox;
     cmbDataBitsRot1: TComboBox;
     cmbDataBitsRot2: TComboBox;
+    cmbModelRot1: TComboBox;
+    cmbModelRot2: TComboBox;
     cmbWsjtDefaultMode: TComboBox;
     cmbDTRR1: TComboBox;
     cmbDTRRot1: TComboBox;
@@ -492,6 +496,9 @@ type
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
+    edtRot1Host: TEdit;
+    edtRot2Host: TEdit;
+    edtRotor2: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
     edtQSOColorDate : TEdit;
@@ -514,7 +521,6 @@ type
     edtHaUserName: TEdit;
     edtDelAfter : TEdit;
     edtClUserName: TEdit;
-    edtRotor2: TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
     edtPoll1: TEdit;
@@ -523,13 +529,11 @@ type
     edtRot2Poll: TEdit;
     edtR1Device: TEdit;
     edtRot1Device: TEdit;
-    edtRot1Host: TEdit;
     edtRot1RotCtldArgs: TEdit;
     edtRot1RotCtldPort: TEdit;
     edtR2Device: TEdit;
     edtRot2Device: TEdit;
     edtR1RigCtldArgs: TEdit;
-    edtRot2Host: TEdit;
     edtR2RigCtldArgs: TEdit;
     edtR1RigCtldPort: TEdit;
     edtRot2RotCtldArgs: TEdit;
@@ -554,8 +558,6 @@ type
     edtCbUser: TEdit;
     edteQSLName: TEdit;
     edteQSLPass: TEdit;
-    edtRot1ID: TEdit;
-    edtRot2ID: TEdit;
     edtRotCtldPath: TEdit;
     edtRTTY1: TSpinEdit;
     edtRTTY2: TSpinEdit;
@@ -624,8 +626,8 @@ type
     fraExportPref1: TfraExportPref;
     gbProfiles1: TGroupBox;
     grbSerialR2: TGroupBox;
-    grbSerialR3: TGroupBox;
-    grbSerialR4: TGroupBox;
+    grbSerialRot1: TGroupBox;
+    grbSerialRot2: TGroupBox;
     GroupBox1: TGroupBox;
     GroupBox10: TGroupBox;
     GroupBox11: TGroupBox;
@@ -664,8 +666,8 @@ type
     GroupBox40: TGroupBox;
     grbSerialR1: TGroupBox;
     GroupBox41: TGroupBox;
-    GroupBox42: TGroupBox;
-    GroupBox43: TGroupBox;
+    gbRot1: TGroupBox;
+    gbRot2: TGroupBox;
     GroupBox44: TGroupBox;
     GroupBox45: TGroupBox;
     GroupBox46: TGroupBox;
@@ -714,11 +716,11 @@ type
     Label122: TLabel;
     Label123: TLabel;
     Label124: TLabel;
-    Label125: TLabel;
+    lblDevice1: TLabel;
     Label126: TLabel;
     Label127: TLabel;
     lbleQSLBkg: TLabel;
-    Label129: TLabel;
+    lblRotId1: TLabel;
     Label13: TLabel;
     Label130: TLabel;
     Label131: TLabel;
@@ -735,30 +737,30 @@ type
     Label141: TLabel;
     Label142: TLabel;
     Label143: TLabel;
-    Label144: TLabel;
-    Label145: TLabel;
-    Label146: TLabel;
-    Label147: TLabel;
-    Label148: TLabel;
-    Label149: TLabel;
+    lblPoll1: TLabel;
+    lblExtaArgs1: TLabel;
+    lblPort1: TLabel;
+    lblSpeed1: TLabel;
+    lblDataBits1: TLabel;
+    lblStopBits1: TLabel;
     Label15: TLabel;
-    Label150: TLabel;
-    Label151: TLabel;
-    Label152: TLabel;
-    Label153: TLabel;
-    Label154: TLabel;
-    Label155: TLabel;
-    Label156: TLabel;
-    Label157: TLabel;
-    Label158: TLabel;
-    Label159: TLabel;
+    lblHandshake1: TLabel;
+    lblParity1: TLabel;
+    lblDTR1: TLabel;
+    lblRTS1: TLabel;
+    lblDevice2: TLabel;
+    lblRotId2: TLabel;
+    lblPoll2: TLabel;
+    lblExtaArgs2: TLabel;
+    lblPort2: TLabel;
+    lblSpeed2: TLabel;
     Label16: TLabel;
-    Label160: TLabel;
-    Label161: TLabel;
-    Label162: TLabel;
-    Label163: TLabel;
-    Label164: TLabel;
-    Label165: TLabel;
+    lblDataBits2: TLabel;
+    lblStopBits2: TLabel;
+    lblHandshake2: TLabel;
+    lblParity2: TLabel;
+    lblDTR2: TLabel;
+    lblRTS2: TLabel;
     Label166 : TLabel;
     Label167 : TLabel;
     Label168 : TLabel;
@@ -910,8 +912,8 @@ type
     dlgOpen: TOpenDialog;
     Panel2: TPanel;
     Panel3: TPanel;
-    Panel4: TPanel;
-    Panel5: TPanel;
+    pnl2Host: TPanel;
+    pnlHost1: TPanel;
     pnlQSOColor : TPanel;
     pgTRXControl: TPageControl;
     pgPreferences: TPageControl;
@@ -1276,12 +1278,13 @@ begin
   cqrini.WriteString('ROT', 'RotCtldPath', edtRotCtldPath.Text);
 
   cqrini.WriteString('ROT1', 'device', edtRot1Device.Text);
-  cqrini.WriteString('ROT1', 'model', edtRot1ID.Text);
+  cqrini.WriteString('ROT1', 'model',  dmUtils.GetRigIdFromComboBoxItem(cmbModelRot1.Text));
   cqrini.WriteString('ROT1', 'poll', edtRot1Poll.Text);
   cqrini.WriteString('ROT1', 'Desc', edtRotor1.Text);
   cqrini.WriteString('ROT1', 'RotCtldPort', edtRot1RotCtldPort.Text);
   cqrini.WriteString('ROT1', 'ExtraRotCtldArgs', edtRot1RotCtldArgs.Text);
   cqrini.WriteBool('ROT1', 'RunRotCtld', chkRot1RunRotCtld.Checked);
+  cqrini.WriteBool('ROT1', 'RotAzMinMax', chkRot1AzMinMax.Checked);
   cqrini.WriteString('ROT1', 'host', edtRot1Host.Text);
   cqrini.WriteInteger('ROT1', 'SerialSpeed', cmbSpeedRot1.ItemIndex);
   cqrini.WriteInteger('ROT1', 'DataBits', cmbDataBitsRot1.ItemIndex);
@@ -1292,12 +1295,13 @@ begin
   cqrini.WriteInteger('ROT1', 'RTS', cmbRTSRot1.ItemIndex);
 
   cqrini.WriteString('ROT2', 'device', edtRot2Device.Text);
-  cqrini.WriteString('ROT2', 'model', edtRot2ID.Text);
+  cqrini.WriteString('ROT2', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRot2.Text));
   cqrini.WriteString('ROT2', 'poll', edtRot2Poll.Text);
   cqrini.WriteString('ROT2', 'Desc', edtRotor2.Text);
   cqrini.WriteString('ROT2', 'RotCtldPort', edtRot2RotCtldPort.Text);
   cqrini.WriteString('ROT2', 'ExtraRotCtldArgs', edtRot2RotCtldArgs.Text);
   cqrini.WriteBool('ROT2', 'RunRotCtld', chkRot2RunRotCtld.Checked);
+  cqrini.WriteBool('ROT2', 'RotAzMinMax', chkRot2AzMinMax.Checked);
   cqrini.WriteString('ROT2', 'host', edtRot2Host.Text);
   cqrini.WriteInteger('ROT2', 'SerialSpeed', cmbSpeedRot2.ItemIndex);
   cqrini.WriteInteger('ROT2', 'DataBits', cmbDataBitsRot2.ItemIndex);
@@ -2618,6 +2622,8 @@ begin
   chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
   chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
 
+  edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
+
   if (FileExistsUTF8(edtRigCtldPath.Text)) then
   begin
     dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig1);
@@ -2626,6 +2632,16 @@ begin
   else begin
     Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
                            'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
+  end;
+
+  if (FileExistsUTF8(edtRotCtldPath.Text)) then
+  begin
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT1', 'model', ''),edtRotCtldPath.Text,cmbModelRot1);
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT2', 'model', ''),edtRotCtldPath.Text,cmbModelRot2)
+  end
+  else begin
+    Application.MessageBox('rotctld binary not fount, cannot load list of supported rotators!'+LineEnding+LineEnding+
+                           'Fix path to rotctld in ROT control tab.', 'Error', mb_OK+ mb_IconError)
   end;
 
   edtR1Device.Text := cqrini.ReadString('TRX1', 'device', '');
@@ -2660,15 +2676,13 @@ begin
   cmbDTRR2.ItemIndex := cqrini.ReadInteger('TRX2', 'DTR', 0);
   cmbRTSR2.ItemIndex := cqrini.ReadInteger('TRX2', 'RTS', 0);
 
-  edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
-
   edtRot1Device.Text := cqrini.ReadString('ROT1', 'device', '');
-  edtRot1ID.Text := cqrini.ReadString('ROT1', 'model', '');
   edtRot1Poll.Text := cqrini.ReadString('ROT1', 'poll', '500');
   edtRotor1.Text := cqrini.ReadString('ROT1', 'Desc', 'Rotor 1');
   edtRot1RotCtldPort.Text := cqrini.ReadString('ROT1', 'RotCtldPort', '4533');
   edtRot1RotCtldArgs.Text := cqrini.ReadString('ROT1', 'ExtraRotCtldArgs', '');
   chkRot1RunRotCtld.Checked := cqrini.ReadBool('ROT1', 'RunRotCtld', False);
+  chkRot1AzMinMax.Checked := cqrini.ReadBool('ROT1', 'RotAzMinMax', False);
   edtRot1Host.Text := cqrini.ReadString('ROT1', 'host', 'localhost');
   cmbSpeedRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'SerialSpeed', 0);
   cmbDataBitsRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'DataBits', 0);
@@ -2679,12 +2693,12 @@ begin
   cmbRTSRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'RTS', 0);
 
   edtRot2Device.Text := cqrini.ReadString('ROT2', 'device', '');
-  edtRot2ID.Text := cqrini.ReadString('ROT2', 'model', '');
   edtRot2Poll.Text := cqrini.ReadString('ROT2', 'poll', '500');
   edtRotor2.Text := cqrini.ReadString('ROT2', 'Desc', 'Rotor 2');
   edtRot2RotCtldPort.Text := cqrini.ReadString('ROT2', 'RotCtldPort', '4533');
   edtRot2RotCtldArgs.Text := cqrini.ReadString('ROT2', 'ExtraRotCtldArgs', '');
   chkRot2RunRotCtld.Checked := cqrini.ReadBool('ROT2', 'RunRotCtld', False);
+  chkRot2AzMinMax.Checked := cqrini.ReadBool('ROT2', 'RotAzMinMax', False);
   edtRot2Host.Text := cqrini.ReadString('ROT2', 'host', 'localhost');
   cmbSpeedRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'SerialSpeed', 0);
   cmbDataBitsRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'DataBits', 0);

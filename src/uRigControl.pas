@@ -153,7 +153,7 @@ begin
     inc(index);
   end;
   paramList.Free;
-  if fDebugMode then Writeln('rigProcess.Executable: ',rigProcess.Executable,' Parameters: ',rigProcess.Parameters.Text);
+  if fDebugMode then Writeln('rigProcess.Executable: ',rigProcess.Executable,LineEnding,'Parameters:',LineEnding,rigProcess.Parameters.Text);
 
   try
     rigProcess.Execute;
@@ -211,10 +211,11 @@ begin
       if fDebugMode then Writeln('rigctld failed to start!');
       Result := False;
       exit
-    end
-  end;
+    end else
+     if fDebugMode then Writeln('rigctld started!');
+  end else
+     if fDebugMode then Writeln('Not started rigctld process. (Run is set FALSE)');
 
-  if fDebugMode then Writeln('rigctld started!');
 
   rcvdFreqMode.Host := fRigCtldHost;
   rcvdFreqMode.Port := fRigCtldPort;
@@ -222,13 +223,13 @@ begin
   //rcvdFreqMode.Connect(fRigCtldHost,fRigCtldPort);
   if rcvdFreqMode.Connect(fRigCtldHost,fRigCtldPort) then
   begin
-    if fDebugMode then Writeln('Connected to ',fRigCtldHost,':',fRigCtldPort);
+    if fDebugMode then Writeln('Connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
     result := True;
     tmrRigPoll.Interval := fRigPoll;
     tmrRigPoll.Enabled  := True
   end
   else begin
-    if fDebugMode then Writeln('NOT connected to ',fRigCtldHost,':',fRigCtldPort);
+    if fDebugMode then Writeln('NOT connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
     fLastError := ERR_MSG;
     Result     := False
   end
