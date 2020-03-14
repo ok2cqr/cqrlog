@@ -1097,6 +1097,12 @@ object frmMain: TfrmMain
         object MenuItem48: TMenuItem
           Action = acSOTAExport
         end
+        object MenuItem89: TMenuItem
+          Caption = '-'
+        end
+        object MenuItem101: TMenuItem
+          Action = acEDIExport
+        end
       end
       object MenuItem14: TMenuItem
         Caption = '-'
@@ -1915,6 +1921,10 @@ object frmMain: TfrmMain
     object acSOTAExport: TAction
       Caption = 'CSV for SOTA website'
       OnExecute = acSOTAExportExecute
+    end
+    object acEDIExport: TAction
+      Caption = 'EDI for contests'
+      OnExecute = acEDIExportExecute
     end
     object acRemoveDupes: TAction
       Caption = 'Remove dupes from the log'

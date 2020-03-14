@@ -108,6 +108,7 @@ var
 r1  : boolean = true;
 r2  : boolean = true;
 r3  : boolean = true;
+r4  : boolean = true;
 
 begin
   if loc <> '' then   //returns false if loc is empty
@@ -119,19 +120,26 @@ begin
       for i := 1 to length(loc) do
       begin
         case i of
-          1, 2, 5, 6: case Loc[i] of
+          1, 2 : case Loc[i] of
                           'A'..'R': begin
                                       //OK
                                     end;
                       else
                         r2 := false;
                       end;
-               3, 4 : case Loc[i] of
+          3, 4 : case Loc[i] of
                           '0'..'9':begin
                                     //OK
                                    end;
                       else
                         r3:= false;
+                      end;
+          5, 6 : case Loc[i] of
+                          'A'..'X': begin
+                                      //OK
+                                    end;
+                      else
+                        r4 := false;
                       end;
         end; //case
       end; //for i
@@ -139,7 +147,7 @@ begin
     else begin
       r1 := false;
     end;
-    Result := r1 and r2 and r3;
+    Result := r1 and r2 and r3 and r4;
   end
   else
    Result := false;
