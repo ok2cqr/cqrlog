@@ -773,7 +773,7 @@ end;
 
 procedure TfrmTRXControl.mnuProgPrefClick(Sender: TObject);
 begin
-  cqrini.WriteInteger('Pref', 'ActPageIdx', 5);  //set DXCuster tab active. Number may change if preferences page change
+  cqrini.WriteInteger('Pref', 'ActPageIdx', 5);  //set TRXControl tab active. Number may change if preferences page change
   frmNewQSO.acPreferences.Execute
 end;
 

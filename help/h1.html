@@ -226,16 +226,32 @@
 </div>
 <br>
 <img src=img/h100.png border=0><br>
-<p align=center><img src=img/line.png></p>
+
+<h2><strong>ROT Control</strong></h2></a>
+<img src=img/h10b.png border=0><br><br>
 <br>
+Setting up Rotator control is very similar to setting up Rig control.
+<br>
+<br>If <b>Use rotctld \dump_state info for limits</b> cheked rotctld asks turning limits AzMin and AzMax values from rotctld with command <strong>'+\dump_state'</strong>.
+ That makes user possible to set turning limits other than rotator default turn with
+ <strong>Extra command line arguments</strong>. Using string <strong> --set-conf=min_az=10,max_az=355</strong>  you can set rotator so that cqrlog will never turn it below 10deg or over 355deg.
+ <br>Using negative value at az_min causes Cqrlog set it's 0degrees "P"-command to given negative value (while still displaying 0). I.E if az_min=-180 Cqrlog will use turning commands from "P-180" to "P180".
+ <br>Without negative az_min or when checkbox  <b>Use rotctld \dump_state info for limits</b> is not set Cqrlog sends commands in usual range "P0 to "P360".
+ </p><p>Some rotators have turn from -180deg-0deg-180deg (south stop), like Hamlib Dummy test rotator.
+ <br>Most of rotators have turn 0deg - 360deg.
+ <br>Some may turn 0deg - >360 deg. With them cqrlog never drives values over 360, but reads position right if rotor sends over 360 deg value (sent_value-360 = cqrlog display).
+</p> 
+<p>See also <a href="h30.html">Operation: TRX/ROT Control</a>
+</p><p align=center><img src=img/line.png></p>
+<p> 
 <a name="mem"><strong>Add/Modify memory</strong></a><br><br>
 You can define your own favourite frequencis and swich between them directly in New QSO window using ALT+V (Mem down)
 and
 ALT+B (Mem up). These keys are used in N6TR clones to switch between bands.<br>
 You can also switch between memory frequencies with TRXControl's <b>M up</b> and <b>M dwn</b> buttons and set rig frequencies
  by double clicking rows in TRXControl's Add/Modify memory list.
-</p><p>See also <a href="h30.html">Operation: TRXControl</a>
-</p> 
+
+</p>
 <img src="img/h121.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
