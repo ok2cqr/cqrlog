@@ -1,13 +1,13 @@
 object frmAdifImport: TfrmAdifImport
-  Left = 127
-  Height = 365
-  Top = 358
-  Width = 387
+  Left = 78
+  Height = 381
+  Top = 310
+  Width = 392
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Importing ADIF file'
-  ClientHeight = 365
-  ClientWidth = 387
+  ClientHeight = 381
+  ClientWidth = 392
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -125,13 +125,13 @@ object frmAdifImport: TfrmAdifImport
     AnchorSideRight.Side = asrBottom
     Left = 0
     Height = 45
-    Top = 287
-    Width = 387
+    Top = 304
+    Width = 392
     Alignment = taLeftJustify
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
     ClientHeight = 45
-    ClientWidth = 387
+    ClientWidth = 392
     Enabled = False
     TabOrder = 0
     object lblDateTo: TLabel
@@ -202,12 +202,12 @@ object frmAdifImport: TfrmAdifImport
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 287
+    Height = 304
     Top = 0
-    Width = 387
+    Width = 392
     Anchors = [akTop, akLeft, akRight]
-    ClientHeight = 287
-    ClientWidth = 387
+    ClientHeight = 304
+    ClientWidth = 392
     TabOrder = 1
     object lbFile: TLabel
       AnchorSideLeft.Control = pnlAll
@@ -288,7 +288,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 17
-      Top = 137
+      Top = 160
       Width = 134
       BorderSpacing.Top = 6
       Caption = 'Comment to QSO(s):'
@@ -298,9 +298,9 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Control = lbFile
       AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
-      Left = 312
+      Left = 317
       Height = 17
-      Top = 33
+      Top = 35
       Width = 68
       Anchors = [akRight]
       BorderSpacing.Right = 6
@@ -316,7 +316,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 17
-      Top = 194
+      Top = 217
       Width = 73
       BorderSpacing.Top = 6
       Caption = 'QTH Profile'
@@ -330,10 +330,10 @@ object frmAdifImport: TfrmAdifImport
       ParentColor = False
     end
     object btnImport: TButton
-      AnchorSideTop.Control = chkNoCheckOnDuplicates
+      AnchorSideTop.Control = chkRemember
       AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
-      Left = 305
+      Left = 310
       Height = 25
       Top = 85
       Width = 75
@@ -351,7 +351,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 34
-      Top = 154
+      Top = 177
       Width = 145
       AutoSize = False
       TabOrder = 1
@@ -361,7 +361,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = pnlAll
       AnchorSideRight.Side = asrBottom
-      Left = 305
+      Left = 310
       Height = 25
       Top = 116
       Width = 75
@@ -379,7 +379,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 251
+      Top = 274
       Width = 216
       BorderSpacing.Top = 6
       Caption = 'Filter: only import date range'
@@ -404,7 +404,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 34
-      Top = 211
+      Top = 234
       Width = 334
       ItemHeight = 0
       TabOrder = 4
@@ -415,7 +415,7 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
-      Top = 108
+      Top = 131
       Width = 291
       Caption = 'ADIF file contains more than 10 000 QSO'
       TabOrder = 5
@@ -434,15 +434,26 @@ object frmAdifImport: TfrmAdifImport
     end
     object chkNoCheckOnDuplicates: TCheckBox
       AnchorSideLeft.Control = lbFile
-      AnchorSideTop.Control = lblError
+      AnchorSideTop.Control = chkRemember
+      AnchorSideTop.Side = asrBottom
+      Left = 4
+      Height = 23
+      Top = 108
+      Width = 285
+      Caption = 'No Check For Duplicates (faster Import)'
+      TabOrder = 6
+    end
+    object chkRemember: TCheckBox
+      AnchorSideLeft.Control = lbFile
+      AnchorSideTop.Control = lblErrors
       AnchorSideTop.Side = asrBottom
       Left = 4
       Height = 23
       Top = 85
-      Width = 285
+      Width = 301
       BorderSpacing.Top = 32
-      Caption = 'No Check For Duplicates (faster Import)'
-      TabOrder = 6
+      Caption = 'Case of duplicates; Remember my answer'
+      TabOrder = 7
     end
   end
   object sb: TStatusBar
@@ -451,8 +462,8 @@ object frmAdifImport: TfrmAdifImport
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 25
-    Top = 340
-    Width = 387
+    Top = 356
+    Width = 392
     AutoSize = False
     BorderSpacing.InnerBorder = 3
     Panels = <    
