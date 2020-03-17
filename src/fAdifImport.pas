@@ -90,6 +90,7 @@ type
   TfrmAdifImport = class(TForm)
     btnClose: TButton;
     btnImport: TButton;
+    chkRemember: TCheckBox;
     chkFilterDateRange: TCheckBox;
     chkLotOfQSO: TCheckBox;
     chkNoCheckOnDuplicates: TCheckBox;
@@ -151,6 +152,8 @@ type
 
 var
   frmAdifImport: TfrmAdifImport;
+  Qvalue : integer;
+  Qasked : boolean;
 
 implementation
 {$R *.lfm}
@@ -523,8 +526,19 @@ begin
       dmData.Q.Open;
       if dmData.Q.Fields[0].AsInteger > 0 then
       begin
-        case Application.MessageBox('It looks like this QSO is in the log.'#13'Do you really want to import it again?',
-                                  'Question',MB_ICONQUESTION +  MB_YESNOCANCEL) of
+
+        if not chkRemember.Checked then
+             Qvalue:= Application.MessageBox('It looks like this QSO is in the log.'#13'Do you really want to import it again?',
+                                  'Question',MB_ICONQUESTION +  MB_YESNOCANCEL)
+          else
+          if not Qasked then
+              begin
+                Qvalue:= Application.MessageBox('It looks like this QSO is in the log.'#13'Do you really want to import it again?',
+                                  'Question',MB_ICONQUESTION +  MB_YESNOCANCEL);
+                Qasked := true;
+              end;
+
+        case Qvalue of
         idNo        :begin
                       btnImport.Enabled := True;
                       dmData.Q.Close();
@@ -794,6 +808,7 @@ begin
       dmData.DoAfterImport
     end;
     sb.Panels[0].Text := 'Done ...';
+    Qasked:=false;
     lblComplete.Visible := True
   end;
 end;
@@ -846,7 +861,8 @@ end;
 procedure TfrmAdifImport.FormShow(Sender: TObject);
 begin
   lblComplete.Visible := False;
-  dmUtils.LoadFontSettings(self)
+  dmUtils.LoadFontSettings(self);
+  Qasked:=false;
 end;
 
 procedure TfrmAdifImport.WriteWrongADIF(lines : Array of String; error : String);
