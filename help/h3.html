@@ -61,7 +61,7 @@
     You can fix the errors manually and import again. <br><br>
     <img src="img/h43.png" border="0"><br><br>
     Duplicate entries (contacts already in the log) are indicated with a separate dialog
-    allowing you to exclude or include these records.
+    allowing you to exclude or include these records. This will be asked every time a duplicate is found. If you check <b>Case of duplicates; Remember my answer</b> it is asked only once and then the same answer is used every time a duplicate is found.
     <p align=center><img src=img/line.png></p>
     <a name=ah25><strong>ADIF export</strong></a><br><br>
     Go to QSO list using Ctrl-O or choose the QSO list from the upper menu - item 'File'.<br><br>
@@ -83,7 +83,17 @@
     <img src=img/h45e.png><br><br>
     Choose the 'HTML' option from QSO list Export menu.<br><br>
     <p align=center><img src=img/line.png></p>
-    <p><a name=ah27><strong>Program version update:</strong></a><br><br>
+    <p><a name=ah27><strong>EDI export</strong></a><br><br>
+    This function can be used to export contest logs in .edi file format. This export requires a 
+    suitable filter to be set. Generally only one band per file is allowed. Also make sure that the
+    fields like exchange sent/received are set properly before exporting. If you choose this export
+    you will see the follwing window.
+    <br><br>
+    <img src=img/h45f.png><br><br>
+    You can set the filename to export to as well as some meta data describing the equipment you
+    used for this contest.
+    <p align=center><img src=img/line.png></p>
+    <p><a name=ah28><strong>Program version update:</strong></a><br><br>
     Ubuntu 16.04, 17.10, 18.04 users can use CQRLOG’s repository on Launchpad. To add repository to your system, put into terminal this:<br/>
     <br>sudo add-apt-repository ppa:ok2cqr/ppa;sudo apt-get update;sudo apt-get install cqrlog<br>
     <br>For those who does not use Ubuntu, load install package, or binaries, from: Cqrlog.com <a href="https://www.cqrlog.com/download" target="_new"> download page.</a><br>
@@ -101,7 +111,7 @@
         </tbody>
     </table>
     <p align=center><img src=img/line.png></p>    
-    <a name=ah28><strong>How to update Country files:</strong></a><br>
+    <a name=ah29><strong>How to update Country files:</strong></a><br>
     <ol>
         <li>Unpack and copy all the files into the /ctyfiles folder in your CQRLOG main folder.
             The purpose of this folder is to store these files only, it is not bound to CQRLOG and
@@ -166,7 +176,7 @@
     Remember that a regular rebuild of your DXCC statistics is a matter of importance.
     Rebuild if you upgrade country files, rebuild also if you upgrade the program version!
     <p align=center><img src=img/line.png></p>
-    <a name=ah29><strong>QSL Manager Database update</strong></a><br><br>
+    <a name=ah30><strong>QSL Manager Database update</strong></a><br><br>
     Since version 0.8.0 CQRLOG uses its own QSL Manager database in a very simple, plain
     text format (CSV, semicolon separated). The update is very simple. The automated update
     checks the availability of a new version, downloads and unpacks the tar.gz file if
@@ -212,7 +222,7 @@ Example:
     QSL manager from another source. This ensures that the QSL label will contain the
     proper QSL manager.
     <p align=center><img src=img/line.png></p>
-    <a name=ah30><strong>Statistics rebuilding</strong></a><br><br>
+    <a name=ah31><strong>Statistics rebuilding</strong></a><br><br>
     <img src=img/h46.png><br><br>
     The only way to rebuild your statistics is <strong>from the QSO list</strong>.
     The 'Statistics' menu item has the 'Rebuild DXCC statistics' option (the similar option
@@ -234,7 +244,7 @@ Example:
     long wait.<br><br>
     <img src=img/h47.png>
     <p align=center><img src=img/line.png></p>
-    <a name=ah31><strong>Membership databases</strong></a><br><br>
+    <a name=ah32><strong>Membership databases</strong></a><br><br>
     CQRLOG supports online tracking of up to 5 memberships simultaneously. The membership
     databases can also be used for filter creation, along with a date span (from-to).
     The tracking and filtering feature is not limited to membership, you can create your
@@ -302,7 +312,7 @@ High Speed Club</pre>
     </table>
     <br>
     <p align=center><img src=img/line.png></p>
-    <a name=ah32><strong>Log backup</strong></a><br><br>
+    <a name=ah33><strong>Log backup</strong></a><br><br>
     Your log is in the <br>
     <pre>/home/~/.config/cqrlog/</pre>
     (the tilde ~ represents the name of your personal subdirectory within the 'home' folder).

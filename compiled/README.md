@@ -85,7 +85,7 @@ Then check execution rights.
  
  These binaries also include latest official source updates up to commit:
  
-  #257
+  #261
  
  To see what are the latest official updates look at https://github.com/ok2cqr/cqrlog/commits/master
 
@@ -156,13 +156,9 @@ LOG OR DATABASE SERVER CHANGE
   - log change should work now better (NewQSO/File/Open or create new log/Open)
   - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
 
-ROTATOR CONTROL UPDATES
-  - ver 2.4.0(113)
-  - Preferences/Rot Control has now same style selectable known rotors list as TRX control has the rig list
-  - Preferences/Rot Control has now Checkbox "Use rotctld \dump_state info for limits" for use with other rype rotors than 0..360deg turn,
-    or with user defined limits.
-  - Rotor control window has now user scalable size, Stop button and new layout.
-  - Help files have now section 'Rotor control' included in TRX Control chapter.
+LAST UPDATES
+  - ver 2.4.0(114) merged official source updates up to commit: #261
+  
   
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 

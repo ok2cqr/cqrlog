@@ -75,6 +75,7 @@ type
     aceQSLUp : TAction;
     aceQSLDwn : TAction;
     acSOTAExport : TAction;
+    acEDIExport : TAction;
     acRemoveDupes: TAction;
     acMarkAllClubLog: TAction;
     acMarkAllHrdLog: TAction;
@@ -133,6 +134,8 @@ type
     MenuItem1:  TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem100: TMenuItem;
+    MenuItem101: TMenuItem;
+    MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
@@ -335,6 +338,7 @@ type
     procedure acRebuildMembStatExecute(Sender: TObject);
     procedure acRemoveDupesExecute(Sender: TObject);
     procedure acSOTAExportExecute(Sender : TObject);
+    procedure acEDIExportExecute(Sender : TObject);
     procedure acSQLExecute(Sender: TObject);
     procedure acAutoSizeColumnsExecute(Sender: TObject);
     procedure acUploadAllToLoTWExecute(Sender: TObject);
@@ -461,7 +465,8 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport, fRotControl, fLogUploadStatus, fExportPref,uVersion;
+  feQSLUpload, feQSLDownload, fSOTAExport, fEDIExport, fRotControl, fLogUploadStatus,
+  fExportPref,uVersion;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -1371,6 +1376,16 @@ begin
     frmSOTAExport.ShowModal
   finally
     frmSOTAExport.Free
+  end
+end;
+
+procedure TfrmMain.acEDIExportExecute(Sender : TObject);
+begin
+  frmEDIExport := TfrmEDIExport.Create(frmMain);
+  try
+    frmEDIExport.ShowModal
+  finally
+    frmEDIExport.Free
   end
 end;
 

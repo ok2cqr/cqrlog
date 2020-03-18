@@ -1,0 +1,234 @@
+object frmEDIExport: TfrmEDIExport
+  Left = 819
+  Height = 414
+  Top = 254
+  Width = 516
+  Caption = 'Export for contests'
+  ClientHeight = 414
+  ClientWidth = 516
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '1.8.2.0'
+  object Label1: TLabel
+    Left = 8
+    Height = 17
+    Top = 8
+    Width = 66
+    Caption = 'Filename:'
+    ParentColor = False
+  end
+  object edtFileName: TEdit
+    Left = 8
+    Height = 25
+    Top = 32
+    Width = 421
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 433
+    Height = 25
+    Top = 34
+    Width = 75
+    Caption = 'Browse'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object btnClose: TButton
+    Left = 434
+    Height = 25
+    Top = 368
+    Width = 75
+    Cancel = True
+    Caption = 'Close'
+    ModalResult = 2
+    TabOrder = 10
+  end
+  object btnExport: TButton
+    Left = 345
+    Height = 25
+    Top = 368
+    Width = 75
+    Caption = 'Export'
+    OnClick = btnExportClick
+    TabOrder = 9
+  end
+  object pbExport: TProgressBar
+    Left = 8
+    Height = 20
+    Top = 370
+    Width = 264
+    Step = 1
+    TabOrder = 11
+  end
+  object lblDone: TLabel
+    Left = 289
+    Height = 17
+    Top = 372
+    Width = 37
+    Caption = 'Done'
+    ParentColor = False
+    Visible = False
+  end
+  object lblContestName: TLabel
+    Left = 8
+    Height = 17
+    Top = 72
+    Width = 99
+    Caption = 'Contest name:'
+    ParentColor = False
+  end
+  object lblTxEquipment: TLabel
+    Left = 8
+    Height = 17
+    Top = 104
+    Width = 100
+    Caption = 'TX Equipment:'
+    ParentColor = False
+  end
+  object edtContestName: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblContestName
+    AnchorSideTop.Side = asrCenter
+    Left = 122
+    Height = 25
+    Top = 68
+    Width = 307
+    BorderSpacing.Left = 15
+    TabOrder = 2
+  end
+  object edtTxEquipment: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 122
+    Height = 25
+    Top = 100
+    Width = 307
+    BorderSpacing.Left = 15
+    TabOrder = 3
+  end
+  object lblRxEquipment: TLabel
+    Left = 8
+    Height = 17
+    Top = 168
+    Width = 101
+    Caption = 'RX Equipment:'
+    ParentColor = False
+  end
+  object edtRxEquipment: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 122
+    Height = 25
+    Top = 164
+    Width = 307
+    BorderSpacing.Left = 15
+    TabOrder = 5
+  end
+  object lblAntenna: TLabel
+    Left = 8
+    Height = 17
+    Top = 200
+    Width = 62
+    Caption = 'Antenna:'
+    ParentColor = False
+  end
+  object edtAntenna: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 122
+    Height = 25
+    Top = 196
+    Width = 307
+    BorderSpacing.Left = 15
+    TabOrder = 6
+  end
+  object lblAntennaHeight: TLabel
+    Left = 8
+    Height = 17
+    Top = 232
+    Width = 137
+    Caption = 'Antenna Height (m):'
+    ParentColor = False
+  end
+  object edtAntennaHeightGroundLevel: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 152
+    Height = 25
+    Top = 228
+    Width = 48
+    Anchors = [akTop]
+    BorderSpacing.Left = 15
+    NumbersOnly = True
+    TabOrder = 7
+  end
+  object lblAntennaHeightSeaLevel: TLabel
+    Left = 208
+    Height = 17
+    Top = 232
+    Width = 94
+    Caption = 'above ground'
+    ParentColor = False
+  end
+  object edtAntennaHeightSeaLevel: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 152
+    Height = 25
+    Top = 260
+    Width = 48
+    Anchors = [akTop]
+    BorderSpacing.Left = 15
+    NumbersOnly = True
+    TabOrder = 8
+  end
+  object lblAntennaHeightGroundLevel: TLabel
+    Left = 208
+    Height = 17
+    Top = 264
+    Width = 104
+    Caption = 'above sea level'
+    ParentColor = False
+  end
+  object lblTxPower: TLabel
+    Left = 7
+    Height = 17
+    Top = 136
+    Width = 96
+    Caption = 'TX Power (W):'
+    ParentColor = False
+  end
+  object edtTxPower: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 122
+    Height = 25
+    Top = 132
+    Width = 78
+    BorderSpacing.Left = 15
+    NumbersOnly = True
+    TabOrder = 4
+  end
+  object lblError: TLabel
+    Left = 8
+    Height = 17
+    Top = 344
+    Width = 98
+    Caption = 'Error message'
+    ParentColor = False
+    Visible = False
+  end
+  object dlgSave: TSaveDialog
+    DefaultExt = '.edi'
+    Filter = 'EDI file|*.edi'
+    left = 477
+    top = 236
+  end
+end
