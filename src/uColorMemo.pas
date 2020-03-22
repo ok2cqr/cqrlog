@@ -677,7 +677,7 @@ var z,c,v,a:longint;
     ua,uz:string;
     p,l :integer;
   begin
-     bl1:=x;bl2:=x;//if refr_en=0 then pab.Refresh; //select line under cursor
+     bl1:=x;bl2:=x; //select line under cursor
      nactiblok(x,c);
      ua:='';
      for v:=x to c do ua:=ua+vety[v]^.te+#13#10;
@@ -722,11 +722,16 @@ var z,c,v,a:longint;
                   if ((a=1) and (ua[l]='<')) then     //search word that starts '<' ends '>' start from end of line
                    begin
                     if l>1 then
+                     begin
                       ua := trim(copy(ua,1,l-1)); //cut form start to that word pos
-                   break                        // that is info
+                      Clipboard.Clear;
+                      Clipboard.astext:= ua; //info is now in clipboard
+                      //writeln ('sh/dx info: ',ua);
+                      break;                        // that is info
+                     end;
                    end;
                   end;
-            //writeln ('sh/dx info: ',ua);
+
             end;
         end;
       end;
