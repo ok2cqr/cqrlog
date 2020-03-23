@@ -39,7 +39,7 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="--DEBUG=-4"/>
+        <CommandLineParams Value="--DEBUG=0"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>
@@ -52,7 +52,7 @@
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="--DEBUG=-4"/>
+            <CommandLineParams Value="--DEBUG=0"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
           <environment>
@@ -105,7 +105,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="110">
+    <Units Count="109">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -802,27 +802,23 @@
         <IsPartOfProject Value="True"/>
       </Unit105>
       <Unit106>
-        <Filename Value="fProgress.lfm"/>
-        <IsPartOfProject Value="True"/>
-      </Unit106>
-      <Unit107>
-        <Filename Value="fProgress.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmProgress"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit107>
-      <Unit108>
         <Filename Value="fCWKeys.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCWKeys"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit108>
-      <Unit109>
+      </Unit106>
+      <Unit107>
         <Filename Value="fCWKeys.lfm"/>
         <IsPartOfProject Value="True"/>
-      </Unit109>
+      </Unit107>
+      <Unit108>
+        <Filename Value="fEDIExport.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmEDIExport"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit108>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
