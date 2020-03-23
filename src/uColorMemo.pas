@@ -4,6 +4,8 @@ unit uColorMemo;
 
 other changes by Petr Hlozek, OK7AN
   - public functions and constants renamed to English
+
+Get info from spot, OH1KH
 }
 
 {$mode objfpc}{$H+}
@@ -13,7 +15,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls,menus,Clipbrd;
+  StdCtrls,menus,Clipbrd, strutils;
 
 
 const LANG=1; // 0 Czech , 1 English
@@ -167,6 +169,8 @@ type
 
        procedure postav_obsah_popupa(p:Tpopupmenu);
        function dt(celytext:string):string;
+       procedure GetInfoFromSpot(x:longint);  //sh/dx or normal "DX de" spot found result info part to clipboard
+
    end;
 
 
@@ -668,12 +672,76 @@ var z,x,c:longint;
     result:=bls and (LineNumber>=0) and (LineNumber<=vetp) and (LineNumber>=z) and (LineNumber<=x);
   end;
 
+procedure TcolorMemo.GetInfoFromSpot(x:longint);
+var z,c,v,a:longint;
+    ua,uz:string;
+    p,l :integer;
+  begin
+     bl1:=x;bl2:=x; //select line under cursor
+     nactiblok(x,c);
+     ua:='';
+     for v:=x to c do ua:=ua+vety[v]^.te+#13#10;
+     //writeln('Spot line: ',ua);
+     if pos('DX de',ua)=1 then   //normal DX spot
+      Begin
+         ExtractWordPos(6,ua,[' '],p);   //info part starts at 6th word
+         if p>0 then
+          begin
+           ua := copy(ua,p,length(ua));
+             for l:=1 to wordCount(ua,[' ']) do
+                 Begin
+                   uz:= ExtractWordPos(l,ua,[' '],p);
+                    if ((length(uz)=5) and (uz[5]='Z')) then  //Z is lastchr, length is 5
+                     if TryStrToInt(copy(uz,1,4 ),a ) then
+                      if ((a>=0) and (a<=2400)) then //must be zulu time
+                         Begin       // we do not take Zulu time or anything after that
+                           if (p>1) then  //something to copy
+                             begin
+                              ua:=trim(copy(ua,1,p-1));
+                              Clipboard.Clear;
+                              Clipboard.astext:= ua; //info is now in clipboard
+                              //writeln ('DX de info: ',ua);
+                              break;
+                             end;
+                         end;
+                 end;
+           end;
+        end
+      else
+       Begin          // from command 'sh/dx'
+         if TryStrToInt( copy(ua,1,pos('.',ExtractWordPos(1,ua,[' '],p))-1),a)  then //1st have number (frq) with dot
+         Begin
+           ExtractWordPos(5,ua,[' '],p);   //info part starts at 5th word
+           if p>0 then
+            begin
+             ua := copy(ua,p,length(ua));  //2nd cut from 5th word
+             a:=0;
+             for l:=length(ua) downto 1 do
+                 Begin
+                  if ((a=0) and (ua[l]='>')) then a:=1;
+                  if ((a=1) and (ua[l]='<')) then     //search word that starts '<' ends '>' start from end of line
+                   begin
+                    if l>1 then
+                     begin
+                      ua := trim(copy(ua,1,l-1)); //cut form start to that word pos
+                      Clipboard.Clear;
+                      Clipboard.astext:= ua; //info is now in clipboard
+                      //writeln ('sh/dx info: ',ua);
+                      break;                        // that is info
+                     end;
+                   end;
+                  end;
 
+            end;
+        end;
+      end;
+  end;
 
 procedure TcolorMemo.mys_dclick_in(sender:Tobject);
 var z:longint;
   begin
     z:=my_2_index(my);
+    GetInfoFromSpot(z);
     if oncDblClick<>nil then oncDblClick(z,mb,ms);
   end;
   
