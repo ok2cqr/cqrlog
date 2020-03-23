@@ -19,18 +19,18 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2196"/>
+      <BuildNr Value="2195"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <MacroValues Count="1">
-      <Macro1 Name="LCLWidgetType" Value="qt5"/>
+      <Macro3 Name="LCLWidgetType" Value="gtk2"/>
     </MacroValues>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
       <SharedMatrixOptions Count="3">
-        <Item1 ID="364409174580" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+        <Item1 ID="364409174580" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
         <Item2 ID="890734883088" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk3"/>
-        <Item3 ID="102898540782" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item3 ID="102898540782" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -39,7 +39,7 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="--DEBUG=1"/>
+        <CommandLineParams Value="--DEBUG=0"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>
@@ -52,7 +52,7 @@
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="--DEBUG=1"/>
+            <CommandLineParams Value="--DEBUG=0"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
           <environment>
@@ -105,7 +105,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="111">
+    <Units Count="109">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -284,7 +284,6 @@
         <Filename Value="fNewDXCluster.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewDXCluster"/>
-        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit26>
       <Unit27>
@@ -803,34 +802,23 @@
         <IsPartOfProject Value="True"/>
       </Unit105>
       <Unit106>
-        <Filename Value="fProgress.lfm"/>
-        <IsPartOfProject Value="True"/>
-      </Unit106>
-      <Unit107>
-        <Filename Value="fProgress.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmProgress"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit107>
-      <Unit108>
         <Filename Value="fCWKeys.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCWKeys"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit108>
-      <Unit109>
+      </Unit106>
+      <Unit107>
         <Filename Value="fCWKeys.lfm"/>
         <IsPartOfProject Value="True"/>
-      </Unit109>
-      <Unit110>
+      </Unit107>
+      <Unit108>
         <Filename Value="fEDIExport.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmEDIExport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit110>
+      </Unit108>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
