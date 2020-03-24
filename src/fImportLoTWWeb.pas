@@ -66,7 +66,6 @@ begin
      begin
        SelStart:=Length(lines.Text)-1;
        VertScrollBar.Position:=1000000;
-       Repaint;
       {SelStart := GetTextLen;   //this does not always work (depending on form size, I think)
       SelLength := 0;
       ScrollBy(0, Lines.Count);
