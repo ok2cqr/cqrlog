@@ -204,10 +204,13 @@ procedure TfrmLoTWExport.mStatChange(Sender: TObject);
 begin
    with mStat do
      begin
-      SelStart := GetTextLen;
+       SelStart:=Length(lines.Text)-1;
+       VertScrollBar.Position:=1000000;
+       Repaint;
+      {SelStart := GetTextLen;      //this does not always work (depending on form size, I think)
       SelLength := 0;
       ScrollBy(0, Lines.Count);
-      Refresh;
+      Refresh;  }
      end;
 end;
 

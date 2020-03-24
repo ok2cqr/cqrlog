@@ -115,7 +115,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.0.4.0'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 405
@@ -132,6 +132,7 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
       Top = 0
       Width = 568
       Align = alClient
+      OnChange = mStatChange
       ScrollBars = ssAutoBoth
       TabOrder = 0
     end
