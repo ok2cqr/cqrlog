@@ -8,12 +8,12 @@
    
    Simplest way is to copy whole folder with console command
    
-    - cp -a ~/.config/cqrlog ~/.config/cqrlog_save
+     cp -a ~/.config/cqrlog ~/.config/cqrlog_save
 
    After doing this, if you ever need to restore old settings and logs, just give console commands
    
-    - rm -rf ~/.config/cqrlog
-    - cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
+     rm -rf ~/.config/cqrlog
+     cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
    
   
 -----------YOU HAVE BEEN WARNED!------------
@@ -60,23 +60,23 @@ BINARIES:
 
 Your /usr/share should usually contain folder cqrlog, if so, do install help files.
 
-  - cd /usr/share/cqrlog
-  - sudo tar vxf /your/download/folder/help.tgz
+    cd /usr/share/cqrlog
+    sudo tar vxf /your/download/folder/help.tgz
 
 
 #### ------------THEN INSTALL THE CQRLOG ITSELF---------
 
-  - cd /tmp
-  - unzip /your/download/folder/cqr5.zip  (or cqr2.zip)
+    cd /tmp
+    unzip /your/download/folder/cqr5.zip  (cqr3.zip or cqr2.zip)
 
 
 Then just copy '/tmp/cqrlog'  over your existing 'cqrlog' (usually in /usr/bin folder)
 when first saving the old one to cqrlog_old that you can copy back if new one does not work.
 Then check execution rights.
 
- - sudo cp /usr/bin/cqrlog /usr/bin/cqrlog_old
- - sudo cp /tmp/cqrlog /usr/bin/
- - sudo chmod a+x /usr/bin/cqrlog
+    sudo cp /usr/bin/cqrlog /usr/bin/cqrlog_old
+    sudo cp /tmp/cqrlog /usr/bin/
+    sudo chmod a+x /usr/bin/cqrlog
 
 ## ABOUT:
 
