@@ -69,8 +69,9 @@ begin
       SelStart := GetTextLen;
       SelLength := 0;
       ScrollBy(0, Lines.Count);
-      }
       Refresh;
+      }
+
      end;
 end;
 
