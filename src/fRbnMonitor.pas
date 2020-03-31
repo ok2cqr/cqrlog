@@ -77,6 +77,7 @@ type
     acRbnServer: TAction;
     acScrollDown : TAction;
     acHelp : TAction;
+    acClear: TAction;
     btnEatFocus : TButton;
     dlgFont: TFontDialog;
     imgRbnMonitor: TImageList;
@@ -85,6 +86,8 @@ type
     ToolBar1: TToolBar;
     tbtnConnect: TToolButton;
     ToolButton1 : TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -92,6 +95,8 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8 : TToolButton;
+    ToolButton9: TToolButton;
+    procedure acClearExecute(Sender: TObject);
     procedure acConnectExecute(Sender: TObject);
     procedure acDisconnectExecute(Sender: TObject);
     procedure acFilterExecute(Sender: TObject);
@@ -484,6 +489,13 @@ begin
   btnEatFocus.SetFocus
 end;
 
+procedure TfrmRbnMonitor.acClearExecute(Sender: TObject);
+var l: integer;
+begin
+  for l:= sgRbn.rowcount - 1 downto 1 do
+    sgRbn.DeleteRow(l);
+end;
+
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
   lTelnet.Disconnect();
@@ -517,7 +529,7 @@ end;
 
 procedure TfrmRbnMonitor.acHelpExecute(Sender : TObject);
 begin
-  ShowMessage('Not implemented, yet')
+  dmUtils.OpenInApp(dmData.HelpDir+'h31.html')
 end;
 
 procedure TfrmRbnMonitor.acRbnServerExecute(Sender: TObject);
