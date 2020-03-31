@@ -1,7 +1,7 @@
 object frmRbnMonitor: TfrmRbnMonitor
-  Left = 416
+  Left = -102
   Height = 602
-  Top = 86
+  Top = 145
   Width = 665
   ActiveControl = btnEatFocus
   Caption = 'RBN Monitor'
@@ -75,7 +75,7 @@ object frmRbnMonitor: TfrmRbnMonitor
     end
     object ToolButton8: TToolButton
       Left = 122
-      Hint = 'Scroll down'
+      Hint = ' to last line'
       Top = 2
       Action = acScrollDown
     end
