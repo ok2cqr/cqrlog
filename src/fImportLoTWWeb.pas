@@ -32,6 +32,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnDownloadClick(Sender: TObject);
     procedure btnPreferencesClick(Sender: TObject);
+    procedure mStatChange(Sender: TObject);
   private
     Done : Boolean;
     FileSize : Int64;
@@ -57,6 +58,20 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmImportLoTWWeb.mStatChange(Sender: TObject);
+begin
+    with mStat do
+     begin
+     VertScrollBar.Position:=1000000;
+     {    //this does not always scroll to end (why?)
+      SelStart := GetTextLen;
+      SelLength := 0;
+      ScrollBy(0, Lines.Count);
+      }
+      Refresh;
+     end;
 end;
 
 procedure TfrmImportLoTWWeb.btnDownloadClick(Sender: TObject);
