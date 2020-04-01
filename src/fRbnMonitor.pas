@@ -500,6 +500,7 @@ procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
   lTelnet.Disconnect();
   RbnMonThread.Terminate;
+  freeAndNil(RbnMonThread);
   tbtnConnect.Action := acConnect
 end;
 
@@ -675,7 +676,8 @@ begin
     RbnMonThread.fil_eQSLOnly := cqrini.ReadBool('RBNFilter','eQSLOnly',False);
 
     RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False)
-  end
+  end;
+
 end;
 
 procedure TfrmRbnMonitor.SynRbnMonitor(RbnSpot : TRbnSpot);
