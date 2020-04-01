@@ -33,6 +33,7 @@ object frmBandMap: TfrmBandMap
       TabOrder = 0
       object tbtnFilter: TToolButton
         Left = 1
+        Hint = 'Filter settings'
         Top = 2
         Action = acFilter
         ParentShowHint = False
@@ -47,8 +48,11 @@ object frmBandMap: TfrmBandMap
       end
       object ToolButton3: TToolButton
         Left = 52
+        Hint = 'Font settings'
         Top = 2
         Action = acFont
+        ParentShowHint = False
+        ShowHint = True
       end
       object ToolButton4: TToolButton
         Left = 75
@@ -58,23 +62,29 @@ object frmBandMap: TfrmBandMap
         Style = tbsSeparator
       end
       object ToolButton5: TToolButton
-        Left = 80
+        Left = 83
+        Hint = 'Clean band map'
         Top = 2
         HelpType = htKeyword
         HelpKeyword = 'Clear all'
         Action = acClear
+        ParentShowHint = False
+        ShowHint = True
       end
       object ToolButton6: TToolButton
-        Left = 103
+        Left = 106
         Height = 22
         Top = 2
         Caption = 'ToolButton6'
         Style = tbsSeparator
       end
       object ToolButton7: TToolButton
-        Left = 108
+        Left = 114
+        Hint = 'Open help in web browser'
         Top = 2
         Action = acHelp
+        ParentShowHint = False
+        ShowHint = True
       end
       object ToolButton1: TToolButton
         Left = 24
@@ -84,7 +94,7 @@ object frmBandMap: TfrmBandMap
         Visible = False
       end
       object btnEatFocus: TButton
-        Left = 131
+        Left = 137
         Height = 22
         Top = 2
         Width = 2

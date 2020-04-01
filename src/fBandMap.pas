@@ -242,7 +242,7 @@ var
   i : Integer;
   s : String;
 begin
-  if Active then exit; //do not refresh the window when is activated (user is scrolling)
+  if Active then exit; //do not refresh the window when it is activated (user is scrolling)
   FBandFilter := UpperCase(FBandFilter);
   FModeFilter := UpperCase(FModeFilter);
   BandMap.DisableAutoRepaint(True);

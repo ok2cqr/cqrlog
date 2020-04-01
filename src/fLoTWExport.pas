@@ -108,6 +108,7 @@ var
   date : String = '';
   url  : String = '';
 begin
+  btnUpload.Enabled:=false; //allow only one click
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
@@ -192,7 +193,8 @@ begin
     http.Free;
     l.Free;
     m.Free
-  end
+  end;
+  btnUpload.Enabled:=true; //allow only one click
 end;
 
 procedure TfrmLoTWExport.mStatChange(Sender: TObject);
