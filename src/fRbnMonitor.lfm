@@ -1,5 +1,5 @@
 object frmRbnMonitor: TfrmRbnMonitor
-  Left = -102
+  Left = 0
   Height = 602
   Top = 145
   Width = 665
@@ -75,17 +75,19 @@ object frmRbnMonitor: TfrmRbnMonitor
     end
     object ToolButton8: TToolButton
       Left = 122
-      Hint = ' to last line'
+      Hint = 'Go to last line'
       Top = 2
       Action = acScrollDown
     end
     object ToolButton9: TToolButton
       Left = 145
+      Hint = 'Clean grid'
       Top = 2
       Action = acClear
     end
     object ToolButton10: TToolButton
       Left = 173
+      Hint = 'Open help in web browser'
       Top = 2
       Action = acHelp
     end

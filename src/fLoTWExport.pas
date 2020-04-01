@@ -108,7 +108,7 @@ var
   date : String = '';
   url  : String = '';
 begin
-  btnUpload.Enabled:=false; //disable pressing more than once if lotw server is slow
+  btnUpload.Enabled:=false; //allow only one click
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
@@ -197,7 +197,7 @@ begin
     l.Free;
     m.Free
   end;
-  btnUpload.Enabled:=true;
+  btnUpload.Enabled:=true; //allow only one click
 end;
 
 procedure TfrmLoTWExport.mStatChange(Sender: TObject);
