@@ -201,13 +201,13 @@ procedure TfrmLoTWExport.mStatChange(Sender: TObject);
 begin
    with mStat do
      begin
-     VertScrollBar.Position:=1000000;
-     {  //this does not always scroll to end (why?)
+      //this does not always scroll to end (why?)
       SelStart := GetTextLen;
       SelLength := 0;
       ScrollBy(0, Lines.Count);
       Refresh;
-      }
+      //added
+      VertScrollBar.Position:=100000;
      end;
 end;
 
