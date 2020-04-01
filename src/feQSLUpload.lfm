@@ -241,6 +241,7 @@ object frmeQSLUpload: TfrmeQSLUpload
       Lines.Strings = (
         ''
       )
+      OnChange = mStatChange
       ReadOnly = True
       ScrollBars = ssAutoBoth
       TabOrder = 0
