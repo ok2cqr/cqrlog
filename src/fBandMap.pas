@@ -70,6 +70,7 @@ type
     btnEatFocus: TButton;
     dlgFont: TFontDialog;
     imglBandMap: TImageList;
+    lbStop: TLabel;
     Panel1: TPanel;
     pnlBandMap: TPanel;
     toolBandMap: TToolBar;
@@ -85,8 +86,10 @@ type
     procedure acFilterExecute(Sender: TObject);
     procedure acFontExecute(Sender: TObject);
     procedure acHelpExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -164,9 +167,6 @@ type
     procedure LoadBandMapItemsFromFile(FileName : String);
   end; 
 
-const
-  F_LEN = 12;  //left padding for freq and call
-  C_LEN = 14;
 var
   frmBandMap: TfrmBandMap;
 
@@ -231,9 +231,10 @@ end;
 
 function TfrmBandMap.FormatItem(freq : Double; Call, SplitInfo : String; fromNewQSO : Boolean) : String;
 begin
-  if fromNewQSO then
-    call := '*'+call;
-  Result := SetSizeLeft(FloatToStrF(freq,ffFixed,8,3),F_LEN)+SetSizeLeft(call,C_LEN)+' '+ SplitInfo
+  if fromNewQSO then call := '*'+call;
+  Result := SetSizeLeft(FloatToStrF(freq,ffFixed,8,3),cqrini.ReadInteger('BandMapFilter','FreqWidth',12))+
+            SetSizeLeft(call,cqrini.ReadInteger('BandMapFilter','CallWidth',12))+' '+
+            SplitInfo
 end;
 
 
@@ -616,6 +617,11 @@ begin
   BandMapThread.Start
 end;
 
+procedure TfrmBandMap.FormDeactivate(Sender: TObject);
+begin
+  lbStop.Visible:=false;
+end;
+
 procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmBandMap);
@@ -643,6 +649,11 @@ begin
    //point to special html reload file because '#bh19' cannot be passed as OpenInApp link parameter (why?)
    dmUtils.OpenInApp(dmData.HelpDir+'h21bh19.html') ;
    btnEatFocus.SetFocus
+end;
+
+procedure TfrmBandMap.FormActivate(Sender: TObject);
+begin
+  lbStop.Visible:=True;
 end;
 
 procedure TfrmBandMap.acClearExecute(Sender: TObject);

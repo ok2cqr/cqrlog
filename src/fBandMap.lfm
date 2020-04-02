@@ -7,8 +7,10 @@ object frmBandMap: TfrmBandMap
   ClientHeight = 556
   ClientWidth = 259
   KeyPreview = True
+  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
@@ -100,6 +102,25 @@ object frmBandMap: TfrmBandMap
         Width = 2
         Caption = 'btnEatFocus'
         TabOrder = 0
+      end
+      object lbStop: TLabel
+        AnchorSideLeft.Control = toolBandMap
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = toolBandMap
+        AnchorSideTop.Side = asrCenter
+        Left = 139
+        Height = 25
+        Top = 2
+        Width = 32
+        Align = alBottom
+        Caption = 'STOP'
+        Font.Color = clRed
+        Font.Height = -19
+        Font.Name = 'Monospace'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Visible = False
       end
     end
   end

@@ -653,6 +653,7 @@ type
     GroupBox26: TGroupBox;
     GroupBox27: TGroupBox;
     gbLoTW: TGroupBox;
+    gbWidths: TGroupBox;
     GroupBox29: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox30: TGroupBox;
@@ -696,6 +697,8 @@ type
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
+    lbCallW: TLabel;
+    lbFreqW: TLabel;
     lbleQSLDnlAddr: TLabel;
     lbleQSLStartAddr: TLabel;
     lbleQSLViewAddr: TLabel;
@@ -953,6 +956,8 @@ type
     rbShowSince1: TRadioButton;
     edtWinSpeed: TSpinEdit;
     edtLoadFromFldigi: TSpinEdit;
+    seCallWidth: TSpinEdit;
+    seFreqWidth: TSpinEdit;
     tabExport: TTabSheet;
     tabExport1: TTabSheet;
     tabFont1: TTabSheet;
@@ -1432,6 +1437,8 @@ begin
   cqrini.WriteBool('BandMap','IgnoreBandFreq',chkIgnoreBandFreq.Checked);
   cqrini.WriteBool('BandMap','UseNewQSOFreqMode',chkUseNewQSOFreqMode.Checked);
   cqrini.WriteBool('BandMap','PlusToBandMap',chkPlusToBandMap.Checked);
+  cqrini.WriteInteger('BandMapFilter','FreqWidth',seFreqWidth.Value);
+  cqrini.WriteInteger('BandMapFilter','CallWidth',seCallWidth.Value);
 
   cqrini.WriteString('xplanet', 'path', edtXplanetPath.Text);
   cqrini.WriteString('xplanet', 'height', edtXHeight.Text);
@@ -2843,6 +2850,8 @@ begin
   chkIgnoreBandFreq.Checked := cqrini.ReadBool('BandMap','IgnoreBandFreq',True);
   chkUseNewQSOFreqMode.Checked := cqrini.ReadBool('BandMap','UseNewQSOFreqMode',False);
   chkPlusToBandMap.Checked := cqrini.ReadBool('BandMap','PlusToBandMap',False);
+  seFreqWidth.Value := cqrini.ReadInteger('BandMapFilter','FreqWidth',12);
+  seCallWidth.Value := cqrini.ReadInteger('BandMapFilter','CallWidth',12);
 
   edtXplanetPath.Text := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
   edtXHeight.Text := cqrini.ReadString('xplanet', 'height', '100');
