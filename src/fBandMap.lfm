@@ -109,9 +109,9 @@ object frmBandMap: TfrmBandMap
         AnchorSideTop.Control = toolBandMap
         AnchorSideTop.Side = asrCenter
         Left = 139
-        Height = 25
+        Height = 23
         Top = 2
-        Width = 32
+        Width = 53
         Align = alBottom
         Caption = 'STOP'
         Font.Color = clRed
