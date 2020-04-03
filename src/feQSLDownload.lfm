@@ -31,6 +31,7 @@ object frmeQSLDownload: TfrmeQSLDownload
       Top = 0
       Width = 479
       Align = alClient
+      OnChange = mStatChange
       ScrollBars = ssAutoBoth
       TabOrder = 0
     end
@@ -54,10 +55,10 @@ object frmeQSLDownload: TfrmeQSLDownload
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = GroupBox5
       AnchorSideTop.Side = asrBottom
-      Left = 71
+      Left = 72
       Height = 25
       Top = 126
-      Width = 338
+      Width = 337
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 6
       Caption = 'Download data from eQSL website'

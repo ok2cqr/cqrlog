@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, lclType;
+  ExtCtrls, StdCtrls, lclType, ComCtrls, Spin;
 
 type
 
@@ -25,9 +25,13 @@ type
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
+    lbFreqW: TLabel;
+    lbCallW: TLabel;
     rbShowAll: TRadioButton;
     rbNoWkdHour: TRadioButton;
     rbNoWkdDate: TRadioButton;
+    seFreqWidth: TSpinEdit;
+    seCallWidth: TSpinEdit;
     procedure btnOKClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -58,6 +62,9 @@ begin
 
   chkOnlyeQSL.Checked := cqrini.ReadBool('BandMapFilter','OnlyeQSL',False);
   chkOnlyLoTW.Checked := cqrini.ReadBool('BandMapFilter','OnlyLoTW',False) ;
+
+  seFreqWidth.Value := cqrini.ReadInteger('BandMapFilter','FreqWidth',12);
+  seCallWidth.Value := cqrini.ReadInteger('BandMapFilter','CallWidth',12);
 
   chkShowActiveBandFil.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
 end;
@@ -107,6 +114,9 @@ begin
   cqrini.WriteBool('BandMapFilter','OnlyLoTW',chkOnlyLoTW.Checked);
 
   cqrini.WriteBool('BandMap', 'OnlyActiveBand', chkShowActiveBandFil.Checked);
+
+  cqrini.WriteInteger('BandMapFilter','FreqWidth',seFreqWidth.Value);
+  cqrini.WriteInteger('BandMapFilter','CallWidth',seCallWidth.Value);
 
   ModalResult := mrOK
 end;

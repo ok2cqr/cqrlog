@@ -1,7 +1,7 @@
 object frmBandMapFilter: TfrmBandMapFilter
-  Left = 308
+  Left = 227
   Height = 224
-  Top = 282
+  Top = 102
   Width = 667
   BorderStyle = bsDialog
   Caption = 'Band map filter'
@@ -10,129 +10,248 @@ object frmBandMapFilter: TfrmBandMapFilter
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.0.4.0'
   object GroupBox1: TGroupBox
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 6
     Height = 120
-    Top = 8
+    Top = 6
     Width = 648
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
     ClientHeight = 118
     ClientWidth = 646
     TabOrder = 0
     object rbNoWkdHour: TRadioButton
-      Left = 16
+      AnchorSideLeft.Control = rbShowAll
+      AnchorSideTop.Control = rbShowAll
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 23
-      Top = 42
+      Top = 41
       Width = 256
+      BorderSpacing.Top = 12
       Caption = 'Do not show station worked in last '
       TabOrder = 0
     end
     object rbNoWkdDate: TRadioButton
-      Left = 16
+      AnchorSideLeft.Control = rbNoWkdHour
+      AnchorSideTop.Control = rbNoWkdHour
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 23
-      Top = 81
+      Top = 76
       Width = 335
+      BorderSpacing.Top = 12
       Caption = 'Do not show station that was aleady QSO after '
       TabOrder = 1
     end
     object edtDate: TEdit
-      Left = 368
-      Height = 32
-      Top = 80
+      AnchorSideLeft.Control = rbNoWkdDate
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbNoWkdDate
+      AnchorSideTop.Side = asrCenter
+      Left = 347
+      Height = 34
+      Top = 70
       Width = 96
+      BorderSpacing.Left = 6
       TabOrder = 2
       Text = '2000-10-10'
     end
     object edtTime: TEdit
-      Left = 472
-      Height = 32
-      Top = 80
-      Width = 48
+      AnchorSideLeft.Control = edtDate
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbNoWkdDate
+      AnchorSideTop.Side = asrCenter
+      Left = 449
+      Height = 34
+      Top = 70
+      Width = 56
+      BorderSpacing.Left = 6
       TabOrder = 3
       Text = '12:12'
     end
     object Label2: TLabel
-      Left = 544
-      Height = 15
-      Top = 84
+      AnchorSideLeft.Control = edtTime
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = edtTime
+      AnchorSideTop.Side = asrCenter
+      Left = 511
+      Height = 17
+      Top = 79
       Width = 77
+      BorderSpacing.Left = 6
       Caption = '(date, time)'
       ParentColor = False
     end
     object edtLastHours: TEdit
-      Left = 288
-      Height = 32
-      Top = 40
+      AnchorSideLeft.Control = chkShowActiveBandFil
+      AnchorSideTop.Control = rbNoWkdHour
+      AnchorSideTop.Side = asrCenter
+      Left = 268
+      Height = 34
+      Top = 35
       Width = 41
       TabOrder = 4
       Text = '48'
     end
     object Label1: TLabel
-      Left = 336
-      Height = 15
-      Top = 45
+      AnchorSideLeft.Control = edtLastHours
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = edtLastHours
+      AnchorSideTop.Side = asrCenter
+      Left = 315
+      Height = 17
+      Top = 44
       Width = 226
+      BorderSpacing.Left = 6
       Caption = 'hours on the same band and mode'
       ParentColor = False
     end
     object rbShowAll: TRadioButton
-      Left = 16
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      Left = 6
       Height = 23
-      Top = 8
+      Top = 6
       Width = 81
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
       Caption = 'Show all'
       Checked = True
       TabOrder = 5
       TabStop = True
     end
     object chkShowActiveBandFil: TCheckBox
-      Left = 310
+      AnchorSideLeft.Control = rbNoWkdHour
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbShowAll
+      Left = 268
       Height = 23
-      Top = 8
+      Top = 6
       Width = 173
+      BorderSpacing.Left = 6
       Caption = 'Show only active band'
       TabOrder = 6
     end
   end
   object GroupBox2: TGroupBox
-    Left = 8
+    AnchorSideLeft.Control = GroupBox1
+    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 80
-    Top = 136
-    Width = 369
+    Top = 132
+    Width = 482
+    BorderSpacing.Top = 6
     ClientHeight = 78
-    ClientWidth = 367
+    ClientWidth = 480
     TabOrder = 1
     object chkOnlyeQSL: TCheckBox
-      Left = 16
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GroupBox2
+      Left = 6
       Height = 23
-      Top = 8
+      Top = 6
       Width = 169
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
       Caption = 'Show only eQSL users'
       TabOrder = 0
     end
     object chkOnlyLoTW: TCheckBox
-      Left = 16
+      AnchorSideLeft.Control = chkOnlyeQSL
+      AnchorSideTop.Control = chkOnlyeQSL
+      AnchorSideTop.Side = asrBottom
+      Left = 6
       Height = 23
-      Top = 38
+      Top = 41
       Width = 172
+      BorderSpacing.Top = 12
       Caption = 'Show only LoTW users'
       TabOrder = 1
     end
+    object seFreqWidth: TSpinEdit
+      AnchorSideLeft.Control = lbFreqW
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = lbFreqW
+      AnchorSideTop.Side = asrBottom
+      Left = 261
+      Height = 34
+      Top = 29
+      Width = 55
+      BorderSpacing.Top = 6
+      MaxValue = 30
+      MinValue = 8
+      TabOrder = 2
+      Value = 12
+    end
+    object seCallWidth: TSpinEdit
+      AnchorSideLeft.Control = lbCallW
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = lbCallW
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Side = asrBottom
+      Left = 375
+      Height = 34
+      Top = 29
+      Width = 55
+      BorderSpacing.Top = 6
+      MaxValue = 30
+      MinValue = 8
+      TabOrder = 3
+      Value = 12
+    end
+    object lbFreqW: TLabel
+      AnchorSideLeft.Control = chkOnlyeQSL
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = chkOnlyeQSL
+      Left = 255
+      Height = 17
+      Top = 6
+      Width = 66
+      BorderSpacing.Left = 80
+      Caption = 'FreqWidth'
+      ParentColor = False
+    end
+    object lbCallW: TLabel
+      AnchorSideLeft.Control = lbFreqW
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = chkOnlyeQSL
+      Left = 371
+      Height = 17
+      Top = 6
+      Width = 63
+      BorderSpacing.Left = 50
+      Caption = 'CallWidth'
+      ParentColor = False
+    end
   end
   object btnOK: TButton
-    Left = 496
+    AnchorSideTop.Control = btnCancel
+    AnchorSideRight.Control = btnCancel
+    Left = 498
     Height = 25
-    Top = 191
+    Top = 187
     Width = 75
+    Anchors = [akTop, akRight]
+    BorderSpacing.Right = 6
     Caption = 'OK'
     OnClick = btnOKClick
     TabOrder = 2
   end
   object btnCancel: TButton
-    Left = 581
+    AnchorSideRight.Control = GroupBox1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = GroupBox2
+    AnchorSideBottom.Side = asrBottom
+    Left = 579
     Height = 25
-    Top = 191
+    Top = 187
     Width = 75
+    Anchors = [akRight, akBottom]
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
