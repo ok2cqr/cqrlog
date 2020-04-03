@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, RegExpr;
+  ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, ExtCtrls,
+  RegExpr;
 
 const
   C_MAX_ROWS = 1000; //max lines in the list of RBN spots
@@ -81,8 +82,10 @@ type
     btnEatFocus : TButton;
     dlgFont: TFontDialog;
     imgRbnMonitor: TImageList;
+    lbStop: TLabel;
     sbRbn: TStatusBar;
     sgRbn: TStringGrid;
+    tmrUnfocus: TTimer;
     ToolBar1: TToolBar;
     tbtnConnect: TToolButton;
     ToolButton1 : TToolButton;
@@ -104,16 +107,21 @@ type
     procedure acHelpExecute(Sender : TObject);
     procedure acRbnServerExecute(Sender: TObject);
     procedure acScrollDownExecute(Sender : TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure FormShow(Sender: TObject);
     procedure sgRbnDblClick(Sender: TObject);
     procedure sgRbnDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
       aState: TGridDrawState);
+    procedure sgRbnEnter(Sender: TObject);
+    procedure sgRbnExit(Sender: TObject);
     procedure sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
       Index: Integer);
+    procedure tmrUnfocusTimer(Sender: TObject);
   private
     RbnMonThread : TRbnThread;
     lTelnet      : TLTelnetClientComponent;
@@ -583,6 +591,7 @@ begin
   lTelnet.OnReceive    := @lReceive
 end;
 
+
 procedure TfrmRbnMonitor.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(lTelnet);
@@ -642,12 +651,45 @@ begin
    end }
 end;
 
+procedure TfrmRbnMonitor.sgRbnEnter(Sender: TObject);
+begin
+   lbStop.Visible:=true;
+end;
+
+procedure TfrmRbnMonitor.sgRbnExit(Sender: TObject);
+begin
+  lbStop.Visible:=false;
+end;
+
 procedure TfrmRbnMonitor.sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
   Index: Integer);
 begin
   btnEatFocus.SetFocus
 end;
 
+procedure TfrmRbnMonitor.FormDeactivate(Sender: TObject);
+begin
+   lbStop.Visible:=false;
+end;
+
+//-------------------------------------------------
+//if sgRbn cell is selected, then rbn monitor form looses focus and when it gets focus again
+//another cell is randomly selected. There is no way to unselect column when from looses focus.
+//(or then there is bug because it does not work in any way)
+//ScrollDown releases focus but it cannot be called when
+//form gets focus or it causes focus loop. Small delay fixes it and prevents loop.
+
+procedure TfrmRbnMonitor.FormActivate(Sender: TObject);
+begin
+  tmrUnfocus.Enabled:=true;
+end;
+
+procedure TfrmRbnMonitor.tmrUnfocusTimer(Sender: TObject);
+begin
+  tmrUnfocus.Enabled:=false;
+  acScrollDownExecute(nil);
+end;
+//-------------------------------------------------
 procedure TfrmRbnMonitor.LoadConfigToThread;
 begin
   if Assigned(RbnMonThread) then

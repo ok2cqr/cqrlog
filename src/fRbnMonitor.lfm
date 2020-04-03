@@ -8,8 +8,10 @@ object frmRbnMonitor: TfrmRbnMonitor
   ClientHeight = 602
   ClientWidth = 665
   KeyPreview = True
+  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
@@ -106,6 +108,23 @@ object frmRbnMonitor: TfrmRbnMonitor
       Caption = 'btnEatFocus'
       TabOrder = 0
     end
+    object lbStop: TLabel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Side = asrCenter
+      Left = 208
+      Height = 23
+      Top = 2
+      Width = 53
+      Align = alBottom
+      Caption = 'STOP'
+      Font.Color = clRed
+      Font.Height = -19
+      Font.Name = 'Monospace'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      Visible = False
+    end
   end
   object sbRbn: TStatusBar
     Left = 0
@@ -130,6 +149,8 @@ object frmRbnMonitor: TfrmRbnMonitor
     TabOrder = 2
     OnDblClick = sgRbnDblClick
     OnDrawCell = sgRbnDrawCell
+    OnEnter = sgRbnEnter
+    OnExit = sgRbnExit
     OnHeaderSized = sgRbnHeaderSized
     ColWidths = (
       64
@@ -505,5 +526,12 @@ object frmRbnMonitor: TfrmRbnMonitor
     MaxFontSize = 0
     left = 122
     top = 215
+  end
+  object tmrUnfocus: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = tmrUnfocusTimer
+    left = 484
+    top = 85
   end
 end
