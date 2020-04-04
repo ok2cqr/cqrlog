@@ -5921,8 +5921,8 @@ begin
   azim  := '';
   if (dmUtils.IsLocOK(edtGrid.Text) and dmUtils.IsLocOK(myloc)) then
   begin
-    dmUtils.DistanceFromLocator(myloc,edtGrid.Text, qra, azim);
-    dmUtils.CoordinateFromLocator(edtGrid.Text,lat,long);
+    dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(myloc),dmUtils.CompleteLoc(edtGrid.Text), qra, azim);
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(edtGrid.Text),lat,long);
     dmUtils.CalcSunRiseSunSet(lat,long,SunRise,SunSet);
     if not inUTC then
     begin
