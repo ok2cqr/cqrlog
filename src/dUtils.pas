@@ -1034,8 +1034,8 @@ begin
     begin
       Loc[i] := UpCase(Loc[i]);
       case i of
-        1, 2, 5, 6: case Loc[i] of
-            'A'..'X':
+        1, 2 : case Loc[i] of
+            'A'..'R':
             begin
             end
             else
@@ -1043,6 +1043,13 @@ begin
           end;
         3, 4: case Loc[i] of
             '0'..'9':
+            begin
+            end
+            else
+              Result := False;
+          end;
+        5, 6: case Loc[i] of
+            'A'..'X':
             begin
             end
             else
