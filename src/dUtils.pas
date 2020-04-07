@@ -1016,50 +1016,51 @@ end;
 
 function TdmUtils.CompleteLoc(loc: string): string;
 begin
-  if Length(loc) = 4 then
-    Result := loc + 'LL'
-  else
-    Result := loc;
+  //we will fix even length locators from length 2 .. X  and return them as length of 6
+  //length 8, and up, loc is cutted to length 6
+  //Odd length loc is not touched to see error later
+  if (loc<>'') then
+   begin
+     loc := trim(loc);
+     if  (Length(loc) mod 2 = 0 ) then
+       begin
+         case  Length(loc) of
+           2:              loc := loc + '44LL';
+           4:              loc := loc + 'LL';
+           else
+             loc := copy(loc,1,6);
+         end;
+       end;
+   end;
+  Result := loc;
 end;
 
 function TdmUtils.IsLocOK(Loc: string): boolean;
 var
-  i: integer;
+  i,
+  r : integer;
 begin
-  Result := True;
-  loc := CompleteLoc(loc);
-  if Length(Loc) = 6 then
-  begin
-    for i := 1 to 6 do
-    begin
-      Loc[i] := UpCase(Loc[i]);
-      case i of
-        1, 2 : case Loc[i] of
-            'A'..'R':
-            begin
-            end
-            else
-              Result := False;
+  r:=0;
+  loc := CompleteLoc(loc);   //does not fix empty or odd length, otherwise sets length of 6
+  if  Length(loc) = 6  then  //length should be now 6 if passed this far
+   begin
+     Loc := UpCase(Loc);
+     for i := 1 to 6 do
+        begin
+          case i of
+            1, 2 : case Loc[i] of
+                        'A'..'R':  inc(r);
+                   end;
+            3, 4 : case Loc[i] of
+                        '0'..'9':  inc(r);
+                   end;
+            5, 6 : case Loc[i] of
+                        'A'..'X':  inc(r);
+                   end;
           end;
-        3, 4: case Loc[i] of
-            '0'..'9':
-            begin
-            end
-            else
-              Result := False;
-          end;
-        5, 6: case Loc[i] of
-            'A'..'X':
-            begin
-            end
-            else
-              Result := False;
-          end;
-      end;
-    end;
-  end
-  else
-    Result := False;
+       end;
+   end;
+  Result := (r = 6);
 end;
 function TdmUtils.StdFormatLocator(loc:string):String;
 // Format locator to standard form BL11bh16 See:

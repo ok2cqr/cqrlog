@@ -3482,8 +3482,16 @@ end;
 
 procedure TfrmNewQSO.edtGridExit(Sender: TObject);
 begin
-  CalculateDistanceEtc;
-  sbtnLocatorMap.Visible := True;
+  if dmUtils.isLocOK(edtGrid.Text) then
+    begin
+     CalculateDistanceEtc;
+     sbtnLocatorMap.Visible := True;
+    end
+   else
+    begin
+     edtGrid.Font.Color:=clRed;
+     edtGrid.Font.Style:= [fsBold];
+    end;
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
@@ -4204,6 +4212,8 @@ end;
 
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
 begin
+  edtGrid.Font.Color:=clDefault;
+  edtGrid.Font.Style:= [];
   edtGrid.SelectAll
 end;
 
@@ -5975,9 +5985,9 @@ begin
   if ((qra <>'') and (azim<>'')) then
   begin
     if cqrini.ReadBool('Program','ShowMiles',False) then
-      lblQRA.Caption := FloatToStr(dmUtils.KmToMiles(StrToFloat(qra))) + ' miles'
+      lblQRA.Caption := FloatToStr(dmUtils.KmToMiles(StrToFloat(qra))) + 'mi'
     else
-      lblQRA.Caption := qra + ' km';
+      lblQRA.Caption := qra + 'km';
     lblAzi.Caption := azim;
     Azimuth := azim
   end;
