@@ -5,12 +5,12 @@ object frmNewQSO: TfrmNewQSO
   Width = 997
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 850
+  HorzScrollBar.Page = 997
   VertScrollBar.Page = 620
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
   ClientHeight = 671
-  ClientWidth = 850
+  ClientWidth = 997
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -3717,8 +3717,8 @@ object frmNewQSO: TfrmNewQSO
           end
           object tabLOConfig: TTabSheet
             Caption = 'LO Config'
-            ClientHeight = 146
-            ClientWidth = 934
+            ClientHeight = 104
+            ClientWidth = 928
             object cbTxLo: TCheckBox
               Left = 8
               Height = 23
@@ -4212,7 +4212,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 7
           Height = 17
           Top = 159
-          Width = 36
+          Width = 33
           BorderSpacing.Top = 5
           Caption = 'DIST:'
           Layout = tlBottom
