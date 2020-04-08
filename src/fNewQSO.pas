@@ -1061,7 +1061,7 @@ procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
   lat,long :currency;
 Begin
-  dmUtils.CoordinateFromLocator(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6),lat,long);
+  dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6)),lat,long);
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
   frmGrayline.Refresh;
