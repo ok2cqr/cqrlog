@@ -3476,7 +3476,7 @@ var
   AProcess: TProcess;
   myloc: string = '';
 begin
-  myloc := cqrini.ReadString('Station', 'LOC', '');
+  myloc := dmUtils.CompleteLoc(cqrini.ReadString('Station', 'LOC', ''));
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
