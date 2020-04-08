@@ -6620,7 +6620,7 @@ begin
   chkAutoMode.Checked := cqrini.ReadBool('NewQSO','AutoMode',True);
   if dmUtils.IsLocOK(myloc) then
   begin
-    dmUtils.CoordinateFromLocator(myloc,lat,long);
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc) ,lat,long);
     dmUtils.CalcSunRiseSunSet(lat,long,SunRise,SunSet);
     if not inUTC then
     begin
