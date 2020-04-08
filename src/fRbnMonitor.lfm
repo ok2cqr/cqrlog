@@ -1,19 +1,21 @@
 object frmRbnMonitor: TfrmRbnMonitor
-  Left = 488
+  Left = 0
   Height = 602
-  Top = 232
+  Top = 145
   Width = 665
   ActiveControl = btnEatFocus
   Caption = 'RBN Monitor'
   ClientHeight = 602
   ClientWidth = 665
   KeyPreview = True
+  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.0.4.0'
   object ToolBar1: TToolBar
     Left = 0
     Height = 25
@@ -34,67 +36,100 @@ object frmRbnMonitor: TfrmRbnMonitor
       Left = 24
       Height = 22
       Top = 2
-      Width = 10
       Caption = 'ToolButton2'
       Style = tbsSeparator
     end
     object ToolButton3: TToolButton
-      Left = 34
+      Left = 32
       Top = 2
       Action = acRbnServer
     end
     object ToolButton4: TToolButton
-      Left = 57
+      Left = 55
       Height = 22
       Top = 2
-      Width = 10
       Caption = 'ToolButton4'
       Style = tbsSeparator
     end
     object ToolButton5: TToolButton
-      Left = 67
+      Left = 63
       Top = 2
       Action = acFilter
     end
     object ToolButton6: TToolButton
-      Left = 100
+      Left = 91
       Top = 2
       Action = acFontSettings
     end
     object ToolButton7: TToolButton
-      Left = 90
+      Left = 86
       Height = 22
       Top = 2
-      Width = 10
       Caption = 'ToolButton7'
-      Style = tbsSeparator
-    end
-    object ToolButton1: TToolButton
-      Left = 123
-      Height = 22
-      Top = 2
-      Width = 5
-      Caption = 'ToolButton1'
       Style = tbsDivider
     end
+    object ToolButton1: TToolButton
+      Left = 114
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton1'
+      Style = tbsSeparator
+    end
     object ToolButton8: TToolButton
-      Left = 128
+      Left = 122
+      Hint = 'Go to last line'
       Top = 2
       Action = acScrollDown
     end
+    object ToolButton9: TToolButton
+      Left = 145
+      Hint = 'Clean grid'
+      Top = 2
+      Action = acClear
+    end
+    object ToolButton10: TToolButton
+      Left = 173
+      Hint = 'Open help in web browser'
+      Top = 2
+      Action = acHelp
+    end
+    object ToolButton11: TToolButton
+      Left = 168
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton11'
+      Style = tbsDivider
+    end
     object btnEatFocus: TButton
-      Left = 151
+      Left = 196
       Height = 22
       Top = 2
       Width = 2
       Caption = 'btnEatFocus'
       TabOrder = 0
     end
+    object lbStop: TLabel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Side = asrCenter
+      Left = 208
+      Height = 23
+      Top = 2
+      Width = 53
+      Align = alBottom
+      Caption = 'STOP'
+      Font.Color = clRed
+      Font.Height = -19
+      Font.Name = 'Monospace'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      Visible = False
+    end
   end
   object sbRbn: TStatusBar
     Left = 0
-    Height = 21
-    Top = 581
+    Height = 19
+    Top = 583
     Width = 665
     Panels = <    
       item
@@ -104,7 +139,7 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object sgRbn: TStringGrid
     Left = 0
-    Height = 556
+    Height = 558
     Top = 25
     Width = 665
     Align = alClient
@@ -114,6 +149,8 @@ object frmRbnMonitor: TfrmRbnMonitor
     TabOrder = 2
     OnDblClick = sgRbnDblClick
     OnDrawCell = sgRbnDrawCell
+    OnEnter = sgRbnEnter
+    OnExit = sgRbnExit
     OnHeaderSized = sgRbnHeaderSized
     ColWidths = (
       64
@@ -209,8 +246,14 @@ object frmRbnMonitor: TfrmRbnMonitor
       ImageIndex = 5
       OnExecute = acScrollDownExecute
     end
+    object acClear: TAction
+      Caption = 'Clear'
+      ImageIndex = 7
+      OnExecute = acClearExecute
+    end
     object acHelp: TAction
       Caption = 'Help'
+      HelpKeyword = 'Open help'
       ImageIndex = 6
       OnExecute = acHelpExecute
     end
@@ -219,7 +262,7 @@ object frmRbnMonitor: TfrmRbnMonitor
     left = 344
     top = 128
     Bitmap = {
-      4C69070000001000000010000000000000000000000000000000000000000000
+      4C69080000001000000010000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -443,7 +486,39 @@ object frmRbnMonitor: TfrmRbnMonitor
       37FF8B4437FF8C4538FF8D4639FF8E4739FF8F483AFF90493BFF914A3CFF924B
       3DFF985346F8FFFFFF00FFFFFF00FFFFFF00BB6A346BBA6530BCBB6631EDBA66
       30F7BA6630F7BA6630F7BA6530F7BA652FF7B9652EF7B9652EF7B9642EF7B964
-      2EEFB7622CBDB7622E63FFFFFF00
+      2EEFB7622CBDB7622E63FFFFFF00000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000006416AFF06416AFF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000641
+      6AFF06416AFF06416AFF06416AFF000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000006416AFF0641
+      6AFF06416AFF06416AFF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000006416AFF06416AFF0641
+      6AFF06416AFF0000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000006416AFF06416AFF06416AFF0641
+      6AFF00000000000000000000000000000000000000000000000006416AFF0641
+      6AFF00000000000000000000000006416AFF06416AFF06416AFF06416AFF0000
+      000000000000000000000000000000000000000000000000000009090AFF0641
+      6AFF06416AFF0000000006416AFF06416AFF06416AFF06416AFF000000000000
+      000000000000000000000000000000000000000000000B48AAFF000000000909
+      0AFF06416AFF06416AFF06416AFF06416AFF06416AFF00000000000000000000
+      0000000000000000000000000000000000000B48AAFF000000000B48AAFF0000
+      000009090AFF06416AFF06416AFF06416AFF0000000000000000000000000000
+      00000000000000000000000000000B48AAFF000000000B48AAFF000000000B48
+      AAFF0000000009090AFF06416AFF06416AFF0000000000000000000000000000
+      0000000000000000000000000000000000000B48AAFF000000000B48AAFF0000
+      00000B48AAFF0000000009090AFF06416AFF06416AFF00000000000000000000
+      000000000000000000000000000000000000000000000B48AAFF000000000B48
+      AAFF000000000B48AAFF0000000009090AFF06416AFF06416AFF000000000000
+      00000000000000000000000000000000000000000000000000000B48AAFF0000
+      00000B48AAFF000000000B48AAFF0000000009090AFF06416AFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000B48
+      AAFF000000000B48AAFF000000000B48AAFF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000B48AAFF000000000B48AAFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000B48AAFF00000000000000000000000000000000000000000000
+      0000000000000000000000000000
     }
   end
   object dlgFont: TFontDialog
@@ -451,5 +526,12 @@ object frmRbnMonitor: TfrmRbnMonitor
     MaxFontSize = 0
     left = 122
     top = 215
+  end
+  object tmrUnfocus: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = tmrUnfocusTimer
+    left = 484
+    top = 85
   end
 end

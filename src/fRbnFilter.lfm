@@ -1,7 +1,7 @@
 object frmRbnFilter: TfrmRbnFilter
-  Left = 445
+  Left = 364
   Height = 608
-  Top = 191
+  Top = 74
   Width = 684
   BorderStyle = bsDialog
   Caption = 'RBN filter criteria'
@@ -9,15 +9,15 @@ object frmRbnFilter: TfrmRbnFilter
   ClientWidth = 684
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '2.0.4.0'
   object GroupBox3: TGroupBox
     Left = 8
     Height = 520
     Top = 80
     Width = 664
     Caption = 'DX station '
-    ClientHeight = 501
-    ClientWidth = 660
+    ClientHeight = 502
+    ClientWidth = 662
     TabOrder = 1
     object GroupBox5: TGroupBox
       Left = 8
@@ -25,14 +25,14 @@ object frmRbnFilter: TfrmRbnFilter
       Top = 96
       Width = 638
       Caption = ' Callsign '
-      ClientHeight = 118
-      ClientWidth = 634
+      ClientHeight = 119
+      ClientWidth = 636
       TabOrder = 5
       object rbAllDx: TRadioButton
         Left = 16
-        Height = 24
+        Height = 23
         Top = 16
-        Width = 44
+        Width = 43
         Caption = 'All'
         Checked = True
         TabOrder = 0
@@ -40,15 +40,15 @@ object frmRbnFilter: TfrmRbnFilter
       end
       object rbOnlyCall: TRadioButton
         Left = 16
-        Height = 24
+        Height = 23
         Top = 48
-        Width = 160
+        Width = 161
         Caption = 'Only these callsigns:'
         TabOrder = 1
       end
       object rbOnlyCallReg: TRadioButton
         Left = 16
-        Height = 24
+        Height = 23
         Top = 80
         Width = 199
         Caption = 'Only these by expression: '
@@ -56,7 +56,7 @@ object frmRbnFilter: TfrmRbnFilter
       end
       object edtDXOnlyCall: TEdit
         Left = 240
-        Height = 27
+        Height = 34
         Top = 48
         Width = 272
         CharCase = ecUppercase
@@ -65,7 +65,7 @@ object frmRbnFilter: TfrmRbnFilter
       end
       object edtDXOnlyExpres: TEdit
         Left = 240
-        Height = 27
+        Height = 34
         Top = 80
         Width = 272
         CharCase = ecUppercase
@@ -84,7 +84,7 @@ object frmRbnFilter: TfrmRbnFilter
         Left = 528
         Height = 17
         Top = 87
-        Width = 67
+        Width = 68
         Caption = 'K[0..9]A?Z'
         ParentColor = False
       end
@@ -93,13 +93,13 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 8
       Height = 17
       Top = 252
-      Width = 70
+      Width = 67
       Caption = 'Continent:'
       ParentColor = False
     end
     object edtDXCont: TEdit
       Left = 96
-      Height = 27
+      Height = 34
       Top = 248
       Width = 280
       CharCase = ecUppercase
@@ -108,7 +108,7 @@ object frmRbnFilter: TfrmRbnFilter
     end
     object edtDXBand: TEdit
       Left = 96
-      Height = 27
+      Height = 34
       Top = 280
       Width = 368
       CharCase = ecUppercase
@@ -119,7 +119,7 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 8
       Height = 17
       Top = 285
-      Width = 45
+      Width = 44
       Caption = 'Bands:'
       ParentColor = False
     end
@@ -127,7 +127,7 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 520
       Height = 17
       Top = 285
-      Width = 101
+      Width = 100
       Caption = '160M, 80M etc.'
       ParentColor = False
     end
@@ -135,13 +135,13 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 8
       Height = 17
       Top = 317
-      Width = 50
+      Width = 47
       Caption = 'Modes:'
       ParentColor = False
     end
     object edtDXMode: TEdit
       Left = 96
-      Height = 27
+      Height = 34
       Top = 312
       Width = 344
       CharCase = ecUppercase
@@ -158,9 +158,9 @@ object frmRbnFilter: TfrmRbnFilter
     end
     object rbIgnWkdHour: TRadioButton
       Left = 8
-      Height = 24
+      Height = 23
       Top = 17
-      Width = 169
+      Width = 167
       Caption = 'Ignore worked in last '
       Checked = True
       TabOrder = 0
@@ -174,7 +174,7 @@ object frmRbnFilter: TfrmRbnFilter
     end
     object edtLastHours: TEdit
       Left = 192
-      Height = 27
+      Height = 34
       Top = 16
       Width = 41
       TabOrder = 1
@@ -184,21 +184,21 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 244
       Height = 17
       Top = 21
-      Width = 229
+      Width = 226
       Caption = 'hours on the same band and mode'
       ParentColor = False
     end
     object rbIgnWkdDate: TRadioButton
       Left = 8
-      Height = 24
+      Height = 23
       Top = 52
-      Width = 163
+      Width = 158
       Caption = 'Ignore worked after '
       TabOrder = 2
     end
     object edtDate: TEdit
       Left = 192
-      Height = 27
+      Height = 34
       Top = 51
       Width = 96
       TabOrder = 3
@@ -206,7 +206,7 @@ object frmRbnFilter: TfrmRbnFilter
     end
     object edtTime: TEdit
       Left = 300
-      Height = 27
+      Height = 34
       Top = 51
       Width = 48
       TabOrder = 4
@@ -216,7 +216,7 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 384
       Height = 17
       Top = 56
-      Width = 159
+      Width = 150
       Caption = '(YYYY-MM-DD, HH:MM)'
       ParentColor = False
     end
@@ -228,31 +228,31 @@ object frmRbnFilter: TfrmRbnFilter
     end
     object chkOnlyeQSL: TCheckBox
       Left = 8
-      Height = 24
+      Height = 23
       Top = 424
-      Width = 170
+      Width = 169
       Caption = 'Show only eQSL users'
       TabOrder = 14
     end
     object chkOnlyLoTW: TCheckBox
       Left = 8
-      Height = 24
+      Height = 23
       Top = 392
-      Width = 174
+      Width = 172
       Caption = 'Show only LoTW users'
       TabOrder = 13
     end
     object chkNewDXConly: TCheckBox
       Left = 8
-      Height = 24
+      Height = 23
       Top = 465
-      Width = 441
+      Width = 431
       Caption = 'Show only spots that are "New one"/"New band"/"New mode" '
       TabOrder = 15
     end
     object edtDXCnty: TEdit
       Left = 96
-      Height = 27
+      Height = 34
       Top = 344
       Width = 184
       CharCase = ecUppercase
@@ -263,7 +263,7 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 8
       Height = 17
       Top = 349
-      Width = 69
+      Width = 66
       Caption = 'Countries:'
       ParentColor = False
     end
@@ -271,13 +271,13 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 320
       Height = 17
       Top = 349
-      Width = 51
+      Width = 49
       Caption = 'or NOT '
       ParentColor = False
     end
     object edtDXCNotCnty: TEdit
       Left = 392
-      Height = 27
+      Height = 34
       Top = 344
       Width = 175
       CharCase = ecUppercase
@@ -306,7 +306,7 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 432
       Height = 17
       Top = 252
-      Width = 94
+      Width = 93
       Caption = 'AF, AN, AS etc'
       ParentColor = False
     end
@@ -326,20 +326,20 @@ object frmRbnFilter: TfrmRbnFilter
     Top = 8
     Width = 576
     Caption = ' Source data from '
-    ClientHeight = 46
-    ClientWidth = 572
+    ClientHeight = 47
+    ClientWidth = 574
     TabOrder = 0
     object Label3: TLabel
       Left = 8
       Height = 17
       Top = 12
-      Width = 70
+      Width = 67
       Caption = 'Continent:'
       ParentColor = False
     end
     object edtSrcCont: TEdit
       Left = 96
-      Height = 27
+      Height = 34
       Top = 8
       Width = 280
       CharCase = ecUppercase
@@ -350,7 +350,7 @@ object frmRbnFilter: TfrmRbnFilter
       Left = 432
       Height = 17
       Top = 12
-      Width = 94
+      Width = 93
       Caption = 'AF, AN, AS etc'
       ParentColor = False
     end

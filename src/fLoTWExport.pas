@@ -108,6 +108,7 @@ var
   date : String = '';
   url  : String = '';
 begin
+  btnUpload.Enabled:=false; //allow only one click
   mStat.Lines.Add('');
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
@@ -192,17 +193,21 @@ begin
     http.Free;
     l.Free;
     m.Free
-  end
+  end;
+  btnUpload.Enabled:=true; //allow only one click
 end;
 
 procedure TfrmLoTWExport.mStatChange(Sender: TObject);
 begin
    with mStat do
      begin
+      //this does not always scroll to end (why?)
       SelStart := GetTextLen;
       SelLength := 0;
       ScrollBy(0, Lines.Count);
       Refresh;
+      //added
+      VertScrollBar.Position:=100000;
      end;
 end;
 
