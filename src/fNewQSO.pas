@@ -1089,7 +1089,7 @@ procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
   lat,long :currency;
 Begin
-  dmUtils.CoordinateFromLocator(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6),lat,long);
+  dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6)),lat,long);
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
   frmGrayline.Refresh;
@@ -5649,7 +5649,7 @@ end;
 
 procedure TfrmNewQSO.sbtnLocatorMapClick(Sender: TObject);
 begin
-  dmUtils.ShowLocatorMapInBrowser(edtGrid.Text)
+  dmUtils.ShowLocatorMapInBrowser(dmUtils.CompleteLoc(edtGrid.Text))
 end;
 
 procedure TfrmNewQSO.tmrESCTimer(Sender: TObject);
@@ -6027,10 +6027,10 @@ begin
       end;
       lblTarSunRise.Caption := TimeToStr(SunRise);
       lblTarSunSet.Caption  := TimeToStr(SunSet);
-      dmUtils.DistanceFromCoordinate(myloc,lat,long,qra,azim)
+      dmUtils.DistanceFromCoordinate(dmUtils.CompleteLoc(myloc),lat,long,qra,azim)
     end
     else
-      dmUtils.DistanceFromPrefixMyLoc(myloc,edtDXCCRef.Text, qra, azim)
+      dmUtils.DistanceFromPrefixMyLoc(dmUtils.CompleteLoc(myloc),edtDXCCRef.Text, qra, azim)
   end;
   if ((qra <>'') and (azim<>'')) then
   begin
@@ -6670,7 +6670,7 @@ begin
   chkAutoMode.Checked := cqrini.ReadBool('NewQSO','AutoMode',True);
   if dmUtils.IsLocOK(myloc) then
   begin
-    dmUtils.CoordinateFromLocator(myloc,lat,long);
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc) ,lat,long);
     dmUtils.CalcSunRiseSunSet(lat,long,SunRise,SunSet);
     if not inUTC then
     begin
