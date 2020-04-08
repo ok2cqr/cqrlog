@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  uColorMemo,lclproc, Math, lcltype, ComCtrls, ActnList;
+  uColorMemo,lclproc, Math, lcltype, ComCtrls, ActnList, StdCtrls;
 
 type
   TBandMapClick = procedure(Sender:TObject;Call,Mode : String; Freq : Currency) of object;
@@ -64,15 +64,32 @@ type
     acBandMap: TActionList;
     acFilter: TAction;
     acFilterSettings: TAction;
+    acClear: TAction;
+    acFont: TAction;
+    acHelp: TAction;
+    btnEatFocus: TButton;
+    dlgFont: TFontDialog;
     imglBandMap: TImageList;
+    lbStop: TLabel;
     Panel1: TPanel;
     pnlBandMap: TPanel;
     toolBandMap: TToolBar;
     tbtnFilter: TToolButton;
     ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    procedure acClearExecute(Sender: TObject);
     procedure acFilterExecute(Sender: TObject);
+    procedure acFontExecute(Sender: TObject);
+    procedure acHelpExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -209,14 +226,15 @@ end;
 
 procedure TfrmBandMap.ClearAll;
 begin
-  BandMap.RemoveAllLines
+  BandMap.RemoveAllLines;
 end;
 
 function TfrmBandMap.FormatItem(freq : Double; Call, SplitInfo : String; fromNewQSO : Boolean) : String;
 begin
-  if fromNewQSO then
-    call := '*'+call;
-  Result := SetSizeLeft(FloatToStrF(freq,ffFixed,8,3),12)+SetSizeLeft(call,12)+' '+ SplitInfo
+  if fromNewQSO then call := '*'+call;
+  Result := SetSizeLeft(FloatToStrF(freq,ffFixed,8,3),cqrini.ReadInteger('BandMapFilter','FreqWidth',12))+
+            SetSizeLeft(call,cqrini.ReadInteger('BandMapFilter','CallWidth',12))+' '+
+            SplitInfo
 end;
 
 
@@ -225,7 +243,7 @@ var
   i : Integer;
   s : String;
 begin
-  if Active then exit; //do not refresh the window when is activated (user is scrolling)
+  if Active then exit; //do not refresh the window when it is activated (user is scrolling)
   FBandFilter := UpperCase(FBandFilter);
   FModeFilter := UpperCase(FModeFilter);
   BandMap.DisableAutoRepaint(True);
@@ -599,6 +617,11 @@ begin
   BandMapThread.Start
 end;
 
+procedure TfrmBandMap.FormDeactivate(Sender: TObject);
+begin
+  lbStop.Visible:=false;
+end;
+
 procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmBandMap);
@@ -617,9 +640,43 @@ begin
       LoadSettings
   finally
     FreeAndNil(f)
-  end
+  end ;
+  btnEatFocus.SetFocus
+  end;
+
+procedure TfrmBandMap.acHelpExecute(Sender: TObject);
+begin
+   //point to special html reload file because '#bh19' cannot be passed as OpenInApp link parameter (why?)
+   dmUtils.OpenInApp(dmData.HelpDir+'h21bh19.html') ;
+   btnEatFocus.SetFocus
 end;
 
+procedure TfrmBandMap.FormActivate(Sender: TObject);
+begin
+  lbStop.Visible:=True;
+end;
+
+procedure TfrmBandMap.acClearExecute(Sender: TObject);
+var
+   i: word;
+begin
+  ClearAll;
+  for i:=1 to MAX_ITEMS do
+   begin
+      EnterCriticalSection(BandMapCrit);
+    try
+      frmBandMap.BandMapItems[i].Freq := 0;
+      frmBandMap.BandMapItems[i].Call := '';
+      frmBandMap.BandMapItems[i].Mode := '';
+      frmBandMap.BandMapItems[i].Band := '';
+      frmBandMap.BandMapItems[i].Flag := ''
+    finally
+        BandMapItemsCount := 0;
+        LeaveCriticalSection(BandMapCrit)
+    end;
+   end;
+  btnEatFocus.SetFocus
+end;
 procedure TfrmBandMap.LoadFonts;
 var
   f      : TFont;
@@ -633,6 +690,24 @@ begin
   finally
     f.Free
   end
+end;
+
+procedure TfrmBandMap.acFontExecute(Sender: TObject);
+var
+  f      : TFont;
+begin
+  dmUtils.LoadFontSettings(self);
+  f := TFont.Create;
+    f.Name := cqrini.ReadString('BandMap','BandFont','Monospace');
+    f.Size := cqrini.ReadInteger('BandMap','FontSize',8);
+  dlgFont.Font :=(f);
+  if dlgFont.Execute then
+  begin
+    cqrini.WriteString('BandMap','BandFont',dlgFont.Font.Name);
+    cqrini.WriteInteger('BandMap','FontSize',dlgFont.Font.Size);
+    LoadFonts;
+  end;
+  btnEatFocus.SetFocus
 end;
 
 procedure TfrmBandMap.FormDestroy(Sender: TObject);

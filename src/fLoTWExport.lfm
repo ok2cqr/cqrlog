@@ -12,7 +12,7 @@ object frmLoTWExport: TfrmLoTWExport
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.4.0'
   object pgLoTWExport: TPageControl
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -38,7 +38,7 @@ object frmLoTWExport: TfrmLoTWExport
         Top = 0
         Width = 461
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 86
+        ClientHeight = 70
         ClientWidth = 459
         TabOrder = 0
         object rbFileExportAll: TRadioButton
@@ -77,7 +77,7 @@ object frmLoTWExport: TfrmLoTWExport
         Width = 460
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 6
-        ClientHeight = 103
+        ClientHeight = 87
         ClientWidth = 458
         TabOrder = 1
         object Label1: TLabel
@@ -130,7 +130,7 @@ object frmLoTWExport: TfrmLoTWExport
         Width = 461
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 6
-        ClientHeight = 54
+        ClientHeight = 38
         ClientWidth = 459
         TabOrder = 2
         object chkFileMarkAfterExport: TCheckBox

@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, RegExpr;
+  ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, ExtCtrls,
+  RegExpr;
 
 const
   C_MAX_ROWS = 1000; //max lines in the list of RBN spots
@@ -77,14 +78,19 @@ type
     acRbnServer: TAction;
     acScrollDown : TAction;
     acHelp : TAction;
+    acClear: TAction;
     btnEatFocus : TButton;
     dlgFont: TFontDialog;
     imgRbnMonitor: TImageList;
+    lbStop: TLabel;
     sbRbn: TStatusBar;
     sgRbn: TStringGrid;
+    tmrUnfocus: TTimer;
     ToolBar1: TToolBar;
     tbtnConnect: TToolButton;
     ToolButton1 : TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -92,6 +98,8 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8 : TToolButton;
+    ToolButton9: TToolButton;
+    procedure acClearExecute(Sender: TObject);
     procedure acConnectExecute(Sender: TObject);
     procedure acDisconnectExecute(Sender: TObject);
     procedure acFilterExecute(Sender: TObject);
@@ -99,16 +107,21 @@ type
     procedure acHelpExecute(Sender : TObject);
     procedure acRbnServerExecute(Sender: TObject);
     procedure acScrollDownExecute(Sender : TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure FormShow(Sender: TObject);
     procedure sgRbnDblClick(Sender: TObject);
     procedure sgRbnDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
       aState: TGridDrawState);
+    procedure sgRbnEnter(Sender: TObject);
+    procedure sgRbnExit(Sender: TObject);
     procedure sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
       Index: Integer);
+    procedure tmrUnfocusTimer(Sender: TObject);
   private
     RbnMonThread : TRbnThread;
     lTelnet      : TLTelnetClientComponent;
@@ -484,10 +497,18 @@ begin
   btnEatFocus.SetFocus
 end;
 
+procedure TfrmRbnMonitor.acClearExecute(Sender: TObject);
+var l: integer;
+begin
+  for l:= sgRbn.rowcount - 1 downto 1 do
+    sgRbn.DeleteRow(l);
+end;
+
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
   lTelnet.Disconnect();
   RbnMonThread.Terminate;
+  freeAndNil(RbnMonThread);
   tbtnConnect.Action := acConnect
 end;
 
@@ -517,7 +538,7 @@ end;
 
 procedure TfrmRbnMonitor.acHelpExecute(Sender : TObject);
 begin
-  ShowMessage('Not implemented, yet')
+  dmUtils.OpenInApp(dmData.HelpDir+'h31.html')
 end;
 
 procedure TfrmRbnMonitor.acRbnServerExecute(Sender: TObject);
@@ -569,6 +590,7 @@ begin
   lTelnet.OnDisconnect := @lDisconnect;
   lTelnet.OnReceive    := @lReceive
 end;
+
 
 procedure TfrmRbnMonitor.FormDestroy(Sender: TObject);
 begin
@@ -629,12 +651,45 @@ begin
    end }
 end;
 
+procedure TfrmRbnMonitor.sgRbnEnter(Sender: TObject);
+begin
+   lbStop.Visible:=true;
+end;
+
+procedure TfrmRbnMonitor.sgRbnExit(Sender: TObject);
+begin
+  lbStop.Visible:=false;
+end;
+
 procedure TfrmRbnMonitor.sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
   Index: Integer);
 begin
   btnEatFocus.SetFocus
 end;
 
+procedure TfrmRbnMonitor.FormDeactivate(Sender: TObject);
+begin
+   lbStop.Visible:=false;
+end;
+
+//-------------------------------------------------
+//if sgRbn cell is selected, then rbn monitor form looses focus and when it gets focus again
+//another cell is randomly selected. There is no way to unselect column when from looses focus.
+//(or then there is bug because it does not work in any way)
+//ScrollDown releases focus but it cannot be called when
+//form gets focus or it causes focus loop. Small delay fixes it and prevents loop.
+
+procedure TfrmRbnMonitor.FormActivate(Sender: TObject);
+begin
+  tmrUnfocus.Enabled:=true;
+end;
+
+procedure TfrmRbnMonitor.tmrUnfocusTimer(Sender: TObject);
+begin
+  tmrUnfocus.Enabled:=false;
+  acScrollDownExecute(nil);
+end;
+//-------------------------------------------------
 procedure TfrmRbnMonitor.LoadConfigToThread;
 begin
   if Assigned(RbnMonThread) then
@@ -663,7 +718,8 @@ begin
     RbnMonThread.fil_eQSLOnly := cqrini.ReadBool('RBNFilter','eQSLOnly',False);
 
     RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False)
-  end
+  end;
+
 end;
 
 procedure TfrmRbnMonitor.SynRbnMonitor(RbnSpot : TRbnSpot);

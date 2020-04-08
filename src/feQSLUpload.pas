@@ -30,6 +30,7 @@ type
     procedure btnUploadClick(Sender : TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormShow(Sender : TObject);
+    procedure mStatChange(Sender: TObject);
   private
     FileSize     : Int64;
     QSOCount     : Integer;
@@ -227,6 +228,20 @@ begin
       rbWebExportNotExported.Checked:=true;
     end;
 
+end;
+
+procedure TfrmeQSLUpload.mStatChange(Sender: TObject);
+begin
+  with mStat do
+     begin
+      //this does not always scroll to end (why?)
+      SelStart := GetTextLen;
+      SelLength := 0;
+      ScrollBy(0, Lines.Count);
+      Refresh;
+      //added
+      VertScrollBar.Position:=100000;
+     end;
 end;
 
 procedure TfrmeQSLUpload.FormClose(Sender : TObject;

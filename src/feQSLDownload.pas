@@ -30,6 +30,7 @@ type
     procedure btnPreferencesClick(Sender : TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormShow(Sender : TObject);
+    procedure mStatChange(Sender: TObject);
   private
     Done     : Boolean;
     FileSize : Int64;
@@ -54,6 +55,20 @@ begin
   edtDateFrom.Text   := cqrini.ReadString('eQSLImp','DateFrom',edtDateFrom.Text);
   edtQTH.Text        := cqrini.ReadString('eQSL','QTH','');
   chkShowNew.Checked := cqrini.ReadBool('eQSLImp','ShowNewQSOs',True)
+end;
+
+procedure TfrmeQSLDownload.mStatChange(Sender: TObject);
+begin
+  with mStat do
+     begin
+      //this does not always scroll to end (why?)
+      SelStart := GetTextLen;
+      SelLength := 0;
+      ScrollBy(0, Lines.Count);
+      Refresh;
+      //added
+      VertScrollBar.Position:=100000;
+     end;
 end;
 
 procedure TfrmeQSLDownload.FormClose(Sender : TObject;
