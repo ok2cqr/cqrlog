@@ -1061,7 +1061,7 @@ procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
   lat,long :currency;
 Begin
-  dmUtils.CoordinateFromLocator(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6),lat,long);
+  dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6)),lat,long);
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
   frmGrayline.Refresh;
@@ -3482,8 +3482,16 @@ end;
 
 procedure TfrmNewQSO.edtGridExit(Sender: TObject);
 begin
-  CalculateDistanceEtc;
-  sbtnLocatorMap.Visible := True;
+  if dmUtils.isLocOK(edtGrid.Text) then
+    begin
+     CalculateDistanceEtc;
+     sbtnLocatorMap.Visible := True;
+    end
+   else
+    begin
+     edtGrid.Font.Color:=clRed;
+     edtGrid.Font.Style:= [fsBold];
+    end;
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
@@ -4204,6 +4212,8 @@ end;
 
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
 begin
+  edtGrid.Font.Color:=clDefault;
+  edtGrid.Font.Style:= [];
   edtGrid.SelectAll
 end;
 
@@ -5589,7 +5599,7 @@ end;
 
 procedure TfrmNewQSO.sbtnLocatorMapClick(Sender: TObject);
 begin
-  dmUtils.ShowLocatorMapInBrowser(edtGrid.Text)
+  dmUtils.ShowLocatorMapInBrowser(dmUtils.CompleteLoc(edtGrid.Text))
 end;
 
 procedure TfrmNewQSO.tmrESCTimer(Sender: TObject);
@@ -5921,8 +5931,8 @@ begin
   azim  := '';
   if (dmUtils.IsLocOK(edtGrid.Text) and dmUtils.IsLocOK(myloc)) then
   begin
-    dmUtils.DistanceFromLocator(myloc,edtGrid.Text, qra, azim);
-    dmUtils.CoordinateFromLocator(edtGrid.Text,lat,long);
+    dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(myloc),dmUtils.CompleteLoc(edtGrid.Text), qra, azim);
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(edtGrid.Text),lat,long);
     dmUtils.CalcSunRiseSunSet(lat,long,SunRise,SunSet);
     if not inUTC then
     begin
@@ -5967,17 +5977,17 @@ begin
       end;
       lblTarSunRise.Caption := TimeToStr(SunRise);
       lblTarSunSet.Caption  := TimeToStr(SunSet);
-      dmUtils.DistanceFromCoordinate(myloc,lat,long,qra,azim)
+      dmUtils.DistanceFromCoordinate(dmUtils.CompleteLoc(myloc),lat,long,qra,azim)
     end
     else
-      dmUtils.DistanceFromPrefixMyLoc(myloc,edtDXCCRef.Text, qra, azim)
+      dmUtils.DistanceFromPrefixMyLoc(dmUtils.CompleteLoc(myloc),edtDXCCRef.Text, qra, azim)
   end;
   if ((qra <>'') and (azim<>'')) then
   begin
     if cqrini.ReadBool('Program','ShowMiles',False) then
-      lblQRA.Caption := FloatToStr(dmUtils.KmToMiles(StrToFloat(qra))) + ' miles'
+      lblQRA.Caption := FloatToStr(dmUtils.KmToMiles(StrToFloat(qra))) + 'mi'
     else
-      lblQRA.Caption := qra + ' km';
+      lblQRA.Caption := qra + 'km';
     lblAzi.Caption := azim;
     Azimuth := azim
   end;
@@ -6610,7 +6620,7 @@ begin
   chkAutoMode.Checked := cqrini.ReadBool('NewQSO','AutoMode',True);
   if dmUtils.IsLocOK(myloc) then
   begin
-    dmUtils.CoordinateFromLocator(myloc,lat,long);
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(myloc) ,lat,long);
     dmUtils.CalcSunRiseSunSet(lat,long,SunRise,SunSet);
     if not inUTC then
     begin

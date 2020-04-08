@@ -277,7 +277,7 @@ begin
          enddate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
       if length(loc) = 4 then loc := loc +'LL';
       qrb:='';
-      dmUtils.DistanceFromLocator(myloc,loc, qrb, qrc);
+      dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(myloc),loc, qrb, qrc);
       sum := sum + StrToInt(qrb);
       if StrToInt(qrb) > odx then
       begin

@@ -2387,7 +2387,7 @@ function TfrmMain.CalcQrb(Myloc,loc:string;showUnits:boolean):string;
      if length(Myloc) = 4 then Myloc := Myloc +'LL';
      if length(loc) = 4 then loc := loc +'LL';
      qrb:='';
-     dmUtils.DistanceFromLocator(Myloc,loc,qrb,qrc);
+     dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(Myloc),loc,qrb,qrc);
      if qrb <>'' then
       if cqrini.ReadBool('Program','ShowMiles',False) then
         Begin
