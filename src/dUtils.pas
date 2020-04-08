@@ -1104,8 +1104,6 @@ var
   qra1: string;
   azim1: string;
 begin
-  my_loc := CompleteLoc(my_loc);
-
   if not IsLocOK(my_loc) then
     exit;
 
@@ -3476,7 +3474,7 @@ var
   AProcess: TProcess;
   myloc: string = '';
 begin
-  myloc := dmUtils.CompleteLoc(cqrini.ReadString('Station', 'LOC', ''));
+  myloc := cqrini.ReadString('Station', 'LOC', '');
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
