@@ -559,7 +559,7 @@ begin
   end;
   s := '';
   d := '';
-  dmUtils.CoordinateFromLocator(my_loc,lat,long);
+  dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(my_loc),lat,long);
   lat := lat*-1;
   lat1 := lat1*-1;
   ob^.jachcucaru(true,long,lat,long1,lat1);
