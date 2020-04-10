@@ -300,7 +300,7 @@ var
       SaveTag(dmUtils.StringToADIF('<OPERATOR',cqrini.ReadString('Station', 'Call', '')),leng);
    if ExDistance then
     begin
-      dmUtils.DistanceFromLocator(MyLoc,Loc,qrb,qrc);
+      dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(MyLoc),Loc,qrb,qrc);
       if qrb <> '' then
         SaveTag(dmUtils.StringToADIF('<DISTANCE',qrb),leng);
     end;
@@ -765,7 +765,7 @@ var
     if ExDistance then
     begin
       qrb:='';
-      dmUtils.DistanceFromLocator(Myloc,loc,qrb,qrc);
+      dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(Myloc),loc,qrb,qrc);
       if cqrini.ReadBool('Program','ShowMiles',False) then
         if qrb <> '' then
                 qrb :=  FloatToStr(dmUtils.KmToMiles(StrToInt(qrb)));

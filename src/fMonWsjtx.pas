@@ -245,7 +245,7 @@ var lat,lon :currency;
 Begin
     if cqrini.ReadInteger('xplanet','ShowFrom',0) <> 2 then exit;  //dxclust =0, bandmap=1
 
-    dmUtils.CoordinateFromLocator(loc,lat,lon);
+    dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(loc),lat,lon);
     slat:= FloatToStrF(lat,ffFixed,4,2);
     slon:= FloatToStrF(lon,ffFixed,4,2);
     if LocalDbg then

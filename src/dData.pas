@@ -2503,7 +2503,7 @@ var
         if length(Myloc) = 4 then Myloc := Myloc +'LL';
         loc := Q.Fields[1].AsString;
         if length(loc) = 4 then loc := loc +'LL';
-        dmUtils.DistanceFromLocator(Myloc,loc,qrb,qrc);
+        dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(Myloc),loc,qrb,qrc);
         if StrToIntDef(qrb,0) > LongestDist then  LongestDist := StrToIntDef(qrb,0);
         SumDist:= SumDist + StrToIntDef(qrb,0);
   end;
