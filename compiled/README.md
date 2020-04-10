@@ -50,9 +50,22 @@ BINARIES:
 **All binaries must be copied over complete, working, official installation. These do not work alone.**
 ========================================================================================================
 
+## -------------------SCRIPT-INSTALL--------------------
+You will find a bash script updateCqrlog.sh from this GitHub folder. 
+Download it with one cqrX.zip (2,3 or 5) and help.tgz and place all these 3 files  to folder /tmp
+Check that you can execute  updateCqrlog.sh by giving a command:
+    
+    chmod a+x /tmp/updateCqrlog.sh
 
+Then start it with command:
 
-## ------------------INSTALL--------------------------
+    /tmp/updateCqrlog.sh
+    
+I have tested this script many times while writing it. How ever it may fail with your setup.
+So you USE IT ON YOUR OWN RISK !
+Other way to update is to do it manually as follows:
+
+## -------------------MANUAL-INSTALL--------------------
 
 (you need to become root (sudo) using sudo to do following):
 
@@ -85,7 +98,7 @@ Then check execution rights.
  
  These binaries also include latest official source updates up to commit:
  
-  #261
+  #267
  
  To see what are the latest official updates look at https://github.com/ok2cqr/cqrlog/commits/master
 
@@ -157,24 +170,8 @@ LOG OR DATABASE SERVER CHANGE
   - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
 
 LAST UPDATES
-  - ver 2.4.0(115)
-  lotw/eqsl: …
-  -  Having continuous problems here with lotw upload monitor scrolling to last line. Now added setting of vertical scrollbar to huge value in MStatChange routine.
-  -  Added same mStatChange scrolling procedure to lotw download eqsl up and download.
-  -  Added disable_button "upload"(after click) in lotw upload to prevent pressing it moren than once. If lotw server does not reply in time there is temptation to press it "for sure" again. May lead to duplicate upload requests.
-
- RBN monitor:
-  -  Added tool buttons "clean" (wipe the whole grid) and "Help"
-  -  Fixed program crash if RBN has connected, then disconnected and after that filter is changed. RBNThread free_on_terminate does not nul it and it causes halt when exit from filter settings. FreeAndNil after disconnect removes this problem.
-  -  Fixed mouse-on hint texts
-
-Bandmap:
-  -  Added tool buttons "font", "clean" and "help". Clean button cleans not just display but also the spot array.
-  -  Added to filter settings and to preferences an ability to adjust frequency and callsign widths in right padding. Some calls are now very long like TC1STAYHOME and user may want to adjust the space. Also if only HF is used, frequency width can be narrower. Now it is up to user.
-  -  Added "STOP" indicator to note user that new spots are not added when band map window is focused.
-
-Common:
-  - Help files fixed and new help created for RBN monitor
+  - ver 2.4.0(116)
+    includes offical source up to commit #267
   
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 
