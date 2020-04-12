@@ -52,17 +52,43 @@ BINARIES:
 
 ## -------------------SCRIPT-INSTALL--------------------
 You will find a bash script updateCqrlog.sh from this GitHub folder. 
-Download it with one cqrX.zip (2,3 or 5) and help.tgz and place all these 3 files  to folder /tmp
-Check that you can execute  updateCqrlog.sh by giving a command:
+
+Script will check that you have downloaded all 3 files to /tmp folder, then it checks that you have cqrlog and cqrlog help in usual places (/usr/bin and /usr/share/cqrlog/).
+If all is ok it will make datestamped backups from cqrlog binary, cqrlog help and your logs and settings (~/.config/cqrlog). 
+After that it will replace cqrlog and cqrlog help with new files.
+
+Use it this way:
+
+Download cqrX.zip (X= 2 ,3 or 5) of your choice:
+   - click blue link of that file. New page opens. You see that there is a button "Download" click it.
+     Your browser downloads the zip. If it asks where to save, select folder /tmp
+   - Do the same with file help.tgz
+   - Click next link updateCqrlog.sh. File opens in view mode. There is a button "Raw", click it.
+     File opens in plain mode to web browser.
+     Anywhere on that page do a right click and you get dialog from where you find selection 
+     "Save with name" (or similar). Click that and select folder /tmp for saving. Dialog should offer 
+     updateCqrlog.sh as the save name.
+   - If your browser downloaded cqrX.zip and help.tgz without asking a save folder you find them from your download
+     folder. You must move them now to /tmp folder.
+
+Now you should have all 3 files (cqrX.zip, help.tgz and updateCqrlog.sh) in /tmp folder.
+
+Open command console.
+
+Check that you can execute updateCqrlog.sh by giving a command:
     
     chmod a+x /tmp/updateCqrlog.sh
 
-Then start it with command:
+Then start updateCqrlog.sh script with command:
 
     /tmp/updateCqrlog.sh
     
+Script stops every now and then to let you read what has been done and what to do next. You must press ENTER to continue running. 
+
 I have tested this script many times while writing it. How ever it may fail with your setup.
+
 So you USE IT ON YOUR OWN RISK !
+
 Other way to update is to do it manually as follows:
 
 ## -------------------MANUAL-INSTALL--------------------
