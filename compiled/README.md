@@ -11,7 +11,7 @@ They contain all accepted pull requests from official source (that may not be re
    REPEAT: **ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!**
    
    If you use script-install (see below) it makes backups for you.
-   Otherwise see "manual-install (see below).
+   Otherwise see "manual-install (below).
    
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
