@@ -177,20 +177,34 @@ begin
 end;
 procedure TfrmRotControl.btnLeftClick(Sender: TObject);
 begin
+   rotor.StopRot;
+   tmrStopRot.Enabled:=False;
+   sleep(100);
+   Application.ProcessMessages;
    rotor.LeftRot;
    tmrStopRot.Enabled:=True;
    btnLeft.Font.Color:=clGreen;
    btnLeft.Font.Style:=btnLeft.Font.Style+[fsBold];
    btnLeft.Repaint;
+   btnRight.Font.Color:=clDefault;
+   btnRight.Font.Style:=btnRight.Font.Style-[fsBold];
+   btnRight.Repaint;
 end;
 
 procedure TfrmRotControl.btnRightClick(Sender: TObject);
 begin
+   rotor.StopRot;
+   tmrStopRot.Enabled:=False;
+   sleep(100);
+   Application.ProcessMessages;
    rotor.RightRot;
    tmrStopRot.Enabled:=True;
    btnRight.Font.Color:=clGreen;
    btnRight.Font.Style:=btnRight.Font.Style+[fsBold];
    btnRight.Repaint;
+   btnLeft.Font.Color:=clDefault;
+   btnLeft.Font.Style:=btnLeft.Font.Style-[fsBold];
+   btnLeft.Repaint;
 end;
 
 procedure TfrmRotControl.btnStopClick(Sender: TObject);
