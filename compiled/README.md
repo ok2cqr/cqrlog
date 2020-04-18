@@ -1,3 +1,7 @@
+Latest cqrlog alpha test binaries can be found from this folder.
+This folder holds ready compiled binary files of source "loc_testing" that is the version of cqrlog that I am using myself daily.
+They contain all accepted pull requests from official source (that may not be released offically yet) plus some test code that is not pull requested yet (and may not be pull requested ever)
+
 ------------------WARNINGS-----------------
 ===========================================
    
@@ -6,25 +10,25 @@
    ALWAYS !
    REPEAT: **ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!**
    
-   Simplest way is to copy whole folder with console command
+   If you use script-install (see below) it makes backups for you.
+   Otherwise see "manual-install (below).
    
-     cp -a ~/.config/cqrlog ~/.config/cqrlog_save
-
-   After doing this, if you ever need to restore old settings and logs, just give console commands
-   
-     rm -rf ~/.config/cqrlog
-     cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
-   
-  
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
-   
-   
-Latest cqrlog alpha test binaries can be found from this folder.
-This folder holds ready compiled binary files of source "loc_testing" that is the version of cqrlog that I am using myself daily.
-They contain all accepted pull requests from official source (that may not be released offically yet) plus some test code that is not pull requested yet (and may not be pull requested ever)
+
+BINARIES:
+---------
+
+  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )**
+  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (like official release of cqrlog, poorly tested)**
+  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
+  - **help.tgz  holds latest help files**
 
 
+**All binaries must be copied over complete, working, official installation. These do not work alone.**
+========================================================================================================
+   
+   
 If you like to test QT5 version you need to install libqt5pas.
 libqt5pas is a library that bridges between Qt5 and your Lazarus application. 
 Newer distros have working versions available in their repositories.
@@ -38,35 +42,60 @@ Note that some long term release distributions, ie Ubuntu 18.04 have an incompat
 You will see an error message and a crash if your app uses TMemo. 
 You should install the downloaded packages mentioned below or build your own new version of the library.
 
-BINARIES:
----------
-
-  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )**
-  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (like official release of cqrlog, poorly tested)**
-  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
-  - **help.tgz  holds latest help files**
-
-
-**All binaries must be copied over complete, working, official installation. These do not work alone.**
-========================================================================================================
 
 ## -------------------SCRIPT-INSTALL--------------------
 You will find a bash script updateCqrlog.sh from this GitHub folder. 
-Download it with one cqrX.zip (2,3 or 5) and help.tgz and place all these 3 files  to folder /tmp
-Check that you can execute  updateCqrlog.sh by giving a command:
+
+Script will check that you have downloaded all 3 files to /tmp folder, then it checks that you have cqrlog and cqrlog help in usual places (/usr/bin and /usr/share/cqrlog/).
+If all is ok it will make datestamped backups from cqrlog binary, cqrlog help and your logs and settings (~/.config/cqrlog). 
+After that it will replace cqrlog and cqrlog help with new files.
+
+Use it this way:
+
+Download cqrX.zip (X= 2 ,3 or 5) of your choice:
+   - click blue link of that file. New page opens. You see that there is a button "Download" click it.
+     Your browser downloads the zip. If it asks where to save, select folder /tmp
+   - Do the same with file help.tgz
+   - Click next link updateCqrlog.sh. File opens in view mode. There is a button "Raw", click it.
+     File opens in plain mode to web browser.
+     Anywhere on that page do a right click and you get dialog from where you find selection 
+     "Save with name" (or similar). Click that and select folder /tmp for saving. Dialog should offer 
+     updateCqrlog.sh as the save name.
+   - If your browser downloaded cqrX.zip and help.tgz without asking a save folder you find them from your download
+     folder. You must move them now to /tmp folder.
+
+Now you should have all 3 files (cqrX.zip, help.tgz and updateCqrlog.sh) in /tmp folder.
+
+Open command console.
+
+Check that you can execute updateCqrlog.sh by giving a command:
     
     chmod a+x /tmp/updateCqrlog.sh
 
-Then start it with command:
+Then start updateCqrlog.sh script with command:
 
     /tmp/updateCqrlog.sh
     
+Script stops every now and then to let you read what has been done and what to do next. You must press ENTER to continue running. 
+
 I have tested this script many times while writing it. How ever it may fail with your setup.
+
 So you USE IT ON YOUR OWN RISK !
+
 Other way to update is to do it manually as follows:
 
 ## -------------------MANUAL-INSTALL--------------------
+  
+  Simplest way to backup everything is to copy whole folder with console command
+   
+     cp -a ~/.config/cqrlog ~/.config/cqrlog_save
 
+   After doing this, if you ever need to restore old settings and logs, just give console commands
+   
+     rm -rf ~/.config/cqrlog
+     cp -a ~/.config/cqrlog_save  ~/.config/cqrlog
+   
+  
 (you need to become root (sudo) using sudo to do following):
 
 #### -------------INSTALL NEW HELP FILES----------------
