@@ -120,16 +120,24 @@ Then check execution rights.
     sudo cp /tmp/cqrlog /usr/bin/
     sudo chmod a+x /usr/bin/cqrlog
 
-## ABOUT:
-
- What is new and not included in official cqrlog GitHub source is listed below.
- To see updates in this alpha version look at https://github.com/OH1KH/cqrlog/commits/loc_testing
+## ABOUT THIS ALPHA TEST VERSION:
  
- These binaries also include latest official source updates up to commit:
+ These alpha test binaries also include latest official source updates up to commit:
  
   #267
  
  To see what are the latest official updates look at https://github.com/ok2cqr/cqrlog/commits/master
+
+ To see updates in this alpha version look at https://github.com/OH1KH/cqrlog/commits/loc_testing
+
+LAST UPDATES
+  - ver 2.4.0(117)
+  - minor fixes, pull requested but not yet accepted to official version
+     - https://github.com/ok2cqr/cqrlog/pull/270
+     - https://github.com/ok2cqr/cqrlog/pull/271
+
+
+ What is new and not included (as pull requests) into official cqrlog GitHub source is listed below.
 
 QT5 VERSION
 
@@ -198,9 +206,6 @@ LOG OR DATABASE SERVER CHANGE
   - log change should work now better (NewQSO/File/Open or create new log/Open)
   - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
 
-LAST UPDATES
-  - ver 2.4.0(116)
-    includes offical source up to commit #267
   
 Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
 
