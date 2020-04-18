@@ -492,7 +492,7 @@ begin
   if not TryStrToInt(Copy(server,Pos(':',server)+1,6),port) then
     port := 7000;
   lTelnet.Port := port;
-  Writeln(server,'   ',port);
+  if dmData.DebugLevel>=2 then Writeln(server,'   ',port);
   lTelnet.Connect;
   btnEatFocus.SetFocus
 end;
@@ -506,10 +506,10 @@ end;
 
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
-  lTelnet.Disconnect();
   RbnMonThread.Terminate;
   freeAndNil(RbnMonThread);
-  tbtnConnect.Action := acConnect
+  tbtnConnect.Action := acConnect;
+  sbRbn.Panels[0].Text := 'Disconected'
 end;
 
 procedure TfrmRbnMonitor.acFilterExecute(Sender: TObject);
@@ -654,11 +654,13 @@ end;
 procedure TfrmRbnMonitor.sgRbnEnter(Sender: TObject);
 begin
    lbStop.Visible:=true;
+   ToolBar1.Repaint;
 end;
 
 procedure TfrmRbnMonitor.sgRbnExit(Sender: TObject);
 begin
   lbStop.Visible:=false;
+  ToolBar1.Repaint;
 end;
 
 procedure TfrmRbnMonitor.sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;

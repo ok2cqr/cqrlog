@@ -1,5 +1,5 @@
 object frmRbnMonitor: TfrmRbnMonitor
-  Left = 0
+  Left = 107
   Height = 602
   Top = 145
   Width = 665
@@ -529,7 +529,7 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object tmrUnfocus: TTimer
     Enabled = False
-    Interval = 50
+    Interval = 60
     OnTimer = tmrUnfocusTimer
     left = 484
     top = 85
