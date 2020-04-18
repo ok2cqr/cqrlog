@@ -632,8 +632,13 @@ begin
 end;
 
 procedure TfrmRbnMonitor.sgRbnDblClick(Sender: TObject);
+var i:real;
+    f:TFormatSettings;
 begin
-  frmNewQSO.NewQSOFromSpot(sgRbn.Cells[2,sgRbn.Row],sgRbn.Cells[1,sgRbn.Row],sgRbn.Cells[3,sgRbn.Row],True)
+  //if (sgRbn.Cells[1,sgRbn.Row]<>'Freq') then  //easy way, but works only with header
+  f.DecimalSeparator := '.';
+  if TryStrToFloat( sgRbn.Cells[1,sgRbn.Row],i,f) then
+    frmNewQSO.NewQSOFromSpot(sgRbn.Cells[2,sgRbn.Row],sgRbn.Cells[1,sgRbn.Row],sgRbn.Cells[3,sgRbn.Row],True)
 end;
 
 procedure TfrmRbnMonitor.sgRbnDrawCell(Sender: TObject; aCol, aRow: Integer;
