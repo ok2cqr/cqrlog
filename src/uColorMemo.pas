@@ -6,6 +6,7 @@ other changes by Petr Hlozek, OK7AN
   - public functions and constants renamed to English
 
 Get info from spot, OH1KH
+click on empty memo crashes, fix OH1KH
 }
 
 {$mode objfpc}{$H+}
@@ -680,7 +681,8 @@ var z,c,v,a:longint;
      bl1:=x;bl2:=x; //select line under cursor
      nactiblok(x,c);
      ua:='';
-     for v:=x to c do ua:=ua+vety[v]^.te+#13#10;
+     if vetp < 0 then exit; //otherwise double click on empty memo crashes program (band map, dx cluster)
+      for v:=x to c do ua:=ua+vety[v]^.te+#13#10;
      //writeln('Spot line: ',ua);
      if pos('DX de',ua)=1 then   //normal DX spot
       Begin
