@@ -509,7 +509,7 @@ begin
   RbnMonThread.Terminate;
   freeAndNil(RbnMonThread);
   tbtnConnect.Action := acConnect;
-  sbRbn.Panels[0].Text := 'Disconected'
+  sbRbn.Panels[0].Text := 'Disconnected'
 end;
 
 procedure TfrmRbnMonitor.acFilterExecute(Sender: TObject);
