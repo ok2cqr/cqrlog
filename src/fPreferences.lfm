@@ -1,12 +1,12 @@
 object frmPreferences: TfrmPreferences
   Left = 82
   Height = 659
-  Top = 171
+  Top = 114
   Width = 1098
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 897
-  VertScrollBar.Page = 550
+  HorzScrollBar.Page = 915
+  VertScrollBar.Page = 416
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 659
     Top = 0
     Width = 850
-    ActivePage = tabBandMap
+    ActivePage = tabRBN
     Align = alClient
-    TabIndex = 15
+    TabIndex = 24
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2550,8 +2550,8 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = pgROTControl
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor one'
-          ClientHeight = 361
-          ClientWidth = 647
+          ClientHeight = 388
+          ClientWidth = 653
           object gbRot1: TGroupBox
             AnchorSideLeft.Control = tabRot1
             AnchorSideTop.Control = tabRot1
@@ -3005,8 +3005,8 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = tabRot1
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor two'
-          ClientHeight = 361
-          ClientWidth = 647
+          ClientHeight = 388
+          ClientWidth = 653
           object gbRot2: TGroupBox
             AnchorSideLeft.Control = tabRot2
             AnchorSideTop.Control = tabRot2
@@ -6938,7 +6938,7 @@ object frmPreferences: TfrmPreferences
           Width = 543
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-          ClientHeight = 94
+          ClientHeight = 110
           ClientWidth = 541
           TabOrder = 7
           object Label95: TLabel
@@ -7108,7 +7108,7 @@ object frmPreferences: TfrmPreferences
           Width = 480
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-          ClientHeight = 89
+          ClientHeight = 105
           ClientWidth = 478
           TabOrder = 0
           object Label202: TLabel
@@ -7437,7 +7437,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 352
+        ClientHeight = 368
         ClientWidth = 606
         TabOrder = 0
         object Label93: TLabel
@@ -7726,8 +7726,8 @@ object frmPreferences: TfrmPreferences
         Left = 408
         Height = 23
         Top = 104
-        Width = 231
-        Caption = 'Auto connect after open the log'
+        Width = 249
+        Caption = 'Auto connect after RBN form open'
         TabOrder = 0
       end
       object edtRBNLogin: TEdit
