@@ -48,7 +48,7 @@ object frmBandMap: TfrmBandMap
         Caption = 'ToolButton2'
         Style = tbsDivider
       end
-      object ToolButton3: TToolButton
+      object tbtnFont: TToolButton
         Left = 52
         Hint = 'Font settings'
         Top = 2
@@ -61,10 +61,10 @@ object frmBandMap: TfrmBandMap
         Height = 22
         Top = 2
         Caption = 'ToolButton4'
-        Style = tbsSeparator
+        Style = tbsDivider
       end
-      object ToolButton5: TToolButton
-        Left = 83
+      object tbtnClear: TToolButton
+        Left = 80
         Hint = 'Clean band map'
         Top = 2
         HelpType = htKeyword
@@ -74,21 +74,21 @@ object frmBandMap: TfrmBandMap
         ShowHint = True
       end
       object ToolButton6: TToolButton
-        Left = 106
+        Left = 103
         Height = 22
         Top = 2
         Caption = 'ToolButton6'
-        Style = tbsSeparator
+        Style = tbsDivider
       end
-      object ToolButton7: TToolButton
-        Left = 114
+      object tbtnHelp: TToolButton
+        Left = 108
         Hint = 'Open help in web browser'
         Top = 2
         Action = acHelp
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton1: TToolButton
+      object tbtnTools: TToolButton
         Left = 24
         Hint = 'Filter settings'
         Top = 2
@@ -96,31 +96,12 @@ object frmBandMap: TfrmBandMap
         Visible = False
       end
       object btnEatFocus: TButton
-        Left = 137
+        Left = 131
         Height = 22
         Top = 2
         Width = 2
         Caption = 'btnEatFocus'
         TabOrder = 0
-      end
-      object lbStop: TLabel
-        AnchorSideLeft.Control = toolBandMap
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = toolBandMap
-        AnchorSideTop.Side = asrCenter
-        Left = 139
-        Height = 23
-        Top = 2
-        Width = 53
-        Align = alBottom
-        Caption = 'STOP'
-        Font.Color = clRed
-        Font.Height = -19
-        Font.Name = 'Monospace'
-        Font.Style = [fsBold]
-        ParentColor = False
-        ParentFont = False
-        Visible = False
       end
     end
   end
