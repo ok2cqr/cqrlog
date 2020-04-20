@@ -5,7 +5,7 @@ object frmPreferences: TfrmPreferences
   Width = 1098
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 915
+  HorzScrollBar.Page = 1047
   VertScrollBar.Page = 416
   ActiveControl = lbPreferences
   AutoScroll = True
@@ -6938,7 +6938,7 @@ object frmPreferences: TfrmPreferences
           Width = 543
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-          ClientHeight = 110
+          ClientHeight = 94
           ClientWidth = 541
           TabOrder = 7
           object Label95: TLabel
@@ -7108,7 +7108,7 @@ object frmPreferences: TfrmPreferences
           Width = 480
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-          ClientHeight = 105
+          ClientHeight = 89
           ClientWidth = 478
           TabOrder = 0
           object Label202: TLabel
@@ -7437,7 +7437,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 368
+        ClientHeight = 352
         ClientWidth = 606
         TabOrder = 0
         object Label93: TLabel
@@ -7726,8 +7726,8 @@ object frmPreferences: TfrmPreferences
         Left = 408
         Height = 23
         Top = 104
-        Width = 249
-        Caption = 'Auto connect after RBN form open'
+        Width = 381
+        Caption = 'Auto connect after start (RBN grayline + RBN monitor)'
         TabOrder = 0
       end
       object edtRBNLogin: TEdit
