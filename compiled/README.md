@@ -124,17 +124,16 @@ Then check execution rights.
  
  These alpha test binaries also include latest official source updates up to commit:
  
-  #271
+  [#271] (https://github.com/ok2cqr/cqrlog/commits/master)
  
- To see what are the latest official updates look at https://github.com/ok2cqr/cqrlog/commits/master
+ To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
- To see updates in this alpha version look at https://github.com/OH1KH/cqrlog/commits/loc_testing
+ To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
   - ver 2.4.0(118)
   - minor fix to RBN monitor, pull requested but not yet accepted to official version
-    - "STOP" indicator removed, Shows now "PAUSED" at top of form
-    - autoconnect (Preferences/RBN monitor) now affects to Grayine RBN + RBN monitor
+    <https://github.com/ok2cqr/cqrlog/pull/272>
 
  What is new and not included (as pull requests) into official cqrlog GitHub source is listed below.
 
@@ -206,7 +205,7 @@ LOG OR DATABASE SERVER CHANGE
   - database server change works better, but still have bugs. (NewQSO/File/Open or create new log/save data to local machine/external server)
 
   
-Some cqrlog related videos can be found from  https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ
+Some cqrlog related videos can be found from  <https://www.youtube.com/channel/UC3yPCVYmfeBzDSwTosOe2fQ>
 
 All kind of reports are welcome. You can send them them to mycallsign at sral dot fi
 
