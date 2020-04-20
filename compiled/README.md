@@ -124,18 +124,17 @@ Then check execution rights.
  
  These alpha test binaries also include latest official source updates up to commit:
  
-  #267
+  #271
  
  To see what are the latest official updates look at https://github.com/ok2cqr/cqrlog/commits/master
 
  To see updates in this alpha version look at https://github.com/OH1KH/cqrlog/commits/loc_testing
 
 LAST UPDATES
-  - ver 2.4.0(117)
-  - minor fixes, pull requested but not yet accepted to official version
-     - https://github.com/ok2cqr/cqrlog/pull/270
-     - https://github.com/ok2cqr/cqrlog/pull/271
-
+  - ver 2.4.0(118)
+  - minor fix to RBN monitor, pull requested but not yet accepted to official version
+    - "STOP" indicator removed, Shows now "PAUSED" at top of form
+    - autoconnect (Preferences/RBN monitor) now affects to Grayine RBN + RBN monitor
 
  What is new and not included (as pull requests) into official cqrlog GitHub source is listed below.
 
