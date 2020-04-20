@@ -1,5 +1,5 @@
 object frmRbnMonitor: TfrmRbnMonitor
-  Left = 0
+  Left = 107
   Height = 602
   Top = 145
   Width = 665
@@ -37,93 +37,76 @@ object frmRbnMonitor: TfrmRbnMonitor
       Height = 22
       Top = 2
       Caption = 'ToolButton2'
-      Style = tbsSeparator
+      Style = tbsDivider
     end
-    object ToolButton3: TToolButton
-      Left = 32
+    object tbtnServer: TToolButton
+      Left = 29
       Top = 2
       Action = acRbnServer
     end
     object ToolButton4: TToolButton
-      Left = 55
+      Left = 52
       Height = 22
       Top = 2
       Caption = 'ToolButton4'
-      Style = tbsSeparator
+      Style = tbsDivider
     end
-    object ToolButton5: TToolButton
-      Left = 63
+    object tbtnFilter: TToolButton
+      Left = 57
       Top = 2
       Action = acFilter
     end
-    object ToolButton6: TToolButton
-      Left = 91
+    object tbtnFont: TToolButton
+      Left = 85
       Top = 2
       Action = acFontSettings
     end
     object ToolButton7: TToolButton
-      Left = 86
+      Left = 80
       Height = 22
       Top = 2
       Caption = 'ToolButton7'
       Style = tbsDivider
     end
     object ToolButton1: TToolButton
-      Left = 114
+      Left = 108
       Height = 22
       Top = 2
       Caption = 'ToolButton1'
-      Style = tbsSeparator
+      Style = tbsDivider
     end
-    object ToolButton8: TToolButton
-      Left = 122
+    object tbtnLastLine: TToolButton
+      Left = 113
       Hint = 'Go to last line'
       Top = 2
       Action = acScrollDown
     end
-    object ToolButton9: TToolButton
-      Left = 145
+    object tbtnClear: TToolButton
+      Left = 136
       Hint = 'Clean grid'
       Top = 2
       Action = acClear
     end
-    object ToolButton10: TToolButton
-      Left = 173
+    object tbtnHelp: TToolButton
+      Left = 164
       Hint = 'Open help in web browser'
       Top = 2
       Action = acHelp
     end
     object ToolButton11: TToolButton
-      Left = 168
+      Left = 159
       Height = 22
       Top = 2
       Caption = 'ToolButton11'
       Style = tbsDivider
     end
     object btnEatFocus: TButton
-      Left = 196
+      Left = 187
       Height = 22
       Top = 2
       Width = 2
       Caption = 'btnEatFocus'
       TabOrder = 0
-    end
-    object lbStop: TLabel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Side = asrCenter
-      Left = 208
-      Height = 23
-      Top = 2
-      Width = 53
-      Align = alBottom
-      Caption = 'STOP'
-      Font.Color = clRed
-      Font.Height = -19
-      Font.Name = 'Monospace'
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-      Visible = False
     end
   end
   object sbRbn: TStatusBar
@@ -529,7 +512,7 @@ object frmRbnMonitor: TfrmRbnMonitor
   end
   object tmrUnfocus: TTimer
     Enabled = False
-    Interval = 50
+    Interval = 60
     OnTimer = tmrUnfocusTimer
     left = 484
     top = 85
