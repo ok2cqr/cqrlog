@@ -82,23 +82,22 @@ type
     btnEatFocus : TButton;
     dlgFont: TFontDialog;
     imgRbnMonitor: TImageList;
-    lbStop: TLabel;
     sbRbn: TStatusBar;
     sgRbn: TStringGrid;
     tmrUnfocus: TTimer;
     ToolBar1: TToolBar;
     tbtnConnect: TToolButton;
     ToolButton1 : TToolButton;
-    ToolButton10: TToolButton;
+    tbtnHelp: TToolButton;
     ToolButton11: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
+    tbtnServer: TToolButton;
     ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
+    tbtnFilter: TToolButton;
+    tbtnFont: TToolButton;
     ToolButton7: TToolButton;
-    ToolButton8 : TToolButton;
-    ToolButton9: TToolButton;
+    tbtnLastLine : TToolButton;
+    tbtnClear: TToolButton;
     procedure acClearExecute(Sender: TObject);
     procedure acConnectExecute(Sender: TObject);
     procedure acDisconnectExecute(Sender: TObject);
@@ -492,7 +491,7 @@ begin
   if not TryStrToInt(Copy(server,Pos(':',server)+1,6),port) then
     port := 7000;
   lTelnet.Port := port;
-  Writeln(server,'   ',port);
+  if dmData.DebugLevel>=2 then Writeln(server,'   ',port);
   lTelnet.Connect;
   btnEatFocus.SetFocus
 end;
@@ -506,10 +505,10 @@ end;
 
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
-  lTelnet.Disconnect();
   RbnMonThread.Terminate;
   freeAndNil(RbnMonThread);
-  tbtnConnect.Action := acConnect
+  tbtnConnect.Action := acConnect;
+  sbRbn.Panels[0].Text := 'Disconnected'
 end;
 
 procedure TfrmRbnMonitor.acFilterExecute(Sender: TObject);
@@ -628,7 +627,10 @@ begin
   sgRbn.Cells[3,0] := 'Mode';
   sgRbn.Cells[4,0] := 'dB';
   sgRbn.Cells[5,0] := 'Q';
-  sgRbn.Cells[6,0] := 'D'
+  sgRbn.Cells[6,0] := 'D';
+
+  if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnect',False) )) then
+     acConnectExecute(nil);
 end;
 
 procedure TfrmRbnMonitor.sgRbnDblClick(Sender: TObject);
@@ -658,12 +660,14 @@ end;
 
 procedure TfrmRbnMonitor.sgRbnEnter(Sender: TObject);
 begin
-   lbStop.Visible:=true;
+   frmRbnMonitor.Caption:= 'RBN Monitor  PAUSED!';
+   ToolBar1.Repaint;
 end;
 
 procedure TfrmRbnMonitor.sgRbnExit(Sender: TObject);
 begin
-  lbStop.Visible:=false;
+  frmRbnMonitor.Caption:= 'RBN Monitor';
+  ToolBar1.Repaint;
 end;
 
 procedure TfrmRbnMonitor.sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
@@ -674,7 +678,7 @@ end;
 
 procedure TfrmRbnMonitor.FormDeactivate(Sender: TObject);
 begin
-   lbStop.Visible:=false;
+   frmRbnMonitor.Caption:= 'RBN Monitor';
 end;
 
 //-------------------------------------------------

@@ -70,18 +70,17 @@ type
     btnEatFocus: TButton;
     dlgFont: TFontDialog;
     imglBandMap: TImageList;
-    lbStop: TLabel;
     Panel1: TPanel;
     pnlBandMap: TPanel;
     toolBandMap: TToolBar;
     tbtnFilter: TToolButton;
-    ToolButton1: TToolButton;
+    tbtnTools: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
+    tbtnFont: TToolButton;
     ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
+    tbtnClear: TToolButton;
     ToolButton6: TToolButton;
-    ToolButton7: TToolButton;
+    tbtnHelp: TToolButton;
     procedure acClearExecute(Sender: TObject);
     procedure acFilterExecute(Sender: TObject);
     procedure acFontExecute(Sender: TObject);
@@ -619,7 +618,7 @@ end;
 
 procedure TfrmBandMap.FormDeactivate(Sender: TObject);
 begin
-  lbStop.Visible:=false;
+  frmBandMap.Caption:= 'Band map';
 end;
 
 procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -653,7 +652,7 @@ end;
 
 procedure TfrmBandMap.FormActivate(Sender: TObject);
 begin
-  lbStop.Visible:=True;
+  frmBandMap.Caption:='BM PAUSED!';
 end;
 
 procedure TfrmBandMap.acClearExecute(Sender: TObject);
