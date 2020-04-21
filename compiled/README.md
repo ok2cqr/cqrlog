@@ -124,7 +124,7 @@ Then check execution rights.
  
  These alpha test binaries also include latest official source updates up to commit:
  
-  [#271] (https://github.com/ok2cqr/cqrlog/commits/master)
+   #272 
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
@@ -132,8 +132,7 @@ Then check execution rights.
 
 LAST UPDATES
   - ver 2.4.0(118)
-  - minor fix to RBN monitor, pull requested but not yet accepted to official version
-    <https://github.com/ok2cqr/cqrlog/pull/272>
+  
 
  What is new and not included (as pull requests) into official cqrlog GitHub source is listed below.
 
