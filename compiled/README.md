@@ -2,20 +2,19 @@ Latest cqrlog alpha test binaries can be found from this folder.
 This folder holds ready compiled binary files of source "loc_testing" that is the version of cqrlog that I am using myself daily.
 They contain all accepted pull requests from official source (that may not be released offically yet) plus some test code that is not pull requested yet (and may not be pull requested ever)
 
-------------------WARNINGS-----------------
-===========================================
-   
-**This is NOT official release !**
+## ABOUT THIS ALPHA TEST VERSION:
+ 
+ These alpha test binaries also include latest official source updates up to commit:
+ 
+   #272 
+ 
+ To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
-   ALWAYS !
-   REPEAT: **ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!**
-   
-   If you use script-install (see below) it makes backups for you.
-   Otherwise see "manual-install (below).
-   
------------YOU HAVE BEEN WARNED!------------
-============================================
+ To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
+LAST UPDATES
+  - ver 2.4.0(118)
+  
 BINARIES:
 ---------
 
@@ -27,20 +26,21 @@ BINARIES:
 
 **All binaries must be copied over complete, working, official installation. These do not work alone.**
 ========================================================================================================
-   
-   
-If you like to test QT5 version you need to install libqt5pas.
-libqt5pas is a library that bridges between Qt5 and your Lazarus application. 
-Newer distros have working versions available in their repositories.
+     
 
-Using your distros repository:
-   - Fedora, Mageia - sudo dnf install qt5pas<enter>
-   - Ubuntu, Debian - sudo apt install libqt5pas1 <enter>
 
-Note that some long term release distributions, ie Ubuntu 18.04 have an incompatible version of libqt5pas 
-(even though it appears to have the same version number as later distros!). 
-You will see an error message and a crash if your app uses TMemo. 
-You should install the downloaded packages mentioned below or build your own new version of the library.
+------------------WARNINGS-----------------
+===========================================
+   
+**This is NOT official release !**
+
+   **ALWAYS !!  FIRST DO BACKUP OF YOUR LOGS AND SETTINGS !!**
+   
+   If you use script-install (see below) it makes backups for you.
+   Otherwise see "manual-install (below).
+   
+-----------YOU HAVE BEEN WARNED!------------
+============================================
 
 
 ## -------------------SCRIPT-INSTALL--------------------
@@ -118,30 +118,28 @@ Then check execution rights.
 
     sudo cp /usr/bin/cqrlog /usr/bin/cqrlog_old
     sudo cp /tmp/cqrlog /usr/bin/
-    sudo chmod a+x /usr/bin/cqrlog
+    sudo chmod a+x /usr/bin/cqrlog  
 
-## ABOUT THIS ALPHA TEST VERSION:
- 
- These alpha test binaries also include latest official source updates up to commit:
- 
-   #272 
- 
- To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
-
- To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
-
-LAST UPDATES
-  - ver 2.4.0(118)
-  
-
- What is new and not included (as pull requests) into official cqrlog GitHub source is listed below.
+ ## What is not included (as pull requests) into official cqrlog GitHub source is listed below.
 
 QT5 VERSION
 
-  - If you try QT5 compiled version you may need to install qt5pas library. 
-    When running that version please note if you find clipping or wrong positions at windows.
+If you like to test QT5 version you need to install libqt5pas.
+libqt5pas is a library that bridges between Qt5 and your Lazarus application. 
+Newer distros have working versions available in their repositories.
+
+Using your distros repository:
+   - Fedora, Mageia - sudo dnf install qt5pas<enter>
+   - Ubuntu, Debian - sudo apt install libqt5pas1 <enter>
+
+Note that some long term release distributions, ie Ubuntu 18.04 have an incompatible version of libqt5pas 
+(even though it appears to have the same version number as later distros!). 
+You will see an error message and a crash if your app uses TMemo. 
+You should install the downloaded packages mentioned below or build your own new version of the library.
+
+  - When running that version please note if you find clipping or wrong positions at windows.
     Check also how GTK2 version shows up, they are little bit different. GTK may show up ok, but QT5 has
-    clipping (usually in that way).
+    clipping (usually in that way).    
    
 CQ MONITOR USA STATES
 
