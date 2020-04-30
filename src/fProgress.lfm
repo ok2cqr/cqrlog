@@ -1,7 +1,7 @@
 object frmProgress: TfrmProgress
-  Left = 1705
+  Left = 400
   Height = 91
-  Top = 382
+  Top = 400
   Width = 340
   Caption = 'Progress'
   ClientHeight = 91
