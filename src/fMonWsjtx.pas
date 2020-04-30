@@ -93,6 +93,8 @@ type
   private
     DPstarted : integer;     //fcc states download process status
     DProcess: TProcess;
+    tfIn,tfOUT,dupOut: TextFile;
+    FccEn        :TStringList;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -2119,11 +2121,9 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
   end;
 procedure  TfrmMonWsjtx.BuildFccState;
 var
-  tfIn,tfOUT,dupOut: TextFile;
   s,t: string;
   call,state,ids,Ocall,Ostate :string;
   id,Oid,r,p,d,i,x : longint;
-  FccEn        :TStringList;
 
 begin
   Ocall:='call';
@@ -2217,6 +2217,7 @@ begin
     frmProgress.DoStep('Done !');
     writeln(tfOut,Ocall,'=',Ostate);   //last remaining
     FreeAndNil(FccEn);
+    CloseFile(tfin);
     CloseFile(tfOut);
     CloseFile(dupOut);
   except
@@ -2228,6 +2229,7 @@ begin
   if LocalDbg then Writeln('Written:    ',p,' lines.');
   if LocalDbg then Writeln('Duplicates: ',d,' lines.');
   frmProgress.Hide;
+  CanCloseFCCProcess:=true;
 end;
 
 procedure  TfrmMonWsjtx.downLoadInit;
@@ -2235,6 +2237,7 @@ var
   f :textfile;
 
   begin
+    CanCloseFCCProcess:=false;
     if LocalDbg then Writeln('downloadinit start');
     frmProgress.Show;
     frmProgress.DoInit(155,1);
@@ -2279,7 +2282,16 @@ var
 end;
 Procedure  TfrmMonWsjtx.CloseFCCProcess;
 begin
-      //here force close threads and others
+  //here force close threads and others
+  if DProcess<>nil then FreeAndNil(DProcess);
+  if FccEn<>nil then
+     Begin
+       FreeAndNil(FccEn);
+       CloseFile(tfin);
+       CloseFile(tfOut);
+       CloseFile(dupOut);
+     end;
+  frmProgress.Hide;
 end;
 
 initialization
