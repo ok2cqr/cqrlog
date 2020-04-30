@@ -91,8 +91,8 @@ type
     procedure tmrFCCTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
   private
+    DPstarted : integer;     //fcc states download process status
     DProcess: TProcess;
-    DPstarted : integer;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -120,6 +120,7 @@ type
     procedure downLoadInit;
     { private declarations }
   public
+    CanCloseFCCProcess :boolean;
     DblClickCall  :string;   //callsign that is called by doubleclick
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
@@ -132,6 +133,7 @@ type
     procedure BufDebug(MyHeader,MyBuf:string);
     function HexStrToStr(const HexStr: string): string;
     function StrToHexStr(const S: string): string;
+    procedure CloseFCCProcess;
     { public declarations }
   end;
 
@@ -984,8 +986,15 @@ begin
              if DPstarted > 3 then
               begin
                if LocalDbg then Writeln('DPstarted > 3');
-               frmProgress.Hide;
                tmrFcc.Enabled:=False;
+               frmProgress.lblInfo.Caption:= 'Done!';
+               for sz:=0 to 100 do
+               Begin
+                 frmProgress.ShowOnTop;
+                 sleep(10);
+                 Application.ProcessMessages;
+               end;
+               frmProgress.Hide;
                DPstarted:=0;
                chkUState.Checked:=True; //causes recall
               end
@@ -1051,6 +1060,7 @@ begin
   cmAny.Bitmap  := TBitmap.Create;
   cmNever.Bitmap := TBitmap.Create;
   cmCqDX.Bitmap := TBitmap.Create;
+  CanCloseFCCProcess := True;  //there is no process yet
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
@@ -2266,6 +2276,10 @@ var
      writeln('Error Details: ', E.Message);
     end;
 
+end;
+Procedure  TfrmMonWsjtx.CloseFCCProcess;
+begin
+      //here force close threads and others
 end;
 
 initialization

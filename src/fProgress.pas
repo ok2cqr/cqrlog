@@ -52,28 +52,28 @@ begin
   p.StepIt;
   repaint;
   Application.ProcessMessages;
-  frmProgress.ShowOnTop;
+  //frmProgress.ShowOnTop;
 end;
 procedure TfrmProgress.DoJump(i:integer);
 begin
   p.Position:=p.Position + i;
   repaint;
   Application.ProcessMessages;
-  frmProgress.ShowOnTop;
+  //frmProgress.ShowOnTop;
 end;
 procedure TfrmProgress.DoPos(i:integer);
 begin
   p.Position:= i;
   repaint;
   Application.ProcessMessages;
-  frmProgress.ShowOnTop;
+  //frmProgress.ShowOnTop;
 end;
 procedure TfrmProgress.DoPros(i:integer);
 begin
   p.Position:= (p.max * i)  div 100;
   repaint;
   Application.ProcessMessages;
-  frmProgress.ShowOnTop;
+  //frmProgress.ShowOnTop;
 end;
 procedure TfrmProgress.DoInit(max,step:integer);
 begin

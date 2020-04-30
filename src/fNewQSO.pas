@@ -7036,10 +7036,19 @@ end;
 procedure TfrmNewQSO.DisableRemoteMode;
 var
   tries : integer = 10;
+  msg :String;
 begin
 
   if  mnuRemoteModeWsjt.Checked then
   begin
+      if not frmMonWsjtx.CanCloseFCCProcess  then
+       Begin
+        msg:='FCC US-states download an process is still ' +#13+
+             'running. Closing monitor will abort process'+#13+
+             'Do you want to close anyway?';
+        if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
+        frmMonWsjtx.CloseFCCProcess;
+       end;
       tmrWsjtx.Enabled := False;
       tmrWsjtSpd.Enabled:=false;
       while ((WsjtxDecodeRunning) and (tries > 0)) do
