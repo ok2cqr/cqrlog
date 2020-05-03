@@ -33,6 +33,7 @@ type
     Panel1: TPanel;
     procedure dbgrdProfilesCellClick(Column: TColumn);
     procedure dbgrdProfilesColumnSized(Sender: TObject);
+    procedure dbgrdProfilesDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
@@ -72,7 +73,7 @@ begin
   LocateProfile(profile);
 
   dbgrdProfiles.Columns[0].Visible := False;
-  dbgrdProfiles.Columns[6].Visible := False
+  //dbgrdProfiles.Columns[6].Visible := False
 end;
 
 procedure TfrmQTHProfiles.LocateProfile(profile : String);
@@ -89,6 +90,14 @@ end;
 procedure TfrmQTHProfiles.dbgrdProfilesColumnSized(Sender: TObject);
 begin
   dmUtils.SaveForm(self)
+end;
+
+procedure TfrmQTHProfiles.dbgrdProfilesDblClick(Sender: TObject);
+begin
+  if dmData.qProfiles.RecordCount = 0 then
+    exit;
+
+  btnEditClick(nil);
 end;
 
 procedure TfrmQTHProfiles.FormClose(Sender: TObject;
