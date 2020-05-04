@@ -2287,9 +2287,12 @@ begin
   if FccEn<>nil then
      Begin
        FreeAndNil(FccEn);
-       CloseFile(tfin);
-       CloseFile(tfOut);
-       CloseFile(dupOut);
+       try
+         CloseFile(tfin);
+         CloseFile(tfOut);
+         CloseFile(dupOut);
+       finally
+       end;
      end;
   frmProgress.Hide;
 end;
