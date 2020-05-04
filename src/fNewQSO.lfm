@@ -2726,7 +2726,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideRight.Side = asrBottom
           Left = 485
           Height = 23
-          Hint = 'Opens qrz.com callsing profile in webbrowser'
+          Hint = 'Opens qrz.com callsign profile in webbrowser'
           Top = 338
           Width = 23
           Anchors = [akTop, akRight]
