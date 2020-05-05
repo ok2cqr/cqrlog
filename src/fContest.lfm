@@ -38,7 +38,7 @@ object frmContest: TfrmContest
     Top = 53
     Width = 50
     OnKeyDown = edtCallKeyDown
-    TabOrder = 5
+    TabOrder = 4
   end
   object edtSTX: TEdit
     AnchorSideLeft.Control = edtRSTs
@@ -83,7 +83,7 @@ object frmContest: TfrmContest
     Width = 50
     BorderSpacing.Left = 16
     OnKeyDown = edtCallKeyDown
-    TabOrder = 4
+    TabOrder = 1
   end
   object edtSRX: TEdit
     AnchorSideLeft.Control = edtRSTr
@@ -100,7 +100,7 @@ object frmContest: TfrmContest
     OnKeyPress = edtSTXKeyPress
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 2
   end
   object btSave: TButton
     AnchorSideLeft.Control = edtSRX2
@@ -113,7 +113,7 @@ object frmContest: TfrmContest
     BorderSpacing.Left = 16
     Caption = 'Save QSO'
     OnClick = btSaveClick
-    TabOrder = 3
+    TabOrder = 5
   end
   object edtSRX2: TEdit
     AnchorSideLeft.Control = edtSRX
@@ -129,7 +129,7 @@ object frmContest: TfrmContest
     OnKeyDown = edtCallKeyDown
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 2
+    TabOrder = 3
   end
   object lblCall: TLabel
     AnchorSideLeft.Control = lblContestName
@@ -197,7 +197,7 @@ object frmContest: TfrmContest
     Width = 45
     Caption = 'Inc'
     OnClick = chNRIncClick
-    TabOrder = 8
+    TabOrder = 10
     TabStop = False
   end
   object lblNRs: TLabel
@@ -217,7 +217,7 @@ object frmContest: TfrmContest
     Top = 87
     Width = 101
     Caption = 'MSG is LOC'
-    TabOrder = 9
+    TabOrder = 12
     TabStop = False
   end
   object chSpace: TCheckBox
@@ -229,7 +229,7 @@ object frmContest: TfrmContest
     Top = 87
     Width = 111
     Caption = 'SPACE is TAB'
-    TabOrder = 10
+    TabOrder = 8
     TabStop = False
   end
   object chNoNr: TCheckBox
@@ -253,7 +253,7 @@ object frmContest: TfrmContest
     Width = 45
     Caption = 'Tru'
     OnChange = chTrueRSTChange
-    TabOrder = 12
+    TabOrder = 9
     TabStop = False
   end
   object Button1: TButton
