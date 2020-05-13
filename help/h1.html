@@ -76,6 +76,14 @@
     to access the HamQTH.com/QRZ.COM callbook data.
     <br><br>
     Other settings are:<br><br>
+    <strong>Web browser for cqrlog</strong> - If you do not fill this cqrlog tires to find system default browser. Quite often it places xgd-open as default browser. xgd-open is a linux tool script that tries to find system default browser.
+    <br>Most cases it works, but in some cases xdg-open strips hashtag links away from url path. That makes the right help page open, but from start. Not from chapter you might expect.
+    <br>Fix for this is to give path and filename to your real browser. It does not have to be same as your system default one. You can compare results opening first BandMap window and pressing blue ? (help) button.
+    <br>Do it first with cqrlog found browser (xdg-open). Then change your favorite browser path and name (like /usr/bin/firefox) and repeat pressing ? of Band Map.
+    <br>If no difference, you do not need to change default (unless you want use different browser than system default with cqrlog).
+    <br><strong>Hint:</strong> If you click Web browser name edit box a file open dialog opens and you can navigate to your browser. If you place cursor on Web browser name edit box, press left button and keep it down, you can paint exisiting text and use delete button to clear it and type new text.
+    <br><br>    
+    
     <strong>get UTC time from computer time</strong> - CQRLOG will read UTC from the system time.
     If you uncheck the option, you can set the difference between UTC and your local time manually
     both for sunrise/sunset and qso time.
@@ -199,7 +207,9 @@
     <strong>Radio one, desc:</strong> is a description you'll see in TRX control window. It is only
     descriptive text, you can write whatever you want.<br><br>
     <strong>Host:</strong> computer where rigctld is running, localhost is fine for most cases. <br><br>
-    <strong>RIG model:</strong> choose your radio model from the list<br><br>
+    <strong>RIG model:</strong> choose your radio model from the list.
+     Rig models below 10 (Dummy, NET rigctld, FLRig, TRXManager) are using TCP communication and so the <strong>Device</strong> as well
+     as <strong>Radio serial parameters</strong> do not need settings.<br><br>
     <strong>Device:</strong> device which the radio is connected to. /dev/ttyS0 is COM1, /dev/ttyS1
     is COM2 etc. If you use USB to serial interface, the device will usually be /dev/ttyUSB0
     for COM1 etc. If you are using Ubuntu or Debian, <strong>you have to be member of the dialout users
@@ -231,10 +241,11 @@
 <br>
 <img src=img/h100.png border=0><br>
 
-<h2><strong>ROT Control</strong></h2></a>
+<a name=ah7b><h2><strong>ROT Control</strong></h2></a>
 <img src=img/h10b.png border=0><br><br>
 <br>
-Setting up Rotator control is very similar to setting up Rig control.
+Setting up Rotator control is very similar to setting up Rig control. Rotor models 1 and 2 (Dummy, NET rotctld ) are using TCP communication and so the <strong>Device</strong> as well
+     as <strong>Rotor serial parameters</strong> do not need settings.<br><br>
 <br>
 <br>If <b>Use rotctld \dump_state info for limits</b> cheked rotctld asks turning limits AzMin and AzMax values from rotctld with command <strong>'+\dump_state'</strong>.
  That makes user possible to set turning limits other than rotator default turn with
@@ -530,12 +541,14 @@ There are no known dependencies issues.<br><br>
     <br>Normally you do not need to touch eQSL addresses. But in case something changes at eQSL web pages it might be possible to fix it here without rebuilding cqrlog program.<br><br>
     <a name=ch1><h2><strong>CW interface</strong></h2></a>
     <img src="img/h95.png"><br><br>
-    Choose your preferred CW interface. There are 5 options: None, WinKeyer USB,
+    Choose your preferred CW interface for radios you have. There are 5 options: None, WinKeyer USB,
     cwdaemon, K3NG keyer and HamLib. We strongly recommend Winkey USB by Steve Elliot, K1EL,
     which provides 'all in one' keying, including one of most advanced paddle keyers available.
     cwdaemon should be seen as a backup option with many limitations, which may need
     a custom linux kernel to avoid sloppy CW at speeds above 25 WPM. If cwdaemon is used,
-    only keyboard keying is possible.<br><br>
+    only keyboard keying is possible.
+    <br>If you use <strong>same keyer for both rigs</strong>, and it is not HamLib, you can check <strong>Do not reset when switch radios</strong> to prevent keyer reset (that sets CW speed to default).
+    <br><br>
     Detailed setup of the CW devices is here:
     <ul>
         <li><a href=cwd.html><strong>cwdaemon</strong></a>
@@ -611,11 +624,14 @@ There are no known dependencies issues.<br><br>
     </br></br><img src="img/h119.png"><br><br>
     Check both "Enable autobackup after program ends" and "Ask before creating a backup" to prevent closing cqrlog accidently. Answering <strong>"Cancel"</strong> to question returns to NewQso without backup.
     <a name=ch4><h2><strong>External viewers</strong></h2></a>
-    Set up the viewers used for browsing the notes related to a particular callsign.<br><br>
-    <img src="img/h111.png"><br><br>
+    <br>
+    <img src="img/h111.png"><br><br>Set up the viewers used for browsing the notes related to a particular callsign.
+    <br>
     The notes in the call_data subfolder can contain text, html, pdf and image files.
     To enable reading of all file types, corresponding viewers must be set up properly,
     ie. must be in the system path.<br>
+    <br><strong>Note:</strong> Setting html browser here affects only to call attachments and it can be different than system default, or different than selected at preferences/program tab.
+    <br><strong>Hint:</strong> If you click Web browser name edit box a file open dialog opens and you can navigate to your browser. If you place cursor on Web browser name edit box, press left button and keep it down, you can paint exisiting text and use delete button to clear it and type new text.
     <a name=ch5><h2><strong>Callbook support</strong></h2></a>
     CQRLOG supports <a href="http://HamQTH.com">HamQTH</a> and <a href="http://qrz.com">QRZ.com</a>
     callbooks but only access through the XML interace is supported. HamQTH has a free interface,
@@ -690,5 +706,21 @@ There are no known dependencies issues.<br><br>
     </tbody>
 </table>
 <br>
+<a name=ch9><h2><strong>Propagation</strong></h2></a>
+<p><img src=img/propag.png></p><br><br>
+Propagation setup lets you choose if the <strong>NewQSO/Window/Propagation</strong> show the propagation information either as an image, or text information. Source of the image variant can be selected from given web address.
+<br>If text information is selected you can select what kind of information will be shown using check boxes.
+<br><br></p>
+<p align=center><img src=img/line.png></p>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td width="33%" align="center">[<a href="index.html" target="_top">Menu</a>]</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
 </body>
 </html>
