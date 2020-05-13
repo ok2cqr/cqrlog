@@ -1,4 +1,4 @@
-FROM ubuntu:disco
+FROM ubuntu:eoan
 
 RUN apt-get update && apt-get -y upgrade
 
