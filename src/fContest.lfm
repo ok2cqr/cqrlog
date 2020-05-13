@@ -1,7 +1,7 @@
 object frmContest: TfrmContest
-  Left = 263
+  Left = 515
   Height = 127
-  Top = 339
+  Top = 353
   Width = 688
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
@@ -20,7 +20,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 34
-    Top = 53
+    Top = 59
     Width = 140
     AutoSelect = False
     CharCase = ecUppercase
@@ -35,7 +35,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = edtCall
     Left = 157
     Height = 34
-    Top = 53
+    Top = 59
     Width = 50
     OnKeyDown = edtCallKeyDown
     TabOrder = 6
@@ -47,7 +47,7 @@ object frmContest: TfrmContest
     Left = 207
     Height = 34
     Hint = 'contest serial number sent, max 6 characters'
-    Top = 53
+    Top = 59
     Width = 50
     MaxLength = 6
     OnExit = edtSTXExit
@@ -64,9 +64,10 @@ object frmContest: TfrmContest
     Left = 257
     Height = 34
     Hint = 'contest exchange message sent, max 50 characters'
-    Top = 53
+    Top = 59
     Width = 100
     MaxLength = 50
+    OnEnter = edtSTXStrEnter
     OnExit = edtSTXStrExit
     OnKeyDown = edtCallKeyDown
     ParentShowHint = False
@@ -79,7 +80,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = edtSTXStr
     Left = 373
     Height = 34
-    Top = 53
+    Top = 59
     Width = 50
     BorderSpacing.Left = 16
     OnKeyDown = edtCallKeyDown
@@ -92,7 +93,7 @@ object frmContest: TfrmContest
     Left = 423
     Height = 34
     Hint = 'contest serial number received, max 6 characters'
-    Top = 53
+    Top = 59
     Width = 50
     MaxLength = 6
     OnExit = edtSRXExit
@@ -108,7 +109,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblMSGr
     Left = 589
     Height = 30
-    Top = 36
+    Top = 42
     Width = 80
     BorderSpacing.Left = 16
     Caption = 'Save QSO'
@@ -122,7 +123,7 @@ object frmContest: TfrmContest
     Left = 473
     Height = 34
     Hint = 'contest exchange message sent, max 50 characters'
-    Top = 53
+    Top = 59
     Width = 100
     MaxLength = 50
     OnChange = edtSRXStrChange
@@ -133,11 +134,11 @@ object frmContest: TfrmContest
   end
   object lblCall: TLabel
     AnchorSideLeft.Control = lblContestName
-    AnchorSideTop.Control = cmbContestName
+    AnchorSideTop.Control = chkTabAll
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 17
-    Top = 36
+    Top = 42
     Width = 25
     BorderSpacing.Top = 1
     Caption = 'Call'
@@ -147,7 +148,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblCall
     Left = 161
     Height = 17
-    Top = 36
+    Top = 42
     Width = 36
     Caption = 'RST s'
     ParentColor = False
@@ -156,7 +157,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblNRs
     Left = 257
     Height = 17
-    Top = 36
+    Top = 42
     Width = 41
     Caption = 'MSG s'
     ParentColor = False
@@ -165,7 +166,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblMSGs
     Left = 377
     Height = 17
-    Top = 36
+    Top = 42
     Width = 34
     Caption = 'RST r'
     ParentColor = False
@@ -174,7 +175,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblRSTr
     Left = 425
     Height = 17
-    Top = 36
+    Top = 42
     Width = 28
     Caption = 'NR r'
     ParentColor = False
@@ -183,7 +184,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblNRr
     Left = 481
     Height = 17
-    Top = 36
+    Top = 42
     Width = 39
     Caption = 'MSG r'
     ParentColor = False
@@ -193,19 +194,19 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkTrueRST
     Left = 207
     Height = 23
-    Top = 87
+    Top = 93
     Width = 45
     Caption = 'Inc'
     OnChange = chkNRIncChange
     OnClick = chkNRIncClick
-    TabOrder = 12
+    TabOrder = 13
     TabStop = False
   end
   object lblNRs: TLabel
     AnchorSideTop.Control = lblRSTs
     Left = 209
     Height = 17
-    Top = 36
+    Top = 42
     Width = 30
     Caption = 'NR s'
     ParentColor = False
@@ -215,7 +216,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNoNr
     Left = 473
     Height = 23
-    Top = 87
+    Top = 93
     Width = 101
     Caption = 'MSG is LOC'
     TabOrder = 14
@@ -227,7 +228,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 23
-    Top = 87
+    Top = 93
     Width = 111
     Caption = 'SPACE is TAB'
     TabOrder = 10
@@ -238,11 +239,11 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNRInc
     Left = 423
     Height = 23
-    Top = 87
+    Top = 93
     Width = 44
     Caption = 'No'
     OnChange = chkNoNrChange
-    TabOrder = 13
+    TabOrder = 12
     TabStop = False
   end
   object chkTrueRST: TCheckBox
@@ -250,7 +251,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkSpace
     Left = 157
     Height = 23
-    Top = 87
+    Top = 93
     Width = 45
     Caption = 'Tru'
     OnChange = chkTrueRSTChange
@@ -263,7 +264,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 589
     Height = 30
-    Top = 68
+    Top = 74
     Width = 80
     BorderSpacing.Top = 2
     Caption = 'Clear all'
@@ -573,6 +574,31 @@ object frmContest: TfrmContest
     ParentShowHint = False
     ShowHint = True
     TabOrder = 9
+    TabStop = False
+  end
+  object chkQsp: TCheckBox
+    AnchorSideLeft.Control = edtSTXStr
+    AnchorSideTop.Control = chkNRInc
+    Left = 257
+    Height = 23
+    Top = 93
+    Width = 51
+    Caption = 'Qsp'
+    OnChange = chkQspChange
+    TabOrder = 15
+    TabStop = False
+  end
+  object chkTabAll: TCheckBox
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideTop.Control = lblContestName
+    AnchorSideTop.Side = asrBottom
+    Left = 17
+    Height = 23
+    Top = 18
+    Width = 72
+    Caption = 'TAB All'
+    OnChange = chkTabAllChange
+    TabOrder = 16
     TabStop = False
   end
   object tmrESC2: TTimer

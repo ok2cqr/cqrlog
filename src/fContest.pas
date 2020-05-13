@@ -15,6 +15,8 @@ type
   TfrmContest = class(TForm)
     btSave: TButton;
     btClearAll : TButton;
+    chkTabAll: TCheckBox;
+    chkQsp: TCheckBox;
     chkTrueRST: TCheckBox;
     chkNoNr: TCheckBox;
     chkSpace: TCheckBox;
@@ -43,12 +45,15 @@ type
     procedure chkNoNrChange(Sender: TObject);
     procedure chkNRIncChange(Sender: TObject);
     procedure chkNRIncClick(Sender : TObject);
+    procedure chkQspChange(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
+    procedure chkTabAllChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure edtCallKeyPress(Sender: TObject; var Key: char);
     procedure edtSRXStrChange(Sender: TObject);
     procedure edtSRXExit(Sender: TObject);
+    procedure edtSTXStrEnter(Sender: TObject);
     procedure edtSTXStrExit(Sender: TObject);
     procedure edtSTXExit(Sender: TObject);
     procedure edtSTXKeyPress(Sender: TObject; var Key: char);
@@ -63,10 +68,9 @@ type
     { private declarations }
     procedure InitInput;
     procedure ChkSerialNrUpd(IncNr: boolean);
-    procedure  SetTabOrders;
-    procedure  TabBaseOrder;
-    procedure  TabStopAllOn;
-    procedure  TabTruOrder;
+    procedure SetTabOrders;
+    procedure TabStopAllOn;
+    procedure QspMsg;
   public
     { public declarations }
   end;
@@ -263,7 +267,17 @@ begin
   end
 end;
 
+procedure TfrmContest.chkQspChange(Sender: TObject);
+begin
+  SetTabOrders;
+end;
+
 procedure TfrmContest.chkTrueRSTChange(Sender: TObject);
+begin
+  SetTabOrders;
+end;
+
+procedure TfrmContest.chkTabAllChange(Sender: TObject);
 begin
   SetTabOrders;
 end;
@@ -296,6 +310,12 @@ end;
 procedure TfrmContest.edtSRXExit(Sender: TObject);
 begin
   ChkSerialNrUpd(False); //just save it
+end;
+
+procedure TfrmContest.edtSTXStrEnter(Sender: TObject);
+begin
+  if chkQsp.Checked then
+   QspMsg;
 end;
 
 procedure TfrmContest.edtSTXStrExit(Sender: TObject);
@@ -435,50 +455,21 @@ begin
 end;
 procedure  TfrmContest.SetTabOrders;
 begin
-  if not chkTrueRST.Checked and not chkNRInc.Checked then TabBaseOrder;
-  if not chkTrueRST.Checked and     chkNRInc.Checked then TabBaseOrder;
-  if     chkTrueRST.Checked and not chkNRInc.Checked then TabTruOrder;
-  if     chkTrueRST.Checked and     chkNRInc.Checked then TabTruOrder;
-
-  edtSRX.TabStop:= not chkNoNr.Checked;
+  TabStopAllOn;
+  if not chkTabAll.Checked then
+    begin
+      //NRs no need to touch
+      edtSTX.TabStop      := False;
+      //"Qsp" adds MSGs, else drops
+      edtSTXStr.TabStop:= chkQsp.Checked;
+      //"No" drops NRr
+      edtSRX.TabStop   := not chkNoNr.Checked;
+      //"Tru" checked adds RST fields, else drops
+      edtRSTs.TabStop  := chkTrueRST.Checked;
+      edtRSTr.TabStop  := chkTrueRST.Checked;
+    end;
 end;
 
-procedure  TfrmContest.TabBaseOrder;
-//If nothing is selected:
-//call->NRr->MSGr->SaveQSO->ClearAll (that is all you need. In contest reports are always 599)
-//      NRr can be dropped away
-Begin
-    TabStopAllOn;
-    edtCall.TabOrder     := 0;
-    edtSRX.TabOrder      := 1;
-    edtSRXStr.TabOrder   := 2;
-    btSave.TabOrder      := 3;
-    btClearAll.TabOrder  := 4;
-
-    edtRSTs.TabStop     := False;
-    edtSTX.TabStop      := False;
-    edtSTXStr.TabStop   := False;
-    edtRSTr.TabStop     := False;
-end;
-
-procedure  TfrmContest.TabTruOrder;
-//Tru and inc selected
-//call->RSTs->RSTr->NRr->MSGr->SaveQSO->ClearAll
-//                  NRr can be dropped away
-Begin
-    TabStopAllOn;
-    edtCall.TabOrder     := 0;
-    edtRSTs.TabOrder     := 1;
-
-    edtRSTr.TabOrder     := 2;
-    edtSRX.TabOrder      := 3;
-    edtSRXStr.TabOrder   := 4;
-    btSave.TabOrder      := 5;
-    btClearAll.TabOrder  := 6;
-
-    edtSTX.TabStop       := False;
-    edtSTXStr.TabStop    := False;
-end;
 procedure  TfrmContest.TabStopAllOn;
 //set all tabstops
 Begin
@@ -503,6 +494,28 @@ Begin
     btClearAll.TabStop  := True;
     btClearAll.TabOrder := 8;
 end;
+procedure TfrmContest.QspMsg;
+Begin
+   try
+    dmData.Q.Close;
+    if dmData.trQ.Active then dmData.trQ.Rollback;
+    dmData.Q.SQL.Text := 'SELECT srx_string FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.trQ.StartTransaction;
+    if dmData.DebugLevel >=1 then
+      Writeln(dmData.Q.SQL.Text);
+    dmData.Q.Open();
+    edtSTXStr.Text := dmData.Q.Fields[0].AsString;
+    dmData.Q.Close();
+    dmData.trQ.Rollback;
+   finally
+     edtSTXStr.SetFocus;
+     edtSTXStr.SelStart:=length(edtSTXStr.Text);
+     edtSTXStr.SelLength:=0;
+   end;
+end;
+
+
 initialization
+
 
 end.

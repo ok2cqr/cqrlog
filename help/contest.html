@@ -51,32 +51,47 @@ Contest window has a simple dupe check (same call in same mode and band) that tu
 <ul><li> <b>2x ESC</b> clears all fileds</li>
 <li>Note: <b>1x ESC</b> returns cursor back to Call-field (if cursor is in some of the other fields like RSTr) and places cursor at the end of callsign for possible repairs.<br>
   It also halts CW memory output if it is just running.</li>
-<li> <b> F1..F10 </b>send CW macros etc.</li></ul>
+<li> <b> F1..F10 </b>send CW macros etc.</li>
+<li> <b>TAB-key</b> moves cursor between fields. (may also be SPACE key, if set) </li>
+</ul>
 </p>
 
 <p>
-Form Contest has following fields and checkboxes:<br>
+Contest window has following fields and checkboxes:<br>
 <ul>
-<li><b>Call</b> when you leave this field callsign is moved to NewQSO, to see if you have qso before.</li>
+<li><b>Tab All</b> when checked overrides all other Tab settings (below) and Tab Order is Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
+<li><b>Call</b> when you leave this field callsign is moved to NewQSO.Call turns BOLD RED if it is duplicate.</li>
+<li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field. <b>Note:</b>This prevents typing space (perhaps needed in MSG fields).</li>
+<br>
 <li><b>RST s</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
-<li><b>Tru</b> means you like to change true reports. Useful in some high band contests and Es and tropo openings.</li>
-<li><b>NR s</b> serial number to send. If <b>Inc</b> is checked it will auto increment. You may change this number at any time. Increment goes on from typed number.</li>
+<li><b>Tru</b> means you like to change true reports. Makes Tab order to stop at RST (s & r) fields. Useful in some high band contests, Es and tropo openings.</li>
+<br>
+<li><b>NR s</b> serial number to send. <b>Note:</b> you can type only numbers to NR s field.</li>
+<li> <b>Inc</b> if checked it will auto increment serial number. You may change this number at any time. Increment goes on from typed number.</li>
+<br>
 <li><b>MSG s</b> sometimes you may need an additional message with number, or just a message with no number. On high band contests you may type your locator here.</li>
+<li><b>Qsp</b> if checked makes TAB order stop at MSG s. Content of MSG s is taken from last logged MSG r. Cursor is placed at the end of message for bossible edit. For contests where you have circulating message: At 1st qso you set your own word to send, after that you send previously received word as your next own message. </li>
+<br>
 <li><b>RST r</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
-<li><b>NR r</b> serial number you receive. No if no serial number then setting this changes tab order so that it jumps directly to MSG r from Call (and after that NR r). Note: you can feed only numbers to NR r field.</li>
-<li><b>MSG r</b> message you receive, if <b>MSG is LOC</b> is checked then message will be placed <b>ALSO</b> to NewQSO/Grid field <b>AND</b> to received msg field</li>
-<li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears fields.</li>
-<li><b>Clear all</b> Clear all fields and prepare to enter new QSO</li>
-<li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field.
-Note! This prevents typing space (mainly to MSG fields).</li></ul>
+<br>
+<li><b>NR r</b> serial number you receive. <b>Note:</b> you can type only numbers to NR r field. </li>
+<li><b>No </b> if no serial number then setting this changes tab order so that it jumps directly to MSG r. </li>
+<br>
+<li><b>MSG r</b> message you receive</li>
+<li> <b>MSG is LOC</b> if checked then message will be logged <b>ALSO</b> as locator grid <b>AND</b> SRX String</li>
+<br>
+<li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears all fields. <b>Note:</b> pressing <b>ENTER at any time</b> after Call fied is filled does the same.</li>
+<li><b>Clear all</b> Clear all fields.  <b>Note:</b> Pressing 2x ESC key does the same.</li>
+</ul>
 </p>
 <p>
-<b>TAB-key</b> moves cursor between fields. So contest qso goes like this:
-type callsign-&gt;press TAB-&gt;type contest rxnumber-&gt;press TAB-&gt;type contest message-&gt;press ENTER.
+<b>Typical contest qso goes like this:</b><br>
+Type callsign-&gt;press TAB-&gt;type contest rxnumber-&gt;press TAB-&gt;type contest message-&gt;press ENTER.
 Or hit ENTER after rxnumber if no additional message is exchanged.
 </p>
 <p>Remember that pressing <b>ENTER</b> key at any field saves qso with existing values. How ever there must be
-callsign of least three characters long. Sent/Received number and message are not needed.</p>
+callsign of least three characters long. Sent/Received number and message are not needed.
+<br><b>There is no need to use the mouse.</b> Keep your hands on keyboard (and possible on Cw key / PTT (if not foot pedal in use)). It is faster.</p>
 <p>
 Contest numbers and messages are saved in log into their own columns. Use <b>preferences/Visible columns</b> to show them in <b>Qso list</b>.
 For editing a qso these columns appear to <b>NewQSO</b> window when <b>contest</b> window is open and NewQso window is streched horizontally (DXCCinfo may override them).
