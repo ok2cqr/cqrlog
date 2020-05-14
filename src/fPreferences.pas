@@ -2980,19 +2980,6 @@ begin
   fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-  edtCW1.Width := 60;
-  edtSSB1.Width := 60;
-  edtRTTY1.Width := 60;
-  edtAM1.Width := 60;
-  edtFM1.Width := 60;
-  edtCMD1.Width := 60;
-
-  edtCW2.Width := 60;
-  edtSSB2.Width := 60;
-  edtRTTY2.Width := 60;
-  edtAM2.Width := 60;
-  edtFM2.Width := 60;
-  edtCMD2.Width := 60;
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
