@@ -1,3 +1,7 @@
+This is a rescue branch from rtty_data. I do not know is it from right level brom branch but at least the preferences/modes view is what it should be.
+I have once again messed up my git! Grrrrr!
+
+
 What is CQRLOG?
 ---------------
 
