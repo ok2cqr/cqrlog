@@ -171,6 +171,11 @@ CQ MONITOR USA STATES
 
 RTTY MODE IS DATA
 
+   This is broken in 118, and some previus versions. Same as the branch rtty_data is broken. I have spoiled it making merge master several times and one of them has wiped this code.
+It is there somewhere in Git branch history.AT least 113 seems to have it. I have spent hours trying to rescue it for reuse in 119 and furure versions, but no success.
+
+So be it...
+
    - separate source for this can be found from branch "rtty_data"
    - At preferences/Modes you will see a new "DATA" that replaces the old "RTTY". Defaults for that are
     rig cmd:RTTY data mode:RTTY that acts like pervious cqrlogs.
