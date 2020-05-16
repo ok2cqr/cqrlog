@@ -1,65 +1,115 @@
 object frmFreq: TfrmFreq
-  Left = 514
-  Height = 385
-  Top = 313
-  Width = 561
+  Left = 422
+  Height = 472
+  Top = 47
+  Width = 626
   HorzScrollBar.Page = 448
   VertScrollBar.Page = 331
-  ActiveControl = dbgrdFreq
   BorderIcons = [biSystemMenu]
   Caption = 'Frequencies'
-  ClientHeight = 385
-  ClientWidth = 561
+  ClientHeight = 472
+  ClientWidth = 626
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
-  object Panel1: TPanel
+  LCLVersion = '2.0.4.0'
+  object pnlFreq2: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = pnlFreq1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 45
-    Top = 340
-    Width = 561
+    Height = 51
+    Top = 421
+    Width = 626
     Align = alBottom
+    Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvNone
-    ClientHeight = 45
-    ClientWidth = 561
+    ClientHeight = 51
+    ClientWidth = 626
     TabOrder = 0
     object btnChange: TButton
-      Left = 376
+      AnchorSideRight.Control = btnCancel
+      AnchorSideBottom.Control = pnlFreq2
+      AnchorSideBottom.Side = asrCenter
+      Left = 464
       Height = 25
-      Top = 8
+      Top = 12
       Width = 75
       Anchors = [akRight, akBottom]
+      BorderSpacing.Right = 6
       BorderSpacing.InnerBorder = 4
       Caption = 'Modify'
       OnClick = btnChangeClick
       TabOrder = 0
     end
     object btnCancel: TButton
-      Left = 472
+      AnchorSideRight.Control = pnlFreq2
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = pnlFreq2
+      AnchorSideBottom.Side = asrCenter
+      Left = 545
       Height = 25
-      Top = 8
+      Top = 12
       Width = 75
       Anchors = [akRight, akBottom]
+      BorderSpacing.Right = 6
       BorderSpacing.InnerBorder = 4
       Caption = 'Close'
       ModalResult = 2
       TabOrder = 1
     end
+    object lblFreqNote1: TLabel
+      AnchorSideLeft.Control = pnlFreq2
+      AnchorSideTop.Control = pnlFreq2
+      Left = 12
+      Height = 17
+      Top = 6
+      Width = 375
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 6
+      Caption = 'CW:(f>=Start and f<=CW)   RTTY= (f>RTTY and f<=SSB)'
+      ParentColor = False
+    end
+    object lblFreqNote2: TLabel
+      AnchorSideLeft.Control = lblFreqNote1
+      AnchorSideTop.Control = lblFreqNote1
+      AnchorSideTop.Side = asrBottom
+      Left = 12
+      Height = 17
+      Top = 23
+      Width = 430
+      Caption = 'SSB:(f>SSB and f<=End)      USB:(f>10 or (f>5 and f<6)) else LSB'
+      ParentColor = False
+    end
   end
-  object dbgrdFreq: TDBGrid
+  object pnlFreq1: TPanel
+    AnchorSideTop.Control = Owner
     Left = 0
-    Height = 340
+    Height = 421
     Top = 0
-    Width = 561
-    Align = alClient
-    Color = clWindow
-    Columns = <>
-    DataSource = dsrFreq
-    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    Width = 626
+    Align = alBottom
+    ClientHeight = 421
+    ClientWidth = 626
     TabOrder = 1
-    TitleStyle = tsNative
-    OnColumnSized = dbgrdFreqColumnSized
-    OnDblClick = dbgrdFreqDblClick
+    object dbgrdFreq: TDBGrid
+      Left = 1
+      Height = 419
+      Top = 1
+      Width = 624
+      Align = alClient
+      Color = clWindow
+      Columns = <>
+      DataSource = dsrFreq
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleStyle = tsNative
+      OnColumnSized = dbgrdFreqColumnSized
+      OnDblClick = dbgrdFreqDblClick
+    end
   end
   object dsrFreq: TDataSource
     DataSet = dmData.qBands

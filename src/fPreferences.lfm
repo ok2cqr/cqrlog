@@ -5,8 +5,8 @@ object frmPreferences: TfrmPreferences
   Width = 1098
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 1047
-  VertScrollBar.Page = 416
+  HorzScrollBar.Page = 664
+  VertScrollBar.Page = 409
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 659
     Top = 0
     Width = 850
-    ActivePage = tabRBN
+    ActivePage = tabBands
     Align = alClient
-    TabIndex = 24
+    TabIndex = 4
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -335,7 +335,7 @@ object frmPreferences: TfrmPreferences
           Left = 104
           Height = 17
           Top = 112
-          Width = 28
+          Width = 26
           Caption = 'Loc:'
           ParentColor = False
         end
@@ -349,7 +349,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtCall: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 11
           Width = 128
           CharCase = ecUppercase
@@ -359,13 +359,13 @@ object frmPreferences: TfrmPreferences
           Left = 88
           Height = 17
           Top = 48
-          Width = 44
+          Width = 43
           Caption = 'Name:'
           ParentColor = False
         end
         object edtName: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 43
           Width = 128
           TabOrder = 1
@@ -374,20 +374,20 @@ object frmPreferences: TfrmPreferences
           Left = 98
           Height = 17
           Top = 80
-          Width = 34
+          Width = 32
           Caption = 'QTH:'
           ParentColor = False
         end
         object edtQTH: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 75
           Width = 128
           TabOrder = 2
         end
         object edtLoc: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 107
           Width = 128
           OnChange = edtLocChange
@@ -407,13 +407,13 @@ object frmPreferences: TfrmPreferences
           Left = 20
           Height = 17
           Top = 45
-          Width = 112
+          Width = 108
           Caption = 'Mailing Address:'
           ParentColor = False
         end
         object edtMailingAddress: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 40
           Width = 128
           OnChange = edtLocChange
@@ -423,13 +423,13 @@ object frmPreferences: TfrmPreferences
           Left = 76
           Height = 17
           Top = 77
-          Width = 56
+          Width = 54
           Caption = 'ZIP City:'
           ParentColor = False
         end
         object edtZipCity: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 72
           Width = 128
           OnChange = edtLocChange
@@ -439,13 +439,13 @@ object frmPreferences: TfrmPreferences
           Left = 86
           Height = 17
           Top = 109
-          Width = 46
+          Width = 45
           Caption = 'E-Mail:'
           ParentColor = False
         end
         object edtEmail: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 104
           Width = 128
           OnChange = edtLocChange
@@ -455,13 +455,13 @@ object frmPreferences: TfrmPreferences
           Left = 8
           Height = 17
           Top = 141
-          Width = 124
+          Width = 118
           Caption = 'Club Membership:'
           ParentColor = False
         end
         object edtClub: TEdit
           Left = 147
-          Height = 25
+          Height = 34
           Top = 136
           Width = 128
           OnChange = edtLocChange
@@ -471,7 +471,7 @@ object frmPreferences: TfrmPreferences
           Left = 8
           Height = 17
           Top = 8
-          Width = 150
+          Width = 142
           Caption = '(used for EDI exports)'
           ParentColor = False
         end
@@ -1661,7 +1661,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 20
       end
       object btnFrequencies: TButton
-        Left = 310
+        Left = 312
         Height = 25
         Top = 206
         Width = 94
@@ -1770,8 +1770,8 @@ object frmPreferences: TfrmPreferences
         TabOrder = 3
         object tabTRX1: TTabSheet
           Caption = 'Radio one'
-          ClientHeight = 388
-          ClientWidth = 643
+          ClientHeight = 361
+          ClientWidth = 637
           object GroupBox3: TGroupBox
             Left = 16
             Height = 333
@@ -2113,8 +2113,8 @@ object frmPreferences: TfrmPreferences
         end
         object tabTRX2: TTabSheet
           Caption = 'Radio two'
-          ClientHeight = 388
-          ClientWidth = 643
+          ClientHeight = 361
+          ClientWidth = 637
           object GroupBox4: TGroupBox
             Left = 16
             Height = 333
@@ -2550,8 +2550,8 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = pgROTControl
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor one'
-          ClientHeight = 388
-          ClientWidth = 653
+          ClientHeight = 361
+          ClientWidth = 647
           object gbRot1: TGroupBox
             AnchorSideLeft.Control = tabRot1
             AnchorSideTop.Control = tabRot1
@@ -3005,8 +3005,8 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = tabRot1
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor two'
-          ClientHeight = 388
-          ClientWidth = 653
+          ClientHeight = 361
+          ClientWidth = 647
           object gbRot2: TGroupBox
             AnchorSideLeft.Control = tabRot2
             AnchorSideTop.Control = tabRot2
@@ -6938,7 +6938,7 @@ object frmPreferences: TfrmPreferences
           Width = 543
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-          ClientHeight = 94
+          ClientHeight = 110
           ClientWidth = 541
           TabOrder = 7
           object Label95: TLabel
@@ -7108,7 +7108,7 @@ object frmPreferences: TfrmPreferences
           Width = 480
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-          ClientHeight = 89
+          ClientHeight = 105
           ClientWidth = 478
           TabOrder = 0
           object Label202: TLabel
@@ -7437,7 +7437,7 @@ object frmPreferences: TfrmPreferences
         Height = 370
         Top = 8
         Width = 608
-        ClientHeight = 352
+        ClientHeight = 368
         ClientWidth = 606
         TabOrder = 0
         object Label93: TLabel
