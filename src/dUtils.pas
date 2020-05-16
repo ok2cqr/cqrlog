@@ -95,9 +95,11 @@ type
     fHamQTHSession: string;
     fSysUTC: boolean;
 
+
     procedure LoadRigList(RigCtlBinaryPath : String;RigList : TStringList);
     procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
 
+    function BandFromDbase(tmp:Currency):string;
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
     function GetQRZSession(var ErrMsg: string): boolean;
@@ -296,7 +298,29 @@ begin
       Result := 'D';
   end;
 end;
+function TdmUtils.BandFromDbase(tmp:Currency):string;
+Begin
+  Result := '';
+  dmData.qBands1.Close;
+  dmData.qBands1.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
+  if dmData.trBands1.Active then
+    dmData.trBands1.Rollback;
+  dmData.trBands1.StartTransaction;
+  try
+    dmData.qBands1.Open;
+     while (( not dmData.qBands1.Eof ) and (Result = '')) do
+              begin
+               if (tmp >= dmData.qBands1.FieldByName('b_begin').AsFloat)
+                 and (tmp <= dmData.qBands1.FieldByName('b_end').AsFloat) then
+                   Result := dmData.qBands1.FieldByName('band').AsString;
+               dmData.qBands1.Next;
+              end;
+  finally
+    dmData.qBands1.Close;
+    dmData.trBands1.Rollback
+  end;
 
+end;
 
 function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
 var
@@ -361,30 +385,9 @@ begin
     MHz[pos(',', MHz)] := FormatSettings.DecimalSeparator;
 
   if not TryStrToCurr(MHz, tmp) then
-    exit;
-
-  dmData.qBands1.Close;
-  dmData.qBands1.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
-  if dmData.trBands1.Active then
-    dmData.trBands1.Rollback;
-  dmData.trBands1.StartTransaction;
-  try
-    dmData.qBands1.Open;
-     while (( not dmData.qBands1.Eof ) and (Result = '')) do
-              begin
-               if (tmp >= dmData.qBands1.FieldByName('b_begin').AsFloat)
-                 and (tmp <= dmData.qBands1.FieldByName('b_end').AsFloat) then
-                   Result := dmData.qBands1.FieldByName('band').AsString;
-               dmData.qBands1.Next;
-              end;
-  finally
-    dmData.qBands1.Close;
-    dmData.trBands1.Rollback
-  end;
-
-
-
-
+    exit
+   else
+    Result := BandFromDbase(tmp);
 {
   if tmp < 1 then
   begin
@@ -444,8 +447,9 @@ begin
     MHz[pos(',', MHz)] := FormatSettings.DecimalSeparator;
 
   if not TextToFloat(PChar(MHZ), tmp, fvCurrency) then
-    exit;
-
+    exit
+   else Result := BandFromDbase(tmp);
+{
   if tmp < 1 then
   begin
     Dec := Int(frac(tmp) * 1000);
@@ -489,6 +493,7 @@ begin
     76000..84000: band := '4MM';
   end;
   Result := band;
+  }
 end;
 
 procedure TdmUtils.SaveForm(aForm: TForm);

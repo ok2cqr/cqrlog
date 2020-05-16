@@ -1,0 +1,65 @@
+Test that these works!
+
+
+
+[saku@hamtpad cqrlog]$ grep -ni GetAdifBandFromFreq  src/*.pas
+src/dUtils.pas:243:    function  GetAdifBandFromFreq(MHz : string): String;
+src/dUtils.pas:434:function TdmUtils.GetAdifBandFromFreq(MHz: string): string;
+src/fExportProgress.pas:234:      SaveTag(dmUtils.StringToADIF('<BAND',dmUtils.GetAdifBandFromFreq(Freq)),leng);
+
+
+[saku@hamtpad cqrlog]$ grep -ni GetBandFromFreq  src/*.pas
+src/dData.pas:1324:  band := dmUtils.GetBandFromFreq(CurrToStr(freq));
+src/dData.pas:1390:  band  := dmUtils.GetBandFromFreq(CurrToStr(freq));
+src/dData.pas:1971:  band := dmUtils.GetBandFromFreq(freq);
+src/dData.pas:2025:  band := dmUtils.GetBandFromFreq(freq);
+src/dDXCC.pas:257:  band := dmUtils.GetBandFromFreq(freq);
+src/dDXCluster.pas:92:    function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
+src/dDXCluster.pas:215:    band := dmUtils.GetBandFromFreq(freq);
+src/dDXCluster.pas:750:function TdmDXCluster.GetBandFromFreq(freq : string; kHz : Boolean=false): String;
+src/dUtils.pas:196:    function  GetBandFromFreq(MHz : string): String;
+src/dUtils.pas:331:  band := GetBandFromFreq(freq);
+src/dUtils.pas:372:function TdmUtils.GetBandFromFreq(MHz: string): string;
+src/dUtils.pas:1288:  if GetBandFromFreq(freq) <> '' then
+src/dUtils.pas:1507:  if (GetBandFromFreq(freq) = '') then
+src/dUtils.pas:2726:  Result := LowerCase(GetBandFromFreq(freq));
+src/fAdifImport.pas:564:    band := dmUtils.GetBandFromFreq(d.FREQ);
+src/fContest.pas:184:  if frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text) = 1 then
+src/fGrayline.pas:305:  band := dmDXCluster.GetBandFromFreq(freq,True);
+src/fGrayline.pas:323:  Writeln('band:   ',dmDXCluster.GetBandFromFreq(freq,True));
+src/fGroupEdit.pas:222:           sql := 'freq='+cmbValue.Text+', band='+QuotedStr(dmUtils.GetBandFromFreq(cmbValue.Text))
+src/fImportProgress.pas:814:            band  := dmUtils.GetBandFromFreq(dmUtils.FreqFromBand(band,'CW'));
+src/fImportTest.pas:194:        if dmUtils.GetBandFromFreq(dmData.qImport.FieldByName('FREQ').AsString) = 0 then
+src/fNewQSO.pas:1776:            if dmUtils.GetBandFromFreq(mhz) <> '' then
+src/fNewQSO.pas:2100:          band := dmUtils.GetBandFromFreq(freq);
+src/fNewQSO.pas:2469:          ParStr := dmUtils.GetBandFromFreq(mhz);
+src/fNewQSO.pas:2556:            if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
+src/fNewQSO.pas:2748:                  if dmUtils.GetBandFromFreq(mhz) <> '' then
+src/fNewQSO.pas:2754:          ParStr := dmUtils.GetBandFromFreq(mhz);
+src/fNewQSO.pas:3018:  if (dmUtils.GetBandFromFreq(cmbFreq.Text) = '') then
+src/fNewQSO.pas:3135:        frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
+src/fNewQSO.pas:4122:  frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
+src/fQSODetails.pas:453:                           QuotedStr(dmUtils.GetBandFromFreq(ffreq)) + ' and mode = ' +
+src/fQSODetails.pas:469:                               QuotedStr(dmUtils.GetBandFromFreq(ffreq)) + 'and mode = ' +
+src/fQSODetails.pas:486:                               QuotedStr(dmUtils.GetBandFromFreq(ffreq)) + ' LIMIT 1';
+src/fRbnMonitor.pas:196:  Band := dmDXCluster.GetBandFromFreq(freq,True);
+src/fRbnMonitor.pas:790:  band := dmDXCluster.GetBandFromFreq(freq, True);
+src/fTRXControl.pas:410:        b := dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text);
+src/fTRXControl.pas:459:    b := dmUtils.GetBandFromFreq(lblFreq.Caption);
+src/fTRXControl.pas:1339:    band := dmUtils.GetBandFromFreq(freq)
+src/fTRXControl.pas:1479:  btn160MBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','160cw',1830)/1000));
+src/fTRXControl.pas:1480:  btn80MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','80cw',3525)/1000));
+src/fTRXControl.pas:1481:  btn40MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','40cw',7015)/1000));
+src/fTRXControl.pas:1482:  btn30MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','30cw',10110)/1000));
+src/fTRXControl.pas:1483:  btn20MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','20cw',14025)/1000));
+src/fTRXControl.pas:1484:  btn17MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','17cw',18080)/1000));
+src/fTRXControl.pas:1485:  btn15MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','15cw',21025)/1000));
+src/fTRXControl.pas:1486:  btn12MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','12cw',24895)/1000));
+src/fTRXControl.pas:1487:  btn10MBand  := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','10cw',28025)/1000));
+src/fTRXControl.pas:1488:  btn6MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','6cw',50090)/1000));
+src/fTRXControl.pas:1489:  btn2MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','2cw',144050)/1000));
+src/fTRXControl.pas:1490:  btn70CMBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','70cw',430000)/1000))
+src/fWAZITUStat.pas:539:      b := dmUtils.GetBandFromFreq(dmData.Q.Fields[1].AsString);
+src/fWAZITUStat.pas:543:        oldb := dmUtils.GetBandFromFreq(dmData.Q.Fields[1].AsString)
+src/fXfldigi.pas:243:                  if dmUtils.GetBandFromFreq(mhz) <> '' then
+[saku@hamtpad cqrlog]$ 
