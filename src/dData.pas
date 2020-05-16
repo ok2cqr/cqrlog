@@ -55,11 +55,14 @@ type
   { TdmData }
 
   TdmData = class(TDataModule)
+    dsrBands1: TDataSource;
     dsrSQLConsole: TDatasource;
     dsrLogList: TDatasource;
     dsrmQ: TDatasource;
     mQ: TSQLQuery;
     Q2: TSQLQuery;
+    qBands1: TSQLQuery;
+    trBands1: TSQLTransaction;
     trQ2: TSQLTransaction;
     qSQLConsole: TSQLQuery;
     scCommon: TSQLScript;

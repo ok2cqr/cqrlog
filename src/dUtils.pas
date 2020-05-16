@@ -305,28 +305,28 @@ var
 begin
   Result := '';
   band := GetBandFromFreq(freq);
-  dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
+  dmData.qBands1.Close;
+  dmData.qBands1.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
     QuotedStr(band);
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
-  dmData.trBands.StartTransaction;
+  if dmData.trBands1.Active then
+    dmData.trBands1.Rollback;
+  dmData.trBands1.StartTransaction;
   try
-    dmData.qBands.Open;
+    dmData.qBands1.Open;
     tmp := StrToFloat(freq);
-    if dmData.qBands.RecordCount > 0 then
+    if dmData.qBands1.RecordCount > 0 then
     begin
-      if ((tmp >= dmData.qBands.FieldByName('B_BEGIN').AsCurrency) and
-        (tmp <= dmData.qBands.FieldByName('CW').AsCurrency)) then
+      if ((tmp >= dmData.qBands1.FieldByName('B_BEGIN').AsCurrency) and
+        (tmp <= dmData.qBands1.FieldByName('CW').AsCurrency)) then
         Result := 'CW'
       else
       begin
-        if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
+        if ((tmp > dmData.qBands1.FieldByName('RTTY').AsCurrency) and
+          (tmp <= dmData.qBands1.FieldByName('SSB').AsCurrency)) then
           Result := 'RTTY';
 
-        if ((tmp > dmData.qBands.FieldByName('SSB').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('B_END').AsCurrency)) then
+        if ((tmp > dmData.qBands1.FieldByName('SSB').AsCurrency) and
+          (tmp <= dmData.qBands1.FieldByName('B_END').AsCurrency)) then
         begin
           if (tmp > 5) and (tmp < 6) then
             Result := 'USB'
@@ -340,8 +340,8 @@ begin
       end
     end
   finally
-    dmData.qBands.Close;
-    dmData.trBands.Rollback
+    dmData.qBands1.Close;
+    dmData.trBands1.Rollback
   end;
 end;
 
@@ -363,23 +363,23 @@ begin
   if not TryStrToCurr(MHz, tmp) then
     exit;
 
-  dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
-  dmData.trBands.StartTransaction;
+  dmData.qBands1.Close;
+  dmData.qBands1.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
+  if dmData.trBands1.Active then
+    dmData.trBands1.Rollback;
+  dmData.trBands1.StartTransaction;
   try
-    dmData.qBands.Open;
-     while (( not dmData.qBands.Eof ) and (Result = '')) do
+    dmData.qBands1.Open;
+     while (( not dmData.qBands1.Eof ) and (Result = '')) do
               begin
-               if (tmp >= dmData.qBands.FieldByName('b_begin').AsFloat)
-                 and (tmp <= dmData.qBands.FieldByName('b_end').AsFloat) then
-                   Result := dmData.qBands.FieldByName('band').AsString;
-               dmData.qBands.Next;
+               if (tmp >= dmData.qBands1.FieldByName('b_begin').AsFloat)
+                 and (tmp <= dmData.qBands1.FieldByName('b_end').AsFloat) then
+                   Result := dmData.qBands1.FieldByName('band').AsString;
+               dmData.qBands1.Next;
               end;
   finally
-    dmData.qBands.Close;
-    dmData.trBands.Rollback
+    dmData.qBands1.Close;
+    dmData.trBands1.Rollback
   end;
 
 

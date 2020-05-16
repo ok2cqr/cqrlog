@@ -19,6 +19,8 @@ type
     dsrFreq: TDatasource;
     lblFreqNote1: TLabel;
     lblFreqNote2: TLabel;
+    lblFreqNote3: TLabel;
+    lblFreqNote4: TLabel;
     pnlFreq2: TPanel;
     pnlFreq1: TPanel;
     procedure dbgrdFreqColumnSized(Sender : TObject);
