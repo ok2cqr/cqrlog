@@ -4,10 +4,10 @@ Until now found at least 3 cases to have same hardcoded "band from freq" code. S
 Test that these works!
 
 Grayline
-RBNmonitor
+RBNmonitor  (in testing: Filter works by bands, but died. not know yet why. Must test more9
 DXCluster
-ADIF inport
-ADIF export
+ADIF import  (tested. gives right band 70CM with 443MHz if band end is set to 450 instead of 440 )
+ADIF export  (tested. Gives tag "BAND:0><" if out of band definitions)
 COntest
 TRXControl
 NewQso
