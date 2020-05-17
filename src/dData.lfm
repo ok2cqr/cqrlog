@@ -966,24 +966,4 @@ object dmData: TdmData
     left = 576
     top = 144
   end
-  object qBands1: TSQLQuery
-    FieldDefs = <>
-    BeforeOpen = qBandsBeforeOpen
-    Transaction = trBands1
-    Params = <>
-    ParseSQL = False
-    left = 88
-    top = 216
-  end
-  object trBands1: TSQLTransaction
-    Active = False
-    Action = caNone
-    left = 88
-    top = 288
-  end
-  object dsrBands1: TDataSource
-    DataSet = qBands1
-    left = 88
-    top = 360
-  end
 end

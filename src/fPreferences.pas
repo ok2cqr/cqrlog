@@ -1721,7 +1721,9 @@ begin
     frmFreq.ShowModal
   finally
     frmFreq.Free
-  end
+  end;
+  //init user defined bands vs frequencies
+  dmUtils.BandFromDbase;
 end;
 
 procedure TfrmPreferences.FormCloseQuery(Sender: TObject; var CanClose: boolean);

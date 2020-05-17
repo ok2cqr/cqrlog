@@ -1,5 +1,5 @@
 object frmNewQSO: TfrmNewQSO
-  Left = -299
+  Left = 0
   Height = 709
   Top = 24
   Width = 997

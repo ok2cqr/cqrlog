@@ -31,6 +31,12 @@ type
     Exists    : Boolean;
   end;
 
+  BandVsFreq = record
+    band     : string;
+    b_begin  : currency;
+    b_end    : currency;
+  end;
+
 type
   TColumnVisibleArray = array of TVisibleColumn;
 
@@ -57,10 +63,9 @@ const
     +
     '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|';
   cBands: array[0..25] of string[10] =
-    ('2190M', '630M', '160M', '80M', '60M', '40M', '30M', '20M', '17M', '15M', '12M', '10M', '6M',
-    '4M', '2M', '1.25M', '70CM',
-    '33CM', '23CM', '13CM', '9CM', '6CM', '3CM',
-    '1.25CM', '6MM', '4MM');
+    ('2190M', '630M', '160M', '80M'   , '60M', '40M'  , '30M', '20M'  , '17M' , '15M' ,
+     '12M'  , '10M' , '6M'  , '4M'    , '2M' , '1.25M', '70CM', '33CM', '23CM', '13CM',
+     '9CM'  , '6CM' , '3CM' , '1.25CM', '6MM', '4MM');
 
   cMaxIgnoreFreq = 6;
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string =
@@ -137,6 +142,7 @@ type
     USstates: array [1..50] of string;
     MyBands: array [0..cMaxBandsCount - 1, 0..1] of string[6];
     //list of bands, band labels
+    BandFreq  : array [0..cMaxBandsCount - 1]of BandVsFreq;
 
     property TimeOffset: currency read fTimeOffset write fTimeOffset;
     property GrayLineOffset: currency read fGraylineOffset write fGrayLineOffset;
@@ -188,8 +194,9 @@ type
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
+    procedure  BandFromDbase;
 
-    function BandFromDbase(tmp:Currency):string;
+    function  BandFromArray(tmp:Currency):string;
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;
@@ -297,28 +304,47 @@ begin
       Result := 'D';
   end;
 end;
-function TdmUtils.BandFromDbase(tmp:Currency):string;
+Procedure TdmUtils.BandFromDbase;
+var
+  BandCount: integer;
 Begin
-  Result := '';
-  dmData.qBands1.Close;
-  dmData.qBands1.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
-  if dmData.trBands1.Active then
-    dmData.trBands1.Rollback;
-  dmData.trBands1.StartTransaction;
+  BandCount := 0;
+  dmData.qBands.Close;
+  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
+  if dmData.trBands.Active then
+    dmData.trBands.Rollback;
+  dmData.trBands.StartTransaction;
   try
-    dmData.qBands1.Open;
-     while (( not dmData.qBands1.Eof ) and (Result = '')) do
-              begin
-               if (tmp >= dmData.qBands1.FieldByName('b_begin').AsFloat)
-                 and (tmp <= dmData.qBands1.FieldByName('b_end').AsFloat) then
-                   Result := dmData.qBands1.FieldByName('band').AsString;
-               dmData.qBands1.Next;
-              end;
+    dmData.qBands.Open;
+    while not dmData.qBands.Eof  do
+     Begin
+       BandFreq[BandCount].band:= dmData.qBands.FieldByName('band').AsString;
+       BandFreq[BandCount].b_begin:=dmData.qBands.FieldByName('b_begin').AsCurrency;
+       BandFreq[BandCount].b_end:=dmData.qBands.FieldByName('b_end').AsCurrency;
+       writeln( BandFreq[BandCount].band);
+       inc(BandCount);
+       dmData.qBands.Next;
+     end;
   finally
-    dmData.qBands1.Close;
-    dmData.trBands1.Rollback
+    dmData.qBands.Close;
+    dmData.trBands.Rollback
   end;
-
+end;
+function TdmUtils.BandFromArray(tmp:Currency):string;
+var
+   x:integer;
+Begin
+  result:='';
+   for x:=0 to  (cMaxBandsCount - 1 ) do
+      Begin
+           if (tmp >= dmUtils.BandFreq[x].b_begin )
+             and (tmp <= dmUtils.BandFreq[x].b_end ) then
+                Begin
+                   Result := dmUtils.BandFreq[x].band;
+                    writeln('Band is:',Result);
+                    exit;
+                end;
+      end;
 end;
 
 function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
@@ -328,28 +354,28 @@ var
 begin
   Result := '';
   band := GetBandFromFreq(freq);
-  dmData.qBands1.Close;
-  dmData.qBands1.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
+  dmData.qBands.Close;
+  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
     QuotedStr(band);
-  if dmData.trBands1.Active then
-    dmData.trBands1.Rollback;
-  dmData.trBands1.StartTransaction;
+  if dmData.trBands.Active then
+    dmData.trBands.Rollback;
+  dmData.trBands.StartTransaction;
   try
-    dmData.qBands1.Open;
+    dmData.qBands.Open;
     tmp := StrToFloat(freq);
-    if dmData.qBands1.RecordCount > 0 then
+    if dmData.qBands.RecordCount > 0 then
     begin
-      if ((tmp >= dmData.qBands1.FieldByName('B_BEGIN').AsCurrency) and
-        (tmp <= dmData.qBands1.FieldByName('CW').AsCurrency)) then
+      if ((tmp >= dmData.qBands.FieldByName('B_BEGIN').AsCurrency) and
+        (tmp <= dmData.qBands.FieldByName('CW').AsCurrency)) then
         Result := 'CW'
       else
       begin
-        if ((tmp > dmData.qBands1.FieldByName('RTTY').AsCurrency) and
-          (tmp <= dmData.qBands1.FieldByName('SSB').AsCurrency)) then
+        if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and
+          (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
           Result := 'RTTY';
 
-        if ((tmp > dmData.qBands1.FieldByName('SSB').AsCurrency) and
-          (tmp <= dmData.qBands1.FieldByName('B_END').AsCurrency)) then
+        if ((tmp > dmData.qBands.FieldByName('SSB').AsCurrency) and
+          (tmp <= dmData.qBands.FieldByName('B_END').AsCurrency)) then
         begin
           if (tmp > 5) and (tmp < 6) then
             Result := 'USB'
@@ -363,8 +389,8 @@ begin
       end
     end
   finally
-    dmData.qBands1.Close;
-    dmData.trBands1.Rollback
+    dmData.qBands.Close;
+    dmData.trBands.Rollback
   end;
 end;
 
@@ -386,7 +412,7 @@ begin
   if not TryStrToCurr(MHz, tmp) then
     exit
    else
-    Result := BandFromDbase(tmp);
+    Result := BandFromArray(tmp);
 {
   if tmp < 1 then
   begin
@@ -447,7 +473,7 @@ begin
 
   if not TextToFloat(PChar(MHZ), tmp, fvCurrency) then
     exit
-   else Result := BandFromDbase(tmp);
+   else Result := BandFromArray(tmp);
 {
   if tmp < 1 then
   begin

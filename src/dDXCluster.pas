@@ -770,7 +770,7 @@ begin
     if kHz then
       tmp := tmp/1000;
 
-    Result := dmUtils.BandFromDbase(tmp);
+    Result := dmUtils.BandFromArray(tmp);
 
  {
     if tmp < 1 then

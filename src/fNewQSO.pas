@@ -1643,6 +1643,9 @@ begin
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
+
+  //init user defined bands vs frequencies
+  dmUtils.BandFromDbase;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
