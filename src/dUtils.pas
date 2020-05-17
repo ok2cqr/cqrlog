@@ -99,7 +99,6 @@ type
     procedure LoadRigList(RigCtlBinaryPath : String;RigList : TStringList);
     procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
 
-    function BandFromDbase(tmp:Currency):string;
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
     function GetQRZSession(var ErrMsg: string): boolean;
@@ -190,7 +189,7 @@ type
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
 
-
+    function BandFromDbase(tmp:Currency):string;
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;

@@ -770,6 +770,9 @@ begin
     if kHz then
       tmp := tmp/1000;
 
+    Result := dmUtils.BandFromDbase(tmp);
+
+ {
     if tmp < 1 then
     begin
       dec := Int(frac(tmp) * 1000);
@@ -809,6 +812,7 @@ begin
       76000..84000 : band := '4MM'
     end;
     Result := band
+  }
   finally
     LeaveCriticalsection(csDX)
   end
