@@ -4,16 +4,17 @@ New way to read band from mem array, not form database.
 New tests.
 Test that these works!
 
-Grayline
+Grayline  (tested: works)
 RBNmonitor  (tested: reads now band and does not crash like with database fetch)
-DXCluster
+DXCluster  (tested:works)
 ADIF import  (tested. gives right band 70CM with 443MHz if band end is set to 450 instead of 440 )
 ADIF export  (tested. Gives tag "BAND:0><" if out of band definitions)
-COntest
-TRXControl  (does not give band buttons colored, why?=
-NewQso
-WAZITUStatus
-
+COntest  (tested: works -- dupe test)
+TRXControl  (Tested: does not give band buttons colored. Now does when band array init is at DBopen/btnclickOpen)
+NewQso  
+WAZITUStatus (tested:works)
+flodigi xml (Tested: fixed, Error in freq reading. Not in getbandfromfreq)
+groupedit (tested:works)
 
 [saku@hamtpad cqrlog]$ grep -ni GetAdifBandFromFreq  src/*.pas
 

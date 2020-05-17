@@ -236,7 +236,10 @@ begin
     dmData.CheckForDatabases;
     UpdateGridFields;
     EnableButtons;
-    OpenDefaultLog
+    OpenDefaultLog;
+
+    //init user defined bands vs frequencies
+    dmUtils.BandFromDbase;
   end
 end;
 

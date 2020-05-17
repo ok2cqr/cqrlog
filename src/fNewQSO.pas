@@ -1644,8 +1644,6 @@ begin
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
 
-  //init user defined bands vs frequencies
-  dmUtils.BandFromDbase;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -1776,6 +1774,8 @@ begin
               if dmData.DebugLevel>=1 then Writeln('mhz:',mhz)
             end;
             mhz := Trim(mhz);
+            if Pos('.', mhz) > 0 then mhz[Pos('.', mhz)] := FormatSettings.DecimalSeparator;
+            if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
             if dmUtils.GetBandFromFreq(mhz) <> '' then
               cmbFreq.Text := mhz;
           end;
