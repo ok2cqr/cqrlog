@@ -788,13 +788,11 @@ end;
 
 procedure TfrmTRXControl.rbRadio1Click(Sender: TObject);
 begin
-  cqrini.WriteInteger('TRX', 'ActiveRig', 1);
   InicializeRig
 end;
 
 procedure TfrmTRXControl.rbRadio2Click(Sender: TObject);
 begin
-  cqrini.WriteInteger('TRX', 'ActiveRig', 2);
   InicializeRig
 end;
 
@@ -1349,6 +1347,8 @@ end;
 procedure TfrmTRXControl.UpdateModeButtons(mode : String);
 var
   usermode :String;
+  n        :String;
+
 begin
   btnCW.Font.Color    := COLOR_WINDOWTEXT;
   btnSSB.Font.Color   := COLOR_WINDOWTEXT;
@@ -1356,10 +1356,8 @@ begin
   btnAM.Font.Color    := COLOR_WINDOWTEXT;
   btnFM.Font.Color    := COLOR_WINDOWTEXT;
 
-  if cqrini.ReadInteger('TRX', 'ActiveRig', 1) = 2 then
-          usermode:=cqrini.ReadString('Band2', 'Datacmd', 'RTTY')
-         else
-          usermode:=cqrini.ReadString('Band1', 'Datacmd', 'RTTY');
+  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  usermode:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
 
   if mode = usermode then btnRTTY.Font.Color := clRed
      else
@@ -1492,20 +1490,13 @@ end;
 procedure TfrmTRXControl.CheckUserMode(var mode : String);
 var
   usermode,
-  usercmd:String;
+  usercmd,
+  n       :String;
 
 begin
-   if cqrini.ReadInteger('TRX', 'ActiveRig', 1) = 2 then
-          Begin
-            usercmd:=cqrini.ReadString('Band2', 'Datacmd', 'RTTY');
-            usermode:=cqrini.ReadString('Band2', 'Datamode', 'RTTY');
-          end
-         else
-          Begin
-            usercmd:=cqrini.ReadString('Band1', 'Datacmd', 'RTTY');
-            usermode:=cqrini.ReadString('Band1', 'Datamode', 'RTTY');
-          end;
-
+  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  usercmd:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
+  usermode:=cqrini.ReadString('Band'+n, 'Datamode', 'RTTY');
 
   if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
      mode := usercmd;
