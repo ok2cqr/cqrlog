@@ -237,9 +237,6 @@ begin
     UpdateGridFields;
     EnableButtons;
     OpenDefaultLog;
-
-    //init user defined bands vs frequencies
-    dmUtils.BandFromDbase;
   end
 end;
 

@@ -3461,6 +3461,9 @@ procedure TdmUtils.LoadBandsSettings;
 var
   i: integer;
 begin
+  //init user defined bands vs frequencies
+  dmUtils.BandFromDbase;
+
   LoadBandLabelSettins;
   for i := 0 to cMaxBandsCount - 1 do
   begin
