@@ -14,20 +14,22 @@ type
 
   TfrmContest = class(TForm)
     btSave: TButton;
-    Button1 : TButton;
-    chTrueRST: TCheckBox;
-    chNoNr: TCheckBox;
-    chSpace: TCheckBox;
-    chLoc: TCheckBox;
-    chNRInc: TCheckBox;
+    btClearAll : TButton;
+    chkTabAll: TCheckBox;
+    chkQsp: TCheckBox;
+    chkTrueRST: TCheckBox;
+    chkNoNr: TCheckBox;
+    chkSpace: TCheckBox;
+    chkLoc: TCheckBox;
+    chkNRInc: TCheckBox;
     cmbContestName: TComboBox;
     edtCall: TEdit;
     edtRSTs: TEdit;
     edtSTX: TEdit;
-    edtSTX_str: TEdit;
+    edtSTXStr: TEdit;
     edtRSTr: TEdit;
     edtSRX: TEdit;
-    edtSRX2: TEdit;
+    edtSRXStr: TEdit;
     lblContestName: TLabel;
     lblCall: TLabel;
     lblRSTs: TLabel;
@@ -39,16 +41,20 @@ type
     btnHelp : TSpeedButton;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
-    procedure Button1Click(Sender : TObject);
-    procedure chNoNrChange(Sender: TObject);
-    procedure chNRIncClick(Sender : TObject);
-    procedure chTrueRSTChange(Sender: TObject);
+    procedure btClearAllClick(Sender : TObject);
+    procedure chkNoNrChange(Sender: TObject);
+    procedure chkNRIncChange(Sender: TObject);
+    procedure chkNRIncClick(Sender : TObject);
+    procedure chkQspChange(Sender: TObject);
+    procedure chkTrueRSTChange(Sender: TObject);
+    procedure chkTabAllChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure edtCallKeyPress(Sender: TObject; var Key: char);
-    procedure edtSRX2Change(Sender: TObject);
+    procedure edtSRXStrChange(Sender: TObject);
     procedure edtSRXExit(Sender: TObject);
-    procedure edtSTX_strExit(Sender: TObject);
+    procedure edtSTXStrEnter(Sender: TObject);
+    procedure edtSTXStrExit(Sender: TObject);
     procedure edtSTXExit(Sender: TObject);
     procedure edtSTXKeyPress(Sender: TObject; var Key: char);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -62,6 +68,9 @@ type
     { private declarations }
     procedure InitInput;
     procedure ChkSerialNrUpd(IncNr: boolean);
+    procedure SetTabOrders;
+    procedure TabStopAllOn;
+    procedure QspMsg;
   public
     { public declarations }
   end;
@@ -206,7 +215,7 @@ begin
 
   frmNewQSO.edtHisRST.Text := edtRSTs.Text;
   frmNewQSO.edtContestSerialSent.Text := edtSTX.Text;
-  frmNewQSO.edtContestExchangeMessageSent.Text := edtSTX_str.Text;
+  frmNewQSO.edtContestExchangeMessageSent.Text := edtSTXStr.Text;
   //so that CW macros work
   frmNewQSO.edtCallExit(nil);
   frmContest.ShowOnTop;
@@ -215,100 +224,68 @@ end;
 
 procedure TfrmContest.btSaveClick(Sender: TObject);
 begin
-  if chLoc.Checked then
-    frmNewQSO.edtGrid.Text := edtSRX2.Text;
+  if chkLoc.Checked then
+    frmNewQSO.edtGrid.Text := edtSRXStr.Text;
 
   frmNewQSO.edtHisRST.Text := edtRSTs.Text;
   frmNewQSO.edtMyRST.Text := edtRSTr.Text;
   frmNewQSO.edtContestSerialReceived.Text := edtSRX.Text;
   frmNewQSO.edtContestSerialSent.Text := edtSTX.Text;
-  frmNewQSO.edtContestExchangeMessageReceived.Text := edtSRX2.Text;
-  frmNewQSO.edtContestExchangeMessageSent.Text := edtSTX_str.Text;
+  frmNewQSO.edtContestExchangeMessageReceived.Text := edtSRXStr.Text;
+  frmNewQSO.edtContestExchangeMessageSent.Text := edtSTXStr.Text;
   frmNewQSO.edtContestName.Text := ExtractWord(1,cmbContestName.Text,['|']);
 
   frmNewQSO.btnSave.Click;
   if dmData.DebugLevel >= 1 then
                        writeln('input finale');
-  ChkSerialNrUpd(chNRInc.Checked);
+  ChkSerialNrUpd(chkNRInc.Checked);
   initInput;
 end;
 
-procedure TfrmContest.Button1Click(Sender : TObject);
+procedure TfrmContest.btClearAllClick(Sender : TObject);
 begin
   frmNewQSO.ClearAll;
   initInput
 end;
 
-procedure TfrmContest.chNoNrChange(Sender: TObject);
-var
-  n, m, s, c: integer;
-
-  procedure swapTab;
-  begin //swap
-    c := n;
-    n := m;
-    m := c;
-    if (m < n) and (s > n) then    //must change n and s
-    begin
-      c := n;
-      n := s;
-      s := c;
-    end;
-    if (n < m) and (s < m) then    //must change m and s
-    begin
-      c := m;
-      m := s;
-      s := c;
-    end
-  end;
-begin
-  n := edtSRX.TabOrder;
-  m := edtSRX2.TabOrder;
-  s := btSave.TabOrder;
-
-  if (chNoNr.Checked) and (n < m) then          //msg always gets smaller tab order
-    swapTab;
-
-  if (not chNoNr.Checked) and (m < n) then  //msg always gets higher tab order
-    swapTab;
-  edtSRX.TabOrder := n;
-  edtSRX2.TabOrder := m;
-  btSave.TabOrder := s
+procedure TfrmContest.chkNoNrChange(Sender: TObject);
+Begin
+  SetTabOrders;
 end;
 
-procedure TfrmContest.chNRIncClick(Sender : TObject);
+procedure TfrmContest.chkNRIncChange(Sender: TObject);
 begin
-  if chNRInc.Checked and (edtSTX.Text = '') then
+  SetTabOrders;
+end;
+
+procedure TfrmContest.chkNRIncClick(Sender : TObject);
+begin
+  if chkNRInc.Checked and (edtSTX.Text = '') then
   begin
     edtSTX.Text := '001';
     edtCall.SetFocus
   end
 end;
 
-procedure TfrmContest.chTrueRSTChange(Sender: TObject);
+procedure TfrmContest.chkQspChange(Sender: TObject);
 begin
-  if chTrueRST.Checked then
-  begin                   //true RST order
-    edtRSTs.TabOrder := 1;
-    edtRSTr.TabOrder := 2;
-    edtSRX.TabOrder := 3;
-    edtSRX2.TabOrder := 4;
-    btSave.TabOrder := 5;
-  end
-  else begin                     //contest order
-    edtSRX.TabOrder := 1;
-    edtSRX2.TabOrder := 2;
-    btSave.TabOrder := 3;
-    edtRSTr.TabOrder := 4;
-    edtRSTs.TabOrder := 5;
-  end;
-  frmContest.chNoNrChange(nil); //finally check Nr/MSG order
+  SetTabOrders;
+end;
+
+procedure TfrmContest.chkTrueRSTChange(Sender: TObject);
+begin
+  SetTabOrders;
+end;
+
+procedure TfrmContest.chkTabAllChange(Sender: TObject);
+begin
+  SetTabOrders;
 end;
 
 procedure TfrmContest.edtCallKeyDown(Sender: TObject; var Key: word;
   Shift: TShiftState);
 begin
-  if ((Key = VK_SPACE) and (chSpace.Checked)) then
+  if ((Key = VK_SPACE) and (chkSpace.Checked)) then
   begin
     Key := 0;
     SelectNext(Sender as TWinControl, True, True);
@@ -322,12 +299,12 @@ begin
     key := #0;
 end;
 
-procedure TfrmContest.edtSRX2Change(Sender: TObject);
+procedure TfrmContest.edtSRXStrChange(Sender: TObject);
 begin
-  if chLoc.Checked then
+  if chkLoc.Checked then
   begin
-   edtSRX2.Text := dmUtils.StdFormatLocator(edtSRX2.Text);
-   edtSRX2.SelStart := Length(edtSRX2.Text);
+   edtSRXStr.Text := dmUtils.StdFormatLocator(edtSRXStr.Text);
+   edtSRXStr.SelStart := Length(edtSRXStr.Text);
   end;
 end;
 procedure TfrmContest.edtSRXExit(Sender: TObject);
@@ -335,7 +312,13 @@ begin
   ChkSerialNrUpd(False); //just save it
 end;
 
-procedure TfrmContest.edtSTX_strExit(Sender: TObject);
+procedure TfrmContest.edtSTXStrEnter(Sender: TObject);
+begin
+  if chkQsp.Checked then
+   QspMsg;
+end;
+
+procedure TfrmContest.edtSTXStrExit(Sender: TObject);
 begin
   ChkSerialNrUpd(False); //just save it
 end;
@@ -398,9 +381,9 @@ begin
   if not ((edtSTX.Text <> '') and (RSTstx = ''))  then
     edtSTX.Text := RSTstx;
 
-  edtSTX_str.Text := RSTstxAdd;
+  edtSTXStr.Text := RSTstxAdd;
   edtSRX.Text := '';
-  edtSRX2.Text := '';
+  edtSRXStr.Text := '';
   edtCall.Font.Color:=clDefault;
   edtCall.Font.Style:= [];
   edtCall.Clear;
@@ -421,7 +404,7 @@ begin
   All works, but this needs attention and I can not resolve this at the moment.
 
   }
-
+  SetTabOrders;
   frmContest.ShowOnTop;
   frmContest.SetFocus;
   edtCall.SetFocus;
@@ -439,7 +422,7 @@ begin
   if IncNr then
   begin
     stxlen := length(stx);
-    if chNRInc.Checked then //inc of number requested
+    if chkNRInc.Checked then //inc of number requested
     begin
       lZero := stx[1] = '0'; //do we have leading zero(es)
       if dmData.DebugLevel >= 1 then
@@ -465,12 +448,74 @@ begin
   end;
 
   RSTstx := stx;
-  RSTstxAdd := edtSTX_str.Text;
+  RSTstxAdd := edtSTXStr.Text;
 
   if dmData.DebugLevel >= 1 then
     Writeln(' Inc number is: ', IncNr);
 end;
+procedure  TfrmContest.SetTabOrders;
+begin
+  TabStopAllOn;
+  if not chkTabAll.Checked then
+    begin
+      //NRs no need to touch
+      edtSTX.TabStop      := False;
+      //"Qsp" adds MSGs, else drops
+      edtSTXStr.TabStop:= chkQsp.Checked;
+      //"No" drops NRr
+      edtSRX.TabStop   := not chkNoNr.Checked;
+      //"Tru" checked adds RST fields, else drops
+      edtRSTs.TabStop  := chkTrueRST.Checked;
+      edtRSTr.TabStop  := chkTrueRST.Checked;
+    end;
+end;
+
+procedure  TfrmContest.TabStopAllOn;
+//set all tabstops
+Begin
+    edtCall.TabStop     := True;
+    edtCall.TabOrder    := 0;
+    edtRSTs.TabStop     := True;
+    edtRSTs.TabOrder    := 1;
+    edtSTX.TabStop      := True;
+    edtSTX.TabOrder     := 2;
+    edtSTXStr.TabStop   := True;
+    edtSTXStr.TabOrder  := 3;
+
+    edtRSTr.TabStop     := True;
+    edtRSTr.TabOrder    := 4;
+    edtSRX.TabStop      := True;
+    edtSRX.TabOrder     := 5;
+    edtSRXStr.TabStop   := True;
+    edtSRXStr.TabOrder  := 6;
+
+    btSave.TabStop      := True;
+    btSave.TabOrder     := 7;
+    btClearAll.TabStop  := True;
+    btClearAll.TabOrder := 8;
+end;
+procedure TfrmContest.QspMsg;
+Begin
+   try
+    dmData.Q.Close;
+    if dmData.trQ.Active then dmData.trQ.Rollback;
+    dmData.Q.SQL.Text := 'SELECT srx_string FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.trQ.StartTransaction;
+    if dmData.DebugLevel >=1 then
+      Writeln(dmData.Q.SQL.Text);
+    dmData.Q.Open();
+    edtSTXStr.Text := dmData.Q.Fields[0].AsString;
+    dmData.Q.Close();
+    dmData.trQ.Rollback;
+   finally
+     edtSTXStr.SetFocus;
+     edtSTXStr.SelStart:=length(edtSTXStr.Text);
+     edtSTXStr.SelLength:=0;
+   end;
+end;
+
 
 initialization
+
 
 end.
