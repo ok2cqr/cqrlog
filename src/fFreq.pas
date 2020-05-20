@@ -22,7 +22,6 @@ type
     lblFreqNote3: TLabel;
     lblFreqNote4: TLabel;
     pnlFreq2: TPanel;
-    pnlFreq1: TPanel;
     procedure dbgrdFreqColumnSized(Sender : TObject);
     procedure dbgrdFreqDblClick(Sender : TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);

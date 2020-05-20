@@ -1,33 +1,51 @@
 object frmFreq: TfrmFreq
   Left = 283
-  Height = 525
+  Height = 540
   Top = 24
   Width = 803
   HorzScrollBar.Page = 448
   VertScrollBar.Page = 331
   BorderIcons = [biSystemMenu]
   Caption = 'Frequencies'
-  ClientHeight = 525
+  ClientHeight = 540
   ClientWidth = 803
   OnClose = FormClose
   OnShow = FormShow
   LCLVersion = '2.0.4.0'
+  object dbgrdFreq: TDBGrid
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 457
+    Top = 0
+    Width = 803
+    Anchors = [akTop, akLeft, akRight]
+    Color = clWindow
+    Columns = <>
+    DataSource = dsrFreq
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 1
+    TitleStyle = tsNative
+    OnColumnSized = dbgrdFreqColumnSized
+    OnDblClick = dbgrdFreqDblClick
+  end
   object pnlFreq2: TPanel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = pnlFreq1
+    AnchorSideTop.Control = dbgrdFreq
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 85
-    Top = 440
+    Height = 73
+    Top = 457
     Width = 803
-    Align = alBottom
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
-    ClientHeight = 85
+    ClientHeight = 73
     ClientWidth = 803
     TabOrder = 0
     object btnChange: TButton
@@ -105,32 +123,6 @@ object frmFreq: TfrmFreq
       Width = 247
       Caption = 'USB: (f>10 or (f>5 and f<6)) else LSB'
       ParentColor = False
-    end
-  end
-  object pnlFreq1: TPanel
-    AnchorSideTop.Control = Owner
-    Left = 0
-    Height = 440
-    Top = 0
-    Width = 803
-    Align = alBottom
-    ClientHeight = 440
-    ClientWidth = 803
-    TabOrder = 1
-    object dbgrdFreq: TDBGrid
-      Left = 1
-      Height = 438
-      Top = 1
-      Width = 801
-      Align = alClient
-      Color = clWindow
-      Columns = <>
-      DataSource = dsrFreq
-      Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
-      TabOrder = 0
-      TitleStyle = tsNative
-      OnColumnSized = dbgrdFreqColumnSized
-      OnDblClick = dbgrdFreqDblClick
     end
   end
   object dsrFreq: TDataSource
