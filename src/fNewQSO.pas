@@ -2198,7 +2198,7 @@ begin
            DecodeTime(Time,Hour,Min,Sec,HSec);
            if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
            case Sec of
-             13,28,43,58 :
+             12,27,42,57 :
                            begin  //set hispeed  decode time is coming
                               if ( tmrWsjtx.Interval = wLoSpeed ) then
                                 begin
