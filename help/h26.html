@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>CQRLOG - CW Interface</title>
+    <title>CQRLOG - CW messages</title>
 </head>
 <body>
 <table border="0" cellpadding="5" cellspacing="2" width="100%">
@@ -28,12 +28,13 @@
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
-<h2><strong>CW interface</strong></h2>
-    Assuming that your CW interface is properly set up and working,
+<h2><strong>CW messages</strong></h2>
+    <p>Assuming that your CW interface is properly set up and working,
     you can add and/or edit your CW messages.<br><br>
-    First, set up your CW messages. In the upper menu bar on the logging screen,
-    click on the 'File' item.<br><br>
-    <img src=img/h96.png><br><br>
+    Set up your CW messages via Preferences/CW inteface/CW messages button.
+    <br> You can also access CW messages from the upper menu bar of the New QSO window.
+    Click on the 'File' item and select CW Messages.<br><br>
+    <img src=img/h96b.png>&nbsp;&nbsp;<img src=img/h96.png><br><br>
     Choose the <strong>CW Messages</strong> option. By using the form opened you can edit your CW messages that
     will be sent when you press the corresponding <strong>F</strong>-key(s).
     You can set up to 10 predefined messages:<br><br>
@@ -55,7 +56,7 @@
 		<li>%c  - callsign</li>
 		<li>%h - greeting GM/GA/GE calculated from the %c station location time</li>
 		<br>
-		<li>%xn  - contest exchenge serial number</li>
+		<li>%xn  - contest exchange serial number</li>
 		<li>%xm  - contest exchange message</li>
 		<li>%xns - contest exchenge serial number sends 9->N and 0->T</li>
 		<li>%xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.<br>
@@ -65,14 +66,14 @@
         </tr>
         </tbody>
     </table>
-    <p><img src="img/misc8.png" name="8"  width="500" height="85">
+    </p><a name=mk1><br></a> <img src="img/misc8.png" name="8"  width="500" height="85">
    </img>
-   </p><p><strong>Memory keys</strong> form has buttons PgUp and PgDn that are not configurable. They alter CW speed in same way as keyboard keys PgUp and PgDn that some, specially laptop computers, may not even have.
+   <p><strong>Memory keys</strong> form has buttons PgUp and PgDn that are not configurable. They alter CW speed in same way as keyboard keys PgUp and PgDn that some, specially laptop computers, may not even have.
    <br>When using <strong>Memory keys</strong>-form with mouse, or keyboard, you are able to lauch memories by mouse click or by  <strong>F</strong>-key press from keyboard keys. Same with PgUp and PgDn, both are working, keys and mouse click.
    <br>You can select what happens when <strong>Memory keys</strong>-form is active and <strong>ENTER</strong> (also called Return) key is pressed, <strong>repeat last clicked memory</strong> (send focused button text)
    , <strong>ignore it</strong> (do nothing) or <strong>save qso</strong>, by selecting that with ENTER section radio buttons in <strong> CW Messages</strong> definition form.</p>
+    <a name=mk2><img src=img/h98.png></a><br>
     Another form <strong>CW type</strong> is a powerful keyboard keyer with 3 operation modes:<br></p>
-    <img src=img/h98.png><br><br>
     <ul>
         <li><strong>letter mode</strong> - the character of the corresponding keyboard key is
             sent immediately on pressing the key
@@ -88,11 +89,20 @@
     <strong>NOTE!</strong> CW sending has limited buffer space depending keyer type and rig model. Be aware that pasting a very long text to CWType area may lead to CW keyer buffer overflow. When Hamlib keying is in use it will send words under 10 characters as one command, but if text to be sent is longer it will send all letter by letter (1 chr per one command).
      This is tested to work with IC7300. Same should happen with Kenwoodother rigs and HamLib keying, but this is not tested and may not work in same way.
       
-      <br><br> <strong>Same warning  </strong>with manual typing in word mode: If your typing speed is faster than cw sending you may hit send buffer limit sooner or later.<br><br>
+      <br><br> <strong>Same warning  </strong>with manual typing in word mode: If your typing speed is faster than cw sending you may hit send buffer limit sooner or later.
+      <br><br> <strong>Switching radios </strong>while CW sending is going on can cause unexpected results !
+      <br><strong>Always wait</strong> that CW message has finshed before switching radios as it will also switch CW keyers.
+      <br><strong>Always wait</strong> that selected radio shows frequency in TRXControl before sending a CW message or start using CW Type.
+      <br><br>
+
     The <strong>keying speed</strong> can be changed with PgUp (QRQ) and PgDn (QRS) keys
     in 2 WPM steps when <strong>NewQSO</strong>-form is active. In the <strong>CW type</strong>-form when cursor is in text typing area same PgUP/PgDN keys work. Speed can also be changed with the small arrow
     buttons to the right of the speed display. The actual speed is always displayed in the status line of the <strong>New QSO</strong>-form and in <strong>CWType</strong>-forms speed selector.<br><br>
-    The<strong> ESC </strong>key stops running transmit. This may not be supported in all keyers and rigs and is mainly usefull when using word mode or pasted/dropped text.<br><br>
+    The<strong> ESC </strong>key stops running transmit. This may not be supported in all keyers and rigs and is mainly usefull when using word mode or pasted/dropped text.
+    <br>
+    With HamLib keyer ESC sends hex byte 0xFF as message. Icom rigs halt CW with this. An empty message with Kenwood rigs should use this to stop sending.
+    <br>Be aware that this has tested very little.
+    <br><br>
     <strong>NOTE!</strong> Some special characters like Ä (A with dots) etc. May not be supported in CWType direct from keypress. For example Hamlib keying with Icom rig sends A with dots when typing 3 characters ^AA and you have to find out the way suitable for your setup.<br><br>
     <img src=img/h99.png><br><br>
     Setup howtos for both <a href=cwd.html><strong>cwdaemon</strong></a> and

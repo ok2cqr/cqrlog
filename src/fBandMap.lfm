@@ -3,6 +3,8 @@ object frmBandMap: TfrmBandMap
   Height = 556
   Top = 30
   Width = 259
+  HelpType = htKeyword
+  HelpKeyword = 'help/h21.html#bh19'
   Caption = 'Band map'
   ClientHeight = 556
   ClientWidth = 259
@@ -67,8 +69,6 @@ object frmBandMap: TfrmBandMap
         Left = 80
         Hint = 'Clean band map'
         Top = 2
-        HelpType = htKeyword
-        HelpKeyword = 'Clear all'
         Action = acClear
         ParentShowHint = False
         ShowHint = True

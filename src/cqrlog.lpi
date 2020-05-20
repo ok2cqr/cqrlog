@@ -19,7 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2195"/>
+      <BuildNr Value="2196"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <MacroValues Count="1">
@@ -39,7 +39,7 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="--DEBUG=0"/>
+        <CommandLineParams Value="--DEBUG=-8"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <environment>
@@ -52,7 +52,7 @@
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="--DEBUG=0"/>
+            <CommandLineParams Value="--DEBUG=-8"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
           <environment>
@@ -492,6 +492,7 @@
         <Filename Value="fCallAttachment.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCallAttachment"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit58>
       <Unit59>
