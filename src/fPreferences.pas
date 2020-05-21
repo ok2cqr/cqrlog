@@ -2861,12 +2861,16 @@ begin
   edtRTTY1.Value := cqrini.ReadInteger('Band1', 'RTTY', 500);
   edtAM1.Value := cqrini.ReadInteger('Band1', 'AM', 3000);
   edtFM1.Value := cqrini.ReadInteger('Band1', 'FM', 2500);
+  edtCMD1.Text := cqrini.ReadString('Band1', 'Datacmd', 'RTTY');
+  edtDataMode1.Text := cqrini.ReadString('Band1', 'Datamode', 'RTTY');
 
   edtCW2.Value := cqrini.ReadInteger('Band2', 'CW', 500);
   edtSSB2.Value := cqrini.ReadInteger('Band2', 'SSB', 1800);
   edtRTTY2.Value := cqrini.ReadInteger('Band2', 'RTTY', 500);
   edtAM2.Value := cqrini.ReadInteger('Band2', 'AM', 3000);
   edtFM2.Value := cqrini.ReadInteger('Band2', 'FM', 2500);
+  edtCMD2.Text := cqrini.ReadString('Band2', 'Datacmd', 'RTTY');
+  edtDataMode2.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY');
 
   edtDigiModes.Text := cqrini.ReadString('Modes', 'Digi', '');
 
