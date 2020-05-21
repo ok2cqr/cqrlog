@@ -11,13 +11,6 @@ object frmFreq: TfrmFreq
   ClientWidth = 803
   OnClose = FormClose
   OnShow = FormShow
-<<<<<<< HEAD
-  LCLVersion = '2.0.2.0'
-  object Panel1: TPanel
-||||||| merged common ancestors
-  LCLVersion = '1.6.0.4'
-  object Panel1: TPanel
-=======
   LCLVersion = '2.0.4.0'
   object dbgrdFreq: TDBGrid
     AnchorSideLeft.Control = Owner
@@ -46,7 +39,6 @@ object frmFreq: TfrmFreq
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
->>>>>>> getbandfromfreq
     Left = 0
     Height = 73
     Top = 457
