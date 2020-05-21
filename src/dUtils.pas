@@ -321,7 +321,6 @@ Begin
        BandFreq[BandCount].band:= dmData.qBands.FieldByName('band').AsString;
        BandFreq[BandCount].b_begin:=dmData.qBands.FieldByName('b_begin').AsCurrency;
        BandFreq[BandCount].b_end:=dmData.qBands.FieldByName('b_end').AsCurrency;
-       writeln( BandFreq[BandCount].band);
        inc(BandCount);
        dmData.qBands.Next;
      end;
@@ -341,8 +340,7 @@ Begin
              and (tmp <= dmUtils.BandFreq[x].b_end ) then
                 Begin
                    Result := dmUtils.BandFreq[x].band;
-                    writeln('Band is:',Result);
-                    exit;
+                   exit;
                 end;
       end;
 end;
