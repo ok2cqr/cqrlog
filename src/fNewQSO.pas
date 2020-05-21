@@ -814,19 +814,16 @@ begin
 end;
 function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
 var
-   NrRig,
-   DatCmd:String;
+   DatCmd,
+   n      :String;
 Begin
-   if cqrini.ReadInteger('TRX', 'ActiveRig', 1) = 2 then
-      NrRig := 'Band2'
-     else
-      NrRig := 'Band1';
+   if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
 
-   DatCmd :=  upcase(cqrini.ReadString(NrRig, 'Datacmd', 'RTTY'));
+   DatCmd :=  upcase(cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY'));
    if (DatCmd = 'USB') or (DatCmd = 'LSB') then DatCmd := 'SSB'; //this is what RigControl responses
 
    if cqrini.ReadBool('Modes', 'Rig2Data', False) and (mode = DatCmd) then
-            Result := cqrini.ReadString(NrRig, 'Datamode', 'RTTY')
+            Result := cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
      else   Result := mode;
 end;
 

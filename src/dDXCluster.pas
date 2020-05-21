@@ -148,6 +148,7 @@ function TdmDXCluster.BandModFromFreq(freq : String;var mode,band : String) : Bo
 var
   tmp : Extended;
   cw, ssb : Extended;
+  n   :String;
 begin
   EnterCriticalsection(csDX);
   try
@@ -183,10 +184,8 @@ begin
         mode := 'SSB'
       else
         Begin
-          if cqrini.ReadInteger('TRX', 'ActiveRig', 1)=2 then
-             mode :=  cqrini.ReadString('Band2', 'Datamode', 'RTTY')
-            else
-             mode :=  cqrini.ReadString('Band1', 'Datamode', 'RTTY');
+          if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+          mode :=  cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
         end;
     end;
     writeln('-----------------mode',mode);

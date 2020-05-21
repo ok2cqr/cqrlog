@@ -498,6 +498,10 @@ type
     dlgColor : TColorDialog;
     edtClub: TEdit;
     edtCWPort2: TEdit;
+    edtDataMode2: TEdit;
+    edtDataMode1: TEdit;
+    edtCMD2: TEdit;
+    edtCMD1: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
@@ -3130,11 +3134,6 @@ begin
   fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-  edtCW1.Width := 60;
-  edtSSB1.Width := 60;
-  edtRTTY1.Width := 60;
-  edtAM1.Width := 60;
-  edtFM1.Width := 60;
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
