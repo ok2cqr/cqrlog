@@ -187,8 +187,9 @@ type
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
+    procedure UpdateHelpBrowser;
 
-
+    function MyDefaultBrowser:String;
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;
@@ -273,6 +274,7 @@ type
     function  MyDateTimeToStr(DateTime : TDateTime) : String;
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
     function  StdFormatLocator(loc:string):String;
+
 end;
 
 var
@@ -514,7 +516,9 @@ end;
 procedure TdmUtils.DataModuleCreate(Sender: TObject);
 begin
   fQRZSession := '';
+  //this overrides dmUtils.lfm setings
   HelpDatabase.BaseURL := 'file://' + dmData.HelpDir;
+  //check of user defined HelpViever (other than xdg-open as default) is done at fNewQSO
   USstates[1] := 'AK, Alaska';
   USstates[2] := 'AL, Alabama';
   USstates[3] := 'AR, Arkansas';
@@ -741,6 +745,17 @@ begin
   end; //case
   DateSeparator := sep;
   }
+end;
+
+function TdmUtils.MyDefaultBrowser:String;
+var
+  v: THTMLBrowserHelpViewer;
+  BrowserPath, BrowserParams: string;
+begin
+  v:=THTMLBrowserHelpViewer.Create(nil);
+  v.FindDefaultBrowser(BrowserPath,BrowserParams);
+  result := BrowserPath;
+  v.Free;
 end;
 
 function TdmUtils.StrToDateFormat(sDate: string): TDateTime;
@@ -3119,7 +3134,8 @@ begin
         inc(index);
       end;
       paramList.Free;
-    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    if dmData.DebugLevel>=1 then
+     Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -3427,7 +3443,7 @@ begin
     SetCurrentDir(dmData.HomeDir + 'call_data' + PathDelim + call + PathDelim);
     prg := cqrini.ReadString('ExtView', 'img', 'eog');
     if prg = '' then
-      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
+      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) +
         ' ' + qsl)
     else
       dmUtils.RunOnBackgroud(prg + ' ' + qsl)
@@ -3460,7 +3476,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
     AProcess.Parameters.Add('http://www.qrz.com/db/' + GetIDCall(call));
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -3477,7 +3493,7 @@ begin
   myloc := cqrini.ReadString('Station', 'LOC', '');
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
     AProcess.Parameters.Add('https://www.k7fry.com/grid/?qth=' + locator + '&from=' + myloc);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -3945,9 +3961,10 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
-    AProcess.Parameters.Add(' http://www.hamqth.com/' + GetIDCall(call));
-    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+    AProcess.Parameters.Add('http://www.hamqth.com/' + GetIDCall(call));
+    if dmData.DebugLevel>=1 then ;
+    Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -4254,7 +4271,15 @@ end;
 
 procedure TdmUtils.OpenInApp(what: string);
 begin
-  RunOnBackgroud('xdg-open ' + what);
+  if ((pos('.HTML',upcase(what))>0) or (pos('.HTM',upcase(what))>0)) //because possible "hashtag in link-problem"
+    then
+     Begin
+      RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
+     end
+   else
+    begin
+      RunOnBackgroud('xdg-open ' + what);
+    end;
 end;
 
 function TdmUtils.GetDescKeyFromCode(key: word): string;
@@ -4593,6 +4618,25 @@ begin
   finally
     FindClose(SearchRec)
   end
+end;
+procedure TdmUtils.UpdateHelpBrowser;
+var b :string;
+Begin
+  //here we can read preferences/program/defaut browser as log (and so preferences) are already selected
+  //we need this because xdg-open (as default browser) can not work properly in all systems
+  //dropping hashtags away from html file:// paths. Then user may define browser path/name that
+  //usually works with hashtag html file paths.
+
+  b := cqrini.ReadString('Program', 'WebBrowser', '');
+     if (b<>'') then
+      try
+       Begin
+        dmUtils.HelpViewer.BrowserPath:=b;
+        dmUtils.HelpViewer.BrowserParams:='%s';
+       end;
+      finally
+      end;
+     //else use default browser that is defined at program early start
 end;
 
 end.

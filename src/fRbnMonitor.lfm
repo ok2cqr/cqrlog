@@ -3,6 +3,8 @@ object frmRbnMonitor: TfrmRbnMonitor
   Height = 602
   Top = 145
   Width = 665
+  HelpType = htKeyword
+  HelpKeyword = 'help/h31.html'
   ActiveControl = btnEatFocus
   Caption = 'RBN Monitor'
   ClientHeight = 602
@@ -236,7 +238,6 @@ object frmRbnMonitor: TfrmRbnMonitor
     end
     object acHelp: TAction
       Caption = 'Help'
-      HelpKeyword = 'Open help'
       ImageIndex = 6
       OnExecute = acHelpExecute
     end

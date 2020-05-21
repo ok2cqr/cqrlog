@@ -784,10 +784,14 @@ begin
   FreeOnTerminate := True;
   if dmUtils.GetDataFromHttp(cQSLMgrVersionCheckUrl, data) then
   begin
-    FileDate := dmUtils.MyStrToDate(data);
-    if FileDate > dmUtils.GetLastQSLUpgradeDate then
-      Synchronize(@frmNewQSO.SynQSLTab)
-  end
+   if (pos('NOT FOUND',upcase(data))=0) then
+     begin
+      FileDate := dmUtils.MyStrToDate(data);
+      if FileDate > dmUtils.GetLastQSLUpgradeDate then
+        Synchronize(@frmNewQSO.SynQSLTab)
+     end
+    else
+  end;
 end;
 
 
@@ -799,9 +803,13 @@ begin
   FreeOnTerminate := True;
   if dmUtils.GetDataFromHttp(cCntyVersionCheckUrl, data) then
   begin
-    FileDate := dmUtils.MyStrToDate(data);
-    if FileDate > dmUtils.GetLastUpgradeDate then
-        Synchronize(@frmNewQSO.SynDXCCTab)
+    if (pos('NOT FOUND',upcase(data))=0) then
+     begin
+      FileDate := dmUtils.MyStrToDate(data);
+      if FileDate > dmUtils.GetLastUpgradeDate then
+          Synchronize(@frmNewQSO.SynDXCCTab)
+     end
+    else
   end
 end;
 function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
@@ -1596,7 +1604,6 @@ begin
 
   if Assigned(CWint) then
   begin
-    Menuitem73.Visible:=False;
     CWint.Close;
     FreeAndNil(CWint)
   end ;
@@ -1618,6 +1625,7 @@ procedure TfrmNewQSO.FormShow(Sender: TObject);
 var
   ini       : TIniFile;
   changelog : Boolean = False;
+
 begin
   with TfrmDBConnect.Create(self) do
   try
@@ -1672,6 +1680,7 @@ begin
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
   if cqrini.ReadBool('Modes', 'Rig2Data', False) then chkAutoMode.Font.Color:=clRed;
+  dmUtils.UpdateHelpBrowser;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -2229,7 +2238,7 @@ begin
            DecodeTime(Time,Hour,Min,Sec,HSec);
            if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
            case Sec of
-             13,28,43,58 :
+             12,27,42,57 :
                            begin  //set hispeed  decode time is coming
                               if ( tmrWsjtx.Interval = wLoSpeed ) then
                                 begin
@@ -4168,11 +4177,10 @@ end;
 
 procedure TfrmNewQSO.acCWTypeExecute(Sender: TObject);
 begin
+  frmCWType.Show;
   if (CWint<>nil) then
-  begin
-    frmCWType.edtSpeed.Value:= CWint.GetSpeed;
-    frmCWType.Show
-  end
+     frmCWType.edtSpeed.Value:= CWint.GetSpeed
+    else ShowMessage('CW interface:  No keyer defined for current radio!');
 end;
 
 procedure TfrmNewQSO.FormActivate(Sender: TObject);
@@ -4747,7 +4755,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program','WebBrowser','firefox');
+    AProcess.Executable := cqrini.ReadString('Program','WebBrowser',dmUtils.MyDefaultBrowser);
     AProcess.Parameters.Add('http://www.ik3qar.it/manager/man_result.php?call='+
                             dmData.qQSOBefore.Fields[4].AsString);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
@@ -5294,7 +5302,8 @@ begin
           if Assigned(CWint) and (cmbMode.Text='CW') then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-            frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+            frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+           else if (cmbMode.Text='CW') then ShowMessage('CW interface:  No keyer defined for current radio!');
        end;
       end;
     key := 0
@@ -6809,25 +6818,27 @@ var
   KeyType: TKeyType;
   UseSpeed: integer;
   KeyerType: integer;
+  n         : String;
 begin
   if (CWint<>nil) then
    Begin
-    Menuitem73.Visible:=False;
     sbNewQSO.Panels[2].Text := '';
     CWint.Close;
     FreeAndNil(CWint)
    end;
 
-  KeyerType :=  cqrini.ReadInteger('CW','Type',0);
-  if dmData.DebugLevel>=1 then Writeln('CW init keyer type:',KeyerType);
+  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
+  KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
+  if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
   case  KeyerType of
     1 : begin
           CWint := TCWWinKeyerUSB.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','wk_port','');
-          CWint.Device  := cqrini.ReadString('CW','wk_port','');
+                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.Port    := cqrini.ReadString('CW','wk_port'+n,'');
+          CWint.Device  := cqrini.ReadString('CW','wk_port'+n,'');
           CWint.PortSpeed := 1200;
           UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
         end;
@@ -6835,8 +6846,8 @@ begin
           CWint    := TCWDaemon.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','cw_port','');
+                 CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.Port    := cqrini.ReadString('CW','cw_port'+n,'');
           CWint.Device  := cqrini.ReadString('CW','cw_address','');
           CWint.PortSpeed := 0;
           UseSpeed := cqrini.ReadInteger('CW','cw_speed',30);
@@ -6845,9 +6856,9 @@ begin
           CWint := TCWK3NG.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','K3NGPort','');
-          CWint.Device  := cqrini.ReadString('CW','K3NGPort','');
+                 CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.Port    := cqrini.ReadString('CW','K3NGPort'+n,'');
+          CWint.Device  := cqrini.ReadString('CW','K3NGPort'+n,'');
           CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
           UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
         end;
@@ -6855,15 +6866,14 @@ begin
           CWint        := TCWHamLib.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
-          CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port   := cqrini.ReadString('TRX1','RigCtldPort','4532');
-          CWint.Device := cqrini.ReadString('TRX1','host','localhost');
+                 CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
+          CWint.Port := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
+          CWint.Device := cqrini.ReadString('TRX'+n,'host','localhost');
           UseSpeed := cqrini.ReadInteger('CW','HamLibSpeed',30);
         end;
   end; //case
   if KeyerType > 0 then
    Begin
-     Menuitem73.Visible:=True; //set CWType in Window menu visible
      CWint.Open;
      CWint.SetSpeed(UseSpeed);
      sbNewQSO.Panels[2].Text := IntToStr(UseSpeed) + 'WPM';

@@ -999,22 +999,17 @@ var
   id     : Integer = 0;
   port   : Integer;
   poll   : Integer;
+  KeyerType : Integer;
 begin
+  tmrRadio.Enabled := False;
 
-  if Assigned(radio) then
-  begin
-    FreeAndNil(radio);
-  end;
+  if Assigned(radio) then FreeAndNil(radio);
 
   Application.ProcessMessages;
   Sleep(500);
+  Application.ProcessMessages;
 
-  tmrRadio.Enabled := False;
-
-  if rbRadio1.Checked then
-    n := '1'
-  else
-    n := '2';
+  if rbRadio1.Checked then   n := '1'   else   n := '2';
 
   radio := TRigControl.Create;
 
@@ -1060,6 +1055,25 @@ begin
   begin
     FreeAndNil(radio)
   end
+  else  //radio changed, restart CW interface
+  begin
+      //we check this again although preferences prevent false setting
+      if (    cqrini.ReadBool('CW', 'NoReset', false) //is set: user does not want reset
+        and  (cqrini.ReadInteger('CW','Type1',0) = cqrini.ReadInteger('CW','Type2',0)) //both keyers are same
+        and  (cqrini.ReadInteger('CW','Type1',0)<>4)  //type is not HamLib
+          ) then //no restart keyer it is same device for both radios.
+         Begin
+           if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then
+              Writeln('User ask: No reset and keyer not Hamlib: No restart by TRControl radio'+n+' change');
+         end
+      else
+         Begin
+           frmNewQSO.InitializeCW;
+           if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then
+              Writeln('CW keyer reloaded by TRControl radio'+n+' change');
+         end;
+
+   end;
 end;
 
 procedure TfrmTRXControl.SetMode(mode : String;bandwidth :Integer);

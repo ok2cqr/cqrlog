@@ -114,6 +114,7 @@ uses uMyIni, dUtils, dData, fImportProgress;
     i : Integer;
     l : TStringList;
     ClubFileName : String;
+    ClubFileNameUrl : String;
   begin
     FreeOnTerminate := True;
     l := TStringList.Create;
@@ -122,8 +123,15 @@ uses uMyIni, dUtils, dData, fImportProgress;
       for i:=0 to ClubFileNames.Count-1 do
       begin
         ClubFileName := ExtractFileName(ClubFileNames.Strings[i]);
-        if dmUtils.GetDataFromHttp(Format(C_MEMBERSHIP_VERSION_CHECK_URL, [ClubFileName]), data) then
+        ClubFileNameUrl := Format(C_MEMBERSHIP_VERSION_CHECK_URL, [ClubFileName]);
+        if dmUtils.GetDataFromHttp(ClubFileNameUrl, data) then
         begin
+          if (Pos('ERR', data) = 1) then
+          begin
+            Writeln('Error loading file timestamp: ', ClubFileNameUrl);
+            continue;
+          end;
+
           FileDate := dmUtils.MyStrToDateTime(data);
           if FileDate > dmMembership.GetLastMembershipUpdateDate(ClubFileName) then
             l.Add(ClubFileNames.Strings[i])

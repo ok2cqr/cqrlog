@@ -492,6 +492,7 @@
         <Filename Value="fCallAttachment.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCallAttachment"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit58>
       <Unit59>

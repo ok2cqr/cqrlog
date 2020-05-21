@@ -1005,9 +1005,9 @@ var
     tmr: integer;
 begin
   tmrCqPeriod.Enabled := False;
-  tmr := 61000;
+  tmr := 60000;
   case CurMode of
-       'FT8': tmr := 16000;
+       'FT8': tmr := 15000;
        'FT4': tmr := 8000;
   end;
   tmrCqPeriod.Interval := tmr;
