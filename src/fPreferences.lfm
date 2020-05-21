@@ -4,8 +4,9 @@ object frmPreferences: TfrmPreferences
   Top = 31
   Width = 958
   HelpType = htKeyword
-  HorzScrollBar.Page = 810
-  VertScrollBar.Page = 681
+  HelpKeyword = 'help/h1.html'
+  HorzScrollBar.Page = 664
+  VertScrollBar.Page = 409
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -1661,7 +1662,7 @@ object frmPreferences: TfrmPreferences
         TabOrder = 20
       end
       object btnFrequencies: TButton
-        Left = 310
+        Left = 312
         Height = 25
         Top = 206
         Width = 94

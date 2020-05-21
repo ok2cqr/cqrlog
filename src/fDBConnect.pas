@@ -236,7 +236,7 @@ begin
     dmData.CheckForDatabases;
     UpdateGridFields;
     EnableButtons;
-    OpenDefaultLog
+    OpenDefaultLog;
   end
 end;
 
