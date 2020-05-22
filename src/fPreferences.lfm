@@ -3604,8 +3604,8 @@ object frmPreferences: TfrmPreferences
           Left = 6
           Height = 17
           Top = 192
-          Width = 32
-          Caption = 'RTTY'
+          Width = 34
+          Caption = 'DATA'
           ParentColor = False
         end
         object edtRTTY1: TSpinEdit
@@ -3863,8 +3863,8 @@ object frmPreferences: TfrmPreferences
           Left = 6
           Height = 17
           Top = 192
-          Width = 32
-          Caption = 'RTTY'
+          Width = 34
+          Caption = 'DATA'
           ParentColor = False
         end
         object edtRTTY2: TSpinEdit
