@@ -315,15 +315,16 @@ begin
   GetRealCoordinate(lat,long,latitude, longitude);
   frmGrayline.RBNSpotList[index].lat  := latitude;
   frmGrayline.RBNSpotList[index].long := longitude;
-  {
-  Writeln('call:   ',call);
-  Writeln('spotter:',spotter);
-  Writeln('stren:  ',stren);
-  Writeln('freq:   ',freq);
-  Writeln('band:   ',dmDXCluster.GetBandFromFreq(freq,True));
-  Writeln('Lat:    ',lat);
-  Writeln('Long:   ',long)
-  }
+  if dmData.DebugLevel>=1 then
+   begin
+    Writeln('call:   ',call);
+    Writeln('spotter:',spotter);
+    Writeln('stren:  ',stren);
+    Writeln('freq:   ',freq);
+    Writeln('band:   ',dmDXCluster.GetBandFromFreq(freq,True));
+    Writeln('Lat:    ',lat);
+    Writeln('Long:   ',long)
+   end;
 end;
 
 procedure TRBNThread.RemoveOldSpots;

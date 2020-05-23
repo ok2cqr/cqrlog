@@ -15,9 +15,13 @@ type
   TfrmFreq = class(TForm)
     btnChange: TButton;
     btnCancel: TButton;
-    dsrFreq: TDatasource;
     dbgrdFreq: TDBGrid;
-    Panel1: TPanel;
+    dsrFreq: TDatasource;
+    lblFreqNote1: TLabel;
+    lblFreqNote2: TLabel;
+    lblFreqNote3: TLabel;
+    lblFreqNote4: TLabel;
+    pnlFreq2: TPanel;
     procedure dbgrdFreqColumnSized(Sender : TObject);
     procedure dbgrdFreqDblClick(Sender : TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
