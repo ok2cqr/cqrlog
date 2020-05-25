@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, inifiles, DB, process, Spin, ColorBox, lcltype,
-  Calendar, EditBtn, uCWKeying, frExportPref, types, fileutil, LazFileUtils;
+  Calendar, EditBtn, uCWKeying, frExportPref, types, fileutil, LazFileUtils,LCLIntf, Dos;
 
 type
 
@@ -31,6 +31,7 @@ type
     Bevel4: TBevel;
     btnBrowseBackup1: TButton;
     btnDefineProfile1: TButton;
+    btnHelp1: TButton;
     btnWsjtPath: TButton;
     btnSecondLoad: TButton;
     btnFrequencies1: TButton;
@@ -63,7 +64,7 @@ type
     btnTestXplanet: TButton;
     btnFirstLoad: TButton;
     btnChangeDefaultFreq: TButton;
-    btnKeyText: TButton;
+    btnKeyMacros: TButton;
     btnBrowseBackup: TButton;
     btnFldigiPath: TButton;
     btnChangeDefFreq: TButton;
@@ -120,6 +121,7 @@ type
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
+    cbNoKeyerReset: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
     chkRot2AzMinMax: TCheckBox;
     chkShowOwnPos: TCheckBox;
@@ -425,6 +427,7 @@ type
     cmbDataBitsR2: TComboBox;
     cmbDataBitsRot1: TComboBox;
     cmbDataBitsRot2: TComboBox;
+    cmbIfaceType2: TComboBox;
     cmbModelRot1: TComboBox;
     cmbModelRot2: TComboBox;
     cmbWsjtDefaultMode: TComboBox;
@@ -484,7 +487,7 @@ type
     cmbFrmDXCColor: TColorBox;
     cmbFirstZip: TComboBox;
     cmbFirstSaveTo: TComboBox;
-    cmbIfaceType: TComboBox;
+    cmbIfaceType1: TComboBox;
     cmbXplanetColor: TColorBox;
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
@@ -494,13 +497,16 @@ type
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
     edtClub: TEdit;
+    edtCWPort2: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
+    edtK3NGPort2: TEdit;
     edtRot1Host: TEdit;
     edtRot2Host: TEdit;
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
+    edtWinPort2: TEdit;
     edtZipCity: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
@@ -576,16 +582,16 @@ type
     edtSunOffset: TEdit;
     edtOffset: TEdit;
     edtCWAddress: TEdit;
-    edtCWPort: TEdit;
+    edtCWPort1: TEdit;
     edtPdfFiles: TEdit;
-    edtWinPort: TEdit;
+    edtWinPort1: TEdit;
     edtRecetQSOs: TEdit;
     edtLoTWPass: TEdit;
     edtLoTWName: TEdit;
     edtCWSpeed: TSpinEdit;
     edtWinMinSpeed: TSpinEdit;
     edtWinMaxSpeed: TSpinEdit;
-    edtK3NGPort: TEdit;
+    edtK3NGPort1: TEdit;
     edtK3NGSpeed: TSpinEdit;
     edtFldigiIp: TEdit;
     edtn1mmIp: TEdit;
@@ -654,9 +660,9 @@ type
     GroupBox27: TGroupBox;
     gbLoTW: TGroupBox;
     gbWidths: TGroupBox;
-    GroupBox29: TGroupBox;
+    gbWinkeyer: TGroupBox;
     GroupBox3: TGroupBox;
-    GroupBox30: TGroupBox;
+    gbCwkeyer: TGroupBox;
     GroupBox31: TGroupBox;
     GroupBox32: TGroupBox;
     GroupBox33: TGroupBox;
@@ -678,10 +684,10 @@ type
     GroupBox46: TGroupBox;
     gbDXCAlert: TGroupBox;
     GroupBox48: TGroupBox;
-    GroupBox49: TGroupBox;
+    gbK3NGkey: TGroupBox;
     gbDXCColor: TGroupBox;
     GroupBox5: TGroupBox;
-    GroupBox50: TGroupBox;
+    gbHamlib: TGroupBox;
     GroupBox51: TGroupBox;
     GroupBox52: TGroupBox;
     gbDXCConnect: TGroupBox;
@@ -697,6 +703,11 @@ type
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
+    lblCWPort2: TLabel;
+    lblHamlib: TLabel;
+    lblHamlib1: TLabel;
+    lblK3NGPort2: TLabel;
+    lblRadio1: TLabel;
     lbCallW: TLabel;
     lbFreqW: TLabel;
     lbleQSLDnlAddr: TLabel;
@@ -734,6 +745,7 @@ type
     Label126: TLabel;
     Label127: TLabel;
     lbleQSLBkg: TLabel;
+    lblRadio2: TLabel;
     lblRotId1: TLabel;
     Label13: TLabel;
     Label130: TLabel;
@@ -804,18 +816,18 @@ type
     Label190 : TLabel;
     Label191 : TLabel;
     Label192: TLabel;
-    Label193: TLabel;
-    Label194: TLabel;
-    Label195: TLabel;
-    Label196: TLabel;
+    lblK3NGPort: TLabel;
+    lblK3NGSpeed: TLabel;
+    lblK3NGWPM: TLabel;
+    lblK3NGSerSpeed: TLabel;
     Label197: TLabel;
     Label198: TLabel;
-    Label199: TLabel;
-    Label200: TLabel;
-    Label201: TLabel;
+    lblHamLibSpeed: TLabel;
+    lblHamLibWPM: TLabel;
     Label202: TLabel;
     lbln1mmport: TLabel;
     lbln1mmaddr: TLabel;
+    lblWinPort2: TLabel;
     lblwsjtport: TLabel;
     Label204: TLabel;
     Label205: TLabel;
@@ -881,16 +893,16 @@ type
     lblQSOList: TLabel;
     lblLoTWpass: TLabel;
     Label82: TLabel;
-    Label83: TLabel;
-    Label84: TLabel;
-    Label85: TLabel;
-    Label86: TLabel;
-    Label87: TLabel;
-    Label88: TLabel;
-    Label89: TLabel;
-    Label90: TLabel;
-    Label97: TLabel;
-    Label98: TLabel;
+    lbIfaceType: TLabel;
+    lblWinPort: TLabel;
+    lblWinSpeed: TLabel;
+    lblWinWPM: TLabel;
+    lblCWAddr: TLabel;
+    lblCWPort1: TLabel;
+    lblCWDefSpeed: TLabel;
+    lblCWWPM: TLabel;
+    lblWinMinSpeed: TLabel;
+    lblWinMaxSpeed: TLabel;
     Label99: TLabel;
     lbleFont: TLabel;
     lblgFont: TLabel;
@@ -924,6 +936,7 @@ type
     lbleFont1: TLabel;
     lbPreferences: TListBox;
     dlgOpen: TOpenDialog;
+    odFindBrowser: TOpenDialog;
     Panel2: TPanel;
     Panel3: TPanel;
     pnl2Host: TPanel;
@@ -1007,6 +1020,7 @@ type
     procedure btnCfgStorageClick(Sender: TObject);
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnChangeDefModeClick(Sender: TObject);
+    procedure btnHelp1Click(Sender: TObject);
     procedure btnWsjtPathClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
     procedure btnSelectQSOColorClick(Sender : TObject);
@@ -1014,9 +1028,10 @@ type
     procedure Button2Click(Sender: TObject);
     procedure btnBrowseBackupClick(Sender: TObject);
     procedure btnChangeDefaultFreqClick(Sender: TObject);
-    procedure btnKeyTextClick(Sender: TObject);
+    procedure btnKeyMacrosClick(Sender: TObject);
     procedure btnSplitClick(Sender: TObject);
     procedure btnForceMembershipUpdateClick(Sender : TObject);
+    procedure cbNoKeyerResetChange(Sender: TObject);
     procedure chkClUpEnabledChange(Sender: TObject);
     procedure chkHaUpEnabledChange(Sender: TObject);
     procedure chkHrUpEnabledChange(Sender: TObject);
@@ -1035,7 +1050,8 @@ type
     procedure cmbDTRR2Change(Sender : TObject);
     procedure cmbHanshakeR1Change(Sender : TObject);
     procedure cmbHanshakeR2Change(Sender : TObject);
-    procedure cmbIfaceTypeChange(Sender: TObject);
+    procedure cmbIfaceType1Change(Sender: TObject);
+    procedure cmbIfaceType2Change(Sender: TObject);
     procedure cmbParityR1Change(Sender : TObject);
     procedure cmbParityR2Change(Sender : TObject);
     procedure cmbRTSR1Change(Sender : TObject);
@@ -1044,6 +1060,7 @@ type
     procedure cmbSpeedR2Change(Sender : TObject);
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
+    procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
@@ -1053,9 +1070,11 @@ type
     procedure edtRadio1Change(Sender: TObject);
     procedure edtRadio2Change(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
+    procedure edtWebBrowserClick(Sender: TObject);
+    procedure edtWebBrowserExit(Sender: TObject);
     procedure edtWinMaxSpeedChange(Sender: TObject);
     procedure edtWinMinSpeedChange(Sender: TObject);
-    procedure edtWinPortChange(Sender: TObject);
+    procedure edtWinPort1Change(Sender: TObject);
     procedure edtWinSpeedChange(Sender: TObject);
     procedure edtXplanetLocChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
@@ -1170,7 +1189,10 @@ begin
   cqrini.WriteInteger('Program', 'Options', pgPreferences.ActivePageIndex);
   cqrini.WriteBool('Program', 'BandStatMHz', rgStatistics.ItemIndex = 0);
   cqrini.WriteFloat('Program', 'GraylineOffset', StrToCurr(edtGrayLineOffset.Text));
+
+  if  edtWebBrowser.Text = '' then  edtWebBrowser.Text:= dmUtils.MyDefaultBrowser; //may not be empty string
   cqrini.WriteString('Program', 'WebBrowser', edtWebBrowser.Text);
+
   cqrini.WriteBool('Program', 'CheckDXCCTabs', chkNewDXCCTables.Checked);
   cqrini.WriteBool('Program', 'ShowDeleted', chkShowDeleted.Checked);
   cqrini.WriteBool('Program', 'SunUTC', chkSunUTC.Checked);
@@ -1482,16 +1504,21 @@ begin
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
   cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
 
-  cqrini.WriteInteger('CW', 'Type', cmbIfaceType.ItemIndex);
-  cqrini.WriteString('CW', 'wk_port', edtWinPort.Text);
+  cqrini.WriteInteger('CW', 'Type1', cmbIfaceType1.ItemIndex);
+  cqrini.WriteInteger('CW', 'Type2', cmbIfaceType2.ItemIndex);
+  cqrini.WriteBool('CW', 'NoReset', cbNoKeyerReset.Checked);
+  cqrini.WriteString('CW', 'wk_port1', edtWinPort1.Text);
+  cqrini.WriteString('CW', 'wk_port2', edtWinPort2.Text);
   cqrini.WriteBool('CW', 'PotSpeed', chkPotSpeed.Checked);
   cqrini.WriteInteger('CW', 'wk_speed', edtWinSpeed.Value);
   cqrini.WriteString('CW', 'cw_address', edtCWAddress.Text);
-  cqrini.WriteString('CW', 'cw_port', edtCWPort.Text);
+  cqrini.WriteString('CW', 'cw_port1', edtCWPort1.Text);
+  cqrini.WriteString('CW', 'cw_port2', edtCWPort2.Text);
   cqrini.WriteInteger('CW', 'cw_speed', edtCWSpeed.Value);
   cqrini.WriteInteger('CW', 'wk_min', edtWinMinSpeed.Value);
   cqrini.WriteInteger('CW', 'wk_max', edtWinMaxSpeed.Value);
-  cqrini.WriteString('CW','K3NGPort',edtK3NGPort.Text);
+  cqrini.WriteString('CW','K3NGPort1',edtK3NGPort1.Text);
+  cqrini.WriteString('CW','K3NGPort2',edtK3NGPort2.Text);
   cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
   cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
   cqrini.WriteInteger('CW','HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
@@ -1539,7 +1566,10 @@ begin
   cqrini.WriteString('ExtView', 'txt', edtTxtFiles.Text);
   cqrini.WriteString('ExtView', 'pdf', edtPdfFiles.Text);
   cqrini.WriteString('ExtView', 'img', edtImgFiles.Text);
+
+  if  edtHtmlFiles.Text = '' then  edtHtmlFiles.Text:= dmUtils.MyDefaultBrowser; //may not be empty string
   cqrini.WriteString('ExtView', 'html', edtHtmlFiles.Text);
+
   cqrini.WriteBool('ExtView', 'QSL', chkIntQSLViewer.Checked);
 
   cqrini.WriteString('FirstClub', 'DateFrom', edtClub1Date.Text);
@@ -1594,32 +1624,7 @@ begin
   cqrini.WriteBool('prop','CalcHF',chkCondxCalcHF.Checked);
   cqrini.WriteBool('prop','CalcVHF',chkCondxCalcVHF.Checked);
 
-  if WinKeyerChanged then
-  begin
-    {
-    frmNewQSO.CWint.Close;
-    if cmbIfaceType.ItemIndex > 0 then
-    begin
-      if cmbIfaceType.ItemIndex = 1 then
-      begin
-        //frmNewQSO.CWint.KeyType := ktWinKeyer;
-        frmNewQSO.CWint.Port := edtWinPort.Text;
-        frmNewQSO.CWint.SetSpeed(edtWinSpeed.Value);
-        frmNewQSO.CWint.Device := edtWinPort.Text;
-        frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtWinSpeed.Value) + 'WPM'
-      end
-      else
-      begin
-        //frmNewQSO.CWint.KeyType := ktCWdaemon;
-        frmNewQSO.CWint.Port := edtCWPort.Text;
-        frmNewQSO.CWint.Device := edtCWAddress.Text;
-        frmNewQSO.CWint.SetSpeed(edtCWSpeed.Value);
-        frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtCWSpeed.Value) + 'WPM'
-      end;
-      frmNewQSO.CWint.Open
-    end}
-    frmNewQSO.InitializeCW
-  end;
+  if WinKeyerChanged then frmNewQSO.InitializeCW;
 
   fraExportPref1.SaveExportPref;
 
@@ -1704,6 +1709,7 @@ begin
   dmUtils.LoadBandsSettings;
   dmData.LoadClubsSettings;
   dmData.LoadZipSettings;
+  dmUtils.UpdateHelpBrowser;
 end;
 
 procedure TfrmPreferences.FormCreate(Sender: TObject);
@@ -1721,7 +1727,9 @@ begin
     frmFreq.ShowModal
   finally
     frmFreq.Free
-  end
+  end;
+  //init user defined bands vs frequencies
+  dmUtils.BandFromDbase;
 end;
 
 procedure TfrmPreferences.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -1752,8 +1760,55 @@ begin
 end;
 
 procedure TfrmPreferences.btnHelpClick(Sender: TObject);
+
+var
+    HelpAddr : array [-1 .. 26] of string = (
+    'h1.html',      //preferences, none tab selected
+    'h1.html#ah2',  //program
+    'h1.html#ah3',  //station
+    'h1.html#ah4',  //new qso
+    'h1.html#ah5',  //visible columns
+    'h1.html#ah6',  //bands
+    'h1.html#ah7',  //trx control
+    'h1.html#ah7b', //rot control
+    'h1.html#ah8',  //modes
+    'h1.html#ah9',  //qth profiles
+    'h1.html#ah10', //export
+    'h1.html#ah11', //dx cluster
+    'h1.html#ah12', //fonts
+    'h1.html#ah13', //waz itu zones
+    'h1.html#ah14', //iota
+    'h1.html#ah15', //membership
+    'h1.html#bh1 ', //bandmap
+    'h1.html#bh2',  //xplanet support
+    'h1.html#bh3',  //zip code tracking
+    'h1.html#bh4',  //lotw support
+    'h1.html#ch1',  //cw interface
+    'h1.html#ch2',  //fldigi wsjt-x n1mm interface
+    'h1.html#ch3',  //autobackup
+    'h1.html#ch4',  //external viewers
+    'h1.html#ch5',  //callbook support
+    'h1.html#ch6',  //rbn support
+    'h1.html#ch7',  //online log upload support
+    'h1.html#ch9'   //propagation
+    );
+
 begin
-  ShowHelp;
+  dmUtils.OpenInApp('file://' + dmData.HelpDir + HelpAddr[pgPreferences.TabIndex] );
+  //ShowHelp;
+{
+ this feels stupid but I could not find any other way to bind help-button to active tab's help
+ Because of:
+
+ procedure TControl.ShowHelp;
+  Begin
+  ...
+  ...
+   if Parent <> nil then  <-------------!!!! I THINK: this leads always to show upper level help !!!!
+      Parent.ShowHelp;
+  end;
+ }
+
 end;
 
 procedure TfrmPreferences.btnLoadFifthClick(Sender: TObject);
@@ -2066,6 +2121,11 @@ begin
   end;
 end;
 
+procedure TfrmPreferences.btnHelp1Click(Sender: TObject);
+begin
+  dmUtils.OpenInApp('file://' + dmData.HelpDir + 'index.html' );
+end;
+
 procedure TfrmPreferences.btnWsjtPathClick(Sender: TObject);
 begin
   dlgOpen.Title := 'Locate wsjtx binary ...';
@@ -2174,7 +2234,7 @@ begin
     end;
 end;
 
-procedure TfrmPreferences.btnKeyTextClick(Sender: TObject);
+procedure TfrmPreferences.btnKeyMacrosClick(Sender: TObject);
 begin
   frmKeyTexts := TfrmKeyTexts.Create(self);
   try
@@ -2198,6 +2258,15 @@ procedure TfrmPreferences.btnForceMembershipUpdateClick(Sender : TObject);
 begin
   SaveClubSection;
   dmMembership.CheckForMembershipUpdate
+end;
+
+procedure TfrmPreferences.cbNoKeyerResetChange(Sender: TObject);
+begin
+  if  cbNoKeyerReset.Checked
+    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
+     or  (cmbIfaceType1.ItemIndex = 4)
+     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
+     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
 
 
@@ -2361,9 +2430,23 @@ begin
   TRXChanged := True
 end;
 
-procedure TfrmPreferences.cmbIfaceTypeChange(Sender: TObject);
+procedure TfrmPreferences.cmbIfaceType1Change(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  WinKeyerChanged := True;
+   if  cbNoKeyerReset.Checked
+    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
+     or  (cmbIfaceType1.ItemIndex = 4)
+     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
+     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
+end;
+procedure TfrmPreferences.cmbIfaceType2Change(Sender: TObject);
+begin
+  WinKeyerChanged := True;
+  if  cbNoKeyerReset.Checked
+    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
+     or  (cmbIfaceType1.ItemIndex = 4)
+     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
+     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
 
 procedure TfrmPreferences.cmbParityR1Change(Sender : TObject);
@@ -2404,6 +2487,12 @@ end;
 procedure TfrmPreferences.cmbStopBitsR2Change(Sender : TObject);
 begin
   TRXChanged := True
+end;
+
+procedure TfrmPreferences.edtHtmlFilesClick(Sender: TObject);
+begin
+  if odFindBrowser.Execute then
+        edtHtmlFiles.Text := odFindBrowser.Filename;
 end;
 
 procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
@@ -2453,6 +2542,31 @@ begin
     key := #0;
 end;
 
+procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
+Begin
+  if odFindBrowser.Execute then
+        edtWebBrowser.Text := odFindBrowser.Filename;
+end;
+
+procedure TfrmPreferences.edtWebBrowserExit(Sender: TObject);
+var
+   f,p :string;
+begin
+  f:= edtWebBrowser.Text;
+  if (f = '') or (f[length(f)] = '/') then
+      Begin
+       edtWebBrowser.Text :='';
+       ShowMessage('File:'+f+' is not found!'+LineEnding+'Check file name,'+LineEnding+'or give full path.')
+      end
+    else
+     begin
+       p:= GetEnv('PATH');
+       edtWebBrowser.Text:=FileSearch (f,p);
+       if (edtWebBrowser.Text ='') then
+         ShowMessage('File:'+f+' is not found!'+LineEnding+'Check file name,'+LineEnding+'or give full path.');
+     end;
+end;
+
 procedure TfrmPreferences.edtWinMaxSpeedChange(Sender: TObject);
 begin
   WinKeyerChanged := True
@@ -2463,7 +2577,7 @@ begin
   WinKeyerChanged := True
 end;
 
-procedure TfrmPreferences.edtWinPortChange(Sender: TObject);
+procedure TfrmPreferences.edtWinPort1Change(Sender: TObject);
 begin
   WinKeyerChanged := True
 end;
@@ -2552,7 +2666,7 @@ begin
   pgPreferences.ActivePageIndex := cqrini.ReadInteger('Program', 'Options', 0);
   edtGrayLineOffset.Text :=
     CurrToStr(cqrini.ReadFloat('Program', 'GraylineOffset', 0));
-  edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+  edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
   chkNewDXCCTables.Checked := cqrini.ReadBool('Program', 'CheckDXCCTabs', True);
   chkShowDeleted.Checked := cqrini.ReadBool('Program', 'ShowDeleted', False);
   chkSunUTC.Checked := cqrini.ReadBool('Program', 'SunUTC', False);
@@ -2895,20 +3009,24 @@ begin
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
   chkExpCommet.Checked := cqrini.ReadBool('LoTW', 'ExpComment', True);
 
-  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW', 'Type', 0);
-  edtWinPort.Text := cqrini.ReadString('CW', 'wk_port', '');
+  cmbIfaceType1.ItemIndex := cqrini.ReadInteger('CW', 'Type1', 0);
+  cmbIfaceType2.ItemIndex := cqrini.ReadInteger('CW', 'Type2', 0);
+  cbNoKeyerReset.Checked := cqrini.ReadBool('CW', 'NoReset', false);
+  edtWinPort1.Text := cqrini.ReadString('CW', 'wk_port1', '');
+  edtWinPort2.Text := cqrini.ReadString('CW', 'wk_port2', '');
   chkPotSpeed.Checked := cqrini.ReadBool('CW', 'PotSpeed', False);
   edtWinSpeed.Value := cqrini.ReadInteger('CW', 'wk_speed', 30);
   edtCWAddress.Text := cqrini.ReadString('CW', 'cw_address', 'localhost');
-  edtCWPort.Text := cqrini.ReadString('CW', 'cw_port', '6789');
+  edtCWPort1.Text := cqrini.ReadString('CW', 'cw_port1', '6789');
+  edtCWPort2.Text := cqrini.ReadString('CW', 'cw_port2', '6789');
   edtCWSpeed.Value := cqrini.ReadInteger('CW', 'cw_speed', 30);
   edtWinMinSpeed.Value := cqrini.ReadInteger('CW', 'wk_min', 5);
   edtWinMaxSpeed.Value := cqrini.ReadInteger('CW', 'wk_max', 60);
-  edtK3NGPort.Text := cqrini.ReadString('CW','K3NGPort','');
+  edtK3NGPort1.Text := cqrini.ReadString('CW','K3NGPort1','');
+  edtK3NGPort2.Text := cqrini.ReadString('CW','K3NGPort2','');
   edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
   edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
   edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30));
-
 
   rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);       //
   edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');//
@@ -2952,7 +3070,7 @@ begin
   edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', 'gedit');
   edtPdfFiles.Text := cqrini.ReadString('ExtView', 'pdf', 'evince');
   edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', 'eog');
-  edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', 'firefox');
+  edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', dmUtils.MyDefaultBrowser);
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
 
   edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);

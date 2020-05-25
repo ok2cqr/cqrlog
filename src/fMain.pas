@@ -1255,7 +1255,7 @@ begin
   if dmData.DebugLevel>=1 then Writeln(url);
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
     AProcess.Parameters.Add(url);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -1271,7 +1271,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
     AProcess.Parameters.Add('http://www.ik3qar.it/manager/man_result.php?call=' + dmData.qCQRLOG.Fields[4].AsString);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute

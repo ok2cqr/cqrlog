@@ -1,57 +1,28 @@
 object frmFreq: TfrmFreq
-  Left = 514
-  Height = 385
-  Top = 313
-  Width = 561
+  Left = 283
+  Height = 540
+  Top = 24
+  Width = 803
   HorzScrollBar.Page = 448
   VertScrollBar.Page = 331
-  ActiveControl = dbgrdFreq
   BorderIcons = [biSystemMenu]
   Caption = 'Frequencies'
-  ClientHeight = 385
-  ClientWidth = 561
+  ClientHeight = 540
+  ClientWidth = 803
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
-  object Panel1: TPanel
-    Left = 0
-    Height = 45
-    Top = 340
-    Width = 561
-    Align = alBottom
-    BevelOuter = bvNone
-    ClientHeight = 45
-    ClientWidth = 561
-    TabOrder = 0
-    object btnChange: TButton
-      Left = 376
-      Height = 25
-      Top = 8
-      Width = 75
-      Anchors = [akRight, akBottom]
-      BorderSpacing.InnerBorder = 4
-      Caption = 'Modify'
-      OnClick = btnChangeClick
-      TabOrder = 0
-    end
-    object btnCancel: TButton
-      Left = 472
-      Height = 25
-      Top = 8
-      Width = 75
-      Anchors = [akRight, akBottom]
-      BorderSpacing.InnerBorder = 4
-      Caption = 'Close'
-      ModalResult = 2
-      TabOrder = 1
-    end
-  end
+  LCLVersion = '2.0.4.0'
   object dbgrdFreq: TDBGrid
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 340
+    Height = 457
     Top = 0
-    Width = 561
-    Align = alClient
+    Width = 803
+    Anchors = [akTop, akLeft, akRight]
     Color = clWindow
     Columns = <>
     DataSource = dsrFreq
@@ -60,6 +31,99 @@ object frmFreq: TfrmFreq
     TitleStyle = tsNative
     OnColumnSized = dbgrdFreqColumnSized
     OnDblClick = dbgrdFreqDblClick
+  end
+  object pnlFreq2: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = dbgrdFreq
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 73
+    Top = 457
+    Width = 803
+    Anchors = [akTop, akLeft, akRight]
+    BevelOuter = bvNone
+    ClientHeight = 73
+    ClientWidth = 803
+    TabOrder = 0
+    object btnChange: TButton
+      AnchorSideTop.Control = lblFreqNote1
+      AnchorSideRight.Control = btnCancel
+      AnchorSideBottom.Side = asrCenter
+      Left = 641
+      Height = 25
+      Top = 18
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 6
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Modify'
+      OnClick = btnChangeClick
+      TabOrder = 0
+    end
+    object btnCancel: TButton
+      AnchorSideTop.Control = btnChange
+      AnchorSideRight.Control = pnlFreq2
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrCenter
+      Left = 722
+      Height = 25
+      Top = 18
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 6
+      BorderSpacing.InnerBorder = 4
+      Caption = 'Close'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object lblFreqNote1: TLabel
+      AnchorSideLeft.Control = pnlFreq2
+      AnchorSideTop.Control = pnlFreq2
+      Left = 12
+      Height = 17
+      Top = 18
+      Width = 184
+      BorderSpacing.Left = 12
+      BorderSpacing.Top = 18
+      Caption = 'CW: (f>=Begin and f<=CW)'
+      ParentColor = False
+    end
+    object lblFreqNote2: TLabel
+      AnchorSideLeft.Control = lblFreqNote1
+      AnchorSideTop.Control = lblFreqNote1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Side = asrCenter
+      Left = 12
+      Height = 17
+      Top = 35
+      Width = 167
+      Caption = 'SSB: (f>SSB and f<=End)'
+      ParentColor = False
+    end
+    object lblFreqNote3: TLabel
+      AnchorSideLeft.Control = pnlFreq2
+      AnchorSideTop.Control = lblFreqNote1
+      Left = 230
+      Height = 17
+      Top = 18
+      Width = 180
+      BorderSpacing.Left = 230
+      Caption = 'RTTY: (f>RTTY and f<=SSB)'
+      ParentColor = False
+    end
+    object lblFreqNote4: TLabel
+      AnchorSideLeft.Control = lblFreqNote3
+      AnchorSideTop.Control = lblFreqNote2
+      Left = 230
+      Height = 17
+      Top = 35
+      Width = 247
+      Caption = 'USB: (f>10 or (f>5 and f<6)) else LSB'
+      ParentColor = False
+    end
   end
   object dsrFreq: TDataSource
     DataSet = dmData.qBands

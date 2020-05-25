@@ -31,6 +31,12 @@ type
     Exists    : Boolean;
   end;
 
+  BandVsFreq = record
+    band     : string;
+    b_begin  : currency;
+    b_end    : currency;
+  end;
+
 type
   TColumnVisibleArray = array of TVisibleColumn;
 
@@ -57,10 +63,9 @@ const
     +
     '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|';
   cBands: array[0..25] of string[10] =
-    ('2190M', '630M', '160M', '80M', '60M', '40M', '30M', '20M', '17M', '15M', '12M', '10M', '6M',
-    '4M', '2M', '1.25M', '70CM',
-    '33CM', '23CM', '13CM', '9CM', '6CM', '3CM',
-    '1.25CM', '6MM', '4MM');
+    ('2190M', '630M', '160M', '80M'   , '60M', '40M'  , '30M', '20M'  , '17M' , '15M' ,
+     '12M'  , '10M' , '6M'  , '4M'    , '2M' , '1.25M', '70CM', '33CM', '23CM', '13CM',
+     '9CM'  , '6CM' , '3CM' , '1.25CM', '6MM', '4MM');
 
   cMaxIgnoreFreq = 6;
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string =
@@ -94,6 +99,7 @@ type
     fQRZSession: string;
     fHamQTHSession: string;
     fSysUTC: boolean;
+
 
     procedure LoadRigList(RigCtlBinaryPath : String;RigList : TStringList);
     procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
@@ -136,6 +142,7 @@ type
     USstates: array [1..50] of string;
     MyBands: array [0..cMaxBandsCount - 1, 0..1] of string[6];
     //list of bands, band labels
+    BandFreq  : array [0..cMaxBandsCount - 1]of BandVsFreq;
 
     property TimeOffset: currency read fTimeOffset write fTimeOffset;
     property GrayLineOffset: currency read fGraylineOffset write fGrayLineOffset;
@@ -187,8 +194,11 @@ type
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
+    procedure  BandFromDbase;
+    procedure UpdateHelpBrowser;
 
-
+    function  BandFromArray(tmp:Currency):string;
+    function MyDefaultBrowser:String;
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;
@@ -273,6 +283,7 @@ type
     function  MyDateTimeToStr(DateTime : TDateTime) : String;
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
     function  StdFormatLocator(loc:string):String;
+
 end;
 
 var
@@ -296,7 +307,93 @@ begin
       Result := 'D';
   end;
 end;
+Procedure TdmUtils.BandFromDbase;
+var
+  BandCount: integer;
+Begin
+  BandCount := 0;
+  dmData.qBands.Close;
+  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
+  if dmData.trBands.Active then
+    dmData.trBands.Rollback;
+  dmData.trBands.StartTransaction;
+  try
+    dmData.qBands.Open;
+    while not dmData.qBands.Eof  do
+     Begin
+       BandFreq[BandCount].band:= dmData.qBands.FieldByName('band').AsString;
+       BandFreq[BandCount].b_begin:=dmData.qBands.FieldByName('b_begin').AsCurrency;
+       BandFreq[BandCount].b_end:=dmData.qBands.FieldByName('b_end').AsCurrency;
+       inc(BandCount);
+       dmData.qBands.Next;
+     end;
+  finally
+    dmData.qBands.Close;
+    dmData.trBands.Rollback
+  end;
+end;
+function TdmUtils.BandFromArray(tmp:Currency):string;
+var
+   x:integer;
+Begin
+  result:='';
+   for x:=0 to  (cMaxBandsCount - 1 ) do
+      Begin
+           if (tmp >= dmUtils.BandFreq[x].b_begin )
+             and (tmp <= dmUtils.BandFreq[x].b_end ) then
+                Begin
+                   Result := dmUtils.BandFreq[x].band;
+                   exit;
+                end;
+      end;
+end;
 
+function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
+var
+  Band: string;
+  tmp: extended;
+begin
+  Result := '';
+  band := GetBandFromFreq(freq);
+  dmData.qBands.Close;
+  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
+    QuotedStr(band);
+  if dmData.trBands.Active then
+    dmData.trBands.Rollback;
+  dmData.trBands.StartTransaction;
+  try
+    dmData.qBands.Open;
+    tmp := StrToFloat(freq);
+    if dmData.qBands.RecordCount > 0 then
+    begin
+      if ((tmp >= dmData.qBands.FieldByName('B_BEGIN').AsCurrency) and
+        (tmp <= dmData.qBands.FieldByName('CW').AsCurrency)) then
+        Result := 'CW'
+      else
+      begin
+        if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and
+          (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
+          Result := 'RTTY';
+
+        if ((tmp > dmData.qBands.FieldByName('SSB').AsCurrency) and
+          (tmp <= dmData.qBands.FieldByName('B_END').AsCurrency)) then
+        begin
+          if (tmp > 5) and (tmp < 6) then
+            Result := 'USB'
+          else begin
+            if tmp > 10 then
+              Result := 'USB'
+            else
+              Result := 'LSB'
+          end
+        end
+      end
+    end
+  finally
+    dmData.qBands.Close;
+    dmData.trBands.Rollback
+  end;
+end;
 
 function TdmUtils.GetBandFromFreq(MHz: string): string;
 var
@@ -314,47 +411,9 @@ begin
     MHz[pos(',', MHz)] := FormatSettings.DecimalSeparator;
 
   if not TryStrToCurr(MHz, tmp) then
-    exit;
-
-  if tmp < 1 then
-  begin
-    Dec := Int(frac(tmp) * 1000);
-    if ((Dec >= 133) and (Dec <= 139)) then
-      Result := '2190M';
-    if ((Dec >= 472) and (Dec <= 480)) then
-      Result := '630M';
-    exit;
-  end;
-  x := trunc(tmp);
-
-  case x of
-    1: Band := '160M';
-    3: band := '80M';
-    5: band := '60M';
-    7: band := '40M';
-    10: band := '30M';
-    14: band := '20M';
-    18: Band := '17M';
-    21: Band := '15M';
-    24: Band := '12M';
-    28..30: Band := '10M';
-    50..53: Band := '6M';
-    70..72: Band := '4M';
-    144..149: Band := '2M';
-    219..225: Band := '1.25M';
-    430..440: band := '70CM';
-    900..929: band := '33CM';
-    1240..1300: Band := '23CM';
-    2300..2450: Band := '13CM';  //12 cm
-    3400..3475: band := '9CM';
-    5650..5850: Band := '6CM';
-
-    10000..10500: band := '3CM';
-    24000..24250: band := '1.25CM';
-    47000..47200: band := '6MM';
-    76000..84000: band := '4MM'
-  end;
-  Result := band;
+    exit
+   else
+    Result := BandFromArray(tmp);
 end;
 
 function TdmUtils.GetAdifBandFromFreq(MHz: string): string;
@@ -373,51 +432,8 @@ begin
     MHz[pos(',', MHz)] := FormatSettings.DecimalSeparator;
 
   if not TextToFloat(PChar(MHZ), tmp, fvCurrency) then
-    exit;
-
-  if tmp < 1 then
-  begin
-    Dec := Int(frac(tmp) * 1000);
-    if ((Dec >= 133) and (Dec <= 139)) then
-    begin
-      Result := '2190M';
-      exit;
-    end;
-    if ((Dec >= 472) and (Dec <= 479)) then
-    begin
-      Result := '630M';
-      exit;
-    end;
-  end;
-  x := trunc(tmp);
-  case x of
-    1: Band := '160M';
-    3: band := '80M';
-    5: band := '60M';
-    7: band := '40M';
-    10: band := '30M';
-    14: band := '20M';
-    18: Band := '17M';
-    21: Band := '15M';
-    24: Band := '12M';
-    28..29: Band := '10M';
-    50..53: Band := '6M';
-    70..72: Band := '4M';
-    144..149: Band := '2M';
-    219..225: band := '1.25M';
-    430..440: band := '70CM';
-    900..929: band := '33CM';
-    1240..1300: Band := '23CM';
-    2300..2450: Band := '13CM';
-    3400..3475: band := '9CM';
-    5650..5850: Band := '6CM';
-
-    10000..10500: band := '3CM';
-    24000..24250: band := '1.25CM';
-    47000..47200: band := '6MM';
-    76000..84000: band := '4MM';
-  end;
-  Result := band;
+    exit
+   else Result := BandFromArray(tmp);
 end;
 
 procedure TdmUtils.SaveForm(aForm: TForm);
@@ -514,7 +530,9 @@ end;
 procedure TdmUtils.DataModuleCreate(Sender: TObject);
 begin
   fQRZSession := '';
+  //this overrides dmUtils.lfm setings
   HelpDatabase.BaseURL := 'file://' + dmData.HelpDir;
+  //check of user defined HelpViever (other than xdg-open as default) is done at fNewQSO
   USstates[1] := 'AK, Alaska';
   USstates[2] := 'AL, Alabama';
   USstates[3] := 'AR, Arkansas';
@@ -741,6 +759,17 @@ begin
   end; //case
   DateSeparator := sep;
   }
+end;
+
+function TdmUtils.MyDefaultBrowser:String;
+var
+  v: THTMLBrowserHelpViewer;
+  BrowserPath, BrowserParams: string;
+begin
+  v:=THTMLBrowserHelpViewer.Create(nil);
+  v.FindDefaultBrowser(BrowserPath,BrowserParams);
+  result := BrowserPath;
+  v.Free;
 end;
 
 function TdmUtils.StrToDateFormat(sDate: string): TDateTime;
@@ -1606,50 +1635,6 @@ begin
     end;
 end;
 
-function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
-var
-  Band: string;
-  tmp: extended;
-begin
-  Result := '';
-  band := GetBandFromFreq(freq);
-  dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
-    QuotedStr(band);
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
-  dmData.trBands.StartTransaction;
-  try
-    dmData.qBands.Open;
-    tmp := StrToFloat(freq);
-    if dmData.qBands.RecordCount > 0 then
-    begin
-      if ((tmp >= dmData.qBands.FieldByName('B_BEGIN').AsCurrency) and
-        (tmp <= dmData.qBands.FieldByName('CW').AsCurrency)) then
-        Result := 'CW'
-      else
-      begin
-        if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
-          Result := 'RTTY'
-        else
-        begin
-          if (tmp > 5) and (tmp < 6) then
-            Result := 'USB'
-          else begin
-            if tmp > 10 then
-              Result := 'USB'
-            else
-              Result := 'LSB'
-          end
-        end
-      end
-    end
-  finally
-    dmData.qBands.Close;
-    dmData.trBands.Rollback
-  end;
-end;
 
 function TdmUtils.StringToADIF(ATag,Text: string): string;
 var
@@ -3119,7 +3104,8 @@ begin
         inc(index);
       end;
       paramList.Free;
-    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    if dmData.DebugLevel>=1 then
+     Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -3427,7 +3413,7 @@ begin
     SetCurrentDir(dmData.HomeDir + 'call_data' + PathDelim + call + PathDelim);
     prg := cqrini.ReadString('ExtView', 'img', 'eog');
     if prg = '' then
-      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', 'firefox') +
+      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) +
         ' ' + qsl)
     else
       dmUtils.RunOnBackgroud(prg + ' ' + qsl)
@@ -3460,7 +3446,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
     AProcess.Parameters.Add('http://www.qrz.com/db/' + GetIDCall(call));
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -3477,7 +3463,7 @@ begin
   myloc := cqrini.ReadString('Station', 'LOC', '');
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
+    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
     AProcess.Parameters.Add('https://www.k7fry.com/grid/?qth=' + locator + '&from=' + myloc);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -3490,6 +3476,9 @@ procedure TdmUtils.LoadBandsSettings;
 var
   i: integer;
 begin
+  //init user defined bands vs frequencies
+  dmUtils.BandFromDbase;
+
   LoadBandLabelSettins;
   for i := 0 to cMaxBandsCount - 1 do
   begin
@@ -3945,9 +3934,10 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', 'firefox');
-    AProcess.Parameters.Add(' http://www.hamqth.com/' + GetIDCall(call));
-    if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+    AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+    AProcess.Parameters.Add('http://www.hamqth.com/' + GetIDCall(call));
+    if dmData.DebugLevel>=1 then ;
+    Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
     AProcess.Free
@@ -4254,7 +4244,15 @@ end;
 
 procedure TdmUtils.OpenInApp(what: string);
 begin
-  RunOnBackgroud('xdg-open ' + what);
+  if ((pos('.HTML',upcase(what))>0) or (pos('.HTM',upcase(what))>0)) //because possible "hashtag in link-problem"
+    then
+     Begin
+      RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
+     end
+   else
+    begin
+      RunOnBackgroud('xdg-open ' + what);
+    end;
 end;
 
 function TdmUtils.GetDescKeyFromCode(key: word): string;
@@ -4593,6 +4591,25 @@ begin
   finally
     FindClose(SearchRec)
   end
+end;
+procedure TdmUtils.UpdateHelpBrowser;
+var b :string;
+Begin
+  //here we can read preferences/program/defaut browser as log (and so preferences) are already selected
+  //we need this because xdg-open (as default browser) can not work properly in all systems
+  //dropping hashtags away from html file:// paths. Then user may define browser path/name that
+  //usually works with hashtag html file paths.
+
+  b := cqrini.ReadString('Program', 'WebBrowser', '');
+     if (b<>'') then
+      try
+       Begin
+        dmUtils.HelpViewer.BrowserPath:=b;
+        dmUtils.HelpViewer.BrowserParams:='%s';
+       end;
+      finally
+      end;
+     //else use default browser that is defined at program early start
 end;
 
 end.

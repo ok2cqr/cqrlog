@@ -20,7 +20,7 @@ type
       fDebugMode : Boolean;
       fMinSpeed  : Word;
       fMaxSpeed  : Word;
-      fPortSpeed : Word;
+      fPortSpeed : dWord;
     public
       property Port      : String read fPort write fPort;
       property Device    : String read fDevice write fDevice;
@@ -29,7 +29,7 @@ type
       property DebugMode : Boolean read fDebugMode write fDebugMode;
       property MinSpeed  : Word read fMinSpeed;
       property MaxSpeed  : Word read fMaxSpeed;
-      property PortSpeed : Word read fPortSpeed write fPortSpeed;
+      property PortSpeed : dWord read fPortSpeed write fPortSpeed;
 
       constructor Create; virtual; abstract;
 

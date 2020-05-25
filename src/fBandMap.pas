@@ -646,7 +646,13 @@ begin
 procedure TfrmBandMap.acHelpExecute(Sender: TObject);
 begin
    //point to special html reload file because '#bh19' cannot be passed as OpenInApp link parameter (why?)
-   dmUtils.OpenInApp(dmData.HelpDir+'h21bh19.html') ;
+   //dmUtils.OpenInApp(dmData.HelpDir+'h21bh19.html') ;
+
+   //Later: Found out that it is xdg-open issue and depends how browser is registred. Some systems work some not.
+   //xdg-open may strip hashtag away then we need to use real bowser call, not xdg.open call
+   // /usr/bin/opera %s does work, xdg-open %s does not (even calls opera). So we should use preferences/program/browser
+   // to init Lazarus help viewer.
+   ShowHelp;
    btnEatFocus.SetFocus
 end;
 
