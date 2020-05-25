@@ -781,7 +781,7 @@ begin
         Synchronize(@frmNewQSO.SynQSLTab)
      end
     else
-     writeln (data);
+     if dmData.DebugLevel>=1 then writeln (data);
   end;
 end;
 
@@ -801,7 +801,7 @@ begin
           Synchronize(@frmNewQSO.SynDXCCTab)
      end
     else
-     writeln (data);
+     if dmData.DebugLevel>=1 then writeln (data);
   end
 end;
 procedure TfrmNewQSO.WaitWeb(secs:integer);
@@ -1785,6 +1785,8 @@ begin
               if dmData.DebugLevel>=1 then Writeln('mhz:',mhz)
             end;
             mhz := Trim(mhz);
+            if Pos('.', mhz) > 0 then mhz[Pos('.', mhz)] := FormatSettings.DecimalSeparator;
+            if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
             if dmUtils.GetBandFromFreq(mhz) <> '' then
               cmbFreq.Text := mhz;
           end;

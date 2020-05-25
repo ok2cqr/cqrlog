@@ -90,7 +90,7 @@ implementation
 //should this be thread? There should not be network problems this kind of case
 
 
-uses  fTRXControl, dData, dUtils, uMyIni, fNewQSO;
+uses  fTRXControl, dData, dUtils, uMyIni, fNewQSO, dDXCluster;
 
 
 procedure Tfrmxfldigi.SetMyFields(d:integer);
@@ -199,7 +199,7 @@ begin
                         inc(Rstart);
                        end;
              end;
-
+          if dmData.DebugLevel>=1 then writeln ('Rcvd: ',Rres);
          end
        else
         Begin
@@ -222,6 +222,7 @@ var
    opmode :string;
    SockOK :Boolean;
    Drop   :integer;
+   tmp    :Currency;
 
 begin
   frmNewQSO.tmrFldigi.Enabled := false;
@@ -236,12 +237,17 @@ begin
                 end;
             1 : begin
                   if SockOK then SockOK := PollFldigi('log.get_frequency',mhz);//here kHz
-                  mhz := copy(mhz,1,pos('.',mhz)-1);   //here kHz no decimals
-                  Fdes := copy(mhz,length(mhz)-2,3); //decimal part of MHz
-                  mhz := copy(mhz,1,length(mhz)-3); //integer part here
-                  mhz := trim(mhz+'.'+Fdes);
-                  if dmUtils.GetBandFromFreq(mhz) <> '' then
-                    frequency := mhz
+                  mhz := Trim(mhz);
+                  if Pos('.', mhz) > 0 then mhz[Pos('.', mhz)] := FormatSettings.DecimalSeparator;
+                  if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
+                  if dmDXCluster.GetBandFromFreq(mhz,True) <> '' then
+                    Begin
+                      if TryStrToCurr(mhz,tmp) then
+                        begin
+                         tmp := tmp/1000;
+                         frequency := CurrToStr(tmp);
+                        end;
+                    end;
                 end;
             2 : frequency := cqrini.ReadString('fldigi','deffreq','3.600')
      end;
