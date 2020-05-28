@@ -71,6 +71,7 @@ type
     qProfiles: TSQLQuery;
     qIOTAList: TSQLQuery;
     qBands: TSQLQuery;
+    qWorkedContests: TSQLQuery;
     qDXClusters: TSQLQuery;
     qComment: TSQLQuery;
     qException: TSQLQuery;
@@ -113,6 +114,7 @@ type
     dsrDXCluster: TDatasource;
     dsrProfiles: TDatasource;
     dsrBands: TDatasource;
+    dsrWorkedContests: TDatasource;
     dsrImport: TDatasource;
     dsrQSOBefore: TDatasource;
     dsrMain: TDatasource;

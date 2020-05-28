@@ -154,6 +154,7 @@ type
     procedure InsertQSL_R(QSL_R: TcomboBox);
     procedure InsertFreq(cmbFreq: TComboBox);
     procedure InsertBands(cmbBand: TComboBox);
+    procedure InsertWorkedContests(cmbContest: TComboBox);
     procedure DateInRightFormat(date: TDateTime; var Mask, sDate: string);
     procedure FileCopy(const FileFrom, FileTo: string);
     procedure CopyData(Source, Destination: string);
@@ -714,6 +715,33 @@ begin
   cmbBand.Clear;
   for i := 0 to cMaxBandsCount - 2 do
     cmbBand.Items.Add(cBands[i]);
+end;
+
+procedure TdmUtils.InsertWorkedContests(cmbContest: TComboBox);
+var
+  i: integer;
+const
+  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` DESC';
+begin
+  cmbContest.Clear;
+  dmData.qWorkedContests.Close;
+  try
+   dmData.qWorkedContests.SQL.Text := 'SET CHARACTER SET "utf8"';
+   dmData.qWorkedContests.ExecSQL;
+   dmData.qWorkedContests.SQL.Text := C_SEL;
+    if dmData.DebugLevel >=1 then
+      Writeln(dmData.qWorkedContests.SQL.Text);
+    dmData.qWorkedContests.Open;
+    while not dmData.qWorkedContests.EOF do
+    begin
+      if dmData.DebugLevel >= 1 then
+        Writeln('Contest: ' + dmData.qWorkedContests.Fields[0].AsString);
+      cmbContest.Items.Add(dmData.qWorkedContests.Fields[0].AsString);
+    dmData.qWorkedContests.Next
+    end;
+  finally
+    dmData.qWorkedContests.Close;
+  end;
 end;
 
 function TdmUtils.DateInRightFormat(date: TDateTime): string;

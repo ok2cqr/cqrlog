@@ -1148,6 +1148,13 @@ object frmMain: TfrmMain
         Action = acCancelFilter
         OnClick = acCancelFilterExecute
       end
+      object MenuItem104: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem103: TMenuItem
+        Action = acCreateContestFilter
+        OnClick = acCreateContestFilterExecute
+      end
       object MenuItem79: TMenuItem
         Caption = '-'
       end
@@ -1676,6 +1683,11 @@ object frmMain: TfrmMain
       ImageIndex = 9
       OnExecute = acCreateFilterExecute
       ShortCut = 123
+    end
+    object acCreateContestFilter: TAction
+      Caption = 'Contest filter'
+      Hint = 'Create contest filter'
+      OnExecute = acCreateContestFilterExecute
     end
     object acCancelFilter: TAction
       Caption = 'Cancel filter'

@@ -251,6 +251,8 @@ begin
     q := q + ' order by qsodate,time_on';
     dmData.Q.SQL.Text := q;
   end;
+  if dmData.DebugLevel >=1 then
+    Writeln(dmData.Q.SQL.Text);
   s := TStringList.Create;
   callsign_list := TStringList.Create;
   category_band := 'ALL';

@@ -29,6 +29,7 @@ type
     acEditQSO:   TAction;
     acDeleteQSO: TAction;
     acCreateFilter: TAction;
+    acCreateContestFilter: TAction;
     acCancelFilter: TAction;
 
     acClose:    TAction;
@@ -137,6 +138,8 @@ type
     MenuItem100: TMenuItem;
     MenuItem101: TMenuItem;
     MenuItem102: TMenuItem;
+    MenuItem103: TMenuItem;
+    MenuItem104: TMenuItem;
     MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
@@ -400,6 +403,7 @@ type
     procedure acCancelFilterExecute(Sender: TObject);
     procedure acCloseExecute(Sender: TObject);
     procedure acCreateFilterExecute(Sender: TObject);
+    procedure acCreateContestFilterExecute(Sender: TObject);
     procedure acDXClusterExecute(Sender: TObject);
     procedure acExADIFExecute(Sender: TObject);
     procedure acExHTMLExecute(Sender: TObject);
@@ -463,7 +467,7 @@ implementation
 
 { TfrmMain }
 uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCStat,
-  fSort, fFilter, fImportProgress, fGrayline, fCallbook, fTRXControl,
+  fSort, fFilter, fContestFilter, fImportProgress, fGrayline, fCallbook, fTRXControl,
   fAdifImport, fSplash, fSearch, fExportProgress, fDXCluster, fQSLMgr,
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
@@ -1814,6 +1818,27 @@ begin
   lblDistance.Visible:=(lblDist.Caption <>'');
 
   with TfrmFilter.Create(self) do
+  try
+    ShowModal;
+    if (ModalResult = mrOk) then
+      if (tmp <> '') then
+      begin
+        dmData.IsFilter := True;
+        sbMain.Panels[2].Text := 'Filter is ACTIVE!';
+        RefreshQSODXCCCount;
+        ShowFields
+      end
+  finally
+    Free
+  end
+end;
+
+procedure TfrmMain.acCreateContestFilterExecute(Sender: TObject);
+begin
+  lblDist.Caption :='';
+  lblDistance.Visible:=(lblDist.Caption <>'');
+
+  with TfrmContestFilter.Create(self) do
   try
     ShowModal;
     if (ModalResult = mrOk) then
