@@ -1,7 +1,7 @@
 object frmxfldigi: Tfrmxfldigi
-  Left = 39
+  Left = 57
   Height = 193
-  Top = 15
+  Top = 39
   Width = 347
   Caption = 'fldigi xmlrpc'
   ClientHeight = 193
@@ -10,7 +10,7 @@ object frmxfldigi: Tfrmxfldigi
   OnCreate = FormCreate
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object lbCall: TLabel
     Left = 8
     Height = 15
@@ -26,7 +26,7 @@ object frmxfldigi: Tfrmxfldigi
     Left = 88
     Height = 15
     Top = 32
-    Width = 56
+    Width = 67
     AutoSize = False
     Caption = '-Freq'
     Color = clDefault

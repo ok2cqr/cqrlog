@@ -1308,6 +1308,7 @@ end;
 function TfrmTRXControl.GetModeFreqNewQSO(var mode,freq : String) : Boolean;
 begin
   Result := False;
+  if not Assigned(radio) then exit; //without this sets old freq as mode (!) if switched from radio to non existing radio
   if not ((lblFreq.Caption = empty_freq) or (lblFreq.Caption = '')) then
     Result := True
   else

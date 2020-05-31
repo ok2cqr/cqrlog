@@ -222,7 +222,7 @@ var
    opmode :string;
    SockOK :Boolean;
    Drop   :integer;
-   tmp    :Currency;
+   tmp    :extended;
 
 begin
   frmNewQSO.tmrFldigi.Enabled := false;
@@ -242,13 +242,18 @@ begin
                   if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
                   if dmDXCluster.GetBandFromFreq(mhz,True) <> '' then
                     Begin
-                      if TryStrToCurr(mhz,tmp) then
+                      if TryStrToFloat(mhz,tmp) then
                         begin
                          tmp := tmp/1000;
-                         frequency := CurrToStr(tmp);
+                         frequency :=FloatToStrF(tmp,ffFixed,8,5);
+                          if (dmUtils.GetBandFromFreq(frequency) <> frmNewQSO.old_t_band) then
+                             Begin
+                              frmNewQSO.old_t_band := dmUtils.GetBandFromFreq(frequency);
+                              frmNewQSO.btnClearSatelliteClick(nil); //if band changes sat and prop cleared
+                             end;
                         end;
                     end;
-                end;
+                  end;
             2 : frequency := cqrini.ReadString('fldigi','deffreq','3.600')
      end;
      if dmData.DebugLevel>=1 then Writeln('Qrg :', frequency);
