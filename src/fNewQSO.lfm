@@ -2138,7 +2138,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object sbNewQSO: TStatusBar
     AnchorSideBottom.Side = asrBottom
     Left = 0
@@ -3557,11 +3557,11 @@ object frmNewQSO: TfrmNewQSO
           Height = 135
           Top = 376
           Width = 938
-          ActivePage = tabDXCCStat
+          ActivePage = tabSatellite
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 40
-          TabIndex = 0
+          TabIndex = 1
           TabOrder = 28
           object tabDXCCStat: TTabSheet
             Caption = 'DXCC statistic'
@@ -3703,8 +3703,8 @@ object frmNewQSO: TfrmNewQSO
               Left = 8
               Height = 23
               Hint = 'Use RX frequency from the Satellite tab instead of Frequency for DX spots'
-              Top = 106
-              Width = 233
+              Top = 114
+              Width = 226
               BorderSpacing.Top = 35
               Caption = 'Use RX frequency for DX spots'
               Color = clNone

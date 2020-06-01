@@ -30,7 +30,9 @@ type
 
     procedure LoadSatellitesFromFile;
     procedure LoadPropModesFromFile;
+    procedure SetListOfSatellites(cmbSatellite : TComboBox);
     procedure GetListOfSatellites(cmbSatellite : TComboBox; Selected : String = '');
+    procedure SetListOfPropModes(cmbPropMode : TComboBox);
     procedure GetListOfPropModes(cmbPropMode : TComboBox; Selected : String = '');
   end;
 
@@ -66,16 +68,20 @@ begin
   if FileExists(dmData.HomeDir + C_PROP_MODE_LIST) then
     ListOfPropModes.LoadFromFile(dmData.HomeDir + C_PROP_MODE_LIST)
 end;
-
-procedure TdmSatellite.GetListOfSatellites(cmbSatellite : TComboBox; Selected : String = '');
-var
-  i : Integer;
-begin
+procedure TdmSatellite.SetListOfSatellites(cmbSatellite : TComboBox);
+Begin
   cmbSatellite.Clear;
   cmbSatellite.Items.Add('');
   cmbSatellite.ItemIndex := 0;
 
   cmbSatellite.Items.AddStrings(ListOfSatellites);
+end;
+
+procedure TdmSatellite.GetListOfSatellites(cmbSatellite : TComboBox; Selected : String = '');
+var
+  i : Integer;
+begin
+
   for i:=0 to cmbSatellite.Items.Count -1 do
   begin
     if (GetSatShortName(cmbSatellite.Items.Strings[i]) = Selected) then
@@ -85,16 +91,20 @@ begin
     end
   end
 end;
+procedure TdmSatellite.SetListOfPropModes(cmbPropMode : TComboBox);
+Begin
+ cmbPropMode.Clear;
+ cmbPropMode.Items.Add('');
+ cmbPropMode.ItemIndex := 0;
+
+ cmbPropMode.Items.AddStrings(ListOfPropModes);
+end;
 
 procedure TdmSatellite.GetListOfPropModes(cmbPropMode : TComboBox; Selected : String);
 var
   i : Integer;
 begin
-  cmbPropMode.Clear;
-  cmbPropMode.Items.Add('');
-  cmbPropMode.ItemIndex := 0;
 
-  cmbPropMode.Items.AddStrings(ListOfPropModes);
   for i:=0 to cmbPropMode.Items.Count - 1 do
   begin
     if (GetPropShortName(cmbPropMode.Items.Strings[i]) = Selected) then

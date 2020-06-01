@@ -593,7 +593,6 @@ type
     Running    : Boolean;
     idcall     : String;
     old_t_mode : String;
-    old_t_band : String;
     lotw_qslr  : String;
     fromNewQSO : Boolean;
     FreqBefChange : Double;
@@ -655,6 +654,7 @@ type
     CWint       : TCWDevice;
     ShowWin     : Boolean;
     LastFkey    : Word;
+    old_t_band  : String;
 
     WsjtxSock             : TUDPBlockSocket;
     N1MMSock              : TUDPBlockSocket;
@@ -1170,7 +1170,6 @@ begin
   end;
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertFreq(cmbFreq);
-
   dmSatellite.GetListOfSatellites(cmbSatellite, old_sat);
   dmSatellite.GetListOfPropModes(cmbPropagation, old_prop);
   edtRXFreq.Text := old_rxfreq;
@@ -1602,18 +1601,22 @@ var
 
 begin
   with TfrmDBConnect.Create(self) do
-  try
-    ShowModal;
-    if ModalResult <> mrOK then
-    begin
-      Application.Terminate;
-      exit
-    end
-    else
-      frmNewQSO.Caption := dmUtils.GetNewQSOCaption('New QSO')
-  finally
-    Free
-  end;
+   Begin
+    try
+      ShowModal;
+      if ModalResult <> mrOK then
+      begin
+        Application.Terminate;
+        exit
+      end
+      else
+        frmNewQSO.Caption := dmUtils.GetNewQSOCaption('New QSO')
+    finally
+      Free
+    end;
+   end;  //without this begin-end editor offers "finally; end" for every new line entered until end of procedure
+
+
 
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
@@ -1655,6 +1658,9 @@ begin
   tmrStart.Enabled := True;
 
   dmUtils.UpdateHelpBrowser;
+  dmSatellite.SetListOfSatellites(cmbSatellite); //load combo box lists
+  dmSatellite.SetListOfPropModes(cmbPropagation);
+
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -2112,11 +2118,12 @@ begin
         if (mode <> '') and (freq <> empty_freq) then
         begin
           band := dmUtils.GetBandFromFreq(freq);
+          if (band <> old_t_band) then btnClearSatelliteClick(nil); //if band changes sat and prop cleared
           if (mode <> old_t_mode) or (band <> old_t_band) then
           begin
             old_t_mode := mode;
             old_t_band := band
-          end
+          end;
         end
       end
     end
@@ -2249,7 +2256,7 @@ const
 var
 
   Buf      : String;
-  Fdes     : String;
+  Fdes     : Currency;
   ParStr   : String;
   Par2Str  : String;
   Fox2Line: integer;
@@ -2471,9 +2478,11 @@ begin
                     mhz := ''
                 end;
             1 : begin
-                  Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
-                  mhz := copy(mhz,1,length(mhz)-6); //integer part here
-                  mhz := mhz+'.'+Fdes;
+                  if TryStrToCurr(mhz,Fdes) then
+                     Begin
+                       Fdes :=Fdes/1000000.0;
+                       mhz:=FloatToStrF(Fdes,ffFixed,8,5);
+                     end;
                   if dmData.DebugLevel>=1 then Writeln('Qrg :', mhz);
                   mhz := Trim(mhz)
                 end;
@@ -2579,7 +2588,17 @@ begin
             old_ccall := '';
             old_cfreq := '';
             old_cmode := '';
-            if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode)
+            if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
+              Begin
+               frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode);
+               cmbFreq.Text :=mhz;
+               cmbMode.Text := WsjtxMode;
+               if (dmUtils.GetBandFromFreq(cmbFreq.Text) <> old_t_band) then
+                 Begin
+                  old_t_band := dmUtils.GetBandFromFreq(cmbFreq.Text);
+                  btnClearSatelliteClick(nil); //if band changes sat and prop cleared
+                 end;
+              end;
           end
         end; //Status
 
@@ -2754,9 +2773,11 @@ begin
                     cmbFreq.Text := mhz
                 end;
             1 : begin
-                  Fdes := copy(mhz,length(mhz)-5,3); //decimal part of MHz
-                  mhz := copy(mhz,1,length(mhz)-6); //integer part here
-                  mhz := mhz+'.'+Fdes;
+                 if TryStrToCurr(mhz,Fdes) then
+                     Begin
+                       Fdes :=Fdes/1000000;
+                       mhz:=FloatToStrF(Fdes,ffFixed,8,5);
+                     end;
                   if dmData.DebugLevel>=1 then Writeln('Qrg :', mhz);
                   mhz := Trim(mhz);
                   if dmUtils.GetBandFromFreq(mhz) <> '' then
@@ -4351,6 +4372,8 @@ begin
   cmbPropagation.ItemIndex := 0;
   cmbSatellite.ItemIndex   := 0;
   edtRXFreq.Clear;
+  old_sat:='';
+  old_prop:='';
   cmbSatelliteChange(nil)
 end;
 
@@ -4473,6 +4496,8 @@ end;
 
 
 procedure TfrmNewQSO.cmbFreqExit(Sender: TObject);
+var
+    band :String;
 begin
   if (not (fViewQSO or fEditQSO)) then
     cmbQSL_S.Text := dmData.SendQSL(edtCall.Text,cmbMode.Text,cmbFreq.Text,adif);
@@ -4480,7 +4505,14 @@ begin
   CheckQTHClub;
   CheckAwardClub;
   CheckCountyClub;
-  CheckStateClub
+  CheckStateClub;
+
+  band := dmUtils.GetBandFromFreq(cmbFreq.Text);
+  if (band <> old_t_band) then
+     Begin
+      btnClearSatelliteClick(nil); //if band changes sat and prop cleared
+       old_t_band := band;
+     end;
 end;
 
 procedure TfrmNewQSO.cmbIOTAEnter(Sender: TObject);
@@ -4493,7 +4525,9 @@ begin
   if (cmbPropagation.Text <> '') or (cmbSatellite.Text <> '') or (edtRXFreq.Text <> '') then
     tabSatellite.Font.Color := clRed
   else
-    tabSatellite.Font.Color := clDefault
+    tabSatellite.Font.Color := clDefault;
+
+  old_prop   := dmSatellite.GetPropShortName(cmbPropagation.Text); //old_prop is now selected value
 end;
 
 procedure TfrmNewQSO.cmbQSL_REnter(Sender: TObject);
@@ -4518,9 +4552,11 @@ end;
 
 procedure TfrmNewQSO.cmbSatelliteChange(Sender : TObject);
 begin
-  cmbPropagationChange(nil);
   if ((cmbSatellite.Text <> '') and (cmbPropagation.Text = '')) then
-    cmbPropagation.Text := 'SAT|Satellite'
+    cmbPropagation.Text := 'SAT|Satellite';
+
+  old_sat := dmSatellite.GetSatShortName(cmbSatellite.Text);  //old_sat is now selected value
+  cmbPropagationChange(nil);
 end;
 
 procedure TfrmNewQSO.dbgrdQSOBeforeColumnSized(Sender: TObject);
@@ -4870,7 +4906,8 @@ begin
 end;
 
 procedure TfrmNewQSO.cmbFreqChange(Sender: TObject);
-begin
+Begin
+  //note this procedure does NOT run if rig CAT changes cmbFreq text value !! (why?)
   cmbFreq.Text := CheckFreq(cmbFreq.Text);
   ShowCountryInfo;
   ChangeReports
