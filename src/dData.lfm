@@ -26,6 +26,11 @@ object dmData: TdmData
     left = 88
     top = 360
   end
+  object dsrWorkedContests: TDataSource
+    DataSet = qWorkedContests
+    left = 416
+    top = 424
+  end
   object dsrProfiles: TDataSource
     DataSet = qProfiles
     left = 88
@@ -552,6 +557,12 @@ object dmData: TdmData
     left = 88
     top = 288
   end
+  object trWorkedContests: TSQLTransaction
+    Active = False
+    Action = caNone
+    left = 416
+    top = 360
+  end
   object qBands: TSQLQuery
     FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
@@ -559,6 +570,14 @@ object dmData: TdmData
     Params = <>
     ParseSQL = False
     left = 88
+    top = 216
+  end
+  object qWorkedContests: TSQLQuery
+    FieldDefs = <>
+    Transaction = trWorkedContests
+    Params = <>
+    ParseSQL = False
+    left = 122
     top = 216
   end
   object trDXClusters: TSQLTransaction
