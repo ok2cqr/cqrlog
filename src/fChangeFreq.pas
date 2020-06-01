@@ -37,8 +37,10 @@ type
     Label8 : TLabel;
     Label9 : TLabel;
     procedure btnOKClick(Sender: TObject);
+    procedure ChkKeyPress(Sender: TObject; var Key: char);
   private
     { private declarations }
+
   public
     { public declarations }
   end; 
@@ -50,6 +52,12 @@ implementation
 {$R *.lfm}
 
 { TfrmChangeFreq }
+
+procedure TfrmChangeFreq.ChkKeyPress(Sender: TObject; var Key: char);
+begin
+  if (not (Key in ['0'..'9', '.','-','+', #8, #127])) OR ( (Key = '.') and (pos('.',TEdit(Sender).Text)>0) ) then Key := #0;
+end;
+
 
 procedure TfrmChangeFreq.btnOKClick(Sender: TObject);
 var
@@ -106,6 +114,7 @@ begin
 
   ModalResult := mrOK;
 end;
+
 
 end.
 
