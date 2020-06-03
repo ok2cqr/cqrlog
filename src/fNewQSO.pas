@@ -4236,15 +4236,12 @@ end;
 procedure TfrmNewQSO.edtGridChange(Sender: TObject);
 begin
   // this check is mainly for exports from remote. keying has own checking
-  edtGrid.SetFocus;
   edtGrid.Text := dmUtils.StdFormatLocator(edtGrid.Text);
   edtGrid.SelStart := Length(edtGrid.Text);
 end;
 
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
 begin
-  edtGrid.Font.Color:=clDefault;
-  edtGrid.Font.Style:= [];
   edtGrid.SelectAll
 end;
 
@@ -4255,11 +4252,6 @@ begin
      CalculateDistanceEtc;
      sbtnLocatorMap.Visible := True;
     end
-   else
-    begin
-     edtGrid.Font.Color:=clRed;
-     edtGrid.Font.Style:= [fsBold];
-    end;
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
