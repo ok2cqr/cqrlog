@@ -197,9 +197,7 @@ type
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
     procedure  BandFromDbase;
     procedure UpdateHelpBrowser;
-    procedure  BandFromDbase;
 
-    function  BandFromArray(tmp:Currency):string;
     function MyDefaultBrowser:String;
     function  BandFromArray(tmp:Currency):string;
     function  StrToDateFormat(sDate : String) : TDateTime;

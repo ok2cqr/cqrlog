@@ -237,9 +237,6 @@ begin
                 end;
             1 : begin
                   if SockOK then SockOK := PollFldigi('log.get_frequency',mhz);//here kHz
-                  if dmDXCluster.GetBandFromFreq(mhz,True) <> '' then
-                     frequency := mhz
-                end;
                   mhz := Trim(mhz);
                   if Pos('.', mhz) > 0 then mhz[Pos('.', mhz)] := FormatSettings.DecimalSeparator;
                   if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
