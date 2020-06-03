@@ -1103,6 +1103,9 @@ object frmMain: TfrmMain
         object MenuItem101: TMenuItem
           Action = acEDIExport
         end
+        object MenuItem102: TMenuItem
+          Action = acCabrilloExport
+        end
       end
       object MenuItem14: TMenuItem
         Caption = '-'
@@ -1144,6 +1147,13 @@ object frmMain: TfrmMain
       object mnuCancelFilter: TMenuItem
         Action = acCancelFilter
         OnClick = acCancelFilterExecute
+      end
+      object MenuItem104: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem103: TMenuItem
+        Action = acCreateContestFilter
+        OnClick = acCreateContestFilterExecute
       end
       object MenuItem79: TMenuItem
         Caption = '-'
@@ -1674,6 +1684,11 @@ object frmMain: TfrmMain
       OnExecute = acCreateFilterExecute
       ShortCut = 123
     end
+    object acCreateContestFilter: TAction
+      Caption = 'Contest filter'
+      Hint = 'Create contest filter'
+      OnExecute = acCreateContestFilterExecute
+    end
     object acCancelFilter: TAction
       Caption = 'Cancel filter'
       Hint = 'Cancel filter'
@@ -1925,6 +1940,10 @@ object frmMain: TfrmMain
     object acEDIExport: TAction
       Caption = 'EDI for contests'
       OnExecute = acEDIExportExecute
+    end
+    object acCabrilloExport: TAction
+      Caption = 'Cabrillo'
+      OnExecute = acCabrilloExportExecute
     end
     object acRemoveDupes: TAction
       Caption = 'Remove dupes from the log'

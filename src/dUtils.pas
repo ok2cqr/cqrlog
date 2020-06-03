@@ -72,7 +72,7 @@ const
     ('1800.0', '3500.0', '7000.0', '10100.0', '14000.0', '21000.0', '28000.0');
 
   C_RBN_CONT  = 'AF,AN,AS,EU,NA,SA,OC';
-  C_RBN_BANDS = '630M,160M,80M,40M,30M,20M,17M,15M,12M,10M,6M,2M';
+  C_RBN_BANDS = '630M,160M,80M,60M,40M,30M,20M,17M,15M,12M,10M,6M,2M';
   C_RBN_MODES = 'CW,RTTY,PSK31';
 
   C_CONTEST_LIST_FILE_NAME = 'ContestName.tab';
@@ -154,6 +154,7 @@ type
     procedure InsertQSL_R(QSL_R: TcomboBox);
     procedure InsertFreq(cmbFreq: TComboBox);
     procedure InsertBands(cmbBand: TComboBox);
+    procedure InsertWorkedContests(cmbContest: TComboBox);
     procedure DateInRightFormat(date: TDateTime; var Mask, sDate: string);
     procedure FileCopy(const FileFrom, FileTo: string);
     procedure CopyData(Source, Destination: string);
@@ -194,9 +195,11 @@ type
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
+    procedure  BandFromDbase;
     procedure UpdateHelpBrowser;
     procedure  BandFromDbase;
 
+    function  BandFromArray(tmp:Currency):string;
     function MyDefaultBrowser:String;
     function  BandFromArray(tmp:Currency):string;
     function  StrToDateFormat(sDate : String) : TDateTime;
@@ -714,6 +717,33 @@ begin
   cmbBand.Clear;
   for i := 0 to cMaxBandsCount - 2 do
     cmbBand.Items.Add(cBands[i]);
+end;
+
+procedure TdmUtils.InsertWorkedContests(cmbContest: TComboBox);
+var
+  i: integer;
+const
+  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` DESC';
+begin
+  cmbContest.Clear;
+  dmData.qWorkedContests.Close;
+  try
+   dmData.qWorkedContests.SQL.Text := 'SET CHARACTER SET "utf8"';
+   dmData.qWorkedContests.ExecSQL;
+   dmData.qWorkedContests.SQL.Text := C_SEL;
+    if dmData.DebugLevel >=1 then
+      Writeln(dmData.qWorkedContests.SQL.Text);
+    dmData.qWorkedContests.Open;
+    while not dmData.qWorkedContests.EOF do
+    begin
+      if dmData.DebugLevel >= 1 then
+        Writeln('Contest: ' + dmData.qWorkedContests.Fields[0].AsString);
+      cmbContest.Items.Add(dmData.qWorkedContests.Fields[0].AsString);
+    dmData.qWorkedContests.Next
+    end;
+  finally
+    dmData.qWorkedContests.Close;
+  end;
 end;
 
 function TdmUtils.DateInRightFormat(date: TDateTime): string;

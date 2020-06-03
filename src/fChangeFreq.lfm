@@ -1,7 +1,7 @@
 object frmChangeFreq: TfrmChangeFreq
-  Left = 468
+  Left = 471
   Height = 185
-  Top = 316
+  Top = 192
   Width = 557
   HorzScrollBar.Page = 324
   VertScrollBar.Page = 184
@@ -12,7 +12,7 @@ object frmChangeFreq: TfrmChangeFreq
   ClientHeight = 185
   ClientWidth = 557
   Position = poOwnerFormCenter
-  LCLVersion = '2.0.2.0'
+  LCLVersion = '2.0.8.0'
   object Label1: TLabel
     Left = 14
     Height = 17
@@ -54,19 +54,19 @@ object frmChangeFreq: TfrmChangeFreq
     ParentColor = False
   end
   object edtBegin: TEdit
-    Left = 12
+    Left = 14
     Height = 34
     Top = 33
     Width = 100
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 0
   end
   object edtEnd: TEdit
-    Left = 168
+    Left = 169
     Height = 34
     Top = 33
     Width = 100
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 1
   end
   object edtCW: TEdit
@@ -74,7 +74,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 34
     Top = 89
     Width = 100
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 2
   end
   object edtRTTY: TEdit
@@ -82,7 +82,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 34
     Top = 89
     Width = 100
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 3
   end
   object edtSSB: TEdit
@@ -90,7 +90,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 34
     Top = 89
     Width = 100
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 4
   end
   object btnOK: TButton
@@ -119,7 +119,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 34
     Top = 145
     Width = 98
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 5
     Text = '0'
   end
@@ -136,7 +136,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 34
     Top = 145
     Width = 100
-    NumbersOnly = True
+    OnKeyPress = ChkKeyPress
     TabOrder = 6
     Text = '0'
   end

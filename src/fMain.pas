@@ -29,6 +29,7 @@ type
     acEditQSO:   TAction;
     acDeleteQSO: TAction;
     acCreateFilter: TAction;
+    acCreateContestFilter: TAction;
     acCancelFilter: TAction;
 
     acClose:    TAction;
@@ -76,6 +77,7 @@ type
     aceQSLDwn : TAction;
     acSOTAExport : TAction;
     acEDIExport : TAction;
+    acCabrilloExport : TAction;
     acRemoveDupes: TAction;
     acMarkAllClubLog: TAction;
     acMarkAllHrdLog: TAction;
@@ -135,6 +137,9 @@ type
     MenuItem10: TMenuItem;
     MenuItem100: TMenuItem;
     MenuItem101: TMenuItem;
+    MenuItem102: TMenuItem;
+    MenuItem103: TMenuItem;
+    MenuItem104: TMenuItem;
     MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
@@ -339,6 +344,7 @@ type
     procedure acRemoveDupesExecute(Sender: TObject);
     procedure acSOTAExportExecute(Sender : TObject);
     procedure acEDIExportExecute(Sender : TObject);
+    procedure acCabrilloExportExecute(Sender : TObject);
     procedure acSQLExecute(Sender: TObject);
     procedure acAutoSizeColumnsExecute(Sender: TObject);
     procedure acUploadAllToLoTWExecute(Sender: TObject);
@@ -397,6 +403,7 @@ type
     procedure acCancelFilterExecute(Sender: TObject);
     procedure acCloseExecute(Sender: TObject);
     procedure acCreateFilterExecute(Sender: TObject);
+    procedure acCreateContestFilterExecute(Sender: TObject);
     procedure acDXClusterExecute(Sender: TObject);
     procedure acExADIFExecute(Sender: TObject);
     procedure acExHTMLExecute(Sender: TObject);
@@ -460,13 +467,13 @@ implementation
 
 { TfrmMain }
 uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCStat,
-  fSort, fFilter, fImportProgress, fGrayline, fCallbook, fTRXControl,
+  fSort, fFilter, fContestFilter, fImportProgress, fGrayline, fCallbook, fTRXControl,
   fAdifImport, fSplash, fSearch, fExportProgress, fDXCluster, fQSLMgr,
   fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
-  feQSLUpload, feQSLDownload, fSOTAExport, fEDIExport, fRotControl, fLogUploadStatus,
-  fExportPref,uVersion;
+  feQSLUpload, feQSLDownload, fSOTAExport, fEDIExport, fCabrilloExport, fRotControl,
+  fLogUploadStatus, fExportPref,uVersion;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -1389,6 +1396,16 @@ begin
   end
 end;
 
+procedure TfrmMain.acCabrilloExportExecute(Sender : TObject);
+begin
+  frmCabrilloExport := TfrmCabrilloExport.Create(frmMain);
+  try
+    frmCabrilloExport.ShowModal
+  finally
+    frmCabrilloExport.Free
+  end
+end;
+
 procedure TfrmMain.acAttachExecute(Sender: TObject);
 begin
   frmCallAttachment := TfrmCallAttachment.Create(self);
@@ -1801,6 +1818,27 @@ begin
   lblDistance.Visible:=(lblDist.Caption <>'');
 
   with TfrmFilter.Create(self) do
+  try
+    ShowModal;
+    if (ModalResult = mrOk) then
+      if (tmp <> '') then
+      begin
+        dmData.IsFilter := True;
+        sbMain.Panels[2].Text := 'Filter is ACTIVE!';
+        RefreshQSODXCCCount;
+        ShowFields
+      end
+  finally
+    Free
+  end
+end;
+
+procedure TfrmMain.acCreateContestFilterExecute(Sender: TObject);
+begin
+  lblDist.Caption :='';
+  lblDistance.Visible:=(lblDist.Caption <>'');
+
+  with TfrmContestFilter.Create(self) do
   try
     ShowModal;
     if (ModalResult = mrOk) then
