@@ -3033,6 +3033,7 @@ object frmNewQSO: TfrmNewQSO
           OnEnter = edtGridEnter
           OnExit = edtGridExit
           OnKeyDown = edtGridKeyDown
+          OnKeyPress = edtGridKeyPress
           ParentShowHint = False
           ShowHint = True
           TabOrder = 7

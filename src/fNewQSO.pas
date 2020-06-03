@@ -408,6 +408,7 @@ type
     procedure edtEndTimeEnter(Sender: TObject);
     procedure edtGridChange(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
+    procedure edtGridKeyPress(Sender: TObject; var Key: char);
     procedure edtHisRSTExit(Sender: TObject);
     procedure edtHisRSTKeyPress(Sender : TObject; var Key : char);
     procedure edtITUEnter(Sender: TObject);
@@ -3515,39 +3516,6 @@ begin
   end;
 end;
 
-procedure TfrmNewQSO.edtGridExit(Sender: TObject);
-begin
-  if dmUtils.isLocOK(edtGrid.Text) then
-    begin
-     CalculateDistanceEtc;
-     sbtnLocatorMap.Visible := True;
-    end
-   else
-    begin
-     edtGrid.Font.Color:=clRed;
-     edtGrid.Font.Style:= [fsBold];
-    end;
-end;
-
-procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if (key = 40) then  //down arrow
-  begin
-    edtPWR.SetFocus;
-    key := 0;
-  end;
-  if (key = 38) then //up arrow
-  begin
-    edtQTH.SetFocus;
-    key := 0;
-  end;
-  if ((key = VK_SPACE) and UseSpaceBar) then
-  begin
-    edtPWR.SetFocus;
-    key := 0
-  end
-end;
 
 procedure TfrmNewQSO.edtHisRSTEnter(Sender: TObject);
 begin
@@ -4240,6 +4208,8 @@ end;
 
 procedure TfrmNewQSO.edtGridChange(Sender: TObject);
 begin
+  // this check is mainly for exports from remote. keying has own checking
+  edtGrid.SetFocus;
   edtGrid.Text := dmUtils.StdFormatLocator(edtGrid.Text);
   edtGrid.SelStart := Length(edtGrid.Text);
 end;
@@ -4249,6 +4219,58 @@ begin
   edtGrid.Font.Color:=clDefault;
   edtGrid.Font.Style:= [];
   edtGrid.SelectAll
+end;
+
+procedure TfrmNewQSO.edtGridExit(Sender: TObject);
+begin
+  if dmUtils.isLocOK(edtGrid.Text) then
+    begin
+     CalculateDistanceEtc;
+     sbtnLocatorMap.Visible := True;
+    end
+   else
+    begin
+     edtGrid.Font.Color:=clRed;
+     edtGrid.Font.Style:= [fsBold];
+    end;
+end;
+
+procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key = 40) then  //down arrow
+  begin
+    edtPWR.SetFocus;
+    key := 0;
+  end;
+  if (key = 38) then //up arrow
+  begin
+    edtQTH.SetFocus;
+    key := 0;
+  end;
+  if ((key = VK_SPACE) and UseSpaceBar) then
+  begin
+    edtPWR.SetFocus;
+    key := 0
+  end
+end;
+procedure TfrmNewQSO.edtGridKeyPress(Sender: TObject; var Key: char);
+begin
+  if (( Key<>#$8 ) and ( Key<>#$7F)) then
+  begin
+    case length(edtGrid.Text) of                                        //AB12cd34ef
+      0,1  :  if Key in ['a'..'z'] then Key:= chr(ord(Key) - $20) else
+                  if not (Key in ['A'..'Z']) then Key:= #0;
+      2,3  :  if not (Key in ['0'..'9']) then Key:= #0;
+      4,5  :  if Key in ['A'..'Z'] then Key:= chr(ord(Key) + $20) else
+                 if not (Key in ['a'..'z']) then Key:= #0;
+      6,7  :  if not (Key in ['0'..'9']) then Key:=  #0;
+      8,9  :  if Key in ['A'..'Z'] then Key:= chr(ord(Key) + $20) else
+                 if not (Key in ['a'..'z']) then Key:= #0;
+      else
+        Key:=#0;
+    end;
+  end;
 end;
 
 procedure TfrmNewQSO.acQSOListExecute(Sender: TObject);
@@ -5650,7 +5672,8 @@ end;
 
 procedure TfrmNewQSO.sbtnLocatorMapClick(Sender: TObject);
 begin
-  dmUtils.ShowLocatorMapInBrowser(dmUtils.CompleteLoc(edtGrid.Text))
+  if dmUtils.isLocOK(edtGrid.Text) then  //there may be case where Grid is empty and button is visible
+    dmUtils.ShowLocatorMapInBrowser(dmUtils.CompleteLoc(edtGrid.Text))
 end;
 
 procedure TfrmNewQSO.tmrESCTimer(Sender: TObject);
