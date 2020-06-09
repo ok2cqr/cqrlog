@@ -25,7 +25,7 @@ BINARIES:
   - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (like official release of cqrlog, poorly tested)**
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
   - **help.tgz  holds latest help files**
-
+  - **updateCqrlog.sh.zip holds the updateCqrlog.sh script that you can see also as plain text file updateCqrlog.sh (zip is easier to download from GitHub)**
 
 **All binaries must be copied over complete, working, official installation. These do not work alone.**
 ========================================================================================================
@@ -59,26 +59,29 @@ Download cqrX.zip (X= 2 ,3 or 5) of your choice:
    - click blue link of that file. New page opens. You see that there is a button "Download" click it.
      Your browser downloads the zip. If it asks where to save, select folder /tmp
    - Do the same with file help.tgz
-   - Click next link updateCqrlog.sh. File opens in view mode. There is a button "Raw", click it.
-     File opens in plain mode to web browser.
-     Anywhere on that page do a right click and you get dialog from where you find selection 
-     "Save with name" (or similar). Click that and select folder /tmp for saving. Dialog should offer 
-     updateCqrlog.sh as the save name.
+   - Do the same with file updateCqrlog.sh.zip
+
    - If your browser downloaded cqrX.zip and help.tgz without asking a save folder you find them from your download
      folder. You must move them now to /tmp folder.
 
-Now you should have all 3 files (cqrX.zip, help.tgz and updateCqrlog.sh) in /tmp folder.
+Now you should have all 3 files (cqrX.zip, help.tgz and updateCqrlog.sh.zip) in /tmp folder.
 
-Open command console.
+Open command console. Go to /tmp directory.
 
-Check that you can execute updateCqrlog.sh by giving a command:
-    
-    chmod a+x /tmp/updateCqrlog.sh
+    cd /tmp
+
+Unzip updateCqrlog.sh.zip to find the updating script.
+
+    unzip updateCqrlog.sh.zip
 
 Then start updateCqrlog.sh script with command:
 
     /tmp/updateCqrlog.sh
     
+	If you can not start script then check that you can execute updateCqrlog.sh by giving a command:
+	    chmod a+x /tmp/updateCqrlog.sh
+	Then try again to start script.
+
 Script stops every now and then to let you read what has been done and what to do next. You must press ENTER to continue running. 
 
 I have tested this script many times while writing it. How ever it may fail with your setup.
