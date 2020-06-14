@@ -122,6 +122,8 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkDarcDok: TCheckBox;
+    chkNewDOKTables: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
     chkRot2AzMinMax: TCheckBox;
     chkShowOwnPos: TCheckBox;
@@ -1197,6 +1199,7 @@ begin
   cqrini.WriteBool('Program', 'ShowDeleted', chkShowDeleted.Checked);
   cqrini.WriteBool('Program', 'SunUTC', chkSunUTC.Checked);
   cqrini.WriteBool('Program', 'CheckQSLTabs', chkNewQSLTables.Checked);
+  cqrini.WriteBool('Program', 'CheckDOKTabs', chkNewDOKTables.Checked);
   cqrini.WriteFloat('Program', 'SunOffset', StrToCurr(edtSunOffset.Text));
   cqrini.WriteBool('Program', 'SysUTC', chkSysUTC.Checked);
   cqrini.WriteBool('Program','ShowMiles',chkShowMiles.Checked);
@@ -1250,6 +1253,7 @@ begin
   cqrini.WriteBool('Columns', 'SRX', chkSRX.Checked);
   cqrini.WriteBool('Columns', 'ContMsgSent', chkSTX_str.Checked);
   cqrini.WriteBool('Columns', 'ContMsgRcvd', chkSRX_str.Checked);
+  cqrini.WriteBool('Columns', 'DarcDok', chkDarcDok.Checked);
 
   cqrini.WriteBool('Bands', '137kHz', cb136kHz.Checked);
   cqrini.WriteBool('Bands', '472kHz', cb472kHz.Checked);
@@ -2671,6 +2675,7 @@ begin
   chkShowDeleted.Checked := cqrini.ReadBool('Program', 'ShowDeleted', False);
   chkSunUTC.Checked := cqrini.ReadBool('Program', 'SunUTC', False);
   chkNewQSLTables.Checked := cqrini.ReadBool('Program', 'CheckQSLTabs', True);
+  chkNewDOKTables.Checked := cqrini.ReadBool('Program', 'CheckDOKTabs', False);
   edtSunOffset.Text := CurrToStr(cqrini.ReadFloat('Program', 'SunOffset', 0));
   chkSysUTC.Checked := cqrini.ReadBool('Program', 'SysUTC', True);
   chkShowMiles.Checked := cqrini.ReadBool('Program','ShowMiles',False);
@@ -2729,6 +2734,7 @@ begin
   chkSRX.Checked := cqrini.ReadBool('Columns', 'SRX', False);
   chkSTX_str.Checked := cqrini.ReadBool('Columns', 'ContMsgSent', False);
   chkSRX_str.Checked := cqrini.ReadBool('Columns', 'ContMsgRcvd', False);
+  chkDarcDok.Checked := cqrini.ReadBool('Columns', 'DarcDok', False);
 
   cb136kHz.Checked := cqrini.ReadBool('Bands', '137kHz', False);
   cb472kHz.Checked := cqrini.ReadBool('Bands', '472kHz', False);

@@ -1,16 +1,16 @@
 object frmMain: TfrmMain
-  Left = 81
+  Left = 683
   Height = 669
-  Top = 72
+  Top = 272
   Width = 986
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
   HorzScrollBar.Page = 672
-  VertScrollBar.Page = 272
+  VertScrollBar.Page = 275
   ActiveControl = Panel2
   AutoScroll = True
   Caption = 'CQRLOG for Linux'
-  ClientHeight = 644
+  ClientHeight = 647
   ClientWidth = 986
   Constraints.MinHeight = 148
   Constraints.MinWidth = 536
@@ -159,12 +159,12 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '1.8.2.0'
   object sbMain: TStatusBar
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 19
+    Height = 22
     Top = 625
     Width = 986
     Panels = <    
@@ -205,7 +205,7 @@ object frmMain: TfrmMain
       AnchorSideLeft.Control = pnlButtons
       AnchorSideTop.Control = pnlButtons
       Left = 10
-      Height = 33
+      Height = 28
       Top = 5
       Width = 130
       Action = acNewQSO
@@ -221,7 +221,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideTop.Side = asrCenter
       Left = 150
-      Height = 33
+      Height = 28
       Top = 5
       Width = 130
       Action = acView
@@ -235,7 +235,7 @@ object frmMain: TfrmMain
       AnchorSideRight.Control = pnlButtons
       AnchorSideRight.Side = asrBottom
       Left = 846
-      Height = 33
+      Height = 28
       Top = 5
       Width = 130
       Action = acClose
@@ -250,7 +250,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnClose
       Left = 706
-      Height = 33
+      Height = 28
       Top = 5
       Width = 130
       Action = acDeleteQSO
@@ -265,7 +265,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnDeleteQSO
       Left = 566
-      Height = 33
+      Height = 28
       Top = 5
       Width = 130
       Action = acSort
@@ -281,7 +281,7 @@ object frmMain: TfrmMain
       AnchorSideTop.Control = btnNewQSO
       AnchorSideTop.Side = asrCenter
       Left = 290
-      Height = 33
+      Height = 28
       Top = 5
       Width = 130
       Action = acEditQSO
@@ -311,7 +311,7 @@ object frmMain: TfrmMain
       Left = 10
       Height = 17
       Top = 11
-      Width = 72
+      Width = 76
       Alignment = taRightJustify
       BorderSpacing.Left = 10
       Caption = 'QSO in log:'
@@ -324,10 +324,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblQSOInLog
       AnchorSideBottom.Side = asrBottom
-      Left = 92
+      Left = 96
       Height = 17
       Top = 11
-      Width = 45
+      Width = 43
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = '10000'
@@ -342,10 +342,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Control = Panel2
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = lblQSOInLog
-      Left = 473
+      Left = 472
       Height = 17
       Top = 11
-      Width = 40
+      Width = 42
       Caption = 'DXCC:'
       Layout = tlBottom
       ParentColor = False
@@ -356,10 +356,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblDXCCWorked
       AnchorSideBottom.Side = asrBottom
-      Left = 523
+      Left = 524
       Height = 17
       Top = 11
-      Width = 27
+      Width = 26
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = '238'
@@ -371,10 +371,10 @@ object frmMain: TfrmMain
     object lblDXCCConfirmed: TLabel
       AnchorSideTop.Control = lblQSOInLog
       AnchorSideRight.Control = lblDXCCCmf
-      Left = 840
+      Left = 837
       Height = 17
       Top = 11
-      Width = 73
+      Width = 76
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 10
@@ -726,7 +726,7 @@ object frmMain: TfrmMain
       Left = 10
       Height = 17
       Top = 10
-      Width = 122
+      Width = 129
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Comment for QSO:'
@@ -741,7 +741,7 @@ object frmMain: TfrmMain
       Left = 10
       Height = 17
       Top = 37
-      Width = 44
+      Width = 48
       BorderSpacing.Top = 10
       Caption = 'Award:'
       Layout = tlBottom
@@ -753,10 +753,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblCommentForQSO
       AnchorSideBottom.Side = asrBottom
-      Left = 138
+      Left = 145
       Height = 17
       Top = 10
-      Width = 85
+      Width = 91
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
       Layout = tlBottom
@@ -767,10 +767,10 @@ object frmMain: TfrmMain
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = lblAward
       AnchorSideBottom.Side = asrBottom
-      Left = 64
+      Left = 68
       Height = 17
       Top = 37
-      Width = 61
+      Width = 68
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Layout = tlBottom
@@ -792,7 +792,7 @@ object frmMain: TfrmMain
         Left = 0
         Height = 17
         Top = 10
-        Width = 70
+        Width = 73
         BorderSpacing.Top = 10
         Caption = 'QS_S date:'
         Layout = tlBottom
@@ -804,10 +804,10 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblQSLSDate
         AnchorSideBottom.Side = asrBottom
-        Left = 76
+        Left = 79
         Height = 17
         Top = 10
-        Width = 85
+        Width = 92
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 6
         Layout = tlBottom
@@ -818,10 +818,10 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblQSLRDate
         AnchorSideBottom.Side = asrBottom
-        Left = 77
+        Left = 81
         Height = 17
         Top = 37
-        Width = 86
+        Width = 93
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 6
         Layout = tlBottom
@@ -834,7 +834,7 @@ object frmMain: TfrmMain
         Left = 0
         Height = 17
         Top = 37
-        Width = 71
+        Width = 75
         BorderSpacing.Top = 10
         Caption = 'QS_R date:'
         Layout = tlBottom
@@ -858,7 +858,7 @@ object frmMain: TfrmMain
         Left = 0
         Height = 17
         Top = 10
-        Width = 110
+        Width = 116
         BorderSpacing.Top = 10
         Caption = 'LoTW QS_S date:'
         Layout = tlBottom
@@ -870,10 +870,10 @@ object frmMain: TfrmMain
         AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = lblLoTWQSLSDate
         AnchorSideBottom.Side = asrBottom
-        Left = 116
+        Left = 122
         Height = 17
         Top = 10
-        Width = 90
+        Width = 98
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 6
         Layout = tlBottom
@@ -885,10 +885,10 @@ object frmMain: TfrmMain
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblLoTWQSLRDate
         AnchorSideBottom.Side = asrBottom
-        Left = 117
+        Left = 123
         Height = 17
         Top = 37
-        Width = 91
+        Width = 101
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 6
         BorderSpacing.Top = 10
@@ -902,7 +902,7 @@ object frmMain: TfrmMain
         Left = 0
         Height = 17
         Top = 37
-        Width = 111
+        Width = 117
         BorderSpacing.Top = 10
         Caption = 'LoTW QS_R date:'
         Layout = tlBottom
@@ -927,7 +927,7 @@ object frmMain: TfrmMain
         Left = 11
         Height = 17
         Top = 5
-        Width = 61
+        Width = 63
         BorderSpacing.Left = 10
         Caption = 'Distance:'
         ParentColor = False
@@ -939,10 +939,10 @@ object frmMain: TfrmMain
         AnchorSideTop.Control = lblDistance
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Side = asrBottom
-        Left = 78
+        Left = 80
         Height = 17
         Top = 5
-        Width = 42
+        Width = 45
         BorderSpacing.Left = 6
         Caption = 'lblDist'
         ParentColor = False
@@ -954,10 +954,10 @@ object frmMain: TfrmMain
         AnchorSideRight.Control = pnlDistance
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Side = asrBottom
-        Left = 908
+        Left = 903
         Height = 17
         Top = 5
-        Width = 67
+        Width = 72
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 10
         Caption = 'lblLongest'
@@ -967,10 +967,10 @@ object frmMain: TfrmMain
         AnchorSideTop.Control = lblDistance
         AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = lblLongest
-        Left = 815
+        Left = 803
         Height = 17
         Top = 5
-        Width = 87
+        Width = 94
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 6
         Caption = 'Longest QSO:'
@@ -981,10 +981,10 @@ object frmMain: TfrmMain
         AnchorSideTop.Control = lblDistance
         AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = lblSumDist
-        Left = 354
+        Left = 348
         Height = 17
         Top = 5
-        Width = 94
+        Width = 99
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 6
         Caption = 'Total distance:'
@@ -996,10 +996,10 @@ object frmMain: TfrmMain
         AnchorSideTop.Control = lblDistance
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Side = asrBottom
-        Left = 454
+        Left = 453
         Height = 17
         Top = 5
-        Width = 79
+        Width = 81
         Caption = 'lblSumDist  '
         ParentColor = False
       end
@@ -1410,6 +1410,42 @@ object frmMain: TfrmMain
       Caption = 'Statistics'
       object MenuItem11: TMenuItem
         Caption = 'DXCC statistic'
+        Bitmap.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000874480FF833F
+          7EFF7F387DFF7C337CFF792E7BFFC63A13FFC63712FFC43112FFC02E11FFC02A
+          10FFBF270FFF7C4F25FF7A4A21FF77461EFF75421BFF733F19FF413DF3FF999B
+          FEFF9698FEFF9395FEFF9193FEFFC94315FFE0935DFFDF8F59FFDF8D55FFDE8A
+          51FFC02E11FFA2C99EFF9DC699FF98C395FF94C091FF276D2CFF4A47F5FF9EA0
+          FEFF5B5EFEFF5659FEFF9597FEFFCD4C16FFE19763FFDA8041FFD97D3BFFDF8F
+          58FFC63512FFA8CDA4FF77B071FF70AB6AFF9AC496FF2E7633FF5351F6FFA2A4
+          FEFF6266FEFF5D61FEFF999BFEFFCF5518FFE39C6CFFDC864AFFDB8344FFE094
+          5EFFC63C13FFAFD1ABFF80B77AFF79B273FFA0C89CFF35803CFF5B5BF8FFA8AA
+          FEFF6B6FFEFF6569FEFF9EA0FEFFD1601AFFE5A274FFDE8C53FFDD894DFFE299
+          66FFC94515FFB5D5B0FF8ABD83FF83B87DFFA7CDA3FF3D8B44FF6364FAFFACAF
+          FEFF7276FEFF6D71FEFFA2A4FEFFD6691EFFE7A77BFFE0925CFFDF8F56FFE49E
+          6EFFCD4E16FFBAD9B5FFB7D6B1FFB3D3AEFFAED1A9FF45964DFF6A6CFCFFB0B3
+          FEFF797EFEFF7579FEFFA8AAFEFFD8742AFFE8AD83FFE29865FFE19560FFE5A3
+          76FFCF5718FF60BC6CFF5CB667FF57B061FF52A85CFF4DA155FF7073FDFFB4B7
+          FEFF8185FEFF7C81FEFFACAFFEFFD97B39FFEAB28AFFE49F6EFFE39C6AFFE7A8
+          7DFFD1621AFF00000000000000000000000000000000000000007478FEFFB8BB
+          FEFFB6B9FEFFB3B6FEFFB0B3FEFFDF8445FFECB792FFE6A578FFE6A273FFE9AD
+          85FFD66B1EFF00000000000000000000000000000000000000007478FEFF7478
+          FEFF7276FEFF6E71FDFF6A6CFCFFE18D52FFEDBB99FFE9AC81FFE7A87CFFEAB3
+          8DFFD8742CFF0000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000E2925CFFEEC1A0FFEAB189FFE9AE85FFEDB7
+          94FFDB7C3AFF0000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000E69B67FFF0C5A6FFECB691FFEBB38CFFEEBC
+          9BFFDF8547FF0000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000E8A070FFF2C8ACFFF0C6A8FFF0C5A6FFEFC2
+          A2FFE18E53FF0000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000EAA677FFE8A474FFE8A06EFFE69D6BFFE499
+          65FFE2955EFF000000000000000000000000000000000000000038FDF200C803
+          EA0038FDF20038FDF20000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000
+        }
         Hint = 'DXCC statistic'
         ImageIndex = 8
         object MenuItem46: TMenuItem
@@ -1450,6 +1486,12 @@ object frmMain: TfrmMain
       end
       object MenuItem72: TMenuItem
         Action = acWASCfm
+      end
+      object MenuItem106: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem105: TMenuItem
+        Action = acDOKCfm
       end
       object MenuItem25: TMenuItem
         Caption = '-'
@@ -1626,6 +1668,42 @@ object frmMain: TfrmMain
       RightJustify = True
       object mnuHelpIndex: TMenuItem
         Caption = 'Help index'
+        Bitmap.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000560151001806
+          520058015200160653004A02E600290000008888F500B001EA004C02E900D103
+          EA004E02EA00CF03EB00C00048001314150000040000380000000202F5003604
+          F6005801E3001606E4006211CE00603B95009E6056FFA16844FFA36642FF925B
+          50FF7A3490002D134A0054014E001A06500055015000190651000202FE003604
+          FF000002FF00612C1A00BA7046FFD7BBA3FFE9DACAFFECE0D1FFECE0D1FFE8D8
+          C8FFD3B59CFF9D614CFFE224B6003904F4000002F4003804F500FE0232009204
+          3300E92E4100B98159FFE7D5C4FFE5D2BFFFC9A685FFB88E67FFB68A65FFC5A1
+          80FFE0CCBAFFE3D0BEFFAF6B45FF992790000003B8009004B900920159003D17
+          5D00BE8368FFEAD8C9FFE3CDBAFFC0946BFFBA8C62FFCFB094FFCFB094FFB789
+          5FFFB28761FFDAC0AAFFE4D1C0FFA0694FFF171233009004320050031200AB51
+          4500E4CCB9FFEAD6C5FFC79971FFBF9066FFBF9066FFF7F1ECFFF6F0EAFFB789
+          5FFFB7895FFFB58963FFE2CEBBFFD9BDA6FFA23E53002703590009000000D6B1
+          7AFFEFE1D3FFD9B595FFC7986CFFC39569FFC19367FFBF9066FFBF9066FFBB8B
+          63FFB98A63FFB88A62FFCBA786FFEADCCCFFA9714DFF8A0512001049F300D5AE
+          92FFF2E4D9FFD1A57AFFC5996BFFC4976AFFC49669FFFAF6F2FFF3EAE1FFC295
+          6DFFBE8F65FFBE8F64FFC0956DFFEFE3D5FFC08D60FF4849F30056015100D9B2
+          97FFF2E5DAFFD1A67EFFCC9D71FFC79A6CFFC5986BFFE2CCB6FFF8F3EEFFF6EE
+          E8FFD9BDA1FFC29468FFC59B71FFF0E2D6FFBE9068FF38000000FE02B700DBA7
+          A6FFF3E5D9FFDFBB9EFFCFA075FFCD9E72FFF5EBE3FFE4CBB4FFE7D3BFFFFBF8
+          F6FFE5D3BFFFC4986BFFD6B491FFEEE0D2FFBB8872FF190651000002F4009065
+          D100F4E3D4FFEFDCCDFFD5A87EFFD0A077FFFBF8F5FFFCF8F5FFFCF8F5FFFBF8
+          F5FFD1A881FFCFA47BFFEAD5C3FFEAD4C2FFE8549D009304B700FB023600A11F
+          B400E6B9AAFFF6E9DDFFECD8C6FFD7AC81FFDCBB9AFFF6ECE3FFF5ECE2FFE4C8
+          AEFFD2A77BFFE6CEBAFFF1E2D5FFCBA19BFFFA18E6003904F400520310008905
+          110086474800EEC9B1FFF7EADFFFEEDED0FFE3C1A7FFD8AE89FFD7AC86FFDDBB
+          9CFFEBD6C7FFF3E6D9FFE4B69AFFAC405600FC023400940436005401E6001A06
+          E8005301E800624A7300DDC1C3FFF9E9DCFFF6E8DDFFF3E5DAFFF3E5DAFFF5E7
+          DCFFF5E4D6FFDAB49BFFF74139003B04F10054030F008705100009000000E8EE
+          43000C0000001847F3003E1E1B00D06C5F00DCDCAEFFECCDC0FFE9CBB3FFE5B6
+          A3FFA367CE003421DE005601E4001806E5005501E5001906E600F803EA0060F0
+          3E0000000000000000001D0200001F0000000000000040972500640020000000
+          0000000000000000000003000000C9010000E8AD4500C8983900
+        }
         ImageIndex = 14
         OnClick = mnuHelpIndexClick
       end
@@ -1875,6 +1953,10 @@ object frmMain: TfrmMain
     object acWASCfm: TAction
       Caption = 'WAS'
       OnExecute = acWASCfmExecute
+    end
+    object acDOKCfm: TAction
+      Caption = 'DOK'
+      OnExecute = acDOKCfmExecute
     end
     object acAddQSLMgrs: TAction
       Caption = 'Auto add QSL managers'
@@ -2534,11 +2616,83 @@ object frmMain: TfrmMain
     end
     object mnuIK3AQR: TMenuItem
       Caption = 'Search on IK3QAR qsl manager page'
+      Bitmap.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000064000000640000000000000000000000FFFFF700DCDD
+        D738A5A5A1719C9C9B60ACADA7619896935B9696966C9A9A9A5392939266AAAB
+        A964999D9869A1A19D6C97979757ADACA561A7A8A65EACABA480FFFFF700DDDD
+        D82FACACA96BA2A2A158AFB0AB5BA0A09D5A999A996AA3A3A24E9C9D9C62B0B1
+        B05DA0A39E69A7A7A3689C9D9C52B1AFAA59AEAFAF57AEADA76EFFFFF7008ECD
+        ED7D70BEE4BC6EBCE3B872C0E6B86DBBE2B76EBBE3BA6EBBE3B66CBAE1B971BF
+        E6B96EBCE3B96FBDE4BA6EBBE3B772BFE5B970BEE5B872BFE5C0FFFFF700A7D2
+        E66880B4CDA57CB0CB9D84B9D19D79ADC69A7AAFC9A17AAFC99776ABC69F82B7
+        D19F7AB1C9A07EB3CBA17AAFC99984B8D09E80B5CF9C84B8D0AFE1C4A246B5C3
+        C6E3B3C6CAF3B0C6CAF3B0C6CAF3B0C6CAF3B0C6CAF3B0C6CAF3B0C6CAF3AABD
+        C4F3B0BFC4F3B0C6CAF3B0C6CAF3B0C6CAF3B0C6CAF3B0C6CAF3E2DAD52BC1C2
+        C249E0E0DF44BBB7AF77DCDCDB33CBBDB190CECCCD39C7C8C568D8E3E96679BC
+        EADD99BACFCBDCE0E61DA4CCD751303E91259D96911F54585736E0D2C635C2C2
+        C06CDCDBD868BDBAB291D8D8D55ACABFB3A5CDCBCA5FC7C7C385D5DEE18387BC
+        E0E4A2BBCAD5D8DBDE49AACBD2724D589A4FA5A09A4A6A6D6A5DC7A58486C5B0
+        9BBDCFB095B2C89F77D3C0A48CC6C3A891E0C7A383C3C19B76E5CEB49AC397CC
+        F76276AAD3F48DDBE83763ADB9772A42BE79A6C9B0188AAE9957CEB49B6EC4B4
+        A59BD4BDA891C5A585B8C7B2A19BC5AD98C8C9AD969BC3A689C2D1C1AFA78DC8
+        F57F7DAED3E8A1DDE92972B5C168273DB25EA3BBA71379958548DAC2A877CBA2
+        7DE6D1B7A097CFB193CCBF9570F2BFA388BDCAA07CF3C39B74EABE9169F2AACB
+        E04271A7D3E182BDCF6E3798E2541F3BCDD3B5997466D9CBAF18D3B79980C9A6
+        84E0D0B299A5CEAB89D3BE9775EDC0A389CBC99F7AECC29971EFC29973E9A6CC
+        E74671A7D3E981C6D660419CD461233ECBBDB1AA8750C5C7AC2DE5CDB453C79D
+        74E9C0A187D5BFA78FD7C5946BFAC39D7DD4C09D7FC8C5A380CBC29C78F2BBC9
+        CD4EC5E0F34152B685A5488EBC3E428ACAF9BE8958DFD8C6AE15EAD5BD20CDA8
+        8696CDAA887CCDAB898CD5B29378CDA0779DD7BEA53ED1B3967ACD9D6DA7EAE7
+        E01BF4FEFB093EAE6CA151A27AA047C5EDA0C6844BC4D4C4AD20EAD4BC27CCA6
+        83A4CAA8878ECAAA8A99D2AD8C8ECC9F78A8D3B89E52CFB19386CC9D70B3E3E2
+        DC24F0FBFB0C3FAF6DA3519F838F48BEE7AFC5854CCDD4C4AD1FFDFAF003F9F5
+        EA11FAF5EA0DFAF5EA10FAF6EC0CF9F4E812FBF8EE05FAF6EC0DF9F3E613FDFD
+        F502FFFFF800E8F5E61351BE7D15E9F9F712F8F0E217FAF8EE04F9F3E508F0E4
+        D42CF0E5D523F0E5D529F3E8D920F0E2CF2FF4ECDF0EF1E8D923F0E0CB32FAF9
+        F106FDFFF902C2E6CB3251B87B36C5EEF62EEDD9C13BF2EDE00A
+      }
       ImageIndex = 22
       OnClick = mnuIK3AQRClick
     end
     object mnueQSLView: TMenuItem
       Caption = 'View eQSL'
+      Bitmap.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFE7E4E5FFACA1A5FF96898EFF8A7178FF93868AFF7566
+        6CFFADA2A6FFE6E2E3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFAF9F9FFA89DA1FFA58B90FFA58B90FFC6BEC0FFC0B8BBFFD3C7CAFFA195
+        99FFC0B8BBFF794853FFAEA4A7FFFAF9F9FFFFFFFFFFFFFFFFFFFFFFFFFFFAF9
+        F9FF998D92FFC3ABB0FF9E9297FFA58B90FF632735FF561B29FF561B29FF5B1B
+        2AFF977F86FFC6BEC0FFAC969AFF928589FFFAF9F9FFFFFFFFFFFFFFFFFFB4AB
+        AEFF977F86FFAC969AFF704650FF5B1B2AFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C
+        2BFF5C1C2BFF662A38FFBBADAFFFAC969AFFA89DA1FFFFFFFFFFE6E2E3FFA195
+        99FFC3ABB0FF561B29FF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C
+        2BFF5C1C2BFF5C1C2BFF80535DFFC4BCBFFF703845FFE9E6E7FFB4ABAEFFB4A1
+        A4FF723D49FF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C
+        2BFF5C1C2BFF5C1C2BFF5B1B2AFF8F6A72FFC0B8BBFFCBC4C7FFC7C0C2FFCBC4
+        C7FF662A38FF561B29FF5A1B2AFF5A1B2AFF662A38FF561B29FF561B29FF5A1B
+        2AFF561B29FF5A1B2AFF5A1B2AFF5C1C2BFFCBC4C7FFAEA4A7FF6A323FFF8A71
+        78FF8F7F84FFAEA4A7FF8A7178FFC0B8BBFFC0B8BBFF96757CFFAEA4A7FFA89D
+        A1FFB7AEB1FF8B626DFF96757CFF704650FF723D49FF5C1C2BFF561B2AFF7046
+        50FF885F68FFC0B8BBFFB8AFB2FFB4ABAEFFAA9FA4FFAC969AFFD0CDCCFFAEA4
+        A7FFAEA4A7FF5B1B2AFF5C1C2BFF96757CFFD3C7CAFF93868AFF96898EFFA58B
+        90FF662A38FF8A7178FF80535DFFB8AFB2FFAC969AFFAA9FA4FFB4A1A4FF885F
+        68FFB4ABAEFF561B29FF5C1C2BFF704650FFC0B8BBFF8A7178FFC7C0C2FFC0B8
+        BBFF96757CFF5B1B2AFF5C1C2BFF794853FF7F7076FF662A38FF7C6E73FF7263
+        69FF726369FF5B1B2AFF5C1C2BFF8F7F84FFD2CCCEFFB4ABAEFFE6E2E3FF7C6E
+        73FFC0B8BBFF80535DFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C
+        2BFF5C1C2BFF5C1C2BFF632735FFBBADAFFF8A7178FFE7E4E5FFFFFFFFFFA89D
+        A1FFAC969AFFAA9FA4FF704650FF5C1C2BFF5C1C2BFF5C1C2BFF5C1C2BFF5C1C
+        2BFF5C1C2BFF662A38FFB4A1A4FF80535DFFB8AFB2FFFFFFFFFFFFFFFFFFFAF9
+        F9FF9C9094FFBBADAFFFB4A1A4FF977F86FF5C1C2BFF5B1B2AFF561B29FF6327
+        35FF977F86FFB49CA2FFC0B8BBFF9C9094FFFAF9F9FFFFFFFFFFFFFFFFFFFFFF
+        FFFFFAF9F9FFAEA4A7FFD3CECFFFC7C0C2FFC7C0C2FFAE8E96FFC0B8BBFFCBC4
+        C7FFCBC4C7FF8A7178FFB6ACAFFFFAF9F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFE7E4E5FFAEA4A7FF8A7178FF8F7F84FF96898EFF8B7D
+        82FFB4ABAEFFE7E4E5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      }
       ImageIndex = 21
       Visible = False
       OnClick = mnueQSLViewClick

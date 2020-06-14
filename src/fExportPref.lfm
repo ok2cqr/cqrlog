@@ -1,15 +1,15 @@
 object frmExportPref: TfrmExportPref
   Left = 232
-  Height = 502
+  Height = 519
   Top = 131
   Width = 931
   BorderStyle = bsDialog
   Caption = 'Choose fields to export'
-  ClientHeight = 502
+  ClientHeight = 519
   ClientWidth = 931
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.6.0'
   object btnOK: TButton
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner

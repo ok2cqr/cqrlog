@@ -26,7 +26,8 @@ type
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
-                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg: Boolean);
+                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg,
+                              ExDarcDok: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
 
@@ -80,13 +81,14 @@ begin
     end // case
   end
 end;
+
 procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode,
                               ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR,
                               ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower,
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
-                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg: Boolean);
+                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg, ExDarcDok: Boolean);
 begin
   ExDate    := cqrini.ReadBool('Export','Date',True);
   ExTimeOn  := cqrini.ReadBool('Export','time_on',True);
@@ -134,6 +136,7 @@ begin
   ExContestName := cqrini.ReadBool('Export', 'Contestname', False);
   ExContestNr   := cqrini.ReadBool('Export', 'ContestNr',False);
   ExContesMsg   := cqrini.ReadBool('Export', 'ContestMsg', False);
+  ExDarcDok := cqrini.ReadBool('Export', 'DarcDok', False);
 
 end;
 
@@ -157,7 +160,7 @@ var
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate : Boolean;
   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
-  ExContinent, ExContestName, ExContestNr, ExContestMsg : Boolean;
+  ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok : Boolean;
   Source : TDataSet;
   FirstBackupPath : String;
   qrb,             //distance
@@ -180,7 +183,7 @@ var
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,Op,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,continent,
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
-                     srx, stx_string, srx_string, contestname : String);
+                     srx, stx_string, srx_string, contestname, Darc_Dok : String);
 
   begin
     leng := 0;
@@ -391,7 +394,8 @@ var
        SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
     if (ExSatName and (Satellite<>'')) then
        SaveTag(dmUtils.StringToADIF('<SAT_NAME',Satellite),leng);
-
+    if (ExDarcDok and (Darc_Dok <> '')) then
+       SaveTag(dmUtils.StringToADIF('<DARC_DOK',Darc_Dok),leng);
 
     Writeln(f);
     Write(f,'<EOR>');
@@ -407,7 +411,7 @@ begin   //TfrmExportProgress
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
-                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContestMsg)
+                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok)
  else begin    //adif backup
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
@@ -416,6 +420,7 @@ begin   //TfrmExportProgress
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExContinent := True;
     ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; ExAscTime := False;
     ExProp := True; ExRxFreq := True; ExSatName := True; ExContestname := True; ExContestnr := True; ExContestmsg := True;
+    ExDarcDok := True;
 
     if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
       CreateDirUTF8(dmData.HomeDir + 'tmp');
@@ -532,7 +537,8 @@ begin   //TfrmExportProgress
                  Source.FieldByName('srx').AsString,
                  Source.FieldByName('stx_string').AsString,
                  Source.FieldByName('srx_string').AsString,
-                 Source.FieldByName('contestname').AsString
+                 Source.FieldByName('contestname').AsString,
+                 Source.FieldByName('dok').AsString
                   );
           pBarProg.StepIt;
           if (i mod 100 = 0) then
@@ -615,7 +621,7 @@ var
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate, ExQSLRDate : Boolean;
   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
-  ExContinent, ExContestName, ExContestNr, ExContestMsg : Boolean;
+  ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok : Boolean;
   //-----------------------------------------------------------
   function ColumnWidth(ItemWidth:String):String;
   var i : integer;
@@ -657,7 +663,7 @@ var
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,Op,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,continent,
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
-                     srx, stx_string, srx_string, contestname  : String);
+                     srx, stx_string, srx_string, contestname, dok  : String);
 
   begin
     Writeln(f,'<tr>');
@@ -975,6 +981,13 @@ var
       Writeln(f, SetData('WContestMsg', '10' ,stx_string));
     end;
 
+    if ExDarcDok then
+    begin
+      if (stx_string='') then
+         stx_string:='&nbsp;';
+      Writeln(f, SetData('Darc_Dok', '10' ,dok));
+    end;
+
     Writeln(f,'</tr>')
   end;
 
@@ -989,7 +1002,7 @@ begin
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime, ExProp, ExRxFreq, ExSatName,
-                  ExContinent, ExContestname, ExContestnr, ExContestmsg);
+                  ExContinent, ExContestname, ExContestnr, ExContestmsg, ExDarcDok);
 
   AssignFile(f, FileName);
   Rewrite(f);
@@ -1183,17 +1196,19 @@ begin
   if ExSatName  then
     Writeln(f,SetTHWidth('WSatName','10', 'WSatName1', 'Satellite'));
   if ExProfile  then
-    Writeln(f,SetTHWidth( 'WProfile', 'Profile', 'WProfile1', 'Profile'));
+    Writeln(f,SetTHWidth( 'WProfile', '10', 'WProfile1', 'Profile'));
   if ExContestname  then
-    Writeln(f,SetTHWidth( 'WContestName', 'Contest', 'WContestName1', ''));
+    Writeln(f,SetTHWidth( 'WContestName', '10', 'WContestName1', ''));
   if ExContestnr  then
-    Writeln(f,SetTHWidth( 'WContestNr', 'Cont Nr' , 'WContestNr1'+'R', 'Cont Nr'+'R'));
+    Writeln(f,SetTHWidth( 'WContestNr', '10' , 'WContestNr1'+'R', 'Cont Nr'+'R'));
   if ExContestmsg  then
-    Writeln(f,SetTHWidth( 'WContestMsg', 'Cont Msg', 'WContestMsg1'+'R', 'Cont Msg'+'R'));
+    Writeln(f,SetTHWidth( 'WContestMsg', '10', 'WContestMsg1'+'R', 'Cont Msg'+'R'));
   if ExContestnr  then
-     Writeln(f,SetTHWidth( 'WContestNr', 'Cont Nr' , 'WContestNr1'+'S', 'Cont Nr'+'S'));
-   if ExContestmsg  then
-     Writeln(f,SetTHWidth( 'WContestMsg', 'Cont Msg', 'WContestMsg1'+'S', 'Cont Msg'+'S'));
+     Writeln(f,SetTHWidth( 'WContestNr', '10' , 'WContestNr1'+'S', 'Cont Nr'+'S'));
+  if ExContestmsg  then
+     Writeln(f,SetTHWidth( 'WContestMsg', '10', 'WContestMsg1'+'S', 'Cont Msg'+'S'));
+  if ExDarcDok  then
+     Writeln(f,SetTHWidth( 'Darc_Dok', '10', 'DARC DOK', 'DARC DOK'));
 
 
   Writeln(f,'</tr>');
@@ -1296,7 +1311,8 @@ begin
                Source.FieldByName('srx').AsString,
                Source.FieldByName('stx_string').AsString,
                Source.FieldByName('srx_string').AsString,
-               Source.FieldByName('contestname').AsString
+               Source.FieldByName('contestname').AsString,
+               Source.FieldByName('dok').AsString
              );
       pBarProg.StepIt;
       if (i mod 100 = 0) then

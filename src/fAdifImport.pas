@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Buttons, lcltype, ComCtrls, ExtCtrls, EditBtn, iniFiles, sqldb, dateutils,
-  strutils, LazUTF8;
+  strutils, LazUTF8, RegExpr;
 
 {$include uADIFhash.pas}
 
@@ -26,7 +26,7 @@ type
   TDateString = string[10]; //Date in yyyy-mm-dd format
 
 type TnewQSOEntry=record   //represents a new qso entry in the log
-      st:longint; // pocet pridanych polozek  number of items added;
+      st:longint; // number of items added;
       BAND:string[10];
       CALL:string[30];
       CNTY:string[50];
@@ -65,6 +65,7 @@ type TnewQSOEntry=record   //represents a new qso entry in the log
       STX:string[6];
       STX_STRING:string[250];
       CONTEST_ID:string[250];
+      DARC_DOK:string[12];
       TIME_OFF:string[5];
       TIME_ON:string[5];
       TX_PWR:string[5];
@@ -303,6 +304,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_STX:d.STX:=data;
       h_STX_STRING:d.STX_STRING:=data;
       h_CONTEST_ID:d.CONTEST_ID:=data;
+      h_DARC_DOK:d.DARC_DOK:=data;
       h_TIME_OFF:d.TIME_OFF:=data;
       h_TIME_ON:d.TIME_ON:=data;
       h_TX_PWR:d.TX_PWR:=data;
@@ -414,6 +416,8 @@ begin
     d.IOTA  := UpperCase(d.IOTA);
     d.NAME  := Copy(d.NAME, 1 ,40);
     d.QTH   := Copy(d.QTH, 1, 60);
+    d.DARC_DOK := ReplaceRegExpr('Ø', d.DARC_DOK, '0', True);
+    d.DARC_DOK := LeftStr(Uppercase(ReplaceRegExpr('[^a-zA-Z0-9]',d.DARC_DOK, '', True)), 12);
 
     d.QSL_VIA := UpperCase(d.QSL_VIA);
     if Pos('QSL VIA',d.QSL_VIA) > 0 then
@@ -579,13 +583,13 @@ begin
                    'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                    'remarks,county,adif,idcall,award,band,state,cont,profile,lotw_qslsdate,lotw_qsls,'+
                    'lotw_qslrdate,lotw_qslr,qsls_date,qslr_date,eqsl_qslsdate,eqsl_qsl_sent,'+
-                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string, srx_string, contestname) values('+
+                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string, srx_string, contestname, dok) values('+
                    ':qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,:qth,'+
                    ':qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:itu,:waz,:loc,:my_loc,:remarks,:county,:adif,'+
                    ':idcall,:award,:band,:state,:cont,:profile,:lotw_qslsdate,:lotw_qsls,:lotw_qslrdate,'+
                    ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
                    ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq, :stx, :srx, :stx_string, :srx_string,'+
-                   ':contestname)';
+                   ':contestname,:dok)';
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
@@ -709,6 +713,7 @@ begin
     Q1.Params[43].AsString := d.STX_STRING;
     Q1.Params[44].AsString := d.SRX_STRING;
     Q1.Params[45].AsString := d.CONTEST_ID;
+    Q1.Params[46].AsString := d.DARC_DOK;
 
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
