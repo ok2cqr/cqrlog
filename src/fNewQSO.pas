@@ -835,7 +835,6 @@ begin
      if dmData.DebugLevel>=1 then writeln (data);
   end
 end;
-<<<<<<< HEAD
 function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
 var
    DatCmd,
@@ -851,8 +850,6 @@ Begin
      else   Result := mode;
 end;
 
-||||||| 33873f6
-=======
 
 procedure TDOKTabThread.Execute;
 var
@@ -873,7 +870,6 @@ begin
   end
 end;
 
->>>>>>> master
 procedure TfrmNewQSO.WaitWeb(secs:integer);
 var
    l:integer;

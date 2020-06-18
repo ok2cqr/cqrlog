@@ -6,16 +6,15 @@ They contain all accepted pull requests from official source (that may not be re
  
  These alpha test binaries also include latest official source updates up to commit:
  
-   #276 
+   #294
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
-  - ver 2.4.0(119)
-  - getbandfromfreq fix. Now user can set band limits preferences/bands/freqencies and it affects to functions like
-    importing 443.8MHz ADIF qso now works if 70cm band top is set over 440MHz (the default)
+  - ver 2.4.0(120)
+  - check official updates link above.
     
   
 BINARIES:

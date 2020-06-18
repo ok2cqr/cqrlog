@@ -329,15 +329,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabStation: TTabSheet
       Caption = 'Station'
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object GroupBox5: TGroupBox
         Left = 16
         Height = 168
@@ -3520,16 +3513,8 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 12
         BorderSpacing.Top = 6
         Caption = ' Radio one '
-<<<<<<< HEAD
-        ClientHeight = 336
-        ClientWidth = 206
-||||||| 33873f6
-        ClientHeight = 206
-        ClientWidth = 206
-=======
         ClientHeight = 198
         ClientWidth = 202
->>>>>>> master
         TabOrder = 1
         object lbRadio1Mode: TLabel
           AnchorSideLeft.Control = gbRadioOne
@@ -3787,16 +3772,8 @@ object frmPreferences: TfrmPreferences
         Width = 208
         BorderSpacing.Left = 18
         Caption = ' Radio two '
-<<<<<<< HEAD
-        ClientHeight = 336
-        ClientWidth = 206
-||||||| 33873f6
-        ClientHeight = 206
-        ClientWidth = 206
-=======
         ClientHeight = 198
         ClientWidth = 202
->>>>>>> master
         TabOrder = 2
         object lbRadio2Mode: TLabel
           AnchorSideLeft.Control = gbRadioTwo
@@ -4152,16 +4129,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabExport: TTabSheet
       Caption = 'Export'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 633
       ClientWidth = 836
->>>>>>> master
       inline fraExportPref1: TfraExportPref
         Top = 8
         inherited lblField1: TLabel
@@ -4172,16 +4141,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabDXCluster: TTabSheet
       Caption = 'DXCluster'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object gbDXCColor: TGroupBox
         AnchorSideLeft.Control = tabDXCluster
         AnchorSideTop.Control = tabDXCluster
@@ -5807,16 +5768,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabXplanet: TTabSheet
       Caption = 'xplanet support'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object GroupBox21: TGroupBox
         Left = 14
         Height = 89
@@ -6690,16 +6643,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabCWInterface: TTabSheet
       Caption = 'CW interface'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 668
       ClientWidth = 692
->>>>>>> master
       object lbIfaceType: TLabel
         AnchorSideLeft.Control = tabCWInterface
         AnchorSideTop.Control = tabCWInterface
@@ -7313,16 +7258,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabFldigi1: TTabSheet
       Caption = 'fldigi/wsjt interface'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 633
       ClientWidth = 730
->>>>>>> master
       object GroupBox31: TGroupBox
         AnchorSideLeft.Control = tabFldigi1
         AnchorSideTop.Control = tabFldigi1
@@ -7517,16 +7454,8 @@ object frmPreferences: TfrmPreferences
           Width = 543
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-<<<<<<< HEAD
-          ClientHeight = 94
-          ClientWidth = 541
-||||||| 33873f6
-          ClientHeight = 110
-          ClientWidth = 541
-=======
           ClientHeight = 86
           ClientWidth = 537
->>>>>>> master
           TabOrder = 7
           object Label95: TLabel
             AnchorSideLeft.Control = edtFldigiPath
@@ -7695,16 +7624,8 @@ object frmPreferences: TfrmPreferences
           Width = 480
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
-<<<<<<< HEAD
-          ClientHeight = 89
-          ClientWidth = 478
-||||||| 33873f6
-          ClientHeight = 105
-          ClientWidth = 478
-=======
           ClientHeight = 81
           ClientWidth = 474
->>>>>>> master
           TabOrder = 0
           object Label202: TLabel
             AnchorSideLeft.Control = edtWsjtPath
@@ -8025,31 +7946,15 @@ object frmPreferences: TfrmPreferences
     end
     object tabAutoBackup: TTabSheet
       Caption = 'Exit & Auto backup'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object GroupBox32: TGroupBox
         Left = 8
         Height = 370
         Top = 8
         Width = 608
-<<<<<<< HEAD
-        ClientHeight = 352
-        ClientWidth = 606
-||||||| 33873f6
-        ClientHeight = 368
-        ClientWidth = 606
-=======
         ClientHeight = 344
         ClientWidth = 602
->>>>>>> master
         TabOrder = 0
         object Label93: TLabel
           AnchorSideLeft.Control = chkEnableBackup
@@ -8189,16 +8094,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabExtViewers: TTabSheet
       Caption = 'External viewers'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object Label99: TLabel
         Left = 23
         Height = 17
@@ -8274,16 +8171,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabCallbook: TTabSheet
       Caption = 'Callbook support'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object GroupBox38: TGroupBox
         Left = 13
         Height = 160
@@ -8347,16 +8236,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabRBN: TTabSheet
       Caption = 'RBN support'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 633
       ClientWidth = 801
->>>>>>> master
       object chkRBNAutoConn: TCheckBox
         Left = 408
         Height = 23
@@ -8568,16 +8449,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabOnlineLog: TTabSheet
       Caption = 'Online log upload'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object GroupBox44: TGroupBox
         Left = 13
         Height = 179
@@ -8878,16 +8751,8 @@ object frmPreferences: TfrmPreferences
     end
     object tabCondx: TTabSheet
       Caption = 'Propagation'
-<<<<<<< HEAD
-      ClientHeight = 628
-      ClientWidth = 840
-||||||| 33873f6
-      ClientHeight = 672
-      ClientWidth = 687
-=======
       ClientHeight = 647
       ClientWidth = 706
->>>>>>> master
       object rbCondxAsImage: TRadioButton
         Left = 25
         Height = 23
@@ -8958,26 +8823,12 @@ object frmPreferences: TfrmPreferences
   end
   object Panel1: TPanel
     AnchorSideBottom.Side = asrBottom
-<<<<<<< HEAD
-    Left = 1010
-    Height = 659
-||||||| 33873f6
-    Left = 857
-    Height = 703
-=======
     Left = 870
     Height = 681
->>>>>>> master
     Top = 0
     Width = 88
     Align = alRight
-<<<<<<< HEAD
-    ClientHeight = 659
-||||||| 33873f6
-    ClientHeight = 703
-=======
     ClientHeight = 681
->>>>>>> master
     ClientWidth = 88
     TabOrder = 1
     OnClick = Panel1Click
@@ -9043,13 +8894,7 @@ object frmPreferences: TfrmPreferences
   end
   object lbPreferences: TListBox
     Left = 0
-<<<<<<< HEAD
-    Height = 659
-||||||| 33873f6
-    Height = 703
-=======
     Height = 681
->>>>>>> master
     Top = 0
     Width = 160
     Align = alLeft
