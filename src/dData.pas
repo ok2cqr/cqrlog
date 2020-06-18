@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 16;
+  cDB_MAIN_VER = 17;
   cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -275,14 +275,14 @@ type
     procedure SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
                       loc, my_loc,county,award,remarks : String; adif : Integer;
-                      idcall,state,cont : String; qso_dxcc : Boolean; profile : Integer;
+                      idcall,state,dok,cont : String; qso_dxcc : Boolean; profile : Integer;
                       nclub1,nclub2,nclub3,nclub4,nclub5, PropMode, Satellite : String;
                       RxFreq : Currency;srx : String;stx : String;srx_string : String;stx_string : String;
                       contestname : String);
 
     procedure EditQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
-                      loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,cont : String;
+                      loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,dok,cont : String;
                       qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
                       RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
                       contestname : String);
@@ -941,7 +941,9 @@ begin
   if not DirectoryExistsUTF8(fHomeDir+'xplanet') then
     CreateDirUTF8(fHomeDir+'xplanet');
   if not DirectoryExistsUTF8(fHomeDir+'voice_keyer') then
-    CreateDirUTF8(fHomeDir+'voice_keyer')
+    CreateDirUTF8(fHomeDir+'voice_keyer');
+  if not DirectoryExistsUTF8(fHomeDir+'dok_data') then
+    CreateDirUTF8(fHomeDir+'dok_data')
 end;
 
 procedure TdmData.PrepareCtyData;
@@ -1306,7 +1308,7 @@ end;
 procedure TdmData.SaveQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                  rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
                  loc, my_loc,county,award,remarks : String; adif : Integer;
-                 idcall,state,cont : String; qso_dxcc : Boolean; profile : Integer;
+                 idcall,state,dok,cont : String; qso_dxcc : Boolean; profile : Integer;
                  nclub1,nclub2,nclub3,nclub4,nclub5, PropMode, Satellite : String;
                  RxFreq : Currency;srx : String;stx : String;srx_string : String;stx_string : String;
                  contestname : String);
@@ -1337,6 +1339,7 @@ begin
   qsl_via := copy(qsl_via,1,30);
   award   := copy(award,1,50);
   state   := copy(state,1,4);
+  dok     := UpperCase(copy(dok,1,12));
   cont    := UpperCase(copy(cont,1,2));
   qth     := copy(qth,1,60);
   trQ.StartTransaction;
@@ -1345,7 +1348,7 @@ begin
                  'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                  'county,award,remarks,adif,idcall,state,qso_dxcc,band,profile,cont,club_nr1,'+
                  'club_nr2,club_nr3,club_nr4,club_nr5, prop_mode, satellite, rxfreq, srx, stx,'+
-                 'srx_string, stx_string, contestname) values('+QuotedStr(qsodate) +
+                 'srx_string, stx_string, contestname, dok) values('+QuotedStr(qsodate) +
                  ','+QuotedStr(time_on)+','+QuotedStr(time_off)+
                  ','+QuotedStr(call)+','+FloatToStr(freq)+
                  ','+QuotedStr(mode)+','+QuotedStr(rst_s)+
@@ -1364,7 +1367,8 @@ begin
                  ','+QuotedStr(band)+','+ IntToStr(profile) +','+QuotedStr(cont)+
                  ','+QuotedStr(nclub1)+','+QuotedStr(nclub2)+','+QuotedStr(nclub3)+
                  ','+QuotedStr(nclub4)+','+QuotedStr(nclub5)+','+QuotedStr(PropMode)+','+QuotedStr(Satellite)+','+rx_freq+
-                 ','+QuotedStr(srx)+','+QuotedStr(stx)+','+QuotedStr(srx_string)+','+QuotedStr(stx_string)+','+QuotedStr(contestname)+')';
+                 ','+QuotedStr(srx)+','+QuotedStr(stx)+','+QuotedStr(srx_string)+','+QuotedStr(stx_string)+','+QuotedStr(contestname)+
+                 ','+QuotedStr(dok)+')';
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
   Q.ExecSQL;
@@ -1373,7 +1377,7 @@ end;
 
 procedure TdmData.EditQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                  rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
-                 loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,cont : String;
+                 loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,dok,cont : String;
                  qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
                  RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
                  contestname : String);
@@ -1402,6 +1406,7 @@ begin
   if (rx_freq = '0') then
     rx_freq := 'null';
 
+  dok  := UpperCase(copy(dok,1,12));
   cont := UpperCase(copy(cont,1,2));
   qth  := copy(qth,1,60);
   qsodate := (FormatDateTime('YYYY-MM-DD',date));
@@ -1419,7 +1424,7 @@ begin
            ', profile = ' + IntToStr(profile) + ', idcall = ' + QuotedStr(idcall) + ', state=' + QuotedStr(state) +
            ', cont = ' + QuotedStr(cont)+ ', prop_mode = ' + QuotedStr(PropMode) + ', satellite = ' + QuotedStr(Satellite)+
            ', rxfreq = ' + rx_freq + ', stx = ' + QuotedStr(stx)+ ', stx_string = ' + QuotedStr(stx_string) + ', srx = ' + QuotedStr(srx)+
-           ', srx_string = ' + QuotedStr(srx_string) + ', contestname = ' + QuotedStr(contestname)+
+           ', srx_string = ' + QuotedStr(srx_string) + ', contestname = ' + QuotedStr(contestname) + ', dok = ' + QuotedStr(dok) +
            ' where id_cqrlog_main = ' + IntToStr(idx);
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
@@ -3112,6 +3117,18 @@ begin
           Q1.ExecSQL;
           trQ1.Commit
         end;
+      end;
+
+      if (old_version < 17) then
+            begin
+              if (not FieldExists('cqrlog_main', 'dok')) then
+              begin
+                trQ1.StartTransaction;
+                Q1.SQL.Text := 'alter table cqrlog_main add dok varchar(12) null';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+                trQ1.Commit;
+              end;
       end;
 
       if TableExists('view_cqrlog_main_by_callsign') then

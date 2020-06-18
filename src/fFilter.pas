@@ -48,6 +48,7 @@ type
     cmbLoTW_qsls: TComboBox;
     cmbSort: TComboBox;
     cmbBandSelector: TComboBox;
+    edtDarcDok: TEdit;
     edtSTX: TEdit;
     edtSRX: TEdit;
     edtSTXstr: TEdit;
@@ -92,6 +93,7 @@ type
     gbQth: TGroupBox;
     gbQsl: TGroupBox;
     gbContinent: TGroupBox;
+    gbDarcDok: TGroupBox;
     Label1: TLabel;
     lblContExS: TLabel;
     lblContNR: TLabel;
@@ -119,6 +121,8 @@ type
     Label8: TLabel;
     Label9: TLabel;
     dlgOpen: TOpenDialog;
+    rbExactlyDarcDok: TRadioButton;
+    rbIncludeDarcDok: TRadioButton;
     rbExactlyCounty: TRadioButton;
     rbExactlyMyLoc: TRadioButton;
     rbExactlyRem: TRadioButton;
@@ -263,6 +267,16 @@ begin
                                      else
                                       tmp := tmp + ' (iota LIKE ''%' + edtIOTA.Text + '%'') AND';
                                   end;
+  if (edtDarcDok.Text <> '') then
+                                begin
+                                  if rbExactlyDarcDok.Checked then
+                                    tmp := tmp + ' (dok = ' + QuotedStr(edtDarcDok.Text)+') AND'
+                                   else
+                                    tmp := tmp + ' (dok LIKE ''%' + edtDarcDok.Text + '%'') AND';
+                                end;
+
+
+
 
   if chkIOTAOnly.Checked then tmp := tmp + ' (iota IS NOT NULL) AND';
 
@@ -379,7 +393,8 @@ begin
                          13 : OrderBy := ' ORDER By callsign,dxcc_ref';
                          14 : OrderBy := ' ORDER BY waz';
                          15 : OrderBy := ' ORDER BY itu';
-                         16 : OrderBy := ' ORDER BY loc'
+                         16 : OrderBy := ' ORDER BY loc';
+                         17 : OrderBy := ' ORDER BY dok'
                         end;//case
 
                         case cmbGroupBy.ItemIndex of
@@ -398,7 +413,8 @@ begin
                           13 : grb_by := 'GROUP BY club_nr2';
                           14 : grb_by := 'GROUP BY club_nr3';
                           15 : grb_by := 'GROUP BY club_nr4';
-                          16 : grb_by := 'GROUP BY club_nr5'
+                          16 : grb_by := 'GROUP BY club_nr5';
+                          17 : grb_by := 'GROUP BY dok'
                         end; //case
 
                         if chkNot.Checked then tmp:= 'NOT( '+tmp+' )';
@@ -621,6 +637,7 @@ begin
       edtITU.Text              := '';
       edtCounty.Text           := '';
       edtState.Text            := '';
+      edtDarcDok.Text          := '';
       cmbLoTW_qsls.Text        := '';
       cmbLoTW_qslr.Text        := '';
       edtCont.Text             := '';
@@ -693,6 +710,7 @@ begin
       filini.WriteString('remarks','remarks',edtRemarks.Text);
       filini.WriteBool('remarks','exactly',rbExactlyRem.Checked);
       filini.WriteString('award','award',edtDiplom.Text);
+      filini.WriteString('darc_dok','darc_dok',edtDarcDok.Text);
       filini.Writebool('award','exactly',rbExactlyDiplom.Checked);
       filini.WriteString('myloc','myloc',edtMyLoc.Text);
       filini.WriteBool('myloc','exactly',rbExactlyMyLoc.Checked);
@@ -752,6 +770,8 @@ var
       rbIncludeRem.Checked    := not filini.ReadBool('remarks','exactly',True);
       edtDiplom.Text          := filini.ReadString('award','award','');
       rbIncludeDiplom.Checked := not filini.Readbool('award','exactly',True);
+      edtDarcDok.Text         := filini.ReadString('darc_dok','darc_dok','');
+      rbExactlyDarcDok.Checked:= not filini.Readbool('darc_dok','exactly',True);
       edtMyLoc.Text           := filini.ReadString('myloc','myloc','');
       rbIncludeMyLoc.Checked  := not filini.ReadBool('myloc','exactly',True);
       edtWAZ.Text             := filini.ReadString('waz','waz','');

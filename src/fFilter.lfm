@@ -1,7 +1,7 @@
 object frmFilter: TfrmFilter
-  Left = 0
-  Height = 658
-  Top = 115
+  Left = 137
+  Height = 667
+  Top = 47
   Width = 817
   HelpType = htKeyword
   HelpKeyword = 'help/h23.html#ah22'
@@ -9,7 +9,7 @@ object frmFilter: TfrmFilter
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Filter'
-  ClientHeight = 658
+  ClientHeight = 667
   ClientWidth = 817
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -121,14 +121,14 @@ object frmFilter: TfrmFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object lblProf: TLabel
     AnchorSideTop.Control = cmbProfile
     AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 225
     Height = 17
-    Top = 580
+    Top = 594
     Width = 45
     Anchors = [akTop, akRight]
     Caption = 'Profile:'
@@ -140,7 +140,7 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Side = asrBottom
     Left = 185
     Height = 17
-    Top = 620
+    Top = 634
     Width = 85
     Anchors = [akTop, akRight]
     Caption = 'Membership:'
@@ -152,7 +152,7 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Side = asrBottom
     Left = 208
     Height = 17
-    Top = 540
+    Top = 554
     Width = 62
     Anchors = [akTop, akRight]
     Caption = 'Group by:'
@@ -164,7 +164,7 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Side = asrBottom
     Left = 221
     Height = 17
-    Top = 500
+    Top = 514
     Width = 49
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 206
@@ -229,9 +229,9 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Side = asrBottom
     Left = 731
     Height = 26
-    Top = 500
+    Top = 514
     Width = 75
-    Anchors = [akTop, akRight]
+    Anchors = [akTop]
     BorderSpacing.Left = 6
     BorderSpacing.InnerBorder = 4
     Caption = 'OK'
@@ -244,7 +244,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 731
     Height = 26
-    Top = 532
+    Top = 546
     Width = 75
     BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
@@ -521,12 +521,12 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbAward
     Left = 332
-    Height = 114
+    Height = 128
     Top = 376
     Width = 154
     BorderSpacing.Left = 6
     Caption = 'QTH'
-    ClientHeight = 96
+    ClientHeight = 110
     ClientWidth = 152
     TabOrder = 8
     object rbExactlyQth: TRadioButton
@@ -862,13 +862,13 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbAward
     Left = 492
-    Height = 114
+    Height = 128
     Top = 376
-    Width = 314
+    Width = 154
     BorderSpacing.Left = 6
     Caption = ' IOTA '
-    ClientHeight = 96
-    ClientWidth = 312
+    ClientHeight = 110
+    ClientWidth = 152
     TabOrder = 11
     object edtIOTA: TEdit
       AnchorSideLeft.Control = gbIota
@@ -908,16 +908,16 @@ object frmFilter: TfrmFilter
       TabStop = True
     end
     object chkIOTAOnly: TCheckBox
-      AnchorSideLeft.Control = rbExactlyIOTA
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = rbExactlyIOTA
+      AnchorSideLeft.Control = gbIota
+      AnchorSideTop.Control = rbIncludeIOTA
+      AnchorSideTop.Side = asrBottom
       AnchorSideRight.Side = asrBottom
-      Left = 110
+      Left = 6
       Height = 23
-      Top = 41
-      Width = 154
-      BorderSpacing.Left = 30
-      Caption = 'Only QSO with IOTA'
+      Top = 87
+      Width = 124
+      BorderSpacing.Left = 6
+      Caption = 'Only IOTA qsos'
       TabOrder = 3
     end
   end
@@ -975,13 +975,13 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = gbDxcc
     AnchorSideTop.Side = asrBottom
     Left = 12
-    Height = 114
+    Height = 128
     Top = 376
     Width = 154
     BorderSpacing.Left = 12
     BorderSpacing.Top = 10
     Caption = ' Award '
-    ClientHeight = 96
+    ClientHeight = 110
     ClientWidth = 152
     TabOrder = 13
     object rbExactlyDiplom: TRadioButton
@@ -1141,7 +1141,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 276
     Height = 34
-    Top = 580
+    Top = 594
     Width = 360
     BorderSpacing.Top = 6
     ItemHeight = 0
@@ -1153,12 +1153,12 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbAward
     Left = 172
-    Height = 114
+    Height = 128
     Top = 376
     Width = 154
     BorderSpacing.Left = 6
     Caption = 'County'
-    ClientHeight = 96
+    ClientHeight = 110
     ClientWidth = 152
     TabOrder = 17
     object edtCounty: TEdit
@@ -1204,7 +1204,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 276
     Height = 33
-    Top = 620
+    Top = 634
     Width = 360
     BorderSpacing.Top = 6
     ItemHeight = 0
@@ -1217,7 +1217,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 731
     Height = 26
-    Top = 564
+    Top = 578
     Width = 75
     BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
@@ -1231,7 +1231,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 276
     Height = 34
-    Top = 540
+    Top = 554
     Width = 200
     BorderSpacing.Top = 6
     ItemHeight = 0
@@ -1253,6 +1253,7 @@ object frmFilter: TfrmFilter
       'club3'
       'club4'
       'club5'
+      'DARC_DOK'
     )
     TabOrder = 20
   end
@@ -1262,7 +1263,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 650
     Height = 26
-    Top = 531
+    Top = 545
     Width = 75
     BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
@@ -1276,7 +1277,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 650
     Height = 26
-    Top = 563
+    Top = 577
     Width = 75
     BorderSpacing.Top = 6
     BorderSpacing.InnerBorder = 4
@@ -1317,7 +1318,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = gbPower
     Left = 276
     Height = 34
-    Top = 500
+    Top = 514
     Width = 200
     BorderSpacing.Left = 100
     ItemHeight = 0
@@ -1340,6 +1341,7 @@ object frmFilter: TfrmFilter
       'WAZ'
       'ITU'
       'Gridsquare'
+      'DARC_DOK'
     )
     TabOrder = 24
     Text = 'DXCC'
@@ -1350,7 +1352,7 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Side = asrBottom
     Left = 12
     Height = 114
-    Top = 500
+    Top = 514
     Width = 164
     BorderSpacing.Left = 12
     BorderSpacing.Top = 10
@@ -1450,7 +1452,7 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Side = asrBottom
     Left = 479
     Height = 23
-    Top = 500
+    Top = 514
     Width = 154
     BorderSpacing.Left = 3
     Caption = 'Reverse filter (NOT)'
@@ -1859,7 +1861,7 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Control = btnOK
     Left = 650
     Height = 25
-    Top = 500
+    Top = 514
     Width = 75
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 3
@@ -1873,12 +1875,64 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = cmbGroupBy
     Left = 479
     Height = 23
-    Top = 540
+    Top = 554
     Width = 131
     BorderSpacing.Left = 3
     Caption = 'Remember filter'
     OnChange = chkRememberChange
     TabOrder = 31
+  end
+  object gbDarcDok: TGroupBox
+    AnchorSideLeft.Control = gbIota
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = gbRemarks
+    AnchorSideTop.Side = asrBottom
+    Left = 652
+    Height = 128
+    Top = 376
+    Width = 154
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 10
+    Caption = 'DARC DOK'
+    ClientHeight = 110
+    ClientWidth = 152
+    TabOrder = 32
+    object edtDarcDok: TEdit
+      AnchorSideLeft.Control = gbDarcDok
+      AnchorSideTop.Control = gbDarcDok
+      Left = 6
+      Height = 34
+      Top = 6
+      Width = 132
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
+      TabOrder = 0
+    end
+    object rbExactlyDarcDok: TRadioButton
+      AnchorSideLeft.Control = edtDarcDok
+      AnchorSideTop.Control = edtDarcDok
+      AnchorSideTop.Side = asrBottom
+      Left = 6
+      Height = 23
+      Top = 41
+      Width = 74
+      BorderSpacing.Top = 1
+      Caption = 'Exactly'
+      Checked = True
+      TabOrder = 1
+      TabStop = True
+    end
+    object rbIncludeDarcDok: TRadioButton
+      AnchorSideLeft.Control = rbExactlyDarcDok
+      AnchorSideTop.Control = rbExactlyDarcDok
+      AnchorSideTop.Side = asrBottom
+      Left = 6
+      Height = 23
+      Top = 64
+      Width = 73
+      Caption = 'Include'
+      TabOrder = 2
+    end
   end
   object dlgOpen: TOpenDialog
     Filter = 'filter *.fil|*.fil'

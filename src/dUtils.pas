@@ -19,7 +19,7 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, StdCtrls, iniFiles,
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
-  XMLRead, DOM, sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8;
+  XMLRead, DOM, sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr;
 
 type
   TExplodeArray = array of string;
@@ -111,7 +111,7 @@ type
     function GetQRZInfo(call: string;
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
     function GetHamQTHInfo(call: string;
-      var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
+      var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
   public
     s136: string;
     s630: string;
@@ -140,6 +140,7 @@ type
     s47G: string;
     s76G: string;
     USstates: array [1..50] of string;
+    DOKs: array [1..52] of string;
     MyBands: array [0..cMaxBandsCount - 1, 0..1] of string[6];
     //list of bands, band labels
     BandFreq  : array [0..cMaxBandsCount - 1]of BandVsFreq;
@@ -253,6 +254,7 @@ type
     function  GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text: String) : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
+    function  GetLastDOKUpgradeDate : TDateTime;
     function  CallTrim(call : String) : String;
     function  GetQSLVia(text : String) : String;
     function  IsQSLViaValid(text : String) : Boolean;
@@ -268,7 +270,7 @@ type
     function  IsValidFileName(const fileName : string) : boolean;
     function  GetBandPos(band : String) : Integer;
     function  GetNewQSOCaption(capt : String) : String;
-    function  GetCallBookData(call : String; var nick,qth,address,zip,grid,state,county,qsl,iota,waz,itu,ErrMsg : String) : Boolean;
+    function  GetCallBookData(call : String; var nick,qth,address,zip,grid,state,county,qsl,iota,waz,itu,dok,ErrMsg : String) : Boolean;
     function  DateInSOTAFormat(date : TDateTime) : String;
     function  GetLocalUTCDelta : Double;
     function  GetRadioRigCtldCommandLine(radio : Word) : String;
@@ -584,6 +586,60 @@ begin
   USstates[48] := 'WI, Wisconsin';
   USstates[49] := 'WV, West Virginia';
   USstates[50] := 'WY, Wyoming';
+
+  // Array of German DOKs
+  DOKs[1]   := 'N01, Bielefeld';
+  DOKs[2]   := 'N02, Brackwede';
+  DOKs[3]   := 'N04, Detmold';
+  DOKs[4]   := 'N05, Bad Driburg';
+  DOKs[5]   := 'N06, Gelsenkirchen';
+  DOKs[6]   := 'N08, Herford';
+  DOKs[7]   := 'N10, Hiltrup';
+  DOKs[8]   := 'N11, Lengerich';
+  DOKs[9]   := 'N12, Minden';
+  DOKs[10]  := 'N13, Münster';
+  DOKs[11]  := 'N14, Paderborn';
+  DOKs[12]  := 'N15, Büren';
+  DOKs[13]  := 'N16, Rheine';
+  DOKs[14]  := 'N17, Bocholt';
+  DOKs[15]  := 'N18, Oer-Erkenschwick/Recklinghausen';
+  DOKs[16]  := 'N19, Marl';
+  DOKs[17]  := 'N20, Herten';
+  DOKs[18]  := 'N21, Waltrop-Datteln';
+  DOKs[19]  := 'N22, Wiehengebirge';
+  DOKs[20]  := 'N23, Borken';
+  DOKs[21]  := 'N24, Beverungen-Lauenförde';
+  DOKs[22]  := 'N25, Neubeckum';
+  DOKs[23]  := 'N26, Lemgo';
+  DOKs[24]  := 'N28, Dülmen';
+  DOKs[25]  := 'N29, Lüdinghausen';
+  DOKs[26]  := 'N30, Bad Salzuflen';
+  DOKs[27]  := 'N32, Münsterland';
+  DOKs[28]  := 'N33, Greven-Emsdetten';
+  DOKs[29]  := 'N34, Ahlen';
+  DOKs[30]  := 'N35, Monasterium';
+  DOKs[31]  := 'N37, Holter Wald';
+  DOKs[32]  := 'N38, Herrlichkeit-Lembeck';
+  DOKs[33]  := 'N39, Senden';
+  DOKs[34]  := 'N40, Velen';
+  DOKs[35]  := 'N41, Gronau';
+  DOKs[36]  := 'N42, Haltern';
+  DOKs[37]  := 'N43, Bünde';
+  DOKs[38]  := 'N44, Telgte';
+  DOKs[39]  := 'N46, Nienberge';
+  DOKs[40]  := 'N47, Gütersloh';
+  DOKs[41]  := 'N48, Hiddenhausen';
+  DOKs[42]  := 'N49, Ibbenbüren';
+  DOKs[43]  := 'N50, Buer';
+  DOKs[44]  := 'N51, Harsewinkel';
+  DOKs[45]  := 'N52, Vlotho';
+  DOKs[46]  := 'N53, Stadtlohn';
+  DOKs[47]  := 'N54, Rhede';
+  DOKs[48]  := 'N55, Borgentreich';
+  DOKs[49]  := 'N59, Widukind';
+  DOKs[50]  := 'N60, Salzkotten';
+  DOKs[51]  := 'N61, Paderborn-Elsen';
+  DOKs[52]  := 'N62, Wüllen';
 end;
 procedure TdmUtils.InsertContests(cmbContestName: TComboBox);
 var
@@ -2613,6 +2669,16 @@ begin
     Result := EncodeDate(2000, 01, 01);
 end;
 
+function TdmUtils.GetLastDOKUpgradeDate: TDateTime;
+var
+  dir: string;
+begin
+  dir := dmData.HomeDir + 'dok_data' + PathDelim;
+  if FileExists(dir + 'dok.csv') then
+    Result := FileDateToDateTime(FileAge(dir + 'dok.csv')) + 1
+  else
+    Result := EncodeDate(2000, 01, 01);
+end;
 
 function TdmUtils.UnTarFiles(FileName, TargetDir: string): boolean;
 var
@@ -3734,12 +3800,12 @@ begin
 end;
 
 function TdmUtils.GetCallBookData(call: string;
-  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu,  ErrMsg: string): boolean;
+  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok,  ErrMsg: string): boolean;
 begin
   if cqrini.ReadBool('Callbook', 'QRZ', False) then
     Result := GetQRZInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg)
   else
-    Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg)
+    Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg)
 end;
 
 function TdmUtils.GetTagValue(Data, tg: string): string;
@@ -3866,7 +3932,7 @@ begin
 end;
 
 function TdmUtils.GetHamQTHInfo(call: string;
-  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
+  var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
 var
   http: THTTPSend;
   req: string = '';
@@ -3879,6 +3945,7 @@ begin
   state := '';
   county := '';
   qsl := '';
+  dok := '';
   ErrMsg := '';
   if fHamQTHSession = '' then
   begin
@@ -3910,7 +3977,7 @@ begin
       begin
         fHamQTHSession := '';
         Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state,
-          county, qsl, iota, waz, itu, ErrMsg)
+          county, qsl, iota, waz, itu, dok, ErrMsg)
       end
       else
       begin
@@ -3947,7 +4014,12 @@ begin
         qsl := GetTagValue(m.Text, '<qsl_via>');
         iota := GetTagValue(m.Text, '<iota>');
         waz := GetTagValue(m.Text, '<cq>');
-        itu := GetTagValue(m.Text, '<itu>')
+        itu := GetTagValue(m.Text, '<itu>');
+        //DL7OAP: DOK can be 'H24', 'h 24' or 'H-24', etc.
+        //thats why we clean it with RegExp so only letters and figures are left
+        dok := GetTagValue(m.Text, '<dok>');
+        dok := ReplaceRegExpr('[^a-zA-Z0-9]', dok, '', True); //ARegExpr, AInputStr, AReplaceStr
+        dok := LeftStr(UpperCase(dok),12); // now all upcase and cut to maximal length of 12 of dok field
       end
     end
   finally
@@ -4418,40 +4490,40 @@ begin
   aColumns[4].FieldName := 'MODE';
   aColumns[4].Visible   := cqrini.ReadBool('Columns','Mode',True);
 
-  aColumns[4].FieldName := 'FREQ';
-  aColumns[4].Visible   := cqrini.ReadBool('Columns','Freq',True);
+  aColumns[5].FieldName := 'FREQ';
+  aColumns[5].Visible   := cqrini.ReadBool('Columns','Freq',True);
 
-  aColumns[5].FieldName := 'RST_S';
-  aColumns[5].Visible   := cqrini.ReadBool('Columns','RST_S',True);
+  aColumns[6].FieldName := 'RST_S';
+  aColumns[6].Visible   := cqrini.ReadBool('Columns','RST_S',True);
 
-  aColumns[6].FieldName := 'RST_R';
-  aColumns[6].Visible   := cqrini.ReadBool('Columns','RST_R',True);
+  aColumns[7].FieldName := 'RST_R';
+  aColumns[7].Visible   := cqrini.ReadBool('Columns','RST_R',True);
 
-  aColumns[7].FieldName := 'NAME';
-  aColumns[7].Visible   := cqrini.ReadBool('Columns','Name',True);
+  aColumns[8].FieldName := 'NAME';
+  aColumns[8].Visible   := cqrini.ReadBool('Columns','Name',True);
 
-  aColumns[8].FieldName := 'QTH';
-  aColumns[8].Visible   := cqrini.ReadBool('Columns','QTH',True);
+  aColumns[9].FieldName := 'QTH';
+  aColumns[9].Visible   := cqrini.ReadBool('Columns','QTH',True);
 
-  aColumns[9].FieldName := 'QSL_S';
-  aColumns[9].Visible   := cqrini.ReadBool('Columns','QSL_S',True);
+  aColumns[10].FieldName := 'QSL_S';
+  aColumns[10].Visible   := cqrini.ReadBool('Columns','QSL_S',True);
 
-  aColumns[10].FieldName := 'QSL_R';
-  aColumns[10].Visible   := cqrini.ReadBool('Columns','QSL_R',True);
+  aColumns[11].FieldName := 'QSL_R';
+  aColumns[11].Visible   := cqrini.ReadBool('Columns','QSL_R',True);
 
-  aColumns[11].FieldName := 'QSL_VIA';
-  aColumns[11].Visible   := cqrini.ReadBool('Columns','QSL_VIA',False);
+  aColumns[12].FieldName := 'QSL_VIA';
+  aColumns[12].Visible   := cqrini.ReadBool('Columns','QSL_VIA',False);
 
-  aColumns[12].FieldName := 'LOC';
-  aColumns[12].Visible   := cqrini.ReadBool('Columns','Locator',False);
+  aColumns[13].FieldName := 'LOC';
+  aColumns[13].Visible   := cqrini.ReadBool('Columns','Locator',False);
 
-  aColumns[13].FieldName := 'MY_LOC';
-  aColumns[13].Visible   := cqrini.ReadBool('Columns','MyLoc',False);
+  aColumns[14].FieldName := 'MY_LOC';
+  aColumns[14].Visible   := cqrini.ReadBool('Columns','MyLoc',False);
 
-  aColumns[14].FieldName := 'IOTA';
-  aColumns[14].Visible   := cqrini.ReadBool('Columns','IOTA',False);
+  aColumns[15].FieldName := 'IOTA';
+  aColumns[15].Visible   := cqrini.ReadBool('Columns','IOTA',False);
 
-  aColumns[15].FieldName := 'AWARD';
+  aColumns[16].FieldName := 'AWARD';
   aColumns[16].Visible   := cqrini.ReadBool('Columns','Award',False);
 
   aColumns[17].FieldName := 'COUNTY';
@@ -4463,80 +4535,83 @@ begin
   aColumns[19].FieldName := 'DXCC_REF';
   aColumns[19].Visible   := cqrini.ReadBool('Columns','DXCC',False);
 
-  aColumns[21].FieldName := 'REMARKS';
-  aColumns[21].Visible   := cqrini.ReadBool('Columns','Remarks',False);
+  aColumns[20].FieldName := 'REMARKS';
+  aColumns[20].Visible   := cqrini.ReadBool('Columns','Remarks',False);
 
-  aColumns[22].FieldName := 'WAZ';
-  aColumns[22].Visible   := cqrini.ReadBool('Columns','WAZ',False);
+  aColumns[21].FieldName := 'WAZ';
+  aColumns[21].Visible   := cqrini.ReadBool('Columns','WAZ',False);
 
-  aColumns[23].FieldName := 'ITU';
-  aColumns[23].Visible   := cqrini.ReadBool('Columns','ITU',False);
+  aColumns[22].FieldName := 'ITU';
+  aColumns[22].Visible   := cqrini.ReadBool('Columns','ITU',False);
 
-  aColumns[24].FieldName := 'STATE';
-  aColumns[24].Visible   := cqrini.ReadBool('Columns','State',False);
+  aColumns[23].FieldName := 'STATE';
+  aColumns[23].Visible   := cqrini.ReadBool('Columns','State',False);
 
-  aColumns[25].FieldName := 'LOTW_QSLSDATE';
-  aColumns[25].Visible   := cqrini.ReadBool('Columns','LoTWQSLSDate',False);
+  aColumns[24].FieldName := 'LOTW_QSLSDATE';
+  aColumns[24].Visible   := cqrini.ReadBool('Columns','LoTWQSLSDate',False);
 
-  aColumns[26].FieldName := 'LOTW_QSLRDATE';
-  aColumns[26].Visible   := cqrini.ReadBool('Columns','LoTWQSLRDate',False);
+  aColumns[25].FieldName := 'LOTW_QSLRDATE';
+  aColumns[25].Visible   := cqrini.ReadBool('Columns','LoTWQSLRDate',False);
 
-  aColumns[27].FieldName := 'LOTW_QSLS';
-  aColumns[27].Visible   := cqrini.ReadBool('Columns','LoTWQSLS',False);
+  aColumns[26].FieldName := 'LOTW_QSLS';
+  aColumns[26].Visible   := cqrini.ReadBool('Columns','LoTWQSLS',False);
 
-  aColumns[28].FieldName := 'LOTW_QSLR';
-  aColumns[28].Visible   := cqrini.ReadBool('Columns','LOTWQSLR',False);
+  aColumns[27].FieldName := 'LOTW_QSLR';
+  aColumns[27].Visible   := cqrini.ReadBool('Columns','LOTWQSLR',False);
 
-  aColumns[29].FieldName := 'CONT';
-  aColumns[29].Visible   := cqrini.ReadBool('Columns','Cont',False);
+  aColumns[28].FieldName := 'CONT';
+  aColumns[28].Visible   := cqrini.ReadBool('Columns','Cont',False);
 
-  aColumns[30].FieldName := 'QSLS_DATE';
-  aColumns[30].Visible   := cqrini.ReadBool('Columns','QSLSDate',False);
+  aColumns[29].FieldName := 'QSLS_DATE';
+  aColumns[29].Visible   := cqrini.ReadBool('Columns','QSLSDate',False);
 
-  aColumns[31].FieldName := 'QSLR_DATE';
-  aColumns[31].Visible   := cqrini.ReadBool('Columns','QSLRDate',False);
+  aColumns[30].FieldName := 'QSLR_DATE';
+  aColumns[30].Visible   := cqrini.ReadBool('Columns','QSLRDate',False);
 
-  aColumns[32].FieldName := 'EQSL_QSL_SENT';
-  aColumns[32].Visible   := cqrini.ReadBool('Columns','eQSLQSLS',False);
+  aColumns[31].FieldName := 'EQSL_QSL_SENT';
+  aColumns[31].Visible   := cqrini.ReadBool('Columns','eQSLQSLS',False);
 
-  aColumns[33].FieldName := 'EQSL_QSLSDATE';
-  aColumns[33].Visible   := cqrini.ReadBool('Columns','eQSLQSLSDate',False);
+  aColumns[32].FieldName := 'EQSL_QSLSDATE';
+  aColumns[32].Visible   := cqrini.ReadBool('Columns','eQSLQSLSDate',False);
 
-  aColumns[34].FieldName := 'EQSL_QSL_RCVD';
-  aColumns[34].Visible   := cqrini.ReadBool('Columns','eQSLQSLR',False);
+  aColumns[33].FieldName := 'EQSL_QSL_RCVD';
+  aColumns[33].Visible   := cqrini.ReadBool('Columns','eQSLQSLR',False);
 
-  aColumns[35].FieldName := 'EQSL_QSLRDATE';
-  aColumns[35].Visible   := cqrini.ReadBool('Columns','eQSLQSLRDate',False);
+  aColumns[34].FieldName := 'EQSL_QSLRDATE';
+  aColumns[34].Visible   := cqrini.ReadBool('Columns','eQSLQSLRDate',False);
 
-  aColumns[36].FieldName := 'QSLR';
-  aColumns[36].Visible   := cqrini.ReadBool('Columns','QSLRAll',False);
+  aColumns[35].FieldName := 'QSLR';
+  aColumns[35].Visible   := cqrini.ReadBool('Columns','QSLRAll',False);
 
-  aColumns[37].FieldName := 'COUNTRY';
-  aColumns[37].Visible   := cqrini.ReadBool('Columns','Country',False);
+  aColumns[36].FieldName := 'COUNTRY';
+  aColumns[36].Visible   := cqrini.ReadBool('Columns','Country',False);
 
-  aColumns[38].FieldName := 'PROP_MODE';
-  aColumns[38].Visible   := cqrini.ReadBool('Columns', 'Propagation', False);
+  aColumns[37].FieldName := 'PROP_MODE';
+  aColumns[37].Visible   := cqrini.ReadBool('Columns', 'Propagation', False);
 
-  aColumns[39].FieldName := 'RXFREQ';
-  aColumns[39].Visible   := cqrini.ReadBool('Columns', 'RXFreq', False);
+  aColumns[38].FieldName := 'RXFREQ';
+  aColumns[38].Visible   := cqrini.ReadBool('Columns', 'RXFreq', False);
 
-  aColumns[40].FieldName := 'SATELLITE';
-  aColumns[40].Visible   := cqrini.ReadBool('Columns', 'SatelliteName', False);
+  aColumns[39].FieldName := 'SATELLITE';
+  aColumns[39].Visible   := cqrini.ReadBool('Columns', 'SatelliteName', False);
 
-  aColumns[41].FieldName := 'SRX';
-  aColumns[41].Visible   := cqrini.ReadBool('Columns', 'SRX', False);
+  aColumns[40].FieldName := 'SRX';
+  aColumns[40].Visible   := cqrini.ReadBool('Columns', 'SRX', False);
 
-  aColumns[42].FieldName := 'STX';
-  aColumns[42].Visible   := cqrini.ReadBool('Columns', 'STX', False);
+  aColumns[41].FieldName := 'STX';
+  aColumns[41].Visible   := cqrini.ReadBool('Columns', 'STX', False);
 
-  aColumns[43].FieldName := 'SRX_STRING';
-  aColumns[43].Visible   := cqrini.ReadBool('Columns', 'ContMsgRcvd', False);
+  aColumns[42].FieldName := 'SRX_STRING';
+  aColumns[42].Visible   := cqrini.ReadBool('Columns', 'ContMsgRcvd', False);
 
-  aColumns[44].FieldName := 'STX_STRING';
-  aColumns[44].Visible   := cqrini.ReadBool('Columns', 'ContMsgSent', False);
+  aColumns[43].FieldName := 'STX_STRING';
+  aColumns[43].Visible   := cqrini.ReadBool('Columns', 'ContMsgSent', False);
 
-  aColumns[45].FieldName := 'CONTESTNAME';
-  aColumns[45].Visible   := cqrini.ReadBool('Columns', 'ContestName', False);
+  aColumns[44].FieldName := 'CONTESTNAME';
+  aColumns[44].Visible   := cqrini.ReadBool('Columns', 'ContestName', False);
+
+  aColumns[45].FieldName := 'DOK';
+  aColumns[45].Visible   := cqrini.ReadBool('Columns', 'DarcDok', False);
 
   for i:=0 to Length(aColumns)-1 do
     aColumns[i].Exists := False;
