@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
   ActnList, ExtCtrls, StdCtrls, ComCtrls, DBGrids, Buttons, LCLType, IniFiles, process,
-  Grids, DBCtrls, dLogUpload,db,synacode;
+  Grids, DBCtrls, dLogUpload,db,synacode, FileUtil, LazFileUtils;
 
 type
 
@@ -91,6 +91,7 @@ type
     acUploadToHamQTH: TAction;
     acMarkAllHamQTH: TAction;
     acWASCfm:   TAction;
+    acDOKCfm:   TAction;
     acWACCfm:   TAction;
     acUnselAll: TAction;
     acUnselRecord: TAction;
@@ -140,6 +141,8 @@ type
     MenuItem102: TMenuItem;
     MenuItem103: TMenuItem;
     MenuItem104: TMenuItem;
+    MenuItem105: TMenuItem;
+    MenuItem106: TMenuItem;
     MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
@@ -384,6 +387,7 @@ type
     procedure acUploadQSOToLoTWWebExecute(Sender: TObject);
     procedure acWACCfmExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
+    procedure acDOKCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
@@ -469,7 +473,7 @@ implementation
 uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCStat,
   fSort, fFilter, fContestFilter, fImportProgress, fGrayline, fCallbook, fTRXControl,
   fAdifImport, fSplash, fSearch, fExportProgress, fDXCluster, fQSLMgr,
-  fQSODetails, fWAZITUStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
+  fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
   feQSLUpload, feQSLDownload, fSOTAExport, fEDIExport, fCabrilloExport, fRotControl,
@@ -1187,6 +1191,24 @@ begin
   finally
     Free
   end
+end;
+
+
+procedure TfrmMain.acDOKCfmExecute(Sender: TObject);
+begin
+  if FileExistsUTF8(dmData.HomeDir+'dok_data'+PathDelim+'dok.csv') and FileExistsUTF8(dmData.HomeDir+'dok_data'+PathDelim+'sdok.csv') then
+  begin
+    with TfrmDOKStat.Create(self) do
+    try
+      StatType := tsDOK;
+      ShowModal
+    finally
+      Free
+    end
+  end
+  else
+  begin
+    Application.MessageBox(PChar('DOK table is empty. Please ensure that the folder '+dmData.HomeDir+'dok_data exists and the files dok.csv and sdok.csv therein.'+sLineBreak+'You might also consider enabling the automatic update function in preferences.'),'Problem');end;
 end;
 
 
@@ -2309,6 +2331,7 @@ begin
   ChangeVis('SRX',cqrini.ReadBool('Columns', 'SRX', False));
   ChangeVis('STX_STRING',cqrini.ReadBool('Columns', 'ContMsgSent', False));
   ChangeVis('SRX_STRING',cqrini.ReadBool('Columns', 'ContMsgRcvd', False));
+  ChangeVis('DOK',cqrini.ReadBool('Columns', 'DarcDok', False));
 end;
 
 procedure TfrmMain.MarkQSLSend(symbol: string);

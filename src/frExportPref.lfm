@@ -1,14 +1,14 @@
 object fraExportPref: TfraExportPref
   Left = 0
-  Height = 481
+  Height = 527
   Top = 0
-  Width = 834
-  ClientHeight = 481
-  ClientWidth = 834
-  LCLVersion = '2.0.4.0'
+  Width = 836
+  ClientHeight = 527
+  ClientWidth = 836
+  LCLVersion = '2.0.6.0'
   TabOrder = 0
-  DesignLeft = 362
-  DesignTop = 277
+  DesignLeft = 21
+  DesignTop = 194
   object chkProfile: TCheckBox
     AnchorSideLeft.Control = lblField1
     AnchorSideTop.Control = chkExCont
@@ -23,11 +23,11 @@ object fraExportPref: TfraExportPref
   end
   object chkAscTime: TCheckBox
     AnchorSideLeft.Control = lblField1
-    AnchorSideTop.Control = chkProfile
+    AnchorSideTop.Control = chkDarcDok
     AnchorSideTop.Side = asrBottom
     Left = 6
     Height = 28
-    Top = 449
+    Top = 477
     Width = 197
     AutoSize = False
     Caption = 'Most recent entries on top'
@@ -1236,7 +1236,7 @@ object fraExportPref: TfraExportPref
     AnchorSideTop.Control = chkAscTime
     Left = 278
     Height = 28
-    Top = 449
+    Top = 477
     Width = 197
     AutoSize = False
     Caption = 'HTML auto column width'
@@ -1820,5 +1820,42 @@ object fraExportPref: TfraExportPref
     AutoSize = False
     TabOrder = 133
     Text = 'qQSLRdat'
+  end
+  object chkDarcDok: TCheckBox
+    AnchorSideLeft.Control = lblField1
+    AnchorSideTop.Control = chkProfile
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 28
+    Top = 449
+    Width = 103
+    AutoSize = False
+    Caption = 'DARC DOK'
+    TabOrder = 137
+  end
+  object edtWDarcDok1: TEdit
+    AnchorSideLeft.Control = lblHTML1
+    AnchorSideTop.Control = chkDarcDok
+    AnchorSideTop.Side = asrCenter
+    Left = 146
+    Height = 28
+    Top = 449
+    Width = 75
+    AutoSize = False
+    TabOrder = 138
+    Text = 'DARC DOK'
+  end
+  object edtWDarcDok: TEdit
+    AnchorSideLeft.Control = lblWidth1
+    AnchorSideTop.Control = edtWDarcDok1
+    AnchorSideTop.Side = asrCenter
+    Left = 228
+    Height = 28
+    Top = 449
+    Width = 40
+    AutoSize = False
+    NumbersOnly = True
+    TabOrder = 139
+    Text = '50'
   end
 end

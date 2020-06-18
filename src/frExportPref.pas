@@ -59,6 +59,7 @@ type
     chkexWAZ : TCheckBox;
     chkProfile : TCheckBox;
     chkAscTime : TCheckBox;
+    chkDarcDok: TCheckBox;
     edtWAward1: TEdit;
     edtWCall1: TEdit;
     edtWContestMsg1: TEdit;
@@ -80,6 +81,8 @@ type
     edtWLQSLSDate1: TEdit;
     edtWMyLoc1: TEdit;
     edtWNote1: TEdit;
+    edtWOperator: TEdit;
+    edtWOperator1: TEdit;
     edtWPower1: TEdit;
     edtWProfile: TEdit;
     edtWContinent1: TEdit;
@@ -89,6 +92,8 @@ type
     edtWFreq1: TEdit;
     edtWMode1: TEdit;
     edtWName1: TEdit;
+    edtWDarcDok1: TEdit;
+    edtWDarcDok: TEdit;
     edtWProp : TEdit;
     edtWAward : TEdit;
     edtWCall : TEdit;
@@ -224,6 +229,7 @@ begin
   cqrini.WriteBool('Export', 'Contestname', chkexContestName.Checked);
   cqrini.WriteBool('Export', 'ContestNr', chkexContestNr.Checked);
   cqrini.WriteBool('Export', 'ContestMsg', chkexContestMsg.Checked);
+  cqrini.WriteBool('Export', 'DarcDok', chkDarcDok.Checked);
   cqrini.WriteBool('Export', 'HTMLAutoColumn', chkAutoColumn.Checked);
 
   //group "none"
@@ -271,6 +277,7 @@ begin
   cqrini.WriteString('Export', 'WContestName', edtWContestName.Text);
   cqrini.WriteString('Export', 'WContestNr', edtWContestNr.Text);
   cqrini.WriteString('Export', 'WContestMsg', edtWContestMsg.Text);
+  cqrini.WriteString('Export', 'WDarcDok', edtWDarcDok.Text);
 
 
   //group "one"
@@ -318,6 +325,7 @@ begin
   cqrini.WriteString('Export', 'WContestName1', edtWContestName1.Text);
   cqrini.WriteString('Export', 'WContestNr1', edtWContestNr1.Text);
   cqrini.WriteString('Export', 'WContestMsg1', edtWContestMsg1.Text);
+  cqrini.WriteString('Export', 'WDarcDok1', edtWDarcDok1.Text);
 end;
 
 procedure TfraExportPref.LoadExportPref;
@@ -368,6 +376,7 @@ begin
   chkexContestName.Checked := cqrini.ReadBool('Export', 'Contestname', False);
   chkexContestNr.Checked := cqrini.ReadBool('Export', 'ContestNr',False);
   chkexContestMsg.Checked := cqrini.ReadBool('Export', 'ContestMsg', False);
+  chkDarcDok.Checked := cqrini.ReadBool('Export', 'DarcDok', False);
   chkAutoColumn.Checked := cqrini.ReadBool('Export', 'HTMLAutoColumn', False);
 
 
@@ -416,6 +425,7 @@ begin
   edtWContestName.Text := cqrini.ReadString('Export', 'WContestName', '20');
   edtWContestNr.Text := cqrini.ReadString('Export', 'WContestNr', '4');
   edtWContestMsg.Text := cqrini.ReadString('Export', 'WContestMsg', '10');
+  edtWDarcDok.Text := cqrini.ReadString('Export', 'WDarcDok', '10');
 
   //group "one"
   edtWDate1.Text := cqrini.ReadString('Export', 'WDate1', 'Date');
@@ -462,6 +472,7 @@ begin
   edtWContestName1.Text := cqrini.ReadString('Export', 'WContestName1', 'Contest');
   edtWContestNr1.Text := cqrini.ReadString('Export', 'WContestNr1', 'Cont Nr');
   edtWContestMsg1.Text := cqrini.ReadString('Export', 'WContestMsg1', 'Cont Msg');
+  edtWDarcDok1.Text := cqrini.ReadString('Export', 'WDarcDok1', 'DarcDok');
 
 end;
 

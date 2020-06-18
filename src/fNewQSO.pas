@@ -20,12 +20,14 @@ uses
   DBGrids, StdCtrls, Buttons, ComCtrls, Grids, inifiles,
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
   uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
-  fMonWsjtx, fWorkedGrids,fPropDK0WCY, fAdifImport;
+  fMonWsjtx, fWorkedGrids,fPropDK0WCY, fAdifImport, RegExpr,
+  FileUtil, LazFileUtils;
 
 const
   cRefCall = 'Ref. call (to change press CTRL+R)   ';
   cMyLoc   = 'My grid (to change press CTRL+L) ';
   cQSLMgrVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat';
+  cDOKVersionCheckUrl = 'https://www.df2et.de/cqrlog/ver.dat';
   cCntyVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
 
 type
@@ -92,6 +94,7 @@ type
     cmbPropagation : TComboBox;
     cmbSatellite : TComboBox;
     dbgrdQSOBefore: TDBGrid;
+    edtDOK: TEdit;
     edtTXLO: TEdit;
     edtRXLO: TEdit;
     edtContestExchangeMessageReceived: TEdit;
@@ -110,6 +113,7 @@ type
     lblContestName: TLabel;
     lblCallbookInformation : TLabel;
     lblPropagation : TLabel;
+    lblDOK: TLabel;
     lblStatellite : TLabel;
     lblRXFreq : TLabel;
     Label36 : TLabel;
@@ -126,6 +130,8 @@ type
     MenuItem39: TMenuItem;
     MenuItem4 : TMenuItem;
     MenuItem40: TMenuItem;
+    MenuItem41: TMenuItem;
+    MenuItem43: TMenuItem;
     MenuItem51: TMenuItem;
     MenuItem52: TMenuItem;
     MenuItem53: TMenuItem;
@@ -155,6 +161,7 @@ type
     MenuItem55: TMenuItem;
     acWASCfm: TAction;
     acWACCfm: TAction;
+    acDOKCfm: TAction;
     acViewQSO: TAction;
     acWAZCfm: TAction;
     acXplanet: TAction;
@@ -433,7 +440,9 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormWindowStateChange(Sender: TObject);
     procedure lblAziChangeBounds(Sender: TObject);
+    procedure lblDOKClick(Sender: TObject);
     procedure lblQRAChangeBounds(Sender: TObject);
+    procedure lblStateClick(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
@@ -445,6 +454,7 @@ type
     procedure MenuItem9Click(Sender: TObject);
     procedure acRemoteModeExecute(Sender: TObject);
     procedure acWASCfmExecute(Sender: TObject);
+    procedure acDOKCfmExecute(Sender: TObject);
     procedure acAddToBandMapExecute(Sender: TObject);
     procedure acCWMessagesExecute(Sender: TObject);
     procedure acCWTypeExecute(Sender: TObject);
@@ -609,6 +619,7 @@ type
     WsjtxDecodeRunning : boolean;
 
     RememberAutoMode : Boolean;
+    procedure showDOK(stat:boolean);
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
     procedure ChangeReports;
@@ -646,6 +657,7 @@ type
 
     procedure CheckForExternalTablesUpdate;
     procedure CheckForDXCCTablesUpdate;
+    procedure CheckForDOKTablesUpdate;
     procedure CheckForQslManagersUpdate;
     procedure CheckForMembershipUpdate;
 
@@ -703,6 +715,7 @@ type
     procedure StoreClubInfo(where,StoreText : String);
     procedure SynCallBook;
     procedure SynDXCCTab;
+    procedure SynDOKTab;
     procedure SynQSLTab;
     procedure CalculateLocalSunRiseSunSet;
     procedure UploadAllQSOOnline;
@@ -722,6 +735,12 @@ type
 
   type
     TDXCCTabThread = class(TThread)
+    protected
+      procedure Execute; override;
+  end;
+
+  type
+    TDOKTabThread = class(TThread)
     protected
       procedure Execute; override;
   end;
@@ -750,6 +769,7 @@ var
   c_iota      : String;
   c_waz       : String;
   c_itu       : String;
+  c_dok       : String;
   c_ErrMsg    : String;
   c_SyncText  : String;
   c_running   : Boolean = False;
@@ -770,7 +790,7 @@ implementation
 
 uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGrayline,
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
-     fQSODetails, fWAZITUStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
+     fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
@@ -815,6 +835,7 @@ begin
      if dmData.DebugLevel>=1 then writeln (data);
   end
 end;
+<<<<<<< HEAD
 function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
 var
    DatCmd,
@@ -830,6 +851,29 @@ Begin
      else   Result := mode;
 end;
 
+||||||| 33873f6
+=======
+
+procedure TDOKTabThread.Execute;
+var
+  data   : string;
+  FileDate : TDateTime;
+begin
+  FreeOnTerminate := True;
+  if dmUtils.GetDataFromHttp(cDOKVersionCheckUrl, data) then
+  begin
+    if (pos('NOT FOUND',upcase(data))=0) then
+     begin
+      FileDate := dmUtils.MyStrToDate(data);
+      if FileDate > dmUtils.GetLastDOKUpgradeDate then
+          Synchronize(@frmNewQSO.SynDOKTab)
+     end
+    else
+     if dmData.DebugLevel>=1 then writeln (data);
+  end
+end;
+
+>>>>>>> master
 procedure TfrmNewQSO.WaitWeb(secs:integer);
 var
    l:integer;
@@ -862,6 +906,25 @@ begin
       ClearAll;                //reload combo boxes with prop modes and satelite names
     dmDXCC.ReloadDXCCTables;
     dmDXCluster.ReloadDXCCTables
+  end
+end;
+
+procedure TfrmNewQSO.SynDOKTab;
+begin
+  if Application.MessageBox('New DOK tables are available. Do you want to download and install it?','Question ...',
+                            mb_YesNo + mb_IconQuestion) = idYes then
+  begin
+    with TfrmImportProgress.Create(self) do
+    try
+      Caption            := 'Downloading DOK data ...';
+      lblComment.Caption := 'Downloading DOK data ...';
+      ImportType := imptDownloadDOKData;
+      ShowModal;
+    finally
+      Free
+    end;
+    if (edtCall.Text = '') then
+      ClearAll;                //reload combo boxes with prop modes and satelite names
   end
 end;
 
@@ -898,11 +961,12 @@ begin
     c_ErrMsg   := '';
     c_waz      := '';
     c_itu      := '';
+    c_dok      := '';
 
     FreeOnTerminate:= True;
     c_SyncText := 'Working ...';
     Synchronize(@frmNewQSO.SynCallBook);
-    dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_waz,c_itu,c_ErrMsg);
+    dmUtils.GetCallBookData(c_callsign,c_nick,c_qth,c_address,c_zip,c_grid,c_state,c_county,c_qsl,c_iota,c_waz,c_itu, c_dok, c_ErrMsg);
     c_SyncText := '';
     Synchronize(@frmNewQSO.SynCallBook)
   finally
@@ -944,11 +1008,11 @@ end;
 
 procedure TfrmNewQSO.InsertNameQTH;
 var
-  sName, QTH, loc : String;
-  county, qsl_via : String;
-  award,state     : String;
-  qslrdate        : String;
-  waz, itu        : String;
+  sName, QTH, loc  : String;
+  county, qsl_via  : String;
+  award,state, dok : String;
+  qslrdate         : String;
+  waz, itu         : String;
 begin
   sName    := '';
   QTH      := '';
@@ -957,6 +1021,7 @@ begin
   qsl_via  := '';
   award    := '';
   state    := '';
+  dok      := '';
   qslrdate := '';
   waz      := '';
   itu      := '';
@@ -982,6 +1047,8 @@ begin
           award := dmData.qQSOBefore.FieldByName('award').AsString;
         if (state = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           state := dmData.qQSOBefore.FieldByName('state').AsString;
+        if (dok = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
+          dok := dmData.qQSOBefore.FieldByName('dok').AsString;
         if (qslrdate = '') and (not dmData.qQSOBefore.FieldByName('qslr_date').IsNull) then
           lblQSLRcvdDate.Caption := 'QSL rcvd on '+dmData.qQSOBefore.FieldByName('qslr_date').AsString;
         if (waz = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
@@ -1011,6 +1078,8 @@ begin
       edtAward.Text := award;
     if (edtState.Text = '') then
       edtState.Text := state;
+    if (edtDOK.Text = '') then
+      edtDOK.Text := dok;
     if (waz <> '') then
       edtWAZ.Text := waz;
     if (itu <> '') then
@@ -1092,6 +1161,8 @@ begin
   lblLat.Caption  := lat;
   lblLong.Caption := long;
   if (pfx='!') or (pfx='#') then ClearGrayLineMapLine;
+
+  showDOK(pfx='DL');
 end;
 procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
@@ -1173,6 +1244,7 @@ begin
   dmData.qQSOBefore.Close;
   lblIOTA.Font.Color := clDefault;
   idcall := ''; //OH1KH: this line fixes issue #201 but does it something wrong elsewhere? (I did not notice)
+  showDOK(false);
   if frmQSODetails.Showing then
   begin
     frmQSODetails.ClearAll;
@@ -3041,6 +3113,14 @@ begin
     edtITU.Text := '0';
   if edtWAZ.Text = '' then
     edtWAZ.Text := '0';
+  if edtDOK.Text <> '' then
+  begin
+    // DF2ET, 10.06.2020: Replace special char Ø by 0
+    edtDOK.Text := ReplaceRegExpr('Ø', edtDOK.Text, '0', True);
+    //DL7OAP: DOK can be 'H24', 'h 24' or 'H-24', etc.
+    //thats why we clean it with RegExp so only letters and figures are left
+    edtDOK.Text := UpperCase(ReplaceRegExpr('[^a-zA-Z0-9]', edtDOK.Text, '', True)); //ARegExpr, AInputStr, AReplaceStr
+  end;
 
   if not dmUtils.IsDateOK(edtDate.Text) then
   begin
@@ -3134,6 +3214,7 @@ begin
                    adif,
                    idcall,
                    edtState.Text,
+                   edtDOK.Text,
                    lblCont.Caption,
                    ChangeDXCC,
                    dmData.GetNRFromProfile(cmbProfiles.Text),
@@ -3222,6 +3303,7 @@ begin
                    adif,
                    idcall,
                    edtState.Text,
+                   edtDOK.Text,
                    lblCont.Caption,
                    ChangeDXCC,
                    dmData.GetNRFromProfile(cmbProfiles.Text),
@@ -4140,6 +4222,24 @@ begin
   end
 end;
 
+procedure TfrmNewQSO.acDOKCfmExecute(Sender: TObject);
+begin
+  if FileExistsUTF8(dmData.HomeDir+'dok_data'+PathDelim+'dok.csv') and FileExistsUTF8(dmData.HomeDir+'dok_data'+PathDelim+'sdok.csv') then
+  begin
+    with TfrmDOKStat.Create(self) do
+    try
+      StatType := tsDOK;
+      ShowModal
+    finally
+      Free
+    end
+  end
+  else
+  begin
+    Application.MessageBox(PChar('DOK table is empty. Please ensure that the folder '+dmData.HomeDir+'dok_data exists and the files dok.csv and sdok.csv therein.'+sLineBreak+'You might also consider enabling the automatic update function in preferences.'),'Problem');
+  end;
+end;
+
 procedure TfrmNewQSO.acAddToBandMapExecute(Sender: TObject);
 var
   f : Double;
@@ -4275,9 +4375,10 @@ begin
 end;
 procedure TfrmNewQSO.edtGridKeyPress(Sender: TObject; var Key: char);
 begin
+  //pass only format AB12cd34ef and BS/DEL keys
   if (( Key<>#$8 ) and ( Key<>#$7F)) then
   begin
-    case length(edtGrid.Text) of                                        //AB12cd34ef
+    case length(edtGrid.Text) of
       0,1  :  if Key in ['a'..'z'] then Key:= chr(ord(Key) - $20) else
                   if not (Key in ['A'..'Z']) then Key:= #0;
       2,3  :  if not (Key in ['0'..'9']) then Key:= #0;
@@ -4761,6 +4862,33 @@ end;
 procedure TfrmNewQSO.lblAziChangeBounds(Sender: TObject);
 begin
   RefreshInfoLabels
+end;
+
+procedure TfrmNewQSO.lblDOKClick(Sender: TObject);
+begin
+ showDOK(false);
+end;
+
+procedure TfrmNewQSO.lblStateClick(Sender: TObject);
+begin
+  showDOK(true);
+end;
+procedure TfrmNewQSO.showDOK(stat:boolean);
+Begin
+   lblDOK.Visible:= stat;
+   edtDOK.Visible:= stat;
+   lblState.Visible:= not stat;
+   edtState.Visible:= not stat;
+   if (stat) then
+   begin
+        edtDOK.TabOrder := 14;
+        edtState.TabOrder := 30;
+   end
+   else
+   begin
+        edtDOK.TabOrder := 30;
+        edtState.TabOrder := 14;
+   end;
 end;
 
 procedure TfrmNewQSO.lblQRAChangeBounds(Sender: TObject);
@@ -5330,16 +5458,6 @@ begin
   else
     EscFirstTime := False;
 
-  if ((Shift = [ssCtrl]) and (key = VK_F2)) then
-  begin
-    Caption := dmUtils.GetNewQSOCaption('New QSO');
-    fViewQSO := False;
-    fEditQSO := False;
-    NewQSO;
-    ClearAll;
-    key := 0
-  end;
-
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
   Begin
    if LastFkey = 0 then
@@ -5361,6 +5479,17 @@ begin
     key := 0
   end;
 
+  if (Key = VK_F11) then
+  begin
+    if NOT c_running then
+    begin
+      c_callsign := edtCall.Text;
+      mCallBook.Clear;
+      QRZ := TQRZThread.Create(True);
+      QRZ.FreeOnTerminate := True;
+      QRZ.Start
+    end
+  end;
 
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
@@ -5384,6 +5513,18 @@ begin
     end
   end;
 
+  // CTRL-Key > Keyboard Shortcuts for NewQSO GUI with CTRL
+
+  if ((Shift = [ssCtrl]) and (key = VK_F2)) then
+  begin
+    Caption := dmUtils.GetNewQSOCaption('New QSO');
+    fViewQSO := False;
+    fEditQSO := False;
+    NewQSO;
+    ClearAll;
+    key := 0
+  end;
+
   if (Shift = [ssCtrl]) and (Key = VK_F8) then
   begin     //F8
     if not (fEditQSO or fViewQSO) then
@@ -5391,54 +5532,53 @@ begin
     edtCall.SetFocus;
     key := 0
   end;
-  if (Key = VK_F11) then
+
+  if ((Shift = [ssCtrl]) and (key = VK_A)) then
   begin
-    if NOT c_running then
-    begin
-      c_callsign := edtCall.Text;
-      mCallBook.Clear;
-      QRZ := TQRZThread.Create(True);
-      QRZ.FreeOnTerminate := True;
-      QRZ.Start
-    end
-  end;
-  if (Shift = [ssAlt]) and (key = VK_F) then
-  begin
-    dmUtils.EnterFreq;
+    acAddToBandMap.Execute;
     key := 0
   end;
-
+  if (Shift = [ssCtrl]) and (key = VK_D) then
+  begin
+    acDXCCCfm.Execute;
+    key := 0;
+  end;
+  if (Shift = [ssCtrl]) and (key = VK_I) then
+  begin
+    acDetails.Execute;
+    key := 0
+  end;
+  if ((Shift = [ssCtrl]) and (key = VK_H)) then
+  begin
+    acDetails.Execute;
+    key := 0
+  end;
+  if ((Shift = [ssCtrl]) and (key = VK_M)) then
+  begin
+    acRemoteMode.Execute;
+    key := 0
+  end;
+  if ((Shift = [ssCtrl]) and (key = VK_N)) then
+  begin
+    acLongNote.Execute;
+    key := 0
+  end;
+  if (Shift = [ssCtrl]) and (key = VK_O) then
+  begin
+    mnuQSOList.Click;
+    key := 0;
+  end;
+  if (Shift = [ssCtrl]) and (key = VK_P) then
+  begin
+    acPreferences.Execute;
+    key := 0;
+  end;
   if (Shift = [ssCtrl]) and (key = VK_Q) then //why all this didnt work directly in action?
   begin
     acClose.Execute;
     key := 0;
     exit
   end;
-
-  if (Shift = [ssCtrl]) and (key = VK_P) then
-  begin
-    acPreferences.Execute;
-    key := 0;
-  end;
-
-  if (Shift = [ssCtrl]) and (key = VK_D) then
-  begin
-    acDXCCCfm.Execute;
-    key := 0;
-  end;
-
-  if (Shift = [ssCtrl]) and (key = VK_O) then
-  begin
-    mnuQSOList.Click;
-    key := 0;
-  end;
-
-  if (Shift = [ssCtrl]) and (key = VK_I) then
-  begin
-    acDetails.Execute;
-    key := 0
-  end;
-
   if ((Shift = [ssCtrl]) and (key = VK_R)) then
   begin
     if edtCall.Text <> '' then
@@ -5458,40 +5598,9 @@ begin
       key := 0
     end;
   end;
-  if ((Shift = [ssCtrl]) and (key = VK_A)) then
-  begin
-    acAddToBandMap.Execute;
-    key := 0
-  end;
-  if ((Shift = [ssCtrl]) and (key = VK_N)) then
-  begin
-    acLongNote.Execute;
-    key := 0
-  end;
-  
-  if ((Shift = [ssCtrl]) and (key = VK_M)) then
-  begin
-    acRemoteMode.Execute;
-    key := 0
-  end;
+  if ((Shift = [ssCTRL]) and (key = VK_W)) then
+    acSendSpot.Execute;
 
-  if ((Shift = [ssCtrl]) and (key = VK_H)) then
-  begin
-    acDetails.Execute;
-    key := 0
-  end;
-
-  if ((Shift = [ssAlt]) and (key = VK_H)) then
-  begin
-    ShowHelp;
-    key := 0
-  end;
-
-  if ((Shift = [ssAlt]) and (key = VK_F2)) then
-  begin
-    acNewQSOExecute(nil);
-    key := 0
-  end;
 
   if ((Shift = [ssCTRL]) and (key = VK_1)) then
     frmTRXControl.rbRadio1.Checked := True;
@@ -5513,13 +5622,34 @@ begin
     SetSplit('8');
   if ((Shift = [ssCTRL]) and (key = VK_0)) then
     frmTRXControl.DisableSplit;
-  if ((Shift = [ssCTRL]) and (key = VK_W)) then
-    acSendSpot.Execute;
 
+  // ALT-Key > Keyboard Shortcuts for NewQSO GUI with ALT
+
+  if ((Shift = [ssAlt]) and (key = VK_B)) then
+    frmTRXControl.btnMemUp.Click;
+  if ((Shift = [ssAlt]) and (key = VK_F)) then
+  begin
+    dmUtils.EnterFreq;
+    key := 0
+  end;
   if ((Shift = [ssAlt]) and (key = VK_V)) then
     frmTRXControl.btnMemDwn.Click;
-  if ((Shift = [ssAlt]) and (key = VK_B)) then
-    frmTRXControl.btnMemUp.Click
+  if ((Shift = [ssAlt]) and (key = VK_W)) then
+    cmbQSL_S.text:='SB';
+  if ((Shift = [ssAlt]) and (key = VK_N)) then
+    cmbQSL_S.text:='N';
+  if ((Shift = [ssAlt]) and (key = VK_H)) then
+  begin
+    ShowHelp;
+    key := 0
+  end;
+  if ((Shift = [ssAlt]) and (key = VK_F2)) then
+  begin
+    acNewQSOExecute(nil);
+    key := 0
+  end;
+
+
 end;
 
 procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
@@ -6150,6 +6280,7 @@ begin
     idcall            := dmData.qQSOBefore.FieldByName('idcall').AsString;
     edtAward.Text     := Trim(dmData.qQSOBefore.FieldByName('award').AsString);
     edtState.Text     := Trim(dmData.qQSOBefore.FieldByName('state').AsString);
+    edtDOK.Text       := Trim(dmData.qQSOBefore.FieldByName('dok').AsString);
     lotw_qslr         := dmData.qQSOBefore.FieldByName('lotw_qslr').AsString;
     if lotw_qslr = 'L' then
     begin
@@ -6200,6 +6331,7 @@ begin
     idcall            := dmData.qCQRLOG.FieldByName('idcall').AsString;
     edtAward.Text     := dmData.qCQRLOG.FieldByName('award').AsString;
     edtState.Text     := dmData.qCQRLOG.FieldByName('state').AsString;
+    edtDOK.Text       := dmData.qCQRLOG.FieldByName('dok').AsString;
     lotw_qslr         := dmData.qCQRLOG.FieldByName('lotw_qslr').AsString;
     edtContestName.Text := dmData.qCQRLOG.FieldByName('contestname').AsString;
     edtContestSerialSent.Text := dmData.qCQRLOG.FieldByName('stx').AsString;
@@ -6412,7 +6544,13 @@ begin
         else if (StoreTo = 'state') and (edtState.Text='') then
           edtState.Text := County
       end
-    end //zip code
+    end; //zip code
+
+    if c_dok <> '' then
+    begin
+      edtDok.Text := c_dok
+    end;
+
   end;
   if edtState.Text<>'' then
     edtStateExit(nil);
@@ -7236,6 +7374,7 @@ end;
 procedure TfrmNewQSO.CheckForExternalTablesUpdate;
 begin
   CheckForDXCCTablesUpdate;
+  CheckForDOKTablesUpdate;
   CheckForQslManagersUpdate;
   CheckForMembershipUpdate
 end;
@@ -7247,6 +7386,18 @@ begin
   if cqrini.ReadBool('Program','CheckDXCCTabs',True) then
   begin
     Tab := TDXCCTabThread.Create(True);
+    Tab.FreeOnTerminate := True;
+    Tab.Start
+  end
+end;
+
+procedure TfrmNewQSO.CheckForDOKTablesUpdate;
+var
+  Tab   : TDOKTabThread;
+begin
+  if cqrini.ReadBool('Program','CheckDOKTabs',False) then
+  begin
+    Tab := TDOKTabThread.Create(True);
     Tab.FreeOnTerminate := True;
     Tab.Start
   end

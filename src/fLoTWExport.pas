@@ -429,6 +429,16 @@ begin
           Continue
         end
       end;
+
+      //DL7OAP 2020-06-14: github.com/ok2cqr/cqrlog/issues/292
+      //Propagation type RPT (repeater) should not be uploaded to LoTW
+      //because repeater contacts don't count and do not match the LoTW rule
+      if (uppercase(dmData.Q1.FieldByName('prop_mode').AsString) = 'RPT') then
+      begin
+        dmData.Q1.Next;
+        Continue
+      end;
+
       tmp :=  dmData.Q1.FieldByName('qsodate').AsString;
       tmp := copy(tmp,1,4) + copy(tmp,6,2) +copy(tmp,9,2);
       tmp := dmUtils.StringToADIF('<QSO_DATE',tmp);

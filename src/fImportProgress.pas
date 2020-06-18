@@ -23,7 +23,7 @@ uses
 type
   TImportProgressType = (imptRegenerateDXCC, imptImportDXCCTables, imptDownloadDXCCData, imptImportLoTWAdif,
                          imptImportQSLMgrs, imptDownloadQSLData, imptInsertQSLManagers, imptImporteQSLAdif,
-                         imptRemoveDupes, imptUpdateMembershipFiles);
+                         imptRemoveDupes, imptUpdateMembershipFiles, imptDownloadDOKData);
 
 type
 
@@ -46,6 +46,7 @@ type
     procedure ImportDXCCTables;
     procedure RegenerateDXCCStat;
     procedure DownloadDXCCData;
+    procedure DownloadDOKData;
     procedure ImportLoTWAdif;
     procedure ImportQSLMgrs;
     procedure DownloadQSLData;
@@ -88,6 +89,7 @@ begin
       imptRegenerateDXCC : RegenerateDXCCStat;
       imptImportDXCCTables : ImportDXCCTables;
       imptDownloadDXCCData : DownloadDXCCData;
+      imptDownloadDOKData : DownloadDOKData;
       imptImportLoTWAdif : ImportLoTWAdif;
       imptImportQSLMgrs : ImportQSLMgrs;
       imptDownloadQSLData  : DownloadQSLData;
@@ -459,6 +461,39 @@ begin
   finally
     http.Free;
     m.Free;
+  end
+end;
+
+procedure TfrmImportProgress.DownloadDOKData;
+var
+  HTTP   : THTTPSend;
+  m      : TFileStream;
+begin
+  FileName := dmData.HomeDir+'dok_data/doks.tar.gz';
+  if FileExists(FileName) then
+    DeleteFile(FileName);
+  http   := THTTPSend.Create;
+  m      := TFileStream.Create(FileName,fmCreate);
+  try
+    HTTP.Sock.OnStatus := @SockCallBack;
+    HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
+    HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
+    HTTP.UserName  := cqrini.ReadString('Program','User','');
+    HTTP.Password  := cqrini.ReadString('Program','Passwd','');
+
+    if HTTP.HTTPMethod('GET', 'https://www.df2et.de/cqrlog/doks.tar.gz') then
+    begin
+      http.Document.Seek(0,soBeginning);
+      m.CopyFrom(http.Document,HTTP.Document.Size);
+      if dmUtils.UnTarFiles(FileName,ExtractFilePath(FileName)) then
+      begin
+        Directory := ExtractFilePath(FileName);
+      end;
+    end;
+  finally
+    http.Free;
+    m.Free;
+    Close;
   end
 end;
 
