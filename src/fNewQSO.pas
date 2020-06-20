@@ -4346,7 +4346,7 @@ end;
 procedure TfrmNewQSO.edtGridKeyPress(Sender: TObject; var Key: char);
 begin
   //pass only format AB12cd34ef and BS/DEL keys
-  if (( Key<>#$8 ) and ( Key<>#$7F)) then
+  if (( Key<>#$8 ) and ( Key<>#$7F) and ( Key<>#22)) then
   begin
     case length(edtGrid.Text) of
       0,1  :  if Key in ['a'..'z'] then Key:= chr(ord(Key) - $20) else
