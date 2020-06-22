@@ -133,7 +133,7 @@ begin
       ini.WriteBool('Login','SaveToLocal',False);
       ini.WriteString('Login','Server',edtServer.Text);
       ini.WriteString('Login','Port',edtPort.Text);
-      ini.WriteString('Logini','User',edtUser.Text);
+      ini.WriteString('Login','User',edtUser.Text);
 
       if chkSavePass.Checked then
         ini.WriteString('Login','Pass',edtPass.Text)
@@ -173,7 +173,7 @@ begin
       grbLogin.Visible     := True;
       edtServer.Text       := ini.ReadString('Login','Server','127.0.0.1');
       edtPort.Text         := ini.ReadString('Login','Port','3306');
-      edtUser.Text         := ini.ReadString('Logini','User','');
+      edtUser.Text         := ini.ReadString('Login','User','');
       chkSavePass.Checked  := ini.ReadBool('Login','SavePass',False);
 
         if chkSavePass.Checked then
