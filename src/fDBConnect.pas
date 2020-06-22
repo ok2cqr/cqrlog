@@ -176,10 +176,10 @@ begin
       edtUser.Text         := ini.ReadString('Login','User','');
       chkSavePass.Checked  := ini.ReadBool('Login','SavePass',False);
 
-        if chkSavePass.Checked then
+      if chkSavePass.Checked then
         edtPass.Text := ini.ReadString('Login','Pass','')
       else
-        edtPass.Text := ini.ReadString('Login','Pass','');
+        edtPass.Text := '';
 
         chkAutoConn.Checked := ini.ReadBool('Login','AutoConnect',False);
       chkSavePassChange(nil);
