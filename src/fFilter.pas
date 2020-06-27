@@ -147,6 +147,7 @@ type
     procedure btnSelectDXCCClick(Sender: TObject);
     procedure chkRememberChange(Sender: TObject);
     procedure cmbBandSelectorChange(Sender: TObject);
+    procedure edtCallSignChange(Sender: TObject);
     procedure edtLocatorChange(Sender: TObject);
     procedure edtMyLocChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -573,6 +574,26 @@ begin
       end;
     end;
 
+end;
+
+procedure TfrmFilter.edtCallSignChange(Sender: TObject);
+var i:    integer;
+    s:    string;
+begin
+  if edtCallSign.Text<>'' then
+   begin
+     s:= '';
+     for i:=1 to length(edtCallSign.Text) do
+       begin
+         case edtCallSign.Text[i] of
+           'A'..'Z' : s:=s+ edtCallSign.Text[i];
+           '0'..'9' : s:=s+ edtCallSign.Text[i];
+                '/' : s:=s+ edtCallSign.Text[i];
+        end;
+       end;
+     edtCallSign.Text:=s;
+     edtCallSign.SelStart := Length(edtCallSign.Text);
+   end;
 end;
 
 
