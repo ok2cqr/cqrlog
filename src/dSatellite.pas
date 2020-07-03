@@ -27,6 +27,7 @@ type
   public
     function  GetSatShortName(Satellite : String) : String;
     function  GetPropShortName(Propagation : String) : String;
+    function  GetPropLongName(Propagation : String) : String;
 
     procedure LoadSatellitesFromFile;
     procedure LoadPropModesFromFile;
@@ -123,6 +124,18 @@ end;
 function TdmSatellite.GetPropShortName(Propagation : String) : String;
 begin
   Result := GetShortName(Propagation)
+end;
+
+function TdmSatellite.GetPropLongName(Propagation : String) : String;
+var
+  i : integer;
+begin
+  for i:=0 to ListOfPropModes.Count-1 do
+  begin
+    if (Pos(Propagation, ListOfPropModes[i]) = 1) then
+        break;
+  end;
+  Result := ListOfPropModes[i];
 end;
 
 function TdmSatellite.GetShortName(StringItem : String) : String;

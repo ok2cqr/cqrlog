@@ -2370,6 +2370,7 @@ var
   OpCall : String;
   ExchR  : String;
   ExchS  : String;
+  propmode  : String;
 
   Procedure MoveIndex(m:integer);    //within Buf limits
   Begin
@@ -2773,16 +2774,17 @@ begin
           //----------------------------------------------------
           //ClearAll;          THis removes QRZ data, not accepted!
           cbOffline.Checked := True;
-          call  := '';
-          sname := '';
-          qth   := '';
-          loc   := '';
-          mhz   := '';
-          mode  := '';
-          rstS  := '';
-          rstR  := '';
-          note  := '';
-          pwr   := '';
+          call     := '';
+          sname    := '';
+          qth      := '';
+          loc      := '';
+          mhz      := '';
+          mode     := '';
+          rstS     := '';
+          rstR     := '';
+          note     := '';
+          pwr      := '';
+          propmode := '';
           edtDate.Clear;
           //----------------------------------------------------
            if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date
@@ -2988,6 +2990,10 @@ begin
                       1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
                  end;
            end;
+           //----------------------------------------------------
+           propmode:= trim(StrBuf(index));
+           if dmData.DebugLevel>=1 then Writeln('Prop Mode :', propmode);
+           cmbPropagation.Text := dmSatellite.GetPropLongName(propmode);
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
