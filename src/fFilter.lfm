@@ -127,8 +127,8 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 225
-    Height = 15
-    Top = 592
+    Height = 17
+    Top = 594
     Width = 45
     Anchors = [akTop, akRight]
     Caption = 'Profile:'
@@ -139,8 +139,8 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 185
-    Height = 15
-    Top = 631
+    Height = 17
+    Top = 634
     Width = 85
     Anchors = [akTop, akRight]
     Caption = 'Membership:'
@@ -151,8 +151,8 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Control = lblSortBy
     AnchorSideRight.Side = asrBottom
     Left = 208
-    Height = 15
-    Top = 553
+    Height = 17
+    Top = 554
     Width = 62
     Anchors = [akTop, akRight]
     Caption = 'Group by:'
@@ -163,7 +163,7 @@ object frmFilter: TfrmFilter
     AnchorSideRight.Control = cmbSort
     AnchorSideRight.Side = asrBottom
     Left = 221
-    Height = 15
+    Height = 17
     Top = 514
     Width = 49
     Anchors = [akTop, akRight]
@@ -188,7 +188,6 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbCallsign
       AnchorSideTop.Control = gbCallsign
       Left = 8
-      Height = 33
       Top = 6
       Width = 130
       BorderSpacing.Left = 8
@@ -203,7 +202,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -217,7 +216,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 2
@@ -271,7 +270,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbDxcc
       AnchorSideTop.Control = gbDxcc
       Left = 8
-      Height = 33
+      Height = 34
       Top = 13
       Width = 95
       BorderSpacing.Left = 8
@@ -285,7 +284,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 25
-      Top = 47
+      Top = 48
       Width = 75
       BorderSpacing.Top = 1
       BorderSpacing.InnerBorder = 4
@@ -311,7 +310,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtFreqFrom
       AnchorSideRight.Control = edtFreqFrom
       Left = 10
-      Height = 15
+      Height = 17
       Top = 6
       Width = 35
       Anchors = [akTop, akRight]
@@ -324,8 +323,8 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = Label1
       AnchorSideTop.Control = edtFreqTo
       Left = 10
-      Height = 15
-      Top = 40
+      Height = 17
+      Top = 41
       Width = 17
       Caption = 'to:'
       ParentColor = False
@@ -335,7 +334,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = gbFreq
       AnchorSideRight.Side = asrBottom
       Left = 51
-      Height = 33
+      Height = 34
       Top = 6
       Width = 95
       Anchors = [akTop, akRight]
@@ -348,8 +347,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtFreqFrom
       AnchorSideTop.Side = asrBottom
       Left = 51
-      Height = 33
-      Top = 40
+      Height = 34
+      Top = 41
       Width = 95
       BorderSpacing.Top = 1
       TabOrder = 1
@@ -398,7 +397,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbDate
       AnchorSideTop.Control = gbDate
       Left = 6
-      Height = 15
+      Height = 17
       Top = 6
       Width = 39
       Anchors = [akTop, akLeft, akRight]
@@ -414,8 +413,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Side = asrCenter
       Left = 6
-      Height = 15
-      Top = 46
+      Height = 17
+      Top = 48
       Width = 17
       BorderSpacing.Top = 25
       Caption = 'to:'
@@ -427,7 +426,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = gbDate
       AnchorSideRight.Side = asrBottom
       Left = 32
-      Height = 33
+      Height = 34
       Top = 19
       Width = 114
       CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames, dsStartMonday]
@@ -449,8 +448,8 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = gbDate
       AnchorSideRight.Side = asrBottom
       Left = 32
-      Height = 33
-      Top = 58
+      Height = 34
+      Top = 59
       Width = 114
       CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames, dsStartMonday]
       DateOrder = doYMd
@@ -483,7 +482,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbLoc
       AnchorSideTop.Control = gbLoc
       Left = 8
-      Height = 33
+      Height = 34
       Top = 6
       Width = 95
       BorderSpacing.Left = 8
@@ -497,7 +496,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 1
@@ -508,7 +507,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -536,7 +535,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -550,7 +549,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 1
@@ -559,7 +558,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbQth
       AnchorSideTop.Control = gbQth
       Left = 6
-      Height = 33
+      Height = 34
       Top = 6
       Width = 142
       BorderSpacing.Left = 6
@@ -586,8 +585,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
       Left = 9
-      Height = 15
-      Top = 46
+      Height = 17
+      Top = 47
       Width = 22
       BorderSpacing.Left = 1
       Caption = 'VIA'
@@ -599,8 +598,8 @@ object frmFilter: TfrmFilter
       AnchorSideBottom.Control = cmbQSL_R
       AnchorSideBottom.Side = asrBottom
       Left = 155
-      Height = 15
-      Top = 63
+      Height = 17
+      Top = 61
       Width = 9
       Anchors = [akRight, akBottom]
       BorderSpacing.Top = 1
@@ -613,7 +612,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = cmbLoTW_qsls
       AnchorSideRight.Side = asrBottom
       Left = 360
-      Height = 15
+      Height = 17
       Top = 45
       Width = 36
       Anchors = [akTop, akRight]
@@ -625,7 +624,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbQsl
       AnchorSideTop.Control = gbQsl
       Left = 8
-      Height = 33
+      Height = 34
       Top = 13
       Width = 120
       BorderSpacing.Left = 8
@@ -746,7 +745,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = cmbeQSL_qsls
       AnchorSideRight.Side = asrBottom
       Left = 247
-      Height = 15
+      Height = 17
       Top = 45
       Width = 33
       Anchors = [akTop, akRight]
@@ -759,7 +758,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = cmbQSL_S
       AnchorSideRight.Side = asrBottom
       Left = 156
-      Height = 15
+      Height = 17
       Top = 14
       Width = 8
       Anchors = [akTop, akRight]
@@ -775,7 +774,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = lblEqsl
       AnchorSideRight.Side = asrBottom
       Left = 272
-      Height = 15
+      Height = 17
       Top = 14
       Width = 8
       Anchors = [akTop, akRight]
@@ -791,7 +790,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = lblLoTW
       AnchorSideRight.Side = asrBottom
       Left = 388
-      Height = 15
+      Height = 17
       Top = 14
       Width = 8
       Anchors = [akTop, akRight]
@@ -808,8 +807,8 @@ object frmFilter: TfrmFilter
       AnchorSideBottom.Control = cmbQSL_R
       AnchorSideBottom.Side = asrBottom
       Left = 271
-      Height = 15
-      Top = 63
+      Height = 17
+      Top = 61
       Width = 9
       Anchors = [akRight, akBottom]
       BorderSpacing.Top = 1
@@ -824,8 +823,8 @@ object frmFilter: TfrmFilter
       AnchorSideBottom.Control = cmbQSL_R
       AnchorSideBottom.Side = asrBottom
       Left = 387
-      Height = 15
-      Top = 63
+      Height = 17
+      Top = 61
       Width = 9
       Anchors = [akRight, akBottom]
       BorderSpacing.Top = 1
@@ -851,7 +850,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbContinent
       AnchorSideTop.Control = gbContinent
       Left = 6
-      Height = 33
+      Height = 34
       Top = 0
       Width = 95
       BorderSpacing.Left = 6
@@ -875,7 +874,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbIota
       AnchorSideTop.Control = gbIota
       Left = 6
-      Height = 33
+      Height = 34
       Top = 6
       Width = 142
       BorderSpacing.Left = 6
@@ -889,7 +888,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 1
@@ -900,7 +899,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -915,7 +914,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 86
+      Top = 87
       Width = 124
       BorderSpacing.Left = 6
       Caption = 'Only IOTA qsos'
@@ -941,7 +940,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 5
       Height = 23
-      Top = 46
+      Top = 47
       Width = 74
       Caption = 'Exactly'
       Checked = True
@@ -954,7 +953,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 5
       Height = 23
-      Top = 69
+      Top = 70
       Width = 73
       Caption = 'Include'
       TabOrder = 1
@@ -964,7 +963,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = gbRemarks
       Left = 5
-      Height = 33
+      Height = 34
       Top = 13
       Width = 142
       BorderSpacing.Top = 13
@@ -991,7 +990,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -1005,7 +1004,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 1
@@ -1014,7 +1013,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbAward
       AnchorSideTop.Control = gbAward
       Left = 6
-      Height = 33
+      Height = 34
       Top = 6
       Width = 142
       BorderSpacing.Left = 6
@@ -1039,7 +1038,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbMyLoc
       AnchorSideTop.Control = gbMyLoc
       Left = 8
-      Height = 33
+      Height = 34
       Top = 6
       Width = 95
       BorderSpacing.Left = 8
@@ -1053,7 +1052,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 1
@@ -1064,7 +1063,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 8
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -1090,7 +1089,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtWAZ
       AnchorSideRight.Control = edtWAZ
       Left = 13
-      Height = 15
+      Height = 17
       Top = 6
       Width = 30
       Anchors = [akTop, akRight]
@@ -1102,8 +1101,8 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = Label8
       AnchorSideTop.Control = edtITU
       Left = 13
-      Height = 15
-      Top = 40
+      Height = 17
+      Top = 41
       Width = 26
       Anchors = [akTop, akLeft, akRight]
       Caption = 'ITU'
@@ -1114,7 +1113,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = gbZones
       AnchorSideRight.Side = asrBottom
       Left = 101
-      Height = 33
+      Height = 34
       Top = 6
       Width = 45
       Anchors = [akTop, akRight]
@@ -1128,8 +1127,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtWAZ
       AnchorSideTop.Side = asrBottom
       Left = 101
-      Height = 33
-      Top = 40
+      Height = 34
+      Top = 41
       Width = 45
       BorderSpacing.Top = 1
       CharCase = ecUppercase
@@ -1141,8 +1140,8 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = cmbGroupBy
     AnchorSideTop.Side = asrBottom
     Left = 276
-    Height = 33
-    Top = 592
+    Height = 34
+    Top = 594
     Width = 360
     BorderSpacing.Top = 6
     ItemHeight = 0
@@ -1166,7 +1165,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbCounty
       AnchorSideTop.Control = gbCounty
       Left = 6
-      Height = 33
+      Height = 34
       Top = 6
       Width = 142
       BorderSpacing.Left = 6
@@ -1179,7 +1178,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -1193,7 +1192,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 2
@@ -1204,8 +1203,8 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = cmbProfile
     AnchorSideTop.Side = asrBottom
     Left = 276
-    Height = 32
-    Top = 631
+    Height = 33
+    Top = 634
     Width = 360
     BorderSpacing.Top = 6
     ItemHeight = 0
@@ -1231,8 +1230,8 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = cmbSort
     AnchorSideTop.Side = asrBottom
     Left = 276
-    Height = 33
-    Top = 553
+    Height = 34
+    Top = 554
     Width = 200
     BorderSpacing.Top = 6
     ItemHeight = 0
@@ -1305,7 +1304,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = gbState
       AnchorSideRight.Side = asrBottom
       Left = 6
-      Height = 33
+      Height = 34
       Top = 0
       Width = 95
       BorderSpacing.Left = 6
@@ -1318,7 +1317,7 @@ object frmFilter: TfrmFilter
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = gbPower
     Left = 276
-    Height = 33
+    Height = 34
     Top = 514
     Width = 200
     BorderSpacing.Left = 100
@@ -1365,8 +1364,8 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = Label19
       AnchorSideTop.Control = edtPwrTo
       Left = 13
-      Height = 15
-      Top = 39
+      Height = 17
+      Top = 40
       Width = 17
       Caption = 'to:'
       ParentColor = False
@@ -1376,8 +1375,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtPwrFrom
       AnchorSideTop.Side = asrBottom
       Left = 61
-      Height = 33
-      Top = 39
+      Height = 34
+      Top = 40
       Width = 95
       TabOrder = 0
     end
@@ -1386,7 +1385,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = gbPower
       AnchorSideRight.Side = asrBottom
       Left = 61
-      Height = 33
+      Height = 34
       Top = 6
       Width = 95
       Anchors = [akTop, akRight]
@@ -1398,7 +1397,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtPwrFrom
       AnchorSideRight.Control = edtPwrFrom
       Left = 13
-      Height = 15
+      Height = 17
       Top = 6
       Width = 35
       Anchors = [akTop, akRight]
@@ -1424,7 +1423,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbBand
       AnchorSideTop.Control = gbBand
       Left = 6
-      Height = 33
+      Height = 34
       Top = 6
       Width = 100
       BorderSpacing.Left = 6
@@ -1438,8 +1437,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = cmbBandSelector
       AnchorSideTop.Side = asrBottom
       Left = 6
-      Height = 45
-      Top = 45
+      Height = 51
+      Top = 46
       Width = 134
       BorderSpacing.Top = 6
       Caption = 'Select band for Freq'#10'FROM and TO preset'#10'values.'
@@ -1454,7 +1453,7 @@ object frmFilter: TfrmFilter
     Left = 479
     Height = 23
     Top = 514
-    Width = 155
+    Width = 154
     BorderSpacing.Left = 3
     Caption = 'Reverse filter (NOT)'
     TabOrder = 27
@@ -1476,7 +1475,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbContestEx
       AnchorSideTop.Control = gbContestEx
       Left = 6
-      Height = 33
+      Height = 34
       Hint = 'search for contest send serial number'
       Top = 6
       Width = 60
@@ -1491,9 +1490,9 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtSTX
       AnchorSideTop.Side = asrBottom
       Left = 6
-      Height = 33
+      Height = 34
       Hint = 'search for contest received serial number'
-      Top = 40
+      Top = 41
       Width = 60
       BorderSpacing.Left = 6
       BorderSpacing.Top = 1
@@ -1506,7 +1505,7 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = gbContestEx
       AnchorSideRight.Side = asrBottom
       Left = 86
-      Height = 33
+      Height = 34
       Hint = 'search for contest send message exchange'
       Top = 6
       Width = 60
@@ -1522,9 +1521,9 @@ object frmFilter: TfrmFilter
       AnchorSideRight.Control = edtSTXstr
       AnchorSideRight.Side = asrBottom
       Left = 86
-      Height = 33
+      Height = 34
       Hint = 'search for contest received message exchange'
-      Top = 40
+      Top = 41
       Width = 60
       Anchors = [akTop, akRight]
       BorderSpacing.Top = 1
@@ -1538,7 +1537,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtSTX
       AnchorSideTop.Side = asrCenter
       Left = 72
-      Height = 15
+      Height = 17
       Top = 15
       Width = 8
       Alignment = taCenter
@@ -1551,8 +1550,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtSRX
       AnchorSideTop.Side = asrCenter
       Left = 72
-      Height = 15
-      Top = 49
+      Height = 17
+      Top = 50
       Width = 9
       Alignment = taCenter
       Caption = 'R'
@@ -1564,8 +1563,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtSRX
       AnchorSideTop.Side = asrBottom
       Left = 29
-      Height = 15
-      Top = 73
+      Height = 17
+      Top = 75
       Width = 15
       Alignment = taCenter
       Caption = 'Nr'
@@ -1577,8 +1576,8 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Control = edtSRXstr
       AnchorSideTop.Side = asrBottom
       Left = 103
-      Height = 15
-      Top = 73
+      Height = 17
+      Top = 75
       Width = 27
       Alignment = taCenter
       Caption = 'Msg'
@@ -1603,7 +1602,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbContName
       AnchorSideTop.Control = gbContName
       Left = 6
-      Height = 33
+      Height = 34
       Hint = 'contestname, choose ADIF contest_id via combobox or type freestyle max 40 characters'
       Top = 0
       Width = 90
@@ -1850,7 +1849,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrCenter
       Left = 97
       Height = 23
-      Top = 5
+      Top = 6
       Width = 45
       BorderSpacing.Left = 1
       Caption = 'inc'
@@ -1876,8 +1875,8 @@ object frmFilter: TfrmFilter
     AnchorSideTop.Control = cmbGroupBy
     Left = 479
     Height = 23
-    Top = 553
-    Width = 132
+    Top = 554
+    Width = 131
     BorderSpacing.Left = 3
     Caption = 'Remember filter'
     OnChange = chkRememberChange
@@ -1902,7 +1901,7 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbDarcDok
       AnchorSideTop.Control = gbDarcDok
       Left = 6
-      Height = 33
+      Height = 34
       Top = 6
       Width = 132
       BorderSpacing.Left = 6
@@ -1915,7 +1914,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 40
+      Top = 41
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
@@ -1929,7 +1928,7 @@ object frmFilter: TfrmFilter
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 23
-      Top = 63
+      Top = 64
       Width = 73
       Caption = 'Include'
       TabOrder = 2
