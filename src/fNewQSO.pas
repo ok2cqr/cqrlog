@@ -2397,6 +2397,7 @@ var
   OpCall : String;
   ExchR  : String;
   ExchS  : String;
+  propmode  : String;
 
   Procedure MoveIndex(m:integer);    //within Buf limits
   Begin
@@ -2800,16 +2801,17 @@ begin
           //----------------------------------------------------
           //ClearAll;          THis removes QRZ data, not accepted!
           cbOffline.Checked := True;
-          call  := '';
-          sname := '';
-          qth   := '';
-          loc   := '';
-          mhz   := '';
-          mode  := '';
-          rstS  := '';
-          rstR  := '';
-          note  := '';
-          pwr   := '';
+          call     := '';
+          sname    := '';
+          qth      := '';
+          loc      := '';
+          mhz      := '';
+          mode     := '';
+          rstS     := '';
+          rstR     := '';
+          note     := '';
+          pwr      := '';
+          propmode := '';
           edtDate.Clear;
           //----------------------------------------------------
            if TryJulianDateToDateTime(int64Buf(index),DTim)  then  //date
@@ -3015,6 +3017,10 @@ begin
                       1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
                  end;
            end;
+           //----------------------------------------------------
+           propmode:= trim(StrBuf(index));
+           if dmData.DebugLevel>=1 then Writeln('Prop Mode :', propmode);
+           cmbPropagation.Text := dmSatellite.GetPropLongName(propmode);
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
@@ -4372,7 +4378,7 @@ end;
 procedure TfrmNewQSO.edtGridKeyPress(Sender: TObject; var Key: char);
 begin
   //pass only format AB12cd34ef and BS/DEL keys
-  if (( Key<>#$8 ) and ( Key<>#$7F)) then
+  if (( Key<>#$8 ) and ( Key<>#$7F) and ( Key<>#22)) then
   begin
     case length(edtGrid.Text) of
       0,1  :  if Key in ['a'..'z'] then Key:= chr(ord(Key) - $20) else

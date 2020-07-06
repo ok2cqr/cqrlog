@@ -188,12 +188,12 @@ object frmFilter: TfrmFilter
       AnchorSideLeft.Control = gbCallsign
       AnchorSideTop.Control = gbCallsign
       Left = 8
-      Height = 34
       Top = 6
       Width = 130
       BorderSpacing.Left = 8
       BorderSpacing.Top = 6
       CharCase = ecUppercase
+      OnChange = edtCallSignChange
       TabOrder = 0
     end
     object rbExactlyCall: TRadioButton

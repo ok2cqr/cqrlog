@@ -147,6 +147,7 @@ type
     procedure btnSelectDXCCClick(Sender: TObject);
     procedure chkRememberChange(Sender: TObject);
     procedure cmbBandSelectorChange(Sender: TObject);
+    procedure edtCallSignChange(Sender: TObject);
     procedure edtLocatorChange(Sender: TObject);
     procedure edtMyLocChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -575,22 +576,77 @@ begin
 
 end;
 
+procedure TfrmFilter.edtCallSignChange(Sender: TObject);
+var i:    integer;
+    s:    string;
+begin
+  if edtCallSign.Text<>'' then
+   begin
+     s:= '';
+     for i:=1 to length(edtCallSign.Text) do
+       begin
+         case edtCallSign.Text[i] of
+           'A'..'Z' : s:=s+ edtCallSign.Text[i];
+           '0'..'9' : s:=s+ edtCallSign.Text[i];
+                '/' : s:=s+ edtCallSign.Text[i];
+        end;
+       end;
+     edtCallSign.Text:=s;
+     edtCallSign.SelStart := Length(edtCallSign.Text);
+   end;
+end;
 
 procedure TfrmFilter.edtLocatorChange(Sender: TObject);
+var i:    integer;
+    s:    string;
 begin
    if rbExactlyLoc.Checked then
    Begin
      edtLocator.Text:=dmUtils.StdFormatLocator(edtLocator.Text);
      edtLocator.SelStart := Length(edtLocator.Text);
    end;
+   begin
+     if edtLocator.Text<>'' then
+      begin
+        s:= '';
+        for i:=1 to length(edtLocator.Text) do
+          begin
+            case edtLocator.Text[i] of
+              'A'..'Z' : s:=s+ edtLocator.Text[i];
+              'a'..'z' : s:=s+ edtLocator.Text[i];
+              '0'..'9' : s:=s+ edtLocator.Text[i];
+           end;
+          end;
+        edtLocator.Text:=s;
+        edtLocator.SelStart := Length(edtLocator.Text);
+      end;
+   end;
 end;
 
 procedure TfrmFilter.edtMyLocChange(Sender: TObject);
+var i:    integer;
+    s:    string;
 begin
   if rbExactlyMyLoc.Checked then
    Begin
      edtMyLoc.Text:=dmUtils.StdFormatLocator(edtMyLoc.Text);
      edtMyLoc.SelStart := Length(edtMyLoc.Text);
+   end;
+   begin
+     if edtMyLoc.Text<>'' then
+      begin
+        s:= '';
+        for i:=1 to length(edtMyLoc.Text) do
+          begin
+            case edtMyLoc.Text[i] of
+              'A'..'Z' : s:=s+ edtMyLoc.Text[i];
+              'a'..'z' : s:=s+ edtMyLoc.Text[i];
+              '0'..'9' : s:=s+ edtMyLoc.Text[i];
+           end;
+          end;
+        edtMyLoc.Text:=s;
+        edtMyLoc.SelStart := Length(edtMyLoc.Text);
+      end;
    end;
 end;
 
