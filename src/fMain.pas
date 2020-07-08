@@ -1268,7 +1268,7 @@ begin
     QSOMinute:= copy(QSOTime,4,2);
     url := cqrini.ReadString('LoTW', 'eQSViewAddr','https://www.eQSL.cc/qslcard/GeteQSL.cfm')+
            '?UserName='+Username+
-           '&Password='+EncodeURL(Password)+
+           '&Password='+dmUtils.EncodeURLData(Password)+
            '&CallsignFrom='+CallsignFrom+
            '&QSOYear='+QSOYear+
            '&QSOMonth='+QSOMonth +

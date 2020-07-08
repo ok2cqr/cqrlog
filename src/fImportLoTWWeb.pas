@@ -116,7 +116,7 @@ begin
     edtCall.Enabled        := False;
 
     user := cqrini.ReadString('LoTW','LoTWName','');
-    pass := EncodeURL(cqrini.ReadString('LoTW','LoTWPass',''));
+    pass :=dmUtils.EncodeURLData(cqrini.ReadString('LoTW','LoTWPass',''));
     http.Sock.OnStatus := @SockCallBack;
     HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
