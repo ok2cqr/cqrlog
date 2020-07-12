@@ -1,3 +1,22 @@
+{*
+todo:
+
+DONE -Contest name:  Use same predefined list as is used in contest form's contest name
+DONE -QSO print: let user design format mask (often published with contest rules)
+DONE REMOVED -Points counting:  consider giving up that. Claimed score is not needed (only nice to know)
+DONE -Add warning:  If preferences/station/contest info is not filled
+DONE - use form font size routines at formcreate (or show)
+DONE - save/load export settings
+DONE - write /tmp/CabReject.log for rejected qsos
+DONE- clear unused code and debugs
+- status counts to help manual score counting:
+    + worked countries
+    + worked qsos by continents,
+    + count of different entries in excange1 & exhange2 (if entry is loc count by 4 char)
+    ADDED SETTING + count for user defined country (perhaps)
+- help button works, but help itself needs now refreshing up to date
+- test test test
+*}
 unit fCabrilloExport;
 
 {$mode objfpc}{$H+}
@@ -6,50 +25,105 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, LCLType, LazFileUtils;
+  StdCtrls, ComCtrls, LCLType, Buttons, LazFileUtils, StrUtils, inifiles;
+
+
+const
+  cMaxExch = 32;  //cExhanges array Max size
+  cExhanges: array[0..32] of string[11] =
+    ('',
+    'stx', 'srx', 'stx_string', 'srx_string', 'itu', 'waz', 'loc', 'my_loc', 'iota', 'state',
+    'dok', 'county', 'name', 'my_name','qth', 'remarks', 'cont', 'pwr', 'freq', 'band',
+    'mode', 'prop_mode', 'satellite', 'qsodate', 'time_on', 'time_off', 'award', 'qso_dxcc', 'profile', 'idcall',
+    'rxfreq', 'contestname');
 
 type
 
   { TfrmCabrilloExport }
 
   TfrmCabrilloExport = class(TForm)
-    btnClose: TButton;
-    btnExport: TButton;
-    Button1: TButton;
-    cbPower: TComboBox;
-    cbContestRules: TComboBox;
-    dlgSave: TSaveDialog;
-    edtContestName: TEdit;
-    edtFileName: TEdit;
-    Label1: TLabel;
-    lblStatsSum: TLabel;
-    lblStatsContent: TLabel;
-    lblStats: TLabel;
-    lblContestRules: TLabel;
-    lblPower: TLabel;
-    lblError: TLabel;
-    lblContestName: TLabel;
-    lblDone: TLabel;
-    pbExport: TProgressBar;
-    multipliers: TStringList;
-    procedure btnExportClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    btnCabFrmFlt: TButton;
+    btnCabClose: TButton;
+    btnCabExport: TButton;
+    btnCabHelp: TSpeedButton;
+    btnCabBrowse: TButton;
+    btCabSave: TButton;
+    btCabLoad: TButton;
+    chkCabInfoSrst: TCheckBox;
+    chkCabInfoRrst: TCheckBox;
+    cmbCabInfoREx1: TComboBox;
+    cmbCabInfoREx2: TComboBox;
+    cmbCabPower: TComboBox;
+    cmbCabContestName: TComboBox;
+    cmbCabInfoSEx1: TComboBox;
+    cmbCabInfoSEx2: TComboBox;
+    cmbCabTailTxCount: TComboBox;
+    dlgCabSave: TSaveDialog;
+    edtCabCountC: TEdit;
+    edtCabCallWdt: TEdit;
+    edtCabLocation: TEdit;
+    edtCabInfoREx2Wdt: TEdit;
+    edtCabInfoSEx1Wdt: TEdit;
+    edtCabInfoSEx2Wdt: TEdit;
+    edtCabFileName: TEdit;
+    edtCabInfoREx1Wdt: TEdit;
+    edtCabSoapBox: TEdit;
+    gbCabInfoRcvd: TGroupBox;
+    gbCabInfoSent: TGroupBox;
+    gbCabQsoHeader: TGroupBox;
+    gbCabQsoTail: TGroupBox;
+    gbCabLayout: TGroupBox;
+    gbCabCoCount: TGroupBox;
+    lblCabQsoHeader1: TLabel;
+    lblCabSoapBox: TLabel;
+    lblCabQsoHeader: TLabel;
+    lblCabQsoTail: TLabel;
+    lblCabSEx1Cmb: TLabel;
+    lblCabSrxCmb: TLabel;
+    lblCabSEx2Cmb: TLabel;
+    lblCabfileName: TLabel;
+    lblCabStats: TLabel;
+    lblCabLocation: TLabel;
+    lblCabPower: TLabel;
+    lblCabError: TLabel;
+    lblCabContestName: TLabel;
+    lblCabDone: TLabel;
+    lblCabSrxStCmb: TLabel;
+    dlgCabOpen: TOpenDialog;
+    mCabStatistics: TMemo;
+    pbCabExport: TProgressBar;
+    procedure btCabLoadClick(Sender: TObject);
+    procedure btCabSaveClick(Sender: TObject);
+    procedure btnCabExportClick(Sender: TObject);
+    procedure btnCabBrowseClick(Sender: TObject);
+    procedure btnCabFrmFltClick(Sender: TObject);
+    procedure btnCabHelpClick(Sender: TObject);
+    procedure cmbCabContestNameChange(Sender: TObject);
+    procedure cmbCabContestNameExit(Sender: TObject);
+    procedure edtCabCallWdtExit(Sender: TObject);
+    procedure edtCabInfoREx2WdtExit(Sender: TObject);
+    procedure edtCabInfoREx1WdtExit(Sender: TObject);
+    procedure edtCabInfoSEx2WdtExit(Sender: TObject);
+    procedure edtCabInfoSEx1WdtExit(Sender: TObject);
+    procedure edtCabCountCExit(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender : TObject);
   private
     procedure SaveSettings;
-    procedure CabrilloMultipliersListCreate(contesttype: Integer);
-
+    function NonZero(s:String):String;
     function CabrilloMode(mode : String) : String;
-    function CabrilloBand(band : String) : String;
+    function CabrilloBandToFreq(band : String) : String;
     function CabrilloPower(power: integer): String;
-    function CabrilloQSOPoints(mode: String): Integer;
+    procedure saveCabLay(filename:string);
+    procedure loadCabLay(filename:string);
   public
     { public declarations }
   end;
 
 var
   frmCabrilloExport : TfrmCabrilloExport;
+  CountryToCount    : integer = 0;
 
 implementation
 {$R *.lfm}
@@ -61,25 +135,65 @@ uses dData,dUtils,dDXCC,fWorkedGrids, uMyIni;
 procedure TfrmCabrilloExport.FormShow(Sender : TObject);
 begin
   dmUtils.LoadWindowPos(self);
-  lblError.Visible := False;
-  edtFileName.Text  := cqrini.ReadString('CabrilloExport','FileName','');
-  if edtFileName.Text='' then
-    dlgSave.InitialDir := dmData.UsrHomeDir
+  lblCabError.Visible := False;
+  edtCabFileName.Text  := cqrini.ReadString('CabrilloExport','FileName','');
+  if edtCabFileName.Text='' then
+    dlgCabSave.InitialDir := dmData.UsrHomeDir
   else
-    dlgSave.InitialDir := ExtractFilePath(edtFileName.Text);
-  edtContestName.Text := cqrini.ReadString('CabrilloExport','ContestName','');
-  cbPower.ItemIndex := 0;
-  lblStats.Visible := False;
-  lblStatsContent.Visible := False;
-  lblStatsSum.Visible := False;
-  multipliers := TStringList.Create;
+    dlgCabSave.InitialDir := ExtractFilePath(edtCabFileName.Text);
+  cmbCabContestName.Text := cqrini.ReadString('CabrilloExport','ContestName','');
 
+  cmbCabPower.ItemIndex:= cqrini.ReadInteger('CabrilloExport','Power',0);
+  edtCabLocation.Text:= cqrini.ReadString('CabrilloExport','Location','');
+  edtCabSoapBox.Text:= cqrini.ReadString('CabrilloExport','SoapBox','');
+  edtCabCallWdt.Text:= cqrini.ReadString('CabrilloExport','CallsWidth', '13');
+
+  chkCabInfoSrst.Checked:= cqrini.ReadBool('CabrilloExport','incRSTs',True);
+  cmbCabInfoSEx1.ItemIndex:= cqrini.ReadInteger('CabrilloExport','StxOrder',0);
+  edtCabInfoSEx1Wdt.Text:= cqrini.ReadString('CabrilloExport','StxWidth','6');
+  cmbCabInfoSEx2.ItemIndex := cqrini.ReadInteger('CabrilloExport','StxStringOrder',0);
+  edtCabInfoSEx2Wdt.Text := cqrini.ReadString('CabrilloExport','StxStringWidth', '6');
+
+  chkCabInfoRrst.Checked:= cqrini.ReadBool('CabrilloExport','incRSTr',True);
+  cmbCabInfoREx1.ItemIndex:= cqrini.ReadInteger('CabrilloExport','SrxOrder',0);
+  edtCabInfoREx1Wdt.Text:= cqrini.ReadString('CabrilloExport','SrxWidth','6');
+  cmbCabInfoREx2.ItemIndex := cqrini.ReadInteger('CabrilloExport','SrxStringOrder',0);
+  edtCabInfoREx2Wdt.Text := cqrini.ReadString('CabrilloExport','SrxStringWidth', '6');
+  cmbCabTailTxCount.ItemIndex := cqrini.ReadInteger('CabrilloExport','TxCount',0);
+
+  CountryToCount:= cqrini.ReadInteger('CabrilloExport','CountryToCount',0);
+  if ( CountryToCount > 0) then  edtCabCountC.Text:= dmDXCC.PfxFromADIF(CountryToCount);
+
+  lblCabStats.Visible := False;
+  mCabStatistics.Visible:=False;
 end;
 
 procedure TfrmCabrilloExport.SaveSettings;
 begin
-  cqrini.WriteString('CabrilloExport','FileName',edtFileName.Text);
-  cqrini.WriteString('CabrilloExport','ContestName',edtContestName.Text);
+  cqrini.WriteString('CabrilloExport','FileName',edtCabFileName.Text);
+  cqrini.WriteString('CabrilloExport','ContestName',cmbCabContestName.Text);
+  cqrini.WriteInteger('CabrilloExport','Power',cmbCabPower.ItemIndex);
+  cqrini.WriteString('CabrilloExport','Location',edtCabLocation.Text);
+  cqrini.WriteString('CabrilloExport','SoapBox',edtCabSoapBox.Text);
+  cqrini.WriteString('CabrilloExport','CallsWidth', edtCabCallWdt.Text);
+
+  cqrini.WriteBool('CabrilloExport','incRSTs',chkCabInfoSrst.Checked);
+  cqrini.WriteInteger('CabrilloExport','StxOrder',cmbCabInfoSEx1.ItemIndex);
+  cqrini.WriteString('CabrilloExport','StxWidth', edtCabInfoSEx1Wdt.Text);
+  cqrini.WriteInteger('CabrilloExport','StxStringOrder',cmbCabInfoSEx2.ItemIndex);
+  cqrini.WriteString('CabrilloExport','StxStringWidth', edtCabInfoSEx2Wdt.Text);
+
+  cqrini.WriteBool('CabrilloExport','incRSTr',chkCabInfoRrst.Checked);
+  cqrini.WriteInteger('CabrilloExport','SrxOrder',cmbCabInfoREx1.ItemIndex);
+  cqrini.WriteString('CabrilloExport','SrxWidth', edtCabInfoREx1Wdt.Text);
+  cqrini.WriteInteger('CabrilloExport','SrxStringOrder',cmbCabInfoREx2.ItemIndex);
+  cqrini.WriteString('CabrilloExport','SrxStringWidth', edtCabInfoREx2Wdt.Text);
+
+  cqrini.WriteInteger('CabrilloExport','TxCount',cmbCabTailTxCount.ItemIndex);
+  cqrini.WriteInteger('CabrilloExport','CountryToCount',CountryToCount);
+
+  lblCabStats.Visible := False;
+  mCabStatistics.Visible:=False;
 end;
 
 function TfrmCabrilloExport.CabrilloMode(mode: string): String;
@@ -91,24 +205,34 @@ begin
     'AM':   Result := 'PH';
     'FM':   Result := 'PH';
     'RTTY': Result := 'RY';
-    'SSTV': Result := 'DG';
-  end; //case
+    else                     //remaining modes are digital (mostly)
+      Result := 'DG';
+  end;
 end;
 
-function TfrmCabrilloExport.CabrilloBand(band: string): String;
+function TfrmCabrilloExport.CabrilloBandToFreq(band: string): String;
 begin
-  Result := '';
   case band of
-    '6M':       Result := '50';
-    '4M':       Result := '70';
-    '2M':       Result := '144';
+    '160M':     Result := '1800';
+     '80M':     Result := '3500';
+     '40M':     Result := '7000';
+     '20M':     Result := '14000';
+     '15M':     Result := '21000';
+     '10M':     Result := '28000';
+      '6M':     Result := '50';
+      '4M':     Result := '70';
+      '2M':     Result := '144';
     '70CM':     Result := '432';
     '23CM':     Result := '1.2G';
     '13CM':     Result := '2.3G';
-    '9CM':      Result := '3.4G';
-    '6CM':      Result := '5.7G';
-    '3CM':      Result := '10G';
-    '1.25CM':   Result := '24G';
+     '9CM':     Result := '3.4G';
+     '6CM':     Result := '5.7G';
+     '3CM':     Result := '10G';
+  '1.25CM':     Result := '24G';
+     '6MM':     Result := '47G';
+     '4MM':     Result := '75G';
+    else
+     Result := '';
   end; //case
 end;
 
@@ -122,34 +246,6 @@ begin
   end;
 end;
 
-function TfrmCabrilloExport.CabrilloQSOPoints(mode: String): Integer;
-begin
-  Result := 0;
-  // Westphalia North and South Activities count QSO points based on mode
-  if (cbContestRules.ItemIndex = 0) or (cbContestRules.ItemIndex = 1) then
-  begin
-    case mode of
-      'FM':  Result := 2;
-      'SSB': Result := 4;
-      'CW':  Result := 6;
-    end;
-  end;
-end;
-
-procedure TfrmCabrilloExport.CabrilloMultipliersListCreate(contesttype: Integer);
-begin
-  case contesttype of
-    0: begin
-      multipliers.Delimiter := ';';
-      multipliers.DelimitedText := 'N01;N02;N03;N04;N05;N06;N07;N08;N09;N10;N11;N12;N13;N14;N15;N16;N17;N18;N19;N20;N21;N22;N23;N24;N25;N26;N28;N29;N30;N31;N32;N33;N34;N35;N36;N37;N38;N39;N40;N41;N42;N43;N44;N45;N46;N47;N48;N49;N50;N51;N52;N53;N54;N55;N56;N57;N58;N59;N60;N61;N62;WN;DVN;YLN;Z14;Z34;Z41;Z60';
-    end;
-    1: begin
-      multipliers.Delimiter := ';';
-      multipliers.DelimitedText := 'O01;O02;O03;O04;O05;O06;O07;O08;O09;O10;O11;O12;O13;O14;O15;O16;O17;O18;O19;O20;O21;O22;O23;O24;O25;O26;O27;O28;O29;O30;O31;O32;O33;O34;O35;O36;O37;O38;O39;O40;O41;O42;O43;O44;O45;O46;O47;O48;O49;O51;O52;O53;O54;O55;DVO;DWS;YLO;Z03;Z38;Z92;Z93';
-    end;
-  end;
-end;
-
 procedure TfrmCabrilloExport.FormClose(Sender : TObject;
   var CloseAction : TCloseAction);
 begin
@@ -157,18 +253,154 @@ begin
   dmUtils.SaveWindowPos(self)
 end;
 
-procedure TfrmCabrilloExport.Button1Click(Sender : TObject);
+procedure TfrmCabrilloExport.FormCreate(Sender: TObject);
+var i:integer;
 begin
-  if dlgSave.Execute then
-    edtFileName.Text := dlgSave.FileName
+  dmUtils.LoadWindowPos(self);
+  dmUtils.LoadFontSettings(self);
+  dmUtils.InsertContests(cmbCabContestName);
+  cmbCabInfoSEx1.Items.Clear;
+  cmbCabInfoSEx2.Items.Clear;
+  cmbCabInfoREx1.Items.Clear;
+  cmbCabInfoREx2.Items.Clear;
+  for i:=0 to cMaxExch do //cExhanges array Max size
+    Begin
+      cmbCabInfoSEx1.Items.Add(cExhanges[i]);
+      cmbCabInfoSEx2.Items.Add(cExhanges[i]);
+      cmbCabInfoREx1.Items.Add(cExhanges[i]);
+      cmbCabInfoREx2.Items.Add(cExhanges[i]);
+    end;
 end;
 
-procedure TfrmCabrilloExport.btnExportClick(Sender: TObject);
+procedure TfrmCabrilloExport.btnCabBrowseClick(Sender : TObject);
+begin
+  if dlgCabSave.Execute then
+    edtCabFileName.Text := dlgCabSave.FileName
+end;
+
+procedure TfrmCabrilloExport.btnCabFrmFltClick(Sender: TObject);
+begin
+if not dmData.IsFilter then
+  begin
+      Application.MessageBox('You must first use Contest Filter for qsos to export!','Error ...',mb_OK+mb_IconError);
+      exit
+  end;
+  cmbCabContestName.Text:='';
+  dmData.qCQRLOG.First;
+    while not dmData.qCQRLOG.eof do
+    begin
+      if (cmbCabContestName.Text='') then //set contest name from filtered qosos
+       Begin
+         if (dmData.qCQRLOG.FieldByName('contestname').AsString <> '') then
+          cmbCabContestName.Text:=dmData.qCQRLOG.FieldByName('contestname').AsString;
+       end
+      else
+       Begin  //if there are different contest names in filtered qsos put "?" instead
+         if ((cmbCabContestName.Text<>dmData.qCQRLOG.FieldByName('contestname').AsString)
+          and (dmData.qCQRLOG.FieldByName('contestname').AsString <> '')) then
+             cmbCabContestName.Text:='eh? Check filter results!';
+       end;
+     dmData.qCQRLOG.Next;
+    end;
+end;
+
+procedure TfrmCabrilloExport.btnCabHelpClick(Sender: TObject);
+begin
+  ShowHelp;
+end;
+
+procedure TfrmCabrilloExport.cmbCabContestNameChange(Sender: TObject);
+  var i:    integer;
+    s:    string;
+begin
+  if cmbCabContestName.Text<>'' then
+   begin
+     if pos('|', cmbCabContestName.Text)>1 then   //list selected item
+     cmbCabContestName.Text := ExtractWord(1,cmbCabContestName.Text,['|']);
+     s:= '';
+     for i:=1 to length(cmbCabContestName.Text) do
+       begin
+         case cmbCabContestName.Text[i] of
+           'A'..'Z' : s:=s+ cmbCabContestName.Text[i];
+           '0'..'9' : s:=s+ cmbCabContestName.Text[i];
+                '-' : s:=s+ cmbCabContestName.Text[i];
+        end;
+       end;
+     cmbCabContestName.Text:=s;
+     cmbCabContestName.SelStart := Length(cmbCabContestName.Text);
+   end;
+end;
+
+procedure TfrmCabrilloExport.cmbCabContestNameExit(Sender: TObject);
+begin
+  if pos('|', cmbCabContestName.Text)>1 then   //list selected item
+     cmbCabContestName.Text := ExtractWord(1,cmbCabContestName.Text,['|']);
+end;
+
+procedure TfrmCabrilloExport.edtCabCallWdtExit(Sender: TObject);
+begin
+  edtCabCallWdt.Text:=NonZero(edtCabCallWdt.Text);
+end;
+
+
+procedure TfrmCabrilloExport.edtCabInfoSEx1WdtExit(Sender: TObject);
+begin
+    edtCabInfoSEx1Wdt.Text :=NonZero( edtCabInfoSEx1Wdt.Text);
+end;
+
+procedure TfrmCabrilloExport.edtCabCountCExit(Sender: TObject);
 var
-  AllQSO     : Boolean=False;
-  f          : TextFile;
-  q          : String;
-  mycall     : String;
+  adif       : Word;
+  date       : TDateTime;
+  cont, WAZ, posun, ITU, lat, long, pfx, country: string;
+Begin
+  date := dmUtils.GetDateTime(0);
+  if dmDXCC.IsPrefix(edtCabCountC.Text,Date) then
+   Begin
+      cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
+      adif:=dmDXCC.id_country(edtCabCountC.Text,date,pfx,country,cont,itu,waz,posun,lat,long);
+      edtCabCountC.Text:= dmDXCC.PfxFromADIF(adif);
+      CountryToCount:= adif;
+   end
+   else
+    begin
+      edtCabCountC.Text:='';
+      CountryToCount:= 0;
+     end
+end;
+
+procedure TfrmCabrilloExport.edtCabInfoSEx2WdtExit(Sender: TObject);
+begin
+  edtCabInfoSEx2Wdt.Text:=NonZero(edtCabInfoSEx2Wdt.Text);
+end;
+
+procedure TfrmCabrilloExport.edtCabInfoREx1WdtExit(Sender: TObject);
+begin
+ edtCabInfoREx1Wdt.Text:=NonZero(edtCabInfoREx1Wdt.Text);
+end;
+procedure TfrmCabrilloExport.edtCabInfoREx2WdtExit(Sender: TObject);
+begin
+ edtCabInfoREx2Wdt.Text:=NonZero(edtCabInfoREx2Wdt.Text);
+end;
+
+function TfrmCabrilloExport.NonZero(s:String):String;
+var i:integer;
+begin
+    TryStrToInt(s,i);
+    if (i=0) then s:='1';
+    Result:=s;
+end;
+
+procedure TfrmCabrilloExport.btnCabExportClick(Sender: TObject);
+type
+   EachContinent=Record
+        Name, WkdPfxs: String;
+        QsoCount: Integer;
+ end;
+var
+  f,r        : TextFile;
+  tmp        : String;
+  mycall,call: String;
   myloc, loc : String;
   myname     : String;
   mailingaddress, zipcity : String;
@@ -179,30 +411,33 @@ var
   j          : Integer = 0;
   s          : TStringList;
   Date       : TDateTime;
-  callsign_list : TStringList;
-  dupe       : String;
   cont, WAZ, posun, ITU, lat, long, pfx, country: string;
-  message : String;
   category_band: String;
+  category_mode: String;
   address: TStringArray;
-  qsopoints  : Integer = 0;
-  multiplierpoints : Integer = 0;
-  worked_multipliers : TStringList;
+
+  UsrCountryCount       : integer = 0;
+  TotalCountryList      : TStringList;
+
+  Continents: array[ 0 .. 6 ] of EachContinent = (
+              (name: 'NA'; WkdPfxs: ''; QsoCount: 0),
+              (name: 'SA'; WkdPfxs: ''; QsoCount: 0),
+              (name: 'OC'; WkdPfxs: ''; QsoCount: 0),
+              (name: 'AS'; WkdPfxs: ''; QsoCount: 0),
+              (name: 'EU'; WkdPfxs: ''; QsoCount: 0),
+              (name: 'AF'; WkdPfxs: ''; QsoCount: 0),
+              (name: 'Locator'; WkdPfxs: ''; QsoCount: 0) //nice place for this :-)
+              );
+
+
 begin
   SaveSettings;
   date := dmUtils.GetDateTime(0);
   mycall := cqrini.ReadString('Station','Call','');
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-  adif := dmDXCC.id_country(mycall,date,pfx,country,cont,itu,waz,posun,lat,long);
-  dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE adif = ' + IntToStr(adif);
-  dmDXCC.qDXCCRef.Open;
-  if dmDXCC.qDXCCRef.RecordCount > 0 then
-  begin
-    country := dmDXCC.qDXCCRef.FieldByName('name').AsString;
-  end;
+  adif := dmDXCC.id_country(mycall,date,pfx,cont,country,itu,waz,posun,lat,long);
   myloc  := cqrini.ReadString('Station','LOC','');
-  if length(myloc) = 4 then myloc := myloc +'LL';
+  if length(myloc) = 4 then myloc := myloc +'ll';
   myname := cqrini.ReadString('Station','Name','');
   mailingaddress := cqrini.ReadString('Station','MailingAddress','');
   zipcity := cqrini.ReadString('Station','ZipCity','');
@@ -210,103 +445,185 @@ begin
   email := cqrini.ReadString('Station','Email','');
   club := cqrini.ReadString('Station','Club','');
 
-  CabrilloMultipliersListCreate(cbContestRules.ItemIndex);
-  worked_multipliers := TStringList.Create;
-
+  if (( mailingaddress ='') or (zipcity='') or (email='')) then
+   begin
+      Application.MessageBox('You should fill Preferences/Station/Contest info.'+LineEnding+
+                             'MailAddr,Zip and eMail should have content!'+LineEnding+
+                             '(at least "-")','Error ...',mb_OK+mb_IconError);
+      exit
+   end;
   if not dmData.IsFilter then
   begin
-      Application.MessageBox('You must filter a single band to export!','Error ...',mb_OK+mb_IconError);
+      Application.MessageBox('You must first use filter for qsos to export!','Error ...',mb_OK+mb_IconError);
       exit
   end;
-  if (dmData.qCQRLOG.FieldByName('band').AsString = '') then
-  begin
-      Application.MessageBox('You must filter a single band to export!','Error ...',mb_OK+mb_IconError);
-      exit
-  end;
-  if FileExistsUTF8(edtFileName.Text) then
+
+  if FileExistsUTF8(edtCabFileName.Text) then
   begin
     if Application.MessageBox('File already exists,overwrite it?','Question ...',mb_YesNo
                               +mb_IconQuestion)=mrYes then
-      DeleteFileUTF8(edtFileName.Text)
+      DeleteFileUTF8(edtCabFileName.Text)
     else
       exit
   end;
-  if (trim(edtFileName.Text)='') then
+  if (trim(edtCabFileName.Text)='') then
   begin
     Application.MessageBox('You must choose file to export!','Error ...',mb_OK+mb_IconError);
     exit
   end;
-  pbExport.Position := 0;
-  lblDone.Visible   := False;
-  pbExport.Visible  := True;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.Close;
-  if AllQSO then
-    dmData.Q.SQL.Text := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
-                         'from view_cqrlog_main_by_qsodate order by qsodate,time_on'
-  else begin
-    q := dmData.qCQRLOG.SQL.Text;
-    if Pos('order by',LowerCase(q)) > 0 then
-      q := copy(q,1,Pos('order by',LowerCase(q))-1);
-    q := q + ' order by qsodate,time_on';
-    dmData.Q.SQL.Text := q;
-  end;
-  if dmData.DebugLevel >=1 then
-    Writeln(dmData.Q.SQL.Text);
+  pbCabExport.Position := 0;
+  lblCabDone.Visible   := False;
+  pbCabExport.Visible  := True;
+
+  TotalCountryList := TStringList.Create;
+  TotalCountryList.Sorted:=True;
+  TotalCountryList.Duplicates:=dupIgnore;
   s := TStringList.Create;
-  callsign_list := TStringList.Create;
-  category_band := 'ALL';
+  category_band := '';
+  category_mode := '';
   try try
-    dmData.trQ.StartTransaction;
-    dmData.Q.Open;
-    pbExport.Max := dmData.Q.RecordCount;
-    while not dmData.Q.Eof do
+    AssignFile(r,'/tmp/CabrilloReject.log');
+    Rewrite(r);
+    pbCabExport.Max := dmData.qCQRLOG.RecordCount;
+    dmData.qCQRLOG.Last;
+    while not dmData.qCQRLOG.bof do
     begin
+      tmp:='';
       // Check for missing mandatory fields
-      if (dmData.Q.FieldByName('rst_s').AsString = '') then
+      if (
+          (dmData.qCQRLOG.FieldByName('qsodate').AsString  = '')
+       or (dmData.qCQRLOG.FieldByName('time_on').AsString  = '')
+       or (dmData.qCQRLOG.FieldByName('callsign').AsString = '')
+       or (CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString) = '')  //warc or missing band
+       or (dmData.qCQRLOG.FieldByName('mode').AsString  = '')  //missing mode
+         ) then
       begin
-        pbExport.StepIt;
-        dmData.Q.Next;
+        writeln(r,dmData.qCQRLOG.FieldByName('qsodate').AsString,' ',
+                dmData.qCQRLOG.FieldByName('time_on').AsString,' ',
+                dmData.qCQRLOG.FieldByName('callsign').AsString,' ',
+                dmData.qCQRLOG.FieldByName('band').AsString,' ',
+                dmData.qCQRLOG.FieldByName('mode').AsString ,' ',
+                CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString));
+        pbCabExport.StepIt;
+        dmData.qCQRLOG.Prior;
         Continue;
       end;
-      if (dmData.Q.FieldByName('rst_r').AsString = '') then
-      begin
-        pbExport.StepIt;
-        dmData.Q.Next;
-        Continue;
-      end;
+
       // Check for single or ALL band
-      if (CabrilloBand(dmData.Q.FieldByName('band').AsString) <> category_band) then
-      begin
-           if (category_band = 'ALL') then
-              category_band := CabrilloBand(dmData.Q.FieldByName('band').AsString)
-           else
-               category_band := 'ALL';
-      end;
-      i := i+1;
-      s.Add('QSO: '+
-            Format('%5S', [CabrilloBand(dmData.Q.FieldByName('band').AsString)])+' '+
-            CabrilloMode(dmData.Q.FieldByName('mode').AsString)+' '+
-            dmData.Q.FieldByName('qsodate').AsString+' '+
-            StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+' '+
-            Format('%-13S', [mycall])+' '+
-            Format('%3S', [dmData.Q.FieldByName('rst_s').AsString])+' '+
-            Format('%-6S', [dmData.Q.FieldByName('stx_string').AsString])+' '+
-            // UpperCase(myloc)+' '+  // My locator is not needed here
-            Format('%-13S', [dmData.Q.FieldByName('callsign').AsString])+' '+
-            Format('%3S', [dmData.Q.FieldByName('rst_r').AsString])+' '+
-            Format('%-6S', [dmData.Q.FieldByName('srx_string').AsString])+' '+
-            '0' // Only single Ops supported currently so put transmitter ID to 0
-      );
-      qsopoints += CabrilloQSOPoints(dmData.Q.FieldByName('mode').AsString);
-      if (multipliers.IndexOf(dmData.Q.FieldByName('srx_string').AsString) >= 0) and
-         (worked_multipliers.IndexOf(dmData.Q.FieldByName('srx_string').AsString) < 0) then
-      begin
-            worked_multipliers.Add(dmData.Q.FieldByName('srx_string').AsString);
-            multiplierpoints += 1;
-      end;
-      pbExport.StepIt;
-      dmData.Q.Next
+      if ( category_band='') then
+          category_band:= dmData.qCQRLOG.FieldByName('band').AsString //initial band
+        else
+       begin
+          if (dmData.qCQRLOG.FieldByName('band').AsString <> category_band) then  //if other bands found then ALL
+            category_band := 'ALL';
+       end;
+        // Check for single or MIXED mode
+      if ( category_mode='') then
+          category_mode:= dmData.qCQRLOG.FieldByName('mode').AsString //initial mode
+        else
+       begin
+          if (dmData.qCQRLOG.FieldByName('mode').AsString <> category_mode) then  //if other modes found then MIXED
+            category_mode := 'MIXED';
+       end;
+
+      loc  := copy(dmData.qCQRLOG.FieldByName('loc').AsString,1,4);
+      call := Format('%-'+edtCabCallWdt.Text+'.'+edtCabCallWdt.Text+'s', [dmData.qCQRLOG.FieldByName('callsign').AsString]);
+      adif := dmDXCC.id_country(call,date,pfx,cont,country,itu,waz,posun,lat,long);
+      TotalCountryList.Add(pfx);
+
+      if ((CountryToCount<>0) and (adif = CountryToCount)) then inc(UsrCountryCount);
+      case cont of
+             'NA':       Begin
+                           inc(Continents[0].QsoCount);
+                           if (pos(pfx,Continents[0].WkdPfxs)=0 )then
+                              Continents[0].WkdPfxs:= Continents[0].WkdPfxs+pfx+' ';
+                         end;
+             'SA':       Begin
+                           inc(Continents[1].QsoCount);
+                           if (pos(pfx,Continents[1].WkdPfxs)=0 )then
+                              Continents[1].WkdPfxs:= Continents[1].WkdPfxs+pfx+' ';
+                         end;
+             'OC':       Begin
+                           inc(Continents[2].QsoCount);
+                           if (pos(pfx,Continents[2].WkdPfxs)=0 )then
+                              Continents[2].WkdPfxs:= Continents[2].WkdPfxs+pfx+' ';
+                         end;
+             'AS':       Begin
+                           inc(Continents[3].QsoCount);
+                           if (pos(pfx,Continents[3].WkdPfxs)=0 )then
+                              Continents[3].WkdPfxs:= Continents[3].WkdPfxs+pfx+' ';
+                         end;
+             'EU':       Begin
+                           inc(Continents[4].QsoCount);
+                           if (pos(pfx,Continents[4].WkdPfxs)=0 )then
+                              Continents[4].WkdPfxs:= Continents[4].WkdPfxs+pfx+' ';
+                         end;
+             'AF':       Begin
+                           inc(Continents[5].QsoCount);
+                           if (pos(pfx,Continents[5].WkdPfxs)=0 )then
+                              Continents[5].WkdPfxs:= Continents[5].WkdPfxs+pfx+' ';
+                         end;
+       end; //case
+
+       if (length(loc)=4) then
+                         Begin
+                           if (pos(loc,Continents[6].WkdPfxs)=0 )then
+                            begin
+                              Continents[6].WkdPfxs:= Continents[6].WkdPfxs+loc+' ';
+                              inc(Continents[6].QsoCount);  //here not total, but different count
+                            end;
+                         end;
+
+      tmp:= 'QSO: '+
+            Format('%5s', [CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' '+
+            CabrilloMode(dmData.qCQRLOG.FieldByName('mode').AsString)+' '+
+            dmData.qCQRLOG.FieldByName('qsodate').AsString+' '+
+            StringReplace(dmData.qCQRLOG.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+' '+
+            Format('%-'+edtCabCallWdt.Text+'.'+edtCabCallWdt.Text+'s', [mycall]);
+            //end of common header
+
+            if chkCabInfoSrst.Checked then tmp:=tmp+' '+ Format('%-3s', [dmData.qCQRLOG.FieldByName('rst_s').AsString]);
+
+            if (cmbCabInfoSEx1.ItemIndex > 0) then
+             Begin
+                 if (cmbCabInfoSEx1.Text = 'my_name') then
+                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx1Wdt.Text+'.'+edtCabInfoSEx1Wdt.Text+'s', [myname])
+                  else
+                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx1Wdt.Text+'.'+edtCabInfoSEx1Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                     cmbCabInfoSEx1.Text).AsString]) ;
+             end;
+             if (cmbCabInfoSEx2.ItemIndex > 0) then
+             Begin
+                 if (cmbCabInfoSEx2.Text = 'my_name') then
+                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx2Wdt.Text+'.'+edtCabInfoSEx2Wdt.Text+'s', [myname])
+                  else
+                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx2Wdt.Text+'.'+edtCabInfoSEx2Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                     cmbCabInfoSEx2.Text).AsString]) ;
+             end;
+             //end of info sent
+
+             tmp:=tmp+' '+ call;
+             if chkCabInfoRrst.Checked then tmp:=tmp+' '+ Format('%-3s', [dmData.qCQRLOG.FieldByName('rst_r').AsString]);
+
+             if (cmbCabInfoREx1.ItemIndex > 0) then
+             Begin
+                   tmp:=tmp+' '+Format('%-'+edtCabInfoREx1Wdt.Text+'.'+edtCabInfoREx1Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                     cmbCabInfoREx1.Text).AsString]) ;
+             end;
+             if (cmbCabInfoREx2.ItemIndex > 0) then
+             Begin
+                   tmp:=tmp+' '+Format('%-'+edtCabInfoREx2Wdt.Text+'.'+edtCabInfoREx2Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                     cmbCabInfoREx2.Text).AsString]) ;
+             end;
+            //end of info rcvd
+
+             if (cmbCabTailTxCount.Text<>'') then tmp:=tmp+' '+Format('%1s',[ cmbCabTailTxCount.Text]);
+
+      s.Add(tmp);
+
+      inc(i);
+      pbCabExport.StepIt;
+      dmData.qCQRLOG.Prior
     end;
   except
     on E : Exception do
@@ -316,35 +633,50 @@ begin
     end
   end
   finally
-    lblDone.Visible := True;
-    dmData.trQ.Rollback;
-    dmData.Q.Close
+    lblCabDone.Visible := True;
+    CloseFile(r);
   end;
+
+  //Check mode result before writing header
+  case category_mode of
+         'CW',
+         'FM',
+         'RTTY',
+         'SSB',
+         'MIXED'  : Begin //all is ok
+                       if dmData.DebugLevel >=1 then  writeln('CATEGORY-MODE:', category_mode);
+                    end;
+         else category_mode:='DIGI';
+  end;
+
+
   try
-    AssignFile(f,edtFileName.Text);
+    AssignFile(f,edtCabFileName.Text);
     Rewrite(f);
     // This is Cabrillo format v3.0
     Writeln(f,'START-OF-LOG: 3.0');
     Writeln(f,'CREATED-BY: CQRLOG '+dmData.VersionString);
-    Writeln(f,'CONTEST: '+edtContestName.Text);
+    Writeln(f,'CONTEST: '+cmbCabContestName.Text);
     Writeln(f,'CALLSIGN: '+mycall);
     Writeln(f,'CATEGORY-OPERATOR: SINGLE-OP');  // Only single op supported currently
     Writeln(f,'CATEGORY-BAND: '+category_band);
-    Writeln(f,'CATEGORY-POWER: '+CabrilloPower(cbPower.ItemIndex));
+    Writeln(f,'CATEGORY-MODE: '+category_mode);
+    Writeln(f,'CATEGORY-POWER: '+CabrilloPower(cmbCabPower.ItemIndex));
     Writeln(f,'CATEGORY-ASSISTED: NON-ASSISTED'); //  Only non-assisted currently
     Writeln(f,'CATEGORY-TRANSMITTER: ONE');  // Only one transmitter for now
-    Writeln(f,'LOCATION: ');
-    Writeln(f,'CLAIMED-SCORE: '+IntToStr(qsopoints*multiplierpoints));
+    Writeln(f,'GRID-LOCATOR: '+UPcase(myloc)); //non standard upcase required
+    Writeln(f,'LOCATION: '+edtCabLocation.Text);
+    Writeln(f,'CLAIMED-SCORE: ');
     Writeln(f,'SPECIFIC: ');
     Writeln(f,'CLUB: '+club);
     Writeln(f,'NAME: '+myname);
     Writeln(f,'ADDRESS: '+mailingaddress);
     Writeln(f,'ADDRESS-CITY: '+address[1]);
-    Writeln(f,'ADDRESS-STATE: '+country);
+    Writeln(f,'ADDRESS-COUNTRY: '+country);
     Writeln(f,'ADDRESS-STATE-PROVINCE: ');
     Writeln(f,'ADDRESS-POSTAL-CODE: '+address[0]);
     Writeln(f,'EMAIL: '+email);
-    Writeln(f,'SOAPBOX:');
+    Writeln(f,'SOAPBOX:'+edtCabSoapBox.Text);
 
     for j:=0 to pred(s.Count) do
       Writeln(f,s[j]);
@@ -358,24 +690,124 @@ begin
                                mb_OK+mb_IconError)
       end
   end;
-  if ((pbExport.Max - i) > 0) then
+  if ((pbCabExport.Max - i) > 0) then
   begin
-    lblError.Caption := IntToStr(pbExport.Max - i)+' of '+IntToStr(pbExport.Max)+' entries were ignored! Please check log entries.';
-    lblError.Font.Color := clRed;
-  end
-  else
-  begin
-    lblError.Caption := IntToStr(s.Count)+' entries were exported.';
-    lblStats.Visible := True;
-    lblStatsContent.Caption := 'Valid QSOs: '+IntToStr(s.Count)+LineEnding+
-                        'QSO Points: '+IntToStr(qsopoints)+LineEnding+
-                        'Multipliers: '+IntToStr(multiplierpoints)+LineEnding;
-    lblStatsContent.Visible := True;
-    lblStatsSum.Caption := 'Total Sum: '+IntToStr(qsopoints*multiplierpoints);
-    lblStatsSum.Visible := True;
+    lblCabError.Caption := IntToStr(pbCabExport.Max - i)+' of '+IntToStr(pbCabExport.Max)+' entries were ignored! Please check /tmp/CabrilloReject.log entries.';
+    lblCabError.Font.Color := clRed;
+    lblCabError.Visible := True;
   end;
-  lblError.Visible := True;
+
+    lblCabError.Caption := IntToStr(s.Count)+' entries were exported.';
+    lblCabStats.Visible := True;
+    lblCabStats.Font.Style:=[fsBold]; //Bold disappears when visible false->true (why?)
+    mCabStatistics.Clear;
+    mCabStatistics.Lines.Add( 'Valid QSOs: '+IntToStr(s.Count));
+    mCabStatistics.Lines.Add('Total country count: '+IntToStr(TotalCountryList.Count));
+    if (CountryToCount<>0) then
+       mCabStatistics.Lines.Add('User def pfx count: '+IntToStr(UsrCountryCount));
+    if (( cmbCabInfoREx1.Text='loc') or (cmbCabInfoREx2.Text='loc')) then
+       mCabStatistics.Lines.Add(Continents[6].Name+' Count: '+IntToStr(Continents[6].QsoCount)+'   '+Continents[6].WkdPfxs);
+
+    for j:=0 to 5 do
+      Begin
+          mCabStatistics.Lines.Add(Continents[j].Name+' Qsos:'+Format('%4s',[IntToStr(Continents[j].QsoCount)])+' Pfx: '+Continents[j].WkdPfxs);
+      end;
+    mCabStatistics.Visible:=true;
 end;
+
+procedure TfrmCabrilloExport.btCabSaveClick(Sender: TObject);
+var
+  f : string ;
+begin
+  if (cmbCabContestName.Text<>'') then
+   begin
+    f:= dlgCabSave.FileName;
+    dlgCabSave.FileName:= cmbCabContestName.Text;
+   end;
+  dlgCabSave.DefaultExt:='.templ';
+  dlgCabSave.Filter:='Cabrillo template|*.templ';
+  dlgCabSave.InitialDir := dmData.HomeDir;
+  if dlgCabSave.Execute then saveCabLay(dlgCabSave.FileName);
+  //return export file settings
+  dlgCabSave.DefaultExt:='.cbr';
+  dlgCabSave.Filter:='Cabrillo file|*.cbr';
+  dlgCabSave.FileName:= f;
+end;
+
+procedure TfrmCabrilloExport.btCabLoadClick(Sender: TObject);
+begin
+  dlgCabOpen.InitialDir := dmData.HomeDir;
+  if dlgCabOpen.Execute then loadCabLay(dlgCabOpen.FileName);
+end;
+procedure TfrmCabrilloExport.saveCabLay(filename:String);
+var
+  filini : TIniFile;
+begin
+    filini := TIniFile.Create(fileName);
+    try
+      filini.WriteString('CabrilloExport','FileName',edtCabFileName.Text);
+      filini.WriteString('CabrilloExport','ContestName',cmbCabContestName.Text);
+      filini.WriteInteger('CabrilloExport','Power',cmbCabPower.ItemIndex);
+      filini.WriteString('CabrilloExport','Location',edtCabLocation.Text);
+      filini.WriteString('CabrilloExport','SoapBox',edtCabSoapBox.Text);
+      filini.WriteString('CabrilloExport','CallsWidth', edtCabCallWdt.Text);
+
+      filini.WriteBool('CabrilloExport','incRSTs',chkCabInfoSrst.Checked);
+      filini.WriteInteger('CabrilloExport','StxOrder',cmbCabInfoSEx1.ItemIndex);
+      filini.WriteString('CabrilloExport','StxWidth', edtCabInfoSEx1Wdt.Text);
+      filini.WriteInteger('CabrilloExport','StxStringOrder',cmbCabInfoSEx2.ItemIndex);
+      filini.WriteString('CabrilloExport','StxStringWidth', edtCabInfoSEx2Wdt.Text);
+
+      filini.WriteBool('CabrilloExport','incRSTr',chkCabInfoRrst.Checked);
+      filini.WriteInteger('CabrilloExport','SrxOrder',cmbCabInfoREx1.ItemIndex);
+      filini.WriteString('CabrilloExport','SrxWidth', edtCabInfoREx1Wdt.Text);
+      filini.WriteInteger('CabrilloExport','SrxStringOrder',cmbCabInfoREx2.ItemIndex);
+      filini.WriteString('CabrilloExport','SrxStringWidth', edtCabInfoREx2Wdt.Text);
+
+      filini.WriteInteger('CabrilloExport','TxCount',cmbCabTailTxCount.ItemIndex);
+      filini.WriteInteger('CabrilloExport','CountryToCount',CountryToCount);
+    finally
+      filini.Free
+    end;
+end;
+Procedure TfrmCabrilloExport.loadCabLay(filename:string);
+var
+  filini : TIniFile;
+  begin
+    filini := TIniFile.Create(fileName);
+    try
+        edtCabFileName.Text  := filini.ReadString('CabrilloExport','FileName','');
+        if edtCabFileName.Text='' then
+          dlgCabSave.InitialDir := dmData.UsrHomeDir
+        else
+          dlgCabSave.InitialDir := ExtractFilePath(edtCabFileName.Text);
+        cmbCabContestName.Text := filini.ReadString('CabrilloExport','ContestName','');
+
+        cmbCabPower.ItemIndex:= filini.ReadInteger('CabrilloExport','Power',0);
+        edtCabLocation.Text:= filini.ReadString('CabrilloExport','Location','');
+        edtCabSoapBox.Text:= filini.ReadString('CabrilloExport','SoapBox','');
+        edtCabCallWdt.Text:= filini.ReadString('CabrilloExport','CallsWidth', '13');
+
+        chkCabInfoSrst.Checked:= filini.ReadBool('CabrilloExport','incRSTs',True);
+        cmbCabInfoSEx1.ItemIndex:= filini.ReadInteger('CabrilloExport','StxOrder',0);
+        edtCabInfoSEx1Wdt.Text:= filini.ReadString('CabrilloExport','StxWidth','6');
+        cmbCabInfoSEx2.ItemIndex := filini.ReadInteger('CabrilloExport','StxStringOrder',0);
+        edtCabInfoSEx2Wdt.Text := filini.ReadString('CabrilloExport','StxStringWidth', '6');
+
+        chkCabInfoRrst.Checked:= filini.ReadBool('CabrilloExport','incRSTr',True);
+        cmbCabInfoREx1.ItemIndex:= filini.ReadInteger('CabrilloExport','SrxOrder',0);
+        edtCabInfoREx1Wdt.Text:= filini.ReadString('CabrilloExport','SrxWidth','6');
+        cmbCabInfoREx2.ItemIndex := filini.ReadInteger('CabrilloExport','SrxStringOrder',0);
+        edtCabInfoREx2Wdt.Text := filini.ReadString('CabrilloExport','SrxStringWidth', '6');
+        cmbCabTailTxCount.ItemIndex := filini.ReadInteger('CabrilloExport','TxCount',0);
+
+        CountryToCount:= filini.ReadInteger('CabrilloExport','CountryToCount',0);
+        if ( CountryToCount > 0) then  edtCabCountC.Text:= dmDXCC.PfxFromADIF(CountryToCount);
+    finally
+      filini.Free
+    end
+end;
+
 
 end.
 
