@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process;
 
 type
 
@@ -61,6 +61,14 @@ type
     procedure btnUtilsClick(Sender: TObject);
     procedure chkSavePassChange(Sender: TObject);
     procedure chkSaveToLocalClick(Sender: TObject);
+    procedure edtPassEnter(Sender: TObject);
+    procedure edtPassExit(Sender: TObject);
+    procedure edtPortEnter(Sender: TObject);
+    procedure edtPortExit(Sender: TObject);
+    procedure edtServerEnter(Sender: TObject);
+    procedure edtServerExit(Sender: TObject);
+    procedure edtUserEnter(Sender: TObject);
+    procedure edtUserExit(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -72,7 +80,9 @@ type
   private
     RemoteMySQL : Boolean;
     AskForDB    : Boolean;
-
+    editCheck   :String;
+    procedure FromMenu_CloseExist;
+    function Mysql_safe_running: boolean;
     procedure SaveLogin;
     procedure LoadLogin;
     procedure UpdateGridFields;
@@ -90,10 +100,51 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, fNewLog;
+uses dData, dUtils, fNewLog, fDXCluster,fNewQSO;
 
 { TfrmDBConnect }
 
+procedure TfrmDBConnect.FromMenu_CloseExist;
+          begin
+           if  OpenFromMenu then
+            Begin
+                    frmDXCluster.StopAllConnections;
+                    frmNewQSO.CloseAllWindows;
+                    frmNewQSO.SaveSettings;
+                    dmData.CloseDatabases;
+                    frmNewQSO.DBServerChanged :=True;
+            end;
+          end;
+//------------------------------------------
+function TfrmDBConnect.Mysql_safe_running: boolean;
+var
+  res       : Byte;
+  SearchRec : TSearchRec;
+  f         : TextFile;
+  pid       : String = '';
+  pidfile   : String = '';
+  p         : TProcess;
+begin
+  res := FindFirst(dmData.DataDir + '*.pid', faAnyFile, SearchRec);
+  while Res = 0 do
+  begin
+    if dmData.DebugLevel>=1 then Writeln(dmData.DataDir + SearchRec.Name);
+    if FileExists(dmData.DataDir + SearchRec.Name) then
+    begin
+      pidfile := dmData.DataDir + SearchRec.Name;
+      AssignFile(f,pidfile);
+      Reset(f);
+      ReadLn(f,pid); //get process id from <computer-name.pid>
+      pid := Trim(pid);
+      CloseFile(f);
+      break
+    end;
+    Res := FindNext(SearchRec)
+  end;
+  FindClose(SearchRec);
+
+  Result := pid <> '';
+end;
 procedure TfrmDBConnect.EnableButtons;
 begin
   btnOpenLog.Enabled   := True;
@@ -126,10 +177,12 @@ procedure TfrmDBConnect.SaveLogin;
 var
   ini : TIniFile;
 begin
+  writeln('saving login');
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
     if not chkSaveToLocal.Checked then
     begin
+      writeln('saving as remote');
       ini.WriteBool('Login','SaveToLocal',False);
       ini.WriteString('Login','Server',edtServer.Text);
       ini.WriteString('Login','Port',edtPort.Text);
@@ -144,7 +197,10 @@ begin
       ini.WriteBool('Login','AutoConnect',chkAutoConn.Checked)
     end
     else
-      ini.WriteBool('Login','SaveToLocal',True)
+      Begin
+      writeln('saving as local');
+      ini.WriteBool('Login','SaveToLocal',True);
+      end;
   finally
     ini.Free
   end
@@ -154,10 +210,12 @@ procedure TfrmDBConnect.LoadLogin;
 var
   ini : TIniFile;
 begin
+  writeln('Loading login');
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
     if ini.ReadBool('Login','SaveTolocal',True) then
     begin
+      writeln('Load values set local');
       edtServer.Text         := '127.0.0.1';
       edtPort.Text           := '64000';
       edtUser.Text           := 'cqrlog';
@@ -169,6 +227,7 @@ begin
       RemoteMySQL  := False
     end
     else begin
+      writeln('Load values set remote');
       chkSaveToLocal.Checked := False;
       grbLogin.Visible     := True;
       edtServer.Text       := ini.ReadString('Login','Server','127.0.0.1');
@@ -242,6 +301,12 @@ end;
 
 procedure TfrmDBConnect.btnDeleteLogClick(Sender: TObject);
 begin
+  if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+      Begin
+         ShowMessage('Open log can not be deleted!' +
+           sLineBreak + 'Switch logs first or delete log before opening it!' );
+      exit;
+      end;
   if dmData.qLogList.Fields[0].AsInteger = 1 then
   begin
     Application.MessageBox('You can not delete the first log!','Info ...',mb_ok +
@@ -363,28 +428,100 @@ begin
 end;
 
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
+
 begin
+  SaveLogin;  //saves the new value of  chkSaveToLocal   first
+
   if chkSaveToLocal.Checked then
   begin
-    if RemoteMySQL then
+    if RemoteMySQL then //coming from remote server
     begin
-      if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
-      begin
-        dmData.StartMysqldProcess;
-        Sleep(3000);
+      if not Mysql_safe_running then
+       if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes
+           then
+              Begin
+                dmData.StartMysqldProcess;
+                Sleep(3000);
+             end
+             else
+             begin      //deny mysql_safe start , return to remote server
+              chkSaveToLocal.Checked := False;
+              grbLogin.Visible       := True;
+              exit
+            end;
+
+        FromMenu_CloseExist;  //close existing log, if open
+        RemoteMySQL :=false;
+        OpenFromMenu:=false;
+        edtServer.Text         := '127.0.0.1';
+        edtPort.Text           := '64000';
+        edtUser.Text           := 'cqrlog';
+        edtPass.Text           := 'cqrlog';
+        tmrAutoConnect.Enabled := True;
+        chkAutoConn.Checked    := True;
         btnConnectClick(nil)
-      end
-      else begin
-        chkSaveToLocal.Checked := False;
-        grbLogin.Visible       := True;
-        exit
-      end
     end;
     grbLogin.Visible := False
   end
-  else  begin
-    grbLogin.Visible := True
+  else     // not chkSaveToLocal.Checked
+  begin
+     FromMenu_CloseExist; //close existing log, if open
+     RemoteMySQL :=True;
+     OpenFromMenu:=false;
+      edtServer.Text       := '127.0.0.1';
+      edtPort.Text         := '3306';
+      edtUser.Text         := 'cqrlog';
+      chkSavePass.Checked  := False;
+      chkAutoOpen.Checked  := False;
+      edtPass.Text         := '';
+     Savelogin;
+     sleep(200);
+     btnDisconnectClick(nil);
+     sleep(200);
+     LoadLogin;
+
+     grbLogin.Visible := True
   end
+end;
+
+procedure TfrmDBConnect.edtPassEnter(Sender: TObject);
+begin
+   editCheck:=edtPass.Text
+end;
+
+procedure TfrmDBConnect.edtPassExit(Sender: TObject);
+begin
+ if  edtPass.Text <> editCheck then btnDisconnectClick(nil); //disconnect if change
+end;
+
+procedure TfrmDBConnect.edtPortEnter(Sender: TObject);
+begin
+  editCheck:=edtPort.Text;
+end;
+
+procedure TfrmDBConnect.edtPortExit(Sender: TObject);
+begin
+  if  edtPort.Text <> editCheck then btnDisconnectClick(nil); //disconnect if change
+end;
+
+procedure TfrmDBConnect.edtServerEnter(Sender: TObject);
+begin
+  editCheck:=edtServer.Text;
+end;
+
+procedure TfrmDBConnect.edtServerExit(Sender: TObject);
+begin
+  if  edtServer.Text <> editCheck then btnDisconnectClick(nil); //disconnect if change
+end;
+
+procedure TfrmDBConnect.edtUserEnter(Sender: TObject);
+begin
+   editCheck:=edtUser.Text;
+end;
+
+procedure TfrmDBConnect.edtUserExit(Sender: TObject);
+begin
+  if edtUser.Text  <> editCheck then btnDisconnectClick(nil); //disconnect if change
 end;
 
 procedure TfrmDBConnect.FormShow(Sender: TObject);
@@ -469,6 +606,12 @@ var
   db : String;
   l  : TStringList;
 begin
+   if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+      Begin
+         ShowMessage('Importing settings to open log may not always take effect!' +
+           sLineBreak + 'Switch logs fist or import settings before opening the log!' );
+      exit;
+      end;
   if dlgOpen.Execute then
   begin
     db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);

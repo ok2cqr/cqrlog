@@ -1,7 +1,7 @@
 object frmDBConnect: TfrmDBConnect
-  Left = 499
+  Left = 757
   Height = 587
-  Top = 186
+  Top = 117
   Width = 357
   Caption = 'Database connection'
   ClientHeight = 587
@@ -2126,10 +2126,10 @@ object frmDBConnect: TfrmDBConnect
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object grbLogin: TGroupBox
     Left = 0
-    Height = 218
+    Height = 212
     Top = 0
     Width = 357
     Align = alTop
@@ -2137,7 +2137,7 @@ object frmDBConnect: TfrmDBConnect
     BorderSpacing.InnerBorder = 10
     Caption = ' MySQL server '
     ChildSizing.LeftRightSpacing = 10
-    ClientHeight = 200
+    ClientHeight = 194
     ClientWidth = 355
     TabOrder = 0
     Visible = False
@@ -2145,16 +2145,18 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Control = lblServerName
       AnchorSideTop.Side = asrBottom
       Left = 10
-      Height = 34
-      Top = 19
+      Height = 33
+      Top = 17
       Width = 168
       BorderSpacing.Top = 2
+      OnEnter = edtServerEnter
+      OnExit = edtServerExit
       TabOrder = 0
       Text = 'localhost'
     end
     object lblServerName: TLabel
       Left = 10
-      Height = 17
+      Height = 15
       Top = 0
       Width = 87
       Caption = 'Server name:'
@@ -2162,7 +2164,7 @@ object frmDBConnect: TfrmDBConnect
     end
     object lblPort: TLabel
       Left = 214
-      Height = 17
+      Height = 15
       Top = 0
       Width = 30
       Caption = 'Port:'
@@ -2174,11 +2176,13 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Control = lblPort
       AnchorSideTop.Side = asrBottom
       Left = 213
-      Height = 34
-      Top = 19
+      Height = 33
+      Top = 17
       Width = 80
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
+      OnEnter = edtPortEnter
+      OnExit = edtPortExit
       TabOrder = 1
       Text = '3306'
     end
@@ -2186,8 +2190,8 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Control = edtServer
       AnchorSideTop.Side = asrBottom
       Left = 10
-      Height = 17
-      Top = 59
+      Height = 15
+      Top = 56
       Width = 75
       BorderSpacing.Top = 6
       Caption = 'User name:'
@@ -2197,18 +2201,20 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Control = lblUserName
       AnchorSideTop.Side = asrBottom
       Left = 10
-      Height = 34
-      Top = 78
+      Height = 33
+      Top = 73
       Width = 168
       BorderSpacing.Top = 2
+      OnEnter = edtUserEnter
+      OnExit = edtUserExit
       TabOrder = 2
     end
     object lblPassword: TLabel
       AnchorSideTop.Control = edtPort
       AnchorSideTop.Side = asrBottom
       Left = 214
-      Height = 17
-      Top = 59
+      Height = 15
+      Top = 56
       Width = 65
       BorderSpacing.Top = 6
       Caption = 'Password:'
@@ -2220,12 +2226,14 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Control = lblPassword
       AnchorSideTop.Side = asrBottom
       Left = 213
-      Height = 34
-      Top = 78
+      Height = 33
+      Top = 73
       Width = 132
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
       EchoMode = emPassword
+      OnEnter = edtPassEnter
+      OnExit = edtPassExit
       PasswordChar = '*'
       TabOrder = 3
     end
@@ -2234,8 +2242,8 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Side = asrBottom
       Left = 14
       Height = 23
-      Top = 118
-      Width = 122
+      Top = 112
+      Width = 123
       BorderSpacing.Top = 6
       Caption = 'Remember me'
       OnChange = chkSavePassChange
@@ -2246,7 +2254,7 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Side = asrBottom
       Left = 38
       Height = 33
-      Top = 147
+      Top = 141
       Width = 90
       AutoSize = True
       BorderSpacing.Top = 6
@@ -2260,7 +2268,7 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Side = asrBottom
       Left = 202
       Height = 33
-      Top = 147
+      Top = 141
       Width = 90
       AutoSize = True
       BorderSpacing.Top = 6
@@ -2274,7 +2282,7 @@ object frmDBConnect: TfrmDBConnect
       AnchorSideTop.Side = asrBottom
       Left = 202
       Height = 23
-      Top = 118
+      Top = 112
       Width = 111
       BorderSpacing.Top = 6
       Caption = 'Auto connect'
@@ -2283,25 +2291,25 @@ object frmDBConnect: TfrmDBConnect
   end
   object Panel1: TPanel
     Left = 0
-    Height = 326
-    Top = 261
+    Height = 332
+    Top = 255
     Width = 357
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel1'
-    ClientHeight = 326
+    ClientHeight = 332
     ClientWidth = 357
     TabOrder = 1
     object Panel2: TPanel
       Left = 225
-      Height = 293
+      Height = 299
       Top = 0
       Width = 132
       Align = alRight
       AutoSize = True
       BorderSpacing.InnerBorder = 10
       BevelOuter = bvNone
-      ClientHeight = 293
+      ClientHeight = 299
       ClientWidth = 132
       TabOrder = 0
       object btnNewLog: TButton
@@ -2395,7 +2403,7 @@ object frmDBConnect: TfrmDBConnect
     end
     object dbgrdLogs: TDBGrid
       Left = 0
-      Height = 293
+      Height = 299
       Top = 0
       Width = 225
       Align = alClient
@@ -2409,7 +2417,7 @@ object frmDBConnect: TfrmDBConnect
     object Panel4: TPanel
       Left = 5
       Height = 23
-      Top = 298
+      Top = 304
       Width = 352
       Align = alBottom
       AutoSize = True
@@ -2424,7 +2432,7 @@ object frmDBConnect: TfrmDBConnect
         Left = 0
         Height = 23
         Top = 0
-        Width = 257
+        Width = 256
         Caption = 'Open recent log after program start'
         TabOrder = 0
       end
@@ -2433,7 +2441,7 @@ object frmDBConnect: TfrmDBConnect
   object Panel3: TPanel
     Left = 10
     Height = 23
-    Top = 228
+    Top = 222
     Width = 337
     Align = alTop
     AutoSize = True

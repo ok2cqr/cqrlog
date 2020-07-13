@@ -636,7 +636,7 @@ type
     procedure UpdateFKeyLabels;
     procedure ClearStatGrid;
     procedure LoadSettings;
-    procedure SaveSettings;
+
     procedure ChangeCallBookCaption;
     procedure SendSpot;
     procedure CreateAutoBackup();
@@ -644,7 +644,6 @@ type
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
 
-    procedure CloseAllWindows;
     procedure onExcept(Sender: TObject; E: Exception);
     procedure DisplayCoordinates(latitude, Longitude : Currency);
     procedure DrawGrayline;
@@ -687,6 +686,7 @@ type
     RepHead                :String;                //the heading for possible reply commands created
                                                   //includes message type #0 (change it)
     ContestNr             : integer;              //wsjtx 2.0 contest type definition in status msg
+    DBServerChanged       : Boolean;
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -715,6 +715,9 @@ type
     procedure InitializeCW;
     procedure RunVK(key_pressed: String);
     procedure RunST(script: String);
+
+    procedure CloseAllWindows;
+    procedure SaveSettings;
   end;
 
   type
@@ -4571,6 +4574,7 @@ var
   LogId   : Integer;
   LogName : String;
 begin
+  DBServerChanged := false;
   with TfrmDBConnect.Create(self) do
   try
     old := dmData.LogName;
@@ -4578,15 +4582,19 @@ begin
     ShowModal;
     if ModalResult = mrOK then
     begin
-      if old = dmData.qLogList.Fields[1].AsString then exit;
+      if not DBServerChanged then
+         if old = dmData.qLogList.Fields[1].AsString then exit;
 
       LogId   := dmData.qLogList.Fields[0].AsInteger;
       LogName := dmData.qLogList.Fields[1].AsString;
 
-      frmDXCluster.StopAllConnections;
-      CloseAllWindows;         //fixes issue #163
-      SaveSettings;
-      dmData.CloseDatabases;
+      if not DBServerChanged then  //we did this at DBConnect
+       begin
+        frmDXCluster.StopAllConnections;
+        CloseAllWindows;         //fixes issue #163
+        SaveSettings;
+        dmData.CloseDatabases;
+       end;
 
       dmData.OpenDatabase(LogId);
       dmData.RefreshLogList(LogId);
