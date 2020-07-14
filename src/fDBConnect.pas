@@ -216,10 +216,6 @@ begin
     if ini.ReadBool('Login','SaveTolocal',True) then
     begin
       writeln('Load values set local');
-      edtServer.Text         := '127.0.0.1';
-      edtPort.Text           := '64000';
-      edtUser.Text           := 'cqrlog';
-      edtPass.Text           := 'cqrlog';
       tmrAutoConnect.Enabled := True;
       chkAutoConn.Checked    := True;
       chkSaveToLocal.Checked := True;
@@ -288,9 +284,25 @@ begin
 end;
 
 procedure TfrmDBConnect.btnConnectClick(Sender: TObject);
+var
+  OpenServer,OpenPort,OpenUser,OpenPass : string;
 begin
   SaveLogin;
-  if dmData.OpenConnections(edtServer.Text,edtPort.Text,edtUser.Text,edtPass.Text) then
+  if chkSaveToLocal.Checked then
+     Begin                //no mind to save them to cqrlog_login as they are always the same.
+       OpenServer:='127.0.0.1';
+       OpenPort  :='64000';
+       OpenUser  :='cqrlog';
+       OpenPass  :='cqrlog';
+     end
+   else
+     Begin               //remote values
+       OpenServer:=edtServer.Text;
+       OpenPort  :=edtPort.Text;
+       OpenUser  :=edtUser.Text;
+       OpenPass  :=edtPass.Text;
+     end;
+  if dmData.OpenConnections(OpenServer,OpenPort,OpenUser,OpenPass) then
   begin
     dmData.CheckForDatabases;
     UpdateGridFields;
@@ -454,30 +466,17 @@ begin
 
         RemoteMySQL :=false;
         OpenFromMenu:=false;
-        edtServer.Text         := '127.0.0.1';
-        edtPort.Text           := '64000';
-        edtUser.Text           := 'cqrlog';
-        edtPass.Text           := 'cqrlog';
         tmrAutoConnect.Enabled := True;
         chkAutoConn.Checked    := True;
         btnConnectClick(nil)
     end;
     grbLogin.Visible := False
   end
-  else     // not chkSaveToLocal.Checked
+  else     // if not chkSaveToLocal.Checked
   begin
      RemoteMySQL :=True;
      OpenFromMenu:=false;
-      edtServer.Text       := '127.0.0.1';
-      edtPort.Text         := '3306';
-      edtUser.Text         := 'cqrlog';
-      chkSavePass.Checked  := False;
-      chkAutoOpen.Checked  := False;
-      edtPass.Text         := '';
-     Savelogin;
-     sleep(200);
      btnDisconnectClick(nil);
-     sleep(200);
      LoadLogin;
 
      grbLogin.Visible := True
