@@ -342,6 +342,7 @@ begin
       dmData.MainCon55.Connected := False
   end;
   }
+  FromMenu_CloseExist; //if from open log, close it first.
   if dmData.MainCon.Connected then
     dmData.MainCon.Connected := False;
   DisableButtons
@@ -436,6 +437,7 @@ begin
   begin
     if RemoteMySQL then //coming from remote server
     begin
+      btnDisconnectClick(nil);
       if not Mysql_safe_running then
        if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes
            then
@@ -450,7 +452,6 @@ begin
               exit
             end;
 
-        FromMenu_CloseExist;  //close existing log, if open
         RemoteMySQL :=false;
         OpenFromMenu:=false;
         edtServer.Text         := '127.0.0.1';
@@ -465,7 +466,6 @@ begin
   end
   else     // not chkSaveToLocal.Checked
   begin
-     FromMenu_CloseExist; //close existing log, if open
      RemoteMySQL :=True;
      OpenFromMenu:=false;
       edtServer.Text       := '127.0.0.1';
