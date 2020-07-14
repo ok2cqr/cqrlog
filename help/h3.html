@@ -94,13 +94,26 @@
     used for this contest.
     <p align=center><img src=img/line.png></p>
     <p><a name=ah28><strong>Cabrillo export</strong></a><br><br>
-    This dialog can be used to export contest logs in Carbillo format. For this to work properly a 
-    filter has to be set. All necessary fields have to be filled in order for this to export a
-    suitable log file. If you choose this export you will see the follwing window.
+    This dialog can be used to export contest logs in Carbillo format. Cabrillo is very compilcated to export as
+    almost all contests have their own QSO line layout and score counting. That's why Export has no score counting, but it offers
+    some statistics from exported qsos to help manual counting of claimed score.<br><br>
+    For export  <b>Qso list/filter/create</b> or <b>Qso list/filter/Contest filter </b>has to be set to select qsos to be exported.<br>
+    If you used <b>Qso list/filter/Contest filter </b> you can press button <b>Frm Flt</b> to get contest name from filtered result.
+    <br><br>QSO-line header follows most used layout and can not be modified, except <b>width of callsign space</b> that affects both calls (my&amp;wkd).<br>
+    Info sent and rcvd can be modified using selections. Some contests do not use <b>reports, they can be omitted from checbox.</b><br>
+    Exchange1 and Exchange2 can contain data by  selected by selectors with <b>given space width</b> 1-99. If empty they are ignored.<br>
+    <B>TX count</b> is the transmitter count at the end of line. It can also be empty and so ingnored<br>
+    Many template layouts to study can be found from <b> http://www.contestlogchecker.com/cabrillo-templates.html</b>
     <br><br>
-    <img src=img/h45g.png><br><br>
-    You need to set the filename to export to and select an appropriate rule set for the calculation
-    of your points in the contest.
+    With <b>Count pfx</b> user can get statistic count from qsos to certain country. Type in callsign prefix of country. If export thinks prefix is wrong
+     it clears column when moved away from it. Then try again. Example: VA is not ok, but VA1 will turn accepted as VE.
+    <br><br>
+    Export remebers last used settings (by used log). You can also save and load settings for different contests using <b>save and load buttons</b>.
+    <br> At bottom of form there is prograss indicator and after export there is some statistics and possible error message.
+    <br><br>
+    As cabrillo export output is very basic you may need to edit exported file afterwards with text editor to suit your purposes!
+    <br><br>
+    <img src=img/h45g.png> <img src=img/h45gg.png><br><br>
     <p align=center><img src=img/line.png></p>
     <p><a name=ah29><strong>Program version update:</strong></a><br><br>
     Ubuntu 16.04, 17.10, 18.04 users can use CQRLOG’s repository on Launchpad. To add repository to your system, put into terminal this:<br/>

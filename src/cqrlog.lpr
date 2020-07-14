@@ -24,7 +24,7 @@ uses
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc,
-  fCabrilloExport, fDOKStat;
+  fDOKStat, fCabrilloExport;
 var
   Splash : TfrmSplash;
 
