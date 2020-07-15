@@ -821,27 +821,33 @@
         <ResourceBaseClass Value="Form"/>
       </Unit108>
       <Unit109>
+       <Filename Value="fDOKStat.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmDOKStat"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit109>
+      <Unit110>
+        <Filename Value="fCabrilloExport.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+        <Filename Value="fCabrilloExport.lfm"/>
+        <IsPartOfProject Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit110>
+      <Unit111>
+        <Filename Value="fContestFilter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmContestFilter"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit111>
+      <Unit112>
         <Filename Value="fProgress.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmProgress"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit109>
-      <Unit110>
-        <Filename Value="fDOKStat.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmDOKStat"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit110>
-      <Unit111>
-        <Filename Value="fCabrilloExport.pas"/>
-        <IsPartOfProject Value="True"/>
-        <HasResources Value="True"/>
-      </Unit111>
-      <Unit112>
-        <Filename Value="fCabrilloExport.lfm"/>
-        <IsPartOfProject Value="True"/>
       </Unit112>
     </Units>
   </ProjectOptions>

@@ -83,7 +83,6 @@ procedure TfrmContestFilter.FormShow(Sender: TObject);
 
 begin
   dmUtils.LoadFontSettings(self);
-
 end;
 
 procedure TfrmContestFilter.FormKeyUp(Sender: TObject; var Key: Word;

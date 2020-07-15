@@ -137,7 +137,7 @@ begin
     WriteStrToStream(http.Document, s);
     http.MimeType := 'multipart/form-data; boundary=' + Bound;
 
-    url := Format(UPLOAD_URL,[cqrini.ReadString('LoTW','LoTWName',''),EncodeURL(cqrini.ReadString('LoTW','LoTWPass',''))]);
+    url := Format(UPLOAD_URL,[cqrini.ReadString('LoTW','LoTWName',''),dmUtils.EncodeURLData(cqrini.ReadString('LoTW','LoTWPass',''))]);
     if dmData.DebugLevel >= 1 then Writeln(url);
 
     Res := HTTP.HTTPMethod('POST', url);

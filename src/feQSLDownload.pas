@@ -139,8 +139,8 @@ begin
     end;
     url := cqrini.ReadString('LoTW', 'eQSLStartAddr','https://www.eqsl.cc/qslcard/DownloadInBox.cfm')+
            '?UserName='+user+
-           '&Password='+EncodeURL(pass)+
-           '&QTHNickname='+EncodeURL(edtQTH.Text)+
+           '&Password='+dmUtils.EncodeURLData(pass)+
+           '&QTHNickname='+dmUtils.EncodeURLData(edtQTH.Text)+
            '&RcvdSince='+StringReplace(edtDateFrom.Text,'-','',[rfReplaceAll, rfIgnoreCase]);
     if dmData.DebugLevel>=1 then Writeln(url);
     http.MimeType := 'text/xml';
