@@ -290,6 +290,7 @@ end;
 procedure TfrmDBConnect.btnConnectClick(Sender: TObject);
 begin
   SaveLogin;
+  btnDisconnectClick(nil); //be sure we have disconnected and closed any log open
   if dmData.OpenConnections(edtServer.Text,edtPort.Text,edtUser.Text,edtPass.Text) then
   begin
     dmData.CheckForDatabases;
