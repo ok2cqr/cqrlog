@@ -4578,7 +4578,7 @@ begin
   with TfrmDBConnect.Create(self) do
   try
     old := dmData.LogName;
-    OpenFromMenu := True;
+    OpenFromNewQSOMenu := True;
     ShowModal;
     if ModalResult = mrOK then
     begin

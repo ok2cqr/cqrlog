@@ -2152,7 +2152,6 @@ object frmDBConnect: TfrmDBConnect
       OnEnter = edtServerEnter
       OnExit = edtServerExit
       TabOrder = 0
-      Text = 'localhost'
     end
     object lblServerName: TLabel
       Left = 10
@@ -2184,7 +2183,6 @@ object frmDBConnect: TfrmDBConnect
       OnEnter = edtPortEnter
       OnExit = edtPortExit
       TabOrder = 1
-      Text = '3306'
     end
     object lblUserName: TLabel
       AnchorSideTop.Control = edtServer
@@ -2463,6 +2461,7 @@ object frmDBConnect: TfrmDBConnect
   object tmrAutoConnect: TTimer
     Enabled = False
     OnTimer = tmrAutoConnectTimer
+    OnStartTimer = tmrAutoConnectStartTimer
     left = 112
     top = 400
   end
