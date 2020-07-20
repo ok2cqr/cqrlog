@@ -96,7 +96,7 @@ type
 
 var
   frmDBConnect: TfrmDBConnect;
-
+  A_O_disable : boolean;
 
 implementation
 {$R *.lfm}
@@ -522,7 +522,7 @@ begin
     ini.Free
   end;
   dbgrdLogs.DataSource := dmData.dsrLogList;
-
+  A_O_disable :=  OpenFromNewQSOMenu;
   if OpenFromNewQSOMenu then
   begin
     UpdateGridFields;
@@ -671,10 +671,13 @@ begin
   finally
     ini.Free
   end;
-  if AutoOpen then
+
+  sleep(1000);
+
+  if AutoOpen and (not A_O_disable ) then
   begin
     if dmData.qLogList.Locate('log_nr',AutoLog,[]) then
-      btnOpenLog.Click
+      btnOpenLogClick(nil);
   end
   else begin
     dmData.qLogList.Locate('log_nr',LastLog,[])
