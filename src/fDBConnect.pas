@@ -96,7 +96,7 @@ type
 
 var
   frmDBConnect: TfrmDBConnect;
-  A_O_disable : boolean;
+  AutoOpenDisable : boolean;
 
 implementation
 {$R *.lfm}
@@ -381,10 +381,6 @@ begin
   try
     ini.WriteBool('Login','AutoOpen',chkAutoOpen.Checked);
     ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger);
-    if chkAutoOpen.Checked then
-      ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger)
-    else
-      ini.WriteInteger('Login','LastOpenedLog',dmData.qLogList.Fields[0].AsInteger)
   finally
     ini.Free
   end;
@@ -522,7 +518,7 @@ begin
     ini.Free
   end;
   dbgrdLogs.DataSource := dmData.dsrLogList;
-  A_O_disable :=  OpenFromNewQSOMenu;
+  AutoOpenDisable :=  OpenFromNewQSOMenu;
   if OpenFromNewQSOMenu then
   begin
     UpdateGridFields;
@@ -530,7 +526,10 @@ begin
   end
   else begin
     if StartMysql and (not Mysql_safe_running) then
-      dmData.StartMysqldProcess
+     Begin
+      dmData.StartMysqldProcess;
+      Sleep(3000);
+     end;
   end;
   LoadLogin;
   dlgOpen.InitialDir := dmData.HomeDir;
@@ -661,27 +660,25 @@ var
   ini    : TIniFile;
   AutoLog  : Integer;
   AutoOpen : Boolean;
-  LastLog  : Integer;
+  s:integer;
 begin
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
     AutoOpen := ini.ReadBool('Login','AutoOpen',False);
     AutoLog  := ini.ReadInteger('Login','LastLog',0);
-    LastLog  := ini.ReadInteger('Login','LastOpenedLog',0)
   finally
     ini.Free
   end;
 
-  sleep(1000);
+  dmData.RefreshLogList(Autolog);
 
-  if AutoOpen and (not A_O_disable ) then
-  begin
-    if dmData.qLogList.Locate('log_nr',AutoLog,[]) then
-      btnOpenLogClick(nil);
-  end
-  else begin
-    dmData.qLogList.Locate('log_nr',LastLog,[])
-  end
+  if AutoOpen and (not AutoOpenDisable ) then
+  Begin
+    dmData.LogName := dmData.qLogList.Fields[1].AsString;
+    dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger);
+    ModalResult    := mrOK
+  end;
+
 end;
 
 end.
