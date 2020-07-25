@@ -4570,20 +4570,22 @@ end;
 
 procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
 var
-  old : String;
+  //old : String;
+  LogOld   : Integer;
   LogId   : Integer;
   LogName : String;
 begin
   DBServerChanged := false;
   with TfrmDBConnect.Create(self) do
   try
-    old := dmData.LogName;
+    LogOld   := dmData.qLogList.Fields[0].AsInteger;
+    //old := dmData.LogName;
     OpenFromNewQSOMenu := True;
     ShowModal;
     if ModalResult = mrOK then
     begin
       if not DBServerChanged then
-         if old = dmData.qLogList.Fields[1].AsString then exit;
+         if LogOld = dmData.qLogList.Fields[0].AsInteger then exit;
 
       LogId   := dmData.qLogList.Fields[0].AsInteger;
       LogName := dmData.qLogList.Fields[1].AsString;

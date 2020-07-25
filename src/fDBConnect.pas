@@ -96,7 +96,6 @@ type
 
 var
   frmDBConnect: TfrmDBConnect;
-  AutoOpenDisable : boolean;
 
 implementation
 {$R *.lfm}
@@ -114,6 +113,9 @@ procedure TfrmDBConnect.FromMenu_CloseExist;
                     frmNewQSO.SaveSettings;
                     dmData.CloseDatabases;
                     frmNewQSO.DBServerChanged :=True;
+                    sleep(200);
+                    application.ProcessMessages;
+                    writeln('All closed now!');
             end;
           end;
 //------------------------------------------
@@ -219,9 +221,9 @@ begin
       if dmData.DebugLevel>=1 then Writeln('Load values set local');
       chkSaveToLocal.Checked := True;
       chkSaveToLocalClick(nil);
-      RemoteMySQL  := False
     end
-    else begin
+    else
+    begin
       if dmData.DebugLevel>=1 then Writeln('Load values set remote');
       chkSaveToLocal.Checked := False;
       grbLogin.Visible     := True;
@@ -421,8 +423,8 @@ begin
         if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes
            then
               Begin
-                if RemoteMySQL then btnDisconnectClick(nil);//coming from remote server
-                RemoteMySQL :=false;
+                //if RemoteMySQL then btnDisconnectClick(nil);//coming from remote server
+                //RemoteMySQL :=false;
                 dmData.StartMysqldProcess;
                 Sleep(3000);
              end
@@ -433,11 +435,10 @@ begin
               exit
             end;
         end;
-        if RemoteMySQL then //coming from remote server
-                                  btnDisconnectClick(nil);
+        //if RemoteMySQL then //coming from remote server
+        //                          btnDisconnectClick(nil);
         SaveLogin; //saves toLocal.checked set
         RemoteMySQL :=false;
-        OpenFromNewQSOMenu:=false;
         edtServer.Text         := '127.0.0.1';
         edtPort.Text           := '64000';
         edtUser.Text           := 'cqrlog';
@@ -451,9 +452,8 @@ begin
   end
   else     // not chkSaveToLocal.Checked
   begin
-     btnDisconnectClick(nil);
-     OpenFromNewQSOMenu:=false;
-     LoadLogin(true);
+     //btnDisconnectClick(nil);
+     LoadLogin(true);   //force remote DB
      chkSaveToLocal.Checked := False;
   end
 end;
@@ -518,7 +518,6 @@ begin
     ini.Free
   end;
   dbgrdLogs.DataSource := dmData.dsrLogList;
-  AutoOpenDisable :=  OpenFromNewQSOMenu;
   if OpenFromNewQSOMenu then
   begin
     UpdateGridFields;
@@ -637,6 +636,7 @@ begin
                               'new databases will be created. This may take a while, please be patient.' ,'Question ...',
                               mb_YesNo+mb_IconQuestion) =  idYes then
     begin
+      RemoteMySQL := False;
       dmData.StartMysqldProcess;
       Sleep(3000)
     end
@@ -672,7 +672,7 @@ begin
 
   dmData.RefreshLogList(Autolog);
 
-  if AutoOpen and (not AutoOpenDisable ) then
+  if AutoOpen and (not OpenFromNewQSOMenu ) then
   Begin
     dmData.LogName := dmData.qLogList.Fields[1].AsString;
     dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger);
