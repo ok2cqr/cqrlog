@@ -4321,7 +4321,7 @@ object frmPreferences: TfrmPreferences
           Height = 17
           Top = 110
           Width = 302
-          Caption = 'Macros: $CALLSIGN, $BAND, $MODE, $FREQ'
+          Caption = 'Macros: $CALLSIGN, $BAND, $MODE, $FREQ, $MSG'
           ParentColor = False
         end
       end
@@ -4375,7 +4375,7 @@ object frmPreferences: TfrmPreferences
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 6
           BorderSpacing.Bottom = 4
-          Caption = 'Send this text (DXCluster command) to telnet DXCluster when connected'
+          Caption = 'Send these commands to telnet DXCluster when connected (comma separated)'
           ParentColor = False
         end
       end

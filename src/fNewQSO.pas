@@ -6845,13 +6845,14 @@ end;
 
 procedure TfrmNewQSO.SendSpot;
 var
-  call : String;
+  call,rst_s,stx,stx_str,HisName,HelloMsg : String;
   tmp  : String;
   ModRst,
   HMLoc :String;
   f    : Currency;
   freq : String;
 begin
+  HelloMsg:='';
   if edtCall.Text <> '' then
   begin
     if TryStrToCurr(cmbFreq.Text,f) then
@@ -6859,9 +6860,15 @@ begin
       if (cqrini.ReadBool('DXCluster','SpotRX',False)) then
         f := StrToCurr(edtRXFreq.Text);
       f := f*1000;
-      tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + edtCall.Text;
-      ModRst := cmbMode.Text+' '+edtHisRst.Text;
+      call:=  edtCall.Text;
+      rst_s := edtHisRST.Text;
+      stx :=  edtContestSerialSent.Text;
+      stx_str:=edtContestExchangeMessageSent.Text;
+      HisName:= edtName.Text;
+      tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + call;
+      ModRst := cmbMode.Text+' '+ rst_s;
       HMLoc := edtGrid.Text+'<'+dmSatellite.GetPropShortName(cmbPropagation.Text)+'>'+copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
+
     end;
   end
   else begin
@@ -6878,18 +6885,22 @@ begin
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
     dmData.Q.Open();
     ModRst  := dmData.Q.Fields[0].AsString+' '+dmData.Q.Fields[1].AsString;
     HMLoc   := dmData.Q.Fields[2].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[4].AsString;
+    rst_s := dmData.Q.Fields[1].AsString;
+    stx :=  dmData.Q.Fields[5].AsString;
+    stx_str:=dmData.Q.Fields[6].AsString;
+    HisName:= dmData.Q.Fields[7].AsString;
     dmData.Q.Close();
     dmData.trQ.Rollback;
 
   end;
-  if (call = '') and (edtCall.Text = '') then
+  if (call = '') then
   exit;
 
   with TfrmSendSpot.Create(self) do
@@ -6897,6 +6908,12 @@ begin
     edtSpot.Text := tmp + ' ';
     ModeRst      :=' '+ModRst;
     HisMyLoc     :=' '+HMLoc;
+    Scall := call;
+    Srst_s := rst_s;
+    Sstx := stx ;
+    Sstx_str:=stx_str;
+    SHisName:= HisName;
+    SHelloMsg:=HelloMsg;
     ShowModal;
     if ModalResult = mrOK then
     begin

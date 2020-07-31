@@ -49,10 +49,17 @@ messages indicating progress. You can enter any command into the 'Command' field
 
 
 </p><img src="img/h4b.png" border="0"> <img src="img/h4c.png" border="0"><br><p>
-With <b>Ctrl-W</b> you can send a spot to DXCluster if you are connected. If NewQSO is empty the spot is generated from last logged call from current log. If there is a call entered in NewQSO/Call field it will be used for spot generation.
-Additionally you can add used Mode and RST sent by pressing button <b>+Mode_Rst</b> and/or add locators by pressing button <b>+Locators</b>.
-<br>Locator separators <b>&lt;&gt;</b> will have propagation mode included if it is set from <b>NewQSO/Satellite/Propagation</b>.
-<br>Both strings can be added only once. To edit or delete added strings you must use keyboard's delete button. When spot looks good <b>press enter</b> or click button <b>OK</b> and it will be sent.
+With <b>Ctrl-W</b> you can send a spot to DXCluster if you are connected. If NewQSO is empty the spot is generated from last logged call from current log. 
+If there is a call entered in NewQSO/Call field NewQSO information will be used for spot generation.
+Additionally you can add used Mode and RST sent by pressing button <b>+Mode_Rst</b> and/or add locators by pressing button <b>+Locators
+</b>. Locator separators <b>&lt;&gt;</b> will have propagation mode included if it is set from <b>NewQSO/Satellite/Propagation</b>.
+<br> <b>+UsrMsg</b> adds user defined message.
+<br>User message can be generated with <b>right</b> mouse click to button. Same predefined macros as in <a href="h26.html#predef"><b>cw messages</b></a> can be used.
+<br>Moving mouse cursor over button a hint will show the text what is added by pressing button.
+<br><br><b>Note!</b> There is a limited space to spot info. User string generation warns you about long message, but it is up to you to decide.
+<br>You must cancel spot sending and reopen it with Ctrl+W to get User message up to date after editing it.
+<br>
+<br>Strings can be added only once. To edit or delete added strings you must use keyboard's delete button. When spot looks good <b>press enter</b> or click button <b>OK</b> and spot will be sent to connected DXCluster.
 <br><br>
 With <b>Ctrl-Z</b> you can scroll back 5 last used DXCluster commands. It is very handy if you make error
  in cluster command. You do not have to retype everything, just Ctrl-Z and then fix the command and send it again.
