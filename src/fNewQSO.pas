@@ -669,7 +669,8 @@ type
     LastFkey    : Word;
     old_t_band  : String;
 
-    WsjtxSock             : TUDPBlockSocket;
+    WsjtxSock             : TUDPBlockSocket; //receive socket
+    WsjtxSockS            : TUDPBlockSocket; //multicast send socket
     N1MMSock              : TUDPBlockSocket;
 
     WsjtxMode             : String;          //Moved from private
@@ -746,6 +747,7 @@ var
   frmNewQSO    : TfrmNewQSO;
 
   EscFirstTime : Boolean = True;
+  multicast    : boolean = false;
 
   c_callsign  : String;
   c_nick      : String;
@@ -2532,7 +2534,10 @@ begin
               RepBuf[12] := #$07;    //quick hack: change message type from 0 to 7
               if dmData.DebugLevel>=1 then Writeln('Changed message type from 0 to 7. Sending...')
             end;
-            Wsjtxsock.SendString(RepBuf)
+            if multicast then
+               WsjtxsockS.SendString(RepBuf)
+             else
+               Wsjtxsock.SendString(RepBuf);
           end
         end; // Heartbeat
 
@@ -7161,6 +7166,15 @@ begin
 
                   tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do
 
+                  //multicast is 239.0.0.0/8
+                  multicast:=pos('239.',cqrini.ReadString('wsjt','ip','127.0.0.1'))=1; //check multicast
+                  if multicast then
+                   Begin
+                      WsjtxSockS := TUDPBlockSocket.Create;
+                      if dmData.DebugLevel>=1 then Writeln('Multicast sendsocket created!');
+                      WsjtxSockS.EnableReuse(true);
+                      if dmData.DebugLevel>=1 then Writeln('Reuse enabled!');
+                   end;
 
                   // start UDP server  http://synapse.ararat.cz/doc/help/blcksock.TBlockSocket.html
                   WsjtxSock := TUDPBlockSocket.Create;
@@ -7168,16 +7182,37 @@ begin
                   WsjtxSock.EnableReuse(true);
                   if dmData.DebugLevel>=1 then Writeln('Reuse enabled!');
                   try
-                    WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
-                    if dmData.DebugLevel>=1 then Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
+                    if multicast then
+                     begin
+                        WsjtxSock.createsocket;
+                        WsjtxSock.Bind('0.0.0.0',cqrini.ReadString('wsjt','port','2237'));
+                        WsjtxSock.AddMulticast(cqrini.ReadString('wsjt','ip','239.255.0.0'));
+                        Assert(WsjtxSock.LastError = 0);
+                        if dmData.DebugLevel>=1 then Writeln('Bind multicast RX '+cqrini.ReadString('wsjt','ip','239.255.0.0')+
                                                                         ':'+cqrini.ReadString('wsjt','port','2237'));
-                     // On bind failure try to rebind every second
-                     while ((WsjtxSock.LastError <> 0) and (tries > 0 )) do
-                       begin
-                         dec(tries);
-                         sleep(1000);
-                         WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
-                       end;
+                        WsjtxSockS.createsocket;
+                        WsjtxSockS.Bind('0.0.0.0','0');
+                        WsjtxSockS.MulticastTTL := 1;
+                        WsjtxSockS.connect(cqrini.ReadString('wsjt','ip','239.255.0.0'),cqrini.ReadString('wsjt','port','2237'));
+                        Assert(WsjtxSockS.LastError = 0);
+                        if dmData.DebugLevel>=1 then Writeln('Bind multicast TX '+cqrini.ReadString('wsjt','ip','239.255.0.0')+
+                                                                        ':'+cqrini.ReadString('wsjt','port','2237'));
+                     end
+                    else
+                     Begin
+                        WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
+
+                        if dmData.DebugLevel>=1 then Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
+                                                                        ':'+cqrini.ReadString('wsjt','port','2237'));
+                       // On bind failure try to rebind every second
+                       while ((WsjtxSock.LastError <> 0) and (tries > 0 )) do
+                         begin
+                           dec(tries);
+                           sleep(1000);
+                           WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
+                         end;
+
+                      end;
                      tmrWsjtx.Enabled  := True;          //  so timer can run more seldom.
                      tmrWsjtSpd.Enabled:= True;
                   except
@@ -7239,6 +7274,7 @@ begin
     dmUtils.RunOnBackgroud(path)
 end;
 
+
 procedure TfrmNewQSO.DisableRemoteMode;
 var
   tries : integer = 10;
@@ -7262,6 +7298,7 @@ begin
         FreeAndNil(frmMonWsjtx); //to release flooding richmemo
        end;
       if Assigned(WsjtxSock) then FreeAndNil(WsjtxSock);  // to release UDP socket
+      if multicast then if Assigned(WsjtxSockS) then FreeAndNil(WsjtxSockS);  // to release UDP multicast TX socket
       mnuRemoteModeWsjt.Checked:= False;
       AnyRemoteOn := False;
   end;
