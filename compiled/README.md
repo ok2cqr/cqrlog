@@ -3,7 +3,7 @@ This folder holds ready compiled binary files of source "loc_testing" that is th
 They contain all accepted pull requests from official source (that may not be released offically yet) plus some test code that is not pull requested yet (and may not be pull requested ever)
 
 ## ABOUT THIS ALPHA TEST VERSION:
- 
+
  These alpha test binaries also include latest official source updates up to commit:
  
    #308
@@ -13,9 +13,15 @@ They contain all accepted pull requests from official source (that may not be re
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
-  - ver 2.4.0(121)
+  - ver 2.4.0(122)
   - check official updates link above.
+  
+  Not yet in offical source (31.07.2020):
+  - Call alert has new macro "$MSG" that includes spot's info text
+  - Telnet DXCluster connect command can now send multiple commands (comma separated)
+  - Send spot (Ctrl+W) has new button for user defined message. Message can contain same macros that are used in CW Memory keys
     
+  - wsjt-remote has UDP multicast support if address is selected from 239.0.0.0/8 subnet. Now several programs can receive one wsjt decodes at same time.
   
 BINARIES:
 ---------
