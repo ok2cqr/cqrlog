@@ -610,6 +610,8 @@ There are no known dependencies issues.<br><br>
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2237</strong> for port. These are set in wsjt-x settings/reporting and if changed there, must also to be changed here.
     <br>
     Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    <br><br>You can also use a multicast address for both <b>wsjt-x/settings/Reporting/UDP Server</b> and <b>cqrlog/preferences/fldigi/wsjt interface/wsjt addr</b>. Cqrlog will handle ip addresses starting with "239." as multicast addresses.
+    <br>With multicast you are able to run several programs listening to wsjt-x udp broadcasts at same time. To start with multicast try multicast group address "239.255.0.0" for both cqrlog and wsjt-x (and also other programs needed to listen wsjt-x)
     <br><br>
     Using <strong> WB4 chk starts from</strong> it is possible to limit log search starting from given date for callsign and/or locator.
     <br>Setting checkbox will apply given date as start date. Otherwise, when unchecked, whole log is searched through.
