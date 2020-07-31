@@ -24,6 +24,7 @@ type
   { TfrmSendSpot }
 
   TfrmSendSpot = class(TForm)
+    btnUsr: TButton;
     btnOK: TButton;
     btnCancel: TButton;
     btnModRst: TButton;
@@ -32,26 +33,36 @@ type
     Label1: TLabel;
     procedure btnLocClick(Sender: TObject);
     procedure btnModRstClick(Sender: TObject);
+    procedure btnUsrClick(Sender: TObject);
+    procedure btnUsrMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure FormActivate(Sender: TObject);
     procedure edtSpotEnter(Sender: TObject);
     procedure edtSpotKeyPress(Sender: TObject; var Key: char);
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
   public
     ModeRst,
-    HisMyLoc  :String;
+    HisMyLoc,
+    Scall,
+    Srst_s,
+    Sstx,
+    Sstx_str,
+    SHisName,
+    SHelloMsg  :String;
     { public declarations }
   end; 
 
 var
   frmSendSpot: TfrmSendSpot;
-
+  UsrString    :String;
 
 implementation
 {$R *.lfm}
 
 { TfrmSendSpot }
-uses dUtils;
+uses dUtils, uMyIni,fDXCluster;
 
 
 
@@ -72,6 +83,31 @@ begin
     edtSpot.Text := edtSpot.Text+ ' '+ModeRst;
 end;
 
+procedure TfrmSendSpot.btnUsrClick(Sender: TObject);
+begin
+  if pos(UsrString, edtSpot.Text) = 0 then
+     edtSpot.Text := edtSpot.Text+' '+UsrString;
+end;
+
+procedure TfrmSendSpot.btnUsrMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  QueryResult: Boolean;
+  UsrString: string;
+begin
+  If Button = mbRight then
+    begin
+      UsrString := cqrini.ReadString('DXCluster', 'UsrMsg', '');
+      if InputQuery('Question', 'Type in user string', false, UsrString)
+        then
+            Begin
+              btnUsr.Hint:=UsrString;
+              cqrini.WriteString('DXCluster', 'UsrMsg', UsrString);
+              if length(UsrString)>25 then ShowMessage('Your string might be too long!'+LineEnding+'Length: '+IntToStr(length(UsrString))+'chrs')
+            end
+    end;
+end;
+
 procedure TfrmSendSpot.btnLocClick(Sender: TObject);
 begin
   if pos(HisMyLoc,  edtSpot.Text ) = 0 then
@@ -85,6 +121,20 @@ begin
     if (edtSpot.Text <> '') then
       btnOK.Click;
   end;
+end;
+
+procedure TfrmSendSpot.FormShow(Sender: TObject);
+begin
+  if not ((frmDXCluster.ConWeb) or (frmDXCluster.ConTelnet)) then
+   Begin
+     ShowMessage('You must connect to DXCluster first!');
+     btnCancel.Click;
+   end;
+  UsrString := cqrini.ReadString('DXCluster', 'UsrMsg', '');
+  UsrString:=dmUtils.GetCWMessage('',Scall,Srst_s,Sstx,Sstx_str,SHisName,SHelloMsg,UsrString);
+  btnUsr.Hint:=UsrString;
+  btnLoc.Hint:= HisMyLoc;
+  btnModRst.Hint:= ModeRst;
 end;
 
 end.
