@@ -1,13 +1,13 @@
 object frmSendSpot: TfrmSendSpot
-  Left = 841
+  Left = 793
   Height = 116
   Top = 237
-  Width = 395
+  Width = 443
   HorzScrollBar.Page = 307
   VertScrollBar.Page = 106
   Caption = 'Send spot'
   ClientHeight = 116
-  ClientWidth = 395
+  ClientWidth = 443
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -114,13 +114,14 @@ object frmSendSpot: TfrmSendSpot
     FFFF
   }
   OnActivate = FormActivate
+  OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 5
-    Height = 17
+    Height = 15
     Top = 12
     Width = 96
     BorderSpacing.Left = 5
@@ -135,9 +136,9 @@ object frmSendSpot: TfrmSendSpot
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 6
-    Height = 34
-    Top = 41
-    Width = 383
+    Height = 33
+    Top = 39
+    Width = 431
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 12
@@ -149,9 +150,9 @@ object frmSendSpot: TfrmSendSpot
   object btnOK: TButton
     AnchorSideTop.Control = btnCancel
     AnchorSideRight.Control = btnCancel
-    Left = 227
+    Left = 275
     Height = 30
-    Top = 81
+    Top = 78
     Width = 75
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 12
@@ -165,9 +166,9 @@ object frmSendSpot: TfrmSendSpot
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = edtSpot
     AnchorSideRight.Side = asrBottom
-    Left = 314
+    Left = 362
     Height = 30
-    Top = 81
+    Top = 78
     Width = 75
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 6
@@ -180,28 +181,50 @@ object frmSendSpot: TfrmSendSpot
   object btnModRst: TButton
     AnchorSideTop.Control = btnLoc
     AnchorSideRight.Control = btnLoc
-    Left = 183
+    Left = 155
     Height = 30
-    Top = 5
-    Width = 100
+    Top = 4
+    Width = 90
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 6
     Caption = '+Mode_Rst'
     OnClick = btnModRstClick
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
   object btnLoc: TButton
     AnchorSideTop.Control = Label1
     AnchorSideTop.Side = asrCenter
-    AnchorSideRight.Control = edtSpot
-    AnchorSideRight.Side = asrBottom
-    Left = 289
+    AnchorSideRight.Control = btnUsr
+    Left = 251
     Height = 30
-    Top = 5
-    Width = 100
+    Top = 4
+    Width = 90
     Anchors = [akTop, akRight]
+    BorderSpacing.Right = 6
     Caption = '+Locators'
     OnClick = btnLocClick
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 4
+  end
+  object btnUsr: TButton
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 347
+    Height = 30
+    Top = 4
+    Width = 90
+    Anchors = [akTop, akRight]
+    BorderSpacing.Right = 6
+    Caption = '+UsrMsg'
+    OnClick = btnUsrClick
+    OnMouseDown = btnUsrMouseDown
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
   end
 end
