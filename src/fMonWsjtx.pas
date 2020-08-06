@@ -365,6 +365,7 @@ begin
     BufDebug('Array gives '+INtToStr(length(sgMonitor.Cells[8,sgMonitor.row]))+' :',
              HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
   end;
+  frmNewQSO.GetCallInfo(DblClickCall);
   SendReply(HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
 end;
 

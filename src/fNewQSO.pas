@@ -694,6 +694,7 @@ type
 
     procedure DisableRemoteMode;   //Moved from private
     procedure SaveRemote;
+    procedure GetCallInfo(callTOinfo:string);
 
     procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
@@ -789,6 +790,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fRemind, fContest, fXfldigi, dMembership, dSatellite;
 
 
+
 procedure TQSLTabThread.Execute;
 var
   data   : string;
@@ -845,6 +847,23 @@ begin
     else
      if dmData.DebugLevel>=1 then writeln (data);
   end
+end;
+
+procedure TfrmNewQSO.GetCallInfo(callTOinfo:string);
+
+Begin
+  if  edtCall.Text <> callTOinfo then  //call (and web info) maybe there already ok from pevious status packet
+                           Begin
+                             edtCall.Text := '';//clean grid like double ESC does
+                             old_ccall := '';
+                             old_cfreq := '';
+                             old_cmode := '';
+                             edtCall.Text := callTOinfo;
+                             c_lock:=False;
+                             edtCallExit(nil);    //<--------this will fetch web info
+                             if dmData.DebugLevel>=1 then Writeln('GetCallInfo: Call was not there already');
+                             WaitWeb(2); // give time for web
+                           end;
 end;
 
 procedure TfrmNewQSO.WaitWeb(secs:integer);
@@ -2637,18 +2656,7 @@ begin
                                               if dmData.DebugLevel>=1 then Writeln('Change 2click call to:',frmMonWsjtx.DblClickCall);
                                             end;
 
-            if  edtCall.Text <> call then  //call (and web info) maybe there already ok from pevious status packet
-                           Begin
-                             edtCall.Text := '';//clean grid like double ESC does
-                             old_ccall := '';
-                             old_cfreq := '';
-                             old_cmode := '';
-                             edtCall.Text := call;
-                             c_lock:=False;
-                             edtCallExit(nil);    //<--------this will fetch web info
-                             if dmData.DebugLevel>=1 then Writeln('Call was not there already');
-                             WaitWeb(2); // give time for web
-                           end;
+            GetCallInfo(call); //call web info
 
             //these can be altered always
             if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
