@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types;
+  process, Types, iniFiles, LCLType, ComCtrls, dateutils, BaseUnix;
 
 type
 
@@ -15,6 +15,7 @@ type
 
   TfrmMonWsjtx = class(TForm)
     btFtxtName: TButton;
+    chkUState: TCheckBox;
     chkStopTx: TCheckBox;
     chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
@@ -47,6 +48,7 @@ type
     tbmyAlrt: TToggleBox;
     tbFollow: TToggleBox;
     tbTCAlert: TToggleBox;
+    tmrFCC: TTimer;
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
@@ -56,6 +58,7 @@ type
     procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
+    procedure chkUStateChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
     procedure cmBandClick(Sender: TObject);
     procedure cmCqDxClick(Sender: TObject);
@@ -85,8 +88,13 @@ type
     procedure tbmyAlrtChange(Sender: TObject);
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
+    procedure tmrFCCTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
   private
+    DPstarted : integer;     //fcc states download process status
+    DProcess: TProcess;
+    tfIn,tfOUT,dupOut: TextFile;
+    FccEn        :TStringList;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -110,8 +118,11 @@ type
     procedure PrintDecodedMessage;
     function getCurMode(sMode: String): String;
     procedure extcqprint;
+    procedure BuildFccState;
+    procedure downLoadInit;
     { private declarations }
   public
+    CanCloseFCCProcess :boolean;
     DblClickCall  :string;   //callsign that is called by doubleclick
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
@@ -124,6 +135,7 @@ type
     procedure BufDebug(MyHeader,MyBuf:string);
     function HexStrToStr(const HexStr: string): string;
     function StrToHexStr(const S: string): string;
+    procedure CloseFCCProcess;
     { public declarations }
   end;
 
@@ -136,6 +148,13 @@ const
   //color bitmap size
   bmW = 10;
   bmH = 10;
+
+  C_STATEFILE = 'ctyfiles/fcc_states.tab';
+  C_STATE_SOURCE = 'ctyfiles/EN.dat';
+  C_URL = 'http://wireless.fcc.gov/uls/data/complete/l_amat.zip                    ';//space to fix this with binary editor if needed
+  //C_URL ='http://localhost/l_amat.zip'; //for testing;
+  C_MYZIP = 'ctyfiles/l_amat.zip';
+  C_MY_SCRIPT = 'ctyfiles/fcc_get.sh';
 
 //DL7OAP: define type for grid coloring
 type
@@ -187,19 +206,24 @@ var
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
+  UState : TStringList;
+  URState : TStringList; // runtime found calls=states expecting them occur many times. faster to find.
+  //crit : TRTLCriticalSection;
+
+
 implementation
 
 {$R *.lfm}
 
 { TfrmMonWsjtx }
 
-uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster;
+uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster,fProgress;
 
 procedure TfrmMonWsjtx.RunVA(Afile: string);
 const
   cAlert = 'voice_keyer/voice_alert.sh';
 var
-  AProcess: TProcess;
+   AProcess: TProcess;
 begin
   if not FileExists(dmData.HomeDir + cAlert) then
     exit;
@@ -212,7 +236,7 @@ begin
     if LocalDbg then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
-    AProcess.Free
+    FreeAndNil(Aprocess);
   end;
 end;
 
@@ -378,6 +402,9 @@ begin
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
 
+  FreeAndNil(UState);
+  FreeAndNil(URState);
+  //DoneCriticalsection(crit)
 end;
  
 procedure TfrmMonWsjtx.Setbitmap(bm: TBitmap; col: Tcolor);
@@ -588,6 +615,7 @@ begin
   lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
+  chkUState.Visible:= not chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -646,6 +674,95 @@ begin
     begin
       DblClickCall := '';
       if LocalDbg then Writeln('Reset 2click call: sTx unchecked');
+    end;
+end;
+
+procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
+
+var
+  StateFile,
+  SourceFile,
+  msg ,
+  call,
+  HasState        : String;
+  StateSourceIn    : Textfile;
+  BuildFile        : TIniFile;
+  i,c                :integer;
+begin
+  cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
+  if chkUState.Checked then
+    Begin
+      if LocalDbg then  Writeln('State check activated');
+      if  UState.Count = 0 then  //load file
+        Begin
+          StateFile :=  dmData.HomeDir+C_STATEFILE;
+          SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
+          if FileExists(StateFile) then
+             Begin
+              if (DaysBetween(now,FileDateTodateTime(FileAge(StateFile)))) > 90 then
+                Begin //over 3 month old
+                 msg := 'Source file '+StateFile+' is over 90 days old.'+#13+#13+'Should it be updated?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                    Begin
+                     DeleteFile(StateFile);
+                     if FileExists(SourceFile) then DeleteFile(SourceFile);
+                     chkUStateChange(nil); //recall
+                     if not FileExists(StateFile) then  //when back here should have new StateFile
+                      begin
+                        chkUState.Checked := false;
+                        exit;
+                      end;
+                    end;
+                end;
+              if LocalDbg then Writeln('loading...');
+              UState.LoadFromFile(StateFile);
+              if LocalDbg then writeln(UState.Count);
+             end
+           else // no file: inform and ask if load it.uncheck USStete and return
+             begin
+               chkUState.Checked := false;
+               if FileExists(SourceFile) then
+                Begin
+                  msg := 'Source file '+SourceFile+' found!'+#13+#13+'Should the '+StateFile+#13+'to be built from source file ?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Build from source EN.dat');
+                     Application.ProcessMessages;
+                     BuildFccState;
+                     chkUState.Checked := True; //causes recall
+                     exit;
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('Build from source denied!');
+                     exit;
+                   end;
+                end
+                else
+                Begin
+                  msg := 'Neither '+StateFile+#13+
+                          'nor '+SourceFile+' found!'+#13+#13+
+                          'Try to load zipped source from fcc ?'+#13+#13+
+                          '(http://wireless.fcc.gov/uls/data/complete/l_amat.zip)'+#13+
+                          'Command line tools "wget" and "unzip" must be available.';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Load and unzip from fcc');
+                     msg:='If you have overseas connection to fcc.gov' +#13+
+                          'loading may take over 5 minutes!';
+                     if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
+                     downLoadInit;
+                     exit;
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('load from fcc denied!');
+                     exit;
+                   end;
+                end;
+             end;
+        end
+       else  if LocalDbg then Writeln('Already loaded:',UState.Count);
     end;
 end;
 
@@ -836,6 +953,58 @@ begin
   sgMonitor.Repaint;
 end;
 
+procedure TfrmMonWsjtx.tmrFCCTimer(Sender: TObject);
+Var
+  sz : integer;
+begin
+  tmrFcc.Enabled:=False;
+
+          if DProcess <> nil then
+              if LocalDbg then Writeln('Dprocess 1 running');
+
+          if DPstarted = 1 then
+           begin
+             if (FileExists(dmData.HomeDir+C_MYZIP)) and not (FileExists(dmData.HomeDir+C_STATE_SOURCE)) then
+              Begin
+                sz:=FileSize(dmData.HomeDir+C_MYZIP) div 1000000;
+                frmProgress.lblInfo.Caption:= 'Loading from fcc.gov '+IntToStr(sz)+'M';
+                frmProgress.DoPos(sz);
+                if LocalDbg then Writeln('Loading from fcc');
+              end
+             else
+              begin
+               if LocalDbg then Writeln('unzip ... ');
+               frmProgress.lblInfo.Caption:= 'Unzip ...';
+               frmProgress.DoJump(1);
+               inc(DPStarted);
+              end;
+             tmrFcc.Enabled:=True;
+            end
+
+           else
+
+           Begin
+             if LocalDbg then Writeln('inc DPstarted');
+             inc(DPstarted);
+             if DPstarted > 3 then
+              begin
+               if LocalDbg then Writeln('DPstarted > 3');
+               tmrFcc.Enabled:=False;
+               frmProgress.lblInfo.Caption:= 'Done!';
+               for sz:=0 to 100 do
+               Begin
+                 frmProgress.ShowOnTop;
+                 sleep(10);
+                 Application.ProcessMessages;
+               end;
+               frmProgress.Hide;
+               DPstarted:=0;
+               chkUState.Checked:=True; //causes recall
+              end
+              else tmrFcc.Enabled:=True;
+            end;
+
+end;
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
 begin
   tmrFollow.Enabled := False;
@@ -885,15 +1054,21 @@ begin
   LastWsjtLineTime := '';
   DblClickCall :='';
 
+   //InitCriticalSection(crit);
+  UState := TStringList.Create;
+  URState := TStringList.Create;
+
   cmHere.Bitmap := TBitmap.Create;
   cmBand.Bitmap := TBitmap.Create;
   cmAny.Bitmap  := TBitmap.Create;
   cmNever.Bitmap := TBitmap.Create;
   cmCqDX.Bitmap := TBitmap.Create;
+  CanCloseFCCProcess := True;  //there is no process yet
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
   sgMonitor.DefaultDrawing:= True; // setting to true to use DrawCell-Event for coloring
+  DPstarted :=0;
 end;
 
 procedure TfrmMonWsjtx.FormDropFiles(Sender: TObject;
@@ -943,6 +1118,7 @@ begin
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
+  chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
   SetAllbitmaps;
   edtFollow.Font.Name := sgMonitor.Font.Name;
   edtFollow.Font.Size := sgMonitor.Font.Size;
@@ -956,15 +1132,17 @@ begin
   LockMap := False; //last thing to do
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
+  chkUState.Visible:= not chkMap.Checked;
   //DL7OAP
   setMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
-  chknoHistoryChange(nil); // sure to get historu settings right
+  chknoHistoryChange(nil); // sure to get history settings right
 
   //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
         LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
+
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1734,8 +1912,12 @@ begin
 end;
 procedure TfrmMonWsjtx.PrintDecodedMessage;
 Var
-  i : integer;
-  freq :string;
+   i,
+   us  : integer;
+  freq,
+  Stat :string;
+StatClr: Tcolor;
+
 begin
   cont := '';
   country := '';
@@ -1788,8 +1970,65 @@ begin
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
      //case of USA print it only. Forget state. It is not shown full and may be bogus
-     if pos('USA',upcase(msgRes))=1 then msgRes := 'USA';
+     StatClr :=clBlack;
+     if pos('USA',upcase(msgRes))=1 then
+       begin
+        msgRes := 'USA';
+         if chkUState.Checked then
+          begin
+              //EnterCriticalsection(crit);
+              try
+               us:= URState.IndexOfName(msgCall);   //seek runtime list first
+               if us >= 0 then
+                Begin
+                  Stat := URState.ValueFromIndex[us];
+                  if LocalDbg then  Writeln('State found from runtime stringlist');
+                end
+               else
+                Begin
+                  us:= UState.IndexOfName(msgCall); // seek from fcc data
+                  if us >= 0 then
+                   begin
+                   Stat := UState.ValueFromIndex[us];
+                   URState.Add(msgCall+'='+Stat);   //put to runtime list
+                   if LocalDbg then  Writeln('State found from fcc stringlist, added to runtime');
+                   end
+                  else  Stat:='';
+                end;
 
+               if Stat <>''  then
+                 begin
+                  us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
+                   case us of
+                        0: Begin
+                            StatClr :=wkdnever;
+                           end;
+                        1: Begin
+                            Stat := LowerCase(Stat);
+                            StatClr :=wkdhere;
+                           end;
+                        2: Begin
+                            StatClr :=wkdband;
+                           end;
+                        3: Begin
+                             StatClr :=wkdany;
+                           end;
+                        else
+                          Begin
+                            StatClr :=clBlack;
+                          end;
+                          //should not happen
+                      end;
+
+                  if LocalDbg then Writeln(' State WB4 status is: ',us);
+                  msgRes := 'USA-'+Stat;
+                 end
+              finally
+                //LeaveCriticalsection(crit)
+              end;
+
+          end;
+       end;
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
      if CqDir <> '' then
@@ -1809,7 +2048,9 @@ begin
          end
          else  // should be ok to answer this directed cq
           if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-           AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1);
+           //AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
+           //space prefix is for what? forgot that
+            AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
         end
        else
         begin
@@ -1820,7 +2061,7 @@ begin
        // should be ok to answer this is not directed cq
          if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
              Begin
-              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,6, sgMonitor.rowCount-1);
+              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', StatClr,6, sgMonitor.rowCount-1);
              end;
    if (not chkMap.Checked) then
     begin
@@ -1879,6 +2120,183 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       //'+'     : getCurMode := 'T10';
     end;
   end;
+procedure  TfrmMonWsjtx.BuildFccState;
+var
+  s,t: string;
+  call,state,ids,Ocall,Ostate :string;
+  id,Oid,r,p,d,i,x : longint;
+
+begin
+  Ocall:='call';
+  Ostate:='state';
+  Oid:=0;
+  r:=0;
+  p:=0;
+  d:=0;
+  x:=0;
+  frmProgress.Show;
+  frmProgress.DoInit(40,10);
+  frmProgress.DoStep('Reading file...');
+  sleep(100);
+  Application.ProcessMessages;
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
+  AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
+   try
+    reset(tfIn);
+    rewrite(dupOut);
+    FccEn := TStringList.Create;
+    FccEn.Sorted:=False;
+    FccEn.Duplicates:=dupAccept;
+    if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
+
+    while not eof(tfIn) do
+    begin
+     readln(tfIn, s);
+     inc(r);
+      call := ExtractDelimited(5,s,['|']);
+      ids := ExtractDelimited(2,s,['|']);
+      state := ExtractDelimited(18,s,['|']);
+     if ( (call<>'') and (state<>'') and (ids <>'')) then  FccEn.Add(call+'-'+ids+'='+state)
+      else
+        begin
+         writeln(dupOut, call+'-'+ids+'='+state);
+         inc(x);
+        end;
+    end;
+   except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  CloseFile(tfIn);
+  CloseFile(dupOut);
+  if LocalDbg then Writeln('Sorting...');
+  frmProgress.DoStep('Sorting...(May take some time!)');
+  FccEn.Sort;
+  frmProgress.DoStep('Writing file...');
+  if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
+
+  AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_dupes.txt');
+  try
+    reset(tfIn);
+    rewrite(tfOut);
+    rewrite(dupOut);
+    for i:=0 to  FccEn.Count-1 do
+    begin
+      s:= FccEn.Strings[i];
+      t := ExtractWord(1,s,['=']);
+      call := ExtractWord(1,t,['-']);
+      id := StrToIntDef(ExtractWord(2,t,['-']),-1);
+      state := ExtractWord(2,s,['=']);
+
+      if ( (call<>'') and (state<>'') and (id >=0)) then
+      begin
+        if call<> Ocall then
+         Begin
+           writeln(tfOut,Ocall,'=',Ostate);//write old call=state if next call is different
+           Ocall:=call;
+           Oid := id;
+           Ostate := state;
+           inc(p);
+         end
+         else
+          Begin  //if they are same calls
+            writeln(dupOut,Ocall,'=',Ostate);//write old call=state to dupe list
+            inc(d);
+            if id > Oid then  //if id is bigger than old id save call and state as old
+                              //should remain finally the higest id call to print
+                              //needs one extra line to end of file to get all printed
+             begin
+              Ocall:=call;
+              Oid := id;
+              Ostate := state;
+             end;
+
+          end;
+       end;
+      end;
+    frmProgress.DoStep('Done !');
+    writeln(tfOut,Ocall,'=',Ostate);   //last remaining
+    FreeAndNil(FccEn);
+    CloseFile(tfin);
+    CloseFile(tfOut);
+    CloseFile(dupOut);
+  except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  if LocalDbg then Writeln('Read:       ',r,' lines.');
+  if LocalDbg then Writeln('Rejected:   ',x,' lines.');
+  if LocalDbg then Writeln('Written:    ',p,' lines.');
+  if LocalDbg then Writeln('Duplicates: ',d,' lines.');
+  frmProgress.Hide;
+  CanCloseFCCProcess:=true;
+end;
+
+procedure  TfrmMonWsjtx.downLoadInit;
+var
+  f :textfile;
+
+  begin
+    CanCloseFCCProcess:=false;
+    if LocalDbg then Writeln('downloadinit start');
+    frmProgress.Show;
+    frmProgress.DoInit(155,1);
+    frmProgress.DoStep('Loading from fcc.gov');
+    if FileExists(dmData.HomeDir+C_MYZIP) then DeleteFile(dmData.HomeDir+C_MYZIP);
+
+    if FileExists(dmData.HomeDir+C_MY_SCRIPT) then DeleteFile( dmData.HomeDir+C_MY_SCRIPT);
+
+        if LocalDbg then Writeln('Next create script wget + unzip');
+        AssignFile(f,dmData.HomeDir+C_MY_SCRIPT);
+        ReWrite(f);
+            Writeln(f,'#!/bin/bash');
+            Writeln(f,'wget -q -nd -O'+dmData.HomeDir+C_MYZIP+' '+trim(C_URL));
+            Writeln(f,'unzip -q -o -d'+dmData.HomeDir+'ctyfiles/ '+dmData.HomeDir+C_MYZIP+' EN.dat');
+            Writeln(f,'exit');
+        CloseFile(f);
+        if LocalDbg then Writeln('Next chmod script');
+        fpChmod (dmData.HomeDir+C_MY_SCRIPT,&777);
+
+
+    if LocalDbg then Writeln('Next run script');
+
+    DProcess := TProcess.Create(nil);
+    tmrFCC.Enabled:=True;
+    DPstarted:=1;
+
+    try
+     try
+      if LocalDbg then Writeln('Next DProcess run script');
+      DProcess.Executable  := '/bin/bash';
+      DProcess.Parameters.Add(dmData.HomeDir+C_MY_SCRIPT);
+      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+      DProcess.Execute;
+     finally
+      FreeAndNil(Dprocess);
+     end;
+    except
+    on E :EExternal do
+     writeln('Error Details: ', E.Message);
+    end;
+
+end;
+Procedure  TfrmMonWsjtx.CloseFCCProcess;
+begin
+  //here force close threads and others
+  if DProcess<>nil then FreeAndNil(DProcess);
+  if FccEn<>nil then
+     Begin
+       FreeAndNil(FccEn);
+       try
+         CloseFile(tfin);
+         CloseFile(tfOut);
+         CloseFile(dupOut);
+       finally
+       end;
+     end;
+  frmProgress.Hide;
+end;
 
 initialization
 

@@ -2303,6 +2303,8 @@ begin
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
                                  tmrWsjtx.Interval := wLoSpeed;
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
+                                 //If USstate file needs commit,
+                                 //do it now and reset commit flag
                                 end;
                             end;
              end;
@@ -7313,10 +7315,19 @@ end;
 procedure TfrmNewQSO.DisableRemoteMode;
 var
   tries : integer = 10;
+  msg :String;
 begin
 
   if  mnuRemoteModeWsjt.Checked then
   begin
+      if not frmMonWsjtx.CanCloseFCCProcess  then
+       Begin
+        msg:='FCC US-states download an process is still ' +#13+
+             'running. Closing monitor will abort process'+#13+
+             'Do you want to close anyway?';
+        if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
+        frmMonWsjtx.CloseFCCProcess;
+       end;
       tmrWsjtx.Enabled := False;
       tmrWsjtSpd.Enabled:=false;
       while ((WsjtxDecodeRunning) and (tries > 0)) do
