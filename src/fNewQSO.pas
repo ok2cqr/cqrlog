@@ -668,7 +668,8 @@ type
     LastFkey    : Word;
     old_t_band  : String;
 
-    WsjtxSock             : TUDPBlockSocket;
+    WsjtxSock             : TUDPBlockSocket; //receive socket
+    WsjtxSockS            : TUDPBlockSocket; //multicast send socket
     N1MMSock              : TUDPBlockSocket;
 
     WsjtxMode             : String;          //Moved from private
@@ -693,6 +694,7 @@ type
 
     procedure DisableRemoteMode;   //Moved from private
     procedure SaveRemote;
+    procedure GetCallInfo(callTOinfo:string);
 
     procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
@@ -749,6 +751,7 @@ var
   frmNewQSO    : TfrmNewQSO;
 
   EscFirstTime : Boolean = True;
+  multicast    : boolean = false;
 
   c_callsign  : String;
   c_nick      : String;
@@ -788,6 +791,7 @@ uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGray
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite;
+
 
 
 procedure TQSLTabThread.Execute;
@@ -846,6 +850,23 @@ begin
     else
      if dmData.DebugLevel>=1 then writeln (data);
   end
+end;
+
+procedure TfrmNewQSO.GetCallInfo(callTOinfo:string);
+
+Begin
+  if  edtCall.Text <> callTOinfo then  //call (and web info) maybe there already ok from pevious status packet
+                           Begin
+                             edtCall.Text := '';//clean grid like double ESC does
+                             old_ccall := '';
+                             old_cfreq := '';
+                             old_cmode := '';
+                             edtCall.Text := callTOinfo;
+                             c_lock:=False;
+                             edtCallExit(nil);    //<--------this will fetch web info
+                             if dmData.DebugLevel>=1 then Writeln('GetCallInfo: Call was not there already');
+                             WaitWeb(2); // give time for web
+                           end;
 end;
 
 procedure TfrmNewQSO.WaitWeb(secs:integer);
@@ -2535,7 +2556,10 @@ begin
               RepBuf[12] := #$07;    //quick hack: change message type from 0 to 7
               if dmData.DebugLevel>=1 then Writeln('Changed message type from 0 to 7. Sending...')
             end;
-            Wsjtxsock.SendString(RepBuf)
+            if multicast then
+               WsjtxsockS.SendString(RepBuf)
+             else
+               Wsjtxsock.SendString(RepBuf);
           end
         end; // Heartbeat
 
@@ -2635,18 +2659,7 @@ begin
                                               if dmData.DebugLevel>=1 then Writeln('Change 2click call to:',frmMonWsjtx.DblClickCall);
                                             end;
 
-            if  edtCall.Text <> call then  //call (and web info) maybe there already ok from pevious status packet
-                           Begin
-                             edtCall.Text := '';//clean grid like double ESC does
-                             old_ccall := '';
-                             old_cfreq := '';
-                             old_cmode := '';
-                             edtCall.Text := call;
-                             c_lock:=False;
-                             edtCallExit(nil);    //<--------this will fetch web info
-                             if dmData.DebugLevel>=1 then Writeln('Call was not there already');
-                             WaitWeb(2); // give time for web
-                           end;
+            GetCallInfo(call); //call web info
 
             //these can be altered always
             if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
@@ -6855,13 +6868,14 @@ end;
 
 procedure TfrmNewQSO.SendSpot;
 var
-  call : String;
+  call,rst_s,stx,stx_str,HisName,HelloMsg : String;
   tmp  : String;
   ModRst,
   HMLoc :String;
   f    : Currency;
   freq : String;
 begin
+  HelloMsg:='';
   if edtCall.Text <> '' then
   begin
     if TryStrToCurr(cmbFreq.Text,f) then
@@ -6869,9 +6883,15 @@ begin
       if (cqrini.ReadBool('DXCluster','SpotRX',False)) then
         f := StrToCurr(edtRXFreq.Text);
       f := f*1000;
-      tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + edtCall.Text;
-      ModRst := cmbMode.Text+' '+edtHisRst.Text;
+      call:=  edtCall.Text;
+      rst_s := edtHisRST.Text;
+      stx :=  edtContestSerialSent.Text;
+      stx_str:=edtContestExchangeMessageSent.Text;
+      HisName:= edtName.Text;
+      tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + call;
+      ModRst := cmbMode.Text+' '+ rst_s;
       HMLoc := edtGrid.Text+'<'+dmSatellite.GetPropShortName(cmbPropagation.Text)+'>'+copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
+
     end;
   end
   else begin
@@ -6888,18 +6908,22 @@ begin
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
     dmData.Q.Open();
     ModRst  := dmData.Q.Fields[0].AsString+' '+dmData.Q.Fields[1].AsString;
     HMLoc   := dmData.Q.Fields[2].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[4].AsString;
+    rst_s := dmData.Q.Fields[1].AsString;
+    stx :=  dmData.Q.Fields[5].AsString;
+    stx_str:=dmData.Q.Fields[6].AsString;
+    HisName:= dmData.Q.Fields[7].AsString;
     dmData.Q.Close();
     dmData.trQ.Rollback;
 
   end;
-  if (call = '') and (edtCall.Text = '') then
+  if (call = '') then
   exit;
 
   with TfrmSendSpot.Create(self) do
@@ -6907,6 +6931,12 @@ begin
     edtSpot.Text := tmp + ' ';
     ModeRst      :=' '+ModRst;
     HisMyLoc     :=' '+HMLoc;
+    Scall := call;
+    Srst_s := rst_s;
+    Sstx := stx ;
+    Sstx_str:=stx_str;
+    SHisName:= HisName;
+    SHelloMsg:=HelloMsg;
     ShowModal;
     if ModalResult = mrOK then
     begin
@@ -7171,6 +7201,15 @@ begin
 
                   tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do
 
+                  //multicast is 239.0.0.0/8
+                  multicast:=pos('239.',cqrini.ReadString('wsjt','ip','127.0.0.1'))=1; //check multicast
+                  if multicast then
+                   Begin
+                      WsjtxSockS := TUDPBlockSocket.Create;
+                      if dmData.DebugLevel>=1 then Writeln('Multicast sendsocket created!');
+                      WsjtxSockS.EnableReuse(true);
+                      if dmData.DebugLevel>=1 then Writeln('Reuse enabled!');
+                   end;
 
                   // start UDP server  http://synapse.ararat.cz/doc/help/blcksock.TBlockSocket.html
                   WsjtxSock := TUDPBlockSocket.Create;
@@ -7178,16 +7217,37 @@ begin
                   WsjtxSock.EnableReuse(true);
                   if dmData.DebugLevel>=1 then Writeln('Reuse enabled!');
                   try
-                    WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
-                    if dmData.DebugLevel>=1 then Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
+                    if multicast then
+                     begin
+                        WsjtxSock.createsocket;
+                        WsjtxSock.Bind('0.0.0.0',cqrini.ReadString('wsjt','port','2237'));
+                        WsjtxSock.AddMulticast(cqrini.ReadString('wsjt','ip','239.255.0.0'));
+                        Assert(WsjtxSock.LastError = 0);
+                        if dmData.DebugLevel>=1 then Writeln('Bind multicast RX '+cqrini.ReadString('wsjt','ip','239.255.0.0')+
                                                                         ':'+cqrini.ReadString('wsjt','port','2237'));
-                     // On bind failure try to rebind every second
-                     while ((WsjtxSock.LastError <> 0) and (tries > 0 )) do
-                       begin
-                         dec(tries);
-                         sleep(1000);
-                         WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
-                       end;
+                        WsjtxSockS.createsocket;
+                        WsjtxSockS.Bind('0.0.0.0','0');
+                        WsjtxSockS.MulticastTTL := 1;
+                        WsjtxSockS.connect(cqrini.ReadString('wsjt','ip','239.255.0.0'),cqrini.ReadString('wsjt','port','2237'));
+                        Assert(WsjtxSockS.LastError = 0);
+                        if dmData.DebugLevel>=1 then Writeln('Bind multicast TX '+cqrini.ReadString('wsjt','ip','239.255.0.0')+
+                                                                        ':'+cqrini.ReadString('wsjt','port','2237'));
+                     end
+                    else
+                     Begin
+                        WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
+
+                        if dmData.DebugLevel>=1 then Writeln('Bind issued '+cqrini.ReadString('wsjt','ip','127.0.0.1')+
+                                                                        ':'+cqrini.ReadString('wsjt','port','2237'));
+                       // On bind failure try to rebind every second
+                       while ((WsjtxSock.LastError <> 0) and (tries > 0 )) do
+                         begin
+                           dec(tries);
+                           sleep(1000);
+                           WsjtxSock.bind(cqrini.ReadString('wsjt','ip','127.0.0.1'),cqrini.ReadString('wsjt','port','2237'));
+                         end;
+
+                      end;
                      tmrWsjtx.Enabled  := True;          //  so timer can run more seldom.
                      tmrWsjtSpd.Enabled:= True;
                   except
@@ -7249,6 +7309,7 @@ begin
     dmUtils.RunOnBackgroud(path)
 end;
 
+
 procedure TfrmNewQSO.DisableRemoteMode;
 var
   tries : integer = 10;
@@ -7272,6 +7333,7 @@ begin
         FreeAndNil(frmMonWsjtx); //to release flooding richmemo
        end;
       if Assigned(WsjtxSock) then FreeAndNil(WsjtxSock);  // to release UDP socket
+      if multicast then if Assigned(WsjtxSockS) then FreeAndNil(WsjtxSockS);  // to release UDP multicast TX socket
       mnuRemoteModeWsjt.Checked:= False;
       AnyRemoteOn := False;
   end;

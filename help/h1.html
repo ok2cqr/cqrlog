@@ -329,13 +329,25 @@ to display. If you want to supress (ie. filter out) spots for some DX countries,
 its prefixes in the box below. Use a semicolon as a separator.
 <p>
 <strong>Callsign alert</strong> - allows you to enter callsigns that you are interested in. Eg. some special station for an award etc.<br>
-<strong>Run this command when callsign is potted:</strong> will run select command when any of callsigns you've enter appears in the cluster.<br>
+<strong>Run this command when callsign is spotted:</strong> will run select command when any of callsigns you've enter appears in the cluster.<br>
 E.g. use this if you want to see small window with information:<br><br>
 <i> zenity --info --text='Callsign $CALLSIGN detected at $FREQ $MODE' --title=Info</i><br><br>
 You have to install zenity, first. <i>(Thans to SV2RCK for the tip!)</i>
+<br><br>A variant for the KDE desktop.<br>
+The display duration in seconds (here 5) can be set here. The window closes automatically.
+<br><br><i>kdialog --title=Spot-Info --passivepopup "Callsign $CALLSIGN detected at $FREQ $MODE" 5</i>
+<br><br>
+This is also possible with "notify-send". The display duration is set in ms (-t 5000).
+<br><br>
+<i>notify-send -t 5000 "Spot-Info" "Callsign $CALLSIGN detected at $FREQ $MODE"</i>
+<br><br>
+"Kdialog" is installed by default using the 'kdebase-bin' package. For "notify-send" the 'libnotify-bin' package must be installed. <i>(Thans to Wolfgang, DL2KI, for the tip!)</i>
+
+
 </p>
 <p>
 <strong>Show country name in the DX cluster spot</strong> - next to every spot, you will se the coutry name of the DX station<br>
+<strong>Send these commands to telnet DXCluster when connected</strong> - one or several commands with comma separated can be sent to DXCluster after connect is initialized.<br>
 <strong>Connect to DX cluster after program startup</strong> - after log is opened, cqrlog will connect to your default cluster. Please remember that
 username and password(if needed) have to be filled in the cluster list.
 </p>
@@ -593,6 +605,8 @@ There are no known dependencies issues.<br><br>
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2237</strong> for port. These are set in wsjt-x settings/reporting and if changed there, must also to be changed here.
     <br>
     Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    <br><br>You can also use a multicast address for both <b>wsjt-x/settings/Reporting/UDP Server</b> and <b>cqrlog/preferences/fldigi/wsjt interface/wsjt addr</b>. Cqrlog will handle ip addresses starting with "239." as multicast addresses.
+    <br>With multicast you are able to run several programs listening to wsjt-x udp broadcasts at same time. To start with multicast try multicast group address "239.255.0.0" for both cqrlog and wsjt-x (and also other programs needed to listen wsjt-x)
     <br><br>
     Using <strong> WB4 chk starts from</strong> it is possible to limit log search starting from given date for callsign and/or locator.
     <br>Setting checkbox will apply given date as start date. Otherwise, when unchecked, whole log is searched through.

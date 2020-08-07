@@ -726,6 +726,8 @@ var
   itmp, itmp2, QSLState, SkimCTYid : Integer;
   buffer : String;
   f, etmp : Double;
+  cmds    :TStringlist;
+  K       :integer;
 begin
   if lTelnet.GetMessage(buffer) = 0 then
     exit;
@@ -764,8 +766,22 @@ begin
           //send start command at first prompt
           if not SentStartCmd and (cqrini.ReadString('DXCluster','StartCmd','') <> '') then
             begin
-               SendCommand(cqrini.ReadString('DXCluster','StartCmd',''));
-               if dmData.DebugLevel>=1 then  writeln('Sent DXCluster connect start command');
+               cmds := Tstringlist.create;
+                try
+                 Assert(Assigned(cmds)) ;
+                 cmds.Clear;
+                 cmds.StrictDelimiter := true;
+                 cmds.Delimiter := ',';
+                 cmds.DelimitedText := cqrini.ReadString('DXCluster','StartCmd','') ;
+                 for K:=0 to cmds.Count-1 do
+                  Begin
+                   SendCommand(trim(cmds[K]));
+                   if dmData.DebugLevel>=1 then  writeln('Sent DXCluster connect start command:',trim(cmds[K]));
+                   sleep(100);
+                  end;
+                finally
+                  FreeAndNil(cmds);
+                end;
                SentStartCmd := true;
             end;
         end;
@@ -982,6 +998,7 @@ var
   tmp      : Integer = 0;
   band     : String  = '';
   mode     : String  = '';
+  freeText : String  = '';
   seznam   : TStringList;
   i        : Integer = 0;
   prefix   : String  = '';
@@ -1328,9 +1345,10 @@ begin
                                                    // and connected to telnet cluster
     if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) then
       Begin
+        freeText:= dmDXCluster.GetfreeTextFromSpot('DX de '+spot);
         if dmData.DebugLevel >=1 then
-            Writeln('--------------------------------------------Call alerting is: ',call);
-        dmDXCluster.RunCallAlertCmd(call,band,mode,freq);
+            Writeln('Spot is:',spot,#$0A,'----Call alerting is: ',call,',',band,',',mode,',',freq,',',freeText,'-----------');
+        dmDXCluster.RunCallAlertCmd(call,band,mode,freq,freeText);
         call :='';
       end;
   if dmData.DebugLevel >=1 then
