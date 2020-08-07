@@ -4054,9 +4054,12 @@ begin
     exit;
   end;
 
-  Result := '-m ' + cqrini.ReadString(section, 'model', '') + ' ' +
-    '-r ' + cqrini.ReadString(section, 'device', '') + ' ' +
-    '-t ' + cqrini.ReadString(section, 'RigCtldPort', '4532') + ' ';
+  //if parameter data is empty ignore parameter
+  Result:='-m ' + cqrini.ReadString(section, 'model', '') + ' ';
+  if  (trim(cqrini.ReadString(section, 'device', ''))<>'') then
+         Result:=Result+'-r ' + cqrini.ReadString(section, 'device', '') + ' ';
+  if  (trim(cqrini.ReadString(section, 'RigCtldPort', ''))<>'') then
+         Result:=Result+'-t ' + cqrini.ReadString(section, 'RigCtldPort', '') + ' ';
   Result := Result + cqrini.ReadString(section, 'ExtraRigCtldArgs', '') + ' ';
 
   case cqrini.ReadInteger(section, 'SerialSpeed', 0) of
@@ -4159,9 +4162,12 @@ begin
     exit;
   end;
 
-  Result := '-m ' + cqrini.ReadString(section, 'model', '') + ' ' +
-    '-r ' + cqrini.ReadString(section, 'device', '') + ' ' +
-    '-t ' + cqrini.ReadString(section, 'RotCtldPort', '4533') + ' ';
+   //if parameter data is empty ignore parameter
+  Result:='-m ' + cqrini.ReadString(section, 'model', '') + ' ';
+  if  (trim(cqrini.ReadString(section, 'device', ''))<>'') then
+         Result:=Result+'-r ' + cqrini.ReadString(section, 'device', '') + ' ';
+  if  (trim(cqrini.ReadString(section, 'RotCtldPort', ''))<>'') then
+         Result:=Result+'-t ' + cqrini.ReadString(section, 'RotCtldPort', '') + ' ';
   Result := Result + cqrini.ReadString(section, 'ExtraRotCtldArgs', '') + ' ';
 
   case cqrini.ReadInteger(section, 'SerialSpeed', 0) of
