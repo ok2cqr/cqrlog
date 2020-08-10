@@ -113,7 +113,7 @@ type
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
     procedure setDefaultColorSgMonitorAttributes;
-    procedure setMonitorColumnHW;
+    procedure SetsgMonitorColumnHW;
     procedure scrollSgMonitorToLastLine;
     function  LineFilter(L: string):string;
     procedure PrintDecodedMessage;
@@ -300,6 +300,7 @@ var
 begin
   for l:= sgMonitor.rowcount - 1 downto 0 do
     sgMonitor.DeleteRow(l);
+  SetsgMonitorColumnHW;
   setDefaultColorSgMonitorAttributes;
   if LocalDbg then
         Writeln('sgMonitor clear finished');
@@ -350,7 +351,7 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.setMonitorColumnHW;
+procedure TfrmMonWsjtx.SetsgMonitorColumnHW;
 Var
   FSz : integer;
   i   : integer;
@@ -573,7 +574,6 @@ begin
        Columns.Items[1].maxSize := 1;
        Columns.Items[1].minSize := 1;
       end;
-    setMonitorColumnHW;
     clearSgMonitor;
   end;
 end;
@@ -610,15 +610,11 @@ begin
 end;
 
 procedure TfrmMonWsjtx.chkMapChange(Sender: TObject);
-//X
-var
-  i: integer;
 begin
   sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
-  //X chkUState.Visible:= not chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -627,8 +623,7 @@ begin
     if chkMap.Checked then
     begin   //Map
       //write width/height CQ read width Map
-      if Sender <> frmMonWsjtx then
-        SaveFormPos('Cq');  //no save from init
+      if Sender <> frmMonWsjtx then  SaveFormPos('Cq');  //no save from init
       LoadFormPos('Map');
       LockFlw := True;
       cbflw.Checked := False;
@@ -647,7 +642,6 @@ begin
       chknoHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
       sgMonitor.Columns.Items[1].Visible:= false;
-      //X
       sgMonitor.Columns.Items[7].Visible:= true;
       sgMonitor.Columns.Items[6].MinSize:=2;  //map mode -> US state
       sgMonitor.Columns.Items[6].MaxSize:=2;
@@ -655,8 +649,7 @@ begin
     else
     begin   //Cq
       //write width/height Map read width CQ
-      if Sender <> frmMonWsjtx then
-        SaveFormPos('Map');   //no save from init
+      if Sender <> frmMonWsjtx then  SaveFormPos('Map');   //no save from init
       LoadFormPos('Cq');
       cbflw.Checked := cqrini.ReadBool('MonWsjtx', 'FollowShow', False);
       tbFollow.Checked := cqrini.ReadBool('MonWsjtx', 'Follow', False);
@@ -672,9 +665,6 @@ begin
       sgMonitor.Columns.Items[6].MaxSize:=15;
     end;
     clearSgMonitor;
-    //X
-         i:=sgMonitor.Columns.Items[6].MaxSize;
-     i:= sgMonitor.Columns.Items[6].MinSize;
   end;
 end;
 
@@ -1051,7 +1041,6 @@ begin
     edtFollow.Font.Size := popFontDlg.Font.Size;
     sgMonitor.Font.Name := popFontDlg.Font.Name;
     sgMonitor.Font.Size := popFontDlg.Font.Size;
-    setMonitorColumnHW;
     clearSgMonitor;
     edtFollow.Text := '';
   end;
@@ -1143,9 +1132,8 @@ begin
   LockMap := False; //last thing to do
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
-  //X chkUState.Visible:= not chkMap.Checked;
   //DL7OAP
-  setMonitorColumnHW;
+  SetsgMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
   chknoHistoryChange(nil); // sure to get history settings right
 
@@ -1316,13 +1304,15 @@ begin
                Begin
                      if LocalDbg then
                                  Writeln('---O msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+                    if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+                                       else sgMonitor.Columns.Items[1].Visible:= false;
                     clearSgMonitor;
                   end;
             LastWsjtLineTime := msgTime;
             sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
             //Snr
-            if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
-             else sgMonitor.Columns.Items[1].Visible:= false;
+            //X if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+            // else sgMonitor.Columns.Items[1].Visible:= false;
             sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
                                //PadLeft(IntToStr(Snr),3);
 
@@ -2130,8 +2120,6 @@ begin
 
 end;
 procedure TfrmMonWsjtx.extcqprint;
-//X
-var i:integer;
   begin
     if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
     else
@@ -2141,7 +2129,7 @@ var i:integer;
           AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
         end
        else
-          AddColorStr(CqDir, extCqCall,7,sgMonitor.rowCount-1)
+          AddColorStr('>'+CqDir, extCqCall,7,sgMonitor.rowCount-1)
     end;
   end;
 
