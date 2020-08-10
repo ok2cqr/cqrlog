@@ -130,12 +130,16 @@ function TdmSatellite.GetPropLongName(Propagation : String) : String;
 var
   i : integer;
 begin
+  Result:='';
   for i:=0 to ListOfPropModes.Count-1 do
   begin
     if (Pos(Propagation, ListOfPropModes[i]) = 1) then
-        break;
+     Begin
+       Result := ListOfPropModes[i];
+       break;
+     end;
   end;
-  Result := ListOfPropModes[i];
+
 end;
 
 function TdmSatellite.GetShortName(StringItem : String) : String;

@@ -3009,10 +3009,14 @@ begin
                       1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
                  end;
            end;
-           //----------WHAT IS THIS? THERE IS NO PROPAGATION INFO IN MSG#5--(removed 2020.08.10 OH1KH)-----
-           //propmode:= trim(StrBuf(index));
-           //if dmData.DebugLevel>=1 then Writeln('Prop Mode :', propmode);
-           //cmbPropagation.Text := dmSatellite.GetPropLongName(propmode);
+           //----------this is not yet in wsjt-x 2.2.2 and JTDX 2.1.0rc151------------------
+           propmode:= trim(StrBuf(index));
+           if dmData.DebugLevel>=1 then Writeln('Prop Mode :', propmode);
+           if (cmbPropagation.Text='') then
+                 Begin
+                  cmbPropagation.Text := dmSatellite.GetPropLongName(propmode);
+                  if dmData.DebugLevel>=1 then Writeln('Prop Mode added!');
+                 end;
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
