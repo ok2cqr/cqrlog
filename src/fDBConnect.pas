@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process;
 
 type
 
@@ -61,6 +61,14 @@ type
     procedure btnUtilsClick(Sender: TObject);
     procedure chkSavePassChange(Sender: TObject);
     procedure chkSaveToLocalClick(Sender: TObject);
+    procedure edtPassEnter(Sender: TObject);
+    procedure edtPassExit(Sender: TObject);
+    procedure edtPortEnter(Sender: TObject);
+    procedure edtPortExit(Sender: TObject);
+    procedure edtServerEnter(Sender: TObject);
+    procedure edtServerExit(Sender: TObject);
+    procedure edtUserEnter(Sender: TObject);
+    procedure edtUserExit(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -68,24 +76,26 @@ type
     procedure mnuExportClick(Sender: TObject);
     procedure mnuImportClick(Sender: TObject);
     procedure mnuRepairClick(Sender : TObject);
+    procedure tmrAutoConnectStartTimer(Sender: TObject);
     procedure tmrAutoConnectTimer(Sender: TObject);
   private
     RemoteMySQL : Boolean;
     AskForDB    : Boolean;
-
+    editCheck   :String;
+    procedure FromMenu_CloseExist;
+    function Mysql_safe_running: boolean;
     procedure SaveLogin;
-    procedure LoadLogin;
+    procedure LoadLogin(ForceRemote:boolean=false);
     procedure UpdateGridFields;
     procedure EnableButtons;
     procedure DisableButtons;
     procedure OpenDefaultLog;
   public
-    OpenFromMenu : Boolean;
+    OpenFromNewQSOMenu : Boolean;
   end; 
 
 var
   frmDBConnect: TfrmDBConnect;
-
 
 implementation
 {$R *.lfm}
@@ -94,6 +104,50 @@ uses dData, dUtils, fNewLog, fDXCluster,fNewQSO;
 
 { TfrmDBConnect }
 
+procedure TfrmDBConnect.FromMenu_CloseExist;
+          begin
+           if  OpenFromNewQSOMenu then
+            Begin
+                    frmDXCluster.StopAllConnections;
+                    frmNewQSO.CloseAllWindows;
+                    frmNewQSO.SaveSettings;
+                    dmData.CloseDatabases;
+                    frmNewQSO.DBServerChanged :=True;
+                    sleep(200);
+                    application.ProcessMessages;
+                    writeln('All closed now!');
+            end;
+          end;
+//------------------------------------------
+function TfrmDBConnect.Mysql_safe_running: boolean;
+var
+  res       : Byte;
+  SearchRec : TSearchRec;
+  f         : TextFile;
+  pid       : String = '';
+  pidfile   : String = '';
+  p         : TProcess;
+begin
+  res := FindFirst(dmData.DataDir + '*.pid', faAnyFile, SearchRec);
+  while Res = 0 do
+  begin
+    if dmData.DebugLevel>=1 then Writeln(dmData.DataDir + SearchRec.Name);
+    if FileExists(dmData.DataDir + SearchRec.Name) then
+    begin
+      pidfile := dmData.DataDir + SearchRec.Name;
+      AssignFile(f,pidfile);
+      Reset(f);
+      ReadLn(f,pid); //get process id from <computer-name.pid>
+      pid := Trim(pid);
+      CloseFile(f);
+      break
+    end;
+    Res := FindNext(SearchRec)
+  end;
+  FindClose(SearchRec);
+
+  Result := pid <> '';
+end;
 procedure TfrmDBConnect.EnableButtons;
 begin
   btnOpenLog.Enabled   := True;
@@ -126,10 +180,12 @@ procedure TfrmDBConnect.SaveLogin;
 var
   ini : TIniFile;
 begin
+  if dmData.DebugLevel>=1 then Writeln('saving login');
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
     if not chkSaveToLocal.Checked then
     begin
+      if dmData.DebugLevel>=1 then Writeln('saving as remote');
       ini.WriteBool('Login','SaveToLocal',False);
       ini.WriteString('Login','Server',edtServer.Text);
       ini.WriteString('Login','Port',edtPort.Text);
@@ -144,31 +200,31 @@ begin
       ini.WriteBool('Login','AutoConnect',chkAutoConn.Checked)
     end
     else
-      ini.WriteBool('Login','SaveToLocal',True)
+      Begin
+      if dmData.DebugLevel>=1 then Writeln('saving as local');
+      ini.WriteBool('Login','SaveToLocal',True);
+      end;
   finally
     ini.Free
   end
 end;
 
-procedure TfrmDBConnect.LoadLogin;
+procedure TfrmDBConnect.LoadLogin(ForceRemote:boolean=false);
 var
   ini : TIniFile;
 begin
+  if dmData.DebugLevel>=1 then Writeln('Loading login');
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
-    if ini.ReadBool('Login','SaveTolocal',True) then
+    if (ini.ReadBool('Login','SaveTolocal',True) and (ForceRemote=false)) then
     begin
-      edtServer.Text         := '127.0.0.1';
-      edtPort.Text           := '64000';
-      edtUser.Text           := 'cqrlog';
-      edtPass.Text           := 'cqrlog';
-      tmrAutoConnect.Enabled := True;
-      chkAutoConn.Checked    := True;
+      if dmData.DebugLevel>=1 then Writeln('Load values set local');
       chkSaveToLocal.Checked := True;
       chkSaveToLocalClick(nil);
-      RemoteMySQL  := False
     end
-    else begin
+    else
+    begin
+      if dmData.DebugLevel>=1 then Writeln('Load values set remote');
       chkSaveToLocal.Checked := False;
       grbLogin.Visible     := True;
       edtServer.Text       := ini.ReadString('Login','Server','127.0.0.1');
@@ -198,9 +254,9 @@ procedure TfrmDBConnect.FormClose(Sender: TObject; var CloseAction: TCloseAction
 var
   ini : TIniFile;
 begin
-  SaveLogin;
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
+    ini.WriteBool('Login','SaveToLocal',chkSaveToLocal.Checked);
     if WindowState = wsMaximized then
       ini.WriteBool(Name,'Max',True)
     else begin
@@ -219,7 +275,7 @@ procedure TfrmDBConnect.FormCreate(Sender: TObject);
 var
   ini : TIniFile;
 begin
-  OpenFromMenu := False;
+  OpenFromNewQSOMenu := False;
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
     AskForDB := not ini.ValueExists('Login','SaveToLocal')
@@ -231,6 +287,7 @@ end;
 procedure TfrmDBConnect.btnConnectClick(Sender: TObject);
 begin
   SaveLogin;
+  btnDisconnectClick(nil); //be sure we have disconnected and closed any log open
   if dmData.OpenConnections(edtServer.Text,edtPort.Text,edtUser.Text,edtPass.Text) then
   begin
     dmData.CheckForDatabases;
@@ -242,10 +299,10 @@ end;
 
 procedure TfrmDBConnect.btnDeleteLogClick(Sender: TObject);
 begin
-  if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+  if ( OpenFromNewQSOMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
       Begin
          ShowMessage('Open log can not be deleted!' +
-           sLineBreak + 'Switch logs fist or delete log before opening it!' );
+           sLineBreak + 'Switch logs first or delete log before opening it!' );
       exit;
       end;
   if dmData.qLogList.Fields[0].AsInteger = 1 then
@@ -273,16 +330,7 @@ end;
 
 procedure TfrmDBConnect.btnDisconnectClick(Sender: TObject);
 begin
-  {if (dmData.MySQLVersion < 5.5) then
-  begin
-    if dmData.MainCon51.Connected then
-      dmData.MainCon51.Connected := False
-  end
-  else begin
-    if dmData.MainCon55.Connected then
-      dmData.MainCon55.Connected := False
-  end;
-  }
+  FromMenu_CloseExist; //if from open log, close it first.
   if dmData.MainCon.Connected then
     dmData.MainCon.Connected := False;
   DisableButtons
@@ -335,14 +383,11 @@ begin
   try
     ini.WriteBool('Login','AutoOpen',chkAutoOpen.Checked);
     ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger);
-    if chkAutoOpen.Checked then
-      ini.WriteInteger('Login','LastLog',dmData.qLogList.Fields[0].AsInteger)
-    else
-      ini.WriteInteger('Login','LastOpenedLog',dmData.qLogList.Fields[0].AsInteger)
   finally
     ini.Free
   end;
-  if not OpenFromMenu then
+
+  if not OpenFromNewQSOMenu then
   begin
     dmData.LogName := dmData.qLogList.Fields[1].AsString;
     dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger)
@@ -369,54 +414,89 @@ begin
 end;
 
 procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
+
 begin
   //writeln('OpenFromMenu:',OpenFromMenu);
   if chkSaveToLocal.Checked then
   begin
-    if RemoteMySQL then
-    begin
-      if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes then
-      begin
-        if  OpenFromMenu then  //close existing log
-         Begin
-          frmDXCluster.StopAllConnections;
-          frmNewQSO.CloseAllWindows;
-          frmNewQSO.SaveSettings;
-          dmData.CloseDatabases;
-          frmNewQSO.DBServerChanged :=True;
-          RemoteMySQL :=false;
-          OpenFromMenu:=false;
-          SaveLogin;
-          LoadLogin;
-         end;
-        dmData.StartMysqldProcess;
-        Sleep(3000);
+      if not Mysql_safe_running then
+       begin
+        if Application.MessageBox('Local database is not running. Dou you want to start it?','Question',mb_YesNo+mb_IconQuestion) = idYes
+           then
+              Begin
+                //if RemoteMySQL then btnDisconnectClick(nil);//coming from remote server
+                //RemoteMySQL :=false;
+                dmData.StartMysqldProcess;
+                Sleep(3000);
+             end
+             else
+             begin      //deny mysql_safe start , return to remote server
+              chkSaveToLocal.Checked := False;
+              grbLogin.Visible       := True;
+              exit
+            end;
+        end;
+        //if RemoteMySQL then //coming from remote server
+        //                          btnDisconnectClick(nil);
+        SaveLogin; //saves toLocal.checked set
+        RemoteMySQL :=false;
+        edtServer.Text         := '127.0.0.1';
+        edtPort.Text           := '64000';
+        edtUser.Text           := 'cqrlog';
+        edtPass.Text           := 'cqrlog';
+        tmrAutoConnect.Enabled := True;
+        chkAutoConn.Checked    := True;
+        grbLogin.Visible := False;
+        chkSaveToLocal.Checked := True;
         btnConnectClick(nil)
       end
       else begin
-        chkSaveToLocal.Checked := False;
-        grbLogin.Visible       := True;
-        exit
-      end
-    end;
-    grbLogin.Visible := False
-  end
-  else
+  else     // not chkSaveToLocal.Checked
   begin
-    if  OpenFromMenu then  //close existing log
-         Begin
-            frmDXCluster.StopAllConnections;
-            frmNewQSO.CloseAllWindows;
-            frmNewQSO.SaveSettings;
-            dmData.CloseDatabases;
-            frmNewQSO.DBServerChanged :=True;
-            RemoteMySQL :=True;
-            OpenFromMenu:=false;
-            SaveLogin;
-            LoadLogin;
-         end;
-    grbLogin.Visible := True
+     //btnDisconnectClick(nil);
+     LoadLogin(true);   //force remote DB
+     chkSaveToLocal.Checked := False;
   end
+end;
+
+procedure TfrmDBConnect.edtPassEnter(Sender: TObject);
+begin
+   editCheck:=edtPass.Text
+end;
+
+procedure TfrmDBConnect.edtPassExit(Sender: TObject);
+begin
+ if  edtPass.Text <> editCheck then btnDisconnectClick(nil); //disconnect if change
+end;
+
+procedure TfrmDBConnect.edtPortEnter(Sender: TObject);
+begin
+  editCheck:=edtPort.Text;
+end;
+
+procedure TfrmDBConnect.edtPortExit(Sender: TObject);
+begin
+  if  edtPort.Text <> editCheck then btnDisconnectClick(nil); //disconnect if change
+end;
+
+procedure TfrmDBConnect.edtServerEnter(Sender: TObject);
+begin
+  editCheck:=edtServer.Text;
+end;
+
+procedure TfrmDBConnect.edtServerExit(Sender: TObject);
+begin
+  if  edtServer.Text <> editCheck then btnDisconnectClick(nil); //disconnect if change
+end;
+
+procedure TfrmDBConnect.edtUserEnter(Sender: TObject);
+begin
+   editCheck:=edtUser.Text;
+end;
+
+procedure TfrmDBConnect.edtUserExit(Sender: TObject);
+begin
+  if edtUser.Text  <> editCheck then btnDisconnectClick(nil); //disconnect if change
 end;
 
 procedure TfrmDBConnect.FormShow(Sender: TObject);
@@ -439,17 +519,19 @@ begin
     ini.Free
   end;
   dbgrdLogs.DataSource := dmData.dsrLogList;
-
-  LoadLogin;
-  if OpenFromMenu then
+  if OpenFromNewQSOMenu then
   begin
     UpdateGridFields;
     EnableButtons
   end
   else begin
-    if StartMysql then
-      dmData.StartMysqldProcess
+    if StartMysql and (not Mysql_safe_running) then
+     Begin
+      dmData.StartMysqldProcess;
+      Sleep(3000);
+     end;
   end;
+  LoadLogin;
   dlgOpen.InitialDir := dmData.HomeDir;
   dlgSave.InitialDir := dmData.HomeDir
 end;
@@ -501,7 +583,7 @@ var
   db : String;
   l  : TStringList;
 begin
-   if ( OpenFromMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
+   if ( OpenFromNewQSOMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
       Begin
          ShowMessage('Importing settings to open log may not always take effect!' +
            sLineBreak + 'Switch logs fist or import settings before opening the log!' );
@@ -538,6 +620,11 @@ begin
   ShowMessage('Done, tables fixed')
 end;
 
+procedure TfrmDBConnect.tmrAutoConnectStartTimer(Sender: TObject);
+begin
+  btnDisconnectClick(nil);
+end;
+
 procedure TfrmDBConnect.tmrAutoConnectTimer(Sender: TObject);
 var
   Connect : Boolean = True;
@@ -550,19 +637,21 @@ begin
                               'new databases will be created. This may take a while, please be patient.' ,'Question ...',
                               mb_YesNo+mb_IconQuestion) =  idYes then
     begin
+      RemoteMySQL := False;
       dmData.StartMysqldProcess;
       Sleep(3000)
     end
-    else begin
+    else
+     begin
       Connect     := False;
       RemoteMySQL := True;
       chkSaveToLocal.Checked := False;
       chkSaveToLocalClick(nil);
       edtServer.SetFocus
-    end
+     end
   end;
-  if (not OpenFromMenu) and Connect then
-    btnConnect.Click;
+  if Connect then
+    btnConnectClick(nil);
   if btnOpenLog.Enabled then
     btnOpenLog.SetFocus
 end;
@@ -572,24 +661,25 @@ var
   ini    : TIniFile;
   AutoLog  : Integer;
   AutoOpen : Boolean;
-  LastLog  : Integer;
+  s:integer;
 begin
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
     AutoOpen := ini.ReadBool('Login','AutoOpen',False);
     AutoLog  := ini.ReadInteger('Login','LastLog',0);
-    LastLog  := ini.ReadInteger('Login','LastOpenedLog',0)
   finally
     ini.Free
   end;
-  if AutoOpen then
-  begin
-    if dmData.qLogList.Locate('log_nr',AutoLog,[]) then
-      btnOpenLog.Click
-  end
-  else begin
-    dmData.qLogList.Locate('log_nr',LastLog,[])
-  end
+
+  dmData.RefreshLogList(Autolog);
+
+  if AutoOpen and (not OpenFromNewQSOMenu ) then
+  Begin
+    dmData.LogName := dmData.qLogList.Fields[1].AsString;
+    dmData.OpenDatabase(dmData.qLogList.Fields[0].AsInteger);
+    ModalResult    := mrOK
+  end;
+
 end;
 
 end.

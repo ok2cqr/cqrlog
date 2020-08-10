@@ -25,6 +25,7 @@ type
     edtFollow: TEdit;
     edtFollowCall: TEdit;
     lblInfo: TLabel;
+    pnlChecks: TPanel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
     sgMonitor: TStringGrid;
@@ -91,8 +92,10 @@ type
     procedure tmrFCCTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
   private
+    DPstarted : integer;     //fcc states download process status
     DProcess: TProcess;
-    DPstarted : integer;
+    tfIn,tfOUT,dupOut: TextFile;
+    FccEn        :TStringList;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -110,7 +113,7 @@ type
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
     procedure setDefaultColorSgMonitorAttributes;
-    procedure setMonitorColumnHW;
+    procedure SetsgMonitorColumnHW;
     procedure scrollSgMonitorToLastLine;
     function  LineFilter(L: string):string;
     procedure PrintDecodedMessage;
@@ -118,8 +121,10 @@ type
     procedure extcqprint;
     procedure BuildFccState;
     procedure downLoadInit;
+    function UsCallState(call:string;var StatClr:TColor):string;
     { private declarations }
   public
+    CanCloseFCCProcess :boolean;
     DblClickCall  :string;   //callsign that is called by doubleclick
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
@@ -132,6 +137,7 @@ type
     procedure BufDebug(MyHeader,MyBuf:string);
     function HexStrToStr(const HexStr: string): string;
     function StrToHexStr(const S: string): string;
+    procedure CloseFCCProcess;
     { public declarations }
   end;
 
@@ -294,6 +300,7 @@ var
 begin
   for l:= sgMonitor.rowcount - 1 downto 0 do
     sgMonitor.DeleteRow(l);
+  SetsgMonitorColumnHW;
   setDefaultColorSgMonitorAttributes;
   if LocalDbg then
         Writeln('sgMonitor clear finished');
@@ -344,7 +351,7 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.setMonitorColumnHW;
+procedure TfrmMonWsjtx.SetsgMonitorColumnHW;
 Var
   FSz : integer;
   i   : integer;
@@ -567,7 +574,6 @@ begin
        Columns.Items[1].maxSize := 1;
        Columns.Items[1].minSize := 1;
       end;
-    setMonitorColumnHW;
     clearSgMonitor;
   end;
 end;
@@ -604,14 +610,11 @@ begin
 end;
 
 procedure TfrmMonWsjtx.chkMapChange(Sender: TObject);
-var
-  i: integer;
 begin
   sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not sgMonitor.Visible;
   chkCbCQ.Visible := chkMap.Checked;
   chkdB.Visible := chkMap.Checked;
-  chkUState.Visible:= not chkMap.Checked;
   if not chkMap.Checked then chkCbCQ.Checked:=false;
 
   if not LockMap then    //do not run automaticly on init or leave form
@@ -620,8 +623,7 @@ begin
     if chkMap.Checked then
     begin   //Map
       //write width/height CQ read width Map
-      if Sender <> frmMonWsjtx then
-        SaveFormPos('Cq');  //no save from init
+      if Sender <> frmMonWsjtx then  SaveFormPos('Cq');  //no save from init
       LoadFormPos('Map');
       LockFlw := True;
       cbflw.Checked := False;
@@ -640,13 +642,14 @@ begin
       chknoHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
       sgMonitor.Columns.Items[1].Visible:= false;
-      sgMonitor.Columns.Items[7].Visible:= false;
+      sgMonitor.Columns.Items[7].Visible:= true;
+      sgMonitor.Columns.Items[6].MinSize:=2;  //map mode -> US state
+      sgMonitor.Columns.Items[6].MaxSize:=2;
     end
     else
     begin   //Cq
       //write width/height Map read width CQ
-      if Sender <> frmMonWsjtx then
-        SaveFormPos('Map');   //no save from init
+      if Sender <> frmMonWsjtx then  SaveFormPos('Map');   //no save from init
       LoadFormPos('Cq');
       cbflw.Checked := cqrini.ReadBool('MonWsjtx', 'FollowShow', False);
       tbFollow.Checked := cqrini.ReadBool('MonWsjtx', 'Follow', False);
@@ -658,6 +661,8 @@ begin
       sgMonitor.Columns.Items[0].Visible:= true;
       sgMonitor.Columns.Items[1].Visible:= true;
       sgMonitor.Columns.Items[7].Visible:= true;
+      sgMonitor.Columns.Items[6].MinSize:=15;
+      sgMonitor.Columns.Items[6].MaxSize:=15;
     end;
     clearSgMonitor;
   end;
@@ -985,8 +990,15 @@ begin
              if DPstarted > 3 then
               begin
                if LocalDbg then Writeln('DPstarted > 3');
-               frmProgress.Hide;
                tmrFcc.Enabled:=False;
+               frmProgress.lblInfo.Caption:= 'Done!';
+               for sz:=0 to 100 do
+               Begin
+                 frmProgress.ShowOnTop;
+                 sleep(10);
+                 Application.ProcessMessages;
+               end;
+               frmProgress.Hide;
                DPstarted:=0;
                chkUState.Checked:=True; //causes recall
               end
@@ -1029,7 +1041,6 @@ begin
     edtFollow.Font.Size := popFontDlg.Font.Size;
     sgMonitor.Font.Name := popFontDlg.Font.Name;
     sgMonitor.Font.Size := popFontDlg.Font.Size;
-    setMonitorColumnHW;
     clearSgMonitor;
     edtFollow.Text := '';
   end;
@@ -1052,6 +1063,7 @@ begin
   cmAny.Bitmap  := TBitmap.Create;
   cmNever.Bitmap := TBitmap.Create;
   cmCqDX.Bitmap := TBitmap.Create;
+  CanCloseFCCProcess := True;  //there is no process yet
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
@@ -1120,9 +1132,8 @@ begin
   LockMap := False; //last thing to do
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
-  chkUState.Visible:= not chkMap.Checked;
   //DL7OAP
-  setMonitorColumnHW;
+  SetsgMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
   chknoHistoryChange(nil); // sure to get history settings right
 
@@ -1219,6 +1230,11 @@ procedure TfrmMonWsjtx.AddOtherMessage(Time,Message, Reply: string;Df,Sr:integer
 var
   msgList: TStringList;
   index: integer;
+  adif:integer;
+  pfx:string = '';
+  msgRes:string = '';
+  StatClr: Tcolor;
+
 begin
   Message := LineFilter(Message);
 
@@ -1288,13 +1304,13 @@ begin
                Begin
                      if LocalDbg then
                                  Writeln('---O msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+                    if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+                                       else sgMonitor.Columns.Items[1].Visible:= false;
                     clearSgMonitor;
                   end;
             LastWsjtLineTime := msgTime;
             sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
             //Snr
-            if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
-             else sgMonitor.Columns.Items[1].Visible:= false;
             sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
                                //PadLeft(IntToStr(Snr),3);
 
@@ -1314,6 +1330,17 @@ begin
             //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
             AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
+             if (chkUState.Checked) then
+              adif:= dmDXCC.id_country(msgCall, Now(), pfx, msgRes);
+              case adif of
+                6,9,103,110,166,202,285,291:
+                                               Begin
+                                                 StatClr :=clBlack;
+                                                 msgRes := UsCallState(msgCall,StatClr);
+                                                  if (StatClr<>clBlack)  then  //there is US state to print to Map
+                                                     AddColorStr(msgRes, StatClr,7,sgMonitor.rowCount-1);
+                                               end;
+              end;
             if LocalDbg then
               Begin
                Writeln('All written in Addother. Next alerts');
@@ -1900,10 +1927,8 @@ begin
 end;
 procedure TfrmMonWsjtx.PrintDecodedMessage;
 Var
-   i,
-   us  : integer;
-  freq,
-  Stat :string;
+   i : integer;
+  freq :string;
 StatClr: Tcolor;
 
 begin
@@ -1963,60 +1988,12 @@ begin
        begin
         msgRes := 'USA';
          if chkUState.Checked then
-          begin
-              //EnterCriticalsection(crit);
-              try
-               us:= URState.IndexOfName(msgCall);   //seek runtime list first
-               if us >= 0 then
-                Begin
-                  Stat := URState.ValueFromIndex[us];
-                  if LocalDbg then  Writeln('State found from runtime stringlist');
-                end
-               else
-                Begin
-                  us:= UState.IndexOfName(msgCall); // seek from fcc data
-                  if us >= 0 then
-                   begin
-                   Stat := UState.ValueFromIndex[us];
-                   URState.Add(msgCall+'='+Stat);   //put to runtime list
-                   if LocalDbg then  Writeln('State found from fcc stringlist, added to runtime');
-                   end
-                  else  Stat:='';
-                end;
-
-               if Stat <>''  then
-                 begin
-                  us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
-                   case us of
-                        0: Begin
-                            StatClr :=wkdnever;
-                           end;
-                        1: Begin
-                            Stat := LowerCase(Stat);
-                            StatClr :=wkdhere;
-                           end;
-                        2: Begin
-                            StatClr :=wkdband;
-                           end;
-                        3: Begin
-                             StatClr :=wkdany;
-                           end;
-                        else
-                          Begin
-                            StatClr :=clBlack;
-                          end;
-                          //should not happen
-                      end;
-
-                  if LocalDbg then Writeln(' State WB4 status is: ',us);
-                  msgRes := 'USA-'+Stat;
-                 end
-              finally
-                //LeaveCriticalsection(crit)
-              end;
-
-          end;
+            msgRes := 'USA '+UsCallState(msgCall,StatClr);
        end;
+
+      if (chkMap.Checked and (StatClr<>clBlack))  then  //there is US state to print to Map
+      AddColorStr(copy(msgRes,5,2), StatClr,6,sgMonitor.rowCount-1);
+
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
      if CqDir <> '' then
@@ -2051,6 +2028,9 @@ begin
              Begin
               AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', StatClr,6, sgMonitor.rowCount-1);
              end;
+
+
+
    if (not chkMap.Checked) then
     begin
      freq := dmUtils.FreqFromBand(CurBand, CurMode);
@@ -2078,8 +2058,65 @@ begin
      end;
 
  end;//printing out  line
-procedure TfrmMonWsjtx.extcqprint;
+function TfrmMonWsjtx.UsCallState(call:string;var StatClr:TColor):string;
+var
+   us:integer;
+   Stat:string;
+begin
+   Result:='';
+    //EnterCriticalsection(crit);
+    try
+     us:= URState.IndexOfName(msgCall);   //seek runtime list first
+     if us >= 0 then
+      Begin
+        Stat := URState.ValueFromIndex[us];
+        if LocalDbg then  Writeln('State found from runtime stringlist');
+      end
+     else
+      Begin
+        us:= UState.IndexOfName(msgCall); // seek from fcc data
+        if us >= 0 then
+         begin
+         Stat := UState.ValueFromIndex[us];
+         URState.Add(msgCall+'='+Stat);   //put to runtime list
+         if LocalDbg then  Writeln('State found from fcc stringlist, added to runtime');
+         end
+        else  Stat:='';
+      end;
 
+     if Stat <>''  then
+       begin
+        us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
+         case us of
+              0: Begin
+                  StatClr :=wkdnever;
+                 end;
+              1: Begin
+                  Stat := LowerCase(Stat);
+                  StatClr :=wkdhere;
+                 end;
+              2: Begin
+                  StatClr :=wkdband;
+                 end;
+              3: Begin
+                   StatClr :=wkdany;
+                 end;
+              else
+                Begin
+                  StatClr :=clBlack;
+                end;
+                //should not happen
+            end;
+
+        if LocalDbg then Writeln(' State WB4 status is: ',us);
+        Result:=Stat;
+       end
+    finally
+      //LeaveCriticalsection(crit)
+    end;
+
+end;
+procedure TfrmMonWsjtx.extcqprint;
   begin
     if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
     else
@@ -2089,7 +2126,7 @@ procedure TfrmMonWsjtx.extcqprint;
           AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
         end
        else
-          AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
+          AddColorStr('>'+CqDir, extCqCall,7,sgMonitor.rowCount-1)
     end;
   end;
 
@@ -2110,11 +2147,9 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
   end;
 procedure  TfrmMonWsjtx.BuildFccState;
 var
-  tfIn,tfOUT,dupOut: TextFile;
   s,t: string;
   call,state,ids,Ocall,Ostate :string;
   id,Oid,r,p,d,i,x : longint;
-  FccEn        :TStringList;
 
 begin
   Ocall:='call';
@@ -2208,6 +2243,7 @@ begin
     frmProgress.DoStep('Done !');
     writeln(tfOut,Ocall,'=',Ostate);   //last remaining
     FreeAndNil(FccEn);
+    CloseFile(tfin);
     CloseFile(tfOut);
     CloseFile(dupOut);
   except
@@ -2219,6 +2255,7 @@ begin
   if LocalDbg then Writeln('Written:    ',p,' lines.');
   if LocalDbg then Writeln('Duplicates: ',d,' lines.');
   frmProgress.Hide;
+  CanCloseFCCProcess:=true;
 end;
 
 procedure  TfrmMonWsjtx.downLoadInit;
@@ -2226,6 +2263,7 @@ var
   f :textfile;
 
   begin
+    CanCloseFCCProcess:=false;
     if LocalDbg then Writeln('downloadinit start');
     frmProgress.Show;
     frmProgress.DoInit(155,1);
@@ -2267,6 +2305,22 @@ var
      writeln('Error Details: ', E.Message);
     end;
 
+end;
+Procedure  TfrmMonWsjtx.CloseFCCProcess;
+begin
+  //here force close threads and others
+  if DProcess<>nil then FreeAndNil(DProcess);
+  if FccEn<>nil then
+     Begin
+       FreeAndNil(FccEn);
+       try
+         CloseFile(tfin);
+         CloseFile(tfOut);
+         CloseFile(dupOut);
+       finally
+       end;
+     end;
+  frmProgress.Hide;
 end;
 
 initialization

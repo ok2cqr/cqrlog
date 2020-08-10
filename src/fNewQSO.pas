@@ -725,8 +725,8 @@ type
     procedure InitializeCW;
     procedure RunVK(key_pressed: String);
     procedure RunST(script: String);
-    procedure SaveSettings;
     procedure CloseAllWindows;
+    procedure SaveSettings;
   end;
 
   type
@@ -3080,7 +3080,7 @@ begin
 end;
 {
   The latest UDP message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
+  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/Network/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
   to construct a recipe to replicate an issue.
@@ -4610,20 +4610,22 @@ end;
 
 procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
 var
-  old : String;
+  //old : String;
+  LogOld   : Integer;
   LogId   : Integer;
   LogName : String;
 begin
   DBServerChanged := false;
   with TfrmDBConnect.Create(self) do
   try
-    old := dmData.LogName;
-    OpenFromMenu := True;
+    LogOld   := dmData.qLogList.Fields[0].AsInteger;
+    //old := dmData.LogName;
+    OpenFromNewQSOMenu := True;
     ShowModal;
     if ModalResult = mrOK then
     begin
       if not DBServerChanged then
-         if old = dmData.qLogList.Fields[1].AsString then exit;
+         if LogOld = dmData.qLogList.Fields[0].AsInteger then exit;
 
       LogId   := dmData.qLogList.Fields[0].AsInteger;
       LogName := dmData.qLogList.Fields[1].AsString;
@@ -7352,10 +7354,19 @@ end;
 procedure TfrmNewQSO.DisableRemoteMode;
 var
   tries : integer = 10;
+  msg :String;
 begin
 
   if  mnuRemoteModeWsjt.Checked then
   begin
+      if not frmMonWsjtx.CanCloseFCCProcess  then
+       Begin
+        msg:='FCC US-states download an process is still ' +#13+
+             'running. Closing monitor will abort process'+#13+
+             'Do you want to close anyway?';
+        if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
+        frmMonWsjtx.CloseFCCProcess;
+       end;
       tmrWsjtx.Enabled := False;
       tmrWsjtSpd.Enabled:=false;
       while ((WsjtxDecodeRunning) and (tries > 0)) do
