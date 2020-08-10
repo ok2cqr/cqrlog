@@ -2781,7 +2781,7 @@ begin
         end; //Clear
 
     5 : begin  //qso logged
-          frmMonWsjtx.BufDebug('log',Buf);
+          //frmMonWsjtx.BufDebug('log',Buf);
           ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Qso Logging Id:', ParStr);
           if dmData.DebugLevel>=1 then Writeln('edtCall before started logging #5:',edtCall.Text );
