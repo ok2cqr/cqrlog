@@ -2781,6 +2781,7 @@ begin
         end; //Clear
 
     5 : begin  //qso logged
+          frmMonWsjtx.BufDebug('log',Buf);
           ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Qso Logging Id:', ParStr);
           if dmData.DebugLevel>=1 then Writeln('edtCall before started logging #5:',edtCall.Text );
@@ -3003,10 +3004,10 @@ begin
                       1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
                  end;
            end;
-           //----------------------------------------------------
-           propmode:= trim(StrBuf(index));
-           if dmData.DebugLevel>=1 then Writeln('Prop Mode :', propmode);
-           cmbPropagation.Text := dmSatellite.GetPropLongName(propmode);
+           //----------WHAT IS THIS? THERE IS NO PROPAGATION INFO IN MSG#5--(removed 2020.08.10 OH1KH)-----
+           //propmode:= trim(StrBuf(index));
+           //if dmData.DebugLevel>=1 then Writeln('Prop Mode :', propmode);
+           //cmbPropagation.Text := dmSatellite.GetPropLongName(propmode);
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln(' WSJTX decode #5 logging: press save');
            SaveRemote;
@@ -3049,7 +3050,7 @@ begin
 end;
 {
   The latest UDP message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
+  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/Network/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
   to construct a recipe to replicate an issue.
