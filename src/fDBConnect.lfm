@@ -2455,7 +2455,7 @@ object frmDBConnect: TfrmDBConnect
       Top = 0
       Width = 227
       Caption = 'Save log data to local machine'
-      OnClick = chkSaveToLocalClick
+      OnChange = chkSaveToLocalChange
       TabOrder = 0
     end
   end
