@@ -450,13 +450,12 @@ begin
         chkSaveToLocal.Checked := True;
         btnConnectClick(nil)
       end
-      else begin
-  else     // not chkSaveToLocal.Checked
-  begin
-     //btnDisconnectClick(nil);
-     LoadLogin(true);   //force remote DB
-     chkSaveToLocal.Checked := False;
-  end
+      else     // not chkSaveToLocal.Checked
+      begin
+         //btnDisconnectClick(nil);
+         LoadLogin(true);   //force remote DB
+         chkSaveToLocal.Checked := False;
+      end
 end;
 
 procedure TfrmDBConnect.edtPassEnter(Sender: TObject);
