@@ -60,7 +60,7 @@ type
     procedure btnOpenLogClick(Sender: TObject);
     procedure btnUtilsClick(Sender: TObject);
     procedure chkSavePassChange(Sender: TObject);
-    procedure chkSaveToLocalClick(Sender: TObject);
+    procedure chkSaveToLocalChange(Sender: TObject);
     procedure edtPassEnter(Sender: TObject);
     procedure edtPassExit(Sender: TObject);
     procedure edtPortEnter(Sender: TObject);
@@ -220,7 +220,7 @@ begin
     begin
       if dmData.DebugLevel>=1 then Writeln('Load values set local');
       chkSaveToLocal.Checked := True;
-      chkSaveToLocalClick(nil);
+      chkSaveToLocalChange(nil);
     end
     else
     begin
@@ -287,7 +287,7 @@ end;
 procedure TfrmDBConnect.btnConnectClick(Sender: TObject);
 begin
   SaveLogin;
-  btnDisconnectClick(nil); //be sure we have disconnected and closed any log open
+  // X btnDisconnectClick(nil); //be sure we have disconnected and closed any open log
   if dmData.OpenConnections(edtServer.Text,edtPort.Text,edtUser.Text,edtPass.Text) then
   begin
     dmData.CheckForDatabases;
@@ -413,9 +413,14 @@ begin
     chkAutoConn.Enabled := False
 end;
 
-procedure TfrmDBConnect.chkSaveToLocalClick(Sender: TObject);
-
+procedure TfrmDBConnect.chkSaveToLocalChange(Sender: TObject);
 begin
+  //in all cases reset "open recent log" if database source changes
+  chkAutoOpen.Checked:=false;
+  application.ProcessMessages;
+  if frmDBConnect<>nil  then
+      btnDisconnectClick(nil);
+
   if chkSaveToLocal.Checked then
   begin
       if not Mysql_safe_running then
@@ -443,7 +448,7 @@ begin
         edtPort.Text           := '64000';
         edtUser.Text           := 'cqrlog';
         edtPass.Text           := 'cqrlog';
-        tmrAutoConnect.Enabled := True;
+        tmrAutoConnect.Enabled := false;
         chkAutoConn.Checked    := True;
         grbLogin.Visible := False;
         chkSaveToLocal.Checked := True;
@@ -645,7 +650,7 @@ begin
       Connect     := False;
       RemoteMySQL := True;
       chkSaveToLocal.Checked := False;
-      chkSaveToLocalClick(nil);
+      chkSaveToLocalChange(nil);
       edtServer.SetFocus
      end
   end;
