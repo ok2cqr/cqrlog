@@ -416,7 +416,6 @@ end;
 procedure TfrmDBConnect.chkSaveToLocalChange(Sender: TObject);
 begin
   //writeln('OpenFromMenu:',OpenFromMenu);
-=======
   //in all cases reset "open recent log" if database source changes
   chkAutoOpen.Checked:=false;
   application.ProcessMessages;
