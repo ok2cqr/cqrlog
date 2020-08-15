@@ -30,7 +30,7 @@ object fraExportPref: TfraExportPref
     Top = 477
     Width = 197
     AutoSize = False
-    Caption = 'Most recent entries on top'
+    Caption = 'Oldest entries on top'
     TabOrder = 135
   end
   object chkExCont: TCheckBox
