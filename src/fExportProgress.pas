@@ -597,9 +597,9 @@ end;
 procedure TfrmExportProgress.ExportHTML;
 var
   f      : TextFile;
-  tmp    : String;
+  tmp    : UTF8String;
    i      : Integer;
-  note   : String;
+  note   : UTF8String;
   Mycall : String;
   Source : TDataSet;
   QSOcnt : Integer;
@@ -614,6 +614,7 @@ var
   eqsl_qslrdate : String;
   qrb,             //distance
   qrc :String;     //azimuth
+  lang:String;
 
   ExDate,ExTimeOn,ExTimeOff,ExCall,ExMode  : Boolean;
   ExFreq,ExRSTS,ExRSTR,ExName,ExQTH,ExQSLS,ExQSLR  : Boolean;
@@ -623,7 +624,7 @@ var
   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
   ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok : Boolean;
   //-----------------------------------------------------------
-  function ColumnWidth(ItemWidth:String):String;
+  function ColumnWidth(ItemWidth:UTF8String):UTF8String;
   var i : integer;
   Begin
       i := StrToIntDef(ItemWidth,1); //if conversion fails set 1chr
@@ -631,7 +632,7 @@ var
       Result:= IntToStr(95 * i div 10);
   end;
 //-----------------------------------------------------------
- function SetWidth(item,Defw:String): String;
+ function SetWidth(item,Defw:UTF8String): UTF8String;
 
  Begin
  if cqrini.ReadBool('Export', 'HTMLAutoColumn', False) then
@@ -640,12 +641,12 @@ var
      Result := ' style="width: '+ColumnWidth(cqrini.ReadString('Export',item,defw))+'px" ';
  end;
  //-----------------------------------------------------------
- function SetData(item,Defw,Dat:string):String;
+ function SetData(item,Defw,Dat:UTF8String):UTF8String;
  begin
   Result := '<td><div '+SetWidth(item,Defw)+' class="norm">'+Dat+'</div></td><!-- '+item+' -->';
  end;
  //-----------------------------------------------------------
- function SetTHWidth(item,Defw,item1,Defw1:String): String;
+ function SetTHWidth(item,Defw,item1,Defw1:UTF8String): UTF8String;
 
  Begin
  if cqrini.ReadBool('Export', 'HTMLAutoColumn', False) then
@@ -663,7 +664,7 @@ var
                      QTH,QSLS,QSLR,QSLVIA,IOTA,Power,Itu,waz,loc,Myloc,Op,County,
                      Award,Remarks,dxcc,state,band,profile,LQslS,LQslSDate,LQslR,LQslRDate,continent,
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
-                     srx, stx_string, srx_string, contestname, dok  : String);
+                     srx, stx_string, srx_string, contestname, dok  : UTF8String);
 
   begin
     Writeln(f,'<tr>');
@@ -1004,21 +1005,25 @@ begin
                   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime, ExProp, ExRxFreq, ExSatName,
                   ExContinent, ExContestname, ExContestnr, ExContestmsg, ExDarcDok);
 
+  lang:= ExtractWord(1,GetEnvironmentVariable('LANG'),['.']);
+  if (lang='') or (pos('_',lang)=0) then lang:='en-EN'
+    else lang[pos('_',lang)]:='-'; //html equv
   AssignFile(f, FileName);
+  SetTextCodePage(f,CP_UTF8);
   Rewrite(f);
   Writeln(f,'<!DOCTYPE HTML>');
-  Writeln(f, '<html>');
+  Writeln(f, '<html lang="',lang,'">');
   Writeln(f, '<head>');
-  Writeln(f, '<META HTTP-EQUIV="Content-Language" content="en">');
   Writeln(f, '<META NAME="GENERATOR" CONTENT="CQRLOG ver. ' + dmData.VersionString + '">');
-  Writeln(f, '<META charset="utf8">');
-  Writeln(f, '<META HTTP-EQUIV="Expires" CONTENT="-1">');
-  Writeln(f, '<META HTTP-EQUIV="Last-Modified" CONTENT="0">');
-  Writeln(f, '<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">');
+  Writeln(f, '<META charset="UTF-8">');
+  Writeln(f, '<META NAME="viewport" content="width=device-width, initial-scale=1.0">');
   Writeln(f, '<title>List of QSO from CQRLOG - ' + Mycall + '</title>');
 
 
   Writeln(f,'<style>');
+  Writeln(f,'.cntr {');
+  Writeln(f,'	text-align:center;');
+  Writeln(f,'}');
   Writeln(f,'.norm {');
   Writeln(f,'	color: #000000;');
   Writeln(f,'	font-family: Verdana, Arial, Helvetica, sans-serif;');
@@ -1057,6 +1062,8 @@ begin
   Writeln(f,'   table-layout: auto;');
   Writeln(f,'} ');
   Writeln(f,'table.b { ');
+  Writeln(f,'	margin-left: auto;');
+  Writeln(f,'	margin-right: auto;');
   Writeln(f,'   border-width: 5px;');
   Writeln(f,'   border-spacing: 1px;');
   Writeln(f,'   border-style: solid;');
@@ -1088,7 +1095,7 @@ begin
   Writeln(f);
   Writeln(f, '<body>');
 
-  Writeln(f, '<center><h1>QSO from station log of ' + Mycall +' </h1></center>');
+  Writeln(f, '<h1 class="cntr">QSO from station log of ' + Mycall +' </h1>');
   Writeln(f, '<br/>');
 
   Writeln(f, '<table class="a">');
@@ -1108,7 +1115,6 @@ begin
   Writeln(f, '</table>');
 
   Writeln(f, '<br/><br/>');
-  Writeln(f, '<center>');
 
   Writeln(f, '<table class="b">');
   Writeln(f, '<tr>');
@@ -1324,9 +1330,8 @@ begin
       Source.Next
     end;
     Writeln(f,'</table>');
-    Writeln(f,'</center>');
     Writeln(f,'<br> <br>');
-    Writeln(f,'<h5 align=center> <a href="http://www.cqrlog.com">CQRLOG ver. ' + dmData.VersionString  + ' </a></h5>');
+    Writeln(f,'<h5 class="cntr"> <a href="http://www.cqrlog.com">CQRLOG ver. ' + dmData.VersionString  + ' </a></h5>');
     Writeln(f,'</body>');
     Writeln(f,'</html>')
   finally
