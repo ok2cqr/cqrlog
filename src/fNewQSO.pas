@@ -5571,7 +5571,7 @@ begin
   end;
   if ((Shift = [ssCtrl]) and (key = VK_H)) then
   begin
-    acDetails.Execute;
+    ShowHelp;
     key := 0
   end;
   if ((Shift = [ssCtrl]) and (key = VK_M)) then
