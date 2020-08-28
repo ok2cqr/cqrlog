@@ -6,22 +6,16 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   #308
+   #319
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
-  - ver 2.4.0(122)
+  - ver 2.4.0(124)
   - check official updates link above.
-  
-  Not yet in offical source (31.07.2020):
-  - Call alert has new macro "$MSG" that includes spot's info text
-  - Telnet DXCluster connect command can now send multiple commands (comma separated)
-  - Send spot (Ctrl+W) has new button for user defined message. Message can contain same macros that are used in CW Memory keys
-    
-  - wsjt-remote has UDP multicast support if address is selected from 239.0.0.0/8 subnet. Now several programs can receive one wsjt decodes at same time.
+  - removed database ping that caused unstability. 
   
 BINARIES:
 ---------
