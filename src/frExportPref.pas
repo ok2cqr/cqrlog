@@ -12,6 +12,7 @@ type
   { TfraExportPref }
 
   TfraExportPref = class(TFrame)
+    chkExSatMode: TCheckBox;
     chkAutoColumn: TCheckBox;
     chkexContestName: TCheckBox;
     chkexContestMsg: TCheckBox;
@@ -144,6 +145,8 @@ type
     edtWRstR : TEdit;
     edtWRstS : TEdit;
     edtWSatName1: TEdit;
+    edtWSatMode1: TEdit;
+    edtWSatMode: TEdit;
     edtWState : TEdit;
     edtWState1: TEdit;
     edtWTimeOff : TEdit;
@@ -226,6 +229,7 @@ begin
   cqrini.WriteBool('Export', 'Prop', chkExPropagation.Checked);
   cqrini.WriteBool('Export', 'RxFreq', chkExRXFreq.Checked);
   cqrini.WriteBool('Export', 'SatName', chkExSat.Checked);
+  cqrini.WriteBool('Export', 'SatMode', chkExSatMode.Checked);
   cqrini.WriteBool('Export', 'Contestname', chkexContestName.Checked);
   cqrini.WriteBool('Export', 'ContestNr', chkexContestNr.Checked);
   cqrini.WriteBool('Export', 'ContestMsg', chkexContestMsg.Checked);
@@ -272,6 +276,7 @@ begin
   cqrini.WriteString('Export', 'WProp', edtWProp.Text);
   cqrini.WriteString('Export', 'WRxFreq', edtWRxFreq.Text);
   cqrini.WriteString('Export', 'WSatName', edtWSatName.Text);
+  cqrini.WriteString('Export', 'WSatMode', edtWSatMode.Text);
   cqrini.WriteString('Export', 'WContinent', edtWContinent.Text);
   cqrini.WriteString('Export', 'WProfile', edtWProfile.Text);
   cqrini.WriteString('Export', 'WContestName', edtWContestName.Text);
@@ -320,6 +325,7 @@ begin
   cqrini.WriteString('Export', 'WProp1', edtWProp1.Text);
   cqrini.WriteString('Export', 'WRxFreq1', edtWRxFreq1.Text);
   cqrini.WriteString('Export', 'WSatName1', edtWSatName1.Text);
+  cqrini.WriteString('Export', 'WSatMode1', edtWSatMode1.Text);
   cqrini.WriteString('Export', 'WContinent1', edtWContinent1.Text);
   cqrini.WriteString('Export', 'WProfile1', edtWProfile1.Text);
   cqrini.WriteString('Export', 'WContestName1', edtWContestName1.Text);
@@ -373,6 +379,7 @@ begin
   chkExPropagation.Checked := cqrini.ReadBool('Export', 'Prop', False);
   chkExRXFreq.Checked := cqrini.ReadBool('Export', 'RxFreq', False);
   chkExSat.Checked := cqrini.ReadBool('Export', 'SatName', False);
+  chkExSatMode.Checked := cqrini.ReadBool('Export', 'SatMode', False);
   chkexContestName.Checked := cqrini.ReadBool('Export', 'Contestname', False);
   chkexContestNr.Checked := cqrini.ReadBool('Export', 'ContestNr',False);
   chkexContestMsg.Checked := cqrini.ReadBool('Export', 'ContestMsg', False);
@@ -420,6 +427,7 @@ begin
   edtWProp.Text := cqrini.ReadString('Export', 'WProp', '6');
   edtWRxFreq.Text := cqrini.ReadString('Export', 'WRxFreq', '10');
   edtWSatName.Text := cqrini.ReadString('Export', 'WSatName', '10');
+  edtWSatMode.Text := cqrini.ReadString('Export', 'WSatMode', '10');
   edtWContinent.Text := cqrini.ReadString('Export', 'WContinent', '2');
   edtWProfile.Text := cqrini.ReadString('Export', 'WProfile', '20');
   edtWContestName.Text := cqrini.ReadString('Export', 'WContestName', '20');
@@ -467,6 +475,7 @@ begin
   edtWProp1.Text := cqrini.ReadString('Export', 'WProp1', 'Propag');
   edtWRxFreq1.Text := cqrini.ReadString('Export', 'WRxFreq1', 'RX Freq');
   edtWSatName1.Text := cqrini.ReadString('Export', 'WSatName1', 'Satellite');
+  edtWSatMode1.Text := cqrini.ReadString('Export', 'WSatMode1', 'SAT Mode');
   edtWContinent1.Text := cqrini.ReadString('Export', 'WContinent1', 'Contin');
   edtWProfile1.Text := cqrini.ReadString('Export', 'WProfile1', 'Profile');
   edtWContestName1.Text := cqrini.ReadString('Export', 'WContestName1', 'Contest');
