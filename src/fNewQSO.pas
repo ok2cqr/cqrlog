@@ -3314,6 +3314,11 @@ begin
                    edtContestName.Text
                    )
   end;
+  if (cmbPropagation.Text = 'SAT|Satellite') then
+  begin
+     if (cqrini.ReadBool('NewQSO','UpdateAMSATstatus',False)) then
+        dmSatellite.UpdateAMSATStatusPage(edtDate.Text, edtStartTime.Text, cmbSatellite.Text, cmbFreq.Text, edtRXFreq.Text, cmbMode.Text);
+  end;
   if fEditQSO and (not fromNewQSO) then
   begin
     dmData.RefreshMainDatabase(id)

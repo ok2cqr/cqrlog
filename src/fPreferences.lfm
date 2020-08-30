@@ -929,6 +929,18 @@ object frmPreferences: TfrmPreferences
         Caption = 'instead of recent, show QSOs B4 with logged call'
         TabOrder = 20
       end
+      object chkUpdateAMSATstatus: TCheckBox
+        AnchorSideLeft.Control = tabNewQSO
+        AnchorSideTop.Control = chkSatelliteMode
+        AnchorSideTop.Side = asrBottom
+        Left = 20
+        Height = 23
+        Top = 578
+        Width = 286
+        BorderSpacing.Left = 20
+        Caption = 'Upload SAT info to AMSAT status page'
+        TabOrder = 21
+      end
     end
     object tabVisibleColumns: TTabSheet
       Caption = 'Visible columns'
