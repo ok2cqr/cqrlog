@@ -138,6 +138,7 @@ type
     chkSatellite : TCheckBox;
     chkPropagation : TCheckBox;
     chkSatelliteMode : TCheckBox;
+    chkUpdateAMSATstatus : TCheckBox;
     chkCheckMembershipUpdate : TCheckBox;
     chkConToDXC: TCheckBox;
     chkFldXmlRpc: TCheckBox;
@@ -1182,6 +1183,7 @@ begin
   cqrini.WriteBool('NewQSO','UseCallbookZonesEtc',chkUseCallbookZonesEtc.Checked);
   cqrini.WriteBool('NewQSO','FillAwardField',chkFillAwardField.Checked);
   cqrini.WriteBool('NewQSO','SatelliteMode', chkSatelliteMode.Checked);
+  cqrini.WriteBool('NewQSO','UpdateAMSATstatus', chkUpdateAMSATstatus.Checked);
 
   cqrini.WriteString('Program', 'Proxy', edtProxy.Text);
   cqrini.WriteString('Program', 'Port', edtPort.Text);
@@ -2661,6 +2663,7 @@ begin
   chkUseCallbookZonesEtc.Checked := cqrini.ReadBool('NewQSO','UseCallbookZonesEtc',True);
   chkFillAwardField.Checked := cqrini.ReadBool('NewQSO','FillAwardField',True);
   chkSatelliteMode.Checked := cqrini.ReadBool('NewQSO','SatelliteMode', False);
+  chkUpdateAMSATstatus.Checked := cqrini.ReadBool('NewQSO','UpdateAMSATstatus', False);
 
   edtProxy.Text := cqrini.ReadString('Program', 'Proxy', '');
   edtPort.Text := cqrini.ReadString('Program', 'Port', '');
