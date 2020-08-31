@@ -6,13 +6,16 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   #319
+   #321
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
+  - ver 2.4.0(125)
+  - added new commits
+  - compiled with Lazarus 2.0.8/fpc3.0.4 instead of Laz2.0.10/fpc3.2.0 that were used with (124) and caused several problems
   - ver 2.4.0(124)
   - check official updates link above.
   - removed database ping that caused unstability. 
