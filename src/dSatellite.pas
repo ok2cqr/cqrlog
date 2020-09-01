@@ -25,11 +25,13 @@ type
     ListOfPropModes  : TStringList;
 
     function  GetShortName(StringItem : String) : String;
+    function  GetSatModeDesignator(freq : String) : String;
 
   public
     function  GetSatShortName(Satellite : String) : String;
     function  GetPropShortName(Propagation : String) : String;
     function  GetPropLongName(Propagation : String) : String;
+    function  GetSatMode(freq, rxfreq : String) : String;
 
     procedure LoadSatellitesFromFile;
     procedure LoadPropModesFromFile;
@@ -149,6 +151,34 @@ end;
 function TdmSatellite.GetShortName(StringItem : String) : String;
 begin
   Result := Copy(StringItem, 1, Pos('|', StringItem) - 1)
+end;
+
+function  TdmSatellite.GetSatMode(freq, rxfreq : String) : String;
+var
+   tmp : String = '';
+begin
+  tmp := GetSatModeDesignator(freq)+GetSatModeDesignator(rxfreq);
+  if (length(tmp) = 2) then
+     Result := tmp
+  else
+     Result := '';
+end;
+
+function  TdmSatellite.GetSatModeDesignator(freq : String) : String;
+begin
+   case dmUtils.GetBandFromFreq(freq) of
+      '15M'    : Result := 'H';
+      '10M'    : Result := 'A';
+      '2M'     : Result := 'V';
+      '70CM'   : Result := 'U';
+      '23CM'   : Result := 'L';
+      '13CM'   : Result := 'S';
+      '6CM'    : Result := 'C';
+      '3CM'    : Result := 'X';
+      '1.25CM' : Result := 'K';
+      '6MM'    : Result := 'R';
+      else       Result := '';
+   end;
 end;
 
 procedure TdmSatellite.DataModuleDestroy(Sender : TObject);

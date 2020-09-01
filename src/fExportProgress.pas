@@ -26,8 +26,8 @@ type
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
-                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg,
-                              ExDarcDok: Boolean);
+                              ExSatName, ExSatMode, ExContinent, ExContestName, ExContestNr,
+                              ExContesMsg, ExDarcDok: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
 
@@ -48,7 +48,7 @@ implementation
 {$R *.lfm}
 
 { TfrmExportProgress }
-uses dUtils, dData, uMyIni, dDXCC, uVersion;
+uses dUtils, dData, uMyIni, dDXCC, uVersion, dSatellite;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -88,7 +88,8 @@ procedure TfrmExportProgress.FieldsForExport(var ExDate,ExTimeOn,ExTimeOff,ExCal
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
-                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContesMsg, ExDarcDok: Boolean);
+                              ExSatName, ExSatMode, ExContinent, ExContestName, ExContestNr,
+                              ExContesMsg, ExDarcDok: Boolean);
 begin
   ExDate    := cqrini.ReadBool('Export','Date',True);
   ExTimeOn  := cqrini.ReadBool('Export','time_on',True);
@@ -131,6 +132,7 @@ begin
   ExProp      := cqrini.ReadBool('Export', 'Prop', False);
   ExRxFreq    := cqrini.ReadBool('Export', 'RxFreq', False);
   ExSatName   := cqrini.ReadBool('Export', 'SatName', False);
+  ExSatMode   := cqrini.ReadBool('Export', 'SatMode', False);
   ExContinent := cqrini.ReadBool('Export', 'Continent', False);
   ExProfile   := cqrini.ReadBool('Export', 'Profile', False);
   ExContestName := cqrini.ReadBool('Export', 'Contestname', False);
@@ -159,7 +161,7 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower : Boolean;
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName, ExSatMode : Boolean;
   ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok : Boolean;
   Source : TDataSet;
   FirstBackupPath : String;
@@ -390,10 +392,15 @@ var
     end;
     if (ExProp and (PropMode <> '')) then
        SaveTag(dmUtils.StringToADIF('<PROP_MODE',PropMode),leng);
-    if (ExRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
-       SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
     if (ExSatName and (Satellite<>'')) then
        SaveTag(dmUtils.StringToADIF('<SAT_NAME',Satellite),leng);
+    if (ExSatMode and (PropMode = 'SAT')) then
+       begin
+          if (dmSatellite.GetSatMode(Freq, RxFreq) <> '') then
+             SaveTag(dmUtils.StringToADIF('<SAT_MODE', dmSatellite.GetSatMode(Freq, RxFreq)),leng);
+       end;
+    if (ExRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
+       SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
     if (ExDarcDok and (Darc_Dok <> '')) then
        SaveTag(dmUtils.StringToADIF('<DARC_DOK',Darc_Dok),leng);
 
@@ -411,7 +418,8 @@ begin   //TfrmExportProgress
                               ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote,ExState,ExProfile,
                               ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                               ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq,
-                              ExSatName, ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok)
+                              ExSatName, ExSatMode, ExContinent, ExContestName, ExContestNr,
+                              ExContestMsg, ExDarcDok)
  else begin    //adif backup
     ExDate := True;ExTimeOn := True;ExTimeOff := True;ExCall := True;ExMode := True;
     ExFreq := True;ExRSTS := True;ExRSTR := True;ExName := True;ExQTH := True;ExQSLS := True;ExQSLR := True;
@@ -419,7 +427,7 @@ begin   //TfrmExportProgress
     ExCounty := True;ExDXCC := True;ExRemarks := True;ExWAZ := True;ExITU := True;ExNote := True;ExState := True;ExProfile := True;
     ExLQslS := True;ExLQslSDate := True;ExLQslR := True;ExLQslRDate := True; ExContinent := True;
     ExeQslS := True;ExeQslSDate := True;ExeQslR := True;ExeQslRDate := True; ExAscTime := False;
-    ExProp := True; ExRxFreq := True; ExSatName := True; ExContestname := True; ExContestnr := True; ExContestmsg := True;
+    ExProp := True; ExRxFreq := True; ExSatName := True; ExSatMode := True; ExContestname := True; ExContestnr := True; ExContestmsg := True;
     ExDarcDok := True;
 
     if not DirectoryExistsUTF8(dmData.HomeDir + 'tmp') then
@@ -621,7 +629,7 @@ var
   ExQSLVIA,ExIOTA,ExAward,ExLoc,ExMyLoc,ExOperator,ExDistance,ExPower  : Boolean;
   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState, ExProfile : Boolean;
   ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate, ExQSLRDate : Boolean;
-  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName : Boolean;
+  ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime,ExProp, ExRxFreq, ExSatName, ExSatMode : Boolean;
   ExContinent, ExContestName, ExContestNr, ExContestMsg, ExDarcDok : Boolean;
   //-----------------------------------------------------------
   function ColumnWidth(ItemWidth:UTF8String):UTF8String;
@@ -666,6 +674,8 @@ var
                      QSLSDate,QSLRDate,eQslS,eQslSDate,eQslR,eQslRDate,PropMode, Satellite, RxFreq, stx,
                      srx, stx_string, srx_string, contestname, dok  : UTF8String);
 
+  var
+     SatMode : String = '';
   begin
     Writeln(f,'<tr>');
     if ExDate then
@@ -932,7 +942,12 @@ var
       Writeln(f, SetData( 'WSatName', '10',Satellite));
     end;
 
-
+    if ExSatMode then
+    begin
+      if (PropMode = 'SAT') then
+        SatMode := dmSatellite.GetSatMode(Freq, RxFreq);
+      Writeln(f, SetData( 'WSatMode', '10', SatMode));
+    end;
 
     if ExProfile then
     begin
@@ -1003,7 +1018,7 @@ begin
                   ExCounty,ExDXCC,ExRemarks,ExWAZ, ExITU,ExNote, ExState,
                   ExProfile,ExLQslS,ExLQslSDate,ExLQslR,ExLQslRDate,ExQSLSDate,ExQSLRDate,
                   ExeQslS,ExeQslSDate,ExeQslR,ExeQslRDate,ExAscTime, ExProp, ExRxFreq, ExSatName,
-                  ExContinent, ExContestname, ExContestnr, ExContestmsg, ExDarcDok);
+                  ExSatMode, ExContinent, ExContestname, ExContestnr, ExContestmsg, ExDarcDok);
 
   lang:= ExtractWord(1,GetEnvironmentVariable('LANG'),['.']);
   if (lang='') or (pos('_',lang)=0) then lang:='en-EN'
@@ -1201,6 +1216,8 @@ begin
     Writeln(f,SetTHWidth('WRxFreq','10', 'WRxFreq1', 'RX Freq'));
   if ExSatName  then
     Writeln(f,SetTHWidth('WSatName','10', 'WSatName1', 'Satellite'));
+  if ExSatMode  then
+    Writeln(f,SetTHWidth('WSatMode','10', 'WSatMode1', 'SAT Mode'));
   if ExProfile  then
     Writeln(f,SetTHWidth( 'WProfile', '10', 'WProfile1', 'Profile'));
   if ExContestname  then
