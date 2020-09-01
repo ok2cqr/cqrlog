@@ -53,7 +53,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils,dData,uMyIni, fPreferences, uVersion, dLogUpload;
+uses dUtils,dData,uMyIni, fPreferences, uVersion, dLogUpload, dSatellite;
 
 procedure TfrmeQSLUpload.SockCallBack(Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 begin
@@ -166,7 +166,15 @@ begin
       Writeln(f,tmp);
 
       if (dmData.Q.FieldByName('prop_mode').AsString <> '') then
+      begin
         Writeln(f, dmUtils.StringToADIF('<PROP_MODE' ,dmData.Q.FieldByName('prop_mode').AsString));
+        if (dmData.Q.FieldByName('prop_mode').AsString = 'SAT') then
+        begin
+          tmp := dmSatellite.GetSatMode(dmData.Q.FieldByName('freq').AsString, dmData.Q.FieldByName('rxfreq').AsString);
+          if (tmp <> '') then
+            Writeln(f, dmUtils.StringToADIF('<SAT_MODE' , tmp));
+        end;
+      end;
 
       if (dmData.Q.FieldByName('satellite').AsString <> '') then
         Writeln(f, dmUtils.StringToADIF('<SAT_NAME' ,dmData.Q.FieldByName('satellite').AsString));
