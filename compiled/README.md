@@ -13,9 +13,13 @@ They contain all accepted pull requests from official source (that may not be re
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
+  - ver 2.4.0(126)
+  - FCC has changed US Amateur listing address (needed for states) For now on user can define it
+
   - ver 2.4.0(125)
   - added new commits
   - compiled with Lazarus 2.0.8/fpc3.0.4 instead of Laz2.0.10/fpc3.2.0 that were used with (124) and caused several problems
+
   - ver 2.4.0(124)
   - check official updates link above.
   - removed database ping that caused unstability. 
