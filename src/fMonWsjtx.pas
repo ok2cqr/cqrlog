@@ -153,7 +153,7 @@ const
 
   C_STATEFILE = 'ctyfiles/fcc_states.tab';
   C_STATE_SOURCE = 'ctyfiles/EN.dat';
-  C_URL = 'http://wireless.fcc.gov/uls/data/complete/l_amat.zip                    ';//space to fix this with binary editor if needed
+  C_URL = 'ftp://wirelessftp.fcc.gov/pub/uls/complete/l_amat.zip';
   //C_URL ='http://localhost/l_amat.zip'; //for testing;
   C_MYZIP = 'ctyfiles/l_amat.zip';
   C_MY_SCRIPT = 'ctyfiles/fcc_get.sh';
@@ -208,6 +208,7 @@ var
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
+  FCC_Address :String;
   UState : TStringList;
   URState : TStringList; // runtime found calls=states expecting them occur many times. faster to find.
   //crit : TRTLCriticalSection;
@@ -743,8 +744,7 @@ begin
                 Begin
                   msg := 'Neither '+StateFile+#13+
                           'nor '+SourceFile+' found!'+#13+#13+
-                          'Try to load zipped source from fcc ?'+#13+#13+
-                          '(http://wireless.fcc.gov/uls/data/complete/l_amat.zip)'+#13+
+                          'Try to load zipped source of USCalls from fcc ?'+#13+#13+
                           'Command line tools "wget" and "unzip" must be available.';
                   if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
                    Begin
@@ -2264,10 +2264,17 @@ var
 
   begin
     CanCloseFCCProcess:=false;
+    FCC_Address:=cqrini.ReadString('MonWsjtx', 'FCC_Addr', C_URL);
+     if InputQuery('FCC Address check','Using Address (change if needed):', FCC_Address) then
+      begin
+        cqrini.WriteString('MonWsjtx', 'FCC_Addr',FCC_Address);
+        if LocalDbg then Writeln('Saved FCC Address:',FCC_Address);
+      end;
     if LocalDbg then Writeln('downloadinit start');
     frmProgress.Show;
     frmProgress.DoInit(155,1);
     frmProgress.DoStep('Loading from fcc.gov');
+
     if FileExists(dmData.HomeDir+C_MYZIP) then DeleteFile(dmData.HomeDir+C_MYZIP);
 
     if FileExists(dmData.HomeDir+C_MY_SCRIPT) then DeleteFile( dmData.HomeDir+C_MY_SCRIPT);
@@ -2276,7 +2283,7 @@ var
         AssignFile(f,dmData.HomeDir+C_MY_SCRIPT);
         ReWrite(f);
             Writeln(f,'#!/bin/bash');
-            Writeln(f,'wget -q -nd -O'+dmData.HomeDir+C_MYZIP+' '+trim(C_URL));
+            Writeln(f,'wget -q -nd -O'+dmData.HomeDir+C_MYZIP+' '+trim(FCC_Address));
             Writeln(f,'unzip -q -o -d'+dmData.HomeDir+'ctyfiles/ '+dmData.HomeDir+C_MYZIP+' EN.dat');
             Writeln(f,'exit');
         CloseFile(f);
