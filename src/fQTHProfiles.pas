@@ -16,7 +16,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  db, DBGrids, Buttons, Strings, lcltype, StdCtrls, iniFiles;
+  db, DBGrids, Buttons, Strings, lcltype, StdCtrls, iniFiles, Grids;
 
 type
 
@@ -28,8 +28,10 @@ type
     btnDelete: TButton;
     btnClose: TButton;
     btnApply: TButton;
+    btnHideShowProfile: TButton;
     dbgrdProfiles: TDBGrid;
     Panel1: TPanel;
+    procedure btnHideShowProfileClick(Sender: TObject);
     procedure dbgrdProfilesCellClick(Column: TColumn);
     procedure dbgrdProfilesColumnSized(Sender: TObject);
     procedure dbgrdProfilesDblClick(Sender: TObject);
@@ -109,6 +111,20 @@ end;
 procedure TfrmQTHProfiles.dbgrdProfilesCellClick(Column: TColumn);
 begin
   dmUtils.SaveForm(self)
+end;
+
+procedure TfrmQTHProfiles.btnHideShowProfileClick(Sender: TObject);
+begin
+  if (dmData.qProfiles.FieldByName('visible').AsInteger = 1) then
+  begin
+    dmQTHProfile.UpdateVisibility(dmData.qProfiles.Fields[1].AsString, False);
+  end
+  else begin
+    dmQTHProfile.UpdateVisibility(dmData.qProfiles.Fields[1].AsString, True);
+  end;
+
+  RefreshGrid(dmData.qProfiles.Fields[1].AsString);
+  dbgrdProfiles.SetFocus;
 end;
 
 procedure TfrmQTHProfiles.btnDeleteClick(Sender: TObject);

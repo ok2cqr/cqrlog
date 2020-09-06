@@ -95,6 +95,18 @@ object frmQTHProfiles: TfrmQTHProfiles
       TabOrder = 4
       Visible = False
     end
+    object btnHideShowProfile: TButton
+      AnchorSideLeft.Control = btnDelete
+      AnchorSideLeft.Side = asrBottom
+      Left = 246
+      Height = 35
+      Top = 12
+      Width = 224
+      BorderSpacing.Left = 10
+      Caption = '&Hide/Show profile in the list'
+      OnClick = btnHideShowProfileClick
+      TabOrder = 5
+    end
   end
   object dbgrdProfiles: TDBGrid
     Left = 0

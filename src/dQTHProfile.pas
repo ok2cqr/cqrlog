@@ -29,6 +29,7 @@ type
     procedure AddNewProfile(ProfileNumber, Locator, Qth, Equipment, Remarks : String; ProfileVisible : Integer);
     procedure UpdateNewProfile(OldProfileNumber, ProfileNumber, Locator, Qth, Equipment, Remarks : String; ProfileVisible : Integer);
     procedure DeleteProfile(ProfileNumber : String);
+    procedure UpdateVisibility(ProfileNumber : String; Visible : Boolean);
   end;
 
 var
@@ -166,6 +167,33 @@ begin
     C.T.StartTransaction;
     C.Q.SQL.Text := C_DEL;
     C.Q.Prepare;
+    C.Q.ParamByName('profile_number').AsString := ProfileNumber;
+    C.Q.ExecSQL;
+    C.T.Commit;
+    C.Q.Close;
+  finally
+    FreeAndNil(C);
+  end;
+end;
+
+procedure TdmQTHProfile.UpdateVisibility(ProfileNumber : String; Visible : Boolean);
+const
+  C_UPD = 'update profiles set visible = :visible where nr = :profile_number limit 1';
+var
+  C : TinternalConnection;
+begin
+  C := GetNewInternalConnection();
+  try
+    C.T.StartTransaction;
+    C.Q.SQL.Text := C_UPD;
+    C.Q.Prepare;
+    if (Visible) then
+    begin
+      C.Q.ParamByName('visible').AsInteger := 1;
+    end
+    else begin
+      C.Q.ParamByName('visible').AsInteger := 0;
+    end;
     C.Q.ParamByName('profile_number').AsString := ProfileNumber;
     C.Q.ExecSQL;
     C.T.Commit;
