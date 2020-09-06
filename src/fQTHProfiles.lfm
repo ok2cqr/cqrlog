@@ -109,5 +109,6 @@ object frmQTHProfiles: TfrmQTHProfiles
     TitleStyle = tsNative
     OnCellClick = dbgrdProfilesCellClick
     OnColumnSized = dbgrdProfilesColumnSized
+    OnDblClick = dbgrdProfilesDblClick
   end
 end
