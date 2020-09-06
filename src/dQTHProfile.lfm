@@ -1,0 +1,8 @@
+object dmQTHProfile: TdmQTHProfile
+  OldCreateOrder = False
+  Height = 239
+  HorizontalOffset = 731
+  VerticalOffset = 477
+  Width = 448
+  PPI = 96
+end

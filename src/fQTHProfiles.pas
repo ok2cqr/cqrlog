@@ -8,7 +8,6 @@
  ***************************************************************************
 *)
 
-
 unit fQTHProfiles;
 
 {$mode objfpc}{$H+}
@@ -54,7 +53,7 @@ implementation
 {$R *.lfm}
 
 { TfrmQTHProfiles }
-uses dData, fNewQTHProfile, dUtils;
+uses dData, fNewQTHProfile, dUtils, dQTHProfile;
 
 procedure TfrmQTHProfiles.RefreshGrid(profile : String = '');
 const
@@ -113,28 +112,20 @@ begin
 end;
 
 procedure TfrmQTHProfiles.btnDeleteClick(Sender: TObject);
-const
-  C_DEL = 'delete from profiles where nr= %s';
 begin
-  if dmData.ProfileInUse(dmData.qProfiles.Fields[0].AsString) then
-    Application.MessageBox('This profiles is used by QSOs and cannot be deleted.','Information ...',
-                           mb_OK + mb_IconInformation)
-  else begin
-    if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo +
-                              mb_IconQuestion) = idYes then
-    begin
-      dmData.Q.Close();
-      dmData.Q.SQL.Text := Format(C_DEL, [QuotedStr(dmData.qProfiles.Fields[1].AsString)]);
-      Writeln(dmData.Q.SQL.Text);
-      if dmData.trQ.Active then dmData.trQ.RollBack;
-      dmData.trQ.StartTransaction;
-      dmData.Q.ExecSQL();
-      dmData.trQ.Commit;
-      dmData.Q.Close();
+  if dmQTHProfile.ProfileInUse(dmData.qProfiles.Fields[1].AsString) then
+  begin
+    Application.MessageBox('This profiles is used by QSOs and cannot be deleted.','Information ...', mb_OK + mb_IconInformation);
+    exit;
+  end;
 
-      RefreshGrid();
-    end
-  end
+  if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+  begin
+    exit;
+  end;
+
+  dmQTHProfile.DeleteProfile(dmData.qProfiles.Fields[1].AsString);
+  RefreshGrid();
 end;
 
 procedure TfrmQTHProfiles.btnEditClick(Sender: TObject);
@@ -142,12 +133,12 @@ const
   UPD_PROF = 'update profiles set locator = :locator, qth = :qth, rig = :rig, remarks = :remarks, visible = :visible, nr = :nr where nr = :old_nr';
   UPD_MAIN = 'update cqrlog_main set profile = %s  where profile = %s';
 var
-  old_nr : String = '';
-  tm : Integer;
-  rem : String = '';
-  equ : String = '';
-  qth : String = '';
-  profile : String;
+  OldProfileNumber : String = '';
+  ProfileVisible : Integer;
+  Remarks : String = '';
+  Equipment : String = '';
+  Qth : String = '';
+  Profile : String;
 begin
   with TfrmNewQTHProfile.Create(self) do
   try
@@ -157,95 +148,78 @@ begin
     mEquipment.Lines.Text := Trim(dmData.qProfiles.Fields[4].AsString);
     mRemarks.Lines.Text   := Trim(dmData.qProfiles.Fields[5].AsString);
     chkVisible.Checked    := dmData.qProfiles.Fields[6].AsInteger > 0;
-    old_nr                := edtProfNr.Text;
+    OldProfileNumber      := edtProfNr.Text;
     Editing               := True;
     Caption               := 'Edit current QTH profile';
     ShowModal;
     if ModalResult = mrOK then
     begin
       if chkVisible.Checked then
-        tm := 1
+        ProfileVisible := 1
       else
-        tm := 0;
+        ProfileVisible := 0;
 
-      qth := dmUtils.ReplaceEnter(mQTH.Lines.Text);
-      rem := dmUtils.ReplaceEnter(mRemarks.Lines.Text);
-      equ := dmUtils.ReplaceEnter(mEquipment.Lines.Text);
+      Qth := dmUtils.ReplaceEnter(mQTH.Lines.Text);
+      Remarks := dmUtils.ReplaceEnter(mRemarks.Lines.Text);
+      Equipment := dmUtils.ReplaceEnter(mEquipment.Lines.Text);
 
-      dmData.Q.Close;
-      dmData.trQ.StartTransaction;
-      dmData.Q.SQL.Text := UPD_PROF;
-      dmData.Q.Prepare;
-      dmData.Q.ParamByName('locator').AsString := edtLocator.Text;
-      dmData.Q.ParamByName('qth').AsString := qth;
-      dmData.Q.ParamByName('rig').AsString := equ;
-      dmData.Q.ParamByName('remarks').AsString := rem;
-      dmData.Q.ParamByName('visible').AsInteger := tm;
-      dmData.Q.ParamByName('nr').AsString := edtProfNr.Text;
-      dmData.Q.ParamByName('old_nr').AsString := old_nr;
-      dmData.Q.ExecSQL;
+      dmQTHProfile.UpdateNewProfile(
+        OldProfileNumber,
+        edtProfNr.Text,
+        edtLocator.Text,
+        Qth,
+        Equipment,
+        Remarks,
+        ProfileVisible
+      );
 
-      if edtProfNr.Text <> old_nr then
-      begin
-        dmData.Q.SQL.Text := Format(UPD_MAIN, [QuotedStr(edtProfNr.Text), QuotedStr(old_nr)]);
-        if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-        dmData.Q.ExecSQL
-      end;
-
-      dmData.trQ.Commit;
-
-      profile := edtProfNr.Text
+      Profile := edtProfNr.Text
     end
   finally
     Free;
-    RefreshGrid(profile)
+    RefreshGrid(Profile)
   end
 end;
 
 procedure TfrmQTHProfiles.btnNewClick(Sender: TObject);
-const
-    C_INS = 'INSERT INTO profiles (nr, locator, qth, rig, remarks, visible) VALUES (:nr, :locator, :qth, :rig, :remarks, :visible)';
 var
-  tm : Integer;
-  profile : String;
-  rem : String = '';
-  equ : String = '';
-  qth : String = '';
+  ProfileVisible : Integer;
+  ProfileName : String;
+  Remarks : String = '';
+  Equipment : String = '';
+  Qth : String = '';
 begin
   with TfrmNewQTHProfile.Create(self) do
   try
+    edtProfNr.Text := IntToStr(dmQTHProfile.getNewProfileNumber());
     Caption := 'New QTH profile';
     ShowModal;
     if ModalResult = mrOK then
     begin
       if chkVisible.Checked then
-        tm := 1
+        ProfileVisible := 1
       else
-        tm := 0;
+        ProfileVisible := 0;
 
-      qth := dmUtils.ReplaceEnter(mQTH.Lines.Text);
-      rem := dmUtils.ReplaceEnter(mRemarks.Lines.Text);
-      equ := dmUtils.ReplaceEnter(mEquipment.Lines.Text);
+      Qth := dmUtils.ReplaceEnter(mQTH.Lines.Text);
+      Remarks := dmUtils.ReplaceEnter(mRemarks.Lines.Text);
+      Equipment := dmUtils.ReplaceEnter(mEquipment.Lines.Text);
 
-      dmData.Q.Close;
-      dmData.trQ.StartTransaction;
-      dmData.Q.SQL.Text := C_INS;
-      dmData.Q.Prepare;
-      dmData.Q.ParamByName('nr').AsString := edtProfNr.Text;
-      dmData.Q.ParamByName('locator').AsString := edtLocator.Text;
-      dmData.Q.ParamByName('qth').AsString := qth;
-      dmData.Q.ParamByName('rig').AsString := equ;
-      dmData.Q.ParamByName('remarks').AsString := rem;
-      dmData.Q.ParamByName('visible').AsInteger := tm;
-      dmData.Q.ExecSQL;
-      dmData.trQ.Commit;
+      dmQTHProfile.AddNewProfile(
+        edtProfNr.Text,
+        edtLocator.Text,
+        Qth,
+        Equipment,
+        Remarks,
+        ProfileVisible
+      );
 
-      profile := edtProfNr.Text
-    end
+      ProfileName := edtProfNr.Text
+    end;
   finally
     Free;
-    RefreshGrid(profile)
-  end
+    RefreshGrid(ProfileName);
+  end;
 end;
 
 procedure TfrmQTHProfiles.SelectingProfiles;

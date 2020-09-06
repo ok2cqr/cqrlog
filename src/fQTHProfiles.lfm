@@ -1,21 +1,21 @@
 object frmQTHProfiles: TfrmQTHProfiles
   Left = 781
-  Height = 556
+  Height = 559
   Top = 276
   Width = 685
   ActiveControl = dbgrdProfiles
   BorderIcons = [biSystemMenu]
   Caption = 'QTH Profiles'
-  ClientHeight = 556
+  ClientHeight = 559
   ClientWidth = 685
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '2.0.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 50
-    Top = 506
+    Top = 509
     Width = 685
     Align = alBottom
     BevelOuter = bvNone
@@ -24,7 +24,7 @@ object frmQTHProfiles: TfrmQTHProfiles
     TabOrder = 0
     object btnNew: TButton
       Left = 14
-      Height = 31
+      Height = 35
       Top = 12
       Width = 60
       AutoSize = True
@@ -38,7 +38,7 @@ object frmQTHProfiles: TfrmQTHProfiles
       AnchorSideLeft.Control = btnNew
       AnchorSideLeft.Side = asrBottom
       Left = 94
-      Height = 31
+      Height = 35
       Top = 12
       Width = 60
       AutoSize = True
@@ -53,9 +53,9 @@ object frmQTHProfiles: TfrmQTHProfiles
       AnchorSideLeft.Control = btnEdit
       AnchorSideLeft.Side = asrBottom
       Left = 174
-      Height = 31
+      Height = 35
       Top = 12
-      Width = 60
+      Width = 62
       AutoSize = True
       BorderSpacing.Left = 20
       BorderSpacing.InnerBorder = 1
@@ -67,7 +67,7 @@ object frmQTHProfiles: TfrmQTHProfiles
     object btnClose: TButton
       AnchorSideLeft.Side = asrBottom
       Left = 608
-      Height = 31
+      Height = 35
       Top = 12
       Width = 60
       Anchors = [akTop]
@@ -83,7 +83,7 @@ object frmQTHProfiles: TfrmQTHProfiles
     object btnApply: TButton
       AnchorSideRight.Control = btnClose
       Left = 528
-      Height = 31
+      Height = 35
       Top = 12
       Width = 60
       Anchors = [akTop, akRight]
@@ -98,7 +98,7 @@ object frmQTHProfiles: TfrmQTHProfiles
   end
   object dbgrdProfiles: TDBGrid
     Left = 0
-    Height = 506
+    Height = 509
     Top = 0
     Width = 685
     Align = alClient

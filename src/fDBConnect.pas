@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, uDbUtils;
 
 type
 
@@ -233,6 +233,7 @@ begin
   SaveLogin;
   if dmData.OpenConnections(edtServer.Text,edtPort.Text,edtUser.Text,edtPass.Text) then
   begin
+    UpdateConnectionInfoRecord(edtServer.Text, edtPort.Text, edtUser.Text, edtPass.Text, '');
     dmData.CheckForDatabases;
     UpdateGridFields;
     EnableButtons;
@@ -336,6 +337,9 @@ begin
   finally
     ini.Free
   end;
+
+  UpdateConnectionInfoDatabaseName(dmData.qLogList.Fields[0].AsInteger);
+
   if not OpenFromMenu then
   begin
     dmData.LogName := dmData.qLogList.Fields[1].AsString;

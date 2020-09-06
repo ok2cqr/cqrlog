@@ -1,27 +1,27 @@
 object frmNewQTHProfile: TfrmNewQTHProfile
-  Left = 522
-  Height = 425
-  Top = 146
-  Width = 395
+  Left = 842
+  Height = 509
+  Top = 330
+  Width = 400
   HorzScrollBar.Page = 394
   VertScrollBar.Page = 403
   ActiveControl = edtLocator
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'frmNewQTHProfile'
-  ClientHeight = 425
-  ClientWidth = 395
+  ClientHeight = 509
+  ClientWidth = 400
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.6.0'
   object lblLocator: TLabel
     AnchorSideTop.Control = edtProfNr
     AnchorSideTop.Side = asrBottom
     Left = 9
-    Height = 17
-    Top = 76
-    Width = 48
+    Height = 15
+    Top = 67
+    Width = 52
     BorderSpacing.Top = 10
     Caption = 'Locator'
     ParentColor = False
@@ -30,31 +30,31 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = edtLocator
     AnchorSideTop.Side = asrBottom
     Left = 9
-    Height = 17
-    Top = 139
-    Width = 28
+    Height = 15
+    Top = 127
+    Width = 29
     BorderSpacing.Top = 10
     Caption = 'QTH'
     ParentColor = False
   end
   object lblEquipment: TLabel
-    AnchorSideTop.Control = chkVisible
+    AnchorSideTop.Control = mQTH
     AnchorSideTop.Side = asrBottom
-    Left = 177
-    Height = 17
-    Top = 68
-    Width = 70
+    Left = 9
+    Height = 15
+    Top = 236
+    Width = 73
     BorderSpacing.Top = 10
     Caption = 'Equipment'
     ParentColor = False
   end
   object lblRemarks: TLabel
-    AnchorSideTop.Control = mQTH
+    AnchorSideTop.Control = mEquipment
     AnchorSideTop.Side = asrBottom
     Left = 9
-    Height = 17
-    Top = 258
-    Width = 57
+    Height = 15
+    Top = 337
+    Width = 59
     BorderSpacing.Top = 10
     Caption = 'Remarks'
     ParentColor = False
@@ -62,9 +62,10 @@ object frmNewQTHProfile: TfrmNewQTHProfile
   object lblProfileNumber: TLabel
     AnchorSideBottom.Control = edtProfNr
     Left = 9
-    Height = 17
-    Top = 13
-    Width = 95
+    Height = 15
+    Top = 7
+    Width = 100
+    Anchors = [akLeft]
     BorderSpacing.Bottom = 2
     Caption = 'Profile number'
     ParentColor = False
@@ -73,8 +74,8 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = lblLocator
     AnchorSideTop.Side = asrBottom
     Left = 8
-    Height = 34
-    Top = 95
+    Height = 33
+    Top = 84
     Width = 92
     BorderSpacing.Top = 2
     MaxLength = 6
@@ -85,10 +86,10 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = lblQTH
     AnchorSideTop.Side = asrBottom
     Left = 9
-    Height = 90
-    Top = 158
-    Width = 150
-    BorderSpacing.Top = 2
+    Height = 74
+    Top = 152
+    Width = 376
+    BorderSpacing.Top = 10
     MaxLength = 250
     ScrollBars = ssAutoBoth
     TabOrder = 2
@@ -96,10 +97,11 @@ object frmNewQTHProfile: TfrmNewQTHProfile
   object mEquipment: TMemo
     AnchorSideTop.Control = lblEquipment
     AnchorSideTop.Side = asrBottom
-    Left = 177
-    Height = 146
-    Top = 87
-    Width = 208
+    Left = 9
+    Height = 74
+    Top = 253
+    Width = 376
+    Anchors = [akTop]
     BorderSpacing.Top = 2
     MaxLength = 250
     ScrollBars = ssAutoBoth
@@ -108,20 +110,20 @@ object frmNewQTHProfile: TfrmNewQTHProfile
   object mRemarks: TMemo
     AnchorSideTop.Control = lblRemarks
     AnchorSideTop.Side = asrBottom
-    Left = 9
+    Left = 8
     Height = 90
-    Top = 277
+    Top = 362
     Width = 376
-    BorderSpacing.Top = 2
+    BorderSpacing.Top = 10
     ScrollBars = ssAutoBoth
     TabOrder = 4
   end
   object btnSave: TButton
     AnchorSideTop.Control = mRemarks
     AnchorSideTop.Side = asrBottom
-    Left = 28
+    Left = 16
     Height = 35
-    Top = 377
+    Top = 462
     Width = 60
     AutoSize = True
     BorderSpacing.Top = 10
@@ -136,7 +138,7 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Side = asrBottom
     Left = 288
     Height = 35
-    Top = 377
+    Top = 462
     Width = 62
     AutoSize = True
     BorderSpacing.Top = 10
@@ -148,10 +150,10 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     TabOrder = 7
   end
   object chkVisible: TCheckBox
-    Left = 177
+    Left = 134
     Height = 23
-    Top = 35
-    Width = 146
+    Top = 36
+    Width = 148
     Caption = 'Show profile in list'
     Checked = True
     State = cbChecked
@@ -161,8 +163,8 @@ object frmNewQTHProfile: TfrmNewQTHProfile
     AnchorSideTop.Control = lblProfileNumber
     AnchorSideTop.Side = asrBottom
     Left = 9
-    Height = 34
-    Top = 32
+    Height = 33
+    Top = 24
     Width = 93
     BorderSpacing.Top = 2
     CharCase = ecUppercase

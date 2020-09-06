@@ -19,7 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2196"/>
+      <BuildNr Value="2199"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <MacroValues Count="1">
@@ -105,7 +105,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="112">
+    <Units Count="115">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -841,6 +841,21 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit111>
+      <Unit112>
+        <Filename Value="uDbUtils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit112>
+      <Unit113>
+        <Filename Value="dQTHProfile.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dmQTHProfile"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+      </Unit113>
+      <Unit114>
+        <Filename Value="uInternalConnection.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit114>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
