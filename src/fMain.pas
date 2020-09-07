@@ -1891,6 +1891,7 @@ begin
   if dlgSave.Execute then
   begin
     ShowWidths:=false;
+{
     frmExportPref := TfrmExportPref.Create(frmMain);
     try
       if frmExportPref.ShowModal = mrCancel then
@@ -1898,7 +1899,7 @@ begin
     finally
       FreeAndNil(frmExportPref)
     end;
-
+}
     with TfrmExportProgress.Create(self) do
     try
       FileName   := dlgSave.FileName;
@@ -1920,6 +1921,7 @@ begin
   if dlgSave.Execute then
   begin
     ShowWidths:=true;
+{
     frmExportPref := TfrmExportPref.Create(frmMain);
     try
       if frmExportPref.ShowModal = mrCancel then
@@ -1927,7 +1929,7 @@ begin
     finally
       FreeAndNil(frmExportPref)
     end;
-
+}
     with TfrmExportProgress.Create(self) do
     try
       FileName   := dlgSave.FileName;
