@@ -5540,7 +5540,7 @@ object frmNewQSO: TfrmNewQSO
     end
     object acDetails: TAction
       Category = 'Window'
-      Caption = 'Detail info'
+      Caption = 'Details info'
       OnExecute = acDetailsExecute
       ShortCut = 16457
     end
