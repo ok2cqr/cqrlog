@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process uDbUtils;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process, uDbUtils;
 
 type
 
