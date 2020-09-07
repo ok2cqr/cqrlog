@@ -47,7 +47,7 @@ implementation
 {$R *.lfm}
 
 { TfrmNewQTHProfile }
-uses dUtils, dData;
+uses dUtils, dQTHProfile;
 
 procedure TfrmNewQTHProfile.btnSaveClick(Sender: TObject);
 begin
@@ -61,7 +61,7 @@ begin
   begin
     if (OldProf <> edtProfNr.Text) then
     begin
-      if dmData.ProfileExists(edtProfNr.Text) then
+      if dmQTHProfile.ProfileExists(edtProfNr.Text) then
       begin
          Application.MessageBox('Profile already exists!','Warning ...',mb_ok + mb_IconWarning);
         edtProfNr.SetFocus;
@@ -70,7 +70,7 @@ begin
     end
   end
   else begin
-    if dmData.ProfileExists(edtProfNr.Text) then
+    if dmQTHProfile.ProfileExists(edtProfNr.Text) then
     begin
       Application.MessageBox('Profile already exists!','Warning ...',mb_ok + mb_IconWarning);
       edtProfNr.SetFocus;

@@ -250,8 +250,6 @@ type
     function  FindCounty2(qth,pfx : String; var StoreTo : String) : String;
     function  FindCounty3(qth,pfx : String; var StoreTo : String) : String;
     function  GetMyLocFromProfile(profile : String) : String;
-    function  ProfileExists(nr : string) : Boolean;
-    function  ProfileInUse(nr : String) : Boolean;
     function  SendQSL(call,mode,freq : String; adif : Word) : String;
     function  GetSCPCalls(call : String) : String;
     function  UsesLotw(call : String) : Boolean;
@@ -2275,34 +2273,6 @@ begin
   trQ.StartTransaction;
   Q.Open();
   Result := Q.Fields[0].AsString;
-  trQ.RollBack;
-  Q.Close()
-end;
-
-function TdmData.ProfileExists(nr : string) : Boolean;
-begin
-  Q.Close();
-  Q.SQL.Text := 'select nr from profiles where nr = '+nr;
-  if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
-  if trQ.Active then
-    trQ.RollBack;
-  trQ.StartTransaction;
-  Q.Open();
-  Result := Q.Fields[0].AsInteger > 0;
-  trQ.RollBack;
-  Q.Close()
-end;
-
-function TdmData.ProfileInUse(nr : String) : Boolean;
-begin
-  Q.Close();
-  Q.SQL.Text := 'select id_cqrlog_main from cqrlog_main where profile = '+nr+' LIMIT 1';
-  if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
-  if trQ.Active then
-    trQ.RollBack;
-  trQ.StartTransaction;
-  Q.Open();
-  Result := Q.Fields[0].AsInteger > 0;
   trQ.RollBack;
   Q.Close()
 end;

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process uDbUtils;
 
 type
 
@@ -290,6 +290,7 @@ begin
   // X btnDisconnectClick(nil); //be sure we have disconnected and closed any open log
   if dmData.OpenConnections(edtServer.Text,edtPort.Text,edtUser.Text,edtPass.Text) then
   begin
+    UpdateConnectionInfoRecord(edtServer.Text, edtPort.Text, edtUser.Text, edtPass.Text, '');
     dmData.CheckForDatabases;
     UpdateGridFields;
     EnableButtons;
@@ -387,6 +388,8 @@ begin
     ini.Free
   end;
 
+ UpdateConnectionInfoDatabaseName(dmData.qLogList.Fields[0].AsInteger);
+  
   if not OpenFromNewQSOMenu then
   begin
     dmData.LogName := dmData.qLogList.Fields[1].AsString;

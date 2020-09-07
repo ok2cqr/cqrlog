@@ -23,8 +23,8 @@ uses
   fRbnServer, fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
-  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fProgress,
-  fDOKStat, fCabrilloExport;
+  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc,
+  fDOKStat, fCabrilloExport, uDbUtils, dQTHProfile,fProgress;
 var
   Splash : TfrmSplash;
 

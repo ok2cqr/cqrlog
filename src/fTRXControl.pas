@@ -377,7 +377,8 @@ begin
       if not TryStrToFloat(cqrini.ReadString('NewQSO','RXLO',''),rxlo) then
         rxlo := 0;
       if (f + rxlo <> 0) then
-        frmNewQSO.edtRXFreq.Text := FloatToStr((f + rxlo));
+        if not frmNewQSO.cbOffline.Checked then
+          frmNewQSO.edtRXFreq.Text := FloatToStr((f + rxlo));
     end;
   end
   else
