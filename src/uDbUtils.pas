@@ -15,13 +15,14 @@ unit uDbUtils;
 interface
 
 uses
-  Classes, SysUtils, strutils, uInternalConnection;
+  Classes, SysUtils, strutils, uConnectionInfo, uInternalConnection;
 
   (*
   * Returns connection to CQRLOG database. Usfull for one-time methods eg. modify something
   * getting some value from a table etc.
   *)
   function  GetNewInternalConnection(): TInternalConnection;
+  function  GetConnectionInfo() : TConnectionInfo;
 
   procedure UpdateConnectionInfoRecord(Host, Port, UserName, Password : String; DatabaseName : String = '');
   procedure UpdateConnectionInfoDatabaseName(DatabaseNumber : Integer);
@@ -49,6 +50,12 @@ function GetNewInternalConnection(): TInternalConnection;
 begin
   Result := TinternalConnection.Create(ConnectionInfo);
 end;
+
+function GetConnectionInfo() : TConnectionInfo;
+begin
+  Result := ConnectionInfo;
+end;
+
 
 end.
 
