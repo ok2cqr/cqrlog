@@ -1,21 +1,25 @@
 object frmQTHProfiles: TfrmQTHProfiles
-  Left = 781
-  Height = 559
-  Top = 276
+  Left = 565
+  Height = 549
+  Top = 177
   Width = 685
   ActiveControl = dbgrdProfiles
   BorderIcons = [biSystemMenu]
   Caption = 'QTH Profiles'
-  ClientHeight = 559
+  ClientHeight = 549
   ClientWidth = 685
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.8.0'
   object Panel1: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideBottom.Control = Owner
     Left = 0
     Height = 50
-    Top = 509
+    Top = 499
     Width = 685
     Align = alBottom
     BevelOuter = bvNone
@@ -23,11 +27,15 @@ object frmQTHProfiles: TfrmQTHProfiles
     ClientWidth = 685
     TabOrder = 0
     object btnNew: TButton
-      Left = 14
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 18
       Height = 35
-      Top = 12
+      Top = 8
       Width = 60
       AutoSize = True
+      BorderSpacing.Left = 18
       BorderSpacing.InnerBorder = 1
       Caption = 'New'
       Constraints.MinWidth = 60
@@ -37,12 +45,14 @@ object frmQTHProfiles: TfrmQTHProfiles
     object btnEdit: TButton
       AnchorSideLeft.Control = btnNew
       AnchorSideLeft.Side = asrBottom
-      Left = 94
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 96
       Height = 35
-      Top = 12
+      Top = 8
       Width = 60
       AutoSize = True
-      BorderSpacing.Left = 20
+      BorderSpacing.Left = 18
       BorderSpacing.InnerBorder = 1
       Caption = 'Edit'
       Constraints.MinWidth = 60
@@ -52,12 +62,14 @@ object frmQTHProfiles: TfrmQTHProfiles
     object btnDelete: TButton
       AnchorSideLeft.Control = btnEdit
       AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
       Left = 174
       Height = 35
-      Top = 12
-      Width = 62
+      Top = 8
+      Width = 61
       AutoSize = True
-      BorderSpacing.Left = 20
+      BorderSpacing.Left = 18
       BorderSpacing.InnerBorder = 1
       Caption = 'Delete'
       Constraints.MinWidth = 60
@@ -66,13 +78,17 @@ object frmQTHProfiles: TfrmQTHProfiles
     end
     object btnClose: TButton
       AnchorSideLeft.Side = asrBottom
-      Left = 608
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 607
       Height = 35
-      Top = 12
+      Top = 8
       Width = 60
-      Anchors = [akTop]
+      Anchors = [akTop, akRight]
       AutoSize = True
-      BorderSpacing.Left = 20
+      BorderSpacing.Right = 18
       BorderSpacing.InnerBorder = 1
       Cancel = True
       Caption = 'Close'
@@ -81,13 +97,16 @@ object frmQTHProfiles: TfrmQTHProfiles
       TabOrder = 3
     end
     object btnApply: TButton
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnClose
-      Left = 528
+      Left = 529
       Height = 35
-      Top = 12
+      Top = 8
       Width = 60
       Anchors = [akTop, akRight]
       AutoSize = True
+      BorderSpacing.Right = 18
       BorderSpacing.InnerBorder = 1
       Caption = 'Apply'
       Constraints.MinWidth = 60
@@ -98,19 +117,28 @@ object frmQTHProfiles: TfrmQTHProfiles
     object btnHideShowProfile: TButton
       AnchorSideLeft.Control = btnDelete
       AnchorSideLeft.Side = asrBottom
-      Left = 246
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 253
       Height = 35
-      Top = 12
-      Width = 224
-      BorderSpacing.Left = 10
+      Top = 8
+      Width = 198
+      AutoSize = True
+      BorderSpacing.Left = 18
+      BorderSpacing.InnerBorder = 1
       Caption = '&Hide/Show profile in the list'
+      Constraints.MinWidth = 198
       OnClick = btnHideShowProfileClick
       TabOrder = 5
     end
   end
   object dbgrdProfiles: TDBGrid
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideBottom.Control = Panel1
     Left = 0
-    Height = 509
+    Height = 499
     Top = 0
     Width = 685
     Align = alClient
