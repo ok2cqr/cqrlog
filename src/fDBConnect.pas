@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process, uDbUtils;
+  StdCtrls, ExtCtrls, DBGrids, LCLType, Menus, IniFiles, process, uDbUtils, uConnectionInfo,
+  strutils;
 
 type
 
@@ -299,29 +300,44 @@ begin
 end;
 
 procedure TfrmDBConnect.btnDeleteLogClick(Sender: TObject);
+var
+  ConnectionInfo : TConnectionInfo;
+  ActiveLog : String;
 begin
+
   if ( OpenFromNewQSOMenu and (dmData.LogName = dmData.qLogList.Fields[1].AsString) )then
       Begin
          ShowMessage('Open log can not be deleted!' +
            sLineBreak + 'Switch logs first or delete log before opening it!' );
       exit;
       end;
+
   if dmData.qLogList.Fields[0].AsInteger = 1 then
   begin
-    Application.MessageBox('You can not delete the first log!','Info ...',mb_ok +
-                          mb_IconInformation);
+    Application.MessageBox('You can not delete the first log!','Info ...',mb_ok + mb_IconInformation);
     exit
   end;
-  if Application.MessageBox('Do you really want to delete this log?','Question ...',
-                           mb_YesNo + mb_IconQuestion) = idYes then
+
+  ConnectionInfo := GetConnectionInfo();
+  ActiveLog := 'cqrlog' + AddChar('0',IntToStr(dmData.qLogList.Fields[0].AsInteger), 3);
+  if (ConnectionInfo.DatabaseName = ActiveLog) then
   begin
-    if Application.MessageBox('LOG WILL BE _DELETED_. Are you sure?','Question ...',
-                             mb_YesNo + mb_IconQuestion) = idYes then
-    begin
-      dmData.DeleteLogDatabase(dmData.qLogList.Fields[0].AsInteger);
-      UpdateGridFields
-    end
-  end
+    Application.MessageBox('You can not delete current active log!','Info ...',mb_ok + mb_IconInformation);
+    exit;
+  end;
+
+  if Application.MessageBox('Do you really want to delete this log?','Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+  begin
+    exit;
+  end;
+
+  if Application.MessageBox('LOG WILL BE _DELETED_. Are you sure?','Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+  begin
+    exit;
+  end;
+
+  dmData.DeleteLogDatabase(dmData.qLogList.Fields[0].AsInteger);
+  UpdateGridFields;
 end;
 
 procedure TfrmDBConnect.btnCancelClick(Sender: TObject);

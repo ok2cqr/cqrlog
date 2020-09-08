@@ -15,16 +15,7 @@ unit uInternalConnection;
 interface
 
 uses
-  Classes, SysUtils, sqldb, mysql57dyn, mysql57conn;
-
-type
-  TConnectionInfo = record
-    HostName: string;
-    Port: String;
-    UserName: String;
-    Password: String;
-    DatabaseName: String;
-  end;
+  Classes, SysUtils, sqldb, mysql57dyn, mysql57conn, uConnectionInfo;
 
 type
   TinternalConnection = class
