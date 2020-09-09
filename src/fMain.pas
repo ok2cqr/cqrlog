@@ -143,6 +143,7 @@ type
     MenuItem104: TMenuItem;
     MenuItem105: TMenuItem;
     MenuItem106: TMenuItem;
+    MenuItem107: TMenuItem;
     MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
@@ -389,6 +390,7 @@ type
     procedure acWASCfmExecute(Sender: TObject);
     procedure acDOKCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
+    procedure MenuItem107Click(Sender: TObject);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
@@ -1221,6 +1223,46 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmMain.MenuItem107Click(Sender: TObject);
+var
+  s: PChar;
+
+  Procedure RemoveTriggers;
+   Begin
+    dmLogUpload.DisableOnlineLogSupport;
+    dmLogUpload.EnableOnlineLogSupport;
+    Application.MessageBox('Triggers removed','Info ...',mb_ok + mb_IconInformation);
+   end;
+
+begin
+  if not (cqrini.ReadBool('OnlineLog','HaUP',False)
+          or cqrini.ReadBool('OnlineLog','ClUP',False)
+          or cqrini.ReadBool('OnlineLog','HrUP',False) ) then
+     Begin
+       //warn: none of uploads selected
+       Application.MessageBox('You do not have any log uploads enabled!','Info ...',mb_ok + mb_IconInformation);
+       exit
+     end
+   else
+     Begin
+       if not (cqrini.ReadBool('OnlineLog','HaUpOnline',False)
+           or cqrini.ReadBool('OnlineLog','ClUpOnline',False)
+           or cqrini.ReadBool('OnlineLog','HrUpOnline',False) ) then
+         Begin
+           //Warn: none of online uploads
+           s:= 'You do not have any immediately uploads active'+LineEnding+LineEnding+
+               'Are you sure you want to remove ALL upload triggers?';
+           if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion) = idYes then
+            RemoveTriggers;
+           exit;
+         end;
+        s:= 'Are you sure you want to remove ALL upload triggers?';
+        if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion) = idYes then
+         RemoveTriggers;
+        exit;
+     end;
 end;
 
 procedure TfrmMain.mnueQSLViewClick(Sender: TObject);
