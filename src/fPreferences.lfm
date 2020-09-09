@@ -8760,6 +8760,28 @@ object frmPreferences: TfrmPreferences
         Caption = 'Ignore changes caused by LoTW/eQSL upload or download'
         TabOrder = 4
       end
+      object chkIgnoreQSL: TCheckBox
+        AnchorSideLeft.Control = chkIgnoreLoTW
+        AnchorSideTop.Control = chkIgnoreLoTW
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 23
+        Top = 584
+        Width = 316
+        Caption = 'Ignore changes caused by QSL sent/received'
+        TabOrder = 5
+      end
+      object chkIgnoreEdit: TCheckBox
+        AnchorSideLeft.Control = chkIgnoreQSL
+        AnchorSideTop.Control = chkIgnoreQSL
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 23
+        Top = 607
+        Width = 256
+        Caption = 'Ignore changes caused by QSO edit'
+        TabOrder = 6
+      end
     end
     object tabCondx: TTabSheet
       Caption = 'Propagation'

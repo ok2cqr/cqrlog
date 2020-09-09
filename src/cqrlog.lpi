@@ -163,6 +163,7 @@
         <Filename Value="fMarkQSL.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMarkQSL"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit8>
       <Unit9>

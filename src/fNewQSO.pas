@@ -3348,7 +3348,12 @@ begin
   end;
   if fEditQSO and (not fromNewQSO) then
   begin
-    dmData.RefreshMainDatabase(id)
+    dmData.RefreshMainDatabase(id);
+    if cqrini.ReadBool('OnlineLog','IgnoreEdit',False) then
+     Begin
+       dmLogUpload.DisableOnlineLogSupport;
+       dmLogUpload.EnableOnlineLogSupport;
+     end;
   end;
   if not AnyRemoteOn then
     UnsetEditLabel;
