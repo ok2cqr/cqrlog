@@ -2033,6 +2033,9 @@ var
 begin
   dmData.Q.Close;
   dmData.trQ.StartTransaction;
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.DisableOnlineLogSupport;
+
   if dbgrdMain.SelectedRows.Count < 2 then
   begin
     MarkRec
@@ -2050,7 +2053,10 @@ begin
   dmData.qCQRLOG.Close;
   dmData.RefreshMainDatabase(idx);
   dbgrdMain.SelectedRows.Clear;
-  RefreshQSODXCCCount
+  RefreshQSODXCCCount;
+
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+   dmLogUpload.EnableOnlineLogSupport;
 end;
 
 procedure TfrmMain.acQSL_SExecute(Sender: TObject);
@@ -2414,6 +2420,9 @@ begin
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
+   if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.DisableOnlineLogSupport;
+
   if dbgrdMain.SelectedRows.Count = 0 then
   begin
     MarkRec
@@ -2430,7 +2439,10 @@ begin
 
   dmData.qCQRLOG.Close;
   dbgrdMain.SelectedRows.Clear;
-  dmData.RefreshMainDatabase(idx)
+  dmData.RefreshMainDatabase(idx);
+
+   if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.EnableOnlineLogSupport;
 end;
 
 procedure TfrmMain.ChechkSelRecords;

@@ -122,6 +122,8 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkIgnoreEdit: TCheckBox;
+    chkIgnoreQSL: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
@@ -1622,6 +1624,8 @@ begin
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
   cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreLoTWeQSL',chkIgnoreLoTW.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreQSL',chkIgnoreQSL.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreEdit',chkIgnoreEdit.Checked);
 
   cqrini.WriteString('prop','Url',edtCondxImageUrl.Text);
   cqrini.WriteBool('prop','AsImage',rbCondxAsImage.Checked);
@@ -3125,6 +3129,8 @@ begin
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
   chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
   chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
+  chkIgnoreQSL.Checked   := cqrini.ReadBool('OnlineLog','IgnoreQSL',False);
+  chkIgnoreEdit.Checked  := cqrini.ReadBool('OnlineLog','IgnoreEdit',False);
   chkHrUpEnabledChange(nil);
 
   edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');
