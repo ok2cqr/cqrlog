@@ -370,6 +370,7 @@
         <Filename Value="fRefCall.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmRefCall"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit39>
       <Unit40>
@@ -860,6 +861,13 @@
         <Filename Value="uConnectionInfo.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit115>
+      <Unit116>
+        <Filename Value="fChangeOperator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmChangeOperator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit116>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

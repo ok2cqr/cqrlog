@@ -46,7 +46,13 @@ end;
 
 procedure TfrmChangeLocator.btnOKClick(Sender: TObject);
 begin
-  ModalResult := mrOK
+   if dmUtils.isLocOK(edtLocator.Text) then
+    ModalResult := mrOK
+    else
+     Begin
+        edtLocator.Text:='ERROR!';
+        edtLocator.SelStart := Length(edtLocator.Text);
+     end;
 end;
 
 procedure TfrmChangeLocator.edtLocatorChange(Sender: TObject);

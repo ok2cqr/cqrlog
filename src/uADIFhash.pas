@@ -54,4 +54,5 @@ const h_AWARD = 53520;
 const h_PROP_MODE = 17551;
 const h_SAT_NAME = 39545;
 const h_FREQ_RX = 2926;
+const h_OP = 16130;
 

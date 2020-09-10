@@ -83,6 +83,7 @@ type TnewQSOEntry=record   //represents a new qso entry in the log
       PROP_MODE : String[30];
       SAT_NAME : String[30];
       FREQ_RX  : String[30];
+      OP:String[30];
      end;
 type
 
@@ -318,7 +319,8 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_AWARD:d.AWARD:=data;
       h_PROP_MODE:d.PROP_MODE:=data;
       h_SAT_NAME:d.SAT_NAME:=data;
-      h_FREQ_RX:d.FREQ_RX:=data
+      h_FREQ_RX:d.FREQ_RX:=data;
+      h_OP:d.OP:=data
     else begin
         { writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}
       end;
@@ -430,6 +432,8 @@ begin
     d.COMMENT := copy(d.COMMENT, 1, 200);
 
     d.MODE := UpperCase(d.MODE);
+
+    d.OP := UpperCase(d.OP);
 
     if not dmUtils.IsAdifOK(d.QSO_DATE,d.TIME_ON,d.TIME_OFF,d.CALL,d.FREQ,d.MODE,d.RST_SENT,
                             d.RST_RCVD,d.IOTA,d.ITUZ,d.CQZ,d.GRIDSQUARE,d.MY_GRIDSQUARE,
@@ -583,13 +587,14 @@ begin
                    'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                    'remarks,county,adif,idcall,award,band,state,cont,profile,lotw_qslsdate,lotw_qsls,'+
                    'lotw_qslrdate,lotw_qslr,qsls_date,qslr_date,eqsl_qslsdate,eqsl_qsl_sent,'+
-                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string, srx_string, contestname, dok) values('+
+                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string,'+
+                   'srx_string, contestname, dok, operator) values('+
                    ':qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,:qth,'+
                    ':qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:itu,:waz,:loc,:my_loc,:remarks,:county,:adif,'+
                    ':idcall,:award,:band,:state,:cont,:profile,:lotw_qslsdate,:lotw_qsls,:lotw_qslrdate,'+
                    ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
                    ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq, :stx, :srx, :stx_string, :srx_string,'+
-                   ':contestname,:dok)';
+                   ':contestname,:dok,:operator)';
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
@@ -714,6 +719,10 @@ begin
     Q1.Params[44].AsString := d.SRX_STRING;
     Q1.Params[45].AsString := d.CONTEST_ID;
     Q1.Params[46].AsString := d.DARC_DOK;
+    if (d.OP <> '') then
+      Q1.Params[47].AsString := d.OP
+    else
+      Q1.Params[47].Clear;
 
     if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
