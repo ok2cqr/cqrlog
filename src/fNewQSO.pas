@@ -24,8 +24,9 @@ uses
   FileUtil, LazFileUtils;
 
 const
-  cRefCall = 'Ref. call (to change press CTRL+R)   ';
-  cMyLoc   = 'My grid (to change press CTRL+L) ';
+  cRefCall = 'Ref.call (CTRL+R): ';
+  cMyLoc   = 'My Loc (CTRL+L): ';
+  cOperator ='Operator (ALT+O): ';
   cQSLMgrVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat';
   cDOKVersionCheckUrl = 'https://www.df2et.de/cqrlog/ver.dat';
   cCntyVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
@@ -613,6 +614,8 @@ type
     WsjtxDecodeRunning : boolean;
 
     RememberAutoMode : Boolean;
+
+    Op         : String;
     procedure showDOK(stat:boolean);
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -781,7 +784,7 @@ implementation
 
 { TfrmNewQSO }
 
-uses dUtils, fChangeLocator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGrayline,
+uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGrayline,
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
      fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
@@ -1359,10 +1362,10 @@ begin
   dmUtils.ModifyXplanetConf;
   dmUtils.LoadFontSettings(frmNewQSO);
   dmUtils.LoadBandLabelSettins;
-  sbNewQSO.Panels[0].Width := 280;
-  sbNewQSO.Panels[1].Width := 310;
+  sbNewQSO.Panels[0].Width := 180;
+  sbNewQSO.Panels[1].Width := 200;
 
-  sbNewQSO.Panels[2].Width := 70;
+  sbNewQSO.Panels[2].Width := 200;
 
   sbNewQSO.Panels[3].Text  := 'Ver. '+ dmData.VersionString;
   sbNewQSO.Panels[3].Width := 60;
@@ -1377,6 +1380,8 @@ begin
   dmData.LoadQSODateColorSettings;
 
   InitializeCW;
+
+  Op := '';
 
   if dbgrdQSOBefore.Visible then
     mnuQSOBefore.Caption := 'Disable QSO before grid'
@@ -2155,6 +2160,13 @@ begin
                                                'STX_STRING':edtContestExchangeMessageSent.Text := data;
                                                 //same with SRX
                                                'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
+                                               'OPERATOR': Begin
+                                                             if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
+                                                              Begin
+                                                               Op := data;
+                                                               sbNewQSO.Panels[2].Text := cOperator+Op;
+                                                              end;
+                                                            end;
                                             end; //case
                 end;  //repeat
           until Buf = '';
@@ -2945,7 +2957,12 @@ begin
            if RemoteName = 'WSJT-X' then   //no contest in JTDX
             begin
                  if dmData.DebugLevel>=1 then Writeln('Tail logging part entered');
-                 OpCall := trim(StrBuf(index));  //operator callsign (in contest, club etc.)
+                 OpCall := UpperCase(trim(StrBuf(index)));  //operator callsign (in contest, club etc.)
+                 if ((OpCall<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
+                  Begin
+                   Op := OpCall;
+                   sbNewQSO.Panels[2].Text := cOperator+Op;
+                  end;
                  ExchR :=  trim(StrBuf(index));  //fake, this is actually "My call". Not used
                  ExchR :=  trim(StrBuf(index));  //fake, this is actually "My grid". Not used
                  ExchS :=  trim(StrBuf(index));  //contest exchange sent. report + others
@@ -3218,7 +3235,8 @@ begin
                    edtContestSerialSent.Text,
                    edtContestExchangeMessageReceived.Text,
                    edtContestExchangeMessageSent.Text,
-                   edtContestName.Text);
+                   edtContestName.Text,
+                   Op);
     if (old_call<>edtCall.Text) or (old_mode<>cmbMode.Text) or (StrToFloat(old_freq)<>StrToFloat(cmbFreq.Text)) or
        (old_date<>StrToDate(edtDate.Text)) or (old_time<>edtStartTime.Text) or (old_rsts<>edtHisRST.Text) or
        (old_rstr<>edtMyRST.Text) then
@@ -3311,7 +3329,8 @@ begin
                    edtContestSerialSent.Text,
                    edtContestExchangeMessageReceived.Text,
                    edtContestExchangeMessageSent.Text,
-                   edtContestName.Text
+                   edtContestName.Text,
+                   Op
                    )
   end;
   if (cmbPropagation.Text = 'SAT|Satellite') then
@@ -5614,6 +5633,27 @@ begin
     cmbQSL_S.text:='SB';
   if ((Shift = [ssAlt]) and (key = VK_N)) then
     cmbQSL_S.text:='N';
+  if ((Shift = [ssAlt]) and (key = VK_O)) then
+  begin
+    with TfrmChangeOperator.Create(self) do
+    try
+      edtOperator.Text := Op;
+      ShowModal;
+      if ModalResult = mrOk then
+      begin
+       if UpperCase(edtOperator.Text)<>'' then
+          Op := UpperCase(edtOperator.Text)
+         else
+          Op:= '';
+        if dmData.DebugLevel>=1 then writeln('Operator changed: '+Op);
+         if Op<>UpperCase(cqrini.ReadString('Station', 'Call', ''))  then
+              sbNewQSO.Panels[2].Text := cOperator+Op
+           else sbNewQSO.Panels[2].Text :='';
+      end;
+    finally
+      Free;
+    end;
+  end;
   if ((Shift = [ssAlt]) and (key = VK_H)) then
   begin
     ShowHelp;
@@ -5639,7 +5679,7 @@ begin
     #12 : begin                    // CTRL+L
             with TfrmChangeLocator.Create(self) do
             try
-              edtLocator.Text := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
+              edtLocator.Text := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,10);
               ShowModal;
               if ModalResult = mrOk then
               begin
@@ -5651,7 +5691,7 @@ begin
             end;
             key := #0
           end;
-    #96 : begin
+    #96 : begin  // CTRL+w
             acSendSpot.Execute;
             Key := #0
           end;
@@ -6329,7 +6369,8 @@ begin
     end;
     dmSatellite.GetListOfSatellites(cmbSatellite, dmData.qCQRLOG.FieldByName('satellite').AsString);
     dmSatellite.GetListOfPropModes(cmbPropagation, dmData.qCQRLOG.FieldByName('prop_mode').AsString);
-    edtRXFreq.Text := FloatToStr(dmData.qCQRLOG.FieldByName('rxfreq').AsFloat)
+    edtRXFreq.Text := FloatToStr(dmData.qCQRLOG.FieldByName('rxfreq').AsFloat);
+    Op := dmData.qCQRLOG.FieldByName('operator').AsString;
   end;
   if (edtRXFreq.Text = '0') then
     edtRXFreq.Text := '';

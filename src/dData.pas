@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 17;
+  cDB_MAIN_VER = 18;
   cDB_COMN_VER = 4;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -276,14 +276,14 @@ type
                       idcall,state,dok,cont : String; qso_dxcc : Boolean; profile : Integer;
                       nclub1,nclub2,nclub3,nclub4,nclub5, PropMode, Satellite : String;
                       RxFreq : Currency;srx : String;stx : String;srx_string : String;stx_string : String;
-                      contestname : String);
+                      contestname : String; Op : String);
 
     procedure EditQSO(date : TDateTime; time_on,time_off,call : String; freq : Currency;mode,rst_s,
                       rst_r, stn_name,qth,qsl_s,qsl_r,qsl_via,iota,pwr : String; itu,waz : Integer;
                       loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,dok,cont : String;
                       qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
                       RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
-                      contestname : String);
+                      contestname : String; Op : String);
     procedure SaveComment(call,text : String);
     procedure DeleteComment(id : Integer);
     procedure PrepareImport;
@@ -1309,7 +1309,7 @@ procedure TdmData.SaveQSO(date : TDateTime; time_on,time_off,call : String; freq
                  idcall,state,dok,cont : String; qso_dxcc : Boolean; profile : Integer;
                  nclub1,nclub2,nclub3,nclub4,nclub5, PropMode, Satellite : String;
                  RxFreq : Currency;srx : String;stx : String;srx_string : String;stx_string : String;
-                 contestname : String);
+                 contestname : String; Op : String);
 var
   qsodate : String;
   band    : String;
@@ -1346,7 +1346,7 @@ begin
                  'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
                  'county,award,remarks,adif,idcall,state,qso_dxcc,band,profile,cont,club_nr1,'+
                  'club_nr2,club_nr3,club_nr4,club_nr5, prop_mode, satellite, rxfreq, srx, stx,'+
-                 'srx_string, stx_string, contestname, dok) values('+QuotedStr(qsodate) +
+                 'srx_string, stx_string, contestname, dok, operator) values('+QuotedStr(qsodate) +
                  ','+QuotedStr(time_on)+','+QuotedStr(time_off)+
                  ','+QuotedStr(call)+','+FloatToStr(freq)+
                  ','+QuotedStr(mode)+','+QuotedStr(rst_s)+
@@ -1366,7 +1366,11 @@ begin
                  ','+QuotedStr(nclub1)+','+QuotedStr(nclub2)+','+QuotedStr(nclub3)+
                  ','+QuotedStr(nclub4)+','+QuotedStr(nclub5)+','+QuotedStr(PropMode)+','+QuotedStr(Satellite)+','+rx_freq+
                  ','+QuotedStr(srx)+','+QuotedStr(stx)+','+QuotedStr(srx_string)+','+QuotedStr(stx_string)+','+QuotedStr(contestname)+
-                 ','+QuotedStr(dok)+')';
+                 ','+QuotedStr(dok);
+  if (Op <> '') then
+     Q.SQL.Text := Q.SQL.Text+','+QuotedStr(Op)+')'
+  else
+     Q.SQL.Text := Q.SQL.Text+', NULL)';
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
   Q.ExecSQL;
@@ -1378,7 +1382,7 @@ procedure TdmData.EditQSO(date : TDateTime; time_on,time_off,call : String; freq
                  loc, my_loc,county,award,remarks : String; adif : Word; idcall,state,dok,cont : String;
                  qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
                  RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
-                 contestname : String);
+                 contestname : String; Op : String);
 var
   qsodate : String;
   band    : String;
@@ -1422,8 +1426,12 @@ begin
            ', profile = ' + IntToStr(profile) + ', idcall = ' + QuotedStr(idcall) + ', state=' + QuotedStr(state) +
            ', cont = ' + QuotedStr(cont)+ ', prop_mode = ' + QuotedStr(PropMode) + ', satellite = ' + QuotedStr(Satellite)+
            ', rxfreq = ' + rx_freq + ', stx = ' + QuotedStr(stx)+ ', stx_string = ' + QuotedStr(stx_string) + ', srx = ' + QuotedStr(srx)+
-           ', srx_string = ' + QuotedStr(srx_string) + ', contestname = ' + QuotedStr(contestname) + ', dok = ' + QuotedStr(dok) +
-           ' where id_cqrlog_main = ' + IntToStr(idx);
+           ', srx_string = ' + QuotedStr(srx_string) + ', contestname = ' + QuotedStr(contestname) + ', dok = ' + QuotedStr(dok);
+  if (Op <> '') then
+    Q.SQL.Text := Q.SQL.Text+', operator = ' + QuotedStr(Op)
+  else
+    Q.SQL.Text := Q.SQL.Text+', operator = NULL';
+  Q.SQL.Text := Q.SQL.Text+' where id_cqrlog_main = ' + IntToStr(idx);
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
   trQ.StartTransaction;
@@ -3095,6 +3103,18 @@ begin
               begin
                 trQ1.StartTransaction;
                 Q1.SQL.Text := 'alter table cqrlog_main add dok varchar(12) null';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+                trQ1.Commit;
+              end;
+      end;
+
+      if (old_version < 18) then
+            begin
+              if (not FieldExists('cqrlog_main', 'operator')) then
+              begin
+                trQ1.StartTransaction;
+                Q1.SQL.Text := 'alter table cqrlog_main add operator varchar(20) null';
                 if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
                 Q1.ExecSQL;
                 trQ1.Commit;

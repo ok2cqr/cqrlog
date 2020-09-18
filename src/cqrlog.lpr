@@ -5,7 +5,7 @@ uses
   cmem,cthreads,uScrollBars,
   Interfaces, // this includes the LCL widgetset
   Forms, sysutils, Classes, fMain, fPreferences, dUtils, fNewQSO, dialogs,
-  fChangeLocator, dData, dDXCC, fMarkQSL, fDXCCStat, fSort, fFilter,
+  fChangeLocator, fChangeOperator, dData, dDXCC, fMarkQSL, fDXCCStat, fSort, fFilter,
   fImportProgress, fImportTest, TAChartLazarusPkg, RunTimeTypeInfoControls,
   fSelectDXCC, fGrayline, fCallbook, fTRXControl, fFreq, fChangeFreq,
   fAdifImport, fSplash, fSearch, fQTHProfiles, fNewQTHProfile, fEnterFreq,
