@@ -1,22 +1,4 @@
-{*
-todo:
 
-DONE -Contest name:  Use same predefined list as is used in contest form's contest name
-DONE -QSO print: let user design format mask (often published with contest rules)
-DONE REMOVED -Points counting:  consider giving up that. Claimed score is not needed (only nice to know)
-DONE -Add warning:  If preferences/station/contest info is not filled
-DONE - use form font size routines at formcreate (or show)
-DONE - save/load export settings
-DONE - write /tmp/CabReject.log for rejected qsos
-DONE- clear unused code and debugs
-- status counts to help manual score counting:
-    + worked countries
-    + worked qsos by continents,
-    + count of different entries in excange1 & exhange2 (if entry is loc count by 4 char)
-    ADDED SETTING + count for user defined country (perhaps)
-- help button works, but help itself needs now refreshing up to date
-- test test test
-*}
 unit fCabrilloExport;
 
 {$mode objfpc}{$H+}
@@ -400,7 +382,7 @@ type
 var
   f,r        : TextFile;
   tmp        : String;
-  mycall,call: String;
+  mycall,call,
   myloc, loc : String;
   myname     : String;
   mailingaddress, zipcity : String;
@@ -415,6 +397,8 @@ var
   category_band: String;
   category_mode: String;
   address: TStringArray;
+  Operators : TStringList;
+  OpString : String;
 
   UsrCountryCount       : integer = 0;
   TotalCountryList      : TStringList;
@@ -444,6 +428,8 @@ begin
   address := zipcity.Split(' ');
   email := cqrini.ReadString('Station','Email','');
   club := cqrini.ReadString('Station','Club','');
+  Operators := TStringList.Create;
+  OpString := '';
 
   if (( mailingaddress ='') or (zipcity='') or (email='')) then
    begin
@@ -573,6 +559,8 @@ begin
                               inc(Continents[6].QsoCount);  //here not total, but different count
                             end;
                          end;
+      if (dmData.qCQRLOG.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.qCQRLOG.FieldByName('operator').AsString) < 0) then
+         Operators.Add(dmData.qCQRLOG.FieldByName('operator').AsString);
 
       tmp:= 'QSO: '+
             Format('%5s', [CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' '+
@@ -637,6 +625,14 @@ begin
     CloseFile(r);
   end;
 
+  for j:=0 to pred(Operators.Count) do
+  begin
+     OpString := OpString+Operators[j];
+     if (j >= 0) then
+        OpString:=OpString+', '
+  end;
+  OpString := OpString + '@' + UpperCase(cqrini.ReadString('Station', 'Call', ''));
+
   //Check mode result before writing header
   case category_mode of
          'CW',
@@ -658,7 +654,10 @@ begin
     Writeln(f,'CREATED-BY: CQRLOG '+dmData.VersionString);
     Writeln(f,'CONTEST: '+cmbCabContestName.Text);
     Writeln(f,'CALLSIGN: '+mycall);
-    Writeln(f,'CATEGORY-OPERATOR: SINGLE-OP');  // Only single op supported currently
+    if (Operators.Count > 0) then
+       Writeln(f,'CATEGORY-OPERATOR: MULTI-OP')
+    else
+       Writeln(f,'CATEGORY-OPERATOR: SINGLE-OP');
     Writeln(f,'CATEGORY-BAND: '+category_band);
     Writeln(f,'CATEGORY-MODE: '+category_mode);
     Writeln(f,'CATEGORY-POWER: '+CabrilloPower(cmbCabPower.ItemIndex));
@@ -669,6 +668,8 @@ begin
     Writeln(f,'CLAIMED-SCORE: ');
     Writeln(f,'SPECIFIC: ');
     Writeln(f,'CLUB: '+club);
+    if (Operators.Count > 0) then
+       Writeln(f,'OPERATORS: '+OpString);
     Writeln(f,'NAME: '+myname);
     Writeln(f,'ADDRESS: '+mailingaddress);
     Writeln(f,'ADDRESS-CITY: '+address[1]);

@@ -165,6 +165,8 @@ var
   dupe       : String;
   cont, WAZ, posun, ITU, lat, long, pfx, country: string;
   message : String;
+  Operators : TStringList;
+  OpString : String;
 begin
   SaveSettings;
   date := dmUtils.GetDateTime(0);
@@ -230,6 +232,8 @@ begin
   dxccs := TStringList.Create;
   new_dxcc := '';
   callsign_list := TStringList.Create;
+  Operators := TStringList.Create;
+  OpString := '';
   try try
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
@@ -302,6 +306,9 @@ begin
       else
               callsign_list.Add(dmData.Q.FieldByName('callsign').AsString);
 
+      if (dmData.Q.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.Q.FieldByName('operator').AsString) < 0) then
+         Operators.Add(dmData.Q.FieldByName('operator').AsString);
+
       s.Add(RightStr(StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]),6)+';'+
             StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+';'+
             dmData.Q.FieldByName('callsign').AsString+';'+
@@ -336,6 +343,12 @@ begin
     dmData.trQ.Rollback;
     dmData.Q.Close
   end;
+  for j:=0 to pred(Operators.Count) do
+  begin
+     OpString := OpString+Operators[j];
+     if (j >= 0) and (j < (Operators.Count-1)) then
+        OpString:=OpString+';'
+  end;
   try
     AssignFile(f,edtFileName.Text);
     Rewrite(f);
@@ -351,7 +364,8 @@ begin
     Writeln(f,'PBand='+EdiBand(dmData.qCQRLOG.FieldByName('band').AsString));
     Writeln(f,'PClub='+club);
     Writeln(f,'RName='+myname);
-    Writeln(f,'RCall='+mycall);
+    if (Operators.Count = 0) then
+      Writeln(f,'RCall='+mycall);
     Writeln(f,'RAdr1='+mailingaddress);
     Writeln(f,'RAdr2='+zipcity);
     Writeln(f,'RPoCo=');
@@ -359,7 +373,10 @@ begin
     Writeln(f,'RCoun='+country);
     Writeln(f,'RPhon=');
     Writeln(f,'RHBBS='+email);
-    Writeln(f,'MOpe1=');
+    if (Operators.Count > 0) then
+      Writeln(f,'MOpe1='+OpString)
+    else
+      Writeln(f,'MOpe1=');
     Writeln(f,'MOpe2=');
     Writeln(f,'STXEq='+edtTxEquipment.Text);
     Writeln(f,'SPowe='+edtTxPower.Text);
