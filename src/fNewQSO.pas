@@ -7397,6 +7397,7 @@ begin
   lblCall.Font.Color    := clRed;
   edtCall.Enabled       := False;
   cbOffline.Checked     := True;
+  cbOffline.Enabled    := False;
   if run and FileExists(path) then
     dmUtils.RunOnBackgroud(path)
 end;
@@ -7460,6 +7461,7 @@ begin
   lblCall.Font.Color        := clDefault;
   edtCall.Enabled           := True;
   cbOffline.Checked         := False;
+  cbOffline.Enabled         := True;
   edtCall.SetFocus;
 
 
