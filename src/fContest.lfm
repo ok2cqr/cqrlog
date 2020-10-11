@@ -24,6 +24,7 @@ object frmContest: TfrmContest
     Width = 140
     AutoSelect = False
     CharCase = ecUppercase
+    OnChange = edtCallChange
     OnExit = edtCallExit
     OnKeyDown = edtCallKeyDown
     OnKeyPress = edtCallKeyPress

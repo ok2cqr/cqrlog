@@ -48,6 +48,7 @@ type
     procedure chkQspChange(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
+    procedure edtCallChange(Sender: TObject);
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure edtCallKeyPress(Sender: TObject; var Key: char);
@@ -86,7 +87,7 @@ implementation
 
 {$R *.lfm}
 
-uses dData, dUtils, fNewQSO, fWorkedGrids, strutils;
+uses dData, dUtils, fNewQSO, fWorkedGrids, strutils, fscp;
 
 procedure TfrmContest.FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 var
@@ -280,6 +281,14 @@ end;
 procedure TfrmContest.chkTabAllChange(Sender: TObject);
 begin
   SetTabOrders;
+end;
+
+procedure TfrmContest.edtCallChange(Sender: TObject);
+begin
+  if frmSCP.Showing and (Length(edtCall.Text)>2) then
+    frmSCP.mSCP.Text := dmData.GetSCPCalls(edtCall.Text)
+  else
+    frmSCP.mSCP.Clear
 end;
 
 procedure TfrmContest.edtCallKeyDown(Sender: TObject; var Key: word;
