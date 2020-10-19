@@ -6,7 +6,7 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   #321
+   #333
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
@@ -48,6 +48,9 @@ BINARIES:
    If you use script-install (see below) it makes backups for you.
    Otherwise see "manual-install (below).
    
+   In some cases it has happen that alpha binary compiled using Fedora linux may not run flawlessly wit Ubuntu derivates.
+   if you start to get mysterious errors it might be the cause. Then you should consider to compile alpha from source.
+   I have written few messages to Cqrlog forum how to make the compile.
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
 
@@ -133,6 +136,14 @@ Then check execution rights.
     sudo chmod a+x /usr/bin/cqrlog  
 
  ## What is not included (as pull requests) into official cqrlog GitHub source is listed below.
+ 
+RESET/IGNORE ONLINE LOG UPLOAD MARKERS
+
+    Pteferences/Online log has now new two checkboxes to prevent some reloading to online logs:
+    Ignore changes caused by QSL sent/received (marked by hand or label printing) 
+    Ignore changes caused by QSO edit
+    And QSO list/Online log-menu has new selection: Remove all upload markers to flush pending uploads.
+
 
 QT5 VERSION
 
