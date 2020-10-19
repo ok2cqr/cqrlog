@@ -13,6 +13,11 @@ They contain all accepted pull requests from official source (that may not be re
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
+  - ver 2.4.0(127)
+  - check official updates link above.
+  - Online log upload: prevent upload after QSL sent/received/label print. Prevent upload after QSO edit (Preferences checkboxes)
+  - QSO list/Online log/Remove all upload markers (that would cause upload at next connect [when immediate upload is not used])
+
   - ver 2.4.0(126)
   - FCC has changed US Amateur listing address (needed for states) For now on user can define it
 
