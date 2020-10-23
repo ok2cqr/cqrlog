@@ -6739,7 +6739,7 @@ begin
       edtQTH.Text := StoreText;
     edtQTHExit(nil);
   end;
-  if (where = 'comm. for QSO') and (Pos(LowerCase(StoreText),LowerCase(edtRemQSO.text))=0) then
+  if (where = 'remarks') and (Pos(LowerCase(StoreText),LowerCase(edtRemQSO.text))=0) then
   begin
     if edtRemQSO.Text <> ''  then
       edtRemQSO.Text := edtRemQSO.Text + ' ' + StoreText
