@@ -297,7 +297,7 @@ object frmClubSettings: TfrmClubSettings
       Items.Strings = (
         'award'
         'qth'
-        'comm. for QSO'
+        'remarks'
         'name'
         'county'
         'grid'
