@@ -136,6 +136,7 @@ type
 
       procedure Open; override;
       procedure Close; override;
+      procedure WaitMorse;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
       procedure StopSending; override;
@@ -279,6 +280,7 @@ begin
       if text[i] = '+' then
       begin
         spd := spd+5;
+        if spd>fMaxSpeed then spd:=fMaxSpeed;
         ser.SendByte($1C);
         ser.SendByte(spd);
         Continue
@@ -287,6 +289,7 @@ begin
         if text[i] = '-' then
         begin
           spd := spd-5;
+          if spd<fMinSpeed then spd:=fMinSpeed;
           ser.SendByte($1C);
           ser.SendByte(spd);
           Continue
@@ -484,12 +487,14 @@ begin
       if text[i] = '+' then
       begin
         spd := spd+5;
+        if spd>fMaxSpeed then spd:=fMaxSpeed;
         udp.SendMessage(Chr(27)+'2'+IntToStr(spd))
       end
       else begin
         if text[i] = '-' then
         begin
           spd := spd-5;
+          if spd<fMinSpeed then spd:=fMinSpeed;
           udp.SendMessage(Chr(27)+'2'+IntToStr(spd))
         end
         else
@@ -631,12 +636,14 @@ begin
       if text[i] = '+' then
       begin
         spd := spd+5;
+        if spd>fMaxSpeed then spd:=fMaxSpeed;
         ChangeSpeed(spd)
       end
       else begin
         if text[i] = '-' then
         begin
           spd := spd-5;
+          if spd<fMinSpeed then spd:=fMinSpeed;
           ChangeSpeed(spd)
         end
         else
@@ -717,10 +724,15 @@ begin
     if DebugMode then Writeln('HLresp MSG:',Rmsg,':');
    end;
 end;
-
+procedure TCWHamLib.WaitMorse;
+begin
+  tcp.SendMessage('\wait_morse' +LineEnding);
+end;
 
 procedure TCWHamLib.SetSpeed(speed : Word);
 begin
+  if Speed>fMaxSpeed then speed:= fMaxSpeed;
+  if Speed<fMinSpeed then speed:= fMinSpeed;
   fSpeed := speed;
   if fActive then
     tcp.SendMessage('L KEYSPD '+IntToStr(speed)+LineEnding);
@@ -779,54 +791,80 @@ var
   c, i,
   tout,
   rpt : integer;
+  Wcw : char;
+  dSpd: integer;
+            //-----------------------------------------------------------------------------------
+            Procedure SendToHamlib(t:string);
+            Begin
+                        tout :=_TIMEOUT; //used away in sleep(10) bloks
+                        rpt := _REPEATS;
 
-//-----------------------------------------------------------------------------------
-Procedure SendToHamlib(t:string);
-Begin
-            tout :=_TIMEOUT; //used away in sleep(10) bloks
-            rpt := _REPEATS;
+                        while ((rpt > 0) and AllowCW) do
+                          Begin
+                             if fDebugMode then  Writeln('HLsend MSG:','b'+t+':');
+                             Rmsg:='';
+                             tcp.SendMessage('b'+t+LineEnding);
+                             dec(rpt);
+                              repeat
+                                begin
+                                  sleep(10);
+                                  Application.ProcessMessages;
+                                  dec(tout);
+                                end;
+                              until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
+                              if fDebugMode then  Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')');
+                              if fDebugMode then  Writeln('     Repeats left: ',rpt,'(/',_REPEATS,')');
+                              if pos('-9',Rmsg)>0 then
+                                Begin
+                                  dec(rpt);
+                                  sleep(300);
+                                end
+                               else
+                                rpt :=0;
+                          end;
 
-            while ((rpt > 0) and AllowCW) do
-              Begin
-                 if fDebugMode then  Writeln('HLsend MSG:','b'+t+':');
-                 Rmsg:='';
-                 tcp.SendMessage('b'+t+LineEnding);
-                 dec(rpt);
-                  repeat
-                    begin
-                      sleep(10);
-                      Application.ProcessMessages;
-                      dec(tout);
-                    end;
-                  until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
-                  if fDebugMode then  Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')');
-                  if fDebugMode then  Writeln('     Repeats left: ',rpt,'(/',_REPEATS,')');
-                  if pos('-9',Rmsg)>0 then
-                    Begin
-                      dec(rpt);
-                      sleep(300);
-                    end
-                   else
-                    rpt :=0;
-              end;
-
-end;
-//-----------------------------------------------------------------------------------
+            end;
+            //-----------------------------------------------------------------------------------
+            Procedure ModSpeed(m:char);
+            Begin
+                if Wcw<>m then WaitMorse;
+                //check if more m
+                While ((text[i]=m) and (i<=length(text))) do
+                  Begin
+                    if m='+' then inc(dSpd) else dec(dSpd);
+                    inc(i)
+                  end;
+                if (i<length(text)) then dec(i); //there is still text left
+                SetSpeed(fSpeed+dSpd*5);
+                if fDebugMode then  Writeln(m,' speed with ',dSpd*5);
+                dSpd:=0;
+            end;
+            //-----------------------------------------------------------------------------------
 begin
    if text<>'' then
      begin
+       Wcw:=#0;
+       dSpd:=0;
        AllowCW := true;
         //different rigs support different length of b-command. 10chr should be safe for all
         c:= length(text);
-        if c>10 then
+        if (c>10) or (pos('+',text)>0) or (pos('-',text)>0) then
          Begin
             i := 1;
             if fDebugMode then  Writeln('Ltr send: ');
             repeat
-              Begin
-                SendToHamlib(text[i]);
-                inc(i);
-              end;
+             Begin
+               case text[i] of
+                 '+','-'   : ModSpeed(text[i]);
+                 else
+                             Begin
+                               if fDebugMode then  Writeln('send letter ',i,' ',text[i]);
+                               SendToHamlib(text[i]);
+                               Wcw:=#0;
+                             end;
+               end;
+               inc(i);
+             end;
             until (i > c);
          end
         else
