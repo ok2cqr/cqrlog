@@ -1667,7 +1667,7 @@ object frmMain: TfrmMain
       Caption = 'Help'
       RightJustify = True
       object mnuHelpIndex: TMenuItem
-        Caption = 'Help index'
+        Caption = 'Help index Alt+H'
         Bitmap.Data = {
           36040000424D3604000000000000360000002800000010000000100000000100
           2000000000000004000064000000640000000000000000000000560151001806

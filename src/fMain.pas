@@ -812,7 +812,12 @@ begin
   begin
     mnuDoNotSendClick(nil);
     key := 0
-  end
+  end;
+   if ((Shift = [ssCtrl]) and (key = VK_H)) then
+  begin
+    ShowHelp;
+    key := 0
+  end;
 end;
 
 procedure TfrmMain.mnuOQRSClick(Sender : TObject);
