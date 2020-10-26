@@ -113,6 +113,7 @@ type
     function  IsAmbiguous(call : String) : Boolean;
     function  IsPrefix(pref : String; Date : TDateTime) : Boolean;
     function  GetCont(call : String; Date : TDateTime) : String;
+    function  GetCountry(callsign : String; QsoDate : TDateTime) : String;
     function  id_country(znacka: string; us_state : String; datum : TDateTime; var pfx, cont, country, WAZ,
                            posun, ITU, lat, long: string) : Word; overload;
     function  id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
@@ -653,6 +654,14 @@ var
 begin
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
   Result := id_country(znacka,datum,pfx,country,cont,itu,waz,posun,lat,long)
+end;
+
+function TdmDXCC.GetCountry(callsign : String; QsoDate : TDateTime) : String;
+var
+  cont, WAZ, posun, ITU, lat, long, pfx, country: string;
+begin
+  cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
+  Result := DXCCRefArray[id_country(callsign,qsodate,pfx,country,cont,itu,waz,posun,lat,long)].name
 end;
 
 function TdmDXCC.GetCont(call : String; Date : TDateTime) : String;
