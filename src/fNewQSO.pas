@@ -630,7 +630,6 @@ type
     procedure CheckStateClub;
     procedure SaveGrid;
     procedure LoadGrid;
-    procedure SetSplit(s : String);
     procedure ShowWindows;
     procedure CheckAttachment;
     procedure CheckQSLImage;
@@ -709,6 +708,7 @@ type
     procedure NewQSOFromSpot(call,freq,mode : String;FromRbn : Boolean = False);
     procedure SetEditLabel;
     procedure UnsetEditLabel;
+    procedure SetSplit(s : String);
     procedure StoreClubInfo(where,StoreText : String);
     procedure SynCallBook;
     procedure SynDXCCTab;
@@ -5596,25 +5596,8 @@ begin
   if ((Shift = [ssCTRL]) and (key = VK_W)) then
     acSendSpot.Execute;
 
-
-  if ((Shift = [ssCTRL]) and (key = VK_1)) then
-    frmTRXControl.rbRadio1.Checked := True;
-    //SetSplit('1');
-  if ((Shift = [ssCTRL]) and (key = VK_2)) then
-    frmTRXControl.rbRadio2.Checked := True;
-    //SetSplit('2');
-  if ((Shift = [ssCTRL]) and (key = VK_3)) then
-    SetSplit('3');
-  if ((Shift = [ssCTRL]) and (key = VK_4)) then
-    SetSplit('4');
-  if ((Shift = [ssCTRL]) and (key = VK_5)) then
-    SetSplit('5');
-  if ((Shift = [ssCTRL]) and (key = VK_6)) then
-    SetSplit('6');
-  if ((Shift = [ssCTRL]) and (key = VK_7)) then
-    SetSplit('7');
-  if ((Shift = [ssCTRL]) and (key = VK_8)) then
-    SetSplit('8');
+  if (Shift = [ssCTRL]) then
+    if key in [VK_1..VK_9] then SetSplit(chr(key));
   if ((Shift = [ssCTRL]) and (key = VK_0)) then
     frmTRXControl.DisableSplit;
 
@@ -6827,8 +6810,19 @@ begin
 end;
 
 procedure TfrmNewQSO.SetSplit(s : String);
+var
+   d:integer;
 begin
-  frmTRXControl.Split(cqrini.ReadInteger('Split',s,0))
+  if s='9' then
+   Begin
+    d := cqrini.ReadInteger('Split','9',0);
+    if d<0 then
+      frmTRXControl.Split(d-Random(100)*10)
+     else
+      frmTRXControl.Split(d+Random(100)*10)
+   end
+  else
+    frmTRXControl.Split(cqrini.ReadInteger('Split',s,0));
 end;
 
 procedure TfrmNewQSO.ShowWindows;

@@ -977,7 +977,11 @@ begin
   begin
     dmUtils.EnterFreq;
     key := 0;
-  end
+  end;
+  if (Shift = [ssCTRL]) then
+    if key in [VK_1..VK_9] then frmNewQSO.SetSplit(chr(key));
+  if ((Shift = [ssCTRL]) and (key = VK_0)) then
+    DisableSplit;
 end;
 
 procedure TfrmTRXControl.FormKeyUp(Sender: TObject; var Key: Word;
@@ -1389,34 +1393,18 @@ begin
 end;
 
 procedure TfrmTRXControl.Split(Up : Integer);
-{
-var
-  a : String = '';
-  b : String = '';
-  f : Double;
-  v : String;
-  }
+
 begin
-{
-  f := StrToFloat(lblFreq.Caption)*1000000; //freq to Hz
-  f := f + up;
-  if mvfo = 'VFOA' then
-    v := 'VFOB'
-  else
-    v := 'VFOB';
-  if rbRadio1.Checked then
-    TRX1.SetSplit(v,FloatToStr(f))
-  else
-    TRX2.SetSplit(v,FloatToStr(f))
-  }
+  //we do split with XIT, no need to play with 2 VFOs
+ if Assigned(radio) then
+  begin
+    radio.SetSplit(up);
+  end;
 end;
 
 procedure TfrmTRXControl.DisableSplit;
 begin
-  //if rbRadio1.Checked then
-    //TRX1.DisableSplit
-  //else
-    //TRX2.DisableSplit
+ if Assigned(radio) then  radio.DisableSplit;
 end;
 
 function TfrmTRXControl.GetFreqHz  : Double;
