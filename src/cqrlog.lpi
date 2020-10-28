@@ -465,6 +465,7 @@
         <Filename Value="fSplitSettings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmSplitSettings"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit53>
       <Unit54>

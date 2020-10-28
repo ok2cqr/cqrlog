@@ -23,7 +23,7 @@ object frmPreferences: TfrmPreferences
     Height = 659
     Top = 0
     Width = 850
-    ActivePage = tabModes
+    ActivePage = tabProgram
     Align = alClient
     TabIndex = 7
     TabOrder = 0
@@ -1754,14 +1754,13 @@ object frmPreferences: TfrmPreferences
         TabOrder = 0
       end
       object btnSplit: TButton
-        Left = 536
+        Left = 472
         Height = 25
-        Top = 584
+        Top = 561
         Width = 104
         Caption = 'Split settings'
         OnClick = btnSplitClick
         TabOrder = 1
-        Visible = False
       end
       object GroupBox40: TGroupBox
         Left = 7

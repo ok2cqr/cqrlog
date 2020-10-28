@@ -29,11 +29,19 @@
 <div align="left"><strong>CQRLOG for LINUX by OK7AN &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <a name="ah16"><h2><strong>Keys and shortcuts</strong></h2></a>
-<strong>New QSO Windows/Logging screen</strong><br><br>
-<table width="99%" border="0" cellpadding="4" cellspacing="0">
+<strong>When "New QSO" window is active:</strong><br><br>
+<table>
+    <tr>
+        <td valign="top"><img src="img/bulb.png"></td>
+        <td bgcolor=ccffff width="100%">
+            <strong><font color="blue">The "New QSO" is the logging screen!</font></strong>
+        </td>
+    </tr>
+</table>
+<br><br><table width="99%" border="0" cellpadding="4" cellspacing="0">
     <tbody>
     <tr>
-        <td width="35%">2x ESC or Ctrl+F2</td>
+        <td width="35%">2x ESC or Ctrl-F2</td>
         <td width="65%">Empty all fields and prepare program for a new QSO</td>
     </tr>
     <tr>
@@ -44,17 +52,26 @@
         <td width="35%">PgDn</td>
         <td width="65%">CW Speed -2 WPM (QRS)</td>
     </tr>
-
     <tr>
         <td width="35%">F11</td>
         <td width="65%">QRZ/HamQTH Callbook (call in the field)</td>
     </tr>
-    </tr>
+    <tr>
      <td> </td>
+    </tr>
     <tr>
+        <td width="35%">Ctrl-1...Ctrl-9</td>
+        <td width="65%">Set split using XIT if rig supports it. Value 0 - 9999Hz UP/DOWN
+	<br>Ctrl-9 will add random value 0 - 990Hz to setting. Subtract if split is DOWN
+	<br>Keys work also when TRXcontrol window is active</td>
+    </tr>
     <tr>
-        <td width="35%">Ctrl-1 ... Ctrl-9</td>
-        <td width="65%">Set split on trx with 1 ... 9 kHz via VFO A and VFO B</td>
+        <td width="35%">Ctrl-0</td>
+        <td width="65%">Disables XIT
+        <br>Key works also when TRXcontrol window is active</td>
+    </tr>
+    <tr>
+     <td> </td>
     </tr>
     <tr>
         <td width="35%">Ctrl-A</td>
@@ -66,7 +83,7 @@
     </tr>
     <tr>
         <td width="35%">Ctrl-H</td>
-        <td width="65%">Open help</td>
+        <td width="65%">Show help</td>
     </tr>
     <tr>
         <td width="35%">Ctrl-I</td>
@@ -120,17 +137,13 @@
         <td width="35%">Ctrl-Z</td>
         <td width="65%">Scroll back DXCluster commands (5 stored)</td>
     </tr>
-    </tr>
-     <td> </td>
     <tr>
+     <td> </td>
+    </tr>
     <tr>
         <td width="35%">ALT-F2</td>
         <td width="65%">execute New QSO</td>
     </tr>
-     <td> </td>
-    <tr>
-    </tr>
-
     <tr>
         <td width="35%">ALT-B</td>
         <td width="65%"><a href="h30.html#m3">Memory down</a></td>
@@ -165,12 +178,12 @@
 </table>
 <br>
 <p align=center><img src=img/line.png></p>
-<strong>QSO list</strong><br><br>
+<strong>When "QSO list" window is active:</strong><br><br>
 <table>
     <tr>
         <td valign="top"><img src="img/bulb.png"></td>
         <td bgcolor=ccffff width="100%">
-            <strong><font color="blue">The QSO list is the main screen for maintenance!</font></strong>
+            <strong><font color="blue">The "QSO list" is the main screen for maintenance!</font></strong>
         </td>
     </tr>
 </table>
@@ -235,6 +248,10 @@
     <tr>
         <td width="35%">Ctrl-F</td>
         <td width="65%">Search</td>
+    </tr>
+    <tr>
+        <td width="35%">Ctrl-H</td>
+        <td width="65%">Show help</td>
     </tr>
     <tr>
         <td width="35%">Ctrl-P</td>
@@ -330,7 +347,7 @@
     <br><br>
     <img src=img/h25.png border=0><br><br>
     <div align=justify>
-    Details window dispays details about new/confirmed zones, IOTA details etc. You can open it from <strong> NewQSo/Window/Details</strong> or with Ctrl+I key.
+    Details window dispays details about new/confirmed zones, IOTA details etc. You can open it from <strong> NewQSo/Window/Details</strong> or with Ctrl-I key.
     </div>
     <br><br>
 
@@ -422,7 +439,7 @@ CQRLOG employs <em>fldigi</em> by Dave Freese, W1HKJ and <em>WSJT-X</em> by Joe 
 best digimode softwares available.<br>
 <br>The most important thing is a <a href="h1.html#ch2">proper setup</a> of the remote mode. For <em>fldigi<em> you have 2 different ways to setup remote .<br>
 For <em>wsjt-x</em>, setup is done at same tab of preferences as <em>fldigi<em>. For operating with wsjt-x see: <a href="wsjt.html">Wsjt-x operation</a>
-<br><br> To use <em>fldigi</em>, CQRLOG must be switched to Remote from the menu File -> Remote mode for fldigi(or CTRL+M).
+<br><br> To use <em>fldigi</em>, CQRLOG must be switched to Remote from the menu File -> Remote mode for fldigi(or Ctrl-M).
 <br> To use <em>wsjt-x</em>, CQRLOG must be switched to Remote from the menu File -> Remote mode for wsjt.
 <br> To use <em>N1MM logger</em>, CQRLOG must be switched to Remote from the menu File -> Remote mode for N1MM logger.<br><br>
 <img src="img/h104.png"><br><br>
