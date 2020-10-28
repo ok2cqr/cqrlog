@@ -117,7 +117,7 @@ procedure TfrmRebuildMembStat.btnStartClick(Sender: TObject);
     dmData.Q.SQL.Text := 'update cqrlog_main set club_nr'+nr+' = '+QuotedStr('');
     dmData.Q.ExecSQL;
     dmData.Q.SQL.Clear;
-    dmData.Q.SQL.Add('update cqrlog_main q left join club'+nr+' c on q.'+Club.MainFieled+
+    dmData.Q.SQL.Add('update cqrlog_main q inner join club'+nr+' c on q.'+Club.MainFieled+
                      '= c.'+Club.ClubField);
     dmData.Q.SQL.Add(' and c.fromdate <= q.qsodate and c.todate >= q.qsodate');
     dmData.Q.SQL.Add('set q.club_nr'+nr+' = c.club_nr');
@@ -128,7 +128,7 @@ procedure TfrmRebuildMembStat.btnStartClick(Sender: TObject);
     dmData.Q.SQL.Clear;
     if (Club.StoreField <> '') and (Club.StoreText <> '') then
     begin
-      dmData.Q.SQL.Add('update cqrlog_main q left join club'+nr+' c on q.'+Club.MainFieled+
+      dmData.Q.SQL.Add('update cqrlog_main q inner join club'+nr+' c on q.'+Club.MainFieled+
                        '= c.'+Club.ClubField);
       dmData.Q.SQL.Add(' and c.fromdate <= q.qsodate and c.todate >= q.qsodate');
       dmData.Q.SQL.Add(' set '+Club.StoreField+'='+StoreText(Club));
