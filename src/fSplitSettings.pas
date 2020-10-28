@@ -23,6 +23,7 @@ type
     cmbSplit6: TComboBox;
     cmbSplit7: TComboBox;
     cmbSplit8: TComboBox;
+    cmbSplit9: TComboBox;
     edtSplit2: TSpinEdit;
     edtSplit3: TSpinEdit;
     edtSplit4: TSpinEdit;
@@ -30,23 +31,26 @@ type
     edtSplit6: TSpinEdit;
     edtSplit7: TSpinEdit;
     edtSplit8: TSpinEdit;
-    Label1: TLabel;
+    edtSplit9: TSpinEdit;
+    lbl1: TLabel;
     edtSplit1: TSpinEdit;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
-    Label16: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    Label9: TLabel;
+    lblH4: TLabel;
+    lblH5: TLabel;
+    lblH6: TLabel;
+    lbl7: TLabel;
+    lblH7: TLabel;
+    lbl8: TLabel;
+    lblH8: TLabel;
+    lbl9: TLabel;
+    lblH9: TLabel;
+    lbl2: TLabel;
+    lbl3: TLabel;
+    lbl4: TLabel;
+    lbl5: TLabel;
+    lbl6: TLabel;
+    lblH1: TLabel;
+    lblH2: TLabel;
+    lblH3: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
   private
@@ -98,7 +102,12 @@ begin
   if cmbSplit8.ItemIndex = 0 then
     cqrini.WriteInteger('Split','8',edtSplit8.Value)
   else
-    cqrini.WriteInteger('Split','8',edtSplit8.Value*-1)
+    cqrini.WriteInteger('Split','8',edtSplit8.Value*-1);
+   if cmbSplit9.ItemIndex = 0 then
+    cqrini.WriteInteger('Split','9',edtSplit9.Value)
+  else
+    cqrini.WriteInteger('Split','9',edtSplit9.Value*-1);
+   Close;
 end;
 
 procedure TfrmSplitSettings.FormShow(Sender: TObject);
@@ -150,8 +159,15 @@ begin
   else begin
     edtSplit8.Value     := cqrini.ReadInteger('Split','8',0)*-1;
     cmbSplit8.ItemIndex := 1
+  end;
+  if cqrini.ReadInteger('Split','9',0) >= 0 then
+    edtSplit9.Value := cqrini.ReadInteger('Split','9',0)
+  else begin
+    edtSplit9.Value     := cqrini.ReadInteger('Split','9',0)*-1;
+    cmbSplit9.ItemIndex := 1
   end
 end;
+
 
 end.
 
