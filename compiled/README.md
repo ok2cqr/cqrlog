@@ -6,13 +6,16 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   #333
+   #340
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
+  - ver 2.4.0(128)
+  - check official updates link above.
+
   - ver 2.4.0(127)
   - check official updates link above.
   - Online log upload: prevent upload after QSL sent/received/label print. Prevent upload after QSO edit (Preferences checkboxes)
