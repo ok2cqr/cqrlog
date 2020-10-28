@@ -383,7 +383,8 @@ var
   f,r        : TextFile;
   tmp        : String;
   mycall,call,
-  myloc, loc : String;
+  myloc, loc,
+  mycountry  : String;
   myname     : String;
   mailingaddress, zipcity : String;
   email      : String;
@@ -419,7 +420,7 @@ begin
   date := dmUtils.GetDateTime(0);
   mycall := cqrini.ReadString('Station','Call','');
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-  adif := dmDXCC.id_country(mycall,date,pfx,cont,country,itu,waz,posun,lat,long);
+  mycountry := dmDXCC.GetCountry(mycall, date);
   myloc  := cqrini.ReadString('Station','LOC','');
   if length(myloc) = 4 then myloc := myloc +'ll';
   myname := cqrini.ReadString('Station','Name','');
@@ -666,16 +667,16 @@ begin
     Writeln(f,'GRID-LOCATOR: '+UPcase(myloc)); //non standard upcase required
     Writeln(f,'LOCATION: '+edtCabLocation.Text);
     Writeln(f,'CLAIMED-SCORE: ');
-    Writeln(f,'SPECIFIC: ');
+    // Writeln(f,'SPECIFIC: ');   // Unknown Cabrillo Tag (DF2ET 26.10.2020)
     Writeln(f,'CLUB: '+club);
     if (Operators.Count > 0) then
        Writeln(f,'OPERATORS: '+OpString);
     Writeln(f,'NAME: '+myname);
     Writeln(f,'ADDRESS: '+mailingaddress);
     Writeln(f,'ADDRESS-CITY: '+address[1]);
-    Writeln(f,'ADDRESS-COUNTRY: '+country);
+    Writeln(f,'ADDRESS-COUNTRY: '+mycountry);
     Writeln(f,'ADDRESS-STATE-PROVINCE: ');
-    Writeln(f,'ADDRESS-POSTAL-CODE: '+address[0]);
+    Writeln(f,'ADDRESS-POSTALCODE: '+address[0]);
     Writeln(f,'EMAIL: '+email);
     Writeln(f,'SOAPBOX:'+edtCabSoapBox.Text);
 
