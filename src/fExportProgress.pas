@@ -409,8 +409,10 @@ var
              SaveTag(dmUtils.StringToADIF('<SAT_MODE', dmSatellite.GetSatMode(Freq, RxFreq)),leng);
        end;
     if (ExRxFreq and ((RxFreq <> '0') and (RxFreq <> ''))) then
-       SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
-       SaveTag(dmUtils.StringToADIF('<BAND_RX',dmUtils.GetAdifBandFromFreq(RxFreq)),leng);
+       begin
+         SaveTag(dmUtils.StringToADIF('<FREQ_RX',RxFreq),leng);
+         SaveTag(dmUtils.StringToADIF('<BAND_RX',dmUtils.GetAdifBandFromFreq(RxFreq)),leng);
+       end;
     if (ExDarcDok and (Darc_Dok <> '')) then
        SaveTag(dmUtils.StringToADIF('<DARC_DOK',Darc_Dok),leng);
 
