@@ -8,7 +8,7 @@ object frmAbout: TfrmAbout
   ClientHeight = 294
   ClientWidth = 453
   OnShow = FormShow
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.8.0'
   object PageControl1: TPageControl
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -20,9 +20,9 @@ object frmAbout: TfrmAbout
     Height = 294
     Top = 0
     Width = 453
-    ActivePage = tabAbout
+    ActivePage = tabContributors
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object tabAbout: TTabSheet
       AnchorSideLeft.Control = PageControl1
@@ -32,7 +32,7 @@ object frmAbout: TfrmAbout
       AnchorSideBottom.Control = PageControl1
       AnchorSideBottom.Side = asrBottom
       Caption = 'About'
-      ClientHeight = 263
+      ClientHeight = 265
       ClientWidth = 443
       object Image1: TImage
         AnchorSideLeft.Control = tabAbout
@@ -869,9 +869,9 @@ object frmAbout: TfrmAbout
       object Label2: TLabel
         AnchorSideLeft.Control = Image1
         Left = 8
-        Height = 17
+        Height = 15
         Top = 152
-        Width = 54
+        Width = 51
         Caption = 'Authors:'
         ParentColor = False
       end
@@ -879,10 +879,10 @@ object frmAbout: TfrmAbout
         AnchorSideLeft.Control = Label2
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label2
-        Left = 77
-        Height = 17
+        Left = 74
+        Height = 15
         Top = 152
-        Width = 304
+        Width = 277
         BorderSpacing.Left = 15
         Caption = 'Petr Hlozek, OK7AN && Martin Kratoska, OK1RR'
         ParentColor = False
@@ -892,9 +892,9 @@ object frmAbout: TfrmAbout
         AnchorSideTop.Control = Label2
         AnchorSideTop.Side = asrBottom
         Left = 8
-        Height = 17
-        Top = 185
-        Width = 160
+        Height = 15
+        Top = 183
+        Width = 151
         BorderSpacing.Top = 16
         Caption = 'Home page and support:'
         ParentColor = False
@@ -903,10 +903,10 @@ object frmAbout: TfrmAbout
         AnchorSideLeft.Control = Label5
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label5
-        Left = 184
-        Height = 17
-        Top = 185
-        Width = 146
+        Left = 175
+        Height = 15
+        Top = 183
+        Width = 139
         BorderSpacing.Left = 16
         Caption = 'http://www.cqrlog.com'
         Font.Color = clBlue
@@ -919,7 +919,7 @@ object frmAbout: TfrmAbout
       object btnChangelog: TButton
         AnchorSideLeft.Control = Image1
         Left = 9
-        Height = 33
+        Height = 31
         Top = 224
         Width = 90
         AutoSize = True
@@ -934,7 +934,7 @@ object frmAbout: TfrmAbout
         AnchorSideRight.Control = Label1
         AnchorSideRight.Side = asrBottom
         Left = 343
-        Height = 33
+        Height = 31
         Top = 225
         Width = 90
         Anchors = [akTop, akRight]
@@ -965,13 +965,13 @@ object frmAbout: TfrmAbout
     end
     object tabContributors: TTabSheet
       Caption = 'Contributors'
-      ClientHeight = 263
+      ClientHeight = 265
       ClientWidth = 443
       object mContributors: TMemo
         Left = 0
-        Height = 261
+        Height = 265
         Top = 0
-        Width = 402
+        Width = 443
         Align = alClient
         Lines.Strings = (
           'Saku, OH1KH '
@@ -981,6 +981,7 @@ object frmAbout: TfrmAbout
           'Darek, SP2MKI '
           'Jörg, DL8DTL'
           'Colin, AI4QR'
+          'Andreas, DL7OAP'
         )
         TabOrder = 0
       end
