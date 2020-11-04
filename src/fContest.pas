@@ -87,7 +87,7 @@ implementation
 
 {$R *.lfm}
 
-uses dData, dUtils, fNewQSO, fWorkedGrids, strutils, fscp;
+uses dData, dUtils, fNewQSO, fWorkedGrids, strutils, fscp, fTRXControl;
 
 procedure TfrmContest.FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 var
@@ -172,6 +172,12 @@ begin
     frmNewQSO.acAddToBandMap.Execute;
     key := 0
   end;
+
+  //split keys
+   if (Shift = [ssCTRL]) then
+    if key in [VK_1..VK_9] then frmNewQSO.SetSplit(chr(key));
+  if ((Shift = [ssCTRL]) and (key = VK_0)) then
+    frmTRXControl.DisableSplit;
 end;
 
 
