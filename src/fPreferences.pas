@@ -122,6 +122,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkOperator: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
@@ -1224,6 +1225,7 @@ begin
   cqrini.WriteBool('Columns', 'QSL_VIA', chkQSL_VIA.Checked);
   cqrini.WriteBool('Columns', 'Locator', chkLoc.Checked);
   cqrini.WriteBool('Columns', 'MyLoc', chkMyLoc.Checked);
+  cqrini.WriteBool('Columns', 'Operator', chkOperator.Checked);
   cqrini.WriteBool('Columns', 'Distance', chkDistance.Checked);
   cqrini.WriteBool('Columns', 'IOTA', chkIOTA.Checked);
   cqrini.WriteBool('Columns', 'Award', chkAward.Checked);
@@ -2706,6 +2708,7 @@ begin
   chkQSL_VIA.Checked := cqrini.ReadBool('Columns', 'QSL_VIA', False);
   chkLoc.Checked := cqrini.ReadBool('Columns', 'Locator', False);
   chkMyLoc.Checked := cqrini.ReadBool('Columns', 'MyLoc', False);
+  chkOperator.Checked := cqrini.ReadBool('Columns', 'Operator', False);
   chkDistance.Checked := cqrini.ReadBool('Columns', 'Distance', False);
   chkIOTA.Checked := cqrini.ReadBool('Columns', 'IOTA', False);
   chkAward.Checked := cqrini.ReadBool('Columns', 'Award', False);
