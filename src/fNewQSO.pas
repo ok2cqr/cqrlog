@@ -696,7 +696,7 @@ type
 
     procedure DisableRemoteMode;   //Moved from private
     procedure SaveRemote;
-    procedure GetCallInfo(callTOinfo:string);
+    procedure GetCallInfo(callTOinfo,mode,rsts:string);
 
     procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
@@ -852,9 +852,10 @@ begin
   end
 end;
 
-procedure TfrmNewQSO.GetCallInfo(callTOinfo:string);
+procedure TfrmNewQSO.GetCallInfo(callTOinfo,mode,rsts:string);
 
 Begin
+
   if  edtCall.Text <> callTOinfo then  //call (and web info) maybe there already ok from pevious status packet
                            Begin
                              edtCall.Text := '';//clean grid like double ESC does
@@ -867,6 +868,23 @@ Begin
                              if dmData.DebugLevel>=1 then Writeln('GetCallInfo: Call was not there already');
                              WaitWeb(2); // give time for web
                            end;
+
+  //mode and report may change if call stays same
+   cmbMode.Text:=mode;
+   edtMyRST.Text :='';
+   rsts:=trim(rsts);
+   if pos('-',rsts)>0 then
+        Begin
+          if length(rsts)<3 then rsts:= rsts[1]+'0'+rsts[2]
+        end
+     else
+        Begin
+          if length(rsts)=1 then rsts:= '+0'+rsts
+            else
+             rsts:= '+'+rsts
+        end;
+   edtHisRST.Text := rsts;
+
 end;
 
 procedure TfrmNewQSO.WaitWeb(secs:integer);
@@ -2614,8 +2632,8 @@ begin
           call := trim(StrBuf(index)); //to be sure...
           if dmData.DebugLevel>=1 then Writeln('Call :', call);
          //----------------------------------------------------
-          ParStr := StrBuf(index);    //report
-          if dmData.DebugLevel>=1 then Writeln('Report: ',ParStr);
+          rstS:= StrBuf(index);    //report
+          if dmData.DebugLevel>=1 then Writeln('Report: ',rstS);
           //----------------------------------------------------
           case cqrini.ReadInteger('wsjt','mode',1) of
             0 : begin
@@ -2668,7 +2686,7 @@ begin
                                               if dmData.DebugLevel>=1 then Writeln('Change 2click call to:',frmMonWsjtx.DblClickCall);
                                             end;
 
-            GetCallInfo(call); //call web info
+            GetCallInfo(call,WsjtxMode,rstS); //call web info
 
             //these can be altered always
             if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
