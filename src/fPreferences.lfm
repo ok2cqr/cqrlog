@@ -8125,7 +8125,7 @@ object frmPreferences: TfrmPreferences
         Width = 567
         BorderSpacing.Left = 24
         BorderSpacing.Top = 12
-        Caption = 'CQRLOG can receive spots from RBN and show it on Gray line map. It''s very useful '#10'especially when you are calling CQ and want to see where your signal can be received.'
+        Caption = 'CQRLOG can receive spots from RBN and show receivers as dots on Gray line map. It''s very useful '#10'especially when you are calling CQ and want to see where your signal can be received.'
         ParentColor = False
       end
       object lblRbnSignal: TLabel
