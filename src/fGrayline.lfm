@@ -121,7 +121,7 @@ object frmGrayline: TfrmGrayline
   OnPaint = FormPaint
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.0.8.0'
   object sbtnGrayLine: TSpeedButton
     Left = 400
     Height = 16
@@ -183,14 +183,17 @@ object frmGrayline: TfrmGrayline
   object popGrayLine: TPopupMenu
     left = 336
     top = 24
-    object MenuItem1: TMenuItem
+    object pumConnect: TMenuItem
       Action = acConnect
     end
     object MenuItem2: TMenuItem
       Caption = '-'
     end
-    object MenuItem3: TMenuItem
+    object pumShowStatusbar: TMenuItem
       Action = acShowStatusBar
+    end
+    object pumLinkToRBNMonitor: TMenuItem
+      Action = acLinkToRbnMonitor
     end
   end
   object acGrayLine: TActionList
@@ -204,12 +207,22 @@ object frmGrayline: TfrmGrayline
       Caption = 'Show statusbar'
       OnExecute = acShowStatusBarExecute
     end
+    object acLinkToRbnMonitor: TAction
+      Caption = 'Link to RBNMonitor'
+      OnExecute = acLinkToRbnMonitorExecute
+    end
   end
   object tmrAutoConnect: TTimer
     Enabled = False
     Interval = 2000
     OnTimer = tmrAutoConnectTimer
     left = 158
+    top = 32
+  end
+  object tmrRemoveSpots: TTimer
+    Interval = 60000
+    OnTimer = tmrRemoveSpotsTimer
+    left = 40
     top = 32
   end
 end

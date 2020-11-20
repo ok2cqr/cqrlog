@@ -7,7 +7,7 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType, LazFileUtils;
+  lnet, lclType, LazFileUtils, StrUtils;
 
 type
   TRBNList = record
@@ -39,7 +39,6 @@ type
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
     procedure AddToList(spot : String);
-    procedure RemoveOldSpots;
   protected
     procedure Execute; override;
 end;
@@ -53,15 +52,19 @@ type
     acGrayLine : TActionList;
     acConnect : TAction;
     acShowStatusBar : TAction;
-    MenuItem1 : TMenuItem;
+    acLinkToRbnMonitor: TAction;
+    pumConnect : TMenuItem;
     MenuItem2 : TMenuItem;
-    MenuItem3 : TMenuItem;
+    pumShowStatusbar : TMenuItem;
+    pumLinkToRBNMonitor: TMenuItem;
     popGrayLine : TPopupMenu;
     sbGrayLine : TStatusBar;
     sbtnGrayLine : TSpeedButton;
     tmrAutoConnect : TTimer;
     tmrGrayLine: TTimer;
+    tmrRemoveSpots: TTimer;
     procedure acConnectExecute(Sender : TObject);
+    procedure acLinkToRbnMonitorExecute(Sender: TObject);
     procedure acShowStatusBarExecute(Sender : TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -74,6 +77,7 @@ type
     procedure sbtnGrayLineClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender : TObject);
     procedure tmrGrayLineTimer(Sender: TObject);
+    procedure tmrRemoveSpotsTimer(Sender: TObject);
   private
     csRBN : TRTLCriticalSection;
     RBNThread : TRBNThread;
@@ -88,6 +92,10 @@ type
     procedure kresli;
     procedure SavePosition;
     procedure SynRBN;
+    function  GetEmptyPos : Word;
+    function  SpotterExists(spotter : String) : Word;
+    procedure RemoveOldSpots;
+    procedure AddSpotToList(spot : String);
   end;
 
 var
@@ -270,7 +278,6 @@ var
   latitude, longitude: Currency;
 begin
   ParseSpot(spot, spotter, call, freq, mode, stren);
-
   if watchFor<>'' then
   begin
     if Pos('*',watchFor) > 0 then   //ZL*
@@ -327,19 +334,6 @@ begin
    end;
 end;
 
-procedure TRBNThread.RemoveOldSpots;
-var
-  i    : Integer;
-  time : TDateTime;
-begin
-  time := now;
-  for i:=1 to MAX_ITEMS do
-  begin
-    if frmGrayline.RBNSpotList[i].time+delAfter/86400 < time then
-      frmGrayline.RBNSpotList[i].band := ''
-  end
-end;
-
 function TRBNThread.ConnectToRBN : Boolean;
 var
   server : String;
@@ -393,9 +387,9 @@ begin
     finally
       LeaveCriticalsection(cs)
     end;
-    RemoveOldSpots;
+    //RemoveOldSpots;    done now by tmrRemoveSpots
     Synchronize(@frmGrayline.SynRBN);
-    sleep(2000)
+    sleep(1000)
   end;
   lTelnet.Disconnect(true);
   DoneCriticalsection(cs)
@@ -414,7 +408,11 @@ begin
   if not FileExists(ImageFile) then
     ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
                  PathDelim+'images'+PathDelim+'grayline.bmp');
-  ob:=new(Pgrayline,init(ImageFile))
+  ob:=new(Pgrayline,init(ImageFile));
+
+   tmrRemoveSpots.Interval:= cqrini.ReadInteger('RBN','deleteAfter',60)*1000;
+   tmrRemoveSpots.Enabled:=true;
+
 end;
 
 procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -439,6 +437,7 @@ begin
   end
 end;
 
+
 procedure TfrmGrayline.acConnectExecute(Sender : TObject);
 begin
   if (cqrini.ReadString('RBN','login','')='') then
@@ -448,14 +447,28 @@ begin
     begin
       RBNThread.Terminate;
       acConnect.Caption     := 'Connect to RBN';
-      sbGrayLine.SimpleText := 'Disconnected'
+      sbGrayLine.SimpleText := 'Disconnected';
+      pumLinkToRBNMonitor.Enabled:=true;
     end
     else begin
+      pumLinkToRBNMonitor.Enabled:=false;
+      acLinkToRbnMonitor.Checked :=false;
       RBNThread := TRBNThread.Create(True);
       RBNThread.FreeOnTerminate := True;
       RBNThread.Start
     end
   end
+end;
+
+procedure TfrmGrayline.acLinkToRbnMonitorExecute(Sender: TObject);
+begin
+    acLinkToRbnMonitor.Checked := not acLinkToRbnMonitor.Checked;
+    pumConnect.Enabled:=not acLinkToRbnMonitor.Checked;
+    if acLinkToRbnMonitor.Checked then
+     rbn_status := 'Linked to RBNMonitor'
+    else
+     rbn_status := 'Disconnected';
+    sbGrayLine.SimpleText := rbn_status;
 end;
 
 procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -523,13 +536,22 @@ end;
 
 procedure TfrmGrayline.tmrAutoConnectTimer(Sender : TObject);
 begin
-  if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '') and (RBNThread = nil) then
-    acConnect.Execute
+    if cqrini.ReadBool('RBN','AutoLink',false) then
+      acLinkToRbnMonitorExecute(nil)
+      else
+        if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '') and (RBNThread = nil) then
+         acConnect.Execute;
+   tmrAutoConnect.Enabled:=false;
 end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
 begin
   Refresh
+end;
+
+procedure TfrmGrayline.tmrRemoveSpotsTimer(Sender: TObject);
+begin
+  RemoveOldSpots
 end;
 
 procedure TfrmGrayline.kresli;
@@ -616,5 +638,178 @@ begin
   Refresh
 end;
 
+function  TfrmGrayline.GetEmptyPos : Word;
+var
+  i : Integer;
+begin
+  Result := 0;
+  for i:= 1 to MAX_ITEMS do
+  begin
+    if frmGrayline.RBNSpotList[i].band='' then
+    begin
+      Result := i;
+      break
+    end
+  end
+end;
+
+function  TfrmGrayline.SpotterExists(spotter : String) : Word;
+var
+  i : Integer;
+begin
+  Result := 0;
+  for i:= 1 to MAX_ITEMS do
+  begin
+    if frmGrayline.RBNSpotList[i].spotter=spotter then
+    begin
+      Result := i;
+      break
+    end
+  end
+end;
+
+procedure  TfrmGrayline.RemoveOldSpots;
+var
+  i       : Integer;
+  time    : TDateTime;
+  delAfter: word;
+begin
+   tmrRemoveSpots.Enabled:=false;
+   delAfter   := cqrini.ReadInteger('RBN','deleteAfter',60);
+   tmrRemoveSpots.Interval:=delAfter*1000;
+  time := now;
+  for i:=1 to MAX_ITEMS do
+  begin
+    if frmGrayline.RBNSpotList[i].time+delAfter/86400 < time then
+      frmGrayline.RBNSpotList[i].band := ''
+  end;
+  SynRBN;
+  tmrRemoveSpots.Enabled:=true;
+end;
+procedure TfrmGrayline.AddSpotToList(spot : String);
+
+  procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
+  var
+    s,d : String;
+  begin
+    s := lat;
+    d := long;
+    if ((Length(s)=0) or (Length(d)=0)) then
+    begin
+      longitude := 0;
+      latitude  := 0;
+      exit
+    end;
+
+    if s[Length(s)] = 'S' then
+      s := '-' +s ;
+    s := copy(s,1,Length(s)-1);
+    if pos('.',s) > 0 then
+      s[pos('.',s)] := FormatSettings.DecimalSeparator;
+    if not TryStrToCurr(s,latitude) then
+      latitude := 0;
+
+    if d[Length(d)] = 'W' then
+      d := '-' + d ;
+    d := copy(d,1,Length(d)-1);
+    if pos('.',d) > 0 then
+      d[pos('.',d)] := FormatSettings.DecimalSeparator;
+    if not TryStrToCurr(d,longitude) then
+      longitude := 0;
+    if dmData.DebugLevel>=4 then
+    begin
+      //Writeln('Lat:  ',latitude);
+      //Writeln('Long: ',longitude);
+    end;
+  end;
+
+  procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
+  var
+     i: integer;
+  begin
+    spotter := ExtractWord(3,spot,[' ']);
+     i := pos('-', spotter);
+    if i > 0 then
+      spotter := copy(spotter, 1, i-1);
+    dxstn := ExtractWord(5,spot,[' ']);
+    freq  := ExtractWord(4,spot,[' ']);
+    mode  := ExtractWord(6,spot,[' ']);
+    stren := ExtractWord(7,spot,[' ']);
+  end;
+
+var
+  watchFor: String;
+  spotter : String;
+  call    : String;
+  stren   : String;
+  freq    : String;
+  lat     : String;
+  long    : String;
+  index   : Word;
+  tmp     : Integer;
+  wCall   : String;
+  mode    : String;
+  latitude, longitude: Currency;
+begin
+  if pos('DX DE',UpperCase(spot) )<> 1 then exit;
+  watchFor   := cqrini.ReadString('RBN','watch','');
+  ParseSpot(spot, spotter, call, freq, mode, stren);
+
+  if watchFor<>'' then
+  begin
+    if Pos('*',watchFor) > 0 then   //ZL*
+    begin
+      wCall := copy(watchFor,1,Pos('*',watchFor)-1);
+      if (Pos(wCall,call) <> 1) then    //all callsign started with ZL
+        exit
+    end
+    else begin
+      if (call <> watchFor) then exit;
+    end
+  end;
+
+  if dmData.DebugLevel>=1 then
+  begin
+    Writeln('Spotter:',spotter,'*');
+    Writeln('Signal: ',stren,'*');
+    Writeln('*Freq:  ',freq,'*')
+  end;
+
+  dmDXCluster.id_country(spotter,lat,long);
+
+  index := SpotterExists(spotter);
+  if index = 0 then //spotter doesn't exist, we need new position
+    index := GetEmptyPos;
+
+  if index = 0 then
+  begin
+    Writeln('CRITICAL ERROR! THIS SHOULD NOT HAPPEN, RBN LIST IS FULL');
+    exit
+  end;
+  band := dmDXCluster.GetBandFromFreq(freq,True);
+
+  frmGrayline.RBNSpotList[index].band    := band;
+  frmGrayline.RBNSpotList[index].spotter := spotter;
+  frmGrayline.RBNSpotList[index].time    := now;
+  if TryStrToInt(stren,tmp) then
+    frmGrayline.RBNSpotList[index].strengt := tmp
+  else
+    frmGrayline.RBNSpotList[index].strengt := 0;
+
+  GetRealCoordinate(lat,long,latitude, longitude);
+  frmGrayline.RBNSpotList[index].lat  := latitude;
+  frmGrayline.RBNSpotList[index].long := longitude;
+  if dmData.DebugLevel>=1 then
+   begin
+    Write('call:   ',call);
+    Write(' spotter:',spotter);
+    Write(' stren:  ',stren);
+    Write(' freq:   ',freq);
+    Write(' band:   ',dmDXCluster.GetBandFromFreq(freq,True));
+    Write(' Lat:    ',lat);
+    Writeln(' Long:   ',long)
+   end;
+  SynRBN;
+end;
 end.
 

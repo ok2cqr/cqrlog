@@ -147,7 +147,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO;
+uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline;
 
 { TfrmRbnMonitor }
 
@@ -400,7 +400,8 @@ procedure TfrmRbnMonitor.AddSpotToThread(spot : String);
 begin
   EnterCriticalsection(csRbnMonitor);
   try
-     slRbnSpots.Add(spot)
+     slRbnSpots.Add(spot);
+     if  (frmGrayline.Showing and frmGrayline.acLinkToRbnMonitor.Checked) then frmGrayline.AddSpotToList(spot);
   finally
     LeaveCriticalsection(csRbnMonitor)
   end
@@ -505,6 +506,7 @@ end;
 
 procedure TfrmRbnMonitor.acDisconnectExecute(Sender: TObject);
 begin
+  lTelnet.Disconnect;
   RbnMonThread.Terminate;
   freeAndNil(RbnMonThread);
   tbtnConnect.Action := acConnect;
@@ -629,7 +631,7 @@ begin
   sgRbn.Cells[5,0] := 'Q';
   sgRbn.Cells[6,0] := 'D';
 
-  if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnect',False) )) then
+  if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnectM',False) )) then
      acConnectExecute(nil);
 end;
 

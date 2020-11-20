@@ -124,6 +124,8 @@ type
     cbNoKeyerReset: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
+    chkRBNMAutoConn: TCheckBox;
+    chkRBNLink: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
     chkRot2AzMinMax: TCheckBox;
     chkShowOwnPos: TCheckBox;
@@ -706,6 +708,7 @@ type
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
+    lblAutoCon: TLabel;
     lblCWPort2: TLabel;
     lblHamlib: TLabel;
     lblHamlib1: TLabel;
@@ -1042,6 +1045,7 @@ type
     procedure chkProfileLocatorClick(Sender: TObject);
     procedure chkProfileQTHClick(Sender: TObject);
     procedure chkProfileRigClick(Sender: TObject);
+    procedure chkRBNLinkChange(Sender: TObject);
     procedure chkSysUTCClick(Sender: TObject);
     procedure chkUseDXCColorsChange(Sender: TObject);
     procedure btnFirstLoadClick(Sender: TObject);
@@ -1596,6 +1600,8 @@ begin
   cqrini.WriteString('RBN','login',edtRBNLogin.Text);
   cqrini.WriteString('RBN','watch',edtWatchFor.Text);
   cqrini.WriteBool('RBN','AutoConnect',chkRBNAutoConn.Checked);
+  cqrini.WriteBool('RBN','AutoConnectM',chkRBNMAutoConn.Checked);
+  cqrini.WriteBool('RBN','AutoLink',chkRBNLink.Checked);
   if TryStrToInt(edtDelAfter.Text,int) then
     cqrini.WriteInteger('RBN','deleteAfter',int)
   else
@@ -2337,6 +2343,16 @@ begin
   dmData.InsertProfiles(cmbProfiles, False, chkProfileLocator.Checked,
     chkProfileQTH.Checked, chkProfileRig.Checked);
   cmbProfiles.ItemIndex := i;
+end;
+
+procedure TfrmPreferences.chkRBNLinkChange(Sender: TObject);
+begin
+  if chkRBNLink.Checked then
+   Begin
+     chkRBNAutoConn.Checked:=false;
+     chkRBNAutoConn.Enabled:=false;
+   end
+  else chkRBNAutoConn.Enabled:=true;
 end;
 
 procedure TfrmPreferences.chkSysUTCClick(Sender: TObject);
@@ -3100,6 +3116,8 @@ begin
   edtRBNLogin.Text       := cqrini.ReadString('RBN','login','');
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
+  chkRBNMAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnectM',false);
+  chkRBNLink.Checked     := cqrini.ReadBool('RBN','AutoLink',false);
   edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
   edtRBNServer.Text      := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
 

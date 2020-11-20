@@ -8033,19 +8033,19 @@ object frmPreferences: TfrmPreferences
     end
     object tabRBN: TTabSheet
       Caption = 'RBN support'
-      ClientHeight = 633
-      ClientWidth = 801
+      ClientHeight = 650
+      ClientWidth = 700
       object chkRBNAutoConn: TCheckBox
-        Left = 408
+        Left = 368
         Height = 23
-        Top = 104
-        Width = 393
-        Caption = 'Auto connect after start (RBN grayline + RBN monitor)'
+        Top = 207
+        Width = 198
+        Caption = 'Autoconnect RBN Grayline'
         TabOrder = 0
       end
       object edtRBNLogin: TEdit
         Left = 92
-        Height = 25
+        Height = 33
         Top = 102
         Width = 101
         CharCase = ecUppercase
@@ -8053,23 +8053,23 @@ object frmPreferences: TfrmPreferences
       end
       object Label166: TLabel
         Left = 20
-        Height = 17
+        Height = 15
         Top = 107
-        Width = 42
+        Width = 39
         Caption = 'Login:'
         ParentColor = False
       end
       object Label167: TLabel
         Left = 20
-        Height = 17
+        Height = 15
         Top = 139
-        Width = 71
+        Width = 67
         Caption = 'Watch for:'
         ParentColor = False
       end
       object edtWatchFor: TEdit
         Left = 92
-        Height = 25
+        Height = 33
         Top = 134
         Width = 101
         CharCase = ecUppercase
@@ -8077,55 +8077,55 @@ object frmPreferences: TfrmPreferences
       end
       object Label168: TLabel
         Left = 212
-        Height = 17
+        Height = 15
         Top = 107
-        Width = 178
+        Width = 175
         Caption = '(usually your own callsign)'
         ParentColor = False
       end
       object Label169: TLabel
         Left = 212
-        Height = 17
+        Height = 15
         Top = 139
-        Width = 373
+        Width = 367
         Caption = '(callsign you are watching for, also can be your callsign)'
         ParentColor = False
       end
       object Label170: TLabel
         Left = 15
-        Height = 34
+        Height = 30
         Top = 14
-        Width = 580
+        Width = 567
         Caption = 'CQRLOG can receive spots from RBN and show it on Gray line map. It''s very useful '#10'especially when you are calling CQ and want to see where your signal can be received.'
         ParentColor = False
       end
       object Label171: TLabel
         Left = 20
-        Height = 17
+        Height = 15
         Top = 182
-        Width = 96
+        Width = 92
         Caption = 'Signal strench'
         ParentColor = False
       end
       object Label172: TLabel
-        Left = 244
-        Height = 17
+        Left = 212
+        Height = 15
         Top = 182
-        Width = 37
+        Width = 34
         Caption = 'Color'
         ParentColor = False
       end
       object Label173: TLabel
         Left = 28
-        Height = 17
+        Height = 15
         Top = 215
-        Width = 61
+        Width = 60
         Caption = '0 ... 10db'
         ParentColor = False
       end
       object cl10db: TColorBox
-        Left = 220
-        Height = 25
+        Left = 212
+        Height = 32
         Top = 204
         Width = 137
         DefaultColorColor = clWhite
@@ -8137,15 +8137,15 @@ object frmPreferences: TfrmPreferences
       end
       object Label174: TLabel
         Left = 28
-        Height = 17
+        Height = 15
         Top = 248
-        Width = 70
+        Width = 68
         Caption = '11 ... 20db'
         ParentColor = False
       end
       object cl20db: TColorBox
-        Left = 220
-        Height = 25
+        Left = 212
+        Height = 32
         Top = 237
         Width = 137
         DefaultColorColor = clWhite
@@ -8157,16 +8157,16 @@ object frmPreferences: TfrmPreferences
       end
       object Label175: TLabel
         Left = 28
-        Height = 17
+        Height = 15
         Top = 284
-        Width = 70
+        Width = 68
         Caption = '21 ... 30db'
         ParentColor = False
       end
       object cl30db: TColorBox
-        Left = 220
-        Height = 25
-        Top = 273
+        Left = 212
+        Height = 32
+        Top = 272
         Width = 137
         DefaultColorColor = clWhite
         Selected = clMaroon
@@ -8177,16 +8177,16 @@ object frmPreferences: TfrmPreferences
       end
       object Label176: TLabel
         Left = 28
-        Height = 17
+        Height = 15
         Top = 319
-        Width = 69
+        Width = 66
         Caption = 'over 30dB'
         ParentColor = False
       end
       object clOver30db: TColorBox
-        Left = 220
-        Height = 25
-        Top = 308
+        Left = 212
+        Height = 32
+        Top = 309
         Width = 137
         DefaultColorColor = clWhite
         Selected = clRed
@@ -8196,40 +8196,40 @@ object frmPreferences: TfrmPreferences
         TabOrder = 6
       end
       object Label177: TLabel
-        Left = 16
-        Height = 17
-        Top = 356
-        Width = 193
+        Left = 368
+        Height = 15
+        Top = 319
+        Width = 182
         Caption = 'Delete old information after'
         ParentColor = False
       end
       object edtDelAfter: TEdit
-        Left = 212
-        Height = 25
-        Top = 351
+        Left = 560
+        Height = 33
+        Top = 308
         Width = 40
         TabOrder = 7
         Text = '60'
       end
       object Label178: TLabel
-        Left = 260
-        Height = 17
-        Top = 356
-        Width = 55
+        Left = 608
+        Height = 15
+        Top = 319
+        Width = 53
         Caption = 'seconds'
         ParentColor = False
       end
       object Label190: TLabel
         Left = 20
-        Height = 17
+        Height = 15
         Top = 75
-        Width = 48
+        Width = 46
         Caption = 'Server:'
         ParentColor = False
       end
       object edtRBNServer: TEdit
         Left = 92
-        Height = 25
+        Height = 33
         Top = 70
         Width = 304
         TabOrder = 8
@@ -8237,11 +8237,36 @@ object frmPreferences: TfrmPreferences
       end
       object Label191: TLabel
         Left = 416
-        Height = 17
+        Height = 15
         Top = 75
-        Width = 76
+        Width = 71
         Caption = 'server:port'
         ParentColor = False
+      end
+      object lblAutoCon: TLabel
+        Left = 368
+        Height = 15
+        Top = 182
+        Width = 128
+        Caption = 'After program start:'
+        ParentColor = False
+      end
+      object chkRBNMAutoConn: TCheckBox
+        Left = 368
+        Height = 23
+        Top = 240
+        Width = 193
+        Caption = 'Autoconnect RBN Monitor'
+        TabOrder = 9
+      end
+      object chkRBNLink: TCheckBox
+        Left = 368
+        Height = 23
+        Top = 276
+        Width = 216
+        Caption = 'Link Grayline to RBN monitor'
+        OnChange = chkRBNLinkChange
+        TabOrder = 10
       end
     end
     object tabOnlineLog: TTabSheet
