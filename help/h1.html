@@ -278,15 +278,20 @@ You can also switch between memory frequencies with TRXControl's <b>M up</b> and
 <img src="img/h121.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
-Here you can set up the default bandwidth for any of the supported modes (CW - SSB - RTTY - AM - FM).
+Here you can set up the default bandwidth for any of the supported modes (CW - SSB - DATA - AM - FM).
 If your radio is tuned to the corresponding band segment or if you switch the mode on the radio
 control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be
 changed at any time, however a program restart will probably be needed to make the changes
-take effect.<br><br>
-<strong>User definable digital modes</strong> can be set up in a separate box. Use comma
-as a separator, ie. BPSK31,QPSK64,OLIVIA,CONTESTIA etc.<br>
-Some <strong>TRX like ICOM don't have support for this in HamLib. To get mode settings work, set
-all values to 0 (zero).</strong>
+take effect.
+<br><strong>Some TRX like don't have support for setting bandwith in HamLib. To get mode bandwidth setting to rig default, set
+value to 0 (zero).</strong>
+<br><br>You can define data mode and corresponding rig mode command by your needs. Data mode effects to bands/frequencies settings and that way to DXCluster spot colors.
+<br>Here we have setting PKTUSB / FT8 as Icom rig needs command PKTUSB for running FT8 and we like to see FT8 DX spots colored by our wkd/needs.
+<br>At NewQSO window right click of checbox "Auto"(mode) allows selection where mode received from rig is converted back to user data mode. (Auto+RigMode2DataMode)
+<br>Some cases this may be bad. Example: you work fone qsos(SSB) and SSTV qsos using rig mode USB. Then setting Auto+RigMode2DataMode leads all fone qsos set as mode SSTV.
+<br><br><strong>User definable digital modes</strong> can be set up in a separate box. Use comma
+as a separator, ie. MYMODE1,MYMODE2 etc.<br>
+
 <p align=center><img src=img/line.png></p>
 <a name=ah9><h2><strong>QTH Profiles</strong></h2></a>
 <img src=img/h12.png border=0><br><br>
@@ -674,11 +679,17 @@ There are no known dependencies issues.<br><br>
       <li><strong>Login:</strong> - your user name to log in to RBN. It's usually your own callsign.</li>
       <li><strong>Watch for:</strong> the callsign you are watching for, also usually your own callsign. 
        If you leave this field empty, every spot will be shown on the grayline map.</li>
-      <li><strong>Auto connect after start</strong> - check this option if you want to autoconnect
-    to RBN when the program starts, you won't have to worry about it and CQRLOG will do
-    it for you automatically.<br>This checkbox affects to <strong>both</strong> Grayline RBN and RBN monitor (text list) </li>
       <li><strong>Signal strength</strong> How strong you are will be clear very quickly when you look
     at the map with the dots in different colours. Which colour will be used can be set here.</li>
+      <li><strong>After program start</strong> - check these options if you want to autoconnect
+    to RBN when the program starts, you won't have to worry about it and CQRLOG will do it for you automatic.</li>
+    <ul>
+      <li><strong>Autoconnect RBN Grayline</strong> connects Grayline map to RBN.</li>
+      <li><strong>Autoconnect RBN Monitor</strong> connects RBN Monitor to RBN. See: <a href="./h31.html">Operation/RBN monitor</a></li>
+      <li><strong>Link Grayline to RBN Monitor.</strong> links Grayline to same connection as RBN Monitor uses and does not allow to create a new connection to Grayline itself. This is usefull with QT5 widgets compiled version as there the direct Grayline RBN connection does not work. It also saves one connection in all cases as the same RBN connection can be used for both Grayline dotting and RBN Monitor listing.
+      <br>Linking alone does not start Grayline dotting. Connection to RBN must be done either here with <strong>Autoconnect RBN Monitor</strong> or <strong>manually</strong> at RBM Monitor window side.</li>
+      <strong>Note:</strong> Even when linked Grayline dotting and RBN Monitor listing both uses their own settings what call(s) to follow.</li>
+    </ul>
       <li><strong>Delete old information after XX seconds</strong> The dots won't stay on the map forever.
     180 seconds (3 minutes) is a good default value. Please note, it also depends on the band,
     if you change band, dots will always be deleted. All data is band related.</li>
@@ -715,10 +726,19 @@ There are no known dependencies issues.<br><br>
     if you don't want to have Log upload status window visible, check this option and
     windows will be closed after upload to online log is finished.
     <br><br>
-    <strong>Ignore changes caused by LoTW/eQSL upload or download</strong> - every change of
+    <strong>Ignore changes caused by LoTW/eQSL upload or download</strong> 
+    <br><strong>Ignore changes caused by QSL sent/received</strong> (marked by hand or label printing) 
+    <br><strong>Ignore changes caused by QSO edit</strong> 
+    - every change of
     a qso will cause a new upload to the online log database. Sometimes it can be useful to
     have the opportunity to disable it when upload/download data to LoTW/eQSL. These changes
     won't be logged and QSO won't be uploaded to any online log.
+   <br><br>
+   <img src="img/h1116b.png"><br>
+   Uploading can also be controlled from <strong>QSO list/Online log</strong>-menu where you can mark QSO(s) uploaded or remove all triggers that would cause upload on next time(if you do not use immediate uploading)<br>
+
+
+
 </div>
 <p align=center><img src=img/line.png></p>
 <br>
