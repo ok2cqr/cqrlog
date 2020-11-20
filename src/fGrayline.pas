@@ -536,12 +536,14 @@ end;
 
 procedure TfrmGrayline.tmrAutoConnectTimer(Sender : TObject);
 begin
+    if (rbn_status='Connected') or (rbn_status='Linked') then exit;
     if cqrini.ReadBool('RBN','AutoLink',false) then
-      acLinkToRbnMonitorExecute(nil)
-      else
-        if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '') and (RBNThread = nil) then
-         acConnect.Execute;
-   tmrAutoConnect.Enabled:=false;
+        Begin
+         acLinkToRbnMonitorExecute(nil);
+         exit;
+        end;
+    if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '')
+       and (RBNThread = nil) then  acConnect.Execute;
 end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
