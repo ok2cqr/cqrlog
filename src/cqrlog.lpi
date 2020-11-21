@@ -163,6 +163,7 @@
         <Filename Value="fMarkQSL.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMarkQSL"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit8>
       <Unit9>
@@ -844,38 +845,45 @@
         <ResourceBaseClass Value="Form"/>
       </Unit111>
       <Unit112>
-        <Filename Value="uDbUtils.pas"/>
+        <Filename Value="fProgress.pas"/>
         <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmProgress"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit112>
       <Unit113>
+        <Filename Value="uDbUtils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit113>
+      <Unit114>
         <Filename Value="dQTHProfile.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmQTHProfile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-      </Unit113>
-      <Unit114>
-        <Filename Value="uInternalConnection.pas"/>
-        <IsPartOfProject Value="True"/>
       </Unit114>
       <Unit115>
-        <Filename Value="uConnectionInfo.pas"/>
+        <Filename Value="uInternalConnection.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit115>
       <Unit116>
+        <Filename Value="uConnectionInfo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit116>
+      <Unit117>
         <Filename Value="fChangeOperator.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmChangeOperator"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit116>
-      <Unit117>
+      </Unit117>
+      <Unit118>
         <Filename Value="fRemind.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmReminder"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit117>
+      </Unit118>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
