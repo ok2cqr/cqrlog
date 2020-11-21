@@ -1450,7 +1450,7 @@ begin
   end;
   if band = '9CM' then
   begin
-    Result := '3401.200';
+    Result := '3400.200';
     exit;
   end;
   if band = '6CM' then
