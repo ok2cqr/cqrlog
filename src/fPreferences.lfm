@@ -17,7 +17,7 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 703
@@ -8033,120 +8033,168 @@ object frmPreferences: TfrmPreferences
     end
     object tabRBN: TTabSheet
       Caption = 'RBN support'
-      ClientHeight = 633
-      ClientWidth = 801
+      ClientHeight = 650
+      ClientWidth = 700
       object chkRBNAutoConn: TCheckBox
-        Left = 408
+        AnchorSideLeft.Control = lblRbnWindowOpen
+        AnchorSideTop.Control = cmbCl10db
+        AnchorSideTop.Side = asrCenter
+        Left = 404
         Height = 23
-        Top = 104
-        Width = 393
-        Caption = 'Auto connect after start (RBN grayline + RBN monitor)'
+        Top = 212
+        Width = 198
+        Caption = 'Autoconnect RBN Grayline'
         TabOrder = 0
       end
       object edtRBNLogin: TEdit
-        Left = 92
-        Height = 25
-        Top = 102
+        AnchorSideLeft.Control = edtRBNServer
+        AnchorSideTop.Control = edtRBNServer
+        AnchorSideTop.Side = asrBottom
+        Left = 94
+        Height = 33
+        Top = 90
         Width = 101
         CharCase = ecUppercase
         TabOrder = 1
       end
-      object Label166: TLabel
-        Left = 20
-        Height = 17
-        Top = 107
-        Width = 42
+      object lblRbnLogin: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = edtRBNLogin
+        AnchorSideTop.Side = asrCenter
+        Left = 24
+        Height = 15
+        Top = 99
+        Width = 39
         Caption = 'Login:'
         ParentColor = False
       end
-      object Label167: TLabel
-        Left = 20
-        Height = 17
-        Top = 139
-        Width = 71
+      object lblRbnWatchFor: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = edtWatchFor
+        AnchorSideTop.Side = asrCenter
+        Left = 24
+        Height = 15
+        Top = 132
+        Width = 67
         Caption = 'Watch for:'
         ParentColor = False
       end
       object edtWatchFor: TEdit
-        Left = 92
-        Height = 25
-        Top = 134
+        AnchorSideLeft.Control = edtRBNLogin
+        AnchorSideTop.Control = edtRBNLogin
+        AnchorSideTop.Side = asrBottom
+        Left = 94
+        Height = 33
+        Top = 123
         Width = 101
         CharCase = ecUppercase
         TabOrder = 2
       end
-      object Label168: TLabel
-        Left = 212
-        Height = 17
-        Top = 107
-        Width = 178
+      object lblRbnLoginHint: TLabel
+        AnchorSideLeft.Control = edtRBNLogin
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = edtRBNLogin
+        AnchorSideTop.Side = asrCenter
+        Left = 201
+        Height = 15
+        Top = 99
+        Width = 175
+        BorderSpacing.Left = 6
         Caption = '(usually your own callsign)'
         ParentColor = False
       end
-      object Label169: TLabel
-        Left = 212
-        Height = 17
-        Top = 139
-        Width = 373
+      object lblRbnWatchForHint: TLabel
+        AnchorSideLeft.Control = edtWatchFor
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = edtWatchFor
+        AnchorSideTop.Side = asrCenter
+        Left = 201
+        Height = 15
+        Top = 132
+        Width = 367
+        BorderSpacing.Left = 6
         Caption = '(callsign you are watching for, also can be your callsign)'
         ParentColor = False
       end
-      object Label170: TLabel
-        Left = 15
-        Height = 34
-        Top = 14
-        Width = 580
-        Caption = 'CQRLOG can receive spots from RBN and show it on Gray line map. It''s very useful '#10'especially when you are calling CQ and want to see where your signal can be received.'
+      object lblRbnHeader: TLabel
+        AnchorSideLeft.Control = tabRBN
+        AnchorSideTop.Control = tabRBN
+        Left = 24
+        Height = 30
+        Top = 12
+        Width = 567
+        BorderSpacing.Left = 24
+        BorderSpacing.Top = 12
+        Caption = 'CQRLOG can receive spots from RBN and show receivers as dots on Gray line map. It''s very useful '#10'especially when you are calling CQ and want to see where your signal can be received.'
         ParentColor = False
       end
-      object Label171: TLabel
-        Left = 20
-        Height = 17
-        Top = 182
-        Width = 96
+      object lblRbnSignal: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = edtWatchFor
+        AnchorSideTop.Side = asrBottom
+        Left = 24
+        Height = 15
+        Top = 180
+        Width = 92
+        BorderSpacing.Top = 24
         Caption = 'Signal strench'
         ParentColor = False
       end
-      object Label172: TLabel
-        Left = 244
-        Height = 17
-        Top = 182
-        Width = 37
+      object lblRbnColor: TLabel
+        AnchorSideLeft.Control = lblRbnWatchForHint
+        AnchorSideTop.Control = lblRbnSignal
+        Left = 201
+        Height = 15
+        Top = 180
+        Width = 34
         Caption = 'Color'
         ParentColor = False
       end
-      object Label173: TLabel
-        Left = 28
-        Height = 17
-        Top = 215
-        Width = 61
+      object lblRbnDb1: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = cmbCl10db
+        AnchorSideTop.Side = asrCenter
+        Left = 24
+        Height = 15
+        Top = 216
+        Width = 60
         Caption = '0 ... 10db'
         ParentColor = False
       end
-      object cl10db: TColorBox
-        Left = 220
-        Height = 25
-        Top = 204
+      object cmbCl10db: TColorBox
+        AnchorSideLeft.Control = lblRbnColor
+        AnchorSideTop.Control = lblRbnColor
+        AnchorSideTop.Side = asrBottom
+        Left = 201
+        Height = 32
+        Top = 207
         Width = 137
         DefaultColorColor = clWhite
         Selected = clWhite
         Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+        BorderSpacing.Top = 12
         Color = clWhite
         ItemHeight = 28
         TabOrder = 3
       end
-      object Label174: TLabel
-        Left = 28
-        Height = 17
+      object lblRbnDb2: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = cmbCl20db
+        AnchorSideTop.Side = asrCenter
+        Left = 24
+        Height = 15
         Top = 248
-        Width = 70
+        Width = 68
         Caption = '11 ... 20db'
         ParentColor = False
       end
-      object cl20db: TColorBox
-        Left = 220
-        Height = 25
-        Top = 237
+      object cmbCl20db: TColorBox
+        AnchorSideLeft.Control = cmbCl10db
+        AnchorSideTop.Control = cmbCl10db
+        AnchorSideTop.Side = asrBottom
+        Left = 201
+        Height = 32
+        Top = 239
         Width = 137
         DefaultColorColor = clWhite
         Selected = clPurple
@@ -8155,18 +8203,24 @@ object frmPreferences: TfrmPreferences
         ItemHeight = 28
         TabOrder = 4
       end
-      object Label175: TLabel
-        Left = 28
-        Height = 17
-        Top = 284
-        Width = 70
+      object lblRbnDb3: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = cmbCl30db
+        AnchorSideTop.Side = asrCenter
+        Left = 24
+        Height = 15
+        Top = 280
+        Width = 68
         Caption = '21 ... 30db'
         ParentColor = False
       end
-      object cl30db: TColorBox
-        Left = 220
-        Height = 25
-        Top = 273
+      object cmbCl30db: TColorBox
+        AnchorSideLeft.Control = cmbCl20db
+        AnchorSideTop.Control = cmbCl20db
+        AnchorSideTop.Side = asrBottom
+        Left = 201
+        Height = 32
+        Top = 271
         Width = 137
         DefaultColorColor = clWhite
         Selected = clMaroon
@@ -8175,18 +8229,24 @@ object frmPreferences: TfrmPreferences
         ItemHeight = 28
         TabOrder = 5
       end
-      object Label176: TLabel
-        Left = 28
-        Height = 17
-        Top = 319
-        Width = 69
+      object lblRbnDb4: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = cmbClOver30db
+        AnchorSideTop.Side = asrCenter
+        Left = 24
+        Height = 15
+        Top = 312
+        Width = 66
         Caption = 'over 30dB'
         ParentColor = False
       end
-      object clOver30db: TColorBox
-        Left = 220
-        Height = 25
-        Top = 308
+      object cmbClOver30db: TColorBox
+        AnchorSideLeft.Control = cmbCl30db
+        AnchorSideTop.Control = cmbCl30db
+        AnchorSideTop.Side = asrBottom
+        Left = 201
+        Height = 32
+        Top = 303
         Width = 137
         DefaultColorColor = clWhite
         Selected = clRed
@@ -8195,53 +8255,99 @@ object frmPreferences: TfrmPreferences
         ItemHeight = 28
         TabOrder = 6
       end
-      object Label177: TLabel
-        Left = 16
-        Height = 17
-        Top = 356
-        Width = 193
-        Caption = 'Delete old information after'
-        ParentColor = False
-      end
       object edtDelAfter: TEdit
-        Left = 212
-        Height = 25
-        Top = 351
+        AnchorSideLeft.Control = lblRbnWindowOpen
+        AnchorSideTop.Control = cmbClOver30db
+        AnchorSideTop.Side = asrCenter
+        Left = 404
+        Height = 33
+        Top = 303
         Width = 40
         TabOrder = 7
         Text = '60'
       end
-      object Label178: TLabel
-        Left = 260
-        Height = 17
-        Top = 356
-        Width = 55
-        Caption = 'seconds'
+      object lblRbnDeleteAfterSec: TLabel
+        AnchorSideLeft.Control = edtDelAfter
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = cmbClOver30db
+        AnchorSideTop.Side = asrCenter
+        Left = 445
+        Height = 15
+        Top = 312
+        Width = 186
+        BorderSpacing.Left = 1
+        Caption = 'seconds view time for dot(s)'
         ParentColor = False
       end
-      object Label190: TLabel
-        Left = 20
-        Height = 17
-        Top = 75
-        Width = 48
+      object lnlRbnServer: TLabel
+        AnchorSideLeft.Control = lblRbnHeader
+        AnchorSideTop.Control = lblRbnHeader
+        AnchorSideTop.Side = asrBottom
+        Left = 24
+        Height = 15
+        Top = 66
+        Width = 46
+        BorderSpacing.Top = 24
         Caption = 'Server:'
         ParentColor = False
       end
       object edtRBNServer: TEdit
-        Left = 92
-        Height = 25
-        Top = 70
+        AnchorSideLeft.Control = lnlRbnServer
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = lnlRbnServer
+        AnchorSideTop.Side = asrCenter
+        Left = 94
+        Height = 33
+        Top = 57
         Width = 304
+        BorderSpacing.Left = 24
         TabOrder = 8
         Text = 'edtRBNServer'
       end
-      object Label191: TLabel
-        Left = 416
-        Height = 17
-        Top = 75
-        Width = 76
+      object lblRbnAdrFormat: TLabel
+        AnchorSideLeft.Control = edtRBNServer
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = lnlRbnServer
+        AnchorSideTop.Side = asrCenter
+        Left = 404
+        Height = 15
+        Top = 66
+        Width = 71
+        BorderSpacing.Left = 6
         Caption = 'server:port'
         ParentColor = False
+      end
+      object lblRbnWindowOpen: TLabel
+        AnchorSideLeft.Control = lblRbnAdrFormat
+        AnchorSideTop.Control = lblRbnSignal
+        Left = 404
+        Height = 15
+        Top = 180
+        Width = 132
+        Caption = 'After window opens:'
+        ParentColor = False
+      end
+      object chkRBNMAutoConn: TCheckBox
+        AnchorSideLeft.Control = lblRbnWindowOpen
+        AnchorSideTop.Control = cmbCl20db
+        AnchorSideTop.Side = asrCenter
+        Left = 404
+        Height = 23
+        Top = 244
+        Width = 193
+        Caption = 'Autoconnect RBN Monitor'
+        TabOrder = 9
+      end
+      object chkRBNLink: TCheckBox
+        AnchorSideLeft.Control = lblRbnWindowOpen
+        AnchorSideTop.Control = cmbCl30db
+        Left = 404
+        Height = 23
+        Top = 271
+        Width = 216
+        Caption = 'Link Grayline to RBN monitor'
+        OnChange = chkRBNLinkChange
+        TabOrder = 10
       end
     end
     object tabOnlineLog: TTabSheet
