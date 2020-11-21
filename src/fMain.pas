@@ -389,6 +389,7 @@ type
     procedure acWASCfmExecute(Sender: TObject);
     procedure acDOKCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
@@ -1225,6 +1226,16 @@ begin
     ShowModal
   finally
     Free
+  end
+end;
+
+procedure TfrmMain.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
   end
 end;
 

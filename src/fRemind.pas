@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, maskedit;
+  ExtCtrls, StdCtrls, maskedit, LCLtype;
 
 type
 
@@ -23,6 +23,7 @@ type
     RemindTimeSet: TMaskEdit;
     RemiMemo: TMemo;
     tmrRemi: TTimer;
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure RemiMemoLimit(Sender: TObject; var Key: Char);
     procedure btCloseClick(Sender: TObject);
@@ -51,7 +52,7 @@ implementation
 
 { TfrmReminder }
 
-uses dData,dUtils,uMyini;
+uses dData,dUtils,uMyini,fNewQSO;
 
 Procedure TfrmReminder.OpenReminder;
 
@@ -84,6 +85,17 @@ end;
 procedure TfrmReminder.FormShow(Sender: TObject);
 begin
   //dmUtils.LoadWindowPos(frmReminder);    // this breaks big fonts and positions used in this form !!!!
+end;
+
+procedure TfrmReminder.FormKeyUp(Sender : TObject; var Key : Word;
+  Shift : TShiftState);
+begin
+  if (key= VK_ESCAPE) then
+  begin
+    btCloseClick(nil);
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 
