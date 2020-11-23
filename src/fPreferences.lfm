@@ -1131,7 +1131,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 110
+        Top = 133
         Width = 56
         BorderSpacing.Top = 3
         Caption = 'IOTA'
@@ -1143,7 +1143,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 136
+        Top = 159
         Width = 66
         BorderSpacing.Top = 3
         Caption = 'Award'
@@ -1155,7 +1155,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 162
+        Top = 185
         Width = 72
         BorderSpacing.Top = 3
         Caption = 'County'
@@ -1167,7 +1167,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 188
+        Top = 211
         Width = 66
         BorderSpacing.Top = 3
         Caption = 'Power'
@@ -1179,7 +1179,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 214
+        Top = 237
         Width = 62
         BorderSpacing.Top = 3
         Caption = 'DXCC'
@@ -1191,7 +1191,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 240
+        Top = 263
         Width = 139
         BorderSpacing.Top = 3
         Caption = 'Comment to QSO'
@@ -1203,7 +1203,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 266
+        Top = 289
         Width = 56
         BorderSpacing.Top = 3
         Caption = 'WAZ'
@@ -1215,7 +1215,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 292
+        Top = 315
         Width = 48
         BorderSpacing.Top = 3
         Caption = 'ITU'
@@ -1227,7 +1227,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 318
+        Top = 341
         Width = 60
         BorderSpacing.Top = 3
         Caption = 'State'
@@ -1418,7 +1418,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 344
+        Top = 367
         Width = 121
         BorderSpacing.Top = 3
         Caption = 'Satellite name'
@@ -1430,7 +1430,7 @@ object frmPreferences: TfrmPreferences
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 370
+        Top = 393
         Width = 113
         BorderSpacing.Top = 3
         Caption = 'RX frequency'
@@ -1498,11 +1498,11 @@ object frmPreferences: TfrmPreferences
       end
       object chkDistance: TCheckBox
         AnchorSideLeft.Control = chkQSL_VIA
-        AnchorSideTop.Control = chkMyLoc
+        AnchorSideTop.Control = chkOperator
         AnchorSideTop.Side = asrBottom
         Left = 163
         Height = 23
-        Top = 84
+        Top = 107
         Width = 133
         BorderSpacing.Top = 3
         Caption = 'Distance (in pnl)'
@@ -1515,6 +1515,17 @@ object frmPreferences: TfrmPreferences
         Width = 88
         Caption = 'DARC DOK'
         TabOrder = 46
+      end
+      object chkOperator: TCheckBox
+        AnchorSideLeft.Control = chkQSL_VIA
+        AnchorSideTop.Control = chkMyLoc
+        AnchorSideTop.Side = asrBottom
+        Left = 163
+        Height = 23
+        Top = 81
+        Width = 83
+        Caption = 'Operator'
+        TabOrder = 47
       end
     end
     object tabBands: TTabSheet
