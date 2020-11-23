@@ -750,7 +750,7 @@ type
 var
   frmNewQSO    : TfrmNewQSO;
 
-  EscFirstTime : Boolean = True;
+  EscFirstPressDone : Boolean = True;
   multicast    : boolean = false;
 
   c_callsign  : String;
@@ -1305,8 +1305,8 @@ begin
   else begin
     cmbProfiles.Text := dmData.GetProfileText(old_prof)
   end;
-  if cmbProfiles.Text <> '' then
-    cmbProfilesChange(nil);
+  //if cmbProfiles.Text <> '' then
+     cmbProfilesChange(nil);
 
   if sbNewQSO.Panels[0].Text = '' then
     sbNewQSO.Panels[0].Text := cMyLoc + cqrini.ReadString('Station','LOC','');
@@ -1762,7 +1762,7 @@ begin
   old_cfreq := '';
 
   Running      := False;
-  EscFirstTime := False;
+  EscFirstPressDone := False;
   ChangeDXCC   := False;
 
   ClearAll;
@@ -5151,7 +5151,10 @@ procedure TfrmNewQSO.cmbProfilesChange(Sender: TObject);
 var
   myloc : String;
 begin
-  myloc := dmData.GetMyLocFromProfile(cmbProfiles.Text);
+  if cmbProfiles.Text = '' then
+   myloc :=  cqrini.ReadString('Station','LOC','')
+  else
+   myloc := dmData.GetMyLocFromProfile(cmbProfiles.Text);
   if myloc <> '' then
      sbNewQSO.Panels[0].Text := cMyLoc + myloc;
   if dmData.DebugLevel >=1 then Writeln(cmbProfiles.Text)
@@ -5419,7 +5422,7 @@ begin
   begin
     if not (fViewQSO or fEditQSO) then
     begin
-      if EscFirstTime then
+      if EscFirstPressDone then
       begin
         //SaveGrid;
         if edtCall.Text = '' then
@@ -5429,14 +5432,14 @@ begin
         end
         else
          edtCall.Text := ''; // OnChange calls ClearAll;
-        EscFirstTime := False;
+        EscFirstPressDone := False;
         old_ccall := '';
         old_cfreq := '';
         old_cmode := '';
       end
       else begin
         if Assigned(CWint) then CWint.StopSending;
-        EscFirstTime   := True;
+        EscFirstPressDone   := True;
         tmrESC.Enabled := True
       end
     end
@@ -5469,7 +5472,7 @@ begin
     end
   end
   else
-    EscFirstTime := False;
+    EscFirstPressDone := False;
 
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
   Begin
@@ -5866,7 +5869,7 @@ end;
 
 procedure TfrmNewQSO.tmrESCTimer(Sender: TObject);
 begin
-  EscFirstTime   := False;
+  EscFirstPressDone   := False;
   tmrESC.Enabled := False
 end;
 
@@ -6265,7 +6268,7 @@ begin
   tmrStart.Enabled := False;
 
   Running      := False;
-  EscFirstTime := False;
+  EscFirstPressDone := False;
   ChangeDXCC   := False;
   dmData.InsertProfiles(cmbProfiles,true);
   
