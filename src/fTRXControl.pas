@@ -139,6 +139,8 @@ type
     procedure SetMode(mode : String;bandwidth :Integer);
     procedure ClearButtonsColor;
     procedure UpdateModeButtons(mode : String);
+    procedure CheckUserMode(var mode : String);
+
   public
     {
     rfreq : Double;
@@ -1081,6 +1083,8 @@ procedure TfrmTRXControl.SetMode(mode : String;bandwidth :Integer);
 var
   rmode : TRigMode;
 begin
+  CheckUserMode(mode);
+
   if Assigned(radio) then
   begin
     rmode.mode := mode;
@@ -1258,6 +1262,7 @@ var
   rmode : TRigMode;
   RXOffset : Currency;
   TXOffset : Currency;
+
 begin
   if mode = 'SSB' then
   begin
@@ -1270,6 +1275,8 @@ begin
         mode := 'LSB'
     end
   end;
+
+  CheckUserMode(mode);
 
   if Assigned(radio) then
   begin
@@ -1296,17 +1303,6 @@ begin
     exit;
   bandwidth := GetBandWidth(mode);
   f := StrToFloat(freq);
-  if mode = 'SSB' then
-  begin
-    if (f > 5000) and (f < 6000) then
-      mode := 'USB'
-    else begin
-      if f > 10000 then
-        mode := 'USB'
-      else
-        mode := 'LSB'
-    end
-  end;
 
   SetFreqModeBandWidth(f,mode,bandwidth)
 end;
@@ -1369,27 +1365,28 @@ begin
 end;
 
 procedure TfrmTRXControl.UpdateModeButtons(mode : String);
+var
+  usermode :String;
+  n        :String;
+
 begin
   btnCW.Font.Color    := COLOR_WINDOWTEXT;
   btnSSB.Font.Color   := COLOR_WINDOWTEXT;
   btnRTTY.Font.Color  := COLOR_WINDOWTEXT;
   btnAM.Font.Color    := COLOR_WINDOWTEXT;
   btnFM.Font.Color    := COLOR_WINDOWTEXT;
-  if mode = 'CW' then
-    btnCW.Font.Color := clRed
-  else
-    if mode = 'SSB' then
-      btnSSB.Font.Color := clRed
-     else
-       if mode = 'RTTY' then
-         btnRTTY.Font.Color := clRed
-       else
-         if mode = 'AM' then
-           btnAM.Font.Color := clRed
-         else
-           if mode = 'FM' then
-             btnFM.Font.Color := clRed;
 
+  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  usermode:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
+
+  if mode = usermode then btnRTTY.Font.Color := clRed
+     else
+       case mode of
+        'CW' : btnCW.Font.Color := clRed;
+        'SSB' : btnSSB.Font.Color := clRed;
+        'AM' : btnAM.Font.Color := clRed;
+        'FM' : btnFM.Font.Color := clRed;
+       end;
 end;
 
 procedure TfrmTRXControl.Split(Up : Integer);
@@ -1493,6 +1490,22 @@ begin
   btn2MBand   := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','2cw',144050)/1000));
   btn70CMBand := dmUtils.GetBandFromFreq(FloatToStr(cqrini.ReadFloat('DefFreq','70cw',430000)/1000))
 end;
+
+procedure TfrmTRXControl.CheckUserMode(var mode : String);
+var
+  usermode,
+  usercmd,
+  n       :String;
+
+begin
+  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  usercmd:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
+  usermode:=cqrini.ReadString('Band'+n, 'Datamode', 'RTTY');
+
+  if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
+     mode := usercmd;
+
+  end;
 
 end.
 

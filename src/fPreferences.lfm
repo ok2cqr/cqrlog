@@ -3486,336 +3486,550 @@ object frmPreferences: TfrmPreferences
     end
     object tabModes: TTabSheet
       Caption = 'Modes'
-      ClientHeight = 672
-      ClientWidth = 687
+      ClientHeight = 628
+      ClientWidth = 840
       object GroupBox35: TGroupBox
-        Left = 14
+        AnchorSideLeft.Control = gbRadioOne
+        AnchorSideTop.Control = gbRadioOne
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 73
-        Top = 267
+        Top = 384
         Width = 561
+        BorderSpacing.Top = 24
         Caption = ' User defined digital modes (use , as delimitter)'
-        ClientHeight = 47
-        ClientWidth = 555
+        ClientHeight = 55
+        ClientWidth = 559
         TabOrder = 0
         object edtDigiModes: TEdit
-          Left = 7
-          Height = 34
-          Top = 15
+          AnchorSideLeft.Control = GroupBox35
+          AnchorSideLeft.Side = asrCenter
+          AnchorSideTop.Control = GroupBox35
+          AnchorSideTop.Side = asrCenter
+          Left = 11
+          Height = 33
+          Top = 11
           Width = 536
           CharCase = ecUppercase
           TabOrder = 0
         end
       end
-      object GroupBox37: TGroupBox
-        Left = 14
-        Height = 224
-        Top = 11
+      object gbRadioOne: TGroupBox
+        AnchorSideLeft.Control = tabModes
+        AnchorSideTop.Control = tabModes
+        Left = 12
+        Height = 354
+        Top = 6
         Width = 208
+        BorderSpacing.Left = 12
+        BorderSpacing.Top = 6
         Caption = ' Radio one '
-        ClientHeight = 198
-        ClientWidth = 202
+        ClientHeight = 336
+        ClientWidth = 206
         TabOrder = 1
-        object Label28: TLabel
-          Left = 13
-          Height = 17
-          Top = 18
+        object lbRadio1Mode: TLabel
+          AnchorSideLeft.Control = gbRadioOne
+          AnchorSideTop.Control = gbRadioOne
+          Left = 6
+          Height = 15
+          Top = 12
           Width = 36
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 12
           Caption = 'Mode'
           ParentColor = False
         end
-        object Label29: TLabel
-          Left = 77
-          Height = 17
-          Top = 18
+        object lbRadio1BW: TLabel
+          AnchorSideLeft.Control = lbRadio1Mode
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = lbRadio1Mode
+          Left = 66
+          Height = 15
+          Top = 12
           Width = 69
+          BorderSpacing.Left = 24
           Caption = 'Bandwidth'
           ParentColor = False
         end
-        object Label30: TLabel
-          Left = 11
-          Height = 17
-          Top = 43
+        object lbRadio1Cw: TLabel
+          AnchorSideLeft.Control = lbRadio1Mode
+          AnchorSideTop.Control = edtCW1
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 42
           Width = 22
           Caption = 'CW'
           ParentColor = False
         end
         object edtCW1: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 39
-          Width = 81
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = lbRadio1BW
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 33
+          Width = 90
+          BorderSpacing.Top = 6
           Increment = 50
-          MaxValue = 3000
+          MaxValue = 100000
           TabOrder = 0
           Value = 500
         end
-        object Label35: TLabel
-          Left = 169
-          Height = 17
-          Top = 43
+        object lblHzCw1: TLabel
+          AnchorSideLeft.Control = edtCW1
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtCW1
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 42
           Width = 17
+          BorderSpacing.Left = 6
           Caption = 'Hz'
           ParentColor = False
         end
-        object Label36: TLabel
-          Left = 169
-          Height = 17
+        object lblHzSSB1: TLabel
+          AnchorSideLeft.Control = lblHzCw1
+          AnchorSideTop.Control = edtSSB1
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
           Top = 75
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
         object edtSSB1: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 71
-          Width = 81
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = edtCW1
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 66
+          Width = 90
           Increment = 50
-          MaxValue = 3000
+          MaxValue = 100000
           TabOrder = 1
           Value = 1800
         end
-        object Label31: TLabel
-          Left = 10
-          Height = 17
+        object lbRadio1SSB: TLabel
+          AnchorSideLeft.Control = lbRadio1Mode
+          AnchorSideTop.Control = edtSSB1
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
           Top = 75
           Width = 25
           Caption = 'SSB'
           ParentColor = False
         end
-        object Label32: TLabel
-          Left = 11
-          Height = 17
-          Top = 106
-          Width = 32
-          Caption = 'RTTY'
+        object lbRadio1DATA: TLabel
+          AnchorSideLeft.Control = lbRadio1Mode
+          AnchorSideTop.Control = edtRTTY1
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 186
+          Width = 34
+          Caption = 'DATA'
           ParentColor = False
         end
         object edtRTTY1: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 102
-          Width = 81
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = edtFM1
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 177
+          Width = 90
+          BorderSpacing.Top = 12
           Increment = 50
-          MaxValue = 3000
+          MaxValue = 100000
           TabOrder = 2
           Value = 500
         end
-        object Label37: TLabel
-          Left = 169
-          Height = 17
-          Top = 106
+        object lblHzAM1: TLabel
+          AnchorSideLeft.Control = lblHzCw1
+          AnchorSideTop.Control = edtAM1
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 108
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
-        object Label38: TLabel
-          Left = 169
-          Height = 17
-          Top = 139
+        object lblHzFM1: TLabel
+          AnchorSideLeft.Control = lblHzCw1
+          AnchorSideTop.Control = edtFM1
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 141
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
         object edtAM1: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 133
-          Width = 81
-          Increment = 100
-          MaxValue = 6000
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = edtSSB1
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 99
+          Width = 90
+          Increment = 50
+          MaxValue = 100000
           TabOrder = 3
           Value = 3000
         end
-        object Label33: TLabel
-          Left = 11
-          Height = 17
-          Top = 139
+        object lbRadio1AM: TLabel
+          AnchorSideLeft.Control = lbRadio1Mode
+          AnchorSideTop.Control = edtAM1
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 108
           Width = 21
           Caption = 'AM'
           ParentColor = False
         end
-        object Label34: TLabel
-          Left = 11
-          Height = 17
-          Top = 170
+        object lbRadio1FM: TLabel
+          AnchorSideLeft.Control = lbRadio1Mode
+          AnchorSideTop.Control = edtFM1
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 141
           Width = 20
           Caption = 'FM'
           ParentColor = False
         end
         object edtFM1: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 166
-          Width = 81
-          Increment = 100
-          MaxValue = 6000
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = edtAM1
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 132
+          Width = 90
+          Increment = 50
+          MaxValue = 100000
           TabOrder = 4
           Value = 2500
         end
-        object Label39: TLabel
-          Left = 169
-          Height = 17
-          Top = 170
+        object lblHzDATA1: TLabel
+          AnchorSideLeft.Control = lblHzCw1
+          AnchorSideTop.Control = edtRTTY1
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 186
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
+        object lblRig1cmd: TLabel
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = edtRTTY1
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 15
+          Top = 210
+          Width = 53
+          Caption = 'Rig cmd'
+          ParentColor = False
+        end
+        object edtCMD1: TEdit
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = lblRig1cmd
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 225
+          Width = 90
+          TabOrder = 5
+        end
+        object lblRig1DataMode: TLabel
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = edtCMD1
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 15
+          Top = 258
+          Width = 72
+          Caption = 'Data mode'
+          ParentColor = False
+        end
+        object edtDataMode1: TEdit
+          AnchorSideLeft.Control = lbRadio1BW
+          AnchorSideTop.Control = lblRig1DataMode
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 273
+          Width = 90
+          TabOrder = 6
+        end
       end
-      object GroupBox39: TGroupBox
-        Left = 246
-        Height = 224
-        Top = 11
+      object gbRadioTwo: TGroupBox
+        AnchorSideLeft.Control = gbRadioOne
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = gbRadioOne
+        Left = 238
+        Height = 354
+        Top = 6
         Width = 208
+        BorderSpacing.Left = 18
         Caption = ' Radio two '
-        ClientHeight = 198
-        ClientWidth = 202
+        ClientHeight = 336
+        ClientWidth = 206
         TabOrder = 2
-        object Label110: TLabel
-          Left = 13
-          Height = 17
-          Top = 18
+        object lbRadio2Mode: TLabel
+          AnchorSideLeft.Control = gbRadioTwo
+          AnchorSideTop.Control = gbRadioTwo
+          Left = 6
+          Height = 15
+          Top = 12
           Width = 36
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 12
           Caption = 'Mode'
           ParentColor = False
         end
-        object Label113: TLabel
-          Left = 77
-          Height = 17
-          Top = 18
+        object lbRadio2BW: TLabel
+          AnchorSideLeft.Control = lbRadio2Mode
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = lbRadio2Mode
+          Left = 66
+          Height = 15
+          Top = 12
           Width = 69
+          BorderSpacing.Left = 24
           Caption = 'Bandwidth'
           ParentColor = False
         end
-        object Label114: TLabel
-          Left = 11
-          Height = 17
-          Top = 43
+        object lbRadio2Cw: TLabel
+          AnchorSideLeft.Control = lbRadio2Mode
+          AnchorSideTop.Control = edtCW2
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 42
           Width = 22
           Caption = 'CW'
           ParentColor = False
         end
         object edtCW2: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 39
-          Width = 81
+          AnchorSideLeft.Control = lbRadio2BW
+          AnchorSideTop.Control = lbRadio2BW
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 33
+          Width = 90
+          BorderSpacing.Top = 6
           Increment = 50
-          MaxValue = 3000
+          MaxValue = 100000
           TabOrder = 0
           Value = 500
         end
-        object Label115: TLabel
-          Left = 169
-          Height = 17
-          Top = 43
+        object lblHzCw2: TLabel
+          AnchorSideLeft.Control = edtCW2
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtCW2
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 42
           Width = 17
+          BorderSpacing.Left = 6
           Caption = 'Hz'
           ParentColor = False
         end
-        object Label116: TLabel
-          Left = 169
-          Height = 17
+        object lblHzSSB2: TLabel
+          AnchorSideLeft.Control = lblHzCw2
+          AnchorSideTop.Control = edtSSB2
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
           Top = 75
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
         object edtSSB2: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 71
-          Width = 81
+          AnchorSideLeft.Control = edtCW2
+          AnchorSideTop.Control = edtCW2
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 66
+          Width = 90
           Increment = 50
-          MaxValue = 3000
+          MaxValue = 100000
           TabOrder = 1
           Value = 1800
         end
-        object Label117: TLabel
-          Left = 10
-          Height = 17
+        object lbRadio2SSB: TLabel
+          AnchorSideLeft.Control = lbRadio2Mode
+          AnchorSideTop.Control = edtSSB2
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
           Top = 75
           Width = 25
           Caption = 'SSB'
           ParentColor = False
         end
-        object Label118: TLabel
-          Left = 11
-          Height = 17
-          Top = 106
-          Width = 32
-          Caption = 'RTTY'
+        object lbRadio2DATA: TLabel
+          AnchorSideLeft.Control = lbRadio2Mode
+          AnchorSideTop.Control = edtRTTY2
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 186
+          Width = 34
+          Caption = 'DATA'
           ParentColor = False
         end
         object edtRTTY2: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 102
-          Width = 81
+          AnchorSideLeft.Control = edtFM2
+          AnchorSideTop.Control = edtFM2
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 177
+          Width = 90
+          BorderSpacing.Top = 12
           Increment = 50
-          MaxValue = 3000
+          MaxValue = 100000
           TabOrder = 2
           Value = 500
         end
-        object Label119: TLabel
-          Left = 169
-          Height = 17
-          Top = 106
+        object lblHzAM2: TLabel
+          AnchorSideLeft.Control = lblHzCw2
+          AnchorSideTop.Control = edtAM2
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 108
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
-        object Label120: TLabel
-          Left = 169
-          Height = 17
-          Top = 139
+        object lblHzFM2: TLabel
+          AnchorSideLeft.Control = lblHzCw2
+          AnchorSideTop.Control = edtFM2
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 141
           Width = 17
           Caption = 'Hz'
           ParentColor = False
         end
         object edtAM2: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 133
-          Width = 81
-          Increment = 100
-          MaxValue = 6000
+          AnchorSideLeft.Control = edtSSB2
+          AnchorSideTop.Control = edtSSB2
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 99
+          Width = 90
+          Increment = 50
+          MaxValue = 100000
           TabOrder = 3
           Value = 3000
         end
-        object Label121: TLabel
-          Left = 11
-          Height = 17
-          Top = 139
+        object lbRadio2AM: TLabel
+          AnchorSideLeft.Control = lbRadio2Mode
+          AnchorSideTop.Control = edtAM2
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 108
           Width = 21
           Caption = 'AM'
           ParentColor = False
         end
-        object Label122: TLabel
-          Left = 11
-          Height = 17
-          Top = 170
+        object lbRadio2FM: TLabel
+          AnchorSideLeft.Control = lbRadio2Mode
+          AnchorSideTop.Control = edtFM2
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 15
+          Top = 141
           Width = 20
           Caption = 'FM'
           ParentColor = False
         end
         object edtFM2: TSpinEdit
-          Left = 77
-          Height = 34
-          Top = 166
-          Width = 81
-          Increment = 100
-          MaxValue = 6000
+          AnchorSideLeft.Control = edtAM2
+          AnchorSideTop.Control = edtAM2
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 132
+          Width = 90
+          Increment = 50
+          MaxValue = 100000
           TabOrder = 4
           Value = 2500
         end
-        object Label123: TLabel
-          Left = 169
-          Height = 17
-          Top = 170
+        object lblHzDATA2: TLabel
+          AnchorSideLeft.Control = lblHzCw2
+          AnchorSideTop.Control = edtRTTY2
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 15
+          Top = 186
           Width = 17
           Caption = 'Hz'
           ParentColor = False
+        end
+        object lblRig2Cmd: TLabel
+          AnchorSideLeft.Control = edtRTTY2
+          AnchorSideTop.Control = edtRTTY2
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 15
+          Top = 210
+          Width = 53
+          Caption = 'Rig cmd'
+          ParentColor = False
+        end
+        object lblRig2DataMode: TLabel
+          AnchorSideLeft.Control = edtCMD2
+          AnchorSideTop.Control = edtCMD2
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 15
+          Top = 258
+          Width = 72
+          Caption = 'Data mode'
+          ParentColor = False
+        end
+        object edtCMD2: TEdit
+          AnchorSideLeft.Control = lblRig2Cmd
+          AnchorSideTop.Control = lblRig2Cmd
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 225
+          Width = 90
+          TabOrder = 5
+        end
+        object edtDataMode2: TEdit
+          AnchorSideLeft.Control = lblRig2DataMode
+          AnchorSideTop.Control = lblRig2DataMode
+          AnchorSideTop.Side = asrBottom
+          Left = 66
+          Height = 33
+          Top = 273
+          Width = 90
+          TabOrder = 6
         end
       end
     end
@@ -8650,6 +8864,28 @@ object frmPreferences: TfrmPreferences
         Width = 422
         Caption = 'Ignore changes caused by LoTW/eQSL upload or download'
         TabOrder = 4
+      end
+      object chkIgnoreQSL: TCheckBox
+        AnchorSideLeft.Control = chkIgnoreLoTW
+        AnchorSideTop.Control = chkIgnoreLoTW
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 23
+        Top = 584
+        Width = 316
+        Caption = 'Ignore changes caused by QSL sent/received'
+        TabOrder = 5
+      end
+      object chkIgnoreEdit: TCheckBox
+        AnchorSideLeft.Control = chkIgnoreQSL
+        AnchorSideTop.Control = chkIgnoreQSL
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 23
+        Top = 607
+        Width = 256
+        Caption = 'Ignore changes caused by QSO edit'
+        TabOrder = 6
       end
     end
     object tabCondx: TTabSheet

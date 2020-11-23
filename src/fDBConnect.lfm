@@ -2126,7 +2126,7 @@ object frmDBConnect: TfrmDBConnect
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.8.0'
   object grbLogin: TGroupBox
     Left = 0
     Height = 212
@@ -2149,8 +2149,9 @@ object frmDBConnect: TfrmDBConnect
       Top = 17
       Width = 168
       BorderSpacing.Top = 2
+      OnEnter = edtServerEnter
+      OnExit = edtServerExit
       TabOrder = 0
-      Text = 'localhost'
     end
     object lblServerName: TLabel
       Left = 10
@@ -2164,7 +2165,7 @@ object frmDBConnect: TfrmDBConnect
       Left = 214
       Height = 15
       Top = 0
-      Width = 34
+      Width = 30
       Caption = 'Port:'
       ParentColor = False
     end
@@ -2179,8 +2180,9 @@ object frmDBConnect: TfrmDBConnect
       Width = 80
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
+      OnEnter = edtPortEnter
+      OnExit = edtPortExit
       TabOrder = 1
-      Text = '3306'
     end
     object lblUserName: TLabel
       AnchorSideTop.Control = edtServer
@@ -2201,6 +2203,8 @@ object frmDBConnect: TfrmDBConnect
       Top = 73
       Width = 168
       BorderSpacing.Top = 2
+      OnEnter = edtUserEnter
+      OnExit = edtUserExit
       TabOrder = 2
     end
     object lblPassword: TLabel
@@ -2209,7 +2213,7 @@ object frmDBConnect: TfrmDBConnect
       Left = 214
       Height = 15
       Top = 56
-      Width = 70
+      Width = 65
       BorderSpacing.Top = 6
       Caption = 'Password:'
       ParentColor = False
@@ -2226,6 +2230,8 @@ object frmDBConnect: TfrmDBConnect
       BorderSpacing.Left = 35
       BorderSpacing.Top = 2
       EchoMode = emPassword
+      OnEnter = edtPassEnter
+      OnExit = edtPassExit
       PasswordChar = '*'
       TabOrder = 3
     end
@@ -2235,7 +2241,7 @@ object frmDBConnect: TfrmDBConnect
       Left = 14
       Height = 23
       Top = 112
-      Width = 124
+      Width = 123
       BorderSpacing.Top = 6
       Caption = 'Remember me'
       OnChange = chkSavePassChange
@@ -2275,7 +2281,7 @@ object frmDBConnect: TfrmDBConnect
       Left = 202
       Height = 23
       Top = 112
-      Width = 115
+      Width = 111
       BorderSpacing.Top = 6
       Caption = 'Auto connect'
       TabOrder = 7
@@ -2399,9 +2405,10 @@ object frmDBConnect: TfrmDBConnect
       Top = 0
       Width = 225
       Align = alClient
+      AutoEdit = False
       Color = clWindow
       Columns = <>
-      Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgAutoSizeColumns]
       ReadOnly = True
       TabOrder = 1
       TitleStyle = tsNative
@@ -2424,7 +2431,7 @@ object frmDBConnect: TfrmDBConnect
         Left = 0
         Height = 23
         Top = 0
-        Width = 267
+        Width = 256
         Caption = 'Open recent log after program start'
         TabOrder = 0
       end
@@ -2446,15 +2453,16 @@ object frmDBConnect: TfrmDBConnect
       Left = 0
       Height = 23
       Top = 0
-      Width = 226
+      Width = 227
       Caption = 'Save log data to local machine'
-      OnClick = chkSaveToLocalClick
+      OnChange = chkSaveToLocalChange
       TabOrder = 0
     end
   end
   object tmrAutoConnect: TTimer
     Enabled = False
     OnTimer = tmrAutoConnectTimer
+    OnStartTimer = tmrAutoConnectStartTimer
     left = 112
     top = 400
   end

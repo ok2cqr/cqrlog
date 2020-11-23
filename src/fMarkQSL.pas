@@ -46,7 +46,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, dDXCC;
+uses dUtils, dData, dDXCC, UMyIni, dLogUpload;
 
 procedure TfrmMarkQSL.FormShow(Sender: TObject);
 begin
@@ -76,6 +76,10 @@ begin
     Application.MessageBox('First, you must filter QSO which you want to mark!','Info...',mb_ok+mb_IconInformation);
     exit
   end;
+
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.DisableOnlineLogSupport;
+
   if Pos('WHERE',tmp) = 0 then exit;
   tmp := copy(tmp,Pos('WHERE',tmp)+5,Length(tmp) - Pos('WHERE',tmp));
   if pos('ORDER',tmp) > 0 then
@@ -245,7 +249,10 @@ begin
     end;
     dmData.qCQRLOG.Next
   end;
-  lblProg.Caption := 'Complete!'
+  lblProg.Caption := 'Complete!';
+
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.EnableOnlineLogSupport;
 end;
 
 procedure TfrmMarkQSL.cmbTypeChange(Sender: TObject);

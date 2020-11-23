@@ -655,7 +655,7 @@ procedure TdmData.OpenDatabase(nr : Word);
 var
   l : TStringList;
 begin
-  DeleteFile(cqrini.IniFileName);
+  if FileExists(cqrini.IniFileName) then DeleteFile(cqrini.IniFileName);
   FreeAndNil(cqrini);
 
   fDBName := GetProperDBName(nr);

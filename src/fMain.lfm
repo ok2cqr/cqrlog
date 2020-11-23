@@ -1663,6 +1663,10 @@ object frmMain: TfrmMain
       object MenuItem96: TMenuItem
         Action = acUploadToAll
       end
+      object MenuItem107: TMenuItem
+        Caption = 'Remove all upload triggers'
+        OnClick = MenuItem107Click
+      end
     end
     object mnuHelp: TMenuItem
       Caption = 'Help'

@@ -122,6 +122,8 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkIgnoreEdit: TCheckBox;
+    chkIgnoreQSL: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
     chkRBNMAutoConn: TCheckBox;
@@ -503,6 +505,10 @@ type
     dlgColor : TColorDialog;
     edtClub: TEdit;
     edtCWPort2: TEdit;
+    edtDataMode2: TEdit;
+    edtDataMode1: TEdit;
+    edtCMD2: TEdit;
+    edtCMD1: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
@@ -674,9 +680,9 @@ type
     GroupBox34: TGroupBox;
     GroupBox35: TGroupBox;
     gbeQSL: TGroupBox;
-    GroupBox37: TGroupBox;
+    gbRadioOne: TGroupBox;
     GroupBox38: TGroupBox;
-    GroupBox39: TGroupBox;
+    gbRadioTwo: TGroupBox;
     gbProfiles: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox40: TGroupBox;
@@ -731,21 +737,21 @@ type
     lbleQSLUsr: TLabel;
     lbleQSLPass: TLabel;
     Label11: TLabel;
-    Label110: TLabel;
+    lbRadio2Mode: TLabel;
     Label111: TLabel;
     Label112: TLabel;
-    Label113: TLabel;
-    Label114: TLabel;
-    Label115: TLabel;
-    Label116: TLabel;
-    Label117: TLabel;
-    Label118: TLabel;
-    Label119: TLabel;
+    lbRadio2BW: TLabel;
+    lbRadio2Cw: TLabel;
+    lblHzCw2: TLabel;
+    lblHzSSB2: TLabel;
+    lbRadio2SSB: TLabel;
+    lbRadio2DATA: TLabel;
+    lblHzAM2: TLabel;
     Label12: TLabel;
-    Label120: TLabel;
-    Label121: TLabel;
-    Label122: TLabel;
-    Label123: TLabel;
+    lblHzFM2: TLabel;
+    lbRadio2AM: TLabel;
+    lbRadio2FM: TLabel;
+    lblHzDATA2: TLabel;
     Label124: TLabel;
     lblDevice1: TLabel;
     Label126: TLabel;
@@ -830,6 +836,10 @@ type
     lblHamLibSpeed: TLabel;
     lblHamLibWPM: TLabel;
     Label202: TLabel;
+    lblRig2Cmd: TLabel;
+    lblRig1DataMode: TLabel;
+    lblRig2DataMode: TLabel;
+    lblRig1cmd: TLabel;
     lbln1mmport: TLabel;
     lbln1mmaddr: TLabel;
     lblWinPort2: TLabel;
@@ -855,18 +865,18 @@ type
     Label24: TLabel;
     Label25: TLabel;
     Label27: TLabel;
-    Label28: TLabel;
-    Label29: TLabel;
-    Label30: TLabel;
-    Label31: TLabel;
-    Label32: TLabel;
-    Label33: TLabel;
-    Label34: TLabel;
-    Label35: TLabel;
-    Label36: TLabel;
-    Label37: TLabel;
-    Label38: TLabel;
-    Label39: TLabel;
+    lbRadio1Mode: TLabel;
+    lbRadio1BW: TLabel;
+    lbRadio1Cw: TLabel;
+    lbRadio1SSB: TLabel;
+    lbRadio1DATA: TLabel;
+    lbRadio1AM: TLabel;
+    lbRadio1FM: TLabel;
+    lblHzCw1: TLabel;
+    lblHzSSB1: TLabel;
+    lblHzAM1: TLabel;
+    lblHzFM1: TLabel;
+    lblHzDATA1: TLabel;
     Label52: TLabel;
     Label53: TLabel;
     Label54: TLabel;
@@ -1627,6 +1637,8 @@ begin
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
   cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreLoTWeQSL',chkIgnoreLoTW.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreQSL',chkIgnoreQSL.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreEdit',chkIgnoreEdit.Checked);
 
   cqrini.WriteString('prop','Url',edtCondxImageUrl.Text);
   cqrini.WriteBool('prop','AsImage',rbCondxAsImage.Checked);
@@ -2877,12 +2889,16 @@ begin
   edtRTTY1.Value := cqrini.ReadInteger('Band1', 'RTTY', 500);
   edtAM1.Value := cqrini.ReadInteger('Band1', 'AM', 3000);
   edtFM1.Value := cqrini.ReadInteger('Band1', 'FM', 2500);
+  edtCMD1.Text := cqrini.ReadString('Band1', 'Datacmd', 'RTTY');
+  edtDataMode1.Text := cqrini.ReadString('Band1', 'Datamode', 'RTTY');
 
   edtCW2.Value := cqrini.ReadInteger('Band2', 'CW', 500);
   edtSSB2.Value := cqrini.ReadInteger('Band2', 'SSB', 1800);
   edtRTTY2.Value := cqrini.ReadInteger('Band2', 'RTTY', 500);
   edtAM2.Value := cqrini.ReadInteger('Band2', 'AM', 3000);
   edtFM2.Value := cqrini.ReadInteger('Band2', 'FM', 2500);
+  edtCMD2.Text := cqrini.ReadString('Band2', 'Datacmd', 'RTTY');
+  edtDataMode2.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY');
 
   edtDigiModes.Text := cqrini.ReadString('Modes', 'Digi', '');
 
@@ -3142,6 +3158,8 @@ begin
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
   chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
   chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
+  chkIgnoreQSL.Checked   := cqrini.ReadBool('OnlineLog','IgnoreQSL',False);
+  chkIgnoreEdit.Checked  := cqrini.ReadBool('OnlineLog','IgnoreEdit',False);
   chkHrUpEnabledChange(nil);
 
   edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');
@@ -3156,11 +3174,6 @@ begin
   fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-  edtCW1.Width := 60;
-  edtSSB1.Width := 60;
-  edtRTTY1.Width := 60;
-  edtAM1.Width := 60;
-  edtFM1.Width := 60;
 
   chkSysUTCClick(nil);
   TRXChanged      := False;

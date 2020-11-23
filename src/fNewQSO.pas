@@ -141,6 +141,8 @@ type
     MenuItem58: TMenuItem;
     MenuItem63: TMenuItem;
     MenuItem94 : TMenuItem;
+    MenuItem95: TMenuItem;
+    MenuItem96: TMenuItem;
     mnueQSLView: TMenuItem;
     mnuRemoteModeN1MM: TMenuItem;
     mnuReminder: TMenuItem;
@@ -340,6 +342,7 @@ type
     Panel6: TPanel;
     pnlOffline: TPanel;
     popEditQSO: TPopupMenu;
+    popMode: TPopupMenu;
     sbNewQSO: TStatusBar;
     sbtneQSL : TSpeedButton;
     sgrdStatistic : TStringGrid;
@@ -444,6 +447,8 @@ type
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
+    procedure MenuItem95Click(Sender: TObject);
+    procedure MenuItem96Click(Sender: TObject);
     procedure mnuQrzClick(Sender: TObject);
     procedure mnuIK3QARClick(Sender: TObject);
     procedure mnuHamQthClick(Sender : TObject);
@@ -558,6 +563,7 @@ type
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
+    procedure popModePopup(Sender: TObject);
     procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnLocatorMapClick(Sender: TObject);
@@ -638,7 +644,7 @@ type
     procedure UpdateFKeyLabels;
     procedure ClearStatGrid;
     procedure LoadSettings;
-    procedure SaveSettings;
+
     procedure ChangeCallBookCaption;
     procedure SendSpot;
     procedure CreateAutoBackup();
@@ -646,7 +652,7 @@ type
     procedure FillDateTimeFields;
     procedure GoToRemoteMode(RemoteType : TRemoteModeType);
 
-    procedure CloseAllWindows;
+
     procedure onExcept(Sender: TObject; E: Exception);
     procedure DisplayCoordinates(latitude, Longitude : Currency);
     procedure DrawGrayline;
@@ -661,6 +667,7 @@ type
 
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
+    function RigCmd2DataMode(mode:String):String;
 
   public
     QTHfromCb   : Boolean;
@@ -690,6 +697,7 @@ type
     RepHead                :String;                //the heading for possible reply commands created
                                                   //includes message type #0 (change it)
     ContestNr             : integer;              //wsjtx 2.0 contest type definition in status msg
+    DBServerChanged       : Boolean;
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -720,6 +728,8 @@ type
     procedure InitializeCW;
     procedure RunVK(key_pressed: String);
     procedure RunST(script: String);
+    procedure CloseAllWindows;
+    procedure SaveSettings;
   end;
 
   type
@@ -832,6 +842,21 @@ begin
      if dmData.DebugLevel>=1 then writeln (data);
   end
 end;
+function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
+var
+   DatCmd,
+   n      :String;
+Begin
+   if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+
+   DatCmd :=  upcase(cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY'));
+   if (DatCmd = 'USB') or (DatCmd = 'LSB') then DatCmd := 'SSB'; //this is what RigControl responses
+
+   if cqrini.ReadBool('Modes', 'Rig2Data', False) and (mode = DatCmd) then
+            Result := cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+     else   Result := mode;
+end;
+
 
 procedure TDOKTabThread.Execute;
 var
@@ -1751,7 +1776,7 @@ begin
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
-
+  if cqrini.ReadBool('Modes', 'Rig2Data', False) then chkAutoMode.Font.Color:=clRed;
   dmUtils.UpdateHelpBrowser;
   dmSatellite.SetListOfSatellites(cmbSatellite); //load combo box lists
   dmSatellite.SetListOfPropModes(cmbPropagation);
@@ -2203,7 +2228,7 @@ begin
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
-          cmbMode.Text := mode;
+           cmbMode.Text := RigCmd2DataMode(mode);
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
@@ -2312,6 +2337,8 @@ begin
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Sec is: ',Sec,' ',tmrWsjtx.Interval,'=',wLoSpeed );
                                  tmrWsjtx.Interval := wLoSpeed;
                                  if dmData.DebugLevel>=1 then Writeln(' Timer << Setting UDP decode to FT LoSpeed ', tmrWsjtx.Interval);
+                                 //If USstate file needs commit,
+                                 //do it now and reset commit flag
                                 end;
                             end;
              end;
@@ -3070,7 +3097,7 @@ begin
 end;
 {
   The latest UDP message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
+  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/Network/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
   to construct a recipe to replicate an issue.
@@ -3340,7 +3367,12 @@ begin
   end;
   if fEditQSO and (not fromNewQSO) then
   begin
-    dmData.RefreshMainDatabase(id)
+    dmData.RefreshMainDatabase(id);
+    if cqrini.ReadBool('OnlineLog','IgnoreEdit',False) then
+     Begin
+       dmLogUpload.DisableOnlineLogSupport;
+       dmLogUpload.EnableOnlineLogSupport;
+     end;
   end;
   if not AnyRemoteOn then
     UnsetEditLabel;
@@ -4351,8 +4383,7 @@ end;
 
 procedure TfrmNewQSO.edtGridChange(Sender: TObject);
 begin
-  // this check is mainly for exports from remote.
-  // keying has own checking
+  // this check is mainly for exports from remote. keying has own checking
   edtGrid.Text := dmUtils.StdFormatLocator(edtGrid.Text);
   edtGrid.SelStart := Length(edtGrid.Text);
 end;
@@ -4608,26 +4639,33 @@ end;
 
 procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
 var
-  old : String;
+  //old : String;
+  LogOld   : Integer;
   LogId   : Integer;
   LogName : String;
 begin
+  DBServerChanged := false;
   with TfrmDBConnect.Create(self) do
   try
-    old := dmData.LogName;
-    OpenFromMenu := True;
+    LogOld   := dmData.qLogList.Fields[0].AsInteger;
+    //old := dmData.LogName;
+    OpenFromNewQSOMenu := True;
     ShowModal;
     if ModalResult = mrOK then
     begin
-      if old = dmData.qLogList.Fields[1].AsString then exit;
+      if not DBServerChanged then
+         if LogOld = dmData.qLogList.Fields[0].AsInteger then exit;
 
       LogId   := dmData.qLogList.Fields[0].AsInteger;
       LogName := dmData.qLogList.Fields[1].AsString;
 
-      frmDXCluster.StopAllConnections;
-      CloseAllWindows;         //fixes issue #163
-      SaveSettings;
-      dmData.CloseDatabases;
+      if not DBServerChanged then  //we did this at DBConnect
+       begin
+        frmDXCluster.StopAllConnections;
+        CloseAllWindows;         //fixes issue #163
+        SaveSettings;
+        dmData.CloseDatabases;
+       end;
 
       dmData.OpenDatabase(LogId);
       dmData.RefreshLogList(LogId);
@@ -4959,6 +4997,23 @@ end;
 procedure TfrmNewQSO.mnuHamQthClick(Sender : TObject);
 begin
   dmUtils.ShowHamQTHInBrowser(dmData.qQSOBefore.Fields[4].AsString)
+end;
+procedure TfrmNewQSO.popModePopup(Sender: TObject);
+begin
+    MenuItem96.RadioItem:= cqrini.ReadBool('Modes', 'Rig2Data', False);
+    MenuItem95.RadioItem:= not  MenuItem96.RadioItem;
+end;
+
+procedure TfrmNewQSO.MenuItem95Click(Sender: TObject);
+begin
+     chkAutoMode.Font.Color:=clDefault;
+     cqrini.WriteBool('Modes', 'Rig2Data', False);
+end;
+
+procedure TfrmNewQSO.MenuItem96Click(Sender: TObject);
+begin
+    chkAutoMode.Font.Color:=clRed;
+    cqrini.WriteBool('Modes', 'Rig2Data', True);
 end;
 
 procedure TfrmNewQSO.acNewQSOExecute(Sender: TObject);
@@ -5322,7 +5377,7 @@ begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) and (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
     begin
       if chkAutoMode.Checked then
-        cmbMode.Text := mode;
+        cmbMode.Text := RigCmd2DataMode(mode);
       cmbFreq.Text := freq;
       edtHisRST.SetFocus;
       edtHisRST.SelStart  := 1;
@@ -5801,9 +5856,6 @@ begin
     if dmData.DebugLevel>=1 then writeln(dmData.qQSOBefore.FieldByName('callsign').AsString,' ',
                                          dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString )
 end;
-
-
-
 procedure TfrmNewQSO.sbtnAttachClick(Sender: TObject);
 begin
   frmCallAttachment := TfrmCallAttachment.Create(self);
@@ -6587,7 +6639,7 @@ begin
     edtCall.Text := call;
     cmbFreq.Text := freq;
     if chkAutoMode.Checked then
-      cmbMode.Text := mode;
+       cmbMode.Text := RigCmd2DataMode(mode);
     freq := FloatToStr(etmp);
     if not FromRbn then
       mode := dmUtils.GetModeFromFreq(freq);
@@ -7351,10 +7403,19 @@ end;
 procedure TfrmNewQSO.DisableRemoteMode;
 var
   tries : integer = 10;
+  msg :String;
 begin
 
   if  mnuRemoteModeWsjt.Checked then
   begin
+      if not frmMonWsjtx.CanCloseFCCProcess  then
+       Begin
+        msg:='FCC US-states download an process is still ' +#13+
+             'running. Closing monitor will abort process'+#13+
+             'Do you want to close anyway?';
+        if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
+        frmMonWsjtx.CloseFCCProcess;
+       end;
       tmrWsjtx.Enabled := False;
       tmrWsjtSpd.Enabled:=false;
       while ((WsjtxDecodeRunning) and (tries > 0)) do

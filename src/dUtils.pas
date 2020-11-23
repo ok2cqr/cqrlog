@@ -199,8 +199,8 @@ type
     procedure  BandFromDbase;
     procedure UpdateHelpBrowser;
 
-    function  BandFromArray(tmp:Currency):string;
     function MyDefaultBrowser:String;
+    function  BandFromArray(tmp:Currency):string;
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;

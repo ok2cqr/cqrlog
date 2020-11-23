@@ -113,6 +113,8 @@ begin
   Bound := IntToHex(Random(MaxInt), 8) + '_Synapse_boundary';
   FileName := ChangeFileExt(Filename,'.tq8');
   mStat.Lines.Add('Uploading file ...');
+  mStat.Lines.Add('');
+  mStatChange(nil); //sometimes it happens that TMemo dees not scroll to end
   mStat.Lines.Add('Size: ');
   http := THTTPSend.Create;
   m    := TMemoryStream.Create;
@@ -156,6 +158,7 @@ begin
     else begin
       mStat.Lines.Add('Error: '+IntToStr(http.Sock.LastError))
     end;
+    mStatChange(nil); //sometimes it happens that TMemo dees not scroll to end
     if suc then
     begin
       date := FormatDateTime('yyyy-mm-dd',now);
@@ -229,6 +232,7 @@ begin
 
     if Aprocess.ExitCode = 0 then begin
       mStat.Lines.Add('Signed ...');
+      mStat.Lines.Add('');
       mStat.Lines.Add('If you did not see any errors, you can send signed file to LoTW website by' +
                       ' pressing Upload button');
       btnUpload.Enabled := True;

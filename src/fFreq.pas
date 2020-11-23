@@ -137,7 +137,7 @@ begin
   dbgrdFreq.Columns[2].Title.Caption := 'Begin';
   dbgrdFreq.Columns[3].Title.Caption := 'End';
   dbgrdFreq.Columns[4].Title.Caption := 'CW';
-  dbgrdFreq.Columns[5].Title.Caption := 'RTTY';
+  dbgrdFreq.Columns[5].Title.Caption := 'DATA';
   dbgrdFreq.Columns[6].Title.Caption := 'SSB';
   dbgrdFreq.Columns[7].Title.Caption := 'RX offset';
   dbgrdFreq.Columns[8].Title.Caption := 'TX offset';
