@@ -125,6 +125,8 @@ type
     chkOperator: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
+    chkRBNMAutoConn: TCheckBox;
+    chkRBNLink: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
     chkRot2AzMinMax: TCheckBox;
     chkShowOwnPos: TCheckBox;
@@ -420,9 +422,9 @@ type
     chkWAZ3: TCheckBox;
     chkWAZ4: TCheckBox;
     chkWAZ5: TCheckBox;
-    cl20db : TColorBox;
-    cl30db : TColorBox;
-    clOver30db : TColorBox;
+    cmbCl20db : TColorBox;
+    cmbCl30db : TColorBox;
+    cmbClOver30db : TColorBox;
     clBoxBandITU: TColorBox;
     clboxQSLIOTA: TColorBox;
     clboxNewITU: TColorBox;
@@ -495,7 +497,7 @@ type
     cmbXplanetColor: TColorBox;
     cmbLoTWBckColor: TColorBox;
     cmbDataBitsR1: TComboBox;
-    cl10db : TColorBox;
+    cmbCl10db : TColorBox;
     cmbModelRig1: TComboBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
@@ -707,6 +709,7 @@ type
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
+    lblRbnWindowOpen: TLabel;
     lblCWPort2: TLabel;
     lblHamlib: TLabel;
     lblHamlib1: TLabel;
@@ -791,20 +794,19 @@ type
     lblParity2: TLabel;
     lblDTR2: TLabel;
     lblRTS2: TLabel;
-    Label166 : TLabel;
-    Label167 : TLabel;
-    Label168 : TLabel;
-    Label169 : TLabel;
+    lblRbnLogin : TLabel;
+    lblRbnWatchFor : TLabel;
+    lblRbnLoginHint : TLabel;
+    lblRbnWatchForHint : TLabel;
     Label17: TLabel;
-    Label170 : TLabel;
-    Label171 : TLabel;
-    Label172 : TLabel;
-    Label173 : TLabel;
-    Label174 : TLabel;
-    Label175 : TLabel;
-    Label176 : TLabel;
-    Label177 : TLabel;
-    Label178 : TLabel;
+    lblRbnHeader : TLabel;
+    lblRbnSignal : TLabel;
+    lblRbnColor : TLabel;
+    lblRbnDb1 : TLabel;
+    lblRbnDb2 : TLabel;
+    lblRbnDb3 : TLabel;
+    lblRbnDb4 : TLabel;
+    lblRbnDeleteAfterSec : TLabel;
     Label179: TLabel;
     Label18: TLabel;
     Label180: TLabel;
@@ -817,8 +819,8 @@ type
     Label187: TLabel;
     Label188: TLabel;
     Label189: TLabel;
-    Label190 : TLabel;
-    Label191 : TLabel;
+    lnlRbnServer : TLabel;
+    lblRbnAdrFormat : TLabel;
     Label192: TLabel;
     lblK3NGPort: TLabel;
     lblK3NGSpeed: TLabel;
@@ -1043,6 +1045,7 @@ type
     procedure chkProfileLocatorClick(Sender: TObject);
     procedure chkProfileQTHClick(Sender: TObject);
     procedure chkProfileRigClick(Sender: TObject);
+    procedure chkRBNLinkChange(Sender: TObject);
     procedure chkSysUTCClick(Sender: TObject);
     procedure chkUseDXCColorsChange(Sender: TObject);
     procedure btnFirstLoadClick(Sender: TObject);
@@ -1591,13 +1594,15 @@ begin
   cqrini.WriteString('CallBook', 'CBUser', edtCbUser.Text);
   cqrini.WriteString('CallBook', 'CBPass', edtCbPass.Text);
 
-  cqrini.WriteInteger('RBN','10db',cl10db.Selected);
-  cqrini.WriteInteger('RBN','20db',cl20db.Selected);
-  cqrini.WriteInteger('RBN','30db',cl30db.Selected);
-  cqrini.WriteInteger('RBN','over30db',clOver30db.Selected);
+  cqrini.WriteInteger('RBN','10db',cmbCl10db.Selected);
+  cqrini.WriteInteger('RBN','20db',cmbCl20db.Selected);
+  cqrini.WriteInteger('RBN','30db',cmbCl30db.Selected);
+  cqrini.WriteInteger('RBN','over30db',cmbClOver30db.Selected);
   cqrini.WriteString('RBN','login',edtRBNLogin.Text);
   cqrini.WriteString('RBN','watch',edtWatchFor.Text);
   cqrini.WriteBool('RBN','AutoConnect',chkRBNAutoConn.Checked);
+  cqrini.WriteBool('RBN','AutoConnectM',chkRBNMAutoConn.Checked);
+  cqrini.WriteBool('RBN','AutoLink',chkRBNLink.Checked);
   if TryStrToInt(edtDelAfter.Text,int) then
     cqrini.WriteInteger('RBN','deleteAfter',int)
   else
@@ -2339,6 +2344,16 @@ begin
   dmData.InsertProfiles(cmbProfiles, False, chkProfileLocator.Checked,
     chkProfileQTH.Checked, chkProfileRig.Checked);
   cmbProfiles.ItemIndex := i;
+end;
+
+procedure TfrmPreferences.chkRBNLinkChange(Sender: TObject);
+begin
+  if chkRBNLink.Checked then
+   Begin
+     chkRBNAutoConn.Checked:=false;
+     chkRBNAutoConn.Enabled:=false;
+   end
+  else chkRBNAutoConn.Enabled:=true;
 end;
 
 procedure TfrmPreferences.chkSysUTCClick(Sender: TObject);
@@ -3096,13 +3111,15 @@ begin
   rbHamQTH.Checked := cqrini.ReadBool('Callbook', 'HamQTH', True);
   rbQRZ.Checked := cqrini.ReadBool('Callbook', 'QRZ', False);
 
-  cl10db.Selected        := cqrini.ReadInteger('RBN','10db',clWhite);
-  cl20db.Selected        := cqrini.ReadInteger('RBN','20db',clPurple);
-  cl30db.Selected        := cqrini.ReadInteger('RBN','30db',clMaroon);
-  clOver30db.Selected    := cqrini.ReadInteger('RBN','over30db',clRed);
+  cmbCl10db.Selected        := cqrini.ReadInteger('RBN','10db',clWhite);
+  cmbCl20db.Selected        := cqrini.ReadInteger('RBN','20db',clPurple);
+  cmbCl30db.Selected        := cqrini.ReadInteger('RBN','30db',clMaroon);
+  cmbClOver30db.Selected    := cqrini.ReadInteger('RBN','over30db',clRed);
   edtRBNLogin.Text       := cqrini.ReadString('RBN','login','');
   edtWatchFor.Text       := cqrini.ReadString('RBN','watch','');
   chkRBNAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnect',False);
+  chkRBNMAutoConn.Checked := cqrini.ReadBool('RBN','AutoConnectM',false);
+  chkRBNLink.Checked     := cqrini.ReadBool('RBN','AutoLink',false);
   edtDelAfter.Text       := cqrini.ReadString('RBN','deleteAfter','60');
   edtRBNServer.Text      := cqrini.ReadString('RBN','Server','telnet.reversebeacon.net:7000');
 
