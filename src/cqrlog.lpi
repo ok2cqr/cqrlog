@@ -877,13 +877,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit117>
-      <Unit118>
-        <Filename Value="fRemind.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmReminder"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit118>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
