@@ -7178,8 +7178,11 @@ end;
 
 procedure TfrmNewQSO.ReturnToNewQSO;
 begin
-  if edtCall.Enabled then
-    edtCall.SetFocus
+  if frmContest.Showing then
+      frmContest.edtCall.SetFocus
+    else
+      if edtCall.Enabled then
+         edtCall.SetFocus
 end;
 
 procedure TfrmNewQSO.RefreshInfoLabels;

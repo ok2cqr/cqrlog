@@ -158,6 +158,7 @@ object frmMain: TfrmMain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   LCLVersion = '1.8.2.0'
   object sbMain: TStatusBar

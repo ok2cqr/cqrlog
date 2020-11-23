@@ -8,6 +8,7 @@ object frmReminder: TfrmReminder
   ClientHeight = 128
   ClientWidth = 599
   OnClose = FormClose
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '1.6.0.4'
@@ -24,6 +25,7 @@ object frmReminder: TfrmReminder
     BorderSpacing.Bottom = 4
     MaxLength = 255
     OnKeyPress = RemiMemoLimit
+    OnKeyUp = FormKeyUp
     TabOrder = 0
   end
   object chRemi: TCheckBox

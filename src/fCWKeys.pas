@@ -59,6 +59,12 @@ procedure TfrmCWKeys.FormKeyUp(Sender : TObject; var Key : Word;
 begin
   if (Key >= VK_F1) and (Key <= VK_F10) and (Shift = []) then
                       frmNewQSO.FormKeyUp(Sender,Key,Shift);
+
+  if (key= VK_ESCAPE) then
+  begin
+    frmNewQSO.ReturnToNewQSO;
+    key := 0
+  end
 end;
 
 procedure TfrmCWKeys.FormShow(Sender: TObject);

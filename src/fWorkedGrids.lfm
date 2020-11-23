@@ -8,8 +8,10 @@ object frmWorkedGrids: TfrmWorkedGrids
   Caption = 'Worked locator grids'
   ClientHeight = 432
   ClientWidth = 721
+  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poDefault
   LCLVersion = '2.0.0.4'
@@ -43,6 +45,7 @@ object frmWorkedGrids: TfrmWorkedGrids
       '2M'
     )
     OnChange = BandSelectorChange
+    OnKeyUp = FormKeyUp
     Style = csDropDownList
     TabOrder = 0
   end
