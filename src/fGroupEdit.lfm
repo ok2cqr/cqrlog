@@ -1,13 +1,13 @@
 object frmGroupEdit: TfrmGroupEdit
   Left = 454
-  Height = 146
+  Height = 150
   Top = 357
   Width = 436
   ActiveControl = btnApply
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Group edit'
-  ClientHeight = 146
+  ClientHeight = 150
   ClientWidth = 436
   Icon.Data = {
     BE1000000000010001002020000001002000A810000016000000280000002000
@@ -148,56 +148,41 @@ object frmGroupEdit: TfrmGroupEdit
   }
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.8.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     Left = 0
-    Height = 108
+    Height = 112
     Top = 0
     Width = 436
     Align = alClient
-    ClientHeight = 106
+    ClientHeight = 110
     ClientWidth = 434
     TabOrder = 0
-    object Label1: TLabel
+    object lblField: TLabel
       AnchorSideLeft.Control = GroupBox1
       AnchorSideTop.Control = cmbField
       AnchorSideTop.Side = asrCenter
       Left = 12
-      Height = 17
-      Top = 9
-      Width = 35
+      Height = 15
+      Top = 10
+      Width = 34
       BorderSpacing.Left = 12
       Caption = 'Field:'
       ParentColor = False
+      OnClick = lblFieldClick
     end
-    object Label2: TLabel
-      AnchorSideLeft.Control = Label1
+    object lblValue: TLabel
+      AnchorSideLeft.Control = lblField
       AnchorSideTop.Control = cmbValue
       AnchorSideTop.Side = asrCenter
       Left = 12
-      Height = 17
+      Height = 15
       Top = 44
-      Width = 40
-      Caption = 'Value:'
-      ParentColor = False
-    end
-    object lblInfo: TLabel
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Side = asrBottom
-      AnchorSideBottom.Control = GroupBox1
-      AnchorSideBottom.Side = asrBottom
-      Left = 197
-      Height = 17
-      Top = 83
       Width = 41
-      Anchors = [akLeft, akBottom]
-      BorderSpacing.Top = 6
-      BorderSpacing.Bottom = 6
-      Caption = 'lblInfo'
+      Caption = 'Value:'
       ParentColor = False
     end
     object cmbField: TComboBox
@@ -221,29 +206,33 @@ object frmGroupEdit: TfrmGroupEdit
         'RSt received'
         'Name'
         'QTH'
-        'QSL sent'
-        'QSL received'
-        'QSL via'
         'Power'
         'ITU'
         'WAZ'
         'County'
         'State'
-        'LoTW QSL sent'
-        'LoTW QSL received'
         'Award'
         'IOTA'
         'Comment to QSO'
         'My locator'
         'Locator'
         'QTH Profile'
+        'QSL via'
+        'QSL sent'
         'QSL sent date'
+        'QSL received'
         'QSL rcvd date'
+        'LoTW QSL sent'
+        'LoTW QSL sent date'
+        'LoTW QSL received'
+        'LoTW QSL received date'
         'eQSL sent'
         'eQSL sent date'
         'eQSL rcvd'
         'eQSL rcvd date'
         'Contest name'
+        'Propagation mode'
+        'Satellite name'
       )
       OnChange = cmbFieldChange
       Style = csDropDownList
@@ -254,13 +243,45 @@ object frmGroupEdit: TfrmGroupEdit
       AnchorSideTop.Control = cmbField
       AnchorSideTop.Side = asrBottom
       Left = 96
-      Height = 34
+      Height = 33
       Top = 35
       Width = 312
       BorderSpacing.Top = 3
       ItemHeight = 0
       OnChange = cmbValueChange
       TabOrder = 1
+    end
+    object pnlGrpEdt: TPanel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = cmbValue
+      AnchorSideTop.Side = asrBottom
+      Left = 6
+      Height = 32
+      Top = 72
+      Width = 422
+      BorderSpacing.Top = 4
+      BorderWidth = 1
+      BorderStyle = bsSingle
+      ClientHeight = 30
+      ClientWidth = 420
+      TabOrder = 2
+      object lblInfo: TLabel
+        AnchorSideLeft.Control = pnlGrpEdt
+        AnchorSideLeft.Side = asrCenter
+        AnchorSideTop.Control = pnlGrpEdt
+        AnchorSideTop.Side = asrCenter
+        AnchorSideBottom.Control = GroupBox1
+        AnchorSideBottom.Side = asrBottom
+        Left = 210
+        Height = 1
+        Top = 15
+        Width = 1
+        BorderSpacing.Top = 6
+        BorderSpacing.Bottom = 12
+        Layout = tlCenter
+        ParentColor = False
+      end
     end
   end
   object Panel1: TPanel
@@ -269,7 +290,7 @@ object frmGroupEdit: TfrmGroupEdit
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 38
-    Top = 108
+    Top = 112
     Width = 436
     Align = alBottom
     BevelOuter = bvNone

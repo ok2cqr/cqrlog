@@ -40,6 +40,8 @@ type
     cmbeQSL_qslr : TComboBox;
     cmbeQSL_qsls : TComboBox;
     cmbMode: TComboBox;
+    cmbPropMode: TComboBox;
+    cmbSatName: TComboBox;
     cmbQSL_S: TComboBox;
     cmbQSL_R: TComboBox;
     cmbProfile: TComboBox;
@@ -75,6 +77,8 @@ type
     edtITU: TEdit;
     gbCallsign: TGroupBox;
     gbIota: TGroupBox;
+    gbPropMode: TGroupBox;
+    gbSatName: TGroupBox;
     gbRemarks: TGroupBox;
     gbAward: TGroupBox;
     gbMyLoc: TGroupBox;
@@ -110,8 +114,8 @@ type
     lblSentL: TLabel;
     lblSortBy: TLabel;
     lblEqsl : TLabel;
-    Label18 : TLabel;
-    Label19 : TLabel;
+    lblPwrTo : TLabel;
+    lblPwrFrom : TLabel;
     Label2: TLabel;
     Label20: TLabel;
     Label3: TLabel;
@@ -122,6 +126,8 @@ type
     Label9: TLabel;
     dlgOpen: TOpenDialog;
     rbExactlyDarcDok: TRadioButton;
+    rbExactlyPropMode: TRadioButton;
+    rbExactlySatName: TRadioButton;
     rbIncludeDarcDok: TRadioButton;
     rbExactlyCounty: TRadioButton;
     rbExactlyMyLoc: TRadioButton;
@@ -134,6 +140,8 @@ type
     rbExactlyCall: TRadioButton;
     rbIncludeCounty: TRadioButton;
     rbIncludeMyLoc: TRadioButton;
+    rbIncludePropMode: TRadioButton;
+    rbIncludeSatName: TRadioButton;
     rbIncludeRem: TRadioButton;
     rbIncludeLoc: TRadioButton;
     rbIncludeQth: TRadioButton;
@@ -147,6 +155,9 @@ type
     procedure btnSelectDXCCClick(Sender: TObject);
     procedure chkRememberChange(Sender: TObject);
     procedure cmbBandSelectorChange(Sender: TObject);
+    procedure cmbContestNameExit(Sender: TObject);
+    procedure cmbPropModeExit(Sender: TObject);
+    procedure cmbSatNameExit(Sender: TObject);
     procedure edtCallSignChange(Sender: TObject);
     procedure edtLocatorChange(Sender: TObject);
     procedure edtMyLocChange(Sender: TObject);
@@ -162,7 +173,6 @@ type
     tmp : String;
   end;
 const
-  C_CONTEST_LIST_FILE_NAME = 'ContestName.tab';
   C_FILTER_LAST_SETTINGS_FILE_NAME = 'FilterSettings.fil';
 var
   frmFilter: TfrmFilter;
@@ -171,7 +181,7 @@ implementation
 {$R *.lfm}
 
 { TfrmFilter }
-uses dData, dUtils,fSelectDXCC, dMembership, uMyini;
+uses dData, dUtils,fSelectDXCC, dMembership, uMyini,dSatellite;
 
 procedure TfrmFilter.btnOKClick(Sender: TObject);
 var
@@ -368,6 +378,20 @@ begin
   if ((edtPwrFrom.Text <> '') and (edtPwrTo.Text <> '')) then  tmp := tmp + ' (pwr >= ' + edtPwrFrom.Text + ') AND '+
                                                                             ' (pwr <= ' + edtPwrTo.Text + ') AND';
 
+  if (cmbPropMode.Text <> '') then
+                                  begin
+                                    if rbExactlyPropMode.Checked then
+                                      tmp := tmp + ' (prop_mode = ' + QuotedStr(cmbPropMode.Text)+') AND'
+                                    else
+                                      tmp := tmp + ' (prop_mode LIKE ''%' + cmbPropMode.Text + '%'') AND';
+                                  end;
+  if (cmbSatName.Text <> '') then
+                                  begin
+                                    if rbExactlySatName.Checked then
+                                      tmp := tmp + ' (satellite = ' + QuotedStr(cmbSatName.Text)+') AND'
+                                    else
+                                      tmp := tmp + ' (satellite LIKE ''%' + cmbSatName.Text + '%'') AND';
+                                  end;
 
   if cmbMembers.ItemIndex >0 then tmp := tmp + ' (club_nr'+IntToStr(cmbMembers.ItemIndex)+' <> '+
                                                QuotedStr('')+') AND';
@@ -438,50 +462,29 @@ procedure TfrmFilter.btnCancelClick(Sender: TObject);
 begin
   Close
 end;
-
 procedure TfrmFilter.FormCreate(Sender: TObject);
-var
-   ListOfContests : TStringList;
-   i : integer;
-   s: string;
-   Contestfile :TextFile;
 begin
+  dmUtils.InsertModes(cmbMode);
+  cmbMode.Items.Insert(0,''); //to be sure there is empty line at start
   dmUtils.InsertBands(cmbBandSelector);
-  cmbBandSelector.Items.Insert(0, ''); //to be sure
-  // loading the contest list from ../ContestNames.tab
-  // Format of File   CONTEST_ID|CONTEST_DESCRIPTION
-  // see ADIF 3.0.9 http://www.adif.org/309/ADIF_309.htm#Contest_ID
-  ListOfContests:= TStringList.Create;
-  ListOfContests.Clear;
-  ListOfContests.Sorted:=false;
-  if FileExists(dmData.HomeDir + C_CONTEST_LIST_FILE_NAME) then
-     Begin
-       AssignFile(Contestfile, dmData.HomeDir + C_CONTEST_LIST_FILE_NAME);
-       try
-        reset(Contestfile);
-       while not eof(Contestfile) do
-       begin
-        readln(Contestfile, s);
-        ListOfContests.Add(ExtractDelimited(1,s,['|']));
-       end;
-       CloseFile(Contestfile);
-        except
-          on E: EInOutError do
-           writeln('Contestfile reading error. Details: ', E.Message);
-       end;
-     end;
-  //Add strings that wsjt-x may use at contest_name column
-  ListOfContests.Add('NA VHF');
-  ListOfContests.Add('EU VHF');
-  ListOfContests.Add('FIELD DAY');
-  ListOfContests.Add('RTTY RU');
-  ListOfContests.Add('FOX-QSO');
-  ListOfContests.Add('HOUND-QSO');
-  ListOfContests.Sort;
-  cmbContestName.Clear;
-  cmbContestName.Items := ListOfContests;
-  cmbContestName.Items.Insert(0,''); //to be sure there is empty line at start
-  ListOfContests.Free;
+  cmbBandSelector.Items.Insert(0, '');
+  dmUtils.InsertContests(cmbContestName);
+  cmbContestName.Items.Insert(0,'');
+  cmbContestName.Items.Add('NA VHF'); //Add strings that wsjt-x may use at contest_name column
+  cmbContestName.Items.Add('EU VHF');
+  cmbContestName.Items.Add('FIELD DAY');
+  cmbContestName.Items.Add('RTTY RU');
+  cmbContestName.Items.Add('FOX-QSO');
+  cmbContestName.Items.Add('HOUND-QSO');
+  TStringList(cmbContestName.Items).Sort;
+  dmSatellite.SetListOfPropModes(cmbPropMode);
+  cmbPropMode.Items.Insert(0, '');
+  dmSatellite.SetListOfSatellites(cmbSatName);
+  cmbSatName.Items.Insert(0, '');
+  dmData.InsertProfiles(cmbProfile,True);
+  cmbProfile.Text := dmData.GetDefaultProfileText;
+  cmbProfile.Items.Insert(0,'Any profile');
+  cmbProfile.ItemIndex := 0;
 end;
 //actually form create and show are common procedure as filter is opened in showModal and it always
 //creates and shows itself in every opening
@@ -495,13 +498,7 @@ begin
   cmbQSL_S.Items.Add('Empty');
   dmUtils.InsertQSL_R(cmbQSL_R);
   cmbQSL_R.Items.Add('Empty');
-  dmUtils.InsertModes(cmbMode);
-  cmbMode.Items.Insert(0,'');
 
-  dmData.InsertProfiles(cmbProfile,True);
-  cmbProfile.Text := dmData.GetDefaultProfileText;
-  cmbProfile.Items.Insert(0,'Any profile');
-  cmbProfile.ItemIndex := 0;
   cmbMembers.Items.Add('');
   if dmMembership.Club1.Name <> '' then
     cmbMembers.Items.Add('1;'+dmMembership.Club1.Name+';'+dmMembership.Club1.LongName);
@@ -574,6 +571,21 @@ begin
       end;
     end;
 
+end;
+
+procedure TfrmFilter.cmbContestNameExit(Sender: TObject);
+begin
+    cmbContestName.Text:=ExtractWord(1,cmbContestName.Text,['|'])
+end;
+
+procedure TfrmFilter.cmbPropModeExit(Sender: TObject);
+begin
+    cmbPropMode.Text:=ExtractWord(1,cmbPropMode.Text,['|']);
+end;
+
+procedure TfrmFilter.cmbSatNameExit(Sender: TObject);
+begin
+    cmbSatName.Text:=ExtractWord(1,cmbSatName.Text,['|']);
 end;
 
 procedure TfrmFilter.edtCallSignChange(Sender: TObject);
