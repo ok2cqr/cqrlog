@@ -1434,41 +1434,47 @@ begin
   end;
   if band = '23CM' then
   begin
-    Result := '1295.150';
+    if mode = 'CW' then
+      Result := '1296.150'
+    else
+      Result := '1296.200';
     exit;
   end;
   if band = '13CM' then
   begin
-    Result := '2300.000';
+    if mode = 'CW' then
+      Result := '2320.150'
+    else
+      Result := '2320.200';
     exit;
   end;
   if band = '9CM' then
   begin
-    Result := '3500.000';
+    Result := '3400.200';
     exit;
   end;
   if band = '6CM' then
   begin
-    Result := '5650.000';
+    Result := '5760.200';
     exit;
   end;
   if band = '3CM' then
   begin
-    Result := '10100.00';
+    Result := '10368.200';
     exit;
   end;
   if band = '1.25CM' then
   begin
-    Result := '24000.00';
+    Result := '24048.200';
     exit;
   end;
   if band = '6MM' then
   begin
-    Result := '47000';
+    Result := '47088';
     exit;
   end;
   if band = '4MM' then
-    Result := '75000';
+    Result := '77500.200';
 end;
 
 

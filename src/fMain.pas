@@ -2395,6 +2395,7 @@ begin
   ChangeVis('STX_STRING',cqrini.ReadBool('Columns', 'ContMsgSent', False));
   ChangeVis('SRX_STRING',cqrini.ReadBool('Columns', 'ContMsgRcvd', False));
   ChangeVis('DOK',cqrini.ReadBool('Columns', 'DarcDok', False));
+  ChangeVis('OPERATOR',cqrini.ReadBool('Columns', 'Operator', False));
 end;
 
 procedure TfrmMain.MarkQSLSend(symbol: string);

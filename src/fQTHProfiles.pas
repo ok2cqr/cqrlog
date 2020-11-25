@@ -75,6 +75,7 @@ begin
 
   dbgrdProfiles.Columns[0].Visible := False;
   //dbgrdProfiles.Columns[6].Visible := False
+  btnEdit.Enabled:=(dmData.qProfiles.RecordCount <> 0);
 end;
 
 procedure TfrmQTHProfiles.LocateProfile(profile : String);

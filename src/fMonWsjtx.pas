@@ -394,7 +394,7 @@ begin
              HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
   end;
   SendReply(HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
-  frmNewQSO.GetCallInfo(DblClickCall);
+  frmNewQSO.GetCallInfo(DblClickCall,CurMode,sgMonitor.Cells[1,sgMonitor.row]);
 end;
 
 procedure TfrmMonWsjtx.FormClose(Sender: TObject; var CloseAction: TCloseAction);
