@@ -29,14 +29,16 @@ type
     cmbField: TComboBox;
     cmbValue: TComboBox;
     GroupBox1: TGroupBox;
-    Label1: TLabel;
-    Label2: TLabel;
+    lblField: TLabel;
+    lblValue: TLabel;
     lblInfo: TLabel;
     Panel1: TPanel;
+    pnlGrpEdt: TPanel;
     procedure btnApplyClick(Sender: TObject);
     procedure cmbFieldChange(Sender: TObject);
     procedure cmbValueChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure lblFieldClick(Sender: TObject);
   private
     { private declarations }
   public
@@ -51,7 +53,7 @@ implementation
 {$R *.lfm}
 
 { TfrmGroupEdit }
-uses dUtils, dData, dDXCC, fMain;
+uses dUtils, dData, dDXCC, fMain,dSatellite;
 
 procedure TfrmGroupEdit.cmbFieldChange(Sender: TObject);
 begin
@@ -62,51 +64,63 @@ begin
            dmUtils.InsertModes(cmbValue);
            cmbValue.Style:=csDropDownList;
          end;
-    10 : begin
+    22 : begin
            dmUtils.InsertQSL_S(cmbValue);
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
          end;
-    11 : begin
+    24 : begin
            dmUtils.InsertQSL_R(cmbValue);
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
          end;
- 18,28 : begin
+ 26,30 : begin
            cmbValue.Items.Add('Y');
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
          end;
-    19 : begin
+    28 : begin
            cmbValue.Items.Add('L');
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
          end;
-    25 : begin
+    20 : begin
            dmData.InsertProfiles(cmbValue,False);
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
          end;
-    30 : begin
+    32 : begin
            cmbValue.Items.Add('E');
            cmbValue.Items.Add('N');
            cmbValue.ItemIndex := 0;
            cmbValue.Style:=csDropDownList;
          end;
-    32 : begin
+    34 : begin
            dmUtils.InsertContests(cmbValue);
            cmbValue.Style:=csDropDown;
          end;
+    35 : begin
+           dmSatellite.SetListOfPropModes(cmbValue);
+           cmbValue.Style:=csDropDown;
+         end;
+    36 : begin
+           dmSatellite.SetListOfSatellites(cmbValue);
+           cmbValue.Style:=csDropDown;
+         end;
    end;
+   pnlGrpEdt.Color:=clRed;
    lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+   pnlGrpEdt.Repaint;
    lblInfo.Repaint;
 end;
 
 procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
 begin
+  pnlGrpEdt.Color:=clRed;
   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  pnlGrpEdt.Repaint;
   lblInfo.Repaint;
 
   if (cmbField.ItemIndex=23) or (cmbField.ItemIndex=24) then
@@ -116,16 +130,24 @@ begin
   end;
 end;
 
-{eQSL sent        28
- eQSL sent date   29
- eQSL rcvd        30
- eQSL rcvd date   31
- }
 procedure TfrmGroupEdit.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
-  lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  pnlGrpEdt.Color:=clDefault;
+  if Selected then
+     lblInfo.Caption := 'Apply will afftect to selected qso(s)'
+    else
+     if dmData.IsFilter then
+       lblInfo.Caption := 'Apply will afftect to filtered qso(s)'
+      else
+       lblInfo.Caption := 'Apply will afftect to whole log';
+  pnlGrpEdt.Repaint;
   lblInfo.Repaint;
+end;
+
+procedure TfrmGroupEdit.lblFieldClick(Sender: TObject);
+begin
+
 end;
 
 procedure TfrmGroupEdit.btnApplyClick(Sender: TObject);
@@ -173,7 +195,9 @@ var
 
 
     inc(nr);
+    pnlGrpEdt.Color:=clYellow;
     lblInfo.Caption := 'Working .... QSO nr. ' + IntToStr(nr);
+    pnlGrpEdt.Repaint;
     lblInfo.Repaint
   end;
   
@@ -264,37 +288,10 @@ begin
            sql := 'qth='+QuotedStr(cmbValue.Text)
          end;
     10 : begin
-           if (cmbValue.ItemIndex=0) and (Application.MessageBox('Dou you really want to clear QSL_S field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
-           begin
-             cmbValue.SetFocus;
-             exit
-           end;
-           sql := 'qsl_s='+QuotedStr(cmbValue.Text)
-         end;
-    11 : begin
-           if (cmbValue.ItemIndex=0) and (Application.MessageBox('Dou you really want to clear QSL_R field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
-           begin
-             cmbValue.SetFocus;
-             exit
-           end;
-           sql := 'qsl_r='+QuotedStr(cmbValue.Text)
-         end;
-    12 : begin
-           if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear QSL via field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
-           begin
-             cmbValue.SetFocus;
-             exit
-           end;
-           sql := 'qsl_via='+QuotedStr(UpperCase(cmbValue.Text))
-         end;
-    13 : begin
            if (cmbValue.Text<>'') then
              sql := 'pwr='+QuotedStr(UpperCase(cmbValue.Text))
          end;
-    14 : begin
+    11 : begin
            if not (TryStrToInt(cmbValue.Text,zone) and (zone > 0) and (zone < 76)) then
            begin
              Application.MessageBox('Please enter correct ITU zone!','Error ...', mb_OK+mb_IconError);
@@ -303,7 +300,7 @@ begin
            end;
            sql := 'itu='+cmbValue.Text
          end;
-    15 : begin
+    12 : begin
            if not (TryStrToInt(cmbValue.Text,zone) and (zone > 0) and (zone < 41)) then
            begin
              Application.MessageBox('Please enter correct WAZ zone!','Error ...', mb_OK+mb_IconError);
@@ -312,7 +309,7 @@ begin
            end;
            sql := 'waz='+cmbValue.Text
          end;
-    16 : begin
+    13 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear County field?',
               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
            begin
@@ -321,7 +318,7 @@ begin
            end;
            sql := 'county='+QuotedStr(cmbValue.Text)
          end;
-    17 : begin
+    14 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear State field?',
               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
            begin
@@ -330,21 +327,8 @@ begin
            end;
            sql := 'state='+QuotedStr(UpperCase(cmbValue.Text))
          end;
-    18 : begin
-           if cmbValue.Text = 'Y' then
-             sql := 'lotw_qsls='+QuotedStr(cmbValue.Text)+',lotw_qslsdate='+
-                    QuotedStr(dmUtils.MyDateToStr(now))
-           else
-             sql := 'lotw_qsls='+QuotedStr('')+',lotw_qslsdate=null'
-         end;
-    19 : begin
-           if cmbValue.Text = 'Y' then
-             sql := 'lotw_qslr='+QuotedStr(cmbValue.Text)+',lotw_qslrdate='+
-                    QuotedStr(dmUtils.MyDateToStr(now))
-           else
-             sql := 'lotw_qslr='+QuotedStr('')+',lotw_qslrdate=null';
-         end;
-    20 : begin
+
+    15 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Award field?',
               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
            begin
@@ -353,7 +337,7 @@ begin
            end;
            sql := 'award='+QuotedStr(cmbValue.Text)
          end;
-    21 : begin
+    16 : begin
            if not ((cmbValue.Text <> '') and dmUtils.IsIOTAOK(cmbValue.Text)) then
            begin
              Application.MessageBox('Please enter correct IOTA!','Error ...', mb_OK+mb_IconError);
@@ -362,7 +346,7 @@ begin
            end;
            sql := 'iota='+QuotedStr(UpperCase(cmbValue.Text))
          end;
-    22 : begin
+    17 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Comment to QSO field?',
               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
            begin
@@ -370,28 +354,28 @@ begin
              exit
            end;
            sql := 'remarks='+QuotedStr(cmbValue.Text)
-        end;
-   23 : begin
+          end;
+     18 : begin
           if (cmbValue.Text <> '') then
-          begin
-            if not dmUtils.IsLocOK(cmbValue.Text) then
-            begin
-              Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
-              cmbValue.SetFocus;
-              exit
+           begin
+             if not dmUtils.IsLocOK(cmbValue.Text) then
+              begin
+               Application.MessageBox('Please enter correct locator!','Error ...', mb_OK+mb_IconError);
+               cmbValue.SetFocus;
+               exit
+              end
             end
-          end
-          else begin
+           else begin
              if (Application.MessageBox('Dou you really want to clear My locator field?',
               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
             begin
               cmbValue.SetFocus;
               exit
             end
+           end;
+            sql := 'my_loc='+QuotedStr(cmbValue.Text)
           end;
-          sql := 'my_loc='+QuotedStr(cmbValue.Text)
-        end;
-   24 : begin
+   19 : begin
           if (cmbValue.Text <> '') then
           begin
             if not dmUtils.IsLocOK(cmbValue.Text) then
@@ -411,11 +395,29 @@ begin
           end;
           sql := 'loc='+QuotedStr(cmbValue.Text)
         end;
-   25 : begin
+   20 : begin
           sql := 'profile=' + IntToStr(dmData.GetNRFromProfile(cmbValue.Text))
         end;
-   26 : begin
-          if (cmbValue.Text <> '') and (not dmUtils.IsDateOK(cmbValue.Text)) then
+   21 : begin
+          if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear QSL via field?',
+             'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+          begin
+            cmbValue.SetFocus;
+            exit
+          end;
+          sql := 'qsl_via='+QuotedStr(UpperCase(cmbValue.Text))
+        end;
+   22 : begin
+          if (cmbValue.ItemIndex=0) and (Application.MessageBox('Dou you really want to clear QSL_S field?',
+             'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+          begin
+            cmbValue.SetFocus;
+            exit
+          end;
+          sql := 'qsl_s='+QuotedStr(cmbValue.Text)
+        end;
+   23 : begin
+          if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
             Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
             cmbValue.SetFocus;
@@ -426,8 +428,17 @@ begin
           else
             sql := 'qsls_date='+QuotedStr(cmbValue.Text)
         end;
-   27 : begin
-          if (cmbValue.Text <> '') and (not dmUtils.IsDateOK(cmbValue.Text)) then
+   24 : begin
+          if (cmbValue.ItemIndex=0) and (Application.MessageBox('Dou you really want to clear QSL_R field?',
+             'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+          begin
+            cmbValue.SetFocus;
+            exit
+          end;
+          sql := 'qsl_r='+QuotedStr(cmbValue.Text)
+        end;
+   25 : begin
+          if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
             Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
             cmbValue.SetFocus;
@@ -438,58 +449,98 @@ begin
           else
             sql := 'qslr_date='+QuotedStr(cmbValue.Text)
         end;
+   26 : begin
+          if cmbValue.Text = 'Y' then
+            sql := 'lotw_qsls='+QuotedStr(cmbValue.Text)+',lotw_qslsdate='+
+                   QuotedStr(dmUtils.MyDateToStr(now))
+          else
+            sql := 'lotw_qsls="",lotw_qslsdate=null'
+        end;
+   27 : begin
+          if (not dmUtils.IsDateOK(cmbValue.Text))then
+          begin
+            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            cmbValue.SetFocus;
+            exit
+          end
+          else
+            sql := 'lotw_qsls='+QuotedStr('Y')+',lotw_qslsdate='+
+                   QuotedStr(cmbValue.Text)
+        end;
    28 : begin
+          if cmbValue.Text = 'Y' then
+            sql := 'lotw_qslr='+QuotedStr(cmbValue.Text)+',lotw_qslrdate='+
+                   QuotedStr(dmUtils.MyDateToStr(now))
+          else
+            sql := 'lotw_qslr="",lotw_qslrdate=null';
+        end;
+
+   29 : begin
+          if (not dmUtils.IsDateOK(cmbValue.Text))then
+          begin
+            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            cmbValue.SetFocus;
+            exit
+          end
+          else
+            sql := 'lotw_qslr='+QuotedStr('E')+',lotw_qslrdate='+
+                   QuotedStr(cmbValue.Text)
+        end;
+   30 : begin
           if cmbValue.Text = 'Y' then
             sql := 'eqsl_qsl_sent='+QuotedStr(cmbValue.Text)+',eqsl_qslsdate='+
                    QuotedStr(dmUtils.MyDateToStr(now))
           else
-            sql := 'eqsl_qsl_sent=null,eqsl_qslsdate=null';
+            sql := 'eqsl_qsl_sent="",eqsl_qslsdate=null';
         end;
-   29 : begin
-          if (cmbValue.Text <> '') and (not dmUtils.IsDateOK(cmbValue.Text)) then
+   31 : begin
+          if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
             Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
             cmbValue.SetFocus;
             exit
-          end;
-          if cmbValue.Text = '' then
-            sql := 'eqsl_qsl_sent=null,eqsl_qslsdate=null'
+          end
           else
             sql := 'eqsl_qsl_sent='+QuotedStr('Y')+',eqsl_qslsdate='+
                    QuotedStr(cmbValue.Text)
         end;
-   30 : begin
+   32 : begin
           if cmbValue.Text = 'E' then
             sql := 'eqsl_qsl_rcvd='+QuotedStr(cmbValue.Text)+',eqsl_qslrdate='+
                    QuotedStr(dmUtils.MyDateToStr(now))
           else
-            sql := 'eqsl_qsl_rcvd=null,eqsl_qslrdate=null'
+            sql := 'eqsl_qsl_rcvd="",eqsl_qslrdate=null'
         end;
-   31 : begin
-          if (cmbValue.Text <> '') and (not dmUtils.IsDateOK(cmbValue.Text)) then
+   33 : begin
+          if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
             Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
             cmbValue.SetFocus;
             exit
-          end;
-          if cmbValue.Text = '' then
-            sql := 'eqsl_qsl_rcvd=null,eqsl_qslrdate=null'
+          end
           else
             sql := 'eqsl_qsl_rcvd='+QuotedStr('E')+',eqsl_qslrdate='+
                    QuotedStr(cmbValue.Text)
         end;
-   32 : begin
+   34 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Contest name field?',
               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
              exit;
            sql := 'contestname='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
          end;
+   35 : begin
+           if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Propagation mode field?',
+              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+             exit;
+           sql := 'prop_mode='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
+         end;
+   36 : begin
+           if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Satellite field?',
+              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+             exit;
+           sql := 'satellite='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
+         end;
 
-{eQSL sent        28
- eQSL sent date   29
- eQSL rcvd        30
- eQSL rcvd date   31
- }
   end;
   if sql = '' then exit;
   try
@@ -519,6 +570,8 @@ begin
     frmMain.acRefresh.Execute
   end;
   lblInfo.Caption := 'Edit done! (Press Cancel to exit)';
+  pnlGrpEdt.Color:= clLime;
+  pnlGrpEdt.Repaint;
   lblInfo.Repaint;
 end;
 
