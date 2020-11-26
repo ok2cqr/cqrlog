@@ -3535,7 +3535,7 @@ end;
 
 procedure TdmData.MarkAllAsUploadedToeQSL;
 const
-  C_UPD = 'update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s';
+  C_UPD = 'update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s where (eqsl_qsl_sent="" and eqsl_qslsdate is NULL)';
 begin
   Q1.Close;
   if trQ1.Active then
@@ -3554,7 +3554,7 @@ begin
 end;
 procedure TdmData.MarkAllAsUploadedToLoTW;
 const
-  C_UPD = 'update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s';
+  C_UPD = 'update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s where (lotw_qsls="" and lotw_qslsdate is NULL)';
 begin
   Q1.Close;
   if trQ1.Active then

@@ -3584,6 +3584,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 6
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 0
           Value = 500
         end
@@ -3621,6 +3622,7 @@ object frmPreferences: TfrmPreferences
           Width = 90
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 1
           Value = 1800
         end
@@ -3657,6 +3659,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 12
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 2
           Value = 500
         end
@@ -3692,6 +3695,7 @@ object frmPreferences: TfrmPreferences
           Width = 90
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 3
           Value = 3000
         end
@@ -3727,6 +3731,7 @@ object frmPreferences: TfrmPreferences
           Width = 90
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 4
           Value = 2500
         end
@@ -3843,6 +3848,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 6
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 0
           Value = 500
         end
@@ -3880,6 +3886,7 @@ object frmPreferences: TfrmPreferences
           Width = 90
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 1
           Value = 1800
         end
@@ -3916,6 +3923,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 12
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 2
           Value = 500
         end
@@ -3951,6 +3959,7 @@ object frmPreferences: TfrmPreferences
           Width = 90
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 3
           Value = 3000
         end
@@ -3986,6 +3995,7 @@ object frmPreferences: TfrmPreferences
           Width = 90
           Increment = 50
           MaxValue = 100000
+          MinValue = -1
           TabOrder = 4
           Value = 2500
         end
