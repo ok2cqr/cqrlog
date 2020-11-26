@@ -110,7 +110,7 @@ uses dUtils, dData, uMyIni, dDXCluster, fNewQSO;
 procedure TRBNThread.lConnect(aSocket: TLSocket);
 begin
   frmGrayline.rbn_status := 'Connected';
-  Synchronize(@frmGrayline.SynRBN)
+  Synchronize(@frmGrayline.SynRBN);
 end;
 
 procedure TRBNThread.lDisconnect(aSocket: TLSocket);
@@ -419,7 +419,6 @@ procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction)
 begin
   if RBNThread<>nil then
    Begin
-    RBNThread.lTelnet.Disconnect(true);
     RBNThread.Terminate;
    end;
   cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
@@ -453,7 +452,6 @@ begin
       pumLinkToRBNMonitor.Enabled:=true;
     end
     else begin
-      pumLinkToRBNMonitor.Enabled:=false;
       acLinkToRbnMonitor.Checked :=false;
       RBNThread := TRBNThread.Create(True);
       RBNThread.FreeOnTerminate := True;
@@ -465,6 +463,7 @@ end;
 procedure TfrmGrayline.acLinkToRbnMonitorExecute(Sender: TObject);
 begin
     acLinkToRbnMonitor.Checked := not acLinkToRbnMonitor.Checked;
+    cqrini.WriteBool('RBN','AutoLink',acLinkToRbnMonitor.Checked);
     pumConnect.Enabled:=not acLinkToRbnMonitor.Checked;
     if acLinkToRbnMonitor.Checked then
      rbn_status := 'Linked to RBNMonitor'
@@ -478,7 +477,7 @@ begin
   tmrGrayLine.Enabled := False;
   tmrAutoConnect.Enabled:=False;
   tmrRemoveDots.Enabled:=False;
-  SavePosition;
+  sleep(100);
 end;
 
 procedure TfrmGrayline.FormDestroy(Sender: TObject);
@@ -554,12 +553,12 @@ end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
 begin
-  Refresh
+  Refresh;
 end;
 
 procedure TfrmGrayline.tmrRemoveDotsTimer(Sender: TObject);
 begin
-  RemoveOldSpots
+  RemoveOldSpots;
 end;
 
 procedure TfrmGrayline.kresli;
@@ -612,9 +611,15 @@ var
 begin
   sbGrayLine.SimpleText := rbn_status;
   if rbn_status='Connected' then
-    acConnect.Caption := 'Disconnect'
+   Begin
+    acConnect.Caption := 'Disconnect';
+    pumLinkToRBNMonitor.Enabled:=false;
+   end
   else
-    acConnect.Caption := 'Connect to RBN';
+   Begin
+     acConnect.Caption := 'Connect to RBN';
+     pumLinkToRBNMonitor.Enabled:=True;
+   end;
   ob^.body_smaz;
   for i:=1 to MAX_ITEMS do
   begin
