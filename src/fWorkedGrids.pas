@@ -29,7 +29,6 @@ type
     BandLabel: TLabel;
     ZooMap: TImage;
     procedure BandSelectorChange(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure LocMapChangeBounds(Sender: TObject);
@@ -726,19 +725,11 @@ begin
   if (BandSelector.ItemIndex >= 0) then UpdateGridData;
 end;
 
-
-
 procedure TfrmWorkedGrids.BandSelectorChange(Sender: TObject);
 Begin
     UpdateGridData;
 end;
 
-procedure TfrmWorkedGrids.FormActivate(Sender: TObject);
-begin
-  BandSelector.SetFocus;
-end;
-//FormKeyUp does not work unless focus is set to some of selectors (BandSelector)
-//and there BandSelector.OnKeyUp can access FromKeyUp procedure
 procedure TfrmWorkedGrids.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
