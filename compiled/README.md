@@ -15,7 +15,7 @@ They contain all accepted pull requests from official source (that may not be re
 LAST UPDATES
   - ver 2.4.0(129)
   - check official updates link above.
-  - bugfix for Grayline #355
+  - bugfix for Grayline (pull request #356)
 
   - ver 2.4.0(128)
   - check official updates link above.
