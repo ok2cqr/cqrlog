@@ -2092,11 +2092,13 @@ end;
 procedure TfrmNewQSO.tmrN1MMTimer(Sender: TObject);
 var
   Buf,
+  buf2,
   prik,
   data:string;
   chkDuplicates :boolean;
   i:longint;
-  l:integer;
+  l,
+  p:integer;
 
 begin
   tmrN1MM.Enabled:=false;
@@ -2106,90 +2108,100 @@ begin
    if dmData.DebugLevel>=1 then Writeln('N1MM has data');
    while N1MMsock.WaitingData > 0 do     //do all pending messages in one go
     begin
-      Buf := N1MMsock.RecvPacket(1000);
+      Buf2 := N1MMsock.RecvPacket(500);    //Read all data waitingtimeout 500ms
       if dmData.DebugLevel>=1 then Writeln('N1MM read data');
+      if (pos('<CALL',uppercase(Buf2))=1) and (pos('<EOR>',uppercase(Buf2))+4=length(Buf2)) then //js8call adif block
+         Buf2:='<ADIF_VER 0 <EOH> '+Buf2;
       if N1MMSock.lasterror=0 then
        begin
        //check data.  Is there string '<adif_ver'? Might then be wsjt-x's UDP
-       if pos('<ADIF_VER',uppercase (Buf)) > 0 then
+       if (pos('<ADIF_VER',uppercase (Buf2)) > 0) then //proper adif block starts with header
          Begin
          if dmData.DebugLevel>=1 then writeln('adif_ver found');
            Begin //cut all before '<adif_data' away and continue then
-             data := copy(Buf,pos('<ADIF_VER',uppercase (Buf)),length(Buf));
-             Buf := data;
+             Buf2 := copy(Buf2,pos('<ADIF_VER',uppercase (Buf2)),length(Buf2));
            end;
-         end;
-        //check now that at least tag '<call:' is found. If not throw away...
-        if pos('<CALL:',uppercase (Buf)) > 0 then
-         Begin
-          if dmData.DebugLevel>=1 then writeln(Buf);
-          //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
-          //qso_date will then replace this
-          edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
-          repeat
+           //here check if several qsos in block
+           repeat   //here check if several qsos in block
             begin
-              if frmAdifImport.getNextAdifTag(Buf,prik,data) then
-                if dmData.DebugLevel>=1 then
-                                            Begin
-                                             write(prik,'->');
-                                             writeln(data);
-                                            end;
-                                             case uppercase(prik) of
-                                              'CALL' : Begin
-                                                            edtCall.Text := uppercase(data);
-                                                            c_lock :=false;
-                                                            edtCallExit(nil);   //does info fetch
-                                                            WaitWeb(5);  //wait for web response 5sec timeout
-                                                          end;
-                                              'GRIDSQUARE' :Begin
-                                                                 data := uppercase(data);
-                                                                 if dmUtils.IsLocOK(data) then
-                                                                    if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
-                                                                                  edtGrid.Text := data; //replace qrz loc, otherwise keep it
-                                                            end;
-                                              'MODE' : cmbMode.Text := uppercase(data);
-                                              //now this overrides MODE, if exists
-                                              'SUBMODE' : cmbMode.Text := uppercase(data);
-                                              'FREQ' : cmbFreq.Text := data;
-                                              'RST_SENT' : edtHisRST.Text := data;
-                                              'RST_RCVD' : edtMyRST.Text := data;
-                                              'QSO_DATE' : Begin
-                                                            edtDate.Text := copy(data,1,4)+'-'+
-                                                                            copy(data,5,2)+'-'+
-                                                                            copy(data,7,2);
-                                                       end;
-                                               'TIME_ON' : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                               'TIME_OFF': edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                               'TX_PWR' : edtPWR.Text := data;
-                                               'NAME'   : if edtName.Text='' then edtName.Text := data;
-                                               'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
-                                               'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
-                                               'NAME_INTL'   : if edtName.Text='' then edtName.Text := data;
-                                               'QTH_INTL'    : if edtQTH.Text='' then edtQTH.Text := data;
-                                               'COMMENT_INTL': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
-                                               'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
-                                               'STATE'  : if edtState.Text='' then edtState.Text := data;
-                                               'CQZ'    : edtWaz.Text := data;
-                                               'ITUZ'   : edtITU.Text := data;
-                                               'CONTEST_ID':  edtContestName.Text := data;
-                                               'STX': edtContestSerialSent.Text := data;
-                                               'SRX': edtContestSerialReceived.Text := data;
-                                                //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
-                                               'STX_STRING':edtContestExchangeMessageSent.Text := data;
-                                                //same with SRX
-                                               'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
-                                               'OPERATOR': Begin
-                                                             if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
-                                                              Begin
-                                                               Op := data;
-                                                               sbNewQSO.Panels[2].Text := cOperator+Op;
+             p:=pos('<EOR>',uppercase(buf2));
+             buf:=copy(Buf2,1,p+5);   //holds one record
+             buf2:= copy(buf2,p+6,length(buf2));  //holds remaining records
+            //check now that at least tag '<call:' is found. If not throw away...
+            if pos('<CALL:',uppercase (Buf)) > 0 then
+             Begin
+              if dmData.DebugLevel>=1 then writeln(Buf);
+              //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
+              //qso_date will then replace this
+              edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
+              repeat
+                begin
+                  if frmAdifImport.getNextAdifTag(Buf,prik,data) then
+                    if dmData.DebugLevel>=1 then
+                                                Begin
+                                                 write(prik,'->');
+                                                 writeln(data);
+                                                end;
+                                                 case uppercase(prik) of
+                                                  'CALL' : Begin
+                                                                edtCall.Text := uppercase(data);
+                                                                c_lock :=false;
+                                                                edtCallExit(nil);   //does info fetch
+                                                                WaitWeb(5);  //wait for web response 5sec timeout
                                                               end;
-                                                            end;
-                                            end; //case
-                end;  //repeat
+                                                  'GRIDSQUARE' :Begin
+                                                                     data := uppercase(data);
+                                                                     if dmUtils.IsLocOK(data) then
+                                                                        if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
+                                                                                      edtGrid.Text := data; //replace qrz loc, otherwise keep it
+                                                                end;
+                                                  'MODE' : cmbMode.Text := uppercase(data);
+                                                  //now this overrides MODE, if exists
+                                                  'SUBMODE' : cmbMode.Text := uppercase(data);
+                                                  'FREQ' : cmbFreq.Text := data;
+                                                  'RST_SENT' : edtHisRST.Text := data;
+                                                  'RST_RCVD' : edtMyRST.Text := data;
+                                                  'QSO_DATE' : Begin
+                                                                edtDate.Text := copy(data,1,4)+'-'+
+                                                                                copy(data,5,2)+'-'+
+                                                                                copy(data,7,2);
+                                                           end;
+                                                   'TIME_ON' : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                                   'TIME_OFF': edtEndTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                                   'TX_PWR' : edtPWR.Text := data;
+                                                   'NAME'   : if edtName.Text='' then edtName.Text := data;
+                                                   'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
+                                                   'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
+                                                   'NAME_INTL'   : if edtName.Text='' then edtName.Text := data;
+                                                   'QTH_INTL'    : if edtQTH.Text='' then edtQTH.Text := data;
+                                                   'COMMENT_INTL': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
+                                                   'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
+                                                   'STATE'  : if edtState.Text='' then edtState.Text := data;
+                                                   'CQZ'    : edtWaz.Text := data;
+                                                   'ITUZ'   : edtITU.Text := data;
+                                                   'CONTEST_ID':  edtContestName.Text := data;
+                                                   'STX': edtContestSerialSent.Text := data;
+                                                   'SRX': edtContestSerialReceived.Text := data;
+                                                    //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
+                                                   'STX_STRING':edtContestExchangeMessageSent.Text := data;
+                                                    //same with SRX
+                                                   'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
+                                                   'OPERATOR': Begin
+                                                                 if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
+                                                                  Begin
+                                                                   Op := data;
+                                                                   sbNewQSO.Panels[2].Text := cOperator+Op;
+                                                                  end;
+                                                                end;
+                                                end; //case
+                    end;  //repeat
+               until pos('<EOR>',uppercase(Buf))=1;
+              SaveRemote;
+              buf:=copy(buf,6,length(buf)); //cut eof away.
+             end; // has tag call
+           end; //here check if several qsos in block
           until Buf = '';
-          SaveRemote;
-         end; // has tag call
+        end; // has <adif ver
        end; //lasterror=0
     end;  // while waiting data
   end;  //if waiting data
@@ -3088,7 +3100,7 @@ begin
 end;
 {
   The latest UDP message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
+  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/Network/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
   to construct a recipe to replicate an issue.
