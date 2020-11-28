@@ -6,13 +6,17 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   #340
+   #354
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
+  - ver 2.4.0(129)
+  - check official updates link above.
+  - bugfix for Grayline #355
+
   - ver 2.4.0(128)
   - check official updates link above.
 
