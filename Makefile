@@ -73,3 +73,12 @@ debug:
 	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
+cqrlog_qt5: src/cqrlog.lpi
+	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	$(ST) src/cqrlog
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
+cqrlog_qt5_debug: src/cqrlog.lpi
+	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+	
