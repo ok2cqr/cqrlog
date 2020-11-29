@@ -8,7 +8,6 @@ object frmWorkedGrids: TfrmWorkedGrids
   Caption = 'Worked locator grids'
   ClientHeight = 432
   ClientWidth = 721
-  OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyUp = FormKeyUp
