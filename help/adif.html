@@ -41,8 +41,14 @@ function goBack() {
 
 <a name=fl1><h2><strong>ADIF logger remote</strong></h2></a>
 <img src="img/adif1.png" name="1"  border="0"/>
-<p>ADIF logger remote connection is just for copying logged qso infromation from other program like wsjt-x or js8call (or similars that support this kind of logging) to cqrlog.
+<p>ADIF remote connection (former "N1MM+ remote logger") is just for copying logged qso infromation from other program like wsjt-x or js8call (or similars that support this kind of logging) to cqrlog.
 There is no other finctionality than just transfer the logged data.
+<br><br> ADIF remote can read adif tags from UDP datagram as follows:
+<ul>
+    <li> Datagram has full adif export including proper header and one or more qso records.(used by wsjt-x primary UDP datagram)</li>
+    <li> Datagram has qso record without header starting with tag "&lt;CALL" and ending to &lt;EOR&gt; (used by wsjt-x secondary UDP datagram)</li>
+    <li> Datagram has JSON record including 'LOG.QSO","value":' followed by adif tags starting with tag "&lt;CALL" and ending to '"}'</li>
+</ul>     
 </br>Remote mode is activated from NewQSO/File selection list, or pressing Ctrl-K when NewQSO window is focused.
 </p><p>
 <img src="img/adif3.png" name="3"  border="0"/>

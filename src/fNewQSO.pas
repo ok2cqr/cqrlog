@@ -614,6 +614,7 @@ type
     WsjtxDecodeRunning : boolean;
 
     RememberAutoMode : Boolean;
+    IsJS8Callrmt     : Boolean; //way to isolate adif from JS8's JSON
 
     Op         : String;
     procedure showDOK(stat:boolean);
@@ -2105,19 +2106,30 @@ begin
   chkDuplicates:=false;
   if ADIFsock.WaitingData > 0 then
   Begin
-   if dmData.DebugLevel>=1 then Writeln('ADIF has data');
+   if dmData.DebugLevel>=1 then Writeln('rmtADIF has data. JS8CALL mode is now ',IsJS8Callrmt);
    while ADIFsock.WaitingData > 0 do     //do all pending messages in one go
     begin
       Buf2 := trim(ADIFsock.RecvPacket(500));    //Read all data waitingtimeout 500ms
-      if dmData.DebugLevel>=1 then Writeln('ADIF read data');
-      if (pos('<CALL',uppercase(Buf2))=1) and (pos('<EOR>',uppercase(Buf2))+4=length(Buf2)) then //js8call adif block
-         Buf2:='<adif_ver:1>0 <EOH> '+Buf2;     //fake adif version to make rest work
+      if dmData.DebugLevel>=1 then Writeln('rmtADIF read data');
+
+      if pos('"LOG.QSO","value":"',Buf2) >0  then
+         Begin
+          IsJS8Callrmt:=true; //once set resets only when remote closed
+          Buf2:='<adif_ver:1>0 <EOH> '+copy(Buf2,pos('<CALL',uppercase(Buf2)),(pos('"}',Buf2)-pos('<CALL',uppercase(Buf2))))+' <eor>';
+          if dmData.DebugLevel>=1 then writeln('Modified JS8CALL JSON: ',Buf2);
+         end;
+
+      if (not IsJS8Callrmt) and (pos('<CALL',uppercase(Buf2))=1) and (pos('<EOR>',uppercase(Buf2))+4=length(Buf2)) then //add fake header
+         Begin
+          Buf2:='<adif_ver:1>0 <EOH> '+Buf2;     //fake adif version to make rest work
+          if dmData.DebugLevel>=1 then writeln('Modified headerless ADIF: ',Buf2);
+         end;
       if ADIFSock.lasterror=0 then
        begin
        //check data.  Is there string '<adif_ver'? Might then be wsjt-x's UDP
        if (pos('<ADIF_VER',uppercase (Buf2)) > 0) then //proper adif block starts with header
          Begin
-         if dmData.DebugLevel>=1 then writeln('adif_ver found');
+         if dmData.DebugLevel>=1 then writeln('ADIF_VER header found!');
            Begin //cut all before '<adif_data' away and continue then
              Buf2 := copy(Buf2,pos('<ADIF_VER',uppercase (Buf2)),length(Buf2));
            end;
@@ -7342,6 +7354,7 @@ begin
                   AnyRemoteOn := True;
 
                   lblCall.Caption           := 'remote ADIF';
+                  IsJS8Callrmt              := false;
 
                   // start UDP server  http://synapse.ararat.cz/doc/help/blcksock.TBlockSocket.html
                   //use lot of wsjtx stuff as it can not be running at same time
