@@ -7500,7 +7500,7 @@ object frmPreferences: TfrmPreferences
         object lblwsjtport: TLabel
           AnchorSideLeft.Control = edtWsjtPort
           AnchorSideLeft.Side = asrCenter
-          AnchorSideTop.Control = lbln1mmport
+          AnchorSideTop.Control = lblADIFport
           AnchorSideBottom.Side = asrBottom
           Left = 603
           Height = 17
@@ -7511,9 +7511,9 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
         end
         object edtWsjtPort: TEdit
-          AnchorSideLeft.Control = edtN1MMPort
+          AnchorSideLeft.Control = edtADIFPort
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = edtN1MMPort
+          AnchorSideTop.Control = edtADIFPort
           AnchorSideRight.Side = asrBottom
           Left = 596
           Height = 25
@@ -7708,7 +7708,7 @@ object frmPreferences: TfrmPreferences
             Text = '    .  .  '
           end
         end
-        object edtN1MMPort: TEdit
+        object edtADIFPort: TEdit
           AnchorSideLeft.Control = GroupBox52
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = GroupBox52
@@ -7721,7 +7721,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 18
           TabOrder = 8
         end
-        object lbln1mmport: TLabel
+        object lblADIFport: TLabel
           AnchorSideLeft.Control = GroupBox52
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = GroupBox52
@@ -7732,12 +7732,12 @@ object frmPreferences: TfrmPreferences
           Width = 83
           BorderSpacing.Left = 12
           BorderSpacing.Bottom = 35
-          Caption = 'N1MM port:'
+          Caption = 'ADIF port:'
           ParentColor = False
         end
-        object edtn1mmIp: TEdit
-          AnchorSideLeft.Control = edtN1MMPort
-          AnchorSideTop.Control = lbln1mmaddr
+        object edtADIFIp: TEdit
+          AnchorSideLeft.Control = edtADIFPort
+          AnchorSideTop.Control = lblADIFaddr
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
           Left = 500
@@ -7747,17 +7747,17 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 2
           TabOrder = 9
         end
-        object lbln1mmaddr: TLabel
-          AnchorSideLeft.Control = edtn1mmIp
+        object lblADIFaddr: TLabel
+          AnchorSideLeft.Control = edtADIFIp
           AnchorSideLeft.Side = asrCenter
-          AnchorSideTop.Control = edtN1MMPort
+          AnchorSideTop.Control = edtADIFPort
           AnchorSideTop.Side = asrBottom
           Left = 498
           Height = 17
           Top = 51
           Width = 84
           BorderSpacing.Top = 2
-          Caption = 'N1MM addr:'
+          Caption = 'ADIF addr:'
           ParentColor = False
         end
       end
