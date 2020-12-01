@@ -2095,11 +2095,10 @@ var
   Buf,
   buf2,
   prik,
-  data:string;
+  data          :string;
   chkDuplicates :boolean;
-  i:longint;
-  l,
-  p:integer;
+  i             :longint;
+  a,b,l         :integer;
 
 begin
   tmrADIF.Enabled:=false;
@@ -2109,40 +2108,81 @@ begin
    if dmData.DebugLevel>=1 then Writeln('rmtADIF has data. JS8CALL mode is now ',IsJS8Callrmt);
    while ADIFsock.WaitingData > 0 do     //do all pending messages in one go
     begin
-      Buf2 := trim(ADIFsock.RecvPacket(500));    //Read all data waitingtimeout 500ms
+      Buf := trim(ADIFsock.RecvPacket(500));    //Read all data waitingtimeout 500ms
       if dmData.DebugLevel>=1 then Writeln('rmtADIF read data');
-
-      if pos('"LOG.QSO","value":"',Buf2) >0  then
-         Begin
-          IsJS8Callrmt:=true; //once set resets only when remote closed
-          Buf2:='<adif_ver:1>0 <EOH> '+copy(Buf2,pos('<CALL',uppercase(Buf2)),(pos('"}',Buf2)-pos('<CALL',uppercase(Buf2))))+' <eor>';
-          if dmData.DebugLevel>=1 then writeln('Modified JS8CALL JSON: ',Buf2);
-         end;
-
-      if (not IsJS8Callrmt) and (pos('<CALL',uppercase(Buf2))=1) and (pos('<EOR>',uppercase(Buf2))+4=length(Buf2)) then //add fake header
-         Begin
-          Buf2:='<adif_ver:1>0 <EOH> '+Buf2;     //fake adif version to make rest work
-          if dmData.DebugLevel>=1 then writeln('Modified headerless ADIF: ',Buf2);
-         end;
       if ADIFSock.lasterror=0 then
        begin
-       //check data.  Is there string '<adif_ver'? Might then be wsjt-x's UDP
-       if (pos('<ADIF_VER',uppercase (Buf2)) > 0) then //proper adif block starts with header
-         Begin
-         if dmData.DebugLevel>=1 then writeln('ADIF_VER header found!');
-           Begin //cut all before '<adif_data' away and continue then
-             Buf2 := copy(Buf2,pos('<ADIF_VER',uppercase (Buf2)),length(Buf2));
-           end;
+         //check data.
+         //if JS8CALL JSON with ADIF inside
+          a:= pos('"LOG.QSO","value":"',Buf);
+          b:= pos('"}',Buf);
+          if (a>0 ) and (b>0)  then
+             Begin
+              IsJS8Callrmt:=true; //once this is set it resets only when remote is closed
+              Buf:=copy(Buf,a+19,length(Buf)-a-19-1)+' <eor>';
+              if dmData.DebugLevel>=1 then writeln('Modified JS8CALL JSON: ',Buf);
+             end
+            else
+             begin
+                //if not JS8CALL and has proper ADIF header with at least one qso record with CALL and EOR (wsjt-x primary UDP msg #12)
+                if not IsJS8Callrmt then
+                Begin
+                  a:=pos('<ADIF_VER',uppercase (Buf));
+                  b:=pos('<EOH>',uppercase (Buf));
+                  if (a>0) and (b>0) then //proper adif block starts with header
+                     Begin
+                     if dmData.DebugLevel>=1 then writeln('ADIF_VER header block found!');
+                     Buf:=copy(Buf,b+5,length(Buf));
+                     a:=pos('<CALL',uppercase (Buf));
+                     b:=pos('<EOR>',uppercase (Buf));
+                     if (b>a) and  (a>0) and (b>0) then
+                       Begin
+                        if dmData.DebugLevel>=1 then writeln('There seems to be at least one qso record!')
+                       end
+                      else
+                       Begin
+                        if dmData.DebugLevel>=1 then writeln('There seems to be something wrong with qso record(s)!');
+                        tmrADIF.Enabled:=true;
+                        exit;
+                       end;
+                     end;
+
+
+                 //if not JS8CALL and not proper ADIF header but has CALL and EOR (wsjt-x secondary UDP frame)
+                 if (a=0) and (b=0) then
+                 Begin
+                  a:=pos('<CALL',uppercase (Buf));
+                  b:=pos('<EOR>',uppercase (Buf));
+                  if (a>0) and (b>0) then
+                   Begin
+                    if dmData.DebugLevel>=1 then writeln('There seems to be at least one qso record!')
+                   end
+                  else
+                   Begin
+                    if dmData.DebugLevel>=1 then writeln('No qso record(s)!');
+                    tmrADIF.Enabled:=true;
+                    exit;
+                   end;
+                  end;
+                 end
+                else
+                 Begin //this will block the second adif frame sent by JS8CALL without JSON and ADIF header
+                   tmrADIF.Enabled:=true;
+                   exit;
+                 end;
+             end; //else JS8CALL with JSON included ADIF
+
+           Buf2:=Buf;
            //here check if several qsos in block
            repeat   //here check if several qsos in block
             begin
-             p:=pos('<EOR>',uppercase(buf2));
-             buf:=copy(Buf2,1,p+5);   //holds one record
-             buf2:= copy(buf2,p+6,length(buf2));  //holds remaining records
+             b:=pos('<EOR>',uppercase(buf2));
+             buf:=copy(Buf2,1,b+5);   //holds one record
+             buf2:= copy(buf2,b+6,length(buf2));  //holds remaining records
             //check now that at least tag '<call:' is found. If not throw away...
             if pos('<CALL:',uppercase (Buf)) > 0 then
              Begin
-              if dmData.DebugLevel>=1 then writeln(Buf);
+              if dmData.DebugLevel>=1 then writeln('Handle qso record: ',Buf);
               //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
               //qso_date will then replace this
               edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
@@ -2213,7 +2253,6 @@ begin
              end; // has tag call
            end; //here check if several qsos in block
           until Buf = '';
-        end; // has <adif ver
        end; //lasterror=0
     end;  // while waiting data
   end;  //if waiting data
