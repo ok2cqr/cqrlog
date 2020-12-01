@@ -606,11 +606,11 @@ type
     edtK3NGPort1: TEdit;
     edtK3NGSpeed: TSpinEdit;
     edtFldigiIp: TEdit;
-    edtn1mmIp: TEdit;
+    edtADIFIp: TEdit;
     edtWsjtPath: TEdit;
     edtWsjtPort: TEdit;
     edtFldigiPort: TEdit;
-    edtN1MMPort: TEdit;
+    edtADIFPort: TEdit;
     edtXRefresh: TEdit;
     edtXLastSpots: TEdit;
     edtXTop: TEdit;
@@ -841,8 +841,8 @@ type
     lblRig1DataMode: TLabel;
     lblRig2DataMode: TLabel;
     lblRig1cmd: TLabel;
-    lbln1mmport: TLabel;
-    lbln1mmaddr: TLabel;
+    lblADIFport: TLabel;
+    lblADIFaddr: TLabel;
     lblWinPort2: TLabel;
     lblwsjtport: TLabel;
     Label204: TLabel;
@@ -1571,8 +1571,8 @@ begin
   cqrini.WriteBool('wsjt','wb4CCall', cgLimit.Checked[0]);
   cqrini.WriteBool('wsjt','wb4CLoc', cgLimit.Checked[1]);
 
-  cqrini.WriteString('n1mm','port',edtn1mmPort.Text);
-  cqrini.WriteString('n1mm','ip',edtn1mmIp.Text);
+  cqrini.WriteString('n1mm','port',edtADIFPort.Text);
+  cqrini.WriteString('n1mm','ip',edtADIFIp.Text);
 
   if edtBackupPath.Text <> '' then
     if edtBackupPath.Text[Length(edtBackupPath.Text)] <> PathDelim then
@@ -1809,7 +1809,7 @@ var
     'h1.html#bh3',  //zip code tracking
     'h1.html#bh4',  //lotw support
     'h1.html#ch1',  //cw interface
-    'h1.html#ch2',  //fldigi wsjt-x n1mm interface
+    'h1.html#ch2',  //fldigi wsjt-x ADIF interface
     'h1.html#ch3',  //autobackup
     'h1.html#ch4',  //external viewers
     'h1.html#ch5',  //callbook support
@@ -3099,8 +3099,8 @@ begin
   cgLimit.Checked[0] := cqrini.ReadBool('wsjt','wb4CCall', False);
   cgLimit.Checked[1] := cqrini.ReadBool('wsjt','wb4CLoc', False);
 
-  edtn1mmPort.Text         := cqrini.ReadString('n1mm','port','2333');
-  edtn1mmIp.Text           := cqrini.ReadString('n1mm','ip','127.0.0.1');
+  edtADIFPort.Text         := cqrini.ReadString('n1mm','port','2333');
+  edtADIFIp.Text           := cqrini.ReadString('n1mm','ip','127.0.0.1');
 
 
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);

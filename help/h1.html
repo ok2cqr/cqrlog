@@ -57,7 +57,7 @@
         <li><a href="h1.html#ch2">fldigi interface</a></li>
         <li><a href="fldxml.html">fldigi XmlRpc remote</a></li>
         <li><a href="h1.html#ch2b">wsjt-x interface</a></li>        
-        <li><a href="h1.html#ch2c">N1MM interface</a></li>        
+        <li><a href="h1.html#ch2c">ADIF interface</a></li>        
         <li><a href="h1.html#ch3">Exit & Auto backup</a></li>
         <li><a href="h1.html#ch4">External viewers</a></li>
         <li><a href="h1.html#ch5">Callbook support</a></li>
@@ -625,19 +625,19 @@ There are no known dependencies issues.<br><br>
     Pressing calendar icon is easy way to set date. Double click on selected date closes calendar and sets the date. Pressing ESC closes calendar, but does not set date. Date can also be typed in manually.
     <br><br>
     <a name=ch2c></a>
-    <h2><strong>N1MM interface</strong></h2>
-    Setting of N1MM interface is similar as wsjt-x interface. Only IP address and PORT have to be set if they are not defaults.
+    <h2><strong>ADIF interface</strong></h2>
+    Setting of ADIF interface is similar as wsjt-x interface. Only IP address and PORT have to be set if they are not defaults.
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2333</strong> for port. These are set in wsjt-x, or js8call, settings/reporting and if changed there, must also to be changed here.
     <br>
     Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
     <br><br>
-    At WSJT-X 2.1.0 settings N1MM remote is renamed to "Secondary UDP server (deprecated)" and it is reported to be removed completely in future. Because of that it is now possible to set cqrlog's N1MM port to wsjt-x UDP server port number. WSJT-X 2.1.x UDP frames contain message #12 that
-     includes log information in ADIF format and N1MM remote can now parse that from binary data if you do not like to have monitoring properties (using wsjt remote) but want just qso logging (using N1MM remote).
+    At WSJT-X 2.1.0 settings ADIF remote is renamed to "Secondary UDP server (deprecated)" and it is reported to be removed completely in future. Because of that it is now possible to set cqrlog's ADIF port to wsjt-x UDP server port number. WSJT-X 2.1.x UDP frames contain message #12 that
+     includes log information in ADIF format and ADIF remote can now parse that from binary data if you do not like to have monitoring properties (using wsjt remote) but want just qso logging (using ADIF remote).
     <br><br>
-    N1MM remote has now better support for QRZ/HamQTH info fetch. If this is not allowed in preferences, or if there is no reponse from Web max waiting time (timeout)  is 5 seconds (You can not remove this property, so be patient. You can not have new qso for logging during 5 seconds!).
+    ADIF remote has now better support for QRZ/HamQTH info fetch. If this is not allowed in preferences, or if there is no reponse from Web max waiting time (timeout)  is 5 seconds (You can not remove this property, so be patient. You can not have new qso for logging during 5 seconds!).
     <br>While having qso you can write some notes like Name, QTH, Comment to QSO, etc. to NewQSO and it will saved with qso data during next wsjt-x "log qso/OK" event. They will not be overwritten by possible Qrz/HamQth info.
     <br><br>
-    <strong>NOTE !!</strong> Wstx- does not send contest -name, -number and -string in ADIF logging datagram. Contest exchanges are placed to regular rst_s and rst_r strings. So cqrlog can not fill proper contest columns when logging is done with ADIF datagram using N1MM remote. 
+    <strong>NOTE !!</strong> Wstx- does not send contest -name, -number and -string in ADIF logging datagram. Contest exchanges are placed to regular rst_s and rst_r strings. So cqrlog can not fill proper contest columns when logging is done with ADIF datagram using ADIF remote. 
     <br><br>
     
     <a name=ch3><h2><strong>Exit & Auto backup</strong></h2></a>
