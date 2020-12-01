@@ -2119,7 +2119,7 @@ begin
           if (a>0 ) and (b>0)  then
              Begin
               IsJS8Callrmt:=true; //once this is set it resets only when remote is closed
-              lblCall.Caption := 'rmtADIF JS8CALL';
+              lblCall.Caption := 'rmt ADIF JS8CALL';
               Buf:=copy(Buf,a+19,length(Buf)-a-19-1)+' <eor>';
               if dmData.DebugLevel>=1 then writeln('Modified JS8CALL JSON: ',Buf);
              end
