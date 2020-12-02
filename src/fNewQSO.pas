@@ -32,7 +32,7 @@ const
   cCntyVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
 
 type
-  TRemoteModeType = (rmtFldigi, rmtWsjt, n1mm);
+  TRemoteModeType = (rmtFldigi, rmtWsjt, rmtADIF);
 
 
 type
@@ -81,7 +81,7 @@ type
     acProp: TAction;
     acReminder: TAction;
     acContest: TAction;
-    acRemoteModeN1MM: TAction;
+    acRemoteModeADIF: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
@@ -142,7 +142,7 @@ type
     MenuItem63: TMenuItem;
     MenuItem94 : TMenuItem;
     mnueQSLView: TMenuItem;
-    mnuRemoteModeN1MM: TMenuItem;
+    mnuRemoteModeADIF: TMenuItem;
     mnuReminder: TMenuItem;
     MenuItem86: TMenuItem;
     MenuItem87: TMenuItem;
@@ -357,7 +357,7 @@ type
     tabDXCCStat : TTabSheet;
     tabSatellite : TTabSheet;
     tabLOConfig: TTabSheet;
-    tmrN1MM: TTimer;
+    tmrADIF: TTimer;
     tmrWsjtSpd: TTimer;
     tmrWsjtx: TTimer;
     tmrUploadAll: TTimer;
@@ -388,7 +388,7 @@ type
     procedure acSCPExecute(Sender : TObject);
     procedure acSendSpotExecute(Sender : TObject);
     procedure acShowStatBarExecute(Sender: TObject);
-    procedure acRemoteModeN1MMExecute(Sender: TObject);
+    procedure acRemoteModeADIFExecute(Sender: TObject);
     procedure acTuneExecute(Sender : TObject);
     procedure acUploadToAllExecute(Sender: TObject);
     procedure acUploadToClubLogExecute(Sender: TObject);
@@ -568,7 +568,7 @@ type
     procedure tmrEndStartTimer(Sender: TObject);
     procedure tmrEndTimer(Sender: TObject);
     procedure tmrFldigiTimer(Sender: TObject);
-    procedure tmrN1MMTimer(Sender: TObject);
+    procedure tmrADIFTimer(Sender: TObject);
     procedure tmrRadioTimer(Sender: TObject);
     procedure tmrStartStartTimer(Sender: TObject);
     procedure tmrStartTimer(Sender: TObject);
@@ -614,6 +614,7 @@ type
     WsjtxDecodeRunning : boolean;
 
     RememberAutoMode : Boolean;
+    IsJS8Callrmt     : Boolean; //way to isolate adif from JS8's JSON
 
     Op         : String;
     procedure showDOK(stat:boolean);
@@ -673,7 +674,7 @@ type
 
     WsjtxSock             : TUDPBlockSocket; //receive socket
     WsjtxSockS            : TUDPBlockSocket; //multicast send socket
-    N1MMSock              : TUDPBlockSocket;
+    ADIFSock              : TUDPBlockSocket;
 
     WsjtxMode             : String;          //Moved from private
     WsjtxBand             : String;
@@ -683,7 +684,7 @@ type
     was_call              : String;            //holds recent edtCallsign.text before it was cleared
 
     FldigiXmlRpc          : Boolean;
-    AnyRemoteOn           : Boolean;     //true if any of remotes fldigi,wsjt,or n1mm is active);
+    AnyRemoteOn           : Boolean;     //true if any of remotes fldigi,wsjt,or ADIF is active);
 
     ClearAfterFreqChange  : Boolean;
     ChangeFreqLimit       : Double;
@@ -2089,111 +2090,171 @@ begin
 
 end;
 
-procedure TfrmNewQSO.tmrN1MMTimer(Sender: TObject);
+procedure TfrmNewQSO.tmrADIFTimer(Sender: TObject);
 var
   Buf,
+  buf2,
   prik,
-  data:string;
+  data          :string;
   chkDuplicates :boolean;
-  i:longint;
-  l:integer;
+  i             :longint;
+  a,b,l         :integer;
 
 begin
-  tmrN1MM.Enabled:=false;
+  tmrADIF.Enabled:=false;
   chkDuplicates:=false;
-  if N1MMsock.WaitingData > 0 then
+  if ADIFsock.WaitingData > 0 then
   Begin
-   if dmData.DebugLevel>=1 then Writeln('N1MM has data');
-   while N1MMsock.WaitingData > 0 do     //do all pending messages in one go
+   if dmData.DebugLevel>=1 then Writeln('rmtADIF has data. JS8CALL mode is now ',IsJS8Callrmt);
+   while ADIFsock.WaitingData > 0 do     //do all pending messages in one go
     begin
-      Buf := N1MMsock.RecvPacket(1000);
-      if dmData.DebugLevel>=1 then Writeln('N1MM read data');
-      if N1MMSock.lasterror=0 then
+      Buf := trim(ADIFsock.RecvPacket(500));    //Read all data waitingtimeout 500ms
+      if dmData.DebugLevel>=1 then Writeln('rmtADIF read data');
+      if ADIFSock.lasterror=0 then
        begin
-       //check data.  Is there string '<adif_ver'? Might then be wsjt-x's UDP
-       if pos('<ADIF_VER',uppercase (Buf)) > 0 then
-         Begin
-         if dmData.DebugLevel>=1 then writeln('adif_ver found');
-           Begin //cut all before '<adif_data' away and continue then
-             data := copy(Buf,pos('<ADIF_VER',uppercase (Buf)),length(Buf));
-             Buf := data;
-           end;
-         end;
-        //check now that at least tag '<call:' is found. If not throw away...
-        if pos('<CALL:',uppercase (Buf)) > 0 then
-         Begin
-          if dmData.DebugLevel>=1 then writeln(Buf);
-          //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
-          //qso_date will then replace this
-          edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
-          repeat
+         //check data.
+         //if JS8CALL JSON with ADIF inside
+          a:= pos('"LOG.QSO","value":"',Buf);
+          b:= pos('"}',Buf);
+          if (a>0 ) and (b>0)  then
+             Begin
+              IsJS8Callrmt:=true; //once this is set it resets only when remote is closed
+              lblCall.Caption := 'rmt ADIF JS8CALL';
+              Buf:=copy(Buf,a+19,length(Buf)-a-19-1)+' <eor>';
+              if dmData.DebugLevel>=1 then writeln('Modified JS8CALL JSON: ',Buf);
+             end
+            else
+             begin
+                //if not JS8CALL and has proper ADIF header with at least one qso record with CALL and EOR (wsjt-x primary UDP msg #12)
+                if not IsJS8Callrmt then
+                Begin
+                  a:=pos('<ADIF_VER',uppercase (Buf));
+                  b:=pos('<EOH>',uppercase (Buf));
+                  if (a>0) and (b>0) then //proper adif block starts with header
+                     Begin
+                     if dmData.DebugLevel>=1 then writeln('ADIF_VER header block found!');
+                     Buf:=copy(Buf,b+5,length(Buf));
+                     a:=pos('<CALL',uppercase (Buf));
+                     b:=pos('<EOR>',uppercase (Buf));
+                     if (b>a) and  (a>0) and (b>0) then
+                       Begin
+                        if dmData.DebugLevel>=1 then writeln('There seems to be at least one qso record!')
+                       end
+                      else
+                       Begin
+                        if dmData.DebugLevel>=1 then writeln('There seems to be something wrong with qso record(s)!');
+                        tmrADIF.Enabled:=true;
+                        exit;
+                       end;
+                     end;
+
+
+                 //if not JS8CALL and not proper ADIF header but has CALL and EOR (wsjt-x secondary UDP frame)
+                 if (a=0) and (b=0) then
+                 Begin
+                  a:=pos('<CALL',uppercase (Buf));
+                  b:=pos('<EOR>',uppercase (Buf));
+                  if (a>0) and (b>0) then
+                   Begin
+                    if dmData.DebugLevel>=1 then writeln('There seems to be at least one qso record!')
+                   end
+                  else
+                   Begin
+                    if dmData.DebugLevel>=1 then writeln('No qso record(s)!');
+                    tmrADIF.Enabled:=true;
+                    exit;
+                   end;
+                  end;
+                 end
+                else
+                 Begin //this will block the second adif frame sent by JS8CALL without JSON and ADIF header
+                   tmrADIF.Enabled:=true;
+                   exit;
+                 end;
+             end; //else JS8CALL with JSON included ADIF
+
+           Buf2:=Buf;
+           //here check if several qsos in block
+           repeat   //here check if several qsos in block
             begin
-              if frmAdifImport.getNextAdifTag(Buf,prik,data) then
-                if dmData.DebugLevel>=1 then
-                                            Begin
-                                             write(prik,'->');
-                                             writeln(data);
-                                            end;
-                                             case uppercase(prik) of
-                                              'CALL' : Begin
-                                                            edtCall.Text := uppercase(data);
-                                                            c_lock :=false;
-                                                            edtCallExit(nil);   //does info fetch
-                                                            WaitWeb(5);  //wait for web response 5sec timeout
-                                                          end;
-                                              'GRIDSQUARE' :Begin
-                                                                 data := uppercase(data);
-                                                                 if dmUtils.IsLocOK(data) then
-                                                                    if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
-                                                                                  edtGrid.Text := data; //replace qrz loc, otherwise keep it
-                                                            end;
-                                              'MODE' : cmbMode.Text := uppercase(data);
-                                              //now this overrides MODE, if exists
-                                              'SUBMODE' : cmbMode.Text := uppercase(data);
-                                              'FREQ' : cmbFreq.Text := data;
-                                              'RST_SENT' : edtHisRST.Text := data;
-                                              'RST_RCVD' : edtMyRST.Text := data;
-                                              'QSO_DATE' : Begin
-                                                            edtDate.Text := copy(data,1,4)+'-'+
-                                                                            copy(data,5,2)+'-'+
-                                                                            copy(data,7,2);
-                                                       end;
-                                               'TIME_ON' : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                               'TIME_OFF': edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                               'TX_PWR' : edtPWR.Text := data;
-                                               'NAME'   : if edtName.Text='' then edtName.Text := data;
-                                               'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
-                                               'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
-                                               'NAME_INTL'   : if edtName.Text='' then edtName.Text := data;
-                                               'QTH_INTL'    : if edtQTH.Text='' then edtQTH.Text := data;
-                                               'COMMENT_INTL': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
-                                               'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
-                                               'STATE'  : if edtState.Text='' then edtState.Text := data;
-                                               'CQZ'    : edtWaz.Text := data;
-                                               'ITUZ'   : edtITU.Text := data;
-                                               'CONTEST_ID':  edtContestName.Text := data;
-                                               'STX': edtContestSerialSent.Text := data;
-                                               'SRX': edtContestSerialReceived.Text := data;
-                                                //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
-                                               'STX_STRING':edtContestExchangeMessageSent.Text := data;
-                                                //same with SRX
-                                               'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
-                                               'OPERATOR': Begin
-                                                             if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
-                                                              Begin
-                                                               Op := data;
-                                                               sbNewQSO.Panels[2].Text := cOperator+Op;
-                                                              end;
-                                                            end;
-                                            end; //case
-                end;  //repeat
+             b:=pos('<EOR>',uppercase(buf2));
+             buf:=copy(Buf2,1,b+5);   //holds one record
+             buf2:= copy(buf2,b+6,length(buf2));  //holds remaining records
+            //check now that at least tag '<call:' is found. If not throw away...
+            if pos('<CALL:',uppercase (Buf)) > 0 then
+             Begin
+              if dmData.DebugLevel>=1 then writeln('Handle qso record: ',Buf);
+              //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
+              //qso_date will then replace this
+              edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
+              repeat
+                begin
+                  if frmAdifImport.getNextAdifTag(Buf,prik,data) then
+                    if dmData.DebugLevel>=1 then
+                                                Begin
+                                                 write(prik,'->');
+                                                 writeln(data);
+                                                end;
+                                                 case uppercase(prik) of
+                                                  'CALL'       : Begin
+                                                                  edtCall.Text := uppercase(data);
+                                                                  c_lock :=false;
+                                                                  edtCallExit(nil);   //does info fetch
+                                                                  WaitWeb(5);  //wait for web response 5sec timeout
+                                                                 end;
+                                                  'GRIDSQUARE' :Begin
+                                                                     data := uppercase(data);
+                                                                     if dmUtils.IsLocOK(data) then
+                                                                        if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
+                                                                                      edtGrid.Text := data; //replace qrz loc, otherwise keep it
+                                                                 end;
+                                                  'MODE' : cmbMode.Text := uppercase(data);
+                                                  //now this overrides MODE, if exists
+                                                  'SUBMODE'    : cmbMode.Text := uppercase(data);
+                                                  'FREQ'       : cmbFreq.Text := data;
+                                                  'RST_SENT'   : edtHisRST.Text := data;
+                                                  'RST_RCVD'   : edtMyRST.Text := data;
+                                                  'QSO_DATE'   : Begin
+                                                                  edtDate.Text := copy(data,1,4)+'-'+
+                                                                                  copy(data,5,2)+'-'+
+                                                                                  copy(data,7,2);
+                                                                 end;
+                                                   'TIME_ON'   : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                                   'TIME_OFF'  : edtEndTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                                   'TX_PWR'    : edtPWR.Text := data;
+                                       'NAME_INTL','NAME'      : if (data<>edtName.Text) and (data<>'') then edtName.Text := data;
+                                        'QTH_INTL','QTH'       : if (data<>edtQTH.Text) and (data<>'') then edtQTH.Text := data;
+                                    'COMMENT_INTL','COMMENT'   : if (data<>edtRemQSO.Text) and (data<>'') then edtRemQSO.Text := data;
+                                                   'IOTA'      : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
+                                                   'STATE'     : if edtState.Text='' then edtState.Text := data;
+                                                   'CQZ'       : edtWaz.Text := data;
+                                                   'ITUZ'      : edtITU.Text := data;
+                                                   'CONTEST_ID':  edtContestName.Text := data;
+                                                   'STX'       : edtContestSerialSent.Text := data;
+                                                   'SRX'       : edtContestSerialReceived.Text := data;
+                                                    //ADIF logger+ definition does not have STXString tag. Added anyway(future?).
+                                                   'STX_STRING':edtContestExchangeMessageSent.Text := data;
+                                                    //same with SRX
+                                                   'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
+                                                   'OPERATOR'  : Begin
+                                                                 if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
+                                                                  Begin
+                                                                   Op := data;
+                                                                   sbNewQSO.Panels[2].Text := cOperator+Op;
+                                                                  end;
+                                                                end;
+                                                end; //case
+                    end;  //repeat
+               until pos('<EOR>',uppercase(Buf))=1;
+              SaveRemote;
+              buf:=copy(buf,6,length(buf)); //cut eof away.
+             end; // has tag call
+           end; //here check if several qsos in block
           until Buf = '';
-          SaveRemote;
-         end; // has tag call
        end; //lasterror=0
     end;  // while waiting data
   end;  //if waiting data
-  tmrN1MM.Enabled:=true;
+  tmrADIF.Enabled:=true;
 end;
 
 procedure TfrmNewQSO.tmrRadioTimer(Sender: TObject);
@@ -3088,7 +3149,7 @@ begin
 end;
 {
   The latest UDP message protocol as always is documented in the latest revision of the NetworkMessage.hpp header file:
-  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/NetworkMessage.hpp
+  https://sourceforge.net/p/wsjt/wsjtx/ci/master/tree/Network/NetworkMessage.hpp
 
   The reference implementations, particularly message_aggregator, can always be used to verify behaviour or
   to construct a recipe to replicate an issue.
@@ -4497,12 +4558,12 @@ begin
   end
 end;
 
-procedure TfrmNewQSO.acRemoteModeN1MMExecute(Sender: TObject);
+procedure TfrmNewQSO.acRemoteModeADIFExecute(Sender: TObject);
 begin
-   if mnuRemoteModeN1MM.Checked then
+   if mnuRemoteModeADIF.Checked then
     DisableRemoteMode
   else
-    GoToRemoteMode(n1mm)
+    GoToRemoteMode(rmtADIF)
 end;
 
 procedure TfrmNewQSO.acTuneExecute(Sender : TObject);
@@ -7224,7 +7285,7 @@ begin
                   chkAutoMode.Checked   := False;
                   if mnuRemoteModeWsjt.Checked then       //not both on at same time
                      DisableRemoteMode;
-                  if mnuRemoteModeN1MM.Checked then          //not both on at same time
+                  if mnuRemoteModeADIF.Checked then          //not both on at same time
                         DisableRemoteMode;
                   mnuRemoteMode.Checked := True;
                   AnyRemoteOn := True;
@@ -7242,7 +7303,7 @@ begin
                   chkAutoMode.Checked   := False;
                   if mnuRemoteMode.Checked then          //not both on at same time
                   DisableRemoteMode;
-                  if mnuRemoteModeN1MM.Checked then          //not both on at same time
+                  if mnuRemoteModeADIF.Checked then          //not both on at same time
                         DisableRemoteMode;
                   mnuRemoteModeWsjt.Checked := True;
                   AnyRemoteOn := True;
@@ -7318,7 +7379,7 @@ begin
                   if cqrini.ReadBool('Window','MonWsjtx',true) then acMonitorWsjtxExecute(nil)
                 end;
 
-    n1mm      : begin
+    rmtADIF   : begin
                   RememberAutoMode := chkAutoMode.Checked;
                   chkAutoMode.Checked   := False;
                   if mnuRemoteModeWsjt.Checked then       //not both on at same time  wsjt
@@ -7326,33 +7387,34 @@ begin
                   if mnuRemoteMode.Checked then          //not both on at same time   fldigi
                         DisableRemoteMode;
 
-                  mnuRemoteModeN1MM.Checked := True;
+                  mnuRemoteModeADIF.Checked := True;
                   AnyRemoteOn := True;
 
-                  lblCall.Caption           := 'N1MM logger+';
+                  lblCall.Caption           := 'remote ADIF';
+                  IsJS8Callrmt              := false;
 
                   // start UDP server  http://synapse.ararat.cz/doc/help/blcksock.TBlockSocket.html
                   //use lot of wsjtx stuff as it can not be running at same time
-                  N1MMSock := TUDPBlockSocket.Create;
+                  ADIFSock := TUDPBlockSocket.Create;
                   if dmData.DebugLevel>=1 then Writeln('Socket created!');
-                  N1MMSock.EnableReuse(true);
+                  ADIFSock.EnableReuse(true);
                   if dmData.DebugLevel>=1 then Writeln('Reuse enabled!');
                   try
                     //fix these in preferences
-                    N1MMSock.bind(cqrini.ReadString('n1mm','ip','127.0.0.1'),cqrini.ReadString('n1mm','port','2333'));
+                    ADIFSock.bind(cqrini.ReadString('n1mm','ip','127.0.0.1'),cqrini.ReadString('n1mm','port','2333'));
                     if dmData.DebugLevel>=1 then Writeln('Bind issued '+cqrini.ReadString('n1mm','ip','127.0.0.1')+
                                                                         ':'+cqrini.ReadString('n1mm','port','2333'));
                      // On bind failure try to rebind every second
-                     while ((N1MMSock.LastError <> 0) and (tries > 0 )) do
+                     while ((ADIFSock.LastError <> 0) and (tries > 0 )) do
                        begin
                          dec(tries);
                          sleep(1000);
-                         N1MMSock.bind(cqrini.ReadString('n1mm','ip','127.0.0.1'),cqrini.ReadString('n1mm','port','2333'));
+                         ADIFSock.bind(cqrini.ReadString('n1mm','ip','127.0.0.1'),cqrini.ReadString('n1mm','port','2333'));
                        end;
-                     tmrN1MM.Enabled  := True;
+                     tmrADIF.Enabled  := True;
                   except
-                      {if dmData.DebugLevel>=1 then} Writeln('Could not bind socket for N1MM!');
-                      edtRemQSO.Text := 'Could not bind socket for N1MM!';
+                      {if dmData.DebugLevel>=1 then} Writeln('Could not bind socket for ADIF!');
+                      edtRemQSO.Text := 'Could not bind socket for ADIF!';
                      DisableRemoteMode;
                      exit
                   end;
@@ -7405,11 +7467,11 @@ begin
      AnyRemoteOn := False;
   end ;
 
-  if  mnuRemoteModeN1MM.Checked then
+  if  mnuRemoteModeADIF.Checked then
   begin
-      tmrN1MM.Enabled:=false;
-      if Assigned(N1MMSock) then FreeAndNil(N1MMSock);  // to release UDP socket
-      mnuRemoteModeN1MM.Checked:= False;
+      tmrADIF.Enabled:=false;
+      if Assigned(ADIFSock) then FreeAndNil(ADIFSock);  // to release UDP socket
+      mnuRemoteModeADIF.Checked:= False;
       AnyRemoteOn := False;
   end;
 

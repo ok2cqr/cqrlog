@@ -4941,11 +4941,11 @@ object frmNewQSO: TfrmNewQSO
         ShortCut = 16458
         OnClick = acRemoteWsjtExecute
       end
-      object mnuRemoteModeN1MM: TMenuItem
-        Action = acRemoteModeN1MM
-        Caption = 'Remote mode for N1MM logger'
+      object mnuRemoteModeADIF: TMenuItem
+        Action = acRemoteModeADIF
+        Caption = 'Remote mode for ADIF'
         ShortCut = 16459
-        OnClick = acRemoteModeN1MMExecute
+        OnClick = acRemoteModeADIFExecute
       end
       object MenuItem59: TMenuItem
         Caption = '-'
@@ -5774,10 +5774,10 @@ object frmNewQSO: TfrmNewQSO
       Caption = 'Contest'
       OnExecute = acContestExecute
     end
-    object acRemoteModeN1MM: TAction
+    object acRemoteModeADIF: TAction
       Category = 'File'
-      Caption = 'N1MM'
-      OnExecute = acRemoteModeN1MMExecute
+      Caption = 'ADIF'
+      OnExecute = acRemoteModeADIFExecute
     end
   end
   object imgMain: TImageList
@@ -7267,9 +7267,9 @@ object frmNewQSO: TfrmNewQSO
     left = 392
     top = 720
   end
-  object tmrN1MM: TTimer
+  object tmrADIF: TTimer
     Enabled = False
-    OnTimer = tmrN1MMTimer
+    OnTimer = tmrADIFTimer
     left = 800
     top = 32
   end
