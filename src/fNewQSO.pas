@@ -2202,7 +2202,6 @@ begin
            //here check if several qsos in block
            repeat   //here check if several qsos in block
             begin
-                                                              end;
              b:=pos('<EOR>',uppercase(buf2));
              buf:=copy(Buf2,1,b+5);   //holds one record
              buf2:= copy(buf2,b+6,length(buf2));  //holds remaining records
@@ -2227,6 +2226,7 @@ begin
                                                                 c_lock :=false;
                                                                 edtCallExit(nil);   //does info fetch
                                                                 WaitWeb(5);  //wait for web response 5sec timeout
+                                                              end;
                                                   'GRIDSQUARE' :Begin
                                                                      data := uppercase(data);
                                                                      if dmUtils.IsLocOK(data) then
@@ -2260,7 +2260,7 @@ begin
                                                    'CONTEST_ID':  edtContestName.Text := data;
                                                    'STX': edtContestSerialSent.Text := data;
                                                    'SRX': edtContestSerialReceived.Text := data;
-                                                    //N1MM logger+ definition does not have STXString tag. Added anyway(future?).
+                                                    //ADIF logger+ definition does not have STXString tag. Added anyway(future?).
                                                    'STX_STRING':edtContestExchangeMessageSent.Text := data;
                                                     //same with SRX
                                                    'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
@@ -2279,12 +2279,12 @@ begin
              end; // has tag call
            end; //here check if several qsos in block
           until Buf = '';
-        end; // has <adif ver
        end; //lasterror=0
     end;  // while waiting data
   end;  //if waiting data
-  tmrN1MM.Enabled:=true;
+  tmrADIF.Enabled:=true;
 end;
+
 
 procedure TfrmNewQSO.tmrRadioTimer(Sender: TObject);
 var
