@@ -39,20 +39,27 @@ function goBack() {
 <p align=center><img src=img/line.png></p>
 
 
-<a name=fl1><h2><strong>N1MM logger remote</strong></h2></a>
-<img src="img/n1mm1.png" name="1"  border="0"/>
-<p>N1MM logger remote connection is just for copying logged qso infromation from other program like wsjt-x or js8call (or similars that support this kind of logging) to cqrlog.
+<a name=fl1><h2><strong>ADIF logger remote</strong></h2></a>
+<img src="img/adif1.png" name="1"  border="0"/>
+<p>ADIF remote connection (former "N1MM+ remote logger") is just for copying logged qso infromation from other program like wsjt-x or js8call (or similars that support this kind of logging) to cqrlog.
 There is no other finctionality than just transfer the logged data.
+<br><br> ADIF remote can read adif tags from UDP datagram as follows:
+<ul>
+    <li> Datagram has full adif export including proper header and one or more qso records.(used by wsjt-x primary UDP datagram)</li>
+    <li> Datagram has qso record without header starting with tag "&lt;CALL" and ending to &lt;EOR&gt; (used by wsjt-x secondary UDP datagram)</li>
+    <li> Datagram has JSON record including 'LOG.QSO","value":' followed by adif tags starting with tag "&lt;CALL" and ending to '"}'</li>
+</ul>     
 </br>Remote mode is activated from NewQSO/File selection list, or pressing Ctrl-K when NewQSO window is focused.
 </p><p>
-<img src="img/n1mm3.png" name="3"  border="0"/>
+<img src="img/adif3.png" name="3"  border="0"/>
 </br>Settings must be done at wsjt-x or js8call Settings/reporting. At least checking the checkbox. Port and address values can be defaults.
 </p><p>
-<img src="img/n1mm2.png" name="2"  border="0"/></br>
+<img src="img/adif2.png" name="2"  border="0"/></br>
 No indication of logging can be seen unless user has set "cqrlog/preferences/NewQSO/Show recent qso records for last X days" active.</br>
 If this is set, after pressing "OK" at companion program's logging window logged qso will appear to cqrlog's NewQSO recent qsos list.
+If QSO list window is open and   "cqrlog/preferences/NewQSQ/Refresh data after save qso" is checked QSO list is also updated after QSO is logged.
 </p><p>
-N1MM remote can not be used at same time as fldigi or wsjt remotes.</br> How ever if you allow N1MM logger support at wsjt-x and js8call settings and choose remote mode for N1MM from cqrlog you can keep both programs running at same time if your rigctld settings support that. 
+ADIF remote can not be used at same time as fldigi or wsjt remotes.</br> How ever if you allow ADIF logger support at wsjt-x and js8call settings and choose remote mode for ADIF from cqrlog you can keep both programs running at same time if your rigctld settings support that. 
 See: <a href="img/setting_rigctld_for_all_programs.pdf">setting_rigctld_for_all_programs</a>,  and log qsos from both programs to cqrlog without problems.
 </p><p align=center><img src=img/line.png></p>
 <br>
