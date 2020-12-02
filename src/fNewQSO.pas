@@ -2221,50 +2221,47 @@ begin
                                                  writeln(data);
                                                 end;
                                                  case uppercase(prik) of
-                                                  'CALL' : Begin
-                                                                edtCall.Text := uppercase(data);
-                                                                c_lock :=false;
-                                                                edtCallExit(nil);   //does info fetch
-                                                                WaitWeb(5);  //wait for web response 5sec timeout
-                                                              end;
+                                                  'CALL'       : Begin
+                                                                  edtCall.Text := uppercase(data);
+                                                                  c_lock :=false;
+                                                                  edtCallExit(nil);   //does info fetch
+                                                                  WaitWeb(5);  //wait for web response 5sec timeout
+                                                                 end;
                                                   'GRIDSQUARE' :Begin
                                                                      data := uppercase(data);
                                                                      if dmUtils.IsLocOK(data) then
                                                                         if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
                                                                                       edtGrid.Text := data; //replace qrz loc, otherwise keep it
-                                                                end;
+                                                                 end;
                                                   'MODE' : cmbMode.Text := uppercase(data);
                                                   //now this overrides MODE, if exists
-                                                  'SUBMODE' : cmbMode.Text := uppercase(data);
-                                                  'FREQ' : cmbFreq.Text := data;
-                                                  'RST_SENT' : edtHisRST.Text := data;
-                                                  'RST_RCVD' : edtMyRST.Text := data;
-                                                  'QSO_DATE' : Begin
-                                                                edtDate.Text := copy(data,1,4)+'-'+
-                                                                                copy(data,5,2)+'-'+
-                                                                                copy(data,7,2);
-                                                           end;
-                                                   'TIME_ON' : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                                   'TIME_OFF': edtEndTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
-                                                   'TX_PWR' : edtPWR.Text := data;
-                                                   'NAME'   : if edtName.Text='' then edtName.Text := data;
-                                                   'QTH'    : if edtQTH.Text='' then edtQTH.Text := data;
-                                                   'COMMENT': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
-                                                   'NAME_INTL'   : if edtName.Text='' then edtName.Text := data;
-                                                   'QTH_INTL'    : if edtQTH.Text='' then edtQTH.Text := data;
-                                                   'COMMENT_INTL': if edtRemQSO.Text = '' then edtRemQSO.Text := data;
-                                                   'IOTA'   : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
-                                                   'STATE'  : if edtState.Text='' then edtState.Text := data;
-                                                   'CQZ'    : edtWaz.Text := data;
-                                                   'ITUZ'   : edtITU.Text := data;
+                                                  'SUBMODE'    : cmbMode.Text := uppercase(data);
+                                                  'FREQ'       : cmbFreq.Text := data;
+                                                  'RST_SENT'   : edtHisRST.Text := data;
+                                                  'RST_RCVD'   : edtMyRST.Text := data;
+                                                  'QSO_DATE'   : Begin
+                                                                  edtDate.Text := copy(data,1,4)+'-'+
+                                                                                  copy(data,5,2)+'-'+
+                                                                                  copy(data,7,2);
+                                                                 end;
+                                                   'TIME_ON'   : edtStartTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                                   'TIME_OFF'  : edtEndTime.Text := copy(data,1,2)+':'+ copy(data,3,2);
+                                                   'TX_PWR'    : edtPWR.Text := data;
+                                       'NAME_INTL','NAME'      : if (data<>edtName.Text) and (data<>'') then edtName.Text := data;
+                                        'QTH_INTL','QTH'       : if (data<>edtQTH.Text) and (data<>'') then edtQTH.Text := data;
+                                    'COMMENT_INTL','COMMENT'   : if (data<>edtRemQSO.Text) and (data<>'') then edtRemQSO.Text := data;
+                                                   'IOTA'      : if cmbIOTA.Text = '' then cmbIOTA.Text := data;
+                                                   'STATE'     : if edtState.Text='' then edtState.Text := data;
+                                                   'CQZ'       : edtWaz.Text := data;
+                                                   'ITUZ'      : edtITU.Text := data;
                                                    'CONTEST_ID':  edtContestName.Text := data;
-                                                   'STX': edtContestSerialSent.Text := data;
-                                                   'SRX': edtContestSerialReceived.Text := data;
+                                                   'STX'       : edtContestSerialSent.Text := data;
+                                                   'SRX'       : edtContestSerialReceived.Text := data;
                                                     //ADIF logger+ definition does not have STXString tag. Added anyway(future?).
                                                    'STX_STRING':edtContestExchangeMessageSent.Text := data;
                                                     //same with SRX
                                                    'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
-                                                   'OPERATOR': Begin
+                                                   'OPERATOR'  : Begin
                                                                  if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
                                                                   Begin
                                                                    Op := data;
