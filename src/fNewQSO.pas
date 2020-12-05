@@ -1813,8 +1813,8 @@ begin
     edtEndTime.Text   := FormatDateTime('hh:mm',date);
     Takes := StartTime - Date;
     DecodeTime(Takes,h,m,s,ms);
-    lblQSOTakes.Caption := 'QSO takes ' + IntToStr(h) + ' hours, ' + IntToStr(m) +
-                           ' minutes, ' + IntToStr(s) + ' seconds'
+    lblQSOTakes.Caption := 'QSO takes ' + IntToStr(h) + ' hr, ' + IntToStr(m) +
+                           ' min, ' + IntToStr(s) + ' sec'
   end
 end;
 
