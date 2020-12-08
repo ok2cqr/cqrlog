@@ -848,10 +848,10 @@ var
     tmr: integer;
 begin
   tmrCqPeriod.Enabled := False;
-  tmr := 60000;
+  tmr := 40000;   // tmr about 2/3 of period time
   case CurMode of
-       'FT8': tmr := 15000;
-       'FT4': tmr := 8000;
+       'FT8': tmr := 10000;
+       'FT4': tmr := 5000;
   end;
   tmrCqPeriod.Interval := tmr;
   if LocalDbg then Writeln('Period timer set to: ',tmr);
