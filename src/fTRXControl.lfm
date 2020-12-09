@@ -540,6 +540,7 @@ object frmTRXControl: TfrmTRXControl
       object pnlPower: TPanel
         AnchorSideLeft.Control = gbBand
         AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = gbBand
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = gbBand
         AnchorSideBottom.Side = asrBottom
@@ -556,9 +557,10 @@ object frmTRXControl: TfrmTRXControl
         object btPon: TButton
           AnchorSideLeft.Control = pnlPower
           AnchorSideTop.Control = pnlPower
+          AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 25
-          Top = 0
+          Top = 3
           Width = 56
           BorderSpacing.Left = 6
           Caption = 'P-ON'
@@ -569,9 +571,10 @@ object frmTRXControl: TfrmTRXControl
           AnchorSideLeft.Control = pnlPower
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = pnlPower
+          AnchorSideTop.Side = asrCenter
           Left = 67
           Height = 25
-          Top = 0
+          Top = 3
           Width = 56
           Caption = 'P-OFF'
           OnClick = btPoffClick
@@ -580,16 +583,76 @@ object frmTRXControl: TfrmTRXControl
         object btPstby: TButton
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlPower
+          AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = pnlPower
           AnchorSideRight.Side = asrBottom
           Left = 128
           Height = 25
-          Top = 0
+          Top = 3
           Width = 56
           Anchors = [akTop, akRight]
           BorderSpacing.Right = 6
           Caption = 'P-STB'
           OnClick = btPstbyClick
+          TabOrder = 2
+        end
+      end
+      object pnlUsr: TPanel
+        AnchorSideLeft.Control = gbBand
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = gbBand
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = pnlPower
+        Left = 0
+        Height = 30
+        Top = 80
+        Width = 190
+        Anchors = [akLeft, akRight, akBottom]
+        BevelOuter = bvNone
+        ClientHeight = 30
+        ClientWidth = 190
+        TabOrder = 13
+        Visible = False
+        object btnUsr1: TButton
+          AnchorSideLeft.Control = pnlUsr
+          AnchorSideTop.Control = pnlUsr
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 25
+          Top = 3
+          Width = 56
+          BorderSpacing.Left = 6
+          Caption = 'USR1'
+          OnClick = btnUsr1Click
+          TabOrder = 0
+        end
+        object btnUsr2: TButton
+          AnchorSideLeft.Control = pnlUsr
+          AnchorSideLeft.Side = asrCenter
+          AnchorSideTop.Control = pnlUsr
+          AnchorSideTop.Side = asrCenter
+          Left = 67
+          Height = 25
+          Top = 3
+          Width = 56
+          Caption = 'USR2'
+          OnClick = btnUsr2Click
+          TabOrder = 1
+        end
+        object btnUsr3: TButton
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlUsr
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = pnlUsr
+          AnchorSideRight.Side = asrBottom
+          Left = 128
+          Height = 25
+          Top = 3
+          Width = 56
+          Anchors = [akTop, akRight]
+          BorderSpacing.Right = 6
+          Caption = 'USR3'
+          OnClick = btnUsr3Click
           TabOrder = 2
         end
       end
@@ -751,6 +814,10 @@ object frmTRXControl: TfrmTRXControl
       object mnuShowVfo: TMenuItem
         Caption = 'Show Vfo'
         OnClick = mnuShowVfoClick
+      end
+      object mnuShowUsr: TMenuItem
+        Caption = 'Show Usr buttons'
+        OnClick = mnuShowUsrClick
       end
       object mnuShowPwr: TMenuItem
         Caption = 'Show Pwr buttons'
