@@ -3153,7 +3153,8 @@ begin
       paramList.Free;
     if dmData.DebugLevel>=1 then
      Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
-    AProcess.Execute
+    if FileExists(AProcess.Executable) then AProcess.Execute
+      else if dmData.DebugLevel>=1 then writeln(AProcess.Executable,' not found!');
   finally
     AProcess.Free
   end;

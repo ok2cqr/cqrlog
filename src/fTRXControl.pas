@@ -53,8 +53,11 @@ type
     btnVFOA: TButton;
     btnVFOB: TButton;
     btPoff: TButton;
+    btnUsr2: TButton;
     btPon: TButton;
+    btnUsr1: TButton;
     btPstby: TButton;
+    btnUsr3: TButton;
     edtMemNr: TEdit;
     gbBand: TGroupBox;
     gbFreq: TGroupBox;
@@ -63,6 +66,7 @@ type
     gbVfo: TGroupBox;
     GroupBox4: TGroupBox;
     lblFreq: TLabel;
+    mnuShowUsr: TMenuItem;
     mnuShowInfo: TMenuItem;
     mnuShowVfo: TMenuItem;
     mnuOpenMem: TMenuItem;
@@ -71,6 +75,7 @@ type
     mnuShowPwr: TMenuItem;
     mnuProgPref: TMenuItem;
     mnuMem: TMainMenu;
+    pnlUsr: TPanel;
     pnlRig: TPanel;
     pnlMain: TPanel;
     pnlPower: TPanel;
@@ -86,6 +91,9 @@ type
     procedure btPoffClick(Sender: TObject);
     procedure btPonClick(Sender: TObject);
     procedure btPstbyClick(Sender: TObject);
+    procedure btnUsr1Click(Sender: TObject);
+    procedure btnUsr2Click(Sender: TObject);
+    procedure btnUsr3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender : TObject; var CanClose : boolean);
     procedure FormCreate(Sender: TObject);
@@ -113,6 +121,7 @@ type
     procedure mnuShowInfoClick(Sender: TObject);
     procedure mnuShowPwrClick(Sender: TObject);
     procedure mnuProgPrefClick(Sender: TObject);
+    procedure mnuShowUsrClick(Sender: TObject);
     procedure mnuShowVfoClick(Sender: TObject);
     procedure rbRadio1Click(Sender: TObject);
     procedure rbRadio2Click(Sender: TObject);
@@ -141,6 +150,7 @@ type
     procedure UpdateModeButtons(mode : String);
     procedure CheckUserMode(var mode : String);
 
+    procedure UserButton(r,b:Char);
   public
     {
     rfreq : Double;
@@ -177,6 +187,7 @@ type
     procedure Split(up : Integer);
     procedure DisableSplit;
     procedure ClearRIT;
+    procedure LoadUsrButtonCaptions;
     procedure LoadButtonCaptions;
     procedure SetDebugMode(DebugMode : Boolean);
     procedure LoadBandButtons;
@@ -534,6 +545,7 @@ end;
 
 procedure TfrmTRXControl.FormShow(Sender: TObject);
 begin
+  LoadUsrButtonCaptions;
   LoadButtonCaptions;
   LoadBandButtons;
   dmUtils.LoadWindowPos(frmTRXControl);
@@ -544,7 +556,9 @@ begin
   gbInfo.Visible := cqrini.ReadBool('TRX','MemShowInfo',gbInfo.Visible) ;
   mnuShowInfo.Checked := gbInfo.Visible;
   gbVfo.Visible := cqrini.ReadBool('TRX','ShowVfo',gbVfo.Visible);
+  pnlUsr.Visible := cqrini.ReadBool('TRX','ShowUsr',pnlUsr.Visible);
   mnuShowVfo.Checked :=  gbVfo.Visible;
+  mnuShowUsr.Checked :=  pnlUsr.Visible;
 end;
 
 procedure TfrmTRXControl.btn10mClick(Sender: TObject);
@@ -780,6 +794,13 @@ begin
   frmNewQSO.acPreferences.Execute
 end;
 
+procedure TfrmTRXControl.mnuShowUsrClick(Sender: TObject);
+begin
+  pnlUsr.Visible:= not pnlUsr.Visible;
+  mnuShowUsr.Checked:= pnlUsr.Visible;
+  cqrini.WriteBool('TRX','ShowUsr',pnlUsr.Visible)
+end;
+
 procedure TfrmTRXControl.mnuShowVfoClick(Sender: TObject);
 begin
   gbVfo.Visible := not gbVfo.Visible;
@@ -789,11 +810,13 @@ end;
 
 procedure TfrmTRXControl.rbRadio1Click(Sender: TObject);
 begin
+  LoadUsrButtonCaptions;
   InicializeRig
 end;
 
 procedure TfrmTRXControl.rbRadio2Click(Sender: TObject);
 begin
+  LoadUsrButtonCaptions;
   InicializeRig
 end;
 
@@ -945,6 +968,48 @@ begin
          btPon.Font.Color:= clDefault;
          btPstby.Font.Color:= clRed;
          btPoff.Font.Color:= clDefault;
+        end;
+end;
+procedure TfrmTRXControl.UserButton(r,b:Char);
+var c: string;
+Begin
+  c:= trim(cqrini.ReadString('TRX'+r, 'usr'+b, ''));
+  if pos('RUN',uppercase(c))=1 then
+     Begin
+       c:= trim(copy(c,4,length(c)));
+       dmutils.RunOnBackgroud(c);
+     end
+   else
+     radio.UsrCmd(c);
+end;
+
+procedure TfrmTRXControl.btnUsr1Click(Sender: TObject);
+var r:char;
+begin
+      if Assigned(radio) then
+        begin
+         if rbRadio1.Checked then  r:='1' else r:='2';
+         UserButton(r,'1')
+        end;
+end;
+
+procedure TfrmTRXControl.btnUsr2Click(Sender: TObject);
+var       r:char;
+begin
+     if Assigned(radio) then
+        begin
+         if rbRadio1.Checked then  r:='1' else r:='2';
+         UserButton(r,'2')
+        end;
+end;
+
+procedure TfrmTRXControl.btnUsr3Click(Sender: TObject);
+var       r:char;
+begin
+      if Assigned(radio) then
+        begin
+         if rbRadio1.Checked then  r:='1' else r:='2';
+         UserButton(r,'3')
         end;
 end;
 
@@ -1441,6 +1506,14 @@ begin
   if (lblFreq.Caption = empty_freq) then
     exit;
   radio.ClearRit
+end;
+procedure TfrmTRXControl.LoadUsrButtonCaptions;
+var       r:char;
+Begin
+  if rbRadio1.Checked then r:='1' else r:='2';
+  btnUsr1.Caption:=cqrini.ReadString('TRX'+r, 'usr1name', 'Usr1');
+  btnUsr2.Caption:=cqrini.ReadString('TRX'+r, 'usr2name', 'Usr2');
+  btnUsr3.Caption:=cqrini.ReadString('TRX'+r, 'usr3name', 'Usr3');
 end;
 
 procedure TfrmTRXControl.LoadButtonCaptions;

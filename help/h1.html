@@ -226,6 +226,18 @@
     Very often it is much better to specify only serial speed and leave other options as default.
     Default value means that the settings from HamLib will be used.<br>
     <br>
+    <strong>User defined TRXControl buttons</strong> can be defined here. First column is button name shown (4char max) and second column is command to execute. Definition can consist one, or several in queue, rigctld commands or if definition starts with word
+    <strong> run </strong> it can be a program or script name with full path.
+    <br><ul> <li>
+    <strong>Note:</strong> Rigctld supports raw command <strong>W</strong>. Parameter for it is the rig cat command in bytes. Prefix<strong> \0x</strong> must be added for Hex values. Usr1 command in picture activates Icom IC7300 first voice memory play.
+    </li> <li>
+    <strong>Note:</strong> To run program or script it's name with full path must be entered. If file is command script then first line of it must tell what it is written for. If it is bash command script it's first line must be
+    <strong>#!/bin/bash </strong> if not, button definition must have <strong>run /bin/bash /tmp/my_test.sh</strong> to tell that bash is used to call the script.
+    </li> <li>
+    <strong>Note:</strong> Several rigctld commands can be written in same button definition. Usr3 command in picture  moves rig to 7.1MHz and then sets LSB mode with 2400Hz bandwidth.
+    </li><br> <li>
+    <strong>Note:  There is NO feedback from commands to cqrlog !</strong>
+    </li></ul>
     <strong>Switch only between mode related memories</strong> if this option is cheched, only memories related to
     current
     operating mode will be used. E.g. you are on CW right now, CQRLOG will switch only between memories with CW mode.
