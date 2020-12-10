@@ -955,6 +955,9 @@ begin
     'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
     exit;
   lastid := cqrini.ReadInteger('CallBook', 'LastId', -1);
+
+  //lastid:=9999999; //for testing
+
   if lastid > -1 then
   begin
     if Application.MessageBox(
@@ -964,7 +967,10 @@ begin
     cqrini.WriteInteger('CallBook', 'LastId', -1)
   end
   else
+   Begin
+    dmData.qCQRLOG.First; //without this only the last qso of filtered selection is updated
     lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+   end;
 
   if Application.MessageBox('Update names from previous QSOs?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
     prenames := True;
