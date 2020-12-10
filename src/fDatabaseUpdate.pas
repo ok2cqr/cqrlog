@@ -22,6 +22,7 @@ type
     procedure btnCancelClick(Sender: TObject);
     procedure tmrQRZTimer(Sender: TObject);
   private
+    found: boolean; //found interrupted previous update's last id
     procedure QRZupdate;
   public
     id_cqrlog_main: Integer;
@@ -307,6 +308,7 @@ end;
 procedure TfrmDatabaseUpdate.FormCreate(Sender: TObject);
 begin
   c_running := False;
+  found:=false;
 end;
 
 procedure TfrmDatabaseUpdate.FormDestroy(Sender: TObject);
@@ -338,6 +340,13 @@ procedure TfrmDatabaseUpdate.tmrQRZTimer(Sender: TObject);
 begin
   tmrQRZ.Enabled := False;
   QRZupdate;
+  if not found then    //this should close cancelled update
+   Begin
+      btnCancel.Click;
+      frmDatabaseUpdate.Close;
+      c_running := False;
+      dmData.RefreshMainDatabase();
+   end;
 end;
 
 procedure TfrmDatabaseUpdate.SynCallBook;
@@ -361,7 +370,7 @@ end;
 procedure TfrmDatabaseUpdate.QRZupdate;
 var
   QRZ:   TQRZThread;
-  found: boolean = False;
+
 begin
   if not c_running then
   begin
@@ -384,8 +393,15 @@ begin
         dmData.qCallBook.Next
       end;
       if not found then
-        exit
+      Begin
+        pnlQRZ.Caption := 'Previously canceled update breakpoint not found!';
+        pnlQRZ.Repaint;
+        Application.ProcessMessages;
+        sleep(5000);
+        exit  //here returns from QTZupdate, does not return from database update.Goes back to ONtmrQRZ
+      end;
     end;
+    found:=true;
     QRZ := TQRZThread.Create(True);
     QRZ.Start
   end
