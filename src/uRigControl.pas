@@ -112,6 +112,7 @@ type TRigControl = class
     procedure PwrStBy;
     procedure PttOn;
     procedure PttOff;
+    procedure UsrCmd(cmd:String);
 end;
 
 implementation
@@ -288,6 +289,10 @@ end;
 procedure TRigControl.PwrStBy;
 begin
   RigCommand.Add(#$87+' 2')
+end;
+procedure TRigControl.UsrCmd(cmd:String);
+begin
+  RigCommand.Add(cmd)
 end;
 function TRigControl.GetCurrVFO  : TVFO;
 begin
