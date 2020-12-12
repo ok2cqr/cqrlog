@@ -14,26 +14,29 @@ type
 
   TfrmCallbook = class(TForm)
     btnSearch: TButton;
+    btnClose: TButton;
     edtCall: TEdit;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
-    Label1: TLabel;
+    gbAddress: TGroupBox;
+    gbOther: TGroupBox;
+    lblCallsign: TLabel;
     lblGrid: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
+    lbGrid: TLabel;
+    lbState: TLabel;
+    lbCounty: TLabel;
+    lbQsl: TLabel;
     lblCounty: TLabel;
     lblQSL: TLabel;
     lblState: TLabel;
     mCallbook: TMemo;
-    Panel1: TPanel;
+    pnlCallsign: TPanel;
+    procedure btnCloseClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormShow(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure edtCallKeyPress(Sender: TObject; var Key: char);
   private
     { private declarations }
+    procedure ClearAll;
   public
     { public declarations }
   end; 
@@ -47,6 +50,15 @@ implementation
 { TfrmCallbook }
 
 uses dUtils, dData, uMyIni;
+
+procedure TfrmCallbook.ClearAll;
+Begin
+    mCallbook.Clear;
+    lblGrid.Caption   :='';
+    lblState.Caption  := '';
+    lblCounty.Caption := '';
+    lblQSL.Caption    := '';
+end;
 
 procedure TfrmCallbook.edtCallKeyPress(Sender: TObject; var Key: char);
 begin
@@ -74,7 +86,7 @@ var
   c_dok       : String;
   c_ErrMsg    : String;
 begin
-  mCallbook.Lines.Clear;
+  ClearAll;
   mCallBook.Lines.Add('Working ...');
   mCallbook.Repaint;
   c_callsign := dmUtils.GetIDCall(edtCall.Text);
@@ -89,15 +101,17 @@ begin
     lblQSL.Caption    := c_qsl
   end
   else
-    mCallbook.Text := c_ErrMsg
+    mCallbook.Text := c_ErrMsg;
+
+  edtCall.SetFocus;
+  edtCall.SelectAll;
 end;
 
 procedure TfrmCallbook.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(frmCallbook);
-  edtCall.SetFocus;
-  edtCall.SelectAll;
-  mCallbook.Clear
+  ClearAll;
+  btnSearch.Click;
 end;
 
 procedure TfrmCallbook.FormKeyPress(Sender: TObject; var Key: char);
@@ -105,8 +119,15 @@ begin
   if key = #27 then
   begin
     key := #0;
+    ClearAll;
     Close
   end;
+end;
+
+procedure TfrmCallbook.btnCloseClick(Sender: TObject);
+begin
+   ClearAll;
+   Close
 end;
 
 end.

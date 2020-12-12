@@ -946,28 +946,57 @@ end;
 
 procedure TfrmMain.acDatabaseUpdateExecute(Sender: TObject);
 var
-  lastid: integer;
+  lastid: LongInt;
   prenames : Boolean = False;
+  Selected : Boolean;
+  i        : integer;
+  aid      : Array of LongInt;
+
 begin
   if Application.MessageBox('Do you really want to run database update?',
     'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
     exit;
   lastid := cqrini.ReadInteger('CallBook', 'LastId', -1);
-
-  //lastid:=9999999; //for testing
+  Selected:=dbgrdMain.SelectedRows.Count > 0;
+  
+  if Selected then
+    begin
+      SetLength(aid,frmMain.dbgrdMain.SelectedRows.Count);
+      for i := 0 to frmMain.dbgrdMain.SelectedRows.Count-1 do
+      begin
+        dmData.qCQRLOG.GotoBookmark(Pointer(frmMain.dbgrdMain.SelectedRows.Items[i]));
+        aid[i] := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+        if dmData.DebugLevel >= 1 then Writeln('Selected id: ',dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger)
+      end;
+      dmData.qCallBook.SQL.Text:= 'SELECT * FROM view_cqrlog_main_by_qsodate where id_cqrlog_main in (';
+      for i:=0 to Length(aid)-1 do
+       Begin
+        dmData.qCallBook.SQL.Text:= dmData.qCallBook.SQL.Text+IntToStr(aid[i]);
+         if i  < Length(aid)-1 then
+            dmData.qCallBook.SQL.Text:= dmData.qCallBook.SQL.Text + ','
+          else
+            dmData.qCallBook.SQL.Text:= dmData.qCallBook.SQL.Text + ')';
+       end;
+    dmData.qCallBook.Open();
+    dmData.qCallBook.First;
+    end;
 
   if lastid > -1 then
   begin
     if Application.MessageBox(
       'It looks like last update were canceled. Do you want to continue from last position?',
       'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
-      lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+      Begin
+      if Selected then lastid := dmData.qCallBook.FieldByName('id_cqrlog_main').AsInteger
+       else lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger
+      end;
     cqrini.WriteInteger('CallBook', 'LastId', -1)
   end
   else
    Begin
     dmData.qCQRLOG.First; //without this only the last qso of filtered selection is updated
-    lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+    if Selected then lastid := dmData.qCallBook.FieldByName('id_cqrlog_main').AsInteger
+       else lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger
    end;
 
   if Application.MessageBox('Update names from previous QSOs?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
@@ -975,10 +1004,14 @@ begin
 
   frmDatabaseUpdate := TfrmDatabaseUpdate.Create(self);
   try
+    frmDatabaseUpdate.Selected := Selected;
     frmDatabaseUpdate.id_cqrlog_main   := lastid;
     frmDatabaseUpdate.NameFromLog := prenames;
-    dmData.QCallBook.SQL.Clear;
-    dmData.QCallBook.SQL.Text     := dmData.qCQRLOG.SQL.Text;
+    if not Selected then
+      Begin
+       dmData.QCallBook.SQL.Clear;
+       dmData.QCallBook.SQL.Text     := dmData.qCQRLOG.SQL.Text;
+      end;
     frmDatabaseUpdate.ShowModal
   finally
     frmDatabaseUpdate.Free
@@ -1012,7 +1045,7 @@ procedure TfrmMain.acGroupEditExecute(Sender: TObject);
 begin
   with TfrmGroupEdit.Create(self) do
   try
-    Selected := dbgrdMain.SelectedRows.Count > 1;
+    Selected := dbgrdMain.SelectedRows.Count > 0;
     ShowModal
   finally
     Free
