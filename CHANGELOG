@@ -3,6 +3,37 @@ Legend:
   + new feature
   - bugfix
 --------------------
+
+2.5.0
+  + include operator's callsign in the exports (phl0 - florian@florian-wolters.de)
+  + view eQSL image from list of QSO (Saku, OH1KH)
+  + button to show remote station on a map with path and direction (phl0 - florian@florian-wolters.de)
+  + buttons for adding Mode+RST_sent and Locators to DX spot (Saku, OH1KH)
+  + ADIF import for JS8, FT4 and PKT (Andreas, DL7OAP)
+  + local oscilator configuration added (phl0 - florian@florian-wolters.de)
+  + user can spot RX freq instead of TX (phl0 - florian@florian-wolters.de)
+  + export to EDI (phl0 - florian@florian-wolters.de)
+  + rotor controls updated (Saku, OH1KH)
+  + working with WSJT improved
+  + DARK DOK info support added (phl0 - florian@florian-wolters.de)
+  + Cabrillo export added (Saku, OH1KH)
+  + DX cluster improved (Saku, OH1KH)
+  + Add option to upload SAT status info to AMSAT status page (phl0 - florian@florian-wolters.de)
+  + Calculate SAT mode from freq and RX freq. Used in eqsl.cc upload and ADIF/HTML exports (phl0 - florian@florian-wolters.de)
+  - UTF-8 problems in ADIF (Saku, OH1KH)
+  - JTDX fixes (Saku, OH1KH)
+  - typo in satellite EO-80 (Andreas, DL7OAP)
+  - layout fixes for QT5 compilation (Saku, OH1KH)
+  - filter to take fix (Saku, OH1KH)
+  - eQSL upload fixes (Saku, OH1KH)
+  - CQ monitor fixes (Saku, OH1KH)
+  - CW keys fixes (Saku, OH1KH)
+  - RBN monitor fixes (Saku, OH1KH)
+  - new membership files check fixed
+  - export to HTML and ADIF fixes (Saku, OH1KH)
+  - QTH profile fixes
+  - callbook database update fixes (Saku, OH1KH)
+  
 2.4.0 (2019-10-27)
   # update sat_name.tab with newest lotw satellite list (Andy, DL7OAP)
   # some layout changes and code refactoring
