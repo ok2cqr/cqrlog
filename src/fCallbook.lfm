@@ -1,14 +1,14 @@
 object frmCallbook: TfrmCallbook
   Left = 585
-  Height = 423
+  Height = 426
   Top = 223
-  Width = 263
-  ActiveControl = Panel1
+  Width = 267
+  ActiveControl = pnlCallsign
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Callbook'
-  ClientHeight = 423
-  ClientWidth = 263
+  ClientHeight = 426
+  ClientWidth = 267
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
     0000400000000100180000000000000C00006400000064000000000000000000
@@ -118,133 +118,214 @@ object frmCallbook: TfrmCallbook
   OnKeyPress = FormKeyPress
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.30'
-  object Panel1: TPanel
+  LCLVersion = '2.0.8.0'
+  object pnlCallsign: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
     Left = 0
     Height = 80
     Top = 0
-    Width = 263
+    Width = 267
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 80
-    ClientWidth = 263
+    ClientWidth = 267
     TabOrder = 0
-    object Label1: TLabel
+    object lblCallsign: TLabel
+      AnchorSideLeft.Control = pnlCallsign
+      AnchorSideTop.Control = edtCall
+      AnchorSideTop.Side = asrCenter
       Left = 18
-      Height = 18
-      Top = 19
-      Width = 57
+      Height = 15
+      Top = 15
+      Width = 56
+      BorderSpacing.Left = 18
       Caption = 'Callsign:'
       ParentColor = False
     end
     object edtCall: TEdit
-      Left = 88
-      Height = 27
-      Top = 14
-      Width = 142
+      AnchorSideLeft.Control = lblCallsign
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlCallsign
+      Left = 80
+      Height = 33
+      Top = 6
+      Width = 153
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
       CharCase = ecUppercase
       OnKeyPress = edtCallKeyPress
       TabOrder = 0
     end
     object btnSearch: TButton
-      Left = 155
+      AnchorSideLeft.Control = edtCall
+      AnchorSideTop.Control = edtCall
+      AnchorSideTop.Side = asrBottom
+      Left = 80
       Height = 25
-      Top = 48
+      Top = 42
       Width = 75
+      BorderSpacing.Top = 3
       BorderSpacing.InnerBorder = 4
       Caption = 'Search'
       OnClick = btnSearchClick
       TabOrder = 1
     end
+    object btnClose: TButton
+      AnchorSideLeft.Control = btnSearch
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = edtCall
+      AnchorSideTop.Side = asrBottom
+      Left = 158
+      Height = 25
+      Top = 42
+      Width = 75
+      BorderSpacing.Left = 3
+      BorderSpacing.Top = 3
+      Caption = 'Close'
+      OnClick = btnCloseClick
+      TabOrder = 2
+    end
   end
-  object GroupBox1: TGroupBox
-    Left = 8
+  object gbAddress: TGroupBox
+    AnchorSideLeft.Control = pnlCallsign
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = pnlCallsign
+    AnchorSideTop.Side = asrBottom
+    Left = 9
     Height = 160
-    Top = 88
+    Top = 92
     Width = 248
+    BorderSpacing.Top = 12
     Caption = ' Address '
-    ClientHeight = 141
-    ClientWidth = 244
+    ClientHeight = 142
+    ClientWidth = 246
     TabOrder = 1
     object mCallbook: TMemo
-      Left = 8
+      AnchorSideLeft.Control = gbAddress
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = gbAddress
+      AnchorSideTop.Side = asrCenter
+      Left = 11
       Height = 120
-      Top = 7
+      Top = 11
       Width = 224
       ScrollBars = ssAutoBoth
       TabOrder = 0
     end
   end
-  object GroupBox2: TGroupBox
-    Left = 8
+  object gbOther: TGroupBox
+    AnchorSideLeft.Control = gbAddress
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = gbAddress
+    AnchorSideTop.Side = asrBottom
+    Left = 9
     Height = 160
-    Top = 256
+    Top = 255
     Width = 248
+    BorderSpacing.Top = 3
     Caption = ' Other '
-    ClientHeight = 141
-    ClientWidth = 244
+    ClientHeight = 142
+    ClientWidth = 246
     TabOrder = 2
-    object Label3: TLabel
+    object lbGrid: TLabel
+      AnchorSideLeft.Control = gbOther
+      AnchorSideTop.Control = gbOther
       Left = 8
-      Height = 18
-      Top = 15
-      Width = 34
+      Height = 15
+      Top = 12
+      Width = 31
+      BorderSpacing.Left = 8
+      BorderSpacing.Top = 12
       Caption = 'Grid:'
       ParentColor = False
     end
-    object Label4: TLabel
+    object lbState: TLabel
+      AnchorSideLeft.Control = lbGrid
+      AnchorSideTop.Control = lbGrid
+      AnchorSideTop.Side = asrBottom
       Left = 8
-      Height = 18
-      Top = 47
-      Width = 41
+      Height = 15
+      Top = 45
+      Width = 38
+      BorderSpacing.Top = 18
       Caption = 'State:'
       ParentColor = False
     end
-    object Label6: TLabel
+    object lbQsl: TLabel
+      AnchorSideLeft.Control = lbCounty
+      AnchorSideTop.Control = lbCounty
+      AnchorSideTop.Side = asrBottom
       Left = 8
-      Height = 18
+      Height = 15
       Top = 111
-      Width = 32
+      Width = 29
+      BorderSpacing.Top = 18
       Caption = 'QSL:'
       ParentColor = False
     end
-    object Label5: TLabel
+    object lbCounty: TLabel
+      AnchorSideLeft.Control = lbState
+      AnchorSideTop.Control = lbState
+      AnchorSideTop.Side = asrBottom
       Left = 8
-      Height = 18
-      Top = 79
-      Width = 52
+      Height = 15
+      Top = 78
+      Width = 49
+      BorderSpacing.Top = 18
       Caption = 'County:'
       ParentColor = False
     end
     object lblGrid: TLabel
-      Left = 70
-      Height = 18
-      Top = 15
-      Width = 94
+      AnchorSideLeft.Control = lbCounty
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lbGrid
+      AnchorSideTop.Side = asrCenter
+      Left = 60
+      Height = 15
+      Top = 12
+      Width = 124
+      BorderSpacing.Left = 3
       Caption = '                               '
       ParentColor = False
     end
     object lblState: TLabel
-      Left = 70
-      Height = 18
-      Top = 47
-      Width = 94
+      AnchorSideLeft.Control = lbCounty
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lbState
+      AnchorSideTop.Side = asrCenter
+      Left = 60
+      Height = 15
+      Top = 45
+      Width = 124
+      BorderSpacing.Left = 3
       Caption = '                               '
       ParentColor = False
     end
     object lblCounty: TLabel
-      Left = 70
-      Height = 18
-      Top = 79
-      Width = 94
+      AnchorSideLeft.Control = lbCounty
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lbCounty
+      AnchorSideTop.Side = asrCenter
+      Left = 60
+      Height = 15
+      Top = 78
+      Width = 124
+      BorderSpacing.Left = 3
       Caption = '                               '
       ParentColor = False
     end
     object lblQSL: TLabel
-      Left = 70
-      Height = 18
+      AnchorSideLeft.Control = lbCounty
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lbQsl
+      AnchorSideTop.Side = asrCenter
+      Left = 60
+      Height = 15
       Top = 111
-      Width = 94
+      Width = 124
+      BorderSpacing.Left = 3
       Caption = '                               '
       ParentColor = False
     end

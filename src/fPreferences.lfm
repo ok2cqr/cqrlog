@@ -2369,7 +2369,6 @@ object frmPreferences: TfrmPreferences
                 Top = 33
                 Width = 511
                 Anchors = [akTop, akLeft, akRight]
-                OnChange = edtUsr2R1Change
                 TabOrder = 1
               end
               object edtUsr3R1: TEdit
@@ -2952,7 +2951,6 @@ object frmPreferences: TfrmPreferences
                 Top = 33
                 Width = 511
                 Anchors = [akTop, akLeft, akRight]
-                OnChange = edtUsr2R1Change
                 TabOrder = 1
               end
               object edtUsr3R2: TEdit

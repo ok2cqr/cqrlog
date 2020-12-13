@@ -1097,7 +1097,6 @@ type
     procedure edtRadio1NameChange(Sender: TObject);
     procedure edtRadio2Change(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
-    procedure edtUsr2R1Change(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
     procedure edtWebBrowserExit(Sender: TObject);
     procedure edtWinMaxSpeedChange(Sender: TObject);
@@ -2597,11 +2596,6 @@ procedure TfrmPreferences.edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
 begin
   if not (key in ['0'..'9']) then
     key := #0;
-end;
-
-procedure TfrmPreferences.edtUsr2R1Change(Sender: TObject);
-begin
-
 end;
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
