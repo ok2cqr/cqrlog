@@ -3866,12 +3866,6 @@ begin
 
     //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
     //too late to rewrite it (Petr, OK2CQR)
-
-    sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
-           'and (mode = '+QuotedStr(mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
-           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')';
-    qRbnMon.SQL.Text := sql;
-
     qRbnMon.SQL.Text := 'select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band) '+
            'and (mode = :mode) and (str_to_date(concat(qsodate, '+QuotedStr(' ')+',time_on), '+
            QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date(:last_date_time, '+QuotedStr('%Y-%m-%d %H:%i')+')';
