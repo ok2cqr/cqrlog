@@ -88,7 +88,7 @@ var
   id : Integer;
 begin
   if Application.MessageBox('Do you really want to delete this dxcluster?',
-                            'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
+                            'Question ...', MB_ICONQUESTION + MB_YESNO) in [idNo, idCancel] then
     exit;
 
   id := dmData.qDXClusters.FieldByName('id_dxclusters').AsInteger;

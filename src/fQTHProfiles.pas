@@ -136,7 +136,7 @@ begin
     exit;
   end;
 
-  if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+  if Application.MessageBox('Do you really want to delete this profile?','Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
   begin
     exit;
   end;

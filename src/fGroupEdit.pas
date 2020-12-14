@@ -274,13 +274,13 @@ begin
          end;
      8 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear name field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
              exit;
            sql := 'name='+QuotedStr(cmbValue.Text)
          end;
      9 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear QTH field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
            begin
              cmbValue.SetFocus;
              exit
@@ -311,7 +311,7 @@ begin
          end;
     13 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear County field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
            begin
              cmbValue.SetFocus;
              exit
@@ -320,7 +320,7 @@ begin
          end;
     14 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear State field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
            begin
              cmbValue.SetFocus;
              exit
@@ -330,7 +330,7 @@ begin
 
     15 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Award field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
            begin
              cmbValue.SetFocus;
              exit
@@ -348,7 +348,7 @@ begin
          end;
     17 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Comment to QSO field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
            begin
              cmbValue.SetFocus;
              exit
@@ -367,7 +367,7 @@ begin
             end
            else begin
              if (Application.MessageBox('Dou you really want to clear My locator field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
             begin
               cmbValue.SetFocus;
               exit
@@ -387,7 +387,7 @@ begin
           end
           else begin
             if (Application.MessageBox('Dou you really want to clear Locator field?',
-               'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+               'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
             begin
               cmbValue.SetFocus;
               exit
@@ -400,7 +400,7 @@ begin
         end;
    21 : begin
           if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear QSL via field?',
-             'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+             'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
           begin
             cmbValue.SetFocus;
             exit
@@ -409,7 +409,7 @@ begin
         end;
    22 : begin
           if (cmbValue.ItemIndex=0) and (Application.MessageBox('Dou you really want to clear QSL_S field?',
-             'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+             'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
           begin
             cmbValue.SetFocus;
             exit
@@ -430,7 +430,7 @@ begin
         end;
    24 : begin
           if (cmbValue.ItemIndex=0) and (Application.MessageBox('Dou you really want to clear QSL_R field?',
-             'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+             'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
           begin
             cmbValue.SetFocus;
             exit
@@ -524,19 +524,19 @@ begin
         end;
    34 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Contest name field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
              exit;
            sql := 'contestname='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
          end;
    35 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Propagation mode field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
              exit;
            sql := 'prop_mode='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
          end;
    36 : begin
            if (cmbValue.Text='') and (Application.MessageBox('Dou you really want to clear Satellite field?',
-              'Question ...',mb_YesNo+mb_IconQuestion)=idNo) then
+              'Question ...',mb_YesNo+mb_IconQuestion) in [idNo, idCancel]) then
              exit;
            sql := 'satellite='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
          end;
