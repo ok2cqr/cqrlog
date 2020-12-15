@@ -261,12 +261,12 @@ begin
     exit;
   end;
 
-  if Application.MessageBox('Do you really want to delete this log?','Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
+  if Application.MessageBox('Do you really want to delete this log?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
   begin
     exit;
   end;
 
-  if Application.MessageBox('LOG WILL BE _DELETED_. Are you sure?','Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
+  if Application.MessageBox('LOG WILL BE _DELETED_. Are you sure?','Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton2) in [idNo, idCancel] then
   begin
     exit;
   end;
@@ -446,7 +446,7 @@ var
 begin
   s := 'YOUR ENTIRE LOG WILL BE DELETED!'+LineEnding+LineEnding+
        'Do you want to CANCEL this operation?';
-  if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
+  if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion + mb_DefButton1) in [idNo, idCancel] then
   begin
     dmData.TruncateTables(dmData.qLogList.Fields[0].AsInteger);
     ShowMessage('Log is empty')

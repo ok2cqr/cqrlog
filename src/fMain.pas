@@ -735,7 +735,7 @@ begin
     if dbgrdMain.SelectedRows.Count < 1 then
     begin
       if Application.MessageBox('Do you really want to delete this QSO?',
-        'Question ...', MB_ICONQUESTION + MB_YESNO) in [idNo, idCancel] then
+        'Question ...', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) in [idNo, idCancel] then
         exit;
       dmData.qCQRLOG.DisableControls;
       try
@@ -761,7 +761,7 @@ begin
     else
     begin
       if Application.MessageBox('Do you really want to delete selected QSOs?',
-        'Question ...', MB_ICONQUESTION + MB_YESNO) in [idNo, idCancel] then
+        'Question ...', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) in [idNo, idCancel] then
         exit;
       dmData.qCQRLOG.DisableControls;
       try
@@ -1434,7 +1434,7 @@ end;
 procedure TfrmMain.acRemoveDupesExecute(Sender: TObject);
 begin
   if Application.MessageBox('PLEASE MAKE A BACKUP FIRST! THIS FUNCTION MAY DELETE QSO FROM YOUR LOG!'+LineEnding+LineEnding+
-       'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion) = idYes then
+       'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) = idYes then
   begin
     if cqrini.ReadBool('OnlineLog','HaUP',False)  or cqrini.ReadBool('OnlineLog','ClUP',False) or cqrini.ReadBool('OnlineLog','HrUP',False) then
     begin
