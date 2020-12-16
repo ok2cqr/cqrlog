@@ -735,7 +735,7 @@ begin
     if dbgrdMain.SelectedRows.Count < 1 then
     begin
       if Application.MessageBox('Do you really want to delete this QSO?',
-        'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
+        'Question ...', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) in [idNo, idCancel] then
         exit;
       dmData.qCQRLOG.DisableControls;
       try
@@ -761,7 +761,7 @@ begin
     else
     begin
       if Application.MessageBox('Do you really want to delete selected QSOs?',
-        'Question ...', MB_ICONQUESTION + MB_YESNO) = idNo then
+        'Question ...', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) in [idNo, idCancel] then
         exit;
       dmData.qCQRLOG.DisableControls;
       try
@@ -954,7 +954,7 @@ var
 
 begin
   if Application.MessageBox('Do you really want to run database update?',
-    'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+    'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
     exit;
   lastid := cqrini.ReadInteger('CallBook', 'LastId', -1);
   Selected:=dbgrdMain.SelectedRows.Count > 0;
@@ -985,7 +985,7 @@ begin
   begin
     if Application.MessageBox(
       'It looks like last update were canceled. Do you want to continue from last position?',
-      'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+      'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
       Begin
       if Selected then lastid := dmData.qCallBook.FieldByName('id_cqrlog_main').AsInteger
        else lastid := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger
@@ -1132,7 +1132,7 @@ begin
            'This could cause that you won''t have more callsigns on one label and ' +
            'only last 500 QSO will be printed.'+LineEnding+LineEnding+
            'Do you want to continue?';
-    if Application.MessageBox(PChar(msg),'Warning ...',mb_YesNo + mb_IconWarning) = idNo then
+    if Application.MessageBox(PChar(msg),'Warning ...',mb_YesNo + mb_IconWarning) in [idNo, idCancel] then
       exit
   end;
   with TfrmExLabelPrint.Create(self) do
@@ -1167,7 +1167,7 @@ end;
 procedure TfrmMain.acSelAllExecute(Sender: TObject);
 begin
   if application.MessageBox('Do you really want to select all records?',
-    'Question ...', mb_ok + mb_YesNo) = idNo then
+    'Question ...', mb_ok + mb_YesNo) in [idNo, idCancel] then
     exit;
   try
     dbgrdMain.SelectedRows.Clear;
@@ -1434,12 +1434,12 @@ end;
 procedure TfrmMain.acRemoveDupesExecute(Sender: TObject);
 begin
   if Application.MessageBox('PLEASE MAKE A BACKUP FIRST! THIS FUNCTION MAY DELETE QSO FROM YOUR LOG!'+LineEnding+LineEnding+
-       'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion) = idYes then
+       'Do you really want to remove dupes from database?','Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) = idYes then
   begin
     if cqrini.ReadBool('OnlineLog','HaUP',False)  or cqrini.ReadBool('OnlineLog','ClUP',False) or cqrini.ReadBool('OnlineLog','HrUP',False) then
     begin
       if Application.MessageBox('It seems you are using online log upload. First, please go to Online log menu and click to  "Mark all QSO as uploaded to all logs".'+
-                              LineEnding + LineEnding + 'Do you want to continue?','Question...', mb_YesNo+mb_IconQuestion) = idNo then
+                              LineEnding + LineEnding + 'Do you want to continue?','Question...', mb_YesNo+mb_IconQuestion) in [idNo, idCancel] then
         exit
     end;
     with TfrmImportProgress.Create(self) do
@@ -1840,7 +1840,7 @@ end;
 procedure TfrmMain.acAddQSLMgrsExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to find qsl managers for these QSOs?',
-    'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+    'Question ...', mb_YesNo + mb_IconQuestion) in [idNo, idCancel] then
     exit;
 
   with TfrmImportProgress.Create(self) do
