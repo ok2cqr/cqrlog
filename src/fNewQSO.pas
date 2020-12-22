@@ -7004,7 +7004,7 @@ begin
       HisName:= edtName.Text;
       tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + call;
       ModRst := cmbMode.Text+' '+ rst_s;
-      HMLoc := edtGrid.Text+'<'+dmSatellite.GetPropShortName(cmbPropagation.Text)+'>'+copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
+      HMLoc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6)+'<'+dmSatellite.GetPropShortName(cmbPropagation.Text)+'>'+edtGrid.Text;
 
     end;
   end
