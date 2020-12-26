@@ -3459,7 +3459,7 @@ begin
   dmData.qQSOBefore.Close;
   fEditQSO := False;
   was_call := edtCall.Text;
-  edtCall.Text := ''; //calls Clear.All
+  edtCall.Text := ''; //calls ClearAll
   old_ccall := '';
   old_cfreq := '';
   old_cmode := '';
@@ -4803,8 +4803,6 @@ begin
     tabSatellite.Font.Color := clRed
   else
     tabSatellite.Font.Color := clDefault;
-
-  old_prop   := dmSatellite.GetPropShortName(cmbPropagation.Text); //old_prop is now selected value
 end;
 
 procedure TfrmNewQSO.cmbQSL_REnter(Sender: TObject);
