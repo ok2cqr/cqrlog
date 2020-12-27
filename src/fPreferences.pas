@@ -1426,12 +1426,16 @@ begin
   cqrini.WriteInteger('Band1', 'RTTY', edtRTTY1.Value);
   cqrini.WriteInteger('Band1', 'AM', edtAM1.Value);
   cqrini.WriteInteger('Band1', 'FM', edtFM1.Value);
+  cqrini.WriteString ('Band1', 'Datacmd', edtCMD1.Text);
+  cqrini.WriteString ('Band1', 'Datamode', edtDataMode1.Text);
 
   cqrini.WriteInteger('Band2', 'CW', edtCW2.Value);
   cqrini.WriteInteger('Band2', 'SSB', edtSSB2.Value);
   cqrini.WriteInteger('Band2', 'RTTY', edtRTTY2.Value);
   cqrini.WriteInteger('Band2', 'AM', edtAM2.Value);
   cqrini.WriteInteger('Band2', 'FM', edtFM2.Value);
+  cqrini.WriteString ('Band2', 'Datacmd', edtCMD2.Text);
+  cqrini.WriteString ('Band2', 'Datamode', edtDataMode2.Text);
 
   cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
 
