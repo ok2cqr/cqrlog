@@ -21,7 +21,7 @@ uses
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
   uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
   fMonWsjtx, fWorkedGrids,fPropDK0WCY, fAdifImport, RegExpr,
-  FileUtil, LazFileUtils, laz2_XMLRead, laz2_DOM;
+  FileUtil, LazFileUtils;
 
 const
   cRefCall = 'Ref.call (CTRL+R): ';
@@ -662,7 +662,6 @@ type
 
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
-    function FromN1MMToAdif(buf:string):string;
 
   public
     QTHfromCb   : Boolean;
@@ -2090,118 +2089,7 @@ begin
  end; //else fldigixmlrpc
 
 end;
-function TfrmNewQSO.FromN1MMToAdif(buf:string):string;
-{
 
-//purpose of this procedure is to convert contanct info to ADIF record that then can be used by ADIF remote
-// should return with ADIF string but not yet implemented so
-
-
-Contact Info UDP packet
-
-<?xml version="1.0" encoding="utf-8"?>
-<contactinfo>
-    <app>N1MM</app>
-    <contestname>CWOPS</contestname>
-    <contestnr>73</contestnr>
-    <timestamp>2020-01-17 16 :43:38</timestamp>
-    <mycall>W2XYZ</mycall>
-    <band>3.5</band>
-    <rxfreq>352519</rxfreq>
-    <txfreq>352519</txfreq>
-    <operator></operator>
-    <mode>CW</mode>
-    <call>WlAW</call>
-    <countryprefix>K</countryprefix>
-    <wpxprefix>Wl</wpxprefix>
-    <stationprefix>W2XYZ</stationprefix>
-    <continent>NA</continent>
-    <snt>599</snt>
-    <sntnr>5</sntnr>
-    <rcv>599</rcv>
-    <rcvnr>0</rcvnr>
-    <gridsquare></gridsquare>
-    <exchangel></exchangel>
-    <section></section>
-    <comment></comment>
-    <qth></qth>
-    <name></name>
-    <power></power>
-    <misctext></misctext>
-    <zone>0</zone>
-    <prec></prec>
-    <ck>0</ck>
-    <ismultiplierl>l</ismultiplierl>
-    <ismultiplier2>0</ismultiplier2>
-    <ismultiplier3>0</ismultiplier3>
-    <points>l</points>
-    <radionr>l</radionr>
-    <RoverLocation></RoverLocation>
-    <RadioInterfaced>l</RadioInterfaced>
-    <NetworkedCompNr>0</NetworkedCompNr>
-    <IsOriginal>False</IsOriginal>
-    <NetBiosName></NetBiosName>
-    <IsRunQSO>0</IsRunQSO>
-    <StationName>CONTEST-PC</StationName>
-    <ID>a1b2c3d4e5f6g7h</ID>
-    <IsClaimedQso>True</IsClaimedQso>
-</contactinfo>
-}
-var
-  iDoc     : TXMLDocument;
-  Nodelist : TDOMNodeList;
-  Anode    : TDOMNode;
-  AStream  : TStringStream;
-  i        : integer;
-  adi,n,v      : String;
-
-Begin
- adi:='<ADIF_VER:5>3.1.0<EOH>';
-
-  Writeln('Enter N1MM:',Buf);
-  AStream := TStringStream.Create(Buf);          { assign the XMLstring to the stream}
-
-  try
-    if Assigned(AStream) then
-     begin
-      ReadXMLFile(iDoc, AStream);                   { read the stream, the XMLstring }
-       Writeln('Read xml');
-      NodeList := iDoc.DocumentElement.ChildNodes;
-
-        if Assigned(NodeList) then
-        begin
-          Writeln('In node list');
-          for i := 0 to NodeList.Count-1 do
-          begin
-           ANode:= NodeList.Item[i];
-           if (ANode <> nil) and (ANode.FirstChild <> nil) then
-           begin
-               n:= UpperCase(Anode.NodeName.Trim);
-               v:= ANode.FirstChild.NodeValue.Trim;
-               Writeln('In loop: ',n,' = ',v);
-                case n of
-                  'CALL'          : adi:=adi+'<'+dmUtils.StringToADIF(n,v);
-                  'TIMESTAMP'     : Begin
-                                       adi:=adi+'<'+dmUtils.StringToADIF('QSO_DATE',copy(v,1,4)+copy(v,6,2)+copy(v,8,2));
-                                       v:= trim(copy(v,pos(' ',v),length(v)));
-                                       v:= StringReplace(StringReplace(v,' ','',[rfReplaceAll]),':','', [rfReplaceAll]);
-                                       adi:=adi+'<'+dmUtils.StringToADIF('TIME_ON',v);
-                                       adi:=adi+'<'+dmUtils.StringToADIF('TIME_OFF',v);
-                                    end;
-                  'CONTESTNAME'   : adi:=adi+'<'+dmUtils.StringToADIF('CONTEST_ID',v);
-                  'TXFREQ'        : adi:=adi+'<'+dmUtils.StringToADIF('FREQ',v+'0');
-
-                end; //case
-            end; //Anode not nil
-           end;//nodelist cocunt
-          end; //assigned nodelist
-        end; //assigned Astream
-   finally
-     AStream.free;
-   end;
-   adi:=adi+'<EOR>';
-   writeln(adi);
-end;
 procedure TfrmNewQSO.tmrADIFTimer(Sender: TObject);
 var
   Buf,
@@ -2227,12 +2115,16 @@ begin
       if ADIFSock.lasterror=0 then
        begin
          //check data.
-         if pos('<contactinfo>',Buf)>0 then Buf:=FromN1MMToAdif(Buf);
+         //N1MM contact info
+         if (pos('<CONTACTINFO>',Uppercase(Buf))>0 )
+           and(pos('<APP>N1MM',Uppercase(Buf))>0 ) then Buf:=dmUtils.FromN1MMToAdif(Buf);
          //if JS8CALL JSON with ADIF inside
           a:= pos('"LOG.QSO","value":"',Buf);
           b:= pos('"}',Buf);
-          if (a>0 ) and (b>0)  then
-             Begin
+          if (a>0 ) and (b>0)  then  // Buf:=dmUtils.FromJS8CALLToAdif(Buf)
+            //ToDo
+           //change following to dmUtils function call JS8ToAdif  (just like with N1MM)
+           Begin
               IsJS8Callrmt:=true; //once this is set it resets only when remote is closed
               lblCall.Caption := 'rmt ADIF JS8CALL';
               Buf:=copy(Buf,a+19,length(Buf)-a-19-1)+' <eor>';
@@ -2302,6 +2194,8 @@ begin
               //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
               //qso_date will then replace this
               edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
+              edtRXFreq.Text := ''; //this does not reset in qso save, so it must be cleared here in case there was
+                                    //FREQ_RX tag with value in previously received record.
               repeat
                 begin
                   if frmAdifImport.getNextAdifTag(Buf,prik,data) then
@@ -2327,6 +2221,7 @@ begin
                                                   //now this overrides MODE, if exists
                                                   'SUBMODE'    : cmbMode.Text := uppercase(data);
                                                   'FREQ'       : cmbFreq.Text := data;
+                                                  'FREQ_RX'    : edtRXFreq.Text := data;
                                                   'RST_SENT'   : edtHisRST.Text := data;
                                                   'RST_RCVD'   : edtMyRST.Text := data;
                                                   'QSO_DATE'   : Begin
