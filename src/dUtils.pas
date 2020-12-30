@@ -1717,7 +1717,8 @@ Begin
  AStream := TStringStream.Create(Buf);
  mhz:='';
  Rmhz:='';
-
+  if dmData.DebugLevel>=1 then
+                            Writeln('IN->',buf);
   try
     if Assigned(AStream) then
      begin
@@ -1762,7 +1763,8 @@ Begin
                   'SNTNR'         : adi:=adi+'<'+StringToADIF('STX',Nval);
                   'RCV'           : adi:=adi+'<'+StringToADIF('RST_RCVD',Nval);
                   'RCVNR'         : adi:=adi+'<'+StringToADIF('SRX',Nval);
-                  'EXCHANGEL'     :                                  ; //what is this?   STX_STRING +  SRX_STRING ?
+                  'EXCHANGE1'     :                   ; //what is this?   STX_STRING +  SRX_STRING ?
+                  'MISCTEXT'      : adi:=adi+'<'+StringToADIF('SRX_STRING',Nval);  //seems to be here, why ?
                   'GRIDSQUARE'    : adi:=adi+'<'+StringToADIF('GRIDSQUARE',Nval);
                   'COMMENT'       : adi:=adi+'<'+StringToADIF('COMMENT',Nval);
                   'NAME'          : adi:=adi+'<'+StringToADIF('NAME',Nval);
@@ -1786,7 +1788,8 @@ Begin
      AStream.free;
    end;
    adi:=adi+'<EOR>';
-   if dmData.DebugLevel>=1 then writeln(adi,'   ',IsOriginal);
+   if dmData.DebugLevel>=1 then
+                        writeln('OUT->',adi,'   ',IsOriginal);
    if IsOriginal then Result:=adi  else Result :=''; //do not accept relayed connect infos
 end;
 
