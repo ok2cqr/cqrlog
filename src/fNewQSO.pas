@@ -2099,10 +2099,11 @@ var
   chkDuplicates :boolean;
   i             :longint;
   a,b,l         :integer;
+  fixed         :Boolean;
 
 begin
 
-
+  fixed:=false;
   tmrADIF.Enabled:=false;
   chkDuplicates:=false;
   if ADIFsock.WaitingData > 0 then
@@ -2117,72 +2118,50 @@ begin
          //check data.
          //N1MM contact info
          if (pos('<CONTACTINFO>',Uppercase(Buf))>0 )
-           and(pos('<APP>N1MM',Uppercase(Buf))>0 ) then Buf:=dmUtils.FromN1MMToAdif(Buf);
+           and(pos('<APP>N1MM',Uppercase(Buf))>0 ) then
+                                                 Begin
+                                                  Buf:=dmUtils.FromN1MMToAdif(Buf);
+                                                  lblCall.Caption := 'rmt ADIF N1MM+';
+                                                  fixed:=true;
+                                                 end;
          //if JS8CALL JSON with ADIF inside
-          a:= pos('"LOG.QSO","value":"',Buf);
-          b:= pos('"}',Buf);
-          if (a>0 ) and (b>0)  then  // Buf:=dmUtils.FromJS8CALLToAdif(Buf)
-            //ToDo
-           //change following to dmUtils function call JS8ToAdif  (just like with N1MM)
-           Begin
-              IsJS8Callrmt:=true; //once this is set it resets only when remote is closed
-              lblCall.Caption := 'rmt ADIF JS8CALL';
-              Buf:=copy(Buf,a+19,length(Buf)-a-19-1)+' <eor>';
-              if dmData.DebugLevel>=1 then writeln('Modified JS8CALL JSON: ',Buf);
-             end
-            else
-             begin
-                //if not JS8CALL and has proper ADIF header with at least one qso record with CALL and EOR (wsjt-x primary UDP msg #12)
-                if not IsJS8Callrmt then
-                Begin
-                  a:=pos('<ADIF_VER',uppercase (Buf));
-                  b:=pos('<EOH>',uppercase (Buf));
-                  if (a>0) and (b>0) then //proper adif block starts with header
-                     Begin
-                     if dmData.DebugLevel>=1 then writeln('ADIF_VER header block found!');
-                     Buf:=copy(Buf,b+5,length(Buf));
-                     a:=pos('<CALL',uppercase (Buf));
-                     b:=pos('<EOR>',uppercase (Buf));
-                     if (b>a) and  (a>0) and (b>0) then
-                       Begin
-                        if dmData.DebugLevel>=1 then writeln('There seems to be at least one qso record!')
-                       end
-                      else
-                       Begin
-                        if dmData.DebugLevel>=1 then writeln('There seems to be something wrong with qso record(s)!');
-                        tmrADIF.Enabled:=true;
-                        exit;
-                       end;
-                     end;
+          if (pos('"LOG.QSO","value":"',Buf)>0) and (pos('"}',Buf)>0)  then
+                                                Begin
+                                                 Buf:=dmUtils.FromJS8CALLToAdif(Buf);
+                                                 lblCall.Caption := 'rmt ADIF JS8CALL';
+                                                 IsJS8Callrmt :=true;
+                                                 fixed:=true;
+                                                end;
+
+          //if headerless ADIF from wsjtx secondary server, not from old versions of js8call
+          if (pos('<CALL',uppercase (Buf))=1)
+            and (pos('<EOR>',uppercase (Buf))>0)
+            and (not IsJS8Callrmt)     then
+                                               Begin
+                                                 Buf:='<ADIF_VER:5>3.1.0<EOH>'+Buf;
+                                                 lblCall.Caption := 'rmt ADIF hdless';
+                                                 fixed:=true;
+                                                end;
 
 
-                 //if not JS8CALL and not proper ADIF header but has CALL and EOR (wsjt-x secondary UDP frame)
-                 if (a=0) and (b=0) then
-                 Begin
-                  a:=pos('<CALL',uppercase (Buf));
-                  b:=pos('<EOR>',uppercase (Buf));
-                  if (a>0) and (b>0) then
-                   Begin
-                    if dmData.DebugLevel>=1 then writeln('There seems to be at least one qso record!')
-                   end
-                  else
-                   Begin
-                    if dmData.DebugLevel>=1 then writeln('No qso record(s)!');
-                    tmrADIF.Enabled:=true;
-                    exit;
-                   end;
-                  end;
-                 end
-                else
-                 Begin //this will block the second adif frame sent by JS8CALL without JSON and ADIF header
-                   tmrADIF.Enabled:=true;
-                   exit;
-                 end;
-             end; //else JS8CALL with JSON included ADIF
+          //now all types should have proper adif header
+
+         if ( (pos('<ADIF_VER',uppercase (Buf))>0)
+          and (pos('<EOH>',uppercase (Buf))>0)
+          and (pos('<CALL',uppercase (Buf))>0)
+          and (pos('<EOR',uppercase (Buf))>0) ) then //we have at least one full record
+            Begin  //remove header
+               Buf:=copy(Buf,pos('<EOH>',uppercase (Buf))+5,length(Buf));
+               if not fixed then lblCall.Caption := 'REMOTE ADIF';
+            end
+           else
+            Begin      //nothing to do
+              tmrADIF.Enabled:=true;
+              exit;
+            end;
 
            Buf2:=Buf;
-           //here check if several qsos in block
-           repeat   //here check if several qsos in block
+           repeat //here check if several qsorecords in UDP block
             begin
              b:=pos('<EOR>',uppercase(buf2));
              buf:=copy(Buf2,1,b+5);   //holds one record
@@ -2194,8 +2173,7 @@ begin
               //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
               //qso_date will then replace this
               edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
-              edtRXFreq.Text := ''; //this does not reset in qso save, so it must be cleared here in case there was
-                                    //FREQ_RX tag with value in previously received record.
+
               repeat
                 begin
                   if frmAdifImport.getNextAdifTag(Buf,prik,data) then
@@ -2247,7 +2225,8 @@ begin
                                                     //same with SRX
                                                    'SRX_STRING': edtContestExchangeMessageReceived.Text:= data;
                                                    'OPERATOR'  : Begin
-                                                                 if ((data<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
+                                                                 data :=UpperCase(data);
+                                                                 if ((data<>'') and (data <> UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
                                                                   Begin
                                                                    Op := data;
                                                                    sbNewQSO.Panels[2].Text := cOperator+Op;
@@ -2257,6 +2236,12 @@ begin
                     end;  //repeat
                until pos('<EOR>',uppercase(Buf))=1;
               SaveRemote;
+
+              //these do not reset in qso save, so they must be cleared here in case there was
+              //FREQ_RX tag or OPERATOR-tag with value in previously received record.
+              edtRXFreq.Text := '';
+              sbNewQSO.Panels[2].Text :=''; Op:='';
+
               buf:=copy(buf,6,length(buf)); //cut eof away.
              end; // has tag call
            end; //here check if several qsos in block

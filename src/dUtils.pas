@@ -20,7 +20,7 @@ uses
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
   sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr,
-  laz2_XMLRead, laz2_DOM;
+  laz2_XMLRead, laz2_DOM, fpjson,jsonparser;
 
   //"XMLRead, DOM," replced. These have system encoding. "laz2_" ones have full UTF-8 Unicode support
   //they should be replaceable by Laz-XML-wiki.
@@ -1680,8 +1680,16 @@ end;
 function TdmUtils.FromJS8CALLToAdif(buf:string):string;
 //purpose of this procedure is to convert JS8CALL UDP frame from json
 //to ADIF record that then can be used by ADIF remote logging
+var
+  adi,a   :String;
+  Jdata   :TJSONData;
 Begin
-
+  Jdata:=GetJSON(Buf);
+  adi:= Jdata.FindPath('value').AsString;
+  if pos('<CALL',UpperCase(adi))>0 then    //there should be call-tag
+       Result:= '<ADIF_VER:5>3.1.0<EOH>'+adi+'<EOR>'
+    else
+       Result:= '';
 end;
 
 function TdmUtils.FromN1MMToAdif(buf:string):string;
@@ -1778,7 +1786,7 @@ Begin
      AStream.free;
    end;
    adi:=adi+'<EOR>';
-   writeln(adi,'   ',IsOriginal);
+   if dmData.DebugLevel>=1 then writeln(adi,'   ',IsOriginal);
    if IsOriginal then Result:=adi  else Result :=''; //do not accept relayed connect infos
 end;
 
