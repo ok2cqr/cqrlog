@@ -19,7 +19,11 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, StdCtrls, iniFiles,
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
-  XMLRead, DOM, sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr;
+  sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr,
+  laz2_XMLRead, laz2_DOM, fpjson,jsonparser;
+
+  //"XMLRead, DOM," replced. These have system encoding. "laz2_" ones have full UTF-8 Unicode support
+  //they should be replaceable by Laz-XML-wiki.
 
 type
   TExplodeArray = array of string;
@@ -225,6 +229,8 @@ type
     function  StripHTML(S: string): string;
     function  ExtractQTH( qth : String) : String;
     function  GetModeFromFreq(freq : String) : String;
+    function  FromJS8CALLToAdif(buf:string):string;
+    function  FromN1MMToAdif(buf:string):string;
     function  StringToADIF(ATag, Text : String) : String;
     function  MyTrim(text : String) : String;
     function  ReplaceSpace(txt : String) : String;
@@ -1671,7 +1677,121 @@ begin
       Free
     end;
 end;
+function TdmUtils.FromJS8CALLToAdif(buf:string):string;
+//purpose of this procedure is to convert JS8CALL UDP frame from json
+//to ADIF record that then can be used by ADIF remote logging
+var
+  adi,a   :String;
+  Jdata   :TJSONData;
+Begin
+  Jdata:=GetJSON(Buf);
+  adi:= Jdata.FindPath('value').AsString;
+  if pos('<CALL',UpperCase(adi))>0 then    //there should be call-tag
+       Result:= '<ADIF_VER:5>3.1.0<EOH>'+adi+'<EOR>'
+    else
+       Result:= '';
+end;
 
+function TdmUtils.FromN1MMToAdif(buf:string):string;
+
+//purpose of this procedure is to convert "contanct info" UDP frame from N1MM
+//to ADIF record that then can be used by ADIF remote logging
+//https://n1mmwp.hamdocs.com/appendices/external-udp-broadcasts/
+
+var
+  iDoc       : TXMLDocument;
+  Nodelist   : TDOMNodeList;
+  Anode      : TDOMNode;
+  AStream    : TStringStream;
+  i          : integer;
+  mhz,Rmhz,
+  adi,
+  Nname,
+  Nval       : String;
+  IsOriginal : Boolean;
+  Fdes       : Currency;
+
+Begin
+ adi:='<ADIF_VER:5>3.1.0<EOH>';
+ IsOriginal := false;
+ AStream := TStringStream.Create(Buf);
+ mhz:='';
+ Rmhz:='';
+  if dmData.DebugLevel>=1 then
+                            Writeln('IN->',buf);
+  try
+    if Assigned(AStream) then
+     begin
+      ReadXMLFile(iDoc, AStream);
+      NodeList := iDoc.DocumentElement.ChildNodes;
+
+        if Assigned(NodeList) then
+        begin
+          for i := 0 to NodeList.Count-1 do
+          begin
+           ANode:= NodeList.Item[i];
+           if (ANode <> nil) and (ANode.FirstChild <> nil) then
+           begin
+               Nname:= UpperCase(Anode.NodeName.Trim);
+               Nval:= ANode.FirstChild.NodeValue.Trim;
+                case Nname of
+                  'CALL'          : adi:=adi+'<'+StringToADIF(Nname,Nval);
+                  'TIMESTAMP'     : Begin
+                                       adi:=adi+'<'+StringToADIF('QSO_DATE',copy(Nval,1,4)+
+                                                                            copy(Nval,6,2)+
+                                                                            copy(Nval,9,2));
+                                       Nval:= trim(copy(Nval,pos(' ',Nval),length(Nval)));
+                                       Nval:= StringReplace(StringReplace(Nval,' ','',[rfReplaceAll]),':','', [rfReplaceAll]);
+                                       adi:=adi+'<'+StringToADIF('TIME_ON',Nval);
+                                       adi:=adi+'<'+StringToADIF('TIME_OFF',Nval);
+                                    end;
+                  'CONTESTNAME'   : adi:=adi+'<'+StringToADIF('CONTEST_ID',Nval);
+                  'RXFREQ'        : if TryStrToCurr(Nval+'0',Fdes) then //N1MM sends units of 10 Hz!
+                                             Begin
+                                               Fdes :=Fdes/1000000.0;
+                                               Rmhz:=FloatToStrF(Fdes,ffFixed,8,5);
+                                             end;
+                  'TXFREQ'        : if TryStrToCurr(Nval+'0',Fdes) then //N1MM sends units of 10 Hz!
+                                             Begin
+                                               Fdes :=Fdes/1000000.0;
+                                               mhz:=FloatToStrF(Fdes,ffFixed,8,5);
+                                             end;
+                  'BAND'          : adi:=adi+'<'+StringToADIF('BAND',GetAdifBandFromFreq(Nval));
+                  'OPERATOR'      : adi:=adi+'<'+StringToADIF('OPERATOR',Nval);
+                  'MODE'          : adi:=adi+'<'+StringToADIF('MODE',Nval);
+                  'SNT'           : adi:=adi+'<'+StringToADIF('RST_SENT',Nval);
+                  'SNTNR'         : adi:=adi+'<'+StringToADIF('STX',Nval);
+                  'RCV'           : adi:=adi+'<'+StringToADIF('RST_RCVD',Nval);
+                  'RCVNR'         : adi:=adi+'<'+StringToADIF('SRX',Nval);
+                  'EXCHANGE1'     :                   ; //what is this?   STX_STRING +  SRX_STRING ?
+                  'MISCTEXT'      : adi:=adi+'<'+StringToADIF('SRX_STRING',Nval);  //seems to be here, why ?
+                  'GRIDSQUARE'    : adi:=adi+'<'+StringToADIF('GRIDSQUARE',Nval);
+                  'COMMENT'       : adi:=adi+'<'+StringToADIF('COMMENT',Nval);
+                  'NAME'          : adi:=adi+'<'+StringToADIF('NAME',Nval);
+                  'POWER'         : adi:=adi+'<'+StringToADIF('TX_PWR',Nval);
+
+                  'ISORIGINAL'    : IsOriginal := ( Uppercase(Nval) = 'TRUE');
+
+                end; //case
+            end; //Anode not nil
+           end;//nodelist cocunt
+          if ((Rmhz='') and (mhz<>'')) or (Rmhz=mhz) then   // no RX_freq or RX=TX then only FREQ tag
+            adi:=adi+'<'+StringToADIF('FREQ',mhz)
+           else
+            begin
+              adi:=adi+'<'+StringToADIF('FREQ_RX',Rmhz); //if split then both
+              adi:=adi+'<'+StringToADIF('FREQ',mhz);
+            end
+          end; //assigned nodelist
+        end; //assigned Astream
+   finally
+     AStream.free;
+   end;
+   adi:=adi+'<EOR>';
+   if dmData.DebugLevel>=1 then
+                        writeln('OUT->',adi,'   ',IsOriginal);
+   if IsOriginal then Result:=adi  else Result :=''; //do not accept relayed connect infos
+end;
 
 function TdmUtils.StringToADIF(ATag,Text: string): string;
 var
