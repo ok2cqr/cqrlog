@@ -624,7 +624,8 @@ There are no known dependencies issues.<br><br>
     Setting wsjt-x interface is mainly same as setting fldigi. How ever communication is done via UDP frames and so the IP address and Port must be specified.
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2237</strong> for port. These are set in wsjt-x settings/reporting and if changed there, must also to be changed here.
     <br>
-    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
+    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even<b> 0.0.0.0</b> when cqrlog listens all transmits from every wsjt-x in network.
+
     <br><br>You can also use a multicast address for both <b>wsjt-x/settings/Reporting/UDP Server</b> and <b>cqrlog/preferences/fldigi/wsjt interface/wsjt addr</b>. Cqrlog will handle ip addresses starting with "239." as multicast addresses.
     <br>With multicast you are able to run several programs listening to wsjt-x udp broadcasts at same time. To start with multicast try multicast group address "239.255.0.0" for both cqrlog and wsjt-x (and also other programs needed to listen wsjt-x)
     <br><br>
@@ -635,14 +636,14 @@ There are no known dependencies issues.<br><br>
     WB4 can be handy when working <strong>ARRL International Grid Chase </strong>or <strong>ARRL RTTY-FT8</strong> like contests if one does not like to create separate log for that purpose.
     <br><br><img src="img/h101b.png"><br><br>
     Pressing calendar icon is easy way to set date. Double click on selected date closes calendar and sets the date. Pressing ESC closes calendar, but does not set date. Date can also be typed in manually.
-    <br><br>
     <a name=ch2c></a>
     <h2><strong>ADIF interface</strong></h2>
     Setting of ADIF interface is similar as wsjt-x interface. Only IP address and PORT have to be set if they are not defaults.
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2333</strong> for port. These are set in wsjt-x, or js8call, settings/reporting and if changed there, must also to be changed here.
     <br>
     Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even 0.0.0.0 when cqrlog listens all transmits from every wsjt-x in network.
-    <br><br>
+    That is an easy choice because it works in all cases, even when running applications in different virtual machine of same PC. Just remember to open firewall for UPD port that is used.
+<br><br>
     At WSJT-X 2.1.0 settings ADIF remote is renamed to "Secondary UDP server (deprecated)" and it is reported to be removed completely in future. Because of that it is now possible to set cqrlog's ADIF port to wsjt-x UDP server port number. WSJT-X 2.1.x UDP frames contain message #12 that
      includes log information in ADIF format and ADIF remote can now parse that from binary data if you do not like to have monitoring properties (using wsjt remote) but want just qso logging (using ADIF remote).
     <br><br>
