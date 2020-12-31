@@ -45,16 +45,29 @@ function goBack() {
 There is no other finctionality than just transfer the logged data.
 <br><br> ADIF remote can read adif tags from UDP datagram as follows:
 <ul>
-    <li> Datagram has full adif export including proper header and one or more qso records.(used by wsjt-x primary UDP datagram)</li>
-    <li> Datagram has qso record without header starting with tag "&lt;CALL" and ending to &lt;EOR&gt; (used by wsjt-x secondary UDP datagram)</li>
-    <li> Datagram has JSON record including 'LOG.QSO","value":' followed by adif tags starting with tag "&lt;CALL" and ending to '"}'</li>
+    <li> 1) Datagram has full adif export including proper header and one or more qso records.(used by wsjt-x primary UDP datagram)</li>
+    <li> 2) Datagram has qso record without header starting with tag "&lt;CALL" and ending to &lt;EOR&gt; (used by wsjt-x secondary UDP datagram and older js8call)</li>
+    <li> 3) Datagram has JSON record including 'LOG.QSO","value":' followed by adif tags starting with tag "&lt;CALL" and ending to '"}' (latest js8call)</li>
+    <li> 4) Datagram has XML qso record including node <b>contactinfo</b> with subnode <b>IsOriginal:True</b> (N1MM+ qso contact broadcast)
 </ul>     
 </br>Remote mode is activated from NewQSO/File selection list, or pressing Ctrl-K when NewQSO window is focused.
 </p><p>
 <img src="img/adif3.png" name="3"  border="0"/>
 </br>Settings must be done at wsjt-x or js8call Settings/reporting. At least checking the checkbox. Port and address values can be defaults.
+</br></br>
+<img src="img/adif3b.png" name="3"  border="0"/>
+</br></br>If N1MM is run in virtual machine or second computer the IP address of cqrlog computer must be used. Otherwise, when running under same Linux localhost addtess 127.0.0.1 can be used also with N1MM+
+
 </p><p>
-<img src="img/adif2.png" name="2"  border="0"/></br>
+<img src="img/adif2.png" name="2"  border="0"/></br></br>
+When remote is selected you will see <b>remote ADIF</b> with red font. This will change when UDP frame is received.
+</br> Case 1) (see list abowe) it turns to <b>REMOTE ADIF</b>
+</br> Case 2) (see list abowe) it turns to <b>rmt ADIF hdless</b>
+</br> Case 3) (see list abowe) it turns to <b>rmt ADIF JS8CALL</b>
+</br> Case 4) (see list abowe) it turns to <b>rmt ADIF N1MM+</b>
+</br></br>
+<b>Note:</b> when case 3) frame is received ADIF remote can not receive any other type frames until remote is disabled and again enabled. This is because some versions of js8call send both json and headereless logging frames that would lead to double logging of qsos.
+</br></br>
 No indication of logging can be seen unless user has set "cqrlog/preferences/NewQSO/Show recent qso records for last X days" active.</br>
 If this is set, after pressing "OK" at companion program's logging window logged qso will appear to cqrlog's NewQSO recent qsos list.
 If QSO list window is open and   "cqrlog/preferences/NewQSQ/Refresh data after save qso" is checked QSO list is also updated after QSO is logged.
