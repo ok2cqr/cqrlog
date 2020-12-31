@@ -13,6 +13,10 @@ They contain all accepted pull requests from official source (that may not be re
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATES
+  - ver 2.4.0(134)
+  - fix, cleanup and N1MM contactinfo addition to ADIF remote (open PR #369)
+  - check official updates link above.
+
   - ver 2.4.0(133)
   - minor fix in preferences/mode/data (was rtty)
   - check official updates link above.
