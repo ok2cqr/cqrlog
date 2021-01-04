@@ -14,6 +14,7 @@ They contain all accepted pull requests from official source (that may not be re
 
 LAST UPDATES
   - ver 2.4.0(135)
+  - fix to dxSpot/UsrMessage (PR #372)
   - check official updates link above.
 
   - ver 2.4.0(134)
