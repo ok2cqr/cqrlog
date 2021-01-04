@@ -31,6 +31,7 @@ type
     btnCabBrowse: TButton;
     btCabSave: TButton;
     btCabLoad: TButton;
+    chkUpCase: TCheckBox;
     chkCabInfoSrst: TCheckBox;
     chkCabInfoRrst: TCheckBox;
     cmbCabInfoREx1: TComboBox;
@@ -608,6 +609,7 @@ begin
 
              if (cmbCabTailTxCount.Text<>'') then tmp:=tmp+' '+Format('%1s',[ cmbCabTailTxCount.Text]);
 
+      if chkUpCase.Checked then tmp:=UpperCase(tmp);
       s.Add(tmp);
 
       inc(i);
@@ -768,6 +770,8 @@ begin
 
       filini.WriteInteger('CabrilloExport','TxCount',cmbCabTailTxCount.ItemIndex);
       filini.WriteInteger('CabrilloExport','CountryToCount',CountryToCount);
+
+      filini.WriteBool('CabrilloExport','UseUpCase',chkUpCase.Checked);
     finally
       filini.Free
     end;
@@ -805,6 +809,8 @@ var
 
         CountryToCount:= filini.ReadInteger('CabrilloExport','CountryToCount',0);
         if ( CountryToCount > 0) then  edtCabCountC.Text:= dmDXCC.PfxFromADIF(CountryToCount);
+
+        chkUpCase.Checked:=filini.ReadBool('CabrilloExport','UseUpCase',true);
     finally
       filini.Free
     end

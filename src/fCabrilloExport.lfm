@@ -1,7 +1,7 @@
 object frmCabrilloExport: TfrmCabrilloExport
-  Left = 644
+  Left = 631
   Height = 687
-  Top = 45
+  Top = 0
   Width = 516
   HelpType = htKeyword
   HelpKeyword = 'help/h3.html#ah28'
@@ -18,7 +18,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     Left = 6
     Height = 15
     Top = 6
-    Width = 127
+    Width = 126
     BorderSpacing.Left = 6
     BorderSpacing.Top = 6
     Caption = 'Filename to export:'
@@ -181,7 +181,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideTop.Side = asrBottom
     Left = 6
     Height = 15
-    Top = 509
+    Top = 529
     Width = 76
     BorderSpacing.Top = 6
     Caption = 'Statistics:'
@@ -266,7 +266,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 80
-    Top = 266
+    Top = 286
     Width = 504
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 6
@@ -397,7 +397,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 80
-    Top = 352
+    Top = 372
     Width = 504
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 6
@@ -532,13 +532,13 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideRight.Control = btnCabBrowse
     AnchorSideRight.Side = asrBottom
     Left = 6
-    Height = 60
+    Height = 80
     Top = 200
     Width = 504
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 6
     Caption = 'QSO: common header'
-    ClientHeight = 42
+    ClientHeight = 62
     ClientWidth = 502
     TabOrder = 6
     object lblCabQsoHeader: TLabel
@@ -587,6 +587,20 @@ object frmCabrilloExport: TfrmCabrilloExport
       ParentColor = False
       ParentShowHint = False
     end
+    object chkUpCase: TCheckBox
+      AnchorSideLeft.Control = lblCabQsoHeader
+      AnchorSideTop.Control = lblCabQsoHeader
+      AnchorSideTop.Side = asrBottom
+      Left = 6
+      Height = 23
+      Top = 28
+      Width = 277
+      BorderSpacing.Top = 4
+      Caption = 'Use UpCase letters for all QSO records'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+    end
   end
   object gbCabQsoTail: TGroupBox
     AnchorSideLeft.Control = lblCabfileName
@@ -595,7 +609,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideRight.Side = asrBottom
     Left = 6
     Height = 65
-    Top = 438
+    Top = 458
     Width = 194
     BorderSpacing.Top = 6
     Caption = 'QSO: tail'
@@ -686,7 +700,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     Left = 336
     Height = 65
     Hint = 'Save(/Load) all settings to file'
-    Top = 438
+    Top = 458
     Width = 174
     Anchors = [akTop, akRight]
     BorderSpacing.Left = 6
@@ -733,7 +747,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideRight.Control = gbCabLayout
     Left = 206
     Height = 65
-    Top = 438
+    Top = 458
     Width = 124
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 6
@@ -767,8 +781,8 @@ object frmCabrilloExport: TfrmCabrilloExport
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = lblCabError
     Left = 6
-    Height = 83
-    Top = 530
+    Height = 63
+    Top = 550
     Width = 504
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 6
