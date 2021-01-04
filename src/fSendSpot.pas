@@ -85,6 +85,7 @@ end;
 
 procedure TfrmSendSpot.btnUsrClick(Sender: TObject);
 begin
+  UsrString := cqrini.ReadString('DXCluster', 'UsrMsg', '');
   if pos(UsrString, edtSpot.Text) = 0 then
      edtSpot.Text := edtSpot.Text+' '+UsrString;
 end;
