@@ -540,6 +540,12 @@ begin
              exit;
            sql := 'satellite='+QuotedStr(ExtractWord(1,cmbValue.Text,['|']));
          end;
+   37 : begin
+           if (cmbValue.Text='') and (Application.MessageBox('Do you really want to clear Operator field?',
+              'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) in [idNo, idCancel]) then
+             exit;
+           sql := 'operator='+QuotedStr(cmbValue.Text)
+         end;
 
   end;
   if sql = '' then exit;
