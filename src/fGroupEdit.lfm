@@ -233,6 +233,7 @@ object frmGroupEdit: TfrmGroupEdit
         'Contest name'
         'Propagation mode'
         'Satellite name'
+        'Operator̈́'
       )
       OnChange = cmbFieldChange
       Style = csDropDownList
