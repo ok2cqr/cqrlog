@@ -7076,7 +7076,7 @@ begin
       Writeln(dmData.Q.SQL.Text);
     dmData.Q.Open();
     ModRst  := dmData.Q.Fields[0].AsString+' '+dmData.Q.Fields[1].AsString;
-    HMLoc   := dmData.Q.Fields[2].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[4].AsString;
+    HMLoc   := dmData.Q.Fields[4].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[2].AsString;
     rst_s := dmData.Q.Fields[1].AsString;
     stx :=  dmData.Q.Fields[5].AsString;
     stx_str:=dmData.Q.Fields[6].AsString;
