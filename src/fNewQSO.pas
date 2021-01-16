@@ -3568,7 +3568,10 @@ begin
   end;
   if (key = 38) then //up arrow
   begin
-    edtState.SetFocus;
+    if edtState.IsVisible then
+      edtState.SetFocus
+    else
+      edtDOK.SetFocus;
     key := 0
   end
 end;
@@ -4042,7 +4045,11 @@ procedure TfrmNewQSO.cmbIOTAKeyDown(Sender: TObject; var Key: Word;
 begin
   if (key = 40) then  //down arrow
   begin
-    edtState.SetFocus;
+    if edtState.IsVisible then
+      edtState.SetFocus
+    else
+      edtDOK.SetFocus;
+
     key := 0
   end;
   if (key = 38) then //up arrow
@@ -4052,7 +4059,10 @@ begin
   end;
   if ((key = VK_SPACE) and UseSpaceBar) then
   begin
-    edtState.SetFocus;
+    if edtState.IsVisible then
+      edtState.SetFocus
+    else
+      edtDOK.SetFocus;
     key := 0
   end
 end;
