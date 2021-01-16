@@ -47,6 +47,8 @@ cqrlog (2.5.0-1) unstable; urgency=low
   * QTH profile fixes (Saku, OH1KH)
   * callbook database update fixes (Saku, OH1KH)
 
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 16 Jan 2021 15:02:15 +0100
+
 cqrlog (2.4.0-1) unstable; urgency=low
 
   * update sat_name.tab with newest lotw satellite list 
