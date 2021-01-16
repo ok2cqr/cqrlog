@@ -7006,13 +7006,15 @@ begin
   else begin
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := 'SELECT callsign,freq FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := 'SELECT callsign,freq,rxfreq FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
     dmData.Q.Open();
     call := dmData.Q.Fields[0].AsString;
     freq := FloatToStrF(dmData.Q.Fields[1].AsCurrency*1000,ffFixed,8,1);
+    if (cqrini.ReadBool('DXCluster','SpotRX',False)) then
+      freq := FloatToStrF(dmData.Q.Fields[2].AsCurrency*1000,ffFixed,8,1);
     dmData.Q.Close();
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
