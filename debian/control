@@ -1,7 +1,7 @@
 Source: cqrlog
 Section: hamradio
 Priority: extra
-Maintainer: Debian Hamradio Maintainers <debian-hams@lists.debian.org>
+Maintainer: Petr Hlozek <petr@ok2cqr.com>
 Uploaders: Petr Hlozek <petr@ok2cqr.com>, Kamal Mostafa <kamal@whence.com>, Colin Tuckley <colint@debian.org>
 Build-Depends: debhelper (>= 7), lazarus-ide, lcl, fp-utils, fp-units-misc, fp-units-gfx, fp-units-gtk2, fp-units-db, fp-units-math, fp-units-net, libgtk2.0-0
 Standards-Version: 3.9.5
