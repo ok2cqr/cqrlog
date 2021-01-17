@@ -39,7 +39,7 @@ implementation
 
 function TdmQTHProfile.GetNewProfileNumber() : Integer;
 const
-  SQL = 'select max(nr)+1 as nr from profiles';
+  SQL = 'select max(nr) as nr from profiles';
 var
   Connection : TInternalConnection;
 begin
@@ -48,7 +48,8 @@ begin
     Connection.Q.SQL.Text := SQL;
     Connection.Q.Open;
 
-    Result := Connection.Q.Fields[0].AsInteger;
+    Result := Connection.Q.Fields[0].AsInteger + 1;
+
   finally
     FreeAndNil(Connection);
   end;
