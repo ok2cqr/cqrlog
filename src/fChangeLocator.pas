@@ -33,7 +33,7 @@ implementation
 {$R *.lfm}
 
 { TfrmChangeLocator }
-uses dUtils;
+uses dUtils, uMyIni;
 
 procedure TfrmChangeLocator.edtLocatorKeyPress(Sender: TObject; var Key: char);
 begin
@@ -46,6 +46,7 @@ end;
 
 procedure TfrmChangeLocator.btnOKClick(Sender: TObject);
 begin
+   if  edtLocator.Text='' then  edtLocator.Text:= cqrini.ReadString('Station', 'LOC', '');
    if dmUtils.isLocOK(edtLocator.Text) then
     ModalResult := mrOK
     else
