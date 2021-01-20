@@ -90,6 +90,11 @@ BINARIES:
 
 
 ## -------------------SCRIPT-INSTALL--------------------
+
+##There is now new script. Download newupdate.zip and extract it somewhere. 
+##Check that execution bit is on, if not set with command: chmod a+x newupdate.sh
+##After that start scirpt with command ./update.sh It will do rest of downloads for you. 
+
 You will find a bash script updateCqrlog.sh from this GitHub folder. 
 
 Script will check that you have downloaded all 3 files to /tmp folder, then it checks that you have cqrlog and cqrlog help in usual places (/usr/bin and /usr/share/cqrlog/).
