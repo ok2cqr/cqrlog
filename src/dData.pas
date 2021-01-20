@@ -4146,27 +4146,13 @@ end;
 
 function TdmData.GetDebugLevel : Integer;
 var
-  param : String;
   i : Integer;
 begin
   Result := 0;
-
-  if ParamCount>0 then
-  begin
-    param := LowerCase(ParamStr(1));
-    if Pos('debug',param) > 0 then
-    begin
-      if Pos('=',param) > 0 then
-      begin
-        if TryStrToInt(copy(param,Pos('=',param)+1,2),i) then
-          Result := i
-        else
-          Result := 1
-      end
-      else
-        Result := 1
-    end
-  end
+  Application.CaseSensitiveOptions:=False; // this is done at start but to be sure...
+  if Application.HasOption('debug') then
+     if TryStrToInt(Application.GetOptionValue('debug'),i) then
+                                                               Result:=i;
 end;
 
 function TdmData.GetNewLogNumber : Integer;
