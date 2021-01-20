@@ -165,8 +165,11 @@ procedure TCWWinKeyerUSB.Open;
 var
   rec : byte;
 begin
-  if fActive then Close();
-
+  if fActive then
+                 Begin
+                   Close();
+                   sleep (200);
+                 end;
   if fDebugMode then Writeln('Device: ',fDevice);
   ser.RaiseExcept := False;
   ser.Connect(fDevice);
@@ -185,12 +188,12 @@ begin
   ser.SendByte($13);
   ser.SendByte($13);  //sending null commands
   ser.SendByte($13);
-  sleep(50);
+  sleep(300);
   if fDebugMode then Writeln('After sending null command');
   ser.SendByte(0);
   ser.SendByte(4);  //send echo command
   ser.SendByte(20);
-  sleep(50);
+  sleep(300);
   while ser.CanReadex(10) do
   begin
     rec := (ser.recvByte(0))
@@ -201,6 +204,7 @@ begin
   else begin
     fLastErrNr := 1000;
     fLastErrSt := 'WinKeyer USB inicialization failed';
+    if fDebugMode then Writeln(fLastErrSt);
     exit
   end;
   ser.SendByte(0);
@@ -270,6 +274,11 @@ var
   i : Integer;
   spd : Integer;
 begin
+  if not fActive then
+    Begin
+     if fDebugMode then Writeln('Winkeyer is not active. Can not send: ',text);
+     exit
+    end;
   spd  := fSpeed;
   text := UpperCase(text);
   if fDebugMode then Writeln('Sending text: ',text);

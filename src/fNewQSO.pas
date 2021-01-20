@@ -1398,8 +1398,8 @@ begin
 
   dmData.LoadQSODateColorSettings;
 
-  InitializeCW;
-
+  if cqrini.ReadBool('CW', 'NoReset', false) then     //is set: user does not want reset CW keyer at rig switch/init
+                                        InitializeCW; //so we have to do it at least once: Here.
   Op := '';
 
   if dbgrdQSOBefore.Visible then
