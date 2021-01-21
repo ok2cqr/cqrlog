@@ -4,7 +4,7 @@ clear
 #-----------
 function MyOut (){
       echo -e $1
-      echo -e $1 >> /tmp/updateCqrlog.txt 
+      echo -e $1 >> /tmp/newupdate.txt 
  }
  
 #-----------
@@ -208,3 +208,4 @@ MyOut "\x20\x20 rm -rf ~\x2F.config\x2Fcqrlog-20*"
 MyOut "\x20\x20 sudo rm -rf \x2Fusr\x2Fshare\x2Fcqrlog\x2Fhelp-20*"
 MyOut "\x20\x20 sudo rm \x2Fusr\x2Fbin\x2Fcqrlog-20*"
 MyOut "\n BUT ! Only after you have tested that everything works!\n"
+MyOut "Install log is in file /tmp/newupdate.txt"
