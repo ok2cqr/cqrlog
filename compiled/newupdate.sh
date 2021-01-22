@@ -23,7 +23,8 @@ fi
 MyOut "==================================================="
 MyOut "This command will update your existing and working Cqrlog."
 MyOut "It can not install Cqrlog to PC where it does not exist."
-MyOut "For that use your packet manager. After that you can run this update."
+MyOut "For that use your packet manager."
+MyOut "After that you can run again this update."
 MyOut "==================================================="
 MyOut "Looking for installed cqrlog."
 
@@ -57,41 +58,54 @@ rm -f help.tgz
 MyOut "Cleanup for old downloads in /tmp directory"
 MyOut "==================================================="
 MyOut "Your linux "$arc
+sleep 3
 MyOut "==================================================="
-MyOut "Select Cqrlog version you want to use for update:"
+MyOut "Select Cqrlog version you want to use for update:\n"
+MyOut "1)64bit Official version Cqrlog for x86_64 with Gtk2 widgets"
+MyOut "\x20\x20(this is compiled with linux Mint20 from latest official source )\n"
+MyOut "2)64bit Alpha test version Cqrlog for x86_64 with Gtk2 widgets"
+MyOut "\x20\x20(this is the most commonly used Alpha test version )\n"
+MyOut "3)64bit Alpha test version Cqrlog for x86_64 with QT5 widgets"
+MyOut "\x20\x20(you need libqt5pas installed to run this Alpha test version)\n"
+MyOut "4)32bit Test version Cqrlog for x86 with Gtk2 widgets"
+MyOut "\x20\x20(Alpha test version for old PCs )"
+MyOut "==================================================="
+MyOut "\x20\x20\x20Make your selection:"
 options=(
-"64bit Cqrlog for x86_64 with Gtk2 widgets (this is the most commonly used version)"
-"64bit Cqrlog for x86_64 with QT5 widgets (you need libqt5pas installed to run this)"
-"32bit Cqrlog for x86 with Gtk2 widgets (for old PCs)"
-"Quit")
+"64bit Official Gtk2 version"
+"64bit Alpha test Gtk2 version"
+"64bit Alpha test QT5 version"
+"32bit Alpha test Gtk2 version"
+"Quit now without update"
+)
 select opt in "${options[@]}"
 do
     case $opt in
-        "64bit Cqrlog for x86_64 with Gtk2 widgets (this is the most commonly used version)")
-            MyOut "Downloading Cqrlog binary file"
+        "64bit Official Gtk2 version")
+            wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/cqr0.zip
+            wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/help.tgz
+            cqr=0
+            break
+            ;;
+        "64bit Alpha test Gtk2 version")
             wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/cqr2.zip
-            MyOut "Downloading Cqrlog Help files"
             wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/help.tgz
             cqr=2
             break
             ;;
-        "64bit Cqrlog for x86_64 with QT5 widgets (you need libqt5pas installed to run this)")
-            MyOut "Downloading Cqrlog binary file"
+	"64bit Alpha test QT5 version")
             wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/cqr5.zip
-            MyOut "Downloading Cqrlog Help files"
             wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/help.tgz
             cqr=5
             break
             ;;
-        "32bit Cqrlog for x86 with Gtk2 widgets (for old PCs)")
-            MyOut "Downloading Cqrlog binary file"
+	"32bit Alpha test Gtk2 version")
             wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/cqr3.zip
-            MyOut "Downloading Cqrlog Help files"
             wget -q --show-progress https://github.com/OH1KH/cqrlog/raw/loc_testing/compiled/help.tgz
             cqr=3
             break
             ;;
-        "Quit")
+	"Quit now without update")
             exit
             break
             ;;

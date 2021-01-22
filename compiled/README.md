@@ -64,6 +64,7 @@ BINARIES:
   - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )**
   - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (like official release of cqrlog, poorly tested)**
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
+  - **cqr0.zip  holds binary for  64bit systems compiled for GTK2 widgets from latest official source with linux Mint20**
   - **help.tgz  holds latest help files**
   - **updateCqrlog.sh.zip holds the updateCqrlog.sh script that you can see also as plain text file updateCqrlog.sh (zip is easier to download from GitHub)**
 
@@ -82,8 +83,10 @@ BINARIES:
    If you use script-install (see below) it makes backups for you.
    Otherwise see "manual-install (below).
    
-   In some cases it has happen that alpha binary compiled using Fedora linux may not run flawlessly wit Ubuntu derivates.
-   if you start to get mysterious errors it might be the cause. Then you should consider to compile alpha from source.
+   In some cases it has happen that alpha binary compiled using Fedora linux may not run flawlessly with Ubuntu derivates.
+   if you start to get mysterious errors it might be the reason.
+   I have now added version that has no special additions from me. It is compiled with Mint20 from up to date official source.
+   You could try that or otherwise consider to compile cqrlog either from official or from my alpha source.
    I have written few messages to Cqrlog forum how to make the compile.
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
@@ -91,47 +94,34 @@ BINARIES:
 
 ## -------------------SCRIPT-INSTALL--------------------
 
-**There is now new script. Download newupdate.zip and extract it somewhere the script can be started from any location.**
-**Check that execution bit is on (ls -l newupdate.sh), if not set with command: chmod a+x newupdate.sh. No harm if you do it anyway.**
-**After that start script with command ./newupdate.sh It will do rest of downloads for you and then install updates.**
+**There is now new script for update. You need to download only the script and start it.
+** It will do rest of downloads for you and then install updates.**
 
-You can also use this old update script if you like:
-You will find a bash script updateCqrlog.sh from this GitHub folder. 
-
-Script will check that you have downloaded all 3 files to /tmp folder, then it checks that you have cqrlog and cqrlog help in usual places (/usr/bin and /usr/share/cqrlog/).
-If all is ok it will make datestamped backups from cqrlog binary, cqrlog help and your logs and settings (~/.config/cqrlog). 
-After that it will replace cqrlog and cqrlog help with new files.
 
 Use it this way:
 
-Download cqrX.zip (X= 2 ,3 or 5) of your choice:
-   - click blue link of that file. New page opens. You see that there is a button "Download" click it.
-     Your browser downloads the zip. If it asks where to save, select folder /tmp
-   - Do the same with file help.tgz
-   - Do the same with file updateCqrlog.sh.zip
+Download newupdate.zip from GitHub page.
+   - click blue link of newupdate.zip file. New page opens. You see that there is a button "Download" click it.
+     Your browser downloads the zip. If it asks where to save, select folder from where you can find the zip.
 
-   - If your browser downloaded cqrX.zip and help.tgz without asking a save folder you find them from your download
-     folder. You must move them now to /tmp folder.
+Open command console. Go to your download directory.
 
-Now you should have all 3 files (cqrX.zip, help.tgz and updateCqrlog.sh.zip) in /tmp folder.
+    cd [your download directory path]
 
-Open command console. Go to /tmp directory.
+Unzip newupdate.zip to find the updating script:
 
-    cd /tmp
+    unzip newupdate.zip
 
-Unzip updateCqrlog.sh.zip to find the updating script.
+Then start newupdate.sh script with command:
 
-    unzip updateCqrlog.sh.zip
-
-Then start updateCqrlog.sh script with command:
-
-    /tmp/updateCqrlog.sh
+    ./newupdate.sh
     
-	If you can not start script then check that you can execute updateCqrlog.sh by giving a command:
-	    chmod a+x /tmp/updateCqrlog.sh
+	If you can not start script then check that you can execute newupdate.sh by giving a command:
+	    chmod a+x newupdate.sh
 	Then try again to start script.
 
-Script stops every now and then to let you read what has been done and what to do next. You must press ENTER to continue running. 
+Script checks frist that you have cqrlog installed and that you have some other needed programs.
+If they are not found it will stop and tell what you should do before new try.
 
 I have tested this script many times while writing it. How ever it may fail with your setup.
 
@@ -175,7 +165,7 @@ Then check execution rights.
     sudo cp /tmp/cqrlog /usr/bin/
     sudo chmod a+x /usr/bin/cqrlog  
 
- ## What is not included (as pull requests) into official cqrlog GitHub source is listed below.
+ ## A list what is not included into official cqrlog GitHub source and exist only in Test versions is listed below.
  
 RESET/IGNORE ONLINE LOG UPLOAD MARKERS
 
