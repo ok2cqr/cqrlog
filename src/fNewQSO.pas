@@ -21,7 +21,7 @@ uses
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
   uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
   fMonWsjtx, fWorkedGrids,fPropDK0WCY, fAdifImport, RegExpr,
-  FileUtil, LazFileUtils;
+  FileUtil, LazFileUtils, sqldb;
 
 const
   cRefCall = 'Ref.call (CTRL+R): ';
@@ -4015,7 +4015,7 @@ begin
     begin
       case Application.MessageBox('Do you want to backup your data?'+#13+#13+'("Cancel" = Do not exit cqrlog)','Exit & backup',mb_YesNoCancel+mb_IconQuestion) of
         idCancel : begin
-                     CloseAction := caNone;
+                     CloseAction := TCloseAction(caNone);
                      exit
                    end;
         idYes : CreateAutoBackup()
@@ -4135,7 +4135,8 @@ end;
 procedure TfrmNewQSO.btnDXCCRefClick(Sender: TObject);
 var
   waz,itu,cont,lat,long,cname : String;
-  old,new : String;
+  old : String;
+  q : TSQLQuery;
 begin
   if fViewQSO then
     exit;
@@ -4149,44 +4150,33 @@ begin
     begin
       if Pos('*',frmSelectDXCC.edtPrefix.Text) = 0 then
       begin
-        new   := dmDXCC.qValid.Fields[1].AsString;
-        cname := dmDXCC.qValid.Fields[2].AsString;
-        cont  := dmDXCC.qValid.Fields[3].AsString;
-        lat   := dmDXCC.qValid.Fields[5].AsString;
-        long  := dmDXCC.qValid.Fields[6].AsString;
-        itu   := dmDXCC.qValid.Fields[7].AsString;
-        waz   := dmDXCC.qValid.Fields[8].AsString;
-        adif  := dmDXCC.qValid.FieldByName('ADIF').AsInteger
+        q := dmDXCC.qValid;
       end
       else begin
-        new   := dmDXCC.qDeleted.Fields[1].AsString;
-        cname := dmDXCC.qDeleted.Fields[2].AsString;
-        cont  := dmDXCC.qDeleted.Fields[3].AsString;
-        lat   := dmDXCC.qDeleted.Fields[5].AsString;
-        long  := dmDXCC.qDeleted.Fields[6].AsString;
-        itu   := dmDXCC.qDeleted.Fields[7].AsString;
-        waz   := dmDXCC.qDeleted.Fields[8].AsString;
-        adif  := dmDXCC.qDeleted.FieldByName('ADIF').AsInteger
+        q := dmDXCC.qDeleted;
       end;
-      if old = new then
+      if old = q.Fields[1].AsString then
         exit;
+
       ChangeDXCC         := True;
-      edtDXCCRef.Text    := new;
-      lblDXCC.Caption    := new;
+      edtDXCCRef.Text    := q.Fields[1].AsString;
+      lblDXCC.Caption    := q.Fields[1].AsString;
       mCountry.Clear;
-      mCountry.Text      := cname;
-      lblWAZ.Caption     := waz;
-      lblITU.Caption     := itu;
-      lblCont.Caption    := cont;
-      lblLat.Caption     := lat;
-      lblLong.Caption    := long;
+      mCountry.Text      := q.Fields[2].AsString;
+      lblCont.Caption    := q.Fields[3].AsString;
+      lblLat.Caption     := q.Fields[5].AsString;
+      lblLong.Caption    := q.Fields[6].AsString;
+
+      waz := q.Fields[8].AsString;
+      itu := q.Fields[7].AsString;
       dmUtils.ModifyWAZITU(waz,itu);
       edtWAZ.Text        := waz;
       edtITU.Text        := itu;
+
       lblHisTime.Caption := dmUtils.HisDateTime(edtDXCCRef.Text);
       ShowCountryInfo;
-      ShowStatistic(adif);
-      if dmData.GetIOTAForDXCC(edtCall.Text,lblDXCC.Caption,cmbIOTA,dmUtils.MyStrToDate(edtDate.Text)) then
+      ShowStatistic(q.FieldByName('ADIF').AsInteger);
+      if dmData.GetIOTAForDXCC(edtCall.Text, lblDXCC.Caption, cmbIOTA, dmUtils.MyStrToDate(edtDate.Text)) then
         lblIOTA.Font.Color := clRed
       else
         lblIOTA.Font.Color := clDefault

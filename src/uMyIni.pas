@@ -246,6 +246,6 @@ end;
 initialization
 
 finalization
-  Writeln('Closing ini file ...')
+// Writeln('Closing ini file ...') // we do not want this with options "version" and "debug", and it is not needed in any way
 end.
 

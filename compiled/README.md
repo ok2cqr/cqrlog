@@ -6,67 +6,25 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   #371
+   Jan 22,2021 "code redactoring - select dxcc"
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
-LAST UPDATES
-  - ver 2.4.0(135)
-  - fix to dxSpot/UsrMessage (PR #372)
-  - check official updates link above.
-
-  - ver 2.4.0(134)
-  - fix, cleanup and N1MM contactinfo addition to ADIF remote (open PR #369)
-  - check official updates link above.
-
-  - ver 2.4.0(133)
-  - minor fix in preferences/mode/data (was rtty)
-  - check official updates link above.
-
-  - ver 2.4.0(132)
-  - check official updates link above.
-
-  - ver 2.4.0(131)
-  - check official updates link above.
-
-  - ver 2.4.0(130)
-  - check official updates link above.
-  - bugfix for NewQSO/QSO takes: (pull request #358)
-
-  - ver 2.4.0(129)
-  - check official updates link above.
-  - bugfix for Grayline (pull request #356)
-
-  - ver 2.4.0(128)
-  - check official updates link above.
-
-  - ver 2.4.0(127)
-  - check official updates link above.
-  - Online log upload: prevent upload after QSL sent/received/label print. Prevent upload after QSO edit (Preferences checkboxes)
-  - QSO list/Online log/Remove all upload markers (that would cause upload at next connect [when immediate upload is not used])
-
-  - ver 2.4.0(126)
-  - FCC has changed US Amateur listing address (needed for states) For now on user can define it
-
-  - ver 2.4.0(125)
-  - added new commits
-  - compiled with Lazarus 2.0.8/fpc3.0.4 instead of Laz2.0.10/fpc3.2.0 that were used with (124) and caused several problems
-
-  - ver 2.4.0(124)
-  - check official updates link above.
-  - removed database ping that caused unstability. 
+LAST UPDATE
+  - ver 2.50(101)
+  - official version with alpha additions (see below)
   
 BINARIES:
 ---------
 
-  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas )**
-  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (like official release of cqrlog, poorly tested)**
-  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (like official release of cqrlog)**
-  - **cqr0.zip  holds binary for  64bit systems compiled for GTK2 widgets from latest official source with linux Mint20**
+  - **cqr0.zip  holds binary for  64bit systems compiled for GTK2 widgets from latest official source (without additions) using linux Mint20**
+  - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (official release of cqrlog with additions)**
+  - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (official release of cqrlogwith additions, poorly tested)**
+  - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas to run this)**
   - **help.tgz  holds latest help files**
-  - **updateCqrlog.sh.zip holds the updateCqrlog.sh script that you can see also as plain text file updateCqrlog.sh (zip is easier to download from GitHub)**
+  - **newupdate.zip holds the newupdate.sh script for easy update**
 
 **All binaries must be copied over complete, working, official installation. These do not work alone.**
 ========================================================================================================
@@ -94,8 +52,8 @@ BINARIES:
 
 ## -------------------SCRIPT-INSTALL--------------------
 
-**There is now new script for update. You need to download only the script and start it.
-** It will do rest of downloads for you and then install updates.**
+**There is now new script for update. You need to download only the script and start it.**
+**It will do rest of downloads for you and then install updates.**
 
 
 Use it this way:
@@ -108,7 +66,7 @@ Open command console. Go to your download directory.
 
     cd [your download directory path]
 
-Unzip newupdate.zip to find the updating script:
+Unzip newupdate.zip to find the newupdate.sh script:
 
     unzip newupdate.zip
 
