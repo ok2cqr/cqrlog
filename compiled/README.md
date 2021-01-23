@@ -46,6 +46,7 @@ BINARIES:
    I have now added version that has no special additions from me. It is compiled with Mint20 from up to date official source.
    You could try that or otherwise consider to compile cqrlog either from official or from my alpha source.
    I have written few messages to Cqrlog forum how to make the compile.
+   
 -----------YOU HAVE BEEN WARNED!------------
 ============================================
 
