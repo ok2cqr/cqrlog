@@ -1,3 +1,12 @@
+cqrlog (2.5.1-1) unstable; urgency=low
+
+  * Winkeyer didn't work (Saku, OH1KH)
+  * CW was interrupted with every move from
+    callsign/mode/rst fields
+  * QTH Profile numbering (Saku, OH1KH)
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 24 Jan 2021 16:42:12 +0100
+
 cqrlog (2.5.0-1) unstable; urgency=low
 
   * 3 user defined buttons for TRX control (Saku, OH1KH)
