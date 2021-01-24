@@ -692,6 +692,8 @@ type
                                                   //includes message type #0 (change it)
     ContestNr             : integer;              //wsjtx 2.0 contest type definition in status msg
 
+    ModeBeforeChange      : String; //flush CW buffer after mode change
+
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
 
@@ -1775,6 +1777,7 @@ begin
   dmSatellite.SetListOfSatellites(cmbSatellite); //load combo box lists
   dmSatellite.SetListOfPropModes(cmbPropagation);
 
+  ModeBeforeChange := cmbMode.Text;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -4071,12 +4074,20 @@ procedure TfrmNewQSO.cmbModeChange(Sender: TObject);
 begin
   ShowCountryInfo;
   ChangeReports;
-  //flush CW buffer when entering to CW (specially HamLib keyer)
-  if ((Assigned(CWint)) and (cmbMode.Text='CW'))then CWint.StopSending;
+
+  if (ModeBeforeChange = 'CW') and (cmbMode.Text <> 'CW') then
+  begin
+    //flush CW buffer when entering to CW (specially HamLib keyer)
+    if (Assigned(CWint)) then
+      CWint.StopSending;
+  end;
+
+  ModeBeforeChange := cmbMode.Text;
 end;
 
 procedure TfrmNewQSO.cmbModeEnter(Sender: TObject);
 begin
+  ModeBeforeChange := cmbMode.Text;
   cmbMode.SelectAll
 end;
 
@@ -5492,6 +5503,7 @@ begin
         old_cmode := '';
       end
       else begin
+
         if Assigned(CWint) then CWint.StopSending;
         EscFirstPressDone   := True;
         tmrESC.Enabled := True

@@ -4,6 +4,9 @@ Legend:
   - bugfix
 --------------------
 
+2.5.1
+  - CW was interrupted with every move from callsign/mode/rst fields
+
 2.5.0 (2021-01-16)
   + 3 user defined buttons for TRX control (Saku, OH1KH)
   + TX quick split using XIT (Saku, OH1KH)
