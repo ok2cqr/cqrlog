@@ -2,7 +2,7 @@ unit uColorMemo;
 {
 (c) Martin Tichacek licence GPL 2.0
 
-other changes by Petr Hlozek, OK7AN
+other changes by Petr Hlozek, OK2CQR
   - public functions and constants renamed to English
 
 Get info from spot, OH1KH
