@@ -4,8 +4,11 @@ Legend:
   - bugfix
 --------------------
 
-2.5.1
+
+2.5.1 (2021-01-24)
+  - Winkeyer didn't work (Saku, OH1KH)
   - CW was interrupted with every move from callsign/mode/rst fields
+  - QTH Prfile numbering (Saku, OH1KH)
 
 2.5.0 (2021-01-16)
   + 3 user defined buttons for TRX control (Saku, OH1KH)
