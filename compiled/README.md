@@ -6,13 +6,16 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   Jan 22,2021 "code redactoring - select dxcc"
+   Jan 24,2021 "fix: OK7AN back to OK2CQR"
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATE
+  - ver 2.51(101)
+  - official version with alpha additions (see below)
+
   - ver 2.50(101)
   - official version with alpha additions (see below)
   
