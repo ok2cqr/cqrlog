@@ -6,17 +6,18 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   Jan 24,2021 "fix: OK7AN back to OK2CQR"
+   Jan 27,2021 "Update CHANGELOG"
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATE
-  - ver 2.51(101)
+  - ver 2.5.1(102)
   - official version with alpha additions (see below)
-
-  - ver 2.50(101)
+  - ver 2.5.1(101)
+  - official version with alpha additions (see below)
+  - ver 2.5.0(101)
   - official version with alpha additions (see below)
   
 BINARIES:
@@ -82,6 +83,13 @@ Then start newupdate.sh script with command:
 	    chmod a+x newupdate.sh
 	Then try again to start script.
 
+	There has been one case where starting newupdate.sh it complains error at line 5 (arch bracket).
+	In that case solution was to start newupdate.sh as:
+
+    bash newupdate.sh
+
+	That (Ubuntu 20) linux obviously did not had bash as default shell.
+	
 Script checks frist that you have cqrlog installed and that you have some other needed programs.
 If they are not found it will stop and tell what you should do before new try.
 
