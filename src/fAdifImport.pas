@@ -525,7 +525,8 @@ begin
     begin
       dmData.Q.Close;
       dmData.Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main WHERE qsodate = ' + QuotedStr(d.QSO_DATE) +
-                           ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL);
+                           ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL)+
+                           ' AND band = ' + QuotedStr(d.BAND) + ' AND mode = '+QuotedStr(d.MODE);
 
       if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
       if dmData.trQ.Active then
@@ -534,15 +535,14 @@ begin
       dmData.Q.Open;
       if dmData.Q.Fields[0].AsInteger > 0 then
       begin
-
+        tmp:= d.QSO_DATE+' '+d.TIME_ON+' '+d.CALL+' '+d.BAND+' '+d.MODE+
+              #13'It looks like this QSO is in the log.'#13'Do you really want to import it again?';
         if not chkRemember.Checked then
-             Qvalue:= Application.MessageBox('It looks like this QSO is in the log.'#13'Do you really want to import it again?',
-                                  'Question',MB_ICONQUESTION +  MB_YESNOCANCEL)
+             Qvalue:= Application.MessageBox(Pchar(tmp),'Question',MB_ICONQUESTION +  MB_YESNOCANCEL)
           else
           if not Qasked then
               begin
-                Qvalue:= Application.MessageBox('It looks like this QSO is in the log.'#13'Do you really want to import it again?',
-                                  'Question',MB_ICONQUESTION +  MB_YESNOCANCEL);
+                Qvalue:= Application.MessageBox(Pchar(tmp),'Question',MB_ICONQUESTION +  MB_YESNOCANCEL);
                 Qasked := true;
               end;
 
@@ -561,6 +561,7 @@ begin
                       exit;
                      end;
         end;
+        tmp:='';
       end;
       dmData.Q.Close();
       dmData.trQ.Rollback
@@ -827,6 +828,7 @@ begin
   end;
 end;
 
+
 function TfrmAdifImport.ValidateFilter: boolean;
 begin
   Result := true;
@@ -870,11 +872,15 @@ end;
 procedure TfrmAdifImport.chkFilterDateRangeChange(Sender: TObject);
 begin
   pnlFilterDateRange.Enabled := chkFilterDateRange.Checked;
+  lblFilteredOut.Visible := chkFilterDateRange.Checked;
+  lblFilteredOutCount.Visible := chkFilterDateRange.Checked;
 end;
 
 procedure TfrmAdifImport.FormShow(Sender: TObject);
 begin
   lblComplete.Visible := False;
+  lblFilteredOut.Visible := chkFilterDateRange.Checked;
+  lblFilteredOutCount.Visible := chkFilterDateRange.Checked;
   dmUtils.LoadFontSettings(self);
   Qasked:=false;
 end;
