@@ -1,25 +1,25 @@
 object frmContest: TfrmContest
   Left = 370
-  Height = 143
+  Height = 154
   Top = 281
-  Width = 698
+  Width = 700
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
-  ClientHeight = 143
-  ClientWidth = 698
+  ClientHeight = 154
+  ClientWidth = 700
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.6.0'
   object edtCall: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideTop.Control = lblCall
     AnchorSideTop.Side = asrBottom
     Left = 17
-    Height = 34
+    Height = 25
     Top = 59
     Width = 140
     AutoSelect = False
@@ -35,7 +35,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtCall
     Left = 157
-    Height = 34
+    Height = 25
     Top = 59
     Width = 50
     OnKeyDown = edtCallKeyDown
@@ -46,7 +46,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtRSTs
     Left = 207
-    Height = 34
+    Height = 25
     Hint = 'contest serial number sent, max 6 characters'
     Top = 59
     Width = 50
@@ -63,7 +63,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtSTX
     Left = 257
-    Height = 34
+    Height = 25
     Hint = 'contest exchange message sent, max 50 characters'
     Top = 59
     Width = 100
@@ -80,7 +80,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtSTXStr
     Left = 373
-    Height = 34
+    Height = 25
     Top = 59
     Width = 50
     BorderSpacing.Left = 16
@@ -92,7 +92,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtRSTr
     Left = 423
-    Height = 34
+    Height = 25
     Hint = 'contest serial number received, max 6 characters'
     Top = 59
     Width = 50
@@ -122,7 +122,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtRSTr
     Left = 473
-    Height = 34
+    Height = 25
     Hint = 'contest exchange message sent, max 50 characters'
     Top = 59
     Width = 100
@@ -140,7 +140,7 @@ object frmContest: TfrmContest
     Left = 17
     Height = 17
     Top = 42
-    Width = 25
+    Width = 26
     BorderSpacing.Top = 1
     Caption = 'Call'
     ParentColor = False
@@ -159,7 +159,7 @@ object frmContest: TfrmContest
     Left = 257
     Height = 17
     Top = 42
-    Width = 41
+    Width = 42
     Caption = 'MSG s'
     ParentColor = False
   end
@@ -168,7 +168,7 @@ object frmContest: TfrmContest
     Left = 377
     Height = 17
     Top = 42
-    Width = 34
+    Width = 36
     Caption = 'RST r'
     ParentColor = False
   end
@@ -177,7 +177,7 @@ object frmContest: TfrmContest
     Left = 425
     Height = 17
     Top = 42
-    Width = 28
+    Width = 30
     Caption = 'NR r'
     ParentColor = False
   end
@@ -186,7 +186,7 @@ object frmContest: TfrmContest
     Left = 481
     Height = 17
     Top = 42
-    Width = 39
+    Width = 41
     Caption = 'MSG r'
     ParentColor = False
   end
@@ -195,7 +195,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkTrueRST
     Left = 207
     Height = 23
-    Top = 93
+    Top = 84
     Width = 45
     Caption = 'Inc'
     OnChange = chkNRIncChange
@@ -208,7 +208,7 @@ object frmContest: TfrmContest
     Left = 209
     Height = 17
     Top = 42
-    Width = 30
+    Width = 31
     Caption = 'NR s'
     ParentColor = False
   end
@@ -217,8 +217,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNoNr
     Left = 473
     Height = 23
-    Top = 93
-    Width = 101
+    Top = 84
+    Width = 102
     Caption = 'MSG is LOC'
     TabOrder = 14
     TabStop = False
@@ -229,8 +229,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 23
-    Top = 93
-    Width = 111
+    Top = 84
+    Width = 114
     Caption = 'SPACE is TAB'
     TabOrder = 10
     TabStop = False
@@ -240,8 +240,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNRInc
     Left = 423
     Height = 23
-    Top = 93
-    Width = 44
+    Top = 84
+    Width = 45
     Caption = 'No'
     OnChange = chkNoNrChange
     TabOrder = 12
@@ -252,8 +252,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkSpace
     Left = 157
     Height = 23
-    Top = 93
-    Width = 45
+    Top = 84
+    Width = 48
     Caption = 'Tru'
     OnChange = chkTrueRSTChange
     TabOrder = 11
@@ -276,7 +276,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 670
+    Left = 672
     Height = 25
     Hint = 'Help'
     Top = 3
@@ -326,7 +326,7 @@ object frmContest: TfrmContest
     Left = 17
     Height = 17
     Top = 1
-    Width = 91
+    Width = 95
     BorderSpacing.Left = 17
     Caption = 'Contest name'
     ParentColor = False
@@ -335,8 +335,8 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
-    Left = 114
-    Height = 34
+    Left = 118
+    Height = 25
     Hint = 'contestname, choose ADIF contest_id via combobox or type freestyle max 40 characters'
     Top = 1
     Width = 432
@@ -344,7 +344,7 @@ object frmContest: TfrmContest
     AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 1
-    ItemHeight = 0
+    ItemHeight = 17
     Items.Strings = (
       '070-160M-SPRINT'
       '070-3-DAY'
@@ -582,8 +582,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNRInc
     Left = 257
     Height = 23
-    Top = 93
-    Width = 51
+    Top = 84
+    Width = 53
     Caption = 'Qsp'
     OnChange = chkQspChange
     TabOrder = 15
@@ -596,11 +596,39 @@ object frmContest: TfrmContest
     Left = 17
     Height = 23
     Top = 18
-    Width = 72
+    Width = 74
     Caption = 'TAB All'
     OnChange = chkTabAllChange
     TabOrder = 16
     TabStop = False
+  end
+  object sbContest: TStatusBar
+    Left = 0
+    Height = 22
+    Top = 132
+    Width = 700
+    Panels = <    
+      item
+        Text = '0'
+        Width = 150
+      end    
+      item
+        Text = '1'
+        Width = 50
+      end    
+      item
+        Text = '2'
+        Width = 50
+      end    
+      item
+        Text = '3'
+        Width = 50
+      end    
+      item
+        Text = '4'
+        Width = 50
+      end>
+    SimplePanel = False
   end
   object tmrESC2: TTimer
     Enabled = False

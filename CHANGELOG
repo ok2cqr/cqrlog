@@ -5,6 +5,7 @@ Legend:
 --------------------
 
 2.5.2
+  - some contest window improvements (showing DXCC, WAZ, ITU, continent)	
   - ADIF import duplicate check fixed, form layout fixed (Saku, OH1KH)
 
 2.5.1 (2021-01-24)
