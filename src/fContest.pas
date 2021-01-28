@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls;
 
 type
 
@@ -39,6 +39,7 @@ type
     lblMSGr: TLabel;
     lblNRs: TLabel;
     btnHelp : TSpeedButton;
+    sbContest: TStatusBar;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
     procedure btClearAllClick(Sender : TObject);
@@ -72,6 +73,8 @@ type
     procedure SetTabOrders;
     procedure TabStopAllOn;
     procedure QspMsg;
+    procedure ClearStatusBar;
+    procedure ShowStatusBarInfo();
   public
     { public declarations }
   end;
@@ -227,6 +230,8 @@ begin
   frmNewQSO.edtCallExit(nil);
   frmContest.ShowOnTop;
   frmContest.SetFocus;
+
+  ShowStatusBarInfo();
 end;
 
 procedure TfrmContest.btSaveClick(Sender: TObject);
@@ -373,6 +378,12 @@ begin
   frmNewQSO.gbContest.Visible := true;
   dmUtils.LoadWindowPos(frmContest);
   InitInput;
+
+  sbContest.Panels[0].Width := 450;
+  sbContest.Panels[1].Width := 65;
+  sbContest.Panels[2].Width := 65;
+  sbContest.Panels[3].Width := 65;
+  sbContest.Panels[4].Width := 20;
 end;
 
 procedure TfrmContest.btnHelpClick(Sender : TObject);
@@ -423,6 +434,8 @@ begin
   frmContest.ShowOnTop;
   frmContest.SetFocus;
   edtCall.SetFocus;
+
+  ClearStatusBar;
 end;
 
 procedure TfrmContest.ChkSerialNrUpd(IncNr: boolean);   // do we need serial nr inc
@@ -529,6 +542,22 @@ Begin
    end;
 end;
 
+procedure TfrmContest.ClearStatusBar();
+var
+  i : Integer;
+begin
+  for i:=0 to sbContest.Panels.Count-1 do
+    sbContest.Panels.Items[i].Text := '';
+end;
+
+procedure TfrmContest.ShowStatusBarInfo();
+begin
+  sbContest.Panels.Items[0].Text := Trim(frmNewQSO.mCountry.Text);
+  sbContest.Panels.Items[1].Text := 'WAZ: ' + frmNewQSO.lblWAZ.Caption;
+  sbContest.Panels.Items[2].Text := 'ITU: ' + frmNewQSO.lblITU.Caption;
+  sbContest.Panels.Items[3].Text := 'AZ: ' + frmNewQSO.lblAzi.Caption;
+  sbContest.Panels.Items[4].Text := frmNewQSO.lblCont.Caption;
+end;
 
 initialization
 
