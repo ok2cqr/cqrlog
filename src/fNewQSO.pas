@@ -648,6 +648,7 @@ type
     procedure InsertNameQTH;
     procedure UpdateFKeyLabels;
     procedure ClearStatGrid;
+    procedure AddBandsToStatGrid;
     procedure LoadSettings;
     procedure SaveSettings;
     procedure ChangeCallBookCaption;
@@ -1013,6 +1014,23 @@ begin
     Cells[0, 2] := 'CW';
     Cells[0, 3] := 'DIGI'
   end
+end;
+
+procedure TfrmNewQSO.AddBandsToStatGrid;
+var
+  i : Integer;
+begin
+  sgrdStatistic.ColCount  := cMaxBandsCount;
+
+  for i:=0 to cMaxBandsCount-1 do
+  begin
+    if dmUtils.MyBands[i][0]='' then
+    begin
+      sgrdStatistic.ColCount  := i+1;
+      break
+    end;
+    sgrdStatistic.Cells[i+1,0] := dmUtils.MyBands[i][1];
+  end;
 end;
 
 procedure TfrmNewQSO.SetDateTime(EndTime : Boolean =  True);
@@ -1392,6 +1410,7 @@ begin
   end;
   ChangeCallBookCaption;
   ClearStatGrid;
+  AddBandsToStatGrid;
   ClearGrayLineMapLine;
 
   if not AnyRemoteOn then
@@ -1801,6 +1820,7 @@ begin
   ChangeDXCC   := False;
 
   ClearAll;
+  AddBandsToStatGrid;
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
@@ -6161,7 +6181,9 @@ begin
     exit;
   old_stat_adif := ref_adif;
   sgrdStatistic.ColCount  := cMaxBandsCount;
+
   ClearStatGrid;
+  AddBandsToStatGrid;
 
   space := ' ';
   if cqrini.ReadBool('Fonts','GridDotsInsteadSpaces',False) = True then
@@ -6176,7 +6198,7 @@ begin
       sgrdStatistic.ColCount  := i+1;
       break
     end;
-    sgrdStatistic.Cells[i+1,0] := dmUtils.MyBands[i][1];
+
     sgrdStatistic.Cells[i+1,1] := space+space+space;
     sgrdStatistic.Cells[i+1,2] := space+space+space;
     sgrdStatistic.Cells[i+1,3] := space+space+space;
