@@ -2288,7 +2288,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = edtEndTime
           Left = 177
           Height = 17
-          Top = 258
+          Top = 260
           Width = 26
           Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 6
@@ -3039,7 +3039,6 @@ object frmNewQSO: TfrmNewQSO
           Width = 55
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
-          BorderSpacing.Top = 2
           OnEnter = edtEndTimeEnter
           OnExit = edtEndTimeExit
           OnKeyDown = edtEndTimeKeyDown
