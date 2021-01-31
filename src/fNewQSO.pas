@@ -88,6 +88,7 @@ type
     acUploadToHamQTH: TAction;
     acTune : TAction;
     btnClearSatellite : TButton;
+    cbOffline: TCheckBox;
     cbTxLo: TCheckBox;
     cbRxLo: TCheckBox;
     cbSpotRX: TCheckBox;
@@ -105,6 +106,7 @@ type
     edtContestName: TEdit;
     edtRXFreq : TEdit;
     gbContest: TGroupBox;
+    lbleQslRcvdDate: TLabel;
     Label38: TLabel;
     Label37: TLabel;
     lblContestExchangeMessageReceived: TLabel;
@@ -117,7 +119,7 @@ type
     lblDOK: TLabel;
     lblStatellite : TLabel;
     lblRXFreq : TLabel;
-    Label36 : TLabel;
+    lblRXMhz : TLabel;
     lblQSLRcvdDate: TLabel;
     mCallBook : TMemo;
     mCountry : TMemo;
@@ -170,7 +172,6 @@ type
     btnDXCCRef: TButton;
     btnQSLMgr: TButton;
     btnSave: TButton;
-    cbOffline: TCheckBox;
     cmbFreq: TComboBox;
     cmbIOTA: TComboBox;
     cmbMode: TComboBox;
@@ -195,7 +196,7 @@ type
     edtStartTime: TEdit;
     edtState: TEdit;
     edtWAZ: TEdit;
-    GroupBox1: TGroupBox;
+    gbDXCCdata: TGroupBox;
     imgMain: TImageList;
     imgMain1: TImageList;
     lblDate: TLabel;
@@ -331,28 +332,35 @@ type
     mnuNewQSO: TMenuItem;
     mnuFile: TMenuItem;
     mnuTRXControl: TMenuItem;
-    pgDetails : TPageControl;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    Panel3: TPanel;
-    Panel4: TPanel;
-    Panel5 : TPanel;
-    Panel6: TPanel;
+    pnlSbtn2: TPanel;
+    pnlSbtn0: TPanel;
     pnlOffline: TPanel;
+    pgDetails : TPageControl;
+    pnlAll: TPanel;
+    pnlDXCCinfo: TPanel;
+    pnlQsoInfo: TPanel;
+    pnlProfiles: TPanel;
+    pnlDXCCCountry : TPanel;
+    pnlQSOinput: TPanel;
+    pnlSbtn1: TPanel;
+    pnlSbtn3: TPanel;
+    pnlSbtn4: TPanel;
+    pnlSbtn5: TPanel;
+    pnlSbtn6: TPanel;
     popEditQSO: TPopupMenu;
     sbNewQSO: TStatusBar;
-    sbtneQSL : TSpeedButton;
+    sbtnAttach: TSpeedButton;
+    sbtneQSL: TSpeedButton;
+    sbtnHamQTH: TSpeedButton;
+    sbtnLocatorMap: TSpeedButton;
+    sbtnLoTW: TSpeedButton;
+    sbtnQRZ: TSpeedButton;
+    sbtnQSL: TSpeedButton;
     sgrdStatistic : TStringGrid;
     btnSunRise: TSpeedButton;
-    sbtnLocatorMap: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     btnSunSet: TSpeedButton;
-    sbtnAttach: TSpeedButton;
-    sbtnQSL: TSpeedButton;
-    sbtnQRZ: TSpeedButton;
-    sbtnLoTW: TSpeedButton;
-    sbtnHamQTH : TSpeedButton;
     sbtnRefreshTime: TSpeedButton;
     tabDXCCStat : TTabSheet;
     tabSatellite : TTabSheet;
@@ -558,6 +566,8 @@ type
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
+    procedure pgDetailsChange(Sender: TObject);
+    procedure pnlAllClick(Sender: TObject);
     procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnLocatorMapClick(Sender: TObject);
@@ -1028,6 +1038,8 @@ var
   county, qsl_via  : String;
   award,state, dok : String;
   qslrdate         : String;
+  eqslrdate        : String;
+  lotw_qslrdate    : String;
   waz, itu         : String;
 begin
   sName    := '';
@@ -1039,6 +1051,8 @@ begin
   state    := '';
   dok      := '';
   qslrdate := '';
+  eqslrdate :='';
+  lotw_qslrdate :='';
   waz      := '';
   itu      := '';
   
@@ -1066,14 +1080,21 @@ begin
         if (dok = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           dok := dmData.qQSOBefore.FieldByName('dok').AsString;
         if (qslrdate = '') and (not dmData.qQSOBefore.FieldByName('qslr_date').IsNull) then
-          lblQSLRcvdDate.Caption := 'QSL rcvd on '+dmData.qQSOBefore.FieldByName('qslr_date').AsString;
+          lblQSLRcvdDate.Caption := dmData.qQSOBefore.FieldByName('qslr_date').AsString+' rcvd QSL';
+        if (lotw_qslrdate = '') and (not dmData.qQSOBefore.FieldByName('lotw_qslrdate').IsNull) then
+          lblCfmLoTW.Caption := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+' LoTW cfmd';
+        if (eqslrdate = '') and (not dmData.qQSOBefore.FieldByName('eqsl_qslrdate').IsNull) then
+          lbleQslRcvdDate.Caption := dmData.qQSOBefore.FieldByName('eqsl_qslrdate').AsString+' rcvd eQSL';
         if (waz = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           waz := dmData.qQSOBefore.FieldByName('waz').AsString;
         if (itu = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           itu := dmData.qQSOBefore.FieldByName('itu').AsString;
         dmData.qQSOBefore.Prior
       end;
-      lblQSLRcvdDate.Visible := True
+      lblQSLRcvdDate.Visible := True;
+      lbleQslRcvdDate.Visible := True;
+      lblCfmLoTW.Visible := True;
+
     finally
       dmData.qQSOBefore.Last;  //after this, dbgrid is not set to last record
       dmData.qQSOBefore.EnableControls;
@@ -1109,7 +1130,16 @@ var
 begin
   index := 0;
   lblCountryInfo.Caption := dmDXCC.DXCCInfo(adif,cmbFreq.Text,
-                            cmbMode.Text,index)
+                            cmbMode.Text,index);
+  if pos('UNKN',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clRed;
+  if pos('CONF',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clGreen;
+  if pos('NEW C',Uppercase(lblCountryInfo.Caption))>0 then
+  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewCountry',0);
+  if pos('NEW B',Uppercase(lblCountryInfo.Caption))>0 then
+  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewBand',0);
+  if pos('NEW M',Uppercase(lblCountryInfo.Caption))>0 then
+  lblCountryInfo.Font.Color:=cqrini.ReadInteger('DXCluster','NewMode',0);
+  lblCountryInfo.Refresh;
 end;
 
 procedure TfrmNewQSO.ShowDXCCInfo(ref_adif : Word = 0);
@@ -1252,6 +1282,7 @@ begin
   old_rsts := '';
   lblCfmLoTW.Visible := False;
   lblQSLRcvdDate.Visible := False;
+  lbleQslRcvdDate.Visible := False;
   lblQSLRcvdDate.Caption := '';
   lblCountryInfo.Caption := '';
   Mask  := '';
@@ -1382,6 +1413,7 @@ procedure TfrmNewQSO.LoadSettings;
 begin
   dmUtils.ModifyXplanetConf;
   dmUtils.LoadFontSettings(frmNewQSO);
+
   dmUtils.LoadBandLabelSettins;
   sbNewQSO.Panels[0].Width := 180;
   sbNewQSO.Panels[1].Width := 200;
@@ -5882,6 +5914,16 @@ begin
   frmMain.BringToFront;
 end;
 
+procedure TfrmNewQSO.pgDetailsChange(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmNewQSO.pnlAllClick(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
 begin
     mnueQSLView.Visible :=  pos('E',dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString)>0;
@@ -6373,13 +6415,18 @@ begin
     lotw_qslr         := dmData.qQSOBefore.FieldByName('lotw_qslr').AsString;
     if lotw_qslr = 'L' then
     begin
-      lblCfmLoTW.Caption := 'QSO confirmed by LoTW ' + dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString;
+      lblCfmLoTW.Caption := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+ ' Cfmd by LoTW';
       lblCfmLoTW.Visible := True
     end;
     if not dmData.qQSOBefore.FieldByName('qslr_date').IsNull then
     begin
-      lblQSLRcvdDate.Caption := 'QSL rcvd on '+dmData.qQSOBefore.FieldByName('qslr_date').AsString;
+      lblQSLRcvdDate.Caption := dmData.qQSOBefore.FieldByName('qslr_date').AsString+' rcvd QSL';
       lblQSLRcvdDate.Visible := True
+    end;
+     if not dmData.qCQRLOG.FieldByName('eqsl_qslrdate').IsNull then
+    begin
+      lblQSLRcvdDate.Caption := dmData.qCQRLOG.FieldByName('eqsl_qslrdate').AsString+' rcvd eQSL';
+      lbleQslRcvdDate.Visible := True
     end;
     dmSatellite.GetListOfSatellites(cmbSatellite, dmData.qQSOBefore.FieldByName('satellite').AsString);
     dmSatellite.GetListOfPropModes(cmbPropagation, dmData.qQSOBefore.FieldByName('prop_mode').AsString);
@@ -6429,13 +6476,18 @@ begin
     edtContestExchangeMessageReceived.Text := dmData.qCQRLOG.FieldByName('srx_string').AsString;
     if lotw_qslr = 'L' then
     begin
-      lblCfmLoTW.Caption := 'QSO confirmed by LoTW ' + dmData.qCQRLOG.FieldByName('lotw_qslrdate').AsString;
+      lblCfmLoTW.Caption := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+ ' Cfmd by LoTW';
       lblCfmLoTW.Visible := True
     end;
-    if not dmData.qCQRLOG.FieldByName('qslr_date').IsNull then
+    if not dmData.qQSOBefore.FieldByName('qslr_date').IsNull then
     begin
-      lblQSLRcvdDate.Caption := 'QSL rcvd on '+dmData.qCQRLOG.FieldByName('qslr_date').AsString;
+      lblQSLRcvdDate.Caption := dmData.qQSOBefore.FieldByName('qslr_date').AsString+' rcvd QSL';
       lblQSLRcvdDate.Visible := True
+    end;
+     if not dmData.qCQRLOG.FieldByName('eqsl_qslrdate').IsNull then
+    begin
+      lblQSLRcvdDate.Caption := dmData.qCQRLOG.FieldByName('eqsl_qslrdate').AsString+' rcvd eQSL';
+      lbleQslRcvdDate.Visible := True
     end;
     dmSatellite.GetListOfSatellites(cmbSatellite, dmData.qCQRLOG.FieldByName('satellite').AsString);
     dmSatellite.GetListOfPropModes(cmbPropagation, dmData.qCQRLOG.FieldByName('prop_mode').AsString);

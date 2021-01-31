@@ -468,7 +468,7 @@ begin
                    QuotedStr(cmbValue.Text)
         end;
    28 : begin
-          if cmbValue.Text = 'Y' then
+          if cmbValue.Text = 'L' then
             sql := 'lotw_qslr='+QuotedStr(cmbValue.Text)+',lotw_qslrdate='+
                    QuotedStr(dmUtils.MyDateToStr(now))
           else
