@@ -1,16 +1,16 @@
 object frmNewQSO: TfrmNewQSO
-  Left = 695
+  Left = 1
   Height = 709
-  Top = 64
-  Width = 997
+  Top = 1
+  Width = 1032
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 997
-  VertScrollBar.Page = 623
+  HorzScrollBar.Page = 968
+  VertScrollBar.Page = 638
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
-  ClientHeight = 709
-  ClientWidth = 997
+  ClientHeight = 684
+  ClientWidth = 1032
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2140,57 +2140,46 @@ object frmNewQSO: TfrmNewQSO
   OnWindowStateChange = FormWindowStateChange
   PopupMenu = popMode
   LCLVersion = '2.0.8.0'
-  object sbNewQSO: TStatusBar
+  object pnlAll: TPanel
+    AnchorSideTop.Control = dbgrdQSOBefore
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 22
-    Top = 651
-    Width = 1203
-    Panels = <    
-      item
-        Width = 50
-      end    
-      item
-        Width = 50
-      end    
-      item
-        Width = 50
-      end    
-      item
-        Width = 50
-      end>
-    SimplePanel = False
-  end
-  object Panel1: TPanel
-    AnchorSideRight.Side = asrBottom
-    Left = 0
-    Height = 551
-    Top = 100
-    Width = 1203
+    Height = 588
+    Top = 96
+    Width = 1032
     Align = alBottom
-    ClientHeight = 551
-    ClientWidth = 1203
+    ClientHeight = 588
+    ClientWidth = 1032
     TabOrder = 0
-    object Panel3: TPanel
+    OnClick = pnlAllClick
+    object pnlQsoInfo: TPanel
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
       Left = 1
-      Height = 511
-      Top = 39
-      Width = 939
+      Height = 532
+      Top = 35
+      Width = 768
       Align = alClient
+      BorderSpacing.Bottom = 2
       BevelOuter = bvNone
-      ClientHeight = 511
-      ClientWidth = 939
+      ClientHeight = 532
+      ClientWidth = 768
       TabOrder = 0
-      object Panel6: TPanel
+      object pnlQSOinput: TPanel
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Side = asrBottom
         Left = 0
-        Height = 511
+        Height = 532
         Top = 0
-        Width = 939
+        Width = 768
         Align = alClient
         BorderSpacing.InnerBorder = 2
         BevelOuter = bvNone
-        ClientHeight = 511
-        ClientWidth = 939
+        ClientHeight = 532
+        ClientWidth = 768
         ParentShowHint = False
         TabOrder = 0
         object lblCommentToCallsign: TLabel
@@ -2199,10 +2188,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Side = asrBottom
           Left = 259
-          Height = 17
-          Top = 200
-          Width = 139
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 215
+          Width = 135
+          BorderSpacing.Top = 3
           Caption = 'Comment to callsign'
           Layout = tlBottom
           ParentColor = False
@@ -2213,10 +2202,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblName
           AnchorSideTop.Side = asrCenter
           Left = 109
-          Height = 17
-          Top = 53
-          Width = 31
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 56
+          Width = 28
           Caption = 'QTH'
           ParentColor = False
           ParentFont = False
@@ -2226,10 +2214,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtCall
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 17
-          Top = 53
-          Width = 41
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 56
+          Width = 39
+          BorderSpacing.Top = 3
           Caption = 'Name'
           ParentColor = False
           ParentFont = False
@@ -2239,9 +2227,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblCall
           AnchorSideTop.Side = asrCenter
           Left = 445
-          Height = 17
-          Top = 4
-          Width = 59
+          Height = 15
+          Top = 3
+          Width = 57
           Caption = 'RST rcvd'
           ParentColor = False
           ParentFont = False
@@ -2251,22 +2239,22 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblCall
           AnchorSideTop.Side = asrCenter
           Left = 353
-          Height = 17
-          Top = 4
-          Width = 59
+          Height = 15
+          Top = 3
+          Width = 57
           Caption = 'RST sent'
           ParentColor = False
           ParentFont = False
         end
         object lblCall: TLabel
-          AnchorSideLeft.Control = Panel6
-          AnchorSideTop.Control = Panel6
+          AnchorSideLeft.Control = pnlQSOinput
+          AnchorSideTop.Control = pnlQSOinput
           Left = 12
-          Height = 17
-          Top = 4
-          Width = 26
+          Height = 15
+          Top = 3
+          Width = 25
           BorderSpacing.Left = 12
-          BorderSpacing.Top = 4
+          BorderSpacing.Top = 3
           Caption = 'Call'
           ParentColor = False
           ParentFont = False
@@ -2276,9 +2264,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblCall
           AnchorSideTop.Side = asrCenter
           Left = 132
-          Height = 17
-          Top = 4
-          Width = 72
+          Height = 15
+          Top = 3
+          Width = 67
           Caption = 'Frequency'
           ParentColor = False
           ParentFont = False
@@ -2286,22 +2274,24 @@ object frmNewQSO: TfrmNewQSO
         object lblMode: TLabel
           AnchorSideLeft.Control = cmbMode
           AnchorSideTop.Control = lblCall
+          AnchorSideTop.Side = asrCenter
           Left = 237
-          Height = 17
-          Top = 4
-          Width = 40
+          Height = 15
+          Top = 3
+          Width = 36
           Caption = 'Mode'
           ParentColor = False
           ParentFont = False
         end
         object lblEndTime: TLabel
           AnchorSideLeft.Control = edtEndTime
-          AnchorSideTop.Control = lblDate
           AnchorSideTop.Side = asrCenter
-          Left = 156
-          Height = 17
-          Top = 247
-          Width = 26
+          AnchorSideBottom.Control = edtEndTime
+          Left = 177
+          Height = 15
+          Top = 274
+          Width = 24
+          Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 6
           Caption = '&End'
           FocusControl = edtEndTime
@@ -2310,12 +2300,13 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblStartTime: TLabel
           AnchorSideLeft.Control = edtStartTime
-          AnchorSideTop.Control = lblDate
           AnchorSideTop.Side = asrCenter
-          Left = 103
-          Height = 17
-          Top = 247
-          Width = 34
+          AnchorSideBottom.Control = edtStartTime
+          Left = 117
+          Height = 15
+          Top = 276
+          Width = 31
+          Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 6
           Caption = '&Start'
           FocusControl = edtStartTime
@@ -2323,14 +2314,14 @@ object frmNewQSO: TfrmNewQSO
           ParentFont = False
         end
         object lblDate: TLabel
-          AnchorSideLeft.Control = pnlOffline
-          AnchorSideTop.Control = pnlOffline
-          AnchorSideTop.Side = asrBottom
+          AnchorSideLeft.Control = edtDate
+          AnchorSideTop.Side = asrCenter
+          AnchorSideBottom.Control = edtDate
           Left = 12
-          Height = 17
-          Top = 247
-          Width = 33
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 276
+          Width = 31
+          Anchors = [akLeft, akBottom]
           Caption = 'Date'
           ParentColor = False
           ParentFont = False
@@ -2340,10 +2331,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblName
           AnchorSideTop.Side = asrCenter
           Left = 250
-          Height = 17
-          Top = 53
-          Width = 35
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 56
+          Width = 33
           Caption = 'GRID'
           ParentColor = False
           ParentFont = False
@@ -2353,10 +2343,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblName
           AnchorSideTop.Side = asrCenter
           Left = 327
-          Height = 17
-          Top = 53
-          Width = 34
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 56
+          Width = 30
           Caption = 'PWR'
           ParentColor = False
           ParentFont = False
@@ -2366,10 +2355,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblName
           AnchorSideTop.Side = asrCenter
           Left = 387
-          Height = 17
-          Top = 53
-          Width = 43
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 56
+          Width = 40
           Caption = 'QSL_S'
           ParentColor = False
           ParentFont = False
@@ -2379,10 +2367,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblName
           AnchorSideTop.Side = asrCenter
           Left = 461
-          Height = 17
-          Top = 53
-          Width = 46
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 56
+          Width = 41
           Caption = 'QSL_R'
           ParentColor = False
           ParentFont = False
@@ -2392,10 +2379,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtName
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 17
-          Top = 102
-          Width = 23
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 109
+          Width = 22
+          BorderSpacing.Top = 3
           Caption = 'ITU'
           ParentColor = False
           ParentFont = False
@@ -2405,10 +2392,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrCenter
           Left = 392
-          Height = 17
-          Top = 102
-          Width = 44
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 109
+          Width = 41
           Caption = 'Award'
           ParentColor = False
           ParentFont = False
@@ -2418,10 +2404,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtITU
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 17
-          Top = 151
-          Width = 64
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 162
+          Width = 62
+          BorderSpacing.Top = 3
           Caption = 'DXCC ref.'
           ParentColor = False
           ParentFont = False
@@ -2431,10 +2417,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrCenter
           Left = 59
-          Height = 17
-          Top = 102
-          Width = 33
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 109
+          Width = 31
           Caption = 'WAZ'
           ParentColor = False
           ParentFont = False
@@ -2444,10 +2429,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrCenter
           Left = 106
-          Height = 17
-          Top = 102
-          Width = 33
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 109
+          Width = 31
           Caption = 'IOTA'
           ParentColor = False
           ParentFont = False
@@ -2457,10 +2441,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrCenter
           Left = 259
-          Height = 17
-          Top = 102
-          Width = 50
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 109
+          Width = 46
           Caption = 'County'
           ParentColor = False
           ParentFont = False
@@ -2470,10 +2453,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblDXCCRef
           AnchorSideTop.Side = asrCenter
           Left = 107
-          Height = 17
-          Top = 151
-          Width = 120
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 162
+          Width = 113
           Caption = 'Comment to QSO'
           ParentColor = False
           ParentFont = False
@@ -2483,25 +2465,22 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblDXCCRef
           AnchorSideTop.Side = asrCenter
           Left = 402
-          Height = 17
-          Top = 151
-          Width = 55
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 162
+          Width = 51
           Caption = 'QSL VIA'
           ParentColor = False
           ParentFont = False
         end
         object lblQSOTakes: TLabel
-          AnchorSideLeft.Control = pnlOffline
-          AnchorSideTop.Control = edtDate
-          AnchorSideTop.Side = asrBottom
-          AnchorSideBottom.Control = pnlOffline
+          AnchorSideLeft.Control = lblDXCCRef
+          AnchorSideTop.Control = pnlOffline
+          AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Side = asrBottom
           Left = 12
-          Height = 17
-          Top = 296
-          Width = 75
-          BorderSpacing.Top = 5
+          Height = 15
+          Top = 331
+          Width = 71
           Caption = 'QSO takes '
           Layout = tlBottom
           ParentColor = False
@@ -2510,17 +2489,15 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblQSLMgr: TLabel
           AnchorSideLeft.Control = edtQSL_VIA
+          AnchorSideTop.Control = lblCommentToCallsign
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblCommentToCallsign
-          AnchorSideBottom.Side = asrBottom
           Left = 402
-          Height = 17
-          Top = 200
-          Width = 139
-          Anchors = [akLeft, akBottom]
+          Height = 15
+          Top = 215
+          Width = 133
           BorderSpacing.Top = 10
           Caption = 'QSL manager found!'
-          Font.Color = clRed
+          Font.Color = clGreen
           Layout = tlBottom
           ParentColor = False
           ParentFont = False
@@ -2532,11 +2509,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrCenter
           Left = 211
-          Height = 17
-          Top = 102
-          Width = 37
+          Height = 15
+          Top = 109
+          Width = 34
           BorderSpacing.Left = 5
-          BorderSpacing.Top = 5
           Caption = 'State'
           ParentColor = False
           ParentFont = False
@@ -2544,298 +2520,43 @@ object frmNewQSO: TfrmNewQSO
         end
         object lblCfmLoTW: TLabel
           AnchorSideLeft.Control = edtDXCCRef
-          AnchorSideTop.Control = edtDXCCRef
+          AnchorSideTop.Control = lbleQslRcvdDate
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 17
-          Top = 200
-          Width = 123
-          BorderSpacing.Top = 5
-          Caption = 'QSO cfm by LoTW'
-          Font.Color = clRed
+          Height = 15
+          Top = 251
+          Width = 87
+          BorderSpacing.Top = 3
+          Caption = 'Cfm by LoTW'
+          Font.Color = clGreen
           Layout = tlBottom
           ParentColor = False
           ParentFont = False
           Visible = False
         end
         object lblQSLRcvdDate: TLabel
-          AnchorSideLeft.Control = lblCfmLoTW
-          AnchorSideLeft.Side = asrBottom
+          AnchorSideLeft.Control = edtDXCCRef
+          AnchorSideTop.Control = lblCommentToCallsign
           AnchorSideTop.Side = asrCenter
-          AnchorSideBottom.Control = lblCfmLoTW
-          AnchorSideBottom.Side = asrBottom
-          Left = 160
-          Height = 17
-          Top = 200
-          Width = 85
-          Anchors = [akLeft, akBottom]
-          BorderSpacing.Left = 25
+          AnchorSideBottom.Side = asrCenter
+          Left = 12
+          Height = 15
+          Top = 215
+          Width = 81
           Caption = 'QSL rcvd on '
-          Font.Color = clRed
+          Font.Color = clGreen
           Layout = tlBottom
           ParentColor = False
           ParentFont = False
           Visible = False
-        end
-        object sbtnAttach: TSpeedButton
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 382
-          Height = 22
-          Hint = 'Call has an attachment'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          BorderSpacing.Right = 130
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00000000000000000000000000000000000000000000281C1A00495252735C72
-            7494647F82A7627D80A4627D80A4627D80A4627D80A4627D80A4627D80A4627D
-            80A4627D80A4627D80A560797BAD495354570000001100000000536264C0749C
-            9EF582B3B6FF80AFB2FF80AFB2FF80AFB2FF80AFB2FF80AFB2FF80AFB2FF80AF
-            B2FF80AFB2FF80AFB2FF80AFB0FF5D7373AC1802003A000000005D7477B79ADC
-            DFE7B4FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FF
-            FFFFB1FFFFFFB2FFFFFFB7FFFFFF759C9CDA3837386F00000000444D4DB78FC9
-            CFE7AFFEFFFFABF7FFFFABF7FFFFABF7FFFFABF7FFFFABF7FFFFABF7FFFFABF7
-            FFFFABF7FFFFACF9FFFFB1FFFFFF7FAFB1FF5F7A7C9C00000000323F40B78BC7
-            CEE7B1FFFFFFACFFFFFFABFFFFFFABFFFFFFABFFFFFFABFFFFFFAAF7FFFFAAF5
-            FEFFAAF6FEFFAAF6FEFFADFCFFFF96D4DAFF81B3B8AC000000062E4B50B782BE
-            C5E7A7EBEFFFA6DDD9FFAAD9D2FFAAD8D0FFA9D8D0FFA8DCD8FFA8F1F8FFA9F6
-            FFFFAAF6FEFFAAF6FEFFABF7FFFFA7F0F8FF96D7DDB500000023366B73B76FA7
-            AFE790B8B7FF9DA293FFA79076FFAA8D71FFA88D72FFA59D89FFA6E6EBFFA9F7
-            FFFFABF7FFFFABF7FFFFABF7FEFFACFAFFFF9DE1E8C136353243418B95B75788
-            8FE77C9FA0FFA7BDB3FFAC977DFFB7997AFFBA9C7CFFB2A48BFFA9E5E9FFACFB
-            FFFFAFFEFFFFAEFDFFFFAEFDFFFFB0FFFFFFA0E5EBCF5D75766B45919CB7498A
-            92E7659DA3FF8DBEC0FF8BAFADFF8EB0ACFF90B1ADFF8DB3B0FF89C4CAFF8ACA
-            D1FF8BCBD2FF8BCBD2FF8BCCD2FF8CC7CDFF7FACB0CE56696A8644868FB74BA8
-            B4E75BBFCDFF6ECCDAFF6ACEDFFF68CDDEFF68CEDEFF69CFDFFF6ACAD6FF6AC7
-            D4FF69C6D3FF69C7D4FF6ACDD9FF61949AE1586162985160615240727AB855C9
-            DAE75DECFFFF59E4F7FF59E4F7FF5AE5F9FF59E4F8FF59E2F5FE59E3F6F559E3
-            F6F359E4F6F25AE5F8F35BEEFFF93E7C83A811000040000000003D666CBE51B9
-            C8EA5ADDF0FF58D7E9FF58D8E9FF5BE6F9FF58D8EBFF4EAFBDF440767C923C63
-            68763D6A6F733D6A6F763D6A707C34494B461C000013000000003855598A468E
-            97E24B9EAAFF4A9CA7FF4A9CA7FF4BA3AEFF499AA5FF43808ADF333F413C1E00
-            0018280C071A280E091C270C091E2813110E2F3D3E02000000003444463C4072
-            7881427B82AB427A81A4427A81A4427A81A740747AA03D666D7A2E2B300B0000
-            000000000000000000000000000000000000000000002A1F1D00000000000000
-            00000000000000000000000000000000000000000000000000000000000057D0
-            DF00230000000000000000000000000000000000000000000000
-          }
-          OnClick = sbtnAttachClick
-          ShowHint = True
-          ParentShowHint = False
-        end
-        object sbtnQSL: TSpeedButton
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 408
-          Height = 23
-          Hint = 'Call has a QSL image'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          BorderSpacing.Right = 104
-          Glyph.Data = {
-            36090000424D3609000000000000360000002800000018000000180000000100
-            2000000000000009000064000000640000000000000000000000FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00C1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0
-            C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0
-            C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFFFFFFF00FFFFFF00FFFFFF00C1C0
-            C2FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
-            77FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
-            77FF927777FF927777FF927777FF927777FFC1C0C2FFFFFFFF00FFFFFF009277
-            77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFFAEFFFFFF5C5C
-            5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFFAEFFFFFF5C5C5CFF5C5C
-            5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C
-            5CFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C
-            5CFF5C5C5CFF5C5C5CFFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C
-            5CFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFF87614FFF86604EFF85604DFF86604EFF86614EFF86624EFF8762
-            4EFF85604CFF835E4BFF7F5E4DFF7B5E4FFF7EAEA7FFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFF6A4B39FF684836FF654634FF61402EFF5D3B27FF5C3A26FF5A39
-            26FF563929FF52392CFF50382AFF4E3628FF679A94FFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFB69E92FFB69E91FFB69E90FFB39C8EFFB09A8DFFAA9488FFA48F
-            82FF85786FFF66605CFF6C645EFF716761FF78B3B0FFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFCABEAFFFC9C0B0FFC8C1B2FFCCB8A7FFCFAF9CFFCEAF9CFFCEAF
-            9CFFB69C8CFF9F8A7DFF8A7A70FF746A63FF7AB4B1FFAEFFFFFFAEFFFFFFAEFF
-            FFFF927777FF00D7D7FF927777FFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFCBD5CBFFCCDCD2FFCDE2DAFFC2B9A9FFB89078FFB89179FFB892
-            7AFFB69077FFB48E74FFA8856DFF9C7C66FF8EBEB2FFAEFFFFFFAEFFFFFFAEFF
-            FFFF00D7D7FF927777FF00D7D7FFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFB5AA95FFB4AC98FFB4AF9AFFB0967CFFAC7D5EFFAB7C5DFFAA7C
-            5CFFA77858FFA47554FFA47250FFA4704CFF92B8A6FFAEFFFFFFAEFFFFFFAEFF
-            FFFF927777FF00D7D7FF927777FFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
-            77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
-            FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFFFFFFF00FFFFFF00C1C0
-            C2FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
-            77FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
-            77FF927777FF927777FF927777FF927777FFC1C0C2FFFFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-          }
-          OnClick = sbtnQSLClick
-          ShowHint = True
-          ParentShowHint = False
-        end
-        object sbtnQRZ: TSpeedButton
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 486
-          Height = 23
-          Hint = 'Opens qrz.com callsign profile in webbrowser'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          BorderSpacing.Right = 26
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000F5F2E9FFF5F2
-            E9FFF5F2E9FFF5F5FAFFF5F2E9FFF5F5FAFFF5F2E9FFF5F5FAFFF5F5FAFFF5F5
-            FAFFF5F5FAFFF5F2E9FFF5F5FAFFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
-            E9FFF5F5FAFFEDCB6CFFF3E6C1FFE7AB00FFF3E6C1FFEDCB6CFFF1DA9BFFF1DA
-            9BFFEBBD41FFF3E6C1FFEBBD41FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F5
-            FAFFF1DA9BFFF3E6C1FFF3E6C1FFF1DA9BFFF1DA9BFFF1DA9BFFF1DA9BFFF1DA
-            9BFFF1DA9BFFF3E6C1FFF5F2E9FFF1DA9BFFF5F5FAFFF5F2E9FFF5F2E9FFF3E6
-            C1FFE4A011FFF3E6C1FFE7AB00FFF1DA9BFFEBBD41FFEDCB6CFFF1DA9BFFEBBD
-            41FFF3E6C1FFE7AB00FFF3E6C1FFE7AB00FFF1DA9BFFF5F2E9FFF5F5FAFFF1DA
-            9BFFEBBD41FFF1DA9BFFE4A011FFF3E6C1FFE7AB00FFEBBD41FFEDCB6CFFE7AB
-            00FFF3E6C1FFE4A011FFEDCB6CFFEDCB6CFFEDCB6CFFF5F5FAFFF3E6C1FFEBBD
-            41FFF1DA9BFFF3E6C1FFF3E6C1FFF5F2E9FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6
-            C1FFF5F2E9FFF3E6C1FFF1DA9BFFF3E6C1FFEBBD41FFF3E6C1FFF1DA9BFFE7AB
-            00FFEDCB6CFFEBBD41FFE4A011FFF3E6C1FFE4A011FFEBBD41FFEDCB6CFFE4A0
-            11FFF3E6C1FFE4A011FFE4A011FFF1DA9BFFE4A011FFEDCB6CFFF5F2E9FFF3E6
-            C1FFF5F2E9FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6C1FFF3E6C1FFF3E6C1FFF3E6
-            C1FFF5F2E9FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6C1FFF3E6C1FFF1DA9BFFE7AB
-            00FFF1DA9BFFEBBD41FFE7AB00FFF3E6C1FFE7AB00FFEBBD41FFEDCB6CFFE7AB
-            00FFF3E6C1FFE7AB00FFE7AB00FFF1DA9BFFE7AB00FFEDCB6CFFF3E6C1FFE4A0
-            11FFEDCB6CFFEDCB6CFFEBBD41FFF3E6C1FFEBBD41FFEDCB6CFFF1DA9BFFEBBD
-            41FFF3E6C1FFEBBD41FFEBBD41FFF1DA9BFFE4A011FFF1DA9BFFF5F2E9FFF3E6
-            C1FFF3E6C1FFF3E6C1FFEDCB6CFFF3E6C1FFEDCB6CFFF1DA9BFFF1DA9BFFEDCB
-            6CFFF3E6C1FFEDCB6CFFF3E6C1FFF3E6C1FFF3E6C1FFF5F2E9FFF5F5FAFFEDCB
-            6CFFE7AB00FFF3E6C1FFE4A011FFF1DA9BFFE7AB00FFEBBD41FFEDCB6CFFE7AB
-            00FFF3E6C1FFE4A011FFF1DA9BFFE7AB00FFEBBD41FFF5F5FAFFF5F2E9FFF5F5
-            FAFFEBBD41FFF5F2E9FFF1DA9BFFF3E6C1FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6
-            C1FFF5F2E9FFF1DA9BFFF5F2E9FFE7AB00FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
-            E9FFF5F5FAFFEDCB6CFFF1DA9BFFE7AB00FFEDCB6CFFEBBD41FFEDCB6CFFEDCB
-            6CFFEBBD41FFEDCB6CFFEDCB6CFFF5F5FAFFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
-            E9FFF5F2E9FFF5F2E9FFF5F2E9FFF3E6C1FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
-            E9FFF3E6C1FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
-            E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
-            E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FF
-          }
-          OnClick = sbtnQRZClick
-          ShowHint = True
-          ParentShowHint = False
-        end
-        object sbtnLoTW: TSpeedButton
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 460
-          Height = 23
-          Hint = 'LoTW user'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          BorderSpacing.Right = 52
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFF0000FCFF0000
-            FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFF0000FCFF0000
-            FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFF0000FCFF0000
-            FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-          }
-          ShowHint = True
-          ParentShowHint = False
         end
         object edtDXCCRef: TEdit
           AnchorSideLeft.Control = lblDXCCRef
           AnchorSideTop.Control = lblDXCCRef
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 25
-          Top = 170
+          Height = 33
+          Top = 179
           Width = 64
           BorderSpacing.Top = 2
           CharCase = ecUppercase
@@ -2851,9 +2572,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
           Left = 259
-          Height = 80
+          Height = 92
           Hint = 'Comment/Remark to the callsign, max length 256'
-          Top = 219
+          Top = 232
           Width = 276
           BorderSpacing.Top = 2
           BorderSpacing.Right = 6
@@ -2874,9 +2595,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtName
           AnchorSideTop.Side = asrCenter
           Left = 109
-          Height = 25
+          Height = 33
           Hint = 'QTH, max length 60'
-          Top = 72
+          Top = 73
           Width = 136
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -2893,9 +2614,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblName
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 25
+          Height = 33
           Hint = 'Name, max length 40'
-          Top = 72
+          Top = 73
           Width = 92
           BorderSpacing.Top = 2
           MaxLength = 40
@@ -2912,9 +2633,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtCall
           AnchorSideTop.Side = asrCenter
           Left = 445
-          Height = 25
+          Height = 33
           Hint = 'RST received, max length 20'
-          Top = 23
+          Top = 20
           Width = 86
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
@@ -2932,9 +2653,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtCall
           AnchorSideTop.Side = asrCenter
           Left = 353
-          Height = 25
+          Height = 33
           Hint = 'RST sent, max length 20'
-          Top = 23
+          Top = 20
           Width = 86
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -2952,9 +2673,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblCall
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 25
+          Height = 33
           Hint = 'callsign, max length 20'
-          Top = 23
+          Top = 20
           Width = 115
           BorderSpacing.Top = 2
           CharCase = ecUppercase
@@ -2974,15 +2695,15 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtCall
           AnchorSideTop.Side = asrCenter
           Left = 237
-          Height = 25
+          Height = 33
           Hint = 'mode, max length 12'
-          Top = 23
+          Top = 20
           Width = 111
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
-          ItemHeight = 17
+          ItemHeight = 0
           Items.Strings = (
             'SSB'
             'CW'
@@ -3026,9 +2747,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtName
           AnchorSideTop.Side = asrCenter
           Left = 250
-          Height = 25
+          Height = 33
           Hint = 'Grid/Locator, max length 10'
-          Top = 72
+          Top = 73
           Width = 72
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3048,9 +2769,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtName
           AnchorSideTop.Side = asrCenter
           Left = 327
-          Height = 25
+          Height = 33
           Hint = 'Output power, max length 10'
-          Top = 72
+          Top = 73
           Width = 55
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3068,14 +2789,14 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtName
           AnchorSideTop.Side = asrCenter
           Left = 387
-          Height = 25
-          Top = 72
+          Height = 33
+          Top = 73
           Width = 69
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
-          ItemHeight = 17
+          ItemHeight = 0
           ItemIndex = 1
           Items.Strings = (
             ''
@@ -3102,14 +2823,14 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtName
           AnchorSideTop.Side = asrCenter
           Left = 461
-          Height = 25
-          Top = 72
+          Height = 33
+          Top = 73
           Width = 69
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
-          ItemHeight = 17
+          ItemHeight = 0
           Items.Strings = (
             ''
             ''
@@ -3127,9 +2848,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrBottom
           Left = 12
-          Height = 25
+          Height = 33
           Hint = 'ITU, must be a number (integer)'
-          Top = 121
+          Top = 126
           Width = 42
           BorderSpacing.Top = 2
           CharCase = ecUppercase
@@ -3146,9 +2867,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblAward
           AnchorSideTop.Side = asrBottom
           Left = 392
-          Height = 25
+          Height = 33
           Hint = 'Award, max length 50'
-          Top = 121
+          Top = 126
           Width = 140
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3166,9 +2887,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblWazEdit
           AnchorSideTop.Side = asrBottom
           Left = 59
-          Height = 25
+          Height = 33
           Hint = 'ITU, must be a number (integer)'
-          Top = 121
+          Top = 126
           Width = 42
           HelpType = htKeyword
           BorderSpacing.Left = 5
@@ -3187,9 +2908,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblCounty
           AnchorSideTop.Side = asrBottom
           Left = 259
-          Height = 25
+          Height = 33
           Hint = 'County, max length 30'
-          Top = 121
+          Top = 126
           Width = 128
           BorderSpacing.Left = 53
           BorderSpacing.Top = 2
@@ -3207,14 +2928,14 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = edtCall
           AnchorSideTop.Side = asrCenter
           Left = 132
-          Height = 25
-          Top = 23
+          Height = 33
+          Top = 20
           Width = 100
           AutoComplete = True
           AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
-          ItemHeight = 17
+          ItemHeight = 0
           OnChange = cmbFreqChange
           OnEnter = cmbFreqEnter
           OnExit = cmbFreqExit
@@ -3227,9 +2948,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblQSLVia
           AnchorSideTop.Side = asrBottom
           Left = 402
-          Height = 25
+          Height = 33
           Hint = 'QSl via/QSL Manager, max length 30'
-          Top = 170
+          Top = 179
           Width = 96
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3248,7 +2969,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 78
           Height = 27
-          Top = 170
+          Top = 179
           Width = 24
           BorderSpacing.Left = 2
           BorderSpacing.Top = 2
@@ -3257,36 +2978,6 @@ object frmNewQSO: TfrmNewQSO
           OnClick = btnDXCCRefClick
           TabOrder = 18
         end
-        object pnlOffline: TPanel
-          AnchorSideLeft.Control = edtDXCCRef
-          AnchorSideTop.Control = mComment
-          Left = 12
-          Height = 23
-          Top = 219
-          Width = 74
-          AutoSize = True
-          BevelOuter = bvNone
-          ClientHeight = 23
-          ClientWidth = 74
-          TabOrder = 26
-          object cbOffline: TCheckBox
-            AnchorSideTop.Side = asrBottom
-            AnchorSideRight.Control = pnlOffline
-            AnchorSideRight.Side = asrBottom
-            AnchorSideBottom.Control = pnlOffline
-            AnchorSideBottom.Side = asrBottom
-            Left = 0
-            Height = 23
-            Top = 0
-            Width = 74
-            Anchors = [akRight, akBottom]
-            BorderSpacing.CellAlignHorizontal = ccaRightBottom
-            BorderSpacing.CellAlignVertical = ccaRightBottom
-            Caption = 'Offline'
-            OnChange = cbOfflineChange
-            TabOrder = 0
-          end
-        end
         object btnQSLMgr: TButton
           AnchorSideLeft.Control = edtQSL_VIA
           AnchorSideLeft.Side = asrBottom
@@ -3294,7 +2985,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 500
           Height = 27
-          Top = 170
+          Top = 179
           Width = 24
           BorderSpacing.Left = 2
           BorderSpacing.Top = 2
@@ -3304,14 +2995,15 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 21
         end
         object edtDate: TEdit
-          AnchorSideLeft.Control = lblDate
-          AnchorSideTop.Control = lblDate
+          AnchorSideLeft.Control = edtDXCCRef
           AnchorSideTop.Side = asrBottom
+          AnchorSideBottom.Control = edtStartTime
+          AnchorSideBottom.Side = asrBottom
           Left = 12
-          Height = 25
-          Top = 266
-          Width = 86
-          BorderSpacing.Top = 2
+          Height = 33
+          Top = 291
+          Width = 100
+          Anchors = [akLeft, akBottom]
           OnEnter = edtDateEnter
           OnExit = edtDateExit
           OnKeyDown = edtDateKeyDown
@@ -3321,14 +3013,15 @@ object frmNewQSO: TfrmNewQSO
         object edtStartTime: TEdit
           AnchorSideLeft.Control = edtDate
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = edtDate
           AnchorSideTop.Side = asrCenter
-          Left = 103
-          Height = 25
-          Top = 266
-          Width = 48
+          AnchorSideBottom.Control = edtEndTime
+          AnchorSideBottom.Side = asrBottom
+          Left = 117
+          Height = 33
+          Top = 291
+          Width = 55
+          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
-          BorderSpacing.Top = 2
           OnEnter = edtStartTimeEnter
           OnExit = edtStartTimeExit
           OnKeyDown = edtStartTimeKeyDown
@@ -3338,12 +3031,14 @@ object frmNewQSO: TfrmNewQSO
         object edtEndTime: TEdit
           AnchorSideLeft.Control = edtStartTime
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = edtDate
           AnchorSideTop.Side = asrCenter
-          Left = 156
-          Height = 25
-          Top = 266
-          Width = 48
+          AnchorSideBottom.Control = mComment
+          AnchorSideBottom.Side = asrBottom
+          Left = 177
+          Height = 33
+          Top = 291
+          Width = 55
+          Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           OnEnter = edtEndTimeEnter
@@ -3358,14 +3053,14 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblIOTA
           AnchorSideTop.Side = asrBottom
           Left = 106
-          Height = 25
+          Height = 33
           Hint = 'IOTA, max length 6'
-          Top = 121
+          Top = 126
           Width = 100
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           CharCase = ecUppercase
-          ItemHeight = 17
+          ItemHeight = 0
           MaxLength = 6
           OnChange = cmbIOTAChange
           OnEnter = cmbIOTAEnter
@@ -3381,9 +3076,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblCommentToQSO
           AnchorSideTop.Side = asrBottom
           Left = 107
-          Height = 25
+          Height = 33
           Hint = 'Comment/Remarks, max length 200'
-          Top = 170
+          Top = 179
           Width = 290
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
@@ -3399,9 +3094,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = cmbIOTA
           Left = 211
-          Height = 25
+          Height = 33
           Hint = 'State, max length 4'
-          Top = 121
+          Top = 126
           Width = 42
           BorderSpacing.Left = 5
           CharCase = ecUppercase
@@ -3419,163 +3114,64 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = cmbMode
           AnchorSideRight.Side = asrBottom
-          Left = 292
+          Left = 285
           Height = 23
-          Top = 1
-          Width = 56
+          Top = -1
+          Width = 63
           Anchors = [akTop, akRight]
           BorderSpacing.Left = 4
           Caption = 'Auto'
           Checked = True
           OnChange = chkAutoModeChange
           State = cbChecked
-          TabOrder = 27
-        end
-        object sbtnHamQTH: TSpeedButton
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 512
-          Height = 23
-          Hint = 'Opens HamQTH.com callsing profile in webbrowser'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          Font.Color = clBlue
-          Font.Height = 16
-          Font.Style = [fsBold]
-          Glyph.Data = {
-            B6030000424DB60300000000000036000000280000000E000000100000000100
-            2000000000008003000064000000640000000000000000000000F3AA6AFFF19A
-            50FFF19B51FFF19B51FFF19648FFF9DBC0FFFEFEFEFFFEFDFDFFF8CFACFFF097
-            4AFFF19B51FFF19B51FFF19A4FFFF4B279FFF2A35FFFEF8A34FFEB7005FFEC7E
-            20FFEF8D38FFFCEADAFFFFFFFFFFFEFDFDFFF8CEAAFFEF8D37FFEC7E20FFEB70
-            05FFEF8932FFF5B680FFFFFFFFFFFDF1E7FFEC7106FFF6BC89FFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6BC89FFEC7106FFFDF2E8FFFFFF
-            FFFFFFFFFFFFFCE9D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9
-            D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEC7106FFF5B7
-            82FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5B782FFEC71
-            06FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEC7106FFF5B985FFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5B985FFEC7106FFFCE9D9FFFFFF
-            FFFFFFFFFFFFFCE9D9FFEC7106FFF08F3AFFF3AD6FFFF2A968FFF2A968FFF2A9
-            68FFF2A968FFF3AD6FFFF08F3AFFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9
-            D9FFEB7106FFEB7207FFEC750DFFEC740CFFEC740CFFEC740CFFEC740CFFEC75
-            0DFFEB7207FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEB7106FFF5BB
-            88FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5BB88FFEC71
-            06FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEC7106FFF5B782FFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5B782FFEC7106FFFCE9D9FFFFFF
-            FFFFFFFFFFFFFCE9D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9
-            D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFDF2E9FFEB7006FFF5BC
-            8AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5BC8AFFEB70
-            06FFFDF2E9FFFFFFFFFFFCEADAFFED801FFFEB7006FFEC7B19FFEE8223FFFBE5
-            D3FFFFFFFFFFFEFDFDFFF8CCA6FFEE8428FFEC7B19FFEB7006FFED801FFFFCEA
-            DAFFFDF4EDFFEF9342FFF19C53FFF19B52FFF1974AFFFADDC4FFFEFEFEFFFEFD
-            FDFFF8D1AFFFF0994CFFF19B52FFF19C53FFEF9342FFFDF4EDFF
-          }
-          OnClick = sbtnHamQTHClick
-          ShowHint = True
-          ParentFont = False
-          ParentShowHint = False
-        end
-        object sbtneQSL: TSpeedButton
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 434
-          Height = 23
-          Hint = 'eQSL user'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          BorderSpacing.Right = 78
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
-            FFFFFFFEFEFFF3C096FFEEA366FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF6F1FFF1B4
-            83FFEC9753FFE77217FFF6CAA8FFFFFFFFFFF9DCC7FFEB8E44FFED9856FFEC97
-            52FFF7D2B4FFFFFFFFFFEB8E44FFEC8F46FFEC8F47FFEC8F47FFF2BA8CFFF4BE
-            95FFFFFFFFFFFEFAF8FFEC8F46FFFAE0CCFFFEF9F6FFFFFFFFFFFFFFFFFFFDF3
-            EBFFE98535FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFEA8639FFFDF5
-            EEFFFFFFFFFFFFFFFFFFF4BD94FFF3B586FFFFFFFFFFFFFFFFFFFBECDFFFF0AF
-            7AFFED9A57FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFE8802CFFFEFA
-            F8FFFFFFFFFFFFFFFFFFF6C8A4FFF2B180FFFEFAF8FFEC8F46FFEB9149FFF4C2
-            9CFFFEFAF8FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFF1AC78FFF7D4
-            B7FFFFFFFFFFFFFFFFFFED9D5DFFFBE4D3FFF8DAC1FFEFA56AFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFFBECDFFFEE98
-            55FFEFA86FFFED9856FFF0AC75FFFFFFFFFFFEFCFAFFEB893DFFF2B180FFF1B4
-            82FFF3C096FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFBEADCFFFEF7F3FFFFFFFFFFFFFFFFFFFFFFFFFFFEFDFCFFF7D3B7FFF8D9
-            C1FFFEFCFAFFFFFFFFFFFBECE0FFFFFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFF8D8BFFFEA8535FFE56806FFE56500FFE565
-            00FFE66F12FFEE9B5AFFFBEBDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFF4BF96FFE56500FFE87B25FFF3BD93FFF8D6BCFFF6CB
-            AAFFF1B17FFFE87B25FFF7D3B7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFCEDE2FFE66C0CFFE9802DFFFEFAF7FFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFEFAF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFF4BF96FFE56500FFF6CCACFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFF0A66CFFE56500FFF5C49EFFF7D3B7FFF7D3B7FFF7D3B7FFF7D3
-            B7FFF7D3B7FFF7D3B7FFFAE2D0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFEFA56BFFE56500FFE56500FFE56500FFE56500FFE56500FFE565
-            00FFE56500FFE56500FFEE9C5CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFF3BD93FFE56500FFF6CBA9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFAE4D3FFE56500FFF1B17EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFBE7D8FFE56704FFEB883BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFF1AE7AFFE56500FFF7D0B2FFFFFFFFFFFFFFFFFFFFFFFFFF
-          }
-          ShowHint = True
-          ParentShowHint = False
+          TabOrder = 26
         end
         object sbtnRefreshTime: TSpeedButton
           AnchorSideLeft.Control = edtEndTime
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = lblEndTime
-          AnchorSideTop.Side = asrBottom
-          Left = 209
+          AnchorSideTop.Control = edtEndTime
+          AnchorSideTop.Side = asrCenter
+          Left = 235
           Height = 20
-          Top = 270
+          Top = 297
           Width = 20
           Action = acRefreshTime
           AutoSize = True
-          BorderSpacing.Left = 5
-          BorderSpacing.Top = 6
+          BorderSpacing.Left = 3
           ShowHint = True
           ParentShowHint = False
         end
         object pgDetails: TPageControl
-          AnchorSideTop.Control = edtDate
+          AnchorSideTop.Control = pnlOffline
           AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 135
-          Top = 376
-          Width = 938
+          Height = 178
+          Top = 354
+          Width = 768
           ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
-          BorderSpacing.Top = 40
+          BorderSpacing.Top = 3
           TabIndex = 0
-          TabOrder = 28
+          TabOrder = 27
+          OnChange = pgDetailsChange
           object tabDXCCStat: TTabSheet
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Side = asrBottom
             Caption = 'DXCC statistic'
-            ClientHeight = 101
-            ClientWidth = 928
+            ClientHeight = 147
+            ClientWidth = 758
             object sgrdStatistic: TStringGrid
+              AnchorSideRight.Side = asrBottom
+              AnchorSideBottom.Side = asrBottom
               Left = 0
-              Height = 146
+              Height = 147
               Top = 0
-              Width = 935
+              Width = 758
               Align = alClient
+              AutoFillColumns = True
               ColCount = 2
               DefaultColWidth = 35
               FixedCols = 0
@@ -3586,45 +3182,54 @@ object frmNewQSO: TfrmNewQSO
               TitleFont.Color = clBlue
               TitleFont.Height = 8
               TitleStyle = tsNative
+              ColWidths = (
+                378
+                378
+              )
             end
           end
           object tabSatellite: TTabSheet
+            AnchorSideBottom.Side = asrBottom
             Caption = 'Satellite'
-            ClientHeight = 101
-            ClientWidth = 928
+            ClientHeight = 147
+            ClientWidth = 758
             object cmbPropagation: TComboBox
               AnchorSideLeft.Control = lblStatellite
               AnchorSideTop.Control = lblPropagation
               AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 33
-              Top = 79
+              Left = 6
+              Height = 32
+              Top = 80
               Width = 272
-              BorderSpacing.Top = 2
-              ItemHeight = 25
+              BorderSpacing.Top = 3
+              ItemHeight = 0
               OnChange = cmbPropagationChange
               ParentFont = False
               Style = csDropDownList
               TabOrder = 0
             end
             object lblPropagation: TLabel
-              AnchorSideLeft.Control = cmbSatellite
+              AnchorSideLeft.Control = lblStatellite
               AnchorSideTop.Control = cmbSatellite
               AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 17
-              Top = 60
+              Left = 6
+              Height = 15
+              Top = 62
               Width = 78
-              BorderSpacing.Top = 5
+              BorderSpacing.Top = 6
               Caption = 'Propagation'
               ParentColor = False
               ParentFont = False
             end
             object lblStatellite: TLabel
-              Left = 8
-              Height = 17
-              Top = 3
+              AnchorSideLeft.Control = tabSatellite
+              AnchorSideTop.Control = tabSatellite
+              Left = 6
+              Height = 15
+              Top = 6
               Width = 54
+              BorderSpacing.Left = 6
+              BorderSpacing.Top = 6
               Caption = 'Satellite'
               ParentColor = False
               ParentFont = False
@@ -3633,12 +3238,12 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Control = lblStatellite
               AnchorSideTop.Control = lblStatellite
               AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 33
-              Top = 22
+              Left = 6
+              Height = 32
+              Top = 24
               Width = 272
-              BorderSpacing.Top = 2
-              ItemHeight = 25
+              BorderSpacing.Top = 3
+              ItemHeight = 0
               OnChange = cmbSatelliteChange
               ParentFont = False
               Style = csDropDownList
@@ -3649,8 +3254,8 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideTop.Control = lblStatellite
               AnchorSideTop.Side = asrCenter
               Left = 290
-              Height = 17
-              Top = 3
+              Height = 15
+              Top = 6
               Width = 87
               Caption = 'RX frequency'
               ParentColor = False
@@ -3659,14 +3264,12 @@ object frmNewQSO: TfrmNewQSO
             object edtRXFreq: TEdit
               AnchorSideLeft.Control = cmbSatellite
               AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = lblRXFreq
-              AnchorSideTop.Side = asrBottom
+              AnchorSideTop.Control = cmbSatellite
               Left = 290
-              Height = 34
-              Top = 22
+              Height = 33
+              Top = 24
               Width = 128
-              BorderSpacing.Left = 10
-              BorderSpacing.Top = 2
+              BorderSpacing.Left = 12
               OnChange = edtRXFreqChange
               OnExit = edtRXFreqExit
               ParentFont = False
@@ -3674,41 +3277,40 @@ object frmNewQSO: TfrmNewQSO
             end
             object btnClearSatellite: TButton
               AnchorSideLeft.Control = edtRXFreq
-              AnchorSideTop.Control = cmbPropagation
-              AnchorSideTop.Side = asrCenter
+              AnchorSideTop.Control = cbSpotRX
+              AnchorSideTop.Side = asrBottom
               Left = 290
               Height = 33
-              Top = 79
+              Top = 81
               Width = 70
               AutoSize = True
-              BorderSpacing.Top = 2
               BorderSpacing.Right = 10
               Caption = 'Clear all'
               OnClick = btnClearSatelliteClick
               TabOrder = 3
             end
-            object Label36: TLabel
+            object lblRXMhz: TLabel
               AnchorSideLeft.Control = edtRXFreq
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = edtRXFreq
               AnchorSideTop.Side = asrCenter
               Left = 424
-              Height = 17
-              Top = 31
+              Height = 15
+              Top = 33
               Width = 29
               BorderSpacing.Left = 6
               Caption = 'MHz'
               ParentColor = False
             end
             object cbSpotRX: TCheckBox
-              AnchorSideLeft.Control = lblStatellite
-              AnchorSideTop.Control = cmbPropagation
-              Left = 8
+              AnchorSideLeft.Control = lblRXFreq
+              AnchorSideTop.Control = lblPropagation
+              AnchorSideTop.Side = asrCenter
+              Left = 290
               Height = 23
               Hint = 'Use RX frequency from the Satellite tab instead of Frequency for DX spots'
-              Top = 106
-              Width = 233
-              BorderSpacing.Top = 35
+              Top = 58
+              Width = 226
               Caption = 'Use RX frequency for DX spots'
               Color = clNone
               OnChange = cbSpotRXChange
@@ -3718,14 +3320,16 @@ object frmNewQSO: TfrmNewQSO
             end
           end
           object tabLOConfig: TTabSheet
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Side = asrBottom
             Caption = 'LO Config'
-            ClientHeight = 101
-            ClientWidth = 928
+            ClientHeight = 147
+            ClientWidth = 758
             object cbTxLo: TCheckBox
               Left = 8
               Height = 23
               Top = 16
-              Width = 98
+              Width = 97
               Caption = 'Use TX LO:'
               OnChange = cbTxLoChange
               TabOrder = 0
@@ -3735,7 +3339,7 @@ object frmNewQSO: TfrmNewQSO
               Left = 8
               Height = 23
               Top = 48
-              Width = 99
+              Width = 98
               BorderSpacing.Top = 32
               Caption = 'Use RX LO:'
               OnChange = cbRxLoChange
@@ -3746,9 +3350,9 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cbTxLo
               AnchorSideTop.Side = asrCenter
-              Left = 111
-              Height = 25
-              Top = 15
+              Left = 110
+              Height = 33
+              Top = 11
               Width = 80
               BorderSpacing.Left = 5
               OnExit = edtTXLOExit
@@ -3759,9 +3363,9 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cbRxLo
               AnchorSideTop.Side = asrCenter
-              Left = 112
-              Height = 25
-              Top = 47
+              Left = 111
+              Height = 33
+              Top = 43
               Width = 80
               BorderSpacing.Left = 5
               OnExit = edtRXLOExit
@@ -3772,10 +3376,10 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = edtTXLO
               AnchorSideTop.Side = asrCenter
-              Left = 197
-              Height = 17
-              Top = 19
-              Width = 31
+              Left = 196
+              Height = 15
+              Top = 20
+              Width = 29
               BorderSpacing.Left = 6
               Caption = 'MHz'
               ParentColor = False
@@ -3785,10 +3389,10 @@ object frmNewQSO: TfrmNewQSO
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = edtRXLO
               AnchorSideTop.Side = asrCenter
-              Left = 198
-              Height = 17
-              Top = 51
-              Width = 31
+              Left = 197
+              Height = 15
+              Top = 52
+              Width = 29
               BorderSpacing.Left = 6
               Caption = 'MHz'
               ParentColor = False
@@ -3798,25 +3402,28 @@ object frmNewQSO: TfrmNewQSO
         object gbContest: TGroupBox
           AnchorSideLeft.Control = mComment
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = Panel6
+          AnchorSideTop.Control = pnlQSOinput
+          AnchorSideRight.Control = pnlQSOinput
+          AnchorSideRight.Side = asrBottom
           Left = 555
-          Height = 231
+          Height = 212
           Top = 0
-          Width = 380
-          Anchors = [akTop, akLeft, akBottom]
+          Width = 210
+          Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 20
+          BorderSpacing.Right = 3
           Caption = 'Contest'
-          ClientHeight = 213
-          ClientWidth = 378
-          TabOrder = 29
+          ClientHeight = 194
+          ClientWidth = 208
+          TabOrder = 28
           Visible = False
           object lblContestName: TLabel
             AnchorSideLeft.Control = gbContest
             AnchorSideTop.Control = gbContest
             Left = 3
-            Height = 17
+            Height = 15
             Top = 3
-            Width = 92
+            Width = 87
             BorderSpacing.Left = 3
             BorderSpacing.Top = 3
             Caption = 'Contestname'
@@ -3827,9 +3434,9 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideTop.Control = edtContestName
             AnchorSideTop.Side = asrBottom
             Left = 3
-            Height = 17
-            Top = 54
-            Width = 71
+            Height = 15
+            Top = 60
+            Width = 69
             BorderSpacing.Top = 6
             Caption = 'Serial sent'
             ParentColor = False
@@ -3839,9 +3446,9 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideTop.Control = edtContestSerialSent
             AnchorSideTop.Side = asrBottom
             Left = 3
-            Height = 17
-            Top = 105
-            Width = 71
+            Height = 15
+            Top = 117
+            Width = 69
             BorderSpacing.Top = 6
             Caption = 'Serial rcvd'
             ParentColor = False
@@ -3850,10 +3457,10 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideLeft.Control = lblContestSerialSent
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = lblContestSerialSent
-            Left = 83
-            Height = 17
-            Top = 54
-            Width = 62
+            Left = 81
+            Height = 15
+            Top = 60
+            Width = 59
             BorderSpacing.Left = 9
             Caption = 'Msg sent'
             ParentColor = False
@@ -3861,10 +3468,10 @@ object frmNewQSO: TfrmNewQSO
           object lblContestExchangeMessageReceived: TLabel
             AnchorSideLeft.Control = lblContestExchangeMessageSent
             AnchorSideTop.Control = lblContestSerialReceived
-            Left = 83
-            Height = 17
-            Top = 105
-            Width = 61
+            Left = 81
+            Height = 15
+            Top = 117
+            Width = 59
             Caption = 'Msg rcvd'
             ParentColor = False
           end
@@ -3872,12 +3479,16 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideLeft.Control = lblContestName
             AnchorSideTop.Control = lblContestName
             AnchorSideTop.Side = asrBottom
+            AnchorSideRight.Control = gbContest
+            AnchorSideRight.Side = asrBottom
             Left = 3
-            Height = 25
+            Height = 33
             Hint = 'name of contest, max 40 characters allowed'
-            Top = 23
-            Width = 372
+            Top = 21
+            Width = 202
+            Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 3
+            BorderSpacing.Right = 3
             MaxLength = 40
             ParentShowHint = False
             ShowHint = True
@@ -3889,9 +3500,9 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideTop.Control = lblContestSerialSent
             AnchorSideTop.Side = asrBottom
             Left = 3
-            Height = 25
+            Height = 33
             Hint = 'serial number sent of contest, max 6 characters'
-            Top = 74
+            Top = 78
             Width = 64
             BorderSpacing.Top = 3
             MaxLength = 6
@@ -3904,9 +3515,9 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideTop.Control = lblContestSerialReceived
             AnchorSideTop.Side = asrBottom
             Left = 3
-            Height = 25
+            Height = 33
             Hint = 'rserial number received of contest, max 6 characters'
-            Top = 128
+            Top = 138
             Width = 64
             BorderSpacing.Top = 6
             MaxLength = 6
@@ -3918,12 +3529,16 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideLeft.Control = lblContestExchangeMessageSent
             AnchorSideTop.Control = edtContestSerialSent
             AnchorSideTop.Side = asrCenter
-            Left = 83
-            Height = 25
+            AnchorSideRight.Control = gbContest
+            AnchorSideRight.Side = asrBottom
+            Left = 81
+            Height = 33
             Hint = 'contest exchange message sent, max 50 characters'
-            Top = 74
-            Width = 292
+            Top = 78
+            Width = 124
+            Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 6
+            BorderSpacing.Right = 3
             MaxLength = 50
             ParentShowHint = False
             ShowHint = True
@@ -3934,11 +3549,15 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideLeft.Control = lblContestExchangeMessageReceived
             AnchorSideTop.Control = edtContestSerialReceived
             AnchorSideTop.Side = asrCenter
-            Left = 83
-            Height = 25
+            AnchorSideRight.Control = gbContest
+            AnchorSideRight.Side = asrBottom
+            Left = 81
+            Height = 33
             Hint = 'contest exchange message received, max 50 characters'
-            Top = 128
-            Width = 292
+            Top = 138
+            Width = 124
+            Anchors = [akTop, akLeft, akRight]
+            BorderSpacing.Right = 3
             MaxLength = 50
             ParentShowHint = False
             ShowHint = True
@@ -3946,70 +3565,16 @@ object frmNewQSO: TfrmNewQSO
             TextHint = 'max 50 characters'
           end
         end
-        object sbtnLocatorMap: TSpeedButton
-          AnchorSideTop.Control = mComment
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 356
-          Height = 23
-          Hint = 'Show locator on map'
-          Top = 302
-          Width = 23
-          Anchors = [akTop, akRight]
-          BorderSpacing.Top = 3
-          BorderSpacing.Right = 156
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF0080402B0C87492057884A2090894C22CD894B21CB884A
-            218D884A2156804D1A0AFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF0085481E437E5B34ECA0724EF3B1825FFEBB9070FFBB9070FFAF81
-            5EFDA16E49F38B5025E68848223CFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00884C218D945D37F443AB95FF5AA389FFAF784DFFA96D3FFFA96D3FFFAF78
-            4DFFAC8D69FF62A38BFF905F39F4894D2182FFFFFF00FFFFFF00FFFFFF008749
-            2146955E37F4C09575FF38A993FF2BAF9CFF867950FFA76938FFA76939FFA769
-            38FF79815CFF29B09DFF87A084FF935A34F68649203FFFFFFF008049240E8C4F
-            25EBBC9170FF7A8B69FF29B09DFF2BB29FFF52A287FFAD7143FFAD7244FFAD71
-            43FF758E6CFF2AB29FFF35AC97FFB98E6DFF8A4D24E7804D1A0A8849215EA472
-            4DF4B78762FF30AC97FF2AB29FFF2EB8A5FF3FB59FFFB27B4EFFB47B4EFFB37A
-            4DFF6E9C7CFF2EB7A4FF2CB09CFFB98F6BFFA06D48F4884A2156874C2097B284
-            60FEB37C52FF48A189FF2DB6A3FF67A385FFB48257FFBA8358FF9E916CFF9396
-            72FF4FB49CFF31BCA9FF2CB5A2FF73997AFFB0815FFD8749218C894C21D3AF98
-            79FF719271FF7F8F6BFF829673FFBB8459FFBE885EFFBA8E65FF46C6B1FF3BCA
-            B7FF38C6B3FF34C0ADFF33B6A3FF5E9E82FFBE9475FF894C21C9884B22D556A9
-            92FF938762FFB67D51FFBB8459FFC08B61FFC49068FFC5946DFF48CDB9FF3FD0
-            BDFF3BCAB7FF36C3B0FF57AC92FF34B09CFF949F83FF894D22CB894B21995EA1
-            89FF6C9D81FF978F69FFBE895FFFC49068FFC99770FFCC9C76FF95B698FF42D5
-            C2FF51C7B1FF5EB79FFF46B59FFF3BB19CFF669F85FE874B208E864B205F8087
-            69F729B09DFF39B49FFFAD936EFFC7956DFFCD9D77FFD2A37FFFB7B191FF88BF
-            A3FFA9A988FF73B297FF3CBBA6FF2DB5A2FF838464F787492057805020108A52
-            28EC36AF9AFF2EB8A5FF41BBA7FF9DA583FFCF9F7AFFD5A884FFD9AF8DFF74C7
-            AEFF40D0BCFF39C7B4FF33BEABFF44B29DFF8A5028E980402B0CFFFFFF00874A
-            20487B7655F764B29DFF77AD91FF7BB093FFBDA07CFFD3A581FFCCA988FFA8AC
-            8DFF80B79CFF3DC5B1FF3EBCA8FF876A45F7854B1F41FFFFFF00FFFFFF00FFFF
-            FF00894E2393757B5CF98AAB93FF92AC92FF7DAB90FF62B098FFABAD8DFFD4A9
-            87FF90BBA3FF78B79FFF876B48F78B4D2488FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00884B1F4B89542AED8E8565F771A48BFE59B29DFF94B9A1FFBF96
-            77FEA97956F58C5026EB85481E43FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF0080502010864B205F8A4B22988A4E25D48B4F25D1884D
-            22968849215E894E270DFFFFFF00FFFFFF00FFFFFF00FFFFFF00
-          }
-          OnClick = sbtnLocatorMapClick
-          ShowHint = True
-          ParentShowHint = False
-        end
         object lblDOK: TLabel
           AnchorSideLeft.Control = cmbIOTA
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = lblItuEdit
           AnchorSideTop.Side = asrCenter
           Left = 211
-          Height = 17
-          Top = 102
-          Width = 33
+          Height = 15
+          Top = 109
+          Width = 29
           BorderSpacing.Left = 5
-          BorderSpacing.Top = 5
           Caption = 'DOK'
           ParentColor = False
           ParentFont = False
@@ -4021,9 +3586,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = cmbIOTA
           Left = 211
-          Height = 34
+          Height = 33
           Hint = 'DOK, max length 12'
-          Top = 139
+          Top = 126
           Width = 42
           BorderSpacing.Left = 5
           CharCase = ecUppercase
@@ -4033,26 +3598,570 @@ object frmNewQSO: TfrmNewQSO
           OnKeyDown = edtStateKeyDown
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 30
+          TabOrder = 29
           Visible = False
+        end
+        object pnlOffline: TPanel
+          AnchorSideLeft.Control = mComment
+          AnchorSideTop.Control = mComment
+          AnchorSideTop.Side = asrBottom
+          Left = 259
+          Height = 25
+          Top = 326
+          Width = 91
+          BorderSpacing.Top = 2
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 91
+          TabOrder = 30
+          object cbOffline: TCheckBox
+            AnchorSideLeft.Control = pnlOffline
+            AnchorSideTop.Control = pnlOffline
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Side = asrBottom
+            Left = 0
+            Height = 23
+            Top = 1
+            Width = 70
+            BorderSpacing.CellAlignHorizontal = ccaRightBottom
+            BorderSpacing.CellAlignVertical = ccaRightBottom
+            Caption = 'Offline'
+            OnChange = cbOfflineChange
+            TabOrder = 0
+          end
+        end
+        object lbleQslRcvdDate: TLabel
+          AnchorSideLeft.Control = edtDXCCRef
+          AnchorSideTop.Control = lblQSLRcvdDate
+          AnchorSideTop.Side = asrBottom
+          Left = 12
+          Height = 15
+          Top = 233
+          Width = 85
+          BorderSpacing.Top = 3
+          Caption = 'eQSL rcvd on'
+          Font.Color = clGreen
+          ParentColor = False
+          ParentFont = False
+          Visible = False
+        end
+        object pnlSbtn0: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn1
+          AnchorSideRight.Control = pnlSbtn1
+          Left = 360
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 31
+          object sbtnLocatorMap: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn0
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn0
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'Show locator on map'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF0080402B0C87492057884A2090894C22CD894B21CB884A
+              218D884A2156804D1A0AFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF0085481E437E5B34ECA0724EF3B1825FFEBB9070FFBB9070FFAF81
+              5EFDA16E49F38B5025E68848223CFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00884C218D945D37F443AB95FF5AA389FFAF784DFFA96D3FFFA96D3FFFAF78
+              4DFFAC8D69FF62A38BFF905F39F4894D2182FFFFFF00FFFFFF00FFFFFF008749
+              2146955E37F4C09575FF38A993FF2BAF9CFF867950FFA76938FFA76939FFA769
+              38FF79815CFF29B09DFF87A084FF935A34F68649203FFFFFFF008049240E8C4F
+              25EBBC9170FF7A8B69FF29B09DFF2BB29FFF52A287FFAD7143FFAD7244FFAD71
+              43FF758E6CFF2AB29FFF35AC97FFB98E6DFF8A4D24E7804D1A0A8849215EA472
+              4DF4B78762FF30AC97FF2AB29FFF2EB8A5FF3FB59FFFB27B4EFFB47B4EFFB37A
+              4DFF6E9C7CFF2EB7A4FF2CB09CFFB98F6BFFA06D48F4884A2156874C2097B284
+              60FEB37C52FF48A189FF2DB6A3FF67A385FFB48257FFBA8358FF9E916CFF9396
+              72FF4FB49CFF31BCA9FF2CB5A2FF73997AFFB0815FFD8749218C894C21D3AF98
+              79FF719271FF7F8F6BFF829673FFBB8459FFBE885EFFBA8E65FF46C6B1FF3BCA
+              B7FF38C6B3FF34C0ADFF33B6A3FF5E9E82FFBE9475FF894C21C9884B22D556A9
+              92FF938762FFB67D51FFBB8459FFC08B61FFC49068FFC5946DFF48CDB9FF3FD0
+              BDFF3BCAB7FF36C3B0FF57AC92FF34B09CFF949F83FF894D22CB894B21995EA1
+              89FF6C9D81FF978F69FFBE895FFFC49068FFC99770FFCC9C76FF95B698FF42D5
+              C2FF51C7B1FF5EB79FFF46B59FFF3BB19CFF669F85FE874B208E864B205F8087
+              69F729B09DFF39B49FFFAD936EFFC7956DFFCD9D77FFD2A37FFFB7B191FF88BF
+              A3FFA9A988FF73B297FF3CBBA6FF2DB5A2FF838464F787492057805020108A52
+              28EC36AF9AFF2EB8A5FF41BBA7FF9DA583FFCF9F7AFFD5A884FFD9AF8DFF74C7
+              AEFF40D0BCFF39C7B4FF33BEABFF44B29DFF8A5028E980402B0CFFFFFF00874A
+              20487B7655F764B29DFF77AD91FF7BB093FFBDA07CFFD3A581FFCCA988FFA8AC
+              8DFF80B79CFF3DC5B1FF3EBCA8FF876A45F7854B1F41FFFFFF00FFFFFF00FFFF
+              FF00894E2393757B5CF98AAB93FF92AC92FF7DAB90FF62B098FFABAD8DFFD4A9
+              87FF90BBA3FF78B79FFF876B48F78B4D2488FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00884B1F4B89542AED8E8565F771A48BFE59B29DFF94B9A1FFBF96
+              77FEA97956F58C5026EB85481E43FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF0080502010864B205F8A4B22988A4E25D48B4F25D1884D
+              22968849215E894E270DFFFFFF00FFFFFF00FFFFFF00FFFFFF00
+            }
+            OnClick = sbtnLocatorMapClick
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn1: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn2
+          AnchorSideRight.Control = pnlSbtn2
+          Left = 385
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 32
+          object sbtnAttach: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn1
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn1
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 22
+            Hint = 'Call has an attachment'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000064000000640000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              00000000000000000000000000000000000000000000281C1A00495252735C72
+              7494647F82A7627D80A4627D80A4627D80A4627D80A4627D80A4627D80A4627D
+              80A4627D80A4627D80A560797BAD495354570000001100000000536264C0749C
+              9EF582B3B6FF80AFB2FF80AFB2FF80AFB2FF80AFB2FF80AFB2FF80AFB2FF80AF
+              B2FF80AFB2FF80AFB2FF80AFB0FF5D7373AC1802003A000000005D7477B79ADC
+              DFE7B4FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FFFFFFB1FF
+              FFFFB1FFFFFFB2FFFFFFB7FFFFFF759C9CDA3837386F00000000444D4DB78FC9
+              CFE7AFFEFFFFABF7FFFFABF7FFFFABF7FFFFABF7FFFFABF7FFFFABF7FFFFABF7
+              FFFFABF7FFFFACF9FFFFB1FFFFFF7FAFB1FF5F7A7C9C00000000323F40B78BC7
+              CEE7B1FFFFFFACFFFFFFABFFFFFFABFFFFFFABFFFFFFABFFFFFFAAF7FFFFAAF5
+              FEFFAAF6FEFFAAF6FEFFADFCFFFF96D4DAFF81B3B8AC000000062E4B50B782BE
+              C5E7A7EBEFFFA6DDD9FFAAD9D2FFAAD8D0FFA9D8D0FFA8DCD8FFA8F1F8FFA9F6
+              FFFFAAF6FEFFAAF6FEFFABF7FFFFA7F0F8FF96D7DDB500000023366B73B76FA7
+              AFE790B8B7FF9DA293FFA79076FFAA8D71FFA88D72FFA59D89FFA6E6EBFFA9F7
+              FFFFABF7FFFFABF7FFFFABF7FEFFACFAFFFF9DE1E8C136353243418B95B75788
+              8FE77C9FA0FFA7BDB3FFAC977DFFB7997AFFBA9C7CFFB2A48BFFA9E5E9FFACFB
+              FFFFAFFEFFFFAEFDFFFFAEFDFFFFB0FFFFFFA0E5EBCF5D75766B45919CB7498A
+              92E7659DA3FF8DBEC0FF8BAFADFF8EB0ACFF90B1ADFF8DB3B0FF89C4CAFF8ACA
+              D1FF8BCBD2FF8BCBD2FF8BCCD2FF8CC7CDFF7FACB0CE56696A8644868FB74BA8
+              B4E75BBFCDFF6ECCDAFF6ACEDFFF68CDDEFF68CEDEFF69CFDFFF6ACAD6FF6AC7
+              D4FF69C6D3FF69C7D4FF6ACDD9FF61949AE1586162985160615240727AB855C9
+              DAE75DECFFFF59E4F7FF59E4F7FF5AE5F9FF59E4F8FF59E2F5FE59E3F6F559E3
+              F6F359E4F6F25AE5F8F35BEEFFF93E7C83A811000040000000003D666CBE51B9
+              C8EA5ADDF0FF58D7E9FF58D8E9FF5BE6F9FF58D8EBFF4EAFBDF440767C923C63
+              68763D6A6F733D6A6F763D6A707C34494B461C000013000000003855598A468E
+              97E24B9EAAFF4A9CA7FF4A9CA7FF4BA3AEFF499AA5FF43808ADF333F413C1E00
+              0018280C071A280E091C270C091E2813110E2F3D3E02000000003444463C4072
+              7881427B82AB427A81A4427A81A4427A81A740747AA03D666D7A2E2B300B0000
+              000000000000000000000000000000000000000000002A1F1D00000000000000
+              00000000000000000000000000000000000000000000000000000000000057D0
+              DF00230000000000000000000000000000000000000000000000
+            }
+            OnClick = sbtnAttachClick
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn2: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn3
+          AnchorSideRight.Control = pnlSbtn3
+          Left = 410
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 33
+          object sbtnQSL: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn2
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn2
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 0
+            Height = 23
+            Hint = 'Call has a QSL image'
+            Top = 1
+            Width = 25
+            Glyph.Data = {
+              36090000424D3609000000000000360000002800000018000000180000000100
+              2000000000000009000064000000640000000000000000000000FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00C1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0
+              C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0
+              C2FFC1C0C2FFC1C0C2FFC1C0C2FFC1C0C2FFFFFFFF00FFFFFF00FFFFFF00C1C0
+              C2FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
+              77FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
+              77FF927777FF927777FF927777FF927777FFC1C0C2FFFFFFFF00FFFFFF009277
+              77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFFAEFFFFFF5C5C
+              5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFFAEFFFFFF5C5C5CFF5C5C
+              5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C
+              5CFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C
+              5CFF5C5C5CFF5C5C5CFFAEFFFFFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C5CFF5C5C
+              5CFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFF87614FFF86604EFF85604DFF86604EFF86614EFF86624EFF8762
+              4EFF85604CFF835E4BFF7F5E4DFF7B5E4FFF7EAEA7FFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFF6A4B39FF684836FF654634FF61402EFF5D3B27FF5C3A26FF5A39
+              26FF563929FF52392CFF50382AFF4E3628FF679A94FFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFB69E92FFB69E91FFB69E90FFB39C8EFFB09A8DFFAA9488FFA48F
+              82FF85786FFF66605CFF6C645EFF716761FF78B3B0FFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFCABEAFFFC9C0B0FFC8C1B2FFCCB8A7FFCFAF9CFFCEAF9CFFCEAF
+              9CFFB69C8CFF9F8A7DFF8A7A70FF746A63FF7AB4B1FFAEFFFFFFAEFFFFFFAEFF
+              FFFF927777FF00D7D7FF927777FFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFCBD5CBFFCCDCD2FFCDE2DAFFC2B9A9FFB89078FFB89179FFB892
+              7AFFB69077FFB48E74FFA8856DFF9C7C66FF8EBEB2FFAEFFFFFFAEFFFFFFAEFF
+              FFFF00D7D7FF927777FF00D7D7FFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFB5AA95FFB4AC98FFB4AF9AFFB0967CFFAC7D5EFFAB7C5DFFAA7C
+              5CFFA77858FFA47554FFA47250FFA4704CFF92B8A6FFAEFFFFFFAEFFFFFFAEFF
+              FFFF927777FF00D7D7FF927777FFAEFFFFFF927777FFC1C0C2FFFFFFFF009277
+              77FFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFF
+              FFFFAEFFFFFFAEFFFFFFAEFFFFFFAEFFFFFF927777FFFFFFFF00FFFFFF00C1C0
+              C2FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
+              77FF927777FF927777FF927777FF927777FF927777FF927777FF927777FF9277
+              77FF927777FF927777FF927777FF927777FFC1C0C2FFFFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+            }
+            OnClick = sbtnQSLClick
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn3: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn4
+          AnchorSideRight.Control = pnlSbtn4
+          Left = 435
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 34
+          object sbtneQSL: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn3
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn3
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'eQSL user'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
+              FFFFFFFEFEFFF3C096FFEEA366FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF6F1FFF1B4
+              83FFEC9753FFE77217FFF6CAA8FFFFFFFFFFF9DCC7FFEB8E44FFED9856FFEC97
+              52FFF7D2B4FFFFFFFFFFEB8E44FFEC8F46FFEC8F47FFEC8F47FFF2BA8CFFF4BE
+              95FFFFFFFFFFFEFAF8FFEC8F46FFFAE0CCFFFEF9F6FFFFFFFFFFFFFFFFFFFDF3
+              EBFFE98535FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFEA8639FFFDF5
+              EEFFFFFFFFFFFFFFFFFFF4BD94FFF3B586FFFFFFFFFFFFFFFFFFFBECDFFFF0AF
+              7AFFED9A57FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFE8802CFFFEFA
+              F8FFFFFFFFFFFFFFFFFFF6C8A4FFF2B180FFFEFAF8FFEC8F46FFEB9149FFF4C2
+              9CFFFEFAF8FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFF1AC78FFF7D4
+              B7FFFFFFFFFFFFFFFFFFED9D5DFFFBE4D3FFF8DAC1FFEFA56AFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFFBECDFFFEE98
+              55FFEFA86FFFED9856FFF0AC75FFFFFFFFFFFEFCFAFFEB893DFFF2B180FFF1B4
+              82FFF3C096FFFFFFFFFFEB8637FFFDFAF7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFBEADCFFFEF7F3FFFFFFFFFFFFFFFFFFFFFFFFFFFEFDFCFFF7D3B7FFF8D9
+              C1FFFEFCFAFFFFFFFFFFFBECE0FFFFFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFF8D8BFFFEA8535FFE56806FFE56500FFE565
+              00FFE66F12FFEE9B5AFFFBEBDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFF4BF96FFE56500FFE87B25FFF3BD93FFF8D6BCFFF6CB
+              AAFFF1B17FFFE87B25FFF7D3B7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFCEDE2FFE66C0CFFE9802DFFFEFAF7FFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFEFAF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFF4BF96FFE56500FFF6CCACFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFF0A66CFFE56500FFF5C49EFFF7D3B7FFF7D3B7FFF7D3B7FFF7D3
+              B7FFF7D3B7FFF7D3B7FFFAE2D0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFEFA56BFFE56500FFE56500FFE56500FFE56500FFE56500FFE565
+              00FFE56500FFE56500FFEE9C5CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFF3BD93FFE56500FFF6CBA9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFAE4D3FFE56500FFF1B17EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFBE7D8FFE56704FFEB883BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFF1AE7AFFE56500FFF7D0B2FFFFFFFFFFFFFFFFFFFFFFFFFF
+            }
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn4: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn5
+          AnchorSideRight.Control = pnlSbtn5
+          Left = 460
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 35
+          object sbtnLoTW: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn4
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn4
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'LoTW user'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000064000000640000000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFF0000FCFF0000
+              FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFF0000FCFF0000
+              FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFF0000FCFF0000
+              FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF0000FCFF0000FCFF0000FCFF0000FCFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            }
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn5: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn6
+          AnchorSideRight.Control = pnlSbtn6
+          Left = 485
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 36
+          object sbtnQRZ: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn5
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn5
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'Opens qrz.com callsign profile in webbrowser'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36040000424D3604000000000000360000002800000010000000100000000100
+              2000000000000004000064000000640000000000000000000000F5F2E9FFF5F2
+              E9FFF5F2E9FFF5F5FAFFF5F2E9FFF5F5FAFFF5F2E9FFF5F5FAFFF5F5FAFFF5F5
+              FAFFF5F5FAFFF5F2E9FFF5F5FAFFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
+              E9FFF5F5FAFFEDCB6CFFF3E6C1FFE7AB00FFF3E6C1FFEDCB6CFFF1DA9BFFF1DA
+              9BFFEBBD41FFF3E6C1FFEBBD41FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F5
+              FAFFF1DA9BFFF3E6C1FFF3E6C1FFF1DA9BFFF1DA9BFFF1DA9BFFF1DA9BFFF1DA
+              9BFFF1DA9BFFF3E6C1FFF5F2E9FFF1DA9BFFF5F5FAFFF5F2E9FFF5F2E9FFF3E6
+              C1FFE4A011FFF3E6C1FFE7AB00FFF1DA9BFFEBBD41FFEDCB6CFFF1DA9BFFEBBD
+              41FFF3E6C1FFE7AB00FFF3E6C1FFE7AB00FFF1DA9BFFF5F2E9FFF5F5FAFFF1DA
+              9BFFEBBD41FFF1DA9BFFE4A011FFF3E6C1FFE7AB00FFEBBD41FFEDCB6CFFE7AB
+              00FFF3E6C1FFE4A011FFEDCB6CFFEDCB6CFFEDCB6CFFF5F5FAFFF3E6C1FFEBBD
+              41FFF1DA9BFFF3E6C1FFF3E6C1FFF5F2E9FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6
+              C1FFF5F2E9FFF3E6C1FFF1DA9BFFF3E6C1FFEBBD41FFF3E6C1FFF1DA9BFFE7AB
+              00FFEDCB6CFFEBBD41FFE4A011FFF3E6C1FFE4A011FFEBBD41FFEDCB6CFFE4A0
+              11FFF3E6C1FFE4A011FFE4A011FFF1DA9BFFE4A011FFEDCB6CFFF5F2E9FFF3E6
+              C1FFF5F2E9FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6C1FFF3E6C1FFF3E6C1FFF3E6
+              C1FFF5F2E9FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6C1FFF3E6C1FFF1DA9BFFE7AB
+              00FFF1DA9BFFEBBD41FFE7AB00FFF3E6C1FFE7AB00FFEBBD41FFEDCB6CFFE7AB
+              00FFF3E6C1FFE7AB00FFE7AB00FFF1DA9BFFE7AB00FFEDCB6CFFF3E6C1FFE4A0
+              11FFEDCB6CFFEDCB6CFFEBBD41FFF3E6C1FFEBBD41FFEDCB6CFFF1DA9BFFEBBD
+              41FFF3E6C1FFEBBD41FFEBBD41FFF1DA9BFFE4A011FFF1DA9BFFF5F2E9FFF3E6
+              C1FFF3E6C1FFF3E6C1FFEDCB6CFFF3E6C1FFEDCB6CFFF1DA9BFFF1DA9BFFEDCB
+              6CFFF3E6C1FFEDCB6CFFF3E6C1FFF3E6C1FFF3E6C1FFF5F2E9FFF5F5FAFFEDCB
+              6CFFE7AB00FFF3E6C1FFE4A011FFF1DA9BFFE7AB00FFEBBD41FFEDCB6CFFE7AB
+              00FFF3E6C1FFE4A011FFF1DA9BFFE7AB00FFEBBD41FFF5F5FAFFF5F2E9FFF5F5
+              FAFFEBBD41FFF5F2E9FFF1DA9BFFF3E6C1FFF3E6C1FFF3E6C1FFF5F2E9FFF3E6
+              C1FFF5F2E9FFF1DA9BFFF5F2E9FFE7AB00FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
+              E9FFF5F5FAFFEDCB6CFFF1DA9BFFE7AB00FFEDCB6CFFEBBD41FFEDCB6CFFEDCB
+              6CFFEBBD41FFEDCB6CFFEDCB6CFFF5F5FAFFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
+              E9FFF5F2E9FFF5F2E9FFF5F2E9FFF3E6C1FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
+              E9FFF3E6C1FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
+              E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2
+              E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FFF5F2E9FF
+            }
+            OnClick = sbtnQRZClick
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn6: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = mComment
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = mComment
+          AnchorSideRight.Side = asrBottom
+          Left = 510
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BorderSpacing.Top = 2
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 37
+          object sbtnHamQTH: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn6
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn6
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'Opens HamQTH.com callsing profile in webbrowser'
+            Top = 1
+            Width = 23
+            Font.Color = clBlue
+            Font.Height = 16
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              B6030000424DB60300000000000036000000280000000E000000100000000100
+              2000000000008003000064000000640000000000000000000000F3AA6AFFF19A
+              50FFF19B51FFF19B51FFF19648FFF9DBC0FFFEFEFEFFFEFDFDFFF8CFACFFF097
+              4AFFF19B51FFF19B51FFF19A4FFFF4B279FFF2A35FFFEF8A34FFEB7005FFEC7E
+              20FFEF8D38FFFCEADAFFFFFFFFFFFEFDFDFFF8CEAAFFEF8D37FFEC7E20FFEB70
+              05FFEF8932FFF5B680FFFFFFFFFFFDF1E7FFEC7106FFF6BC89FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6BC89FFEC7106FFFDF2E8FFFFFF
+              FFFFFFFFFFFFFCE9D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9
+              D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEC7106FFF5B7
+              82FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5B782FFEC71
+              06FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEC7106FFF5B985FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5B985FFEC7106FFFCE9D9FFFFFF
+              FFFFFFFFFFFFFCE9D9FFEC7106FFF08F3AFFF3AD6FFFF2A968FFF2A968FFF2A9
+              68FFF2A968FFF3AD6FFFF08F3AFFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9
+              D9FFEB7106FFEB7207FFEC750DFFEC740CFFEC740CFFEC740CFFEC740CFFEC75
+              0DFFEB7207FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEB7106FFF5BB
+              88FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5BB88FFEC71
+              06FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9D9FFEC7106FFF5B782FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5B782FFEC7106FFFCE9D9FFFFFF
+              FFFFFFFFFFFFFCE9D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFCE9
+              D9FFEC7106FFF5B782FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFF5B782FFEC7106FFFCE9D9FFFFFFFFFFFFFFFFFFFDF2E9FFEB7006FFF5BC
+              8AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5BC8AFFEB70
+              06FFFDF2E9FFFFFFFFFFFCEADAFFED801FFFEB7006FFEC7B19FFEE8223FFFBE5
+              D3FFFFFFFFFFFEFDFDFFF8CCA6FFEE8428FFEC7B19FFEB7006FFED801FFFFCEA
+              DAFFFDF4EDFFEF9342FFF19C53FFF19B52FFF1974AFFFADDC4FFFEFEFEFFFEFD
+              FDFFF8D1AFFFF0994CFFF19B52FFF19C53FFEF9342FFFDF4EDFF
+            }
+            OnClick = sbtnHamQTHClick
+            ShowHint = True
+            ParentFont = False
+            ParentShowHint = False
+          end
         end
       end
     end
-    object Panel2: TPanel
-      Left = 940
-      Height = 511
-      Top = 39
+    object pnlDXCCinfo: TPanel
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 769
+      Height = 534
+      Top = 35
       Width = 262
       Align = alRight
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 484
-      ClientHeight = 511
+      ClientHeight = 534
       ClientWidth = 262
       TabOrder = 1
-      object GroupBox1: TGroupBox
-        AnchorSideLeft.Control = Panel2
+      object gbDXCCdata: TGroupBox
+        AnchorSideLeft.Control = pnlDXCCinfo
         AnchorSideLeft.Side = asrCenter
-        AnchorSideTop.Control = Panel2
+        AnchorSideTop.Control = pnlDXCCinfo
         Left = 7
         Height = 456
         Top = 4
@@ -4067,23 +4176,23 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblContCaption
           AnchorSideTop.Control = lblContCaption
           AnchorSideTop.Side = asrBottom
-          Left = 135
-          Height = 17
-          Top = 115
-          Width = 42
+          Left = 131
+          Height = 15
+          Top = 113
+          Width = 41
           BorderSpacing.Top = 5
           Caption = 'DXCC:'
           ParentColor = False
           ParentFont = False
         end
         object lblWAZCaption: TLabel
-          AnchorSideLeft.Control = Panel5
-          AnchorSideTop.Control = Panel5
+          AnchorSideLeft.Control = pnlDXCCCountry
+          AnchorSideTop.Control = pnlDXCCCountry
           AnchorSideTop.Side = asrBottom
           Left = 7
-          Height = 17
+          Height = 15
           Top = 93
-          Width = 37
+          Width = 35
           BorderSpacing.Left = 7
           BorderSpacing.Top = 5
           Caption = 'WAZ:'
@@ -4096,9 +4205,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblWAZCaption
           AnchorSideTop.Side = asrBottom
           Left = 7
-          Height = 17
-          Top = 115
-          Width = 27
+          Height = 15
+          Top = 113
+          Width = 26
           BorderSpacing.Top = 5
           Caption = 'ITU:'
           Layout = tlBottom
@@ -4108,12 +4217,12 @@ object frmNewQSO: TfrmNewQSO
         object lblContCaption: TLabel
           AnchorSideLeft.Control = lblWAZ
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = Panel5
+          AnchorSideTop.Control = pnlDXCCCountry
           AnchorSideTop.Side = asrBottom
-          Left = 135
-          Height = 17
+          Left = 131
+          Height = 15
           Top = 93
-          Width = 37
+          Width = 34
           BorderSpacing.Left = 57
           BorderSpacing.Top = 5
           Caption = 'Cont:'
@@ -4127,9 +4236,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = lblWAZCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
-          Height = 17
+          Height = 15
           Top = 93
-          Width = 31
+          Width = 27
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 40
           BorderSpacing.Top = 5
@@ -4144,9 +4253,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = lblITUCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
-          Height = 17
-          Top = 115
-          Width = 31
+          Height = 15
+          Top = 113
+          Width = 27
           Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 5
           Caption = 'AAA'
@@ -4159,10 +4268,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = lblDXCCCaption
           AnchorSideBottom.Side = asrBottom
-          Left = 181
-          Height = 17
-          Top = 115
-          Width = 31
+          Left = 174
+          Height = 15
+          Top = 113
+          Width = 27
           Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 5
           Caption = 'AAA'
@@ -4176,10 +4285,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblContCaption
           AnchorSideBottom.Side = asrBottom
-          Left = 181
-          Height = 17
+          Left = 174
+          Height = 15
           Top = 93
-          Width = 31
+          Width = 27
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 9
           Caption = 'AAA'
@@ -4192,9 +4301,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblITUCaption
           AnchorSideTop.Side = asrBottom
           Left = 7
-          Height = 17
-          Top = 137
-          Width = 29
+          Height = 15
+          Top = 133
+          Width = 28
           BorderSpacing.Top = 5
           Caption = 'LAT:'
           Layout = tlBottom
@@ -4205,10 +4314,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblContCaption
           AnchorSideTop.Control = lblDXCCCaption
           AnchorSideTop.Side = asrBottom
-          Left = 135
-          Height = 17
-          Top = 137
-          Width = 44
+          Left = 131
+          Height = 15
+          Top = 133
+          Width = 41
           BorderSpacing.Top = 5
           Caption = 'LONG:'
           Layout = tlBottom
@@ -4220,9 +4329,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = lblLatCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
-          Height = 17
-          Top = 137
-          Width = 31
+          Height = 15
+          Top = 133
+          Width = 27
           Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
@@ -4234,10 +4343,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblLongCaption
           AnchorSideBottom.Side = asrBottom
-          Left = 181
-          Height = 17
-          Top = 137
-          Width = 31
+          Left = 174
+          Height = 15
+          Top = 133
+          Width = 27
           Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
@@ -4249,9 +4358,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblLatCaption
           AnchorSideTop.Side = asrBottom
           Left = 7
-          Height = 17
-          Top = 159
-          Width = 34
+          Height = 15
+          Top = 153
+          Width = 33
           BorderSpacing.Top = 5
           Caption = 'DIST:'
           Layout = tlBottom
@@ -4264,9 +4373,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = lblDistCaption
           AnchorSideBottom.Side = asrBottom
           Left = 47
-          Height = 17
-          Top = 159
-          Width = 31
+          Height = 15
+          Top = 153
+          Width = 27
           Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
@@ -4278,10 +4387,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Control = lblContCaption
           AnchorSideTop.Control = lblLongCaption
           AnchorSideTop.Side = asrBottom
-          Left = 135
-          Height = 17
-          Top = 159
-          Width = 40
+          Left = 131
+          Height = 15
+          Top = 153
+          Width = 38
           BorderSpacing.Top = 5
           Caption = 'AZIM:'
           Layout = tlBottom
@@ -4292,10 +4401,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = lblAzim
           AnchorSideBottom.Side = asrBottom
-          Left = 181
-          Height = 17
-          Top = 159
-          Width = 31
+          Left = 174
+          Height = 15
+          Top = 153
+          Width = 27
           Anchors = [akLeft, akBottom]
           Caption = 'AAA'
           Layout = tlBottom
@@ -4309,7 +4418,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 7
           Height = 20
-          Top = 220
+          Top = 212
           Width = 162
           AutoSize = False
           BorderSpacing.Top = 6
@@ -4325,9 +4434,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = lblHisTime
           AnchorSideBottom.Side = asrBottom
           Left = 181
-          Height = 17
-          Top = 223
-          Width = 48
+          Height = 15
+          Top = 217
+          Width = 44
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 12
           Caption = 'GE/GM'
@@ -4342,7 +4451,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 7
           Height = 22
-          Top = 192
+          Top = 184
           Width = 23
           BorderSpacing.Top = 16
           Flat = True
@@ -4387,9 +4496,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = SpeedButton3
           AnchorSideBottom.Side = asrBottom
-          Left = 136
+          Left = 132
           Height = 22
-          Top = 268
+          Top = 258
           Width = 23
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 1
@@ -4429,7 +4538,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           Left = 7
           Height = 22
-          Top = 268
+          Top = 258
           Width = 23
           BorderSpacing.Top = 5
           Flat = True
@@ -4474,9 +4583,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = btnSunRise
           AnchorSideBottom.Side = asrBottom
-          Left = 135
+          Left = 131
           Height = 22
-          Top = 192
+          Top = 184
           Width = 23
           Anchors = [akLeft, akBottom]
           Flat = True
@@ -4516,9 +4625,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = SpeedButton3
           AnchorSideBottom.Side = asrBottom
           Left = 30
-          Height = 17
-          Top = 273
-          Width = 94
+          Height = 15
+          Top = 265
+          Width = 90
           Anchors = [akLeft, akBottom]
           Caption = 'lblLocSunRise'
           Layout = tlBottom
@@ -4531,10 +4640,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = SpeedButton3
           AnchorSideBottom.Side = asrBottom
-          Left = 164
-          Height = 17
-          Top = 273
-          Width = 88
+          Left = 160
+          Height = 15
+          Top = 265
+          Width = 83
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
           Caption = 'lblLocSunSet'
@@ -4549,9 +4658,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideBottom.Control = btnSunRise
           AnchorSideBottom.Side = asrBottom
           Left = 30
-          Height = 17
-          Top = 197
-          Width = 92
+          Height = 15
+          Top = 191
+          Width = 87
           Anchors = [akLeft, akBottom]
           BorderSpacing.Top = 5
           Caption = 'lblTarSunRise'
@@ -4565,10 +4674,10 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrCenter
           AnchorSideBottom.Control = btnSunRise
           AnchorSideBottom.Side = asrBottom
-          Left = 163
-          Height = 17
-          Top = 197
-          Width = 86
+          Left = 159
+          Height = 15
+          Top = 191
+          Width = 80
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
           Caption = 'lblTarSunSet'
@@ -4581,50 +4690,50 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Control = lblHisTime
           AnchorSideTop.Side = asrBottom
           Left = 7
-          Height = 17
-          Top = 246
-          Width = 40
+          Height = 15
+          Top = 238
+          Width = 38
           BorderSpacing.Top = 6
           Caption = 'Local:'
           Layout = tlBottom
           ParentColor = False
           ParentFont = False
         end
-        object Panel5: TPanel
-          AnchorSideLeft.Control = GroupBox1
-          AnchorSideTop.Control = GroupBox1
+        object pnlDXCCCountry: TPanel
+          AnchorSideLeft.Control = gbDXCCdata
+          AnchorSideTop.Control = gbDXCCdata
           Left = 0
           Height = 88
           Top = 0
-          Width = 243
+          Width = 247
           Align = alTop
           BevelOuter = bvNone
           Caption = 'pnlmCountry'
           ClientHeight = 88
-          ClientWidth = 243
+          ClientWidth = 247
           TabOrder = 0
           object mCountry: TMemo
-            AnchorSideLeft.Control = Panel5
-            AnchorSideTop.Control = Panel5
+            AnchorSideLeft.Control = pnlDXCCCountry
+            AnchorSideTop.Control = pnlDXCCCountry
             Left = 0
             Height = 88
             Top = 0
-            Width = 243
+            Width = 247
             Align = alClient
             ParentFont = False
             TabOrder = 0
           end
         end
         object mCallBook: TMemo
-          AnchorSideLeft.Control = Panel5
+          AnchorSideLeft.Control = pnlDXCCCountry
           AnchorSideLeft.Side = asrCenter
           AnchorSideTop.Control = lblCallbookInformation
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 118
-          Top = 312
-          Width = 243
+          Height = 131
+          Top = 307
+          Width = 247
           Align = alBottom
           Anchors = [akTop, akLeft, akRight]
           ParentFont = False
@@ -4632,27 +4741,27 @@ object frmNewQSO: TfrmNewQSO
           TabOrder = 1
         end
         object lblCallbookInformation: TLabel
-          AnchorSideLeft.Control = Panel5
+          AnchorSideLeft.Control = pnlDXCCCountry
           AnchorSideTop.Control = SpeedButton3
           AnchorSideTop.Side = asrBottom
           Left = 3
-          Height = 17
-          Top = 295
-          Width = 64
+          Height = 15
+          Top = 292
+          Width = 61
           BorderSpacing.Left = 3
-          BorderSpacing.Top = 5
+          BorderSpacing.Top = 12
           Caption = 'Callbook:'
           ParentColor = False
         end
       end
       object btnSave: TButton
-        AnchorSideLeft.Control = GroupBox1
-        AnchorSideBottom.Control = Panel2
+        AnchorSideLeft.Control = gbDXCCdata
+        AnchorSideBottom.Control = pnlDXCCinfo
         AnchorSideBottom.Side = asrBottom
         Left = 7
-        Height = 29
-        Top = 476
-        Width = 132
+        Height = 35
+        Top = 493
+        Width = 130
         Anchors = [akLeft, akBottom]
         AutoSize = True
         BorderSpacing.Bottom = 6
@@ -4662,14 +4771,14 @@ object frmNewQSO: TfrmNewQSO
         TabOrder = 1
       end
       object btnCancel: TButton
-        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Control = gbDXCCdata
         AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = Panel2
+        AnchorSideBottom.Control = pnlDXCCinfo
         AnchorSideBottom.Side = asrBottom
-        Left = 142
-        Height = 29
-        Top = 476
-        Width = 114
+        Left = 143
+        Height = 35
+        Top = 493
+        Width = 113
         Anchors = [akRight, akBottom]
         AutoSize = True
         BorderSpacing.Bottom = 6
@@ -4680,17 +4789,17 @@ object frmNewQSO: TfrmNewQSO
         TabOrder = 2
       end
     end
-    object Panel4: TPanel
+    object pnlProfiles: TPanel
+      AnchorSideRight.Side = asrBottom
       Left = 1
-      Height = 38
+      Height = 34
       Top = 1
-      Width = 1201
+      Width = 1030
       Align = alTop
-      Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 38
-      ClientWidth = 1201
+      ClientHeight = 34
+      ClientWidth = 1030
       TabOrder = 2
       object lblQSONr: TLabel
         AnchorSideLeft.Control = lblQSONrDesc
@@ -4698,10 +4807,10 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideTop.Side = asrCenter
         AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 78
-        Height = 17
-        Top = 11
-        Width = 9
+        Left = 67
+        Height = 15
+        Top = 10
+        Width = 8
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 6
         Caption = '0'
@@ -4710,15 +4819,14 @@ object frmNewQSO: TfrmNewQSO
         ParentFont = False
       end
       object lblQSONrDesc: TLabel
-        AnchorSideLeft.Control = Panel4
-        AnchorSideTop.Control = Panel4
+        AnchorSideLeft.Control = pnlProfiles
+        AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
-        Left = 16
-        Height = 17
-        Top = 11
-        Width = 52
-        BorderSpacing.Left = 6
-        BorderSpacing.Around = 10
+        Left = 12
+        Height = 15
+        Top = 10
+        Width = 49
+        BorderSpacing.Left = 12
         Caption = 'QSO nr.'
         Layout = tlBottom
         ParentColor = False
@@ -4727,15 +4835,14 @@ object frmNewQSO: TfrmNewQSO
       object lblCountryInfo: TLabel
         AnchorSideLeft.Control = cmbProfiles
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
-        AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 493
-        Height = 17
-        Top = 11
-        Width = 129
+        Left = 477
+        Height = 15
+        Top = 10
+        Width = 123
         Alignment = taRightJustify
-        Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 10
         Caption = 'New band country!'
         Font.Color = clRed
@@ -4746,14 +4853,13 @@ object frmNewQSO: TfrmNewQSO
       object lblAmbiguous: TLabel
         AnchorSideLeft.Control = lblCountryInfo
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
-        AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 632
-        Height = 17
-        Top = 11
-        Width = 121
-        Anchors = [akLeft, akBottom]
+        Left = 610
+        Height = 15
+        Top = 10
+        Width = 115
         BorderSpacing.Left = 10
         Caption = 'Ambiguous prefix'
         Font.Color = clRed
@@ -4765,14 +4871,13 @@ object frmNewQSO: TfrmNewQSO
       object blbQTHProfile: TLabel
         AnchorSideLeft.Control = lblQSONr
         AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
-        AnchorSideBottom.Control = lblQSONrDesc
         AnchorSideBottom.Side = asrBottom
-        Left = 107
-        Height = 17
-        Top = 11
-        Width = 90
-        Anchors = [akLeft, akBottom]
+        Left = 95
+        Height = 15
+        Top = 10
+        Width = 86
         BorderSpacing.Left = 20
         Caption = 'QTH profile:  '
         Layout = tlBottom
@@ -4782,32 +4887,55 @@ object frmNewQSO: TfrmNewQSO
       object cmbProfiles: TComboBox
         AnchorSideLeft.Control = blbQTHProfile
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = Panel4
+        AnchorSideTop.Control = pnlProfiles
         AnchorSideTop.Side = asrCenter
-        Left = 202
-        Height = 25
-        Top = 7
+        Left = 186
+        Height = 33
+        Top = 1
         Width = 281
         BorderSpacing.Left = 5
-        ItemHeight = 17
+        ItemHeight = 0
         OnChange = cmbProfilesChange
         ParentFont = False
         TabOrder = 0
         Text = 'cmbProfiles'
       end
     end
+    object sbNewQSO: TStatusBar
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 1
+      Height = 18
+      Top = 569
+      Width = 1030
+      Panels = <      
+        item
+          Width = 50
+        end      
+        item
+          Width = 50
+        end      
+        item
+          Width = 50
+        end      
+        item
+          Width = 50
+        end>
+      SimplePanel = False
+    end
   end
   object dbgrdQSOBefore: TDBGrid
+    AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 100
+    Height = 96
     Top = 0
-    Width = 1203
+    Width = 1032
     Align = alClient
     Color = clWindow
     Columns = <>
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
     PopupMenu = popEditQSO
-    TabOrder = 2
+    TabOrder = 1
     TitleFont.Height = 8
     OnColumnSized = dbgrdQSOBeforeColumnSized
     OnDrawColumnCell = dbgrdQSOBeforeDrawColumnCell

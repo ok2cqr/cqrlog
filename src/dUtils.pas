@@ -302,7 +302,7 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini;
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO;
 
 function TdmUtils.LetterFromMode(mode: string): string;
 begin
@@ -1940,6 +1940,18 @@ begin
     fQsoGr := cqrini.ReadString('Fonts', 'QGrids', 'Sans 10');
     fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10)
   end;
+
+  //otherwise NewQSO buttons do not fit to space
+   if ( fbSize > 10 )then
+     Begin
+          frmNewQSO.btnSave.Caption:='Save QSO';
+          frmNewQSO.btnCancel.Caption:= 'Quit';
+     end
+    else
+     Begin
+          frmNewQSO.btnSave.Caption:='Save QSO [enter]';
+          frmNewQSO.btnCancel.Caption:= 'Quit [CTRL+Q]';
+     end;
 
   for i := 0 to aForm.ComponentCount - 1 do
   begin
