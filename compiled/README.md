@@ -6,13 +6,15 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-   Jan 27,2021 "Update CHANGELOG"
+   Commits on Jan 31, 2021 "Merge pull request #385 from OH1KH/squash_statusbar"
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATE
+ - ver 2.5.1(103)
+  - official version with alpha additions (see below)
   - ver 2.5.1(102)
   - official version with alpha additions (see below)
   - ver 2.5.1(101)
