@@ -5,7 +5,7 @@ object frmNewQSO: TfrmNewQSO
   Width = 1032
   HelpType = htKeyword
   HelpKeyword = 'help/index.html'
-  HorzScrollBar.Page = 977
+  HorzScrollBar.Page = 983
   VertScrollBar.Page = 638
   AutoScroll = True
   Caption = 'New QSO ... (CQRLOG for Linux)'
@@ -2160,12 +2160,12 @@ object frmNewQSO: TfrmNewQSO
       Left = 1
       Height = 536
       Top = 27
-      Width = 768
+      Width = 759
       Align = alClient
       BorderSpacing.Bottom = 2
       BevelOuter = bvNone
       ClientHeight = 536
-      ClientWidth = 768
+      ClientWidth = 759
       TabOrder = 0
       object pnlQSOinput: TPanel
         AnchorSideRight.Side = asrBottom
@@ -2173,12 +2173,12 @@ object frmNewQSO: TfrmNewQSO
         Left = 0
         Height = 536
         Top = 0
-        Width = 768
+        Width = 759
         Align = alClient
         BorderSpacing.InnerBorder = 2
         BevelOuter = bvNone
         ClientHeight = 536
-        ClientWidth = 768
+        ClientWidth = 759
         ParentShowHint = False
         TabOrder = 0
         object lblCommentToCallsign: TLabel
@@ -3147,7 +3147,7 @@ object frmNewQSO: TfrmNewQSO
           Left = 0
           Height = 204
           Top = 332
-          Width = 768
+          Width = 759
           ActivePage = tabDXCCStat
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
@@ -3159,15 +3159,15 @@ object frmNewQSO: TfrmNewQSO
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
             Caption = 'DXCC statistic'
-            ClientHeight = 170
-            ClientWidth = 764
+            ClientHeight = 173
+            ClientWidth = 755
             object sgrdStatistic: TStringGrid
               AnchorSideRight.Side = asrBottom
               AnchorSideBottom.Side = asrBottom
               Left = 0
-              Height = 170
+              Height = 173
               Top = 0
-              Width = 764
+              Width = 755
               Align = alClient
               AutoFillColumns = True
               ColCount = 2
@@ -3181,8 +3181,8 @@ object frmNewQSO: TfrmNewQSO
               TitleFont.Height = 8
               TitleStyle = tsNative
               ColWidths = (
-                381
-                381
+                376
+                377
               )
             end
           end
@@ -3404,15 +3404,14 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideRight.Control = pnlQSOinput
           AnchorSideRight.Side = asrBottom
           Left = 555
-          Height = 216
+          Height = 192
           Top = 0
-          Width = 210
+          Width = 204
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 20
-          BorderSpacing.Right = 3
           Caption = 'Contest'
-          ClientHeight = 190
-          ClientWidth = 204
+          ClientHeight = 166
+          ClientWidth = 198
           TabOrder = 28
           Visible = False
           object lblContestName: TLabel
@@ -3483,7 +3482,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 25
             Hint = 'name of contest, max 40 characters allowed'
             Top = 23
-            Width = 198
+            Width = 192
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 3
             BorderSpacing.Right = 3
@@ -3533,7 +3532,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 25
             Hint = 'contest exchange message sent, max 50 characters'
             Top = 74
-            Width = 118
+            Width = 112
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Top = 6
             BorderSpacing.Right = 3
@@ -3553,7 +3552,7 @@ object frmNewQSO: TfrmNewQSO
             Height = 25
             Hint = 'contest exchange message received, max 50 characters'
             Top = 128
-            Width = 118
+            Width = 112
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Right = 3
             MaxLength = 50
@@ -4146,28 +4145,29 @@ object frmNewQSO: TfrmNewQSO
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 769
+      Left = 760
       Height = 538
       Top = 27
-      Width = 262
+      Width = 271
       Align = alRight
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 484
       ClientHeight = 538
-      ClientWidth = 262
+      ClientWidth = 271
       TabOrder = 1
       object gbDXCCdata: TGroupBox
         AnchorSideLeft.Control = pnlDXCCinfo
         AnchorSideLeft.Side = asrCenter
         AnchorSideTop.Control = pnlDXCCinfo
-        Left = 7
-        Height = 456
+        Left = 6
+        Height = 484
         Top = 4
-        Width = 249
+        Width = 258
         BorderSpacing.Top = 4
+        BorderSpacing.Bottom = 4
         Caption = 'DXCC info'
-        ClientHeight = 430
-        ClientWidth = 243
+        ClientHeight = 458
+        ClientWidth = 252
         ParentFont = False
         TabOrder = 0
         object lblDXCCCaption: TLabel
@@ -4703,12 +4703,12 @@ object frmNewQSO: TfrmNewQSO
           Left = 0
           Height = 88
           Top = 0
-          Width = 243
+          Width = 252
           Align = alTop
           BevelOuter = bvNone
           Caption = 'pnlmCountry'
           ClientHeight = 88
-          ClientWidth = 243
+          ClientWidth = 252
           TabOrder = 0
           object mCountry: TMemo
             AnchorSideLeft.Control = pnlDXCCCountry
@@ -4716,7 +4716,7 @@ object frmNewQSO: TfrmNewQSO
             Left = 0
             Height = 88
             Top = 0
-            Width = 243
+            Width = 252
             Align = alClient
             ParentFont = False
             TabOrder = 0
@@ -4729,9 +4729,9 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Side = asrBottom
           Left = 0
-          Height = 111
-          Top = 319
-          Width = 243
+          Height = 137
+          Top = 321
+          Width = 252
           Align = alBottom
           Anchors = [akTop, akLeft, akRight]
           ParentFont = False
@@ -4748,6 +4748,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 64
           BorderSpacing.Left = 3
           BorderSpacing.Top = 12
+          BorderSpacing.Bottom = 2
           Caption = 'Callbook:'
           ParentColor = False
         end
@@ -4756,7 +4757,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideLeft.Control = gbDXCCdata
         AnchorSideBottom.Control = pnlDXCCinfo
         AnchorSideBottom.Side = asrBottom
-        Left = 7
+        Left = 6
         Height = 29
         Top = 503
         Width = 132
@@ -4773,7 +4774,7 @@ object frmNewQSO: TfrmNewQSO
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = pnlDXCCinfo
         AnchorSideBottom.Side = asrBottom
-        Left = 142
+        Left = 150
         Height = 29
         Top = 503
         Width = 114
