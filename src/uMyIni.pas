@@ -5,7 +5,7 @@ unit uMyIni;
 interface
 
 uses
-  Classes, SysUtils, iniFiles, dynlibs;
+  Classes, SysUtils, iniFiles, dynlibs,strutils;
 
 type
   TMyIni = class
@@ -225,7 +225,7 @@ end;
 
 function TMyIni.LocalOnly(Section : String) : Boolean;
 begin
-  Result := Pos(Section+',',LocalSections)>0
+  Result := IsWordPresent(Section,LocalSections,[',']);
 end;
 
 procedure TMyIni.LoadLocalSectionsList;
