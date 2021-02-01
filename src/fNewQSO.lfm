@@ -2152,7 +2152,6 @@ object frmNewQSO: TfrmNewQSO
     ClientHeight = 588
     ClientWidth = 1032
     TabOrder = 0
-    OnClick = pnlAllClick
     object pnlQsoInfo: TPanel
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Side = asrBottom
@@ -3154,7 +3153,6 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Top = 3
           TabIndex = 0
           TabOrder = 27
-          OnChange = pgDetailsChange
           object tabDXCCStat: TTabSheet
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
