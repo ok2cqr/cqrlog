@@ -566,8 +566,6 @@ type
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
-    procedure pgDetailsChange(Sender: TObject);
-    procedure pnlAllClick(Sender: TObject);
     procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnLocatorMapClick(Sender: TObject);
@@ -5932,16 +5930,6 @@ begin
     frmMain.WindowState := wsNormal;
   frmMain.Show;
   frmMain.BringToFront;
-end;
-
-procedure TfrmNewQSO.pgDetailsChange(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmNewQSO.pnlAllClick(Sender: TObject);
-begin
-
 end;
 
 procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
