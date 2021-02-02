@@ -1283,7 +1283,9 @@ var
   QSOmode:String;
 begin
     QSOMode :=       dmData.qCQRLOG.FieldByName('mode').AsString;
-    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+    if  ((upcase(QSOMode) = 'JS8')
+      or (upcase(QSOMode) = 'FT4')
+      or (upcase(QSOMode) = 'FST4')) then QSOMode := 'MFSK';
 
     eQSLView( dmData.qCQRLOG.FieldByName('qsodate').AsString,
               dmData.qCQRLOG.FieldByName('time_on').AsString,

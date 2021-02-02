@@ -1875,7 +1875,8 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       '&'     : getCurMode := 'MSK144';
       ':'     : getCurMode := 'QRA64';
       '+'     : getCurMode := 'FT4';
-      chr(126): getCurMode := 'FT8';
+      chr(126): getCurMode := 'FT8';    // ~
+      chr(96) : getCurMode := 'FST4';   // `
       //'+'     : getCurMode := 'T10';
     end;
   end;

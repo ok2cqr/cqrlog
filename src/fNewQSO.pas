@@ -2444,7 +2444,7 @@ begin
              end;
           end;
 
-   'FT8':begin
+   'FT8','FST4':begin
            DecodeTime(Time,Hour,Min,Sec,HSec);
            if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
            case Sec of
@@ -5895,7 +5895,9 @@ var
   QSOmode:String;
 begin
     QSOMode :=       dmData.qQSOBefore.FieldByName('mode').AsString;
-    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+    if  ((upcase(QSOMode) = 'JS8')
+      or (upcase(QSOMode) = 'FT4')
+      or (upcase(QSOMode) = 'FST4')) then QSOMode := 'MFSK';
 
     frmMain.eQSLView( dmData.qQSOBefore.FieldByName('qsodate').AsString,
                       dmData.qQSOBefore.FieldByName('time_on').AsString,
