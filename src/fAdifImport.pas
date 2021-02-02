@@ -257,70 +257,71 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
     fillTypeVariableWithTagData:=true;
     data := trim(data);
     case h of
-      h_BAND:d.BAND:=data;
-      h_CALL:d.CALL:=data;
-      h_CNTY:d.CNTY:=data;
-      h_COMMENT:d.COMMENT:=data;
-      h_CONT:d.CONT:=data;
-      h_DXCC:d.DXCC:=data;
-      h_EQSL_QSLRDATE:d.EQSL_QSLRDATE:=data;
-      h_EQSL_QSLSDATE:d.EQSL_QSLSDATE:=data;
-      h_EQSL_QSL_RCVD:d.EQSL_QSL_RCVD:=data;
-      h_EQSL_QSL_SENT:d.EQSL_QSL_SENT:=data;
-      h_FREQ:d.FREQ:=data;
-      h_GRIDSQUARE:d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-      h_IOTA:d.IOTA:=data;
-      h_ITUZ:d.ITUZ:=data;
-      h_LOTW_QSLRDATE:d.LOTW_QSLRDATE:=data;
-      h_LOTW_QSLSDATE:d.LOTW_QSLSDATE:=data;
-      h_LOTW_QSL_RCVD:d.LOTW_QSL_RCVD:=data;
-      h_LOTW_QSL_SENT:d.LOTW_QSL_SENT:=data;
+      h_BAND                          :d.BAND:=data;
+      h_CALL                          :d.CALL:=data;
+      h_CNTY                          :d.CNTY:=data;
+      h_COMMENT                       :d.COMMENT:=data;
+      h_CONT                          :d.CONT:=data;
+      h_DXCC                          :d.DXCC:=data;
+      h_EQSL_QSLRDATE                 :d.EQSL_QSLRDATE:=data;
+      h_EQSL_QSLSDATE                 :d.EQSL_QSLSDATE:=data;
+      h_EQSL_QSL_RCVD                 :d.EQSL_QSL_RCVD:=data;
+      h_EQSL_QSL_SENT                 :d.EQSL_QSL_SENT:=data;
+      h_FREQ                          :d.FREQ:=data;
+      h_GRIDSQUARE                    :d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
+      h_IOTA                          :d.IOTA:=data;
+      h_ITUZ                          :d.ITUZ:=data;
+      h_LOTW_QSLRDATE                 :d.LOTW_QSLRDATE:=data;
+      h_LOTW_QSLSDATE                 :d.LOTW_QSLSDATE:=data;
+      h_LOTW_QSL_RCVD                 :d.LOTW_QSL_RCVD:=data;
+      h_LOTW_QSL_SENT                 :d.LOTW_QSL_SENT:=data;
       // DL7OAP: because MODE-field in cqrlog database does not match completely
       // with MODE field of ADIF specification, we have to transfer the
-      // ADIF MODES/SUBMODES (JS8, FT4, PKT) to MODE-field in cqrlog database
-      h_MODE: begin
-        if data = 'PKT' then d.MODE:='PACKET'
-        else d.MODE:=data
-      end;
-      h_SUBMODE: begin
-        if data = 'FT4' then d.MODE:=data;
-        if data = 'JS8' then d.MODE:=data
-      end;
-      h_MY_GRIDSQUARE:d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-      h_NAME:d.NAME:=data;
-      h_NOTES:d.NOTES:=data;
-      h_PFX:d.PFX:=data;
-      h_QSLMSG:d.QSLMSG:=data;
-      h_QSLRDATE:d.QSLRDATE:=data;
-      h_QSLSDATE:d.QSLSDATE:=data;
-      h_QSL_RCVD:d.QSL_RCVD:=data;
-      h_QSL_SENT:d.QSL_SENT:=data;
-      h_QSL_VIA:d.QSL_VIA:=data;
-      h_QSO_DATE:d.QSO_DATE:=data;
-      h_QTH:d.QTH:=data;
-      h_RST_RCVD:d.RST_RCVD:=data;
-      h_RST_SENT:d.RST_SENT:=data;
-      h_SRX:d.SRX:=data;
-      h_SRX_STRING:d.SRX_STRING:=data;
-      h_STX:d.STX:=data;
-      h_STX_STRING:d.STX_STRING:=data;
-      h_CONTEST_ID:d.CONTEST_ID:=data;
-      h_DARC_DOK:d.DARC_DOK:=data;
-      h_TIME_OFF:d.TIME_OFF:=data;
-      h_TIME_ON:d.TIME_ON:=data;
-      h_TX_PWR:d.TX_PWR:=data;
-      h_APP_CQRLOG_DXCC:d.APP_CQRLOG_DXCC:=data;
-      h_APP_CQRLOG_QSLS:d.APP_CQRLOG_QSLS:=data;
-      h_APP_CQRLOG_PROFILE:d.APP_CQRLOG_PROFILE:=data;
-      h_APP_CQRLOG_QSLR:d.APP_CQRLOG_QSLR:=data;
-      h_APP_CQRLOG_COUNTY:d.APP_CQRLOG_COUNTY:=data;
-      h_CQZ:d.CQZ:=data;
-      h_STATE:d.STATE:=data;
-      h_AWARD:d.AWARD:=data;
-      h_PROP_MODE:d.PROP_MODE:=data;
-      h_SAT_NAME:d.SAT_NAME:=data;
-      h_FREQ_RX:d.FREQ_RX:=data;
-      h_OP:d.OP:=data
+      // ADIF MODES/SUBMODES (JS8, FT4, FST4,PKT) to MODE-field in cqrlog database
+      h_MODE                          : begin
+                                          if data = 'PKT' then d.MODE:='PACKET'
+                                          else d.MODE:=data
+                                        end;
+      h_SUBMODE                       : begin
+                                          if data = 'FT4' then d.MODE:=data;
+                                          if data = 'FST4' then d.MODE:=data;
+                                          if data = 'JS8' then d.MODE:=data
+                                        end;
+      h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
+      h_NAME                            :d.NAME:=data;
+      h_NOTES                           :d.NOTES:=data;
+      h_PFX                             :d.PFX:=data;
+      h_QSLMSG                          :d.QSLMSG:=data;
+      h_QSLRDATE                        :d.QSLRDATE:=data;
+      h_QSLSDATE                        :d.QSLSDATE:=data;
+      h_QSL_RCVD                        :d.QSL_RCVD:=data;
+      h_QSL_SENT                        :d.QSL_SENT:=data;
+      h_QSL_VIA                         :d.QSL_VIA:=data;
+      h_QSO_DATE                        :d.QSO_DATE:=data;
+      h_QTH                             :d.QTH:=data;
+      h_RST_RCVD                        :d.RST_RCVD:=data;
+      h_RST_SENT                        :d.RST_SENT:=data;
+      h_SRX                             :d.SRX:=data;
+      h_SRX_STRING                      :d.SRX_STRING:=data;
+      h_STX                             :d.STX:=data;
+      h_STX_STRING                      :d.STX_STRING:=data;
+      h_CONTEST_ID                      :d.CONTEST_ID:=data;
+      h_DARC_DOK                        :d.DARC_DOK:=data;
+      h_TIME_OFF                        :d.TIME_OFF:=data;
+      h_TIME_ON                         :d.TIME_ON:=data;
+      h_TX_PWR                          :d.TX_PWR:=data;
+      h_APP_CQRLOG_DXCC                 :d.APP_CQRLOG_DXCC:=data;
+      h_APP_CQRLOG_QSLS                 :d.APP_CQRLOG_QSLS:=data;
+      h_APP_CQRLOG_PROFILE              :d.APP_CQRLOG_PROFILE:=data;
+      h_APP_CQRLOG_QSLR                 :d.APP_CQRLOG_QSLR:=data;
+      h_APP_CQRLOG_COUNTY               :d.APP_CQRLOG_COUNTY:=data;
+      h_CQZ                             :d.CQZ:=data;
+      h_STATE                           :d.STATE:=data;
+      h_AWARD                           :d.AWARD:=data;
+      h_PROP_MODE                       :d.PROP_MODE:=data;
+      h_SAT_NAME                        :d.SAT_NAME:=data;
+      h_FREQ_RX                         :d.FREQ_RX:=data;
+      h_OP                              :d.OP:=data
     else begin
         { writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}
       end;
