@@ -220,21 +220,27 @@ var
       SaveTag(dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(call)),leng);
     if ExMode then
     begin
-      if (Mode = 'JS8') then begin
-        tmp := '<MODE:4>MFSK<SUBMODE:3>JS8';
-        SaveTag(tmp,leng);
-      end
-      else if (Mode = 'FT4') then begin
-        tmp := '<MODE:4>MFSK<SUBMODE:3>FT4';
-        SaveTag(tmp,leng);
-      end
-      else if (Mode = 'PACKET') then begin
-        tmp := '<MODE:3>PKT';
-        SaveTag(tmp,leng);
-      end
-      else begin
-        tmp := '<MODE';
-        SaveTag(dmUtils.StringToADIF(tmp,Mode),leng);
+      case Mode of
+        'JS8'     : begin
+                      tmp := '<MODE:4>MFSK<SUBMODE:3>JS8';
+                      SaveTag(tmp,leng);
+                    end;
+        'FT4'     : begin
+                      tmp := '<MODE:4>MFSK<SUBMODE:3>FT4';
+                      SaveTag(tmp,leng);
+                    end;
+        'FST4'    : begin
+                      tmp := '<MODE:4>MFSK<SUBMODE:4>FST4';
+                      SaveTag(tmp,leng);
+                    end;
+        'PACKET'  :  begin
+                        tmp := '<MODE:3>PKT';
+                        SaveTag(tmp,leng);
+                     end;
+      else           begin
+                        tmp := '<MODE';
+                        SaveTag(dmUtils.StringToADIF(tmp,Mode),leng);
+                     end;
       end;
     end;
     if ExFreq then

@@ -451,28 +451,35 @@ begin
 
       tmp := dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(dmData.Q1.FieldByName('callsign').AsString));
       Writeln(f,tmp);
-
-      if (dmData.Q1.FieldByName('mode').AsString = 'JS8') then begin
-        tmp := '<MODE:4>MFSK';
-        Writeln(f,tmp);
-        tmp := '<SUBMODE:3>JS8';
-        Writeln(f,tmp);
-      end
-      else if (dmData.Q1.FieldByName('mode').AsString = 'FT4') then begin
-        tmp := '<MODE:4>MFSK';
-        Writeln(f,tmp);
-        tmp := '<SUBMODE:3>FT4';
-        Writeln(f,tmp);
-      end
-      else if (dmData.Q1.FieldByName('mode').AsString = 'PACKET') then begin
-        tmp := '<MODE:3>PKT';
-        Writeln(f,tmp);
-      end
-      else begin
-        tmp := dmUtils.StringToADIF('<MODE',dmData.Q1.FieldByName('mode').AsString);
-        Writeln(f,tmp);
-      end;
-
+      case dmData.Q1.FieldByName('mode').AsString of
+         'JS8'        :   begin
+                            tmp := '<MODE:4>MFSK';
+                            Writeln(f,tmp);
+                            tmp := '<SUBMODE:3>JS8';
+                            Writeln(f,tmp);
+                          end;
+         'FT4'        :   begin
+                            tmp := '<MODE:4>MFSK';
+                            Writeln(f,tmp);
+                            tmp := '<SUBMODE:3>FT4';
+                            Writeln(f,tmp);
+                          end;
+         'FST4'        :   begin
+                            tmp := '<MODE:4>MFSK';
+                            Writeln(f,tmp);
+                            tmp := '<SUBMODE:4>FST4';
+                            Writeln(f,tmp);
+                          end;
+         'PACKET'      :  begin
+                              tmp := '<MODE:3>PKT';
+                              Writeln(f,tmp);
+                          end;
+        else
+           begin
+              tmp := dmUtils.StringToADIF('<MODE',dmData.Q1.FieldByName('mode').AsString);
+              Writeln(f,tmp);
+            end;
+       end;
 
       tmp :=dmUtils.StringToADIF( '<BAND' , dmData.Q1.FieldByName('band').AsString);
       Writeln(f,tmp);

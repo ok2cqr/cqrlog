@@ -21,7 +21,7 @@ uses
   LCLType, RTTICtrls, httpsend, Menus, ActnList, process, db,
   uCWKeying, ipc, baseunix, dLogUpload, blcksock, dateutils,
   fMonWsjtx, fWorkedGrids,fPropDK0WCY, fAdifImport, RegExpr,
-  FileUtil, LazFileUtils, sqldb;
+  FileUtil, LazFileUtils, sqldb, strutils;
 
 const
   cRefCall = 'Ref.call (CTRL+R): ';
@@ -106,7 +106,6 @@ type
     edtContestName: TEdit;
     edtRXFreq : TEdit;
     gbContest: TGroupBox;
-    lbleQslRcvdDate: TLabel;
     Label38: TLabel;
     Label37: TLabel;
     lblContestExchangeMessageReceived: TLabel;
@@ -120,7 +119,6 @@ type
     lblStatellite : TLabel;
     lblRXFreq : TLabel;
     lblRXMhz : TLabel;
-    lblQSLRcvdDate: TLabel;
     mCallBook : TMemo;
     mCountry : TMemo;
     MenuItem32 : TMenuItem;
@@ -240,7 +238,6 @@ type
     lblAmbiguous: TLabel;
     lblAzi: TLabel;
     lblCall: TLabel;
-    lblCfmLoTW: TLabel;
     lblCont: TLabel;
     lblCountryInfo: TLabel;
     lblDXCC: TLabel;
@@ -631,6 +628,10 @@ type
     IsJS8Callrmt     : Boolean; //way to isolate adif from JS8's JSON
 
     Op         : String;
+    QSLcfm,
+    eQSLcfm,
+    LoTWcfm    : String;
+    OffLnBeforeEdit : Boolean;
     procedure showDOK(stat:boolean);
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -1121,20 +1122,21 @@ begin
         if (dok = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           dok := dmData.qQSOBefore.FieldByName('dok').AsString;
         if (qslrdate = '') and (not dmData.qQSOBefore.FieldByName('qslr_date').IsNull) then
-          lblQSLRcvdDate.Caption := dmData.qQSOBefore.FieldByName('qslr_date').AsString+' rcvd QSL';
+          QSLcfm := dmData.qQSOBefore.FieldByName('qslr_date').AsString+'  '+
+                    dmData.qQSOBefore.FieldByName('band').AsString+'  QSL rcvd';
         if (lotw_qslrdate = '') and (not dmData.qQSOBefore.FieldByName('lotw_qslrdate').IsNull) then
-          lblCfmLoTW.Caption := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+' LoTW cfmd';
+          LoTWcfm := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+'  '+
+                     dmData.qQSOBefore.FieldByName('band').AsString+'  LoTW cfmd';
         if (eqslrdate = '') and (not dmData.qQSOBefore.FieldByName('eqsl_qslrdate').IsNull) then
-          lbleQslRcvdDate.Caption := dmData.qQSOBefore.FieldByName('eqsl_qslrdate').AsString+' rcvd eQSL';
+          eQSlcfm := dmData.qQSOBefore.FieldByName('eqsl_qslrdate').AsString+'  '+
+                     dmData.qQSOBefore.FieldByName('band').AsString+'  eQSL rcvd';
         if (waz = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           waz := dmData.qQSOBefore.FieldByName('waz').AsString;
         if (itu = '') and (dmData.qQSOBefore.FieldByName('callsign').AsString=edtCall.Text) then
           itu := dmData.qQSOBefore.FieldByName('itu').AsString;
+
         dmData.qQSOBefore.Prior
       end;
-      lblQSLRcvdDate.Visible := True;
-      lbleQslRcvdDate.Visible := True;
-      lblCfmLoTW.Visible := True;
 
     finally
       dmData.qQSOBefore.Last;  //after this, dbgrid is not set to last record
@@ -1234,6 +1236,9 @@ begin
   lblGreeting.Caption := dmUtils.GetGreetings(lblHisTime.Caption);
   mCountry.Clear;
   mCountry.Lines.Add(country);
+  if QSLcfm<>'' then mCountry.Lines.Add(QSLcfm);
+  if eQSLcfm<>'' then mCountry.Lines.Add(eQSLcfm);
+  if LoTWcfm<>'' then mCountry.Lines.Add(LoTWcfm);
   mCountry.Repaint;
   if not (fEditQSO or fViewQSO) then
   begin
@@ -1321,10 +1326,9 @@ begin
   old_time := '';
   old_rstr := '';
   old_rsts := '';
-  lblCfmLoTW.Visible := False;
-  lblQSLRcvdDate.Visible := False;
-  lbleQslRcvdDate.Visible := False;
-  lblQSLRcvdDate.Caption := '';
+  QSLcfm:= '';
+  eQSLcfm := '';
+  LoTWcfm := '';
   lblCountryInfo.Caption := '';
   Mask  := '';
   lblQSONr.Caption := '0';
@@ -1839,6 +1843,11 @@ begin
   old_cmode := '';
   old_cfreq := '';
 
+  QSLcfm    := '';
+  eQSLcfm   := '';
+  LoTWcfm   := '';
+  OffLnBeforeEdit := False;
+
   Running      := False;
   EscFirstPressDone := False;
   ChangeDXCC   := False;
@@ -1892,8 +1901,9 @@ begin
     edtEndTime.Text   := FormatDateTime('hh:mm',date);
     Takes := StartTime - Date;
     DecodeTime(Takes,h,m,s,ms);
-    lblQSOTakes.Caption := 'QSO takes ' + IntToStr(h) + ' hr, ' + IntToStr(m) +
-                           ' min, ' + IntToStr(s) + ' sec'
+    lblQSOTakes.Caption := 'QSO takes: ' + AddChar('0',IntToStr(h),2) + 'hr '
+                                         + AddChar('0',IntToStr(m),2) + 'min '
+                                         + AddChar('0',IntToStr(s),2) + 'sec'
   end
 end;
 
@@ -2473,7 +2483,7 @@ begin
              end;
           end;
 
-   'FT8':begin
+   'FT8','FST4':begin
            DecodeTime(Time,Hour,Min,Sec,HSec);
            if dmData.DebugLevel>=1 then Writeln(' Timer FT mode - Sec is: ',Sec);
            case Sec of
@@ -5952,7 +5962,9 @@ var
   QSOmode:String;
 begin
     QSOMode :=       dmData.qQSOBefore.FieldByName('mode').AsString;
-    if ((upcase(QSOMode) = 'JS8') or (upcase(QSOMode) = 'FT4')) then QSOMode := 'MFSK';
+    if  ((upcase(QSOMode) = 'JS8')
+      or (upcase(QSOMode) = 'FT4')
+      or (upcase(QSOMode) = 'FST4')) then QSOMode := 'MFSK';
 
     frmMain.eQSLView( dmData.qQSOBefore.FieldByName('qsodate').AsString,
                       dmData.qQSOBefore.FieldByName('time_on').AsString,
@@ -6477,21 +6489,17 @@ begin
     edtState.Text     := Trim(dmData.qQSOBefore.FieldByName('state').AsString);
     edtDOK.Text       := Trim(dmData.qQSOBefore.FieldByName('dok').AsString);
     lotw_qslr         := dmData.qQSOBefore.FieldByName('lotw_qslr').AsString;
+
     if lotw_qslr = 'L' then
-    begin
-      lblCfmLoTW.Caption := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+ ' Cfmd by LoTW';
-      lblCfmLoTW.Visible := True
-    end;
+          LoTWcfm:= dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString + '  '+
+                    dmData.qQSOBefore.FieldByName('band').AsString +'  LoTW cfmd';
     if not dmData.qQSOBefore.FieldByName('qslr_date').IsNull then
-    begin
-      lblQSLRcvdDate.Caption := dmData.qQSOBefore.FieldByName('qslr_date').AsString+' rcvd QSL';
-      lblQSLRcvdDate.Visible := True
-    end;
-     if not dmData.qCQRLOG.FieldByName('eqsl_qslrdate').IsNull then
-    begin
-      lblQSLRcvdDate.Caption := dmData.qCQRLOG.FieldByName('eqsl_qslrdate').AsString+' rcvd eQSL';
-      lbleQslRcvdDate.Visible := True
-    end;
+          QSLcfm := dmData.qQSOBefore.FieldByName('qslr_date').AsString + '  '+
+                    dmData.qQSOBefore.FieldByName('band').AsString +'  QSL rcvd';
+    if not dmData.qQSOBefore.FieldByName('eqsl_qslrdate').IsNull then
+          eQSLcfm := dmData.qQSOBefore.FieldByName('eqsl_qslrdate').AsString + '  '+
+                     dmData.qQSOBefore.FieldByName('band').AsString +'  eQSL rcvd';
+
     dmSatellite.GetListOfSatellites(cmbSatellite, dmData.qQSOBefore.FieldByName('satellite').AsString);
     dmSatellite.GetListOfPropModes(cmbPropagation, dmData.qQSOBefore.FieldByName('prop_mode').AsString);
     edtRXFreq.Text := FloatToStr(dmData.qQSOBefore.FieldByName('rxfreq').AsFloat);
@@ -6538,21 +6546,17 @@ begin
     edtContestSerialReceived.Text := dmData.qCQRLOG.FieldByName('srx').AsString;
     edtContestExchangeMessageSent.Text := dmData.qCQRLOG.FieldByName('stx_string').AsString;
     edtContestExchangeMessageReceived.Text := dmData.qCQRLOG.FieldByName('srx_string').AsString;
+
     if lotw_qslr = 'L' then
-    begin
-      lblCfmLoTW.Caption := dmData.qQSOBefore.FieldByName('lotw_qslrdate').AsString+ ' Cfmd by LoTW';
-      lblCfmLoTW.Visible := True
-    end;
-    if not dmData.qQSOBefore.FieldByName('qslr_date').IsNull then
-    begin
-      lblQSLRcvdDate.Caption := dmData.qQSOBefore.FieldByName('qslr_date').AsString+' rcvd QSL';
-      lblQSLRcvdDate.Visible := True
-    end;
-     if not dmData.qCQRLOG.FieldByName('eqsl_qslrdate').IsNull then
-    begin
-      lblQSLRcvdDate.Caption := dmData.qCQRLOG.FieldByName('eqsl_qslrdate').AsString+' rcvd eQSL';
-      lbleQslRcvdDate.Visible := True
-    end;
+           LoTWcfm := dmData.qCQRLOG.FieldByName('lotw_qslrdate').AsString + '  '+
+                      dmData.qCQRLOG.FieldByName('band').AsString +'  LoTW cfmd' ;
+    if not dmData.qCQRLOG.FieldByName('qslr_date').IsNull then
+           QSLcfm := dmData.qCQRLOG.FieldByName('qslr_date').AsString + '  '+
+                     dmData.qCQRLOG.FieldByName('band').AsString +'  QSL rcvd ';
+    if not dmData.qCQRLOG.FieldByName('eqsl_qslrdate').IsNull then
+      eQSLcfm := dmData.qCQRLOG.FieldByName('eqsl_qslrdate').AsString + '  '+
+                 dmData.qCQRLOG.FieldByName('band').AsString +'  eQSL rcvd';
+
     dmSatellite.GetListOfSatellites(cmbSatellite, dmData.qCQRLOG.FieldByName('satellite').AsString);
     dmSatellite.GetListOfPropModes(cmbPropagation, dmData.qCQRLOG.FieldByName('prop_mode').AsString);
     edtRXFreq.Text := FloatToStr(dmData.qCQRLOG.FieldByName('rxfreq').AsFloat);
@@ -6812,14 +6816,18 @@ procedure TfrmNewQSO.SetEditLabel;
 begin
   lblCall.Caption    := 'Call (edit mode):';
   lblCall.Font.Color := clRed;
-  Caption := dmUtils.GetNewQSOCaption('Edit QSO')
+  Caption := dmUtils.GetNewQSOCaption('Edit QSO');
+  OffLnBeforeEdit:=cbOffline.Checked;
+  cbOffline.Checked :=true;
 end;
 
 procedure TfrmNewQSO.UnsetEditLabel;
 begin
   lblCall.Caption    := 'Call:';
   lblCall.Font.Color := clDefault;
-  Caption := dmUtils.GetNewQSOCaption('New QSO')
+  Caption := dmUtils.GetNewQSOCaption('New QSO');
+  cbOffline.Checked :=OffLnBeforeEdit;
+  OffLnBeforeEdit:=cbOffline.Checked;
 end;
 
 procedure TfrmNewQSO.CheckCallsignClub;
