@@ -114,7 +114,7 @@ begin
     Writeln(f, '<PROGRAMVERSION:',Length(cVERSION),'>',cVERSION);
     Writeln(f);
     Writeln(f,dmUtils.StringToADIF('<EQSL_USER',cqrini.ReadString('LoTW','eQSLName','')));
-    Writeln(f,dmUtils.StringToADIF('<EQSL_PSWD',dmUtils.EncodeURLData(cqrini.ReadString('LoTW','eQSLPass',''))));
+    Writeln(f,dmUtils.StringToADIF('<EQSL_PSWD',cqrini.ReadString('LoTW','eQSLPass','')));
     Writeln(f,'<EOH>');
     while not dmData.Q.Eof do
     begin
