@@ -1356,7 +1356,7 @@ begin
     cmbProfiles.Text := dmData.GetProfileText(old_prof)
   end;
   //if cmbProfiles.Text <> '' then
-     cmbProfilesChange(nil);
+     //cmbProfilesChange(nil);
 
   if sbNewQSO.Panels[0].Text = '' then
     sbNewQSO.Panels[0].Text := cMyLoc + cqrini.ReadString('Station','LOC','');
@@ -3303,7 +3303,6 @@ begin
 
   dmData.SaveComment(edtCall.Text,mComment.Text);
 
-  myloc := sbNewQSO.Panels[0].Text;
   myloc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
   if NOT dmUtils.IsLocOK(myloc) then
     myloc := '';
@@ -5804,7 +5803,8 @@ begin
               if ModalResult = mrOk then
               begin
                 sbNewQSO.Panels[0].Text := cMyLoc + edtLocator.Text;
-                cqrini.WriteString('Station','LOC',edtLocator.Text)
+                // We don't want the temporary locator to be saved permanently
+                // cqrini.WriteString('Station','LOC',edtLocator.Text)
               end;
             finally
               Free;
