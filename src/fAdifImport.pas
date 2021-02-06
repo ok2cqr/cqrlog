@@ -92,6 +92,7 @@ type
   TfrmAdifImport = class(TForm)
     btnClose: TButton;
     btnImport: TButton;
+    chkOverrideLocator: TCheckBox;
     chkRemember: TCheckBox;
     chkFilterDateRange: TCheckBox;
     chkLotOfQSO: TCheckBox;
@@ -366,7 +367,7 @@ begin
   if (d.st>0) and (d.CALL <> '') and (d.QSO_DATE <> '') then
   begin
     //filling and optimize data in variable d
-    if not dmUtils.IsLocOK(d.MY_GRIDSQUARE) then
+    if (not dmUtils.IsLocOK(d.MY_GRIDSQUARE)) or chkOverrideLocator.Checked then
       d.MY_GRIDSQUARE := FMyLoc;
     d.CALL := UpperCase(d.CALL);
     if (d.MODE = 'USB') or (d.MODE ='LSB') then
@@ -755,7 +756,12 @@ begin
   lblComplete.Visible := False;
   GlobalProfile := dmData.GetNRFromProfile(cmbProfiles.Text);
   FMyPower := cqrini.ReadString('NewQSO', 'PWR', '5 W');
-  FMyLoc   := cqrini.ReadString('Station', 'LOC', '');
+  // Read locator from selected profile
+  FMyLoc   := dmData.GetMyLocFromProfile(cmbProfiles.Text);
+  // If that failed use default configured locator
+  if not dmUtils.IsLocOK(FMyLoc) then
+     FMyLoc   := cqrini.ReadString('Station', 'LOC', '');
+  if dmData.DebugLevel >=1 then WriteLn('Using '+FMyLoc+' as locator for imports');
   RecNR := 0;
   WrongRecNr := 0;
   FFilteredOutRecNr := 0;
