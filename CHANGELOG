@@ -5,7 +5,11 @@ Legend:
 --------------------
 
 2.5.2
-  + some contest window improvements (showing DXCC, WAZ, ITU, continent)	
+  # some code refactoring
+  + some contest window improvements (showing DXCC, WAZ, ITU, continent)
+  + FST4 mode support added (Saku, OH1KH)
+  + user can change the locator to use in ADIF import (Florian, DF2ET)
+  - eQSL upload fixes (Saku, OH1KH)	
   - ADIF import duplicate check fixed, form layout fixed (Saku, OH1KH)
   - New QSO window layout fixes (Saku, OH1KH)
 
