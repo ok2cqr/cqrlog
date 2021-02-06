@@ -249,7 +249,7 @@ begin
           mode :=  cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
         end;
     end;
-    writeln('-----------------mode',mode);
+
     //Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
   finally
     LeaveCriticalsection(csDX)
