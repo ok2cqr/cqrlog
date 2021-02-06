@@ -132,7 +132,7 @@ procedure TfrmQTHProfiles.btnDeleteClick(Sender: TObject);
 begin
   if dmQTHProfile.ProfileInUse(dmData.qProfiles.Fields[1].AsString) then
   begin
-    Application.MessageBox('This profiles is used by QSOs and cannot be deleted.','Information ...', mb_OK + mb_IconInformation);
+    Application.MessageBox('This profile is used by QSOs and can not be deleted.','Information ...', mb_OK + mb_IconInformation);
     exit;
   end;
 

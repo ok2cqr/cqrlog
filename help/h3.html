@@ -54,6 +54,12 @@
     <img src="img/h41.png" border="0"><br><br>
     If you import a huge file, you will see a progress bar, however import of a small file
     is so fast that you never notice the progress indicator.<br><br>
+    If the ADIF file contains a grid locator (tag MY_GRIDSQUARE) that will be used upon import.
+    In the case that this is not present the grid locator from the selected profile will be used.
+    If also that is absent or incorret the default locator from the config will be used.
+    However the user can choose to override a MY_GRIDSQUARE from ADIF file by selecting the checkbox.
+    In this case MY_GRIDSQUARE from the ADIF file is overriden by the locator from the selected profile 
+    or if no profile is selected the default locator from the config is used.<br><br>
     <img src="img/h42.png" border="0"><br><br>
     The previous window now shows the import completion, the number of imported records and
     the number of errors. If the ADIF file contains incorrect entries, they will be stored
