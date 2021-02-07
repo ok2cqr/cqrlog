@@ -420,8 +420,12 @@ begin
     d.IOTA  := UpperCase(d.IOTA);
     d.NAME  := Copy(d.NAME, 1 ,40);
     d.QTH   := Copy(d.QTH, 1, 60);
-    d.DARC_DOK := ReplaceRegExpr('Ø', d.DARC_DOK, '0', True);
-    d.DARC_DOK := LeftStr(Uppercase(ReplaceRegExpr('[^a-zA-Z0-9]',d.DARC_DOK, '', True)), 12);
+    //workaround for 'TRegExpr exec: empty input string' error in fpc compiler
+    if (trim(d.DARC_DOK) <> '') then
+    begin
+      d.DARC_DOK := ReplaceRegExpr('Ø', d.DARC_DOK, '0', True);
+      d.DARC_DOK := LeftStr(Uppercase(ReplaceRegExpr('[^a-zA-Z0-9]',d.DARC_DOK, '', True)), 12);
+    end;
 
     d.QSL_VIA := UpperCase(d.QSL_VIA);
     if Pos('QSL VIA',d.QSL_VIA) > 0 then
