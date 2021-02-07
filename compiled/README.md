@@ -102,6 +102,8 @@ I have tested this script many times while writing it. How ever it may fail with
 
 So you USE IT ON YOUR OWN RISK !
 
+Here is a video showing update in use: https://www.youtube.com/watch?v=Jt_D5sICJVo
+
 Other way to update is to do it manually as follows:
 
 ## -------------------MANUAL-INSTALL--------------------
