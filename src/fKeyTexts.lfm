@@ -1,11 +1,10 @@
 object frmKeyTexts: TfrmKeyTexts
-  Left = 451
+  Left = 371
   Height = 625
-  Top = 45
+  Top = 10
   Width = 594
   HelpType = htKeyword
   HelpKeyword = 'help/h26.html'
-  ActiveControl = pgCWTexts
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'CW Messages'
@@ -119,8 +118,10 @@ object frmKeyTexts: TfrmKeyTexts
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.4.0'
-  object Panel1: TPanel
+  LCLVersion = '2.0.8.0'
+  object pnlControl: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideBottom.Control = Owner
     Left = 0
     Height = 34
     Top = 591
@@ -131,7 +132,7 @@ object frmKeyTexts: TfrmKeyTexts
     ClientWidth = 594
     TabOrder = 0
     object btnOK: TButton
-      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Control = pnlControl
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = btnHelp
       Left = 149
@@ -145,9 +146,9 @@ object frmKeyTexts: TfrmKeyTexts
       TabOrder = 0
     end
     object btnHelp: TButton
-      AnchorSideLeft.Control = Panel1
+      AnchorSideLeft.Control = pnlControl
       AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Control = pnlControl
       AnchorSideTop.Side = asrCenter
       Left = 260
       Height = 25
@@ -160,7 +161,7 @@ object frmKeyTexts: TfrmKeyTexts
     object btnCancel: TButton
       AnchorSideLeft.Control = btnHelp
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Control = pnlControl
       AnchorSideTop.Side = asrCenter
       Left = 371
       Height = 25
@@ -172,897 +173,715 @@ object frmKeyTexts: TfrmKeyTexts
       TabOrder = 2
     end
   end
-  object pgCWTexts: TPageControl
+  object pnlMain: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = pnlControl
     Left = 0
     Height = 591
     Top = 0
     Width = 594
-    ActivePage = tabRunMode
-    Align = alClient
-    TabIndex = 0
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ClientHeight = 591
+    ClientWidth = 594
     TabOrder = 1
-    object tabRunMode: TTabSheet
-      Caption = 'RUN'
-      ClientHeight = 560
-      ClientWidth = 584
-      object GroupBox1: TGroupBox
-        AnchorSideLeft.Control = tabRunMode
-        AnchorSideTop.Control = tabRunMode
-        Left = 6
-        Height = 88
-        Top = 6
-        Width = 273
-        BorderSpacing.Left = 6
-        BorderSpacing.Top = 6
-        Caption = ' F1 '
-        ClientHeight = 70
-        ClientWidth = 271
+    object GroupBox1: TGroupBox
+      AnchorSideLeft.Control = pnlMain
+      AnchorSideTop.Control = pnlMain
+      Left = 7
+      Height = 88
+      Top = 7
+      Width = 273
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 6
+      Caption = ' F1 '
+      ClientHeight = 70
+      ClientWidth = 271
+      TabOrder = 0
+      object Label1: TLabel
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = edtCapF1
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label2: TLabel
+        AnchorSideLeft.Control = Label1
+        AnchorSideTop.Control = edtF1
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF1: TEdit
+        AnchorSideLeft.Control = edtCapF1
+        AnchorSideTop.Control = edtCapF1
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
         TabOrder = 0
-        object Label1: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label2: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF1: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF1: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
       end
-      object GroupBox2: TGroupBox
-        AnchorSideLeft.Control = GroupBox1
-        AnchorSideTop.Control = GroupBox1
-        AnchorSideTop.Side = asrBottom
-        Left = 6
-        Height = 88
-        Top = 100
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F2 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 1
-        object Label3: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label4: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF2: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF2: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox3: TGroupBox
-        AnchorSideLeft.Control = GroupBox1
-        AnchorSideTop.Control = GroupBox2
-        AnchorSideTop.Side = asrBottom
-        Left = 6
-        Height = 88
-        Top = 194
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F3 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 2
-        object Label5: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label6: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF3: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF3: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox4: TGroupBox
-        AnchorSideLeft.Control = GroupBox1
-        AnchorSideTop.Control = GroupBox3
-        AnchorSideTop.Side = asrBottom
-        Left = 6
-        Height = 88
-        Top = 288
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F4 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 3
-        object Label7: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label8: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF4: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF4: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox5: TGroupBox
-        AnchorSideLeft.Control = GroupBox1
-        AnchorSideTop.Control = GroupBox4
-        AnchorSideTop.Side = asrBottom
-        Left = 6
-        Height = 88
-        Top = 382
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F5 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 4
-        object Label9: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label10: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF5: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF5: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox6: TGroupBox
-        AnchorSideLeft.Control = GroupBox1
+      object edtCapF1: TEdit
+        AnchorSideLeft.Control = Label1
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = GroupBox1
-        Left = 300
-        Height = 88
-        Top = 6
-        Width = 269
-        BorderSpacing.Left = 21
-        Caption = ' F6 '
-        ClientHeight = 70
-        ClientWidth = 267
-        TabOrder = 5
-        object Label11: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label12: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF6: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF6: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
       end
-      object GroupBox7: TGroupBox
-        AnchorSideLeft.Control = GroupBox6
-        AnchorSideTop.Control = GroupBox6
+    end
+    object GroupBox10: TGroupBox
+      AnchorSideLeft.Control = GroupBox9
+      AnchorSideTop.Control = GroupBox9
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox9
+      AnchorSideRight.Side = asrBottom
+      Left = 301
+      Height = 88
+      Top = 383
+      Width = 269
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F10 '
+      ClientHeight = 70
+      ClientWidth = 267
+      TabOrder = 1
+      object Label35: TLabel
+        AnchorSideLeft.Control = GroupBox10
+        AnchorSideTop.Control = edtCapF10
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label36: TLabel
+        AnchorSideLeft.Control = Label35
+        AnchorSideTop.Control = edtF10
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF10: TEdit
+        AnchorSideLeft.Control = edtCapF10
+        AnchorSideTop.Control = edtCapF10
         AnchorSideTop.Side = asrBottom
-        Left = 300
-        Height = 88
-        Top = 100
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F7 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 6
-        object Label13: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label14: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF7: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF7: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
       end
-      object GroupBox8: TGroupBox
-        AnchorSideLeft.Control = GroupBox6
-        AnchorSideTop.Control = GroupBox7
+      object edtCapF10: TEdit
+        AnchorSideLeft.Control = Label35
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox10
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox9: TGroupBox
+      AnchorSideLeft.Control = GroupBox8
+      AnchorSideTop.Control = GroupBox8
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox8
+      AnchorSideRight.Side = asrBottom
+      Left = 301
+      Height = 88
+      Top = 289
+      Width = 269
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F9 '
+      ClientHeight = 70
+      ClientWidth = 267
+      TabOrder = 2
+      object Label33: TLabel
+        AnchorSideLeft.Control = GroupBox9
+        AnchorSideTop.Control = edtCapF9
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label34: TLabel
+        AnchorSideLeft.Control = Label33
+        AnchorSideTop.Control = edtF9
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF9: TEdit
+        AnchorSideLeft.Control = edtCapF9
+        AnchorSideTop.Control = edtCapF9
         AnchorSideTop.Side = asrBottom
-        Left = 300
-        Height = 88
-        Top = 194
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F8 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 7
-        object Label15: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label16: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF8: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF8: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
       end
-      object GroupBox17: TGroupBox
-        AnchorSideLeft.Control = GroupBox6
+      object edtCapF9: TEdit
+        AnchorSideLeft.Control = Label33
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox9
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox8: TGroupBox
+      AnchorSideLeft.Control = GroupBox7
+      AnchorSideTop.Control = GroupBox7
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox7
+      AnchorSideRight.Side = asrBottom
+      Left = 301
+      Height = 88
+      Top = 195
+      Width = 269
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F8 '
+      ClientHeight = 70
+      ClientWidth = 267
+      TabOrder = 3
+      object Label15: TLabel
+        AnchorSideLeft.Control = GroupBox8
+        AnchorSideTop.Control = edtCapF8
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label16: TLabel
+        AnchorSideLeft.Control = Label15
+        AnchorSideTop.Control = edtF8
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF8: TEdit
+        AnchorSideLeft.Control = edtCapF8
+        AnchorSideTop.Control = edtCapF8
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF8: TEdit
+        AnchorSideLeft.Control = Label15
+        AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = GroupBox8
-        AnchorSideTop.Side = asrBottom
-        Left = 300
-        Height = 88
-        Top = 288
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F9 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 8
-        object Label33: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label34: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF9: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF9: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
       end
-      object GroupBox18: TGroupBox
+    end
+    object GroupBox7: TGroupBox
+      AnchorSideLeft.Control = GroupBox6
+      AnchorSideTop.Control = GroupBox6
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox6
+      AnchorSideRight.Side = asrBottom
+      Left = 301
+      Height = 88
+      Top = 101
+      Width = 269
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F7 '
+      ClientHeight = 70
+      ClientWidth = 267
+      TabOrder = 4
+      object Label13: TLabel
+        AnchorSideLeft.Control = GroupBox7
+        AnchorSideTop.Control = edtCapF7
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label14: TLabel
+        AnchorSideLeft.Control = Label13
+        AnchorSideTop.Control = edtF7
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF7: TEdit
+        AnchorSideLeft.Control = edtCapF7
+        AnchorSideTop.Control = edtCapF7
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF7: TEdit
+        AnchorSideLeft.Control = Label13
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox7
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox6: TGroupBox
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = GroupBox1
+      Left = 301
+      Height = 88
+      Top = 7
+      Width = 269
+      BorderSpacing.Left = 21
+      Caption = ' F6 '
+      ClientHeight = 70
+      ClientWidth = 267
+      TabOrder = 5
+      object Label11: TLabel
         AnchorSideLeft.Control = GroupBox6
-        AnchorSideTop.Control = GroupBox17
-        AnchorSideTop.Side = asrBottom
-        Left = 300
-        Height = 88
-        Top = 382
-        Width = 273
-        BorderSpacing.Top = 6
-        Caption = ' F10 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 9
-        object Label35: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label36: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtF10: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtCapF10: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
+        AnchorSideTop.Control = edtCapF6
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
       end
-      object rgEnter: TRadioGroup
-        AnchorSideLeft.Control = tabRunMode
-        AnchorSideLeft.Side = asrCenter
+      object Label12: TLabel
+        AnchorSideLeft.Control = Label11
+        AnchorSideTop.Control = edtF6
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF6: TEdit
+        AnchorSideLeft.Control = edtCapF6
+        AnchorSideTop.Control = edtCapF6
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF6: TEdit
+        AnchorSideLeft.Control = Label11
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox6
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox5: TGroupBox
+      AnchorSideLeft.Control = GroupBox4
+      AnchorSideTop.Control = GroupBox4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox4
+      AnchorSideRight.Side = asrBottom
+      Left = 7
+      Height = 88
+      Top = 383
+      Width = 273
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F5 '
+      ClientHeight = 70
+      ClientWidth = 271
+      TabOrder = 6
+      object Label9: TLabel
+        AnchorSideLeft.Control = GroupBox5
+        AnchorSideTop.Control = edtCapF5
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label10: TLabel
+        AnchorSideLeft.Control = Label9
+        AnchorSideTop.Control = edtF5
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF5: TEdit
+        AnchorSideLeft.Control = edtCapF5
+        AnchorSideTop.Control = edtCapF5
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF5: TEdit
+        AnchorSideLeft.Control = Label9
+        AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = GroupBox5
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox4: TGroupBox
+      AnchorSideLeft.Control = GroupBox3
+      AnchorSideTop.Control = GroupBox3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox3
+      AnchorSideRight.Side = asrBottom
+      Left = 7
+      Height = 88
+      Top = 289
+      Width = 273
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F4 '
+      ClientHeight = 70
+      ClientWidth = 271
+      TabOrder = 7
+      object Label7: TLabel
+        AnchorSideLeft.Control = GroupBox4
+        AnchorSideTop.Control = edtCapF4
+        Left = 12
+        Height = 15
+        Top = 0
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label8: TLabel
+        AnchorSideLeft.Control = Label7
+        AnchorSideTop.Control = edtF4
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF4: TEdit
+        AnchorSideLeft.Control = edtCapF4
+        AnchorSideTop.Control = edtCapF4
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF4: TEdit
+        AnchorSideLeft.Control = Label7
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox4
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideTop.Control = GroupBox2
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 7
+      Height = 88
+      Top = 195
+      Width = 273
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F3 '
+      ClientHeight = 70
+      ClientWidth = 271
+      TabOrder = 8
+      object Label5: TLabel
+        AnchorSideLeft.Control = GroupBox3
+        AnchorSideTop.Control = edtCapF3
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label6: TLabel
+        AnchorSideLeft.Control = Label5
+        AnchorSideTop.Control = edtF3
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF3: TEdit
+        AnchorSideLeft.Control = edtCapF3
+        AnchorSideTop.Control = edtCapF3
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF3: TEdit
+        AnchorSideLeft.Control = Label5
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox3
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object GroupBox2: TGroupBox
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 7
+      Height = 88
+      Top = 101
+      Width = 273
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = ' F2 '
+      ClientHeight = 70
+      ClientWidth = 271
+      TabOrder = 9
+      object Label3: TLabel
+        AnchorSideLeft.Control = GroupBox2
+        AnchorSideTop.Control = edtCapF2
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 9
+        Width = 58
+        BorderSpacing.Left = 12
+        Caption = 'Caption: '
+        ParentColor = False
+      end
+      object Label4: TLabel
+        AnchorSideLeft.Control = Label3
+        AnchorSideTop.Control = edtF2
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 15
+        Top = 42
+        Width = 44
+        Caption = 'Macro:'
+        ParentColor = False
+      end
+      object edtF2: TEdit
+        AnchorSideLeft.Control = edtCapF2
+        AnchorSideTop.Control = edtCapF2
+        AnchorSideTop.Side = asrBottom
+        Left = 82
+        Height = 33
+        Top = 33
+        Width = 176
+        TabOrder = 0
+      end
+      object edtCapF2: TEdit
+        AnchorSideLeft.Control = Label3
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = GroupBox2
+        Left = 82
+        Height = 33
+        Top = 0
+        Width = 88
+        BorderSpacing.Left = 12
+        TabOrder = 1
+      end
+    end
+    object rgEnter: TRadioGroup
+      AnchorSideLeft.Control = GroupBox5
+      AnchorSideTop.Control = GroupBox5
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox5
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 7
+      Height = 88
+      Top = 477
+      Width = 273
+      Anchors = [akTop, akLeft, akRight]
+      AutoFill = True
+      BorderSpacing.Top = 6
+      Caption = 'When "Memory keys" is active ENTER'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 70
+      ClientWidth = 271
+      Items.Strings = (
+        'repeats last clicked (focused) memory '
+        'is ignored'
+        'saves qso'
+      )
+      TabOrder = 10
+    end
+    object GroupBox11: TGroupBox
+      AnchorSideLeft.Control = GroupBox10
+      AnchorSideTop.Control = GroupBox10
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox10
+      AnchorSideRight.Side = asrBottom
+      Left = 301
+      Height = 88
+      Top = 477
+      Width = 269
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 6
+      Caption = 'CW Messages'
+      ClientHeight = 70
+      ClientWidth = 267
+      TabOrder = 11
+      object SaveMsg: TButton
+        AnchorSideLeft.Control = GroupBox11
+        AnchorSideLeft.Side = asrCenter
+        AnchorSideTop.Control = GroupBox11
+        AnchorSideRight.Side = asrBottom
+        Left = 89
+        Height = 26
+        Top = 6
+        Width = 88
+        BorderSpacing.Top = 6
+        Caption = 'Save'
+        OnClick = SaveMsgClick
+        TabOrder = 0
+      end
+      object LoadMsg: TButton
+        AnchorSideLeft.Control = SaveMsg
+        AnchorSideTop.Control = SaveMsg
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = tabRunMode
         AnchorSideBottom.Side = asrBottom
-        Left = 135
-        Height = 78
-        Top = 476
-        Width = 314
-        Anchors = [akTop, akLeft, akBottom]
-        AutoFill = True
-        BorderSpacing.Top = 6
-        BorderSpacing.Bottom = 6
-        Caption = 'When "Memory keys" form is active ENTER'
-        ChildSizing.LeftRightSpacing = 6
-        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-        ChildSizing.EnlargeVertical = crsHomogenousChildResize
-        ChildSizing.ShrinkHorizontal = crsScaleChilds
-        ChildSizing.ShrinkVertical = crsScaleChilds
-        ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 1
-        ClientHeight = 60
-        ClientWidth = 312
-        Items.Strings = (
-          'repeats last clicked (focused) memory '
-          'is ignored'
-          'saves qso'
-        )
-        TabOrder = 10
-      end
-    end
-    object tabSPMode: TTabSheet
-      Caption = 'S&&P'
-      ClientHeight = 560
-      ClientWidth = 584
-      object GroupBox9: TGroupBox
-        Left = 8
-        Height = 88
-        Top = 8
-        Width = 273
-        Caption = ' F1 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 0
-        object Label17: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label18: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF1: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF1: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox10: TGroupBox
-        Left = 8
-        Height = 88
-        Top = 104
-        Width = 273
-        Caption = ' F2 '
-        ClientHeight = 70
-        ClientWidth = 271
+        Left = 89
+        Height = 26
+        Top = 35
+        Width = 88
+        BorderSpacing.Top = 3
+        Caption = 'Load'
+        OnClick = LoadMsgClick
         TabOrder = 1
-        object Label19: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label20: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF2: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF2: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox11: TGroupBox
-        Left = 8
-        Height = 88
-        Top = 200
-        Width = 273
-        Caption = ' F3 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 2
-        object Label21: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label22: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF3: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF3: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox12: TGroupBox
-        Left = 8
-        Height = 88
-        Top = 296
-        Width = 273
-        Caption = ' F4 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 3
-        object Label23: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label24: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF4: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF4: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox13: TGroupBox
-        Left = 8
-        Height = 88
-        Top = 392
-        Width = 273
-        Caption = ' F5 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 4
-        object Label25: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label26: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF5: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF5: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox14: TGroupBox
-        Left = 304
-        Height = 88
-        Top = 8
-        Width = 273
-        Caption = ' F6 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 5
-        object Label27: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label28: TLabel
-          Left = 62
-          Height = 17
-          Top = 119
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF6: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF6: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox15: TGroupBox
-        Left = 304
-        Height = 88
-        Top = 104
-        Width = 273
-        Caption = ' F7 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 6
-        object Label29: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label30: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF7: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF7: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox16: TGroupBox
-        Left = 304
-        Height = 88
-        Top = 200
-        Width = 273
-        Caption = ' F8 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 7
-        object Label31: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label32: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF8: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF8: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox19: TGroupBox
-        Left = 304
-        Height = 88
-        Top = 296
-        Width = 273
-        Caption = ' F9 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 8
-        object Label37: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label38: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF9: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF9: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
-      end
-      object GroupBox20: TGroupBox
-        Left = 304
-        Height = 88
-        Top = 392
-        Width = 273
-        Caption = ' F10 '
-        ClientHeight = 70
-        ClientWidth = 271
-        TabOrder = 9
-        object Label39: TLabel
-          Left = 14
-          Height = 17
-          Top = 7
-          Width = 58
-          Caption = 'Caption: '
-          ParentColor = False
-        end
-        object Label40: TLabel
-          Left = 14
-          Height = 17
-          Top = 39
-          Width = 44
-          Caption = 'Macro:'
-          ParentColor = False
-        end
-        object edtSPF10: TEdit
-          Left = 78
-          Height = 34
-          Top = 31
-          Width = 176
-          TabOrder = 0
-        end
-        object edtSPCapF10: TEdit
-          Left = 78
-          Height = 34
-          Top = 0
-          Width = 88
-          TabOrder = 1
-        end
       end
     end
+  end
+  object OpenDialog1: TOpenDialog
+    Title = 'Open CW Messages'
+    DefaultExt = '.cwm'
+    Filter = 'CW memory|*.cwm;*.CWM|All files|*.*'
+    Options = [ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
+    left = 472
+    top = 576
+  end
+  object SaveDialog1: TSaveDialog
+    Title = 'Save CW messages'
+    DefaultExt = '.cwm'
+    Filter = 'CW memory|*.cwm;*.CWM|All files|*.*'
+    Options = [ofOverwritePrompt, ofExtensionDifferent, ofPathMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
+    left = 544
+    top = 576
   end
 end
