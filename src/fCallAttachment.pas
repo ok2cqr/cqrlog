@@ -51,31 +51,17 @@ end;
 
 procedure TfrmCallAttachment.btnViewClick(Sender: TObject);
 var
-  ext : String = '';
-  prg : String = '';
-  dir : String = '';
+  CurrentDir : String = '';
 begin
   if flAttach.FileName = '' then exit;
-  dir := GetCurrentDir;
+
+  CurrentDir := GetCurrentDir;
   try
     SetCurrentDir(flAttach.Directory);
-    ext := LowerCase(ExtractFileExt(flAttach.FileName));
-    if ext = '.pdf' then
-      prg := cqrini.ReadString('ExtView','pdf','evince')
-    else if ext = '.txt' then
-      prg := cqrini.ReadString('ExtView','txt','gedit')
-    else if ((ext = '.html') or (ext = '.htm')) then
-      prg := cqrini.ReadString('ExtView','html',dmUtils.MyDefaultBrowser)
-    else
-      prg := cqrini.ReadString('ExtView','img','eog');
-    if prg = '' then
-      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser) +
-                             ' ' + flAttach.FileName)
-    else
-      dmUtils.RunOnBackgroud(prg + ' ' + flAttach.FileName)
+    dmUtils.RunOnBackgroud('/usr/bin/xdg-open' + ' "' + flAttach.FileName + '"');
   finally
-    SetCurrentDir(dir)
-  end
+    SetCurrentDir(CurrentDir)
+  end;
 end;
 
 procedure TfrmCallAttachment.flAttachDblClick(Sender: TObject);

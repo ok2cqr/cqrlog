@@ -217,7 +217,7 @@ begin
 
   if fil_AllowOnlyCallReg then
    begin
-   if (fil_AllowOnlyCallRegValue='') or ( dxstn='') then
+   if (trim(fil_AllowOnlyCallRegValue)='') or (trim(dxstn)='') then
     begin    // do not allow empty regexp
       if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station or allowed callsigns - empty ');
       exit

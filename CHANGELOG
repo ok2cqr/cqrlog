@@ -12,6 +12,8 @@ Legend:
   - eQSL upload fixes (Saku, OH1KH)	
   - ADIF import duplicate check fixed, form layout fixed (Saku, OH1KH)
   - New QSO window layout fixes (Saku, OH1KH)
+  - workaround for 'TRegExpr exec: empty input string' error in fpc compiler on arm64
+  - xdg-open is used in Call extra data window to open open the attachments
 
 2.5.1 (2021-01-24)
   - Winkeyer didn't work (Saku, OH1KH)
