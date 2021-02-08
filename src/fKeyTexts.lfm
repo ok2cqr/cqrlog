@@ -872,7 +872,7 @@ object frmKeyTexts: TfrmKeyTexts
     Title = 'Open CW Messages'
     DefaultExt = '.cwm'
     Filter = 'CW memory|*.cwm;*.CWM|All files|*.*'
-    Options = [ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
+    Options = [ofPathMustExist, ofFileMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
     left = 472
     top = 576
   end
@@ -880,7 +880,6 @@ object frmKeyTexts: TfrmKeyTexts
     Title = 'Save CW messages'
     DefaultExt = '.cwm'
     Filter = 'CW memory|*.cwm;*.CWM|All files|*.*'
-    Options = [ofOverwritePrompt, ofExtensionDifferent, ofPathMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
     left = 544
     top = 576
   end

@@ -128,7 +128,7 @@ end;
 procedure TfrmKeyTexts.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
-  dmUtils.SaveWindowPos(frmKeyTexts)
+  dmUtils.SaveWindowPos(frmKeyTexts);
 end;
 
 procedure TfrmKeyTexts.btnHelpClick(Sender: TObject);
@@ -167,49 +167,77 @@ begin
 end;
 procedure TfrmKeyTexts.LoadMsgClick(Sender: TObject);
 var
-  section : String = '';
-  CwM  : TMemIniFile;
+  section     : String = '';
+  CWM_file    : String = '';
+  CwM         : TMemIniFile;
 begin
  OpenDialog1.InitialDir:= dmData.HomeDir;
- if OpenDialog1.Execute then
-  begin
-  CWM := TMemIniFile.Create(OpenDialog1.Filename);
-  section := 'CW';
-  edtF1.text     := CWM.ReadString(section,'F1','cq cq de %mc %mc pse K');
-  edtF2.text     := CWM.ReadString(section,'F2','');
-  edtF3.text     := CWM.ReadString(section,'F3','');
-  edtF4.text     := CWM.ReadString(section,'F4','');
-  edtF5.text     := CWM.ReadString(section,'F5','');
-  edtF6.text     := CWM.ReadString(section,'F6','');
-  edtF7.text     := CWM.ReadString(section,'F7','');
-  edtF8.text     := CWM.ReadString(section,'F8','');
-  edtF9.text     := CWM.ReadString(section,'F9','');
-  edtF10.text    := CWM.ReadString(section,'F10','');
-  edtCapF1.text  := CWM.ReadString(section,'CapF1','F1 - CQ');
-  edtCapF2.text  := CWM.ReadString(section,'CapF2','F2');
-  edtCapF3.text  := CWM.ReadString(section,'CapF3','F3');
-  edtCapF4.text  := CWM.ReadString(section,'CapF4','F4');
-  edtCapF5.text  := CWM.ReadString(section,'CapF5','F5');
-  edtCapF6.text  := CWM.ReadString(section,'CapF6','F6');
-  edtCapF7.text  := CWM.ReadString(section,'CapF7','F7');
-  edtCapF8.text  := CWM.ReadString(section,'CapF8','F8');
-  edtCapF9.text  := CWM.ReadString(section,'CapF9','F9');
-  edtCapF10.text := CWM.ReadString(section,'CapF10','F10');
-  rgEnter.ItemIndex := CWM.ReadInteger(section,'EnterFunction',1);
-  FreeAndNil(CWM);
-  end;
+ try
+  if OpenDialog1.Execute then
+    CWM_file := OpenDialog1.Filename;
+ finally
+ end;
+
+ if FileExists(CWM_file) then
+   CWM := TMemIniFile.Create(CWM_file)
+  else
+    Begin
+     ShowMessage('Error opening file!');
+     exit;
+    end;
+
+ try
+   begin
+    section := 'CW';
+    edtF1.text     := CWM.ReadString(section,'F1','cq cq de %mc %mc pse K');
+    edtF2.text     := CWM.ReadString(section,'F2','');
+    edtF3.text     := CWM.ReadString(section,'F3','');
+    edtF4.text     := CWM.ReadString(section,'F4','');
+    edtF5.text     := CWM.ReadString(section,'F5','');
+    edtF6.text     := CWM.ReadString(section,'F6','');
+    edtF7.text     := CWM.ReadString(section,'F7','');
+    edtF8.text     := CWM.ReadString(section,'F8','');
+    edtF9.text     := CWM.ReadString(section,'F9','');
+    edtF10.text    := CWM.ReadString(section,'F10','');
+    edtCapF1.text  := CWM.ReadString(section,'CapF1','F1 - CQ');
+    edtCapF2.text  := CWM.ReadString(section,'CapF2','F2');
+    edtCapF3.text  := CWM.ReadString(section,'CapF3','F3');
+    edtCapF4.text  := CWM.ReadString(section,'CapF4','F4');
+    edtCapF5.text  := CWM.ReadString(section,'CapF5','F5');
+    edtCapF6.text  := CWM.ReadString(section,'CapF6','F6');
+    edtCapF7.text  := CWM.ReadString(section,'CapF7','F7');
+    edtCapF8.text  := CWM.ReadString(section,'CapF8','F8');
+    edtCapF9.text  := CWM.ReadString(section,'CapF9','F9');
+    edtCapF10.text := CWM.ReadString(section,'CapF10','F10');
+    rgEnter.ItemIndex := CWM.ReadInteger(section,'EnterFunction',1);
+   end;
+ finally
+    FreeAndNil(CWM);
+ end;
 end;
 
 procedure TfrmKeyTexts.SaveMsgClick(Sender: TObject);
 var
-  section : String = '';
+  section     : String = '';
+  CWM_file    : String = '';
   CwM  : TMemIniFile;
- begin
+begin
   SaveDialog1.InitialDir:= dmData.HomeDir;
+ try
   if SaveDialog1.Execute then
+    CWM_file := SaveDialog1.Filename;
+ finally
+ end;
+ if DirectoryExists(ExtractFilePath(CWM_file)) then
+      CWM := TMemIniFile.Create(CWM_file)
+    else
+      Begin
+       ShowMessage('Error creating file!');
+       exit;
+      end;
+
+ try
      begin
-      CWM := TMemIniFile.Create(SaveDialog1.Filename);
-      section := 'CW';
       section := 'CW';
       CWM.WriteString(section,'F1',edtF1.Text);
       CWM.WriteString(section,'F2',edtF2.Text);
@@ -233,9 +261,11 @@ var
       CWM.WriteString(section,'CapF10',edtCapF10.Text);
       CWM.WriteInteger(section,'EnterFunction',rgEnter.ItemIndex);
       CWM.UpdateFile;
-      FreeAndNil(CWM);
      end;
- end;
+  finally
+      FreeAndNil(CWM);
+  end;
+end;
 
 end.
 
