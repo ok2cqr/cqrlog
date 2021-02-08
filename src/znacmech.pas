@@ -13,14 +13,19 @@
 
   v.02 ... zvyseno max_delka_popisu=250
            zmenen typ v najdis_s2 - parametr presne slysi na 3 hodnoty.
+  v.02 ... increased max_description_length = 250
+            changed type in najdis_s2 - the parameter hears exactly 3 values.
 
   v.01 ... zacalo cislovani (po incidentu s verzemi :-) )
            najdis_s2 z nastavenym presne=true nema hledat znacky zacinajici na '='
+  v.01 ... numbering started (after the version incident :-))
+            najdis_s2 with set exactly = true does not search for tags starting with '='
 *)
 
 unit znacmech;
 
 // zakomentuj nasledujici radek, bude Ti fungovat "debug" :-P  Mti.
+//// comment next line, "debug" will work for you :-P Mti.
 //{$define nuse_ddata}
 
 
@@ -51,7 +56,7 @@ Type Tplac=array[0..Cplac] of byte;
      Pplac=^Tplac;
 
 
-const kjpvp=12; // pocet polozek v popisku
+const kjpvp=12; // pocet polozek v popisku  number of items in the label
       c_pop_misto=0;
       c_pop_zkrat=1;
       c_pop_neco1=2;
@@ -83,13 +88,18 @@ Type Tpopis=record
 
 
 
-Type Tpohash=record { protoze mi Hlozek nedal nerozbalene data, musim si popisy tridit sam ... uz sice neni pravda (predelaval jsem vstupy :-/ ), ale nicemu to tam nevadi}
+Type Tpohash=record { protoze mi Hlozek nedal nerozbalene data, musim si popisy tridit sam ... uz sice neni pravda (predelaval jsem vstupy :-/ ), ale nicemu to tam nevadi
+                    because Hlozek didn't give me unpacked data, I have to sort the descriptions myself ... it's no longer true (I remade the entries: - /), but nothing matters there }
        po:Ppopis;
        da:pointer; 
      end;
 const kolikhasulog=8;  { kolik bitu budeou mit hashe .. male cislo udela maly pocet ruznych 
 			vysledku a zdrzovat budou dlouhe retezce , velke cislo zase zpusobi 
-                        prilis velke pametove naroky. Kolem 8-10 ocekavam rozumny prumer }
+                        prilis velke pametove naroky. Kolem 8-10 ocekavam rozumny prumer
+
+                        how many bits will they have hashes .. the small number will make a small number
+                        of different ones result and will delay long chains, will cause a large number again
+                        too large memory requirements. Around 8-10 I expect a reasonable average }
       kolikhasu=(1 shl kolikhasulog)-1;
 
 Type Ppohash=^Tpohash;
@@ -98,7 +108,7 @@ Type Ppohash=^Tpohash;
 
      Tznac=record
        text:string_mdz;
-       texb:string_mdz; // pro trideni 
+       texb:string_mdz; // pro trideni  for sorting
        popi:Ppopis;
      end;
      Pznac=^Tznac;
@@ -107,8 +117,12 @@ Type Ppohash=^Tpohash;
      Pznacky=^Tznacky;
 
 
-type Tchyby=object	{ udelej si potomka, ktery prepise "hlaseni" a tam si delej co chces }
-			{ tento objekt je uplne prazdny , urceny jen k podedeni}
+type Tchyby=object	{ udelej si potomka, ktery prepise "hlaseni" a tam si delej co chces
+			 tento objekt je uplne prazdny , urceny jen k podedeni
+
+                        make a child who will rewrite "report" and do what you want there
+                        this object is completely empty, intended only for feeding }
+
        constructor	init;
        destructor	done;virtual;
        procedure	hlaseni(vzkaz,kdo:string);virtual;
@@ -118,16 +132,18 @@ type Tchyby=object	{ udelej si potomka, ktery prepise "hlaseni" a tam si delej c
 
 type Tseznam=object 
      
-	  procedure dump(pref:string); {pref - prefix nazvu souboruu}
+	  procedure dump(pref:string); {pref - prefix nazvu souboruu. file name }
 
-	  constructor init(naz:string;de:Pchyby); {naz - soubor k nacteni ; de - debouk - pokud chces dostavat hlaseni o chybach/debug, udelej si potomka Tchyby, jinak tu predavej nil }
+	  constructor init(naz:string;de:Pchyby); {naz - soubor k nacteni ; de - debouk - pokud chces dostavat hlaseni o chybach/debug, udelej si potomka Tchyby, jinak tu predavej nil
+          naz - file to                            load; de - debouk - if you want to get a bug / debug report, make a descendant of Tchyba, otherwise sell nil here }
 	  destructor  done;
 
 
-          function znacky_posledni:longint; // posledni znacka
+          function znacky_posledni:longint; // posledni znacka. last brand
 
-          function znacka_text(zn:longint):string_mdz; // vraci znack dle indexu
-          function znacka_popis(zn:longint):string_mdp; // vraci popis znacky dle indexu
+          function znacka_text(zn:longint):string_mdz; // vraci znack dle indexu. returns tags by index
+          function znacka_popis(zn:longint):string_mdp; // vraci popis znacky dle indexu. returns a description of the brand according to the index
+
           function znacka_popis_ex(zn,i:longint):string_mdp;
 
 	  function znacka_sedidatum(i:longint;var datum:string_mdd):boolean; 
@@ -136,6 +152,11 @@ type Tseznam=object
           // * - plati vzdy , ! neplati nikdy
           // samotny rok je mensi jak cele datum. (2006 < 2006/01/01)
 
+          // is the tag valid for this date?
+           // (YYYY / MM / DD - must fit exact characters or don't talk to it)
+           // * - always applies,! never pays
+           // the year itself is smaller than the whole date. (2006 <2006/01/01)
+
       function najdis_s2(var co:string_mdz;datum:string_mdd;presne:integer):longint; 
               { co - hledana znacka ; datum, kdy ma platit; 
 
@@ -143,12 +164,18 @@ type Tseznam=object
                         c_pres_kratke=1;   tak musi mit nalezena znacka stejnou delku jak "co".
                         c_pres_strikt=2;  jako kratke, ale BEZ = na zacatku.
 
+                co - the mark sought; the date when I should be paid;
+
+                 exactly: c_pres_dlouhe = 0; which can be longer than the brand found.
+                         c_pres_kratke = 1; so the mark found must be the same length as "what".
+                         c_pres_strikt = 2; as short, but WITHOUT = at the beginning.
               }
 
 
-	private // a sem ani necum :-) ... jen pro silne povahy
+	private // a sem ani necum :-) ... jen pro silne povahy. and I'm not even here :-) ... only for strong characters
+
 	  popisy:Ppopisy;
-	  popisy_posl:longint; // posledni pouzity;
+	  popisy_posl:longint; // posledni pouzity;  last used;
 	  znacky:Pznacky;
 	  znacky_posl:longint;
 
@@ -172,11 +199,16 @@ type Tseznam=object
 	  function najdihas(var s:string):Ppopis;
 	  function pridejhapopis(s:string):Ppopis;
 
-	  {nasledujici funkce vraci v "po" stejnou hodnotu jako samy}
-          {hledani nebere ohledy na "po", pouze jej nastavi ; "dalsi" pouzivaji po jako aktualni pozici}
-	  {vsechny ... pokud nenajdou pozadovane, vraci -1 }
-	  function znacka_najdikam_s(var cc1:string_mdz;var po:longint):longint; {a zjisti, kam patri "cc"}
+	  {nasledujici funkce vraci v "po" stejnou hodnotu jako samy
+          hledani nebere ohledy na "po", pouze jej nastavi ; "dalsi" pouzivaji po jako aktualni pozici
+	  vsechny ... pokud nenajdou pozadovane, vraci -1
+
+          the following functions return in "after" the same value as themselves
+           the search does not take into account "after", it only sets it; "Next" is used after as the current position
+          all ... if not found required, returns -1 }
+	  function znacka_najdikam_s(var cc1:string_mdz;var po:longint):longint; {a zjisti, kam patri "cc". and find out where "cc" belongs }
  		// string musi byt KRATSI nebo alespon stejny jak polozka v tabulce ... :-(
+                // string must be KRATSI or at least the same as the item in the table ... :-(
 	  function znacka_dalsi_s(var cc1:string_mdz;var po:longint):longint;
 
           function uznejregex2(var zn:string_mdz;izn:longint;co:char):boolean;
@@ -221,23 +253,23 @@ procedure Tseznam.debouk(aaa:string);
   end;
 
 
-function Tseznam.znacky_posledni:longint; // posledni znacka
+function Tseznam.znacky_posledni:longint; // posledni znacka  last brand
   begin
-    if not ziju then begin debouk('E02: Neziju - znacky_posledni');znacky_posledni:=-1;exit;end
+    if not ziju then begin debouk('E02: Neziju  - last marks ');znacky_posledni:=-1;exit;end
     else
      znacky_posledni:=znacky_posl;
   end;
 
-function Tseznam.znacka_text(zn:longint):string_mdz; // vraci znack dle indexu
-  begin
-    if not ziju then begin debouk('E03: Neziju - znacka_text');znacka_text:='';exit;end;
+function Tseznam.znacka_text(zn:longint):string_mdz; // vraci znack dle indexu returns tags by index
+  begin                                              // returns a description of the brand according to the index
+    if not ziju then begin debouk('E03: Neziju - mark text ');znacka_text:='';exit;end;
     if (zn>=0) and (zn<=znacky_posl) then znacka_text:=znacky^[zn]^.text
     else begin debouk('E04: znacka_text - out of range');znacka_text:='XXXXXXXX';end;
 
   end;
 function Tseznam.znacka_popis(zn:longint):string_mdp; // vraci popis znacky dle indexu
-  begin
-    if not ziju then begin debouk('E05: Neziju - znacka_popis');znacka_popis:='';exit;end;
+  begin                                               //returns a description of the brand according to the index
+    if not ziju then begin debouk('E05: Neziju - out of range');znacka_popis:='';exit;end;
     if (zn>=0) and (zn<=znacky_posl) then znacka_popis:=znacky^[zn]^.popi^.text
     else begin debouk('E06: znacka_popis - out of range');znacka_popis:='XXXXXXXX';end;
   end;
@@ -245,7 +277,7 @@ function Tseznam.znacka_popis(zn:longint):string_mdp; // vraci popis znacky dle 
 function Tseznam.znacka_popis_ex(zn,i:longint):string_mdp;
 var z,x:longint;
   begin
-    if not ziju then begin debouk('E05: Neziju - znacka_popis_ex');znacka_popis_ex:='';exit;end;
+    if not ziju then begin debouk('E05: Neziju - mark_description_ex ');znacka_popis_ex:='';exit;end;
     if (zn>=0) and (zn<=znacky_posl) and (i>=0) and (i<kjpvp) then 
       begin
         z:= znacky^[zn]^.popi^.jpo[i];if z<>1 then inc(z);
@@ -274,6 +306,13 @@ function Tseznam.znacka_sedidatum(i:longint;var datum:string_mdd):boolean;
 
  Pokud zadate jen rok, tak tento je vzdy mensi nez stejny rok s mesicem/dnem
  ... kdyby ste to chteli orypavat... taky.
+
+ the date can be one character * or! and or FULL date in the form YYYY / MM / DD
+  * ensure that the function returns ALWAYS true.
+  ! ensure that the function always returns false.
+
+  If you enter only a year, this is always less than the same year with month / day
+  ... if you want to crack it ... too.
 }
   begin
     if not ziju then begin debouk('E07: Neziju - sedidatum');znacka_sedidatum:=false;exit;end;
@@ -336,7 +375,7 @@ var z,x,c,v:longint;
     inc(popisy_posl);
     if popisy_posl>popisu_max then 
       begin 
-        debouk('E09: MISTO!!! - popisy');
+        debouk('E09: PLACE!!! - descriptions');
 	dec(popisy_posl);
 	ziju:=false;
       end
@@ -345,7 +384,7 @@ var z,x,c,v:longint;
       if nejdelsi_popis<length(po) then 
         begin
           nejdelsi_popis:=length(po);
-          if nejdelsi_popis>max_delka_popisu-2 then debouk('E13 - prekrocena delka popisu: '+po);
+          if nejdelsi_popis>max_delka_popisu-2 then debouk('E13 - recalculated length of the description : '+po);
         end;
       new(popisy^[popisy_posl]);
      
@@ -355,10 +394,10 @@ var z,x,c,v:longint;
         if po[z]='|' then begin inc(x);popisy^[popisy_posl]^.jpo[x]:=z;end;
         inc(z);
       end;
-      z:=popisy^[popisy_posl]^.jpo[x]; // ukazuju na posledni '|'
+      z:=popisy^[popisy_posl]^.jpo[x]; // ukazuju na posledni '|'   indicate the last '|'
       c:=z;
       while (c<length(po)) and (po[c]<>'=') do inc(c);
-      // c ukazuje na rovnitko (nebo na konec textu)
+      // c ukazuje na rovnitko (nebo na konec textu)  c points to an equal sign (or to the end of the text)
       if po[c]<>'=' then 
          begin 
            c:=length(po)+1;
@@ -367,7 +406,7 @@ var z,x,c,v:longint;
          end;
       v:=z;
       while (v<c) and (po[v]<>'-') do inc(v);
-      // v ukazuje na '-' nebo na '='.
+      // v ukazuje na '-' nebo na '='.   v points to '-' or '='.
       popisy^[popisy_posl]^.jpo[x+1]:=v;
       popisy^[popisy_posl]^.jpo[x+2]:=c;
       popisy^[popisy_posl]^.jpo[x+3]:=length(po)+1;
@@ -386,7 +425,7 @@ function Tseznam.pridej_znacku(zn:shortstring;po:Ppopis):Pznac;
     inc(znacky_posl);
     if znacky_posl>znacek_max then 
       begin 
-        debouk('E10: MISTO!!! - znacky');
+        debouk('E10:PLACE!!! - brands');
         pridej_znacku:=nil;
       end
     else
@@ -394,7 +433,7 @@ function Tseznam.pridej_znacku(zn:shortstring;po:Ppopis):Pznac;
         if length(zn)>nejdelsi_znacka then 
           begin  
             nejdelsi_znacka:=length(zn);
-            if length(zn)>max_delka_znacky-2 then debouk('E14 - prekrocena delka znacky: '+zn); 
+            if length(zn)>max_delka_znacky-2 then debouk('E14 -brand length exceeded: '+zn);
           end;
 	new(znacky^[znacky_posl]);
         znacky^[znacky_posl]^.text:=zn;
@@ -441,7 +480,8 @@ var z,x,c:integer;
   begin
     if not ziju then exit;
     z:=length(co);
-    while(z>1) and (co[z]<>'|') do dec(z); {z bude ukazovat na posledni '|'}
+    while(z>1) and (co[z]<>'|') do dec(z); {z bude ukazovat na posledni '|'z will point to the last '|'}
+
     aaa:=copy(co,z+1,length(co));
     c:=pos(' ',aaa);
     if c<>0 then
@@ -486,7 +526,7 @@ var z:longint;
 
 
 
-function Tseznam.znacka_najdikam_s(var cc1:string_mdz;var po:longint):longint; {a zjisti, kam patri "vec"}
+function Tseznam.znacka_najdikam_s(var cc1:string_mdz;var po:longint):longint; {a zjisti, kam patri "vec"and find out where the "thing" belongs }
 var z,x,c:longint;
     cc:string_mdz;
   begin
@@ -521,7 +561,7 @@ var lcc:longint;
     if (po<0) or (po>znacky_posl) then 
       begin
         po:=-1;
-        //znacka_dalsi_s:=po;
+        //znacka_dalsi_s:=po;  mark_next_s: = po;
       end;
     inc(po);
     cc:=string2bec(cc1);
@@ -605,6 +645,8 @@ var z:longint;
     debouk('M2: done zac');
 //    writeln('NDZ: ',nejdelsi_znacka);
 //    writeln('NDP: ',nejdelsi_popis);
+// writeln ('NDZ:', longest_tag);
+// writeln ('NDP:', longest_description);
     for z:=0 to znacky_posl-1 do if znacky^[z]<>nil then dispose(znacky^[z]); 
     for z:=0 to popisy_posl-1 do if popisy^[z]<>nil then dispose(popisy^[z]);  
 
@@ -635,7 +677,7 @@ var z,x:longint;
 
       function znacky_jevet(z1,z2:Pznac):boolean;
         begin
-          if (z1=nil) or (z2=nil) then debouk('nil - znacky_jevet');
+          if (z1=nil) or (z2=nil) then debouk('nil -brands jevet ');
           znacky_jevet:=z1^.texb>z2^.texb;
 	end;
 
@@ -709,8 +751,9 @@ var z:longint;
 //    z:=izn;while (z<length(zn)) and (zn[z]<>']') do inc(z);
 //    aaa:=copy(zn,izn+1,z-1);
     ven:=false;
-    z:=izn+1; // kde sme ve znacce (+1 -> zavorky nezeru)
-    aa:=#255; // posledni porovnany znak ... jen aby tam neco bylo.
+    z:=izn+1; // kde sme ve znacce (+1 -> zavorky nezeru)   where we are in the sign (+1 -> I don't eat zavorky)
+    aa:=#255; // posledni porovnany znak ... jen aby tam neco bylo. last character compared ... just to have something there.
+
     while (ven=false) and (zn[z]<>']') and (z<=length(zn)) do
       begin
         if zn[z]='-' then 
@@ -720,7 +763,7 @@ var z:longint;
   	    end
 	  else
    	   if (co=zn[z]) then ven:=true;
-	  aa:=zn[z]; // ulozim si posledni znak :-)
+	  aa:=zn[z]; // ulozim si posledni znak :-)  I put my last sign :-)   I put my last sign :-) And put my last sign :-)
 	inc(z);
       end;
     uznejregex2:=ven;
@@ -734,30 +777,35 @@ var z,x:longint;
     lzn,lco:longint;
   begin
     
-    z:=1;x:=1; // pozice v zn,co
+    z:=1;x:=1; // pozice v zn,co  position in zn, co
     lzn:=length(zn);
     lco:=length(co);
     // zacina to rovnitkem - zbytek musi byt stejny.
+    // starts with an equation - the rest must be the same.
     if zn[1]='=' then 
       begin pasuje:=copy(zn,2,lzn)=co;exit; end; 
 
 
     vr:=true; // presumpce neviny :-) Dokud to nevyvratim, musim tvrdit, ze pasuje...
               // obcac,pokud to prestane pasovat to shazuju exitem zrovna... tak bacha :-(
+              // presumption of innocence :-) Until I refute it, I must say that it fits ...
+               // obcac, if it stops to fit, I'm crashing the exit just ... so watch out :-(
 
    while (vr) and (z<=lzn) do
      begin
        // zacka skoncila- nasleduji libovolne znaky - tomu vyhovi cokoliv :-)
-       if z>lzn then begin {writeln('pres-z ',zn);}pasuje:=true;exit;end;  { ale asi to tu nedojde :-) - while to chyti}
+       // the end is over - I follow any characters - anything will do it :-)
+       if z>lzn then begin {writeln('pres-z ',zn);}pasuje:=true;exit;end;  { ale asi to tu nedojde :-) - while to chyti. but it probably won't happen here :-) - while it catches }
 
        // hledany text kratsi jak znacka? - tato to nebude. - exit
+       // searched text shorter as a brand? - It won't be this one. - exit
        if (x>lco) and (lzn>0) then 
          begin {writeln('pres-x ',zn);} pasuje:=false;exit; end;
 
-       // ok ... tak testujeme prvni znak
+       // ok ... tak testujeme prvni znak  // ok ... so we test the first character
        case zn[z] of
-         '#': if not( co[x] in ['0'..'9']) then begin pasuje:=false;exit;end; // cislo, ze? :-) Exit!
-         '%','?': ; // libovolny znak... hm
+         '#': if not( co[x] in ['0'..'9']) then begin pasuje:=false;exit;end; // cislo, ze? number, right?:-) Exit!
+         '%','?': ; // libovolny znak... hm  // any character ... hm
          '[': if not uznejregex2(zn,z,co[x]) then begin pasuje:=false;exit end // exit!
                else while (z<lzn) and (zn[z]<>']') do inc(z);
          else if zn[z]<>co[x] then begin pasuje:=false;exit end;
@@ -826,6 +874,12 @@ function Tseznam.najdis_s2(var co:string_mdz;datum:string_mdd;presne:integer):lo
                 presne: c_pres_dlouhe=0;   co muze byt delsi nez nalezena znacka.
                         c_pres_kratke=1;   tak musi mit nalezena znacka stejnou delku jak "co".
                         c_pres_strikt=2;  jako kratke, ale BEZ = na zacatku.
+
+               co - the mark sought; the date when I should be paid;
+
+                 exactly: c_pres_dlouhe = 0; which can be longer than the brand found.
+                         c_pres_kratke = 1; so the mark found must be the same length as "what".
+                         c_pres_strikt = 2; as short, but WITHOUT = at the beginning.
               }
 var nas1:longint;
     exa:boolean;
@@ -867,14 +921,14 @@ var nas1:longint;
              end;
   
          until not ((znacka_dalsi_s(co2,z)<>-1) and not exa)
-         else{ writeln('Nenasel')};
+         else{ writeln('He didnt find it ')};
        end;
 
 var 
     aaa,sss:string_mdz;
     lco:longint;
   begin
-    if not ziju then begin debouk('E12: Neziju - nehledam');najdis_s2:=-1;exit;end;
+    if not ziju then begin debouk('E12: Neziju - Im not looking ');najdis_s2:=-1;exit;end;
 
     {$ifndef nuse_ddata}
     if dmData.DebugLevel >=3 then
@@ -903,7 +957,8 @@ var
       zizz(aaa,sss);
      end;
 
-{ nezkousej udelat totez pro delku 3 ... :-) ... uz to tu bylo. }
+{ nezkousej udelat totez pro delku 3 ... :-) ... uz to tu bylo.
+don't try to do the same for length 3 ... :-) ... it was already here }
     najdis_s2:=nas1;  
     {$ifndef nuse_ddata}
     if dmData.DebugLevel >=3 then

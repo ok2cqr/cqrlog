@@ -426,7 +426,6 @@ begin
       d.DARC_DOK := ReplaceRegExpr('Ø', d.DARC_DOK, '0', True);
       d.DARC_DOK := LeftStr(Uppercase(ReplaceRegExpr('[^a-zA-Z0-9]',d.DARC_DOK, '', True)), 12);
     end;
-
     d.QSL_VIA := UpperCase(d.QSL_VIA);
     if Pos('QSL VIA',d.QSL_VIA) > 0 then
       d.QSL_VIA := copy(d.QSL_VIA,9,Length(d.QSL_VIA)-1);

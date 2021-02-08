@@ -4104,7 +4104,8 @@ begin
         //DL7OAP: DOK can be 'H24', 'h 24' or 'H-24', etc.
         //thats why we clean it with RegExp so only letters and figures are left
         dok := GetTagValue(m.Text, '<dok>');
-        dok := ReplaceRegExpr('[^a-zA-Z0-9]', dok, '', True); //ARegExpr, AInputStr, AReplaceStr
+        if (trim(dok) <> '') then
+           dok := ReplaceRegExpr('[^a-zA-Z0-9]', dok, '', True); //ARegExpr, AInputStr, AReplaceStr
         dok := LeftStr(UpperCase(dok),12); // now all upcase and cut to maximal length of 12 of dok field
       end
     end
