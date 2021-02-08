@@ -19,18 +19,18 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2239"/>
+      <BuildNr Value="2240"/>
       <StringTable ProductVersion="0.3.1.2026"/>
     </VersionInfo>
     <MacroValues Count="1">
-      <Macro3 Name="LCLWidgetType" Value="gtk2"/>
+      <Macro1 Name="LCLWidgetType" Value="qt5"/>
     </MacroValues>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
       <SharedMatrixOptions Count="3">
-        <Item1 ID="364409174580" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+        <Item1 ID="364409174580" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
         <Item2 ID="890734883088" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk3"/>
-        <Item3 ID="102898540782" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item3 ID="102898540782" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -105,7 +105,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="118">
+    <Units Count="119">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -877,6 +877,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit117>
+      <Unit118>
+        <Filename Value="znacmech.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit118>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

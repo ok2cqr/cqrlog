@@ -216,7 +216,12 @@ begin
   end;
 
   if fil_AllowOnlyCallReg then
-  begin
+   begin
+   if (fil_AllowOnlyCallRegValue='') or ( dxstn='') then
+    begin    // do not allow empty regexp
+      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Station or allowed callsigns - empty ');
+      exit
+    end;
     reg.Expression  := fil_AllowOnlyCallRegValue;
     reg.InputString := dxstn;
     if not reg.Exec(1) then
