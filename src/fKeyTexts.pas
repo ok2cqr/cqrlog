@@ -170,7 +170,8 @@ var
   section : String = '';
   CwM  : TMemIniFile;
 begin
-if OpenDialog1.Execute then
+ OpenDialog1.InitialDir:= dmData.HomeDir;
+ if OpenDialog1.Execute then
   begin
   CWM := TMemIniFile.Create(OpenDialog1.Filename);
   section := 'CW';
@@ -204,6 +205,7 @@ var
   section : String = '';
   CwM  : TMemIniFile;
  begin
+  SaveDialog1.InitialDir:= dmData.HomeDir;
   if SaveDialog1.Execute then
      begin
       CWM := TMemIniFile.Create(SaveDialog1.Filename);

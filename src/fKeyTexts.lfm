@@ -871,18 +871,16 @@ object frmKeyTexts: TfrmKeyTexts
   object OpenDialog1: TOpenDialog
     Title = 'Open CW Messages'
     DefaultExt = '.cwm'
-    Filter = 'CW Messages|*.cwm|All files|*.*'
-    InitialDir = 'dmData.HomeDir'
-    Options = [ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofEnableSizing, ofViewDetail]
+    Filter = 'CW memory|*.cwm;*.CWM|All files|*.*'
+    Options = [ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
     left = 472
     top = 576
   end
   object SaveDialog1: TSaveDialog
     Title = 'Save CW messages'
     DefaultExt = '.cwm'
-    Filter = '.cwm'
-    InitialDir = 'dmData.HomeDir'
-    Options = [ofOverwritePrompt, ofExtensionDifferent, ofPathMustExist, ofEnableSizing, ofViewDetail]
+    Filter = 'CW memory|*.cwm;*.CWM|All files|*.*'
+    Options = [ofOverwritePrompt, ofExtensionDifferent, ofPathMustExist, ofEnableSizing, ofForceShowHidden, ofViewDetail]
     left = 544
     top = 576
   end
