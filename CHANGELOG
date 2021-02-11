@@ -9,6 +9,7 @@ Legend:
   + some contest window improvements (showing DXCC, WAZ, ITU, continent)
   + FST4 mode support added (Saku, OH1KH)
   + user can change the locator to use in ADIF import (Florian, DF2ET)
+  + CW messages can be saved or loaded from a file (Saku, OH1KH)
   - eQSL upload fixes (Saku, OH1KH)	
   - ADIF import duplicate check fixed, form layout fixed (Saku, OH1KH)
   - New QSO window layout fixes (Saku, OH1KH)
