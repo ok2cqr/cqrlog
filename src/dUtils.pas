@@ -292,6 +292,7 @@ type
     function  MyDateTimeToStr(DateTime : TDateTime) : String;
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
     function  StdFormatLocator(loc:string):String;
+    function DoString(BytesIn:Tbytes):String;
 
 end;
 
@@ -4807,5 +4808,13 @@ Begin
       end;
      //else use default browser that is defined at program early start
 end;
-
+function TdmUtils.DoString(BytesIn:Tbytes):string;
+var
+   s:String = '';
+   i: integer;
+Begin
+     for i:=0 to length(BytesIn) do
+        s:=s+char(BytesIn[i]);
+     Result :=s;
+end;
 end.

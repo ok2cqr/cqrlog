@@ -30,7 +30,6 @@ type
                               ExContesMsg, ExDarcDok: Boolean);
     procedure ExportADIF;
     procedure ExportHTML;
-
     { private declarations }
   public
     SecondBackupPath : String;
@@ -49,6 +48,7 @@ implementation
 
 { TfrmExportProgress }
 uses dUtils, dData, uMyIni, dDXCC, uVersion, dSatellite;
+
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -541,6 +541,7 @@ begin   //TfrmExportProgress
                  Source.Fields[20].AsString, //county
                  Source.Fields[21].AsString, //award
                  Source.Fields[22].AsString, //remarks
+                 //dmUtils.DoString(Source.Fields[22].AsBytes),       //for laz 2.0.10/fpc3.2.0
                  Source.Fields[24].AsString, //dxcc
                  Source.Fields[28].AsString, //state
                  Source.Fields[23].AsString, //band
