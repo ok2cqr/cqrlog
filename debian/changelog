@@ -1,3 +1,22 @@
+cqrlog (2.5.2-1) unstable; urgency=low
+
+  * some contest window improvements
+    (showing DXCC, WAZ, ITU, continent)
+  * FST4 mode support added (Saku, OH1KH)
+  * user can change the locator to use in ADIF import
+    (Florian, DF2ET)
+  * CW messages can be saved or loaded from a file (Saku, OH1KH)
+  * eQSL upload fixes (Saku, OH1KH)
+  * ADIF import duplicate check fixed, form layout fixed
+    (Saku, OH1KH)
+  * New QSO window layout fixes (Saku, OH1KH)
+  * workaround for 'TRegExpr exec: empty input string' error
+    in fpc compiler
+  * xdg-open is used in Call extra data window to open open
+    the attachments
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Fri, 12 Feb 2021 17:20:38 +0100
+
 cqrlog (2.5.1-1) unstable; urgency=low
 
   * Winkeyer didn't work (Saku, OH1KH)
