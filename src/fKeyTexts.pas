@@ -8,6 +8,9 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, ComCtrls, iniFiles;
 
+const
+  C_INI_FILE_SECTION = 'CW';
+
 type
 
   { TfrmKeyTexts }
@@ -96,37 +99,32 @@ implementation
 uses dData, dUtils, uMyIni;
 
 procedure TfrmKeyTexts.FormShow(Sender: TObject);
-var
-  section : String = '';
 begin
   dmUtils.LoadWindowPos(frmKeyTexts);
-  section := 'CW';
-
-  edtF1.text     := cqrini.ReadString(section,'F1','cq cq de %mc %mc pse K');
-  edtF2.text     := cqrini.ReadString(section,'F2','');
-  edtF3.text     := cqrini.ReadString(section,'F3','');
-  edtF4.text     := cqrini.ReadString(section,'F4','');
-  edtF5.text     := cqrini.ReadString(section,'F5','');
-  edtF6.text     := cqrini.ReadString(section,'F6','');
-  edtF7.text     := cqrini.ReadString(section,'F7','');
-  edtF8.text     := cqrini.ReadString(section,'F8','');
-  edtF9.text     := cqrini.ReadString(section,'F9','');
-  edtF10.text    := cqrini.ReadString(section,'F10','');
-  edtCapF1.text  := cqrini.ReadString(section,'CapF1','F1 - CQ');
-  edtCapF2.text  := cqrini.ReadString(section,'CapF2','F2');
-  edtCapF3.text  := cqrini.ReadString(section,'CapF3','F3');
-  edtCapF4.text  := cqrini.ReadString(section,'CapF4','F4');
-  edtCapF5.text  := cqrini.ReadString(section,'CapF5','F5');
-  edtCapF6.text  := cqrini.ReadString(section,'CapF6','F6');
-  edtCapF7.text  := cqrini.ReadString(section,'CapF7','F7');
-  edtCapF8.text  := cqrini.ReadString(section,'CapF8','F8');
-  edtCapF9.text  := cqrini.ReadString(section,'CapF9','F9');
-  edtCapF10.text := cqrini.ReadString(section,'CapF10','F10');
-  rgEnter.ItemIndex := cqrini.ReadInteger(section,'EnterFunction',1);
+  edtF1.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F1','cq cq de %mc %mc pse K');
+  edtF2.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F2','');
+  edtF3.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F3','');
+  edtF4.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F4','');
+  edtF5.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F5','');
+  edtF6.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F6','');
+  edtF7.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F7','');
+  edtF8.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F8','');
+  edtF9.text     := cqrini.ReadString(C_INI_FILE_SECTION,'F9','');
+  edtF10.text    := cqrini.ReadString(C_INI_FILE_SECTION,'F10','');
+  edtCapF1.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF1','F1 - CQ');
+  edtCapF2.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF2','F2');
+  edtCapF3.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF3','F3');
+  edtCapF4.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF4','F4');
+  edtCapF5.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF5','F5');
+  edtCapF6.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF6','F6');
+  edtCapF7.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF7','F7');
+  edtCapF8.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF8','F8');
+  edtCapF9.text  := cqrini.ReadString(C_INI_FILE_SECTION,'CapF9','F9');
+  edtCapF10.text := cqrini.ReadString(C_INI_FILE_SECTION,'CapF10','F10');
+  rgEnter.ItemIndex := cqrini.ReadInteger(C_INI_FILE_SECTION,'EnterFunction',1);
 end;
 
-procedure TfrmKeyTexts.FormClose(Sender: TObject; var CloseAction: TCloseAction
-  );
+procedure TfrmKeyTexts.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmKeyTexts);
 end;
@@ -137,133 +135,101 @@ begin
 end;
 
 procedure TfrmKeyTexts.btnOKClick(Sender: TObject);
-var
-  section : String = '';
 begin
-  section := 'CW';
-  cqrini.WriteString(section,'F1',edtF1.Text);
-  cqrini.WriteString(section,'F2',edtF2.Text);
-  cqrini.WriteString(section,'F3',edtF3.Text);
-  cqrini.WriteString(section,'F4',edtF4.Text);
-  cqrini.WriteString(section,'F5',edtF5.Text);
-  cqrini.WriteString(section,'F6',edtF6.Text);
-  cqrini.WriteString(section,'F7',edtF7.Text);
-  cqrini.WriteString(section,'F8',edtF8.Text);
-  cqrini.WriteString(section,'F9',edtF9.Text);
-  cqrini.WriteString(section,'F10',edtF10.Text);
-  cqrini.WriteString(section,'CapF1',edtCapF1.Text);
-  cqrini.WriteString(section,'CapF2',edtCapF2.Text);
-  cqrini.WriteString(section,'CapF3',edtCapF3.Text);
-  cqrini.WriteString(section,'CapF4',edtCapF4.Text);
-  cqrini.WriteString(section,'CapF5',edtCapF5.Text);
-  cqrini.WriteString(section,'CapF6',edtCapF6.Text);
-  cqrini.WriteString(section,'CapF7',edtCapF7.Text);
-  cqrini.WriteString(section,'CapF8',edtCapF8.Text);
-  cqrini.WriteString(section,'CapF9',edtCapF9.Text);
-  cqrini.WriteString(section,'CapF10',edtCapF10.Text);
-  cqrini.WriteInteger(section,'EnterFunction',rgEnter.ItemIndex);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F1',edtF1.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F2',edtF2.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F3',edtF3.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F4',edtF4.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F5',edtF5.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F6',edtF6.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F7',edtF7.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F8',edtF8.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F9',edtF9.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'F10',edtF10.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF1',edtCapF1.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF2',edtCapF2.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF3',edtCapF3.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF4',edtCapF4.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF5',edtCapF5.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF6',edtCapF6.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF7',edtCapF7.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF8',edtCapF8.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF9',edtCapF9.Text);
+  cqrini.WriteString(C_INI_FILE_SECTION,'CapF10',edtCapF10.Text);
+  cqrini.WriteInteger(C_INI_FILE_SECTION,'EnterFunction',rgEnter.ItemIndex);
   cqrini.SaveToDisk;
   ModalResult := mrOK
 end;
 procedure TfrmKeyTexts.LoadMsgClick(Sender: TObject);
 var
-  section     : String = '';
-  CWM_file    : String = '';
-  CwM         : TMemIniFile;
+  CwM : TIniFile;
 begin
- OpenDialog1.InitialDir:= dmData.HomeDir;
- try
-  if OpenDialog1.Execute then
-    CWM_file := OpenDialog1.Filename;
- finally
- end;
-
- if FileExists(CWM_file) then
-   CWM := TMemIniFile.Create(CWM_file)
-  else
-    Begin
-     ShowMessage('Error opening file!');
-     exit;
-    end;
-
- try
-   begin
-    section := 'CW';
-    edtF1.text     := CWM.ReadString(section,'F1','cq cq de %mc %mc pse K');
-    edtF2.text     := CWM.ReadString(section,'F2','');
-    edtF3.text     := CWM.ReadString(section,'F3','');
-    edtF4.text     := CWM.ReadString(section,'F4','');
-    edtF5.text     := CWM.ReadString(section,'F5','');
-    edtF6.text     := CWM.ReadString(section,'F6','');
-    edtF7.text     := CWM.ReadString(section,'F7','');
-    edtF8.text     := CWM.ReadString(section,'F8','');
-    edtF9.text     := CWM.ReadString(section,'F9','');
-    edtF10.text    := CWM.ReadString(section,'F10','');
-    edtCapF1.text  := CWM.ReadString(section,'CapF1','F1 - CQ');
-    edtCapF2.text  := CWM.ReadString(section,'CapF2','F2');
-    edtCapF3.text  := CWM.ReadString(section,'CapF3','F3');
-    edtCapF4.text  := CWM.ReadString(section,'CapF4','F4');
-    edtCapF5.text  := CWM.ReadString(section,'CapF5','F5');
-    edtCapF6.text  := CWM.ReadString(section,'CapF6','F6');
-    edtCapF7.text  := CWM.ReadString(section,'CapF7','F7');
-    edtCapF8.text  := CWM.ReadString(section,'CapF8','F8');
-    edtCapF9.text  := CWM.ReadString(section,'CapF9','F9');
-    edtCapF10.text := CWM.ReadString(section,'CapF10','F10');
-    rgEnter.ItemIndex := CWM.ReadInteger(section,'EnterFunction',1);
+ OpenDialog1.InitialDir := dmData.HomeDir;
+ if OpenDialog1.Execute then
+ begin
+   CWM := TIniFile.Create(OpenDialog1.FileName);
+   try
+     edtF1.text     := CWM.ReadString(C_INI_FILE_SECTION,'F1','cq cq de %mc %mc pse K');
+     edtF2.text     := CWM.ReadString(C_INI_FILE_SECTION,'F2','');
+     edtF3.text     := CWM.ReadString(C_INI_FILE_SECTION,'F3','');
+     edtF4.text     := CWM.ReadString(C_INI_FILE_SECTION,'F4','');
+     edtF5.text     := CWM.ReadString(C_INI_FILE_SECTION,'F5','');
+     edtF6.text     := CWM.ReadString(C_INI_FILE_SECTION,'F6','');
+     edtF7.text     := CWM.ReadString(C_INI_FILE_SECTION,'F7','');
+     edtF8.text     := CWM.ReadString(C_INI_FILE_SECTION,'F8','');
+     edtF9.text     := CWM.ReadString(C_INI_FILE_SECTION,'F9','');
+     edtF10.text    := CWM.ReadString(C_INI_FILE_SECTION,'F10','');
+     edtCapF1.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF1','F1 - CQ');
+     edtCapF2.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF2','F2');
+     edtCapF3.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF3','F3');
+     edtCapF4.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF4','F4');
+     edtCapF5.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF5','F5');
+     edtCapF6.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF6','F6');
+     edtCapF7.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF7','F7');
+     edtCapF8.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF8','F8');
+     edtCapF9.text  := CWM.ReadString(C_INI_FILE_SECTION,'CapF9','F9');
+     edtCapF10.text := CWM.ReadString(C_INI_FILE_SECTION,'CapF10','F10');
+     rgEnter.ItemIndex := CWM.ReadInteger(C_INI_FILE_SECTION,'EnterFunction',1);
+   finally
+     FreeAndNil(CWM);
    end;
- finally
-    FreeAndNil(CWM);
  end;
 end;
 
 procedure TfrmKeyTexts.SaveMsgClick(Sender: TObject);
 var
-  section     : String = '';
-  CWM_file    : String = '';
-  CwM  : TMemIniFile;
+  CwM : TIniFile;
 begin
-  SaveDialog1.InitialDir:= dmData.HomeDir;
- try
+  SaveDialog1.InitialDir := dmData.HomeDir;
   if SaveDialog1.Execute then
-    CWM_file := SaveDialog1.Filename;
- finally
- end;
- if DirectoryExists(ExtractFilePath(CWM_file)) then
-      CWM := TMemIniFile.Create(CWM_file)
-    else
-      Begin
-       ShowMessage('Error creating file!');
-       exit;
-      end;
-
- try
-     begin
-      section := 'CW';
-      CWM.WriteString(section,'F1',edtF1.Text);
-      CWM.WriteString(section,'F2',edtF2.Text);
-      CWM.WriteString(section,'F3',edtF3.Text);
-      CWM.WriteString(section,'F4',edtF4.Text);
-      CWM.WriteString(section,'F5',edtF5.Text);
-      CWM.WriteString(section,'F6',edtF6.Text);
-      CWM.WriteString(section,'F7',edtF7.Text);
-      CWM.WriteString(section,'F8',edtF8.Text);
-      CWM.WriteString(section,'F9',edtF9.Text);
-      CWM.WriteString(section,'F10',edtF10.Text);
-      CWM.WriteString(section,'CapF1',edtCapF1.Text);
-      CWM.WriteString(section,'CapF2',edtCapF2.Text);
-      CWM.WriteString(section,'CapF3',edtCapF3.Text);
-      CWM.WriteString(section,'CapF4',edtCapF4.Text);
-      CWM.WriteString(section,'CapF5',edtCapF5.Text);
-      CWM.WriteString(section,'CapF6',edtCapF6.Text);
-      CWM.WriteString(section,'CapF7',edtCapF7.Text);
-      CWM.WriteString(section,'CapF8',edtCapF8.Text);
-      CWM.WriteString(section,'CapF9',edtCapF9.Text);
-      CWM.WriteString(section,'CapF10',edtCapF10.Text);
-      CWM.WriteInteger(section,'EnterFunction',rgEnter.ItemIndex);
+  begin
+    CWM := TIniFile.Create(SaveDialog1.FileName);
+    try
+      CWM.WriteString(C_INI_FILE_SECTION,'F1',edtF1.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F2',edtF2.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F3',edtF3.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F4',edtF4.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F5',edtF5.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F6',edtF6.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F7',edtF7.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F8',edtF8.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F9',edtF9.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'F10',edtF10.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF1',edtCapF1.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF2',edtCapF2.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF3',edtCapF3.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF4',edtCapF4.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF5',edtCapF5.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF6',edtCapF6.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF7',edtCapF7.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF8',edtCapF8.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF9',edtCapF9.Text);
+      CWM.WriteString(C_INI_FILE_SECTION,'CapF10',edtCapF10.Text);
+      CWM.WriteInteger(C_INI_FILE_SECTION,'EnterFunction',rgEnter.ItemIndex);
       CWM.UpdateFile;
-     end;
-  finally
-      FreeAndNil(CWM);
+    finally
+      FreeAndNil(CwM);
+    end;
   end;
 end;
 
