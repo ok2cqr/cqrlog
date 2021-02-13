@@ -6,13 +6,15 @@ They contain all accepted pull requests from official source (that may not be re
 
  These alpha test binaries also include latest official source updates up to commit:
  
-    Commits on Feb 9, 2021  Merge pull request #398 from OH1KH/Squash_save_cwkeys b088b1c
+    Commits on Feb 12, 2021  "version changed to 2.5.2"  c640afb
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
 
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
 LAST UPDATE
+  - ver 2.5.2(101)
+  - official version with alpha additions (see below) 
   - ver 2.5.1(106)
   - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP
