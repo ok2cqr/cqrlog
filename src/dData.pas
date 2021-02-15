@@ -530,30 +530,35 @@ begin
   if RbnMonCon.Connected then
     RbnMonCon.Connected := False;
 
+  MainCon.CharSet:='UTF8';
   MainCon.HostName     := host;
   MainCon.Params.Text  := 'Port='+port;
   MainCon.UserName     := user;
   MainCon.Password     := pass;
   MainCon.DatabaseName := 'information_schema';
 
+  BandMapCon.CharSet:='UTF8';
   BandMapCon.HostName     := host;
   BandMapCon.Params.Text  := 'Port='+port;
   BandMapCon.UserName     := user;
   BandMapCon.Password     := pass;
   BandMapCon.DatabaseName := 'information_schema';
 
+  RbnMonCon.CharSet:='UTF8';
   RbnMonCon.HostName     := host;
   RbnMonCon.Params.Text  := 'Port='+port;
   RbnMonCon.UserName     := user;
   RbnMonCon.Password     := pass;
   RbnMonCon.DatabaseName := 'information_schema';
 
+  dbDXC.CharSet:='UTF8';
   dbDXC.HostName     := host;
   dbDXC.Params.Text  := 'Port='+port;
   dbDXC.UserName     := user;
   dbDXC.Password     := pass;
   dbDXC.DatabaseName := 'information_schema';
 
+  LogUploadCon.CharSet:='UTF8';
   LogUploadCon.HostName     := host;
   LogUploadCon.Params.Text  := 'Port='+port;
   LogUploadCon.UserName     := user;
