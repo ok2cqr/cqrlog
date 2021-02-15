@@ -398,7 +398,7 @@ var
   cont, WAZ, posun, ITU, lat, long, pfx, country: string;
   category_band: String;
   category_mode: String;
-  address: TStringArray;
+  address: String;
   Operators : TStringList;
   OpString : String;
 
@@ -417,6 +417,7 @@ var
 
 
 begin
+  lblCabError.Visible := False;
   SaveSettings;
   date := dmUtils.GetDateTime(0);
   mycall := cqrini.ReadString('Station','Call','');
@@ -426,8 +427,11 @@ begin
   if length(myloc) = 4 then myloc := myloc +'ll';
   myname := cqrini.ReadString('Station','Name','');
   mailingaddress := cqrini.ReadString('Station','MailingAddress','');
-  zipcity := cqrini.ReadString('Station','ZipCity','');
-  address := zipcity.Split(' ');
+
+  address :=  cqrini.ReadString('Station','ZipCity','');
+  zipcity := trim(ExtractDelimited(1,address,[' ']));
+  address := trim(copy(address,length(zipcity)+1,length(address)));
+
   email := cqrini.ReadString('Station','Email','');
   club := cqrini.ReadString('Station','Club','');
   Operators := TStringList.Create;
@@ -564,8 +568,13 @@ begin
       if (dmData.qCQRLOG.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.qCQRLOG.FieldByName('operator').AsString) < 0) then
          Operators.Add(dmData.qCQRLOG.FieldByName('operator').AsString);
 
-      tmp:= 'QSO: '+
-            Format('%5s', [CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' '+
+
+         if ( dmData.qCQRLOG.FieldByName('freq').AsFloat < 50 ) then
+                tmp:= 'QSO: '+Format('%5s',[FloatToStrF(dmData.qCQRLOG.FieldByName('freq').AsFloat*1000,ffFixed,0,0)])+' '
+               else
+                tmp:= 'QSO: '+Format('%5s',[CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' ';
+
+         tmp:=tmp +
             CabrilloMode(dmData.qCQRLOG.FieldByName('mode').AsString)+' '+
             dmData.qCQRLOG.FieldByName('qsodate').AsString+' '+
             StringReplace(dmData.qCQRLOG.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+' '+
@@ -675,10 +684,10 @@ begin
        Writeln(f,'OPERATORS: '+OpString);
     Writeln(f,'NAME: '+myname);
     Writeln(f,'ADDRESS: '+mailingaddress);
-    Writeln(f,'ADDRESS-CITY: '+address[1]);
+    Writeln(f,'ADDRESS-CITY: '+address);
     Writeln(f,'ADDRESS-COUNTRY: '+mycountry);
     Writeln(f,'ADDRESS-STATE-PROVINCE: ');
-    Writeln(f,'ADDRESS-POSTALCODE: '+address[0]);
+    Writeln(f,'ADDRESS-POSTALCODE: '+zipcity);
     Writeln(f,'EMAIL: '+email);
     Writeln(f,'SOAPBOX:'+edtCabSoapBox.Text);
 
@@ -694,14 +703,15 @@ begin
                                mb_OK+mb_IconError)
       end
   end;
+  lblCabError.Visible := True;
   if ((pbCabExport.Max - i) > 0) then
   begin
-    lblCabError.Caption := IntToStr(pbCabExport.Max - i)+' of '+IntToStr(pbCabExport.Max)+' entries were ignored! Please check /tmp/CabrilloReject.log entries.';
+    lblCabError.Caption := IntToStr(pbCabExport.Max - i)+' of '+IntToStr(pbCabExport.Max)+' qsos were ignored! Please check: /tmp/CabrilloReject.log';
     lblCabError.Font.Color := clRed;
-    lblCabError.Visible := True;
-  end;
-
+  end
+  else
     lblCabError.Caption := IntToStr(s.Count)+' entries were exported.';
+
     lblCabStats.Visible := True;
     lblCabStats.Font.Style:=[fsBold]; //Bold disappears when visible false->true (why?)
     mCabStatistics.Clear;
