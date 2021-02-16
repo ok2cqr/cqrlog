@@ -5945,7 +5945,18 @@ begin
 end;
 
 procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
+var
+   v:boolean;
 begin
+    v := dmData.qQSOBefore.RecordCount>0;
+    mnuViewQso.Enabled:=v;
+    mnuEditQso.Enabled:=v;
+    mnuHamQth.Enabled:=v;
+    mnuQrz.Enabled:=v;
+    mnuIK3QAR.Enabled:=v;
+    mnueQSLView.Enabled:=v;
+    if not v then exit;
+
     mnueQSLView.Visible :=  pos('E',dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString)>0;
     if dmData.DebugLevel>=1 then writeln(dmData.qQSOBefore.FieldByName('callsign').AsString,' ',
                                          dmData.qQSOBefore.FieldByName('eqsl_qsl_rcvd').AsString )
