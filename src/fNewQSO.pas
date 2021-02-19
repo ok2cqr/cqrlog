@@ -344,12 +344,14 @@ type
     pnlSbtn4: TPanel;
     pnlSbtn5: TPanel;
     pnlSbtn6: TPanel;
+    pnlSbtn7: TPanel;
     popEditQSO: TPopupMenu;
     sbNewQSO: TStatusBar;
     sbtnAttach: TSpeedButton;
     sbtneQSL: TSpeedButton;
     sbtnHamQTH: TSpeedButton;
     sbtnLocatorMap: TSpeedButton;
+    sbtnUsrbtn: TSpeedButton;
     sbtnLoTW: TSpeedButton;
     sbtnQRZ: TSpeedButton;
     sbtnQSL: TSpeedButton;
@@ -569,6 +571,7 @@ type
     procedure sbtnQSLClick(Sender: TObject);
     procedure sbtnQRZClick(Sender: TObject);
     procedure sbtnHamQTHClick(Sender : TObject);
+    procedure sbtnUsrbtnClick(Sender: TObject);
     procedure tmrESCTimer(Sender: TObject);
     procedure tmrEndStartTimer(Sender: TObject);
     procedure tmrEndTimer(Sender: TObject);
@@ -703,6 +706,7 @@ type
     ContestNr             : integer;              //wsjtx 2.0 contest type definition in status msg
 
     ModeBeforeChange      : String; //flush CW buffer after mode change
+    CurrentMyLoc          : String; //currently valid my locator for other units.
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
@@ -1272,6 +1276,7 @@ begin
   sbtneQSL.Visible       := False;
   sbtnHamQTH.Visible     := False;
   sbtnLocatorMap.Visible := False;
+  sbtnUsrBtn.Visible     := False;
   TabUsed    := False;
   fromNewQSO := False;
   FromDXC  := False;
@@ -1364,7 +1369,7 @@ begin
 
   if sbNewQSO.Panels[0].Text = '' then
     sbNewQSO.Panels[0].Text := cMyLoc + cqrini.ReadString('Station','LOC','');
-
+  CurrentMyLoc := cqrini.ReadString('Station','LOC','');
   cmbFreq.Text := cqrini.ReadString('TMPQSO','FREQ',cqrini.ReadString(
                   'NewQSO','FREQ','7.025'));
   cmbMode.Text := cqrini.ReadString('TMPQSO','Mode',cqrini.ReadString(
@@ -5366,6 +5371,7 @@ begin
     exit;
   sbtnQRZ.Visible    := True;
   sbtnHamQTH.Visible := True;
+  sbtnUsrBtn.Visible := True;
   if cqrini.ReadBool('LoTW','ShowInfo',True) then
   begin
     sbtneQSL.Visible := dmData.UseseQSL(edtCall.Text);
@@ -5813,6 +5819,7 @@ begin
               if ModalResult = mrOk then
               begin
                 sbNewQSO.Panels[0].Text := cMyLoc + edtLocator.Text;
+                CurrentMyLoc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6);
                 // We don't want the temporary locator to be saved permanently
                 // cqrini.WriteString('Station','LOC',edtLocator.Text)
               end;
@@ -5998,6 +6005,11 @@ end;
 procedure TfrmNewQSO.sbtnHamQTHClick(Sender : TObject);
 begin
   dmUtils.ShowHamQTHInBrowser(edtCall.Text)
+end;
+
+procedure TfrmNewQSO.sbtnUsrbtnClick(Sender: TObject);
+begin
+  dmUtils.ShowUsrUrl;
 end;
 
 procedure TfrmNewQSO.sbtnLocatorMapClick(Sender: TObject);

@@ -195,6 +195,7 @@ type
     procedure LoadBandsSettings;
     procedure FillBandCombo(cmb : TComboBox);
     procedure ShowHamQTHInBrowser(call : String);
+    procedure ShowUsrUrl;
     procedure SortArray(l,r : Integer);
     procedure OpenInApp(what : String);
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
@@ -4129,6 +4130,32 @@ begin
   finally
     AProcess.Free
   end;
+end;
+procedure TdmUtils.ShowUsrUrl;
+var
+  AProcess: TProcess;
+  cmd       :String;
+begin
+  cmd := cqrini.ReadString('NewQSO', 'UsrBtn', 'https://www.qrzcq.com/call/$CALL');
+  if (cmd<>'') then
+   begin
+      AProcess := TProcess.Create(nil);
+      try
+          cmd := StringReplace(cmd,'$CALL',frmNewQSO.edtCall.Text,[rfReplaceAll]);
+          cmd := StringReplace(cmd,'$BAND',dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text),[rfReplaceAll]);
+          cmd := StringReplace(cmd,'$MODE',frmNewQSO.cmbFreq.Text,[rfReplaceAll]);
+          cmd := StringReplace(cmd,'$FREQ',frmNewQSO.cmbMode.Text,[rfReplaceAll]);
+          cmd := StringReplace(cmd,'$LOC',frmNewQSO.edtGrid.Text,[rfReplaceAll]);
+          cmd := StringReplace(cmd,'$MYLOC',frmNewQSO.CurrentMyLoc,[rfReplaceAll]);
+        AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+        AProcess.Parameters.Add(cmd);
+        if dmData.DebugLevel>=1 then ;
+        Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
+        AProcess.Execute
+      finally
+        AProcess.Free
+      end;
+   end;
 end;
 
 function TdmUtils.DateInSOTAFormat(date: TDateTime): string;

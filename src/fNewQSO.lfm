@@ -2138,7 +2138,7 @@ object frmNewQSO: TfrmNewQSO
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.0.10.0'
   object pnlAll: TPanel
     AnchorSideTop.Control = dbgrdQSOBefore
     AnchorSideTop.Side = asrBottom
@@ -3589,7 +3589,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn1
           AnchorSideRight.Control = pnlSbtn1
-          Left = 360
+          Left = 335
           Height = 25
           Top = 326
           Width = 25
@@ -3654,7 +3654,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn2
           AnchorSideRight.Control = pnlSbtn2
-          Left = 385
+          Left = 360
           Height = 25
           Top = 326
           Width = 25
@@ -3719,7 +3719,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn3
           AnchorSideRight.Control = pnlSbtn3
-          Left = 410
+          Left = 385
           Height = 25
           Top = 326
           Width = 25
@@ -3824,7 +3824,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn4
           AnchorSideRight.Control = pnlSbtn4
-          Left = 435
+          Left = 410
           Height = 25
           Top = 326
           Width = 25
@@ -3888,7 +3888,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn5
           AnchorSideRight.Control = pnlSbtn5
-          Left = 460
+          Left = 435
           Height = 25
           Top = 326
           Width = 25
@@ -3952,7 +3952,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn6
           AnchorSideRight.Control = pnlSbtn6
-          Left = 485
+          Left = 460
           Height = 25
           Top = 326
           Width = 25
@@ -4017,9 +4017,8 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = mComment
           AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 510
+          AnchorSideRight.Control = pnlSbtn7
+          Left = 485
           Height = 25
           Top = 326
           Width = 25
@@ -4078,6 +4077,65 @@ object frmNewQSO: TfrmNewQSO
             OnClick = sbtnHamQTHClick
             ShowHint = True
             ParentFont = False
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn7: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn1
+          AnchorSideRight.Control = mComment
+          AnchorSideRight.Side = asrBottom
+          Left = 510
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 38
+          object sbtnUsrbtn: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn7
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn7
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'User defineable button'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36030000424D3603000000000000360000002800000010000000100000000100
+              1800000000000003000064000000640000000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFF572BFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFF572B
+              FF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF57
+              2BFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFF572B
+              FF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF57
+              2BFF572BFF572BFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFF572BFF572BFFFFFFFFFFFFFF572B
+              FF572BFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFF572BFFFFFFFF572BFF57
+              2BFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFF
+              572BFF572BFF572BFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFF572B
+              FF572BFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFF57
+              2BFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF
+              572BFFFFFFFFFFFFFF572BFF572BFF572BFF572BFF572BFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF
+              572BFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF
+              572BFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            }
+            Visible = False
+            OnClick = sbtnUsrbtnClick
+            ShowHint = True
             ParentShowHint = False
           end
         end
