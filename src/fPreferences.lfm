@@ -17,7 +17,7 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.0.10.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 703
@@ -940,6 +940,29 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 20
         Caption = 'Upload SAT info to AMSAT status page'
         TabOrder = 21
+      end
+      object lblUsrBtn: TLabel
+        AnchorSideLeft.Control = tabNewQSO
+        AnchorSideTop.Control = chkUpdateAMSATstatus
+        AnchorSideTop.Side = asrBottom
+        Left = 40
+        Height = 15
+        Top = 609
+        Width = 528
+        BorderSpacing.Left = 40
+        Caption = 'User defined web button. Macros: $CALL, $BAND, $FREQ, $MODE, $LOC, $MYLOC'
+        ParentColor = False
+      end
+      object edtUsrBtn: TEdit
+        AnchorSideLeft.Control = tabNewQSO
+        AnchorSideTop.Control = lblUsrBtn
+        AnchorSideTop.Side = asrBottom
+        Left = 20
+        Height = 33
+        Top = 624
+        Width = 548
+        BorderSpacing.Left = 20
+        TabOrder = 22
       end
     end
     object tabVisibleColumns: TTabSheet
