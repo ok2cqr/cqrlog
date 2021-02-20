@@ -6774,7 +6774,6 @@ begin
   lblCall.Caption    := 'Call (edit mode):';
   lblCall.Font.Color := clRed;
   Caption := dmUtils.GetNewQSOCaption('Edit QSO');
-  OffLnBeforeEdit:=cbOffline.Checked;
   cbOffline.Checked :=true;
 end;
 
@@ -6783,8 +6782,7 @@ begin
   lblCall.Caption    := 'Call:';
   lblCall.Font.Color := clDefault;
   Caption := dmUtils.GetNewQSOCaption('New QSO');
-  cbOffline.Checked :=OffLnBeforeEdit;
-  OffLnBeforeEdit:=cbOffline.Checked;
+  cbOffline.Checked := cqrini.ReadBool('TMPQSO','OFF',False);
 end;
 
 procedure TfrmNewQSO.CheckCallsignClub;
