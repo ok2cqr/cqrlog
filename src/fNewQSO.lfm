@@ -2139,7 +2139,7 @@ object frmNewQSO: TfrmNewQSO
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   PopupMenu = popMode
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.0.10.0'
   object pnlAll: TPanel
     AnchorSideTop.Control = dbgrdQSOBefore
     AnchorSideTop.Side = asrBottom
@@ -3111,7 +3111,7 @@ object frmNewQSO: TfrmNewQSO
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 3
-          TabIndex = 0
+          TabIndex = 1
           TabOrder = 27
           object tabDXCCStat: TTabSheet
             AnchorSideRight.Side = asrBottom
@@ -3590,7 +3590,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn1
           AnchorSideRight.Control = pnlSbtn1
-          Left = 360
+          Left = 335
           Height = 25
           Top = 326
           Width = 25
@@ -3655,7 +3655,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn2
           AnchorSideRight.Control = pnlSbtn2
-          Left = 385
+          Left = 360
           Height = 25
           Top = 326
           Width = 25
@@ -3720,7 +3720,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn3
           AnchorSideRight.Control = pnlSbtn3
-          Left = 410
+          Left = 385
           Height = 25
           Top = 326
           Width = 25
@@ -3825,7 +3825,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn4
           AnchorSideRight.Control = pnlSbtn4
-          Left = 435
+          Left = 410
           Height = 25
           Top = 326
           Width = 25
@@ -3889,7 +3889,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn5
           AnchorSideRight.Control = pnlSbtn5
-          Left = 460
+          Left = 435
           Height = 25
           Top = 326
           Width = 25
@@ -3953,7 +3953,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = pnlSbtn6
           AnchorSideRight.Control = pnlSbtn6
-          Left = 485
+          Left = 460
           Height = 25
           Top = 326
           Width = 25
@@ -4018,9 +4018,8 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = mComment
           AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = mComment
-          AnchorSideRight.Side = asrBottom
-          Left = 510
+          AnchorSideRight.Control = pnlSbtn7
+          Left = 485
           Height = 25
           Top = 326
           Width = 25
@@ -4079,6 +4078,65 @@ object frmNewQSO: TfrmNewQSO
             OnClick = sbtnHamQTHClick
             ShowHint = True
             ParentFont = False
+            ParentShowHint = False
+          end
+        end
+        object pnlSbtn7: TPanel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = pnlSbtn1
+          AnchorSideRight.Control = mComment
+          AnchorSideRight.Side = asrBottom
+          Left = 510
+          Height = 25
+          Top = 326
+          Width = 25
+          Anchors = [akTop, akRight]
+          BevelOuter = bvNone
+          ClientHeight = 25
+          ClientWidth = 25
+          TabOrder = 38
+          object sbtnUsrbtn: TSpeedButton
+            AnchorSideLeft.Control = pnlSbtn7
+            AnchorSideLeft.Side = asrCenter
+            AnchorSideTop.Control = pnlSbtn7
+            AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Side = asrBottom
+            Left = 1
+            Height = 23
+            Hint = 'User defineable button'
+            Top = 1
+            Width = 23
+            Glyph.Data = {
+              36030000424D3603000000000000360000002800000010000000100000000100
+              1800000000000003000064000000640000000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFF572BFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFF572B
+              FF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF57
+              2BFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFF572B
+              FF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF57
+              2BFF572BFF572BFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFF572BFF572BFFFFFFFFFFFFFF572B
+              FF572BFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFF572BFFFFFFFF572BFF57
+              2BFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFF
+              572BFF572BFF572BFFFFFFFF572BFF572BFFFFFFFF572BFF572BFFFFFFFF572B
+              FF572BFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFF57
+              2BFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF
+              572BFFFFFFFFFFFFFF572BFF572BFF572BFF572BFF572BFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF
+              572BFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFF572BFF572BFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF572BFF
+              572BFFFFFFFFFFFFFF572BFF572BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            }
+            Visible = False
+            OnClick = sbtnUsrbtnClick
+            ShowHint = True
             ParentShowHint = False
           end
         end
@@ -4887,26 +4945,26 @@ object frmNewQSO: TfrmNewQSO
     Interval = 2000
     OnTimer = tmrStartTimer
     OnStartTimer = tmrStartStartTimer
-    left = 520
-    top = 720
+    Left = 520
+    Top = 720
   end
   object tmrEnd: TTimer
     Enabled = False
     OnTimer = tmrEndTimer
     OnStartTimer = tmrEndStartTimer
-    left = 456
-    top = 720
+    Left = 456
+    Top = 720
   end
   object tmrRadio: TTimer
     Enabled = False
     OnTimer = tmrRadioTimer
-    left = 560
-    top = 32
+    Left = 560
+    Top = 32
   end
   object MainMenu1: TMainMenu
     Images = imgMain1
-    left = 128
-    top = 32
+    Left = 128
+    Top = 32
     object mnuFile: TMenuItem
       Caption = 'File'
       object MenuItem82: TMenuItem
@@ -5421,8 +5479,8 @@ object frmNewQSO: TfrmNewQSO
   end
   object ActionList1: TActionList
     Images = imgMain
-    left = 488
-    top = 32
+    Left = 488
+    Top = 32
     object acClose: TAction
       Category = 'File'
       Caption = 'Close'
@@ -5708,8 +5766,8 @@ object frmNewQSO: TfrmNewQSO
     end
   end
   object imgMain: TImageList
-    left = 264
-    top = 32
+    Left = 264
+    Top = 32
     Bitmap = {
       4C6910000000100000001000000010C4E70010C4E700C88B4DFFC88C4FFFC88C
       4FFFC88C4FFFC88C4FFFC88D4FFFC98C4FFFC78B4FFFC5894BFFC4763BFF4104
@@ -6229,8 +6287,8 @@ object frmNewQSO: TfrmNewQSO
   object popEditQSO: TPopupMenu
     Images = imgMain1
     OnPopup = popEditQSOPopup
-    left = 656
-    top = 32
+    Left = 656
+    Top = 32
     object mnuViewQso: TMenuItem
       Action = acViewQSO
       OnClick = acViewQSOExecute
@@ -6271,8 +6329,8 @@ object frmNewQSO: TfrmNewQSO
     end
   end
   object imgMain1: TImageList
-    left = 344
-    top = 32
+    Left = 344
+    Top = 32
     Bitmap = {
       4C69170000001000000010000000C803EA00C803EA00009B0000009B00000000
       000000000000000000000000000000000000000000003939E7FF000000000000
@@ -7016,45 +7074,45 @@ object frmNewQSO: TfrmNewQSO
   object tmrESC: TTimer
     Enabled = False
     OnTimer = tmrESCTimer
-    left = 736
-    top = 32
+    Left = 736
+    Top = 32
   end
   object tmrFldigi: TTimer
     Enabled = False
     OnTimer = tmrFldigiTimer
-    left = 408
-    top = 32
+    Left = 408
+    Top = 32
   end
   object tmrRotor: TTimer
     Enabled = False
     Interval = 500
-    left = 200
-    top = 32
+    Left = 200
+    Top = 32
   end
   object tmrUploadAll: TTimer
     Enabled = False
     OnTimer = tmrUploadAllTimer
-    left = 40
-    top = 32
+    Left = 40
+    Top = 32
   end
   object tmrWsjtx: TTimer
     Enabled = False
     OnTimer = tmrWsjtxTimer
-    left = 280
-    top = 720
+    Left = 280
+    Top = 720
   end
   object tmrWsjtSpd: TTimer
     Enabled = False
     Interval = 490
     OnTimer = tmrWsjtSpdTimer
-    left = 392
-    top = 720
+    Left = 392
+    Top = 720
   end
   object tmrADIF: TTimer
     Enabled = False
     OnTimer = tmrADIFTimer
-    left = 800
-    top = 32
+    Left = 800
+    Top = 32
   end
   object popMode: TPopupMenu
     OnPopup = popModePopup
