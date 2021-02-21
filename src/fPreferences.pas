@@ -502,6 +502,7 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtUsrBtn: TEdit;
     edtUsr1R1Name: TEdit;
     edtR2Host: TEdit;
     edtRadio2Name: TEdit;
@@ -720,6 +721,7 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblUsrBtn: TLabel;
     lblHost2: TLabel;
     lblUsr1R1: TLabel;
     lblUsr1R2: TLabel;
@@ -1188,6 +1190,7 @@ begin
   cqrini.WriteString('NewQSO', 'Mode', cmbMode.Text);
   cqrini.WriteString('NewQSO', 'QSL_S', cmbQSL_S.Text);
   cqrini.WriteString('NewQSO', 'RemQSO', edtComments.Text);
+  cqrini.WriteString('NewQSO', 'UsrBtn', edtUsrBtn.Text);
   cqrini.WriteBool('NewQSO', 'UseSpaceBar', chkUseSpaceBar.Checked);
   cqrini.WriteBool('NewQSO', 'RefreshAfterSave', chkRefreshAfterSave.Checked);
   cqrini.WriteBool('NewQSO', 'SkipModeFreq', chkSkipModeFreq.Checked);
@@ -1745,7 +1748,10 @@ begin
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
   if ((frmNewQSO.sbNewQSO.Panels[0].Text = '') or (frmNewQSO.sbNewQSO.Panels[0].Text = cMyLoc)) then
+   Begin
     frmNewQSO.sbNewQSO.Panels[0].Text := cMyLoc + edtLoc.Text;
+    frmNewQSO.CurrentMyLoc:=edtLoc.Text;
+   end;
 
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
@@ -2694,6 +2700,7 @@ begin
   cmbMode.Text := cqrini.ReadString('NewQSO', 'Mode', 'CW');
   cmbQSL_S.Text := cqrini.ReadString('NewQSO', 'QSL_S', '');
   edtComments.Text := cqrini.ReadString('NewQSO', 'RemQSO', '');
+  edtUsrBtn.Text := cqrini.ReadString('NewQSO', 'UsrBtn', 'https://www.qrzcq.com/call/$CALL');
   chkUseSpaceBar.Checked := cqrini.ReadBool('NewQSO', 'UseSpaceBar', False);
   chkRefreshAfterSave.Checked := cqrini.ReadBool('NewQSO', 'RefreshAfterSave', False);
   chkSkipModeFreq.Checked := cqrini.ReadBool('NewQSO', 'SkipModeFreq', True);
