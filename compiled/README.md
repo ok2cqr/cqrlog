@@ -5,10 +5,11 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
  
-    Commits on Feb 12, 2021  "version changed to 2.5.2"  c640afb
+	Commits on Feb 21, 2021 Merge pull request #405 from OH1KH/squash__usr_butt 
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
+
 # WARNING FOR THIS NEW VERSION !!!  READ AND UNDERSTAND THIS!
  From version 2.5.2(102) on *and also official version compiled from source after 2021-02-15*
  Database opening has fixed so that special charcters like ÜéÄ etc. work properly with latest Freepascal version.
