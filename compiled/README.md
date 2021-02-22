@@ -40,7 +40,7 @@ They contain all accepted pull requests from official source (that may not be re
   
  Update scirpt will do backups from old /usr/bin/cqrlog programs, so
  do not worry if you missed this and regret. Look at /usr/bin to find old cqrlog backups.
- copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide abowe.
+ copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide above.
  
 LAST UPDATE
   - ver 2.5.2(102)
