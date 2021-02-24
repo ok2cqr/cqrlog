@@ -15,27 +15,30 @@ type
 
   TfrmMonWsjtx = class(TForm)
     btFtxtName: TButton;
-    chkStopTx: TCheckBox;
-    chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
+    chkDx: TCheckBox;
+    chkCbCQ: TCheckBox;
     chkdB: TCheckBox;
     chkMap: TCheckBox;
+    chknoHistory: TCheckBox;
+    chknoTxt: TCheckBox;
+    chkStopTx: TCheckBox;
     EditAlert: TEdit;
     edtFollow: TEdit;
     edtFollowCall: TEdit;
+    lblBand: TLabel;
     lblInfo: TLabel;
+    lblMode: TLabel;
+    pnlTrigPop: TPanel;
+    pnlSelects: TPanel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
     sgMonitor: TStringGrid;
     tbAlert: TToggleBox;
-    chknoTxt: TCheckBox;
-    chknoHistory: TCheckBox;
     cmCqDx: TMenuItem;
     cmFont: TMenuItem;
     popFontDlg: TFontDialog;
     popColorDlg: TColorDialog;
-    lblBand: TLabel;
-    lblMode: TLabel;
     cmHead: TMenuItem;
     cmNever: TMenuItem;
     cmBand: TMenuItem;
@@ -75,6 +78,8 @@ type
     procedure FormHide(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure chknoTxtChange(Sender: TObject);
+    procedure pnlSelectsClick(Sender: TObject);
+    procedure pnlTrigPopMouseEnter(Sender: TObject);
     procedure sgMonitorDblClick(Sender: TObject);
     procedure sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
@@ -86,6 +91,7 @@ type
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
+    procedure tmrPnlHideTimer(Sender: TObject);
   private
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
@@ -703,6 +709,23 @@ begin
   lblInfo.Visible := not sgMonitor.Visible;
 end;
 
+procedure TfrmMonWsjtx.pnlSelectsClick(Sender: TObject);
+begin
+  pnlSelects.Visible:=False;
+  sgMonitor.BorderSpacing.Top:= 0;
+end;
+
+
+procedure TfrmMonWsjtx.pnlTrigPopMouseEnter(Sender: TObject);
+begin
+  pnlSelects.Visible:=True;
+  sgMonitor.BorderSpacing.Top:=pnlSelects.Height;
+end;
+procedure TfrmMonWsjtx.tmrPnlHideTimer(Sender: TObject);
+begin
+  pnlSelects.Visible:=False;
+  pnlTrigPop.Visible:=True;
+end;
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 //DL7OAP: complete procedure for the coloring, this function is called every time
@@ -1109,6 +1132,9 @@ begin
 
           if LocalDbg then
             Writeln('Other call:', msgCall, '    loc:', msgLocator);
+          //print only DX drops here
+          if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
+
           if (not frmWorkedGrids.GridOK(msgLocator)) or (msgLocator = 'RR73') then //disble false used "RR73" being a loc
                   msgLocator := '';
 
@@ -1707,6 +1733,8 @@ begin
 
   if (CurMode <> '') AND (msgCall <> 'NOCALL') then //mode and call is known; we can continue
   begin
+    //print only DX drops here
+    if (chkDx.Checked) and (not dmUtils.IsHeDX(msgCall)) then exit;
 
     if LocalDbg then
       Writeln('LOCATOR IS:', msgLocator);
@@ -1792,25 +1820,19 @@ begin
 
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
-     if CqDir <> '' then
+
+      if CqDir <> '' then
        if ((mycont <> '') and (cont <> '')) then
          //we can do some comparisons of continents
        begin
-         if ((CqDir = 'DX') and (mycont = cont)) then
-         begin
+         if not dmUtils.IsHeDx(msgCall,CqDir) then
            //I'm not DX for caller: color to warn directed call
-           extcqprint;
-         end
-         else  //calling specified continent
-         if ((CqDir <> 'DX') and (CqDir <> mycont)) then
-         begin
            //CQ NOT directed to my continent: color to warn directed call
            extcqprint;
          end
          else  // should be ok to answer this directed cq
           if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
-           AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1);
-        end
+           AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1)
        else
         begin
          // we can not compare continents, but it is directed cq. Best to warn with color anyway
