@@ -30,17 +30,17 @@ They contain all accepted pull requests from official source (that may not be re
  6) Open new cqrlog and your log and confirm that special charcters are garbage. 
  7) Close cqrlog. Open it again to get "Database Connection" window 
  8) Press button "new log" Give log number and name. See that new log gets selected. Not open it yet.
- 9) Press "utils" select "configuration/import" and find your newly created file excample "log.ini"
+ 9) Press "utils" select "configuration/import" and find your newly created file example "log.ini"
  10) press on and after succesfull import open that log.
  11) Open QSO list File/import/ADIF and find and load your newly created full adif export file.
  12) Once loaded confirm that you can again see special characters properly and also new qso entries
-     will have them prperly.
+     will have them properly.
      
-##Do not try to be smart and try invent a shortcut for this 12 line guide
+## Do not try to be smart and try invent a shortcut for this 12 line guide
   
  Update scirpt will do backups from old /usr/bin/cqrlog programs, so
  do not worry if you missed this and regret. Look at /usr/bin to find old cqrlog backups.
- copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide abowe.
+ copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide above.
  
 LAST UPDATE
   - ver 2.5.2(102)
