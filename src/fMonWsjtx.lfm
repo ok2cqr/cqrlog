@@ -392,14 +392,14 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
-    Left = 81
+    Left = 86
     Height = 31
     Top = 0
-    Width = 421
+    Width = 411
     AutoSize = True
     BorderWidth = 3
     ClientHeight = 31
-    ClientWidth = 421
+    ClientWidth = 411
     TabOrder = 5
     Visible = False
     OnClick = pnlSelectsClick
@@ -445,7 +445,6 @@ object frmMonWsjtx: TfrmMonWsjtx
       Height = 23
       Top = 4
       Width = 49
-      BorderSpacing.Left = 12
       BorderSpacing.Top = 6
       BorderSpacing.Right = 2
       Caption = 'Flw'
@@ -503,10 +502,8 @@ object frmMonWsjtx: TfrmMonWsjtx
       Left = 371
       Height = 15
       Top = 8
-      Width = 310
-      Anchors = [akTop, akLeft, akRight]
+      Width = 36
       BorderSpacing.Left = 12
-      BorderSpacing.Right = 10
       Caption = 'Mode'
       Layout = tlBottom
       ParentColor = False
@@ -521,6 +518,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       Height = 15
       Top = 8
       Width = 33
+      BorderSpacing.Right = 12
       Caption = 'Band'
       Layout = tlBottom
       ParentColor = False
@@ -533,7 +531,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 2
+    Height = 3
     Top = 0
     Width = 582
     Anchors = [akTop, akLeft, akRight]

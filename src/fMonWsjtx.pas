@@ -91,7 +91,6 @@ type
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
-    procedure tmrPnlHideTimer(Sender: TObject);
   private
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
@@ -712,7 +711,7 @@ end;
 procedure TfrmMonWsjtx.pnlSelectsClick(Sender: TObject);
 begin
   pnlSelects.Visible:=False;
-  sgMonitor.BorderSpacing.Top:= 0;
+  sgMonitor.BorderSpacing.Top:= 3;
 end;
 
 
@@ -721,11 +720,7 @@ begin
   pnlSelects.Visible:=True;
   sgMonitor.BorderSpacing.Top:=pnlSelects.Height;
 end;
-procedure TfrmMonWsjtx.tmrPnlHideTimer(Sender: TObject);
-begin
-  pnlSelects.Visible:=False;
-  pnlTrigPop.Visible:=True;
-end;
+
 procedure TfrmMonWsjtx.sgMonitorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 //DL7OAP: complete procedure for the coloring, this function is called every time
@@ -982,7 +977,9 @@ begin
   //DL7OAP
   setMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
-  chknoHistoryChange(nil); // sure to get historu settings right
+  chknoHistoryChange(nil); // sure to get history settings right
+  pnlTrigPopMouseEnter(nil); //starts with panel visible,
+  chkDx.Checked:=False; //DX filter off
 
   //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
