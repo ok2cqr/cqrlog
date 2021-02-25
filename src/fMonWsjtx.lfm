@@ -27,23 +27,6 @@ object frmMonWsjtx: TfrmMonWsjtx
     Layout = tlBottom
     ParentColor = False
   end
-  object lblMode: TLabel
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = lblBand
-    AnchorSideBottom.Side = asrBottom
-    Left = 536
-    Height = 15
-    Top = 12
-    Width = 36
-    Anchors = [akRight, akBottom]
-    BorderSpacing.Top = 12
-    BorderSpacing.Right = 10
-    Caption = 'Mode'
-    Layout = tlBottom
-    ParentColor = False
-  end
   object pnlAlert: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
@@ -304,14 +287,13 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideRight.Control = Owner
     AnchorSideBottom.Control = pnlFollow
     Left = 2
-    Height = 281
-    Top = 30
+    Height = 311
+    Top = 0
     Width = 578
     Align = alClient
     AutoEdit = False
     AutoFillColumns = True
     BorderSpacing.Left = 2
-    BorderSpacing.Top = 30
     BorderSpacing.Right = 2
     BorderSpacing.Bottom = 51
     BorderStyle = bsNone
@@ -420,75 +402,80 @@ object frmMonWsjtx: TfrmMonWsjtx
       0
     )
   end
-  object pnlChecks: TPanel
+  object pnlSelects: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
-    AnchorSideRight.Side = asrCenter
-    AnchorSideBottom.Control = lblBand
-    AnchorSideBottom.Side = asrBottom
-    Left = 125
-    Height = 27
+    Left = 86
+    Height = 31
     Top = 0
-    Width = 332
-    Anchors = [akTop, akLeft, akBottom]
+    Width = 411
     AutoSize = True
-    ClientHeight = 27
-    ClientWidth = 332
+    BorderWidth = 3
+    ClientHeight = 31
+    ClientWidth = 411
     TabOrder = 5
+    Visible = False
+    OnClick = pnlSelectsClick
     object chknoHistory: TCheckBox
-      AnchorSideLeft.Control = chknoTxt
+      AnchorSideLeft.Control = cbflw
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlChecks
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
-      Left = 166
+      Left = 100
       Height = 23
-      Top = 1
+      Top = 4
       Width = 56
-      BorderSpacing.Left = 3
+      BorderSpacing.Top = 6
+      BorderSpacing.Right = 1
       Caption = 'nHst'
       OnChange = chknoHistoryChange
       TabOrder = 0
     end
     object chknoTxt: TCheckBox
-      AnchorSideLeft.Control = cbflw
+      AnchorSideLeft.Control = chknoHistory
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlChecks
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
       AnchorSideRight.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
-      Left = 108
+      Left = 157
       Height = 23
-      Top = 1
+      Top = 4
       Width = 55
-      BorderSpacing.Left = 3
+      BorderSpacing.Top = 6
       Caption = 'nTxt'
       OnChange = chknoTxtChange
       TabOrder = 1
     end
     object cbflw: TCheckBox
-      AnchorSideLeft.Control = chkUState
+      AnchorSideLeft.Control = lblBand
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlChecks
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
-      Left = 56
+      Left = 49
       Height = 23
-      Top = 1
+      Top = 4
       Width = 49
-      BorderSpacing.Left = 3
+      BorderSpacing.Top = 6
+      BorderSpacing.Right = 2
       Caption = 'Flw'
       OnChange = cbflwChange
       TabOrder = 2
     end
     object chkMap: TCheckBox
-      AnchorSideLeft.Control = chknoHistory
+      AnchorSideLeft.Control = chknoTxt
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlChecks
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
-      Left = 225
+      Left = 212
       Height = 23
-      Top = 1
+      Top = 4
       Width = 54
-      BorderSpacing.Left = 3
+      BorderSpacing.Top = 6
       Caption = 'Map'
       OnChange = chkMapChange
       TabOrder = 3
@@ -496,24 +483,24 @@ object frmMonWsjtx: TfrmMonWsjtx
     object chkStopTx: TCheckBox
       AnchorSideLeft.Control = chkMap
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = pnlChecks
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Side = asrBottom
-      Left = 282
+      Left = 266
       Height = 23
-      Top = 1
+      Top = 4
       Width = 49
-      BorderSpacing.Left = 3
       Caption = 'sTx'
       OnChange = chkStopTxChange
       TabOrder = 4
     end
     object chkUState: TCheckBox
-      AnchorSideLeft.Control = pnlChecks
-      AnchorSideTop.Control = pnlChecks
-      AnchorSideBottom.Side = asrBottom
+      AnchorSideLeft.Control = chkStopTx
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideBottom.Side = asrCenter
       Left = 4
       Height = 23
-      Top = 1
+      Top = 4
       Width = 49
       BorderSpacing.Left = 3
       BorderSpacing.Right = 2
@@ -521,10 +508,68 @@ object frmMonWsjtx: TfrmMonWsjtx
       OnChange = chkUStateChange
       TabOrder = 5
     end
+    object chkDx: TCheckBox
+      AnchorSideLeft.Control = chkUState
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
+      Left = 315
+      Height = 23
+      Top = 4
+      Width = 44
+      Caption = 'Dx'
+      TabOrder = 5
+    end
+    object lblMode: TLabel
+      AnchorSideLeft.Control = chkDx
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 371
+      Height = 15
+      Top = 8
+      Width = 36
+      BorderSpacing.Left = 12
+      Caption = 'Mode'
+      Layout = tlBottom
+      ParentColor = False
+      OnClick = pnlSelectsClick
+    end
+    object lblBand: TLabel
+      AnchorSideLeft.Control = pnlSelects
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Side = asrBottom
+      Left = 4
+      Height = 15
+      Top = 8
+      Width = 33
+      BorderSpacing.Right = 12
+      Caption = 'Band'
+      Layout = tlBottom
+      ParentColor = False
+      OnClick = pnlSelectsClick
+    end
+  end
+  object pnlTrigPop: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 0
+    Height = 3
+    Top = 0
+    Width = 582
+    Anchors = [akTop, akLeft, akRight]
+    BevelOuter = bvNone
+    TabOrder = 6
+    OnMouseEnter = pnlTrigPopMouseEnter
   end
   object popColors: TPopupMenu
-    left = 104
-    top = 88
+    Left = 104
+    Top = 88
     object cmHead: TMenuItem
       Caption = 'Set color of:'
       object cmNever: TMenuItem
@@ -578,27 +623,27 @@ object frmMonWsjtx: TfrmMonWsjtx
       'ColorS=F0FBFF'
       'ColorT=A4A0A0'
     )
-    left = 160
-    top = 88
+    Left = 160
+    Top = 88
   end
   object popFontDlg: TFontDialog
     Title = 'Choose font'
     MinFontSize = 0
     MaxFontSize = 0
-    left = 224
-    top = 88
+    Left = 224
+    Top = 88
   end
   object tmrCqPeriod: TTimer
     Enabled = False
     OnTimer = tmrCqPeriodTimer
-    left = 160
-    top = 144
+    Left = 160
+    Top = 144
   end
   object tmrFollow: TTimer
     Enabled = False
     OnTimer = tmrFollowTimer
-    left = 224
-    top = 144
+    Left = 224
+    Top = 144
   end
   object tmrFCC: TTimer
     Enabled = False

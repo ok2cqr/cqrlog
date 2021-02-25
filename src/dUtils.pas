@@ -294,6 +294,7 @@ type
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
     function  StdFormatLocator(loc:string):String;
     function DoString(BytesIn:Tbytes):String;
+    function  IsHeDx(call:String; CqDir:String = ''):boolean;
 
 end;
 
@@ -4845,5 +4846,64 @@ Begin
      for i:=0 to length(BytesIn) do
         s:=s+char(BytesIn[i]);
      Result :=s;
+end;
+function  TdmUtils.IsHeDx(call:String; CqDir:String = ''):boolean;
+ // Find out is call dx for me.
+ // If direction<>'' is directed cq pointed to me
+var
+  adif   :word;
+  pfx    : String = '';
+  mycont : String = '';
+  cont   : String = '';
+  country: String = '';
+  waz    : String = '';
+  posun  : String = '';
+  itu    : String = '';
+  lat    : String = '';
+  long   : String = '';
+
+begin
+    adif:= dmDXCC.id_country(cqrini.ReadString('Station', 'Call', ''), Now(), pfx, mycont,  country, WAZ, posun, ITU, lat, long);
+    adif:= dmDXCC.id_country(call, Now(), pfx, cont,  country, WAZ, posun, ITU, lat, long);
+
+    if CqDir <> '' then
+      begin
+       if ((mycont <> '') and (cont <> '')) then
+           //we can do some comparisons of continents and call dirction
+           begin
+             if ((CqDir = 'DX') and (mycont = cont)) then
+             begin
+               //I'm not DX for caller:
+               Result := false;
+               if dmData.DebugLevel >= 1 then
+                                    Writeln('My continent is:', mycont, '  His continent is:', cont,' is DX/CQ for me:',Result);
+               exit
+             end
+             else  //calling specified continent
+             if ((CqDir <> 'DX') and (CqDir <> mycont)) then
+              begin
+               //CQ NOT directed to my continent
+               Result := false;
+               if dmData.DebugLevel >= 1 then
+                                    Writeln('My continent is:', mycont, '  His continent is:', cont,' is DX/CQ for me:',Result);
+               exit
+              end
+             else
+              Begin
+               //CQ directed to my continent
+               Result :=true;
+               if dmData.DebugLevel >= 1 then
+                                    Writeln('My continent is:', mycont, '  His continent is:', cont,' is DX/CQ for me:',Result);
+               exit
+              end;
+           end
+      end
+     else
+      Begin
+       //no directed CQ just find out if call is DX for me
+       Result := (mycont <> cont);
+       if dmData.DebugLevel >= 1 then
+                            Writeln('My continent is:', mycont, '  His continent is:', cont,' is DX/CQ for me:',Result);
+      end;
 end;
 end.
