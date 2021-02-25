@@ -12,21 +12,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   OnDropFiles = FormDropFiles
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '2.0.8.0'
-  object lblBand: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideBottom.Side = asrBottom
-    Left = 10
-    Height = 15
-    Top = 12
-    Width = 33
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 12
-    Caption = 'Band'
-    Layout = tlBottom
-    ParentColor = False
-  end
+  LCLVersion = '2.0.10.0'
   object pnlAlert: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrBottom
@@ -406,14 +392,14 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
-    Left = 86
+    Left = 60
     Height = 31
     Top = 0
-    Width = 411
+    Width = 462
     AutoSize = True
     BorderWidth = 3
     ClientHeight = 31
-    ClientWidth = 411
+    ClientWidth = 462
     TabOrder = 5
     Visible = False
     OnClick = pnlSelectsClick
@@ -496,24 +482,24 @@ object frmMonWsjtx: TfrmMonWsjtx
     end
     object chkUState: TCheckBox
       AnchorSideLeft.Control = chkStopTx
+      AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlSelects
       AnchorSideBottom.Side = asrCenter
-      Left = 4
+      Left = 315
       Height = 23
       Top = 4
       Width = 49
-      BorderSpacing.Left = 3
       BorderSpacing.Right = 2
       Caption = 'USt'
       OnChange = chkUStateChange
-      TabOrder = 5
+      TabOrder = 6
     end
     object chkDx: TCheckBox
       AnchorSideLeft.Control = chkUState
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlSelects
       AnchorSideTop.Side = asrCenter
-      Left = 315
+      Left = 366
       Height = 23
       Top = 4
       Width = 44
@@ -527,7 +513,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 371
+      Left = 422
       Height = 15
       Top = 8
       Width = 36
@@ -648,7 +634,7 @@ object frmMonWsjtx: TfrmMonWsjtx
   object tmrFCC: TTimer
     Enabled = False
     OnTimer = tmrFCCTimer
-    left = 104
-    top = 144
+    Left = 104
+    Top = 144
   end
 end

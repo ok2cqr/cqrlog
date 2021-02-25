@@ -16,11 +16,9 @@ type
   TfrmMonWsjtx = class(TForm)
     btFtxtName: TButton;
     chkUState: TCheckBox;
-    chkStopTx: TCheckBox;
     chkCbCQ: TCheckBox;
     cbflw: TCheckBox;
     chkDx: TCheckBox;
-    chkCbCQ: TCheckBox;
     chkdB: TCheckBox;
     chkMap: TCheckBox;
     chknoHistory: TCheckBox;
@@ -2040,7 +2038,6 @@ begin
 	   //AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
         
            AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1)
-       end
        else
         begin
          // we can not compare continents, but it is directed cq. Best to warn with color anyway
