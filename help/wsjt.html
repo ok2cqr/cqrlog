@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <head>
@@ -55,10 +54,13 @@ These will show you that UDP link is alive between these programs.</font></p>
 
 
 <h3><a name="w1"></a>Wsjt-x CQ-monitor</h3>
-<p ><img src="img/wsjt16.png" name="16"  width="363" height="282">
+<p ><img src="img/wsjt16.png" name="16"  width="363" height="282"> <img src="img/wsjt16b.png" name="16"  width="363" height="282">
 </img>
 </p>
-<p >Wsjt-x CQ-monitor form opens when you select ”Remote mode for wsjtx” from ”File” of NewQSO window.</p>
+<p >Wsjt-x CQ-monitor form opens when you select ”Remote mode for wsjtx” from ”File” of NewQSO window.
+<br> Top checkbox selection bar is visible at start by default.<br>
+You can hide it clicking with mouse on band or mode visible in both ends of the selection bar.
+ It can be restored by moving mouse over window's name bar at top. It works same way when wsjtx-MAP mode is selected (see below).</p>
 <p >You can close this window and reopen it later via NewQSO/Window/Wsjt-x monitor that is visible only when
 remote mode is selected. While it is closed it will not update it’s contents.<br/>
 Only remote logging and call qrz/hamqth seek are used then.
@@ -86,28 +88,12 @@ In some cases your TX may be shut down after you have first tried to answer some
 </img>
 <img src="img/wsjt30.png" name="30" width="353" height="83">
 </img></p><p>
-If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent richmemo text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
-</br>
-If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 
-How ever there are some limitations compared to CQ-monitor:
-</br><li><strong>color back</strong> can not change lower case letters of Band Activity line in case call or locator is worked. Just font color is changed</li>
-<li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
-<li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
-</br>
-With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
-</br></p><p>
-<img src="img/wsjt34.png" name="34" width="353" height="282">
-</img>
-<img src="img/wsjt33.png" name="33" width="353" height="282">
-</img></p><p>
-If you are able to use <strong>color back</strong> feature you may want to change some Wsjt-x color settings and maybe check "CQ only" checbox at Main window. Selecting also font to some of "mono"+ "bold" ones from "Configuration/General/Decoded Text Font" could make a better view.</p>
-<p>
-<ul><strong>A word of warning:</strong></ul>  In current Wsjt-x devel version 1.9.0-rc3 r8592 selecting <strong>CQ only</strong> will <strong>disable Generating of Std messages</strong> by double click either <strong>followed</strong> message line or Wsjt-x <strong>map's non-cq lines</strong>.
-</br>This <strong>does not</strong> happen if <strong>CQ only</strong> is <strong>uncheked</strong>. Unchecking it after not working double click does not help if Band Activiy window does not contain that line from which  <strong>Wsjt map</strong> or <strong>follow</strong> line was created.
-</br>That is because Wsjt-x must found equal line from Band activity and UDP command that produces Std General messages creation. 
-</br> This may change in future devel versions or in official release of 1.9.0, but at the moment you should be aware of that.</p>
-<p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
- Wsjtx will produce again last periods decode (wsjt map will show it double) and after that you can have effect for double click.
+If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
+</br></br>
+Selecting <b>DX</b> checkbox cqrlog fiters away all calls that are from same continent as you are. This works both in Cq monitor and MAP mode<br>
+
+
+
 </p><p><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img></p>
 Checking <b>“flw”</b> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
@@ -236,6 +222,26 @@ How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Excep
 </p><p><strong>dB</strong> selection shows station snr report, like it shows up in Band Activity of wsjt-x.
 </br><strong>ColorBackCQs </strong> selection work so that all <strong>CQs</strong> are printed (colored) <strong>back to Wsjt-x</strong> Band Activity window and <strong>rest of the traffic</strong> will appear to Wsjt-x <strong>band map</strong>.
 </p>
+If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 
+How ever there are some limitations compared to CQ-monitor:
+</br><li><strong>color back</strong> can not change lower case letters of Band Activity line in case call or locator is worked. Just font color is changed</li>
+<li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
+<li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
+</br>
+With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
+</br></p><p>
+<img src="img/wsjt34.png" name="34" width="353" height="282">
+</img>
+<img src="img/wsjt33.png" name="33" width="353" height="282">
+</img></p><p>
+If you are able to use <strong>color back</strong> feature you may want to change some Wsjt-x color settings and maybe check "CQ only" checbox at Main window. Selecting also font to some of "mono"+ "bold" ones from "Configuration/General/Decoded Text Font" could make a better view.</p>
+<p>
+<ul><strong>A word of warning:</strong></ul>  In current Wsjt-x devel version 1.9.0-rc3 r8592 selecting <strong>CQ only</strong> will <strong>disable Generating of Std messages</strong> by double click either <strong>followed</strong> message line or Wsjt-x <strong>map's non-cq lines</strong>.
+</br>This <strong>does not</strong> happen if <strong>CQ only</strong> is <strong>uncheked</strong>. Unchecking it after not working double click does not help if Band Activiy window does not contain that line from which  <strong>Wsjt map</strong> or <strong>follow</strong> line was created.
+</br>That is because Wsjt-x must found equal line from Band activity and UDP command that produces Std General messages creation. 
+</br> This may change in future devel versions or in official release of 1.9.0, but at the moment you should be aware of that.</p>
+<p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
+ Wsjtx will produce again last periods decode (wsjt map will show it double) and after that you can have effect for double click.
 <p><img src="img/wsjt31.png" name="31" width="453" height="383">
 </img><img src="img/wsjt32.png" name="32" width="253" height="283">
 </img></p>

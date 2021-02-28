@@ -665,6 +665,10 @@ begin
 end;
 
 function TdmDXCC.GetCont(call : String; Date : TDateTime) : String;
+//NOTE: 21-02-24 OH1KH
+//this returns country, not continent as would expect from naming!!
+//result is then same as calling TdmDXCC.GetCountry function above !!
+//Why?
 var
   cont, WAZ, posun, ITU, lat, long, country, pfx: string;
 begin
