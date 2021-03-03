@@ -201,11 +201,14 @@
 <a name=ah7><h2><strong>TRX Control</strong></h2></a>
 <img src=img/h10.png border=0><br><br>
 <div align=justify>
-    The TRX Control displays actual frequency. You can change band and mode. The radio will
-    change the freq/mode after you double click on a spot from dx cluster or on an item
-    in bandmap.<br> CQRLOG uses the rigctld utilty from HamLib. It controls the radio and
-    programs communicate with it through UDP. CQRLOG supports operating with two TRX but
-    only one can be active at a time.<br><br>
+The TRX Control displays actual frequency. If you open the DX Cluster window and connect to a DX Cluster server,
+ you will see a list of DX spots displayed. You can change band and mode of your radio by double clicking on a DX spot line in the DX cluster.
+ The radio will change the freq/mode after you have double clicked by sending Hamlib rigctld utility commands F and M to your radio with the
+ proper frequency and mode taken from DX spot line. Note how ever that settings in Preferences/Bands/Frequencies will affect what mode will be selected.
+<br>CQRLOG supports operating with two TRX radios but only one can be active at a time.
+<br><br>
+After you have the DX Cluster window open and connected you may also open the Band Map Window. You can then make a frequency change on the radio by double clicking on a callsign line listed in the Band Map.
+<br><br>
     <strong>Radio one, desc:</strong> is a description you'll see in TRX control window. It is only
     descriptive text, you can write whatever you want.<br><br>
     <strong>Host:</strong> computer where rigctld is running, localhost is fine for most cases. <br><br>
@@ -226,9 +229,14 @@
     Very often it is much better to specify only serial speed and leave other options as default.
     Default value means that the settings from HamLib will be used.<br>
     <br>
-    <strong>User defined TRXControl buttons</strong> can be defined here. First column is button name shown (4char max) and second column is command to execute. Definition can consist one, or several in queue, rigctld commands or if definition starts with word
-    <strong> run </strong> it can be a program or script name with full path.
-    <br><ul> <li>
+    <strong>User defined TRXControl buttons</strong> can be defined here. Your defined buttons will shown in the TRX Control window after
+     you drop select this option in using the <strong>Preferences tab in the TRXControl</strong> window. For setting up buttons use
+      <strong>preferences</strong> option from TRXControl drop select option <strong>Preferences</strong>. From TRX Control tab you will find group
+       box named <strong>User defined TRX control buttons</strong>.
+    The first column is button name shown (4char max). In the same area the second column is the command(s) to execute. Definition can consist one 
+     command or several in a queue, rigctld commands may be used or if definition starts with word "<strong>run</strong>" (without quotes) it can be a program or
+      script name with full file path for your computer.
+      <br><ul> <li>
     <strong>Note:</strong> Rigctld supports raw command <strong>W</strong>. Parameter for it is the rig cat command in bytes. Prefix<strong> \0x</strong> must be added for Hex values. Usr1 command in picture activates Icom IC7300 first voice memory play.
     </li> <li>
     <strong>Note:</strong> To run program or script it's name with full path must be entered. If file is command script then first line of it must tell what it is written for. If it is bash command script it's first line must be
