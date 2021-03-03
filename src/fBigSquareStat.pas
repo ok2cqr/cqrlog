@@ -159,13 +159,10 @@ begin
         db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
         try
           db.FieldDefs.Clear;
-          with db.FieldDefs do
-          begin
-            Add('loc', ftString, 4);
-            Add('cfm',ftBoolean)
-          end;
-          db.CreateDataset;
+          db.FieldDefs.Add('loc', ftString, 4);
           db.IndexDefs.Add('loc','loc',[ixPrimary]);
+          db.FieldDefs.Add('cfm',ftBoolean);
+          db.CreateDataset;
 
           db.Open;
           wkd := 0;
