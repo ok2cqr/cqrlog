@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
  
-	Commits on Feb 21, 2021 Merge pull request #405 from OH1KH/squash__usr_butt 
+    Commits on Mar 3, 2021  Merge pull request #407 from OH1KH/big_sqr
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -43,6 +43,9 @@ They contain all accepted pull requests from official source (that may not be re
  copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide above.
  
 LAST UPDATE
+  - ver 2.5.2(103)
+  - official version with alpha additions (see below) 
+  - Help files have additions remember to update also HELP
   - ver 2.5.2(102)
   - official version with alpha additions (see below) 
   - ver 2.5.2(101)
