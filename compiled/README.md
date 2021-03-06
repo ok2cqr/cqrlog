@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
  
-    Commits on Mar 3, 2021  Merge pull request #407 from OH1KH/big_sqr
+    Commits on Mar 6, 2021 Merge pull request #408 from OH1KH/label_print
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -43,6 +43,8 @@ They contain all accepted pull requests from official source (that may not be re
  copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide above.
  
 LAST UPDATE
+  - ver 2.5.2(104)
+  - official version with alpha additions (see below) 
   - ver 2.5.2(103)
   - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP
@@ -69,8 +71,10 @@ BINARIES:
 ---------
 
   - **cqr0.zip  holds binary for  64bit systems compiled for GTK2 widgets from latest official source (without additions) using linux Mint20**
+  - **cqr1.zip  holds binary for  32bit systems compiled for GTK2 widgets from latest official source (without additions) using linux Mint20**
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (official release of cqrlog with additions)**
   - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (official release of cqrlogwith additions, poorly tested)**
+  - **cqr4.zip  holds binary for  Arm systems (RPi) compiled for GTK2 widgets (official release of cqrlogwith additions, poorly tested)**
   - **cqr5.zip  holds binary for  64bit systems compiled for QT5 widgets (you may need to install libqt5pas to run this)**
   - **help.tgz  holds latest help files**
   - **newupdate.zip holds the newupdate.sh script for easy update**
