@@ -3243,6 +3243,8 @@ end;
 
 function TdmUtils.IsQSLViaValid(Text: string): boolean;
 begin
+  Result :=false;
+  if Text='' then exit; //do not allow empty RegExp
   reg.InputString := Text;
   reg.Expression := '\A\w{1,2}\d[A-Z]{1,3}\Z';
   Result := reg.ExecPos(1);
