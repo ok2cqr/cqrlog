@@ -71,7 +71,7 @@ BINARIES:
 ---------
 
   - **cqr0.zip  holds binary for  64bit systems compiled for GTK2 widgets from latest official source (without additions) using linux Mint20**
-  - **cqr1.zip  holds binary for  32bit systems compiled for GTK2 widgets from latest official source (without additions) using linux Mint20**
+  - **cqr1.zip  holds binary for  32bit systems compiled for GTK2 widgets from latest official source (without additions) using Ubuntu 18 LTS**
   - **cqr2.zip  holds binary for  64bit systems compiled for GTK2 widgets (official release of cqrlog with additions)**
   - **cqr3.zip  holds binary for  32bit systems compiled for GTK2 widgets (official release of cqrlogwith additions, poorly tested)**
   - **cqr4.zip  holds binary for  Arm systems (RPi) compiled for GTK2 widgets (official release of cqrlogwith additions, poorly tested)**
