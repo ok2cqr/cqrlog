@@ -3112,10 +3112,10 @@ begin
             begin
                  if dmData.DebugLevel>=1 then Writeln('Tail logging part entered');
                  OpCall := UpperCase(trim(StrBuf(index)));  //operator callsign (in contest, club etc.)
-                 if ((OpCall<>'') and (Op = UpperCase(cqrini.ReadString('Station', 'Call', '')))) then
-                  Begin
-                   Op := OpCall;
-                   sbNewQSO.Panels[2].Text := cOperator+Op;
+                 if ((OpCall<>'') and (Op <> OpCall)) then
+                  Begin           //wsjt-x operator setting wins cqrlog operator setting
+                   Op := OpCall;  //for this qso only as it is currently used operation mode
+                   ShowOperator;  //This only flashes wsjt-x operator during save
                   end;
                  ExchR :=  trim(StrBuf(index));  //fake, this is actually "My call". Not used
                  ExchR :=  trim(StrBuf(index));  //fake, this is actually "My grid". Not used
