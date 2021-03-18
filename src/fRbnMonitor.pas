@@ -281,17 +281,15 @@ begin
     2 : dxinfo := 'B';
     3 : dxinfo := 'M';
     else
-      dxinfo := ''
+     Begin
+      dxinfo := '';
+      if fil_NewDXCOnly then
+                        Begin
+                          if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Not new one, band or mode - ',dxstn);
+                          exit;
+                        end;
+     end;
   end; //case
-
-  if fil_NewDXCOnly then
-  begin
-    if (index>0) and (index<4) then
-    begin
-      if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Not new one, band or mode - ',dxstn);
-      exit
-    end
-  end;
 
   Result := True
 end;
