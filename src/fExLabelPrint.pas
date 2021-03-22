@@ -253,7 +253,7 @@ begin
       dmData.Q.ParamByName('qsl_r').AsString      := dmData.qCQRLOG.FieldByName('qsl_r').AsString;
       dmData.Q.ParamByName('iota').AsString       := dmData.qCQRLOG.FieldByName('iota').AsString;
       dmData.Q.ParamByName('pwr').AsString        := dmData.qCQRLOG.FieldByName('pwr').AsString;
-      dmData.Q.ParamByName('loc').AsString        := dmData.qCQRLOG.FieldByName('loc').AsString;
+      dmData.Q.ParamByName('loc').AsString        := Copy(dmData.qCQRLOG.FieldByName('loc').AsString, 1, 6);
       dmData.Q.ParamByName('my_loc').AsString     := dmData.qCQRLOG.FieldByName('my_loc').AsString;
       dmData.Q.ParamByName('award').AsString      := Rep(dmData.qCQRLOG.FieldByName('award').AsString);
       dmData.Q.ParamByName('band').AsString       := dmData.qCQRLOG.FieldByName('band').AsString;
