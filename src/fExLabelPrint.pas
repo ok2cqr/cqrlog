@@ -337,7 +337,7 @@ var
     if cqrini.ReadBool('QSLExport', 'Mode', True) then
       Write(f,dmData.Q.FieldByName('mode').AsString,C_SEP);
     if cqrini.ReadBool('QSLExport', 'Freq', True) then
-      Write(f,FloatToStr(dmData.Q.FieldByName('freq').AsFloat),C_SEP);
+      Write(f,FormatFloat('0.0000;;',dmData.Q.FieldByName('freq').AsFloat),C_SEP);
 
     if cqrini.ReadBool('QSLExport', 'RST_S', True) then
     begin
