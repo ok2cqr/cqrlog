@@ -22,6 +22,7 @@ type
     btnHelp: TButton;
     btnExportFieldsPref : TButton;
     Cancel: TButton;
+    chkKeepCsvStructure: TCheckBox;
     chkRemoveSep: TCheckBox;
     chkAllQSOs: TCheckBox;
     chkMarkSent: TCheckBox;
@@ -87,6 +88,8 @@ begin
   edtQSOsToLabel.Text   := cqrini.ReadString('QslExport','QSOs','6');
   edtRemarks.Text       := cqrini.ReadString('QslExport','Remarks','');
   chkRemoveSep.Checked  := cqrini.ReadBool('QslExport','RemoveSep',True);
+  chkKeepCsvStructure.Checked := cqrini.ReadBool('QSLExport', 'KeepCsvStructure', False);
+
   if edtRemarks.Text <> '' then
     rbOwnRemarks.Checked
 end;
@@ -253,7 +256,7 @@ begin
       dmData.Q.ParamByName('qsl_r').AsString      := dmData.qCQRLOG.FieldByName('qsl_r').AsString;
       dmData.Q.ParamByName('iota').AsString       := dmData.qCQRLOG.FieldByName('iota').AsString;
       dmData.Q.ParamByName('pwr').AsString        := dmData.qCQRLOG.FieldByName('pwr').AsString;
-      dmData.Q.ParamByName('loc').AsString        := dmData.qCQRLOG.FieldByName('loc').AsString;
+      dmData.Q.ParamByName('loc').AsString        := Copy(dmData.qCQRLOG.FieldByName('loc').AsString, 1, 6);
       dmData.Q.ParamByName('my_loc').AsString     := dmData.qCQRLOG.FieldByName('my_loc').AsString;
       dmData.Q.ParamByName('award').AsString      := Rep(dmData.qCQRLOG.FieldByName('award').AsString);
       dmData.Q.ParamByName('band').AsString       := dmData.qCQRLOG.FieldByName('band').AsString;
@@ -327,17 +330,36 @@ var
         Write(f,FormatDateTime('mm/dd/yyyy',dmData.Q.FieldByName('qsodate').AsDateTime),C_SEP);
         FormatSettings.DateSeparator:=sep;
       end;
+    end
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
     end;
     if cqrini.ReadBool('QSLExport', 'time_on', True) then
-      Write(f,dmData.Q.FieldByName('time_on').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('time_on').AsString,C_SEP)
+    else
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
     if cqrini.ReadBool('QSLExport', 'time_off', True) then
-      Write(f,dmData.Q.FieldByName('time_off').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('time_off').AsString,C_SEP)
+    else
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
     if cqrini.ReadBool('QSLExport', 'CallSign', True) then
-      Write(f,dmData.Q.FieldByName('callsign').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('callsign').AsString,C_SEP)
+    else
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
     if cqrini.ReadBool('QSLExport', 'Mode', True) then
-      Write(f,dmData.Q.FieldByName('mode').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('mode').AsString,C_SEP)
+    else
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
     if cqrini.ReadBool('QSLExport', 'Freq', True) then
-      Write(f,FloatToStr(dmData.Q.FieldByName('freq').AsFloat),C_SEP);
+      Write(f,FloatToStr(dmData.Q.FieldByName('freq').AsFloat),C_SEP)
+    else
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
 
     if cqrini.ReadBool('QSLExport', 'RST_S', True) then
     begin
@@ -351,6 +373,15 @@ var
         Write(f,rst_tmp[2],C_SEP);
         Write(f,rst_tmp[3],C_SEP);
       end;
+    end
+    else begin
+        if chkKeepCsvStructure.Checked then
+	begin
+           if not cqrini.ReadBool('QSLExport','SplitRST_R',False) then
+	      Write(f,C_SEP)
+           else
+	      Write(f,C_SEP,C_SEP,C_SEP);
+        end;
     end;
     if cqrini.ReadBool('QSLExport', 'RST_R', True) then
     begin
@@ -364,49 +395,142 @@ var
         Write(f,rst_tmp[2],C_SEP);
         Write(f,rst_tmp[3],C_SEP);
       end;
+    end
+    else begin
+        if chkKeepCsvStructure.Checked then
+	begin
+           if not cqrini.ReadBool('QSLExport','SplitRST_R',False) then
+	      Write(f,C_SEP)
+           else
+	      Write(f,C_SEP,C_SEP,C_SEP);
+        end;
     end;
     if cqrini.ReadBool('QSLExport', 'Name', True) then
-      Write(f,dmData.Q.FieldByName('name').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('name').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'QTH', True) then
-      Write(f,dmData.Q.FieldByName('qth').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('qth').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'band', True) then
-      Write(f,dmData.Q.FieldByName('band').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('band').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'Propagation', True) then
-      Write(f,dmData.Q.FieldByName('prop_mode').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('prop_mode').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'Satellite',  True) then
-      Write(f,dmData.Q.FieldByName('satellite').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('satellite').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'ContestName',  True) then
-      Write(f, dmData.Q.FieldByName('contestname').AsString,C_SEP);
+      Write(f, dmData.Q.FieldByName('contestname').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'QSL_S', True) then
-      Write(f,dmData.Q.FieldByName('qsl_s').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('qsl_s').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'QSL_R', True) then
-      Write(f,dmData.Q.FieldByName('qsl_r').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('qsl_r').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'QSL_VIA', True) then
-      Write(f,dmData.Q.FieldByName('qsl_via').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('qsl_via').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'locator', True) then
-      Write(f,dmData.Q.FieldByName('loc').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('loc').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'MyLoc', True) then
-      Write(f,dmData.Q.FieldByName('my_loc').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('my_loc').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'Distance', True) then
-      Write(f,frmMain.CalcQrb(dmData.Q.FieldByName('my_loc').AsString,dmData.Q.FieldByName('loc').AsString,False),C_SEP);
+      Write(f,frmMain.CalcQrb(dmData.Q.FieldByName('my_loc').AsString,dmData.Q.FieldByName('loc').AsString,False),C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'IOTA', True) then
-      Write(f,dmData.Q.FieldByName('iota').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('iota').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'award', True) then
-      Write(f,dmData.Q.FieldByName('award').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('award').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'power', True) then
-      Write(f,dmData.Q.FieldByName('pwr').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('pwr').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'Remarks', True) then
-      Write(f,dmData.Q.FieldByName('remarks').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('remarks').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'QSLMsg', True) then
-      Write(f,dmData.Q.FieldByName('qslmsg').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('qslmsg').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'ContestNrS', True) then
-      Write(f,dmData.Q.FieldByName('stx').AsString ,C_SEP);
+      Write(f,dmData.Q.FieldByName('stx').AsString ,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'ContestMsgS', True) then
-      Write(f,dmData.Q.FieldByName('stx_string').AsString,C_SEP);
+      Write(f,dmData.Q.FieldByName('stx_string').AsString,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'ContestNrR',  True) then
-      Write(f,dmData.Q.FieldByName('srx').AsString ,C_SEP);
+      Write(f,dmData.Q.FieldByName('srx').AsString ,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
     if cqrini.ReadBool('QSLExport', 'ContestMsgR',  True) then
-      Write(f,dmData.Q.FieldByName('srx_string').AsString ,C_SEP);
+      Write(f,dmData.Q.FieldByName('srx_string').AsString ,C_SEP)
+    else begin
+        if chkKeepCsvStructure.Checked then
+	    Write(f,C_SEP);
+    end;
 
   end;
 
@@ -546,7 +670,8 @@ begin
   cqrini.WriteString('QslExport','Path',edtFile.Text);
   cqrini.WriteString('QslExport','QSOs',edtQSOsToLabel.Text);
   cqrini.WriteString('QslExport','Remarks',edtRemarks.Text);
-  cqrini.ReadBool('QslExport','RemoveSep',chkRemoveSep.Checked)
+  cqrini.WriteBool('QSLExport', 'KeepCsvStructure', chkKeepCsvStructure.Checked);
+  cqrini.WriteBool('QslExport','RemoveSep',chkRemoveSep.Checked)
 end;
 
 procedure TfrmExLabelPrint.btnExportFieldsPrefClick(Sender : TObject);
