@@ -104,8 +104,10 @@ type TRigControl = class
     procedure SetModePass(mode : TRigMode);
     procedure SetFreqKHz(freq : Double);
     procedure SetSplit(up:integer);
-    procedure DisableSplit;
+    procedure DisableSplit;  //this is disable XIT
+    procedure ClearXit;
     procedure ClearRit;
+    procedure DisableRit;
     procedure Restart;
     procedure PwrOn;
     procedure PwrOff;
@@ -261,10 +263,18 @@ procedure TRigControl.ClearRit;
 begin
   RigCommand.Add('J 0')
 end;
+procedure TRigControl.DisableRit;
+Begin
+  RigCommand.Add('U RIT 0');
+end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
   RigCommand.Add('Z '+IntToStr(up));
   RigCommand.Add('U XIT 1');
+end;
+procedure TRigControl.ClearXit;
+begin
+  RigCommand.Add('Z 0')
 end;
 procedure TRigControl.DisableSplit;
 Begin
