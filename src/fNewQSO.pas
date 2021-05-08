@@ -7442,6 +7442,7 @@ begin
                   wHiSpeed  := 10;    //mS will be shorter when FT8
                   wLoSpeed  := 1000;
 
+                  frmTRXControl.DisableRitXit; //wsjtx does not do this, so we have to ...
 
                   tmrWsjtx.Interval := wLoSpeed;      //  timer has now dynamic value. Most of time there is nothing to do
 

@@ -185,6 +185,7 @@ type
     procedure Split(up : Integer);
     procedure DisableSplit;
     procedure ClearRIT;
+    procedure DisableRitXit;
     procedure LoadUsrButtonCaptions;
     procedure LoadButtonCaptions;
     procedure SetDebugMode(DebugMode : Boolean);
@@ -1508,7 +1509,15 @@ procedure TfrmTRXControl.ClearRIT;
 begin
   if (lblFreq.Caption = empty_freq) then
     exit;
-  radio.ClearRit
+  radio.ClearRit;
+  radio.ClearXit   //this clears Xit too
+end;
+procedure TfrmTRXControl.DisableRitXit;
+begin
+  if (lblFreq.Caption = empty_freq) then
+    exit;
+  radio.DisableRit;
+  radio.DisableSplit   //this disabeles Xit
 end;
 procedure TfrmTRXControl.LoadUsrButtonCaptions;
 var       r:char;
