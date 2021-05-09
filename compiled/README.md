@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
  
-    Commits on Mar 17, 2021   Merge pull request #410 from OH1KH/wsjt_op 
+    Commits on May 8, 2021 Merge pull request #417 from phl0/TO108
  
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -43,6 +43,8 @@ They contain all accepted pull requests from official source (that may not be re
  copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide above.
  
 LAST UPDATE
+  - ver 2.5.2(106)
+  - official version with alpha additions (see below) 
   - ver 2.5.2(105)
   - official version with alpha additions (see below) 
   - ver 2.5.2(104)
