@@ -7619,7 +7619,7 @@ begin
 
   if  mnuRemoteModeWsjt.Checked then
   begin
-      if not frmMonWsjtx.CanCloseFCCProcess  then
+      if (( frmMonWsjtx <> nil) and (not frmMonWsjtx.CanCloseFCCProcess )) then
        Begin
         msg:='FCC US-states download an process is still ' +#13+
              'running. Closing monitor will abort process'+#13+
