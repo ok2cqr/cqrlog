@@ -976,7 +976,7 @@ Begin
   if pos('RUN',uppercase(c))=1 then
      Begin
        c:= trim(copy(c,4,length(c)));
-       dmutils.RunOnBackgroud(c);
+       dmutils.RunOnBackground(c);
      end
    else
      radio.UsrCmd(c);
