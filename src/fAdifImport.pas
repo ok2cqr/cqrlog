@@ -17,8 +17,8 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, lcltype, ComCtrls, ExtCtrls, EditBtn, iniFiles, sqldb, dateutils,
-  strutils, LazUTF8, RegExpr;
+  Buttons, lcltype, ComCtrls, ExtCtrls, EditBtn, Menus, iniFiles, sqldb,
+  dateutils, strutils, LazUTF8, RegExpr;
 
 {$include uADIFhash.pas}
 
@@ -115,8 +115,12 @@ type
     lblDateTo: TLabel;
     lblQthProfile: TLabel;
     lblRemaks: TLabel;
+    mnuedit: TMenuItem;
+    mnuImport: TMenuItem;
+    mnuDelete: TMenuItem;
     pnlAll: TPanel;
     pnlFilterDateRange: TPanel;
+    popErrFile: TPopupMenu;
     Q1: TSQLQuery;
     Q2: TSQLQuery;
     Q3: TSQLQuery;
@@ -130,6 +134,9 @@ type
     procedure lblErrorLogClick(Sender: TObject);
     procedure lblErrorLogMouseEnter(Sender: TObject);
     procedure lblErrorLogMouseLeave(Sender: TObject);
+    procedure mnuDeleteClick(Sender: TObject);
+    procedure mnueditClick(Sender: TObject);
+    procedure mnuImportClick(Sender: TObject);
   private
     AbortImport : boolean;
     ERR_FILE : String;
@@ -853,10 +860,16 @@ begin
 end;
 
 procedure TfrmAdifImport.lblErrorLogClick(Sender: TObject);
-  //open in text editor
+Begin
+   popErrFile.Popup;
+end;
+
+procedure TfrmAdifImport.mnueditClick(Sender: TObject);
+   //open in text editor
 var
   prg: string;
 begin
+  popErrFile.Close;
   try
     prg := cqrini.ReadString('ExtView', 'txt', '');
     if prg<>'' then
@@ -865,6 +878,25 @@ begin
   finally
    //done
   end;
+end;
+
+procedure TfrmAdifImport.mnuImportClick(Sender: TObject);
+begin
+  popErrFile.Close;
+  lblFileName.Caption:= lblErrorLog.Caption;
+  lblErrorLog.Caption:='';
+  lblCount.Caption :='';
+  lblErrors.Caption := ''
+end;
+
+procedure TfrmAdifImport.mnuDeleteClick(Sender: TObject);
+begin
+  popErrFile.Close;
+  if ( Application.MessageBox(pAnsiChar('Do you want to delete file'+#10+lblErrorLog.Caption) , 'Delete file ?',MB_ICONQUESTION + MB_YESNO) = IDYES) then
+    Begin
+      DeleteFile( lblErrorLog.Caption );
+      lblErrorLog.Caption:=''
+    end;
 end;
 
 procedure TfrmAdifImport.lblErrorLogMouseEnter(Sender: TObject);
