@@ -27,63 +27,63 @@ type
 
 type TnewQSOEntry=record   //represents a new qso entry in the log
       st:longint; // number of items added;
-      BAND:string[10];
-      CALL:string[30];
-      CNTY:string[50];
-      COMMENT:string[250];
-      CONT:string[2];
-      DXCC:string[16];
-      EQSL_QSLRDATE:string[10];
-      EQSL_QSLSDATE:string[10];
-      EQSL_QSL_RCVD:string[2];
-      EQSL_QSL_SENT:string[2];
-      FREQ:string[12];
-      GRIDSQUARE:string[6];
-      IOTA:string[6];
-      ITUZ:string[2];
-      LOTW_QSLRDATE:string[10];
-      LOTW_QSLSDATE:string[10];
-      LOTW_QSL_RCVD:string[2];
-      LOTW_QSL_SENT:string[2];
-      MODE:string[12];
-      MY_GRIDSQUARE:string[6];
-      NAME:string[50];
-      NOTES:string[250];
-      PFX:string[16];
-      QSLMSG:string[250];
-      QSLRDATE:string[10];
-      QSLSDATE:string[10];
-      QSL_RCVD:string[5];
-      QSL_SENT:string[5];
-      QSL_VIA:string[20];
-      QSO_DATE:string[10];
-      QTH:string[250];
-      RST_RCVD:string[6];
-      RST_SENT:string[6];
-      SRX:string[6];
-      SRX_STRING:string[250];
-      STX:string[6];
-      STX_STRING:string[250];
-      CONTEST_ID:string[250];
-      DARC_DOK:string[12];
-      TIME_OFF:string[5];
-      TIME_ON:string[5];
-      TX_PWR:string[5];
-      EOH:string[250];
-      EOR:string[250];
-      APP_CQRLOG_QSLS:string[4];
-      APP_CQRLOG_QSLR:string[4];
-      APP_CQRLOG_PROFILE:string[250];
-      APP_CQRLOG_COUNTY:string[250];
-      APP_CQRLOG_DXCC:string[16];
-      CQZ:string[3];
-      STATE:string[3];
-      AWARD:string[250];
-      POWER:String[10];
-      PROP_MODE : String[30];
-      SAT_NAME : String[30];
-      FREQ_RX  : String[30];
-      OP:String[30];
+      BAND:string[l_BAND];
+      CALL:string[l_CALL];
+      CNTY:string[l_CNTY];
+      COMMENT:string[l_COMMENT];
+      CONT:string[l_CONT];
+      DXCC:string[l_DXCC];
+      EQSL_QSLRDATE:string[l_EQSL_QSLRDATE];
+      EQSL_QSLSDATE:string[l_EQSL_QSLSDATE];
+      EQSL_QSL_RCVD:string[l_EQSL_QSL_RCVD];
+      EQSL_QSL_SENT:string[l_EQSL_QSL_SENT];
+      FREQ:string[l_FREQ];
+      GRIDSQUARE:string[l_GRIDSQUARE];
+      IOTA:string[l_IOTA];
+      ITUZ:string[l_ITUZ];
+      LOTW_QSLRDATE:string[l_LOTW_QSLRDATE];
+      LOTW_QSLSDATE:string[l_LOTW_QSLSDATE];
+      LOTW_QSL_RCVD:string[l_LOTW_QSL_RCVD];
+      LOTW_QSL_SENT:string[l_LOTW_QSL_SENT];
+      MODE:string[l_MODE];
+      MY_GRIDSQUARE:string[l_MY_GRIDSQUARE];
+      NAME:string[l_NAME];
+      NOTES:string[l_NOTES];
+      PFX:string[l_PFX];
+      QSLMSG:string[l_QSLMSG];
+      QSLRDATE:string[l_QSLRDATE];
+      QSLSDATE:string[l_QSLSDATE];
+      QSL_RCVD:string[l_QSL_RCVD];
+      QSL_SENT:string[l_QSL_SENT];
+      QSL_VIA:string[l_QSL_VIA];
+      QSO_DATE:string[l_QSO_DATE];
+      QTH:string[l_QTH];
+      RST_RCVD:string[l_RST_RCVD];
+      RST_SENT:string[l_RST_SENT];
+      SRX:string[l_SRX];
+      SRX_STRING:string[l_SRX_STRING];
+      STX:string[l_STX];
+      STX_STRING:string[l_STX_STRING];
+      CONTEST_ID:string[l_CONTEST_ID];
+      DARC_DOK:string[l_DARC_DOK];
+      TIME_OFF:string[l_TIME_OFF];
+      TIME_ON:string[l_TIME_ON];
+      TX_PWR:string[l_TX_PWR];
+      EOH:string[l_EOH];
+      EOR:string[l_EOR];
+      APP_CQRLOG_QSLS:string[l_APP_CQRLOG_QSLS];
+      APP_CQRLOG_QSLR:string[l_APP_CQRLOG_QSLR];
+      APP_CQRLOG_PROFILE:string[l_APP_CQRLOG_PROFILE];
+      APP_CQRLOG_COUNTY:string[l_APP_CQRLOG_COUNTY];
+      APP_CQRLOG_DXCC:string[l_APP_CQRLOG_DXCC];
+      CQZ:string[l_CQZ];
+      STATE:string[l_STATE];
+      AWARD:string[l_AWARD];
+      POWER:String[l_POWER];
+      PROP_MODE : String[l_PROP_MODE];
+      SAT_NAME : String[l_SAT_NAME];
+      FREQ_RX  : String[l_FREQ_RX];
+      OP:String[l_OP];
      end;
 type
 
@@ -127,9 +127,13 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnImportClick(Sender: TObject);
+    procedure lblErrorLogClick(Sender: TObject);
+    procedure lblErrorLogMouseEnter(Sender: TObject);
+    procedure lblErrorLogMouseLeave(Sender: TObject);
   private
     AbortImport : boolean;
     ERR_FILE : String;
+    CutErrText : String;
     WrongRecNr : Integer;
     RecNR      : Integer;
     GlobalProfile : Integer;
@@ -141,12 +145,11 @@ type
     FFilterDateRange: array [0..1] of TDateString;
     function ValidateFilter: boolean;
     procedure WriteWrongADIF(lines : Array of String; error : String);
-
     function generateAdifTagHash(aaa:String):longint;
-    function fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry):boolean;
+    function fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry;adifTag:String):boolean;
     procedure initializeTypeVariable(var d:TnewQSOEntry);
     function saveNewEntryFromADIFinDatabase(var d:TnewQSOEntry; var err : String) : Boolean;
-
+    function TrimDataLen(adifTag:String;adifdata:String;maxlen:integer): String;
     { private declarations }
   public
     function getNextAdifTag(var vstup,prik,data:string):boolean;
@@ -250,32 +253,35 @@ var z,x:longint;
     getNextAdifTag:=true
   end;
 
-function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry):boolean;
+function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry;adifTag:String):boolean;
+
   begin
     if (h=h_EOH) or (h=h_EOR) then begin
       fillTypeVariableWithTagData:=false;exit;
     end;
+
     fillTypeVariableWithTagData:=true;
     data := trim(data);
     case h of
-      h_BAND                          :d.BAND:=data;
-      h_CALL                          :d.CALL:=data;
-      h_CNTY                          :d.CNTY:=data;
-      h_COMMENT                       :d.COMMENT:=data;
-      h_CONT                          :d.CONT:=data;
-      h_DXCC                          :d.DXCC:=data;
-      h_EQSL_QSLRDATE                 :d.EQSL_QSLRDATE:=data;
-      h_EQSL_QSLSDATE                 :d.EQSL_QSLSDATE:=data;
-      h_EQSL_QSL_RCVD                 :d.EQSL_QSL_RCVD:=data;
-      h_EQSL_QSL_SENT                 :d.EQSL_QSL_SENT:=data;
-      h_FREQ                          :d.FREQ:=data;
-      h_GRIDSQUARE                    :d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-      h_IOTA                          :d.IOTA:=data;
-      h_ITUZ                          :d.ITUZ:=data;
-      h_LOTW_QSLRDATE                 :d.LOTW_QSLRDATE:=data;
-      h_LOTW_QSLSDATE                 :d.LOTW_QSLSDATE:=data;
-      h_LOTW_QSL_RCVD                 :d.LOTW_QSL_RCVD:=data;
-      h_LOTW_QSL_SENT                 :d.LOTW_QSL_SENT:=data;
+    h_BAND                          :d.BAND:=TrimDataLen(adifTag,data,l_BAND);
+    h_CALL                          :d.CALL:=TrimDataLen(adifTag,data,l_CALL);
+    h_CNTY                          :d.CNTY:=TrimDataLen(adifTag,data,l_CNTY);
+    h_COMMENT                       :d.COMMENT:=TrimDataLen(adifTag,data,l_COMMENT);
+    h_CONT                          :d.CONT:=TrimDataLen(adifTag,data,l_CONT);
+    h_DXCC                          :d.DXCC:=TrimDataLen(adifTag,data,l_DXCC);
+    h_EQSL_QSLRDATE                 :d.EQSL_QSLRDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLRDATE);
+    h_EQSL_QSLSDATE                 :d.EQSL_QSLSDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLSDATE);
+    h_EQSL_QSL_RCVD                 :d.EQSL_QSL_RCVD:=TrimDataLen(adifTag,data,l_EQSL_QSL_RCVD);
+    h_EQSL_QSL_SENT                 :d.EQSL_QSL_SENT:=TrimDataLen(adifTag,data,l_EQSL_QSL_SENT);
+    h_FREQ                          :d.FREQ:=TrimDataLen(adifTag,data,l_FREQ);
+    h_GRIDSQUARE                    :d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
+    h_IOTA                          :d.IOTA:=TrimDataLen(adifTag,data,l_IOTA);
+    h_ITUZ                          :d.ITUZ:=TrimDataLen(adifTag,data,l_ITUZ);
+    h_LOTW_QSLRDATE                 :d.LOTW_QSLRDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLRDATE);
+    h_LOTW_QSLSDATE                 :d.LOTW_QSLSDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLSDATE);
+    h_LOTW_QSL_RCVD                 :d.LOTW_QSL_RCVD:=TrimDataLen(adifTag,data,l_LOTW_QSL_RCVD);
+    h_LOTW_QSL_SENT                 :d.LOTW_QSL_SENT:=TrimDataLen(adifTag,data,l_LOTW_QSL_SENT);
+
       // DL7OAP: because MODE-field in cqrlog database does not match completely
       // with MODE field of ADIF specification, we have to transfer the
       // ADIF MODES/SUBMODES (JS8, FT4, FST4,PKT) to MODE-field in cqrlog database
@@ -289,40 +295,41 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
                                           if data = 'JS8' then d.MODE:=data
                                         end;
       h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-      h_NAME                            :d.NAME:=data;
-      h_NOTES                           :d.NOTES:=data;
-      h_PFX                             :d.PFX:=data;
-      h_QSLMSG                          :d.QSLMSG:=data;
-      h_QSLRDATE                        :d.QSLRDATE:=data;
-      h_QSLSDATE                        :d.QSLSDATE:=data;
-      h_QSL_RCVD                        :d.QSL_RCVD:=data;
-      h_QSL_SENT                        :d.QSL_SENT:=data;
-      h_QSL_VIA                         :d.QSL_VIA:=data;
-      h_QSO_DATE                        :d.QSO_DATE:=data;
-      h_QTH                             :d.QTH:=data;
-      h_RST_RCVD                        :d.RST_RCVD:=data;
-      h_RST_SENT                        :d.RST_SENT:=data;
-      h_SRX                             :d.SRX:=data;
-      h_SRX_STRING                      :d.SRX_STRING:=data;
-      h_STX                             :d.STX:=data;
-      h_STX_STRING                      :d.STX_STRING:=data;
-      h_CONTEST_ID                      :d.CONTEST_ID:=data;
-      h_DARC_DOK                        :d.DARC_DOK:=data;
-      h_TIME_OFF                        :d.TIME_OFF:=data;
-      h_TIME_ON                         :d.TIME_ON:=data;
-      h_TX_PWR                          :d.TX_PWR:=data;
-      h_APP_CQRLOG_DXCC                 :d.APP_CQRLOG_DXCC:=data;
-      h_APP_CQRLOG_QSLS                 :d.APP_CQRLOG_QSLS:=data;
-      h_APP_CQRLOG_PROFILE              :d.APP_CQRLOG_PROFILE:=data;
-      h_APP_CQRLOG_QSLR                 :d.APP_CQRLOG_QSLR:=data;
-      h_APP_CQRLOG_COUNTY               :d.APP_CQRLOG_COUNTY:=data;
-      h_CQZ                             :d.CQZ:=data;
-      h_STATE                           :d.STATE:=data;
-      h_AWARD                           :d.AWARD:=data;
-      h_PROP_MODE                       :d.PROP_MODE:=data;
-      h_SAT_NAME                        :d.SAT_NAME:=data;
-      h_FREQ_RX                         :d.FREQ_RX:=data;
-      h_OP                              :d.OP:=data
+      h_NAME                            :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
+      h_NOTES                           :d.NOTES:=TrimDataLen(adifTag,data,l_NOTES);
+      h_PFX                             :d.PFX:=TrimDataLen(adifTag,data,l_PFX);
+      h_QSLMSG                          :d.QSLMSG:=TrimDataLen(adifTag,data,l_QSLMSG);
+      h_QSLRDATE                        :d.QSLRDATE:=TrimDataLen(adifTag,data,l_QSLRDATE);
+      h_QSLSDATE                        :d.QSLSDATE:=TrimDataLen(adifTag,data,l_QSLSDATE);
+      h_QSL_RCVD                        :d.QSL_RCVD:=TrimDataLen(adifTag,data,l_QSL_RCVD);
+      h_QSL_SENT                        :d.QSL_SENT:=TrimDataLen(adifTag,data,l_QSL_SENT);
+      h_QSL_VIA                         :d.QSL_VIA:=TrimDataLen(adifTag,data,l_QSL_VIA);
+      h_QSO_DATE                        :d.QSO_DATE:=TrimDataLen(adifTag,data,l_QSO_DATE);
+      h_QTH                             :d.QTH:=TrimDataLen(adifTag,data,l_QTH);
+      h_RST_RCVD                        :d.RST_RCVD:=TrimDataLen(adifTag,data,l_RST_RCVD);
+      h_RST_SENT                        :d.RST_SENT:=TrimDataLen(adifTag,data,l_RST_SENT);
+      h_SRX                             :d.SRX:=TrimDataLen(adifTag,data,l_SRX);
+      h_SRX_STRING                      :d.SRX_STRING:=TrimDataLen(adifTag,data,l_SRX_STRING);
+      h_STX                             :d.STX:=TrimDataLen(adifTag,data,l_STX);
+      h_STX_STRING                      :d.STX_STRING:=TrimDataLen(adifTag,data,l_STX_STRING);
+      h_CONTEST_ID                      :d.CONTEST_ID:=TrimDataLen(adifTag,data,l_CONTEST_ID);
+      h_DARC_DOK                        :d.DARC_DOK:=TrimDataLen(adifTag,data,l_DARC_DOK);
+      h_TIME_OFF                        :d.TIME_OFF:=copy(data,1,4);//can be HHMMSS but cqrlog uses HHMM both
+      h_TIME_ON                         :d.TIME_ON:=copy(data,1,4); //are valid adif forms so no Trim/Err here
+      h_TX_PWR                          :d.TX_PWR:=TrimDataLen(adifTag,data,l_TX_PWR);
+      h_APP_CQRLOG_DXCC                 :d.APP_CQRLOG_DXCC:=TrimDataLen(adifTag,data,l_APP_CQRLOG_DXCC);
+      h_APP_CQRLOG_QSLS                 :d.APP_CQRLOG_QSLS:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLS);
+      h_APP_CQRLOG_PROFILE              :d.APP_CQRLOG_PROFILE:=TrimDataLen(adifTag,data,l_APP_CQRLOG_PROFILE);
+      h_APP_CQRLOG_QSLR                 :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
+      h_APP_CQRLOG_COUNTY               :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
+      h_CQZ                             :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
+      h_STATE                           :d.STATE:=TrimDataLen(adifTag,data,l_STATE);
+      h_AWARD                           :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
+      h_PROP_MODE                       :d.PROP_MODE:=TrimDataLen(adifTag,data,l_PROP_MODE);
+      h_SAT_NAME                        :d.SAT_NAME:=TrimDataLen(adifTag,data,l_SAT_NAME);
+      h_FREQ_RX                         :d.FREQ_RX:=TrimDataLen(adifTag,data,l_FREQ_RX);
+      h_OP                              :d.OP:=TrimDataLen(adifTag,data,l_OP);
+
     else begin
         { writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}
       end;
@@ -388,7 +395,8 @@ begin
     d.EQSL_QSLSDATE := dmUtils.ADIFDateToDate(d.EQSL_QSLSDATE);
     d.EQSL_QSLRDATE := dmUtils.ADIFDateToDate(d.EQSL_QSLRDATE);
 
-    d.TIME_ON := copy(d.TIME_ON,1,2) + ':' + copy(d.TIME_ON,3,2);
+
+     d.TIME_ON := copy(d.TIME_ON,1,2) + ':' + copy(d.TIME_ON,3,2);
     if d.TIME_OFF <> '' then
       d.TIME_OFF := copy(d.TIME_OFF,1,2) + ':' + copy(d.TIME_OFF,3,2)
     else
@@ -416,10 +424,11 @@ begin
         d.QSL_RCVD := ''
     end;
 
-    d.IOTA  := Trim(d.IOTA);
+    // d.IOTA  := Trim(d.IOTA); this has been trimmed at  fillTypeVariableWithTagData
     d.IOTA  := UpperCase(d.IOTA);
-    d.NAME  := Copy(d.NAME, 1 ,40);
-    d.QTH   := Copy(d.QTH, 1, 60);
+    //lengths now fixed in  fillTypeVariableWithTagData
+    //d.NAME  := Copy(d.NAME, 1 ,40);
+    //d.QTH   := Copy(d.QTH, 1, 60);
     //workaround for 'TRegExpr exec: empty input string' error in fpc compiler
     if (trim(d.DARC_DOK) <> '') then
     begin
@@ -440,13 +449,14 @@ begin
 
     d.OP := UpperCase(d.OP);
 
-    if not dmUtils.IsAdifOK(d.QSO_DATE,d.TIME_ON,d.TIME_OFF,d.CALL,d.FREQ,d.MODE,d.RST_SENT,
+    if (not dmUtils.IsAdifOK(d.QSO_DATE,d.TIME_ON,d.TIME_OFF,d.CALL,d.FREQ,d.MODE,d.RST_SENT,
                             d.RST_RCVD,d.IOTA,d.ITUZ,d.CQZ,d.GRIDSQUARE,d.MY_GRIDSQUARE,
-                            d.BAND,err) then
+                            d.BAND,err)) then
     begin
       inc(WrongRecNr);
       lblErrors.Caption   := IntToStr(WrongRecNr);
       lblErrorLog.Caption := dmData.UsrHomeDir + ERR_FILE;
+      lblErrorLog.Visible:=true;
       Repaint;
       Application.ProcessMessages;
       Result := False;
@@ -755,6 +765,7 @@ var
   ErrText : String = '';
   tmp : String='';
 begin
+  CutErrText :='';
   AbortImport := false;
   lblComplete.Visible := False;
   GlobalProfile := dmData.GetNRFromProfile(cmbProfiles.Text);
@@ -796,13 +807,16 @@ begin
       while getNextAdifTag(oneTextRow,adifTag,data) and not (AbortImport) do
       begin
         h:=generateAdifTagHash(adifTag);
-        if (h=h_EOH) or (h=h_EOR) then
+        if ((h=h_EOH) or (h=h_EOR)) then
         begin
           if not saveNewEntryFromADIFinDatabase(d,ErrText) then
             WriteWrongADIF(tmp,ErrText);
-          tmp:=''
+          if (CutErrText<>'') and (h=h_EOR)then
+              WriteWrongADIF(tmp,'Imported with shrink(s):'+#10+CutErrText);
+          CutErrText:='';
+          tmp:='';
         end;
-        fillTypeVariableWithTagData(h,data,d)
+        fillTypeVariableWithTagData(h,data,D,adifTag);
       end;
     end
   except
@@ -836,6 +850,31 @@ begin
     Qasked:=false;
     lblComplete.Visible := True
   end;
+end;
+
+procedure TfrmAdifImport.lblErrorLogClick(Sender: TObject);
+  //open in text editor
+var
+  prg: string;
+begin
+  try
+    prg := cqrini.ReadString('ExtView', 'txt', '');
+    if prg<>'' then
+      dmUtils.RunOnBackground(prg + ' ' + lblErrorLog.Caption)
+     else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
+  finally
+   //done
+  end;
+end;
+
+procedure TfrmAdifImport.lblErrorLogMouseEnter(Sender: TObject);
+begin
+     lblErrorLog.Font.Bold:=true;
+end;
+
+procedure TfrmAdifImport.lblErrorLogMouseLeave(Sender: TObject);
+begin
+  lblErrorLog.Font.Bold:=false;
 end;
 
 
@@ -876,7 +915,8 @@ begin
     ERR_FILE := 'errors_'+TimeToStr(now)+'.adi'
   finally
     FormatSettings.TimeSeparator := tmp
-  end
+  end;
+  lblErrorLog.Visible:=false
 end;
 
 procedure TfrmAdifImport.chkFilterDateRangeChange(Sender: TObject);
@@ -894,6 +934,18 @@ begin
   dmUtils.LoadFontSettings(self);
   Qasked:=false;
 end;
+
+function TfrmAdifImport.TrimDataLen(adiftag:String;adifdata:String;maxlen:integer):String;
+Begin
+ if length(adifdata)>maxlen then
+     Begin
+            CutErrText:=CutErrText + adiftag+' shrink to '+IntToStr(maxlen)+' chrs:'+adifdata+' -> '+copy(adifdata,1,maxlen)+#10;
+            Result:= trim(copy(adifdata,1,maxlen)); //trim after cut
+     end
+   else
+            Result:=adifdata; //trimmed before
+end;
+
 
 procedure TfrmAdifImport.WriteWrongADIF(lines : Array of String; error : String);
 var

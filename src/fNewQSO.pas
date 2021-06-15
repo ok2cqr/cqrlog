@@ -7553,7 +7553,7 @@ begin
   cbOffline.Checked     := True;
   cbOffline.Enabled    := False;
   if run and FileExists(path) then
-    dmUtils.RunOnBackgroud(path)
+    dmUtils.RunOnBackground(path)
 end;
 
 
