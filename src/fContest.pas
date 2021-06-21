@@ -15,6 +15,7 @@ type
   TfrmContest = class(TForm)
     btSave: TButton;
     btClearAll : TButton;
+    chkmode4dupe: TCheckBox;
     chkTabAll: TCheckBox;
     chkQsp: TCheckBox;
     chkTrueRST: TCheckBox;
@@ -185,6 +186,9 @@ end;
 
 
 procedure TfrmContest.edtCallExit(Sender: TObject);
+var
+  dupe    :integer;
+
 begin
   // if frmNewQSO is in viewmode or editmode it overwrites old data or will not save
   // because saving is disabled in view mode. this if statement starts a fresh newqso form
@@ -200,15 +204,20 @@ begin
   frmNewQSO.edtCall.Text := edtCall.Text;
 
   //dupe check
-  if frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text) = 1 then
+  dupe := frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
+
+  if  ((dupe = 1 )                                        // 1= wkd this band and mode
+   or ((dupe = 2 ) and (   chkMode4Dupe.Checked ))) then // 2= wkd this band but NOT this mode
        Begin        //dupe
          edtCall.Font.Color:=clRed;
          edtCall.Font.Style:= [fsBold];
+         frmNewQSO.edtRemQSO.Caption:='Dupe';
        end
     else
       Begin         //clear dupe if user press 1xESC and change call not to be dupe
          edtCall.Font.Color:=clDefault;
          edtCall.Font.Style:= [];
+         frmNewQSO.edtRemQSO.Caption:='';
       end;
 
   //report in NEwQSO changes to 59 to late (after passing cmbMode)
