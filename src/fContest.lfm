@@ -13,7 +13,7 @@ object frmContest: TfrmContest
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.0.12.0'
   object edtCall: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideTop.Control = lblCall
@@ -632,6 +632,19 @@ object frmContest: TfrmContest
         Width = 50
       end>
     SimplePanel = False
+  end
+  object chkmode4dupe: TCheckBox
+    AnchorSideLeft.Control = chkSpace
+    AnchorSideTop.Control = chkSpace
+    AnchorSideTop.Side = asrBottom
+    Left = 17
+    Height = 23
+    Top = 111
+    Width = 122
+    Caption = 'NoMode4Dupe'
+    Checked = True
+    State = cbChecked
+    TabOrder = 18
   end
   object tmrESC2: TTimer
     Enabled = False
