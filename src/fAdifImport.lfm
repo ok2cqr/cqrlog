@@ -328,12 +328,18 @@ object frmAdifImport: TfrmAdifImport
       AnchorSideLeft.Control = lblErrors
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = lblError
-      Left = 121
+      Left = 112
       Height = 1
       Top = 55
       Width = 1
       BorderSpacing.Left = 6
+      Font.Color = clRed
       ParentColor = False
+      ParentFont = False
+      Visible = False
+      OnClick = lblErrorLogClick
+      OnMouseEnter = lblErrorLogMouseEnter
+      OnMouseLeave = lblErrorLogMouseLeave
     end
     object btnImport: TButton
       AnchorSideTop.Control = lbFile

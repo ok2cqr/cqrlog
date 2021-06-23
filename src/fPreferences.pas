@@ -727,6 +727,7 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    Label17: TLabel;
     lblUsrBtn: TLabel;
     lblHost2: TLabel;
     lblUsr1R1: TLabel;
@@ -1115,8 +1116,11 @@ type
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
     procedure edtHtmlFilesClick(Sender: TObject);
+    procedure edtHtmlFilesExit(Sender: TObject);
+    procedure edtImgFilesExit(Sender: TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
+    procedure edtPdfFilesExit(Sender: TObject);
     procedure edtR1RigCtldArgsChange(Sender: TObject);
     procedure edtR1RigCtldPortChange(Sender : TObject);
     procedure edtR2RigCtldArgsChange(Sender : TObject);
@@ -1124,6 +1128,7 @@ type
     procedure edtRadio1NameChange(Sender: TObject);
     procedure edtRadio2Change(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
+    procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
     procedure edtWebBrowserExit(Sender: TObject);
     procedure edtWinMaxSpeedChange(Sender: TObject);
@@ -1167,6 +1172,7 @@ type
     procedure SaveClubSection;
     procedure LoadMebershipCombo;
     procedure LoadMembersFromCombo(ClubComboText, ClubNumber : String);
+    function SeekExecFile(MyFile,MyExeFor:String): String;
   public
     { public declarations }
     ActPageIdx : integer;
@@ -1800,6 +1806,7 @@ begin
   dmUtils.InsertQSL_S(cmbQSL_S);
   dmUtils.InsertFreq(cmbFreq);
   ActPageIdx := 0; //tabProgram
+  Label17.Caption:='';
 end;
 
 
@@ -2588,6 +2595,44 @@ begin
         edtHtmlFiles.Text := odFindBrowser.Filename;
 end;
 
+procedure TfrmPreferences.edtHtmlFilesExit(Sender: TObject);
+begin
+   if ExtractFilePath(edtHtmlFiles.Text)='' then
+   Begin
+     edtHtmlFiles.Text:='';
+     Label17.Caption:='NOTE: You have to give full path for program file names!'
+   end else
+     Label17.Caption:='';
+end;
+
+procedure TfrmPreferences.edtImgFilesExit(Sender: TObject);
+begin
+   if ExtractFilePath(edtImgFiles.Text)='' then
+        edtImgFiles.Text:=SeekExecFile(edtImgFiles.Text,'Find image viewer');
+end;
+
+procedure TfrmPreferences.edtPdfFilesExit(Sender: TObject);
+begin
+   if ExtractFilePath(edtPdfFiles.Text)='' then
+        edtPdfFiles.Text:=SeekExecFile(edtPdfFiles.Text,'Find PDF viewer');
+end;
+
+procedure TfrmPreferences.edtTxtFilesExit(Sender: TObject);
+begin
+  if ExtractFilePath(edtTxtFiles.Text)='' then
+        edtTxtFiles.Text:=SeekExecFile(edtTxtFiles.Text,'Find text editor');
+end;
+function TfrmPreferences.SeekExecFile(MyFile,MyExeFor:string): String;
+Begin
+     Result :='';
+     Label17.Caption:='NOTE: You have to give full path for program file names!';
+     odFindBrowser.InitialDir:='/usr/bin';
+     odFindBrowser.FileName:=MyFile;
+     odFindBrowser.Title:=MyExeFor;
+     if odFindBrowser.Execute then
+        Result := odFindBrowser.Filename;
+end;
+
 procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
 begin
   WinKeyerChanged := True
@@ -2637,6 +2682,7 @@ end;
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
 Begin
+  odFindBrowser.InitialDir:='/usr/bin';
   if odFindBrowser.Execute then
         edtWebBrowser.Text := odFindBrowser.Filename;
 end;
@@ -3181,9 +3227,9 @@ begin
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
   chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 
-  edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', 'gedit');
-  edtPdfFiles.Text := cqrini.ReadString('ExtView', 'pdf', 'evince');
-  edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', 'eog');
+  edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', '');
+  edtPdfFiles.Text := cqrini.ReadString('ExtView', 'pdf', '');
+  edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', '');
   edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', dmUtils.MyDefaultBrowser);
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
 

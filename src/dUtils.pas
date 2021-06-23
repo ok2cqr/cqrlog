@@ -20,7 +20,7 @@ uses
   DBGrids, aziloc, azidis3, process, DB, sqldb, Grids, Buttons, spin, colorbox,
   Menus, Graphics, Math, LazHelpHTML, lNet, DateUtils, fileutil, httpsend,
   sqlscript, BaseUnix, Unix, LazFileUtils, LazUTF8, RegExpr,
-  laz2_XMLRead, laz2_DOM, fpjson,jsonparser;
+  laz2_XMLRead, laz2_DOM, fpjson,jsonparser,StrUtils;
 
   //"XMLRead, DOM," replced. These have system encoding. "laz2_" ones have full UTF-8 Unicode support
   //they should be replaceable by Laz-XML-wiki.
@@ -186,7 +186,7 @@ type
     procedure ReadZipList(cmbZip: TComboBox);
     procedure CalcSunRiseSunSet(Lat, Long: double; var SunRise, SunSet: TDateTime);
     procedure ExecuteCommand(cmd: string);
-    procedure RunOnBackgroud(path: string);
+    procedure RunOnBackground(path: string);
     procedure SaveWindowPos(a: TForm);
     procedure LoadWindowPos(a: TForm);
     procedure ShowQSLWithExtViewer(Call: string);
@@ -3266,14 +3266,19 @@ begin
   end;
 end;
 
-procedure TdmUtils.RunOnBackgroud(path: string);
+procedure TdmUtils.RunOnBackground(path: string);
 var
   AProcess: TProcess;
   index     :integer;
   paramList : TStringList;
 begin
-  if dmData.DebugLevel>=1 then Writeln('RunOnBackgroud -start');
-  if (path = '') then exit;
+ if dmData.DebugLevel>=1 then Writeln('RunOnBackground start ',path);
+  if (path = '') then  exit;
+  //following will fail if exec does not have full path or exec is not in current directory!
+  //this could be fixed by using getEnv('PATH') for search, but adding "Dos" unit that is then neeed (laz 2.0.12)
+  //breaks all FindFIle searches in other procedures (fpc bug or property?)
+  //Easy Fix will be to require full path at preferences/External Viewers   (OH1KH 2021.05.21)
+
   AProcess := TProcess.Create(nil);
   try
       index:=0;
@@ -3598,10 +3603,10 @@ begin
     SetCurrentDir(dmData.HomeDir + 'call_data' + PathDelim + call + PathDelim);
     prg := cqrini.ReadString('ExtView', 'img', 'eog');
     if prg = '' then
-      dmUtils.RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) +
+      dmUtils.RunOnBackground(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) +
         ' ' + qsl)
     else
-      dmUtils.RunOnBackgroud(prg + ' ' + qsl)
+      dmUtils.RunOnBackground(prg + ' ' + qsl)
   finally
     SetCurrentDir(dir)
   end;
@@ -4473,11 +4478,11 @@ begin
   if ((pos('.HTML',upcase(what))>0) or (pos('.HTM',upcase(what))>0)) //because possible "hashtag in link-problem"
     then
      Begin
-      RunOnBackgroud(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
+      RunOnBackground(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
      end
    else
     begin
-      RunOnBackgroud('xdg-open ' + what);
+      RunOnBackground('xdg-open ' + what);
     end;
 end;
 

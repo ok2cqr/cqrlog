@@ -58,7 +58,7 @@ begin
   CurrentDir := GetCurrentDir;
   try
     SetCurrentDir(flAttach.Directory);
-    dmUtils.RunOnBackgroud('/usr/bin/xdg-open' + ' "' + flAttach.FileName + '"');
+    dmUtils.RunOnBackground('/usr/bin/xdg-open' + ' "' + flAttach.FileName + '"');
   finally
     SetCurrentDir(CurrentDir)
   end;

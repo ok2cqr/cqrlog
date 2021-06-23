@@ -60,14 +60,30 @@
     However the user can choose to override a MY_GRIDSQUARE from ADIF file by selecting the checkbox.
     In this case MY_GRIDSQUARE from the ADIF file is overriden by the locator from the selected profile 
     or if no profile is selected the default locator from the config is used.<br><br>
-    <img src="img/h42.png" border="0"><br><br>
-    The previous window now shows the import completion, the number of imported records and
+    <img src="img/h42.png" border="0"><p>
+    The  window now shows the import completion, the number of imported records and
     the number of errors. If the ADIF file contains incorrect entries, they will be stored
-    separately in the file <strong>errors.adi</strong> located in the 'log_data' subfolder.
-    You can fix the errors manually and import again. <br><br>
+    separately in the file <strong>errors_HH_MM_SS.adi</strong> located in the user's home folder.
+    You can open, import or delete the file by pointing the name with left mouse click.</p><p>
+    If you plan to import fixed error file you have to fix every qso record line at point(s) the ERROR: -line(s) show. 
+    After fixing a qso record you must delete corresponding ERROR: -line(s).<br>
+    Text editor to use must be defined at preferences/External viewers.<br>
+    <strong>NOTE:</strong> If you change tag text you have to check the length of text that is after tag name, before text itself, as <strong>:xx&gt;</strong> where
+    xx is the count of characters in tag string.
+    <i><br><br>
+    &lt;Complete adif qso record here&gt;<br>
+    ERROR: Wrong QSO IOTA: NO
+    <br><br></i>
+    <strong>NOTE:</strong> Error file now contains also qsos that are imported with shrunken adif tags. There is no need to import them again. You can fix shrunken tags with QSL list/Edit QSO.
+    <i><br><br>
+    &lt;Complete adif qso record here&gt;<br>
+    ERROR: Imported with shrink(s):<br>
+    STATE shrink to 4 chrs:05 // Yamagata-ken -> 05 /<br>
+    QSL_VIA shrink to 30 chrs:via Bureau, Direct, e-QSL, LoTW -> via Bureau, Direct, e-QSL, LoT<br>
+    <br></i></p><p>
     <img src="img/h43.png" border="0"><br><br>
     Duplicate entries (contacts already in the log) are indicated with a separate dialog
-    allowing you to exclude or include these records. This will be asked every time a duplicate is found. If you check <b>Case of duplicates; Remember my answer</b> it is asked only once and then the same answer is used every time a duplicate is found.
+    allowing you to exclude or include these records. This will be asked every time a duplicate is found. If you check <b>Case of duplicates; Remember my answer</b> it is asked only once and then the same answer is used every time a duplicate is found.</p>
     <p align=center><img src=img/line.png></p>
     <a name=ah25><strong>ADIF export</strong></a><br><br>
     Go to QSO list using Ctrl-O or choose the QSO list from the upper menu - item 'File'.<br><br>

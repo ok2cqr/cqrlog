@@ -56,3 +56,70 @@ const h_SAT_NAME = 39545;
 const h_FREQ_RX = 2926;
 const h_OP = 16130;
 
+//max length                               database lenght
+const l_BAND = 6;//10;                     // band             varchar(6)        FIXED if longer than database
+const l_CALL = 20;//30;                     // callsign         varchar(20)
+const l_CNTY = 30;//50;                     // county           varchar(30)
+const l_COMMENT = 200;//250;                 // remarks          varchar(200)
+const l_CONT = 2;                      // cont             varchar(3)
+const l_DXCC = 16;                     // qso_dxcc         int(11)
+const l_EQSL_QSLRDATE = 10;            // eqsl_qslrdate    date
+const l_EQSL_QSLSDATE = 10;            // eqsl_qslsdate    date
+const l_EQSL_QSL_RCVD = 1;//2;             // eqsl_qsl_rcvd    varchar(1)
+const l_EQSL_QSL_SENT = 1;//2;             // eqsl_qsl_sent    varchar(1)
+const l_FREQ = 12;                     // freq             decimal(10,4)
+const l_GRIDSQUARE = 6;                // loc              varchar(10)
+const l_IOTA = 6;                      // iota             varchar(6)
+const l_ITUZ = 2;                      // itu              int(11)
+const l_LOTW_QSLRDATE = 10;            // lotw_qslrdate    date
+const l_LOTW_QSLSDATE = 10;            // lotw_qslsdate    date
+const l_LOTW_QSL_RCVD = 2;             // lotw_qslr        varchar(3)
+const l_LOTW_QSL_SENT = 2;             // lotw_qsls        varchar(3)
+const l_MODE = 12;                     // mode             varchar(12)
+const l_MY_GRIDSQUARE = 6;             // my_loc           varchar(10)
+const l_NAME = 40;//50;                     // name             varchar(40)
+const l_NOTES = 250;                   // notes.longremarks  varchar(256)
+const l_PFX = 16;
+const l_QSLMSG = 250;
+const l_QSLRDATE = 10;                // qslr_date        varchar(10)
+const l_QSLSDATE = 10;                // qsls_date        varchar(10)
+const l_QSL_RCVD = 3;//5;                 // qsl_r            varchar(3)
+const l_QSL_SENT = 4;//5;                 // qsl_s            varchar(4)
+const l_QSL_VIA = 30;//20;                 // qsl_via          varchar(30)    FIXED if shorter than database
+const l_QSO_DATE = 10;                // qsodate          date
+const l_QTH = 60;//250;                    // qth              varchar(60)
+const l_RST_RCVD = 20;//6;                 // rst_r            varchar(20)    FIXED if shorter than database
+const l_RST_SENT = 20;//6;                 // rst_s            varchar(20)    FIXED if shorter than database
+const l_SRX = 6;                      // srx              varchar(6)
+const l_SRX_STRING = 50;//250;             // srx_string       varchar(50)
+const l_STX = 6;                      // stx              varchar(6)
+const l_STX_STRING = 50;//250;             // stx_string       varchar(50)
+const l_CONTEST_ID = 40;//250;             // contestname      varchar(40)
+const l_DARC_DOK = 12;                // dok              varchar(12)
+const l_TIME_OFF = 5;                 // time_off         varchar(5)
+const l_TIME_ON = 5;                  // time_on          varchar(5)
+const l_TX_PWR = 10;// 5;                   // pwr              varchar(10)   FIXED if shorter than database
+const l_EOH = 250;
+const l_EOR = 250;
+const l_APP_CQRLOG_QSLS = 4;
+const l_APP_CQRLOG_QSLR = 4;
+const l_APP_CQRLOG_PROFILE = 250;
+const l_APP_CQRLOG_COUNTY = 250;
+const l_APP_CQRLOG_DXCC = 16;
+const l_CQZ = 3;                      // waz              int(11)
+const l_STATE = 4;//3;                    // state            varchar(4)
+const l_AWARD = 50;//250;                  // award            varchar(50)
+const l_POWER = 10;                   // pwr              varchar(10)
+const l_PROP_MODE = 30;               // prop_mode        varchar(30)
+const l_SAT_NAME = 30;                // satellite        varchar(30)
+const l_FREQ_RX = 30;                 // rxfreq           decimal(10,4)
+const l_OP = 20;//30;                      // operator         varchar(20)
+
+                                      // adif             int(11)
+                                      // profile          int(11)
+                                      // idcall           varchar(20)
+                                      // club_nr1         varchar(100)
+                                      // club_nr2         varchar(100)
+                                      // club_nr3         varchar(100)
+                                      // club_nr4         varchar(100)
+                                      // club_nr5         varchar(100)

@@ -8713,24 +8713,24 @@ object frmPreferences: TfrmPreferences
         Height = 25
         Top = 49
         Width = 321
+        OnExit = edtTxtFilesExit
         TabOrder = 0
-        Text = 'gedit'
       end
       object edtPdfFiles: TEdit
         Left = 47
         Height = 25
         Top = 105
         Width = 320
+        OnExit = edtPdfFilesExit
         TabOrder = 1
-        Text = 'evince'
       end
       object edtImgFiles: TEdit
         Left = 47
         Height = 25
         Top = 166
         Width = 320
+        OnExit = edtImgFilesExit
         TabOrder = 2
-        Text = 'eog'
       end
       object edtHtmlFiles: TEdit
         Left = 45
@@ -8738,6 +8738,7 @@ object frmPreferences: TfrmPreferences
         Top = 264
         Width = 320
         OnClick = edtHtmlFilesClick
+        OnExit = edtHtmlFilesExit
         TabOrder = 3
       end
       object chkIntQSLViewer: TCheckBox
@@ -8747,6 +8748,16 @@ object frmPreferences: TfrmPreferences
         Width = 317
         Caption = 'Open QSL card images with internal viewer'
         TabOrder = 4
+      end
+      object Label17: TLabel
+        Left = 23
+        Height = 1
+        Top = 8
+        Width = 1
+        Font.Color = clRed
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
       end
     end
     object tabCallbook: TTabSheet

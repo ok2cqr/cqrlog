@@ -46,6 +46,8 @@ LAST UPDATE
   - ver 2.5.2(107)
   - official version with alpha additions (see below) 
   - wsjtx remote fix, close when cqmonitor is not visible caused error with fcc-states loading check
+  - Help files have additions remember to update also HELP
+
   - ver 2.5.2(106)
   - official version with alpha additions (see below) 
   - ver 2.5.2(105)
