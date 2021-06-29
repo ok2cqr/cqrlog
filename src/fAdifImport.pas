@@ -127,6 +127,7 @@ type
     Q4: TSQLQuery;
     sb: TStatusBar;
     tr: TSQLTransaction;
+    procedure btnCloseClick(Sender: TObject);
     procedure chkFilterDateRangeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -881,8 +882,17 @@ begin
 end;
 
 procedure TfrmAdifImport.mnuImportClick(Sender: TObject);
+var
+  tmp:Char;
 begin
   popErrFile.Close;
+  try
+    tmp := FormatSettings.TimeSeparator;
+    FormatSettings.TimeSeparator := '_';
+    ERR_FILE := 'errors_'+TimeToStr(now)+'.adi'
+  finally
+    FormatSettings.TimeSeparator := tmp
+  end;
   lblFileName.Caption:= lblErrorLog.Caption;
   lblErrorLog.Caption:='';
   lblCount.Caption :='';
@@ -956,6 +966,11 @@ begin
   pnlFilterDateRange.Enabled := chkFilterDateRange.Checked;
   lblFilteredOut.Visible := chkFilterDateRange.Checked;
   lblFilteredOutCount.Visible := chkFilterDateRange.Checked;
+end;
+
+procedure TfrmAdifImport.btnCloseClick(Sender: TObject);
+begin
+  AbortImport:=true;
 end;
 
 procedure TfrmAdifImport.FormShow(Sender: TObject);
