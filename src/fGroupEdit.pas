@@ -41,6 +41,7 @@ type
     procedure lblFieldClick(Sender: TObject);
   private
     { private declarations }
+    WhereTo: String;
   public
     Selected : Boolean;
     { public declarations }
@@ -112,6 +113,7 @@ begin
    end;
    pnlGrpEdt.Color:=clRed;
    lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+   btnCancel.Caption:='Cancel';
    pnlGrpEdt.Repaint;
    lblInfo.Repaint;
 end;
@@ -120,6 +122,7 @@ procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
 begin
   pnlGrpEdt.Color:=clRed;
   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
+  btnCancel.Caption:='Cancel';
   pnlGrpEdt.Repaint;
   lblInfo.Repaint;
 
@@ -135,12 +138,13 @@ begin
   dmUtils.LoadFontSettings(self);
   pnlGrpEdt.Color:=clDefault;
   if Selected then
-     lblInfo.Caption := 'Apply will afftect to selected qso(s)'
+     WhereTo := 'to selected qsos'
     else
      if dmData.IsFilter then
-       lblInfo.Caption := 'Apply will afftect to filtered qso(s)'
+       WhereTo := 'to filtered qsos'
       else
-       lblInfo.Caption := 'Apply will afftect to whole log';
+       WhereTo := 'to whole log';
+  lblInfo.Caption := 'Apply will afftect '+WhereTo;
   pnlGrpEdt.Repaint;
   lblInfo.Repaint;
 end;
@@ -575,7 +579,8 @@ begin
     dmData.qCQRLOG.EnableControls;
     frmMain.acRefresh.Execute
   end;
-  lblInfo.Caption := 'Edit done! (Press Cancel to exit)';
+  lblInfo.Caption := 'Group edit done '+WhereTo;
+  btnCancel.Caption:= 'Close';
   pnlGrpEdt.Color:= clLime;
   pnlGrpEdt.Repaint;
   lblInfo.Repaint;

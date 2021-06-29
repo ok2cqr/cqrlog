@@ -29,26 +29,31 @@
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
-
 <a name=co1><h2><strong>Contest support</strong></h2></a>
+<p>You will find contest selection from <b>NewQSO/Window</b> dropdown menu.
+<br><br>When contest window is open <b>NewQSO</b> has contest exchange fields visible. You may have to stretch <b>NewQSO </b> window horizontally to see them.
+<br>You <b>do not</b> normally need <b>NewQSO</b> window during contest. Only need for <b>NewQSO</b> is in case you have to edit an already worked qso.
+ <br> Select qso normally via <b>QSO list</b> and press <b>edit QSO button</b> and you are able to edit qso, also the contest message part of it.
+ <br><br><b>NewQSO</b>  is not meant to be used during contest qso feeds. <b>All new qsos are entered via contest window.</b></p>
+
 <p align="center">
    <img src="img/contest.png">
 </p>
 <p>
-<b>RECOMMENDATION:</b> Make new log for each contest, do not allow qrz/hamqth search. It slows things.
+<b>RECOMMENDATION:</b> Make new log for each contest, consider not to allow qrz/hamqth search, it may slow down qso feed.
 <b>Note:</b> This is <b>NOT</b> a contest logging add-on!!! It is a contest-notepad.
 It is meant to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
 </p><p>
-Contest window is just a "child form" for NewQSO to make qso logging faster when working in contests.
-With Tru and Msg is Loc setting it is useful also in VHF, UHF, SHF Tropo, Es etc. openings for fast qso
-logging.
+Contest window is just a "child form" for <b>NewQSO</b> to make qso logging faster when working in contests.
+With <b>Tru</b> and <b>Msg is Loc</b> setting it is useful also in VHF, UHF, SHF Tropo, Es etc. openings for fast qso
+logging. Perhaps also in some other operations like WWFF activations.
 <br><br>
-Contest window has a simple dupe check (same call in same mode and band) that turns typed duplicate callsign bold red printed.
-<br>To get this working properly you must either create a new log for every contest or set "preferences/fldigi/wsjt interface/
+Contest window has a simple dupe check that turns typed duplicate callsign bold red printed. If you save a duplicate qso it is marked as "Dupe" in "Comment to qso" field.
+<br>To get this working properly you must <b>either</b> create a new log for every contest <b>or</b> set "preferences/fldigi/wsjt interface/
 <b>WB4 check starts from/call Date</b>" and check the <b>"call" checkbox</b>. See :  <a href="h1.html#ch2b">Quick start: wsjt-x interface</a> Remember to uncheck "call" checkbox after contest is over.
 </p>
 <p>
-<b>HOTKEYS</b> work like in <a href="h20.html">New QSO window</a>.
+<b>HOTKEYS</b> work like with <a href="h20.html">New QSO window</a>.
 <ul><li> <b>2x ESC</b> clears all fileds</li>
 <li>Note: <b>1x ESC</b> returns cursor back to Call-field (if cursor is in some of the other fields like RSTr) and places cursor at the end of callsign for possible repairs.<br>
   It also halts CW memory output if it is just running.</li>
@@ -63,8 +68,8 @@ Contest window has following fields and checkboxes:<br>
 <li><b>Tab All</b> when checked overrides all other Tab settings (below) and Tab Order is Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
 <li><b>Call</b> when you leave this field callsign is moved to NewQSO. Callsign turns BOLD RED if it is duplicate.</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field. <b>Note:</b>This prevents typing space (perhaps needed in MSG fields).</li>
-<li><b>NoMode4Dupe</b> Default checked. Means that callsign is duplicate if it is worked on that band in any mode. There are contests where you can work same station again on same band if mode is different. In that case uncheck this checkbox.
-</br>If you save a duplicate qso it is marked as "Dupe" in "Commnt to qso" field.</li>
+<li><b>NoMode4Dupe</b> Default checked. Means that callsign is duplicate if it is worked on that band in any mode. There are contests where you can work same station again on same band if mode is different (separate CW,SBB,RTTY sections). In that case uncheck this checkbox.
+</li>
 <br>
 <li><b>RST s</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
 <li><b>Tru</b> means you like to exchange true reports. Makes Tab order to stop at RST (s & r) fields. Useful in some high band contests, Es and tropo openings.</li>
@@ -97,9 +102,8 @@ callsign of least three characters long. Sent/Received number and message are no
 <br><b>There is no need to use the mouse.</b> Keep your hands on keyboard (and possible on CW key / PTT (if not foot pedal in use)). It is faster.</p>
 <p>
 Contest numbers and messages are saved in log into their own columns. Use <b>preferences/Visible columns</b> to show them in <b>Qso list</b>.
-For editing a qso these columns appear to <b>NewQSO</b> window when <b>contest</b> window is open and NewQso window is streched horizontally (DXCCinfo may override them).
-<br> 
-CW macros Have some new items. Look them from <a href="h26.html">CW Operation</a>
+<br><br>
+<b>CW macros</b> can be used for sending contest meessages. Look them from help section <a href="h26.html">CW Operation</a>
 </p>
 <p>
 ADIF exports fields to right tags.<br><br>
@@ -118,8 +122,9 @@ HTML export will look like this:<br>
 </p>
 <p>
 </br>
-Most contests expect <b>Cabrillo</b> log format. <b>There is no support for this. You have to make ADIF export of qsos</b>
-and then use separate program if you want to send logs.</p><p>
+Most contests expect <b>Cabrillo</b> log format. Cqrlog has a limited support of Cabrillo exports. Mostly enough for a Sunday contester.
+<br>In case you want to use external Cabrillo program you have to make ADIF export of qsos</b>
+and then use another program.</p><p>
 </br>
 I found nice <b>adif2cabrillo</b> program for Linux from <a href="http://users.telenet.be/on4qz/a2c/index.html" target="_blank">http://users.telenet.be/on4qz/</a> that supports ADIF importing.
 </p></p>Starting is bit complicated: 
