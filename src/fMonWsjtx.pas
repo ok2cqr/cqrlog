@@ -160,7 +160,7 @@ var
   //       'text'= text given is found from new monitor line
   timeToAlert: string;                  //only once per event per minute
   MonitorLine: string;                  // complete line as printed to monitor
-
+  AlertLine:   string;                  //copy of monitor line but has spaces between items
   extCqCall: Tcolor;    // extended cq (cq dx, cq na etc.) color
   wkdhere: Tcolor;
   wkdband: Tcolor;
@@ -214,6 +214,7 @@ begin
     AProcess.Executable:=dmData.HomeDir + cAlert;
     AProcess.Parameters.Clear;
     AProcess.Parameters.Add(AFile);
+    AProcess.Parameters.Add(AlertLine);
     if LocalDbg then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
@@ -248,7 +249,9 @@ begin
   begin
     if ((Ord(s[i]) >= 32) and (Ord(s[i]) <= 122)) then   //from space to z accepted
       MonitorLine := MonitorLine + s[i];
+      AlertLine := AlertLine + s[i];
   end;
+  AlertLine := AlertLine + ' ';
   if ((not chknoTxt.Checked) and (r > -1)) then
         Begin
              sgMonitor.Cells[c,r]:= s;  //trim ??
@@ -1139,6 +1142,7 @@ begin
           begin
             myAlert := '';
             MonitorLine := '';
+            AlertLine := '';
 
             //starts a row
             if (msgTime <> LastWsjtLineTime) then
@@ -1666,6 +1670,7 @@ begin
 
   myAlert := '';
   MonitorLine := '';
+  AlertLine:='';
 
   dxcc_number_adif := dmDXCC.id_country(
     UpperCase(cqrini.ReadString('Station', 'Call', '')), '', Now(), pfx,
