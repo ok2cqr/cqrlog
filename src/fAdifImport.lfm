@@ -339,7 +339,6 @@ object frmAdifImport: TfrmAdifImport
       Visible = False
       OnClick = lblErrorLogClick
       OnMouseEnter = lblErrorLogMouseEnter
-      OnMouseLeave = lblErrorLogMouseLeave
     end
     object btnImport: TButton
       AnchorSideTop.Control = lbFile
@@ -383,6 +382,7 @@ object frmAdifImport: TfrmAdifImport
       BorderSpacing.Bottom = 6
       Caption = 'Close'
       ModalResult = 2
+      OnClick = btnCloseClick
       TabOrder = 2
     end
     object chkFilterDateRange: TCheckBox
@@ -529,5 +529,26 @@ object frmAdifImport: TfrmAdifImport
     Params = <>
     Left = 280
     Top = 144
+  end
+  object popErrFile: TPopupMenu
+    Left = 320
+    Top = 144
+    object mnuedit: TMenuItem
+      Caption = 'Open with text editor'
+      OnClick = mnueditClick
+    end
+    object mnuImport: TMenuItem
+      Caption = 'Adif import file'
+      OnClick = mnuImportClick
+    end
+    object mnuDelImport: TMenuItem
+      Caption = 'Delete imported Err file'
+      Visible = False
+      OnClick = mnuDelImportClick
+    end
+    object mnuDelete: TMenuItem
+      Caption = 'Delete file'
+      OnClick = mnuDeleteClick
+    end
   end
 end
