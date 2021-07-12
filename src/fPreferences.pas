@@ -1090,6 +1090,7 @@ type
     procedure cmbSpeedR2Change(Sender : TObject);
     procedure cmbStopBitsR1Change(Sender : TObject);
     procedure cmbStopBitsR2Change(Sender : TObject);
+    procedure edtAlertCmdExit(Sender: TObject);
     procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtHtmlFilesExit(Sender: TObject);
     procedure edtImgFilesExit(Sender: TObject);
@@ -2556,6 +2557,12 @@ end;
 procedure TfrmPreferences.cmbStopBitsR2Change(Sender : TObject);
 begin
   TRXChanged := True
+end;
+
+procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
+begin
+   edtAlertCmd.Text:=StringReplace(edtAlertCmd.Text,'~/',dmData.UsrHomeDir,[rfReplaceAll]);
+   // ~ in command causes DXCluster spot flow stop (!?)
 end;
 
 procedure TfrmPreferences.edtHtmlFilesClick(Sender: TObject);

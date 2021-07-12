@@ -284,6 +284,7 @@
         <Filename Value="fNewDXCluster.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmNewDXCluster"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit26>
       <Unit27>
