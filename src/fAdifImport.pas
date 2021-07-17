@@ -115,6 +115,7 @@ type
     lblDateTo: TLabel;
     lblQthProfile: TLabel;
     lblRemaks: TLabel;
+    mnuDelImport: TMenuItem;
     mnuedit: TMenuItem;
     mnuImport: TMenuItem;
     mnuDelete: TMenuItem;
@@ -127,19 +128,21 @@ type
     Q4: TSQLQuery;
     sb: TStatusBar;
     tr: TSQLTransaction;
+    procedure btnCloseClick(Sender: TObject);
     procedure chkFilterDateRangeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnImportClick(Sender: TObject);
     procedure lblErrorLogClick(Sender: TObject);
     procedure lblErrorLogMouseEnter(Sender: TObject);
-    procedure lblErrorLogMouseLeave(Sender: TObject);
     procedure mnuDeleteClick(Sender: TObject);
+    procedure mnuDelImportClick(Sender: TObject);
     procedure mnueditClick(Sender: TObject);
     procedure mnuImportClick(Sender: TObject);
   private
     AbortImport : boolean;
     ERR_FILE : String;
+    Do_Err_Import : Boolean;
     CutErrText : String;
     WrongRecNr : Integer;
     RecNR      : Integer;
@@ -772,6 +775,7 @@ var
   ErrText : String = '';
   tmp : String='';
 begin
+  if lblFileName.Caption='' then exit;
   CutErrText :='';
   AbortImport := false;
   lblComplete.Visible := False;
@@ -881,12 +885,22 @@ begin
 end;
 
 procedure TfrmAdifImport.mnuImportClick(Sender: TObject);
+var
+  tmp:Char;
 begin
   popErrFile.Close;
+  try
+    tmp := FormatSettings.TimeSeparator;
+    FormatSettings.TimeSeparator := '_';
+    ERR_FILE := 'errors_'+TimeToStr(now)+'.adi'
+  finally
+    FormatSettings.TimeSeparator := tmp
+  end;
   lblFileName.Caption:= lblErrorLog.Caption;
   lblErrorLog.Caption:='';
   lblCount.Caption :='';
-  lblErrors.Caption := ''
+  lblErrors.Caption := '';
+  Do_Err_Import:=true;
 end;
 
 procedure TfrmAdifImport.mnuDeleteClick(Sender: TObject);
@@ -899,16 +913,22 @@ begin
     end;
 end;
 
+procedure TfrmAdifImport.mnuDelImportClick(Sender: TObject);
+begin
+    popErrFile.Close;
+     if ( Application.MessageBox(pAnsiChar('Do you want to delete file'+#10+lblFileName.Caption) , 'Delete file ?',MB_ICONQUESTION + MB_YESNO) = IDYES) then
+    Begin
+      DeleteFile(lblFileName.Caption);
+      Do_Err_Import:=false;
+      lblFileName.Caption:=''
+    end;
+end;
+
 procedure TfrmAdifImport.lblErrorLogMouseEnter(Sender: TObject);
 begin
-     lblErrorLog.Font.Bold:=true;
+     mnuDelImport.Visible:=Do_Err_Import;
+     popErrFile.Popup;
 end;
-
-procedure TfrmAdifImport.lblErrorLogMouseLeave(Sender: TObject);
-begin
-  lblErrorLog.Font.Bold:=false;
-end;
-
 
 function TfrmAdifImport.ValidateFilter: boolean;
 begin
@@ -931,6 +951,7 @@ procedure TfrmAdifImport.FormCreate(Sender: TObject);
 var
   tmp : Char;
 begin
+  Do_Err_Import:=false;
   NowDate := dmUtils.MyDateToStr(now);
 
   Q1.DataBase := dmData.MainCon;
@@ -956,6 +977,11 @@ begin
   pnlFilterDateRange.Enabled := chkFilterDateRange.Checked;
   lblFilteredOut.Visible := chkFilterDateRange.Checked;
   lblFilteredOutCount.Visible := chkFilterDateRange.Checked;
+end;
+
+procedure TfrmAdifImport.btnCloseClick(Sender: TObject);
+begin
+  AbortImport:=true;
 end;
 
 procedure TfrmAdifImport.FormShow(Sender: TObject);
