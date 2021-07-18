@@ -20,6 +20,7 @@ type
     btnApply: TButton;
     dbgrdDXClusterList: TDBGrid;
     Panel1: TPanel;
+    procedure dbgrdDXClusterListCellClick(Column: TColumn);
     procedure dbgrdDXClusterListDblClick(Sender : TObject);
     procedure FormShow(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
@@ -83,6 +84,12 @@ begin
     btnEdit.Click
 end;
 
+procedure TfrmDXClusterList.dbgrdDXClusterListCellClick(Column: TColumn);
+begin
+   btnApply.Font.Color:=clGreen;
+   btnApply.Font.Style:=[fsBold];
+end;
+
 procedure TfrmDXClusterList.btnDeleteClick(Sender: TObject);
 var
   id : Integer;
@@ -114,6 +121,7 @@ begin
     edtPort.Text        := dmData.qDXClusters.Fields[3].AsString;
     edtUserName.Text    := dmData.qDXClusters.Fields[4].AsString;
     edtPassword.Text    := dmData.qDXClusters.Fields[5].AsString;
+    Caption:='Edit DXCluster';
     ShowModal;
     if ModalResult = mrOK then
     begin
@@ -128,7 +136,9 @@ begin
       dmData.trDXClusters.Rollback;
       dmData.trDXClusters.StartTransaction;
       dmData.qDXClusters.ExecSQL;
-      dmData.trDXClusters.Commit
+      dmData.trDXClusters.Commit;
+      btnApply.Font.Color:=clGreen;
+      btnApply.Font.Style:=[fsBold];
     end
   finally
     Free;
@@ -140,6 +150,7 @@ procedure TfrmDXClusterList.btnNewClick(Sender: TObject);
 begin
   with TfrmNewDXCluster.Create(self) do
   try
+    Caption:='New DXCluster';
     ShowModal;
     if ModalResult = mrOK then
     begin

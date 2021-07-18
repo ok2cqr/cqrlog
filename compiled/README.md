@@ -5,8 +5,8 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
  
-    Commits on Jun 22, 2021 Merge pull request #421 from OH1KH/contest_mode_dupe
- 
+    Commits on Jul 17, 2021  Merge pull request #428 from OH1KH/DXC_issue_425
+    
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
@@ -43,11 +43,14 @@ They contain all accepted pull requests from official source (that may not be re
  copy one of them to name /usr/bin/cqrlog (you need sudo) and you can start guide above.
  
 LAST UPDATE
+  - ver 2.5.2(108)
+  - official version with alpha additions (see below) 
+  - Help files have additions remember to update also HELP
+
   - ver 2.5.2(107)
   - official version with alpha additions (see below) 
   - wsjtx remote fix, close when cqmonitor is not visible caused error with fcc-states loading check
   - Help files have additions remember to update also HELP
-
   - ver 2.5.2(106)
   - official version with alpha additions (see below) 
   - ver 2.5.2(105)

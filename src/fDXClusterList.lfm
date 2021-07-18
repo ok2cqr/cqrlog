@@ -12,7 +12,7 @@ object frmDXClusterList: TfrmDXClusterList
   ClientHeight = 376
   ClientWidth = 515
   OnShow = FormShow
-  LCLVersion = '0.9.30.2'
+  LCLVersion = '2.0.12.0'
   object dbgrdDXClusterList: TDBGrid
     Left = 0
     Height = 334
@@ -24,6 +24,7 @@ object frmDXClusterList: TfrmDXClusterList
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
     TabOrder = 0
     TitleStyle = tsNative
+    OnCellClick = dbgrdDXClusterListCellClick
     OnDblClick = dbgrdDXClusterListDblClick
   end
   object Panel1: TPanel
@@ -90,4 +91,4 @@ object frmDXClusterList: TfrmDXClusterList
       TabOrder = 4
     end
   end
-end
+end

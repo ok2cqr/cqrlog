@@ -1165,6 +1165,7 @@ var
   cmd      : String;
 begin
   cmd := cqrini.ReadString('DXCluster','AlertCmd','');
+
   if (cmd<>'') then
   begin
     AProcess := TProcess.Create(nil);
@@ -1178,6 +1179,12 @@ begin
       paramList := TStringList.Create;
       paramList.Delimiter := ' ';
       paramList.DelimitedText := cmd;
+      if not  FileExists(paramList[0]) then
+       begin
+         if dmData.DebugLevel>=1 then
+                         Writeln('AProcess.Executable: ', paramList[0],' Not found!');
+         exit;
+       end;
       AProcess.Parameters.Clear;
       while index < paramList.Count do
       begin

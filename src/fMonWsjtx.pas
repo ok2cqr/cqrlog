@@ -1781,6 +1781,7 @@ procedure TfrmMonWsjtx.AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string
 var
    Fox73    : boolean;
 begin
+     AlertLine:='';
      if LocalDbg then Writeln('Start AddMyCallMessage');
      isMyCall:= true;
      Dfreq:=Df;
@@ -1824,7 +1825,9 @@ begin
                Writeln('All written in AddMy. Next alerts');
                Writeln;
               end;
-            TryAlerts;
+            if tbmyAll.Checked then TryAlerts
+             else
+               if ( msgLocator <> '*QSO')  then TryAlerts;
          end;
 end;
 

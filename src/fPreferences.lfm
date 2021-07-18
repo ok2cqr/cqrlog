@@ -5107,6 +5107,7 @@ object frmPreferences: TfrmPreferences
           Height = 25
           Top = 72
           Width = 471
+          OnExit = edtAlertCmdExit
           TabOrder = 1
           Text = 'edtAlertCmd'
         end
