@@ -584,9 +584,10 @@ type
     procedure tmrWsjtSpdTimer(Sender: TObject);
     procedure tmrWsjtxTimer(Sender: TObject);
   private
-    StartRun : Boolean;
+    StartUpCount : integer;
+    StartRun    : Boolean;
     old_stat_adif : Word;
-    TabUsed : Boolean;
+    TabUsed     : Boolean;
     old_cmode   : String;
     old_ccall   : String;
     old_cfreq   : String;
@@ -674,6 +675,7 @@ type
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
     procedure ShowOperator;
+    procedure StartUpRemote;
 
   public
     fEditQSO    : Boolean;
@@ -2398,7 +2400,8 @@ procedure TfrmNewQSO.tmrStartTimer(Sender: TObject);
 begin
   if not cbOffline.Checked then
   begin
-    FillDateTimeFields
+    FillDateTimeFields;
+    StartUpRemote;
   end
 end;
 
@@ -7394,7 +7397,28 @@ begin
   edtStartTime.Text := FormatDateTime('hh:mm',date);
   edtEndTime.Text   := FormatDateTime('hh:mm',date)
 end;
-
+procedure TfrmNewQSO.StartUpRemote;
+var
+  StartKey:String;
+Begin
+    if StartUpCount > 10 then exit; //done already
+    inc(StartUpCount);
+    if StartUpCount = 10 then
+     Begin
+       inc(StartUpCount); //to be 11
+       if not Application.HasOption('r','remote') then exit
+        else
+         Begin
+           StartKey:= Application.GetOptionValue('r','remote');
+           if length(StartKey)>1 then  exit; //must be one letter
+           case UpperCase(StartKey[1]) of
+               'J' :  GoToRemoteMode(rmtWsjt);
+               'M' :  GoToRemoteMode(rmtFldigi);
+               'K' :  GoToRemoteMode(rmtADIF);
+           end;
+         end;
+     end;
+end;
 procedure TfrmNewQSO.GoToRemoteMode(RemoteType : TRemoteModeType);
 var
   run  : Boolean = False;
