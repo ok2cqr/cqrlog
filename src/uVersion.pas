@@ -12,5 +12,7 @@ const
 
   cBUILD_DATE = '2021-08-10';
 
+implementation
+
 end.
 
