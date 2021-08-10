@@ -1511,7 +1511,7 @@ begin
 end;
 procedure TfrmTRXControl.DisableRitXit;
 begin
-  if (lblFreq.Caption = empty_freq) then
+  if not Assigned(radio) then
     exit;
   radio.DisableRit;
   radio.DisableSplit   //this disabeles Xit

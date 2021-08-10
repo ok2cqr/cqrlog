@@ -44,6 +44,7 @@ begin
         Writeln('Cqrlog Ver:',cVERSION,' Date:',cBUILD_DATE);
         if Application.HasOption('v','version') then exit;
         Writeln('-h     --help           Print this help and exit');
+        Writeln('-r KEY --remote=KEY     Start with remote mode KEY= one of J,M,K');
         Writeln('-v     --version        Print version and exit');
         Writeln('       --debug=NR       Set debug level to NR');
         Exit;

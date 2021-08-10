@@ -28,7 +28,18 @@
 <br>
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
-<h2><strong>Preferences</strong></h2>
+<a name=ah0><h2><strong>Starting cqrlog</strong></h2>
+<p>Installing cqrlog from package should create a start up selection to your system startup menu.
+<br>Cqrlog can also be started from command terminal by typing: cqrlog ,follwed with return key.
+<br>There are some additional startup parameters that you can use with command terminal, or add them to your startup menu parameters of cqrlog.
+ Those parameters can be listed in command terminal starting cqrlog as: cqrlog -h , or: cqrlog --help
+<br><br><img src=img/h0.png border=0>
+<br><br>Starting with <b>--remote</b> or <b>-r</b> takes one letter argument <b>J</b>,<b> M</b> or <b>K</b> that is not case sensitive. Letters correspond quick control keys in NewQSO/File to start three remote modes.
+<br>When one of these are assigned cqrlog will jump to selected remote mode 10 seconds after startup is complete.
+<br><br>Starting with <b>--debug</b> takes one number (NR) usually<b> 1</b> to see full debug. Thtere are also some negative numbers in use to limit debug prints to certain functions. Mainly for developer usage.
+
+</p>
+<a name=ah1><h2><strong>Preferences</strong></h2>
 <div align=justify>The first step you need is to set up your log preferences. From the
     logging window, choose the 'File' menu item and 'Preferences' (or Ctrl-P).<br><br>
     <img src=img/h2.png border=0>
@@ -64,7 +75,6 @@
         <li><a href="h1.html#ch6">RBN support</a></li>
         <li><a href="h1.html#ch7">Online log upload support</a></li>
     </ul>
-    <h2><strong>Preferences</strong></h2>
     The first tab of the 'Preferences' dialog is labelled 'Program'. Here you can setup the
     main program behaviour.<br><br>
     <a name=ah2><h2><strong>Program</strong></h2></a>
