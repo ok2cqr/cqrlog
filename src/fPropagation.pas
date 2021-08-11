@@ -189,54 +189,54 @@ begin
     Child := Doc.DocumentElement.FirstChild;
 
     data := Child.FindNode('updated');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.LastUpdate := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('solarflux');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.sfi := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('aindex');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.a := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('kindex');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.k := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('sunspots');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.ssn := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('aurora');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
     begin
       if Assigned(data.FirstChild) then
         frmPropagation.aur := String(data.FirstChild.NodeValue)
     end;
 
     data := Child.FindNode('latdegree');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.lat := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('magneticfield');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.mag := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('geomagfield');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.geo := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('signalnoise');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.sigs := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('fof2');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
       frmPropagation.fof2 := String(data.FirstChild.NodeValue);
 
     data := Child.FindNode('calculatedconditions');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
     begin
       for j:=0 to data.ChildNodes.Count-1 do
       begin                                              //80-40m                                       daynight                                                         poor
@@ -271,7 +271,7 @@ begin
       end
     end;
     data := Child.FindNode('calculatedvhfconditions');
-    if Assigned(data) then
+    if Assigned(data) and (data.ChildNodes.Count>0) then
     begin
       for j:=0 to data.ChildNodes.Count-1 do
       begin
