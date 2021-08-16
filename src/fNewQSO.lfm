@@ -2139,7 +2139,7 @@ object frmNewQSO: TfrmNewQSO
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   PopupMenu = popMode
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.0.12.0'
   object pnlAll: TPanel
     AnchorSideTop.Control = dbgrdQSOBefore
     AnchorSideTop.Side = asrBottom
@@ -4909,6 +4909,9 @@ object frmNewQSO: TfrmNewQSO
       Top = 569
       Width = 1030
       Panels = <      
+        item
+          Width = 50
+        end      
         item
           Width = 50
         end      

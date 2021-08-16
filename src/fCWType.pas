@@ -414,7 +414,7 @@ end;
 procedure TfrmCWType.edtSpeedChange(Sender: TObject);
 begin
   frmNewQSO.CWint.SetSpeed(edtSpeed.Value);
-  frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(edtSpeed.Value)+'WPM';
+  frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
 end;
 procedure TfrmCWType.fraCWKeys1Resize(Sender: TObject);
  var
@@ -561,7 +561,7 @@ Begin
     begin
       speed := frmNewQSO.CWint.GetSpeed+change;
       frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM';
+      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
       edtSpeed.Value := speed;
     end;
 end;
