@@ -1453,11 +1453,10 @@ begin
   dmUtils.LoadBandLabelSettins;
   sbNewQSO.Panels[0].Width := 180;
   sbNewQSO.Panels[1].Width := 200;
-
   sbNewQSO.Panels[2].Width := 200;
-
   sbNewQSO.Panels[3].Text  := 'Ver. '+ dmData.VersionString;
-  sbNewQSO.Panels[3].Width := 60;
+  sbNewQSO.Panels[3].Width := 150;
+  sbNewQSO.Panels[4].Width :=  50;
 
   dmUtils.LoadWindowPos(frmNewQSO);
 
@@ -5662,7 +5661,7 @@ begin
     begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM';
+      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -5673,7 +5672,7 @@ begin
     begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[2].Text := IntToStr(speed)+'WPM';
+      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -7305,7 +7304,7 @@ begin
    Begin
      CWint.Open;
      CWint.SetSpeed(UseSpeed);
-     sbNewQSO.Panels[2].Text := IntToStr(UseSpeed) + 'WPM';
+     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
      if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
    end;
 end;

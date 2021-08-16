@@ -155,7 +155,7 @@ begin
     begin
       speed := frmNewQSO.CWint.GetSpeed + 2;
       frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed) + 'WPM';
+      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
     end;
     key := 0;
   end;
@@ -166,7 +166,7 @@ begin
     begin
       speed := frmNewQSO.CWint.GetSpeed - 2;
       frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[2].Text := IntToStr(speed) + 'WPM';
+      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
     end;
     key := 0;
   end;
