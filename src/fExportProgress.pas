@@ -222,6 +222,14 @@ var
     begin
       case Mode of
         'PACKET'                   : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
+        //these modes come from ICOM rig (IC7300) when DATA is selected with USB,LSB,FM or AM
+        //and checkbox "auto" for mode is selected in NewQSO
+        //There is not clear what mode is then actually used (depends on additional program in use)
+        //but we put them all to PKT category here
+        'PKTUSB'                   : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
+        'PKTLSB'                   : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
+        'PKTFM'                    : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
+        'PKTAM'                    : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
 
         //definitions by https://adif.org/312/ADIF_312.htm#Mode_Enumeration
 
