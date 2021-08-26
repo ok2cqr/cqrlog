@@ -308,15 +308,18 @@ You can also switch between memory frequencies with TRXControl's <b>M up</b> and
 <img src="img/h121.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
-Here you can set up the default bandwidth for any of the supported modes (CW - SSB - RTTY - AM - FM).
+<p>Here you can set up the default bandwidth for any of the supported modes (CW - SSB - RTTY - AM - FM).
 If your radio is tuned to the corresponding band segment or if you switch the mode on the radio
 control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be
 changed at any time, however a program restart will probably be needed to make the changes
-take effect.<br><br>
-<strong>User definable digital modes</strong> can be set up in a separate box. Use comma
-as a separator, ie. BPSK31,QPSK64,OLIVIA,CONTESTIA etc.<br>
+take effect.<br>
 Some <strong>TRX like ICOM don't have support for this in HamLib. To get mode settings work, set
 all values to 0 (zero).</strong>
+</p><p><strong>User definable digital modes</strong> can be set up in a separate box. Use comma
+as a separator, ie. MYMODE1,MYMODE2 etc.<br>
+If user adds digital modes (submode names) exactly as written in this table <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> ADIF export will place correct mode and submode tags to exported file.
+ Submode list is copied at 2021-08-25 and may need updating of source code some day in future.
+</p>
 <p align=center><img src=img/line.png></p>
 <a name=ah9><h2><strong>QTH Profiles</strong></h2></a>
 <img src=img/h12.png border=0><br><br>
