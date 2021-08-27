@@ -3333,7 +3333,7 @@ begin
       ErrMsg := 'Callsign field empty!';
       exit;
     end;
-    req := 'http://xml.qrz.com/xml?s=' + fQRZSession + ';callsign=' + GetIDCall(call);
+    req := 'https://xml.qrz.com/xml/1.34?s=' + fQRZSession + ';callsign=' + GetIDCall(call);
     if not HTTP.HTTPMethod('GET', req) then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
     else
@@ -3637,7 +3637,7 @@ begin
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
-    AProcess.Parameters.Add('http://www.qrz.com/db/' + GetIDCall(call));
+    AProcess.Parameters.Add('https://www.qrz.com/db/' + GetIDCall(call));
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
@@ -3946,7 +3946,7 @@ begin
     http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    req := 'http://xmldata.qrz.com/xml/?username=' + cqrini.ReadString(
+    req := 'https://xmldata.qrz.com/xml/1.34?username=' + cqrini.ReadString(
       'CallBook', 'CBUser', '') + ';password=' + cqrini.ReadString(
       'CallBook', 'CBPass', '') + ';agent=cqrlog';
     if not HTTP.HTTPMethod('GET', req) then

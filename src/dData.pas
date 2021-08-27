@@ -1986,8 +1986,10 @@ begin
   band := dmUtils.GetBandFromFreq(freq);
   Q.Close();
   Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE waz = ' + waz +
-                ' AND band = ' + QuotedStr(band) + ' AND QSL_R = ' + QuotedStr('Q')+
-                ' LIMIT 1';
+                ' AND band = ' + QuotedStr(band) +
+                ' AND ( QSL_R = ' + QuotedStr('Q')+ ' OR lotw_qslr= ' + QuotedStr('L')+
+                ' OR eqsl_qsl_rcvd= ' + QuotedStr('E')+
+                ') LIMIT 1';
   trQ.StartTransaction;
   Q.Open();
   if Q.Fields[0].AsInteger > 0 then
@@ -2040,8 +2042,9 @@ begin
   band := dmUtils.GetBandFromFreq(freq);
   Q.Close();
   Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE itu = ' + itu +
-                ' AND band = ' + QuotedStr(band) + ' AND QSL_R = ' + QuotedStr('Q')+
-                ' LIMIT 1';
+                ' AND band = ' + QuotedStr(band) +
+                ' AND ( QSL_R = ' + QuotedStr('Q')+ ' OR lotw_qslr= ' + QuotedStr('L')+
+                ' ) LIMIT 1';
   trQ.StartTransaction;
   Q.Open();
   if Q.Fields[0].AsInteger > 0 then
