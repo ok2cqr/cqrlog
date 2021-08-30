@@ -24,15 +24,17 @@ type
   { TfrmDXCCStat }
 
   TfrmDXCCStat = class(TForm)
-    Button1: TButton;
+    btnRefresh: TButton;
+    btClose: TButton;
     btnHTMLExport: TButton;
-    btnRefresh : TButton;
-    cmbCfmType : TComboBox;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
-    Label1 : TLabel;
+    cmbCfmType: TComboBox;
+    grdDXCCStat: TStringGrid;
+    gbCW: TGroupBox;
+    gbPhone: TGroupBox;
+    gbDigi: TGroupBox;
+    gbMix: TGroupBox;
+    grdStatSum: TStringGrid;
+    lblDXCCType: TLabel;
     lblCfmMix: TLabel;
     lblWkdMix: TLabel;
     lblFoneCmf: TLabel;
@@ -41,11 +43,9 @@ type
     lblFoneWKD: TLabel;
     lblCWWKD: TLabel;
     lblDIGIWKD: TLabel;
-    Panel1: TPanel;
-    grdStat: TStringGrid;
-    grdDXCCStat: TStringGrid;
+    PnlDXCCStat: TPanel;
+    pnlStatSum: TPanel;
     dlgSave: TSaveDialog;
-    Panel2 : TPanel;
     procedure btnHTMLExportClick(Sender: TObject);
     procedure btnRefreshClick(Sender : TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -101,20 +101,21 @@ end;
 procedure TfrmDXCCStat.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(self);
+  grdStatSum.Constraints.MinHeight:=(grdStatSum.Font.Size+6)*10;
   LoadBandsSettings;
 
   if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
   begin
     grdDXCCStat.AlternateColor:=$00E7FFEB;
-    grdStat.AlternateColor:=$00E7FFEB;
+    grdStatSum.AlternateColor:=$00E7FFEB;
     grdDXCCStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
-    grdStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
+    grdStatSum.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
   end
   else begin
     grdDXCCStat.AlternateColor:=clWindow;
-    grdStat.AlternateColor:=clWindow;
+    grdStatSum.AlternateColor:=clWindow;
     grdDXCCStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
-    grdStat.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
+    grdStatSum.Options:=[goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine,goFixedHorzLine,goHorzline];
   end;
 
   grdDXCCStat.Cells[0,0] := 'DXCC';
@@ -296,7 +297,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40 bgcolor="#333366" class="hlava">');
-    tmp := grdStat.Cells[i,0];
+    tmp := grdStatSum.Cells[i,0];
     Writeln(f,'<div align="center" class="popis">' + tmp +  '</div>');
     Writeln(f,'</TD>');
   end;  //^^ table header
@@ -309,7 +310,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=60>');
-    tmp := grdStat.Cells[i,1];
+    tmp := grdStatSum.Cells[i,1];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2>' + tmp +  '</FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -322,7 +323,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,2];
+    tmp := grdStatSum.Cells[i,2];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2><B>' + tmp +  '</B></FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -335,7 +336,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,4];
+    tmp := grdStatSum.Cells[i,4];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2>' + tmp +  '</FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -348,7 +349,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,5];
+    tmp := grdStatSum.Cells[i,5];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2><B>' + tmp +  '</B></FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -361,7 +362,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,6];
+    tmp := grdStatSum.Cells[i,6];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2>' + tmp +  '</FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -374,7 +375,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,7];
+    tmp := grdStatSum.Cells[i,7];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2><B>' + tmp +  '</B></FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -387,7 +388,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,8];
+    tmp := grdStatSum.Cells[i,8];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2>' + tmp +  '</FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -400,7 +401,7 @@ begin
   for i:=1 to grdDXCCStat.ColCount -1 do
   begin
     Writeln(f,'<TD WIDTH=40>');
-    tmp := grdStat.Cells[i,9];
+    tmp := grdStatSum.Cells[i,9];
     Writeln(f,'<P ALIGN=CENTER><FONT SIZE=2><B>' + tmp +  '</B></FONT></P>');
     Writeln(f,'</TD>');
   end;
@@ -488,20 +489,20 @@ var
   i : Integer = 0;
 begin
   grdDXCCStat.ColCount := cMaxBandsCount;
-  grdStat.ColCount     := cMaxBandsCount;
+  grdStatSum.ColCount     := cMaxBandsCount;
   for i:=0 to cMaxBandsCount-1 do
   begin
     if dmUtils.MyBands[i][0]='' then
     begin
       grdDXCCStat.ColCount := i+2;
-      grdStat.ColCount     := i+1;
+      grdStatSum.ColCount     := i+1;
       break
     end;
     grdDXCCStat.Cells[i+2,0] := dmUtils.MyBands[i][1];
-    grdStat.Cells[i+1,0]     := dmUtils.MyBands[i][1];
+    grdStatSum.Cells[i+1,0]     := dmUtils.MyBands[i][1];
   end;
-  grdDXCCStat.ColWidths[grdStat.ColCount-1] := 50;
-  grdStat.ColWidths[grdStat.ColCount-1]     := 50
+  grdDXCCStat.ColWidths[grdStatSum.ColCount-1] := 50;
+  grdStatSum.ColWidths[grdStatSum.ColCount-1]     := 50
 end;
 
 procedure TfrmDXCCStat.CreateModeStatistic;
@@ -523,9 +524,9 @@ var
       end;
       BandPos := BandPos + 1;
       if dmData.Q.Fields[1].AsString = '' then
-        grdStat.Cells[BandPos,Row] := '0'
+        grdStatSum.Cells[BandPos,Row] := '0'
       else
-        grdStat.Cells[BandPos,Row] := dmData.Q.Fields[1].AsString;
+        grdStatSum.Cells[BandPos,Row] := dmData.Q.Fields[1].AsString;
       dmData.Q.Next
     end
   end;
@@ -582,18 +583,18 @@ const
   C_SEL = 'select band,count(distinct adif) from cqrlog_main where adif <> 0 and ';
 
 begin
-  grdStat.ColWidths[0] := 110;
-  grdStat.Cells[0,1] := 'DXCC';
-  grdStat.Cells[0,2] := 'DXCC CFM';
+  grdStatSum.ColWidths[0] := 110;
+  grdStatSum.Cells[0,1] := 'DXCC';
+  grdStatSum.Cells[0,2] := 'DXCC CFM';
 
-  grdStat.Cells[0,4] := 'DXCC PHONE';
-  grdStat.Cells[0,5] := 'DXCC CFM PHONE';
+  grdStatSum.Cells[0,4] := 'DXCC PHONE';
+  grdStatSum.Cells[0,5] := 'DXCC CFM PHONE';
 
-  grdStat.Cells[0,6] := 'DXCC CW';
-  grdStat.Cells[0,7] := 'DXCC CFM CW';
+  grdStatSum.Cells[0,6] := 'DXCC CW';
+  grdStatSum.Cells[0,7] := 'DXCC CFM CW';
 
-  grdStat.Cells[0,8] := 'DXCC DIGI';
-  grdStat.Cells[0,9] := 'DXCC CFM DIGI';
+  grdStatSum.Cells[0,8] := 'DXCC DIGI';
+  grdStatSum.Cells[0,9] := 'DXCC CFM DIGI';
 
   ShowDel := cqrini.ReadBool('Program','ShowDeleted',False);
 
@@ -1192,22 +1193,22 @@ var
   y   : Integer;
   sum : Word;
 begin
-  grdStat.ColCount := grdStat.ColCount+1;
-  grdStat.Cells[grdStat.ColCount-1,0] := 'Total';
+  grdStatSum.ColCount := grdStatSum.ColCount+1;
+  grdStatSum.Cells[grdStatSum.ColCount-1,0] := 'Total';
 
-  for y:=1 to grdStat.RowCount-1 do
+  for y:=1 to grdStatSum.RowCount-1 do
   begin
-    if grdStat.Cells[0,y] = '' then
+    if grdStatSum.Cells[0,y] = '' then
       Continue;
     sum := 0;
-    for i:=1 to grdStat.ColCount -1 do
+    for i:=1 to grdStatSum.ColCount -1 do
     begin
-      if grdStat.Cells[i,y] <> '' then
-        sum := sum + StrToInt(grdStat.Cells[i,y])
+      if grdStatSum.Cells[i,y] <> '' then
+        sum := sum + StrToInt(grdStatSum.Cells[i,y])
       else
-        grdStat.Cells[i,y] := '0'
+        grdStatSum.Cells[i,y] := '0'
     end;
-    grdStat.Cells[grdStat.ColCount-1,y] := IntToStr(sum)
+    grdStatSum.Cells[grdStatSum.ColCount-1,y] := IntToStr(sum)
   end
 end;
 
