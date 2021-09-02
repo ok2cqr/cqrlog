@@ -647,7 +647,7 @@ begin
                     400 : begin
                             Result     := Response;
                             if (Pos('skipping qso',LowerCase(Response))=0) then //consider skiping QSO as non fatal error, the app can live with it :)
-                              FatalError := True
+                            FatalError := not (cqrini.ReadBool('OnlineLog','IgnoreCLubLogErrors',False));
                           end;
                     403 : begin
                             Result := 'Access denied';
@@ -659,7 +659,7 @@ begin
                           end;
                     404 : begin
                             Result     := Response;
-                            FatalError := True
+                            FatalError := not (cqrini.ReadBool('OnlineLog','IgnoreCLubLogErrors',False));
                           end
                   end //case
                 end;

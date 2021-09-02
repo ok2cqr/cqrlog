@@ -122,6 +122,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkIgnoreCLErr: TCheckBox;
     chkIgnoreEdit: TCheckBox;
     chkIgnoreQSL: TCheckBox;
     chkOperator: TCheckBox;
@@ -1702,6 +1703,7 @@ begin
   cqrini.WriteBool('OnlineLog','IgnoreLoTWeQSL',chkIgnoreLoTW.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreQSL',chkIgnoreQSL.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreEdit',chkIgnoreEdit.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreCLubLogErrors',chkIgnoreCLErr.Checked);
 
   cqrini.WriteString('prop','Url',edtCondxImageUrl.Text);
   cqrini.WriteBool('prop','AsImage',rbCondxAsImage.Checked);
@@ -3287,6 +3289,7 @@ begin
   chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
   chkIgnoreQSL.Checked   := cqrini.ReadBool('OnlineLog','IgnoreQSL',False);
   chkIgnoreEdit.Checked  := cqrini.ReadBool('OnlineLog','IgnoreEdit',False);
+  chkIgnoreCLErr.Checked := cqrini.ReadBool('OnlineLog','IgnoreCLubLogErrors',False);
   chkHrUpEnabledChange(nil);
 
   edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');

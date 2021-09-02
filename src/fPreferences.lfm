@@ -9468,6 +9468,17 @@ object frmPreferences: TfrmPreferences
         Caption = 'Ignore changes caused by QSO edit'
         TabOrder = 6
       end
+      object chkIgnoreCLErr: TCheckBox
+        AnchorSideLeft.Control = chkIgnoreEdit
+        AnchorSideTop.Control = chkIgnoreEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 13
+        Height = 23
+        Top = 645
+        Width = 320
+        Caption = 'Continue when ClubLog Errors 400, 404 occur'
+        TabOrder = 7
+      end
     end
     object tabCondx: TTabSheet
       Caption = 'Propagation'
