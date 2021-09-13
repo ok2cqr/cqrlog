@@ -49,8 +49,12 @@ type TRigControl = class
 
     procedure OnReceivedRcvdFreqMode(aSocket: TLSocket);
     procedure OnRigPollTimer(Sender: TObject);
+
+
   public
 
+    ParmVfoChkd : Boolean;
+    ParmHasVfo  : integer;
 
     constructor Create;
     destructor  Destroy; override;
@@ -230,6 +234,8 @@ begin
   begin
     if fDebugMode then Writeln('Connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
     result := True;
+    ParmVfoChkd:=false; //initial check of "--vfo" not done
+    ParmHasVfo:=0;   // "--vfo" is not used as start parameter
     tmrRigPoll.Interval := fRigPoll;
     tmrRigPoll.Enabled  := True
   end
@@ -425,8 +431,16 @@ begin
     //Writeln('Whole MSG:|',msg,'|');
     msg := trim(msg);
 
-    if DebugMode then Writeln('Msg from rig: ',msg);
+    if DebugMode then ;
+    Writeln('Msg from rig: ',msg);
 
+    if not ParmVfoChkd then
+     Begin
+        ParmVfoChkd:=true;
+        if  (msg[1]='1') then ParmHasVfo := 1;  //Hamlib 4.3
+        if (pos('CHKVFO 1',msg)>0) then ParmHasVfo := 2;  //Hamlib 3.3
+        Writeln('"--vfo" checked:',ParmHasVfo);
+     end;
     a := Explode(LineEnding,msg);
     for i:=0 to Length(a)-1 do
     begin
@@ -580,11 +594,22 @@ begin
     end;
     RigCommand.Clear
   end
-  else begin
-    cmd := 'fmv'+LineEnding;
-    if DebugMode then Writeln('Sending: '+cmd);
+  else
+   begin
+    if not ParmVfoChkd then
+     cmd := '\chk_vfo'+LineEnding
+    else
+     Begin
+         case ParmHasVfo of
+           1: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v'+LineEnding;
+           2: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
+         else  cmd := 'fmv'+LineEnding;
+      end;
+     end;
+    if DebugMode then;
+    Writeln('Sending: '+cmd);
     rcvdFreqMode.SendMessage(cmd)
-  end
+   end
 end;
 
 procedure TRigControl.Restart;
