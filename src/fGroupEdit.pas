@@ -550,6 +550,12 @@ begin
              exit;
            sql := 'operator='+QuotedStr(cmbValue.Text)
          end;
+   38 : begin
+           if (cmbValue.Text='') and (Application.MessageBox('Do you really want to clear DOK field?',
+              'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) in [idNo, idCancel]) then
+             exit;
+           sql := 'dok='+QuotedStr(cmbValue.Text)
+         end;
 
   end;
   if sql = '' then exit;
