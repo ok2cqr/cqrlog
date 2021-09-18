@@ -1456,6 +1456,25 @@ begin
            if mode = 'FM' then
              btnFM.Font.Color := clRed;
 
+   //update vfobuttons if vfo is known by radio.vfostr
+   if Assigned(radio) then
+    Begin
+       case radio.VfoStr of
+         'VFOA'  : Begin
+                    btnVFOA.Color:=clRed;
+                    btnVFOB.Color:=clDefault;
+                   end;
+         'VFOB'  : Begin
+                    btnVFOB.Color:=clRed;
+                    btnVFOA.Color:=clDefault;
+                   end;
+         else
+                   Begin
+                    btnVFOB.Color:=clDefault;
+                    btnVFOA.Color:=clDefault;
+                   end;
+       end;
+    end;
 end;
 
 procedure TfrmTRXControl.Split(Up : Integer);

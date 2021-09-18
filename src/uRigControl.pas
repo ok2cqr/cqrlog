@@ -50,11 +50,11 @@ type TRigControl = class
     procedure OnReceivedRcvdFreqMode(aSocket: TLSocket);
     procedure OnRigPollTimer(Sender: TObject);
 
-
-  public
+public
 
     ParmVfoChkd : Boolean;
     ParmHasVfo  : integer;
+    VfoStr      : String;
 
     constructor Create;
     destructor  Destroy; override;
@@ -136,6 +136,7 @@ begin
   rigProcess   := TProcess.Create(nil);
   tmrRigPoll   := TTimer.Create(nil);
   tmrRigPoll.Enabled := False;
+  VfoStr       := ''; //defaults to non-"--vfo" (legacy) mode
   if DebugMode then Writeln('All objects created');
   tmrRigPoll.OnTimer     := @OnRigPollTimer;
   BadRcvd := 0;
@@ -182,7 +183,6 @@ begin
       exit
     end
   end;
-
   Result := True
 end;
 
@@ -249,8 +249,14 @@ end;
 procedure TRigControl.SetCurrVFO(vfo : TVFO);
 begin
   case vfo of
-    VFOA : RigCommand.Add('V VFOA');//sendCommand.SendMessage('V VFOA'+LineEnding);
-    VFOB : RigCommand.Add('V VFOB')//sendCommand.SendMessage('V VFOB'+LineEnding);
+    VFOA : Begin
+                RigCommand.Add('V VFOA');//sendCommand.SendMessage('V VFOA'+LineEnding);
+                if (ParmHasVfo>0) then VfoStr := 'VFOA';
+           end;
+    VFOB : Begin
+                RigCommand.Add('V VFOB');//sendCommand.SendMessage('V VFOB'+LineEnding);
+                if (ParmHasVfo>0) then VfoStr := 'VFOB';
+           end;
   end //case
 end;
 
@@ -486,11 +492,17 @@ begin
       if (a[i][1] = 'V') then
       begin
         if Pos('VFOB',msg) > 0 then
-          fVFO := VFOB
+          Begin
+            fVFO := VFOB;
+            if (ParmHasVfo>0) then VfoStr := 'VFOB';
+          end
         else
-          fVFO := VFOA
-      end
-    end;
+          begin
+           fVFO := VFOA;
+           if (ParmHasVfo>0) then VfoStr := 'VFOA';
+          end;
+       end;
+     end;
     {
 
     if (Length(a)<4) then
@@ -575,9 +587,8 @@ begin
     Writeln('Mode     :',fMode.mode);
     Writeln('Bandwidth:',fMode.pass);
     Writeln('-----')}
-  end
+  end;
 end;
-
 procedure TRigControl.OnRigPollTimer(Sender: TObject);
 var
   cmd : String;
@@ -600,10 +611,15 @@ begin
      cmd := '\chk_vfo'+LineEnding
     else
      Begin
+         VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
          case ParmHasVfo of
-           1: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v'+LineEnding;
-           2: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
-         else  cmd := 'fmv'+LineEnding;
+           1: cmd := 'f '+VfoStr+LineEnding+'m '+VfoStr+LineEnding+'v'+LineEnding;
+           2: cmd := 'f '+VfoStr+LineEnding+'m '+VfoStr+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
+         else
+           Begin
+            cmd := 'fmv'+LineEnding;
+            VfoStr := '';         //legacy mode does not accept vfo definition
+           end;
       end;
      end;
     if DebugMode then;
