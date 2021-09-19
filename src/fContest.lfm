@@ -1,12 +1,12 @@
 object frmContest: TfrmContest
   Left = 370
-  Height = 154
+  Height = 153
   Top = 281
   Width = 700
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
-  ClientHeight = 154
+  ClientHeight = 153
   ClientWidth = 700
   OnClose = FormClose
   OnCreate = FormCreate
@@ -608,7 +608,7 @@ object frmContest: TfrmContest
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 18
-    Top = 136
+    Top = 135
     Width = 700
     Panels = <    
       item
@@ -646,10 +646,22 @@ object frmContest: TfrmContest
     State = cbChecked
     TabOrder = 18
   end
+  object lblSpeed: TLabel
+    AnchorSideLeft.Control = cmbContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = cmbContestName
+    AnchorSideTop.Side = asrCenter
+    Left = 564
+    Height = 1
+    Top = 17
+    Width = 1
+    BorderSpacing.Left = 18
+    ParentColor = False
+  end
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer
-    left = 544
-    top = 8
+    Left = 672
+    Top = 112
   end
 end
