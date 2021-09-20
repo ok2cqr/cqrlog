@@ -1461,17 +1461,17 @@ begin
     Begin
        case radio.VfoStr of
          'VFOA'  : Begin
-                    btnVFOA.Color:=clRed;
-                    btnVFOB.Color:=clDefault;
+                    btnVFOA.Font.Color:=clRed;
+                    btnVFOB.Font.Color:=clDefault;
                    end;
          'VFOB'  : Begin
-                    btnVFOB.Color:=clRed;
-                    btnVFOA.Color:=clDefault;
+                    btnVFOB.Font.Color:=clRed;
+                    btnVFOA.Font.Color:=clDefault;
                    end;
          else
                    Begin
-                    btnVFOB.Color:=clDefault;
-                    btnVFOA.Color:=clDefault;
+                    btnVFOB.Font.Color:=clDefault;
+                    btnVFOA.Font.Color:=clDefault;
                    end;
        end;
     end;

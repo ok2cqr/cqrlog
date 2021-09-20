@@ -264,41 +264,41 @@ procedure TRigControl.SetModePass(mode : TRigMode);
 begin
   if (mode.mode='CW') and fRigSendCWR then
     mode.mode := 'CWR';
-  RigCommand.Add('M '+mode.mode+' '+IntToStr(mode.pass))
+  RigCommand.Add('M '+VfoStr+' '+mode.mode+' '+IntToStr(mode.pass))
 end;
 
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
-  RigCommand.Add('F '+FloatToStr(freq*1000-TXOffset*1000000))
+  RigCommand.Add('F '+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000))
 end;
 procedure TRigControl.ClearRit;
 begin
-  RigCommand.Add('J 0')
+  RigCommand.Add('J '+VfoStr+' 0')
 end;
 procedure TRigControl.DisableRit;
 Begin
-  RigCommand.Add('U RIT 0');
+  RigCommand.Add('U '+VfoStr+' RIT 0');
 end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
-  RigCommand.Add('Z '+IntToStr(up));
-  RigCommand.Add('U XIT 1');
+  RigCommand.Add('Z '+VfoStr+' '+IntToStr(up));
+  RigCommand.Add('U '+VfoStr+' XIT 1');
 end;
 procedure TRigControl.ClearXit;
 begin
-  RigCommand.Add('Z 0')
+  RigCommand.Add('Z '+VfoStr+' 0')
 end;
 procedure TRigControl.DisableSplit;
 Begin
-  RigCommand.Add('U XIT 0');
+  RigCommand.Add('U '+VfoStr+' XIT 0');
 end;
 procedure TRigControl.PttOn;
 begin
-  RigCommand.Add('T 1')
+  RigCommand.Add('T '+VfoStr+' 1')
 end;
 procedure TRigControl.PttOff;
 begin
-  RigCommand.Add('T 0')
+  RigCommand.Add('T '+VfoStr+' 0')
 end;
 procedure TRigControl.PwrOn;
 begin
@@ -437,8 +437,8 @@ begin
     //Writeln('Whole MSG:|',msg,'|');
     msg := trim(msg);
 
-    if DebugMode then ;
-    Writeln('Msg from rig: ',msg);
+    if DebugMode then
+         Writeln('Msg from rig: ',msg);
 
     if not ParmVfoChkd then
      Begin
@@ -489,9 +489,12 @@ begin
             inc(BadRcvd)
         end
       end;
-      if (a[i][1] = 'V') then
+      if ( (a[i][1] = 'V')
+       or (upcase(msg)='MAIN')
+       or (upcase(msg)='SUB') ) then
       begin
-        if Pos('VFOB',msg) > 0 then
+        if (( Pos('VFOB',msg) > 0 )
+          or (upcase(msg)='SUB') ) then
           Begin
             fVFO := VFOB;
             if (ParmHasVfo>0) then VfoStr := 'VFOB';
@@ -594,37 +597,42 @@ var
   cmd : String;
   i   : Integer;
 begin
+  if not ParmVfoChkd then
+                     RigCommand.Clear; // chk must be first thing to do
+
   if (RigCommand.Text<>'') then
-  begin
-    for i:=0 to RigCommand.Count-1 do
     begin
-      sleep(100);
-      cmd := RigCommand.Strings[i]+LineEnding;
-      rcvdFreqMode.SendMessage(cmd);
-      if DebugMode then Writeln('Sending: '+cmd)
-    end;
-    RigCommand.Clear
-  end
+      for i:=0 to RigCommand.Count-1 do
+      begin
+        sleep(100);
+        cmd := RigCommand.Strings[i]+LineEnding;
+        rcvdFreqMode.SendMessage(cmd);
+        if DebugMode then
+           Writeln('Sending: '+cmd)
+      end;
+      RigCommand.Clear
+    end
   else
    begin
-    if not ParmVfoChkd then
-     cmd := '\chk_vfo'+LineEnding
+     if not ParmVfoChkd then
+       cmd := '\chk_vfo'+LineEnding
     else
      Begin
-         VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
+         if VfoStr= '' then
+                    VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
          case ParmHasVfo of
            1: cmd := 'f '+VfoStr+LineEnding+'m '+VfoStr+LineEnding+'v'+LineEnding;
            2: cmd := 'f '+VfoStr+LineEnding+'m '+VfoStr+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
          else
            Begin
             cmd := 'fmv'+LineEnding;
-            VfoStr := '';         //legacy mode does not accept vfo definition
+            VfoStr := '';         //legacy mode does not accept vfo definition so reset VfoStr
            end;
       end;
      end;
-    if DebugMode then;
-    Writeln('Sending: '+cmd);
-    rcvdFreqMode.SendMessage(cmd)
+     if DebugMode then
+         Writeln('Sending: '+cmd);
+     rcvdFreqMode.SendMessage(cmd)
    end
 end;
 
