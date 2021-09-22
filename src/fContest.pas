@@ -31,6 +31,7 @@ type
     edtRSTr: TEdit;
     edtSRX: TEdit;
     edtSRXStr: TEdit;
+    lblSpeed: TLabel;
     lblContestName: TLabel;
     lblCall: TLabel;
     lblRSTs: TLabel;
@@ -143,8 +144,8 @@ begin
     else
     if Assigned(frmNewQSO.CWint) then
       frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(
-        dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
-      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+        dmUtils.GetDescKeyFromCode(Key),edtCall.Text,
+      edtRSTs.Text, edtSTX.Text,edtSTXStr.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
     key := 0;
   end;
@@ -156,6 +157,7 @@ begin
       speed := frmNewQSO.CWint.GetSpeed + 2;
       frmNewQSO.CWint.SetSpeed(speed);
       frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
+      lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
     end;
     key := 0;
   end;
@@ -167,6 +169,7 @@ begin
       speed := frmNewQSO.CWint.GetSpeed - 2;
       frmNewQSO.CWint.SetSpeed(speed);
       frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
+      lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
     end;
     key := 0;
   end;
@@ -393,6 +396,7 @@ begin
   sbContest.Panels[2].Width := 65;
   sbContest.Panels[3].Width := 65;
   sbContest.Panels[4].Width := 20;
+  lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
 end;
 
 procedure TfrmContest.btnHelpClick(Sender : TObject);

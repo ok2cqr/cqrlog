@@ -6612,6 +6612,7 @@ end;
 procedure TfrmNewQSO.SavePosition;
 begin
   dmUtils.SaveWindowPos(frmNewQSO);
+  if frmContest.Showing then dmUtils.SaveWindowPos(frmContest);
   cqrini.WriteBool('NewQSO','StatBar',sbNewQSO.Visible);
   cqrini.SaveToDisk
 end;

@@ -234,6 +234,7 @@ object frmGroupEdit: TfrmGroupEdit
         'Propagation mode'
         'Satellite name'
         'Operator̈́'
+        'DOK'
       )
       OnChange = cmbFieldChange
       Style = csDropDownList
