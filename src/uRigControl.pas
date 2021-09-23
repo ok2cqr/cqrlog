@@ -264,41 +264,41 @@ procedure TRigControl.SetModePass(mode : TRigMode);
 begin
   if (mode.mode='CW') and fRigSendCWR then
     mode.mode := 'CWR';
-  RigCommand.Add('M '+VfoStr+' '+mode.mode+' '+IntToStr(mode.pass))
+  RigCommand.Add('M currVFO '+mode.mode+' '+IntToStr(mode.pass))
 end;
 
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
-  RigCommand.Add('F '+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000))
+  RigCommand.Add('F currVFO '+FloatToStr(freq*1000-TXOffset*1000000))
 end;
 procedure TRigControl.ClearRit;
 begin
-  RigCommand.Add('J '+VfoStr+' 0')
+  RigCommand.Add('J currVFO 0')
 end;
 procedure TRigControl.DisableRit;
 Begin
-  RigCommand.Add('U '+VfoStr+' RIT 0');
+  RigCommand.Add('U currVFO RIT 0');
 end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
-  RigCommand.Add('Z '+VfoStr+' '+IntToStr(up));
-  RigCommand.Add('U '+VfoStr+' XIT 1');
+  RigCommand.Add('Z currVFO '+IntToStr(up));
+  RigCommand.Add('U currVFO XIT 1');
 end;
 procedure TRigControl.ClearXit;
 begin
-  RigCommand.Add('Z '+VfoStr+' 0')
+  RigCommand.Add('Z currVFO 0')
 end;
 procedure TRigControl.DisableSplit;
 Begin
-  RigCommand.Add('U '+VfoStr+' XIT 0');
+  RigCommand.Add('U currVFO XIT 0');
 end;
 procedure TRigControl.PttOn;
 begin
-  RigCommand.Add('T '+VfoStr+' 1')
+  RigCommand.Add('T currVFO 1')
 end;
 procedure TRigControl.PttOff;
 begin
-  RigCommand.Add('T '+VfoStr+' 0')
+  RigCommand.Add('T currVFO 0')
 end;
 procedure TRigControl.PwrOn;
 begin
@@ -618,15 +618,15 @@ begin
        cmd := '\chk_vfo'+LineEnding
     else
      Begin
-         if VfoStr= '' then
-                    VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
+         //if VfoStr= '' then
+         //           VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
          case ParmHasVfo of
-           1: cmd := 'f '+VfoStr+LineEnding+'m '+VfoStr+LineEnding+'v'+LineEnding;
-           2: cmd := 'f '+VfoStr+LineEnding+'m '+VfoStr+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
+           1: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v'+LineEnding;
+           2: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
          else
            Begin
             cmd := 'fmv'+LineEnding;
-            VfoStr := '';         //legacy mode does not accept vfo definition so reset VfoStr
+            //VfoStr := '';         //legacy mode does not accept vfo definition so reset VfoStr
            end;
       end;
      end;
