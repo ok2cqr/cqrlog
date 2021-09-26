@@ -214,6 +214,9 @@ begin
   '1.25CM':     Result := '24G';
      '6MM':     Result := '47G';
      '4MM':     Result := '75G';
+     '2.5MM':   Result := '122G';
+     '2MM':     Result := '134G';
+     '1MM':     Result := '241G';
     else
      Result := '';
   end; //case

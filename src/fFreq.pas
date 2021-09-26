@@ -143,7 +143,7 @@ begin
   dbgrdFreq.Columns[8].Title.Caption := 'TX offset';
 
   for i:=2 to dbgrdFreq.Columns.Count-1 do
-    dbgrdFreq.Columns[i].DisplayFormat   := '###,###0.000;;'
+    dbgrdFreq.Columns[i].DisplayFormat   := '####0.000;;'
 end;
 
 end.
