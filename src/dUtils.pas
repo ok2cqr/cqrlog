@@ -1501,7 +1501,7 @@ begin
   end;
   if band = '1MM' then
   begin
-    Result := '248000.200';
+    Result := '248000.000';
     exit;
   end;
 end;
