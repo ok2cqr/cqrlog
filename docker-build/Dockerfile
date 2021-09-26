@@ -1,4 +1,4 @@
-FROM ubuntu:eoan
+FROM ubuntu:focal
 
 RUN apt-get update && apt-get -y upgrade
 
