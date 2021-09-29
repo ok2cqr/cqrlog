@@ -122,6 +122,8 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkR2Vfo: TCheckBox;
+    chkR1Vfo: TCheckBox;
     chkOperator: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
@@ -1329,6 +1331,7 @@ begin
   cqrini.WriteString('TRX1', 'poll', edtPoll1.Text);
   cqrini.WriteString('TRX1', 'Desc', edtRadio1Name.Text);
   cqrini.WriteBool('TRX1', 'CWR', chkR1SendCWR.Checked);
+  cqrini.WriteBool('TRX1', 'ChkVfo',chkR1Vfo.Checked);
   cqrini.WriteString('TRX1', 'RigCtldPort', edtR1RigCtldPort.Text);
   cqrini.WriteString('TRX1', 'ExtraRigCtldArgs', edtR1RigCtldArgs.Text);
   cqrini.WriteBool('TRX1', 'RunRigCtld', chkR1RunRigCtld.Checked);
@@ -1352,6 +1355,7 @@ begin
   cqrini.WriteString('TRX2', 'poll', edtPoll2.Text);
   cqrini.WriteString('TRX2', 'Desc', edtRadio2Name.Text);
   cqrini.WriteBool('TRX2', 'CWR', chkR2SendCWR.Checked);
+  cqrini.WriteBool('TRX2', 'ChkVfo',chkR2Vfo.Checked);
   cqrini.WriteString('TRX2', 'RigCtldPort', edtR2RigCtldPort.Text);
   cqrini.WriteString('TRX2', 'ExtraRigCtldArgs', edtR2RigCtldArgs.Text);
   cqrini.WriteBool('TRX2', 'RunRigCtld', chkR2RunRigCtld.Checked);
@@ -2908,6 +2912,7 @@ begin
   edtPoll1.Text := cqrini.ReadString('TRX1', 'poll', '500');
   edtRadio1Name.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
   chkR1SendCWR.Checked := cqrini.ReadBool('TRX1', 'CWR', False);
+  chkR1Vfo.Checked:=   cqrini.ReadBool('TRX1', 'ChkVfo', True);
   edtR1RigCtldPort.Text := cqrini.ReadString('TRX1', 'RigCtldPort', '4532');
   edtR1RigCtldArgs.Text := cqrini.ReadString('TRX1', 'ExtraRigCtldArgs', '');
   chkR1RunRigCtld.Checked := cqrini.ReadBool('TRX1', 'RunRigCtld', False);
@@ -2930,6 +2935,7 @@ begin
   edtPoll2.Text := cqrini.ReadString('TRX2', 'poll', '500');
   edtRadio2Name.Text := cqrini.ReadString('TRX2', 'Desc', 'Radio 2');
   chkR2SendCWR.Checked := cqrini.ReadBool('TRX2', 'CWR', False);
+  chkR2Vfo.Checked:=   cqrini.ReadBool('TRX2', 'ChkVfo', True);
   edtR2RigCtldPort.Text := cqrini.ReadString('TRX2', 'RigCtldPort', '4532');
   edtR2RigCtldArgs.Text := cqrini.ReadString('TRX2', 'ExtraRigCtldArgs', '');
   chkR2RunRigCtld.Checked := cqrini.ReadBool('TRX2', 'RunRigCtld', False);

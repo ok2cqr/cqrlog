@@ -39,6 +39,7 @@ type TRigControl = class
     fVFO         : TVFO;
     RigCommand   : TStringList;
     fRigSendCWR  : Boolean;
+    fRigChkVfo : Boolean;
     BadRcvd      : Integer;
     fRXOffset    : Double;
     fTXOffset    : Double;
@@ -81,6 +82,8 @@ public
     //poll rate in milliseconds
     property RigSendCWR  : Boolean read fRigSendCWR    write fRigSendCWR;
     //send CWR instead of CW
+     property RigChkVfo  : Boolean read fRigChkVfo    write fRigChkVfo;
+    //test if rigctld "--vfo" start parameter is used
     property LastError   : String  read fLastError;
     //last error during operation
 
@@ -203,6 +206,7 @@ begin
     Writeln('RigCtldHost:',RigCtldHost);
     Writeln('RigPoll:    ',RigPoll);
     Writeln('RigSendCWR: ',RigSendCWR);
+    Writeln('RigChkVfo   ',RigChkVfo);
     Writeln('RigId:      ',RigId);
     Writeln('')
   end;
@@ -234,10 +238,11 @@ begin
   begin
     if fDebugMode then Writeln('Connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
     result := True;
-    ParmVfoChkd:=false; //initial check of "--vfo" not done
-    ParmHasVfo:=0;   // "--vfo" is not used as start parameter
+    ParmVfoChkd:= not(RigChkVfo); //default: check of "--vfo" not done is false, assigned by preferences not(RigVfoChk)
+    ParmHasVfo:=0;   //default: "--vfo" is not used as start parameter
     tmrRigPoll.Interval := fRigPoll;
-    tmrRigPoll.Enabled  := True
+    tmrRigPoll.Enabled  := True;
+    RigCommand.Clear;
   end
   else begin
     if fDebugMode then Writeln('NOT connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
@@ -618,20 +623,19 @@ begin
        cmd := '\chk_vfo'+LineEnding
     else
      Begin
-         //if VfoStr= '' then
-         //           VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
+         // VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
          case ParmHasVfo of
            1: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v'+LineEnding;
            2: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
          else
            Begin
             cmd := 'fmv'+LineEnding;
-            //VfoStr := '';         //legacy mode does not accept vfo definition so reset VfoStr
+            //legacy mode does not accept vfo definition
            end;
       end;
      end;
      if DebugMode then
-         Writeln('Sending: '+cmd);
+         Writeln('Poll Sending: '+cmd);
      rcvdFreqMode.SendMessage(cmd)
    end
 end;

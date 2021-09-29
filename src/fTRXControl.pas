@@ -1105,7 +1105,7 @@ begin
   radio.RigCtldHost := cqrini.ReadString('TRX'+n,'host','localhost');
   radio.RigPoll     := poll;
   radio.RigSendCWR  := cqrini.ReadBool('TRX'+n,'CWR',False);
-
+  radio.RigChkVfo   := cqrini.ReadBool('TRX'+n, 'ChkVfo', True);
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled  := True;
   Result := True;
