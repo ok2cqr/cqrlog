@@ -17,7 +17,7 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.0.12.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 703
@@ -2442,6 +2442,19 @@ object frmPreferences: TfrmPreferences
                 TabOrder = 5
               end
             end
+            object chkR1Vfo: TCheckBox
+              AnchorSideLeft.Control = edtR1RigCtldPort
+              AnchorSideTop.Control = chkR1SendCWR
+              AnchorSideTop.Side = asrCenter
+              Left = 522
+              Height = 23
+              Top = 87
+              Width = 103
+              Caption = 'Use \chkvfo'
+              Checked = True
+              State = cbChecked
+              TabOrder = 11
+            end
           end
         end
         object tabTRX2: TTabSheet
@@ -3023,6 +3036,18 @@ object frmPreferences: TfrmPreferences
                 MaxLength = 4
                 TabOrder = 5
               end
+            end
+            object chkR2Vfo: TCheckBox
+              AnchorSideLeft.Control = edtR2RigCtldPort
+              AnchorSideTop.Control = chkR2SendCWR
+              Left = 522
+              Height = 23
+              Top = 87
+              Width = 103
+              Caption = 'Use \chkvfo'
+              Checked = True
+              State = cbChecked
+              TabOrder = 11
             end
           end
         end
