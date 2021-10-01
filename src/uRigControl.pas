@@ -440,7 +440,7 @@ begin
   if aSocket.GetMessage(msg) > 0 then
   begin
     //Writeln('Whole MSG:|',msg,'|');
-    msg := trim(msg);
+    msg := upcase(trim(msg));        //note the char case!
 
     if DebugMode then
          Writeln('Msg from rig: ',msg);
@@ -450,7 +450,7 @@ begin
         ParmVfoChkd:=true;
         if  (msg[1]='1') then ParmHasVfo := 1;  //Hamlib 4.3
         if (pos('CHKVFO 1',msg)>0) then ParmHasVfo := 2;  //Hamlib 3.3
-        Writeln('"--vfo" checked:',ParmHasVfo);
+        if DebugMode then Writeln('"--vfo" checked:',ParmHasVfo);
      end;
     a := Explode(LineEnding,msg);
     for i:=0 to Length(a)-1 do
@@ -469,37 +469,47 @@ begin
 
       //if (a[i][1] in ['A'..'Z']) and (a[i][1] <> 'V' ) then //receiving mode info
       //FT-920 returned VFO as MEM
-      if (a[i][1] in ['A'..'Z']) and (a[i][1] <> 'V' ) and (a[i]<>'MEM') then//receiving mode info
-      begin
-        if Pos('RPRT',a[i]) = 0 then
-        begin
-          BadRcvd := 0;
-          fMode.mode := a[i];
-          fMode.raw  := a[i];
-          if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-            fMode.mode := 'SSB';
-          if fMode.mode = 'CWR' then
-            fMode.mode := 'CW'
-        end
-        else begin
-          if BadRcvd>2 then
-          begin
-            fFreq := 0;
-            fVFO := VFOA;
-            fMode.mode := 'SSB';
-            fMode.raw  := 'SSB';
-            fMode.pass := 2700
-          end
-          else
-            inc(BadRcvd)
-        end
-      end;
+      //Some rigs report VFO as Main,MainA,MainB or Sub,SubA,SubB
+      //Hamlib dummy has also "None" could it be in some real rigs too?
+      if ( (a[i][1] in ['A'..'Z'])
+            and (a[i][1] <> 'V' )
+            and (a[i]<>'MEM')
+            and (Pos('NONE',a[i]) = 0)
+            and (Pos('MAIN',a[i]) = 0)
+            and (Pos('SUB',a[i]) = 0) )then//receiving mode info
+                begin
+                  if Pos('RPRT',a[i]) = 0 then
+                  begin
+                    BadRcvd := 0;
+                    fMode.mode := a[i];
+                    fMode.raw  := a[i];
+                    if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
+                      fMode.mode := 'SSB';
+                    if fMode.mode = 'CWR' then
+                      fMode.mode := 'CW'
+                  end
+                  else begin
+                    if BadRcvd>2 then
+                    begin
+                      fFreq := 0;
+                      fVFO := VFOA;
+                      fMode.mode := 'SSB';
+                      fMode.raw  := 'SSB';
+                      fMode.pass := 2700
+                    end
+                    else
+                      inc(BadRcvd)
+                  end
+                end;
+
       if ( (a[i][1] = 'V')
-       or (upcase(msg)='MAIN')
-       or (upcase(msg)='SUB') ) then
+       or (Pos('MAIN',a[i]) > 0)
+       or (Pos('SUB',a[i]) > 0) ) then
       begin
-        if (( Pos('VFOB',msg) > 0 )
-          or (upcase(msg)='SUB') ) then
+        if (( Pos('VFOB',a[i]) > 0 )
+          or ( Pos('MAINB',a[i]) > 0 )
+          or ( (Pos('SUBA',a[i]) = 0) and (Pos('SUB',a[i]) > 0)) )  //cases Sub and SubB count as VFOB
+        then
           Begin
             fVFO := VFOB;
             if (ParmHasVfo>0) then VfoStr := 'VFOB';
