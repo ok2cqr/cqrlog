@@ -267,41 +267,41 @@ procedure TRigControl.SetModePass(mode : TRigMode);
 begin
   if (mode.mode='CW') and fRigSendCWR then
     mode.mode := 'CWR';
-  RigCommand.Add('M'+VfoStr+' '+mode.mode+' '+IntToStr(mode.pass))
+  RigCommand.Add('+M'+VfoStr+' '+mode.mode+' '+IntToStr(mode.pass))
 end;
 
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
-  RigCommand.Add('F'+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000))
+  RigCommand.Add('+F'+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000))
 end;
 procedure TRigControl.ClearRit;
 begin
-  RigCommand.Add('J'+VfoStr+' 0')
+  RigCommand.Add('+J'+VfoStr+' 0')
 end;
 procedure TRigControl.DisableRit;
 Begin
-  RigCommand.Add('U'+VfoStr+' RIT 0');
+  RigCommand.Add('+U'+VfoStr+' RIT 0');
 end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
-  RigCommand.Add('Z'+VfoStr+' '+IntToStr(up));
-  RigCommand.Add('U'+VfoStr+' XIT 1');
+  RigCommand.Add('+Z'+VfoStr+' '+IntToStr(up));
+  RigCommand.Add('+U'+VfoStr+' XIT 1');
 end;
 procedure TRigControl.ClearXit;
 begin
-  RigCommand.Add('Z'+VfoStr+' 0')
+  RigCommand.Add('+Z'+VfoStr+' 0')
 end;
 procedure TRigControl.DisableSplit;
 Begin
-  RigCommand.Add('U'+VfoStr+' XIT 0');
+  RigCommand.Add('+U'+VfoStr+' XIT 0');
 end;
 procedure TRigControl.PttOn;
 begin
-  RigCommand.Add('T'+VfoStr+' 1')
+  RigCommand.Add('+T'+VfoStr+' 1')
 end;
 procedure TRigControl.PttOff;
 begin
-  RigCommand.Add('T'+VfoStr+' 0')
+  RigCommand.Add('+T'+VfoStr+' 0')
 end;
 procedure TRigControl.PwrOn;
 begin
@@ -431,7 +431,7 @@ end;
 procedure TRigControl.OnReceivedRcvdFreqMode(aSocket: TLSocket);
 var
   msg : String;
-  a   : TExplodeArray;
+  a,b : TExplodeArray;
   i   : Integer;
   f   : Double;
 begin
@@ -451,158 +451,61 @@ begin
         if DebugMode then Writeln('"--vfo" checked:',ParmHasVfo);
         if ParmHasVfo > 0 then VfoStr:=' currVFO';  //note set leading one space to string!
      end;
+
     a := Explode(LineEnding,msg);
-    for i:=0 to Length(a)-1 do
+    for i:=0 to Length(a)-1 do     //this handles received message line by line
     begin
       //Writeln('a[i]:',a[i]);
       if a[i]='' then Continue;
 
-      if TryStrToFloat(a[i],f) then
-      begin
-        if f>20000 then
-          fFReq := f
-        else
-          fMode.pass := round(f);
-        Continue
-      end;
+      //we send all commands with '+' prefix that makes receiving sort lot easier
+      b:= Explode(' ', a[i]);
 
-      //if (a[i][1] in ['A'..'Z']) and (a[i][1] <> 'V' ) then //receiving mode info
+      if b[0]='FREQUENCY:' then
+       Begin
+         if TryStrToFloat(b[1],f) then
+           Begin
+             fFReq := f;
+             BadRcvd := 0;
+           end
+          else
+           fFReq := 0;
+       end;
+
+      if b[0]='MODE:' then
+       Begin
+         fMode.raw  := b[1];
+         fMode.mode :=  fMode.raw;
+         if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
+           fMode.mode := 'SSB';
+         if fMode.mode = 'CWR' then
+           fMode.mode := 'CW'
+        end;
+
       //FT-920 returned VFO as MEM
       //Some rigs report VFO as Main,MainA,MainB or Sub,SubA,SubB
       //Hamlib dummy has also "None" could it be in some real rigs too?
-      if ( (a[i][1] in ['A'..'Z'])
-            and (a[i][1] <> 'V' )
-            and (a[i]<>'MEM')
-            and (Pos('NONE',a[i]) = 0)
-            and (Pos('MAIN',a[i]) = 0)
-            and (Pos('SUB',a[i]) = 0) )then//receiving mode info
-                begin
-                  if Pos('RPRT',a[i]) = 0 then
-                  begin
-                    BadRcvd := 0;
-                    fMode.mode := a[i];
-                    fMode.raw  := a[i];
-                    if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-                      fMode.mode := 'SSB';
-                    if fMode.mode = 'CWR' then
-                      fMode.mode := 'CW'
-                  end
-                  else begin
-                    if BadRcvd>2 then
-                    begin
-                      fFreq := 0;
-                      fVFO := VFOA;
-                      fMode.mode := 'SSB';
-                      fMode.raw  := 'SSB';
-                      fMode.pass := 2700
-                    end
-                    else
-                      inc(BadRcvd)
-                  end
-                end;
+      if b[0]='VFO:' then
+       Begin
+         b:= Explode(' ', a[i]);
+         case b[1] of
+           'VFOA',
+           'MAIN',
+           'MAINA',
+           'SUBA'    :fVFO := VFOA;
 
-      if ( (a[i][1] = 'V')
-       or (Pos('MAIN',a[i]) > 0)
-       or (Pos('SUB',a[i]) > 0) ) then
-      begin
-        if (( Pos('VFOB',a[i]) > 0 )
-          or ( Pos('MAINB',a[i]) > 0 )
-          or ( (Pos('SUBA',a[i]) = 0) and (Pos('SUB',a[i]) > 0)) )  //cases Sub and SubB count as VFOB
-        then
-          Begin
-            fVFO := VFOB;
-          end
-        else
-          begin
-           fVFO := VFOA;
-          end;
-       end;
-     end;
-    {
-
-    if (Length(a)<4) then
-    begin
-      for i:=0 to Length(a)-1 do
-        Writeln('a[',i,']:',a[i]);
-      if (msg[1] = 'V') then
-      begin
-        if Pos('VFOB',msg) > 0 then
-          fVFO := VFOB
-        else
-          fVFO := VFOA
-      end;
-
-      if (msg[1] in ['A'..'Z']) and (msg[1] <> 'V' ) then //receiving mode info
-      begin
-        if Pos('RPRT',msg) = 0 then
-        begin
-          tmp := copy(msg,1,Pos(LineEnding,msg)-1);
-          fMode.mode := trim(tmp);
-          if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-            fMode.mode := 'SSB';
-
-          tmp := trim(copy(msg,Pos(LineEnding,msg)+1,5));
-          if not TryStrToInt(tmp,wdt) then
-          begin
-            fMode.pass := 0;
-            fLastError := 'Could not get mode width from radio';
-            if fDebugMode then Writeln(fLastError,':',msg,'*')
-          end
+           'VFOB',
+           'SUB',
+           'MAINB',
+           'SUBB'    :fVFO := VFOB;
           else
-            fMode.pass := wdt
-        end
-      end
-      else begin
-        if (msg[1] <> 'V' ) then
-        begin
-          tmp := trim(msg);
-          if not TryStrToFloat(tmp,fFreq) then
-          begin
-            fFreq      := 0;
-            fLastError := 'Could not get freq from radio';
-            if fDebugMode then Writeln(fLastError,':',msg,'*')
-          end
-        end
-      end
-    end
-    else begin
-      if not TryStrToFloat(a[0],fFreq) then
-      begin
-        fFreq      := 0;
-        fLastError := 'Could not get freq from radio';
-        if fDebugMode then Writeln(fLastError,':',msg,'*',a[0],'*')
-      end;
-
-      if Pos('RPRT',a[1]) = 0 then
-      begin
-        fMode.mode := trim(a[1]);
-        if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-          fMode.mode := 'SSB';
-        if fMode.mode = 'CWR' then
-          fMode.mode := 'CW';
-
-        tmp := a[2];
-        if not TryStrToInt(tmp,wdt) then
-        begin
-          fMode.pass := 0;
-          fLastError := 'Could not get mode width from radio';
-          if fDebugMode then Writeln(fLastError,':',msg,'*')
-        end
-        else
-          fMode.pass := wdt
-      end;
-      if Pos('VFOB',a[3]) > 0 then
-        fVFO := VFOB
-      else
-        fVFO := VFOA
-    end;}
-{    Writeln('-----');
-    Writeln('VFO      :',fVFO);
-    Writeln('FREQ     :',fFreq);
-    Writeln('Mode     :',fMode.mode);
-    Writeln('Bandwidth:',fMode.pass);
-    Writeln('-----')}
+            fVFO := VFOA;
+         end;
+        end;
+   end;
   end;
+
+
 end;
 procedure TRigControl.OnRigPollTimer(Sender: TObject);
 var
@@ -629,21 +532,22 @@ begin
      if not ParmVfoChkd then
        cmd := '\chk_vfo'+LineEnding
     else
-     Begin
-         case ParmHasVfo of
-           1: cmd := 'f'+VfoStr+LineEnding+'m'+VfoStr+LineEnding+'v'+LineEnding;
-           2: cmd := 'f'+VfoStr+LineEnding+'m'+VfoStr+LineEnding+'v'+VfoStr+LineEnding; //chk this  with v3.3
-         else
-           Begin
-            cmd := 'fmv'+LineEnding;
-            //legacy mode does not accept vfo definition
-           end;
-      end;
-     end;
+     if  ParmHasVfo=2 then
+       cmd := '+f'+VfoStr+LineEnding+'+m'+VfoStr+LineEnding+'+v'+VfoStr+LineEnding //chk this with rigctld v3.1
+      else
+       cmd := '+f'+VfoStr+LineEnding+'+m'+VfoStr+LineEnding+'+v'+LineEnding;
+
      if DebugMode then
          Writeln('Poll Sending: '+cmd);
      rcvdFreqMode.SendMessage(cmd)
-   end
+   end;
+
+   inc(BadRcvd);  //we use this now as "no freq reply" counter
+   if BadRcvd > 10 then  // if missed to get frequency during 10 polls, rig connection is dead(?)
+     Begin
+      fFReq := 0;
+      BadRcvd := 10; // prevent overflow
+     end;
 end;
 
 procedure TRigControl.Restart;
