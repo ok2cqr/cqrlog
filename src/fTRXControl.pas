@@ -1456,12 +1456,12 @@ begin
    //update vfobuttons if vfo is known by radio.vfostr
    if Assigned(radio) then
     Begin
-       case radio.VfoStr of
-         'VFOA'  : Begin
+       case radio.GetCurrVFO of
+         VFOA    : Begin
                     btnVFOA.Font.Color:=clRed;
                     btnVFOB.Font.Color:=clDefault;
                    end;
-         'VFOB'  : Begin
+         VFOB    : Begin
                     btnVFOB.Font.Color:=clRed;
                     btnVFOA.Font.Color:=clDefault;
                    end;

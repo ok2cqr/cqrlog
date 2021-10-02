@@ -1102,22 +1102,12 @@ type
     procedure btnFirstLoadClick(Sender: TObject);
     procedure btnSecondLoadClick(Sender: TObject);
     procedure btnThirdLoadClick(Sender: TObject);
-    procedure cmbDataBitsR1Change(Sender : TObject);
-    procedure cmbDataBitsR2Change(Sender : TObject);
-    procedure cmbDTRR1Change(Sender : TObject);
-    procedure cmbDTRR2Change(Sender : TObject);
-    procedure cmbHanshakeR1Change(Sender : TObject);
-    procedure cmbHanshakeR2Change(Sender : TObject);
     procedure cmbIfaceType1Change(Sender: TObject);
     procedure cmbIfaceType2Change(Sender: TObject);
-    procedure cmbParityR1Change(Sender : TObject);
-    procedure cmbParityR2Change(Sender : TObject);
-    procedure cmbRTSR1Change(Sender : TObject);
-    procedure cmbRTSR2Change(Sender : TObject);
-    procedure cmbSpeedR1Change(Sender : TObject);
-    procedure cmbSpeedR2Change(Sender : TObject);
-    procedure cmbStopBitsR1Change(Sender : TObject);
-    procedure cmbStopBitsR2Change(Sender : TObject);
+    procedure cmbModelRig1Change(Sender: TObject);
+    procedure cmbModelRig2Change(Sender: TObject);
+    procedure cmbModelRot1Change(Sender: TObject);
+    procedure cmbModelRot2Change(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
     procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtHtmlFilesExit(Sender: TObject);
@@ -1125,13 +1115,9 @@ type
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
-    procedure edtR1RigCtldArgsChange(Sender: TObject);
-    procedure edtR1RigCtldPortChange(Sender : TObject);
-    procedure edtR2RigCtldArgsChange(Sender : TObject);
-    procedure edtR2RigCtldPortChange(Sender : TObject);
-    procedure edtRadio1NameChange(Sender: TObject);
-    procedure edtRadio2Change(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
+    procedure RotorParamsChange(Sender: TObject);
+    procedure TRXParamsChange(Sender: TObject);
     procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
     procedure edtWebBrowserExit(Sender: TObject);
@@ -1190,6 +1176,7 @@ var
   fqSize: integer;
   fbandSize: integer;
   TRXChanged: boolean;
+  RotChanged: boolean;
   ReloadFreq: Boolean = False;
   ReloadModes: Boolean = False;
   WinKeyerChanged : Boolean;
@@ -1199,7 +1186,7 @@ implementation
 
 { TfrmPreferences }
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
-  fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,
+  fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,fRotControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
   fRadioMemories, dMembership, dLogUpload;
 
@@ -1739,6 +1726,8 @@ begin
   cqrini.SaveToDisk;
   if TRXChanged then
     frmTRXControl.InicializeRig;
+  if RotChanged then
+    frmRotControl.InicializeRot;
 
   frmTRXControl.LoadUsrButtonCaptions;
   frmTRXControl.LoadButtonCaptions;
@@ -2505,38 +2494,6 @@ begin
     end;
 end;
 
-procedure TfrmPreferences.cmbDataBitsR1Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbDataBitsR2Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbDTRR1Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbDTRR2Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-
-
-procedure TfrmPreferences.cmbHanshakeR1Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbHanshakeR2Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
 procedure TfrmPreferences.cmbIfaceType1Change(Sender: TObject);
 begin
   WinKeyerChanged := True;
@@ -2556,46 +2513,53 @@ begin
      then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
 
-procedure TfrmPreferences.cmbParityR1Change(Sender : TObject);
+procedure TfrmPreferences.cmbModelRig1Change(Sender: TObject);
 begin
-  TRXChanged := True
+   if cmbModelRig1.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
+    Begin
+     chkR1RunRigCtld.Checked:=False;
+     chkR1RunRigCtld.Enabled:=False;
+    end
+   else
+      chkR1RunRigCtld.Enabled:=True;
+   TRXParamsChange(nil);
 end;
 
-procedure TfrmPreferences.cmbParityR2Change(Sender : TObject);
+procedure TfrmPreferences.cmbModelRig2Change(Sender: TObject);
 begin
-  TRXChanged := True
+    if cmbModelRig2.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
+    Begin
+     chkR2RunRigCtld.Checked:=False;
+     chkR2RunRigCtld.Enabled:=False;
+    end
+   else
+      chkR2RunRigCtld.Enabled:=True;
+   TRXParamsChange(nil);
 end;
 
-procedure TfrmPreferences.cmbRTSR1Change(Sender : TObject);
+procedure TfrmPreferences.cmbModelRot1Change(Sender: TObject);
 begin
-  TRXChanged := True
+    if cmbModelRot1.ItemIndex=1 then
+    Begin
+     chkRot1RunRotCtld.Checked:=False;
+     chkRot1RunRotCtld.Enabled:=False;
+    end
+   else
+      chkRot1RunRotCtld.Enabled:=True;
+   RotorParamsChange(nil);
 end;
 
-procedure TfrmPreferences.cmbRTSR2Change(Sender : TObject);
+procedure TfrmPreferences.cmbModelRot2Change(Sender: TObject);
 begin
-  TRXChanged := True
+    if cmbModelRot2.ItemIndex=1 then
+    Begin
+     chkRot2RunRotCtld.Checked:=False;
+     chkRot2RunRotCtld.Enabled:=False;
+    end
+   else
+      chkRot2RunRotCtld.Enabled:=True;
+   RotorParamsChange(nil);
 end;
-
-procedure TfrmPreferences.cmbSpeedR1Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbSpeedR2Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbStopBitsR1Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.cmbStopBitsR2Change(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
 begin
    edtAlertCmd.Text:=StringReplace(edtAlertCmd.Text,'~/',dmData.UsrHomeDir,[rfReplaceAll]);
@@ -2657,40 +2621,18 @@ begin
   edtLoc.SelStart := Length(edtLoc.Text);
 end;
 
-procedure TfrmPreferences.edtR1RigCtldArgsChange(Sender: TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.edtR1RigCtldPortChange(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.edtR2RigCtldArgsChange(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.edtR2RigCtldPortChange(Sender : TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.edtRadio1NameChange(Sender: TObject);
-begin
-  TRXChanged := True
-end;
-
-procedure TfrmPreferences.edtRadio2Change(Sender: TObject);
-begin
-  TRXChanged := True
-end;
-
 procedure TfrmPreferences.edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
 begin
   if not (key in ['0'..'9']) then
     key := #0;
+end;
+procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
+begin
+  TRXChanged := True
+end;
+procedure TfrmPreferences.RotorParamsChange(Sender: TObject);
+begin
+  RotChanged := True;
 end;
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
@@ -3035,7 +2977,14 @@ begin
   edtCMD2.Text := cqrini.ReadString('Band2', 'Datacmd', 'RTTY');
   edtDataMode2.Text := cqrini.ReadString('Band2', 'Datamode', 'RTTY');
 
+  cmbModelRig1Change(nil);
+  cmbModelRig2Change(nil);
+  cmbModelRot1Change(nil);
+  cmbModelRot2Change(nil);
+
   edtDigiModes.Text := cqrini.ReadString('Modes', 'Digi', '');
+
+
 
   chkUseProfiles.Checked := cqrini.ReadBool('Profiles', 'Use', False);
   cmbProfiles.Text :=
@@ -3313,6 +3262,7 @@ begin
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
+  RotChanged      := False;
   WinKeyerChanged := False;
 
   pgPreferences.ActivePageIndex := ActPageIdx;    //set wanted tab for showing when open. ActTab is public variable.
