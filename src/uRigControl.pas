@@ -256,11 +256,9 @@ begin
   case vfo of
     VFOA : Begin
                 RigCommand.Add('V VFOA');//sendCommand.SendMessage('V VFOA'+LineEnding);
-                if (ParmHasVfo>0) then VfoStr := 'VFOA';
            end;
     VFOB : Begin
                 RigCommand.Add('V VFOB');//sendCommand.SendMessage('V VFOB'+LineEnding);
-                if (ParmHasVfo>0) then VfoStr := 'VFOB';
            end;
   end //case
 end;
@@ -269,41 +267,41 @@ procedure TRigControl.SetModePass(mode : TRigMode);
 begin
   if (mode.mode='CW') and fRigSendCWR then
     mode.mode := 'CWR';
-  RigCommand.Add('M currVFO '+mode.mode+' '+IntToStr(mode.pass))
+  RigCommand.Add('M'+VfoStr+' '+mode.mode+' '+IntToStr(mode.pass))
 end;
 
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
-  RigCommand.Add('F currVFO '+FloatToStr(freq*1000-TXOffset*1000000))
+  RigCommand.Add('F'+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000))
 end;
 procedure TRigControl.ClearRit;
 begin
-  RigCommand.Add('J currVFO 0')
+  RigCommand.Add('J'+VfoStr+' 0')
 end;
 procedure TRigControl.DisableRit;
 Begin
-  RigCommand.Add('U currVFO RIT 0');
+  RigCommand.Add('U'+VfoStr+' RIT 0');
 end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
-  RigCommand.Add('Z currVFO '+IntToStr(up));
-  RigCommand.Add('U currVFO XIT 1');
+  RigCommand.Add('Z'+VfoStr+' '+IntToStr(up));
+  RigCommand.Add('U'+VfoStr+' XIT 1');
 end;
 procedure TRigControl.ClearXit;
 begin
-  RigCommand.Add('Z currVFO 0')
+  RigCommand.Add('Z'+VfoStr+' 0')
 end;
 procedure TRigControl.DisableSplit;
 Begin
-  RigCommand.Add('U currVFO XIT 0');
+  RigCommand.Add('U'+VfoStr+' XIT 0');
 end;
 procedure TRigControl.PttOn;
 begin
-  RigCommand.Add('T currVFO 1')
+  RigCommand.Add('T'+VfoStr+' 1')
 end;
 procedure TRigControl.PttOff;
 begin
-  RigCommand.Add('T currVFO 0')
+  RigCommand.Add('T'+VfoStr+' 0')
 end;
 procedure TRigControl.PwrOn;
 begin
@@ -451,6 +449,7 @@ begin
         if  (msg[1]='1') then ParmHasVfo := 1;  //Hamlib 4.3
         if (pos('CHKVFO 1',msg)>0) then ParmHasVfo := 2;  //Hamlib 3.3
         if DebugMode then Writeln('"--vfo" checked:',ParmHasVfo);
+        if ParmHasVfo > 0 then VfoStr:=' currVFO';  //note set leading one space to string!
      end;
     a := Explode(LineEnding,msg);
     for i:=0 to Length(a)-1 do
@@ -512,12 +511,10 @@ begin
         then
           Begin
             fVFO := VFOB;
-            if (ParmHasVfo>0) then VfoStr := 'VFOB';
           end
         else
           begin
            fVFO := VFOA;
-           if (ParmHasVfo>0) then VfoStr := 'VFOA';
           end;
        end;
      end;
@@ -633,10 +630,9 @@ begin
        cmd := '\chk_vfo'+LineEnding
     else
      Begin
-         // VfoStr := 'currVFO';  //defauts to current vfo string if start patameter "--vfo" used
          case ParmHasVfo of
-           1: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v'+LineEnding;
-           2: cmd := 'f currVFO'+LineEnding+'m currVFO'+LineEnding+'v currVFO'+LineEnding; //chk this  with v3.3
+           1: cmd := 'f'+VfoStr+LineEnding+'m'+VfoStr+LineEnding+'v'+LineEnding;
+           2: cmd := 'f'+VfoStr+LineEnding+'m'+VfoStr+LineEnding+'v'+VfoStr+LineEnding; //chk this  with v3.3
          else
            Begin
             cmd := 'fmv'+LineEnding;
