@@ -223,7 +223,7 @@ After you have the DX Cluster window open and connected you may also open the Ba
     descriptive text, you can write whatever you want.<br><br>
     <strong>Host:</strong> computer where rigctld is running, localhost is fine for most cases. <br><br>
     <strong>RIG model:</strong> choose your radio model from the list.
-     Rig models below 10 (Dummy, NET rigctld, FLRig, TRXManager) are using TCP communication and so the <strong>Device</strong> as well
+    <br> Rig models below 10 (Dummy, NET rigctld, FLRig, TRXManager) are using TCP communication and so the <strong>Device</strong> as well
      as <strong>Radio serial parameters</strong> do not need settings.<br><br>
     <strong>Device:</strong> device which the radio is connected to. /dev/ttyS0 is COM1, /dev/ttyS1
     is COM2 etc. If you use USB to serial interface, the device will usually be /dev/ttyUSB0
@@ -232,10 +232,12 @@ After you have the DX Cluster window open and connected you may also open the Ba
     <strong>Poll rate:</strong> specifies how often CQRLOG should read data from rigctld. 500 milliseconds
     is fine.<br><br>
     <strong>Port number</strong> is the number of the port used to communicate with rigctld.
-    Default value is 4532. The second radio, has to have a different port e.g. 4533.<br><br>
-    <strong>Extra command line arguments</strong> usefull when you have to specify more parameters to
+    Default value is 4532. The second radio, has to have a different port e.g. 4533.<br>
+    <br><strong>Extra command line arguments</strong> usefull when you have to specify more parameters to
     rigctld. E.g. CIV address (--civaddr=ID, where ID is the CIV address).<br><br>
-    <strong>Serial port parameters</strong> from the manual of your rig, please choose the correct options.
+    <strong>Run rigctld when program starts</strong> is usually checked but when rig model #2 <strong>Hamlib Net Rigctld</strong> is used then it is unchecked and disabled because with that rig setting we are trying to connect external rigctld. Either in same PC or in network.
+    <br><br><strong>Use \chkvfo</strong> is normally checked. Then cqrlog tries to find out is rigctld started with parameter "--vfo" because that changes rigctld command format. Uncheck of this disables this function. Use it in case of problems.
+    <br><br><strong>Serial port parameters</strong> Use the manual of your rig, please choose the correct options.
     Very often it is much better to specify only serial speed and leave other options as default.
     Default value means that the settings from HamLib will be used.<br>
     <br>
@@ -247,12 +249,12 @@ After you have the DX Cluster window open and connected you may also open the Ba
      command or several in a queue, rigctld commands may be used or if definition starts with word "<strong>run</strong>" (without quotes) it can be a program or
       script name with full file path for your computer.
       <br><ul> <li>
-    <strong>Note:</strong> Rigctld supports raw command <strong>W</strong>. Parameter for it is the rig cat command in bytes. Prefix<strong> \0x</strong> must be added for Hex values. Usr1 command in picture activates Icom IC7300 first voice memory play.
+    <strong>Note:</strong> Rigctld supports raw command <strong>W</strong>. Parameter for it is the rig cat command in bytes. Prefix<strong> \0x</strong> must be added for Hex values. Usr1 command in picture Sets IC7300 to 60m CW with 500Hz filter and reduces output power to leagal limit with raw command.
     </li> <li>
     <strong>Note:</strong> To run program or script it's name with full path must be entered. If file is command script then first line of it must tell what it is written for. If it is bash command script it's first line must be
     <strong>#!/bin/bash </strong> if not, button definition must have <strong>run /bin/bash /tmp/my_test.sh</strong> to tell that bash is used to call the script.
     </li> <li>
-    <strong>Note:</strong> Several rigctld commands can be written in same button definition. Usr3 command in picture  moves rig to 7.1MHz and then sets LSB mode with 2400Hz bandwidth.
+    <strong>Note:</strong> Several rigctld commands can be written in same button definition. Usr3 command in picture  moves rig to 70MHz and then sets CW mode with 500Hz bandwidth filter.
     </li><br> <li>
     <strong>Note:  There is NO feedback from commands to cqrlog !</strong>
     </li></ul>
