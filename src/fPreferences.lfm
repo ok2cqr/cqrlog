@@ -17,7 +17,7 @@ object frmPreferences: TfrmPreferences
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.0.12.0'
   object pgPreferences: TPageControl
     Left = 160
     Height = 703
@@ -1841,6 +1841,7 @@ object frmPreferences: TfrmPreferences
           Top = 27
           Width = 503
           BorderSpacing.Top = 6
+          OnChange = TRXParamsChange
           TabOrder = 0
         end
       end
@@ -1927,7 +1928,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 51
               Width = 173
-              OnChange = edtRadio1NameChange
+              OnChange = TRXParamsChange
               TabOrder = 0
             end
             object edtPoll1: TEdit
@@ -1938,7 +1939,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 51
               Width = 80
-              OnChange = edtRadio1NameChange
+              OnChange = TRXParamsChange
               OnExit = edtPoll1Exit
               TabOrder = 1
             end
@@ -1952,7 +1953,7 @@ object frmPreferences: TfrmPreferences
               Width = 185
               BorderSpacing.Left = 12
               Caption = 'Use CWR instead of CW '
-              OnChange = edtRadio2Change
+              OnChange = TRXParamsChange
               TabOrder = 2
             end
             object chkR1RunRigCtld: TCheckBox
@@ -1964,6 +1965,7 @@ object frmPreferences: TfrmPreferences
               Top = 110
               Width = 235
               Caption = 'Run rigctld when program starts'
+              OnChange = TRXParamsChange
               TabOrder = 3
             end
             object lblExtra: TLabel
@@ -1986,7 +1988,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 102
               Width = 255
-              OnChange = edtR1RigCtldArgsChange
+              OnChange = TRXParamsChange
               TabOrder = 4
             end
             object lblPortR1: TLabel
@@ -2009,7 +2011,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 51
               Width = 80
-              OnChange = edtR1RigCtldPortChange
+              OnChange = TRXParamsChange
               TabOrder = 5
             end
             object grbSerialR1: TGroupBox
@@ -2096,7 +2098,7 @@ object frmPreferences: TfrmPreferences
                   'XON/XOFF'
                   'HARDWARE'
                 )
-                OnChange = cmbHanshakeR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'default'
@@ -2120,7 +2122,7 @@ object frmPreferences: TfrmPreferences
                   'Mark'
                   'Space'
                 )
-                OnChange = cmbParityR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 1
                 Text = 'default'
@@ -2144,7 +2146,7 @@ object frmPreferences: TfrmPreferences
                   '8'
                   '9'
                 )
-                OnChange = cmbDataBitsR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 2
                 Text = 'default'
@@ -2167,7 +2169,7 @@ object frmPreferences: TfrmPreferences
                   '2'
                   '3'
                 )
-                OnChange = cmbStopBitsR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 3
                 Text = 'default'
@@ -2195,7 +2197,7 @@ object frmPreferences: TfrmPreferences
                   '57600'
                   '115200'
                 )
-                OnChange = cmbSpeedR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 4
                 Text = 'default'
@@ -2217,7 +2219,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbDTRR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 5
                 Text = 'default'
@@ -2249,7 +2251,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbRTSR1Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 6
                 Text = 'default'
@@ -2274,6 +2276,7 @@ object frmPreferences: TfrmPreferences
               Top = 51
               Width = 200
               ItemHeight = 0
+              OnChange = cmbModelRig1Change
               TabOrder = 7
             end
             object lblHost: TLabel
@@ -2296,7 +2299,7 @@ object frmPreferences: TfrmPreferences
               Top = 0
               Width = 94
               BorderSpacing.Left = 126
-              OnChange = edtRadio1NameChange
+              OnChange = TRXParamsChange
               TabOrder = 8
             end
             object edtR1Host: TEdit
@@ -2308,6 +2311,7 @@ object frmPreferences: TfrmPreferences
               Top = 0
               Width = 128
               BorderSpacing.Left = 12
+              OnChange = TRXParamsChange
               TabOrder = 9
             end
             object grpUsrCmds: TGroupBox
@@ -2442,6 +2446,20 @@ object frmPreferences: TfrmPreferences
                 TabOrder = 5
               end
             end
+            object chkR1Vfo: TCheckBox
+              AnchorSideLeft.Control = edtR1RigCtldPort
+              AnchorSideTop.Control = chkR1SendCWR
+              AnchorSideTop.Side = asrCenter
+              Left = 522
+              Height = 23
+              Top = 87
+              Width = 103
+              Caption = 'Use \chkvfo'
+              Checked = True
+              OnChange = TRXParamsChange
+              State = cbChecked
+              TabOrder = 11
+            end
           end
         end
         object tabTRX2: TTabSheet
@@ -2511,7 +2529,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 51
               Width = 173
-              OnChange = edtRadio1NameChange
+              OnChange = TRXParamsChange
               TabOrder = 0
             end
             object edtPoll2: TEdit
@@ -2521,7 +2539,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 51
               Width = 80
-              OnChange = edtRadio1NameChange
+              OnChange = TRXParamsChange
               OnExit = edtPoll1Exit
               TabOrder = 1
             end
@@ -2535,7 +2553,7 @@ object frmPreferences: TfrmPreferences
               Width = 185
               BorderSpacing.Left = 12
               Caption = 'Use CWR instead of CW '
-              OnChange = edtRadio2Change
+              OnChange = TRXParamsChange
               TabOrder = 2
             end
             object chkR2RunRigCtld: TCheckBox
@@ -2547,6 +2565,7 @@ object frmPreferences: TfrmPreferences
               Top = 110
               Width = 235
               Caption = 'Run rigctld when program starts'
+              OnChange = TRXParamsChange
               TabOrder = 3
             end
             object lblExtra2: TLabel
@@ -2569,7 +2588,7 @@ object frmPreferences: TfrmPreferences
               Height = 33
               Top = 102
               Width = 255
-              OnChange = edtR2RigCtldArgsChange
+              OnChange = TRXParamsChange
               TabOrder = 4
             end
             object lblPortR2: TLabel
@@ -2591,7 +2610,7 @@ object frmPreferences: TfrmPreferences
               Top = 51
               Width = 80
               BorderSpacing.Left = 12
-              OnChange = edtR2RigCtldPortChange
+              OnChange = TRXParamsChange
               TabOrder = 5
             end
             object grbSerialR2: TGroupBox
@@ -2678,7 +2697,7 @@ object frmPreferences: TfrmPreferences
                   'XON/XOFF'
                   'HARDWARE'
                 )
-                OnChange = cmbHanshakeR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'default'
@@ -2702,7 +2721,7 @@ object frmPreferences: TfrmPreferences
                   'Mark'
                   'Space'
                 )
-                OnChange = cmbParityR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 1
                 Text = 'default'
@@ -2726,7 +2745,7 @@ object frmPreferences: TfrmPreferences
                   '8'
                   '9'
                 )
-                OnChange = cmbDataBitsR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 2
                 Text = 'default'
@@ -2749,7 +2768,7 @@ object frmPreferences: TfrmPreferences
                   '2'
                   '3'
                 )
-                OnChange = cmbStopBitsR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 3
                 Text = 'default'
@@ -2777,7 +2796,7 @@ object frmPreferences: TfrmPreferences
                   '57600'
                   '115200'
                 )
-                OnChange = cmbSpeedR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 4
                 Text = 'default'
@@ -2799,7 +2818,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbDTRR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 5
                 Text = 'default'
@@ -2831,7 +2850,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbRTSR2Change
+                OnChange = TRXParamsChange
                 Style = csDropDownList
                 TabOrder = 6
                 Text = 'default'
@@ -2856,6 +2875,7 @@ object frmPreferences: TfrmPreferences
               Top = 51
               Width = 200
               ItemHeight = 0
+              OnChange = cmbModelRig2Change
               TabOrder = 7
             end
             object edtRadio2Name: TEdit
@@ -2866,7 +2886,7 @@ object frmPreferences: TfrmPreferences
               Top = 0
               Width = 94
               BorderSpacing.Left = 126
-              OnChange = edtRadio1NameChange
+              OnChange = TRXParamsChange
               TabOrder = 8
             end
             object edtR2Host: TEdit
@@ -2878,6 +2898,7 @@ object frmPreferences: TfrmPreferences
               Top = 0
               Width = 128
               BorderSpacing.Left = 12
+              OnChange = TRXParamsChange
               TabOrder = 9
             end
             object lblHost2: TLabel
@@ -3024,6 +3045,19 @@ object frmPreferences: TfrmPreferences
                 TabOrder = 5
               end
             end
+            object chkR2Vfo: TCheckBox
+              AnchorSideLeft.Control = edtR2RigCtldPort
+              AnchorSideTop.Control = chkR2SendCWR
+              Left = 522
+              Height = 23
+              Top = 87
+              Width = 103
+              Caption = 'Use \chkvfo'
+              Checked = True
+              OnChange = TRXParamsChange
+              State = cbChecked
+              TabOrder = 11
+            end
           end
         end
       end
@@ -3113,6 +3147,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 503
+          OnChange = TRXParamsChange
           TabOrder = 0
           Text = 'edtRotCtldPath'
         end
@@ -3193,7 +3228,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 208
               BorderSpacing.Left = 12
-              OnChange = edtRadio1NameChange
+              OnChange = RotorParamsChange
               TabOrder = 0
             end
             object edtRot1Poll: TEdit
@@ -3205,7 +3240,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
-              OnChange = edtRadio1NameChange
+              OnChange = RotorParamsChange
               OnExit = edtPoll1Exit
               TabOrder = 1
             end
@@ -3219,6 +3254,7 @@ object frmPreferences: TfrmPreferences
               Width = 235
               BorderSpacing.Left = 24
               Caption = 'Run rotctld when program starts'
+              OnChange = RotorParamsChange
               TabOrder = 2
             end
             object lblExtaArgs1: TLabel
@@ -3241,7 +3277,7 @@ object frmPreferences: TfrmPreferences
               Height = 34
               Top = 98
               Width = 255
-              OnChange = edtR1RigCtldArgsChange
+              OnChange = RotorParamsChange
               TabOrder = 3
               Text = 'edtRot1RotCtldArgs'
             end
@@ -3264,7 +3300,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
-              OnChange = edtR1RigCtldPortChange
+              OnChange = RotorParamsChange
               TabOrder = 4
             end
             object grbSerialRot1: TGroupBox
@@ -3355,7 +3391,7 @@ object frmPreferences: TfrmPreferences
                   'XON/XOFF'
                   'HARDWARE'
                 )
-                OnChange = cmbHanshakeR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'default'
@@ -3379,7 +3415,7 @@ object frmPreferences: TfrmPreferences
                   'Mark'
                   'Space'
                 )
-                OnChange = cmbParityR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 1
                 Text = 'default'
@@ -3403,7 +3439,7 @@ object frmPreferences: TfrmPreferences
                   '8'
                   '9'
                 )
-                OnChange = cmbDataBitsR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 2
                 Text = 'default'
@@ -3426,7 +3462,7 @@ object frmPreferences: TfrmPreferences
                   '2'
                   '3'
                 )
-                OnChange = cmbStopBitsR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 3
                 Text = 'default'
@@ -3453,7 +3489,7 @@ object frmPreferences: TfrmPreferences
                   '57600'
                   '115200'
                 )
-                OnChange = cmbSpeedR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 4
                 Text = 'default'
@@ -3475,7 +3511,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbDTRR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 5
                 Text = 'default'
@@ -3507,7 +3543,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbRTSR1Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 6
                 Text = 'default'
@@ -3531,6 +3567,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 200
               ItemHeight = 17
+              OnChange = cmbModelRot1Change
               TabOrder = 6
               Text = 'cmbModelRot1'
             end
@@ -3543,6 +3580,7 @@ object frmPreferences: TfrmPreferences
               Top = 104
               Width = 276
               Caption = 'Use rotctrld \dump:state info for limits'
+              OnChange = RotorParamsChange
               TabOrder = 7
             end
           end
@@ -3555,7 +3593,7 @@ object frmPreferences: TfrmPreferences
             Width = 94
             BorderSpacing.Left = 140
             BorderSpacing.Top = 12
-            OnChange = edtRadio1NameChange
+            OnChange = RotorParamsChange
             TabOrder = 1
           end
           object pnlHost1: TPanel
@@ -3580,6 +3618,7 @@ object frmPreferences: TfrmPreferences
             Height = 34
             Top = 12
             Width = 128
+            OnChange = RotorParamsChange
             TabOrder = 3
             Text = 'edtR1Host'
           end
@@ -3648,7 +3687,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 208
               BorderSpacing.Left = 12
-              OnChange = edtRadio1NameChange
+              OnChange = RotorParamsChange
               TabOrder = 0
             end
             object edtRot2Poll: TEdit
@@ -3660,7 +3699,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
-              OnChange = edtRadio1NameChange
+              OnChange = RotorParamsChange
               OnExit = edtPoll1Exit
               TabOrder = 1
             end
@@ -3674,6 +3713,7 @@ object frmPreferences: TfrmPreferences
               Width = 235
               BorderSpacing.Left = 24
               Caption = 'Run rotctld when program starts'
+              OnChange = RotorParamsChange
               TabOrder = 2
             end
             object lblExtaArgs2: TLabel
@@ -3696,7 +3736,7 @@ object frmPreferences: TfrmPreferences
               Height = 34
               Top = 98
               Width = 255
-              OnChange = edtR2RigCtldArgsChange
+              OnChange = RotorParamsChange
               TabOrder = 3
               Text = 'edtRot2RotCtldArgs'
             end
@@ -3719,7 +3759,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
-              OnChange = edtR2RigCtldPortChange
+              OnChange = RotorParamsChange
               TabOrder = 4
             end
             object grbSerialRot2: TGroupBox
@@ -3810,7 +3850,7 @@ object frmPreferences: TfrmPreferences
                   'XON/XOFF'
                   'HARDWARE'
                 )
-                OnChange = cmbHanshakeR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 0
                 Text = 'default'
@@ -3834,7 +3874,7 @@ object frmPreferences: TfrmPreferences
                   'Mark'
                   'Space'
                 )
-                OnChange = cmbParityR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 1
                 Text = 'default'
@@ -3858,7 +3898,7 @@ object frmPreferences: TfrmPreferences
                   '8'
                   '9'
                 )
-                OnChange = cmbDataBitsR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 2
                 Text = 'default'
@@ -3881,7 +3921,7 @@ object frmPreferences: TfrmPreferences
                   '2'
                   '3'
                 )
-                OnChange = cmbStopBitsR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 3
                 Text = 'default'
@@ -3908,7 +3948,7 @@ object frmPreferences: TfrmPreferences
                   '57600'
                   '115200'
                 )
-                OnChange = cmbSpeedR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 4
                 Text = 'default'
@@ -3930,7 +3970,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbDTRR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 5
                 Text = 'default'
@@ -3962,7 +4002,7 @@ object frmPreferences: TfrmPreferences
                   'ON'
                   'OFF'
                 )
-                OnChange = cmbRTSR2Change
+                OnChange = RotorParamsChange
                 Style = csDropDownList
                 TabOrder = 6
                 Text = 'default'
@@ -3987,6 +4027,7 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 200
               ItemHeight = 17
+              OnChange = cmbModelRot2Change
               TabOrder = 6
               Text = 'cmbModelRot2'
             end
@@ -3999,6 +4040,7 @@ object frmPreferences: TfrmPreferences
               Top = 104
               Width = 276
               Caption = 'Use rotctrld \dump:state info for limits'
+              OnChange = RotorParamsChange
               TabOrder = 7
             end
           end
@@ -4011,7 +4053,7 @@ object frmPreferences: TfrmPreferences
             Width = 94
             BorderSpacing.Left = 140
             BorderSpacing.Top = 12
-            OnChange = edtRadio1NameChange
+            OnChange = RotorParamsChange
             TabOrder = 1
           end
           object pnl2Host: TPanel
@@ -4037,6 +4079,7 @@ object frmPreferences: TfrmPreferences
             Height = 34
             Top = 12
             Width = 128
+            OnChange = RotorParamsChange
             TabOrder = 3
             Text = 'edtRot2Host'
           end
