@@ -260,6 +260,7 @@ end;
 
 procedure TfrmCabrilloExport.btnCabBrowseClick(Sender : TObject);
 begin
+  dlgCabSave.InitialDir:=dmData.UsrHomeDir;
   if dlgCabSave.Execute then
     edtCabFileName.Text := dlgCabSave.FileName
 end;
