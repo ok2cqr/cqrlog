@@ -197,7 +197,7 @@ type
     property ProxyPass: string read FProxyPass Write FProxyPass;
 
     {:Here you can specify custom User-Agent identification.
-     Default: 'Mozilla/4.0 (compatible; Synapse)'}
+     Default: 'Mozilla/4.0 (X11; Linux x86_64)'}
     property UserAgent: string read FUserAgent Write FUserAgent;
 
     {:Operation result code after successful @link(HTTPMethod) method.}
@@ -291,7 +291,7 @@ begin
   FProtocol := '1.0';
   FKeepAlive := True;
   FStatus100 := False;
-  FUserAgent := 'Mozilla/4.0 (compatible; Synapse)';
+  FUserAgent := 'Mozilla/4.0 (X11; Linux x86_64)';
   FDownloadSize := 0;
   FUploadSize := 0;
   FAddPortNumberToHost := true;

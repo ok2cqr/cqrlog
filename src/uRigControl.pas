@@ -39,6 +39,7 @@ type TRigControl = class
     fVFO         : TVFO;
     RigCommand   : TStringList;
     fRigSendCWR  : Boolean;
+    fRigChkVfo : Boolean;
     BadRcvd      : Integer;
     fRXOffset    : Double;
     fTXOffset    : Double;
@@ -49,8 +50,12 @@ type TRigControl = class
 
     procedure OnReceivedRcvdFreqMode(aSocket: TLSocket);
     procedure OnRigPollTimer(Sender: TObject);
-  public
 
+public
+
+    ParmVfoChkd : Boolean;
+    ParmHasVfo  : integer;
+    VfoStr      : String;
 
     constructor Create;
     destructor  Destroy; override;
@@ -77,6 +82,8 @@ type TRigControl = class
     //poll rate in milliseconds
     property RigSendCWR  : Boolean read fRigSendCWR    write fRigSendCWR;
     //send CWR instead of CW
+     property RigChkVfo  : Boolean read fRigChkVfo    write fRigChkVfo;
+    //test if rigctld "--vfo" start parameter is used
     property LastError   : String  read fLastError;
     //last error during operation
 
@@ -132,6 +139,7 @@ begin
   rigProcess   := TProcess.Create(nil);
   tmrRigPoll   := TTimer.Create(nil);
   tmrRigPoll.Enabled := False;
+  VfoStr       := ''; //defaults to non-"--vfo" (legacy) mode
   if DebugMode then Writeln('All objects created');
   tmrRigPoll.OnTimer     := @OnRigPollTimer;
   BadRcvd := 0;
@@ -178,7 +186,6 @@ begin
       exit
     end
   end;
-
   Result := True
 end;
 
@@ -199,6 +206,7 @@ begin
     Writeln('RigCtldHost:',RigCtldHost);
     Writeln('RigPoll:    ',RigPoll);
     Writeln('RigSendCWR: ',RigSendCWR);
+    Writeln('RigChkVfo   ',RigChkVfo);
     Writeln('RigId:      ',RigId);
     Writeln('')
   end;
@@ -230,8 +238,11 @@ begin
   begin
     if fDebugMode then Writeln('Connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
     result := True;
+    ParmVfoChkd:= not(RigChkVfo); //default: check of "--vfo" not done is false, assigned by preferences not(RigVfoChk)
+    ParmHasVfo:=0;   //default: "--vfo" is not used as start parameter
     tmrRigPoll.Interval := fRigPoll;
-    tmrRigPoll.Enabled  := True
+    tmrRigPoll.Enabled  := True;
+    RigCommand.Clear;
   end
   else begin
     if fDebugMode then Writeln('NOT connected to rigctld @ ',fRigCtldHost,':',fRigCtldPort);
@@ -243,8 +254,12 @@ end;
 procedure TRigControl.SetCurrVFO(vfo : TVFO);
 begin
   case vfo of
-    VFOA : RigCommand.Add('V VFOA');//sendCommand.SendMessage('V VFOA'+LineEnding);
-    VFOB : RigCommand.Add('V VFOB')//sendCommand.SendMessage('V VFOB'+LineEnding);
+    VFOA : Begin
+                RigCommand.Add('V VFOA');//sendCommand.SendMessage('V VFOA'+LineEnding);
+           end;
+    VFOB : Begin
+                RigCommand.Add('V VFOB');//sendCommand.SendMessage('V VFOB'+LineEnding);
+           end;
   end //case
 end;
 
@@ -252,41 +267,41 @@ procedure TRigControl.SetModePass(mode : TRigMode);
 begin
   if (mode.mode='CW') and fRigSendCWR then
     mode.mode := 'CWR';
-  RigCommand.Add('M '+mode.mode+' '+IntToStr(mode.pass))
+  RigCommand.Add('+M'+VfoStr+' '+mode.mode+' '+IntToStr(mode.pass))
 end;
 
 procedure TRigControl.SetFreqKHz(freq : Double);
 begin
-  RigCommand.Add('F '+FloatToStr(freq*1000-TXOffset*1000000))
+  RigCommand.Add('+F'+VfoStr+' '+FloatToStr(freq*1000-TXOffset*1000000))
 end;
 procedure TRigControl.ClearRit;
 begin
-  RigCommand.Add('J 0')
+  RigCommand.Add('+J'+VfoStr+' 0')
 end;
 procedure TRigControl.DisableRit;
 Begin
-  RigCommand.Add('U RIT 0');
+  RigCommand.Add('+U'+VfoStr+' RIT 0');
 end;
 procedure TRigControl.SetSplit(up:integer);
 Begin
-  RigCommand.Add('Z '+IntToStr(up));
-  RigCommand.Add('U XIT 1');
+  RigCommand.Add('+Z'+VfoStr+' '+IntToStr(up));
+  RigCommand.Add('+U'+VfoStr+' XIT 1');
 end;
 procedure TRigControl.ClearXit;
 begin
-  RigCommand.Add('Z 0')
+  RigCommand.Add('+Z'+VfoStr+' 0')
 end;
 procedure TRigControl.DisableSplit;
 Begin
-  RigCommand.Add('U XIT 0');
+  RigCommand.Add('+U'+VfoStr+' XIT 0');
 end;
 procedure TRigControl.PttOn;
 begin
-  RigCommand.Add('T 1')
+  RigCommand.Add('+T'+VfoStr+' 1')
 end;
 procedure TRigControl.PttOff;
 begin
-  RigCommand.Add('T 0')
+  RigCommand.Add('+T'+VfoStr+' 0')
 end;
 procedure TRigControl.PwrOn;
 begin
@@ -416,175 +431,123 @@ end;
 procedure TRigControl.OnReceivedRcvdFreqMode(aSocket: TLSocket);
 var
   msg : String;
-  a   : TExplodeArray;
+  a,b : TExplodeArray;
   i   : Integer;
   f   : Double;
 begin
   if aSocket.GetMessage(msg) > 0 then
   begin
     //Writeln('Whole MSG:|',msg,'|');
-    msg := trim(msg);
+    msg := upcase(trim(msg));        //note the char case!
 
-    if DebugMode then Writeln('Msg from rig: ',msg);
+    if DebugMode then
+         Writeln('Msg from rig: ',msg);
+
+    if not ParmVfoChkd then
+     Begin
+        ParmVfoChkd:=true;
+        if  (msg[1]='1') then ParmHasVfo := 1;  //Hamlib 4.3
+        if (pos('CHKVFO 1',msg)>0) then ParmHasVfo := 2;  //Hamlib 3.3
+        if DebugMode then Writeln('"--vfo" checked:',ParmHasVfo);
+        if ParmHasVfo > 0 then VfoStr:=' currVFO';  //note set leading one space to string!
+     end;
 
     a := Explode(LineEnding,msg);
-    for i:=0 to Length(a)-1 do
+    for i:=0 to Length(a)-1 do     //this handles received message line by line
     begin
       //Writeln('a[i]:',a[i]);
       if a[i]='' then Continue;
 
-      if TryStrToFloat(a[i],f) then
-      begin
-        if f>20000 then
-          fFReq := f
-        else
-          fMode.pass := round(f);
-        Continue
-      end;
+      //we send all commands with '+' prefix that makes receiving sort lot easier
+      b:= Explode(' ', a[i]);
 
-      //if (a[i][1] in ['A'..'Z']) and (a[i][1] <> 'V' ) then //receiving mode info
+      if b[0]='FREQUENCY:' then
+       Begin
+         if TryStrToFloat(b[1],f) then
+           Begin
+             fFReq := f;
+             BadRcvd := 0;
+           end
+          else
+           fFReq := 0;
+       end;
+
+      if b[0]='MODE:' then
+       Begin
+         fMode.raw  := b[1];
+         fMode.mode :=  fMode.raw;
+         if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
+           fMode.mode := 'SSB';
+         if fMode.mode = 'CWR' then
+           fMode.mode := 'CW'
+        end;
+
       //FT-920 returned VFO as MEM
-      if (a[i][1] in ['A'..'Z']) and (a[i][1] <> 'V' ) and (a[i]<>'MEM') then//receiving mode info
-      begin
-        if Pos('RPRT',a[i]) = 0 then
-        begin
-          BadRcvd := 0;
-          fMode.mode := a[i];
-          fMode.raw  := a[i];
-          if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-            fMode.mode := 'SSB';
-          if fMode.mode = 'CWR' then
-            fMode.mode := 'CW'
-        end
-        else begin
-          if BadRcvd>2 then
-          begin
-            fFreq := 0;
+      //Some rigs report VFO as Main,MainA,MainB or Sub,SubA,SubB
+      //Hamlib dummy has also "None" could it be in some real rigs too?
+      if b[0]='VFO:' then
+       Begin
+         b:= Explode(' ', a[i]);
+         case b[1] of
+           'VFOA',
+           'MAIN',
+           'MAINA',
+           'SUBA'    :fVFO := VFOA;
+
+           'VFOB',
+           'SUB',
+           'MAINB',
+           'SUBB'    :fVFO := VFOB;
+          else
             fVFO := VFOA;
-            fMode.mode := 'SSB';
-            fMode.raw  := 'SSB';
-            fMode.pass := 2700
-          end
-          else
-            inc(BadRcvd)
-        end
-      end;
-      if (a[i][1] = 'V') then
-      begin
-        if Pos('VFOB',msg) > 0 then
-          fVFO := VFOB
-        else
-          fVFO := VFOA
-      end
-    end;
-    {
+         end;
+        end;
+   end;
+  end;
 
-    if (Length(a)<4) then
-    begin
-      for i:=0 to Length(a)-1 do
-        Writeln('a[',i,']:',a[i]);
-      if (msg[1] = 'V') then
-      begin
-        if Pos('VFOB',msg) > 0 then
-          fVFO := VFOB
-        else
-          fVFO := VFOA
-      end;
 
-      if (msg[1] in ['A'..'Z']) and (msg[1] <> 'V' ) then //receiving mode info
-      begin
-        if Pos('RPRT',msg) = 0 then
-        begin
-          tmp := copy(msg,1,Pos(LineEnding,msg)-1);
-          fMode.mode := trim(tmp);
-          if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-            fMode.mode := 'SSB';
-
-          tmp := trim(copy(msg,Pos(LineEnding,msg)+1,5));
-          if not TryStrToInt(tmp,wdt) then
-          begin
-            fMode.pass := 0;
-            fLastError := 'Could not get mode width from radio';
-            if fDebugMode then Writeln(fLastError,':',msg,'*')
-          end
-          else
-            fMode.pass := wdt
-        end
-      end
-      else begin
-        if (msg[1] <> 'V' ) then
-        begin
-          tmp := trim(msg);
-          if not TryStrToFloat(tmp,fFreq) then
-          begin
-            fFreq      := 0;
-            fLastError := 'Could not get freq from radio';
-            if fDebugMode then Writeln(fLastError,':',msg,'*')
-          end
-        end
-      end
-    end
-    else begin
-      if not TryStrToFloat(a[0],fFreq) then
-      begin
-        fFreq      := 0;
-        fLastError := 'Could not get freq from radio';
-        if fDebugMode then Writeln(fLastError,':',msg,'*',a[0],'*')
-      end;
-
-      if Pos('RPRT',a[1]) = 0 then
-      begin
-        fMode.mode := trim(a[1]);
-        if (fMode.mode = 'USB') or (fMode.mode = 'LSB') then
-          fMode.mode := 'SSB';
-        if fMode.mode = 'CWR' then
-          fMode.mode := 'CW';
-
-        tmp := a[2];
-        if not TryStrToInt(tmp,wdt) then
-        begin
-          fMode.pass := 0;
-          fLastError := 'Could not get mode width from radio';
-          if fDebugMode then Writeln(fLastError,':',msg,'*')
-        end
-        else
-          fMode.pass := wdt
-      end;
-      if Pos('VFOB',a[3]) > 0 then
-        fVFO := VFOB
-      else
-        fVFO := VFOA
-    end;}
-{    Writeln('-----');
-    Writeln('VFO      :',fVFO);
-    Writeln('FREQ     :',fFreq);
-    Writeln('Mode     :',fMode.mode);
-    Writeln('Bandwidth:',fMode.pass);
-    Writeln('-----')}
-  end
 end;
-
 procedure TRigControl.OnRigPollTimer(Sender: TObject);
 var
   cmd : String;
   i   : Integer;
 begin
+  if not ParmVfoChkd then
+                     RigCommand.Clear; // chk must be first thing to do
+
   if (RigCommand.Text<>'') then
-  begin
-    for i:=0 to RigCommand.Count-1 do
     begin
-      sleep(100);
-      cmd := RigCommand.Strings[i]+LineEnding;
-      rcvdFreqMode.SendMessage(cmd);
-      if DebugMode then Writeln('Sending: '+cmd)
-    end;
-    RigCommand.Clear
-  end
-  else begin
-    cmd := 'fmv'+LineEnding;
-    if DebugMode then Writeln('Sending: '+cmd);
-    rcvdFreqMode.SendMessage(cmd)
-  end
+      for i:=0 to RigCommand.Count-1 do
+      begin
+        sleep(100);
+        cmd := RigCommand.Strings[i]+LineEnding;
+        rcvdFreqMode.SendMessage(cmd);
+        if DebugMode then
+           Writeln('Sending: '+cmd)
+      end;
+      RigCommand.Clear
+    end
+  else
+   begin
+     if not ParmVfoChkd then
+       cmd := '\chk_vfo'+LineEnding
+    else
+     if  ParmHasVfo=2 then
+       cmd := '+f'+VfoStr+LineEnding+'+m'+VfoStr+LineEnding+'+v'+VfoStr+LineEnding //chk this with rigctld v3.1
+      else
+       cmd := '+f'+VfoStr+LineEnding+'+m'+VfoStr+LineEnding+'+v'+LineEnding;
+
+     if DebugMode then
+         Writeln('Poll Sending: '+cmd);
+     rcvdFreqMode.SendMessage(cmd)
+   end;
+
+   inc(BadRcvd);  //we use this now as "no freq reply" counter
+   if BadRcvd > 10 then  // if missed to get frequency during 10 polls, rig connection is dead(?)
+     Begin
+      fFReq := 0;
+      BadRcvd := 10; // prevent overflow
+     end;
 end;
 
 procedure TRigControl.Restart;

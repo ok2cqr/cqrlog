@@ -77,10 +77,11 @@ selection to use XmlRpC.</br>With selection you can choose “the old way” for
 address.</br>
 If you use fldigi on other PC remember to open firewall at fldigi-PC side for TCP traffic to port 7362 from your local network.</p>
 
-<p>Parameter &quot;Drop after SyncErr &gt;&quot; automates remote mode closing when fldigi is closed. But as it may affect also (in slow PCs) fldigi started by cqrlog it can be changed. 0 disables, 1-20 means timer rounds until drop.
- When closing happens it leaves text &quot;Socket error, check fldigi!&quot; to NewQSO field &quot;Comment QSO&quot;.
- </p><p> In all cases fldigi must be started from command line with parameter: <b>fldigi --xmlrpc-server-port 7362</b>
-</br>When closing fldgi properly and answering YES to save setup changes the next start should open xmlrpc server without parameters from usual icon.</p>
+<p>Parameter <b>&quot;Drop after SyncErr &gt;&quot; </b> automates remote mode closing when fldigi is closed. Because SyncError happens when fldigi can not be reached it can cause remote mode closing already at start of entering remote mode in case PC is slow and fldigi is set to start when entering remote mode.
+<br>Therefore the value should be big enough to give time for fldigi to start. Value 0 disables drop, 1-20 means timer rounds to wait before drop the remote mode.
+<br>In case of remote mode drop happens it leaves text <b> &quot;Socket error, check fldigi!&quot; </b>to NewQSO field <b> &quot;Comment QSO&quot; </b> to give information that remote mode dropped by sync error. I.E. fldigi could not be connected. 
+ </p><p> In all cases fldigi must be started from command line with parameter: <b>fldigi --xmlrpc-server-port 7362</b> at least once.
+</br>When closing fldgi properly and answering YES to &quot; save setup changes &quot; question the next start should open xmlrpc server without parameters from usual icon.</p>
 
 <a name=fl3><h3>Use</h3></a>
 <p><img src="img/fxml9.png"  width="446" height="117">
