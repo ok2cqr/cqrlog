@@ -95,6 +95,12 @@ type
     cb6m1: TCheckBox;
     cb70cm1: TCheckBox;
     cb76GHz1: TCheckBox;
+    cb122GHz: TCheckBox;
+    cb122GHz1: TCheckBox;
+    cb134GHz: TCheckBox;
+    cb134GHz1: TCheckBox;
+    cb241GHz: TCheckBox;
+    cb241GHz1: TCheckBox;
     cb80m: TCheckBox;
     cb40m: TCheckBox;
     cb30m: TCheckBox;
@@ -383,6 +389,9 @@ type
     chkProfileRig1: TCheckBox;
     chkShow17M: TCheckBox;
     chkShow6MM: TCheckBox;
+    chkShow25MM: TCheckBox;
+    chkShow2MM: TCheckBox;
+    chkShow1MM: TCheckBox;
     chkShowGrayline1: TCheckBox;
     chkShowTRXwindow1: TCheckBox;
     chkSSB1: TCheckBox;
@@ -1319,6 +1328,9 @@ begin
   cqrini.WriteBool('Bands', '1cm', cb1cm.Checked);
   cqrini.WriteBool('Bands', '47GHz', cb47GHz.Checked);
   cqrini.WriteBool('Bands', '76GHz', cb76GHz.Checked);
+  cqrini.WriteBool('Bands', '122GHz', cb122GHz.Checked);
+  cqrini.WriteBool('Bands', '134GHz', cb134GHz.Checked);
+  cqrini.WriteBool('Bands', '241GHz', cb241GHz.Checked);
 
   cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
@@ -1456,6 +1468,9 @@ begin
   cqrini.WriteBool('DXCluster', 'Show125CM', chkShow125CM.Checked);
   cqrini.WriteBool('DXCluster', 'Show6MM', chkShow6MM.Checked);
   cqrini.WriteBool('DXCluster', 'Show4MM', chkShow4MM.Checked);
+  cqrini.WriteBool('DXCluster', 'Show25MM', chkShow25MM.Checked);
+  cqrini.WriteBool('DXCluster', 'Show2MM', chkShow2MM.Checked);
+  cqrini.WriteBool('DXCluster', 'Show1MM', chkShow1MM.Checked);
   cqrini.WriteBool('DXCluster', 'CW', chkCW.Checked);
   cqrini.WriteBool('DXCluster', 'SSB', chkSSB.Checked);
   cqrini.WriteString('DXCluster', 'NotShow', edtDoNotShow.Text);
@@ -2877,6 +2892,9 @@ begin
   cb1cm.Checked := cqrini.ReadBool('Bands', '1cm', False);
   cb47GHz.Checked := cqrini.ReadBool('Bands', '47GHz', False);
   cb76GHz.Checked := cqrini.ReadBool('Bands', '76GHz', False);
+  cb122GHz.Checked := cqrini.ReadBool('Bands', '122GHz', False);
+  cb134GHz.Checked := cqrini.ReadBool('Bands', '134GHz', False);
+  cb241GHz.Checked := cqrini.ReadBool('Bands', '241GHz', False);
 
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
   chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
@@ -3028,6 +3046,9 @@ begin
   chkShow125CM.Checked := cqrini.ReadBool('DXCluster', 'Show125CM', True);
   chkShow6MM.Checked := cqrini.ReadBool('DXCluster', 'Show6MM', True);
   chkShow4MM.Checked := cqrini.ReadBool('DXCluster', 'Show4MM', True);
+  chkShow25MM.Checked := cqrini.ReadBool('DXCluster', 'Show25MM', True);
+  chkShow2MM.Checked := cqrini.ReadBool('DXCluster', 'Show2MM', True);
+  chkShow1MM.Checked := cqrini.ReadBool('DXCluster', 'Show1MM', True);
   chkCW.Checked := cqrini.ReadBool('DXCluster', 'CW', True);
   chkSSB.Checked := cqrini.ReadBool('DXCluster', 'SSB', True);
   edtDoNotShow.Text := cqrini.ReadString('DXCluster', 'NotShow', '');

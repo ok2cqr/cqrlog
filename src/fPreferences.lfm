@@ -1723,15 +1723,39 @@ object frmPreferences: TfrmPreferences
         Caption = '76 GHz'
         TabOrder = 20
       end
+      object cb122GHz: TCheckBox
+        Left = 310
+        Height = 23
+        Top = 195
+        Width = 73
+        Caption = '122 GHz'
+        TabOrder = 21
+      end
+      object cb134GHz: TCheckBox
+        Left = 310
+        Height = 23
+        Top = 227
+        Width = 73
+        Caption = '134 GHz'
+        TabOrder = 22
+      end
+      object cb241GHz: TCheckBox
+        Left = 310
+        Height = 23
+        Top = 259
+        Width = 73
+        Caption = '241 GHz'
+        TabOrder = 23
+      end
       object btnFrequencies: TButton
         Left = 312
         Height = 25
-        Top = 206
+        Top = 362
         Width = 94
         BorderSpacing.InnerBorder = 4
         Caption = 'Frequencies'
         OnClick = btnFrequenciesClick
-        TabOrder = 21
+        TabOrder = 24
       end
       object cb4m: TCheckBox
         Left = 166
@@ -1739,7 +1763,7 @@ object frmPreferences: TfrmPreferences
         Top = 98
         Width = 71
         Caption = '70MHz'
-        TabOrder = 22
+        TabOrder = 25
       end
       object cb60m: TCheckBox
         Left = 14
@@ -1747,7 +1771,7 @@ object frmPreferences: TfrmPreferences
         Top = 131
         Width = 67
         Caption = '5 MHz'
-        TabOrder = 23
+        TabOrder = 26
       end
       object cb125m: TCheckBox
         Left = 166
@@ -1755,7 +1779,7 @@ object frmPreferences: TfrmPreferences
         Top = 162
         Width = 83
         Caption = '220 MHz'
-        TabOrder = 24
+        TabOrder = 27
       end
       object cb30cm: TCheckBox
         Left = 166
@@ -1763,7 +1787,7 @@ object frmPreferences: TfrmPreferences
         Top = 227
         Width = 83
         Caption = '900 MHz'
-        TabOrder = 25
+        TabOrder = 28
       end
       object cb472kHz: TCheckBox
         Left = 166
@@ -1771,7 +1795,7 @@ object frmPreferences: TfrmPreferences
         Top = 19
         Width = 79
         Caption = '472 kHz'
-        TabOrder = 26
+        TabOrder = 29
       end
     end
     object tabTRXcontrol: TTabSheet
@@ -4770,7 +4794,7 @@ object frmPreferences: TfrmPreferences
           Height = 23
           Top = 79
           Width = 70
-          Caption = '47GHz'
+          Caption = '47 GHz'
           TabOrder = 19
         end
         object chkShow4MM: TCheckBox
@@ -4781,13 +4805,37 @@ object frmPreferences: TfrmPreferences
           Caption = '76 GHz'
           TabOrder = 20
         end
+        object chkShow25MM: TCheckBox
+          Left = 391
+          Height = 23
+          Top = 107
+          Width = 78
+          Caption = '122 GHz'
+          TabOrder = 21
+        end
+        object chkShow2MM: TCheckBox
+          Left = 391
+          Height = 23
+          Top = 111
+          Width = 82
+          Caption = '134 GHz'
+          TabOrder = 22
+        end
+        object chkShow1MM: TCheckBox
+          Left = 391
+          Height = 23
+          Top = 115
+          Width = 86
+          Caption = '241 GHz'
+          TabOrder = 23
+        end
         object chkCW: TCheckBox
           Left = 6
           Height = 23
           Top = 126
           Width = 49
           Caption = 'CW'
-          TabOrder = 21
+          TabOrder = 24
         end
         object chkSSB: TCheckBox
           Left = 110
@@ -4795,14 +4843,14 @@ object frmPreferences: TfrmPreferences
           Top = 126
           Width = 51
           Caption = 'SSB'
-          TabOrder = 22
+          TabOrder = 25
         end
         object edtDoNotShow: TEdit
           Left = 6
           Height = 25
           Top = 178
           Width = 471
-          TabOrder = 23
+          TabOrder = 26
         end
         object chkShow4M: TCheckBox
           Left = 207
@@ -4810,7 +4858,7 @@ object frmPreferences: TfrmPreferences
           Top = 55
           Width = 73
           Caption = '70MHz'
-          TabOrder = 24
+          TabOrder = 27
         end
         object chkShow60M: TCheckBox
           Left = 6
@@ -4818,7 +4866,7 @@ object frmPreferences: TfrmPreferences
           Top = 79
           Width = 68
           Caption = '5 MHz'
-          TabOrder = 25
+          TabOrder = 28
         end
         object chkShow125M: TCheckBox
           Left = 207
@@ -4826,7 +4874,7 @@ object frmPreferences: TfrmPreferences
           Top = 103
           Width = 85
           Caption = '220 MHz'
-          TabOrder = 26
+          TabOrder = 29
         end
         object chkShow33CM: TCheckBox
           Left = 294
@@ -4834,7 +4882,7 @@ object frmPreferences: TfrmPreferences
           Top = 31
           Width = 85
           Caption = '900 MHz'
-          TabOrder = 27
+          TabOrder = 30
         end
         object chkShow630M: TCheckBox
           Left = 207
@@ -4842,7 +4890,7 @@ object frmPreferences: TfrmPreferences
           Top = 126
           Width = 76
           Caption = '472kHz'
-          TabOrder = 28
+          TabOrder = 31
         end
         object chkShowDxcCountry: TCheckBox
           AnchorSideBottom.Control = gbDXCSpots
@@ -4854,7 +4902,7 @@ object frmPreferences: TfrmPreferences
           Anchors = [akLeft, akBottom]
           BorderSpacing.Bottom = 1
           Caption = 'Show country name in the DX cluster spot'
-          TabOrder = 29
+          TabOrder = 32
         end
       end
       object gbDXCAlert: TGroupBox
