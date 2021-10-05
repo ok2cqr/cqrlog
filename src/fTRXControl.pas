@@ -1105,7 +1105,7 @@ begin
   radio.RigCtldHost := cqrini.ReadString('TRX'+n,'host','localhost');
   radio.RigPoll     := poll;
   radio.RigSendCWR  := cqrini.ReadBool('TRX'+n,'CWR',False);
-
+  radio.RigChkVfo   := cqrini.ReadBool('TRX'+n, 'ChkVfo', True);
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled  := True;
   Result := True;
@@ -1456,6 +1456,24 @@ begin
            if mode = 'FM' then
              btnFM.Font.Color := clRed;
 
+   if Assigned(radio) then
+    Begin
+       case radio.GetCurrVFO of
+         VFOA    : Begin
+                    btnVFOA.Font.Color:=clRed;
+                    btnVFOB.Font.Color:=clDefault;
+                   end;
+         VFOB    : Begin
+                    btnVFOB.Font.Color:=clRed;
+                    btnVFOA.Font.Color:=clDefault;
+                   end;
+         else
+                   Begin
+                    btnVFOB.Font.Color:=clDefault;
+                    btnVFOA.Font.Color:=clDefault;
+                   end;
+       end;
+    end;
 end;
 
 procedure TfrmTRXControl.Split(Up : Integer);
