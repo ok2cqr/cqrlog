@@ -6181,7 +6181,7 @@ begin
       if (UpperCase(dbgrdQSOBefore.Columns[i].DisplayName) = 'FREQ') then
       begin
         dbgrdQSOBefore.Columns[i].Alignment       := taRightJustify;
-        dbgrdQSOBefore.Columns[i].DisplayFormat   := '###,##0.0000;;';
+        dbgrdQSOBefore.Columns[i].DisplayFormat   := '####0.000;;';
         dbgrdQSOBefore.Columns[i].Title.Alignment := taCenter
       end;
 

@@ -214,6 +214,9 @@ begin
   '1.25CM':     Result := '24G';
      '6MM':     Result := '47G';
      '4MM':     Result := '75G';
+     '2.5MM':   Result := '122G';
+     '2MM':     Result := '134G';
+     '1MM':     Result := '241G';
     else
      Result := '';
   end; //case
@@ -257,6 +260,7 @@ end;
 
 procedure TfrmCabrilloExport.btnCabBrowseClick(Sender : TObject);
 begin
+  dlgCabSave.InitialDir:=dmData.UsrHomeDir;
   if dlgCabSave.Execute then
     edtCabFileName.Text := dlgCabSave.FileName
 end;
@@ -382,6 +386,7 @@ type
  end;
 var
   f,r        : TextFile;
+  RejectQso  : boolean;
   tmp        : String;
   mycall,call,
   myloc, loc,
@@ -456,7 +461,10 @@ begin
                               +mb_IconQuestion)=mrYes then
       DeleteFileUTF8(edtCabFileName.Text)
     else
-      exit
+      exit;
+    Application.ProcessMessages;   //closes hanging message box with QT5
+    sleep(10);                     //sleep and
+    Application.ProcessMessages;   //second time is needed for GTK2 to work same way
   end;
   if (trim(edtCabFileName.Text)='') then
   begin
@@ -482,97 +490,93 @@ begin
     begin
       tmp:='';
       // Check for missing mandatory fields
-      if (
-          (dmData.qCQRLOG.FieldByName('qsodate').AsString  = '')
-       or (dmData.qCQRLOG.FieldByName('time_on').AsString  = '')
-       or (dmData.qCQRLOG.FieldByName('callsign').AsString = '')
-       or (CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString) = '')  //warc or missing band
-       or (dmData.qCQRLOG.FieldByName('mode').AsString  = '')  //missing mode
-         ) then
-      begin
-        writeln(r,dmData.qCQRLOG.FieldByName('qsodate').AsString,' ',
-                dmData.qCQRLOG.FieldByName('time_on').AsString,' ',
-                dmData.qCQRLOG.FieldByName('callsign').AsString,' ',
-                dmData.qCQRLOG.FieldByName('band').AsString,' ',
-                dmData.qCQRLOG.FieldByName('mode').AsString ,' ',
-                CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString));
-        pbCabExport.StepIt;
-        dmData.qCQRLOG.Prior;
-        Continue;
-      end;
+      if (dmData.qCQRLOG.FieldByName('qsodate').AsString  = '') then
+                                                           tmp:=tmp+'Missing qsodate, ';
+      if (dmData.qCQRLOG.FieldByName('time_on').AsString  = '') then
+                                                           tmp:=tmp+'Missing time_on, ';
+      if (dmData.qCQRLOG.FieldByName('callsign').AsString = '') then
+                                                           tmp:=tmp+'Missing callsign, ';
+      if (CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString) = '') then
+                                                           tmp:=tmp+'Missing or WARC band, ';
+      if (dmData.qCQRLOG.FieldByName('mode').AsString  = '') then
+                                                           tmp:=tmp+'Missing mode, ';
 
-      // Check for single or ALL band
-      if ( category_band='') then
-          category_band:= dmData.qCQRLOG.FieldByName('band').AsString //initial band
-        else
-       begin
-          if (dmData.qCQRLOG.FieldByName('band').AsString <> category_band) then  //if other bands found then ALL
-            category_band := 'ALL';
-       end;
-        // Check for single or MIXED mode
-      if ( category_mode='') then
-          category_mode:= dmData.qCQRLOG.FieldByName('mode').AsString //initial mode
-        else
-       begin
-          if (dmData.qCQRLOG.FieldByName('mode').AsString <> category_mode) then  //if other modes found then MIXED
-            category_mode := 'MIXED';
-       end;
+      RejectQso := (tmp <> '');
 
-      loc  := copy(dmData.qCQRLOG.FieldByName('loc').AsString,1,4);
-      call := Format('%-'+edtCabCallWdt.Text+'.'+edtCabCallWdt.Text+'s', [dmData.qCQRLOG.FieldByName('callsign').AsString]);
-      adif := dmDXCC.id_country(call,date,pfx,cont,country,itu,waz,posun,lat,long);
-      TotalCountryList.Add(pfx);
+      if not RejectQso then
+       Begin
+              // Check for single or ALL band
+              if ( category_band='') then
+                  category_band:= dmData.qCQRLOG.FieldByName('band').AsString //initial band
+                else
+               begin
+                  if (dmData.qCQRLOG.FieldByName('band').AsString <> category_band) then  //if other bands found then ALL
+                    category_band := 'ALL';
+               end;
+                // Check for single or MIXED mode
+              if ( category_mode='') then
+                  category_mode:= dmData.qCQRLOG.FieldByName('mode').AsString //initial mode
+                else
+               begin
+                  if (dmData.qCQRLOG.FieldByName('mode').AsString <> category_mode) then  //if other modes found then MIXED
+                    category_mode := 'MIXED';
+               end;
 
-      if ((CountryToCount<>0) and (adif = CountryToCount)) then inc(UsrCountryCount);
-      case cont of
-             'NA':       Begin
-                           inc(Continents[0].QsoCount);
-                           if (pos(pfx,Continents[0].WkdPfxs)=0 )then
-                              Continents[0].WkdPfxs:= Continents[0].WkdPfxs+pfx+' ';
-                         end;
-             'SA':       Begin
-                           inc(Continents[1].QsoCount);
-                           if (pos(pfx,Continents[1].WkdPfxs)=0 )then
-                              Continents[1].WkdPfxs:= Continents[1].WkdPfxs+pfx+' ';
-                         end;
-             'OC':       Begin
-                           inc(Continents[2].QsoCount);
-                           if (pos(pfx,Continents[2].WkdPfxs)=0 )then
-                              Continents[2].WkdPfxs:= Continents[2].WkdPfxs+pfx+' ';
-                         end;
-             'AS':       Begin
-                           inc(Continents[3].QsoCount);
-                           if (pos(pfx,Continents[3].WkdPfxs)=0 )then
-                              Continents[3].WkdPfxs:= Continents[3].WkdPfxs+pfx+' ';
-                         end;
-             'EU':       Begin
-                           inc(Continents[4].QsoCount);
-                           if (pos(pfx,Continents[4].WkdPfxs)=0 )then
-                              Continents[4].WkdPfxs:= Continents[4].WkdPfxs+pfx+' ';
-                         end;
-             'AF':       Begin
-                           inc(Continents[5].QsoCount);
-                           if (pos(pfx,Continents[5].WkdPfxs)=0 )then
-                              Continents[5].WkdPfxs:= Continents[5].WkdPfxs+pfx+' ';
-                         end;
-       end; //case
+              loc  := copy(dmData.qCQRLOG.FieldByName('loc').AsString,1,4);
+              call := Format('%-'+edtCabCallWdt.Text+'.'+edtCabCallWdt.Text+'s', [dmData.qCQRLOG.FieldByName('callsign').AsString]);
+              adif := dmDXCC.id_country(call,date,pfx,cont,country,itu,waz,posun,lat,long);
+              TotalCountryList.Add(pfx);
 
-       if (length(loc)=4) then
-                         Begin
-                           if (pos(loc,Continents[6].WkdPfxs)=0 )then
-                            begin
-                              Continents[6].WkdPfxs:= Continents[6].WkdPfxs+loc+' ';
-                              inc(Continents[6].QsoCount);  //here not total, but different count
-                            end;
-                         end;
-      if (dmData.qCQRLOG.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.qCQRLOG.FieldByName('operator').AsString) < 0) then
-         Operators.Add(dmData.qCQRLOG.FieldByName('operator').AsString);
+              if ((CountryToCount<>0) and (adif = CountryToCount)) then inc(UsrCountryCount);
+              case cont of
+                     'NA':       Begin
+                                   inc(Continents[0].QsoCount);
+                                   if (pos(pfx,Continents[0].WkdPfxs)=0 )then
+                                      Continents[0].WkdPfxs:= Continents[0].WkdPfxs+pfx+' ';
+                                 end;
+                     'SA':       Begin
+                                   inc(Continents[1].QsoCount);
+                                   if (pos(pfx,Continents[1].WkdPfxs)=0 )then
+                                      Continents[1].WkdPfxs:= Continents[1].WkdPfxs+pfx+' ';
+                                 end;
+                     'OC':       Begin
+                                   inc(Continents[2].QsoCount);
+                                   if (pos(pfx,Continents[2].WkdPfxs)=0 )then
+                                      Continents[2].WkdPfxs:= Continents[2].WkdPfxs+pfx+' ';
+                                 end;
+                     'AS':       Begin
+                                   inc(Continents[3].QsoCount);
+                                   if (pos(pfx,Continents[3].WkdPfxs)=0 )then
+                                      Continents[3].WkdPfxs:= Continents[3].WkdPfxs+pfx+' ';
+                                 end;
+                     'EU':       Begin
+                                   inc(Continents[4].QsoCount);
+                                   if (pos(pfx,Continents[4].WkdPfxs)=0 )then
+                                      Continents[4].WkdPfxs:= Continents[4].WkdPfxs+pfx+' ';
+                                 end;
+                     'AF':       Begin
+                                   inc(Continents[5].QsoCount);
+                                   if (pos(pfx,Continents[5].WkdPfxs)=0 )then
+                                      Continents[5].WkdPfxs:= Continents[5].WkdPfxs+pfx+' ';
+                                 end;
+               end; //case
 
+               if (length(loc)=4) then
+                                 Begin
+                                   if (pos(loc,Continents[6].WkdPfxs)=0 )then
+                                    begin
+                                      Continents[6].WkdPfxs:= Continents[6].WkdPfxs+loc+' ';
+                                      inc(Continents[6].QsoCount);  //here not total, but different count
+                                    end;
+                                 end;
+              if (dmData.qCQRLOG.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.qCQRLOG.FieldByName('operator').AsString) < 0) then
+                 Operators.Add(dmData.qCQRLOG.FieldByName('operator').AsString);
+       end;   //skip with rejected ends
 
          if ( dmData.qCQRLOG.FieldByName('freq').AsFloat < 50 ) then
-                tmp:= 'QSO: '+Format('%5s',[FloatToStrF(dmData.qCQRLOG.FieldByName('freq').AsFloat*1000,ffFixed,0,0)])+' '
+                tmp:=tmp +  'QSO: '+Format('%5s',[FloatToStrF(dmData.qCQRLOG.FieldByName('freq').AsFloat*1000,ffFixed,0,0)])+' '
                else
-                tmp:= 'QSO: '+Format('%5s',[CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' ';
+                tmp:=tmp +  'QSO: '+Format('%5s',[CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString)])+' ';
 
          tmp:=tmp +
             CabrilloMode(dmData.qCQRLOG.FieldByName('mode').AsString)+' '+
@@ -619,10 +623,18 @@ begin
              if (cmbCabTailTxCount.Text<>'') then tmp:=tmp+' '+Format('%1s',[ cmbCabTailTxCount.Text]);
 
       if chkUpCase.Checked then tmp:=UpperCase(tmp);
-      s.Add(tmp);
 
-      inc(i);
+      if not RejectQso then
+         Begin
+             s.Add(tmp);      //add to cabrillo export
+             inc(i);
+         end
+       else
+             writeln(r,tmp); //add to rejected file
+
       pbCabExport.StepIt;
+      pbCabExport.Update;  //GTK2 needs this to show progress, QT5 works even without
+
       dmData.qCQRLOG.Prior
     end;
   except

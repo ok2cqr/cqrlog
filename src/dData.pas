@@ -1725,7 +1725,19 @@ begin
   Q.ExecSQL;
 
   Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('4MM')+',77500,84000,77500,81000,81000)';
+                QuotedStr('4MM')+',75500,81500,75500,81500,81500)';
+  Q.ExecSQL;
+
+  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('2.5MM')+',122250,123000,122250,123000,123000)';
+  Q.ExecSQL;
+
+  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('2MM')+',134000,141000,141000,141000,141000)';
+  Q.ExecSQL;
+
+  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                QuotedStr('1MM')+',241000,248000,241000,248000,248000)';
   Q.ExecSQL;
 
   trQ.Commit;

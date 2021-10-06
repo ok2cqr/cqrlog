@@ -60,16 +60,16 @@ const
     'OLIVIA', 'MFSK16', 'JS8', 'JT4','JT6M', 'JT65', 'JT65A', 'JT65B', 'JT65C',
     'JT9', 'QRA64', 'ISCAT', 'MSK144', 'FT8', 'FT4', 'FST4', 'FSK441', 'PSK125',
     'PSK63', 'WSPR', 'PSK250', 'ROS', 'DIGITALVOICE');
-  cMaxBandsCount = 27; //26 bands
+  cMaxBandsCount = 30; //29 bands
 
   cDefaultFreq =
     '0.136|0.472|1.800|3.500|3.700|5.351|7.000|10.100|14.000|14.200|18.100|21.000|21.200|24.890|28.000|28.500|50.000|70.0875|'
     +
-    '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|';
-  cBands: array[0..25] of string[10] =
+    '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|122252.0|134930.0|248000.0';
+  cBands: array[0..28] of string[10] =
     ('2190M', '630M', '160M', '80M'   , '60M', '40M'  , '30M', '20M'  , '17M' , '15M' ,
      '12M'  , '10M' , '6M'  , '4M'    , '2M' , '1.25M', '70CM', '33CM', '23CM', '13CM',
-     '9CM'  , '6CM' , '3CM' , '1.25CM', '6MM', '4MM');
+     '9CM'  , '6CM' , '3CM' , '1.25CM', '6MM', '4MM', '2.5MM', '2MM', '1MM');
 
   cMaxIgnoreFreq = 6;
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string =
@@ -143,6 +143,9 @@ type
     s24G: string;
     s47G: string;
     s76G: string;
+    s122G: string;
+    s134G: string;
+    s241G: string;
     USstates: array [1..50] of string;
     DOKs: array [1..52] of string;
     MyBands: array [0..cMaxBandsCount - 1, 0..1] of string[6];
@@ -1483,9 +1486,26 @@ begin
     exit;
   end;
   if band = '4MM' then
+  begin
     Result := '77500.200';
+    exit;
+  end;
+  if band = '2.5MM' then
+  begin
+    Result := '122250.000';
+    exit;
+  end;
+  if band = '2MM' then
+  begin
+    Result := '134930.000';
+    exit;
+  end;
+  if band = '1MM' then
+  begin
+    Result := '248000.000';
+    exit;
+  end;
 end;
-
 
 function TdmUtils.IsAdifOK(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r, iota,
   itu, waz, loc, my_loc, band: string;
@@ -2231,6 +2251,9 @@ begin
     s24G := '24G';
     s47G := '47G';
     s76G := '76G';
+    s122G := '122G';
+    s134G := '134G';
+    s241G := '241G';
   end
   else
   begin
@@ -2260,6 +2283,9 @@ begin
     s24G := '1cm';
     s47G := '6mm';
     s76G := '4mm';
+    s122G := '2.5mm';
+    s134G := '2mm';
+    s241G := '1mm';
   end;
 end;
 
@@ -3856,6 +3882,28 @@ begin
     MyBands[i][1] := s76G;
     Inc(i);
   end;
+
+  if cqrini.ReadBool('Bands', '122GHz', False) then
+  begin
+    MyBands[i][0] := '2.5MM';
+    MyBands[i][1] := s122G;
+    Inc(i);
+  end;
+
+  if cqrini.ReadBool('Bands', '134GHz', False) then
+  begin
+    MyBands[i][0] := '2MM';
+    MyBands[i][1] := s134G;
+    Inc(i);
+  end;
+
+  if cqrini.ReadBool('Bands', '241GHz', False) then
+  begin
+    MyBands[i][0] := '1MM';
+    MyBands[i][1] := s241G;
+    Inc(i);
+  end;
+
 end;
 
 function TdmUtils.GetBandPos(band: string): integer;

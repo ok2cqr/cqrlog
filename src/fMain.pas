@@ -2340,7 +2340,7 @@ procedure TfrmMain.ShowFields;
       if (UpperCase(dbgrdMain.Columns[i].DisplayName) = 'FREQ') then
       begin
         dbgrdMain.Columns[i].Alignment       := taRightJustify;
-        dbgrdMain.Columns[i].DisplayFormat   := '###,##0.0000;;';
+        dbgrdMain.Columns[i].DisplayFormat   := '####0.000;;';
         dbgrdMain.Columns[i].Title.Alignment := taCenter
       end;
       if (UpperCase(dbgrdMain.Columns[i].DisplayName) = 'STATE') then
