@@ -206,7 +206,6 @@ object frmFilter: TfrmFilter
       Width = 74
       BorderSpacing.Top = 1
       Caption = 'Exactly'
-      Checked = True
       TabOrder = 1
       TabStop = True
     end
@@ -219,6 +218,7 @@ object frmFilter: TfrmFilter
       Top = 63
       Width = 73
       Caption = 'Include'
+      Checked = True
       TabOrder = 2
     end
   end
