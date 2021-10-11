@@ -533,9 +533,9 @@ begin
        cmd := '\chk_vfo'+LineEnding
     else
      if  ParmHasVfo=2 then
-       cmd := '+f'+VfoStr+LineEnding+'+m'+VfoStr+LineEnding+'+v'+VfoStr+LineEnding //chk this with rigctld v3.1
+       cmd := '+f'+VfoStr+' +m'+VfoStr+' +v'+VfoStr+LineEnding //chk this with rigctld v3.1
       else
-       cmd := '+f'+VfoStr+LineEnding+'+m'+VfoStr+LineEnding+'+v'+LineEnding;
+       cmd := '+f'+VfoStr+' +m'+VfoStr+' +v'+LineEnding;
 
      if DebugMode then
          Writeln('Poll Sending: '+cmd);
