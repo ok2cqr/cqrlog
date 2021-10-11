@@ -118,7 +118,7 @@ type
     FOnlyLoTW       : Boolean;
     FOnlyEQSL       : Boolean;
 
-    procedure SortBandMapArray(l,r : Integer);
+    procedure SortBandMapArray(l,r : Integer; Rev:boolean);
     procedure BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure EmitBandMapClick(Sender:TObject;Call,Mode : String; Freq : Currency);
     procedure ClearAll;
@@ -332,27 +332,37 @@ begin
   end
 end;
 
-procedure TfrmBandMap.SortBandMapArray(l,r : integer);
+procedure TfrmBandMap.SortBandMapArray(l,r : integer; Rev:boolean);
 var
-  i,j : Integer;
-  w : TbandMapItem;
-  x : Double;
+  i,j,h : Integer;
+  w     : TbandMapItem;
+  x     : Double;
+
+procedure SwapItems;
+  begin
+    BandMapItems[j] := BandMapItems[j-h];
+    j := j - h;
+  end;
+
 begin
-  i:=l; j:=r;
-  x:=BandMapItems[(l+r) div 2].Freq;
+  h := l;
   repeat
-    while BandMapItems[i].Freq < x do i:=i+1;
-    while x < BandMapItems[j].Freq do j:=j-1;
-    if i <= j then
-    begin
-      w := BandMapItems[i];
-      BandMapItems[i] := BandMapItems[j];
-      BandMapItems[j] := w;
-      i:=i+1; j:=j-1
-    end
-  until i > j;
-  if l < j then SortBandMapArray(l,j);
-  if i < r then SortBandMapArray(i,r)
+   h := 3*h + 1
+  until h > r;
+  repeat
+   h := h div 3;
+   for i := h + 1 to r do
+      begin
+       x := BandMapItems[i].Freq;
+       w := BandMapItems[i];
+       j := i;
+       if not Rev then
+          while (j > h) AND (BandMapItems[j-h].Freq > x) do SwapItems
+        else
+          while (j > h) AND (BandMapItems[j-h].Freq < x) do SwapItems;
+       BandMapItems[j] := w;
+      end
+  until h = 1;
 end;
 
 function TfrmBandMap.GetIndexFromPosition(ItemPos : Word) : Integer;
@@ -555,7 +565,7 @@ begin
       end;
       if NewAdded then
       begin
-        frmBandMap.SortBandMapArray(1,MAX_ITEMS);
+        frmBandMap.SortBandMapArray(1,MAX_ITEMS,cqrini.ReadBool('BandMap', 'ReverseOrder', False) );
         NewAdded := False;
         Changed  := True
       end;

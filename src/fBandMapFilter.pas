@@ -15,6 +15,7 @@ type
   TfrmBandMapFilter = class(TForm)
     btnOK: TButton;
     btnCancel: TButton;
+    chkRevOrder: TCheckBox;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
     chkShowActiveBandFil: TCheckBox;
@@ -67,6 +68,7 @@ begin
   seCallWidth.Value := cqrini.ReadInteger('BandMapFilter','CallWidth',12);
 
   chkShowActiveBandFil.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
+  chkRevOrder.Checked:=cqrini.ReadBool('BandMap', 'ReverseOrder', False);
 end;
 
 procedure TfrmBandMapFilter.FormClose(Sender: TObject;
@@ -114,6 +116,7 @@ begin
   cqrini.WriteBool('BandMapFilter','OnlyLoTW',chkOnlyLoTW.Checked);
 
   cqrini.WriteBool('BandMap', 'OnlyActiveBand', chkShowActiveBandFil.Checked);
+  cqrini.WriteBool('BandMap', 'ReverseOrder', chkRevOrder.Checked);
 
   cqrini.WriteInteger('BandMapFilter','FreqWidth',seFreqWidth.Value);
   cqrini.WriteInteger('BandMapFilter','CallWidth',seCallWidth.Value);
