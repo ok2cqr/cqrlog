@@ -10,7 +10,7 @@ const
   cRELEAS     = 2;
   cBUILD      = 1;
 
-  cBUILD_DATE = '2021-10-06';
+  cBUILD_DATE = '2021-10-11';
 
 implementation
 
