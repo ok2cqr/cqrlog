@@ -10,7 +10,7 @@ object frmBandMapFilter: TfrmBandMapFilter
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.0.12.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -135,6 +135,17 @@ object frmBandMapFilter: TfrmBandMapFilter
       BorderSpacing.Left = 6
       Caption = 'Show only active band'
       TabOrder = 6
+    end
+    object chkRevOrder: TCheckBox
+      AnchorSideLeft.Control = edtTime
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = rbShowAll
+      Left = 505
+      Height = 23
+      Top = 6
+      Width = 117
+      Caption = 'Reverse order'
+      TabOrder = 7
     end
   end
   object GroupBox2: TGroupBox
