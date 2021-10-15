@@ -239,6 +239,7 @@ var
         'DOM8','DOM11','DOM16',
         'DOM22','DOM44','DOM88',
         'DOMINOEX','DOMINOF'       : begin tmp := '<MODE:6>DOMINO<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
+        'FELDHELL',                 //this is non standard that fldigi uses
         'FMHELL','FSKHELL',
         'HELL80','HELLX5',
         'HELLX9','HFSK',
@@ -260,10 +261,7 @@ var
         'MFSK22','MFSK31','MFSK32',
         'MFSK64','MFSK64L',
         'MFSK128'                   : begin tmp := '<MODE:4>MFSK<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'OLIVIA 4/125','OLIVIA 4/250',
-        'OLIVIA 8/250','OLIVIA 8/500',
-        'OLIVIA 16/500','OLIVIA 16/1000',
-        'OLIVIA 32/1000'            : begin tmp := '<MODE:6>OLIVIA<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
+         //OLIVIA is exception #1
         'OPERA-BEACON',
         'OPERA-QSO'                 : begin tmp := '<MODE:5>OPERA<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
         'PAC2','PAC3','PAC4'        : begin tmp := '<MODE:3>PAC<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
@@ -315,10 +313,26 @@ var
         'SITORB'                    : begin tmp := '<MODE:3>TOR<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
 
       else           begin
+                      //exceptions follow
+                      if pos('OLIVIA',mode)=1 then
+                        //fldigi marks them with "-" that is against standard " "
+                        //also there are more BW definitions than standard: will pass them all
+                        begin
+                             mode := StringReplace(mode,'-',' ',[rfReplaceAll]);
+                             tmp := '<MODE:6>OLIVIA<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);
+                        end
+                       else
+                     //exceptions end
+                       Begin
                         tmp := '<MODE';
                         SaveTag(dmUtils.StringToADIF(tmp,Mode),leng);
+                       end;
                      end;
       end;
+
+
+
+
     end;
     if ExFreq then
     begin

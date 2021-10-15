@@ -140,6 +140,7 @@ type
     procedure mnueditClick(Sender: TObject);
     procedure mnuImportClick(Sender: TObject);
   private
+    LockSubMode : boolean;   //if we replace mode with submode we set lock in case that submode and mode are in opposite order in qso record.
     AbortImport : boolean;
     ERR_FILE : String;
     Do_Err_Import : Boolean;
@@ -295,14 +296,17 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       // DL7OAP: because MODE-field in cqrlog database does not match completely
       // with MODE field of ADIF specification, we have to transfer the
       // ADIF MODES/SUBMODES (JS8, FT4, FST4,PKT) to MODE-field in cqrlog database
+
+      //OH1KH: we can put all submodes to mode when importing
+
       h_MODE                          : begin
-                                          if data = 'PKT' then d.MODE:='PACKET'
-                                          else d.MODE:=data
+                                          if not LockSubMode then  //do not override mode if already set by submode
+                                             if data = 'PKT' then d.MODE:='PACKET'
+                                                else d.MODE:=TrimDataLen(adifTag,data,l_MODE);
                                         end;
       h_SUBMODE                       : begin
-                                          if data = 'FT4' then d.MODE:=data;
-                                          if data = 'FST4' then d.MODE:=data;
-                                          if data = 'JS8' then d.MODE:=data
+                                          d.MODE:=TrimDataLen(adifTag,data,l_MODE);
+                                          LockSubMode:=true;
                                         end;
       h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
       h_NAME                            :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
@@ -826,6 +830,7 @@ begin
               WriteWrongADIF(tmp,'Imported with shrink(s):'+#10+CutErrText);
           CutErrText:='';
           tmp:='';
+          LockSubMode :=false;
         end;
         fillTypeVariableWithTagData(h,data,D,adifTag);
       end;
