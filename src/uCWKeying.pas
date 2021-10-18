@@ -119,6 +119,9 @@ type
 
   TCWHamLib = class(TCWDevice)
     private
+      ParamChkVfo: boolean;
+      WaitChkVfo: integer;
+      VfoStr : String;
       AllowCW : Boolean;
       fActive : Boolean;
       fSpeed  : Word;
@@ -702,8 +705,36 @@ begin
   if DebugMode then
      Writeln('CWint connected to hamlib');
 
-  tcp.SendMessage('fmv'+LineEnding);
-  SetSpeed(fSpeed)
+  VfoStr := '';
+  ParamChkVfo :=false;
+  WaitChkVfo:=5; // wait max 5 rcvd blocks
+  tcp.SendMessage('+\chk_vfo'+LineEnding);
+  if DebugMode then
+     Writeln('CW send +\chk_vfo');
+end;
+
+procedure TCWHamLib.OnReceived(aSocket: TLSocket);
+begin
+  if aSocket.GetMessage(Rmsg) > 0 then
+   begin
+     Rmsg := StringReplace(Rmsg,LineEnding,' ',[rfReplaceAll]);
+     if (( not ParamChkVfo ) and (WaitChkVfo>0))then
+       Begin
+         dec(WaitChkVfo);
+         if (pos('CHKVFO',Uppercase(Rmsg))>0) then
+         Begin
+           if (pos('1',Rmsg)>0) then
+                                  VfoStr:=' currVFO';
+           if DebugMode then
+               Writeln('CW commands need parameter: ',VfoStr);
+           WaitChkVfo:=0;
+           SetSpeed(fSpeed);
+         end;
+        ParamChkVfo:= WaitChkVfo < 1;
+       end;
+     if DebugMode then
+         Writeln('HLresp MSG:',Rmsg,':');
+   end;
 end;
 
 procedure TCWHamLib.OnHamLibError(const msg: AnsiString; aSocket: TLSocket);
@@ -728,28 +759,24 @@ begin
   tcp.Connect(fDevice,StrToInt(fPort));
 end;
 
-procedure TCWHamLib.OnReceived(aSocket: TLSocket);
-begin
-  if aSocket.GetMessage(Rmsg) > 0 then
-   begin
-    Rmsg := StringReplace(Rmsg,LineEnding,' ',[rfReplaceAll]);
-    if DebugMode then Writeln('HLresp MSG:',Rmsg,':');
-   end;
-end;
 procedure TCWHamLib.WaitMorse;
 begin
-  tcp.SendMessage('\wait_morse' +LineEnding);
+  tcp.SendMessage('\wait_morse'+VfoStr+LineEnding);
+  if DebugMode then
+         Writeln('CW: \wait_morse');
 end;
 
 procedure TCWHamLib.SetSpeed(speed : Word);
+var      tmp:String;
 begin
   if Speed>fMaxSpeed then speed:= fMaxSpeed;
   if Speed<fMinSpeed then speed:= fMinSpeed;
   fSpeed := speed;
+  tmp:= 'L'+VfoStr+' KEYSPD '+IntToStr(speed)+LineEnding;
   if fActive then
-    tcp.SendMessage('L KEYSPD '+IntToStr(speed)+LineEnding);
+    tcp.SendMessage(tmp);
   if fDebugMode then
-    Writeln('CW speed changed to:',fSpeed)
+    Writeln('CW speed changed to:',fSpeed,'  ',tmp)
 end;
 
 function TCWHamLib.GetSpeed  : Word;
@@ -813,7 +840,8 @@ var
 
                         while ((rpt > 0) and AllowCW) do
                           Begin
-                             if fDebugMode then  Writeln('HLsend MSG:','b'+t+':');
+                             if fDebugMode then
+                               Writeln('HLsend MSG:','b'+t+':');
                              Rmsg:='';
                              tcp.SendMessage('b'+t+LineEnding);
                              dec(rpt);
