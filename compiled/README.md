@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
 
-    Commits on Oct 5, 2021    Merge pull request #445 from OH1KH/cabrilo_folder 
+    Commits on Oct 19, 2021 Merge pull request #452 from OH1KH/squash_adif_submode_import 
 
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -13,12 +13,14 @@ They contain all accepted pull requests from official source (that may not be re
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
 LAST UPDATE
-  - ver 2.5.2(111)
+  - ver 2.5.2(112)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
 
 
-  - ver 2.5.2(110)
+  - ver 2.5.2(111)
+  - official version with alpha additions (see below)
+  - Help files have additions remember to update also HELP  - ver 2.5.2(110)
   - official version with alpha additions (see below)
   - Added checbox (preferences/Online Logs) to continue ClubLog upload if error occurs
   - Help files have additions remember to update also HELP
