@@ -20,18 +20,17 @@ object frmRotControl: TfrmRotControl
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = pnlBtns
     Left = 6
-    Height = 99
+    Height = 75
     Top = 1
     Width = 172
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
     BorderSpacing.Left = 6
     BorderSpacing.Top = 1
     BorderSpacing.Right = 6
-    BorderSpacing.Bottom = 1
     Caption = 'Azimuth'
-    ClientHeight = 81
+    ClientHeight = 57
     ClientWidth = 170
     TabOrder = 0
     object lblAzimuth: TLabel
@@ -43,11 +42,10 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Side = asrBottom
       Left = 2
       Height = 34
-      Top = 28
+      Top = 23
       Width = 166
       Alignment = taRightJustify
       Anchors = [akTop, akLeft, akRight]
-      AutoSize = False
       BorderSpacing.Left = 2
       BorderSpacing.Top = 2
       BorderSpacing.Right = 2
@@ -66,14 +64,15 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Control = gbAzimuth
       AnchorSideRight.Side = asrBottom
       Left = 1
-      Height = 25
+      Height = 20
       Top = 1
       Width = 168
       Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
       BorderSpacing.Left = 1
       BorderSpacing.Top = 1
       BorderSpacing.Right = 1
-      ClientHeight = 25
+      ClientHeight = 20
       ClientWidth = 168
       TabOrder = 0
       Visible = False
@@ -131,7 +130,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Side = asrBottom
       Left = 2
       Height = 33
-      Top = 28
+      Top = 23
       Width = 166
       NumbersOnly = True
       Anchors = [akTop, akLeft, akRight]
@@ -159,12 +158,13 @@ object frmRotControl: TfrmRotControl
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 6
-    Height = 118
-    Top = 101
+    Height = 112
+    Top = 107
     Width = 172
     Anchors = [akLeft, akRight, akBottom]
+    AutoSize = True
     BorderSpacing.Bottom = 6
-    ClientHeight = 118
+    ClientHeight = 112
     ClientWidth = 172
     TabOrder = 1
     object rbRotor1: TRadioButton
@@ -173,7 +173,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Side = asrBottom
       Left = 7
       Height = 23
-      Top = 88
+      Top = 82
       Width = 69
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
@@ -192,7 +192,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Side = asrBottom
       Left = 96
       Height = 23
-      Top = 88
+      Top = 82
       Width = 69
       Anchors = [akRight, akBottom]
       BorderSpacing.Top = 12
@@ -207,7 +207,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Control = btnLeft
       Left = 7
       Height = 25
-      Top = 7
+      Top = 1
       Width = 75
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6
@@ -222,7 +222,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Side = asrBottom
       Left = 90
       Height = 25
-      Top = 7
+      Top = 1
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
@@ -237,7 +237,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Control = rbRotor1
       Left = 11
       Height = 25
-      Top = 61
+      Top = 55
       Width = 150
       Anchors = [akLeft, akBottom]
       BorderSpacing.Bottom = 2
@@ -252,7 +252,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideRight.Side = asrBottom
       Left = 90
       Height = 25
-      Top = 34
+      Top = 28
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 6
@@ -267,7 +267,7 @@ object frmRotControl: TfrmRotControl
       AnchorSideBottom.Control = btnStop
       Left = 7
       Height = 25
-      Top = 34
+      Top = 28
       Width = 75
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 6

@@ -111,7 +111,7 @@ begin
         On E : EConvertError do
           Az:=-999;
    end;
-     if ((Az>=0) or (Az<=360)) then
+     if ((Az>=0) and (Az<=360)) then
         rotor.SetAzimuth(edtBAzimuth.Text);
 
    lblAzimuth.Visible:=true;
