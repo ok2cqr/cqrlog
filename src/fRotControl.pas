@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls, Menus;
+  StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls, Menus,
+  EditBtn;
 
 type
 
@@ -18,6 +19,7 @@ type
     btnRight: TButton;
     btnShortP: TButton;
     btnStop: TButton;
+    edtBAzimuth: TEditButton;
     gbAzimuth: TGroupBox;
     lblAzimuth: TLabel;
     lblAzmax: TLabel;
@@ -40,6 +42,10 @@ type
     procedure btnShortPClick(Sender: TObject);
     procedure btnLongPClick(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
+    procedure edtBAzimuthButtonClick(Sender: TObject);
+    procedure edtBAzimuthClick(Sender: TObject);
+    procedure edtBAzimuthKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -89,23 +95,43 @@ begin
 end;
 
 procedure TfrmRotControl.lblAzimuthClick(Sender: TObject);
-var
-   UsrAz :string;
-   Az    :integer = -1;
+
 begin
-  if InputQuery('New Az?', '', usrAz) then
-    Begin
-      Try
-        Az:= StrToInt(UsrAz);
-      except
+  lblAzimuth.Visible:=false;
+  edtBAzimuth.Visible:=true;
+end;
+
+procedure TfrmRotControl.edtBAzimuthButtonClick(Sender: TObject);
+var
+   Az    :integer=-999;
+begin
+   Try
+        Az:= StrToInt(edtBAzimuth.Text);
+   except
         On E : EConvertError do
-          Application.MessageBox('Not valid number', 'Value!', MB_ICONHAND)
-     end;
-     if ((Az<0) or (Az>360)) then
-        Application.MessageBox('Must be in:'+LineEnding+'0 - 360', 'Value!', MB_ICONHAND)
-      else
-        rotor.SetAzimuth(UsrAz);
-    end;
+          Az:=-999;
+   end;
+     if ((Az>=0) or (Az<=360)) then
+        rotor.SetAzimuth(edtBAzimuth.Text);
+
+   lblAzimuth.Visible:=true;
+   edtBAzimuth.Visible:=false;
+   edtBAzimuth.MaxLength:=0;
+   edtBAzimuth.Text:='Az? (0-360)';
+end;
+
+procedure TfrmRotControl.edtBAzimuthClick(Sender: TObject);
+begin
+   edtBAzimuth.SetFocus;
+   edtBAzimuth.text:='';
+   edtBAzimuth.NumbersOnly:=True;
+   edtBAzimuth.MaxLength:=3;
+end;
+
+procedure TfrmRotControl.edtBAzimuthKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key=VK_Return then edtBAzimuthButtonClick(nil);
 end;
 
 procedure TfrmRotControl.mnuDirbtnsClick(Sender: TObject);
