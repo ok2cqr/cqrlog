@@ -44,6 +44,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure lblAzimuthClick(Sender: TObject);
     procedure mnuDirbtnsClick(Sender: TObject);
     procedure mnuMinMaxClick(Sender: TObject);
     procedure mnuPreferencesClick(Sender: TObject);
@@ -85,6 +86,26 @@ begin
   btnStop.Visible:=cqrini.ReadBool('ROT','Stopbtn',False);
   mnuStopbtn.Checked:=cqrini.ReadBool('ROT','Stopbtn',False);
   if pnlMinMax.Visible then gbAzimuth.Height:=70;
+end;
+
+procedure TfrmRotControl.lblAzimuthClick(Sender: TObject);
+var
+   UsrAz :string;
+   Az    :integer = -1;
+begin
+  if InputQuery('New Az?', '', usrAz) then
+    Begin
+      Try
+        Az:= StrToInt(UsrAz);
+      except
+        On E : EConvertError do
+          Application.MessageBox('Not valid number', 'Value!', MB_ICONHAND)
+     end;
+     if ((Az<0) or (Az>360)) then
+        Application.MessageBox('Must be in:'+LineEnding+'0 - 360', 'Value!', MB_ICONHAND)
+      else
+        rotor.SetAzimuth(UsrAz);
+    end;
 end;
 
 procedure TfrmRotControl.mnuDirbtnsClick(Sender: TObject);
