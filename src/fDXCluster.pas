@@ -771,7 +771,7 @@ begin
                  Assert(Assigned(cmds)) ;
                  cmds.Clear;
                  cmds.StrictDelimiter := true;
-                 cmds.Delimiter := ',';
+                 cmds.Delimiter := ';';
                  cmds.DelimitedText := cqrini.ReadString('DXCluster','StartCmd','') ;
                  for K:=0 to cmds.Count-1 do
                   Begin
