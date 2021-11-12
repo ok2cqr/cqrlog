@@ -1076,6 +1076,7 @@ procedure TfrmMonWsjtx.AddOtherMessage(Time,Message, Reply: string;Df,Sr:integer
 var
   msgList: TStringList;
   index: integer;
+  ClLine : char;
 begin
   Message := LineFilter(Message);
 
@@ -1104,7 +1105,13 @@ begin
     if chkMap.Checked then
         begin
           CqPeriodTimerStart;
-          if LocalDbg then Writeln('Other line:', Message);
+          if LocalDbg then
+           Writeln('Other line:', Message);
+          if  (pos('RR73',Message)= length(Message)-3)
+           or (pos('73',Message)= length(Message)-1) then
+              ClLine:='*'
+           else
+              ClLine:=')';
           msgTime := Time;
           Dfreq := Df;
           Snr := Sr;
@@ -1173,7 +1180,7 @@ begin
               if frmWorkedGrids.GridOK(msgLocator) then  AddXpList(msgCall,msgLocator);
             end;
             //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
-            AddColorStr(')', clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
+            AddColorStr(ClLine, clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
             if LocalDbg then
               Begin
@@ -1902,7 +1909,9 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       '&'     : getCurMode := 'MSK144';
       ':'     : getCurMode := 'QRA64';
       '+'     : getCurMode := 'FT4';
+      'FT4' : getCurMode := 'FT4'; // For MSHV added by LB2EG nov 7th 2021
       chr(126): getCurMode := 'FT8';    // ~
+      'FT8' : getCurMode := 'FT8'; // For MSHV added by LB2EG nov 7th 2021
       chr(96) : getCurMode := 'FST4';   // `
       //'+'     : getCurMode := 'T10';
     end;
