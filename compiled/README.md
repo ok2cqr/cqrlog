@@ -5,15 +5,15 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
 
-    Commits on Oct 19, 2021 Merge pull request #452 from OH1KH/squash_adif_submode_import 
-
+    Commits on Nov 12, 2021  Merge pull request #456 from OH1KH/dxcluster_fixes 
+    
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
 LAST UPDATE
-  - ver 2.5.2(112)
+  - ver 2.5.2(113)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
 
