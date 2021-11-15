@@ -1297,7 +1297,8 @@ begin
    else
     case mode of
      'usb','lsb',
-     'fm','am'   : mode:='ssb';
+     'fm','am',
+     'ssb'       : mode:='ssb';
      'cw'        : mode:='cw';
       else
        mode:='rtty'  //this covers all modes not phone or cw
