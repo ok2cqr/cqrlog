@@ -1290,221 +1290,40 @@ end;
 function TdmUtils.FreqFromBand(band, mode: string): string;
 begin
   Result := '';
-  mode := UpperCase(mode);
+  mode := LowerCase(mode);
   band := UpperCase(band);
-  if band = '2190M' then
-  begin
-    Result := '0.139';
-    exit;
-  end;
-  if band = '630M' then
-  begin
-    Result := '0.472';
-    exit;
-  end;
-  if band = '160M' then
-  begin
-    if (mode = 'CW') then
-      Result := '1.800'
-    else
-      Result := '1.850';
-    exit;
-  end;
-  if band = '80M' then
-  begin
-    if (mode = 'CW') then
-      Result := '3.520'
-    else
-      Result := '3.770';
-    exit;
-  end;
-  if band = '60M' then
-  begin
-    Result := '5.2585';
-    exit;
-  end;
-  if band = '40M' then
-  begin
-    if (mode = 'CW') then
-      Result := '7.020'
-    else
-      Result := '7.055';
-    exit;
-  end;
-  if band = '30M' then
-  begin
-    Result := '10.1';
-    exit;
-  end;
-  if band = '20M' then
-  begin
-    if (mode = 'CW') then
-      Result := '14.025'
-    else
-    begin
-      if (Pos('PSK', mode) > 0) then
-        Result := '14.075'
+
+  if mode='' then
+     mode:='b_begin'
+   else
+    case mode of
+     'usb','lsb',
+     'fm','am',
+     'ssb'       : mode:='ssb';
+     'cw'        : mode:='cw';
       else
-      begin
-        if (mode = 'RTTY') then
-          Result := '14.085'
-        else
-          Result := '14.200';
-      end;
+       mode:='rtty'  //this covers all modes not phone or cw
     end;
+
+  dmData.qBands.Close;
+  dmData.qBands.SQL.Text := 'SELECT '+mode+' FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
+  if dmData.DebugLevel >=1 then
+     Writeln(dmData.qBands.SQL.Text);
+
+  if dmData.trBands.Active then
+    dmData.trBands.Rollback;
+  dmData.trBands.StartTransaction;
+  try
+    dmData.qBands.Open;
+    if dmData.qBands.RecordCount > 0 then
+      Result:= dmData.qBands.FieldByName(mode).AsString;
+  finally
+    if dmData.DebugLevel >=1 then
+     Writeln('FreqFromBand('+band+','+mode+')='+Result);
+    dmData.qBands.Close;
+    dmData.trBands.Rollback
   end;
-  if band = '17M' then
-  begin
-    if (mode = 'CW') then
-      Result := '18.070'
-    else
-      Result := '18.100';
-    exit;
-  end;
-  if band = '15M' then
-  begin
-    if (mode = 'CW') then
-      Result := '21.050'
-    else
-    begin
-      if (Pos('PSK', mode) > 0) then
-        Result := '21.075'
-      else
-      begin
-        if mode = 'RTTY' then
-          Result := '21.085'
-        else
-          Result := '21.200';
-      end;
-    end;
-    exit;
-  end;
-  if band = '12M' then
-  begin
-    if (mode = 'CW') then
-      Result := '24.916'
-    else
-    begin
-      if LetterFromMode(mode) = 'D' then
-        Result := '24.917'
-      else
-        Result := '24.932';
-    end;
-    exit;
-  end;
-  if band = '10M' then
-  begin
-    if (mode = 'CW') then
-      Result := '28.050'
-    else
-    begin
-      if LetterFromMode(mode) = 'D' then
-        Result := '28.100'
-      else
-        Result := '28.200';
-    end;
-    exit;
-  end;
-  if band = '6M' then
-  begin
-    Result := '50.100';
-    exit;
-  end;
-  if band = '4M' then
-  begin
-    if mode = 'CW' then
-      Result := ' 70.0500'
-    else
-      Result := '70.0875';
-    exit;
-  end;
-  if band = '1.25M' then
-  begin
-    Result := '222.010';
-    exit;
-  end;
-  if band = '2M' then
-  begin
-    if (mode = 'CW') then
-      Result := '144.050'
-    else
-      Result := '144.280';
-    exit;
-  end;
-  if band = '70CM' then
-  begin
-    if mode = 'CW' then
-      Result := '432.100'
-    else
-      Result := '432.200';
-    exit;
-  end;
-  if band = '33CM' then
-  begin
-    Result := '902.000';
-    exit;
-  end;
-  if band = '23CM' then
-  begin
-    if mode = 'CW' then
-      Result := '1296.150'
-    else
-      Result := '1296.200';
-    exit;
-  end;
-  if band = '13CM' then
-  begin
-    if mode = 'CW' then
-      Result := '2320.150'
-    else
-      Result := '2320.200';
-    exit;
-  end;
-  if band = '9CM' then
-  begin
-    Result := '3400.200';
-    exit;
-  end;
-  if band = '6CM' then
-  begin
-    Result := '5760.200';
-    exit;
-  end;
-  if band = '3CM' then
-  begin
-    Result := '10368.200';
-    exit;
-  end;
-  if band = '1.25CM' then
-  begin
-    Result := '24048.200';
-    exit;
-  end;
-  if band = '6MM' then
-  begin
-    Result := '47088';
-    exit;
-  end;
-  if band = '4MM' then
-  begin
-    Result := '77500.200';
-    exit;
-  end;
-  if band = '2.5MM' then
-  begin
-    Result := '122250.000';
-    exit;
-  end;
-  if band = '2MM' then
-  begin
-    Result := '134930.000';
-    exit;
-  end;
-  if band = '1MM' then
-  begin
-    Result := '248000.000';
-    exit;
-  end;
+
 end;
 
 function TdmUtils.IsAdifOK(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r, iota,
