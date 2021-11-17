@@ -25,7 +25,7 @@ uses
 const
   cDB_LIMIT = 500;
   cDB_MAIN_VER = 18;
-  cDB_COMN_VER = 4;
+  cDB_COMN_VER = 5;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -2732,6 +2732,22 @@ begin
         Q1.SQL.Text := 'alter table cqrlog_common.bands add tx_offset numeric(10,4) default 0';
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
+      end;
+
+      if old_version < 5 then
+      begin
+        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('2.5MM')+',122250.0,123000.0,122251.0,122251.0,122251.0)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('2MM')+',134000.0,141000.0,134930.0,134930.0,134930.0)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                        QuotedStr('1MM')+',241000.0,250000.0,248000.0,248000.0,248000.0)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
       end;
 
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
