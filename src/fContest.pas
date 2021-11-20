@@ -120,6 +120,8 @@ begin
          frmNewQSO.edtQth.Text  :='';        //and qrz, if one wants)
          frmNewQSO.edtGrid.Text :='';        //otherwise we do not get cursor at the end of call
          edtCall.SetFocus;
+         edtCall.SelStart:=length(edtCall.Text);
+         edtCall.SelLength:=0;
       //else
       if Assigned(frmNewQSO.CWint) then
         frmNewQSO.CWint.StopSending;
