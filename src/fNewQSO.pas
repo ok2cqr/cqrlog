@@ -3514,7 +3514,7 @@ begin
   if cqrini.ReadBool('NewQSO','ClearRIT',False) then
     frmTRXControl.ClearRIT;
 
-  if (cqrini.ReadBool('NewQSO','RefreshAfterSave',False) and frmMain.Showing) then
+  if (cqrini.ReadBool('NewQSO','RefreshAfterSave', True) and frmMain.Showing) then
     frmMain.acRefresh.Execute;
 
   if ShowMain and frmMain.Showing then
