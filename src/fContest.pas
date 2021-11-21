@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, uMyIni;
 
 type
 
@@ -389,6 +389,20 @@ end;
 procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmContest);
+
+  cqrini.WriteBool('frmContest', 'DupeCheck', rbDupeCheck.Checked);
+  cqrini.WriteBool('frmContest', 'NoMode4Dupe', rbNoMode4Dupe.Checked);
+  cqrini.WriteBool('frmContest', 'IgnoreDupes', rbIgnoreDupes.Checked);
+
+  cqrini.WriteBool('frmContest', 'SpaceIsTab', chkSpace.Checked);
+  cqrini.WriteBool('frmContest', 'TrueRST', chkTrueRST.Checked);
+  cqrini.WriteBool('frmContest', 'NRInc', chkNRInc.Checked);
+  cqrini.WriteBool('frmContest', 'QSP', chkQsp.Checked);
+  cqrini.WriteBool('frmContest', 'NoNR', chkNoNr.Checked);
+  cqrini.WriteBool('frmContest', 'Loc', chkLoc.Checked);
+
+  cqrini.WriteString('frmContest', 'STX', edtSTX.Text);
+  cqrini.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
 end;
 
 procedure TfrmContest.FormHide(Sender: TObject);
@@ -402,6 +416,21 @@ procedure TfrmContest.FormShow(Sender: TObject);
 begin
   frmNewQSO.gbContest.Visible := true;
   dmUtils.LoadWindowPos(frmContest);
+
+  rbDupeCheck.Checked := cqrini.ReadBool('frmContest', 'DupeCheck', True);
+  rbNoMode4Dupe.Checked := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
+  rbIgnoreDupes.Checked := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
+
+  chkSpace.Checked := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
+  chkTrueRST.Checked := cqrini.ReadBool('frmContest', 'TrueRST', False);
+  chkNRInc.Checked := cqrini.ReadBool('frmContest', 'NRInc', False);
+  chkQsp.Checked := cqrini.ReadBool('frmContest', 'QSP', False);
+  chkNoNr.Checked := cqrini.ReadBool('frmContest', 'NoNR', False);
+  chkLoc.Checked := cqrini.ReadBool('frmContest', 'Loc', False);
+
+  edtSTX.Text := cqrini.ReadString('frmContest', 'STX', '');
+  edtSTXStr.Text := cqrini.ReadString('frmContest', 'STXStr', '');
+
   InitInput;
 
   sbContest.Panels[0].Width := 450;

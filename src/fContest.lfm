@@ -1,12 +1,12 @@
 object frmContest: TfrmContest
   Left = 370
-  Height = 174
+  Height = 177
   Top = 281
   Width = 700
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
-  ClientHeight = 174
+  ClientHeight = 177
   ClientWidth = 700
   OnClose = FormClose
   OnCreate = FormCreate
@@ -608,7 +608,7 @@ object frmContest: TfrmContest
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 22
-    Top = 152
+    Top = 155
     Width = 700
     Panels = <    
       item
