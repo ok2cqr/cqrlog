@@ -4465,7 +4465,7 @@ end;
 
 function TdmUtils.LoadVisibleColumnsConfiguration : TColumnVisibleArray;
 const
-  COLUMN_COUNT = 46;
+  COLUMN_COUNT = 47;
 var
   i : Integer;
   aColumns : TColumnVisibleArray;
@@ -4609,6 +4609,9 @@ begin
 
   aColumns[45].FieldName := 'DOK';
   aColumns[45].Visible   := cqrini.ReadBool('Columns', 'DarcDok', False);
+
+  aColumns[46].FieldName := 'OPERATOR';
+  aColumns[46].Visible   := cqrini.ReadBool('Columns', 'Operator', False);
 
   for i:=0 to Length(aColumns)-1 do
     aColumns[i].Exists := False;
