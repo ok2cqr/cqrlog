@@ -15,7 +15,6 @@ type
   TfrmContest = class(TForm)
     btSave: TButton;
     btClearAll : TButton;
-    chkmode4dupe: TCheckBox;
     chkTabAll: TCheckBox;
     chkQsp: TCheckBox;
     chkTrueRST: TCheckBox;
@@ -41,6 +40,9 @@ type
     lblMSGr: TLabel;
     lblNRs: TLabel;
     btnHelp : TSpeedButton;
+    rbDupeCheck: TRadioButton;
+    rbNoMode4Dupe: TRadioButton;
+    rbIgnoreDupes: TRadioButton;
     sbContest: TStatusBar;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
@@ -192,8 +194,7 @@ end;
 
 procedure TfrmContest.edtCallExit(Sender: TObject);
 var
-  dupe    :integer;
-
+  dupe : Integer;
 begin
   // if frmNewQSO is in viewmode or editmode it overwrites old data or will not save
   // because saving is disabled in view mode. this if statement starts a fresh newqso form
@@ -208,32 +209,42 @@ begin
 
   frmNewQSO.edtCall.Text := edtCall.Text;
 
-  //dupe check
-  dupe := frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
-
-  if  ((dupe = 1 )                                        // 1= wkd this band and mode
-   or ((dupe = 2 ) and (   chkMode4Dupe.Checked ))) then // 2= wkd this band but NOT this mode
-       Begin        //dupe
-         edtCall.Font.Color:=clRed;
-         edtCall.Font.Style:= [fsBold];
-         frmNewQSO.edtRemQSO.Caption:='Dupe';
-       end
-    else
-      Begin         //clear dupe if user press 1xESC and change call not to be dupe
-         edtCall.Font.Color:=clDefault;
-         edtCall.Font.Style:= [];
-         frmNewQSO.edtRemQSO.Caption:='';
-      end;
+  if (rbIgnoreDupes.Checked) then
+  begin
+    //dupe check
+    dupe := frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
+    // 1= wkd this band and mode
+    // 2= wkd this band but NOT this mode
+    if ((dupe = 1 ) or ((dupe = 2 ) and (rbNoMode4Dupe.Checked ))) then
+    begin        //dupe
+     edtCall.Font.Color:=clRed;
+     edtCall.Font.Style:= [fsBold];
+     frmNewQSO.edtRemQSO.Caption:='Dupe';
+    end
+    else begin         //clear dupe if user press 1xESC and change call not to be dupe
+      edtCall.Font.Color:=clDefault;
+      edtCall.Font.Style:= [];
+      frmNewQSO.edtRemQSO.Caption:='';
+    end;
+  end
+  else begin
+    edtCall.Font.Color:=clDefault;
+    edtCall.Font.Style:= [];
+    frmNewQSO.edtRemQSO.Caption:='';
+  end;
 
   //report in NEwQSO changes to 59 to late (after passing cmbMode)
   //NOTE! if mode is not in list program dies! In that case skip next
   if frmNewQSO.cmbMode.ItemIndex >=0 then
    begin
      case frmNewQSO.cmbMode.Items[frmNewQSO.cmbMode.ItemIndex] of
-          'SSB','AM','FM' : Begin
-                                 edtRSTs.Text := copy(edtRSTs.Text,0,2);
-                                 edtRSTr.Text := copy(edtRSTr.Text,0,2);
-                            end;
+       'SSB',
+       'AM',
+       'FM' :
+         begin
+           edtRSTs.Text := copy(edtRSTs.Text,0,2);
+           edtRSTr.Text := copy(edtRSTr.Text,0,2);
+         end;
      end;
    end;
 
@@ -263,7 +274,7 @@ begin
 
   frmNewQSO.btnSave.Click;
   if dmData.DebugLevel >= 1 then
-                       writeln('input finale');
+    Writeln('input finale');
   ChkSerialNrUpd(chkNRInc.Checked);
   initInput;
 end;
