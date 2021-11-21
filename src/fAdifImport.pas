@@ -273,6 +273,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
 
     fillTypeVariableWithTagData:=true;
     data := trim(data);
+
     case h of
     h_BAND                          :d.BAND:=TrimDataLen(adifTag,data,l_BAND);
     h_CALL                          :d.CALL:=TrimDataLen(adifTag,data,l_CALL);
@@ -400,6 +401,7 @@ begin
     if not IsQsoDateInRange then
     begin
       Inc(FFilteredOutRecNr);
+      initializeTypeVariable(d);
       exit;
     end;
     d.LOTW_QSLSDATE := dmUtils.ADIFDateToDate(d.LOTW_QSLSDATE);
