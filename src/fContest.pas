@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, uMyIni;
 
 type
 
@@ -15,7 +15,6 @@ type
   TfrmContest = class(TForm)
     btSave: TButton;
     btClearAll : TButton;
-    chkmode4dupe: TCheckBox;
     chkTabAll: TCheckBox;
     chkQsp: TCheckBox;
     chkTrueRST: TCheckBox;
@@ -41,6 +40,9 @@ type
     lblMSGr: TLabel;
     lblNRs: TLabel;
     btnHelp : TSpeedButton;
+    rbDupeCheck: TRadioButton;
+    rbNoMode4Dupe: TRadioButton;
+    rbIgnoreDupes: TRadioButton;
     sbContest: TStatusBar;
     tmrESC2: TTimer;
     procedure btSaveClick(Sender: TObject);
@@ -192,8 +194,7 @@ end;
 
 procedure TfrmContest.edtCallExit(Sender: TObject);
 var
-  dupe    :integer;
-
+  dupe : Integer;
 begin
   // if frmNewQSO is in viewmode or editmode it overwrites old data or will not save
   // because saving is disabled in view mode. this if statement starts a fresh newqso form
@@ -208,32 +209,42 @@ begin
 
   frmNewQSO.edtCall.Text := edtCall.Text;
 
-  //dupe check
-  dupe := frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
-
-  if  ((dupe = 1 )                                        // 1= wkd this band and mode
-   or ((dupe = 2 ) and (   chkMode4Dupe.Checked ))) then // 2= wkd this band but NOT this mode
-       Begin        //dupe
-         edtCall.Font.Color:=clRed;
-         edtCall.Font.Style:= [fsBold];
-         frmNewQSO.edtRemQSO.Caption:='Dupe';
-       end
-    else
-      Begin         //clear dupe if user press 1xESC and change call not to be dupe
-         edtCall.Font.Color:=clDefault;
-         edtCall.Font.Style:= [];
-         frmNewQSO.edtRemQSO.Caption:='';
-      end;
+  if (rbIgnoreDupes.Checked) then
+  begin
+    //dupe check
+    dupe := frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
+    // 1= wkd this band and mode
+    // 2= wkd this band but NOT this mode
+    if ((dupe = 1 ) or ((dupe = 2 ) and (rbNoMode4Dupe.Checked ))) then
+    begin        //dupe
+     edtCall.Font.Color:=clRed;
+     edtCall.Font.Style:= [fsBold];
+     frmNewQSO.edtRemQSO.Caption:='Dupe';
+    end
+    else begin         //clear dupe if user press 1xESC and change call not to be dupe
+      edtCall.Font.Color:=clDefault;
+      edtCall.Font.Style:= [];
+      frmNewQSO.edtRemQSO.Caption:='';
+    end;
+  end
+  else begin
+    edtCall.Font.Color:=clDefault;
+    edtCall.Font.Style:= [];
+    frmNewQSO.edtRemQSO.Caption:='';
+  end;
 
   //report in NEwQSO changes to 59 to late (after passing cmbMode)
   //NOTE! if mode is not in list program dies! In that case skip next
   if frmNewQSO.cmbMode.ItemIndex >=0 then
    begin
      case frmNewQSO.cmbMode.Items[frmNewQSO.cmbMode.ItemIndex] of
-          'SSB','AM','FM' : Begin
-                                 edtRSTs.Text := copy(edtRSTs.Text,0,2);
-                                 edtRSTr.Text := copy(edtRSTr.Text,0,2);
-                            end;
+       'SSB',
+       'AM',
+       'FM' :
+         begin
+           edtRSTs.Text := copy(edtRSTs.Text,0,2);
+           edtRSTr.Text := copy(edtRSTr.Text,0,2);
+         end;
      end;
    end;
 
@@ -263,7 +274,7 @@ begin
 
   frmNewQSO.btnSave.Click;
   if dmData.DebugLevel >= 1 then
-                       writeln('input finale');
+    Writeln('input finale');
   ChkSerialNrUpd(chkNRInc.Checked);
   initInput;
 end;
@@ -378,6 +389,20 @@ end;
 procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmContest);
+
+  cqrini.WriteBool('frmContest', 'DupeCheck', rbDupeCheck.Checked);
+  cqrini.WriteBool('frmContest', 'NoMode4Dupe', rbNoMode4Dupe.Checked);
+  cqrini.WriteBool('frmContest', 'IgnoreDupes', rbIgnoreDupes.Checked);
+
+  cqrini.WriteBool('frmContest', 'SpaceIsTab', chkSpace.Checked);
+  cqrini.WriteBool('frmContest', 'TrueRST', chkTrueRST.Checked);
+  cqrini.WriteBool('frmContest', 'NRInc', chkNRInc.Checked);
+  cqrini.WriteBool('frmContest', 'QSP', chkQsp.Checked);
+  cqrini.WriteBool('frmContest', 'NoNR', chkNoNr.Checked);
+  cqrini.WriteBool('frmContest', 'Loc', chkLoc.Checked);
+
+  cqrini.WriteString('frmContest', 'STX', edtSTX.Text);
+  cqrini.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
 end;
 
 procedure TfrmContest.FormHide(Sender: TObject);
@@ -391,6 +416,21 @@ procedure TfrmContest.FormShow(Sender: TObject);
 begin
   frmNewQSO.gbContest.Visible := true;
   dmUtils.LoadWindowPos(frmContest);
+
+  rbDupeCheck.Checked := cqrini.ReadBool('frmContest', 'DupeCheck', True);
+  rbNoMode4Dupe.Checked := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
+  rbIgnoreDupes.Checked := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
+
+  chkSpace.Checked := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
+  chkTrueRST.Checked := cqrini.ReadBool('frmContest', 'TrueRST', False);
+  chkNRInc.Checked := cqrini.ReadBool('frmContest', 'NRInc', False);
+  chkQsp.Checked := cqrini.ReadBool('frmContest', 'QSP', False);
+  chkNoNr.Checked := cqrini.ReadBool('frmContest', 'NoNR', False);
+  chkLoc.Checked := cqrini.ReadBool('frmContest', 'Loc', False);
+
+  edtSTX.Text := cqrini.ReadString('frmContest', 'STX', '');
+  edtSTXStr.Text := cqrini.ReadString('frmContest', 'STXStr', '');
+
   InitInput;
 
   sbContest.Panels[0].Width := 450;
