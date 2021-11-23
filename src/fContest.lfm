@@ -664,28 +664,24 @@ object frmContest: TfrmContest
   object rbNoMode4Dupe: TRadioButton
     AnchorSideLeft.Control = rbDupeCheck
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = chkTrueRST
-    AnchorSideTop.Side = asrBottom
+    AnchorSideTop.Control = rbDupeCheck
     Left = 157
     Height = 23
     Top = 119
     Width = 122
     BorderSpacing.Left = 38
-    BorderSpacing.Top = 8
     Caption = 'NoMode4Dupe'
     TabOrder = 19
   end
   object rbIgnoreDupes: TRadioButton
     AnchorSideLeft.Control = rbNoMode4Dupe
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = edtSTXStr
-    AnchorSideTop.Side = asrBottom
+    AnchorSideTop.Control = rbDupeCheck
     Left = 317
     Height = 23
     Top = 119
     Width = 110
     BorderSpacing.Left = 38
-    BorderSpacing.Top = 31
     Caption = 'Ignore dupes'
     TabOrder = 20
   end
