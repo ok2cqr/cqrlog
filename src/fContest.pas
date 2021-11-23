@@ -81,9 +81,9 @@ type
     procedure QspMsg;
     procedure ClearStatusBar;
     procedure ShowStatusBarInfo;
-    procedure SaveSettings;
   public
     { public declarations }
+    procedure SaveSettings;
   end;
 
 var
@@ -276,8 +276,6 @@ begin
     Writeln('input finale');
   ChkSerialNrUpd(chkNRInc.Checked);
   initInput;
-  SaveSettings;   //we have to do this here,
-                  //otherwise saved serial number fails if cqrlog is closed without first closing contest form
 end;
 
 procedure TfrmContest.btClearAllClick(Sender: TObject);
