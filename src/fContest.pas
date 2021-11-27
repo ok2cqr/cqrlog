@@ -13,8 +13,9 @@ type
   { TfrmContest }
 
   TfrmContest = class(TForm)
+    btClearAll: TButton;
     btSave: TButton;
-    btClearAll : TButton;
+    btClearQso : TButton;
     chkTabAll: TCheckBox;
     chkQsp: TCheckBox;
     chkTrueRST: TCheckBox;
@@ -45,8 +46,9 @@ type
     rbIgnoreDupes: TRadioButton;
     sbContest: TStatusBar;
     tmrESC2: TTimer;
+    procedure btClearAllClick(Sender: TObject);
     procedure btSaveClick(Sender: TObject);
-    procedure btClearAllClick(Sender : TObject);
+    procedure btClearQsoClick(Sender : TObject);
     procedure chkNoNrChange(Sender: TObject);
     procedure chkNRIncChange(Sender: TObject);
     procedure chkNRIncClick(Sender : TObject);
@@ -78,9 +80,11 @@ type
     procedure TabStopAllOn;
     procedure QspMsg;
     procedure ClearStatusBar;
-    procedure ShowStatusBarInfo();
+    procedure ShowStatusBarInfo;
+
   public
     { public declarations }
+    procedure SaveSettings;
   end;
 
 var
@@ -209,30 +213,26 @@ begin
 
   frmNewQSO.edtCall.Text := edtCall.Text;
 
-  if (rbIgnoreDupes.Checked) then
+  if not (rbIgnoreDupes.Checked) then
   begin
     //dupe check
     dupe := frmWorkedGrids.WkdCall(edtCall.Text, dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text) ,frmNewQSO.cmbMode.Text);
     // 1= wkd this band and mode
     // 2= wkd this band but NOT this mode
-    if ((dupe = 1 ) or ((dupe = 2 ) and (rbNoMode4Dupe.Checked ))) then
-    begin        //dupe
-     edtCall.Font.Color:=clRed;
-     edtCall.Font.Style:= [fsBold];
-     frmNewQSO.edtRemQSO.Caption:='Dupe';
-    end
-    else begin         //clear dupe if user press 1xESC and change call not to be dupe
-      edtCall.Font.Color:=clDefault;
-      edtCall.Font.Style:= [];
-      frmNewQSO.edtRemQSO.Caption:='';
-    end;
-  end
-  else begin
-    edtCall.Font.Color:=clDefault;
-    edtCall.Font.Style:= [];
-    frmNewQSO.edtRemQSO.Caption:='';
-  end;
-
+    if  ( (rbNoMode4Dupe.Checked) and (dupe = 1) )
+     or ( (not rbNoMode4Dupe.Checked) and ((dupe = 1) or (dupe=2)) )then
+       Begin
+         edtCall.Font.Color:=clRed;
+         edtCall.Font.Style:= [fsBold];
+         frmNewQSO.edtRemQSO.Caption:='Dupe';
+       end
+    else
+        Begin
+         edtCall.Font.Color:=clDefault;
+         edtCall.Font.Style:= [];
+         frmNewQSO.edtRemQSO.Caption:='';
+        end;
+   end;
   //report in NEwQSO changes to 59 to late (after passing cmbMode)
   //NOTE! if mode is not in list program dies! In that case skip next
   if frmNewQSO.cmbMode.ItemIndex >=0 then
@@ -277,9 +277,28 @@ begin
     Writeln('input finale');
   ChkSerialNrUpd(chkNRInc.Checked);
   initInput;
+
 end;
 
-procedure TfrmContest.btClearAllClick(Sender : TObject);
+procedure TfrmContest.btClearAllClick(Sender: TObject);
+begin
+  rbDupeCheck.Checked := True;
+  rbNoMode4Dupe.Checked := False;
+  rbIgnoreDupes.Checked := False;
+
+  chkSpace.Checked :=  False;
+  chkTrueRST.Checked := False;
+  chkNRInc.Checked := False;
+  chkQsp.Checked := False;
+  chkNoNr.Checked := False;
+  chkLoc.Checked := False;
+
+  edtSTX.Text := '';
+  edtSTXStr.Text := '';
+  cmbContestName.Text:= '';
+end;
+
+procedure TfrmContest.btClearQsoClick(Sender : TObject);
 begin
   frmNewQSO.ClearAll;
   initInput
@@ -385,8 +404,7 @@ begin
   frmContest.KeyPreview := True;
   dmUtils.InsertContests(cmbContestName);
 end;
-
-procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TfrmContest.SaveSettings;
 begin
   dmUtils.SaveWindowPos(frmContest);
 
@@ -403,6 +421,11 @@ begin
 
   cqrini.WriteString('frmContest', 'STX', edtSTX.Text);
   cqrini.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
+  cqrini.WriteString('frmContest', 'ContestName', cmbContestName.Text);
+end;
+procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+Begin
+  SaveSettings;
 end;
 
 procedure TfrmContest.FormHide(Sender: TObject);
@@ -439,6 +462,7 @@ begin
   sbContest.Panels[3].Width := 65;
   sbContest.Panels[4].Width := 20;
   lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
+  cmbContestName.Text := cqrini.ReadString('frmContest', 'ContestName','');
 end;
 
 procedure TfrmContest.btnHelpClick(Sender : TObject);
@@ -469,22 +493,7 @@ begin
   edtCall.Font.Style:= [];
   edtCall.Clear;
   EscFirstTime := True;
-  {
-  Next 3 lines of procedure will cause
-  ----
-  either (dbg msg:input finale):
 
-  NOTE: Window with stalled focus found!, faking focus-out event
-  (cqrlog:2643): Pango-CRITICAL **: pango_layout_get_cursor_pos: assertion 'index >= 0 && index <= layout->length' failed
-  ----
-  or(dbg msg: Clear all done next focus ):
-
-  NOTE: Window with stalled focus found!, faking focus-out event
-
-  ----
-  All works, but this needs attention and I can not resolve this at the moment.
-
-  }
   SetTabOrders;
   frmContest.ShowOnTop;
   frmContest.SetFocus;
@@ -574,8 +583,15 @@ Begin
 
     btSave.TabStop      := True;
     btSave.TabOrder     := 7;
-    btClearAll.TabStop  := True;
-    btClearAll.TabOrder := 8;
+    btClearQso.TabStop  := True;
+    btClearQso.TabOrder := 8;
+
+    rbDupeCheck.TabStop:=false;
+    rbNoMode4Dupe.TabStop:=false;
+    rbIgnoreDupes.TabStop:=false;
+    btClearAll.TabStop:=false;
+    chkTabAll.TabStop:=false;
+    cmbContestName.TabStop:=false;
 end;
 procedure TfrmContest.QspMsg;
 Begin
@@ -597,7 +613,7 @@ Begin
    end;
 end;
 
-procedure TfrmContest.ClearStatusBar();
+procedure TfrmContest.ClearStatusBar;
 var
   i : Integer;
 begin
@@ -605,9 +621,9 @@ begin
     sbContest.Panels.Items[i].Text := '';
 end;
 
-procedure TfrmContest.ShowStatusBarInfo();
+procedure TfrmContest.ShowStatusBarInfo;
 begin
-  sbContest.Panels.Items[0].Text := Trim(frmNewQSO.mCountry.Text);
+  sbContest.Panels.Items[0].Text := StringReplace(Trim(frmNewQSO.mCountry.Text),#$0A,'|',[rfReplaceAll]);
   sbContest.Panels.Items[1].Text := 'WAZ: ' + frmNewQSO.lblWAZ.Caption;
   sbContest.Panels.Items[2].Text := 'ITU: ' + frmNewQSO.lblITU.Caption;
   sbContest.Panels.Items[3].Text := 'AZ: ' + frmNewQSO.lblAzi.Caption;
