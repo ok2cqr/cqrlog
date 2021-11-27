@@ -5,19 +5,21 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
 
-    Commits on Nov 12, 2021  Merge pull request #456 from OH1KH/dxcluster_fixes 
-    
+    Commits on Nov 27, 2021 Merge pull request #464 from OH1KH/squash_contest_fixes 
+
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
 
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
 LAST UPDATE
-  - ver 2.5.2(113)
+  - ver 2.5.2(114)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
 
-
+  - ver 2.5.2(113)
+  - official version with alpha additions (see below)
+  - Help files have additions remember to update also HELP
   - ver 2.5.2(111)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP  - ver 2.5.2(110)
