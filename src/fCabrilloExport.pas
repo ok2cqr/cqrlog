@@ -31,6 +31,7 @@ type
     btnCabBrowse: TButton;
     btCabSave: TButton;
     btCabLoad: TButton;
+    btnResultFile: TButton;
     chkUpCase: TCheckBox;
     chkCabInfoSrst: TCheckBox;
     chkCabInfoRrst: TCheckBox;
@@ -81,6 +82,7 @@ type
     procedure btnCabBrowseClick(Sender: TObject);
     procedure btnCabFrmFltClick(Sender: TObject);
     procedure btnCabHelpClick(Sender: TObject);
+    procedure btnResultFileClick(Sender: TObject);
     procedure cmbCabContestNameChange(Sender: TObject);
     procedure cmbCabContestNameExit(Sender: TObject);
     procedure edtCabCallWdtExit(Sender: TObject);
@@ -92,6 +94,7 @@ type
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender : TObject);
+    procedure lblCabErrorClick(Sender: TObject);
   private
     procedure SaveSettings;
     function NonZero(s:String):String;
@@ -100,6 +103,7 @@ type
     function CabrilloPower(power: integer): String;
     procedure saveCabLay(filename:string);
     procedure loadCabLay(filename:string);
+    procedure ViewFile(f:string);
   public
     { public declarations }
   end;
@@ -149,6 +153,30 @@ begin
 
   lblCabStats.Visible := False;
   mCabStatistics.Visible:=False;
+  btnResultFile.Visible:=False;
+end;
+
+procedure TfrmCabrilloExport.ViewFile(f:string);
+var
+  prg: string;
+begin
+  try
+    prg := cqrini.ReadString('ExtView', 'txt', '');
+    if prg<>'' then
+      dmUtils.RunOnBackground(prg + ' ' + f)
+     else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
+  finally
+   //done
+  end;
+
+end;
+
+procedure TfrmCabrilloExport.lblCabErrorClick(Sender: TObject);
+begin
+  if  lblCabError.Font.Color = clRed then
+    Begin
+      ViewFile('/tmp/CabrilloReject.log');
+    end;
 end;
 
 procedure TfrmCabrilloExport.SaveSettings;
@@ -296,6 +324,11 @@ begin
   ShowHelp;
 end;
 
+procedure TfrmCabrilloExport.btnResultFileClick(Sender: TObject);
+Begin
+  ViewFile(edtCabFileName.Text);
+end;
+
 procedure TfrmCabrilloExport.cmbCabContestNameChange(Sender: TObject);
   var i:    integer;
     s:    string;
@@ -423,6 +456,7 @@ var
 
 begin
   lblCabError.Visible := False;
+  btnResultFile.Visible:=False;
   SaveSettings;
   date := dmUtils.GetDateTime(0);
   mycall := cqrini.ReadString('Station','Call','');
@@ -646,6 +680,7 @@ begin
   end
   finally
     lblCabDone.Visible := True;
+    btnResultFile.Visible:=True;
     CloseFile(r);
   end;
 
