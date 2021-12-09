@@ -662,14 +662,14 @@ object frmContest: TfrmContest
     TabOrder = 21
   end
   object rbNoMode4Dupe: TRadioButton
-    AnchorSideLeft.Control = rbDupeCheck
+    AnchorSideLeft.Control = btDupChkStart
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = rbDupeCheck
-    Left = 157
+    Left = 156
     Height = 23
     Top = 119
     Width = 122
-    BorderSpacing.Left = 38
+    BorderSpacing.Left = 18
     Caption = 'NoMode4Dupe'
     TabOrder = 19
   end
@@ -677,12 +677,13 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = rbNoMode4Dupe
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = rbDupeCheck
-    Left = 317
+    Left = 296
     Height = 23
     Top = 119
     Width = 110
-    BorderSpacing.Left = 38
+    BorderSpacing.Left = 18
     Caption = 'Ignore dupes'
+    OnChange = rbIgnoreDupesChange
     TabOrder = 20
   end
   object btClearAll: TButton
@@ -698,10 +699,43 @@ object frmContest: TfrmContest
     TabOrder = 5
     TabStop = False
   end
+  object btDupChkStart: TButton
+    AnchorSideLeft.Control = rbDupeCheck
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = rbDupeCheck
+    AnchorSideTop.Side = asrCenter
+    Left = 122
+    Height = 32
+    Hint = 'When using common log, set date of dupe check begin (contest start date)'
+    Top = 114
+    Width = 16
+    AutoSize = True
+    BorderSpacing.Left = 3
+    Constraints.MaxHeight = 35
+    Constraints.MaxWidth = 180
+    OnClick = btDupChkStartClick
+    TabOrder = 22
+    TabStop = False
+  end
+  object Label1: TLabel
+    Left = 270
+    Height = 1
+    Top = 150
+    Width = 1
+    ParentColor = False
+  end
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer
     Left = 672
     Top = 112
+  end
+  object cdDupeDate: TCalendarDialog
+    Title = 'Set start date'
+    DialogPosition = poScreenCenter
+    OKCaption = 'OK'
+    CancelCaption = 'Cancel'
+    Left = 672
+    Top = 80
   end
 end

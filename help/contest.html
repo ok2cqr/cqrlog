@@ -49,8 +49,7 @@ With <b>Tru</b> and <b>Msg is Loc</b> setting it is useful also in VHF, UHF, SHF
 logging. Perhaps also in some other operations like WWFF activations.
 <br><br>
 Contest window has a simple dupe check that turns typed duplicate callsign bold red printed. If you save a duplicate qso it is marked as "Dupe" in "Comment to qso" field.
-<br>To get this working properly you must <b>either</b> create a new log for every contest <b>or</b> set "preferences/fldigi/wsjt interface/
-<b>WB4 check starts from/call Date</b>" and check the <b>"call" checkbox</b>. See :  <a href="h1.html#ch2b">Quick start: wsjt-x interface</a> Remember to uncheck "call" checkbox after contest is over.
+<br>To get this working properly you must <b>either</b> create a new log for every contest <b>or</b> set dupe start date (I.E. contest starting day) with button <b>"from YYYY-MM-DD"</b>
 </p>
 <p>
 <b>HOTKEYS</b> work like with <a href="h20.html">New QSO window</a>.
@@ -69,6 +68,8 @@ Contest window has following fields and checkboxes:<br>
 <li><b>Call</b> when you leave this field callsign is moved to NewQSO. Callsign turns BOLD RED if it is duplicate.</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field. <b>Note:</b>This prevents typing space (perhaps needed in MSG fields).</li>
 <li><b>Dupe check</b> Default checked.
+<li><b>from YY-MM-DD</b> Button to set duplicate check start date (I.E. contest start date). Must be set if you have all qsos in same log. 
+<br>If every contest has it's own log can be as default (1900-01-01). Button is not visible if <b>Ignore dupes</b> is set.
 <li><b>NoMode4Dupe</b> Means that same callsign can be worked again on same band if mode is different.
 </li>
 <li><b>Ignore dupes</b> Do not check duplicate qsos at all.</li>

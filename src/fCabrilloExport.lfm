@@ -11,7 +11,7 @@ object frmCabrilloExport: TfrmCabrilloExport
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.0.12.0'
   object lblCabfileName: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -133,6 +133,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     BorderSpacing.Bottom = 12
     Caption = 'Error message'
     ParentColor = False
+    OnClick = lblCabErrorClick
     Visible = False
   end
   object lblCabPower: TLabel
@@ -183,7 +184,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     Height = 15
     Top = 529
     Width = 76
-    BorderSpacing.Top = 6
+    BorderSpacing.Top = 15
     Caption = 'Statistics:'
     Font.Style = [fsBold]
     ParentColor = False
@@ -807,6 +808,20 @@ object frmCabrilloExport: TfrmCabrilloExport
     Caption = 'Frm Flt'
     OnClick = btnCabFrmFltClick
     TabOrder = 16
+  end
+  object btnResultFile: TButton
+    AnchorSideRight.Control = btnCabClose
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = mCabStatistics
+    Left = 364
+    Height = 25
+    Top = 528
+    Width = 156
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Bottom = 2
+    Caption = 'Open resulted file'
+    OnClick = btnResultFileClick
+    TabOrder = 17
   end
   object dlgCabSave: TSaveDialog
     Title = 'Save with file name'
