@@ -99,7 +99,7 @@ var
 implementation
 
 {$R *.lfm}
-uses fNewQSO, fTRXControl, dData, dUtils, uMyIni;
+uses fNewQSO, fTRXControl, dData, dUtils, uMyIni,fContest;
 
 { TfrmWorkedGrids }
  //441H      753W
@@ -253,10 +253,17 @@ var
 
 begin
   if LocalDbg then Writeln('Start WkdCall');
-  if cqrini.ReadBool('wsjt','wb4CCall', False) then
-            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39 //default date check all qsos
-     else
+  //in case we were called from contest form open
+  if ((frmContest.Showing) and ((frmContest.rbDupeCheck.Checked) or (frmContest.rbNoMode4Dupe.Checked)))
+      then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01')+#39 //default date check all qsos
+   else
+     Begin
+        if cqrini.ReadBool('wsjt','wb4CCall', False) then
+            daylimit := ' and qsodate >= '+#39+cqrini.ReadString('wsjt', 'wb4Calldate','1900-01-01')+#39
+          else
             daylimit :='';
+     end;
 
   WkdCall := 0;
   dmData.W.Close;

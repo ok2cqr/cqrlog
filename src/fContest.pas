@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, uMyIni;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, uMyIni;
 
 type
 
@@ -16,6 +16,8 @@ type
     btClearAll: TButton;
     btSave: TButton;
     btClearQso : TButton;
+    btDupChkStart: TButton;
+    cdDupeDate: TCalendarDialog;
     chkTabAll: TCheckBox;
     chkQsp: TCheckBox;
     chkTrueRST: TCheckBox;
@@ -31,6 +33,7 @@ type
     edtRSTr: TEdit;
     edtSRX: TEdit;
     edtSRXStr: TEdit;
+    Label1: TLabel;
     lblSpeed: TLabel;
     lblContestName: TLabel;
     lblCall: TLabel;
@@ -47,6 +50,7 @@ type
     sbContest: TStatusBar;
     tmrESC2: TTimer;
     procedure btClearAllClick(Sender: TObject);
+    procedure btDupChkStartClick(Sender: TObject);
     procedure btSaveClick(Sender: TObject);
     procedure btClearQsoClick(Sender : TObject);
     procedure chkNoNrChange(Sender: TObject);
@@ -71,6 +75,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnHelpClick(Sender : TObject);
+    procedure rbIgnoreDupesChange(Sender: TObject);
     procedure tmrESC2Timer(Sender: TObject);
   private
     { private declarations }
@@ -92,6 +97,7 @@ var
   RSTstxAdd: string = ''; //contest mode additional string store
   //RSTsrx         :string = '';
   EscFirstTime: boolean = False;
+  DupeFromDate :string = '1900-01-01';
 
 implementation
 
@@ -296,6 +302,18 @@ begin
   cmbContestName.Text:= '';
 end;
 
+procedure TfrmContest.btDupChkStartClick(Sender: TObject);
+begin
+  cdDupeDate.Date := StrToDate(DupeFromDate,'-');
+  if cdDupeDate.Execute then
+    begin
+      DupeFromDate:=FormatDateTime( 'yyyy-mm-dd',cdDupeDate.Date );
+      cqrini.WriteString('frmContest', 'DupeFrom', DupeFromDate);
+      btDupChkStart.Caption:='from '+DupeFromDate;
+    end
+
+end;
+
 procedure TfrmContest.btClearQsoClick(Sender : TObject);
 begin
   frmNewQSO.ClearAll;
@@ -409,6 +427,7 @@ begin
   cqrini.WriteBool('frmContest', 'DupeCheck', rbDupeCheck.Checked);
   cqrini.WriteBool('frmContest', 'NoMode4Dupe', rbNoMode4Dupe.Checked);
   cqrini.WriteBool('frmContest', 'IgnoreDupes', rbIgnoreDupes.Checked);
+  cqrini.WriteString('frmContest', 'DupeFrom', DupeFromDate);
 
   cqrini.WriteBool('frmContest', 'SpaceIsTab', chkSpace.Checked);
   cqrini.WriteBool('frmContest', 'TrueRST', chkTrueRST.Checked);
@@ -441,6 +460,7 @@ begin
   rbDupeCheck.Checked := cqrini.ReadBool('frmContest', 'DupeCheck', True);
   rbNoMode4Dupe.Checked := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
   rbIgnoreDupes.Checked := cqrini.ReadBool('frmContest', 'IgnoreDupes', False);
+  DupeFromDate:= cqrini.ReadString('frmContest', 'DupeFrom', '1900-01-01');
 
   chkSpace.Checked := cqrini.ReadBool('frmContest', 'SpaceIsTab', False);
   chkTrueRST.Checked := cqrini.ReadBool('frmContest', 'TrueRST', False);
@@ -461,11 +481,18 @@ begin
   sbContest.Panels[4].Width := 20;
   lblSpeed.Caption:= frmNewQSO.sbNewQSO.Panels[4].Text;
   cmbContestName.Text := cqrini.ReadString('frmContest', 'ContestName','');
+  btDupChkStart.Caption := 'from '+DupeFromDate;
+  btDupChkStart.Visible:=not(rbIgnoreDupes.Checked);
 end;
 
 procedure TfrmContest.btnHelpClick(Sender : TObject);
 begin
   ShowHelp
+end;
+
+procedure TfrmContest.rbIgnoreDupesChange(Sender: TObject);
+begin
+  btDupChkStart.Visible:=not(rbIgnoreDupes.Checked);
 end;
 
 procedure TfrmContest.tmrESC2Timer(Sender: TObject);
@@ -590,6 +617,7 @@ Begin
     btClearAll.TabStop:=false;
     chkTabAll.TabStop:=false;
     cmbContestName.TabStop:=false;
+    btDupChkStart.TabStop:=False;
 end;
 procedure TfrmContest.QspMsg;
 Begin
