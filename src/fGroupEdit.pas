@@ -191,7 +191,8 @@ var
     end
     else begin
       dmData.Q.SQL.Text := 'update cqrlog_main set '+sql+' where id_cqrlog_main='+IntToStr(idx);
-      if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
+      if dmData.DebugLevel>=1 then
+                       Writeln(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.ExecSQL;
       dmData.trQ.Commit
@@ -412,13 +413,22 @@ begin
           sql := 'qsl_via='+QuotedStr(UpperCase(cmbValue.Text))
         end;
    22 : begin
-          if (cmbValue.ItemIndex=0) and (Application.MessageBox('Do you really want to clear QSL_S field?',
+          if (cmbValue.ItemIndex=0) and (Application.MessageBox('Do you really want to clear QSL_S field?'
+             +#10+'It also clears QSLS_DATE.',
              'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) in [idNo, idCancel]) then
           begin
             cmbValue.SetFocus;
             exit
           end;
-          sql := 'qsl_s='+QuotedStr(cmbValue.Text)
+          if (cmbValue.Text <> '') then
+           begin
+           sql := 'qsl_s='+QuotedStr(cmbValue.Text);
+           if Application.MessageBox('Do you also want to set QSLS_DATE to current date?',
+             'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) = idYes then
+               sql:=sql+',qsls_date='+ QuotedStr(dmUtils.MyDateToStr(now));
+           end
+          else
+           sql := 'qsl_s="",qsls_date=null'
         end;
    23 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
@@ -427,19 +437,25 @@ begin
             cmbValue.SetFocus;
             exit
           end;
-          if cmbValue.Text = '' then
-            sql := 'qsls_date= NULL'
-          else
             sql := 'qsls_date='+QuotedStr(cmbValue.Text)
         end;
    24 : begin
-          if (cmbValue.ItemIndex=0) and (Application.MessageBox('Do you really want to clear QSL_R field?',
+          if (cmbValue.ItemIndex=0) and (Application.MessageBox('Do you really want to clear QSL_R field?'
+              +#10+'It also clears QSLR_DATE.',
              'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) in [idNo, idCancel]) then
           begin
             cmbValue.SetFocus;
             exit
           end;
-          sql := 'qsl_r='+QuotedStr(cmbValue.Text)
+          if (cmbValue.Text <> '') then
+           begin
+           sql := 'qsl_r='+QuotedStr(cmbValue.Text);
+           if Application.MessageBox('Do you also want to set QSLR_DATE to current date?',
+             'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) = idYes then
+               sql:=sql+',qslr_date='+ QuotedStr(dmUtils.MyDateToStr(now));
+           end
+          else
+           sql := 'qsl_r="",qslr_date=null'
         end;
    25 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
@@ -448,9 +464,6 @@ begin
             cmbValue.SetFocus;
             exit
           end;
-          if cmbValue.Text = '' then
-            sql := 'qslr_date= NULL'
-          else
             sql := 'qslr_date='+QuotedStr(cmbValue.Text)
         end;
    26 : begin
@@ -476,7 +489,7 @@ begin
             sql := 'lotw_qslr='+QuotedStr(cmbValue.Text)+',lotw_qslrdate='+
                    QuotedStr(dmUtils.MyDateToStr(now))
           else
-            sql := 'lotw_qslr="",lotw_qslrdate=null';
+            sql := 'lotw_qslr="",lotw_qslrdate=null'
         end;
 
    29 : begin
@@ -495,7 +508,7 @@ begin
             sql := 'eqsl_qsl_sent='+QuotedStr(cmbValue.Text)+',eqsl_qslsdate='+
                    QuotedStr(dmUtils.MyDateToStr(now))
           else
-            sql := 'eqsl_qsl_sent="",eqsl_qslsdate=null';
+            sql := 'eqsl_qsl_sent="",eqsl_qslsdate=null'
         end;
    31 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
