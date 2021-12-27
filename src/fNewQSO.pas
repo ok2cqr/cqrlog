@@ -5826,7 +5826,7 @@ procedure TfrmNewQSO.FormKeyPress(Sender: TObject; var Key: char);
 begin
   case key of
     #13 : begin                     //enter
-            btnSave.Click;
+            if not AnyRemoteOn then btnSave.Click;
             //SaveGrid;
             key := #0;
           end;
@@ -7575,7 +7575,8 @@ begin
   lblCall.Font.Color    := clRed;
   edtCall.Enabled       := False;
   cbOffline.Checked     := True;
-  cbOffline.Enabled    := False;
+  cbOffline.Enabled     := False;
+  btnSave.Enabled       := False;  //disable manual saving when remote is on
   if run and FileExists(path) then
     dmUtils.RunOnBackground(path)
 end;
@@ -7631,6 +7632,7 @@ begin
   edtCall.Enabled           := True;
   cbOffline.Checked         := False;
   cbOffline.Enabled         := True;
+  btnSave.Enabled           := True;
   edtCall.SetFocus;
 
 
