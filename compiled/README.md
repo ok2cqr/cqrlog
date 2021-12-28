@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
 
-    Commits on Dec 9, 2021 Merge pull request #466 from OH1KH/squash_fix_contest_cbrexport
+    Commits on Dec 28, 2021 Merge pull request #469 from OH1KH/disable_save_on_remote 
 
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -13,10 +13,12 @@ They contain all accepted pull requests from official source (that may not be re
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
 LAST UPDATE
+  - ver 2.5.2(116)
+  - official version with alpha additions (see below)
+  
   - ver 2.5.2(115)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
-
   - ver 2.5.2(114)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
