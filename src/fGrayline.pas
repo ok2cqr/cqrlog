@@ -564,7 +564,7 @@ var
   lat1,long1 : Currency;
   my_loc : String;
 begin
-    my_loc := cqrini.ReadString('Station','LOC','JO70GG');
+    my_loc := frmNewQSO.CurrentMyLoc;   //cqrini.ReadString('Station','LOC','JO70GG');
   if (s='') or (d='') then
     dmUtils.GetCoordinate(pfx,lat1,long1)
   else begin
