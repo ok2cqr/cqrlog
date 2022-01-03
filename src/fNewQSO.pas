@@ -5841,6 +5841,7 @@ begin
                 sbNewQSO.Panels[0].Text := cMyLoc + CurrentMyLoc;
                 // We don't want the temporary locator to be saved permanently
                 // cqrini.WriteString('Station','LOC',edtLocator.Text)
+                ClearGrayLineMapLine; //set myqth position to new locator
               end;
             finally
               Free;
