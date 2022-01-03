@@ -2,12 +2,12 @@ object frmContest: TfrmContest
   Left = 370
   Height = 178
   Top = 281
-  Width = 697
+  Width = 706
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
   ClientHeight = 178
-  ClientWidth = 697
+  ClientWidth = 706
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
@@ -19,8 +19,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblCall
     AnchorSideTop.Side = asrBottom
     Left = 17
-    Height = 33
-    Top = 55
+    Height = 34
+    Top = 59
     Width = 140
     AutoSelect = False
     CharCase = ecUppercase
@@ -35,8 +35,8 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtCall
     Left = 157
-    Height = 33
-    Top = 55
+    Height = 34
+    Top = 59
     Width = 50
     OnKeyDown = edtCallKeyDown
     TabOrder = 7
@@ -46,9 +46,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtRSTs
     Left = 207
-    Height = 33
+    Height = 34
     Hint = 'contest serial number sent, max 6 characters'
-    Top = 55
+    Top = 59
     Width = 50
     MaxLength = 6
     OnExit = edtSTXExit
@@ -63,9 +63,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtSTX
     Left = 257
-    Height = 33
+    Height = 34
     Hint = 'contest exchange message sent, max 50 characters'
-    Top = 55
+    Top = 59
     Width = 100
     MaxLength = 50
     OnEnter = edtSTXStrEnter
@@ -73,15 +73,15 @@ object frmContest: TfrmContest
     OnKeyDown = edtCallKeyDown
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 9
+    TabOrder = 13
   end
   object edtRSTr: TEdit
     AnchorSideLeft.Control = edtSTXStr
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtSTXStr
     Left = 373
-    Height = 33
-    Top = 55
+    Height = 34
+    Top = 59
     Width = 50
     BorderSpacing.Left = 16
     OnKeyDown = edtCallKeyDown
@@ -92,9 +92,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtRSTr
     Left = 423
-    Height = 33
+    Height = 34
     Hint = 'contest serial number received, max 6 characters'
-    Top = 55
+    Top = 59
     Width = 50
     MaxLength = 6
     OnExit = edtSRXExit
@@ -105,14 +105,16 @@ object frmContest: TfrmContest
     TabOrder = 2
   end
   object btSave: TButton
-    AnchorSideLeft.Control = edtSRXStr
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = lblMSGr
-    Left = 589
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 609
     Height = 30
-    Top = 40
+    Top = 42
     Width = 80
-    BorderSpacing.Left = 16
+    Anchors = [akTop, akRight]
+    BorderSpacing.Right = 17
     Caption = 'Save QSO'
     OnClick = btSaveClick
     TabOrder = 4
@@ -122,9 +124,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = edtRSTr
     Left = 473
-    Height = 33
+    Height = 34
     Hint = 'contest exchange message sent, max 50 characters'
-    Top = 55
+    Top = 59
     Width = 100
     MaxLength = 50
     OnChange = edtSRXStrChange
@@ -138,8 +140,8 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkTabAll
     AnchorSideTop.Side = asrBottom
     Left = 17
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 25
     BorderSpacing.Top = 1
     Caption = 'Call'
@@ -148,8 +150,8 @@ object frmContest: TfrmContest
   object lblRSTs: TLabel
     AnchorSideTop.Control = lblCall
     Left = 161
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 36
     Caption = 'RST s'
     ParentColor = False
@@ -157,8 +159,8 @@ object frmContest: TfrmContest
   object lblMSGs: TLabel
     AnchorSideTop.Control = lblNRs
     Left = 257
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 41
     Caption = 'MSG s'
     ParentColor = False
@@ -166,8 +168,8 @@ object frmContest: TfrmContest
   object lblRSTr: TLabel
     AnchorSideTop.Control = lblMSGs
     Left = 377
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 34
     Caption = 'RST r'
     ParentColor = False
@@ -175,8 +177,8 @@ object frmContest: TfrmContest
   object lblNRr: TLabel
     AnchorSideTop.Control = lblRSTr
     Left = 425
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 28
     Caption = 'NR r'
     ParentColor = False
@@ -184,8 +186,8 @@ object frmContest: TfrmContest
   object lblMSGr: TLabel
     AnchorSideTop.Control = lblNRr
     Left = 481
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 39
     Caption = 'MSG r'
     ParentColor = False
@@ -195,19 +197,19 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkTrueRST
     Left = 207
     Height = 23
-    Top = 88
+    Top = 93
     Width = 45
     Caption = 'Inc'
     OnChange = chkNRIncChange
     OnClick = chkNRIncClick
-    TabOrder = 14
+    TabOrder = 9
     TabStop = False
   end
   object lblNRs: TLabel
     AnchorSideTop.Control = lblRSTs
     Left = 209
-    Height = 15
-    Top = 40
+    Height = 17
+    Top = 42
     Width = 30
     Caption = 'NR s'
     ParentColor = False
@@ -217,10 +219,11 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNoNr
     Left = 473
     Height = 23
-    Top = 88
-    Width = 101
-    Caption = 'MSG is LOC'
-    TabOrder = 15
+    Top = 93
+    Width = 102
+    Caption = 'MSG is Grid'
+    PopupMenu = popSetMsg
+    TabOrder = 14
     TabStop = False
   end
   object chkSpace: TCheckBox
@@ -229,7 +232,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 23
-    Top = 88
+    Top = 93
     Width = 113
     Caption = 'SPACE is TAB'
     TabOrder = 11
@@ -240,11 +243,11 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNRInc
     Left = 423
     Height = 23
-    Top = 88
+    Top = 93
     Width = 44
     Caption = 'No'
     OnChange = chkNoNrChange
-    TabOrder = 13
+    TabOrder = 15
     TabStop = False
   end
   object chkTrueRST: TCheckBox
@@ -252,7 +255,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkSpace
     Left = 157
     Height = 23
-    Top = 88
+    Top = 93
     Width = 46
     Caption = 'Tru'
     OnChange = chkTrueRSTChange
@@ -263,9 +266,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = btSave
     AnchorSideTop.Side = asrBottom
-    Left = 589
+    Left = 609
     Height = 30
-    Top = 72
+    Top = 74
     Width = 80
     BorderSpacing.Top = 2
     Caption = 'Clear QSO'
@@ -276,7 +279,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 669
+    Left = 678
     Height = 25
     Hint = 'Help'
     Top = 3
@@ -324,7 +327,7 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = cmbContestName
     Left = 17
-    Height = 15
+    Height = 17
     Top = 1
     Width = 91
     BorderSpacing.Left = 17
@@ -337,7 +340,7 @@ object frmContest: TfrmContest
     AnchorSideRight.Control = edtSRXStr
     AnchorSideRight.Side = asrBottom
     Left = 141
-    Height = 33
+    Height = 34
     Hint = 'contestname, choose ADIF contest_id via combobox or type freestyle max 40 characters'
     Top = 1
     Width = 432
@@ -584,7 +587,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = chkNRInc
     Left = 257
     Height = 23
-    Top = 88
+    Top = 93
     Width = 51
     Caption = 'Qsp'
     OnChange = chkQspChange
@@ -597,7 +600,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 23
-    Top = 16
+    Top = 18
     Width = 106
     Caption = 'TAB in order'
     OnChange = chkTabAllChange
@@ -609,9 +612,9 @@ object frmContest: TfrmContest
     AnchorSideRight.Control = Owner
     AnchorSideBottom.Control = Owner
     Left = 0
-    Height = 18
-    Top = 160
-    Width = 697
+    Height = 19
+    Top = 159
+    Width = 706
     Panels = <    
       item
         Text = '0'
@@ -642,7 +645,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrCenter
     Left = 591
     Height = 1
-    Top = 17
+    Top = 18
     Width = 1
     BorderSpacing.Left = 18
     ParentColor = False
@@ -653,13 +656,14 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrBottom
     Left = 17
     Height = 23
-    Top = 119
+    Top = 124
     Width = 102
     BorderSpacing.Left = 17
     BorderSpacing.Top = 8
     Caption = 'Dupe check'
     Checked = True
     TabOrder = 21
+    TabStop = True
   end
   object rbNoMode4Dupe: TRadioButton
     AnchorSideLeft.Control = btDupChkStart
@@ -667,7 +671,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = rbDupeCheck
     Left = 156
     Height = 23
-    Top = 119
+    Top = 124
     Width = 122
     BorderSpacing.Left = 18
     Caption = 'NoMode4Dupe'
@@ -679,7 +683,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = rbDupeCheck
     Left = 296
     Height = 23
-    Top = 119
+    Top = 124
     Width = 110
     BorderSpacing.Left = 18
     Caption = 'Ignore dupes'
@@ -690,9 +694,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = rbDupeCheck
     AnchorSideTop.Side = asrCenter
-    Left = 589
+    Left = 609
     Height = 30
-    Top = 115
+    Top = 120
     Width = 80
     Caption = 'Clear All'
     OnClick = btClearAllClick
@@ -705,9 +709,9 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = rbDupeCheck
     AnchorSideTop.Side = asrCenter
     Left = 122
-    Height = 32
+    Height = 33
     Hint = 'When using common log, set date of dupe check begin (contest start date)'
-    Top = 114
+    Top = 119
     Width = 16
     AutoSize = True
     BorderSpacing.Left = 3
@@ -727,15 +731,52 @@ object frmContest: TfrmContest
   object tmrESC2: TTimer
     Enabled = False
     OnTimer = tmrESC2Timer
-    Left = 672
-    Top = 112
+    Left = 536
+    Top = 120
   end
   object cdDupeDate: TCalendarDialog
     Title = 'Set start date'
     DialogPosition = poScreenCenter
+    Date = 44563
     OKCaption = 'OK'
     CancelCaption = 'Cancel'
-    Left = 672
-    Top = 80
+    Left = 488
+    Top = 120
+  end
+  object popSetMsg: TPopupMenu
+    Left = 440
+    Top = 120
+    object mnuName: TMenuItem
+      Caption = 'MSG is Name'
+      OnClick = mnuNameClick
+    end
+    object mnuGrid: TMenuItem
+      Caption = 'MSG is Grid'
+      OnClick = mnuGridClick
+    end
+    object mnyIOTA: TMenuItem
+      Caption = 'MSG is IOTA'
+      OnClick = mnyIOTAClick
+    end
+    object mnuState: TMenuItem
+      Caption = 'Msg is State'
+      OnClick = mnuStateClick
+    end
+    object mnuCounty: TMenuItem
+      Caption = 'MSG is County'
+      OnClick = mnuCountyClick
+    end
+    object mnuAward: TMenuItem
+      Caption = 'MSG is Award'
+      OnClick = mnuAwardClick
+    end
+    object mnuQSLvia: TMenuItem
+      Caption = 'MSG is QSl via'
+      OnClick = mnuQSLviaClick
+    end
+    object mnuComment: TMenuItem
+      Caption = 'MSG is Comment'
+      OnClick = mnuCommentClick
+    end
   end
 end

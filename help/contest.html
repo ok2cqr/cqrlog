@@ -92,7 +92,13 @@ Contest window has following fields and checkboxes:<br>
 <li><b>No </b> if no serial number then setting this changes tab order so that it jumps directly to MSG r. </li>
 <br>
 <li><b>MSG r</b> message you receive</li>
-<li> <b>MSG is LOC</b> if checked then message will be logged <b>ALSO</b> as locator grid <b>AND</b> SRX String</li>
+<li> <b>MSG is Grid</b> If '<b>MSG is ...</b>' is checked then message will be logged in <i> SRX_String </i><b>AND ALSO</b> to <i>selected NewQSO column</i>. 
+<br><br> By default <b>Msg is Grid</b>. It can be changed with right mouse click on the text.
+ If <b>checked</b> then input will turn red if character count is odd. Maximum of 6 characters locator can be entered.
+<br>If <b>MSG is Grid</b> but the entered locator is <b>not valid</b> it will <b>NOT</b> be copied to <i>NewQSO/Grid column</i> and stays only in <i>Srx_String</i>.
+<br> 
+<br>In case of <b>MSG is State</b> and callsign is detected by prefix to be a Germany callsign srx_string is copied to <b>DarcDOC</b> column, orherwise to <b>State</b> column.
+<br>In case of <b>MSG is Comment</b> and dupe checking is allowed, and dupe found, Comment to QSO contains first "Dupe " and then the copied message.</li>
 <br>
 <li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears all fields.
 <br><b> Note:</b> pressing <b>ENTER at any time</b> after Call field is filled does the same.</li>
