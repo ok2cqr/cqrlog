@@ -111,8 +111,8 @@ begin
   case band of
     '6M':       Result := '50 MHz';
     '4M':       Result := '70 MHz';
-    '2M':       Result := '144 MHz';
-    '70CM':     Result := '432 MHz';
+    '2M':       Result := '145 MHz';
+    '70CM':     Result := '435 MHz';
     '23CM':     Result := '1,3 GHz';
     '13CM':     Result := '2,3 GHz';
     '9CM':      Result := '3,4 GHz';

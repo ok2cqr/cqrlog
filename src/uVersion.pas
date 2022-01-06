@@ -11,7 +11,7 @@ const
   cBUILD      = 1;
 
 
-  cBUILD_DATE = '2021-12-13';
+  cBUILD_DATE = '2022-01-03';
 
 
 implementation

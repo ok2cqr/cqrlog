@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, uMyIni;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, Menus, uMyIni;
 
 type
 
@@ -44,6 +44,15 @@ type
     lblMSGr: TLabel;
     lblNRs: TLabel;
     btnHelp : TSpeedButton;
+    mnuGrid: TMenuItem;
+    mnyIOTA: TMenuItem;
+    mnuState: TMenuItem;
+    mnuCounty: TMenuItem;
+    mnuAward: TMenuItem;
+    mnuQSLvia: TMenuItem;
+    mnuComment: TMenuItem;
+    mnuName: TMenuItem;
+    popSetMsg: TPopupMenu;
     rbDupeCheck: TRadioButton;
     rbNoMode4Dupe: TRadioButton;
     rbIgnoreDupes: TRadioButton;
@@ -75,6 +84,14 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btnHelpClick(Sender : TObject);
+    procedure mnuGridClick(Sender: TObject);
+    procedure mnyIOTAClick(Sender: TObject);
+    procedure mnuStateClick(Sender: TObject);
+    procedure mnuCountyClick(Sender: TObject);
+    procedure mnuAwardClick(Sender: TObject);
+    procedure mnuQSLviaClick(Sender: TObject);
+    procedure mnuCommentClick(Sender: TObject);
+    procedure mnuNameClick(Sender: TObject);
     procedure rbIgnoreDupesChange(Sender: TObject);
     procedure tmrESC2Timer(Sender: TObject);
   private
@@ -86,6 +103,7 @@ type
     procedure QspMsg;
     procedure ClearStatusBar;
     procedure ShowStatusBarInfo;
+    procedure MsgIsPopChk(nr:integer);
 
   public
     { public declarations }
@@ -99,6 +117,7 @@ var
   //RSTsrx         :string = '';
   EscFirstTime: boolean = False;
   DupeFromDate :string = '1900-01-01';
+  MsgIs        :integer = 0;
 
 implementation
 
@@ -268,7 +287,24 @@ end;
 procedure TfrmContest.btSaveClick(Sender: TObject);
 begin
   if chkLoc.Checked then
-    frmNewQSO.edtGrid.Text := edtSRXStr.Text;
+   begin
+     case MsgIs of
+     0:   frmNewQSO.edtName.Caption:=edtSRXStr.Text;             //Name
+     1:   if dmUtils.isLocOK(edtSRXStr.Text) then
+             frmNewQSO.edtGrid.Text := edtSRXStr.Text;           //Grid copied only if it is valid
+     2:   frmNewQSO.cmbIOTA.Caption:= edtSRXStr.Text;            //IOTA
+     3:   Begin
+              if frmNewQSO.edtState.Visible then
+                frmNewQSO.edtState.Caption:= edtSRXStr.Text       //State
+               else
+                frmNewQSO.edtDOK.Caption:=edtSRXStr.Text;         //DOK
+          end;
+     4:   frmNewQSO.edtCounty.Caption:= edtSRXStr.Text;          //County
+     5:   frmNewQSO.edtAward.Caption:= edtSRXStr.Text;           //Award
+     6:   frmNewQSO.edtQSL_VIA.Caption:= edtSRXStr.Text;         //QSL via
+     7:   frmNewQSO.edtRemQSO.Caption:=frmNewQSO.edtRemQSO.Caption+' '+edtSRXStr.Text;    //Comment. Preserves "DUPE"
+    end;
+   end;
 
   frmNewQSO.edtHisRST.Text := edtRSTs.Text;
   frmNewQSO.edtMyRST.Text := edtRSTr.Text;
@@ -383,10 +419,16 @@ end;
 
 procedure TfrmContest.edtSRXStrChange(Sender: TObject);
 begin
-  if chkLoc.Checked then
+  if ((chkLoc.Checked) and (MsgIs=1 ))then
   begin
    edtSRXStr.Text := dmUtils.StdFormatLocator(edtSRXStr.Text);
    edtSRXStr.SelStart := Length(edtSRXStr.Text);
+   if ( Length(edtSRXStr.Text) in [1,3,5] )then
+       edtSRXStr.Font.Color:=clRed
+      else
+       edtSRXStr.Font.Color:=clDefault;
+   if ( Length(edtSRXStr.Text) > 6 )then
+          edtSRXStr.Text:=copy(edtSRXStr.Text,1,6); //accept only 6chr locator input here
   end;
 end;
 procedure TfrmContest.edtSRXExit(Sender: TObject);
@@ -437,10 +479,13 @@ begin
   cqrini.WriteBool('frmContest', 'QSP', chkQsp.Checked);
   cqrini.WriteBool('frmContest', 'NoNR', chkNoNr.Checked);
   cqrini.WriteBool('frmContest', 'Loc', chkLoc.Checked);
+  cqrini.WriteString('frmContest','MsgIsStr',chkLoc.Caption);
+  cqrini.WriteInteger('frmContest','MsgIs',MsgIs);
 
   cqrini.WriteString('frmContest', 'STX', edtSTX.Text);
   cqrini.WriteString('frmContest', 'STXStr', edtSTXStr.Text);
   cqrini.WriteString('frmContest', 'ContestName', cmbContestName.Text);
+
 end;
 procedure TfrmContest.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 Begin
@@ -470,9 +515,13 @@ begin
   chkQsp.Checked := cqrini.ReadBool('frmContest', 'QSP', False);
   chkNoNr.Checked := cqrini.ReadBool('frmContest', 'NoNR', False);
   chkLoc.Checked := cqrini.ReadBool('frmContest', 'Loc', False);
+  chkLoc.Caption:=cqrini.ReadString('frmContest','MsgIsStr','MSG is Grid');
+  MsgIs:=cqrini.ReadInteger('frmContest','MsgIs',1); //defaults to MSG is Grid
 
   edtSTX.Text := cqrini.ReadString('frmContest', 'STX', '');
   edtSTXStr.Text := cqrini.ReadString('frmContest', 'STXStr', '');
+
+  popSetMsg.Items[MsgIs].Checked:=true;
 
   InitInput;
 
@@ -487,9 +536,72 @@ begin
   btDupChkStart.Visible:=not(rbIgnoreDupes.Checked);
 end;
 
+procedure TfrmContest.MsgIsPopChk(nr:integer);
+var i:integer ;
+begin
+   for i:=0 to popSetMsg.Items.Count-1 do
+       popSetMsg.Items[i].Checked:=false;
+   popSetMsg.Items[nr].Checked:=true;
+end;
+
 procedure TfrmContest.btnHelpClick(Sender : TObject);
 begin
   ShowHelp
+end;
+
+procedure TfrmContest.mnuNameClick(Sender: TObject);
+begin
+  MsgIs:=0;
+  chkLoc.Caption:='MSG is Name';
+  MsgIsPopChk(MsgIs);
+end;
+procedure TfrmContest.mnuGridClick(Sender: TObject);
+begin
+  MsgIs:=1;
+  chkLoc.Caption:='MSG is Grid';
+  MsgIsPopChk(MsgIs);
+end;
+
+procedure TfrmContest.mnyIOTAClick(Sender: TObject);
+begin
+  MsgIs:=2;
+  chkLoc.Caption:='MSG is IOTA';
+  MsgIsPopChk(MsgIs);
+end;
+
+procedure TfrmContest.mnuStateClick(Sender: TObject);
+begin
+  MsgIs:=3;
+  chkLoc.Caption:='MSG is Stat';
+  MsgIsPopChk(MsgIs);
+end;
+
+procedure TfrmContest.mnuCountyClick(Sender: TObject);
+begin
+    MsgIs:=4;
+    chkLoc.Caption:='MSG is Cnty';
+    MsgIsPopChk(MsgIs);
+end;
+
+procedure TfrmContest.mnuAwardClick(Sender: TObject);
+begin
+  MsgIs:=5;
+  chkLoc.Caption:='MSG is Awrd';
+  MsgIsPopChk(MsgIs);
+end;
+
+procedure TfrmContest.mnuQSLviaClick(Sender: TObject);
+begin
+  MsgIs:=6;
+  chkLoc.Caption:='MSG is Qvia';
+  MsgIsPopChk(MsgIs);
+end;
+
+procedure TfrmContest.mnuCommentClick(Sender: TObject);
+begin
+  MsgIs:=7;
+  chkLoc.Caption:='MSG is Cmnt';
+  MsgIsPopChk(MsgIs);
 end;
 
 procedure TfrmContest.rbIgnoreDupesChange(Sender: TObject);
