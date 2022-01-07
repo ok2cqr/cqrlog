@@ -1123,6 +1123,7 @@ type
     procedure edtImgFilesExit(Sender: TObject);
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
+    procedure edtLocExit(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure RotorParamsChange(Sender: TObject);
@@ -2634,6 +2635,22 @@ procedure TfrmPreferences.edtLocChange(Sender: TObject);
 begin
   edtLoc.Text := dmUtils.StdFormatLocator(edtLoc.Text);
   edtLoc.SelStart := Length(edtLoc.Text);
+end;
+
+procedure TfrmPreferences.edtLocExit(Sender: TObject);
+begin
+  edtLoc.Text:=trim(edtLoc.Text);
+  if dmUtils.IsLocOK(edtLoc.Text) then   //update
+   begin
+    frmNewQSO.CurrentMyLoc :=edtLoc.Text;//current my_loc
+    frmNewQSO.sbNewQSO.Panels[0].Text := fNewQSO.cMyLoc + frmNewQSO.CurrentMyLoc; //and  NewQSO panel
+    frmNewQSO.ClearGrayLineMapLine; //my_loc on map
+   end
+  else
+   begin
+    edtLoc.Text:='';
+    edtLoc.SetFocus;
+   end;
 end;
 
 procedure TfrmPreferences.edtRecetQSOsKeyPress(Sender: TObject; var Key: char);

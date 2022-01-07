@@ -400,6 +400,7 @@ object frmPreferences: TfrmPreferences
           Top = 107
           Width = 128
           OnChange = edtLocChange
+          OnExit = edtLocExit
           TabOrder = 3
         end
       end
