@@ -7,7 +7,7 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType, LazFileUtils, StrUtils;
+  lnet, lclType, LazFileUtils, StrUtils, DateUtils;
 
 type
   TRBNList = record
@@ -53,8 +53,10 @@ type
     acConnect : TAction;
     acShowStatusBar : TAction;
     acLinkToRbnMonitor: TAction;
+    pumClearAllSpots: TMenuItem;
+    pumWatchFor: TMenuItem;
     pumConnect : TMenuItem;
-    MenuItem2 : TMenuItem;
+    pumMnuLine1 : TMenuItem;
     pumShowStatusbar : TMenuItem;
     pumLinkToRBNMonitor: TMenuItem;
     popGrayLine : TPopupMenu;
@@ -74,6 +76,9 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormPaint(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure popGrayLinePopup(Sender: TObject);
+    procedure pumClearAllSpotsClick(Sender: TObject);
+    procedure pumWatchForClick(Sender: TObject);
     procedure sbtnGrayLineClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender : TObject);
     procedure tmrGrayLineTimer(Sender: TObject);
@@ -81,6 +86,8 @@ type
   private
     csRBN : TRTLCriticalSection;
     RBNThread : TRBNThread;
+    delAfter : integer;
+    watchFor : String;
 
   public
     RBNSpotList : array[1..MAX_ITEMS] of TRBNList;
@@ -94,7 +101,7 @@ type
     procedure SynRBN;
     function  GetEmptyPos : Word;
     function  SpotterExists(spotter : String) : Word;
-    procedure RemoveOldSpots;
+    procedure RemoveOldSpots(RemoveAfter:integer);
     procedure AddSpotToList(spot : String);
   end;
 
@@ -383,7 +390,6 @@ begin
     try
       login      := cqrini.ReadString('RBN','login','');
       watchFor   := cqrini.ReadString('RBN','watch','');
-      delAfter   := cqrini.ReadInteger('RBN','deleteAfter',60)
     finally
       LeaveCriticalsection(cs)
     end;
@@ -392,34 +398,10 @@ begin
     sleep(1000)
   end;
   lTelnet.Disconnect(true);
+  sleep(100);
+  FreeAndNil(lTelnet);
+  frmGrayline.rbn_status :='Disconnected';
   DoneCriticalsection(cs)
-end;
-
-procedure TfrmGrayline.FormCreate(Sender: TObject);
-var
-  ImageFile : String;
-  i : Integer;
-begin
-  InitCriticalSection(csRBN);
-  RBNThread := nil;
-  for i:=1 to MAX_ITEMS do
-    RBNSpotList[i].band := '';
-  ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
-  if not FileExists(ImageFile) then
-    ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
-                 PathDelim+'images'+PathDelim+'grayline.bmp');
-  ob:=new(Pgrayline,init(ImageFile));
-
-   tmrRemoveDots.Interval:= cqrini.ReadInteger('RBN','deleteAfter',60)*1000;
-   tmrRemoveDots.Enabled:=true;
-
-end;
-
-procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  if RBNThread<>nil then RBNThread.Terminate;
-  cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
-  dmUtils.SaveWindowPos(frmGrayline)
 end;
 
 procedure TfrmGrayline.acShowStatusBarExecute(Sender : TObject);
@@ -445,7 +427,7 @@ begin
     begin
       RBNThread.Terminate;
       acConnect.Caption     := 'Connect to RBN';
-      sbGrayLine.SimpleText := 'Disconnected';
+      sbGrayLine.SimpleText := rbn_status;//'Disconnected';
       pumLinkToRBNMonitor.Enabled:=true;
     end
     else begin
@@ -469,12 +451,51 @@ begin
     sbGrayLine.SimpleText := rbn_status;
 end;
 
+procedure TfrmGrayline.FormCreate(Sender: TObject);
+var
+  ImageFile : String;
+  i : Integer;
+begin
+  InitCriticalSection(csRBN);
+  tmrRemoveDots.Enabled:=false;
+  RBNThread := nil;
+  for i:=1 to MAX_ITEMS do
+    RBNSpotList[i].band := '';
+  ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
+  if not FileExists(ImageFile) then
+    ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
+                 PathDelim+'images'+PathDelim+'grayline.bmp');
+  ob:=new(Pgrayline,init(ImageFile));
+end;
+
+procedure TfrmGrayline.FormShow(Sender: TObject);
+begin
+  dmUtils.LoadWindowPos(frmGrayline);
+  sbGrayLine.Visible      := cqrini.ReadBool('Grayline','Statusbar',True);
+  acShowStatusBar.Checked := sbGrayLine.Visible;
+  rbn_status              :='Disconnected';
+  sbGrayLine.SimpleText   := rbn_status;
+  tmrGrayLine.Enabled     := True;
+  tmrGrayLineTimer(nil);
+  tmrAutoConnect.Enabled  := True;
+  delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
+  tmrRemoveDots.Interval:=1000;  //remove Spots(DOts) timer will always run 1 sec period.
+  tmrRemoveDots.Enabled:=true;
+end;
+
 procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   tmrGrayLine.Enabled := False;
   tmrAutoConnect.Enabled:=False;
   tmrRemoveDots.Enabled:=False;
   sleep(100)
+end;
+
+procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  if RBNThread<>nil then RBNThread.Terminate;
+  cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
+  dmUtils.SaveWindowPos(frmGrayline)
 end;
 
 procedure TfrmGrayline.FormDestroy(Sender: TObject);
@@ -514,16 +535,32 @@ begin
   ob^.kresli(r,Canvas)
 end;
 
-procedure TfrmGrayline.FormShow(Sender: TObject);
+
+procedure TfrmGrayline.popGrayLinePopup(Sender: TObject);
 begin
-  dmUtils.LoadWindowPos(frmGrayline);
-  sbGrayLine.Visible      := cqrini.ReadBool('Grayline','Statusbar',True);
-  acShowStatusBar.Checked := sbGrayLine.Visible;
-  rbn_status              :='Disconnected';
-  sbGrayLine.SimpleText   := rbn_status;
-  tmrGrayLine.Enabled     := True;
-  tmrGrayLineTimer(nil);
-  tmrAutoConnect.Enabled  := True
+   watchFor := cqrini.ReadString('RBN','watch','');
+   pumWatchFor.Caption:='Watch for: '+watchFor;
+end;
+
+procedure TfrmGrayline.pumClearAllSpotsClick(Sender: TObject);
+begin
+  tmrRemoveDots.Enabled:=False;
+  RemoveOldSpots(0);
+  delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
+  tmrRemoveDots.Enabled:=true;
+end;
+
+procedure TfrmGrayline.pumWatchForClick(Sender: TObject);
+
+begin
+   EnterCriticalsection(csRBN);
+   watchFor := cqrini.ReadString('RBN','watch','');
+   if InputQuery('Watch for:','', false, watchFor) then
+     Begin
+          pumWatchFor.Caption:='Watch for: '+uppercase(watchFor);
+          cqrini.WriteString('RBN','watch',watchFor);
+     end;
+   LeaveCriticalsection(csRBN);
 end;
 
 procedure TfrmGrayline.sbtnGrayLineClick(Sender : TObject);
@@ -546,6 +583,8 @@ begin
         end;
     if cqrini.ReadBool('RBN','AutoConnect',False) and (cqrini.ReadString('RBN','login','') <> '')
        and (RBNThread = nil) then  acConnect.Execute;
+
+    tmrAutoConnect.Enabled:=False; //job is done, nex initiate when FormShow run
 end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
@@ -555,7 +594,16 @@ end;
 
 procedure TfrmGrayline.tmrRemoveDotsTimer(Sender: TObject);
 begin
-  RemoveOldSpots
+   tmrRemoveDots.Enabled:=false;
+
+   dec(delAfter);
+   if delAfter < 1 then
+     Begin
+      delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
+      RemoveOldSpots(delAfter);
+     end;
+
+   tmrRemoveDots.Enabled:=true;
 end;
 
 procedure TfrmGrayline.kresli;
@@ -606,6 +654,7 @@ var
   i : Integer;
   c : TColor;
 begin
+
   sbGrayLine.SimpleText := rbn_status;
   if rbn_status='Connected' then
    Begin
@@ -617,6 +666,7 @@ begin
      acConnect.Caption := 'Connect to RBN';
      pumLinkToRBNMonitor.Enabled:=True;
    end;
+
   ob^.body_smaz;
   for i:=1 to MAX_ITEMS do
   begin
@@ -678,23 +728,30 @@ begin
   end
 end;
 
-procedure  TfrmGrayline.RemoveOldSpots;
+procedure  TfrmGrayline.RemoveOldSpots(RemoveAfter:integer); //setting RemoveAfter:=0 removes all Spots
 var
   i       : Integer;
-  time    : TDateTime;
-  delAfter: word;
+  time    : int64;
+
 begin
-   tmrRemoveDots.Enabled:=false;
-   delAfter   := cqrini.ReadInteger('RBN','deleteAfter',60);
-   tmrRemoveDots.Interval:=delAfter*1000;
-  time := now;
+  time := DateTimeToUnix(now);
+  EnterCriticalsection(csRBN);
   for i:=1 to MAX_ITEMS do
   begin
-    if frmGrayline.RBNSpotList[i].time+delAfter/86400 < time then
-      frmGrayline.RBNSpotList[i].band := ''
+     if (time - DateTimeToUnix(frmGrayline.RBNSpotList[i].time)) > RemoveAfter then
+        with RBNSpotList[i] do
+            Begin
+                spotter  :='';
+                band     :='';
+                lat      :=0;
+                long     :=0;
+                strengt  :=0;
+                time     :=0;
+            end;
   end;
   SynRBN;
-  tmrRemoveDots.Enabled:=true;
+  LeaveCriticalsection(csRBN);
+
 end;
 procedure TfrmGrayline.AddSpotToList(spot : String);
 
@@ -748,7 +805,6 @@ procedure TfrmGrayline.AddSpotToList(spot : String);
   end;
 
 var
-  watchFor: String;
   spotter : String;
   call    : String;
   stren   : String;
