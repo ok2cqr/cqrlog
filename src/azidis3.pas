@@ -92,7 +92,8 @@ begin
   c := delx(loc1);
   d := dely(loc1);
   azim  := IntToStr(round(azimut(loc2)));
-  qrb   := IntToStr(round(dis));
+  // Adhere to REG1 QRB calculation, /node/3292
+  qrb   := IntToStr(trunc(dis) + 1);
 end;
 procedure LocToCoordinate(loc : String; var Latitude, Longitude : Real);
 begin
