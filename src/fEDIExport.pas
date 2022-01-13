@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, LCLType, LazFileUtils;
+  StdCtrls, ComCtrls, LCLType, LazFileUtils, StrUtils;
 
 type
 
@@ -25,6 +25,7 @@ type
     edtAntenna: TEdit;
     edtAntennaHeightGroundLevel: TEdit;
     edtTxPower: TEdit;
+    edtDigitalModes: TEdit;
     Label1: TLabel;
     lblError: TLabel;
     lblAntennaHeight: TLabel;
@@ -36,6 +37,7 @@ type
     lblDone: TLabel;
     lblRxEquipment: TLabel;
     lblTxPower: TLabel;
+    lblDigitalModes: TLabel;
     pbExport: TProgressBar;
     procedure btnExportClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -72,6 +74,7 @@ begin
   edtContestName.Text := cqrini.ReadString('EdiExport','ContestName','');
   edtTxEquipment.Text := cqrini.ReadString('EdiExport','TxEquipment','');
   edtTxPower.Text := cqrini.ReadString('EdiExport','TxPower','');
+  edtDigitalModes.Text := cqrini.ReadString('EdiExport','DigitalModes','');
   edtRxEquipment.Text := cqrini.ReadString('EdiExport','RxEquipment','');
   edtAntenna.Text := cqrini.ReadString('EdiExport','Antenna','');
   edtAntennaHeightGroundLevel.Text := cqrini.ReadString('EdiExport','AntennaHeightGroundLevel','');
@@ -85,6 +88,7 @@ begin
   cqrini.WriteString('EdiExport','ContestName',edtContestName.Text);
   cqrini.WriteString('EdiExport','TxEquipment',edtTxEquipment.Text);
   cqrini.WriteString('EdiExport','TxPower',edtTxPower.Text);
+  cqrini.WriteString('EdiExport','DigitalModes',edtDigitalModes.Text);
   cqrini.WriteString('EdiExport','RxEquipment',edtRxEquipment.Text);
   cqrini.WriteString('EdiExport','Antenna',edtAntenna.Text);
   cqrini.WriteString('EdiExport','AntennaHeightGroundLevel',edtAntennaHeightGroundLevel.Text);
@@ -103,6 +107,11 @@ begin
     'SSTV': Result := '8';
     'ATV':  Result := '9';
   end; //case
+  if Result = '0' then
+  begin
+    if PosEx(mode, edtDigitalModes.Text) > 0 then
+      Result := '7';
+  end; //if
 end;
 
 function TfrmEDIExport.EdiBand(band: string): String;

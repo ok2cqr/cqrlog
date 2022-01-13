@@ -216,6 +216,25 @@ object frmEDIExport: TfrmEDIExport
     NumbersOnly = True
     TabOrder = 4
   end
+  object lblDigitalModes: TLabel
+    Left = 8
+    Height = 17
+    Top = 296
+    Width = 137
+    Caption = 'Digital Modes:'
+    ParentColor = False
+  end
+  object edtDigitalModes: TEdit
+    AnchorSideLeft.Control = lblContestName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrBottom
+    Left = 122
+    Height = 25
+    Top = 292
+    Width = 307
+    BorderSpacing.Left = 15
+    TabOrder = 6
+  end
   object lblError: TLabel
     Left = 8
     Height = 17
