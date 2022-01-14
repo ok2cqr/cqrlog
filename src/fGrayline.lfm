@@ -228,10 +228,10 @@ object frmGrayline: TfrmGrayline
     Left = 158
     Top = 32
   end
-  object tmrRemoveDots: TTimer
-    Enabled = False
+  object tmrSpotDots: TTimer
     Interval = 1000
-    OnTimer = tmrRemoveDotsTimer
+    Enabled = False
+    OnTimer = tmrSpotDotsTimer
     Left = 40
     Top = 32
   end
