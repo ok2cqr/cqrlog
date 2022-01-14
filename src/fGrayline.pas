@@ -103,15 +103,7 @@ uses dUtils, dData, uMyIni, dDXCluster, fNewQSO;
 
 procedure TfrmGrayline.lConnect(aSocket: TLSocket);
 begin
-<<<<<<< HEAD
-  frmGrayline.rbn_status := 'Connected';
-  Synchronize(@frmGrayline.SynRBN);
-||||||| fcb37e8
-  frmGrayline.rbn_status := 'Connected';
-  Synchronize(@frmGrayline.SynRBN)
-=======
   rbn_status := 'Connected';
->>>>>>> gray_spots
 end;
 
 procedure TfrmGrayline.lDisconnect(aSocket: TLSocket);
@@ -229,123 +221,6 @@ begin
   end
 end;
 
-<<<<<<< HEAD
-procedure TRBNThread.Execute;
-begin
-  if not ConnectToRBN then
-  begin
-    if dmData.DebugLevel>=1 then Writeln('Can not connect to RBN!');
-    FreeAndNil(lTelnet);
-    exit
-  end;
-
-  InitCriticalSection(cs);
-  while not Terminated do
-  begin
-    EnterCriticalsection(cs);
-    try
-      login      := cqrini.ReadString('RBN','login','');
-      watchFor   := cqrini.ReadString('RBN','watch','');
-      delAfter   := cqrini.ReadInteger('RBN','deleteAfter',60)
-    finally
-      LeaveCriticalsection(cs)
-    end;
-    //RemoveOldSpots;    done now by tmrRemoveDots
-    Synchronize(@frmGrayline.SynRBN);
-    sleep(1000)
-  end;
-  lTelnet.Disconnect(true);
-  DoneCriticalsection(cs)
-end;
-
-procedure TfrmGrayline.FormCreate(Sender: TObject);
-var
-  ImageFile : String;
-  i : Integer;
-begin
-  InitCriticalSection(csRBN);
-  RBNThread := nil;
-  for i:=1 to MAX_ITEMS do
-    RBNSpotList[i].band := '';
-  ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
-  if not FileExists(ImageFile) then
-    ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
-                 PathDelim+'images'+PathDelim+'grayline.bmp');
-  ob:=new(Pgrayline,init(ImageFile));
-
-   tmrRemoveDots.Interval:= cqrini.ReadInteger('RBN','deleteAfter',60)*1000;
-   tmrRemoveDots.Enabled:=true;
-
-end;
-
-procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  if RBNThread<>nil then
-   Begin
-    RBNThread.Terminate;
-   end;
-  cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
-  dmUtils.SaveWindowPos(frmGrayline);
-end;
-
-||||||| fcb37e8
-procedure TRBNThread.Execute;
-begin
-  if not ConnectToRBN then
-  begin
-    if dmData.DebugLevel>=1 then Writeln('Can not connect to RBN!');
-    FreeAndNil(lTelnet);
-    exit
-  end;
-
-  InitCriticalSection(cs);
-  while not Terminated do
-  begin
-    EnterCriticalsection(cs);
-    try
-      login      := cqrini.ReadString('RBN','login','');
-      watchFor   := cqrini.ReadString('RBN','watch','');
-      delAfter   := cqrini.ReadInteger('RBN','deleteAfter',60)
-    finally
-      LeaveCriticalsection(cs)
-    end;
-    //RemoveOldSpots;    done now by tmrRemoveDots
-    Synchronize(@frmGrayline.SynRBN);
-    sleep(1000)
-  end;
-  lTelnet.Disconnect(true);
-  DoneCriticalsection(cs)
-end;
-
-procedure TfrmGrayline.FormCreate(Sender: TObject);
-var
-  ImageFile : String;
-  i : Integer;
-begin
-  InitCriticalSection(csRBN);
-  RBNThread := nil;
-  for i:=1 to MAX_ITEMS do
-    RBNSpotList[i].band := '';
-  ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
-  if not FileExists(ImageFile) then
-    ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
-                 PathDelim+'images'+PathDelim+'grayline.bmp');
-  ob:=new(Pgrayline,init(ImageFile));
-
-   tmrRemoveDots.Interval:= cqrini.ReadInteger('RBN','deleteAfter',60)*1000;
-   tmrRemoveDots.Enabled:=true;
-
-end;
-
-procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  if RBNThread<>nil then RBNThread.Terminate;
-  cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
-  dmUtils.SaveWindowPos(frmGrayline)
-end;
-
-=======
->>>>>>> gray_spots
 procedure TfrmGrayline.acShowStatusBarExecute(Sender : TObject);
 begin
   if acShowStatusBar.Checked then
@@ -435,13 +310,6 @@ procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   tmrGrayLine.Enabled := False;
   tmrAutoConnect.Enabled:=False;
-<<<<<<< HEAD
-  tmrRemoveDots.Enabled:=False;
-  sleep(100);
-||||||| fcb37e8
-  tmrRemoveDots.Enabled:=False;
-  sleep(100)
-=======
   tmrSpotDots.Enabled:=False;
   if ltelnet <> nil then
        Begin
@@ -456,7 +324,6 @@ procedure TfrmGrayline.FormClose(Sender: TObject; var CloseAction: TCloseAction)
 begin
   cqrini.WriteBool('Grayline','Statusbar',sbGrayLine.Visible);
   dmUtils.SaveWindowPos(frmGrayline)
->>>>>>> gray_spots
 end;
 
 procedure TfrmGrayline.FormDestroy(Sender: TObject);
@@ -552,16 +419,11 @@ end;
 
 procedure TfrmGrayline.tmrGrayLineTimer(Sender: TObject);
 begin
-  Refresh;
+  Refresh
 end;
 
 procedure TfrmGrayline.tmrSpotDotsTimer(Sender: TObject);
 begin
-<<<<<<< HEAD
-  RemoveOldSpots;
-||||||| fcb37e8
-  RemoveOldSpots
-=======
    tmrSpotDots.Enabled:=false;
 
    dec(delAfter);
@@ -586,7 +448,6 @@ begin
    SynRBN;
 
    tmrSpotDots.Enabled:=true;
->>>>>>> gray_spots
 end;
 
 procedure TfrmGrayline.kresli;
