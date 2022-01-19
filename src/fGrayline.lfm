@@ -121,7 +121,7 @@ object frmGrayline: TfrmGrayline
   OnPaint = FormPaint
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.0.12.0'
   object sbtnGrayLine: TSpeedButton
     Left = 400
     Height = 16
@@ -177,28 +177,37 @@ object frmGrayline: TfrmGrayline
     Enabled = False
     Interval = 60000
     OnTimer = tmrGrayLineTimer
-    left = 40
-    top = 32
+    Left = 40
+    Top = 32
   end
   object popGrayLine: TPopupMenu
-    left = 336
-    top = 24
+    OnPopup = popGrayLinePopup
+    Left = 336
+    Top = 24
     object pumConnect: TMenuItem
       Action = acConnect
     end
-    object MenuItem2: TMenuItem
+    object pumLinkToRBNMonitor: TMenuItem
+      Action = acLinkToRbnMonitor
+    end
+    object pumMnuLine1: TMenuItem
       Caption = '-'
     end
     object pumShowStatusbar: TMenuItem
       Action = acShowStatusBar
     end
-    object pumLinkToRBNMonitor: TMenuItem
-      Action = acLinkToRbnMonitor
+    object pumClearAllSpots: TMenuItem
+      Caption = 'Clear all spots'
+      OnClick = pumClearAllSpotsClick
+    end
+    object pumWatchFor: TMenuItem
+      Caption = 'Watch for: '
+      OnClick = pumWatchForClick
     end
   end
   object acGrayLine: TActionList
-    left = 336
-    top = 80
+    Left = 336
+    Top = 80
     object acConnect: TAction
       Caption = 'Connect to RBN'
       OnExecute = acConnectExecute
@@ -216,13 +225,14 @@ object frmGrayline: TfrmGrayline
     Enabled = False
     Interval = 2000
     OnTimer = tmrAutoConnectTimer
-    left = 158
-    top = 32
+    Left = 158
+    Top = 32
   end
-  object tmrRemoveDots: TTimer
-    Interval = 60000
-    OnTimer = tmrRemoveDotsTimer
-    left = 40
-    top = 32
+  object tmrSpotDots: TTimer
+    Interval = 1000
+    Enabled = False
+    OnTimer = tmrSpotDotsTimer
+    Left = 40
+    Top = 32
   end
 end
