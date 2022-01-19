@@ -169,7 +169,7 @@ begin
   Result := 0;
   for i:= 1 to MAX_ITEMS do
   begin
-    if frmGrayline.RBNSpotList[i].band='' then
+    if RBNSpotList[i].band='' then
     begin
       Result := i;
       break
@@ -184,7 +184,7 @@ begin
   Result := 0;
   for i:= 1 to MAX_ITEMS do
   begin
-    if frmGrayline.RBNSpotList[i].spotter=spotter then
+    if RBNSpotList[i].spotter=spotter then
     begin
       Result := i;
       break
@@ -280,7 +280,14 @@ begin
   InitCriticalSection(csRBN);
   tmrSpotDots.Enabled:=false;
   for i:=1 to MAX_ITEMS do
-    RBNSpotList[i].band := '';
+   begin
+    RBNSpotList[i].band    := '';
+    RBNSpotList[i].spotter := '';
+    RBNSpotList[i].time    := DateTimeToUnix(now);
+    RBNSpotList[i].strengt := 0;
+    RBNSpotList[i].lat  := 0;
+    RBNSpotList[i].long := 0;
+   end;
   ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
   if not FileExists(ImageFile) then
     ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
@@ -590,21 +597,24 @@ procedure TfrmGrayline.SynRBN;
 var
   i : Integer;
   c : TColor;
-begin
+  CqrBand:String;
 
+begin
   ob^.body_smaz;
+  CqrBand := dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text);
+
   for i:=1 to MAX_ITEMS do
   begin
-    if (RBNSpotList[i].band='') then
+
+   if (RBNSpotList[i].band='') then  //skip empty
       Continue;
 
-    if (band <> '') then
-    begin
-      if band<>RBNSpotList[i].band then
-        Continue
-    end;
+    if (CqrBand = '') or (CqrBand<>RBNSpotList[i].band) then //skip if no cqrlog band or it differs from spot band
+        Continue;
+
     if LocalDbg then
     begin
+      writeln('Cqr:band:   ',cqrband);
       Writeln('Syn:spotter:',RBNSpotList[i].spotter);
       Writeln('Syn:stren:  ',RBNSpotList[i].strengt);
       Writeln('Syn:band:   ',RBNSpotList[i].band);
@@ -625,25 +635,18 @@ end;
 
 procedure  TfrmGrayline.RemoveOldSpots(RemoveAfter:integer); //setting RemoveAfter:=0 removes all Spots
 var
-  i       : Integer;
-  time    : int64;
+  i        : Integer;
+  time,
+  SpotTime: int64;
 
 begin
   time := DateTimeToUnix(now);
   EnterCriticalsection(csRBN);
   for i:=1 to MAX_ITEMS do
-  begin
-     if (time - DateTimeToUnix(frmGrayline.RBNSpotList[i].time)) > RemoveAfter then
-        with RBNSpotList[i] do
-            Begin
-                spotter  :='';
-                band     :='';
-                lat      :=0;
-                long     :=0;
-                strengt  :=0;
-                time     :=0;
-            end;
-  end;
+   begin
+     if ((time - RBNSpotList[i].time) > RemoveAfter) then
+         RBNSpotList[i].band :='';
+   end;
   SynRBN;
   LeaveCriticalsection(csRBN);
 
@@ -751,7 +754,7 @@ begin
 
   frmGrayline.RBNSpotList[index].band    := band;
   frmGrayline.RBNSpotList[index].spotter := spotter;
-  frmGrayline.RBNSpotList[index].time    := now;
+  frmGrayline.RBNSpotList[index].time    := DateTimeToUnix(now);
   if TryStrToInt(stren,tmp) then
     frmGrayline.RBNSpotList[index].strengt := tmp
   else
@@ -766,7 +769,7 @@ begin
     Write('Add spotter:',spotter);
     Write('Add stren:  ',stren);
     Write('Add freq:   ',freq);
-    Write('Add band:   ',dmDXCluster.GetBandFromFreq(freq,True));
+    Write('Add band:   ',band);
     Write('Add Lat:    ',lat);
     Writeln('Add Long:   ',long)
    end;
