@@ -7,7 +7,7 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType, LazFileUtils, StrUtils, DateUtils;
+  lnet, lclType, LazFileUtils, StrUtils, DateUtils, Math;
 
 type
   TRBNList = record
@@ -32,6 +32,8 @@ type
     acConnect : TAction;
     acShowStatusBar : TAction;
     acLinkToRbnMonitor: TAction;
+    pumShowGreatCircle: TMenuItem;
+    pumMnuLine2: TMenuItem;
     pumClearAllSpots: TMenuItem;
     pumWatchFor: TMenuItem;
     pumConnect : TMenuItem;
@@ -57,6 +59,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure popGrayLinePopup(Sender: TObject);
     procedure pumClearAllSpotsClick(Sender: TObject);
+    procedure pumShowGreatCircleClick(Sender: TObject);
     procedure pumWatchForClick(Sender: TObject);
     procedure sbtnGrayLineClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender : TObject);
@@ -84,6 +87,7 @@ type
     pfx : String;
     rbn_status  : String;
     procedure kresli;
+    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:Currency);
     procedure SavePosition;
     procedure SynRBN;
     function  GetEmptyPos : Word;
@@ -294,16 +298,17 @@ end;
 procedure TfrmGrayline.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmGrayline);
-  sbGrayLine.Visible      := cqrini.ReadBool('Grayline','Statusbar',True);
-  acShowStatusBar.Checked := sbGrayLine.Visible;
-  rbn_status              :='Disconnected';
-  sbGrayLine.SimpleText   := rbn_status;
-  tmrGrayLine.Enabled     := True;
+  sbGrayLine.Visible        := cqrini.ReadBool('Grayline','Statusbar',True);
+  pumShowGreatCircle.Checked:= cqrini.ReadBool('Grayline','GreatCircle',False);
+  acShowStatusBar.Checked   := sbGrayLine.Visible;
+  rbn_status                :='Disconnected';
+  sbGrayLine.SimpleText     := rbn_status;
+  tmrGrayLine.Enabled       := True;
   tmrGrayLineTimer(nil);
-  tmrAutoConnect.Enabled  := True;
-  delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
-  tmrSpotDots.Interval:=1000;  //remove Spots(DOts) timer will always run 1 sec period.
-  tmrSpotDots.Enabled:=true;
+  tmrAutoConnect.Enabled    := True;
+  delAfter                  := cqrini.ReadInteger('RBN','deleteAfter',60);
+  tmrSpotDots.Interval      :=1000;  //remove Spots(DOts) timer will always run 1 sec period.
+  tmrSpotDots.Enabled       :=true;
 end;
 
 procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -376,6 +381,12 @@ begin
   RemoveOldSpots(0);
   delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
   tmrSpotDots.Enabled:=true;
+end;
+
+procedure TfrmGrayline.pumShowGreatCircleClick(Sender: TObject);
+begin
+  pumShowGreatCircle.Checked:= not pumShowGreatCircle.Checked;
+  cqrini.WriteBool('Grayline','GreatCircle',pumShowGreatCircle.Checked);
 end;
 
 procedure TfrmGrayline.pumWatchForClick(Sender: TObject);
@@ -460,7 +471,7 @@ begin
   if (s='') or (d='') then
     dmUtils.GetCoordinate(pfx,lat1,long1)
   else begin
-    if s[Length(s)] = 'S' then  //pokud je tam S musi byt udaj zaporny
+    if s[Length(s)] = 'S' then  //if S is there, the data must be negative
       s := '-' +s ;
     s := copy(s,1,Length(s)-1);
     if pos('.',s) > 0 then
@@ -468,7 +479,7 @@ begin
     if not TryStrToCurr(s,lat1) then
       lat1 := 0;
 
-    if d[Length(d)] = 'W' then  //pokud je tam W musi byt udaj zaporny
+    if d[Length(d)] = 'W' then  //  if there is a W it must be negative
       d := '-' + d ;
     d := copy(d,1,Length(d)-1);
     if pos('.',d) > 0 then
@@ -479,10 +490,92 @@ begin
   s := '';
   d := '';
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(my_loc),lat,long);
-  lat := lat*-1;
-  lat1 := lat1*-1;
-  ob^.jachcucaru(true,long,lat,long1,lat1);
+  if pumShowGreatCircle.Checked then
+    PlotGreatCircleArcLine(long,lat,long1,lat1)
+   else
+    ob^.jachcucaru(true,long,lat*-1,long1,lat1*-1);
   Refresh
+end;
+procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:Currency);
+ { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
+
+var
+  lat1,lat2,lon1,lon2,
+  latFrom,lonFrom,
+  step,
+  dist,
+  bearing             : double;
+  CountLimit          : integer;
+  BearingIsPositive   : boolean;
+
+//-------------------------------------------------------------------
+    procedure LatLongToDistance(const lat0, long0, lat1, long1: double;
+      var dist, bearing: double);
+    var
+      R: double = 6371000; // earth radius in meters
+      dlat, dlong, slat, slong, a, c, x, y: double;
+    begin
+      // dist
+      dlat := lat1 - lat0;
+      dlong := long1 - long0;
+      slat := Sin(0.5 * dlat);
+      slong := Sin(0.5 * dlong);
+      a := slat * slat + Cos(lat0) * Cos(lat1) * slong * slong;
+      c := 2.0 * ArcTan2(Sqrt(a), Sqrt(1.0-a));
+      dist := R * c;
+      // bearing
+      y := Sin(long1 - long0) * Cos(lat1);
+      x := Cos(lat0) * Sin(lat1) - Sin(lat0) * Cos(lat1) * Cos(long1 - long0);
+      bearing := ArcTan2(y, x);
+    end;
+//-------------------------------------------------------------------
+
+Begin
+
+ob^.GC_line_clear;
+  if LocalDbg then
+      begin
+        writeln ('-------------------------------------------------------------------');
+        writeln ('Start:',round(latitude1),' ',round(longitude1),' ',round(latitude2),' ',round(longitude2));
+      end;
+step := degToRad(1); //step in degrees
+dist :=0;
+bearing :=0;
+
+longitude1 := degToRad(longitude1);
+latitude1 := degToRad(latitude1);
+longitude2 := degToRad(longitude2);
+latitude2 := degToRad(latitude2);
+
+LatLongToDistance(latitude1, longitude1, latitude2, longitude2, dist, bearing);
+BearingIsPositive := (bearing > 0);
+CountLimit:=ob^.GC_Points_Max;
+
+while (CountLimit > 0) do
+ Begin
+  latFrom:=latitude1;
+  lonFrom:=longitude1;
+  dec(CountLimit);
+
+  LatLongToDistance(latFrom, lonFrom, latitude2, longitude2, dist, bearing);
+  if ((bearing > 0) <> BearingIsPositive) then CountLimit:=0;;
+  if LocalDbg then
+    writeln ('Dist:',round(dist * 0.001) ,' Bearing:',round(radTodeg(bearing)));
+
+  longitude1 := longitude1 + (sin(bearing) * step) / cos(latitude1);
+  latitude1 :=  latitude1 + (cos(bearing) * step);
+
+
+  if longitude1 < -Pi  then longitude1 := longitude1 + Pi;
+  if longitude1 >  Pi  then longitude1 := longitude1 - Pi;
+  if latitude1 > Pi/2 then latitude1:= Pi/2 - (latitude1-Pi/2);
+  if latitude1 < -Pi/2 then latitude1:= -Pi/2 - (latitude1+Pi/2);
+
+  if LocalDbg then
+    writeln ('To: ',Round(RadToDeg(latitude1)),' ',Round(RadToDeg(longitude1)),'                       (',Round(RadToDeg(latFrom)),' ',Round(RadToDeg(lonFrom)),')');
+
+  ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
+ end;
 end;
 
 procedure TfrmGrayline.SavePosition;
@@ -525,7 +618,6 @@ begin
       else
         c := cqrini.ReadInteger('RBN','10db',clWhite)
     end; //case
-    //procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
     ob^.body_add(3,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].spotter,c,1);
   end;
   Refresh

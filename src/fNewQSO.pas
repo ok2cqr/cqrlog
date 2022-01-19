@@ -1246,6 +1246,7 @@ Begin
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(CurrentMyLoc),lat,long);
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
+  frmGrayLine.ob^.GC_line_clear;
   frmGrayline.Refresh;
 end;
 

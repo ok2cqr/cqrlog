@@ -168,8 +168,8 @@ object frmGrayline: TfrmGrayline
   end
   object sbGrayLine: TStatusBar
     Left = 0
-    Height = 21
-    Top = 227
+    Height = 19
+    Top = 229
     Width = 419
     Panels = <>
   end
@@ -195,6 +195,13 @@ object frmGrayline: TfrmGrayline
     end
     object pumShowStatusbar: TMenuItem
       Action = acShowStatusBar
+    end
+    object pumShowGreatCircle: TMenuItem
+      Caption = 'Show GreatCirclePath'
+      OnClick = pumShowGreatCircleClick
+    end
+    object pumMnuLine2: TMenuItem
+      Caption = '-'
     end
     object pumClearAllSpots: TMenuItem
       Caption = 'Clear all spots'
@@ -229,7 +236,6 @@ object frmGrayline: TfrmGrayline
     Top = 32
   end
   object tmrSpotDots: TTimer
-    Interval = 1000
     Enabled = False
     OnTimer = tmrSpotDotsTimer
     Left = 40
