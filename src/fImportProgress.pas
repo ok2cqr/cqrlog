@@ -881,9 +881,9 @@ begin
               else                   //as day is set at sql query and we can not go backwards to yesterday
                 t_lotw_min := t_lotw-5/1440;
 
-             if copy(time_on,1,2)='23' then
+             if t_lotw > EncodeTime(23,54,0,0) then
                 t_lotw_max :=EncodeTime(23,59,0,0)
-                                     //this fails too in qsos past 23:xx as we can not set high limit to next day
+                                     //this fails too in qsos past 23:54 as we can not set high limit to next day
               else                   //as day is set at sql query and we can not go forward to tomorrow
                 t_lotw_max := t_lotw+5/1440;
 
