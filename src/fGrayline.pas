@@ -506,18 +506,21 @@ end;
 procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:Currency);
  { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
 
+Const
+  Basestep = 0.0174532925;   //1 degree in radians
+  PolarStep = 0.00174532925; // base/10
 var
   lat1,lat2,lon1,lon2,
   latFrom,lonFrom,
   step,
   dist,
-  bearing             : double;
+  bearing             : extended;
   CountLimit          : integer;
   BearingIsPositive   : boolean;
 
 //-------------------------------------------------------------------
-    procedure LatLongToDistance(const lat0, long0, lat1, long1: double;
-      var dist, bearing: double);
+    procedure LatLongToDistance(const lat0, long0, lat1, long1: extended;
+      var dist, bearing: extended);
     var
       R: double = 6371000; // earth radius in meters
       dlat, dlong, slat, slong, a, c, x, y: double;
@@ -545,7 +548,7 @@ ob^.GC_line_clear;
         writeln ('-------------------------------------------------------------------');
         writeln ('Start:',round(latitude1),' ',round(longitude1),' ',round(latitude2),' ',round(longitude2));
       end;
-step := degToRad(1); //step in degrees
+step := BaseStep;
 dist :=0;
 bearing :=0;
 
@@ -563,6 +566,11 @@ while (CountLimit > 0) do
   latFrom:=latitude1;
   lonFrom:=longitude1;
   dec(CountLimit);
+
+  if abs(latFrom) > 1.45 then
+     step:=PolarStep
+    else
+     step:=BaseStep;
 
   LatLongToDistance(latFrom, lonFrom, latitude2, longitude2, dist, bearing);
   if ((bearing > 0) <> BearingIsPositive) then CountLimit:=0;;
