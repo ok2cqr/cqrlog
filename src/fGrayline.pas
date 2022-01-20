@@ -87,7 +87,7 @@ type
     pfx : String;
     rbn_status  : String;
     procedure kresli;
-    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:Currency);
+    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended);
     procedure SavePosition;
     procedure SynRBN;
     function  GetEmptyPos : Word;
@@ -503,7 +503,7 @@ begin
     ob^.jachcucaru(true,long,lat*-1,long1,lat1*-1);
   Refresh
 end;
-procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:Currency);
+procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended);
  { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
 
 Const
@@ -580,16 +580,20 @@ while (CountLimit > 0) do
   longitude1 := longitude1 + (sin(bearing) * step) / cos(latitude1);
   latitude1 :=  latitude1 + (cos(bearing) * step);
 
+  if longitude1 < -Pi  then longitude1 :=  2*Pi+longitude1;
+  if longitude1 >  Pi  then longitude1 := -2*Pi+longitude1;
 
-  if longitude1 < -Pi  then longitude1 := longitude1 + Pi;
-  if longitude1 >  Pi  then longitude1 := longitude1 - Pi;
   if latitude1 > Pi/2 then latitude1:= Pi/2 - (latitude1-Pi/2);
   if latitude1 < -Pi/2 then latitude1:= -Pi/2 - (latitude1+Pi/2);
 
   if LocalDbg then
     writeln ('To: ',Round(RadToDeg(latitude1)),' ',Round(RadToDeg(longitude1)),'                       (',Round(RadToDeg(latFrom)),' ',Round(RadToDeg(lonFrom)),')');
 
-  ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
+  // 170 degrees = 2,96705972839 rad
+  if not (((lonFrom >  2.96705972839) and (longitude1 < -2.96705972839))  //right crossing
+     or   ((lonFrom < -2.96705972839) and (longitude1 >  2.96705972839)) //left crossing
+     ) then
+        ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
  end;
 end;
 
