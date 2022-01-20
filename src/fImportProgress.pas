@@ -876,8 +876,16 @@ begin
               t_log := EncodeTime(StrToInt(copy(dmData.Q.Fields[0].AsString,1,2)),
                         StrToInt(copy(dmData.Q.Fields[0].AsString,4,2)),0,0);
 
-              t_lotw_min := t_lotw-5/1440;
-              t_lotw_max := t_lotw+5/1440;
+             if copy(time_on,1,2)='00' then
+                t_lotw_min := 0      //if lotw time is from 1st hour 00:00-00:59 low limit must be set to 00:00
+              else                   //as day is set at sql query and we can not go backwards to yesterday
+                t_lotw_min := t_lotw-5/1440;
+
+             if copy(time_on,1,2)='23' then
+                t_lotw_max :=EncodeTime(23,59,0,0)
+                                     //this fails too in qsos past 23:xx as we can not set high limit to next day
+              else                   //as day is set at sql query and we can not go forward to tomorrow
+                t_lotw_max := t_lotw+5/1440;
 
               if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_log),' | ',TimeToStr(t_lotw_min),'|',TimeToStr(t_lotw_max));
 
@@ -1309,8 +1317,16 @@ begin
             t_log  := EncodeTime(StrToInt(copy(dmData.Q.Fields[2].AsString,1,2)),
                       StrToInt(copy(dmData.Q.Fields[2].AsString,4,2)),0,0);
 
-            t_eQSL_min := t_eQSL-60/1440;
-            t_eQSL_max := t_eQSL+60/1440;
+             if copy(time_on,1,2)='00' then
+                t_eQSL_min := 0      //if eqsl time is from 1st hour 00:00-00:59 low limit must be set to 00:00
+              else                   //as day is set at sql query and we can not go backwards to yesterday
+                t_eQSL_min := t_eQSL-60/1440;
+
+            if copy(time_on,1,2)='23' then
+                t_eQSL_max :=EncodeTime(23,59,0,0)
+                                     //this fails too in qsos past 23:xx as we can not set high limit to next day
+              else                   //as day is set at sql query and we can not go forward to tomorrow
+                t_eQSL_max := t_eQSL+60/1440;
 
             if dmData.DebugLevel >=1 then Writeln(call,'|',TimeToStr(t_log),' | ',TimeToStr(t_eQSL_min),'|',TimeToStr(t_eQSL_max));
 
