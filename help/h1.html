@@ -712,7 +712,7 @@ There are no known dependencies issues.<br><br>
     <img src="img/h1114.png"><br><br>
     <ul>
       <li><strong>Login:</strong> - your user name to log in to RBN. It's usually your own callsign.</li>
-      <li><strong>Watch for:</strong> the callsign you are watching for, also usually your own callsign. 
+      <li><strong>Watch for:</strong> the callsign you are watching for, usually your own callsign but can be any. You can also type in prefix followed by asterisk I.E. OK* etc.
        If you leave this field empty, every spot will be shown on the grayline map.</li>
       <li><strong>Signal strength</strong> How strong you are will be clear very quickly when you look
     at the map with the dots in different colours. Which colour will be used can be set here.</li>
@@ -720,19 +720,20 @@ There are no known dependencies issues.<br><br>
     to RBN when the Grayline and/or RBN Monitor window opens. If you have closed cqrlog with window(s) open they will open at next program start
     and so also connection is made.</li>
     <ul>
-      <li><strong>Autoconnect RBN Grayline</strong> connects Grayline map to RBN.</li>
-      <li><strong>Autoconnect RBN Monitor</strong> connects RBN Monitor to RBN. See: <a href="./h31.html">Operation/RBN monitor</a></li>
-      <li><strong>Link Grayline to RBN Monitor.</strong> links Grayline to same connection as RBN Monitor uses and does not allow to create a new connection to Grayline itself. This is usefull with QT5 widgets compiled version as there the direct Grayline RBN connection does not work. It also saves one connection in all cases as the same RBN connection can be used for both Grayline dotting and RBN Monitor listing.
-      <br>Linking alone does not start Grayline dotting. Connection to RBN must be done either here with <strong>Autoconnect RBN Monitor</strong> or <strong>manually</strong> at RBM Monitor window side.</li>
-      <strong>Note:</strong> Even when linked, Grayline dotting and RBN Monitor listing both uses their own settings what call(s) to follow.
+      <li><strong>Autoconnect RBN Grayline</strong> connects Grayline map to RBN.
+      <br>Connection to RBN must be done either here with <strong>Autoconnect RBN Monitor</strong> or <strong>manually</strong> at Grayline window side.</li>
+      <li><strong>Autoconnect RBN Monitor</strong> connects RBN Monitor to RBN site. See: <a href="./h31.html">Operation/RBN monitor</a></li>
+      <li><strong>Link Grayline to RBN Monitor</strong> links Grayline to same connection as RBN Monitor uses. It saves one connection as the same RBN connection can be used for both Grayline dotting and RBN Monitor listing.
+      </li>
+      <strong>Note:</strong> Linking alone does not start Grayline dotting.When linked, Grayline dotting and RBN Monitor listing both uses their own filter settings what call(s) to follow.
       <br><strong>Note:</strong> "Connect RBN Grayline" and "Link Grayline to RBN Monitor" are alternatives. You can not select both of them at same time.</li>
     </ul>
       <li><strong>Delete old information after XX seconds</strong> The dots won't stay on the map forever.
-    180 seconds (3 minutes) is a good default value. Please note, it also depends on the band,
-    if you change band, dots will always be deleted. All data is band related.</li>
+    180 seconds (3 minutes) is a good default value.
+    <br><b>Note:</b> Dots also depend on the band, if you change band, dots will always be deleted. All data is band related.</li>
     </ul>
     <br><br>
-    <img src="img/h1114b.png"><br><br>
+
     <a name=ch7><h2><strong>Online log upload support</strong></h2></a>
     CQRLOG supports online log upload to <a href="http://HamQTH.com">HamQTH</a>,
     <a href="https://secure.clublog.org/loginform.php">ClubLog.org</a> and

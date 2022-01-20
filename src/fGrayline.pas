@@ -7,7 +7,7 @@ interface
 uses
   Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
-  lnet, lclType, LazFileUtils, StrUtils, DateUtils;
+  lnet, lclType, LazFileUtils, StrUtils, DateUtils, Math;
 
 type
   TRBNList = record
@@ -32,6 +32,8 @@ type
     acConnect : TAction;
     acShowStatusBar : TAction;
     acLinkToRbnMonitor: TAction;
+    pumShowGreatCircle: TMenuItem;
+    pumMnuLine2: TMenuItem;
     pumClearAllSpots: TMenuItem;
     pumWatchFor: TMenuItem;
     pumConnect : TMenuItem;
@@ -57,6 +59,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure popGrayLinePopup(Sender: TObject);
     procedure pumClearAllSpotsClick(Sender: TObject);
+    procedure pumShowGreatCircleClick(Sender: TObject);
     procedure pumWatchForClick(Sender: TObject);
     procedure sbtnGrayLineClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender : TObject);
@@ -84,6 +87,7 @@ type
     pfx : String;
     rbn_status  : String;
     procedure kresli;
+    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended);
     procedure SavePosition;
     procedure SynRBN;
     function  GetEmptyPos : Word;
@@ -165,7 +169,7 @@ begin
   Result := 0;
   for i:= 1 to MAX_ITEMS do
   begin
-    if frmGrayline.RBNSpotList[i].band='' then
+    if RBNSpotList[i].band='' then
     begin
       Result := i;
       break
@@ -180,7 +184,7 @@ begin
   Result := 0;
   for i:= 1 to MAX_ITEMS do
   begin
-    if frmGrayline.RBNSpotList[i].spotter=spotter then
+    if RBNSpotList[i].spotter=spotter then
     begin
       Result := i;
       break
@@ -276,7 +280,14 @@ begin
   InitCriticalSection(csRBN);
   tmrSpotDots.Enabled:=false;
   for i:=1 to MAX_ITEMS do
-    RBNSpotList[i].band := '';
+   begin
+    RBNSpotList[i].band    := '';
+    RBNSpotList[i].spotter := '';
+    RBNSpotList[i].time    := DateTimeToUnix(now);
+    RBNSpotList[i].strengt := 0;
+    RBNSpotList[i].lat  := 0;
+    RBNSpotList[i].long := 0;
+   end;
   ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
   if not FileExists(ImageFile) then
     ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
@@ -294,16 +305,17 @@ end;
 procedure TfrmGrayline.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmGrayline);
-  sbGrayLine.Visible      := cqrini.ReadBool('Grayline','Statusbar',True);
-  acShowStatusBar.Checked := sbGrayLine.Visible;
-  rbn_status              :='Disconnected';
-  sbGrayLine.SimpleText   := rbn_status;
-  tmrGrayLine.Enabled     := True;
+  sbGrayLine.Visible        := cqrini.ReadBool('Grayline','Statusbar',True);
+  pumShowGreatCircle.Checked:= cqrini.ReadBool('Grayline','GreatCircle',False);
+  acShowStatusBar.Checked   := sbGrayLine.Visible;
+  rbn_status                :='Disconnected';
+  sbGrayLine.SimpleText     := rbn_status;
+  tmrGrayLine.Enabled       := True;
   tmrGrayLineTimer(nil);
-  tmrAutoConnect.Enabled  := True;
-  delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
-  tmrSpotDots.Interval:=1000;  //remove Spots(DOts) timer will always run 1 sec period.
-  tmrSpotDots.Enabled:=true;
+  tmrAutoConnect.Enabled    := True;
+  delAfter                  := cqrini.ReadInteger('RBN','deleteAfter',60);
+  tmrSpotDots.Interval      :=1000;  //remove Spots(DOts) timer will always run 1 sec period.
+  tmrSpotDots.Enabled       :=true;
 end;
 
 procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -376,6 +388,12 @@ begin
   RemoveOldSpots(0);
   delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
   tmrSpotDots.Enabled:=true;
+end;
+
+procedure TfrmGrayline.pumShowGreatCircleClick(Sender: TObject);
+begin
+  pumShowGreatCircle.Checked:= not pumShowGreatCircle.Checked;
+  cqrini.WriteBool('Grayline','GreatCircle',pumShowGreatCircle.Checked);
 end;
 
 procedure TfrmGrayline.pumWatchForClick(Sender: TObject);
@@ -460,7 +478,7 @@ begin
   if (s='') or (d='') then
     dmUtils.GetCoordinate(pfx,lat1,long1)
   else begin
-    if s[Length(s)] = 'S' then  //pokud je tam S musi byt udaj zaporny
+    if s[Length(s)] = 'S' then  //if S is there, the data must be negative
       s := '-' +s ;
     s := copy(s,1,Length(s)-1);
     if pos('.',s) > 0 then
@@ -468,7 +486,7 @@ begin
     if not TryStrToCurr(s,lat1) then
       lat1 := 0;
 
-    if d[Length(d)] = 'W' then  //pokud je tam W musi byt udaj zaporny
+    if d[Length(d)] = 'W' then  //  if there is a W it must be negative
       d := '-' + d ;
     d := copy(d,1,Length(d)-1);
     if pos('.',d) > 0 then
@@ -479,10 +497,104 @@ begin
   s := '';
   d := '';
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(my_loc),lat,long);
-  lat := lat*-1;
-  lat1 := lat1*-1;
-  ob^.jachcucaru(true,long,lat,long1,lat1);
+  if pumShowGreatCircle.Checked then
+    PlotGreatCircleArcLine(long,lat,long1,lat1)
+   else
+    ob^.jachcucaru(true,long,lat*-1,long1,lat1*-1);
   Refresh
+end;
+procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended);
+ { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
+
+Const
+  Basestep = 0.0174532925;   //1 degree in radians
+  PolarStep = 0.00174532925; // base/10
+var
+  lat1,lat2,lon1,lon2,
+  latFrom,lonFrom,
+  step,
+  dist,
+  bearing             : extended;
+  CountLimit          : integer;
+  BearingIsPositive   : boolean;
+
+//-------------------------------------------------------------------
+    procedure LatLongToDistance(const lat0, long0, lat1, long1: extended;
+      var dist, bearing: extended);
+    var
+      R: double = 6371000; // earth radius in meters
+      dlat, dlong, slat, slong, a, c, x, y: double;
+    begin
+      // dist
+      dlat := lat1 - lat0;
+      dlong := long1 - long0;
+      slat := Sin(0.5 * dlat);
+      slong := Sin(0.5 * dlong);
+      a := slat * slat + Cos(lat0) * Cos(lat1) * slong * slong;
+      c := 2.0 * ArcTan2(Sqrt(a), Sqrt(1.0-a));
+      dist := R * c;
+      // bearing
+      y := Sin(long1 - long0) * Cos(lat1);
+      x := Cos(lat0) * Sin(lat1) - Sin(lat0) * Cos(lat1) * Cos(long1 - long0);
+      bearing := ArcTan2(y, x);
+    end;
+//-------------------------------------------------------------------
+
+Begin
+
+ob^.GC_line_clear;
+  if LocalDbg then
+      begin
+        writeln ('-------------------------------------------------------------------');
+        writeln ('Start:',round(latitude1),' ',round(longitude1),' ',round(latitude2),' ',round(longitude2));
+      end;
+step := BaseStep;
+dist :=0;
+bearing :=0;
+
+longitude1 := degToRad(longitude1);
+latitude1 := degToRad(latitude1);
+longitude2 := degToRad(longitude2);
+latitude2 := degToRad(latitude2);
+
+LatLongToDistance(latitude1, longitude1, latitude2, longitude2, dist, bearing);
+BearingIsPositive := (bearing > 0);
+CountLimit:=ob^.GC_Points_Max;
+
+while (CountLimit > 0) do
+ Begin
+  latFrom:=latitude1;
+  lonFrom:=longitude1;
+  dec(CountLimit);
+
+  if abs(latFrom) > 1.45 then
+     step:=PolarStep
+    else
+     step:=BaseStep;
+
+  LatLongToDistance(latFrom, lonFrom, latitude2, longitude2, dist, bearing);
+  if ((bearing > 0) <> BearingIsPositive) then CountLimit:=0;;
+  if LocalDbg then
+    writeln ('Dist:',round(dist * 0.001) ,' Bearing:',round(radTodeg(bearing)));
+
+  longitude1 := longitude1 + (sin(bearing) * step) / cos(latitude1);
+  latitude1 :=  latitude1 + (cos(bearing) * step);
+
+  if longitude1 < -Pi  then longitude1 :=  2*Pi+longitude1;
+  if longitude1 >  Pi  then longitude1 := -2*Pi+longitude1;
+
+  if latitude1 > Pi/2 then latitude1:= Pi/2 - (latitude1-Pi/2);
+  if latitude1 < -Pi/2 then latitude1:= -Pi/2 - (latitude1+Pi/2);
+
+  if LocalDbg then
+    writeln ('To: ',Round(RadToDeg(latitude1)),' ',Round(RadToDeg(longitude1)),'                       (',Round(RadToDeg(latFrom)),' ',Round(RadToDeg(lonFrom)),')');
+
+  // 170 degrees = 2,96705972839 rad
+  if not (((lonFrom >  2.96705972839) and (longitude1 < -2.96705972839))  //right crossing
+     or   ((lonFrom < -2.96705972839) and (longitude1 >  2.96705972839)) //left crossing
+     ) then
+        ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
+ end;
 end;
 
 procedure TfrmGrayline.SavePosition;
@@ -497,21 +609,24 @@ procedure TfrmGrayline.SynRBN;
 var
   i : Integer;
   c : TColor;
-begin
+  CqrBand:String;
 
+begin
   ob^.body_smaz;
+  CqrBand := dmUtils.GetBandFromFreq(frmNewQSO.cmbFreq.Text);
+
   for i:=1 to MAX_ITEMS do
   begin
-    if (RBNSpotList[i].band='') then
+
+   if (RBNSpotList[i].band='') then  //skip empty
       Continue;
 
-    if (band <> '') then
-    begin
-      if band<>RBNSpotList[i].band then
-        Continue
-    end;
+    if (CqrBand = '') or (CqrBand<>RBNSpotList[i].band) then //skip if no cqrlog band or it differs from spot band
+        Continue;
+
     if LocalDbg then
     begin
+      writeln('Cqr:band:   ',cqrband);
       Writeln('Syn:spotter:',RBNSpotList[i].spotter);
       Writeln('Syn:stren:  ',RBNSpotList[i].strengt);
       Writeln('Syn:band:   ',RBNSpotList[i].band);
@@ -525,7 +640,6 @@ begin
       else
         c := cqrini.ReadInteger('RBN','10db',clWhite)
     end; //case
-    //procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
     ob^.body_add(3,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].long,RBNSpotList[i].lat*-1,RBNSpotList[i].spotter,c,1);
   end;
   Refresh
@@ -533,25 +647,18 @@ end;
 
 procedure  TfrmGrayline.RemoveOldSpots(RemoveAfter:integer); //setting RemoveAfter:=0 removes all Spots
 var
-  i       : Integer;
-  time    : int64;
+  i        : Integer;
+  time,
+  SpotTime: int64;
 
 begin
   time := DateTimeToUnix(now);
   EnterCriticalsection(csRBN);
   for i:=1 to MAX_ITEMS do
-  begin
-     if (time - DateTimeToUnix(frmGrayline.RBNSpotList[i].time)) > RemoveAfter then
-        with RBNSpotList[i] do
-            Begin
-                spotter  :='';
-                band     :='';
-                lat      :=0;
-                long     :=0;
-                strengt  :=0;
-                time     :=0;
-            end;
-  end;
+   begin
+     if ((time - RBNSpotList[i].time) > RemoveAfter) then
+         RBNSpotList[i].band :='';
+   end;
   SynRBN;
   LeaveCriticalsection(csRBN);
 
@@ -659,7 +766,7 @@ begin
 
   frmGrayline.RBNSpotList[index].band    := band;
   frmGrayline.RBNSpotList[index].spotter := spotter;
-  frmGrayline.RBNSpotList[index].time    := now;
+  frmGrayline.RBNSpotList[index].time    := DateTimeToUnix(now);
   if TryStrToInt(stren,tmp) then
     frmGrayline.RBNSpotList[index].strengt := tmp
   else
@@ -674,7 +781,7 @@ begin
     Write('Add spotter:',spotter);
     Write('Add stren:  ',stren);
     Write('Add freq:   ',freq);
-    Write('Add band:   ',dmDXCluster.GetBandFromFreq(freq,True));
+    Write('Add band:   ',band);
     Write('Add Lat:    ',lat);
     Writeln('Add Long:   ',long)
    end;
