@@ -25,7 +25,7 @@ uses
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc,
   fDOKStat, fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, fProgress,
-  znacmech;
+  znacmech, gline2;
 var
   Splash : TfrmSplash;
 
@@ -43,10 +43,22 @@ begin
      Begin
         Writeln('Cqrlog Ver:',cVERSION,' Date:',cBUILD_DATE);
         if Application.HasOption('v','version') then exit;
+        Writeln;
         Writeln('-h     --help           Print this help and exit');
         Writeln('-r KEY --remote=KEY     Start with remote mode KEY= one of J,M,K');
+        Writeln('                        (for KEY see: NewQSO shortcut keys)');
         Writeln('-v     --version        Print version and exit');
         Writeln('       --debug=NR       Set debug level to NR');
+        Writeln;
+        Writeln('Debug level NRs:');
+        Writeln('     0  No debug meesages');
+        Writeln('     1  All debug messages');
+        Writeln('     2  All debug messages + some additional RBNmonitor & DXCluster debugs');
+        Writeln('Negative values can be combined (binary bitwise OR)');
+        Writeln('    -4  Wsjtx remote & Worked grids debug messages');
+        Writeln('    -8  CW keying & TRXControl debug messages');
+        Writeln('   -16  Grayline map RBN debug messages');
+        Writeln;
         Exit;
      end;
 

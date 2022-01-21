@@ -1096,7 +1096,10 @@ begin
   Writeln('Cqrlog Ver:',cVERSION,' Date:',cBUILD_DATE);
   Writeln('**** DEBUG LEVEL ',fDebugLevel,' ****');
   if fDebugLevel=0 then
-    Writeln('**** CHANGE WITH --debug=1 PARAMETER ****');
+   Begin
+    Writeln('**** CHANGE WITH --debug=NR PARAMETER ****');
+    Writeln('*** Parameter -h or --help for details ***');
+   end;
   Writeln('');
 
   Writeln('OS:');
