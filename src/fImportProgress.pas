@@ -899,18 +899,21 @@ begin
                   dmData.Q1.SQL.Clear;
                   dmData.Q1.SQL.Add('update cqrlog_main set lotw_qslr = ' + QuotedStr('L'));
                   dmData.Q1.SQL.Add(',lotw_qslrdate = ' + QuotedStr(qslrdate));
-                  if cqz<>'' then
-                    dmData.Q1.SQL.Add(',waz = ' + QuotedStr(cqz));
-                  if ituz<>'' then
-                    dmData.Q1.SQL.Add(',itu = ' + QuotedStr(ituz));
-                  if iota<>'' then
-                    dmData.Q1.SQL.Add(',iota = ' + QuotedStr(iota));
-                  if (grid <> '') and (dmData.Q.Fields[5].AsString='') then
-                    dmData.Q1.SQL.Add(',loc = ' + QuotedStr(grid));
-                  if (state<>'') and (dmData.Q.Fields[6].AsString='') then
-                    dmData.Q1.SQL.Add(',state = ' + QuotedStr(state));
-                  if (county<>'') and (dmData.Q.Fields[7].AsString='') then
-                    dmData.Q1.SQL.Add(',county = ' + QuotedStr(county));
+                  if cqrini.ReadBool('LoTWImp','Import',True) then
+                    Begin
+                      if cqz<>'' then
+                        dmData.Q1.SQL.Add(',waz = ' + QuotedStr(cqz));
+                      if ituz<>'' then
+                        dmData.Q1.SQL.Add(',itu = ' + QuotedStr(ituz));
+                      if iota<>'' then
+                        dmData.Q1.SQL.Add(',iota = ' + QuotedStr(iota));
+                      if (grid <> '') and (dmData.Q.Fields[5].AsString='') then
+                        dmData.Q1.SQL.Add(',loc = ' + QuotedStr(grid));
+                      if (state<>'') and (dmData.Q.Fields[6].AsString='') then
+                        dmData.Q1.SQL.Add(',state = ' + QuotedStr(state));
+                      if (county<>'') and (dmData.Q.Fields[7].AsString='') then
+                        dmData.Q1.SQL.Add(',county = ' + QuotedStr(county));
+                    end;
                   dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[8].AsString);
                   inc(qsln);
                   if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text+ '  qsl number:'+ IntToStr(qsln));
