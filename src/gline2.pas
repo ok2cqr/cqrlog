@@ -38,30 +38,38 @@ type
 
 const body_popis_max=30;
 type Tcarobod=record
-       typ:byte; // 0 - nic;1 cara, 2 bod ctverecek , 3 bod krizek
+       typ:byte; // 0 - nothing, 1 square, 2 square points, 3 cross points
        x1,y1,x2,y2:extended;
-       popis:string[body_popis_max];
-       barva:Tcolor;
-       vel_bodu:longint;
+       popis:string[body_popis_max];    //bodu_popis = points_list
+       barva:Tcolor;                    //barva = color
+       vel_bodu:longint;                //vel_bodu ??  bodu = point
      end;
 const body_max=128;
+
+type TGC_point=record
+       La1,Lo1,La2,Lo2 : double;
+     end;
 var star_time_u:extended;
 
 type
   Tgrayline=object
+      const GC_Points_Max = 500;
       constructor init(naz_sou:string);
       destructor done;
       procedure VypocitejSunClock(cas:Tdatetime);
-      procedure kresli(r:Trect;can:Tcanvas); {vykresli v pozadovanych rozmerech}
-      procedure kresli1(x1,y1:longint;can:Tcanvas); {vykresli 1:1, zadavan je "jen" levy horni roh}
+      procedure kresli(r:Trect;can:Tcanvas); {kresli = line  draw in the required dimensions }
+      procedure kresli1(x1,y1:longint;can:Tcanvas); {draw 1: 1, the input is "only" the upper left corner}
       
       procedure jachcucaru(en:boolean;x1,y1,x2,y2:extended);
 
       procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
       procedure body_smaz;
 
+      procedure GC_line_part(x1,y1,x2,y2:double);
+      procedure GC_line_clear;
+
     private
-      nrd:boolean; // potrebuje prekreslit (probehl novy vypocet)
+      nrd:boolean; //needs to redraw (a new calculation has been made)
 
       chcipni:boolean;
       ziju:boolean;
@@ -76,12 +84,15 @@ type
       carax1,carax2,caray1,caray2:extended;
       caraen:boolean;
       
-      obrp:TLazIntfImage; // predloha... 1-z disku
-      obrA,obrT:TLazIntfImage;   // obra -  zde vse kreslit
+      obrp:TLazIntfImage; //  template ... 1-of-disk template ... 1-of-disk
+      obrA,obrT:TLazIntfImage;   //picture - draw everything here
 
       obmap: TBitmap;
       body:array[0..body_max] of Tcarobod;
       body_poc:longint;
+
+      GC_point:array[0..GC_points_Max] of TGC_point;
+      GCpointer:longint;
 
       function calc_horizontalx(var coord:t_coord; date:TDateTime; z:longint;latitude: extended):longint;
   end;
@@ -507,6 +518,7 @@ var e,z:longint;
    end;
 
   body_poc:=0;
+  GCpointer:=0;
 
   poslednicas:=now-1000000;
   nrd:=false;
@@ -681,7 +693,7 @@ begin
 end;
 
 
-procedure Tgrayline.kresli(r:Trect;can:Tcanvas);
+procedure Tgrayline.kresli(r:Trect;can:Tcanvas);      //kresli =draw
 var z,x,c:longint;
     ze,zez,ze2,zez2,ze2s,zez2s:extended;
     
@@ -689,7 +701,7 @@ var
 
     xptr:^byte;
 
-
+//-----------------------------------------------------------
     procedure cmarniu(x1,y1,x2,y2:longint);
       begin
             can.pen.color:=clblack;
@@ -701,7 +713,8 @@ var
             can.moveto(x1,y1);
             can.lineto(x2,y2);
       end;
-    
+
+//-----------------------------------------------------------
     procedure cmarni(x1,y1,x2,y2:extended;roh:boolean);
     var dx,dy,ax,ay:extended;
       begin
@@ -726,6 +739,7 @@ var
           end;
       end;
 
+//-----------------------------------------------------------
     procedure bod_cmarniu(x1,y1,x2,y2:longint;b:Tcarobod);
     var vb:longint;
       begin
@@ -775,8 +789,7 @@ var
         end;
       end;
 
-
-
+//-----------------------------------------------------------
     procedure bod_cmarni(b:Tcarobod);
     var dx,dy,ax,ay:extended;
       begin
@@ -790,20 +803,20 @@ var
                     round(ax+round(b.x2*dx/360)),round(ay+round(b.y2*dy/180)),b);
       end;
 
+//-----------------------------------------------------------
 
-  begin
+begin
   if chcipni then exit;
 
   if ((r.left-r.right<>rold.left-rold.right) or (r.top-r.bottom<>rold.top-rold.bottom))
      and (r.right-r.left+1>obsi) then nrd:=true;
 
-    if nrd then
+  if nrd then
     begin
 
        obrA.CopyPixels(obrP);
-
-       //ze2:=0.79;   //zadání jak bude tmavý obrázek - R a G
-       //zez2:=0.90;   //zadání jak bude tmavý obrázek - modry kanal
+       //ze2:=0.79;   // specify how the dark image will be - R and G
+       //zez2:=0.90;   // specify how the dark image will be - blue channel
 
        ze2  := 1.7;
        zez2 := 1.0;
@@ -850,31 +863,42 @@ var
      obmap.LoadFromIntfImage(obrT);
 
    end;
-//        r.right:=r.left;
-        if r.left=r.right then
-          begin
-            r.Right:=r.left+obsi-1;
-            r.bottom:=r.top+obvy-1;
-            Can.Draw(r.left,r.top,obmap);
-          end
-          else
-            Can.StretchDraw(r,obmap);
 
-            if caraen then
-              begin
-                cmarni(carax1,caray1,carax2,caray2,true);
-//                can.Font.Color:=clyellow;
-//                can.TextOut(10,10,inttostr(round(carax1))+':'+inttostr(round(caray1)));
-//                can.TextOut(10,20,inttostr(round(carax2))+':'+inttostr(round(caray2)));
-              end;
-            for z:=0 to body_poc-1 do
-              begin
-                 bod_cmarni(body[z]);
-              end;
+//r.right:=r.left;
+  if r.left=r.right then
+    begin
+      r.Right:=r.left+obsi-1;
+      r.bottom:=r.top+obvy-1;
+      Can.Draw(r.left,r.top,obmap);
+    end
+    else
+      Can.StretchDraw(r,obmap);
+
+  if caraen then
+    begin
+      cmarni(carax1,caray1,carax2,caray2,true);
+//    can.Font.Color:=clBlack;
+//    can.TextOut(10,10,' '+inttostr(round(carax1))+':'+inttostr(round(caray1))+' ');
+//    can.TextOut(10,30,' '+inttostr(round(carax2))+':'+inttostr(round(caray2))+' ');
+    end;
+
+  if GCpointer > 0 then
+    begin
+      for z:=0 to GCpointer-1 do
+        begin
+          cmarni(GC_point[z].La1, GC_point[z].Lo1, GC_point[z].La2, GC_point[z].Lo2, false);
+        end;
+    end;
+
+
+  for z:=0 to body_poc-1 do
+    begin
+       bod_cmarni(body[z]);
+    end;
     nrd:=false;
-  end;
+end;
 
-procedure Tgrayline.kresli1(x1,y1:longint;can:Tcanvas);
+procedure Tgrayline.kresli1(x1,y1:longint;can:Tcanvas);   //kresli =draw
 var r:Trect;
   begin
   if chcipni then exit;
@@ -885,10 +909,10 @@ var r:Trect;
     kresli(r,can);
   end;
 
-procedure Tgrayline.jachcucaru(en:boolean;x1,y1,x2,y2:extended);
+procedure Tgrayline.jachcucaru(en:boolean;x1,y1,x2,y2:extended);     //jachcucaru = ?????
   begin
-  if chcipni then exit;
-    caraen:=en;
+  if chcipni then exit;    //chcipni = "die"
+    caraen:=en;           //cara = "line"
     if  (abs(y1)>90) or (abs(y2)>90) then
       begin
         caraen:=false;exit;
@@ -931,9 +955,29 @@ procedure Tgrayline.body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tc
       end;
   end;
 
-procedure Tgrayline.body_smaz;
+procedure Tgrayline.body_smaz;   //smaz = delete
   begin
     body_poc:=0;
   end;
+
+procedure Tgrayline.GC_line_part(x1,y1,x2,y2:double);
+
+Begin
+    if chcipni then exit;    //chcipni = "die"
+    if GCpointer < GC_Points_max then
+     begin
+      GC_point[GCpointer].La1:=x1;
+      GC_point[GCpointer].Lo1:=y1;
+      GC_point[GCpointer].La2:=x2;
+      GC_point[GCpointer].Lo2:=y2;
+      inc(GCpointer);
+     end;
+end;
+
+procedure Tgrayline.GC_line_clear;
+
+Begin
+ GCpointer:=0;
+end;
 
 end.
