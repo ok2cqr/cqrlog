@@ -17,17 +17,19 @@ type
     btnDownload: TButton;
     btnClose: TButton;
     btnPreferences: TButton;
+    cbImports: TCheckBox;
     chkShowNew: TCheckBox;
     edtCall: TEdit;
     edtDateFrom: TEdit;
-    GroupBox1: TGroupBox;
-    GroupBox5: TGroupBox;
-    Label1: TLabel;
-    Label3: TLabel;
+    gbProgress: TGroupBox;
+    gbSettings: TGroupBox;
+    lblForCall: TLabel;
+    lblReturnQsl: TLabel;
     Label4: TLabel;
     mStat: TMemo;
-    Panel1: TPanel;
-    Panel2: TPanel;
+    pnlSettings: TPanel;
+    pnlButtons: TPanel;
+    procedure cbImportsChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure btnDownloadClick(Sender: TObject);
@@ -207,6 +209,7 @@ begin
   edtDateFrom.Text   := cqrini.ReadString('LoTWImp','DateFrom','1990-01-01');
   edtCall.Text       := cqrini.ReadString('LoTWImp','Call',
                         cqrini.ReadString('Station','Call',''));
+  cbImports.Checked  := cqrini.ReadBool('LoTWImp','Import',True);
   Done := False
 end;
 
@@ -215,6 +218,12 @@ procedure TfrmImportLoTWWeb.FormCloseQuery(Sender: TObject;
 begin
   dmUtils.SaveWindowPos(self)
 end;
+
+procedure TfrmImportLoTWWeb.cbImportsChange(Sender: TObject);
+begin
+  cqrini.WriteBool('LoTWImp','Import',cbImports.Checked);
+end;
+
 procedure TfrmImportLoTWWeb.SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 begin
   case Reason of
