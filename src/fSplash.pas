@@ -55,7 +55,7 @@ end;
 
 procedure TfrmSplash.Image1Paint(Sender: TObject);
 const
-  VersionPos: TPoint = (X:250; Y:240);
+  VersionPos: TPoint = (X:270; Y:245);
   VersionStyle: TTextStyle =
    (
      Alignment  : taCenter;
