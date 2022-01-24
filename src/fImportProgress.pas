@@ -1158,6 +1158,7 @@ begin
       PosEOR   := 0;
       while not ((PosEOR > 0) or eof(f)) do
       begin
+        qso_in_log := False;
         Readln(f, a);
         a    := Trim(a);
         orig := a;
@@ -1310,6 +1311,8 @@ begin
           //if dmData.trQ.Active then dmData.trQ.Rollback;
           //dmData.trQ.StartTransaction;
           dmData.Q.Open();
+          dmData.Q.First;
+          if dmData.Q.Eof then  qso_in_log := False;
           while not dmData.Q.Eof do
           begin
             qso_in_log := False;
