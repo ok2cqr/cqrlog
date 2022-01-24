@@ -1243,9 +1243,11 @@ procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
   lat,long :currency;
 Begin
+  frmGrayLine.ob^.GC_line_clear;
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(CurrentMyLoc),lat,long);
   lat := lat*-1;
-  frmGrayLine.ob^.jachcucaru(true,long,lat,long,lat);
+  frmGrayLine.ob^.jachcucaru(true,long,lat,long+0.03,lat+0.03); //trying to make own qth dot a bit bigger
+                                                                //the Grayline window zoom affects to visibility anyhow
   frmGrayline.Refresh;
 end;
 

@@ -5,26 +5,27 @@ uses
   cmem,cthreads,uScrollBars,
   Interfaces, // this includes the LCL widgetset
   Forms, sysutils, Classes, fMain, fPreferences, dUtils, fNewQSO, dialogs,
-  fChangeLocator, fChangeOperator, dData, dDXCC, fMarkQSL, fDXCCStat, fSort, fFilter,
-  fImportProgress, fImportTest, TAChartLazarusPkg, RunTimeTypeInfoControls,
-  fSelectDXCC, fGrayline, fCallbook, fTRXControl, fFreq, fChangeFreq,
-  fAdifImport, fSplash, fSearch, fQTHProfiles, fNewQTHProfile, fEnterFreq,
-  fExportProgress, fNewDXCluster, fDXCluster, fDXClusterList, dDXCluster,
-  fWorking, fSerialPort, fQSLMgr, fSendSpot, fQSODetails, fUpgrade, fWAZITUStat,
-  fIOTAStat, fClubSettings, fLoadClub, fRefCall, fGraphStat, fBandMap,
-  fBandMapWatch, fLongNote, fDatabaseUpdate, fExLabelPrint, fImportLoTWWeb,
-  fLoTWExport, fGroupEdit, fDefaultFreq, fCustomStat, fKeyTexts, fCWType,
-  fSplitSettings, MemDSLaz, SDFLaz, turbopoweripro, fShowStations, uMyIni,
-  fPropagation, fSQLConsole, fCallAttachment, fEditDetails, fQSLViewer, fCWKeys,
-  fSCP, fDBConnect, fNewLog, fRebuildMembStat, uVersion, fAbout, fChangelog,
-  fBigSquareStat, feQSLDownload, feQSLUpload, fSOTAExport, fEDIExport,
-  fNewQSODefValues, fQSLExpPref, fRotControl, dLogUpload, fLogUploadStatus,
-  frCWKeys, fCallAlert, fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor,
-  fRbnServer, fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
+  fChangeLocator, fChangeOperator, dData, dDXCC, fMarkQSL, fDXCCStat, fSort,
+  fFilter, fImportProgress, fImportTest, TAChartLazarusPkg,
+  RunTimeTypeInfoControls, fSelectDXCC, fGrayline, fCallbook, fTRXControl,
+  fFreq, fChangeFreq, fAdifImport, fSplash, fSearch, fQTHProfiles,
+  fNewQTHProfile, fEnterFreq, fExportProgress, fNewDXCluster, fDXCluster,
+  fDXClusterList, dDXCluster, fWorking, fSerialPort, fQSLMgr, fSendSpot,
+  fQSODetails, fUpgrade, fWAZITUStat, fIOTAStat, fClubSettings, fLoadClub,
+  fRefCall, fGraphStat, fBandMap, fBandMapWatch, fLongNote, fDatabaseUpdate,
+  fExLabelPrint, fImportLoTWWeb, fLoTWExport, fGroupEdit, fDefaultFreq,
+  fCustomStat, fKeyTexts, fCWType, fSplitSettings, MemDSLaz, SDFLaz,
+  turbopoweripro, fShowStations, uMyIni, fPropagation, fSQLConsole,
+  fCallAttachment, fEditDetails, fQSLViewer, fCWKeys, fSCP, fDBConnect, fNewLog,
+  fRebuildMembStat, uVersion, fAbout, fChangelog, fBigSquareStat, feQSLDownload,
+  feQSLUpload, fSOTAExport, fEDIExport, fNewQSODefValues, fQSLExpPref,
+  fRotControl, dLogUpload, fLogUploadStatus, frCWKeys, fCallAlert,
+  fNewCallAlert, fConfigStorage, fRbnFilter, fRbnMonitor, fRbnServer,
+  fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
-  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc,
-  fDOKStat, fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech;
+  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
+  fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2;
 var
   Splash : TfrmSplash;
 
@@ -42,10 +43,22 @@ begin
      Begin
         Writeln('Cqrlog Ver:',cVERSION,' Date:',cBUILD_DATE);
         if Application.HasOption('v','version') then exit;
+        Writeln;
         Writeln('-h     --help           Print this help and exit');
         Writeln('-r KEY --remote=KEY     Start with remote mode KEY= one of J,M,K');
+        Writeln('                        (for KEY see: NewQSO shortcut keys)');
         Writeln('-v     --version        Print version and exit');
         Writeln('       --debug=NR       Set debug level to NR');
+        Writeln;
+        Writeln('Debug level NRs:');
+        Writeln('     0  No debug meesages');
+        Writeln('     1  All debug messages');
+        Writeln('     2  All debug messages + some additional RBNmonitor & DXCluster debugs');
+        Writeln('Negative values can be combined (binary bitwise OR)');
+        Writeln('    -4  Wsjtx remote & Worked grids debug messages');
+        Writeln('    -8  CW keying & TRXControl debug messages');
+        Writeln('   -16  Grayline map RBN debug messages');
+        Writeln;
         Exit;
      end;
 
