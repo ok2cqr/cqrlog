@@ -2179,7 +2179,8 @@ var
   buf2,
   prik,
   data          :string;
-  chkDuplicates :boolean;
+  chkDuplicates,
+  submodeExist  :boolean;
   i             :longint;
   a,b,l         :integer;
   fixed         :Boolean;
@@ -2256,7 +2257,7 @@ begin
               //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
               //qso_date will then replace this
               edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
-
+              submodeExist:=false;
               repeat
                 begin
                   if frmAdifImport.getNextAdifTag(Buf,prik,data) then
@@ -2278,9 +2279,14 @@ begin
                                                                         if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
                                                                                       edtGrid.Text := data; //replace qrz loc, otherwise keep it
                                                                  end;
-                                                  'MODE' : cmbMode.Text := uppercase(data);
+                                                  'MODE'       : if not submodeExist then
+                                                                        cmbMode.Text := uppercase(data);
                                                   //now this overrides MODE, if exists
-                                                  'SUBMODE'    : cmbMode.Text := uppercase(data);
+                                                  'SUBMODE'    : Begin
+                                                                  //we need lock in case submode found before mode tag
+                                                                  submodeExist:=true;
+                                                                  cmbMode.Text := uppercase(data);
+                                                                 end;
                                                   'FREQ'       : cmbFreq.Text := data;
                                                   'FREQ_RX'    : edtRXFreq.Text := data;
                                                   'RST_SENT'   : edtHisRST.Text := data;

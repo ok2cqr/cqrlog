@@ -4,13 +4,14 @@ unit uVersion;
 interface
 
 const
-  {$IFDEF LCLGtk2}
-    cVERSION    = '2.5.2 (001) Gtk2';
-  {$ENDIF}
- {$IFDEF LCLQt5}
-      cVERSION    = '2.5.2 (001) QT5';
-  {$ENDIF}
+  cVersionBase     = '2.5.2 (001)';
 
+  {$IFDEF LCLGtk2}
+  cVERSION    = cVersionBase+' Gtk2';
+  {$ENDIF}
+  {$IFDEF LCLQt5}
+  cVERSION    = cVersionBase+' QT5';
+  {$ENDIF}
 
   cMAJOR      = 2;
   cMINOR      = 5;
