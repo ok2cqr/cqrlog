@@ -165,7 +165,7 @@ type
     { private declarations }
   public
     function getNextAdifTag(var vstup,prik,data:string):boolean;
-    procedure OpenInTextEditor(OpenName:String);
+    procedure OpenInTextEditor(OtF:String);
     { public declarations }
   end; 
 
@@ -876,7 +876,7 @@ procedure TfrmAdifImport.lblErrorLogClick(Sender: TObject);
 Begin
    popErrFile.Popup;
 end;
-procedure TfrmAdifImport.OpenInTextEditor(OpenName:String);
+procedure TfrmAdifImport.OpenInTextEditor(OtF:String);
 //open in text editor
 var
   prg: string;
@@ -884,7 +884,7 @@ begin
   try
     prg := cqrini.ReadString('ExtView', 'txt', '');
     if prg<>'' then
-      dmUtils.RunOnBackground(prg + ' ' + name)
+      dmUtils.RunOnBackground(prg + ' ' + OtF)
      else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
   finally
    //done
