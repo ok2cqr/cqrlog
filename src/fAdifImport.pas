@@ -277,19 +277,19 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
     data := trim(data);
 
     case h of
-    h_BAND                          :d.BAND:=TrimDataLen(adifTag,data,l_BAND);
-    h_CALL                          :d.CALL:=TrimDataLen(adifTag,data,l_CALL);
+    h_BAND                          :d.BAND:=UpperCase(TrimDataLen(adifTag,data,l_BAND));
+    h_CALL                          :d.CALL:=UpperCase(TrimDataLen(adifTag,data,l_CALL));
     h_CNTY                          :d.CNTY:=TrimDataLen(adifTag,data,l_CNTY);
     h_COMMENT                       :d.COMMENT:=TrimDataLen(adifTag,data,l_COMMENT);
-    h_CONT                          :d.CONT:=TrimDataLen(adifTag,data,l_CONT);
-    h_DXCC                          :d.DXCC:=TrimDataLen(adifTag,data,l_DXCC);
+    h_CONT                          :d.CONT:=UpperCase(TrimDataLen(adifTag,data,l_CONT));
+    h_DXCC                          :d.DXCC:=UpperCase(TrimDataLen(adifTag,data,l_DXCC));
     h_EQSL_QSLRDATE                 :d.EQSL_QSLRDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLRDATE);
     h_EQSL_QSLSDATE                 :d.EQSL_QSLSDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLSDATE);
     h_EQSL_QSL_RCVD                 :d.EQSL_QSL_RCVD:=TrimDataLen(adifTag,data,l_EQSL_QSL_RCVD);
     h_EQSL_QSL_SENT                 :d.EQSL_QSL_SENT:=TrimDataLen(adifTag,data,l_EQSL_QSL_SENT);
     h_FREQ                          :d.FREQ:=TrimDataLen(adifTag,data,l_FREQ);
     h_GRIDSQUARE                    :d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-    h_IOTA                          :d.IOTA:=TrimDataLen(adifTag,data,l_IOTA);
+    h_IOTA                          :d.IOTA:=UpperCase(TrimDataLen(adifTag,data,l_IOTA));
     h_ITUZ                          :d.ITUZ:=TrimDataLen(adifTag,data,l_ITUZ);
     h_LOTW_QSLRDATE                 :d.LOTW_QSLRDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLRDATE);
     h_LOTW_QSLSDATE                 :d.LOTW_QSLSDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLSDATE);
@@ -305,16 +305,16 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_MODE                          : begin
                                           if not LockSubMode then  //do not override mode if already set by submode
                                              if data = 'PKT' then d.MODE:='PACKET'
-                                                else d.MODE:=TrimDataLen(adifTag,data,l_MODE);
+                                                else d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
                                         end;
       h_SUBMODE                       : begin
-                                          d.MODE:=TrimDataLen(adifTag,data,l_MODE);
+                                          d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
                                           LockSubMode:=true;
                                         end;
       h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
       h_NAME                            :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
       h_NOTES                           :d.NOTES:=TrimDataLen(adifTag,data,l_NOTES);
-      h_PFX                             :d.PFX:=TrimDataLen(adifTag,data,l_PFX);
+      h_PFX                             :d.PFX:=UpperCase(TrimDataLen(adifTag,data,l_PFX));
       h_QSLMSG                          :d.QSLMSG:=TrimDataLen(adifTag,data,l_QSLMSG);
       h_QSLRDATE                        :d.QSLRDATE:=TrimDataLen(adifTag,data,l_QSLRDATE);
       h_QSLSDATE                        :d.QSLSDATE:=TrimDataLen(adifTag,data,l_QSLSDATE);
@@ -340,7 +340,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_APP_CQRLOG_QSLR                 :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
       h_APP_CQRLOG_COUNTY               :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
       h_CQZ                             :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
-      h_STATE                           :d.STATE:=TrimDataLen(adifTag,data,l_STATE);
+      h_STATE                           :d.STATE:=UpperCase(TrimDataLen(adifTag,data,l_STATE));
       h_AWARD                           :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
       h_PROP_MODE                       :d.PROP_MODE:=TrimDataLen(adifTag,data,l_PROP_MODE);
       h_SAT_NAME                        :d.SAT_NAME:=TrimDataLen(adifTag,data,l_SAT_NAME);
@@ -561,7 +561,8 @@ begin
                            ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL)+
                            ' AND band = ' + QuotedStr(d.BAND) + ' AND mode = '+QuotedStr(d.MODE);
 
-      if LocalDbg then Writeln(dmData.Q.SQL.Text);
+      if LocalDbg then
+                  Writeln(dmData.Q.SQL.Text);
       if dmData.trQ.Active then
         dmData.trQ.Rollback;
       dmData.trQ.StartTransaction;
