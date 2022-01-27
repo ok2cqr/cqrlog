@@ -141,6 +141,7 @@ type
     procedure mnuImportClick(Sender: TObject);
   private
     LockSubMode : boolean;   //if we replace mode with submode we set lock in case that submode and mode are in opposite order in qso record.
+    LocalDbg     : Boolean;
     AbortImport : boolean;
     ERR_FILE : String;
     Do_Err_Import : Boolean;
@@ -164,6 +165,7 @@ type
     { private declarations }
   public
     function getNextAdifTag(var vstup,prik,data:string):boolean;
+    procedure OpenInTextEditor(OtF:String);
     { public declarations }
   end; 
 
@@ -224,7 +226,7 @@ var z,x:longint;
       DataLen := 0
     else
       DataLen := StrToInt(slen);
-    //if dmData.DebugLevel >=1 then Write('Got length:',DataLen);
+    //if LocalDbg then Write('Got length:',DataLen);
 
     if z<>0 then
       prik:=trim(copy(aaa,1,z-1))
@@ -235,14 +237,14 @@ var z,x:longint;
 
     z:=pos('<',aaa);
     i:= pos('_INTL',upcase(prik));
-    //if dmData.DebugLevel >=1 then Write(' pos INTL:',i);
+    //if LocalDbg then Write(' pos INTL:',i);
     if z=0 then
     begin
       if i>0 then  //tags with '_intl' have UTF8 charactes
        Begin
         prik:= copy(prik,1,i-1); //remove '_INTL'
         data:=UTF8copy(aaa,1,DataLen);
-        //if dmData.DebugLevel >=1 then Write(' as UTF8');
+        //if LocalDbg then Write(' as UTF8');
        end
       else
         data:=copy(aaa,1,DataLen);
@@ -253,14 +255,14 @@ var z,x:longint;
        Begin
         prik:= copy(prik,1,i-1); //remove '_INTL'
         data:=UTF8copy(aaa,1,DataLen);
-        //if dmData.DebugLevel >=1 then Write(' as UTF8');
+        //if LocalDbg then Write(' as UTF8');
        end
       else
         data:=copy(aaa,1,DataLen);
       vstup:=copy(aaa,z,length(aaa))
     end;
     data :=trim(data);
-    //if dmData.DebugLevel >=1 then Writeln(' for tag:',prik,' with data:',data);
+    //if LocalDbg then Writeln(' for tag:',prik,' with data:',data);
     getNextAdifTag:=true
   end;
 
@@ -275,19 +277,19 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
     data := trim(data);
 
     case h of
-    h_BAND                          :d.BAND:=TrimDataLen(adifTag,data,l_BAND);
-    h_CALL                          :d.CALL:=TrimDataLen(adifTag,data,l_CALL);
+    h_BAND                          :d.BAND:=UpperCase(TrimDataLen(adifTag,data,l_BAND));
+    h_CALL                          :d.CALL:=UpperCase(TrimDataLen(adifTag,data,l_CALL));
     h_CNTY                          :d.CNTY:=TrimDataLen(adifTag,data,l_CNTY);
     h_COMMENT                       :d.COMMENT:=TrimDataLen(adifTag,data,l_COMMENT);
-    h_CONT                          :d.CONT:=TrimDataLen(adifTag,data,l_CONT);
-    h_DXCC                          :d.DXCC:=TrimDataLen(adifTag,data,l_DXCC);
+    h_CONT                          :d.CONT:=UpperCase(TrimDataLen(adifTag,data,l_CONT));
+    h_DXCC                          :d.DXCC:=UpperCase(TrimDataLen(adifTag,data,l_DXCC));
     h_EQSL_QSLRDATE                 :d.EQSL_QSLRDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLRDATE);
     h_EQSL_QSLSDATE                 :d.EQSL_QSLSDATE:=TrimDataLen(adifTag,data,l_EQSL_QSLSDATE);
     h_EQSL_QSL_RCVD                 :d.EQSL_QSL_RCVD:=TrimDataLen(adifTag,data,l_EQSL_QSL_RCVD);
     h_EQSL_QSL_SENT                 :d.EQSL_QSL_SENT:=TrimDataLen(adifTag,data,l_EQSL_QSL_SENT);
     h_FREQ                          :d.FREQ:=TrimDataLen(adifTag,data,l_FREQ);
     h_GRIDSQUARE                    :d.GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-    h_IOTA                          :d.IOTA:=TrimDataLen(adifTag,data,l_IOTA);
+    h_IOTA                          :d.IOTA:=UpperCase(TrimDataLen(adifTag,data,l_IOTA));
     h_ITUZ                          :d.ITUZ:=TrimDataLen(adifTag,data,l_ITUZ);
     h_LOTW_QSLRDATE                 :d.LOTW_QSLRDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLRDATE);
     h_LOTW_QSLSDATE                 :d.LOTW_QSLSDATE:=TrimDataLen(adifTag,data,l_LOTW_QSLSDATE);
@@ -303,16 +305,16 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_MODE                          : begin
                                           if not LockSubMode then  //do not override mode if already set by submode
                                              if data = 'PKT' then d.MODE:='PACKET'
-                                                else d.MODE:=TrimDataLen(adifTag,data,l_MODE);
+                                                else d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
                                         end;
       h_SUBMODE                       : begin
-                                          d.MODE:=TrimDataLen(adifTag,data,l_MODE);
+                                          d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
                                           LockSubMode:=true;
                                         end;
       h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
       h_NAME                            :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
       h_NOTES                           :d.NOTES:=TrimDataLen(adifTag,data,l_NOTES);
-      h_PFX                             :d.PFX:=TrimDataLen(adifTag,data,l_PFX);
+      h_PFX                             :d.PFX:=UpperCase(TrimDataLen(adifTag,data,l_PFX));
       h_QSLMSG                          :d.QSLMSG:=TrimDataLen(adifTag,data,l_QSLMSG);
       h_QSLRDATE                        :d.QSLRDATE:=TrimDataLen(adifTag,data,l_QSLRDATE);
       h_QSLSDATE                        :d.QSLSDATE:=TrimDataLen(adifTag,data,l_QSLSDATE);
@@ -338,7 +340,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
       h_APP_CQRLOG_QSLR                 :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
       h_APP_CQRLOG_COUNTY               :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
       h_CQZ                             :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
-      h_STATE                           :d.STATE:=TrimDataLen(adifTag,data,l_STATE);
+      h_STATE                           :d.STATE:=UpperCase(TrimDataLen(adifTag,data,l_STATE));
       h_AWARD                           :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
       h_PROP_MODE                       :d.PROP_MODE:=TrimDataLen(adifTag,data,l_PROP_MODE);
       h_SAT_NAME                        :d.SAT_NAME:=TrimDataLen(adifTag,data,l_SAT_NAME);
@@ -507,19 +509,19 @@ begin
           Q4.SQL.Text := 'SELECT nr FROM profiles WHERE locator='+QuotedStr(pLoc) +
                          ' and qth='+QuotedStr(pQTH)+' and rig='+QuotedStr(pEq) +
                          ' and remarks='+QuotedStr(pNote);
-          if dmData.DebugLevel >=1 then Writeln(Q4.SQL.Text);
+          if LocalDbg then Writeln(Q4.SQL.Text);
           Q4.Open;
           if Q4.Fields[0].AsInteger = 0 then
           begin
             Q4.Close();
             Q4.SQL.Text := 'select nr from profiles where nr = '+pProf;
-            if dmData.DebugLevel >=1 then Writeln(Q4.SQL.Text);
+            if LocalDbg then Writeln(Q4.SQL.Text);
             Q4.Open();
             if (Q4.Fields[0].AsInteger > 0) then //if profile with this number doesnt exists,
             begin                           //we can save the number
               Q4.Close();
               Q4.SQL.Text := 'select max(nr) from profiles';
-              if dmData.DebugLevel >=1 then Writeln(Q4.SQL.Text);
+              if LocalDbg then Writeln(Q4.SQL.Text);
               Q4.Open();
               pProf := IntToStr(Q4.Fields[0].AsInteger+1)
             end;
@@ -539,7 +541,7 @@ begin
                            pProf+','+QuotedStr(pLoc)+','+QuotedStr(pQTH)+','+QuotedStr(pEq)+','+
                            QuotedStr(pNote)+',1)';
             }
-            if dmData.DebugLevel >=1 then Writeln(Q4.SQL.Text);
+            if LocalDbg then Writeln(Q4.SQL.Text);
             Q4.ExecSQL;
             Q4.Close();
           end
@@ -559,7 +561,8 @@ begin
                            ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL)+
                            ' AND band = ' + QuotedStr(d.BAND) + ' AND mode = '+QuotedStr(d.MODE);
 
-      if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
+      if LocalDbg then
+                  Writeln(dmData.Q.SQL.Text);
       if dmData.trQ.Active then
         dmData.trQ.Rollback;
       dmData.trQ.StartTransaction;
@@ -627,7 +630,7 @@ begin
                    ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
                    ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq, :stx, :srx, :stx_string, :srx_string,'+
                    ':contestname,:dok,:operator)';
-    if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
+    if LocalDbg then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
     Q1.Params[1].AsString   := d.TIME_ON;
@@ -756,7 +759,7 @@ begin
     else
       Q1.Params[47].Clear;
 
-    if dmData.DebugLevel >=1 then Writeln(Q1.SQL.Text);
+    if LocalDbg then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
     inc(RecNR);
     if (RecNR mod 100 = 0) then
@@ -792,7 +795,7 @@ begin
   // If that failed use default configured locator
   if not dmUtils.IsLocOK(FMyLoc) then
      FMyLoc   := cqrini.ReadString('Station', 'LOC', '');
-  if dmData.DebugLevel >=1 then WriteLn('Using '+FMyLoc+' as locator for imports');
+  if LocalDbg then WriteLn('Using '+FMyLoc+' as locator for imports');
   RecNR := 0;
   WrongRecNr := 0;
   FFilteredOutRecNr := 0;
@@ -852,7 +855,7 @@ begin
       tr.Commit;
     dt := dt - now;
     DecodeTime(dt,hh,m,s,ms);
-    if dmData.DebugLevel >=1 then WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
+    if LocalDbg then WriteLn('It takes about ',m,' minutes and ',s,' seconds ',ms,' milliseconds');
     lblCount.Caption := IntToStr(RecNR);
     lblFilteredOut.Visible := FFilterByDate;
     lblFilteredOutCount.Visible := FFilterByDate;
@@ -874,21 +877,25 @@ procedure TfrmAdifImport.lblErrorLogClick(Sender: TObject);
 Begin
    popErrFile.Popup;
 end;
-
-procedure TfrmAdifImport.mnueditClick(Sender: TObject);
-   //open in text editor
+procedure TfrmAdifImport.OpenInTextEditor(OtF:String);
+//open in text editor
 var
   prg: string;
 begin
-  popErrFile.Close;
   try
     prg := cqrini.ReadString('ExtView', 'txt', '');
     if prg<>'' then
-      dmUtils.RunOnBackground(prg + ' ' + lblErrorLog.Caption)
+      dmUtils.RunOnBackground(prg + ' ' + OtF)
      else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
   finally
    //done
   end;
+end;
+
+procedure TfrmAdifImport.mnueditClick(Sender: TObject);
+begin
+  popErrFile.Close;
+  OpenInTextEditor(lblErrorLog.Caption);
 end;
 
 procedure TfrmAdifImport.mnuImportClick(Sender: TObject);
@@ -976,7 +983,12 @@ begin
   finally
     FormatSettings.TimeSeparator := tmp
   end;
-  lblErrorLog.Visible:=false
+  lblErrorLog.Visible:=false;
+  //set debug rules for this form
+  // bit 1, %1,  ---> -2 for routines in this form
+  LocalDbg := dmData.DebugLevel >= 1 ;
+  if dmData.DebugLevel < 0 then
+      LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 2) = 2 );
 end;
 
 procedure TfrmAdifImport.chkFilterDateRangeChange(Sender: TObject);
@@ -1018,7 +1030,7 @@ var
   i : Integer;
 begin
     for i:= 0 to Length(lines)-1 do
-      if dmData.DebugLevel >=1 then WriteLn(lines[i]);
+      if LocalDbg then WriteLn(lines[i]);
 
   if FileExists(dmData.UsrHomeDir + ERR_FILE) then
   begin

@@ -20,16 +20,14 @@
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
-        <td align="left" width="33%">&nbsp;&lt;<a href="h6.html"> Prev</a></td>
         <td align="center" width="33%">[<a href="index.html" target="_top">Menu</a>]</td>
-        <td align="right" width="33%"><a href="h8.html">Next </a>&gt;</td>
     </tr>
     </tbody>
 </table>
 <br>
 <div align=left><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align="center"><img src="img/line.png"></p><a name="bh4"></a><br><b><h2>LoTW support</h2></b>
-<p><strong>Preparation</strong></p>
+<p><h3>Preparation</h3></p>
 <div align=justify>We assume that you have a working LoTW Account. If you are new to LoTW,
     carefully read the instructions provided by the ARRL and set up your account.<br><br>
     Most important is the certificate. ARRL issues certificates (.tq8) which are bound to
@@ -37,7 +35,7 @@
     .tq8 certificate, it is <b>absolutely essential to convert it to more usual .p12</b>
     format which <strong>can</strong> be transferred. Do this immediately!<br><br>
     Download and install the latest LoTW utilities (<em>tqsl</em> and <em>tqslcert</em>).
-    <p><strong>Setup</strong></p>
+    <p><h3>Setup</h3></p>
     <img src="img/h76.png"><br><br>
     <div align=justify>If you didn't do it already in the 'Preferences' setup procedure,
         provide your user name for LoTW and the password (this is <strong>not</strong> the
@@ -62,7 +60,11 @@
     <br>
     <img src="img/h81.png"><br><br>
     <div align=justify>Once entered, the QTH name stays in the predefined command line.</div>
-    <p><strong>LoTW file export and upload</strong></p>
+    <p><h3>LoTW file export and upload</h3></p>
+    You find LoTW up- and download from <b>QSO list/QSL</b> menu.
+    <br> For daily usage it is easier to select<b>Export only QSQs that have never been uploaded</b> using the <b>Upload to LoTW TAB </b>of Export window.
+    <br> Below are instructions for making file to export and exporting it.
+    <br><br>
     <div align=justify><strong>1. Select the QSO records</strong> you want to confirm.
 
         A suitable choice is a filter for date, QSL received etc. But be aware that QSO with propagtion mode "RPT - repeater" are filtered, due to the LoTW rule that repeater QSO doesn't count.<br><br>
@@ -103,7 +105,7 @@ Uploading was succesful<br></pre>
         Log in and go to <em>Your Account -> Your Activity</em> and you should see your last
         upload with the date, time and file name.
         <br><br></div>
-    <p><strong>LoTW files download and processing</strong></p>
+    <p><h3>LoTW files download and processing</h3></p>
     <div align=justify>The main purpose of the LoTW file processing (also download) is to
         mark existing QSO records as confirmed via LoTW. Files can be downloaded directly
         into CQRLOG or an already downloaded ADIF files can be processed.
@@ -116,26 +118,29 @@ Uploading was succesful<br></pre>
     </div>
     <br>
     <img src="img/h86.png"><br><br>
-    If you choose <em>Download and process data from LoTW website</em> a progress
-    indicator is displayed.
+    If you press <b>Download and process data from LoTW website</b> a progress
+    indicator is displayed in <b>Progress</b> window.
+    <br>You can select to <b>show new confirmed qsos</b> in Progress window after import finish.
+    <br>You can also select to <b>import station information from LoTW </b>data if it is not filled during qso logging (default checked).
+    This does not overwrite logged data, just fills empty columns of WAZ, ITU, IOTA, GRID, STATE and COUNTY
 </div>
 <br><br>
 <img src="img/h87.png"><br><br>
-<div align=justify>The Size changes while downloading, if finished it indicates the
-    total file size. When the download finishes, a summary appears and the import begins,
+<div align=justify>The Size changes while downloading, When finished it indicates the
+    total file size downloaded. When the download finishes, a summary appears and the import begins,
     showing the same progress indicator as above.
+    <br>In case there are files that are not in your log the queston to show the error file appears.
 </div>
 <br>
 <img src="img/h88.png"><br><br>
 If the file is not accessible (due to server overload etc.), an error message is shown.
 Also if the file contains a record which is not in your log, a warning message appears.
+<br>All downloaded files from LoTW are saved in ~/.config/cqrlog/lotw folder for possible later needs.
 <p align="center"><img src="img/line.png"></p>
 <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
     <tbody>
     <tr>
-        <td align="left" width="33%">&nbsp;&lt;<a href="h6.html"> Prev</a></td>
         <td align="center" width="33%">[<a href="index.html" target="_top">Menu</a>]</td>
-        <td align="right" width="33%"><a href="h8.html">Next </a>&gt;</td>
     </tr>
     </tbody>
 </table>
