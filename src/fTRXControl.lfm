@@ -334,6 +334,29 @@ object frmTRXControl: TfrmTRXControl
         Layout = tlCenter
         ParentColor = False
         ParentFont = False
+        OnClick = lblFreqClick
+      end
+      object edtFreqInput: TEdit
+        AnchorSideLeft.Control = lblFreq
+        AnchorSideTop.Control = lblFreq
+        AnchorSideRight.Control = lblFreq
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = lblFreq
+        AnchorSideBottom.Side = asrBottom
+        Left = 4
+        Height = 39
+        Top = 4
+        Width = 183
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        AutoSize = False
+        AutoSelect = False
+        OnKeyPress = edtFreqInputKeyPress
+        OnKeyUp = edtFreqInputKeyUp
+        OnMouseUp = edtFreqInputMouseUp
+        OnMouseWheel = edtFreqInputMouseWheel
+        TabOrder = 0
+        TextHint = 'Mhz(Enter)'
+        Visible = False
       end
     end
     object gbBand: TGroupBox
