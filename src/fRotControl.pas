@@ -103,6 +103,7 @@ procedure TfrmRotControl.gbAzimuthClick(Sender: TObject);
 begin
   edtAzimuth.Text:=lblAzimuth.Caption;
   edtAzimuth.Font:=lblAzimuth.Font;
+  edtAzimuth.Color:=clYellow;
   edtAzimuth.Visible:=true;
   edtAzimuth.SetFocus;
   edtAzimuth.SelStart := Length(edtAzimuth.Text);

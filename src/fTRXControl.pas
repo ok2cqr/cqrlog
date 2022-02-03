@@ -765,6 +765,7 @@ procedure TfrmTRXControl.gbFreqClick(Sender: TObject);
 begin
   edtFreqInput.Text:=lblFreq.Caption;
   edtFreqInput.Font:=lblFreq.Font;
+  edtFreqInput.Color:=clYellow;
   edtFreqInput.Visible:=True;
   edtFreqInput.SetFocus;
   edtFreqInput.SelStart := Length(edtFreqInput.Text);
@@ -1118,6 +1119,7 @@ begin
     try
       f:= StrToFloat(s);
       f:=f+m;
+      if f<0 then f:=0;
       edtFreqInput.Text:=FormatFloat(empty_freq+';;',f);
       if Assigned(radio) then
                              radio.SetFreqKHz(f*1000);
