@@ -98,6 +98,7 @@ type
     procedure edtFreqInputKeyPress(Sender: TObject; var Key: char);
     procedure edtFreqInputKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtFreqInputMouseLeave(Sender: TObject);
     procedure edtFreqInputMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure edtFreqInputMouseWheel(Sender: TObject; Shift: TShiftState;
@@ -136,6 +137,7 @@ type
     procedure rbRadio2Click(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
   private
+    MouseWheelUsed : Boolean;
     radio : TRigControl;
     old_mode : String;
 
@@ -567,6 +569,7 @@ begin
   pnlUsr.Visible := cqrini.ReadBool('TRX','ShowUsr',pnlUsr.Visible);
   mnuShowVfo.Checked :=  gbVfo.Visible;
   mnuShowUsr.Checked :=  pnlUsr.Visible;
+  MouseWheelUsed:=false;
 end;
 
 procedure TfrmTRXControl.btn10mClick(Sender: TObject);
@@ -1057,6 +1060,7 @@ mode : String = '';
 begin
   if Key = VK_Return then
    Begin
+    MouseWheelUsed:=false;
     s:= edtFreqInput.Text;
     mode := GetActualMode;
     try
@@ -1072,13 +1076,18 @@ begin
    end;
 end;
 
+procedure TfrmTRXControl.edtFreqInputMouseLeave(Sender: TObject);
+begin
+  if MouseWheelUsed then
+                    edtFreqInputMouseUp(nil,mbMiddle,[ssCtrl],0,0);
+end;
+
 procedure TfrmTRXControl.edtFreqInputMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
    Key : word = VK_Return;
 begin
-    if Button = mbMiddle then
-                             edtFreqInputKeyUp(nil,Key,Shift);
+    edtFreqInputKeyUp(nil,Key,Shift);
 end;
 
 procedure TfrmTRXControl.edtFreqInputMouseWheel(Sender: TObject;
@@ -1089,18 +1098,24 @@ var
    f : currency;
    m : currency;
 begin
+    MouseWheelUsed:=true;
     m:=0.0001;   //base 10Hz step
-    if Shift = [ssShift] then  m:=0.001;
-    if Shift = [ssCtrl]  then  m:=0.01;
-    if Shift = [ssShift]+[ssCtrl]  then  m:=1;
+    if Shift = [ssShift]           then
+                                       m:=0.001;
+    if Shift = [ssCtrl]            then
+                                       m:=0.01;
+    if Shift = [ssShift]+[ssCtrl]  then
+                                       m:=1;
     if  WheelDelta<0 then
-                     m:=m*-1;
+                                       m:=m*-1;
 
     s:= edtFreqInput.Text;
     try
       f:= StrToFloat(s);
       f:=f+m;
-      edtFreqInput.Text:=FloatToStr(f);
+      edtFreqInput.Text:=FormatFloat(empty_freq+';;',f);
+      if Assigned(radio) then
+                             radio.SetFreqKHz(f*1000);
     except
       On E : Exception do
         edtFreqInput.Text:=s;

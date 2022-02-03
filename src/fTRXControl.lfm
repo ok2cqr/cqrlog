@@ -350,8 +350,10 @@ object frmTRXControl: TfrmTRXControl
         Anchors = [akTop, akLeft, akRight, akBottom]
         AutoSize = False
         AutoSelect = False
+        Color = clYellow
         OnKeyPress = edtFreqInputKeyPress
         OnKeyUp = edtFreqInputKeyUp
+        OnMouseLeave = edtFreqInputMouseLeave
         OnMouseUp = edtFreqInputMouseUp
         OnMouseWheel = edtFreqInputMouseWheel
         TabOrder = 0
