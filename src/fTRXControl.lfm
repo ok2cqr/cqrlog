@@ -307,6 +307,7 @@ object frmTRXControl: TfrmTRXControl
       ClientHeight = 46
       ClientWidth = 190
       TabOrder = 0
+      OnClick = gbFreqClick
       object lblFreq: TLabel
         AnchorSideLeft.Control = gbFreq
         AnchorSideLeft.Side = asrCenter

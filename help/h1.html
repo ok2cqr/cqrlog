@@ -236,6 +236,7 @@ After you have the DX Cluster window open and connected you may also open the Ba
     <br><strong>Extra command line arguments</strong> usefull when you have to specify more parameters to
     rigctld. E.g. CIV address (--civaddr=ID, where ID is the CIV address).<br><br>
     <strong>Run rigctld when program starts</strong> is usually checked but when rig model #2 <strong>Hamlib Net Rigctld</strong> is used then it is unchecked and disabled because with that rig setting we are trying to connect external rigctld. Either in same PC or in network.
+    <br>If rig model #1 <b>Hamlib Dummy</b> is selected <strong>Run rigctld when program starts</strong>  is forced to be checked. This allows testing and simulated operations without rig CAT control.
     <br><br><strong>Use \chkvfo</strong> is normally checked. Then cqrlog tries to find out is rigctld started with parameter "--vfo" because that changes rigctld command format. Uncheck of this disables this function. Use it in case of problems.
     <br><br><strong>Serial port parameters</strong> Use the manual of your rig, please choose the correct options.
     Very often it is much better to specify only serial speed and leave other options as default.

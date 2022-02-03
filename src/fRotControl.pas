@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls, Menus,
-  EditBtn;
+  EditBtn, Types;
 
 type
 
@@ -19,7 +19,7 @@ type
     btnRight: TButton;
     btnShortP: TButton;
     btnStop: TButton;
-    edtBAzimuth: TEditButton;
+    edtAzimuth: TEdit;
     gbAzimuth: TGroupBox;
     lblAzimuth: TLabel;
     lblAzmax: TLabel;
@@ -42,14 +42,18 @@ type
     procedure btnShortPClick(Sender: TObject);
     procedure btnLongPClick(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
-    procedure edtBAzimuthButtonClick(Sender: TObject);
-    procedure edtBAzimuthClick(Sender: TObject);
-    procedure edtBAzimuthKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure edtAzimuthKeyPress(Sender: TObject; var Key: char);
+    procedure edtAzimuthKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState );
+    procedure edtAzimuthMouseLeave(Sender: TObject);
+    procedure edtAzimuthMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure edtAzimuthMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure gbAzimuthClick(Sender: TObject);
     procedure lblAzimuthClick(Sender: TObject);
     procedure mnuDirbtnsClick(Sender: TObject);
     procedure mnuMinMaxClick(Sender: TObject);
@@ -62,6 +66,7 @@ type
   private
     { private declarations }
     rotor : TRotControl;
+    MouseWheelUsed : Boolean;
   public
     { public declarations }
     procedure SynROT;
@@ -94,45 +99,20 @@ begin
   if pnlMinMax.Visible then gbAzimuth.Height:=70;
 end;
 
+procedure TfrmRotControl.gbAzimuthClick(Sender: TObject);
+begin
+  edtAzimuth.Text:=lblAzimuth.Caption;
+  edtAzimuth.Font:=lblAzimuth.Font;
+  edtAzimuth.Visible:=true;
+  edtAzimuth.SetFocus;
+  edtAzimuth.SelStart := Length(edtAzimuth.Text);
+end;
+
 procedure TfrmRotControl.lblAzimuthClick(Sender: TObject);
-
 begin
-  lblAzimuth.Visible:=false;
-  edtBAzimuth.Visible:=true;
+   gbAzimuthClick(Sender);
 end;
 
-procedure TfrmRotControl.edtBAzimuthButtonClick(Sender: TObject);
-var
-   Az    :integer=-999;
-begin
-   Try
-        Az:= StrToInt(edtBAzimuth.Text);
-   except
-        On E : EConvertError do
-          Az:=-999;
-   end;
-     if ((Az>=0) and (Az<=360)) then
-        rotor.SetAzimuth(edtBAzimuth.Text);
-
-   lblAzimuth.Visible:=true;
-   edtBAzimuth.Visible:=false;
-   edtBAzimuth.MaxLength:=0;
-   edtBAzimuth.Text:='Az? (0-360)';
-end;
-
-procedure TfrmRotControl.edtBAzimuthClick(Sender: TObject);
-begin
-   edtBAzimuth.SetFocus;
-   edtBAzimuth.text:='';
-   edtBAzimuth.NumbersOnly:=True;
-   edtBAzimuth.MaxLength:=3;
-end;
-
-procedure TfrmRotControl.edtBAzimuthKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if Key=VK_Return then edtBAzimuthButtonClick(nil);
-end;
 
 procedure TfrmRotControl.mnuDirbtnsClick(Sender: TObject);
 begin
@@ -274,6 +254,75 @@ begin
   btnStop.Font.Color:=clDefault;
   btnStop.Font.Style:=btnStop.Font.Style-[fsBold];
   btnStop.Repaint;
+end;
+
+
+procedure TfrmRotControl.edtAzimuthKeyPress(Sender: TObject; var Key: char);
+var
+   a : integer;
+begin
+  if (Key<>#127)      //delete and numbers ok
+    and ((Key >'9')
+       or (( Key>=#20) and (Key<'0'))) then
+                                        Key:=#0;
+
+   if TryStrToInt(edtAzimuth.Text,a) then
+     Begin
+       if a > 360 then a:=360;
+       if a < 0 then a:=0;
+       edtAzimuth.Text:=IntToStr(a);
+     end;
+end;
+
+procedure TfrmRotControl.edtAzimuthKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if Key = VK_Return then
+   Begin
+    MouseWheelUsed:=false;
+    if edtAzimuth.Text<>'' then
+      rotor.SetAzimuth(edtAzimuth.Text);
+    edtAzimuth.Visible:=False;
+   end;
+end;
+
+procedure TfrmRotControl.edtAzimuthMouseLeave(Sender: TObject);
+begin
+  if MouseWheelUsed then
+                    edtAzimuthMouseUp(nil,mbMiddle,[ssCtrl],0,0);
+end;
+
+procedure TfrmRotControl.edtAzimuthMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+   Key : word = VK_Return;
+begin
+    edtAzimuthKeyUp(nil,Key,Shift);
+end;
+
+procedure TfrmRotControl.edtAzimuthMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+var
+      m,s : integer;
+begin
+    MouseWheelUsed:=true;
+    m:=1;   //base 10Hz step
+    if Shift = [ssShift]           then
+                                       m:=10;
+    if Shift = [ssCtrl]            then
+                                       m:=100;
+    if  WheelDelta<0 then
+                                       m:=m*-1;
+    if pos('.',edtAzimuth.Text)>0 then
+                   edtAzimuth.Text:=copy(edtAzimuth.Text,1, pos('.',edtAzimuth.Text)-1);
+    if TryStrToInt(edtAzimuth.Text,s) then
+    Begin
+     s:=s+m;
+     if s > 360 then s:=0;
+     if s < 0 then s:=360;
+     edtAzimuth.Text:=IntToStr(s);
+    end;
 end;
 
 procedure TfrmRotControl.tmrStopRotTimer(Sender: TObject);

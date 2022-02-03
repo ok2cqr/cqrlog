@@ -127,6 +127,7 @@ type
     procedure btnFMClick(Sender: TObject);
     procedure btnRTTYClick(Sender: TObject);
     procedure btnSSBClick(Sender: TObject);
+    procedure gbFreqClick(Sender: TObject);
     procedure lblFreqClick(Sender: TObject);
     procedure mnuShowInfoClick(Sender: TObject);
     procedure mnuShowPwrClick(Sender: TObject);
@@ -760,13 +761,18 @@ begin
   end
 end;
 
-procedure TfrmTRXControl.lblFreqClick(Sender: TObject);
+procedure TfrmTRXControl.gbFreqClick(Sender: TObject);
 begin
   edtFreqInput.Text:=lblFreq.Caption;
   edtFreqInput.Font:=lblFreq.Font;
   edtFreqInput.Visible:=True;
   edtFreqInput.SetFocus;
   edtFreqInput.SelStart := Length(edtFreqInput.Text);
+end;
+
+procedure TfrmTRXControl.lblFreqClick(Sender: TObject);
+begin
+  gbFreqClick(Sender);
 end;
 
 procedure TfrmTRXControl.mnuShowInfoClick(Sender: TObject);
@@ -1032,7 +1038,6 @@ begin
          UserButton(r,'3')
         end;
 end;
-
 
 
 procedure TfrmTRXControl.edtFreqInputKeyPress(Sender: TObject; var Key: char);
