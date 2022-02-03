@@ -211,11 +211,14 @@ begin
     Writeln('')
   end;
 
+  { Hamlib Dummy rig allowed helps testing and maybe some operations without CAT rig
+
   if (RigId = 1) then
   begin
     Result := False;
     exit
   end;
+  }
 
   if fRunRigCtld then
   begin

@@ -19,7 +19,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, inifiles, process, lcltype, buttons, Menus, ActnList, dynlibs,
-  uRigControl;
+  uRigControl, Types;
 
 
 
@@ -58,6 +58,7 @@ type
     btnUsr1: TButton;
     btPstby: TButton;
     btnUsr3: TButton;
+    edtFreqInput: TEdit;
     edtMemNr: TEdit;
     gbBand: TGroupBox;
     gbFreq: TGroupBox;
@@ -94,6 +95,14 @@ type
     procedure btnUsr1Click(Sender: TObject);
     procedure btnUsr2Click(Sender: TObject);
     procedure btnUsr3Click(Sender: TObject);
+    procedure edtFreqInputKeyPress(Sender: TObject; var Key: char);
+    procedure edtFreqInputKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edtFreqInputMouseLeave(Sender: TObject);
+    procedure edtFreqInputMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure edtFreqInputMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender : TObject; var CanClose : boolean);
     procedure FormCreate(Sender: TObject);
@@ -118,6 +127,8 @@ type
     procedure btnFMClick(Sender: TObject);
     procedure btnRTTYClick(Sender: TObject);
     procedure btnSSBClick(Sender: TObject);
+    procedure gbFreqClick(Sender: TObject);
+    procedure lblFreqClick(Sender: TObject);
     procedure mnuShowInfoClick(Sender: TObject);
     procedure mnuShowPwrClick(Sender: TObject);
     procedure mnuProgPrefClick(Sender: TObject);
@@ -127,6 +138,7 @@ type
     procedure rbRadio2Click(Sender: TObject);
     procedure tmrRadioTimer(Sender : TObject);
   private
+    MouseWheelUsed : Boolean;
     radio : TRigControl;
     old_mode : String;
 
@@ -558,6 +570,7 @@ begin
   pnlUsr.Visible := cqrini.ReadBool('TRX','ShowUsr',pnlUsr.Visible);
   mnuShowVfo.Checked :=  gbVfo.Visible;
   mnuShowUsr.Checked :=  pnlUsr.Visible;
+  MouseWheelUsed:=false;
 end;
 
 procedure TfrmTRXControl.btn10mClick(Sender: TObject);
@@ -746,6 +759,21 @@ begin
         SetMode('LSB',GetBandWidth('SSB'))
     end
   end
+end;
+
+procedure TfrmTRXControl.gbFreqClick(Sender: TObject);
+begin
+  edtFreqInput.Text:=lblFreq.Caption;
+  edtFreqInput.Font:=lblFreq.Font;
+  edtFreqInput.Color:=clYellow;
+  edtFreqInput.Visible:=True;
+  edtFreqInput.SetFocus;
+  edtFreqInput.SelStart := Length(edtFreqInput.Text);
+end;
+
+procedure TfrmTRXControl.lblFreqClick(Sender: TObject);
+begin
+  gbFreqClick(Sender);
 end;
 
 procedure TfrmTRXControl.mnuShowInfoClick(Sender: TObject);
@@ -1010,6 +1038,95 @@ begin
          if rbRadio1.Checked then  r:='1' else r:='2';
          UserButton(r,'3')
         end;
+end;
+
+
+procedure TfrmTRXControl.edtFreqInputKeyPress(Sender: TObject; var Key: char);
+begin
+  if key='.' then
+    Begin
+     if pos('.',edtFreqInput.Text)>0 then         //only one dot
+                                         Key:=#0;
+    end
+  else
+   if (Key<>#127)      //delete and numbers ok
+    and ((Key >'9')
+       or (( Key>=#20) and (Key<'0'))) then
+                                        Key:=#0;
+end;
+
+
+procedure TfrmTRXControl.edtFreqInputKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+freq : String = '';
+mode : String = '';
+   s : String ;
+   f : currency;
+begin
+  if Key = VK_Return then
+   Begin
+    MouseWheelUsed:=false;
+    s:= edtFreqInput.Text;
+    mode := GetActualMode;
+    try
+      f:= StrToFloat(s);
+      f:=f*1000;
+      freq:=FloatToStr(f);
+      SetModeFreq(mode,freq);
+    except
+      On E : Exception do
+        edtFreqInput.Text:=s;
+    end;
+    edtFreqInput.Visible:=false;
+   end;
+end;
+
+procedure TfrmTRXControl.edtFreqInputMouseLeave(Sender: TObject);
+begin
+  if MouseWheelUsed then
+                    edtFreqInputMouseUp(nil,mbMiddle,[ssCtrl],0,0);
+end;
+
+procedure TfrmTRXControl.edtFreqInputMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+   Key : word = VK_Return;
+begin
+    edtFreqInputKeyUp(nil,Key,Shift);
+end;
+
+procedure TfrmTRXControl.edtFreqInputMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+var
+   s : String ;
+   f : currency;
+   m : currency;
+begin
+    MouseWheelUsed:=true;
+    m:=0.0001;   //base 10Hz step
+    if Shift = [ssShift]           then
+                                       m:=0.001;
+    if Shift = [ssCtrl]            then
+                                       m:=0.01;
+    if Shift = [ssShift]+[ssCtrl]  then
+                                       m:=1;
+    if  WheelDelta<0 then
+                                       m:=m*-1;
+
+    s:= edtFreqInput.Text;
+    try
+      f:= StrToFloat(s);
+      f:=f+m;
+      if f<0 then f:=0;
+      edtFreqInput.Text:=FormatFloat(empty_freq+';;',f);
+      if Assigned(radio) then
+                             radio.SetFreqKHz(f*1000);
+    except
+      On E : Exception do
+        edtFreqInput.Text:=s;
+    end;
 end;
 
 procedure TfrmTRXControl.FormCloseQuery(Sender : TObject; var CanClose : boolean

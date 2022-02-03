@@ -33,6 +33,7 @@ object frmRotControl: TfrmRotControl
     ClientHeight = 57
     ClientWidth = 170
     TabOrder = 0
+    OnClick = gbAzimuthClick
     object lblAzimuth: TLabel
       AnchorSideLeft.Control = gbAzimuth
       AnchorSideTop.Control = pnlMinMax
@@ -122,31 +123,28 @@ object frmRotControl: TfrmRotControl
         ParentFont = False
       end
     end
-    object edtBAzimuth: TEditButton
-      AnchorSideLeft.Control = gbAzimuth
-      AnchorSideTop.Control = pnlMinMax
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = gbAzimuth
+    object edtAzimuth: TEdit
+      AnchorSideLeft.Control = lblAzimuth
+      AnchorSideTop.Control = lblAzimuth
+      AnchorSideRight.Control = lblAzimuth
       AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = lblAzimuth
+      AnchorSideBottom.Side = asrBottom
       Left = 2
-      Height = 33
-      Top = 23
+      Height = 36
+      Hint = '0-360(enter)'
+      Top = 25
       Width = 166
-      NumbersOnly = True
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Top = 2
-      BorderSpacing.Right = 2
-      ButtonCaption = 'OK'
-      ButtonWidth = 40
-      MaxLength = 0
-      NumGlyphs = 1
-      OnButtonClick = edtBAzimuthButtonClick
-      OnClick = edtBAzimuthClick
-      OnKeyDown = edtBAzimuthKeyDown
-      PasswordChar = #0
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      AutoSize = False
+      AutoSelect = False
+      Color = clYellow
+      OnKeyPress = edtAzimuthKeyPress
+      OnKeyUp = edtAzimuthKeyUp
+      OnMouseLeave = edtAzimuthMouseLeave
+      OnMouseUp = edtAzimuthMouseUp
+      OnMouseWheel = edtAzimuthMouseWheel
       TabOrder = 1
-      Text = 'Az? (0-360)'
       Visible = False
     end
   end
