@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
 
-    Commits on Jan 6, 2022 Merge pull request #474 from phl0/updateSATnames 
+    Commits on Feb 7, 2022 Merge pull request #483 from OH1KH/squash_trx_freq 
 
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -13,64 +13,46 @@ They contain all accepted pull requests from official source (that may not be re
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
 LAST UPDATE
-  - ver 2.5.2(117)
+  - ver 2.5.2(118)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
 
 
-
+  - ver 2.5.2(117)
+  - Help files have additions remember to update also HELP
   - ver 2.5.2(116)
-  - official version with alpha additions (see below)
   - ver 2.5.2(115)
-  - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
   - ver 2.5.2(114)
-  - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
   - ver 2.5.2(113)
-  - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
   - ver 2.5.2(111)
-  - official version with alpha additions (see below)
-  - Help files have additions remember to update also HELP  - ver 2.5.2(110)
-  - official version with alpha additions (see below)
+  - Help files have additions remember to update also HELP  
+  - ver 2.5.2(110)
   - Added checbox (preferences/Online Logs) to continue ClubLog upload if error occurs
   - Help files have additions remember to update also HELP
   - ver 2.5.2(109)
-  - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP  
   - ver 2.5.2(108)
-  - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP
   - ver 2.5.2(107)
-  - official version with alpha additions (see below) 
   - wsjtx remote fix, close when cqmonitor is not visible caused error with fcc-states loading check
   - Help files have additions remember to update also HELP
   - ver 2.5.2(106)
-  - official version with alpha additions (see below) 
   - ver 2.5.2(105)
-  - official version with alpha additions (see below) 
   - ver 2.5.2(104)
-  - official version with alpha additions (see below) 
   - ver 2.5.2(103)
-  - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP
   - ver 2.5.2(102)
-  - official version with alpha additions (see below) 
   - ver 2.5.2(101)
-  - official version with alpha additions (see below) 
   - ver 2.5.1(106)
-  - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP
   - ver 2.5.1(105)
-  - official version with alpha additions (see below) 
   - Help files have additions remember to update also HELP
   - ver 2.5.1(103)
-  - official version with alpha additions (see below)
   - ver 2.5.1(102)
-  - official version with alpha additions (see below)
   - ver 2.5.1(101)
-  - official version with alpha additions (see below)
   - ver 2.5.0(101)
   - official version with alpha additions (see below)
   
