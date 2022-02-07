@@ -2498,25 +2498,35 @@ end;
 
 procedure TfrmPreferences.cmbModelRig1Change(Sender: TObject);
 begin
-   if cmbModelRig1.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
+   chkR1RunRigCtld.Enabled:=True;
+
+  if cmbModelRig1.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
+    Begin
+     chkR1RunRigCtld.Checked:=True;
+     chkR1RunRigCtld.Enabled:=False;
+    end;
+  if cmbModelRig1.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
     Begin
      chkR1RunRigCtld.Checked:=False;
      chkR1RunRigCtld.Enabled:=False;
-    end
-   else
-      chkR1RunRigCtld.Enabled:=True;
+    end;
    TRXParamsChange(nil);
 end;
 
 procedure TfrmPreferences.cmbModelRig2Change(Sender: TObject);
 begin
-    if cmbModelRig2.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
+    chkR2RunRigCtld.Enabled:=True;
+
+  if cmbModelRig2.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
+      Begin
+       chkR2RunRigCtld.Checked:=True;
+       chkR2RunRigCtld.Enabled:=False;
+      end;
+   if cmbModelRig2.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
     Begin
      chkR2RunRigCtld.Checked:=False;
      chkR2RunRigCtld.Enabled:=False;
-    end
-   else
-      chkR2RunRigCtld.Enabled:=True;
+    end;
    TRXParamsChange(nil);
 end;
 

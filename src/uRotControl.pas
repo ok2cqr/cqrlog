@@ -251,11 +251,11 @@ begin
 end;
 procedure TRotControl.LeftRot ;
 begin
-  rcvdAzimut.SendMessage('M 8 1'+LineEnding);
+  rcvdAzimut.SendMessage('M 8 -1'+LineEnding);
 end;
 procedure TRotControl.RightRot ;
 begin
-  rcvdAzimut.SendMessage('M 16 1'+LineEnding);
+  rcvdAzimut.SendMessage('M 16 -1'+LineEnding);
 end;
 procedure TRotControl.OnReceivedRcvdAzimut(aSocket: TLSocket);
 var
