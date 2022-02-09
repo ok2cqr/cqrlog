@@ -24,6 +24,7 @@ object frmContest: TfrmContest
     Width = 140
     AutoSelect = False
     CharCase = ecUppercase
+    MaxLength = 20
     OnChange = edtCallChange
     OnExit = edtCallExit
     OnKeyDown = edtCallKeyDown
@@ -38,6 +39,7 @@ object frmContest: TfrmContest
     Height = 34
     Top = 59
     Width = 50
+    MaxLength = 20
     OnKeyDown = edtCallKeyDown
     TabOrder = 7
   end
@@ -84,6 +86,7 @@ object frmContest: TfrmContest
     Top = 59
     Width = 50
     BorderSpacing.Left = 16
+    MaxLength = 20
     OnKeyDown = edtCallKeyDown
     TabOrder = 1
   end
