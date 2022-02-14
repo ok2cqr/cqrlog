@@ -2597,6 +2597,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 86
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
+          MaxLength = 20
           OnEnter = edtMyRSTEnter
           OnExit = edtMyRSTExit
           OnKeyDown = edtMyRSTKeyDown
@@ -2755,7 +2756,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 5
           BorderSpacing.Top = 2
           ItemHeight = 0
-          ItemIndex = 1
+          ItemIndex = 0
           Items.Strings = (
             ''
             'MD'
@@ -2769,11 +2770,11 @@ object frmNewQSO: TfrmNewQSO
             'SMB'
             'SPE'
           )
+          MaxLength = 4
           OnEnter = cmbQSL_SEnter
           OnExit = cmbQSL_SExit
           OnKeyDown = cmbQSL_SKeyDown
           TabOrder = 9
-          Text = 'MD'
         end
         object cmbQSL_R: TComboBox
           AnchorSideLeft.Control = cmbQSL_S
@@ -2796,6 +2797,7 @@ object frmNewQSO: TfrmNewQSO
             ''
             ''
           )
+          MaxLength = 3
           OnEnter = cmbQSL_REnter
           OnExit = cmbQSL_RExit
           OnKeyDown = cmbQSL_RKeyDown
@@ -2962,6 +2964,7 @@ object frmNewQSO: TfrmNewQSO
           Top = 232
           Width = 100
           BorderSpacing.Top = 2
+          MaxLength = 10
           OnEnter = edtDateEnter
           OnExit = edtDateExit
           OnKeyDown = edtDateKeyDown
@@ -2980,6 +2983,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 55
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
+          MaxLength = 5
           OnEnter = edtStartTimeEnter
           OnExit = edtStartTimeExit
           OnKeyDown = edtStartTimeKeyDown
@@ -2998,6 +3002,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 55
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
+          MaxLength = 5
           OnEnter = edtEndTimeEnter
           OnExit = edtEndTimeExit
           OnKeyDown = edtEndTimeKeyDown
@@ -3159,6 +3164,7 @@ object frmNewQSO: TfrmNewQSO
               Width = 272
               BorderSpacing.Top = 3
               ItemHeight = 0
+              MaxLength = 30
               OnChange = cmbPropagationChange
               ParentFont = False
               Style = csDropDownList
@@ -3200,6 +3206,7 @@ object frmNewQSO: TfrmNewQSO
               Width = 272
               BorderSpacing.Top = 3
               ItemHeight = 0
+              MaxLength = 30
               OnChange = cmbSatelliteChange
               ParentFont = False
               Style = csDropDownList
@@ -3362,7 +3369,7 @@ object frmNewQSO: TfrmNewQSO
           AnchorSideRight.Control = pnlQSOinput
           AnchorSideRight.Side = asrBottom
           Left = 555
-          Height = 188
+          Height = 205
           Top = 0
           Width = 204
           Anchors = [akTop, akLeft, akRight, akBottom]
