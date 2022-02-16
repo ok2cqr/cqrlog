@@ -819,7 +819,7 @@ object frmCabrilloExport: TfrmCabrilloExport
     Width = 156
     Anchors = [akRight, akBottom]
     BorderSpacing.Bottom = 2
-    Caption = 'Open resulted file'
+    Caption = 'Open exported file'
     OnClick = btnResultFileClick
     TabOrder = 17
   end
