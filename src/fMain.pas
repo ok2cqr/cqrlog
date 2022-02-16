@@ -1166,7 +1166,7 @@ end;
 
 procedure TfrmMain.acSelAllExecute(Sender: TObject);
 begin
-  if application.MessageBox('Do you really want to select all records?',
+  if application.MessageBox('Do you really want to select all records'+#10+#13+'now in buffer (Max 500)?',
     'Question ...', mb_ok + mb_YesNo) in [idNo, idCancel] then
     exit;
   try
