@@ -20,6 +20,10 @@ uses
   ComCtrls,lcltype, synachar, ExtCtrls, httpsend, blcksock, iniFiles, FileUtil,
   LazFileUtils;
 
+const
+  C_EErrorFile ='errors_eQSL.adi';
+  C_LErrorFile ='errors_LoTW.adi';
+
 type
   TImportProgressType = (imptRegenerateDXCC, imptImportDXCCTables, imptDownloadDXCCData, imptImportLoTWAdif,
                          imptImportQSLMgrs, imptDownloadQSLData, imptInsertQSLManagers, imptImporteQSLAdif,
@@ -49,7 +53,9 @@ type
     procedure DownloadDXCCData;
     procedure DownloadDOKData;
     procedure CommonImport(var PosEOR:word;var f:TextFile;var call,band,mode,submode,qsodate,time_on,qslr,
-                                                      qslrdate,cqz,ituz,iota,grid,state,county:String);
+                                                      qslrdate,cqz,ituz,iota,grid,state,county,qsorecord:String);
+    procedure WriteErrorRecord(f:char;call,band,mode,qsodate,time_on,qslr,qslrdate,
+                                              cqz,ituz,iota,grid,state,county,qsorecord:string;var s:Tstringlist);
     procedure ImportLoTWAdif;
     procedure ImportQSLMgrs;
     procedure DownloadQSLData;
@@ -549,15 +555,17 @@ begin
   end;
 end;
 procedure TfrmImportProgress.CommonImport(var PosEOR:word;var f:TextFile;var call,band,mode,submode,qsodate,time_on,qslr,
-                                                      qslrdate,cqz,ituz,iota,grid,state,county:String);
+                                                      qslrdate,cqz,ituz,iota,grid,state,county,qsorecord:String);
 var
   a,
   prik,
   data,
+  Dstamp,
   Buf  :string;
 
 Begin
   Buf:='';
+  Dstamp:=FormatDateTime('YYYYMMDD',Now);
   while not ((PosEOR > 0) or eof(f)) do //combine one record. LoTW adif has one tag per line
     Begin
      Readln(f, a);
@@ -565,8 +573,21 @@ Begin
      PosEOR := Pos('<EOR>',UpperCase(a));
      Buf    := Buf+a;
     end;
-  Buf:=buf+'<EOR>'; //in case we have broken record in broken file (hit eof before it is time)
-  if LocalDbg then Writeln('one record read: ',Buf);
+  if Pos('<EOR>',UpperCase(Buf))=0 then
+     Buf:=buf+'<EOR>'; //in case we have broken record in broken file (hit eof before it is time)
+  if LocalDbg then
+                  Writeln('one record read: ',Buf);
+
+  //Here we create a qso record that has comment and lotw+eqsl sent set.
+  //user can add this record to log to get rid of lotw/eqsl error "Not found in log"
+  //in case this qso is really wanted to be confirmed (maybe is SWL report) user can wipe out
+  //the first 1-3 lines (lotw,eqsl sent, comment) and import only the last line to log and so
+  //it will be added to log and sent to lotw/eqsl during next upload
+  qsorecord:= '<LOTW_QSL_SENT:1>Y<LOTW_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:55>Remove this line before import to allow upload to LoTW'
+              +LineEnding+'<EQSL_QSL_SENT:1>Y<EQSL_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:55>Remove this line before import to allow upload to eQSL'
+              +LineEnding+'<CONTEST_ID:25>Qso_was_not_found_in_log!'
+              +LineEnding+Buf;
+
   mode := ''; //be sure there is no mode at this point
   repeat
    begin
@@ -598,7 +619,44 @@ Begin
        end;  //repeat
   until pos('<EOR>',uppercase(Buf))=1;
 end;
+procedure TfrmImportProgress.WriteErrorRecord(f:char;call,band,mode,qsodate,time_on,qslr,qslrdate,
+                                              cqz,ituz,iota,grid,state,county,qsorecord:string;var s:Tstringlist);
+var
+  l,
+  tmp:String;
 
+
+Begin
+             tmp:=LineEnding
+                  +'------------------------------------------------'+LineEnding
+                  +'QSO NOT FOUND in log'+LineEnding
+                  +'Call:     '+call+LineEnding
+                  +'Band:     '+band+LineEnding
+                  +'Mode:     '+mode+LineEnding
+                  +'QSO_date: '+qsodate+LineEnding
+                  +'Time_on:  '+time_on+LineEnding;
+             if f='L' then
+               begin
+                 tmp:=tmp
+                 +'QSLR:     '+qslr+LineEnding
+                 +'QSLRDate: '+qslrdate+LineEnding
+                 +'CQZ:      '+cqz+LineEnding
+                 +'ITUZ:     '+ituz+LineEnding
+                 +'IOTA:     '+iota+LineEnding
+                 +'Grid:     '+grid+LineEnding
+                 +'State:    '+state+LineEnding
+                 +'County:   '+county+LineEnding;
+               end;
+             tmp:=tmp+'------------------------------------------------'+LineEnding;
+             l:=IntToStr(length(tmp));
+             //end of APP_CQRLOG_ERROR tag
+             tmp:=tmp
+             +qsorecord+LineEnding
+             +LineEnding;
+
+             s.Add('<APP_CQRLOG_ERROR:'+l+'>'+tmp);
+
+end;
 procedure TfrmImportProgress.ImportLoTWAdif;
 var
   num      : Word = 1;
@@ -610,6 +668,7 @@ var
   f        : TextFile;
   PosEOH   : Word;
   PosEOR   : Word;
+  qsorecord: String;
   call     : String;
   band     : String;
   mode     : String;
@@ -641,7 +700,17 @@ begin
 
 
   l := TStringList.Create;
+  l.Add('<ADIF_VER:5>3.1.0');
+  l.Add('<CREATED_TIMESTAMP:15>'+FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
+  l.Add('LoTW import errors from CQRLOG for Linux version '+dmData.VersionString);
+  l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
+  l.Add('');
+  l.Add('Internet: http://www.cqrlog.com');
+  l.Add('');
+  l.Add('<EOH>');
+  l.Add('');
   AssignFile(f,FileName);
+
   try
     if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
       dmLogUpload.DisableOnlineLogSupport;
@@ -683,7 +752,7 @@ begin
         begin
           qso_in_log := False;
           CommonImport(PosEOR,f,call,band,mode,submode,qsodate,time_on,qslr,
-                        qslrdate,cqz,ituz,iota,grid,state,county);
+                        qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
 
           if PosEOR > 0 then
           begin
@@ -786,22 +855,7 @@ begin
             end;
             if not qso_in_log then
             begin
-              l.Add('QSO NOT FOUND in log');
-              l.Add('Call:     '+call);
-              l.Add('Band:     '+band);
-              l.Add('Mode:     '+mode);
-              l.Add('QSO_date: '+qsodate);
-              l.Add('Time_on:  '+time_on);
-              l.Add('QSLR:     '+qslr);
-              l.Add('QSLRDate: '+qslrdate);
-              l.Add('CQZ:      '+cqz);
-              l.Add('ITUZ:     '+ituz);
-              l.Add('IOTA:     '+iota);
-              l.Add('Grid:     '+grid);
-              l.Add('State:    '+state);
-              l.Add('County:   '+county);
-              l.Add('------------------------------------------------');
-              l.Add('');
+              WriteErrorRecord('L',call,band,mode,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
               inc(ErrorCount)
             end
           end
@@ -814,10 +868,10 @@ begin
       dmData.trQ1.Commit;
       if ErrorCount > 0 then
       begin
-        l.SaveToFile(dmData.UsrHomeDir + 'lotw_error.txt');
-        if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.UsrHomeDir + 'lotw_error.txt'+
+        l.SaveToFile(dmData.UsrHomeDir + C_LErrorFile);
+        if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log.'+LineEnding+'QSO(s) are stored to '+dmData.UsrHomeDir + C_LErrorFile +
                                   LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
-          frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + 'lotw_error.txt')
+          frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_LErrorFile)
       end
     end
     else begin
@@ -956,6 +1010,7 @@ var
   f        : TextFile;
   PosEOH   : Word;
   PosEOR   : Word;
+  qsorecord: String;
   call     : String;
   band     : String;
   mode     : String;
@@ -990,6 +1045,15 @@ var
 
 begin
   l := TStringList.Create;
+  l.Add('<ADIF_VER:5>3.1.0');
+  l.Add('<CREATED_TIMESTAMP:15>'+FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
+  l.Add('eQSL import errors from CQRLOG for Linux version '+dmData.VersionString);
+  l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
+  l.Add('');
+  l.Add('Internet: http://www.cqrlog.com');
+  l.Add('');
+  l.Add('<EOH>');
+  l.Add('');
   if dmData.trQ.Active then
     dmData.trQ.RollBack;
   if dmData.trQ1.Active then
@@ -1039,7 +1103,7 @@ begin
       begin
         qso_in_log := False;
         CommonImport(PosEOR,f,call,band,mode,submode,qsodate,time_on,qslr,
-                        qslrdate,cqz,ituz,iota,grid,state,county);
+                        qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
 
         if PosEOR > 0 then
         begin
@@ -1125,15 +1189,7 @@ begin
           end;
           if not qso_in_log then
           begin
-            l.Add('QSO NOT FOUND in log');
-            l.Add('Call:     '+call);
-            l.Add('Band:     '+band);
-            l.Add('Mode:     '+mode);
-            l.Add('Mode:     '+submode);
-            l.Add('QSO_date: '+qsodate);
-            l.Add('Time_on:  '+time_on);
-            l.Add('------------------------------------------------');
-            l.Add('');
+            WriteErrorRecord('E',call,band,mode,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
             inc(ErrorCount)
           end
         end
@@ -1147,10 +1203,10 @@ begin
     CloseFile(f);
     if ErrorCount > 0 then
     begin
-      l.SaveToFile(dmData.UsrHomeDir + 'eQSL_error.txt');
-      if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log. '#13' QSO(s) are stored to '+dmData.UsrHomeDir + 'eQSL_error.txt'+
+      l.SaveToFile(dmData.UsrHomeDir + C_EErrorFile);
+      if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log.'+LineEnding+'QSO(s) are stored to '+dmData.UsrHomeDir + C_EErrorFile +
                                 LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
-      frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + 'eQSL_error.txt')
+      frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_EErrorFile)
     end
   finally
     l.Free;

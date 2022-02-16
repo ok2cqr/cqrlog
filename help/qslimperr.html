@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us">
+<head>
+    <title>CQRLOG - LoTW/eQSL import errors</title></head>
+<body>
+<table border="0" cellpadding="5" cellspacing="2" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top"><img src="img/exc.png"></td>
+        <td align="justify" bgcolor="ffffcc" valign="top"><strong>
+            <font color="red">WARNING!</font></strong>
+            Backup your data often! BACKUP your log directory at the end of EVERY session!
+            All that you need to backup and store in a safe place is the log database directory
+            located in the ~/.config/cqrlog/database folder, or you can enable the autobackup function
+            in Preferences. This autobackup function creates an ADIF file with a backup of your log.
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td align="center" width="33%">[<a href="index.html" target="_top">Menu</a>]</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
+<p align="center"><img src="img/line.png"></p>
+<H2>LoTW/eQSL import errors</H2>
+<p><H4>Preface</H4>
+Sometimes you find some "QSO not found" errors in LoTW or eQSL download. There are some reasons for that.<br>
+<ul>
+<li>QSO did not complete and you did not log that, but the opponent station thinks it is completed.</li>
+<li>People type in their old paper logs to computer and upload them to LoTW/eQSL. QSO is ok but it is somewhere in your earlier paper logs.</li>
+<li>QSO may be an SWL report waiting to confirm via eQSL</li>
+</ul><br>
+Those same errors keep appearing every time when you download from LoTW/eQSL. If you confirm or archive qso in eQSL that does not help as downloading always gives all qsos from given start date.
+<br>Only way to get rid of those errors is to add them into cqrlog. Cqrlog LoTW and eQSL error file names are now modified from ".txt" to ."adi" and file contents are suitable for adif import.
+</p>
+<p><H4>Operating with error files</H4>
+If you just want to add all qsos that were not in your log you simply make <strong>QSO list/File/Import/ADIF</strong> using <strong>errors_LoTW.adi</strong> or <strong> errors_eQSL.adi</strong> file.
+<br>All qsos are added to your log with following additions:
+<ul>
+<li>LoTW qsl sent and LoTW qsl sent date is set to current date</li>
+<li>eQSL qsl sent and eQSL qsl sent date is set to current date</li>
+<ul><li>These prevent upload on next "Export only QSOs which has never been uploaded"</li></ul>
+<li>Contest name is set to "Qso_was_not_found_in_log!" for all imported QSOs</li>
+<ul><li>This allows quick find of all these kind of qsos using <strong>QSO list/Filter/Contest filter</strong></li></ul>
+</ul>
+<br>
+If you do not want to import all error qsos, or want to send a confirmation to eQSL for SWL report, or confirm old paper log qso via LoTW you can do it
+ quite easy by modifying the <strong>errors_LoTW.adi</strong> or <strong> errors_eQSL.adi</strong> file with plain text editor <strong>before you import it to cqrlog.</strong>.
+</p><p><img src="img/qslimperr1.png"></p>
+<p>Here is a sample eQSL error file opened with Leafpad editor (that shows line numbers at left side).
+LoTW error file looks very similar, but has some text more for every qso record.
+<br><br>When you edit file do not touch the header of the file. Lines from 1 to 8 where header ends with "EOH" (End Of Header).
+<br>You can remove qso records that you do not want to import to your log by removing all record's lines. For example here remove the JA8TWF qso means
+ to remove lines 10 - 22.
+</p><p>
+If you want to upload a confirmation for SWL to eQSL you remove one line. If we keep JA8TWF qso as example then removing line 20 will cause upload to eQSL
+ at next time you execute eQSL upload/"Export only QSOs which has never been uploaded" 
+<br>How ever if it is a SWL confirmation you should edit logged qso after import and change perhaps RSTs to "SWL" and add comment "Thanks for reporting" or something similar to notify it is an SWL confirmation.
+<br><br>Same way, if you want to LoTW confirm an old paper log qso now added to cqrlog, removing line 19 (in this example JA8TWF qso) before importing error file to cqrlog will cause upload to LoTW
+ on next LoTW upload/"Export only QSOs which has never been uploaded"
+</p> 
+<p>With these properties handling of "not found qsos" should become a little bit easier</p>
+ 
+
+
+
+
+
+<p align="center"><img src="img/line.png"></p>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+    <tbody>
+    <tr>
+        <td align="center" width="33%">[<a href="index.html" target="_top">Menu</a>]</td>
+    </tr>
+    </tbody>
+</table>
+<br>
+</body>
+</html>
