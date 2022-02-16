@@ -15,7 +15,9 @@ type
   TfrmEDIExport = class(TForm)
     btnClose: TButton;
     btnExport: TButton;
-    Button1: TButton;
+    btnBrowse: TButton;
+    btnResultFile: TButton;
+    chcSerialNr: TCheckBox;
     dlgSave: TSaveDialog;
     edtAntennaHeightSeaLevel: TEdit;
     edtContestName: TEdit;
@@ -26,7 +28,7 @@ type
     edtAntennaHeightGroundLevel: TEdit;
     edtTxPower: TEdit;
     edtDigitalModes: TEdit;
-    Label1: TLabel;
+    lblFilename: TLabel;
     lblError: TLabel;
     lblAntennaHeight: TLabel;
     lblAntennaHeightSeaLevel: TLabel;
@@ -40,9 +42,11 @@ type
     lblDigitalModes: TLabel;
     pbExport: TProgressBar;
     procedure btnExportClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure btnBrowseClick(Sender: TObject);
+    procedure btnResultFileClick(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormShow(Sender : TObject);
+
   private
     procedure SaveSettings;
 
@@ -64,6 +68,7 @@ uses dData,dUtils,dDXCC,fWorkedGrids, uMyIni;
 
 procedure TfrmEDIExport.FormShow(Sender : TObject);
 begin
+  btnResultFile.Visible:=false;
   dmUtils.LoadWindowPos(self);
   lblError.Visible := False;
   edtFileName.Text  := cqrini.ReadString('EdiExport','FileName','');
@@ -81,6 +86,7 @@ begin
   edtAntennaHeightSeaLevel.Text := cqrini.ReadString('EdiExport','AntennaHeightSeaLevel','');
 
 end;
+
 
 procedure TfrmEDIExport.SaveSettings;
 begin
@@ -138,10 +144,24 @@ begin
   dmUtils.SaveWindowPos(self)
 end;
 
-procedure TfrmEDIExport.Button1Click(Sender : TObject);
+procedure TfrmEDIExport.btnBrowseClick(Sender : TObject);
 begin
   if dlgSave.Execute then
     edtFileName.Text := dlgSave.FileName
+end;
+
+procedure TfrmEDIExport.btnResultFileClick(Sender: TObject);
+var
+  prg: string;
+begin
+  try
+    prg := cqrini.ReadString('ExtView', 'txt', '');
+    if prg<>'' then
+      dmUtils.RunOnBackground(prg + ' ' + edtFileName.Text)
+     else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
+  finally
+   //done
+  end;
 end;
 
 procedure TfrmEDIExport.btnExportClick(Sender: TObject);
@@ -159,6 +179,7 @@ var
   qrb, qrc   : String;
   odx        : Integer = 0;
   odx_call, odx_wwl : String;
+  QsoMax     : Integer = 0;
   i          : Integer = 0;
   j          : Integer = 0;
   startdate, enddate: String;
@@ -249,6 +270,7 @@ begin
     pbExport.Max := dmData.Q.RecordCount;
     while not dmData.Q.Eof do
     begin
+      inc(QsoMax);
       // Check for missing mandatory fields
       if (dmData.Q.FieldByName('rst_s').AsString = '') then
       begin
@@ -262,17 +284,20 @@ begin
         dmData.Q.Next;
         Continue;
       end;
-      if (dmData.Q.FieldByName('stx').AsString = '') then
-      begin
-        pbExport.StepIt;
-        dmData.Q.Next;
-        Continue;
-      end;
-      if (dmData.Q.FieldByName('srx').AsString = '') then
-      begin
-        pbExport.StepIt;
-        dmData.Q.Next;
-        Continue;
+      if chcSerialNr.Checked then
+      begin;
+        if (dmData.Q.FieldByName('stx').AsString = '') then
+        begin
+          pbExport.StepIt;
+          dmData.Q.Next;
+          Continue;
+        end;
+        if (dmData.Q.FieldByName('srx').AsString = '') then
+        begin
+          pbExport.StepIt;
+          dmData.Q.Next;
+          Continue;
+        end;
       end;
       loc := UpperCase(dmData.Q.FieldByName('srx_string').AsString);
       if (loc = '') then //or not frmWorkedGrids.GridOK(loc) then
@@ -418,17 +443,19 @@ begin
                                mb_OK+mb_IconError)
       end
   end;
-  if ((pbExport.Max - i) > 0) then
+  if ((QsoMax - i) > 0) then
   begin
-    lblError.Caption := IntToStr(pbExport.Max - i)+' of '+IntToStr(pbExport.Max)+' entries were ignored! Please check log entries.';
+    lblError.Caption := IntToStr(QsoMax - i)+' of '+IntToStr(QsoMax)+' entries were ignored! Please check log entries.';
     lblError.Font.Color := clRed;
     lblError.Visible := True;
   end
   else
   begin
-    lblError.Caption := IntToStr(pbExport.Max)+' entries were exported.';
+    lblError.Caption := IntToStr(QsoMax)+' entries were exported.';
+    lblError.Font.Color := clGreen;
     lblError.Visible := True;
   end;
+  btnResultFile.Visible:=True;
 end;
 
 end.
