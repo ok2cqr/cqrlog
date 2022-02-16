@@ -339,7 +339,7 @@ var
       if pos(',',freq) > 0 then
         freq[pos(',',freq)] := '.';
       SaveTag(dmUtils.StringToADIF('<FREQ',Freq),leng);
-      SaveTag(dmUtils.StringToADIF('<BAND',dmUtils.GetAdifBandFromFreq(Freq)),leng);
+      SaveTag(dmUtils.StringToADIF('<BAND',lowercase(dmUtils.GetAdifBandFromFreq(Freq))),leng);
     end;
     if ExRSTS then
       SaveTag(dmUtils.StringToADIF('<RST_SENT',ExtractWord(1,RSTS,[' '])),leng);
