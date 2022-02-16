@@ -1,253 +1,363 @@
 object frmEDIExport: TfrmEDIExport
-  Left = 819
-  Height = 414
+  Left = 760
+  Height = 457
   Top = 254
   Width = 516
   Caption = 'Export for contests'
-  ClientHeight = 414
+  ClientHeight = 457
   ClientWidth = 516
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.8.2.0'
-  object Label1: TLabel
-    Left = 8
+  LCLVersion = '2.0.12.0'
+  object lblFilename: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 6
     Height = 17
-    Top = 8
-    Width = 66
+    Top = 7
+    Width = 63
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 7
     Caption = 'Filename:'
     ParentColor = False
   end
   object edtFileName: TEdit
-    Left = 8
-    Height = 25
-    Top = 32
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = lblFilename
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 34
+    Top = 27
     Width = 421
+    BorderSpacing.Top = 3
     TabOrder = 0
   end
-  object Button1: TButton
-    Left = 433
+  object btnBrowse: TButton
+    AnchorSideLeft.Control = edtFileName
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtFileName
+    AnchorSideTop.Side = asrCenter
+    Left = 430
     Height = 25
-    Top = 34
+    Top = 32
     Width = 75
+    BorderSpacing.Left = 3
     Caption = 'Browse'
-    OnClick = Button1Click
+    OnClick = btnBrowseClick
     TabOrder = 1
   end
   object btnClose: TButton
-    Left = 434
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 435
     Height = 25
-    Top = 368
+    Top = 420
     Width = 75
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 6
+    BorderSpacing.Bottom = 12
     Cancel = True
     Caption = 'Close'
     ModalResult = 2
     TabOrder = 10
   end
   object btnExport: TButton
+    AnchorSideTop.Control = btnClose
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = btnClose
     Left = 345
     Height = 25
-    Top = 368
-    Width = 75
+    Top = 420
+    Width = 79
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Right = 11
     Caption = 'Export'
     OnClick = btnExportClick
     TabOrder = 9
   end
   object pbExport: TProgressBar
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = btnClose
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 20
-    Top = 370
+    Top = 422
     Width = 264
     Step = 1
     TabOrder = 11
   end
   object lblDone: TLabel
-    Left = 289
+    AnchorSideLeft.Control = pbExport
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = btnClose
+    AnchorSideTop.Side = asrCenter
+    Left = 282
     Height = 17
-    Top = 372
-    Width = 37
+    Top = 424
+    Width = 34
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 12
     Caption = 'Done'
     ParentColor = False
     Visible = False
   end
   object lblContestName: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtContestName
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 17
-    Top = 72
-    Width = 99
+    Top = 74
+    Width = 95
     Caption = 'Contest name:'
     ParentColor = False
   end
   object lblTxEquipment: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtTxEquipment
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 17
-    Top = 104
-    Width = 100
+    Top = 111
+    Width = 95
     Caption = 'TX Equipment:'
     ParentColor = False
   end
   object edtContestName: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = lblContestName
-    AnchorSideTop.Side = asrCenter
-    Left = 122
-    Height = 25
-    Top = 68
+    AnchorSideTop.Control = edtFileName
+    AnchorSideTop.Side = asrBottom
+    Left = 116
+    Height = 34
+    Top = 65
     Width = 307
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 4
     TabOrder = 2
   end
   object edtTxEquipment: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtContestName
     AnchorSideTop.Side = asrBottom
-    Left = 122
-    Height = 25
-    Top = 100
+    Left = 116
+    Height = 34
+    Top = 102
     Width = 307
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 3
     TabOrder = 3
   end
   object lblRxEquipment: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtRxEquipment
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 17
-    Top = 168
-    Width = 101
+    Top = 185
+    Width = 96
     Caption = 'RX Equipment:'
     ParentColor = False
   end
   object edtRxEquipment: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtTxPower
     AnchorSideTop.Side = asrBottom
-    Left = 122
-    Height = 25
-    Top = 164
+    Left = 116
+    Height = 34
+    Top = 176
     Width = 307
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 3
     TabOrder = 5
   end
   object lblAntenna: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtAntenna
+    Left = 6
     Height = 17
-    Top = 200
-    Width = 62
+    Top = 213
+    Width = 58
     Caption = 'Antenna:'
     ParentColor = False
   end
   object edtAntenna: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtRxEquipment
     AnchorSideTop.Side = asrBottom
-    Left = 122
-    Height = 25
-    Top = 196
+    Left = 116
+    Height = 34
+    Top = 213
     Width = 307
     BorderSpacing.Left = 15
-    TabOrder = 6
+    BorderSpacing.Top = 3
+    TabOrder = 12
   end
   object lblAntennaHeight: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtAntennaHeightGroundLevel
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 17
-    Top = 232
-    Width = 137
+    Top = 259
+    Width = 132
     Caption = 'Antenna Height (m):'
     ParentColor = False
   end
   object edtAntennaHeightGroundLevel: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtAntenna
     AnchorSideTop.Side = asrBottom
     Left = 152
-    Height = 25
-    Top = 228
+    Height = 34
+    Top = 250
     Width = 48
     Anchors = [akTop]
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 3
     NumbersOnly = True
     TabOrder = 7
   end
   object lblAntennaHeightSeaLevel: TLabel
-    Left = 208
+    AnchorSideLeft.Control = edtAntennaHeightGroundLevel
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtAntennaHeightGroundLevel
+    AnchorSideTop.Side = asrCenter
+    Left = 213
     Height = 17
-    Top = 232
-    Width = 94
+    Top = 259
+    Width = 89
+    BorderSpacing.Left = 13
     Caption = 'above ground'
     ParentColor = False
   end
   object edtAntennaHeightSeaLevel: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtAntennaHeightGroundLevel
     AnchorSideTop.Side = asrBottom
     Left = 152
-    Height = 25
-    Top = 260
+    Height = 34
+    Top = 287
     Width = 48
     Anchors = [akTop]
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 3
     NumbersOnly = True
     TabOrder = 8
   end
   object lblAntennaHeightGroundLevel: TLabel
+    AnchorSideTop.Control = edtAntennaHeightSeaLevel
+    AnchorSideTop.Side = asrCenter
     Left = 208
     Height = 17
-    Top = 264
-    Width = 104
+    Top = 296
+    Width = 103
     Caption = 'above sea level'
     ParentColor = False
   end
   object lblTxPower: TLabel
-    Left = 7
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtTxPower
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 17
-    Top = 136
-    Width = 96
+    Top = 148
+    Width = 92
     Caption = 'TX Power (W):'
     ParentColor = False
   end
   object edtTxPower: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtTxEquipment
     AnchorSideTop.Side = asrBottom
-    Left = 122
-    Height = 25
-    Top = 132
+    Left = 116
+    Height = 34
+    Top = 139
     Width = 78
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 3
     NumbersOnly = True
     TabOrder = 4
   end
   object lblDigitalModes: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = edtDigitalModes
+    AnchorSideTop.Side = asrCenter
+    Left = 6
     Height = 17
-    Top = 296
-    Width = 137
+    Top = 333
+    Width = 94
     Caption = 'Digital Modes:'
     ParentColor = False
   end
   object edtDigitalModes: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = edtAntennaHeightSeaLevel
     AnchorSideTop.Side = asrBottom
-    Left = 122
-    Height = 25
-    Top = 292
+    Left = 116
+    Height = 34
+    Top = 324
     Width = 307
     BorderSpacing.Left = 15
+    BorderSpacing.Top = 3
     TabOrder = 6
   end
   object lblError: TLabel
-    Left = 8
+    AnchorSideLeft.Control = lblFilename
+    AnchorSideTop.Control = chcSerialNr
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 17
-    Top = 344
-    Width = 98
+    Top = 387
+    Width = 94
+    BorderSpacing.Top = 6
     Caption = 'Error message'
     ParentColor = False
     Visible = False
   end
+  object btnResultFile: TButton
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = btnClose
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = btnClose
+    Left = 347
+    Height = 25
+    Top = 389
+    Width = 163
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Bottom = 6
+    Caption = 'Open exported file'
+    OnClick = btnResultFileClick
+    TabOrder = 13
+    Visible = False
+  end
+  object chcSerialNr: TCheckBox
+    AnchorSideLeft.Control = edtDigitalModes
+    AnchorSideTop.Control = edtDigitalModes
+    AnchorSideTop.Side = asrBottom
+    Left = 116
+    Height = 23
+    Top = 358
+    Width = 240
+    Caption = 'Export requires serial nr (stx/srx)'
+    Checked = True
+    State = cbChecked
+    TabOrder = 14
+  end
   object dlgSave: TSaveDialog
     DefaultExt = '.edi'
     Filter = 'EDI file|*.edi'
-    left = 477
-    top = 236
+    Left = 477
+    Top = 236
   end
 end
