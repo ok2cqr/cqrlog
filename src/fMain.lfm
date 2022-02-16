@@ -1933,7 +1933,7 @@ object frmMain: TfrmMain
     end
     object acSelAll: TAction
       Caption = 'Select all'
-      Hint = 'Select all records'
+      Hint = 'Select all records now in buffer (Max 500)'
       ImageIndex = 21
       OnExecute = acSelAllExecute
     end
