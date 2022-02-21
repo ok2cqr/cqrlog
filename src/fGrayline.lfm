@@ -196,9 +196,13 @@ object frmGrayline: TfrmGrayline
     object pumShowStatusbar: TMenuItem
       Action = acShowStatusBar
     end
-    object pumShowGreatCircle: TMenuItem
-      Caption = 'Show GreatCirclePath'
-      OnClick = pumShowGreatCircleClick
+    object pumShowShortPath: TMenuItem
+      Caption = 'Show ShortPath'
+      OnClick = pumShowShortPathClick
+    end
+    object pumShowLongPath: TMenuItem
+      Caption = 'Show LongPath'
+      OnClick = pumShowLongPathClick
     end
     object pumMnuLine2: TMenuItem
       Caption = '-'
