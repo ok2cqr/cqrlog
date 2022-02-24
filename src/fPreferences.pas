@@ -516,6 +516,8 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtGCStep: TEdit;
+    edtGCPolarDivisor: TEdit;
     edtUsrBtn: TEdit;
     edtUsr1R1Name: TEdit;
     edtR2Host: TEdit;
@@ -686,7 +688,7 @@ type
     GroupBox17: TGroupBox;
     GroupBox18: TGroupBox;
     GroupBox19: TGroupBox;
-    GroupBox2: TGroupBox;
+    gbInternet: TGroupBox;
     GroupBox20: TGroupBox;
     GroupBox21: TGroupBox;
     GroupBox22: TGroupBox;
@@ -703,7 +705,7 @@ type
     grpUsrCmds: TGroupBox;
     GroupBox31: TGroupBox;
     GroupBox32: TGroupBox;
-    GroupBox33: TGroupBox;
+    gbOffsets: TGroupBox;
     GroupBox34: TGroupBox;
     GroupBox35: TGroupBox;
     gbeQSL: TGroupBox;
@@ -739,6 +741,11 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblGLOffset: TLabel;
+    lblGCStep: TLabel;
+    lblGCDivisor: TLabel;
+    lblGCHint: TLabel;
+    LblTimes: TLabel;
     Label17: TLabel;
     lblUsrBtn: TLabel;
     lblHost2: TLabel;
@@ -789,6 +796,18 @@ type
     lbRadio2AM: TLabel;
     lbRadio2FM: TLabel;
     lblHzDATA2: TLabel;
+    Label113: TLabel;
+    Label114: TLabel;
+    Label115: TLabel;
+    Label116: TLabel;
+    Label117: TLabel;
+    Label118: TLabel;
+    Label119: TLabel;
+    lblintProxy: TLabel;
+    Label120: TLabel;
+    Label121: TLabel;
+    Label122: TLabel;
+    Label123: TLabel;
     Label124: TLabel;
     lblDevice1: TLabel;
     lblPortR1: TLabel;
@@ -796,7 +815,7 @@ type
     lbleQSLBkg: TLabel;
     lblRadio2: TLabel;
     lblRotId1: TLabel;
-    Label13: TLabel;
+    lblIntPort: TLabel;
     lblSerialR1Spd: TLabel;
     lblserialR1DataBits: TLabel;
     lblSerialR1Stop: TLabel;
@@ -807,7 +826,7 @@ type
     lblSerialR2Spd: TLabel;
     lblSerialR2DataBits: TLabel;
     lblSerialR2Stop: TLabel;
-    Label14: TLabel;
+    lblIntUser: TLabel;
     lblSerialR2Hand: TLabel;
     lblSerialR2Parity: TLabel;
     lblSerialR2Dtr: TLabel;
@@ -818,7 +837,7 @@ type
     lblSpeed1: TLabel;
     lblDataBits1: TLabel;
     lblStopBits1: TLabel;
-    Label15: TLabel;
+    lblUtc: TLabel;
     lblHandshake1: TLabel;
     lblParity1: TLabel;
     lblDTR1: TLabel;
@@ -869,7 +888,7 @@ type
     lblK3NGSpeed: TLabel;
     lblK3NGWPM: TLabel;
     lblK3NGSerSpeed: TLabel;
-    Label197: TLabel;
+    lblGraylineHint: TLabel;
     Label198: TLabel;
     lblHamLibSpeed: TLabel;
     lblHamLibWPM: TLabel;
@@ -887,14 +906,14 @@ type
     lblDebug : TLabel;
     Label207: TLabel;
     lblwsjtaddr: TLabel;
-    Label46 : TLabel;
-    Label47 : TLabel;
+    lblDiffColor : TLabel;
+    lblQsoColorDate : TLabel;
     Label48: TLabel;
     Label49: TLabel;
     Label50: TLabel;
     Label51: TLabel;
     lbl: TLabel;
-    Label19: TLabel;
+    lblIntPasswd: TLabel;
     Label2: TLabel;
     lblExtra: TLabel;
     lblModelR1: TLabel;
@@ -935,13 +954,13 @@ type
     Label54: TLabel;
     Label55: TLabel;
     Label56: TLabel;
-    Label59: TLabel;
+    lblGrayline: TLabel;
     Label61: TLabel;
     Label63: TLabel;
     Label91: TLabel;
     Label92: TLabel;
     Label93: TLabel;
-    Label94: TLabel;
+    lblSunRiseSet: TLabel;
     Label95: TLabel;
     lblPollR2: TLabel;
     lbl1: TLabel;
@@ -978,7 +997,7 @@ type
     Label57: TLabel;
     Label58: TLabel;
     Label6: TLabel;
-    Label60: TLabel;
+    lblWebBrowser: TLabel;
     lblBandMapFont: TLabel;
     Label62: TLabel;
     Label64: TLabel;
@@ -1118,6 +1137,8 @@ type
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
+    procedure edtGCPolarDivisorExit(Sender: TObject);
+    procedure edtGCStepExit(Sender: TObject);
     procedure edtHtmlFilesClick(Sender: TObject);
     procedure edtHtmlFilesExit(Sender: TObject);
     procedure edtImgFilesExit(Sender: TObject);
@@ -1252,6 +1273,8 @@ begin
   cqrini.WriteInteger('Program', 'Options', pgPreferences.ActivePageIndex);
   cqrini.WriteBool('Program', 'BandStatMHz', rgStatistics.ItemIndex = 0);
   cqrini.WriteFloat('Program', 'GraylineOffset', StrToCurr(edtGrayLineOffset.Text));
+  cqrini.WriteFloat('Program', 'GraylineGCstep',StrToCurr(edtGCStep.Caption));
+  cqrini.WriteInteger('Program', 'GraylineGCPolarDivisor',StrToInt(edtGCPolarDivisor.Caption));
 
   if  edtWebBrowser.Text = '' then  edtWebBrowser.Text:= dmUtils.MyDefaultBrowser; //may not be empty string
   cqrini.WriteString('Program', 'WebBrowser', edtWebBrowser.Text);
@@ -2592,6 +2615,30 @@ begin
    // ~ in command causes DXCluster spot flow stop (!?)
 end;
 
+procedure TfrmPreferences.edtGCPolarDivisorExit(Sender: TObject);
+var v:integer;
+begin
+   if TryStrToInt(edtGCPolarDivisor.Caption,v) then
+    begin
+      if ((v<=0) or (v>40)) then
+             edtGCPolarDivisor.Caption:='10' //replace with default
+    end
+    else
+       edtGCPolarDivisor.Caption:='10' //replace with default
+end;
+
+procedure TfrmPreferences.edtGCStepExit(Sender: TObject);
+var v:extended;
+begin
+  if TryStrToFloat(edtGCStep.Caption,v) then
+    Begin
+      if ((v<=0) or (v>40)) then
+        edtGCStep.Caption:='1.5'; //error use default value;
+    end
+   else
+    edtGCStep.Caption:='1.5'; //on convert error use default value;
+end;
+
 procedure TfrmPreferences.edtHtmlFilesClick(Sender: TObject);
 begin
   if odFindBrowser.Execute then
@@ -2668,6 +2715,7 @@ begin
   if not (key in ['0'..'9']) then
     key := #0;
 end;
+
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
 begin
   TRXChanged := True
@@ -2802,8 +2850,9 @@ begin
   edtPasswd.Text := cqrini.ReadString('Program', 'Passwd', '');
   edtOffset.Text := CurrToStr(cqrini.ReadFloat('Program', 'offset', 0));
   pgPreferences.ActivePageIndex := cqrini.ReadInteger('Program', 'Options', 0);
-  edtGrayLineOffset.Text :=
-    CurrToStr(cqrini.ReadFloat('Program', 'GraylineOffset', 0));
+  edtGrayLineOffset.Text := CurrToStr(cqrini.ReadFloat('Program', 'GraylineOffset', 0));
+  edtGCStep.Caption :=  CurrToStr(cqrini.ReadFloat('Program', 'GraylineGCstep',15E-001));
+  edtGCPolarDivisor.Caption := IntToStr(cqrini.ReadInteger('Program', 'GraylineGCPolarDivisor',10));
   edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
   chkNewDXCCTables.Checked := cqrini.ReadBool('Program', 'CheckDXCCTabs', True);
   chkShowDeleted.Checked := cqrini.ReadBool('Program', 'ShowDeleted', False);

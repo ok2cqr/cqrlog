@@ -32,7 +32,8 @@ type
     acConnect : TAction;
     acShowStatusBar : TAction;
     acLinkToRbnMonitor: TAction;
-    pumShowGreatCircle: TMenuItem;
+    pumShowLongPath: TMenuItem;
+    pumShowShortPath: TMenuItem;
     pumMnuLine2: TMenuItem;
     pumClearAllSpots: TMenuItem;
     pumWatchFor: TMenuItem;
@@ -59,7 +60,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure popGrayLinePopup(Sender: TObject);
     procedure pumClearAllSpotsClick(Sender: TObject);
-    procedure pumShowGreatCircleClick(Sender: TObject);
+    procedure pumShowLongPathClick(Sender: TObject);
+    procedure pumShowShortPathClick(Sender: TObject);
     procedure pumWatchForClick(Sender: TObject);
     procedure sbtnGrayLineClick(Sender : TObject);
     procedure tmrAutoConnectTimer(Sender : TObject);
@@ -78,7 +80,7 @@ type
     procedure lReceive(aSocket: TLSocket);
 
     function  ConnectToRBN : Boolean;
-
+    procedure CalculateBearing(lat0, long0, lat1, long1: extended; var bearing: extended);
   public
     RBNSpotList : array[1..MAX_ITEMS] of TRBNList;
     band   : String;
@@ -87,7 +89,7 @@ type
     pfx : String;
     rbn_status  : String;
     procedure kresli;
-    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended);
+    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:boolean);
     procedure SavePosition;
     procedure SynRBN;
     function  GetEmptyPos : Word;
@@ -306,7 +308,8 @@ procedure TfrmGrayline.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmGrayline);
   sbGrayLine.Visible        := cqrini.ReadBool('Grayline','Statusbar',True);
-  pumShowGreatCircle.Checked:= cqrini.ReadBool('Grayline','GreatCircle',False);
+  pumShowShortPath.Checked  := cqrini.ReadBool('Grayline','ShortPath',False);
+  pumShowLongPath.Checked   := cqrini.ReadBool('Grayline','LongPath',False);
   acShowStatusBar.Checked   := sbGrayLine.Visible;
   rbn_status                :='Disconnected';
   sbGrayLine.SimpleText     := rbn_status;
@@ -390,10 +393,16 @@ begin
   tmrSpotDots.Enabled:=true;
 end;
 
-procedure TfrmGrayline.pumShowGreatCircleClick(Sender: TObject);
+procedure TfrmGrayline.pumShowLongPathClick(Sender: TObject);
 begin
-  pumShowGreatCircle.Checked:= not pumShowGreatCircle.Checked;
-  cqrini.WriteBool('Grayline','GreatCircle',pumShowGreatCircle.Checked);
+  pumShowLongPath.Checked:= not pumShowLongPath.Checked;
+  cqrini.WriteBool('Grayline','LongPath',pumShowLongPath.Checked);
+end;
+
+procedure TfrmGrayline.pumShowShortPathClick(Sender: TObject);
+begin
+  pumShowShortPath.Checked:= not pumShowShortPath.Checked;
+  cqrini.WriteBool('Grayline','ShortPath',pumShowShortPath.Checked);
 end;
 
 procedure TfrmGrayline.pumWatchForClick(Sender: TObject);
@@ -497,70 +506,73 @@ begin
   s := '';
   d := '';
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(my_loc),lat,long);
-  if pumShowGreatCircle.Checked then
-    PlotGreatCircleArcLine(long,lat,long1,lat1)
+  if pumShowShortPath.Checked or pumShowLongPath.Checked then
+    Begin
+      if pumShowShortPath.Checked then
+                                      PlotGreatCircleArcLine(long,lat,long1,lat1,false);
+      if pumShowLongPath.Checked then
+                                      PlotGreatCircleArcLine(long,lat,long1,lat1,true);
+    end
    else
     ob^.jachcucaru(true,long,lat*-1,long1,lat1*-1);
   Refresh
 end;
-procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended);
- { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
 
-Const
-  Basestep = 0.0174532925;   //1 degree in radians
-  PolarStep = 0.00174532925; // base/10
-var
-  lat1,lat2,lon1,lon2,
-  latFrom,lonFrom,
-  step,
-  dist,
-  bearing             : extended;
-  CountLimit          : integer;
-  BearingIsPositive   : boolean;
-
-//-------------------------------------------------------------------
-    procedure LatLongToDistance(const lat0, long0, lat1, long1: extended;
-      var dist, bearing: extended);
+procedure TfrmGrayline.CalculateBearing(lat0, long0, lat1, long1: extended; var bearing: extended);
     var
-      R: double = 6371000; // earth radius in meters
-      dlat, dlong, slat, slong, a, c, x, y: double;
+     x, y: extended;
     begin
-      // dist
-      dlat := lat1 - lat0;
-      dlong := long1 - long0;
-      slat := Sin(0.5 * dlat);
-      slong := Sin(0.5 * dlong);
-      a := slat * slat + Cos(lat0) * Cos(lat1) * slong * slong;
-      c := 2.0 * ArcTan2(Sqrt(a), Sqrt(1.0-a));
-      dist := R * c;
       // bearing
       y := Sin(long1 - long0) * Cos(lat1);
       x := Cos(lat0) * Sin(lat1) - Sin(lat0) * Cos(lat1) * Cos(long1 - long0);
       bearing := ArcTan2(y, x);
     end;
-//-------------------------------------------------------------------
+
+procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:boolean);
+ { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
+
+Const
+  MEC       = 170  *pi/180;       // Map image horizontal Edge Crossing "no print" limit in degrees (converted to radians)
+
+var
+  lat1,lat2,lon1,lon2,
+  latFrom,lonFrom,
+  BaseStep,step,                  // degree steps (converted to radians) for path line
+  PolarStep,                      // steps in polar regions where distances/degrees are smaller
+  bearing, oldbearing : extended;
+  CountLimit,
+  LP                  : integer;  //LongPath instead of ShortPath
 
 Begin
+BaseStep  := cqrini.ReadFloat('Program', 'GraylineGCstep',15E-001) * pi/180;
+PolarStep := Basestep/cqrini.ReadInteger('Program', 'GraylineGCstep',10);
 
-ob^.GC_line_clear;
-  if LocalDbg then
+
+if LocalDbg then
       begin
         writeln ('-------------------------------------------------------------------');
         writeln ('Start:',round(latitude1),' ',round(longitude1),' ',round(latitude2),' ',round(longitude2));
       end;
-step := BaseStep;
-dist :=0;
-bearing :=0;
 
+step := BaseStep;
+
+if LongP then
+               LP:=1
+         else
+               LP:=0;
+ob^.GC_line_clear(LP);
 longitude1 := degToRad(longitude1);
 latitude1 := degToRad(latitude1);
 longitude2 := degToRad(longitude2);
 latitude2 := degToRad(latitude2);
 
-LatLongToDistance(latitude1, longitude1, latitude2, longitude2, dist, bearing);
-BearingIsPositive := (bearing > 0);
+CalculateBearing(latitude1, longitude1, latitude2, longitude2, bearing);
+bearing:=bearing+LP*pi;
+oldbearing:=bearing;
 CountLimit:=ob^.GC_Points_Max;
 
+if LocalDbg then
+         writeln ('Bearing:',round(radTodeg(bearing)));
 while (CountLimit > 0) do
  Begin
   latFrom:=latitude1;
@@ -572,14 +584,40 @@ while (CountLimit > 0) do
     else
      step:=BaseStep;
 
-  LatLongToDistance(latFrom, lonFrom, latitude2, longitude2, dist, bearing);
-  if ((bearing > 0) <> BearingIsPositive) then CountLimit:=0;;
+ if LocalDbg then
+         writeln (LineEnding,'FROM (',Round(RadToDeg(latFrom)),' ',Round(RadToDeg(lonFrom)),')','  To: ',Round(RadToDeg(latitude2)),' ',Round(RadToDeg(longitude2)));
+
+  CalculateBearing(latFrom, lonFrom, latitude2, longitude2,bearing);
+  bearing:=bearing+LP*pi; //makes LongPath if LP=1 counting plot points in "wrong direction"
+
+  if abs(oldbearing -bearing) > (pi/2) then
+         Begin
+         if LocalDbg then
+           Begin
+             writeln('Obe:',round(radtodeg(oldbearing)));
+             writeln('Nbe:',round(radtodeg(bearing)));
+           end;
+          if LP = 1 then
+           begin
+            if LocalDbg then
+                         writeln ('Release LP value in count round ',CountLimit);
+            LP:=0;  //we are on globe's opposite side of target. Release LP and now on calculate rest via ShortPath
+            CalculateBearing(latFrom, lonFrom, latitude2, longitude2, bearing);
+           end
+          else
+           begin
+           if LocalDbg then
+                         writeln ('Stop counting in round ',CountLimit);
+            CountLimit:=0;
+           end;
+         end;
   if LocalDbg then
-    writeln ('Dist:',round(dist * 0.001) ,' Bearing:',round(radTodeg(bearing)));
+    writeln ('Bearing:',round(radTodeg(bearing)));
 
   longitude1 := longitude1 + (sin(bearing) * step) / cos(latitude1);
   latitude1 :=  latitude1 + (cos(bearing) * step);
 
+  //swap on horizontal or veritcal edges
   if longitude1 < -Pi  then longitude1 :=  2*Pi+longitude1;
   if longitude1 >  Pi  then longitude1 := -2*Pi+longitude1;
 
@@ -587,13 +625,20 @@ while (CountLimit > 0) do
   if latitude1 < -Pi/2 then latitude1:= -Pi/2 - (latitude1+Pi/2);
 
   if LocalDbg then
-    writeln ('To: ',Round(RadToDeg(latitude1)),' ',Round(RadToDeg(longitude1)),'                       (',Round(RadToDeg(latFrom)),' ',Round(RadToDeg(lonFrom)),')');
+    writeln ('From (',Round(RadToDeg(latFrom)),' ',Round(RadToDeg(lonFrom)),')','  To: ',Round(RadToDeg(latitude1)),' ',Round(RadToDeg(longitude1)));
 
-  // 170 degrees = 2,96705972839 rad
-  if not (((lonFrom >  2.96705972839) and (longitude1 < -2.96705972839))  //right crossing
-     or   ((lonFrom < -2.96705972839) and (longitude1 >  2.96705972839)) //left crossing
+  //map image horizontal edge crossing check. Allow plot if we are not in edge of image.
+  if not (((lonFrom >  MEC) and (longitude1 < -MEC))  //right crossing
+     or   ((lonFrom < -MEC) and (longitude1 >  MEC))  //left crossing
      ) then
-        ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
+      begin
+       if not LongP then
+         ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1)
+        else
+         ob^.GC_Lline_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1)
+      end;
+
+  oldbearing:=bearing;
  end;
 end;
 
