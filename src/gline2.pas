@@ -65,8 +65,9 @@ type
       procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
       procedure body_smaz;
 
-      procedure GC_line_part(x1,y1,x2,y2:double);
-      procedure GC_line_clear;
+      procedure GC_line_part(x1,y1,x2,y2:double);   //add ShortPath point
+      procedure GC_Lline_part(x1,y1,x2,y2:double);  //add LongPath point
+      procedure GC_line_clear(what:integer=-1);      //clear S&LPath points
 
     private
       nrd:boolean; //needs to redraw (a new calculation has been made)
@@ -91,8 +92,11 @@ type
       body:array[0..body_max] of Tcarobod;
       body_poc:longint;
 
-      GC_point:array[0..GC_points_Max] of TGC_point;
+      GC_point:array[0..GC_points_Max] of TGC_point;  //ShortPath array
       GCpointer:longint;
+      GC_Lpoint:array[0..GC_points_Max] of TGC_point; //LongPath array
+      GCLpointer:longint;
+      LP        : boolean;  //set LongPath color;
 
       function calc_horizontalx(var coord:t_coord; date:TDateTime; z:longint;latitude: extended):longint;
   end;
@@ -519,6 +523,7 @@ var e,z:longint;
 
   body_poc:=0;
   GCpointer:=0;
+  GCLpointer:=0;
 
   poslednicas:=now-1000000;
   nrd:=false;
@@ -708,7 +713,10 @@ var
             can.pen.Width:=5;
             can.moveto(x1,y1);
             can.lineto(x2,y2);
-            can.pen.color:=clyellow;
+            If LP then
+                   can.pen.color:=clFuchsia
+                  else
+                   can.pen.color:=clyellow;
             can.pen.Width:=2;
             can.moveto(x1,y1);
             can.lineto(x2,y2);
@@ -882,13 +890,15 @@ begin
 //    can.TextOut(10,30,' '+inttostr(round(carax2))+':'+inttostr(round(caray2))+' ');
     end;
 
-  if GCpointer > 0 then
+ if GCpointer+GCLpointer > 0 then //same as OR
     begin
+     LP:=True; //LongPath color plotting
+      for z:=0 to GCLpointer-1 do
+          cmarni(GC_Lpoint[z].La1, GC_Lpoint[z].Lo1, GC_Lpoint[z].La2, GC_Lpoint[z].Lo2, false);
+      LP:=False; //ShortPath color plotting
       for z:=0 to GCpointer-1 do
-        begin
           cmarni(GC_point[z].La1, GC_point[z].Lo1, GC_point[z].La2, GC_point[z].Lo2, false);
-        end;
-    end;
+     end;
 
 
   for z:=0 to body_poc-1 do
@@ -973,11 +983,31 @@ Begin
       inc(GCpointer);
      end;
 end;
-
-procedure Tgrayline.GC_line_clear;
+procedure Tgrayline.GC_Lline_part(x1,y1,x2,y2:double);
 
 Begin
- GCpointer:=0;
+    if chcipni then exit;    //chcipni = "die"
+    if GCLpointer < GC_Points_max then
+     begin
+      GC_Lpoint[GCLpointer].La1:=x1;
+      GC_Lpoint[GCLpointer].Lo1:=y1;
+      GC_Lpoint[GCLpointer].La2:=x2;
+      GC_Lpoint[GCLpointer].Lo2:=y2;
+      inc(GCLpointer);
+     end;
+end;
+
+procedure Tgrayline.GC_line_clear(what:integer=-1);
+
+begin
+  case what of
+       -1: Begin
+            GCpointer:=0;
+            GCLpointer:=0;
+          end;
+       0: GCpointer:=0;
+       1: GCLpointer:=0;
+  end;
 end;
 
 end.
