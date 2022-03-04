@@ -209,9 +209,17 @@ begin
 
       dmData.Q.ParamByName('id_cqrlog_main').AsInteger := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
 
-      if dmUtils.IsQSLViaValid(dmData.qCQRLOG.FieldByName('qsl_via').AsString) then
+      //if QSOs are imported from other source they may not have QSLmgr set even it exists
+      //then we look from cqrlog's manager database before making label
+      if dmData.qCQRLOG.FieldByName('qsl_via').AsString='' then
+         dmData.QSLMgrFound(dmData.qCQRLOG.FieldByName('callsign').AsString,
+                            dmData.qCQRLOG.FieldByName('qsodate').AsString,
+                            qsl_via)
+       else
+         qsl_via := dmData.qCQRLOG.FieldByName('qsl_via').AsString;
+
+      if dmUtils.IsQSLViaValid(qsl_via) then
       begin
-        qsl_via := dmData.qCQRLOG.FieldByName('qsl_via').AsString;
         dmData.Q.ParamByName('idcall').AsString  := dmUtils.GetIDCall(qsl_via);
         dmData.Q.ParamByName('dxcc').AsString    := dmDXCC.id_country(dmData.Q.ParamByName('idcall').AsString,
                                                                      dmData.qCQRLOG.FieldByName('qsodate').AsDateTime);
