@@ -55,15 +55,18 @@ If you do not want to import all error qsos, or want to send a confirmation to e
 <p>Here is a sample eQSL error file opened with Leafpad editor (that shows line numbers at left side).
 LoTW error file looks very similar, but has some text more for every qso record.
 <br><br>When you edit file do not touch the header of the file. Lines from 1 to 8 where header ends with "EOH" (End Of Header).
-<br>You can remove qso records that you do not want to import to your log by removing all record's lines. For example here remove the JA8TWF qso means
- to remove lines 10 - 22.
+<br>You can remove qso records that you do not want to import to your log by removing all record's lines. For example here remove the CQ750RSI qso means
+ to remove lines 10 - 22. Adif tag APP_CQRLOG_ERROR:XXX specifies one error qso data lenght (to EOH tag) but it is actually not used for anything.
 </p><p>
-If you want to upload a confirmation for SWL to eQSL you remove one line. If we keep JA8TWF qso as example then removing line 20 will cause upload to eQSL
- at next time you execute eQSL upload/"Export only QSOs which has never been uploaded" 
-<br>How ever if it is a SWL confirmation you should edit logged qso after import and change perhaps RSTs to "SWL" and add comment "Thanks for reporting" or something similar to notify it is an SWL confirmation.
-<br><br>Same way, if you want to LoTW confirm an old paper log qso now added to cqrlog, removing line 19 (in this example JA8TWF qso) before importing error file to cqrlog will cause upload to LoTW
- on next LoTW upload/"Export only QSOs which has never been uploaded"
-</p> 
+<h5>SWL</h5>
+Cqrlog fixes error record if adif tag APP_EQSL_SWL is found.<br>
+CONTEST_ID is changed to talk about "SWL" instead of "Qso". Then all imported SWL cards from this error file can be found fast by selecting Contest filter "SWL_was_not_found_in_log!"
+<br>RST_SENT is swapped to RST_RCVD as SWLs do report how heard you in RST_SENT tag.
+<br>RST_SENT is replaced as "SWL". This is your "report" for swl.
+<br>SWLs should report who they heard you working with. They should use QSOMSG adif tag. This is swapped to tag COMMENT to show up in "Comment for qso" in cqrlog. Without this informaton you can concider that swl report is not valid.
+<br><br>If you want to upload a confirmation for SWL  after importing error file to cqrlog change "eQSL qsl sent" value with QSL list/File/Group edit from Y to N to cause upload to eQSL. This might be handy if you want to check several swl cards before uploading. Be careful not to touch "LoTW qsl sent" value as LoTW does not support SWLs. 
+<br><br>Same way, if you want to confirm an old paper log qso now added to cqrlog on next upload/"Export only QSOs which has never been uploaded"
+just change the eQSL and/or LoTW qsl set from value Y to N</p> 
 <p>With these properties handling of "not found qsos" should become a little bit easier</p>
  
 
