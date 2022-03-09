@@ -107,8 +107,6 @@ begin
               ShowMessage(edtText.Text + ' not found')
           end
           else begin
-            dmData.Q.Close;
-            if dmData.trQ.Active then dmData.trQ.Rollback;
             sql := sql + ' where qsodate = '+ QuotedStr(edtText.Text);
             if chkSortByDate.Checked then
               sql := sql + ' order by qsodate'
@@ -126,8 +124,6 @@ begin
               ShowMessage(edtText.Text + ' not found')
           end
           else begin
-            dmData.Q.Close;
-            if dmData.trQ.Active then dmData.trQ.Rollback;
             if chkInclude.Checked then
               sql := sql + ' where (callsign like ''%' + edtText.Text + '%'')'
             else
@@ -148,8 +144,6 @@ begin
               ShowMessage(edtText.Text + ' not found')
           end
           else begin
-            dmData.Q.Close;
-            if dmData.trQ.Active then dmData.trQ.Rollback;
             if chkInclude.Checked then
               sql := sql + ' where (name like ''%' + edtText.Text + '%'')'
             else
@@ -170,8 +164,6 @@ begin
               ShowMessage(edtText.Text + ' not found')
           end
           else begin
-            dmData.Q.Close;
-            if dmData.trQ.Active then dmData.trQ.Rollback;
             if chkInclude.Checked then
               sql := sql + ' where (qth like ''%' + edtText.Text + '%'')'
             else
@@ -181,6 +173,9 @@ begin
           end
         end
   end; //case
+
+  dmData.Q.Close;
+  if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.Q.SQL.Text := sql + ' LIMIT 1';
   dmData.trQ.StartTransaction;
   dmData.Q.Open;
