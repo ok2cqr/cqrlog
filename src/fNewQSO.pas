@@ -2201,10 +2201,8 @@ end;
 
 procedure TfrmNewQSO.tmrADIFTimer(Sender: TObject);
 var
-  Buf,
-  buf2,
-  prik,
-  data          :string;
+  Buf, buf2,
+  prik,data    :string;
   chkDuplicates,
   submodeExist  :boolean;
   i             :longint;
@@ -2221,7 +2219,7 @@ begin
    if dmData.DebugLevel>=1 then Writeln('rmtADIF has data. JS8CALL mode is now ',IsJS8Callrmt);
    while ADIFsock.WaitingData > 0 do     //do all pending messages in one go
     begin
-      Buf := trim(ADIFsock.RecvPacket(500));    //Read all data waitingtimeout 500ms
+      Buf := trim(ADIFsock.RecvPacket(50));    //Read all data waitingtimeout 50ms
       if dmData.DebugLevel>=1 then Writeln('rmtADIF read data');
       if ADIFSock.lasterror=0 then
        begin
@@ -2305,8 +2303,8 @@ begin
                                                                         if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
                                                                                       edtGrid.Text := data; //replace qrz loc, otherwise keep it
                                                                  end;
-                                                  'MODE'       : if not submodeExist then
-                                                                        cmbMode.Text := uppercase(data);
+                                                  'MODE'       : if not submodeExist
+                                                                      then  cmbMode.Text := uppercase(data);
                                                   //now this overrides MODE, if exists
                                                   'SUBMODE'    : Begin
                                                                   //we need lock in case submode found before mode tag
@@ -2350,6 +2348,9 @@ begin
                                                 end; //case
                     end;  //repeat
                until pos('<EOR>',uppercase(Buf))=1;
+               //execption is SSB. Cqrlog does not use USB and LSB (submodes)
+               if (cmbMode.Text ='USB') or (cmbMode.Text='LSB') then
+                                                                    cmbMode.Text:='SSB';
               SaveRemote;
 
               //these do not reset in qso save, so they must be cleared here in case there was
@@ -7640,6 +7641,7 @@ begin
   cbOffline.Checked     := True;
   cbOffline.Enabled     := False;
   btnSave.Enabled       := False;  //disable manual saving when remote is on
+  tmrADIF.Interval      := 250;    //rate to read qsos from UDP (msec)
   if run and FileExists(path) then
     dmUtils.RunOnBackground(path)
 end;

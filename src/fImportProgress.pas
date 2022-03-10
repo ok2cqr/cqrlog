@@ -560,6 +560,7 @@ var
   a,
   prik,
   data,
+  Cstamp,
   Dstamp,
   Buf  :string;
 
@@ -577,15 +578,27 @@ Begin
      Buf:=buf+'<EOR>'; //in case we have broken record in broken file (hit eof before it is time)
   if LocalDbg then
                   Writeln('one record read: ',Buf);
+  //check SWL and is so change contest_id to find those easier
+  //if there is tag QSLMSG move data of it to (comment to qso).
+  if pos('APP_EQSL_SWL:1>Y',uppercase(buf))>0 then
+              Begin
+               Cstamp:= '<CONTEST_ID:25>SWL_was_not_found_in_log!';
+               Buf:=StringReplace(buf,'<QSLMSG:','<COMMENT:',[rfIgnoreCase]);
+               Buf:=StringReplace(buf,'<RST_RCVD:0>','<RST_SENT+:3>SWL',[rfIgnoreCase]); //we need this for temp use
+               Buf:=StringReplace(buf,'<RST_SENT:','<RST_RCVD:',[rfIgnoreCase]);
+               Buf:=StringReplace(buf,'<RST_SENT+:','<RST_SENT:',[rfIgnoreCase]);
+              end
+              else
+               Cstamp:= '<CONTEST_ID:25>Qso_was_not_found_in_log!';
 
   //Here we create a qso record that has comment and lotw+eqsl sent set.
   //user can add this record to log to get rid of lotw/eqsl error "Not found in log"
   //in case this qso is really wanted to be confirmed (maybe is SWL report) user can wipe out
   //the first 1-3 lines (lotw,eqsl sent, comment) and import only the last line to log and so
   //it will be added to log and sent to lotw/eqsl during next upload
-  qsorecord:= '<LOTW_QSL_SENT:1>Y<LOTW_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:55>Remove this line before import to allow upload to LoTW'
-              +LineEnding+'<EQSL_QSL_SENT:1>Y<EQSL_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:55>Remove this line before import to allow upload to eQSL'
-              +LineEnding+'<CONTEST_ID:25>Qso_was_not_found_in_log!'
+  qsorecord:= '<LOTW_QSL_SENT:1>Y<LOTW_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:36>This line prevents reupload to LoTW'
+              +LineEnding+'<EQSL_QSL_SENT:1>Y<EQSL_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:36>This line prevents reupload to eQSL'
+              +LineEnding+Cstamp
               +LineEnding+Buf;
 
   mode := ''; //be sure there is no mode at this point
@@ -602,7 +615,8 @@ Begin
            'GRIDSQUARE' : if dmUtils.IsLocOK(data) then
                              grid := dmUtils.StdFormatLocator(data);
                         //if not mode set by submode then set mode
-           'MODE'       : if mode='' then mode := uppercase(data);
+           'MODE'       : if mode='' then
+                                 mode := uppercase(data);
                         //submode overrides MODE, if exist
            'SUBMODE'    : mode    := uppercase(data);
            'BAND'       : band    := uppercase(data);
@@ -618,6 +632,9 @@ Begin
           end; //case
        end;  //repeat
   until pos('<EOR>',uppercase(Buf))=1;
+  //execption is SSB. Cqrlog does not use USB and LSB (submodes)
+  if (mode='USB') or (mode='LSB') then
+                                       mode:='SSB';
 end;
 procedure TfrmImportProgress.WriteErrorRecord(f:char;call,band,mode,qsodate,time_on,qslr,qslrdate,
                                               cqz,ituz,iota,grid,state,county,qsorecord:string;var s:Tstringlist);

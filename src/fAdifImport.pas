@@ -308,7 +308,9 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
                                                 else d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
                                         end;
       h_SUBMODE                       : begin
-                                          d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
+                                         // Cqrlog does not use USB and LSB (submodes)
+                                         // but it is fixed in function saveNewEntryFromADIFinDatabase
+                                               d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
                                           LockSubMode:=true;
                                         end;
       h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
