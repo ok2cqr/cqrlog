@@ -687,6 +687,7 @@ type
     ShowWin     : Boolean;
     LastFkey    : Word;
     old_t_band  : String;
+    RemoteName  : String;
 
     WsjtxSock             : TUDPBlockSocket; //receive socket
     WsjtxSockS            : TUDPBlockSocket; //multicast send socket
@@ -2547,7 +2548,6 @@ var
   TXOn     : Boolean;
   i        : word;
   TXmode   : String;
-  RemoteName :String;
   BufEnd     : Boolean;
 
   call  : String;
