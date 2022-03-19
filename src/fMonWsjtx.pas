@@ -1907,13 +1907,18 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       '#'     : getCurMode := 'JT65';
       '@'     : getCurMode := 'JT9';
       '&'     : getCurMode := 'MSK144';
-      ':'     : getCurMode := 'QRA64';
-      '+'     : getCurMode := 'FT4';
+      ':'     : if frmNewQSO.RemoteName= 'WSJT-X' then
+                          getCurMode:='QRA64'
+                       else
+                          getCurMode:='FT4';
+      '+'     : if frmNewQSO.RemoteName= 'WSJT-X' then
+                          getCurMode:='FT4'
+                       else
+                          getCurMode:='T10';
       'FT4' : getCurMode := 'FT4'; // For MSHV added by LB2EG nov 7th 2021
       chr(126): getCurMode := 'FT8';    // ~
       'FT8' : getCurMode := 'FT8'; // For MSHV added by LB2EG nov 7th 2021
       chr(96) : getCurMode := 'FST4';   // `
-      //'+'     : getCurMode := 'T10';
     end;
   end;
 
