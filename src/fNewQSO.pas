@@ -683,6 +683,7 @@ type
     function RigCmd2DataMode(mode:String):String;
     procedure ShowOperator;
     procedure StartUpRemote;
+    procedure NewLogSplash;
 
   public
     fEditQSO    : Boolean;
@@ -694,6 +695,7 @@ type
     ShowWin     : Boolean;
     LastFkey    : Word;
     old_t_band  : String;
+    RemoteName  : String;
 
     WsjtxSock             : TUDPBlockSocket; //receive socket
     WsjtxSockS            : TUDPBlockSocket; //multicast send socket
@@ -1883,6 +1885,8 @@ begin
 
   ModeBeforeChange := cmbMode.Text;
   UsrAssignedProfile:= cmbProfiles.Text;   //initial value
+  if cqrini.ReadString('Station','Call','')=''
+                                               then NewLogSplash;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -2576,7 +2580,6 @@ var
   TXOn     : Boolean;
   i        : word;
   TXmode   : String;
-  RemoteName :String;
   BufEnd     : Boolean;
 
   call  : String;
@@ -7824,6 +7827,45 @@ Begin
        else
          sbNewQSO.Panels[2].Text :='';
 end;
+
+procedure  TfrmNewQSO.NewLogSplash;
+  var tmp  :String;
+Begin
+
+     tmp:=  'It seems that you have not set Station CALLSIGN for this log.'+LineEnding
+           +LineEnding
+           +'Cqrlog has own settings for every log. You can copy settings'+LineEnding
+           +'between logs using window:'+LineEnding
+           +'Database Connect/Utils/settings/import<->export.'+LineEnding
+           +LineEnding
+           +'For this new log check now from top menu File/Preferences'+LineEnding
+           +'at least following Tabs:'+LineEnding
+           +LineEnding
+           +'PROGRAM:'+LineEnding
+           +'         Basic settings how cqrlog works with this log'+LineEnding
+           +'STATION:'+LineEnding
+           +'         Your station information for this log'+LineEnding
+           +'BANDS:'+LineEnding
+           +'         By default Cqrlog uses Region1 band settings.'+LineEnding
+           +'         If you are in other region please check bands/frequencies'+LineEnding
+           +'         to set correct band start and end frequencies.'+LineEnding
+           +'         This will affect to Cqrlog operations.'+LineEnding
+           +'TRX CONTROL:'+LineEnding
+           +'         Settings if you want Cqrlog to communicate with'+LineEnding
+           +'         your rig using CAT control.'+LineEnding
+           +'EXTERNAL VIEWERS:'+LineEnding
+           +'         Programs that Cqrlog uses for viewing various'+LineEnding
+           +'         documents'+LineEnding
+           +LineEnding
+           +'For other Tabs set their values by your needs.'+LineEnding
+           +LineEnding
+           +'PLEASE use top menu HELP/HELP INDEX for more help for'+LineEnding
+           +'settings and operation. Help opens to your web browser.'+LineEnding
+           +LineEnding
+           +'73, gl DX!';
+           ShowMessage(tmp);
+end;
+
 end.
 
 
