@@ -1,53 +1,65 @@
 object frmxfldigi: Tfrmxfldigi
-  Left = 57
-  Height = 193
-  Top = 39
-  Width = 347
-  Caption = 'fldigi xmlrpc'
-  ClientHeight = 193
-  ClientWidth = 347
+  Left = 78
+  Height = 241
+  Top = 69
+  Width = 414
+  Caption = 'fldigi xmlrpc monitor'
+  ClientHeight = 241
+  ClientWidth = 414
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnShow = FormShow
-  LCLVersion = '2.0.8.0'
-  object lbCall: TLabel
-    Left = 8
+  LCLVersion = '2.0.12.0'
+  object edtCall: TLabel
+    AnchorSideLeft.Control = lblCall
+    AnchorSideTop.Control = lblCall
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 15
-    Top = 32
-    Width = 72
+    Top = 78
+    Width = 80
     AutoSize = False
     Caption = '-call'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbFreq: TLabel
-    Left = 88
+  object edtFreq: TLabel
+    AnchorSideLeft.Control = lblFreq
+    AnchorSideTop.Control = lblFreq
+    AnchorSideTop.Side = asrBottom
+    Left = 98
     Height = 15
-    Top = 32
-    Width = 67
+    Top = 78
+    Width = 70
     AutoSize = False
     Caption = '-Freq'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbMode: TLabel
-    Left = 160
+  object edtMode: TLabel
+    AnchorSideLeft.Control = lblMode
+    AnchorSideTop.Control = lblMode
+    AnchorSideTop.Side = asrBottom
+    Left = 180
     Height = 15
-    Top = 32
-    Width = 51
+    Top = 78
+    Width = 100
     AutoSize = False
     Caption = '-Mode'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbRstS: TLabel
-    Left = 224
+  object edtRstS: TLabel
+    AnchorSideLeft.Control = lblRstS
+    AnchorSideTop.Control = lblRstS
+    AnchorSideTop.Side = asrBottom
+    Left = 292
     Height = 15
-    Top = 32
+    Top = 78
     Width = 43
     AutoSize = False
     Caption = '-rstS'
@@ -55,43 +67,57 @@ object frmxfldigi: Tfrmxfldigi
     ParentColor = False
     Transparent = False
   end
-  object lbRstR: TLabel
-    Left = 296
+  object edtRstR: TLabel
+    AnchorSideTop.Control = lblRstR
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = edtState
+    AnchorSideRight.Side = asrBottom
+    Left = 360
     Height = 15
-    Top = 32
+    Top = 78
     Width = 43
+    Anchors = [akTop, akRight]
     AutoSize = False
     Caption = '-rstR'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbName: TLabel
-    Left = 8
+  object edtName: TLabel
+    AnchorSideLeft.Control = lblName
+    AnchorSideTop.Control = lblName
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 15
-    Top = 74
-    Width = 72
+    Top = 116
+    Width = 80
     AutoSize = False
     Caption = '-name'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbQth: TLabel
-    Left = 88
+  object edtQth: TLabel
+    AnchorSideLeft.Control = lblQth
+    AnchorSideTop.Control = lblQth
+    AnchorSideTop.Side = asrBottom
+    Left = 98
     Height = 15
-    Top = 74
-    Width = 123
+    Top = 116
+    Width = 150
     AutoSize = False
     Caption = '-qth'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbGrid: TLabel
-    Left = 224
+  object edtGrid: TLabel
+    AnchorSideLeft.Control = lblGrid
+    AnchorSideTop.Control = lblGrid
+    AnchorSideTop.Side = asrBottom
+    Left = 292
     Height = 15
-    Top = 74
+    Top = 116
     Width = 64
     AutoSize = False
     Caption = '-grid'
@@ -99,32 +125,41 @@ object frmxfldigi: Tfrmxfldigi
     ParentColor = False
     Transparent = False
   end
-  object lbStat: TLabel
-    Left = 296
+  object edtState: TLabel
+    AnchorSideLeft.Control = lblState
+    AnchorSideTop.Control = lblState
+    AnchorSideTop.Side = asrBottom
+    Left = 368
     Height = 15
-    Top = 74
-    Width = 27
+    Top = 116
+    Width = 35
     AutoSize = False
     Caption = '-st'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbComm: TLabel
-    Left = 8
+  object edtComment: TLabel
+    AnchorSideLeft.Control = lblComment
+    AnchorSideTop.Control = lblComment
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 15
-    Top = 128
-    Width = 232
+    Top = 154
+    Width = 270
     AutoSize = False
     Caption = '-comment QSO'
     Color = clDefault
     ParentColor = False
     Transparent = False
   end
-  object lbCoun: TLabel
-    Left = 256
+  object edtCounty: TLabel
+    AnchorSideLeft.Control = lblCounty
+    AnchorSideTop.Control = lblCounty
+    AnchorSideTop.Side = asrBottom
+    Left = 292
     Height = 15
-    Top = 128
+    Top = 154
     Width = 75
     AutoSize = False
     Caption = '-county'
@@ -132,10 +167,13 @@ object frmxfldigi: Tfrmxfldigi
     ParentColor = False
     Transparent = False
   end
-  object lbTrx: TLabel
-    Left = 307
+  object edtRig: TLabel
+    AnchorSideLeft.Control = lblRig
+    AnchorSideTop.Control = lblRig
+    AnchorSideTop.Side = asrBottom
+    Left = 292
     Height = 15
-    Top = 160
+    Top = 190
     Width = 32
     AutoSize = False
     Caption = '-RX'
@@ -147,18 +185,23 @@ object frmxfldigi: Tfrmxfldigi
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
-    Left = 68
+    Left = 101
     Height = 17
-    Top = 0
-    Width = 211
+    Top = 3
+    Width = 212
+    BorderSpacing.Top = 3
     Caption = 'Data received from fldigi xmlrpc'
     ParentColor = False
   end
   object btSaveQSO: TButton
-    Left = 8
+    AnchorSideLeft.Control = edtComment
+    AnchorSideTop.Control = edtComment
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 25
-    Top = 152
+    Top = 187
     Width = 232
+    BorderSpacing.Top = 18
     Caption = 'Save this QSO'
     Font.Color = clRed
     Font.Style = [fsBold]
@@ -167,125 +210,244 @@ object frmxfldigi: Tfrmxfldigi
     TabOrder = 0
     Visible = False
   end
-  object Label1: TLabel
-    Left = 8
+  object lblComment: TLabel
+    AnchorSideLeft.Control = lblCall
+    AnchorSideTop.Control = edtName
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 17
-    Top = 104
+    Top = 137
     Width = 96
+    BorderSpacing.Top = 6
     Caption = 'Comment QSO'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label2: TLabel
-    Left = 256
+  object lblCounty: TLabel
+    AnchorSideLeft.Control = edtGrid
+    AnchorSideTop.Control = lblComment
+    Left = 292
     Height = 17
-    Top = 104
+    Top = 137
     Width = 46
     Caption = 'County'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label3: TLabel
-    Left = 256
+  object lblRig: TLabel
+    AnchorSideLeft.Control = edtCounty
+    AnchorSideTop.Control = edtCounty
+    AnchorSideTop.Side = asrBottom
+    Left = 292
     Height = 15
-    Top = 160
+    Top = 175
     Width = 32
     AutoSize = False
+    BorderSpacing.Top = 6
     Caption = 'Rig'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label4: TLabel
-    Left = 8
+  object lblName: TLabel
+    AnchorSideLeft.Control = lblCall
+    AnchorSideTop.Control = edtCall
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 17
-    Top = 56
+    Top = 99
     Width = 39
+    BorderSpacing.Top = 6
     Caption = 'Name'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label5: TLabel
-    Left = 88
+  object lblQth: TLabel
+    AnchorSideLeft.Control = edtFreq
+    AnchorSideTop.Control = lblName
+    Left = 98
     Height = 17
-    Top = 56
+    Top = 99
     Width = 28
     Caption = 'QTH'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label6: TLabel
-    Left = 224
+  object lblGrid: TLabel
+    AnchorSideLeft.Control = edtRstS
+    AnchorSideTop.Control = lblName
+    Left = 292
     Height = 17
-    Top = 56
+    Top = 99
     Width = 27
     Caption = 'Grid'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label7: TLabel
-    Left = 296
+  object lblState: TLabel
+    AnchorSideLeft.Control = edtGrid
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblName
+    Left = 368
     Height = 17
-    Top = 56
+    Top = 99
     Width = 34
+    BorderSpacing.Left = 12
     Caption = 'State'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label8: TLabel
-    Left = 8
+  object lblCall: TLabel
+    AnchorSideLeft.Control = lblDate
+    AnchorSideTop.Control = edtDate
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 17
-    Top = 16
+    Top = 61
     Width = 25
+    BorderSpacing.Top = 3
     Caption = 'Call'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label9: TLabel
-    Left = 88
+  object lblFreq: TLabel
+    AnchorSideLeft.Control = edtCall
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblCall
+    Left = 98
     Height = 17
-    Top = 16
+    Top = 61
     Width = 28
+    BorderSpacing.Left = 12
     Caption = 'Freq'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label10: TLabel
-    Left = 160
+  object lblMode: TLabel
+    AnchorSideLeft.Control = edtFreq
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblCall
+    Left = 180
     Height = 17
-    Top = 16
+    Top = 61
     Width = 36
+    BorderSpacing.Left = 12
     Caption = 'Mode'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label11: TLabel
-    Left = 224
+  object lblRstS: TLabel
+    AnchorSideLeft.Control = edtMode
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblCall
+    Left = 292
     Height = 17
-    Top = 16
+    Top = 61
     Width = 30
+    BorderSpacing.Left = 12
     Caption = 'RSTs'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
   end
-  object Label12: TLabel
-    Left = 296
+  object lblRstR: TLabel
+    AnchorSideLeft.Control = edtRstR
+    AnchorSideTop.Control = lblCall
+    Left = 360
     Height = 17
-    Top = 16
-    Width = 28
+    Top = 61
+    Width = 29
     Caption = 'RSTr'
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
+  end
+  object lblDate: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = lbHeader
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 17
+    Top = 26
+    Width = 31
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    Caption = 'Date'
+    ParentColor = False
+  end
+  object lblTimeOn: TLabel
+    AnchorSideLeft.Control = edtDate
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblDate
+    Left = 98
+    Height = 17
+    Top = 26
+    Width = 50
+    BorderSpacing.Left = 12
+    Caption = 'TimeOn'
+    ParentColor = False
+  end
+  object lblTimeOff: TLabel
+    AnchorSideLeft.Control = edtTimeOn
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblDate
+    Left = 180
+    Height = 17
+    Top = 26
+    Width = 52
+    BorderSpacing.Left = 12
+    Caption = 'TimeOff'
+    ParentColor = False
+  end
+  object edtDate: TLabel
+    AnchorSideLeft.Control = lblDate
+    AnchorSideTop.Control = lblDate
+    AnchorSideTop.Side = asrBottom
+    Left = 6
+    Height = 15
+    Top = 43
+    Width = 80
+    AutoSize = False
+    Caption = '-date'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object edtTimeOn: TLabel
+    AnchorSideLeft.Control = lblTimeOn
+    AnchorSideTop.Control = lblTimeOn
+    AnchorSideTop.Side = asrBottom
+    Left = 98
+    Height = 15
+    Top = 43
+    Width = 70
+    AutoSize = False
+    Caption = '-timeon'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
+  end
+  object edtTimeOff: TLabel
+    AnchorSideLeft.Control = lblTimeOff
+    AnchorSideTop.Control = lblTimeOff
+    AnchorSideTop.Side = asrBottom
+    Left = 180
+    Height = 15
+    Top = 43
+    Width = 70
+    AutoSize = False
+    Caption = '-timeoff'
+    Color = clDefault
+    ParentColor = False
+    Transparent = False
   end
 end
