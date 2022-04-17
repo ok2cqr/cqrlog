@@ -25,7 +25,8 @@ uses
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
-  fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2;
+  fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2,
+  fDbSqlSel;
 var
   Splash : TfrmSplash;
 
@@ -98,7 +99,6 @@ begin
   Application.CreateForm(Tfrmxfldigi, frmxfldigi);
   Application.CreateForm(TdmMembership, dmMembership);
   Application.CreateForm(TdmSatellite, dmSatellite);
-
 
   Splash.Update;
   application.ProcessMessages;
