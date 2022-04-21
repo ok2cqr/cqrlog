@@ -5,7 +5,7 @@ They contain all accepted pull requests from official source (that may not be re
 ## ABOUT THIS ALPHA TEST VERSION:
  These alpha test binaries also include latest official source updates up to commit:
 
-    Commits on Mar 9, 2022 Merge pull request #493 from OH1KH/lotw_eqsl_DLfix 
+    Commits on Apr 17, 2022 Merge pull request #498 from OH1KH/squash_db_select 
 
  To see what are the latest official updates look at <https://github.com/ok2cqr/cqrlog/commits/master>
  To see updates in this alpha version look at <https://github.com/OH1KH/cqrlog/commits/loc_testing>
@@ -13,11 +13,13 @@ They contain all accepted pull requests from official source (that may not be re
  To read about UTF8 special charcters in logs read file UTF8_logs.md
  
 LAST UPDATE
-  - ver 2.5.2(121)
+  - ver 2.5.2(122)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP
 
-
+  - ver 2.5.2(121)
+  - official version with alpha additions (see below)
+  - Help files have additions remember to update also HELP
   - ver 2.5.2(120)
   - official version with alpha additions (see below)
   - Help files have additions remember to update also HELP

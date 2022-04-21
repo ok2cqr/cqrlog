@@ -25,7 +25,7 @@ uses
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc,
   fDOKStat, fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, fProgress,
-  znacmech, gline2;
+  znacmech, gline2, fDbSqlSel;
 var
   Splash : TfrmSplash;
 

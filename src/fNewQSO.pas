@@ -1462,7 +1462,7 @@ begin
   ClearGrayLineMapLine;
 
   if not AnyRemoteOn then
-    edtCall.SetFocus;
+                       edtCall.SetFocus;
   if not (fEditQSO or fViewQSO or cbOffline.Checked) then
     tmrStart.Enabled := True;
   tmrEnd.Enabled := False;
@@ -1945,24 +1945,15 @@ procedure TfrmNewQSO.tmrFldigiTimer(Sender: TObject);
     end;
 
 var
-  ID  : longint;
-  Buf : TMyMsgBuf;
-  i : Integer;
-  call : String;
-  time1 : String;
-  time2 : String;
-  sname : String;
-  qth   : String;
-  loc   : String;
-  mhz   : String;
-  mode  : String;
-  rst   : String;
-  state : String;
-  note  : String;
-  date  : TDateTime;
-  sDate : String='';
-  Mask  : String='';
-  data  : String = '';
+  ID    : longint;
+  Buf   : TMyMsgBuf;
+  i     : Integer;
+  logged,
+  Mo    :TStringList;
+  mhz,
+  mode,
+  Mask,
+  data  : String;
 begin
 
  if FldigiXmlRpc then
@@ -1976,228 +1967,130 @@ begin
   begin
     ClearAll;
     cbOffline.Checked := True;
-    call := '';
-    time1 := '';
-    time2 := '';
-    sname := '';
-    qth   := '';
-    loc   := '';
-    mhz   := '';
-    mode  := '';
-    rst   := '';
-    state := '';
-    note  := '';
+    Mo:= TStringList.create;
+    Mo.Delimiter := ',';
+    Mo.DelimitedText:='JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC';
+    logged:=TStringlist.Create;
     if dmData.DebugLevel>=1 then
-      Writeln ('Type : ',buf.mtype,' Text : ',buf.mtext);
-
-    date := dmUtils.GetDateTime(0);
-    edtDate.Clear;
-    dmUtils.DateInRightFormat(date,Mask,sDate);
-    edtDate.Text:=sDate;
-
-    data := LowerCase(buf.mtext);
-    case cqrini.ReadInteger('fldigi','freq',0) of
-      0 : begin
-            if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
-            begin
-              cmbFreq.Text := mhz
-              //cmbMode.Text := mode
-            end
-          end;
-
-      1 : begin
-            i := Pos('mhz',data);
-            if i > 0 then
-            begin
-              i := i+3;
-              while buf.mtext[i] <> chr(1) do
-              begin
-                mhz := mhz + buf.mtext[i];
-                inc(i)
-              end;
-              if dmData.DebugLevel>=1 then Writeln('mhz:',mhz)
-            end;
-            mhz := Trim(mhz);
-            if Pos('.', mhz) > 0 then mhz[Pos('.', mhz)] := FormatSettings.DecimalSeparator;
-            if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
-            if dmUtils.GetBandFromFreq(mhz) <> '' then
-              cmbFreq.Text := mhz;
-          end;
-       2 : cmbFreq.Text := cqrini.ReadString('fldigi','deffreq','3.600')
+    Begin
+        Writeln ('Type : ',buf.mtype,' Text : ',buf.mtext);
+        frmMonWsjtx.BufDebug('',buf.mtext);
     end;
-    mode := '';
-    case cqrini.ReadInteger('fldigi','mode',1) of
-      0 : begin
-            if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then
-            begin
-              //cmbFreq.Text := mhz;
-              cmbMode.Text := mode
-            end
-          end;
-      1 : begin
-            i := Pos('mode',data);
-            if i > 0 then
-            begin
-              i := i+4;
-              while buf.mtext[i] <> chr(1) do
-              begin
-                mode := mode + buf.mtext[i];
-                inc(i)
-              end;
-              if dmData.DebugLevel>=1 then Writeln('mode:',mode);
-              cmbMode.Text := mode
-            end
-          end;
+    data := buf.mtext;
+    While length(data)>0 do
+     Begin
+        i:= pos(#01,data);
+        Mask:=copy(data,1,i-1);
+        data := copy(data,i+1, length(data));
+        Mask[pos(':',Mask)]:='=';
+        if dmData.DebugLevel>=1 then
+               writeln(Mask);
+        logged.Add(Mask);
+     end;
+    {
+     A QSO record contents after placing buf.mtext to string list value pairs:
+     program=fldigi v 4.1.20.36
+     version=1
+     date=30 Mar 2022
+     TIME=1509
+     endtime=1517
+     call=OH1KH
+     mhz=14.097150
+     mode=OLIVIA
+     submode=OLIVIA 8/500      (submode does not exist here if there is no submode for used mode!)
+     tx=599
+     rx=599
+     name=saku
+     qth=Pori
+     state=PO
+     province=SA
+     country=Finland
+     locator=KP01tn
+     serialout=000
+     serialin=
+     free1=
+     notes=remaks
+     power=
+     }
+    edtCall.Text      := logged.ValueFromIndex[logged.IndexOfName('call')];
+    edtCallExit(nil);
+
+    // set date
+    Mask              := logged.ValueFromIndex[logged.IndexOfName('date')];
+    try
+      data            := IntToStr(Mo.IndexOf(uppercase(ExtractWord(2,Mask,[' '])))+1);
+    finally
+      if length(data)<2 then data:='0'+data;
+    end;
+    data              := ExtractWord(3,Mask,[' '])+'-'+data+'-'+ ExtractWord(1,Mask,[' ']);
+    edtDate.Text      := data;
+    Mask              := logged.ValueFromIndex[logged.IndexOfName('TIME')];
+    edtStartTime.Text := copy(Mask,1,2)+':'+ copy(Mask,3,2);
+    Mask              := logged.ValueFromIndex[logged.IndexOfName('endtime')];
+    edtEndTime.Text   := copy(Mask,1,2)+':'+ copy(Mask,3,2);
+    edtName.Text      := logged.ValueFromIndex[logged.IndexOfName('name')];
+    edtNameExit(nil);
+    edtQTH.Text       := logged.ValueFromIndex[logged.IndexOfName('qth')];
+    edtQTHExit(nil);
+    edtGrid.Text      := logged.ValueFromIndex[logged.IndexOfName('locator')];
+    edtGridExit(nil);
+    edtState.Text     := logged.ValueFromIndex[logged.IndexOfName('state')];
+    edtStateExit(nil);
+    edtRemQSO.Text    := logged.ValueFromIndex[logged.IndexOfName('notes')];
+    edtPWR.text       := logged.ValueFromIndex[logged.IndexOfName('power')];
+    //Contest serial numbers. Test numerical value and >0
+    Mask              := logged.ValueFromIndex[logged.IndexOfName('serialout')];
+    i:= StrToIntDef(Mask,0);
+    if i>0  then
+                      edtContestSerialSent.Text:=Mask;
+    Mask              := logged.ValueFromIndex[logged.IndexOfName('serialin')];
+    i:= StrToIntDef(Mask,0);
+    if i>0  then
+                      edtContestSerialReceived.Text:=Mask;
+
+    //first set mode by mode, then if submode exist replace mode with it.
+    //Here no problem with SSB/USB/LSB combination
+    cmbMode.Text      := logged.ValueFromIndex[logged.IndexOfName('mode')];
+    if logged.IndexOfName('submode')> -1 then
+        Begin
+         mode := logged.ValueFromIndex[logged.IndexOfName('submode')];
+         if mode<>'' then  cmbMode.Text :=  mode;
+        end;
+
+    //set frquency
+    mhz               := logged.ValueFromIndex[logged.IndexOfName('mhz')];
+    if Pos('.', mhz) > 0 then mhz[Pos('.', mhz)] := FormatSettings.DecimalSeparator;
+    if pos(',', mhz) > 0 then mhz[pos(',', mhz)] := FormatSettings.DecimalSeparator;
+    if dmUtils.GetBandFromFreq(mhz) <> '' then
+                         cmbFreq.Text := mhz;
+
+    //set RST
+    edtHisRST.Text       := logged.ValueFromIndex[logged.IndexOfName('tx')];
+    edtMyRST.Text        := logged.ValueFromIndex[logged.IndexOfName('rx')];
+
+    //then override with possible defaults for frequency, mode and RST from Cqrlog settings
+    //Buggy Lazarus GUI creates under this one extra "end;" because of "try/finally/end" above.
+    //Remove it!
+
+  case cqrini.ReadInteger('fldigi','freq',0) of
+      0 : if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then  cmbFreq.Text := mhz;
+      2 : cmbFreq.Text := cqrini.ReadString('fldigi','deffreq','3.600')
+    end;
+
+  case cqrini.ReadInteger('fldigi','mode',1) of
+      0 : if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then cmbMode.Text := mode;
       2 : cmbMode.Text := cqrini.ReadString('fldigi','defmode','RTTY')
     end;
 
-    i := Pos('call',data);
-    if i > 0 then
+  if cqrini.ReadInteger('fldigi','rst',0) = 1 then
     begin
-      i := i+4;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        call := call + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('Call:',call);
-      edtCall.Text := call;
-      edtCallExit(nil)
-    end;
-    i := Pos('time',data);
-    if i > 0 then
-    begin
-      i := i+4;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        time1 := time1 + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('Time on:',time1);
-      if Length(time1) = 4 then
-        edtStartTime.Text := time1[1]+time1[2]+':'+time1[3]+time1[4]
-      else
-        edtStartTime.Text := time1
-    end;
-    i := Pos('endtime',data);
-    if i > 0 then
-    begin
-      i := i+7;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        time2 := time2 + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('Time off:',time2);
-      if Length(time2) = 4 then
-        edtEndTime.Text := time2[1]+time2[2]+':'+time2[3]+time2[4]
-      else
-        edtEndTime.Text := time2
-    end;
-    i := Pos('name',data);
-    if i > 0 then
-    begin
-      i := i+4;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        sname := sname + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('Name:',sname);
-      edtName.Text := sname;
-      edtNameExit(nil)
-    end;
-    i := Pos('qth',data);
-    if i > 0 then
-    begin
-      i := i+3;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        qth := qth + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('qth:',qth);
-      edtQTH.Text := qth;
-      edtQTHExit(nil)
-    end;
-    i := Pos('locator',data);
-    if i > 0 then
-    begin
-      i := i+7;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        loc := loc + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('loc:',loc);
-      if dmUtils.IsLocOK(loc) then
-        edtGrid.Text := loc
+          edtHisRST.Text := cqrini.ReadString('fldigi','defrst','599');
+          edtMyRST.Text  := cqrini.ReadString('fldigi','defrst','599')
     end;
 
-
-    case cqrini.ReadInteger('fldigi','rst',0) of
-      0 : begin
-            i := Pos('rx',data);
-            if i > 0 then
-            begin
-              i := i+2;
-              while buf.mtext[i] <> chr(1) do
-              begin
-                rst := rst + buf.mtext[i];
-                inc(i)
-              end;
-              if dmData.DebugLevel>=1 then Writeln('rst_r:',rst);
-              if rst = '' then
-                rst := cqrini.ReadString('fldigi','defrst','599');
-              edtMyRST.Text := rst
-            end;
-            rst := '';
-            i := Pos('tx',data);
-            if i > 0 then
-            begin
-              i := i+2;
-              while buf.mtext[i] <> chr(1) do
-              begin
-                rst := rst + buf.mtext[i];
-                inc(i)
-              end;
-              if dmData.DebugLevel>=1 then Writeln('rst_r:',rst);
-              if rst = '' then
-                rst := cqrini.ReadString('fldigi','defrst','599');
-              edtHisRST.Text := rst
-            end
-          end;
-      1 : begin
-            edtHisRST.Text := cqrini.ReadString('fldigi','defrst','599');
-            edtMyRST.Text  := cqrini.ReadString('fldigi','defrst','599')
-          end
-    end;
-    i := Pos('state',data);
-    if i > 0 then
-    begin
-      i := i+5;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        state := state + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('state:',state);
-      edtState.Text := state;
-      edtStateExit(nil)
-    end;
-    i := Pos('notes',data);
-    if i > 0 then
-    begin
-      i := i+5;
-      while buf.mtext[i] <> chr(1) do
-      begin
-        note := note + buf.mtext[i];
-        inc(i)
-      end;
-      if dmData.DebugLevel>=1 then Writeln('note:',note);
-      edtRemQSO.Text := note
-    end;
     SaveRemote;
+    FreeAndNil(logged);
+    FreeAndNil(Mo);
   end;   //while msgrcv
  end; //else fldigixmlrpc
 
@@ -3445,12 +3338,10 @@ begin
       dmData.RemoveLoTWUploadedFlag(id)
     end
   end
-  else begin
-    if not AnyRemoteOn then
-      if edtCall.Focused then
-      begin
-        edtCallExit(nil)
-      end;
+  else
+   begin
+     if (not AnyRemoteOn) and edtCall.Focused then
+                                               edtCallExit(nil);
 
     old_prof   := dmData.GetNRFromProfile(cmbProfiles.Text);
     old_sat    := dmSatellite.GetSatShortName(cmbSatellite.Text);
@@ -3532,7 +3423,7 @@ begin
                    edtContestName.Text,
                    Op
                    )
-  end;
+   end;
   if (cmbPropagation.Text = 'SAT|Satellite') then
   begin
      if (cqrini.ReadBool('NewQSO','UpdateAMSATstatus',False)) then
@@ -3548,7 +3439,7 @@ begin
      end;
   end;
   if not AnyRemoteOn then
-    UnsetEditLabel;
+                       UnsetEditLabel;
   dmData.qQSOBefore.Close;
   fEditQSO := False;
   was_call := edtCall.Text;
@@ -3563,18 +3454,25 @@ begin
   if (cqrini.ReadBool('NewQSO','RefreshAfterSave', True) and frmMain.Showing) then
     frmMain.acRefresh.Execute;
 
-  if ShowMain and frmMain.Showing then
-  begin
-    frmMain.BringToFront;
-    frmMain.BringToFront;
-    frmMain.dbgrdMain.SetFocus
-  end
-  else if not AnyRemoteOn then
-     edtCall.SetFocus;
   UploadAllQSOOnline;
   if frmWorkedGrids.Showing then frmWorkedGrids.UpdateMap;
   Op := cqrini.ReadString('TMPQSO','OP','');
   ShowOperator;
+
+  if AnyRemoteOn then
+     frmNewQSO.SendToBack
+    else
+     begin
+      if ShowMain and frmMain.Showing then
+        begin
+          frmMain.BringToFront;
+          frmMain.BringToFront;
+          frmMain.dbgrdMain.SetFocus
+        end
+        else
+          edtCall.SetFocus;
+     end;
+
 end;
 
 procedure TfrmNewQSO.btnCancelClick(Sender: TObject);
@@ -6865,7 +6763,10 @@ begin
     freq := FloatToStr(etmp);
     frmTRXControl.SetModeFreq(mode,freq);
     edtCallExit(nil);
-    BringToFront;
+    if AnyRemoteOn then
+                   SendToBack
+                 else
+                   BringToFront;
     if frmContest.Showing then
      Begin
      //this makes "double round" setting new qso but works with minimal code

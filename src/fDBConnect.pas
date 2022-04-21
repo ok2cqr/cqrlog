@@ -101,7 +101,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, fNewLog, fDXCluster,fNewQSO;
+uses dData, dUtils, fNewLog, fDXCluster,fNewQSO, fDbSqlSel;
 
 { TfrmDBConnect }
 
@@ -654,23 +654,38 @@ begin
   tmrAutoConnect.Enabled := False;
   if AskForDB then
   begin
-    if Application.MessageBox('It seems you are trying to run this program for the first time, '+
-                              'are you going to save data to local machine?'#10#13'If you say Yes, '+
-                              'new databases will be created. This may take a while, please be patient.' ,'Question ...',
-                              mb_YesNo+mb_IconQuestion) =  idYes then
-    begin
-      RemoteMySQL := False;
-      dmData.StartMysqldProcess;
-      Sleep(3000)
-    end
-    else
-     begin
-      Connect     := False;
-      RemoteMySQL := True;
-      chkSaveToLocal.Checked := False;
-      chkSaveToLocalChange(nil);
-      edtServer.SetFocus
-     end
+      if (frmDbSqlSel = nil) then  Application.CreateForm(TfrmDbSqlSel, frmDbSqlSel);
+      frmDbSqlSel.Show;
+
+      repeat   //wait for user to make selection on other window
+       Begin
+        sleep(100);
+        Application.ProcessMessages;
+       end;
+        until frmDbSqlSel.rdy;
+
+      if frmDbSqlSel.loc then
+       begin
+        dmData.StartMysqldProcess;
+        Sleep(3000)
+       end
+      else
+       begin
+        Connect     := True;
+        RemoteMySQL := True;
+
+        edtUser.Text:=frmDbSqlSel.user;
+        edtPass.Text:=frmDbSqlSel.pass;
+        edtPort.Text:=frmDbSqlSel.port;
+        edtServer.Text:=frmDbSqlSel.ip;
+        chkAutoConn.Checked:= frmDbSqlSel.Acon;
+        chkSavePass.Checked:= frmDbSqlSel.Rmbr;
+
+        chkSaveToLocal.Checked := False;
+       end;
+
+      FreeAndNil(frmDbSqlSel);
+
   end;
   if Connect then
     btnConnectClick(nil);
