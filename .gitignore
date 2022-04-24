@@ -32,3 +32,6 @@ lib/
 cqrlog
 
 tools/cqrlog.?.gz
+.idea
+
+
