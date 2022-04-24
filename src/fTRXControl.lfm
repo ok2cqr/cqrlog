@@ -1,7 +1,7 @@
 object frmTRXControl: TfrmTRXControl
   Left = 732
   Height = 326
-  Top = 19
+  Top = 27
   Width = 275
   Anchors = []
   Caption = 'TRX control'
@@ -153,7 +153,7 @@ object frmTRXControl: TfrmTRXControl
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.0.4'
   object gbMode: TGroupBox
     AnchorSideLeft.Control = gbVfo
     AnchorSideTop.Control = gbVfo
@@ -333,7 +333,6 @@ object frmTRXControl: TfrmTRXControl
         Font.Height = 30
         Font.Style = [fsBold]
         Layout = tlCenter
-        ParentColor = False
         ParentFont = False
         OnClick = lblFreqClick
       end
@@ -705,7 +704,7 @@ object frmTRXControl: TfrmTRXControl
         Left = 7
         Height = 23
         Top = 1
-        Width = 57
+        Width = 56
         BorderSpacing.Left = 7
         BorderSpacing.Top = 1
         Caption = 'RIG: '
@@ -719,10 +718,10 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideTop.Control = pnlRig
         AnchorSideRight.Control = pnlRig
         AnchorSideRight.Side = asrBottom
-        Left = 130
+        Left = 131
         Height = 23
         Top = 1
-        Width = 57
+        Width = 56
         Anchors = [akTop, akRight]
         BidiMode = bdRightToLeft
         BorderSpacing.Top = 1

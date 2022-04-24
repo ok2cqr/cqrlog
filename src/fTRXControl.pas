@@ -405,8 +405,10 @@ begin
   end
   else
     f := 0;
+
   f := f + txlo;
-  lblFreq.Caption := FormatFloat(empty_freq+';;',f);
+  lblFreq.Caption := FormatFloat(empty_freq, f);
+
   UpdateModeButtons(m);
   ClearButtonsColor;
   // this waits5 rig polls before lock freq set by memory. After that if freq chanfǵes (by vfo knob) clean info text
