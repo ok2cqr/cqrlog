@@ -26,176 +26,176 @@ type
   { TfrmTRXControl }
 
   TfrmTRXControl = class(TForm)
-    acMem: TActionList;
-    acAddModMem: TAction;
-    btn10m: TButton;
-    btn12m: TButton;
-    btn15m: TButton;
-    btn160m: TButton;
-    btn17m: TButton;
-    btn20m: TButton;
-    btn2m: TButton;
-    btn30m: TButton;
-    btn40m: TButton;
-    btn6m: TButton;
-    btn70cm: TButton;
-    btn80m: TButton;
-    btnCW: TButton;
-    btnMemDwn: TButton;
-    btnMemWri: TButton;
-    btnMemUp: TButton;
-    btnSSB: TButton;
-    btnRTTY: TButton;
-    btnAM: TButton;
-    btnFM: TButton;
-    btnVFOA: TButton;
-    btnVFOB: TButton;
-    btPoff: TButton;
-    btnUsr2: TButton;
-    btPon: TButton;
-    btnUsr1: TButton;
-    btPstby: TButton;
-    btnUsr3: TButton;
-    edtFreqInput: TEdit;
-    edtMemNr: TEdit;
-    gbBand: TGroupBox;
-    gbFreq: TGroupBox;
-    gbMode: TGroupBox;
-    gbInfo: TGroupBox;
-    gbVfo: TGroupBox;
-    GroupBox4: TGroupBox;
-    lblFreq: TLabel;
-    mnuShowUsr: TMenuItem;
-    mnuShowInfo: TMenuItem;
-    mnuShowVfo: TMenuItem;
-    mnuOpenMem: TMenuItem;
-    mnuPref: TMenuItem;
-    mnuAddMod: TMenuItem;
-    mnuShowPwr: TMenuItem;
-    mnuProgPref: TMenuItem;
-    mnuMem: TMainMenu;
-    pnlUsr: TPanel;
-    pnlRig: TPanel;
-    pnlMain: TPanel;
-    pnlPower: TPanel;
-    rbRadio1: TRadioButton;
-    rbRadio2: TRadioButton;
-    tmrRadio: TTimer;
-    procedure acAddModMemExecute(Sender: TObject);
-    procedure btnMemWriClick(Sender: TObject);
-    procedure btnMemDwnClick(Sender: TObject);
-    procedure btnMemUpClick(Sender: TObject);
-    procedure btnVFOAClick(Sender: TObject);
-    procedure btnVFOBClick(Sender: TObject);
-    procedure btPoffClick(Sender: TObject);
-    procedure btPonClick(Sender: TObject);
-    procedure btPstbyClick(Sender: TObject);
-    procedure btnUsr1Click(Sender: TObject);
-    procedure btnUsr2Click(Sender: TObject);
-    procedure btnUsr3Click(Sender: TObject);
-    procedure edtFreqInputKeyPress(Sender: TObject; var Key: char);
-    procedure edtFreqInputKeyUp(Sender: TObject; var Key: word; Shift: TShiftState);
-    procedure edtFreqInputMouseLeave(Sender: TObject);
-    procedure edtFreqInputMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: integer);
-    procedure edtFreqInputMouseWheel(Sender: TObject; Shift: TShiftState;
-      WheelDelta: integer; MousePos: TPoint; var Handled: boolean);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
-    procedure FormKeyUp(Sender: TObject; var Key: word; Shift: TShiftState);
-    procedure FormShow(Sender: TObject);
-    procedure btn10mClick(Sender: TObject);
-    procedure btn12mClick(Sender: TObject);
-    procedure btn15mClick(Sender: TObject);
-    procedure btn160mClick(Sender: TObject);
-    procedure btn17mClick(Sender: TObject);
-    procedure btn20mClick(Sender: TObject);
-    procedure btn2mClick(Sender: TObject);
-    procedure btn30mClick(Sender: TObject);
-    procedure btn40mClick(Sender: TObject);
-    procedure btn6mClick(Sender: TObject);
-    procedure btn70cmClick(Sender: TObject);
-    procedure btn80mClick(Sender: TObject);
-    procedure btnAMClick(Sender: TObject);
-    procedure btnCWClick(Sender: TObject);
-    procedure btnFMClick(Sender: TObject);
-    procedure btnRTTYClick(Sender: TObject);
-    procedure btnSSBClick(Sender: TObject);
-    procedure gbFreqClick(Sender: TObject);
-    procedure lblFreqClick(Sender: TObject);
-    procedure mnuShowInfoClick(Sender: TObject);
-    procedure mnuShowPwrClick(Sender: TObject);
-    procedure mnuProgPrefClick(Sender: TObject);
-    procedure mnuShowUsrClick(Sender: TObject);
-    procedure mnuShowVfoClick(Sender: TObject);
-    procedure rbRadio1Click(Sender: TObject);
-    procedure rbRadio2Click(Sender: TObject);
-    procedure tmrRadioTimer(Sender: TObject);
+    acMem : TActionList;
+    acAddModMem : TAction;
+    btn10m : TButton;
+    btn12m : TButton;
+    btn15m : TButton;
+    btn160m : TButton;
+    btn17m : TButton;
+    btn20m : TButton;
+    btn2m : TButton;
+    btn30m : TButton;
+    btn40m : TButton;
+    btn6m : TButton;
+    btn70cm : TButton;
+    btn80m : TButton;
+    btnCW : TButton;
+    btnMemDwn : TButton;
+    btnMemWri : TButton;
+    btnMemUp : TButton;
+    btnSSB : TButton;
+    btnRTTY : TButton;
+    btnAM : TButton;
+    btnFM : TButton;
+    btnVFOA : TButton;
+    btnVFOB : TButton;
+    btPoff : TButton;
+    btnUsr2 : TButton;
+    btPon : TButton;
+    btnUsr1 : TButton;
+    btPstby : TButton;
+    btnUsr3 : TButton;
+    edtFreqInput : TEdit;
+    edtMemNr : TEdit;
+    gbBand : TGroupBox;
+    gbFreq : TGroupBox;
+    gbMode : TGroupBox;
+    gbInfo : TGroupBox;
+    gbVfo : TGroupBox;
+    GroupBox4 : TGroupBox;
+    lblFreq : TLabel;
+    mnuShowUsr : TMenuItem;
+    mnuShowInfo : TMenuItem;
+    mnuShowVfo : TMenuItem;
+    mnuOpenMem : TMenuItem;
+    mnuPref : TMenuItem;
+    mnuAddMod : TMenuItem;
+    mnuShowPwr : TMenuItem;
+    mnuProgPref : TMenuItem;
+    mnuMem : TMainMenu;
+    pnlUsr : TPanel;
+    pnlRig : TPanel;
+    pnlMain : TPanel;
+    pnlPower : TPanel;
+    rbRadio1 : TRadioButton;
+    rbRadio2 : TRadioButton;
+    tmrRadio : TTimer;
+    procedure acAddModMemExecute(Sender : TObject);
+    procedure btnMemWriClick(Sender : TObject);
+    procedure btnMemDwnClick(Sender : TObject);
+    procedure btnMemUpClick(Sender : TObject);
+    procedure btnVFOAClick(Sender : TObject);
+    procedure btnVFOBClick(Sender : TObject);
+    procedure btPoffClick(Sender : TObject);
+    procedure btPonClick(Sender : TObject);
+    procedure btPstbyClick(Sender : TObject);
+    procedure btnUsr1Click(Sender : TObject);
+    procedure btnUsr2Click(Sender : TObject);
+    procedure btnUsr3Click(Sender : TObject);
+    procedure edtFreqInputKeyPress(Sender : TObject; var Key : Char);
+    procedure edtFreqInputKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
+    procedure edtFreqInputMouseLeave(Sender : TObject);
+    procedure edtFreqInputMouseUp(Sender : TObject; Button : TMouseButton;
+      Shift : TShiftState; X, Y : Integer);
+    procedure edtFreqInputMouseWheel(Sender : TObject; Shift : TShiftState;
+      WheelDelta : Integer; MousePos : TPoint; var Handled : Boolean);
+    procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
+    procedure FormCreate(Sender : TObject);
+    procedure FormDestroy(Sender : TObject);
+    procedure FormKeyDown(Sender : TObject; var Key : Word; Shift : TShiftState);
+    procedure FormKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
+    procedure FormShow(Sender : TObject);
+    procedure btn10mClick(Sender : TObject);
+    procedure btn12mClick(Sender : TObject);
+    procedure btn15mClick(Sender : TObject);
+    procedure btn160mClick(Sender : TObject);
+    procedure btn17mClick(Sender : TObject);
+    procedure btn20mClick(Sender : TObject);
+    procedure btn2mClick(Sender : TObject);
+    procedure btn30mClick(Sender : TObject);
+    procedure btn40mClick(Sender : TObject);
+    procedure btn6mClick(Sender : TObject);
+    procedure btn70cmClick(Sender : TObject);
+    procedure btn80mClick(Sender : TObject);
+    procedure btnAMClick(Sender : TObject);
+    procedure btnCWClick(Sender : TObject);
+    procedure btnFMClick(Sender : TObject);
+    procedure btnRTTYClick(Sender : TObject);
+    procedure btnSSBClick(Sender : TObject);
+    procedure gbFreqClick(Sender : TObject);
+    procedure lblFreqClick(Sender : TObject);
+    procedure mnuShowInfoClick(Sender : TObject);
+    procedure mnuShowPwrClick(Sender : TObject);
+    procedure mnuProgPrefClick(Sender : TObject);
+    procedure mnuShowUsrClick(Sender : TObject);
+    procedure mnuShowVfoClick(Sender : TObject);
+    procedure rbRadio1Click(Sender : TObject);
+    procedure rbRadio2Click(Sender : TObject);
+    procedure tmrRadioTimer(Sender : TObject);
   private
-    MouseWheelUsed: boolean;
-    radio: TRigControl;
-    old_mode: string;
+    MouseWheelUsed : Boolean;
+    radio : TRigControl;
+    old_mode : String;
 
-    btn160MBand: string;
-    btn80MBand: string;
-    btn40MBand: string;
-    btn30MBand: string;
-    btn20MBand: string;
-    btn17MBand: string;
-    btn15MBand: string;
-    btn12MBand: string;
-    btn10MBand: string;
-    btn6MBand: string;
-    btn2MBand: string;
-    btn70CMBand: string;
+    btn160MBand : String;
+    btn80MBand : String;
+    btn40MBand : String;
+    btn30MBand : String;
+    btn20MBand : String;
+    btn17MBand : String;
+    btn15MBand : String;
+    btn12MBand : String;
+    btn10MBand : String;
+    btn6MBand : String;
+    btn2MBand : String;
+    btn70CMBand : String;
 
-    function GetActualMode: string;
-    function GetModeNumber(mode: string): cardinal;
-    procedure SetMode(mode: string; bandwidth: integer);
+    function GetActualMode : String;
+    function GetModeNumber(mode : String) : Cardinal;
+    procedure SetMode(mode : String; bandwidth : Integer);
     procedure ClearButtonsColor;
-    procedure UpdateModeButtons(mode: string);
-    procedure UserButton(r, b: char);
+    procedure UpdateModeButtons(mode : String);
+    procedure UserButton(r, b : Char);
   public
-    AutoMode: boolean;
-    infosetstage: integer;
-    infosetfreq: string;
+    AutoMode : Boolean;
+    infosetstage : Integer;
+    infosetfreq : String;
     procedure SynTRX;
 
-    function GetFreqFromModeBand(band: integer; smode: string): string;
-    function GetModeFreqNewQSO(var mode, freq: string): boolean;
-    function GetBandWidth(mode: string): integer;
-    function GetModeBand(var mode, band: string): boolean;
-    function InicializeRig: boolean;
-    function GetFreqHz: double;
-    function GetFreqkHz: double;
-    function GetFreqMHz: double;
-    function GetDislayFreq: string;
-    function GetRawMode: string;
+    function GetFreqFromModeBand(band : Integer; smode : String) : String;
+    function GetModeFreqNewQSO(var mode, freq : String) : Boolean;
+    function GetBandWidth(mode : String) : Integer;
+    function GetModeBand(var mode, band : String) : Boolean;
+    function InicializeRig : Boolean;
+    function GetFreqHz : Double;
+    function GetFreqkHz : Double;
+    function GetFreqMHz : Double;
+    function GetDislayFreq : String;
+    function GetRawMode : String;
 
-    procedure SetModeFreq(mode, freq: string);
-    procedure SetFreqModeBandWidth(freq: double; mode: string; BandWidth: integer);
+    procedure SetModeFreq(mode, freq : String);
+    procedure SetFreqModeBandWidth(freq : Double; mode : String; BandWidth : Integer);
     procedure SavePosition;
     procedure CloseRigs;
-    procedure Split(up: integer);
+    procedure Split(up : Integer);
     procedure DisableSplit;
     procedure ClearRIT;
     procedure DisableRitXit;
     procedure LoadUsrButtonCaptions;
     procedure LoadButtonCaptions;
-    procedure SetDebugMode(DebugMode: boolean);
+    procedure SetDebugMode(DebugMode : Boolean);
     procedure LoadBandButtons;
-    function ListModeClose: boolean;
-    procedure HLTune(start: boolean);
+    function ListModeClose : Boolean;
+    procedure HLTune(start : Boolean);
   end;
 
 var
   frmTRXControl : TfrmTRXControl;
-  ModeWas : string;  //store mode while tuning with AM
-  BwWas : integer;
-  Tuning : boolean = False;
-  MemRelated : boolean;
+  ModeWas : String;  //store mode while tuning with AM
+  BwWas : Integer;
+  Tuning : Boolean = False;
+  MemRelated : Boolean;
 
 implementation
 
@@ -204,7 +204,7 @@ implementation
 { TfrmTRXControl }
 uses dUtils, dData, fNewQSO, fBandMap, uMyIni, fGrayline, fRadioMemories;
 
-procedure TfrmTRXControl.HLTune(start: boolean);
+procedure TfrmTRXControl.HLTune(start : Boolean);
 begin
   if Assigned(radio) then
   begin
@@ -229,13 +229,13 @@ end;
 
 procedure TfrmTRXControl.SynTRX;
 var
-  b : string = '';
-  f : double;
-  m : string;
-  oldG : integer;
-  mG : integer;
-  txlo : double = 0.0;
-  rxlo : double = 0.0;
+  b : String = '';
+  f : Double;
+  m : String;
+  oldG : Integer;
+  mG : Integer;
+  txlo : Double = 0.0;
+  rxlo : Double = 0.0;
 begin
   if Assigned(radio) then
   begin
@@ -305,8 +305,8 @@ begin
 
   m := radio.GetRawMode;
 
+  //user changed settings
   if MemRelated <> cqrini.ReadBool('TRX', 'MemModeRelated', False) then
-    //user changed settings
   begin
     MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
     dmData.OpenFreqMemories(m);
@@ -368,7 +368,7 @@ begin
   frmBandMap.CurrentMode := m;
 end;
 
-function TfrmTRXControl.GetModeNumber(mode: string): cardinal;
+function TfrmTRXControl.GetModeNumber(mode : String) : Cardinal;
 begin
   Result := 0;
   if mode = 'AM' then
@@ -387,9 +387,9 @@ begin
     Result := 4;
 end;
 
-function TfrmTRXControl.GetBandWidth(mode: string): integer;
+function TfrmTRXControl.GetBandWidth(mode : String) : Integer;
 var
-  section : string;
+  section : String;
 begin
   if rbRadio1.Checked then
     section := 'Band1'
@@ -410,7 +410,7 @@ begin
     Result := (cqrini.ReadInteger(section, 'FM', 2500));
 end;
 
-procedure TfrmTRXControl.FormShow(Sender: TObject);
+procedure TfrmTRXControl.FormShow(Sender : TObject);
 begin
   LoadUsrButtonCaptions;
   LoadButtonCaptions;
@@ -429,10 +429,10 @@ begin
   MouseWheelUsed := False;
 end;
 
-procedure TfrmTRXControl.btn10mClick(Sender: TObject);
+procedure TfrmTRXControl.btn10mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -442,10 +442,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn12mClick(Sender: TObject);
+procedure TfrmTRXControl.btn12mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -455,10 +455,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn15mClick(Sender: TObject);
+procedure TfrmTRXControl.btn15mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -468,10 +468,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn160mClick(Sender: TObject);
+procedure TfrmTRXControl.btn160mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -481,10 +481,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn17mClick(Sender: TObject);
+procedure TfrmTRXControl.btn17mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -494,10 +494,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn20mClick(Sender: TObject);
+procedure TfrmTRXControl.btn20mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -507,10 +507,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn2mClick(Sender: TObject);
+procedure TfrmTRXControl.btn2mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -520,10 +520,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn30mClick(Sender: TObject);
+procedure TfrmTRXControl.btn30mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -533,10 +533,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn40mClick(Sender: TObject);
+procedure TfrmTRXControl.btn40mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -546,10 +546,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn6mClick(Sender: TObject);
+procedure TfrmTRXControl.btn6mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -559,10 +559,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn70cmClick(Sender: TObject);
+procedure TfrmTRXControl.btn70cmClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -572,10 +572,10 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btn80mClick(Sender: TObject);
+procedure TfrmTRXControl.btn80mClick(Sender : TObject);
 var
-  freq : string = '';
-  mode : string = '';
+  freq : String = '';
+  mode : String = '';
 begin
   ClearButtonsColor;
   mode := GetActualMode;
@@ -585,25 +585,25 @@ begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
 end;
 
-procedure TfrmTRXControl.btnVFOAClick(Sender: TObject);
+procedure TfrmTRXControl.btnVFOAClick(Sender : TObject);
 begin
   if Assigned(radio) then radio.SetCurrVfo(VFOA);
 end;
 
-procedure TfrmTRXControl.btnVFOBClick(Sender: TObject);
+procedure TfrmTRXControl.btnVFOBClick(Sender : TObject);
 begin
   if Assigned(radio) then radio.SetCurrVfo(VFOB);
 end;
 
-procedure TfrmTRXControl.btnCWClick(Sender: TObject);
+procedure TfrmTRXControl.btnCWClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   SetMode('CW', GetBandWidth('CW'));
 end;
 
-procedure TfrmTRXControl.btnSSBClick(Sender: TObject);
+procedure TfrmTRXControl.btnSSBClick(Sender : TObject);
 var
-  tmp : currency;
+  tmp : Currency;
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   if not TryStrToCurr(lblFreq.Caption, tmp) then
@@ -620,7 +620,7 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.gbFreqClick(Sender: TObject);
+procedure TfrmTRXControl.gbFreqClick(Sender : TObject);
 begin
   edtFreqInput.Text := lblFreq.Caption;
   edtFreqInput.Font := lblFreq.Font;
@@ -630,37 +630,37 @@ begin
   edtFreqInput.SelStart := Length(edtFreqInput.Text);
 end;
 
-procedure TfrmTRXControl.lblFreqClick(Sender: TObject);
+procedure TfrmTRXControl.lblFreqClick(Sender : TObject);
 begin
   gbFreqClick(Sender);
 end;
 
-procedure TfrmTRXControl.mnuShowInfoClick(Sender: TObject);
+procedure TfrmTRXControl.mnuShowInfoClick(Sender : TObject);
 begin
   gbInfo.Visible := not gbInfo.Visible;
   mnuShowInfo.Checked := gbInfo.Visible;
   cqrini.WriteBool('TRX', 'MemShowInfo', gbInfo.Visible);
 end;
 
-procedure TfrmTRXControl.btnRTTYClick(Sender: TObject);
+procedure TfrmTRXControl.btnRTTYClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   SetMode('RTTY', GetBandWidth('RTTY'));
 end;
 
-procedure TfrmTRXControl.btnAMClick(Sender: TObject);
+procedure TfrmTRXControl.btnAMClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   SetMode('AM', GetBandWidth('AM'));
 end;
 
-procedure TfrmTRXControl.btnFMClick(Sender: TObject);
+procedure TfrmTRXControl.btnFMClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
   SetMode('FM', GetBandWidth('FM'));
 end;
 
-procedure TfrmTRXControl.mnuShowPwrClick(Sender: TObject);
+procedure TfrmTRXControl.mnuShowPwrClick(Sender : TObject);
 begin
   if pnlPower.Visible then
   begin
@@ -675,50 +675,50 @@ begin
   cqrini.WriteBool('TRX', 'PowerButtons', pnlPower.Visible);
 end;
 
-procedure TfrmTRXControl.mnuProgPrefClick(Sender: TObject);
+procedure TfrmTRXControl.mnuProgPrefClick(Sender : TObject);
 begin
   cqrini.WriteInteger('Pref', 'ActPageIdx', 5);
   //set TRXControl tab active. Number may change if preferences page change
   frmNewQSO.acPreferences.Execute;
 end;
 
-procedure TfrmTRXControl.mnuShowUsrClick(Sender: TObject);
+procedure TfrmTRXControl.mnuShowUsrClick(Sender : TObject);
 begin
   pnlUsr.Visible := not pnlUsr.Visible;
   mnuShowUsr.Checked := pnlUsr.Visible;
   cqrini.WriteBool('TRX', 'ShowUsr', pnlUsr.Visible);
 end;
 
-procedure TfrmTRXControl.mnuShowVfoClick(Sender: TObject);
+procedure TfrmTRXControl.mnuShowVfoClick(Sender : TObject);
 begin
   gbVfo.Visible := not gbVfo.Visible;
   mnuShowVfo.Checked := gbVfo.Visible;
   cqrini.WriteBool('TRX', 'ShowVfo', gbVfo.Visible);
 end;
 
-procedure TfrmTRXControl.rbRadio1Click(Sender: TObject);
+procedure TfrmTRXControl.rbRadio1Click(Sender : TObject);
 begin
   LoadUsrButtonCaptions;
   InicializeRig;
 end;
 
-procedure TfrmTRXControl.rbRadio2Click(Sender: TObject);
+procedure TfrmTRXControl.rbRadio2Click(Sender : TObject);
 begin
   LoadUsrButtonCaptions;
   InicializeRig;
 end;
 
-procedure TfrmTRXControl.tmrRadioTimer(Sender: TObject);
+procedure TfrmTRXControl.tmrRadioTimer(Sender : TObject);
 begin
   SynTRX;
 end;
 
-procedure TfrmTRXControl.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TfrmTRXControl.FormClose(Sender : TObject; var CloseAction : TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 
-function TfrmTRXControl.ListModeClose: boolean;
+function TfrmTRXControl.ListModeClose : Boolean;
 
 begin
   Result := False;
@@ -730,7 +730,7 @@ begin
     end;
 end;
 
-procedure TfrmTRXControl.acAddModMemExecute(Sender: TObject);
+procedure TfrmTRXControl.acAddModMemExecute(Sender : TObject);
 
 begin
   ListModeClose;
@@ -762,12 +762,12 @@ begin
 
 end;
 
-procedure TfrmTRXControl.btnMemWriClick(Sender: TObject);
+procedure TfrmTRXControl.btnMemWriClick(Sender : TObject);
 var
-  bandwidth : word = 0;
-  mode : string = '';
-  freq : string = '';
-  Dfreq : double;
+  bandwidth : Word = 0;
+  mode : String = '';
+  freq : String = '';
+  Dfreq : Double;
 
 begin
   Dfreq := 0;
@@ -799,12 +799,12 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.btnMemDwnClick(Sender: TObject);
+procedure TfrmTRXControl.btnMemDwnClick(Sender : TObject);
 var
-  freq : double;
-  mode : string;
-  bandwidth : integer;
-  info : string;
+  freq : Double;
+  mode : String;
+  bandwidth : Integer;
+  info : String;
 begin
   dmData.GetNextFreqFromMem(freq, mode, bandwidth, info);
   if dmData.DebugLevel >= 1 then
@@ -813,19 +813,19 @@ begin
     SetFreqModeBandWidth(freq, mode, bandwidth);
 end;
 
-procedure TfrmTRXControl.btnMemUpClick(Sender: TObject);
+procedure TfrmTRXControl.btnMemUpClick(Sender : TObject);
 var
-  freq : double;
-  mode : string;
-  bandwidth : integer;
-  info : string;
+  freq : Double;
+  mode : String;
+  bandwidth : Integer;
+  info : String;
 begin
   dmData.GetPreviousFreqFromMem(freq, mode, bandwidth, info);
   if freq > 0 then
     SetFreqModeBandWidth(freq, mode, bandwidth);
 end;
 
-procedure TfrmTRXControl.btPoffClick(Sender: TObject);
+procedure TfrmTRXControl.btPoffClick(Sender : TObject);
 begin
   if Assigned(radio) then
   begin
@@ -836,7 +836,7 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.btPonClick(Sender: TObject);
+procedure TfrmTRXControl.btPonClick(Sender : TObject);
 begin
   if Assigned(radio) then
   begin
@@ -847,7 +847,7 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.btPstbyClick(Sender: TObject);
+procedure TfrmTRXControl.btPstbyClick(Sender : TObject);
 begin
   if Assigned(radio) then
   begin
@@ -858,9 +858,9 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.UserButton(r, b: char);
+procedure TfrmTRXControl.UserButton(r, b : Char);
 var
-  c : string;
+  c : String;
 begin
   c := trim(cqrini.ReadString('TRX' + r, 'usr' + b, ''));
   if pos('RUN', uppercase(c)) = 1 then
@@ -872,9 +872,9 @@ begin
     radio.UsrCmd(c);
 end;
 
-procedure TfrmTRXControl.btnUsr1Click(Sender: TObject);
+procedure TfrmTRXControl.btnUsr1Click(Sender : TObject);
 var
-  r : char;
+  r : Char;
 begin
   if Assigned(radio) then
   begin
@@ -885,9 +885,9 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.btnUsr2Click(Sender: TObject);
+procedure TfrmTRXControl.btnUsr2Click(Sender : TObject);
 var
-  r : char;
+  r : Char;
 begin
   if Assigned(radio) then
   begin
@@ -898,9 +898,9 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.btnUsr3Click(Sender: TObject);
+procedure TfrmTRXControl.btnUsr3Click(Sender : TObject);
 var
-  r : char;
+  r : Char;
 begin
   if Assigned(radio) then
   begin
@@ -912,7 +912,7 @@ begin
 end;
 
 
-procedure TfrmTRXControl.edtFreqInputKeyPress(Sender: TObject; var Key: char);
+procedure TfrmTRXControl.edtFreqInputKeyPress(Sender : TObject; var Key : Char);
 begin
   if key = '.' then
   begin
@@ -926,13 +926,13 @@ begin
 end;
 
 
-procedure TfrmTRXControl.edtFreqInputKeyUp(Sender: TObject; var Key: word;
-  Shift: TShiftState);
+procedure TfrmTRXControl.edtFreqInputKeyUp(Sender : TObject; var Key : Word;
+  Shift : TShiftState);
 var
-  freq : string = '';
-  mode : string = '';
-  s : string;
-  f : currency;
+  freq : String = '';
+  mode : String = '';
+  s : String;
+  f : Currency;
 begin
   if Key = VK_Return then
   begin
@@ -952,26 +952,26 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.edtFreqInputMouseLeave(Sender: TObject);
+procedure TfrmTRXControl.edtFreqInputMouseLeave(Sender : TObject);
 begin
   if MouseWheelUsed then
     edtFreqInputMouseUp(nil, mbMiddle, [ssCtrl], 0, 0);
 end;
 
-procedure TfrmTRXControl.edtFreqInputMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: integer);
+procedure TfrmTRXControl.edtFreqInputMouseUp(Sender : TObject;
+  Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
 var
-  Key : word = VK_Return;
+  Key : Word = VK_Return;
 begin
   edtFreqInputKeyUp(nil, Key, Shift);
 end;
 
-procedure TfrmTRXControl.edtFreqInputMouseWheel(Sender: TObject;
-  Shift: TShiftState; WheelDelta: integer; MousePos: TPoint; var Handled: boolean);
+procedure TfrmTRXControl.edtFreqInputMouseWheel(Sender : TObject;
+  Shift : TShiftState; WheelDelta : Integer; MousePos : TPoint; var Handled : Boolean);
 var
-  s : string;
-  f : currency;
-  m : currency;
+  s : String;
+  f : Currency;
+  m : Currency;
 begin
   MouseWheelUsed := True;
   m := 0.0001;   //base 10Hz step
@@ -998,19 +998,19 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.FormCreate(Sender: TObject);
+procedure TfrmTRXControl.FormCreate(Sender : TObject);
 begin
   Radio := nil;
   AutoMode := True;
 end;
 
-procedure TfrmTRXControl.FormDestroy(Sender: TObject);
+procedure TfrmTRXControl.FormDestroy(Sender : TObject);
 begin
   if dmData.DebugLevel >= 1 then Writeln('Closing TRXControl window');
 end;
 
-procedure TfrmTRXControl.FormKeyDown(Sender: TObject; var Key: word;
-  Shift: TShiftState);
+procedure TfrmTRXControl.FormKeyDown(Sender : TObject; var Key : Word;
+  Shift : TShiftState);
 begin
   if (Shift = [ssAlt]) and (key = VK_F) then
   begin
@@ -1023,7 +1023,8 @@ begin
     DisableSplit;
 end;
 
-procedure TfrmTRXControl.FormKeyUp(Sender: TObject; var Key: word; Shift: TShiftState);
+procedure TfrmTRXControl.FormKeyUp(Sender : TObject; var Key : Word;
+  Shift : TShiftState);
 begin
   if (key = VK_ESCAPE) then
   begin
@@ -1032,13 +1033,13 @@ begin
   end;
 end;
 
-function TfrmTRXControl.InicializeRig: boolean;
+function TfrmTRXControl.InicializeRig : Boolean;
 var
-  n : string = '';
-  id : integer = 0;
-  port : integer;
-  poll : integer;
-  KeyerType : integer;
+  n : String = '';
+  id : Integer = 0;
+  port : Integer;
+  poll : Integer;
+  KeyerType : Integer;
 begin
   tmrRadio.Enabled := False;
 
@@ -1118,7 +1119,7 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.SetMode(mode: string; bandwidth: integer);
+procedure TfrmTRXControl.SetMode(mode : String; bandwidth : Integer);
 var
   rmode : TRigMode;
 begin
@@ -1130,10 +1131,10 @@ begin
   end;
 end;
 
-function TfrmTRXControl.GetFreqFromModeBand(band: integer; smode: string): string;
+function TfrmTRXControl.GetFreqFromModeBand(band : Integer; smode : String) : String;
 var
-  freq : currency = 0;
-  mode : integer = 0;
+  freq : Currency = 0;
+  mode : Integer = 0;
 begin
   if smode = 'CW' then
     mode := 0
@@ -1275,7 +1276,7 @@ begin
     Writeln(Result);
 end;
 
-function TfrmTRXControl.GetActualMode: string;
+function TfrmTRXControl.GetActualMode : String;
 begin
   if Assigned(radio) then
   begin
@@ -1283,12 +1284,12 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.SetFreqModeBandWidth(freq: double; mode: string;
-  BandWidth: integer);
+procedure TfrmTRXControl.SetFreqModeBandWidth(freq : Double; mode : String;
+  BandWidth : Integer);
 var
   rmode : TRigMode;
-  RXOffset : currency;
-  TXOffset : currency;
+  RXOffset : Currency;
+  TXOffset : Currency;
 begin
   if mode = 'SSB' then
   begin
@@ -1318,10 +1319,10 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.SetModeFreq(mode, freq: string); //freq in kHz
+procedure TfrmTRXControl.SetModeFreq(mode, freq : String); //freq in kHz
 var
-  bandwidth : integer = 0;
-  f : double = 0;
+  bandwidth : Integer = 0;
+  f : Double = 0;
 begin
   if (lblFreq.Caption = empty_freq) then
     exit;
@@ -1342,7 +1343,7 @@ begin
   SetFreqModeBandWidth(f, mode, bandwidth);
 end;
 
-function TfrmTRXControl.GetModeFreqNewQSO(var mode, freq: string): boolean;
+function TfrmTRXControl.GetModeFreqNewQSO(var mode, freq : String) : Boolean;
 begin
   Result := False;
   if not Assigned(radio) then exit;
@@ -1376,9 +1377,9 @@ begin
   btn70cm.Font.Color := COLOR_WINDOWTEXT;
 end;
 
-function TfrmTRXControl.GetModeBand(var mode, band: string): boolean;
+function TfrmTRXControl.GetModeBand(var mode, band : String) : Boolean;
 var
-  freq : string;
+  freq : String;
 begin
   mode := '';
   band := '';
@@ -1400,7 +1401,7 @@ begin
     FreeAndNil(radio);
 end;
 
-procedure TfrmTRXControl.UpdateModeButtons(mode: string);
+procedure TfrmTRXControl.UpdateModeButtons(mode : String);
 begin
   btnCW.Font.Color := COLOR_WINDOWTEXT;
   btnSSB.Font.Color := COLOR_WINDOWTEXT;
@@ -1441,7 +1442,7 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.Split(Up: integer);
+procedure TfrmTRXControl.Split(Up : Integer);
 
 begin
   //we do split with XIT, no need to play with 2 VFOs
@@ -1456,7 +1457,7 @@ begin
   if Assigned(radio) then  radio.DisableSplit;
 end;
 
-function TfrmTRXControl.GetFreqHz: double;
+function TfrmTRXControl.GetFreqHz : Double;
 begin
   if Assigned(radio) then
     Result := radio.GetFreqHz
@@ -1464,7 +1465,7 @@ begin
     Result := 0;
 end;
 
-function TfrmTRXControl.GetFreqkHz: double;
+function TfrmTRXControl.GetFreqkHz : Double;
 begin
   if Assigned(radio) then
     Result := radio.GetFreqKHz
@@ -1472,7 +1473,7 @@ begin
     Result := 0;
 end;
 
-function TfrmTRXControl.GetFreqMHz: double;
+function TfrmTRXControl.GetFreqMHz : Double;
 begin
   if Assigned(radio) then
     Result := radio.GetFreqMHz
@@ -1480,7 +1481,7 @@ begin
     Result := 0;
 end;
 
-function TfrmTRXControl.GetDislayFreq: string;
+function TfrmTRXControl.GetDislayFreq : String;
 begin
   if Assigned(radio) then
     Result := FormatFloat(empty_freq + ';;', radio.GetFreqMHz)
@@ -1506,7 +1507,7 @@ end;
 
 procedure TfrmTRXControl.LoadUsrButtonCaptions;
 var
-  r : char;
+  r : Char;
 begin
   if rbRadio1.Checked then r := '1'
   else
@@ -1532,7 +1533,7 @@ begin
   btn70cm.Caption := cqrini.ReadString('DefFreq', '70btn', '70cm');
 end;
 
-procedure TfrmTRXControl.SetDebugMode(DebugMode: boolean);
+procedure TfrmTRXControl.SetDebugMode(DebugMode : Boolean);
 begin
   if Assigned(radio) then
   begin
@@ -1540,7 +1541,7 @@ begin
   end;
 end;
 
-function TfrmTRXControl.GetRawMode: string;
+function TfrmTRXControl.GetRawMode : String;
 begin
   if Assigned(radio) then
     Result := radio.GetRawMode
