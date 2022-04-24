@@ -147,7 +147,6 @@ object frmTRXControl: TfrmTRXControl
   KeyPreview = True
   Menu = mnuMem
   OnClose = FormClose
-  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
