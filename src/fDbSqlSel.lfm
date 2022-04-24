@@ -9,7 +9,7 @@ object frmDbSqlSel: TfrmDbSqlSel
   Color = clWhite
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.0.4'
   object gbLocalUser: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = rbExternal
@@ -65,10 +65,9 @@ object frmDbSqlSel: TfrmDbSqlSel
       Left = 331
       Height = 17
       Top = 1
-      Width = 62
+      Width = 66
       Anchors = [akLeft, akBottom]
       Caption = 'Password'
-      ParentColor = False
     end
     object lblUsername: TLabel
       AnchorSideLeft.Control = edtUserName
@@ -76,10 +75,9 @@ object frmDbSqlSel: TfrmDbSqlSel
       Left = 229
       Height = 17
       Top = 1
-      Width = 67
+      Width = 68
       Anchors = [akLeft, akBottom]
       Caption = 'Username'
-      ParentColor = False
     end
     object lblIp: TLabel
       AnchorSideLeft.Control = edtIP
@@ -87,10 +85,9 @@ object frmDbSqlSel: TfrmDbSqlSel
       Left = 6
       Height = 17
       Top = 1
-      Width = 60
+      Width = 63
       Anchors = [akLeft, akBottom]
       Caption = 'IP addres'
-      ParentColor = False
     end
     object lblPort: TLabel
       AnchorSideLeft.Control = edtPort
@@ -98,10 +95,9 @@ object frmDbSqlSel: TfrmDbSqlSel
       Left = 108
       Height = 17
       Top = 1
-      Width = 26
+      Width = 30
       Anchors = [akLeft, akBottom]
       Caption = 'Port'
-      ParentColor = False
     end
     object edtPort: TEdit
       AnchorSideLeft.Control = edtIP
@@ -138,14 +134,13 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = pnlWelcome
     AnchorSideTop.Side = asrBottom
-    Left = 21
+    Left = 34
     Height = 34
     Top = 43
-    Width = 398
+    Width = 372
     BorderSpacing.Top = 6
     Caption = 'It seems you are trying to run this program for '#10'the first time. Do you want to save your Log data to:'
     Font.Style = [fsBold]
-    ParentColor = False
     ParentFont = False
   end
   object rbFolder: TRadioButton
@@ -155,10 +150,10 @@ object frmDbSqlSel: TfrmDbSqlSel
     Left = 24
     Height = 23
     Top = 89
-    Width = 271
+    Width = 288
     BorderSpacing.Left = 24
     BorderSpacing.Top = 12
-    Caption = 'your linux user folder (Cqrlog default)'
+    Caption = 'your linux user folder (CQRLOG default)'
     Checked = True
     OnClick = rbFolderClick
     ParentShowHint = False
@@ -172,7 +167,7 @@ object frmDbSqlSel: TfrmDbSqlSel
     Left = 24
     Height = 23
     Top = 115
-    Width = 202
+    Width = 203
     BorderSpacing.Top = 3
     Caption = 'local machine''s SQL server'
     OnChange = rbLocalChange
@@ -187,7 +182,7 @@ object frmDbSqlSel: TfrmDbSqlSel
     Left = 24
     Height = 23
     Top = 141
-    Width = 226
+    Width = 231
     BorderSpacing.Top = 3
     Caption = 'external networked SQL server'
     OnChange = rbExternalChange
@@ -237,15 +232,14 @@ object frmDbSqlSel: TfrmDbSqlSel
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = pnlWelcome
       AnchorSideTop.Side = asrCenter
-      Left = 52
-      Height = 30
-      Top = 0
-      Width = 277
-      Caption = 'Welcome to Cqrlog!'
+      Left = 71
+      Height = 29
+      Top = 1
+      Width = 238
+      Caption = 'Welcome to CQRLOG'
       Font.Color = clOlive
       Font.Height = 25
       Font.Style = [fsBold, fsItalic]
-      ParentColor = False
       ParentFont = False
     end
   end
@@ -576,10 +570,9 @@ object frmDbSqlSel: TfrmDbSqlSel
       Left = 1
       Height = 34
       Top = 1
-      Width = 366
+      Width = 370
       Caption = 'Cqrlog is creatng your first log, it might take some time.'#10'Please be patient!'
       Font.Color = clMaroon
-      ParentColor = False
       ParentFont = False
       ShowAccelChar = False
       WordWrap = True
@@ -596,7 +589,6 @@ object frmDbSqlSel: TfrmDbSqlSel
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 6
     Font.Color = clRed
-    ParentColor = False
     ParentFont = False
   end
   object btnHelp: TSpeedButton
