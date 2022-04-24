@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Buttons;
+  ExtCtrls, Buttons, LazFileUtils;
 
 type
 
@@ -292,10 +292,17 @@ end;
 
 procedure TfrmDbSqlSel.btnHelpClick(Sender: TObject);
 var
-  wb: string;
+  xdg: string;
+  pathToHelp : string;
 begin
-  wb := FileSearch('xdg-open', C_PATH, True);
-  if wb <> '' then dmUtils.RunOnBackground(wb + ' /usr/share/cqrlog/help/firsttime.html');
+  xdg := FileSearch('xdg-open', C_PATH, True);
+  if xdg <> '' then
+  begin
+    pathToHelp := ExpandFileNameUTF8('..' + DirectorySeparator + 'share' + DirectorySeparator + 'cqrlog' + DirectorySeparator +
+                                     'help' + DirectorySeparator + 'firsttime.html');
+
+    dmUtils.RunOnBackground(xdg + ' ' + pathToHelp);
+  end;
 end;
 
 procedure TfrmDbSqlSel.ChkValues;
@@ -359,7 +366,6 @@ begin
 end;
 
 procedure TfrmDbSqlSel.FormCreate(Sender: TObject);
-
 begin
   ip := 'localhost';
   port := '64000';
