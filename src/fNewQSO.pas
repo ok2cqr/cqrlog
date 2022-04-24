@@ -1156,9 +1156,11 @@ Procedure TfrmNewQSO.ShowCountryInfo;
 var
   index : Integer;
 begin
+  if (edtCall.Text = '') then
+    exit;
+
   index := 0;
-  lblCountryInfo.Caption := dmDXCC.DXCCInfo(adif,cmbFreq.Text,
-                            cmbMode.Text,index);
+  lblCountryInfo.Caption := dmDXCC.DXCCInfo(adif, cmbFreq.Text, cmbMode.Text,index);
   if pos('UNKN',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clRed;
   if pos('CONF',Uppercase(lblCountryInfo.Caption))>0 then lblCountryInfo.Font.Color:=clGreen;
   if pos('NEW C',Uppercase(lblCountryInfo.Caption))>0 then
