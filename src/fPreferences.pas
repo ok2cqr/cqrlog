@@ -1813,8 +1813,7 @@ end;
 
 procedure TfrmPreferences.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  cqrini.WriteInteger('Pref', 'Top', Top);
-  cqrini.WriteInteger('Pref', 'Left', Left);
+  dmUtils.SaveWindowPos(self);
   cqrini.WriteInteger('Pref', 'ActPageIdx', pgPreferences.ActivePageIndex);
 end;
 
@@ -2741,6 +2740,8 @@ var
   i: integer;
 begin
   dmUtils.LoadFontSettings(self);
+  dmUtils.LoadWindowPos(self);
+
   dmUtils.InsertModes(cmbDefaultMode);
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertModes(cmbWsjtDefaultMode);
