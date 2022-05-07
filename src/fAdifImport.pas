@@ -46,6 +46,7 @@ type TnewQSOEntry=record   //represents a new qso entry in the log
       LOTW_QSL_RCVD:string[l_LOTW_QSL_RCVD];
       LOTW_QSL_SENT:string[l_LOTW_QSL_SENT];
       MODE:string[l_MODE];
+      SUBMODE:string[l_SUBMODE]; //we need this while processing cqrmode
       MY_GRIDSQUARE:string[l_MY_GRIDSQUARE];
       NAME:string[l_NAME];
       NOTES:string[l_NOTES];
@@ -140,7 +141,6 @@ type
     procedure mnueditClick(Sender: TObject);
     procedure mnuImportClick(Sender: TObject);
   private
-    LockSubMode : boolean;   //if we replace mode with submode we set lock in case that submode and mode are in opposite order in qso record.
     LocalDbg     : Boolean;
     AbortImport : boolean;
     ERR_FILE : String;
@@ -296,58 +296,44 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
     h_LOTW_QSL_RCVD                 :d.LOTW_QSL_RCVD:=TrimDataLen(adifTag,data,l_LOTW_QSL_RCVD);
     h_LOTW_QSL_SENT                 :d.LOTW_QSL_SENT:=TrimDataLen(adifTag,data,l_LOTW_QSL_SENT);
 
-      // DL7OAP: because MODE-field in cqrlog database does not match completely
-      // with MODE field of ADIF specification, we have to transfer the
-      // ADIF MODES/SUBMODES (JS8, FT4, FST4,PKT) to MODE-field in cqrlog database
+    h_MODE                          :d.MODE    := UpperCase(TrimDataLen(adifTag,data,l_MODE));
+    h_SUBMODE                       :d.SUBMODE := UpperCase(TrimDataLen(adifTag,data,l_SUBMODE));
 
-      //OH1KH: we can put all submodes to mode when importing
-
-      h_MODE                          : begin
-                                          if not LockSubMode then  //do not override mode if already set by submode
-                                             if data = 'PKT' then d.MODE:='PACKET'
-                                                else d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
-                                        end;
-      h_SUBMODE                       : begin
-                                         // Cqrlog does not use USB and LSB (submodes)
-                                         // but it is fixed in function saveNewEntryFromADIFinDatabase
-                                               d.MODE:=UpperCase(TrimDataLen(adifTag,data,l_MODE));
-                                          LockSubMode:=true;
-                                        end;
-      h_MY_GRIDSQUARE                   :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
-      h_NAME                            :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
-      h_NOTES                           :d.NOTES:=TrimDataLen(adifTag,data,l_NOTES);
-      h_PFX                             :d.PFX:=UpperCase(TrimDataLen(adifTag,data,l_PFX));
-      h_QSLMSG                          :d.QSLMSG:=TrimDataLen(adifTag,data,l_QSLMSG);
-      h_QSLRDATE                        :d.QSLRDATE:=TrimDataLen(adifTag,data,l_QSLRDATE);
-      h_QSLSDATE                        :d.QSLSDATE:=TrimDataLen(adifTag,data,l_QSLSDATE);
-      h_QSL_RCVD                        :d.QSL_RCVD:=TrimDataLen(adifTag,data,l_QSL_RCVD);
-      h_QSL_SENT                        :d.QSL_SENT:=TrimDataLen(adifTag,data,l_QSL_SENT);
-      h_QSL_VIA                         :d.QSL_VIA:=TrimDataLen(adifTag,data,l_QSL_VIA);
-      h_QSO_DATE                        :d.QSO_DATE:=TrimDataLen(adifTag,data,l_QSO_DATE);
-      h_QTH                             :d.QTH:=TrimDataLen(adifTag,data,l_QTH);
-      h_RST_RCVD                        :d.RST_RCVD:=TrimDataLen(adifTag,data,l_RST_RCVD);
-      h_RST_SENT                        :d.RST_SENT:=TrimDataLen(adifTag,data,l_RST_SENT);
-      h_SRX                             :d.SRX:=TrimDataLen(adifTag,data,l_SRX);
-      h_SRX_STRING                      :d.SRX_STRING:=TrimDataLen(adifTag,data,l_SRX_STRING);
-      h_STX                             :d.STX:=TrimDataLen(adifTag,data,l_STX);
-      h_STX_STRING                      :d.STX_STRING:=TrimDataLen(adifTag,data,l_STX_STRING);
-      h_CONTEST_ID                      :d.CONTEST_ID:=TrimDataLen(adifTag,data,l_CONTEST_ID);
-      h_DARC_DOK                        :d.DARC_DOK:=TrimDataLen(adifTag,data,l_DARC_DOK);
-      h_TIME_OFF                        :d.TIME_OFF:=copy(data,1,4);//can be HHMMSS but cqrlog uses HHMM both
-      h_TIME_ON                         :d.TIME_ON:=copy(data,1,4); //are valid adif forms so no Trim/Err here
-      h_TX_PWR                          :d.TX_PWR:=TrimDataLen(adifTag,data,l_TX_PWR);
-      h_APP_CQRLOG_DXCC                 :d.APP_CQRLOG_DXCC:=TrimDataLen(adifTag,data,l_APP_CQRLOG_DXCC);
-      h_APP_CQRLOG_QSLS                 :d.APP_CQRLOG_QSLS:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLS);
-      h_APP_CQRLOG_PROFILE              :d.APP_CQRLOG_PROFILE:=TrimDataLen(adifTag,data,l_APP_CQRLOG_PROFILE);
-      h_APP_CQRLOG_QSLR                 :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
-      h_APP_CQRLOG_COUNTY               :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
-      h_CQZ                             :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
-      h_STATE                           :d.STATE:=UpperCase(TrimDataLen(adifTag,data,l_STATE));
-      h_AWARD                           :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
-      h_PROP_MODE                       :d.PROP_MODE:=TrimDataLen(adifTag,data,l_PROP_MODE);
-      h_SAT_NAME                        :d.SAT_NAME:=TrimDataLen(adifTag,data,l_SAT_NAME);
-      h_FREQ_RX                         :d.FREQ_RX:=TrimDataLen(adifTag,data,l_FREQ_RX);
-      h_OP                              :d.OP:=TrimDataLen(adifTag,data,l_OP);
+    h_MY_GRIDSQUARE                 :d.MY_GRIDSQUARE:=dmUtils.StdFormatLocator(data);
+    h_NAME                          :d.NAME:=TrimDataLen(adifTag,data,l_NAME);
+    h_NOTES                         :d.NOTES:=TrimDataLen(adifTag,data,l_NOTES);
+    h_PFX                           :d.PFX:=UpperCase(TrimDataLen(adifTag,data,l_PFX));
+    h_QSLMSG                        :d.QSLMSG:=TrimDataLen(adifTag,data,l_QSLMSG);
+    h_QSLRDATE                      :d.QSLRDATE:=TrimDataLen(adifTag,data,l_QSLRDATE);
+    h_QSLSDATE                      :d.QSLSDATE:=TrimDataLen(adifTag,data,l_QSLSDATE);
+    h_QSL_RCVD                      :d.QSL_RCVD:=TrimDataLen(adifTag,data,l_QSL_RCVD);
+    h_QSL_SENT                      :d.QSL_SENT:=TrimDataLen(adifTag,data,l_QSL_SENT);
+    h_QSL_VIA                       :d.QSL_VIA:=TrimDataLen(adifTag,data,l_QSL_VIA);
+    h_QSO_DATE                      :d.QSO_DATE:=TrimDataLen(adifTag,data,l_QSO_DATE);
+    h_QTH                           :d.QTH:=TrimDataLen(adifTag,data,l_QTH);
+    h_RST_RCVD                      :d.RST_RCVD:=TrimDataLen(adifTag,data,l_RST_RCVD);
+    h_RST_SENT                      :d.RST_SENT:=TrimDataLen(adifTag,data,l_RST_SENT);
+    h_SRX                           :d.SRX:=TrimDataLen(adifTag,data,l_SRX);
+    h_SRX_STRING                    :d.SRX_STRING:=TrimDataLen(adifTag,data,l_SRX_STRING);
+    h_STX                           :d.STX:=TrimDataLen(adifTag,data,l_STX);
+    h_STX_STRING                    :d.STX_STRING:=TrimDataLen(adifTag,data,l_STX_STRING);
+    h_CONTEST_ID                    :d.CONTEST_ID:=TrimDataLen(adifTag,data,l_CONTEST_ID);
+    h_DARC_DOK                      :d.DARC_DOK:=TrimDataLen(adifTag,data,l_DARC_DOK);
+    h_TIME_OFF                      :d.TIME_OFF:=copy(data,1,4);//can be HHMMSS but cqrlog uses HHMM both
+    h_TIME_ON                       :d.TIME_ON:=copy(data,1,4); //are valid adif forms so no Trim/Err here
+    h_TX_PWR                        :d.TX_PWR:=TrimDataLen(adifTag,data,l_TX_PWR);
+    h_APP_CQRLOG_DXCC               :d.APP_CQRLOG_DXCC:=TrimDataLen(adifTag,data,l_APP_CQRLOG_DXCC);
+    h_APP_CQRLOG_QSLS               :d.APP_CQRLOG_QSLS:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLS);
+    h_APP_CQRLOG_PROFILE            :d.APP_CQRLOG_PROFILE:=TrimDataLen(adifTag,data,l_APP_CQRLOG_PROFILE);
+    h_APP_CQRLOG_QSLR               :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
+    h_APP_CQRLOG_COUNTY             :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
+    h_CQZ                           :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
+    h_STATE                         :d.STATE:=UpperCase(TrimDataLen(adifTag,data,l_STATE));
+    h_AWARD                         :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
+    h_PROP_MODE                     :d.PROP_MODE:=TrimDataLen(adifTag,data,l_PROP_MODE);
+    h_SAT_NAME                      :d.SAT_NAME:=TrimDataLen(adifTag,data,l_SAT_NAME);
+    h_FREQ_RX                       :d.FREQ_RX:=TrimDataLen(adifTag,data,l_FREQ_RX);
+    h_OP                            :d.OP:=TrimDataLen(adifTag,data,l_OP);
 
     else begin
         { writeln('Unnamed...>',pom,'<');fillTypeVariableWithTagData:=false;exit;}
@@ -396,9 +382,11 @@ begin
     if (not dmUtils.IsLocOK(d.MY_GRIDSQUARE)) or chkOverrideLocator.Checked then
       d.MY_GRIDSQUARE := FMyLoc;
     d.CALL := UpperCase(d.CALL);
-    if (d.MODE = 'USB') or (d.MODE ='LSB') then
-      d.MODE := 'SSB';
-    if (d.FREQ  = '') or (d.FREQ = '0') then
+
+    //convert mode and submode to cqrmode here
+    d.MODE:=dmUtils.ModeToCqr(d.MODE,d.SUBMODE,LocalDbg);
+
+         if (d.FREQ  = '') or (d.FREQ = '0') then
       d.FREQ := dmUtils.FreqFromBand(d.BAND,d.MODE);
 
     d.QSO_DATE      := dmUtils.ADIFDateToDate(d.QSO_DATE);
@@ -837,7 +825,6 @@ begin
               WriteWrongADIF(tmp,'Imported with shrink(s):'+#10+CutErrText);
           CutErrText:='';
           tmp:='';
-          LockSubMode :=false;
         end;
         fillTypeVariableWithTagData(h,data,D,adifTag);
       end;

@@ -199,7 +199,10 @@ begin
               dmUtils.DateInSOTAFormat(dmData.Q.FieldByName('qsodate').AsDateTime)+',',
               StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+',',
               FormatFloat('0.00;;',dmData.Q.FieldByName('freq').AsFloat),'MHz,',
+              //2022-05-05 OH1KH It seems that SOTA mode can be CqrMode (mainly CW,SSB,FM,AM)(I.E. no mode+submode pairs needed)
+              //otherwise use dmUtils.ModeFromCqr to get mode and submode at this point
               dmData.Q.FieldByName('mode').AsString,',',
+
               dmData.Q.FieldByName('callsign').AsString,',',  //his callsign
               HisSota+',', //his summit
               note  //comments

@@ -208,6 +208,8 @@ begin
 end;
 
 function TfrmCabrilloExport.CabrilloMode(mode: string): String;
+//2022-05-05 OH1KH It seems that Cabrilllo mode can be CqrMode (mainly CW,SSB,AM,FM,RTTY)(I.E. no mode+submode pairs needed)
+//otherwise use dmUtils.ModeFromCqr to get mode and submode at this function
 begin
   Result := '';
   case mode of
