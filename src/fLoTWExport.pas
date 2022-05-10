@@ -385,6 +385,7 @@ begin
   end;
 
   date := FormatDateTime('yyyy-mm-dd',now);
+  Writeln(f);
   Writeln(f, '<ADIF_VER:5>3.1.0');
   Writeln(f, '<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
