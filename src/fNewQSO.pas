@@ -6601,8 +6601,9 @@ begin
       if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace or ReplaceZonesEtc then
       begin
         if (edtState.Text<>'') then
-          edtCounty.Text := edtState.Text+','+c_county
-        else
+        // what is the mind of adding state to county?? Remove...
+        // edtCounty.Text := edtState.Text+','+c_county
+        // else
           edtCounty.Text := c_county
       end
     end;  //county
