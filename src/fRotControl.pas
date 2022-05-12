@@ -120,7 +120,7 @@ begin
    mnuDirbtns.Checked:= not mnuDirbtns.Checked;
    btnLeft.Visible:=mnuDirbtns.Checked;
    btnRight.Visible:=mnuDirbtns.Checked;
-   cqrini.WriteBool('ROT','DirBtns',mnuDirbtns.Visible);
+   cqrini.WriteBool('ROT','DirBtns',mnuDirbtns.Checked);
 end;
 
 procedure TfrmRotControl.mnuMinMaxClick(Sender: TObject);
