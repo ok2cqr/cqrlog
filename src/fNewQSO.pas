@@ -6593,9 +6593,9 @@ begin
       edtState.Text := c_state;
       if ((c_county <> '') and (edtCounty.Text='')) or AlwaysReplace or ReplaceZonesEtc then
       begin
-        if (edtState.Text<>'') then
+        if ((edtState.Text<>'') and (c_county <> '')) then //chk c_county.Might be empty because above if-and-or-or  passes it wnen empty
           edtCounty.Text := edtState.Text+','+c_county
-        else
+          else
           edtCounty.Text := c_county
       end
     end;  //county
