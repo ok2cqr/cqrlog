@@ -102,6 +102,8 @@ begin
 end;
 
 function TfrmEDIExport.EdiMode(mode: string): String;
+//2022-05-05 OH1KH It seems that EDI mode can be CqrMode (I.E. no mode+submode pairs needed)
+//otherwise use dmUtils.ModeFromCqr to get mode and submode at this point
 begin
   Result := '0';
   case mode of

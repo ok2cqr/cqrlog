@@ -514,6 +514,10 @@ begin
     time_on := Q2.FieldByName('time_on').AsString;
     time_on := copy(time_on,1,2) + copy(time_on,4,2);
 
+    //2022-05-05 OH1KH I do not know (I can not test) are mode+submode pairs needed with log uploads
+    // or is the CqrMode ok here ???????
+    //If mode+submode needed then  use dmUtils.ModeFromCqr to get mode and submode at this point
+    // (look sample from fLoTWExport.pas line 453-460)
     adif := GetAdifValue('QSO_DATE',qsodate)+GetAdifValue('TIME_ON',time_on)+
             GetAdifValue('CALL',Q2.FieldByName('callsign').AsString)+
             GetAdifValue('BAND',Q2.FieldByName('band').AsString)+
