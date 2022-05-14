@@ -52,9 +52,9 @@ type
     procedure RegenerateDXCCStat;
     procedure DownloadDXCCData;
     procedure DownloadDOKData;
-    procedure CommonImport(var PosEOR:word;var f:TextFile;var call,band,mode,submode,qsodate,time_on,qslr,
+    procedure CommonImport(var PosEOR:word;var f:TextFile;var call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
                                                       qslrdate,cqz,ituz,iota,grid,state,county,qsorecord:String);
-    procedure WriteErrorRecord(f:char;call,band,mode,qsodate,time_on,qslr,qslrdate,
+    procedure WriteErrorRecord(f:char;call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,
                                               cqz,ituz,iota,grid,state,county,qsorecord:string;var s:Tstringlist);
     procedure ImportLoTWAdif;
     procedure ImportQSLMgrs;
@@ -554,7 +554,7 @@ begin
     Application.ProcessMessages;
   end;
 end;
-procedure TfrmImportProgress.CommonImport(var PosEOR:word;var f:TextFile;var call,band,mode,submode,qsodate,time_on,qslr,
+procedure TfrmImportProgress.CommonImport(var PosEOR:word;var f:TextFile;var call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
                                                       qslrdate,cqz,ituz,iota,grid,state,county,qsorecord:String);
 var
   a,
@@ -615,10 +615,8 @@ Begin
            'GRIDSQUARE' : if dmUtils.IsLocOK(data) then
                              grid := dmUtils.StdFormatLocator(data);
                         //if not mode set by submode then set mode
-           'MODE'       : if mode='' then
-                                 mode := uppercase(data);
-                        //submode overrides MODE, if exist
-           'SUBMODE'    : mode    := uppercase(data);
+           'MODE'       : mode    := uppercase(data);
+           'SUBMODE'    : submode := uppercase(data);
            'BAND'       : band    := uppercase(data);
            'QSO_DATE'   : qsodate := data;
            'TIME_ON'    : time_on := data;
@@ -632,11 +630,13 @@ Begin
           end; //case
        end;  //repeat
   until pos('<EOR>',uppercase(Buf))=1;
-  //execption is SSB. Cqrlog does not use USB and LSB (submodes)
-  if (mode='USB') or (mode='LSB') then
-                                       mode:='SSB';
+  //store original modes
+  modeorig:=uppercase(mode);
+  submodeorig:=uppercase(submode);
+  //after this line mode will be changed to Cqrmode. submodeorig & modeorig has orignal ones stored for possible error reports
+  mode :=dmUtils.ModeToCqr(mode,submode,LocalDbg);
 end;
-procedure TfrmImportProgress.WriteErrorRecord(f:char;call,band,mode,qsodate,time_on,qslr,qslrdate,
+procedure TfrmImportProgress.WriteErrorRecord(f:char;call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,
                                               cqz,ituz,iota,grid,state,county,qsorecord:string;var s:Tstringlist);
 var
   l,
@@ -649,7 +649,8 @@ Begin
                   +'QSO NOT FOUND in log'+LineEnding
                   +'Call:     '+call+LineEnding
                   +'Band:     '+band+LineEnding
-                  +'Mode:     '+mode+LineEnding
+                  +'Mode:     '+modeorig+LineEnding
+                  +'Submode:  '+submodeorig+lineEnding
                   +'QSO_date: '+qsodate+LineEnding
                   +'Time_on:  '+time_on+LineEnding;
              if f='L' then
@@ -685,21 +686,22 @@ var
   f        : TextFile;
   PosEOH   : Word;
   PosEOR   : Word;
-  qsorecord: String;
-  call     : String;
-  band     : String;
-  mode     : String;
-  //submode not needed with lotw
-  submode  : String;
-  qsodate  : String;
-  time_on  : String;
-  qslr     : String;
-  qslrdate : String;
-  cqz      : String;
-  ituz     : String;
-  iota     : String;
-  grid     : String;
-  state    : String;
+  qsorecord,
+  call,
+  band,
+  mode,
+  modeorig,
+  submode,
+  submodeorig,
+  qsodate,
+  time_on,
+  qslr,
+  qslrdate,
+  cqz,
+  ituz,
+  iota,
+  grid,
+  state,
   county   : String;
 
   qso_in_log  : Boolean = False;
@@ -753,7 +755,9 @@ begin
         call     := '';
         band     := '';
         mode     := '';
+        modeorig := '';
         submode  := '';
+        submodeorig := '';
         qsodate  := '';
         time_on  := '';
         qslr     := '';
@@ -768,9 +772,9 @@ begin
         while not ((PosEOR > 0) or eof(f)) do //read all records
         begin
           qso_in_log := False;
-          CommonImport(PosEOR,f,call,band,mode,submode,qsodate,time_on,qslr,
+          CommonImport(PosEOR,f,call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
                         qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
-
+          //for now on the mode is converted Cqrmode
           if PosEOR > 0 then
           begin
             if LocalDbg  then
@@ -779,7 +783,9 @@ begin
               Writeln('Record Number:   ',IntToStr(qsln));
               Writeln('Call:     ',call);
               Writeln('Band:     ',band);
-              Writeln('Mode:     ',mode);
+              Writeln('Mode:     ',modeorig);
+              Writeln('Submode:  ',submodeorig);
+              Writeln('Cqrmode:  ',mode);
               Writeln('QSO_date: ',qsodate);
               Writeln('Time_on:  ',time_on);
               Writeln('QSLR:     ',qslr);
@@ -796,15 +802,19 @@ begin
             qsodate  := dmUtils.ADIFDateToDate(qsodate);
             qslrdate := dmUtils.ADIFDateToDate(qslrdate);
 
-            mode := UpperCase(mode);
-            if mode='JT65' then
-              mode := 'JT65A';
-
             dmData.Q.Close;
+            //we compare Cqrmode in log to mode and submode received and Cqrmode created.
+            //If any of these is ok, qso is ok by mode.
+            //this makes backward compatible to old cqrlog loggings.
+            //Actually qso is ok even without mode check if other items fit!
             dmData.Q.SQL.Text := 'select time_on,lotw_qslr,waz,itu,iota,loc,state,county,id_cqrlog_main from cqrlog_main ' +
                                  'where (qsodate ='+QuotedStr(qsodate)+') '+
                                  'and (band = ' + QuotedStr(band) + ')'+
-//                                 'and (mode = ' + QuotedStr(mode) + ') and (band = ' + QuotedStr(band) + ')'+
+                                 'and ('+
+                                      '(mode = ' + QuotedStr(mode) +') or '+
+                                      '(mode = ' + QuotedStr(modeorig)+') or '+
+                                      '(mode = ' + QuotedStr(submodeorig)+') '+
+                                      ')' +
                                  'and (callsign = ' + QuotedStr(call) + ')';
             if LocalDbg then Writeln(dmData.Q.SQL.Text);
             //if dmData.trQ.Active then dmData.trQ.Rollback;
@@ -872,7 +882,7 @@ begin
             end;
             if not qso_in_log then
             begin
-              WriteErrorRecord('L',call,band,mode,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
+              WriteErrorRecord('L',call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
               inc(ErrorCount)
             end
           end
@@ -1019,45 +1029,47 @@ end;
 
 procedure TfrmImportProgress.ImporteQSLAdif;
 var
-  num      : Word = 1;
-  size     : Word;
-  sSize    : String;
-  a        : String;
-  orig     : String;
   f        : TextFile;
-  PosEOH   : Word;
+  num      : Word = 1;
+  size,
+  PosEOH,
   PosEOR   : Word;
-  qsorecord: String;
-  call     : String;
-  band     : String;
-  mode     : String;
-  submode  : String;
-  qsodate  : String;
-  time_on  : String;
-  qslr     : String;
-  qslrdate : String;
-  cqz      : String;
-  ituz     : String;
-  iota     : String;
-  grid     : String;
-  state    : String;
-  county   : String;
-  Buf      : String;
+  sSize,
+  a,
+  orig,
+  qsorecord,
+  call,
+  band,
+  mode,
+  modeorig,
+  submode,
+  submodeorig,
+  qsodate,
+  time_on,
+  qslr,
+  qslrdate,
+  cqz,
+  ituz,
+  iota,
+  grid,
+  state,
+  county,
+  Buf         : String;
 
-  PosCall     : Word;
-  PosBand     : Word;
-  PosMode     : Word;
-  PosSubmode  : Word;
-  PosQsoDate  : Word;
-  PosTime_on  : Word;
+  PosCall,
+  PosBand,
+  PosMode,
+  PosSubmode,
+  PosQsoDate,
+  PosTime_on,
   PosQslr     : Word;
 
   qso_in_log  : Boolean = False;
   ErrorCount  : Word = 0;
   l           : TStringList;
-  t_eQSL      : TDateTime;
-  t_eQSL_min  : TDateTime;
-  t_eQSL_max  : TDateTime;
+  t_eQSL,
+  t_eQSL_min,
+  t_eQSL_max,
   t_log       : TDateTime;
 
 begin
@@ -1099,7 +1111,10 @@ begin
     begin
       call     := '';
       band     := '';
+      modeorig := '';
       mode     := '';
+      submodeorig
+               := '';
       submode  := '';
       qsodate  := '';
       time_on  := '';
@@ -1119,9 +1134,9 @@ begin
       while not ((PosEOR > 0) or eof(f)) do
       begin
         qso_in_log := False;
-        CommonImport(PosEOR,f,call,band,mode,submode,qsodate,time_on,qslr,
+        CommonImport(PosEOR,f,call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
                         qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
-
+        //for now on the mode is converted Cqrmode
         if PosEOR > 0 then
         begin
           if LocalDbg then
@@ -1129,8 +1144,9 @@ begin
             Writeln('------------------------------------------------');
             Writeln('Call:     ',call);
             Writeln('Band:     ',band);
-            Writeln('Mode:     ',mode);
-            Writeln('Submode:  ',submode);
+            Writeln('Mode:     ',modeorig);
+            Writeln('Submode:  ',submodeorig);
+            Writeln('CqrMode:  ',mode);
             Writeln('QSO_date: ',qsodate);
             Writeln('Time_on:  ',time_on);
             Writeln('QSLR:     ',qslr);
@@ -1140,22 +1156,20 @@ begin
 
           dmData.Q.Close;
 
-          if (mode='JT65') then  //since implementing submodes below, this can most probably be removed
-          begin
-            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd,time_on from cqrlog_main ' +
+          //we compare Cqrmode in log to mode and submode received and Cqrmode created.
+          //If any of these is ok, qso is ok by mode.
+          //this makes backward compatible to old cqrlog loggings.
+          //Actually qso is ok even without mode check if other items fit!
+          dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd,time_on from cqrlog_main ' +
                                  'where (qsodate ='+QuotedStr(qsodate)+') '+
-                                 'and ((mode = ' + QuotedStr('JT65') + ') or (mode='+QuotedStr('JT65A')+') '+
-                                 'or (mode='+QuotedStr('JT65B')+') or (mode='+QuotedStr('JT65C')+')) '+
+                                 'and ('+
+                                      '(mode = ' + QuotedStr(mode) +') or '+
+                                      '(mode = ' + QuotedStr(modeorig)+') or '+
+                                      '(mode = ' + QuotedStr(submodeorig)+') '+
+                                      ')' +
                                  'and (band = ' + QuotedStr(band) + ') '+
-                                 'and (callsign = ' + QuotedStr(call) + ')'
-          end
-          else begin
-            dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd,time_on from cqrlog_main ' +
-                                 'where (qsodate ='+QuotedStr(qsodate)+') '+
-                                 'and ((mode = ' + QuotedStr(mode) + ') or (mode = ' + QuotedStr(submode) + ')) '+
-                                 'and (band = ' + QuotedStr(band) + ') '+
-                                 'and (callsign = ' + QuotedStr(call) + ')'
-          end;
+                                 'and (callsign = ' + QuotedStr(call) + ')';
+
           if LocalDbg  then Writeln(dmData.Q.SQL.Text);
           //if dmData.trQ.Active then dmData.trQ.Rollback;
           //dmData.trQ.StartTransaction;
@@ -1206,7 +1220,7 @@ begin
           end;
           if not qso_in_log then
           begin
-            WriteErrorRecord('E',call,band,mode,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
+            WriteErrorRecord('E',call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
             inc(ErrorCount)
           end
         end

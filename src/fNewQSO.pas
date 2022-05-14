@@ -1928,6 +1928,7 @@ var
   Mo    :TStringList;
   mhz,
   mode,
+  submode,
   Mask,
   data  : String;
 begin
@@ -2026,12 +2027,12 @@ begin
 
     //first set mode by mode, then if submode exist replace mode with it.
     //Here no problem with SSB/USB/LSB combination
-    cmbMode.Text      := logged.ValueFromIndex[logged.IndexOfName('mode')];
+    mode      := logged.ValueFromIndex[logged.IndexOfName('mode')];
     if logged.IndexOfName('submode')> -1 then
-        Begin
-         mode := logged.ValueFromIndex[logged.IndexOfName('submode')];
-         if mode<>'' then  cmbMode.Text :=  mode;
-        end;
+         submode := logged.ValueFromIndex[logged.IndexOfName('submode')]
+     else
+         submode:='';
+     cmbMode.Text:=dmUtils.ModeToCqr(mode,submode,dmData.DebugLevel>=1);
 
     //set frquency
     mhz               := logged.ValueFromIndex[logged.IndexOfName('mhz')];
@@ -2045,10 +2046,7 @@ begin
     edtMyRST.Text        := logged.ValueFromIndex[logged.IndexOfName('rx')];
 
     //then override with possible defaults for frequency, mode and RST from Cqrlog settings
-    //Buggy Lazarus GUI creates under this one extra "end;" because of "try/finally/end" above.
-    //Remove it!
-
-  case cqrini.ReadInteger('fldigi','freq',0) of
+    case cqrini.ReadInteger('fldigi','freq',0) of
       0 : if frmTRXControl.GetModeFreqNewQSO(mode,mhz) then  cmbFreq.Text := mhz;
       2 : cmbFreq.Text := cqrini.ReadString('fldigi','deffreq','3.600')
     end;
@@ -2075,15 +2073,14 @@ end;
 procedure TfrmNewQSO.tmrADIFTimer(Sender: TObject);
 var
   Buf, buf2,
-  prik,data    :string;
-  chkDuplicates,
-  submodeExist  :boolean;
+  prik,data     :string;
+  chkDuplicates :boolean;
   i             :longint;
   a,b,l         :integer;
   fixed         :Boolean;
+  mode,submode  :string;
 
 begin
-
   fixed:=false;
   tmrADIF.Enabled:=false;
   chkDuplicates:=false;
@@ -2151,10 +2148,11 @@ begin
             if pos('<CALL:',uppercase (Buf)) > 0 then
              Begin
               if dmData.DebugLevel>=1 then writeln('Handle qso record: ',Buf);
+              mode:='';
+              submode:='';
               //this is fake as call info(qslmgr) needs date. We use current date if call tag comes before qso_date tag
               //qso_date will then replace this
               edtDate.Text := FormatDateTime('YYYY-MM-DD',now());
-              submodeExist:=false;
               repeat
                 begin
                   if frmAdifImport.getNextAdifTag(Buf,prik,data) then
@@ -2176,14 +2174,8 @@ begin
                                                                         if pos(data,edtGrid.Text)=0  then   //if qso loc does not fit to QRZ loc , or qrz loc is empty
                                                                                       edtGrid.Text := data; //replace qrz loc, otherwise keep it
                                                                  end;
-                                                  'MODE'       : if not submodeExist
-                                                                      then  cmbMode.Text := uppercase(data);
-                                                  //now this overrides MODE, if exists
-                                                  'SUBMODE'    : Begin
-                                                                  //we need lock in case submode found before mode tag
-                                                                  submodeExist:=true;
-                                                                  cmbMode.Text := uppercase(data);
-                                                                 end;
+                                                  'MODE'       : mode := uppercase(data);
+                                                  'SUBMODE'    : submode := uppercase(data);
                                                   'FREQ'       : cmbFreq.Text := data;
                                                   'FREQ_RX'    : edtRXFreq.Text := data;
                                                   'RST_SENT'   : edtHisRST.Text := data;
@@ -2221,9 +2213,10 @@ begin
                                                 end; //case
                     end;  //repeat
                until pos('<EOR>',uppercase(Buf))=1;
-               //execption is SSB. Cqrlog does not use USB and LSB (submodes)
-               if (cmbMode.Text ='USB') or (cmbMode.Text='LSB') then
-                                                                    cmbMode.Text:='SSB';
+
+              //set the final Cqrlmode
+              cmbMode.Text:=dmUtils.ModeToCqr(mode,submode,dmData.DebugLevel>=1 );
+
               SaveRemote;
 
               //these do not reset in qso save, so they must be cleared here in case there was
@@ -7551,8 +7544,8 @@ begin
   cbOffline.Enabled         := True;
   btnSave.Enabled           := True;
   edtCall.SetFocus;
-
-
+  //clear TMPQSO mode on close. Otherwise it shows up on next remote mode (procedure ClearAll makes it)
+  cqrini.WriteString('TMPQSO','Mode','');
 end;
 procedure  TfrmNewQSO.SaveRemote;
 Begin

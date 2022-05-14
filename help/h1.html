@@ -320,8 +320,47 @@ Some <strong>TRX like ICOM don't have support for this in HamLib. To get mode se
 all values to 0 (zero).</strong>
 </p><p><strong>User definable digital modes</strong> can be set up in a separate box. Use comma
 as a separator, ie. MYMODE1,MYMODE2 etc.<br>
-If user adds digital modes (submode names) exactly as written in this table <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> ADIF export will place correct mode and submode tags to exported file.
- Submode list is copied at 2021-08-25 and may need updating of source code some day in future.
+user should add digital modes (submode names) exactly as written in this table <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> 
+If mode is missing from <strong>NewQSO/mode</strong> selection list and not added to <strong>User defined digital modes</strong> it may prevent ADIF import causing "wrong mode" error.
+</p><p>
+<strong>Note:</strong><br>
+Cqrlog uses internally modefied mode name. We call it here <strong>CqrMode</strong>. CqrMode is created from ADIF mode and submode with conversion table. CqrMode is mainly ADIF submode if it exist, with some exceptions.
+<br>Cqrlog will create four files in ~/.config/cqrlog folder for this use if they do not exist. One is a brief <strong>README_modefiles</strong> explaining three other files purposes.
+<br><br>If files exist they are not overwritten keeping possible user changes there. How ever user must do backups by himself if files are edited from original format.
+These files apply to all logs created. They are not log based.
+<ul>
+<li><strong>submode_mode.txt</strong>
+<br> This file holds submode=mode pairs used to convert incoming mode+submode pair to CqrMode that mainly is the submode.
+<br><br> All pairs must be in uppercase format. User can add or delete mode pairs with text editor if definition at
+<br> <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> changes. 
+<br>"Self invented" mode names should not be used! Just one mode pair is accepted in one line.
+<br> The first line is never read (lower case). It just shows the order of submode and mode.
+<br><br>This file is used also when qso record is ADIF exported. Then CqrMode is converted back to mode+sumbode tags.
+<br>
+</li>
+<li><strong>import_mode.txt</strong>
+<br>This file holds a list of deprecated ADIF submodes that are accepted only for input. They are used in CqrModes but they will never be ADIF exported out from Cqrlog.
+<br><br> All lines must be in uppercase format. User can add or delete lines with text editor if definition at
+<br> <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> changes. 
+<br>"Self invented" mode names should not be used!  Just one mode is accepted in one line.
+<br> The first line is never read (lower case). It just shows the meaning of then list. 
+<br><br>This file is used also when qso record is ADIF exported. It prevents submode in list to export and only mode is exported.
+<br>
+
+</li>
+<li><strong>exception_mode.txt</strong>
+<br>This file holds submode=mode pairs used to convert incoming mode+submode pair to CqrMode when CqrMode can not use ADIF submode directly.
+<br>For example by ADIF definition mode SSB  has submodes USB and LSB. How ever Cqrlog does not use those as CqrMode, but uses only SSB.
+ Then CqrMode is converted as SSB. How ever after exception the mode can not have it's submode back when exporting ADIF from Cqrlog.
+<br><br>This file can also have conversion from rigctld given mode to ADIF mode. For example with IC7300 rigctld shows mode PACKETUSB if rig is set to usb and data mode:
+<br> then this file can convert PACKETUSB to PKT that is ADIF standard format.
+<br><br> All pairs must be in uppercase format. User can add or delete mode pairs with text editor when needed.
+<br>How ever in case of outgoing modes (outgoing mode is at right side of mode pair) <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> should be used.
+<br>"Self invented" mode names should not be used! Just one mode pair is accepted in one line.
+<br> The first line is never read (lower case). It just shows the order of submode and mode.
+</li>
+</ul>
+
 </p>
 <p align=center><img src=img/line.png></p>
 <a name=ah9><h2><strong>QTH Profiles</strong></h2></a>

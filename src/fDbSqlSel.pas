@@ -167,14 +167,34 @@ begin
   rewrite(f);
   Writeln(f, '#!/bin/bash');
   Writeln(f);
-  Writeln(f, 'echo -e "\nCreating backup of all CQRLOG logs in database to /tmp/allcqrlogs.sql\n"');
+  Writeln(f, 'stamp=$(date +_%Y%m%d-%H%M)');
+  Writeln(f, 'echo -e "\nStarted$stamp"');
+  Writeln(f, 'echo -e "Creating common backup of all CQRLOG logs in database to /tmp/allcqrlogs$stamp.sql"');
   Writeln(f, '$(mysql -u' + user + ' -p' + pass + ' -B -N -h' + ip + ' -P' + port +
-    ' -e " show databases like ' + #$27 + 'cqr%' + #$27 + '" |\');
+             ' -e " show databases like ' + #$27 + 'cqr%' + #$27 + '" |\');
   Writeln(f, 'xargs  echo -n mysqldump -q -h' + ip + ' -P' + port + ' -u' +
-    user + ' -p' + pass + ' --databases) > /tmp/allcqrlogs.sql');
-  Writeln(f, 'echo -e "Done!\nCopy backup file to your safe place.\nIt will be erased from /tmp at next Linux start\n\nTo restore all CQRLOG logs use command:\n"');
+              user + ' -p' + pass + ' --databases) > /tmp/allcqrlogs$stamp.sql');
+
+  Writeln(f, 'echo -e "Creating separate backups of each CQRLOG logXXX in database to /tmp/cqrlogXXX$stamp.sql(s)\n"');
+  Writeln(f, 'mysql -u' + user + ' -p' + pass + ' -B -N -h' + ip + ' -P' + port +
+             ' -e " show databases like ' + #$27 + 'cqr%' + #$27 + '" |\');
+  Writeln(f, 'xargs -d\ | while read line; do if [[ $line != "" ]];then\');
+  Writeln(f, ' echo "mysqldump -q -h' + ip + ' -P' + port + ' -u' +
+              user + ' -p' + pass + ' $line > /tmp/$line$stamp.sql";fi;done > /tmp/sepsql.sh');
+  Writeln(f, 'chmod a+x /tmp/sepsql.sh');
+  Writeln(f, '/tmp/sepsql.sh');
+  Writeln(f, 'rm /tmp/sepsql.sh');
+
+
+  Writeln(f, 'echo -e "\nDone!\nCopy backup files to your safe place.\n'+
+             'They will be erased from /tmp at next Linux start\n\n"');
+  Writeln(f, 'echo "To restore all CQRLOG logs use command:"');
+  Writeln(f, 'echo -e "mysql -h' + ip + ' -P' + port + ' -u' + user + ' -p' + pass +
+             ' < /tmp/allcqrlogs$stamp.sql\n\n"');
+  Writeln(f, 'echo "To restore single a log use command:"');
   Writeln(f, 'echo "mysql -h' + ip + ' -P' + port + ' -u' + user + ' -p' + pass +
-    ' < /tmp/allcqrlogs.sql"');
+             ' cqrlog001 < /tmp/cqrlog001$stamp.sql"');
+  Writeln(f, 'echo -e "\nBe sure that both log numbers used in line are equal"');
   closeFile(f);
   dmUtils.ExecuteCommand('chmod a+rwx ' + UsrHome + 'backup_all_cqr.sh');
 end;

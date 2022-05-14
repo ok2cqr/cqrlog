@@ -365,10 +365,12 @@ end;
 
 function TfrmLoTWExport.ExportToAdif : Word;
 var
-  f    : TextFile;
-  tmp  : String  = '';
-  nr   : Integer = 1;
-  date : String;
+  f         : TextFile;
+  tmp       : String  = '';
+  nr        : Integer = 1;
+  date,
+  ModeOut,
+  SubmodeOut: String;
 begin
   if FileExists(FileName) then
     DeleteFile(FileName);
@@ -385,6 +387,7 @@ begin
   end;
 
   date := FormatDateTime('yyyy-mm-dd',now);
+  Writeln(f);
   Writeln(f, '<ADIF_VER:5>3.1.0');
   Writeln(f, '<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
@@ -447,35 +450,15 @@ begin
 
       tmp := dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(dmData.Q1.FieldByName('callsign').AsString));
       Writeln(f,tmp);
-      case dmData.Q1.FieldByName('mode').AsString of
-         'JS8'        :   begin
-                            tmp := '<MODE:4>MFSK';
-                            Writeln(f,tmp);
-                            tmp := '<SUBMODE:3>JS8';
-                            Writeln(f,tmp);
-                          end;
-         'FT4'        :   begin
-                            tmp := '<MODE:4>MFSK';
-                            Writeln(f,tmp);
-                            tmp := '<SUBMODE:3>FT4';
-                            Writeln(f,tmp);
-                          end;
-         'FST4'        :   begin
-                            tmp := '<MODE:4>MFSK';
-                            Writeln(f,tmp);
-                            tmp := '<SUBMODE:4>FST4';
-                            Writeln(f,tmp);
-                          end;
-         'PACKET'      :  begin
-                              tmp := '<MODE:3>PKT';
-                              Writeln(f,tmp);
-                          end;
-        else
-           begin
-              tmp := dmUtils.StringToADIF('<MODE',dmData.Q1.FieldByName('mode').AsString);
-              Writeln(f,tmp);
-            end;
-       end;
+
+      dmUtils.ModeFromCqr(dmData.Q1.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
+      tmp := dmUtils.StringToADIF('<MODE',ModeOut);
+      Writeln(f,tmp);
+      if SubmodeOut<>'' then
+                        Begin
+                          tmp := dmUtils.StringToADIF('<SUBMODE',SubmodeOut);
+                          Writeln(f,tmp);
+                        end;
 
       tmp :=dmUtils.StringToADIF( '<BAND' , dmData.Q1.FieldByName('band').AsString);
       Writeln(f,tmp);

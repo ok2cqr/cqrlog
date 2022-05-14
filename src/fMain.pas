@@ -723,7 +723,8 @@ var
     if dmData.trQ.Active then
       dmData.trQ.RollBack;
     dmData.Q.SQL.Text := 'DELETE FROM cqrlog_main WHERE id_cqrlog_main = ' + IntToStr(idx);
-    WriteLn(dmData.Q.SQL.Text);
+    if dmData.DebugLevel >= 1 then
+                                  WriteLn(dmData.Q.SQL.Text);
     dmData.trQ.StartTransaction;
     dmData.Q.ExecSQL;
     dmData.trQ.Commit
