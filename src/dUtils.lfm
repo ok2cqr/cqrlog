@@ -1,26 +1,26 @@
 object dmUtils: TdmUtils
   OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
   OldCreateOrder = False
   Height = 300
   HorizontalOffset = 365
   VerticalOffset = 366
   Width = 400
-  PPI = 96
   object HelpDatabase: THTMLHelpDatabase
     BaseURL = 'file:///usr/share/cqrlog/help'
     AutoRegister = True
     KeywordPrefix = 'help/'
-    left = 176
-    top = 40
+    Left = 176
+    Top = 40
   end
   object HelpViewer: THTMLBrowserHelpViewer
     BrowserParams = '%s'
     AutoRegister = True
-    left = 272
-    top = 40
+    Left = 272
+    Top = 40
   end
   object Datasource1: TDataSource
-    left = 56
-    top = 48
+    Left = 56
+    Top = 48
   end
 end

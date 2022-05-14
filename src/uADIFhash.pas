@@ -76,6 +76,7 @@ const l_LOTW_QSLSDATE = 10;            // lotw_qslsdate    date
 const l_LOTW_QSL_RCVD = 2;             // lotw_qslr        varchar(3)
 const l_LOTW_QSL_SENT = 2;             // lotw_qsls        varchar(3)
 const l_MODE = 12;                     // mode             varchar(12)
+const l_SUBMODE = 12;                  // submode          this is never stored, no database column. Just for cqrmode conversion
 const l_MY_GRIDSQUARE = 6;             // my_loc           varchar(10)
 const l_NAME = 40;//50;                     // name             varchar(40)
 const l_NOTES = 250;                   // notes.longremarks  varchar(256)

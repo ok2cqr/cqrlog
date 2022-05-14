@@ -69,9 +69,12 @@ end;
 
 function TfrmeQSLUpload.ExportData(const FileName : String) : Boolean;
 var
-  nr  : integer = 0;
-  tmp : String = '';
-  f   : TextFile;
+  nr         : integer = 0;
+  tmp        : String = '';
+  ModeOut,
+  SubmodeOut : String;
+  f          : TextFile;
+
 begin
   QSOCount := 0;
   Result := True;
@@ -104,6 +107,7 @@ begin
   AssignFile(f,FileName);
   try try
     Rewrite(f);
+    Writeln(f);
     Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
     Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
     Writeln(f);
@@ -132,34 +136,14 @@ begin
       tmp := dmUtils.StringToADIF('<CALL' ,dmUtils.RemoveSpaces(dmData.Q.FieldByName('callsign').AsString));
       Writeln(f,tmp);
 
-      case dmData.Q.FieldByName('mode').AsString of
-      'JS8'   : begin
-                  tmp := '<MODE:4>MFSK';
-                  Writeln(f,tmp);
-                  tmp := '<SUBMODE:3>JS8';
-                  Writeln(f,tmp);
-                end;
-      'FT4'   : begin
-                  tmp := '<MODE:4>MFSK';
-                  Writeln(f,tmp);
-                  tmp := '<SUBMODE:3>FT4';
-                  Writeln(f,tmp);
-                end;
-      'FST4'  : begin
-                  tmp := '<MODE:4>MFSK';
-                  Writeln(f,tmp);
-                  tmp := '<SUBMODE:4>FST4';
-                  Writeln(f,tmp);
-                end;
-      'PACKET': begin
-                  tmp := '<MODE:3>PKT';
-                  Writeln(f,tmp);
-                end;
-      else      begin
-                  tmp := dmUtils.StringToADIF('<MODE',dmData.Q.FieldByName('mode').AsString);
-                  Writeln(f,tmp);
-                end;
-      end;
+      dmUtils.ModeFromCqr(dmData.Q.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
+      tmp := dmUtils.StringToADIF('<MODE',ModeOut);
+      Writeln(f,tmp);
+      if SubmodeOut<>'' then
+                       Begin
+                         tmp := dmUtils.StringToADIF('<SUBMODE',SubmodeOut);
+                         Writeln(f,tmp);
+                       end;
 
       tmp := dmUtils.StringToADIF('<BAND' ,dmData.Q.FieldByName('band').AsString);
       Writeln(f,tmp);

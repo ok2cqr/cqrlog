@@ -88,6 +88,12 @@ const
     'NAME_INTL',    'NOTES_INTL',     'QSLMSG_INTL',     'QTH_INTL',
     'RIG_INTL',     'SIG_INTL',       'SIG_INFO_INTL');
 
+   c_MODEFILE_DIR    = ''; //   'ctyfiles/';
+   C_SUBMODE_FILE    = 'submode_mode.txt';
+   C_IMPORTMODE_FILE = 'import_mode.txt';
+   C_EXCEPMODE_FILE  = 'exception_mode.txt';
+   C_READMEMODE_FILE = 'README_modefiles';
+
 type
 
   { TdmUtils }
@@ -97,16 +103,21 @@ type
     HelpViewer: THTMLBrowserHelpViewer;
     HelpDatabase: THTMLHelpDatabase;
     procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
   private
     fTimeOffset: currency;
     fGrayLineOffset: currency;
     fQRZSession: string;
     fHamQTHSession: string;
     fSysUTC: boolean;
-
+    SubmodeMode: TStringList;
+    ImportMode : TStringlist;
+    ExceptMode : TStringlist;
 
     procedure LoadRigList(RigCtlBinaryPath : String;RigList : TStringList);
     procedure LoadRigListCombo(CurrentRigId : String; RigList : TStringList; RigComboBox : TComboBox);
+    procedure ModeConvListsCreate(SetUp:boolean);
+    procedure MakeMissingModeFile(num:integer);
 
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
@@ -116,6 +127,7 @@ type
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
     function GetHamQTHInfo(call: string;
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
+
   public
     s136: string;
     s630: string;
@@ -151,6 +163,7 @@ type
     MyBands: array [0..cMaxBandsCount - 1, 0..1] of string[6];
     //list of bands, band labels
     BandFreq  : array [0..cMaxBandsCount - 1]of BandVsFreq;
+
 
     property TimeOffset: currency read fTimeOffset write fTimeOffset;
     property GrayLineOffset: currency read fGraylineOffset write fGrayLineOffset;
@@ -204,11 +217,12 @@ type
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
-    procedure  BandFromDbase;
+    procedure BandFromDbase;
     procedure UpdateHelpBrowser;
+    procedure ModeFromCqr(CqrMode:String;var OutMode,OutSubmode:String;dbg:Boolean);
 
     function  BandFromArray(tmp:Currency):string;
-    function MyDefaultBrowser:String;
+    function  MyDefaultBrowser:String;
     function  StrToDateFormat(sDate : String) : TDateTime;
     function  DateToSQLIteDate(date : TDateTime) : String;
     function  GetBandFromFreq(MHz : string): String;
@@ -297,6 +311,8 @@ type
     function  LoadVisibleColumnsConfiguration :  TColumnVisibleArray;
     function  StdFormatLocator(loc:string):String;
     function  IsHeDx(call:String; CqDir:String = ''):boolean;
+    function  ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
+
 
 end;
 
@@ -598,7 +614,14 @@ begin
   USstates[49] := 'WV, West Virginia';
   USstates[50] := 'WY, Wyoming';
 
+  ModeConvListsCreate(True);
 end;
+
+procedure TdmUtils.DataModuleDestroy(Sender: TObject);
+begin
+  ModeConvListsCreate(False);
+end;
+
 procedure TdmUtils.InsertContests(cmbContestName: TComboBox);
 var
     ListOfContests : TStringList;
@@ -4774,5 +4797,246 @@ begin
                             Writeln('My continent is:', mycont, '  His continent is:', cont,' is DX/CQ for me:',Result);
       end;
 end;
+
+procedure TdmUtils.ModeFromCqr(CqrMode:String;var OutMode,OutSubmode:String;dbg:Boolean);
+//encodes Cqrlog's mode to mode and submode pair
+//returns empty string to submode if not exist
+var
+   e: integer;
+
+Begin
+      if dbg then
+                  Writeln('ModeFromCqr: ',CqrMode);
+      Cqrmode:=uppercase(CqrMode); //this is for sure
+      //cqrmode -> ex_mode
+      e:= ExceptMode.IndexOfName(CqrMode);
+      if e > -1 then
+        Begin
+          OutMode := uppercase(ExceptMode.Values[CqrMode]);
+          OutSubmode:='';
+          if dbg then
+                      begin
+                        Writeln('ex_mode=cqrlogmode line: ',e+1);
+                        Writeln('Cqrlog will export adif as mode: ',OutMode,'  submode: ',OutSubmode);
+                      end;
+          exit;
+        end;
+      // cqrmode -> mode+submode
+      e:= SubmodeMode.IndexOfName(CqrMode);
+      if e > -1 then
+         Begin
+           OutMode    := uppercase(SubmodeMode.Values[CqrMode]);
+           OutSubmode := CqrMode;
+           if dbg then
+                      Writeln('submode=mode line: ',e+1);
+
+           //is submode import only
+           e:=ImportMode.IndexOf(CqrMode);
+           if e > -1 then
+                           begin
+                             if dbg then
+                                        Writeln('submode for_import_only line: ',e+1);
+                             OutSubmode :='';
+                           end;
+         end
+        else
+         //no submodes
+         Begin
+           OutMode := CqrMode;
+           OutSubmode:='';
+         end;
+     if dbg then
+                Writeln('Cqrlog will export adif as mode: ',OutMode,'  submode: ',OutSubmode);
+end;
+function  TdmUtils.ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
+//decodes mode and submode pair to mode used by Cqrlog internally
+var
+   e: integer;
+
+Begin
+     if dbg then
+                  Writeln('ModeToCqr mode: ',InMode,' submode: ',InSubmode);
+     InMode:=uppercase(InMode);    //this is for sure
+     InSubmode:=uppercase(InSubmode);
+
+     Result:=InMode; //defaults to InMode
+     if InSubmode='' then
+                      Begin
+                         if dbg then
+                                    writeln('Cqrlog internal mode will be: ',Result);
+                         exit;
+                      end;
+
+     e:= SubmodeMode.IndexOfName(InSubmode);
+     if (e > -1 ) then  //it exist
+                        Begin
+                           if dbg then
+                                      Writeln('submode=mode line: ',e+1);
+                           Result:=InSubmode;
+                        end;
+
+      e:= ExceptMode.IndexOfName(Result);
+      if e > -1  then  //it exist
+                       begin
+                        if dbg then
+                                   Writeln('ex_mode=cqrlogmode line: ',e+1);
+                        Result:= ExceptMode.ValueFromIndex[e];
+                       end;
+
+    Result:=uppercase(Result); //this is for sure
+    if dbg then
+               writeln('Cqrlog internal mode will be: ',Result);
+end;
+procedure TdmUtils.ModeConvListsCreate(SetUp:boolean);
+
+Begin
+   if not SetUp then
+      Begin
+        if assigned(SubmodeMode) then FreeAndNil(SubmodeMode);
+        if assigned(ImportMode) then FreeAndNil(ImportMode);
+        if assigned(ExceptMode) then FreeAndNil(ExceptMode);
+        exit;
+      end;
+
+   SubmodeMode:= TStringList.Create;
+   ImportMode := TStringlist.Create;
+   ExceptMode := TStringlist.Create;
+
+   //if we do not find one of these files we create it
+   if FileSearch(C_SUBMODE_FILE,dmData.HomeDir+C_MODEFILE_DIR,[])='' then
+                                                                         MakeMissingModeFile(1);
+   if FileSearch(C_IMPORTMODE_FILE,dmData.HomeDir+C_MODEFILE_DIR,[])='' then
+                                                                         MakeMissingModeFile(2);
+   if FileSearch(C_EXCEPMODE_FILE,dmData.HomeDir+C_MODEFILE_DIR,[])='' then
+                                                                         MakeMissingModeFile(3);
+   if FileSearch(C_READMEMODE_FILE,dmData.HomeDir+C_MODEFILE_DIR,[])='' then
+                                                                         MakeMissingModeFile(4);
+   try
+      SubmodeMode.LoadFromFile(dmData.HomeDir+C_MODEFILE_DIR+C_SUBMODE_FILE);
+      ImportMode .LoadFromFile(dmData.HomeDir+C_MODEFILE_DIR+C_IMPORTMODE_FILE);
+      ExceptMode.LoadFromFile(dmData.HomeDir+C_MODEFILE_DIR+C_EXCEPMODE_FILE);
+   except
+      on E : Exception do writeln('Could not load mode conversion files!');
+   end;
+
+   if dmData.DebugLevel>=1 then
+    Begin
+       Writeln('Loaded mode conversion files:');
+       Writeln('   ',SubmodeMode.Strings[0]);
+       Writeln('   ',ImportMode.Strings[0]);
+       Writeln('   ',ExceptMode.Strings[0]);
+    end;
+
+
+end;
+
+
+procedure TdmUtils.MakeMissingModeFile(num:integer);
+//the idea not to use const for conversion is that when they are put in files
+//later additions and deletions can be done by user without compile
+Const
+  S_file: array [1..168] of string = (
+  'submode=mode','8PSK125=PSK','8PSK125F=PSK','8PSK125FL=PSK','8PSK250=PSK','8PSK250F=PSK','8PSK250FL=PSK','8PSK500=PSK','8PSK500F=PSK','8PSK1000=PSK',
+  '8PSK1000F=PSK','8PSK1200F=PSK','AMTORFEC=TOR','ASCI=RTTY','CHIP64=CHIP','CHIP128=CHIP','DOM-M=DOMINO','DOM4=DOMINO','DOM5=DOMINO','DOM8=DOMINO',
+  'DOM11=DOMINO','DOM16=DOMINO','DOM22=DOMINO','DOM44=DOMINO','DOM88=DOMINO','DOMINOEX=DOMINO','DOMINOF=DOMINO','FMHELL=HELL','FSK31=PSK','FSKHELL=HELL',
+  'FSQCALL=MFSK','FST4=MFSK','FST4W=MFSK','FT4=MFSK','GTOR=TOR','HELL80=HELL','HELLX5=HELL','HELLX9=HELL','HFSK=HELL','ISCAT-A=ISCAT',
+  'ISCAT-B=ISCAT','JS8=MFSK','JT4A=JT4','JT4B=JT4','JT4C=JT4','JT4D=JT4','JT4E=JT4','JT4F=JT4','JT4G=JT4','JT9-1=JT9',
+  'JT9-2=JT9','JT9-5=JT9','JT9-10=JT9','JT9-30=JT9','JT9A=JT9','JT9B=JT9','JT9C=JT9','JT9D=JT9','JT9E=JT9','JT9E=FAST',
+  'JT9F=JT9','JT9F=FAST','JT9G=JT9','JT9G=FAST','JT9H=JT9','JT9H=FAST','JT65A=JT65','JT65B=JT65','JT65B2=JT65','JT65C=JT65',
+  'JT65C2=JT65','JTMS=MFSK','LSB=SSB','MFSK4=MFSK','MFSK8=MFSK','MFSK11=MFSK','MFSK16=MFSK','MFSK22=MFSK','MFSK31=MFSK','MFSK32=MFSK',
+  'MFSK64=MFSK','MFSK64L=MFSK','MFSK128=MFSK','MFSK128L=MFSK','NAVTEX=TOR','OLIVIA 4/125=OLIVIA','OLIVIA 4/250=OLIVIA','OLIVIA 8/250=OLIVIA','OLIVIA 8/500=OLIVIA','OLIVIA 16/500=OLIVIA',
+  'OLIVIA 16/1000=OLIVIA','OLIVIA 32/1000=OLIVIA','OPERA-BEACON=OPERA','OPERA-QSO=OPERA','PAC2=PAC','PAC3=PAC','PAC4=PAC','PAX2=PAX','PCW=CW','PSK10=PSK',
+  'PSK31=PSK','PSK63=PSK','PSK63F=PSK','PSK63RC10=PSK','PSK63RC20=PSK','PSK63RC32=PSK','PSK63RC4=PSK','PSK63RC5=PSK','PSK125=PSK','PSK125RC10=PSK','PSK125RC12=PSK',
+  'PSK125RC16=PSK','PSK125RC4=PSK','PSK125RC5=PSK','PSK250=PSK','PSK250RC2=PSK','PSK250RC3=PSK','PSK250RC5=PSK','PSK250RC6=PSK','PSK250RC7=PSK','PSK500=PSK',
+  'PSK500RC2=PSK','PSK500RC3=PSK','PSK500RC4=PSK','PSK800RC2=PSK','PSK1000=PSK','PSK1000RC2=PSK','PSKAM10=PSK','PSKAM31=PSK','PSKAM50=PSK','PSKFEC31=PSK',
+  'PSKHELL=HELL','QPSK31=PSK','Q65=MFSK','QPSK63=PSK','QPSK125=PSK','QPSK250=PSK','QPSK500=PSK','QRA64A=QRA64','QRA64B=QRA64','QRA64C=QRA64',
+  'QRA64D=QRA64','QRA64E=QRA64','ROS-EME=ROS','ROS-HF=ROS','ROS-MF=ROS','SIM31=PSK','SITORB=TOR','SLOWHELL=HELL','THOR-M=THOR','THOR4=THOR',
+  'THOR5=THOR','THOR8=THOR','THOR11=THOR','THOR16=THOR','THOR22=THOR','THOR25X4=THOR','THOR50X1=THOR','THOR50X2=THOR','THOR100=THOR','THRBX=THRB',
+  'THRBX1=THRB','THRBX2=THRB','THRBX4=THRB','THROB1=THRB','THROB2=THRB','THROB4=THRB','USB=SSB'
+  );
+  I_file: array [1 .. 41] of string = (
+  'for_import_only','AMTORFEC','ASCI','CHIP64','CHIP128','DOMINOF','FMHELL','FSK31','GTOR','HELL80',
+  'HFSK','JT4A','JT4B','JT4C','JT4D','JT4E','JT4F','JT4G','JT65A','JT65B',
+  'JT65C','MFSK8','MFSK16','PAC2','PAC3','PAX2','PCW','PSK10','PSK31','PSK63',
+  'PSK63F','PSK125','PSKAM10','PSKAM31','PSKAM50','PSKFEC31','PSKHELL','QPSK31','QPSK63','QPSK125',
+  'THRBX'
+  );
+
+  {Exceptions file:
+  Cqrlog uses SSB for both USB and LSB
+  Cqrlog uses RTTY, some programs may export ASCI even when it is import only!
+  'PACKET':
+           these modes come from ICOM rig (IC7300) when DATA is selected with USB,LSB,FM or AM
+           and checkbox "auto" for mode is selected in NewQSO we put them all to PKT category here
+           as it is in ADIF standard
+  }
+  E_file: array [1 .. 9] of string = (
+  'ex_mode=cqrlogmode',
+  'USB=SSB',
+  'LSB=SSB',
+  'ASCI=RTTY',
+  'PACKET=PKT',
+  'PKTUSB=PKT',
+  'PKTLSB=PKT',
+  'PKTFM=PKT',
+  'PKTAM=PKT'
+  );
+  R_file: array [1 .. 22] of string = (
+  'Files to modify ADIF mode+submode to fit with Cqrlog.',
+  'Cqrlog internally uses submodes as mode. (only one database column -> mode)',
+  '',
+  'These files are manually created and can be changed if needed:',
+  'Contents are read to TStringLists at program start.',
+  '',
+  'submode_mode.txt',
+  ' Submode=Mode',
+  ' Used en/decoding mode-submode pairs for Cqrlog.',
+  '',
+  'import_mode.txt',
+  ' Submode list for import only',
+  ' Used to define deprecated submodes that are used ony for adif input.',
+  ' These submodes do not export.',
+   '',
+   'exception_mode.txt',
+   ' mode=cqrlogmode',
+   ' Exceptions between "true" (sub)modes and internal cqrlog mode',
+   ' Converts also in export "non adif" modes from rigctld like PACKET -> PKT',
+   '',
+   'Two first files created by https://adif.org/312/ADIF_312_annotated.htm#Mode_Enumeration',
+   'informations 2022-04-29,'
+  );
+  var f:TextFile;
+
+
+//--------------------------------------------------------
+  procedure CreaFile(Fname:string;items:array of string);
+  var
+     i: integer;
+     itemsmax:integer;
+
+   begin
+      itemsmax:=length(items);
+      AssignFile(f,Fname);
+      try
+        rewrite(f);
+        try
+         for i:= 0 to itemsmax-1 do
+            Writeln(f, items[i]);
+        finally
+         CloseFile(f);
+        end;
+      except
+      on E: EInOutError do
+         ShowMessage('File handling error occurred. Details: ' +  E.ClassName +  '/' +  E.Message);
+      end;
+    end;
+//--------------------------------------------------------
+Begin
+   if num=1 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_SUBMODE_FILE,S_file);
+   if num=2 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_IMPORTMODE_FILE,I_file);
+   if num=3 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_EXCEPMODE_FILE,E_file);
+   if num=4 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_READMEMODE_FILE,R_file);
+end;
+
 end.
 

@@ -188,7 +188,10 @@ var
                      srx, stx_string, srx_string, contestname, Darc_Dok : String);
 
   var
-     station_callsign : String;
+     station_callsign  : String;
+     OutMode,
+     OutSubmode        :String;
+
   begin
     station_callsign := cqrini.ReadString('Station', 'Call', '');
     leng := 0;
@@ -219,120 +222,11 @@ var
     if ExCall then
       SaveTag(dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(call)),leng);
     if ExMode then
-    begin
-      case Mode of
-        'PACKET'                   : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
-        //these modes come from ICOM rig (IC7300) when DATA is selected with USB,LSB,FM or AM
-        //and checkbox "auto" for mode is selected in NewQSO
-        //There is not clear what mode is then actually used (depends on additional program in use)
-        //but we put them all to PKT category here
-        'PKTUSB'                   : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
-        'PKTLSB'                   : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
-        'PKTFM'                    : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
-        'PKTAM'                    : begin tmp := '<MODE:3>PKT'; SaveTag(tmp,leng); end;
-
-        //definitions by https://adif.org/312/ADIF_312.htm#Mode_Enumeration
-
-        'CHIP64','CHIP128'         : begin tmp := '<MODE:4>CHIP<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'PCW'                      : begin tmp := '<MODE:2>CW<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'DOM-M','DOM4','DOM5',
-        'DOM8','DOM11','DOM16',
-        'DOM22','DOM44','DOM88',
-        'DOMINOEX','DOMINOF'       : begin tmp := '<MODE:6>DOMINO<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'FELDHELL',                 //this is non standard that fldigi uses
-        'FMHELL','FSKHELL',
-        'HELL80','HELLX5',
-        'HELLX9','HFSK',
-        'PSKHELL','SLOWHELL'       : begin tmp := '<MODE:4>HELL<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'ISCAT-A','ISCAT-B'        : begin tmp := '<MODE:5>ISCAT<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'JT4A','JT4B','JT4C',
-        'JT4D','JT4E','JT4F',
-        'JT4G'                     : begin tmp := '<MODE:3>JT4<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'JT9-1','JT9-2','JT9-5',
-        'JT9-10','JT9-30',
-        'JT9A','JT9B','JT9C',
-        'JT9D','JT9E','JT9E FAST',
-        'JT9F','JT9F FAST','JT9G',
-        'JT9G FAST','JT9H',
-        'JT9H FAST'                 : begin tmp := '<MODE:3>JT9<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'FSQCALL','FST4','FST4W',
-        'FT4','JS8','JTMS','MFSK4',
-        'MFSK8','MFSK11','MFSK16',
-        'MFSK22','MFSK31','MFSK32',
-        'MFSK64','MFSK64L',
-        'MFSK128'                   : begin tmp := '<MODE:4>MFSK<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-         //OLIVIA is exception #1
-        'OPERA-BEACON',
-        'OPERA-QSO'                 : begin tmp := '<MODE:5>OPERA<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'PAC2','PAC3','PAC4'        : begin tmp := '<MODE:3>PAC<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'PAX2'                      : begin tmp := '<MODE:3>PAX<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        '8PSK125','8PSK125F',
-        '8PSK125FL','8PSK250',
-        '8PSK250F','8PSK250FL',
-        '8PSK500','8PSK500F',
-        '8PSK1000','8PSK1000F',
-        '8PSK1200F','FSK31','PSK10',
-        'PSK31','PSK63','PSK63F',
-        'PSK63RC4','PSK63RC5',
-        'PSK63RC10','PSK63RC20',
-        'PSK63RC32','PSK125',
-        'PSK125C12','PSK125R',
-        'PSK125RC10','PSK125RC12',
-        'PSK125RC16','PSK125RC4',
-        'PSK125RC5','PSK250',
-        'PSK250C6','PSK250R',
-        'PSK250RC2','PSK250RC3',
-        'PSK250RC5','PSK250RC6',
-        'PSK250RC7','PSK500',
-        'PSK500C2','PSK500C4',
-        'PSK500R','PSK500RC2',
-        'PSK500RC3','PSK500RC4',
-        'PSK800C2','PSK800RC2',
-        'PSK1000','PSK1000C2',
-        'PSK1000R','PSK1000RC2',
-        'PSKAM10','PSKAM31',
-        'PSKAM50','PSKFEC31',
-        'QPSK31','QPSK63',
-        'QPSK125','QPSK250',
-        'QPSK500','SIM31'           : begin tmp := '<MODE:3>PSK<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'QRA64A','QRA64B','QRA64C',
-        'QRA64D','QRA64E'           : begin tmp := '<MODE:5>QRA64<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'ROS-EME','ROS-HF',
-        'ROS-MF'                    : begin tmp := '<MODE:3>ROS<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'ASCI','ASCII'              : begin tmp := '<MODE:4>RTTY<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'LSB','USB'                 : begin tmp := '<MODE:3>SSB<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'THOR-M','THOR4','THOR5',
-        'THOR8','THOR11','THOR16',
-        'THOR22','THOR25X4',
-        'THOR50X1','THOR50X2',
-        'THOR100'                   : begin tmp := '<MODE:4>THOR<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'THRBX','THRBX1','THRBX2',
-        'THRBX4','THROB1','THROB2',
-        'THROB4'                    : begin tmp := '<MODE:4>THRB<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-        'AMTORFEC','GTOR','NAVTEX',
-        'SITORB'                    : begin tmp := '<MODE:3>TOR<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);end;
-
-      else           begin
-                      //exceptions follow
-                      if pos('OLIVIA',mode)=1 then
-                        //fldigi marks them with "-" that is against standard " "
-                        //also there are more BW definitions than standard: will pass them all
-                        begin
-                             mode := StringReplace(mode,'-',' ',[rfReplaceAll]);
-                             tmp := '<MODE:6>OLIVIA<SUBMODE:'+IntToStr(length(Mode))+'>'+Mode;SaveTag(tmp,leng);
-                        end
-                       else
-                     //exceptions end
-                       Begin
-                        tmp := '<MODE';
-                        SaveTag(dmUtils.StringToADIF(tmp,Mode),leng);
-                       end;
-                     end;
-      end;
-
-
-
-
+    Begin
+        dmUtils.ModeFromCqr(mode,OutMode,OutSubmode,dmData.DebugLevel>=1);
+        SaveTag(dmUtils.StringToADIF('<MODE',OutMode),leng);
+        if OutSubmode<>'' then
+                          SaveTag(dmUtils.StringToADIF('<SUBMODE',OutSubmode),leng);
     end;
     if ExFreq then
     begin
@@ -547,6 +441,7 @@ begin   //TfrmExportProgress
 
   AssignFile(f, FileName);
   Rewrite(f);
+  Writeln(f);
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
   Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
   Writeln(f);

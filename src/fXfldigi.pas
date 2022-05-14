@@ -237,6 +237,7 @@ var
    Drop   :integer;
    tmp    :extended;
 
+
 begin
   frmNewQSO.tmrFldigi.Enabled := false;
   SockOK := true;
@@ -281,10 +282,12 @@ begin
                   mode:='';submode:='';
                   if SockOK then SockOK := PollFldigi('modem.get_mode',mode);
                   if SockOK then SockOK := PollFldigi('modem.get_submode',submode);
-                  if mode='' then  //old version of fldigi, make different query
+                  if mode='' then  //old version of fldigi get_mode not supported, make different query
+                     Begin
                       if SockOK then SockOK := PollFldigi('modem.get_name',mode);
-                  //cqrlog saves submode as mode
-                  if submode<>'' then mode := submode;
+                     end
+                    else
+                      mode:=dmUtils.ModeToCqr(mode,submode,dmData.DebugLevel>=1 );
                 end;
             2 : begin
                   mode := cqrini.ReadString('fldigi','defmode','RTTY');
