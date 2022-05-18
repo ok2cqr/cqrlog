@@ -428,7 +428,7 @@ begin
   TelSpots.Align       := alClient;
   TelSpots.setLanguage(1);
 
-  ChBckColor  := $00D3F3F8;
+  ChBckColor  := clWindow;
   pnlChat.Color := ChBckColor;
   ChatSpots             := TColorMemo.Create(pnlChat);
   ChatSpots.parent      := pnlChat;
@@ -1051,7 +1051,7 @@ var
   cfgAN  : Boolean;
   cfgOC  : Boolean;
 begin
-  sColor  := 0; //cerna
+  sColor  := clWindowText; //cerna
 
   EnterCriticalSection(csDXCPref);
   try
@@ -1119,9 +1119,9 @@ begin
   isLoTW := dmData.UsesLotw(call);
   isEQSL := dmDXCluster.UseseQSL(call);
 
-  //DXCluster - default Backgroundcolor white
+  //DXCluster - default Backgroundcolor
   //case lotw and eqsl is given, lotw will win
-  ThBckColor := clWhite;
+  ThBckColor := clWindow;
   if cfgeUseBackColor and isEQSL then
     ThBckColor := cfgeBckColor;
   if cfgUseBackColor and isLoTW then
@@ -1281,7 +1281,7 @@ begin
     end
   end;
   if index = 0 then
-    sColor := 0;
+    sColor := clWindowText;
   if index = 1 then
     sColor := cfgNewCountryColor;
   if index = 2 then
