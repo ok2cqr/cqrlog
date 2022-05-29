@@ -1,3 +1,35 @@
+cqrlog (2.6.0-1) unstable; urgency=low
+
+  * new button "URL" to row below "Comment to callsign" (Saku, OH1KH)
+  * many improvements to working with WSJTX (Saku, OH1KH)
+  * Clear RIT after saving QSO cleats also XIT (Saku, OH1KH)
+  * TO-108 / CAMSAT 6 added (Florian, DF2ET)
+  * XW-3 (CAS-9) satellite added (Florian, DF2ET)
+  * more options to error.adi file created in ADIF import added 
+    see help (Saku, OH1KH)  
+  * saving contest window state after save 
+    (Petr, OK2CQR && Saku, OH1KH)  
+  * CQRLOG can start directly to Remote mode (Saku, OH1KH)
+  * DOK editing in Edit group (Florian, DF2ET)
+  * Bandmap improvements (Saku, OH1KH)
+  * Grayline fixes (Saku, OH1KH)
+  * DX cluster CW fixes (Saku, OH1KH)
+  * Hamlib CW fixes (Saku, OH1KH)
+  * Contest window fixes (Petr, OK2CQR && Saku, OH1KH)
+  * ADIF submode fixes (Saku, OH1KH)
+  * WSJT CQ monitor fixes (Saku, OH1KH)
+  * group edit (Saku, OH1KH)
+  * ADIF text field length crash (Saku, OH1KH)
+  * label export fields (Florian, DF2ET)
+  * RBN filter (Saku, OH1KH)
+  * Statistics/Big squares (Saku, OH1KH)
+  * show recent qsos before popup (Saku, OH1KH)
+  * cabrillo export (Saku, OH1KH)
+  * docker build fixes (Dawid, SQ6EMM)
+  * microwave band fixes (Dawid, SQ6EMM)  
+  
+ -- Petr Hlozek <petr@ok2cqr.com>  Sun, 29 May 2022 13:44:14 +0100
+
 cqrlog (2.5.2-1) unstable; urgency=low
 
   * some contest window improvements
