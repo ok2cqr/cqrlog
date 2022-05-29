@@ -578,18 +578,33 @@ Begin
      Buf:=buf+'<EOR>'; //in case we have broken record in broken file (hit eof before it is time)
   if LocalDbg then
                   Writeln('one record read: ',Buf);
+
+//here we add some stuff to every record received. It does not mess up "qso in log" checking
+//but makes record to be ready for write to error log if qso was not found in log
+//=====================================
   //check SWL and is so change contest_id to find those easier
   //if there is tag QSLMSG move data of it to (comment to qso).
   if pos('APP_EQSL_SWL:1>Y',uppercase(buf))>0 then
               Begin
                Cstamp:= '<CONTEST_ID:25>SWL_was_not_found_in_log!';
-               Buf:=StringReplace(buf,'<QSLMSG:','<COMMENT:',[rfIgnoreCase]);
+               Buf:=StringReplace(buf,'<QSLMSG:','<COMMENT:',[rfIgnoreCase]); //SWL should inform "qso with", put it to Comment field
                Buf:=StringReplace(buf,'<RST_RCVD:0>','<RST_SENT+:3>SWL',[rfIgnoreCase]); //we need this for temp use
-               Buf:=StringReplace(buf,'<RST_SENT:','<RST_RCVD:',[rfIgnoreCase]);
+               Buf:=StringReplace(buf,'<RST_SENT:','<RST_RCVD:',[rfIgnoreCase]); //generate RST_s as "SWL" for own log (upload to eQSL)
                Buf:=StringReplace(buf,'<RST_SENT+:','<RST_SENT:',[rfIgnoreCase]);
               end
               else
+              Begin
                Cstamp:= '<CONTEST_ID:25>Qso_was_not_found_in_log!';
+               if pos('APP_LOTW',uppercase(buf))=0 then  //it is eQSL
+                 begin
+                     Cstamp:= Cstamp+LineEnding+'<APP_CQRLOG_NOTE:61>RST sent/rcvd are swapped to be ready for import to your log!'
+                     +LineEnding+'<APP_CQRLOG_NOTE:43>You have to fix your RST_SENT after import!';
+                     Buf:=StringReplace(buf,'<RST_RCVD:','<RST_SENT+:',[rfIgnoreCase]); //swap sent/rcvd for own log import
+                     Buf:=StringReplace(buf,'<RST_SENT:','<RST_RCVD:',[rfIgnoreCase]);
+                     Buf:=StringReplace(buf,'<RST_SENT+:','<RST_SENT:',[rfIgnoreCase]);
+                 end;
+
+              end;
 
   //Here we create a qso record that has comment and lotw+eqsl sent set.
   //user can add this record to log to get rid of lotw/eqsl error "Not found in log"
@@ -600,8 +615,9 @@ Begin
               +LineEnding+'<EQSL_QSL_SENT:1>Y<EQSL_QSLSDATE:8>'+Dstamp+'<APP_CQRLOG_NOTE:36>This line prevents reupload to eQSL'
               +LineEnding+Cstamp
               +LineEnding+Buf;
+//=====================================
 
-  mode := ''; //be sure there is no mode at this point
+mode := ''; //be sure there is no mode at this point
   repeat
    begin
      if frmAdifImport.getNextAdifTag(Buf,prik,data) then
