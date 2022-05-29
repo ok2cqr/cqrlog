@@ -204,7 +204,7 @@ object frmDXCluster: TfrmDXCluster
         Alignment = taLeftJustify
         BevelInner = bvLowered
         BevelOuter = bvLowered
-        Color = clWhite
+        Color = clDefault
         Font.CharSet = ANSI_CHARSET
         Font.Height = 12
         Font.Name = 'DejaVu Sans Mono 12'
@@ -343,7 +343,7 @@ object frmDXCluster: TfrmDXCluster
         BevelOuter = bvNone
         ClientHeight = 331
         ClientWidth = 699
-        Color = clWhite
+        Color = clDefault
         ParentColor = False
         TabOrder = 2
         object pnlChat: TPanel
@@ -353,7 +353,7 @@ object frmDXCluster: TfrmDXCluster
           Width = 699
           Align = alTop
           BevelOuter = bvNone
-          Color = 13890552
+          Color = clDefault
           ParentColor = False
           TabOrder = 0
         end

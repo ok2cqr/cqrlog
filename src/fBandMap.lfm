@@ -112,7 +112,7 @@ object frmBandMap: TfrmBandMap
     Width = 259
     Align = alClient
     BevelOuter = bvNone
-    Color = clWhite
+    Color = clDefault
     Font.Height = -11
     Font.Name = 'Monospace'
     ParentColor = False
