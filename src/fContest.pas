@@ -763,7 +763,7 @@ end;
 
 procedure TfrmContest.ShowStatusBarInfo;
 begin
-  sbContest.Panels.Items[0].Text := StringReplace(Trim(frmNewQSO.mCountry.Text),#$0A,'|',[rfReplaceAll]);
+  sbContest.Panels.Items[0].Text := ExtractWord(1,Trim(frmNewQSO.mCountry.Text),[#$0A]);
   sbContest.Panels.Items[1].Text := 'WAZ: ' + frmNewQSO.lblWAZ.Caption;
   sbContest.Panels.Items[2].Text := 'ITU: ' + frmNewQSO.lblITU.Caption;
   sbContest.Panels.Items[3].Text := 'AZ: ' + frmNewQSO.lblAzi.Caption;
