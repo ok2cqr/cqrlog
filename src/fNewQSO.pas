@@ -7582,6 +7582,12 @@ end;
 
 procedure TfrmNewQSO.CheckForExternalTablesUpdate;
 begin
+  //when the callsign is not filled in, the iformation window appears
+  //without this, the info about new dxcctables appeard first and was
+  //covered by information window. Program looked like frozen
+  if cqrini.ReadString('Station','Call','') = '' then
+    exit;
+
   CheckForDXCCTablesUpdate;
   CheckForDOKTablesUpdate;
   CheckForQslManagersUpdate;
