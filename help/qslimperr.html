@@ -32,6 +32,7 @@
 Sometimes you find some "QSO not found" errors in LoTW or eQSL download. There are some reasons for that.<br>
 <ul>
 <li>QSO did not complete and you did not log that, but the opponent station thinks it is completed.</li>
+<li>You forgot to set remote on and logged qso only to your digital mode program. (You find qso from it's log)
 <li>People type in their old paper logs to computer and upload them to LoTW/eQSL. QSO is ok but it is somewhere in your earlier paper logs.</li>
 <li>QSO may be an SWL report waiting to confirm via eQSL</li>
 </ul><br>
@@ -55,8 +56,12 @@ If you do not want to import all error qsos, or want to send a confirmation to e
 <p>Here is a sample eQSL error file opened with Leafpad editor (that shows line numbers at left side).
 LoTW error file looks very similar, but has some text more for every qso record.
 <br><br>When you edit file do not touch the header of the file. Lines from 1 to 8 where header ends with "EOH" (End Of Header).
-<br>You can remove qso records that you do not want to import to your log by removing all record's lines. For example here remove the CQ750RSI qso means
- to remove lines 10 - 22. Adif tag APP_CQRLOG_ERROR:XXX specifies one error qso data lenght (to EOH tag) but it is actually not used for anything.
+<br>You can remove qso records that you do not want to import to your log by removing all record's lines. For example here remove the F-21716 qso means
+ to remove lines 10 - 23. Adif tag &lt;APP_CQRLOG_ERROR:XXX specifies error label data lenght but it is actually not used for anything.
+ <br>There are also other comments starting with &lt;APP_CQRLOG_NOTE that are just for information.
+ <br><br><b>NOTE:</b>RST sent/rcvd are swapped to be ready for import to your log. I.E. senders RST_sent is placed to (your) RST_rcvd already.
+ <br>(This concerns mainly eQSL as LoTW does not handle RSTs)
+ <br>You just have to fix your RST_sent to proper value, as well as remove "LoTW/eQSL uploaded" mark if you want to upload this "found qso" to LoTW/eQSL after import.
 </p><p>
 <h5>SWL</h5>
 Cqrlog fixes error record if adif tag APP_EQSL_SWL is found.<br>
