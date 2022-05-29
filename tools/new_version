@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [ $1 = "beta" ]; then
+if [ -v $i] && [ $1 = "beta" ]; then
    VERSION=`date '+%Y%m%d'`
 else
-   VERSION=`cat ../src/uVersion.pas | grep cVERSION`
+   VERSION=`cat ../src/uVersion.pas | grep 'cVersionBase     = '`
    VERSION="$(echo -e "${VERSION}" | sed -e 's/^[[:space:]]*//')"
-   VERSION="${VERSION:15:5}"
+   VERSION="${VERSION:20:5}"
 fi
 mkdir ~/tmp/cqrlog_build_$VERSION -p
 FINAL=~/tmp/cqrlog_build_$VERSION
@@ -41,7 +41,7 @@ echo cqrlog_"$VERSION"_$ARCH.tar.gz
 mkdir $CTMP/cqrlog-$VERSION -p
 mkdir $FINAL -p
 cd $CTMP
-git clone git://github.com/ok2cqr/cqrlog.git cqrlog-$VERSION
+git clone https://github.com/ok2cqr/cqrlog.git cqrlog-$VERSION --depth=1
 
 # Raspbian still has old verison of Lazarus and FreePascal
 # new properties from Lazarus 1.8 has to be removed
