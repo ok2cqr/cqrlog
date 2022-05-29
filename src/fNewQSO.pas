@@ -876,38 +876,35 @@ begin
 end;
 
 procedure TfrmNewQSO.GetCallInfo(callTOinfo,mode,rsts:string);
-
-Begin
-
+begin
   if  edtCall.Text <> callTOinfo then  //call (and web info) maybe there already ok from pevious status packet
-                           Begin
-                             edtCall.Text := '';//clean grid like double ESC does
-                             old_ccall := '';
-                             old_cfreq := '';
-                             old_cmode := '';
-                             edtCall.Text := callTOinfo;
-                             c_lock:=False;
-                             edtCallExit(nil);    //<--------this will fetch web info
-                             if dmData.DebugLevel>=1 then Writeln('GetCallInfo: Call was not there already');
-                             WaitWeb(2); // give time for web
-                           end;
+  begin
+    edtCall.Text := '';//clean grid like double ESC does
+    old_ccall := '';
+    old_cfreq := '';
+    old_cmode := '';
+    edtCall.Text := callTOinfo;
+    c_lock:=False;
+    edtCallExit(nil);    //<--------this will fetch web info
+    if dmData.DebugLevel>=1 then Writeln('GetCallInfo: Call was not there already');
+    WaitWeb(2); // give time for web
+  end;
 
   //mode and report may change if call stays same
-   cmbMode.Text:=mode;
-   edtMyRST.Text :='';
-   rsts:=trim(rsts);
-   if pos('-',rsts)>0 then
-        Begin
-          if length(rsts)<3 then rsts:= rsts[1]+'0'+rsts[2]
-        end
-     else
-        Begin
-          if length(rsts)=1 then rsts:= '+0'+rsts
-            else
-             rsts:= '+'+rsts
-        end;
-   edtHisRST.Text := rsts;
-
+  cmbMode.Text:=mode;
+  edtMyRST.Text :='';
+  rsts:=trim(rsts);
+  if pos('-',rsts)>0 then
+  begin
+    if length(rsts)<3 then rsts:= rsts[1]+'0'+rsts[2]
+  end
+  else begin
+  if length(rsts)=1 then
+    rsts:= '+0'+rsts
+  else
+    rsts:= '+'+rsts
+  end;
+  edtHisRST.Text := rsts;
 end;
 
 procedure TfrmNewQSO.WaitWeb(secs:integer);
@@ -1793,7 +1790,7 @@ var
 
 begin
   with TfrmDBConnect.Create(self) do
-   Begin
+  begin
     try
       ShowModal;
       if ModalResult <> mrOK then
@@ -1806,9 +1803,7 @@ begin
     finally
       Free
     end;
-   end;  //without this begin-end editor offers "finally; end" for every new line entered until end of procedure
-
-
+  end;  //without this begin-end editor offers "finally; end" for every new line entered until end of procedure
 
   ini := TIniFile.Create(GetAppConfigDir(False)+'cqrlog_login.cfg');
   try
@@ -1861,8 +1856,9 @@ begin
 
   ModeBeforeChange := cmbMode.Text;
   UsrAssignedProfile:= cmbProfiles.Text;   //initial value
-  if cqrini.ReadString('Station','Call','')=''
-                                               then NewLogSplash;
+
+  if cqrini.ReadString('Station','Call','') = '' then
+     NewLogSplash;
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -7653,50 +7649,51 @@ begin
   end
 end;
 
-procedure  TfrmNewQSO.ShowOperator;
+procedure TfrmNewQSO.ShowOperator;
 Begin
   if (Op<>UpperCase(cqrini.ReadString('Station', 'Call', ''))) and (Op<>'') then
-         sbNewQSO.Panels[2].Text := cOperator+Op
-       else
-         sbNewQSO.Panels[2].Text :='';
+    sbNewQSO.Panels[2].Text := cOperator+Op
+  else
+    sbNewQSO.Panels[2].Text := '';
 end;
 
-procedure  TfrmNewQSO.NewLogSplash;
-  var tmp  :String;
+procedure TfrmNewQSO.NewLogSplash;
+var
+  message : String;
 Begin
+  message := 'It seems that you have not set Station CALLSIGN for this log.'+LineEnding
+    +LineEnding
+    +'CQRLOG has own settings for every log. You can copy settings'+LineEnding
+    +'between logs using window:'+LineEnding
+    +'Database Connect/Utils/settings/import<->export.'+LineEnding
+    +LineEnding
+    +'For this new log check now from top menu File/Preferences'+LineEnding
+    +'at least following Tabs:'+LineEnding
+    +LineEnding
+    +'PROGRAM:'+LineEnding
+    +'         Basic settings how CQRLOG works with this log'+LineEnding
+    +'STATION:'+LineEnding
+    +'         Your station information for this log'+LineEnding
+    +'BANDS:'+LineEnding
+    +'         By default CQRLOG uses Region1 band settings.'+LineEnding
+    +'         If you are in other region please check bands/frequencies'+LineEnding
+    +'         to set correct band start and end frequencies.'+LineEnding
+    +'         This will affect to CQRLOG operations.'+LineEnding
+    +'TRX CONTROL:'+LineEnding
+    +'         Settings if you want CQRLOG to communicate with'+LineEnding
+    +'         your rig using CAT control.'+LineEnding
+    +'EXTERNAL VIEWERS:'+LineEnding
+    +'         Programs that CQRLOG uses for viewing various'+LineEnding
+    +'         documents'+LineEnding
+    +LineEnding
+    +'For other Tabs set their values by your needs.'+LineEnding
+    +LineEnding
+    +'PLEASE use top menu HELP/HELP INDEX for more help for'+LineEnding
+    +'settings and operation. Help opens to your web browser.'+LineEnding
+    +LineEnding
+    +'73, gl DX!';
 
-     tmp:=  'It seems that you have not set Station CALLSIGN for this log.'+LineEnding
-           +LineEnding
-           +'Cqrlog has own settings for every log. You can copy settings'+LineEnding
-           +'between logs using window:'+LineEnding
-           +'Database Connect/Utils/settings/import<->export.'+LineEnding
-           +LineEnding
-           +'For this new log check now from top menu File/Preferences'+LineEnding
-           +'at least following Tabs:'+LineEnding
-           +LineEnding
-           +'PROGRAM:'+LineEnding
-           +'         Basic settings how cqrlog works with this log'+LineEnding
-           +'STATION:'+LineEnding
-           +'         Your station information for this log'+LineEnding
-           +'BANDS:'+LineEnding
-           +'         By default Cqrlog uses Region1 band settings.'+LineEnding
-           +'         If you are in other region please check bands/frequencies'+LineEnding
-           +'         to set correct band start and end frequencies.'+LineEnding
-           +'         This will affect to Cqrlog operations.'+LineEnding
-           +'TRX CONTROL:'+LineEnding
-           +'         Settings if you want Cqrlog to communicate with'+LineEnding
-           +'         your rig using CAT control.'+LineEnding
-           +'EXTERNAL VIEWERS:'+LineEnding
-           +'         Programs that Cqrlog uses for viewing various'+LineEnding
-           +'         documents'+LineEnding
-           +LineEnding
-           +'For other Tabs set their values by your needs.'+LineEnding
-           +LineEnding
-           +'PLEASE use top menu HELP/HELP INDEX for more help for'+LineEnding
-           +'settings and operation. Help opens to your web browser.'+LineEnding
-           +LineEnding
-           +'73, gl DX!';
-           ShowMessage(tmp);
+  ShowMessage(message);
 end;
 
 end.
