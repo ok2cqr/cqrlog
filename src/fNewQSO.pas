@@ -7487,7 +7487,7 @@ begin
   cbOffline.Enabled     := False;
   btnSave.Enabled       := False;  //disable manual saving when remote is on
   tmrADIF.Interval      := 250;    //rate to read qsos from UDP (msec)
-  if run and FileExists(path) then
+  if run and FileExists(ExtractWord(1,path,[' '])) then
     dmUtils.RunOnBackground(path)
 end;
 
