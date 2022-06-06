@@ -53,7 +53,10 @@ var star_time_u:extended;
 
 type
   Tgrayline=object
-      const GC_Points_Max = 500;
+      GC_LWidth : integer;  //plot line wdth;
+      GC_SP_Color : TColor;
+      GC_LP_Color : TColor;
+      const GC_Points_Max = 5000;
       constructor init(naz_sou:string);
       destructor done;
       procedure VypocitejSunClock(cas:Tdatetime);
@@ -65,6 +68,7 @@ type
       procedure body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
       procedure body_smaz;
 
+  //    procedure GC_line_width(LWidth:Integer);      //set plot line width
       procedure GC_line_part(x1,y1,x2,y2:double);   //add ShortPath point
       procedure GC_Lline_part(x1,y1,x2,y2:double);  //add LongPath point
       procedure GC_line_clear(what:integer=-1);      //clear S&LPath points
@@ -701,7 +705,7 @@ end;
 procedure Tgrayline.kresli(r:Trect;can:Tcanvas);      //kresli =draw
 var z,x,c:longint;
     ze,zez,ze2,zez2,ze2s,zez2s:extended;
-    
+    LWidht:integer;
 var
 
     xptr:^byte;
@@ -709,15 +713,15 @@ var
 //-----------------------------------------------------------
     procedure cmarniu(x1,y1,x2,y2:longint);
       begin
-            can.pen.color:=clblack;
+          {  can.pen.color:=clblack;
             can.pen.Width:=5;
             can.moveto(x1,y1);
-            can.lineto(x2,y2);
+            can.lineto(x2,y2); }
             If LP then
-                   can.pen.color:=clFuchsia
+                   can.pen.color:=GC_LP_Color
                   else
-                   can.pen.color:=clyellow;
-            can.pen.Width:=2;
+                   can.pen.color:=GC_SP_Color;
+            can.pen.Width:=GC_LWidth;
             can.moveto(x1,y1);
             can.lineto(x2,y2);
       end;
@@ -882,7 +886,7 @@ begin
     else
       Can.StretchDraw(r,obmap);
 
-  if caraen then
+  if caraen then     //caraen = do
     begin
       cmarni(carax1,caray1,carax2,caray2,true);
 //    can.Font.Color:=clBlack;
@@ -948,7 +952,7 @@ procedure Tgrayline.jachcucaru(en:boolean;x1,y1,x2,y2:extended);     //jachcucar
       end;
   end;
 
-procedure Tgrayline.body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);
+procedure Tgrayline.body_add(typ:byte;x1,y1,x2,y2:extended;popis:string;barva:tcolor;vel_bodu:longint);  //barva = color
   begin
     if chcipni then exit;
     if body_poc<body_max-1 then
@@ -1009,5 +1013,10 @@ begin
        1: GCLpointer:=0;
   end;
 end;
-
+{
+procedure GC_line_width(LWidth:Integer);
+Begin
+   GC_LWidth:=LWidth;
+end;
+ }
 end.

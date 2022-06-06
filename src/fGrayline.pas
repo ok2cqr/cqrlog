@@ -546,7 +546,9 @@ var
 Begin
 BaseStep  := cqrini.ReadFloat('Program', 'GraylineGCstep',15E-001) * pi/180;
 PolarStep := Basestep/cqrini.ReadInteger('Program', 'GraylineGCstep',10);
-
+ob^.GC_LWidth := cqrini.ReadInteger('Program', 'GraylineGCLineWidth',2);
+ob^.GC_SP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineSPColor', 'clYellow' ));
+ob^.GC_LP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineLPColor', 'clFuchsia' ));
 
 if LocalDbg then
       begin
