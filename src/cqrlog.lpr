@@ -6,7 +6,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, sysutils, Classes, fMain, fPreferences, dUtils, fNewQSO, dialogs,
   fChangeLocator, fChangeOperator, dData, dDXCC, fMarkQSL, fDXCCStat, fSort,
-  fFilter, fImportProgress, fImportTest, TAChartLazarusPkg,
+  fFilter, fImportProgress, fImportTest,
   RunTimeTypeInfoControls, fSelectDXCC, fGrayline, fCallbook, fTRXControl,
   fFreq, fChangeFreq, fAdifImport, fSplash, fSearch, fQTHProfiles,
   fNewQTHProfile, fEnterFreq, fExportProgress, fNewDXCluster, fDXCluster,
