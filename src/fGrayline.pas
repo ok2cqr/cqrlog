@@ -5,7 +5,7 @@ unit fGrayline;
 interface
 
 uses
-  Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,TAGraph,
+  Classes,SysUtils,LResources,Forms,Controls,Graphics,Dialogs,gline2,
   ExtCtrls,Buttons,inifiles,FileUtil,Menus,ActnList,ComCtrls,lNetComponents,
   lnet, lclType, LazFileUtils, StrUtils, DateUtils, Math;
 
