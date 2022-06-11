@@ -76,6 +76,10 @@ implementation
   {$i lclgtkeventer.inc}
 {$endif}
 
+{$ifdef LCLGTK3}
+  {$i lclgtkeventer.inc}
+{$endif}
+
 {$ifdef LCLQT}
   {$i lclgtkeventer.inc} // identical code ;)
 {$endif}
