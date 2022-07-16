@@ -84,6 +84,7 @@ type
     acMarkAll: TAction;
     acMarkAlleQSL: TAction;
     acAutoSizeColumns: TAction;
+    acCreateLoadFilter: TAction;
     acUploadAllToLoTW: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
@@ -135,24 +136,25 @@ type
     lblSumDist: TLabel;
     lblSumDistances: TLabel;
     MenuItem1:  TMenuItem;
-    MenuItem10: TMenuItem;
+    MenuItemStats: TMenuItem;
     MenuItem100: TMenuItem;
     MenuItem101: TMenuItem;
     MenuItem102: TMenuItem;
-    MenuItem103: TMenuItem;
+    mnuContestFilter: TMenuItem;
     MenuItem104: TMenuItem;
     MenuItem105: TMenuItem;
     MenuItem106: TMenuItem;
+    mnuLoadFilter: TMenuItem;
     MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
+    MenuItemImport: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem17: TMenuItem;
-    MenuItem18: TMenuItem;
+    MenuItemWillSend: TMenuItem;
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
     MenuItem21: TMenuItem;
@@ -164,7 +166,7 @@ type
     MenuItem27: TMenuItem;
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
-    MenuItem30: TMenuItem;
+    MenuItemView: TMenuItem;
     MenuItem31: TMenuItem;
     MenuItem32: TMenuItem;
     MenuItem33: TMenuItem;
@@ -220,7 +222,7 @@ type
     MenuItem77: TMenuItem;
     MenuItem78: TMenuItem;
     MenuItem79: TMenuItem;
-    MenuItem80: TMenuItem;
+    mnuSQLConsole: TMenuItem;
     MenuItem81: TMenuItem;
     MenuItem82: TMenuItem;
     MenuItem83: TMenuItem;
@@ -274,7 +276,7 @@ type
     MenuItem9:  TMenuItem;
     mnuMain:    TMainMenu;
     mnuClose:   TMenuItem;
-    MenuItem2:  TMenuItem;
+    MenuItemFilter:  TMenuItem;
     mnuCreateFilter: TMenuItem;
     mnuCancelFilter: TMenuItem;
     mnuFile:    TMenuItem;
@@ -407,7 +409,9 @@ type
     procedure acCallBookExecute(Sender: TObject);
     procedure acCancelFilterExecute(Sender: TObject);
     procedure acCloseExecute(Sender: TObject);
+    procedure RunFilter(Load,Contest:Boolean);
     procedure acCreateFilterExecute(Sender: TObject);
+    procedure acCreateLoadFilterExecute(Sender: TObject);
     procedure acCreateContestFilterExecute(Sender: TObject);
     procedure acDXClusterExecute(Sender: TObject);
     procedure acExADIFExecute(Sender: TObject);
@@ -1891,47 +1895,60 @@ procedure TfrmMain.acCloseExecute(Sender: TObject);
 begin
   Close
 end;
-
-procedure TfrmMain.acCreateFilterExecute(Sender: TObject);
-begin
-  lblDist.Caption :='';
-  lblDistance.Visible:=(lblDist.Caption <>'');
-
-  with TfrmFilter.Create(self) do
-  try
-    ShowModal;
-    if (ModalResult = mrOk) then
-      if (tmp <> '') then
+procedure TfrmMain.RunFilter(Load,Contest:Boolean);
+  procedure Info;
+   Begin
       begin
         dmData.IsFilter := True;
         sbMain.Panels[2].Text := 'Filter is ACTIVE!';
         RefreshQSODXCCCount;
         ShowFields
       end
-  finally
-    Free
-  end
+   end;
+begin
+  lblDist.Caption :='';
+  lblDistance.Visible:=(lblDist.Caption <>'');
+
+  if contest then
+   Begin
+    with TfrmContestFilter.Create(self) do
+    try
+     ShowModal;
+     if (ModalResult = mrOk) then
+      if (tmp <> '') then
+                         Info;
+    finally
+      Free
+    end
+   end
+  else
+   Begin
+    with TfrmFilter.Create(self) do
+    try
+     DirectLoad:=Load;
+     ShowModal;
+     if (ModalResult = mrOk) then
+      if (tmp <> '') then
+                         Info;
+    finally
+      Free
+    end
+   end;
+end;
+
+procedure TfrmMain.acCreateFilterExecute(Sender: TObject);
+Begin
+  RunFilter(False,False);
+end;
+
+procedure TfrmMain.acCreateLoadFilterExecute(Sender: TObject);
+begin
+  RunFilter(True,False);
 end;
 
 procedure TfrmMain.acCreateContestFilterExecute(Sender: TObject);
 begin
-  lblDist.Caption :='';
-  lblDistance.Visible:=(lblDist.Caption <>'');
-
-  with TfrmContestFilter.Create(self) do
-  try
-    ShowModal;
-    if (ModalResult = mrOk) then
-      if (tmp <> '') then
-      begin
-        dmData.IsFilter := True;
-        sbMain.Panels[2].Text := 'Filter is ACTIVE!';
-        RefreshQSODXCCCount;
-        ShowFields
-      end
-  finally
-    Free
-  end
+  RunFilter(False,True)
 end;
 
 procedure TfrmMain.acDXClusterExecute(Sender: TObject);
