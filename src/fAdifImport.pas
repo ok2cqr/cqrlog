@@ -874,7 +874,7 @@ begin
   try
     prg := cqrini.ReadString('ExtView', 'txt', '');
     if prg<>'' then
-      dmUtils.RunOnBackground(prg + ' ' + OtF)
+      dmUtils.RunOnBackground(prg + ' ' + AnsiQuotedStr(OtF, '"'))
      else ShowMessage('No external text viewer defined!'+#10+'See: prefrences/External viewers');
   finally
    //done

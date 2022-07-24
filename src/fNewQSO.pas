@@ -3158,6 +3158,7 @@ var
   ShowMain : Boolean = False;
   date     : TDate;
   RxFreq   : Double = 0;
+  key      : word = $24; //Home-key
 begin
   ShowMain := (fEditQSO or fViewQSO) and (not fromNewQSO);
   if not cbOffline.Checked then
@@ -3398,7 +3399,7 @@ begin
   if not AnyRemoteOn then
                        UnsetEditLabel;
   dmData.qQSOBefore.Close;
-  fEditQSO := False;
+
   was_call := edtCall.Text;
   edtCall.Text := ''; //calls ClearAll
   old_ccall := '';
@@ -3409,7 +3410,14 @@ begin
     frmTRXControl.ClearRIT;
 
   if (cqrini.ReadBool('NewQSO','RefreshAfterSave', True) and frmMain.Showing) then
+   begin
     frmMain.acRefresh.Execute;
+    if not fEditQso then
+                  frmMain.dbgrdMainKeyUp(nil,key,[ssCtrl]); //shows last logged qso
+
+   end;
+
+  fEditQSO := False;
 
   UploadAllQSOOnline;
   if frmWorkedGrids.Showing then frmWorkedGrids.UpdateMap;
@@ -7484,7 +7492,7 @@ begin
   btnSave.Enabled       := False;  //disable manual saving when remote is on
   tmrADIF.Interval      := 250;    //rate to read qsos from UDP (msec)
   if run and FileExists(ExtractWord(1,path,[' '])) then
-    dmUtils.RunOnBackground(path)
+    dmUtils.RunOnBackground(AnsiQuotedStr(path, '"'))
 end;
 
 
