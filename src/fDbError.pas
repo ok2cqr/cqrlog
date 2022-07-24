@@ -37,7 +37,7 @@ uses dUtils, dData;
 
 procedure TfrmDbError.btnOpenErrFileClick(Sender : TObject);
 begin
-  dmUtils.RunOnBackground('xdg-open ' + dmData.DataDir + 'mysql.err')
+  dmUtils.RunOnBackground('xdg-open ' + AnsiQuotedStr(dmData.DataDir + 'mysql.err', '"'))
 end;
 
 procedure TfrmDbError.btnVisitFAQClick(Sender : TObject);
