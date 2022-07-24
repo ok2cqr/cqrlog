@@ -475,8 +475,8 @@ var
   user   : String;
 begin
   RbnMonThread := TRBNThread.Create(True);
-  RbnMonThread.FreeOnTerminate := True;
-  RbnMonThread.OnShowSpot := @SynRbnMonitor;
+  RbnMonThread.FreeOnTerminate :=  False;// True; I think this causes abrt in terminate (TfrmRbnMonitor.acDisconnectExecute) because procedure has freeAndNil (does free twice)
+  RbnMonThread.OnShowSpot := @SynRbnMonitor; //shows up when RBN traffic is high like IARU HF contest and connect is tried to close or filter adjusted
   RbnMonThread.Start;
 
   LoadConfigToThread;
