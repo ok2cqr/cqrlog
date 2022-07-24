@@ -171,6 +171,7 @@ type
     procedure loadFilter(filename:string);
   public
     tmp : String;
+    DirectLoad: boolean;
   end;
 const
   C_FILTER_LAST_SETTINGS_FILE_NAME = 'FilterSettings.fil';
@@ -485,6 +486,7 @@ begin
   cmbProfile.Text := dmData.GetDefaultProfileText;
   cmbProfile.Items.Insert(0,'Any profile');
   cmbProfile.ItemIndex := 0;
+  DirectLoad:=False;
 end;
 //actually form create and show are common procedure as filter is opened in showModal and it always
 //creates and shows itself in every opening
@@ -513,8 +515,11 @@ begin
   cmbMembers.ItemIndex := 0;
   cmbSort.ItemIndex := 0;
 
+  if DirectLoad then
+          btnLoadClick(nil);
   chkRemember.Checked:= cqrini.ReadBool('frmFilter','Remember',false);
-  if chkRemember.Checked then loadFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
+  if chkRemember.Checked then
+          loadFilter(dmData.HomeDir + C_FILTER_LAST_SETTINGS_FILE_NAME);
 end;
 
 procedure TfrmFilter.btnSelectDXCCClick(Sender: TObject);
@@ -738,7 +743,11 @@ end;
 procedure TfrmFilter.btnLoadClick(Sender: TObject);
 begin
   dlgOpen.InitialDir := dmData.HomeDir;
-  if dlgOpen.Execute then loadFilter(dlgOpen.FileName);
+  if dlgOpen.Execute then
+     Begin
+       loadFilter(dlgOpen.FileName);
+       if DirectLoad then btnOkClick(nil);
+     end;
 end;
 
 procedure TfrmFilter.btnSaveClick(Sender: TObject);
