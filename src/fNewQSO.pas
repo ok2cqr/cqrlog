@@ -3435,7 +3435,10 @@ begin
           frmMain.dbgrdMain.SetFocus
         end
         else
-          edtCall.SetFocus;
+         Begin
+          if cbOffline.Checked then edtDate.SetFocus
+                               else edtCall.SetFocus;
+         end;
      end;
 
 end;
@@ -3711,6 +3714,11 @@ begin
     mComment.SetFocus;
     key := 0
   end;
+  if ((key = VK_TAB) and cbOffline.Checked and (edtCall.Text='') and (not AnyRemoteOn)) then
+   Begin
+     edtCall.SetFocus;
+     key := 0
+   end;
 end;
 
 
@@ -5816,8 +5824,11 @@ end;
 procedure TfrmNewQSO.mCommentKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if key = VK_TAB then
-    edtCall.SetFocus;
+  if ((key = VK_TAB) and (not AnyRemoteOn)) then
+    Begin
+     edtCall.SetFocus;
+     key := 0
+    end;
 end;
 
 procedure TfrmNewQSO.mCommentKeyUp(Sender: TObject; var Key: Word;
