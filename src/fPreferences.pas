@@ -440,19 +440,19 @@ type
     clboxNewITU: TColorBox;
     clboxNewIOTA: TColorBox;
     clBoxQSLITU: TColorBox;
-    cmbDataBitsR1: TComboBox;
+    cmbDataBitsR: TComboBox;
     cmbDataBitsRot1: TComboBox;
     cmbDataBitsRot2: TComboBox;
-    cmbDTRR1: TComboBox;
-    cmbHanshakeR1: TComboBox;
+    cmbDTRR: TComboBox;
+    cmbHanshakeR: TComboBox;
     cmbIfaceType2: TComboBox;
     cmbModelRig: TComboBox;
     cmbModelRot1: TComboBox;
     cmbModelRot2: TComboBox;
-    cmbParityR1: TComboBox;
-    cmbRTSR1: TComboBox;
-    cmbSpeedR1: TComboBox;
-    cmbStopBitsR1: TComboBox;
+    cmbParityR: TComboBox;
+    cmbRTSR: TComboBox;
+    cmbSpeedR: TComboBox;
+    cmbStopBitsR: TComboBox;
     cmbWsjtDefaultMode: TComboBox;
     cmbDTRRot1: TComboBox;
     cmbDTRRot2: TComboBox;
@@ -514,12 +514,12 @@ type
     edtRRigCtldArgs: TEdit;
     edtRRigCtldPort: TEdit;
     edtRadioName: TEdit;
-    edtUsr1R1: TEdit;
-    edtUsr1R1Name: TEdit;
-    edtUsr2R1: TEdit;
-    edtUsr2R1Name: TEdit;
-    edtUsr3R1: TEdit;
-    edtUsr3R1Name: TEdit;
+    edtUsr1R: TEdit;
+    edtUsr1RName: TEdit;
+    edtUsr2R: TEdit;
+    edtUsr2RName: TEdit;
+    edtUsr3R: TEdit;
+    edtUsr3RName: TEdit;
     edtUsrBtn: TEdit;
     edtClub: TEdit;
     edtCWPort2: TEdit;
@@ -726,18 +726,18 @@ type
     lblModelR: TLabel;
     lblPollR: TLabel;
     lblPortR: TLabel;
-    lblserialR1DataBits: TLabel;
-    lblSerialR1Dtr: TLabel;
-    lblSerialR1Hand: TLabel;
-    lblSerialR1Parity: TLabel;
-    lblSerialR1Rts: TLabel;
-    lblSerialR1Spd: TLabel;
-    lblSerialR1Stop: TLabel;
+    lblserialRDataBits: TLabel;
+    lblSerialRDtr: TLabel;
+    lblSerialRHand: TLabel;
+    lblSerialRParity: TLabel;
+    lblSerialRRts: TLabel;
+    lblSerialRSpd: TLabel;
+    lblSerialRStop: TLabel;
     LblTimes: TLabel;
     Label17: TLabel;
-    lblUsr1R1: TLabel;
-    lblUsr2R1: TLabel;
-    lblUsr3R1: TLabel;
+    lblUsr1R: TLabel;
+    lblUsr2R: TLabel;
+    lblUsr3R: TLabel;
     lblUsrBtn: TLabel;
     Label26: TLabel;
     Label80: TLabel;
@@ -1059,7 +1059,6 @@ type
     procedure cmbIfaceType1Change(Sender: TObject);
     procedure cmbIfaceType2Change(Sender: TObject);
     procedure cmbModelRigChange(Sender: TObject);
-    procedure cmbModelRig2Change(Sender: TObject);
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
     procedure cmbRadioNrChangeBounds(Sender: TObject);
@@ -1110,13 +1109,13 @@ type
     procedure btnFrequenciesClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure edtPoll2Exit(Sender: TObject);
     procedure edtPollExit(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
   private
     wasOnlineLogSupportEnabled : Boolean;
     RadioNrLoaded : integer;
-
+    procedure LoadTRX(RigNr:integer);
+    procedure SaveTRX(RigNr:integer);
     procedure SaveClubSection;
     procedure LoadMebershipCombo;
     procedure LoadMembersFromCombo(ClubComboText, ClubNumber : String);
@@ -1305,53 +1304,7 @@ begin
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
   cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
 
-  cqrini.WriteString('TRX1', 'device', edtRDevice.Text);
-  cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));
-  cqrini.WriteString('TRX1', 'poll', edtPoll.Text);
-  cqrini.WriteString('TRX1', 'Desc', edtRadioName.Text);
-  cqrini.WriteBool('TRX1', 'CWR', chkRSendCWR.Checked);
-  cqrini.WriteBool('TRX1', 'ChkVfo',chkRVfo.Checked);
-  cqrini.WriteString('TRX1', 'RigCtldPort', edtRRigCtldPort.Text);
-  cqrini.WriteString('TRX1', 'ExtraRigCtldArgs', edtRRigCtldArgs.Text);
-  cqrini.WriteBool('TRX1', 'RunRigCtld', chkRRunRigCtld.Checked);
-  cqrini.WriteString('TRX1', 'host', edtRHost.Text);
-  cqrini.WriteInteger('TRX1', 'SerialSpeed', cmbSpeedR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'DataBits', cmbDataBitsR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'StopBits', cmbStopBitsR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'Parity', cmbParityR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'HandShake', cmbHanshakeR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'DTR', cmbDTRR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'RTS', cmbRTSR1.ItemIndex);
-  cqrini.WriteString('TRX1', 'usr1name', edtUsr1R1name.Text);
-  cqrini.WriteString('TRX1', 'usr2name', edtUsr2R1name.Text);
-  cqrini.WriteString('TRX1', 'usr3name', edtUsr3R1name.Text);
-  cqrini.WriteString('TRX1', 'usr1', edtUsr1R1.Text);
-  cqrini.WriteString('TRX1', 'usr2', edtUsr2R1.Text);
-  cqrini.WriteString('TRX1', 'usr3', edtUsr3R1.Text);
-
-  cqrini.WriteString('TRX2', 'device', edtR2Device.Text);
-  cqrini.WriteString('TRX2', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig2.Text));
-  cqrini.WriteString('TRX2', 'poll', edtPoll2.Text);
-  cqrini.WriteString('TRX2', 'Desc', edtRadio2Name.Text);
-  cqrini.WriteBool('TRX2', 'CWR', chkR2SendCWR.Checked);
-  cqrini.WriteBool('TRX2', 'ChkVfo',chkR2Vfo.Checked);
-  cqrini.WriteString('TRX2', 'RigCtldPort', edtR2RigCtldPort.Text);
-  cqrini.WriteString('TRX2', 'ExtraRigCtldArgs', edtR2RigCtldArgs.Text);
-  cqrini.WriteBool('TRX2', 'RunRigCtld', chkR2RunRigCtld.Checked);
-  cqrini.WriteString('TRX2', 'host', edtR2Host.Text);
-  cqrini.WriteInteger('TRX2', 'SerialSpeed', cmbSpeedR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'DataBits', cmbDataBitsR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'StopBits', cmbStopBitsR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'Parity', cmbParityR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'HandShake', cmbHanshakeR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'DTR', cmbDTRR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'RTS', cmbRTSR2.ItemIndex);
-  cqrini.WriteString('TRX2', 'usr1name', edtUsr1R2name.Text);
-  cqrini.WriteString('TRX2', 'usr2name', edtUsr2R2name.Text);
-  cqrini.WriteString('TRX2', 'usr3name', edtUsr3R2name.Text);
-  cqrini.WriteString('TRX2', 'usr1', edtUsr1R2.Text);
-  cqrini.WriteString('TRX2', 'usr2', edtUsr2R2.Text);
-  cqrini.WriteString('TRX2', 'usr3', edtUsr3R2.Text);
+  SaveTRX(cmbRadioNr.ItemIndex);
 
   cqrini.WriteString('ROT', 'RotCtldPath', edtRotCtldPath.Text);
 
@@ -1739,7 +1692,6 @@ begin
     frmPropagation.RefreshPropagation;
 
   frmTRXControl.rbRadio1.Caption := edtRadioName.Text;
-  frmTRXControl.rbRadio2.Caption := edtRadio2Name.Text;
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
   if ((frmNewQSO.sbNewQSO.Panels[0].Text = '') or (frmNewQSO.sbNewQSO.Panels[0].Text = cMyLoc)) then
@@ -2509,23 +2461,6 @@ begin
    TRXParamsChange(nil);
 end;
 
-procedure TfrmPreferences.cmbModelRig2Change(Sender: TObject);
-begin
-    chkR2RunRigCtld.Enabled:=True;
-
-  if cmbModelRig2.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
-      Begin
-       chkR2RunRigCtld.Checked:=True;
-       chkR2RunRigCtld.Enabled:=False;
-      end;
-   if cmbModelRig2.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
-    Begin
-     chkR2RunRigCtld.Checked:=False;
-     chkR2RunRigCtld.Enabled:=False;
-    end;
-   TRXParamsChange(nil);
-end;
-
 procedure TfrmPreferences.cmbModelRot1Change(Sender: TObject);
 begin
     if cmbModelRot1.ItemIndex=1 then
@@ -2552,8 +2487,8 @@ end;
 
 procedure TfrmPreferences.cmbRadioNrChangeBounds(Sender: TObject);
 begin
-  //save existing settings, need radiNr variable set when settings are loaded (default 1)
-  //then load Nr radio settings
+  SaveTRX(RadioNrLoaded);
+  LoadTRX(cmbRadioNr.ItemIndex);
 end;
 
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
@@ -2924,10 +2859,7 @@ begin
   edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
 
   if (FileExistsUTF8(edtRigCtldPath.Text)) then
-  begin
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig);
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX2', 'model', ''),edtRigCtldPath.Text,cmbModelRig2)
-  end
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig)
   else begin
     Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
                            'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
@@ -2943,51 +2875,7 @@ begin
                            'Fix path to rotctld in ROT control tab.', 'Error', mb_OK+ mb_IconError)
   end;
 
-  edtRDevice.Text := cqrini.ReadString('TRX1', 'device', '');
-  edtPoll.Text := cqrini.ReadString('TRX1', 'poll', '500');
-  edtRadioName.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
-  chkRSendCWR.Checked := cqrini.ReadBool('TRX1', 'CWR', False);
-  chkRVfo.Checked:=   cqrini.ReadBool('TRX1', 'ChkVfo', True);
-  edtRRigCtldPort.Text := cqrini.ReadString('TRX1', 'RigCtldPort', '4532');
-  edtRRigCtldArgs.Text := cqrini.ReadString('TRX1', 'ExtraRigCtldArgs', '');
-  chkRRunRigCtld.Checked := cqrini.ReadBool('TRX1', 'RunRigCtld', False);
-  edtRHost.Text := cqrini.ReadString('TRX1', 'host', 'localhost');
-  cmbSpeedR1.ItemIndex := cqrini.ReadInteger('TRX1', 'SerialSpeed', 0);
-  cmbDataBitsR1.ItemIndex := cqrini.ReadInteger('TRX1', 'DataBits', 0);
-  cmbStopBitsR1.ItemIndex := cqrini.ReadInteger('TRX1', 'StopBits', 0);
-  cmbParityR1.ItemIndex := cqrini.ReadInteger('TRX1', 'Parity', 0);
-  cmbHanshakeR1.ItemIndex := cqrini.ReadInteger('TRX1', 'HandShake', 0);
-  cmbDTRR1.ItemIndex := cqrini.ReadInteger('TRX1', 'DTR', 0);
-  cmbRTSR1.ItemIndex := cqrini.ReadInteger('TRX1', 'RTS', 0);
-  edtUsr1R1name.Text:=cqrini.ReadString('TRX1', 'usr1name', 'Usr1');
-  edtUsr2R1name.Text:=cqrini.ReadString('TRX1', 'usr2name', 'Usr2');
-  edtUsr3R1name.Text:=cqrini.ReadString('TRX1', 'usr3name', 'Usr3');
-  edtUsr1R1.Text:=cqrini.ReadString('TRX1', 'usr1', '');
-  edtUsr2R1.Text:=cqrini.ReadString('TRX1', 'usr2', '');
-  edtUsr3R1.Text:=cqrini.ReadString('TRX1', 'usr3', '');
-
-  edtR2Device.Text := cqrini.ReadString('TRX2', 'device', '');
-  edtPoll2.Text := cqrini.ReadString('TRX2', 'poll', '500');
-  edtRadio2Name.Text := cqrini.ReadString('TRX2', 'Desc', 'Radio 2');
-  chkR2SendCWR.Checked := cqrini.ReadBool('TRX2', 'CWR', False);
-  chkR2Vfo.Checked:=   cqrini.ReadBool('TRX2', 'ChkVfo', True);
-  edtR2RigCtldPort.Text := cqrini.ReadString('TRX2', 'RigCtldPort', '4532');
-  edtR2RigCtldArgs.Text := cqrini.ReadString('TRX2', 'ExtraRigCtldArgs', '');
-  chkR2RunRigCtld.Checked := cqrini.ReadBool('TRX2', 'RunRigCtld', False);
-  edtR2Host.Text := cqrini.ReadString('TRX2', 'host', 'localhost');
-  cmbSpeedR2.ItemIndex := cqrini.ReadInteger('TRX2', 'SerialSpeed', 0);
-  cmbDataBitsR2.ItemIndex := cqrini.ReadInteger('TRX2', 'DataBits', 0);
-  cmbStopBitsR2.ItemIndex := cqrini.ReadInteger('TRX2', 'StopBits', 0);
-  cmbParityR2.ItemIndex := cqrini.ReadInteger('TRX2', 'Parity', 0);
-  cmbHanshakeR2.ItemIndex := cqrini.ReadInteger('TRX2', 'HandShake', 0);
-  cmbDTRR2.ItemIndex := cqrini.ReadInteger('TRX2', 'DTR', 0);
-  cmbRTSR2.ItemIndex := cqrini.ReadInteger('TRX2', 'RTS', 0);
-  edtUsr1R2name.Text:=cqrini.ReadString('TRX2', 'usr1name', 'Usr1');
-  edtUsr2R2name.Text:=cqrini.ReadString('TRX2', 'usr2name', 'Usr2');
-  edtUsr3R2name.Text:=cqrini.ReadString('TRX2', 'usr3name', 'Usr3');
-  edtUsr1R2.Text:=cqrini.ReadString('TRX2', 'usr1', '');
-  edtUsr2R2.Text:=cqrini.ReadString('TRX2', 'usr2', '');
-  edtUsr3R2.Text:=cqrini.ReadString('TRX2', 'usr3', '');
+  LoadTRX(cmbRadioNr.ItemIndex);
 
   edtRot1Device.Text := cqrini.ReadString('ROT1', 'device', '');
   edtRot1Poll.Text := cqrini.ReadString('ROT1', 'poll', '500');
@@ -3033,8 +2921,8 @@ begin
   edtAM2.Value := cqrini.ReadInteger('Band2', 'AM', 3000);
   edtFM2.Value := cqrini.ReadInteger('Band2', 'FM', 2500);
 
-  cmbModelRig1Change(nil);
-  cmbModelRig2Change(nil);
+  cmbModelRigChange(nil);
+
   cmbModelRot1Change(nil);
   cmbModelRot2Change(nil);
 
@@ -3330,14 +3218,6 @@ begin
   lbPreferences.ItemIndex := ActPageIdx;
 end;
 
-procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);
-var
-  tmp: integer = 0;
-begin
-  if not TryStrToInt(edtPoll.Text, tmp) then
-    edtPoll2.Text := '500';
-end;
-
 procedure TfrmPreferences.edtPollExit(Sender: TObject);
 var
   tmp: integer = 0;
@@ -3420,6 +3300,65 @@ begin
     CopyFile(dmData.GlobalMembersDir + MemberFileName, dmData.MembersDir + MemberFileName);
 
   LoadMebershipCombo
+end;
+Procedure TfrmPreferences.LoadTRX(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  edtRDevice.Text := cqrini.ReadString('TRX'+nr, 'device', '');
+  edtPoll.Text := cqrini.ReadString('TRX'+nr, 'poll', '500');
+  edtRadioName.Text := cqrini.ReadString('TRX'+nr, 'Desc', 'Radio 1');
+  chkRSendCWR.Checked := cqrini.ReadBool('TRX'+nr, 'CWR', False);
+  chkRVfo.Checked:=   cqrini.ReadBool('TRX'+nr, 'ChkVfo', True);
+  edtRRigCtldPort.Text := cqrini.ReadString('TRX'+nr, 'RigCtldPort', '4532');
+  edtRRigCtldArgs.Text := cqrini.ReadString('TRX'+nr, 'ExtraRigCtldArgs', '');
+  chkRRunRigCtld.Checked := cqrini.ReadBool('TRX'+nr, 'RunRigCtld', False);
+  edtRHost.Text := cqrini.ReadString('TRX'+nr, 'host', 'localhost');
+  cmbSpeedR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'SerialSpeed', 0);
+  cmbDataBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DataBits', 0);
+  cmbStopBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'StopBits', 0);
+  cmbParityR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'Parity', 0);
+  cmbHanshakeR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'HandShake', 0);
+  cmbDTRR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DTR', 0);
+  cmbRTSR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'RTS', 0);
+  edtUsr1RName.Text:=cqrini.ReadString('TRX'+nr, 'usr1name', 'Usr1');
+  edtUsr2RName.Text:=cqrini.ReadString('TRX'+nr, 'usr2name', 'Usr2');
+  edtUsr3RName.Text:=cqrini.ReadString('TRX'+nr, 'usr3name', 'Usr3');
+  edtUsr1R.Text:=cqrini.ReadString('TRX'+nr, 'usr1', '');
+  edtUsr2R.Text:=cqrini.ReadString('TRX'+nr, 'usr2', '');
+  edtUsr3R.Text:=cqrini.ReadString('TRX'+nr, 'usr3', '');
+  RadioNrLoaded:= RigNr;
+end;
+Procedure TfrmPreferences.SaveTRX(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+
+  cqrini.WriteString('TRX'+nr, 'device', edtRDevice.Text);
+  cqrini.WriteString('TRX'+nr, 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));
+  cqrini.WriteString('TRX'+nr, 'poll', edtPoll.Text);
+  cqrini.WriteString('TRX'+nr, 'Desc', edtRadioName.Text);
+  cqrini.WriteBool('TRX'+nr, 'CWR', chkRSendCWR.Checked);
+  cqrini.WriteBool('TRX'+nr, 'ChkVfo',chkRVfo.Checked);
+  cqrini.WriteString('TRX'+nr, 'RigCtldPort', edtRRigCtldPort.Text);
+  cqrini.WriteString('TRX'+nr, 'ExtraRigCtldArgs', edtRRigCtldArgs.Text);
+  cqrini.WriteBool('TRX'+nr, 'RunRigCtld', chkRRunRigCtld.Checked);
+  cqrini.WriteString('TRX'+nr, 'host', edtRHost.Text);
+  cqrini.WriteInteger('TRX'+nr, 'SerialSpeed', cmbSpeedR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'DataBits', cmbDataBitsR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'StopBits', cmbStopBitsR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'Parity', cmbParityR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'HandShake', cmbHanshakeR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'DTR', cmbDTRR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'RTS', cmbRTSR.ItemIndex);
+  cqrini.WriteString('TRX'+nr, 'usr1name', edtUsr1RName.Text);
+  cqrini.WriteString('TRX'+nr, 'usr2name', edtUsr2RName.Text);
+  cqrini.WriteString('TRX'+nr, 'usr3name', edtUsr3RName.Text);
+  cqrini.WriteString('TRX'+nr, 'usr1', edtUsr1R.Text);
+  cqrini.WriteString('TRX'+nr, 'usr2', edtUsr2R.Text);
+  cqrini.WriteString('TRX'+nr, 'usr3', edtUsr3R.Text);
 end;
 
 end.

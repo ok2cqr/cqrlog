@@ -56,7 +56,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 3
         Caption = ' Internet connection '
-        ClientHeight = 111
+        ClientHeight = 127
         ClientWidth = 339
         TabOrder = 0
         object lblintProxy: TLabel
@@ -248,7 +248,7 @@ object frmPreferences: TfrmPreferences
         Width = 626
         BorderSpacing.Top = 9
         Caption = ' Offsets and colors'
-        ClientHeight = 185
+        ClientHeight = 201
         ClientWidth = 624
         TabOrder = 7
         object lblUtc: TLabel
@@ -2377,7 +2377,7 @@ object frmPreferences: TfrmPreferences
           ClientHeight = 130
           ClientWidth = 509
           TabOrder = 6
-          object lblSerialR1Spd: TLabel
+          object lblSerialRSpd: TLabel
             AnchorSideLeft.Control = grbSerialR
             AnchorSideTop.Control = grbSerialR
             Left = 6
@@ -2389,9 +2389,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Serial speed:'
             ParentColor = False
           end
-          object lblserialR1DataBits: TLabel
-            AnchorSideLeft.Control = cmbDataBitsR1
-            AnchorSideTop.Control = lblSerialR1Spd
+          object lblserialRDataBits: TLabel
+            AnchorSideLeft.Control = cmbDataBitsR
+            AnchorSideTop.Control = lblSerialRSpd
             Left = 125
             Height = 17
             Top = 6
@@ -2399,9 +2399,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Data bits'
             ParentColor = False
           end
-          object lblSerialR1Stop: TLabel
-            AnchorSideLeft.Control = cmbStopBitsR1
-            AnchorSideTop.Control = lblSerialR1Spd
+          object lblSerialRStop: TLabel
+            AnchorSideLeft.Control = cmbStopBitsR
+            AnchorSideTop.Control = lblSerialRSpd
             Left = 244
             Height = 17
             Top = 6
@@ -2409,9 +2409,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Stop bits'
             ParentColor = False
           end
-          object lblSerialR1Hand: TLabel
-            AnchorSideLeft.Control = lblSerialR1Spd
-            AnchorSideTop.Control = cmbSpeedR1
+          object lblSerialRHand: TLabel
+            AnchorSideLeft.Control = lblSerialRSpd
+            AnchorSideTop.Control = cmbSpeedR
             AnchorSideTop.Side = asrBottom
             Left = 6
             Height = 17
@@ -2421,9 +2421,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Handshake'
             ParentColor = False
           end
-          object lblSerialR1Parity: TLabel
-            AnchorSideLeft.Control = cmbParityR1
-            AnchorSideTop.Control = lblSerialR1Spd
+          object lblSerialRParity: TLabel
+            AnchorSideLeft.Control = cmbParityR
+            AnchorSideTop.Control = lblSerialRSpd
             Left = 356
             Height = 17
             Top = 6
@@ -2431,9 +2431,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Parity'
             ParentColor = False
           end
-          object cmbHanshakeR1: TComboBox
-            AnchorSideLeft.Control = lblSerialR1Spd
-            AnchorSideTop.Control = lblSerialR1Hand
+          object cmbHanshakeR: TComboBox
+            AnchorSideLeft.Control = lblSerialRSpd
+            AnchorSideTop.Control = lblSerialRHand
             AnchorSideTop.Side = asrBottom
             Left = 6
             Height = 29
@@ -2453,10 +2453,10 @@ object frmPreferences: TfrmPreferences
             TabOrder = 0
             Text = 'default'
           end
-          object cmbParityR1: TComboBox
-            AnchorSideLeft.Control = cmbStopBitsR1
+          object cmbParityR: TComboBox
+            AnchorSideLeft.Control = cmbStopBitsR
             AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = cmbSpeedR1
+            AnchorSideTop.Control = cmbSpeedR
             Left = 356
             Height = 29
             Top = 35
@@ -2477,10 +2477,10 @@ object frmPreferences: TfrmPreferences
             TabOrder = 1
             Text = 'default'
           end
-          object cmbDataBitsR1: TComboBox
-            AnchorSideLeft.Control = cmbSpeedR1
+          object cmbDataBitsR: TComboBox
+            AnchorSideLeft.Control = cmbSpeedR
             AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = cmbSpeedR1
+            AnchorSideTop.Control = cmbSpeedR
             Left = 125
             Height = 29
             Top = 35
@@ -2501,10 +2501,10 @@ object frmPreferences: TfrmPreferences
             TabOrder = 2
             Text = 'default'
           end
-          object cmbStopBitsR1: TComboBox
-            AnchorSideLeft.Control = cmbDataBitsR1
+          object cmbStopBitsR: TComboBox
+            AnchorSideLeft.Control = cmbDataBitsR
             AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = cmbSpeedR1
+            AnchorSideTop.Control = cmbSpeedR
             Left = 244
             Height = 29
             Top = 35
@@ -2524,9 +2524,9 @@ object frmPreferences: TfrmPreferences
             TabOrder = 3
             Text = 'default'
           end
-          object cmbSpeedR1: TComboBox
-            AnchorSideLeft.Control = lblSerialR1Spd
-            AnchorSideTop.Control = lblSerialR1Spd
+          object cmbSpeedR: TComboBox
+            AnchorSideLeft.Control = lblSerialRSpd
+            AnchorSideTop.Control = lblSerialRSpd
             AnchorSideTop.Side = asrBottom
             Left = 6
             Height = 29
@@ -2552,10 +2552,10 @@ object frmPreferences: TfrmPreferences
             TabOrder = 4
             Text = 'default'
           end
-          object cmbDTRR1: TComboBox
-            AnchorSideLeft.Control = cmbHanshakeR1
+          object cmbDTRR: TComboBox
+            AnchorSideLeft.Control = cmbHanshakeR
             AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = cmbHanshakeR1
+            AnchorSideTop.Control = cmbHanshakeR
             Left = 125
             Height = 29
             Top = 93
@@ -2574,9 +2574,9 @@ object frmPreferences: TfrmPreferences
             TabOrder = 5
             Text = 'default'
           end
-          object lblSerialR1Dtr: TLabel
-            AnchorSideLeft.Control = cmbDTRR1
-            AnchorSideTop.Control = lblSerialR1Hand
+          object lblSerialRDtr: TLabel
+            AnchorSideLeft.Control = cmbDTRR
+            AnchorSideTop.Control = lblSerialRHand
             Left = 125
             Height = 17
             Top = 70
@@ -2584,10 +2584,10 @@ object frmPreferences: TfrmPreferences
             Caption = 'DTR'
             ParentColor = False
           end
-          object cmbRTSR1: TComboBox
-            AnchorSideLeft.Control = cmbDTRR1
+          object cmbRTSR: TComboBox
+            AnchorSideLeft.Control = cmbDTRR
             AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = cmbDTRR1
+            AnchorSideTop.Control = cmbDTRR
             Left = 244
             Height = 29
             Top = 93
@@ -2606,9 +2606,9 @@ object frmPreferences: TfrmPreferences
             TabOrder = 6
             Text = 'default'
           end
-          object lblSerialR1Rts: TLabel
-            AnchorSideLeft.Control = cmbRTSR1
-            AnchorSideTop.Control = lblSerialR1Hand
+          object lblSerialRRts: TLabel
+            AnchorSideLeft.Control = cmbRTSR
+            AnchorSideTop.Control = lblSerialRHand
             Left = 244
             Height = 17
             Top = 70
@@ -2688,9 +2688,9 @@ object frmPreferences: TfrmPreferences
           ClientHeight = 110
           ClientWidth = 641
           TabOrder = 10
-          object lblUsr1R1: TLabel
+          object lblUsr1R: TLabel
             AnchorSideLeft.Control = grpUsrCmds
-            AnchorSideTop.Control = edtUsr1R1
+            AnchorSideTop.Control = edtUsr1R
             AnchorSideTop.Side = asrCenter
             Left = 3
             Height = 17
@@ -2701,9 +2701,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Usr1'
             ParentColor = False
           end
-          object lblUsr2R1: TLabel
-            AnchorSideLeft.Control = lblUsr1R1
-            AnchorSideTop.Control = edtUsr2R1
+          object lblUsr2R: TLabel
+            AnchorSideLeft.Control = lblUsr1R
+            AnchorSideTop.Control = edtUsr2R
             AnchorSideTop.Side = asrCenter
             Left = 3
             Height = 17
@@ -2712,9 +2712,9 @@ object frmPreferences: TfrmPreferences
             Caption = 'Usr2'
             ParentColor = False
           end
-          object lblUsr3R1: TLabel
-            AnchorSideLeft.Control = lblUsr1R1
-            AnchorSideTop.Control = edtUsr3R1
+          object lblUsr3R: TLabel
+            AnchorSideLeft.Control = lblUsr1R
+            AnchorSideTop.Control = edtUsr3R
             AnchorSideTop.Side = asrCenter
             Left = 3
             Height = 17
@@ -2723,8 +2723,8 @@ object frmPreferences: TfrmPreferences
             Caption = 'Usr3'
             ParentColor = False
           end
-          object edtUsr1R1: TEdit
-            AnchorSideLeft.Control = edtUsr1R1Name
+          object edtUsr1R: TEdit
+            AnchorSideLeft.Control = edtUsr1RName
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = grpUsrCmds
             AnchorSideRight.Control = grpUsrCmds
@@ -2738,11 +2738,11 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Right = 12
             TabOrder = 0
           end
-          object edtUsr2R1: TEdit
-            AnchorSideLeft.Control = edtUsr1R1
-            AnchorSideTop.Control = edtUsr1R1
+          object edtUsr2R: TEdit
+            AnchorSideLeft.Control = edtUsr1R
+            AnchorSideTop.Control = edtUsr1R
             AnchorSideTop.Side = asrBottom
-            AnchorSideRight.Control = edtUsr1R1
+            AnchorSideRight.Control = edtUsr1R
             AnchorSideRight.Side = asrBottom
             Left = 102
             Height = 34
@@ -2751,11 +2751,11 @@ object frmPreferences: TfrmPreferences
             Anchors = [akTop, akLeft, akRight]
             TabOrder = 1
           end
-          object edtUsr3R1: TEdit
-            AnchorSideLeft.Control = edtUsr2R1
-            AnchorSideTop.Control = edtUsr2R1
+          object edtUsr3R: TEdit
+            AnchorSideLeft.Control = edtUsr2R
+            AnchorSideTop.Control = edtUsr2R
             AnchorSideTop.Side = asrBottom
-            AnchorSideRight.Control = edtUsr2R1
+            AnchorSideRight.Control = edtUsr2R
             AnchorSideRight.Side = asrBottom
             Left = 102
             Height = 34
@@ -2764,8 +2764,8 @@ object frmPreferences: TfrmPreferences
             Anchors = [akTop, akLeft, akRight]
             TabOrder = 2
           end
-          object edtUsr1R1Name: TEdit
-            AnchorSideLeft.Control = lblUsr1R1
+          object edtUsr1RName: TEdit
+            AnchorSideLeft.Control = lblUsr1R
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = grpUsrCmds
             Left = 39
@@ -2776,9 +2776,9 @@ object frmPreferences: TfrmPreferences
             MaxLength = 4
             TabOrder = 3
           end
-          object edtUsr2R1Name: TEdit
-            AnchorSideLeft.Control = edtUsr1R1Name
-            AnchorSideTop.Control = edtUsr1R1Name
+          object edtUsr2RName: TEdit
+            AnchorSideLeft.Control = edtUsr1RName
+            AnchorSideTop.Control = edtUsr1RName
             AnchorSideTop.Side = asrBottom
             Left = 39
             Height = 34
@@ -2787,9 +2787,9 @@ object frmPreferences: TfrmPreferences
             MaxLength = 4
             TabOrder = 4
           end
-          object edtUsr3R1Name: TEdit
-            AnchorSideLeft.Control = edtUsr1R1Name
-            AnchorSideTop.Control = edtUsr2R1Name
+          object edtUsr3RName: TEdit
+            AnchorSideLeft.Control = edtUsr1RName
+            AnchorSideTop.Control = edtUsr2RName
             AnchorSideTop.Side = asrBottom
             Left = 39
             Height = 34
