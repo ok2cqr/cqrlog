@@ -130,11 +130,12 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
-    chkR2Vfo: TCheckBox;
-    chkR1Vfo: TCheckBox;
     chkOperator: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
+    chkRRunRigCtld: TCheckBox;
+    chkRSendCWR: TCheckBox;
+    chkRVfo: TCheckBox;
     chkRBNMAutoConn: TCheckBox;
     chkRBNLink: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
@@ -192,10 +193,6 @@ type
     chkRot2RunRotCtld: TCheckBox;
     chkClearRIT : TCheckBox;
     chkCountry: TCheckBox;
-    chkR1RunRigCtld: TCheckBox;
-    chkR2RunRigCtld: TCheckBox;
-    chkR1SendCWR: TCheckBox;
-    chkR2SendCWR: TCheckBox;
     chkShowBckEQSL: TCheckBox;
     chkSysUTC: TCheckBox;
     chkAllVariants: TCheckBox;
@@ -443,14 +440,20 @@ type
     clboxNewITU: TColorBox;
     clboxNewIOTA: TColorBox;
     clBoxQSLITU: TColorBox;
-    cmbDataBitsR2: TComboBox;
+    cmbDataBitsR1: TComboBox;
     cmbDataBitsRot1: TComboBox;
     cmbDataBitsRot2: TComboBox;
+    cmbDTRR1: TComboBox;
+    cmbHanshakeR1: TComboBox;
     cmbIfaceType2: TComboBox;
+    cmbModelRig: TComboBox;
     cmbModelRot1: TComboBox;
     cmbModelRot2: TComboBox;
+    cmbParityR1: TComboBox;
+    cmbRTSR1: TComboBox;
+    cmbSpeedR1: TComboBox;
+    cmbStopBitsR1: TComboBox;
     cmbWsjtDefaultMode: TComboBox;
-    cmbDTRR1: TComboBox;
     cmbDTRRot1: TComboBox;
     cmbDTRRot2: TComboBox;
     cmbHaColor: TColorBox;
@@ -458,28 +461,16 @@ type
     cmbHrColor: TColorBox;
     cmbHanshakeRot1: TComboBox;
     cmbHanshakeRot2: TComboBox;
-    cmbModelRig2: TComboBox;
     cmbParityRot1: TComboBox;
     cmbParityRot2: TComboBox;
-    cmbRTSR1: TComboBox;
-    cmbDTRR2: TComboBox;
-    cmbRTSR2: TComboBox;
-    cmbHanshakeR2: TComboBox;
-    cmbParityR2: TComboBox;
     cmbRTSRot1: TComboBox;
     cmbRTSRot2: TComboBox;
-    cmbSpeedR1: TComboBox;
-    cmbSpeedR2: TComboBox;
     cmbSpeedRot1: TComboBox;
     cmbSpeedRot2: TComboBox;
-    cmbStopBitsR1: TComboBox;
     cmbDefaultMode: TComboBox;
     cmbeQSLBckColor: TColorBox;
-    cmbHanshakeR1: TComboBox;
-    cmbParityR1: TComboBox;
     cmbQSL_S: TComboBox;
     cmbSecondSaveTo: TComboBox;
-    cmbStopBitsR2: TComboBox;
     cmbStopBitsRot1: TComboBox;
     cmbStopBitsRot2: TComboBox;
     cmbThirdSaveTo: TComboBox;
@@ -509,42 +500,37 @@ type
     cmbIfaceType1: TComboBox;
     cmbXplanetColor: TColorBox;
     cmbLoTWBckColor: TColorBox;
-    cmbDataBitsR1: TComboBox;
     cmbCl10db : TColorBox;
-    cmbModelRig1: TComboBox;
+    cmbRadioNr: TComboBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
-    edtUsrBtn: TEdit;
-    edtUsr1R1Name: TEdit;
-    edtR2Host: TEdit;
-    edtRadio2Name: TEdit;
-    edtUsr1R2Name: TEdit;
-    edtUsr2R2Name: TEdit;
-    edtUsr3R2Name: TEdit;
-    edtUsr2R1Name: TEdit;
-    edtUsr3R1Name: TEdit;
-    edtUsr2R2: TEdit;
+    edtPoll: TEdit;
+    edtRDevice: TEdit;
+    edtRHost: TEdit;
+    edtRRigCtldArgs: TEdit;
+    edtRRigCtldPort: TEdit;
+    edtRadioName: TEdit;
     edtUsr1R1: TEdit;
+    edtUsr1R1Name: TEdit;
     edtUsr2R1: TEdit;
-    edtUsr1R2: TEdit;
+    edtUsr2R1Name: TEdit;
     edtUsr3R1: TEdit;
+    edtUsr3R1Name: TEdit;
+    edtUsrBtn: TEdit;
     edtClub: TEdit;
     edtCWPort2: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
     edtK3NGPort2: TEdit;
-    edtR1Host: TEdit;
-    edtRadio1Name: TEdit;
     edtRot1Host: TEdit;
     edtRot2Host: TEdit;
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
-    edtUsr3R2: TEdit;
     edtWinPort2: TEdit;
     edtZipCity: TEdit;
     edtStartConCmd: TEdit;
@@ -568,21 +554,13 @@ type
     edtClUserName: TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
-    edtPoll1: TEdit;
-    edtPoll2: TEdit;
     edtRot1Poll: TEdit;
     edtRot2Poll: TEdit;
-    edtR1Device: TEdit;
     edtRot1Device: TEdit;
     edtRot1RotCtldArgs: TEdit;
     edtRot1RotCtldPort: TEdit;
-    edtR2Device: TEdit;
     edtRot2Device: TEdit;
-    edtR1RigCtldArgs: TEdit;
-    edtR2RigCtldArgs: TEdit;
-    edtR1RigCtldPort: TEdit;
     edtRot2RotCtldArgs: TEdit;
-    edtR2RigCtldPort: TEdit;
     edtRot2RotCtldPort: TEdit;
     edtRotor1: TEdit;
     edtRigCtldPath: TEdit;
@@ -670,7 +648,8 @@ type
     edtEmail: TEdit;
     fraExportPref1: TfraExportPref;
     gbProfiles1: TGroupBox;
-    grbSerialR2: TGroupBox;
+    grbRadio: TGroupBox;
+    grbSerialR: TGroupBox;
     grbSerialRot1: TGroupBox;
     grbSerialRot2: TGroupBox;
     GroupBox1: TGroupBox;
@@ -696,9 +675,7 @@ type
     gbLoTW: TGroupBox;
     gbWidths: TGroupBox;
     gbWinkeyer: TGroupBox;
-    grbRadio1: TGroupBox;
     gbCwkeyer: TGroupBox;
-    grpUsrCmds: TGroupBox;
     GroupBox31: TGroupBox;
     GroupBox32: TGroupBox;
     gbOffsets: TGroupBox;
@@ -709,9 +686,7 @@ type
     GroupBox38: TGroupBox;
     GroupBox39: TGroupBox;
     gbProfiles: TGroupBox;
-    grbRadio2: TGroupBox;
     grbRigctldPath: TGroupBox;
-    grbSerialR1: TGroupBox;
     GroupBox41: TGroupBox;
     gbRot1: TGroupBox;
     gbRot2: TGroupBox;
@@ -733,10 +708,13 @@ type
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
-    grpUsrCmds1: TGroupBox;
+    grpUsrCmds: TGroupBox;
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblRName: TLabel;
+    lblDeviceR: TLabel;
+    lblExtra: TLabel;
     lblGC_SP_Color: TLabel;
     lblGC_LP_Color: TLabel;
     lblGCwidth: TLabel;
@@ -744,16 +722,23 @@ type
     lblGCStep: TLabel;
     lblGCDivisor: TLabel;
     lblGCHint: TLabel;
+    lblHost: TLabel;
+    lblModelR: TLabel;
+    lblPollR: TLabel;
+    lblPortR: TLabel;
+    lblserialR1DataBits: TLabel;
+    lblSerialR1Dtr: TLabel;
+    lblSerialR1Hand: TLabel;
+    lblSerialR1Parity: TLabel;
+    lblSerialR1Rts: TLabel;
+    lblSerialR1Spd: TLabel;
+    lblSerialR1Stop: TLabel;
     LblTimes: TLabel;
     Label17: TLabel;
-    lblUsrBtn: TLabel;
-    lblHost2: TLabel;
     lblUsr1R1: TLabel;
-    lblUsr1R2: TLabel;
     lblUsr2R1: TLabel;
-    lblUsr2R2: TLabel;
     lblUsr3R1: TLabel;
-    lblHost: TLabel;
+    lblUsrBtn: TLabel;
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
@@ -797,27 +782,11 @@ type
     Label123: TLabel;
     Label124: TLabel;
     lblDevice1: TLabel;
-    lblPortR1: TLabel;
-    lblPortR2: TLabel;
     lbleQSLBkg: TLabel;
     lblRadio2: TLabel;
     lblRotId1: TLabel;
     lblIntPort: TLabel;
-    lblSerialR1Spd: TLabel;
-    lblserialR1DataBits: TLabel;
-    lblSerialR1Stop: TLabel;
-    lblSerialR1Hand: TLabel;
-    lblSerialR1Parity: TLabel;
-    lblSerialR1Dtr: TLabel;
-    lblSerialR1Rts: TLabel;
-    lblSerialR2Spd: TLabel;
-    lblSerialR2DataBits: TLabel;
-    lblSerialR2Stop: TLabel;
     lblIntUser: TLabel;
-    lblSerialR2Hand: TLabel;
-    lblSerialR2Parity: TLabel;
-    lblSerialR2Dtr: TLabel;
-    lblSerialr2Rts: TLabel;
     lblPoll1: TLabel;
     lblExtaArgs1: TLabel;
     lblPort1: TLabel;
@@ -856,7 +825,6 @@ type
     lblRbnDb4 : TLabel;
     lblRbnDeleteAfterSec : TLabel;
     Label179: TLabel;
-    lblDeviceR1: TLabel;
     Label180: TLabel;
     Label181: TLabel;
     Label182: TLabel;
@@ -867,7 +835,6 @@ type
     Label187: TLabel;
     Label188: TLabel;
     Label189: TLabel;
-    lblUsr3R2: TLabel;
     lnlRbnServer : TLabel;
     lblRbnAdrFormat : TLabel;
     Label192: TLabel;
@@ -898,13 +865,7 @@ type
     lbl: TLabel;
     lblIntPasswd: TLabel;
     Label2: TLabel;
-    lblExtra: TLabel;
-    lblModelR1: TLabel;
-    lblDevieR2: TLabel;
     Label23: TLabel;
-    lblModelR2: TLabel;
-    lblExtra2: TLabel;
-    lblPollR1: TLabel;
     Label28: TLabel;
     Label29: TLabel;
     Label30: TLabel;
@@ -930,7 +891,6 @@ type
     Label93: TLabel;
     lblSunRiseSet: TLabel;
     Label95: TLabel;
-    lblPollR2: TLabel;
     lbl1: TLabel;
     lblButtons: TLabel;
     Label3: TLabel;
@@ -994,7 +954,6 @@ type
     odFindBrowser: TOpenDialog;
     pnl2Host: TPanel;
     pnlHost1: TPanel;
-    pgTRXControl: TPageControl;
     pgPreferences: TPageControl;
     Panel1: TPanel;
     pgROTControl: TPageControl;
@@ -1039,8 +998,6 @@ type
     tabRBN : TTabSheet;
     tabOnlineLog: TTabSheet;
     tabCondx: TTabSheet;
-    tabTRX2: TTabSheet;
-    tabTRX1: TTabSheet;
     tabRot1: TTabSheet;
     tabRot2: TTabSheet;
     tabZipCode: TTabSheet;
@@ -1101,10 +1058,11 @@ type
     procedure btnThirdLoadClick(Sender: TObject);
     procedure cmbIfaceType1Change(Sender: TObject);
     procedure cmbIfaceType2Change(Sender: TObject);
-    procedure cmbModelRig1Change(Sender: TObject);
+    procedure cmbModelRigChange(Sender: TObject);
     procedure cmbModelRig2Change(Sender: TObject);
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
+    procedure cmbRadioNrChangeBounds(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
@@ -1153,10 +1111,11 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtPoll2Exit(Sender: TObject);
-    procedure edtPoll1Exit(Sender: TObject);
+    procedure edtPollExit(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
   private
     wasOnlineLogSupportEnabled : Boolean;
+    RadioNrLoaded : integer;
 
     procedure SaveClubSection;
     procedure LoadMebershipCombo;
@@ -1346,16 +1305,16 @@ begin
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
   cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
 
-  cqrini.WriteString('TRX1', 'device', edtR1Device.Text);
-  cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig1.Text));
-  cqrini.WriteString('TRX1', 'poll', edtPoll1.Text);
-  cqrini.WriteString('TRX1', 'Desc', edtRadio1Name.Text);
-  cqrini.WriteBool('TRX1', 'CWR', chkR1SendCWR.Checked);
-  cqrini.WriteBool('TRX1', 'ChkVfo',chkR1Vfo.Checked);
-  cqrini.WriteString('TRX1', 'RigCtldPort', edtR1RigCtldPort.Text);
-  cqrini.WriteString('TRX1', 'ExtraRigCtldArgs', edtR1RigCtldArgs.Text);
-  cqrini.WriteBool('TRX1', 'RunRigCtld', chkR1RunRigCtld.Checked);
-  cqrini.WriteString('TRX1', 'host', edtR1Host.Text);
+  cqrini.WriteString('TRX1', 'device', edtRDevice.Text);
+  cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));
+  cqrini.WriteString('TRX1', 'poll', edtPoll.Text);
+  cqrini.WriteString('TRX1', 'Desc', edtRadioName.Text);
+  cqrini.WriteBool('TRX1', 'CWR', chkRSendCWR.Checked);
+  cqrini.WriteBool('TRX1', 'ChkVfo',chkRVfo.Checked);
+  cqrini.WriteString('TRX1', 'RigCtldPort', edtRRigCtldPort.Text);
+  cqrini.WriteString('TRX1', 'ExtraRigCtldArgs', edtRRigCtldArgs.Text);
+  cqrini.WriteBool('TRX1', 'RunRigCtld', chkRRunRigCtld.Checked);
+  cqrini.WriteString('TRX1', 'host', edtRHost.Text);
   cqrini.WriteInteger('TRX1', 'SerialSpeed', cmbSpeedR1.ItemIndex);
   cqrini.WriteInteger('TRX1', 'DataBits', cmbDataBitsR1.ItemIndex);
   cqrini.WriteInteger('TRX1', 'StopBits', cmbStopBitsR1.ItemIndex);
@@ -1779,7 +1738,7 @@ begin
   if frmPropagation.Showing then
     frmPropagation.RefreshPropagation;
 
-  frmTRXControl.rbRadio1.Caption := edtRadio1Name.Text;
+  frmTRXControl.rbRadio1.Caption := edtRadioName.Text;
   frmTRXControl.rbRadio2.Caption := edtRadio2Name.Text;
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
@@ -2533,19 +2492,19 @@ begin
      then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
 
-procedure TfrmPreferences.cmbModelRig1Change(Sender: TObject);
+procedure TfrmPreferences.cmbModelRigChange(Sender: TObject);
 begin
-   chkR1RunRigCtld.Enabled:=True;
+   chkRRunRigCtld.Enabled:=True;
 
-  if cmbModelRig1.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
+  if cmbModelRig.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
     Begin
-     chkR1RunRigCtld.Checked:=True;
-     chkR1RunRigCtld.Enabled:=False;
+     chkRRunRigCtld.Checked:=True;
+     chkRRunRigCtld.Enabled:=False;
     end;
-  if cmbModelRig1.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
+  if cmbModelRig.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
     Begin
-     chkR1RunRigCtld.Checked:=False;
-     chkR1RunRigCtld.Enabled:=False;
+     chkRRunRigCtld.Checked:=False;
+     chkRRunRigCtld.Enabled:=False;
     end;
    TRXParamsChange(nil);
 end;
@@ -2590,6 +2549,13 @@ begin
       chkRot2RunRotCtld.Enabled:=True;
    RotorParamsChange(nil);
 end;
+
+procedure TfrmPreferences.cmbRadioNrChangeBounds(Sender: TObject);
+begin
+  //save existing settings, need radiNr variable set when settings are loaded (default 1)
+  //then load Nr radio settings
+end;
+
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
 begin
    edtAlertCmd.Text:=StringReplace(edtAlertCmd.Text,'~/',dmData.UsrHomeDir,[rfReplaceAll]);
@@ -2959,7 +2925,7 @@ begin
 
   if (FileExistsUTF8(edtRigCtldPath.Text)) then
   begin
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig1);
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig);
     dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX2', 'model', ''),edtRigCtldPath.Text,cmbModelRig2)
   end
   else begin
@@ -2977,15 +2943,15 @@ begin
                            'Fix path to rotctld in ROT control tab.', 'Error', mb_OK+ mb_IconError)
   end;
 
-  edtR1Device.Text := cqrini.ReadString('TRX1', 'device', '');
-  edtPoll1.Text := cqrini.ReadString('TRX1', 'poll', '500');
-  edtRadio1Name.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
-  chkR1SendCWR.Checked := cqrini.ReadBool('TRX1', 'CWR', False);
-  chkR1Vfo.Checked:=   cqrini.ReadBool('TRX1', 'ChkVfo', True);
-  edtR1RigCtldPort.Text := cqrini.ReadString('TRX1', 'RigCtldPort', '4532');
-  edtR1RigCtldArgs.Text := cqrini.ReadString('TRX1', 'ExtraRigCtldArgs', '');
-  chkR1RunRigCtld.Checked := cqrini.ReadBool('TRX1', 'RunRigCtld', False);
-  edtR1Host.Text := cqrini.ReadString('TRX1', 'host', 'localhost');
+  edtRDevice.Text := cqrini.ReadString('TRX1', 'device', '');
+  edtPoll.Text := cqrini.ReadString('TRX1', 'poll', '500');
+  edtRadioName.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
+  chkRSendCWR.Checked := cqrini.ReadBool('TRX1', 'CWR', False);
+  chkRVfo.Checked:=   cqrini.ReadBool('TRX1', 'ChkVfo', True);
+  edtRRigCtldPort.Text := cqrini.ReadString('TRX1', 'RigCtldPort', '4532');
+  edtRRigCtldArgs.Text := cqrini.ReadString('TRX1', 'ExtraRigCtldArgs', '');
+  chkRRunRigCtld.Checked := cqrini.ReadBool('TRX1', 'RunRigCtld', False);
+  edtRHost.Text := cqrini.ReadString('TRX1', 'host', 'localhost');
   cmbSpeedR1.ItemIndex := cqrini.ReadInteger('TRX1', 'SerialSpeed', 0);
   cmbDataBitsR1.ItemIndex := cqrini.ReadInteger('TRX1', 'DataBits', 0);
   cmbStopBitsR1.ItemIndex := cqrini.ReadInteger('TRX1', 'StopBits', 0);
@@ -3368,16 +3334,16 @@ procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);
 var
   tmp: integer = 0;
 begin
-  if not TryStrToInt(edtPoll1.Text, tmp) then
+  if not TryStrToInt(edtPoll.Text, tmp) then
     edtPoll2.Text := '500';
 end;
 
-procedure TfrmPreferences.edtPoll1Exit(Sender: TObject);
+procedure TfrmPreferences.edtPollExit(Sender: TObject);
 var
   tmp: integer = 0;
 begin
-  if not TryStrToInt(edtPoll1.Text, tmp) then
-    edtPoll1.Text := '500';
+  if not TryStrToInt(edtPoll.Text, tmp) then
+    edtPoll.Text := '500';
 end;
 
 procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
