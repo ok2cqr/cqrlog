@@ -2114,7 +2114,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Top = 6
         Caption = 'Change default frequencies'
         OnClick = btnChangeDefaultFreqClick
-        TabOrder = 0
+        TabOrder = 1
       end
       object btnSplit: TButton
         AnchorSideTop.Control = btnAddTrxMem
@@ -2128,7 +2128,7 @@ object frmPreferences: TfrmPreferences
         Anchors = [akTop, akRight]
         Caption = 'Split settings'
         OnClick = btnSplitClick
-        TabOrder = 1
+        TabOrder = 2
       end
       object grbRigctldPath: TGroupBox
         AnchorSideLeft.Control = tabTRXcontrol
@@ -2142,7 +2142,8 @@ object frmPreferences: TfrmPreferences
         Caption = ' rigctld '
         ClientHeight = 70
         ClientWidth = 655
-        TabOrder = 2
+        TabOrder = 0
+        TabStop = True
         object lblRigctdPath: TLabel
           AnchorSideLeft.Control = grbRigctldPath
           AnchorSideTop.Control = grbRigctldPath
@@ -2233,6 +2234,7 @@ object frmPreferences: TfrmPreferences
         ClientHeight = 427
         ClientWidth = 655
         TabOrder = 6
+        TabStop = True
         object lblDeviceR: TLabel
           AnchorSideLeft.Control = cmbModelRig
           AnchorSideLeft.Side = asrBottom
@@ -2279,7 +2281,7 @@ object frmPreferences: TfrmPreferences
           Top = 51
           Width = 173
           OnChange = TRXParamsChange
-          TabOrder = 0
+          TabOrder = 10
         end
         object edtPoll: TEdit
           AnchorSideLeft.Control = lblPollR
@@ -2291,7 +2293,7 @@ object frmPreferences: TfrmPreferences
           Width = 80
           OnChange = TRXParamsChange
           OnExit = edtPollExit
-          TabOrder = 1
+          TabOrder = 12
         end
         object chkRSendCWR: TCheckBox
           AnchorSideLeft.Control = edtRRigCtldArgs
@@ -2316,7 +2318,7 @@ object frmPreferences: TfrmPreferences
           Width = 235
           Caption = 'Run rigctld when program starts'
           OnChange = TRXParamsChange
-          TabOrder = 3
+          TabOrder = 5
         end
         object lblExtra: TLabel
           AnchorSideLeft.Control = lblModelR
@@ -2339,7 +2341,7 @@ object frmPreferences: TfrmPreferences
           Top = 105
           Width = 255
           OnChange = TRXParamsChange
-          TabOrder = 4
+          TabOrder = 1
         end
         object lblPortR: TLabel
           AnchorSideLeft.Control = edtPoll
@@ -2362,7 +2364,7 @@ object frmPreferences: TfrmPreferences
           Top = 51
           Width = 80
           OnChange = TRXParamsChange
-          TabOrder = 5
+          TabOrder = 0
         end
         object grbSerialR: TGroupBox
           AnchorSideLeft.Control = lblModelR
@@ -2376,7 +2378,8 @@ object frmPreferences: TfrmPreferences
           Caption = 'Radio one serial parameters'
           ClientHeight = 130
           ClientWidth = 509
-          TabOrder = 6
+          TabOrder = 9
+          TabStop = True
           object lblSerialRSpd: TLabel
             AnchorSideLeft.Control = grbSerialR
             AnchorSideTop.Control = grbSerialR
@@ -2450,7 +2453,7 @@ object frmPreferences: TfrmPreferences
             )
             OnChange = TRXParamsChange
             Style = csDropDownList
-            TabOrder = 0
+            TabOrder = 4
             Text = 'default'
           end
           object cmbParityR: TComboBox
@@ -2474,7 +2477,7 @@ object frmPreferences: TfrmPreferences
             )
             OnChange = TRXParamsChange
             Style = csDropDownList
-            TabOrder = 1
+            TabOrder = 3
             Text = 'default'
           end
           object cmbDataBitsR: TComboBox
@@ -2498,7 +2501,7 @@ object frmPreferences: TfrmPreferences
             )
             OnChange = TRXParamsChange
             Style = csDropDownList
-            TabOrder = 2
+            TabOrder = 1
             Text = 'default'
           end
           object cmbStopBitsR: TComboBox
@@ -2521,7 +2524,7 @@ object frmPreferences: TfrmPreferences
             )
             OnChange = TRXParamsChange
             Style = csDropDownList
-            TabOrder = 3
+            TabOrder = 2
             Text = 'default'
           end
           object cmbSpeedR: TComboBox
@@ -2549,7 +2552,7 @@ object frmPreferences: TfrmPreferences
             )
             OnChange = TRXParamsChange
             Style = csDropDownList
-            TabOrder = 4
+            TabOrder = 0
             Text = 'default'
           end
           object cmbDTRR: TComboBox
@@ -2627,7 +2630,7 @@ object frmPreferences: TfrmPreferences
           Width = 200
           ItemHeight = 0
           OnChange = cmbModelRigChange
-          TabOrder = 7
+          TabOrder = 8
         end
         object lblHost: TLabel
           AnchorSideLeft.Control = edtRadioName
@@ -2652,7 +2655,7 @@ object frmPreferences: TfrmPreferences
           Width = 94
           BorderSpacing.Left = 12
           OnChange = TRXParamsChange
-          TabOrder = 8
+          TabOrder = 4
         end
         object edtRHost: TEdit
           AnchorSideLeft.Control = lblHost
@@ -2665,7 +2668,7 @@ object frmPreferences: TfrmPreferences
           Width = 128
           BorderSpacing.Left = 12
           OnChange = TRXParamsChange
-          TabOrder = 9
+          TabOrder = 6
         end
         object grpUsrCmds: TGroupBox
           AnchorSideLeft.Control = grbRadio
@@ -2687,7 +2690,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'User defined TRX control buttons'
           ClientHeight = 110
           ClientWidth = 641
-          TabOrder = 10
+          TabOrder = 11
           object lblUsr1R: TLabel
             AnchorSideLeft.Control = grpUsrCmds
             AnchorSideTop.Control = edtUsr1R
@@ -2749,7 +2752,7 @@ object frmPreferences: TfrmPreferences
             Top = 34
             Width = 527
             Anchors = [akTop, akLeft, akRight]
-            TabOrder = 1
+            TabOrder = 2
           end
           object edtUsr3R: TEdit
             AnchorSideLeft.Control = edtUsr2R
@@ -2762,7 +2765,7 @@ object frmPreferences: TfrmPreferences
             Top = 68
             Width = 527
             Anchors = [akTop, akLeft, akRight]
-            TabOrder = 2
+            TabOrder = 4
           end
           object edtUsr1RName: TEdit
             AnchorSideLeft.Control = lblUsr1R
@@ -2774,7 +2777,7 @@ object frmPreferences: TfrmPreferences
             Width = 57
             BorderSpacing.Left = 6
             MaxLength = 4
-            TabOrder = 3
+            TabOrder = 1
           end
           object edtUsr2RName: TEdit
             AnchorSideLeft.Control = edtUsr1RName
@@ -2785,7 +2788,7 @@ object frmPreferences: TfrmPreferences
             Top = 34
             Width = 57
             MaxLength = 4
-            TabOrder = 4
+            TabOrder = 3
           end
           object edtUsr3RName: TEdit
             AnchorSideLeft.Control = edtUsr1RName
@@ -2811,7 +2814,7 @@ object frmPreferences: TfrmPreferences
           Checked = True
           OnChange = TRXParamsChange
           State = cbChecked
-          TabOrder = 11
+          TabOrder = 7
         end
         object cmbRadioNr: TComboBox
           AnchorSideLeft.Control = grbRadio
@@ -2832,9 +2835,9 @@ object frmPreferences: TfrmPreferences
             '5'
             '6'
           )
-          OnChangeBounds = cmbRadioNrChangeBounds
+          OnCloseUp = cmbRadioNrChangeBounds
           Style = csDropDownList
-          TabOrder = 12
+          TabOrder = 3
           Text = '1'
         end
         object lblRName: TLabel
@@ -9561,7 +9564,7 @@ object frmPreferences: TfrmPreferences
     Top = 344
   end
   object odFindBrowser: TOpenDialog
-    Left = 904
-    Top = 224
+    Left = 1040
+    Top = 408
   end
 end

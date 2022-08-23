@@ -2858,12 +2858,7 @@ begin
 
   edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
 
-  if (FileExistsUTF8(edtRigCtldPath.Text)) then
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig)
-  else begin
-    Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
-                           'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
-  end;
+
 
   if (FileExistsUTF8(edtRotCtldPath.Text)) then
   begin
@@ -3306,6 +3301,12 @@ var
    nr :string;
 Begin
   nr:=IntToStr(RigNr);
+  if (FileExistsUTF8(edtRigCtldPath.Text)) then
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX'+nr, 'model', ''),edtRigCtldPath.Text,cmbModelRig)
+  else begin
+    Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
+                           'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
+  end;
   edtRDevice.Text := cqrini.ReadString('TRX'+nr, 'device', '');
   edtPoll.Text := cqrini.ReadString('TRX'+nr, 'poll', '500');
   edtRadioName.Text := cqrini.ReadString('TRX'+nr, 'Desc', 'Radio 1');
