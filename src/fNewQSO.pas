@@ -418,8 +418,10 @@ type
     procedure dbgrdQSOBeforeColumnSized(Sender: TObject);
     procedure edtAwardEnter(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
+    procedure edtDateChange(Sender: TObject);
     procedure edtDateEnter(Sender: TObject);
     procedure edtDXCCRefEnter(Sender: TObject);
+    procedure edtEndTimeChange(Sender: TObject);
     procedure edtEndTimeEnter(Sender: TObject);
     procedure edtGridChange(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
@@ -437,6 +439,7 @@ type
     procedure edtRXFreqChange(Sender: TObject);
     procedure edtRXFreqExit(Sender: TObject);
     procedure edtRXLOExit(Sender: TObject);
+    procedure edtStartTimeChange(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
     procedure edtStateEnter(Sender: TObject);
     procedure edtTXLOExit(Sender: TObject);
@@ -3435,7 +3438,10 @@ begin
           frmMain.dbgrdMain.SetFocus
         end
         else
-          edtCall.SetFocus;
+         Begin
+          if cbOffline.Checked then edtDate.SetFocus
+                               else edtCall.SetFocus;
+         end;
      end;
 
 end;
@@ -3632,7 +3638,14 @@ begin
   begin
     edtStartTime.SetFocus;
     key := 0
-  end
+  end;
+  if ( ((length(edtDate.Text)=5) or (length(edtDate.Text)=8))
+    and ((key = VK_BACK) or (key = VK_DELETE))
+    and (not AnyRemoteOn and cbOffline.Checked) ) then     //auto del "-"
+     begin
+        edtDate.Text:=copy(edtDate.Text,1,length(edtDate.Text)-2);
+        key := 0
+     end;
 end;
 
 
@@ -3711,6 +3724,18 @@ begin
     mComment.SetFocus;
     key := 0
   end;
+  if ((key = VK_TAB) and cbOffline.Checked and (edtCall.Text='') and (not AnyRemoteOn)) then
+   Begin
+     edtCall.SetFocus;
+     key := 0
+   end;
+   if ((length(edtEndTime.Text)=3)
+    and ((key = VK_BACK) or (key = VK_DELETE))
+    and (not AnyRemoteOn and cbOffline.Checked) ) then //aute del ":"
+     begin
+        edtEndTime.Text:=copy(edtEndTime.Text,1,length(edtEndTime.Text)-2);
+        key := 0
+     end;
 end;
 
 
@@ -3965,7 +3990,14 @@ begin
   begin
     edtEndTime.SetFocus;
     key := 0
-  end
+  end;
+  if ((length(edtStartTime.Text)=3)
+    and ((key = VK_BACK) or (key = VK_DELETE))
+    and (not AnyRemoteOn and cbOffline.Checked) ) then //aute del ":"
+     begin
+        edtStartTime.Text:=copy(edtStartTime.Text,1,length(edtStartTime.Text)-2);
+        key := 0
+     end;
 end;
 
 procedure TfrmNewQSO.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -4408,7 +4440,20 @@ begin
   if frmSCP.Showing and (Length(edtCall.Text)>2) then
     frmSCP.mSCP.Text := dmData.GetSCPCalls(edtCall.Text)
   else
-    frmSCP.mSCP.Clear
+    frmSCP.mSCP.Clear;
+  lblGrid.Font.Style:=[];
+  lblGrid.Font.Color:=clDefault;
+end;
+
+procedure TfrmNewQSO.edtDateChange(Sender: TObject);
+begin
+  if  cbOffline.Checked and not AnyRemoteOn then
+  begin
+    if  (length(edtDate.Text)=4) or (length(edtDate.Text)=7) then //auto "-"
+     edtDate.Text:=edtDate.Text+'-';
+    edtDate.SelStart:=length(edtDate.Text);
+    edtDate.SelLength:=0;
+  end;
 end;
 
 procedure TfrmNewQSO.edtDateEnter(Sender: TObject);
@@ -4419,6 +4464,17 @@ end;
 procedure TfrmNewQSO.edtDXCCRefEnter(Sender: TObject);
 begin
   edtDXCCRef.SelectAll
+end;
+
+procedure TfrmNewQSO.edtEndTimeChange(Sender: TObject);
+begin
+    if  cbOffline.Checked and not AnyRemoteOn then
+  begin
+    if  (length(edtEndTime.Text)=2) then //auto ":"
+     edtEndTime.Text:=edtEndTime.Text+':';
+    edtEndTime.SelStart:=length(edtEndTime.Text);
+    edtEndTime.SelLength:=0;
+  end;
 end;
 
 procedure TfrmNewQSO.edtEndTimeEnter(Sender: TObject);
@@ -4432,6 +4488,7 @@ begin
   // keying has own checking
   edtGrid.Text := dmUtils.StdFormatLocator(edtGrid.Text);
   edtGrid.SelStart := Length(edtGrid.Text);
+  edtGrid.SelLength:=0;
 end;
 
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
@@ -4445,7 +4502,14 @@ begin
     begin
      CalculateDistanceEtc;
      sbtnLocatorMap.Visible := True;
+     lblGrid.Font.Style:=[];
+     lblGrid.Font.Color:=clDefault;
     end
+   else
+    Begin
+     lblGrid.Font.Style:=[fsBold];
+     lblGrid.Font.Color:=clRed;
+    end;
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
@@ -4892,6 +4956,17 @@ begin
       edtRXLO.Text := '0.0';
   end;
   cqrini.WriteString('NewQSO', 'RXLO', edtRXLO.Text);
+end;
+
+procedure TfrmNewQSO.edtStartTimeChange(Sender: TObject);
+begin
+   if  cbOffline.Checked and not AnyRemoteOn then
+  begin
+    if  (length(edtStartTime.Text)=2) then //auto ":"
+     edtStartTime.Text:=edtStartTime.Text+':';
+    edtStartTime.SelStart:=length(edtStartTime.Text);
+    edtStartTime.SelLength:=0;
+  end;
 end;
 
 procedure TfrmNewQSO.edtStartTimeEnter(Sender: TObject);
@@ -5816,8 +5891,11 @@ end;
 procedure TfrmNewQSO.mCommentKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if key = VK_TAB then
-    edtCall.SetFocus;
+  if ((key = VK_TAB) and (not AnyRemoteOn)) then
+    Begin
+     edtCall.SetFocus;
+     key := 0
+    end;
 end;
 
 procedure TfrmNewQSO.mCommentKeyUp(Sender: TObject; var Key: Word;

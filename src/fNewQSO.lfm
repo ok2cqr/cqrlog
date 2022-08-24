@@ -2964,6 +2964,7 @@ object frmNewQSO: TfrmNewQSO
           Width = 100
           BorderSpacing.Top = 2
           MaxLength = 10
+          OnChange = edtDateChange
           OnEnter = edtDateEnter
           OnExit = edtDateExit
           OnKeyDown = edtDateKeyDown
@@ -2983,6 +2984,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
           MaxLength = 5
+          OnChange = edtStartTimeChange
           OnEnter = edtStartTimeEnter
           OnExit = edtStartTimeExit
           OnKeyDown = edtStartTimeKeyDown
@@ -3002,6 +3004,7 @@ object frmNewQSO: TfrmNewQSO
           BorderSpacing.Left = 6
           BorderSpacing.Top = 2
           MaxLength = 5
+          OnChange = edtEndTimeChange
           OnEnter = edtEndTimeEnter
           OnExit = edtEndTimeExit
           OnKeyDown = edtEndTimeKeyDown
