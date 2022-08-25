@@ -3335,7 +3335,13 @@ Procedure TfrmPreferences.SaveTRX(RigNr:integer);
 var
    nr :string;
 Begin
+
   nr:=IntToStr(RigNr);
+  if cmbModelRig.Text='' then //empty model will erase whole TRX section
+     Begin
+      cqrini.SectionErase('TRX'+nr);
+      exit;
+     end;
 
   cqrini.WriteString('TRX'+nr, 'device', edtRDevice.Text);
   cqrini.WriteString('TRX'+nr, 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));

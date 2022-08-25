@@ -26,6 +26,7 @@ type
     function  ReadBool(const Section, Ident: string; Default: Boolean;ToLocal : Boolean=FALSE): Boolean;
     function  ReadFloat(const Section, Ident: string; Default: Double): Double;
     function  SectionExists(Section : String) : Boolean;
+    function  SectionErase(Section : String) : Boolean;
     function  LocalOnly(Section : String) : Boolean;
 
     procedure WriteString(const Section, Ident, Value: String;ToLocal : Boolean=FALSE);
@@ -221,6 +222,30 @@ begin
   finally
     LeaveCriticalsection(crit)
   end
+end;
+function TMyIni.SectionErase(Section : String) : Boolean;
+begin
+  EnterCriticalsection(crit);
+  try
+    if SectionExists(Section) then
+      begin
+         if LocalOnly(Section) then
+           Begin
+             Result := true;
+             lini.EraseSection(Section)
+           end
+       else
+           begin
+             Result := true;
+             ini.EraseSection(Section)
+           end;
+      end
+    else
+      Result:=false;
+  finally
+    LeaveCriticalsection(crit)
+  end
+
 end;
 
 function TMyIni.LocalOnly(Section : String) : Boolean;
