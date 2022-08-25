@@ -1497,15 +1497,7 @@ begin
   end;
 
   if frmTRXControl.Showing then
-  begin
-    if frmTRXControl.rbRadio1.Checked then
-      tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
-    else
-      tmrRadio.Interval := cqrini.ReadInteger('TRX2','Poll',500)
-  end
-  else begin
-    tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
-  end;
+      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex+1),'Poll',500);
 
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
@@ -4504,7 +4496,7 @@ end;
 
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
 begin
-  frmTRXControl.InicializeRig;
+  frmTRXControl.InitializeRig;
   tmrRadio.Enabled := True;
   frmRotControl.InicializeRot;
   tmrRotor.Enabled := True
@@ -7172,7 +7164,9 @@ begin
     FreeAndNil(CWint)
    end;
 
-  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  //if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  //ToDo fix CW when cmbRig works elsewhere!
+  n:='1';
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
   KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);

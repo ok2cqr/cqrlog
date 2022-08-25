@@ -56,6 +56,7 @@ type
     btnUsr1 : TButton;
     btPstby : TButton;
     btnUsr3 : TButton;
+    cmbRig: TComboBox;
     edtFreqInput : TEdit;
     edtMemNr : TEdit;
     gbBand : TGroupBox;
@@ -64,6 +65,7 @@ type
     gbInfo : TGroupBox;
     gbVfo : TGroupBox;
     GroupBox4 : TGroupBox;
+    lblInitRig: TLabel;
     lblFreq : TLabel;
     mnuShowUsr : TMenuItem;
     mnuShowInfo : TMenuItem;
@@ -78,8 +80,6 @@ type
     pnlRig : TPanel;
     pnlMain : TPanel;
     pnlPower : TPanel;
-    rbRadio1 : TRadioButton;
-    rbRadio2 : TRadioButton;
     tmrRadio : TTimer;
     procedure acAddModMemExecute(Sender : TObject);
     procedure btnMemWriClick(Sender : TObject);
@@ -90,9 +90,9 @@ type
     procedure btPoffClick(Sender : TObject);
     procedure btPonClick(Sender : TObject);
     procedure btPstbyClick(Sender : TObject);
-    procedure btnUsr1Click(Sender : TObject);
-    procedure btnUsr2Click(Sender : TObject);
-    procedure btnUsr3Click(Sender : TObject);
+    procedure btnUsrClick(Sender : TObject);
+    procedure cmbRigChange(Sender: TObject);
+    procedure cmbRigGetItems(Sender: TObject);
     procedure edtFreqInputKeyPress(Sender : TObject; var Key : Char);
     procedure edtFreqInputKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure edtFreqInputMouseLeave(Sender : TObject);
@@ -100,6 +100,7 @@ type
       Shift : TShiftState; X, Y : Integer);
     procedure edtFreqInputMouseWheel(Sender : TObject; Shift : TShiftState;
       WheelDelta : Integer; MousePos : TPoint; var Handled : Boolean);
+    procedure FillRigNames(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormCreate(Sender : TObject);
     procedure FormDestroy(Sender : TObject);
@@ -167,7 +168,7 @@ type
     function GetModeFreqNewQSO(var mode, freq : String) : Boolean;
     function GetBandWidth(mode : String) : Integer;
     function GetModeBand(var mode, band : String) : Boolean;
-    function InicializeRig : Boolean;
+    function InitializeRig : Boolean;
     function GetFreqHz : Double;
     function GetFreqkHz : Double;
     function GetFreqMHz : Double;
@@ -188,6 +189,7 @@ type
     procedure LoadBandButtons;
     function ListModeClose : Boolean;
     procedure HLTune(start : Boolean);
+    procedure FillRigNames;
   end;
 
 var
@@ -393,10 +395,11 @@ function TfrmTRXControl.GetBandWidth(mode : String) : Integer;
 var
   section : String;
 begin
-  if rbRadio1.Checked then
-    section := 'Band1'
-  else
-    section := 'Band2';
+  //ToDo fix this when cmbRig work elsewhere
+ // if rbRadio1.Checked then
+    section := 'Band1';
+ // else
+ //   section := 'Band2';
   Result := 500;
   if (mode = 'LSB') or (mode = 'USB') then
     mode := 'SSB';
@@ -411,15 +414,28 @@ begin
   if mode = 'FM' then
     Result := (cqrini.ReadInteger(section, 'FM', 2500));
 end;
+procedure TfrmTRXControl.FillRigNames;
+var
+   n:integer;
+   s,r:string;
+Begin
+   for n:=0 to 5 do
+   Begin
+       s:=IntToStr(n+1);
+       r:=cqrini.ReadString('TRX'+s, 'Desc', '');
+       if r='' then  r:=' None' else r:=' '+r;
+       cmbRig.Items[n]:=s + r;
+   end;
+end;
 
 procedure TfrmTRXControl.FormShow(Sender : TObject);
+
 begin
   LoadUsrButtonCaptions;
   LoadButtonCaptions;
   LoadBandButtons;
   dmUtils.LoadWindowPos(frmTRXControl);
-  rbRadio1.Caption := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
-  rbRadio2.Caption := cqrini.ReadString('TRX2', 'Desc', 'Radio 2');
+  FillRigNames;
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
   gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', gbInfo.Visible);
@@ -700,13 +716,13 @@ end;
 procedure TfrmTRXControl.rbRadio1Click(Sender : TObject);
 begin
   LoadUsrButtonCaptions;
-  InicializeRig;
+  InitializeRig;
 end;
 
 procedure TfrmTRXControl.rbRadio2Click(Sender : TObject);
 begin
   LoadUsrButtonCaptions;
-  InicializeRig;
+  InitializeRig;
 end;
 
 procedure TfrmTRXControl.tmrRadioTimer(Sender : TObject);
@@ -872,46 +888,31 @@ begin
   else
     radio.UsrCmd(c);
 end;
-
-procedure TfrmTRXControl.btnUsr1Click(Sender : TObject);
+procedure TfrmTRXControl.btnUsrClick(Sender : TObject);
 var
-  r : Char;
+  b : Char;
+  r:string;
 begin
-  if Assigned(radio) then
-  begin
-    if rbRadio1.Checked then  r := '1'
-    else
-      r := '2';
-    UserButton(r, '1');
-  end;
+  if Sender = btnUsr1 then b:='1';
+  if Sender = btnUsr2 then b:='2';
+  if Sender = btnUsr3 then b:='3';
+  r:=IntToStr(cmbRig.ItemIndex+1);
+  UserButton(r[1], b);
 end;
 
-procedure TfrmTRXControl.btnUsr2Click(Sender : TObject);
-var
-  r : Char;
+procedure TfrmTRXControl.cmbRigChange(Sender: TObject);
 begin
-  if Assigned(radio) then
-  begin
-    if rbRadio1.Checked then  r := '1'
-    else
-      r := '2';
-    UserButton(r, '2');
-  end;
+  cmbRig.Visible:=False;
+  lblInitRig.Visible:=True;
+  InitializeRig;
+  lblInitRig.Visible:=False;
+  cmbRig.Visible:=True;
 end;
 
-procedure TfrmTRXControl.btnUsr3Click(Sender : TObject);
-var
-  r : Char;
+procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
 begin
-  if Assigned(radio) then
-  begin
-    if rbRadio1.Checked then  r := '1'
-    else
-      r := '2';
-    UserButton(r, '3');
-  end;
+  FillRigNames;
 end;
-
 
 procedure TfrmTRXControl.edtFreqInputKeyPress(Sender : TObject; var Key : Char);
 begin
@@ -999,6 +1000,11 @@ begin
   end;
 end;
 
+procedure TfrmTRXControl.FillRigNames(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmTRXControl.FormCreate(Sender : TObject);
 begin
   Radio := nil;
@@ -1034,7 +1040,7 @@ begin
   end;
 end;
 
-function TfrmTRXControl.InicializeRig : Boolean;
+function TfrmTRXControl.InitializeRig : Boolean;
 var
   n : String = '';
   id : Integer = 0;
@@ -1050,9 +1056,7 @@ begin
   Sleep(500);
   Application.ProcessMessages;
 
-  if rbRadio1.Checked then  n := '1'
-  else
-    n := '2';
+  n:=IntToStr(cmbRig.ItemIndex+1);
 
   radio := TRigControl.Create;
 
@@ -1060,7 +1064,10 @@ begin
     radio.DebugMode := True;
 
   if not TryStrToInt(cqrini.ReadString('TRX' + n, 'model', ''), id) then
+   Begin
+    cmbRig.Items[cmbRig.ItemIndex]:= n + ' Not Set';
     radio.RigId := 1
+   end
   else
     radio.RigId := id;
 
@@ -1510,11 +1517,9 @@ end;
 
 procedure TfrmTRXControl.LoadUsrButtonCaptions;
 var
-  r : Char;
+  r : String;
 begin
-  if rbRadio1.Checked then r := '1'
-  else
-    r := '2';
+  r:= IntToStr(cmbRig.ItemIndex+1);
   btnUsr1.Caption := cqrini.ReadString('TRX' + r, 'usr1name', 'Usr1');
   btnUsr2.Caption := cqrini.ReadString('TRX' + r, 'usr2name', 'Usr2');
   btnUsr3.Caption := cqrini.ReadString('TRX' + r, 'usr3name', 'Usr3');

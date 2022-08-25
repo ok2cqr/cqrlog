@@ -1640,7 +1640,7 @@ begin
     frmBandMap.LoadFonts;
   cqrini.SaveToDisk;
   if TRXChanged then
-    frmTRXControl.InicializeRig;
+    frmTRXControl.InitializeRig;
   if RotChanged then
     frmRotControl.InicializeRot;
 
@@ -1691,7 +1691,7 @@ begin
   if frmPropagation.Showing then
     frmPropagation.RefreshPropagation;
 
-  frmTRXControl.rbRadio1.Caption := edtRadioName.Text;
+  frmTRXControl.FillRigNames;
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
   if ((frmNewQSO.sbNewQSO.Panels[0].Text = '') or (frmNewQSO.sbNewQSO.Panels[0].Text = cMyLoc)) then
