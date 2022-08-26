@@ -1497,7 +1497,7 @@ begin
   end;
 
   if frmTRXControl.Showing then
-      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex+1),'Poll',500);
+      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'Poll',500);
 
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');

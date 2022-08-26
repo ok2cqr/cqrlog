@@ -316,10 +316,10 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = gbFreq
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 4
         Height = 39
         Top = 4
-        Width = 174
+        Width = 173
         Alignment = taRightJustify
         Anchors = [akTop, akLeft, akRight, akBottom]
         AutoSize = False
@@ -343,10 +343,10 @@ object frmTRXControl: TfrmTRXControl
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = lblFreq
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 4
         Height = 39
         Top = 4
-        Width = 174
+        Width = 173
         Anchors = [akTop, akLeft, akRight, akBottom]
         AutoSize = False
         AutoSelect = False
@@ -713,8 +713,9 @@ object frmTRXControl: TfrmTRXControl
         Width = 130
         Anchors = [akTop, akLeft, akBottom]
         ItemHeight = 0
-        ItemIndex = 0
+        ItemIndex = 1
         Items.Strings = (
+          ''
           '1'
           '2'
           '3'
@@ -723,6 +724,7 @@ object frmTRXControl: TfrmTRXControl
           '6'
         )
         OnChange = cmbRigChange
+        OnCloseUp = cmbRigCloseUp
         OnGetItems = cmbRigGetItems
         Style = csDropDownList
         TabOrder = 0

@@ -502,9 +502,12 @@ type
     cmbLoTWBckColor: TColorBox;
     cmbCl10db : TColorBox;
     cmbRadioNr: TComboBox;
+    cmbRadioModes: TComboBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtLogMode: TEdit;
+    edtRigCmd: TEdit;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
@@ -564,16 +567,14 @@ type
     edtRot2RotCtldPort: TEdit;
     edtRotor1: TEdit;
     edtRigCtldPath: TEdit;
-    edtAM1: TSpinEdit;
+    edtAM: TSpinEdit;
     edtClub1Date: TEdit;
     edtClub2Date: TEdit;
     edtClub4Date: TEdit;
     edtClub5Date: TEdit;
     edtClub3Date: TEdit;
-    edtCW1: TSpinEdit;
-    edtCW2: TSpinEdit;
-    edtFM1: TSpinEdit;
-    edtFM2: TSpinEdit;
+    edtCW: TSpinEdit;
+    edtFM: TSpinEdit;
     edtImgFiles: TEdit;
     edtHtmlFiles: TEdit;
     edtCbPass: TEdit;
@@ -581,10 +582,8 @@ type
     edteQSLName: TEdit;
     edteQSLPass: TEdit;
     edtRotCtldPath: TEdit;
-    edtRTTY1: TSpinEdit;
-    edtRTTY2: TSpinEdit;
-    edtSSB1: TSpinEdit;
-    edtSSB2: TSpinEdit;
+    edtRTTY: TSpinEdit;
+    edtSSB: TSpinEdit;
     edtTxtFiles: TEdit;
     edtDigiModes: TEdit;
     edtFldigiPath: TEdit;
@@ -627,7 +626,6 @@ type
     edtWAward1: TEdit;
     edtDoNotShow: TEdit;
     edtXLeft: TEdit;
-    edtAM2: TSpinEdit;
     edtCIV3: TEdit;
     edtPasswd1: TEdit;
     edtPort1: TEdit;
@@ -680,11 +678,10 @@ type
     GroupBox32: TGroupBox;
     gbOffsets: TGroupBox;
     GroupBox34: TGroupBox;
-    GroupBox35: TGroupBox;
+    grpUsrDigitalModes: TGroupBox;
     gbeQSL: TGroupBox;
-    GroupBox37: TGroupBox;
+    grbRigBandWidths: TGroupBox;
     GroupBox38: TGroupBox;
-    GroupBox39: TGroupBox;
     gbProfiles: TGroupBox;
     grbRigctldPath: TGroupBox;
     GroupBox41: TGroupBox;
@@ -712,6 +709,11 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblNoRigForMode: TLabel;
+    lblDataMode: TLabel;
+    lblDataMode1: TLabel;
+    lblLogMode: TLabel;
+    lblRigMode: TLabel;
     lblRName: TLabel;
     lblDeviceR: TLabel;
     lblExtra: TLabel;
@@ -765,21 +767,9 @@ type
     lbleQSLUsr: TLabel;
     lbleQSLPass: TLabel;
     Label11: TLabel;
-    Label110: TLabel;
     Label111: TLabel;
     Label112: TLabel;
-    Label113: TLabel;
-    Label114: TLabel;
-    Label115: TLabel;
-    Label116: TLabel;
-    Label117: TLabel;
-    Label118: TLabel;
-    Label119: TLabel;
     lblintProxy: TLabel;
-    Label120: TLabel;
-    Label121: TLabel;
-    Label122: TLabel;
-    Label123: TLabel;
     Label124: TLabel;
     lblDevice1: TLabel;
     lbleQSLBkg: TLabel;
@@ -866,18 +856,18 @@ type
     lblIntPasswd: TLabel;
     Label2: TLabel;
     Label23: TLabel;
-    Label28: TLabel;
-    Label29: TLabel;
-    Label30: TLabel;
-    Label31: TLabel;
-    Label32: TLabel;
-    Label33: TLabel;
-    Label34: TLabel;
-    Label35: TLabel;
-    Label36: TLabel;
-    Label37: TLabel;
-    Label38: TLabel;
-    Label39: TLabel;
+    lblMode: TLabel;
+    lblBandWidth: TLabel;
+    lblCWbw: TLabel;
+    lblSSBBw: TLabel;
+    lblDataBw: TLabel;
+    lblAMBw: TLabel;
+    lblFMBw: TLabel;
+    lblCWHz: TLabel;
+    lblSSBHz: TLabel;
+    lblDataHz: TLabel;
+    lblAMHz: TLabel;
+    lblFMHz: TLabel;
     Label52: TLabel;
     Label53: TLabel;
     Label54: TLabel;
@@ -1062,6 +1052,7 @@ type
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
     procedure cmbRadioNrChangeBounds(Sender: TObject);
+    procedure cmbRadioModesCloseUp(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
@@ -1114,8 +1105,11 @@ type
   private
     wasOnlineLogSupportEnabled : Boolean;
     RadioNrLoaded : integer;
+    BandWNrLoaded : integer;
     procedure LoadTRX(RigNr:integer);
     procedure SaveTRX(RigNr:integer);
+    procedure SaveBandW(RigNr:integer);
+    procedure LoadBandW(RigNr:integer);
     procedure SaveClubSection;
     procedure LoadMebershipCombo;
     procedure LoadMembersFromCombo(ClubComboText, ClubNumber : String);
@@ -1342,17 +1336,6 @@ begin
   cqrini.WriteInteger('ROT2', 'DTR', cmbDTRRot2.ItemIndex);
   cqrini.WriteInteger('ROT2', 'RTS', cmbRTSRot2.ItemIndex);
 
-  cqrini.WriteInteger('Band1', 'CW', edtCW1.Value);
-  cqrini.WriteInteger('Band1', 'SSB', edtSSB1.Value);
-  cqrini.WriteInteger('Band1', 'RTTY', edtRTTY1.Value);
-  cqrini.WriteInteger('Band1', 'AM', edtAM1.Value);
-  cqrini.WriteInteger('Band1', 'FM', edtFM1.Value);
-
-  cqrini.WriteInteger('Band2', 'CW', edtCW2.Value);
-  cqrini.WriteInteger('Band2', 'SSB', edtSSB2.Value);
-  cqrini.WriteInteger('Band2', 'RTTY', edtRTTY2.Value);
-  cqrini.WriteInteger('Band2', 'AM', edtAM2.Value);
-  cqrini.WriteInteger('Band2', 'FM', edtFM2.Value);
 
   cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
 
@@ -2487,8 +2470,23 @@ end;
 
 procedure TfrmPreferences.cmbRadioNrChangeBounds(Sender: TObject);
 begin
+  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
   SaveTRX(RadioNrLoaded);
   LoadTRX(cmbRadioNr.ItemIndex);
+end;
+
+procedure TfrmPreferences.cmbRadioModesCloseUp(Sender: TObject);
+var
+   nr : String;
+begin
+  if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
+  nr:= IntToStr(cmbRadioModes.ItemIndex);
+  SaveBandW(BandWNrLoaded);
+  LoadBandW(cmbRadioModes.ItemIndex);
+  if cqrini.ReadString('TRX'+nr, 'model', '')='' then
+     lblNoRigForMode.Visible:=True
+   else
+     lblNoRigForMode.Visible:=False;
 end;
 
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
@@ -2618,6 +2616,7 @@ procedure TfrmPreferences.RotorParamsChange(Sender: TObject);
 begin
   RotChanged := True;
 end;
+
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
 Begin
@@ -2870,7 +2869,8 @@ begin
                            'Fix path to rotctld in ROT control tab.', 'Error', mb_OK+ mb_IconError)
   end;
 
-  LoadTRX(cmbRadioNr.ItemIndex);
+  LoadTRX(cmbRadioNr.ItemIndex);   //this loads just 1st Rig values, others will be loaded/saved
+  LoadBandW(cmbRadioNr.ItemIndex); //when user changes radio Nr selector
 
   edtRot1Device.Text := cqrini.ReadString('ROT1', 'device', '');
   edtRot1Poll.Text := cqrini.ReadString('ROT1', 'poll', '500');
@@ -2903,18 +2903,6 @@ begin
   cmbHanshakeRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'HandShake', 0);
   cmbDTRRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'DTR', 0);
   cmbRTSRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'RTS', 0);
-
-  edtCW1.Value := cqrini.ReadInteger('Band1', 'CW', 500);
-  edtSSB1.Value := cqrini.ReadInteger('Band1', 'SSB', 1800);
-  edtRTTY1.Value := cqrini.ReadInteger('Band1', 'RTTY', 500);
-  edtAM1.Value := cqrini.ReadInteger('Band1', 'AM', 3000);
-  edtFM1.Value := cqrini.ReadInteger('Band1', 'FM', 2500);
-
-  edtCW2.Value := cqrini.ReadInteger('Band2', 'CW', 500);
-  edtSSB2.Value := cqrini.ReadInteger('Band2', 'SSB', 1800);
-  edtRTTY2.Value := cqrini.ReadInteger('Band2', 'RTTY', 500);
-  edtAM2.Value := cqrini.ReadInteger('Band2', 'AM', 3000);
-  edtFM2.Value := cqrini.ReadInteger('Band2', 'FM', 2500);
 
   cmbModelRigChange(nil);
 
@@ -3198,11 +3186,11 @@ begin
   fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-  edtCW1.Width := 60;
-  edtSSB1.Width := 60;
-  edtRTTY1.Width := 60;
-  edtAM1.Width := 60;
-  edtFM1.Width := 60;
+  edtCW.Width := 60;
+  edtSSB.Width := 60;
+  edtRTTY.Width := 60;
+  edtAM.Width := 60;
+  edtFM.Width := 60;
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
@@ -3337,9 +3325,10 @@ var
 Begin
 
   nr:=IntToStr(RigNr);
-  if cmbModelRig.Text='' then //empty model will erase whole TRX section
+  if cmbModelRig.Text='' then //empty model will erase whole TRX and corresponding bandwidth section
      Begin
       cqrini.SectionErase('TRX'+nr);
+      cqrini.SectionErase('Band'+nr);
       exit;
      end;
 
@@ -3367,6 +3356,31 @@ Begin
   cqrini.WriteString('TRX'+nr, 'usr2', edtUsr2R.Text);
   cqrini.WriteString('TRX'+nr, 'usr3', edtUsr3R.Text);
 end;
+procedure TfrmPreferences.LoadBandW(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  edtCW.Value := cqrini.ReadInteger('Band'+nr, 'CW', 500);
+  edtSSB.Value := cqrini.ReadInteger('Band'+nr, 'SSB', 1800);
+  edtRTTY.Value := cqrini.ReadInteger('Band'+nr, 'RTTY', 500);
+  edtAM.Value := cqrini.ReadInteger('Band'+nr, 'AM', 3000);
+  edtFM.Value := cqrini.ReadInteger('Band'+nr, 'FM', 2500);
+  BandWNrLoaded := RigNr;
+end;
+procedure TfrmPreferences.SaveBandW(RigNr:integer);
+var
+   nr :string;
+Begin
+  if lblNoRigForMode.Visible then exit; //No rig, no save
+  nr:=IntToStr(RigNr);
+  cqrini.WriteInteger('Band'+nr, 'CW', edtCW.Value);
+  cqrini.WriteInteger('Band'+nr, 'SSB', edtSSB.Value);
+  cqrini.WriteInteger('Band'+nr, 'RTTY', edtRTTY.Value);
+  cqrini.WriteInteger('Band'+nr, 'AM', edtAM.Value);
+  cqrini.WriteInteger('Band'+nr, 'FM', edtFM.Value);
+end;
+
 
 end.
 

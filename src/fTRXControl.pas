@@ -92,6 +92,7 @@ type
     procedure btPstbyClick(Sender : TObject);
     procedure btnUsrClick(Sender : TObject);
     procedure cmbRigChange(Sender: TObject);
+    procedure cmbRigCloseUp(Sender: TObject);
     procedure cmbRigGetItems(Sender: TObject);
     procedure edtFreqInputKeyPress(Sender : TObject; var Key : Char);
     procedure edtFreqInputKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
@@ -896,7 +897,7 @@ begin
   if Sender = btnUsr1 then b:='1';
   if Sender = btnUsr2 then b:='2';
   if Sender = btnUsr3 then b:='3';
-  r:=IntToStr(cmbRig.ItemIndex+1);
+  r:=IntToStr(cmbRig.ItemIndex);
   UserButton(r[1], b);
 end;
 
@@ -907,6 +908,11 @@ begin
   InitializeRig;
   lblInitRig.Visible:=False;
   cmbRig.Visible:=True;
+end;
+
+procedure TfrmTRXControl.cmbRigCloseUp(Sender: TObject);
+begin
+  if cmbRig.ItemIndex<1 then cmbRig.ItemIndex:=1;
 end;
 
 procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
@@ -1056,7 +1062,7 @@ begin
   Sleep(500);
   Application.ProcessMessages;
 
-  n:=IntToStr(cmbRig.ItemIndex+1);
+  n:=IntToStr(cmbRig.ItemIndex);
 
   radio := TRigControl.Create;
 
@@ -1519,7 +1525,7 @@ procedure TfrmTRXControl.LoadUsrButtonCaptions;
 var
   r : String;
 begin
-  r:= IntToStr(cmbRig.ItemIndex+1);
+  r:= IntToStr(cmbRig.ItemIndex);
   btnUsr1.Caption := cqrini.ReadString('TRX' + r, 'usr1name', 'Usr1');
   btnUsr2.Caption := cqrini.ReadString('TRX' + r, 'usr2name', 'Usr2');
   btnUsr3.Caption := cqrini.ReadString('TRX' + r, 'usr3name', 'Usr3');
