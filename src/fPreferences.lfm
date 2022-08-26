@@ -5,8 +5,8 @@ object frmPreferences: TfrmPreferences
   Width = 1131
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 1094
-  VertScrollBar.Page = 703
+  HorzScrollBar.Page = 794
+  VertScrollBar.Page = 432
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -56,7 +56,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 3
         Caption = ' Internet connection '
-        ClientHeight = 111
+        ClientHeight = 127
         ClientWidth = 339
         TabOrder = 0
         object lblintProxy: TLabel
@@ -248,7 +248,7 @@ object frmPreferences: TfrmPreferences
         Width = 626
         BorderSpacing.Top = 9
         Caption = ' Offsets and colors'
-        ClientHeight = 185
+        ClientHeight = 201
         ClientWidth = 624
         TabOrder = 7
         object lblUtc: TLabel
@@ -2140,7 +2140,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 4
         Caption = ' rigctld '
-        ClientHeight = 70
+        ClientHeight = 86
         ClientWidth = 655
         TabOrder = 0
         object lblRigctdPath: TLabel
@@ -2374,7 +2374,7 @@ object frmPreferences: TfrmPreferences
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
-          ClientHeight = 130
+          ClientHeight = 146
           ClientWidth = 509
           TabOrder = 11
           object lblSerialRSpd: TLabel

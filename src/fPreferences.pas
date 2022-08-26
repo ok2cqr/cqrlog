@@ -3186,11 +3186,7 @@ begin
   fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-  edtCW.Width := 60;
-  edtSSB.Width := 60;
-  edtRTTY.Width := 60;
-  edtAM.Width := 60;
-  edtFM.Width := 60;
+
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
@@ -3297,7 +3293,7 @@ Begin
   end;
   edtRDevice.Text := cqrini.ReadString('TRX'+nr, 'device', '');
   edtPoll.Text := cqrini.ReadString('TRX'+nr, 'poll', '500');
-  edtRadioName.Text := cqrini.ReadString('TRX'+nr, 'Desc', 'Radio 1');
+  edtRadioName.Text := cqrini.ReadString('TRX'+nr, 'Desc', '');
   chkRSendCWR.Checked := cqrini.ReadBool('TRX'+nr, 'CWR', False);
   chkRVfo.Checked:=   cqrini.ReadBool('TRX'+nr, 'ChkVfo', True);
   edtRRigCtldPort.Text := cqrini.ReadString('TRX'+nr, 'RigCtldPort', '4532');
