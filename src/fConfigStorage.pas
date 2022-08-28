@@ -146,11 +146,11 @@ begin
   if cmbStoreVisColumns.ItemIndex>0 then
     Sections := Sections + 'Columns,';
   if cmbStoreTRXControl.ItemIndex>0 then
-    Sections := Sections + 'TRX,TRX1,TRX2,';
+    Sections := Sections + 'TRX,TRX1,TRX2,TRX3,TRX4,TRX5,TRX6,';
   if cmbStoreRotorControl.ItemIndex>0 then
     Sections := Sections + 'ROT,ROT1,ROT2,';
   if cmbStoreModes.ItemIndex>=0 then
-    Sections := Sections + 'Band1,Band2,Modes,';
+    Sections := Sections + 'Band1,Band2,Band3,Band4,Band5,Band6,Modes,';
   if cmbStoreExport.ItemIndex>0 then
     Sections := Sections + 'Export,';
   if cmbStoreCluster.ItemIndex>0 then
