@@ -130,6 +130,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkRPwrOn: TCheckBox;
     chkOperator: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
@@ -3299,6 +3300,7 @@ Begin
   edtRRigCtldPort.Text := cqrini.ReadString('TRX'+nr, 'RigCtldPort', '4532');
   edtRRigCtldArgs.Text := cqrini.ReadString('TRX'+nr, 'ExtraRigCtldArgs', '');
   chkRRunRigCtld.Checked := cqrini.ReadBool('TRX'+nr, 'RunRigCtld', False);
+  chkRPwrON.Checked := cqrini.ReadBool('TRX'+nr, 'RigPwrON', True);
   edtRHost.Text := cqrini.ReadString('TRX'+nr, 'host', 'localhost');
   cmbSpeedR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'SerialSpeed', 0);
   cmbDataBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DataBits', 0);
@@ -3337,6 +3339,7 @@ Begin
   cqrini.WriteString('TRX'+nr, 'RigCtldPort', edtRRigCtldPort.Text);
   cqrini.WriteString('TRX'+nr, 'ExtraRigCtldArgs', edtRRigCtldArgs.Text);
   cqrini.WriteBool('TRX'+nr, 'RunRigCtld', chkRRunRigCtld.Checked);
+  cqrini.WriteBool('TRX'+nr, 'RigPwrON', chkRPwrON.Checked);
   cqrini.WriteString('TRX'+nr, 'host', edtRHost.Text);
   cqrini.WriteInteger('TRX'+nr, 'SerialSpeed', cmbSpeedR.ItemIndex);
   cqrini.WriteInteger('TRX'+nr, 'DataBits', cmbDataBitsR.ItemIndex);

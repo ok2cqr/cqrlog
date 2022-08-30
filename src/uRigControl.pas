@@ -39,11 +39,12 @@ type TRigControl = class
     fVFO         : TVFO;
     RigCommand   : TStringList;
     fRigSendCWR  : Boolean;
-    fRigChkVfo : Boolean;
+    fRigChkVfo   : Boolean;
     fRXOffset    : Double;
     fTXOffset    : Double;
     fMorse       : boolean;
     fPower       : boolean;
+    fPowerON     : boolean;
     fGetVfo      : boolean;
 
     AllowCommand      : integer; //things to do before start polling
@@ -94,6 +95,8 @@ public
     //can rig send CW
     property Power      : Boolean read fPower;
     //can rig switch power
+    property PowerON      : Boolean write fPowerON;
+    //may rig switch power on at start
     property CanGetVfo  : Boolean read fGetVfo;
     //can rig show vfo (many Icoms can not)
     property LastError   : String  read fLastError;
@@ -620,10 +623,13 @@ begin
                AllowCommand:=-1; //waiting for reply
           end;
       8:  Begin
-               cmd:= '+\set_powerstat 1'+LineEnding;
-               if DebugMode then
+               if fPowerON then
+               begin
+                cmd:= '+\set_powerstat 1'+LineEnding;
+                if DebugMode then
                      Writeln('Sending: '+cmd);
-               RigctldConnect.SendMessage(cmd);
+                RigctldConnect.SendMessage(cmd);
+               end;
                AllowCommand:=-1; //waiting for reply
           end;
 

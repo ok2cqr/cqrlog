@@ -5,8 +5,8 @@ object frmPreferences: TfrmPreferences
   Width = 1131
   HelpType = htKeyword
   HelpKeyword = 'help/h1.html'
-  HorzScrollBar.Page = 794
-  VertScrollBar.Page = 432
+  HorzScrollBar.Page = 1094
+  VertScrollBar.Page = 703
   ActiveControl = lbPreferences
   AutoScroll = True
   BorderIcons = [biSystemMenu]
@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 713
     Top = 0
     Width = 883
-    ActivePage = tabModes
+    ActivePage = tabTRXcontrol
     Align = alClient
-    TabIndex = 7
+    TabIndex = 5
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2140,7 +2140,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 4
         Caption = ' rigctld '
-        ClientHeight = 86
+        ClientHeight = 70
         ClientWidth = 655
         TabOrder = 0
         object lblRigctdPath: TLabel
@@ -2374,7 +2374,7 @@ object frmPreferences: TfrmPreferences
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
-          ClientHeight = 146
+          ClientHeight = 130
           ClientWidth = 509
           TabOrder = 11
           object lblSerialRSpd: TLabel
@@ -2800,10 +2800,11 @@ object frmPreferences: TfrmPreferences
           end
         end
         object chkRVfo: TCheckBox
-          AnchorSideLeft.Control = edtRRigCtldPort
+          AnchorSideLeft.Control = grbSerialR
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = chkRSendCWR
           AnchorSideTop.Side = asrCenter
-          Left = 549
+          Left = 517
           Height = 23
           Top = 94
           Width = 103
@@ -2850,6 +2851,19 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Left = 24
           Caption = 'Name'
           ParentColor = False
+        end
+        object chkRPwrOn: TCheckBox
+          AnchorSideLeft.Control = chkRVfo
+          AnchorSideTop.Control = chkRVfo
+          AnchorSideTop.Side = asrBottom
+          Left = 517
+          Height = 23
+          Top = 117
+          Width = 131
+          Caption = 'Rig pwr ON cmd'
+          Checked = True
+          State = cbChecked
+          TabOrder = 13
         end
       end
     end
