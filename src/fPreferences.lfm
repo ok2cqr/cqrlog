@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 713
     Top = 0
     Width = 883
-    ActivePage = tabTRXcontrol
+    ActivePage = tabModes
     Align = alClient
-    TabIndex = 5
+    TabIndex = 7
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -3993,7 +3993,7 @@ object frmPreferences: TfrmPreferences
         end
         object lblDataBw: TLabel
           AnchorSideLeft.Control = lblMode
-          AnchorSideTop.Control = edtRTTY
+          AnchorSideTop.Control = edtData
           AnchorSideTop.Side = asrCenter
           Left = 12
           Height = 17
@@ -4002,7 +4002,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'Data'
           ParentColor = False
         end
-        object edtRTTY: TSpinEdit
+        object edtData: TSpinEdit
           AnchorSideLeft.Control = edtCW
           AnchorSideTop.Control = edtSSB
           AnchorSideTop.Side = asrBottom
@@ -4020,7 +4020,7 @@ object frmPreferences: TfrmPreferences
         end
         object lblDataHz: TLabel
           AnchorSideLeft.Control = lblCWHz
-          AnchorSideTop.Control = edtRTTY
+          AnchorSideTop.Control = edtData
           AnchorSideTop.Side = asrCenter
           Left = 177
           Height = 17
@@ -4042,7 +4042,7 @@ object frmPreferences: TfrmPreferences
         end
         object edtAM: TSpinEdit
           AnchorSideLeft.Control = edtCW
-          AnchorSideTop.Control = edtRTTY
+          AnchorSideTop.Control = edtData
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
           Left = 81
@@ -4222,6 +4222,30 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
           ParentFont = False
           Visible = False
+        end
+        object chkModeReverse: TCheckBox
+          AnchorSideLeft.Control = lblRigMode
+          AnchorSideTop.Control = lblDataHz
+          AnchorSideTop.Side = asrCenter
+          Left = 207
+          Height = 23
+          Top = 132
+          Width = 202
+          BorderSpacing.Top = 5
+          Caption = 'Use also reverse (rig->log)'
+          TabOrder = 8
+        end
+        object lblReadHelp: TLabel
+          AnchorSideLeft.Control = chkModeReverse
+          AnchorSideTop.Control = chkModeReverse
+          AnchorSideTop.Side = asrBottom
+          Left = 207
+          Height = 34
+          Top = 159
+          Width = 169
+          BorderSpacing.Top = 4
+          Caption = 'Please read Help about'#10'Log/Rig mode conversion!'
+          ParentColor = False
         end
       end
     end

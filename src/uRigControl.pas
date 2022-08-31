@@ -629,8 +629,9 @@ begin
                 if DebugMode then
                      Writeln('Sending: '+cmd);
                 RigctldConnect.SendMessage(cmd);
+                AllowCommand:=-1; //waiting for reply
                end;
-               AllowCommand:=-1; //waiting for reply
+
           end;
 
       //lower priority commands queue handled here

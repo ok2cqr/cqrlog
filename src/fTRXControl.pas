@@ -45,7 +45,7 @@ type
     btnMemWri : TButton;
     btnMemUp : TButton;
     btnSSB : TButton;
-    btnRTTY : TButton;
+    btnDATA : TButton;
     btnAM : TButton;
     btnFM : TButton;
     btnVFOA : TButton;
@@ -123,7 +123,7 @@ type
     procedure btnAMClick(Sender : TObject);
     procedure btnCWClick(Sender : TObject);
     procedure btnFMClick(Sender : TObject);
-    procedure btnRTTYClick(Sender : TObject);
+    procedure btnDATAClick(Sender : TObject);
     procedure btnSSBClick(Sender : TObject);
     procedure gbFreqClick(Sender : TObject);
     procedure lblFreqClick(Sender : TObject);
@@ -396,11 +396,8 @@ function TfrmTRXControl.GetBandWidth(mode : String) : Integer;
 var
   section : String;
 begin
-  //ToDo fix this when cmbRig work elsewhere
- // if rbRadio1.Checked then
-    section := 'Band1';
- // else
- //   section := 'Band2';
+  section:=IntToStr(cmbRig.ItemIndex);
+  section := 'Band'+section;
   Result := 500;
   if (mode = 'LSB') or (mode = 'USB') then
     mode := 'SSB';
@@ -409,7 +406,7 @@ begin
   if mode = 'SSB' then
     Result := (cqrini.ReadInteger(section, 'SSB', 1800));
   if mode = 'RTTY' then
-    Result := (cqrini.ReadInteger(section, 'RTTY', 500));
+    Result := (cqrini.ReadInteger(section, 'RTTY', 500)); //note: Data is called rtty for backward compatibility
   if mode = 'AM' then
     Result := (cqrini.ReadInteger(section, 'AM', 3000));
   if mode = 'FM' then
@@ -661,9 +658,10 @@ begin
   cqrini.WriteBool('TRX', 'MemShowInfo', gbInfo.Visible);
 end;
 
-procedure TfrmTRXControl.btnRTTYClick(Sender : TObject);
+procedure TfrmTRXControl.btnDATAClick(Sender : TObject);
 begin
   frmTRXControl.edtMemNr.Text := ''; //clear memo nr display if any text from last M push
+  //TODO fix mode setting here
   SetMode('RTTY', GetBandWidth('RTTY'));
 end;
 
@@ -1418,7 +1416,7 @@ procedure TfrmTRXControl.UpdateModeButtons(mode : String);
 begin
   btnCW.Font.Color := COLOR_WINDOWTEXT;
   btnSSB.Font.Color := COLOR_WINDOWTEXT;
-  btnRTTY.Font.Color := COLOR_WINDOWTEXT;
+  btnDATA.Font.Color := COLOR_WINDOWTEXT;
   btnAM.Font.Color := COLOR_WINDOWTEXT;
   btnFM.Font.Color := COLOR_WINDOWTEXT;
   if mode = 'CW' then
@@ -1428,7 +1426,7 @@ begin
     btnSSB.Font.Color := clRed
   else
   if mode = 'RTTY' then
-    btnRTTY.Font.Color := clRed
+    btnDATA.Font.Color := clRed
   else
   if mode = 'AM' then
     btnAM.Font.Color := clRed

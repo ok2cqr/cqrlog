@@ -194,7 +194,7 @@ object frmTRXControl: TfrmTRXControl
       OnClick = btnSSBClick
       TabOrder = 1
     end
-    object btnRTTY: TButton
+    object btnDATA: TButton
       AnchorSideLeft.Control = btnCW
       AnchorSideTop.Control = btnSSB
       AnchorSideTop.Side = asrBottom
@@ -202,13 +202,13 @@ object frmTRXControl: TfrmTRXControl
       Height = 25
       Top = 50
       Width = 51
-      Caption = 'RTTY'
-      OnClick = btnRTTYClick
+      Caption = 'DATA'
+      OnClick = btnDATAClick
       TabOrder = 2
     end
     object btnAM: TButton
       AnchorSideLeft.Control = btnCW
-      AnchorSideTop.Control = btnRTTY
+      AnchorSideTop.Control = btnDATA
       AnchorSideTop.Side = asrBottom
       Left = 13
       Height = 25

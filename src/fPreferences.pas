@@ -130,6 +130,7 @@ type
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
+    chkModeReverse: TCheckBox;
     chkRPwrOn: TCheckBox;
     chkOperator: TCheckBox;
     chkDarcDok: TCheckBox;
@@ -583,7 +584,7 @@ type
     edteQSLName: TEdit;
     edteQSLPass: TEdit;
     edtRotCtldPath: TEdit;
-    edtRTTY: TSpinEdit;
+    edtData: TSpinEdit;
     edtSSB: TSpinEdit;
     edtTxtFiles: TEdit;
     edtDigiModes: TEdit;
@@ -710,6 +711,7 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblReadHelp: TLabel;
     lblNoRigForMode: TLabel;
     lblDataMode: TLabel;
     lblDataMode1: TLabel;
@@ -3362,9 +3364,12 @@ Begin
   nr:=IntToStr(RigNr);
   edtCW.Value := cqrini.ReadInteger('Band'+nr, 'CW', 500);
   edtSSB.Value := cqrini.ReadInteger('Band'+nr, 'SSB', 1800);
-  edtRTTY.Value := cqrini.ReadInteger('Band'+nr, 'RTTY', 500);
+  edtData.Value := cqrini.ReadInteger('Band'+nr, 'RTTY', 500);  //note: Data is called rtty for backward compatibility
   edtAM.Value := cqrini.ReadInteger('Band'+nr, 'AM', 3000);
   edtFM.Value := cqrini.ReadInteger('Band'+nr, 'FM', 2500);
+  edtLogMode.Text:=cqrini.ReadString('Band'+nr, 'LogMode', 'RTTY');
+  edtRigCmd.Text:=cqrini.ReadString('Band'+nr, 'RigCmd', 'RTTY');
+  chkModeReverse.Checked :=cqrini.ReadBool('Band'+nr, 'UseReverse', False);
   BandWNrLoaded := RigNr;
 end;
 procedure TfrmPreferences.SaveBandW(RigNr:integer);
@@ -3375,9 +3380,12 @@ Begin
   nr:=IntToStr(RigNr);
   cqrini.WriteInteger('Band'+nr, 'CW', edtCW.Value);
   cqrini.WriteInteger('Band'+nr, 'SSB', edtSSB.Value);
-  cqrini.WriteInteger('Band'+nr, 'RTTY', edtRTTY.Value);
+  cqrini.WriteInteger('Band'+nr, 'RTTY', edtData.Value);  //note: Data is called rtty for backward compatibility
   cqrini.WriteInteger('Band'+nr, 'AM', edtAM.Value);
   cqrini.WriteInteger('Band'+nr, 'FM', edtFM.Value);
+  cqrini.WriteString('Band'+nr, 'LogMode', edtLogMode.Text);
+  cqrini.WriteString('Band'+nr, 'RigCmd', edtRigCmd.Text);
+  cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
 end;
 
 
