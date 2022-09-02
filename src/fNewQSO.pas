@@ -674,6 +674,7 @@ type
 
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
+    function RigCmd2DataMode(mode:String):String;
     procedure ShowOperator;
     procedure StartUpRemote;
     procedure NewLogSplash;
@@ -2247,7 +2248,7 @@ begin
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
-          cmbMode.Text := mode;
+          cmbMode.Text := RigCmd2DataMode(mode);
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
@@ -5394,7 +5395,7 @@ begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) and (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
     begin
       if chkAutoMode.Checked then
-        cmbMode.Text := mode;
+        cmbMode.Text := RigCmd2DataMode(mode);
       cmbFreq.Text := freq;
       edtHisRST.SetFocus;
       edtHisRST.SelStart  := 1;
@@ -6692,7 +6693,7 @@ begin
     edtCall.Text := call;
     cmbFreq.Text := freq;
     if chkAutoMode.Checked then
-      cmbMode.Text := mode;
+      cmbMode.Text := RigCmd2DataMode(mode);
     freq := FloatToStr(etmp);
     if not FromRbn then
       mode := dmUtils.GetModeFromFreq(freq);
@@ -7702,6 +7703,19 @@ Begin
     +'73, gl DX!';
 
   ShowMessage(message);
+end;
+function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
+var
+   DatCmd,
+   n      :String;
+Begin
+   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+   DatCmd :=  upcase(cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY'));
+   if (DatCmd = 'USB') or (DatCmd = 'LSB') then DatCmd := 'SSB'; //this is what RigControl responses
+
+   if cqrini.ReadBool('Band'+n, 'UseReverse', False)  and (mode = DatCmd) then
+            Result := cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+     else   Result := mode;
 end;
 
 end.

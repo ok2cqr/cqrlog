@@ -158,6 +158,7 @@ type
     procedure SetMode(mode : String; bandwidth : Integer);
     procedure ClearButtonsColor;
     procedure UpdateModeButtons(mode : String);
+    procedure CheckUserMode(var mode : String);
     procedure UserButton(r, b : Char);
   public
     AutoMode : Boolean;
@@ -1134,6 +1135,7 @@ procedure TfrmTRXControl.SetMode(mode : String; bandwidth : Integer);
 var
   rmode : TRigMode;
 begin
+  CheckUserMode(mode);
   if Assigned(radio) then
   begin
     rmode.mode := mode;
@@ -1313,6 +1315,7 @@ begin
         mode := 'LSB';
     end;
   end;
+  CheckUserMode(mode);
 
   if Assigned(radio) then
   begin
@@ -1413,26 +1416,27 @@ begin
 end;
 
 procedure TfrmTRXControl.UpdateModeButtons(mode : String);
+var
+  usermode :String;
+  n        :String;
 begin
   btnCW.Font.Color := COLOR_WINDOWTEXT;
   btnSSB.Font.Color := COLOR_WINDOWTEXT;
   btnDATA.Font.Color := COLOR_WINDOWTEXT;
   btnAM.Font.Color := COLOR_WINDOWTEXT;
   btnFM.Font.Color := COLOR_WINDOWTEXT;
-  if mode = 'CW' then
-    btnCW.Font.Color := clRed
-  else
-  if mode = 'SSB' then
-    btnSSB.Font.Color := clRed
-  else
-  if mode = 'RTTY' then
-    btnDATA.Font.Color := clRed
-  else
-  if mode = 'AM' then
-    btnAM.Font.Color := clRed
-  else
-  if mode = 'FM' then
-    btnFM.Font.Color := clRed;
+
+  n:=IntToStr(cmbRig.ItemIndex);
+  usermode:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
+
+  if mode = usermode then btnDATA.Font.Color := clRed
+     else
+       case mode of
+        'CW' : btnCW.Font.Color := clRed;
+        'SSB' : btnSSB.Font.Color := clRed;
+        'AM' : btnAM.Font.Color := clRed;
+        'FM' : btnFM.Font.Color := clRed;
+       end;
 
   if Assigned(radio) then
   begin
@@ -1588,6 +1592,20 @@ begin
     FloatToStr(cqrini.ReadFloat('DefFreq', '2cw', 144050) / 1000));
   btn70CMBand := dmUtils.GetBandFromFreq(
     FloatToStr(cqrini.ReadFloat('DefFreq', '70cw', 430000) / 1000));
+end;
+procedure TfrmTRXControl.CheckUserMode(var mode : String);
+var
+  usermode,
+  usercmd,
+  n       :String;
+
+begin
+  n:=IntToStr(cmbRig.ItemIndex);
+  usercmd:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
+  usermode:=cqrini.ReadString('Band'+n, 'Datamode', 'RTTY');
+
+  if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
+     mode := usercmd;
 end;
 
 end.

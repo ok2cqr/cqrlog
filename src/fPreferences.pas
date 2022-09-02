@@ -508,8 +508,8 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
-    edtLogMode: TEdit;
-    edtRigCmd: TEdit;
+    edtDataMode: TEdit;
+    edtDataCmd: TEdit;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
@@ -715,8 +715,8 @@ type
     lblNoRigForMode: TLabel;
     lblDataMode: TLabel;
     lblDataMode1: TLabel;
-    lblLogMode: TLabel;
-    lblRigMode: TLabel;
+    lblLogDataMode: TLabel;
+    lblRigDataCmd: TLabel;
     lblRName: TLabel;
     lblDeviceR: TLabel;
     lblExtra: TLabel;
@@ -1068,6 +1068,8 @@ type
     procedure edtLocExit(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
+    procedure lblDataMode1Click(Sender: TObject);
+    procedure lblDataModeClick(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
     procedure TRXParamsChange(Sender: TObject);
     procedure edtTxtFilesExit(Sender: TObject);
@@ -2611,6 +2613,16 @@ begin
     key := #0;
 end;
 
+procedure TfrmPreferences.lblDataMode1Click(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmPreferences.lblDataModeClick(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
 begin
   TRXChanged := True
@@ -3367,8 +3379,8 @@ Begin
   edtData.Value := cqrini.ReadInteger('Band'+nr, 'RTTY', 500);  //note: Data is called rtty for backward compatibility
   edtAM.Value := cqrini.ReadInteger('Band'+nr, 'AM', 3000);
   edtFM.Value := cqrini.ReadInteger('Band'+nr, 'FM', 2500);
-  edtLogMode.Text:=cqrini.ReadString('Band'+nr, 'LogMode', 'RTTY');
-  edtRigCmd.Text:=cqrini.ReadString('Band'+nr, 'RigCmd', 'RTTY');
+  edtDataMode.Text:=cqrini.ReadString('Band'+nr, 'Datamode', 'RTTY');
+  edtDataCmd.Text:=cqrini.ReadString('Band'+nr, 'Datacmd', 'RTTY');
   chkModeReverse.Checked :=cqrini.ReadBool('Band'+nr, 'UseReverse', False);
   BandWNrLoaded := RigNr;
 end;
@@ -3383,8 +3395,8 @@ Begin
   cqrini.WriteInteger('Band'+nr, 'RTTY', edtData.Value);  //note: Data is called rtty for backward compatibility
   cqrini.WriteInteger('Band'+nr, 'AM', edtAM.Value);
   cqrini.WriteInteger('Band'+nr, 'FM', edtFM.Value);
-  cqrini.WriteString('Band'+nr, 'LogMode', edtLogMode.Text);
-  cqrini.WriteString('Band'+nr, 'RigCmd', edtRigCmd.Text);
+  cqrini.WriteString('Band'+nr, 'Datamode', edtDataMode.Text);
+  cqrini.WriteString('Band'+nr, 'Datacmd', edtDatacmd.Text);
   cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
 end;
 

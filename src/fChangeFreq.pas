@@ -17,7 +17,7 @@ type
     btnCancel: TButton;
     edtRXOffset : TEdit;
     edtCW: TEdit;
-    edtRTTY: TEdit;
+    edtData: TEdit;
     edtEnd: TEdit;
     edtBegin: TEdit;
     edtTXOffset : TEdit;
@@ -70,10 +70,10 @@ begin
     exit
   end;
   
-  if NOT TryStrToCurr(edtRTTY.Text,f) then
+  if NOT TryStrToCurr(edtData.Text,f) then
   begin
     Application.MessageBox('You must enter correct frequency!','Error',mb_OK+mb_IconError);
-    edtRTTY.SetFocus;
+    edtData.SetFocus;
     exit
   end;
 

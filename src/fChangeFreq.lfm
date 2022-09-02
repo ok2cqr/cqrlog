@@ -77,7 +77,7 @@ object frmChangeFreq: TfrmChangeFreq
     OnKeyPress = ChkKeyPress
     TabOrder = 2
   end
-  object edtRTTY: TEdit
+  object edtData: TEdit
     Left = 168
     Height = 34
     Top = 89
