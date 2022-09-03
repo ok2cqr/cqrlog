@@ -4244,9 +4244,9 @@ object frmPreferences: TfrmPreferences
           Left = 207
           Height = 34
           Top = 159
-          Width = 169
+          Width = 202
           BorderSpacing.Top = 4
-          Caption = 'Please read Help about'#10'Log/Rig mode conversion!'
+          Caption = 'Please read Help about'#10'Log/Rig data mode conversion!'
           ParentColor = False
         end
       end

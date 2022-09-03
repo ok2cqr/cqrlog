@@ -101,7 +101,6 @@ type
       Shift : TShiftState; X, Y : Integer);
     procedure edtFreqInputMouseWheel(Sender : TObject; Shift : TShiftState;
       WheelDelta : Integer; MousePos : TPoint; var Handled : Boolean);
-    procedure FillRigNames(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormCreate(Sender : TObject);
     procedure FormDestroy(Sender : TObject);
@@ -191,7 +190,6 @@ type
     procedure LoadBandButtons;
     function ListModeClose : Boolean;
     procedure HLTune(start : Boolean);
-    procedure FillRigNames;
   end;
 
 var
@@ -413,20 +411,6 @@ begin
   if mode = 'FM' then
     Result := (cqrini.ReadInteger(section, 'FM', 2500));
 end;
-procedure TfrmTRXControl.FillRigNames;
-var
-   n:integer;
-   s,r:string;
-Begin
-   for n:=0 to 5 do
-   Begin
-       s:=IntToStr(n+1);
-       r:=cqrini.ReadString('TRX'+s, 'Desc', '');
-       if r='' then  r:=' None' else r:=' '+r;
-       cmbRig.Items[n]:=s + r;
-   end;
-end;
-
 procedure TfrmTRXControl.FormShow(Sender : TObject);
 
 begin
@@ -434,7 +418,8 @@ begin
   LoadButtonCaptions;
   LoadBandButtons;
   dmUtils.LoadWindowPos(frmTRXControl);
-  FillRigNames;
+  cmbRigGetItems(nil);
+  cmbRigCloseUp(nil); //defaults rig 1
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
   gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', gbInfo.Visible);
@@ -915,8 +900,19 @@ begin
 end;
 
 procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
-begin
-  FillRigNames;
+var
+   n:integer;
+   s,r:string;
+Begin
+   cmbRig.Items.Clear;
+   cmbRig.Items.add(''); //nr zero is empty
+   for n:=1 to 6 do
+   Begin
+       s:=IntToStr(n);
+       r:=cqrini.ReadString('TRX'+s, 'Desc', '');
+       if r='' then  r:=' None' else r:=' '+r;
+       cmbRig.Items.add(s + r);
+   end;
 end;
 
 procedure TfrmTRXControl.edtFreqInputKeyPress(Sender : TObject; var Key : Char);
@@ -1005,11 +1001,6 @@ begin
   end;
 end;
 
-procedure TfrmTRXControl.FillRigNames(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmTRXControl.FormCreate(Sender : TObject);
 begin
   Radio := nil;
@@ -1063,18 +1054,21 @@ begin
 
   n:=IntToStr(cmbRig.ItemIndex);
 
-  radio := TRigControl.Create;
-
-  if (dmData.DebugLevel > 0) or cqrini.ReadBool('TRX', 'Debug', False) then
-    radio.DebugMode := True;
-
   if not TryStrToInt(cqrini.ReadString('TRX' + n, 'model', ''), id) then
    Begin
-    cmbRig.Items[cmbRig.ItemIndex]:= n + ' Not Set';
-    radio.RigId := 1
+    cmbRig.Items[cmbRig.ItemIndex]:= n + 'Is not Set';
+    edtFreqInput.Text:='';
+    edtFreqInput.Repaint;
+    ClearButtonsColor;
+    exit;
    end
   else
+   begin
+    radio := TRigControl.Create;
+    if (dmData.DebugLevel > 0) or cqrini.ReadBool('TRX', 'Debug', False) then
+    radio.DebugMode := True;
     radio.RigId := id;
+   end;
 
   //broken configuration caused crash because RigCtldPort was empty
   //probably late to change it to Integer, I have no idea if the current
@@ -1389,6 +1383,7 @@ begin
   btn6m.Font.Color := COLOR_WINDOWTEXT;
   btn2m.Font.Color := COLOR_WINDOWTEXT;
   btn70cm.Font.Color := COLOR_WINDOWTEXT;
+
 end;
 
 function TfrmTRXControl.GetModeBand(var mode, band : String) : Boolean;

@@ -1679,7 +1679,7 @@ begin
   if frmPropagation.Showing then
     frmPropagation.RefreshPropagation;
 
-  frmTRXControl.FillRigNames;
+  frmTRXControl.cmbRigGetItems(nil);
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
   if ((frmNewQSO.sbNewQSO.Panels[0].Text = '') or (frmNewQSO.sbNewQSO.Panels[0].Text = cMyLoc)) then
