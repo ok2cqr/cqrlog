@@ -155,7 +155,8 @@ type
     function GetActualMode : String;
     function GetModeNumber(mode : String) : Cardinal;
     procedure SetMode(mode : String; bandwidth : Integer);
-    procedure ClearButtonsColor;
+    procedure ClearBandButtonsColor;
+    procedure ClearModeButtonsColor;
     procedure UpdateModeButtons(mode : String);
     procedure CheckUserMode(var mode : String);
     procedure UserButton(r, b : Char);
@@ -163,6 +164,8 @@ type
     AutoMode : Boolean;
     infosetstage : Integer;
     infosetfreq : String;
+    RigInUse    : String;  //rig in use. Number as string
+
     procedure SynTRX;
 
     function GetFreqFromModeBand(band : Integer; smode : String) : String;
@@ -264,7 +267,7 @@ begin
   lblFreq.Caption := FormatFloat(empty_freq, f);
 
   UpdateModeButtons(m);
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   // this waits5 rig polls before lock freq set by memory. After that if freq chanfǵes (by vfo knob) clean info text
   // stupid but works quite well
   case infosetstage of
@@ -395,8 +398,7 @@ function TfrmTRXControl.GetBandWidth(mode : String) : Integer;
 var
   section : String;
 begin
-  section:=IntToStr(cmbRig.ItemIndex);
-  section := 'Band'+section;
+  section := 'Band'+RigInUse;
   Result := 500;
   if (mode = 'LSB') or (mode = 'USB') then
     mode := 'SSB';
@@ -419,6 +421,7 @@ begin
   LoadBandButtons;
   dmUtils.LoadWindowPos(frmTRXControl);
   cmbRigGetItems(nil);
+  cmbRig.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
   cmbRigCloseUp(nil); //defaults rig 1
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
@@ -436,7 +439,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(8, mode);
   SetModeFreq(mode, freq);
@@ -449,7 +452,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(7, mode);
   SetModeFreq(mode, freq);
@@ -462,7 +465,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(6, mode);
   SetModeFreq(mode, freq);
@@ -475,7 +478,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(0, mode);
   SetModeFreq(mode, freq);
@@ -488,7 +491,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(5, mode);
   SetModeFreq(mode, freq);
@@ -501,7 +504,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(4, mode);
   SetModeFreq(mode, freq);
@@ -514,7 +517,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(10, mode);
   SetModeFreq(mode, freq);
@@ -527,7 +530,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(3, mode);
   SetModeFreq(mode, freq);
@@ -540,7 +543,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(2, mode);
   SetModeFreq(mode, freq);
@@ -553,7 +556,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(9, mode);
   SetModeFreq(mode, freq);
@@ -566,7 +569,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(11, mode);
   SetModeFreq(mode, freq);
@@ -579,7 +582,7 @@ var
   freq : String = '';
   mode : String = '';
 begin
-  ClearButtonsColor;
+  ClearBandButtonsColor;
   mode := GetActualMode;
   freq := GetFreqFromModeBand(1, mode);
   SetModeFreq(mode, freq);
@@ -717,6 +720,7 @@ end;
 
 procedure TfrmTRXControl.FormClose(Sender : TObject; var CloseAction : TCloseAction);
 begin
+  cqrini.WriteString('TRX', 'RigInUse', IntToStr(cmbRig.ItemIndex));
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 
@@ -871,18 +875,17 @@ begin
     dmutils.RunOnBackground(c);
   end
   else
-    radio.UsrCmd(c);
+   if Assigned(radio) then
+              radio.UsrCmd(c);
 end;
 procedure TfrmTRXControl.btnUsrClick(Sender : TObject);
 var
   b : Char;
-  r:string;
 begin
   if Sender = btnUsr1 then b:='1';
   if Sender = btnUsr2 then b:='2';
   if Sender = btnUsr3 then b:='3';
-  r:=IntToStr(cmbRig.ItemIndex);
-  UserButton(r[1], b);
+  UserButton(RigInUse[1], b);
 end;
 
 procedure TfrmTRXControl.cmbRigChange(Sender: TObject);
@@ -897,9 +900,11 @@ end;
 procedure TfrmTRXControl.cmbRigCloseUp(Sender: TObject);
 begin
   if cmbRig.ItemIndex<1 then cmbRig.ItemIndex:=1;
+  RigInUse:=IntToStr(cmbRig.ItemIndex);
 end;
 
 procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
+
 var
    n:integer;
    s,r:string;
@@ -1038,7 +1043,6 @@ end;
 
 function TfrmTRXControl.InitializeRig : Boolean;
 var
-  n : String = '';
   id : Integer = 0;
   port : Integer;
   poll : Integer;
@@ -1052,14 +1056,12 @@ begin
   Sleep(500);
   Application.ProcessMessages;
 
-  n:=IntToStr(cmbRig.ItemIndex);
-
-  if not TryStrToInt(cqrini.ReadString('TRX' + n, 'model', ''), id) then
+  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'model', ''), id) then
    Begin
-    cmbRig.Items[cmbRig.ItemIndex]:= n + 'Is not Set';
-    edtFreqInput.Text:='';
-    edtFreqInput.Repaint;
-    ClearButtonsColor;
+    cmbRig.Items[cmbRig.ItemIndex]:= RigInUse + ' Is not Set';
+    lblFreq.Caption:='0.0000';
+    ClearBandButtonsColor;
+    ClearModeButtonsColor;
     exit;
    end
   else
@@ -1073,22 +1075,22 @@ begin
   //broken configuration caused crash because RigCtldPort was empty
   //probably late to change it to Integer, I have no idea if the current
   //setting would be converted automatically or user has to do it again :(
-  if not TryStrToInt(cqrini.ReadString('TRX' + n, 'RigCtldPort', '4532'), port) then
+  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'RigCtldPort', '4532'), port) then
     port := 4532;
 
-  if not TryStrToInt(cqrini.ReadString('TRX' + n, 'poll', '500'), poll) then
+  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'poll', '500'), poll) then
     poll := 500;
 
   radio.RigCtldPath := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
-  radio.RigCtldArgs := dmUtils.GetRadioRigCtldCommandLine(StrToInt(n));
-  radio.RunRigCtld := cqrini.ReadBool('TRX' + n, 'RunRigCtld', False);
-  radio.RigDevice := cqrini.ReadString('TRX' + n, 'device', '');
+  radio.RigCtldArgs := dmUtils.GetRadioRigCtldCommandLine(StrToInt(RigInUse));
+  radio.RunRigCtld := cqrini.ReadBool('TRX' + RigInUse, 'RunRigCtld', False);
+  radio.RigDevice := cqrini.ReadString('TRX' + RigInUse, 'device', '');
   radio.RigCtldPort := port;
-  radio.RigCtldHost := cqrini.ReadString('TRX' + n, 'host', 'localhost');
+  radio.RigCtldHost := cqrini.ReadString('TRX' + RigInUse, 'host', 'localhost');
   radio.RigPoll := poll;
-  radio.RigSendCWR := cqrini.ReadBool('TRX' + n, 'CWR', False);
-  radio.RigChkVfo := cqrini.ReadBool('TRX' + n, 'ChkVfo', True);
-  radio.PowerON:=cqrini.ReadBool('TRX'+ n, 'RigPwrON', True);
+  radio.RigSendCWR := cqrini.ReadBool('TRX' + RigInUse, 'CWR', False);
+  radio.RigChkVfo := cqrini.ReadBool('TRX' + RigInUse, 'ChkVfo', True);
+  radio.PowerON:=cqrini.ReadBool('TRX'+ RigInUse, 'RigPwrON', True);
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled := True;
   Result := True;
@@ -1112,14 +1114,14 @@ begin
         ) then //no restart keyer it is same device for both radios.
             begin
               if ((dmData.DebugLevel >= 1) or ((abs(dmData.DebugLevel) and 8) = 8)) then
-                Writeln('User ask: No reset and keyer not Hamlib: No restart by TRControl radio'
-                  + n + ' change');
+                Writeln('User want: No reset and keyer not Hamlib: No restart by TRControl radio'
+                  + RigInUse + ' change');
             end
       else
         Begin
           frmNewQSO.InitializeCW;
           if ((dmData.DebugLevel >= 1) or ((abs(dmData.DebugLevel) and 8) = 8)) then
-            Writeln('CW keyer reloaded by TRControl radio' + n + ' change');
+            Writeln('CW keyer reloaded by TRControl radio' + RigInUse + ' change');
         end;
 
     end;
@@ -1369,7 +1371,7 @@ begin
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 
-procedure TfrmTRXControl.ClearButtonsColor;
+procedure TfrmTRXControl.ClearBandButtonsColor;
 begin
   btn160m.Font.Color := COLOR_WINDOWTEXT;
   btn80m.Font.Color := COLOR_WINDOWTEXT;
@@ -1384,6 +1386,14 @@ begin
   btn2m.Font.Color := COLOR_WINDOWTEXT;
   btn70cm.Font.Color := COLOR_WINDOWTEXT;
 
+end;
+procedure TfrmTRXControl.ClearModeButtonsColor;
+begin
+  btnCW.Font.Color := COLOR_WINDOWTEXT;
+  btnSSB.Font.Color := COLOR_WINDOWTEXT;
+  btnDATA.Font.Color := COLOR_WINDOWTEXT;
+  btnAM.Font.Color := COLOR_WINDOWTEXT;
+  btnFM.Font.Color := COLOR_WINDOWTEXT;
 end;
 
 function TfrmTRXControl.GetModeBand(var mode, band : String) : Boolean;
@@ -1413,16 +1423,10 @@ end;
 procedure TfrmTRXControl.UpdateModeButtons(mode : String);
 var
   usermode :String;
-  n        :String;
 begin
-  btnCW.Font.Color := COLOR_WINDOWTEXT;
-  btnSSB.Font.Color := COLOR_WINDOWTEXT;
-  btnDATA.Font.Color := COLOR_WINDOWTEXT;
-  btnAM.Font.Color := COLOR_WINDOWTEXT;
-  btnFM.Font.Color := COLOR_WINDOWTEXT;
+  ClearModeButtonsColor;
 
-  n:=IntToStr(cmbRig.ItemIndex);
-  usermode:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
+  usermode:=cqrini.ReadString('Band'+RigInUse, 'Datacmd', 'RTTY');
 
   if mode = usermode then btnDATA.Font.Color := clRed
      else
@@ -1520,13 +1524,10 @@ begin
 end;
 
 procedure TfrmTRXControl.LoadUsrButtonCaptions;
-var
-  r : String;
 begin
-  r:= IntToStr(cmbRig.ItemIndex);
-  btnUsr1.Caption := cqrini.ReadString('TRX' + r, 'usr1name', 'Usr1');
-  btnUsr2.Caption := cqrini.ReadString('TRX' + r, 'usr2name', 'Usr2');
-  btnUsr3.Caption := cqrini.ReadString('TRX' + r, 'usr3name', 'Usr3');
+  btnUsr1.Caption := cqrini.ReadString('TRX' + RigInUse, 'usr1name', 'Usr1');
+  btnUsr2.Caption := cqrini.ReadString('TRX' + RigInUse, 'usr2name', 'Usr2');
+  btnUsr3.Caption := cqrini.ReadString('TRX' + RigInUse, 'usr3name', 'Usr3');
 end;
 
 procedure TfrmTRXControl.LoadButtonCaptions;
@@ -1591,13 +1592,10 @@ end;
 procedure TfrmTRXControl.CheckUserMode(var mode : String);
 var
   usermode,
-  usercmd,
-  n       :String;
-
+  usercmd  :String;
 begin
-  n:=IntToStr(cmbRig.ItemIndex);
-  usercmd:=cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY');
-  usermode:=cqrini.ReadString('Band'+n, 'Datamode', 'RTTY');
+  usercmd:=cqrini.ReadString('Band'+RigInUse, 'Datacmd', 'RTTY');
+  usermode:=cqrini.ReadString('Band'+RigInUse, 'Datamode', 'RTTY');
 
   if ((Upcase(mode)='RTTY') or (Upcase(mode)=Upcase(usermode))) then
      mode := usercmd;

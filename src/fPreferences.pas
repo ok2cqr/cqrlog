@@ -1054,8 +1054,9 @@ type
     procedure cmbModelRigChange(Sender: TObject);
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
-    procedure cmbRadioNrChangeBounds(Sender: TObject);
     procedure cmbRadioModesCloseUp(Sender: TObject);
+    procedure cmbRadioNrChangeBounds(Sender: TObject);
+    procedure cmbRadioNrCloseUp(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
@@ -1068,9 +1069,8 @@ type
     procedure edtLocExit(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
-    procedure lblDataMode1Click(Sender: TObject);
-    procedure lblDataModeClick(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
+    procedure tabTRXcontrolExit(Sender: TObject);
     procedure TRXParamsChange(Sender: TObject);
     procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
@@ -2473,13 +2473,6 @@ begin
    RotorParamsChange(nil);
 end;
 
-procedure TfrmPreferences.cmbRadioNrChangeBounds(Sender: TObject);
-begin
-  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
-  SaveTRX(RadioNrLoaded);
-  LoadTRX(cmbRadioNr.ItemIndex);
-end;
-
 procedure TfrmPreferences.cmbRadioModesCloseUp(Sender: TObject);
 var
    nr : String;
@@ -2492,6 +2485,20 @@ begin
      lblNoRigForMode.Visible:=True
    else
      lblNoRigForMode.Visible:=False;
+end;
+
+procedure TfrmPreferences.cmbRadioNrChangeBounds(Sender: TObject);
+begin
+  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
+  SaveTRX(RadioNrLoaded);
+  LoadTRX(cmbRadioNr.ItemIndex);
+end;
+
+procedure TfrmPreferences.cmbRadioNrCloseUp(Sender: TObject);
+begin
+  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
+  SaveTRX(RadioNrLoaded);
+  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex
 end;
 
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
@@ -2612,17 +2619,6 @@ begin
   if not (key in ['0'..'9']) then
     key := #0;
 end;
-
-procedure TfrmPreferences.lblDataMode1Click(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmPreferences.lblDataModeClick(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
 begin
   TRXChanged := True
@@ -2630,6 +2626,16 @@ end;
 procedure TfrmPreferences.RotorParamsChange(Sender: TObject);
 begin
   RotChanged := True;
+end;
+
+procedure TfrmPreferences.tabTRXcontrolExit(Sender: TObject);
+begin
+  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
+  SaveTRX(RadioNrLoaded);
+  LoadTRX(cmbRadioNr.ItemIndex);
+  frmTRXControl.cmbRigGetItems(nil);               //sets rig names to
+  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items; //mode selector
+  cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
 end;
 
 
@@ -2869,6 +2875,9 @@ begin
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
   chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
   chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
+
+  cmbRadioNr.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
+  cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
 
   edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
 
