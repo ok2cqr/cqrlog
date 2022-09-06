@@ -901,6 +901,7 @@ procedure TfrmTRXControl.cmbRigCloseUp(Sender: TObject);
 begin
   if cmbRig.ItemIndex<1 then cmbRig.ItemIndex:=1;
   RigInUse:=IntToStr(cmbRig.ItemIndex);
+  cqrini.WriteInteger('TRX', 'RigInUse',cmbRig.ItemIndex);
 end;
 
 procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
@@ -911,13 +912,14 @@ var
 Begin
    cmbRig.Items.Clear;
    cmbRig.Items.add(''); //nr zero is empty
-   for n:=1 to 6 do
+   for n:=1 to cqrini.ReadInteger('TRX', 'RigCount', 2) do
    Begin
        s:=IntToStr(n);
        r:=cqrini.ReadString('TRX'+s, 'Desc', '');
        if r='' then  r:=' None' else r:=' '+r;
        cmbRig.Items.add(s + r);
    end;
+   cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
 end;
 
 procedure TfrmTRXControl.edtFreqInputKeyPress(Sender : TObject; var Key : Char);

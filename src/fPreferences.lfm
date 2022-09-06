@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabModes
+    ActivePage = tabTRXcontrol
     Align = alClient
-    TabIndex = 7
+    TabIndex = 5
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2168,6 +2168,31 @@ object frmPreferences: TfrmPreferences
           OnChange = TRXParamsChange
           TabOrder = 0
         end
+        object edtRigCount: TSpinEdit
+          AnchorSideLeft.Control = edtRigCtldPath
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = edtRigCtldPath
+          Left = 542
+          Height = 34
+          Top = 29
+          Width = 50
+          BorderSpacing.Left = 33
+          MaxValue = 6
+          MinValue = 1
+          OnChange = edtRigCountChange
+          TabOrder = 1
+          Value = 2
+        end
+        object lblNrOfRadios: TLabel
+          AnchorSideLeft.Control = edtRigCount
+          AnchorSideTop.Control = lblRigctdPath
+          Left = 542
+          Height = 17
+          Top = 6
+          Width = 76
+          Caption = 'Nr of radios'
+          ParentColor = False
+        end
       end
       object chkTrxControlDebug: TCheckBox
         AnchorSideLeft.Control = chkModeRelatedOnly
@@ -2825,21 +2850,10 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Left = 6
           BorderSpacing.Top = 1
           ItemHeight = 0
-          ItemIndex = 1
-          Items.Strings = (
-            ''
-            '1'
-            '2'
-            '3'
-            '4'
-            '5'
-            '6'
-          )
-          OnChangeBounds = cmbRadioNrChangeBounds
+          OnChange = cmbRadioNrChange
           OnCloseUp = cmbRadioNrCloseUp
           Style = csDropDownList
           TabOrder = 0
-          Text = '1'
         end
         object lblRName: TLabel
           AnchorSideLeft.Control = cmbRadioNr
@@ -4116,21 +4130,11 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Left = 12
           BorderSpacing.Top = 1
           ItemHeight = 0
-          ItemIndex = 1
-          Items.Strings = (
-            ''
-            '1'
-            '2'
-            '3'
-            '4'
-            '5'
-            '6'
-          )
+          OnChange = cmbRadioModesChange
           OnCloseUp = cmbRadioModesCloseUp
           ReadOnly = True
           Style = csDropDownList
           TabOrder = 5
-          Text = '1'
         end
         object lblDataMode: TLabel
           AnchorSideLeft.Control = lblCWHz
@@ -4183,7 +4187,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 280
           Height = 34
-          Hint = 'Log Mode is the data mode name you want to use.'#10'(most used data mode)'#10'This setting effects to DXCluster spot line colors and'#10'sets wanted rig mode when double click on spot line.'
+          Hint = '"Log Mode" is the data mode name you want to use.'#10'(most used data mode)'#10'This setting effects to DXCluster spot line colors and'#10'sets wanted rig mode when double click on DXspot line.'#10#10'NOTE: You may have to add your "Log mode" to'#10'"User defined digital modes"'
           Top = 53
           Width = 80
           AutoSize = False
@@ -4198,7 +4202,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 280
           Height = 34
-          Hint = 'Rig cmd is the mode command your rig needs when'#10' working this mode.'
+          Hint = '"Rig cmd" is the rigctld mode command your rig needs to'#10'set rig to this mode.'
           Top = 87
           Width = 80
           AutoSize = False
@@ -4230,23 +4234,14 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 207
           Height = 23
+          Hint = 'Cheking this will cause Cqrlog to set selected "Log mode" if'#10'rigctld reads this mode from rig and NewQSO/Auto is checked.'#10#10'This can be a pitfall if your "Log mode" needs for ex. USB mode'#10'from rig. Then when working phone qso using USB your log gets'#10'mode as "Log mode". '#10'Normally when using remote modes and get mode from remote'#10'program this does not need to be checked.'
           Top = 127
           Width = 202
           BorderSpacing.Top = 5
           Caption = 'Use also reverse (rig->log)'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 8
-        end
-        object lblReadHelp: TLabel
-          AnchorSideLeft.Control = chkModeReverse
-          AnchorSideTop.Control = chkModeReverse
-          AnchorSideTop.Side = asrBottom
-          Left = 207
-          Height = 34
-          Top = 154
-          Width = 202
-          BorderSpacing.Top = 4
-          Caption = 'Please read Help about'#10'Log/Rig data mode conversion!'
-          ParentColor = False
         end
       end
     end
