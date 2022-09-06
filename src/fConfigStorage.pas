@@ -182,7 +182,7 @@ begin
   if cmbStoreOnlineLog.ItemIndex>0 then
     Sections := Sections + 'OnlineLog,';
   if cmbStoreWindowSize.ItemIndex>0 then
-    Sections := Sections + 'WindowSize, Window,Grayline,';
+    Sections := Sections + 'WindowSize,Window,Grayline,';
   if cmbStoreColumnSize.ItemIndex>0 then
     Sections := Sections + 'ColumnSize,';
   cqrini.WriteString('ConfigStorage','Items',Sections);

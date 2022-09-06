@@ -1073,6 +1073,7 @@ type
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure edtRigCountChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
+    procedure tabModesExit(Sender: TObject);
     procedure tabTRXcontrolExit(Sender: TObject);
     procedure TRXParamsChange(Sender: TObject);
     procedure edtTxtFilesExit(Sender: TObject);
@@ -1307,9 +1308,14 @@ begin
   cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
   cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
-  cqrini.WriteInteger('TRX', 'RigInUse', edtRigCount.Value);
+  cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
 
-  SaveTRX(cmbRadioNr.ItemIndex);
+  for int:=1 to edtRigCount.Value do
+      begin
+       SaveTRX(int);
+       SaveBandW(int);
+      end;
+
   ClearUnUsedRigs;
   frmTRXControl.cmbRigGetItems(nil);
 
@@ -2634,6 +2640,7 @@ end;
 
 procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
 begin
+  cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
   InitRigCmb;
 end;
 
@@ -2644,6 +2651,12 @@ end;
 procedure TfrmPreferences.RotorParamsChange(Sender: TObject);
 begin
   RotChanged := True;
+end;
+
+procedure TfrmPreferences.tabModesExit(Sender: TObject);
+begin
+  if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
+  SaveBandW(BandWNrLoaded);
 end;
 
 procedure TfrmPreferences.tabTRXcontrolExit(Sender: TObject);
@@ -2900,6 +2913,7 @@ begin
 
   LoadTRX(cmbRadioNr.ItemIndex);
   LoadBandW(cmbRadioNr.ItemIndex);
+  tabTRXcontrolExit(nil);
 
   edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
   if (FileExistsUTF8(edtRotCtldPath.Text)) then
@@ -3425,7 +3439,7 @@ Begin
   cqrini.WriteString('Band'+nr, 'Datacmd', edtDatacmd.Text);
   cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
 end;
-procedure TfrmPreferences.InitRigCmb;    //initialize radion selectors in TRXControl and Modes
+procedure TfrmPreferences.InitRigCmb;    //initialize radio selectors in TRXControl and Modes
 var
    f : integer;
    s   : string;
@@ -3439,14 +3453,20 @@ Begin
       cmbRadioNr.Items.Add(IntToStr(f));
       cmbRadioModes.Items.Add(IntToStr(f));
     end;
-   cmbRadioNr.ItemIndex:=1;
-   cmbRadioModes.ItemIndex:=1;
+
 end;
-procedure TfrmPreferences.ClearUnUsedRigs;  //remove unused rigs from configuration
+procedure TfrmPreferences.ClearUnUsedRigs;
 var
    f:integer;
 Begin
-     for f:=edtRigCount.Value+1 to  6 do //6 is max rig value set by edtRigCount Tspinedit
+    //remove these just in case (they should not exist)
+    for f:=-1 to  0 do
+     begin
+      cqrini.SectionErase('TRX'+IntToStr(f));
+      cqrini.SectionErase('Band'+IntToStr(f));
+     end;
+     //remove unused rigs from configuration
+    for f:=edtRigCount.Value+1 to  6 do //6 is max rig value set by edtRigCount Tspinedit
       begin
        cqrini.SectionErase('TRX'+IntToStr(f));
        cqrini.SectionErase('Band'+IntToStr(f));

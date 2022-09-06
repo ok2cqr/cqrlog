@@ -56,7 +56,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 3
         Caption = ' Internet connection '
-        ClientHeight = 127
+        ClientHeight = 111
         ClientWidth = 339
         TabOrder = 0
         object lblintProxy: TLabel
@@ -248,7 +248,7 @@ object frmPreferences: TfrmPreferences
         Width = 626
         BorderSpacing.Top = 9
         Caption = ' Offsets and colors'
-        ClientHeight = 201
+        ClientHeight = 185
         ClientWidth = 624
         TabOrder = 7
         object lblUtc: TLabel
@@ -2265,7 +2265,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblModelR
           Left = 236
           Height = 17
-          Top = 35
+          Top = 39
           Width = 157
           BorderSpacing.Left = 30
           Caption = 'Device (e.g. /dev/ttyS0):'
@@ -2277,7 +2277,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
-          Top = 35
+          Top = 39
           Width = 72
           BorderSpacing.Left = 6
           BorderSpacing.Top = 5
@@ -2290,7 +2290,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblDeviceR
           Left = 439
           Height = 17
-          Top = 35
+          Top = 39
           Width = 58
           BorderSpacing.Left = 30
           Caption = 'Poll rate:'
@@ -2302,7 +2302,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 236
           Height = 34
-          Top = 52
+          Top = 56
           Width = 173
           OnChange = TRXParamsChange
           TabOrder = 4
@@ -2313,7 +2313,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 439
           Height = 34
-          Top = 52
+          Top = 56
           Width = 80
           OnChange = TRXParamsChange
           OnExit = edtPollExit
@@ -2325,7 +2325,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblExtra
           Left = 273
           Height = 23
-          Top = 89
+          Top = 93
           Width = 185
           BorderSpacing.Left = 12
           Caption = 'Use CWR instead of CW '
@@ -2338,7 +2338,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 273
           Height = 23
-          Top = 112
+          Top = 116
           Width = 235
           Caption = 'Run rigctld when program starts'
           OnChange = TRXParamsChange
@@ -2350,7 +2350,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
-          Top = 89
+          Top = 93
           Width = 209
           BorderSpacing.Top = 3
           Caption = 'Extra command line arguments:'
@@ -2362,7 +2362,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 34
-          Top = 106
+          Top = 110
           Width = 255
           OnChange = TRXParamsChange
           TabOrder = 7
@@ -2373,7 +2373,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblPollR
           Left = 549
           Height = 17
-          Top = 35
+          Top = 39
           Width = 84
           BorderSpacing.Left = 30
           Caption = 'Port number:'
@@ -2385,7 +2385,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 549
           Height = 34
-          Top = 52
+          Top = 56
           Width = 80
           OnChange = TRXParamsChange
           TabOrder = 6
@@ -2396,7 +2396,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 148
-          Top = 143
+          Top = 147
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
@@ -2649,7 +2649,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 34
-          Top = 52
+          Top = 56
           Width = 200
           ItemHeight = 0
           OnChange = cmbModelRigChange
@@ -2702,8 +2702,8 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = grbRadio
           AnchorSideBottom.Side = asrBottom
           Left = 6
-          Height = 127
-          Top = 294
+          Height = 123
+          Top = 298
           Width = 643
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 6
@@ -2711,7 +2711,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Right = 6
           BorderSpacing.Bottom = 6
           Caption = 'User defined TRX control buttons'
-          ClientHeight = 109
+          ClientHeight = 105
           ClientWidth = 641
           TabOrder = 12
           object lblUsr1R: TLabel
@@ -2832,7 +2832,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 517
           Height = 23
-          Top = 89
+          Top = 93
           Width = 103
           Caption = 'Use \chkvfo'
           Checked = True
@@ -2844,7 +2844,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Control = grbRadio
           AnchorSideTop.Control = grbRadio
           Left = 6
-          Height = 29
+          Height = 33
           Top = 1
           Width = 74
           BorderSpacing.Left = 6
@@ -2873,7 +2873,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 517
           Height = 23
-          Top = 112
+          Top = 116
           Width = 131
           Caption = 'Rig pwr ON cmd'
           Checked = True
@@ -3860,6 +3860,7 @@ object frmPreferences: TfrmPreferences
       Caption = 'Modes'
       ClientHeight = 681
       ClientWidth = 873
+      OnExit = tabModesExit
       object grpUsrDigitalModes: TGroupBox
         AnchorSideLeft.Control = tabModes
         AnchorSideTop.Control = grbRigBandWidths
@@ -3909,7 +3910,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 12
           Height = 17
-          Top = 36
+          Top = 40
           Width = 36
           BorderSpacing.Left = 12
           BorderSpacing.Top = 6
@@ -3922,7 +3923,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblMode
           Left = 81
           Height = 17
-          Top = 36
+          Top = 40
           Width = 69
           BorderSpacing.Left = 33
           Caption = 'Bandwidth'
@@ -3934,7 +3935,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 12
           Height = 17
-          Top = 62
+          Top = 66
           Width = 22
           Caption = 'CW'
           ParentColor = False
@@ -3946,7 +3947,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           Left = 81
           Height = 34
-          Top = 53
+          Top = 57
           Width = 90
           AutoSize = False
           Increment = 50
@@ -3962,7 +3963,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 177
           Height = 17
-          Top = 62
+          Top = 66
           Width = 17
           BorderSpacing.Left = 6
           Caption = 'Hz'
@@ -3974,7 +3975,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 177
           Height = 17
-          Top = 96
+          Top = 100
           Width = 17
           Caption = 'Hz'
           ParentColor = False
@@ -3986,7 +3987,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           Left = 81
           Height = 34
-          Top = 87
+          Top = 91
           Width = 90
           AutoSize = False
           Increment = 50
@@ -4001,7 +4002,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 12
           Height = 17
-          Top = 96
+          Top = 100
           Width = 25
           Caption = 'SSB'
           ParentColor = False
@@ -4012,7 +4013,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 12
           Height = 17
-          Top = 130
+          Top = 134
           Width = 31
           Caption = 'Data'
           ParentColor = False
@@ -4024,7 +4025,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           Left = 81
           Height = 34
-          Top = 121
+          Top = 125
           Width = 90
           AutoSize = False
           Increment = 50
@@ -4039,7 +4040,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 177
           Height = 17
-          Top = 130
+          Top = 134
           Width = 17
           Caption = 'Hz'
           ParentColor = False
@@ -4050,7 +4051,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 177
           Height = 17
-          Top = 164
+          Top = 168
           Width = 17
           Caption = 'Hz'
           ParentColor = False
@@ -4062,7 +4063,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           Left = 81
           Height = 34
-          Top = 155
+          Top = 159
           Width = 90
           AutoSize = False
           Increment = 100
@@ -4077,7 +4078,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 12
           Height = 17
-          Top = 164
+          Top = 168
           Width = 21
           Caption = 'AM'
           ParentColor = False
@@ -4088,7 +4089,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 12
           Height = 17
-          Top = 198
+          Top = 202
           Width = 20
           Caption = 'FM'
           ParentColor = False
@@ -4100,7 +4101,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideRight.Side = asrBottom
           Left = 81
           Height = 34
-          Top = 189
+          Top = 193
           Width = 90
           AutoSize = False
           Increment = 100
@@ -4115,7 +4116,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 177
           Height = 17
-          Top = 198
+          Top = 202
           Width = 17
           Caption = 'Hz'
           ParentColor = False
@@ -4124,7 +4125,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideLeft.Control = grbRigBandWidths
           AnchorSideTop.Control = grbRigBandWidths
           Left = 12
-          Height = 29
+          Height = 33
           Top = 1
           Width = 116
           BorderSpacing.Left = 12
@@ -4141,7 +4142,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblMode
           Left = 207
           Height = 17
-          Top = 36
+          Top = 40
           Width = 31
           BorderSpacing.Left = 30
           Caption = 'Data'
@@ -4153,7 +4154,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 207
           Height = 17
-          Top = 62
+          Top = 66
           Width = 63
           Caption = 'Log Mode'
           ParentColor = False
@@ -4164,7 +4165,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 207
           Height = 17
-          Top = 96
+          Top = 100
           Width = 53
           Caption = 'Rig cmd'
           ParentColor = False
@@ -4175,7 +4176,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblMode
           Left = 280
           Height = 17
-          Top = 36
+          Top = 40
           Width = 40
           BorderSpacing.Left = 42
           Caption = 'Mode '
@@ -4188,7 +4189,7 @@ object frmPreferences: TfrmPreferences
           Left = 280
           Height = 34
           Hint = '"Log Mode" is the data mode name you want to use.'#10'(most used data mode)'#10'This setting effects to DXCluster spot line colors and'#10'sets wanted rig mode when double click on DXspot line.'#10#10'NOTE: You may have to add your "Log mode" to'#10'"User defined digital modes"'
-          Top = 53
+          Top = 57
           Width = 80
           AutoSize = False
           ParentShowHint = False
@@ -4203,7 +4204,7 @@ object frmPreferences: TfrmPreferences
           Left = 280
           Height = 34
           Hint = '"Rig cmd" is the rigctld mode command your rig needs to'#10'set rig to this mode.'
-          Top = 87
+          Top = 91
           Width = 80
           AutoSize = False
           ParentShowHint = False
@@ -4218,7 +4219,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 140
           Height = 17
-          Top = 7
+          Top = 9
           Width = 207
           BorderSpacing.Left = 12
           Caption = 'There is no radio definition'
@@ -4235,7 +4236,7 @@ object frmPreferences: TfrmPreferences
           Left = 207
           Height = 23
           Hint = 'Cheking this will cause Cqrlog to set selected "Log mode" if'#10'rigctld reads this mode from rig and NewQSO/Auto is checked.'#10#10'This can be a pitfall if your "Log mode" needs for ex. USB mode'#10'from rig. Then when working phone qso using USB your log gets'#10'mode as "Log mode". '#10'Normally when using remote modes and get mode from remote'#10'program this does not need to be checked.'
-          Top = 127
+          Top = 131
           Width = 202
           BorderSpacing.Top = 5
           Caption = 'Use also reverse (rig->log)'
