@@ -2680,6 +2680,8 @@ end;
 procedure TfrmPreferences.tabModesEnter(Sender: TObject);
 
 begin
+  sleep(100);                                            //needed sometimes !?!?! when entering directly to this tab
+  Application.ProcessMessages;                           //otherwise names are missing from selector
   LoadBandW(cmbRadioModes.ItemIndex);
   cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab (needed when entering direct to modes tab)
   cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;         //select rig in use
@@ -2934,7 +2936,6 @@ begin
   chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
   edtRigCount.Value:=cqrini.ReadInteger('TRX', 'RigCount', 2);
   InitRigCmb;
-  //frmTRXControl.cmbRigGetItems(nil);
   LoadTRX(cmbRadioNr.ItemIndex);
   LoadBandW(cmbRadioNr.ItemIndex);
 
@@ -2945,7 +2946,7 @@ begin
     dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT2', 'model', ''),edtRotCtldPath.Text,cmbModelRot2)
   end
   else begin
-    Application.MessageBox('rotctld binary not fount, cannot load list of supported rotators!'+LineEnding+LineEnding+
+    Application.MessageBox('rotctld binary not found, unable to load list of supported rotators!'+LineEnding+LineEnding+
                            'Fix path to rotctld in ROT control tab.', 'Error', mb_OK+ mb_IconError)
   end;
 
@@ -3360,13 +3361,15 @@ begin
 end;
 Procedure TfrmPreferences.LoadTRX(RigNr:integer);
 var
-   nr :string;
+   nr,
+   rp  :string;
 Begin
   nr:=IntToStr(RigNr);
-  if (FileExistsUTF8(edtRigCtldPath.Text)) then
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX'+nr, 'model', ''),edtRigCtldPath.Text,cmbModelRig)
+  rp:= cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
+  if FileExistsUTF8(rp) then
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX'+nr, 'model', ''),rp,cmbModelRig)
   else begin
-    Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
+    Application.MessageBox('rigctld binary not found, unable to load list of supported rigs!'+LineEnding+LineEnding+
                            'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
   end;
   edtRDevice.Text := cqrini.ReadString('TRX'+nr, 'device', '');

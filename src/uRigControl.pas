@@ -566,7 +566,7 @@ begin
        Begin
          fMorse:= b[3]='Y';
          if DebugMode then Writeln('Send Morse: ',fMorse,LineEnding);
-         if fPower then
+         if fPower and fPowerON then
             AllowCommand:=8 //issue power on
           else
             AllowCommand:=1 //check pending commands
@@ -623,15 +623,11 @@ begin
                AllowCommand:=-1; //waiting for reply
           end;
       8:  Begin
-               if fPowerON then
-               begin
                 cmd:= '+\set_powerstat 1'+LineEnding;
                 if DebugMode then
                      Writeln('Sending: '+cmd);
                 RigctldConnect.SendMessage(cmd);
                 AllowCommand:=-1; //waiting for reply
-               end;
-
           end;
 
       //lower priority commands queue handled here

@@ -372,7 +372,11 @@ begin
   frmBandMap.CurrentFreq := f * 1000;
   frmBandMap.CurrentMode := m;
   if Assigned(radio) then
-            pnlPower.Enabled:=radio.Power;
+     begin
+          btPon.Enabled:=radio.Power;
+          btPoff.Enabled:=radio.Power;
+          btPstby.Enabled:=radio.Power;
+     end;
 end;
 
 function TfrmTRXControl.GetModeNumber(mode : String) : Cardinal;
@@ -422,7 +426,8 @@ begin
   dmUtils.LoadWindowPos(frmTRXControl);
   cmbRigGetItems(nil);
   cmbRig.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
-  cmbRigCloseUp(nil); //defaults rig 1
+  cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
+  cmbRigChange(nil); //inits rig
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
   gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', gbInfo.Visible);

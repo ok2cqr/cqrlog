@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabModes
+    ActivePage = tabTRXcontrol
     Align = alClient
-    TabIndex = 7
+    TabIndex = 5
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2833,11 +2833,14 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 517
           Height = 23
+          Hint = 'Check if rigctld has started with --vfo parameter. '#10'if result is posirive (1) the polling command format '#10'used will be different.'
           Top = 93
           Width = 103
           Caption = 'Use \chkvfo'
           Checked = True
           OnChange = TRXParamsChange
+          ParentShowHint = False
+          ShowHint = True
           State = cbChecked
           TabOrder = 10
         end
@@ -2874,10 +2877,13 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 517
           Height = 23
+          Hint = 'Should Power ON command to be sent when initializing rig'
           Top = 116
           Width = 131
           Caption = 'Rig pwr ON cmd'
           Checked = True
+          ParentShowHint = False
+          ShowHint = True
           State = cbChecked
           TabOrder = 13
         end
