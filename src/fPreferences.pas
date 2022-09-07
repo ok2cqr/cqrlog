@@ -1060,6 +1060,8 @@ type
     procedure cmbRadioNrChange(Sender: TObject);
     procedure cmbRadioNrCloseUp(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
+    procedure edtDataCmdChange(Sender: TObject);
+    procedure edtDataModeChange(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
     procedure edtGCStepExit(Sender: TObject);
@@ -1073,8 +1075,9 @@ type
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure edtRigCountChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
+    procedure tabModesEnter(Sender: TObject);
     procedure tabModesExit(Sender: TObject);
-    procedure tabTRXcontrolExit(Sender: TObject);
+    procedure tabTRXcontrolEnter(Sender: TObject);
     procedure TRXParamsChange(Sender: TObject);
     procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
@@ -1125,6 +1128,7 @@ type
     procedure LoadMebershipCombo;
     procedure LoadMembersFromCombo(ClubComboText, ClubNumber : String);
     function SeekExecFile(MyFile,MyExeFor:String): String;
+    function DataModeInput(s:string):string;
   public
     { public declarations }
     ActPageIdx : integer;
@@ -1309,12 +1313,6 @@ begin
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
   cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
   cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
-
-  for int:=1 to edtRigCount.Value do
-      begin
-       SaveTRX(int);
-       SaveBandW(int);
-      end;
 
   ClearUnUsedRigs;
   frmTRXControl.cmbRigGetItems(nil);
@@ -2493,14 +2491,12 @@ begin
 end;
 
 procedure TfrmPreferences.cmbRadioModesCloseUp(Sender: TObject);
-var
-   nr : String;
+
 begin
   if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
-  nr:= IntToStr(cmbRadioModes.ItemIndex);
   SaveBandW(BandWNrLoaded);
   LoadBandW(cmbRadioModes.ItemIndex);
-  if cqrini.ReadString('TRX'+nr, 'model', '')='' then
+  if cqrini.ReadString('TRX'+IntToStr(cmbRadioModes.ItemIndex), 'model', '')='' then
      lblNoRigForMode.Visible:=True
    else
      lblNoRigForMode.Visible:=False;
@@ -2514,15 +2510,41 @@ end;
 procedure TfrmPreferences.cmbRadioNrCloseUp(Sender: TObject);
 begin
   if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
-  SaveTRX(RadioNrLoaded);
-  LoadTRX(cmbRadioNr.ItemIndex);
-  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex
+  SaveTRX(RadioNrLoaded);                                 //save edited rig
+  LoadTRX(cmbRadioNr.ItemIndex);                          //load selected rig
+  frmTRXControl.cmbRigGetItems(nil);                      //update rig names
+  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab
+  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex          //select rig in use
 end;
 
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
 begin
    edtAlertCmd.Text:=StringReplace(edtAlertCmd.Text,'~/',dmData.UsrHomeDir,[rfReplaceAll]);
    // ~ in command causes DXCluster spot flow stop (!?)
+end;
+
+procedure TfrmPreferences.edtDataCmdChange(Sender: TObject);
+begin
+  edtDataCmd.Text:=DataModeInput(edtDataCmd.Text);
+  edtDataCmd.SelStart:=length(edtDataCmd.Text);
+  edtDataCmd.SelLength:=0;
+end;
+
+procedure TfrmPreferences.edtDataModeChange(Sender: TObject);
+begin
+  edtDataMode.Text:=DataModeInput(edtDataMode.Text);
+  edtDataMode.SelStart:=length(edtDataMode.Text);
+  edtDataMode.SelLength:=0;
+end;
+function TfrmPreferences.DataModeInput(s:string):string;
+begin
+  s:=Upcase(s);
+  if (length(s)>0)
+    and
+       not ( (s[length(s)] in ['A'..'Z'])
+             or (s[length(s)] in ['0'..'9']) ) then
+                                       s:=copy(s,1,length(s)-1);
+  Result:=s;
 end;
 
 procedure TfrmPreferences.edtGCLineWidthExit(Sender: TObject);
@@ -2641,7 +2663,9 @@ end;
 procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
 begin
   cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
-  InitRigCmb;
+  InitRigCmb;                                             //load selectors
+  frmTRXControl.cmbRigGetItems(nil);                      //update rig names
+  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab
 end;
 
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
@@ -2653,22 +2677,24 @@ begin
   RotChanged := True;
 end;
 
+procedure TfrmPreferences.tabModesEnter(Sender: TObject);
+
+begin
+  LoadBandW(cmbRadioModes.ItemIndex);
+  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab (needed when entering direct to modes tab)
+  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;         //select rig in use
+end;
+
 procedure TfrmPreferences.tabModesExit(Sender: TObject);
 begin
   if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
   SaveBandW(BandWNrLoaded);
 end;
 
-procedure TfrmPreferences.tabTRXcontrolExit(Sender: TObject);
+procedure TfrmPreferences.tabTRXcontrolEnter(Sender: TObject);
 begin
-  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
-  SaveTRX(RadioNrLoaded);
   LoadTRX(cmbRadioNr.ItemIndex);
-  frmTRXControl.cmbRigGetItems(nil);               //sets rig names to
-  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items; //mode selector
-  cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
 end;
-
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
 Begin
@@ -2908,12 +2934,9 @@ begin
   chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
   edtRigCount.Value:=cqrini.ReadInteger('TRX', 'RigCount', 2);
   InitRigCmb;
-  cmbRadioNr.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
-  cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
-
+  //frmTRXControl.cmbRigGetItems(nil);
   LoadTRX(cmbRadioNr.ItemIndex);
   LoadBandW(cmbRadioNr.ItemIndex);
-  tabTRXcontrolExit(nil);
 
   edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
   if (FileExistsUTF8(edtRotCtldPath.Text)) then
@@ -3439,8 +3462,8 @@ Begin
   cqrini.WriteString('Band'+nr, 'Datacmd', edtDatacmd.Text);
   cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
 end;
-procedure TfrmPreferences.InitRigCmb;    //initialize radio selectors in TRXControl and Modes
-var
+procedure TfrmPreferences.InitRigCmb;    //initialize radio selectors (without names) in TRXControl and Modes
+var                                      //set itemindexes to used rig
    f : integer;
    s   : string;
 Begin
@@ -3453,7 +3476,8 @@ Begin
       cmbRadioNr.Items.Add(IntToStr(f));
       cmbRadioModes.Items.Add(IntToStr(f));
     end;
-
+  cmbRadioNr.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+  cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
 end;
 procedure TfrmPreferences.ClearUnUsedRigs;
 var
@@ -3465,12 +3489,22 @@ Begin
       cqrini.SectionErase('TRX'+IntToStr(f));
       cqrini.SectionErase('Band'+IntToStr(f));
      end;
-     //remove unused rigs from configuration
-    for f:=edtRigCount.Value+1 to  6 do //6 is max rig value set by edtRigCount Tspinedit
+     //remove unused rigs and modes from configuration
+    if  edtRigCount.Value< edtRigCount.MaxValue then
       begin
-       cqrini.SectionErase('TRX'+IntToStr(f));
-       cqrini.SectionErase('Band'+IntToStr(f));
+       f:= edtRigCount.MaxValue;
+       repeat
+         Begin
+           cqrini.SectionErase('TRX'+IntToStr(f));
+           cqrini.SectionErase('Band'+IntToStr(f));
+           dec(f);
+         end;
+       until (f=edtRigCount.Value);
       end;
+      //6 is max rig count set by edtRigCount:Tspinedit
+      //if you change it you must change also fConfigStorage.pas
+      //TRX and Band lists
+
 end;
 
 end.

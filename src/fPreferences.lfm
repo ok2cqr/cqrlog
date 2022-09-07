@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabTRXcontrol
+    ActivePage = tabModes
     Align = alClient
-    TabIndex = 5
+    TabIndex = 7
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -56,7 +56,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 3
         Caption = ' Internet connection '
-        ClientHeight = 111
+        ClientHeight = 127
         ClientWidth = 339
         TabOrder = 0
         object lblintProxy: TLabel
@@ -248,7 +248,7 @@ object frmPreferences: TfrmPreferences
         Width = 626
         BorderSpacing.Top = 9
         Caption = ' Offsets and colors'
-        ClientHeight = 185
+        ClientHeight = 201
         ClientWidth = 624
         TabOrder = 7
         object lblUtc: TLabel
@@ -2102,7 +2102,8 @@ object frmPreferences: TfrmPreferences
       Caption = 'TRX control'
       ClientHeight = 681
       ClientWidth = 873
-      OnExit = tabTRXcontrolExit
+      OnExit = cmbRadioNrCloseUp
+      OnShow = tabTRXcontrolEnter
       object btnChangeDefaultFreq: TButton
         AnchorSideTop.Control = grbRadio
         AnchorSideTop.Side = asrBottom
@@ -2179,7 +2180,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Left = 33
           MaxValue = 6
           MinValue = 1
-          OnChange = edtRigCountChange
+          OnExit = edtRigCountChange
           TabOrder = 1
           Value = 2
         end
@@ -3861,6 +3862,7 @@ object frmPreferences: TfrmPreferences
       ClientHeight = 681
       ClientWidth = 873
       OnExit = tabModesExit
+      OnShow = tabModesEnter
       object grpUsrDigitalModes: TGroupBox
         AnchorSideLeft.Control = tabModes
         AnchorSideTop.Control = grbRigBandWidths
@@ -4166,8 +4168,8 @@ object frmPreferences: TfrmPreferences
           Left = 207
           Height = 17
           Top = 100
-          Width = 53
-          Caption = 'Rig cmd'
+          Width = 61
+          Caption = 'Rig Mode'
           ParentColor = False
         end
         object lblDataMode1: TLabel
@@ -4192,6 +4194,7 @@ object frmPreferences: TfrmPreferences
           Top = 57
           Width = 80
           AutoSize = False
+          OnChange = edtDataModeChange
           ParentShowHint = False
           ShowHint = True
           TabOrder = 6
@@ -4203,10 +4206,11 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrCenter
           Left = 280
           Height = 34
-          Hint = '"Rig cmd" is the rigctld mode command your rig needs to'#10'set rig to this mode.'
+          Hint = '"Rig mode" is the rigctld mode command your rig needs to'#10'set rig to "Log mode" mode working.'
           Top = 91
           Width = 80
           AutoSize = False
+          OnChange = edtDataCmdChange
           ParentShowHint = False
           ShowHint = True
           TabOrder = 7

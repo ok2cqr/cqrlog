@@ -905,7 +905,7 @@ begin
 end;
 
 procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
-
+//sets rig names or none to selector list
 var
    n:integer;
    s,r:string;
