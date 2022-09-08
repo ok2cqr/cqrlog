@@ -447,7 +447,6 @@ type
     cmbDataBitsRot2: TComboBox;
     cmbDTRR: TComboBox;
     cmbHanshakeR: TComboBox;
-    cmbIfaceType2: TComboBox;
     cmbModelRig: TComboBox;
     cmbModelRot1: TComboBox;
     cmbModelRot2: TComboBox;
@@ -499,12 +498,12 @@ type
     cmbFrmDXCColor: TColorBox;
     cmbFirstZip: TComboBox;
     cmbFirstSaveTo: TComboBox;
-    cmbIfaceType1: TComboBox;
     cmbXplanetColor: TColorBox;
     cmbLoTWBckColor: TColorBox;
     cmbCl10db : TColorBox;
     cmbRadioNr: TComboBox;
     cmbRadioModes: TComboBox;
+    cmbCWRadio: TComboBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
@@ -527,16 +526,13 @@ type
     edtUsr3RName: TEdit;
     edtUsrBtn: TEdit;
     edtClub: TEdit;
-    edtCWPort2: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
-    edtK3NGPort2: TEdit;
     edtRot1Host: TEdit;
     edtRot2Host: TEdit;
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
-    edtWinPort2: TEdit;
     edtZipCity: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
@@ -711,6 +707,7 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblCWRadio: TLabel;
     lblNrOfRadios: TLabel;
     lblNoRigForMode: TLabel;
     lblDataMode: TLabel;
@@ -748,11 +745,8 @@ type
     Label80: TLabel;
     Label81: TLabel;
     lblRbnWindowOpen: TLabel;
-    lblCWPort2: TLabel;
     lblHamlib: TLabel;
     lblHamlib1: TLabel;
-    lblK3NGPort2: TLabel;
-    lblRadio1: TLabel;
     lbCallW: TLabel;
     lbFreqW: TLabel;
     lbleQSLDnlAddr: TLabel;
@@ -776,7 +770,6 @@ type
     Label124: TLabel;
     lblDevice1: TLabel;
     lbleQSLBkg: TLabel;
-    lblRadio2: TLabel;
     lblRotId1: TLabel;
     lblIntPort: TLabel;
     lblIntUser: TLabel;
@@ -842,7 +835,6 @@ type
     Label202: TLabel;
     lblADIFport: TLabel;
     lblADIFaddr: TLabel;
-    lblWinPort2: TLabel;
     lblwsjtport: TLabel;
     Label204: TLabel;
     Label205: TLabel;
