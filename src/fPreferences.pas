@@ -504,6 +504,7 @@ type
     cmbRadioNr: TComboBox;
     cmbRadioModes: TComboBox;
     cmbCWRadio: TComboBox;
+    cmbIfaceType: TComboBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
@@ -708,6 +709,7 @@ type
     Label10: TLabel;
     Label108: TLabel;
     lblCWRadio: TLabel;
+    lblNoRigForCW: TLabel;
     lblNrOfRadios: TLabel;
     lblNoRigForMode: TLabel;
     lblDataMode: TLabel;
@@ -1042,8 +1044,10 @@ type
     procedure btnFirstLoadClick(Sender: TObject);
     procedure btnSecondLoadClick(Sender: TObject);
     procedure btnThirdLoadClick(Sender: TObject);
-    procedure cmbIfaceType1Change(Sender: TObject);
-    procedure cmbIfaceType2Change(Sender: TObject);
+    procedure cmbCWRadioChange(Sender: TObject);
+    procedure cmbCWRadioCloseUp(Sender: TObject);
+    procedure cmbIfaceTypeChange(Sender: TObject);
+    procedure cmbIfaceTypeCloseUp(Sender: TObject);
     procedure cmbModelRigChange(Sender: TObject);
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
@@ -1067,6 +1071,9 @@ type
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure edtRigCountChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
+    procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
+    procedure tabCWInterfaceExit(Sender: TObject);
     procedure tabModesEnter(Sender: TObject);
     procedure tabModesExit(Sender: TObject);
     procedure tabTRXcontrolEnter(Sender: TObject);
@@ -1110,10 +1117,13 @@ type
     wasOnlineLogSupportEnabled : Boolean;
     RadioNrLoaded : integer;
     BandWNrLoaded : integer;
-    procedure LoadTRX(RigNr:integer);
+    CWifLoaded    : integer;
     procedure SaveTRX(RigNr:integer);
+    procedure LoadTRX(RigNr:integer);
     procedure SaveBandW(RigNr:integer);
     procedure LoadBandW(RigNr:integer);
+    procedure SaveCWif(RigNr:integer);
+    procedure LoadCWif(RigNr:integer);
     procedure InitRigCmb;
     procedure ClearUnUsedRigs;
     procedure SaveClubSection;
@@ -1137,7 +1147,7 @@ var
   RotChanged: boolean;
   ReloadFreq: Boolean = False;
   ReloadModes: Boolean = False;
-  WinKeyerChanged : Boolean;
+  CWKeyerChanged : Boolean;
 
 implementation
 {$R *.lfm}
@@ -1488,25 +1498,6 @@ begin
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
   cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
 
-  cqrini.WriteInteger('CW', 'Type1', cmbIfaceType1.ItemIndex);
-  cqrini.WriteInteger('CW', 'Type2', cmbIfaceType2.ItemIndex);
-  cqrini.WriteBool('CW', 'NoReset', cbNoKeyerReset.Checked);
-  cqrini.WriteString('CW', 'wk_port1', edtWinPort1.Text);
-  cqrini.WriteString('CW', 'wk_port2', edtWinPort2.Text);
-  cqrini.WriteBool('CW', 'PotSpeed', chkPotSpeed.Checked);
-  cqrini.WriteInteger('CW', 'wk_speed', edtWinSpeed.Value);
-  cqrini.WriteString('CW', 'cw_address', edtCWAddress.Text);
-  cqrini.WriteString('CW', 'cw_port1', edtCWPort1.Text);
-  cqrini.WriteString('CW', 'cw_port2', edtCWPort2.Text);
-  cqrini.WriteInteger('CW', 'cw_speed', edtCWSpeed.Value);
-  cqrini.WriteInteger('CW', 'wk_min', edtWinMinSpeed.Value);
-  cqrini.WriteInteger('CW', 'wk_max', edtWinMaxSpeed.Value);
-  cqrini.WriteString('CW','K3NGPort1',edtK3NGPort1.Text);
-  cqrini.WriteString('CW','K3NGPort2',edtK3NGPort2.Text);
-  cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
-  cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
-  cqrini.WriteInteger('CW','HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
-
   cqrini.WriteInteger('fldigi', 'freq', rgFreqFrom.ItemIndex);
   cqrini.WriteString('fldigi', 'deffreq', edtDefaultFreq.Text);
   cqrini.WriteInteger('fldigi', 'mode', rgModeFrom.ItemIndex);
@@ -1610,7 +1601,7 @@ begin
   cqrini.WriteBool('prop','CalcHF',chkCondxCalcHF.Checked);
   cqrini.WriteBool('prop','CalcVHF',chkCondxCalcVHF.Checked);
 
-  if WinKeyerChanged then frmNewQSO.InitializeCW;
+  if CWKeyerChanged then frmNewQSO.InitializeCW;
 
   fraExportPref1.SaveExportPref;
 
@@ -2269,16 +2260,6 @@ begin
   dmMembership.CheckForMembershipUpdate
 end;
 
-procedure TfrmPreferences.cbNoKeyerResetChange(Sender: TObject);
-begin
-  if  cbNoKeyerReset.Checked
-    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
-     or  (cmbIfaceType1.ItemIndex = 4)
-     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
-     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
-end;
-
-
 procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
 begin
   edtClUserName.Enabled := chkClUpEnabled.Checked;
@@ -2417,22 +2398,39 @@ begin
     end;
 end;
 
-procedure TfrmPreferences.cmbIfaceType1Change(Sender: TObject);
+procedure TfrmPreferences.cmbCWRadioChange(Sender: TObject);
 begin
-  WinKeyerChanged := True;
-   if  cbNoKeyerReset.Checked
-    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
-     or  (cmbIfaceType1.ItemIndex = 4)
-     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
+  if cmbCWRadio.ItemIndex<1 then cmbCWRadio.ItemIndex:=1;
+end;
+
+procedure TfrmPreferences.cmbCWRadioCloseUp(Sender: TObject);
+begin
+  if cmbCWRadio.ItemIndex<1 then cmbCWRadio.ItemIndex:=1;
+  SaveCWif(CWifLoaded);
+  LoadCWif(cmbCWRadio.ItemIndex);
+  if cqrini.ReadString('TRX'+IntToStr(cmbRadioModes.ItemIndex), 'model', '')='' then
+     lblNoRigForCW.Visible:=True
+   else
+     lblNoRigForCW.Visible:=False;
+end;
+
+procedure TfrmPreferences.cmbIfaceTypeChange(Sender: TObject);
+begin
+  CWKeyerChanged:=true;
+end;
+
+procedure TfrmPreferences.cbNoKeyerResetChange(Sender: TObject);
+begin
+  if  cbNoKeyerReset.Checked
+    and (cmbIfaceType.ItemIndex = 4) //type is HamLib
      then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
-procedure TfrmPreferences.cmbIfaceType2Change(Sender: TObject);
+
+procedure TfrmPreferences.cmbIfaceTypeCloseUp(Sender: TObject);
 begin
-  WinKeyerChanged := True;
-  if  cbNoKeyerReset.Checked
-    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
-     or  (cmbIfaceType1.ItemIndex = 4)
-     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
+  CWKeyerChanged := True;
+   if  cbNoKeyerReset.Checked
+    and  (cmbIfaceType.ItemIndex = 4) //type is HamLib
      then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
 
@@ -2506,7 +2504,9 @@ begin
   LoadTRX(cmbRadioNr.ItemIndex);                          //load selected rig
   frmTRXControl.cmbRigGetItems(nil);                      //update rig names
   cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab
-  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex          //select rig in use
+  cmbCWRadio.Items:=cmbRadioModes.Items;                  //names to cw tab
+  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;          //select rig in use
+  cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
 end;
 
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
@@ -2621,7 +2621,7 @@ end;
 
 procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtLocChange(Sender: TObject);
@@ -2667,6 +2667,17 @@ end;
 procedure TfrmPreferences.RotorParamsChange(Sender: TObject);
 begin
   RotChanged := True;
+end;
+
+procedure TfrmPreferences.tabCWInterfaceContextPopup(Sender: TObject;
+  MousePos: TPoint; var Handled: Boolean);
+begin
+
+end;
+
+procedure TfrmPreferences.tabCWInterfaceExit(Sender: TObject);
+begin
+     SaveCWif(CWifLoaded);
 end;
 
 procedure TfrmPreferences.tabModesEnter(Sender: TObject);
@@ -2718,22 +2729,22 @@ end;
 
 procedure TfrmPreferences.edtWinMaxSpeedChange(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtWinMinSpeedChange(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtWinPort1Change(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtXplanetLocChange(Sender: TObject);
@@ -3134,25 +3145,6 @@ begin
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
   chkExpCommet.Checked := cqrini.ReadBool('LoTW', 'ExpComment', True);
 
-  cmbIfaceType1.ItemIndex := cqrini.ReadInteger('CW', 'Type1', 0);
-  cmbIfaceType2.ItemIndex := cqrini.ReadInteger('CW', 'Type2', 0);
-  cbNoKeyerReset.Checked := cqrini.ReadBool('CW', 'NoReset', false);
-  edtWinPort1.Text := cqrini.ReadString('CW', 'wk_port1', '');
-  edtWinPort2.Text := cqrini.ReadString('CW', 'wk_port2', '');
-  chkPotSpeed.Checked := cqrini.ReadBool('CW', 'PotSpeed', False);
-  edtWinSpeed.Value := cqrini.ReadInteger('CW', 'wk_speed', 30);
-  edtCWAddress.Text := cqrini.ReadString('CW', 'cw_address', 'localhost');
-  edtCWPort1.Text := cqrini.ReadString('CW', 'cw_port1', '6789');
-  edtCWPort2.Text := cqrini.ReadString('CW', 'cw_port2', '6789');
-  edtCWSpeed.Value := cqrini.ReadInteger('CW', 'cw_speed', 30);
-  edtWinMinSpeed.Value := cqrini.ReadInteger('CW', 'wk_min', 5);
-  edtWinMaxSpeed.Value := cqrini.ReadInteger('CW', 'wk_max', 60);
-  edtK3NGPort1.Text := cqrini.ReadString('CW','K3NGPort1','');
-  edtK3NGPort2.Text := cqrini.ReadString('CW','K3NGPort2','');
-  edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
-  edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
-  edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30));
-
   rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);       //
   edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');//
   rgModeFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'mode', 1);       //
@@ -3262,7 +3254,7 @@ begin
   chkSysUTCClick(nil);
   TRXChanged      := False;
   RotChanged      := False;
-  WinKeyerChanged := False;
+  CWKeyerChanged := False;
 
   pgPreferences.ActivePageIndex := ActPageIdx;    //set wanted tab for showing when open. ActTab is public variable.
   lbPreferences.ItemIndex := ActPageIdx;
@@ -3457,6 +3449,49 @@ Begin
   cqrini.WriteString('Band'+nr, 'Datacmd', edtDatacmd.Text);
   cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
 end;
+procedure TfrmPreferences.LoadCWif(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW', 'Type'+nr, 0);
+  cbNoKeyerReset.Checked := cqrini.ReadBool('CW', 'NoReset', false);
+  edtWinPort1.Text := cqrini.ReadString('CW', 'wk_port'+nr, '');
+  chkPotSpeed.Checked := cqrini.ReadBool('CW', 'PotSpeed', False);
+  edtWinSpeed.Value := cqrini.ReadInteger('CW', 'wk_speed', 30);
+  edtCWAddress.Text := cqrini.ReadString('CW', 'cw_address', 'localhost');
+  edtCWPort1.Text := cqrini.ReadString('CW', 'cw_port'+nr, '6789');
+  edtCWSpeed.Value := cqrini.ReadInteger('CW', 'cw_speed', 30);
+  edtWinMinSpeed.Value := cqrini.ReadInteger('CW', 'wk_min', 5);
+  edtWinMaxSpeed.Value := cqrini.ReadInteger('CW', 'wk_max', 60);
+  edtK3NGPort1.Text := cqrini.ReadString('CW','K3NGPort'+nr,'');
+  edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
+  edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
+  edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30));
+  CWifLoaded := RigNr;
+end;
+procedure TfrmPreferences.SaveCWif(RigNr:integer);
+var
+   nr :string;
+Begin
+  if lblNoRigForCW.Visible then exit; //No rig, no save
+  nr:=IntToStr(RigNr);
+  cqrini.WriteInteger('CW', 'Type'+nr, cmbIfaceType.ItemIndex);
+  cqrini.WriteBool('CW', 'NoReset', cbNoKeyerReset.Checked);
+  cqrini.WriteString('CW', 'wk_port'+nr, edtWinPort1.Text);
+  cqrini.WriteBool('CW', 'PotSpeed', chkPotSpeed.Checked);
+  cqrini.WriteInteger('CW', 'wk_speed', edtWinSpeed.Value);
+  cqrini.WriteString('CW', 'cw_address', edtCWAddress.Text);
+  cqrini.WriteString('CW', 'cw_port'+nr, edtCWPort1.Text);
+  cqrini.WriteInteger('CW', 'cw_speed', edtCWSpeed.Value);
+  cqrini.WriteInteger('CW', 'wk_min', edtWinMinSpeed.Value);
+  cqrini.WriteInteger('CW', 'wk_max', edtWinMaxSpeed.Value);
+  cqrini.WriteString('CW','K3NGPort'+nr,edtK3NGPort1.Text);
+  cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
+  cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
+  cqrini.WriteInteger('CW','HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
+end;
+
 procedure TfrmPreferences.InitRigCmb;    //initialize radio selectors (without names) in TRXControl and Modes
 var                                      //set itemindexes to used rig
    f : integer;

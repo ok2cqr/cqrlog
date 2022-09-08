@@ -7165,9 +7165,7 @@ begin
     FreeAndNil(CWint)
    end;
 
-  //if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
-  //ToDo fix CW when cmbRig works elsewhere!
-  n:='1';
+  n:=intToStr(frmTRXControl.cmbRig.ItemIndex);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
   KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
