@@ -168,7 +168,7 @@ begin
   if cmbStoreLoTW.ItemIndex>0 then
     Sections := Sections + 'LoTW,';
   if cmbStoreCWInterface.ItemIndex>0 then
-    Sections := Sections + 'CW,';
+    Sections := Sections + 'CW,CW1,CW2,CW3,CW4,CW5,CW6';
   if cmbStoreFldigiInterface.ItemIndex>0 then
     Sections := Sections + 'fldigi,wsjt,n1mm';
   if cmbStoreAutoBackup.ItemIndex>0 then

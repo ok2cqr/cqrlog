@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabCWInterface
+    ActivePage = tabTRXcontrol
     Align = alClient
-    TabIndex = 19
+    TabIndex = 5
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2903,7 +2903,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 6
         Caption = ' rotctld '
-        ClientHeight = 86
+        ClientHeight = 70
         ClientWidth = 655
         TabOrder = 0
         object Label124: TLabel
@@ -2951,7 +2951,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = pgROTControl
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor one'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 647
           object gbRot1: TGroupBox
             AnchorSideLeft.Control = tabRot1
@@ -2963,7 +2963,7 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Left = 6
             BorderSpacing.Top = 12
             Caption = ' Rotor one, desc.:'
-            ClientHeight = 339
+            ClientHeight = 323
             ClientWidth = 622
             TabOrder = 0
             object lblDevice1: TLabel
@@ -3090,14 +3090,14 @@ object frmPreferences: TfrmPreferences
               AnchorSideBottom.Side = asrBottom
               Left = 6
               Height = 161
-              Top = 172
+              Top = 156
               Width = 610
               Anchors = [akLeft, akRight, akBottom]
               BorderSpacing.Left = 6
               BorderSpacing.Right = 6
               BorderSpacing.Bottom = 6
               Caption = 'Rotor one serial parameters'
-              ClientHeight = 159
+              ClientHeight = 143
               ClientWidth = 608
               TabOrder = 5
               object lblSpeed1: TLabel
@@ -3409,7 +3409,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = tabRot1
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor two'
-          ClientHeight = 388
+          ClientHeight = 361
           ClientWidth = 647
           object gbRot2: TGroupBox
             AnchorSideLeft.Control = tabRot2
@@ -7123,7 +7123,6 @@ object frmPreferences: TfrmPreferences
           Width = 71
           Caption = 'Min speed:'
           ParentColor = False
-          Visible = False
         end
         object lblWinMaxSpeed: TLabel
           AnchorSideLeft.Side = asrBottom
@@ -7138,7 +7137,6 @@ object frmPreferences: TfrmPreferences
           Anchors = [akTop, akRight]
           Caption = 'Max speed:'
           ParentColor = False
-          Visible = False
         end
         object edtWinPort1: TEdit
           AnchorSideLeft.Control = lblWinPort
@@ -7180,7 +7178,6 @@ object frmPreferences: TfrmPreferences
           Caption = 'Use potentiometer''s CW speed'
           OnChange = chkPotSpeedChange
           TabOrder = 1
-          Visible = False
         end
         object edtWinMinSpeed: TSpinEdit
           AnchorSideLeft.Control = lblWinMinSpeed
@@ -7197,7 +7194,6 @@ object frmPreferences: TfrmPreferences
           OnChange = edtWinMinSpeedChange
           TabOrder = 3
           Value = 5
-          Visible = False
         end
         object edtWinMaxSpeed: TSpinEdit
           AnchorSideLeft.Control = lblWinMaxSpeed
@@ -7212,7 +7208,6 @@ object frmPreferences: TfrmPreferences
           OnChange = edtWinMaxSpeedChange
           TabOrder = 4
           Value = 60
-          Visible = False
         end
       end
       object gbCwkeyer: TGroupBox
