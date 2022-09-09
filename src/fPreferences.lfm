@@ -2903,7 +2903,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 6
         Caption = ' rotctld '
-        ClientHeight = 70
+        ClientHeight = 86
         ClientWidth = 655
         TabOrder = 0
         object Label124: TLabel
@@ -2951,7 +2951,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = pgROTControl
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor one'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 647
           object gbRot1: TGroupBox
             AnchorSideLeft.Control = tabRot1
@@ -2963,7 +2963,7 @@ object frmPreferences: TfrmPreferences
             BorderSpacing.Left = 6
             BorderSpacing.Top = 12
             Caption = ' Rotor one, desc.:'
-            ClientHeight = 323
+            ClientHeight = 339
             ClientWidth = 622
             TabOrder = 0
             object lblDevice1: TLabel
@@ -3090,14 +3090,14 @@ object frmPreferences: TfrmPreferences
               AnchorSideBottom.Side = asrBottom
               Left = 6
               Height = 161
-              Top = 156
+              Top = 172
               Width = 610
               Anchors = [akLeft, akRight, akBottom]
               BorderSpacing.Left = 6
               BorderSpacing.Right = 6
               BorderSpacing.Bottom = 6
               Caption = 'Rotor one serial parameters'
-              ClientHeight = 143
+              ClientHeight = 159
               ClientWidth = 608
               TabOrder = 5
               object lblSpeed1: TLabel
@@ -3409,7 +3409,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = tabRot1
           AnchorSideBottom.Side = asrBottom
           Caption = 'Rotor two'
-          ClientHeight = 361
+          ClientHeight = 388
           ClientWidth = 647
           object gbRot2: TGroupBox
             AnchorSideLeft.Control = tabRot2
@@ -3909,7 +3909,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 12
         BorderSpacing.Top = 12
         Caption = ' Radio'
-        ClientHeight = 274
+        ClientHeight = 290
         ClientWidth = 522
         TabOrder = 1
         object lblMode: TLabel
@@ -7089,8 +7089,8 @@ object frmPreferences: TfrmPreferences
           ParentColor = False
         end
         object lblWinSpeed: TLabel
-          AnchorSideLeft.Control = edtWinPort1
-          AnchorSideTop.Control = edtWinPort1
+          AnchorSideLeft.Control = edtWinPort
+          AnchorSideTop.Control = edtWinPort
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
@@ -7138,7 +7138,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'Max speed:'
           ParentColor = False
         end
-        object edtWinPort1: TEdit
+        object edtWinPort: TEdit
           AnchorSideLeft.Control = lblWinPort
           AnchorSideTop.Control = lblWinPort
           AnchorSideTop.Side = asrBottom
@@ -7146,7 +7146,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 147
-          OnChange = edtWinPort1Change
+          OnChange = edtWinPortChange
           TabOrder = 0
         end
         object edtWinSpeed: TSpinEdit
@@ -7164,9 +7164,9 @@ object frmPreferences: TfrmPreferences
           Value = 5
         end
         object chkPotSpeed: TCheckBox
-          AnchorSideLeft.Control = edtWinPort1
+          AnchorSideLeft.Control = edtWinPort
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = edtWinPort1
+          AnchorSideTop.Control = edtWinPort
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Side = asrBottom
           Left = 162
@@ -7282,7 +7282,7 @@ object frmPreferences: TfrmPreferences
           Width = 139
           TabOrder = 0
         end
-        object edtCWPort1: TEdit
+        object edtCWPort: TEdit
           AnchorSideLeft.Control = lblCWPort1
           AnchorSideTop.Control = lblCWPort1
           AnchorSideTop.Side = asrBottom
@@ -7348,7 +7348,7 @@ object frmPreferences: TfrmPreferences
         end
         object lblK3NGSpeed: TLabel
           AnchorSideLeft.Control = lblK3NGPort
-          AnchorSideTop.Control = edtK3NGPort1
+          AnchorSideTop.Control = edtK3NGPort
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
@@ -7369,7 +7369,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'WPM'
           ParentColor = False
         end
-        object edtK3NGPort1: TEdit
+        object edtK3NGPort: TEdit
           AnchorSideLeft.Control = lblK3NGPort
           AnchorSideTop.Control = lblK3NGPort
           AnchorSideTop.Side = asrBottom
@@ -7377,7 +7377,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 147
-          OnChange = edtWinPort1Change
+          OnChange = edtWinPortChange
           TabOrder = 0
         end
         object edtK3NGSpeed: TSpinEdit
@@ -7406,7 +7406,7 @@ object frmPreferences: TfrmPreferences
           TabOrder = 1
         end
         object lblK3NGSerSpeed: TLabel
-          AnchorSideLeft.Control = edtK3NGPort1
+          AnchorSideLeft.Control = edtK3NGPort
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = lblK3NGPort
           Left = 201
@@ -7561,7 +7561,7 @@ object frmPreferences: TfrmPreferences
         Width = 120
         ItemHeight = 0
         Items.Strings = (
-          ''
+          'None'
           'Winkeyer'
           'cwdaemon'
           'K3NG Key'

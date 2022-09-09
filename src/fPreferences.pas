@@ -593,16 +593,16 @@ type
     edtSunOffset: TEdit;
     edtOffset: TEdit;
     edtCWAddress: TEdit;
-    edtCWPort1: TEdit;
+    edtCWPort: TEdit;
     edtPdfFiles: TEdit;
-    edtWinPort1: TEdit;
+    edtWinPort: TEdit;
     edtRecetQSOs: TEdit;
     edtLoTWPass: TEdit;
     edtLoTWName: TEdit;
     edtCWSpeed: TSpinEdit;
     edtWinMinSpeed: TSpinEdit;
     edtWinMaxSpeed: TSpinEdit;
-    edtK3NGPort1: TEdit;
+    edtK3NGPort: TEdit;
     edtK3NGSpeed: TSpinEdit;
     edtFldigiIp: TEdit;
     edtADIFIp: TEdit;
@@ -1083,7 +1083,7 @@ type
     procedure edtWebBrowserExit(Sender: TObject);
     procedure edtWinMaxSpeedChange(Sender: TObject);
     procedure edtWinMinSpeedChange(Sender: TObject);
-    procedure edtWinPort1Change(Sender: TObject);
+    procedure edtWinPortChange(Sender: TObject);
     procedure edtWinSpeedChange(Sender: TObject);
     procedure edtXplanetLocChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
@@ -1124,7 +1124,7 @@ type
     procedure LoadBandW(RigNr:integer);
     procedure SaveCWif(RigNr:integer);
     procedure LoadCWif(RigNr:integer);
-    procedure InitRigCmb;
+    procedure InitRigCmb(SetUsedRig:boolean=false);
     procedure ClearUnUsedRigs;
     procedure SaveClubSection;
     procedure LoadMebershipCombo;
@@ -1316,14 +1316,7 @@ begin
   cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
   cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
 
-  For int:=1 to edtRigCount.Value do  //these should be saved while editing them, but we do it here just for sure
-   Begin
-     SaveTRX(int);
-     SaveBandW(int);
-     SaveCWif(int);
-   end;
-  ClearUnUsedRigs;
-  frmTRXControl.cmbRigGetItems(nil);
+  ClearUnUsedRigs;  //rigs modes and cw are saved when editing. Just delete unused rigs (model=empty)
 
   cqrini.WriteString('ROT', 'RotCtldPath', edtRotCtldPath.Text);
 
@@ -2413,7 +2406,8 @@ begin
   if cmbCWRadio.ItemIndex<1 then cmbCWRadio.ItemIndex:=1;
   SaveCWif(CWifLoaded);
   LoadCWif(cmbCWRadio.ItemIndex);
-  if cqrini.ReadString('TRX'+IntToStr(cmbCWRadio.ItemIndex), 'model', '')='' then
+  if (cqrini.ReadString('TRX'+IntToStr(cmbCWRadio.ItemIndex), 'model', '')='')
+    or (pos('NONE',uppercase(cqrini.ReadString('TRX'+IntToStr(cmbCWRadio.ItemIndex), 'model', '')) )>1) then
      lblNoRigForCW.Visible:=True
    else
      lblNoRigForCW.Visible:=False;
@@ -2507,9 +2501,8 @@ begin
   if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
   SaveTRX(RadioNrLoaded);                                 //save edited rig
   LoadTRX(cmbRadioNr.ItemIndex);                          //load selected rig
-  frmTRXControl.cmbRigGetItems(nil);                      //update rig names
-  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab
-  cmbCWRadio.Items:=cmbRadioModes.Items;                  //names to cw tab
+  InitRigCmb;                                             //load names and set currently edited rig
+
   cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;          //select rig in use
   cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
 end;
@@ -2660,10 +2653,7 @@ end;
 procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
 begin
   cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
-  InitRigCmb;                                             //load selectors
-  frmTRXControl.cmbRigGetItems(nil);                      //update rig names
-  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab
-  cmbCWRadio.Items:=cmbRadioModes.Items;                  //names to CW tab
+  InitRigCmb;                                             //load names and set currently edited rig
 end;
 
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
@@ -2743,7 +2733,7 @@ begin
   CWKeyerChanged := True
 end;
 
-procedure TfrmPreferences.edtWinPort1Change(Sender: TObject);
+procedure TfrmPreferences.edtWinPortChange(Sender: TObject);
 begin
   CWKeyerChanged := True
 end;
@@ -2944,11 +2934,8 @@ begin
   chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
   chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
   edtRigCount.Value:=cqrini.ReadInteger('TRX', 'RigCount', 2);
-  InitRigCmb;
-  frmTRXControl.cmbRigGetItems(nil); //this populates cmb radio names and sets used rig to cmbRig.itemindex
-  cmbRadioNr.ItemIndex:=frmTRXControl.cmbRig.ItemIndex;
+  InitRigCmb(true); //define used rig=true
   LoadTRX(cmbRadioNr.ItemIndex);
-  cmbRadioNrCloseUp(nil);//this populates radio names to modes and cw
   LoadBandW(cmbRadioNr.ItemIndex);
   LoadCWif(cmbRadioNr.ItemIndex);
 
@@ -3464,20 +3451,20 @@ var
    nr :string;
 Begin
   nr:=IntToStr(RigNr);
-  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, 'Type'+nr, 0);
+  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, 'Type', 0);
   cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, 'NoReset', false);
-  edtWinPort1.Text := cqrini.ReadString('CW'+nr, 'wk_port'+nr, '');
-  chkPotSpeed.Checked := cqrini.ReadBool('CW'+nr, 'PotSpeed', False);
-  edtWinSpeed.Value := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
-  edtCWAddress.Text := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
-  edtCWPort1.Text := cqrini.ReadString('CW'+nr, 'cw_port'+nr, '6789');
-  edtCWSpeed.Value := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
-  edtWinMinSpeed.Value := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
-  edtWinMaxSpeed.Value := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
-  edtK3NGPort1.Text := cqrini.ReadString('CW'+nr,'K3NGPort'+nr,'');
-  edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
-  edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
-  edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
+  edtWinPort.Text        := cqrini.ReadString('CW'+nr, 'wk_port', '');
+  chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, 'PotSpeed', False);
+  edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
+  edtCWAddress.Text      := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
+  edtCWPort.Text         := cqrini.ReadString('CW'+nr, 'cw_port', '6789');
+  edtCWSpeed.Value       := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
+  edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
+  edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
+  edtK3NGPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
+  edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
+  edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
+  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
   CWifLoaded := RigNr;
 end;
 procedure TfrmPreferences.SaveCWif(RigNr:integer);
@@ -3488,40 +3475,52 @@ Begin
   nr:=IntToStr(RigNr);
   cqrini.WriteInteger('CW'+nr, 'Type', cmbIfaceType.ItemIndex);
   cqrini.WriteBool('CW'+nr, 'NoReset', cbNoKeyerReset.Checked);
-  cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort1.Text);
+  cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort.Text);
   cqrini.WriteBool('CW'+nr, 'PotSpeed', chkPotSpeed.Checked);
   cqrini.WriteInteger('CW'+nr, 'wk_speed', edtWinSpeed.Value);
   cqrini.WriteString('CW'+nr, 'cw_address', edtCWAddress.Text);
-  cqrini.WriteString('CW'+nr, 'cw_port', edtCWPort1.Text);
+  cqrini.WriteString('CW'+nr, 'cw_port', edtCWPort.Text);
   cqrini.WriteInteger('CW'+nr, 'cw_speed', edtCWSpeed.Value);
   cqrini.WriteInteger('CW'+nr, 'wk_min', edtWinMinSpeed.Value);
   cqrini.WriteInteger('CW'+nr, 'wk_max', edtWinMaxSpeed.Value);
-  cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NGPort1.Text);
+  cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NGPort.Text);
   cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
   cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
   cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
 end;
 
-procedure TfrmPreferences.InitRigCmb;    //initialize radio selectors (without names) in TRXControl, CW and Modes
+procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes
 var                                      //set itemindexes to used rig
    f : integer;
    s   : string;
 Begin
-   cmbRadioNr.Clear;
+   cmbRadioNr.Items.Clear;
    cmbRadioNr.Items.Add('');
-   cmbRadioModes.Clear;
+   cmbRadioModes.Items.Clear;               //zero position is empty
    cmbRadioModes.Items.Add('');
-   cmbCWRadio.Clear;
+   cmbCWRadio.Items.Clear;
    cmbCWRadio.Items.Add('');
-   for f:=1 to edtRigCount.Value do
+   for f:=1 to  cqrini.ReadInteger('TRX', 'RigCount', 2) do
     Begin
+      s:=IntToStr(f);
       cmbRadioNr.Items.Add(IntToStr(f));
-      cmbRadioModes.Items.Add(IntToStr(f));
-      cmbCWRadio.Items.Add(IntToStr(f));
+      cmbRadioModes.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+      cmbCWRadio.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
     end;
-  cmbRadioNr.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
-  cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
-  cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
+
+  if not ( cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
+         begin
+          cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted  (rig count changed)
+          SetUsedRig:=true;
+         end;
+
+  if SetUsedRig then
+    begin
+     cmbRadioNr.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+     cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
+     cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
+    end;
+
 end;
 procedure TfrmPreferences.ClearUnUsedRigs;
 var
@@ -3547,6 +3546,12 @@ Begin
          end;
        until (f=edtRigCount.Value);
       end;
+
+    if not ( cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
+         cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted
+
+    frmTRXControl.cmbRigGetItems(nil); //update TRXControl rig names before returning
+
       //6 is max rig count set by edtRigCount:Tspinedit
       //if you change it you must change also fConfigStorage.pas
       //TRX, CW and Band lists
