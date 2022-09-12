@@ -1075,7 +1075,6 @@ type
     procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
     procedure tabCWInterfaceExit(Sender: TObject);
-    procedure tabModesEnter(Sender: TObject);
     procedure tabModesExit(Sender: TObject);
     procedure tabTRXcontrolEnter(Sender: TObject);
     procedure TRXParamsChange(Sender: TObject);
@@ -2673,23 +2672,16 @@ end;
 
 procedure TfrmPreferences.tabCWInterfaceExit(Sender: TObject);
 begin
-     SaveCWif(CWifLoaded);
-end;
-
-procedure TfrmPreferences.tabModesEnter(Sender: TObject);
-
-begin
-  sleep(100);                                            //needed sometimes !?!?! when entering directly to this tab
-  Application.ProcessMessages;                           //otherwise names are missing from selector
-  LoadBandW(cmbRadioModes.ItemIndex);
-  cmbRadioModes.Items:=frmTRXControl.cmbRig.Items;        //names to modes tab (needed when entering direct to modes tab)
-  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;         //select rig in use
+     SaveCWif(CWifLoaded);  //save currently open CW settings
+     cmbRadioNr.ItemIndex:=cmbCWRadio.ItemIndex;
+     cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;          //select rig in use
 end;
 
 procedure TfrmPreferences.tabModesExit(Sender: TObject);
 begin
-  if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
-  SaveBandW(BandWNrLoaded);
+  SaveBandW(BandWNrLoaded); //save currently loaded modes
+  cmbRadioNr.ItemIndex:=cmbRadioModes.ItemIndex;          //select rig in use
+  cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
 end;
 
 procedure TfrmPreferences.tabTRXcontrolEnter(Sender: TObject);
