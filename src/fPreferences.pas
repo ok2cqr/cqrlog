@@ -1082,9 +1082,6 @@ type
     procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
     procedure edtWebBrowserExit(Sender: TObject);
-    procedure edtWinMaxSpeedChange(Sender: TObject);
-    procedure edtWinMinSpeedChange(Sender: TObject);
-    procedure edtWinPortChange(Sender: TObject);
     procedure edtWinSpeedChange(Sender: TObject);
     procedure edtXplanetLocChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
@@ -2290,6 +2287,7 @@ begin
     edtWinSpeed.Enabled := False
   else
     edtWinSpeed.Enabled := True;
+   CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.chkProfileLocatorClick(Sender: TObject);
@@ -2424,6 +2422,7 @@ begin
   if  cbNoKeyerReset.Checked
     and (cmbIfaceType.ItemIndex = 4) //type is HamLib
      then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.cmbIfaceTypeCloseUp(Sender: TObject);
@@ -2596,6 +2595,11 @@ begin
         edtImgFiles.Text:=SeekExecFile(edtImgFiles.Text,'Find image viewer');
 end;
 
+procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmPreferences.edtPdfFilesExit(Sender: TObject);
 begin
    if ExtractFilePath(edtPdfFiles.Text)='' then
@@ -2616,11 +2620,6 @@ Begin
      odFindBrowser.Title:=MyExeFor;
      if odFindBrowser.Execute then
         Result := odFindBrowser.Filename;
-end;
-
-procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
-begin
-  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtLocChange(Sender: TObject);
@@ -2722,21 +2721,6 @@ begin
        if (edtWebBrowser.Text ='') then
          ShowMessage('File:'+f+' is not found!'+LineEnding+'Check file name,'+LineEnding+'or give full path.');
      end;
-end;
-
-procedure TfrmPreferences.edtWinMaxSpeedChange(Sender: TObject);
-begin
-  CWKeyerChanged := True
-end;
-
-procedure TfrmPreferences.edtWinMinSpeedChange(Sender: TObject);
-begin
-  CWKeyerChanged := True
-end;
-
-procedure TfrmPreferences.edtWinPortChange(Sender: TObject);
-begin
-  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
@@ -3514,9 +3498,7 @@ Begin
     Begin
       s:=IntToStr(f);
       cmbRadioModes.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
-      //todo set selected mode visible
       cmbCWRadio.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
-      //todo set selected keyer visible
     end;
 
   cmbRadioNr.ItemIndex:=i;
@@ -3533,6 +3515,9 @@ Begin
      cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
      cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
     end;
+
+  LoadBandW(cmbRadioNr.ItemIndex);
+  LoadCWif(cmbRadioNr.ItemIndex);
 
 end;
 procedure TfrmPreferences.ClearUnUsedRigs;

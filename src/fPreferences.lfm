@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabModes
+    ActivePage = tabCWInterface
     Align = alClient
-    TabIndex = 7
+    TabIndex = 19
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2142,7 +2142,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 4
         Caption = ' rigctld '
-        ClientHeight = 70
+        ClientHeight = 86
         ClientWidth = 655
         TabOrder = 0
         object lblRigctdPath: TLabel
@@ -2400,7 +2400,7 @@ object frmPreferences: TfrmPreferences
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
-          ClientHeight = 130
+          ClientHeight = 146
           ClientWidth = 509
           TabOrder = 11
           object lblSerialRSpd: TLabel
@@ -7153,7 +7153,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 147
-          OnChange = edtWinPortChange
+          OnChange = edtWinSpeedChange
           TabOrder = 0
         end
         object edtWinSpeed: TSpinEdit
@@ -7198,7 +7198,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Top = 3
           MaxValue = 99
           MinValue = 5
-          OnChange = edtWinMinSpeedChange
+          OnChange = edtWinSpeedChange
           TabOrder = 3
           Value = 5
         end
@@ -7212,7 +7212,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Left = 6
           MaxValue = 99
           MinValue = 5
-          OnChange = edtWinMaxSpeedChange
+          OnChange = edtWinSpeedChange
           TabOrder = 4
           Value = 60
         end
@@ -7287,6 +7287,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 139
+          OnChange = edtWinSpeedChange
           TabOrder = 0
         end
         object edtCWPort: TEdit
@@ -7297,6 +7298,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 80
+          OnChange = edtWinSpeedChange
           TabOrder = 1
         end
         object edtCWSpeed: TSpinEdit
@@ -7309,6 +7311,7 @@ object frmPreferences: TfrmPreferences
           Width = 50
           MaxValue = 99
           MinValue = 5
+          OnChange = edtWinSpeedChange
           TabOrder = 2
           Value = 5
         end
@@ -7384,7 +7387,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 147
-          OnChange = edtWinPortChange
+          OnChange = edtWinSpeedChange
           TabOrder = 0
         end
         object edtK3NGSpeed: TSpinEdit
@@ -7409,7 +7412,7 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 23
           Width = 118
-          OnChange = edtK3NGSerSpeedChange
+          OnChange = edtWinSpeedChange
           TabOrder = 1
         end
         object lblK3NGSerSpeed: TLabel

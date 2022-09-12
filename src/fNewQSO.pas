@@ -7164,10 +7164,10 @@ begin
     CWint.Close;
     FreeAndNil(CWint)
    end;
-
+  UseSpeed:=0; //show zero when pot speed  or no keyer
   n:=intToStr(frmTRXControl.cmbRig.ItemIndex);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
-  KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
+  KeyerType :=  cqrini.ReadInteger('CW'+n,'Type',0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
   case  KeyerType of
     1 : begin
@@ -7175,30 +7175,33 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','wk_port'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','wk_port'+n,'');
+          CWint.Port    := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.Device  := cqrini.ReadString('CW'+n,'wk_port','');
           CWint.PortSpeed := 1200;
-          UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
+          if not  cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+            UseSpeed := cqrini.ReadInteger('CW'+n,'wk_speed',30)
+           else
+            UseSpeed:=-1;
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','cw_port'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','cw_address','');
+          CWint.Port    := cqrini.ReadString('CW'+n,'cw_port','');
+          CWint.Device  := cqrini.ReadString('CW'+n,'cw_address','');
           CWint.PortSpeed := 0;
-          UseSpeed := cqrini.ReadInteger('CW','cw_speed',30);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
         end;
     3 : begin
           CWint := TCWK3NG.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','K3NGPort'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','K3NGPort'+n,'');
-          CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
-          UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
+          CWint.Port    := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.Device  := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.PortSpeed := cqrini.ReadInteger('CW'+n,'K3NGSerSpeed',115200);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
@@ -7207,16 +7210,16 @@ begin
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
           CWint.Device := cqrini.ReadString('TRX'+n,'host','localhost');
-          UseSpeed := cqrini.ReadInteger('CW','HamLibSpeed',30);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'HamLibSpeed',30);
         end;
   end; //case
   if KeyerType > 0 then
    Begin
      CWint.Open;
-     CWint.SetSpeed(UseSpeed);
-     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
-     if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
+     if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
+   sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
+   if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
