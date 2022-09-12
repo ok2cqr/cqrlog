@@ -708,6 +708,7 @@ type
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    lblRadio: TLabel;
     lblCWRadio: TLabel;
     lblNoRigForCW: TLabel;
     lblNrOfRadios: TLabel;
@@ -3491,22 +3492,34 @@ end;
 
 procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes
 var                                      //set itemindexes to used rig
-   f : integer;
+   f,i : integer;
    s   : string;
 Begin
+   i:=cmbRadioNr.ItemIndex;
    cmbRadioNr.Items.Clear;
    cmbRadioNr.Items.Add('');
    cmbRadioModes.Items.Clear;               //zero position is empty
    cmbRadioModes.Items.Add('');
    cmbCWRadio.Items.Clear;
    cmbCWRadio.Items.Add('');
-   for f:=1 to  cqrini.ReadInteger('TRX', 'RigCount', 2) do
+   for f:=1 to edtRigCount.MaxValue do   //trxcontrol always has all 6 in cmb
+     Begin
+      s:=IntToStr(f);
+      if (cqrini.ReadString('TRX'+s, 'model', '')='') then
+            cmbRadioNr.Items.Add(s+' None')
+           else
+            cmbRadioNr.Items.Add(s+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+     end;
+   for f:=1 to  cqrini.ReadInteger('TRX', 'RigCount', 2) do   //others just defined rigs
     Begin
       s:=IntToStr(f);
-      cmbRadioNr.Items.Add(IntToStr(f));
       cmbRadioModes.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+      //todo set selected mode visible
       cmbCWRadio.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+      //todo set selected keyer visible
     end;
+
+  cmbRadioNr.ItemIndex:=i;
 
   if not ( cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
          begin

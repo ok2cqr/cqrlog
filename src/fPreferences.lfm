@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabTRXcontrol
+    ActivePage = tabModes
     Align = alClient
-    TabIndex = 5
+    TabIndex = 7
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -2256,8 +2256,7 @@ object frmPreferences: TfrmPreferences
         Width = 657
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 6
-        Caption = ' Radio '
-        ClientHeight = 427
+        ClientHeight = 443
         ClientWidth = 655
         TabOrder = 1
         object lblDeviceR: TLabel
@@ -2266,7 +2265,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblModelR
           Left = 236
           Height = 17
-          Top = 39
+          Top = 59
           Width = 157
           BorderSpacing.Left = 30
           Caption = 'Device (e.g. /dev/ttyS0):'
@@ -2278,7 +2277,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
-          Top = 39
+          Top = 59
           Width = 72
           BorderSpacing.Left = 6
           BorderSpacing.Top = 5
@@ -2291,7 +2290,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblDeviceR
           Left = 439
           Height = 17
-          Top = 39
+          Top = 59
           Width = 58
           BorderSpacing.Left = 30
           Caption = 'Poll rate:'
@@ -2303,7 +2302,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 236
           Height = 34
-          Top = 56
+          Top = 76
           Width = 173
           OnChange = TRXParamsChange
           TabOrder = 4
@@ -2314,7 +2313,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 439
           Height = 34
-          Top = 56
+          Top = 76
           Width = 80
           OnChange = TRXParamsChange
           OnExit = edtPollExit
@@ -2326,7 +2325,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblExtra
           Left = 273
           Height = 23
-          Top = 93
+          Top = 113
           Width = 185
           BorderSpacing.Left = 12
           Caption = 'Use CWR instead of CW '
@@ -2339,7 +2338,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 273
           Height = 23
-          Top = 116
+          Top = 136
           Width = 235
           Caption = 'Run rigctld when program starts'
           OnChange = TRXParamsChange
@@ -2351,7 +2350,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 17
-          Top = 93
+          Top = 113
           Width = 209
           BorderSpacing.Top = 3
           Caption = 'Extra command line arguments:'
@@ -2363,7 +2362,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 34
-          Top = 110
+          Top = 130
           Width = 255
           OnChange = TRXParamsChange
           TabOrder = 7
@@ -2374,7 +2373,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Control = lblPollR
           Left = 549
           Height = 17
-          Top = 39
+          Top = 59
           Width = 84
           BorderSpacing.Left = 30
           Caption = 'Port number:'
@@ -2386,7 +2385,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 549
           Height = 34
-          Top = 56
+          Top = 76
           Width = 80
           OnChange = TRXParamsChange
           TabOrder = 6
@@ -2397,7 +2396,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 148
-          Top = 147
+          Top = 167
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
@@ -2650,47 +2649,43 @@ object frmPreferences: TfrmPreferences
           AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 34
-          Top = 56
+          Top = 76
           Width = 200
           ItemHeight = 0
           OnChange = cmbModelRigChange
           TabOrder = 3
         end
         object lblHost: TLabel
-          AnchorSideLeft.Control = edtRadioName
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = edtRadioName
-          Left = 261
+          AnchorSideLeft.Control = edtRHost
+          AnchorSideTop.Control = lblRName
+          Left = 439
           Height = 17
-          Top = 0
+          Top = 3
           Width = 30
-          BorderSpacing.Left = 12
+          BorderSpacing.Right = 6
           Caption = 'Host'
           ParentColor = False
         end
         object edtRadioName: TEdit
-          AnchorSideLeft.Control = lblRName
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = grbRadio
+          AnchorSideLeft.Control = edtRDevice
+          AnchorSideTop.Control = lblRName
+          AnchorSideTop.Side = asrBottom
           AnchorSideRight.Side = asrBottom
-          Left = 155
+          Left = 236
           Height = 34
-          Top = 0
-          Width = 94
-          BorderSpacing.Left = 12
+          Top = 20
+          Width = 100
           OnChange = TRXParamsChange
           TabOrder = 1
         end
         object edtRHost: TEdit
-          AnchorSideLeft.Control = lblHost
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = grbRadio
+          AnchorSideLeft.Control = edtPoll
+          AnchorSideTop.Control = edtRadioName
           AnchorSideRight.Side = asrBottom
-          Left = 303
+          Left = 439
           Height = 34
-          Top = 0
+          Top = 20
           Width = 128
-          BorderSpacing.Left = 12
           OnChange = TRXParamsChange
           TabOrder = 2
         end
@@ -2703,8 +2698,8 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Control = grbRadio
           AnchorSideBottom.Side = asrBottom
           Left = 6
-          Height = 123
-          Top = 298
+          Height = 119
+          Top = 318
           Width = 643
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 6
@@ -2712,7 +2707,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Right = 6
           BorderSpacing.Bottom = 6
           Caption = 'User defined TRX control buttons'
-          ClientHeight = 105
+          ClientHeight = 101
           ClientWidth = 641
           TabOrder = 12
           object lblUsr1R: TLabel
@@ -2834,7 +2829,7 @@ object frmPreferences: TfrmPreferences
           Left = 517
           Height = 23
           Hint = 'Check if rigctld has started with --vfo parameter. '#10'if result is posirive (1) the polling command format '#10'used will be different.'
-          Top = 93
+          Top = 113
           Width = 103
           Caption = 'Use \chkvfo'
           Checked = True
@@ -2846,11 +2841,12 @@ object frmPreferences: TfrmPreferences
         end
         object cmbRadioNr: TComboBox
           AnchorSideLeft.Control = grbRadio
-          AnchorSideTop.Control = grbRadio
+          AnchorSideTop.Control = lblRName
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 33
-          Top = 1
-          Width = 74
+          Top = 21
+          Width = 120
           BorderSpacing.Left = 6
           BorderSpacing.Top = 1
           ItemHeight = 0
@@ -2860,14 +2856,14 @@ object frmPreferences: TfrmPreferences
           TabOrder = 0
         end
         object lblRName: TLabel
-          AnchorSideLeft.Control = cmbRadioNr
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = lblHost
-          Left = 104
+          AnchorSideLeft.Control = edtRadioName
+          AnchorSideTop.Control = grbRadio
+          Left = 236
           Height = 17
-          Top = 0
+          Top = 3
           Width = 39
-          BorderSpacing.Left = 24
+          BorderSpacing.Top = 3
+          BorderSpacing.Right = 6
           Caption = 'Name'
           ParentColor = False
         end
@@ -2878,7 +2874,7 @@ object frmPreferences: TfrmPreferences
           Left = 517
           Height = 23
           Hint = 'Should Power ON command to be sent when initializing rig'
-          Top = 116
+          Top = 136
           Width = 131
           Caption = 'Rig pwr ON cmd'
           Checked = True
@@ -2886,6 +2882,17 @@ object frmPreferences: TfrmPreferences
           ShowHint = True
           State = cbChecked
           TabOrder = 13
+        end
+        object lblRadio: TLabel
+          AnchorSideLeft.Control = cmbRadioNr
+          AnchorSideTop.Control = grbRadio
+          Left = 6
+          Height = 17
+          Top = 3
+          Width = 37
+          BorderSpacing.Top = 3
+          Caption = 'Radio'
+          ParentColor = False
         end
       end
     end
@@ -3909,7 +3916,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 12
         BorderSpacing.Top = 12
         Caption = ' Radio'
-        ClientHeight = 290
+        ClientHeight = 274
         ClientWidth = 522
         TabOrder = 1
         object lblMode: TLabel
