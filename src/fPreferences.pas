@@ -505,10 +505,10 @@ type
     cmbRadioModes: TComboBox;
     cmbCWRadio: TComboBox;
     cmbIfaceType: TComboBox;
+    cmbDataMode: TComboBox;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
-    edtDataMode: TEdit;
     edtDataCmd: TEdit;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
@@ -1058,7 +1058,7 @@ type
     procedure cmbRadioNrCloseUp(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
     procedure edtDataCmdChange(Sender: TObject);
-    procedure edtDataModeChange(Sender: TObject);
+    procedure edtDigiModesExit(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
     procedure edtGCStepExit(Sender: TObject);
@@ -1350,9 +1350,6 @@ begin
   cqrini.WriteInteger('ROT2', 'HandShake', cmbHanshakeRot2.ItemIndex);
   cqrini.WriteInteger('ROT2', 'DTR', cmbDTRRot2.ItemIndex);
   cqrini.WriteInteger('ROT2', 'RTS', cmbRTSRot2.ItemIndex);
-
-
-  cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
 
   cqrini.WriteBool('Profiles', 'Use', chkUseProfiles.Checked);
   cqrini.WriteInteger('Profiles', 'Selected', dmData.GetNRFromProfile(cmbProfiles.Text));
@@ -2519,12 +2516,15 @@ begin
   edtDataCmd.SelLength:=0;
 end;
 
-procedure TfrmPreferences.edtDataModeChange(Sender: TObject);
+procedure TfrmPreferences.edtDigiModesExit(Sender: TObject);
+var i :integer;
 begin
-  edtDataMode.Text:=DataModeInput(edtDataMode.Text);
-  edtDataMode.SelStart:=length(edtDataMode.Text);
-  edtDataMode.SelLength:=0;
+  cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
+  i:=cmbDataMode.ItemIndex;
+  dmUtils.InsertModes(cmbDataMode);
+  cmbDataMode.ItemIndex:=i;
 end;
+
 function TfrmPreferences.DataModeInput(s:string):string;
 begin
   s:=Upcase(s);
@@ -2741,9 +2741,10 @@ begin
   dmUtils.InsertModes(cmbDefaultMode);
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertModes(cmbWsjtDefaultMode);
+  dmUtils.InsertModes(cmbDataMode);
   cmbDefaultMode.Style := csDropDownList;
   cmbWsjtDefaultMode.Style := csDropDownList;
-
+  cmbDataMode.Style:=csDropDownList;
   LoadMebershipCombo;
 
   dmUtils.ReadZipList(cmbFirstZip);
@@ -3403,7 +3404,7 @@ Begin
   edtData.Value := cqrini.ReadInteger('Band'+nr, 'RTTY', 500);  //note: Data is called rtty for backward compatibility
   edtAM.Value := cqrini.ReadInteger('Band'+nr, 'AM', 3000);
   edtFM.Value := cqrini.ReadInteger('Band'+nr, 'FM', 2500);
-  edtDataMode.Text:=cqrini.ReadString('Band'+nr, 'Datamode', 'RTTY');
+  cmbDataMode.ItemIndex := cmbDataMode.Items.IndexOf(cqrini.ReadString('Band'+nr, 'Datamode', 'RTTY'));
   edtDataCmd.Text:=cqrini.ReadString('Band'+nr, 'Datacmd', 'RTTY');
   chkModeReverse.Checked :=cqrini.ReadBool('Band'+nr, 'UseReverse', False);
   BandWNrLoaded := RigNr;
@@ -3419,7 +3420,7 @@ Begin
   cqrini.WriteInteger('Band'+nr, 'RTTY', edtData.Value);  //note: Data is called rtty for backward compatibility
   cqrini.WriteInteger('Band'+nr, 'AM', edtAM.Value);
   cqrini.WriteInteger('Band'+nr, 'FM', edtFM.Value);
-  cqrini.WriteString('Band'+nr, 'Datamode', edtDataMode.Text);
+  cqrini.WriteString('Band'+nr, 'Datamode', cmbDataMode.Text);
   cqrini.WriteString('Band'+nr, 'Datacmd', edtDatacmd.Text);
   cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
 end;

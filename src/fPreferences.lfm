@@ -23,9 +23,9 @@ object frmPreferences: TfrmPreferences
     Height = 712
     Top = 0
     Width = 883
-    ActivePage = tabCWInterface
+    ActivePage = tabModes
     Align = alClient
-    TabIndex = 19
+    TabIndex = 7
     TabOrder = 0
     OnChange = pgPreferencesChange
     object tabProgram: TTabSheet
@@ -56,7 +56,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 3
         Caption = ' Internet connection '
-        ClientHeight = 127
+        ClientHeight = 111
         ClientWidth = 339
         TabOrder = 0
         object lblintProxy: TLabel
@@ -248,7 +248,7 @@ object frmPreferences: TfrmPreferences
         Width = 626
         BorderSpacing.Top = 9
         Caption = ' Offsets and colors'
-        ClientHeight = 201
+        ClientHeight = 185
         ClientWidth = 624
         TabOrder = 7
         object lblUtc: TLabel
@@ -812,7 +812,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 20
         BorderSpacing.Top = 10
         Caption = ' Default values '
-        ClientHeight = 158
+        ClientHeight = 142
         ClientWidth = 598
         TabOrder = 0
         object Label5: TLabel
@@ -873,7 +873,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Side = asrBottom
           Left = 5
           Height = 17
-          Top = 101
+          Top = 85
           Width = 118
           Anchors = [akLeft, akBottom]
           BorderSpacing.Bottom = 40
@@ -932,7 +932,7 @@ object frmPreferences: TfrmPreferences
           AnchorSideBottom.Side = asrBottom
           Left = 5
           Height = 34
-          Top = 119
+          Top = 103
           Width = 216
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 5
@@ -2142,7 +2142,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 4
         Caption = ' rigctld '
-        ClientHeight = 70
+        ClientHeight = 86
         ClientWidth = 655
         TabOrder = 0
         object lblRigctdPath: TLabel
@@ -2400,7 +2400,7 @@ object frmPreferences: TfrmPreferences
           Width = 511
           BorderSpacing.Top = 3
           Caption = 'Radio one serial parameters'
-          ClientHeight = 130
+          ClientHeight = 146
           ClientWidth = 509
           TabOrder = 11
           object lblSerialRSpd: TLabel
@@ -3902,6 +3902,7 @@ object frmPreferences: TfrmPreferences
           BorderSpacing.Left = 6
           BorderSpacing.Top = 6
           CharCase = ecUppercase
+          OnExit = edtDigiModesExit
           TabOrder = 0
         end
       end
@@ -4180,8 +4181,8 @@ object frmPreferences: TfrmPreferences
           Left = 207
           Height = 17
           Top = 100
-          Width = 61
-          Caption = 'Rig Mode'
+          Width = 58
+          Caption = 'CAT cmd'
           ParentColor = False
         end
         object lblDataMode1: TLabel
@@ -4196,36 +4197,20 @@ object frmPreferences: TfrmPreferences
           Caption = 'Mode '
           ParentColor = False
         end
-        object edtDataMode: TEdit
-          AnchorSideLeft.Control = lblDataMode1
-          AnchorSideTop.Control = lblLogDataMode
-          AnchorSideTop.Side = asrCenter
-          Left = 280
-          Height = 34
-          Hint = '"Log Mode" is the data mode name you want to use.'#10'(most used data mode)'#10'This setting effects to DXCluster spot line colors and'#10'sets wanted rig mode when double click on DXspot line.'#10#10'NOTE: You may have to add your "Log mode" to'#10'"User defined digital modes"'
-          Top = 57
-          Width = 80
-          AutoSize = False
-          OnChange = edtDataModeChange
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 6
-          Text = 'RTTY'
-        end
         object edtDataCmd: TEdit
-          AnchorSideLeft.Control = edtDataMode
+          AnchorSideLeft.Control = cmbDataMode
           AnchorSideTop.Control = lblRigDataCmd
           AnchorSideTop.Side = asrCenter
           Left = 280
           Height = 34
-          Hint = '"Rig mode" is the rigctld mode command your rig needs to'#10'set rig to "Log mode" mode working.'
+          Hint = '"CAT cmd" is the rigctld mode command needed to'#10'send to rig for working  "Log mode" qsos.'
           Top = 91
-          Width = 80
+          Width = 100
           AutoSize = False
           OnChange = edtDataCmdChange
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 7
+          TabOrder = 6
           Text = 'RTTY'
         end
         object lblNoRigForMode: TLabel
@@ -4253,9 +4238,22 @@ object frmPreferences: TfrmPreferences
           Height = 23
           Hint = 'Cheking this will cause Cqrlog to set selected "Log mode" if'#10'rigctld reads this mode from rig and NewQSO/Auto is checked.'#10#10'This can be a pitfall if your "Log mode" needs for ex. USB mode'#10'from rig. Then when working phone qso using USB your log gets'#10'mode as "Log mode". '#10'Normally when using remote modes and get mode from remote'#10'program this does not need to be checked.'
           Top = 131
-          Width = 202
+          Width = 205
           BorderSpacing.Top = 5
-          Caption = 'Use also reverse (rig->log)'
+          Caption = 'Use also reverse (cat->log)'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+        end
+        object cmbDataMode: TComboBox
+          AnchorSideLeft.Control = lblDataMode1
+          AnchorSideTop.Control = edtCW
+          Left = 280
+          Height = 34
+          Hint = '"Log Mode" is the data mode name you want to use.'#10'(most used data mode)'#10'This setting effects to DXCluster spot line colors and'#10'sets wanted rig mode when double click on DXspot line.'#10#10'NOTE: You may have to add your "Log mode" to'#10'"User defined digital modes" first.'
+          Top = 57
+          Width = 100
+          ItemHeight = 0
           ParentShowHint = False
           ShowHint = True
           TabOrder = 8
@@ -5013,7 +5011,7 @@ object frmPreferences: TfrmPreferences
         Top = 3
         Width = 496
         Caption = ' Font settings '
-        ClientHeight = 350
+        ClientHeight = 334
         ClientWidth = 494
         TabOrder = 0
         object lblButtons: TLabel
@@ -7596,7 +7594,7 @@ object frmPreferences: TfrmPreferences
         BorderSpacing.Left = 6
         BorderSpacing.Top = 6
         Caption = ' Reading data from fldigi'
-        ClientHeight = 326
+        ClientHeight = 310
         ClientWidth = 722
         TabOrder = 0
         object Label91: TLabel
@@ -7938,7 +7936,7 @@ object frmPreferences: TfrmPreferences
         Width = 724
         BorderSpacing.Top = 6
         Caption = 'Reading data from wsjtx'
-        ClientHeight = 262
+        ClientHeight = 246
         ClientWidth = 722
         TabOrder = 1
         object GroupBox52: TGroupBox
