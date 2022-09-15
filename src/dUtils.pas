@@ -4447,7 +4447,7 @@ begin
     end
   end;
   if (CmbText='') then
-    RigComboBox.ItemIndex := 0
+    RigComboBox.ItemIndex := -1
   else
     RigComboBox.Text := CmbText
 end;

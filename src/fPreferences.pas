@@ -2401,11 +2401,6 @@ begin
   if cmbCWRadio.ItemIndex<1 then cmbCWRadio.ItemIndex:=1;
   SaveCWif(CWifLoaded);
   LoadCWif(cmbCWRadio.ItemIndex);
-  if (cqrini.ReadString('TRX'+IntToStr(cmbCWRadio.ItemIndex), 'model', '')='')
-    or (pos('NONE',uppercase(cqrini.ReadString('TRX'+IntToStr(cmbCWRadio.ItemIndex), 'model', '')) )>1) then
-     lblNoRigForCW.Visible:=True
-   else
-     lblNoRigForCW.Visible:=False;
 end;
 
 procedure TfrmPreferences.cmbIfaceTypeChange(Sender: TObject);
@@ -2481,10 +2476,6 @@ begin
   if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
   SaveBandW(BandWNrLoaded);
   LoadBandW(cmbRadioModes.ItemIndex);
-  if cqrini.ReadString('TRX'+IntToStr(cmbRadioModes.ItemIndex), 'model', '')='' then
-     lblNoRigForMode.Visible:=True
-   else
-     lblNoRigForMode.Visible:=False;
 end;
 
 procedure TfrmPreferences.cmbRadioNrChange(Sender: TObject);
@@ -3366,6 +3357,7 @@ Begin
      Begin
       cqrini.SectionErase('TRX'+nr);
       cqrini.SectionErase('Band'+nr);
+      cqrini.SectionErase('CW'+nr);
       exit;
      end;
 
@@ -3408,13 +3400,17 @@ Begin
   edtDataCmd.Text:=cqrini.ReadString('Band'+nr, 'Datacmd', 'RTTY');
   chkModeReverse.Checked :=cqrini.ReadBool('Band'+nr, 'UseReverse', False);
   BandWNrLoaded := RigNr;
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
+    lblNoRigForMode.Visible:=True
+   else
+    lblNoRigForMode.Visible:=False;
 end;
 procedure TfrmPreferences.SaveBandW(RigNr:integer);
 var
    nr :string;
 Begin
-  if lblNoRigForMode.Visible then exit; //No rig, no save
   nr:=IntToStr(RigNr);
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
   cqrini.WriteInteger('Band'+nr, 'CW', edtCW.Value);
   cqrini.WriteInteger('Band'+nr, 'SSB', edtSSB.Value);
   cqrini.WriteInteger('Band'+nr, 'RTTY', edtData.Value);  //note: Data is called rtty for backward compatibility
@@ -3444,13 +3440,17 @@ Begin
   edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
   edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
   CWifLoaded := RigNr;
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
+    lblNoRigForCW.Visible:=True
+   else
+    lblNoRigForCW.Visible:=False;
 end;
 procedure TfrmPreferences.SaveCWif(RigNr:integer);
 var
    nr :string;
 Begin
-  if lblNoRigForCW.Visible then exit; //No rig, no save
   nr:=IntToStr(RigNr);
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
   cqrini.WriteInteger('CW'+nr, 'Type', cmbIfaceType.ItemIndex);
   cqrini.WriteBool('CW'+nr, 'NoReset', cbNoKeyerReset.Checked);
   cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort.Text);
@@ -3470,7 +3470,7 @@ end;
 procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes
 var                                      //set itemindexes to used rig
    f,i : integer;
-   s   : string;
+   s,d : string;
 Begin
    i:=cmbRadioNr.ItemIndex;
    cmbRadioNr.Items.Clear;
@@ -3479,7 +3479,7 @@ Begin
    cmbRadioModes.Items.Add('');
    cmbCWRadio.Items.Clear;
    cmbCWRadio.Items.Add('');
-   for f:=1 to edtRigCount.MaxValue do   //trxcontrol always has all 6 in cmb
+   for f:=1 to edtRigCount.Value do
      Begin
       s:=IntToStr(f);
       if (cqrini.ReadString('TRX'+s, 'model', '')='') then
@@ -3490,13 +3490,22 @@ Begin
    for f:=1 to  cqrini.ReadInteger('TRX', 'RigCount', 2) do   //others just defined rigs
     Begin
       s:=IntToStr(f);
-      cmbRadioModes.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
-      cmbCWRadio.Items.Add(IntToStr(f)+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+      d:= cqrini.ReadString('TRX'+s, 'Desc', '');
+      if (cqrini.ReadString('TRX'+s, 'model', '')='') then
+        Begin
+             cmbRadioModes.Items.Add(s+' None');
+             cmbCWRadio.Items.Add(s+' None');
+        end
+       else
+        begin
+             cmbRadioModes.Items.Add(s+' '+d);
+             cmbCWRadio.Items.Add(s+' '+d);
+        end;
     end;
 
   cmbRadioNr.ItemIndex:=i;
 
-  if not ( cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
+  if not (cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
          begin
           cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted  (rig count changed)
           SetUsedRig:=true;

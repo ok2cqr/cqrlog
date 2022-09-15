@@ -118,7 +118,7 @@ begin
 
   cmbStoreZipCode.ItemIndex         := SectionExists('ZipCode',Sections);
   cmbStoreLoTW.ItemIndex            := SectionExists('LoTW',Sections);
-  cmbStoreCWInterface.ItemIndex     := SectionExists('CW',Sections);
+  cmbStoreCWInterface.ItemIndex     := SectionExists('CW1',Sections);
   cmbStoreFldigiInterface.ItemIndex := SectionExists('fldigi',Sections);
   cmbStoreAutoBackup.ItemIndex      := SectionExists('Backup',Sections);
   cmbStoreExtViewers.ItemIndex      := SectionExists('ExtView',Sections);
