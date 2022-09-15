@@ -3005,7 +3005,6 @@ object frmPreferences: TfrmPreferences
               Width = 80
               BorderSpacing.Left = 12
               OnChange = RotorParamsChange
-              OnExit = edtPoll1Exit
               TabOrder = 1
             end
             object chkRot1RunRotCtld: TCheckBox
@@ -3452,7 +3451,6 @@ object frmPreferences: TfrmPreferences
               Width = 80
               BorderSpacing.Left = 12
               OnChange = RotorParamsChange
-              OnExit = edtPoll1Exit
               TabOrder = 1
             end
             object chkRot2RunRotCtld: TCheckBox
