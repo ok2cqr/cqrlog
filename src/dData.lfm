@@ -987,4 +987,20 @@ object dmData: TdmData
     left = 576
     top = 144
   end
+  object CQ: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = QBeforeOpen
+    Transaction = trCQ
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 680
+    Top = 80
+  end
+  object trCQ: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 680
+    Top = 144
+  end
 end
