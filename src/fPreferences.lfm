@@ -4168,7 +4168,6 @@ object frmPreferences: TfrmPreferences
           ParentShowHint = False
           ShowHint = True
           TabOrder = 6
-          Text = 'RTTY'
         end
         object lblNoRigForMode: TLabel
           AnchorSideLeft.Control = cmbRadioModes

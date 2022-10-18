@@ -42,7 +42,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 17
     Top = 72
     Width = 32
-    Caption = 'RTTY'
+    Caption = 'DATA'
     ParentColor = False
   end
   object Label5: TLabel

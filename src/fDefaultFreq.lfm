@@ -43,7 +43,7 @@ object frmDefaultFreq: TfrmDefaultFreq
     Height = 17
     Top = 16
     Width = 30
-    Caption = 'RTTY'
+    Caption = 'DATA'
     ParentColor = False
   end
   object Label7: TLabel
@@ -611,4 +611,4 @@ object frmDefaultFreq: TfrmDefaultFreq
     TabOrder = 66
     Text = '70cm'
   end
-end
+end
