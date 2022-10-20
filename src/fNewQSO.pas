@@ -5468,6 +5468,7 @@ var
   tmp : String;
   speed : Integer = 0;
   i     : Integer = 0;
+  n     : String;
   ShowMain : Boolean = False;
 begin
   if key = VK_ESCAPE then
@@ -5560,13 +5561,17 @@ begin
     end
   end;
 
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
     if Assigned(CWint) then
     begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        sbNewQSO.Panels[4].Text := 'PotWPM'
+       else
+        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -5577,7 +5582,10 @@ begin
     begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        sbNewQSO.Panels[4].Text := 'PotWPM'
+       else
+        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -7218,7 +7226,10 @@ begin
      CWint.Open;
      if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
-   sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
+   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+     sbNewQSO.Panels[4].Text := 'PotWPM'
+    else
+     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
    if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
 end;
 
