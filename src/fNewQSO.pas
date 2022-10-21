@@ -5569,7 +5569,7 @@ begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
       if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-        sbNewQSO.Panels[4].Text := 'PotWPM'
+        sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
@@ -5583,7 +5583,7 @@ begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
       if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-        sbNewQSO.Panels[4].Text := 'PotWPM'
+        sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
@@ -7227,7 +7227,7 @@ begin
      if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
    if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-     sbNewQSO.Panels[4].Text := 'PotWPM'
+     sbNewQSO.Panels[4].Text := 'Pot WPM'
     else
      sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
    if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
