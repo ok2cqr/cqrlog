@@ -1102,6 +1102,8 @@ begin
   tmrRadio.Enabled := True;
   Result := True;
 
+  LoadUsrButtonCaptions;
+
   pnlPower.Visible := cqrini.ReadBool('TRX', 'PowerButtons', False);
   mnuShowPwr.Checked := pnlPower.Visible;
 
@@ -1114,10 +1116,8 @@ begin
   else  //radio changed, restart CW interface
     begin
       //we check this again although preferences prevent false setting
-      if (cqrini.ReadBool('CW', 'NoReset', False) //is set: user does not want reset
-        and (cqrini.ReadInteger('CW', 'Type1', 0) =
-        cqrini.ReadInteger('CW', 'Type2', 0)) //both keyers are same
-        and (cqrini.ReadInteger('CW', 'Type1', 0) <> 4)  //type is not HamLib
+      if ( cqrini.ReadBool('CW', 'NoReset', False) //is set: user does not want reset
+        and (cqrini.ReadInteger('CW'+RigInUse, 'Type', 0) <> 4)  //type is not HamLib
         ) then //no restart keyer it is same device for both radios.
             begin
               if ((dmData.DebugLevel >= 1) or ((abs(dmData.DebugLevel) and 8) = 8)) then
