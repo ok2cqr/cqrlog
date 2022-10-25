@@ -811,7 +811,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, f
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
      fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
-     fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
+     fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog, fCallbook,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
      fRemind, fContest, fXfldigi, dMembership, dSatellite;
 
@@ -1625,139 +1625,51 @@ begin
   tmrEnd.Enabled   := False;
   tmrStart.Enabled := False;
 
+  //save showing states those ones that needs to be restored
+
   if Assigned(cqrini) then
   begin
+    cqrini.WriteBool('Window','pDK0WCY',frmPropDK0WCY.Showing);
+    cqrini.WriteBool('Window','WorkedGrids',frmWorkedGrids.Showing );
+    cqrini.WriteBool('Window','RBNMonitor',frmRBNMonitor.Showing);
+    cqrini.WriteBool('Window','CWType',frmCWType.Showing );
+    cqrini.WriteBool('Window','LogUploadStatus', frmLogUploadStatus.Showing);
+    cqrini.WriteBool('Window','ROT',frmRotControl.Showing);
     cqrini.WriteBool('Window','CWKeys',frmCWKeys.Showing);
+    cqrini.WriteBool('Window','SCP',frmSCP.Showing);
+    cqrini.WriteBool('Window','Prop',frmPropagation.Showing);
+    cqrini.WriteBool('Window','BandMap',frmBandMap.Showing );
+    cqrini.WriteBool('Window','Details',frmQSODetails.Showing );
+    cqrini.WriteBool('Window','Dxcluster',frmDXCluster.Showing);
+    cqrini.WriteBool('Window','Grayline',frmGrayline.Showing);
+    cqrini.WriteBool('Window','TRX',frmTRXControl.Showing );
+    cqrini.WriteBool('Window','QSOList',frmMain.Showing );
+  end;
 
-    //I have to close window manually because of bug in lazarus.
+  // then close windows.
 
-    if frmGrayline.Showing then
-    begin
-      frmGrayline.Close;
-      cqrini.WriteBool('Window','Grayline',True)
-    end
-    else
-      cqrini.WriteBool('Window','Grayline',False);
-
-    if frmTRXControl.Showing then
-    begin
-      frmTRXControl.Close;
-      cqrini.WriteBool('Window','TRX',True)
-    end
-    else begin
-      cqrini.WriteBool('Window','TRX',False)
-    end;
+    if (frmMonWsjtx <> nil)
+      and frmMonWsjtx.Showing     then  frmMonWsjtx.Close;
+    if frmContest.Showing         then  frmContest.Close;
+    if frmReminder.Showing        then  frmReminder.Close;
+    if frmPropDK0WCY.Showing      then  frmPropDK0WCY.Close;
+    if frmWorkedGrids.Showing     then  frmWorkedGrids.Close;
+    if frmRBNMonitor.Showing      then  frmRBNMonitor.Close;
+    if frmCWType.Showing          then  frmCWType.Close;
+    if frmLogUploadStatus.Showing then  frmLogUploadStatus.Close;
+    if frmRotControl.Showing      then  frmRotControl.Close;
+    if frmCWKeys.Showing          then  frmCWKeys.Close;
+    if frmSCP.Showing             then  frmSCP.Close;
+    if frmPropagation.Showing     then  frmPropagation.Close;
+    if frmBandMap.Showing         then  frmBandMap.Close;
+    if frmQSODetails.Showing      then  frmQSODetails.Close;
+    if frmDXCluster.Showing       then  frmDXCluster.Close;
+    if frmCallbook.Showing        then  frmCallbook.Close;
+    if frmGrayline.Showing        then  frmGrayline.Close;
     frmTRXControl.CloseRigs;
+    if frmTRXControl.Showing      then   frmTRXControl.Close;
+    if frmMain.Showing            then   frmMain.Close;
 
-    if frmRotControl.Showing then
-    begin
-      frmRotControl.Close;
-      cqrini.WriteBool('Window','ROT',True)
-    end
-    else
-      cqrini.WriteBool('Window','ROT',False);
-
-    if frmDXCluster.Showing then
-    begin
-      frmDXCluster.Close;
-      cqrini.WriteBool('Window','Dxcluster',True)
-    end
-    else
-      cqrini.WriteBool('Window','Dxcluster',False);
-
-    if frmQSODetails.Showing then
-    begin
-      frmQSODetails.Close;
-      cqrini.WriteBool('Window','Details',True)
-    end
-    else
-      cqrini.WriteBool('Window','Details',False);
-
-    if frmBandMap.Showing then
-    begin
-      frmBandMap.Close;
-      cqrini.WriteBool('Window','BandMap',True)
-    end
-    else
-      cqrini.WriteBool('Window','BandMap',False);
-
-    if frmPropagation.Showing then
-    begin
-      frmPropagation.Close;
-      cqrini.WriteBool('Window','Prop',True)
-    end
-    else
-      cqrini.WriteBool('Window','Prop',False);
-
-    if frmPropDK0WCY.Showing then
-    begin
-      frmPropDK0WCY.Close;
-      cqrini.WriteBool('Window','pDK0WCY',True)
-    end
-    else
-      cqrini.WriteBool('Window','pDK0WCY',False);
-
-   if frmWorkedGrids.Showing then
-    begin
-      frmWorkedGrids.Close;
-      cqrini.WriteBool('Window','WorkedGrids',True)
-    end
-    else
-      cqrini.WriteBool('Window','WorkedGrids',False);
-
-   if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
-     begin
-       frmMonWsjtx.Close;
-     end;
-
-    if frmCWKeys.Showing then
-    begin
-      frmCWKeys.Close;
-      cqrini.WriteBool('Window','CWKeys',True)
-    end
-    else
-      cqrini.WriteBool('Window','CWKeys',False);
-
-    if frmSCP.Showing then
-    begin
-      cqrini.WriteBool('Window','SCP',True);
-      frmSCP.Close
-    end
-    else
-      cqrini.WriteBool('Window','SCP',False);
-
-    if frmMain.Showing then
-    begin
-      cqrini.WriteBool('Window','QSOList',True);
-      frmMain.Close
-    end
-    else
-      cqrini.WriteBool('Window','QSOList',False);
-
-    if frmLogUploadStatus.Showing then
-    begin
-      cqrini.WriteBool('Window','LogUploadStatus', True);
-      frmLogUploadStatus.Close
-    end
-    else
-      cqrini.WriteBool('Window','LogUploadStatus', False);
-
-    if frmCWType.Showing then
-    begin
-      cqrini.WriteBool('Window','CWType',True);
-      frmCWType.Close
-    end
-    else
-      cqrini.WriteBool('Window','CWType',False);
-
-    if frmRBNMonitor.Showing then
-    begin
-      cqrini.WriteBool('Window','RBNMonitor',True);
-      frmRBNMonitor.Close
-    end
-    else
-      cqrini.WriteBool('Window','RBNMonitor',False)
-  end
 end;
 
 procedure TfrmNewQSO.SaveSettings;
@@ -3069,7 +2981,11 @@ begin
                       5,6       : edtContestName.Text := ContestName[ContestNr]+'-QSO';
                  end;
                  case ContestNr of
-                      1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+                      1,2,3,4   : Begin
+                                       edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+                                       if (frmContest.Showing and (frmContest.cmbContestName.Text<>'')) then
+                                            edtContestName.Text :=frmContest.cmbContestName.Text;
+                                  end;
                  end;
            end;
            //----------this is not yet in wsjt-x 2.2.2 and JTDX 2.1.0rc151------------------
@@ -3987,6 +3903,7 @@ begin
   end;
   RunST('stop.sh'); //run "when cqrlog is closing" -script
   sleep(1000); //give scirpt time to use rigctld if that is needed
+  Application.ProcessMessages;
   if  AnyRemoteOn then DisableRemoteMode;
   CloseAllWindows;
   SaveSettings;

@@ -987,4 +987,25 @@ object dmData: TdmData
     left = 576
     top = 144
   end
+  object dsrFreqs: TDataSource
+    DataSet = qFreqs
+    Left = 80
+    Top = 355
+  end
+  object trFreqs: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 80
+    Top = 280
+  end
+  object qFreqs: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = qBandsBeforeOpen
+    Transaction = trFreqs
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 80
+    Top = 210
+   end
 end

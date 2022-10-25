@@ -126,7 +126,7 @@ object frmFreq: TfrmFreq
     end
   end
   object dsrFreq: TDataSource
-    DataSet = dmData.qBands
+    DataSet = dmData.qFreqs
     left = 130
     top = 57
   end
