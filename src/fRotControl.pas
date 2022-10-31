@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, uMyIni, uRotControl, fNewQSO, LCLType, ComCtrls, Menus,
-  EditBtn, Types;
+  EditBtn, Types, Math;
 
 type
 
@@ -400,14 +400,38 @@ begin
 end;
 
 procedure TfrmRotControl.SynROT;
+
+const R = 6371e3; // metres
 var
   Az : Double ;
+  f  : TextFile;
+  lat,
+  lon,
+  lat2,
+  lon2,
+  dist:currency;
+
 begin
   if Assigned(rotor) then
     Az := rotor.GetAzimut
   else
     Az := 0;
-  lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az)
+  lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az);
+
+  //create file mylat mylon rotlat rotlon thicness
+  //-38.0 143.0 11.6 43.14 thickness=1.5
+  AssignFile(f,dmData.HomeDir + 'xplanet' + PathDelim + 'rotor');
+  Rewrite(f);
+
+  dmUtils.CoordinateFromLocator(frmNewQSO.CurrentMyLoc,lat,lon);
+  dist:=100000;
+
+  lat2 := arcsin( sin(lat)*cos(dist/R) + cos(lat)*sin(dist/R)*cos(DegToRad(Az)) );
+  lon2 := lon + arctan2(sin(DegToRad(Az))*sin(dist/R)*cos(lat), cos(dist/R)-sin(lat)*sin(lat2));
+
+  Writeln(f,FormatFloat(empty_azimuth+';;',lat) ,' ',FormatFloat(empty_azimuth+';;',lon),
+        ' ',FormatFloat(empty_azimuth+';;',lat2) ,' ',FormatFloat(empty_azimuth+';;',lon2),' thickness=1.5');
+  CloseFile(f);
 end;
 
 end.
