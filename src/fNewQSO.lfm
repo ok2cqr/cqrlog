@@ -5041,6 +5041,10 @@ object frmNewQSO: TfrmNewQSO
       object MenuItem39: TMenuItem
         Action = acReloadCW
       end
+      object MenuItem45: TMenuItem
+        Caption = 'Send hex bytes to keyer (W or K)'
+        OnClick = MenuItem45Click
+      end
       object MenuItem51: TMenuItem
         Caption = '-'
       end

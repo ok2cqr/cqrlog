@@ -5,7 +5,7 @@ unit uCWKeying;
 interface
 
 uses
-  Classes, SysUtils, synaser, synautil, lNet, lNetComponents, Forms;
+  Classes, SysUtils, synaser, synautil, lNet, lNetComponents, Forms, Dialogs, StrUtils;
 
 type TKeyType   = (ktCWdaemon, ktWinKeyer);
 type TKeyStatus = (ksReady, ksBusy);
@@ -40,6 +40,7 @@ type
       procedure Close; virtual; abstract;
       procedure SetSpeed(speed : Word); virtual; abstract;
       procedure SendText(text : String); virtual; abstract;
+      procedure SendHex(text:String);  virtual; abstract;
       procedure StopSending; virtual; abstract;
       procedure DelLastChar; virtual; abstract;
       procedure SetMixManSpeed(min,max : Word); virtual; abstract;
@@ -64,6 +65,7 @@ type
       procedure Close; override;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -87,6 +89,7 @@ type
       procedure Close; override;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -110,6 +113,7 @@ type
       procedure Close; override;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -142,6 +146,7 @@ type
       procedure WaitMorse;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -363,7 +368,7 @@ begin
                 ser.SendString('A');
                 ser.SendString('C');
               end;
-{        'ß' : begin
+ {      'ß' : begin
                 ser.SendByte($1B);
                 ser.SendString('S');
                 ser.SendString('Z');
@@ -392,6 +397,61 @@ begin
   end
   else
     ser.SendString(text)
+end;
+
+procedure TCWWinKeyerUSB.SendHex(text : String);
+var
+  H       : String;
+  p       : integer;
+  index     :integer;
+  paramList :TStringList;
+
+function send(ok:boolean):boolean;
+Begin
+  Result:=true;
+  try
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ',';
+    paramList.DelimitedText := text;
+    while index < paramList.Count do
+    begin
+      try
+       if Pos('X', paramList[index])>0 then
+          H:=copy(paramList[index],Pos('X', paramList[index])+1,2)
+        else
+          H:= paramList[index];
+       p:=Hex2Dec(H);
+      except
+       on E: Exception do
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+           Result:=false;
+           exit;
+         end;
+      end;
+      if p>255 then
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+           Result:=false;
+           exit;
+         end;
+      if fDebugMode and ok then Writeln('Sending value: ',paramList[index],'=',p);
+      if ok then ser.SendByte(p);
+      inc(index);
+    end;
+
+    paramList.Free;
+   finally
+     //Done all
+   end;
+end;
+
+begin
+  //test hex conversion
+  if not send(false) then exit;
+  //if passed do real send
+  send(true);
 end;
 
 procedure TCWWinKeyerUSB.Close;
@@ -517,6 +577,10 @@ begin
   end
   else
     udp.SendMessage(text)
+end;
+procedure TCWDaemon.SendHex(text : String);
+Begin
+  //not implemented
 end;
 
 procedure TCWDaemon.Close;
@@ -667,6 +731,60 @@ begin
   else
     ser.SendString(text)
 end;
+procedure TCWK3NG.SendHex(text : String);
+  var
+    H       : String;
+    p       : integer;
+    index     :integer;
+    paramList :TStringList;
+
+  function send(ok:boolean):boolean;
+  Begin
+    Result:=true;
+    try
+      index:=0;
+      paramList := TStringList.Create;
+      paramList.Delimiter := ',';
+      paramList.DelimitedText := text;
+      while index < paramList.Count do
+      begin
+        try
+         if Pos('X', paramList[index])>0 then
+            H:=copy(paramList[index],Pos('X', paramList[index])+1,2)
+          else
+            H:= paramList[index];
+         p:=Hex2Dec(H);
+        except
+         on E: Exception do
+           Begin
+             ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+             Result:=false;
+             exit;
+           end;
+        end;
+        if p>255 then
+           Begin
+             ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+             Result:=false;
+             exit;
+           end;
+        if fDebugMode and ok then Writeln('Sending value: ',paramList[index],'=',p);
+        if ok then ser.SendByte(p);
+        inc(index);
+      end;
+
+      paramList.Free;
+     finally
+       //Done all
+     end;
+  end;
+
+  begin
+    //test hex conversion
+    if not send(false) then exit;
+    //if passed do real send
+    send(true);
+  end;
 
 procedure TCWK3NG.Close;
 begin
@@ -909,7 +1027,10 @@ begin
       end
      else  if fDebugMode then  Writeln('Empty message!');
 end;
-
+procedure TCWHamLib.SendHex(text : String);
+Begin
+  //not implemented
+end;
 procedure TCWHamLib.Close;
 begin
   if tcp.Connected then

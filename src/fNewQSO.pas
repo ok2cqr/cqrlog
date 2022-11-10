@@ -133,6 +133,7 @@ type
     MenuItem40: TMenuItem;
     MenuItem41: TMenuItem;
     MenuItem43: TMenuItem;
+    MenuItem45: TMenuItem;
     MenuItem51: TMenuItem;
     MenuItem52: TMenuItem;
     MenuItem53: TMenuItem;
@@ -451,6 +452,7 @@ type
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
+    procedure MenuItem45Click(Sender: TObject);
     procedure mnuQrzClick(Sender: TObject);
     procedure mnuIK3QARClick(Sender: TObject);
     procedure mnuHamQthClick(Sender : TObject);
@@ -5010,6 +5012,16 @@ begin
   ShowHelp
 end;
 
+procedure TfrmNewQSO.MenuItem45Click(Sender: TObject);
+var
+  S: string;
+begin
+  //message box here for commands
+  if not assigned(CWint) then exit;
+  if InputQuery('Send hex commands to Win/K3NG keyer','Type in comma separated hex bytes 00-ff (can be: 0xff, xff or ff)',False,S) then
+   CWint.SendHex(Uppercase(s));
+end;
+
 procedure TfrmNewQSO.mnuQrzClick(Sender: TObject);
 begin
   dmUtils.ShowQRZInBrowser(dmData.qQSOBefore.Fields[4].AsString)
@@ -7176,6 +7188,7 @@ begin
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
   KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
+  Menuitem45.Visible:=False;  //send hex commands to win/k3ng keyer
   case  KeyerType of
     1 : begin
           CWint := TCWWinKeyerUSB.Create;
@@ -7186,6 +7199,7 @@ begin
           CWint.Device  := cqrini.ReadString('CW','wk_port'+n,'');
           CWint.PortSpeed := 1200;
           UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
+          Menuitem45.Visible:=True;
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
@@ -7206,6 +7220,7 @@ begin
           CWint.Device  := cqrini.ReadString('CW','K3NGPort'+n,'');
           CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
           UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
+          Menuitem45.Visible:=True;
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
