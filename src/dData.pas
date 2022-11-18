@@ -60,6 +60,7 @@ type
     dsrmQ: TDatasource;
     mQ: TSQLQuery;
     Q2: TSQLQuery;
+    CQ: TSQLQuery;
     trQ2: TSQLTransaction;
     qSQLConsole: TSQLQuery;
     scCommon: TSQLScript;
@@ -86,6 +87,7 @@ type
     qBandMapFil: TSQLQuery;
     qRbnMon: TSQLQuery;
     qFreqMem: TSQLQuery;
+    trCQ: TSQLTransaction;
     trW: TSQLTransaction;
     W1: TSQLQuery;
     trW1: TSQLTransaction;

@@ -1259,11 +1259,11 @@ begin
 
     11: begin
       case mode of
-        0: freq := cqrini.ReadFloat('DefFreq', '70cw', 3525);
-        1: freq := cqrini.ReadFloat('DefFreq', '70ssb', 3750);
-        2: freq := cqrini.ReadFloat('DefFreq', '70rtty', 3590);
-        3: freq := cqrini.ReadFloat('DefFreq', '70am', 3750);
-        4: freq := cqrini.ReadFloat('DefFreq', '70fm', 3750);
+        0: freq := cqrini.ReadFloat('DefFreq', '70cw', 432050);
+        1: freq := cqrini.ReadFloat('DefFreq', '70ssb', 432300);
+        2: freq := cqrini.ReadFloat('DefFreq', '70rtty', 432100);
+        3: freq := cqrini.ReadFloat('DefFreq', '70am', 433600);
+        4: freq := cqrini.ReadFloat('DefFreq', '70fm', 433500);
       end; //case
     end;
 

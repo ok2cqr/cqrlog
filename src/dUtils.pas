@@ -758,7 +758,7 @@ procedure TdmUtils.InsertWorkedContests(cmbContest: TComboBox);
 var
   i: integer;
 const
-  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` DESC';
+  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` ASC';
 begin
   cmbContest.Clear;
   dmData.qWorkedContests.Close;
