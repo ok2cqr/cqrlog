@@ -14,10 +14,10 @@ type
 
   TfrmContest = class(TForm)
     btClearAll: TButton;
-    btnCQstart: TButton;
     btSave: TButton;
     btClearQso : TButton;
     btDupChkStart: TButton;
+    btnCQstart: TButton;
     cdDupeDate: TCalendarDialog;
     chkHint: TCheckBox;
     chkMarkDupe: TCheckBox;
