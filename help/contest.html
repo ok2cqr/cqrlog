@@ -77,7 +77,17 @@ Hotkeys work same way as with <a href="h20.html">New QSO window</a>.
 <li><b>Contest name</b> Selection box has a list of predefined contest names. When selecting one and leaving <b>Contest name</b> combo box name will be cut from "|"(including it) that separates contest name and explanation.
  You can also type contest name here if it is not in list. Be sure you do not use "|" character(s) in name because program will cut name from the first one found.
 <br><b>RECOMMENDATION:</b><br>
-Add date to contest name if you keep many contests in same log. That way <b>QSO list/Filter/Contest filter</b> can separate contests by name.<li><b>Tab in order</b> when checked overrides all other Tab settings (see below) and Tab Order is: Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
+Add date to contest name if you keep many contests in same log. That way <b>QSO list/Filter/Contest filter</b> can separate contests by name.</li>
+<li><b>Tab in order</b> when checked overrides all other Tab settings (see below) and Tab Order is: Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
+<li><b>Show hint</b> when checked shows help text of object that mouse cursor currently points</li>
+<li><b>CQ panel</b> is visible when <b>S&P</b> is not checked (CQ calling mode)</li>
+    <ul><li><b>CQ period</b> timer period in millisecons to send one CQ+listen (5000 - 50000, 5-50sec)
+    <br> To adjust: Set repeats=1, press CQ start, adjust period value so that F1 has time to run + listening time</li>
+    <li><b>CQ repeats</b> repeat period how many times CQ period is repeated (1 - 20)s</li>
+    <li><b>CQ start</b> start/stop repeated CQ calling. <b>Shorcut key: Shift+F1</b>. 
+    <br>Pressing <b>ESC</b> stops timer and CW send. It can not stop voice keyer script.
+    <br>Also writing anyting to <b>Call</b> will stop running timer and CW sending.</li>
+    </li></ul>
 <li><b>Call</b> when you leave this field callsign is moved to NewQSO. Callsign <b>turns BOLD RED</b> while typing if it is duplicate (and duplicate check is active).</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field. <b>Note:</b>This prevents typing space (perhaps needed in MSG fields).</li>
 <li><b>Dupe check</b> Default checked. If you use same log for several contests, and/or other working, set the contest start date with <b>from YY-MM-DD</b> button.
@@ -154,6 +164,9 @@ Contest numbers and messages are saved in log in their own columns. Use <b>prefe
 <br><b>NOTE:</b> If you use macro that sends whole contest message (%xrs = RST, STX, STXString) message will skip empty ones. This way %xrs works for all contests.
 </p>
 <h4>Status view support</h4>
+<b>NOTE:</b> If you have one log called <b>contest</b> that you clear always before contest, to have just qsos of that contest, and after contest you move all qsos 
+with adif export to another log called <b>archive</b> you can view contest status afterwards from that log if you have used <b>unique contest names</b> I.E. added contest start date to name.
+<br> Find contest with <b>Filter/Contest filter</b> and copy name from selection list box and paste it to Contest window. You do not have to activate contest filter to see the status of that contest.
 <p><b>OK1WC memorial contest</b> status is supported.
 <p align="center">
 <img src="img/contest_mwc.png">

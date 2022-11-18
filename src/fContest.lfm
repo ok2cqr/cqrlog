@@ -1,26 +1,26 @@
 object frmContest: TfrmContest
   Left = 378
-  Height = 316
+  Height = 359
   Top = 156
-  Width = 742
+  Width = 685
   HelpType = htKeyword
   HelpKeyword = 'help/contest.html'
   Caption = 'Contest'
-  ClientHeight = 316
-  ClientWidth = 742
+  ClientHeight = 359
+  ClientWidth = 685
   OnClose = FormClose
   OnCreate = FormCreate
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.2.2.0'
+  LCLVersion = '2.2.4.0'
   object edtCall: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideTop.Control = lblCall
     AnchorSideTop.Side = asrBottom
     Left = 6
     Height = 34
-    Top = 87
+    Top = 113
     Width = 140
     AutoSelect = False
     CharCase = ecUppercase
@@ -37,7 +37,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = edtCall
     Left = 146
     Height = 34
-    Top = 87
+    Top = 113
     Width = 50
     MaxLength = 20
     OnKeyDown = edtCallKeyDown
@@ -50,7 +50,7 @@ object frmContest: TfrmContest
     Left = 196
     Height = 34
     Hint = 'Contest serial number sent, max 6 characters'
-    Top = 87
+    Top = 113
     Width = 50
     MaxLength = 6
     OnExit = edtSTXExit
@@ -67,7 +67,7 @@ object frmContest: TfrmContest
     Left = 246
     Height = 34
     Hint = 'Contest exchange message sent, max 50 characters'
-    Top = 87
+    Top = 113
     Width = 100
     MaxLength = 50
     OnEnter = edtSTXStrEnter
@@ -83,7 +83,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = edtSTXStr
     Left = 362
     Height = 34
-    Top = 87
+    Top = 113
     Width = 50
     BorderSpacing.Left = 16
     MaxLength = 20
@@ -98,7 +98,7 @@ object frmContest: TfrmContest
     Left = 412
     Height = 34
     Hint = 'Contest serial number received, max 6 characters'
-    Top = 87
+    Top = 113
     Width = 50
     MaxLength = 6
     OnEnter = edtRSTrEnter
@@ -114,9 +114,9 @@ object frmContest: TfrmContest
     AnchorSideTop.Control = lblMSGr
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 645
+    Left = 588
     Height = 30
-    Top = 70
+    Top = 96
     Width = 80
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 17
@@ -131,7 +131,7 @@ object frmContest: TfrmContest
     Left = 462
     Height = 34
     Hint = 'Contest exchange message sent, max 50 characters'
-    Top = 87
+    Top = 113
     Width = 100
     MaxLength = 50
     OnChange = edtSRXStrChange
@@ -143,57 +143,62 @@ object frmContest: TfrmContest
   end
   object lblCall: TLabel
     AnchorSideLeft.Control = lblContestName
-    AnchorSideTop.Control = chkTabAll
+    AnchorSideTop.Control = CQpanel
     AnchorSideTop.Side = asrBottom
     Left = 6
     Height = 17
-    Top = 70
+    Top = 96
     Width = 25
-    BorderSpacing.Top = 1
+    BorderSpacing.Top = 3
     Caption = 'Call'
     ParentColor = False
   end
   object lblRSTs: TLabel
+    AnchorSideLeft.Control = edtRSTs
     AnchorSideTop.Control = lblCall
-    Left = 161
+    Left = 146
     Height = 17
-    Top = 70
+    Top = 96
     Width = 36
     Caption = 'RST s'
     ParentColor = False
   end
   object lblMSGs: TLabel
+    AnchorSideLeft.Control = edtSTXStr
     AnchorSideTop.Control = lblNRs
-    Left = 257
+    Left = 246
     Height = 17
-    Top = 70
+    Top = 96
     Width = 41
     Caption = 'MSG s'
     ParentColor = False
   end
   object lblRSTr: TLabel
+    AnchorSideLeft.Control = edtRSTr
     AnchorSideTop.Control = lblMSGs
-    Left = 377
+    Left = 362
     Height = 17
-    Top = 70
+    Top = 96
     Width = 34
     Caption = 'RST r'
     ParentColor = False
   end
   object lblNRr: TLabel
+    AnchorSideLeft.Control = edtSRX
     AnchorSideTop.Control = lblRSTr
-    Left = 425
+    Left = 412
     Height = 17
-    Top = 70
+    Top = 96
     Width = 28
     Caption = 'NR r'
     ParentColor = False
   end
   object lblMSGr: TLabel
+    AnchorSideLeft.Control = edtSRXStr
     AnchorSideTop.Control = lblNRr
-    Left = 481
+    Left = 462
     Height = 17
-    Top = 70
+    Top = 96
     Width = 39
     Caption = 'MSG r'
     ParentColor = False
@@ -204,7 +209,7 @@ object frmContest: TfrmContest
     Left = 196
     Height = 23
     Hint = 'When cheked STX number is created from 001.'#10'Number can be edited in case of wrong entry and counting'#10'increases from number shown when QSO is saved.'
-    Top = 121
+    Top = 147
     Width = 45
     Caption = 'Inc'
     OnChange = chkNRIncChange
@@ -215,10 +220,11 @@ object frmContest: TfrmContest
     TabStop = False
   end
   object lblNRs: TLabel
+    AnchorSideLeft.Control = edtSTX
     AnchorSideTop.Control = lblRSTs
-    Left = 209
+    Left = 196
     Height = 17
-    Top = 70
+    Top = 96
     Width = 30
     Caption = 'NR s'
     ParentColor = False
@@ -229,7 +235,7 @@ object frmContest: TfrmContest
     Left = 462
     Height = 23
     Hint = 'Several options to choose with right mouse click.'#10'When one of them checked saving QSO will copy '#10'received message to that column of log'#10'.'#10'If you select option, remember also check the chkbox!'#10'.'#10'Received message is, of course, always saved to SRX_String'#10'column too.'
-    Top = 121
+    Top = 147
     Width = 102
     Caption = 'MSG is Grid'
     ParentShowHint = False
@@ -245,7 +251,7 @@ object frmContest: TfrmContest
     Left = 6
     Height = 23
     Hint = 'When checked spacebar works like Tab key.'#10'NOTE: prevents space(s) in MSG received'
-    Top = 121
+    Top = 147
     Width = 113
     Caption = 'SPACE is TAB'
     ParentShowHint = False
@@ -259,7 +265,7 @@ object frmContest: TfrmContest
     Left = 412
     Height = 23
     Hint = 'When checked Tab skips this column (contest has no serial Nr)'
-    Top = 121
+    Top = 147
     Width = 44
     Caption = 'No'
     OnChange = chkNoNrChange
@@ -274,7 +280,7 @@ object frmContest: TfrmContest
     Left = 146
     Height = 23
     Hint = 'When checked Tab stops to RST(s) allowing entering of true reports'
-    Top = 121
+    Top = 147
     Width = 46
     Caption = 'Tru'
     OnChange = chkTrueRSTChange
@@ -287,9 +293,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = btSave
     AnchorSideTop.Side = asrBottom
-    Left = 645
+    Left = 588
     Height = 30
-    Top = 102
+    Top = 128
     Width = 80
     BorderSpacing.Top = 2
     Caption = 'Clear QSO'
@@ -301,7 +307,7 @@ object frmContest: TfrmContest
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 714
+    Left = 657
     Height = 25
     Hint = 'Help'
     Top = 11
@@ -610,7 +616,7 @@ object frmContest: TfrmContest
     Left = 246
     Height = 23
     Hint = 'When checked allows circulating STX_String.'#10'I.E. set MSG_s at start, after 1st QSO is saved your MSG_s'#10'changes to MSG_r received from last logged QSO.'
-    Top = 121
+    Top = 147
     Width = 51
     Caption = 'Qsp'
     OnChange = chkQspChange
@@ -626,10 +632,10 @@ object frmContest: TfrmContest
     Left = 6
     Height = 23
     Hint = 'When checked TAB will move through all columns in order'
-    Top = 46
+    Top = 43
     Width = 106
     BorderSpacing.Left = 6
-    BorderSpacing.Top = 6
+    BorderSpacing.Top = 3
     Caption = 'TAB in order'
     OnChange = chkTabAllChange
     ParentShowHint = False
@@ -643,8 +649,8 @@ object frmContest: TfrmContest
     AnchorSideBottom.Control = Owner
     Left = 0
     Height = 19
-    Top = 297
-    Width = 742
+    Top = 340
+    Width = 685
     Panels = <    
       item
         Text = '0'
@@ -688,7 +694,7 @@ object frmContest: TfrmContest
     Left = 17
     Height = 23
     Hint = 'Dupe = station already worked in this band.'#10'When selected, with date, duplicate cheking starts from set date.'#10'Date is needed if you have several contests in same log'#10'.'#10'With own log for every contest date is not needed to be set'#10'.'#10'Turns call column text to bold red. If QSO is how ever logged '#10'adds "/D" to RSTsend if "Mark dupe" is cheked.'#10' '
-    Top = 152
+    Top = 178
     Width = 102
     BorderSpacing.Left = 17
     BorderSpacing.Top = 8
@@ -706,7 +712,7 @@ object frmContest: TfrmContest
     Left = 144
     Height = 23
     Hint = 'This selection allows same station to be worked in same band'#10' if QSO mode is different.'#10#10'Otherwise like "Dupe check" selction.'
-    Top = 152
+    Top = 178
     Width = 122
     BorderSpacing.Left = 6
     Caption = 'NoMode4Dupe'
@@ -721,7 +727,7 @@ object frmContest: TfrmContest
     Left = 272
     Height = 23
     Hint = 'No duplicate cheking'
-    Top = 152
+    Top = 178
     Width = 110
     BorderSpacing.Left = 6
     Caption = 'Ignore dupes'
@@ -734,9 +740,9 @@ object frmContest: TfrmContest
     AnchorSideLeft.Control = btSave
     AnchorSideTop.Control = rbDupeCheck
     AnchorSideTop.Side = asrCenter
-    Left = 645
+    Left = 588
     Height = 30
-    Top = 148
+    Top = 174
     Width = 80
     Caption = 'Clear All'
     OnClick = btClearAllClick
@@ -751,7 +757,7 @@ object frmContest: TfrmContest
     Left = 122
     Height = 33
     Hint = 'When using common log for all contests set date of '#10'dupe check begin (I.E. contest start date)'
-    Top = 147
+    Top = 173
     Width = 16
     AutoSize = True
     BorderSpacing.Left = 3
@@ -771,9 +777,10 @@ object frmContest: TfrmContest
     Left = 346
     Height = 23
     Hint = 'When cheked form is in Search and Pounce mode where operator'#10'needs to launch all memory contents using function keys (F1-F9)'#10'.'#10'When NOT checked message F2 is launched when cursor enters to'#10'one of RSTr, NRr or MSGr (F2 must be defined by operator)'#10'In case of duplicate call is found message F3 is launced instead'#10'of F2 when cursor leaves CALL column (F3 must be defined by operator)'#10'When QSO is saved  message F4 is lauched. (F4 must be defined by operator)'#10'.'#10'CW messages can be stopped with one 1xESC key as usual.'#10#10'Suggestions for CW message macros (NewQSO/File/CW messages):'#10'F1 = cq %mc test    (%mc is station call)'#10'F2 = %c %xrs          (%c call  %xrs sends CALL+ RST+STX+STXStr in short form.)'#10'F3 = %c QSO'#10'F4 = tu %mc test'#10'F4 ='#10'F6 - F9 for S&P operations'
-    Top = 121
+    Top = 147
     Width = 52
     Caption = 'S&&P'
+    OnChange = chkSPChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 23
@@ -787,16 +794,16 @@ object frmContest: TfrmContest
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = sbContest
     Left = 6
-    Height = 116
-    Top = 181
-    Width = 730
+    Height = 133
+    Top = 207
+    Width = 673
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 6
     BorderSpacing.Right = 6
     Caption = 'Status'
-    ClientHeight = 98
-    ClientWidth = 728
+    ClientHeight = 115
+    ClientWidth = 671
     TabOrder = 24
     OnClick = gbStatusClick
     object mStatus: TMemo
@@ -807,10 +814,10 @@ object frmContest: TfrmContest
       AnchorSideBottom.Control = gbStatus
       AnchorSideBottom.Side = asrBottom
       Left = 3
-      Height = 86
+      Height = 103
       Hint = 'Shows status of contest.'#10'If contest has any name common status counting is used. That'#10'includes QSO counts for all, dx and own continent with lists of'#10'DX and own continent prefixes.'#10'Also received messages are counted and listed allowing msg'#10'multiplier count.'#10'Use can control these with left click of mouse pointing between'#10'text "Status" and status display area'#10'.'#10'Currently if there are contest names that include "mwc"or "ok1wc"'#10'and "nac" those statuses are counted by MWC or NAC rules'#10'.'#10'Update is done evey time QSO is saved or 2xESC is pressed.'
       Top = 9
-      Width = 722
+      Width = 665
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 3
       BorderSpacing.Top = 9
@@ -830,7 +837,7 @@ object frmContest: TfrmContest
     Left = 400
     Height = 23
     Hint = 'If duplicate QSO is logged  adds "/D" to RSTsend when cheked.'
-    Top = 152
+    Top = 178
     Width = 95
     BorderSpacing.Left = 18
     Caption = 'Mark dupe'
@@ -841,15 +848,13 @@ object frmContest: TfrmContest
   end
   object chkHint: TCheckBox
     AnchorSideLeft.Control = chkTabAll
-    AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = chkTabAll
-    AnchorSideTop.Side = asrCenter
-    Left = 124
+    AnchorSideTop.Side = asrBottom
+    Left = 6
     Height = 23
     Hint = 'Turn hint help texts showing ON/OFF '
-    Top = 46
+    Top = 66
     Width = 90
-    BorderSpacing.Left = 12
     Caption = 'Show hint'
     Checked = True
     OnChange = chkHintChange
@@ -858,6 +863,106 @@ object frmContest: TfrmContest
     State = cbChecked
     TabOrder = 26
     TabStop = False
+  end
+  object CQpanel: TPanel
+    AnchorSideLeft.Control = cmbContestName
+    AnchorSideTop.Control = cmbContestName
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = cmbContestName
+    AnchorSideRight.Side = asrBottom
+    Left = 130
+    Height = 50
+    Top = 43
+    Width = 432
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 3
+    ClientHeight = 50
+    ClientWidth = 432
+    TabOrder = 27
+    object spCQperiod: TSpinEdit
+      AnchorSideLeft.Control = lblCQperiod
+      AnchorSideTop.Control = lblCQperiod
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = CQpanel
+      AnchorSideBottom.Side = asrBottom
+      Left = 7
+      Height = 31
+      Hint = 'Timer repeat period for sending F1 (CQ).'#10'Value is milliseconds 5000 -50000 (5 -50 sec)'#10'As there is no indication how long F1 sending'#10'takes value should be adjusted manually.'#10' Set repeats=1, press CQ start and check that'#10' F1 has time to complete+listening time.'#10'CW sending and timer will stop when ESC is '#10'pressed or someting is written to Call column. '
+      Top = 18
+      Width = 90
+      Anchors = [akTop, akLeft, akBottom]
+      BorderSpacing.Right = 6
+      Increment = 250
+      MaxValue = 30000
+      MinValue = 5000
+      OnChange = spCQperiodChange
+      ParentShowHint = False
+      ShowHint = True
+      TabStop = False
+      TabOrder = 0
+      Value = 5000
+    end
+    object spCQrepeat: TSpinEdit
+      AnchorSideLeft.Control = spCQperiod
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = spCQperiod
+      AnchorSideTop.Side = asrCenter
+      Left = 103
+      Height = 34
+      Hint = 'Dead operator counter.'#10'How many times CQ (F1) is repeated before repeat stops.'#10'Value 1 - 20 times.'
+      Top = 16
+      Width = 90
+      BorderSpacing.Right = 6
+      MaxValue = 30
+      MinValue = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabStop = False
+      TabOrder = 1
+      Value = 1
+    end
+    object lblCQperiod: TLabel
+      AnchorSideLeft.Control = CQpanel
+      AnchorSideTop.Control = CQpanel
+      Left = 7
+      Height = 17
+      Top = 1
+      Width = 64
+      BorderSpacing.Left = 6
+      Caption = 'CQ period'
+      ParentColor = False
+    end
+    object lblCQrepeat: TLabel
+      AnchorSideLeft.Control = spCQperiod
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lblCQperiod
+      Left = 109
+      Height = 17
+      Top = 1
+      Width = 72
+      BorderSpacing.Left = 12
+      Caption = 'CQ repeats'
+      ParentColor = False
+    end
+    object btnCQstart: TButton
+      AnchorSideLeft.Control = spCQrepeat
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = spCQrepeat
+      AnchorSideTop.Side = asrCenter
+      Left = 205
+      Height = 34
+      Hint = 'Start CQ (F1) timer.'#10'Shorcut key: Shift+F1'
+      Top = 16
+      Width = 90
+      BorderSpacing.Left = 12
+      Caption = 'CQ start'
+      Font.Color = clGreen
+      OnClick = btnCQstartClick
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
   end
   object tmrESC2: TTimer
     Enabled = False
@@ -965,5 +1070,12 @@ object frmContest: TfrmContest
     object mnuExit: TMenuItem
       Caption = 'Exit  (Esc key)'
     end
+  end
+  object tmrCQ: TTimer
+    Enabled = False
+    Interval = 3000
+    OnTimer = tmrCQTimer
+    Left = 584
+    Top = 264
   end
 end

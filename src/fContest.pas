@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, Menus, uMyIni;
+  StdCtrls, ExtCtrls, LCLType, Buttons, ComCtrls, ExtDlgs, Menus, Spin, uMyIni;
 
 type
 
@@ -14,6 +14,7 @@ type
 
   TfrmContest = class(TForm)
     btClearAll: TButton;
+    btnCQstart: TButton;
     btSave: TButton;
     btClearQso : TButton;
     btDupChkStart: TButton;
@@ -37,6 +38,8 @@ type
     edtSRX: TEdit;
     edtSRXStr: TEdit;
     gbStatus: TGroupBox;
+    lblCQperiod: TLabel;
+    lblCQrepeat: TLabel;
     lblSpeed: TLabel;
     lblContestName: TLabel;
     lblCall: TLabel;
@@ -67,15 +70,20 @@ type
     mnuQSLvia: TMenuItem;
     mnuComment: TMenuItem;
     mnuName: TMenuItem;
+    CQpanel: TPanel;
     popSetMsg: TPopupMenu;
     popCommonStatus: TPopupMenu;
     rbDupeCheck: TRadioButton;
     rbNoMode4Dupe: TRadioButton;
     rbIgnoreDupes: TRadioButton;
     sbContest: TStatusBar;
+    spCQperiod: TSpinEdit;
+    spCQrepeat: TSpinEdit;
+    tmrCQ: TTimer;
     tmrESC2: TTimer;
     procedure btClearAllClick(Sender: TObject);
     procedure btDupChkStartClick(Sender: TObject);
+    procedure btnCQstartClick(Sender: TObject);
     procedure btSaveClick(Sender: TObject);
     procedure btClearQsoClick(Sender : TObject);
     procedure chkHintChange(Sender: TObject);
@@ -83,6 +91,7 @@ type
     procedure chkNRIncChange(Sender: TObject);
     procedure chkNRIncClick(Sender : TObject);
     procedure chkQspChange(Sender: TObject);
+    procedure chkSPChange(Sender: TObject);
     procedure chkTrueRSTChange(Sender: TObject);
     procedure chkTabAllChange(Sender: TObject);
     procedure cmbContestNameExit(Sender: TObject);
@@ -123,6 +132,8 @@ type
     procedure mnuCommentClick(Sender: TObject);
     procedure mnuNameClick(Sender: TObject);
     procedure rbIgnoreDupesChange(Sender: TObject);
+    procedure spCQperiodChange(Sender: TObject);
+    procedure tmrCQTimer(Sender: TObject);
     procedure tmrESC2Timer(Sender: TObject);
   private
     { private declarations }
@@ -140,6 +151,7 @@ type
     procedure CommonStatus;
     procedure SendFmemory(key:word);
     function CheckDupe(call:string):boolean;
+    procedure CQstart(start:boolean);
   public
     { public declarations }
     procedure SaveSettings;
@@ -168,6 +180,8 @@ var
   Mylong   : String = '';
 
   FmemorySent: Boolean;  //for semiAuto sending
+
+  CQcount   : integer;
 
 implementation
 
@@ -203,6 +217,7 @@ begin
          edtCall.SetFocus;
          edtCall.SelStart:=length(edtCall.Text);
          edtCall.SelLength:=0;
+         CQstart(false);
       //else
       if Assigned(frmNewQSO.CWint) then
         frmNewQSO.CWint.StopSending;
@@ -225,6 +240,13 @@ begin
      SendFmemory(key);
      key := 0;
   end;
+
+  //CQ timer
+  if (Key = VK_F1) and (Shift = [ssShift]) and (CQpanel.Enabled=True)then
+   begin
+     CQstart(true);
+     key:=0;
+   end;
 
   if (key = 33) then//pgup
   begin
@@ -416,6 +438,55 @@ begin
 
 end;
 
+procedure TfrmContest.btnCQstartClick(Sender: TObject);
+begin
+    if btnCQstart.Font.Color = clGreen then
+     CQstart(true)
+  else
+     Cqstart(false);
+end;
+
+procedure TfrmContest.CQstart(start:boolean);
+begin
+    if start and (tmrCQ.Enabled=False) then
+   Begin
+     btnCQstart.Font.Color:=clRed;
+     btnCQstart.Repaint;
+     tmrCQ.Enabled:=True;
+     tmrCQTimer(nil);
+   end
+  else
+   Begin
+     if (tmrCQ.Enabled=True) then
+      begin
+       btnCQstart.Font.Color:=clGreen;
+       btnCQstart.Repaint;
+       tmrCQ.Enabled:=false;
+       CQcount:=0;
+       btnCQstart.Caption:='CQ start';
+       if Assigned(frmNewQSO.CWint) then
+        frmNewQSO.CWint.StopSending;
+      end;
+   end;
+end;
+ 
+procedure TfrmContest.tmrCQTimer(Sender: TObject);
+begin
+  if (CQcount<spCQrepeat.Value) then
+     Begin
+      inc(CQcount);
+      btnCQstart.Caption:='CQ '+IntToStr(CQcount);
+      SendFmemory(VK_F1);
+      exit;
+     end;
+  CQstart(false);
+end;
+
+procedure TfrmContest.spCQperiodChange(Sender: TObject);
+begin
+    tmrCQ.Interval:=spCQperiod.Value;
+end;
+
 procedure TfrmContest.btClearQsoClick(Sender : TObject);
 begin
   frmNewQSO.ClearAll;
@@ -433,13 +504,15 @@ begin
    try
     for i := 0 to frmContest.ComponentCount - 1 do
     begin
-
       if frmContest.Components[i] is TCheckBox then
       begin
         chk := frmContest.Components[i] as TCheckBox;
         chk.ShowHint:=not b ;
       end;
     end;
+    spCQperiod.ShowHint:=not b;
+    spCQrepeat.ShowHint:=not b;
+    btnCQStart.ShowHint:=not b;
     rbDupeCheck.ShowHint:=not b;
     btDupChkStart.ShowHint:=not b;
     rbNoMode4Dupe.ShowHint:=not b;
@@ -472,6 +545,11 @@ end;
 procedure TfrmContest.chkQspChange(Sender: TObject);
 begin
   SetTabOrders;
+end;
+
+procedure TfrmContest.chkSPChange(Sender: TObject);
+begin
+  CQpanel.Enabled:=not chkSP.Checked;
 end;
 
 procedure TfrmContest.chkTrueRSTChange(Sender: TObject);
@@ -538,6 +616,7 @@ end;
 
 procedure TfrmContest.edtCallChange(Sender: TObject);
 begin
+  CQstart(false);
   if frmSCP.Showing and (Length(edtCall.Text)>2) then
     frmSCP.mSCP.Text := dmData.GetSCPCalls(edtCall.Text)
   else
@@ -618,6 +697,8 @@ begin
 
   cqrini.WriteBool('frmContest', 'TabAll', chkTabAll.Checked);
   cqrini.WriteBool('frmContest', 'ShowHint', chkHint.Checked);
+  cqrini.WriteInteger('frmContest','CQperiod',spCQperiod.Value);
+  cqrini.WriteInteger('frmContest','CQrepeat',spCQrepeat.Value);
 
   cqrini.WriteBool('frmContest', 'DupeCheck', rbDupeCheck.Checked);
   cqrini.WriteBool('frmContest', 'NoMode4Dupe', rbNoMode4Dupe.Checked);
@@ -665,6 +746,8 @@ begin
 
   chkTabAll.Checked := cqrini.ReadBool('frmContest', 'TabAll', False);
   chkHint.Checked := cqrini.ReadBool('frmContest', 'ShowHint', True);
+  spCQperiod.Value:=cqrini.ReadInteger('frmContest','CQperiod',5000);
+  spCQrepeat.Value:=cqrini.ReadInteger('frmContest','CQrepeat',1);
 
   rbDupeCheck.Checked := cqrini.ReadBool('frmContest', 'DupeCheck', True);
   rbNoMode4Dupe.Checked := cqrini.ReadBool('frmContest', 'NoMode4Dupe', False);
@@ -709,6 +792,10 @@ begin
   mnuOwnCountryList.Caption:=Mycont+' country list';
   cmbContestNameExit(nil);  //updates status view
   FmemorySent:=False;
+
+  tmrCQ.Enabled:=False;
+  tmrCQ.Interval:=spCQperiod.Value;
+  CQcount:=0;
 end;
 
 procedure TfrmContest.MsgIsPopChk(nr:integer);
