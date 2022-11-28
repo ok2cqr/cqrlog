@@ -75,7 +75,7 @@ begin
     edtBegin.Text    := FloatToStr(dmData.qBands.Fields[2].AsFloat);
     edtEnd.Text      := FloatToStr(dmData.qBands.Fields[3].AsFloat);
     edtCW.Text       := FloatToStr(dmData.qBands.Fields[4].AsFloat);
-    edtRTTY.Text     := FloatToStr(dmData.qBands.Fields[5].AsFloat);
+    edtData.Text     := FloatToStr(dmData.qBands.Fields[5].AsFloat);
     edtSSB.Text      := FloatToStr(dmData.qBands.Fields[6].AsFloat);
     edtRXOffset.Text := FloatToStr(dmData.qBands.Fields[7].AsFloat);
     edtTXOffset.Text := FloatToStr(dmData.qBands.Fields[8].AsFloat);
@@ -88,7 +88,7 @@ begin
                              StrToFloat(edtBegin.Text),
                              StrToFloat(edtEnd.Text),
                              StrToFloat(edtCW.Text),
-                             StrToFloat(edtRTTY.Text),
+                             StrToFloat(edtData.Text),
                              StrToFloat(edtSSB.Text),
                              StrToFloat(edtRXOffset.Text),
                              StrToFloat(edtTXOffset.Text)
@@ -137,7 +137,7 @@ begin
   dbgrdFreq.Columns[2].Title.Caption := 'Begin';
   dbgrdFreq.Columns[3].Title.Caption := 'End';
   dbgrdFreq.Columns[4].Title.Caption := 'CW';
-  dbgrdFreq.Columns[5].Title.Caption := 'RTTY';
+  dbgrdFreq.Columns[5].Title.Caption := 'Data';
   dbgrdFreq.Columns[6].Title.Caption := 'SSB';
   dbgrdFreq.Columns[7].Title.Caption := 'RX offset';
   dbgrdFreq.Columns[8].Title.Caption := 'TX offset';

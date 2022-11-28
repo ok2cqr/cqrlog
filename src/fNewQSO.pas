@@ -674,6 +674,7 @@ type
 
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
+    function RigCmd2DataMode(mode:String):String;
     procedure ShowOperator;
     procedure StartUpRemote;
     procedure NewLogSplash;
@@ -1497,15 +1498,7 @@ begin
   end;
 
   if frmTRXControl.Showing then
-  begin
-    if frmTRXControl.rbRadio1.Checked then
-      tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
-    else
-      tmrRadio.Interval := cqrini.ReadInteger('TRX2','Poll',500)
-  end
-  else begin
-    tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
-  end;
+      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'Poll',500);
 
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
@@ -2255,7 +2248,7 @@ begin
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
-          cmbMode.Text := mode;
+          cmbMode.Text := RigCmd2DataMode(mode);
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
@@ -4504,7 +4497,7 @@ end;
 
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
 begin
-  frmTRXControl.InicializeRig;
+  frmTRXControl.InitializeRig;
   tmrRadio.Enabled := True;
   frmRotControl.InicializeRot;
   tmrRotor.Enabled := True
@@ -5402,7 +5395,7 @@ begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) and (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
     begin
       if chkAutoMode.Checked then
-        cmbMode.Text := mode;
+        cmbMode.Text := RigCmd2DataMode(mode);
       cmbFreq.Text := freq;
       edtHisRST.SetFocus;
       edtHisRST.SelStart  := 1;
@@ -5475,6 +5468,7 @@ var
   tmp : String;
   speed : Integer = 0;
   i     : Integer = 0;
+  n     : String;
   ShowMain : Boolean = False;
 begin
   if key = VK_ESCAPE then
@@ -5567,13 +5561,17 @@ begin
     end
   end;
 
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
     if Assigned(CWint) then
     begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -5584,7 +5582,10 @@ begin
     begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -6700,7 +6701,7 @@ begin
     edtCall.Text := call;
     cmbFreq.Text := freq;
     if chkAutoMode.Checked then
-      cmbMode.Text := mode;
+      cmbMode.Text := RigCmd2DataMode(mode);
     freq := FloatToStr(etmp);
     if not FromRbn then
       mode := dmUtils.GetModeFromFreq(freq);
@@ -7171,10 +7172,10 @@ begin
     CWint.Close;
     FreeAndNil(CWint)
    end;
-
-  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  UseSpeed:=0; //show zero when pot speed  or no keyer
+  n:=intToStr(frmTRXControl.cmbRig.ItemIndex);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
-  KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
+  KeyerType :=  cqrini.ReadInteger('CW'+n,'Type',0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
   case  KeyerType of
     1 : begin
@@ -7182,30 +7183,33 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','wk_port'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','wk_port'+n,'');
+          CWint.Port    := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.Device  := cqrini.ReadString('CW'+n,'wk_port','');
           CWint.PortSpeed := 1200;
-          UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
+          if not  cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+            UseSpeed := cqrini.ReadInteger('CW'+n,'wk_speed',30)
+           else
+            UseSpeed:=-1;
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','cw_port'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','cw_address','');
+          CWint.Port    := cqrini.ReadString('CW'+n,'cw_port','');
+          CWint.Device  := cqrini.ReadString('CW'+n,'cw_address','');
           CWint.PortSpeed := 0;
-          UseSpeed := cqrini.ReadInteger('CW','cw_speed',30);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
         end;
     3 : begin
           CWint := TCWK3NG.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','K3NGPort'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','K3NGPort'+n,'');
-          CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
-          UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
+          CWint.Port    := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.Device  := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.PortSpeed := cqrini.ReadInteger('CW'+n,'K3NGSerSpeed',115200);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
@@ -7214,16 +7218,19 @@ begin
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
           CWint.Device := cqrini.ReadString('TRX'+n,'host','localhost');
-          UseSpeed := cqrini.ReadInteger('CW','HamLibSpeed',30);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'HamLibSpeed',30);
         end;
   end; //case
   if KeyerType > 0 then
    Begin
      CWint.Open;
-     CWint.SetSpeed(UseSpeed);
-     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
-     if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
+     if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
+   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+     sbNewQSO.Panels[4].Text := 'Pot WPM'
+    else
+     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
+   if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
@@ -7708,6 +7715,19 @@ Begin
     +'73, gl DX!';
 
   ShowMessage(message);
+end;
+function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
+var
+   DatCmd,
+   n      :String;
+Begin
+   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+   DatCmd :=  upcase(cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY'));
+   if (DatCmd = 'USB') or (DatCmd = 'LSB') then DatCmd := 'SSB'; //this is what RigControl responses
+
+   if cqrini.ReadBool('Band'+n, 'UseReverse', False)  and (mode = DatCmd) then
+            Result := cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+     else   Result := mode;
 end;
 
 end.

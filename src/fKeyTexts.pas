@@ -136,6 +136,7 @@ end;
 
 procedure TfrmKeyTexts.btnOKClick(Sender: TObject);
 begin
+  cqrini.SectionErase(C_INI_FILE_SECTION); //this cleans section to keep only memory keys, other settings in CWnr sections
   cqrini.WriteString(C_INI_FILE_SECTION,'F1',edtF1.Text);
   cqrini.WriteString(C_INI_FILE_SECTION,'F2',edtF2.Text);
   cqrini.WriteString(C_INI_FILE_SECTION,'F3',edtF3.Text);

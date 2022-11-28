@@ -152,7 +152,7 @@ type
 
 implementation
 
-uses fTRXControl;
+uses fTRXControl, uMyIni;
 
 constructor TCWWinKeyerUSB.Create;
 begin
@@ -226,6 +226,7 @@ end;
 procedure TCWWinKeyerUSB.SetSpeed(speed : Word);
 begin
   if fDebugMode then Writeln('Speed: ',speed);
+  if cqrini.ReadBool('CW'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'PotSpeed',False) then exit;
   fSpeed := speed;
   ser.Flush;
   ser.SendByte(2);

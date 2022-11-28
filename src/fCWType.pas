@@ -91,7 +91,7 @@ implementation
 {$R *.lfm}
 
 { TfrmCWType }
-uses fNewQSO,dUtils,dData, uMyIni;
+uses fTRXControl,fNewQSO,dUtils,dData, uMyIni;
 
 function TfrmCWType.PassedKey(key:char):boolean;
 Begin
@@ -392,6 +392,8 @@ begin
 end;
 
 procedure TfrmCWType.FormShow(Sender: TObject);
+var
+   n:string;
 begin
   dmUtils.LoadWindowPos(frmCWType);
   rgMode.ItemIndex := cqrini.ReadInteger('CW','Mode',1);
@@ -400,6 +402,15 @@ begin
   m.Clear;
   Switch2Word :=false;
   WasMemoLen := length(m.lines.text);
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+  if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+     Begin
+         frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM';
+         edtSpeed.Enabled:=False;
+     end
+   else
+     edtSpeed.Enabled:=True;
+
    //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
@@ -412,9 +423,18 @@ begin
 end;
 
 procedure TfrmCWType.edtSpeedChange(Sender: TObject);
+var
+    n:string;
 begin
+ if Assigned(frmNewQSO.CWint) then
+ begin
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
   frmNewQSO.CWint.SetSpeed(edtSpeed.Value);
-  frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
+   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
+ end;
 end;
 procedure TfrmCWType.fraCWKeys1Resize(Sender: TObject);
  var
@@ -556,12 +576,17 @@ end;
 procedure TfrmCWType.SetSpeed(change:integer);
 var
   speed : Integer = 0;
-Begin
+    n   : string;
+begin
    if Assigned(frmNewQSO.CWint) then
     begin
+      n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
       speed := frmNewQSO.CWint.GetSpeed+change;
       frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
       edtSpeed.Value := speed;
     end;
 end;

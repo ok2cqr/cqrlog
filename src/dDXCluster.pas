@@ -110,7 +110,7 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, znacmech, uMyini;
+uses dUtils, dData, znacmech, uMyini, fTRXControl;
 
 type Tchyb1 = object(Tchyby) // podedim objekt a prepisu "hlaseni"
        //procedure hlaseni(vzkaz,kdo:string);virtual;
@@ -209,6 +209,7 @@ function TdmDXCluster.BandModFromFreq(freq : String;var mode,band : String) : Bo
 var
   tmp : Extended;
   cw, ssb : Extended;
+  n   :String;
 begin
   EnterCriticalsection(csDX);
   try
@@ -243,7 +244,10 @@ begin
       if (tmp >= ssb) then
         mode := 'SSB'
       else
-        mode := 'RTTY';
+        Begin
+          n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+          mode :=  cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+        end;
     end;
     //Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
   finally
