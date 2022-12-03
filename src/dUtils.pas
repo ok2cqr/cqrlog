@@ -275,7 +275,7 @@ type
     function  ExtractZipCode(qth : String; Position : Integer) : String;
     function  GetLabelBand(freq : String) : String;
     function  GetAdifBandFromFreq(MHz : string): String;
-    function  GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text: String) : String;
+    function  GetCWMessage(Key,call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg, text: String) : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
     function  GetLastDOKUpgradeDate : TDateTime;
@@ -2728,7 +2728,7 @@ begin
   Result := LowerCase(GetBandFromFreq(freq));
 end;
 
-function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text : String) : String;
+function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg, text : String) : String;
 {
  %mc - my callsign
  %mn - my name
@@ -2741,9 +2741,12 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text
  %c  - callsign
  %h - greeting GM/GA/GE calculated from the %c station location time
 
- %xn  - contest exchenge serial number
+ %xn  - contest exchange serial number
+ %xnr - contest exchange seral number received
  %xm  - contest exchange message
+ %xmr - contest exchange message received
  %xns - contest exchenge serial number sends 9->N and 0->T
+ %xnrs- contest exchange message received sends 9->N and 0->T
  %xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.
         Can be used "always" as if serNR and/or Message are empty just sends plain report.
 
@@ -2758,6 +2761,7 @@ var
   myqth  : String = '';
   rst_sh : String = '';
   stx_sh : String = '';
+  srx_sh : String = '';
   con_ex : String = '';
 
 begin
@@ -2776,25 +2780,39 @@ begin
     stx_sh := StringReplace(stx,'9','N',[rfReplaceAll, rfIgnoreCase]);
     stx_sh := StringReplace(stx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
 
+    srx_sh := StringReplace(srx,'9','N',[rfReplaceAll, rfIgnoreCase]);
+    srx_sh := StringReplace(srx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
+
     con_ex := rst_sh;
     if stx_sh <>'' then con_ex:=con_ex+' '+stx_sh;
     if stx_str <>'' then con_ex:=con_ex+' '+stx_str;
+
+    Result := StringReplace(Result,'%xnrs',srx_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xnr',srx,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xns',stx_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xn',stx,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%xmr',srx_str,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xm',stx_str,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%xrs',con_ex,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
 
     Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%ml',myloc,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
 
-    Result := StringReplace(Result,'%xrs',con_ex,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
 
-    Result := StringReplace(Result,'%xns',stx_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xn',stx,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xm',stx_str,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
+
+
+
+
 
     if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
 end;

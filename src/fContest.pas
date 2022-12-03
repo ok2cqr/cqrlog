@@ -72,6 +72,7 @@ type
     procedure edtCallExit(Sender: TObject);
     procedure edtCallKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure edtCallKeyPress(Sender: TObject; var Key: char);
+    procedure edtSRXChange(Sender: TObject);
     procedure edtSRXStrChange(Sender: TObject);
     procedure edtSRXExit(Sender: TObject);
     procedure edtSTXStrEnter(Sender: TObject);
@@ -178,7 +179,7 @@ begin
     if Assigned(frmNewQSO.CWint) then
       frmNewQSO.CWint.SendText(dmUtils.GetCWMessage(
         dmUtils.GetDescKeyFromCode(Key),edtCall.Text,
-      edtRSTs.Text, edtSTX.Text,edtSTXStr.Text,
+      edtRSTs.Text, edtSTX.Text,edtSTXStr.Text,edtSRX.Text,edtSRXStr.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
     key := 0;
   end;
@@ -417,6 +418,11 @@ begin
     key := #0;
 end;
 
+procedure TfrmContest.edtSRXChange(Sender: TObject);
+begin
+  frmNewQSO.edtContestSerialReceived.Text:=edtSRX.Text;
+end;
+
 procedure TfrmContest.edtSRXStrChange(Sender: TObject);
 begin
   if ((chkLoc.Checked) and (MsgIs=1 ))then
@@ -430,6 +436,7 @@ begin
    if ( Length(edtSRXStr.Text) > 6 )then
           edtSRXStr.Text:=copy(edtSRXStr.Text,1,6); //accept only 6chr locator input here
   end;
+  frmNewQSO.edtContestExchangeMessageReceived.Text:=edtSRXStr.Text;
 end;
 procedure TfrmContest.edtSRXExit(Sender: TObject);
 begin

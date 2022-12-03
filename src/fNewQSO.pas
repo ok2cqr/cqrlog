@@ -5548,6 +5548,7 @@ begin
           if Assigned(CWint) and (cmbMode.Text='CW') then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+            frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
             frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
            else if (cmbMode.Text='CW') then ShowMessage('CW interface:  No keyer defined for current radio!');
        end;
@@ -7023,7 +7024,7 @@ end;
 
 procedure TfrmNewQSO.SendSpot;
 var
-  call,rst_s,stx,stx_str,HisName,HelloMsg : String;
+  call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg : String;
   tmp  : String;
   ModRst,
   HMLoc :String;
@@ -7042,6 +7043,8 @@ begin
       rst_s := edtHisRST.Text;
       stx :=  edtContestSerialSent.Text;
       stx_str:=edtContestExchangeMessageSent.Text;
+      srx :=  edtContestSerialReceived.Text;
+      srx_str:=edtContestExchangeMessageReceived.Text;
       HisName:= edtName.Text;
       tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + call;
       ModRst := cmbMode.Text+' '+ rst_s;
@@ -7065,7 +7068,7 @@ begin
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,srx,srx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
@@ -7075,7 +7078,9 @@ begin
     rst_s := dmData.Q.Fields[1].AsString;
     stx :=  dmData.Q.Fields[5].AsString;
     stx_str:=dmData.Q.Fields[6].AsString;
-    HisName:= dmData.Q.Fields[7].AsString;
+    srx :=  dmData.Q.Fields[7].AsString;
+    srx_str:=dmData.Q.Fields[8].AsString;
+    HisName:= dmData.Q.Fields[9].AsString;
     dmData.Q.Close();
     dmData.trQ.Rollback;
 
@@ -7092,6 +7097,8 @@ begin
     Srst_s := rst_s;
     Sstx := stx ;
     Sstx_str:=stx_str;
+    Ssrx := srx ;
+    Ssrx_str:=srx_str;
     SHisName:= HisName;
     SHelloMsg:=HelloMsg;
     ShowModal;

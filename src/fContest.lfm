@@ -13,7 +13,7 @@ object frmContest: TfrmContest
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.4.0'
   object edtCall: TEdit
     AnchorSideLeft.Control = lblContestName
     AnchorSideTop.Control = lblCall
@@ -100,6 +100,7 @@ object frmContest: TfrmContest
     Top = 59
     Width = 50
     MaxLength = 6
+    OnChange = edtSRXChange
     OnExit = edtSRXExit
     OnKeyDown = edtCallKeyDown
     OnKeyPress = edtSTXKeyPress
