@@ -425,9 +425,9 @@ begin
   LoadBandButtons;
   dmUtils.LoadWindowPos(frmTRXControl);
   cmbRigGetItems(nil);
+  //These two are needed here othewise rig selector has "None" even if rig is initialized at startup
   cmbRig.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
   cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
-  cmbRigChange(nil); //inits rig
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
   gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', gbInfo.Visible);
@@ -1017,6 +1017,9 @@ procedure TfrmTRXControl.FormCreate(Sender : TObject);
 begin
   Radio := nil;
   AutoMode := True;
+  //these are needed here otherwise rig init at startup, if TRXControl window stays closed, fails
+  cmbRig.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
+  cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
 end;
 
 procedure TfrmTRXControl.FormDestroy(Sender : TObject);
