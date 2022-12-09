@@ -376,11 +376,19 @@ begin
   //broken configuration caused crash because RotCtldPort was empty
   //probably late to change it to Integer, I have no idea if the current
   //setting would be converted automatically or user has to do it again :(
-  if not TryStrToInt(cqrini.ReadString('ROT'+n,'RotCtldPort','4533'),port) then
-    port := 4533;
 
-  if not TryStrToInt(cqrini.ReadString('ROT'+n,'poll','500'),poll) then
-    poll := 500;
+
+  //OH1KH 2022-12-09: cqrini.ReadInteger and  cqrini.ReadString both can be used!
+  //Works same way as database ReadAsString or ReadAsInteger; Source is same but resulting read is
+  //either String or Integer how programmer wants.
+  //cqrini.Write does not make difference in config file if variable is saved as String or Integer
+  //both results look same in .cfg file.
+
+  port:= cqrini.ReadInteger('ROT'+n, 'RotCtldPort', 4533);
+  if ((port>65534) or (port<1024)) then port := 4533;  //limit values
+
+  poll:=cqrini.ReadInteger('ROT'+n, 'poll', 500);
+  if ((poll>60000) or (poll<10)) then  poll := 500;  //limit values
 
   rotor.RotCtldPath := cqrini.ReadString('ROT','RotCtldPath','/usr/bin/rotctld');
   rotor.RotCtldArgs := dmUtils.GetRotorRotCtldCommandLine(StrToInt(n));

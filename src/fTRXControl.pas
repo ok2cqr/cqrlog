@@ -426,7 +426,7 @@ begin
   dmUtils.LoadWindowPos(frmTRXControl);
   cmbRigGetItems(nil);
   //These two are needed here othewise rig selector has "None" even if rig is initialized at startup
-  cmbRig.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
+  cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
   cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
   old_mode := '';
   MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
@@ -725,7 +725,7 @@ end;
 
 procedure TfrmTRXControl.FormClose(Sender : TObject; var CloseAction : TCloseAction);
 begin
-  cqrini.WriteString('TRX', 'RigInUse', IntToStr(cmbRig.ItemIndex));
+  cqrini.WriteInteger('TRX', 'RigInUse', cmbRig.ItemIndex);
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 
@@ -1018,7 +1018,7 @@ begin
   Radio := nil;
   AutoMode := True;
   //these are needed here otherwise rig init at startup, if TRXControl window stays closed, fails
-  cmbRig.ItemIndex:=StrToInt(cqrini.ReadString('TRX', 'RigInUse', '1'));
+  cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
   cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
 end;
 
@@ -1085,11 +1085,18 @@ begin
   //broken configuration caused crash because RigCtldPort was empty
   //probably late to change it to Integer, I have no idea if the current
   //setting would be converted automatically or user has to do it again :(
-  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'RigCtldPort', '4532'), port) then
-    port := 4532;
 
-  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'poll', '500'), poll) then
-    poll := 500;
+  //OH1KH 2022-12-09: cqrini.ReadInteger and  cqrini.ReadString both can be used!
+  //Works same way as database ReadAsString or ReadAsInteger; Source is same but resulting read is
+  //either String or Integer how programmer wants.
+  //cqrini.Write does not make difference in config file if variable is saved as String or Integer
+  //both results look same in .cfg file.
+
+    port:= cqrini.ReadInteger('TRX' + RigInUse, 'RigCtldPort', 4532);
+    if ((port>65534) or (port<1024)) then port := 4532;  //limit values
+
+    poll:=cqrini.ReadInteger('TRX' + RigInUse, 'poll', 500);
+    if ((poll>60000) or (poll<10)) then  poll := 500;  //limit values
 
   radio.RigCtldPath := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
   radio.RigCtldArgs := dmUtils.GetRadioRigCtldCommandLine(StrToInt(RigInUse));
