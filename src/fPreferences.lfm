@@ -2315,10 +2315,12 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 76
           Width = 80
+          MaxLength = 5
           NumbersOnly = True
           OnChange = TRXParamsChange
           OnExit = edtPollExit
           TabOrder = 5
+          Text = '500'
         end
         object chkRSendCWR: TCheckBox
           AnchorSideLeft.Control = edtRRigCtldArgs
@@ -2388,9 +2390,11 @@ object frmPreferences: TfrmPreferences
           Height = 34
           Top = 76
           Width = 80
+          MaxLength = 5
           NumbersOnly = True
           OnChange = TRXParamsChange
           TabOrder = 6
+          Text = '4532'
         end
         object grbSerialR: TGroupBox
           AnchorSideLeft.Control = lblModelR
@@ -3028,9 +3032,11 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
+              MaxLength = 5
               NumbersOnly = True
               OnChange = RotorParamsChange
               TabOrder = 1
+              Text = '500'
             end
             object chkRot1RunRotCtld: TCheckBox
               AnchorSideLeft.Control = edtRot1RotCtldArgs
@@ -3088,9 +3094,11 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
+              MaxLength = 5
               NumbersOnly = True
               OnChange = RotorParamsChange
               TabOrder = 4
+              Text = '4533'
             end
             object grbSerialRot1: TGroupBox
               AnchorSideLeft.Control = gbRot1
@@ -3487,9 +3495,11 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
+              MaxLength = 5
               NumbersOnly = True
               OnChange = RotorParamsChange
               TabOrder = 1
+              Text = '500'
             end
             object chkRot2RunRotCtld: TCheckBox
               AnchorSideLeft.Control = edtRot2RotCtldArgs
@@ -3547,9 +3557,11 @@ object frmPreferences: TfrmPreferences
               Top = 35
               Width = 80
               BorderSpacing.Left = 12
+              MaxLength = 5
               NumbersOnly = True
               OnChange = RotorParamsChange
               TabOrder = 4
+              Text = '4533'
             end
             object grbSerialRot2: TGroupBox
               AnchorSideLeft.Control = gbRot2
