@@ -1017,9 +1017,6 @@ procedure TfrmTRXControl.FormCreate(Sender : TObject);
 begin
   Radio := nil;
   AutoMode := True;
-  //these are needed here otherwise rig init at startup, if TRXControl window stays closed, fails
-  cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
-  cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
 end;
 
 procedure TfrmTRXControl.FormDestroy(Sender : TObject);
