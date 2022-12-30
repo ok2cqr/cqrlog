@@ -399,7 +399,6 @@ begin
   else
     frmSCP.mSCP.Clear
 end;
-
 procedure TfrmContest.edtCallKeyDown(Sender: TObject; var Key: word;
   Shift: TShiftState);
 begin
@@ -408,12 +407,15 @@ begin
     Key := 0;
     SelectNext(Sender as TWinControl, True, True);
   end;
+   if not (key in [VK_A..VK_Z, VK_0..VK_9,
+    VK_LCL_SLASH, VK_DELETE,VK_BACK,VK_RIGHT,VK_LEFT]) then
+     key := 0;
 end;
 
 procedure TfrmContest.edtCallKeyPress(Sender: TObject; var Key: char);
 begin
-  if not (key in ['a'..'z', 'A'..'Z', '0'..'9',
-    '/', chr(VK_DELETE), chr(VK_BACK), chr(VK_RIGHT), chr(VK_LEFT)]) then
+  if not (key in ['a'..'z','A'..'Z', '0'..'9',
+    '/',#08]) then
     key := #0;
 end;
 
