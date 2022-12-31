@@ -1277,6 +1277,7 @@ begin
     end;
     edtDate.ReadOnly  := False;
     mComment.ReadOnly := False;
+    edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
   end;
   sbtnQRZ.Visible        := False;
   sbtnLoTW.Visible       := False;
@@ -3241,10 +3242,17 @@ begin
   //Writeln('OldPfx:',old_pfx);
   //Writeln('ChangeDXCC:',ChangeDXCC);
 
+  {
   if (old_call = edtCall.Text) and (old_adif <> adif) then
     ChangeDXCC := True; //if user chooses another country by direct enter to the edtDXCCref
                      //without clicking to btnDXCCRef
 
+   OH1KH 2022.12.30
+
+    Above does not work as EDITQSO does not properly set adif and old_adif from qso data from database.
+    Force changes always via btnDXCCRef.
+    Otherwise EditQSO changes to DXCCref are not saved. (because old_adf & adif values are false set)
+    }
   if not TryStrToFloat(edtRXFreq.Text, RxFreq) then
     RxFreq := 0;
 
@@ -3401,7 +3409,8 @@ begin
   dmData.qQSOBefore.Close;
 
   was_call := edtCall.Text;
-  edtCall.Text := ''; //calls ClearAll
+  edtCall.Text := ''; //calls ClearAll  (except when EDITQSO to be sure that callsign changes do not clear all)
+  if EditQso then ClearAll;
   old_ccall := '';
   old_cfreq := '';
   old_cmode := '';
@@ -4138,6 +4147,7 @@ begin
 
       waz := q.Fields[8].AsString;
       itu := q.Fields[7].AsString;
+      adif:= q.Fields[9].AsInteger;
       dmUtils.ModifyWAZITU(waz,itu);
       edtWAZ.Text        := waz;
       edtITU.Text        := itu;
@@ -5516,6 +5526,7 @@ begin
         end;
         edtDate.ReadOnly  := False;
         mComment.ReadOnly := False;
+        edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
       end;
       ShowMain := (fEditQSO or fViewQSO) and (not fromNewQSO);
       ClearAll;
@@ -6508,6 +6519,7 @@ begin
   end;
   edtDate.ReadOnly  := fViewQSO;
   mComment.ReadOnly := fViewQSO;
+  edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
   edtCall.SetFocus
 end;
 
