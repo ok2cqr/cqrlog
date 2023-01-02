@@ -9430,52 +9430,74 @@ object frmPreferences: TfrmPreferences
     end
     object tabOnlineLog: TTabSheet
       Caption = 'Online log upload'
-      ClientHeight = 672
+      ClientHeight = 676
       ClientWidth = 836
       object GroupBox44: TGroupBox
-        Left = 13
-        Height = 179
-        Top = 7
-        Width = 569
+        AnchorSideLeft.Control = tabOnlineLog
+        AnchorSideTop.Control = tabOnlineLog
+        Left = 12
+        Height = 195
+        Top = 0
+        Width = 650
+        BorderSpacing.Left = 12
         Caption = ' HamQTH '
         ClientHeight = 177
-        ClientWidth = 567
+        ClientWidth = 648
         TabOrder = 0
         object chkHaUpEnabled: TCheckBox
-          Left = 7
+          AnchorSideLeft.Control = GroupBox44
+          AnchorSideTop.Control = GroupBox44
+          Left = 6
           Height = 23
-          Top = 4
-          Width = 202
+          Top = 0
+          Width = 198
+          BorderSpacing.Left = 6
           Caption = 'Enable upload to HamQTH'
           OnChange = chkHaUpEnabledChange
           TabOrder = 0
         end
         object Label179: TLabel
-          Left = 9
+          AnchorSideLeft.Control = chkHaUpEnabled
+          AnchorSideTop.Control = edtHamQTHurl
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 17
-          Top = 36
+          Top = 63
           Width = 75
+          BorderSpacing.Top = 6
           Caption = 'User name:'
+          ParentColor = False
         end
         object edtHaUserName: TEdit
-          Left = 9
+          AnchorSideLeft.Control = Label179
+          AnchorSideTop.Control = Label179
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 34
-          Top = 52
+          Top = 80
           Width = 102
           TabOrder = 1
           Text = 'edtHaUserName'
         end
         object lbl: TLabel
-          Left = 199
+          AnchorSideLeft.Control = edtHaUserName
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label179
+          Left = 120
           Height = 17
-          Top = 36
-          Width = 70
+          Top = 63
+          Width = 66
+          BorderSpacing.Left = 12
           Caption = 'Password:'
+          ParentColor = False
         end
         object edtHaPasswd: TEdit
-          Left = 199
+          AnchorSideLeft.Control = lbl
+          AnchorSideTop.Control = lbl
+          AnchorSideTop.Side = asrBottom
+          Left = 120
           Height = 34
-          Top = 52
+          Top = 80
           Width = 104
           EchoMode = emPassword
           PasswordChar = '*'
@@ -9483,84 +9505,137 @@ object frmPreferences: TfrmPreferences
           Text = 'edtHaPasswd'
         end
         object chkHaupOnline: TCheckBox
-          Left = 7
+          AnchorSideLeft.Control = Label179
+          AnchorSideTop.Control = edtHaUserName
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 23
-          Top = 92
-          Width = 417
+          Top = 117
+          Width = 409
+          BorderSpacing.Top = 3
           Caption = 'Upload QSO data immediately after save, update or delete'
           TabOrder = 3
         end
         object Label184: TLabel
-          Left = 9
+          AnchorSideLeft.Control = Label179
+          AnchorSideTop.Control = cmbHaColor
+          AnchorSideTop.Side = asrCenter
+          Left = 6
           Height = 17
-          Top = 132
+          Top = 149
           Width = 53
           Caption = 'Use this'
+          ParentColor = False
         end
         object Label185: TLabel
-          Left = 238
+          AnchorSideLeft.Control = cmbHaColor
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbHaColor
+          AnchorSideTop.Side = asrCenter
+          Left = 235
           Height = 17
-          Top = 132
-          Width = 338
+          Top = 149
+          Width = 329
+          BorderSpacing.Left = 6
           Caption = 'color to show information in status upload window'
+          ParentColor = False
         end
         object cmbHaColor: TColorBox
-          Left = 62
+          AnchorSideLeft.Control = Label184
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = chkHaupOnline
+          AnchorSideTop.Side = asrBottom
+          Left = 65
           Height = 29
-          Top = 124
+          Top = 143
           Width = 164
           DefaultColorColor = clBlue
           NoneColorColor = clMoneyGreen
           Selected = clBlue
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 3
           ItemHeight = 28
           TabOrder = 4
         end
+        object edtHamQTHurl: TEdit
+          AnchorSideLeft.Control = chkHaUpEnabled
+          AnchorSideTop.Control = chkHaUpEnabled
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 23
+          Width = 600
+          TabOrder = 5
+          Text = 'http://www.hamqth.com/qso_realtime.php'
+        end
       end
       object GroupBox45: TGroupBox
+        AnchorSideLeft.Control = GroupBox44
+        AnchorSideTop.Control = GroupBox44
+        AnchorSideTop.Side = asrBottom
         Left = 12
-        Height = 168
-        Top = 194
-        Width = 569
+        Height = 225
+        Top = 198
+        Width = 650
+        BorderSpacing.Top = 3
         Caption = ' ClubLog '
-        ClientHeight = 166
-        ClientWidth = 567
+        ClientHeight = 207
+        ClientWidth = 648
         TabOrder = 1
         object chkClUpEnabled: TCheckBox
-          Left = 7
+          AnchorSideLeft.Control = GroupBox45
+          AnchorSideTop.Control = GroupBox45
+          Left = 6
           Height = 23
-          Top = 4
-          Width = 196
+          Top = 0
+          Width = 191
+          BorderSpacing.Left = 6
           Caption = 'Enable upload to ClubLog'
           OnChange = chkClUpEnabledChange
           TabOrder = 0
         end
         object Label180: TLabel
-          Left = 9
+          AnchorSideLeft.Control = chkClUpEnabled
+          AnchorSideTop.Control = edtClubLogUrlDel
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 17
-          Top = 36
+          Top = 91
           Width = 56
           Caption = 'Callsign:'
+          ParentColor = False
         end
         object edtClUserName: TEdit
-          Left = 9
+          AnchorSideLeft.Control = Label180
+          AnchorSideTop.Control = Label180
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 34
-          Top = 57
+          Top = 108
           Width = 102
           TabOrder = 1
           Text = 'edtClUserName'
         end
         object lbl1: TLabel
-          Left = 198
+          AnchorSideLeft.Control = edtClUserName
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label180
+          Left = 114
           Height = 17
-          Top = 36
-          Width = 70
+          Top = 91
+          Width = 66
+          BorderSpacing.Left = 6
           Caption = 'Password:'
+          ParentColor = False
         end
         object edtClPasswd: TEdit
-          Left = 198
+          AnchorSideLeft.Control = lbl1
+          AnchorSideTop.Control = lbl1
+          AnchorSideTop.Side = asrBottom
+          Left = 114
           Height = 34
-          Top = 57
+          Top = 108
           Width = 104
           EchoMode = emPassword
           PasswordChar = '*'
@@ -9568,151 +9643,263 @@ object frmPreferences: TfrmPreferences
           Text = 'edtClPasswd'
         end
         object chkClUpOnline: TCheckBox
+          AnchorSideLeft.Control = edtClUserName
+          AnchorSideTop.Control = edtClUserName
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 23
-          Top = 89
-          Width = 417
+          Top = 145
+          Width = 409
+          BorderSpacing.Top = 3
           Caption = 'Upload QSO data immediately after save, update or delete'
           TabOrder = 4
         end
         object Label181: TLabel
-          Left = 358
+          AnchorSideLeft.Control = edtClPasswd
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label180
+          Left = 224
           Height = 17
-          Top = 36
+          Top = 91
           Width = 41
+          BorderSpacing.Left = 6
           Caption = 'Email:'
+          ParentColor = False
         end
         object edtClEmail: TEdit
-          Left = 358
+          AnchorSideLeft.Control = Label181
+          AnchorSideTop.Control = Label181
+          AnchorSideTop.Side = asrBottom
+          Left = 224
           Height = 34
-          Top = 57
+          Top = 108
           Width = 184
           TabOrder = 3
           Text = 'edtClEmail'
         end
         object Label186: TLabel
-          Left = 10
+          AnchorSideLeft.Control = chkClUpOnline
+          AnchorSideTop.Control = cmbClColor
+          AnchorSideTop.Side = asrCenter
+          Left = 6
           Height = 17
-          Top = 121
+          Top = 177
           Width = 53
           Caption = 'Use this'
+          ParentColor = False
         end
         object Label187: TLabel
-          Left = 238
+          AnchorSideLeft.Control = cmbClColor
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbClColor
+          AnchorSideTop.Side = asrCenter
+          Left = 235
           Height = 17
-          Top = 121
-          Width = 338
+          Top = 177
+          Width = 329
+          BorderSpacing.Left = 6
           Caption = 'color to show information in status upload window'
+          ParentColor = False
         end
         object cmbClColor: TColorBox
+          AnchorSideLeft.Control = Label186
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = chkClUpOnline
+          AnchorSideTop.Side = asrBottom
           Left = 65
           Height = 29
-          Top = 113
+          Top = 171
           Width = 164
           DefaultColorColor = clRed
           NoneColorColor = clMoneyGreen
           Selected = clRed
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 3
           ItemHeight = 28
           TabOrder = 5
         end
+        object edtClubLogUrl: TEdit
+          AnchorSideLeft.Control = chkClUpEnabled
+          AnchorSideTop.Control = chkClUpEnabled
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 23
+          Width = 600
+          TabOrder = 6
+          Text = 'https://secure.clublog.org/realtime.php'
+        end
+        object edtClubLogUrlDel: TEdit
+          AnchorSideLeft.Control = chkClUpEnabled
+          AnchorSideTop.Control = edtClubLogUrl
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 57
+          Width = 600
+          TabOrder = 7
+          Text = 'https://secure.clublog.org/delete.php'
+        end
       end
       object GroupBox46: TGroupBox
+        AnchorSideLeft.Control = GroupBox45
+        AnchorSideTop.Control = GroupBox45
+        AnchorSideTop.Side = asrBottom
         Left = 12
-        Height = 168
-        Top = 370
-        Width = 569
+        Height = 195
+        Top = 426
+        Width = 650
+        BorderSpacing.Top = 3
         Caption = ' HRDLog.net '
-        ClientHeight = 166
-        ClientWidth = 567
+        ClientHeight = 177
+        ClientWidth = 648
         TabOrder = 2
         object chkHrUpEnabled: TCheckBox
-          Left = 7
+          AnchorSideLeft.Control = GroupBox46
+          AnchorSideTop.Control = GroupBox46
+          Left = 6
           Height = 23
-          Top = 4
-          Width = 221
+          Top = 0
+          Width = 216
+          BorderSpacing.Left = 6
           Caption = 'Enable upload to HRDLog.net'
           OnChange = chkHrUpEnabledChange
           TabOrder = 0
         end
         object Label182: TLabel
-          Left = 9
+          AnchorSideLeft.Control = chkHrUpEnabled
+          AnchorSideTop.Control = edtHrdUrl
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 17
-          Top = 36
+          Top = 60
           Width = 56
+          BorderSpacing.Top = 3
           Caption = 'Callsign:'
+          ParentColor = False
         end
         object edtHrUserName: TEdit
-          Left = 9
+          AnchorSideLeft.Control = Label182
+          AnchorSideTop.Control = Label182
+          AnchorSideTop.Side = asrBottom
+          Left = 6
           Height = 34
-          Top = 57
+          Top = 77
           Width = 102
           TabOrder = 1
           Text = 'edtHrUserName'
         end
         object chkHrUpOnline: TCheckBox
+          AnchorSideLeft.Control = edtHrUserName
+          AnchorSideTop.Control = edtHrUserName
+          AnchorSideTop.Side = asrBottom
           Left = 6
           Height = 23
-          Top = 89
-          Width = 417
+          Top = 114
+          Width = 409
+          BorderSpacing.Top = 3
           Caption = 'Upload QSO data immediately after save, update or delete'
           TabOrder = 3
         end
         object Label183: TLabel
-          Left = 200
+          AnchorSideLeft.Control = edtHrUserName
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label182
+          Left = 114
           Height = 17
-          Top = 36
-          Width = 39
+          Top = 60
+          Width = 37
+          BorderSpacing.Left = 6
           Caption = 'Code:'
+          ParentColor = False
         end
         object edtHrCode: TEdit
-          Left = 200
+          AnchorSideLeft.Control = Label183
+          AnchorSideTop.Control = Label183
+          AnchorSideTop.Side = asrBottom
+          Left = 114
           Height = 34
-          Top = 57
+          Top = 77
           Width = 184
           TabOrder = 2
           Text = 'edtHrCode'
         end
         object Label188: TLabel
-          Left = 9
+          AnchorSideLeft.Control = edtHrUserName
+          AnchorSideTop.Control = cmbHrColor
+          AnchorSideTop.Side = asrCenter
+          Left = 6
           Height = 17
-          Top = 125
+          Top = 146
           Width = 53
           Caption = 'Use this'
+          ParentColor = False
         end
         object cmbHrColor: TColorBox
-          Left = 64
+          AnchorSideLeft.Control = Label188
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = chkHrUpOnline
+          AnchorSideTop.Side = asrBottom
+          Left = 65
           Height = 29
-          Top = 117
+          Top = 140
           Width = 164
           DefaultColorColor = clPurple
           NoneColorColor = clMoneyGreen
           Selected = clPurple
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
+          BorderSpacing.Left = 6
+          BorderSpacing.Top = 3
           ItemHeight = 28
           TabOrder = 4
         end
         object Label189: TLabel
-          Left = 237
+          AnchorSideLeft.Control = cmbHrColor
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = cmbHrColor
+          AnchorSideTop.Side = asrCenter
+          Left = 235
           Height = 17
-          Top = 125
-          Width = 338
+          Top = 146
+          Width = 329
+          BorderSpacing.Left = 6
           Caption = 'color to show information in status upload window'
+          ParentColor = False
+        end
+        object edtHrdUrl: TEdit
+          AnchorSideLeft.Control = chkHrUpEnabled
+          AnchorSideTop.Control = chkHrUpEnabled
+          AnchorSideTop.Side = asrBottom
+          Left = 6
+          Height = 34
+          Top = 23
+          Width = 600
+          TabOrder = 5
+          Text = 'http://robot.hrdlog.net/NewEntry.aspx'
         end
       end
       object chkCloseAfterUpload: TCheckBox
+        AnchorSideLeft.Control = GroupBox46
+        AnchorSideTop.Control = GroupBox46
+        AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 544
-        Width = 451
+        Top = 627
+        Width = 442
+        BorderSpacing.Top = 6
         Caption = 'Close the "Status of log upload" window after successful upload'
         TabOrder = 3
       end
       object chkIgnoreLoTW: TCheckBox
-        Left = 13
+        AnchorSideLeft.Control = GroupBox46
+        AnchorSideTop.Control = chkCloseAfterUpload
+        AnchorSideTop.Side = asrBottom
+        Left = 12
         Height = 23
-        Top = 576
-        Width = 413
+        Top = 653
+        Width = 404
+        BorderSpacing.Top = 3
         Caption = 'Ignore changes caused by LoTW/eQSL upload or download'
         TabOrder = 4
       end

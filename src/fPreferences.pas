@@ -515,6 +515,10 @@ type
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtHrdUrl: TEdit;
+    edtClubLogUrl: TEdit;
+    edtClubLogUrlDel: TEdit;
+    edtHamQTHurl: TEdit;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
@@ -1683,6 +1687,7 @@ begin
   cqrini.WriteString('OnlineLog','HaUserName',edtHaUserName.Text);
   cqrini.WriteString('OnlineLog','HaPasswd',edtHaPasswd.Text);
   cqrini.WriteInteger('OnlineLog','HaColor',cmbHaColor.Selected);
+  cqrini.WriteString('OnlineLog','HaUrl',edtHamQthUrl.Text);
 
   cqrini.WriteBool('OnlineLog','ClUP',chkClUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','ClUpOnline',chkClUpOnline.Checked);
@@ -1690,6 +1695,8 @@ begin
   cqrini.WriteString('OnlineLog','ClPasswd',edtClPasswd.Text);
   cqrini.WriteString('OnlineLog','ClEmail',edtClEmail.Text);
   cqrini.WriteInteger('OnlineLog','ClColor',cmbClColor.Selected);
+  cqrini.WriteString('OnlineLog','ClUrl',edtClubLogUrl.Text);
+  cqrini.WriteString('OnlineLog','ClUrlDel',edtClubLogUrlDel.Text);
 
   cqrini.WriteBool('OnlineLog','HrUP',chkHrUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','HrUpOnline',chkHrUpOnline.Checked);
@@ -1698,6 +1705,7 @@ begin
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
   cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreLoTWeQSL',chkIgnoreLoTW.Checked);
+  cqrini.WriteString('OnlineLog','HrUrl',edtHrdUrl.Text);
 
   cqrini.WriteString('prop','Url',edtCondxImageUrl.Text);
   cqrini.WriteBool('prop','AsImage',rbCondxAsImage.Checked);
@@ -3318,6 +3326,7 @@ begin
   edtHaUserName.Text     := cqrini.ReadString('OnlineLog','HaUserName','');
   edtHaPasswd.Text       := cqrini.ReadString('OnlineLog','HaPasswd','');
   cmbHaColor.Selected    := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
+  edtHamQthUrl.Text      := cqrini.ReadString('OnlineLog','HaUrl','http://www.hamqth.com/qso_realtime.php');
   chkHaUpEnabledChange(nil);
 
   chkClUpEnabled.Checked := cqrini.ReadBool('OnlineLog','ClUP',False);
@@ -3326,6 +3335,8 @@ begin
   edtClPasswd.Text       := cqrini.ReadString('OnlineLog','ClPasswd','');
   edtClEmail.Text        := cqrini.ReadString('OnlineLog','ClEmail','');
   cmbClColor.Selected    := cqrini.ReadInteger('OnlineLog','ClColor',clRed);
+  edtClubLogUrl.Text     := cqrini.ReadString('OnlineLog','ClUrl','https://secure.clublog.org/realtime.php');
+  edtClubLogUrlDel.Text  := cqrini.ReadString('OnlineLog','ClUrlDel','https://secure.clublog.org/delete.php');
   chkClUpEnabledChange(nil);
 
   chkHrUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HrUP',False);
@@ -3335,6 +3346,7 @@ begin
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
   chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
   chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
+  edtHrdUrl.Text         := cqrini.ReadString('OnlineLog','HrUrl','http://robot.hrdlog.net/NewEntry.aspx');
   chkHrUpEnabledChange(nil);
 
   edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');
