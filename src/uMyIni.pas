@@ -37,6 +37,7 @@ type
     procedure ReadSection(const Section: string; Strings: TStrings;ToLocal : Boolean=FALSE);
     procedure ReadSectionRaw(const Section: string; Strings: TStrings);
     procedure LoadLocalSectionsList;
+    procedure SetCache(c:boolean=false);
 end;
 
 var
@@ -52,6 +53,12 @@ begin
   lini := TMemIniFile.Create(LocalIniFile);
   ini.CacheUpdates :=false;    //should be as default, but is it?
   lini.CacheUpdates :=false;
+end;
+
+procedure TMyIni.SetCache(c:boolean=false);
+Begin
+  ini.CacheUpdates :=c;
+  lini.CacheUpdates :=c;
 end;
 
 function TMyIni.ReadString(const Section, Ident, Default: string): string;

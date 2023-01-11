@@ -1195,6 +1195,7 @@ var
   int  : integer;
   KeyType: TKeyType;
 begin
+  cqrini.SetCache(True);
   cqrini.WriteString('Station', 'Call', edtCall.Text);
   cqrini.WriteString('Station', 'Name', edtName.Text);
   cqrini.WriteString('Station', 'QTH', edtQTH.Text);
@@ -1798,6 +1799,7 @@ begin
   dmData.LoadClubsSettings;
   dmData.LoadZipSettings;
   dmUtils.UpdateHelpBrowser;
+  cqrini.SetCache(False);
 end;
 
 procedure TfrmPreferences.FormCreate(Sender: TObject);
