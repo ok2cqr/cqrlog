@@ -41,7 +41,7 @@
     </ul>
 <p>From New QSO / File select 'Remote mode for wsjt'</p>
 <img src="img/wsjt2.png" name="2" width="144" height="238" border="0"/>
-<p> Remote mode for WSJT-X-communication is made via UDP dtatgrams that and is supported from WSJT-X 1.5.0 program upwards.<br/>
+<p> Remote mode for WSJT-X-communication is made via UDP datagrams that and is supported from WSJT-X 1.5.0 program upwards.<br/>
 Cqrlog supports WSJT-X UDP remote mode since version 1.9.1 
 </p>
 <img src="img/wsjt18.png" name="18" width="144" height="137" border="0"/>
@@ -90,28 +90,28 @@ In some cases your TX may be shut down after you have first tried to answer some
 </img></p><p>
 If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
 </br></br>
-Selecting <b>DX</b> checkbox cqrlog fiters away all calls that are from same continent as you are. This works both in Cq monitor and MAP mode<br>
+Selecting <b>DX</b> checkbox cqrlog filters away all calls that are from same continent as you are. This works both in Cq monitor and MAP mode<br>
 
 
 
 </p><p><img src="img/wsjt21.png" name="21" width="363" height="282">
 </img></p>
 Checking <b>“flw”</b> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
-</br>Type in a callsing. The callsign is checked to be written in upcase letters and spaces are trimmed away. Pressing RETURN at the end of typing turns <strong>Follow</strong> button ON (green).
+</br>Type in a callsign. The callsign is checked to be written in upcase letters and spaces are trimmed away. Pressing RETURN at the end of typing turns <strong>Follow</strong> button ON (green).
 You can also toggle  <b>Follow</b> button ON and OFF by mouse clicks (turns green/red) 
 </br>When <b>Follow</b> turns ON then during next decoding periods follow line (at right side of follow call edit)
 shows decoded lines where that <b>followed callsign is the originating (2nd) callsign</b> and the line is <b>not CQ</b> or not <b>to YOUR Call</b>(destination). That box uses same font and size as CQ-monitor.
 </br>You can also paint any call from WSJT-X main window or CQ-monitor, drag it over Follow callsign field, and drop it there. Follow callsign field can have previous call (it is erased) or empty.
  Dropping also activates <b>Follow button</b> ON (turns green).
 </br></br>Line contains:  <b>decoding_period_time</b> | <b>snr</b>  | <b>delta_frequency</b>  | <b>the_message</b>.  
- </br>Alerts are not connected  to this line. Follow and flw states and callsing are saved over program restart.
+ </br>Alerts are not connected  to this line. Follow and flw states and callsign are saved over program restart.
  </br>Line color turns silver gray from default color (black) when corresponding response period is over.
  </br>This will make easier to follow a DX who does not stay same frequency and jumps around answering to callers.
  </br>Double click on followed line loads Std messages to wsjt-x (but does not fire TX). This works with Wsjt-x 1.9.0-rc3 and up. 
  </br>
  </br>CQ-monitor has known problem of color printing (richmemo unit) that causes CPU load to grow slowly during online hours. For so far solution for this  has not been found.
  </br>
- </br>How ever you can drop CPU load by just setting NewQSO/File/remote mode for wsjt to OFF and then immediately back to ON. This releases previously used memory and CPU load returns to normal and is a very fast fix that can be done during a reciving period.
+ </br>How ever you can drop CPU load by just setting NewQSO/File/remote mode for wsjt to OFF and then immediately back to ON. This releases previously used memory and CPU load returns to normal and is a very fast fix that can be done during a receiving period.
  </br>
  </br>CQ-monitor has now 30 lines (if “no history” unchecked). Automatic scrollbars are visible if needed.
 
@@ -122,7 +122,7 @@ shows decoded lines where that <b>followed callsign is the originating (2nd) cal
 	<li/> mode symbol. Same that wsjt-x uses.</br>
 	<li/> callsign with color and low/Upcase coding.</br>
 	<li/> locator grid with color and low/Upcase coding </br>
-	<li/> caller’s country name (cut to 15chrs) Overlayed with “<font color="#ff0066"><b>CQ:xx</b></font>”
+	<li/> caller’s country name (cut to 15chrs) Overlaid with “<font color="#ff0066"><b>CQ:xx</b></font>”
 	 and <font color="#ff0066"><b>different color</b></font> if station is calling directed CQ like: CQ DX, AS, AF, OC, NA, SA .. or CQ CALLSIGN DX.<br/>
 	<font color="#ff0066"><b>This is set as warning for you </b></font> to check that you are in directed area before answering to his/her CQ.
 	<br/>I.E. <font color="#ff0066"><b>In case of CQ DX you should be in DIFFERENT CONTINENT as the CQ caller</b></font>
@@ -134,7 +134,7 @@ shows decoded lines where that <b>followed callsign is the originating (2nd) cal
 	<li/> information of DXCC status compared to your logged qsos.</br>
 </ul></p>
 <p>If you want to see a bit more in country name you may try to create this script and run it from console. Remember to set execute bit (chmod +x) to script file to get it running. This script will fix some long country names and change comma-space combinations
- to dot (as CQ-monitor cuts contry name if it sees comma). That way you will see a bit more info in 15chr long country name of CQ-monitor.
+ to dot (as CQ-monitor cuts country name if it sees comma). That way you will see a bit more info in 15chr long country name of CQ-monitor.
 <pre>
 --------------cut here---------------------------------------------------------
 #/bin/sh
@@ -222,22 +222,22 @@ How ever if alerts were <strong>on</strong> they stay <strong>on</strong>. Excep
 </p><p><strong>dB</strong> selection shows station snr report, like it shows up in Band Activity of wsjt-x.
 </br><strong>ColorBackCQs </strong> selection work so that all <strong>CQs</strong> are printed (colored) <strong>back to Wsjt-x</strong> Band Activity window and <strong>rest of the traffic</strong> will appear to Wsjt-x <strong>band map</strong>.
 </p>
-If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 
+If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same chosen colours as CQ-monitor uses. 
 How ever there are some limitations compared to CQ-monitor:
 </br><li><strong>color back</strong> can not change lower case letters of Band Activity line in case call or locator is worked. Just font color is changed</li>
 <li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
 <li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
 </br>
-With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
+With older versions of wsjt-x this causes unknown command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
 </br></p><p>
 <img src="img/wsjt34.png" name="34" width="353" height="282">
 </img>
 <img src="img/wsjt33.png" name="33" width="353" height="282">
 </img></p><p>
-If you are able to use <strong>color back</strong> feature you may want to change some Wsjt-x color settings and maybe check "CQ only" checbox at Main window. Selecting also font to some of "mono"+ "bold" ones from "Configuration/General/Decoded Text Font" could make a better view.</p>
+If you are able to use <strong>color back</strong> feature you may want to change some Wsjt-x color settings and maybe check "CQ only" checkbox at Main window. Selecting also font to some of "mono"+ "bold" ones from "Configuration/General/Decoded Text Font" could make a better view.</p>
 <p>
 <ul><strong>A word of warning:</strong></ul>  In current Wsjt-x devel version 1.9.0-rc3 r8592 selecting <strong>CQ only</strong> will <strong>disable Generating of Std messages</strong> by double click either <strong>followed</strong> message line or Wsjt-x <strong>map's non-cq lines</strong>.
-</br>This <strong>does not</strong> happen if <strong>CQ only</strong> is <strong>uncheked</strong>. Unchecking it after not working double click does not help if Band Activiy window does not contain that line from which  <strong>Wsjt map</strong> or <strong>follow</strong> line was created.
+</br>This <strong>does not</strong> happen if <strong>CQ only</strong> is <strong>unchecked</strong>. Unchecking it after not working double click does not help if Band Activity window does not contain that line from which  <strong>Wsjt map</strong> or <strong>follow</strong> line was created.
 </br>That is because Wsjt-x must found equal line from Band activity and UDP command that produces Std General messages creation. 
 </br> This may change in future devel versions or in official release of 1.9.0, but at the moment you should be aware of that.</p>
 <p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
@@ -249,7 +249,7 @@ If you are able to use <strong>color back</strong> feature you may want to chang
 </br>Pressing this button will send a FreeTextMessage to WSJT-X containing "TU HISNAME 73" Where HISNAME is text from NewQSO/Name field. This will not start TX.
 </br>FreeTextMessage length is limited to 13 characters. "Tu " and " 73" will take 6 of them. So name can be only 7 char long. If it is longer it is not sent to WSJT-X and button disappears after pressing to indicate that name is too long.
 </br>Button disappears also on next decode when NewQSO/Name becomes empty. If you do not like to use generated FreeTextMessage you can double click WSJT-X's button <strong>TX5</strong> to get back  standard "CALL MYCALL 73" message.
-</br>This button is made just for testing reply-UDP messages as new WSJT-X will use more of these kind of messages, like callsing coloring in Band activity window by external request.
+</br>This button is made just for testing reply-UDP messages as new WSJT-X will use more of these kind of messages, like callsign coloring in Band activity window by external request.
 </p>
 <h3><a name="w2"></a>Colors &amp; fonts</h3>
 <p>
@@ -343,7 +343,7 @@ text found from monitor line <br/>
 # // 'call'= text fits to the
 callsign<br/>
 # // create files you want to be played<br/>
-# scirpt
+# script
 is seeking names with '.wav' suffix! Change if needed <br/>
 #select
 audio card(if needed) and play alert message</p>
