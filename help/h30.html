@@ -37,8 +37,8 @@
 </img>
 <p>
 TRX Control window Shows current frequency and buttons allow change of Band, mode, memory and rig. Additional selections are User defined buttons, Power buttons, Vfo A and B buttons and memory information field.
-<br>When pressing band selection button rig moves to that band using predefined frequency of currently active mode. Default frequencies and User buttons can be defined in <a href="h1.html#ah7">preferecences/TRX control</a>.
-<br><br>You can select rig vfo with buttons <b>A</b> and <b>B</b> but there is no feedback what vfo is currenty used as Icom brand rigs do not support "Get_vfo" command.
+<br>When pressing band selection button rig moves to that band using predefined frequency of currently active mode. Default frequencies and User buttons can be defined in <a href="h1.html#ah7">preferences/TRX control</a>.
+<br><br>You can select rig vfo with buttons <b>A</b> and <b>B</b> but there is no feedback what vfo is currently used as Icom brand rigs do not support "Get_vfo" command.
 </p><a name="m4"></a><p>If <b>M_up</b> or <b>M_dwn</b> are pressed or memory is selected by double click of memory list, the information text will show up to <b>Mem Info</b> field. If frequency is changed manually after that info text will disappear.
 <br>If memory does not have info text (max 25chr) just <b>x of y</b> is displayed where x refers to memory order in Add/Modify memory list and y total amount of memories.
 <b>None</b> (in red) indicates that there are no memory lines.
@@ -50,15 +50,15 @@ TRX Control window Shows current frequency and buttons allow change of Band, mod
 Keeping both keys pressed the step is 1MHz.
 <br>If you use mouse wheel the rig frequency is changed while turning. There is no need to press enter then. Just move mouse cursor away from frequency display.
 
-<br><br><b>NOTE!!!</b> <br>Check <b>pereferences/TRXcontrol/Switch only between mode related memories</b><br>Cqrlog TRXcontrol memories are categorized by mode (groups). CW, SSB(=AM+USB+LSB+FM), RTTY(=RTTY+DATA+PKTLSB+PKTUSB+PKTFM)[no mode selector for PKT*  but you may "M wri" them anyway]. 
+<br><br><b>NOTE!!!</b> <br>Check <b>preferences/TRXcontrol/Switch only between mode related memories</b><br>Cqrlog TRXcontrol memories are categorized by mode (groups). CW, SSB(=AM+USB+LSB+FM), RTTY(=RTTY+DATA+PKTLSB+PKTUSB+PKTFM)[no mode selector for PKT*  but you may "M wri" them anyway]. 
 So do not wonder if you get smaller amount of memories than in your list when pressing <b>M_up</b> and <b>M_dwn</b> with "Show mode related" checked.
 <br><br>
 <img src="img/h122.png" name="9"  width="393" height="367">
  <img src="img/h121.png" name="10"  width="373" height="367">
 </img>
 <br/>
-<br>You can set rig by double click of an memory row in <b>Open  memory list</b>. Similar action happen also in <b>Add/Modify memories</b>. The differense is that you can keep
- <b>Open memory list</b> open while loggeing qsos etc. Where as <b>Add/Modify memories</b>, when open, blocks other functionality.
+<br>You can set rig by double click of an memory row in <b>Open  memory list</b>. Similar action happen also in <b>Add/Modify memories</b>. The difference is that you can keep
+ <b>Open memory list</b> open while logging qsos etc. Where as <b>Add/Modify memories</b>, when open, blocks other functionality.
  <br>While <b>Add/Modify memories</b> is open you can use buttons in right frame. Texts of buttons are quite self explaining.
  <br>Deleting a memory line, or all lines, do not have any further warning questions (Are you sure?). In case you deleted something wrong just close window with  <b>Cancel</b>. No changes are recorded then.
 <br>Closing <b>Add/Modify memories</b> is done with buttons <b>OK</b> or <b>Cancel</b>. Closing <b> Open memory list</b> window must be done using <b>x</b> at top right corner of window.
@@ -81,8 +81,7 @@ Window shows current position of rotor with <b>numerical display, Short and Long
 <br>Small numbers on top of bar display shows current rotor limits. Usually this is 0..360, but may be also -180..180 depending on rotor model, or other user defined limits.
 <br>Direction drive buttons run rotor until stop button is pressed or maximum 15sec time limit is reached.
 <br><br> When a call is entered to <b>NewQSO</b> callsign field and cursor is moved away from that field <b>DXCC info</b> part gets filled against call prefix and/or locator grid,
- then, when <b>DXCC/AZIM</b> shows a value, it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your ro
- tor will turn your antenna to that direction.
+ then, when <b>DXCC/AZIM</b> shows a value, it is possible to press <b>Short Path</b> or <b>Long Path buttons</b> and your rotor will turn your antenna to that direction.
 <br><br>It is also possible to set new direction by a click on <b>Azimuth display</b>, type a new direction value and press <b>Enter</b> or use  <b>mouse wheel</b> to select degrees.
 <br>One wheel step is one degree. If you keep <b>Shift key</b> pressed while turning mouse wheel the step will be 10 degrees. If <b> Ctrl key</b> is pressed instead step will be 100 degrees.
 <br>If you have used mouse wheel it is enough to move mouse away from Azimuth reading to get rotor turning. No enter keypress is needed then.

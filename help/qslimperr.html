@@ -32,7 +32,7 @@
 Sometimes you find some "QSO not found" errors in LoTW or eQSL download. There are some reasons for that.<br>
 <ul>
 <li>QSO did not complete and you did not log that, but the opponent station thinks it is completed.</li>
-<li>You forgot to set remote on and logged qso only to your digital mode program. (You find qso from it's log)
+<li>You forgot to set remote on and logged qso only to your digital mode program. (You find qso from its log)
 <li>People type in their old paper logs to computer and upload them to LoTW/eQSL. QSO is ok but it is somewhere in your earlier paper logs.</li>
 <li>QSO may be an SWL report waiting to confirm via eQSL</li>
 </ul><br>
@@ -57,7 +57,7 @@ If you do not want to import all error qsos, or want to send a confirmation to e
 LoTW error file looks very similar, but has some text more for every qso record.
 <br><br>When you edit file do not touch the header of the file. Lines from 1 to 8 where header ends with "EOH" (End Of Header).
 <br>You can remove qso records that you do not want to import to your log by removing all record's lines. For example here remove the F-21716 qso means
- to remove lines 10 - 23. Adif tag &lt;APP_CQRLOG_ERROR:XXX specifies error label data lenght but it is actually not used for anything.
+ to remove lines 10 - 23. Adif tag &lt;APP_CQRLOG_ERROR:XXX specifies error label data length but it is actually not used for anything.
  <br>There are also other comments starting with &lt;APP_CQRLOG_NOTE that are just for information.
  <br><br><b>NOTE:</b>RST sent/rcvd are swapped to be ready for import to your log. I.E. senders RST_sent is placed to (your) RST_rcvd already.
  <br>(This concerns mainly eQSL as LoTW does not handle RSTs)
@@ -68,7 +68,7 @@ Cqrlog fixes error record if adif tag APP_EQSL_SWL is found.<br>
 CONTEST_ID is changed to talk about "SWL" instead of "Qso". Then all imported SWL cards from this error file can be found fast by selecting Contest filter "SWL_was_not_found_in_log!"
 <br>RST_SENT is swapped to RST_RCVD as SWLs do report how heard you in RST_SENT tag.
 <br>RST_SENT is replaced as "SWL". This is your "report" for swl.
-<br>SWLs should report who they heard you working with. They should use QSOMSG adif tag. This is swapped to tag COMMENT to show up in "Comment for qso" in cqrlog. Without this informaton you can concider that swl report is not valid.
+<br>SWLs should report who they heard you working with. They should use QSOMSG adif tag. This is swapped to tag COMMENT to show up in "Comment for qso" in cqrlog. Without this information you can consider that swl report is not valid.
 <br><br>If you want to upload a confirmation for SWL  after importing error file to cqrlog change "eQSL qsl sent" value with QSL list/File/Group edit from Y to N to cause upload to eQSL. This might be handy if you want to check several swl cards before uploading. Be careful not to touch "LoTW qsl sent" value as LoTW does not support SWLs. 
 <br><br>Same way, if you want to confirm an old paper log qso now added to cqrlog on next upload/"Export only QSOs which has never been uploaded"
 just change the eQSL and/or LoTW qsl set from value Y to N</p> 

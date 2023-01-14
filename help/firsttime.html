@@ -31,7 +31,7 @@
 <p>First start of CQRLOG is important.
 <br>Thanks for opening the help to your web browser during this first run.  Help has many answers to your future questions and you can open it again from many menus of CQRLOG.
  We hope that you at least check now the left frame to see what topics you may find from help if needed.
-</p><p> Then you have to decide where you put your logs. You have three ways to save logs and each of them has it's good and bad sides.
+</p><p> Then you have to decide where you put your logs. You have three ways to save logs and each of them has its good and bad sides.
 <br><br><img src="img/firsts1.png" >
 
 
@@ -49,19 +49,19 @@ This option uses SQL server already installed to your machine during CQRLOG inst
 <br>When using this option CQRLOG tries first to create SQL user with proper privileges to use the SQL server and then set proper values to "Database connection" window.
 <br>CQRLOG will create two scripts to your home folder: <b>create_cqr_user.sh</b> and <b>backup_all_cqr.sh</b>
 <br>The first one creates database user and is normally used only once. It needs your Linux user password to run this script with sudo.
-<br>The second one allows you to make full backup of all CQRLOG logs currently in database by starting this scipt in command-line terminal. 
+<br>The second one allows you to make full backup of all CQRLOG logs currently in database by starting this script in command-line terminal. 
 This script needs program mysqldump and cqrlog database users username and password to access database same way as CQRLOG itself does.
 Backup creates <b>allcqrlogs.sql</b> in <b>/tmp</b> folder. You have to move this file to safe place because most Linuxes do clean up /tmp folder during startup.
 <br>It is also recommended to save <b>~/.config/cqrlog folder with allcqrlogs.sql </b>file. Script tells you how you can restore all logs back.
 <br><br>CQRLOG tries to open most common terminals <b>xterm, gnome-terminal </b>or<b> lxterminal</b> to execute <b>create_cqr_user.sh</b>. If that fails you have to run script manually from your command-line terminal.
 </p>
 <h4>external networked SQL server</h4>
-With this option you have to define values to connect SQL server by yourself. Address, port, user and passord are required to connect to external SQL server.
-<br>SQL user and it's privileges have to be created by SQL server administrator.
+With this option you have to define values to connect SQL server by yourself. Address, port, user and password are required to connect to external SQL server.
+<br>SQL user and its privileges have to be created by SQL server administrator.
 <br>It can exist in your home network or in Internet. When using internet SQL servers it is most recommended to use VPN or SSH tunnel connection for security reasons.
 </p>
 <p><br>
-After any of these options is selected, <b>OK</b> button pressed, and connection to SQL database established, CQRLOG tries to create first empty Log. This can take some time, so plese be patient.
+After any of these options is selected, <b>OK</b> button pressed, and connection to SQL database established, CQRLOG tries to create first empty Log. This can take some time, so please be patient.
 <br>When log is ready you can open it and go to <b>NewQSO/File/Preferences</b> to set all station details and other settings affecting to CQRLOG.
 In case of local and external SQL servers there might already be a log, or logs. Then no new log is created.<br><br><b>NOTE:</b> All settings are log based. You can have other logs with different settings and station information. 
 <br>Once you have got all settings ready you can export them to file. It happens at CQRLOG start in <b>Database connection</b> window with <b>Utils/Export/configuration</b>.

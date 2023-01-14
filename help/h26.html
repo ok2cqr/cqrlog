@@ -31,7 +31,7 @@
 <h2><strong>CW messages</strong></h2>
     <p>Assuming that your CW interface is properly set up and working,
     you can add and/or edit your CW messages.<br><br>
-    Set up your CW messages via Preferences/CW inteface/CW messages button.
+    Set up your CW messages via Preferences/CW interface/CW messages button.
     <br> You can also access CW messages from the upper menu bar of the New QSO window.
     Click on the 'File' item and select CW Messages.<br><br>
     <img src=img/h96b.png>&nbsp;&nbsp;<img src=img/h96.png><br><br>
@@ -58,11 +58,11 @@
 		<br>
 		<li>%xn  - contest exchange serial number</li>
 		<li>%xm  - contest exchange message</li>
-		<li>%xns - contest exchenge serial number sends 9->N and 0->T</li>
+		<li>%xns - contest exchange serial number sends 9->N and 0->T</li>
 		<li>%xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.<br>
 		(May be used always instead of %rs as if serNR and Message are empty just sends plain report.)</li>
 		</li><li> + or - in macro text will increase/decrease CW speed by 5WPM/one mark. 
-		<br>"TU +++599--- 001" will send 599 with 15WPM higer speed.
+		<br>"TU +++599--- 001" will send 599 with 15WPM higher speed.
 		<br><br>Hamlib keyer has some limitations with this: 
 		<br> 1) Version of Hamlib must be at least Hamlib 4.1~git Last commit 2020-10-20 03:22:59 2020 +0000 SHA=8a769c
 		<br> 2) Do not use space(s) between text and +(or -) rigctld will add them I.E. "TU+++599---001"
@@ -78,7 +78,7 @@
     </p><a name=mk1><br></a> <img src="img/misc8.png" name="8"  width="500" height="85">
    </img>
    <p><strong>Memory keys</strong> form has buttons PgUp and PgDn that are not configurable. They alter CW speed in same way as keyboard keys PgUp and PgDn that some, specially laptop computers, may not even have.
-   <br>When using <strong>Memory keys</strong>-form with mouse, or keyboard, you are able to lauch memories by mouse click or by  <strong>F</strong>-key press from keyboard keys. Same with PgUp and PgDn, both are working, keys and mouse click.
+   <br>When using <strong>Memory keys</strong>-form with mouse, or keyboard, you are able to launch memories by mouse click or by  <strong>F</strong>-key press from keyboard keys. Same with PgUp and PgDn, both are working, keys and mouse click.
    <br>You can select what happens when <strong>Memory keys</strong>-form is active and <strong>ENTER</strong> (also called Return) key is pressed, <strong>repeat last clicked memory</strong> (send focused button text)
    , <strong>ignore it</strong> (do nothing) or <strong>save qso</strong>, by selecting that with ENTER section radio buttons in <strong> CW Messages</strong> definition form.</p>
     <a name=mk2><img src=img/h98.png></a><br>
@@ -89,7 +89,7 @@
         <li><strong>word mode</strong> - a whole word is typed, sending starts after pressing
             of the spacebar
         <li><strong>word mode, first word in letter mode</strong> - a combination of above.
-            The keyer begins in letter mode to avoid unneccessary delays, if you type fast enough
+            The keyer begins in letter mode to avoid unnecessary delays, if you type fast enough
             it switches to word mode
         </li>
     </ul>
@@ -100,14 +100,14 @@
       
       <br><br> <strong>Same warning  </strong>with manual typing in word mode: If your typing speed is faster than cw sending you may hit send buffer limit sooner or later.
       <br><br> <strong>Switching radios </strong>while CW sending is going on can cause unexpected results !
-      <br><strong>Always wait</strong> that CW message has finshed before switching radios as it will also switch CW keyers.
+      <br><strong>Always wait</strong> that CW message has finished before switching radios as it will also switch CW keyers.
       <br><strong>Always wait</strong> that selected radio shows frequency in TRXControl before sending a CW message or start using CW Type.
       <br><br>
 
     The <strong>keying speed</strong> can be changed with PgUp (QRQ) and PgDn (QRS) keys
     in 2 WPM steps when <strong>NewQSO</strong>-form is active. In the <strong>CW type</strong>-form when cursor is in text typing area same PgUP/PgDN keys work. Speed can also be changed with the small arrow
     buttons to the right of the speed display. The actual speed is always displayed in the status line of the <strong>New QSO</strong>-form and in <strong>CWType</strong>-forms speed selector.<br><br>
-    The<strong> ESC </strong>key stops running transmit. This may not be supported in all keyers and rigs and is mainly usefull when using word mode or pasted/dropped text.
+    The<strong> ESC </strong>key stops running transmit. This may not be supported in all keyers and rigs and is mainly useful when using word mode or pasted/dropped text.
     <br>
     With HamLib keyer ESC sends hex byte 0xFF as message. Icom rigs halt CW with this. An empty message with Kenwood rigs should use this to stop sending.
     <br>Be aware that this has tested very little.

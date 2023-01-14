@@ -37,9 +37,9 @@
     programs may need a third party conversion utility).
     <br><br>
     Cqrlog now follows ADIF 3.1.0 specification of special UTF8 characters. Mainly they can be found from Name, QTH, Comment and Notes fields. Specification says that when there is special character(s) some adif tags may have suffix _INTL to show this. Like &lt;QTH_INTL:6&gt;Pyhtää
-    <br>If pure ASCII charcters are found the usual tag format is used. Like &lt;QTH:4&gt;Pori
+    <br>If pure ASCII characters are found the usual tag format is used. Like &lt;QTH:4&gt;Pori
     <br>Every time special UTF8 character is found in tags, where specification allows, UTF8 printing routines are used and the _INTL suffix is added.
-    <br>At import side tags with suffix _INTL are read with UTF8 routines. Without _INTL with normal ASCII routines. This makes importing backward compatible with old cqrlog exports that have set tag lenght wrong if there has been special UTF8 characters in tag data.<br><br>
+    <br>At import side tags with suffix _INTL are read with UTF8 routines. Without _INTL with normal ASCII routines. This makes importing backward compatible with old cqrlog exports that have set tag length wrong if there has been special UTF8 characters in tag data.<br><br>
     Go to QSO list (Ctrl-O on the main logging screen or File -> Show QSO list from the menu).
     <br><br>
     <img src="img/h39.png" border="0"><br><br>
@@ -56,9 +56,9 @@
     is so fast that you never notice the progress indicator.<br><br>
     If the ADIF file contains a grid locator (tag MY_GRIDSQUARE) that will be used upon import.
     In the case that this is not present the grid locator from the selected profile will be used.
-    If also that is absent or incorret the default locator from the config will be used.
+    If also that is absent or incorrect the default locator from the config will be used.
     However the user can choose to override a MY_GRIDSQUARE from ADIF file by selecting the checkbox.
-    In this case MY_GRIDSQUARE from the ADIF file is overriden by the locator from the selected profile 
+    In this case MY_GRIDSQUARE from the ADIF file is overridden by the locator from the selected profile 
     or if no profile is selected the default locator from the config is used.<br><br>
     <img src="img/h42.png" border="0"> <img src="img/h42b.png" border="0"><p>
     The  window now shows the import completion, the number of imported records and
@@ -109,7 +109,7 @@
     This function can be used to export contest logs in .edi file format. This export requires a 
     suitable filter to be set. Generally only one band per file is allowed. Also make sure that the
     fields like exchange sent/received are set properly before exporting. If you choose this export
-    you will see the follwing window.
+    you will see the following window.
     <br><br>
     <img src=img/h45f.png><br><br>
     You can set the filename to export to as well as some meta data describing the equipment you
@@ -122,23 +122,23 @@
     </p>
     <p align=center><img src=img/line.png></p>
     <p><a name=ah28><strong>Cabrillo export</strong></a><br><br>
-    This dialog can be used to export contest logs in Carbillo format. Cabrillo is very compilcated to export as
+    This dialog can be used to export contest logs in Cabrillo format. Cabrillo is very complicated to export as
     almost all contests have their own QSO line layout and score counting. That's why Export has no score counting, but it offers
     some statistics from exported qsos to help manual counting of claimed score.<br><br>
     For export  <b>Qso list/filter/create</b> or <b>Qso list/filter/Contest filter </b>has to be set to select qsos to be exported.<br>
     If you used <b>Qso list/filter/Contest filter </b> you can press button <b>Frm Flt</b> to get contest name from filtered result.
     <br><br>QSO-line header follows most used layout and can not be modified, except <b>width of callsign space</b> that affects both calls (my&amp;wkd).
-    <br><b>Use UpCase letters for all QSO records</b> is defaut checked and converts QSO lines to upper case. Mainly changes exchange messages if they have been written with low case letters. This setting can be saved to log settings file.<br>
-    Info sent and rcvd can be modified using selections. Some contests do not use <b>reports, they can be omitted from checbox.</b><br>
+    <br><b>Use UpCase letters for all QSO records</b> is default checked and converts QSO lines to upper case. Mainly changes exchange messages if they have been written with low case letters. This setting can be saved to log settings file.<br>
+    Info sent and rcvd can be modified using selections. Some contests do not use <b>reports, they can be omitted from checkbox.</b><br>
     Exchange1 and Exchange2 can contain data by  selected by selectors with <b>given space width</b> 1-99. If empty they are ignored.<br>
-    <B>TX count</b> is the transmitter count at the end of line. It can also be empty and so ingnored<br>
+    <B>TX count</b> is the transmitter count at the end of line. It can also be empty and so ignored<br>
     Many template layouts to study can be found from <b> http://www.contestlogchecker.com/cabrillo-templates.html</b>
     <br><br>
     With <b>Count pfx</b> user can get statistic count from qsos to certain country. Type in callsign prefix of country. If export thinks prefix is wrong
      it clears column when moved away from it. Then try again. Example: VA is not ok, but VA1 will turn accepted as VE.
     <br><br>
-    Export remebers last used settings (by used log). You can also save and load settings for different contests using <b>save and load buttons</b>.
-    <br>At bottom of form there is prograss indicator and after export there is some statistics and possible error message shown. You can also open resulted Cabrillo file with defined text editor (preferences/external viewers) using button <b>"Open resulted file".</b>
+    Export remembers last used settings (by used log). You can also save and load settings for different contests using <b>save and load buttons</b>.
+    <br>At bottom of form there is progress indicator and after export there is some statistics and possible error message shown. You can also open resulted Cabrillo file with defined text editor (preferences/external viewers) using button <b>"Open resulted file".</b>
     <br>If red error text is displayed after export you can open error log by clicking the red error text line.
     <br><br>
     As cabrillo export output is very basic you may need to edit exported file afterwards with text editor to suit your purposes!
@@ -156,7 +156,7 @@
             <td valign="top"><img src="img/note.png"></td>
             <td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
                 <strong><font color="blue">Note:</font></strong> Very often Cqrlog version update requires just file /usr/bin/cqrlog change to latest version. If your package manager does not support latest version and you have well running old version in use just copy folder ~/.config/cqrlog with all files and subfolders to safe place as backup. Copy also 
-                /usr/bin/cqrlog to same place. Then download the tgz file "Complete application directory for other distributions", extract file /usr/bin/cqrlog from there and copy it to your /usr/bin folder (you need to use root priveleges I.E sudo for that).
+                /usr/bin/cqrlog to same place. Then download the tgz file "Complete application directory for other distributions", extract file /usr/bin/cqrlog from there and copy it to your /usr/bin folder (you need to use root privileges I.E sudo for that).
                 If everything works you have latest version. If not, just copy back your saved folder ~/.config/cqrlog and the old /usr/bin/cqrlog.
             </td>
         </tr>
@@ -186,7 +186,7 @@
             <td valign="top"><img src="img/note.png"></td>
             <td style="width: 100%; text-align: justify; background-color: rgb(204, 255, 255);">
                 <strong><font color="blue">Note:</font></strong> While opening your new country files
-                [see 3.], you dont need to open a particular file. The 'Open' button starts a procedure
+                [see 3.], you don't need to open a particular file. The 'Open' button starts a procedure
                 which reads ALL files in the /ctyfiles folder.
             </td>
         </tr>
@@ -345,7 +345,7 @@ High Speed Club</pre>
     &nbsp;&nbsp;6Y5XG;331;1951-05;-<br>
     &nbsp;&nbsp;7J1AEF;1297;1976-06;-<br><br>
     ie. a <strong>single</strong> call, membership number and datelimits from-to, separated by
-    a semicolon ';', per line. See above the two optins: 6O2NG with membership number 533 was
+    a semicolon ';', per line. See above the two options: 6O2NG with membership number 533 was
     a member of the club from April, 1957 to March, 2005. 6Y5XG with number 331 started his
     membership May, 1951 and is still a member. The dash instead of a date (separated from
     the begin date by a semicolon) denotes that the membership is still active. A dash can
