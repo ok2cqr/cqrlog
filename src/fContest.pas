@@ -407,8 +407,8 @@ begin
     Key := 0;
     SelectNext(Sender as TWinControl, True, True);
   end;
-   if not (key in [VK_A..VK_Z, VK_0..VK_9,
-    VK_LCL_SLASH, VK_DELETE,VK_BACK,VK_RIGHT,VK_LEFT]) then
+   if not (key in [VK_A..VK_Z, VK_0..VK_9,VK_NUMPAD0..VK_NUMPAD9,
+    VK_LCL_SLASH, VK_DELETE,VK_BACK,VK_RIGHT,VK_LEFT,VK_TAB]) then
      key := 0;
 end;
 
