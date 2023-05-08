@@ -602,9 +602,9 @@ begin
     upHamQTH  : Result := 'http://www.hamqth.com/qso_realtime.php';
     upClubLog : begin
                   if (cmd='DELETE') then
-                    Result := 'https://secure.clublog.org/delete.php'
+                    Result := 'https://clublog.org/delete.php'
                   else
-                    Result := 'https://secure.clublog.org/realtime.php'
+                    Result := 'https://clublog.org/realtime.php'
                 end;
     upHrdLog  : Result := 'http://robot.hrdlog.net/NewEntry.aspx'
   end //case
