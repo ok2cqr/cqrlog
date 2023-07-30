@@ -677,6 +677,10 @@ begin
                   end;
       upHrdLog  : begin
                     frmLogUploadStatus.UploadDataToHrdLog;
+                    WhatUpNext := upUDPLog
+                  end;
+      upUDPLog  : begin
+                    frmLogUploadStatus.UploadDataToUDPLog;
                     tmrUploadAll.Enabled := False
                   end;
     end //case

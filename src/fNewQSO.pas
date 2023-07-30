@@ -2331,6 +2331,16 @@ begin
                       if cqrini.ReadBool('OnlineLog','HrUpOnline',False) then
                         frmLogUploadStatus.UploadDataToHrdLog
                     end;
+                    WhatUpNext           := upUDPLog
+                  end;
+      upUDPLog  : begin
+                    if UploadAll then
+                      frmLogUploadStatus.UploadDataToUDPLog(UploadAll)
+                    else begin
+                      // TODO: SHOULD DEFAULT False
+                      if cqrini.ReadBool('OnlineLog','UdUpOnline',True) then
+                        frmLogUploadStatus.UploadDataToUDPLog
+                    end;
                     tmrUploadAll.Enabled := False;
                     UploadAll            := False;
                     WhatUpNext           := upHamQTH

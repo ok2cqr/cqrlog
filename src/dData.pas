@@ -2899,22 +2899,6 @@ begin
           Q1.ExecSQL;
           trQ1.Commit;
 
-          { version older than 1.8.0 may have all tables in MyISAM engine
-            new version has as default InnoDB. Creating Foreign key between
-            tables in two different engines fail with error no 150.
-
-            This happen only when user updates from old version where cqrlog_main was created in
-            MyISAM engine. I hope this won't happen so often, cqrlog can live without
-            this foreign key
-
-          trQ1.StartTransaction;
-          Q1.SQL.Clear;
-          Q1.SQL.Add('ALTER TABLE log_changes');
-          Q1.SQL.Add('ADD FOREIGN KEY (id_cqrlog_main) REFERENCES cqrlog_main (id_cqrlog_main) ON DELETE SET NULL ON UPDATE CASCADE;');
-          if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-          Q1.ExecSQL;
-          trQ1.Commit
-          }
         end;
 
         if not TableExists('upload_status') then
@@ -3688,6 +3672,10 @@ begin
   lQ.ExecSQL;
 
   lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
+  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+  lQ.ExecSQL;
+
+  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_UDPLOG)+',1)';
   if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
   lQ.ExecSQL;
 
