@@ -113,8 +113,7 @@ begin
                   end
                 end;
     upUDPLog : begin
-                  // TODO: SHOULD DEFAULT False
-                  if not cqrini.ReadBool('OnlineLog','UdUP',True) then
+                  if not cqrini.ReadBool('OnlineLog','UdUP',False) then
                   begin
                     if (not ToAll) then
                     begin

@@ -611,8 +611,7 @@ begin
                     Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Code'])
                 end;
     upUDPLog :  begin
-                  // TODO: SHOULD DEFAULT ''
-                  if (cqrini.ReadString('OnlineLog','UdAddress','127.0.0.1:5444')='') then
+                  if (cqrini.ReadString('OnlineLog','UdAddress','')='') then
                     Result := C_UDPLOG + ' ' + Format(C_IS_NOT_SET,['Address'])
                 end
   end //case
@@ -649,8 +648,7 @@ begin
                    data.Add('App=CQRLOG')
                  end;
     upUDPLog  :  begin
-                   // TODO: SHOULD DEFAULT ''
-                   data.Add('Address='+cqrini.ReadString('OnlineLog','UdAddress','127.0.0.1:5444'));
+                   data.Add('Address='+cqrini.ReadString('OnlineLog','UdAddress',''));
                    data.Add('mycall='+cqrini.ReadString('Station', 'Call', ''));
                    data.Add('app=CQRLOG')
                  end;
@@ -948,11 +946,10 @@ end;
 
 function TdmLogUpload.LogUploadEnabled : Boolean;
 begin
-  // TODO: UdUp should default False
   Result := cqrini.ReadBool('OnlineLog','HaUp',False) or
             cqrini.ReadBool('OnlineLog','ClUp',False) or
             cqrini.ReadBool('OnlineLog','HrUp',False) or
-            cqrini.ReadBool('OnlineLog','UdUp',True)
+            cqrini.ReadBool('OnlineLog','UdUp',False)
 end;
 
 procedure TdmLogUpload.DisableOnlineLogSupport;
