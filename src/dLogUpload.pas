@@ -42,6 +42,7 @@ type
     function  RemoveSpaces(s : String) : String;
     function  GetQSOInAdif(id_cqrlog_main : Integer) : String;
     function  EncodeBandForClubLog(band : String) : String;
+    function  EncodeBandForUDPLog(band : String) : String;
     function  ParseHrdLogOutput(Output : String; var Response : String) : Integer;
     procedure AddQSOKeyValue(id_cqrlog_main : Integer; data : TStringList);
   public
@@ -525,6 +526,42 @@ begin
   end
 end;
 
+function TdmLogUpload.EncodeBandForUDPLog(band : String) : String;
+var
+  i : Integer;
+begin
+  case band of
+    '160M'   : Result := '1.8';
+    '80M'    : Result := '3.5';
+    '60M'    : Result := '5';
+    '40M'    : Result := '7';
+    '30M'    : Result := '10';
+    '20M'    : Result := '14';
+    '17M'    : Result := '18';
+    '15M'    : Result := '21';
+    '12M'    : Result := '24';
+    '10M'    : Result := '28';
+    '6M'     : Result := '50';
+    '4M'     : Result := '70';
+    '2M'     : Result := '144';
+    '1.25M'  : Result := '222';
+    '70CM'   : Result := '420';
+    '33CM'   : Result := '902';
+    '23CM'   : Result := '1240';
+    '13CM'   : Result := '2300';
+    '9CM'    : Result := '3300';
+    '6CM'    : Result := '5650';
+    '3CM'    : Result := '10000';
+    '1.25CM' : Result := '24000';
+    '6MM'    : Result := '47000';
+    '4MM'    : Result := '76000';
+    '2MM'    : Result := '142000';
+    '1MM'    : Result := '241000';
+  else
+    Result := '';
+  end;
+end;
+
 function TdmLogUpload.ParseHrdLogOutput(Output : String; var Response : String) : Integer;
 var
   msg    : String = '';
@@ -705,9 +742,7 @@ begin
                      data.Add('IsOriginal=True');
                      data.Add('timestamp='+Q2.FieldByName('qsodate').AsString+' '+Q2.FieldByName('time_on').AsString+':00');
                      data.Add('call='+Q2.FieldByName('callsign').AsString);
-                     {data.Add('band='+copy(Q2.FieldByName('band').AsString, 1, Length(Q2.FieldByName('band').AsString) - 1));}
-                     // TODO: Handle odd bands, liek 3.5MHz
-                     data.Add('band='+IntToStr(trunc(Q2.FieldByName('freq').AsFloat)));
+                     data.Add('band='+EncodeBandForUDPLog(Q2.FieldByName('band').AsString));
                      data.Add('mode='+Q2.FieldByName('mode').AsString);
                      data.Add('rxfreq='+IntToStr(round(Q2.FieldByName('freq').AsFloat*100000)));
                      data.Add('txfreq='+IntToStr(round(Q2.FieldByName('freq').AsFloat*100000)));
@@ -773,9 +808,7 @@ begin
       upUDPLog  :  begin
                      data.Add('timestamp='+Q2.FieldByName('old_qsodate').AsString+' '+Q2.FieldByName('old_time_on').AsString+':00');
                      data.Add('call='+Q2.FieldByName('old_callsign').AsString);
-                     {data.Add('band='+copy(Q2.FieldByName('band').AsString, 1, Length(Q2.FieldByName('band').AsString) - 1));}
-                     // TODO: Handle odd bands, liek 3.5MHz
-                     data.Add('band='+IntToStr(trunc(Q2.FieldByName('old_freq').AsFloat)));
+                     data.Add('band='+EncodeBandForUDPLog(Q2.FieldByName('old_band').AsString));
                      data.Add('mode='+Q2.FieldByName('old_mode').AsString);
                      data.Add('rxfreq='+IntToStr(round(Q2.FieldByName('old_freq').AsFloat*100000)));
                      data.Add('txfreq='+IntToStr(round(Q2.FieldByName('old_freq').AsFloat*100000)));
