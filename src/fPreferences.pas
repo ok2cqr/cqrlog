@@ -186,6 +186,7 @@ type
     chkClUpOnline: TCheckBox;
     chkUdUpEnabled: TCheckBox;
     chkUdUpOnline: TCheckBox;
+    chkUdIncExch: TCheckBox;
     chkShow630M : TCheckBox;
     chkRBNAutoConn : TCheckBox;
     chkShowMiles : TCheckBox;
@@ -1709,6 +1710,7 @@ begin
   cqrini.WriteBool('OnlineLog','UdUP',chkUdUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','UdUpOnline',chkUdUpOnline.Checked);
   cqrini.WriteString('OnlineLog','UdAddress',edtUdAddress.Text);
+  cqrini.WriteBool('OnlineLog','UdIncExch',chkUdIncExch.Checked);
   cqrini.WriteInteger('OnlineLog','UdColor',cmbUdColor.Selected);
 
   cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
@@ -2419,6 +2421,7 @@ end;
 procedure TfrmPreferences.chkUdUpEnabledChange(Sender: TObject);
 begin
   edtUdAddress.Enabled  := chkUdUpEnabled.Checked;
+  chkUdIncExch.Enabled  := chkUdUpEnabled.Checked;
   chkUdUpOnline.Enabled := chkUdUpEnabled.Checked;
   cmbUdColor.Enabled    := chkUdUpEnabled.Checked
 end;
@@ -3360,6 +3363,7 @@ begin
   chkUdUpEnabled.Checked := cqrini.ReadBool('OnlineLog','UdUP',False);
   chkUdUpOnline.Checked  := cqrini.ReadBool('OnlineLog','UdUpOnline',False);
   edtUdAddress.Text      := cqrini.ReadString('OnlineLog','UdAddress','');
+  chkUdIncExch.Checked   := cqrini.ReadBool('OnlineLog','UdIncExch',True);
   cmbUdColor.Selected    := cqrini.ReadInteger('OnlineLog','UdColor',clGreen);
   chkUdUpEnabledChange(nil);
 

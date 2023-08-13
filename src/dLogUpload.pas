@@ -611,9 +611,17 @@ begin
     }
     data.Add('power='+Q1.FieldByName('pwr').AsString);
     data.Add('contestname='+Q1.FieldByName('contestname').AsString);
-    data.Add('sntnr='+Q1.FieldByName('stx').AsString);
-    data.Add('rcvnr='+Q1.FieldByName('srx').AsString);
     data.Add('operator='+Q1.FieldByName('operator').AsString);
+    if cqrini.ReadBool('OnlineLog','UdIncExch',True) then
+    begin
+      data.Add('sntnr='+Q1.FieldByName('stx').AsString);
+      data.Add('rcvnr='+Q1.FieldByName('srx').AsString)
+    end
+    else
+    begin
+      data.Add('sntnr=');
+      data.Add('rcvnr=');
+    end;
 
   finally
     Q1.Close;

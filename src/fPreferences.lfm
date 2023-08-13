@@ -9776,7 +9776,7 @@ object frmPreferences: TfrmPreferences
           Selected = clGreen
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           ItemHeight = 28
-          TabOrder = 3
+          TabOrder = 4
         end
         object Label194: TLabel
           Left = 237
@@ -9785,6 +9785,16 @@ object frmPreferences: TfrmPreferences
           Width = 324
           Caption = 'color to show information in status upload window'
           ParentColor = False
+        end
+        object chkUdIncExch: TCheckBox
+          Left = 272
+          Height = 23
+          Top = 40
+          Width = 189
+          Caption = 'Include contest exchange'
+          Checked = True
+          State = cbChecked
+          TabOrder = 3
         end
       end
     end
