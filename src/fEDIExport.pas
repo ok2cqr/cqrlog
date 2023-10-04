@@ -199,6 +199,7 @@ var
   message : String;
   Operators : TStringList;
   OpString : String;
+  DBRecordCount : integer =0; //holds max record count;
 begin
   SaveSettings;
   date := dmUtils.GetDateTime(0);
@@ -269,7 +270,10 @@ begin
   try try
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
+    dmData.Q.Last; //to get proper count
     pbExport.Max := dmData.Q.RecordCount;
+    DBRecordCount :=  dmData.Q.RecordCount;
+    dmData.Q.First;
     while not dmData.Q.Eof do
     begin
       inc(QsoMax);
@@ -312,7 +316,7 @@ begin
       if (i = 1)
       then
          startdate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
-      if (i = dmData.Q.RecordCount)
+      if (i = DBRecordCount)
       then
          enddate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
       if length(loc) = 4 then loc := loc +'LL';

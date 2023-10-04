@@ -82,10 +82,12 @@ type
     acReminder: TAction;
     acContest: TAction;
     acRemoteModeADIF: TAction;
+    acCounty: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
     acUploadToClubLog: TAction;
     acUploadToHamQTH: TAction;
+    acUploadToUDPLog: TAction;
     acTune : TAction;
     btnClearSatellite : TButton;
     cbOffline: TCheckBox;
@@ -133,6 +135,8 @@ type
     MenuItem40: TMenuItem;
     MenuItem41: TMenuItem;
     MenuItem43: TMenuItem;
+    MenuItem45: TMenuItem;
+    MenuItem46: TMenuItem;
     MenuItem51: TMenuItem;
     MenuItem52: TMenuItem;
     MenuItem53: TMenuItem;
@@ -140,6 +144,7 @@ type
     MenuItem57: TMenuItem;
     MenuItem58: TMenuItem;
     MenuItem63: TMenuItem;
+    MenuItem84: TMenuItem;
     MenuItem94 : TMenuItem;
     mnueQSLView: TMenuItem;
     mnuRemoteModeADIF: TMenuItem;
@@ -357,6 +362,7 @@ type
     sbtnQSL: TSpeedButton;
     sgrdStatistic : TStringGrid;
     btnSunRise: TSpeedButton;
+    sgrdCallStatistic: TStringGrid;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     btnSunSet: TSpeedButton;
@@ -364,6 +370,7 @@ type
     tabDXCCStat : TTabSheet;
     tabSatellite : TTabSheet;
     tabLOConfig: TTabSheet;
+    tabCallStat: TTabSheet;
     tmrADIF: TTimer;
     tmrWsjtSpd: TTimer;
     tmrWsjtx: TTimer;
@@ -377,6 +384,7 @@ type
     procedure acBigSquareExecute(Sender: TObject);
     procedure acCommentToCallsignExecute(Sender : TObject);
     procedure acContestExecute(Sender: TObject);
+    procedure acCountyExecute(Sender: TObject);
     procedure acCWFKeyExecute(Sender: TObject);
     procedure acHotkeysExecute(Sender: TObject);
     procedure acLocatorMapExecute(Sender: TObject);
@@ -401,6 +409,7 @@ type
     procedure acUploadToClubLogExecute(Sender: TObject);
     procedure acUploadToHamQTHExecute(Sender: TObject);
     procedure acUploadToHrdLogExecute(Sender: TObject);
+    procedure acUploadToUDPLogExecute(Sender: TObject);
     procedure acPropExecute(Sender: TObject);
     procedure btnClearSatelliteClick(Sender : TObject);
     procedure cbRxLoChange(Sender: TObject);
@@ -418,8 +427,10 @@ type
     procedure dbgrdQSOBeforeColumnSized(Sender: TObject);
     procedure edtAwardEnter(Sender: TObject);
     procedure edtCallChange(Sender: TObject);
+    procedure edtDateChange(Sender: TObject);
     procedure edtDateEnter(Sender: TObject);
     procedure edtDXCCRefEnter(Sender: TObject);
+    procedure edtEndTimeChange(Sender: TObject);
     procedure edtEndTimeEnter(Sender: TObject);
     procedure edtGridChange(Sender: TObject);
     procedure edtGridEnter(Sender: TObject);
@@ -437,6 +448,7 @@ type
     procedure edtRXFreqChange(Sender: TObject);
     procedure edtRXFreqExit(Sender: TObject);
     procedure edtRXLOExit(Sender: TObject);
+    procedure edtStartTimeChange(Sender: TObject);
     procedure edtStartTimeEnter(Sender: TObject);
     procedure edtStateEnter(Sender: TObject);
     procedure edtTXLOExit(Sender: TObject);
@@ -451,6 +463,10 @@ type
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
+    procedure MenuItem46Click(Sender: TObject);
+    procedure MenuItem95Click(Sender: TObject);
+    procedure MenuItem96Click(Sender: TObject);
+    procedure MenuItem45Click(Sender: TObject);
     procedure mnuQrzClick(Sender: TObject);
     procedure mnuIK3QARClick(Sender: TObject);
     procedure mnuHamQthClick(Sender : TObject);
@@ -565,6 +581,7 @@ type
     procedure mnuIOTAClick(Sender: TObject);
     procedure mnuQSOBeforeClick(Sender: TObject);
     procedure mnuQSOListClick(Sender: TObject);
+    procedure pgDetailsChange(Sender: TObject);
     procedure popEditQSOPopup(Sender: TObject);
     procedure sbtnAttachClick(Sender: TObject);
     procedure sbtnLocatorMapClick(Sender: TObject);
@@ -619,11 +636,9 @@ type
     WhatUpNext : TWhereToUpload;
     UploadAll  : Boolean;
     WsjtxDecodeRunning : boolean;
-
+    DiffCalls          : byte;
     RememberAutoMode : Boolean;
     IsJS8Callrmt     : Boolean; //way to isolate adif from JS8's JSON
-
-    Op         : String;
     QSLcfm,
     eQSLcfm,
     LoTWcfm    : String;
@@ -632,7 +647,6 @@ type
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
     procedure ChangeReports;
-    procedure ShowStatistic(ref_adif : Word);
     procedure CalculateDistanceEtc;
     procedure SetDateTime(EndTime : Boolean = True);
     procedure CheckCallsignClub;
@@ -647,9 +661,6 @@ type
     procedure CheckQSLImage;
     procedure ShowCountryInfo;
     procedure InsertNameQTH;
-    procedure UpdateFKeyLabels;
-    procedure ClearStatGrid;
-    procedure AddBandsToStatGrid;
     procedure LoadSettings;
     procedure SaveSettings;
     procedure ChangeCallBookCaption;
@@ -674,7 +685,7 @@ type
 
     function CheckFreq(freq : String) : String;
     procedure WaitWeb(secs:integer);
-    procedure ShowOperator;
+    function RigCmd2DataMode(mode:String):String;
     procedure StartUpRemote;
     procedure NewLogSplash;
 
@@ -688,19 +699,21 @@ type
     ShowWin     : Boolean;
     LastFkey    : Word;
     old_t_band  : String;
-    RemoteName  : String;
+    RemoteName  : String; //with wsjt has name from UDP datagram
+    RemoteActive: String; //Actve remote name, empty if no remote running.
+    CallFromSpot: Boolean; //Used with wsjtx UDP#15
+    Op          : String;
 
     WsjtxSock             : TUDPBlockSocket; //receive socket
     WsjtxSockS            : TUDPBlockSocket; //multicast send socket
     ADIFSock              : TUDPBlockSocket;
 
-    WsjtxMode             : String;          //Moved from private
+    WsjtxMode             : String;    //Moved from private
     WsjtxBand             : String;
-    wHiSpeed              : integer;      // when packets received :udp polling speeds (tmrWsjtx)
-    wLoSpeed              : integer;     // when running idle
-    old_call              : String;               //Moved from private
-    was_call              : String;            //holds recent edtCallsign.text before it was cleared
-
+    wHiSpeed              : integer;   // when packets received :udp polling speeds (tmrWsjtx)
+    wLoSpeed              : integer;   // when running idle
+    old_call              : String;    //Moved from private
+    was_call              : String;    //holds recent edtCallsign.text before it was cleared
     FldigiXmlRpc          : Boolean;
     AnyRemoteOn           : Boolean;     //true if any of remotes fldigi,wsjt,or ADIF is active);
 
@@ -716,10 +729,11 @@ type
 
     property EditQSO : Boolean read fEditQSO write fEditQSO default False;
     property ViewQSO : Boolean read fViewQSO write fViewQSO default False;
+    procedure ShowOperator;
 
     procedure DisableRemoteMode;   //Moved from private
     procedure SaveRemote;
-    procedure GetCallInfo(callTOinfo,mode,rsts:string);
+    procedure GetCallInfo(callTOinfo,mode,rsts:string);    //used with wsjtx remote
 
     procedure OnBandMapClick(Sender:TObject;Call,Mode : String;Freq:Currency);
     procedure AppIdle(Sender: TObject; var Handled: Boolean);
@@ -741,6 +755,7 @@ type
     procedure UploadAllQSOOnline;
     procedure ReturnToNewQSO;
     procedure InitializeCW;
+    procedure UpdateFKeyLabels;
     procedure RunVK(key_pressed: String);
     procedure RunST(script: String);
   end;
@@ -813,7 +828,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, f
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest, fXfldigi, dMembership, dSatellite;
+     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat;
 
 
 
@@ -856,6 +871,8 @@ begin
   end
 end;
 
+
+
 procedure TDOKTabThread.Execute;
 var
   data   : string;
@@ -880,6 +897,7 @@ begin
   if  edtCall.Text <> callTOinfo then  //call (and web info) maybe there already ok from pevious status packet
   begin
     edtCall.Text := '';//clean grid like double ESC does
+    Sleep(200); //to be sure edtCallChange has time to run;
     old_ccall := '';
     old_cfreq := '';
     old_cmode := '';
@@ -905,6 +923,7 @@ begin
     rsts:= '+'+rsts
   end;
   edtHisRST.Text := rsts;
+  SendToBack;
 end;
 
 procedure TfrmNewQSO.WaitWeb(secs:integer);
@@ -1005,38 +1024,6 @@ begin
   finally
     c_running := False
   end
-end;
-
-procedure TfrmNewQSO.ClearStatGrid;
-var
-  i,y : Integer;
-begin
-  for i:= 0 to sgrdStatistic.ColCount-1 do
-    for y := 0 to sgrdStatistic.RowCount-1 do
-      sgrdStatistic.Cells[i,y] := '   ';
-  with sgrdStatistic do
-  begin
-    Cells[0, 1] := 'SSB';
-    Cells[0, 2] := 'CW';
-    Cells[0, 3] := 'DIGI'
-  end
-end;
-
-procedure TfrmNewQSO.AddBandsToStatGrid;
-var
-  i : Integer;
-begin
-  sgrdStatistic.ColCount  := cMaxBandsCount;
-
-  for i:=0 to cMaxBandsCount-1 do
-  begin
-    if dmUtils.MyBands[i][0]='' then
-    begin
-      sgrdStatistic.ColCount  := i+1;
-      break
-    end;
-    sgrdStatistic.Cells[i+1,0] := dmUtils.MyBands[i][1];
-  end;
 end;
 
 procedure TfrmNewQSO.SetDateTime(EndTime : Boolean =  True);
@@ -1244,12 +1231,13 @@ procedure TfrmNewQSO.ClearGrayLineMapLine;
 var
   lat,long :currency;
 Begin
-  frmGrayLine.ob^.GC_line_clear;
+  frmGrayLine.ob^.GC_line_clear; //clear short and long path lines
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(CurrentMyLoc),lat,long);
   lat := lat*-1;
   frmGrayLine.ob^.jachcucaru(true,long,lat,long+0.03,lat+0.03); //trying to make own qth dot a bit bigger
                                                                 //the Grayline window zoom affects to visibility anyhow
   frmGrayline.Refresh;
+  frmRotControl.BeamDir:=-1;
 end;
 
 procedure TfrmNewQSO.ClearAll;
@@ -1277,6 +1265,7 @@ begin
     end;
     edtDate.ReadOnly  := False;
     mComment.ReadOnly := False;
+    edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
   end;
   sbtnQRZ.Visible        := False;
   sbtnLoTW.Visible       := False;
@@ -1431,8 +1420,12 @@ begin
     dmData.qQSOBefore.EnableControls;
   end;
   ChangeCallBookCaption;
-  ClearStatGrid;
-  AddBandsToStatGrid;
+  dmUtils.ClearStatGrid(sgrdStatistic);
+  dmUtils.AddBandsToStatGrid(sgrdStatistic);
+  dmUtils.ClearStatGrid(sgrdCallStatistic);
+  dmUtils.AddBandsToStatGrid(sgrdCallStatistic);
+  tabDXCCStat.Caption:='DXCC statistic';
+  tabCallStat.Caption:='Call statistic';
   ClearGrayLineMapLine;
 
   if not AnyRemoteOn then
@@ -1474,7 +1467,13 @@ begin
 
   if cqrini.ReadBool('CW', 'NoReset', false) then     //is set: user does not want reset CW keyer at rig switch/init
                                         InitializeCW; //so we have to do it at least once: Here.
-  Op := '';
+
+  Op := cqrini.ReadString('NewQSO', 'Op', '');
+  if OP<>'' then
+   begin
+    cqrini.WriteString('TMPQSO','OP',Op);
+    ShowOperator;
+   end;
 
   if dbgrdQSOBefore.Visible then
     mnuQSOBefore.Caption := 'Disable QSO before grid'
@@ -1497,15 +1496,7 @@ begin
   end;
 
   if frmTRXControl.Showing then
-  begin
-    if frmTRXControl.rbRadio1.Checked then
-      tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
-    else
-      tmrRadio.Interval := cqrini.ReadInteger('TRX2','Poll',500)
-  end
-  else begin
-    tmrRadio.Interval := cqrini.ReadInteger('TRX1','Poll',500)
-  end;
+      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'Poll',500);
 
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
@@ -1579,10 +1570,13 @@ begin
     frmDXCluster.BringToFront
   end;
 
-  pgDetails.Pages[1].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
-  pgDetails.Pages[2].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
-  if cqrini.ReadBool('NewQSO','SatelliteMode',False) then
-    frmNewQSO.pgDetails.TabIndex := 1;
+  if not cqrini.ReadBool('NewQSO','SatelliteMode', False) then
+      if  (cqrini.ReadInteger('NewQSO','DetailsTabIndex', 0)>1 ) then
+          cqrini.WriteInteger('NewQSO','DetailsTabIndex',1);
+
+  frmNewQSO.pgDetails.TabIndex:=  cqrini.ReadInteger('NewQSO','DetailsTabIndex', 0);
+  frmNewQSO.pgDetails.Pages[2].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
+  frmNewQSO.pgDetails.Pages[3].TabVisible := cqrini.ReadBool('NewQSO','SatelliteMode', False);
 
   //this have to be done here when log is selected (settings at database)
   frmReminder.chRemi.Checked := cqrini.ReadBool('Reminder','chRemi',False);
@@ -1775,6 +1769,7 @@ begin
   cqrini.DeleteKey('TMPQSO','PWR');
   cqrini.DeleteKey('TMPQSO','OP');
   cqrini.WriteBool('NewQSO','AutoMode',chkAutoMode.Checked);
+  cqrini.WriteInteger('NewQSO','DetailsTabIndex', pgDetails.TabIndex);
   SavePosition;
   cqrini.WriteBool('NewQSO','ShowGrd',dbgrdQSOBefore.Visible);
   if cqrini.ReadBool('xplanet','close',False) then
@@ -1843,13 +1838,16 @@ begin
   EscFirstPressDone := False;
   ChangeDXCC   := False;
 
+  RemoteActive:='';
+
   CurrentMyLoc := cqrini.ReadString('Station','LOC','');
   ClearAll;
-  AddBandsToStatGrid;
+  dmUtils.AddBandsToStatGrid(sgrdStatistic);
+  dmUtils.AddBandsToStatGrid(sgrdCallStatistic);
   edtCall.SetFocus;
   tmrRadio.Enabled := True;
   tmrStart.Enabled := True;
-
+  if cqrini.ReadBool('Modes', 'Rig2Data', False) then chkAutoMode.Font.Color:=clRed;
   dmUtils.UpdateHelpBrowser;
   dmSatellite.SetListOfSatellites(cmbSatellite); //load combo box lists
   dmSatellite.SetListOfPropModes(cmbPropagation);
@@ -1859,6 +1857,8 @@ begin
 
   if cqrini.ReadString('Station','Call','') = '' then
      NewLogSplash;
+
+   dmUtils.UpdateCallBookcnf;  //renames old user and pass of ini file
 end;
 
 procedure TfrmNewQSO.tmrEndStartTimer(Sender: TObject);
@@ -2162,7 +2162,7 @@ begin
                                                                   edtCall.Text := uppercase(data);
                                                                   c_lock :=false;
                                                                   edtCallExit(nil);   //does info fetch
-                                                                  WaitWeb(5);  //wait for web response 5sec timeout
+                                                                  WaitWeb(2);  //wait for web response 5sec timeout
                                                                  end;
                                                   'GRIDSQUARE' :Begin
                                                                      data := uppercase(data);
@@ -2255,7 +2255,7 @@ begin
       if (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
       begin
         if( mode <> '') and chkAutoMode.Checked then
-          cmbMode.Text := mode;
+          cmbMode.Text := RigCmd2DataMode(mode);
         if (freq <> empty_freq) then
         begin
           cmbFreq.Text := freq;
@@ -2330,6 +2330,15 @@ begin
                     else begin
                       if cqrini.ReadBool('OnlineLog','HrUpOnline',False) then
                         frmLogUploadStatus.UploadDataToHrdLog
+                    end;
+                    WhatUpNext           := upUDPLog
+                  end;
+      upUDPLog  : begin
+                    if UploadAll then
+                      frmLogUploadStatus.UploadDataToUDPLog(UploadAll)
+                    else begin
+                      if cqrini.ReadBool('OnlineLog','UdUpOnline',False) then
+                        frmLogUploadStatus.UploadDataToUDPLog
                     end;
                     tmrUploadAll.Enabled := False;
                     UploadAll            := False;
@@ -2431,6 +2440,7 @@ var
   Dtim     : TDateTime;
   Dfreq    : Integer;
   new      : Boolean;
+  newstart : Boolean;
   TXEna    : Boolean;
   TXOn     : Boolean;
   i        : word;
@@ -2626,6 +2636,7 @@ begin
 
     1 : begin //Status
           new := false;
+          newstart := false;
           ParStr := StrBuf(index);
           if dmData.DebugLevel>=1 then Writeln('Status Id:', ParStr);
           //----------------------------------------------------
@@ -2648,17 +2659,19 @@ begin
           end;
 
           ParStr := dmUtils.GetBandFromFreq(mhz);
-          if ParStr<>WsjtxBand then
+          if (ParStr<>WsjtxBand) then
           begin
             new := true;
+            newstart:= WsjtxBand=''; //clean start do not use for wsjtx cleaning
             WsjtxBand := ParStr
           end;
           if dmData.DebugLevel>=1 then Writeln('Band :', WsjtxBand);
           //----------------------------------------------------
           ParStr := StrBuf(index);
-          if ParStr<>WsjtxMode then
+          if (ParStr<>WsjtxMode) then
           begin
             new :=true;
+            newstart:= Wsjtxmode=''; //clean start do not use for wsjtx cleaning
             WsjtxMode := ParStr;
           end;
           if dmData.DebugLevel>=1 then Writeln('Mode:', WsjtxMode);
@@ -2706,8 +2719,6 @@ begin
           ContestNr := ui8Buf(index);
           if dmData.DebugLevel>=1 then Writeln('Contest nr: ', ContestNr);
 
-
-
           //----------------------------------------------------
           if TXEna and TXOn then
           begin
@@ -2719,22 +2730,49 @@ begin
                                                 else frmMonWsjtx.DblClickCall :='';
                                               if dmData.DebugLevel>=1 then Writeln('Change 2click call to:',frmMonWsjtx.DblClickCall);
                                             end;
-
-            GetCallInfo(call,WsjtxMode,rstS); //call web info
-
-            //these can be altered always
-            if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
+          end;
+          //these can be altered always
+          if dmUtils.GetBandFromFreq(mhz) <> '' then   //then add new values from status msg
+           begin
             cmbFreq.Text := mhz;
             cmbMode.Text := TXmode;
+           end;
 
-          end;
-          //----------------------------------------------------
-          if new then
-          begin
-            edtCall.Text := '';//clean grid like double ESC does
-            old_ccall := '';
-            old_cfreq := '';
-            old_cmode := '';
+          //callsign can be changed during RX or TX if band does not change
+          if not new then
+            begin
+             if (call <> edtCall.Text) then
+              Begin
+               if (DiffCalls < 3) then
+                  inc( DiffCalls )
+                else
+                 Begin
+                  GetCallInfo(call,WsjtxMode,rstS);
+                  DiffCalls := 0;
+                 end;
+              end
+             else //same calls
+                 DiffCalls := 0;
+            end
+          else //band changes
+           begin
+            new := False;
+            if (frmNewQSO.RepHead <> '') and (not CallFromSpot) and (not newstart) then
+             //clean wsjtx's DXCall and DXGrid and do GenStdMsg(to clean it too)
+               Begin
+                 frmMonWsjtx.SendConfigure('','',' ',' ',$7FFFFFFF,$7FFFFFFF,$7FFFFFFF,False,True);
+               end;
+            if not CallFromSpot then
+               Begin
+                  edtCall.Text := '';//clean grid like double ESC does
+                  Sleep(200); //to be sure edtCallChange has time to run;
+                  old_ccall := '';
+                  old_cfreq := '';
+                  old_cmode := '';
+               end
+            else
+              CallFromSpot:=False;
+
             if (frmMonWsjtx <> nil) and frmMonWsjtx.Showing then
               Begin
                frmMonWsjtx.NewBandMode(WsjtxBand,WsjtxMode);
@@ -2746,7 +2784,7 @@ begin
                   btnClearSatelliteClick(nil); //if band changes sat and prop cleared
                  end;
               end;
-          end
+           end  //band changes
         end; //Status
 
 
@@ -2900,6 +2938,8 @@ begin
           if dmData.DebugLevel>=1 then Writeln('Call decoded #5:', call,'  edtCall:',edtCall.Text );
           if  edtCall.Text <> call then  //call (and web info) maybe there already ok from status packet
                            Begin
+                             edtCall.Text := '';
+                             Sleep(200); //to be sure edtCallChange has time to run;
                              edtCall.Text := call;
                              c_lock:=False;
                              edtCallExit(nil);    //<--------this will fetch web info
@@ -3006,7 +3046,7 @@ begin
            if dmData.DebugLevel>=1 then Writeln('timespec: ', ParNum);
            //----------------------------------------------------
            if dmData.DebugLevel>=1 then Writeln('Remote name: ', RemoteName);
-           if RemoteName = 'WSJT-X' then   //no contest in JTDX
+           if Pos('WSJT',RemoteName)>0 then   //no contest in JTDX
             begin
                  if dmData.DebugLevel>=1 then Writeln('Tail logging part entered');
                  OpCall := UpperCase(trim(StrBuf(index)));  //operator callsign (in contest, club etc.)
@@ -3069,7 +3109,11 @@ begin
                       5,6       : edtContestName.Text := ContestName[ContestNr]+'-QSO';
                  end;
                  case ContestNr of
-                      1,2,3,4   :  edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+                      1,2,3,4   : Begin
+                                       edtContestSerialReceived.Text := copy( edtContestSerialReceived.Text,1,6); //Max Db length=6
+                                       if (frmContest.Showing and (frmContest.cmbContestName.Text<>'')) then
+                                            edtContestName.Text :=frmContest.cmbContestName.Text;
+                                  end;
                  end;
            end;
            //----------this is not yet in wsjt-x 2.2.2 and JTDX 2.1.0rc151------------------
@@ -3241,10 +3285,17 @@ begin
   //Writeln('OldPfx:',old_pfx);
   //Writeln('ChangeDXCC:',ChangeDXCC);
 
+  {
   if (old_call = edtCall.Text) and (old_adif <> adif) then
     ChangeDXCC := True; //if user chooses another country by direct enter to the edtDXCCref
                      //without clicking to btnDXCCRef
 
+   OH1KH 2022.12.30
+
+    Above does not work as EDITQSO does not properly set adif and old_adif from qso data from database.
+    Force changes always via btnDXCCRef.
+    Otherwise EditQSO changes to DXCCref are not saved. (because old_adf & adif values are false set)
+    }
   if not TryStrToFloat(edtRXFreq.Text, RxFreq) then
     RxFreq := 0;
 
@@ -3394,14 +3445,30 @@ begin
   end;
   if fEditQSO and (not fromNewQSO) then
   begin
-    dmData.RefreshMainDatabase(id)
+    dmData.RefreshMainDatabase(id);
+    if cqrini.ReadBool('OnlineLog','IgnoreEdit',False) then
+     Begin
+       dmLogUpload.DisableOnlineLogSupport;
+       dmLogUpload.EnableOnlineLogSupport;
+     end;
   end;
   if not AnyRemoteOn then
                        UnsetEditLabel;
   dmData.qQSOBefore.Close;
 
   was_call := edtCall.Text;
-  edtCall.Text := ''; //calls ClearAll
+  edtCall.Text := ''; //calls ClearAll  (except when EDITQSO to be sure that callsign changes do not clear all)
+  Sleep(200); //to be sure edtCallChange has time to run;
+
+  if (cqrini.ReadBool('NewQSO','RefreshAfterSave', True) and frmMain.Showing) then
+    begin
+     frmMain.acRefresh.Execute;
+     if not fEditQso then
+                   frmMain.dbgrdMainKeyUp(nil,key,[ssCtrl]); //shows last logged qso
+
+    end;
+  if fEditQso then
+             ClearAll;
   old_ccall := '';
   old_cfreq := '';
   old_cmode := '';
@@ -3409,16 +3476,7 @@ begin
   if cqrini.ReadBool('NewQSO','ClearRIT',False) then
     frmTRXControl.ClearRIT;
 
-  if (cqrini.ReadBool('NewQSO','RefreshAfterSave', True) and frmMain.Showing) then
-   begin
-    frmMain.acRefresh.Execute;
-    if not fEditQso then
-                  frmMain.dbgrdMainKeyUp(nil,key,[ssCtrl]); //shows last logged qso
-
-   end;
-
-  fEditQSO := False;
-
+  fEditQSO := False; //this should be cleared by clearAll. Needed here ???
   UploadAllQSOOnline;
   if frmWorkedGrids.Showing then frmWorkedGrids.UpdateMap;
   Op := cqrini.ReadString('TMPQSO','OP','');
@@ -3435,7 +3493,10 @@ begin
           frmMain.dbgrdMain.SetFocus
         end
         else
-          edtCall.SetFocus;
+         Begin
+          if cbOffline.Checked then edtDate.SetFocus
+                               else edtCall.SetFocus;
+         end;
      end;
 
 end;
@@ -3518,7 +3579,7 @@ begin
     old_adif := adif;
     ShowCountryInfo;
     ChangeReports;
-    ShowStatistic(adif)
+    dmUtils.ShowStatistic(adif,old_stat_adif,sgrdStatistic);
   end;
 
   CalculateDistanceEtc;
@@ -3632,7 +3693,14 @@ begin
   begin
     edtStartTime.SetFocus;
     key := 0
-  end
+  end;
+  if ( ((length(edtDate.Text)=5) or (length(edtDate.Text)=8))
+    and ((key = VK_BACK) or (key = VK_DELETE))
+    and (not AnyRemoteOn and cbOffline.Checked) ) then     //auto del "-"
+     begin
+        edtDate.Text:=copy(edtDate.Text,1,length(edtDate.Text)-2);
+        key := 0
+     end;
 end;
 
 
@@ -3711,6 +3779,18 @@ begin
     mComment.SetFocus;
     key := 0
   end;
+  if ((key = VK_TAB) and cbOffline.Checked and (edtCall.Text='') and (not AnyRemoteOn)) then
+   Begin
+     edtCall.SetFocus;
+     key := 0
+   end;
+   if ((length(edtEndTime.Text)=3)
+    and ((key = VK_BACK) or (key = VK_DELETE))
+    and (not AnyRemoteOn and cbOffline.Checked) ) then //aute del ":"
+     begin
+        edtEndTime.Text:=copy(edtEndTime.Text,1,length(edtEndTime.Text)-2);
+        key := 0
+     end;
 end;
 
 
@@ -3965,7 +4045,14 @@ begin
   begin
     edtEndTime.SetFocus;
     key := 0
-  end
+  end;
+  if ((length(edtStartTime.Text)=3)
+    and ((key = VK_BACK) or (key = VK_DELETE))
+    and (not AnyRemoteOn and cbOffline.Checked) ) then //aute del ":"
+     begin
+        edtStartTime.Text:=copy(edtStartTime.Text,1,length(edtStartTime.Text)-2);
+        key := 0
+     end;
 end;
 
 procedure TfrmNewQSO.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -4138,13 +4225,14 @@ begin
 
       waz := q.Fields[8].AsString;
       itu := q.Fields[7].AsString;
+      adif:= q.Fields[9].AsInteger;
       dmUtils.ModifyWAZITU(waz,itu);
       edtWAZ.Text        := waz;
       edtITU.Text        := itu;
 
       lblHisTime.Caption := dmUtils.HisDateTime(edtDXCCRef.Text);
       ShowCountryInfo;
-      ShowStatistic(q.FieldByName('ADIF').AsInteger);
+      dmUtils.ShowStatistic(q.FieldByName('ADIF').AsInteger,old_stat_adif,sgrdStatistic);
       if dmData.GetIOTAForDXCC(edtCall.Text, lblDXCC.Caption, cmbIOTA, dmUtils.MyStrToDate(edtDate.Text)) then
         lblIOTA.Font.Color := clRed
       else
@@ -4408,7 +4496,20 @@ begin
   if frmSCP.Showing and (Length(edtCall.Text)>2) then
     frmSCP.mSCP.Text := dmData.GetSCPCalls(edtCall.Text)
   else
-    frmSCP.mSCP.Clear
+    frmSCP.mSCP.Clear;
+  lblGrid.Font.Style:=[];
+  lblGrid.Font.Color:=clDefault;
+end;
+
+procedure TfrmNewQSO.edtDateChange(Sender: TObject);
+begin
+  if  cbOffline.Checked and not AnyRemoteOn then
+  begin
+    if  (length(edtDate.Text)=4) or (length(edtDate.Text)=7) then //auto "-"
+     edtDate.Text:=edtDate.Text+'-';
+    edtDate.SelStart:=length(edtDate.Text);
+    edtDate.SelLength:=0;
+  end;
 end;
 
 procedure TfrmNewQSO.edtDateEnter(Sender: TObject);
@@ -4419,6 +4520,17 @@ end;
 procedure TfrmNewQSO.edtDXCCRefEnter(Sender: TObject);
 begin
   edtDXCCRef.SelectAll
+end;
+
+procedure TfrmNewQSO.edtEndTimeChange(Sender: TObject);
+begin
+    if  cbOffline.Checked and not AnyRemoteOn then
+  begin
+    if  (length(edtEndTime.Text)=2) then //auto ":"
+     edtEndTime.Text:=edtEndTime.Text+':';
+    edtEndTime.SelStart:=length(edtEndTime.Text);
+    edtEndTime.SelLength:=0;
+  end;
 end;
 
 procedure TfrmNewQSO.edtEndTimeEnter(Sender: TObject);
@@ -4432,6 +4544,7 @@ begin
   // keying has own checking
   edtGrid.Text := dmUtils.StdFormatLocator(edtGrid.Text);
   edtGrid.SelStart := Length(edtGrid.Text);
+  edtGrid.SelLength:=0;
 end;
 
 procedure TfrmNewQSO.edtGridEnter(Sender: TObject);
@@ -4445,7 +4558,14 @@ begin
     begin
      CalculateDistanceEtc;
      sbtnLocatorMap.Visible := True;
+     lblGrid.Font.Style:=[];
+     lblGrid.Font.Color:=clDefault;
     end
+   else
+    Begin
+     lblGrid.Font.Style:=[fsBold];
+     lblGrid.Font.Color:=clRed;
+    end;
 end;
 
 procedure TfrmNewQSO.edtGridKeyDown(Sender: TObject; var Key: Word;
@@ -4504,7 +4624,7 @@ end;
 
 procedure TfrmNewQSO.acRefreshTRXExecute(Sender: TObject);
 begin
-  frmTRXControl.InicializeRig;
+  frmTRXControl.InitializeRig;
   tmrRadio.Enabled := True;
   frmRotControl.InicializeRot;
   tmrRotor.Enabled := True
@@ -4598,6 +4718,11 @@ begin
   frmLogUploadStatus.UploadDataToHrdLog
 end;
 
+procedure TfrmNewQSO.acUploadToUDPLogExecute(Sender: TObject);
+begin
+  frmLogUploadStatus.UploadDataToUDPLog
+end;
+
 procedure TfrmNewQSO.acPropExecute(Sender: TObject);
 begin
    frmPropagation.Show
@@ -4683,6 +4808,16 @@ begin
   frmContest.Show;
 end;
 
+procedure TfrmNewQSO.acCountyExecute(Sender: TObject);
+begin
+    frmCountyStat := TfrmCountyStat.Create(frmNewQSO);
+  try
+    frmCountyStat.ShowModal
+  finally
+    FreeAndNil(frmCountyStat)
+  end
+end;
+
 procedure TfrmNewQSO.acOpenLogExecute(Sender: TObject);
 var
   old : String;
@@ -4762,6 +4897,7 @@ begin
     tabSatellite.Font.Color := clRed
   else
     tabSatellite.Font.Color := clDefault;
+  old_prop   := dmSatellite.GetPropShortName(cmbPropagation.Text); //keep prop mode even when no qsos saved yet
 end;
 
 procedure TfrmNewQSO.cmbQSL_REnter(Sender: TObject);
@@ -4894,6 +5030,17 @@ begin
   cqrini.WriteString('NewQSO', 'RXLO', edtRXLO.Text);
 end;
 
+procedure TfrmNewQSO.edtStartTimeChange(Sender: TObject);
+begin
+   if  cbOffline.Checked and not AnyRemoteOn then
+  begin
+    if  (length(edtStartTime.Text)=2) then //auto ":"
+     edtStartTime.Text:=edtStartTime.Text+':';
+    edtStartTime.SelStart:=length(edtStartTime.Text);
+    edtStartTime.SelLength:=0;
+  end;
+end;
+
 procedure TfrmNewQSO.edtStartTimeEnter(Sender: TObject);
 begin
   edtStartTime.SelectAll
@@ -5010,6 +5157,21 @@ begin
   ShowHelp
 end;
 
+procedure TfrmNewQSO.MenuItem46Click(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmNewQSO.MenuItem45Click(Sender: TObject);
+var
+  S: string;
+begin
+  //message box here for commands
+  if not assigned(CWint) then exit;
+  if InputQuery('Send hex commands to Win/K3NG keyer','Type in comma separated hex bytes 00-ff (can be: 0xff, xff or ff)',False,S) then
+   CWint.SendHex(Uppercase(s));
+end;
+
 procedure TfrmNewQSO.mnuQrzClick(Sender: TObject);
 begin
   dmUtils.ShowQRZInBrowser(dmData.qQSOBefore.Fields[4].AsString)
@@ -5034,6 +5196,18 @@ end;
 procedure TfrmNewQSO.mnuHamQthClick(Sender : TObject);
 begin
   dmUtils.ShowHamQTHInBrowser(dmData.qQSOBefore.Fields[4].AsString)
+end;
+
+procedure TfrmNewQSO.MenuItem95Click(Sender: TObject);
+begin
+     chkAutoMode.Font.Color:=clDefault;
+     cqrini.WriteBool('Modes', 'Rig2Data', False);
+end;
+
+procedure TfrmNewQSO.MenuItem96Click(Sender: TObject);
+begin
+    chkAutoMode.Font.Color:=clRed;
+    cqrini.WriteBool('Modes', 'Rig2Data', True);
 end;
 
 procedure TfrmNewQSO.acNewQSOExecute(Sender: TObject);
@@ -5360,6 +5534,7 @@ begin
     dmUtils.LoadFontSettings(frmNewQSO)
   end;
 
+  dmData.qQSOBefore.Last; // to be sure the count is proper in next if
   if fViewQSO or fEditQSO then
     lblQSONr.Caption := IntToStr(dmData.qQSOBefore.RecordCount)
   else
@@ -5379,7 +5554,10 @@ begin
 
   ShowCountryInfo;
   ChangeReports;
-  ShowStatistic(adif);
+  dmUtils.ShowStatistic(adif,old_stat_adif,sgrdStatistic);
+  dmUtils.ShowStatistic(adif,old_stat_adif,sgrdCallStatistic,edtCall.Text);
+  tabDXCCStat.Caption:=edtDXCCRef.Text+' statistic';
+  tabCallStat.Caption:=edtCall.Text+' statistic';
   CalculateDistanceEtc;
   mComment.Text := dmData.GetComment(edtCall.Text);
   if (lblDXCC.Caption <> '!') and (lblDXCC.Caption <> '#') then
@@ -5402,7 +5580,7 @@ begin
     if (not (fViewQSO or fEditQSO or cbOffline.Checked)) and (frmTRXControl.GetModeFreqNewQSO(mode,freq)) then
     begin
       if chkAutoMode.Checked then
-        cmbMode.Text := mode;
+        cmbMode.Text := RigCmd2DataMode(mode);
       cmbFreq.Text := freq;
       edtHisRST.SetFocus;
       edtHisRST.SelStart  := 1;
@@ -5475,6 +5653,7 @@ var
   tmp : String;
   speed : Integer = 0;
   i     : Integer = 0;
+  n     : String;
   ShowMain : Boolean = False;
 begin
   if key = VK_ESCAPE then
@@ -5496,9 +5675,12 @@ begin
         old_cfreq := '';
         old_cmode := '';
       end
-      else begin
-
-        if Assigned(CWint) then CWint.StopSending;
+      else
+      begin
+        if (cmbMode.Text='CW') and (Assigned(CWint)) then
+                                                             CWint.StopSending;
+        if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
+                                                             frmTRXControl.StopVoice;
         EscFirstPressDone   := True;
         tmrESC.Enabled := True
       end
@@ -5516,6 +5698,7 @@ begin
         end;
         edtDate.ReadOnly  := False;
         mComment.ReadOnly := False;
+        edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
       end;
       ShowMain := (fEditQSO or fViewQSO) and (not fromNewQSO);
       ClearAll;
@@ -5539,6 +5722,11 @@ begin
    if LastFkey = 0 then
     begin
       if (Sender <> nil ) then LastFKey := Key;   //LastKey resets by  KeyUp. Nil sender is a mouse click on button
+      if ( frmContest.Showing and (key = VK_F1)) then  //set the "lastCqFreq" @contest window
+        Begin
+          frmContest.lblCqMode.Caption:=frmTRXControl.GetRawMode;
+          frmContest.lblCqFreq.Caption := FormatFloat('0.00',frmTRXControl.GetFreqkHz);
+        end;
       if ((cmbMode.Text='SSB') or (cmbMode.Text='FM') or (cmbMode.Text='AM')) then
        begin
         RunVK(dmUtils.GetDescKeyFromCode(Key));
@@ -5548,6 +5736,7 @@ begin
           if Assigned(CWint) and (cmbMode.Text='CW') then
           CWint.SendText(dmUtils.GetCWMessage(dmUtils.GetDescKeyFromCode(Key),frmNewQSO.edtCall.Text,
             frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+            frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
             frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
            else if (cmbMode.Text='CW') then ShowMessage('CW interface:  No keyer defined for current radio!');
        end;
@@ -5567,13 +5756,17 @@ begin
     end
   end;
 
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
   if (key = 33) and (not dbgrdQSOBefore.Focused) then//pgup
   begin
     if Assigned(CWint) then
     begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -5584,7 +5777,10 @@ begin
     begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
-      sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
       if (frmCWType <> nil ) then frmCWType.edtSpeed.Value := speed;
     end
   end;
@@ -5781,7 +5977,7 @@ procedure TfrmNewQSO.edtStateExit(Sender: TObject);
 begin
   ShowDXCCInfo();
   ShowCountryInfo;
-  ShowStatistic(adif);
+  dmUtils.ShowStatistic(adif,old_stat_adif,sgrdStatistic);
   CalculateDistanceEtc;
   if (( frmGrayline.Showing ) and (edtCall.Text<>'')) then
     DrawGrayline;
@@ -5816,8 +6012,11 @@ end;
 procedure TfrmNewQSO.mCommentKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if key = VK_TAB then
-    edtCall.SetFocus;
+  if ((key = VK_TAB) and (not AnyRemoteOn)) then
+    Begin
+     edtCall.SetFocus;
+     key := 0
+    end;
 end;
 
 procedure TfrmNewQSO.mCommentKeyUp(Sender: TObject; var Key: Word;
@@ -5878,6 +6077,11 @@ begin
     frmMain.WindowState := wsNormal;
   frmMain.Show;
   frmMain.BringToFront;
+end;
+
+procedure TfrmNewQSO.pgDetailsChange(Sender: TObject);
+begin
+  cqrini.WriteInteger('NewQSO','DetailsTabIndex', pgDetails.TabIndex);
 end;
 
 procedure TfrmNewQSO.popEditQSOPopup(Sender: TObject);
@@ -6118,132 +6322,6 @@ begin
     if Length(edtMyRST.Text) = 2 then
       edtMyRST.Text := edtMyRST.Text + '9'
   end;
-end;
-
-procedure TfrmNewQSO.ShowStatistic(ref_adif : Word);
-var
-  i : Integer;
-  ShowLoTW : Boolean = False;
-  mode : String;
-  QSLR,LoTW,eQSL : String;
-  tmps : String;
-  space: String;
-begin
-  if old_stat_adif = ref_adif then
-    exit;
-  old_stat_adif := ref_adif;
-  sgrdStatistic.ColCount  := cMaxBandsCount;
-
-  ClearStatGrid;
-  AddBandsToStatGrid;
-
-  space := ' ';
-  if cqrini.ReadBool('Fonts','GridDotsInsteadSpaces',False) = True then
-  begin
-    space := '.';
-  end;
-
-  for i:=0 to cMaxBandsCount-1 do
-  begin
-    if dmUtils.MyBands[i][0]='' then
-    begin
-      sgrdStatistic.ColCount  := i+1;
-      break
-    end;
-
-    sgrdStatistic.Cells[i+1,1] := space+space+space;
-    sgrdStatistic.Cells[i+1,2] := space+space+space;
-    sgrdStatistic.Cells[i+1,3] := space+space+space;
-  end;
-
-  if dmData.trQ.Active then
-    dmData.trQ.RollBack;
-  dmData.Q.Close;
-
-  ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
-  if ShowLoTW then
-    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
-                         IntToStr(ref_adif) + ' and ((qsl_r='+QuotedStr('Q')+') or '+
-                         '(lotw_qslr = '+QuotedStr('L')+') or (eqsl_qsl_rcvd='+QuotedStr('E')+
-                         ')) group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd'
-  else
-    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
-                         IntToStr(ref_adif) + ' and (qsl_r = '+QuotedStr('Q')+') '+
-                         'group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd';
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open;
-  while not dmData.Q.Eof do
-  begin
-    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
-    mode := dmData.Q.Fields[1].AsString;
-    QSLR := dmData.Q.Fields[2].AsString;
-    LoTW := dmData.Q.Fields[3].AsString;
-    eQSL := dmData.Q.Fields[4].AsString;
-    if i > 0 then
-    begin
-      if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
-      begin
-        tmps := sgrdStatistic.Cells[i,1] ;
-        if QSLR = 'Q' then
-          tmps[1] := 'Q';
-        if (LoTW = 'L') then
-          tmps[2] := 'L';
-        if (eQSL = 'E') then
-          tmps[3] := 'E';
-       sgrdStatistic.Cells[i,1] := tmps
-      end
-      else begin
-        if (Mode='CW') or (Mode='CWQ') then
-        begin
-          tmps := sgrdStatistic.Cells[i,2] ;
-          if QSLR = 'Q' then
-            tmps[1] := 'Q';
-          if (LoTW = 'L') then
-            tmps[2] := 'L';
-          if (eQSL = 'E') then
-            tmps[3] := 'E';
-          sgrdStatistic.Cells[i,2] := tmps
-        end
-        else begin
-          tmps := sgrdStatistic.Cells[i,3] ;
-          if QSLR = 'Q' then
-            tmps[1] := 'Q';
-          if (LoTW = 'L') then
-            tmps[2] := 'L';
-          if (eQSL = 'E') then
-            tmps[3] := 'E';
-          sgrdStatistic.Cells[i,3] := tmps
-        end
-      end;
-    end;
-    dmData.Q.Next
-  end;
-  dmData.trQ.Rollback;
-
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where adif='+
-                       IntToStr(ref_adif) + ' group by band,mode';
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open;
-  while not dmData.Q.Eof do
-  begin
-    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
-    mode := dmData.Q.Fields[1].AsString;
-    if i > 0 then
-      begin
-        if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
-          if(sgrdStatistic.Cells[i,1] = space+space+space) then sgrdStatistic.Cells[i,1] := ' X ';
-        if ((mode = 'CW') or (mode = 'CWR')) then
-          if (sgrdStatistic.Cells[i,2] = space+space+space) then sgrdStatistic.Cells[i,2] := ' X ';
-        if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
-          if (sgrdStatistic.Cells[i,3] = space+space+space) then sgrdStatistic.Cells[i,3] := ' X '
-      end;
-      dmData.Q.Next;
-  end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback
 end;
 
 procedure TfrmNewQSO.CalculateDistanceEtc;
@@ -6508,6 +6586,7 @@ begin
   end;
   edtDate.ReadOnly  := fViewQSO;
   mComment.ReadOnly := fViewQSO;
+  edtDXCCRef.ReadOnly:=True;  //we allow only DXCCs from list, no free type
   edtCall.SetFocus
 end;
 
@@ -6700,7 +6779,7 @@ begin
     edtCall.Text := call;
     cmbFreq.Text := freq;
     if chkAutoMode.Checked then
-      cmbMode.Text := mode;
+      cmbMode.Text := RigCmd2DataMode(mode);
     freq := FloatToStr(etmp);
     if not FromRbn then
       mode := dmUtils.GetModeFromFreq(freq);
@@ -6709,7 +6788,14 @@ begin
     frmTRXControl.SetModeFreq(mode,freq);
     edtCallExit(nil);
     if AnyRemoteOn then
-                   SendToBack
+                   begin
+                    if RemoteActive='wsjtx' then
+                     Begin
+                      CallFromSpot:=True;
+                      frmMonWsjtx.SendConfigure('','',call,' ',$7FFFFFFF,$7FFFFFFF,$7FFFFFFF,False,True);
+                     end;
+                    SendToBack;
+                   end
                  else
                    BringToFront;
     if frmContest.Showing then
@@ -6977,15 +7063,18 @@ end;
 
 procedure TfrmNewQSO.UpdateFKeyLabels;
 begin
+  frmCWType.fraCWKeys1.UpdateFKeyLabels;
   frmCWKeys.fraCWKeys.UpdateFKeyLabels
 end;
 
 procedure TfrmNewQSO.ChangeCallBookCaption;
 begin
   if cqrini.ReadBool('Callbook','HamQTH',True) then
-    lblCallbookInformation.Caption := 'Callbook (HamQTH.com):'
-  else
-    lblCallbookInformation.Caption := 'Callbook (qrz.com):'
+    lblCallbookInformation.Caption := 'Callbook (HamQTH.com):';
+  if cqrini.ReadBool('Callbook','QRZ',True) then
+    lblCallbookInformation.Caption := 'Callbook (qrz.com):';
+  if cqrini.ReadBool('Callbook','QRZCQ',True) then
+    lblCallbookInformation.Caption := 'Callbook (qrzCQ.com):';
 end;
 
 procedure TfrmNewQSO.CalculateLocalSunRiseSunSet;
@@ -7023,7 +7112,7 @@ end;
 
 procedure TfrmNewQSO.SendSpot;
 var
-  call,rst_s,stx,stx_str,HisName,HelloMsg : String;
+  call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg : String;
   tmp  : String;
   ModRst,
   HMLoc :String;
@@ -7042,6 +7131,8 @@ begin
       rst_s := edtHisRST.Text;
       stx :=  edtContestSerialSent.Text;
       stx_str:=edtContestExchangeMessageSent.Text;
+      srx :=  edtContestSerialReceived.Text;
+      srx_str:=edtContestExchangeMessageReceived.Text;
       HisName:= edtName.Text;
       tmp := 'DX ' + FloatToStrF(f,ffFixed,8,1) + ' ' + call;
       ModRst := cmbMode.Text+' '+ rst_s;
@@ -7065,7 +7156,7 @@ begin
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,srx,srx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
@@ -7075,7 +7166,9 @@ begin
     rst_s := dmData.Q.Fields[1].AsString;
     stx :=  dmData.Q.Fields[5].AsString;
     stx_str:=dmData.Q.Fields[6].AsString;
-    HisName:= dmData.Q.Fields[7].AsString;
+    srx :=  dmData.Q.Fields[7].AsString;
+    srx_str:=dmData.Q.Fields[8].AsString;
+    HisName:= dmData.Q.Fields[9].AsString;
     dmData.Q.Close();
     dmData.trQ.Rollback;
 
@@ -7092,6 +7185,8 @@ begin
     Srst_s := rst_s;
     Sstx := stx ;
     Sstx_str:=stx_str;
+    Ssrx := srx ;
+    Ssrx_str:=srx_str;
     SHisName:= HisName;
     SHelloMsg:=HelloMsg;
     ShowModal;
@@ -7142,6 +7237,12 @@ const
 var
    AProcess: TProcess;
 begin
+  if cqrini.ReadBool('TRX' + frmTRXControl.RigInUse, 'RigVoice', False) then ///use Hamlib's \send_voice command instead.
+  Begin
+    frmTRXControl.SendVoice(Copy(key_pressed,2,length(key_pressed)-1));
+    exit;
+  end;
+
   if not FileExists(dmData.HomeDir + cVoiceKeyer) then 
   exit;
   
@@ -7171,41 +7272,47 @@ begin
     CWint.Close;
     FreeAndNil(CWint)
    end;
-
-  if frmTRXControl.rbRadio1.Checked then n := '1' else  n := '2';
+  UseSpeed:=0; //show zero when pot speed  or no keyer
+  n:=intToStr(frmTRXControl.cmbRig.ItemIndex);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
-  KeyerType :=  cqrini.ReadInteger('CW','Type'+n,0);
+  KeyerType :=  cqrini.ReadInteger('CW'+n,'Type',0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
+  Menuitem45.Visible:=False;  //send hex commands to win/k3ng keyer
   case  KeyerType of
     1 : begin
           CWint := TCWWinKeyerUSB.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','wk_port'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','wk_port'+n,'');
+          CWint.Port    := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.Device  := cqrini.ReadString('CW'+n,'wk_port','');
           CWint.PortSpeed := 1200;
-          UseSpeed := cqrini.ReadInteger('CW','wk_speed',30);
+          if not  cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+            UseSpeed := cqrini.ReadInteger('CW'+n,'wk_speed',30)
+           else
+            UseSpeed:=-1;
+          Menuitem45.Visible:=True;
         end;
     2 : begin
           CWint    := TCWDaemon.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','cw_port'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','cw_address','');
+          CWint.Port    := cqrini.ReadString('CW'+n,'cw_port','');
+          CWint.Device  := cqrini.ReadString('CW'+n,'cw_address','');
           CWint.PortSpeed := 0;
-          UseSpeed := cqrini.ReadInteger('CW','cw_speed',30);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
         end;
     3 : begin
           CWint := TCWK3NG.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW','K3NGPort'+n,'');
-          CWint.Device  := cqrini.ReadString('CW','K3NGPort'+n,'');
-          CWint.PortSpeed := cqrini.ReadInteger('CW','K3NGSerSpeed',115200);
-          UseSpeed := cqrini.ReadInteger('CW','K3NGSpeed',30);
+          CWint.Port    := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.Device  := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
+          CWint.PortSpeed := cqrini.ReadInteger('CW'+n,'K3NGSerSpeed',115200);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
+          Menuitem45.Visible:=True;
         end;
     4 : begin
           CWint        := TCWHamLib.Create;
@@ -7214,16 +7321,20 @@ begin
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
           CWint.Port := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
           CWint.Device := cqrini.ReadString('TRX'+n,'host','localhost');
-          UseSpeed := cqrini.ReadInteger('CW','HamLibSpeed',30);
+          CWint.HamlibBuffer:=cqrini.ReadBool('CW'+n, 'UseHamlibBuffer', False);
+          UseSpeed := cqrini.ReadInteger('CW'+n,'HamLibSpeed',30);
         end;
   end; //case
   if KeyerType > 0 then
    Begin
      CWint.Open;
-     CWint.SetSpeed(UseSpeed);
-     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
-     if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
+     if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
+   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+     sbNewQSO.Panels[4].Text := 'Pot WPM'
+    else
+     sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
+   if frmCWType.Showing then frmCWType.edtSpeed.Value := UseSpeed;
 end;
 
 procedure TfrmNewQSO.OnBandMapClick(Sender:TObject;Call,Mode: String;Freq:Currency);
@@ -7359,6 +7470,7 @@ begin
                   tmrFldigi.Enabled     := true;
                   if FldigiXmlRpc then
                      frmxfldigi.Visible := true;
+                  RemoteActive := 'fldigi';
                 end;
     rmtWsjt   : begin
                   RememberAutoMode := chkAutoMode.Checked;
@@ -7439,7 +7551,8 @@ begin
                      exit
                   end;
                   mnuWsjtxmonitor.Visible := True; //we show "monitor" in view-submenu when active
-                  if cqrini.ReadBool('Window','MonWsjtx',true) then acMonitorWsjtxExecute(nil)
+                  if cqrini.ReadBool('Window','MonWsjtx',true) then acMonitorWsjtxExecute(nil);
+                  RemoteActive := 'wsjtx';
                 end;
 
     rmtADIF   : begin
@@ -7481,6 +7594,7 @@ begin
                      DisableRemoteMode;
                      exit
                   end;
+                  RemoteActive := 'adif';
                 end;
            end; //case remote type
 
@@ -7521,7 +7635,6 @@ begin
       if Assigned(WsjtxSock) then FreeAndNil(WsjtxSock);  // to release UDP socket
       if multicast then if Assigned(WsjtxSockS) then FreeAndNil(WsjtxSockS);  // to release UDP multicast TX socket
       mnuRemoteModeWsjt.Checked:= False;
-      AnyRemoteOn := False;
   end;
 
   if mnuRemoteMode.Checked then
@@ -7529,7 +7642,6 @@ begin
      tmrFldigi.Enabled         := False;
      if FldigiXmlRpc then frmxfldigi.Visible := false;
      mnuRemoteMode.Checked     := False;
-     AnyRemoteOn := False;
   end ;
 
   if  mnuRemoteModeADIF.Checked then
@@ -7537,9 +7649,10 @@ begin
       tmrADIF.Enabled:=false;
       if Assigned(ADIFSock) then FreeAndNil(ADIFSock);  // to release UDP socket
       mnuRemoteModeADIF.Checked:= False;
-      AnyRemoteOn := False;
   end;
 
+  AnyRemoteOn := False;
+  RemoteActive := '';
   chkAutoMode.Checked:= RememberAutoMode;
   lblCall.Caption           := 'Call:';
   lblCall.Font.Color        := clDefault;
@@ -7708,6 +7821,19 @@ Begin
     +'73, gl DX!';
 
   ShowMessage(message);
+end;
+function TfrmNewQSO.RigCmd2DataMode(mode:String):String;
+var
+   DatCmd,
+   n      :String;
+Begin
+   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+   DatCmd :=  upcase(cqrini.ReadString('Band'+n, 'Datacmd', 'RTTY'));
+   if (DatCmd = 'USB') or (DatCmd = 'LSB') then DatCmd := 'SSB'; //this is what RigControl responses
+
+   if cqrini.ReadBool('Band'+n, 'UseReverse', False)  and (mode = DatCmd) then
+            Result := cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+     else   Result := mode;
 end;
 
 end.

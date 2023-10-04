@@ -60,7 +60,7 @@ type
 
 implementation
 
-uses dUtils, fNewQSO, uMyIni, dData, fCWType;
+uses dUtils, fNewQSO, uMyIni, dData, fCWType, fContest;
 
 {$R *.lfm}
 
@@ -105,6 +105,7 @@ procedure TfraCWKeys.btnF1MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -112,6 +113,7 @@ procedure TfraCWKeys.btnF10MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -129,6 +131,7 @@ procedure TfraCWKeys.btnF2MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -141,6 +144,7 @@ procedure TfraCWKeys.btnF3MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -153,6 +157,7 @@ procedure TfraCWKeys.btnF4MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
      frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+     frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -165,6 +170,7 @@ procedure TfraCWKeys.btnF5MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -177,6 +183,7 @@ procedure TfraCWKeys.btnF6MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -189,6 +196,7 @@ procedure TfraCWKeys.btnF7MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -201,6 +209,7 @@ procedure TfraCWKeys.btnF8MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -213,6 +222,7 @@ procedure TfraCWKeys.btnF9MouseEnter(Sender: TObject);
 begin
   self.lblToShowMouseOverTextCwKeys.Caption:=dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -273,17 +283,32 @@ begin
 end;
 
 procedure TfraCWKeys.UpdateFKeyLabels;
+var n,f:integer;
 begin
-  btnF1.Caption  := cqrini.ReadString('CW','CapF1','CQ');
-  btnF2.Caption  := cqrini.ReadString('CW','CapF2','F2');
-  btnF3.Caption  := cqrini.ReadString('CW','CapF3','F3');
-  btnF4.Caption  := cqrini.ReadString('CW','CapF4','F4');
-  btnF5.Caption  := cqrini.ReadString('CW','CapF5','F5');
-  btnF6.Caption  := cqrini.ReadString('CW','CapF6','F6');
-  btnF7.Caption  := cqrini.ReadString('CW','CapF7','F7');
-  btnF8.Caption  := cqrini.ReadString('CW','CapF8','F8');
-  btnF9.Caption  := cqrini.ReadString('CW','CapF9','F9');
-  btnF10.Caption  := cqrini.ReadString('CW','CapF10','F10')
+    if (frmContest.Showing) and ( not (cqrini.ReadBool('CW','S&P',True))) then //if contest and run mode keys are F11-F20
+      n:=11
+     else
+      n:=1;
+
+  btnF1.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'CQ');
+  inc(n);
+  btnF2.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F2');
+  inc(n);
+  btnF3.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F3');
+  inc(n);
+  btnF4.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F4');
+  inc(n);
+  btnF5.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F5');
+  inc(n);
+  btnF6.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F6');
+  inc(n);
+  btnF7.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F7');
+  inc(n);
+  btnF8.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F8');
+  inc(n);
+  btnF9.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F9');
+  inc(n);
+  btnF10.Caption  := cqrini.ReadString('CW','CapF'+IntToStr(n),'F10')
 end;
 
 end.

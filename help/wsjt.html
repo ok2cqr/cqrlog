@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <head>
@@ -76,6 +77,14 @@ Top line will show band and mode that is in use, Checking <b>"noHst”</b> (no h
 </br>If there are no CQ lines during period then old monitor lines will turn to silver gray indicating that right period of possible answer is passed. This happens ONLY if <b>"noHst”</b> is checked. If not, colors stay as they are.
 </br>CQ-lines turning to silver gray does not disable double click answering property. It is just informative color change. 
 </br>If not checked form will show also older CQs (scrolling) to see what you missed while having a coffee break :). Only 20 lines, how ever.
+<p ><img src="img/wsjt37.png" name="22" width="353" height="282"></p>
+</br></br>Checking <b>"USt”</b> (USA states) will show US states of CQ callers. Color of text is based to same formula against your logged qsos as described below with callsigns and locators.
+<br>State is checked against a list of callsigns=states that is created from file EN.dat wich is a part of zip file from http://wireless.fcc.gov/uls/data/complete/l_amat.zip
+<br>This list is named as <b>fcc_states.tab</b> and created into <b>~/.config/cqrlog/ctyfiles</b> folder. Creation needs command line programs <b>wget</b> and <b>unzip</b>. You can test existense of those by simply writing those names, one by one, to command terminal.
+If they exist response should be some kind of help text. If they do not exist use your package manager to install them.
+<br>Cqrlog will inform you about <b>fcc_states.tab</b> when you check the <b>"USt"</b> checkbox (if file is over 90d ays old or missing). File holds all US calls with states and is over 10Mb in size amd that size is taken from computers RAM memory when <b>USt</b> is checked. It should not be problem with modern computers, but may be it with small one card computers like Raspberry Pi (specially older versions).
+
+
 </br></br>Checking <b>"sTx”</b> (Stop TX) will fix missing Wsjt-x property: If you answer to someone's CQ at same frequency Wsjt-x will stop your TX if CQ-caller answers to someone else than you. How ever Wsjt-x developing team has
  decided that if you anśwer to CQ caller on other frequency (split) your TX remains on even if the answer was directed to someone else.
  To reduce band QRM caused by you, you may check <b>sTx</b> to stop your TX if answer was not for you.
@@ -88,13 +97,35 @@ In some cases your TX may be shut down after you have first tried to answer some
 </img>
 <img src="img/wsjt30.png" name="30" width="353" height="83">
 </img></p><p>
+If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent richmemo text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
+</br>
+If you have Wsjt-x devel version 1.9.0-rc3 r8592 (or higher) <strong>color</strong>ing is sent <strong>back</strong> to Wsjt-x with same choosed colours as CQ-monitor uses. 
+How ever there are some limitations compared to CQ-monitor:
+</br><li><strong>color back</strong> can not change lower case letters of Band Activity line in case call or locator is worked. Just font color is changed</li>
+<li><strong>color back</strong> can not print locator with 2 colors in case main grid is worked, but subgrid(numerical part) is not. In that case locator will have maingrid color and yellow background.</li>
+<li><strong>color back</strong> will paint both "CQ" and cq-direction with "CQ ext" color if CQ is not directed to you.</li>
+</br>
+With older versions of wsjt-x this causes unkonwn command error and then <b>nTxt</b> should not be checked until you get newer version of Wsjt-x.
+</br></p><p>
+<img src="img/wsjt34.png" name="34" width="353" height="282">
+</img>
+<img src="img/wsjt33.png" name="33" width="353" height="282">
+</img></p><p>
+If you are able to use <strong>color back</strong> feature you may want to change some Wsjt-x color settings and maybe check "CQ only" checbox at Main window. Selecting also font to some of "mono"+ "bold" ones from "Configuration/General/Decoded Text Font" could make a better view.</p>
+<p>
+<ul><strong>A word of warning:</strong></ul>  In Wsjt-x selecting <strong>CQ only</strong> will <strong>disable Generating of Std messages</strong> by double click either <strong>followed</strong> message line or Wsjt-x <strong>map's non-cq lines</strong>.
+</br>This <strong>does not</strong> happen if <strong>CQ only</strong> is <strong>uncheked</strong>. Unchecking it after not working double click does not help if Band Activiy window does not contain that line from which  <strong>Wsjt map</strong> or <strong>follow</strong> line was created.
+</br>That is because Wsjt-x must found equal line from Band activity and UDP command that produces Std General messages creation. 
+</br> This may change in future devel versions or in official release of 1.9.0, but at the moment you should be aware of that.</p>
+<p><strong>Hint:</strong> If you have had <strong>CQ only</strong> checked and you want to load Std message from just appeared line from <strong>Wsjt map</strong> or <strong>follow line</strong> uncheck <strong>CQ only immediately</strong> during time that entry is not grayed (ongoing period).
+ Wsjtx will produce again last periods decode (wsjt map will show it double) and after that you can have effect for double click.
 If you do not want any information texts, just alerts, you can check <b>nTxt</b> to prevent text updates and minimize window size horizontal or drop it completely down with (<b>_</b>) while alerts and follow are still working.
 </br></br>
 Selecting <b>DX</b> checkbox cqrlog fiters away all calls that are from same continent as you are. This works both in Cq monitor and MAP mode<br>
-
-
+Checking <b>Show LoTW, eQSL usage in CQ-monitor</b> from <b>preferences/fldigi- wsjt interface</b> L &amp; E will show up in front of continent in CQ-monitor<br>
 
 </p><p><img src="img/wsjt21.png" name="21" width="363" height="282">
+</img><img src="img/wsjt21b.png" name="21" width="363" height="282">
 </img></p>
 Checking <b>“flw”</b> new part of monitor opens. This will make easier to follow a DX who does not stay on same frequency, but jumps around answering to callers.
 </br>Type in a callsing. The callsign is checked to be written in upcase letters and spaces are trimmed away. Pressing RETURN at the end of typing turns <strong>Follow</strong> button ON (green).

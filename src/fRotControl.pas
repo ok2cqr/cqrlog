@@ -69,6 +69,7 @@ type
     MouseWheelUsed : Boolean;
   public
     { public declarations }
+    BeamDir : Double;
     procedure SynROT;
     function  InicializeRot : Boolean;
     procedure UpdateAZdisp(Az,AzMin,AzMax:Double;UseState:Boolean);
@@ -82,7 +83,7 @@ implementation
 
 { TfrmRotControl }
 
-uses dUtils, dData;
+uses dUtils, dData, fGrayline;
 
 procedure TfrmRotControl.FormShow(Sender: TObject);
 begin
@@ -97,6 +98,7 @@ begin
   btnStop.Visible:=cqrini.ReadBool('ROT','Stopbtn',False);
   mnuStopbtn.Checked:=cqrini.ReadBool('ROT','Stopbtn',False);
   if pnlMinMax.Visible then gbAzimuth.Height:=70;
+  Beamdir:=-1;
 end;
 
 procedure TfrmRotControl.gbAzimuthClick(Sender: TObject);
@@ -146,11 +148,13 @@ end;
 
 procedure TfrmRotControl.rbRotor1Click(Sender: TObject);
 begin
+  cqrini.WriteBool('ROT','Use1',rbRotor1.Checked);
   InicializeRot
 end;
 
 procedure TfrmRotControl.rbRotor2Click(Sender: TObject);
 begin
+  cqrini.WriteBool('ROT','Use1',rbRotor1.Checked);
   InicializeRot
 end;
 
@@ -168,7 +172,7 @@ end;
 procedure TfrmRotControl.FormDestroy(Sender: TObject);
 begin
   if Assigned(rotor) then
-    FreeAndNil(rotor)
+       FreeAndNil(rotor)
 end;
 
 procedure TfrmRotControl.FormKeyUp(Sender: TObject; var Key: Word;
@@ -376,11 +380,19 @@ begin
   //broken configuration caused crash because RotCtldPort was empty
   //probably late to change it to Integer, I have no idea if the current
   //setting would be converted automatically or user has to do it again :(
-  if not TryStrToInt(cqrini.ReadString('ROT'+n,'RotCtldPort','4533'),port) then
-    port := 4533;
 
-  if not TryStrToInt(cqrini.ReadString('ROT'+n,'poll','500'),poll) then
-    poll := 500;
+
+  //OH1KH 2022-12-09: cqrini.ReadInteger and  cqrini.ReadString both can be used!
+  //Works same way as database ReadAsString or ReadAsInteger; Source is same but resulting read is
+  //either String or Integer how programmer wants.
+  //cqrini.Write does not make difference in config file if variable is saved as String or Integer
+  //both results look same in .cfg file.
+
+  port:= cqrini.ReadInteger('ROT'+n, 'RotCtldPort', 4533);
+  if ((port>65534) or (port<1024)) then port := 4533;  //limit values
+
+  poll:=cqrini.ReadInteger('ROT'+n, 'poll', 500);
+  if ((poll>60000) or (poll<10)) then  poll := 500;  //limit values
 
   rotor.RotCtldPath := cqrini.ReadString('ROT','RotCtldPath','/usr/bin/rotctld');
   rotor.RotCtldArgs := dmUtils.GetRotorRotCtldCommandLine(StrToInt(n));
@@ -401,10 +413,29 @@ end;
 
 procedure TfrmRotControl.SynROT;
 var
-  Az : Double ;
+  Az          :Double;
+  mylat,mylon :currency;
+  exlat,exlon :extended;
+  dist        :longint;
 begin
+  exlon:=0;
+  exlat:=0;
+  dist :=1000;
   if Assigned(rotor) then
-    Az := rotor.GetAzimut
+   begin
+    Az := rotor.GetAzimut;
+    if frmGrayline.Showing then
+       Begin
+        if (Trunc(Az)<>BeamDir) and frmGrayline.pumShowBeamPath.Checked then
+          Begin
+            dist :=cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500); //in kilometers
+            dmutils.CoordinateFromLocator(frmNewQSO.CurrentMyLoc,mylat,mylon);
+            frmGrayline.CalculateLatLonOfNewPoint(mylon,mylat,dist,Trunc(Az),exlon,exlat);
+            frmGrayline.PlotGreatCircleArcLine(mylon,mylat,exlon,exlat,2);
+            Beamdir:=Trunc(Az);
+          end;
+       end;
+   end
   else
     Az := 0;
   lblAzimuth.Caption := FormatFloat(empty_azimuth+';;',Az)

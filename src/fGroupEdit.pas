@@ -38,7 +38,6 @@ type
     procedure cmbFieldChange(Sender: TObject);
     procedure cmbValueChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure lblFieldClick(Sender: TObject);
   private
     { private declarations }
     WhereTo: String;
@@ -111,7 +110,7 @@ begin
            cmbValue.Style:=csDropDown;
          end;
    end;
-   pnlGrpEdt.Color:=clRed;
+   pnlGrpEdt.Color:=$005C5CFF;
    lblInfo.Caption := 'Backup your log! Operations can not be undone!';
    btnCancel.Caption:='Cancel';
    pnlGrpEdt.Repaint;
@@ -120,7 +119,7 @@ end;
 
 procedure TfrmGroupEdit.cmbValueChange(Sender: TObject);
 begin
-  pnlGrpEdt.Color:=clRed;
+  pnlGrpEdt.Color:=$005C5CFF;
   lblInfo.Caption := 'Backup your log! Operations can not be undone!';
   btnCancel.Caption:='Cancel';
   pnlGrpEdt.Repaint;
@@ -149,11 +148,6 @@ begin
   lblInfo.Repaint;
 end;
 
-procedure TfrmGroupEdit.lblFieldClick(Sender: TObject);
-begin
-
-end;
-
 procedure TfrmGroupEdit.btnApplyClick(Sender: TObject);
 var
   sql           : String = '';
@@ -162,7 +156,9 @@ var
   nr            : Integer = 0;
   i             : Integer = 0;
   aid           : Array of LongInt;
-  
+
+
+//------------------------------------------------------------------------------------------------------
   procedure ChangeQSO(idx : LongInt);
   begin
     if update_dxcc then
@@ -198,20 +194,36 @@ var
       dmData.trQ.Commit
     end;
 
-
     inc(nr);
     pnlGrpEdt.Color:=clYellow;
     lblInfo.Caption := 'Working .... QSO nr. ' + IntToStr(nr);
     pnlGrpEdt.Repaint;
     lblInfo.Repaint
   end;
-  
+
+//------------------------------------------------------------------------------------------------------
+ procedure DateErrSplash;
+  Begin
+   Application.MessageBox('Please enter correct date'+LineEnding+'as YYYY-MM-DD !','Error ...', mb_OK+mb_IconError);
+  end;
+
+//------------------------------------------------------------------------------------------------------
+ function ClearDate:Boolean;
+  Begin
+   Result:=False;
+   if Application.MessageBox('Do you really want to clear DATE?',
+             'Question ...',mb_YesNo+mb_IconQuestion+mb_DefButton2) = idYes then
+                                                                    Result:=True;
+  end;
+//------------------------------------------------------------------------------------------------------
+
+
 begin
   case cmbField.ItemIndex of
      0 : begin
            if not dmUtils.IsDateOK(cmbValue.Text) then
            begin
-             Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+             DateErrSplash;
              cmbValue.SetFocus;
              exit
            end;
@@ -431,13 +443,17 @@ begin
            sql := 'qsl_s="",qsls_date=null'
         end;
    23 : begin
-          if (not dmUtils.IsDateOK(cmbValue.Text))then
+          if (cmbValue.Text<>'') and (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
-            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            DateErrSplash;
             cmbValue.SetFocus;
             exit
           end;
+          if (cmbValue.Text<>'') then
             sql := 'qsls_date='+QuotedStr(cmbValue.Text)
+           else
+            if ClearDate then
+                         sql := 'qsls_date=null';
         end;
    24 : begin
           if (cmbValue.ItemIndex=0) and (Application.MessageBox('Do you really want to clear QSL_R field?'
@@ -458,13 +474,17 @@ begin
            sql := 'qsl_r="",qslr_date=null'
         end;
    25 : begin
-          if (not dmUtils.IsDateOK(cmbValue.Text))then
+          if (cmbValue.Text<>'') and (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
-            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            DateErrSplash;
             cmbValue.SetFocus;
             exit
           end;
+          if (cmbValue.Text<>'') then
             sql := 'qslr_date='+QuotedStr(cmbValue.Text)
+           else
+            if ClearDate then
+                         sql := 'qslr_date=null'
         end;
    26 : begin
           if cmbValue.Text = 'Y' then
@@ -476,7 +496,7 @@ begin
    27 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
-            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            DateErrSplash;
             cmbValue.SetFocus;
             exit
           end
@@ -495,12 +515,12 @@ begin
    29 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
-            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            DateErrSplash;
             cmbValue.SetFocus;
             exit
           end
           else
-            sql := 'lotw_qslr='+QuotedStr('E')+',lotw_qslrdate='+
+            sql := 'lotw_qslr='+QuotedStr('L')+',lotw_qslrdate='+
                    QuotedStr(cmbValue.Text)
         end;
    30 : begin
@@ -513,7 +533,7 @@ begin
    31 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
-            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            DateErrSplash;
             cmbValue.SetFocus;
             exit
           end
@@ -531,7 +551,7 @@ begin
    33 : begin
           if (not dmUtils.IsDateOK(cmbValue.Text))then
           begin
-            Application.MessageBox('Please enter correct date!','Error ...', mb_OK+mb_IconError);
+            DateErrSplash;
             cmbValue.SetFocus;
             exit
           end
@@ -600,6 +620,7 @@ begin
   end;
   lblInfo.Caption := 'Group edit done '+WhereTo;
   btnCancel.Caption:= 'Close';
+  btnApply.Enabled:=False;
   pnlGrpEdt.Color:= clLime;
   pnlGrpEdt.Repaint;
   lblInfo.Repaint;

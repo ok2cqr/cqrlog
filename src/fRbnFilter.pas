@@ -14,46 +14,50 @@ type
 
   TfrmRbnFilter = class(TForm)
     Bevel1: TBevel;
-    Bevel2: TBevel;
-    btnOK: TButton;
     btnCancel: TButton;
+    btnDxBandsAll: TButton;
     btnDXCCnty: TButton;
     btnDXCNotCnty: TButton;
     btnDxContAll: TButton;
-    btnSrcContAll: TButton;
-    btnDxBandsAll: TButton;
     btnDxModeAll: TButton;
+    btnOK: TButton;
+    btnSrcContAll: TButton;
+    btnSrcCallAll: TButton;
     chkNewDXConly: TCheckBox;
     chkOnlyeQSL: TCheckBox;
     chkOnlyLoTW: TCheckBox;
-    edtDXCnty: TEdit;
-    edtDXCNotCnty: TEdit;
+    edtSrcCall: TEdit;
     edtDate: TEdit;
+    edtDXBand: TEdit;
+    edtDXCNotCnty: TEdit;
+    edtDXCnty: TEdit;
+    edtDXCont: TEdit;
+    edtDXMode: TEdit;
     edtDXOnlyCall: TEdit;
     edtDXOnlyExpres: TEdit;
-    edtDXBand: TEdit;
-    edtDXMode: TEdit;
-    edtDXCont: TEdit;
     edtLastHours: TEdit;
     edtSrcCont: TEdit;
     edtTime: TEdit;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
-    GroupBox5: TGroupBox;
-    Label1: TLabel;
+    grpCallsignFrom: TGroupBox;
+    grpDXStation: TGroupBox;
+    grpCallisgn: TGroupBox;
+    grpSource: TGroupBox;
+    lblIgnoreHours: TLabel;
     Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
+    lblCallExample: TLabel;
+    lblSrcCall: TLabel;
     Label8: TLabel;
+    lblBandExFrom: TLabel;
+    lblBandFrom: TLabel;
+    lblContExample: TLabel;
+    lblContExFrom: TLabel;
+    lblContinentFrom: TLabel;
+    lblCountryFrom: TLabel;
+    lblDateTimeFormat: TLabel;
+    lblContent: TLabel;
     Label9: TLabel;
+    lblModeFrom: TLabel;
+    lblNotCountry: TLabel;
     rbAllDx: TRadioButton;
     rbOnlyCall: TRadioButton;
     rbOnlyCallReg: TRadioButton;
@@ -65,6 +69,7 @@ type
     procedure btnDxContAllClick(Sender: TObject);
     procedure btnDxModeAllClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure btnSrcCallAllClick(Sender: TObject);
     procedure btnSrcContAllClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -89,7 +94,7 @@ begin
   dmUtils.LoadFontSettings(self);
 
   edtSrcCont.Text      := cqrini.ReadString('RBNFilter','SrcCont',C_RBN_CONT);
-
+  edtSrcCall.Text      := cqrini.ReadString('RBNFilter','SrcCall','');
   rbIgnWkdHour.Checked := cqrini.ReadBool('RBNFilter','IgnHour',True);
   edtLastHours.Text    := IntToStr(cqrini.ReadInteger('RBNFilter','IgnHourValue',48));
   rbIgnWkdDate.Checked := cqrini.ReadBool('RBNFilter','IgnDate',False);
@@ -169,6 +174,7 @@ begin
     edtDXMode.Text := C_RBN_MODES;
 
   cqrini.WriteString('RBNFilter','SrcCont',RmSp(edtSrcCont.Text));
+  cqrini.WriteString('RBNFilter','SrcCall',RmSp(edtSrcCall.Text));
 
   cqrini.WriteBool('RBNFilter','IgnHour',rbIgnWkdHour.Checked);
   cqrini.WriteInteger('RBNFilter','IgnHourValue',StrToint(edtLastHours.Text));
@@ -194,6 +200,11 @@ begin
   cqrini.WriteBool('RBNFilter','NewDXCOnly',chkNewDXConly.Checked);
 
   ModalResult := mrOK
+end;
+
+procedure TfrmRbnFilter.btnSrcCallAllClick(Sender: TObject);
+begin
+  edtSrcCall.Text:='';
 end;
 
 procedure TfrmRbnFilter.btnSrcContAllClick(Sender: TObject);

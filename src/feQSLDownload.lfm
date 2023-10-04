@@ -1,36 +1,47 @@
 object frmeQSLDownload: TfrmeQSLDownload
-  Left = 518
+  Left = 539
   Height = 606
-  Top = 83
-  Width = 481
+  Top = 120
+  Width = 572
   Caption = 'Download data from eQSL.cc'
   ClientHeight = 606
-  ClientWidth = 481
+  ClientWidth = 572
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
+  LCLVersion = '2.2.6.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Panel1
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 0
-    Height = 408
-    Top = 152
-    Width = 481
+    Left = 1
+    Height = 397
+    Top = 162
+    Width = 570
     Align = alClient
     Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 1
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
     Caption = 'Progress'
-    ClientHeight = 390
-    ClientWidth = 479
+    ClientHeight = 379
+    ClientWidth = 568
     TabOrder = 0
     object mStat: TMemo
-      Left = 0
-      Height = 390
-      Top = 0
-      Width = 479
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideBottom.Control = GroupBox1
+      Left = 1
+      Height = 377
+      Top = 1
+      Width = 566
       Align = alClient
+      BorderSpacing.Left = 1
+      BorderSpacing.Top = 1
+      BorderSpacing.Right = 1
+      BorderSpacing.Bottom = 1
       OnChange = mStatChange
       ScrollBars = ssAutoBoth
       TabOrder = 0
@@ -41,50 +52,46 @@ object frmeQSLDownload: TfrmeQSLDownload
     AnchorSideTop.Control = Owner
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
-    Left = 0
-    Height = 152
-    Top = 0
-    Width = 481
+    Left = 1
+    Height = 160
+    Top = 1
+    Width = 570
     Align = alTop
+    BorderSpacing.Left = 1
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
     BevelOuter = bvNone
-    ClientHeight = 152
-    ClientWidth = 481
+    ClientHeight = 160
+    ClientWidth = 570
     TabOrder = 1
-    object btnDownload: TButton
-      AnchorSideLeft.Control = GroupBox5
-      AnchorSideLeft.Side = asrCenter
-      AnchorSideTop.Control = GroupBox5
-      AnchorSideTop.Side = asrBottom
-      Left = 72
-      Height = 25
-      Top = 126
-      Width = 337
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Top = 6
-      Caption = 'Download data from eQSL website'
-      OnClick = btnDownloadClick
-      TabOrder = 0
-    end
-    object GroupBox5: TGroupBox
+    object gbSettings: TGroupBox
       AnchorSideLeft.Control = Panel1
       AnchorSideTop.Control = Panel1
-      Left = 0
-      Height = 120
-      Top = 0
-      Width = 480
-      Anchors = [akTop, akLeft, akRight]
-      Caption = ' '
-      ClientHeight = 102
-      ClientWidth = 478
-      TabOrder = 1
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrCenter
+      Left = 1
+      Height = 158
+      Top = 1
+      Width = 568
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 1
+      BorderSpacing.Top = 1
+      BorderSpacing.Right = 1
+      BorderSpacing.Bottom = 1
+      Caption = 'Settings'
+      ClientHeight = 140
+      ClientWidth = 566
+      TabOrder = 0
       object Label3: TLabel
-        AnchorSideLeft.Control = GroupBox5
+        AnchorSideLeft.Control = gbSettings
         AnchorSideTop.Control = edtDateFrom
         AnchorSideTop.Side = asrCenter
         Left = 12
         Height = 17
         Top = 9
-        Width = 259
+        Width = 260
         BorderSpacing.Left = 12
         Caption = 'Return QSL records received on or after '
         ParentColor = False
@@ -92,34 +99,36 @@ object frmeQSLDownload: TfrmeQSLDownload
       object edtDateFrom: TEdit
         AnchorSideLeft.Control = Label3
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = GroupBox5
-        Left = 277
+        AnchorSideTop.Control = gbSettings
+        Left = 275
         Height = 34
         Top = 0
-        Width = 85
-        BorderSpacing.Left = 6
+        Width = 190
+        BorderSpacing.Left = 3
         TabOrder = 0
       end
       object chkShowNew: TCheckBox
-        AnchorSideLeft.Control = Label4
-        AnchorSideTop.Control = edtQTH
+        AnchorSideLeft.Control = chkChangeDate
+        AnchorSideTop.Control = chkChangeDate
         AnchorSideTop.Side = asrBottom
         Left = 12
         Height = 23
-        Top = 74
-        Width = 382
+        Top = 103
+        Width = 383
         BorderSpacing.Top = 3
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end
       object Label4: TLabel
-        AnchorSideLeft.Control = Label3
         AnchorSideTop.Control = edtQTH
         AnchorSideTop.Side = asrCenter
-        Left = 12
+        AnchorSideRight.Control = edtQTH
+        Left = 174
         Height = 17
         Top = 46
         Width = 98
+        Anchors = [akTop, akRight]
+        BorderSpacing.Right = 3
         Caption = 'QTH Nickname'
         ParentColor = False
       end
@@ -127,12 +136,25 @@ object frmeQSLDownload: TfrmeQSLDownload
         AnchorSideLeft.Control = edtDateFrom
         AnchorSideTop.Control = edtDateFrom
         AnchorSideTop.Side = asrBottom
-        Left = 277
+        Left = 275
         Height = 34
         Top = 37
-        Width = 184
+        Width = 190
         BorderSpacing.Top = 3
         TabOrder = 2
+      end
+      object chkChangeDate: TCheckBox
+        AnchorSideLeft.Control = Label3
+        AnchorSideTop.Control = edtQTH
+        AnchorSideTop.Side = asrBottom
+        Left = 12
+        Height = 23
+        Top = 77
+        Width = 424
+        BorderSpacing.Top = 6
+        Caption = 'Set Rcvd date to be current date -1 after succesfull download'
+        OnChange = chkChangeDateChange
+        TabOrder = 3
       end
     end
   end
@@ -142,21 +164,24 @@ object frmeQSLDownload: TfrmeQSLDownload
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 0
+    Left = 1
     Height = 46
-    Top = 560
-    Width = 481
+    Top = 559
+    Width = 570
     Align = alBottom
+    BorderSpacing.Left = 1
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
     BevelOuter = bvNone
     ClientHeight = 46
-    ClientWidth = 481
+    ClientWidth = 570
     TabOrder = 2
     object btnClose: TButton
       AnchorSideTop.Control = Panel2
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
-      Left = 397
+      Left = 486
       Height = 25
       Top = 11
       Width = 72
@@ -179,6 +204,20 @@ object frmeQSLDownload: TfrmeQSLDownload
       Caption = 'Preferences'
       OnClick = btnPreferencesClick
       TabOrder = 1
+    end
+    object btnDownload: TButton
+      AnchorSideLeft.Control = Panel2
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Side = asrCenter
+      Left = 135
+      Height = 25
+      Top = 11
+      Width = 300
+      BorderSpacing.Top = 6
+      Caption = 'Download data from eQSL website'
+      OnClick = btnDownloadClick
+      TabOrder = 2
     end
   end
 end

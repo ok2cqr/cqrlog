@@ -30,66 +30,103 @@
 <div style="text-align: left;"><strong>CQRLOG for LINUX by OK2CQR &amp; OK1RR</strong></div>
 <p align=center><img src=img/line.png></p>
 <a name=co1><h2><strong>Contest support</strong></h2></a>
-<p>You will find contest selection from <b>NewQSO/Window</b> dropdown menu.
-<br><br>When contest window is open <b>NewQSO</b> has contest exchange fields visible. You may have to stretch <b>NewQSO </b> window horizontally to see them.
-<br>You <b>do not</b> normally need <b>NewQSO</b> window during contest. Only need for <b>NewQSO</b> is in case you have to edit an already worked qso.
- <br> Select qso normally via <b>QSO list</b> and press <b>edit QSO button</b> and you are able to edit qso, also the contest message part of it.
- <br><br><b>NewQSO</b>  is not meant to be used during contest qso feeds. <b>All new qsos are entered via contest window.</b></p>
+<p>You will find contest selection from <b>NewQSO/Window</b> dropdown menu. Contest support of Cqrlog is very limited, but will serve you well if you just
+like to take a part to contest without winning in mind.
+
+<br>Contest window is just a "child form" for <b>NewQSO</b> to make qso logging faster when working in contests.
+With <b>Tru</b> and <b>Msg is Loc</b> setting it is useful also in VHF, UHF, SHF Tropo, Es etc. openings for fast qso
+logging. Perhaps also in some other operations like WWFF activations.
+<br><br><b>Note:</b> This is <b>NOT</b> a contest logging add-on!!! It is a contest-notepad.
+It is meant to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
+<br><br>When contest window is open NewQSO</b> has contest exchange fields visible. You may have to stretch <b>NewQSO </b> window horizontally to see them.
+You <b>do not normally need NewQSO</b> window during contest.
+<br><b>Only need for <i>NewQSO</i> is in case you have to edit an already worked qso.</b>
+Select qso normally via <b>QSO list</b> and press <b>edit QSO button</b> and you are able to edit qso, also the contest message part of it.
+ <br><br><b>Repeat: <i> NewQSO</i></b>  is not meant to be used during contest qso feeds. <b>All new qsos are entered via contest window.</b></p>
 
 <p align="center">
    <img src="img/contest.png">
 </p>
 <p>
-<b>RECOMMENDATION:</b> Make new log for each contest, consider not to allow qrz/hamqth search, it may slow down qso feed.
-<b>Note:</b> This is <b>NOT</b> a contest logging add-on!!! It is a contest-notepad.
-It is meant to be a tool for "Sunday contesters working in Tourist Class". Do not expect wonders!
+<b>RECOMMENDATION:</b><br> Make new log for each contest, consider not to allow qrz/hamqth search, it may slow down qso feed.
+<br> It might be a good idea to have two logs the "contest" that is used during a contest and then cleared for new contest and the other as 
+"contest archive" where contents of "contest" are moved with adif export after Cabrillo log is sent.
+<br>Benefit of having "contest" log with one contest is also that you get <b>DXCC statistic</b> right after cursor leaves callsign column. You can place contest window just above NewQSO/DXCC statistic.(see pic above).
 </p><p>
-Contest window is just a "child form" for <b>NewQSO</b> to make qso logging faster when working in contests.
-With <b>Tru</b> and <b>Msg is Loc</b> setting it is useful also in VHF, UHF, SHF Tropo, Es etc. openings for fast qso
-logging. Perhaps also in some other operations like WWFF activations.
-<br><br>
-Contest window has a simple dupe check that turns typed duplicate callsign bold red printed. If you save a duplicate qso it is marked as "Dupe" in "Comment to qso" field.
-<br>To get this working properly you must <b>either</b> create a new log for every contest <b>or</b> set dupe start date (I.E. contest starting day) with button <b>"from YYYY-MM-DD"</b>
+
+Contest window has a simple dupe check that turns typed duplicate callsign bold red printed. If you save a duplicate qso it is marked as "<b>/D</b>" in "<b>RST sent</b>" field.
+When doing Cabrillo export it is operator's duty to decide what to do with "/D" reports
+<br>To get duplication check working properly you must <b>either</b> create a new log for every contest <b>or</b> set dupe start date (I.E. contest starting day) with button <b>"from YYYY-MM-DD"</b>
 </p>
 <p>
-<b>HOTKEYS</b> work like with <a href="h20.html">New QSO window</a>.
+<h4>Hotkeys:</h4> 
+Hotkeys work same way as with <a href="h20.html">New QSO window</a>.
 <ul><li> <b>2x ESC</b> clears all fileds</li>
 <li>Note: <b>1x ESC</b> returns cursor back to Call-field (if cursor is in some of the other fields like RSTr) and places cursor at the end of callsign for possible repairs.<br>
   It also halts CW memory output if it is just running.</li>
-<li> <b> F1..F10 </b>send CW macros etc.</li>
+<li> <b> F1..F10 </b>send CW or VOICE messages depending on used mode.</li>
 <li> <b>TAB-key</b> moves cursor between fields. (may also be SPACE key, if set) </li>
+<li> <b>Ctrl+Tab</b> will set <b>S&P</b> mode</li>
+<li> <b>Shift+Tab</b> will reset <b>S&P</b> mode</li>
 </ul>
 </p>
 
 <p>
-Contest window has following fields and checkboxes:<br>
+<h4>Contest window has following fields and checkboxes:</h4>
 <ul>
-<li><b>Tab in order</b> when checked overrides all other Tab settings (below) and Tab Order is Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
-<li><b>Call</b> when you leave this field callsign is moved to NewQSO. Callsign turns BOLD RED if it is duplicate.</li>
+<li><b>Contest name</b> Selection box has a list of predefined contest names. When selecting one and leaving <b>Contest name</b> combo box name will be cut from "|"(including it) that separates contest name and explanation.
+ You can also type contest name here if it is not in list. Be sure you do not use "|" character(s) in name because program will cut name from the first one found.
+<br><b>RECOMMENDATION:</b><br>
+Add date to contest name if you keep many contests in same log. That way <b>QSO list/Filter/Contest filter</b> can separate contests by name.</li>
+<li><b>Tab in order</b> when checked overrides all other Tab settings (see below) and Tab Order is: Call-RSTs-NRs-MSGs-RSTr-NRr-MSGr-SaveQSO-ClearAll</li>
+<li><b>Show hint</b> when checked shows help text of object that mouse cursor currently points</li>
+<li><b>CQ panel</b> is visible when <b>S&P</b> is not checked (CQ calling mode)</li>
+    <ul><li><b>CQ period</b> timer period in millisecons to send one CQ+listen (5000 - 50000, 5-50sec)
+    <br> To adjust: Set repeats=1, press CQ start, adjust period value so that F1 has time to run + listening time</li>
+    <li><b>CQ repeats</b> repeat period how many times CQ period is repeated (1 - 20)s</li>
+    <li><b>CQ start</b> start/stop repeated CQ calling. <b>Shorcut key: Shift+F1</b>. 
+    <br>Pressing <b>ESC</b> stops timer and CW send. It can not stop voice keyer script.
+    <br>Also writing anyting to <b>Call</b> will stop running timer and CW sending.</li>
+    </li>
+<li><b>Last Cq Freq</b> will show last used CQ frequency and mode. CQ frequency and mode is stored when F1 memory is launched either from keybord or from Memory keys F1 button.
+    Click on frequency or mode reading or Ctrl+L will restore rig to that frequency and mode. This value is not stored and clears when contest window is closed.</li></ul>
+<li><b>Call</b> when you leave this field callsign is moved to NewQSO. Callsign <b>turns BOLD RED</b> while typing if it is duplicate (and duplicate check is active).</li>
 <li><b>SPACE is TAB</b> when checked space bar acts like TAB-key moving to next field. <b>Note:</b>This prevents typing space (perhaps needed in MSG fields).</li>
-<li><b>Dupe check</b> Default checked.
-<li><b>from YY-MM-DD</b> Button to set duplicate check start date (I.E. contest start date). Must be set if you have all qsos in same log. 
-<br>If every contest has it's own log can be as default (1900-01-01). Button is not visible if <b>Ignore dupes</b> is set.
-<li><b>NoMode4Dupe</b> Means that same callsign can be worked again on same band if mode is different.
-</li>
-<li><b>Ignore dupes</b> Do not check duplicate qsos at all.</li>
+<li><b>Dupe check</b> Default checked. If you use same log for several contests, and/or other working, set the contest start date with <b>from YY-MM-DD</b> button.
+<br> if <b>NoMode4Dupe</b> is selected duplicate check allows qso with same station in same band if mode differs.
+<br> if <b>Ignore dupes</b> is selected it will ignore duplication check completely.
+<br> When dupe check is active and callsign is found as duplicate, but still saved, program will add <b>/D</b> to <b>RST sent</b>.
+ It is then operator's duty to clean or leave <b>/D</b> to exported Cabrillo log.</li>
 <br>
-<li><b>RST s</b> copied from NewQSO, so should correspond used mode. Can be changed.
-<br><b> Note:</b> defaults to 599 (as NewQSO) If mode is not CW it will change after cursor leaves callsign column. So do not worry when working non-cw contest!</li>
+<li><b>RST s</b> RST sent. Can be changed.
+<br><b> Note:</b> defaults to 599 (CW) 59(phone). If rig mode is changed you get corresponding RST with 2xESC. 
+<br>It also changes when cursol leaves <b>call</b> column. So do not worry when working mixed mode contest!</li>
 <li><b>Tru</b> means you like to exchange true reports. Makes Tab order to stop at RST (s & r) fields. Useful in some high band contests, Es and tropo openings.</li>
 <br>
-<li><b>NR s</b> serial number to send. 
+<li><b>NR s</b> serial number to send.
 <br><b> Note:</b> you can type only numbers to NR s field.</li>
 <li> <b>Inc</b> if checked it will auto increment serial number. You may change this number at any time. Increment goes on from typed number.</li>
 <br>
-<li><b>MSG s</b> sometimes you may need an additional message with number, or just a message with no number. On high band contests you may type your locator here.</li>
-<li><b>Qsp</b> if checked makes TAB order stop at MSG s. Content of MSG s is taken from last logged MSG r. Cursor is placed at the end of message for possible edit. For contests where you have circulating message: At 1st qso you set your own word to send, after that you send previously received word as your next own message. </li>
+<li><b>MSG s</b> sometimes you may need an additional message with number, or just a message with no number.
+ On high band contests you may type your locator here.</li>
+<li><b>Qsp</b> if checked makes TAB order stop at MSG s. Content of MSG s is taken from last logged MSG r. Cursor is placed at the end of message for possible edit.
+  For contests where you have circulating message: At 1st qso you set your own word to send, after that you send previously received word as your next own message. </li>
+<li><b>S&P</b> When Search & Pounce is checked operator launces all CW/Voice messages manually.
+<br>When S&P is not checked (in RUN mode) program launches message F2 when cursor enters one of RSTr, NRr, or MSGr columns. This way also if true reports are selected F2 is sent after your message is ready.
+<br>In case duplicate checking is enabled and callsign is duplicate, message F3 is launched instead of F2 and it happens always when cursor leaves callsign column.
+<br>When <i>Enter</i> or <i>Save qso</i> button is pressed program will send message F4.
+<br>Message F1 can be used for CQ that is manually launched.
+<br>When phone modes are used messages are lauched same way but you need very special voice script if you want to include worked station's callsign into F2 and F3 messages, but launcing F4 at QSO save may be useful.
+<br><b>NOTE:</b> When S&P checkbox changes state then also CW memory sets are switched between "S&P" and "Run".
+<br>See more about <a href="/h26.html">CW messages</a> how to define messages with macros and save/load different setups of CW messages.</li>
 <br>
-<li><b>RST r</b> copied from NewQSO, so should correspond used mode. Can be changed.</li>
+<li><b>RST r</b> RST received. Default to 599 (CW) 59 (phone). Can be changed.
+<br>Default rst for CW and phone is created from rig's current mode. If you do not have cat controlled rig select "Hamlib dummy #1" as rig and set correct band and mode from TRXControl's band buttons.
+</li>
 <br>
 <li><b>NR r</b> serial number you receive.
 <br><b> Note:</b> you can type only numbers to NR r field. </li>
-<li><b>No </b> if no serial number then setting this changes tab order so that it jumps directly to MSG r. </li>
+<li><b>No </b> if thre is no serial number in contest this setting changes tab order so that it jumps over, directly to MSG r. </li>
 <br>
 <li><b>MSG r</b> message you receive</li>
 <li> <b>MSG is Grid</b> If '<b>MSG is ...</b>' is checked then message will be logged in <i> SRX_String </i><b>AND ALSO</b> to <i>selected NewQSO column</i>. 
@@ -98,13 +135,16 @@ Contest window has following fields and checkboxes:<br>
 <br>If <b>MSG is Grid</b> but the entered locator is <b>not valid</b> it will <b>NOT</b> be copied to <i>NewQSO/Grid column</i> and stays only in <i>Srx_String</i>.
 <br> 
 <br>In case of <b>MSG is State</b> and callsign is detected by prefix to be a Germany callsign srx_string is copied to <b>DarcDOC</b> column, orherwise to <b>State</b> column.
-<br>In case of <b>MSG is Comment</b> and dupe checking is allowed, and dupe found, Comment to QSO contains first "Dupe " and then the copied message.</li>
-<br>
+<br>In other cases MSG is copied to correspondig NewQSO column.
+<br><b>NOTE: </b>After selecting '<b>MSG is ...</b>' remember also to check the checkbox to get it activated!</b></li>
+</ul>
+<h4>Buttons you really do not need (you should <b>NOT use mouse</b> when working contest!):</h4>
+<ul>
 <li><b>Save QSO</b> Save QSO button at NewQSO, increments NR and clears all fields.
-<br><b> Note:</b> pressing <b>ENTER at any time</b> after Call field is filled does the same.</li>
-<li><b>Clear QSO</b> Clear all QSO information.
+<br><b> Note:</b> pressing <b>ENTER at any time after cursor is out from Call column</b>  does the same.</li>
+<br><li><b>Clear QSO</b> Clear all QSO information.
 <br><b> Note:</b> Pressing 2x ESC key does the same.</li>
-<br><li><b>Clear all</b> Clear all fields. Usefull when starting a new contest to remove saved settings.</li>
+<br><li><b>Clear all</b> Clear all fields. Usefull when starting a new contest to remove all saved settings.</li>
 </ul>
 <br>
 All settings, including contest name, are saved when closing contest form. When opening cqrlog and contest form again after rest period you can directly continue contest working.
@@ -113,18 +153,72 @@ All settings, including contest name, are saved when closing contest form. When 
 <p>
 <b>Typical contest qso goes like this:</b><br>
 Type callsign-&gt;press TAB-&gt;type contest rxnumber-&gt;press TAB-&gt;type contest message-&gt;press ENTER.
-Or hit ENTER after rxnumber if no additional message is exchanged.
+Or hit ENTER after rxnumber if no additional message is exchanged. When S&P is checked you maybe need to launch some Cw messages manually.
 </p>
-<p>Remember that pressing <b>ENTER</b> key at any field saves qso with existing values. How ever there must be
-callsign of least three characters long. Sent/Received number and message are not needed.
+<p>Remember that pressing <b>ENTER</b> key at any column saves qso with existing values. How ever there must be
+callsign of least three characters long. Sent/Received number and message(s) are not needed.
 <br><b>There is no need to use the mouse.</b> Keep your hands on keyboard (and possible on CW key / PTT (if not foot pedal in use)). It is faster.</p>
 <p>
-Contest numbers and messages are saved in log into their own columns. Use <b>preferences/Visible columns</b> to show them in <b>Qso list</b>.
+Contest numbers and messages are saved in log in their own columns. Use <b>preferences/Visible columns</b> to show them in <b>Qso list</b>.
 <br><br>
-<b>CW macros</b> can be used for sending contest meessages. Look them from help section <a href="h26.html">CW Operation</a>
+<b>CW messages</b> can be used for sending contest messages. Look at help section <a href="h26.html">CW Operation</a>
+ how to use macros in messages.
+<br><b>NOTE:</b> If you use macro that sends whole contest message (%xrs = RST, STX, STXString) message will skip empty ones. This way %xrs works for all contests.
+</p>
+<h4>Status view support</h4>
+<b>NOTE:</b> If you have one log called <b>contest</b> that you clear always before contest, to have just qsos of that contest, and after contest you move all qsos 
+with adif export to another log called <b>archive</b> you can view contest status afterwards from that log if you have used <b>unique contest names</b> I.E. added contest start date to name.
+<br> Find contest with <b>Filter/Contest filter</b> and copy name from selection list box and paste it to Contest window. You do not have to activate contest filter to see the status of that contest.
+<p><b>OK1WC memorial contest</b> status is supported.
+<p align="center">
+<img src="img/contest_mwc.png">
 </p>
 <p>
-ADIF exports fields to right tags.<br><br>
+If contest name has "<b>mwc</b>" or "<b>ok1wc</b>" included (no case sensitive) then status counting is activated. At the start of contest (and any oher time when no qso to save) it can be seen by pressing <b>2xESC</b>.
+After saving a qso Status view is updated.
+<br>TRXControl must show that rig is on 80m or 40m band. If you do not have cat controlled rig select "Hamlib dummy #1" as rig and set correct band and mode from TRXControl's band buttons. 
+<br>Only bands 80M and 40M and mode CW are counted (See rules of contest).
+<br><br>
+</p>
+<br>
+<p><b>Nordic Activity Contest (NAC)</b> status is supported.
+<p align="center">
+<img src="img/contest_nac.png">
+</p>
+<p>
+If contest name has "<b>nac</b>"  included (no case sensitive) then status counting is activated. At the start of contest (and any oher time when no qso to save) it can be seen by pressing <b>2xESC</b>.
+After saving a qso Status view is updated.
+<br>
+<br><br>
+</p>
+<p><b>Common</b> status is supported.
+<p align="center">
+<img src="img/contest_cmn.png">
+</p>
+<p>
+If contest name has <b>any name that does not fit rules of two above</b> status counting is activated. At the start of contest (and any oher time when no qso to save) it can be seen by pressing <b>2xESC</b>.
+After saving a qso Status view is updated.
+<br>There are several items shown in Status display. You can control them by left click below text <b>Status</b> (but above status display itself).
+<br>The DX and own continent counts (EU in picture) are defined against your callsign in preferences/station/call.
+<br><br> To see Status section you may need to stretch the bottom part of Contest window.
+<br><b>NOTE:</b><i> Status counting may have errors! It is just for showing progress of contest, not to show final score.</i>
+</p>
+
+<p>
+<H4>After contest</h4>
+Most contests expect <b>Cabrillo</b> log format. Cqrlog has a limited support of Cabrillo exports. Mostly enough for a Sunday contester.
+<br>In case you want to use external Cabrillo program you have to make ADIF export of qsos</b>
+and then use another program.</p><p>
+</br>
+I found nice <b>adif2cabrillo</b> program for Linux from <a href="http://users.telenet.be/on4qz/a2c/index.html" target="_blank">http://users.telenet.be/on4qz/</a> that supports ADIF importing.
+</p></p>Starting is bit complicated: 
+</br>You need to compile it from source. Qt5 with qmake (called qmake-qt5 if your distro is Fedora) is needed to be able to compile
+it.</br>
+Then there are no templates for different contests. You have to create them, but after that it serves you well!
+It accepts nicely exported ADIF format from cqrlog and dig out STX and SRX as expected.
+</p>
+<p>
+<h5>ADIF exports fields to right tags.</h5>
 &lt;RST_SENT:3&gt;599&lt;STX:3&gt;001<br>
 &lt;RST_RCVD:3&gt;599&lt;SRX:3&gt;002<br>
 &lt;RST_SENT:3&gt;599&lt;STX:3&gt;003&lt;STX_STRING:2&gt;SA<br>
@@ -138,19 +232,7 @@ ADIF exports fields to right tags.<br><br>
 HTML export will look like this:<br>
 <img src="img/contest_html_export.png">
 </p>
-<p>
-</br>
-Most contests expect <b>Cabrillo</b> log format. Cqrlog has a limited support of Cabrillo exports. Mostly enough for a Sunday contester.
-<br>In case you want to use external Cabrillo program you have to make ADIF export of qsos</b>
-and then use another program.</p><p>
-</br>
-I found nice <b>adif2cabrillo</b> program for Linux from <a href="http://users.telenet.be/on4qz/a2c/index.html" target="_blank">http://users.telenet.be/on4qz/</a> that supports ADIF importing.
-</p></p>Starting is bit complicated: 
-</br>You need to compile it from source. Qt5 with qmake (called qmake-qt5 if your distro is Fedora) is needed to be able to compile
-it.</br>
-Then there are no templates for different contests. You have to create them, but after that it serves you well!
-It accepts nicely exported ADIF format from cqrlog and dig out STX and SRX as expected.
-</p>
+
 <p align=center><img src=img/line.png></p>
 <br>
 <table width="100%" border="0" cellpadding="2" cellspacing="2">

@@ -111,7 +111,7 @@ object frmFreq: TfrmFreq
       Top = 18
       Width = 180
       BorderSpacing.Left = 230
-      Caption = 'RTTY: (f>RTTY and f<=SSB)'
+      Caption = 'DATA: (f>DATA and f<=SSB)'
       ParentColor = False
     end
     object lblFreqNote4: TLabel
@@ -126,7 +126,7 @@ object frmFreq: TfrmFreq
     end
   end
   object dsrFreq: TDataSource
-    DataSet = dmData.qBands
+    DataSet = dmData.qFreqs
     left = 130
     top = 57
   end

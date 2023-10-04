@@ -42,6 +42,7 @@ type
   public
     DxccWithLoTW              : Boolean;
     fil_SrcCont               : String;
+    fil_SrcCalls              : TStringList;
     fil_IgnWkdHour            : Boolean;
     fil_IgnHourValue          : Integer;
     fil_IgnDate               : Boolean;
@@ -125,6 +126,8 @@ type
     RbnMonThread : TRbnThread;
     lTelnet      : TLTelnetClientComponent;
     aRbnArchive  : Array of TRbnSpot;
+    SrcCalls : TStringlist;
+
 
     function  GetModeFromFreq(freq: string): string;
 
@@ -172,11 +175,31 @@ var
   adif     : Word;
   index    : Integer;
   f        : Double;
+  i        : integer;
+  SpotterOk: Boolean;
 begin
   Result := False;
 
-  dmDXCluster.id_country(spotter,now,pfx,Country,waz,itu,SrcCont);
+  if (fil_SrcCalls.Count>0) then
+   Begin
+     SpotterOK:=false;
+     for i:=0 to fil_SrcCalls.Count-1 do
+      Begin
+        if (pos(fil_SrcCalls.Strings[i], spotter)=1) then  //begins with definition
+                                   begin
+                                     SpotterOk := True;
+                                     Break;
+                                   end;
+      end;
+     if Not SpotterOK then
+        Begin
+          if dmData.DebugLevel>=2 then
+                                  Writeln('RBNMonitor: ','Wrong source callsign - ',Spotter);
+          Exit
+        end;
+    end;
 
+  dmDXCluster.id_country(spotter,now,pfx,Country,waz,itu,SrcCont);
   if (Pos(SrcCont+',',fil_SrcCont+',') = 0) and (fil_SrcCont<>'') then
   begin
     if dmData.DebugLevel>=2 then Writeln('RBNMonitor: ','Wrong source continent - ',SrcCont);
@@ -576,7 +599,7 @@ begin
   for i:=0 to sgRbn.ColCount-1 do
     cqrini.WriteInteger('WindowSize','RbnCol'+IntToStr(i),sgRbn.ColWidths[i]);
   lTelnet.Disconnect();
-  dmUtils.SaveWindowPos(self)
+  dmUtils.SaveWindowPos(self);
 end;
 
 procedure TfrmRbnMonitor.FormCreate(Sender: TObject);
@@ -588,6 +611,7 @@ begin
   sgRbn.RowCount := 1;
 
   slRbnSpots := TStringList.Create;
+  SrcCalls:= TStringList.Create;
 
   lTelnet := TLTelnetClientComponent.Create(nil);
   lTelnet.OnConnect    := @lConnect;
@@ -600,6 +624,7 @@ procedure TfrmRbnMonitor.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(lTelnet);
   DoneCriticalsection(csRbnMonitor);
+  FreeAndNil(SrcCalls);
   FreeAndNil(slRbnSpots)
 end;
 
@@ -631,8 +656,8 @@ begin
   sgRbn.Cells[2,0] := 'DX';
   sgRbn.Cells[3,0] := 'Mode';
   sgRbn.Cells[4,0] := 'dB';
-  sgRbn.Cells[5,0] := 'Q';
-  sgRbn.Cells[6,0] := 'D';
+  sgRbn.Cells[5,0] := 'Qsl';
+  sgRbn.Cells[6,0] := 'DXCC';
 
   if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnectM',False) )) then
      acConnectExecute(nil);
@@ -705,10 +730,16 @@ begin
 end;
 //-------------------------------------------------
 procedure TfrmRbnMonitor.LoadConfigToThread;
+
 begin
   if Assigned(RbnMonThread) then
   begin
     RbnMonThread.fil_SrcCont := cqrini.ReadString('RBNFilter','SrcCont',C_RBN_CONT);
+
+    SrcCalls.Clear;    //we need to do this via another TString list. Direct mods to fil_SrcCalls cause SIGSEGV
+    SrcCalls.Delimiter:=',';
+    SrcCalls.AddDelimitedtext(cqrini.ReadString('RBNFilter','SrcCall',''));
+    RbnMonThread.fil_SrcCalls := SrcCalls;
 
     RbnMonThread.fil_IgnWkdHour    := cqrini.ReadBool('RBNFilter','IgnHour',True);
     RbnMonThread.fil_IgnHourValue  := cqrini.ReadInteger('RBNFilter','IgnHourValue',48);

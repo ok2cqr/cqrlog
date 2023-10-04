@@ -34,9 +34,9 @@
 <br>There are some additional startup parameters that you can use with command terminal, or add them to your startup menu parameters of cqrlog.
  Those parameters can be listed in command terminal starting cqrlog as: cqrlog -h , or: cqrlog --help
 <br><br><img src=img/h0.png border=0>
-<br><br>Starting with <b>--remote</b> or <b>-r</b> takes one letter argument <b>J</b>,<b> M</b> or <b>K</b> that is not case sensitive. Letters correspond quick control keys in NewQSO/File to start three remote modes.
+<br><br>Starting with <strong>--remote</strong> or <strong>-r</strong> takes one letter argument <strong>J</strong>,<strong> M</strong> or <strong>K</strong> that is not case sensitive. Letters correspond quick control keys in NewQSO/File to start three remote modes.
 <br>When one of these are assigned cqrlog will jump to selected remote mode 10 seconds after startup is complete.
-<br><br>Starting with <b>--debug</b> takes one number (NR) usually<b> 1</b> to see full debug. Thtere are also some negative numbers in use to limit debug prints to certain functions. Mainly for developer usage.
+<br><br>Starting with <strong>--debug</strong> takes one number (NR) usually<strong> 1</strong> to see full debug. Thtere are also some negative numbers in use to limit debug prints to certain functions. Mainly for developer usage.
 
 </p>
 <a name=ah1><h2><strong>Preferences</strong></h2>
@@ -101,9 +101,11 @@
     <strong>Grayline offset</strong> - sometimes the gray line position is not accurate.
     You can set your own correction.
     <br><br>
-    <strong>Great circle </strong> Short and Long path line plotting may be adjusted here. Plotting step is decimal degrees &gt; 0.0 and &lt; 40.0. In polar areas where distance/degree is smaller this value is divided by integer divisor value &gt; 0 and &lt; 40.
+    <strong>Great circle </strong> Short and Long path line plotting on Grayline map  may be adjusted here. Plotting step is decimal degrees &gt; 0.0 and &lt; 40.0. In polar areas where distance/degree is smaller this value is divided by integer divisor value &gt; 0 and &lt; 40.
     <br>You may test different values if you like. If Columns are left empty the default values 0.1 and 10 are replaced.
     <br>Color for Short- and Longpath lines can be selected, as well as the line plot width (1 -5 pixels)
+    <br>If rotor control is used also beam heading path may be plotted on Grayline map. Color, plot line width and length may be adjusted.
+    <br><b>Note:</b>At N and S polar areas beam length may be cutted to avoid false plotting. Then reduce the lenght of beam line (fixes to calculation routine are welcome)
     <br><br>
     <strong>Check for newer version of DXCC tables after program startup</strong></a> - if checked,
     CQRLOG will check if any update of the country files is available. If a new version is found,
@@ -171,7 +173,7 @@
     QSO appears in this list immediately after logging, however the refresh procedure is
     quite slow. To save time, keep this box unchecked. </br>
     The <strong>'Skip over mode and frequency when radio is connected'</strong> is very important if the radio control is active.</br>
-    The <strong>'Enable auto search on HamQTH.com/QRZ.COM'</strong> switches on the automated search
+    The <strong>'Enable auto search on HamQTH.com/QRZ.COM/QRZCQ.com'</strong> switches on the automated search
     for HamQTH/QRZ callbook data for any worked station. This option does the same as F6 on the
     logging screen, however it can be rather slow depending on the HamQTH.com/QRZ.COM server
     availability.</br> 
@@ -208,48 +210,92 @@
     Checked bands are visible in both statistics appearing at the bottom of logging screen
     (bands/modes of the actual logged station) and main DXCC, WAZ and ITU zones statistics.
     It also affects the Challenge points at the bottom of the DXCC statistics.<br>
-    Pressing button <b>frequencies</b> band, and mode limits within bands, can be set.
+    Pressing button <strong>frequencies</strong> band, and mode limits within bands, can be set.
 </div><br>
 <img src=img/h9b.png border=0><br><br>
 <p align=center><img src=img/line.png></p>
 <a name=ah7><h2><strong>TRX Control</strong></h2></a>
 <img src=img/h10.png border=0><br><br>
-<div align=justify>
 
-<br><br><b> Note: </b>Running same time CQRLOG and other software that uses rig's CAT control can not be done by just setting rig same parameters to both programs.
-<br>That causes problems. See this document for more information: <a href="https://github.com/OH1KH/cqrlog/blob/loc_testing/compiled/setting_rigctld_for_all_programs.pdf">https://github.com/OH1KH/cqrlog/blob/loc_testing/compiled/setting_rigctld_for_all_programs.pdf</a>
-<br><br><b>Note: </b>CQRLOG supports operating with two TRX radios but only one can be active at a time.
-<br><br>
-    <strong>Radio one, desc:</strong> is a description you'll see in TRX control window. It is only
-    descriptive text, you can write whatever you want.<br><br>
-    <strong>Host:</strong> computer where rigctld is running, localhost is fine for most cases. <br><br>
+<br>Running same time CQRLOG and other software that uses same rig's CAT control can not be done by just setting rig same parameters to both programs.
+    That causes problems. See this document for more information: <a href="https://github.com/OH1KH/cqrlog/blob/loc_testing/compiled/setting_rigctld_for_all_programs.pdf">https://github.com/OH1KH/cqrlog/blob/loc_testing/compiled/setting_rigctld_for_all_programs.pdf</a>
+    
+    <ul><li><strong>Note: </strong>CQRLOG supports operating with six Rigs but only one can be active at a time.
+    </li></ul>
+    <strong>Path to rigctld binary</strong> This tells Cqrlog from where to find rigctld that is a part of Hamlib. That is important for two
+    reasons. 
+    <br>1st The rig model list is loaded from rigctld when preferences open. That makes model list to be always up to date and Cqrlog
+    supports always all rigs that current rigctld can support.
+    <br>2nd rigctld is started when Cqrlog starts (most of cases). Writing whole path makes rigctld to be found also the when it is not found
+    from default path.
+    <ul><li><strong> Note: </strong>Usuallly rigctld is found from /usr/bin, but if you have compiled it by yourself from source it may default to /usr/local/bin
+    </li></ul>
+    <strong>Nr of radios:</strong> With this you can select how many radios Cqrlog will support (Max 6, now).
+    <br><br>
+    <strong>Name:</strong>This is the radio name that you will see in combo box selector lists: TRXControl, Prefrences/TRXControl, Modes, CW interface.
+    If rig is not defined, means rig Model is empty, you will see "None" here. If you want to remove existing rig definition select it from selector, then clear
+    rig Model manually using delete key and change selector to another rig, or close prfereces with "OK" button.
+    <br>This will remove also rig's Modes and CW interface definition from configuration file. Next time you select deleted rig Cqrlog will load all defaults to settings.
+    <ul><li><strong>Note: </strong>If you have 3 rigs and you delete rig #2 Cqrlog does not reorder selection list. Your rig #3 stays as 3rd in 
+    selector list and #2 becomes "None"
+    </ul></li>
+    <strong>Host:</strong> computer where rigctld is running, localhost is fine for most cases but can be IP address of another computer where
+    rigctld is running (I.E. even over local network or internet) <br><br>
     <strong>RIG model:</strong> choose your radio model from the list.
     <br> Rig models below 10 (Dummy, NET rigctld, FLRig, TRXManager) are using TCP communication and so the <strong>Device</strong> as well
-     as <strong>Radio serial parameters</strong> do not need settings.<br><br>
+     as <strong>Radio serial parameters</strong> do not need settings.
+    <br><br>
     <strong>Device:</strong> device which the radio is connected to. /dev/ttyS0 is COM1, /dev/ttyS1
     is COM2 etc. If you use USB to serial interface, the device will usually be /dev/ttyUSB0
     for COM1 etc. If you are using Ubuntu or Debian, <strong>you have to be member of the dialout users
-    group</strong> to have rights to the serial ports.<br><br>
-    <strong>Poll rate:</strong> specifies how often CQRLOG should read data from rigctld. 500 milliseconds
-    is fine.<br><br>
+    group</strong> to have rights to the serial ports.
+    <ul><li><strong> Note: </strong>When connecting to rigctld emulator that imitates a rig via TCP connection the IPaddress and port may be written here like: 192.168.60.1:1234    
+    </li><li><strong> Note: </strong>With recent rigctlds you can use also names in /dev/serial/by-id/ folder. That way the device name does not change
+    like it often happens if you reorder USB wires in PS's sokets.
+    <br>(I.E my ci7300 shows out as /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_IC-7300_03003483-if00-port0  )
+    </li></ul>
+    <strong>Poll rate:</strong> specifies how often CQRLOG should read data from rigctld. 500 milliseconds is defaut. 
+    If your rig is old and slow values 1000 - 3000 may work better.
+    <br><br>
     <strong>Port number</strong> is the number of the port used to communicate with rigctld.
-    Default value is 4532. The second radio, has to have a different port e.g. 4533.<br>
-    <br><strong>Extra command line arguments</strong> usefull when you have to specify more parameters to
-    rigctld. E.g. CIV address (--civaddr=ID, where ID is the CIV address).<br><br>
-    <strong>Run rigctld when program starts</strong> is usually checked but when rig model #2 <strong>Hamlib Net Rigctld</strong> is used then it is unchecked and disabled because with that rig setting we are trying to connect external rigctld. Either in same PC or in network.
-    <br>If rig model #1 <b>Hamlib Dummy</b> is selected <strong>Run rigctld when program starts</strong>  is forced to be checked. This allows testing and simulated operations without rig CAT control.
-    <br><br><strong>Use \chkvfo</strong> is normally checked. Then cqrlog tries to find out is rigctld started with parameter "--vfo" because that changes rigctld command format. Uncheck of this disables this function. Use it in case of problems.
-    <br><br><strong>Serial port parameters</strong> Use the manual of your rig, please choose the correct options.
+    Default value of rigctld is 4532.
+    <br><br>
+    <strong>Extra command line arguments</strong> usefull when you have to specify more parameters to
+    rigctld. E.g. CIV address (--civaddr=ID, where ID is the CIV address) or similars. See rigctld man page for supported parameters.
+    <br><br>
+    <strong>Use CWR insted of CW</strong> means that mode CW will use reverse sideband in receive.
+    <br><br>
+    <strong>Run rigctld when program starts</strong> is usually checked but when rig model #2 <strong>Hamlib Net Rigctld</strong> is used then
+    it is unchecked and disabled because with that rig model we are trying to connect externally running rigctld. Either in same PC or in network.
+    <br>If rig model #1 <strong>Hamlib Dummy</strong> is selected <strong>Run rigctld when program starts</strong>  is forced to be checked. 
+    This allows testing and simulated operations without rig with CAT control.
+    <ul><li><strong> Note: </strong>If you use Cqrlog without connected rig it may be usefull to select rig model #1. Then you can open TRXConrol
+    window and set bands, modes and frequency from there that might be more convinient than selecting them from NewQSO window.
+    <br>Model Hamlib Dummy starts default from 145MHz frequency. Seeing that in TRXControl window tells you that Dummy rig is running.
+    </li></ul>
+    <strong>Use \chkvfo</strong> is normally checked. Then cqrlog tries to find out is rigctld started with parameter "--vfo" because
+     that changes rigctld command format. Uncheck of this disables this function. Use it in case of problems. This may be default ON in future
+     Hamlibs version > 5.
+    <br><br>
+    <strong>Serial port parameters</strong> Use the manual of your rig, please choose the correct options.
     Very often it is much better to specify only serial speed and leave other options as default.
-    Default value means that the settings from HamLib will be used.<br>
-    <br>
-    <strong>User defined TRXControl buttons</strong> can be defined here. Your defined buttons will shown in the TRX Control window after
-     you drop select this option in using the <strong>Preferences tab in the TRXControl</strong> window. For setting up buttons use
-      <strong>preferences</strong> option from TRXControl drop select option <strong>Preferences</strong>. From TRX Control tab you will find group
-       box named <strong>User defined TRX control buttons</strong>.
-    The first column is button name shown (4char max). In the same area the second column is the command(s) to execute. Definition can consist one 
-     command or several in a queue, rigctld commands may be used or if definition starts with word "<strong>run</strong>" (without quotes) it can be a program or
-      script name with full file path for your computer.
+    Default value means that the default settings from HamLib will be used. That should be fine in normal cases.
+    <br><br>
+    <strong>Rig pwr ON cmd</strong> When checked Cqrlog will send power ON command at startup to rig if rig can support power commands.
+    <br><br>
+    <strong>Set UTC to Rig</strong> When checked Cqrlog will send "set_clock" command with current UTC time to rig on next full minute change after initialization.
+    <br><strong>Note:</strong> All rigs do not support set_clock command.
+    <br><br>
+    <strong>Compound poll</strong> When checked Cqrlog will send rig poll command as one line "+f +m +v". That is Cqrlog default.
+    <br>When unchecked every command will be sent with LineEnding, I.E. in it's own line. This may help poor rigctld emulators like WFview.
+    <br><br>
+    <strong>User defined TRXControl buttons</strong> can be defined here. Your defined buttons will be shown in the TRX Control window after
+     you select this option using the <strong>Preferences menu/Show Usr buttons</strong> in the <strong>TRXControl window.</strong> 
+     <br>
+     The first column is button name shown (4char max). In the same area the second column is for the command(s) to execute. 
+     Definition can consist one command or several ones in a queue.
+     <br> rigctld commands may be used directly or if definition starts with word "<strong>run</strong>" (without quotes) 
+     it can be a program or script name with full file path.
       <br><ul> <li>
     <strong>Note:</strong> Rigctld supports raw command <strong>W</strong>. Parameter for it is the rig cat command in bytes. Prefix<strong> \0x</strong> must be added for Hex values. Usr1 command in picture Sets IC7300 to 60m CW with 500Hz filter and reduces output power to leagal limit with raw command.
     </li> <li>
@@ -279,7 +325,6 @@
     <br>Ctrl-0 will disable XIT. 
     <br>Ctrl-9 has a random value 0-990Hz that is added to setting if split is up. If split is down it is subtracted.<br>
     
-</div>
 <br>
 <img src=img/h100.png border=0> <img src=img/h100b.png border=0><br>
 
@@ -289,11 +334,11 @@
 Setting up Rotator control is very similar to setting up Rig control. Rotor models 1 and 2 (Dummy, NET rotctld ) are using TCP communication and so the <strong>Device</strong> as well
      as <strong>Rotor serial parameters</strong> do not need settings.<br><br>
 <br>
-<br>If <b>Use rotctld \dump_state info for limits</b> cheked rotctld asks turning limits AzMin and AzMax values from rotctld with command <strong>'+\dump_state'</strong>.
+<br>If <strong>Use rotctld \dump_state info for limits</strong> cheked rotctld asks turning limits AzMin and AzMax values from rotctld with command <strong>'+\dump_state'</strong>.
  That makes user possible to set turning limits other than rotator default turn with
  <strong>Extra command line arguments</strong>. Using string <strong> --set-conf=min_az=10,max_az=355</strong>  you can set rotator so that cqrlog will never turn it below 10deg or over 355deg.
  <br>Using negative value at az_min causes Cqrlog set it's 0degrees "P"-command to given negative value (while still displaying 0). I.E if az_min=-180 Cqrlog will use turning commands from "P-180" to "P180".
- <br>Without negative az_min or when checkbox  <b>Use rotctld \dump_state info for limits</b> is not set Cqrlog sends commands in usual range "P0 to "P360".
+ <br>Without negative az_min or when checkbox  <strong>Use rotctld \dump_state info for limits</strong> is not set Cqrlog sends commands in usual range "P0 to "P360".
  </p><p>Some rotators have turn from -180deg-0deg-180deg (south stop), like Hamlib Dummy test rotator.
  <br>Most of rotators have turn 0deg - 360deg.
  <br>Some may turn 0deg - >360 deg. With them cqrlog never drives values over 360, but reads position right if rotor sends over 360 deg value (sent_value-360 = cqrlog display).
@@ -305,32 +350,45 @@ Setting up Rotator control is very similar to setting up Rig control. Rotor mode
 You can define your own favourite frequencis and swich between them directly in New QSO window using ALT+V (Mem down)
 and
 ALT+B (Mem up). These keys are used in N6TR clones to switch between bands.<br>
-You can also switch between memory frequencies with TRXControl's <b>M up</b> and <b>M dwn</b> buttons and set rig frequencies
+You can also switch between memory frequencies with TRXControl's <strong>M up</strong> and <strong>M dwn</strong> buttons and set rig frequencies
  by double clicking rows in TRXControl's Add/Modify memory list.
 
 </p>
 <img src="img/h121.png"><br><br>
 <a name=ah8><h2><strong>Modes</strong></h2></a>
 <img src=img/h11.png border=0><br><br>
-<p>Here you can set up the default bandwidth for any of the supported modes (CW - SSB - RTTY - AM - FM).
-If your radio is tuned to the corresponding band segment or if you switch the mode on the radio
-control panel, CQRLOG will change the bandwidth to the desired value. The bandwidth can be
-changed at any time, however a program restart will probably be needed to make the changes
-take effect.<br>
-Some <strong>TRX like ICOM don't have support for this in HamLib. To get mode settings work, set
-all values to 0 (zero).</strong>
-</p><p><strong>User definable digital modes</strong> can be set up in a separate box. Use comma
-as a separator, ie. MYMODE1,MYMODE2 etc.<br>
-user should add digital modes (submode names) exactly as written in this table <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> 
+<p>Here you can set up the default bandwidth for any of the supported modes (CW - SSB - DATA - AM - FM) for rig selectd from <strong>Radio </strong>
+selector list box.
+If your rig is tuned to the corresponding band segment or if you switch the mode from TRXControl buttons CQRLOG will change the bandwidth
+ to the defined value. 
+<br>Setting 0 (zero) to values means that rig should use default bandwidth. This is good selection also when rig can not support bandwidth
+settings (like some ICOM rigs).
+<br>Setting -1 here means that bandwidth setting must be kept as it was. This also needs that rigctld supports negative value (version >=  4).
+<br><br>
+<strong>Log mode </strong>This is the data mode you most often use. Defaulting to RTTY. From mode selector you can select another mode.
+If mode does not exist you have to define it in <strong>User defined digital modes</strong> and then come back to mode selector.
+<br>
+This mode efftects to DXCluster window's spot line coloring (See <a href="h1.html#ah11">DX Cluster</a> ) and also sets defined mode if DX spot line
+is double clicked.
+<br><br>
+<strong>CAT cmd </strong>This is the rigctld mode command that needs to be sent to rig to get rig to proper mode for <strong>Log mode</strong>.
+<br><br>
+<strong>Use also reverse (cat -> rig) </strong>This defines if Cqrlog should show <strong>Log mode</strong> when rig is set to <strong>CAT cmd </strong>
+mode. This may have a pitfall. If your settings are for example SSTV and USB then Cqrlog will select mode as SSTV also when you are working USB fone qsos.
+<br>Usually this needs not to be set if DATA qsos are worked with external program using Cqrlog remote modes.
+<br><br>
+<strong>User defined digital modes</strong> can be set up in a separate box. Use comma as a separator, ie. MYMODE1,MYMODE2 etc.<br>
+User should add digital modes (submode names) exactly as written in this table <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> 
 If mode is missing from <strong>NewQSO/mode</strong> selection list and not added to <strong>User defined digital modes</strong> it may prevent ADIF import causing "wrong mode" error.
-</p><p>
-<strong>Note:</strong><br>
-Cqrlog uses internally modefied mode name. We call it here <strong>CqrMode</strong>. CqrMode is created from ADIF mode and submode with conversion table. CqrMode is mainly ADIF submode if it exist, with some exceptions.
+<ul><li>
+<strong>Note:</strong> Cqrlog uses internally modified mode name. We call it here <strong>CqrMode</strong>. CqrMode is created from ADIF mode and
+ submode with conversion table. CqrMode is mainly ADIF submode if it exist, with some exceptions.
 <br>Cqrlog will create four files in ~/.config/cqrlog folder for this use if they do not exist. One is a brief <strong>README_modefiles</strong> explaining three other files purposes.
-<br><br>If files exist they are not overwritten keeping possible user changes there. How ever user must do backups by himself if files are edited from original format.
+</li></ul>
+If files exist they are not overwritten keeping possible user changes there. How ever user must do backups by himself if files are edited from original format.
 These files apply to all logs created. They are not log based.
-<ul>
-<li><strong>submode_mode.txt</strong>
+<ul><li>
+<strong>submode_mode.txt</strong>
 <br> This file holds submode=mode pairs used to convert incoming mode+submode pair to CqrMode that mainly is the submode.
 <br><br> All pairs must be in uppercase format. User can add or delete mode pairs with text editor if definition at
 <br> <a href="https://adif.org/312/ADIF_312.htm#Mode_Enumeration">ADIF.org: Mode_Enumeration</a> changes. 
@@ -391,23 +449,29 @@ for each operation.
 </table>
 <br><br>
 This option allows an easy setup of the log fields to be exported into ADIF or HTML format.
-Only checked fields are exported. The 'Column' option names columns at header line. 'Width' option denotes the column width in approx. count of 16px characters. 
+<br>Only checked fields are exported. The 'Column' option names columns at header line. 'Width' option denotes the column width in approx. count of 16px characters. 
 Both options affect only for the HTML export. 
 <br>The SAT mode field is not stored in the database but instead calculated on the fly from frequency and RX frequency and for SAT QSOs only.
 <br>Width setting is ignored if "HTML auto column width" is checked when longest text in column (column name or data) sets the column width.
-<br>Distances are not exported when doing log backup at cqlog closing phase. They will be calculated and exported (if selected) in ADIF, HTML and QSL label printing.
+<br><br>Distances are not exported when doing log backup at cqlog closing phase. They will be calculated and exported (if selected) in ADIF, HTML and QSL label printing.
  Calculation of distances requires that preferences/station/locator is set and applied (automatic) to every qso and that at least 4 digit locator
-  (in case "ll" is added as 5 and 6th char to get the center of grid) of destination station logged. Sometimes importing logs from other logging program may leave own station locator unset. In this case QSO list/File/Group edit must be used for updating "my locator" field.
+  (in case "ll" is added as 5 and 6th char to get the center of grid) of destination station logged. 
+<br>Sometimes importing logs from other logging program may leave own station locator unset. In this case QSO list/File/Group edit must be used for updating "my locator" field.
 
 <br><br>
 <a name=ah11><h2><strong>DX cluster</strong></h2></a>
 <img src=img/h14.png border=0><br><br>
-This dialog allows an easy setup of the DX cluster spot filtering. Check the bands you want
-to display. If you want to supress (ie. filter out) spots for some DX countries, put
-its prefixes in the box below. Use a semicolon as a separator.
+<strong>Show only spots</strong><br>
+This dialog allows an easy setup of the DX cluster spot filtering. Check the bands and modes you want
+to display. 
+<br><br><strong>Note: </strong>Mode checkboxes here refer to <a href="h1.html#ah8">Preferences/Modes</a> set for every rig separately, and DATA refers to setting of "Log mode" there.
+<br>Each mode's frequency limits are set at <a href="h1.html#ah6">Preferences/Bands/Frequencies</a>.
+<br>Without proper setting of these spot filtering can not work and may not drop Spots you wish to disable, or may not show Spots you want to see.
+<br><br> If you want to supress (ie. filter out) spots for some DX countries, put
+those prefixes in the box below. Use a semicolon as a separator.
 <p>
-<strong>Callsign alert</strong> - allows you to enter callsigns that you are interested in. Eg. some special station for an award etc.<br>
-<strong>Run this command when callsign is spotted:</strong> will run select command when any of callsigns you've enter appears in the cluster.<br>
+<strong>Callsign alert</strong><br>Allows you to enter callsigns that you are interested in. Eg. some special station for an award etc.<br>
+<strong>Run this command when callsign is spotted</strong><br>Will run select command when any of callsigns you've enter appears in the cluster.<br>
 E.g. use this if you want to see small window with information:<br><br>
 <i> zenity --info --text='Callsign $CALLSIGN detected at $FREQ $MODE' --title=Info</i><br><br>
 You have to install zenity, first. <i>(Thans to SV2RCK for the tip!)</i>
@@ -424,10 +488,11 @@ This is also possible with "notify-send". The display duration is set in ms (-t 
 
 </p>
 <p>
-<strong>Show country name in the DX cluster spot</strong> - next to every spot, you will se the coutry name of the DX station<br>
-<strong>Send these commands to telnet DXCluster when connected</strong> - one or several commands with comma separated can be sent to DXCluster after connect is initialized.
- If your command(s) have space(s) between, like "<strong>acc/spot by_zone 14,15,16 and not (on hf/data or on hf/rtty)</strong>" it is recommended to close each command between double quotes.<br>
-<strong>Connect to DX cluster after program startup</strong> - after log is opened, cqrlog will connect to your default cluster. Please remember that
+<strong>Show country name in the DX cluster spot</strong><br>Next to every spot, you will se the coutry name of the DX station<br>
+<strong>Send these commands to telnet DXCluster when connected</strong><br>One or several commands with comma separated can be sent to DXCluster after connect is initialized.
+ If your command(s) have space(s) between, 
+<br>like "<strong>acc/spot by_zone 14,15,16 and not (on hf/data or on hf/rtty)</strong>" it is recommended to close each command between double quotes.<br>
+<strong>Connect to DX cluster after program startup</strong><br>After log is opened, cqrlog will connect to your default cluster. Please remember that
 username and password(if needed) have to be filled in the cluster list.
 </p>
 <p align=center><img src=img/line.png></p>
@@ -639,18 +704,22 @@ There are no known dependencies issues.<br><br>
     <br>Normally you do not need to touch eQSL addresses. But in case something changes at eQSL web pages it might be possible to fix it here without rebuilding cqrlog program.<br><br>
     <a name=ch1><h2><strong>CW interface</strong></h2></a>
     <img src="img/h95.png"><br><br>
-    Choose your preferred CW interface for radios you have. There are 5 options: None, WinKeyer USB,
-    cwdaemon, K3NG keyer and HamLib. We strongly recommend Winkey USB by Steve Elliot, K1EL,
-    which provides 'all in one' keying, including one of most advanced paddle keyers available.
-    cwdaemon should be seen as a backup option with many limitations, which may need
-    a custom linux kernel to avoid sloppy CW at speeds above 25 WPM. If cwdaemon is used,
-    only keyboard keying is possible.
-    <br>If you use <strong>same keyer for both rigs</strong>, and it is not HamLib, you can check <strong>Do not reset when switch radios</strong> to prevent keyer reset (that sets CW speed to default).
+    Choose your preferred CW interface for radio you have selected from <strong>Radio</strong> selector list.
+    <br>There are 5 options: None, WinKeyer ,cwdaemon, K3NG keyer and HamLib in <strong>CW interface type</strong> selector list.
+    <br>We strongly recommend <strong>Winkeyer</strong> by Steve Elliot, K1EL, which provides 'all in one' keying, including one of most 
+    advanced paddle keyers available.
+    <br>When checking <strong>Use potentiometer's CW speed</strong> Cqrlog does not send <strong>Default CW speed</strong> command to keyer
+    when it is initialized.
     <br><br>
-    Detailed setup of the CW devices is here:
+    <strong>cwdaemon</strong> should be seen as a backup option with many limitations, which may need a custom linux kernel to avoid 
+    sloppy CW at speeds above 25 WPM. If cwdaemon is used, only keyboard keying is possible.
+    <br><br>If you use <strong>Do not reset when switching radios</strong> it prevents keyer reset (that sets CW speed to default). 
+    This option does not apply with Hamlib keyer in use.
+    <br><br>
+    Detailed setup of the CW devices are here:
     <ul>
+        <li><a href=wkusb.html><strong>Winkeyer</strong></a></li>
         <li><a href=cwd.html><strong>cwdaemon</strong></a>
-        <li><a href=wkusb.html><strong>Winkey USB</strong></a></li>
         <li><a href="http://blog.radioartisan.com/arduino-cw-keyer/" target="_blank">
             <strong>K3NG</strong></a></li>
         <li><a href=cwh.html><strong>HamLib</strong></a>
@@ -683,9 +752,9 @@ There are no known dependencies issues.<br><br>
     Setting wsjt-x interface is mainly same as setting fldigi. How ever communication is done via UDP frames and so the IP address and Port must be specified.
     <br>Default values are <strong>127.0.0.1</strong> or <strong>localhost</strong> for address and <strong>2237</strong> for port. These are set in wsjt-x settings/reporting and if changed there, must also to be changed here.
     <br>
-    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even<b> 0.0.0.0</b> when cqrlog listens all transmits from every wsjt-x in network.
+    Address can also be other PC's IP address if wsjt-x is running in different networked PC than cqrlog, or even<strong> 0.0.0.0</strong> when cqrlog listens all transmits from every wsjt-x in network.
 
-    <br><br>You can also use a multicast address for both <b>wsjt-x/settings/Reporting/UDP Server</b> and <b>cqrlog/preferences/fldigi/wsjt interface/wsjt addr</b>. Cqrlog will handle ip addresses starting with "239." as multicast addresses.
+    <br><br>You can also use a multicast address for both <strong>wsjt-x/settings/Reporting/UDP Server</strong> and <strong>cqrlog/preferences/fldigi/wsjt interface/wsjt addr</strong>. Cqrlog will handle ip addresses starting with "239." as multicast addresses.
     <br>With multicast you are able to run several programs listening to wsjt-x udp broadcasts at same time. To start with multicast try multicast group address "239.255.0.0" for both cqrlog and wsjt-x (and also other programs needed to listen wsjt-x)
     <br><br>
     Using <strong> WB4 chk starts from</strong> it is possible to limit log search starting from given date for callsign and/or locator.
@@ -734,9 +803,9 @@ There are no known dependencies issues.<br><br>
     <br><strong>Note:</strong> Setting html browser here affects only to call attachments and it can be different than system default, or different than selected at preferences/program tab.
     <br><strong>Hint:</strong> If you click Web browser name edit box a file open dialog opens and you can navigate to your browser. If you place cursor on Web browser name edit box, press left button and keep it down, you can paint exisiting text and use delete button to clear it and type new text.
     <a name=ch5><h2><strong>Callbook support</strong></h2></a>
-    CQRLOG supports <a href="http://HamQTH.com">HamQTH</a> and <a href="http://qrz.com">QRZ.com</a>
+    CQRLOG supports <a href="http://HamQTH.com">HamQTH</a>,  <a href="http://qrz.com">QRZ.com</a> and  <a href="http://qrzcq.com">QRZCQ.com</a>
     callbooks but only access through the XML interface is supported. HamQTH has a free interface,
-    for QRZ.com you have to pay an annual fee.<br><br>
+    for QRZ.com and QRZCQ.com you have to pay an annual fee.<br><br>
     <img src="img/h1112.png"><br><br>
 
     <a name=ch6><h2><strong>RBN support</strong></h2></a>
@@ -767,17 +836,19 @@ There are no known dependencies issues.<br><br>
     </ul>
       <li><strong>Delete old information after XX seconds</strong> The dots won't stay on the map forever.
     180 seconds (3 minutes) is a good default value.
-    <br><b>Note:</b> Dots also depend on the band, if you change band, dots will always be deleted. All data is band related.</li>
+    <br><strong>Note:</strong> Dots also depend on the band, if you change band, dots will always be deleted. All data is band related.</li>
     </ul>
     <br><br>
 
     <a name=ch7><h2><strong>Online log upload support</strong></h2></a>
     CQRLOG supports online log upload to <a href="http://HamQTH.com">HamQTH</a>,
-    <a href="https://secure.clublog.org/loginform.php">ClubLog.org</a> and
-    <a href="http://hrdlog.net/">HRDLOG.net</a><br>
+    <a href="https://secure.clublog.org/loginform.php">ClubLog.org</a>,
+    <a href="http://hrdlog.net/">HRDLOG.net</a> and
+    <a href="https://n1mmwp.hamdocs.com/appendices/external-udp-broadcasts/#contact">N1MM+ UDP contact messages</a><br>
     <img src="img/h1116.png"><br><br>
     Both ClubLog and HamQTH need a username and password, Clublog also needs the email address
     used when you registered. HRDLog.net needs only user name and the code you got by e-mail.
+    N1MM+ format UDP messages require a hostname/IP and port number in format <i>hostname:port</i> (e.g. 127.0.0.1:5444).
     You can set different color for each service. This color will be used for status messages
     which will inform you about upload progress.
     <strong>Upload QSO data immediately after save, update or delete</strong> means that every
@@ -789,6 +860,7 @@ There are no known dependencies issues.<br><br>
     <a name=ch8><h3>How to get it to work?</h3></a>
     <ul>
         <li>check if you have set correct username, password (email, Code)</li>
+        <li>in case Url address of online log API has changed you are able to change it here</li>
         <li>export all data from the log to ADIF file</li>
         <li>import this adif file to the website of online log you are going to use
             (if you are using HamQTH, please wait untill the email about a successful import arrives)

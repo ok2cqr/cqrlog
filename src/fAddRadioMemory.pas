@@ -24,7 +24,9 @@ type
     lblWidth: TLabel;
     lblInfo: TLabel;
     procedure Button1Click(Sender: TObject);
+    procedure edtFreqKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender : TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -45,8 +47,7 @@ uses dUtils;
 procedure TfrmAddRadioMemory.FormShow(Sender: TObject);
 begin
   dmUtils.LoadFontSettings(frmAddRadioMemory);
-
-  edtFreq.SetFocus
+  edtFreq.SetFocus;
 end;
 
 procedure TfrmAddRadioMemory.Button1Click(Sender: TObject);
@@ -60,6 +61,13 @@ begin
     exit
   end;
 
+  if cmbMode.ItemIndex < 0 then
+  begin
+    Application.MessageBox('Please enter correct mode','Error...', mb_OK+mb_IconError);
+    cmbMode.SetFocus;
+    exit
+  end;
+
   if not TryStrToFloat(edtWidth.Text,f) then
   begin
     Application.MessageBox('Please enter correct bandwidth','Error...', mb_OK+mb_IconError);
@@ -70,12 +78,24 @@ begin
   ModalResult := mrOK
 end;
 
+procedure TfrmAddRadioMemory.edtFreqKeyPress(Sender: TObject; var Key: char);
+begin
+  if not (key in ['0'..'9','.']) then key:=#0;
+end;
+
 procedure TfrmAddRadioMemory.FormCreate(Sender : TObject);
 begin
   dmUtils.InsertModes(cmbMode);
   cmbMode.Items.Delete(cmbMode.Items.IndexOf('SSB'));
   cmbMode.Items.Insert(1,'USB');
   cmbMode.Items.Insert(2,'LSB')
+end;
+
+procedure TfrmAddRadioMemory.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_RETURN then  Button1Click(nil);
+  if key = VK_ESCAPE then ModalResult:=mrCancel;
 end;
 
 initialization

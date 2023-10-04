@@ -6,7 +6,7 @@ interface
 
 uses
   Classes,SysUtils,FileUtil,LResources,Forms,Controls,Graphics,Dialogs,StdCtrls,
-  ExtCtrls, blcksock, httpsend, synacode, LazFileUtils;
+  ExtCtrls, blcksock, httpsend, synacode, LazFileUtils, DateUtils;
 
 type
 
@@ -14,13 +14,14 @@ type
 
   TfrmeQSLDownload = class(TForm)
     btnClose : TButton;
-    btnDownload : TButton;
+    btnDownload: TButton;
     btnPreferences : TButton;
+    chkChangeDate: TCheckBox;
     chkShowNew : TCheckBox;
     edtDateFrom : TEdit;
     edtQTH: TEdit;
     GroupBox1 : TGroupBox;
-    GroupBox5 : TGroupBox;
+    gbSettings : TGroupBox;
     Label3 : TLabel;
     Label4: TLabel;
     mStat : TMemo;
@@ -28,6 +29,7 @@ type
     Panel2 : TPanel;
     procedure btnDownloadClick(Sender : TObject);
     procedure btnPreferencesClick(Sender : TObject);
+    procedure chkChangeDateChange(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormShow(Sender : TObject);
     procedure mStatChange(Sender: TObject);
@@ -54,7 +56,8 @@ begin
   dmUtils.LoadWindowPos(frmeQSLDownload);
   edtDateFrom.Text   := cqrini.ReadString('eQSLImp','DateFrom',edtDateFrom.Text);
   edtQTH.Text        := cqrini.ReadString('eQSL','QTH','');
-  chkShowNew.Checked := cqrini.ReadBool('eQSLImp','ShowNewQSOs',True)
+  chkShowNew.Checked := cqrini.ReadBool('eQSLImp','ShowNewQSOs',True);
+  chkChangeDate.Checked:=cqrini.ReadBool('eQSLImp','ChangeDate',False);
 end;
 
 procedure TfrmeQSLDownload.mStatChange(Sender: TObject);
@@ -212,6 +215,11 @@ begin
               Free
             end;
             mStat.Lines.Add('Import complete ...');
+            if chkChangeDate.Checked then
+               Begin
+                 edtDateFrom.Caption:= FormatDateTime('YYYY-MM-DD', IncDay(Today, -1));
+                 cqrini.WriteString('eQSLImp','DateFrom',FormatDateTime('YYYY-MM-DD', IncDay(Today, -1)));
+               end;
             Repaint;
             Application.ProcessMessages;
             if chkShowNew.Checked then
@@ -268,6 +276,11 @@ begin
   finally
     Free
   end
+end;
+
+procedure TfrmeQSLDownload.chkChangeDateChange(Sender: TObject);
+begin
+  cqrini.WriteBool('eQSLImp','ChangeDate',chkChangeDate.Checked);
 end;
 
 end.

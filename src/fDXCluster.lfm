@@ -1,13 +1,13 @@
 object frmDXCluster: TfrmDXCluster
   Left = 129
-  Height = 424
+  Height = 425
   Top = 116
   Width = 709
   HelpType = htKeyword
   HelpKeyword = 'help/h21.html#ah19'
   ActiveControl = pgDXCluster
   Caption = 'DXCluster'
-  ClientHeight = 424
+  ClientHeight = 425
   ClientWidth = 709
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -121,10 +121,10 @@ object frmDXCluster: TfrmDXCluster
   OnDestroy = FormDestroy
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '2.2.6.0'
   object pgDXCluster: TPageControl
     Left = 0
-    Height = 424
+    Height = 425
     Top = 0
     Width = 709
     ActivePage = tabTelnet
@@ -133,12 +133,12 @@ object frmDXCluster: TfrmDXCluster
     TabOrder = 0
     object tabWeb: TTabSheet
       Caption = 'Web'
-      ClientHeight = 395
+      ClientHeight = 394
       ClientWidth = 699
       object Panel4: TPanel
         Left = 0
         Height = 36
-        Top = 380
+        Top = 358
         Width = 699
         Align = alBottom
         ClientHeight = 36
@@ -197,14 +197,13 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlWeb: TPanel
         Left = 0
-        Height = 380
+        Height = 358
         Top = 0
         Width = 699
         Align = alClient
         Alignment = taLeftJustify
         BevelInner = bvLowered
         BevelOuter = bvLowered
-        Color = clDefault
         Font.CharSet = ANSI_CHARSET
         Font.Height = 12
         Font.Name = 'DejaVu Sans Mono 12'
@@ -215,12 +214,12 @@ object frmDXCluster: TfrmDXCluster
     end
     object tabTelnet: TTabSheet
       Caption = 'Telnet'
-      ClientHeight = 395
+      ClientHeight = 394
       ClientWidth = 699
       object Panel1: TPanel
         Left = 0
         Height = 34
-        Top = 361
+        Top = 360
         Width = 699
         Align = alBottom
         BevelOuter = bvNone
@@ -229,7 +228,7 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 0
         object Label1: TLabel
           Left = 6
-          Height = 15
+          Height = 17
           Top = 11
           Width = 71
           Caption = 'Command:'
@@ -239,7 +238,7 @@ object frmDXCluster: TfrmDXCluster
           AnchorSideLeft.Control = Label1
           AnchorSideLeft.Side = asrBottom
           Left = 79
-          Height = 32
+          Height = 34
           Top = 3
           Width = 266
           BorderSpacing.Left = 2
@@ -299,7 +298,7 @@ object frmDXCluster: TfrmDXCluster
         TabOrder = 1
         object edtTelAddress: TEdit
           Left = 8
-          Height = 32
+          Height = 34
           Top = 1
           Width = 189
           TabOrder = 0
@@ -336,14 +335,13 @@ object frmDXCluster: TfrmDXCluster
       end
       object pnlTelnet: TPanel
         Left = 0
-        Height = 331
+        Height = 330
         Top = 30
         Width = 699
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 331
+        ClientHeight = 330
         ClientWidth = 699
-        Color = clDefault
         ParentColor = False
         TabOrder = 2
         object pnlChat: TPanel
@@ -353,10 +351,260 @@ object frmDXCluster: TfrmDXCluster
           Width = 699
           Align = alTop
           BevelOuter = bvNone
-          Color = clDefault
           ParentColor = False
           TabOrder = 0
         end
+      end
+    end
+    object tabFkeys: TTabSheet
+      Caption = 'F-keys'
+      ClientHeight = 394
+      ClientWidth = 699
+      OnShow = tabFkeysShow
+      object lblF1: TLabel
+        AnchorSideLeft.Control = tabFkeys
+        AnchorSideTop.Control = edtF1
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 32
+        Width = 24
+        BorderSpacing.Left = 12
+        BorderSpacing.Top = 12
+        Caption = 'F1 :'
+        ParentColor = False
+      end
+      object lblF2: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF2
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 66
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F2 :'
+        ParentColor = False
+      end
+      object lblF3: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF3
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 100
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F3 :'
+        ParentColor = False
+      end
+      object lblF4: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF4
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 134
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F4 :'
+        ParentColor = False
+      end
+      object lblF5: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF5
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 168
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F5 :'
+        ParentColor = False
+      end
+      object lblF6: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF6
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 202
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F6 :'
+        ParentColor = False
+      end
+      object lblF7: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF7
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 236
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F7 :'
+        ParentColor = False
+      end
+      object lblF8: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF8
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 270
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F8 :'
+        ParentColor = False
+      end
+      object lblF9: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF9
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 304
+        Width = 24
+        BorderSpacing.Top = 6
+        Caption = 'F9 :'
+        ParentColor = False
+      end
+      object lblF10: TLabel
+        AnchorSideLeft.Control = lblF1
+        AnchorSideTop.Control = edtF10
+        AnchorSideTop.Side = asrCenter
+        Left = 12
+        Height = 17
+        Top = 338
+        Width = 32
+        BorderSpacing.Top = 6
+        Caption = 'F10 :'
+        ParentColor = False
+      end
+      object edtF1: TEdit
+        AnchorSideLeft.Control = lblF1
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = lblShift
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 23
+        Width = 500
+        BorderSpacing.Left = 12
+        BorderSpacing.Top = 3
+        OnExit = edtFExit
+        TabOrder = 0
+      end
+      object edtF2: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF1
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 57
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 1
+      end
+      object edtF3: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF2
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 91
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 2
+      end
+      object edtF4: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF3
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 125
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 3
+      end
+      object edtF5: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF4
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 159
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 4
+      end
+      object edtF6: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF5
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 193
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 5
+      end
+      object edtF7: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF6
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 227
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 6
+      end
+      object edtF8: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF7
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 261
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 7
+      end
+      object edtF9: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF8
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 295
+        Width = 500
+        OnExit = edtFExit
+        TabOrder = 8
+      end
+      object edtF10: TEdit
+        AnchorSideLeft.Control = edtF1
+        AnchorSideTop.Control = edtF9
+        AnchorSideTop.Side = asrBottom
+        Left = 48
+        Height = 34
+        Top = 329
+        Width = 500
+        TabOrder = 9
+      end
+      object lblShift: TLabel
+        AnchorSideLeft.Control = tabFkeys
+        AnchorSideTop.Control = tabFkeys
+        Left = 3
+        Height = 17
+        Top = 3
+        Width = 41
+        BorderSpacing.Left = 3
+        BorderSpacing.Top = 3
+        Caption = 'Shift+'
+        ParentColor = False
       end
     end
   end
@@ -364,25 +612,25 @@ object frmDXCluster: TfrmDXCluster
     Enabled = False
     Interval = 20000
     OnTimer = tmrSpotsTimer
-    left = 88
-    top = 122
+    Left = 440
+    Top = 368
   end
   object dlgDXfnt: TFontDialog
     MinFontSize = 0
     MaxFontSize = 0
-    left = 136
-    top = 122
+    Left = 488
+    Top = 368
   end
   object tmrAutoConnect: TTimer
     Enabled = False
     Interval = 3000
     OnTimer = tmrAutoConnectTimer
-    left = 246
-    top = 68
+    Left = 536
+    Top = 368
   end
   object popPreferences: TPopupMenu
-    left = 385
-    top = 112
+    Left = 592
+    Top = 368
     object mnuCallalert: TMenuItem
       Caption = 'Callsign alert enabled'
       Checked = True
@@ -428,8 +676,8 @@ object frmDXCluster: TfrmDXCluster
     end
   end
   object acPreferences: TActionList
-    left = 393
-    top = 185
+    Left = 640
+    Top = 368
     object acFont: TAction
       Caption = 'Font'
       OnExecute = acFontExecute

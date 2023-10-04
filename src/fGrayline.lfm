@@ -1,7 +1,7 @@
 object frmGrayline: TfrmGrayline
-  Left = 755
+  Left = 547
   Height = 248
-  Top = 304
+  Top = 125
   Width = 419
   Caption = 'Grayline'
   ClientHeight = 248
@@ -121,7 +121,7 @@ object frmGrayline: TfrmGrayline
   OnPaint = FormPaint
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.6.0'
   object sbtnGrayLine: TSpeedButton
     Left = 400
     Height = 16
@@ -203,6 +203,10 @@ object frmGrayline: TfrmGrayline
     object pumShowLongPath: TMenuItem
       Caption = 'Show LongPath'
       OnClick = pumShowLongPathClick
+    end
+    object pumShowBeamPath: TMenuItem
+      Caption = 'Show BeamPath'
+      OnClick = pumShowBeamPathClick
     end
     object pumMnuLine2: TMenuItem
       Caption = '-'

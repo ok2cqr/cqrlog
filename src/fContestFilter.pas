@@ -47,7 +47,7 @@ implementation
 {$R *.lfm}
 
 { TfrmContestFilter }
-uses dData, dUtils;
+uses dData, dUtils, fContest;
 
 procedure TfrmContestFilter.btnOKClick(Sender: TObject);
 begin
@@ -83,6 +83,8 @@ procedure TfrmContestFilter.FormShow(Sender: TObject);
 
 begin
   dmUtils.LoadFontSettings(self);
+   if frmContest.Showing and (frmContest.cmbContestName.Text<>'') then
+    cmbContestName.Text:=frmContest.cmbContestName.Text;
 end;
 
 procedure TfrmContestFilter.FormKeyUp(Sender: TObject; var Key: Word;

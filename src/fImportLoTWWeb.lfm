@@ -1,11 +1,11 @@
 object frmImportLoTWWeb: TfrmImportLoTWWeb
-  Left = 632
-  Height = 583
-  Top = 98
+  Left = 567
+  Height = 600
+  Top = 97
   Width = 572
   ActiveControl = pnlSettings
   Caption = 'Import from LoTW web site'
-  ClientHeight = 583
+  ClientHeight = 600
   ClientWidth = 572
   Icon.Data = {
     BE0C00000000010001002020000001001800A80C000016000000280000002000
@@ -115,22 +115,26 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '2.2.6.0'
   object gbProgress: TGroupBox
     AnchorSideLeft.Control = pnlSettings
-    AnchorSideTop.Control = pnlSettings
+    AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = pnlSettings
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = pnlButtons
     AnchorSideBottom.Side = asrBottom
-    Left = 0
-    Height = 377
-    Top = 153
-    Width = 572
+    Left = 1
+    Height = 364
+    Top = 184
+    Width = 570
     Align = alClient
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 1
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
     Caption = 'Progress'
-    ClientHeight = 359
-    ClientWidth = 570
+    ClientHeight = 346
+    ClientWidth = 568
     TabOrder = 0
     object mStat: TMemo
       AnchorSideLeft.Control = gbProgress
@@ -139,11 +143,15 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = gbProgress
       AnchorSideBottom.Side = asrBottom
-      Left = 0
-      Height = 359
-      Top = 0
-      Width = 570
+      Left = 1
+      Height = 344
+      Top = 1
+      Width = 566
       Align = alClient
+      BorderSpacing.Left = 1
+      BorderSpacing.Top = 1
+      BorderSpacing.Right = 1
+      BorderSpacing.Bottom = 1
       OnChange = mStatChange
       ScrollBars = ssAutoBoth
       TabOrder = 0
@@ -153,48 +161,38 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
-    Left = 3
-    Height = 150
-    Top = 3
-    Width = 566
+    Left = 1
+    Height = 183
+    Top = 1
+    Width = 570
     Align = alTop
-    BorderSpacing.Left = 3
-    BorderSpacing.Top = 3
-    BorderSpacing.Right = 3
+    BorderSpacing.Left = 1
+    BorderSpacing.Top = 1
+    BorderSpacing.Right = 1
     BevelOuter = bvNone
-    ClientHeight = 150
-    ClientWidth = 566
+    ClientHeight = 183
+    ClientWidth = 570
     TabOrder = 1
-    object btnDownload: TButton
-      AnchorSideLeft.Control = gbSettings
-      AnchorSideTop.Control = gbSettings
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = gbSettings
-      AnchorSideRight.Side = asrBottom
-      Left = 0
-      Height = 25
-      Top = 116
-      Width = 566
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Top = 6
-      Caption = 'Download data from ARRL website'
-      OnClick = btnDownloadClick
-      TabOrder = 0
-    end
     object gbSettings: TGroupBox
       AnchorSideLeft.Control = pnlSettings
       AnchorSideTop.Control = pnlSettings
       AnchorSideRight.Control = pnlSettings
       AnchorSideRight.Side = asrBottom
-      Left = 0
-      Height = 110
-      Top = 0
-      Width = 566
-      Anchors = [akTop, akLeft, akRight]
+      AnchorSideBottom.Control = pnlSettings
+      AnchorSideBottom.Side = asrBottom
+      Left = 1
+      Height = 181
+      Top = 1
+      Width = 568
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 1
+      BorderSpacing.Top = 1
+      BorderSpacing.Right = 1
+      BorderSpacing.Bottom = 1
       Caption = 'Settings'
-      ClientHeight = 92
-      ClientWidth = 564
-      TabOrder = 1
+      ClientHeight = 163
+      ClientWidth = 566
+      TabOrder = 0
       object lblReturnQsl: TLabel
         AnchorSideLeft.Control = gbSettings
         AnchorSideTop.Control = gbSettings
@@ -215,43 +213,45 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
         Left = 269
         Height = 34
         Top = 3
-        Width = 123
+        Width = 190
         BorderSpacing.Left = 3
         TabOrder = 0
       end
       object chkShowNew: TCheckBox
         AnchorSideLeft.Control = lblReturnQsl
-        AnchorSideTop.Control = edtCall
+        AnchorSideTop.Control = chkChangeDate
         AnchorSideTop.Side = asrBottom
         Left = 6
         Height = 23
-        Top = 40
+        Top = 103
         Width = 383
         BorderSpacing.Top = 3
         Caption = 'Show new comfirmed QSOs after download and import'
         TabOrder = 1
       end
       object lblForCall: TLabel
-        AnchorSideLeft.Control = edtDateFrom
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = lblReturnQsl
-        Left = 395
+        AnchorSideTop.Control = edtCall
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = edtDateFrom
+        Left = 221
         Height = 17
-        Top = 12
+        Top = 46
         Width = 45
-        BorderSpacing.Left = 3
+        Anchors = [akTop, akRight]
+        BorderSpacing.Right = 3
         Caption = 'for call'
         ParentColor = False
       end
       object edtCall: TEdit
         AnchorSideLeft.Control = lblForCall
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = lblForCall
-        AnchorSideTop.Side = asrCenter
-        Left = 443
+        AnchorSideTop.Control = edtDateFrom
+        AnchorSideTop.Side = asrBottom
+        Left = 269
         Height = 34
-        Top = 3
-        Width = 109
+        Top = 37
+        Width = 190
         BorderSpacing.Left = 3
         TabOrder = 2
       end
@@ -261,13 +261,27 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
         AnchorSideTop.Side = asrBottom
         Left = 6
         Height = 23
-        Top = 63
+        Top = 129
         Width = 439
+        BorderSpacing.Top = 3
         Caption = 'Import station information from LoTW if it is not set during qso.'
         Checked = True
         OnChange = cbImportsChange
         State = cbChecked
         TabOrder = 3
+      end
+      object chkChangeDate: TCheckBox
+        AnchorSideLeft.Control = lblReturnQsl
+        AnchorSideTop.Control = edtCall
+        AnchorSideTop.Side = asrBottom
+        Left = 6
+        Height = 23
+        Top = 77
+        Width = 424
+        BorderSpacing.Top = 6
+        Caption = 'Set Rcvd date to be current date -1 after succesfull download'
+        OnChange = chkChangeDateChange
+        TabOrder = 4
       end
     end
   end
@@ -275,22 +289,24 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
     AnchorSideLeft.Control = pnlSettings
     AnchorSideRight.Control = pnlSettings
     AnchorSideBottom.Control = Owner
-    Left = 0
+    Left = 1
     Height = 50
-    Top = 530
-    Width = 572
+    Top = 549
+    Width = 570
     Align = alBottom
-    BorderSpacing.Bottom = 3
+    BorderSpacing.Left = 1
+    BorderSpacing.Right = 1
+    BorderSpacing.Bottom = 1
     BevelOuter = bvNone
     ClientHeight = 50
-    ClientWidth = 572
+    ClientWidth = 570
     TabOrder = 2
     object btnClose: TButton
       AnchorSideTop.Control = pnlButtons
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = pnlButtons
       AnchorSideRight.Side = asrBottom
-      Left = 494
+      Left = 492
       Height = 25
       Top = 13
       Width = 72
@@ -313,6 +329,20 @@ object frmImportLoTWWeb: TfrmImportLoTWWeb
       Caption = 'Preferences'
       OnClick = btnPreferencesClick
       TabOrder = 1
+    end
+    object btnDownload: TButton
+      AnchorSideLeft.Control = pnlButtons
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = pnlButtons
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Side = asrBottom
+      Left = 135
+      Height = 25
+      Top = 13
+      Width = 300
+      Caption = 'Download data from ARRL website'
+      OnClick = btnDownloadClick
+      TabOrder = 2
     end
   end
 end
