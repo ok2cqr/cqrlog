@@ -49,6 +49,8 @@ type
     Srst_s,
     Sstx,
     Sstx_str,
+    Ssrx,
+    Ssrx_str,
     SHisName,
     SHelloMsg  :String;
     { public declarations }
@@ -86,6 +88,7 @@ end;
 procedure TfrmSendSpot.btnUsrClick(Sender: TObject);
 begin
   UsrString := cqrini.ReadString('DXCluster', 'UsrMsg', '');
+  UsrString:=dmUtils.GetCWMessage('',Scall,Srst_s,Sstx,Sstx_str,Ssrx,Ssrx_str,SHisName,SHelloMsg,UsrString);
   if pos(UsrString, edtSpot.Text) = 0 then
      edtSpot.Text := edtSpot.Text+' '+UsrString;
 end;
@@ -126,13 +129,13 @@ end;
 
 procedure TfrmSendSpot.FormShow(Sender: TObject);
 begin
-  if not ((frmDXCluster.ConWeb) or (frmDXCluster.ConTelnet)) then
+  if not (frmDXCluster.ConTelnet) then
    Begin
-     ShowMessage('You must connect to DXCluster first!');
+     ShowMessage('You must connect to telnet DXCluster first!');
      btnCancel.Click;
    end;
   UsrString := cqrini.ReadString('DXCluster', 'UsrMsg', '');
-  UsrString:=dmUtils.GetCWMessage('',Scall,Srst_s,Sstx,Sstx_str,SHisName,SHelloMsg,UsrString);
+  UsrString:=dmUtils.GetCWMessage('',Scall,Srst_s,Sstx,Sstx_str,Ssrx,Ssrx_str,SHisName,SHelloMsg,UsrString);
   btnUsr.Hint:=UsrString;
   btnLoc.Hint:= HisMyLoc;
   btnModRst.Hint:= ModeRst;

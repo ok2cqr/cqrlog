@@ -118,7 +118,7 @@ begin
 
   cmbStoreZipCode.ItemIndex         := SectionExists('ZipCode',Sections);
   cmbStoreLoTW.ItemIndex            := SectionExists('LoTW',Sections);
-  cmbStoreCWInterface.ItemIndex     := SectionExists('CW',Sections);
+  cmbStoreCWInterface.ItemIndex     := SectionExists('CW1',Sections);
   cmbStoreFldigiInterface.ItemIndex := SectionExists('fldigi',Sections);
   cmbStoreAutoBackup.ItemIndex      := SectionExists('Backup',Sections);
   cmbStoreExtViewers.ItemIndex      := SectionExists('ExtView',Sections);
@@ -146,11 +146,11 @@ begin
   if cmbStoreVisColumns.ItemIndex>0 then
     Sections := Sections + 'Columns,';
   if cmbStoreTRXControl.ItemIndex>0 then
-    Sections := Sections + 'TRX,TRX1,TRX2,';
+    Sections := Sections + 'TRX,TRX1,TRX2,TRX3,TRX4,TRX5,TRX6,';
   if cmbStoreRotorControl.ItemIndex>0 then
     Sections := Sections + 'ROT,ROT1,ROT2,';
-  if cmbStoreModes.ItemIndex>=0 then
-    Sections := Sections + 'Band1,Band2,Modes,';
+  if cmbStoreModes.ItemIndex>0 then
+    Sections := Sections + 'Band1,Band2,Band3,Band4,Band5,Band6,Modes,';
   if cmbStoreExport.ItemIndex>0 then
     Sections := Sections + 'Export,';
   if cmbStoreCluster.ItemIndex>0 then
@@ -168,7 +168,7 @@ begin
   if cmbStoreLoTW.ItemIndex>0 then
     Sections := Sections + 'LoTW,';
   if cmbStoreCWInterface.ItemIndex>0 then
-    Sections := Sections + 'CW,';
+    Sections := Sections + 'CW,CW1,CW2,CW3,CW4,CW5,CW6';
   if cmbStoreFldigiInterface.ItemIndex>0 then
     Sections := Sections + 'fldigi,wsjt,n1mm';
   if cmbStoreAutoBackup.ItemIndex>0 then
@@ -182,7 +182,7 @@ begin
   if cmbStoreOnlineLog.ItemIndex>0 then
     Sections := Sections + 'OnlineLog,';
   if cmbStoreWindowSize.ItemIndex>0 then
-    Sections := Sections + 'WindowSize, Window,Grayline,';
+    Sections := Sections + 'WindowSize,Window,Grayline,';
   if cmbStoreColumnSize.ItemIndex>0 then
     Sections := Sections + 'ColumnSize,';
   cqrini.WriteString('ConfigStorage','Items',Sections);

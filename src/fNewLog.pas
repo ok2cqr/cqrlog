@@ -14,11 +14,13 @@ type
 
   TfrmNewLog = class(TForm)
     btnOK: TButton;
-    Button2: TButton;
+    btnCancel: TButton;
     edtLogName: TEdit;
     edtLogNR: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
+    edtLogCpyNR: TEdit;
+    lblLogCpyNR: TLabel;
+    lblLogNr: TLabel;
+    lblLogName: TLabel;
     procedure btnOKClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -54,7 +56,7 @@ end;
 
 procedure TfrmNewLog.btnOKClick(Sender: TObject);
 var
-  nr : Integer;
+  nr,cnr : integer;
 begin
   if edtLogNR.Enabled then
   begin
@@ -63,11 +65,25 @@ begin
       Application.MessageBox('Please enter correct log number!','Info ...', mb_ok + mb_IconInformation);
       exit
     end;
+    if edtLogCpyNR.Text<>'' then
+      Begin
+       if not TryStrToInt(edtLogCpyNR.Text,cnr) then
+       begin
+         Application.MessageBox('Please enter correct log number to copy from!','Info ...', mb_ok + mb_IconInformation);
+         exit
+       end;
+      end;
     if dmData.LogExists(nr) then
     begin
-      Application.MessageBox('Log with this number already exists!','Info ...', mb_ok + mb_IconInformation);
+      Application.MessageBox(PChar(Ansistring('Log number '+ inttostr(nr)+' already exists!')),'Info ...', mb_ok + mb_IconInformation);
       exit
-    end
+    end;
+    if (edtLogCpyNR.Text<>'') then
+     if not dmData.LogExists(cnr) then
+        begin
+          Application.MessageBox(PChar(Ansistring('Log '+inttostr(cnr)+' does not exist for copy config from!')),'Info ...', mb_ok + mb_IconInformation);
+          exit
+        end
   end;
   ModalResult := mrOK
 end;

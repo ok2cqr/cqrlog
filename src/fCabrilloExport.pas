@@ -45,12 +45,14 @@ type
     dlgCabSave: TSaveDialog;
     edtCabCountC: TEdit;
     edtCabCallWdt: TEdit;
+    edtCabInfoREx1Wdt: TEdit;
+    edtCabInfoRrstWdt: TEdit;
+    edtCabInfoSrstWdt: TEdit;
     edtCabLocation: TEdit;
     edtCabInfoREx2Wdt: TEdit;
     edtCabInfoSEx1Wdt: TEdit;
     edtCabInfoSEx2Wdt: TEdit;
     edtCabFileName: TEdit;
-    edtCabInfoREx1Wdt: TEdit;
     edtCabSoapBox: TEdit;
     gbCabInfoRcvd: TGroupBox;
     gbCabInfoSent: TGroupBox;
@@ -58,6 +60,8 @@ type
     gbCabQsoTail: TGroupBox;
     gbCabLayout: TGroupBox;
     gbCabCoCount: TGroupBox;
+    lblCabInfoRrst: TLabel;
+    lblCabInfoSrst: TLabel;
     lblCabQsoHeader1: TLabel;
     lblCabSoapBox: TLabel;
     lblCabQsoHeader: TLabel;
@@ -88,9 +92,11 @@ type
     procedure edtCabCallWdtExit(Sender: TObject);
     procedure edtCabInfoREx2WdtExit(Sender: TObject);
     procedure edtCabInfoREx1WdtExit(Sender: TObject);
+    procedure edtCabInfoRrstWdtExit(Sender: TObject);
     procedure edtCabInfoSEx2WdtExit(Sender: TObject);
     procedure edtCabInfoSEx1WdtExit(Sender: TObject);
     procedure edtCabCountCExit(Sender: TObject);
+    procedure edtCabInfoSrstWdtExit(Sender: TObject);
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender : TObject);
@@ -136,12 +142,14 @@ begin
   edtCabCallWdt.Text:= cqrini.ReadString('CabrilloExport','CallsWidth', '13');
 
   chkCabInfoSrst.Checked:= cqrini.ReadBool('CabrilloExport','incRSTs',True);
+  edtCabInfoSrstWdt.Text := cqrini.ReadString('CabrilloExport','SRSTWidth', '3');
   cmbCabInfoSEx1.ItemIndex:= cqrini.ReadInteger('CabrilloExport','StxOrder',0);
   edtCabInfoSEx1Wdt.Text:= cqrini.ReadString('CabrilloExport','StxWidth','6');
   cmbCabInfoSEx2.ItemIndex := cqrini.ReadInteger('CabrilloExport','StxStringOrder',0);
   edtCabInfoSEx2Wdt.Text := cqrini.ReadString('CabrilloExport','StxStringWidth', '6');
 
   chkCabInfoRrst.Checked:= cqrini.ReadBool('CabrilloExport','incRSTr',True);
+  edtCabInfoRrstWdt.Text := cqrini.ReadString('CabrilloExport','RRSTWidth', '3');
   cmbCabInfoREx1.ItemIndex:= cqrini.ReadInteger('CabrilloExport','SrxOrder',0);
   edtCabInfoREx1Wdt.Text:= cqrini.ReadString('CabrilloExport','SrxWidth','6');
   cmbCabInfoREx2.ItemIndex := cqrini.ReadInteger('CabrilloExport','SrxStringOrder',0);
@@ -189,12 +197,14 @@ begin
   cqrini.WriteString('CabrilloExport','CallsWidth', edtCabCallWdt.Text);
 
   cqrini.WriteBool('CabrilloExport','incRSTs',chkCabInfoSrst.Checked);
+  cqrini.WriteString('CabrilloExport','SRSTWidth', edtCabInfoSrstWdt.Text);
   cqrini.WriteInteger('CabrilloExport','StxOrder',cmbCabInfoSEx1.ItemIndex);
   cqrini.WriteString('CabrilloExport','StxWidth', edtCabInfoSEx1Wdt.Text);
   cqrini.WriteInteger('CabrilloExport','StxStringOrder',cmbCabInfoSEx2.ItemIndex);
   cqrini.WriteString('CabrilloExport','StxStringWidth', edtCabInfoSEx2Wdt.Text);
 
   cqrini.WriteBool('CabrilloExport','incRSTr',chkCabInfoRrst.Checked);
+  cqrini.WriteString('CabrilloExport','RRSTWidth', edtCabInfoRrstWdt.Text);
   cqrini.WriteInteger('CabrilloExport','SrxOrder',cmbCabInfoREx1.ItemIndex);
   cqrini.WriteString('CabrilloExport','SrxWidth', edtCabInfoREx1Wdt.Text);
   cqrini.WriteInteger('CabrilloExport','SrxStringOrder',cmbCabInfoREx2.ItemIndex);
@@ -291,6 +301,7 @@ end;
 procedure TfrmCabrilloExport.btnCabBrowseClick(Sender : TObject);
 begin
   dlgCabSave.InitialDir:=dmData.UsrHomeDir;
+  dlgCabSave.DefaultExt:='.cbr';
   if dlgCabSave.Execute then
     edtCabFileName.Text := dlgCabSave.FileName
 end;
@@ -391,6 +402,11 @@ Begin
      end
 end;
 
+procedure TfrmCabrilloExport.edtCabInfoSrstWdtExit(Sender: TObject);
+begin
+  edtCabInfoSrstWdt.Text:=NonZero(edtCabInfoSrstWdt.Text);
+end;
+
 procedure TfrmCabrilloExport.edtCabInfoSEx2WdtExit(Sender: TObject);
 begin
   edtCabInfoSEx2Wdt.Text:=NonZero(edtCabInfoSEx2Wdt.Text);
@@ -400,6 +416,12 @@ procedure TfrmCabrilloExport.edtCabInfoREx1WdtExit(Sender: TObject);
 begin
  edtCabInfoREx1Wdt.Text:=NonZero(edtCabInfoREx1Wdt.Text);
 end;
+
+procedure TfrmCabrilloExport.edtCabInfoRrstWdtExit(Sender: TObject);
+begin
+  edtCabInfoRrstWdt.Text:=NonZero(edtCabInfoRrstWdt.Text);
+end;
+
 procedure TfrmCabrilloExport.edtCabInfoREx2WdtExit(Sender: TObject);
 begin
  edtCabInfoREx2Wdt.Text:=NonZero(edtCabInfoREx2Wdt.Text);
@@ -520,16 +542,17 @@ begin
   try try
     AssignFile(r,'/tmp/CabrilloReject.log');
     Rewrite(r);
-    pbCabExport.Max := dmData.qCQRLOG.RecordCount;
     dmData.qCQRLOG.Last;
+    pbCabExport.Max := dmData.qCQRLOG.RecordCount;
+
     while not dmData.qCQRLOG.bof do
     begin
       tmp:='';
       // Check for missing mandatory fields
       if (dmData.qCQRLOG.FieldByName('qsodate').AsString  = '') then
                                                            tmp:=tmp+'Missing qsodate, ';
-      if (dmData.qCQRLOG.FieldByName('time_on').AsString  = '') then
-                                                           tmp:=tmp+'Missing time_on, ';
+      if (dmData.qCQRLOG.FieldByName('time_off').AsString  = '') then
+                                                           tmp:=tmp+'Missing time_off, ';
       if (dmData.qCQRLOG.FieldByName('callsign').AsString = '') then
                                                            tmp:=tmp+'Missing callsign, ';
       if (CabrilloBandToFreq(dmData.qCQRLOG.FieldByName('band').AsString) = '') then
@@ -617,46 +640,46 @@ begin
          tmp:=tmp +
             CabrilloMode(dmData.qCQRLOG.FieldByName('mode').AsString)+' '+
             dmData.qCQRLOG.FieldByName('qsodate').AsString+' '+
-            StringReplace(dmData.qCQRLOG.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+' '+
-            Format('%-'+edtCabCallWdt.Text+'.'+edtCabCallWdt.Text+'s', [mycall]);
+            StringReplace(dmData.qCQRLOG.FieldByName('time_off').AsString,':','',[rfReplaceAll, rfIgnoreCase])+' '+
+            Format('%0:-'+edtCabCallWdt.Text+'s', [mycall]);
             //end of common header
 
-            if chkCabInfoSrst.Checked then tmp:=tmp+' '+ Format('%-3s', [dmData.qCQRLOG.FieldByName('rst_s').AsString]);
+            if chkCabInfoSrst.Checked then tmp:=tmp+' '+ Format('%0:-'+edtCabInfoSrstWdt.Text+'s', [dmData.qCQRLOG.FieldByName('rst_s').AsString]);
 
             if (cmbCabInfoSEx1.ItemIndex > 0) then
              Begin
                  if (cmbCabInfoSEx1.Text = 'my_name') then
-                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx1Wdt.Text+'.'+edtCabInfoSEx1Wdt.Text+'s', [myname])
+                   tmp:=tmp+' '+Format('%0:-'+edtCabInfoSEx1Wdt.Text+'s', [myname])
                   else
-                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx1Wdt.Text+'.'+edtCabInfoSEx1Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                   tmp:=tmp+' '+Format('%0:-'+edtCabInfoSEx1Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
                      cmbCabInfoSEx1.Text).AsString]) ;
              end;
              if (cmbCabInfoSEx2.ItemIndex > 0) then
              Begin
                  if (cmbCabInfoSEx2.Text = 'my_name') then
-                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx2Wdt.Text+'.'+edtCabInfoSEx2Wdt.Text+'s', [myname])
+                   tmp:=tmp+' '+Format('%0:-'+edtCabInfoSEx2Wdt.Text+'s', [myname])
                   else
-                   tmp:=tmp+' '+Format('%-'+edtCabInfoSEx2Wdt.Text+'.'+edtCabInfoSEx2Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                   tmp:=tmp+' '+Format('%0:-'+edtCabInfoSEx2Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
                      cmbCabInfoSEx2.Text).AsString]) ;
              end;
              //end of info sent
 
              tmp:=tmp+' '+ call;
-             if chkCabInfoRrst.Checked then tmp:=tmp+' '+ Format('%-3s', [dmData.qCQRLOG.FieldByName('rst_r').AsString]);
+             if chkCabInfoRrst.Checked then tmp:=tmp+' '+ Format('%0:-'+edtCabInfoRrstWdt.Text+'s', [dmData.qCQRLOG.FieldByName('rst_r').AsString]);
 
              if (cmbCabInfoREx1.ItemIndex > 0) then
              Begin
-                   tmp:=tmp+' '+Format('%-'+edtCabInfoREx1Wdt.Text+'.'+edtCabInfoREx1Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                   tmp:=tmp+' '+Format('%0:-'+edtCabInfoREx1Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
                      cmbCabInfoREx1.Text).AsString]) ;
              end;
              if (cmbCabInfoREx2.ItemIndex > 0) then
              Begin
-                   tmp:=tmp+' '+Format('%-'+edtCabInfoREx2Wdt.Text+'.'+edtCabInfoREx2Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
+                   tmp:=tmp+' '+Format('%0:-'+edtCabInfoREx2Wdt.Text+'s',[dmData.qCQRLOG.FieldByName(
                      cmbCabInfoREx2.Text).AsString]) ;
              end;
             //end of info rcvd
 
-             if (cmbCabTailTxCount.Text<>'') then tmp:=tmp+' '+Format('%1s',[ cmbCabTailTxCount.Text]);
+             if (cmbCabTailTxCount.Text<>'') then tmp:=tmp+' '+Format('%0:1s',[ cmbCabTailTxCount.Text]);
 
       if chkUpCase.Checked then tmp:=UpperCase(tmp);
 
@@ -800,7 +823,11 @@ end;
 procedure TfrmCabrilloExport.btCabLoadClick(Sender: TObject);
 begin
   dlgCabOpen.InitialDir := dmData.HomeDir;
-  if dlgCabOpen.Execute then loadCabLay(dlgCabOpen.FileName);
+  if dlgCabOpen.Execute then
+     if FileExists(dlgCabOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+         loadCabLay(dlgCabOpen.FileName)
+     else
+        ShowMessage('File not found!');
 end;
 procedure TfrmCabrilloExport.saveCabLay(filename:String);
 var
@@ -816,12 +843,14 @@ begin
       filini.WriteString('CabrilloExport','CallsWidth', edtCabCallWdt.Text);
 
       filini.WriteBool('CabrilloExport','incRSTs',chkCabInfoSrst.Checked);
+      filini.WriteString('CabrilloExport','SRSTWidth', edtCabInfoSrstWdt.Text);
       filini.WriteInteger('CabrilloExport','StxOrder',cmbCabInfoSEx1.ItemIndex);
       filini.WriteString('CabrilloExport','StxWidth', edtCabInfoSEx1Wdt.Text);
       filini.WriteInteger('CabrilloExport','StxStringOrder',cmbCabInfoSEx2.ItemIndex);
       filini.WriteString('CabrilloExport','StxStringWidth', edtCabInfoSEx2Wdt.Text);
 
       filini.WriteBool('CabrilloExport','incRSTr',chkCabInfoRrst.Checked);
+      filini.WriteString('CabrilloExport','RRSTWidth', edtCabInfoRrstWdt.Text);
       filini.WriteInteger('CabrilloExport','SrxOrder',cmbCabInfoREx1.ItemIndex);
       filini.WriteString('CabrilloExport','SrxWidth', edtCabInfoREx1Wdt.Text);
       filini.WriteInteger('CabrilloExport','SrxStringOrder',cmbCabInfoREx2.ItemIndex);
@@ -854,12 +883,14 @@ var
         edtCabCallWdt.Text:= filini.ReadString('CabrilloExport','CallsWidth', '13');
 
         chkCabInfoSrst.Checked:= filini.ReadBool('CabrilloExport','incRSTs',True);
+        edtCabInfoSrstWdt.Text := filini.ReadString('CabrilloExport','SRSTWidth', '3');
         cmbCabInfoSEx1.ItemIndex:= filini.ReadInteger('CabrilloExport','StxOrder',0);
         edtCabInfoSEx1Wdt.Text:= filini.ReadString('CabrilloExport','StxWidth','6');
         cmbCabInfoSEx2.ItemIndex := filini.ReadInteger('CabrilloExport','StxStringOrder',0);
         edtCabInfoSEx2Wdt.Text := filini.ReadString('CabrilloExport','StxStringWidth', '6');
 
         chkCabInfoRrst.Checked:= filini.ReadBool('CabrilloExport','incRSTr',True);
+        edtCabInfoRrstWdt.Text := filini.ReadString('CabrilloExport','RRSTWidth', '3');
         cmbCabInfoREx1.ItemIndex:= filini.ReadInteger('CabrilloExport','SrxOrder',0);
         edtCabInfoREx1Wdt.Text:= filini.ReadString('CabrilloExport','SrxWidth','6');
         cmbCabInfoREx2.ItemIndex := filini.ReadInteger('CabrilloExport','SrxStringOrder',0);

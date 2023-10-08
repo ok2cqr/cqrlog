@@ -32,12 +32,13 @@
     <p>Assuming that your CW interface is properly set up and working,
     you can add and/or edit your CW messages.<br><br>
     Set up your CW messages via Preferences/CW inteface/CW messages button.
-    <br> You can also access CW messages from the upper menu bar of the New QSO window.
+    <br> You can also access CW messages from the top menu of the New QSO window.
     Click on the 'File' item and select CW Messages.<br><br>
     <img src=img/h96b.png>&nbsp;&nbsp;<img src=img/h96.png><br><br>
-    Choose the <strong>CW Messages</strong> option. By using the form opened you can edit your CW messages that
-    will be sent when you press the corresponding <strong>F</strong>-key(s).
-    You can set up to 10 predefined messages. Save and load them from file for quick change of all messages.<br><br>
+    CW messages  will be sent when you press the corresponding <strong>F</strong>-key(s) or click message buttons in <b> Memory keys </b> or <b> CW type </b> windows.
+    You can set up to 10 predefined messages in two sets.<br>
+    Set1 <b>"S&P"</b> is always default. Set2 <b>"Run"</b> is active when contest window is opened and checkbox "S&P" is <b>NOT</b> checked.<br>
+    Use buttons <b>Save</b> and <b>Load</b> for save/load both sets to/from file.<br><br>
     <img src=img/h97.png><br><br><a name="predef">
     There are some predefined macros which you can use in your messages:</a><br><br>
     <table border="0" cellpadding="5" cellspacing="2" width="50%">
@@ -57,8 +58,11 @@
 		<li>%h - greeting GM/GA/GE calculated from the %c station location time</li>
 		<br>
 		<li>%xn  - contest exchange serial number</li>
-		<li>%xm  - contest exchange message</li>
 		<li>%xns - contest exchenge serial number sends 9->N and 0->T</li>
+		<li>%xnr - contest exchange serial number received</li>
+		<li>%xnrs- contest exchenge serial number received sends 9->N and 0->T</li>
+		<li>%xm  - contest exchange message</li>
+		<li>%xmr - contest exchange message received</li>
 		<li>%xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.<br>
 		(May be used always instead of %rs as if serNR and Message are empty just sends plain report.)</li>
 		</li><li> + or - in macro text will increase/decrease CW speed by 5WPM/one mark. 
@@ -67,7 +71,7 @@
 		<br> 1) Version of Hamlib must be at least Hamlib 4.1~git Last commit 2020-10-20 03:22:59 2020 +0000 SHA=8a769c
 		<br> 2) Do not use space(s) between text and +(or -) rigctld will add them I.E. "TU+++599---001"
 		<br> 3) Speed change works only with BKIN mode (not F-BKIN) and at the moment new Icom rigs (tested only ic7300)
-		</li>
+		<br> 4) Does not work if Hamlib CW buffering is used</li>
 		
 
 	    </ul>
@@ -75,7 +79,14 @@
         </tr>
         </tbody>
     </table>
-    </p><a name=mk1><br></a> <img src="img/misc8.png" name="8"  width="500" height="85">
+    </p>
+    <p>
+    <img src=img/h96a.png><br>
+    <strong>Send hex bytes to keyer</strong>. Will send hex bytes to Winkeyer or K3NG allowing non charcter bytes to be sent from Cqrlog in case there sudden need to change some of keyer's settings.
+    <br>Consult your keyer's manual to find needed commands.
+    </p>
+    
+   <a name=mk1><br></a> <img src="img/misc8.png" name="8"  width="500" height="85">
    </img>
    <p><strong>Memory keys</strong> form has buttons PgUp and PgDn that are not configurable. They alter CW speed in same way as keyboard keys PgUp and PgDn that some, specially laptop computers, may not even have.
    <br>When using <strong>Memory keys</strong>-form with mouse, or keyboard, you are able to lauch memories by mouse click or by  <strong>F</strong>-key press from keyboard keys. Same with PgUp and PgDn, both are working, keys and mouse click.

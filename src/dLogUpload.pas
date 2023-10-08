@@ -8,16 +8,18 @@ uses
   Classes, SysUtils, sqldb, FileUtil, LResources,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, mysql51conn, db, httpsend, blcksock, synautil, Forms,
-  Graphics, mysql56conn, mysql56dyn, mysql57dyn, mysql57conn;
+  Graphics, mysql56conn, mysql56dyn, mysql57dyn, mysql57conn,
+  lNet, lNetComponents, laz2_DOM, laz2_XMLWrite, md5;
 
 const
   C_HAMQTH       = 'HamQTH';
   C_CLUBLOG      = 'ClubLog';
   C_HRDLOG       = 'HRDLog';
+  C_UDPLOG       = 'UDPLog';
   C_ALLDONE      = 'ALLDONE';
   C_CLUBLOG_API  = '21507885dece41ca049fec7fe02a813f2105aff2';
 type
-  TWhereToUpload = (upHamQTH, upClubLog, upHrdLog);
+  TWhereToUpload = (upHamQTH, upClubLog, upHrdLog, upUDPLog);
 
 type
 
@@ -40,22 +42,26 @@ type
     function  RemoveSpaces(s : String) : String;
     function  GetQSOInAdif(id_cqrlog_main : Integer) : String;
     function  EncodeBandForClubLog(band : String) : String;
+    function  EncodeBandForUDPLog(band : String) : String;
     function  ParseHrdLogOutput(Output : String; var Response : String) : Integer;
+    procedure AddQSOKeyValue(id_cqrlog_main : Integer; data : TStringList);
   public
     csLogUpload  : TRTLCriticalSection;
 
-    function  UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+    function  UploadLogData(where : TWhereToUpload; cmd: String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+    function  UploadLogDataHTTP(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+    function  UploadLogDataUDP(cmd : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
     function  CheckUserUploadSettings(where : TWhereToUpload) : String;
     function  GetLogUploadColor(where : TWhereToUpload) : Integer;
     function  GetUploadUrl(where : TWhereToUpload; cmd : String) : String;
-    function  GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var FatalError : Boolean) : String;
+    function  GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var ErrorCode : Integer) : String;
     function  LogUploadEnabled : Boolean;
 
     procedure MarkAsUploadedToAllOnlineLogs;
     procedure MarkAsUploaded(LogName : String);
     procedure PrepareUserInfoHeader(where : TWhereToUpload; data : TStringList);
     procedure PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
-    procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
+    procedure PrepareDeleteHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
     procedure MarkAsUploaded(LogName : String; id_log_changes : Integer);
     procedure MarkAsUpDeleted(id_log_upload : Integer);
     procedure DisableOnlineLogSupport;
@@ -106,8 +112,16 @@ begin
   if dmData.DebugLevel >=1 then Writeln(Q.SQL.Text)
 end;
 
+function TdmLogUpload.UploadLogData(where : TWhereToUpload; cmd: String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+begin
+  case where of
+    upUDPLog  : Result := UploadLogDataUDP(cmd,data,Response,ResultCode)
+  else
+    Result := UploadLogDataHTTP(dmLogUpload.GetUploadUrl(where,cmd), data, Response, ResultCode);
+  end; // case
+end;
 
-function TdmLogUpload.UploadLogData(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+function TdmLogUpload.UploadLogDataHTTP(Url : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
 var
   HTTP  : THTTPSend;
   Bound : string;
@@ -158,6 +172,106 @@ begin
     FreeAndNil(l)
   end
 end;
+
+function TdmLogUpload.UploadLogDataUDP(cmd : String; data : TStringList; var Response : String; var ResultCode : Integer) : Boolean;
+var
+  i       : Integer;
+  Key     : String;
+  Value   : String;
+  Address : String;
+  udp     : TLUDPComponent;
+  n       : Integer;
+  Doc     : TXMLDocument;
+  RootNode,ItemNode,TextNode: TDOMNode;
+  msg     : TStringStream;
+  msg_len : Integer;
+  sent    : Integer;
+begin
+  Result := False;
+  sent := 0;
+  Address := '';
+
+  try
+    Doc := TXMLDocument.Create;
+    if (cmd='DELETE') then
+      RootNode := Doc.CreateElement('contactdelete')
+    else if (cmd='UPDATE') then
+      RootNode := Doc.CreateElement('contactreplace')
+    else // INSERT
+      RootNode := Doc.CreateElement('contactinfo');
+    Doc.Appendchild(RootNode);
+    RootNode := Doc.DocumentElement;
+
+    for i:=0 to data.Count-1 do
+    begin
+      Key   := copy(data.Strings[i],1,Pos('=',data.Strings[i])-1);
+      Value := copy(data.Strings[i],Pos('=',data.Strings[i])+1,Length(data.Strings[i])-Pos('=',data.Strings[i])+1);
+      case Key of
+        'Address' : Address := Value;
+      else
+        ItemNode := Doc.CreateElement(Key);
+        TextNode := Doc.CreateTextNode(Value);
+        ItemNode.AppendChild(TextNode);
+        RootNode.AppendChild(ItemNode)
+      end; // case
+    end;
+
+    if (Address='') then
+    begin
+      ResultCode := 500;
+      Response   := 'Address not set; check config';
+      Result := True;
+      exit
+    end;
+
+    try
+      msg := TStringStream.Create('', TEncoding.UTF8);
+      WriteXMLFile(Doc, msg);
+    except
+      FreeAndNil(msg);
+      raise;
+    end;
+  finally
+    FreeAndNil(Doc);
+  end;
+  msg_len := Length(msg.DataString);
+
+  try
+    udp := TLUDPComponent.Create(nil);
+    n := Pos(':', Address);
+    if n > 0 then
+    begin
+      udp.Host := Copy(Address, 1, n-1);
+      udp.Port := StrToInt(Copy(Address, n+1, Length(Address)));
+    end
+    else
+    begin
+      udp.Host := Address;
+      udp.Port := 5444;
+    end;
+
+    if udp.Connect then sent := udp.SendMessage(msg.DataString, Address);
+  finally
+    if udp.Connected then udp.Disconnect;
+    FreeAndNil(udp);
+    FreeAndNil(msg);
+  end;
+
+  if (sent = msg_len) then
+  begin
+    ResultCode := 200;
+    Response := 'Success';
+    Result := True;
+  end
+  else
+  begin
+    ResultCode := 400;
+    Response := 'Failed. Only sent ' + IntToStr(sent) + ' of ' + IntToStr(msg_len) + ' bytes to ' + Address;
+    Result := False
+  end;
+
+end;
+
 
 procedure TdmLogUpload.MarkAsUploadedToAllOnlineLogs;
 var
@@ -412,6 +526,42 @@ begin
   end
 end;
 
+function TdmLogUpload.EncodeBandForUDPLog(band : String) : String;
+var
+  i : Integer;
+begin
+  case band of
+    '160M'   : Result := '1.8';
+    '80M'    : Result := '3.5';
+    '60M'    : Result := '5';
+    '40M'    : Result := '7';
+    '30M'    : Result := '10';
+    '20M'    : Result := '14';
+    '17M'    : Result := '18';
+    '15M'    : Result := '21';
+    '12M'    : Result := '24';
+    '10M'    : Result := '28';
+    '6M'     : Result := '50';
+    '4M'     : Result := '70';
+    '2M'     : Result := '144';
+    '1.25M'  : Result := '222';
+    '70CM'   : Result := '420';
+    '33CM'   : Result := '902';
+    '23CM'   : Result := '1240';
+    '13CM'   : Result := '2300';
+    '9CM'    : Result := '3300';
+    '6CM'    : Result := '5650';
+    '3CM'    : Result := '10000';
+    '1.25CM' : Result := '24000';
+    '6MM'    : Result := '47000';
+    '4MM'    : Result := '76000';
+    '2MM'    : Result := '142000';
+    '1MM'    : Result := '241000';
+  else
+    Result := '';
+  end;
+end;
+
 function TdmLogUpload.ParseHrdLogOutput(Output : String; var Response : String) : Integer;
 var
   msg    : String = '';
@@ -430,6 +580,54 @@ begin
       Result := 404
     else
       Result := 500
+  end
+end;
+
+procedure TdmLogUpload.AddQSOKeyValue(id_cqrlog_main : Integer; data : TStringList);
+begin
+  Q1.Close;
+  if trQ1.Active then trQ1.Rollback;
+
+  trQ1.StartTransaction;
+  try
+    Q1.SQL.Text := 'select * from cqrlog_main where id_cqrlog_main = '+IntToStr(id_cqrlog_main);
+    Q1.Open;
+
+    if Q1.Fields[0].IsNull then
+    begin  //this should not happen
+      if dmData.DebugLevel>=1 then Writeln('AddQsoKeyValue: QSO not found in the log. ID:', id_cqrlog_main);
+      exit
+    end;
+
+    data.Add('snt='+Q1.FieldByName('rst_s').AsString);
+    data.Add('rcv='+Q1.FieldByName('rst_r').AsString);
+    data.Add('name='+Q1.FieldByName('name').AsString);
+    data.Add('qth='+Q1.FieldByName('qth').AsString);
+    data.Add('gridsquare='+Q1.FieldByName('loc').AsString);
+    data.Add('continent='+Q1.FieldByName('cont').AsString);
+    data.Add('zone='+Q1.FieldByName('waz').AsString);
+    {
+      data.Add('zone='+Q1.FieldByName('itu').AsString);
+    }
+    data.Add('power='+Q1.FieldByName('pwr').AsString);
+    data.Add('contestname='+Q1.FieldByName('contestname').AsString);
+    data.Add('operator='+Q1.FieldByName('operator').AsString);
+    if cqrini.ReadBool('OnlineLog','UdIncExch',True) then
+    begin
+      data.Add('sntnr='+Q1.FieldByName('stx').AsString);
+      data.Add('rcvnr='+Q1.FieldByName('srx').AsString);
+      data.Add('exchange1='+Q1.FieldByName('stx_string').AsString+' '+Q1.FieldByName('srx_string').AsString)
+    end
+    else
+    begin
+      data.Add('sntnr=');
+      data.Add('rcvnr=');
+      data.Add('exchange1=');
+    end;
+
+  finally
+    Q1.Close;
+    trQ1.Rollback
   end
 end;
 
@@ -458,6 +656,10 @@ begin
                     Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Callsign'])
                   else if (cqrini.ReadString('OnlineLog','HrCode','')='') then
                     Result := C_HRDLOG + ' ' + Format(C_IS_NOT_SET,['Code'])
+                end;
+    upUDPLog :  begin
+                  if (cqrini.ReadString('OnlineLog','UdAddress','')='') then
+                    Result := C_UDPLOG + ' ' + Format(C_IS_NOT_SET,['Address'])
                 end
   end //case
 end;
@@ -468,7 +670,8 @@ begin
   case where of
     upHamQTH  : Result := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
     upClubLog : Result := cqrini.ReadInteger('OnlineLog','ClColor',clRed);
-    upHrdLog  : Result := cqrini.ReadInteger('OnlineLog','HrColor',clPurple)
+    upHrdLog  : Result := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
+    upUDPLog  : Result := cqrini.ReadInteger('OnlineLog','UdColor',clGreen)
   end
 end;
 
@@ -490,6 +693,11 @@ begin
                    data.Add('Callsign='+cqrini.ReadString('OnlineLog','HrUserName',''));
                    data.Add('Code='+cqrini.ReadString('OnlineLog','HrCode',''));
                    data.Add('App=CQRLOG')
+                 end;
+    upUDPLog  :  begin
+                   data.Add('Address='+cqrini.ReadString('OnlineLog','UdAddress',''));
+                   data.Add('mycall='+cqrini.ReadString('Station', 'Call', ''));
+                   data.Add('app=CQRLOG')
                  end;
   end //case
 end;
@@ -539,6 +747,25 @@ begin
                    end;
       upHrdLog  :  begin
                      data.Add('ADIFData='+adif)
+                   end;
+      upUDPLog  :  begin
+                     data.Add('IsOriginal=True');
+                     data.Add('timestamp='+Q2.FieldByName('qsodate').AsString+' '+Q2.FieldByName('time_on').AsString+':00');
+                     data.Add('call='+Q2.FieldByName('callsign').AsString);
+                     data.Add('band='+EncodeBandForUDPLog(Q2.FieldByName('band').AsString));
+                     data.Add('mode='+Q2.FieldByName('mode').AsString);
+                     data.Add('rxfreq='+IntToStr(round(Q2.FieldByName('freq').AsFloat*100000)));
+                     data.Add('txfreq='+IntToStr(round(Q2.FieldByName('freq').AsFloat*100000)));
+                     if (id_cqrlog_main>0) then
+                     begin
+                        AddQSOKeyValue(id_cqrlog_main, data);
+                        data.Add('ID='+MD5Print(MD5String(cqrini.ReadString('Station', 'Call', '') + ':' + IntToStr(id_cqrlog_main))));
+                     end;
+                     if (Q2.FieldByName('old_qsodate').AsString <> '') then
+                     begin
+                       data.Add('oldtimestamp='+Q2.FieldByName('old_qsodate').AsString+' '+Q2.FieldByName('old_time_on').AsString+':00');
+                       data.Add('oldcall='+Q2.FieldByName('old_callsign').AsString);
+                     end
                    end
     end //case
   finally
@@ -547,7 +774,7 @@ begin
   end
 end;
 
-procedure TdmLogUpload.PrepareDeleteHeader(where : TWhereToUpload; id_log_changes : Integer; data : TStringList);
+procedure TdmLogUpload.PrepareDeleteHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
 const
   C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
 var
@@ -587,6 +814,18 @@ begin
                             GetAdifValue('CALL',Q2.FieldByName('old_callsign').AsString);
                     data.Add('ADIFKey='+adif);
                     data.Add('Cmd=DELETE')
+                   end;
+      upUDPLog  :  begin
+                     data.Add('timestamp='+Q2.FieldByName('old_qsodate').AsString+' '+Q2.FieldByName('old_time_on').AsString+':00');
+                     data.Add('call='+Q2.FieldByName('old_callsign').AsString);
+                     data.Add('band='+EncodeBandForUDPLog(Q2.FieldByName('old_band').AsString));
+                     data.Add('mode='+Q2.FieldByName('old_mode').AsString);
+                     data.Add('rxfreq='+IntToStr(round(Q2.FieldByName('old_freq').AsFloat*100000)));
+                     data.Add('txfreq='+IntToStr(round(Q2.FieldByName('old_freq').AsFloat*100000)));
+                     if (id_cqrlog_main>0) then
+                     begin
+                        data.Add('ID='+MD5Print(MD5String(cqrini.ReadString('Station', 'Call', '') + ':' + IntToStr(id_cqrlog_main))));
+                     end
                    end
     end //case
   finally
@@ -599,21 +838,21 @@ function TdmLogUpload.GetUploadUrl(where : TWhereToUpload; cmd : String) : Strin
 begin
   Result := '';
   case where of
-    upHamQTH  : Result := 'http://www.hamqth.com/qso_realtime.php';
+    upHamQTH  : Result := cqrini.ReadString('OnlineLog','HaUrl','http://www.hamqth.com/qso_realtime.php');
     upClubLog : begin
                   if (cmd='DELETE') then
-                    Result := 'https://secure.clublog.org/delete.php'
+                    Result := cqrini.ReadString('OnlineLog','ClUrlDel','https://clublog.org/delete.php')
                   else
-                    Result := 'https://secure.clublog.org/realtime.php'
+                    Result := cqrini.ReadString('OnlineLog','ClUrl','https://clublog.org/realtime.php');
                 end;
-    upHrdLog  : Result := 'http://robot.hrdlog.net/NewEntry.aspx'
+    upHrdLog  : Result := cqrini.ReadString('OnlineLog','HrUrl','http://robot.hrdlog.net/NewEntry.aspx');
   end //case
 end;
 
-function TdmLogUpload.GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var FatalError : Boolean) : String;
+function TdmLogUpload.GetResultMessage(where : TWhereToUpload; Response : String; ResultCode : Integer; var ErrorCode : Integer) : String;
 begin
   Result     := '';
-  FatalError := False;
+  ErrorCode  := 0;
   Response   := Trim(Response);
 
   case where of
@@ -622,26 +861,26 @@ begin
                     200 : Result := 'OK';
                     500 : begin
                             Result     := Response;
-                            FatalError := True
+                            ErrorCode  := 1;
                           end;//something wrong with HamQTH server
                     400 : begin
                             Result := Response;
                             if (Response = 'QSO already exists in the log')  then
                               Result := 'Already exists'
                             else if (Response = 'QSO not found in the log!') then
-                              FatalError := False
+                              ErrorCode := 0
                             else begin
-                              FatalError := True; //QSO rejected
+                              ErrorCode  := 2; //QSO rejected; continue with next one
                               Result     := Response
                             end
                           end;
                     403 : begin
                             Result     := 'Access denied';
-                            FatalError := True
+                            Errorcode := 1
                           end
                     else begin
                       Result     := Response;
-                      FatalError := True
+                      ErrorCode  := 1
                     end
                   end
                 end;
@@ -651,29 +890,49 @@ begin
                     400 : begin
                             Result     := Response;
                             if (Pos('skipping qso',LowerCase(Response))=0) then //consider skiping QSO as non fatal error, the app can live with it :)
-                              FatalError := True
+                              ErrorCode := 2
                           end;
                     403 : begin
                             Result := 'Access denied';
-                            FatalError := True
+                            ErrorCode := 1
                           end;
                     500 : begin
                             Result := 'Internal error';
-                            FatalError := True
+                            ErrorCode := 2
                           end;
                     404 : begin
                             Result     := Response;
-                            FatalError := True
+                            if (Response = 'QSO Details Not Matched') then
+                            begin
+                                ErrorCode := 2;
+                            end
+                            else
+                            begin
+                                ErrorCode := 1;
+                            end;
                           end
                   end //case
                 end;
     upHrdLog  : begin
                   case ParseHrdLogOutput(Response,Result) of
                     200 : Result := 'OK';
-                    400 : FatalError := True;
-                    403 : FatalError := True;
-                    500 : FatalError := True;
-                    404 : FatalError := True
+                    400 : ErrorCode := 2;
+                    403 : ErrorCode := 2;
+                    500 : ErrorCode := 1;
+                    404 : ErrorCode := 2
+                  end //case
+                end;
+    upUDPLog  : begin
+                  case ResultCode of
+                    200 : Result := 'OK';
+                    400 : begin
+                            Result     := Response;
+                            ErrorCode := 2
+                          end;
+                    500 : begin
+                            Result     := Response;
+                            ErrorCode := 1
+                          end
                   end //case
                 end
   end //case
@@ -739,7 +998,8 @@ function TdmLogUpload.LogUploadEnabled : Boolean;
 begin
   Result := cqrini.ReadBool('OnlineLog','HaUp',False) or
             cqrini.ReadBool('OnlineLog','ClUp',False) or
-            cqrini.ReadBool('OnlineLog','HrUp',False)
+            cqrini.ReadBool('OnlineLog','HrUp',False) or
+            cqrini.ReadBool('OnlineLog','UdUp',False)
 end;
 
 procedure TdmLogUpload.DisableOnlineLogSupport;

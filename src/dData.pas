@@ -24,8 +24,8 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 18;
-  cDB_COMN_VER = 5;
+  cDB_MAIN_VER = 19;
+  cDB_COMN_VER = 6;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
                        //so now after cDB_PING_INT will be run simple sql query
@@ -55,11 +55,17 @@ type
   { TdmData }
 
   TdmData = class(TDataModule)
+    dsrFreqs: TDataSource;
     dsrSQLConsole: TDatasource;
     dsrLogList: TDatasource;
     dsrmQ: TDatasource;
     mQ: TSQLQuery;
     Q2: TSQLQuery;
+    CQ: TSQLQuery;
+    qFreqMemGrid: TSQLQuery;
+    qFreqs: TSQLQuery;
+    trFreqMemGrid: TSQLTransaction;
+    trFreqs: TSQLTransaction;
     trQ2: TSQLTransaction;
     qSQLConsole: TSQLQuery;
     scCommon: TSQLScript;
@@ -86,7 +92,9 @@ type
     qBandMapFil: TSQLQuery;
     qRbnMon: TSQLQuery;
     qFreqMem: TSQLQuery;
+    trCQ: TSQLTransaction;
     trW: TSQLTransaction;
+    trWorkedContests: TSQLTransaction;
     W1: TSQLQuery;
     trW1: TSQLTransaction;
     W: TSQLQuery;
@@ -160,12 +168,14 @@ type
     MySQLProcess : TProcess;
     csPreviousQSO : TRTLCriticalSection;
     fMySQLVersion : Currency;
+    FreqMemCount  : integer;
 
     function  FindLib(const Path,LibName : String) : String;
     function  GetMysqldPath : String;
     function  TableExists(TableName : String) : Boolean;
     function  GetDebugLevel : Integer;
     function  FieldExists(TableName, FieldName : String) : Boolean;
+    function ConstraintExists(TableName, ConstraintName : String) : Boolean;
 
     procedure CreateDBConnections;
     procedure CreateViews;
@@ -192,6 +202,7 @@ type
 
     eQSLUsers : Array of ShortString;
     CallArray : Array of String[20];
+    IsFilterSQL : String; //String that is created with Filter settings. Isvalid if isfilter is valid, no cleanups.
     IsFilter  : Boolean;
     IsSFilter : Boolean; //Search filter
     //search function uses filter function but user doesn't need to know about it
@@ -766,7 +777,11 @@ begin
 
   dmUtils.LoadBandsSettings;
 
-  frmTRXControl.InicializeRig;
+  frmTRXControl.cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+  frmTRXControl.cmbRigCloseUp(nil);
+  frmTRXControl.InitializeRig;
+  frmRotControl.rbRotor1.Checked:= cqrini.ReadBool('ROT','Use1',True);
+  frmRotControl.rbRotor2.Checked:= not(cqrini.ReadBool('ROT','Use1',True));
   frmRotControl.InicializeRot;
 
   OpenFreqMemories('');
@@ -1676,7 +1691,15 @@ begin
   Q.ExecSQL;
 
   Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                         QuotedStr('8M')+',40.0000,45.0000,40.3000,40.3000,40.6800)';
+  Q.ExecSQL;
+
+  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
                 QuotedStr('6M')+',50.000,52.000,50.110,50.110,50.120)';
+  Q.ExecSQL;
+
+  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('5M')+',54.0000,69.9000,59.5000,59.6000,59.6000)';
   Q.ExecSQL;
 
   Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
@@ -2583,8 +2606,8 @@ begin
     try
       Q.Open;
       Q.Last;
-      Q.First;
       Result := dmData.Q.RecordCount
+      //Q.First;
     finally
       Q.Close;
       trQ.RollBack
@@ -2753,6 +2776,18 @@ begin
         Q1.ExecSQL;
       end;
 
+      if old_version < 6 then
+      begin
+        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('8M')+',40.0000,45.0000,40.3000,40.3000,40.6800)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+                       QuotedStr('5M')+',54.0000,69.9000,59.5000,59.6000,59.6000)';
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+      end;
+
       Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL
@@ -2774,6 +2809,7 @@ end;
 procedure TdmData.UpgradeMainDatabase(old_version : Integer);
 var
   err : Boolean = False;
+  max : Integer;
 begin
   if fDebugLevel>=1 then Writeln('[UpgradeMainDatabase] Old version: ', old_version,  '  cDB_MAIN_VER: ', cDB_MAIN_VER);
 
@@ -3160,6 +3196,33 @@ begin
               end;
       end;
 
+      if (old_version < 19) then
+            begin
+              if (ConstraintExists('log_changes', 'log_changes_ibfk_1')) then
+              begin
+                trQ1.StartTransaction;
+                Q1.SQL.Text := 'ALTER TABLE log_changes DROP FOREIGN KEY log_changes_ibfk_1';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+                trQ1.Commit;
+              end;
+
+              // PrepareEmptyLogUploadStatusTables() would have been called
+              // for older versions
+              if (old_version >= 8) then
+              begin
+                trQ1.StartTransaction;
+                Q1.SQL.Text := 'select max(id) from log_changes';
+                Q1.Open;
+                max := Q1.Fields[0].AsInteger;
+                Q1.Close;
+                Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_UDPLOG)+','+IntToStr(max)+')';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+                trQ1.Commit;
+              end;
+      end;
+
       if TableExists('view_cqrlog_main_by_callsign') then
       begin
         trQ1.StartTransaction;
@@ -3435,9 +3498,11 @@ begin
     trBands.RollBack;
   trBands.StartTransaction;
   qBands.Open;
+  qBands.Last;   //to get proper record count
   if dmData.DebugLevel>=1 then Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
   if qBands.RecordCount = 0 then
     exit;
+  qBands.First;
   band := qBands.Fields[1].AsString;
   cw   := qBands.Fields[4].AsFloat;
   ssb  := qBands.Fields[6].AsFloat;
@@ -3665,6 +3730,33 @@ begin
   end
 end;
 
+function TdmData.ConstraintExists(TableName, ConstraintName : String) : Boolean;
+const
+  C_SEL = 'select constraint_name from information_schema.table_constraints where table_schema=%s and table_name=%s and constraint_name=%s';
+var
+  t  : TSQLQuery;
+  tr : TSQLTransaction;
+begin
+  Result := True;
+  t := TSQLQuery.Create(nil);
+  tr := TSQLTransaction.Create(nil);
+  try
+    t.Transaction := tr;
+    tr.DataBase   := MainCon;
+    t.DataBase    := MainCon;
+
+    t.SQL.Text := Format(C_SEL,[QuotedStr(fDBName),QuotedStr(TableName), QuotedStr(ConstraintName)]);
+    if fDebugLevel>=1 then Writeln(t.SQL.Text);
+    t.Open;
+    Result := t.RecordCount>0
+  finally
+    t.Close;
+    tr.Rollback;
+    FreeAndNil(t);
+    FreeAndNil(tr)
+  end
+end;
+
 
 procedure TdmData.PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
 var
@@ -3688,6 +3780,10 @@ begin
   lQ.ExecSQL;
 
   lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
+  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+  lQ.ExecSQL;
+
+  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_UDPLOG)+',1)';
   if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
   lQ.ExecSQL;
 
@@ -3932,52 +4028,61 @@ var
   i : Integer;
 begin
   try try
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := C_DEL;
-    dmData.Q.ExecSQL;
-    dmData.Q.SQL.Text := C_INS;
+    dmData.qFreqMemGrid.Close;
+    if dmData.trFreqMemGrid.Active then  dmData.trFreqMemGrid.Rollback;
+    dmData.trFreqMemGrid.StartTransaction;
+    dmData.qFreqMemGrid.SQL.Text := C_DEL;
+    dmData.qFreqMemGrid.ExecSQL;
+    dmData.trFreqMemGrid.Commit;
+
+    dmData.trFreqMemGrid.StartTransaction;
+    dmData.qFreqMemGrid.SQL.Text := C_INS;
     for i:= 1 to grid.RowCount-1 do
     begin
-      Q.Prepare;
-      Q.Params[0].AsFloat   := StrToFloat(grid.Cells[0,i]);
-      Q.Params[1].AsString  := grid.Cells[1,i];
-      Q.Params[2].AsInteger := StrToInt(grid.Cells[2,i]);
-      Q.Params[3].AsString  := grid.Cells[3,i];
-      Q.ExecSQL
+      qFreqMemGrid.Prepare;
+      qFreqMemGrid.Params[0].AsFloat   := StrToFloat(grid.Cells[0,i]);
+      qFreqMemGrid.Params[1].AsString  := grid.Cells[1,i];
+      qFreqMemGrid.Params[2].AsInteger := StrToInt(grid.Cells[2,i]);
+      qFreqMemGrid.Params[3].AsUTF8String  := grid.Cells[3,i];
+      qFreqMemGrid.ExecSQL;
     end
   except
-    dmData.trQ.Rollback
+    dmData.trFreqMemGrid.Rollback
   end
   finally
-    dmData.Q.Close;
-    if dmData.trQ.Active then
-      dmData.trQ.Commit;
+    dmData.qFreqMemGrid.Close;
+    if dmData.trFreqMemGrid.Active then
+      dmData.trFreqMemGrid.Commit;
     OpenFreqMemories(frmTRXControl.GetRawMode)
   end
 end;
 
 procedure TdmData.LoadFreqMemories(grid : TStringGrid);
 const
-  C_SEL = 'select freq,mode,bandwidth,info from freqmem order by id';
+  C_SEL = 'select freq,mode,bandwidth,info from freqmem order by freq';
 begin
   try
+    grid.clear;
     grid.RowCount := 1;
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := C_SEL;
-    dmData.Q.Open;
-    while not dmData.Q.Eof do
+    dmData.qFreqMemGrid.Close;
+    if  dmData.trFreqMemGrid.Active then dmData.trFreqMemGrid.Rollback;
+    dmData.trFreqMemGrid.StartTransaction;
+    dmData.qFreqMemGrid.SQL.Text := C_SEL;
+    dmData.qFreqMemGrid.Open;
+    while not dmData.qFreqMemGrid.Eof do
     begin
       grid.RowCount := grid.RowCount + 1;
-      grid.Cells[0,grid.RowCount-1] := FloatToStrF(Q.Fields[0].AsFloat,ffFixed,15,3);
-      grid.Cells[1,grid.RowCount-1] := Q.Fields[1].AsString;
-      grid.Cells[2,grid.RowCount-1] := IntToStr(Q.Fields[2].AsInteger);
-      grid.Cells[3,grid.RowCount-1] := Q.Fields[3].AsString;
-      Q.Next
+      grid.Cells[0,grid.RowCount-1] := FloatToStrF(qFreqMemGrid.Fields[0].AsFloat,ffFixed,15,3);
+      grid.Cells[1,grid.RowCount-1] := qFreqMemGrid.Fields[1].AsString;
+      grid.Cells[2,grid.RowCount-1] := IntToStr(qFreqMemGrid.Fields[2].AsInteger);
+      grid.Cells[3,grid.RowCount-1] := qFreqMemGrid.Fields[3].AsUTF8String;
+      qFreqMemGrid.Next
     end
   finally
-    dmData.Q.Close;
-    dmData.trQ.Rollback
+    dmData.qFreqMemGrid.Close;
+    dmData.trFreqMemGrid.Rollback
   end
+
 end;
 
 procedure TdmData.OpenFreqMemories(mode : String);
@@ -3987,8 +4092,7 @@ var
   c : integer;
 begin
   qFreqMem.Close;
-  if trFreqMem.Active then
-    trFreqMem.Rollback;
+  if trFreqMem.Active then trFreqMem.Rollback;
 
   if not cqrini.ReadBool('TRX','MemModeRelated',False) then mode:='';   //use related settings!!
 
@@ -4007,21 +4111,24 @@ begin
       qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
     end;
    end;
-  if fDebugLevel>=1 then Writeln('FreqmemSql:',qFreqMem.SQL.Text);
+  if fDebugLevel>=1 then
+                    Writeln('FreqmemSql:',qFreqMem.SQL.Text);
   trFreqMem.StartTransaction;
   qFreqMem.Open;
-
+  qFreqMem.Last;  //to get proper record count
+  FreqMemCount:=qFreqMem.RecordCount;
+  setLength(MemNR,(FreqMemCount)+1);
   qFreqMem.First;
   qFreqMem.prior;
   fFirstMemId := qFreqMem.Fields[0].AsInteger;
-
   c:=-1;
-  setLength(MemNR,qFreqMem.RecordCount+1);
+
   repeat
     begin
       inc(c);
        MemNR[c]:= qFreqMem.Fields[0].AsInteger;
-       if fDebugLevel>=1 then Writeln('FreqmemNR:',c,'=',MemNR[c]);
+       if fDebugLevel>=1 then
+          Writeln('FreqmemNR:',c,'=',MemNR[c]);
        qFreqMem.Next;
     end;
    until qFreqMem.Eof;
@@ -4030,14 +4137,15 @@ begin
   fLastMemId := qFreqMem.Fields[0].AsInteger;
 
 
-  if fDebugLevel>=1 then Writeln('FreqmemFirst:',fFirstMemId,'  FreqmemLast:',fLastMemId);
+  if fDebugLevel>=1 then
+     Writeln('FreqmemFirst:',fFirstMemId,'  FreqmemLast:',fLastMemId);
 end;
 
 procedure TdmData.GetCurrentFreqFromMem(var freq : Double; var mode : String; var bandwidth : Integer; var info : String);
 var
    c: integer;
 begin
-  if qFreqMem.Active and (qFreqMem.RecordCount > 0) then
+  if qFreqMem.Active and (FreqMemCount > 0) then
   begin
     freq      := qFreqMem.Fields[1].AsFloat;
     mode      := qFreqMem.Fields[2].AsString;
@@ -4046,9 +4154,9 @@ begin
     frmTRXControl.edtMemNr.Font.Color:= clDefault; // May be red if previous was "None"
     if info='' then
           begin
-            for c:=0 to  qFreqMem.RecordCount do
+            for c:=0 to  FreqMemCount do
                 if MemNR[c]= qFreqMem.Fields[0].AsInteger then break;
-            frmTRXControl.edtMemNr.Text := IntToStr(c+1)+' of '+ IntToStr(qFreqMem.RecordCount );
+            frmTRXControl.edtMemNr.Text := IntToStr(c+1)+' of '+ IntToStr(FreqMemCount);
             end
                else frmTRXControl.edtMemNr.Text := info;
     frmTRXControl.infosetstage :=1;

@@ -91,7 +91,7 @@ implementation
 {$R *.lfm}
 
 { TfrmCWType }
-uses fNewQSO,dUtils,dData, uMyIni;
+uses fTRXControl,fNewQSO,dUtils,dData, uMyIni, fContest;
 
 function TfrmCWType.PassedKey(key:char):boolean;
 Begin
@@ -140,6 +140,7 @@ procedure TfrmCWType.btnF1MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -154,6 +155,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -162,6 +164,7 @@ procedure TfrmCWType.btnF10MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -171,6 +174,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F10',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -184,9 +188,17 @@ procedure TfrmCWType.btnF1Click(Sender: TObject);
 begin
   m.SetFocus; //after click focus back to memo
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
-   frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
+     begin
+      frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F1',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
-      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
+      frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''));
+      if frmContest.Showing then  //set the "lastCqFreq" @contest window
+        Begin
+          frmContest.lblCqMode.Caption:=frmTRXControl.GetRawMode;
+          frmContest.lblCqFreq.Caption := FormatFloat('0.00',frmTRXControl.GetFreqkHz);
+        end;
+     end
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
 
@@ -194,6 +206,7 @@ procedure TfrmCWType.btnF2MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F2',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -208,6 +221,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -216,6 +230,7 @@ procedure TfrmCWType.btnF3MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F3',frmNewQSO.edtCall.Text,
        frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+       frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -230,6 +245,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -238,6 +254,7 @@ procedure TfrmCWType.btnF4MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F4',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -252,6 +269,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -260,6 +278,7 @@ procedure TfrmCWType.btnF5MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F5',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -274,6 +293,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -282,6 +302,7 @@ procedure TfrmCWType.btnF6MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F6',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -296,6 +317,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -304,6 +326,7 @@ procedure TfrmCWType.btnF7MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F7',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -318,6 +341,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -326,6 +350,7 @@ procedure TfrmCWType.btnF8MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F8',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -340,6 +365,7 @@ begin
   if Assigned(frmNewQSO.CWint) and (frmNewQSO.cmbMode.Text='CW') then
    frmNewQSO.CWint.SendText(dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,''))
     else ShowMessage('Radio:   Not in CW mode!'+LineEnding+'or'+LineEnding+'CW interface:   No keyer defined! ');
 end;
@@ -348,6 +374,7 @@ procedure TfrmCWType.btnF9MouseEnter(Sender: TObject);
 begin
   frmCWType.lblToShowMouseOverText.Caption:=dmUtils.GetCWMessage('F9',frmNewQSO.edtCall.Text,
       frmNewQSO.edtHisRST.Text, frmNewQSO.edtContestSerialSent.Text,frmNewQSO.edtContestExchangeMessageSent.Text,
+      frmNewQSO.edtContestSerialReceived.Text,frmNewQSO.edtContestExchangeMessageReceived.Text,
       frmNewQSO.edtName.Text,frmNewQSO.lblGreeting.Caption,'');
 end;
 
@@ -392,6 +419,8 @@ begin
 end;
 
 procedure TfrmCWType.FormShow(Sender: TObject);
+var
+   n:string;
 begin
   dmUtils.LoadWindowPos(frmCWType);
   rgMode.ItemIndex := cqrini.ReadInteger('CW','Mode',1);
@@ -400,6 +429,15 @@ begin
   m.Clear;
   Switch2Word :=false;
   WasMemoLen := length(m.lines.text);
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+  if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+     Begin
+         frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM';
+         edtSpeed.Enabled:=False;
+     end
+   else
+     edtSpeed.Enabled:=True;
+
    //set debug rules for this form
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
@@ -412,9 +450,18 @@ begin
 end;
 
 procedure TfrmCWType.edtSpeedChange(Sender: TObject);
+var
+    n:string;
 begin
+ if Assigned(frmNewQSO.CWint) then
+ begin
+  n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
   frmNewQSO.CWint.SetSpeed(edtSpeed.Value);
-  frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
+   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
+ end;
 end;
 procedure TfrmCWType.fraCWKeys1Resize(Sender: TObject);
  var
@@ -556,12 +603,17 @@ end;
 procedure TfrmCWType.SetSpeed(change:integer);
 var
   speed : Integer = 0;
-Begin
+    n   : string;
+begin
    if Assigned(frmNewQSO.CWint) then
     begin
+      n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
       speed := frmNewQSO.CWint.GetSpeed+change;
       frmNewQSO.CWint.SetSpeed(speed);
-      frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+        frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
+       else
+        frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
       edtSpeed.Value := speed;
     end;
 end;

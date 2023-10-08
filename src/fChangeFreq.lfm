@@ -42,7 +42,7 @@ object frmChangeFreq: TfrmChangeFreq
     Height = 17
     Top = 72
     Width = 32
-    Caption = 'RTTY'
+    Caption = 'DATA'
     ParentColor = False
   end
   object Label5: TLabel
@@ -77,7 +77,7 @@ object frmChangeFreq: TfrmChangeFreq
     OnKeyPress = ChkKeyPress
     TabOrder = 2
   end
-  object edtRTTY: TEdit
+  object edtData: TEdit
     Left = 168
     Height = 34
     Top = 89

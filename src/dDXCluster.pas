@@ -91,7 +91,6 @@ type
     function  CountryFromADIF(adif : Word) : String;
     function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
     function  IsAlertCall(const call,band,mode : String;RegExp :Boolean) : Boolean;
-    function  GetfreeTextFromSpot(ua:String):String;
 
     procedure AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
     procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
@@ -99,6 +98,7 @@ type
     procedure LoadDXCCRefArray;
     procedure LoadExceptionArray;
     procedure RunCallAlertCmd(call,band,mode,freq,freeText : String);
+    procedure GetSplitSpot(Spot:String;var call,freq,info:String);
 
 
   end;
@@ -110,7 +110,7 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, znacmech, uMyini;
+uses dUtils, dData, znacmech, uMyini, fTRXControl;
 
 type Tchyb1 = object(Tchyby) // podedim objekt a prepisu "hlaseni"
        //procedure hlaseni(vzkaz,kdo:string);virtual;
@@ -129,65 +129,54 @@ begin
     Writeln(vzkaz);
 end;
 }
-function TdmDXCluster.GetfreeTextFromSpot(ua:String):String;
+Procedure TdmDXCluster.GetSplitSpot(Spot:String;var call,freq,info:String);
 var
-  a:longint;
-  uz:string;
-  p,l:integer;
+ i,n,r : integer;
+ s,t   : String;
+
 Begin
-  Result:='';
-  if pos('DX de',ua)=1 then   //normal DX spot
+  Spot:=trim(Spot); //to be sure
+  //remove extra spaces
+  repeat
+    Begin
+      Spot:=StringReplace(Spot,'  ',' ',[rfReplaceAll],i);
+    end;
+  until i=0;
+
+  if (pos('DX DE ',UpperCase(Spot))=1) then  //normal cluster spot format
+   Begin
+     call :=  UpperCase(ExtractDelimited(5,Spot,[' ']));  //to be sure case
+     freq :=  ExtractDelimited(4,Spot,[' ']);
+     s:=trim(copy(Spot,pos(call,Spot)+length(call),length(Spot)));
+     n:=0;
+     r:=0;
+     for i:=1 to length(s) do //find zulu time  works with telnet and web
       Begin
-         ExtractWordPos(6,ua,[' '],p);   //info part starts at 6th word
-         if p>0 then
-          begin
-           ua := copy(ua,p,length(ua));
-             for l:=1 to wordCount(ua,[' ']) do
-                 Begin
-                   uz:= ExtractWordPos(l,ua,[' '],p);
-                    if ((length(uz)=5) and (uz[5]='Z')) then  //Z is lastchr, length is 5
-                     if TryStrToInt(copy(uz,1,4 ),a ) then
-                      if ((a>=0) and (a<=2400)) then //must be zulu time
-                         Begin       // we do not take Zulu time or anything after that
-                           if (p>1) then  //something to copy
-                             begin
-                              ua:=trim(copy(ua,1,p-1));
-                              Result:=ua;
-                              if dmData.DebugLevel >=1 then writeln ('DX spot info: ',ua);
-                              break;
-                             end;
-                         end;
-                 end;
-           end;
-        end
-      else
-       Begin          // from command 'sh/dx'
-         if TryStrToInt( copy(ua,1,pos('.',ExtractWordPos(1,ua,[' '],p))-1),a)  then //1st have number (frq) with dot
+        if ((n=4) and (s[i]='Z')) then
          Begin
-           ExtractWordPos(5,ua,[' '],p);   //info part starts at 5th word
-           if p>0 then
-            begin
-             ua := copy(ua,p,length(ua));  //2nd cut from 5th word
-             a:=0;
-             for l:=length(ua) downto 1 do
-                 Begin
-                  if ((a=0) and (ua[l]='>')) then a:=1;
-                  if ((a=1) and (ua[l]='<')) then     //search word that starts '<' ends '>' start from end of line
-                   begin
-                    if l>1 then
-                     begin
-                      ua := trim(copy(ua,1,l-1)); //cut form start to that word pos
-                      Result:=ua;
-                      if dmData.DebugLevel >=1 then writeln ('sh/dx spot info: ',ua);
-                      break;                        // that is info
-                     end;
-                   end;
-                  end;
-
-            end;
-        end;
+           r:= i-5;
+           break;
+         end;
+        if (s[i] in ['0'..'9']) then
+           inc(n)
+         else
+           n:=0;
       end;
-
+     if (r=0) then r:=i; //r points chars before zulu time, if not found points end of s
+     info := trim(copy(s,1,r));
+   end
+  else     //format from sh/dx command
+   Begin
+     call :=  UpperCase(ExtractDelimited(2,Spot,[' ']));  //to be sure  case
+     freq :=  ExtractDelimited(1,Spot,[' ']);
+     t    :=  ExtractDelimited(4,Spot,[' ']);  //zulu time
+     s:=trim(copy(Spot,pos(t,Spot)+length(t),length(Spot)));
+     i:=Rpos('<',s);
+     if (i > 0) then
+       info:= copy(s,1,i-1)
+      else     //should not happen
+       info:=s;
+   end;
 end;
 
 function TdmDXCluster.MyTryStrToInt(s : String; var i : Integer) : Boolean;
@@ -209,6 +198,7 @@ function TdmDXCluster.BandModFromFreq(freq : String;var mode,band : String) : Bo
 var
   tmp : Extended;
   cw, ssb : Extended;
+  n   :String;
 begin
   EnterCriticalsection(csDX);
   try
@@ -229,6 +219,7 @@ begin
       trBands.RollBack;
     trBands.StartTransaction;
     qBands.Open;
+    //qBands.Last; //to get proper count
     //Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
     if qBands.RecordCount = 0 then
       exit;
@@ -243,8 +234,12 @@ begin
       if (tmp >= ssb) then
         mode := 'SSB'
       else
-        mode := 'RTTY';
+        Begin
+          n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
+          mode :=  cqrini.ReadString('Band'+n, 'Datamode', 'RTTY')
+        end;
     end;
+
     //Writeln('TdmDXCluster.BandModFromFreq:',Result,' cw ',FloatToStr(cw),' ssb ',FloatToStr(ssb))
   finally
     LeaveCriticalsection(csDX)
@@ -282,12 +277,14 @@ begin
       if lotw then
         Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
                       sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                      QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
+                      QuotedStr('Q')+') OR (lotw_qslr='+ QuotedStr('L')+
+                      ') OR (eqsl_qsl_rcvd='+ QuotedStr('E')+')) AND mode='+
                       QuotedStr(mode)+' LIMIT 1'
       else
         Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
                        sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
                        QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+
       trQ.StartTransaction;
       Q.Open;
       if Q.Fields[0].AsInteger > 0 then
@@ -1214,6 +1211,7 @@ begin
     qCallAlert.Open;
     if qCallAlert.RecordCount > 0 then
    begin
+      qCallAlert.Last; //to get proper count
       if dmData.DebugLevel>=1 then Writeln('Alert: Call hits with ', qCallAlert.RecordCount,' records');
       qCallAlert.First;
       while ( (not qCallAlert.Eof) and (not Result) ) do

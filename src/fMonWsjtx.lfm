@@ -1,7 +1,7 @@
 object frmMonWsjtx: TfrmMonWsjtx
-  Left = 183
+  Left = 12
   Height = 362
-  Top = 70
+  Top = 58
   Width = 582
   AllowDropFiles = True
   Caption = 'Wsjt-x CQ-monitor'
@@ -227,7 +227,7 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideTop.Side = asrBottom
     Left = 52
     Height = 15
-    Top = 32
+    Top = 34
     Width = 479
     BorderSpacing.Top = 5
     Caption = 'Yoy may now minimize this window. Printing back to Wsjt-x Band Activity'
@@ -392,14 +392,14 @@ object frmMonWsjtx: TfrmMonWsjtx
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
-    Left = 86
+    Left = 60
     Height = 31
     Top = 0
-    Width = 411
+    Width = 462
     AutoSize = True
     BorderWidth = 3
     ClientHeight = 31
-    ClientWidth = 411
+    ClientWidth = 462
     TabOrder = 5
     Visible = False
     OnClick = pnlSelectsClick
@@ -480,12 +480,26 @@ object frmMonWsjtx: TfrmMonWsjtx
       OnChange = chkStopTxChange
       TabOrder = 4
     end
-    object chkDx: TCheckBox
+    object chkUState: TCheckBox
       AnchorSideLeft.Control = chkStopTx
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = pnlSelects
-      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Side = asrCenter
       Left = 315
+      Height = 23
+      Top = 4
+      Width = 49
+      BorderSpacing.Right = 2
+      Caption = 'USt'
+      OnChange = chkUStateChange
+      TabOrder = 6
+    end
+    object chkDx: TCheckBox
+      AnchorSideLeft.Control = chkUState
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlSelects
+      AnchorSideTop.Side = asrCenter
+      Left = 366
       Height = 23
       Top = 4
       Width = 44
@@ -499,7 +513,7 @@ object frmMonWsjtx: TfrmMonWsjtx
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 371
+      Left = 422
       Height = 15
       Top = 8
       Width = 36
@@ -615,6 +629,12 @@ object frmMonWsjtx: TfrmMonWsjtx
     Enabled = False
     OnTimer = tmrFollowTimer
     Left = 224
+    Top = 144
+  end
+  object tmrFCC: TTimer
+    Enabled = False
+    OnTimer = tmrFCCTimer
+    Left = 104
     Top = 144
   end
 end

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, maskedit, ColorBox, Menus, ExtCtrls, Grids, StrUtils,
-  process, Types;
+  process, Types, iniFiles, LCLType, ComCtrls, dateutils, BaseUnix;
 
 type
 
@@ -23,6 +23,7 @@ type
     chknoHistory: TCheckBox;
     chknoTxt: TCheckBox;
     chkStopTx: TCheckBox;
+    chkUState: TCheckBox;
     EditAlert: TEdit;
     edtFollow: TEdit;
     edtFollowCall: TEdit;
@@ -31,6 +32,7 @@ type
     lblMode: TLabel;
     pnlTrigPop: TPanel;
     pnlSelects: TPanel;
+    pnlChecks: TPanel;
     pnlFollow: TPanel;
     pnlAlert: TPanel;
     sgMonitor: TStringGrid;
@@ -50,6 +52,7 @@ type
     tbmyAlrt: TToggleBox;
     tbFollow: TToggleBox;
     tbTCAlert: TToggleBox;
+    tmrFCC: TTimer;
     tmrFollow: TTimer;
     tmrCqPeriod: TTimer;
     procedure btFtxtNameClick(Sender: TObject);
@@ -59,6 +62,7 @@ type
     procedure chknoHistoryChange(Sender: TObject);
     procedure chkMapChange(Sender: TObject);
     procedure chkStopTxChange(Sender: TObject);
+    procedure chkUStateChange(Sender: TObject);
     procedure cmAnyClick(Sender: TObject);
     procedure cmBandClick(Sender: TObject);
     procedure cmCqDxClick(Sender: TObject);
@@ -90,8 +94,13 @@ type
     procedure tbmyAlrtChange(Sender: TObject);
     procedure tbTCAlertChange(Sender: TObject);
     procedure tmrCqPeriodTimer(Sender: TObject);
+    procedure tmrFCCTimer(Sender: TObject);
     procedure tmrFollowTimer(Sender: TObject);
   private
+    DPstarted : integer;     //fcc states download process status
+    DProcess: TProcess;
+    tfIn,tfOUT,dupOut: TextFile;
+    FccEn        :TStringList;
     procedure AddColorStr(s: string; const col: TColor = clBlack; c:integer =0;r:integer =-1);
     procedure RunVA(Afile: string);
     procedure scrollSgMonitor;
@@ -99,7 +108,7 @@ type
     procedure PrintCall(Pcall: string;PCB:Boolean=false);  // prints colored call
     procedure PrintLoc(PLoc, tTa, mT: string;PCB:Boolean=false);  // prints colored loc
     function isItACall(Call: string): boolean;
-    procedure SendReply(reply: string);
+    procedure SendQsoInit(reply: string);
     procedure TryCallAlert(S: string);
     procedure TryAlerts;
     procedure SaveFormPos(FormMode: string);
@@ -109,15 +118,19 @@ type
     procedure Setbitmap(bm:TBitmap;col:Tcolor);
     procedure SetAllbitmaps;
     procedure setDefaultColorSgMonitorAttributes;
-    procedure setMonitorColumnHW;
+    procedure SetsgMonitorColumnHW;
     procedure scrollSgMonitorToLastLine;
     function  LineFilter(L: string):string;
     procedure PrintDecodedMessage;
     function getCurMode(sMode: String): String;
     procedure extcqprint;
+    procedure BuildFccState;
+    procedure downLoadInit;
+    function UsCallState(call:string;var StatClr:TColor):string;
     { private declarations }
   public
-    DblClickCall  :string;   //callsign that is called by doubleclick
+    CanCloseFCCProcess :boolean;
+    DblClickCall  :string;      //callsign that is called by doubleclick
     procedure clearSgMonitor;
     procedure AddCqCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
     procedure AddMyCallMessage(Time,mode,WsjtxBand,Message,Reply:string; Df,Sr:integer);
@@ -125,10 +138,12 @@ type
     procedure AddOtherMessage(Time,Message, Reply: string;Df,Sr:integer);
     procedure NewBandMode(Band, Mode: string);
     procedure SendFreeText(MyText: string);
+    procedure SendConfigure(Mode,Submode,DXCall,DXGrid:string;FreqTol,TRPeriod,RxDF:Dword;Fmode,GMsg:boolean);
     procedure ColorBack(Myitem:string;Mycolor:Tcolor;bkg:Boolean=false);
     procedure BufDebug(MyHeader,MyBuf:string);
     function HexStrToStr(const HexStr: string): string;
     function StrToHexStr(const S: string): string;
+    procedure CloseFCCProcess;
     { public declarations }
   end;
 
@@ -141,6 +156,13 @@ const
   //color bitmap size
   bmW = 10;
   bmH = 10;
+
+  C_STATEFILE = 'ctyfiles/fcc_states.tab';
+  C_STATE_SOURCE = 'ctyfiles/EN.dat';
+  C_URL = 'ftp://wirelessftp.fcc.gov/pub/uls/complete/l_amat.zip';
+  //C_URL ='http://localhost/l_amat.zip'; //for testing;
+  C_MYZIP = 'ctyfiles/l_amat.zip';
+  C_MY_SCRIPT = 'ctyfiles/fcc_get.sh';
 
 //DL7OAP: define type for grid coloring
 type
@@ -192,19 +214,25 @@ var
   sgMonitorAttributes : array [0..7,0..MaxLinesSgMonitor+2] of TsgMonitorAttributes;
   LocalDbg : boolean;
 
+  FCC_Address :String;
+  UState : TStringList;
+  URState : TStringList; // runtime found calls=states expecting them occur many times. faster to find.
+  //crit : TRTLCriticalSection;
+
+
 implementation
 
 {$R *.lfm}
 
 { TfrmMonWsjtx }
 
-uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster;
+uses fNewQSO, dData, dUtils, dDXCC, fWorkedGrids, uMyIni, dDXCluster,fProgress;
 
 procedure TfrmMonWsjtx.RunVA(Afile: string);
 const
   cAlert = 'voice_keyer/voice_alert.sh';
 var
-  AProcess: TProcess;
+   AProcess: TProcess;
 begin
   if not FileExists(dmData.HomeDir + cAlert) then
     exit;
@@ -218,7 +246,7 @@ begin
     if LocalDbg then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
   finally
-    AProcess.Free
+    FreeAndNil(Aprocess);
   end;
 end;
 
@@ -282,6 +310,7 @@ var
 begin
   for l:= sgMonitor.rowcount - 1 downto 0 do
     sgMonitor.DeleteRow(l);
+  SetsgMonitorColumnHW;
   setDefaultColorSgMonitorAttributes;
   if LocalDbg then
         Writeln('sgMonitor clear finished');
@@ -332,7 +361,7 @@ begin
   end;
 end;
 
-procedure TfrmMonWsjtx.setMonitorColumnHW;
+procedure TfrmMonWsjtx.SetsgMonitorColumnHW;
 Var
   FSz : integer;
   i   : integer;
@@ -346,7 +375,7 @@ Begin
    end;
 end;
 
-procedure TfrmMonWsjtx.SendReply(reply: string);
+procedure TfrmMonWsjtx.SendQsoInit(reply: string);
 var
   i: byte;
 begin
@@ -373,7 +402,7 @@ begin
     BufDebug('Array gives '+INtToStr(length(sgMonitor.Cells[8,sgMonitor.row]))+' :',
              HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
   end;
-  SendReply(HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
+  SendQsoInit(HexStrToStr(sgMonitor.Cells[8,sgMonitor.row]));
   frmNewQSO.GetCallInfo(DblClickCall,CurMode,sgMonitor.Cells[1,sgMonitor.row]);
   frmNewQSO.SendToBack;
 end;
@@ -387,6 +416,9 @@ begin
     SaveFormPos('Cq');  //to be same as intial save
   dmUtils.SaveWindowPos(frmMonWsjtx);
 
+  FreeAndNil(UState);
+  FreeAndNil(URState);
+  //DoneCriticalsection(crit)
 end;
  
 procedure TfrmMonWsjtx.Setbitmap(bm: TBitmap; col: Tcolor);
@@ -525,11 +557,73 @@ begin
   end;
 end;
 
+procedure TfrmMonWsjtx.SendConfigure(Mode,Submode,DXCall,DXGrid:string;FreqTol,TRPeriod,RxDF:Dword;Fmode,GMsg:boolean);
+var
+  i: byte;
+
+procedure AddCint(c:Dword);
+begin
+     RepBuf := RepBuf + chr(hi(hi(c))) + chr(lo(hi(c))) + chr(hi(lo(c))) + chr(lo(lo(c)));
+end;
+procedure AddString(s:string);  //strings here can not be over 256 length here
+var  l: integer;
+Begin
+    l:=  length(s);
+    if l=0 then
+       RepBuf := RepBuf +#$FF+#$FF+#$FF+#$FF
+     else
+       RepBuf := RepBuf +#0 + #0 +#0 + chr(l) + Uppercase(s);
+end;
+procedure AddBool(b:boolean);
+Begin
+  if b then
+             RepBuf := RepBuf +#1
+           else
+             RepBuf := RepBuf +#0;
+end;
+
+
+begin
+  if frmNewQSO.RepHead <> '' then
+  begin
+    RepBuf := frmNewQSO.RepHead;
+    RepBuf[12] := #15; //Send config 15
+
+    AddString(Mode);
+    AddCint(Freqtol);
+    AddString(Submode);
+    AddBool(Fmode);
+    AddCint(TRPeriod);
+    AddCint(RxDF);
+    AddString(DXCall);
+    AddString(DXGrid);
+    AddBool(GMsg);
+
+    frmNewQSO.Wsjtxsock.SendString(RepBuf);
+    //BufDebug('UDP#15',RepBuf);
+  end;
+  {
+ *                         Mode                   utf8
+ *                         Frequency Tolerance    quint32
+ *                         Submode                utf8
+ *                         Fast Mode              bool
+ *                         T/R Period             quint32
+ *                         Rx DF                  quint32
+ *                         DX Call                utf8
+ *                         DX Grid                utf8
+ *                         Generate Messages      bool
+ *      For  utf8  string
+ *      fields an empty value implies no change, for the quint32 Rx DF
+ *      and  Frequency  Tolerance  fields the  maximum  quint32  value
+ *      implies  no change.
+  }
+end;
+
 procedure TfrmMonWsjtx.edtFollowDblClick(Sender: TObject);
 begin
   if LocalDbg then
     Writeln('Clicked follow line gives: ', RepFlw);
-  SendReply(RepFlw);
+  SendQsoInit(RepFlw);
 end;
 
 
@@ -553,7 +647,6 @@ begin
        Columns.Items[1].maxSize := 1;
        Columns.Items[1].minSize := 1;
       end;
-    setMonitorColumnHW;
     clearSgMonitor;
   end;
 end;
@@ -590,8 +683,6 @@ begin
 end;
 
 procedure TfrmMonWsjtx.chkMapChange(Sender: TObject);
-var
-  i: integer;
 begin
   sgMonitor.Visible:= not(chknoTxt.Checked and not chkMap.Checked);
   lblInfo.Visible := not sgMonitor.Visible;
@@ -605,8 +696,7 @@ begin
     if chkMap.Checked then
     begin   //Map
       //write width/height CQ read width Map
-      if Sender <> frmMonWsjtx then
-        SaveFormPos('Cq');  //no save from init
+      if Sender <> frmMonWsjtx then  SaveFormPos('Cq');  //no save from init
       LoadFormPos('Map');
       LockFlw := True;
       cbflw.Checked := False;
@@ -624,14 +714,15 @@ begin
       //map mode allows text printing. Printing stays on when return to monitor mode.
       chknoHistory.Visible := False;
       sgMonitor.Columns.Items[0].Visible:= false;
-      sgMonitor.Columns.Items[1].Visible:= false;
-      sgMonitor.Columns.Items[7].Visible:= false;
+      sgMonitor.Columns.Items[1].Visible:= chkdB.Checked;
+      sgMonitor.Columns.Items[7].Visible:= true;
+      sgMonitor.Columns.Items[6].MinSize:=2;  //map mode -> US state
+      sgMonitor.Columns.Items[6].MaxSize:=2;
     end
     else
     begin   //Cq
       //write width/height Map read width CQ
-      if Sender <> frmMonWsjtx then
-        SaveFormPos('Map');   //no save from init
+      if Sender <> frmMonWsjtx then  SaveFormPos('Map');   //no save from init
       LoadFormPos('Cq');
       cbflw.Checked := cqrini.ReadBool('MonWsjtx', 'FollowShow', False);
       tbFollow.Checked := cqrini.ReadBool('MonWsjtx', 'Follow', False);
@@ -643,6 +734,8 @@ begin
       sgMonitor.Columns.Items[0].Visible:= true;
       sgMonitor.Columns.Items[1].Visible:= true;
       sgMonitor.Columns.Items[7].Visible:= true;
+      sgMonitor.Columns.Items[6].MinSize:=15;
+      sgMonitor.Columns.Items[6].MaxSize:=15;
     end;
     clearSgMonitor;
   end;
@@ -655,6 +748,94 @@ begin
     begin
       DblClickCall := '';
       if LocalDbg then Writeln('Reset 2click call: sTx unchecked');
+    end;
+end;
+
+procedure TfrmMonWsjtx.chkUStateChange(Sender: TObject);
+
+var
+  StateFile,
+  SourceFile,
+  msg ,
+  call,
+  HasState        : String;
+  StateSourceIn    : Textfile;
+  BuildFile        : TIniFile;
+  i,c                :integer;
+begin
+  cqrini.WriteBool('MonWsjtx', 'UStates', chkUState.Checked);
+  if chkUState.Checked then
+    Begin
+      if LocalDbg then  Writeln('State check activated');
+      if  UState.Count = 0 then  //load file
+        Begin
+          StateFile :=  dmData.HomeDir+C_STATEFILE;
+          SourceFile :=  dmData.HomeDir+C_STATE_SOURCE;
+          if FileExists(StateFile) then
+             Begin
+              if (DaysBetween(now,FileDateTodateTime(FileAge(StateFile)))) > 90 then
+                Begin //over 3 month old
+                 msg := 'Source file '+StateFile+' is over 90 days old.'+#13+#13+'Should it be updated?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                    Begin
+                     DeleteFile(StateFile);
+                     if FileExists(SourceFile) then DeleteFile(SourceFile);
+                     chkUStateChange(nil); //recall
+                     if not FileExists(StateFile) then  //when back here should have new StateFile
+                      begin
+                        chkUState.Checked := false;
+                        exit;
+                      end;
+                    end;
+                end;
+              if LocalDbg then Writeln('loading...');
+              UState.LoadFromFile(StateFile);
+              if LocalDbg then writeln(UState.Count);
+             end
+           else // no file: inform and ask if load it.uncheck USStete and return
+             begin
+               chkUState.Checked := false;
+               if FileExists(SourceFile) then
+                Begin
+                  msg := 'Source file '+SourceFile+' found!'+#13+#13+'Should the '+StateFile+#13+'to be built from source file ?';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Build from source EN.dat');
+                     Application.ProcessMessages;
+                     BuildFccState;
+                     chkUState.Checked := True; //causes recall
+                     exit;
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('Build from source denied!');
+                     exit;
+                   end;
+                end
+                else
+                Begin
+                  msg := 'Neither '+StateFile+#13+
+                          'nor '+SourceFile+' found!'+#13+#13+
+                          'Try to load zipped source of USCalls from fcc ?'+#13+#13+
+                          'Command line tools "wget" and "unzip" must be available.';
+                  if Application.MessageBox(PChar(msg),'Question ...',MB_ICONQUESTION + MB_YESNO) = IDYES Then
+                   Begin
+                     if LocalDbg then Writeln('Load and unzip from fcc');
+                     msg:='If you have overseas connection to fcc.gov' +#13+
+                          'loading may take over 5 minutes!';
+                     if MessageDlg('Info',PChar(msg), mtConfirmation,[mbCancel,mbOk ],0) = mrCancel then exit;
+                     downLoadInit;
+                     exit;
+                   end
+                   else
+                   Begin
+                     if LocalDbg then Writeln('load from fcc denied!');
+                     exit;
+                   end;
+                end;
+             end;
+        end
+       else  if LocalDbg then Writeln('Already loaded:',UState.Count);
     end;
 end;
 
@@ -858,6 +1039,58 @@ begin
   sgMonitor.Repaint;
 end;
 
+procedure TfrmMonWsjtx.tmrFCCTimer(Sender: TObject);
+Var
+  sz : integer;
+begin
+  tmrFcc.Enabled:=False;
+
+          if DProcess <> nil then
+              if LocalDbg then Writeln('Dprocess 1 running');
+
+          if DPstarted = 1 then
+           begin
+             if (FileExists(dmData.HomeDir+C_MYZIP)) and not (FileExists(dmData.HomeDir+C_STATE_SOURCE)) then
+              Begin
+                sz:=FileSize(dmData.HomeDir+C_MYZIP) div 1000000;
+                frmProgress.lblInfo.Caption:= 'Loading from fcc.gov '+IntToStr(sz)+'M';
+                frmProgress.DoPos(sz);
+                if LocalDbg then Writeln('Loading from fcc');
+              end
+             else
+              begin
+               if LocalDbg then Writeln('unzip ... ');
+               frmProgress.lblInfo.Caption:= 'Unzip ...';
+               frmProgress.DoJump(1);
+               inc(DPStarted);
+              end;
+             tmrFcc.Enabled:=True;
+            end
+
+           else
+
+           Begin
+             if LocalDbg then Writeln('inc DPstarted');
+             inc(DPstarted);
+             if DPstarted > 3 then
+              begin
+               if LocalDbg then Writeln('DPstarted > 3');
+               tmrFcc.Enabled:=False;
+               frmProgress.lblInfo.Caption:= 'Done!';
+               for sz:=0 to 100 do
+               Begin
+                 frmProgress.ShowOnTop;
+                 sleep(10);
+                 Application.ProcessMessages;
+               end;
+               frmProgress.Hide;
+               DPstarted:=0;
+               chkUState.Checked:=True; //causes recall
+              end
+              else tmrFcc.Enabled:=True;
+            end;
+
+end;
 procedure TfrmMonWsjtx.tmrFollowTimer(Sender: TObject);
 begin
   tmrFollow.Enabled := False;
@@ -893,7 +1126,6 @@ begin
     edtFollow.Font.Size := popFontDlg.Font.Size;
     sgMonitor.Font.Name := popFontDlg.Font.Name;
     sgMonitor.Font.Size := popFontDlg.Font.Size;
-    setMonitorColumnHW;
     clearSgMonitor;
     edtFollow.Text := '';
   end;
@@ -907,15 +1139,21 @@ begin
   LastWsjtLineTime := '';
   DblClickCall :='';
 
+   //InitCriticalSection(crit);
+  UState := TStringList.Create;
+  URState := TStringList.Create;
+
   cmHere.Bitmap := TBitmap.Create;
   cmBand.Bitmap := TBitmap.Create;
   cmAny.Bitmap  := TBitmap.Create;
   cmNever.Bitmap := TBitmap.Create;
   cmCqDX.Bitmap := TBitmap.Create;
+  CanCloseFCCProcess := True;  //there is no process yet
 
   //DL7OAP
   setDefaultColorSgMonitorAttributes;
   sgMonitor.DefaultDrawing:= True; // setting to true to use DrawCell-Event for coloring
+  DPstarted :=0;
 end;
 
 procedure TfrmMonWsjtx.FormDropFiles(Sender: TObject;
@@ -965,6 +1203,7 @@ begin
   wkdany := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdany', '$00000080'));
   wkdnever := StringToColor(cqrini.ReadString('MonWsjtx', 'wkdnever', '$00008000'));
   extCqCall := StringToColor(cqrini.ReadString('MonWsjtx', 'extCqCall', '$00FF6B00'));
+  chkUState.Checked:= cqrini.ReadBool('MonWsjtx', 'UStates', False);
   SetAllbitmaps;
   edtFollow.Font.Name := sgMonitor.Font.Name;
   edtFollow.Font.Size := sgMonitor.Font.Size;
@@ -979,7 +1218,7 @@ begin
   chkMapChange(frmMonWsjtx);
   btFtxtName.Visible := False;
   //DL7OAP
-  setMonitorColumnHW;
+  SetsgMonitorColumnHW;
   sgMonitor.FocusRectVisible:=false; // no red dot line in stringgrid
   chknoHistoryChange(nil); // sure to get history settings right
   pnlTrigPopMouseEnter(nil); //starts with panel visible,
@@ -989,6 +1228,7 @@ begin
   LocalDbg := dmData.DebugLevel >= 1 ;
   if dmData.DebugLevel < 0 then
         LocalDbg :=  LocalDbg or ((abs(dmData.DebugLevel) and 4) = 4 );
+
 end;
 
 procedure TfrmMonWsjtx.NewBandMode(Band, Mode: string);
@@ -1078,6 +1318,10 @@ var
   msgList: TStringList;
   index: integer;
   ClLine : char;
+  adif:integer;
+  pfx:string = '';
+  msgRes:string = '';
+  StatClr: Tcolor;
 begin
   Message := LineFilter(Message);
 
@@ -1106,10 +1350,10 @@ begin
     if chkMap.Checked then
         begin
           CqPeriodTimerStart;
-          if LocalDbg then
+          //if LocalDbg then
            Writeln('Other line:', Message);
           if  (pos('RR73',Message)= length(Message)-3)
-           or (pos('73',Message)= length(Message)-1) then
+           or (pos(' 73',Message)= length(Message)-2) then
               ClLine:='*'
            else
               ClLine:=')';
@@ -1157,13 +1401,15 @@ begin
                Begin
                      if LocalDbg then
                                  Writeln('---O msgtime is:', msgTime,'  LastWsjtlinetime is:',LastWsjtLineTime);
+                    if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+                                       else sgMonitor.Columns.Items[1].Visible:= false;
                     clearSgMonitor;
                   end;
             LastWsjtLineTime := msgTime;
             sgMonitor.InsertRowWithValues(sgMonitor.rowcount , [msgtime]);
             //Snr
-            if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
-             else sgMonitor.Columns.Items[1].Visible:= false;
+            //X if chkdB.Checked then sgMonitor.Columns.Items[1].Visible:= true
+            // else sgMonitor.Columns.Items[1].Visible:= false;
             sgMonitor.Cells[1, sgMonitor.rowCount-1]:= IntToStr(Snr);
                                //PadLeft(IntToStr(Snr),3);
 
@@ -1183,6 +1429,18 @@ begin
             //PCallColor closes parenthesis(not-CQ ind) with same color as it was opened with callsign
             AddColorStr(ClLine, clBlack,6, sgMonitor.rowCount-1);//make in-qso indicator stop
 
+            //here
+             if (chkUState.Checked) then
+              adif:= dmDXCC.id_country(msgCall, Now(), pfx, msgRes);
+              case adif of
+                6,9,103,110,166,202,285,291:
+                                               Begin
+                                                 StatClr :=clBlack;
+                                                 msgRes := UsCallState(msgCall,StatClr);
+                                                  if (StatClr<>clBlack)  then  //there is US state to print to Map
+                                                     AddColorStr(msgRes, StatClr,7,sgMonitor.rowCount-1);
+                                               end;
+              end;
             if LocalDbg then
               Begin
                Writeln('All written in Addother. Next alerts');
@@ -1344,10 +1602,9 @@ procedure TfrmMonWsjtx.PrintLoc(PLoc, tTa, mT: string;PCB:Boolean=false);
 var L1,L2:String;     //locator main
        p :integer = 0;    //locator sub
 Mycolor  :Tcolor = clBlack;     //color main. color sub sub is same, or else wkdnever
+MyMcolor :Tcolor = clBlack;     //color main. color sub sub is same, or else wkdnever
 
 Begin
-  L1:= UpperCase(copy(PLoc, 1, 2));
-  L2:= copy(PLoc, 3, 2);
   if (PLoc = '----') then
    begin
      p:=1;
@@ -1361,6 +1618,8 @@ Begin
      end
     else
      Begin
+        L1:= UpperCase(copy(PLoc, 1, 2));
+        L2:= copy(PLoc, 3, 2);
         case frmWorkedGrids.WkdGrid(PLoc, CurBand, CurMode) of
           //returns 0=not wkd
           //        1=full grid this band and mode
@@ -1424,7 +1683,37 @@ Begin
        end
    else
        begin
-        AddColorStr(L1, Mycolor,4,sgMonitor.rowCount-1);
+        case frmWorkedGrids.WkdMainGrid(PLoc, CurBand, CurMode) of
+          //returns 0=not wkd
+          //        1=main grid this band and mode
+          //        2=main grid this band but NOT this mode
+          //        3=main grid any other band/mode
+          0:Begin
+              //not wkd
+              MyMcolor := wkdnever;
+            end;
+          1:Begin
+              //grid wkd        PrintLoc
+              L1:= lowerCase(L1);
+              MyMcolor := wkdhere;
+            end;
+          2:Begin
+              //grid wkd band
+              MyMcolor := wkdband;
+            end;
+          3:Begin
+              //grid wkd any
+              MyMcolor := wkdany;
+            end;
+          else
+            Begin
+              L1:= lowerCase(L1);//should not happen
+              p:=1;
+              MyMcolor := clBlack;
+            end;
+        end; //case
+        AddColorStr(L1, MyMcolor,4,sgMonitor.rowCount-1);
+
         if p=1 then AddColorStr(L2, Mycolor,5,sgMonitor.rowCount-1)
          else AddColorStr(L2, wkdnever,5,sgMonitor.rowCount-1);
        end;
@@ -1775,8 +2064,10 @@ begin
 end;
 procedure TfrmMonWsjtx.PrintDecodedMessage;
 Var
-  i : integer;
-  freq :string;
+   i      : integer;
+  freq,le : string;
+StatClr   : Tcolor;
+
 begin
   cont := '';
   country := '';
@@ -1819,6 +2110,14 @@ begin
      end
    else
        PrintCall(msgCall,chkCbCQ.Checked);
+   
+   le:='';
+   if cqrini.ReadBool('wsjt', 'chkLoTWeQSL', False) then
+    Begin
+      le:='   ';
+      if dmData.UsesLotw(msgCall) then le[1]:='L';
+      if dmData.UseseQSL(msgCall) then le[2]:='E';
+    end;
 
    PrintLoc(msgLocator, timeToAlert, msgTime,chkCbCQ.Checked);
 
@@ -1829,7 +2128,16 @@ begin
      if (pos(',', msgRes)) > 0 then
        msgRes := copy(msgRes, 1, pos(',', msgRes) - 1);
      //case of USA print it only. Forget state. It is not shown full and may be bogus
-     if pos('USA',upcase(msgRes))=1 then msgRes := 'USA';
+     StatClr :=clBlack;
+     if pos('USA',upcase(msgRes))=1 then
+       begin
+        msgRes := 'USA';
+         if chkUState.Checked then
+            msgRes := 'USA '+UsCallState(msgCall,StatClr);
+       end;
+
+      if (chkMap.Checked and (StatClr<>clBlack))  then  //there is US state to print to Map
+      AddColorStr(copy(msgRes,5,2), StatClr,6,sgMonitor.rowCount-1);
 
      if LocalDbg then
        Writeln('My continent is:', mycont, '  His continent is:', cont);
@@ -1837,7 +2145,7 @@ begin
       if CqDir <> '' then
        if ((mycont <> '') and (cont <> '')) then
          //we can do some comparisons of continents
-       begin
+         begin
          if not dmUtils.IsHeDx(msgCall,CqDir) then
            //I'm not DX for caller: color to warn directed call
            //CQ NOT directed to my continent: color to warn directed call
@@ -1845,6 +2153,10 @@ begin
          end
          else  // should be ok to answer this directed cq
           if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
+           //AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
+           //space prefix is for what? forgot that
+           //AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', StatClr,6, sgMonitor.rowCount-1);
+
            AddColorStr(' ' + copy(PadRight(msgRes, CountryLen), 1, CountryLen) + ' ', clBlack,6, sgMonitor.rowCount-1)
        else
         begin
@@ -1855,26 +2167,29 @@ begin
        // should be ok to answer this is not directed cq
          if ((not chkMap.Checked) and (not chkCbCQ.Checked))  then
              Begin
-              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', clBlack,6, sgMonitor.rowCount-1);
+              AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen)+' ', StatClr,6, sgMonitor.rowCount-1);
              end;
+
+
+
    if (not chkMap.Checked) then
     begin
      freq := dmUtils.FreqFromBand(CurBand, CurMode);
-     msgRes := dmDXCC.DXCCInfo(dxcc_number_adif, freq, CurMode, i);    //wkd info
+     msgRes := StringReplace(dmDXCC.DXCCInfo(dxcc_number_adif, freq, CurMode, i),'!','',[rfReplaceAll]);    //wkd info
 
      if LocalDbg then
        Writeln('Looking this>', msgRes[1], '< from:', msgRes);
      case msgRes[1] of
-       'U': AddColorStr(cont + ':' + msgRes, wkdhere,7 ,sgMonitor.rowCount-1);       //Unknown
-       'C': AddColorStr(cont + ':' + msgRes, wkdAny,7 ,sgMonitor.rowCount-1);        //Confirmed
-       'Q': AddColorStr(cont + ':' + msgRes, clTeal,7 ,sgMonitor.rowCount-1);        //Qsl needed
-       'N': AddColorStr(cont + ':' + msgRes, wkdnever,7 ,sgMonitor.rowCount-1);      //New something
+       'U': AddColorStr(le+cont + ':' + msgRes, wkdhere,7 ,sgMonitor.rowCount-1);       //Unknown
+       'C': AddColorStr(le+cont + ':' + msgRes, wkdAny,7 ,sgMonitor.rowCount-1);        //Confirmed
+       'Q': AddColorStr(le+cont + ':' + msgRes, clTeal,7 ,sgMonitor.rowCount-1);        //Qsl needed
+       'N': AddColorStr(le+cont + ':' + msgRes, wkdnever,7 ,sgMonitor.rowCount-1);      //New something
 
        else
          AddColorStr(msgRes, clBlack,7 ,sgMonitor.rowCount-1);     //something else...can't be
      end;
 
-   end; //Map mode
+   end; //not Map mode
 
    if not (chkCbCQ.Checked or chknoTxt.Checked) then
      Begin
@@ -1884,8 +2199,65 @@ begin
      end;
 
  end;//printing out  line
-procedure TfrmMonWsjtx.extcqprint;
+function TfrmMonWsjtx.UsCallState(call:string;var StatClr:TColor):string;
+var
+   us:integer;
+   Stat:string;
+begin
+   Result:='';
+    //EnterCriticalsection(crit);
+    try
+     us:= URState.IndexOfName(msgCall);   //seek runtime list first
+     if us >= 0 then
+      Begin
+        Stat := URState.ValueFromIndex[us];
+        if LocalDbg then  Writeln('State found from runtime stringlist');
+      end
+     else
+      Begin
+        us:= UState.IndexOfName(msgCall); // seek from fcc data
+        if us >= 0 then
+         begin
+         Stat := UState.ValueFromIndex[us];
+         URState.Add(msgCall+'='+Stat);   //put to runtime list
+         if LocalDbg then  Writeln('State found from fcc stringlist, added to runtime');
+         end
+        else  Stat:='';
+      end;
 
+     if Stat <>''  then
+       begin
+        us := frmWorkedGrids.WkdState(Stat,Curband, Curmode);
+         case us of
+              0: Begin
+                  StatClr :=wkdnever;
+                 end;
+              1: Begin
+                  Stat := LowerCase(Stat);
+                  StatClr :=wkdhere;
+                 end;
+              2: Begin
+                  StatClr :=wkdband;
+                 end;
+              3: Begin
+                   StatClr :=wkdany;
+                 end;
+              else
+                Begin
+                  StatClr :=clBlack;
+                end;
+                //should not happen
+            end;
+
+        if LocalDbg then Writeln(' State WB4 status is: ',us);
+        Result:=Stat;
+       end
+    finally
+      //LeaveCriticalsection(crit)
+    end;
+
+end;
+procedure TfrmMonWsjtx.extcqprint;
   begin
     if (chknoTxt.Checked or chkCbCQ.Checked) then ColorBack('CQ '+CqDir, extCqCall)
     else
@@ -1895,7 +2267,7 @@ procedure TfrmMonWsjtx.extcqprint;
           AddColorStr(copy(PadRight(msgRes, CountryLen), 1, CountryLen - 6)+' CQ:'+CqDir, extCqCall,6,sgMonitor.rowCount-1);
         end
        else
-          AddColorStr(' '+CqDir, extCqCall,6,sgMonitor.rowCount-1);
+          AddColorStr('>'+CqDir, extCqCall,7,sgMonitor.rowCount-1)
     end;
   end;
 
@@ -1922,6 +2294,190 @@ function TfrmMonWsjtx.getCurMode(sMode: String): String;
       chr(96) : getCurMode := 'FST4';   // `
     end;
   end;
+procedure  TfrmMonWsjtx.BuildFccState;
+var
+  s,t: string;
+  call,state,ids,Ocall,Ostate :string;
+  id,Oid,r,p,d,i,x : longint;
+
+begin
+  Ocall:='call';
+  Ostate:='state';
+  Oid:=0;
+  r:=0;
+  p:=0;
+  d:=0;
+  x:=0;
+  frmProgress.Show;
+  frmProgress.DoInit(40,10);
+  frmProgress.DoStep('Reading file...');
+  sleep(100);
+  Application.ProcessMessages;
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_rejects.txt');
+  AssignFile(tfIn,dmData.HomeDir+C_STATE_SOURCE);
+   try
+    reset(tfIn);
+    rewrite(dupOut);
+    FccEn := TStringList.Create;
+    FccEn.Sorted:=False;
+    FccEn.Duplicates:=dupAccept;
+    if LocalDbg then Writeln('Reading ',dmData.HomeDir+C_STATE_SOURCE,' ...');
+
+    while not eof(tfIn) do
+    begin
+     readln(tfIn, s);
+     inc(r);
+      call := ExtractDelimited(5,s,['|']);
+      ids := ExtractDelimited(2,s,['|']);
+      state := ExtractDelimited(18,s,['|']);
+     if ( (call<>'') and (state<>'') and (ids <>'')) then  FccEn.Add(call+'-'+ids+'='+state)
+      else
+        begin
+         writeln(dupOut, call+'-'+ids+'='+state);
+         inc(x);
+        end;
+    end;
+   except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  CloseFile(tfIn);
+  CloseFile(dupOut);
+  if LocalDbg then Writeln('Sorting...');
+  frmProgress.DoStep('Sorting...(May take some time!)');
+  FccEn.Sort;
+  frmProgress.DoStep('Writing file...');
+  if LocalDbg then Writeln('Writing '+dmData.HomeDir+C_STATEFILE );
+
+  AssignFile(tfOut,  dmData.HomeDir+C_STATEFILE );
+  AssignFile(dupOut,dmData.HomeDir+'ctyfiles/fcc_dupes.txt');
+  try
+    reset(tfIn);
+    rewrite(tfOut);
+    rewrite(dupOut);
+    for i:=0 to  FccEn.Count-1 do
+    begin
+      s:= FccEn.Strings[i];
+      t := ExtractWord(1,s,['=']);
+      call := ExtractWord(1,t,['-']);
+      id := StrToIntDef(ExtractWord(2,t,['-']),-1);
+      state := ExtractWord(2,s,['=']);
+
+      if ( (call<>'') and (state<>'') and (id >=0)) then
+      begin
+        if call<> Ocall then
+         Begin
+           writeln(tfOut,Ocall,'=',Ostate);//write old call=state if next call is different
+           Ocall:=call;
+           Oid := id;
+           Ostate := state;
+           inc(p);
+         end
+         else
+          Begin  //if they are same calls
+            writeln(dupOut,Ocall,'=',Ostate);//write old call=state to dupe list
+            inc(d);
+            if id > Oid then  //if id is bigger than old id save call and state as old
+                              //should remain finally the higest id call to print
+                              //needs one extra line to end of file to get all printed
+             begin
+              Ocall:=call;
+              Oid := id;
+              Ostate := state;
+             end;
+
+          end;
+       end;
+      end;
+    frmProgress.DoStep('Done !');
+    writeln(tfOut,Ocall,'=',Ostate);   //last remaining
+    FreeAndNil(FccEn);
+    CloseFile(tfin);
+    CloseFile(tfOut);
+    CloseFile(dupOut);
+  except
+    on E: EInOutError do
+     writeln('File handling error occurred. Details: ', E.Message);
+  end;
+  if LocalDbg then Writeln('Read:       ',r,' lines.');
+  if LocalDbg then Writeln('Rejected:   ',x,' lines.');
+  if LocalDbg then Writeln('Written:    ',p,' lines.');
+  if LocalDbg then Writeln('Duplicates: ',d,' lines.');
+  frmProgress.Hide;
+  CanCloseFCCProcess:=true;
+end;
+
+procedure  TfrmMonWsjtx.downLoadInit;
+var
+  f :textfile;
+
+  begin
+    CanCloseFCCProcess:=false;
+    FCC_Address:=cqrini.ReadString('MonWsjtx', 'FCC_Addr', C_URL);
+     if InputQuery('FCC Address check','Using Address (change if needed):', FCC_Address) then
+      begin
+        cqrini.WriteString('MonWsjtx', 'FCC_Addr',FCC_Address);
+        if LocalDbg then Writeln('Saved FCC Address:',FCC_Address);
+      end;
+    if LocalDbg then Writeln('downloadinit start');
+    frmProgress.Show;
+    frmProgress.DoInit(155,1);
+    frmProgress.DoStep('Loading from fcc.gov');
+
+    if FileExists(dmData.HomeDir+C_MYZIP) then DeleteFile(dmData.HomeDir+C_MYZIP);
+
+    if FileExists(dmData.HomeDir+C_MY_SCRIPT) then DeleteFile( dmData.HomeDir+C_MY_SCRIPT);
+
+        if LocalDbg then Writeln('Next create script wget + unzip');
+        AssignFile(f,dmData.HomeDir+C_MY_SCRIPT);
+        ReWrite(f);
+            Writeln(f,'#!/bin/bash');
+            Writeln(f,'wget -q -nd -O'+dmData.HomeDir+C_MYZIP+' '+trim(FCC_Address));
+            Writeln(f,'unzip -q -o -d'+dmData.HomeDir+'ctyfiles/ '+dmData.HomeDir+C_MYZIP+' EN.dat');
+            Writeln(f,'exit');
+        CloseFile(f);
+        if LocalDbg then Writeln('Next chmod script');
+        fpChmod (dmData.HomeDir+C_MY_SCRIPT,&777);
+
+
+    if LocalDbg then Writeln('Next run script');
+
+    DProcess := TProcess.Create(nil);
+    tmrFCC.Enabled:=True;
+    DPstarted:=1;
+
+    try
+     try
+      if LocalDbg then Writeln('Next DProcess run script');
+      DProcess.Executable  := '/bin/bash';
+      DProcess.Parameters.Add(dmData.HomeDir+C_MY_SCRIPT);
+      if LocalDbg then Writeln('DProcess.Executable: ',DProcess.Executable,' Parameters: ',DProcess.Parameters.Text);
+      DProcess.Execute;
+     finally
+      FreeAndNil(Dprocess);
+     end;
+    except
+    on E :EExternal do
+     writeln('Error Details: ', E.Message);
+    end;
+
+end;
+Procedure  TfrmMonWsjtx.CloseFCCProcess;
+begin
+  //here force close threads and others
+  if DProcess<>nil then FreeAndNil(DProcess);
+  if FccEn<>nil then
+     Begin
+       FreeAndNil(FccEn);
+       try
+         CloseFile(tfin);
+         CloseFile(tfOut);
+         CloseFile(dupOut);
+       finally
+       end;
+     end;
+  frmProgress.Hide;
+end;
 
 initialization
 

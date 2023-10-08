@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
   ExtCtrls, ComCtrls, StdCtrls, Buttons, httpsend, uColorMemo,
-  db, lcltype, Menus, ActnList, Spin, dynlibs, lNetComponents, lnet;
+  db, lcltype, Menus, ActnList, Spin, Grids, dynlibs, lNetComponents, lnet;
 
 type
   { TfrmDXCluster }
@@ -40,8 +40,29 @@ type
     btnPreferences : TButton;
     dlgDXfnt: TFontDialog;
     edtCommand: TEdit;
+    edtF1: TEdit;
+    edtF10: TEdit;
+    edtF2: TEdit;
+    edtF3: TEdit;
+    edtF4: TEdit;
+    edtF5: TEdit;
+    edtF6: TEdit;
+    edtF7: TEdit;
+    edtF8: TEdit;
+    edtF9: TEdit;
     edtTelAddress: TEdit;
     Label1: TLabel;
+    lblShift: TLabel;
+    lblF1: TLabel;
+    lblF10: TLabel;
+    lblF2: TLabel;
+    lblF3: TLabel;
+    lblF4: TLabel;
+    lblF5: TLabel;
+    lblF6: TLabel;
+    lblF7: TLabel;
+    lblF8: TLabel;
+    lblF9: TLabel;
     lblInfo: TLabel;
     MenuItem1 : TMenuItem;
     mnuSkimQSLCheck: TMenuItem;
@@ -62,6 +83,7 @@ type
     pnlTelnet: TPanel;
     pnlWeb: TPanel;
     popPreferences : TPopupMenu;
+    tabFkeys: TTabSheet;
     tabTelnet: TTabSheet;
     tabWeb: TTabSheet;
     tmrAutoConnect: TTimer;
@@ -73,6 +95,8 @@ type
     procedure acProgPrefExecute(Sender : TObject);
     procedure Button2Click(Sender: TObject);
     procedure btnPreferencesClick(Sender : TObject);
+    procedure edtF2Exit(Sender: TObject);
+    procedure edtFExit(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnHelpClick(Sender: TObject);
@@ -88,7 +112,8 @@ type
     procedure mnuCallalertClick(Sender : TObject);
     procedure mnuSkimAllowFreqClick(Sender: TObject);
     procedure mnuSkimQSLCheckClick(Sender: TObject);
-   procedure tmrAutoConnectTimer(Sender: TObject);
+    procedure tabFkeysShow(Sender: TObject);
+    procedure tmrAutoConnectTimer(Sender: TObject);
     procedure tmrSpotsTimer(Sender: TObject);
     procedure trChatSizeChange(Sender: TObject);
     procedure trChatSizeClick(Sender: TObject);
@@ -124,6 +149,7 @@ type
     gcfgNotShow : String;
     gcfgCW : Boolean;
     gcfgSSB : Boolean;
+    gcfgDATA: Boolean;
     gcfgEU  : Boolean;
     gcfgAS  : Boolean;
     gcfgAF  : Boolean;
@@ -143,6 +169,7 @@ type
 
     procedure WebDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure TelDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
+    procedure SpotDbClick(Spot:String);
     procedure ConnectToWeb;
     procedure ConnectToTelnet;
     procedure SynWeb;
@@ -154,11 +181,11 @@ type
     procedure ChangeCallAlertCaption;
 
     function  ShowSpot(spot : String; var sColor : Integer; var Country : String; FromTelnet : Boolean = True) : Boolean;
-    function  GetFreq(spot : String) : String;
-    function  GetCall(spot : String; web : Boolean = False) : String;
-    function  GetSplit(spot : String) :String;
+    function  GetSplit(info : String) :String;
     procedure StoreLastCmd(LastCmd:string);
     function  GetHistCmd:string;
+    function  FontStylesToString(Styles: TFontStyles): string;
+    function  StringToFontStyles(const Styles: string): TFontStyles;
   public
     ConWeb    : Boolean;
     ConTelnet : Boolean;
@@ -326,7 +353,7 @@ begin
   end;
 end;
 
-procedure TfrmDXCluster.Button2Click(Sender: TObject);
+procedure TfrmDXCluster.Button2Click(Sender: TObject);  //this is debugger
 var
   TelThread : TTelThread = nil;
 begin
@@ -363,6 +390,25 @@ begin
   popPreferences.PopUp(p.x, p.y)
 end;
 
+procedure TfrmDXCluster.edtF2Exit(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmDXCluster.edtFExit(Sender: TObject);
+begin
+   cqrini.WriteString('DXCluster','F1key',edtF1.Text);
+   cqrini.WriteString('DXCluster','F2key',edtF2.Text);
+   cqrini.WriteString('DXCluster','F3key',edtF3.Text);
+   cqrini.WriteString('DXCluster','F4key',edtF4.Text);
+   cqrini.WriteString('DXCluster','F5key',edtF5.Text);
+   cqrini.WriteString('DXCluster','F6key',edtF6.Text);
+   cqrini.WriteString('DXCluster','F7key',edtF7.Text);
+   cqrini.WriteString('DXCluster','F8key',edtF8.Text);
+   cqrini.WriteString('DXCluster','F9key',edtF9.Text);
+   cqrini.WriteString('DXCluster','F10key',edtF10.Text);
+end;
+
 procedure TfrmDXCluster.acProgPrefExecute(Sender : TObject);
 begin
   cqrini.WriteInteger('Pref', 'ActPageIdx', 10);  //set DXCuster tab active. Number may change if preferences page change
@@ -372,15 +418,42 @@ end;
 procedure TfrmDXCluster.acFontExecute(Sender : TObject);
 begin
   dlgDXfnt.Font.Name := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
+  dlgDXfnt.Font.Style := StringToFontStyles(cqrini.ReadString('DXCluster','FontStyle',''));
   dlgDXfnt.Font.Size := cqrini.ReadInteger('DXCluster','FontSize',12);
   if dlgDXfnt.Execute then
   begin
     cqrini.WriteString('DXCluster','Font',dlgDXfnt.Font.Name);
     cqrini.WriteInteger('DXCluster','FontSize',dlgDXfnt.Font.Size);
+    cqrini.WriteString('DXCluster','FontStyle',FontStylesToString(dlgDXfnt.Font.Style));
     WebSpots.SetFont(dlgDXfnt.Font);
     TelSpots.SetFont(dlgDXfnt.Font);
     ChatSpots.SetFont(dlgDXfnt.Font)
   end
+end;
+function TfrmDXCluster.FontStylesToString(Styles: TFontStyles): string;
+begin
+  Result := '';
+  if fsBold in Styles then
+    Result := Result + 'B';
+  if fsItalic in Styles then
+    Result := Result + 'I';
+  if fsUnderline in Styles then
+    Result := Result + 'U';
+  if fsStrikeOut in Styles then
+    Result := Result + 'S';
+end;
+
+function TfrmDXCluster.StringToFontStyles(const Styles: string): TFontStyles;
+begin
+  Result := [];
+  if Pos('B', UpperCase(Styles)) > 0 then
+    Include(Result, fsBold);
+  if Pos('I', UpperCase(Styles)) > 0 then
+    Include(Result, fsItalic);
+  if Pos('U', UpperCase(Styles)) > 0 then
+    Include(Result, fsUnderline);
+  if Pos('S', UpperCase(Styles)) > 0 then
+    Include(Result, fsStrikeOut);
 end;
 
 procedure TfrmDXCluster.acCallAlertExecute(Sender : TObject);
@@ -408,6 +481,7 @@ begin
   FirstWebGet := True;
   lTelnet := TLTelnetClientComponent.Create(nil);
   ReloadDXCPref := True;
+  tabFkeys.TabVisible:=false;
 
   lTelnet.OnConnect    := @lConnect;
   lTelnet.OnDisconnect := @lDisconnect;
@@ -460,70 +534,85 @@ end;
 procedure TfrmDXCluster.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if (key= VK_ESCAPE) then
-  begin
-    frmNewQSO.ReturnToNewQSO;
-    key := 0
-  end
+  if key = VK_ESCAPE then
+                  begin
+                    frmNewQSO.ReturnToNewQSO;
+                    key := 0
+                  end;
+  if (Key >= VK_F1) and (Key <= VK_F10) and (ConTelnet = True) and (Shift = [ssShift])  then
+   begin
+      case key of
+        VK_F1     :Begin
+                    if edtF1.Text<>'' then SendCommand(edtF1.Text);
+                      key := 0
+                   end;
+        VK_F2     :Begin
+                    if edtF2.Text<>'' then SendCommand(edtF2.Text);
+                      key := 0
+                   end;
+        VK_F3     :Begin
+                    if edtF3.Text<>'' then SendCommand(edtF3.Text);
+                      key := 0
+                   end;
+        VK_F4     :Begin
+                    if edtF4.Text<>'' then SendCommand(edtF4.Text);
+                      key := 0
+                   end;
+        VK_F5     :Begin
+                    if edtF5.Text<>'' then SendCommand(edtF5.Text);
+                      key := 0
+                   end;
+        VK_F6     :Begin
+                    if edtF6.Text<>'' then SendCommand(edtF6.Text);
+                      key := 0
+                   end;
+        VK_F7     :Begin
+                    if edtF7.Text<>'' then SendCommand(edtF7.Text);
+                      key := 0
+                   end;
+        VK_F8     :Begin
+                    if edtF8.Text<>'' then SendCommand(edtF8.Text);
+                      key := 0
+                   end;
+        VK_F9     :Begin
+                    if edtF9.Text<>'' then SendCommand(edtF9.Text);
+                      key := 0
+                   end;
+        VK_F10    :Begin
+                    if edtF10.Text<>'' then SendCommand(edtF10.Text);
+                      key := 0
+                   end;
+      end;
+  end;
 end;
-
 procedure TfrmDXCluster.WebDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
 var
   spot : String = '';
   tmp  : Integer = 0;
-  freq : String = '';
-  mode : String = '';
-  call : String = '';
-  etmp : Extended = 0;
-  stmp : String = '';
-  i    : Integer = 0;
 begin
   WebSpots.ReadLine(spot,tmp,tmp,tmp,where);
-  spot := copy(spot,i+6,Length(spot)-i-5);
-  spot := Trim(spot);
-  freq := GetFreq(spot);
-  call := GetCall(spot,True);
-  {
-  Writeln('WebDbClick*****');
-  Writeln('Spot:',spot);
-  Writeln('Freq:',freq);
-  Writeln('Call:',call);
-  Writeln('***************');
-  }
-  if NOT TryStrToFloat(freq,etmp) then
-    exit;
-  if (not dmData.BandModFromFreq(freq,mode,stmp)) or (mode='') then
-    exit;
-
-  frmNewQSO.NewQSOFromSpot(call,freq,mode)
+  SpotDbClick(spot);
 end;
 
 procedure TfrmDXCluster.TelDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
 var
   spot : String = '';
   tmp  : Integer = 0;
+  begin
+  TelSpots.ReadLine(spot,tmp,tmp,tmp,where);
+  SpotDbClick(spot);
+end;
+procedure TfrmDXCluster.SpotDbClick(Spot:String);
+var
   freq : String = '';
   mode : String = '';
   call : String = '';
+  info : String = '';
   etmp : Extended = 0;
   stmp : String = '';
-  i    : Integer = 0;
-  f    : Currency;
-begin
-  TelSpots.ReadLine(spot,tmp,tmp,tmp,where);
-  if TryStrToCurr(copy(spot,1,Pos(' ',spot)-1),f)  then
-  begin
-    freq := copy(spot,1,Pos(' ',spot)-1);
-    call := trim(copy(spot,Pos('.',spot)+2,14))
-  end
-  else begin
-    spot := copy(spot,i+6,Length(spot)-i-5);
-    spot := Trim(spot);
-    freq := GetFreq(Spot);
-    call := GetCall(Spot, ConWeb)
-  end;
-  {
-  Writeln('TelDbClick*****');
+Begin
+  dmDXCluster.GetSplitSpot(spot,call,freq,info);
+ {
   Writeln('Spot:',spot);
   Writeln('Freq:',freq);
   Writeln('Call:',call);
@@ -536,7 +625,6 @@ begin
     exit;
   frmNewQSO.NewQSOFromSpot(call,freq,mode)
 end;
-
 
 procedure TfrmDXCluster.FormShow(Sender: TObject);
 var
@@ -546,6 +634,7 @@ begin
   try
     f.Name    := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
     f.Size    := cqrini.ReadInteger('DXCluster','FontSize',12);
+    f.Style   := StringToFontStyles(cqrini.ReadString('DXCluster','FontStyle',''));
     WebSpots.SetFont(f);
     TelSpots.SetFont(f) ;
     ChatSpots.SetFont(f)
@@ -572,6 +661,8 @@ begin
   if cqrini.ReadBool('DXCluster', 'ConAfterRun', False) then
     tmrAutoConnect.Enabled := True;
   pnlChat.Height := cqrini.ReadInteger('DXCluster','ChatSize',2);  //default now 2 = invisible
+
+  tabFkeysShow(nil);
 end;
 
 procedure TfrmDXCluster.btnClearClick(Sender: TObject);
@@ -612,12 +703,15 @@ begin
   begin
     StopAllConnections;
     btnTelConnect.Caption := 'Connect';
+    tabFkeys.TabVisible:=false;
     ConWeb := False;
   end
   else begin
     ConnectToTelnet;
     btnTelConnect.Caption := 'Disconnect';
     ConTelnet := True;
+    tabFkeys.TabVisible:=True;
+    pgDXCluster.ActivePage:=tabTelnet;
     if (Sender <> nil) then
       edtCommand.SetFocus
   end
@@ -689,6 +783,20 @@ begin
   cqrini.WriteBool('Skimmer', 'QSLEnable', mnuSkimQSLCheck.Checked);
 end;
 
+procedure TfrmDXCluster.tabFkeysShow(Sender: TObject);
+begin
+        edtF1.Text:=cqrini.ReadString('DXCluster', 'F1key', '');
+        edtF2.Text:=cqrini.ReadString('DXCluster', 'F2key', '');
+        edtF3.Text:=cqrini.ReadString('DXCluster', 'F3key', '');
+        edtF4.Text:=cqrini.ReadString('DXCluster', 'F4key', '');
+        edtF5.Text:=cqrini.ReadString('DXCluster', 'F5key', '');
+        edtF6.Text:=cqrini.ReadString('DXCluster', 'F6key', '');
+        edtF7.Text:=cqrini.ReadString('DXCluster', 'F7key', '');
+        edtF8.Text:=cqrini.ReadString('DXCluster', 'F8key', '');
+        edtF9.Text:=cqrini.ReadString('DXCluster', 'F9key', '');
+        edtF10.Text:=cqrini.ReadString('DXCluster', 'F10key', '');
+end;
+
 procedure TfrmDXCluster.tmrAutoConnectTimer(Sender: TObject);
 begin
   tmrAutoConnect.Enabled := False;
@@ -707,13 +815,13 @@ end;
 procedure TfrmDXCluster.lConnect(aSocket: TLSocket);
 begin
   btnTelConnect.Caption := 'Disconnect';
-  ConTelnet := True
+  ConTelnet := True;
 end;
 
 procedure TfrmDXCluster.lDisconnect(aSocket: TLSocket);
 begin
   btnTelConnect.Caption := 'Connect';
-  ConTelnet := False
+  ConTelnet := False;
 end;
 
 procedure TfrmDXCluster.lReceive(aSocket: TLSocket);
@@ -804,7 +912,21 @@ begin
         end;
     end;
     itmp := Pos('DX DE',UpperCase(tmp));
-    if (itmp > 0) or TryStrToFloat(copy(tmp,1,Pos(' ',tmp)-1),f)  then
+    if (itmp > 0) or (TryStrToFloat(copy(tmp,1,Pos(' ',tmp)-1),f) and (UpperCase(tmp[1])<>'E'))  then
+    {
+    Chk of tmp[1]<>'E' needed:
+    sh/he E6
+    E6 Niue-E6: 16 degs - dist: 9440 mi, 15192 km Reciprocal heading: 352 degs
+    OH1KH de OH1RCF  1-Apr-2023 1000Z dxspider >
+
+    E[number] at beginning of line passes tryStrToFLoat as scientific number expression
+    and we want to catch only numbers of frequencies in 12345.6 format.
+    They appear if "sh/dx" command is issued
+
+    sh/dx 1
+      28074.0 JA6GXP       1-Apr-2023 1033Z FT8 -22dB from PM52 814Hz     <F4UJU>
+    OH1KH de OH1RCF  1-Apr-2023 1033Z dxspider >
+    }
     begin
       EnterCriticalsection(frmDXCluster.csTelnet);
       if dmData.DebugLevel>=1 then Writeln('Enter critical section On Receive');
@@ -910,41 +1032,33 @@ begin
       if dmData.DebugLevel >=1 then Writeln('Chat sizing Click');
 end;
 
-function TfrmDXCluster.GetFreq(spot : String) : String;
+function TfrmDXCluster.GetSplit(info : String) : String;
 var
-  tmp : String;
-begin
-  tmp    := copy(spot,Pos(' ',spot),Pos('.',spot)+2 - Pos(' ',spot));
-  Result := trim(tmp)
-end;
-
-function TfrmDXCluster.GetSplit(spot : String) : String;
-var
-  tmp : String;
   spl : String;
   spn : String;
   l : Integer;
 begin
-  tmp := copy(spot,34,Length(spot)-34);
-  //Writeln('tmp: ',tmp);
-  if Pos('UP',tmp)>0 then begin
-    spl:= copy(tmp,Pos('UP',tmp),13);
+  if Pos('UP',info)>0 then
+   begin
+    spl:= copy(info,Pos('UP',info),13);
     spn:='UP';
     for l:=3 to Length(spl) do
        if Pos(spl[l],' 0123456789.,-+')>0 then
            spn:=spn+spl[l]
         else break;
     end;
-  if Pos('DOWN',tmp)>0 then begin
-    spl:= copy(tmp,Pos('DOWN',tmp),13);
+  if Pos('DOWN',info)>0 then
+   begin
+    spl:= copy(info,Pos('DOWN',info),13);
     spn:='DOWN';
     for l:=5 to Length(spl) do
        if Pos(spl[l],' 0123456789.,-+')>0 then
            spn:=spn+spl[l]
         else break;
     end;
-  if Pos('QSX',tmp)>0 then begin
-    spl:= copy(tmp,Pos('QSX',tmp),13);
+  if Pos('QSX',info)>0 then
+   begin
+    spl:= copy(info,Pos('QSX',info),13);
     spn:='QSX';
     for l:=4 to Length(spl) do
        if Pos(spl[l],' 0123456789.,-+')>0 then
@@ -952,29 +1066,6 @@ begin
         else break;
     end;
   Result := trim(spn)
-end;
-
-function TfrmDXCluster.GetCall(spot : String; web : Boolean = False) : String;
-var
-  tmp : String='';
-begin
-  if web then
-  begin
-    //Writeln('spot:',spot);
-    tmp    := trim(copy(spot,Pos(' ',spot)+1, Length(spot) -(Pos(' ',spot))));
-    //Writeln('tmp: ',tmp);
-    tmp    := copy(tmp,Pos(' ',tmp)+1, Length(tmp) -(Pos(' ',tmp)));
-    //Writeln('tmp: ',tmp);
-    if Pos(' ',tmp) > 0 then
-      tmp    := trim(copy(tmp,1,Pos(' ',tmp)));
-    //Writeln('tmp: ',tmp);
-  end
-  else begin
-    tmp    := copy(spot,Pos('.',spot)+3,Length(spot)-Pos('.',spot)-1);
-    tmp    := trim(tmp);
-    tmp    := trim(copy(tmp,1,Pos(' ',tmp)))
-  end;
-  Result := tmp
 end;
 
 procedure TfrmDXCluster.StopAllConnections;
@@ -995,10 +1086,10 @@ var
   kmitocet : Extended = 0.0;
   call     : String  = '';
   freq     : String  = '';
+  info     : String  = '';
   tmp      : Integer = 0;
   band     : String  = '';
   mode     : String  = '';
-  freeText : String  = '';
   seznam   : TStringList;
   i        : Integer = 0;
   prefix   : String  = '';
@@ -1043,6 +1134,7 @@ var
 
   cfgCW : Boolean;
   cfgSSB : Boolean;
+  cfgDATA: Boolean;
   cfgEU  : Boolean;
   cfgAS  : Boolean;
   cfgAF  : Boolean;
@@ -1067,6 +1159,7 @@ begin
     iITU   := giITU;
     cfgCW  := gcfgCW;
     cfgSSB := gcfgSSB;
+    cfgDATA:= gcfgDATA;
     cfgEU  := gcfgEU;
     cfgAS  := gcfgAS;
     cfgNA  := gcfgNA;
@@ -1089,26 +1182,9 @@ begin
   finally
     LeaveCriticalSection(csDXCPref)
   end;
-
-  spot := UpperCase(spot);
-  i := Pos('DX DE ',spot);
-  if i > 0 then
-    spot := copy(spot,i+6,Length(spot)-i-5);
-
-  if TryStrToCurr(copy(spot,1,Pos(' ',spot)-1),f)  then
-  begin
-    freq := copy(spot,1,Pos(' ',spot)-1);
-    call := trim(copy(spot,Pos('.',spot)+2,14))
-  end
-  else begin
-    freq     := GetFreq(Spot);
-    call     := GetCall(Spot, ConWeb)
-  end;
-
-  splitstr := GetSplit(Spot);
-
+  dmDXCluster.GetSplitSpot(Spot,call,freq,info);
+  splitstr := GetSplit(info);
   kHz := Freq;
-
   tmp := Pos('.',freq);
   if tmp > 0 then
     freq[tmp] := FormatSettings.DecimalSeparator;
@@ -1180,7 +1256,7 @@ begin
   begin
     Result := false;
     if dmData.DebugLevel >=1 then
-      Writeln('Cannot show this sport because of settings ...');
+      Writeln('Cannot show this spot because of Show only spots (band) settings ...');
     exit
   end;
 
@@ -1196,9 +1272,18 @@ begin
       Result := false
   end;
 
-  if (result = False) then
-    exit;
+  if not cfgDATA  then
+  begin
+    if (mode=cqrini.ReadString('Band'+IntToStr(frmTRXControl.cmbRig.ItemIndex), 'Datamode', 'RTTY')) then
+      Result := false
+  end;
 
+  if (result = False) then
+   Begin
+    if dmData.DebugLevel >=1 then
+       Writeln('Cannot show this spot because of Show only spots (mode) settings ...');
+    exit;
+   end;
   if wDXCC = '*' then
   begin
     if Pos(prefix+';',iDXCC) = 0 then
@@ -1345,10 +1430,9 @@ begin
                                                    // and connected to telnet cluster
     if (dmDXCluster.IsAlertCall(call,band,mode,cqrini.ReadBool('DxCluster', 'AlertRegExp', False))) then
       Begin
-        freeText:= dmDXCluster.GetfreeTextFromSpot('DX de '+spot);
         if dmData.DebugLevel >=1 then
-            Writeln('Spot is:',spot,#$0A,'----Call alerting is: ',call,',',band,',',mode,',',freq,',',freeText,'-----------');
-        dmDXCluster.RunCallAlertCmd(call,band,mode,freq,freeText);
+            Writeln('Spot is:',spot,#$0A,'----Call alerting is: ',call,',',band,',',mode,',',freq,',',info,'-----------');
+        dmDXCluster.RunCallAlertCmd(call,band,mode,freq,info);
         call :='';
       end;
   if dmData.DebugLevel >=1 then
@@ -1642,6 +1726,7 @@ begin
     giITU   := cqrini.ReadString('BandMap','iITU','');
     gcfgCW  := cqrini.ReadBool('DXCluster','CW',true);
     gcfgSSB := cqrini.ReadBool('DXCluster','SSB',True);
+    gcfgDATA:= cqrini.ReadBool('DXCluster','DATA',True);
     gcfgEU  := cqrini.ReadBool('BandMap','wEU',True);
     gcfgAS  := cqrini.ReadBool('BandMap','wAS',True);
     gcfgNA  := cqrini.ReadBool('BandMap','wNA',True);

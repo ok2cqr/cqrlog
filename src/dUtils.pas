@@ -51,32 +51,34 @@ const
     ':', '|', '-', '=', '+', '@', '#', '*', '%', '_', '(', ')', '$', '<', '>'];
   empty_freq = '0.00000';
   empty_azimuth = '0.0';
-  cMaxModes = 48; //last added FST4
-  cModes: array [0..cMaxModes] of string =
-    ('CW', 'SSB', 'AM', 'FM', 'RTTY', 'SSTV', 'PACTOR', 'PSK', 'ATV', 'CLOVER', 'GTOR', 'MTOR',
-    'PSK31', 'HELL', 'MT63',
-    'QRSS', 'CWQ', 'BPSK31', 'MFSK', 'JT44', 'FSK44', 'WSJT', 'AMTOR',
-    'THROB', 'BPSK63', 'PACKET',
-    'OLIVIA', 'MFSK16', 'JS8', 'JT4','JT6M', 'JT65', 'JT65A', 'JT65B', 'JT65C',
-    'JT9', 'QRA64', 'ISCAT', 'MSK144', 'FT8', 'FT4', 'FST4', 'FSK441', 'PSK125',
-    'PSK63', 'WSPR', 'PSK250', 'ROS', 'DIGITALVOICE');
-  cMaxBandsCount = 30; //29 bands
 
+  cMaxModes = 48; //One less than count 49 modes (loops have 0..MaxModes)
+  cModes: array [0..cMaxModes] of string =
+    ('CW',    'SSB',  'AM',    'FM',    'RTTY',  'SSTV',  'PACTOR','PSK',   'ATV',         'CLOVER',
+     'GTOR',  'MTOR', 'PSK31', 'HELL',  'MT63',  'QRSS',  'CWQ',   'BPSK31','MFSK',        'JT44',
+     'FSK44', 'WSJT', 'AMTOR', 'THROB', 'BPSK63','PACKET','OLIVIA','MFSK16','JS8',         'JT4',
+     'JT6M',  'JT65', 'JT65A', 'JT65B', 'JT65C', 'JT9',   'QRA64', 'ISCAT', 'MSK144',      'FT8',
+     'FT4',   'FST4', 'FSK441','PSK125','PSK63', 'WSPR',  'PSK250','ROS',   'DIGITALVOICE');
+
+  cMaxBandsCount = 31; //True count of bands. (loops have 0..MaxBandsCount-1)
+  cBands: array[0..30] of string[10] =
+    ('2190M', '630M', '160M', '80M'  , '60M','40M'  , '30M', '20M'  , '17M' , '15M' ,
+     '12M'  , '10M' , '5M'  , '6M'   , '8M' ,'4M'   , '2M' , '1.25M', '70CM', '33CM',
+     '23CM' , '13CM', '9CM' , '6CM'  , '3CM','1.25CM','6MM', '4MM'  , '2.5MM','2MM',
+     '1MM');
   cDefaultFreq =
-    '0.136|0.472|1.800|3.500|3.700|5.351|7.000|10.100|14.000|14.200|18.100|21.000|21.200|24.890|28.000|28.500|50.000|70.0875|'
-    +
-    '70.0500|144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|47100.0|78000.0|122252.0|134930.0|248000.0';
-  cBands: array[0..28] of string[10] =
-    ('2190M', '630M', '160M', '80M'   , '60M', '40M'  , '30M', '20M'  , '17M' , '15M' ,
-     '12M'  , '10M' , '6M'  , '4M'    , '2M' , '1.25M', '70CM', '33CM', '23CM', '13CM',
-     '9CM'  , '6CM' , '3CM' , '1.25CM', '6MM', '4MM', '2.5MM', '2MM', '1MM');
+    '0.136|0.472|1.800|3.500|3.700|5.351|7.000|10.100|14.000|14.200|'+
+    '18.100|21.000|21.200|24.890|28.000|28.500|40.000|50.000|60.0000|70.0500|'+
+    '144.000|145.275|430.000|902.0|1250.0|2400.0|3450.0|5670.0|10250.0|24100.0|'+
+    '47100.0|78000.0|122252.0|134930.0|248000.0';
+
 
   cMaxIgnoreFreq = 6;
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string =
     ('1800.0', '3500.0', '7000.0', '10100.0', '14000.0', '21000.0', '28000.0');
 
   C_RBN_CONT  = 'AF,AN,AS,EU,NA,SA,OC';
-  C_RBN_BANDS = '630M,160M,80M,60M,40M,30M,20M,17M,15M,12M,10M,6M,2M';
+  C_RBN_BANDS = '630M,160M,80M,60M,40M,30M,20M,17M,15M,12M,10M,8M,6M,5M,2M';
   C_RBN_MODES = 'CW,RTTY,PSK31';
 
   C_CONTEST_LIST_FILE_NAME = 'ContestName.tab';
@@ -109,6 +111,7 @@ type
     fGrayLineOffset: currency;
     fQRZSession: string;
     fHamQTHSession: string;
+    fQRZCQSession: string;
     fSysUTC: boolean;
     SubmodeMode: TStringList;
     ImportMode : TStringlist;
@@ -122,10 +125,13 @@ type
     function nr(ch: char): integer;
     function GetTagValue(Data, tg: string): string;
     function GetQRZSession(var ErrMsg: string): boolean;
+    function GetQRZCQSession(var ErrMsg: string): boolean;
     function GetHamQTHSession(var ErrMsg: string): boolean;
     function GetQRZInfo(call: string;
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg: string): boolean;
     function GetHamQTHInfo(call: string;
+      var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
+    function GetQRZCQInfo(call: string;
       var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
 
   public
@@ -141,7 +147,9 @@ type
     s15: string;
     s12: string;
     s10: string;
+    s8: string;
     s6: string;
+    s5: string;
     s4: string;
     s220: string;
     s2: string;
@@ -220,6 +228,10 @@ type
     procedure BandFromDbase;
     procedure UpdateHelpBrowser;
     procedure ModeFromCqr(CqrMode:String;var OutMode,OutSubmode:String;dbg:Boolean);
+    procedure UpdateCallBookcnf;
+    procedure ClearStatGrid(g:TStringGrid);
+    procedure AddBandsToStatGrid(g:TStringGrid);
+    procedure ShowStatistic(ref_adif,old_stat_adif:Word; g:TStringGrid; call:String='');
 
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
@@ -275,7 +287,7 @@ type
     function  ExtractZipCode(qth : String; Position : Integer) : String;
     function  GetLabelBand(freq : String) : String;
     function  GetAdifBandFromFreq(MHz : string): String;
-    function  GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text: String) : String;
+    function  GetCWMessage(Key,call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg, text: String) : String;
     function  RigGetcmd(r : String): String;
     function  GetLastQSLUpgradeDate : TDateTime;
     function  GetLastDOKUpgradeDate : TDateTime;
@@ -323,7 +335,7 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO;
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest;
 
 function TdmUtils.LetterFromMode(mode: string): string;
 begin
@@ -551,7 +563,8 @@ begin
       end
     end
   finally
-    cqrini.SaveToDisk;
+    //cqrini.SaveToDisk; WHY we save when load? Is this unchecked direct copy from SaveForm source abowe?
+                      // There is no cqrini writing done, so why need to save?
     l.Free
   end
 end;
@@ -702,7 +715,6 @@ begin
   QSL_R.Items.Add('!');
 end;
 
-
 procedure TdmUtils.InsertFreq(cmbFreq: TcomboBox);
 var
   a: TExplodeArray;
@@ -713,36 +725,6 @@ begin
   for i := 0 to Length(a) - 1 do
     if a[i] <> '' then
       cmbFreq.Items.Add(a[i]);
-  {
-  cmbFreq.Items.Add('1.800');
-  cmbFreq.Items.Add('3.500');
-  cmbFreq.Items.Add('3.700');
-  cmbFreq.Items.Add('7.000');
-  cmbFreq.Items.Add('10.100');
-  cmbFreq.Items.Add('14.000');
-  cmbFreq.Items.Add('14.200');
-  cmbFreq.Items.Add('18.100');
-  cmbFreq.Items.Add('21.000');
-  cmbFreq.Items.Add('21.200');
-  cmbFreq.Items.Add('24.890');
-  cmbFreq.Items.Add('28.000');
-  cmbFreq.Items.Add('28.500');
-  cmbFreq.Items.Add('50.000');
-  cmbFreq.Items.Add('70.0875');
-  cmbFreq.Items.Add('70.0500');
-  cmbFreq.Items.Add('144.000');
-  cmbFreq.Items.Add('145.275');
-  cmbFreq.Items.Add('430.000');
-  cmbFreq.Items.Add('902.0');
-  cmbFreq.Items.Add('1250.0');
-  cmbFreq.Items.Add('2400.0');
-  cmbFreq.Items.Add('3450.0');
-  cmbFreq.Items.Add('5670.0');
-  cmbFreq.Items.Add('10250.0');
-  cmbFreq.Items.Add('24100.0');
-  cmbFreq.Items.Add('47100.0');
-  cmbFreq.Items.Add('78000.0');
-  }
 end;
 
 procedure TdmUtils.InsertBands(cmbBand: TComboBox);
@@ -758,7 +740,7 @@ procedure TdmUtils.InsertWorkedContests(cmbContest: TComboBox);
 var
   i: integer;
 const
-  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` DESC';
+  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` ASC';
 begin
   cmbContest.Clear;
   dmData.qWorkedContests.Close;
@@ -1280,6 +1262,9 @@ end;
 function TdmUtils.IsDateOK(date: string): boolean;
 var
   tmp: string;
+
+//OH1KH:  this 230-0010-20 passes as 2023-01-20 !!!   We have to do something for this !!
+
 begin
   if date = '' then
   begin
@@ -1287,6 +1272,10 @@ begin
     exit;
   end;
   Result := True;
+
+//check separator places first
+  if (date[5]<>'-') or (date[8]<>'-') then
+                                         Result:=false;
 
   tmp := FormatSettings.ShortDateFormat;
   try
@@ -2728,7 +2717,7 @@ begin
   Result := LowerCase(GetBandFromFreq(freq));
 end;
 
-function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text : String) : String;
+function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg, text : String) : String;
 {
  %mc - my callsign
  %mn - my name
@@ -2741,9 +2730,12 @@ function TdmUtils.GetCWMessage(Key,call,rst_s,stx,stx_str,HisName,HelloMsg, text
  %c  - callsign
  %h - greeting GM/GA/GE calculated from the %c station location time
 
- %xn  - contest exchenge serial number
+ %xn  - contest exchange serial number
+ %xnr - contest exchange seral number received
  %xm  - contest exchange message
+ %xmr - contest exchange message received
  %xns - contest exchenge serial number sends 9->N and 0->T
+ %xnrs- contest exchange message received sends 9->N and 0->T
  %xrs - full contest exchange RST+SerialNR+Message sends 9->N and 0->T.
         Can be used "always" as if serNR and/or Message are empty just sends plain report.
 
@@ -2758,6 +2750,7 @@ var
   myqth  : String = '';
   rst_sh : String = '';
   stx_sh : String = '';
+  srx_sh : String = '';
   con_ex : String = '';
 
 begin
@@ -2766,7 +2759,15 @@ begin
   myname := cqrini.ReadString('Station', 'Name', '');
   myqth := cqrini.ReadString('Station', 'QTH', '');
   if key <> '' then
+   Begin
+    if (frmContest.Showing) and ( not (cqrini.ReadBool('CW','S&P',True))) then //if contest and run mode keys are F11-F20
+     Begin
+      if key='F10' then key:='F20'
+       else
+         key:= key[1]+'1'+key[2];
+     end;
     Result := LowerCase(cqrini.ReadString('CW', key, ''))
+   end
   else
     Result := text;
 
@@ -2776,27 +2777,38 @@ begin
     stx_sh := StringReplace(stx,'9','N',[rfReplaceAll, rfIgnoreCase]);
     stx_sh := StringReplace(stx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
 
+    srx_sh := StringReplace(srx,'9','N',[rfReplaceAll, rfIgnoreCase]);
+    srx_sh := StringReplace(srx_sh,'0','T',[rfReplaceAll, rfIgnoreCase]);//replace zeros, too
+
     con_ex := rst_sh;
     if stx_sh <>'' then con_ex:=con_ex+' '+stx_sh;
     if stx_str <>'' then con_ex:=con_ex+' '+stx_str;
+
+    Result := StringReplace(Result,'%xnrs',srx_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xnr',srx,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xns',stx_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xn',stx,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%xmr',srx_str,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%xm',stx_str,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%xrs',con_ex,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
+
+    Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
 
     Result := StringReplace(Result,'%mc',mycall,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%ml',myloc,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%mn',myname,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%mq',myqth,[rfReplaceAll, rfIgnoreCase]);
 
-    Result := StringReplace(Result,'%xrs',con_ex,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%rs',rst_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%r',rst_s,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%n',HisName,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
     Result := StringReplace(Result,'%h',HelloMsg,[rfReplaceAll, rfIgnoreCase]);
 
-    Result := StringReplace(Result,'%xns',stx_sh,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xn',stx,[rfReplaceAll, rfIgnoreCase]);
-    Result := StringReplace(Result,'%xm',stx_str,[rfReplaceAll, rfIgnoreCase]);
+    Result := StringReplace(Result,'%c',call,[rfReplaceAll, rfIgnoreCase]);
 
-    if dmData.DebugLevel>=1 then Writeln('Sending:',Result)
+    if dmData.DebugLevel>=1 then
+                                Writeln('Sending:',Result)
 end;
 
 function TdmUtils.RigGetcmd(r : String) : String;
@@ -3246,7 +3258,93 @@ begin
     HTTP.Free
   end;
 end;
+function TdmUtils.GetQRZCQInfo(call: string;
+  var  nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg: string): boolean;
+var
+  http: THTTPSend;
+  req: string = '';
+  m: TStringList;
+  tmp:String;
+begin
+  Result := False;
+  nick := '';
+  address := '';
+  grid := '';
+  state := '';
+  county := '';
+  qsl := '';
+  ErrMsg := '';
+  if fQRZCQSession = '' then
+  begin
+    if not GetQRZCQSession(ErrMsg) then
+      exit;
+  end;
+  http := THTTPSend.Create;
+  m := TStringList.Create;
+  try
+    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
+    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
+    http.UserName := cqrini.ReadString('Program', 'User', '');
+    http.Password := cqrini.ReadString('Program', 'Passwd', '');
+    if (call = '') then
+    begin
+      ErrMsg := 'Callsign field empty!';
+      exit;
+    end;
+    req := 'https://ssl.qrzcq.com/xml?s=' + fQRZCQSession + '&callsign=' + GetIDCall(call)+'&agent=Cqrlog_'+uVersion.cVERSION;
+    if not HTTP.HTTPMethod('GET', req) then
+      ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
+    else
+    begin
+      m.LoadFromStream(http.Document);
+      if Pos(UpperCase('<Error>Session Timeout</Error>'), UpperCase(m.Text)) > 0 then
+      begin
+        fQRZCQSession := '';
+        cqrini.WriteString('CallBook', 'CbQRZCQKey', fQRZCQSession);
+        Result := GetQRZCQInfo(call, nick, qth, address, zip, grid, state,
+          county, qsl, iota, waz, itu, dok, ErrMsg);
+      end
+      else
+      begin
+        if Pos('<Error>Not found:', m.Text) > 0 then
+          exit;
 
+        nick:= GetTagValue(m.Text, '<name>');
+        if WordCount(nick,[' ']) >2 then //There may be nickname after true name
+          Begin
+            tmp := ExtractWord(2,nick,[' ']);
+            nick:= ExtractWord(1,nick,[' ']);
+            if ((pos('(',tmp)>0)
+             or (pos('"',tmp)>0)
+             or (pos(#$27,tmp)>0)  // '
+             or (pos('[',tmp)>0)
+             or (pos('{',tmp)>0) ) then //There may be nickname after true name
+               nick:= nick+' '+tmp;
+          end
+         else
+          nick:= ExtractWord(1,nick,[' ']);
+        qth := GetTagValue(m.Text, '<qth>');
+        state := GetTagValue(m.Text, '<state>');
+        zip := GetTagValue(m.Text, '<zip>');
+        address := GetTagValue(m.Text, '<name>') + LineEnding +
+          GetTagValue(m.Text, '<address>') + LineEnding;
+        if (state <> '') then
+          address := address + ', ' + state;
+        address := address + ' ' + zip;
+        county := GetTagValue(m.Text, '<county>');
+        grid := UpperCase(GetTagValue(m.Text, '<locator>'));
+        qsl := GetTagValue(m.Text, '<manager>');
+        iota := GetTagValue(m.Text, '<iota>');
+        waz := GetTagValue(m.Text, '<cq>');
+        itu := GetTagValue(m.Text, '<itu>');
+        dok := GetTagValue(m.Text, '<dok>')
+      end
+    end
+  finally
+    m.Free;
+    HTTP.Free
+  end;
+end;
 procedure TdmUtils.SaveWindowPos(a: TForm);
 var
   section: string = '';
@@ -3788,8 +3886,10 @@ function TdmUtils.GetCallBookData(call: string;
   var nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok,  ErrMsg: string): boolean;
 begin
   if cqrini.ReadBool('Callbook', 'QRZ', False) then
-    Result := GetQRZInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg)
-  else
+    Result := GetQRZInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, ErrMsg) ;
+  if cqrini.ReadBool('Callbook', 'QRZCQ', False) then
+    Result := GetQRZCQInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg) ;
+  if cqrini.ReadBool('Callbook', 'HamQTH', False) then
     Result := GetHamQTHInfo(call, nick, qth, address, zip, grid, state, county, qsl, iota, waz, itu, dok, ErrMsg)
 end;
 
@@ -3812,7 +3912,6 @@ begin
   end;
 end;
 
-
 function TdmUtils.GetQRZSession(var ErrMsg: string): boolean;
 var
   http: THTTPSend;
@@ -3822,8 +3921,8 @@ var
   kpos: word;
 begin
   Result := False;
-  if (cqrini.ReadString('CallBook', 'CBUser', '') = '') or
-    (cqrini.ReadString('CallBook', 'CBPass', '') = '') then
+  if (cqrini.ReadString('CallBook', 'CbQRZUser', '') = '') or
+    (cqrini.ReadString('CallBook', 'CbQRZPass', '') = '') then
   begin
     ErrMsg := 'Empty password or user name';
     exit;
@@ -3836,8 +3935,8 @@ begin
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
     req := 'https://xmldata.qrz.com/xml/1.34?username=' + cqrini.ReadString(
-      'CallBook', 'CBUser', '') + ';password=' + cqrini.ReadString(
-      'CallBook', 'CBPass', '') + ';agent=cqrlog';
+      'CallBook', 'CbQRZUser', '') + ';password=' + cqrini.ReadString(
+      'CallBook', 'CbQRZPass', '') + ';agent=Cqrlog_'+uVersion.cVERSION;
     if not HTTP.HTTPMethod('GET', req) then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
     else
@@ -3867,16 +3966,23 @@ begin
     HTTP.Free
   end;
 end;
-
-function TdmUtils.GetHamQTHSession(var ErrMsg: string): boolean;
+function TdmUtils.GetQRZCQSession(var ErrMsg: string): boolean;
 var
   http: THTTPSend;
   req: string = '';
   m: TStringList;
+  epos: word;
+  kpos: word;
 begin
+  fQRZCQSession:= cqrini.ReadString('CallBook', 'CbQRZCQKey','');
+  if fQRZCQSession<>'' then
+                       Begin
+                         Result:=true;
+                         exit;
+                       end;
   Result := False;
-  if (cqrini.ReadString('CallBook', 'CBUser', '') = '') or
-    (cqrini.ReadString('CallBook', 'CBPass', '') = '') then
+  if (cqrini.ReadString('CallBook', 'CbQRZCQUser', '') = '') or
+    (cqrini.ReadString('CallBook', 'CbQRZCQPass', '') = '') then
   begin
     ErrMsg := 'Empty password or user name';
     exit;
@@ -3888,8 +3994,62 @@ begin
     http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    req := 'http://www.hamqth.com/xml.php?u=' + cqrini.ReadString('CallBook', 'CBUser', '') +
-      '&p=' + EncodeURLData(cqrini.ReadString('CallBook', 'CBPass', '')) + '&prg=cqrlog';
+    req := 'https://ssl.qrzcq.com/xml?username=' + cqrini.ReadString(
+      'CallBook', 'CbQRZCQUser', '') + '&password=' + cqrini.ReadString(
+      'CallBook', 'CbQRZCQPass', '') + '&agent=Cqrlog_'+uVersion.cVERSION;
+    if not HTTP.HTTPMethod('GET', req) then
+      ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
+    else
+    begin
+      m.LoadFromStream(http.Document);
+      if dmData.DebugLevel >= 1 then
+        Writeln(m.Text);
+      //I'd like to parse it as normal XML but it seems XML support in Freepascal
+      //2.4.0 is broken :-(
+      epos := Pos('<Error>', m.Text);
+      if epos > 0 then
+        ErrMsg := copy(m.Text, epos + 7, Pos('</Error>', m.Text) - epos - 7)
+      else
+      begin
+        kpos := Pos('<Key>', m.Text);
+        if kpos > 0 then
+        begin
+          fQRZCQSession := copy(m.Text, kpos + 5, Pos('</Key>', m.Text) - kpos - 5);
+          cqrini.WriteString('CallBook', 'CbQRZCQKey', fQRZCQSession);
+          Result := True;
+        end
+        else
+          ErrMsg := 'Tag "<Key>" not found!';
+      end;
+    end
+  finally
+    m.Free;
+    HTTP.Free
+  end;
+end;
+
+function TdmUtils.GetHamQTHSession(var ErrMsg: string): boolean;
+var
+  http: THTTPSend;
+  req: string = '';
+  m: TStringList;
+begin
+  Result := False;
+  if (cqrini.ReadString('CallBook', 'CbHamQTHUser', '') = '') or
+    (cqrini.ReadString('CallBook', 'CbHamQTHPass', '') = '') then
+  begin
+    ErrMsg := 'Empty password or user name';
+    exit;
+  end;
+  http := THTTPSend.Create;
+  m := TStringList.Create;
+  try
+    http.ProxyHost := cqrini.ReadString('Program', 'Proxy', '');
+    http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
+    http.UserName := cqrini.ReadString('Program', 'User', '');
+    http.Password := cqrini.ReadString('Program', 'Passwd', '');
+    req := 'http://www.hamqth.com/xml.php?u=' + cqrini.ReadString('CallBook', 'CbHamQTHUser', '') +
+      '&p=' + EncodeURLData(cqrini.ReadString('CallBook', 'CbHamQTHPass', '')) + '&prg=Cqrlog_'+uVersion.cVERSION;
     //Writeln(req);
     if not HTTP.HTTPMethod('GET', req) then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
@@ -4013,7 +4173,6 @@ begin
     HTTP.Free
   end;
 end;
-
 procedure TdmUtils.ShowHamQTHInBrowser(call: string);
 var
   AProcess: TProcess;
@@ -4447,7 +4606,7 @@ begin
     end
   end;
   if (CmbText='') then
-    RigComboBox.ItemIndex := 0
+    RigComboBox.ItemIndex := -1
   else
     RigComboBox.Text := CmbText
 end;
@@ -5036,6 +5195,199 @@ Begin
    if num=2 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_IMPORTMODE_FILE,I_file);
    if num=3 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_EXCEPMODE_FILE,E_file);
    if num=4 then CreaFile(dmData.HomeDir+C_MODEFILE_DIR+C_READMEMODE_FILE,R_file);
+end;
+
+procedure TdmUtils.UpdateCallBookcnf;
+var
+  c,p:string;
+
+Begin
+  c:= cqrini.ReadString('CallBook', 'CBUser', '');
+if c <> '' then
+  Begin //remove old definition
+    p:= cqrini.ReadString('CallBook', 'CBPass', '');
+    if cqrini.ReadBool('Callbook', 'HamQTH', True) then
+      begin
+        cqrini.WriteString('CallBook', 'CbHamQTHUser', c);
+        cqrini.WriteString('CallBook', 'CbHamQTHPass', p);
+      end
+     else
+      begin
+        cqrini.WriteString('CallBook', 'CbQRZUser', c);
+        cqrini.WriteString('CallBook', 'CbQRZPass', p);
+      end;
+    cqrini.DeleteKey('CallBook', 'CBUser');
+    cqrini.DeleteKey('CallBook', 'CBPass');
+  end;
+end;
+
+procedure TdmUtils.ClearStatGrid(g:TStringGrid);
+var
+  i,y : Integer;
+begin
+  for i:= 0 to g.ColCount-1 do
+    for y := 0 to g.RowCount-1 do
+      g.Cells[i,y] := '   ';
+  with g do
+  begin
+    Cells[0, 1] := 'SSB';
+    Cells[0, 2] := 'CW';
+    Cells[0, 3] := 'DIGI'
+  end;
+end;
+
+procedure TdmUtils.AddBandsToStatGrid(g:TStringGrid);
+var
+  i : Integer;
+begin
+  g.ColCount  := cMaxBandsCount;
+
+  for i:=0 to cMaxBandsCount-1 do
+  begin
+    if dmUtils.MyBands[i][0]='' then
+    begin
+      g.ColCount  := i+1;
+      break
+    end;
+    g.Cells[i+1,0] := dmUtils.MyBands[i][1];
+  end;
+end;
+
+
+procedure TdmUtils.ShowStatistic(ref_adif,old_stat_adif:Word; g:TStringGrid; call:String='');
+var
+  i : Integer;
+  ShowLoTW : Boolean = False;
+  mode : String;
+  QSLR,LoTW,eQSL : String;
+  tmps,tmpq : String;
+  space: String;
+
+begin
+  tmpq:='';
+  if call='' then
+   Begin
+    if old_stat_adif = ref_adif then
+      exit;
+    old_stat_adif := ref_adif;
+   end
+  else
+   begin
+   tmpq:=' and callsign='+QuotedStr(call);
+   end;
+
+  g.ColCount  := cMaxBandsCount;
+
+  dmUtils.ClearStatGrid(g);
+  dmUtils.AddBandsToStatGrid(g);
+
+  space := ' ';
+  if cqrini.ReadBool('Fonts','GridDotsInsteadSpaces',False) = True then
+  begin
+    space := '.';
+  end;
+
+  for i:=0 to cMaxBandsCount-1 do
+  begin
+    if dmUtils.MyBands[i][0]='' then
+    begin
+      g.ColCount  := i+1;
+      break
+    end;
+
+    g.Cells[i+1,1] := space+space+space;
+    g.Cells[i+1,2] := space+space+space;
+    g.Cells[i+1,3] := space+space+space;
+  end;
+
+  if dmData.trQ.Active then
+    dmData.trQ.RollBack;
+  dmData.Q.Close;
+
+  ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
+  if ShowLoTW then
+    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
+                         IntToStr(ref_adif) + tmpq + ' and ((qsl_r='+QuotedStr('Q')+') or '+
+                         '(lotw_qslr = '+QuotedStr('L')+') or (eqsl_qsl_rcvd='+QuotedStr('E')+
+                         ')) group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd'
+  else
+    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
+                         IntToStr(ref_adif) + tmpq + ' and (qsl_r = '+QuotedStr('Q')+') '+
+                         'group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd';
+  dmData.trQ.StartTransaction;
+  dmData.Q.Open;
+  while not dmData.Q.Eof do
+  begin
+    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
+    mode := dmData.Q.Fields[1].AsString;
+    QSLR := dmData.Q.Fields[2].AsString;
+    LoTW := dmData.Q.Fields[3].AsString;
+    eQSL := dmData.Q.Fields[4].AsString;
+    if i > 0 then
+    begin
+      if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
+      begin
+        tmps := g.Cells[i,1] ;
+        if QSLR = 'Q' then
+          tmps[1] := 'Q';
+        if (LoTW = 'L') then
+          tmps[2] := 'L';
+        if (eQSL = 'E') then
+          tmps[3] := 'E';
+       g.Cells[i,1] := tmps
+      end
+      else begin
+        if (Mode='CW') or (Mode='CWQ') then
+        begin
+          tmps := g.Cells[i,2] ;
+          if QSLR = 'Q' then
+            tmps[1] := 'Q';
+          if (LoTW = 'L') then
+            tmps[2] := 'L';
+          if (eQSL = 'E') then
+            tmps[3] := 'E';
+          g.Cells[i,2] := tmps
+        end
+        else begin
+          tmps := g.Cells[i,3] ;
+          if QSLR = 'Q' then
+            tmps[1] := 'Q';
+          if (LoTW = 'L') then
+            tmps[2] := 'L';
+          if (eQSL = 'E') then
+            tmps[3] := 'E';
+          g.Cells[i,3] := tmps
+        end
+      end;
+    end;
+    dmData.Q.Next
+  end;
+  dmData.trQ.Rollback;
+
+  dmData.Q.Close;
+  if dmData.trQ.Active then
+    dmData.trQ.Rollback;
+  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where adif='+
+                       IntToStr(ref_adif) + tmpq +' group by band,mode';
+  dmData.trQ.StartTransaction;
+  dmData.Q.Open;
+  while not dmData.Q.Eof do
+  begin
+    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
+    mode := dmData.Q.Fields[1].AsString;
+    if i > 0 then
+      begin
+        if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
+          if(g.Cells[i,1] = space+space+space) then g.Cells[i,1] := ' X ';
+        if ((mode = 'CW') or (mode = 'CWR')) then
+          if (g.Cells[i,2] = space+space+space) then g.Cells[i,2] := ' X ';
+        if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
+          if (g.Cells[i,3] = space+space+space) then g.Cells[i,3] := ' X '
+      end;
+      dmData.Q.Next;
+  end;
+  dmData.Q.Close;
+  dmData.trQ.Rollback
 end;
 
 end.

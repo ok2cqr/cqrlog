@@ -317,6 +317,10 @@ begin
 end;
 
 procedure TfrmDBConnect.btnNewLogClick(Sender: TObject);
+var
+  db          :string;
+  cnr,nr      :integer;
+  l           :TStringList;
 begin
   frmNewLog := TfrmNewLog.Create(nil);
   try
@@ -324,15 +328,45 @@ begin
     frmNewLog.ShowModal;
     if frmNewLog.ModalResult = mrOK then
     begin
-      //if dmData.LogName <> '' then
-      //  dmData.CloseDatabases;
-      dmData.CreateDatabase(StrToInt(frmNewLog.edtLogNR.Text),
-                            frmNewLog.edtLogName.Text);
-      UpdateGridFields
-    end
+      dmData.CreateDatabase(StrToInt(frmNewLog.edtLogNR.Text),frmNewLog.edtLogName.Text);
+      UpdateGridFields;
+      if frmNewLog.edtLogCpyNR.Text<>'' then
+       Begin
+          cnr:=StrToInt(frmNewLog.edtLogCpyNR.Text); //this nr log exists and strtoint works: tested in "newlog"
+          db := dmData.GetProperDBName(cnr);
+          if dmData.DBName<>'' then
+            dmData.SaveConfigFile;
+          dmData.Q.Close;
+          if dmData.trQ.Active then dmData.trQ.Rollback;
+          dmData.Q.SQL.Text := 'select config_file from '+db+'.cqrlog_config';
+          dmData.trQ.StartTransaction;
+          l := TStringList.Create;
+          try  try
+            dmData.Q.Open;
+            l.Text := dmData.Q.Fields[0].AsString;
+            nr:=StrToInt(frmNewLog.edtLogNR.Text);  //this nr log just created strtoint works: tested in "newlog"
+            db := dmData.GetProperDBName(nr);
+            dmData.Q.Close;
+            if dmData.trQ.Active then dmData.trQ.Rollback;
+            dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
+            dmData.trQ.StartTransaction;
+            dmData.Q.Params[0].AsString := l.Text;
+            dmData.Q.ExecSQL
+            except
+              dmData.trQ.Rollback
+            end;
+            dmData.trQ.Commit;
+            ShowMessage('Config copied successfully')
+            finally
+              dmData.Q.Close;
+              l.Free
+            end;
+
+       end;
+      end;
   finally
     frmNewLog.Free
-  end
+  end;
 end;
 
 procedure TfrmDBConnect.btnOpenLogClick(Sender: TObject);
@@ -456,6 +490,7 @@ procedure TfrmDBConnect.mnuExportClick(Sender: TObject);
 var
   db : String;
   l  : TStringList;
+  n  : String;
 begin
   if dlgSave.Execute then
   begin
@@ -470,8 +505,11 @@ begin
     try
       dmData.Q.Open;
       l.Text := dmData.Q.Fields[0].AsString;
-      l.SaveToFile(dlgSave.FileName);
-      ShowMessage('Config file saved to '+dlgSave.FileName
+      n:= dlgSave.FileName;
+      if pos('.INI',UpperCase(n))=0 then
+          n:=n+'.ini';
+      l.SaveToFile(n);
+      ShowMessage('Config file saved to '+n
       +#10+#13+#10+#13+'Warning !'+#10+#13+'File may contain passwords'+#10+#13+'in plain text format')
     finally
       dmData.Q.Close;
@@ -487,28 +525,33 @@ var
   l  : TStringList;
 begin
   if dlgOpen.Execute then
-  begin
-    db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
-    dmData.Q.Close;
-    if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
-    dmData.trQ.StartTransaction;
-    l := TStringList.Create;
-    try try
-      l.LoadFromFile(dlgOpen.FileName);
-      dmData.Q.Params[0].AsString := l.Text;
-      if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
-      dmData.Q.ExecSQL
-    except
-      dmData.trQ.Rollback
-    end;
-    dmData.trQ.Commit;
-    ShowMessage('Config file imported successfully')
-    finally
-      dmData.Q.Close;
-      l.Free
-    end
-  end
+   begin
+     if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+      begin
+        db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
+        dmData.Q.Close;
+        if dmData.trQ.Active then dmData.trQ.Rollback;
+        dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
+        dmData.trQ.StartTransaction;
+        l := TStringList.Create;
+        try try
+          l.LoadFromFile(dlgOpen.FileName);
+          dmData.Q.Params[0].AsString := l.Text;
+          if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
+          dmData.Q.ExecSQL
+        except
+          dmData.trQ.Rollback
+        end;
+        dmData.trQ.Commit;
+        ShowMessage('Config file imported successfully')
+        finally
+          dmData.Q.Close;
+          l.Free
+        end
+      end
+        else
+              ShowMessage('File not found!');
+   end
 end;
 
 procedure TfrmDBConnect.mnuRepairClick(Sender : TObject);

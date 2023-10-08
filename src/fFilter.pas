@@ -445,7 +445,7 @@ begin
 
                         if chkNot.Checked then tmp:= 'NOT( '+tmp+' )';
                         tmp := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE ' + tmp + ' ' + grb_by +' ' + OrderBy;
-
+                        dmData.IsFilterSQL:=tmp;
                         dmData.qCQRLOG.Close;
                         dmData.qCQRLOG.SQL.Text := tmp;
                         if dmData.DebugLevel >=1 then
@@ -744,10 +744,15 @@ procedure TfrmFilter.btnLoadClick(Sender: TObject);
 begin
   dlgOpen.InitialDir := dmData.HomeDir;
   if dlgOpen.Execute then
+   begin
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
      Begin
        loadFilter(dlgOpen.FileName);
        if DirectLoad then btnOkClick(nil);
-     end;
+     end
+    else
+      ShowMessage('File not found!');
+   end;
 end;
 
 procedure TfrmFilter.btnSaveClick(Sender: TObject);

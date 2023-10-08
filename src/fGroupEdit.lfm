@@ -148,7 +148,7 @@ object frmGroupEdit: TfrmGroupEdit
   }
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.2.6.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -166,20 +166,19 @@ object frmGroupEdit: TfrmGroupEdit
       AnchorSideTop.Control = cmbField
       AnchorSideTop.Side = asrCenter
       Left = 12
-      Height = 15
-      Top = 10
+      Height = 17
+      Top = 9
       Width = 34
       BorderSpacing.Left = 12
       Caption = 'Field:'
       ParentColor = False
-      OnClick = lblFieldClick
     end
     object lblValue: TLabel
       AnchorSideLeft.Control = lblField
       AnchorSideTop.Control = cmbValue
       AnchorSideTop.Side = asrCenter
       Left = 12
-      Height = 15
+      Height = 17
       Top = 44
       Width = 41
       Caption = 'Value:'
@@ -233,7 +232,7 @@ object frmGroupEdit: TfrmGroupEdit
         'Contest name'
         'Propagation mode'
         'Satellite name'
-        'Operator̈́'
+        'Operator'
         'DOK'
       )
       OnChange = cmbFieldChange
@@ -245,7 +244,7 @@ object frmGroupEdit: TfrmGroupEdit
       AnchorSideTop.Control = cmbField
       AnchorSideTop.Side = asrBottom
       Left = 96
-      Height = 33
+      Height = 34
       Top = 35
       Width = 312
       BorderSpacing.Top = 3
@@ -260,7 +259,7 @@ object frmGroupEdit: TfrmGroupEdit
       AnchorSideTop.Side = asrBottom
       Left = 6
       Height = 32
-      Top = 72
+      Top = 73
       Width = 422
       BorderSpacing.Top = 4
       BorderWidth = 1

@@ -1,0 +1,39 @@
+object frmProgress: TfrmProgress
+  Left = 400
+  Height = 91
+  Top = 400
+  Width = 340
+  Caption = 'Progress'
+  ClientHeight = 91
+  ClientWidth = 340
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object p: TProgressBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = lblInfo
+    AnchorSideTop.Side = asrBottom
+    Left = 70
+    Height = 30
+    Top = 29
+    Width = 200
+    BorderSpacing.Top = 6
+    Max = 40
+    Smooth = True
+    TabOrder = 0
+  end
+  object lblInfo: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 136
+    Height = 17
+    Top = 6
+    Width = 69
+    Alignment = taCenter
+    BorderSpacing.Top = 6
+    Caption = 'Working....'
+    ParentColor = False
+  end
+end
