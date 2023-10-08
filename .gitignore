@@ -34,4 +34,6 @@ cqrlog
 tools/cqrlog.?.gz
 .idea
 
-
+# appimage and build artifacts
+AppDir/
+*.AppImage
