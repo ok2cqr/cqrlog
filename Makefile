@@ -15,6 +15,9 @@ cqrlog: src/cqrlog.lpi ## Build it with a LPI
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
+dependencies: ## install all dependencies assuming a Ubuntu 22.04 LTS machine
+	sudo apt install git lazarus-ide lcl lcl-gtk2 lcl-nogui lcl-units lcl-utils lazarus lazarus-doc lazarus-src fp-units-misc fp-units-rtl fp-utils fpc fpc-source libssl-dev mariadb-client libhamlib-utils libqt5pas1 fuse3 libfuse2 libsquashfuse0 wget
+
 clean: ## Clean the environment to have a fresh start
 	rm -f -v src/*.o src/*.ppu src/*.bak src/lnet/lib/*.ppu src/lnet/lib/*.o src/lnet/lib/*.bak src/cqrlog src/cqrlog.compiled src/ipc/*.o src/ipc/*.ppu src/cqrlog.or
 	rm -f -v src/*.lrs src/*.ps src/*.lrt src/*.rsh  src/*.rst src/*.a src/synapse/*.a src/synapse/*.o src/synapse/*.ppu
