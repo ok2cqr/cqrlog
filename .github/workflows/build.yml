@@ -18,6 +18,3 @@ jobs:
 
     - name: Run Build
       run: make cqrlog
-
-    - name: Run Install
-      run: make install
