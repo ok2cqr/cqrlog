@@ -98,7 +98,7 @@ cp -r "${ROOTFOLDER}/src/changelog.html" "${ROOTFOLDER}/AppDir/usr/share/cqrlog/
 cp -r "${ROOTFOLDER}/tools/cqrlog-apparmor-fix" "${ROOTFOLDER}/AppDir/usr/share/cqrlog/"
 
 # detect libmysqlclient.so lib
-LIBMYSQL=$(find /usr/lib/ -type f -name "*libmysqlclient.so*")
+LIBMYSQL=$(find /usr/lib/${ARCH}*/ -type f -name "*libmysqlclient.so*")
 cp "$LIBMYSQL" "/tmp/libmysqlclient.so"
 
 # detect hamlib bins
