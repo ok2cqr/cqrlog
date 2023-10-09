@@ -92,6 +92,15 @@ for i in $(ls $ICONS) ; do
     mkdir -p "${TARGET}/${i}/apps/"
     cp "$ICONS/$i/cqrlog.png" "${TARGET}/${i}/apps/"
 done
+
+# copy other single files
+cp -r "${ROOTFOLDER}/src/changelog.html" "${ROOTFOLDER}/AppDir/usr/share/cqrlog/"
+cp -r "${ROOTFOLDER}/tools/cqrlog-apparmor-fix" "${ROOTFOLDER}/AppDir/usr/share/cqrlog/"
+
+# detect libmysqlclient.so lib
+LIBMYSQL=$(find /usr/lib/ -type f -name "*libmysqlclient.so*")
+cp "$LIBMYSQL" "/tmp/libmysqlclient.so"
+
 echo " "
 
 # download & set all needed tools
@@ -100,7 +109,15 @@ wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases
 chmod a+x *.AppImage
 
 # build
-./linuxdeploy-${ARCH}.AppImage -e "$APP" -d "$DESKTOP" -i "$ICON" --output appimage --appdir=./AppDir
+./linuxdeploy-${ARCH}.AppImage \
+    -e "$APP" \
+    -e "$(which mysqld)" \
+    -l "/tmp/libmysqlclient.so" \
+    -d "$DESKTOP" \
+    -i "$ICON" \
+    --output appimage \
+    --appdir=./AppDir
+
 RESULT=$?
 
 # check build success
