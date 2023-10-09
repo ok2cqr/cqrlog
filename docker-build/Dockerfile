@@ -42,6 +42,10 @@ RUN apt-get install -y \
         libsquashfuse0 \
         wget
 
+# Install mariadb-server
+RUN apt-get install -y \
+        mariadb-server
+
 # Mount point for the git repository:
 # -v $(pwd):/home/cqrlog/build
 VOLUME ["/home/cqrlog/build"]

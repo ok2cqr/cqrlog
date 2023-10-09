@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Fail early and fast
+set -o errexit -o pipefail
+
 # Simple recipe to generate an appimage for this app
 #
 # Requirements:
@@ -14,12 +17,15 @@
 
 # Tweak this please: this is the path of the cqrlog executable after a docker
 # build in /usr/local/cqrlog-alpha
-ROOTFOLDER=/usr/local/cqrlog-alpha
-APP="${ROOTFOLDER}/usr/bin/cqrlog"
+ROOTFOLDER=$(pwd)
+APP="${ROOTFOLDER}/src/cqrlog"
 
 # No need to tweak below unless you move files on the actual project
-DESKTOP="${ROOTFOLDER}/usr/share/applications/cqrlog.desktop"
-ICON="${ROOTFOLDER}/usr/share/pixmaps/cqrlog/cqrlog.png"
+DESKTOP="${ROOTFOLDER}/tools/cqrlog.desktop"
+ICON="${ROOTFOLDER}/images/icon/256x256/cqrlog.png"
+
+# capturing the platform architecture
+ARCH=$(uname -m)
 
 # clean log space
 echo "==================================================================="
@@ -62,22 +68,39 @@ fi
 
 # prepare the ground
 rm -rdf AppDir 2>/dev/null
-rm -rdf CQRLOG-*.AppImage 2>/dev/null
-
-# download & set all needed tools
-wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage"
-wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage"
-chmod a+x *.AppImage
+rm -rdf CQRLOG-*${ARCH}.AppImage 2>/dev/null
 
 # notice
-echo "Starting the build..." 
+echo "Starting the build..."
 
-# Create the AppDir & copy some utils we need
-mkdir -p ./AppDir/usr/share/
-cp -r ${ROOTFOLDER}/usr/share/cqrlog ./AppDir/usr/share/
+# Create the AppDir & neede folders
+TARGET="${ROOTFOLDER}/AppDir/usr/share/cqrlog"
+mkdir -p ${TARGET}
+
+# copy some utils we need
+for f in ctyfiles help images members voice_keyer xplanet zipcodes ; do
+    echo "Adding folder $f"
+    cp -r "${ROOTFOLDER}/${f}" "${TARGET}/"
+done
+
+# copy all the icons
+ICONS="${ROOTFOLDER}/images/icon/"
+TARGET="${ROOTFOLDER}/AppDir/usr/share/icons/hicolor"
+mkdir -p ${TARGET}
+for i in $(ls $ICONS) ; do
+    echo "Adding icons for '$i' sizes"
+    mkdir -p "${TARGET}/${i}/apps/"
+    cp "$ICONS/$i/cqrlog.png" "${TARGET}/${i}/apps/"
+done
+echo " "
+
+# download & set all needed tools
+wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${ARCH}.AppImage"
+wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-${ARCH}.AppImage"
+chmod a+x *.AppImage
 
 # build
-./linuxdeploy-x86_64.AppImage -e "$APP" -d "$DESKTOP" -i "$ICON" --output appimage --appdir=./AppDir
+./linuxdeploy-${ARCH}.AppImage -e "$APP" -d "$DESKTOP" -i "$ICON" --output appimage --appdir=./AppDir
 RESULT=$?
 
 # check build success
@@ -89,6 +112,6 @@ if [ $RESULT -ne 0 ] ; then
 else
     # success
     echo ""
-    echo "Success build, check your file:"
+    echo "Success build, check your built apps files:"
     ls -lh CQRLOG-*.AppImage
 fi
