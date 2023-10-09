@@ -31,21 +31,20 @@ RUN apt-get install -y \
 # Install runtime deps and packing tools
 RUN apt-get install -y \
         libssl-dev \
-        mariadb-client \
-        libhamlib-utils \
-        libqt5pas1
-
-# Install packing deps and tools
-RUN apt-get install -y \
-        fuse3 \
+        libfl-dev \
+        libqt5pas1 \
+        libqt5pas-dev \
         libfuse2 \
         libsquashfuse0 \
-        wget
+        wget \
+        qt5-qmake-bin \
+        qtchooser
 
 # Install extra binaries (Mysql, Hamlib, etc.)
 RUN apt-get install -y \
         mariadb-server \
-        libhamlib-utils
+        libhamlib-utils \
+        mariadb-client
 
 # Mount point for the git repository:
 # -v $(pwd):/home/cqrlog/build
