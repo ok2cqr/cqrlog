@@ -94,7 +94,7 @@ cqrlog_qt5_debug: src/cqrlog.lpi ## Build it with qt5 debug
 	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-appimage: cleann cqrlog ## Build an appimage (overwrite the actual one if there is one) using GTK
+appimage: clean cqrlog ## Build an appimage (overwrite the actual one if there is one) using GTK
 	./appimage.sh
 
 appimage-qt5: clean cqrlog_qt5 ## Build an appimage (overwrite the actual one if there is one) using QT5
