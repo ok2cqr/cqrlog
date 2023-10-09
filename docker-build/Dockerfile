@@ -42,6 +42,11 @@ RUN apt-get install -y \
         libsquashfuse0 \
         wget
 
+# Install extra binaries (Mysql, Hamlib, etc.)
+RUN apt-get install -y \
+        mariadb-server \
+        libhamlib-utils
+
 # Mount point for the git repository:
 # -v $(pwd):/home/cqrlog/build
 VOLUME ["/home/cqrlog/build"]
