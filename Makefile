@@ -16,7 +16,7 @@ cqrlog: src/cqrlog.lpi ## Normal build
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
-	sudo apt update && sudo apt install git lazarus-ide lcl lcl-gtk2 lcl-nogui lcl-units lcl-utils lazarus lazarus-doc lazarus-src fp-units-misc fp-units-rtl fp-utils fpc fpc-source libssl-dev mariadb-client libhamlib-utils libqt5pas1 fuse3 libfuse2 libsquashfuse0 wget mariadb-server libhamlib-utils
+	sudo apt update && sudo apt install git lazarus-ide lcl lcl-gtk2 lcl-nogui lcl-units lcl-utils lazarus lazarus-doc lazarus-src fp-units-misc fp-units-rtl fp-utils fpc fpc-source libssl-dev libfl-dev libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 wget qt5-qmake-bin qtchooser mariadb-server libhamlib-utils mariadb-client
 
 clean: ## Clean the environment to have a fresh start
 	rm -f -v src/*.o src/*.ppu src/*.bak src/lnet/lib/*.ppu src/lnet/lib/*.o src/lnet/lib/*.bak src/cqrlog src/cqrlog.compiled src/ipc/*.o src/ipc/*.ppu src/cqrlog.or
