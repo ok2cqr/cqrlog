@@ -94,8 +94,11 @@ cqrlog_qt5_debug: src/cqrlog.lpi ## Build it with qt5 debug
 	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-appimage: ## Build an appimage (overwrite the actual one if there is one) 
+appimage: cleann cqrlog ## Build an appimage (overwrite the actual one if there is one) using GTK
 	./appimage.sh
+
+appimage-qt5: clean cqrlog_qt5 ## Build an appimage (overwrite the actual one if there is one) using QT5
+	./appimage.sh QT5
 
 docker: ## Build the docker image to allow a docker build
 	cd docker-build && docker build -t cqrlog-build .
@@ -106,8 +109,11 @@ docker-build: docker ## Build it with a docker image to keep your system clean
 docker-install: docker-build ## Install the files to the system using the binaries from the docker build 
 	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make install
 
-docker-appimage: docker-build ## Build an appimage using the binaries from the docker build 
+docker-appimage: docker-build ## Build an appimage using the binaries from the docker build, GTK2
 	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage
+
+docker-appimage-qt5: docker-build ## Build an appimage using the binaries from the docker build, QT5
+	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage-qt5
 
 docker-deb: docker-build ## Build a deb package using the binaries from the docker build 
 	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb

@@ -13,6 +13,9 @@ set -o errexit -o pipefail
 #   * Must be run on a Linux version as old as the far distro you need to
 #     support, tested successfully on Ubuntu 20.04 LTS &  23.10
 #
+# If no parameter passed it's asumed to build as GTK2, if passed the parameter
+# will be set as part of the name, for example QT5/QT6/GTK3, etc
+#
 # On any troubles invoke stdevPavelmc in github
 
 # Tweak this please: this is the path of the cqrlog executable after a docker
@@ -26,6 +29,13 @@ ICON="${ROOTFOLDER}/images/icon/256x256/cqrlog.png"
 
 # capturing the platform architecture
 ARCH=$(uname -m)
+
+# detecting the DE used
+DE=GTK2
+if [ "$1" ] ; then
+    DE=$1
+fi
+echo "Building over the $DE desktop environment framework"
 
 # clean log space
 echo "==================================================================="
@@ -68,7 +78,7 @@ fi
 
 # prepare the ground
 rm -rdf AppDir 2>/dev/null
-rm -rdf CQRLOG-*${ARCH}.AppImage 2>/dev/null
+rm -rdf CQRLOG-*-${DE}-${ARCH}.AppImage 2>/dev/null
 
 # notice
 echo "Starting the build..."
@@ -112,9 +122,16 @@ echo " "
 # download & set all needed tools
 wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${ARCH}.AppImage"
 wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-${ARCH}.AppImage"
+if [ "$DE" == "QT5" ] ; then
+    wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${ARCH}.AppImage"
+fi
 chmod a+x *.AppImage
 
-# build
+# build (optional QT plugin if set)
+QT=""
+if [ "$DE" == "QT5" ] ; then
+    QT="-p qt"
+fi
 ./linuxdeploy-${ARCH}.AppImage \
     -e "$APP" \
     -e "$(which mysqld)" \
@@ -123,6 +140,7 @@ chmod a+x *.AppImage
     -e "$ROTCTL" \
     -e "$ROTCTLD" \
     -l "/tmp/libmysqlclient.so" \
+    $QT \
     -d "$DESKTOP" \
     -i "$ICON" \
     --output appimage \
@@ -137,7 +155,9 @@ if [ $RESULT -ne 0 ] ; then
     echo "ERROR: Aborting as something gone wrong, please check the logs"
     exit 1
 else
-    # success
+    # success, adding the DE variables
+    NAME=$(ls CQRLOG-*\)-${ARCH}.AppImage | cut -d ")" -f1)
+    mv CQRLOG-*\)-${ARCH}.AppImage ${NAME}\)-${DE}-${ARCH}.AppImage
     echo ""
     echo "Success build, check your built apps files:"
     ls -lh CQRLOG-*.AppImage

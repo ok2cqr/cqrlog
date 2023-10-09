@@ -18,9 +18,12 @@ jobs:
 
     - name: Run Build
       run: make cqrlog
-    
-    - name: Run Build Appimage
+
+    - name: Run Build Appimage GTK2
       run: make appimage
+
+    - name: Run Build Appimage QT5
+      run: make appimage-qt5
 
     - uses: actions/upload-artifact@v3
       with:
