@@ -10,12 +10,12 @@ PWD = $(shell pwd)
 
 .PHONY : help dockerbuild clean install deb deb_src debug
 
-cqrlog: src/cqrlog.lpi ## Build it with a LPI
+cqrlog: src/cqrlog.lpi ## Normal build
 	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-dependencies: ## install all dependencies assuming a Ubuntu 22.04 LTS machine
+dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
 	sudo apt update && sudo apt install git lazarus-ide lcl lcl-gtk2 lcl-nogui lcl-units lcl-utils lazarus lazarus-doc lazarus-src fp-units-misc fp-units-rtl fp-utils fpc fpc-source libssl-dev mariadb-client libhamlib-utils libqt5pas1 fuse3 libfuse2 libsquashfuse0 wget
 
 clean: ## Clean the environment to have a fresh start
@@ -115,5 +115,5 @@ docker-deb: docker-build ## Build a deb package using the binaries from the dock
 docker-deb-src: docker-build ## Build a deb-src package using the binaries from the docker build 
 	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb_src
 
-help:
+help: ## List the make options available
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
