@@ -101,6 +101,12 @@ cp -r "${ROOTFOLDER}/tools/cqrlog-apparmor-fix" "${ROOTFOLDER}/AppDir/usr/share/
 LIBMYSQL=$(find /usr/lib/ -type f -name "*libmysqlclient.so*")
 cp "$LIBMYSQL" "/tmp/libmysqlclient.so"
 
+# detect hamlib bins
+RIGCTL=$(which rigctl)
+RIGCTLD=$(which rigctld)
+ROTCTL=$(which rotctl)
+ROTCTLD=$(which rotctld)
+
 echo " "
 
 # download & set all needed tools
@@ -112,6 +118,10 @@ chmod a+x *.AppImage
 ./linuxdeploy-${ARCH}.AppImage \
     -e "$APP" \
     -e "$(which mysqld)" \
+    -e "$RIGCTL" \
+    -e "$RIGCTLD" \
+    -e "$ROTCTL" \
+    -e "$ROTCTLD" \
     -l "/tmp/libmysqlclient.so" \
     -d "$DESKTOP" \
     -i "$ICON" \
