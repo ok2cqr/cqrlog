@@ -149,7 +149,10 @@ procedure TfrmSQLConsole.acLoadSQLExecute(Sender: TObject);
 begin
   dlgOpen.Filter := 'SQL|*.sql';
   if dlgOpen.Execute then
-    mSQL.Lines.LoadFromFile(dlgOpen.FileName)
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+      mSQL.Lines.LoadFromFile(dlgOpen.FileName)
+    else
+        ShowMessage('File not found!');
 end;
 
 procedure TfrmSQLConsole.acNextExecute(Sender: TObject);

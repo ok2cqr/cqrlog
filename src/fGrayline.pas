@@ -32,6 +32,7 @@ type
     acConnect : TAction;
     acShowStatusBar : TAction;
     acLinkToRbnMonitor: TAction;
+    pumShowBeamPath: TMenuItem;
     pumShowLongPath: TMenuItem;
     pumShowShortPath: TMenuItem;
     pumMnuLine2: TMenuItem;
@@ -60,6 +61,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure popGrayLinePopup(Sender: TObject);
     procedure pumClearAllSpotsClick(Sender: TObject);
+    procedure pumShowBeamPathClick(Sender: TObject);
     procedure pumShowLongPathClick(Sender: TObject);
     procedure pumShowShortPathClick(Sender: TObject);
     procedure pumWatchForClick(Sender: TObject);
@@ -74,6 +76,7 @@ type
     delAfter : integer;
     watchFor : String;
     LocalDbg : boolean;
+    GC_lock  : boolean;
 
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
@@ -89,7 +92,8 @@ type
     pfx : String;
     rbn_status  : String;
     procedure kresli;
-    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:boolean);
+    procedure PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:integer);
+    procedure CalculateLatLonOfNewPoint(BaseLon,BaseLat:extended;dist,bearing:integer;var lon2,lat2:extended);
     procedure SavePosition;
     procedure SynRBN;
     function  GetEmptyPos : Word;
@@ -105,7 +109,7 @@ implementation
 
 { TfrmGrayline }
 
-uses dUtils, dData, uMyIni, dDXCluster, fNewQSO;
+uses dUtils, dData, uMyIni, dDXCluster, fNewQSO, fRotControl;
 
 procedure TfrmGrayline.lConnect(aSocket: TLSocket);
 begin
@@ -290,6 +294,7 @@ begin
     RBNSpotList[i].lat  := 0;
     RBNSpotList[i].long := 0;
    end;
+  GC_lock:=false;
   ImageFile := dmData.HomeDir+'images'+PathDelim+'grayline.bmp';
   if not FileExists(ImageFile) then
     ImageFile := ExpandFileNameUTF8('..'+PathDelim+'share'+PathDelim+'cqrlog'+
@@ -310,6 +315,7 @@ begin
   sbGrayLine.Visible        := cqrini.ReadBool('Grayline','Statusbar',True);
   pumShowShortPath.Checked  := cqrini.ReadBool('Grayline','ShortPath',False);
   pumShowLongPath.Checked   := cqrini.ReadBool('Grayline','LongPath',False);
+  pumShowBeamPath.Checked   := cqrini.ReadBool('Grayline','BeamPath',False);
   acShowStatusBar.Checked   := sbGrayLine.Visible;
   rbn_status                :='Disconnected';
   sbGrayLine.SimpleText     := rbn_status;
@@ -319,6 +325,7 @@ begin
   delAfter                  := cqrini.ReadInteger('RBN','deleteAfter',60);
   tmrSpotDots.Interval      :=1000;  //remove Spots(DOts) timer will always run 1 sec period.
   tmrSpotDots.Enabled       :=true;
+  ob^.GC_line_clear;
 end;
 
 procedure TfrmGrayline.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -391,6 +398,16 @@ begin
   RemoveOldSpots(0);
   delAfter := cqrini.ReadInteger('RBN','deleteAfter',60);
   tmrSpotDots.Enabled:=true;
+end;
+
+procedure TfrmGrayline.pumShowBeamPathClick(Sender: TObject);
+begin
+  pumShowBeamPath.Checked:= not pumShowBeamPath.Checked;
+  cqrini.WriteBool('Grayline','BeamPath',pumShowBeamPath.Checked);
+  if  pumShowBeamPath.Checked then
+                               frmRotControl.BeamDir:=-1
+                              else
+                               ob^.GC_line_clear(2);
 end;
 
 procedure TfrmGrayline.pumShowLongPathClick(Sender: TObject);
@@ -506,12 +523,12 @@ begin
   s := '';
   d := '';
   dmUtils.CoordinateFromLocator(dmUtils.CompleteLoc(my_loc),lat,long);
-  if pumShowShortPath.Checked or pumShowLongPath.Checked then
+  if pumShowShortPath.Checked or pumShowLongPath.Checked  then
     Begin
       if pumShowShortPath.Checked then
-                                      PlotGreatCircleArcLine(long,lat,long1,lat1,false);
+                                      PlotGreatCircleArcLine(long,lat,long1,lat1,0);
       if pumShowLongPath.Checked then
-                                      PlotGreatCircleArcLine(long,lat,long1,lat1,true);
+                                      PlotGreatCircleArcLine(long,lat,long1,lat1,1);
     end
    else
     ob^.jachcucaru(true,long,lat*-1,long1,lat1*-1);
@@ -528,7 +545,59 @@ procedure TfrmGrayline.CalculateBearing(lat0, long0, lat1, long1: extended; var 
       bearing := ArcTan2(y, x);
     end;
 
-procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:boolean);
+procedure TfrmGrayline.CalculateLatLonOfNewPoint(BaseLon,BaseLat:extended;dist,bearing:integer;var lon2,lat2:extended);
+var R,B,
+    lon1,
+    lat1 :extended;
+    distCount,
+    stp,f:integer;
+
+Begin
+
+     R:=6378.15;     (* Radius of the earth *)
+  if LocalDbg then
+   begin
+      write('Lat:',FormatFloat('0.00;;',BaseLat));
+      write(' Lon:',FormatFloat('0.00;;',BaseLon));
+      write('     ',FormatFloat('0.00;;',bearing),'      ');
+   end;
+stp:=10;
+lon1 := degToRad(BaseLon);
+lat1 := degToRad(BaseLat);
+B    := degToRad(Bearing);
+dist := dist+stp; //div results always at least 1
+distcount:=dist div stp; //we need to calculate in small steps. Otherwise precision errors become too visible
+
+for f:=1 to distcount do
+  Begin
+     lat2 := arcsin(sin(lat1) * cos(stp/R) + cos(lat1) * sin(stp/R) * cos(B));
+     lon2 := lon1 +arctan2( sin(B) * sin(stp/R) * cos(lat1),
+                                    cos(stp/R) - sin(lat1) * sin(lat2)
+                                    );
+
+     if (lat2>87*pi/180) then break;   //calculation fails on polar crossing with big beam lengths
+     if (lat2<-87*pi/180) then break;
+
+     lat1:=lat2;
+     lon1:=lon2;
+   if LocalDbg then
+     begin
+      write('Lat>',FormatFloat('0.00;;',RadToDeg(lat1)));
+      writeln(' Lon>',FormatFloat('0.00;;',RadToDeg(lon1)));
+     end;
+  end;
+
+  lat2:=RadToDeg(lat2);
+  lon2:=RadToDeg(lon2);
+
+  if LocalDbg then
+   begin
+      write('Lat:',FormatFloat('0.00;;',lat2));
+      writeln(' Lon:',FormatFloat('0.00;;',lon2));
+   end;
+end;
+
+procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:integer);
  { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
 
 Const
@@ -544,11 +613,16 @@ var
   LP                  : integer;  //LongPath instead of ShortPath
 
 Begin
+while GC_lock do
+      sleep(1);
+GC_lock:=true;
 BaseStep  := cqrini.ReadFloat('Program', 'GraylineGCstep',15E-001) * pi/180;
 PolarStep := Basestep/cqrini.ReadInteger('Program', 'GraylineGCstep',10);
 ob^.GC_LWidth := cqrini.ReadInteger('Program', 'GraylineGCLineWidth',2);
+ob^.GB_LWidth := cqrini.ReadInteger('Program', 'GraylineGBeamLineWidth',2);
 ob^.GC_SP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineSPColor', 'clYellow' ));
 ob^.GC_LP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineLPColor', 'clFuchsia' ));
+ob^.GC_BE_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineBEColor', 'clRed' ));
 
 if LocalDbg then
       begin
@@ -558,11 +632,12 @@ if LocalDbg then
 
 step := BaseStep;
 
-if LongP then
-               LP:=1
-         else
-               LP:=0;
-ob^.GC_line_clear(LP);
+case LongP of
+        2    :  LP:=0;     //beam
+        1    :  LP:=1;     //long path
+        0    :  LP:=0;     //short path
+end;
+ob^.GC_line_clear(LongP);
 longitude1 := degToRad(longitude1);
 latitude1 := degToRad(latitude1);
 longitude2 := degToRad(longitude2);
@@ -595,21 +670,21 @@ while (CountLimit > 0) do
   if abs(oldbearing -bearing) > (pi/2) then
          Begin
          if LocalDbg then
-           Begin
-             writeln('Obe:',round(radtodeg(oldbearing)));
-             writeln('Nbe:',round(radtodeg(bearing)));
-           end;
+                           Begin
+                             writeln('Obe:',round(radtodeg(oldbearing)));
+                             writeln('Nbe:',round(radtodeg(bearing)));
+                           end;
           if LP = 1 then
            begin
             if LocalDbg then
-                         writeln ('Release LP value in count round ',CountLimit);
+                             writeln ('Release LP value in count round ',CountLimit);
             LP:=0;  //we are on globe's opposite side of target. Release LP and now on calculate rest via ShortPath
             CalculateBearing(latFrom, lonFrom, latitude2, longitude2, bearing);
            end
           else
            begin
            if LocalDbg then
-                         writeln ('Stop counting in round ',CountLimit);
+                              writeln ('Stop counting in round ',CountLimit);
             CountLimit:=0;
            end;
          end;
@@ -634,14 +709,17 @@ while (CountLimit > 0) do
      or   ((lonFrom < -MEC) and (longitude1 >  MEC))  //left crossing
      ) then
       begin
-       if not LongP then
-         ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1)
-        else
-         ob^.GC_Lline_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1)
+       if LongP=0 then
+         ob^.GC_line_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
+       if LongP=1 then
+         ob^.GC_Lline_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
+       if (LongP=2) and (LP=0) then
+         ob^.GC_Bline_part(RadToDeg(lonFrom),RadToDeg(latFrom)*-1,RadToDeg(longitude1),RadToDeg(latitude1)*-1);
       end;
 
   oldbearing:=bearing;
  end;
+ GC_lock:=false;
 end;
 
 procedure TfrmGrayline.SavePosition;
@@ -833,7 +911,6 @@ begin
     Writeln('Add Long:   ',long)
    end;
 end;
-
 
 end.
 

@@ -32,7 +32,9 @@ type
     btnBrowseBackup1: TButton;
     btnDefineProfile1: TButton;
     btnHelp1: TButton;
-    btnLPColor: TButton;
+    btnBPColor: TColorButton;
+    btnSPColor: TColorButton;
+    btnLPColor: TColorButton;
     btnWsjtPath: TButton;
     btnSecondLoad: TButton;
     btnFrequencies1: TButton;
@@ -46,8 +48,6 @@ type
     btnDefineProfile: TButton;
     btnSplit: TButton;
     btnThirdLoad: TButton;
-    btnSetRadio3: TButton;
-    btnSetRadio4: TButton;
     btnSelbFont: TButton;
     btnSeleFont: TButton;
     btnSelsFont: TButton;
@@ -73,36 +73,15 @@ type
     btnAlertCallsigns: TButton;
     btnCfgStorage: TButton;
     btnAddTrxMem : TButton;
-    btnSelectQSOColor : TButton;
     btnForceMembershipUpdate : TButton;
-    btnSPColor: TButton;
-    cb10m1: TCheckBox;
-    cb12m1: TCheckBox;
     cb136kHz: TCheckBox;
     cb472kHz: TCheckBox;
-    cb13cm1: TCheckBox;
-    cb15m1: TCheckBox;
     cb160m: TCheckBox;
-    cb160m1: TCheckBox;
-    cb17m1: TCheckBox;
-    cb1cm1: TCheckBox;
-    cb20m1: TCheckBox;
-    cb23cm1: TCheckBox;
-    cb2m1: TCheckBox;
-    cb30m1: TCheckBox;
-    cb3cm1: TCheckBox;
-    cb40m1: TCheckBox;
-    cb47GHz1: TCheckBox;
-    cb5cm1: TCheckBox;
-    cb6m1: TCheckBox;
-    cb70cm1: TCheckBox;
-    cb76GHz1: TCheckBox;
+    cb5m: TCheckBox;
+    cb8m: TCheckBox;
     cb122GHz: TCheckBox;
-    cb122GHz1: TCheckBox;
     cb134GHz: TCheckBox;
-    cb134GHz1: TCheckBox;
     cb241GHz: TCheckBox;
-    cb241GHz1: TCheckBox;
     cb80m: TCheckBox;
     cb40m: TCheckBox;
     cb30m: TCheckBox;
@@ -116,25 +95,37 @@ type
     cb70cm: TCheckBox;
     cb23cm: TCheckBox;
     cb13cm: TCheckBox;
-    cb80m1: TCheckBox;
     cb8cm: TCheckBox;
     cb5cm: TCheckBox;
     cb3cm: TCheckBox;
     cb1cm: TCheckBox;
     cb47GHz: TCheckBox;
     cb76GHz: TCheckBox;
-    cb8cm1: TCheckBox;
     cb4m: TCheckBox;
     cb125m: TCheckBox;
     cb60m: TCheckBox;
     cb30cm: TCheckBox;
     cgLimit: TCheckGroup;
     cbNoKeyerReset: TCheckBox;
-    chkR2Vfo: TCheckBox;
-    chkR1Vfo: TCheckBox;
+    chkUdUpEnabled: TCheckBox;
+    chkUdUpOnline: TCheckBox;
+    chkUdIncExch: TCheckBox;
+    chkVoiceR: TCheckBox;
+    chkUseHLBuffer: TCheckBox;
+    chkUTC2R: TCheckBox;
+    chkShow5M: TCheckBox;
+    chkCPollR: TCheckBox;
+    chkwsjtLoeQ: TCheckBox;
+    chkModeReverse: TCheckBox;
+    chkRPwrOn: TCheckBox;
     chkOperator: TCheckBox;
+    chkIgnoreEdit: TCheckBox;
+    chkIgnoreQSL: TCheckBox;
     chkDarcDok: TCheckBox;
     chkNewDOKTables: TCheckBox;
+    chkRunRigCtld: TCheckBox;
+    chkRSendCWR: TCheckBox;
+    chkRVfo: TCheckBox;
     chkRBNMAutoConn: TCheckBox;
     chkRBNLink: TCheckBox;
     chkRot1AzMinMax: TCheckBox;
@@ -192,10 +183,6 @@ type
     chkRot2RunRotCtld: TCheckBox;
     chkClearRIT : TCheckBox;
     chkCountry: TCheckBox;
-    chkR1RunRigCtld: TCheckBox;
-    chkR2RunRigCtld: TCheckBox;
-    chkR1SendCWR: TCheckBox;
-    chkR2SendCWR: TCheckBox;
     chkShowBckEQSL: TCheckBox;
     chkSysUTC: TCheckBox;
     chkAllVariants: TCheckBox;
@@ -258,37 +245,13 @@ type
     chkCounty3: TCheckBox;
     chkCounty4: TCheckBox;
     chkCounty5: TCheckBox;
-    chkCW1: TCheckBox;
+    chkDATA: TCheckBox;
     chkDate3: TCheckBox;
     chkDate4: TCheckBox;
     chkDate5: TCheckBox;
     chkDXCC3: TCheckBox;
     chkDXCC4: TCheckBox;
     chkDXCC5: TCheckBox;
-    chkexAward1: TCheckBox;
-    chkexCall1: TCheckBox;
-    chkexCounty1: TCheckBox;
-    chkexDate1: TCheckBox;
-    chkexDXCC1: TCheckBox;
-    chkexFreq1: TCheckBox;
-    chkexIOTA1: TCheckBox;
-    chkexITU1: TCheckBox;
-    chkexLoc1: TCheckBox;
-    chkexMode1: TCheckBox;
-    chkexMyLoc1: TCheckBox;
-    chkexName1: TCheckBox;
-    chkexNote1: TCheckBox;
-    chkexPower1: TCheckBox;
-    chkexQSLR1: TCheckBox;
-    chkexQSLS1: TCheckBox;
-    chkexQSLVIA1: TCheckBox;
-    chkexQTH1: TCheckBox;
-    chkexRemarks1: TCheckBox;
-    chkexRSTR1: TCheckBox;
-    chkexRSTS1: TCheckBox;
-    chkexTimeoff1: TCheckBox;
-    chkexTimeon1: TCheckBox;
-    chkexWAZ1: TCheckBox;
     chkexAscTime: TCheckBox;
     chkFreq3: TCheckBox;
     chkFreq4: TCheckBox;
@@ -337,31 +300,11 @@ type
     chkRST_S3: TCheckBox;
     chkRST_S4: TCheckBox;
     chkRST_S5: TCheckBox;
-    chkShow10m1: TCheckBox;
-    chkShow12m1: TCheckBox;
-    chkShow136k1: TCheckBox;
-    chkShow13cm1: TCheckBox;
-    chkShow15m1: TCheckBox;
-    chkShow160m1: TCheckBox;
-    chkShow17m1: TCheckBox;
-    chkShow1cm1: TCheckBox;
-    chkShow20m1: TCheckBox;
-    chkShow23cm1: TCheckBox;
-    chkShow2m1: TCheckBox;
-    chkShow30m1: TCheckBox;
-    chkShow3cm1: TCheckBox;
-    chkShow3mm1: TCheckBox;
-    chkShow40m1: TCheckBox;
-    chkShow5cm1: TCheckBox;
-    chkShow6m1: TCheckBox;
-    chkShow6mm1: TCheckBox;
+    chkShow8M: TCheckBox;
     chkShow33CM: TCheckBox;
-    chkShow80m1: TCheckBox;
-    chkShow8cm1: TCheckBox;
     chkSkipModeFreq: TCheckBox;
     chkRefreshAfterSave: TCheckBox;
     chkCW: TCheckBox;
-    chkSkipModeFreq1: TCheckBox;
     chkSSB: TCheckBox;
     chkShow125CM: TCheckBox;
     chkShow23CM: TCheckBox;
@@ -382,22 +325,14 @@ type
     chkShow80M: TCheckBox;
     chkShow160M: TCheckBox;
     chkShow2190M: TCheckBox;
-    chkCloseAterSave1: TCheckBox;
-    chkNoConnection1: TCheckBox;
-    chkOpenAfterRun1: TCheckBox;
-    chkProfileLocator1: TCheckBox;
-    chkProfileQTH1: TCheckBox;
     chkProfileRig: TCheckBox;
     chkProfileQTH: TCheckBox;
     chkProfileLocator: TCheckBox;
-    chkProfileRig1: TCheckBox;
     chkShow17M: TCheckBox;
     chkShow6MM: TCheckBox;
     chkShow25MM: TCheckBox;
     chkShow2MM: TCheckBox;
     chkShow1MM: TCheckBox;
-    chkShowGrayline1: TCheckBox;
-    chkShowTRXwindow1: TCheckBox;
     chkSSB1: TCheckBox;
     chkTimeOff3: TCheckBox;
     chkTimeOff4: TCheckBox;
@@ -406,10 +341,8 @@ type
     chkTimeOn4: TCheckBox;
     chkTimeOn5: TCheckBox;
     chkUseProfiles: TCheckBox;
-    chkUseProfiles1: TCheckBox;
     chkUseSpaceBar: TCheckBox;
     chkITU: TCheckBox;
-    chkUseSpaceBar1: TCheckBox;
     chkWAZ: TCheckBox;
     chkRemarks: TCheckBox;
     chkDXCC: TCheckBox;
@@ -443,14 +376,20 @@ type
     clboxNewITU: TColorBox;
     clboxNewIOTA: TColorBox;
     clBoxQSLITU: TColorBox;
-    cmbDataBitsR2: TComboBox;
+    cmbDataBitsR: TComboBox;
     cmbDataBitsRot1: TComboBox;
     cmbDataBitsRot2: TComboBox;
-    cmbIfaceType2: TComboBox;
+    cmbDTRR: TComboBox;
+    cmbHanshakeR: TComboBox;
+    cmbUdColor: TColorBox;
+    cmbModelRig: TComboBox;
     cmbModelRot1: TComboBox;
     cmbModelRot2: TComboBox;
+    cmbParityR: TComboBox;
+    cmbRTSR: TComboBox;
+    cmbSpeedR: TComboBox;
+    cmbStopBitsR: TComboBox;
     cmbWsjtDefaultMode: TComboBox;
-    cmbDTRR1: TComboBox;
     cmbDTRRot1: TComboBox;
     cmbDTRRot2: TComboBox;
     cmbHaColor: TColorBox;
@@ -458,28 +397,16 @@ type
     cmbHrColor: TColorBox;
     cmbHanshakeRot1: TComboBox;
     cmbHanshakeRot2: TComboBox;
-    cmbModelRig2: TComboBox;
     cmbParityRot1: TComboBox;
     cmbParityRot2: TComboBox;
-    cmbRTSR1: TComboBox;
-    cmbDTRR2: TComboBox;
-    cmbRTSR2: TComboBox;
-    cmbHanshakeR2: TComboBox;
-    cmbParityR2: TComboBox;
     cmbRTSRot1: TComboBox;
     cmbRTSRot2: TComboBox;
-    cmbSpeedR1: TComboBox;
-    cmbSpeedR2: TComboBox;
     cmbSpeedRot1: TComboBox;
     cmbSpeedRot2: TComboBox;
-    cmbStopBitsR1: TComboBox;
     cmbDefaultMode: TComboBox;
     cmbeQSLBckColor: TColorBox;
-    cmbHanshakeR1: TComboBox;
-    cmbParityR1: TComboBox;
     cmbQSL_S: TComboBox;
     cmbSecondSaveTo: TComboBox;
-    cmbStopBitsR2: TComboBox;
     cmbStopBitsRot1: TComboBox;
     cmbStopBitsRot2: TComboBox;
     cmbThirdSaveTo: TComboBox;
@@ -490,8 +417,6 @@ type
     cmbFourthClub: TComboBox;
     cmbFifthClub: TComboBox;
     cmbMode: TComboBox;
-    cmbMode1: TComboBox;
-    cmbNewBand1: TColorBox;
     cmbNewMode: TColorBox;
     cmbQSLNeeded: TColorBox;
     cmbFreq: TComboBox;
@@ -506,46 +431,58 @@ type
     cmbFrmDXCColor: TColorBox;
     cmbFirstZip: TComboBox;
     cmbFirstSaveTo: TComboBox;
-    cmbIfaceType1: TComboBox;
     cmbXplanetColor: TColorBox;
     cmbLoTWBckColor: TColorBox;
-    cmbDataBitsR1: TComboBox;
     cmbCl10db : TColorBox;
-    cmbModelRig1: TComboBox;
+    cmbRadioNr: TComboBox;
+    cmbRadioModes: TComboBox;
+    cmbCWRadio: TComboBox;
+    cmbIfaceType: TComboBox;
+    cmbDataMode: TComboBox;
+    btnSelectQSOColor: TColorButton;
     DateEditCall: TDateEdit;
     DateEditLoc: TDateEdit;
     dlgColor : TColorDialog;
+    edtCbQRZPass: TEdit;
+    edtCbQRZCQPass: TEdit;
+    edtCbQRZUser: TEdit;
+    edtCbQRZCQUser: TEdit;
+    edtUdAddress: TEdit;
+    edtOperator: TEdit;
+    edtCondxTextUrl: TEdit;
+    edtDataCmd: TEdit;
+    edtGCBeamWidth: TEdit;
+    edtGCBeamLength: TEdit;
+    edtHrdUrl: TEdit;
+    edtClubLogUrl: TEdit;
+    edtClubLogUrlDel: TEdit;
+    edtHamQTHurl: TEdit;
     edtGCLineWidth: TEdit;
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
+    edtPoll: TEdit;
+    edtRDevice: TEdit;
+    edtRHost: TEdit;
+    edtRRigCtldArgs: TEdit;
+    edtRRigCtldPort: TEdit;
+    edtRadioName: TEdit;
+    edtUsr1R: TEdit;
+    edtUsr1RName: TEdit;
+    edtUsr2R: TEdit;
+    edtUsr2RName: TEdit;
+    edtUsr3R: TEdit;
+    edtUsr3RName: TEdit;
     edtUsrBtn: TEdit;
-    edtUsr1R1Name: TEdit;
-    edtR2Host: TEdit;
-    edtRadio2Name: TEdit;
-    edtUsr1R2Name: TEdit;
-    edtUsr2R2Name: TEdit;
-    edtUsr3R2Name: TEdit;
-    edtUsr2R1Name: TEdit;
-    edtUsr3R1Name: TEdit;
-    edtUsr2R2: TEdit;
-    edtUsr1R1: TEdit;
-    edtUsr2R1: TEdit;
-    edtUsr1R2: TEdit;
-    edtUsr3R1: TEdit;
     edtClub: TEdit;
-    edtCWPort2: TEdit;
+    edtDataMode1: TEdit;
+    edtCMD1: TEdit;
     edteQSLDnlAddr: TEdit;
     edteQSLStartAddr: TEdit;
     edteQSLViewAddr: TEdit;
-    edtK3NGPort2: TEdit;
-    edtR1Host: TEdit;
-    edtRadio1Name: TEdit;
     edtRot1Host: TEdit;
     edtRot2Host: TEdit;
     edtRotor2: TEdit;
     edtMailingAddress: TEdit;
-    edtUsr3R2: TEdit;
-    edtWinPort2: TEdit;
     edtZipCity: TEdit;
     edtStartConCmd: TEdit;
     edtDropSyncErr: TSpinEdit;
@@ -568,45 +505,33 @@ type
     edtClUserName: TEdit;
     edtWatchFor : TEdit;
     edtRBNLogin : TEdit;
-    edtPoll1: TEdit;
-    edtPoll2: TEdit;
     edtRot1Poll: TEdit;
     edtRot2Poll: TEdit;
-    edtR1Device: TEdit;
     edtRot1Device: TEdit;
     edtRot1RotCtldArgs: TEdit;
     edtRot1RotCtldPort: TEdit;
-    edtR2Device: TEdit;
     edtRot2Device: TEdit;
-    edtR1RigCtldArgs: TEdit;
-    edtR2RigCtldArgs: TEdit;
-    edtR1RigCtldPort: TEdit;
     edtRot2RotCtldArgs: TEdit;
-    edtR2RigCtldPort: TEdit;
     edtRot2RotCtldPort: TEdit;
     edtRotor1: TEdit;
     edtRigCtldPath: TEdit;
-    edtAM1: TSpinEdit;
+    edtAM: TSpinEdit;
     edtClub1Date: TEdit;
     edtClub2Date: TEdit;
     edtClub4Date: TEdit;
     edtClub5Date: TEdit;
     edtClub3Date: TEdit;
-    edtCW1: TSpinEdit;
-    edtCW2: TSpinEdit;
-    edtFM1: TSpinEdit;
-    edtFM2: TSpinEdit;
+    edtCW: TSpinEdit;
+    edtFM: TSpinEdit;
     edtImgFiles: TEdit;
     edtHtmlFiles: TEdit;
-    edtCbPass: TEdit;
-    edtCbUser: TEdit;
+    edtCbHamQTHPass: TEdit;
+    edtCbHamQTHUser: TEdit;
     edteQSLName: TEdit;
     edteQSLPass: TEdit;
     edtRotCtldPath: TEdit;
-    edtRTTY1: TSpinEdit;
-    edtRTTY2: TSpinEdit;
-    edtSSB1: TSpinEdit;
-    edtSSB2: TSpinEdit;
+    edtData: TSpinEdit;
+    edtSSB: TSpinEdit;
     edtTxtFiles: TEdit;
     edtDigiModes: TEdit;
     edtFldigiPath: TEdit;
@@ -617,16 +542,16 @@ type
     edtSunOffset: TEdit;
     edtOffset: TEdit;
     edtCWAddress: TEdit;
-    edtCWPort1: TEdit;
+    edtCWPort: TEdit;
     edtPdfFiles: TEdit;
-    edtWinPort1: TEdit;
+    edtWinPort: TEdit;
     edtRecetQSOs: TEdit;
     edtLoTWPass: TEdit;
     edtLoTWName: TEdit;
     edtCWSpeed: TSpinEdit;
     edtWinMinSpeed: TSpinEdit;
     edtWinMaxSpeed: TSpinEdit;
-    edtK3NGPort1: TEdit;
+    edtK3NGPort: TEdit;
     edtK3NGSpeed: TSpinEdit;
     edtFldigiIp: TEdit;
     edtADIFIp: TEdit;
@@ -649,11 +574,7 @@ type
     edtWAward1: TEdit;
     edtDoNotShow: TEdit;
     edtXLeft: TEdit;
-    edtAM2: TSpinEdit;
     edtCIV3: TEdit;
-    edtPasswd1: TEdit;
-    edtPort1: TEdit;
-    edtRadioPort2: TEdit;
     edtPasswd: TEdit;
     edtUser: TEdit;
     edtPort: TEdit;
@@ -669,8 +590,8 @@ type
     dlgFont: TFontDialog;
     edtEmail: TEdit;
     fraExportPref1: TfraExportPref;
-    gbProfiles1: TGroupBox;
-    grbSerialR2: TGroupBox;
+    grbRadio: TGroupBox;
+    grbSerialR: TGroupBox;
     grbSerialRot1: TGroupBox;
     grbSerialRot2: TGroupBox;
     GroupBox1: TGroupBox;
@@ -696,22 +617,18 @@ type
     gbLoTW: TGroupBox;
     gbWidths: TGroupBox;
     gbWinkeyer: TGroupBox;
-    grbRadio1: TGroupBox;
     gbCwkeyer: TGroupBox;
-    grpUsrCmds: TGroupBox;
     GroupBox31: TGroupBox;
     GroupBox32: TGroupBox;
     gbOffsets: TGroupBox;
     GroupBox34: TGroupBox;
-    GroupBox35: TGroupBox;
+    GroupBox47: TGroupBox;
+    grpUsrDigitalModes: TGroupBox;
     gbeQSL: TGroupBox;
-    GroupBox37: TGroupBox;
+    grbRigBandWidths: TGroupBox;
     GroupBox38: TGroupBox;
-    GroupBox39: TGroupBox;
     gbProfiles: TGroupBox;
-    grbRadio2: TGroupBox;
     grbRigctldPath: TGroupBox;
-    grbSerialR1: TGroupBox;
     GroupBox41: TGroupBox;
     gbRot1: TGroupBox;
     gbRot2: TGroupBox;
@@ -733,10 +650,29 @@ type
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
-    grpUsrCmds1: TGroupBox;
+    grpUsrCmds: TGroupBox;
     Label1: TLabel;
     Label10: TLabel;
     Label108: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label193: TLabel;
+    Label194: TLabel;
+    lblGCBeamWidth: TLabel;
+    lblGCBeamLength: TLabel;
+    lblGC_BP_Color: TLabel;
+    lblRadio: TLabel;
+    lblCWRadio: TLabel;
+    lblNoRigForCW: TLabel;
+    lblNrOfRadios: TLabel;
+    lblNoRigForMode: TLabel;
+    lblDataMode: TLabel;
+    lblDataMode1: TLabel;
+    lblLogDataMode: TLabel;
+    lblRigDataCmd: TLabel;
+    lblRName: TLabel;
+    lblDeviceR: TLabel;
+    lblExtra: TLabel;
     lblGC_SP_Color: TLabel;
     lblGC_LP_Color: TLabel;
     lblGCwidth: TLabel;
@@ -744,25 +680,28 @@ type
     lblGCStep: TLabel;
     lblGCDivisor: TLabel;
     lblGCHint: TLabel;
+    lblHost: TLabel;
+    lblModelR: TLabel;
+    lblPollR: TLabel;
+    lblPortR: TLabel;
+    lblserialRDataBits: TLabel;
+    lblSerialRDtr: TLabel;
+    lblSerialRHand: TLabel;
+    lblSerialRParity: TLabel;
+    lblSerialRRts: TLabel;
+    lblSerialRSpd: TLabel;
+    lblSerialRStop: TLabel;
     LblTimes: TLabel;
     Label17: TLabel;
+    lblUsr1R: TLabel;
+    lblUsr2R: TLabel;
+    lblUsr3R: TLabel;
     lblUsrBtn: TLabel;
-    lblHost2: TLabel;
-    lblUsr1R1: TLabel;
-    lblUsr1R2: TLabel;
-    lblUsr2R1: TLabel;
-    lblUsr2R2: TLabel;
-    lblUsr3R1: TLabel;
-    lblHost: TLabel;
     Label26: TLabel;
     Label80: TLabel;
     Label81: TLabel;
     lblRbnWindowOpen: TLabel;
-    lblCWPort2: TLabel;
     lblHamlib: TLabel;
-    lblHamlib1: TLabel;
-    lblK3NGPort2: TLabel;
-    lblRadio1: TLabel;
     lbCallW: TLabel;
     lbFreqW: TLabel;
     lbleQSLDnlAddr: TLabel;
@@ -780,44 +719,15 @@ type
     lbleQSLUsr: TLabel;
     lbleQSLPass: TLabel;
     Label11: TLabel;
-    Label110: TLabel;
     Label111: TLabel;
     Label112: TLabel;
-    Label113: TLabel;
-    Label114: TLabel;
-    Label115: TLabel;
-    Label116: TLabel;
-    Label117: TLabel;
-    Label118: TLabel;
-    Label119: TLabel;
     lblintProxy: TLabel;
-    Label120: TLabel;
-    Label121: TLabel;
-    Label122: TLabel;
-    Label123: TLabel;
     Label124: TLabel;
     lblDevice1: TLabel;
-    lblPortR1: TLabel;
-    lblPortR2: TLabel;
     lbleQSLBkg: TLabel;
-    lblRadio2: TLabel;
     lblRotId1: TLabel;
     lblIntPort: TLabel;
-    lblSerialR1Spd: TLabel;
-    lblserialR1DataBits: TLabel;
-    lblSerialR1Stop: TLabel;
-    lblSerialR1Hand: TLabel;
-    lblSerialR1Parity: TLabel;
-    lblSerialR1Dtr: TLabel;
-    lblSerialR1Rts: TLabel;
-    lblSerialR2Spd: TLabel;
-    lblSerialR2DataBits: TLabel;
-    lblSerialR2Stop: TLabel;
     lblIntUser: TLabel;
-    lblSerialR2Hand: TLabel;
-    lblSerialR2Parity: TLabel;
-    lblSerialR2Dtr: TLabel;
-    lblSerialr2Rts: TLabel;
     lblPoll1: TLabel;
     lblExtaArgs1: TLabel;
     lblPort1: TLabel;
@@ -856,7 +766,6 @@ type
     lblRbnDb4 : TLabel;
     lblRbnDeleteAfterSec : TLabel;
     Label179: TLabel;
-    lblDeviceR1: TLabel;
     Label180: TLabel;
     Label181: TLabel;
     Label182: TLabel;
@@ -867,7 +776,6 @@ type
     Label187: TLabel;
     Label188: TLabel;
     Label189: TLabel;
-    lblUsr3R2: TLabel;
     lnlRbnServer : TLabel;
     lblRbnAdrFormat : TLabel;
     Label192: TLabel;
@@ -880,12 +788,13 @@ type
     lblHamLibSpeed: TLabel;
     lblHamLibWPM: TLabel;
     Label202: TLabel;
+    lblRig1DataMode: TLabel;
+    lblRig1cmd: TLabel;
     lblADIFport: TLabel;
     lblADIFaddr: TLabel;
-    lblWinPort2: TLabel;
     lblwsjtport: TLabel;
-    Label204: TLabel;
-    Label205: TLabel;
+    lblDnloadCondxImg: TLabel;
+    lblCondxImgexample: TLabel;
     lblDebug : TLabel;
     Label207: TLabel;
     lblwsjtaddr: TLabel;
@@ -898,25 +807,19 @@ type
     lbl: TLabel;
     lblIntPasswd: TLabel;
     Label2: TLabel;
-    lblExtra: TLabel;
-    lblModelR1: TLabel;
-    lblDevieR2: TLabel;
     Label23: TLabel;
-    lblModelR2: TLabel;
-    lblExtra2: TLabel;
-    lblPollR1: TLabel;
-    Label28: TLabel;
-    Label29: TLabel;
-    Label30: TLabel;
-    Label31: TLabel;
-    Label32: TLabel;
-    Label33: TLabel;
-    Label34: TLabel;
-    Label35: TLabel;
-    Label36: TLabel;
-    Label37: TLabel;
-    Label38: TLabel;
-    Label39: TLabel;
+    lblMode: TLabel;
+    lblBandWidth: TLabel;
+    lblCWbw: TLabel;
+    lblSSBBw: TLabel;
+    lblDataBw: TLabel;
+    lblAMBw: TLabel;
+    lblFMBw: TLabel;
+    lblCWHz: TLabel;
+    lblSSBHz: TLabel;
+    lblDataHz: TLabel;
+    lblAMHz: TLabel;
+    lblFMHz: TLabel;
     Label52: TLabel;
     Label53: TLabel;
     Label54: TLabel;
@@ -930,7 +833,6 @@ type
     Label93: TLabel;
     lblSunRiseSet: TLabel;
     Label95: TLabel;
-    lblPollR2: TLabel;
     lbl1: TLabel;
     lblButtons: TLabel;
     Label3: TLabel;
@@ -994,7 +896,6 @@ type
     odFindBrowser: TOpenDialog;
     pnl2Host: TPanel;
     pnlHost1: TPanel;
-    pgTRXControl: TPageControl;
     pgPreferences: TPageControl;
     Panel1: TPanel;
     pgROTControl: TPageControl;
@@ -1002,6 +903,7 @@ type
     rbCondxAsImage: TRadioButton;
     rbHamQTH: TRadioButton;
     rbQRZ: TRadioButton;
+    rbQRZCQ: TRadioButton;
     rgBackupType: TRadioGroup;
     rgRSTFrom: TRadioGroup;
     RadioGroup2: TRadioGroup;
@@ -1023,6 +925,7 @@ type
     edtLoadFromFldigi: TSpinEdit;
     seCallWidth: TSpinEdit;
     seFreqWidth: TSpinEdit;
+    edtRigCount: TSpinEdit;
     tabExport: TTabSheet;
     tabExport1: TTabSheet;
     tabFont1: TTabSheet;
@@ -1039,8 +942,6 @@ type
     tabRBN : TTabSheet;
     tabOnlineLog: TTabSheet;
     tabCondx: TTabSheet;
-    tabTRX2: TTabSheet;
-    tabTRX1: TTabSheet;
     tabRot1: TTabSheet;
     tabRot2: TTabSheet;
     tabZipCode: TTabSheet;
@@ -1073,11 +974,8 @@ type
     procedure btnChangeDefFreqClick(Sender: TObject);
     procedure btnChangeDefModeClick(Sender: TObject);
     procedure btnHelp1Click(Sender: TObject);
-    procedure btnLPColorClick(Sender: TObject);
-    procedure btnSPColorClick(Sender: TObject);
     procedure btnWsjtPathClick(Sender: TObject);
     procedure btnFldigiPathClick(Sender: TObject);
-    procedure btnSelectQSOColorClick(Sender : TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure btnBrowseBackupClick(Sender: TObject);
@@ -1089,6 +987,10 @@ type
     procedure chkClUpEnabledChange(Sender: TObject);
     procedure chkHaUpEnabledChange(Sender: TObject);
     procedure chkHrUpEnabledChange(Sender: TObject);
+    procedure chkUdUpEnabledChange(Sender: TObject);
+    procedure chkIgnoreEditChange(Sender: TObject);
+    procedure chkIgnoreLoTWChange(Sender: TObject);
+    procedure chkIgnoreQSLChange(Sender: TObject);
     procedure chkPotSpeedChange(Sender: TObject);
     procedure chkProfileLocatorClick(Sender: TObject);
     procedure chkProfileQTHClick(Sender: TObject);
@@ -1099,13 +1001,21 @@ type
     procedure btnFirstLoadClick(Sender: TObject);
     procedure btnSecondLoadClick(Sender: TObject);
     procedure btnThirdLoadClick(Sender: TObject);
-    procedure cmbIfaceType1Change(Sender: TObject);
-    procedure cmbIfaceType2Change(Sender: TObject);
-    procedure cmbModelRig1Change(Sender: TObject);
-    procedure cmbModelRig2Change(Sender: TObject);
+    procedure cmbCWRadioChange(Sender: TObject);
+    procedure cmbCWRadioCloseUp(Sender: TObject);
+    procedure cmbIfaceTypeChange(Sender: TObject);
+    procedure cmbIfaceTypeCloseUp(Sender: TObject);
+    procedure cmbModelRigChange(Sender: TObject);
     procedure cmbModelRot1Change(Sender: TObject);
     procedure cmbModelRot2Change(Sender: TObject);
+    procedure cmbRadioModesChange(Sender: TObject);
+    procedure cmbRadioModesCloseUp(Sender: TObject);
+    procedure cmbRadioNrChange(Sender: TObject);
+    procedure cmbRadioNrCloseUp(Sender: TObject);
     procedure edtAlertCmdExit(Sender: TObject);
+    procedure edtDataCmdChange(Sender: TObject);
+    procedure edtDigiModesExit(Sender: TObject);
+    procedure edtGCBeamWidthChange(Sender: TObject);
     procedure edtGCLineWidthExit(Sender: TObject);
     procedure edtGCPolarDivisorExit(Sender: TObject);
     procedure edtGCStepExit(Sender: TObject);
@@ -1115,16 +1025,20 @@ type
     procedure edtK3NGSerSpeedChange(Sender: TObject);
     procedure edtLocChange(Sender: TObject);
     procedure edtLocExit(Sender: TObject);
+    procedure edtOperatorExit(Sender: TObject);
     procedure edtPdfFilesExit(Sender: TObject);
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
+    procedure edtRigCountChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
+    procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
+    procedure tabCWInterfaceExit(Sender: TObject);
+    procedure tabModesExit(Sender: TObject);
+    procedure tabTRXcontrolEnter(Sender: TObject);
     procedure TRXParamsChange(Sender: TObject);
     procedure edtTxtFilesExit(Sender: TObject);
     procedure edtWebBrowserClick(Sender: TObject);
     procedure edtWebBrowserExit(Sender: TObject);
-    procedure edtWinMaxSpeedChange(Sender: TObject);
-    procedure edtWinMinSpeedChange(Sender: TObject);
-    procedure edtWinPort1Change(Sender: TObject);
     procedure edtWinSpeedChange(Sender: TObject);
     procedure edtXplanetLocChange(Sender: TObject);
     procedure lbPreferencesClick(Sender: TObject);
@@ -1152,19 +1066,32 @@ type
     procedure btnFrequenciesClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure edtPoll2Exit(Sender: TObject);
-    procedure edtPoll1Exit(Sender: TObject);
+    procedure edtPollExit(Sender: TObject);
     procedure pgPreferencesChange(Sender: TObject);
   private
     wasOnlineLogSupportEnabled : Boolean;
-
+    RadioNrLoaded : integer;
+    BandWNrLoaded : integer;
+    CWifLoaded    : integer;
+    procedure SaveTRX(RigNr:integer);
+    procedure LoadTRX(RigNr:integer);
+    procedure SaveBandW(RigNr:integer);
+    procedure LoadBandW(RigNr:integer);
+    procedure SaveCWif(RigNr:integer);
+    procedure LoadCWif(RigNr:integer);
+    procedure InitRigCmb(SetUsedRig:boolean=false);
+    procedure ClearUnUsedRigs;
     procedure SaveClubSection;
     procedure LoadMebershipCombo;
     procedure LoadMembersFromCombo(ClubComboText, ClubNumber : String);
     function SeekExecFile(MyFile,MyExeFor:String): String;
+    function DataModeInput(s:string):string;
+    function WarnCheck(chk:boolean):boolean;
+
   public
     { public declarations }
     ActPageIdx : integer;
+
   end;
 
 var
@@ -1178,7 +1105,7 @@ var
   RotChanged: boolean;
   ReloadFreq: Boolean = False;
   ReloadModes: Boolean = False;
-  WinKeyerChanged : Boolean;
+  CWKeyerChanged : Boolean;
 
 implementation
 {$R *.lfm}
@@ -1189,12 +1116,30 @@ uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoa
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
   fRadioMemories, dMembership, dLogUpload;
 
+
+
+function TfrmPreferences.WarnCheck(chk:boolean):boolean;
+var
+   s:PChar;
+Begin
+  Result:= chk;
+  if chk then
+     begin
+           s:= 'Using this option MAY GIVE UNEXPECTED RESULTS'+LineEnding+
+               'if you use MORE THAN ONE ONLINE LOG'+LineEnding+LineEnding+
+               'Are you SURE you want to check this?';
+           if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion) = idNo then
+                                                                                           Result:=False;
+     end;
+end;
+
 procedure TfrmPreferences.btnOKClick(Sender: TObject);
 var
   freq : Currency;
   int  : integer;
   KeyType: TKeyType;
 begin
+  cqrini.SetCache(True);
   cqrini.WriteString('Station', 'Call', edtCall.Text);
   cqrini.WriteString('Station', 'Name', edtName.Text);
   cqrini.WriteString('Station', 'QTH', edtQTH.Text);
@@ -1211,6 +1156,7 @@ begin
   cqrini.WriteString('NewQSO', 'Mode', cmbMode.Text);
   cqrini.WriteString('NewQSO', 'QSL_S', cmbQSL_S.Text);
   cqrini.WriteString('NewQSO', 'RemQSO', edtComments.Text);
+  cqrini.WriteString('NewQSO', 'Op', edtOperator.Text);
   cqrini.WriteString('NewQSO', 'UsrBtn', edtUsrBtn.Text);
   cqrini.WriteBool('NewQSO', 'UseSpaceBar', chkUseSpaceBar.Checked);
   cqrini.WriteBool('NewQSO', 'RefreshAfterSave', chkRefreshAfterSave.Checked);
@@ -1244,8 +1190,11 @@ begin
   cqrini.WriteFloat('Program', 'GraylineGCstep',StrToCurr(edtGCStep.Caption));
   cqrini.WriteInteger('Program', 'GraylineGCPolarDivisor',StrToInt(edtGCPolarDivisor.Caption));
   cqrini.WriteInteger('Program', 'GraylineGCLineWidth',StrToInt(edtGCLineWidth.Caption));
-  cqrini.WriteString('Program', 'GraylineGCLineSPColor', ColorToString(btnSPColor.Color));
-  cqrini.WriteString('Program', 'GraylineGCLineLPColor', ColorToString(btnLPColor.Color));
+  cqrini.WriteString('Program', 'GraylineGCLineSPColor', ColorToString(btnSPColor.ButtonColor));
+  cqrini.WriteString('Program', 'GraylineGCLineLPColor', ColorToString(btnLPColor.ButtonColor));
+  cqrini.WriteString('Program', 'GraylineGCLineBEColor', ColorToString(btnBPColor.ButtonColor));
+  cqrini.WriteInteger('Program', 'GraylineGBeamLineWidth',StrToInt(edtGCBeamWidth.Caption));
+  cqrini.WriteInteger('Program', 'GraylineGBeamLineLength',StrToInt(edtGCBeamLength.Caption));
 
   if  edtWebBrowser.Text = '' then  edtWebBrowser.Text:= dmUtils.MyDefaultBrowser; //may not be empty string
   cqrini.WriteString('Program', 'WebBrowser', edtWebBrowser.Text);
@@ -1259,7 +1208,7 @@ begin
   cqrini.WriteBool('Program', 'SysUTC', chkSysUTC.Checked);
   cqrini.WriteBool('Program','ShowMiles',chkShowMiles.Checked);
   cqrini.WriteBool('Program', 'QSODiffColor', chkQSOColor.Checked);
-  cqrini.WriteInteger('Program', 'QSOColor', btnSelectQSOColor.Color);
+  cqrini.WriteInteger('Program', 'QSOColor', btnSelectQSOColor.ButtonColor);
   cqrini.WriteString('Program', 'QSOColorDate', edtQSOColorDate.Text);
 
   cqrini.WriteBool('Columns', 'Date', chkDate.Checked);
@@ -1324,12 +1273,15 @@ begin
   cqrini.WriteBool('Bands', '12m', cb12m.Checked);
   cqrini.WriteBool('Bands', '10m', cb10m.Checked);
 
-  cqrini.WriteBool('Bands', '4m', cb4m.Checked);
+  cqrini.WriteBool('Bands', '8m', cb8m.Checked);
   cqrini.WriteBool('Bands', '6m', cb6m.Checked);
+  cqrini.WriteBool('Bands', '5m', cb5m.Checked);
+  cqrini.WriteBool('Bands', '4m', cb4m.Checked);
   cqrini.WriteBool('Bands', '2m', cb2m.Checked);
   cqrini.WriteBool('Bands', '1.25m', cb125m.Checked);
   cqrini.WriteBool('Bands', '70cm', cb70cm.Checked);
   cqrini.WriteBool('Bands', '33cm', cb30cm.Checked);
+
   cqrini.WriteBool('Bands', '23cm', cb23cm.Checked);
   cqrini.WriteBool('Bands', '13cm', cb13cm.Checked);
   cqrini.WriteBool('Bands', '8cm', cb8cm.Checked);
@@ -1345,54 +1297,9 @@ begin
   cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
   cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
   cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
+  cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
 
-  cqrini.WriteString('TRX1', 'device', edtR1Device.Text);
-  cqrini.WriteString('TRX1', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig1.Text));
-  cqrini.WriteString('TRX1', 'poll', edtPoll1.Text);
-  cqrini.WriteString('TRX1', 'Desc', edtRadio1Name.Text);
-  cqrini.WriteBool('TRX1', 'CWR', chkR1SendCWR.Checked);
-  cqrini.WriteBool('TRX1', 'ChkVfo',chkR1Vfo.Checked);
-  cqrini.WriteString('TRX1', 'RigCtldPort', edtR1RigCtldPort.Text);
-  cqrini.WriteString('TRX1', 'ExtraRigCtldArgs', edtR1RigCtldArgs.Text);
-  cqrini.WriteBool('TRX1', 'RunRigCtld', chkR1RunRigCtld.Checked);
-  cqrini.WriteString('TRX1', 'host', edtR1Host.Text);
-  cqrini.WriteInteger('TRX1', 'SerialSpeed', cmbSpeedR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'DataBits', cmbDataBitsR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'StopBits', cmbStopBitsR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'Parity', cmbParityR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'HandShake', cmbHanshakeR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'DTR', cmbDTRR1.ItemIndex);
-  cqrini.WriteInteger('TRX1', 'RTS', cmbRTSR1.ItemIndex);
-  cqrini.WriteString('TRX1', 'usr1name', edtUsr1R1name.Text);
-  cqrini.WriteString('TRX1', 'usr2name', edtUsr2R1name.Text);
-  cqrini.WriteString('TRX1', 'usr3name', edtUsr3R1name.Text);
-  cqrini.WriteString('TRX1', 'usr1', edtUsr1R1.Text);
-  cqrini.WriteString('TRX1', 'usr2', edtUsr2R1.Text);
-  cqrini.WriteString('TRX1', 'usr3', edtUsr3R1.Text);
-
-  cqrini.WriteString('TRX2', 'device', edtR2Device.Text);
-  cqrini.WriteString('TRX2', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig2.Text));
-  cqrini.WriteString('TRX2', 'poll', edtPoll2.Text);
-  cqrini.WriteString('TRX2', 'Desc', edtRadio2Name.Text);
-  cqrini.WriteBool('TRX2', 'CWR', chkR2SendCWR.Checked);
-  cqrini.WriteBool('TRX2', 'ChkVfo',chkR2Vfo.Checked);
-  cqrini.WriteString('TRX2', 'RigCtldPort', edtR2RigCtldPort.Text);
-  cqrini.WriteString('TRX2', 'ExtraRigCtldArgs', edtR2RigCtldArgs.Text);
-  cqrini.WriteBool('TRX2', 'RunRigCtld', chkR2RunRigCtld.Checked);
-  cqrini.WriteString('TRX2', 'host', edtR2Host.Text);
-  cqrini.WriteInteger('TRX2', 'SerialSpeed', cmbSpeedR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'DataBits', cmbDataBitsR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'StopBits', cmbStopBitsR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'Parity', cmbParityR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'HandShake', cmbHanshakeR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'DTR', cmbDTRR2.ItemIndex);
-  cqrini.WriteInteger('TRX2', 'RTS', cmbRTSR2.ItemIndex);
-  cqrini.WriteString('TRX2', 'usr1name', edtUsr1R2name.Text);
-  cqrini.WriteString('TRX2', 'usr2name', edtUsr2R2name.Text);
-  cqrini.WriteString('TRX2', 'usr3name', edtUsr3R2name.Text);
-  cqrini.WriteString('TRX2', 'usr1', edtUsr1R2.Text);
-  cqrini.WriteString('TRX2', 'usr2', edtUsr2R2.Text);
-  cqrini.WriteString('TRX2', 'usr3', edtUsr3R2.Text);
+  ClearUnUsedRigs;  //rigs modes and cw are saved when editing. Just delete unused rigs (model=empty)
 
   cqrini.WriteString('ROT', 'RotCtldPath', edtRotCtldPath.Text);
 
@@ -1430,20 +1337,6 @@ begin
   cqrini.WriteInteger('ROT2', 'DTR', cmbDTRRot2.ItemIndex);
   cqrini.WriteInteger('ROT2', 'RTS', cmbRTSRot2.ItemIndex);
 
-  cqrini.WriteInteger('Band1', 'CW', edtCW1.Value);
-  cqrini.WriteInteger('Band1', 'SSB', edtSSB1.Value);
-  cqrini.WriteInteger('Band1', 'RTTY', edtRTTY1.Value);
-  cqrini.WriteInteger('Band1', 'AM', edtAM1.Value);
-  cqrini.WriteInteger('Band1', 'FM', edtFM1.Value);
-
-  cqrini.WriteInteger('Band2', 'CW', edtCW2.Value);
-  cqrini.WriteInteger('Band2', 'SSB', edtSSB2.Value);
-  cqrini.WriteInteger('Band2', 'RTTY', edtRTTY2.Value);
-  cqrini.WriteInteger('Band2', 'AM', edtAM2.Value);
-  cqrini.WriteInteger('Band2', 'FM', edtFM2.Value);
-
-  cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
-
   cqrini.WriteBool('Profiles', 'Use', chkUseProfiles.Checked);
   cqrini.WriteInteger('Profiles', 'Selected', dmData.GetNRFromProfile(cmbProfiles.Text));
   cqrini.WriteBool('Profiles', 'Locator', chkProfileLocator.Checked);
@@ -1466,7 +1359,9 @@ begin
   cqrini.WriteBool('DXCluster', 'Show15M', chkShow15M.Checked);
   cqrini.WriteBool('DXCluster', 'Show12M', chkShow12M.Checked);
   cqrini.WriteBool('DXCluster', 'Show10M', chkShow10M.Checked);
+  cqrini.WriteBool('DXCluster', 'Show8M', chkShow8M.Checked);
   cqrini.WriteBool('DXCluster', 'Show6M', chkShow6M.Checked);
+  cqrini.WriteBool('DXCluster', 'Show5M', chkShow5M.Checked);
   cqrini.WriteBool('DXCluster', 'Show4M', chkShow4M.Checked);
   cqrini.WriteBool('DXCluster', 'Show2M', chkShow2M.Checked);
   cqrini.WriteBool('DXCluster', 'Show125M', chkShow125M.Checked);
@@ -1485,6 +1380,7 @@ begin
   cqrini.WriteBool('DXCluster', 'Show1MM', chkShow1MM.Checked);
   cqrini.WriteBool('DXCluster', 'CW', chkCW.Checked);
   cqrini.WriteBool('DXCluster', 'SSB', chkSSB.Checked);
+  cqrini.WriteBool('DXCluster', 'DATA', chkDATA.Checked);
   cqrini.WriteString('DXCluster', 'NotShow', edtDoNotShow.Text);
   cqrini.WriteBool('DXCluster', 'ConAfterRun', chkConToDXC.Checked);
   cqrini.WriteBool('DXCluster','ShowDxcCountry',chkShowDxcCountry.Checked);
@@ -1584,25 +1480,6 @@ begin
   cqrini.WriteInteger('LoTW', 'eBckColor', cmbeQSLBckColor.Selected);
   cqrini.WriteBool('LoTW', 'ExpComment', chkExpCommet.Checked);
 
-  cqrini.WriteInteger('CW', 'Type1', cmbIfaceType1.ItemIndex);
-  cqrini.WriteInteger('CW', 'Type2', cmbIfaceType2.ItemIndex);
-  cqrini.WriteBool('CW', 'NoReset', cbNoKeyerReset.Checked);
-  cqrini.WriteString('CW', 'wk_port1', edtWinPort1.Text);
-  cqrini.WriteString('CW', 'wk_port2', edtWinPort2.Text);
-  cqrini.WriteBool('CW', 'PotSpeed', chkPotSpeed.Checked);
-  cqrini.WriteInteger('CW', 'wk_speed', edtWinSpeed.Value);
-  cqrini.WriteString('CW', 'cw_address', edtCWAddress.Text);
-  cqrini.WriteString('CW', 'cw_port1', edtCWPort1.Text);
-  cqrini.WriteString('CW', 'cw_port2', edtCWPort2.Text);
-  cqrini.WriteInteger('CW', 'cw_speed', edtCWSpeed.Value);
-  cqrini.WriteInteger('CW', 'wk_min', edtWinMinSpeed.Value);
-  cqrini.WriteInteger('CW', 'wk_max', edtWinMaxSpeed.Value);
-  cqrini.WriteString('CW','K3NGPort1',edtK3NGPort1.Text);
-  cqrini.WriteString('CW','K3NGPort2',edtK3NGPort2.Text);
-  cqrini.WriteInteger('CW','K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
-  cqrini.WriteInteger('CW','K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
-  cqrini.WriteInteger('CW','HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
-
   cqrini.WriteInteger('fldigi', 'freq', rgFreqFrom.ItemIndex);
   cqrini.WriteString('fldigi', 'deffreq', edtDefaultFreq.Text);
   cqrini.WriteInteger('fldigi', 'mode', rgModeFrom.ItemIndex);
@@ -1629,6 +1506,7 @@ begin
   cqrini.WriteString('wsjt', 'wb4locdate', DateEditLoc.Text);
   cqrini.WriteBool('wsjt','wb4CCall', cgLimit.Checked[0]);
   cqrini.WriteBool('wsjt','wb4CLoc', cgLimit.Checked[1]);
+  cqrini.WriteBool('wsjt', 'chkLoTWeQSL', chkwsjtLoeQ.Checked);
 
   cqrini.WriteString('n1mm','port',edtADIFPort.Text);
   cqrini.WriteString('n1mm','ip',edtADIFIp.Text);
@@ -1659,9 +1537,14 @@ begin
   cqrini.WriteString('FifthClub', 'DateFrom', edtClub5Date.Text);
 
   cqrini.WriteBool('CallBook', 'QRZ', rbQRZ.Checked);
+  cqrini.WriteBool('CallBook', 'QRZCQ', rbQRZCQ.Checked);
   cqrini.WriteBool('Callbook', 'HamQTH', rbHamQTH.Checked);
-  cqrini.WriteString('CallBook', 'CBUser', edtCbUser.Text);
-  cqrini.WriteString('CallBook', 'CBPass', edtCbPass.Text);
+  cqrini.WriteString('CallBook', 'CbHamQTHUser', edtCbHamQTHUser.Text);
+  cqrini.WriteString('CallBook', 'CbHamQTHPass', edtCbHamQTHPass.Text);
+  cqrini.WriteString('CallBook', 'CbQRZUser', edtCbQRZUser.Text);
+  cqrini.WriteString('CallBook', 'CbQRZPass', edtCbQRZPass.Text);
+  cqrini.WriteString('CallBook', 'CbQRZCQUser', edtCbQRZCQUser.Text);
+  cqrini.WriteString('CallBook', 'CbQRZCQPass', edtCbQRZCQPass.Text);
 
   cqrini.WriteInteger('RBN','10db',cmbCl10db.Selected);
   cqrini.WriteInteger('RBN','20db',cmbCl20db.Selected);
@@ -1683,6 +1566,7 @@ begin
   cqrini.WriteString('OnlineLog','HaUserName',edtHaUserName.Text);
   cqrini.WriteString('OnlineLog','HaPasswd',edtHaPasswd.Text);
   cqrini.WriteInteger('OnlineLog','HaColor',cmbHaColor.Selected);
+  cqrini.WriteString('OnlineLog','HaUrl',edtHamQthUrl.Text);
 
   cqrini.WriteBool('OnlineLog','ClUP',chkClUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','ClUpOnline',chkClUpOnline.Checked);
@@ -1690,23 +1574,36 @@ begin
   cqrini.WriteString('OnlineLog','ClPasswd',edtClPasswd.Text);
   cqrini.WriteString('OnlineLog','ClEmail',edtClEmail.Text);
   cqrini.WriteInteger('OnlineLog','ClColor',cmbClColor.Selected);
+  cqrini.WriteString('OnlineLog','ClUrl',edtClubLogUrl.Text);
+  cqrini.WriteString('OnlineLog','ClUrlDel',edtClubLogUrlDel.Text);
 
   cqrini.WriteBool('OnlineLog','HrUP',chkHrUpEnabled.Checked);
   cqrini.WriteBool('OnlineLog','HrUpOnline',chkHrUpOnline.Checked);
   cqrini.WriteString('OnlineLog','HrUserName',edtHrUserName.Text);
   cqrini.WriteString('OnlineLog','HrCode',edtHrCode.Text);
   cqrini.WriteInteger('OnlineLog','HrColor',cmbHrColor.Selected);
+
+  cqrini.WriteBool('OnlineLog','UdUP',chkUdUpEnabled.Checked);
+  cqrini.WriteBool('OnlineLog','UdUpOnline',chkUdUpOnline.Checked);
+  cqrini.WriteString('OnlineLog','UdAddress',edtUdAddress.Text);
+  cqrini.WriteBool('OnlineLog','UdIncExch',chkUdIncExch.Checked);
+  cqrini.WriteInteger('OnlineLog','UdColor',cmbUdColor.Selected);
+
   cqrini.WriteBool('OnlineLog','CloseAfterUpload',chkCloseAfterUpload.Checked);
   cqrini.WriteBool('OnlineLog','IgnoreLoTWeQSL',chkIgnoreLoTW.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreQSL',chkIgnoreQSL.Checked);
+  cqrini.WriteBool('OnlineLog','IgnoreEdit',chkIgnoreEdit.Checked);
+  cqrini.WriteString('OnlineLog','HrUrl',edtHrdUrl.Text);
 
   cqrini.WriteString('prop','Url',edtCondxImageUrl.Text);
+  cqrini.WriteString('prop','UrlTxt',edtCondxTextUrl.Text);
   cqrini.WriteBool('prop','AsImage',rbCondxAsImage.Checked);
   cqrini.WriteBool('prop','AsText',rbCondxAsText.Checked);
   cqrini.WriteBool('prop','Values',chkShowCondxValues.Checked);
   cqrini.WriteBool('prop','CalcHF',chkCondxCalcHF.Checked);
   cqrini.WriteBool('prop','CalcVHF',chkCondxCalcVHF.Checked);
 
-  if WinKeyerChanged then frmNewQSO.InitializeCW;
+  if CWKeyerChanged then frmNewQSO.InitializeCW;
 
   fraExportPref1.SaveExportPref;
 
@@ -1728,7 +1625,7 @@ begin
     frmBandMap.LoadFonts;
   cqrini.SaveToDisk;
   if TRXChanged then
-    frmTRXControl.InicializeRig;
+    frmTRXControl.InitializeRig;
   if RotChanged then
     frmRotControl.InicializeRot;
 
@@ -1739,18 +1636,17 @@ begin
   frmNewQSO.ClearAfterFreqChange := False;//cqrini.ReadBool('NewQSO','ClearAfterFreqChange',False);
   frmNewQSO.ChangeFreqLimit      := cqrini.ReadFloat('NewQSO','FreqChange',0.010);
 
-
   if not chkSatelliteMode.Checked then
-  begin
-     frmNewQSO.btnClearSatelliteClick(nil);
-     frmNewQSO.pgDetails.TabIndex := 0
-  end
-  else
-  begin
-     frmNewQSO.pgDetails.TabIndex := 1
-  end;
-  frmNewQSO.pgDetails.Pages[1].TabVisible  := chkSatelliteMode.Checked;
-  frmNewQSO.pgDetails.Pages[2].TabVisible  := chkSatelliteMode.Checked;
+     Begin
+      if  (cqrini.ReadInteger('NewQSO','DetailsTabIndex', 0) > 1 ) then
+          cqrini.WriteInteger('NewQSO','DetailsTabIndex',1);
+      frmNewQSO.btnClearSatelliteClick(nil);
+     end;
+
+  frmNewQSO.pgDetails.TabIndex:=  cqrini.ReadInteger('NewQSO','DetailsTabIndex', 0);
+  frmNewQSO.pgDetails.Pages[2].TabVisible := chkSatelliteMode.Checked;
+  frmNewQSO.pgDetails.Pages[3].TabVisible := chkSatelliteMode.Checked;
+
 
   if ReloadFreq then
     dmUtils.InsertFreq(frmNewQSO.cmbFreq);
@@ -1762,7 +1658,7 @@ begin
     frmNewQSO.cmbMode.Text := cmbMode.Text;
   end;
 
-  if (not (chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked)) then
+  if (not (chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked or chkUdUpEnabled.Checked)) then
   begin
     if wasOnlineLogSupportEnabled then
       dmLogUpload.DisableOnlineLogSupport
@@ -1779,8 +1675,10 @@ begin
   if frmPropagation.Showing then
     frmPropagation.RefreshPropagation;
 
-  frmTRXControl.rbRadio1.Caption := edtRadio1Name.Text;
-  frmTRXControl.rbRadio2.Caption := edtRadio2Name.Text;
+  frmNewQSO.Op:=edtOperator.text;
+  cqrini.WriteString('TMPQSO','OP',edtOperator.text);
+  frmNewQSO.ShowOperator;
+
   frmTRXControl.SetDebugMode(chkTrxControlDebug.Checked or (dmData.DebugLevel>0));
 
   if ((frmNewQSO.sbNewQSO.Panels[0].Text = '') or (frmNewQSO.sbNewQSO.Panels[0].Text = cMyLoc)) then
@@ -1788,6 +1686,8 @@ begin
     frmNewQSO.sbNewQSO.Panels[0].Text := cMyLoc + edtLoc.Text;
     frmNewQSO.CurrentMyLoc:=edtLoc.Text;
    end;
+
+  if frmMain.Visible then frmMain.ShowFields;
 
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
@@ -1798,6 +1698,7 @@ begin
   dmData.LoadClubsSettings;
   dmData.LoadZipSettings;
   dmUtils.UpdateHelpBrowser;
+  cqrini.SetCache(False);
 end;
 
 procedure TfrmPreferences.FormCreate(Sender: TObject);
@@ -2155,15 +2056,10 @@ procedure TfrmPreferences.btnFldigiPathClick(Sender: TObject);
 begin
   dlgOpen.Title := 'Locate fldigi binary ...';
   if dlgOpen.Execute then
-    edtFldigiPath.Text := dlgOpen.FileName;
-end;
-
-procedure TfrmPreferences.btnSelectQSOColorClick(Sender : TObject);
-begin
-  dlgColor.Color := btnSelectQSOColor.Color;
-  if dlgColor.Execute then
-    btnSelectQSOColor.Color := dlgColor.Color;
-  btnSelectQSOColor.Repaint;
+      if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+         edtFldigiPath.Text := dlgOpen.FileName
+      else
+       ShowMessage('File not found!');
 end;
 
 procedure TfrmPreferences.btnChangeDefFreqClick(Sender: TObject);
@@ -2215,28 +2111,15 @@ begin
   dmUtils.OpenInApp('file://' + dmData.HelpDir + 'index.html' );
 end;
 
-procedure TfrmPreferences.btnLPColorClick(Sender: TObject);
-begin
-  dlgColor.Color := btnLPColor.Color;
-  if dlgColor.Execute then
-    btnLPColor.Color := dlgColor.Color;
-  btnLPColor.Repaint;
-end;
-
-
-procedure TfrmPreferences.btnSPColorClick(Sender: TObject);
-begin
-  dlgColor.Color := btnSPColor.Color;
-  if dlgColor.Execute then
-    btnSPColor.Color := dlgColor.Color;
-  btnSPColor.Repaint;
-end;
 
 procedure TfrmPreferences.btnWsjtPathClick(Sender: TObject);
 begin
   dlgOpen.Title := 'Locate wsjtx binary ...';
   if dlgOpen.Execute then
-    edtWsjtPath.Text := dlgOpen.FileName;
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+      edtWsjtPath.Text := dlgOpen.FileName
+    else
+        ShowMessage('File not found!');
 end;
 
 procedure TfrmPreferences.btnAlertCallsignsClick(Sender: TObject);
@@ -2366,16 +2249,6 @@ begin
   dmMembership.CheckForMembershipUpdate
 end;
 
-procedure TfrmPreferences.cbNoKeyerResetChange(Sender: TObject);
-begin
-  if  cbNoKeyerReset.Checked
-    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
-     or  (cmbIfaceType1.ItemIndex = 4)
-     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
-     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
-end;
-
-
 procedure TfrmPreferences.chkClUpEnabledChange(Sender: TObject);
 begin
   edtClUserName.Enabled := chkClUpEnabled.Checked;
@@ -2401,12 +2274,43 @@ begin
   cmbHrColor.Enabled    := chkHrUpEnabled.Checked
 end;
 
+procedure TfrmPreferences.chkIgnoreEditChange(Sender: TObject);
+begin
+  //Warn:
+   if not chkIgnoreEdit.Focused then exit; //otherwise triggers on settings load
+   chkIgnoreEdit.Checked:=WarnCheck(chkIgnoreEdit.Checked)
+end;
+
+procedure TfrmPreferences.chkIgnoreLoTWChange(Sender: TObject);
+
+begin
+   //Warn:
+   if not chkIgnoreLoTW.Focused then exit; //otherwise triggers on settings load
+   chkIgnoreLoTW.Checked:=WarnCheck(chkIgnoreLoTW.Checked)
+end;
+
+procedure TfrmPreferences.chkIgnoreQSLChange(Sender: TObject);
+begin
+  //Warn:
+   if not chkIgnoreQSL.Focused then exit;//otherwise triggers on settings load
+   chkIgnoreQSL.Checked:=WarnCheck(chkIgnoreQSL.Checked)
+end;
+
+procedure TfrmPreferences.chkUdUpEnabledChange(Sender: TObject);
+begin
+  edtUdAddress.Enabled  := chkUdUpEnabled.Checked;
+  chkUdIncExch.Enabled  := chkUdUpEnabled.Checked;
+  chkUdUpOnline.Enabled := chkUdUpEnabled.Checked;
+  cmbUdColor.Enabled    := chkUdUpEnabled.Checked
+end;
+
 procedure TfrmPreferences.chkPotSpeedChange(Sender: TObject);
 begin
   if chkPotSpeed.Checked then
     edtWinSpeed.Enabled := False
   else
     edtWinSpeed.Enabled := True;
+   CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.chkProfileLocatorClick(Sender: TObject);
@@ -2514,55 +2418,47 @@ begin
     end;
 end;
 
-procedure TfrmPreferences.cmbIfaceType1Change(Sender: TObject);
+procedure TfrmPreferences.cmbCWRadioChange(Sender: TObject);
 begin
-  WinKeyerChanged := True;
-   if  cbNoKeyerReset.Checked
-    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
-     or  (cmbIfaceType1.ItemIndex = 4)
-     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
-     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
+  if cmbCWRadio.ItemIndex<1 then cmbCWRadio.ItemIndex:=1;
 end;
-procedure TfrmPreferences.cmbIfaceType2Change(Sender: TObject);
+
+procedure TfrmPreferences.cmbCWRadioCloseUp(Sender: TObject);
 begin
-  WinKeyerChanged := True;
+  if cmbCWRadio.ItemIndex<1 then cmbCWRadio.ItemIndex:=1;
+  SaveCWif(CWifLoaded);
+  LoadCWif(cmbCWRadio.ItemIndex);
+end;
+
+procedure TfrmPreferences.cmbIfaceTypeChange(Sender: TObject);
+begin
+  CWKeyerChanged:=true;
+end;
+
+procedure TfrmPreferences.cbNoKeyerResetChange(Sender: TObject);
+begin
   if  cbNoKeyerReset.Checked
-    and  (cmbIfaceType1.ItemIndex <> cmbIfaceType2.ItemIndex ) //both keyers are not same
-     or  (cmbIfaceType1.ItemIndex = 4)
-     or  (cmbIfaceType2.ItemIndex = 4) //type is HamLib
+    and (cmbIfaceType.ItemIndex = 4) //type is HamLib
+     then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
+  CWKeyerChanged := True
+end;
+
+procedure TfrmPreferences.cmbIfaceTypeCloseUp(Sender: TObject);
+begin
+  CWKeyerChanged := True;
+   if  cbNoKeyerReset.Checked
+    and  (cmbIfaceType.ItemIndex = 4) //type is HamLib
      then cbNoKeyerReset.Checked := false; //restart is always needed  when radio changes
 end;
 
-procedure TfrmPreferences.cmbModelRig1Change(Sender: TObject);
+procedure TfrmPreferences.cmbModelRigChange(Sender: TObject);
 begin
-   chkR1RunRigCtld.Enabled:=True;
+   chkRunRigCtld.Enabled:=True;
 
-  if cmbModelRig1.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
+  if cmbModelRig.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
     Begin
-     chkR1RunRigCtld.Checked:=True;
-     chkR1RunRigCtld.Enabled:=False;
-    end;
-  if cmbModelRig1.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
-    Begin
-     chkR1RunRigCtld.Checked:=False;
-     chkR1RunRigCtld.Enabled:=False;
-    end;
-   TRXParamsChange(nil);
-end;
-
-procedure TfrmPreferences.cmbModelRig2Change(Sender: TObject);
-begin
-    chkR2RunRigCtld.Enabled:=True;
-
-  if cmbModelRig2.ItemIndex=0 then  //With Hamlib Dummy force rigctld to start
-      Begin
-       chkR2RunRigCtld.Checked:=True;
-       chkR2RunRigCtld.Enabled:=False;
-      end;
-   if cmbModelRig2.ItemIndex=1 then  //With Hamlib Net rigctld do not start rigctld (no sense)
-    Begin
-     chkR2RunRigCtld.Checked:=False;
-     chkR2RunRigCtld.Enabled:=False;
+     chkRunRigCtld.Checked:=False;
+     chkRunRigCtld.Enabled:=False;
     end;
    TRXParamsChange(nil);
 end;
@@ -2590,10 +2486,72 @@ begin
       chkRot2RunRotCtld.Enabled:=True;
    RotorParamsChange(nil);
 end;
+
+procedure TfrmPreferences.cmbRadioModesChange(Sender: TObject);
+begin
+    if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
+end;
+
+procedure TfrmPreferences.cmbRadioModesCloseUp(Sender: TObject);
+
+begin
+  if  cmbRadioModes.ItemIndex<1 then  cmbRadioModes.ItemIndex:=1;
+  SaveBandW(BandWNrLoaded);
+  LoadBandW(cmbRadioModes.ItemIndex);
+end;
+
+procedure TfrmPreferences.cmbRadioNrChange(Sender: TObject);
+begin
+   if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
+end;
+
+procedure TfrmPreferences.cmbRadioNrCloseUp(Sender: TObject);
+begin
+  if cmbRadioNr.ItemIndex<1 then  cmbRadioNr.ItemIndex:=1;
+  SaveTRX(RadioNrLoaded);                                 //save edited rig
+  LoadTRX(cmbRadioNr.ItemIndex);                          //load selected rig
+  InitRigCmb;                                             //load names and set currently edited rig
+
+  cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;          //select rig in use
+  cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
+end;
+
 procedure TfrmPreferences.edtAlertCmdExit(Sender: TObject);
 begin
    edtAlertCmd.Text:=StringReplace(edtAlertCmd.Text,'~/',dmData.UsrHomeDir,[rfReplaceAll]);
    // ~ in command causes DXCluster spot flow stop (!?)
+end;
+
+procedure TfrmPreferences.edtDataCmdChange(Sender: TObject);
+begin
+  edtDataCmd.Text:=DataModeInput(edtDataCmd.Text);
+  edtDataCmd.SelStart:=length(edtDataCmd.Text);
+  edtDataCmd.SelLength:=0;
+end;
+
+procedure TfrmPreferences.edtDigiModesExit(Sender: TObject);
+var i :integer;
+begin
+  cqrini.WriteString('Modes', 'Digi', edtDigiModes.Text);
+  i:=cmbDataMode.ItemIndex;
+  dmUtils.InsertModes(cmbDataMode);
+  cmbDataMode.ItemIndex:=i;
+end;
+
+procedure TfrmPreferences.edtGCBeamWidthChange(Sender: TObject);
+begin
+
+end;
+
+function TfrmPreferences.DataModeInput(s:string):string;
+begin
+  s:=Upcase(s);
+  if (length(s)>0)
+    and
+       not ( (s[length(s)] in ['A'..'Z'])
+             or (s[length(s)] in ['0'..'9']) ) then
+                                       s:=copy(s,1,length(s)-1);
+  Result:=s;
 end;
 
 procedure TfrmPreferences.edtGCLineWidthExit(Sender: TObject);
@@ -2654,6 +2612,11 @@ begin
         edtImgFiles.Text:=SeekExecFile(edtImgFiles.Text,'Find image viewer');
 end;
 
+procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmPreferences.edtPdfFilesExit(Sender: TObject);
 begin
    if ExtractFilePath(edtPdfFiles.Text)='' then
@@ -2674,11 +2637,6 @@ Begin
      odFindBrowser.Title:=MyExeFor;
      if odFindBrowser.Execute then
         Result := odFindBrowser.Filename;
-end;
-
-procedure TfrmPreferences.edtK3NGSerSpeedChange(Sender: TObject);
-begin
-  WinKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtLocChange(Sender: TObject);
@@ -2703,10 +2661,21 @@ begin
    end;
 end;
 
+procedure TfrmPreferences.edtOperatorExit(Sender: TObject);
+begin
+  edtOperator.text:=Trim(Uppercase(edtOperator.text));
+end;
+
 procedure TfrmPreferences.edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
 begin
   if not (key in ['0'..'9']) then
     key := #0;
+end;
+
+procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
+begin
+  cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
+  InitRigCmb;                                             //load names and set currently edited rig
 end;
 
 procedure TfrmPreferences.TRXParamsChange(Sender: TObject);
@@ -2716,6 +2685,31 @@ end;
 procedure TfrmPreferences.RotorParamsChange(Sender: TObject);
 begin
   RotChanged := True;
+end;
+
+procedure TfrmPreferences.tabCWInterfaceContextPopup(Sender: TObject;
+  MousePos: TPoint; var Handled: Boolean);
+begin
+
+end;
+
+procedure TfrmPreferences.tabCWInterfaceExit(Sender: TObject);
+begin
+     SaveCWif(CWifLoaded);  //save currently open CW settings
+     cmbRadioNr.ItemIndex:=cmbCWRadio.ItemIndex;
+     cmbRadioModes.ItemIndex:= cmbRadioNr.ItemIndex;          //select rig in use
+end;
+
+procedure TfrmPreferences.tabModesExit(Sender: TObject);
+begin
+  SaveBandW(BandWNrLoaded); //save currently loaded modes
+  cmbRadioNr.ItemIndex:=cmbRadioModes.ItemIndex;          //select rig in use
+  cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
+end;
+
+procedure TfrmPreferences.tabTRXcontrolEnter(Sender: TObject);
+begin
+  LoadTRX(cmbRadioNr.ItemIndex);
 end;
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
@@ -2744,24 +2738,9 @@ begin
      end;
 end;
 
-procedure TfrmPreferences.edtWinMaxSpeedChange(Sender: TObject);
-begin
-  WinKeyerChanged := True
-end;
-
-procedure TfrmPreferences.edtWinMinSpeedChange(Sender: TObject);
-begin
-  WinKeyerChanged := True
-end;
-
-procedure TfrmPreferences.edtWinPort1Change(Sender: TObject);
-begin
-  WinKeyerChanged := True
-end;
-
 procedure TfrmPreferences.edtWinSpeedChange(Sender: TObject);
 begin
-  WinKeyerChanged := True
+  CWKeyerChanged := True
 end;
 
 procedure TfrmPreferences.edtXplanetLocChange(Sender: TObject);
@@ -2785,9 +2764,10 @@ begin
   dmUtils.InsertModes(cmbDefaultMode);
   dmUtils.InsertModes(cmbMode);
   dmUtils.InsertModes(cmbWsjtDefaultMode);
+  dmUtils.InsertModes(cmbDataMode);
   cmbDefaultMode.Style := csDropDownList;
   cmbWsjtDefaultMode.Style := csDropDownList;
-
+  cmbDataMode.Style:=csDropDownList;
   LoadMebershipCombo;
 
   dmUtils.ReadZipList(cmbFirstZip);
@@ -2817,6 +2797,7 @@ begin
   cmbMode.Text := cqrini.ReadString('NewQSO', 'Mode', 'CW');
   cmbQSL_S.Text := cqrini.ReadString('NewQSO', 'QSL_S', '');
   edtComments.Text := cqrini.ReadString('NewQSO', 'RemQSO', '');
+  edtOperator.Text := cqrini.ReadString('NewQSO', 'Op', '');
   edtUsrBtn.Text := cqrini.ReadString('NewQSO', 'UsrBtn', 'https://www.qrzcq.com/call/$CALL');
   chkUseSpaceBar.Checked := cqrini.ReadBool('NewQSO', 'UseSpaceBar', False);
   chkRefreshAfterSave.Checked := cqrini.ReadBool('NewQSO', 'RefreshAfterSave', True);
@@ -2849,8 +2830,11 @@ begin
   edtGCStep.Caption :=  CurrToStr(cqrini.ReadFloat('Program', 'GraylineGCstep',0.1));
   edtGCPolarDivisor.Caption := IntToStr(cqrini.ReadInteger('Program', 'GraylineGCPolarDivisor',10));
   edtGCLineWidth.Caption :=  IntToStr(cqrini.ReadInteger('Program', 'GraylineGCLineWidth',2));
-  btnSPColor.Color := StringToColor(cqrini.ReadString('Program', 'GraylineGCLineSPColor', 'clYellow' ));
-  btnLPColor.Color := StringToColor(cqrini.ReadString('Program', 'GraylineGCLineLPColor', 'clFuchsia' ));
+  btnSPColor.ButtonColor := StringToColor(cqrini.ReadString('Program', 'GraylineGCLineSPColor','clYellow' ));
+  btnLPColor.ButtonColor := StringToColor(cqrini.ReadString('Program', 'GraylineGCLineLPColor','clFuchsia' ));
+  btnBPColor.ButtonColor:= StringToColor(cqrini.ReadString('Program', 'GraylineGCLineBEColor','clRed'));
+  edtGCBeamWidth.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineWidth',2));
+  edtGCBeamLength.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500));
 
 
   edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
@@ -2863,7 +2847,7 @@ begin
   chkSysUTC.Checked := cqrini.ReadBool('Program', 'SysUTC', True);
   chkShowMiles.Checked := cqrini.ReadBool('Program','ShowMiles',False);
   chkQSOColor.Checked := cqrini.ReadBool('Program', 'QSODiffColor', False);
-  btnSelectQSOColor.Color := cqrini.ReadInteger('Program', 'QSOColor', clPurple);
+  btnSelectQSOColor.ButtonColor := cqrini.ReadInteger('Program', 'QSOColor', clPurple);
   edtQSOColorDate.Text := cqrini.ReadString('Program', 'QSOColorDate', '');
 
   if cqrini.ReadBool('Program', 'BandStatMHz', True) then
@@ -2932,11 +2916,12 @@ begin
   cb15m.Checked := cqrini.ReadBool('Bands', '15m', True);
   cb12m.Checked := cqrini.ReadBool('Bands', '12m', True);
   cb10m.Checked := cqrini.ReadBool('Bands', '10m', True);
-
-  cb4m.Checked := cqrini.ReadBool('Bands', '4m', False);
+  cb8m.Checked := cqrini.ReadBool('Bands', '8m', True);
   cb6m.Checked := cqrini.ReadBool('Bands', '6m', True);
-  cb125m.Checked := cqrini.ReadBool('Bands', '1.25m', False);
+  cb5m.Checked := cqrini.ReadBool('Bands', '5m', True);
+  cb4m.Checked := cqrini.ReadBool('Bands', '4m', False);
   cb2m.Checked := cqrini.ReadBool('Bands', '2m', True);
+  cb125m.Checked := cqrini.ReadBool('Bands', '1.25m', False);
   cb70cm.Checked := cqrini.ReadBool('Bands', '70cm', True);
   cb30cm.Checked := cqrini.ReadBool('Bands', '33cm', False);
   cb23cm.Checked := cqrini.ReadBool('Bands', '23cm', False);
@@ -2954,74 +2939,23 @@ begin
   edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
   chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
   chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
+  edtRigCount.Value:=cqrini.ReadInteger('TRX', 'RigCount', 2);
+  InitRigCmb(true); //define used rig=true
+  LoadTRX(cmbRadioNr.ItemIndex);
+  LoadBandW(cmbRadioNr.ItemIndex);
+  LoadCWif(cmbRadioNr.ItemIndex);
 
   edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
-
-  if (FileExistsUTF8(edtRigCtldPath.Text)) then
-  begin
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX1', 'model', ''),edtRigCtldPath.Text,cmbModelRig1);
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX2', 'model', ''),edtRigCtldPath.Text,cmbModelRig2)
-  end
-  else begin
-    Application.MessageBox('rigctld binary not fount, cannot load list of supported rigs!'+LineEnding+LineEnding+
-                           'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
-  end;
-
   if (FileExistsUTF8(edtRotCtldPath.Text)) then
   begin
     dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT1', 'model', ''),edtRotCtldPath.Text,cmbModelRot1);
     dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT2', 'model', ''),edtRotCtldPath.Text,cmbModelRot2)
   end
   else begin
-    Application.MessageBox('rotctld binary not fount, cannot load list of supported rotators!'+LineEnding+LineEnding+
+    Application.MessageBox('rotctld binary not found, unable to load list of supported rotators!'+LineEnding+LineEnding+
                            'Fix path to rotctld in ROT control tab.', 'Error', mb_OK+ mb_IconError)
   end;
 
-  edtR1Device.Text := cqrini.ReadString('TRX1', 'device', '');
-  edtPoll1.Text := cqrini.ReadString('TRX1', 'poll', '500');
-  edtRadio1Name.Text := cqrini.ReadString('TRX1', 'Desc', 'Radio 1');
-  chkR1SendCWR.Checked := cqrini.ReadBool('TRX1', 'CWR', False);
-  chkR1Vfo.Checked:=   cqrini.ReadBool('TRX1', 'ChkVfo', True);
-  edtR1RigCtldPort.Text := cqrini.ReadString('TRX1', 'RigCtldPort', '4532');
-  edtR1RigCtldArgs.Text := cqrini.ReadString('TRX1', 'ExtraRigCtldArgs', '');
-  chkR1RunRigCtld.Checked := cqrini.ReadBool('TRX1', 'RunRigCtld', False);
-  edtR1Host.Text := cqrini.ReadString('TRX1', 'host', 'localhost');
-  cmbSpeedR1.ItemIndex := cqrini.ReadInteger('TRX1', 'SerialSpeed', 0);
-  cmbDataBitsR1.ItemIndex := cqrini.ReadInteger('TRX1', 'DataBits', 0);
-  cmbStopBitsR1.ItemIndex := cqrini.ReadInteger('TRX1', 'StopBits', 0);
-  cmbParityR1.ItemIndex := cqrini.ReadInteger('TRX1', 'Parity', 0);
-  cmbHanshakeR1.ItemIndex := cqrini.ReadInteger('TRX1', 'HandShake', 0);
-  cmbDTRR1.ItemIndex := cqrini.ReadInteger('TRX1', 'DTR', 0);
-  cmbRTSR1.ItemIndex := cqrini.ReadInteger('TRX1', 'RTS', 0);
-  edtUsr1R1name.Text:=cqrini.ReadString('TRX1', 'usr1name', 'Usr1');
-  edtUsr2R1name.Text:=cqrini.ReadString('TRX1', 'usr2name', 'Usr2');
-  edtUsr3R1name.Text:=cqrini.ReadString('TRX1', 'usr3name', 'Usr3');
-  edtUsr1R1.Text:=cqrini.ReadString('TRX1', 'usr1', '');
-  edtUsr2R1.Text:=cqrini.ReadString('TRX1', 'usr2', '');
-  edtUsr3R1.Text:=cqrini.ReadString('TRX1', 'usr3', '');
-
-  edtR2Device.Text := cqrini.ReadString('TRX2', 'device', '');
-  edtPoll2.Text := cqrini.ReadString('TRX2', 'poll', '500');
-  edtRadio2Name.Text := cqrini.ReadString('TRX2', 'Desc', 'Radio 2');
-  chkR2SendCWR.Checked := cqrini.ReadBool('TRX2', 'CWR', False);
-  chkR2Vfo.Checked:=   cqrini.ReadBool('TRX2', 'ChkVfo', True);
-  edtR2RigCtldPort.Text := cqrini.ReadString('TRX2', 'RigCtldPort', '4532');
-  edtR2RigCtldArgs.Text := cqrini.ReadString('TRX2', 'ExtraRigCtldArgs', '');
-  chkR2RunRigCtld.Checked := cqrini.ReadBool('TRX2', 'RunRigCtld', False);
-  edtR2Host.Text := cqrini.ReadString('TRX2', 'host', 'localhost');
-  cmbSpeedR2.ItemIndex := cqrini.ReadInteger('TRX2', 'SerialSpeed', 0);
-  cmbDataBitsR2.ItemIndex := cqrini.ReadInteger('TRX2', 'DataBits', 0);
-  cmbStopBitsR2.ItemIndex := cqrini.ReadInteger('TRX2', 'StopBits', 0);
-  cmbParityR2.ItemIndex := cqrini.ReadInteger('TRX2', 'Parity', 0);
-  cmbHanshakeR2.ItemIndex := cqrini.ReadInteger('TRX2', 'HandShake', 0);
-  cmbDTRR2.ItemIndex := cqrini.ReadInteger('TRX2', 'DTR', 0);
-  cmbRTSR2.ItemIndex := cqrini.ReadInteger('TRX2', 'RTS', 0);
-  edtUsr1R2name.Text:=cqrini.ReadString('TRX2', 'usr1name', 'Usr1');
-  edtUsr2R2name.Text:=cqrini.ReadString('TRX2', 'usr2name', 'Usr2');
-  edtUsr3R2name.Text:=cqrini.ReadString('TRX2', 'usr3name', 'Usr3');
-  edtUsr1R2.Text:=cqrini.ReadString('TRX2', 'usr1', '');
-  edtUsr2R2.Text:=cqrini.ReadString('TRX2', 'usr2', '');
-  edtUsr3R2.Text:=cqrini.ReadString('TRX2', 'usr3', '');
 
   edtRot1Device.Text := cqrini.ReadString('ROT1', 'device', '');
   edtRot1Poll.Text := cqrini.ReadString('ROT1', 'poll', '500');
@@ -3055,20 +2989,8 @@ begin
   cmbDTRRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'DTR', 0);
   cmbRTSRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'RTS', 0);
 
-  edtCW1.Value := cqrini.ReadInteger('Band1', 'CW', 500);
-  edtSSB1.Value := cqrini.ReadInteger('Band1', 'SSB', 1800);
-  edtRTTY1.Value := cqrini.ReadInteger('Band1', 'RTTY', 500);
-  edtAM1.Value := cqrini.ReadInteger('Band1', 'AM', 3000);
-  edtFM1.Value := cqrini.ReadInteger('Band1', 'FM', 2500);
+  cmbModelRigChange(nil);
 
-  edtCW2.Value := cqrini.ReadInteger('Band2', 'CW', 500);
-  edtSSB2.Value := cqrini.ReadInteger('Band2', 'SSB', 1800);
-  edtRTTY2.Value := cqrini.ReadInteger('Band2', 'RTTY', 500);
-  edtAM2.Value := cqrini.ReadInteger('Band2', 'AM', 3000);
-  edtFM2.Value := cqrini.ReadInteger('Band2', 'FM', 2500);
-
-  cmbModelRig1Change(nil);
-  cmbModelRig2Change(nil);
   cmbModelRot1Change(nil);
   cmbModelRot2Change(nil);
 
@@ -3096,7 +3018,9 @@ begin
   chkShow15M.Checked := cqrini.ReadBool('DXCluster', 'Show15M', True);
   chkShow12M.Checked := cqrini.ReadBool('DXCluster', 'Show12M', True);
   chkShow10M.Checked := cqrini.ReadBool('DXCluster', 'Show10M', True);
+  chkShow8M.Checked := cqrini.ReadBool('DXCluster', 'Show8M', True);
   chkShow6M.Checked := cqrini.ReadBool('DXCluster', 'Show6M', True);
+  chkShow5M.Checked := cqrini.ReadBool('DXCluster', 'Show5M', True);
   chkShow4M.Checked := cqrini.ReadBool('DXCluster', 'Show4M', True);
   chkShow2M.Checked := cqrini.ReadBool('DXCluster', 'Show2M', True);
   chkShow125M.Checked := cqrini.ReadBool('DXCluster', 'Show125M', True);
@@ -3115,6 +3039,7 @@ begin
   chkShow1MM.Checked := cqrini.ReadBool('DXCluster', 'Show1MM', True);
   chkCW.Checked := cqrini.ReadBool('DXCluster', 'CW', True);
   chkSSB.Checked := cqrini.ReadBool('DXCluster', 'SSB', True);
+  chkDATA.Checked := cqrini.ReadBool('DXCluster', 'DATA', True);
   edtDoNotShow.Text := cqrini.ReadString('DXCluster', 'NotShow', '');
   cmbNewCountry.Selected := cqrini.ReadInteger('DXCluster', 'NewCountry', 0);
   cmbNewBand.Selected := cqrini.ReadInteger('DXCluster', 'NewBand', 0);
@@ -3226,25 +3151,6 @@ begin
   cmbeQSLBckColor.Selected := cqrini.ReadInteger('LoTW', 'eBckColor', clSkyBlue);
   chkExpCommet.Checked := cqrini.ReadBool('LoTW', 'ExpComment', True);
 
-  cmbIfaceType1.ItemIndex := cqrini.ReadInteger('CW', 'Type1', 0);
-  cmbIfaceType2.ItemIndex := cqrini.ReadInteger('CW', 'Type2', 0);
-  cbNoKeyerReset.Checked := cqrini.ReadBool('CW', 'NoReset', false);
-  edtWinPort1.Text := cqrini.ReadString('CW', 'wk_port1', '');
-  edtWinPort2.Text := cqrini.ReadString('CW', 'wk_port2', '');
-  chkPotSpeed.Checked := cqrini.ReadBool('CW', 'PotSpeed', False);
-  edtWinSpeed.Value := cqrini.ReadInteger('CW', 'wk_speed', 30);
-  edtCWAddress.Text := cqrini.ReadString('CW', 'cw_address', 'localhost');
-  edtCWPort1.Text := cqrini.ReadString('CW', 'cw_port1', '6789');
-  edtCWPort2.Text := cqrini.ReadString('CW', 'cw_port2', '6789');
-  edtCWSpeed.Value := cqrini.ReadInteger('CW', 'cw_speed', 30);
-  edtWinMinSpeed.Value := cqrini.ReadInteger('CW', 'wk_min', 5);
-  edtWinMaxSpeed.Value := cqrini.ReadInteger('CW', 'wk_max', 60);
-  edtK3NGPort1.Text := cqrini.ReadString('CW','K3NGPort1','');
-  edtK3NGPort2.Text := cqrini.ReadString('CW','K3NGPort2','');
-  edtK3NGSerSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSerSpeed',115200));
-  edtK3NGSpeed.Text := IntToStr(cqrini.ReadInteger('CW','K3NGSpeed',30));
-  edtHamLibSpeed.Text := IntToStr(cqrini.ReadInteger('CW','HamLibSpeed',30));
-
   rgFreqFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'freq', 1);       //
   edtDefaultFreq.Text := cqrini.ReadString('fldigi', 'deffreq', '3.600');//
   rgModeFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'mode', 1);       //
@@ -3267,7 +3173,8 @@ begin
   rgWsjtFreqFrom.ItemIndex := cqrini.ReadInteger('wsjt', 'freq', 1);
   edtWsjtDefaultFreq.Text  := cqrini.ReadString('wsjt', 'deffreq', '3.600');
   rgWsjtModeFrom.ItemIndex := cqrini.ReadInteger('wsjt', 'mode', 1);
-  cmbWsjtDefaultMode.Text  := cqrini.ReadString('wsjt', 'defmode', 'JT65');
+  cmbWsjtDefaultMode.Text  := cqrini.ReadString('wsjt', 'defmode', 'FT8');
+  chkwsjtLoeQ.Checked      := cqrini.ReadBool('wsjt', 'chkLoTWeQSL', False);
   DateEditCall.Text := cqrini.ReadString('wsjt', 'wb4calldate', '1900-01-01'); //sure all qsos by default :-)
   DateEditLoc.Text := cqrini.ReadString('wsjt', 'wb4locdate','1900-01-01');
   cgLimit.Checked[0] := cqrini.ReadBool('wsjt','wb4CCall', False);
@@ -3296,10 +3203,15 @@ begin
   edtClub4Date.Text := cqrini.ReadString('FourthClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
   edtClub5Date.Text := cqrini.ReadString('FifthClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
 
-  edtCbUser.Text := cqrini.ReadString('CallBook', 'CBUser', '');
-  edtCbPass.Text := cqrini.ReadString('CallBook', 'CBPass', '');
+  edtCbHamQTHUser.Text := cqrini.ReadString('CallBook', 'CbHamQTHUser', '');
+  edtCbHamQTHPass.Text := cqrini.ReadString('CallBook', 'CbHamQTHPass', '');
+  edtCbQRZUser.Text := cqrini.ReadString('CallBook', 'CbQRZUser', '');
+  edtCbQRZPass.Text := cqrini.ReadString('CallBook', 'CbQRZPass', '');
+  edtCbQRZCQUser.Text := cqrini.ReadString('CallBook', 'CbQRZCQUser', '');
+  edtCbQRZCQPass.Text := cqrini.ReadString('CallBook', 'CbQRZCQPass', '');
   rbHamQTH.Checked := cqrini.ReadBool('Callbook', 'HamQTH', True);
   rbQRZ.Checked := cqrini.ReadBool('Callbook', 'QRZ', False);
+  rbQRZCQ.Checked := cqrini.ReadBool('Callbook', 'QRZCQ', False);
 
   cmbCl10db.Selected        := cqrini.ReadInteger('RBN','10db',clWhite);
   cmbCl20db.Selected        := cqrini.ReadInteger('RBN','20db',clPurple);
@@ -3318,6 +3230,7 @@ begin
   edtHaUserName.Text     := cqrini.ReadString('OnlineLog','HaUserName','');
   edtHaPasswd.Text       := cqrini.ReadString('OnlineLog','HaPasswd','');
   cmbHaColor.Selected    := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
+  edtHamQTHurl.Text      := cqrini.ReadString('OnlineLog','HaUrl','http://www.hamqth.com/qso_realtime.php');
   chkHaUpEnabledChange(nil);
 
   chkClUpEnabled.Checked := cqrini.ReadBool('OnlineLog','ClUP',False);
@@ -3326,6 +3239,8 @@ begin
   edtClPasswd.Text       := cqrini.ReadString('OnlineLog','ClPasswd','');
   edtClEmail.Text        := cqrini.ReadString('OnlineLog','ClEmail','');
   cmbClColor.Selected    := cqrini.ReadInteger('OnlineLog','ClColor',clRed);
+  edtClubLogUrl.Text     := cqrini.ReadString('OnlineLog','ClUrl','https://clublog.org/realtime.php');
+  edtClubLogUrlDel.Text  := cqrini.ReadString('OnlineLog','ClUrlDel','https://clublog.org/delete.php');
   chkClUpEnabledChange(nil);
 
   chkHrUpEnabled.Checked := cqrini.ReadBool('OnlineLog','HrUP',False);
@@ -3333,51 +3248,51 @@ begin
   edtHrUserName.Text     := cqrini.ReadString('OnlineLog','HrUserName','');
   edtHrCode.Text         := cqrini.ReadString('OnlineLog','HrCode','');
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
-  chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
-  chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
+  edtHrdUrl.Text         := cqrini.ReadString('OnlineLog','HrUrl','http://robot.hrdlog.net/NewEntry.aspx');
   chkHrUpEnabledChange(nil);
 
+  chkUdUpEnabled.Checked := cqrini.ReadBool('OnlineLog','UdUP',False);
+  chkUdUpOnline.Checked  := cqrini.ReadBool('OnlineLog','UdUpOnline',False);
+  edtUdAddress.Text      := cqrini.ReadString('OnlineLog','UdAddress','');
+  chkUdIncExch.Checked   := cqrini.ReadBool('OnlineLog','UdIncExch',True);
+  cmbUdColor.Selected    := cqrini.ReadInteger('OnlineLog','UdColor',clGreen);
+  chkUdUpEnabledChange(nil);
+
+  chkCloseAfterUpload.Checked := cqrini.ReadBool('OnlineLog','CloseAfterUpload',False);
+  chkIgnoreLoTW.Checked  := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False);
+  chkIgnoreQSL.Checked   := cqrini.ReadBool('OnlineLog','IgnoreQSL',False);
+  chkIgnoreEdit.Checked  := cqrini.ReadBool('OnlineLog','IgnoreEdit',False);
+
   edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');
+  edtCondxTextUrl.Text       := cqrini.ReadString('prop','UrlTxt','https://www.hamqsl.com/solarxml.php' );
   rbCondxAsImage.Checked     := cqrini.ReadBool('prop','AsImage',True);
   rbCondxAsText.Checked      := cqrini.ReadBool('prop','AsText',False);
   chkShowCondxValues.Checked := cqrini.ReadBool('prop','Values',True);
   chkCondxCalcHF.Checked     := cqrini.ReadBool('prop','CalcHF',True);
   chkCondxCalcVHF.Checked    := cqrini.ReadBool('prop','CalcVHF',True);
 
-  wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked;
+  wasOnlineLogSupportEnabled := chkHaUpEnabled.Checked or chkClUpEnabled.Checked or chkHrUpEnabled.Checked or chkUdUpEnabled.Checked;
 
   fraExportPref1.LoadExportPref;
 
   lbPreferences.Selected[pgPreferences.ActivePageIndex] := True;
-  edtCW1.Width := 60;
-  edtSSB1.Width := 60;
-  edtRTTY1.Width := 60;
-  edtAM1.Width := 60;
-  edtFM1.Width := 60;
+
 
   chkSysUTCClick(nil);
   TRXChanged      := False;
   RotChanged      := False;
-  WinKeyerChanged := False;
+  CWKeyerChanged := False;
 
   pgPreferences.ActivePageIndex := ActPageIdx;    //set wanted tab for showing when open. ActTab is public variable.
   lbPreferences.ItemIndex := ActPageIdx;
 end;
 
-procedure TfrmPreferences.edtPoll2Exit(Sender: TObject);
+procedure TfrmPreferences.edtPollExit(Sender: TObject);
 var
   tmp: integer = 0;
 begin
-  if not TryStrToInt(edtPoll1.Text, tmp) then
-    edtPoll2.Text := '500';
-end;
-
-procedure TfrmPreferences.edtPoll1Exit(Sender: TObject);
-var
-  tmp: integer = 0;
-begin
-  if not TryStrToInt(edtPoll1.Text, tmp) then
-    edtPoll1.Text := '500';
+  if not TryStrToInt(edtPoll.Text, tmp) then
+    edtPoll.Text := '500';
 end;
 
 procedure TfrmPreferences.pgPreferencesChange(Sender: TObject);
@@ -3455,6 +3370,263 @@ begin
 
   LoadMebershipCombo
 end;
+Procedure TfrmPreferences.LoadTRX(RigNr:integer);
+var
+   nr,
+   rp  :string;
+Begin
+  nr:=IntToStr(RigNr);
+  rp:= cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
+  if FileExistsUTF8(rp) then
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX'+nr, 'model', ''),rp,cmbModelRig)
+  else begin
+    Application.MessageBox('rigctld binary not found, unable to load list of supported rigs!'+LineEnding+LineEnding+
+                           'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
+  end;
+  edtRDevice.Text := cqrini.ReadString('TRX'+nr, 'device', '');
+  edtPoll.Text := cqrini.ReadString('TRX'+nr, 'poll', '500');
+  edtRadioName.Text := cqrini.ReadString('TRX'+nr, 'Desc', '');
+  chkRSendCWR.Checked := cqrini.ReadBool('TRX'+nr, 'CWR', False);
+  chkRVfo.Checked:=   cqrini.ReadBool('TRX'+nr, 'ChkVfo', True);
+  edtRRigCtldPort.Text := cqrini.ReadString('TRX'+nr, 'RigCtldPort', '4532');
+  edtRRigCtldArgs.Text := cqrini.ReadString('TRX'+nr, 'ExtraRigCtldArgs', '');
+  chkRunRigCtld.Checked := cqrini.ReadBool('TRX'+nr, 'RunRigCtld', False);
+  chkRPwrON.Checked := cqrini.ReadBool('TRX'+nr, 'RigPwrON', True);
+  chkUTC2R.Checked := cqrini.ReadBool('TRX'+nr, 'UTC2Rig', False);
+  chkCPollR.Checked:= cqrini.ReadBool('TRX'+nr, 'CPollR', True);
+  chkVoiceR.Checked:= cqrini.ReadBool('TRX'+nr, 'RigVoice', True);
+  edtRHost.Text := cqrini.ReadString('TRX'+nr, 'host', 'localhost');
+  cmbSpeedR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'SerialSpeed', 0);
+  cmbDataBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DataBits', 0);
+  cmbStopBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'StopBits', 0);
+  cmbParityR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'Parity', 0);
+  cmbHanshakeR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'HandShake', 0);
+  cmbDTRR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DTR', 0);
+  cmbRTSR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'RTS', 0);
+  edtUsr1RName.Text:=cqrini.ReadString('TRX'+nr, 'usr1name', 'Usr1');
+  edtUsr2RName.Text:=cqrini.ReadString('TRX'+nr, 'usr2name', 'Usr2');
+  edtUsr3RName.Text:=cqrini.ReadString('TRX'+nr, 'usr3name', 'Usr3');
+  edtUsr1R.Text:=cqrini.ReadString('TRX'+nr, 'usr1', '');
+  edtUsr2R.Text:=cqrini.ReadString('TRX'+nr, 'usr2', '');
+  edtUsr3R.Text:=cqrini.ReadString('TRX'+nr, 'usr3', '');
+  RadioNrLoaded:= RigNr;
+end;
+Procedure TfrmPreferences.SaveTRX(RigNr:integer);
+var
+   nr :string;
+Begin
+
+  nr:=IntToStr(RigNr);
+  if cmbModelRig.Text='' then //empty model will erase whole TRX and corresponding bandwidth section
+     Begin
+      cqrini.SectionErase('TRX'+nr);
+      cqrini.SectionErase('Band'+nr);
+      cqrini.SectionErase('CW'+nr);
+      exit;
+     end;
+
+  cqrini.WriteString('TRX'+nr, 'device', edtRDevice.Text);
+  cqrini.WriteString('TRX'+nr, 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));
+  cqrini.WriteString('TRX'+nr, 'poll', edtPoll.Text);
+  cqrini.WriteString('TRX'+nr, 'Desc', edtRadioName.Text);
+  cqrini.WriteBool('TRX'+nr, 'CWR', chkRSendCWR.Checked);
+  cqrini.WriteBool('TRX'+nr, 'ChkVfo',chkRVfo.Checked);
+  cqrini.WriteString('TRX'+nr, 'RigCtldPort', edtRRigCtldPort.Text);
+  cqrini.WriteString('TRX'+nr, 'ExtraRigCtldArgs', edtRRigCtldArgs.Text);
+  cqrini.WriteBool('TRX'+nr, 'RunRigCtld', chkRunRigCtld.Checked);
+  cqrini.WriteBool('TRX'+nr, 'RigPwrON', chkRPwrON.Checked);
+  cqrini.WriteBool('TRX'+nr, 'UTC2Rig', chkUTC2R.Checked);
+  cqrini.WriteBool('TRX'+nr, 'CPollR',chkCPollR.Checked);
+  cqrini.WriteBool('TRX'+nr, 'RigVoice', chkVoiceR.Checked);
+  cqrini.WriteString('TRX'+nr, 'host', edtRHost.Text);
+  cqrini.WriteInteger('TRX'+nr, 'SerialSpeed', cmbSpeedR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'DataBits', cmbDataBitsR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'StopBits', cmbStopBitsR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'Parity', cmbParityR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'HandShake', cmbHanshakeR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'DTR', cmbDTRR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, 'RTS', cmbRTSR.ItemIndex);
+  cqrini.WriteString('TRX'+nr, 'usr1name', edtUsr1RName.Text);
+  cqrini.WriteString('TRX'+nr, 'usr2name', edtUsr2RName.Text);
+  cqrini.WriteString('TRX'+nr, 'usr3name', edtUsr3RName.Text);
+  cqrini.WriteString('TRX'+nr, 'usr1', edtUsr1R.Text);
+  cqrini.WriteString('TRX'+nr, 'usr2', edtUsr2R.Text);
+  cqrini.WriteString('TRX'+nr, 'usr3', edtUsr3R.Text);
+end;
+procedure TfrmPreferences.LoadBandW(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  edtCW.Value := cqrini.ReadInteger('Band'+nr, 'CW', 500);
+  edtSSB.Value := cqrini.ReadInteger('Band'+nr, 'SSB', 1800);
+  edtData.Value := cqrini.ReadInteger('Band'+nr, 'RTTY', 500);  //note: Data is called rtty for backward compatibility
+  edtAM.Value := cqrini.ReadInteger('Band'+nr, 'AM', 3000);
+  edtFM.Value := cqrini.ReadInteger('Band'+nr, 'FM', 2500);
+  cmbDataMode.ItemIndex := cmbDataMode.Items.IndexOf(cqrini.ReadString('Band'+nr, 'Datamode', 'RTTY'));
+  edtDataCmd.Text:=cqrini.ReadString('Band'+nr, 'Datacmd', 'RTTY');
+  chkModeReverse.Checked :=cqrini.ReadBool('Band'+nr, 'UseReverse', False);
+  BandWNrLoaded := RigNr;
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
+    lblNoRigForMode.Visible:=True
+   else
+    lblNoRigForMode.Visible:=False;
+end;
+procedure TfrmPreferences.SaveBandW(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
+  cqrini.WriteInteger('Band'+nr, 'CW', edtCW.Value);
+  cqrini.WriteInteger('Band'+nr, 'SSB', edtSSB.Value);
+  cqrini.WriteInteger('Band'+nr, 'RTTY', edtData.Value);  //note: Data is called rtty for backward compatibility
+  cqrini.WriteInteger('Band'+nr, 'AM', edtAM.Value);
+  cqrini.WriteInteger('Band'+nr, 'FM', edtFM.Value);
+  cqrini.WriteString('Band'+nr, 'Datamode', cmbDataMode.Text);
+  cqrini.WriteString('Band'+nr, 'Datacmd', edtDatacmd.Text);
+  cqrini.WriteBool('Band'+nr, 'UseReverse', chkModeReverse.Checked);
+end;
+procedure TfrmPreferences.LoadCWif(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, 'Type', 0);
+  cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, 'NoReset', false);
+  edtWinPort.Text        := cqrini.ReadString('CW'+nr, 'wk_port', '');
+  chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, 'PotSpeed', False);
+  edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
+  edtCWAddress.Text      := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
+  edtCWPort.Text         := cqrini.ReadString('CW'+nr, 'cw_port', '6789');
+  edtCWSpeed.Value       := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
+  edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
+  edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
+  edtK3NGPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
+  edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
+  edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
+  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
+  chkUseHLBuffer.checked := cqrini.ReadBool('CW'+nr, 'UseHamlibBuffer', False);
+  CWifLoaded := RigNr;
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
+    lblNoRigForCW.Visible:=True
+   else
+    lblNoRigForCW.Visible:=False;
+end;
+procedure TfrmPreferences.SaveCWif(RigNr:integer);
+var
+   nr :string;
+Begin
+  nr:=IntToStr(RigNr);
+  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
+  cqrini.WriteInteger('CW'+nr, 'Type', cmbIfaceType.ItemIndex);
+  cqrini.WriteBool('CW'+nr, 'NoReset', cbNoKeyerReset.Checked);
+  cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort.Text);
+  cqrini.WriteBool('CW'+nr, 'PotSpeed', chkPotSpeed.Checked);
+  cqrini.WriteInteger('CW'+nr, 'wk_speed', edtWinSpeed.Value);
+  cqrini.WriteString('CW'+nr, 'cw_address', edtCWAddress.Text);
+  cqrini.WriteString('CW'+nr, 'cw_port', edtCWPort.Text);
+  cqrini.WriteInteger('CW'+nr, 'cw_speed', edtCWSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'wk_min', edtWinMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, 'wk_max', edtWinMaxSpeed.Value);
+  cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NGPort.Text);
+  cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
+  cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
+  cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
+  cqrini.WriteBool('CW'+nr, 'UseHamlibBuffer', chkUseHLBuffer.checked);
+end;
+
+procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes
+var                                      //set itemindexes to used rig
+   f,i : integer;
+   s,d : string;
+Begin
+   i:=cmbRadioNr.ItemIndex;
+   cmbRadioNr.Items.Clear;
+   cmbRadioNr.Items.Add('');
+   cmbRadioModes.Items.Clear;               //zero position is empty
+   cmbRadioModes.Items.Add('');
+   cmbCWRadio.Items.Clear;
+   cmbCWRadio.Items.Add('');
+   for f:=1 to edtRigCount.Value do
+     Begin
+      s:=IntToStr(f);
+      if (cqrini.ReadString('TRX'+s, 'model', '')='') then
+            cmbRadioNr.Items.Add(s+' None')
+           else
+            cmbRadioNr.Items.Add(s+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+     end;
+   for f:=1 to  cqrini.ReadInteger('TRX', 'RigCount', 2) do   //others just defined rigs
+    Begin
+      s:=IntToStr(f);
+      d:= cqrini.ReadString('TRX'+s, 'Desc', '');
+      if (cqrini.ReadString('TRX'+s, 'model', '')='') then
+        Begin
+             cmbRadioModes.Items.Add(s+' None');
+             cmbCWRadio.Items.Add(s+' None');
+        end
+       else
+        begin
+             cmbRadioModes.Items.Add(s+' '+d);
+             cmbCWRadio.Items.Add(s+' '+d);
+        end;
+    end;
+
+  cmbRadioNr.ItemIndex:=i;
+
+  if not (cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
+         begin
+          cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted  (rig count changed)
+          SetUsedRig:=true;
+         end;
+
+  if SetUsedRig then
+    begin
+     cmbRadioNr.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+     cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
+     cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
+    end;
+
+  LoadBandW(cmbRadioNr.ItemIndex);
+  LoadCWif(cmbRadioNr.ItemIndex);
+
+end;
+procedure TfrmPreferences.ClearUnUsedRigs;
+var
+   f:integer;
+Begin
+    //remove these just in case (they should not exist)
+    for f:=-1 to  0 do
+     begin
+      cqrini.SectionErase('TRX'+IntToStr(f));
+      cqrini.SectionErase('Band'+IntToStr(f));
+      cqrini.SectionErase('CW'+IntToStr(f));
+     end;
+     //remove unused rigs and modes from configuration
+    if  edtRigCount.Value< edtRigCount.MaxValue then
+      begin
+       f:= edtRigCount.MaxValue;
+       repeat
+         Begin
+           cqrini.SectionErase('TRX'+IntToStr(f));
+           cqrini.SectionErase('Band'+IntToStr(f));
+           cqrini.SectionErase('CW'+IntToStr(f));
+           dec(f);
+         end;
+       until (f=edtRigCount.Value);
+      end;
+
+    if not ( cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
+         cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted
+
+    frmTRXControl.cmbRigGetItems(nil); //update TRXControl rig names before returning
+
+      //6 is max rig count set by edtRigCount:Tspinedit
+      //if you change it you must change also fConfigStorage.pas
+      //TRX, CW and Band lists
+
+end;
+
 
 end.
 

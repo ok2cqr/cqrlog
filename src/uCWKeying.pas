@@ -5,7 +5,7 @@ unit uCWKeying;
 interface
 
 uses
-  Classes, SysUtils, synaser, synautil, lNet, lNetComponents, Forms;
+  Classes, SysUtils, synaser, synautil, lNet, lNetComponents, Forms, Dialogs, StrUtils;
 
 type TKeyType   = (ktCWdaemon, ktWinKeyer);
 type TKeyStatus = (ksReady, ksBusy);
@@ -18,6 +18,8 @@ type
       fLastErrSt : String;
       fDevice    : String;
       fDebugMode : Boolean;
+      fHamlibBuffer : Boolean;
+      fIsNewHamlib  : Boolean; //Hamlib version date higer than 2023-06-01
       fMinSpeed  : Word;
       fMaxSpeed  : Word;
       fPortSpeed : dWord;
@@ -30,6 +32,8 @@ type
       property MinSpeed  : Word read fMinSpeed;
       property MaxSpeed  : Word read fMaxSpeed;
       property PortSpeed : dWord read fPortSpeed write fPortSpeed;
+      property HamlibBuffer : Boolean read  fHamlibBuffer write fHamlibBuffer;
+      property IsNewHamlib : Boolean read  fIsNewHamlib; //used internally, but can give info out
 
       constructor Create; virtual; abstract;
 
@@ -40,6 +44,7 @@ type
       procedure Close; virtual; abstract;
       procedure SetSpeed(speed : Word); virtual; abstract;
       procedure SendText(text : String); virtual; abstract;
+      procedure SendHex(text:String);  virtual; abstract;
       procedure StopSending; virtual; abstract;
       procedure DelLastChar; virtual; abstract;
       procedure SetMixManSpeed(min,max : Word); virtual; abstract;
@@ -64,6 +69,7 @@ type
       procedure Close; override;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -87,6 +93,7 @@ type
       procedure Close; override;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -110,6 +117,7 @@ type
       procedure Close; override;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -121,6 +129,7 @@ type
     private
       ParamChkVfo: boolean;
       WaitChkVfo: integer;
+      WaitHamlib: boolean;
       VfoStr : String;
       AllowCW : Boolean;
       fActive : Boolean;
@@ -142,6 +151,7 @@ type
       procedure WaitMorse;
       procedure SetSpeed(speed : Word); override;
       procedure SendText(text : String); override;
+      procedure SendHex(text:String);  override;
       procedure StopSending; override;
       procedure DelLastChar; override;
       procedure SetMixManSpeed(min,max : Word); override;
@@ -152,7 +162,7 @@ type
 
 implementation
 
-uses fTRXControl;
+uses fTRXControl, uMyIni;
 
 constructor TCWWinKeyerUSB.Create;
 begin
@@ -161,7 +171,8 @@ begin
   ser           := TBlockserial.Create;
   ser.LinuxLock := False;
   fMinSpeed     := 5;
-  fMaxSpeed     := 60
+  fMaxSpeed     := 60;
+  fIsNewHamlib  :=false;
 end;
 
 procedure TCWWinKeyerUSB.Open;
@@ -226,6 +237,7 @@ end;
 procedure TCWWinKeyerUSB.SetSpeed(speed : Word);
 begin
   if fDebugMode then Writeln('Speed: ',speed);
+  if cqrini.ReadBool('CW'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'PotSpeed',False) then exit;
   fSpeed := speed;
   ser.Flush;
   ser.SendByte(2);
@@ -363,7 +375,7 @@ begin
                 ser.SendString('A');
                 ser.SendString('C');
               end;
-{        'ß' : begin
+ {      'ß' : begin
                 ser.SendByte($1B);
                 ser.SendString('S');
                 ser.SendString('Z');
@@ -392,6 +404,61 @@ begin
   end
   else
     ser.SendString(text)
+end;
+
+procedure TCWWinKeyerUSB.SendHex(text : String);
+var
+  H       : String;
+  p       : integer;
+  index     :integer;
+  paramList :TStringList;
+
+function send(ok:boolean):boolean;
+Begin
+  Result:=true;
+  try
+    index:=0;
+    paramList := TStringList.Create;
+    paramList.Delimiter := ',';
+    paramList.DelimitedText := text;
+    while index < paramList.Count do
+    begin
+      try
+       if Pos('X', paramList[index])>0 then
+          H:=copy(paramList[index],Pos('X', paramList[index])+1,2)
+        else
+          H:= paramList[index];
+       p:=Hex2Dec(H);
+      except
+       on E: Exception do
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+           Result:=false;
+           exit;
+         end;
+      end;
+      if p>255 then
+         Begin
+           ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+           Result:=false;
+           exit;
+         end;
+      if fDebugMode and ok then Writeln('Sending value: ',paramList[index],'=',p);
+      if ok then ser.SendByte(p);
+      inc(index);
+    end;
+
+    paramList.Free;
+   finally
+     //Done all
+   end;
+end;
+
+begin
+  //test hex conversion
+  if not send(false) then exit;
+  //if passed do real send
+  send(true);
 end;
 
 procedure TCWWinKeyerUSB.Close;
@@ -517,6 +584,10 @@ begin
   end
   else
     udp.SendMessage(text)
+end;
+procedure TCWDaemon.SendHex(text : String);
+Begin
+  //not implemented
 end;
 
 procedure TCWDaemon.Close;
@@ -667,6 +738,60 @@ begin
   else
     ser.SendString(text)
 end;
+procedure TCWK3NG.SendHex(text : String);
+  var
+    H       : String;
+    p       : integer;
+    index     :integer;
+    paramList :TStringList;
+
+  function send(ok:boolean):boolean;
+  Begin
+    Result:=true;
+    try
+      index:=0;
+      paramList := TStringList.Create;
+      paramList.Delimiter := ',';
+      paramList.DelimitedText := text;
+      while index < paramList.Count do
+      begin
+        try
+         if Pos('X', paramList[index])>0 then
+            H:=copy(paramList[index],Pos('X', paramList[index])+1,2)
+          else
+            H:= paramList[index];
+         p:=Hex2Dec(H);
+        except
+         on E: Exception do
+           Begin
+             ShowMessage( ' Hex error: '+paramList[index]+' '+ E.ClassName + #13#10 + E.Message );
+             Result:=false;
+             exit;
+           end;
+        end;
+        if p>255 then
+           Begin
+             ShowMessage( ' Hex error: '+paramList[index]+' Value too big' );
+             Result:=false;
+             exit;
+           end;
+        if fDebugMode and ok then Writeln('Sending value: ',paramList[index],'=',p);
+        if ok then ser.SendByte(p);
+        inc(index);
+      end;
+
+      paramList.Free;
+     finally
+       //Done all
+     end;
+  end;
+
+  begin
+    //test hex conversion
+    if not send(false) then exit;
+    //if passed do real send
+    send(true);
+  end;
 
 procedure TCWK3NG.Close;
 begin
@@ -693,7 +818,8 @@ begin
   tcp.OnConnect := @OnHamLibConnect;
   tcp.OnError   := @onHamLibError;
   fMinSpeed     := 5;
-  fMaxSpeed     := 60
+  fMaxSpeed     := 60;
+  fHamlibBuffer := false;
 end;
 
 procedure TCWHamLib.OnHamLibConnect(aSocket: TLSocket);
@@ -702,12 +828,15 @@ begin
   if DebugMode then
      Writeln('CWint connected to hamlib');
 
+  fIsNewHamlib  := false;
+  WaitHamlib    := True;
   VfoStr := '';
   ParamChkVfo :=false;
   WaitChkVfo:=5; // wait max 5 rcvd blocks
   tcp.SendMessage('+\chk_vfo'+LineEnding);
   if DebugMode then
      Writeln('CW send +\chk_vfo');
+
 end;
 
 procedure TCWHamLib.OnReceived(aSocket: TLSocket);
@@ -715,6 +844,7 @@ begin
   if aSocket.GetMessage(Rmsg) > 0 then
    begin
      Rmsg := StringReplace(Rmsg,LineEnding,' ',[rfReplaceAll]);
+
      if (( not ParamChkVfo ) and (WaitChkVfo>0))then
        Begin
          dec(WaitChkVfo);
@@ -725,10 +855,28 @@ begin
            if DebugMode then
                Writeln('CW commands need parameter: ',VfoStr);
            WaitChkVfo:=0;
-           SetSpeed(fSpeed);
+           tcp.SendMessage('+\dump_caps'+LineEnding);
+           if DebugMode then
+             Writeln('CW send +\dump_caps');
          end;
         ParamChkVfo:= WaitChkVfo < 1;
        end;
+
+     if (pos('HAMLIB VERSION:',Uppercase(Rmsg))>0) and WaitHamlib then
+         Begin
+          fIsNewHamlib:=true;
+          WaitHamlib:=False;
+          if DebugMode then
+               Writeln('Hamlib is new');
+         end;
+     if (pos('OVERALL BACKEND WARNINGS:',Uppercase(Rmsg))>0) then //+\dump_caps end
+         Begin
+          WaitHamlib:=False;
+          if DebugMode then
+               Writeln('End of +\dump_caps');
+          SetSpeed(fSpeed);
+         end;
+
      if DebugMode then
          Writeln('HLresp MSG:',Rmsg,':');
    end;
@@ -756,9 +904,9 @@ begin
   tcp.Connect(fDevice,StrToInt(fPort));
 end;
 
-procedure TCWHamLib.WaitMorse;
+procedure TCWHamLib.WaitMorse;  //not used and not confirmed to exist via initialize rig/dump_caps
 begin
-  tcp.SendMessage('\wait_morse'+VfoStr+LineEnding);
+  tcp.SendMessage('\wait_morse'+LineEnding);
   if DebugMode then
          Writeln('CW: \wait_morse');
 end;
@@ -811,17 +959,22 @@ end;
 procedure TCWHamLib.StopSending;
 begin
   AllowCW := false;
-  //not implemented in hamlib command set
+  if fIsNewHamlib then
+   tcp.SendMessage('+\stop_morse'+LineEnding)
+  //implemented in hamlib command set from 2023 (at least)
+  else
+   Begin
   //sending 0xFF as text works with Icom
-  tcp.SendMessage('b'+#$0FF+LineEnding);
+    tcp.SendMessage('b'+#$0FF+LineEnding);
   //All chrs are spaces stops cw for kenwood. Empty chrs (max24) in buffer are filled with spaces.
   // (info by ts480 manual, not tested)
-  tcp.SendMessage('b '+LineEnding);
+    tcp.SendMessage('b  '+LineEnding);
+   end;
 end;
 
 procedure TCWHamLib.SendText(text : String);
 const
-     _REPEATS = 500; //times
+     _REPEATS = 300; //times
      _TIMEOUT = 20; //x10-milliseconds
 var
   c, i,
@@ -829,35 +982,50 @@ var
   rpt : integer;
   Wcw : char;
   dSpd: integer;
+
+
             //-----------------------------------------------------------------------------------
             Procedure SendToHamlib(t:string);
             Begin
-                        tout :=_TIMEOUT; //used away in sleep(10) bloks
+                        tout :=_TIMEOUT; //used away in sleep(10) blocks
                         rpt := _REPEATS;
 
                         while ((rpt > 0) and AllowCW) do
                           Begin
-                             if fDebugMode then
-                               Writeln('HLsend MSG:','b'+t+':');
+                            if fIsNewHamlib then
+                                               t:=' '+t;
+                            if fDebugMode then
+                               Writeln('HLsend MSG: |','b'+t+'|');
                              Rmsg:='';
                              tcp.SendMessage('b'+t+LineEnding);
                              dec(rpt);
                               repeat
                                 begin
                                   sleep(10);
+                                  if fDebugMode then
+                                    Writeln('Waiting RPRT');
                                   Application.ProcessMessages;
                                   dec(tout);
                                 end;
                               until ((pos('RPRT',Rmsg)>0) or (tout < 1 ));
-                              if fDebugMode then  Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')');
-                              if fDebugMode then  Writeln('     Repeats left: ',rpt,'(/',_REPEATS,')');
+                              tout :=_TIMEOUT;
+                               if fDebugMode then
+                                  Begin
+                                    Writeln('rcvd:',Rmsg);
+                                    Writeln('     Ack timeout left: ',tout,'(/',_TIMEOUT,')x10 msec');
+                                    Writeln('     Repeats left: ',rpt,'(/',_REPEATS,') times');
+                                  end;
                               if pos('-9',Rmsg)>0 then
                                 Begin
-                                  dec(rpt);
-                                  sleep(300);
+                                   if fDebugMode then
+                                      Writeln('Waiting before repeat because of RPRT-9');
+                                    dec(rpt);
+                                    sleep(50);
                                 end
                                else
                                 rpt :=0;
+                               if fDebugMode then
+                                  Writeln('Ready for next');
                           end;
 
             end;
@@ -885,7 +1053,8 @@ begin
        AllowCW := true;
         //different rigs support different length of b-command. 10chr should be safe for all
         c:= length(text);
-        if (c>10) or (pos('+',text)>0) or (pos('-',text)>0) then
+        if ((c>10) or (pos('+',text)>0) or (pos('-',text)>0))
+         and (not fHamlibBuffer) then
          Begin
             i := 1;
             if fDebugMode then  Writeln('Ltr send: ');
@@ -895,21 +1064,27 @@ begin
                  '+','-'   : ModSpeed(text[i]);
                  else
                              Begin
-                               if fDebugMode then  Writeln('send letter ',i,' ',text[i]);
+                               if fDebugMode then  Writeln('send letter #',i,': ',text[i]);
                                SendToHamlib(text[i]);
                                Wcw:=#0;
                              end;
                end;
                inc(i);
              end;
-            until (i > c);
+            until (i > c) or (not AllowCW);
          end
         else
+        Begin
+         if fDebugMode then  Writeln('Word send: ');
          SendToHamlib(text);
+        end;
       end
      else  if fDebugMode then  Writeln('Empty message!');
 end;
-
+procedure TCWHamLib.SendHex(text : String);
+Begin
+  //not implemented
+end;
 procedure TCWHamLib.Close;
 begin
   if tcp.Connected then

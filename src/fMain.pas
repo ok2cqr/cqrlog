@@ -81,13 +81,16 @@ type
     acRemoveDupes: TAction;
     acMarkAllClubLog: TAction;
     acMarkAllHrdLog: TAction;
+    acMarkAllUDPLog: TAction;
     acMarkAll: TAction;
     acMarkAlleQSL: TAction;
     acAutoSizeColumns: TAction;
     acCreateLoadFilter: TAction;
+    acCounty: TAction;
     acUploadAllToLoTW: TAction;
     acUploadToAll: TAction;
     acUploadToHrdLog: TAction;
+    acUploadToUDPLog: TAction;
     acUploadToClubLog: TAction;
     acUploadToHamQTH: TAction;
     acMarkAllHamQTH: TAction;
@@ -136,6 +139,8 @@ type
     lblSumDist: TLabel;
     lblSumDistances: TLabel;
     MenuItem1:  TMenuItem;
+    MenuItem2: TMenuItem;
+    mnuOR: TMenuItem;
     MenuItemStats: TMenuItem;
     MenuItem100: TMenuItem;
     MenuItem101: TMenuItem;
@@ -144,6 +149,7 @@ type
     MenuItem104: TMenuItem;
     MenuItem105: TMenuItem;
     MenuItem106: TMenuItem;
+    MenuItem107: TMenuItem;
     mnuLoadFilter: TMenuItem;
     MenuItem89: TMenuItem;
     mnueQSLView: TMenuItem;
@@ -220,7 +226,7 @@ type
     MenuItem72: TMenuItem;
     MenuItem76: TMenuItem;
     MenuItem77: TMenuItem;
-    MenuItem78: TMenuItem;
+    mnuShowDetails: TMenuItem;
     MenuItem79: TMenuItem;
     mnuSQLConsole: TMenuItem;
     MenuItem81: TMenuItem;
@@ -342,6 +348,7 @@ type
     procedure acMarkAllExecute(Sender: TObject);
     procedure acMarkAllHamQTHExecute(Sender: TObject);
     procedure acMarkAllHrdLogExecute(Sender: TObject);
+    procedure acMarkAllUDPLogExecute(Sender: TObject);
     procedure acPnlDetailsExecute(Sender: TObject);
     procedure acQRZExecute(Sender: TObject);
     procedure acQSLImageExecute(Sender: TObject);
@@ -352,11 +359,13 @@ type
     procedure acCabrilloExportExecute(Sender : TObject);
     procedure acSQLExecute(Sender: TObject);
     procedure acAutoSizeColumnsExecute(Sender: TObject);
+    procedure acCountyExecute(Sender: TObject);
     procedure acUploadAllToLoTWExecute(Sender: TObject);
     procedure acUploadToAllExecute(Sender: TObject);
     procedure acUploadToClubLogExecute(Sender: TObject);
     procedure acUploadToHamQTHExecute(Sender: TObject);
     procedure acUploadToHrdLogExecute(Sender: TObject);
+    procedure acUploadToUDPLogExecute(Sender: TObject);
     procedure dbgrdMainColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer
       );
     procedure dbgrdMainColumnSized(Sender: TObject);
@@ -392,6 +401,7 @@ type
     procedure acDOKCfmExecute(Sender: TObject);
     procedure acWAZCfmExecute(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure MenuItem107Click(Sender: TObject);
     procedure mnueQSLViewClick(Sender: TObject);
     procedure mnuIK3AQRClick(Sender: TObject);
     procedure mnuHelpIndexClick(Sender: TObject);
@@ -403,6 +413,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure mnuOQRSClick(Sender : TObject);
+    procedure mnuORClick(Sender: TObject);
     procedure popWebSearchPopup(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure acAboutExecute(Sender: TObject);
@@ -482,7 +493,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
   feQSLUpload, feQSLDownload, fSOTAExport, fEDIExport, fCabrilloExport, fRotControl,
-  fLogUploadStatus, fExportPref,uVersion;
+  fLogUploadStatus, fExportPref,uVersion, fCountyStat;
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -565,17 +576,23 @@ begin
   dlgOpen.DefaultExt := '.tbl';
   if dlgOpen.Execute then
   begin
-    with TfrmImportProgress.Create(self) do
-    try
-      lblComment.Caption := 'Importing DXCC data ...';
-      Directory  := ExtractFilePath(dlgOpen.FileName);
-      ImportType := imptImportDXCCTables;
-      ShowModal
-    finally
-      Free
-    end;
-    dmDXCC.ReloadDXCCTables;
-    dmDXCluster.ReloadDXCCTables
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+     begin
+
+      with TfrmImportProgress.Create(self) do
+      try
+        lblComment.Caption := 'Importing DXCC data ...';
+        Directory  := ExtractFilePath(dlgOpen.FileName);
+        ImportType := imptImportDXCCTables;
+        ShowModal
+      finally
+        Free
+      end;
+      dmDXCC.ReloadDXCCTables;
+      dmDXCluster.ReloadDXCCTables
+     end
+    else
+     ShowMessage('File not found!');
   end
   else
     BringToFront
@@ -677,6 +694,10 @@ begin
                   end;
       upHrdLog  : begin
                     frmLogUploadStatus.UploadDataToHrdLog;
+                    WhatUpNext := upUDPLog
+                  end;
+      upUDPLog  : begin
+                    frmLogUploadStatus.UploadDataToUDPLog;
                     tmrUploadAll.Enabled := False
                   end;
     end //case
@@ -831,6 +852,11 @@ begin
   MarkQSLSend('OQRS')
 end;
 
+procedure TfrmMain.mnuORClick(Sender: TObject);
+begin
+  MarkQSLSend('OR');
+end;
+
 procedure TfrmMain.popWebSearchPopup(Sender: TObject);
 begin
     mnueQSLView.Visible :=  ((pos('E',dmData.qCQRLOG.FieldByName('eqsl_qsl_rcvd').AsString)>0)
@@ -935,7 +961,7 @@ begin
     dmData.RefreshMainDatabase(idx);
     RefreshQSODXCCCount
   finally
-    InRefresh := False
+    InRefresh := False;
   end
 end;
 
@@ -1096,16 +1122,21 @@ begin
   dlgOpen.DefaultExt := '.csv';
   if dlgOpen.Execute then
   begin
-    with TfrmImportProgress.Create(self) do
-    try
-      lblComment.Caption := 'Importing QSL mangers ...';
-      Directory  := ExtractFilePath(dlgOpen.FileName);
-      FileName   := dlgOpen.FileName;
-      ImportType := imptImportQSLMgrs;
-      ShowModal
-    finally
-      Free
-    end
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+      begin
+       with TfrmImportProgress.Create(self) do
+        try
+          lblComment.Caption := 'Importing QSL mangers ...';
+          Directory  := ExtractFilePath(dlgOpen.FileName);
+          FileName   := dlgOpen.FileName;
+          ImportType := imptImportQSLMgrs;
+          ShowModal
+        finally
+          Free
+        end
+       end
+     else
+       ShowMessage('File not found!');
   end
   else
     BringToFront
@@ -1115,15 +1146,20 @@ procedure TfrmMain.acImportLoTWADIFExecute(Sender: TObject);
 begin
   if dlgOpen.Execute then
   begin
-    with TfrmImportProgress.Create(self) do
-    try
-      FileName   := dlgOpen.FileName;
-      ImportType := imptImportLoTWAdif;
-      ShowModal
-    finally
-      Free;
-      acRefreshExecute(nil)
-    end
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+     begin
+      with TfrmImportProgress.Create(self) do
+        try
+          FileName   := dlgOpen.FileName;
+          ImportType := imptImportLoTWAdif;
+          ShowModal
+        finally
+          Free;
+          acRefreshExecute(nil)
+        end
+     end
+    else
+        ShowMessage('File not found!');
   end
 end;
 
@@ -1283,6 +1319,51 @@ begin
   end
 end;
 
+procedure TfrmMain.MenuItem107Click(Sender: TObject);
+var
+  s: PChar;
+
+  Procedure RemoveTriggers;
+   Begin
+    dmLogUpload.DisableOnlineLogSupport;
+    dmLogUpload.EnableOnlineLogSupport;
+    Application.MessageBox('Triggers removed','Info ...',mb_ok + mb_IconInformation);
+   end;
+
+begin
+  if not (cqrini.ReadBool('OnlineLog','HaUP',False)
+          or cqrini.ReadBool('OnlineLog','ClUP',False)
+          or cqrini.ReadBool('OnlineLog','HrUP',False) ) then
+     Begin
+       //warn: none of uploads selected
+       Application.MessageBox('You do not have any log uploads enabled!','Info ...',mb_ok + mb_IconInformation);
+       exit
+     end
+   else
+     Begin
+       if not (cqrini.ReadBool('OnlineLog','HaUpOnline',False)
+           or cqrini.ReadBool('OnlineLog','ClUpOnline',False)
+           or cqrini.ReadBool('OnlineLog','HrUpOnline',False) ) then
+         Begin
+           //Warn: none of online uploads
+           s:= 'You do not have any immediately uploads active'+LineEnding+LineEnding+
+               'Removing ALL upload triggers MAY GIVE UNEXPECTED RESULTS'+LineEnding+
+               'if you use MORE THAN ONE ONLINE LOG'+LineEnding+LineEnding+
+               'Are you SURE you want to remove ALL upload triggers?';
+           if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion) = idYes then
+            RemoveTriggers;
+           exit;
+         end;
+        s:= 'Removing ALL upload triggers MAY GIVE UNEXPECTED RESULTS'+LineEnding+
+            'if you use MORE THAN ONE ONLINE LOG'+LineEnding+LineEnding+
+            'Are you sure you want to remove ALL upload triggers?';
+        if Application.MessageBox(s,'Question ...', mb_YesNo + mb_IconQuestion) = idYes then
+         RemoveTriggers;
+        exit;
+     end;
+end;
+
+
 procedure TfrmMain.mnueQSLViewClick(Sender: TObject);
 var
   QSOmode:String;
@@ -1399,12 +1480,12 @@ begin
   if pnlDetails.Visible then
   begin
     pnlDetails.Visible   := False;
-    acPnlDetails.Checked := False;
+    mnuShowDetails.Checked := False;
   end
   else
   begin
     pnlDetails.Visible   := True;
-    acPnlDetails.Checked := True;
+    mnuShowDetails.Checked := True;
   end;
 end;
 
@@ -1580,6 +1661,11 @@ begin
   dmLogUpload.MarkAsUploaded(C_HRDLOG)
 end;
 
+procedure TfrmMain.acMarkAllUDPLogExecute(Sender: TObject);
+begin
+  dmLogUpload.MarkAsUploaded(C_UDPLOG)
+end;
+
 procedure TfrmMain.acSQLExecute(Sender: TObject);
 begin
   frmSQLConsole := TfrmSQLConsole.Create(self);
@@ -1610,6 +1696,16 @@ begin
   end;
 end;
 
+procedure TfrmMain.acCountyExecute(Sender: TObject);
+begin
+  frmCountyStat := TfrmCountyStat.Create(frmNewQSO);
+  try
+    frmCountyStat.ShowModal
+  finally
+    FreeAndNil(frmCountyStat)
+  end
+end;
+
 procedure TfrmMain.acUploadAllToLoTWExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to mark all QSO as uploaded to LoTW?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
@@ -1637,6 +1733,11 @@ end;
 procedure TfrmMain.acUploadToHrdLogExecute(Sender: TObject);
 begin
   frmLogUploadStatus.UploadDataToHrdLog
+end;
+
+procedure TfrmMain.acUploadToUDPLogExecute(Sender: TObject);
+begin
+  frmLogUploadStatus.UploadDataToUDPLog
 end;
 
 procedure TfrmMain.dbgrdMainColumnMoved(Sender: TObject; FromIndex,
@@ -2030,21 +2131,26 @@ begin
   dlgOpen.DefaultExt := '.adi';
   if dlgOpen.Execute then
   begin
-    with TfrmAdifImport.Create(self) do
-    try
-      Caption := 'Importing ADIF file ...';
-      lblFileName.Caption := dlgOpen.FileName;
-      lblErrors.Caption := '0';
-      lblCount.Caption := '0';
-      lblFilteredOutCount.Caption := '0';
-      ShowModal
-    finally
-      Free
-    end;
-    acRefreshExecute(nil)
-  end
-  else
-    BringToFront
+    if FileExists(dlgOpen.FileName) then  //with QT5 opendialog user can enter filename that may not exist
+      begin
+        with TfrmAdifImport.Create(self) do
+        try
+          Caption := 'Importing ADIF file ...';
+          lblFileName.Caption := dlgOpen.FileName;
+          lblErrors.Caption := '0';
+          lblCount.Caption := '0';
+          lblFilteredOutCount.Caption := '0';
+          ShowModal
+        finally
+          Free
+        end;
+        acRefreshExecute(nil);
+      end
+    else
+       ShowMessage('File not found!');
+    end
+    else
+      BringToFront
 end;
 
 procedure TfrmMain.acQSL_RExecute(Sender: TObject);
@@ -2066,6 +2172,9 @@ var
 begin
   dmData.Q.Close;
   dmData.trQ.StartTransaction;
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.DisableOnlineLogSupport;
+
   if dbgrdMain.SelectedRows.Count < 2 then
   begin
     MarkRec
@@ -2083,7 +2192,10 @@ begin
   dmData.qCQRLOG.Close;
   dmData.RefreshMainDatabase(idx);
   dbgrdMain.SelectedRows.Clear;
-  RefreshQSODXCCCount
+  RefreshQSODXCCCount;
+
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+   dmLogUpload.EnableOnlineLogSupport;
 end;
 
 procedure TfrmMain.acQSL_SExecute(Sender: TObject);
@@ -2206,6 +2318,7 @@ begin
   CheckAttachment;
   mnuShowButtons.Checked := pnlButtons.Visible;
   mnuShowToolBar.Checked := toolMain.Visible;
+  mnuShowDetails.Checked := pnlDetails.Visible;
   //Sets AutoSizeColumns to saved value
   acAutoSizeColumnsExecute(nil);
 end;
@@ -2448,6 +2561,9 @@ begin
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
+   if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.DisableOnlineLogSupport;
+
   if dbgrdMain.SelectedRows.Count = 0 then
   begin
     MarkRec
@@ -2464,7 +2580,10 @@ begin
 
   dmData.qCQRLOG.Close;
   dbgrdMain.SelectedRows.Clear;
-  dmData.RefreshMainDatabase(idx)
+  dmData.RefreshMainDatabase(idx);
+
+   if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.EnableOnlineLogSupport;
 end;
 
 procedure TfrmMain.ChechkSelRecords;

@@ -63,7 +63,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC,fMain;
+uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC,fMain, dLOgUpload;
 { TfrmExLabelPrint }
 
 procedure TfrmExLabelPrint.edtQSOsToLabelExit(Sender: TObject);
@@ -559,6 +559,9 @@ begin
       exit
   end;
 
+  if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+           dmLogUpload.DisableOnlineLogSupport;
+
   FieldCount := GetExpFieldCount;
   if dmData.DebugLevel >= 1 then Writeln('Field count: ', FieldCount);
   dmData.CreateQSLTmpTable;
@@ -643,7 +646,10 @@ begin
     dmData.DropQSLTmpTable;
     lblProgress.Caption := 'Complete!';
     CloseFile(f);
-    dmData.RefreshMainDatabase()
+    dmData.RefreshMainDatabase();
+
+    if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
+     dmLogUpload.EnableOnlineLogSupport;
   end
 end;
 
