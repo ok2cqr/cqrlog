@@ -6,7 +6,7 @@ ENV TZ="Europe/London"
 ENV DESTDIR=/usr/local/cqrlog-alpha
 
 # create the volume folders
-RUN mkdir -p /usr/local/cqrlog-alpha /home/cqrlog/build
+RUN mkdir -p /usr/local/cqrlog-alpha /cqrlog/build
 
 # update the system
 RUN apt-get update
@@ -43,18 +43,21 @@ RUN apt-get install -y \
 # Install extra binaries (Mysql, Hamlib, etc.)
 RUN apt-get install -y \
         mariadb-server \
-        libhamlib-utils \
         mariadb-client
 
+# Install temos
+RUN apt-get install -y \
+        git
+
 # Mount point for the git repository:
-# -v $(pwd):/home/cqrlog/build
-VOLUME ["/home/cqrlog/build"]
+# -v $(pwd):/cqrlog
+VOLUME ["/cqrlog"]
 
 # Mount point for the result of the build:
 # -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha
 VOLUME ["/usr/local/cqrlog-alpha"]
 
 # Set the working directory
-WORKDIR /home/cqrlog/build
+WORKDIR /cqrlog
 
 CMD ["bash"]
