@@ -38,16 +38,21 @@ RUN apt-get install -y \
         libsquashfuse0 \
         wget \
         qt5-qmake-bin \
-        qtchooser
-
-# Install extra binaries (Mysql, Hamlib, etc.)
-RUN apt-get install -y \
+        qtchooser \
         mariadb-server \
         mariadb-client
 
-# Install temos
-RUN apt-get install -y \
-        git
+# Install latest hamlib
+RUN cd /tmp && \
+        git clone https://github.com/Hamlib/Hamlib.git && \
+        cd Hamlib && \
+        git checkout 4.5.5 && \
+        ./bootstrap && \
+        ./configure && \
+        make -j4 && \
+        env DESTDIR= make install && \
+        cp /usr/local/lib/libhamlib* /lib/ && \
+        make clean
 
 # Mount point for the git repository:
 # -v $(pwd):/cqrlog
