@@ -104,22 +104,22 @@ docker: ## Build the docker image to allow a docker build
 	cd docker-build && docker build -t cqrlog-build .
 
 docker-build: docker ## Build it with a docker image to keep your system clean 
-	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make cqrlog
+	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make cqrlog
 
 docker-install: docker-build ## Install the files to the system using the binaries from the docker build 
-	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make install
+	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make install
 
 docker-appimage: docker-build ## Build an appimage using the binaries from the docker build, GTK2
-	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage
+	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage
 
 docker-appimage-qt5: docker-build ## Build an appimage using the binaries from the docker build, QT5
-	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage-qt5
+	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage-qt5
 
 docker-deb: docker-build ## Build a deb package using the binaries from the docker build 
-	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb
+	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb
 
 docker-deb-src: docker-build ## Build a deb-src package using the binaries from the docker build 
-	docker run --rm -ti -u root -v $(PWD):/home/cqrlog/build -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb_src
+	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb_src
 
 help: ## List the make options available
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
