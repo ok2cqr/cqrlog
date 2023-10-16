@@ -37,6 +37,7 @@ RUN apt-get install -y \
         libfuse2 \
         libsquashfuse0 \
         wget \
+        devscripts \
         qt5-qmake-bin \
         qtchooser \
         mariadb-server \
