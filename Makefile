@@ -10,13 +10,29 @@ PWD = $(shell pwd)
 
 .PHONY : help dockerbuild clean install deb deb_src debug
 
-cqrlog: src/cqrlog.lpi ## Normal build
+dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
+	apt update && apt install -y \
+		git lazarus-ide lcl lcl-gtk2 lcl-nogui \
+		lcl-units lcl-utils lazarus lazarus-doc \
+		lazarus-src fp-units-misc fp-units-rtl \
+		fp-utils fpc fpc-source libssl-dev libfl-dev \
+		libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 \
+		wget devscripts qt5-qmake-bin qtchooser \
+		mariadb-server mariadb-client
+
+cqrlog: dependencies src/cqrlog.lpi ## Normal build (Default target)
 	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
-	sudo apt update && sudo apt install git lazarus-ide lcl lcl-gtk2 lcl-nogui lcl-units lcl-utils lazarus lazarus-doc lazarus-src fp-units-misc fp-units-rtl fp-utils fpc fpc-source libssl-dev libfl-dev libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 wget qt5-qmake-bin qtchooser mariadb-server libhamlib-utils mariadb-client
+cqrlog_qt5: dependencies src/cqrlog.lpi  ## Build it with qt5
+	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	$(ST) src/cqrlog
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
+cqrlog_qt5_debug: dependencies src/cqrlog.lpi ## Build it with qt5 debug
+	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 clean: ## Clean the environment to have a fresh start
 	rm -f -v src/*.o src/*.ppu src/*.bak src/lnet/lib/*.ppu src/lnet/lib/*.o src/lnet/lib/*.bak src/cqrlog src/cqrlog.compiled src/ipc/*.o src/ipc/*.ppu src/cqrlog.or
@@ -59,15 +75,15 @@ install: ## Install everything to the system
 	install    -v -m 0644 voice_keyer/README $(datadir)/voice_keyer/README
 	install    -v -m 0644 voice_keyer/F10.mp3 $(datadir)/voice_keyer/F10.mp3
 	install    -v -m 0644 zipcodes/* $(datadir)/zipcodes/
-#	install -v -m 0644 -t images/*   $(datadir)/images/
-	cp -v -R images/* $(datadir)/images
-	cp -v -R images/icon/* $(sharedir)/icons/cqrlog
-	cp -v -R images/icon/* $(sharedir)/pixmaps/cqrlog
+#	install    -v -m 0644 -t images/*   $(datadir)/images/
 #	install    -v -m 0644 images/icon/32x32/*   $(datadir)/images/icon/32x32/
 #	install    -v -m 0644 images/icon/64x64/*   $(datadir)/images/icon/64x64/
 #	install    -v -m 0644 images/icon/128x128/*   $(datadir)/images/icon/128x128/
 #	install    -v -m 0644 images/icon/256x256/*   $(datadir)/images/icon/256x256/
 #	install    -v -m 0644 images/*   $(datadir)/images/
+	cp -v -R images/* $(datadir)/images
+	cp -v -R images/icon/* $(sharedir)/icons/cqrlog
+	cp -v -R images/icon/* $(sharedir)/pixmaps/cqrlog
 	install    -v -m 0644 tools/cqrlog.desktop $(sharedir)/applications/cqrlog.desktop
 	install    -v -m 0644 tools/cqrlog.appdata.xml $(sharedir)/appdata/cqrlog.appdata.xml
 	install    -v -m 0644 images/icon/32x32/cqrlog.png $(sharedir)/pixmaps/cqrlog/cqrlog.png
@@ -75,8 +91,8 @@ install: ## Install everything to the system
 	install    -v -m 0644 src/changelog.html $(datadir)/changelog.html
 	install    -v -m 0644 tools/cqrlog.1.gz $(sharedir)/man/man1/cqrlog.1.gz
 
-deb: ## Build a deb package
-	dpkg-buildpackage -rfakeroot -i -I
+deb: dependencies ## Build a deb package
+	./tools/makedeb.sh
 
 deb_src: ## Build a deb package with source
 	dpkg-buildpackage -rfakeroot -i -I -S
@@ -85,41 +101,81 @@ debug: ## debug build
 	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-cqrlog_qt5: src/cqrlog.lpi  ## Build it with qt5
-	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
-	$(ST) src/cqrlog
-	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
-
-cqrlog_qt5_debug: src/cqrlog.lpi ## Build it with qt5 debug
-	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
-	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
-
 appimage: clean cqrlog ## Build an appimage (overwrite the actual one if there is one) using GTK
-	./appimage.sh
+	./tools/appimage.sh
 
 appimage-qt5: clean cqrlog_qt5 ## Build an appimage (overwrite the actual one if there is one) using QT5
 	./appimage.sh QT5
 
-docker: ## Build the docker image to allow a docker build
-	cd docker-build && docker build -t cqrlog-build .
+docker-image: ## Build the docker image to allow a docker build
+	cd docker-build && docker build -t pavelmc/cqrlog-build:latest .
+
+docker: ## Pull the pre-built docker image from the internet (~2Gb)
+	if command -v docker > /dev/null 2>&1 ; then \
+		docker pull pavelmc/cqrlog-build ; \
+	else \
+		echo "Docker is not installed" && exit 1 ; \
+	fi
 
 docker-build: docker ## Build it with a docker image to keep your system clean 
-	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make cqrlog
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make cqrlog
 
 docker-install: docker-build ## Install the files to the system using the binaries from the docker build 
-	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make install
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make install
 
 docker-appimage: docker-build ## Build an appimage using the binaries from the docker build, GTK2
-	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make appimage
 
 docker-appimage-qt5: docker-build ## Build an appimage using the binaries from the docker build, QT5
-	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make appimage-qt5
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make appimage-qt5
 
-docker-deb: docker-build ## Build a deb package using the binaries from the docker build 
-	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb
+docker-deb: docker ## Build a deb package using the binaries from the docker build
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make deb
 
 docker-deb-src: docker-build ## Build a deb-src package using the binaries from the docker build 
-	docker run --rm -ti -u root -v $(PWD):/cqrlog -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined cqrlog-build make deb_src
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make deb_src
 
 help: ## List the make options available
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
