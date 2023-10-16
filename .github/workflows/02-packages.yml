@@ -22,7 +22,12 @@ jobs:
     - name: Run Build Appimage QT5
       run: make appimage-qt5
 
+    - name: Run Build test deb
+      run: make deb
+
     - uses: actions/upload-artifact@v3
       with:
         name: AppImage
-        path: CQRLOG-*.AppImage
+        ath: |
+          CQRLOG-*.AppImage
+          cqrlog_*.deb
