@@ -37,3 +37,8 @@ tools/cqrlog.?.gz
 # appimage and build artifacts
 AppDir/
 *.AppImage
+
+# vscode and sample adif
+.vscode/*
+*.adi
+*.adif
