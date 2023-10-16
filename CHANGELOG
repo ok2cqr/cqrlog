@@ -3,8 +3,12 @@ Legend:
   + new feature
   - bugfix
 --------------------
-2.6.0 (2022-05-29)
+2.6.0 (2023-10-16)
   #some code refactoring
+  + Build improvements via docker and Makefile (Pavel, CO7WT)
+  + Added build targets for AppImages with latest hamlib & mariadb included for GTK2 & QT5 (Pavel, CO7WT)
+  + Added build target for unsigned develop .deb files (Pavel, CO7WT)
+  + Added Github Acctions to test on push to any branch and build AppImage and deb packages on master branch (Pavel, CO7WT)
   + new button "URL" to row below "Comment to callsign" (Saku, OH1KH)  
   + many improvements to working with WSJTX (Saku, OH1KH)
   + Clear RIT after saving QSO cleats also XIT (Saku, OH1KH)
