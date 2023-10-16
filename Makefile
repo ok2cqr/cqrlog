@@ -11,7 +11,7 @@ PWD = $(shell pwd)
 .PHONY : help dockerbuild clean install deb deb_src debug
 
 dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
-	apt update && apt install -y \
+	sudo apt-get update && sudo apt-get install -y \
 		git lazarus-ide lcl lcl-gtk2 lcl-nogui \
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
@@ -25,7 +25,7 @@ cqrlog: dependencies src/cqrlog.lpi ## Normal build (Default target)
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-cqrlog_qt5: dependencies src/cqrlog.lpi  ## Build it with qt5
+cqrlog_qt5: dependencies src/cqrlog.lpi ## Build it with qt5
 	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz

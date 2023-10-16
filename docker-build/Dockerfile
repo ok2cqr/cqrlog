@@ -41,7 +41,8 @@ RUN apt-get install -y \
         qt5-qmake-bin \
         qtchooser \
         mariadb-server \
-        mariadb-client
+        mariadb-client \
+        sudo
 
 # Install latest hamlib
 RUN cd /tmp && \
