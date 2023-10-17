@@ -1,9 +1,9 @@
-name: Drft Release
+name: Draft Release
 
 on:
   push:
     branches:
-      - 'master'
+      - master
     tags:
       - 'v*'
 
