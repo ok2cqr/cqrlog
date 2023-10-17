@@ -11,14 +11,33 @@ PWD = $(shell pwd)
 .PHONY : help dockerbuild clean install deb deb_src debug
 
 dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
-	sudo apt-get update && sudo apt-get install -y \
+	if [ -e /usr/bin/fpc ]; then \
+		echo "Dependencies already installed" ; \
+	else \
+		sudo apt-get update && sudo apt-get install -y \
 		git lazarus-ide lcl lcl-gtk2 lcl-nogui \
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \
 		libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 \
 		wget devscripts qt5-qmake-bin qtchooser \
-		mariadb-server mariadb-client
+		mariadb-server mariadb-client ; \
+	fi
+
+hamlib: dependencies ## Install latest hamlib 4.5.5 from git.
+	if [ -e /lib/libhamlib.so.4 ]; then \
+		echo "Hamlib already installed" ; \
+	else \
+		cd /tmp && \
+		git clone https://github.com/Hamlib/Hamlib.git && \
+		cd Hamlib && \
+		git checkout Hamlib-4.5.5 && \
+		./bootstrap && \
+		./configure && \
+		make -j4 && \
+		sudo env DESTDIR= make install && \
+		sudo cp /usr/local/lib/libhamlib* /lib/ ; \
+	fi
 
 cqrlog: dependencies src/cqrlog.lpi ## Normal build (Default target)
 	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
@@ -101,10 +120,10 @@ debug: ## debug build
 	$(CC) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
-appimage: clean cqrlog ## Build an appimage (overwrite the actual one if there is one) using GTK
+appimage: clean cqrlog hamlib ## Build an appimage (overwrite the actual one if there is one) using GTK
 	./tools/appimage.sh
 
-appimage-qt5: clean cqrlog_qt5 ## Build an appimage (overwrite the actual one if there is one) using QT5
+appimage-qt5: clean cqrlog_qt5 hamlib ## Build an appimage (overwrite the actual one if there is one) using QT5
 	./appimage.sh QT5
 
 docker-image: ## Build the docker image to allow a docker build

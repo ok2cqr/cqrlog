@@ -44,18 +44,6 @@ RUN apt-get install -y \
         mariadb-client \
         sudo
 
-# Install latest hamlib
-RUN cd /tmp && \
-        git clone https://github.com/Hamlib/Hamlib.git && \
-        cd Hamlib && \
-        git checkout 4.5.5 && \
-        ./bootstrap && \
-        ./configure && \
-        make -j4 && \
-        env DESTDIR= make install && \
-        cp /usr/local/lib/libhamlib* /lib/ && \
-        make clean
-
 # Mount point for the git repository:
 # -v $(pwd):/cqrlog
 VOLUME ["/cqrlog"]
