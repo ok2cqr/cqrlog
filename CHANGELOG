@@ -31,6 +31,7 @@ Legend:
   - cabrillo export (Saku, OH1KH)
   - docker build fixes (Dawid, SQ6EMM)
   - microwave band fixes (Dawid, SQ6EMM)
+  - fix QSO list display when using dark theme (George, N3GB)
   
 2.5.2 (2021-02-12)
   # some code refactoring
