@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: version
-        run: echo "::set-output name=version::$(./get_version.sh)"
+        run: echo "{version}={$(./get_version.sh)}" >> $GITHUB_OUTPUT
         id: version
 
       - name: Run Build Appimage GTK2
@@ -39,7 +39,7 @@ jobs:
           prerelease: false
           release_name: CQRLOG v${{ steps.version.outputs.version }}
           tag_name: ${{ github.ref }}
-          body_path: CHANGELOG.md
+          body_path: CHANGELOG
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
