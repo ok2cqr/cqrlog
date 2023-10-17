@@ -13,9 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Dependencies
-      run: make dependencies
-
     - name: Run Build Appimage GTK2
       run: make appimage
 

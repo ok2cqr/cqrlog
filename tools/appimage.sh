@@ -103,19 +103,19 @@ for i in $(ls $ICONS) ; do
     cp "$ICONS/$i/cqrlog.png" "${TARGET}/${i}/apps/"
 done
 
-# copy other single files
-cp -r "${ROOTFOLDER}/src/changelog.html" "${ROOTFOLDER}/AppDir/usr/share/cqrlog/"
-cp -r "${ROOTFOLDER}/tools/cqrlog-apparmor-fix" "${ROOTFOLDER}/AppDir/usr/share/cqrlog/"
-
 # detect libmysqlclient.so lib
 LIBMYSQL=$(find /usr/lib/${ARCH}*/ -type f -name "*libmysqlclient.so*")
 cp "$LIBMYSQL" "/tmp/libmysqlclient.so"
+LIBMYSQL=/tmp/libmysqlclient.so
 
 # detect hamlib bins
 RIGCTL=$(which rigctl)
 RIGCTLD=$(which rigctld)
 ROTCTL=$(which rotctl)
 ROTCTLD=$(which rotctld)
+
+# detect mysql
+MYSQL=$(which mysqld)
 
 echo " "
 
@@ -134,12 +134,12 @@ if [ "$DE" == "QT5" ] ; then
 fi
 ./linuxdeploy-${ARCH}.AppImage \
     -e "$APP" \
-    -e "$(which mysqld)" \
+    -e "$MYSQL" \
     -e "$RIGCTL" \
     -e "$RIGCTLD" \
     -e "$ROTCTL" \
     -e "$ROTCTLD" \
-    -l "/tmp/libmysqlclient.so" \
+    -l "$LIBMYSQL" \
     $QT \
     -d "$DESKTOP" \
     -i "$ICON" \
