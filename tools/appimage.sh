@@ -43,15 +43,10 @@ echo "                Starting to build the AppImage..."
 echo "==================================================================="
 echo ""
 
-# check if version is set, if not scrape it from the code
-if [ "$VERSION" == "" ] ; then
-    echo "WARNING: VERSION is not set, will be scraped from the code"
-    VFILE=./src/uVersion.pas
-    VER_STRING=$(grep " cVersionBase " ${VFILE} | cut -d "=" -f 2 | cut -d "'" -f 2)
-    VER=$(echo $VER_STRING | cut -d "(" -f 1 | tr -d " " | tr -d "_")
-    VER_NUMBER=$(echo $VER_STRING | cut -d "(" -f 2 | cut -d ")" -f 1)
-    export VERSION="${VER}_(${VER_NUMBER})"
-fi
+# get version numbres
+VER=$(./tools/get_version.sh)
+VER_NUMBER=$(./tools/get_version.sh 1)
+export VERSION="${VER}_(${VER_NUMBER})"
 
 # version notice
 echo "You are building CQRLOG version: $VERSION"

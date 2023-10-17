@@ -1,24 +1,20 @@
 #!/bin/bash
 
-# Fail early and fast
-set -o pipefail
-
 # Simple recipe to create a .deb and .deb-src files [for debug and testing, not final]
 #
 # Requirements:
-#   * VERSION as an ENV var, if not detected will use the values declared in
-#     /src/uVersion.pas
+#   * configured to be run from the root of the repository
 #
 # If no parameter passed it's asumed to build as GTK2, if passed the parameter
 # will be set as part of the name, for example QT5/QT6/GTK3, etc
 #
 # On any troubles invoke stdevPavelmc in github or @pavelmc on Telegram
 
+# Fail early and fast
+set -o pipefail
+
 ### variables
-# check if version is set, if not scrape it from the code
-VFILE=./src/uVersion.pas
-VER_STRING=$(grep " cVersionBase " ${VFILE} | cut -d "=" -f 2 | cut -d "'" -f 2)
-VERSION=$(echo $VER_STRING | cut -d "(" -f 1 | tr -d " " | tr -d "_")
+VERSION=$(./tools/get_version.sh)
 echo "You are building CQRLOG version: $VERSION"
 
 FINAL=$(pwd)
