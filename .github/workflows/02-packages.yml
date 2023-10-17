@@ -1,10 +1,12 @@
-name: Build + AppImage Artifact
+name: Build + AppImage Artifact for testing
 
 on:
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  tags-ignore:
+    - '*'
 
 jobs:
   build:
