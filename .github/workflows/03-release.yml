@@ -1,0 +1,73 @@
+name: Drft Release
+
+on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - '*'
+
+jobs:
+  build_release:
+    name: build_release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: version
+        run: echo "::set-output name=version::$(./get_version.sh)"
+        id: version
+
+      - name: Run Build Appimage GTK2
+        run: make appimage
+
+      - name: Run Build Appimage QT5
+        run: make appimage-qt5
+
+      - name: Run Build test deb
+        run: make deb
+
+      - name: release-draft
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: true
+          prerelease: false
+          release_name: CQRLOG v${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload deb artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cqrlog_${{ steps.version.outputs.version }}*_amd64.deb
+          asset_content_type: application/gzip
+      
+      - name: Upload AppImage GTK2
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: CQRLOG-${{ steps.version.outputs.version }}*GTK2-x86_64.AppImage
+          asset_name: CQRLOG-${{ steps.version.outputs.version }}-GTK2-amd64.AppImage
+          asset_content_type: application/vnd.appimage
+      
+      - name: Upload AppImage QT5
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: CQRLOG-${{ steps.version.outputs.version }}*QT5-x86_64.AppImage
+          asset_name: CQRLOG-${{ steps.version.outputs.version }}-QT5-amd64.AppImage
+          asset_content_type: application/vnd.appimage
