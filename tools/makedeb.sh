@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail early and fast
-set -o errexit -o pipefail
+set -o pipefail
 
 # Simple recipe to create a .deb and .deb-src files [for debug and testing, not final]
 #
@@ -28,7 +28,7 @@ APPDIR="$WDIR/$APPNAME"
 
 # Make and clean
 mkdir -p $APPDIR
-cp -rv ./* "$APPDIR/"
+cp -r ./* "$APPDIR/"
 
 # clean non-needed archives
 cd $APPDIR/

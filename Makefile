@@ -54,12 +54,18 @@ cqrlog_qt5_debug: dependencies src/cqrlog.lpi ## Build it with qt5 debug
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 clean: ## Clean the environment to have a fresh start
-	rm -f -v src/*.o src/*.ppu src/*.bak src/lnet/lib/*.ppu src/lnet/lib/*.o src/lnet/lib/*.bak src/cqrlog src/cqrlog.compiled src/ipc/*.o src/ipc/*.ppu src/cqrlog.or
-	rm -f -v src/*.lrs src/*.ps src/*.lrt src/*.rsh  src/*.rst src/*.a src/synapse/*.a src/synapse/*.o src/synapse/*.ppu
-	rm -f -v src/mysql/*.ppu src/mysq/*.bak src/mysql/*.o
+	find ./ -type f -name "*.o" -delete
+	find ./ -type f -name "*.ppu" -delete
+	find ./ -type f -name "*.bak" -delete
+	find ./ -type f -name "*.or" -delete
+	find ./ -type f -name "*.compiled" -delete
+	find ./ -type f -name "*.lrs" -delete
+	find ./ -type f -name "*.ps" -delete
+	find ./ -type f -name "*.lrt" -delete
+	find ./ -type f -name "*.rst" -delete
+	find ./ -type f -name "*.a" -delete
 	rm -f -v tools/cqrlog.1.gz
 	rm -rf src/backup
-	rm -f -v src/richmemo/*.o src/richmemo/*.ppu src/richmemo/gtk2/*.ppu src/richmemo/gtk2/*.o
 	rm -f -v tools/adif_hash_generator tools/adif_hash_generator.lpi tools/adif_hash_generator.lps
 	rm -rf /tmp/.lazarus
 	
