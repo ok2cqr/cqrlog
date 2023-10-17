@@ -124,7 +124,7 @@ appimage: clean cqrlog hamlib ## Build an appimage (overwrite the actual one if 
 	./tools/appimage.sh
 
 appimage-qt5: clean cqrlog_qt5 hamlib ## Build an appimage (overwrite the actual one if there is one) using QT5
-	./appimage.sh QT5
+	./tools/appimage.sh QT5
 
 docker-image: ## Build the docker image to allow a docker build
 	cd docker-build && docker build -t pavelmc/cqrlog-build:latest .
