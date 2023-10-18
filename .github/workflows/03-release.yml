@@ -19,12 +19,10 @@ jobs:
           fetch-depth: 0
 
       - name: version
-        run: echo "version=$(./tools/get_version.sh)" >> $GITHUB_OUTPUT
-        id: version
+        run: echo "tag_ver=$(./tools/get_version.sh)" >> $GITHUB_ENV
 
       - name: compilation
-        run: echo "version=$(./tools/get_version.sh 1)" >> $GITHUB_OUTPUT
-        id: compiled
+        run: echo "tag_comp=$(./tools/get_version.sh 1)" >> $GITHUB_ENV
 
       - name: Run Build Appimage GTK2
         run: make appimage
@@ -44,7 +42,7 @@ jobs:
         with:
           draft: true
           prerelease: false
-          release_name: CQRLOG v${{ step.version.outputs.version }}
+          release_name: CQRLOG v${{ env.tag_ver }}
           tag_name: ${{ github.ref }}
           body_path: CHANGELOG
         env:
@@ -56,8 +54,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: cqrlog_${{ step.version.outputs.version }}-1_amd64.deb
-          asset_name: cqrlog_${{ step.version.outputs.version }}-1_amd64.deb
+          asset_path: cqrlog_${{ env.tag_ver }}-1_amd64.deb
+          asset_name: cqrlog_${{ env.tag_ver }}-1_amd64.deb
           asset_content_type: application/vnd.debian.binary-package
 
       - name: Upload AppImage GTK2
@@ -66,8 +64,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: CQRLOG-${{ step.version.outputs.version }}_(${{ step.compiled.outputs.version }})-GTK2-x86_64.AppImage
-          asset_name: CQRLOG-${{ step.version.outputs.version }}_(${{ step.compiled.outputs.version }})-GTK2-x86_64.AppImage
+          asset_path: CQRLOG-${{ env.tag_ver }}_(${{ env_tag_comp }})-GTK2-x86_64.AppImage
+          asset_name: CQRLOG-${{ env.tag_ver }}_(${{ env_tag_comp }})-GTK2-x86_64.AppImage
           asset_content_type: application/vnd.appimage
       
       - name: Upload AppImage QT5
@@ -76,6 +74,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: CQRLOG-${{ step.version.outputs.version }}_(${{ step.compiled.outputs.version }})-QT5-x86_64.AppImage
-          asset_name: CQRLOG-${{ step.version.outputs.version }}_(${{ step.compiled.outputs.version }})-QT5-x86_64.AppImage
+          asset_path: CQRLOG-${{ env.tag_ver }}_(${{ env_tag_comp }})-QT5-x86_64.AppImage
+          asset_name: CQRLOG-${{ env.tag_ver }}_(${{ env_tag_comp }})-QT5-x86_64.AppImage
           asset_content_type: application/vnd.appimage
