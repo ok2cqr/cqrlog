@@ -33,8 +33,8 @@ jobs:
       - name: Run Build test deb
         run: make deb
 
-      - name: Build debug
-        run: ls -lh
+      - name: Get latest changelog entries
+        run: ./tools/changelog_latest.sh > CHANGELOG.latest
 
       - name: release-draft
         uses: actions/create-release@v1
@@ -44,8 +44,7 @@ jobs:
           prerelease: false
           release_name: CQRLOG v${{ env.tag_ver }}
           tag_name: ${{ github.ref }}
-          #body_path: CHANGELOG
-          body: $( ./tools/changelog_latest.sh )
+          body_path: CHANGELOG.latest
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
