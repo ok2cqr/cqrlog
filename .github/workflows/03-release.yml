@@ -44,7 +44,8 @@ jobs:
           prerelease: false
           release_name: CQRLOG v${{ env.tag_ver }}
           tag_name: ${{ github.ref }}
-          body_path: CHANGELOG
+          #body_path: CHANGELOG
+          body: $( ./tools/changelog_latest.sh )
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
