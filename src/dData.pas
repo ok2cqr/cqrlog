@@ -2415,7 +2415,7 @@ begin
       aSCP[i-1] := tmp;
       inc(i);
       if i>80000 then
-        SetLength(aSCP,100000)
+        SetLength(aSCP,10000000)
     end;
     CloseFile(f);
     SetLength(aSCP,i);
