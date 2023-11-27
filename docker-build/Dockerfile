@@ -1,22 +1,58 @@
-FROM ubuntu:focal
+# Set base image to Ubuntu 22.04 LTS Jammy, as fpc fails on Focal
+FROM ubuntu:jammy
 
-RUN apt-get update && apt-get -y upgrade
+ENV DEBIAN_FRONTEND="noninteractive"
+ENV TZ="Europe/London"
+ENV DESTDIR=/usr/local/cqrlog-alpha
 
-ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
+# create the volume folders
+RUN mkdir -p /usr/local/cqrlog-alpha /cqrlog/build
 
-RUN apt-get install -y git lazarus-ide lcl lcl-gtk2 lcl-nogui lcl-units lcl-utils lazarus lazarus-doc lazarus-src fp-units-misc fp-units-rtl fp-utils fpc fpc-source libssl-dev
+# update the system
+RUN apt-get update
 
-RUN mkdir -p /usr/local/cqrlog-alpha /home/cqrlog/build
+# install lazarus
+RUN apt-get install -y \
+        git \
+        lazarus-ide \
+        lcl lcl-gtk2 \
+        lcl-nogui \
+        lcl-units \
+        lcl-utils \
+        lazarus \
+        lazarus-doc \
+        lazarus-src \
+        fp-units-misc \
+        fp-units-rtl \
+        fp-utils \
+        fpc \
+        fpc-source
+
+# Install runtime deps and packing tools
+RUN apt-get install -y \
+        libssl-dev \
+        libfl-dev \
+        libqt5pas1 \
+        libqt5pas-dev \
+        libfuse2 \
+        libsquashfuse0 \
+        wget \
+        devscripts \
+        qt5-qmake-bin \
+        qtchooser \
+        mariadb-server \
+        mariadb-client \
+        sudo
 
 # Mount point for the git repository:
-# -v $(pwd):/home/cqrlog/build
-VOLUME ["/home/cqrlog/build"]
+# -v $(pwd):/cqrlog
+VOLUME ["/cqrlog"]
 
 # Mount point for the result of the build:
 # -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha
 VOLUME ["/usr/local/cqrlog-alpha"]
 
-WORKDIR /home/cqrlog/build
+# Set the working directory
+WORKDIR /cqrlog
 
-ENTRYPOINT make clean && make DESTDIR=/usr/local/cqrlog-alpha && make DESTDIR=/usr/local/cqrlog-alpha install
-
+CMD ["bash"]

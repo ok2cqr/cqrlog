@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# TODO:
+#   * make use of get_version.sh to get the version, but need to check run folder to call it right
+
 if [ -v $i] && [ $1 = "beta" ]; then
    VERSION=`date '+%Y%m%d'`
 else

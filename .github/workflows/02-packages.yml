@@ -1,0 +1,34 @@
+name: Build + AppImage Artifact for testing
+
+on:
+  push:
+    branches: [ "master" ]
+    tags-ignore:
+      - '*'
+  pull_request:
+    branches: [ "master" ]
+    tags-ignore:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Build Appimage GTK2
+      run: make appimage
+
+    - name: Run Build Appimage QT5
+      run: make appimage-qt5
+
+    - name: Run Build test deb
+      run: make deb
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: AppImage
+        path: |
+          CQRLOG-*.AppImage
+          cqrlog_*.deb
