@@ -5,6 +5,7 @@ Legend:
 --------------------
 2.6.0 (2022-05-29)
   #some code refactoring
+  #Easier to install into /usr/local or ~/.local (N3GB)
   + new button "URL" to row below "Comment to callsign" (Saku, OH1KH)  
   + many improvements to working with WSJTX (Saku, OH1KH)
   + Clear RIT after saving QSO cleats also XIT (Saku, OH1KH)
@@ -30,6 +31,7 @@ Legend:
   - cabrillo export (Saku, OH1KH)
   - docker build fixes (Dawid, SQ6EMM)
   - microwave band fixes (Dawid, SQ6EMM)
+  - fix QSO list display when using dark theme (George, N3GB)
   
 2.5.2 (2021-02-12)
   # some code refactoring

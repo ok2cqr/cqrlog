@@ -344,7 +344,6 @@ object frmMain: TfrmMain
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = '10000'
-      Font.Color = clBlack
       Font.Style = [fsBold]
       Layout = tlBottom
       ParentColor = False
@@ -410,7 +409,6 @@ object frmMain: TfrmMain
       AutoSize = False
       BorderSpacing.Right = 10
       Caption = '150'
-      Font.Color = clBlack
       Font.Style = [fsBold]
       Layout = tlBottom
       ParentColor = False

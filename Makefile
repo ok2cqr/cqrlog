@@ -1,8 +1,12 @@
 CC=lazbuild
 ST=strip
-datadir  = $(DESTDIR)/usr/share/cqrlog
-bindir   = $(DESTDIR)/usr/bin
-sharedir = $(DESTDIR)/usr/share
+# Set default path header for installation. Can be changed by
+#  environment variable or CLI
+DESTDIR  = /usr
+#
+datadir  = $(DESTDIR)/share/cqrlog
+bindir   = $(DESTDIR)/bin
+sharedir = $(DESTDIR)/share
 tmpdir   = /tmp
 
 cqrlog: src/cqrlog.lpi
@@ -18,8 +22,8 @@ clean:
 	rm -rf src/backup
 	rm -f -v src/richmemo/*.o src/richmemo/*.ppu src/richmemo/gtk2/*.ppu src/richmemo/gtk2/*.o
 	rm -f -v tools/adif_hash_generator tools/adif_hash_generator.lpi tools/adif_hash_generator.lps
-	rm -rf /tmp/.lazarus
-	
+	rm -rf $(tmpdir)/.lazarus
+
 install:
 	install -d -v         $(bindir)
 	install -d -v         $(datadir)
@@ -82,4 +86,3 @@ cqrlog_qt5: src/cqrlog.lpi
 cqrlog_qt5_debug: src/cqrlog.lpi
 	$(CC) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
-	
