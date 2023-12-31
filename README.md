@@ -49,7 +49,7 @@ host that is guaranteed to not exist.)
 
 Then, run the build itself with
 
-    sudo mkdir -p /usr/local/cqrlog-alpha &&
+    sudo mkdir -p /usr/local/cqrlog-alpha && sudo chown $SUDO_USER /usr/local/cqrlog-alpha &&
     docker run -ti -u root -v $(pwd):/home/cqrlog/build \
       -v /usr/local/cqrlog-alpha:/usr/local/cqrlog-alpha this.registry.is.invalid/cqrlog-build
 
