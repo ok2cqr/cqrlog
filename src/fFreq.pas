@@ -51,8 +51,8 @@ end;
 procedure TfrmFreq.FormClose(Sender : TObject; var CloseAction : TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmFreq);
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback
+  if dmData.trFreqs.Active then
+    dmData.trFreqs.Rollback
 end;
 
 procedure TfrmFreq.dbgrdFreqColumnSized(Sender : TObject);
@@ -71,14 +71,14 @@ var
 begin
   with TfrmChangeFreq.Create(frmFreq) do
   try
-    band             := dmData.qBands.Fields[1].AsString;
-    edtBegin.Text    := FloatToStr(dmData.qBands.Fields[2].AsFloat);
-    edtEnd.Text      := FloatToStr(dmData.qBands.Fields[3].AsFloat);
-    edtCW.Text       := FloatToStr(dmData.qBands.Fields[4].AsFloat);
-    edtRTTY.Text     := FloatToStr(dmData.qBands.Fields[5].AsFloat);
-    edtSSB.Text      := FloatToStr(dmData.qBands.Fields[6].AsFloat);
-    edtRXOffset.Text := FloatToStr(dmData.qBands.Fields[7].AsFloat);
-    edtTXOffset.Text := FloatToStr(dmData.qBands.Fields[8].AsFloat);
+    band             := dmData.qFreqs.Fields[1].AsString;
+    edtBegin.Text    := FloatToStr(dmData.qFreqs.Fields[2].AsFloat);
+    edtEnd.Text      := FloatToStr(dmData.qFreqs.Fields[3].AsFloat);
+    edtCW.Text       := FloatToStr(dmData.qFreqs.Fields[4].AsFloat);
+    edtData.Text     := FloatToStr(dmData.qFreqs.Fields[5].AsFloat);
+    edtSSB.Text      := FloatToStr(dmData.qFreqs.Fields[6].AsFloat);
+    edtRXOffset.Text := FloatToStr(dmData.qFreqs.Fields[7].AsFloat);
+    edtTXOffset.Text := FloatToStr(dmData.qFreqs.Fields[8].AsFloat);
     ShowModal;
 
     if ModalResult = mrOK then
@@ -88,7 +88,7 @@ begin
                              StrToFloat(edtBegin.Text),
                              StrToFloat(edtEnd.Text),
                              StrToFloat(edtCW.Text),
-                             StrToFloat(edtRTTY.Text),
+                             StrToFloat(edtData.Text),
                              StrToFloat(edtSSB.Text),
                              StrToFloat(edtRXOffset.Text),
                              StrToFloat(edtTXOffset.Text)
@@ -106,29 +106,29 @@ const
 var
   i : Integer;
 begin
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
+  if dmData.trFreqs.Active then
+    dmData.trFreqs.Rollback;
 
-  dmData.qBands.SQL.Text := C_SEL;
-  dmData.trBands.StartTransaction;
-  dmData.qBands.Open;
+  dmData.qFreqs.SQL.Text := C_SEL;
+  dmData.trFreqs.StartTransaction;
+  dmData.qFreqs.Open;
 
   dbgrdFreq.Columns[0].Visible := False;
 
   if (band<>'') then
   begin
-    dmData.qBands.DisableControls;
+    dmData.qFreqs.DisableControls;
     try
-      dmData.qBands.First;
-      while not dmData.qBands.Eof do
+      dmData.qFreqs.First;
+      while not dmData.qFreqs.Eof do
       begin
-        if (dmData.qBands.Fields[1].AsString=band) then
+        if (dmData.qFreqs.Fields[1].AsString=band) then
           break
         else
-          dmData.qBands.Next
+          dmData.qFreqs.Next
       end
     finally
-      dmData.qBands.EnableControls
+      dmData.qFreqs.EnableControls
     end
   end;
 
@@ -137,7 +137,7 @@ begin
   dbgrdFreq.Columns[2].Title.Caption := 'Begin';
   dbgrdFreq.Columns[3].Title.Caption := 'End';
   dbgrdFreq.Columns[4].Title.Caption := 'CW';
-  dbgrdFreq.Columns[5].Title.Caption := 'RTTY';
+  dbgrdFreq.Columns[5].Title.Caption := 'Data';
   dbgrdFreq.Columns[6].Title.Caption := 'SSB';
   dbgrdFreq.Columns[7].Title.Caption := 'RX offset';
   dbgrdFreq.Columns[8].Title.Caption := 'TX offset';

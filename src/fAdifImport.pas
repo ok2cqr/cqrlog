@@ -904,6 +904,7 @@ begin
   lblCount.Caption :='';
   lblErrors.Caption := '';
   Do_Err_Import:=true;
+  lblComplete.Visible := False;
 end;
 
 procedure TfrmAdifImport.mnuDeleteClick(Sender: TObject);

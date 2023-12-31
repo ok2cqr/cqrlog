@@ -7,15 +7,16 @@ object frmRadioMemories: TfrmRadioMemories
   ClientHeight = 415
   ClientWidth = 578
   OnClose = FormClose
+  OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.2.4.0'
   object sgrdMem: TStringGrid
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 0
     Height = 415
     Top = 0
-    Width = 478
+    Width = 458
     Align = alClient
     ColCount = 4
     Columns = <    
@@ -38,8 +39,8 @@ object frmRadioMemories: TfrmRadioMemories
     FixedCols = 0
     RowCount = 1
     TabOrder = 0
-    OnCompareCells = sgrdMemCompareCells
     OnDblClick = sgrdMemDblClick
+    OnHeaderClick = sgrdMemHeaderClick
     OnSelectCell = sgrdMemSelectCell
     ColWidths = (
       81
@@ -53,109 +54,154 @@ object frmRadioMemories: TfrmRadioMemories
     AnchorSideTop.Control = Owner
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = sgrdMem
-    Left = 478
+    Left = 458
     Height = 415
     Top = 0
-    Width = 100
+    Width = 120
     Align = alRight
     Anchors = [akTop, akRight]
     BevelOuter = bvNone
     ClientHeight = 415
-    ClientWidth = 100
+    ClientWidth = 120
     TabOrder = 1
     object btnCancel: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnOK
       AnchorSideTop.Side = asrBottom
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 43
+      Top = 52
       Width = 75
       BorderSpacing.Top = 6
       Cancel = True
       Caption = 'Cancel'
       ModalResult = 2
-      TabOrder = 0
+      TabOrder = 1
     end
     object btnAdd: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnCancel
       AnchorSideTop.Side = asrBottom
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 110
+      Top = 119
       Width = 75
       Action = acAdd
       BorderSpacing.Top = 42
-      TabOrder = 1
+      TabOrder = 2
     end
     object btnEdit: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnAdd
       AnchorSideTop.Side = asrBottom
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 141
+      Top = 150
       Width = 75
       Action = acEdit
       BorderSpacing.Top = 6
-      TabOrder = 2
+      TabOrder = 3
     end
     object btnDelete: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnEdit
       AnchorSideTop.Side = asrBottom
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 172
+      Top = 181
       Width = 75
       Action = acDelete
       BorderSpacing.Top = 6
-      TabOrder = 3
+      TabOrder = 4
     end
     object btnMore: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnDelAll
       AnchorSideTop.Side = asrBottom
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 258
+      Top = 267
       Width = 75
       BorderSpacing.Top = 30
       Caption = 'More...'
       OnClick = btnMoreClick
-      TabOrder = 4
+      TabOrder = 6
     end
     object btnOK: TButton
       AnchorSideLeft.Control = Panel1
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = Panel1
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 12
+      Top = 21
       Width = 75
-      BorderSpacing.Top = 12
+      BorderSpacing.Top = 21
       Caption = 'OK'
       ModalResult = 1
-      TabOrder = 5
+      TabOrder = 0
     end
     object btnDelAll: TButton
       AnchorSideLeft.Control = btnOK
       AnchorSideTop.Control = btnDelete
       AnchorSideTop.Side = asrBottom
-      Left = 13
+      Left = 23
       Height = 25
-      Top = 203
+      Top = 212
       Width = 75
       BorderSpacing.Top = 6
       Caption = 'Delete All'
       OnClick = btnDelAllClick
-      TabOrder = 6
+      TabOrder = 5
+    end
+    object lblLines: TLabel
+      AnchorSideLeft.Control = lblSlash
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Side = asrCenter
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 64
+      Height = 1
+      Top = 396
+      Width = 1
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 6
+      BorderSpacing.Bottom = 18
+      ParentColor = False
+    end
+    object lblSelected: TLabel
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = lblSlash
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 55
+      Height = 1
+      Top = 396
+      Width = 1
+      Anchors = [akRight, akBottom]
+      BorderSpacing.Right = 6
+      BorderSpacing.Bottom = 18
+      ParentColor = False
+    end
+    object lblSlash: TLabel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 58
+      Height = 17
+      Top = 380
+      Width = 4
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Bottom = 18
+      Caption = '/'
+      ParentColor = False
     end
   end
   object acMem: TActionList
-    left = 24
-    top = 48
+    Left = 24
+    Top = 48
     object acAdd: TAction
       Caption = 'Add'
       OnExecute = acAddExecute
@@ -184,12 +230,11 @@ object frmRadioMemories: TfrmRadioMemories
     end
     object acSortByFreq: TAction
       Caption = 'Sort by freq'
-      OnExecute = acSortByFreqExecute
     end
   end
   object popMem: TPopupMenu
-    left = 96
-    top = 48
+    Left = 96
+    Top = 48
     object MenuItem1: TMenuItem
       Action = acImport
     end
@@ -199,21 +244,18 @@ object frmRadioMemories: TfrmRadioMemories
     object MenuItem3: TMenuItem
       Caption = '-'
     end
-    object MenuItem4: TMenuItem
-      Action = acSortByFreq
-    end
   end
   object dlgOpen: TOpenDialog
     DefaultExt = '.csv'
     Filter = 'CSV files|*.csv'
-    left = 176
-    top = 48
+    Left = 176
+    Top = 48
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.csv'
     Filter = 'CSV files|*.csv'
     Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
-    left = 264
-    top = 48
+    Left = 264
+    Top = 48
   end
 end

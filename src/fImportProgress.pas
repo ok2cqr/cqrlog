@@ -645,7 +645,7 @@ mode := ''; //be sure there is no mode at this point
            'QSLRDATE'   : qslrdate:= data;
           end; //case
        end;  //repeat
-  until pos('<EOR>',uppercase(Buf))=1;
+  until (pos('<EOR>',uppercase(Buf))=1) or (prik='EOR');
   //store original modes
   modeorig:=uppercase(mode);
   submodeorig:=uppercase(submode);
@@ -1013,6 +1013,7 @@ var
   qsl_via : String = '';
   i : Integer = 0;
 begin
+  dmData.qCQRLOG.Last; //to get proper count
   lblComment.Caption := 'Inserting QSL managers ...';
   pBarProg.Max := dmData.qCQRLOG.RecordCount;
   Application.ProcessMessages;

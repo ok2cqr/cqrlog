@@ -8,9 +8,10 @@ object frmAddRadioMemory: TfrmAddRadioMemory
   ClientHeight = 222
   ClientWidth = 308
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.2.4.0'
   object lblFreq: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -32,8 +33,9 @@ object frmAddRadioMemory: TfrmAddRadioMemory
     Top = 19
     Width = 192
     BorderSpacing.Left = 12
+    OnKeyDown = FormKeyDown
+    OnKeyPress = edtFreqKeyPress
     TabOrder = 0
-    Text = '0'
   end
   object lblMode: TLabel
     AnchorSideLeft.Control = Owner
@@ -61,8 +63,8 @@ object frmAddRadioMemory: TfrmAddRadioMemory
     BorderSpacing.Left = 12
     CharCase = ecUppercase
     ItemHeight = 0
+    OnKeyDown = FormKeyDown
     TabOrder = 1
-    Text = 'CMBMODE'
   end
   object lblWidth: TLabel
     AnchorSideLeft.Control = Owner
@@ -86,8 +88,9 @@ object frmAddRadioMemory: TfrmAddRadioMemory
     Top = 125
     Width = 112
     BorderSpacing.Left = 12
+    NumbersOnly = True
+    OnKeyDown = FormKeyDown
     TabOrder = 2
-    Text = '0'
   end
   object Button1: TButton
     AnchorSideTop.Control = Owner
@@ -144,6 +147,7 @@ object frmAddRadioMemory: TfrmAddRadioMemory
     Width = 284
     BorderSpacing.Left = 12
     MaxLength = 25
+    OnKeyDown = FormKeyDown
     TabOrder = 3
   end
 end

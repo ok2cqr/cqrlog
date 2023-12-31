@@ -54,8 +54,10 @@ var star_time_u:extended;
 type
   Tgrayline=object
       GC_LWidth : integer;  //plot line wdth;
+      GB_LWidth : integer;
       GC_SP_Color : TColor;
       GC_LP_Color : TColor;
+      GC_BE_Color : TColor;
       const GC_Points_Max = 5000;
       constructor init(naz_sou:string);
       destructor done;
@@ -71,7 +73,8 @@ type
   //    procedure GC_line_width(LWidth:Integer);      //set plot line width
       procedure GC_line_part(x1,y1,x2,y2:double);   //add ShortPath point
       procedure GC_Lline_part(x1,y1,x2,y2:double);  //add LongPath point
-      procedure GC_line_clear(what:integer=-1);      //clear S&LPath points
+      procedure GC_Bline_part(x1,y1,x2,y2:double);  //add Beam point
+      procedure GC_line_clear(what:integer=-1);      //clear S&L and Beam Path points
 
     private
       nrd:boolean; //needs to redraw (a new calculation has been made)
@@ -100,7 +103,10 @@ type
       GCpointer:longint;
       GC_Lpoint:array[0..GC_points_Max] of TGC_point; //LongPath array
       GCLpointer:longint;
-      LP        : boolean;  //set LongPath color;
+      GC_Bpoint:array[0..GC_points_Max] of TGC_point; //LongPath array
+      GCBpointer:longint;
+
+      LP        : integer;
 
       function calc_horizontalx(var coord:t_coord; date:TDateTime; z:longint;latitude: extended):longint;
   end;
@@ -436,10 +442,6 @@ begin
 
 end;
 
-
-
-
-
 constructor Tgrayline.init(naz_sou:string);
 var e,z:longint;
     a:extended;
@@ -717,11 +719,16 @@ var
             can.pen.Width:=5;
             can.moveto(x1,y1);
             can.lineto(x2,y2); }
-            If LP then
-                   can.pen.color:=GC_LP_Color
-                  else
-                   can.pen.color:=GC_SP_Color;
             can.pen.Width:=GC_LWidth;
+            Case LP of
+                  0: can.pen.color:=GC_SP_Color;
+                  1: can.pen.color:=GC_LP_Color;
+                  2: Begin
+                      can.pen.color:=GC_BE_Color;
+                      can.pen.Width:=GB_LWidth;;
+                     end;
+            end;
+
             can.moveto(x1,y1);
             can.lineto(x2,y2);
       end;
@@ -888,22 +895,31 @@ begin
 
   if caraen then     //caraen = do
     begin
+      LP:=0;
       cmarni(carax1,caray1,carax2,caray2,true);
 //    can.Font.Color:=clBlack;
 //    can.TextOut(10,10,' '+inttostr(round(carax1))+':'+inttostr(round(caray1))+' ');
 //    can.TextOut(10,30,' '+inttostr(round(carax2))+':'+inttostr(round(caray2))+' ');
     end;
-
- if GCpointer+GCLpointer > 0 then //same as OR
+ if GCLpointer > 0 then
     begin
-     LP:=True; //LongPath color plotting
-      for z:=0 to GCLpointer-1 do
+     LP:=1; //LongPath color plotting
+     for z:=0 to GCLpointer-1 do
           cmarni(GC_Lpoint[z].La1, GC_Lpoint[z].Lo1, GC_Lpoint[z].La2, GC_Lpoint[z].Lo2, false);
-      LP:=False; //ShortPath color plotting
-      for z:=0 to GCpointer-1 do
+    end;
+ if GCpointer > 0 then
+    begin
+     LP:=0; //ShortPath color plotting
+     for z:=0 to GCpointer-1 do
           cmarni(GC_point[z].La1, GC_point[z].Lo1, GC_point[z].La2, GC_point[z].Lo2, false);
-     end;
+    end;
 
+ if GCBpointer > 0 then
+  Begin
+     LP:=2; //Beam color plotting
+     for z:=0 to GCBpointer-1 do
+            cmarni(GC_Bpoint[z].La1, GC_Bpoint[z].Lo1, GC_Bpoint[z].La2, GC_Bpoint[z].Lo2, false);
+  end;
 
   for z:=0 to body_poc-1 do
     begin
@@ -1000,17 +1016,36 @@ Begin
       inc(GCLpointer);
      end;
 end;
+procedure Tgrayline.GC_Bline_part(x1,y1,x2,y2:double);
+
+Begin
+    if chcipni then exit;    //chcipni = "die"
+    if GCBpointer < GC_Points_max then
+     begin
+      GC_Bpoint[GCBpointer].La1:=x1;
+      GC_Bpoint[GCBpointer].Lo1:=y1;
+      GC_Bpoint[GCBpointer].La2:=x2;
+      GC_Bpoint[GCBpointer].Lo2:=y2;
+      inc(GCBpointer);
+     end;
+end;
 
 procedure Tgrayline.GC_line_clear(what:integer=-1);
 
 begin
   case what of
-       -1: Begin
+       -1: Begin            //all
+            GCpointer:=0;
+            GCLpointer:=0;
+            GCBpointer:=0;
+          end;
+       0: GCpointer:=0;    //short path
+       1: GCLpointer:=0;   //long path
+       2: GCBpointer:=0;   //beam path
+       3: Begin            //short and long path
             GCpointer:=0;
             GCLpointer:=0;
           end;
-       0: GCpointer:=0;
-       1: GCLpointer:=0;
   end;
 end;
 {

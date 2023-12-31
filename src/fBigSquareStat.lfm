@@ -1,87 +1,166 @@
 object frmBigSquareStat: TfrmBigSquareStat
-  Left = 580
+  Left = 283
   Height = 590
-  Top = 279
+  Top = 53
   Width = 655
   Caption = 'Big square statistic'
   ClientHeight = 590
   ClientWidth = 655
   OnClose = FormClose
   OnShow = FormShow
-  LCLVersion = '1.2.2.0'
+  LCLVersion = '2.2.6.0'
   object Panel1: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
     Left = 0
-    Height = 88
+    Height = 80
     Top = 0
     Width = 655
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 88
+    ClientHeight = 80
     ClientWidth = 655
     TabOrder = 0
     object cmbBands: TComboBox
-      Left = 63
-      Height = 31
-      Top = 24
+      AnchorSideLeft.Control = Label1
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Panel1
+      Left = 55
+      Height = 33
+      Top = 9
       Width = 164
+      BorderSpacing.Left = 6
+      BorderSpacing.Top = 9
       ItemHeight = 0
+      OnChange = cmbBandsChange
       Style = csDropDownList
       TabOrder = 0
     end
     object Label1: TLabel
-      Left = 16
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = cmbBands
+      AnchorSideTop.Side = asrCenter
+      Left = 12
       Height = 17
-      Top = 32
-      Width = 38
+      Top = 17
+      Width = 37
+      BorderSpacing.Left = 12
       Caption = 'Band:'
       ParentColor = False
     end
     object GroupBox1: TGroupBox
-      Left = 240
-      Height = 72
-      Top = 11
-      Width = 225
+      AnchorSideLeft.Control = cmbBands
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cmbBands
+      AnchorSideRight.Control = btnRefresh
+      Left = 231
+      Height = 42
+      Top = 9
+      Width = 244
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 12
+      BorderSpacing.Right = 12
       Caption = ' Confirmed '
-      ClientHeight = 53
-      ClientWidth = 221
+      ClientHeight = 24
+      ClientWidth = 242
       TabOrder = 1
       object chkQSL: TCheckBox
-        Left = 6
-        Height = 24
-        Top = 3
-        Width = 53
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideTop.Control = GroupBox1
+        AnchorSideTop.Side = asrCenter
+        Left = 5
+        Height = 23
+        Top = 1
+        Width = 51
+        BorderSpacing.Left = 5
         Caption = 'QSL'
+        OnChange = cmbBandsChange
         TabOrder = 0
       end
       object chkLoTW: TCheckBox
-        Left = 70
-        Height = 24
-        Top = 3
-        Width = 65
+        AnchorSideLeft.Control = GroupBox1
+        AnchorSideLeft.Side = asrCenter
+        AnchorSideTop.Control = GroupBox1
+        AnchorSideTop.Side = asrCenter
+        Left = 90
+        Height = 23
+        Top = 1
+        Width = 62
         Caption = 'LoTW'
+        OnChange = cmbBandsChange
         TabOrder = 1
       end
       object chkeQSL: TCheckBox
-        Left = 149
-        Height = 24
-        Top = 3
-        Width = 61
+        AnchorSideTop.Control = GroupBox1
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = GroupBox1
+        AnchorSideRight.Side = asrBottom
+        Left = 177
+        Height = 23
+        Top = 1
+        Width = 59
+        Anchors = [akTop, akRight]
+        BorderSpacing.Right = 6
         Caption = 'eQSL'
+        OnChange = cmbBandsChange
         TabOrder = 2
       end
     end
     object btnRefresh: TButton
-      Left = 496
-      Height = 25
-      Top = 28
-      Width = 128
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = GroupBox1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 487
+      Height = 33
+      Top = 14
+      Width = 156
       Anchors = [akTop, akRight]
+      BorderSpacing.Right = 12
       Caption = 'Refresh statistic'
       OnClick = btnRefreshClick
       TabOrder = 2
     end
+    object pbTot: TProgressBar
+      AnchorSideLeft.Control = cmbBands
+      AnchorSideTop.Control = cmbBands
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = cmbBands
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 55
+      Height = 10
+      Top = 54
+      Width = 161
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 12
+      BorderSpacing.Right = 3
+      TabOrder = 3
+    end
+    object lblFIlterActive: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = GroupBox1
+      AnchorSideTop.Side = asrBottom
+      Left = 305
+      Height = 17
+      Top = 57
+      Width = 96
+      BorderSpacing.Top = 6
+      Caption = 'Filter is active!'
+      Font.Color = clRed
+      ParentColor = False
+      ParentFont = False
+      Visible = False
+    end
   end
   object Panel2: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
     Left = 0
     Height = 34
     Top = 556
@@ -92,33 +171,50 @@ object frmBigSquareStat: TfrmBigSquareStat
     ClientWidth = 655
     TabOrder = 1
     object btnClose: TButton
-      Left = 569
-      Height = 25
-      Top = 6
-      Width = 75
+      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 553
+      Height = 33
+      Top = 1
+      Width = 90
       Anchors = [akTop, akRight]
+      BorderSpacing.Right = 12
       Cancel = True
       Caption = 'Close'
       ModalResult = 2
       TabOrder = 0
     end
     object btnSaveTo: TButton
-      Left = 480
-      Height = 25
-      Top = 6
-      Width = 75
+      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = btnClose
+      Left = 451
+      Height = 33
+      Top = 1
+      Width = 90
       Anchors = [akTop, akRight]
+      BorderSpacing.Right = 12
       Caption = 'Save to ...'
       OnClick = btnSaveToClick
       TabOrder = 1
     end
   end
   object IpHtmlPanel1: TIpHtmlPanel
+    AnchorSideLeft.Control = Panel1
+    AnchorSideTop.Control = Panel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Panel1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Panel2
     Left = 0
-    Height = 468
-    Top = 88
+    Height = 476
+    Top = 80
     Width = 655
     Align = alClient
+    BorderWidth = 1
+    BorderStyle = bsSingle
     DataProvider = IpFileDataProvider1
     FixedTypeface = 'Courier New'
     DefaultTypeFace = 'Sans'
@@ -128,17 +224,29 @@ object frmBigSquareStat: TfrmBigSquareStat
     PrintSettings.MarginTop = 0.5
     PrintSettings.MarginRight = 0.5
     PrintSettings.MarginBottom = 0.5
+    PrintSettings.Preview.Left = 320
+    PrintSettings.Preview.Top = 200
+    PrintSettings.Preview.Width = 960
+    PrintSettings.Preview.Height = 600
     TabOrder = 2
     VLinkColor = clBlue
   end
   object IpFileDataProvider1: TIpFileDataProvider
-    left = 160
-    top = 512
+    Left = 160
+    Top = 512
   end
   object dlgSave: TSaveDialog
     DefaultExt = '.html'
     Filter = 'HTML files|*.html'
-    left = 64
-    top = 512
+    Left = 64
+    Top = 512
+  end
+  object tmrBlink: TTimer
+    Enabled = False
+    OnTimer = tmrBlinkTimer
+    OnStartTimer = tmrBlinkStartTimer
+    OnStopTimer = tmrBlinkStopTimer
+    Left = 248
+    Top = 512
   end
 end

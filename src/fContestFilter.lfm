@@ -120,7 +120,7 @@ object frmContestFilter: TfrmContestFilter
   OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '2.0.8.0'
+  LCLVersion = '2.2.2.0'
   object btnOK: TButton
     AnchorSideLeft.Control = btnCancel
     AnchorSideLeft.Side = asrBottom
@@ -183,14 +183,13 @@ object frmContestFilter: TfrmContestFilter
       AnchorSideLeft.Control = gbContName
       AnchorSideTop.Control = gbContName
       Left = 6
-      Height = 33
+      Height = 34
       Hint = 'Choose contest from logged QSOs'
       Top = 0
       Width = 506
       AutoComplete = True
       AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
       BorderSpacing.Left = 6
-      DropDownCount = 3
       ItemHeight = 0
       MaxLength = 40
       ParentShowHint = False

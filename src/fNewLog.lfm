@@ -1,66 +1,124 @@
 object frmNewLog: TfrmNewLog
   Left = 390
-  Height = 118
+  Height = 138
   Top = 273
-  Width = 303
+  Width = 308
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'frmNewLog'
-  ClientHeight = 118
-  ClientWidth = 303
+  ClientHeight = 138
+  ClientWidth = 308
   OnClose = FormClose
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.0.4'
-  object Label1: TLabel
-    Left = 16
+  LCLVersion = '2.2.6.0'
+  object lblLogNr: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 12
     Height = 17
-    Top = 9
-    Width = 87
+    Top = 6
+    Width = 81
+    Alignment = taRightJustify
+    BorderSpacing.Left = 12
+    BorderSpacing.Top = 6
     Caption = 'Log number:'
     ParentColor = False
   end
   object edtLogNR: TEdit
-    Left = 16
-    Height = 27
-    Top = 33
+    AnchorSideLeft.Control = lblLogNr
+    AnchorSideTop.Control = lblLogNr
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 34
+    Hint = 'GIve unused log number, or use suggested.'
+    Top = 23
     Width = 46
     MaxLength = 3
+    NumbersOnly = True
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 0
   end
-  object Label2: TLabel
-    Left = 16
+  object lblLogName: TLabel
+    AnchorSideLeft.Control = edtLogNR
+    AnchorSideTop.Control = edtLogNR
+    AnchorSideTop.Side = asrBottom
+    Left = 12
     Height = 17
-    Top = 65
-    Width = 71
+    Top = 63
+    Width = 68
+    BorderSpacing.Top = 6
     Caption = 'Log name:'
     ParentColor = False
   end
   object edtLogName: TEdit
-    Left = 16
-    Height = 27
-    Top = 86
+    AnchorSideLeft.Control = lblLogName
+    AnchorSideTop.Control = lblLogName
+    AnchorSideTop.Side = asrBottom
+    Left = 12
+    Height = 34
+    Hint = 'Give name for new log.'
+    Top = 80
     Width = 184
     MaxLength = 50
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 1
   end
   object btnOK: TButton
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
     Left = 224
     Height = 25
-    Top = 9
+    Top = 6
     Width = 75
+    Anchors = [akTop]
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 12
     Caption = 'OK'
     OnClick = btnOKClick
     TabOrder = 2
   end
-  object Button2: TButton
+  object btnCancel: TButton
+    AnchorSideLeft.Control = btnOK
+    AnchorSideTop.Control = btnOK
+    AnchorSideTop.Side = asrBottom
     Left = 224
     Height = 25
-    Top = 42
+    Top = 37
     Width = 75
+    BorderSpacing.Top = 6
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 3
+  end
+  object lblLogCpyNR: TLabel
+    AnchorSideLeft.Control = lblLogNr
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = lblLogNr
+    Left = 111
+    Height = 17
+    Top = 6
+    Width = 98
+    BorderSpacing.Left = 18
+    Caption = 'Copy Cfg from:'
+    ParentColor = False
+  end
+  object edtLogCpyNR: TEdit
+    AnchorSideLeft.Control = lblLogCpyNR
+    AnchorSideTop.Control = lblLogCpyNR
+    AnchorSideTop.Side = asrBottom
+    Left = 111
+    Height = 34
+    Hint = 'GIve existing log number to copy new log configuration from.'#10'(Configurations are log based)'
+    Top = 23
+    Width = 46
+    MaxLength = 3
+    NumbersOnly = True
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
   end
 end

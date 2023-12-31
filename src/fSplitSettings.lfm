@@ -208,6 +208,8 @@ object frmSplitSettings: TfrmSplitSettings
     BorderSpacing.Left = 6
     BorderSpacing.Top = 6
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 0
   end
   object cmbSplit1: TComboBox
@@ -238,8 +240,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 39
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 2
-    Value = 1
   end
   object cmbSplit2: TComboBox
     AnchorSideLeft.Control = cmbSplit1
@@ -267,8 +270,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 72
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 4
-    Value = 1
   end
   object cmbSplit3: TComboBox
     AnchorSideLeft.Control = cmbSplit2
@@ -296,8 +300,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 105
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 6
-    Value = 1
   end
   object cmbSplit4: TComboBox
     AnchorSideLeft.Control = cmbSplit3
@@ -325,8 +330,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 138
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 8
-    Value = 1
   end
   object cmbSplit5: TComboBox
     AnchorSideLeft.Control = cmbSplit4
@@ -354,8 +360,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 171
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 10
-    Value = 1
   end
   object cmbSplit6: TComboBox
     AnchorSideLeft.Control = cmbSplit5
@@ -383,8 +390,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 204
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 12
-    Value = 1
   end
   object cmbSplit7: TComboBox
     AnchorSideLeft.Control = cmbSplit6
@@ -412,8 +420,9 @@ object frmSplitSettings: TfrmSplitSettings
     Top = 237
     Width = 88
     MaxValue = 9999
+    MinValue = 0
+    Value = 0
     TabOrder = 14
-    Value = 1
   end
   object cmbSplit8: TComboBox
     AnchorSideLeft.Control = cmbSplit7
@@ -443,7 +452,7 @@ object frmSplitSettings: TfrmSplitSettings
     BorderSpacing.Top = 18
     Caption = 'OK'
     OnClick = btnOKClick
-    TabOrder = 16
+    TabOrder = 18
   end
   object btnCancel: TButton
     AnchorSideLeft.Control = cmbSplit9
@@ -458,7 +467,7 @@ object frmSplitSettings: TfrmSplitSettings
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 17
+    TabOrder = 19
   end
   object lbl9: TLabel
     AnchorSideLeft.Control = lbl1
@@ -491,10 +500,10 @@ object frmSplitSettings: TfrmSplitSettings
     Height = 33
     Top = 270
     Width = 88
-    MaxValue = 8000
-    MinValue = 1
-    TabOrder = 18
-    Value = 2
+    MaxValue = 9999
+    MinValue = 0
+    Value = 0
+    TabOrder = 16
   end
   object cmbSplit9: TComboBox
     AnchorSideLeft.Control = cmbSplit8
@@ -510,7 +519,7 @@ object frmSplitSettings: TfrmSplitSettings
       'UP'
       'DOWN'
     )
-    TabOrder = 19
+    TabOrder = 17
     Text = 'UP'
   end
 end

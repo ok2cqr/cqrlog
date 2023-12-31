@@ -150,14 +150,14 @@ begin
 
     if cqrini.ReadBool('prop','AsImage',True) then
     begin
-      if HTTP.HTTPMethod('GET',cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php')) then
+      if HTTP.HTTPMethod('GET',cqrini.ReadString('prop','Url','https://www.hamqsl.com/solarbrief.php')) then
       begin
         HTTP.Document.SaveToFile(dmData.HomeDir + 'propagation.gif');
         Synchronize(@frmPropagation.SyncPropImage)
       end
     end
     else begin
-      if HTTP.HTTPMethod('GET', 'http://www.hamqsl.com/solarxml.php' ) then
+      if HTTP.HTTPMethod('GET', cqrini.ReadString('prop','UrlTxt','https://www.hamqsl.com/solarxml.php' )) then
       begin
         m.LoadFromStream(HTTP.Document);
         m.SaveToFile(dmData.HomeDir+'solar.xml');

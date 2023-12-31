@@ -676,7 +676,8 @@ var z,x,c:longint;
 
 procedure TcolorMemo.GetInfoFromSpot(x:longint);
 var z,c,v,a:longint;
-    ua,uz:string;
+    ua,uz,
+    call,freq,info:string;
     p,l :integer;
   begin
      bl1:=x;bl2:=x; //select line under cursor
@@ -685,11 +686,10 @@ var z,c,v,a:longint;
      if vetp < 0 then exit; //otherwise double click on empty memo crashes program (band map, dx cluster)
       for v:=x to c do ua:=ua+vety[v]^.te+#13#10;
      //writeln('Spot line: ',ua);
-
-     ua:= dmDXCluster.GetfreeTextFromSpot(ua);
+     dmDXCluster.GetSplitSpot(ua,call,freq,info);
      Clipboard.Clear;
-     Clipboard.astext:= ua; //info is now in clipboard
-     //writeln ('DX de info: ',ua);
+     Clipboard.astext:= info; //info is now in clipboard
+     //writeln ('DX de info: ',info);
 
   end;
 

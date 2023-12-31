@@ -2,68 +2,69 @@ object dmData: TdmData
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   OldCreateOrder = False
-  Height = 606
-  HorizontalOffset = 381
-  VerticalOffset = 87
-  Width = 822
-  PPI = 96
+  Height = 654
+  HorizontalOffset = 153
+  VerticalOffset = 39
+  Width = 1050
   object dsrMain: TDataSource
     DataSet = qCQRLOG
-    left = 304
-    top = 24
+    Left = 304
+    Top = 24
   end
   object dsrQSOBefore: TDataSource
     DataSet = qQSOBefore
-    left = 304
-    top = 360
+    Left = 216
+    Top = 368
   end
   object dsrImport: TDataSource
-    left = 728
-    top = 528
+    Left = 728
+    Top = 528
   end
   object dsrBands: TDataSource
     DataSet = qBands
-    left = 88
-    top = 360
+    Left = 112
+    Top = 552
   end
   object dsrWorkedContests: TDataSource
     DataSet = qWorkedContests
-    left = 416
-    top = 424
+    Left = 416
+    Top = 424
   end
   object dsrProfiles: TDataSource
     DataSet = qProfiles
-    left = 88
-    top = 24
+    Left = 88
+    Top = 24
   end
   object dsrDXCluster: TDataSource
     DataSet = qDXClusters
-    left = 224
-    top = 24
+    Left = 224
+    Top = 24
   end
   object dsrQSLMgr: TDataSource
     AutoEdit = False
     DataSet = qQSLMgr
-    left = 152
-    top = 360
+    Left = 32
+    Top = 552
   end
   object mQ: TSQLQuery
     FieldDefs = <>
     BeforeOpen = mQBeforeOpen
     Transaction = trmQ
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 632
-    top = 80
+    Left = 632
+    Top = 80
   end
   object trmQ: TSQLTransaction
     Active = False
     Action = caNone
-    left = 632
-    top = 144
+    Left = 632
+    Top = 144
   end
   object scCommon: TSQLScript
     Transaction = trmQ
+    AutoCommit = False
     UseDollarString = False
     Directives.Strings = (
       'SET TERM'
@@ -158,11 +159,12 @@ object dmData: TdmData
     UseSetTerm = True
     UseCommit = True
     UseDefines = True
-    left = 304
-    top = 472
+    Left = 304
+    Top = 472
   end
   object scLog: TSQLScript
     Transaction = trmQ
+    AutoCommit = False
     UseDollarString = False
     Directives.Strings = (
       'SET TERM'
@@ -401,9 +403,6 @@ object dmData: TdmData
       'ALTER TABLE log_changes'
       'ADD INDEX id_cqrlog_main (id_cqrlog_main);'
       ''
-      'ALTER TABLE log_changes'
-      'ADD FOREIGN KEY (id_cqrlog_main) REFERENCES cqrlog_main (id_cqrlog_main) ON DELETE SET NULL ON UPDATE CASCADE;'
-      ''
       'CREATE TABLE upload_status ('
       '  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
       '  logname varchar(30) NOT NULL,'
@@ -436,243 +435,258 @@ object dmData: TdmData
     UseCommit = False
     UseDefines = False
     OnException = scLogException
-    left = 152
-    top = 472
+    Left = 152
+    Top = 472
   end
   object dsrmQ: TDataSource
     DataSet = mQ
-    left = 632
-    top = 24
+    Left = 632
+    Top = 24
   end
   object qLogList: TSQLQuery
     FieldDefs = <>
     BeforeOpen = qLogListBeforeOpen
     Transaction = trLogList
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 528
-    top = 216
+    Left = 528
+    Top = 216
   end
   object trLogList: TSQLTransaction
     Active = False
     Action = caNone
-    left = 528
-    top = 288
+    Left = 528
+    Top = 288
   end
   object dsrLogList: TDataSource
     DataSet = qLogList
-    left = 528
-    top = 360
+    Left = 368
+    Top = 368
   end
   object qSQLConsole: TSQLQuery
     PacketRecords = 100
     FieldDefs = <>
     Transaction = trmQ
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 632
-    top = 216
+    Left = 632
+    Top = 216
   end
   object trSQLConsole: TSQLTransaction
     Active = False
     Action = caNone
-    left = 632
-    top = 288
+    Left = 632
+    Top = 288
   end
   object dsrSQLConsole: TDataSource
     DataSet = qSQLConsole
-    left = 632
-    top = 360
+    Left = 632
+    Top = 360
   end
   object qQSLMgr: TSQLQuery
     FieldDefs = <>
     Transaction = trQSLMgr
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 152
-    top = 216
+    Left = 152
+    Top = 216
   end
   object trQSLMgr: TSQLTransaction
     Active = False
     Action = caNone
-    left = 152
-    top = 288
+    Left = 152
+    Top = 288
   end
   object qCallBook: TSQLQuery
     FieldDefs = <>
     Transaction = trCallBook
     Params = <>
-    left = 24
-    top = 80
+    Macros = <>
+    Left = 24
+    Top = 80
   end
   object trCallBook: TSQLTransaction
     Active = False
     Action = caNone
-    left = 24
-    top = 144
+    Left = 24
+    Top = 144
   end
   object trLongNote: TSQLTransaction
     Active = False
     Action = caNone
-    left = 728
-    top = 144
+    Left = 728
+    Top = 144
   end
   object qLongNote: TSQLQuery
     FieldDefs = <>
     BeforeOpen = qLongNoteBeforeOpen
     Transaction = trLongNote
     Params = <>
-    left = 728
-    top = 80
+    Macros = <>
+    Left = 728
+    Top = 80
   end
   object qProfiles: TSQLQuery
     FieldDefs = <>
     Transaction = trProfiles
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 88
-    top = 80
+    Left = 88
+    Top = 80
   end
   object trProfiles: TSQLTransaction
     Active = False
     Action = caNone
-    left = 88
-    top = 144
+    Left = 88
+    Top = 144
   end
   object qIOTAList: TSQLQuery
     FieldDefs = <>
     Transaction = trIOTAList
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 24
-    top = 216
+    Left = 24
+    Top = 216
   end
   object trIOTAList: TSQLTransaction
     Active = False
     Action = caNone
-    left = 24
-    top = 288
+    Left = 24
+    Top = 288
   end
   object trBands: TSQLTransaction
     Active = False
     Action = caNone
-    left = 88
-    top = 288
+    Left = 88
+    Top = 288
   end
   object trWorkedContests: TSQLTransaction
     Active = False
     Action = caNone
-    left = 416
-    top = 360
+    Left = 304
+    Top = 368
   end
   object qBands: TSQLQuery
     FieldDefs = <>
     BeforeOpen = qBandsBeforeOpen
     Transaction = trBands
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 88
-    top = 216
+    Left = 88
+    Top = 216
   end
   object qWorkedContests: TSQLQuery
     FieldDefs = <>
     Transaction = trWorkedContests
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 122
-    top = 216
+    Left = 122
+    Top = 216
   end
   object trDXClusters: TSQLTransaction
     Active = False
     Action = caNone
-    left = 224
-    top = 144
+    Left = 224
+    Top = 144
   end
   object qDXClusters: TSQLQuery
     FieldDefs = <>
     Transaction = trDXClusters
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 224
-    top = 80
+    Left = 224
+    Top = 80
   end
   object trComment: TSQLTransaction
     Active = False
     Action = caNone
-    left = 224
-    top = 288
+    Left = 224
+    Top = 288
   end
   object qComment: TSQLQuery
     FieldDefs = <>
     Transaction = trComment
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 224
-    top = 216
+    Left = 224
+    Top = 216
   end
   object trException: TSQLTransaction
     Active = False
     Action = caNone
-    left = 472
-    top = 288
+    Left = 472
+    Top = 288
   end
   object qException: TSQLQuery
     FieldDefs = <>
     Transaction = trException
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 472
-    top = 216
+    Left = 472
+    Top = 216
   end
   object trQSOBefore: TSQLTransaction
     Active = False
     Action = caNone
-    left = 304
-    top = 288
+    Left = 304
+    Top = 288
   end
   object qQSOBefore: TSQLQuery
     FieldDefs = <>
     Transaction = trQSOBefore
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 299
-    top = 216
+    Left = 299
+    Top = 216
   end
   object trQ1: TSQLTransaction
     Active = False
     Action = caNone
-    left = 528
-    top = 144
+    Left = 528
+    Top = 144
   end
   object Q1: TSQLQuery
     FieldDefs = <>
     BeforeOpen = Q1BeforeOpen
     Transaction = trQ1
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 528
-    top = 80
+    Left = 528
+    Top = 80
   end
   object trQ: TSQLTransaction
     Active = False
     Action = caNone
-    left = 472
-    top = 144
+    Left = 472
+    Top = 144
   end
   object Q: TSQLQuery
     FieldDefs = <>
     BeforeOpen = QBeforeOpen
     Transaction = trQ
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 472
-    top = 80
+    Left = 472
+    Top = 80
   end
   object trCQRLOG: TSQLTransaction
     Active = False
     Action = caNone
-    left = 304
-    top = 144
+    Left = 304
+    Top = 144
   end
   object qCQRLOG: TSQLQuery
     PacketRecords = 100
@@ -680,12 +694,14 @@ object dmData: TdmData
     BeforeOpen = qCQRLOGBeforeOpen
     Transaction = trCQRLOG
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 304
-    top = 80
+    Left = 304
+    Top = 80
   end
   object scViews: TSQLScript
     Transaction = trmQ
+    AutoCommit = False
     UseDollarString = False
     Directives.Strings = (
       'SET TERM'
@@ -715,16 +731,17 @@ object dmData: TdmData
     UseCommit = True
     UseDefines = True
     OnException = scViewsException
-    left = 224
-    top = 472
+    Left = 224
+    Top = 472
   end
   object tmrDBPing: TTimer
     Enabled = False
     OnTimer = tmrDBPingTimer
-    left = 16
-    top = 24
+    Left = 16
+    Top = 24
   end
   object scQSLExport: TSQLScript
+    AutoCommit = False
     UseDollarString = False
     Directives.Strings = (
       'SET TERM'
@@ -781,11 +798,12 @@ object dmData: TdmData
     UseSetTerm = True
     UseCommit = True
     UseDefines = True
-    left = 528
-    top = 472
+    Left = 528
+    Top = 472
   end
   object scOnlineLogTriggers: TSQLScript
     Transaction = trmQ
+    AutoCommit = False
     UseDollarString = False
     Directives.Strings = (
       'SET TERM'
@@ -818,10 +836,11 @@ object dmData: TdmData
     UseSetTerm = True
     UseCommit = True
     UseDefines = True
-    left = 416
-    top = 472
+    Left = 416
+    Top = 472
   end
   object scMySQLConfig: TSQLScript
+    AutoCommit = False
     UseDollarString = False
     Directives.Strings = (
       'SET TERM'
@@ -907,84 +926,140 @@ object dmData: TdmData
     UseSetTerm = True
     UseCommit = True
     UseDefines = True
-    left = 40
-    top = 472
+    Left = 40
+    Top = 472
   end
   object qBandMapFil: TSQLQuery
     FieldDefs = <>
     Params = <>
-    left = 728
-    top = 216
+    Macros = <>
+    Left = 728
+    Top = 216
   end
   object trBandMapFil: TSQLTransaction
     Active = False
-    left = 728
-    top = 288
+    Left = 728
+    Top = 288
   end
   object qRbnMon: TSQLQuery
     FieldDefs = <>
     Params = <>
-    left = 152
-    top = 80
+    Macros = <>
+    Left = 152
+    Top = 80
   end
   object trRbnMon: TSQLTransaction
     Active = False
-    left = 152
-    top = 144
+    Left = 152
+    Top = 144
   end
   object qFreqMem: TSQLQuery
     FieldDefs = <>
     Transaction = trFreqMem
     Params = <>
-    left = 368
-    top = 216
+    Macros = <>
+    Left = 600
+    Top = 544
   end
   object trFreqMem: TSQLTransaction
     Active = False
-    left = 368
-    top = 288
+    Left = 528
+    Top = 544
   end
   object W: TSQLQuery
     FieldDefs = <>
     BeforeOpen = WBeforeOpen
     Transaction = trW
     Params = <>
-    left = 368
-    top = 80
+    Macros = <>
+    Left = 368
+    Top = 80
   end
   object trW: TSQLTransaction
     Active = False
     Action = caNone
-    left = 368
-    top = 144
+    Left = 368
+    Top = 144
   end
   object W1: TSQLQuery
     FieldDefs = <>
     BeforeOpen = W1BeforeOpen
     Transaction = trW1
     Params = <>
-    left = 416
-    top = 80
+    Macros = <>
+    Left = 416
+    Top = 80
   end
   object trW1: TSQLTransaction
     Active = False
     Action = caNone
-    left = 416
-    top = 144
+    Left = 416
+    Top = 144
   end
   object Q2: TSQLQuery
     FieldDefs = <>
     BeforeOpen = Q2BeforeOpen
     Transaction = trQ2
     Params = <>
+    Macros = <>
     ParseSQL = False
-    left = 576
-    top = 80
+    Left = 576
+    Top = 80
   end
   object trQ2: TSQLTransaction
     Active = False
     Action = caNone
-    left = 576
-    top = 144
+    Left = 576
+    Top = 144
+  end
+  object CQ: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = QBeforeOpen
+    Transaction = trCQ
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 680
+    Top = 80
+  end
+  object trCQ: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 680
+    Top = 144
+  end
+  object dsrFreqs: TDataSource
+    DataSet = qFreqs
+    Left = 24
+    Top = 368
+  end
+  object trFreqs: TSQLTransaction
+    Active = False
+    Action = caNone
+    Left = 144
+    Top = 368
+  end
+  object qFreqs: TSQLQuery
+    FieldDefs = <>
+    BeforeOpen = qBandsBeforeOpen
+    Transaction = trFreqs
+    Params = <>
+    Macros = <>
+    ParseSQL = False
+    Left = 88
+    Top = 368
+  end
+  object qFreqMemGrid: TSQLQuery
+    FieldDefs = <>
+    Transaction = trFreqMemGrid
+    Params = <>
+    Macros = <>
+    Left = 352
+    Top = 552
+  end
+  object trFreqMemGrid: TSQLTransaction
+    Active = False
+    Left = 440
+    Top = 552
   end
 end

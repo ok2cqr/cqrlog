@@ -5,9 +5,9 @@ unit fBigSquareStat;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, StdCtrls, Grids, IpHtml, Ipfilebroker, db, BufDataset,
-  LazFileUtils;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, StdCtrls, Grids, ComCtrls, IpHtml, Ipfilebroker, db, BufDataset,
+  LazFileUtils, dateutils;
 
 type
 
@@ -25,13 +25,20 @@ type
     IpFileDataProvider1: TIpFileDataProvider;
     IpHtmlPanel1: TIpHtmlPanel;
     Label1: TLabel;
+    lblFIlterActive: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
     dlgSave: TSaveDialog;
+    pbTot: TProgressBar;
+    tmrBlink: TTimer;
     procedure btnRefreshClick(Sender: TObject);
     procedure btnSaveToClick(Sender: TObject);
+    procedure cmbBandsChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
+    procedure tmrBlinkStartTimer(Sender: TObject);
+    procedure tmrBlinkStopTimer(Sender: TObject);
+    procedure tmrBlinkTimer(Sender: TObject);
   private
     TmpFile : String;
     f  : TextFile;
@@ -61,60 +68,26 @@ begin
   DeleteFileUTF8(ExtractFileNameWithoutExt(TmpFile)+'.html')
 end;
 
-{  dbfBand.FilePathFull := fHomeDir;
-  dbfBand.TableName  := 'bandmap.dat';
-  if not FileExists(fHomeDir+'bandmap.dat') then
-  begin
-    dbfBand.TableLevel := 7;
-    dbfBand.Exclusive  := True;
-    dbfBand.FieldDefs.Clear;
-    With dbfBand.FieldDefs do begin
-      Add('vfo_a', ftFloat);
-      Add('Call', ftString, 20);
-      Add('vfo_b', ftFloat);
-      Add('split',ftBoolean);
-      Add('color',ftLargeint);
-      Add('mode',ftString,8);
-      Add('band',ftString,6);
-      Add('time',ftDateTime);
-      Add('age', ftString,1);
-      Add('pfx',ftString,10);
-      Add('lat',ftString,10);
-      Add('long',ftString,10);
-      Add('id', ftAutoInc)
-    end;
-    dbfBand.CreateTable;
-    dbfBand.Open;
-    dbfBand.AddIndex('id','id', [ixPrimary, ixUnique]);
-    dbfBand.AddIndex('vfo_a','vfo_a', []);
-    dbfBand.Close;
-    dbfBand.Exclusive := false;
-    dbfBand.Open
-}
-
 procedure TfrmBigSquareStat.btnRefreshClick(Sender: TObject);
 var
   tmp : String = '';
+  bnd : String = '';
   grb : String = '';
-  wkd : Word = 0;
-  cfm : Word = 0;
+  allwkd : longint = 0;
+  thiswkd : longint =0;
+  allwkdBig : longint = 0;
+  TotPos : longint = 0;
+  wkd : integer = 0;
+  cfm : integer = 0;
   ll  : String = '';
-  sum_wkd : Word = 0;
-  sum_cfm : Word = 0;
+  sum_wkd : integer = 0;
+  sum_cfm : integer = 0;
   db : TBufDataset;
+  TableName : String;
 begin
-  //db := TBufDataset.Create(nil);
+  tmrBlink.Enabled:=False;
+  TableName:='cqrlog_main';
   try
-    //db.Fields.Clear;
-    //with db.FieldDefs do
-    //begin
-    //  Add('loc', ftString, 4);
-    //  Add('cfm',ftBoolean)
-    //end;
-    //db.CreateDataset;
-    //db.IndexDefs.Add('loc','loc',[ixPrimary]);
-    //db.Open;
-
     dmData.Q.Close;
     dmData.Q1.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
@@ -136,24 +109,68 @@ begin
     end;
     tmp := copy(tmp,1,Length(tmp)-2); //remove "or"
 
+     if cmbBands.Text='ALL' then
+       bnd:=' '
+     else
+      bnd:= ' and band='+QuotedStr(cmbBands.Text);
+
     dmData.trQ.StartTransaction;
     dmData.trQ1.StartTransaction;
     try
-      dmData.Q.SQL.Text := 'select upper(left(loc,2)) as ll FROM cqrlog_main where loc <> '+QuotedStr('')+
-                           ' and band='+QuotedStr(cmbBands.Text)+' group by ll';
+      if dmData.IsFilter then
+         begin
+          try
+            TableName:='statistic_filter';
+            dmData.Q.Close;
+            dmData.Q.SQL.Text:='DROP VIEW IF EXISTS '+TableName;
+            dmData.Q.ExecSQL;
+            dmData.trQ.Commit;
+            dmData.Q.Close;
+            dmData.Q.SQL.Text:='CREATE VIEW '+TableName+' AS '+dmData.IsFilterSQL;
+            dmData.Q.ExecSQL;
+            dmData.trQ.Commit;
+            dmData.Q.Close;
+          except
+           on E : EDatabaseError do
+            Begin
+              ShowMessage('Can not create filter view!');
+              Exit;
+            end;
+          end;
+         end;
+      dmData.Q.SQL.Text := 'select left(loc,2) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll';
       dmData.Q.Open;
+      dmData.Q.Last;
+      allwkdBig:=dmData.Q.RecordCount;
+      dmData.Q.Close;
+
+      dmData.Q.SQL.Text := 'select left(loc,4) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll';
+      dmData.Q.Open;
+      dmData.Q.Last;
+      allwkd:=dmData.Q.RecordCount;
+      dmData.Q.Close;
+
+      dmData.Q.SQL.Text := 'select upper(left(loc,2)) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+
+                           bnd+' group by ll';
+      dmData.Q.Open;
+      dmData.Q.Last;
       WriteHMTLHeader;
       writeln(f,'<table>');
+      pbTot.Max:=dmData.Q.RecordCount;
+      thiswkd:= dmData.Q.RecordCount;
+      dmData.Q.First;
       while not dmData.Q.Eof do
       begin
+        inc(TotPos);
+        pbTot.Position:=TotPos;
+        Application.ProcessMessages;
         ll := dmData.Q.Fields[0].AsString;
         writeln(f,'<tr>'+LineEnding+'<td valign="middle">'+LineEnding+'<font color="black"><b>'+ll+'</b></font>'+LineEnding+'</td>');
         writeln(f,'<td align="left">');
         writeln(f,'<font color="black">');
         dmData.Q1.Close;
-        dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM cqrlog_main where loc like '+
-                              QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
-                              ' group by lll order by loc';
+        dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM '+TableName+' where loc like '+
+                              QuotedStr(ll+'%')+bnd+' group by lll order by loc';
         dmData.Q1.Open;
 
         db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
@@ -179,9 +196,8 @@ begin
           if tmp <> '' then
           begin
             dmData.Q1.Close;
-            dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM cqrlog_main where loc like '+
-                                  QuotedStr(ll+'%')+' and band = '+QuotedStr(cmbBands.Text)+
-                                  'and ('+tmp+') group by lll order by loc';
+            dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM '+TableName+' where loc like '+
+                                  QuotedStr(ll+'%')+bnd+'and ('+tmp+') group by lll order by loc';
             dmData.Q1.Open;
             cfm := 0;
             while not dmData.Q1.Eof do
@@ -237,11 +253,26 @@ begin
       Writeln(f,'<hr>');
       Writeln(f,'<font color="black">'+LineEnding+'<b>Total:</b><br>');
       Writeln(f,'Worked:',sum_wkd,'<br>');
-      Writeln(f,'Confirmed:',sum_cfm);
+      Writeln(f,'Confirmed:',sum_cfm,'<br>');
+      Writeln(f,'<b>Different squares:</b><br>');
+      if cmbBands.Text<>'ALL' then  Writeln(f,'On this band:',thiswkd,'<br>');
+      Writeln(f,'On all bands:',allwkdBig,'/',allwkd);
       Writeln(f,'</font>');
       Writeln(f,'</body>');
       Writeln(f,'</html>');
-      CloseFile(f)
+      CloseFile(f);
+
+      if dmData.IsFilter then
+         begin
+          try
+            dmData.Q.Close;
+            dmData.Q.SQL.Text:='DROP VIEW IF EXISTS '+TableName;
+            dmData.Q.ExecSQL;
+            dmData.trQ.Commit;
+          Finally
+          end;
+         end;
+
     finally
       dmData.trQ.Rollback;
       dmData.trQ1.Rollback
@@ -261,6 +292,12 @@ begin
     cqrini.WriteString('SquareStat','Directory',ExtractFilePath(dlgSave.FileName));
     CopyFile(TmpFile,dlgSave.FileName)
   end
+end;
+
+procedure TfrmBigSquareStat.cmbBandsChange(Sender: TObject);
+begin
+  tmrBlink.Enabled:=True;
+  pbTot.Position:=0;
 end;
 
 procedure TfrmBigSquareStat.WriteHMTLHeader;
@@ -286,6 +323,7 @@ begin
   TmpFile := GetTempFileNameUTF8(dmData.HomeDir,'square');
   dmUtils.LoadForm(frmBigSquareStat);
   dmUtils.FillBandCombo(cmbBands);
+  cmbBands.Items.Insert(0,'ALL');
   if cqrini.ReadInteger('SquareStat','Band',0) > cmbBands.Items.Count-1 then
     cmbBands.ItemIndex := 0
   else
@@ -297,7 +335,49 @@ begin
   dlgSave.InitialDir      := cqrini.ReadString('SquareStat','Directory',dmData.UsrHomeDir);
 
   IpHtmlPanel1.Font.Color := clBlack;
-  btnRefresh.Click
+  pbTot.Min:=0;
+  pbTot.Max:=1;
+  pbTot.Smooth:=True;
+  pbTot.Step:=1;
+  pbTot.Enabled:=True;
+  pbTot.Position:=0;
+  tmrBlink.Enabled:=False;
+  lblFilterActive.Visible:=  dmData.IsFilter;
+  cmbBandsChange(nil);
+end;
+
+procedure TfrmBigSquareStat.tmrBlinkStartTimer(Sender: TObject);
+begin
+  btnRefresh.Caption:='Press to';
+  btnRefresh.Font.Color:=clGreen;
+  btnRefresh.Repaint;
+end;
+
+procedure TfrmBigSquareStat.tmrBlinkStopTimer(Sender: TObject);
+begin
+  btnRefresh.Caption:='Refresh statistic';
+  btnRefresh.Font.Color:=clDefault;
+  btnRefresh.Repaint;
+end;
+
+procedure TfrmBigSquareStat.tmrBlinkTimer(Sender: TObject);
+var
+  C :Tcolor;
+  t:String;
+begin
+  case odd(SecondOf(Now)) of
+    True:  Begin
+            C := clGreen;
+            T :='run statistic'
+           end;
+    False: Begin
+            C := clGreen;
+            T :='Press to'
+    end;
+  end;
+  btnRefresh.Caption:= T;
+  btnRefresh.Font.Color:=C;
+  btnRefresh.Repaint;
 end;
 
 end.

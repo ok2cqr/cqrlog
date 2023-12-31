@@ -163,7 +163,9 @@ begin
     Rewrite(f);
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
+    dmData.Q.Last; //to get proper count
     pbExport.Max := dmData.Q.RecordCount;
+    dmData.Q.First;
     while not dmData.Q.Eof do
     begin
       if rbSotaLog.Checked then
