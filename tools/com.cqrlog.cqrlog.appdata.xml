@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2017 Daniel Rusek <mail@asciiwolf.com> -->
 <component type="desktop">
-  <id>cqrlog.desktop</id>
+  <id>com.cqrlog.cqrlog</id>
   <project_license>GPL-2.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <name>CQRLOG</name>
+  <developer_name>Petr Hlozek</developer_name>
   <summary>Advanced logging program for hamradio operators</summary>
   <description>
     <p>
@@ -16,8 +16,12 @@
     </p>
   </description>
   <url type="homepage">https://www.cqrlog.com/</url>
+  <launchable type="desktop-id">cqrlog.desktop</launchable>
   <screenshots>
-    <screenshot type="default">https://camo.githubusercontent.com/4b8b103448e282e79faa249cc2a3a26e5cfcc25b/68747470733a2f2f6371726c6f672e636f6d2f696d616765732f75736572732f6f6b326371722e706e67</screenshot>
+    <screenshot type="default">
+      <image>https://camo.githubusercontent.com/44596096b3e7dbb320d6cbca9ea6bbe3bc66494aa6c3cb0bbcf3b3dd270d587f/68747470733a2f2f6371726c6f672e636f6d2f696d616765732f75736572732f6f6b326371722e706e67</image>
+    </screenshot>
   </screenshots>
-  <update_contact>mail@asciiwolf.com</update_contact>
+  <content_rating type="oars-1.1" />
+  <update_contact>petr@petrhlozek.cz</update_contact>
 </component>
