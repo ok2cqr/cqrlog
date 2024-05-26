@@ -121,7 +121,7 @@ object frmGrayline: TfrmGrayline
   OnPaint = FormPaint
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '2.2.6.0'
+  LCLVersion = '3.0.0.3'
   object sbtnGrayLine: TSpeedButton
     Left = 400
     Height = 16
@@ -168,8 +168,8 @@ object frmGrayline: TfrmGrayline
   end
   object sbGrayLine: TStatusBar
     Left = 0
-    Height = 19
-    Top = 229
+    Height = 20
+    Top = 228
     Width = 419
     Panels = <>
   end

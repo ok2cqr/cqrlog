@@ -100,6 +100,7 @@ type
     function  SpotterExists(spotter : String) : Word;
     procedure RemoveOldSpots(RemoveAfter:integer);
     procedure AddSpotToList(spot : String);
+    procedure LoadSettings();
   end;
 
 var
@@ -312,17 +313,13 @@ end;
 procedure TfrmGrayline.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmGrayline);
-  sbGrayLine.Visible        := cqrini.ReadBool('Grayline','Statusbar',True);
-  pumShowShortPath.Checked  := cqrini.ReadBool('Grayline','ShortPath',False);
-  pumShowLongPath.Checked   := cqrini.ReadBool('Grayline','LongPath',False);
-  pumShowBeamPath.Checked   := cqrini.ReadBool('Grayline','BeamPath',False);
+  LoadSettings();
   acShowStatusBar.Checked   := sbGrayLine.Visible;
   rbn_status                :='Disconnected';
   sbGrayLine.SimpleText     := rbn_status;
   tmrGrayLine.Enabled       := True;
   tmrGrayLineTimer(nil);
   tmrAutoConnect.Enabled    := True;
-  delAfter                  := cqrini.ReadInteger('RBN','deleteAfter',60);
   tmrSpotDots.Interval      :=1000;  //remove Spots(DOts) timer will always run 1 sec period.
   tmrSpotDots.Enabled       :=true;
   ob^.GC_line_clear;
@@ -618,11 +615,7 @@ while GC_lock do
 GC_lock:=true;
 BaseStep  := cqrini.ReadFloat('Program', 'GraylineGCstep',15E-001) * pi/180;
 PolarStep := Basestep/cqrini.ReadInteger('Program', 'GraylineGCstep',10);
-ob^.GC_LWidth := cqrini.ReadInteger('Program', 'GraylineGCLineWidth',2);
-ob^.GB_LWidth := cqrini.ReadInteger('Program', 'GraylineGBeamLineWidth',2);
-ob^.GC_SP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineSPColor', 'clYellow' ));
-ob^.GC_LP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineLPColor', 'clFuchsia' ));
-ob^.GC_BE_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineBEColor', 'clRed' ));
+LoadSettings();
 
 if LocalDbg then
       begin
@@ -910,6 +903,21 @@ begin
     Write('Add Lat:    ',lat);
     Writeln('Add Long:   ',long)
    end;
+end;
+
+procedure TfrmGrayline.LoadSettings();
+begin
+  sbGrayLine.Visible        := cqrini.ReadBool('Grayline','Statusbar',True);
+  pumShowShortPath.Checked  := cqrini.ReadBool('Grayline','ShortPath',False);
+  pumShowLongPath.Checked   := cqrini.ReadBool('Grayline','LongPath',False);
+  pumShowBeamPath.Checked   := cqrini.ReadBool('Grayline','BeamPath',False);
+  delAfter                  := cqrini.ReadInteger('RBN','deleteAfter',60);
+
+  ob^.GC_LWidth := cqrini.ReadInteger('Program', 'GraylineGCLineWidth',2);
+  ob^.GB_LWidth := cqrini.ReadInteger('Program', 'GraylineGBeamLineWidth',2);
+  ob^.GC_SP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineSPColor', 'clYellow' ));
+  ob^.GC_LP_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineLPColor', 'clFuchsia' ));
+  ob^.GC_BE_Color:=StringToColor(cqrini.ReadString('Program', 'GraylineGCLineBEColor', 'clRed' ));
 end;
 
 end.

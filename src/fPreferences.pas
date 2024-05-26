@@ -1693,6 +1693,7 @@ begin
   dmData.SaveConfigFile;
   frmDXCluster.ReloadSettings;
   ModalResult := mrOk;
+  frmGrayline.LoadSettings();
   dmUtils.LoadBandLabelSettins;
   dmUtils.LoadBandsSettings;
   dmData.LoadClubsSettings;
