@@ -643,6 +643,8 @@ type
     eQSLcfm,
     LoTWcfm    : String;
     UsrAssignedProfile : String;
+    editedQSOId : Integer;
+
     procedure showDOK(stat:boolean);
     procedure ShowDXCCInfo(ref_adif : Word = 0);
     procedure ShowFields;
@@ -3301,10 +3303,6 @@ begin
 
   if fEditQSO then
   begin
-    if fromNewQSO then
-      id := dmData.qQSOBefore.FieldByName('id_cqrlog_main').AsInteger
-    else
-      id := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
     dmData.EditQSO(dmUtils.StrToDateFormat(edtDate.Text),
                    edtStartTime.Text,
                    edtEndTime.Text,
@@ -3337,7 +3335,7 @@ begin
                    dmSatellite.GetPropShortName(cmbPropagation.Text),
                    dmSatellite.GetSatShortName(cmbSatellite.Text),
                    RxFreq,
-                   id,
+                   editedQSOId,
                    edtContestSerialReceived.Text,
                    edtContestSerialSent.Text,
                    edtContestExchangeMessageReceived.Text,
@@ -6435,6 +6433,7 @@ begin
 
   if fromNewQSO then
   begin
+    editedQSOId       := dmData.qQSOBefore.FieldByName('id_cqrlog_main').AsInteger;
     cmbProfiles.Text  := dmData.GetProfileText(dmData.qQSOBefore.FieldByName('profile').AsInteger);
     edtDate.Text      := dmData.qQSOBefore.FieldByName('qsodate').AsString;
     edtStartTime.Text := dmData.qQSOBefore.FieldByName('time_on').AsString;
@@ -6490,7 +6489,8 @@ begin
     EditViewMyLoc :=  dmData.qQSOBefore.FieldByName('my_loc').AsString;
   end
   else begin
-    cmbProfiles.Text := dmData.GetProfileText(dmData.qCQRLOG.FieldByName('profile').AsInteger);
+    editedQSOId       := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
+    cmbProfiles.Text  := dmData.GetProfileText(dmData.qCQRLOG.FieldByName('profile').AsInteger);
     edtDate.Text      := dmData.qCQRLOG.FieldByName('qsodate').AsString;
     edtStartTime.Text := dmData.qCQRLOG.FieldByName('time_on').AsString;
     edtEndTime.Text   := dmData.qCQRLOG.FieldByName('time_off').AsString;
