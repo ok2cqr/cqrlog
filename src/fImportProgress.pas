@@ -1345,6 +1345,8 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
     dmData.q.Close;
     try try
       dmData.trQ.StartTransaction;
+      dmData.Q.SQL.Text := 'TRUNCATE TABLE ' + ClubTableName;
+      dmData.Q.ExecSQL;
       for i:=0 to l.Count-1 do
       begin
         //ship file header
