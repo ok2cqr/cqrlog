@@ -4,6 +4,9 @@
 
 {$ifdef UNIX}
   BaseUnix, NetDB,
+  {$IF FPC_FULLVERSION > 30202}
+    Unix,
+  {$ENDIF}
 {$endif}
 
 {$ifdef NETWARE}
