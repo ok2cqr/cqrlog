@@ -1197,7 +1197,7 @@ begin
   cqrini.WriteInteger('Program', 'GraylineGBeamLineLength',StrToInt(edtGCBeamLength.Caption));
 
   if  edtWebBrowser.Text = '' then  edtWebBrowser.Text:= dmUtils.MyDefaultBrowser; //may not be empty string
-  cqrini.WriteString('Program', 'WebBrowser', edtWebBrowser.Text);
+  cqrini.WriteString('Program', dmUtils.PlatformKey('WebBrowser'), edtWebBrowser.Text);
 
   cqrini.WriteBool('Program', 'CheckDXCCTabs', chkNewDXCCTables.Checked);
   cqrini.WriteBool('Program', 'ShowDeleted', chkShowDeleted.Checked);
@@ -1294,48 +1294,48 @@ begin
   cqrini.WriteBool('Bands', '134GHz', cb134GHz.Checked);
   cqrini.WriteBool('Bands', '241GHz', cb241GHz.Checked);
 
-  cqrini.WriteString('TRX', 'RigCtldPath', edtRigCtldPath.Text);
-  cqrini.WriteBool('TRX','Debug',chkTrxControlDebug.Checked);
-  cqrini.WriteBool('TRX','MemModeRelated',chkModeRelatedOnly.Checked);
-  cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
+  cqrini.WriteString('TRX', dmUtils.PlatformKey('RigCtldPath'), edtRigCtldPath.Text);
+  cqrini.WriteBool('TRX', dmUtils.PlatformKey('Debug'), chkTrxControlDebug.Checked);
+  cqrini.WriteBool('TRX', dmUtils.PlatformKey('MemModeRelated'), chkModeRelatedOnly.Checked);
+  cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigCount'), edtRigCount.Value);
 
   ClearUnUsedRigs;  //rigs modes and cw are saved when editing. Just delete unused rigs (model=empty)
 
-  cqrini.WriteString('ROT', 'RotCtldPath', edtRotCtldPath.Text);
+  cqrini.WriteString('ROT', dmUtils.PlatformKey('RotCtldPath'), edtRotCtldPath.Text);
 
-  cqrini.WriteString('ROT1', 'device', edtRot1Device.Text);
-  cqrini.WriteString('ROT1', 'model',  dmUtils.GetRigIdFromComboBoxItem(cmbModelRot1.Text));
-  cqrini.WriteString('ROT1', 'poll', edtRot1Poll.Text);
-  cqrini.WriteString('ROT1', 'Desc', edtRotor1.Text);
-  cqrini.WriteString('ROT1', 'RotCtldPort', edtRot1RotCtldPort.Text);
-  cqrini.WriteString('ROT1', 'ExtraRotCtldArgs', edtRot1RotCtldArgs.Text);
-  cqrini.WriteBool('ROT1', 'RunRotCtld', chkRot1RunRotCtld.Checked);
-  cqrini.WriteBool('ROT1', 'RotAzMinMax', chkRot1AzMinMax.Checked);
-  cqrini.WriteString('ROT1', 'host', edtRot1Host.Text);
-  cqrini.WriteInteger('ROT1', 'SerialSpeed', cmbSpeedRot1.ItemIndex);
-  cqrini.WriteInteger('ROT1', 'DataBits', cmbDataBitsRot1.ItemIndex);
-  cqrini.WriteInteger('ROT1', 'StopBits', cmbStopBitsRot1.ItemIndex);
-  cqrini.WriteInteger('ROT1', 'Parity', cmbParityRot1.ItemIndex);
-  cqrini.WriteInteger('ROT1', 'HandShake', cmbHanshakeRot1.ItemIndex);
-  cqrini.WriteInteger('ROT1', 'DTR', cmbDTRRot1.ItemIndex);
-  cqrini.WriteInteger('ROT1', 'RTS', cmbRTSRot1.ItemIndex);
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('device'), edtRot1Device.Text);
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('model'),  dmUtils.GetRigIdFromComboBoxItem(cmbModelRot1.Text));
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('poll'), edtRot1Poll.Text);
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('Desc'), edtRotor1.Text);
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('RotCtldPort'), edtRot1RotCtldPort.Text);
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('ExtraRotCtldArgs'), edtRot1RotCtldArgs.Text);
+  cqrini.WriteBool('ROT1', dmUtils.PlatformKey('RunRotCtld'), chkRot1RunRotCtld.Checked);
+  cqrini.WriteBool('ROT1', dmUtils.PlatformKey('RotAzMinMax'), chkRot1AzMinMax.Checked);
+  cqrini.WriteString('ROT1', dmUtils.PlatformKey('host'), edtRot1Host.Text);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('SerialSpeed'), cmbSpeedRot1.ItemIndex);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('DataBits'), cmbDataBitsRot1.ItemIndex);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('StopBits'), cmbStopBitsRot1.ItemIndex);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('Parity'), cmbParityRot1.ItemIndex);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('HandShake'), cmbHanshakeRot1.ItemIndex);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('DTR'), cmbDTRRot1.ItemIndex);
+  cqrini.WriteInteger('ROT1', dmUtils.PlatformKey('RTS'), cmbRTSRot1.ItemIndex);
 
-  cqrini.WriteString('ROT2', 'device', edtRot2Device.Text);
-  cqrini.WriteString('ROT2', 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRot2.Text));
-  cqrini.WriteString('ROT2', 'poll', edtRot2Poll.Text);
-  cqrini.WriteString('ROT2', 'Desc', edtRotor2.Text);
-  cqrini.WriteString('ROT2', 'RotCtldPort', edtRot2RotCtldPort.Text);
-  cqrini.WriteString('ROT2', 'ExtraRotCtldArgs', edtRot2RotCtldArgs.Text);
-  cqrini.WriteBool('ROT2', 'RunRotCtld', chkRot2RunRotCtld.Checked);
-  cqrini.WriteBool('ROT2', 'RotAzMinMax', chkRot2AzMinMax.Checked);
-  cqrini.WriteString('ROT2', 'host', edtRot2Host.Text);
-  cqrini.WriteInteger('ROT2', 'SerialSpeed', cmbSpeedRot2.ItemIndex);
-  cqrini.WriteInteger('ROT2', 'DataBits', cmbDataBitsRot2.ItemIndex);
-  cqrini.WriteInteger('ROT2', 'StopBits', cmbStopBitsRot2.ItemIndex);
-  cqrini.WriteInteger('ROT2', 'Parity', cmbParityRot2.ItemIndex);
-  cqrini.WriteInteger('ROT2', 'HandShake', cmbHanshakeRot2.ItemIndex);
-  cqrini.WriteInteger('ROT2', 'DTR', cmbDTRRot2.ItemIndex);
-  cqrini.WriteInteger('ROT2', 'RTS', cmbRTSRot2.ItemIndex);
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('device'), edtRot2Device.Text);
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('model'), dmUtils.GetRigIdFromComboBoxItem(cmbModelRot2.Text));
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('poll'), edtRot2Poll.Text);
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('Desc'), edtRotor2.Text);
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('RotCtldPort'), edtRot2RotCtldPort.Text);
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('ExtraRotCtldArgs'), edtRot2RotCtldArgs.Text);
+  cqrini.WriteBool('ROT2', dmUtils.PlatformKey('RunRotCtld'), chkRot2RunRotCtld.Checked);
+  cqrini.WriteBool('ROT2', dmUtils.PlatformKey('RotAzMinMax'), chkRot2AzMinMax.Checked);
+  cqrini.WriteString('ROT2', dmUtils.PlatformKey('host'), edtRot2Host.Text);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('SerialSpeed'), cmbSpeedRot2.ItemIndex);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('DataBits'), cmbDataBitsRot2.ItemIndex);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('StopBits'), cmbStopBitsRot2.ItemIndex);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('Parity'), cmbParityRot2.ItemIndex);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('HandShake'), cmbHanshakeRot2.ItemIndex);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('DTR'), cmbDTRRot2.ItemIndex);
+  cqrini.WriteInteger('ROT2', dmUtils.PlatformKey('RTS'), cmbRTSRot2.ItemIndex);
 
   cqrini.WriteBool('Profiles', 'Use', chkUseProfiles.Checked);
   cqrini.WriteInteger('Profiles', 'Selected', dmData.GetNRFromProfile(cmbProfiles.Text));
@@ -1384,18 +1384,18 @@ begin
   cqrini.WriteString('DXCluster', 'NotShow', edtDoNotShow.Text);
   cqrini.WriteBool('DXCluster', 'ConAfterRun', chkConToDXC.Checked);
   cqrini.WriteBool('DXCluster','ShowDxcCountry',chkShowDxcCountry.Checked);
-  cqrini.WriteString('DXCluster','AlertCmd', edtAlertCmd.Text);
-  cqrini.WriteString('DXCluster','StartCmd', edtStartConCmd.Text);
+  cqrini.WriteString('DXCluster', dmUtils.PlatformKey('AlertCmd'), edtAlertCmd.Text);
+  cqrini.WriteString('DXCluster', dmUtils.PlatformKey('StartCmd'), edtStartConCmd.Text);
 
-  cqrini.WriteBool('Fonts', 'UseDefault', chkUseDefaultSEttings.Checked);
-  cqrini.WriteString('Fonts', 'Buttons', lblbFont.Caption);
-  cqrini.WriteString('Fonts', 'Edits', lbleFont.Caption);
-  cqrini.WriteString('Fonts', 'Grids', lblgFont.Caption);
-  cqrini.WriteString('Fonts', 'QGrids', lblqFont.Caption);
-  cqrini.WriteInteger('Fonts', 'eSize', feSize);
-  cqrini.WriteInteger('Fonts', 'bSize', fbSize);
-  cqrini.WriteInteger('Fonts', 'gSize', fgSize);
-  cqrini.WriteInteger('Fonts', 'qSize', fqSize);
+  cqrini.WriteBool('Fonts', dmUtils.PlatformKey('UseDefault'), chkUseDefaultSEttings.Checked);
+  cqrini.WriteString('Fonts', dmUtils.PlatformKey('Buttons'), lblbFont.Caption);
+  cqrini.WriteString('Fonts', dmUtils.PlatformKey('Edits'), lbleFont.Caption);
+  cqrini.WriteString('Fonts', dmUtils.PlatformKey('Grids'), lblgFont.Caption);
+  cqrini.WriteString('Fonts', dmUtils.PlatformKey('QGrids'), lblqFont.Caption);
+  cqrini.WriteInteger('Fonts', dmUtils.PlatformKey('eSize'), feSize);
+  cqrini.WriteInteger('Fonts', dmUtils.PlatformKey('bSize'), fbSize);
+  cqrini.WriteInteger('Fonts', dmUtils.PlatformKey('gSize'), fgSize);
+  cqrini.WriteInteger('Fonts', dmUtils.PlatformKey('qSize'), fqSize);
 
   cqrini.WriteBool('Fonts','GridGreenBar',chkgridgreenbar.Checked);
   cqrini.WriteBool('Fonts','GridBoldTitle',chkgridboldtitle.Checked);
@@ -1418,8 +1418,8 @@ begin
 
   SaveClubSection;
 
-  cqrini.WriteString('BandMap', 'BandFont', lblBandMapFont.Font.Name);
-  cqrini.WriteInteger('BandMap', 'FontSize', fbandSize);
+  cqrini.WriteString('BandMap', dmUtils.PlatformKey('BandFont'), lblBandMapFont.Font.Name);
+  cqrini.WriteInteger('BandMap', dmUtils.PlatformKey('FontSize'), fbandSize);
   cqrini.WriteInteger('BandMap', 'NewQSOColor', cmbQSOBandColor.Selected);
   cqrini.WriteBool('BandMap', 'in_kHz', chkBandMapkHz.Checked);
   cqrini.WriteBool('BandMap', 'Save', chkSaveBandMap.Checked);
@@ -1438,7 +1438,7 @@ begin
   cqrini.WriteInteger('BandMapFilter','FreqWidth',seFreqWidth.Value);
   cqrini.WriteInteger('BandMapFilter','CallWidth',seCallWidth.Value);
 
-  cqrini.WriteString('xplanet', 'path', edtXplanetPath.Text);
+  cqrini.WriteString('xplanet', dmUtils.PlatformKey('path'), edtXplanetPath.Text);
   cqrini.WriteString('xplanet', 'height', edtXHeight.Text);
   cqrini.WriteString('xplanet', 'width', edtXWidth.Text);
   cqrini.WriteString('xplanet', 'top', edtXTop.Text);
@@ -1488,13 +1488,13 @@ begin
   cqrini.WriteInteger('fldigi', 'rst', rgRSTFrom.ItemIndex);
   cqrini.WriteInteger('fldigi', 'interval', edtLoadFromFldigi.Value);
   cqrini.WriteBool('fldigi', 'run', chkRunFldigi.Checked);
-  cqrini.WriteString('fldigi', 'path', edtFldigiPath.Text);
+  cqrini.WriteString('fldigi', dmUtils.PlatformKey('path'), edtFldigiPath.Text);
   cqrini.WriteString('fldigi','port',edtFldigiPort.Text);
   cqrini.WriteString('fldigi','ip',edtFldigiIp.Text);
   cqrini.WriteBool('fldigi', 'xmlrpc', chkFldXmlRpc.Checked);
   cqrini.WriteInteger('fldigi', 'dropSyErr', edtDropSyncErr.Value);
 
-  cqrini.WriteString('wsjt','path',edtWsjtPath.Text);
+  cqrini.WriteString('wsjt', dmUtils.PlatformKey('path'), edtWsjtPath.Text);
   cqrini.WriteString('wsjt','port',edtWsjtPort.Text);
   cqrini.WriteString('wsjt','ip',edtWsjtIp.Text);
   cqrini.WriteBool('wsjt','run',chkRunWsjt.Checked);
@@ -1516,17 +1516,17 @@ begin
       edtBackupPath.Text := edtBackupPath.Text + PathDelim;
   cqrini.WriteBool('Backup', 'Enable', chkEnableBackup.Checked);
   cqrini.WriteBool('Backup', 'Compress', chkCompressBackup.Checked);
-  cqrini.WriteString('Backup', 'Path', edtBackupPath.Text);
-  cqrini.WriteString('Backup', 'Path1', edtBackupPath1.Text);
+  cqrini.WriteString('Backup', dmUtils.PlatformKey('Path'), edtBackupPath.Text);
+  cqrini.WriteString('Backup', dmUtils.PlatformKey('Path1'), edtBackupPath1.Text);
   cqrini.WriteInteger('Backup', 'BackupType', rgBackupType.ItemIndex);
   cqrini.WriteBool('Backup','AskFirst',chkAskBackup.Checked);
 
-  cqrini.WriteString('ExtView', 'txt', edtTxtFiles.Text);
-  cqrini.WriteString('ExtView', 'pdf', edtPdfFiles.Text);
-  cqrini.WriteString('ExtView', 'img', edtImgFiles.Text);
+  cqrini.WriteString('ExtView', dmUtils.PlatformKey('txt'), edtTxtFiles.Text);
+  cqrini.WriteString('ExtView', dmUtils.PlatformKey('pdf'), edtPdfFiles.Text);
+  cqrini.WriteString('ExtView', dmUtils.PlatformKey('img'), edtImgFiles.Text);
 
   if  edtHtmlFiles.Text = '' then  edtHtmlFiles.Text:= dmUtils.MyDefaultBrowser; //may not be empty string
-  cqrini.WriteString('ExtView', 'html', edtHtmlFiles.Text);
+  cqrini.WriteString('ExtView', dmUtils.PlatformKey('html'), edtHtmlFiles.Text);
 
   cqrini.WriteBool('ExtView', 'QSL', chkIntQSLViewer.Checked);
 
@@ -2633,7 +2633,11 @@ function TfrmPreferences.SeekExecFile(MyFile,MyExeFor:string): String;
 Begin
      Result :='';
      Label17.Caption:='NOTE: You have to give full path for program file names!';
+     {$IFDEF DARWIN}
+     odFindBrowser.InitialDir:='/usr/local/bin';
+     {$ELSE}
      odFindBrowser.InitialDir:='/usr/bin';
+     {$ENDIF}
      odFindBrowser.FileName:=MyFile;
      odFindBrowser.Title:=MyExeFor;
      if odFindBrowser.Execute then
@@ -2675,7 +2679,7 @@ end;
 
 procedure TfrmPreferences.edtRigCountChange(Sender: TObject);
 begin
-  cqrini.WriteInteger('TRX', 'RigCount', edtRigCount.Value);
+  cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigCount'), edtRigCount.Value);
   InitRigCmb;                                             //load names and set currently edited rig
 end;
 
@@ -2715,7 +2719,11 @@ end;
 
 procedure TfrmPreferences.edtWebBrowserClick(Sender: TObject);
 Begin
+  {$IFDEF DARWIN}
+  odFindBrowser.InitialDir:='/usr/local/bin';
+  {$ELSE}
   odFindBrowser.InitialDir:='/usr/bin';
+  {$ENDIF}
   if odFindBrowser.Execute then
         edtWebBrowser.Text := odFindBrowser.Filename;
 end;
@@ -2838,7 +2846,7 @@ begin
   edtGCBeamLength.Caption:= IntToStr(cqrini.ReadInteger('Program', 'GraylineGBeamLineLength',1500));
 
 
-  edtWebBrowser.Text := cqrini.ReadString('Program', 'WebBrowser', dmUtils.MyDefaultBrowser);
+  edtWebBrowser.Text := cqrini.ReadString('Program', dmUtils.PlatformKey('WebBrowser'), dmUtils.MyDefaultBrowser);
   chkNewDXCCTables.Checked := cqrini.ReadBool('Program', 'CheckDXCCTabs', True);
   chkShowDeleted.Checked := cqrini.ReadBool('Program', 'ShowDeleted', False);
   chkSunUTC.Checked := cqrini.ReadBool('Program', 'SunUTC', False);
@@ -2937,20 +2945,20 @@ begin
   cb134GHz.Checked := cqrini.ReadBool('Bands', '134GHz', False);
   cb241GHz.Checked := cqrini.ReadBool('Bands', '241GHz', False);
 
-  edtRigCtldPath.Text := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
-  chkTrxControlDebug.Checked := cqrini.ReadBool('TRX','Debug',False);
-  chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX','MemModeRelated',False);
-  edtRigCount.Value:=cqrini.ReadInteger('TRX', 'RigCount', 2);
+  edtRigCtldPath.Text := cqrini.ReadString('TRX', dmUtils.PlatformKey('RigCtldPath'), dmUtils.DefaultToolPath('rigctld', '/usr/bin/rigctld'));
+  chkTrxControlDebug.Checked := cqrini.ReadBool('TRX', dmUtils.PlatformKey('Debug'), False);
+  chkModeRelatedOnly.Checked := cqrini.ReadBool('TRX', dmUtils.PlatformKey('MemModeRelated'), False);
+  edtRigCount.Value:=cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigCount'), 2);
   InitRigCmb(true); //define used rig=true
   LoadTRX(cmbRadioNr.ItemIndex);
   LoadBandW(cmbRadioNr.ItemIndex);
   LoadCWif(cmbRadioNr.ItemIndex);
 
-  edtRotCtldPath.Text := cqrini.ReadString('ROT', 'RotCtldPath', '/usr/bin/rotctld');
+  edtRotCtldPath.Text := cqrini.ReadString('ROT', dmUtils.PlatformKey('RotCtldPath'), dmUtils.DefaultToolPath('rotctld', '/usr/bin/rotctld'));
   if (FileExistsUTF8(edtRotCtldPath.Text)) then
   begin
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT1', 'model', ''),edtRotCtldPath.Text,cmbModelRot1);
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT2', 'model', ''),edtRotCtldPath.Text,cmbModelRot2)
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT1', dmUtils.PlatformKey('model'), ''),edtRotCtldPath.Text,cmbModelRot1);
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT2', dmUtils.PlatformKey('model'), ''),edtRotCtldPath.Text,cmbModelRot2)
   end
   else begin
     Application.MessageBox('rotctld binary not found, unable to load list of supported rotators!'+LineEnding+LineEnding+
@@ -2958,37 +2966,37 @@ begin
   end;
 
 
-  edtRot1Device.Text := cqrini.ReadString('ROT1', 'device', '');
-  edtRot1Poll.Text := cqrini.ReadString('ROT1', 'poll', '500');
-  edtRotor1.Text := cqrini.ReadString('ROT1', 'Desc', 'Rotor 1');
-  edtRot1RotCtldPort.Text := cqrini.ReadString('ROT1', 'RotCtldPort', '4533');
-  edtRot1RotCtldArgs.Text := cqrini.ReadString('ROT1', 'ExtraRotCtldArgs', '');
-  chkRot1RunRotCtld.Checked := cqrini.ReadBool('ROT1', 'RunRotCtld', False);
-  chkRot1AzMinMax.Checked := cqrini.ReadBool('ROT1', 'RotAzMinMax', False);
-  edtRot1Host.Text := cqrini.ReadString('ROT1', 'host', 'localhost');
-  cmbSpeedRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'SerialSpeed', 0);
-  cmbDataBitsRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'DataBits', 0);
-  cmbStopBitsRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'StopBits', 0);
-  cmbParityRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'Parity', 0);
-  cmbHanshakeRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'HandShake', 0);
-  cmbDTRRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'DTR', 0);
-  cmbRTSRot1.ItemIndex := cqrini.ReadInteger('ROT1', 'RTS', 0);
+  edtRot1Device.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('device'), '');
+  edtRot1Poll.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('poll'), '500');
+  edtRotor1.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('Desc'), 'Rotor 1');
+  edtRot1RotCtldPort.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('RotCtldPort'), '4533');
+  edtRot1RotCtldArgs.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('ExtraRotCtldArgs'), '');
+  chkRot1RunRotCtld.Checked := cqrini.ReadBool('ROT1', dmUtils.PlatformKey('RunRotCtld'), False);
+  chkRot1AzMinMax.Checked := cqrini.ReadBool('ROT1', dmUtils.PlatformKey('RotAzMinMax'), False);
+  edtRot1Host.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('host'), 'localhost');
+  cmbSpeedRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('SerialSpeed'), 0);
+  cmbDataBitsRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('DataBits'), 0);
+  cmbStopBitsRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('StopBits'), 0);
+  cmbParityRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('Parity'), 0);
+  cmbHanshakeRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('HandShake'), 0);
+  cmbDTRRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('DTR'), 0);
+  cmbRTSRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('RTS'), 0);
 
-  edtRot2Device.Text := cqrini.ReadString('ROT2', 'device', '');
-  edtRot2Poll.Text := cqrini.ReadString('ROT2', 'poll', '500');
-  edtRotor2.Text := cqrini.ReadString('ROT2', 'Desc', 'Rotor 2');
-  edtRot2RotCtldPort.Text := cqrini.ReadString('ROT2', 'RotCtldPort', '4533');
-  edtRot2RotCtldArgs.Text := cqrini.ReadString('ROT2', 'ExtraRotCtldArgs', '');
-  chkRot2RunRotCtld.Checked := cqrini.ReadBool('ROT2', 'RunRotCtld', False);
-  chkRot2AzMinMax.Checked := cqrini.ReadBool('ROT2', 'RotAzMinMax', False);
-  edtRot2Host.Text := cqrini.ReadString('ROT2', 'host', 'localhost');
-  cmbSpeedRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'SerialSpeed', 0);
-  cmbDataBitsRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'DataBits', 0);
-  cmbStopBitsRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'StopBits', 0);
-  cmbParityRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'Parity', 0);
-  cmbHanshakeRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'HandShake', 0);
-  cmbDTRRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'DTR', 0);
-  cmbRTSRot2.ItemIndex := cqrini.ReadInteger('ROT2', 'RTS', 0);
+  edtRot2Device.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('device'), '');
+  edtRot2Poll.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('poll'), '500');
+  edtRotor2.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('Desc'), 'Rotor 2');
+  edtRot2RotCtldPort.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('RotCtldPort'), '4533');
+  edtRot2RotCtldArgs.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('ExtraRotCtldArgs'), '');
+  chkRot2RunRotCtld.Checked := cqrini.ReadBool('ROT2', dmUtils.PlatformKey('RunRotCtld'), False);
+  chkRot2AzMinMax.Checked := cqrini.ReadBool('ROT2', dmUtils.PlatformKey('RotAzMinMax'), False);
+  edtRot2Host.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('host'), 'localhost');
+  cmbSpeedRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('SerialSpeed'), 0);
+  cmbDataBitsRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('DataBits'), 0);
+  cmbStopBitsRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('StopBits'), 0);
+  cmbParityRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('Parity'), 0);
+  cmbHanshakeRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('HandShake'), 0);
+  cmbDTRRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('DTR'), 0);
+  cmbRTSRot2.ItemIndex := cqrini.ReadInteger('ROT2', dmUtils.PlatformKey('RTS'), 0);
 
   cmbModelRigChange(nil);
 
@@ -3048,18 +3056,18 @@ begin
   cmbQSLNeeded.Selected := cqrini.ReadInteger('DXCluster', 'NeedQSL', 0);
   chkConToDXC.Checked := cqrini.ReadBool('DXCluster', 'ConAfterRun', False);
   chkShowDxcCountry.Checked := cqrini.ReadBool('DXCluster','ShowDxcCountry',False);
-  edtAlertCmd.Text := cqrini.ReadString('DXCluster','AlertCmd','');
-  edtStartConCmd.Text := cqrini.ReadString('DXCluster','StartCmd','');
+  edtAlertCmd.Text := cqrini.ReadString('DXCluster', dmUtils.PlatformKey('AlertCmd'), '');
+  edtStartConCmd.Text := cqrini.ReadString('DXCluster', dmUtils.PlatformKey('StartCmd'), '');
 
-  chkUseDefaultSEttings.Checked := cqrini.ReadBool('Fonts', 'UseDefault', True);
-  lblbFont.Caption := cqrini.ReadString('Fonts', 'Buttons', 'Sans 10');
-  lbleFont.Caption := cqrini.ReadString('Fonts', 'Edits', 'Sans 10');
-  lblgFont.Caption := cqrini.ReadString('Fonts', 'Grids', 'Monospace 8');
-  lblqFont.Caption := cqrini.ReadString('Fonts', 'QGrids', 'Sans 10');
-  feSize := cqrini.ReadInteger('Fonts', 'eSize', 10);
-  fbSize := cqrini.ReadInteger('Fonts', 'bSize', 10);
-  fgSize := cqrini.ReadInteger('Fonts', 'gSize', 8);
-  fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10);
+  chkUseDefaultSEttings.Checked := cqrini.ReadBool('Fonts', dmUtils.PlatformKey('UseDefault'), True);
+  lblbFont.Caption := cqrini.ReadString('Fonts', dmUtils.PlatformKey('Buttons'), cDefaultSansFont + ' 10');
+  lbleFont.Caption := cqrini.ReadString('Fonts', dmUtils.PlatformKey('Edits'), cDefaultSansFont + ' 10');
+  lblgFont.Caption := cqrini.ReadString('Fonts', dmUtils.PlatformKey('Grids'), cDefaultMonoFont + ' 8');
+  lblqFont.Caption := cqrini.ReadString('Fonts', dmUtils.PlatformKey('QGrids'), cDefaultSansFont + ' 10');
+  feSize := cqrini.ReadInteger('Fonts', dmUtils.PlatformKey('eSize'), 10);
+  fbSize := cqrini.ReadInteger('Fonts', dmUtils.PlatformKey('bSize'), 10);
+  fgSize := cqrini.ReadInteger('Fonts', dmUtils.PlatformKey('gSize'), 8);
+  fqSize := cqrini.ReadInteger('Fonts', dmUtils.PlatformKey('qSize'), 10);
 
   chkgridgreenbar.Checked := cqrini.ReadBool('Fonts','GridGreenBar',False);
   chkgridboldtitle.Checked := cqrini.ReadBool('Fonts','GridBoldTitle',False);
@@ -3087,11 +3095,11 @@ begin
   cmbFifthClub.Text := cqrini.ReadString('Clubs', 'Fifth', '');
   chkCheckMembershipUpdate.Checked := cqrini.ReadBool('Clubs', 'CheckForUpdate', False);
 
-  lblBandMapFont.Font.Name := cqrini.ReadString('BandMap', 'BandFont', 'Monospace');
-  lblBandMapFont.Font.Size := cqrini.ReadInteger('BandMap', 'FontSize', 8);
-  fbandSize := cqrini.ReadInteger('BandMap', 'FontSize', 8);
+  lblBandMapFont.Font.Name := cqrini.ReadString('BandMap', dmUtils.PlatformKey('BandFont'), cDefaultMonoFont);
+  lblBandMapFont.Font.Size := cqrini.ReadInteger('BandMap', dmUtils.PlatformKey('FontSize'), 8);
+  fbandSize := cqrini.ReadInteger('BandMap', dmUtils.PlatformKey('FontSize'), 8);
   lblBandMapFont.Caption :=
-    cqrini.ReadString('BandMap', 'BandFont', 'Monospace') + ' ' + IntToStr(fbandSize);
+    cqrini.ReadString('BandMap', dmUtils.PlatformKey('BandFont'), cDefaultMonoFont) + ' ' + IntToStr(fbandSize);
   cmbQSOBandColor.Selected := cqrini.ReadInteger('BandMap', 'NewQSOColor', clBlack);
   chkBandMapkHz.Checked := cqrini.ReadBool('BandMap', 'in_kHz', True);
   chkSaveBandMap.Checked := cqrini.ReadBool('BandMap', 'Save', False);
@@ -3110,7 +3118,7 @@ begin
   seFreqWidth.Value := cqrini.ReadInteger('BandMapFilter','FreqWidth',12);
   seCallWidth.Value := cqrini.ReadInteger('BandMapFilter','CallWidth',12);
 
-  edtXplanetPath.Text := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
+  edtXplanetPath.Text := cqrini.ReadString('xplanet', dmUtils.PlatformKey('path'), dmUtils.DefaultToolPath('xplanet', '/usr/bin/xplanet'));
   edtXHeight.Text := cqrini.ReadString('xplanet', 'height', '100');
   edtXWidth.Text := cqrini.ReadString('xplanet', 'width', '100');
   edtXTop.Text := cqrini.ReadString('xplanet', 'top', '10');
@@ -3160,14 +3168,14 @@ begin
   rgRSTFrom.ItemIndex := cqrini.ReadInteger('fldigi', 'rst', 0);
   edtLoadFromFldigi.Value := cqrini.ReadInteger('fldigi', 'interval', 2);
   chkRunFldigi.Checked := cqrini.ReadBool('fldigi', 'run', False);
-  edtFldigiPath.Text := cqrini.ReadString('fldigi', 'path', '');
+  edtFldigiPath.Text := cqrini.ReadString('fldigi', dmUtils.PlatformKey('path'), '');
   edtFldigiPort.Text := cqrini.ReadString('fldigi','port','7362');
   edtFldigiIp.Text :=  cqrini.ReadString('fldigi','ip','127.0.0.1');
   chkFldXmlRpc.Checked := cqrini.ReadBool('fldigi', 'xmlrpc', False);
   edtDropSyncErr.Value:= cqrini.ReadInteger('fldigi', 'dropSyErr', 3);
 
 
-  edtWsjtPath.Text         := cqrini.ReadString('wsjt','path','');
+  edtWsjtPath.Text         := cqrini.ReadString('wsjt', dmUtils.PlatformKey('path'), '');
   edtWsjtPort.Text         := cqrini.ReadString('wsjt','port','2237');
   edtWsjtIp.Text           := cqrini.ReadString('wsjt','ip','127.0.0.1');
   chkRunWsjt.Checked       := cqrini.ReadBool('wsjt','run',False);
@@ -3187,15 +3195,15 @@ begin
 
   chkEnableBackup.Checked := cqrini.ReadBool('Backup', 'Enable', False);
   chkCompressBackup.Checked := cqrini.ReadBool('Backup', 'Compress', True);
-  edtBackupPath.Text := cqrini.ReadString('Backup', 'Path', dmData.DataDir);
-  edtBackupPath1.Text := cqrini.ReadString('Backup', 'Path1','');
+  edtBackupPath.Text := cqrini.ReadString('Backup', dmUtils.PlatformKey('Path'), dmData.DataDir);
+  edtBackupPath1.Text := cqrini.ReadString('Backup', dmUtils.PlatformKey('Path1'), '');
   rgBackupType.ItemIndex := cqrini.ReadInteger('Backup', 'BackupType', 0);
   chkAskBackup.Checked := cqrini.ReadBool('Backup','AskFirst',False);
 
-  edtTxtFiles.Text := cqrini.ReadString('ExtView', 'txt', '');
-  edtPdfFiles.Text := cqrini.ReadString('ExtView', 'pdf', '');
-  edtImgFiles.Text := cqrini.ReadString('ExtView', 'img', '');
-  edtHtmlFiles.Text := cqrini.ReadString('ExtView', 'html', dmUtils.MyDefaultBrowser);
+  edtTxtFiles.Text := cqrini.ReadString('ExtView', dmUtils.PlatformKey('txt'), '');
+  edtPdfFiles.Text := cqrini.ReadString('ExtView', dmUtils.PlatformKey('pdf'), '');
+  edtImgFiles.Text := cqrini.ReadString('ExtView', dmUtils.PlatformKey('img'), '');
+  edtHtmlFiles.Text := cqrini.ReadString('ExtView', dmUtils.PlatformKey('html'), dmUtils.MyDefaultBrowser);
   chkIntQSLViewer.Checked := cqrini.ReadBool('ExtView', 'QSL', True);
 
   edtClub1Date.Text := cqrini.ReadString('FirstClub', 'DateFrom', C_CLUB_DEFAULT_DATE_FROM);
@@ -3377,39 +3385,39 @@ var
    rp  :string;
 Begin
   nr:=IntToStr(RigNr);
-  rp:= cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
+  rp:= cqrini.ReadString('TRX', dmUtils.PlatformKey('RigCtldPath'), dmUtils.DefaultToolPath('rigctld', '/usr/bin/rigctld'));
   if FileExistsUTF8(rp) then
-    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX'+nr, 'model', ''),rp,cmbModelRig)
+    dmUtils.LoadRigsToComboBox(cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('model'), ''),rp,cmbModelRig)
   else begin
     Application.MessageBox('rigctld binary not found, unable to load list of supported rigs!'+LineEnding+LineEnding+
                            'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
   end;
-  edtRDevice.Text := cqrini.ReadString('TRX'+nr, 'device', '');
-  edtPoll.Text := cqrini.ReadString('TRX'+nr, 'poll', '500');
-  edtRadioName.Text := cqrini.ReadString('TRX'+nr, 'Desc', '');
-  chkRSendCWR.Checked := cqrini.ReadBool('TRX'+nr, 'CWR', False);
-  chkRVfo.Checked:=   cqrini.ReadBool('TRX'+nr, 'ChkVfo', True);
-  edtRRigCtldPort.Text := cqrini.ReadString('TRX'+nr, 'RigCtldPort', '4532');
-  edtRRigCtldArgs.Text := cqrini.ReadString('TRX'+nr, 'ExtraRigCtldArgs', '');
-  chkRunRigCtld.Checked := cqrini.ReadBool('TRX'+nr, 'RunRigCtld', False);
-  chkRPwrON.Checked := cqrini.ReadBool('TRX'+nr, 'RigPwrON', True);
-  chkUTC2R.Checked := cqrini.ReadBool('TRX'+nr, 'UTC2Rig', False);
-  chkCPollR.Checked:= cqrini.ReadBool('TRX'+nr, 'CPollR', True);
-  chkVoiceR.Checked:= cqrini.ReadBool('TRX'+nr, 'RigVoice', True);
-  edtRHost.Text := cqrini.ReadString('TRX'+nr, 'host', 'localhost');
-  cmbSpeedR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'SerialSpeed', 0);
-  cmbDataBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DataBits', 0);
-  cmbStopBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'StopBits', 0);
-  cmbParityR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'Parity', 0);
-  cmbHanshakeR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'HandShake', 0);
-  cmbDTRR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'DTR', 0);
-  cmbRTSR.ItemIndex := cqrini.ReadInteger('TRX'+nr, 'RTS', 0);
-  edtUsr1RName.Text:=cqrini.ReadString('TRX'+nr, 'usr1name', 'Usr1');
-  edtUsr2RName.Text:=cqrini.ReadString('TRX'+nr, 'usr2name', 'Usr2');
-  edtUsr3RName.Text:=cqrini.ReadString('TRX'+nr, 'usr3name', 'Usr3');
-  edtUsr1R.Text:=cqrini.ReadString('TRX'+nr, 'usr1', '');
-  edtUsr2R.Text:=cqrini.ReadString('TRX'+nr, 'usr2', '');
-  edtUsr3R.Text:=cqrini.ReadString('TRX'+nr, 'usr3', '');
+  edtRDevice.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('device'), '');
+  edtPoll.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('poll'), '500');
+  edtRadioName.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('Desc'), '');
+  chkRSendCWR.Checked := cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('CWR'), False);
+  chkRVfo.Checked:=   cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('ChkVfo'), True);
+  edtRRigCtldPort.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('RigCtldPort'), '4532');
+  edtRRigCtldArgs.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('ExtraRigCtldArgs'), '');
+  chkRunRigCtld.Checked := cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('RunRigCtld'), False);
+  chkRPwrON.Checked := cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('RigPwrON'), True);
+  chkUTC2R.Checked := cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('UTC2Rig'), False);
+  chkCPollR.Checked:= cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('CPollR'), True);
+  chkVoiceR.Checked:= cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('RigVoice'), True);
+  edtRHost.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('host'), 'localhost');
+  cmbSpeedR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('SerialSpeed'), 0);
+  cmbDataBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('DataBits'), 0);
+  cmbStopBitsR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('StopBits'), 0);
+  cmbParityR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('Parity'), 0);
+  cmbHanshakeR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('HandShake'), 0);
+  cmbDTRR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('DTR'), 0);
+  cmbRTSR.ItemIndex := cqrini.ReadInteger('TRX'+nr, dmUtils.PlatformKey('RTS'), 0);
+  edtUsr1RName.Text:=cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('usr1name'), 'Usr1');
+  edtUsr2RName.Text:=cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('usr2name'), 'Usr2');
+  edtUsr3RName.Text:=cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('usr3name'), 'Usr3');
+  edtUsr1R.Text:=cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('usr1'), '');
+  edtUsr2R.Text:=cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('usr2'), '');
+  edtUsr3R.Text:=cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('usr3'), '');
   RadioNrLoaded:= RigNr;
 end;
 Procedure TfrmPreferences.SaveTRX(RigNr:integer);
@@ -3426,33 +3434,33 @@ Begin
       exit;
      end;
 
-  cqrini.WriteString('TRX'+nr, 'device', edtRDevice.Text);
-  cqrini.WriteString('TRX'+nr, 'model', dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));
-  cqrini.WriteString('TRX'+nr, 'poll', edtPoll.Text);
-  cqrini.WriteString('TRX'+nr, 'Desc', edtRadioName.Text);
-  cqrini.WriteBool('TRX'+nr, 'CWR', chkRSendCWR.Checked);
-  cqrini.WriteBool('TRX'+nr, 'ChkVfo',chkRVfo.Checked);
-  cqrini.WriteString('TRX'+nr, 'RigCtldPort', edtRRigCtldPort.Text);
-  cqrini.WriteString('TRX'+nr, 'ExtraRigCtldArgs', edtRRigCtldArgs.Text);
-  cqrini.WriteBool('TRX'+nr, 'RunRigCtld', chkRunRigCtld.Checked);
-  cqrini.WriteBool('TRX'+nr, 'RigPwrON', chkRPwrON.Checked);
-  cqrini.WriteBool('TRX'+nr, 'UTC2Rig', chkUTC2R.Checked);
-  cqrini.WriteBool('TRX'+nr, 'CPollR',chkCPollR.Checked);
-  cqrini.WriteBool('TRX'+nr, 'RigVoice', chkVoiceR.Checked);
-  cqrini.WriteString('TRX'+nr, 'host', edtRHost.Text);
-  cqrini.WriteInteger('TRX'+nr, 'SerialSpeed', cmbSpeedR.ItemIndex);
-  cqrini.WriteInteger('TRX'+nr, 'DataBits', cmbDataBitsR.ItemIndex);
-  cqrini.WriteInteger('TRX'+nr, 'StopBits', cmbStopBitsR.ItemIndex);
-  cqrini.WriteInteger('TRX'+nr, 'Parity', cmbParityR.ItemIndex);
-  cqrini.WriteInteger('TRX'+nr, 'HandShake', cmbHanshakeR.ItemIndex);
-  cqrini.WriteInteger('TRX'+nr, 'DTR', cmbDTRR.ItemIndex);
-  cqrini.WriteInteger('TRX'+nr, 'RTS', cmbRTSR.ItemIndex);
-  cqrini.WriteString('TRX'+nr, 'usr1name', edtUsr1RName.Text);
-  cqrini.WriteString('TRX'+nr, 'usr2name', edtUsr2RName.Text);
-  cqrini.WriteString('TRX'+nr, 'usr3name', edtUsr3RName.Text);
-  cqrini.WriteString('TRX'+nr, 'usr1', edtUsr1R.Text);
-  cqrini.WriteString('TRX'+nr, 'usr2', edtUsr2R.Text);
-  cqrini.WriteString('TRX'+nr, 'usr3', edtUsr3R.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('device'), edtRDevice.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('model'), dmUtils.GetRigIdFromComboBoxItem(cmbModelRig.Text));
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('poll'), edtPoll.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('Desc'), edtRadioName.Text);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('CWR'), chkRSendCWR.Checked);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('ChkVfo'), chkRVfo.Checked);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('RigCtldPort'), edtRRigCtldPort.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('ExtraRigCtldArgs'), edtRRigCtldArgs.Text);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('RunRigCtld'), chkRunRigCtld.Checked);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('RigPwrON'), chkRPwrON.Checked);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('UTC2Rig'), chkUTC2R.Checked);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('CPollR'), chkCPollR.Checked);
+  cqrini.WriteBool('TRX'+nr, dmUtils.PlatformKey('RigVoice'), chkVoiceR.Checked);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('host'), edtRHost.Text);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('SerialSpeed'), cmbSpeedR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('DataBits'), cmbDataBitsR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('StopBits'), cmbStopBitsR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('Parity'), cmbParityR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('HandShake'), cmbHanshakeR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('DTR'), cmbDTRR.ItemIndex);
+  cqrini.WriteInteger('TRX'+nr, dmUtils.PlatformKey('RTS'), cmbRTSR.ItemIndex);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('usr1name'), edtUsr1RName.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('usr2name'), edtUsr2RName.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('usr3name'), edtUsr3RName.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('usr1'), edtUsr1R.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('usr2'), edtUsr2R.Text);
+  cqrini.WriteString('TRX'+nr, dmUtils.PlatformKey('usr3'), edtUsr3R.Text);
 end;
 procedure TfrmPreferences.LoadBandW(RigNr:integer);
 var
@@ -3468,7 +3476,7 @@ Begin
   edtDataCmd.Text:=cqrini.ReadString('Band'+nr, 'Datacmd', 'RTTY');
   chkModeReverse.Checked :=cqrini.ReadBool('Band'+nr, 'UseReverse', False);
   BandWNrLoaded := RigNr;
-  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
+  if (cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('model'), '')='') then
     lblNoRigForMode.Visible:=True
    else
     lblNoRigForMode.Visible:=False;
@@ -3478,7 +3486,7 @@ var
    nr :string;
 Begin
   nr:=IntToStr(RigNr);
-  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
+  if (cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('model'), '')='') then  exit; //No rig, no save
   cqrini.WriteInteger('Band'+nr, 'CW', edtCW.Value);
   cqrini.WriteInteger('Band'+nr, 'SSB', edtSSB.Value);
   cqrini.WriteInteger('Band'+nr, 'RTTY', edtData.Value);  //note: Data is called rtty for backward compatibility
@@ -3493,23 +3501,23 @@ var
    nr :string;
 Begin
   nr:=IntToStr(RigNr);
-  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, 'Type', 0);
-  cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, 'NoReset', false);
-  edtWinPort.Text        := cqrini.ReadString('CW'+nr, 'wk_port', '');
-  chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, 'PotSpeed', False);
-  edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, 'wk_speed', 30);
-  edtCWAddress.Text      := cqrini.ReadString('CW'+nr, 'cw_address', 'localhost');
-  edtCWPort.Text         := cqrini.ReadString('CW'+nr, 'cw_port', '6789');
-  edtCWSpeed.Value       := cqrini.ReadInteger('CW'+nr, 'cw_speed', 30);
-  edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_min', 5);
-  edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, 'wk_max', 60);
-  edtK3NGPort.Text       := cqrini.ReadString('CW'+nr,'K3NGPort','');
-  edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSerSpeed',115200));
-  edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr,'K3NGSpeed',30));
-  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr,'HamLibSpeed',30));
-  chkUseHLBuffer.checked := cqrini.ReadBool('CW'+nr, 'UseHamlibBuffer', False);
+  cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('Type'), 0);
+  cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, dmUtils.PlatformKey('NoReset'), false);
+  edtWinPort.Text        := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('wk_port'), '');
+  chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, dmUtils.PlatformKey('PotSpeed'), False);
+  edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('wk_speed'), 30);
+  edtCWAddress.Text      := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('cw_address'), 'localhost');
+  edtCWPort.Text         := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('cw_port'), '6789');
+  edtCWSpeed.Value       := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('cw_speed'), 30);
+  edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('wk_min'), 5);
+  edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('wk_max'), 60);
+  edtK3NGPort.Text       := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('K3NGPort'), '');
+  edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('K3NGSerSpeed'), 115200));
+  edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('K3NGSpeed'), 30));
+  edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('HamLibSpeed'), 30));
+  chkUseHLBuffer.checked := cqrini.ReadBool('CW'+nr, dmUtils.PlatformKey('UseHamlibBuffer'), False);
   CWifLoaded := RigNr;
-  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then
+  if (cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('model'), '')='') then
     lblNoRigForCW.Visible:=True
    else
     lblNoRigForCW.Visible:=False;
@@ -3519,22 +3527,22 @@ var
    nr :string;
 Begin
   nr:=IntToStr(RigNr);
-  if (cqrini.ReadString('TRX'+nr, 'model', '')='') then  exit; //No rig, no save
-  cqrini.WriteInteger('CW'+nr, 'Type', cmbIfaceType.ItemIndex);
-  cqrini.WriteBool('CW'+nr, 'NoReset', cbNoKeyerReset.Checked);
-  cqrini.WriteString('CW'+nr, 'wk_port', edtWinPort.Text);
-  cqrini.WriteBool('CW'+nr, 'PotSpeed', chkPotSpeed.Checked);
-  cqrini.WriteInteger('CW'+nr, 'wk_speed', edtWinSpeed.Value);
-  cqrini.WriteString('CW'+nr, 'cw_address', edtCWAddress.Text);
-  cqrini.WriteString('CW'+nr, 'cw_port', edtCWPort.Text);
-  cqrini.WriteInteger('CW'+nr, 'cw_speed', edtCWSpeed.Value);
-  cqrini.WriteInteger('CW'+nr, 'wk_min', edtWinMinSpeed.Value);
-  cqrini.WriteInteger('CW'+nr, 'wk_max', edtWinMaxSpeed.Value);
-  cqrini.WriteString('CW'+nr,'K3NGPort',edtK3NGPort.Text);
-  cqrini.WriteInteger('CW'+nr,'K3NGSerSpeed',StrToInt(edtK3NGSerSpeed.Text));
-  cqrini.WriteInteger('CW'+nr,'K3NGSpeed',StrToInt(edtK3NGSpeed.Text));
-  cqrini.WriteInteger('CW'+nr,'HamLibSpeed',StrToInt(edtHamLibSpeed.Text));
-  cqrini.WriteBool('CW'+nr, 'UseHamlibBuffer', chkUseHLBuffer.checked);
+  if (cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('model'), '')='') then  exit; //No rig, no save
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('Type'), cmbIfaceType.ItemIndex);
+  cqrini.WriteBool('CW'+nr, dmUtils.PlatformKey('NoReset'), cbNoKeyerReset.Checked);
+  cqrini.WriteString('CW'+nr, dmUtils.PlatformKey('wk_port'), edtWinPort.Text);
+  cqrini.WriteBool('CW'+nr, dmUtils.PlatformKey('PotSpeed'), chkPotSpeed.Checked);
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('wk_speed'), edtWinSpeed.Value);
+  cqrini.WriteString('CW'+nr, dmUtils.PlatformKey('cw_address'), edtCWAddress.Text);
+  cqrini.WriteString('CW'+nr, dmUtils.PlatformKey('cw_port'), edtCWPort.Text);
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('cw_speed'), edtCWSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('wk_min'), edtWinMinSpeed.Value);
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('wk_max'), edtWinMaxSpeed.Value);
+  cqrini.WriteString('CW'+nr, dmUtils.PlatformKey('K3NGPort'), edtK3NGPort.Text);
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('K3NGSerSpeed'), StrToInt(edtK3NGSerSpeed.Text));
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('K3NGSpeed'), StrToInt(edtK3NGSpeed.Text));
+  cqrini.WriteInteger('CW'+nr, dmUtils.PlatformKey('HamLibSpeed'), StrToInt(edtHamLibSpeed.Text));
+  cqrini.WriteBool('CW'+nr, dmUtils.PlatformKey('UseHamlibBuffer'), chkUseHLBuffer.checked);
 end;
 
 procedure TfrmPreferences.InitRigCmb(SetUsedRig:boolean=false);    //initialize radio selectors in TRXControl, CW and Modes
@@ -3552,16 +3560,16 @@ Begin
    for f:=1 to edtRigCount.Value do
      Begin
       s:=IntToStr(f);
-      if (cqrini.ReadString('TRX'+s, 'model', '')='') then
+      if (cqrini.ReadString('TRX'+s, dmUtils.PlatformKey('model'), '')='') then
             cmbRadioNr.Items.Add(s+' None')
            else
-            cmbRadioNr.Items.Add(s+' '+cqrini.ReadString('TRX'+s, 'Desc', ''));
+            cmbRadioNr.Items.Add(s+' '+cqrini.ReadString('TRX'+s, dmUtils.PlatformKey('Desc'), ''));
      end;
-   for f:=1 to  cqrini.ReadInteger('TRX', 'RigCount', 2) do   //others just defined rigs
+   for f:=1 to  cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigCount'), 2) do   //others just defined rigs
     Begin
       s:=IntToStr(f);
-      d:= cqrini.ReadString('TRX'+s, 'Desc', '');
-      if (cqrini.ReadString('TRX'+s, 'model', '')='') then
+      d:= cqrini.ReadString('TRX'+s, dmUtils.PlatformKey('Desc'), '');
+      if (cqrini.ReadString('TRX'+s, dmUtils.PlatformKey('model'), '')='') then
         Begin
              cmbRadioModes.Items.Add(s+' None');
              cmbCWRadio.Items.Add(s+' None');
@@ -3575,15 +3583,15 @@ Begin
 
   cmbRadioNr.ItemIndex:=i;
 
-  if not (cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
+  if not (cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1) in [ 1..edtRigCount.Value] ) then
          begin
-          cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted  (rig count changed)
+          cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);  //used rig was deleted  (rig count changed)
           SetUsedRig:=true;
          end;
 
   if SetUsedRig then
     begin
-     cmbRadioNr.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+     cmbRadioNr.ItemIndex:=cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);
      cmbRadioModes.ItemIndex:=cmbRadioNr.ItemIndex;
      cmbCWRadio.ItemIndex:=cmbRadioNr.ItemIndex;
     end;
@@ -3617,8 +3625,8 @@ Begin
        until (f=edtRigCount.Value);
       end;
 
-    if not ( cqrini.ReadInteger('TRX', 'RigInUse', 1) in [ 1..edtRigCount.Value] ) then
-         cqrini.WriteInteger('TRX', 'RigInUse', 1);  //used rig was deleted
+    if not ( cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1) in [ 1..edtRigCount.Value] ) then
+         cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);  //used rig was deleted
 
     frmTRXControl.cmbRigGetItems(nil); //update TRXControl rig names before returning
 

@@ -1467,7 +1467,7 @@ begin
 
   dmData.LoadQSODateColorSettings;
 
-  if cqrini.ReadBool('CW', 'NoReset', false) then     //is set: user does not want reset CW keyer at rig switch/init
+  if cqrini.ReadBool('CW', dmUtils.PlatformKey('NoReset'), false) then     //is set: user does not want reset CW keyer at rig switch/init
                                         InitializeCW; //so we have to do it at least once: Here.
 
   Op := cqrini.ReadString('NewQSO', 'Op', '');
@@ -1485,20 +1485,20 @@ begin
   if cqrini.ReadBool('Window','Grayline',False) then
     frmGrayline.Show;
 
-  if cqrini.ReadBool('Window','TRX',False) then
+  if cqrini.ReadBool('Window',dmUtils.PlatformKey('TRX'),False) then
   begin
     frmTRXControl.Show;
     frmTRXControl.BringToFront
   end;
 
-   if cqrini.ReadBool('Window','ROT',False) then
+   if cqrini.ReadBool('Window',dmUtils.PlatformKey('ROT'),False) then
   begin
     frmRotControl.Show;
     frmRotControl.BringToFront
   end;
 
   if frmTRXControl.Showing then
-      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex),'Poll',500);
+      tmrRadio.Interval := cqrini.ReadInteger('TRX'+IntToStr(frmTRXControl.cmbRig.ItemIndex),dmUtils.PlatformKey('Poll'),500);
 
   cbTxLo.Checked := cqrini.ReadBool('NewQSO', 'UseTXLO', False);
   edtTXLO.Text   := cqrini.ReadString('NewQSO', 'TXLO', '');
@@ -1510,12 +1510,12 @@ begin
   if frmRotControl.Showing then
   begin
     if frmRotControl.rbRotor1.Checked then
-      tmrRotor.Interval := cqrini.ReadInteger('ROT1','Poll',500)
+      tmrRotor.Interval := cqrini.ReadInteger('ROT1',dmUtils.PlatformKey('Poll'),500)
     else
-      tmrRotor.Interval := cqrini.ReadInteger('ROT2','Poll',500)
+      tmrRotor.Interval := cqrini.ReadInteger('ROT2',dmUtils.PlatformKey('Poll'),500)
   end
   else begin
-    tmrRotor.Interval := cqrini.ReadInteger('ROT1','Poll',500)
+    tmrRotor.Interval := cqrini.ReadInteger('ROT1',dmUtils.PlatformKey('Poll'),500)
   end;
 
   if cqrini.ReadBool('Window','Details',True) then
@@ -1638,20 +1638,20 @@ begin
     if frmTRXControl.Showing then
     begin
       frmTRXControl.Close;
-      cqrini.WriteBool('Window','TRX',True)
+      cqrini.WriteBool('Window',dmUtils.PlatformKey('TRX'),True)
     end
     else begin
-      cqrini.WriteBool('Window','TRX',False)
+      cqrini.WriteBool('Window',dmUtils.PlatformKey('TRX'),False)
     end;
     frmTRXControl.CloseRigs;
 
     if frmRotControl.Showing then
     begin
       frmRotControl.Close;
-      cqrini.WriteBool('Window','ROT',True)
+      cqrini.WriteBool('Window',dmUtils.PlatformKey('ROT'),True)
     end
     else
-      cqrini.WriteBool('Window','ROT',False);
+      cqrini.WriteBool('Window',dmUtils.PlatformKey('ROT'),False);
 
     if frmDXCluster.Showing then
     begin
@@ -1884,14 +1884,14 @@ begin
   begin
     lblQSOTakes.Visible := True;
 
-    if cqrini.ReadBool('Fonts','UseDefault',True) then
+    if cqrini.ReadBool('Fonts',dmUtils.PlatformKey('UseDefault'),True) then
     begin
       lblQSOTakes.Font.Name := 'default';
       lblQSOTakes.Font.Size := 0
     end
     else begin
-      lblQSOTakes.Font.Name := cqrini.ReadString('Fonts','Buttons','Sans 10');
-      lblQSOTakes.Font.Size := cqrini.ReadInteger('Fonts','bSize',10)
+      lblQSOTakes.Font.Name := cqrini.ReadString('Fonts',dmUtils.PlatformKey('Buttons'),cDefaultSansFont + ' 10');
+      lblQSOTakes.Font.Size := cqrini.ReadInteger('Fonts',dmUtils.PlatformKey('bSize'),10)
     end;
 
     date := dmUtils.GetDateTime(0);
@@ -3176,6 +3176,10 @@ end;
 
 procedure TfrmNewQSO.FormCreate(Sender: TObject);
 begin
+  {$IFDEF LCLCocoa}
+  pnlAll.Height := 520;
+  gbDXCCdata.Height := 420;
+  {$ENDIF}
   StartRun := false;
   CWint := nil;
   tmrRadio.Enabled := False;
@@ -5181,7 +5185,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program','WebBrowser',dmUtils.MyDefaultBrowser);
+    AProcess.Executable := cqrini.ReadString('Program', dmUtils.PlatformKey('WebBrowser'), dmUtils.MyDefaultBrowser);
     AProcess.Parameters.Add('http://www.ik3qar.it/manager/man_result.php?call='+
                             dmData.qQSOBefore.Fields[4].AsString);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
@@ -5761,7 +5765,7 @@ begin
     begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
         sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
@@ -5775,7 +5779,7 @@ begin
     begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
         sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
@@ -6172,9 +6176,9 @@ begin
   LoadGrid;
   aColumns := dmUtils.LoadVisibleColumnsConfiguration();
 
-  fQsoGr   := cqrini.ReadString('Fonts','QGrids','Sans 10');
-  fqSize   := cqrini.ReadInteger('Fonts','qSize',10);
-  fDefault := cqrini.ReadBool('Fonts','UseDefault',True);
+  fQsoGr   := cqrini.ReadString('Fonts',dmUtils.PlatformKey('QGrids'),cDefaultSansFont + ' 10');
+  fqSize   := cqrini.ReadInteger('Fonts',dmUtils.PlatformKey('qSize'),10);
+  fDefault := cqrini.ReadBool('Fonts',dmUtils.PlatformKey('UseDefault'),True);
 
   try
     //it's strange but disable grid browsing speed up this much more
@@ -7237,7 +7241,7 @@ const
 var
    AProcess: TProcess;
 begin
-  if cqrini.ReadBool('TRX' + frmTRXControl.RigInUse, 'RigVoice', False) then ///use Hamlib's \send_voice command instead.
+  if cqrini.ReadBool('TRX' + frmTRXControl.RigInUse, dmUtils.PlatformKey('RigVoice'), False) then ///use Hamlib's \send_voice command instead.
   Begin
     frmTRXControl.SendVoice(Copy(key_pressed,2,length(key_pressed)-1));
     exit;
@@ -7284,11 +7288,11 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                   CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW'+n,'wk_port','');
-          CWint.Device  := cqrini.ReadString('CW'+n,'wk_port','');
+          CWint.Port    := cqrini.ReadString('CW'+n, dmUtils.PlatformKey('wk_port'), '');
+          CWint.Device  := cqrini.ReadString('CW'+n, dmUtils.PlatformKey('wk_port'), '');
           CWint.PortSpeed := 1200;
-          if not  cqrini.ReadBool('CW'+n,'PotSpeed',False) then
-            UseSpeed := cqrini.ReadInteger('CW'+n,'wk_speed',30)
+          if not  cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
+            UseSpeed := cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('wk_speed'),30)
            else
             UseSpeed:=-1;
           Menuitem45.Visible:=True;
@@ -7298,20 +7302,20 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW'+n,'cw_port','');
-          CWint.Device  := cqrini.ReadString('CW'+n,'cw_address','');
+          CWint.Port    := cqrini.ReadString('CW'+n, dmUtils.PlatformKey('cw_port'), '');
+          CWint.Device  := cqrini.ReadString('CW'+n, dmUtils.PlatformKey('cw_address'), '');
           CWint.PortSpeed := 0;
-          UseSpeed := cqrini.ReadInteger('CW'+n,'cw_speed',30);
+          UseSpeed := cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('cw_speed'),30);
         end;
     3 : begin
           CWint := TCWK3NG.Create;
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port    := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
-          CWint.Device  := cqrini.ReadString('CW'+n,'K3NGPort'+n,'');
-          CWint.PortSpeed := cqrini.ReadInteger('CW'+n,'K3NGSerSpeed',115200);
-          UseSpeed := cqrini.ReadInteger('CW'+n,'K3NGSpeed',30);
+          CWint.Port    := cqrini.ReadString('CW'+n, dmUtils.PlatformKey('K3NGPort'+n), '');
+          CWint.Device  := cqrini.ReadString('CW'+n, dmUtils.PlatformKey('K3NGPort'+n), '');
+          CWint.PortSpeed := cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('K3NGSerSpeed'),115200);
+          UseSpeed := cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('K3NGSpeed'),30);
           Menuitem45.Visible:=True;
         end;
     4 : begin
@@ -7319,10 +7323,10 @@ begin
           CWint.DebugMode := dmData.DebugLevel>=1;
           if dmData.DebugLevel < 0 then
                  CWint.DebugMode  :=  CWint.DebugMode  or ((abs(dmData.DebugLevel) and 8) = 8 );
-          CWint.Port := cqrini.ReadString('TRX'+n,'RigCtldPort','4532');
-          CWint.Device := cqrini.ReadString('TRX'+n,'host','localhost');
-          CWint.HamlibBuffer:=cqrini.ReadBool('CW'+n, 'UseHamlibBuffer', False);
-          UseSpeed := cqrini.ReadInteger('CW'+n,'HamLibSpeed',30);
+          CWint.Port := cqrini.ReadString('TRX'+n,dmUtils.PlatformKey('RigCtldPort'),'4532');
+          CWint.Device := cqrini.ReadString('TRX'+n,dmUtils.PlatformKey('host'),'localhost');
+          CWint.HamlibBuffer:=cqrini.ReadBool('CW'+n, dmUtils.PlatformKey('UseHamlibBuffer'), False);
+          UseSpeed := cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('HamLibSpeed'),30);
         end;
   end; //case
   if KeyerType > 0 then
@@ -7330,7 +7334,7 @@ begin
      CWint.Open;
      if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
-   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
      sbNewQSO.Panels[4].Text := 'Pot WPM'
     else
      sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';
@@ -7346,8 +7350,8 @@ procedure TfrmNewQSO.CreateAutoBackup();
 var
   call, path1, path2 : String;
 begin
-  path1 := cqrini.ReadString('Backup','Path',dmData.DataDir);
-  path2 := cqrini.ReadString('Backup','Path1','');
+  path1 := cqrini.ReadString('Backup', dmUtils.PlatformKey('Path'), dmData.DataDir);
+  path2 := cqrini.ReadString('Backup', dmUtils.PlatformKey('Path1'), '');
   call  := StringReplace(cqrini.ReadString('Station', 'Call', ''), '/', '_', [rfReplaceAll, rfIgnoreCase]);
   if not DirectoryExists(path1) then
     exit;
@@ -7465,7 +7469,7 @@ begin
                   lblCall.Caption       := 'Fldigi remote';
                   tmrFldigi.Interval    := cqrini.ReadInteger('fldigi','interval',2)*1000;
                   run                   := cqrini.ReadBool('fldigi','run',False);
-                  path                  := cqrini.ReadString('fldigi','path','');
+                  path                  := cqrini.ReadString('fldigi', dmUtils.PlatformKey('path'), '');
                   FldigiXmlRpc          := cqrini.ReadBool('fldigi','xmlrpc',False);
                   tmrFldigi.Enabled     := true;
                   if FldigiXmlRpc then
@@ -7483,7 +7487,7 @@ begin
                   AnyRemoteOn := True;
                   WsjtxDecodeRunning        := false;
                   lblCall.Caption           := 'Wsjtx remote';
-                  path                      := cqrini.ReadString('wsjt','path','');
+                  path                      := cqrini.ReadString('wsjt', dmUtils.PlatformKey('path'), '');
                   run                       := cqrini.ReadBool('wsjt','run',False);
 
                   WsjtxMode := '';    //will be set by type1 'status'-message

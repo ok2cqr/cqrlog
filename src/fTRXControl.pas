@@ -317,9 +317,9 @@ begin
   m := radio.GetRawMode;
 
   //user changed settings
-  if MemRelated <> cqrini.ReadBool('TRX', 'MemModeRelated', False) then
+  if MemRelated <> cqrini.ReadBool('TRX', dmUtils.PlatformKey('MemModeRelated'), False) then
   begin
-    MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
+    MemRelated := cqrini.ReadBool('TRX', dmUtils.PlatformKey('MemModeRelated'), False);
     dmData.OpenFreqMemories(m);
   end
   else begin
@@ -432,14 +432,14 @@ begin
   dmUtils.LoadWindowPos(frmTRXControl);
   cmbRigGetItems(nil);
   //These two are needed here othewise rig selector has "None" even if rig is initialized at startup
-  cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+  cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);
   cmbRigCloseUp(nil); //defaults rig 1 in case of undefined
   old_mode := '';
-  MemRelated := cqrini.ReadBool('TRX', 'MemModeRelated', False);
-  gbInfo.Visible := cqrini.ReadBool('TRX', 'MemShowInfo', gbInfo.Visible);
+  MemRelated := cqrini.ReadBool('TRX', dmUtils.PlatformKey('MemModeRelated'), False);
+  gbInfo.Visible := cqrini.ReadBool('TRX', dmUtils.PlatformKey('MemShowInfo'), gbInfo.Visible);
   mnuShowInfo.Checked := gbInfo.Visible;
-  gbVfo.Visible := cqrini.ReadBool('TRX', 'ShowVfo', gbVfo.Visible);
-  pnlUsr.Visible := cqrini.ReadBool('TRX', 'ShowUsr', pnlUsr.Visible);
+  gbVfo.Visible := cqrini.ReadBool('TRX', dmUtils.PlatformKey('ShowVfo'), gbVfo.Visible);
+  pnlUsr.Visible := cqrini.ReadBool('TRX', dmUtils.PlatformKey('ShowUsr'), pnlUsr.Visible);
   mnuShowVfo.Checked := gbVfo.Visible;
   mnuShowUsr.Checked := pnlUsr.Visible;
   MouseWheelUsed := False;
@@ -655,7 +655,7 @@ procedure TfrmTRXControl.mnuShowInfoClick(Sender : TObject);
 begin
   gbInfo.Visible := not gbInfo.Visible;
   mnuShowInfo.Checked := gbInfo.Visible;
-  cqrini.WriteBool('TRX', 'MemShowInfo', gbInfo.Visible);
+  cqrini.WriteBool('TRX', dmUtils.PlatformKey('MemShowInfo'), gbInfo.Visible);
 end;
 
 procedure TfrmTRXControl.btnDATAClick(Sender : TObject);
@@ -688,7 +688,7 @@ begin
     pnlPower.Visible := True;
     mnuShowPwr.Checked := True;
   end;
-  cqrini.WriteBool('TRX', 'PowerButtons', pnlPower.Visible);
+  cqrini.WriteBool('TRX', dmUtils.PlatformKey('PowerButtons'), pnlPower.Visible);
 end;
 
 procedure TfrmTRXControl.mnuProgPrefClick(Sender : TObject);
@@ -702,14 +702,14 @@ procedure TfrmTRXControl.mnuShowUsrClick(Sender : TObject);
 begin
   pnlUsr.Visible := not pnlUsr.Visible;
   mnuShowUsr.Checked := pnlUsr.Visible;
-  cqrini.WriteBool('TRX', 'ShowUsr', pnlUsr.Visible);
+  cqrini.WriteBool('TRX', dmUtils.PlatformKey('ShowUsr'), pnlUsr.Visible);
 end;
 
 procedure TfrmTRXControl.mnuShowVfoClick(Sender : TObject);
 begin
   gbVfo.Visible := not gbVfo.Visible;
   mnuShowVfo.Checked := gbVfo.Visible;
-  cqrini.WriteBool('TRX', 'ShowVfo', gbVfo.Visible);
+  cqrini.WriteBool('TRX', dmUtils.PlatformKey('ShowVfo'), gbVfo.Visible);
 end;
 
 procedure TfrmTRXControl.tmrRadioTimer(Sender : TObject);
@@ -738,7 +738,7 @@ end;
 
 procedure TfrmTRXControl.FormClose(Sender : TObject; var CloseAction : TCloseAction);
 begin
-  cqrini.WriteInteger('TRX', 'RigInUse', cmbRig.ItemIndex);
+  cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigInUse'), cmbRig.ItemIndex);
   dmUtils.SaveWindowPos(frmTRXControl);
 end;
 
@@ -886,7 +886,7 @@ procedure TfrmTRXControl.UserButton(r, b : Char);
 var
   c : String;
 begin
-  c := trim(cqrini.ReadString('TRX' + r, 'usr' + b, ''));
+  c := trim(cqrini.ReadString('TRX' + r, dmUtils.PlatformKey('usr' + b), ''));
   if pos('RUN', uppercase(c)) = 1 then
   begin
     c := trim(copy(c, 4, length(c)));
@@ -919,7 +919,7 @@ procedure TfrmTRXControl.cmbRigCloseUp(Sender: TObject);
 begin
   if cmbRig.ItemIndex<1 then cmbRig.ItemIndex:=1;
   RigInUse:=IntToStr(cmbRig.ItemIndex);
-  cqrini.WriteInteger('TRX', 'RigInUse',cmbRig.ItemIndex);
+  cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigInUse'),cmbRig.ItemIndex);
 end;
 
 procedure TfrmTRXControl.cmbRigGetItems(Sender: TObject);
@@ -930,14 +930,14 @@ var
 Begin
    cmbRig.Items.Clear;
    cmbRig.Items.add(''); //nr zero is empty
-   for n:=1 to cqrini.ReadInteger('TRX', 'RigCount', 2) do
+   for n:=1 to cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigCount'), 2) do
    Begin
        s:=IntToStr(n);
-       r:=cqrini.ReadString('TRX'+s, 'Desc', '');
+       r:=cqrini.ReadString('TRX'+s, dmUtils.PlatformKey('Desc'), '');
        if r='' then  r:=' None' else r:=' '+r;
        cmbRig.Items.add(s + r);
    end;
-   cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+   cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);
 end;
 
 procedure TfrmTRXControl.edtFreqInputKeyPress(Sender : TObject; var Key : Char);
@@ -1076,7 +1076,7 @@ begin
   Sleep(500);
   Application.ProcessMessages;
 
-  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, 'model', ''), id) then
+  if not TryStrToInt(cqrini.ReadString('TRX' + RigInUse, dmUtils.PlatformKey('model'), ''), id) then
    Begin
     cmbRig.Items[cmbRig.ItemIndex]:= RigInUse + ' Is not Set';
     lblFreq.Caption:='0.0000';
@@ -1087,7 +1087,7 @@ begin
   else
    begin
     radio := TRigControl.Create;
-    if (dmData.DebugLevel > 0) or cqrini.ReadBool('TRX', 'Debug', False) then
+    if (dmData.DebugLevel > 0) or cqrini.ReadBool('TRX', dmUtils.PlatformKey('Debug'), False) then
     radio.DebugMode := True;
     radio.RigId := id;
    end;
@@ -1103,30 +1103,30 @@ begin
   //cqrini.Write does not make difference in config file if variable is saved as String or Integer
   //both results look same in .cfg file.
 
-    port:= cqrini.ReadInteger('TRX' + RigInUse, 'RigCtldPort', 4532);
+    port:= cqrini.ReadInteger('TRX' + RigInUse, dmUtils.PlatformKey('RigCtldPort'), 4532);
     if ((port>65534) or (port<1024)) then port := 4532;  //limit values
 
-    poll:=cqrini.ReadInteger('TRX' + RigInUse, 'poll', 500);
+    poll:=cqrini.ReadInteger('TRX' + RigInUse, dmUtils.PlatformKey('poll'), 500);
     if ((poll>60000) or (poll<10)) then  poll := 500;  //limit values
 
-  radio.RigCtldPath := cqrini.ReadString('TRX', 'RigCtldPath', '/usr/bin/rigctld');
+  radio.RigCtldPath := cqrini.ReadString('TRX', dmUtils.PlatformKey('RigCtldPath'), dmUtils.DefaultToolPath('rigctld', '/usr/bin/rigctld'));
   radio.RigCtldArgs := dmUtils.GetRadioRigCtldCommandLine(StrToInt(RigInUse));
-  radio.RunRigCtld := cqrini.ReadBool('TRX' + RigInUse, 'RunRigCtld', False);
-  radio.RigDevice := cqrini.ReadString('TRX' + RigInUse, 'device', '');
+  radio.RunRigCtld := cqrini.ReadBool('TRX' + RigInUse, dmUtils.PlatformKey('RunRigCtld'), False);
+  radio.RigDevice := cqrini.ReadString('TRX' + RigInUse, dmUtils.PlatformKey('device'), '');
   radio.RigCtldPort := port;
-  radio.RigCtldHost := cqrini.ReadString('TRX' + RigInUse, 'host', 'localhost');
+  radio.RigCtldHost := cqrini.ReadString('TRX' + RigInUse, dmUtils.PlatformKey('host'), 'localhost');
   radio.RigPoll := poll;
-  radio.RigSendCWR := cqrini.ReadBool('TRX' + RigInUse, 'CWR', False);
-  radio.RigChkVfo := cqrini.ReadBool('TRX' + RigInUse, 'ChkVfo', True);
-  radio.PowerON:=cqrini.ReadBool('TRX'+ RigInUse, 'RigPwrON', True);
-  radio.CompoundPoll:=cqrini.ReadBool('TRX'+RigInUse, 'CPollR', True);
+  radio.RigSendCWR := cqrini.ReadBool('TRX' + RigInUse, dmUtils.PlatformKey('CWR'), False);
+  radio.RigChkVfo := cqrini.ReadBool('TRX' + RigInUse, dmUtils.PlatformKey('ChkVfo'), True);
+  radio.PowerON:=cqrini.ReadBool('TRX'+ RigInUse, dmUtils.PlatformKey('RigPwrON'), True);
+  radio.CompoundPoll:=cqrini.ReadBool('TRX'+RigInUse, dmUtils.PlatformKey('CPollR'), True);
   tmrRadio.Interval := radio.RigPoll;
   tmrRadio.Enabled := True;
   Result := True;
 
   LoadUsrButtonCaptions;
 
-  pnlPower.Visible := cqrini.ReadBool('TRX', 'PowerButtons', False);
+  pnlPower.Visible := cqrini.ReadBool('TRX', dmUtils.PlatformKey('PowerButtons'), False);
   mnuShowPwr.Checked := pnlPower.Visible;
 
 
@@ -1153,7 +1153,7 @@ begin
             Writeln('CW keyer reloaded by TRControl radio' + RigInUse + ' change');
         end;
 
-      if cqrini.ReadBool('TRX'+RigInUse, 'UTC2Rig', False) then
+      if cqrini.ReadBool('TRX'+RigInUse, dmUtils.PlatformKey('UTC2Rig'), False) then
              Begin
               currMin:='';
               tmrSetRigTime.Enabled:=True; //sets rig time on next minute change
@@ -1567,9 +1567,9 @@ end;
 
 procedure TfrmTRXControl.LoadUsrButtonCaptions;
 begin
-  btnUsr1.Caption := cqrini.ReadString('TRX' + RigInUse, 'usr1name', 'Usr1');
-  btnUsr2.Caption := cqrini.ReadString('TRX' + RigInUse, 'usr2name', 'Usr2');
-  btnUsr3.Caption := cqrini.ReadString('TRX' + RigInUse, 'usr3name', 'Usr3');
+  btnUsr1.Caption := cqrini.ReadString('TRX' + RigInUse, dmUtils.PlatformKey('usr1name'), 'Usr1');
+  btnUsr2.Caption := cqrini.ReadString('TRX' + RigInUse, dmUtils.PlatformKey('usr2name'), 'Usr2');
+  btnUsr3.Caption := cqrini.ReadString('TRX' + RigInUse, dmUtils.PlatformKey('usr3name'), 'Usr3');
 end;
 
 procedure TfrmTRXControl.LoadButtonCaptions;

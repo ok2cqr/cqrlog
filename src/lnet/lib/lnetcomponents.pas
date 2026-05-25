@@ -30,7 +30,12 @@ interface
 
 uses
   Classes, SysUtils,
-  LCLNet, lNet, lTelnet;//, lFTP, lSMTP, lHTTP, lNetSSL;
+  {$IFDEF LCLCocoa}
+  lEvents, ExtCtrls,
+  {$ELSE}
+  LCLNet,
+  {$ENDIF}
+  lNet, lTelnet;
   
 type
 
@@ -183,15 +188,33 @@ type
  }
 implementation
 
+{$IFDEF LCLCocoa}
+type
+  TSelectPollHelper = class
+    procedure OnTimer(Sender: TObject);
+  end;
+
+var
+  SelectEventer: TLSelectEventer;
+  PollTimer: TTimer;
+  PollHelper: TSelectPollHelper;
+
+procedure TSelectPollHelper.OnTimer(Sender: TObject);
+begin
+  if Assigned(SelectEventer) then
+    SelectEventer.CallAction;
+end;
+{$ELSE}
 var
   LCLEventer: TLCLEventer;
+{$ENDIF}
 
 { TLTCPComponent }
 
 constructor TLTCPComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  Eventer := LCLEventer;
+  Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 
 { TLUDPComponent }
@@ -199,7 +222,7 @@ end;
 constructor TLUDPComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  Eventer :=LCLEventer;
+  Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 
 { TLTelnetClientComponent }
@@ -207,7 +230,7 @@ end;
 constructor TLTelnetClientComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  Connection.Eventer := LCLEventer;
+  Connection.Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 {
 { TLFTPClientComponent }
@@ -215,8 +238,8 @@ end;
 constructor TLFTPClientComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  ControlConnection.Connection.Eventer := LCLEventer;
-  DataConnection.Eventer := LCLEventer;
+  ControlConnection.Connection.Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
+  DataConnection.Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 
 { TLSMTPCientComponent }
@@ -224,7 +247,7 @@ end;
 constructor TLSMTPClientComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  Eventer := LCLEventer;
+  Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 
 { TLHTTPClientComponent }
@@ -232,7 +255,7 @@ end;
 constructor TLHTTPClientComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  Eventer := LCLEventer;
+  Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 
 { TLHTTPServerComponent }
@@ -240,7 +263,7 @@ end;
 constructor TLHTTPServerComponent.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-  Eventer := LCLEventer;
+  Eventer := {$IFDEF LCLCocoa}SelectEventer{$ELSE}LCLEventer{$ENDIF};
 end;
 
 { TLSSLSessionComponent }
@@ -252,9 +275,25 @@ begin
 end;
 }
 initialization
+  {$IFDEF LCLCocoa}
+  SelectEventer := TLSelectEventer.Create;
+  SelectEventer.Timeout := 0;
+  PollHelper := TSelectPollHelper.Create;
+  PollTimer := TTimer.Create(nil);
+  PollTimer.Interval := 50;
+  PollTimer.OnTimer := @PollHelper.OnTimer;
+  PollTimer.Enabled := True;
+  {$ELSE}
   LCLEventer := TLCLEventer.Create;
-  
+  {$ENDIF}
+
 finalization
-  LCLEventer.Free; // it IS required because refcount is +1
+  {$IFDEF LCLCocoa}
+  PollTimer.Free;
+  PollHelper.Free;
+  SelectEventer.Free;
+  {$ELSE}
+  LCLEventer.Free;
+  {$ENDIF}
 
 end.

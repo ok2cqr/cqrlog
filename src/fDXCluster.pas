@@ -417,7 +417,7 @@ end;
 
 procedure TfrmDXCluster.acFontExecute(Sender : TObject);
 begin
-  dlgDXfnt.Font.Name := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
+  dlgDXfnt.Font.Name := cqrini.ReadString('DXCluster','Font',cDefaultMonoFont);
   dlgDXfnt.Font.Style := StringToFontStyles(cqrini.ReadString('DXCluster','FontStyle',''));
   dlgDXfnt.Font.Size := cqrini.ReadInteger('DXCluster','FontSize',12);
   if dlgDXfnt.Execute then
@@ -632,7 +632,7 @@ var
 begin
   f := TFont.Create;
   try
-    f.Name    := cqrini.ReadString('DXCluster','Font','DejaVu Sans Mono');
+    f.Name    := cqrini.ReadString('DXCluster','Font',cDefaultMonoFont);
     f.Size    := cqrini.ReadInteger('DXCluster','FontSize',12);
     f.Style   := StringToFontStyles(cqrini.ReadString('DXCluster','FontStyle',''));
     WebSpots.SetFont(f);
@@ -751,7 +751,7 @@ begin
   if key=#19 then
   Begin
     key := #0;
-    cqrini.WriteString('DXCluster','StartCmd',edtCommand.Text);
+    cqrini.WriteString('DXCluster', dmUtils.PlatformKey('StartCmd'), edtCommand.Text);
     if dmData.DebugLevel>=1 then  writeln('ClusterStarCommand:_',edtCommand.Text,'_saved');
     edtCommand.Clear;
   end;
@@ -872,7 +872,7 @@ begin
           Chline := '';
           if dmData.DebugLevel>=1 then Writeln('Chat : line is cluster prompt!');
           //send start command at first prompt
-          if not SentStartCmd and (cqrini.ReadString('DXCluster','StartCmd','') <> '') then
+          if not SentStartCmd and (cqrini.ReadString('DXCluster', dmUtils.PlatformKey('StartCmd'), '') <> '') then
             begin
                cmds := Tstringlist.create;
                 try
@@ -880,7 +880,7 @@ begin
                  cmds.Clear;
                  cmds.StrictDelimiter := true;
                  cmds.Delimiter := ';';
-                 cmds.DelimitedText := cqrini.ReadString('DXCluster','StartCmd','') ;
+                 cmds.DelimitedText := cqrini.ReadString('DXCluster', dmUtils.PlatformKey('StartCmd'), '') ;
                  for K:=0 to cmds.Count-1 do
                   Begin
                    SendCommand(trim(cmds[K]));

@@ -777,11 +777,11 @@ begin
 
   dmUtils.LoadBandsSettings;
 
-  frmTRXControl.cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+  frmTRXControl.cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);
   frmTRXControl.cmbRigCloseUp(nil);
   frmTRXControl.InitializeRig;
-  frmRotControl.rbRotor1.Checked:= cqrini.ReadBool('ROT','Use1',True);
-  frmRotControl.rbRotor2.Checked:= not(cqrini.ReadBool('ROT','Use1',True));
+  frmRotControl.rbRotor1.Checked:= cqrini.ReadBool('ROT',dmUtils.PlatformKey('Use1'),True);
+  frmRotControl.rbRotor2.Checked:= not(cqrini.ReadBool('ROT',dmUtils.PlatformKey('Use1'),True));
   frmRotControl.InicializeRot;
 
   OpenFreqMemories('');
@@ -1141,6 +1141,28 @@ begin
     Writeln('   ',DLLUtilName)
   end;
 
+  {$IFDEF DARWIN}
+  begin
+    lib := '';
+    if FileExists(ExtractFilePath(ParamStr(0)) + '../Frameworks/libmariadb.3.dylib') then
+      lib := ExtractFilePath(ParamStr(0)) + '../Frameworks/libmariadb.3.dylib'
+    else if FileExists('/opt/homebrew/lib/libmysqlclient.dylib') then
+      lib := '/opt/homebrew/lib/libmysqlclient.dylib'
+    else if FileExists('/usr/local/lib/libmysqlclient.dylib') then
+      lib := '/usr/local/lib/libmysqlclient.dylib';
+    if lib <> '' then
+    begin
+      try
+        InitialiseMysql(lib);
+        Writeln('MySQL library loaded from: ', lib);
+      except
+        on E: Exception do
+          Writeln('Note: Could not preload MySQL library from ', lib, ': ', E.Message);
+      end;
+    end;
+  end;
+  {$ENDIF}
+
   CreateDBConnections;
 
   MainCon.KeepConnection := True;
@@ -1172,7 +1194,7 @@ begin
 
   fHomeDir    := GetAppConfigDir(False);
   fDataDir    := fHomeDir+'database/';
-  fUsrHomeDir := copy(fHomeDir,1,Pos('.config',fHomeDir)-1);
+  fUsrHomeDir := GetUserDir;
 
   PrepareDirectories;
   PrepareCtyData;
@@ -3357,6 +3379,16 @@ begin
     Result := '/usr/bin/mysqld_safe';
   if FileExistsUTF8('/usr/sbin/mysqld') then //openSUSE
     Result := '/usr/sbin/mysqld';
+  {$IFDEF DARWIN}
+  if FileExistsUTF8('/usr/local/bin/mysqld') then
+    Result := '/usr/local/bin/mysqld';
+  if FileExistsUTF8('/opt/homebrew/bin/mysqld') then
+    Result := '/opt/homebrew/bin/mysqld';
+  if FileExistsUTF8('/usr/local/opt/mariadb/bin/mysqld') then
+    Result := '/usr/local/opt/mariadb/bin/mysqld';
+  if FileExistsUTF8('/opt/homebrew/opt/mariadb/bin/mysqld') then
+    Result := '/opt/homebrew/opt/mariadb/bin/mysqld';
+  {$ENDIF}
   if Result = '' then  //don't know where mysqld is, so hopefully will be in  $PATH
     Result := 'mysqld'
 end;
@@ -4094,7 +4126,7 @@ begin
   qFreqMem.Close;
   if trFreqMem.Active then trFreqMem.Rollback;
 
-  if not cqrini.ReadBool('TRX','MemModeRelated',False) then mode:='';   //use related settings!!
+  if not cqrini.ReadBool('TRX',dmUtils.PlatformKey('MemModeRelated'),False) then mode:='';   //use related settings!!
 
   if (mode='') then qFreqMem.SQL.Text := C_SEL + ' order by id'
   else

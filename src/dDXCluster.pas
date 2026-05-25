@@ -1156,7 +1156,7 @@ var
   index     :integer;
   cmd      : String;
 begin
-  cmd := cqrini.ReadString('DXCluster','AlertCmd','');
+  cmd := cqrini.ReadString('DXCluster', dmUtils.PlatformKey('AlertCmd'), '');
 
   if (cmd<>'') then
   begin

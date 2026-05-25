@@ -57,7 +57,11 @@ type
   end;
 
 const
+  {$IFDEF DARWIN}
+  C_PATH = '/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:/opt/local/bin:/usr/sbin:/usr/local/sbin';
+  {$ELSE}
   C_PATH = '/bin:/usr/bin/:/usr/local/bin/:~/.local/bin:/sbin:/usr/sbin:/usr/local/sbin';
+  {$ENDIF}
   C_HEIGHT = 230;
 
 var
@@ -205,7 +209,10 @@ var
   c: integer;
 begin
   UsrHome := dmUtils.GetHomeDirectory;
-  //try to find three well-known terminals
+  {$IFDEF DARWIN}
+  Terminal := 'open';
+  dmUtils.ExecuteCommand('open -a Terminal ' + UsrHome + 'create_cqr_user.sh');
+  {$ELSE}
   Terminal := FileSearch('xterm', C_PATH, True);
   if Terminal = '' then
     Terminal := FileSearch('gnome-terminal', C_PATH, True);
@@ -215,6 +222,7 @@ begin
     ShowMessage('CQRLOG did not find command-line terminal from your system!')
   else
     dmUtils.ExecuteCommand(Terminal + ' -e ' + UsrHome + 'create_cqr_user.sh');
+  {$ENDIF}
 
   c := 60;   //max timeout in seconds
   repeat   //we need this stupid wait because [poWaitOnExit] did not work with Mint 20 !
@@ -233,7 +241,7 @@ begin
   else begin
     msg := 'If you did not see terminal and enter your password there'
       + LineEnding + 'then do this:' + LineEnding +
-      'Open linux command-line terminal and type:' + LineEnding + UsrHome +
+      'Open command-line terminal and type:' + LineEnding + UsrHome +
       'create_cqr_user.sh (and press enter)' + LineEnding +
       LineEnding + 'After that is done without errors close terminal and press OK here'
       + LineEnding + LineEnding;
@@ -312,17 +320,11 @@ end;
 
 procedure TfrmDbSqlSel.btnHelpClick(Sender: TObject);
 var
-  xdg: string;
   pathToHelp : string;
 begin
-  xdg := FileSearch('xdg-open', C_PATH, True);
-  if xdg <> '' then
-  begin
-    pathToHelp := ExpandFileNameUTF8('..' + DirectorySeparator + 'share' + DirectorySeparator + 'cqrlog' + DirectorySeparator +
-                                     'help' + DirectorySeparator + 'firsttime.html');
-
-    dmUtils.RunOnBackground(xdg + ' ' + pathToHelp);
-  end;
+  pathToHelp := ExpandFileNameUTF8('..' + DirectorySeparator + 'share' + DirectorySeparator + 'cqrlog' + DirectorySeparator +
+                                   'help' + DirectorySeparator + 'firsttime.html');
+  dmUtils.OpenWithDesktop(pathToHelp);
 end;
 
 procedure TfrmDbSqlSel.ChkValues;
