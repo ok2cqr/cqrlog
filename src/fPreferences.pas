@@ -1299,6 +1299,15 @@ begin
   cqrini.WriteBool('TRX', dmUtils.PlatformKey('MemModeRelated'), chkModeRelatedOnly.Checked);
   cqrini.WriteInteger('TRX', dmUtils.PlatformKey('RigCount'), edtRigCount.Value);
 
+  //Persist the currently displayed rig/modes/CW settings explicitly here.
+  //These are normally saved by the tab/combo OnExit handlers (cmbRadioNrCloseUp ->
+  //SaveTRX, tabModesExit -> SaveBandW, tabCWInterfaceExit -> SaveCWif), but the
+  //Cocoa (macOS) widgetset does not fire TTabSheet.OnExit when OK closes the dialog,
+  //so without this the radio settings would never be written. Idempotent on GTK2/Qt5.
+  SaveTRX(RadioNrLoaded);
+  SaveBandW(BandWNrLoaded);
+  SaveCWif(CWifLoaded);
+
   ClearUnUsedRigs;  //rigs modes and cw are saved when editing. Just delete unused rigs (model=empty)
 
   cqrini.WriteString('ROT', dmUtils.PlatformKey('RotCtldPath'), edtRotCtldPath.Text);
