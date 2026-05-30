@@ -394,7 +394,7 @@ begin
   poll:=cqrini.ReadInteger('ROT'+n, dmUtils.PlatformKey('poll'), 500);
   if ((poll>60000) or (poll<10)) then  poll := 500;  //limit values
 
-  rotor.RotCtldPath := cqrini.ReadString('ROT', dmUtils.PlatformKey('RotCtldPath'), dmUtils.DefaultToolPath('rotctld', '/usr/bin/rotctld'));
+  rotor.RotCtldPath := cqrini.ReadString('ROT', dmUtils.PlatformKey('RotCtldPath'), dmUtils.DefaultRotCtldPath);
   rotor.RotCtldArgs := dmUtils.GetRotorRotCtldCommandLine(StrToInt(n));
   rotor.RunRotCtld  := cqrini.ReadBool('ROT'+n,dmUtils.PlatformKey('RunRotCtld'),False);
   rotor.RotDevice   := cqrini.ReadString('ROT'+n, dmUtils.PlatformKey('device'), '');

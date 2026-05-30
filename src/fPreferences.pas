@@ -2963,7 +2963,7 @@ begin
   LoadBandW(cmbRadioNr.ItemIndex);
   LoadCWif(cmbRadioNr.ItemIndex);
 
-  edtRotCtldPath.Text := cqrini.ReadString('ROT', dmUtils.PlatformKey('RotCtldPath'), dmUtils.DefaultToolPath('rotctld', '/usr/bin/rotctld'));
+  edtRotCtldPath.Text := cqrini.ReadString('ROT', dmUtils.PlatformKey('RotCtldPath'), dmUtils.DefaultRotCtldPath);
   if (FileExistsUTF8(edtRotCtldPath.Text)) then
   begin
     dmUtils.LoadRigsToComboBox(cqrini.ReadString('ROT1', dmUtils.PlatformKey('model'), ''),edtRotCtldPath.Text,cmbModelRot1);

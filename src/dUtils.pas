@@ -338,6 +338,7 @@ type
     function  FindExecutable(const ExeName : String) : String;
     procedure OpenWithDesktop(const Target : String);
     function  DefaultToolPath(const ToolName, LinuxDefault : String) : String;
+    function  DefaultRotCtldPath : String;
 
 end;
 
@@ -3503,6 +3504,17 @@ begin
   Result := FindExecutable(ToolName);
   if Result = '' then
     Result := LinuxDefault;
+end;
+
+function TdmUtils.DefaultRotCtldPath: string;
+var
+  rigCtldPath: String;
+begin
+  //rotctld lives in the same directory as rigctld. Derive the rotctld default
+  //from the effective rigctld path (saved value or its own default) and just
+  //swap the binary name, so rotctld follows rigctld (app bundle / system / homebrew).
+  rigCtldPath := cqrini.ReadString('TRX', PlatformKey('RigCtldPath'), DefaultToolPath('rigctld', '/usr/bin/rigctld'));
+  Result := ExtractFilePath(rigCtldPath) + 'rotctld';
 end;
 
 
