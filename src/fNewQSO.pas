@@ -5765,7 +5765,7 @@ begin
     begin
       speed := CWint.GetSpeed+2;
       CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
+      if (cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
         sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
@@ -5779,7 +5779,7 @@ begin
     begin
       speed := CWint.GetSpeed-2;
       CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
+      if (cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
         sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         sbNewQSO.Panels[4].Text := IntToStr(speed) + 'WPM';
@@ -7279,7 +7279,7 @@ begin
   UseSpeed:=0; //show zero when pot speed  or no keyer
   n:=intToStr(frmTRXControl.cmbRig.ItemIndex);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('Radio'+n+' CW settings:');
-  KeyerType :=  cqrini.ReadInteger('CW'+n,'Type',0);
+  KeyerType :=  cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0);
   if ((dmData.DebugLevel>=1 ) or ((abs(dmData.DebugLevel) and 8) = 8 )) then Writeln('CW init keyer type:',KeyerType);
   Menuitem45.Visible:=False;  //send hex commands to win/k3ng keyer
   case  KeyerType of
@@ -7334,7 +7334,7 @@ begin
      CWint.Open;
      if UseSpeed>0 then CWint.SetSpeed(UseSpeed);
    end;
-   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
+   if (cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
      sbNewQSO.Panels[4].Text := 'Pot WPM'
     else
      sbNewQSO.Panels[4].Text := IntToStr(UseSpeed) + 'WPM';

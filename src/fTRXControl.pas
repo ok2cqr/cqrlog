@@ -1139,7 +1139,7 @@ begin
       IsNewHamlib:=radio.IsNewHamlib;
       //we check this again although preferences prevent false setting
       if ( cqrini.ReadBool('CW', 'NoReset', False) //is set: user does not want reset
-        and (cqrini.ReadInteger('CW'+RigInUse, 'Type', 0) <> 4)  //type is not HamLib
+        and (cqrini.ReadInteger('CW'+RigInUse, dmUtils.PlatformKey('Type'), 0) <> 4)  //type is not HamLib
         ) then //no restart keyer it is same device for both radios.
             begin
               if ((dmData.DebugLevel >= 1) or ((abs(dmData.DebugLevel) and 8) = 8)) then

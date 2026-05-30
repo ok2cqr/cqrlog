@@ -430,7 +430,7 @@ begin
   Switch2Word :=false;
   WasMemoLen := length(m.lines.text);
   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
-  if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+  if (cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
      Begin
          frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM';
          edtSpeed.Enabled:=False;
@@ -457,7 +457,7 @@ begin
  begin
   n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
   frmNewQSO.CWint.SetSpeed(edtSpeed.Value);
-   if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+   if (cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
         frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(edtSpeed.Value)+'WPM';
@@ -610,7 +610,7 @@ begin
       n:=IntToStr(frmTRXControl.cmbRig.ItemIndex);
       speed := frmNewQSO.CWint.GetSpeed+change;
       frmNewQSO.CWint.SetSpeed(speed);
-      if (cqrini.ReadInteger('CW'+n,'Type',0)=1) and cqrini.ReadBool('CW'+n,'PotSpeed',False) then
+      if (cqrini.ReadInteger('CW'+n,dmUtils.PlatformKey('Type'),0)=1) and cqrini.ReadBool('CW'+n,dmUtils.PlatformKey('PotSpeed'),False) then
         frmNewQSO.sbNewQSO.Panels[4].Text := 'Pot WPM'
        else
         frmNewQSO.sbNewQSO.Panels[4].Text := IntToStr(speed)+'WPM';
