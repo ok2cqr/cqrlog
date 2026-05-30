@@ -4392,6 +4392,12 @@ begin
          Result:=Result+'-r ' + cqrini.ReadString(section, PlatformKey('device'), '') + ' ';
   if  (trim(cqrini.ReadString(section, PlatformKey('RigCtldPort'), ''))<>'') then
          Result:=Result+'-t ' + cqrini.ReadString(section, PlatformKey('RigCtldPort'), '') + ' ';
+  {$IFDEF DARWIN}
+  //Bundled Hamlib's rigctld defaults to listen-addr ANY, which binds IPv6-only on macOS.
+  //lNet connects over IPv4 (localhost -> 127.0.0.1), so force IPv4 loopback bind here,
+  //otherwise CQRLOG gets "connection refused" even though rigctld is listening.
+  Result := Result + '-T 127.0.0.1 ';
+  {$ENDIF}
   Result := Result + cqrini.ReadString(section, PlatformKey('ExtraRigCtldArgs'), '') + ' ';
 
   case cqrini.ReadInteger(section, PlatformKey('SerialSpeed'), 0) of
@@ -4500,6 +4506,10 @@ begin
          Result:=Result+'-r ' + cqrini.ReadString(section, PlatformKey('device'), '') + ' ';
   if  (trim(cqrini.ReadString(section, PlatformKey('RotCtldPort'), ''))<>'') then
          Result:=Result+'-t ' + cqrini.ReadString(section, PlatformKey('RotCtldPort'), '') + ' ';
+  {$IFDEF DARWIN}
+  //Same IPv6-only bind issue as rigctld - force IPv4 loopback so lNet can connect.
+  Result := Result + '-T 127.0.0.1 ';
+  {$ENDIF}
   Result := Result + cqrini.ReadString(section, PlatformKey('ExtraRotCtldArgs'), '') + ' ';
 
   case cqrini.ReadInteger(section, PlatformKey('SerialSpeed'), 0) of
