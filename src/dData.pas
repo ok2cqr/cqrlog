@@ -20,7 +20,7 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn, uMyFindFile, Graphics;
+  mysql57dyn, mysql57conn, uMyFindFile, Graphics, contnrs;
 
 const
   cDB_LIMIT = 500;
@@ -243,6 +243,7 @@ type
     property MySQLVersion : Currency read fMySQLVersion write fMySQLVersion;
 
     function  GetComment(call : String) : String;
+    procedure LoadCommentCache(cache : TFPStringHashTable);
     function  GetProfileText(nr : Integer) : String;
     function  GetCompleteProfileText(nr : Integer) : String;
     function  GetExportProfileText(nr : Integer) : String;
@@ -1545,6 +1546,24 @@ begin
   qComment.SQL.Text := 'SELECT longremarks FROM notes WHERE callsign = ' + QuotedStr(call);
   qComment.Open;
   Result := qComment.Fields[0].AsString;
+  qComment.Close;
+  trComment.Rollback
+end;
+
+// Load all notes in a single query into an in-memory map (callsign -> longremarks).
+// Used by ADIF export to avoid one DB round-trip per QSO (see fExportProgress).
+procedure TdmData.LoadCommentCache(cache : TFPStringHashTable);
+begin
+  qComment.Close;
+  trComment.StartTransaction;
+  qComment.SQL.Text := 'SELECT callsign, longremarks FROM notes';
+  qComment.Open;
+  while not qComment.Eof do
+  begin
+    if qComment.Fields[1].AsString <> '' then
+      cache[qComment.Fields[0].AsString] := qComment.Fields[1].AsString;
+    qComment.Next
+  end;
   qComment.Close;
   trComment.Rollback
 end;
