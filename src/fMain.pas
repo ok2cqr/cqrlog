@@ -835,7 +835,7 @@ begin
     dmUtils.EnterFreq;
     key := 0;
   end;
-  if (Shift = [ssCTRL]) and (Key = VK_N) then
+  if dmUtils.IsCmdCtrl(Shift) and (Key = VK_N) then
   begin
     mnuDoNotSendClick(nil);
     key := 0
@@ -1466,6 +1466,18 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
+  {$IFDEF DARWIN}
+  // macOS: show menu-bar shortcuts as Cmd (⌘) instead of Ctrl; Ctrl+H (Help) stays
+  acPreferences.ShortCut := ShortCut(VK_OEM_COMMA, [ssMeta]);  // ⌘,
+  acClose.ShortCut       := ShortCut(VK_Q, [ssMeta]);
+  acQSL_S.ShortCut       := ShortCut(VK_S, [ssMeta]);
+  acQSL_R.ShortCut       := ShortCut(VK_R, [ssMeta]);
+  acImportADIF.ShortCut  := ShortCut(VK_I, [ssMeta]);
+  acSearch.ShortCut      := ShortCut(VK_F, [ssMeta]);
+  acExADIF.ShortCut      := ShortCut(VK_E, [ssMeta]);
+  acDXCCCfm.ShortCut     := ShortCut(VK_D, [ssMeta]);
+  mnuSB.ShortCut         := ShortCut(VK_W, [ssMeta]);
+  {$ENDIF}
   minimalize    := False;
   MinDXCluster  := False;
   MinGrayLine   := False;
@@ -1782,7 +1794,7 @@ begin
   if StrToInt(lblQSOCount.Caption) = 0 then
      exit;
 
-  if ((key = VK_END) and (Shift = [ssCtrl])) and (not dmData.IsFilter) then
+  if ((key = VK_END) and dmUtils.IsCmdCtrl(Shift)) and (not dmData.IsFilter) then
   begin
     dmData.trCQRLOG.Rollback;
     dmData.qCQRLOG.Close;
@@ -1796,7 +1808,7 @@ begin
     dmData.qCQRLOG.Last
   end;
 
-  if ((key = VK_HOME) and (Shift = [ssCtrl])) and (not dmData.IsFilter) then
+  if ((key = VK_HOME) and dmUtils.IsCmdCtrl(Shift)) and (not dmData.IsFilter) then
   begin
     dmData.trCQRLOG.Rollback;
     dmData.qCQRLOG.Close;

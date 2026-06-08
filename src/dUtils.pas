@@ -334,6 +334,7 @@ type
     function  ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
 
     function  PlatformKey(const Key : String) : String;
+    function  IsCmdCtrl(Shift : TShiftState) : Boolean;
     function  PlatformSearchPath : String;
     function  FindExecutable(const ExeName : String) : String;
     procedure OpenWithDesktop(const Target : String);
@@ -3432,6 +3433,16 @@ begin
   Result := Key + '_mac';
   {$ELSE}
   Result := Key;
+  {$ENDIF}
+end;
+
+// true if the "command" modifier is pressed (Cmd on macOS, otherwise Ctrl) — and no other
+function TdmUtils.IsCmdCtrl(Shift: TShiftState): Boolean;
+begin
+  {$IFDEF DARWIN}
+  Result := Shift = [ssMeta];
+  {$ELSE}
+  Result := Shift = [ssCtrl];
   {$ENDIF}
 end;
 

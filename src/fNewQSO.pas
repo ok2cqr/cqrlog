@@ -3180,6 +3180,19 @@ begin
   pnlAll.Height := 520;
   gbDXCCdata.Height := 420;
   {$ENDIF}
+  {$IFDEF DARWIN}
+  // macOS: show menu-bar shortcuts as Cmd (⌘) instead of Ctrl; Ctrl+M (Remote) and Ctrl+H (Help) stay
+  acPreferences.ShortCut     := ShortCut(VK_OEM_COMMA, [ssMeta]);  // ⌘,
+  acClose.ShortCut           := ShortCut(VK_Q, [ssMeta]);
+  acDetails.ShortCut         := ShortCut(VK_I, [ssMeta]);
+  acLongNote.ShortCut        := ShortCut(VK_N, [ssMeta]);
+  acSendSpot.ShortCut        := ShortCut(VK_W, [ssMeta]);
+  acTune.ShortCut            := ShortCut(VK_T, [ssMeta]);
+  // mnuNewQSO (F2) stays on the FormKeyDown handler — acNewQSOExecute only does ClearAll, not the whole sequence
+  mnuQSOList.ShortCut        := ShortCut(VK_O, [ssMeta]);
+  mnuRemoteModeWsjt.ShortCut := ShortCut(VK_J, [ssMeta]);
+  mnuRemoteModeADIF.ShortCut := ShortCut(VK_K, [ssMeta]);
+  {$ENDIF}
   StartRun := false;
   CWint := nil;
   tmrRadio.Enabled := False;
@@ -5787,9 +5800,9 @@ begin
     end
   end;
 
-  // CTRL-Key > Keyboard Shortcuts for NewQSO GUI with CTRL
+  // Command/Ctrl-Key > Keyboard Shortcuts for NewQSO GUI (Cmd on macOS, Ctrl elsewhere)
 
-  if ((Shift = [ssCtrl]) and (key = VK_F2)) then
+  if (dmUtils.IsCmdCtrl(Shift) and (key = VK_F2)) then
   begin
     Caption := dmUtils.GetNewQSOCaption('New QSO');
     fViewQSO := False;
@@ -5799,7 +5812,7 @@ begin
     key := 0
   end;
 
-  if (Shift = [ssCtrl]) and (Key = VK_F8) then
+  if dmUtils.IsCmdCtrl(Shift) and (Key = VK_F8) then
   begin     //F8
     if not (fEditQSO or fViewQSO) then
       edtCall.Text:= '';
@@ -5807,21 +5820,23 @@ begin
     key := 0
   end;
 
-  if ((Shift = [ssCtrl]) and (key = VK_A)) then
+  if (dmUtils.IsCmdCtrl(Shift) and (key = VK_A)) then
   begin
     acAddToBandMap.Execute;
     key := 0
   end;
-  if (Shift = [ssCtrl]) and (key = VK_D) then
+  if dmUtils.IsCmdCtrl(Shift) and (key = VK_D) then
   begin
     acDXCCCfm.Execute;
     key := 0;
   end;
+  {$IFNDEF DARWIN}  // on macOS handled by action/menu (acDetails has its own ShortCut = ⌘I)
   if (Shift = [ssCtrl]) and (key = VK_I) then
   begin
     acDetails.Execute;
     key := 0
   end;
+  {$ENDIF}
   if ((Shift = [ssCtrl]) and (key = VK_H)) then
   begin
     ShowHelp;
@@ -5832,6 +5847,7 @@ begin
     acRemoteMode.Execute;
     key := 0
   end;
+  {$IFNDEF DARWIN}  // on macOS handled by action/menu (own ShortCut: ⌘N / ⌘O / ⌘, / ⌘Q)
   if ((Shift = [ssCtrl]) and (key = VK_N)) then
   begin
     acLongNote.Execute;
@@ -5853,7 +5869,8 @@ begin
     key := 0;
     exit
   end;
-  if ((Shift = [ssCtrl]) and (key = VK_R)) then
+  {$ENDIF}
+  if (dmUtils.IsCmdCtrl(Shift) and (key = VK_R)) then
   begin
     if edtCall.Text <> '' then
     begin
@@ -5872,12 +5889,14 @@ begin
       key := 0
     end;
   end;
-  if ((Shift = [ssCTRL]) and (key = VK_W)) then
+  {$IFNDEF DARWIN}  // on macOS handled by acSendSpot action (own ShortCut = ⌘W) — otherwise the window would open twice
+  if ((Shift = [ssCtrl]) and (key = VK_W)) then
     acSendSpot.Execute;
+  {$ENDIF}
 
-  if (Shift = [ssCTRL]) then
+  if dmUtils.IsCmdCtrl(Shift) then
     if key in [VK_1..VK_9] then SetSplit(chr(key));
-  if ((Shift = [ssCTRL]) and (key = VK_0)) then
+  if (dmUtils.IsCmdCtrl(Shift) and (key = VK_0)) then
     frmTRXControl.DisableSplit;
 
   // ALT-Key > Keyboard Shortcuts for NewQSO GUI with ALT
