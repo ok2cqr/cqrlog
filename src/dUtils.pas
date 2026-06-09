@@ -231,6 +231,8 @@ type
     procedure SortArray(l,r : Integer);
     procedure OpenInApp(what : String);
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
+    procedure GetSerialPorts(Ports : TStringList);
+    procedure LoadSerialPortsToComboBox(Current : String; SerialComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
     procedure BandFromDbase;
@@ -4748,6 +4750,57 @@ begin
     LoadRigListCombo(CurrentRigId,RigList,RigComboBox)
   finally
     FreeAndNil(RigList)
+  end
+end;
+
+procedure TdmUtils.GetSerialPorts(Ports : TStringList);
+
+  procedure ScanGlob(const Pattern : String);
+  var
+    sr  : TSearchRec;
+    dir : String;
+  begin
+    dir := ExtractFilePath(Pattern);
+    if FindFirst(Pattern, faAnyFile, sr) = 0 then
+    begin
+      repeat
+        // serial devices are character devices, never directories
+        if (sr.Attr and faDirectory) = 0 then
+          Ports.Add(dir + sr.Name);
+      until FindNext(sr) <> 0;
+      FindClose(sr)
+    end
+  end;
+
+begin
+  Ports.Clear;
+  {$IFDEF DARWIN}
+  ScanGlob('/dev/cu.*');                 // macOS - call-out devices (use cu.* for outgoing)
+  {$ELSE}
+  ScanGlob('/dev/ttyS*');                // hardware UART
+  ScanGlob('/dev/ttyUSB*');              // FTDI/PL2303/CH340 USB adapters
+  ScanGlob('/dev/ttyACM*');              // CDC ACM (newer rigs, Arduino interfaces)
+  ScanGlob('/dev/ttyAM*');               // some ARM UARTs
+  ScanGlob('/dev/ttyAMA*');              // Raspberry Pi UART
+  ScanGlob('/dev/serial/by-id/*');       // stable names independent of plug order
+  {$ENDIF}
+end;
+
+procedure TdmUtils.LoadSerialPortsToComboBox(Current : String; SerialComboBox : TComboBox);
+var
+  Ports : TStringList;
+begin
+  Ports := TStringList.Create;
+  try
+    GetSerialPorts(Ports);
+    // keep the currently configured device selectable even if it is not
+    // present right now (rig unplugged, network rig as IP:port, etc.)
+    if (Current <> '') and (Ports.IndexOf(Current) < 0) then
+      Ports.Add(Current);
+    SerialComboBox.Items.Assign(Ports);
+    SerialComboBox.Text := Current
+  finally
+    FreeAndNil(Ports)
   end
 end;
 

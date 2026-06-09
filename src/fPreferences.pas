@@ -461,7 +461,7 @@ type
     edtGCStep: TEdit;
     edtGCPolarDivisor: TEdit;
     edtPoll: TEdit;
-    edtRDevice: TEdit;
+    edtRDevice: TComboBox;
     edtRHost: TEdit;
     edtRRigCtldArgs: TEdit;
     edtRRigCtldPort: TEdit;
@@ -507,10 +507,10 @@ type
     edtRBNLogin : TEdit;
     edtRot1Poll: TEdit;
     edtRot2Poll: TEdit;
-    edtRot1Device: TEdit;
+    edtRot1Device: TComboBox;
     edtRot1RotCtldArgs: TEdit;
     edtRot1RotCtldPort: TEdit;
-    edtRot2Device: TEdit;
+    edtRot2Device: TComboBox;
     edtRot2RotCtldArgs: TEdit;
     edtRot2RotCtldPort: TEdit;
     edtRotor1: TEdit;
@@ -544,14 +544,14 @@ type
     edtCWAddress: TEdit;
     edtCWPort: TEdit;
     edtPdfFiles: TEdit;
-    edtWinPort: TEdit;
+    edtWinPort: TComboBox;
     edtRecetQSOs: TEdit;
     edtLoTWPass: TEdit;
     edtLoTWName: TEdit;
     edtCWSpeed: TSpinEdit;
     edtWinMinSpeed: TSpinEdit;
     edtWinMaxSpeed: TSpinEdit;
-    edtK3NGPort: TEdit;
+    edtK3NGPort: TComboBox;
     edtK3NGSpeed: TSpinEdit;
     edtFldigiIp: TEdit;
     edtADIFIp: TEdit;
@@ -1030,6 +1030,7 @@ type
     procedure edtRecetQSOsKeyPress(Sender: TObject; var Key: char);
     procedure edtRigCountChange(Sender: TObject);
     procedure RotorParamsChange(Sender: TObject);
+    procedure SerialPortDropDown(Sender: TObject);
     procedure tabCWInterfaceContextPopup(Sender: TObject; MousePos: TPoint;
       var Handled: Boolean);
     procedure tabCWInterfaceExit(Sender: TObject);
@@ -2701,6 +2702,14 @@ begin
   RotChanged := True;
 end;
 
+// Re-scan serial ports each time a device combobox is opened, so newly
+// connected rigs/keyers show up without reopening the preferences window.
+procedure TfrmPreferences.SerialPortDropDown(Sender: TObject);
+begin
+  if (Sender is TComboBox) then
+    dmUtils.LoadSerialPortsToComboBox(TComboBox(Sender).Text, TComboBox(Sender));
+end;
+
 procedure TfrmPreferences.tabCWInterfaceContextPopup(Sender: TObject;
   MousePos: TPoint; var Handled: Boolean);
 begin
@@ -2975,7 +2984,7 @@ begin
   end;
 
 
-  edtRot1Device.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('device'), '');
+  dmUtils.LoadSerialPortsToComboBox(cqrini.ReadString('ROT1', dmUtils.PlatformKey('device'), ''), edtRot1Device);
   edtRot1Poll.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('poll'), '500');
   edtRotor1.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('Desc'), 'Rotor 1');
   edtRot1RotCtldPort.Text := cqrini.ReadString('ROT1', dmUtils.PlatformKey('RotCtldPort'), '4533');
@@ -2991,7 +3000,7 @@ begin
   cmbDTRRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('DTR'), 0);
   cmbRTSRot1.ItemIndex := cqrini.ReadInteger('ROT1', dmUtils.PlatformKey('RTS'), 0);
 
-  edtRot2Device.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('device'), '');
+  dmUtils.LoadSerialPortsToComboBox(cqrini.ReadString('ROT2', dmUtils.PlatformKey('device'), ''), edtRot2Device);
   edtRot2Poll.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('poll'), '500');
   edtRotor2.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('Desc'), 'Rotor 2');
   edtRot2RotCtldPort.Text := cqrini.ReadString('ROT2', dmUtils.PlatformKey('RotCtldPort'), '4533');
@@ -3401,7 +3410,7 @@ Begin
     Application.MessageBox('rigctld binary not found, unable to load list of supported rigs!'+LineEnding+LineEnding+
                            'Fix path to rigctld in TRX control tab.', 'Error', mb_OK+ mb_IconError)
   end;
-  edtRDevice.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('device'), '');
+  dmUtils.LoadSerialPortsToComboBox(cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('device'), ''), edtRDevice);
   edtPoll.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('poll'), '500');
   edtRadioName.Text := cqrini.ReadString('TRX'+nr, dmUtils.PlatformKey('Desc'), '');
   chkRSendCWR.Checked := cqrini.ReadBool('TRX'+nr, dmUtils.PlatformKey('CWR'), False);
@@ -3512,7 +3521,7 @@ Begin
   nr:=IntToStr(RigNr);
   cmbIfaceType.ItemIndex := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('Type'), 0);
   cbNoKeyerReset.Checked := cqrini.ReadBool('CW'+nr, dmUtils.PlatformKey('NoReset'), false);
-  edtWinPort.Text        := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('wk_port'), '');
+  dmUtils.LoadSerialPortsToComboBox(cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('wk_port'), ''), edtWinPort);
   chkPotSpeed.Checked    := cqrini.ReadBool('CW'+nr, dmUtils.PlatformKey('PotSpeed'), False);
   edtWinSpeed.Value      := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('wk_speed'), 30);
   edtCWAddress.Text      := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('cw_address'), 'localhost');
@@ -3520,7 +3529,7 @@ Begin
   edtCWSpeed.Value       := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('cw_speed'), 30);
   edtWinMinSpeed.Value   := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('wk_min'), 5);
   edtWinMaxSpeed.Value   := cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('wk_max'), 60);
-  edtK3NGPort.Text       := cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('K3NGPort'), '');
+  dmUtils.LoadSerialPortsToComboBox(cqrini.ReadString('CW'+nr, dmUtils.PlatformKey('K3NGPort'), ''), edtK3NGPort);
   edtK3NGSerSpeed.Text   := IntToStr(cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('K3NGSerSpeed'), 115200));
   edtK3NGSpeed.Text      := IntToStr(cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('K3NGSpeed'), 30));
   edtHamLibSpeed.Text    := IntToStr(cqrini.ReadInteger('CW'+nr, dmUtils.PlatformKey('HamLibSpeed'), 30));

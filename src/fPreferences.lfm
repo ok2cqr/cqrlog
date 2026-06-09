@@ -2524,7 +2524,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'Poll rate:'
           ParentColor = False
         end
-        object edtRDevice: TEdit
+        object edtRDevice: TComboBox
           AnchorSideLeft.Control = lblDeviceR
           AnchorSideTop.Control = lblDeviceR
           AnchorSideTop.Side = asrBottom
@@ -2535,8 +2535,10 @@ object frmPreferences: TfrmPreferences
           Width = 173
           ParentShowHint = False
           ShowHint = True
+          Style = csDropDown
           TabOrder = 4
           OnChange = TRXParamsChange
+          OnDropDown = SerialPortDropDown
         end
         object edtPoll: TEdit
           AnchorSideLeft.Control = lblPollR
@@ -3306,7 +3308,7 @@ object frmPreferences: TfrmPreferences
               Caption = 'Poll rate:'
               ParentColor = False
             end
-            object edtRot1Device: TEdit
+            object edtRot1Device: TComboBox
               AnchorSideLeft.Control = cmbModelRot1
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cmbModelRot1
@@ -3315,8 +3317,10 @@ object frmPreferences: TfrmPreferences
               Top = 36
               Width = 208
               BorderSpacing.Left = 12
+              Style = csDropDown
               TabOrder = 0
               OnChange = RotorParamsChange
+              OnDropDown = SerialPortDropDown
             end
             object edtRot1Poll: TEdit
               AnchorSideLeft.Control = edtRot1Device
@@ -3769,7 +3773,7 @@ object frmPreferences: TfrmPreferences
               Caption = 'Poll rate:'
               ParentColor = False
             end
-            object edtRot2Device: TEdit
+            object edtRot2Device: TComboBox
               AnchorSideLeft.Control = cmbModelRot2
               AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = cmbModelRot2
@@ -3778,8 +3782,10 @@ object frmPreferences: TfrmPreferences
               Top = 36
               Width = 208
               BorderSpacing.Left = 12
+              Style = csDropDown
               TabOrder = 0
               OnChange = RotorParamsChange
+              OnDropDown = SerialPortDropDown
             end
             object edtRot2Poll: TEdit
               AnchorSideLeft.Control = edtRot2Device
@@ -7492,7 +7498,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'Max speed:'
           ParentColor = False
         end
-        object edtWinPort: TEdit
+        object edtWinPort: TComboBox
           AnchorSideLeft.Control = lblWinPort
           AnchorSideTop.Control = lblWinPort
           AnchorSideTop.Side = asrBottom
@@ -7500,8 +7506,10 @@ object frmPreferences: TfrmPreferences
           Height = 35
           Top = 24
           Width = 147
+          Style = csDropDown
           TabOrder = 0
           OnChange = edtWinSpeedChange
+          OnDropDown = SerialPortDropDown
         end
         object edtWinSpeed: TSpinEdit
           AnchorSideLeft.Control = lblWinSpeed
@@ -7725,7 +7733,7 @@ object frmPreferences: TfrmPreferences
           Caption = 'WPM'
           ParentColor = False
         end
-        object edtK3NGPort: TEdit
+        object edtK3NGPort: TComboBox
           AnchorSideLeft.Control = lblK3NGPort
           AnchorSideTop.Control = lblK3NGPort
           AnchorSideTop.Side = asrBottom
@@ -7733,8 +7741,10 @@ object frmPreferences: TfrmPreferences
           Height = 35
           Top = 24
           Width = 147
+          Style = csDropDown
           TabOrder = 0
           OnChange = edtWinSpeedChange
+          OnDropDown = SerialPortDropDown
         end
         object edtK3NGSpeed: TSpinEdit
           AnchorSideLeft.Control = lblK3NGSpeed
