@@ -3,8 +3,7 @@ name: Build + AppImage Artifact for testing
 on:
   workflow_dispatch:
   push:
-    # TODO: před mergem do masteru odebrat "feature/pr564-build-improvements"
-    branches: [ "master", "feature/pr564-build-improvements" ]
+    branches: [ "master" ]
     tags-ignore:
       - '*'
   pull_request:
@@ -17,7 +16,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Run Build Appimage GTK2
       run: make appimage
