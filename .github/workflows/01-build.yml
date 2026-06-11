@@ -1,0 +1,25 @@
+name: Simple build
+
+on:
+  push:
+    branches:
+      - "*"
+      - "!master"
+  pull_request:
+    branches: [ "!master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: make dependencies
+
+    - name: Run Build GTK2
+      run: make cqrlog
+
+    - name: Run Build QT5
+      run: make cqrlog_qt5

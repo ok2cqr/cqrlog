@@ -15,6 +15,14 @@ datadir  = $(DESTDIR)/share/cqrlog
 bindir   = $(DESTDIR)/bin
 sharedir = $(DESTDIR)/share
 tmpdir   = /tmp
+PWD = $(shell pwd)
+
+.DEFAULT_GOAL := cqrlog
+
+.PHONY : help dependencies hamlib clean install deb deb_src debug \
+         appimage appimage-qt5 docker-image docker docker-build docker-install \
+         docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
+         install_macos dmg
 
 cqrlog: src/cqrlog.lpi
 	$(LAZBUILD) --ws=$(WS) src/cqrlog.lpi
@@ -85,9 +93,9 @@ install:
 	install    -v -m 0644 images/icon/256x256/cqrlog.png $(sharedir)/icons/hicolor/256x256/apps/cqrlog.png
 	install    -v -m 0644 src/changelog.html $(datadir)/changelog.html
 	install    -v -m 0644 tools/cqrlog.1.gz $(sharedir)/man/man1/cqrlog.1.gz
-deb:
-	dpkg-buildpackage -rfakeroot -i -I
-deb_src:
+deb: dependencies ## Build a deb package (Linux, via tools/makedeb.sh)
+	./tools/makedeb.sh
+deb_src: ## Build a deb package with source (Linux)
 	dpkg-buildpackage -rfakeroot -i -I -S
 debug:
 	$(LAZBUILD) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
@@ -221,3 +229,118 @@ dmg: install_macos
 	  -ov -format UDZO $(DESTDIR)/$(DMGNAME).dmg
 	rm -rf $(tmpdir)/cqrlog-dmg
 	@echo "DMG created at $(DESTDIR)/$(DMGNAME).dmg"
+
+# ---------------------------------------------------------------------------
+# Linux packaging targets (AppImage / deb / Docker). Imported from PR #564
+# (Pavel, CO7WT). These are Linux-only and used mainly by the GitHub Actions
+# workflows; they are NOT prerequisites of the cross-platform build targets so
+# the macOS build is left untouched.
+# ---------------------------------------------------------------------------
+
+dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
+	if [ -e /usr/bin/fpc ]; then \
+		echo "Dependencies already installed" ; \
+	else \
+		sudo apt-get update && sudo apt-get install -y \
+		git lazarus-ide lcl lcl-gtk2 lcl-nogui \
+		lcl-units lcl-utils lazarus lazarus-doc \
+		lazarus-src fp-units-misc fp-units-rtl \
+		fp-utils fpc fpc-source libssl-dev libfl-dev \
+		libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 \
+		wget devscripts qt5-qmake-bin qtchooser \
+		mariadb-server mariadb-client ; \
+	fi
+
+hamlib: dependencies ## Install latest hamlib 4.5.5 from git.
+	if [ -e /lib/libhamlib.so.4 ]; then \
+		echo "Hamlib already installed" ; \
+	else \
+		cd /tmp && \
+		git clone https://github.com/Hamlib/Hamlib.git && \
+		cd Hamlib && \
+		git checkout Hamlib-4.5.5 && \
+		./bootstrap && \
+		./configure && \
+		make -j4 && \
+		sudo env DESTDIR= make install && \
+		sudo cp /usr/local/lib/libhamlib* /lib/ ; \
+	fi
+
+appimage: dependencies clean cqrlog hamlib ## Build an appimage (Linux, GTK2)
+	./tools/appimage.sh
+
+appimage-qt5: dependencies clean cqrlog_qt5 hamlib ## Build an appimage (Linux, QT5)
+	./tools/appimage.sh QT5
+
+docker-image: ## Build the docker image to allow a docker build
+	cd docker-build && docker build -t pavelmc/cqrlog-build:latest .
+
+docker: ## Pull the pre-built docker image from the internet (~2Gb)
+	if command -v docker > /dev/null 2>&1 ; then \
+		docker pull pavelmc/cqrlog-build ; \
+	else \
+		echo "Docker is not installed" && exit 1 ; \
+	fi
+
+docker-build: docker ## Build it with a docker image to keep your system clean
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog:/usr/local/cqrlog \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make cqrlog
+
+docker-install: docker-build ## Install the files to the system using the binaries from the docker build
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog:/usr/local/cqrlog \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make install
+
+docker-appimage: docker-build ## Build an appimage using the binaries from the docker build, GTK2
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog:/usr/local/cqrlog \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make appimage
+
+docker-appimage-qt5: docker-build ## Build an appimage using the binaries from the docker build, QT5
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog:/usr/local/cqrlog \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make appimage-qt5
+
+docker-deb: docker ## Build a deb package using the binaries from the docker build
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog:/usr/local/cqrlog \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make deb
+
+docker-deb-src: docker-build ## Build a deb-src package using the binaries from the docker build
+	docker run --rm -ti -u root \
+	-v $(PWD):/cqrlog \
+	-v /usr/local/cqrlog:/usr/local/cqrlog \
+	--device /dev/fuse \
+	--cap-add SYS_ADMIN \
+	--security-opt apparmor:unconfined \
+	pavelmc/cqrlog-build \
+	make deb_src
+
+help: ## List the make options available
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
