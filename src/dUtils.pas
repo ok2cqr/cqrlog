@@ -77,6 +77,14 @@ const
   cIngnoreFreq: array [0..cMaxIgnoreFreq] of string =
     ('1800.0', '3500.0', '7000.0', '10100.0', '14000.0', '21000.0', '28000.0');
 
+  {$IFDEF LCLCocoa}
+  cDefaultMonoFont = 'Menlo';
+  cDefaultSansFont = 'Helvetica Neue';
+  {$ELSE}
+  cDefaultMonoFont = 'Monospace';
+  cDefaultSansFont = 'Sans';
+  {$ENDIF}
+
   C_RBN_CONT  = 'AF,AN,AS,EU,NA,SA,OC';
   C_RBN_BANDS = '630M,160M,80M,60M,40M,30M,20M,17M,15M,12M,10M,8M,6M,5M,2M';
   C_RBN_MODES = 'CW,RTTY,PSK31';
@@ -223,6 +231,8 @@ type
     procedure SortArray(l,r : Integer);
     procedure OpenInApp(what : String);
     procedure LoadRigsToComboBox(CurrentRigId : String; RigCtlBinaryPath : String; RigComboBox : TComboBox);
+    procedure GetSerialPorts(Ports : TStringList);
+    procedure LoadSerialPortsToComboBox(Current : String; SerialComboBox : TComboBox);
     procedure GetShorterCoordinates(latitude,longitude : Currency; var lat, long : String);
     procedure LoadListOfFiles(Path, Mask : String; ListOfFiles : TStringList);
     procedure BandFromDbase;
@@ -325,6 +335,13 @@ type
     function  IsHeDx(call:String; CqDir:String = ''):boolean;
     function  ModeToCqr(InMode,InSubmode:String;dbg:boolean=False):String;
 
+    function  PlatformKey(const Key : String) : String;
+    function  IsCmdCtrl(Shift : TShiftState) : Boolean;
+    function  PlatformSearchPath : String;
+    function  FindExecutable(const ExeName : String) : String;
+    procedure OpenWithDesktop(const Target : String);
+    function  DefaultToolPath(const ToolName, LinuxDefault : String) : String;
+    function  DefaultRotCtldPath : String;
 
 end;
 
@@ -1769,7 +1786,7 @@ var
 begin
   if dmData.DBName = '' then
     exit;
-  if cqrini.ReadBool('Fonts', 'UseDefault', True) then
+  if cqrini.ReadBool('Fonts', PlatformKey('UseDefault'), True) then
   begin
     fEdits := 'default';
     feSize := 0;
@@ -1781,17 +1798,17 @@ begin
     fqSize := 0
   end
   else begin
-    fEdits := cqrini.ReadString('Fonts', 'Edits', 'Sans 10');
-    feSize := cqrini.ReadInteger('Fonts', 'eSize', 10);
+    fEdits := cqrini.ReadString('Fonts', PlatformKey('Edits'), cDefaultSansFont + ' 10');
+    feSize := cqrini.ReadInteger('Fonts', PlatformKey('eSize'), 10);
 
-    fButtons := cqrini.ReadString('Fonts', 'Buttons', 'Sans 10');
-    fbSize := cqrini.ReadInteger('Fonts', 'bSize', 10);
+    fButtons := cqrini.ReadString('Fonts', PlatformKey('Buttons'), cDefaultSansFont + ' 10');
+    fbSize := cqrini.ReadInteger('Fonts', PlatformKey('bSize'), 10);
 
-    fGrids := cqrini.ReadString('Fonts', 'Grids', 'Monospace 8');
-    fgSize := cqrini.ReadInteger('Fonts', 'gSize', 8);
+    fGrids := cqrini.ReadString('Fonts', PlatformKey('Grids'), cDefaultMonoFont + ' 8');
+    fgSize := cqrini.ReadInteger('Fonts', PlatformKey('gSize'), 8);
 
-    fQsoGr := cqrini.ReadString('Fonts', 'QGrids', 'Sans 10');
-    fqSize := cqrini.ReadInteger('Fonts', 'qSize', 10)
+    fQsoGr := cqrini.ReadString('Fonts', PlatformKey('QGrids'), cDefaultSansFont + ' 10');
+    fqSize := cqrini.ReadInteger('Fonts', PlatformKey('qSize'), 10)
   end;
 
   //otherwise NewQSO buttons do not fit to space
@@ -1947,7 +1964,7 @@ begin
           (aForm.Components[i] as TStringGrid).DefaultRowHeight := 20
       end
       else begin
-        (aForm.Components[i] as TStringGrid).DefaultRowHeight := 25
+        (aForm.Components[i] as TStringGrid).DefaultRowHeight := {$IFDEF LCLCocoa}20{$ELSE}25{$ENDIF}
       end;
       if cqrini.ReadBool('Fonts', 'GridBoldTitle', False) = True then
       begin
@@ -2474,7 +2491,7 @@ var
   proj: string = '';
 begin
   Result := '';
-  Result := cqrini.ReadString('xplanet', 'path', '/usr/bin/xplanet');
+  Result := cqrini.ReadString('xplanet', PlatformKey('path'), DefaultToolPath('xplanet', '/usr/bin/xplanet'));
   myloc := cqrini.ReadString('Station', 'LOC', '');
   customloc := cqrini.ReadString('xplanet', 'loc', '');
   if not FileExists(Result) then
@@ -2828,18 +2845,18 @@ var
 begin
   if r = '' then exit;
   result := '';
-  civadr    := cqrini.ReadString('TRX'+r,'civ','');
-  speed     := cqrini.ReadString('TRX'+r,'Speed','4800');
-  DataBits  := cqrini.ReadInteger('TRX'+r,'DataBits',8);
-  stopbits  := cqrini.ReadInteger('TRX'+r,'StopBits',1);
-  handshake := cqrini.ReadInteger('TRX'+r,'Handshake',0);
-  parity    := cqrini.ReadInteger('TRX'+r,'Parity',0);
-  DTR       := cqrini.ReadInteger('TRX'+r,'dtr',0) > 0;
-  RTS       := cqrini.ReadInteger('TRX'+r,'rts',0) > 0;
-  rigid     := cqrini.ReadString('TRX'+r,'model','');
-  device    := cqrini.ReadString('TRX'+r,'device','');
+  civadr    := cqrini.ReadString('TRX'+r,PlatformKey('civ'),'');
+  speed     := cqrini.ReadString('TRX'+r,PlatformKey('Speed'),'4800');
+  DataBits  := cqrini.ReadInteger('TRX'+r,PlatformKey('DataBits'),8);
+  stopbits  := cqrini.ReadInteger('TRX'+r,PlatformKey('StopBits'),1);
+  handshake := cqrini.ReadInteger('TRX'+r,PlatformKey('Handshake'),0);
+  parity    := cqrini.ReadInteger('TRX'+r,PlatformKey('Parity'),0);
+  DTR       := cqrini.ReadInteger('TRX'+r,PlatformKey('dtr'),0) > 0;
+  RTS       := cqrini.ReadInteger('TRX'+r,PlatformKey('rts'),0) > 0;
+  rigid     := cqrini.ReadString('TRX'+r,PlatformKey('model'),'');
+  device    := cqrini.ReadString('TRX'+r, PlatformKey('device'), '');
 
-  if not cqrini.ReadBool('TRX'+r,'Run',False) then
+  if not cqrini.ReadBool('TRX'+r,PlatformKey('Run'),False) then
     exit;
 
   if rigid = '' then
@@ -2847,7 +2864,7 @@ begin
   if Device = '' then
     exit;
 
-  cmd := cqrini.ReadString('TRX', 'Path', '/usr/bin/rigctld');
+  cmd := cqrini.ReadString('TRX', PlatformKey('RigCtldPath'), DefaultToolPath('rigctld', '/usr/bin/rigctld'));
   if not FileExists(cmd) then
     exit;
   cmd := cmd + ' --model=' + rigid;
@@ -3409,9 +3426,108 @@ end;
 
 function TdmUtils.GetHomeDirectory: string;
 begin
-  Result := GetAppConfigFile(False);
-  Result := Copy(Result, 1, Pos('/.', Result) - 1);
-  Result := AppendPathDelim(Result);
+  Result := GetUserDir;
+end;
+
+function TdmUtils.PlatformKey(const Key: string): string;
+begin
+  {$IFDEF DARWIN}
+  Result := Key + '_mac';
+  {$ELSE}
+  Result := Key;
+  {$ENDIF}
+end;
+
+// true if the "command" modifier is pressed (Cmd on macOS, otherwise Ctrl) — and no other
+function TdmUtils.IsCmdCtrl(Shift: TShiftState): Boolean;
+begin
+  {$IFDEF DARWIN}
+  Result := Shift = [ssMeta];
+  {$ELSE}
+  Result := Shift = [ssCtrl];
+  {$ENDIF}
+end;
+
+function TdmUtils.PlatformSearchPath: string;
+begin
+  {$IFDEF DARWIN}
+  Result := '/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:/opt/local/bin:/usr/sbin:/usr/local/sbin';
+  {$ELSE}
+  Result := '/bin:/usr/bin:/usr/local/bin:~/.local/bin:/sbin:/usr/sbin:/usr/local/sbin';
+  {$ENDIF}
+end;
+
+function TdmUtils.FindExecutable(const ExeName: string): string;
+var
+  dirs: TStringList;
+  i: Integer;
+  candidate: string;
+begin
+  Result := '';
+  dirs := TStringList.Create;
+  try
+    dirs.Delimiter := ':';
+    dirs.StrictDelimiter := True;
+    dirs.DelimitedText := PlatformSearchPath;
+    for i := 0 to dirs.Count - 1 do
+    begin
+      candidate := IncludeTrailingPathDelimiter(dirs[i]) + ExeName;
+      if FileExists(candidate) then
+      begin
+        Result := candidate;
+        exit;
+      end;
+    end;
+  finally
+    dirs.Free;
+  end;
+end;
+
+procedure TdmUtils.OpenWithDesktop(const Target: string);
+begin
+  {$IFDEF DARWIN}
+  RunOnBackground('open ' + Target);
+  {$ELSE}
+  RunOnBackground('xdg-open ' + Target);
+  {$ENDIF}
+end;
+
+function TdmUtils.DefaultToolPath(const ToolName, LinuxDefault: string): string;
+{$IFDEF DARWIN}
+var
+  BundlePath: String;
+{$ENDIF}
+begin
+  {$IFDEF DARWIN}
+  BundlePath := ExtractFilePath(ParamStr(0)) + ToolName;
+  if FileExists(BundlePath) then
+  begin
+    Result := BundlePath;
+    exit;
+  end;
+  if ToolName = 'tqsl' then
+  begin
+    if FileExists('/Applications/TrustedQSL/tqsl.app/Contents/MacOS/tqsl') then
+    begin
+      Result := '/Applications/TrustedQSL/tqsl.app/Contents/MacOS/tqsl';
+      exit;
+    end;
+  end;
+  {$ENDIF}
+  Result := FindExecutable(ToolName);
+  if Result = '' then
+    Result := LinuxDefault;
+end;
+
+function TdmUtils.DefaultRotCtldPath: string;
+var
+  rigCtldPath: String;
+begin
+  //rotctld lives in the same directory as rigctld. Derive the rotctld default
+  //from the effective rigctld path (saved value or its own default) and just
+  //swap the binary name, so rotctld follows rigctld (app bundle / system / homebrew).
+  rigCtldPath := cqrini.ReadString('TRX', PlatformKey('RigCtldPath'), DefaultToolPath('rigctld', '/usr/bin/rigctld'));
+  Result := ExtractFilePath(rigCtldPath) + 'rotctld';
 end;
 
 
@@ -3452,23 +3568,22 @@ begin
     if Result <> '' then  //we find right application for our file
       exit;
 
-    AssignFile(f, '/etc/mailcap');
-    Reset(f);
-    while not EOF(f) do
+    if FileExists('/etc/mailcap') then
     begin
-      ReadLn(f, tmp);
-      if Pos(mime + ';', tmp) = 1 then
+      AssignFile(f, '/etc/mailcap');
+      Reset(f);
+      while not EOF(f) do
       begin
-        tmp := copy(tmp, Pos(';', tmp) + 1, 100);
-        tmp := copy(tmp, 1, Pos(#39, tmp) - 1);
-        Result := tmp;
-        //break
-        // we can't stop looking for rigth application. When user install e.g. abiword
-        // it also takes palain/text mime type. So last installed app with this mime type
-        // must be find. (The first one is console less command.
+        ReadLn(f, tmp);
+        if Pos(mime + ';', tmp) = 1 then
+        begin
+          tmp := copy(tmp, Pos(';', tmp) + 1, 100);
+          tmp := copy(tmp, 1, Pos(#39, tmp) - 1);
+          Result := tmp;
+        end;
       end;
-    end;
-    CloseFile(f)
+      CloseFile(f);
+    end
   finally
     Filemode := fm
   end;
@@ -3495,30 +3610,34 @@ begin
   fm := Filemode;
   try
     Filemode := READ_ONLY;
+    if not FileExists('/etc/mime.types') then
+      exit;
     AssignFile(f, '/etc/mime.types');
     Reset(f);
-    while not EOF(f) do
-    begin
-      ReadLn(f, tmp);
-      p := Pos(#9, tmp);
-      if p = 0 then
-        p := Pos(' ', tmp);
-      if p = 0 then
-        Continue;
-      if Pos(FileExt, trim(copy(tmp, p, 100))) > 0 then
-      begin //find file extension
-        Result := copy(tmp, 1, p - 1);  //copying mime type of a file
-        Break;
-      end
-      else
-        Continue;  //we must process next line from file
-    end;
-    if Result = '' then
-      exit;  //we couldn't find mime type of that file
-    Result := trim(FindInMailCap(Result));
-    //Writeln('Result: ',Result)
+    try
+      while not EOF(f) do
+      begin
+        ReadLn(f, tmp);
+        p := Pos(#9, tmp);
+        if p = 0 then
+          p := Pos(' ', tmp);
+        if p = 0 then
+          Continue;
+        if Pos(FileExt, trim(copy(tmp, p, 100))) > 0 then
+        begin
+          Result := copy(tmp, 1, p - 1);
+          Break;
+        end
+        else
+          Continue;
+      end;
+      if Result = '' then
+        exit;
+      Result := trim(FindInMailCap(Result));
+    finally
+      CloseFile(f)
+    end
   finally
-    CloseFile(f);
     Filemode := fm
   end;
 end;
@@ -3566,9 +3685,9 @@ begin
   dir := GetCurrentDir;
   try
     SetCurrentDir(dmData.HomeDir + 'call_data' + PathDelim + call + PathDelim);
-    prg := cqrini.ReadString('ExtView', 'img', 'eog');
+    prg := cqrini.ReadString('ExtView', PlatformKey('img'), 'eog');
     if prg = '' then
-      dmUtils.RunOnBackground(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) +
+      dmUtils.RunOnBackground(cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser) +
         ' ' + qsl)
     else
       dmUtils.RunOnBackground(prg + ' ' + qsl)
@@ -3601,7 +3720,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+    AProcess.Executable := cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser);
     AProcess.Parameters.Add('https://www.qrz.com/db/' + GetIDCall(call));
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -3618,7 +3737,7 @@ begin
   myloc := cqrini.ReadString('Station', 'LOC', '');
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+    AProcess.Executable := cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser);
     AProcess.Parameters.Add('https://www.k7fry.com/grid/?qth=' + locator + '&from=' + myloc);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute
@@ -4179,7 +4298,7 @@ var
 begin
   AProcess := TProcess.Create(nil);
   try
-    AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+    AProcess.Executable  := cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser);
     AProcess.Parameters.Add('http://www.hamqth.com/' + GetIDCall(call));
     if dmData.DebugLevel>=1 then ;
     Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
@@ -4206,7 +4325,7 @@ begin
           if not(frmNewQSO.fEditQSO or frmNewQSO.fViewQSO) then
              cmd := StringReplace(cmd,'$MYLOC',frmNewQSO.CurrentMyLoc,[rfReplaceAll])
             else  cmd := StringReplace(cmd,'$MYLOC',frmNewQSO.EditViewMyLoc,[rfReplaceAll]);
-        AProcess.Executable  := cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser);
+        AProcess.Executable  := cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser);
         AProcess.Parameters.Add(cmd);
         if dmData.DebugLevel>=1 then ;
         Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
@@ -4274,21 +4393,27 @@ var
 begin
   section := 'TRX' + IntToStr(radio);
 
-  if cqrini.ReadString(section, 'model', '') = '' then
+  if cqrini.ReadString(section, PlatformKey('model'), '') = '' then
   begin
     Result := '';
     exit;
   end;
 
   //if parameter data is empty ignore parameter
-  Result:='-m ' + cqrini.ReadString(section, 'model', '') + ' ';
-  if  (trim(cqrini.ReadString(section, 'device', ''))<>'') then
-         Result:=Result+'-r ' + cqrini.ReadString(section, 'device', '') + ' ';
-  if  (trim(cqrini.ReadString(section, 'RigCtldPort', ''))<>'') then
-         Result:=Result+'-t ' + cqrini.ReadString(section, 'RigCtldPort', '') + ' ';
-  Result := Result + cqrini.ReadString(section, 'ExtraRigCtldArgs', '') + ' ';
+  Result:='-m ' + cqrini.ReadString(section, PlatformKey('model'), '') + ' ';
+  if  (trim(cqrini.ReadString(section, PlatformKey('device'), ''))<>'') then
+         Result:=Result+'-r ' + cqrini.ReadString(section, PlatformKey('device'), '') + ' ';
+  if  (trim(cqrini.ReadString(section, PlatformKey('RigCtldPort'), ''))<>'') then
+         Result:=Result+'-t ' + cqrini.ReadString(section, PlatformKey('RigCtldPort'), '') + ' ';
+  {$IFDEF DARWIN}
+  //Bundled Hamlib's rigctld defaults to listen-addr ANY, which binds IPv6-only on macOS.
+  //lNet connects over IPv4 (localhost -> 127.0.0.1), so force IPv4 loopback bind here,
+  //otherwise CQRLOG gets "connection refused" even though rigctld is listening.
+  Result := Result + '-T 127.0.0.1 ';
+  {$ENDIF}
+  Result := Result + cqrini.ReadString(section, PlatformKey('ExtraRigCtldArgs'), '') + ' ';
 
-  case cqrini.ReadInteger(section, 'SerialSpeed', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('SerialSpeed'), 0) of
     0: arg := '';
     1: arg := '-s 1200 ';
     2: arg := '-s 2400 ';
@@ -4304,7 +4429,7 @@ begin
   end; //case
   Result := Result + arg;
 
-  case cqrini.ReadInteger(section, 'DataBits', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('DataBits'), 0) of
     0: arg := '';
     1: arg := 'data_bits=5';
     2: arg := 'data_bits=6';
@@ -4317,11 +4442,11 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  if cqrini.ReadInteger(section, 'StopBits', 0) > 0 then
+  if cqrini.ReadInteger(section, PlatformKey('StopBits'), 0) > 0 then
     set_conf := set_conf + 'stop_bits=' + IntToStr(cqrini.ReadInteger(
-      section, 'StopBits', 0) - 1) + ',';
+      section, PlatformKey('StopBits'), 0) - 1) + ',';
 
-  case cqrini.ReadInteger(section, 'Parity', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('Parity'), 0) of
     0: arg := '';
     1: arg := 'serial_parity=None';
     2: arg := 'serial_parity=Odd';
@@ -4334,7 +4459,7 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  case cqrini.ReadInteger(section, 'HandShake', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('HandShake'), 0) of
     0: arg := '';
     1: arg := 'serial_handshake=None';
     2: arg := 'serial_handshake=XONXOFF';
@@ -4345,7 +4470,7 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  case cqrini.ReadInteger(section, 'DTR', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('DTR'), 0) of
     0: arg := '';
     1: arg := 'dtr_state=Unset';
     2: arg := 'dtr_state=ON';
@@ -4356,7 +4481,7 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  case cqrini.ReadInteger(section, 'RTS', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('RTS'), 0) of
     0: arg := '';
     1: arg := 'rts_state=Unset';
     2: arg := 'rts_state=ON';
@@ -4382,21 +4507,25 @@ var
 begin
   section := 'ROT' + IntToStr(rotor);
 
-  if cqrini.ReadString(section, 'model', '') = '' then
+  if cqrini.ReadString(section, PlatformKey('model'), '') = '' then
   begin
     Result := '';
     exit;
   end;
 
    //if parameter data is empty ignore parameter
-  Result:='-m ' + cqrini.ReadString(section, 'model', '') + ' ';
-  if  (trim(cqrini.ReadString(section, 'device', ''))<>'') then
-         Result:=Result+'-r ' + cqrini.ReadString(section, 'device', '') + ' ';
-  if  (trim(cqrini.ReadString(section, 'RotCtldPort', ''))<>'') then
-         Result:=Result+'-t ' + cqrini.ReadString(section, 'RotCtldPort', '') + ' ';
-  Result := Result + cqrini.ReadString(section, 'ExtraRotCtldArgs', '') + ' ';
+  Result:='-m ' + cqrini.ReadString(section, PlatformKey('model'), '') + ' ';
+  if  (trim(cqrini.ReadString(section, PlatformKey('device'), ''))<>'') then
+         Result:=Result+'-r ' + cqrini.ReadString(section, PlatformKey('device'), '') + ' ';
+  if  (trim(cqrini.ReadString(section, PlatformKey('RotCtldPort'), ''))<>'') then
+         Result:=Result+'-t ' + cqrini.ReadString(section, PlatformKey('RotCtldPort'), '') + ' ';
+  {$IFDEF DARWIN}
+  //Same IPv6-only bind issue as rigctld - force IPv4 loopback so lNet can connect.
+  Result := Result + '-T 127.0.0.1 ';
+  {$ENDIF}
+  Result := Result + cqrini.ReadString(section, PlatformKey('ExtraRotCtldArgs'), '') + ' ';
 
-  case cqrini.ReadInteger(section, 'SerialSpeed', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('SerialSpeed'), 0) of
     0: arg := '';
     1: arg := '-s 1200 ';
     2: arg := '-s 2400 ';
@@ -4412,7 +4541,7 @@ begin
   end; //case
   Result := Result + arg;
 
-  case cqrini.ReadInteger(section, 'DataBits', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('DataBits'), 0) of
     0: arg := '';
     1: arg := 'data_bits=5';
     2: arg := 'data_bits=6';
@@ -4425,11 +4554,11 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  if cqrini.ReadInteger(section, 'StopBits', 0) > 0 then
+  if cqrini.ReadInteger(section, PlatformKey('StopBits'), 0) > 0 then
     set_conf := set_conf + 'stop_bits=' + IntToStr(cqrini.ReadInteger(
-      section, 'StopBits', 0) - 1) + ',';
+      section, PlatformKey('StopBits'), 0) - 1) + ',';
 
-  case cqrini.ReadInteger(section, 'Parity', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('Parity'), 0) of
     0: arg := '';
     1: arg := 'serial_parity=None';
     2: arg := 'serial_parity=Odd';
@@ -4442,7 +4571,7 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  case cqrini.ReadInteger(section, 'HandShake', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('HandShake'), 0) of
     0: arg := '';
     1: arg := 'serial_handshake=None';
     2: arg := 'serial_handshake=XONXOFF';
@@ -4453,7 +4582,7 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  case cqrini.ReadInteger(section, 'DTR', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('DTR'), 0) of
     0: arg := '';
     1: arg := 'dtr_state=Unset';
     2: arg := 'dtr_state=ON';
@@ -4464,7 +4593,7 @@ begin
   if arg <> '' then
     set_conf := set_conf + arg + ',';
 
-  case cqrini.ReadInteger(section, 'RTS', 0) of
+  case cqrini.ReadInteger(section, PlatformKey('RTS'), 0) of
     0: arg := '';
     1: arg := 'rts_state=Unset';
     2: arg := 'rts_state=ON';
@@ -4526,11 +4655,11 @@ begin
   if ((pos('.HTML',upcase(what))>0) or (pos('.HTM',upcase(what))>0)) //because possible "hashtag in link-problem"
     then
      Begin
-      RunOnBackground(cqrini.ReadString('Program', 'WebBrowser', MyDefaultBrowser) + ' ' + what);
+      RunOnBackground(cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser) + ' ' + what);
      end
    else
     begin
-      RunOnBackground('xdg-open ' + what);
+      OpenWithDesktop(what);
     end;
 end;
 
@@ -4621,6 +4750,57 @@ begin
     LoadRigListCombo(CurrentRigId,RigList,RigComboBox)
   finally
     FreeAndNil(RigList)
+  end
+end;
+
+procedure TdmUtils.GetSerialPorts(Ports : TStringList);
+
+  procedure ScanGlob(const Pattern : String);
+  var
+    sr  : TSearchRec;
+    dir : String;
+  begin
+    dir := ExtractFilePath(Pattern);
+    if FindFirst(Pattern, faAnyFile, sr) = 0 then
+    begin
+      repeat
+        // serial devices are character devices, never directories
+        if (sr.Attr and faDirectory) = 0 then
+          Ports.Add(dir + sr.Name);
+      until FindNext(sr) <> 0;
+      FindClose(sr)
+    end
+  end;
+
+begin
+  Ports.Clear;
+  {$IFDEF DARWIN}
+  ScanGlob('/dev/cu.*');                 // macOS - call-out devices (use cu.* for outgoing)
+  {$ELSE}
+  ScanGlob('/dev/ttyS*');                // hardware UART
+  ScanGlob('/dev/ttyUSB*');              // FTDI/PL2303/CH340 USB adapters
+  ScanGlob('/dev/ttyACM*');              // CDC ACM (newer rigs, Arduino interfaces)
+  ScanGlob('/dev/ttyAM*');               // some ARM UARTs
+  ScanGlob('/dev/ttyAMA*');              // Raspberry Pi UART
+  ScanGlob('/dev/serial/by-id/*');       // stable names independent of plug order
+  {$ENDIF}
+end;
+
+procedure TdmUtils.LoadSerialPortsToComboBox(Current : String; SerialComboBox : TComboBox);
+var
+  Ports : TStringList;
+begin
+  Ports := TStringList.Create;
+  try
+    GetSerialPorts(Ports);
+    // keep the currently configured device selectable even if it is not
+    // present right now (rig unplugged, network rig as IP:port, etc.)
+    if (Current <> '') and (Ports.IndexOf(Current) < 0) then
+      Ports.Add(Current);
+    SerialComboBox.Items.Assign(Ports);
+    SerialComboBox.Text := Current
+  finally
+    FreeAndNil(Ports)
   end
 end;
 
@@ -4885,7 +5065,7 @@ Begin
   //dropping hashtags away from html file:// paths. Then user may define browser path/name that
   //usually works with hashtag html file paths.
 
-  b := cqrini.ReadString('Program', 'WebBrowser', '');
+  b := cqrini.ReadString('Program', PlatformKey('WebBrowser'), '');
      if (b<>'') then
       try
        Begin

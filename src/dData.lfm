@@ -248,6 +248,7 @@ object dmData: TdmData
       'CREATE INDEX club_nr3 ON cqrlog_main(club_nr3);'
       'CREATE INDEX club_nr4 ON cqrlog_main(club_nr4);'
       'CREATE INDEX club_nr5 ON cqrlog_main(club_nr5);'
+      'CREATE INDEX callsign_qsodate_band ON cqrlog_main(callsign,qsodate,band);'
       ''
       ''
       'CREATE TABLE notes('

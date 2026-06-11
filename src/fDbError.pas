@@ -37,12 +37,12 @@ uses dUtils, dData;
 
 procedure TfrmDbError.btnOpenErrFileClick(Sender : TObject);
 begin
-  dmUtils.RunOnBackground('xdg-open ' + AnsiQuotedStr(dmData.DataDir + 'mysql.err', '"'))
+  dmUtils.OpenWithDesktop(AnsiQuotedStr(dmData.DataDir + 'mysql.err', '"'))
 end;
 
 procedure TfrmDbError.btnVisitFAQClick(Sender : TObject);
 begin
-  dmUtils.RunOnBackground('xdg-open https://www.cqrlog.com/faq')
+  dmUtils.OpenWithDesktop('https://www.cqrlog.com/faq')
 end;
 
 end.

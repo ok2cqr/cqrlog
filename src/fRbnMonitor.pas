@@ -648,7 +648,7 @@ begin
   dmUtils.LoadWindowPos(self);
 
   sgRbn.Options   := sgRbn.Options + [goColSizing] - [goRowSelect, goRangeSelect];
-  sgRbn.Font.Name := cqrini.ReadString('RBNMonitor','Font','DejaVu Sans Mono');
+  sgRbn.Font.Name := cqrini.ReadString('RBNMonitor','Font',cDefaultMonoFont);
   sgRbn.Font.Size := cqrini.ReadInteger('RBNMonitor','FontSize',10);
 
   sgRbn.Cells[0,0] := 'Source';

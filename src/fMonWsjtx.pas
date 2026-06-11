@@ -1115,7 +1115,7 @@ end;
 
 procedure TfrmMonWsjtx.cmFontClick(Sender: TObject);
 begin
-  popFontDlg.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', 'Monospace');
+  popFontDlg.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', cDefaultMonoFont);
   popFontDlg.Font.Size := cqrini.ReadInteger('MonWsjtx', 'FontSize', 10);
   popFontDlg.Title := 'Use monospace fonts, style is ignored';
   if popFontDlg.Execute then
@@ -1185,7 +1185,7 @@ begin
   dmUtils.LoadWindowPos(frmMonWsjtx);
   dmUtils.LoadFontSettings(frmMonWsjtx);
   //overrides font loading
-  sgMonitor.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', 'Monospace');
+  sgMonitor.Font.Name := cqrini.ReadString('MonWsjtx', 'Font', cDefaultMonoFont);
   sgMonitor.Font.Size := cqrini.ReadInteger('MonWsjtx', 'FontSize', 10);
 
   chknoHistory.Checked := cqrini.ReadBool('MonWsjtx', 'NoHistory', False);

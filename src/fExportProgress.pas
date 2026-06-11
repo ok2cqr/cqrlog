@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ComCtrls, iniFiles, ExtCtrls, db, dateutils, FileUtil, LazFileUtils,strutils;
+  ComCtrls, iniFiles, ExtCtrls, db, dateutils, FileUtil, LazFileUtils,strutils,
+  contnrs;
 
 type
 
@@ -168,6 +169,9 @@ var
   qrb,             //distance
   qrc :String;     //azimuth
 
+  TextBuf : array[0..65535] of Byte;
+  CommentCache : TFPStringHashTable;
+
   //------------------------------------------------------
   procedure SaveTag(TagData:String; var leng:word);
    begin
@@ -326,7 +330,7 @@ var
         SaveTag(dmUtils.StringToADIF('<COMMENT',Trim(Remarks)),leng);
     if ExNote then
      Begin
-      Note := dmData.GetComment(call);
+      Note := CommentCache[call];
       if (Length(note) > 0) then
         SaveTag(dmUtils.StringToADIF('<NOTES',Trim(note)),leng);
      end;
@@ -441,6 +445,7 @@ begin   //TfrmExportProgress
 
   AssignFile(f, FileName);
   Rewrite(f);
+  System.SetTextBuf(f, TextBuf, SizeOf(TextBuf));   // 64 KB buffer -> fewer write() syscalls
   Writeln(f);
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
   Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
@@ -454,9 +459,12 @@ begin   //TfrmExportProgress
   Writeln(f, '<EOH>');
 
   i := 0;
+  CommentCache := TFPStringHashTable.Create;
   try
     pBarProg.Max := dmData.GetQSOCount;
     dmData.PrepareProfileExport;
+    if ExNote then
+      dmData.LoadCommentCache(CommentCache);
 
     if AutoBackup or (not dmData.IsFilter) then
     begin
@@ -553,7 +561,7 @@ begin   //TfrmExportProgress
                  Source.FieldByName('dok').AsString
                   );
           pBarProg.StepIt;
-          if (i mod 100 = 0) then
+          if (i mod 1000 = 0) then
           begin
             Repaint;
             Application.ProcessMessages
@@ -602,6 +610,7 @@ begin   //TfrmExportProgress
       DeleteFileUTF8(Dir + FileName)
     end;
     dmData.CloseProfileExport;
+    CommentCache.Free;
     Close
   end
 end;
