@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 19;
+  cDB_MAIN_VER = 20;
   cDB_COMN_VER = 6;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -1631,6 +1631,8 @@ begin
   dmData.Q.ExecSQL;
   dmData.Q.SQL.Text := 'DROP INDEX band ON cqrlog_main';
   dmData.Q.ExecSQL;
+  dmData.Q.SQL.Text := 'DROP INDEX callsign_qsodate_band ON cqrlog_main';
+  dmData.Q.ExecSQL;
   {
   dmData.Q.SQL.Text := 'DROP INDEX club_nr1 ON cqrlog_main';
   dmData.Q.ExecSQL;
@@ -1664,6 +1666,8 @@ begin
   dmData.Q.SQL.Text := 'CREATE INDEX idcall ON cqrlog_main(idcall);';
   dmData.Q.ExecSQL;
   dmData.Q.SQL.Text := 'CREATE INDEX band ON cqrlog_main(band);';
+  dmData.Q.ExecSQL;
+  dmData.Q.SQL.Text := 'CREATE INDEX callsign_qsodate_band ON cqrlog_main(callsign,qsodate,band);';
   dmData.Q.ExecSQL;
   {
   dmData.Q.SQL.Text := 'CREATE INDEX club_nr1 ON cqrlog_main(club_nr1);';
@@ -3262,6 +3266,26 @@ begin
                 Q1.ExecSQL;
                 trQ1.Commit;
               end;
+      end;
+
+      if (old_version < 20) then
+            begin
+              //composite index used to match downloaded LoTW/eQSL QSOs against the log by
+              //(callsign, qsodate, band) - turns the per-QSO lookup into one indexed lookup.
+              //On a large log creating it can take a while; it runs once during the upgrade.
+              trQ1.StartTransaction;
+              Q1.SQL.Text := 'select count(*) from information_schema.statistics where table_schema = database() '+
+                             'and table_name = ''cqrlog_main'' and index_name = ''callsign_qsodate_band''';
+              Q1.Open;
+              max := Q1.Fields[0].AsInteger;
+              Q1.Close;
+              if max = 0 then
+              begin
+                Q1.SQL.Text := 'create index callsign_qsodate_band on cqrlog_main (callsign, qsodate, band)';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+              end;
+              trQ1.Commit;
       end;
 
       if TableExists('view_cqrlog_main_by_callsign') then
