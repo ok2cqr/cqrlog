@@ -1,8 +1,10 @@
 name: Build + AppImage Artifact for testing
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "master" ]
+    # TODO: před mergem do masteru odebrat "feature/pr564-build-improvements"
+    branches: [ "master", "feature/pr564-build-improvements" ]
     tags-ignore:
       - '*'
   pull_request:
@@ -26,7 +28,7 @@ jobs:
     - name: Run Build test deb
       run: make deb
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: AppImage
         path: |
