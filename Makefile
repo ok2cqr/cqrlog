@@ -5,8 +5,10 @@ ST=strip
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
   DESTDIR  = $(HOME)/cqrlog
+  WS      ?= cocoa
 else
   DESTDIR  = /usr
+  WS      ?= gtk2
 endif
 #
 datadir  = $(DESTDIR)/share/cqrlog
@@ -15,7 +17,7 @@ sharedir = $(DESTDIR)/share
 tmpdir   = /tmp
 
 cqrlog: src/cqrlog.lpi
-	$(LAZBUILD) --ws=cocoa src/cqrlog.lpi
+	$(LAZBUILD) --ws=$(WS) src/cqrlog.lpi
 	$(ST) src/cqrlog
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
