@@ -110,6 +110,15 @@ cqrlog_qt5_debug: src/cqrlog.lpi
 	$(LAZBUILD) --ws=qt5 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
+cqrlog_qt6: src/cqrlog.lpi
+	$(LAZBUILD) --ws=qt6 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	$(ST) src/cqrlog
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
+cqrlog_qt6_debug: src/cqrlog.lpi
+	$(LAZBUILD) --ws=qt6 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
 # macOS .app bundle
 APPBUNDLE   = $(DESTDIR)/CQRLOG.app
 APPCONTENTS = $(APPBUNDLE)/Contents
