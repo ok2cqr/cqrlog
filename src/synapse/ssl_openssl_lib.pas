@@ -2202,6 +2202,23 @@ end;
 
 initialization
 begin
+  {$IFDEF DARWIN}
+  if FileExists(ExtractFilePath(ParamStr(0)) + '../Frameworks/libssl.3.dylib') then
+  begin
+    DLLSSLName := ExtractFilePath(ParamStr(0)) + '../Frameworks/libssl.3.dylib';
+    DLLUtilName := ExtractFilePath(ParamStr(0)) + '../Frameworks/libcrypto.3.dylib';
+  end
+  else if FileExists('/opt/homebrew/opt/openssl@3/lib/libssl.dylib') then
+  begin
+    DLLSSLName := '/opt/homebrew/opt/openssl@3/lib/libssl.dylib';
+    DLLUtilName := '/opt/homebrew/opt/openssl@3/lib/libcrypto.dylib';
+  end
+  else if FileExists('/usr/local/opt/openssl@3/lib/libssl.dylib') then
+  begin
+    DLLSSLName := '/usr/local/opt/openssl@3/lib/libssl.dylib';
+    DLLUtilName := '/usr/local/opt/openssl@3/lib/libcrypto.dylib';
+  end;
+  {$ENDIF}
   SSLCS:= TCriticalSection.Create;
 end;
 

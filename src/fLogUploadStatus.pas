@@ -375,7 +375,7 @@ end;
 
 procedure TfrmLogUploadStatus.acFontSettingsExecute(Sender: TObject);
 begin
-  dlgFont.Font.Name := cqrini.ReadString('LogUploadStatus','FontName','Monospace');
+  dlgFont.Font.Name := cqrini.ReadString('LogUploadStatus','FontName',cDefaultMonoFont);
   dlgFont.Font.Size := cqrini.ReadInteger('LogUploadStatus','FontSize',8);
   if dlgFont.Execute then
   begin
@@ -427,7 +427,7 @@ end;
 procedure TfrmLogUploadStatus.LoadFonts;
 begin
   dmUtils.LoadFontSettings(self);
-  mFont.Name := cqrini.ReadString('LogUploadStatus','FontName','Monospace');
+  mFont.Name := cqrini.ReadString('LogUploadStatus','FontName',cDefaultMonoFont);
   mFont.Size := cqrini.ReadInteger('LogUploadStatus','FontSize',8);
   mStatus.SetFont(mFont)
 end;

@@ -30,6 +30,9 @@ type
     procedure init();
   public
     Q : TSQLQuery;
+    //second query sharing the same connection and transaction T - useful when one
+    //prepared query (Q) must stay open/prepared while another statement is executed (Q2)
+    Q2 : TSQLQuery;
     T : TSQLTransaction;
 
     constructor Create(ConnectionInfo : TConnectionInfo);
@@ -42,6 +45,7 @@ constructor TInternalConnection.Create(ConnectionInfo : TConnectionInfo);
 begin
   _ConnectionInfo := ConnectionInfo;
   Q := TSQLQuery.Create(nil);
+  Q2 := TSQLQuery.Create(nil);
   T := TSQLTransaction.Create(nil);
   TC := TSQLTransaction.Create(nil);
 
@@ -54,6 +58,8 @@ begin
   T.DataBase := Connection;
   Q.DataBase := Connection;
   Q.Transaction := T;
+  Q2.DataBase := Connection;
+  Q2.Transaction := T;
   T.Action := caNone;
 end;
 
@@ -95,8 +101,10 @@ begin
   inherited;
 
   Q.Close;
+  Q2.Close;
   Connection.Close(True);
   FreeAndNil(Q);
+  FreeAndNil(Q2);
   FreeAndNil(T);
   FreeAndNil(Connection);
   FreeAndNil(TC);

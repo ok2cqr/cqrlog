@@ -20,11 +20,11 @@ uses
   memds, mysql51conn, sqldb, inifiles, stdctrls, RegExpr,
   dynlibs, lcltype, ExtCtrls, sqlscript, process, mysql51dyn, ssl_openssl_lib,
   mysql55dyn, mysql55conn, CustApp, mysql56dyn, mysql56conn, grids, LazFileUtils,
-  mysql57dyn, mysql57conn, uMyFindFile, Graphics;
+  mysql57dyn, mysql57conn, uMyFindFile, Graphics, contnrs;
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 19;
+  cDB_MAIN_VER = 20;
   cDB_COMN_VER = 6;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -243,6 +243,7 @@ type
     property MySQLVersion : Currency read fMySQLVersion write fMySQLVersion;
 
     function  GetComment(call : String) : String;
+    procedure LoadCommentCache(cache : TFPStringHashTable);
     function  GetProfileText(nr : Integer) : String;
     function  GetCompleteProfileText(nr : Integer) : String;
     function  GetExportProfileText(nr : Integer) : String;
@@ -777,11 +778,11 @@ begin
 
   dmUtils.LoadBandsSettings;
 
-  frmTRXControl.cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', 'RigInUse', 1);
+  frmTRXControl.cmbRig.ItemIndex:=cqrini.ReadInteger('TRX', dmUtils.PlatformKey('RigInUse'), 1);
   frmTRXControl.cmbRigCloseUp(nil);
   frmTRXControl.InitializeRig;
-  frmRotControl.rbRotor1.Checked:= cqrini.ReadBool('ROT','Use1',True);
-  frmRotControl.rbRotor2.Checked:= not(cqrini.ReadBool('ROT','Use1',True));
+  frmRotControl.rbRotor1.Checked:= cqrini.ReadBool('ROT',dmUtils.PlatformKey('Use1'),True);
+  frmRotControl.rbRotor2.Checked:= not(cqrini.ReadBool('ROT',dmUtils.PlatformKey('Use1'),True));
   frmRotControl.InicializeRot;
 
   OpenFreqMemories('');
@@ -1141,6 +1142,28 @@ begin
     Writeln('   ',DLLUtilName)
   end;
 
+  {$IFDEF DARWIN}
+  begin
+    lib := '';
+    if FileExists(ExtractFilePath(ParamStr(0)) + '../Frameworks/libmariadb.3.dylib') then
+      lib := ExtractFilePath(ParamStr(0)) + '../Frameworks/libmariadb.3.dylib'
+    else if FileExists('/opt/homebrew/lib/libmysqlclient.dylib') then
+      lib := '/opt/homebrew/lib/libmysqlclient.dylib'
+    else if FileExists('/usr/local/lib/libmysqlclient.dylib') then
+      lib := '/usr/local/lib/libmysqlclient.dylib';
+    if lib <> '' then
+    begin
+      try
+        InitialiseMysql(lib);
+        Writeln('MySQL library loaded from: ', lib);
+      except
+        on E: Exception do
+          Writeln('Note: Could not preload MySQL library from ', lib, ': ', E.Message);
+      end;
+    end;
+  end;
+  {$ENDIF}
+
   CreateDBConnections;
 
   MainCon.KeepConnection := True;
@@ -1172,7 +1195,7 @@ begin
 
   fHomeDir    := GetAppConfigDir(False);
   fDataDir    := fHomeDir+'database/';
-  fUsrHomeDir := copy(fHomeDir,1,Pos('.config',fHomeDir)-1);
+  fUsrHomeDir := GetUserDir;
 
   PrepareDirectories;
   PrepareCtyData;
@@ -1527,6 +1550,24 @@ begin
   trComment.Rollback
 end;
 
+// Load all notes in a single query into an in-memory map (callsign -> longremarks).
+// Used by ADIF export to avoid one DB round-trip per QSO (see fExportProgress).
+procedure TdmData.LoadCommentCache(cache : TFPStringHashTable);
+begin
+  qComment.Close;
+  trComment.StartTransaction;
+  qComment.SQL.Text := 'SELECT callsign, longremarks FROM notes';
+  qComment.Open;
+  while not qComment.Eof do
+  begin
+    if qComment.Fields[1].AsString <> '' then
+      cache[qComment.Fields[0].AsString] := qComment.Fields[1].AsString;
+    qComment.Next
+  end;
+  qComment.Close;
+  trComment.Rollback
+end;
+
 procedure TdmData.DeleteComment(id : Integer);
 const
   C_DEL = 'delete from notes where id_notes = %d';
@@ -1590,6 +1631,8 @@ begin
   dmData.Q.ExecSQL;
   dmData.Q.SQL.Text := 'DROP INDEX band ON cqrlog_main';
   dmData.Q.ExecSQL;
+  dmData.Q.SQL.Text := 'DROP INDEX callsign_qsodate_band ON cqrlog_main';
+  dmData.Q.ExecSQL;
   {
   dmData.Q.SQL.Text := 'DROP INDEX club_nr1 ON cqrlog_main';
   dmData.Q.ExecSQL;
@@ -1623,6 +1666,8 @@ begin
   dmData.Q.SQL.Text := 'CREATE INDEX idcall ON cqrlog_main(idcall);';
   dmData.Q.ExecSQL;
   dmData.Q.SQL.Text := 'CREATE INDEX band ON cqrlog_main(band);';
+  dmData.Q.ExecSQL;
+  dmData.Q.SQL.Text := 'CREATE INDEX callsign_qsodate_band ON cqrlog_main(callsign,qsodate,band);';
   dmData.Q.ExecSQL;
   {
   dmData.Q.SQL.Text := 'CREATE INDEX club_nr1 ON cqrlog_main(club_nr1);';
@@ -3223,6 +3268,26 @@ begin
               end;
       end;
 
+      if (old_version < 20) then
+            begin
+              //composite index used to match downloaded LoTW/eQSL QSOs against the log by
+              //(callsign, qsodate, band) - turns the per-QSO lookup into one indexed lookup.
+              //On a large log creating it can take a while; it runs once during the upgrade.
+              trQ1.StartTransaction;
+              Q1.SQL.Text := 'select count(*) from information_schema.statistics where table_schema = database() '+
+                             'and table_name = ''cqrlog_main'' and index_name = ''callsign_qsodate_band''';
+              Q1.Open;
+              max := Q1.Fields[0].AsInteger;
+              Q1.Close;
+              if max = 0 then
+              begin
+                Q1.SQL.Text := 'create index callsign_qsodate_band on cqrlog_main (callsign, qsodate, band)';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+              end;
+              trQ1.Commit;
+      end;
+
       if TableExists('view_cqrlog_main_by_callsign') then
       begin
         trQ1.StartTransaction;
@@ -3357,6 +3422,16 @@ begin
     Result := '/usr/bin/mysqld_safe';
   if FileExistsUTF8('/usr/sbin/mysqld') then //openSUSE
     Result := '/usr/sbin/mysqld';
+  {$IFDEF DARWIN}
+  if FileExistsUTF8('/usr/local/bin/mysqld') then
+    Result := '/usr/local/bin/mysqld';
+  if FileExistsUTF8('/opt/homebrew/bin/mysqld') then
+    Result := '/opt/homebrew/bin/mysqld';
+  if FileExistsUTF8('/usr/local/opt/mariadb/bin/mysqld') then
+    Result := '/usr/local/opt/mariadb/bin/mysqld';
+  if FileExistsUTF8('/opt/homebrew/opt/mariadb/bin/mysqld') then
+    Result := '/opt/homebrew/opt/mariadb/bin/mysqld';
+  {$ENDIF}
   if Result = '' then  //don't know where mysqld is, so hopefully will be in  $PATH
     Result := 'mysqld'
 end;
@@ -4094,7 +4169,7 @@ begin
   qFreqMem.Close;
   if trFreqMem.Active then trFreqMem.Rollback;
 
-  if not cqrini.ReadBool('TRX','MemModeRelated',False) then mode:='';   //use related settings!!
+  if not cqrini.ReadBool('TRX',dmUtils.PlatformKey('MemModeRelated'),False) then mode:='';   //use related settings!!
 
   if (mode='') then qFreqMem.SQL.Text := C_SEL + ' order by id'
   else

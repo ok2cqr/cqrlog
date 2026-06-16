@@ -329,16 +329,16 @@ begin
     key := 0;
   end;
 
-  if ((Shift = [ssCtrl]) and (key = VK_A)) then
+  if (dmUtils.IsCmdCtrl(Shift) and (key = VK_A)) then
   begin
     frmNewQSO.acAddToBandMap.Execute;
     key := 0
   end;
 
   //split keys
-   if (Shift = [ssCTRL]) then
+   if dmUtils.IsCmdCtrl(Shift) then
     if key in [VK_1..VK_9] then frmNewQSO.SetSplit(chr(key));
-  if ((Shift = [ssCTRL]) and (key = VK_0)) then
+  if (dmUtils.IsCmdCtrl(Shift) and (key = VK_0)) then
     frmTRXControl.DisableSplit;
 
   //Jump to last CQ freq,mode

@@ -56,11 +56,9 @@ type
                                                       qslrdate,cqz,ituz,iota,grid,state,county,qsorecord:String);
     procedure WriteErrorRecord(f:char;call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,
                                               cqz,ituz,iota,grid,state,county,qsorecord:string;var s:Tstringlist);
-    procedure ImportLoTWAdif;
     procedure ImportQSLMgrs;
     procedure DownloadQSLData;
     procedure InsertQSLManagers;
-    procedure ImporteQSLAdif;
     procedure RemoveDupes;
     procedure UpdateMembershipFiles;
 
@@ -73,9 +71,19 @@ type
     Directory  : String;
     CloseAfImport : Boolean;
     LoTWShowNew : Boolean;
+    //LoTWUrl - when set, the worker thread downloads the report into FileName first;
+    //when empty, FileName is expected to already contain a downloaded report.
+    LoTWUrl    : String;
+    LoTWSuccess : Boolean;
+    LoTWErrMsg : String;
     LoTWQSOList : TStringList;
     eQSLShowNew : Boolean;
     eQSLQSOList : TStringList;
+    //eQSLUrl - when set, the worker thread downloads the eQSL inbox into FileName first;
+    //when empty, FileName is expected to already contain a downloaded report.
+    eQSLUrl    : String;
+    eQSLSuccess : Boolean;
+    eQSLErrMsg : String;
 
   end;
 
@@ -86,10 +94,84 @@ implementation
 {$R *.lfm}
 { TfrmImportProgress }
 
-uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership, dSatellite, fAdifImport;
+uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership, dSatellite, fAdifImport,
+     uInternalConnection, uDbUtils;
+
+type
+  //One parsed LoTW QSO record, buffered so a whole batch can be matched against the log
+  //with a single SQL query instead of one query per record (critical for a remote DB).
+  //lo/hi is the accepted log-time window in minutes-of-day (+-5 min, with the same
+  //00:xx / 23:5x edge handling the original per-QSO code used).
+  TLotwRec = record
+    call, band, mode, modeorig, submodeorig, qsodate, time_on, qslr, qslrdate,
+    cqz, ituz, iota, grid, state, county, qsorecord : String;
+    lo, hi : Integer;
+  end;
+  TLotwRecArray = array of TLotwRec;
+
+  //Background worker thread for downloading the LoTW report and importing/matching it
+  //against the log. Declared in the same unit as TfrmImportProgress so it can reach the
+  //form's private parsing helpers (CommonImport/WriteErrorRecord) - in FPC objfpc mode
+  //"private" visibility is per-unit. All GUI access goes through Synchronize.
+  TLoTWImportThread = class(TThread)
+  private
+    FForm        : TfrmImportProgress;
+    FConn        : TInternalConnection;
+    FSyncStr     : String;
+    FErrorCount  : Integer;
+    FImportExtra : Boolean;
+    FDownloadBytes : Int64;
+    FLastShownBytes : Int64;
+    procedure SyncComment;
+    procedure SyncCount;
+    procedure SyncCloseForm;
+    procedure SyncErrorsDlg;
+    procedure SyncBadHeaderDlg;
+    procedure SyncDisableOnlineLog;
+    procedure SyncEnableOnlineLog;
+    procedure NetStatus(Sender: TObject; Reason: THookSocketReason; const Value: string);
+    function  DownloadReport : Boolean;
+    procedure RunImport;
+    procedure ProcessBatch(var recs: TLotwRecArray; cnt: Integer; var confirmed, errors: Integer; el: TStringList);
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(AForm: TfrmImportProgress);
+  end;
+
+  //Background worker thread for downloading the eQSL inbox and importing/matching it
+  //against the log. Mirrors TLoTWImportThread (see notes above) but with eQSL semantics:
+  //two-step download (HTML page -> parse .adi filename -> download ADIF), a +-60 min match
+  //window, and the eqsl_qsl_rcvd/eqsl_qslrdate columns. All GUI access goes through Synchronize.
+  TeQSLImportThread = class(TThread)
+  private
+    FForm        : TfrmImportProgress;
+    FConn        : TInternalConnection;
+    FSyncStr     : String;
+    FErrorCount  : Integer;
+    FDownloadBytes : Int64;
+    FLastShownBytes : Int64;
+    procedure SyncComment;
+    procedure SyncCount;
+    procedure SyncCloseForm;
+    procedure SyncErrorsDlg;
+    procedure SyncDisableOnlineLog;
+    procedure SyncEnableOnlineLog;
+    procedure NetStatus(Sender: TObject; Reason: THookSocketReason; const Value: string);
+    function  DownloadReport : Boolean;
+    procedure RunImport;
+    procedure ProcessBatch(var recs: TLotwRecArray; cnt: Integer; var confirmed, errors: Integer; el: TStringList);
+  protected
+    procedure Execute; override;
+  public
+    constructor Create(AForm: TfrmImportProgress);
+  end;
 
 procedure TfrmImportProgress.FormActivate(Sender: TObject);
 begin
+  //re-activation while a worker thread runs must not touch the pump timer (see below)
+  if running and ((ImportType = imptImportLoTWAdif) or (ImportType = imptImporteQSLAdif)) then
+    Exit;
   tmrImport.Enabled := False;
   if not running then
   begin
@@ -99,11 +181,29 @@ begin
       imptImportDXCCTables : ImportDXCCTables;
       imptDownloadDXCCData : DownloadDXCCData;
       imptDownloadDOKData : DownloadDOKData;
-      imptImportLoTWAdif : ImportLoTWAdif;
+      imptImportLoTWAdif : begin
+                             TLoTWImportThread.Create(Self).Start;
+                             //Keep an NSTimer ticking while the worker runs. On Cocoa the
+                             //ShowModal loop otherwise parks in nextEventMatchingMask and is
+                             //not reliably woken by the worker's Synchronize, which makes the
+                             //UI feel frozen. The timer wakes the run loop ~10x/s so events
+                             //and queued Synchronize calls are pumped promptly.
+                             tmrImport.Interval := 100;
+                             tmrImport.Enabled  := True;
+                             Exit
+                           end;
       imptImportQSLMgrs : ImportQSLMgrs;
       imptDownloadQSLData  : DownloadQSLData;
       imptInsertQSLManagers : InsertQSLManagers;
-      imptImporteQSLAdif : ImporteQSLAdif;
+      imptImporteQSLAdif : begin
+                             //Download and import run in a background thread, same as LoTW.
+                             TeQSLImportThread.Create(Self).Start;
+                             //Keep an NSTimer ticking while the worker runs so Cocoa's modal
+                             //run loop is woken and queued Synchronize calls are pumped.
+                             tmrImport.Interval := 100;
+                             tmrImport.Enabled  := True;
+                             Exit
+                           end;
       imptRemoveDupes : RemoveDupes;
       imptUpdateMembershipFiles : UpdateMembershipFiles
     end // case
@@ -140,6 +240,10 @@ end;
 
 procedure TfrmImportProgress.tmrImportTimer(Sender: TObject);
 begin
+  //During a threaded import the timer is left running on purpose: each tick just wakes
+  //the Cocoa run loop so events/Synchronize are pumped. Nothing else to do.
+  if running and ((ImportType = imptImportLoTWAdif) or (ImportType = imptImporteQSLAdif)) then
+    Exit;
   FormActivate(nil)
 end;
 
@@ -691,48 +795,269 @@ Begin
              s.Add('<APP_CQRLOG_ERROR:'+l+'>'+tmp);
 
 end;
-procedure TfrmImportProgress.ImportLoTWAdif;
+constructor TLoTWImportThread.Create(AForm: TfrmImportProgress);
+begin
+  inherited Create(True);
+  FForm := AForm;
+  FreeOnTerminate := True
+end;
+
+procedure TLoTWImportThread.SyncComment;
+begin
+  FForm.pBarProg.Visible   := False;
+  FForm.lblComment.Caption := FSyncStr;
+  FForm.Repaint
+end;
+
+procedure TLoTWImportThread.SyncCount;
+begin
+  FForm.lblCount.Caption := FSyncStr;
+  FForm.Repaint
+end;
+
+procedure TLoTWImportThread.SyncCloseForm;
+begin
+  FForm.tmrImport.Enabled := False;
+  FForm.ModalResult := mrOk
+end;
+
+procedure TLoTWImportThread.SyncErrorsDlg;
+begin
+  if Application.MessageBox(PChar(IntToStr(FErrorCount)+' QSO(s) were not found in your log.'+LineEnding+
+                           'QSO(s) are stored to '+dmData.UsrHomeDir + C_LErrorFile +
+                           LineEnding+LineEnding+'Do you want to show the file?'),
+                           'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
+    frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_LErrorFile)
+end;
+
+procedure TLoTWImportThread.SyncBadHeaderDlg;
+begin
+  if Application.MessageBox('Something is wrong because LoTW server returned invalid adif file header.'+LineEnding+
+                           'Your LoTW username/password could be wrong or LoTW server is down.'+LineEnding+LineEnding+
+                           'Do you want to show the file?',
+                           'Error ...',mb_YesNo+mb_IconQuestion) = idYes then
+    frmAdifImport.OpenInTextEditor(FForm.FileName)
+end;
+
+procedure TLoTWImportThread.SyncDisableOnlineLog;
+begin
+  dmLogUpload.DisableOnlineLogSupport
+end;
+
+procedure TLoTWImportThread.SyncEnableOnlineLog;
+begin
+  dmLogUpload.EnableOnlineLogSupport(False)
+end;
+
+procedure TLoTWImportThread.NetStatus(Sender: TObject; Reason: THookSocketReason; const Value: string);
+begin
+  if Reason = HR_ReadCount then
+  begin
+    FDownloadBytes := FDownloadBytes + StrToInt(Value);
+    //throttle GUI updates - refresh at most every 64 kB instead of on every socket read
+    if FDownloadBytes - FLastShownBytes >= 65536 then
+    begin
+      FLastShownBytes := FDownloadBytes;
+      FSyncStr := 'Downloading from LoTW ... ' + IntToStr(FDownloadBytes) + ' bytes';
+      Synchronize(@SyncComment)
+    end
+  end
+end;
+
+function TLoTWImportThread.DownloadReport : Boolean;
 var
-  num      : Word = 1;
-  qsln     : Word = 0;
-  size     : Word;
-  sSize    : String;
+  http : THTTPSend;
+  m    : TFileStream;
+begin
+  Result := False;
+  if FForm.LoTWUrl = '' then //nothing to download, file is expected to be present already
+  begin
+    Result := FileExists(FForm.FileName);
+    if not Result then
+      FForm.LoTWErrMsg := 'File does not exist: ' + FForm.FileName;
+    Exit
+  end;
+
+  FSyncStr := 'Connecting to LoTW server ...';
+  Synchronize(@SyncComment);
+  FDownloadBytes := 0;
+  FLastShownBytes := 0;
+  http := THTTPSend.Create;
+  m    := TFileStream.Create(FForm.FileName, fmCreate);
+  try
+    http.Sock.OnStatus := @NetStatus;
+    http.ProxyHost := cqrini.ReadString('Program','Proxy','');
+    http.ProxyPort := cqrini.ReadString('Program','Port','');
+    http.UserName  := cqrini.ReadString('Program','User','');
+    http.Password  := cqrini.ReadString('Program','Passwd','');
+    http.MimeType  := 'text/xml';
+    http.Protocol  := '1.1';
+    if http.HTTPMethod('GET', FForm.LoTWUrl) then
+    begin
+      http.Document.Seek(0, soBeginning);
+      m.CopyFrom(http.Document, http.Document.Size);
+      Result := True
+    end
+    else begin
+      FForm.LoTWErrMsg := 'Download failed (' + IntToStr(http.Sock.LastError) + '): ' + http.Sock.LastErrorDesc;
+      Result := False
+    end
+  finally
+    http.Free;
+    m.Free
+  end
+end;
+
+procedure TLoTWImportThread.Execute;
+begin
+  try
+    if DownloadReport then
+      RunImport
+  finally
+    Synchronize(@SyncCloseForm)
+  end
+end;
+
+//Match one batch of LoTW records against the log with a SINGLE query.
+//Instead of one SELECT per QSO (tens of thousands of round-trips to a remote DB), we fetch
+//the candidate log rows for the whole batch at once with a (callsign,qsodate,band) IN (...)
+//tuple list. Backed by the composite (callsign,qsodate,band) index that is part of the log
+//schema (db version 20), the server does one indexed lookup per tuple and returns only the
+//exact call+date+band matches (0-1 rows each, never the
+//hundreds of QSOs a single callsign may have). The remaining mode/time (+-5 min) matching is
+//done in memory. The per-row UPDATE is unchanged from the previous version.
+procedure TLoTWImportThread.ProcessBatch(var recs: TLotwRecArray; cnt: Integer; var confirmed, errors: Integer; el: TStringList);
+type
+  TCandRow = record
+    callsign, qsodate, band, time_on, mode, lotw_qslr, loc, state, county, id : String;
+  end;
+var
+  i, j, nc, logMin : Integer;
+  sql : String;
+  cand : array of TCandRow;
+  found : Boolean;
+  mId, mQslr, mLoc, mState, mCounty : String;
+begin
+  if cnt = 0 then Exit;
+
+  sql := 'select callsign,qsodate,band,time_on,mode,lotw_qslr,loc,state,county,id_cqrlog_main '+
+         'from cqrlog_main where (callsign,qsodate,band) in (';
+  for i := 0 to cnt-1 do
+  begin
+    if i > 0 then sql := sql + ',';
+    sql := sql + '(' + QuotedStr(recs[i].call) + ',' + QuotedStr(recs[i].qsodate) + ',' + QuotedStr(recs[i].band) + ')'
+  end;
+  sql := sql + ')';
+
+  FConn.Q.Close;
+  FConn.Q.SQL.Text := sql;
+  FConn.Q.Open;
+  nc := 0;
+  SetLength(cand, 256);
+  while not FConn.Q.Eof do
+  begin
+    if nc >= Length(cand) then
+      SetLength(cand, Length(cand)*2);
+    cand[nc].callsign  := FConn.Q.Fields[0].AsString;
+    cand[nc].qsodate   := FConn.Q.Fields[1].AsString;
+    cand[nc].band      := FConn.Q.Fields[2].AsString;
+    cand[nc].time_on   := FConn.Q.Fields[3].AsString;
+    cand[nc].mode      := FConn.Q.Fields[4].AsString;
+    cand[nc].lotw_qslr := FConn.Q.Fields[5].AsString;
+    cand[nc].loc       := FConn.Q.Fields[6].AsString;
+    cand[nc].state     := FConn.Q.Fields[7].AsString;
+    cand[nc].county    := FConn.Q.Fields[8].AsString;
+    cand[nc].id        := FConn.Q.Fields[9].AsString;
+    inc(nc);
+    FConn.Q.Next
+  end;
+  FConn.Q.Close;
+
+  for i := 0 to cnt-1 do
+  begin
+    found := False;
+    mId := ''; mQslr := ''; mLoc := ''; mState := ''; mCounty := '';
+    for j := 0 to nc-1 do
+    begin
+      if (cand[j].callsign = recs[i].call) and
+         (cand[j].qsodate  = recs[i].qsodate) and
+         (cand[j].band     = recs[i].band) and
+         ((cand[j].mode = recs[i].mode) or (cand[j].mode = recs[i].modeorig) or (cand[j].mode = recs[i].submodeorig)) then
+      begin
+        if Length(cand[j].time_on) >= 5 then
+          logMin := StrToIntDef(copy(cand[j].time_on,1,2),-1)*60 + StrToIntDef(copy(cand[j].time_on,4,2),0)
+        else
+          logMin := -1;
+        if (logMin >= recs[i].lo) and (logMin <= recs[i].hi) then
+        begin
+          found  := True;
+          mQslr  := cand[j].lotw_qslr;
+          mLoc   := cand[j].loc;
+          mState := cand[j].state;
+          mCounty:= cand[j].county;
+          mId    := cand[j].id;
+          cand[j].lotw_qslr := 'L'; //mark used so a duplicate LoTW record in this batch won't re-confirm it
+          Break
+        end
+      end
+    end;
+
+    if found and (mQslr <> 'L') then
+    begin
+      if FForm.LoTWShowNew then
+        FForm.LoTWQSOList.Add(recs[i].qsodate + ' ' + recs[i].call + ' ' + recs[i].band + ' ' + recs[i].mode);
+      FConn.Q2.Close;
+      FConn.Q2.SQL.Clear;
+      FConn.Q2.SQL.Add('update cqrlog_main set lotw_qslr = ' + QuotedStr('L'));
+      FConn.Q2.SQL.Add(',lotw_qslrdate = ' + QuotedStr(recs[i].qslrdate));
+      if FImportExtra then
+      begin
+        if recs[i].cqz  <> '' then FConn.Q2.SQL.Add(',waz = ' + QuotedStr(recs[i].cqz));
+        if recs[i].ituz <> '' then FConn.Q2.SQL.Add(',itu = ' + QuotedStr(recs[i].ituz));
+        if recs[i].iota <> '' then FConn.Q2.SQL.Add(',iota = ' + QuotedStr(recs[i].iota));
+        if (recs[i].grid   <> '') and (mLoc = '')    then FConn.Q2.SQL.Add(',loc = ' + QuotedStr(recs[i].grid));
+        if (recs[i].state  <> '') and (mState = '')  then FConn.Q2.SQL.Add(',state = ' + QuotedStr(recs[i].state));
+        if (recs[i].county <> '') and (mCounty = '') then FConn.Q2.SQL.Add(',county = ' + QuotedStr(recs[i].county))
+      end;
+      FConn.Q2.SQL.Add(' where id_cqrlog_main = ' + mId);
+      FConn.Q2.ExecSQL;
+      inc(confirmed)
+    end;
+
+    if not found then
+    begin
+      FForm.WriteErrorRecord('L',recs[i].call,recs[i].band,recs[i].modeorig,recs[i].submodeorig,recs[i].qsodate,
+                             recs[i].time_on,recs[i].qslr,recs[i].qslrdate,recs[i].cqz,recs[i].ituz,recs[i].iota,
+                             recs[i].grid,recs[i].state,recs[i].county,recs[i].qsorecord,el);
+      inc(errors)
+    end
+  end
+end;
+
+procedure TLoTWImportThread.RunImport;
+const
+  BATCH = 500;
+var
+  num      : Integer = 0;
+  qsln     : Integer = 0;
   a        : String;
-  orig     : String;
   f        : TextFile;
   PosEOH   : Word;
   PosEOR   : Word;
-  qsorecord,
-  call,
-  band,
-  mode,
-  modeorig,
-  submode,
-  submodeorig,
-  qsodate,
-  time_on,
-  qslr,
-  qslrdate,
-  cqz,
-  ituz,
-  iota,
-  grid,
-  state,
-  county   : String;
-
-  qso_in_log  : Boolean = False;
-  ErrorCount  : Word = 0;
+  qsorecord,call,band,mode,modeorig,submode,submodeorig,qsodate,time_on,
+  qslr,qslrdate,cqz,ituz,iota,grid,state,county : String;
+  ErrorCount  : Integer = 0;
   l           : TStringList;
-  t_lotw : TDateTime;
-  t_lotw_min,t_lotw_max  : TDateTime;
-  t_log : TDateTime;
-
+  ignoreOnline: Boolean;
+  recs        : TLotwRecArray;
+  rc          : Integer;
+  lotwMin     : Integer;
 begin
-  if dmData.trQ.Active then
-    dmData.trQ.RollBack;
-  if dmData.trQ1.Active then
-    dmData.trQ1.RollBack;
+  //config read once before the loop (was read per-QSO before)
+  FImportExtra := cqrini.ReadBool('LoTWImp','Import',True);
+  ignoreOnline := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled;
 
+  FConn := GetNewInternalConnection();
 
   l := TStringList.Create;
   l.Add('<ADIF_VER:5>3.1.0');
@@ -744,197 +1069,111 @@ begin
   l.Add('');
   l.Add('<EOH>');
   l.Add('');
-  AssignFile(f,FileName);
+  AssignFile(f,FForm.FileName);
+  SetLength(recs,BATCH);
 
   try
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
-      dmLogUpload.DisableOnlineLogSupport;
+    if ignoreOnline then
+      Synchronize(@SyncDisableOnlineLog);
 
-    dmData.trQ1.StartTransaction;
-    dmData.trQ.StartTransaction;
+    FConn.T.StartTransaction;
     Reset(f);
-    lblComment.Caption := 'Importing LoTW Adif file ...';
-    pBarProg.Visible   := False;
-    Repaint;
+    FSyncStr := 'Importing LoTW Adif file ...';
+    Synchronize(@SyncComment);
     PosEOH := 0;
     PosEOR := 0;
     while (PosEOH = 0) and (not eof(f)) do //Skip header
     begin
       Readln(f, a);
       a      := UpperCase(a);
-      PosEOH := Pos('<EOH>', a);
+      PosEOH := Pos('<EOH>', a)
     end;
     if PosEOH > 0 then //we have valid lotw adif output
     begin
+      rc := 0;
       while not eof(f) do
       begin
-        call     := '';
-        band     := '';
-        mode     := '';
-        modeorig := '';
-        submode  := '';
-        submodeorig := '';
-        qsodate  := '';
-        time_on  := '';
-        qslr     := '';
-        qslrdate := '';
-        cqz      := '';
-        ituz     := '';
-        iota     := '';
-        grid     := '';
-        state    := '';
-        county   := '';
-        PosEOR   := 0;
+        call:=''; band:=''; mode:=''; modeorig:=''; submode:=''; submodeorig:='';
+        qsodate:=''; time_on:=''; qslr:=''; qslrdate:=''; cqz:=''; ituz:='';
+        iota:=''; grid:=''; state:=''; county:='';
+        PosEOR := 0;
         while not ((PosEOR > 0) or eof(f)) do //read all records
         begin
-          qso_in_log := False;
-          CommonImport(PosEOR,f,call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
+          FForm.CommonImport(PosEOR,f,call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
                         qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
-          //for now on the mode is converted Cqrmode
+          //from now on the mode is converted to Cqrmode
           if PosEOR > 0 then
           begin
-            if LocalDbg  then
-            begin
-              Writeln('------------------------------------------------');
-              Writeln('Record Number:   ',IntToStr(qsln));
-              Writeln('Call:     ',call);
-              Writeln('Band:     ',band);
-              Writeln('Mode:     ',modeorig);
-              Writeln('Submode:  ',submodeorig);
-              Writeln('Cqrmode:  ',mode);
-              Writeln('QSO_date: ',qsodate);
-              Writeln('Time_on:  ',time_on);
-              Writeln('QSLR:     ',qslr);
-              Writeln('QSLRDate: ',qslrdate);
-              Writeln('CQZ:      ',cqz);
-              Writeln('ITUZ:     ',ituz);
-              Writeln('IOTA:     ',iota);
-              Writeln('Grid:     ',grid);
-              Writeln('State:    ',state);
-              Writeln('County:   ',county);
-              Writeln('------------------------------------------------')
-            end;
-            band  := dmUtils.GetBandFromFreq(dmUtils.FreqFromBand(band,'CW'));
+            band     := dmUtils.GetBandFromFreq(dmUtils.FreqFromBand(band,'CW'));
             qsodate  := dmUtils.ADIFDateToDate(qsodate);
             qslrdate := dmUtils.ADIFDateToDate(qslrdate);
+            lotwMin  := StrToIntDef(copy(time_on,1,2),0)*60 + StrToIntDef(copy(time_on,3,2),0);
 
-            dmData.Q.Close;
-            //we compare Cqrmode in log to mode and submode received and Cqrmode created.
-            //If any of these is ok, qso is ok by mode.
-            //this makes backward compatible to old cqrlog loggings.
-            //Actually qso is ok even without mode check if other items fit!
-            dmData.Q.SQL.Text := 'select time_on,lotw_qslr,waz,itu,iota,loc,state,county,id_cqrlog_main from cqrlog_main ' +
-                                 'where (qsodate ='+QuotedStr(qsodate)+') '+
-                                 'and (band = ' + QuotedStr(band) + ')'+
-                                 'and ('+
-                                      '(mode = ' + QuotedStr(mode) +') or '+
-                                      '(mode = ' + QuotedStr(modeorig)+') or '+
-                                      '(mode = ' + QuotedStr(submodeorig)+') '+
-                                      ')' +
-                                 'and (callsign = ' + QuotedStr(call) + ')';
-            if LocalDbg then Writeln(dmData.Q.SQL.Text);
-            //if dmData.trQ.Active then dmData.trQ.Rollback;
-            //dmData.trQ.StartTransaction;
-            dmData.Q.Open();
-            dmData.Q.First;
-            if dmData.Q.Eof then  qso_in_log := False;
-            while not dmData.Q.Eof do
+            recs[rc].call        := call;
+            recs[rc].band        := band;
+            recs[rc].mode        := mode;
+            recs[rc].modeorig    := modeorig;
+            recs[rc].submodeorig := submodeorig;
+            recs[rc].qsodate     := qsodate;
+            recs[rc].time_on     := time_on;
+            recs[rc].qslr        := qslr;
+            recs[rc].qslrdate    := qslrdate;
+            recs[rc].cqz         := cqz;
+            recs[rc].ituz        := ituz;
+            recs[rc].iota        := iota;
+            recs[rc].grid        := grid;
+            recs[rc].state       := state;
+            recs[rc].county      := county;
+            recs[rc].qsorecord   := qsorecord;
+            //accepted log-time window in minutes-of-day (same edge handling as the original)
+            if copy(time_on,1,2)='00' then
+              recs[rc].lo := 0
+            else
+              recs[rc].lo := lotwMin - 5;
+            if lotwMin > (23*60+54) then
+              recs[rc].hi := 23*60+59
+            else
+              recs[rc].hi := lotwMin + 5;
+
+            inc(rc);
+            inc(num);
+            if rc = BATCH then
             begin
-              qso_in_log := False;
-
-              t_lotw := EncodeTime(StrToInt(copy(time_on,1,2)),
-                        StrToInt(copy(time_on,3,2)),0,0);
-
-              t_log := EncodeTime(StrToInt(copy(dmData.Q.Fields[0].AsString,1,2)),
-                        StrToInt(copy(dmData.Q.Fields[0].AsString,4,2)),0,0);
-
-             if copy(time_on,1,2)='00' then
-                t_lotw_min := 0      //if lotw time is from 1st hour 00:00-00:59 low limit must be set to 00:00
-              else                   //as day is set at sql query and we can not go backwards to yesterday
-                t_lotw_min := t_lotw-5/1440;
-
-             if t_lotw > EncodeTime(23,54,0,0) then
-                t_lotw_max :=EncodeTime(23,59,0,0)
-                                     //this fails too in qsos past 23:54 as we can not set high limit to next day
-              else                   //as day is set at sql query and we can not go forward to tomorrow
-                t_lotw_max := t_lotw+5/1440;
-
-              if LocalDbg  then Writeln(call,'|',TimeToStr(t_log),' | ',TimeToStr(t_lotw_min),'|',TimeToStr(t_lotw_max));
-
-              if (t_log >=t_lotw_min) and (t_log<=t_lotw_max)  then
-              begin
-                if (dmData.Q.Fields[1].AsString <> 'L') then
-                begin
-                  if LoTWShowNew then  //this qso is already confirmed
-                    LoTWQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
-                  dmData.Q1.Close;
-                  dmData.Q1.SQL.Clear;
-                  dmData.Q1.SQL.Add('update cqrlog_main set lotw_qslr = ' + QuotedStr('L'));
-                  dmData.Q1.SQL.Add(',lotw_qslrdate = ' + QuotedStr(qslrdate));
-                  if cqrini.ReadBool('LoTWImp','Import',True) then
-                    Begin
-                      if cqz<>'' then
-                        dmData.Q1.SQL.Add(',waz = ' + QuotedStr(cqz));
-                      if ituz<>'' then
-                        dmData.Q1.SQL.Add(',itu = ' + QuotedStr(ituz));
-                      if iota<>'' then
-                        dmData.Q1.SQL.Add(',iota = ' + QuotedStr(iota));
-                      if (grid <> '') and (dmData.Q.Fields[5].AsString='') then
-                        dmData.Q1.SQL.Add(',loc = ' + QuotedStr(grid));
-                      if (state<>'') and (dmData.Q.Fields[6].AsString='') then
-                        dmData.Q1.SQL.Add(',state = ' + QuotedStr(state));
-                      if (county<>'') and (dmData.Q.Fields[7].AsString='') then
-                        dmData.Q1.SQL.Add(',county = ' + QuotedStr(county));
-                    end;
-                  dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[8].AsString);
-                  inc(qsln);
-                  if LocalDbg then Writeln(dmData.Q1.SQL.Text+ '  qsl number:'+ IntToStr(qsln));
-                  dmData.Q1.ExecSQL
-                end;
-                qso_in_log := True;
-                Break
-              end;
-              dmData.Q.Next
-            end;
-            if not qso_in_log then
-            begin
-              WriteErrorRecord('L',call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
-              inc(ErrorCount)
+              ProcessBatch(recs,rc,qsln,ErrorCount,l);
+              rc := 0;
+              //commit periodically so row locks on cqrlog_main are released frequently and
+              //the main thread / bandmap / RBN threads don't block on a long-held transaction
+              FConn.T.CommitRetaining;
+              FSyncStr := IntToStr(num);
+              Synchronize(@SyncCount)
             end
           end
-        end;
-        inc(num);
-        lblCount.Caption:= IntToStr(num);
-        if num mod 100 = 0 then
-          Repaint
+        end
       end;
-      dmData.trQ1.Commit;
+      if rc > 0 then
+        ProcessBatch(recs,rc,qsln,ErrorCount,l);
+      FConn.T.Commit;
+      FForm.LoTWSuccess := True;
+      FSyncStr := IntToStr(num);
+      Synchronize(@SyncCount);
       if ErrorCount > 0 then
       begin
         l.SaveToFile(dmData.UsrHomeDir + C_LErrorFile);
-        if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log.'+LineEnding+'QSO(s) are stored to '+dmData.UsrHomeDir + C_LErrorFile +
-                                  LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
-          frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_LErrorFile)
+        FErrorCount := ErrorCount;
+        Synchronize(@SyncErrorsDlg)
       end
     end
-    else begin
-      if Application.MessageBox('Something is wrong because LoTW server returned invalid adif file header.'+LineEnding+
-                                'Your LoTW username/password could be wrong or LoTW server is down.'+LineEnding+LineEnding+'Do you want to show the file?',
-                                'Error ...',mb_YesNo+mb_IconQuestion) = idYes then
-        frmAdifImport.OpenInTextEditor(FileName)
-    end
+    else
+      Synchronize(@SyncBadHeaderDlg)
   finally
-    dmData.Q.Close();
-    if dmData.trQ.Active then
-      dmData.trQ.Rollback;
-    if dmData.trQ1.Active then
-      dmData.trQ1.Rollback;
+    if FConn.T.Active then
+      FConn.T.Rollback;
     l.Free;
     CloseFile(f);
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
-      dmLogUpload.EnableOnlineLogSupport(False)
-  end;
-  Close
+    FreeAndNil(FConn);
+    if ignoreOnline then
+      Synchronize(@SyncEnableOnlineLog)
+  end
 end;
 
 procedure TfrmImportProgress.ImportQSLMgrs;
@@ -1044,52 +1283,282 @@ begin
   Close
 end;
 
-procedure TfrmImportProgress.ImporteQSLAdif;
-var
-  f        : TextFile;
-  num      : Word = 1;
-  size,
-  PosEOH,
-  PosEOR   : Word;
-  sSize,
-  a,
-  orig,
-  qsorecord,
-  call,
-  band,
-  mode,
-  modeorig,
-  submode,
-  submodeorig,
-  qsodate,
-  time_on,
-  qslr,
-  qslrdate,
-  cqz,
-  ituz,
-  iota,
-  grid,
-  state,
-  county,
-  Buf         : String;
-
-  PosCall,
-  PosBand,
-  PosMode,
-  PosSubmode,
-  PosQsoDate,
-  PosTime_on,
-  PosQslr     : Word;
-
-  qso_in_log  : Boolean = False;
-  ErrorCount  : Word = 0;
-  l           : TStringList;
-  t_eQSL,
-  t_eQSL_min,
-  t_eQSL_max,
-  t_log       : TDateTime;
-
+constructor TeQSLImportThread.Create(AForm: TfrmImportProgress);
 begin
+  inherited Create(True);
+  FForm := AForm;
+  FreeOnTerminate := True
+end;
+
+procedure TeQSLImportThread.SyncComment;
+begin
+  FForm.pBarProg.Visible   := False;
+  FForm.lblComment.Caption := FSyncStr;
+  FForm.Repaint
+end;
+
+procedure TeQSLImportThread.SyncCount;
+begin
+  FForm.lblCount.Caption := FSyncStr;
+  FForm.Repaint
+end;
+
+procedure TeQSLImportThread.SyncCloseForm;
+begin
+  FForm.tmrImport.Enabled := False;
+  FForm.ModalResult := mrOk
+end;
+
+procedure TeQSLImportThread.SyncErrorsDlg;
+begin
+  if Application.MessageBox(PChar(IntToStr(FErrorCount)+' QSO(s) were not found in your log.'+LineEnding+
+                           'QSO(s) are stored to '+dmData.UsrHomeDir + C_EErrorFile +
+                           LineEnding+LineEnding+'Do you want to show the file?'),
+                           'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
+    frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_EErrorFile)
+end;
+
+procedure TeQSLImportThread.SyncDisableOnlineLog;
+begin
+  dmLogUpload.DisableOnlineLogSupport
+end;
+
+procedure TeQSLImportThread.SyncEnableOnlineLog;
+begin
+  dmLogUpload.EnableOnlineLogSupport(False)
+end;
+
+procedure TeQSLImportThread.NetStatus(Sender: TObject; Reason: THookSocketReason; const Value: string);
+begin
+  if Reason = HR_ReadCount then
+  begin
+    FDownloadBytes := FDownloadBytes + StrToInt(Value);
+    //throttle GUI updates - refresh at most every 64 kB instead of on every socket read
+    if FDownloadBytes - FLastShownBytes >= 65536 then
+    begin
+      FLastShownBytes := FDownloadBytes;
+      FSyncStr := 'Downloading from eQSL ... ' + IntToStr(FDownloadBytes) + ' bytes';
+      Synchronize(@SyncComment)
+    end
+  end
+end;
+
+//Two-step eQSL inbox download: GET the DownloadInBox.cfm page, parse the .adi filename out
+//of the returned HTML, then GET the actual ADIF file. Mirrors the old main-thread code from
+//feQSLDownload.btnDownloadClick, moved here so the UI stays responsive.
+function TeQSLImportThread.DownloadReport : Boolean;
+const
+  //it is better to seek the file suffix than the old way
+  CDWNLD = '.adi">';
+var
+  http : THTTPSend;
+  m    : TFileStream;
+  l    : TStringList;
+  url, tmp : String;
+  i    : Integer;
+begin
+  Result := False;
+  if FForm.eQSLUrl = '' then //nothing to download, file is expected to be present already
+  begin
+    Result := FileExists(FForm.FileName);
+    if not Result then
+      FForm.eQSLErrMsg := 'File does not exist: ' + FForm.FileName;
+    Exit
+  end;
+
+  FSyncStr := 'Connecting to eQSL server ...';
+  Synchronize(@SyncComment);
+  FDownloadBytes := 0;
+  FLastShownBytes := 0;
+  http := THTTPSend.Create;
+  m    := TFileStream.Create(FForm.FileName, fmCreate);
+  l    := TStringList.Create;
+  try
+    http.Sock.OnStatus := @NetStatus;
+    http.ProxyHost := cqrini.ReadString('Program','Proxy','');
+    http.ProxyPort := cqrini.ReadString('Program','Port','');
+    http.UserName  := cqrini.ReadString('Program','User','');
+    http.Password  := cqrini.ReadString('Program','Passwd','');
+    http.MimeType  := 'text/xml';
+    http.Protocol  := '1.1';
+    if not http.HTTPMethod('GET', FForm.eQSLUrl) then
+    begin
+      FForm.eQSLErrMsg := 'Download failed (' + IntToStr(http.Sock.LastError) + '): ' + http.Sock.LastErrorDesc;
+      Exit
+    end;
+    http.Document.Seek(0, soBeginning);
+    l.LoadFromStream(http.Document);
+    http.Clear;
+    if pos('Error: No such Username/Password found', l.Text) > 0 then
+    begin
+      FForm.eQSLErrMsg := 'Error: No such Username/Password found';
+      Exit
+    end;
+    if pos(CDWNLD, l.Text) <= 0 then
+    begin
+      FForm.eQSLErrMsg := 'eQSL page was probably changed, cannot find the link to ADIF file';
+      Exit
+    end;
+    //find the line that holds the link and parse the .adi filename out of it
+    tmp := '';
+    for i := 0 to pred(l.Count) do
+      if pos(CDWNLD, l[i]) > 0 then
+      begin
+        tmp := copy(l[i], pos('HREF="', l[i])+6, length(l[i])); //start point
+        tmp := copy(l[i], 1, pos('.adi"', l[i])+3);             //endpoint
+        tmp := ExtractFileNameOnly(tmp) + ExtractFileExt(tmp)
+      end;
+    url := cqrini.ReadString('LoTW', 'eQSLDnlAddr', 'https://www.eqsl.cc/downloadedfiles/') + tmp;
+    if dmData.DebugLevel > 0 then Writeln('url: ', url);
+    FDownloadBytes := 0;
+    FLastShownBytes := 0;
+    if http.HTTPMethod('GET', url) then
+    begin
+      http.Document.Seek(0, soBeginning);
+      m.CopyFrom(http.Document, http.Document.Size);
+      Result := True
+    end
+    else
+      FForm.eQSLErrMsg := 'File was NOT downloaded! Error: ' +
+                          IntToStr(http.Sock.LastError) + ' ' + http.Sock.LastErrorDesc
+  finally
+    http.Free;
+    m.Free;
+    l.Free
+  end
+end;
+
+procedure TeQSLImportThread.Execute;
+begin
+  try
+    if DownloadReport then
+      RunImport
+  finally
+    Synchronize(@SyncCloseForm)
+  end
+end;
+
+//Match one batch of eQSL records against the log with a SINGLE query, the same way
+//TLoTWImportThread.ProcessBatch does (see its note). eQSL differences: matches/updates the
+//eqsl_qsl_rcvd / eqsl_qslrdate columns, a record already marked 'E' counts as found but is not
+//re-confirmed, the match time window is +-60 min, and no extra fields are imported.
+procedure TeQSLImportThread.ProcessBatch(var recs: TLotwRecArray; cnt: Integer; var confirmed, errors: Integer; el: TStringList);
+type
+  TCandRow = record
+    callsign, qsodate, band, time_on, mode, eqsl_qslr, id : String;
+  end;
+var
+  i, j, nc, logMin : Integer;
+  sql, nowStr : String;
+  cand : array of TCandRow;
+  found : Boolean;
+  mId, mRcvd : String;
+begin
+  if cnt = 0 then Exit;
+
+  sql := 'select callsign,qsodate,band,time_on,mode,eqsl_qsl_rcvd,id_cqrlog_main '+
+         'from cqrlog_main where (callsign,qsodate,band) in (';
+  for i := 0 to cnt-1 do
+  begin
+    if i > 0 then sql := sql + ',';
+    sql := sql + '(' + QuotedStr(recs[i].call) + ',' + QuotedStr(recs[i].qsodate) + ',' + QuotedStr(recs[i].band) + ')'
+  end;
+  sql := sql + ')';
+
+  FConn.Q.Close;
+  FConn.Q.SQL.Text := sql;
+  FConn.Q.Open;
+  nc := 0;
+  SetLength(cand, 256);
+  while not FConn.Q.Eof do
+  begin
+    if nc >= Length(cand) then
+      SetLength(cand, Length(cand)*2);
+    cand[nc].callsign  := FConn.Q.Fields[0].AsString;
+    cand[nc].qsodate   := FConn.Q.Fields[1].AsString;
+    cand[nc].band      := FConn.Q.Fields[2].AsString;
+    cand[nc].time_on   := FConn.Q.Fields[3].AsString;
+    cand[nc].mode      := FConn.Q.Fields[4].AsString;
+    cand[nc].eqsl_qslr := FConn.Q.Fields[5].AsString;
+    cand[nc].id        := FConn.Q.Fields[6].AsString;
+    inc(nc);
+    FConn.Q.Next
+  end;
+  FConn.Q.Close;
+
+  nowStr := dmUtils.DateInRightFormat(now);
+
+  for i := 0 to cnt-1 do
+  begin
+    found := False;
+    mId := ''; mRcvd := '';
+    for j := 0 to nc-1 do
+    begin
+      if (cand[j].callsign = recs[i].call) and
+         (cand[j].qsodate  = recs[i].qsodate) and
+         (cand[j].band     = recs[i].band) and
+         ((cand[j].mode = recs[i].mode) or (cand[j].mode = recs[i].modeorig) or (cand[j].mode = recs[i].submodeorig)) then
+      begin
+        if Length(cand[j].time_on) >= 5 then
+          logMin := StrToIntDef(copy(cand[j].time_on,1,2),-1)*60 + StrToIntDef(copy(cand[j].time_on,4,2),0)
+        else
+          logMin := -1;
+        if (logMin >= recs[i].lo) and (logMin <= recs[i].hi) then
+        begin
+          found := True;
+          mRcvd := cand[j].eqsl_qslr;
+          mId   := cand[j].id;
+          cand[j].eqsl_qslr := 'E'; //mark used so a duplicate eQSL record in this batch won't re-confirm it
+          Break
+        end
+      end
+    end;
+
+    if found and (mRcvd <> 'E') then
+    begin
+      if FForm.eQSLShowNew then
+        FForm.eQSLQSOList.Add(recs[i].qsodate + ' ' + recs[i].call + ' ' + recs[i].band + ' ' + recs[i].mode);
+      FConn.Q2.Close;
+      FConn.Q2.SQL.Clear;
+      FConn.Q2.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
+      FConn.Q2.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(nowStr));
+      FConn.Q2.SQL.Add(' where id_cqrlog_main = ' + mId);
+      FConn.Q2.ExecSQL;
+      inc(confirmed)
+    end;
+
+    if not found then
+    begin
+      FForm.WriteErrorRecord('E',recs[i].call,recs[i].band,recs[i].modeorig,recs[i].submodeorig,recs[i].qsodate,
+                             recs[i].time_on,recs[i].qslr,recs[i].qslrdate,recs[i].cqz,recs[i].ituz,recs[i].iota,
+                             recs[i].grid,recs[i].state,recs[i].county,recs[i].qsorecord,el);
+      inc(errors)
+    end
+  end
+end;
+
+procedure TeQSLImportThread.RunImport;
+const
+  BATCH = 500;
+var
+  num      : Integer = 0;
+  qsln     : Integer = 0;
+  f        : TextFile;
+  PosEOH   : Word;
+  PosEOR   : Word;
+  qsorecord,call,band,mode,modeorig,submode,submodeorig,qsodate,time_on,
+  qslr,qslrdate,cqz,ituz,iota,grid,state,county : String;
+  ErrorCount  : Integer = 0;
+  l           : TStringList;
+  ignoreOnline: Boolean;
+  recs        : TLotwRecArray;
+  rc          : Integer;
+  eqslMin     : Integer;
+begin
+  ignoreOnline := cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled;
+
+  FConn := GetNewInternalConnection();
+
   l := TStringList.Create;
   l.Add('<ADIF_VER:5>3.1.0');
   l.Add('<CREATED_TIMESTAMP:15>'+FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
@@ -1100,167 +1569,108 @@ begin
   l.Add('');
   l.Add('<EOH>');
   l.Add('');
-  if dmData.trQ.Active then
-    dmData.trQ.RollBack;
-  if dmData.trQ1.Active then
-    dmData.trQ1.RollBack;
+  AssignFile(f,FForm.FileName);
+  SetLength(recs,BATCH);
 
-  if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
-    dmLogUpload.DisableOnlineLogSupport;
-
-  dmData.trQ1.StartTransaction;
-  dmData.trQ.StartTransaction;
   try
-    AssignFile(f,FileName);
+    if ignoreOnline then
+      Synchronize(@SyncDisableOnlineLog);
+
+    FConn.T.StartTransaction;
     Reset(f);
-    lblComment.Caption := 'Importing eQSL Adif file ...';
-    pBarProg.Visible   := False;
-    Repaint;
+    FSyncStr := 'Importing eQSL Adif file ...';
+    Synchronize(@SyncComment);
     PosEOH := 0;
     PosEOR := 0;
-    while not (PosEOH > 0) do //Skip header
+    while (PosEOH = 0) and (not eof(f)) do //Skip header
     begin
-      Readln(f, a);
-      a      := UpperCase(a);
-      PosEOH := Pos('<EOH>', a);
+      Readln(f, qsorecord);
+      qsorecord := UpperCase(qsorecord);
+      PosEOH    := Pos('<EOH>', qsorecord)
     end;
-    while not eof(f) do
+    if PosEOH > 0 then //we have a valid adif header
     begin
-      call     := '';
-      band     := '';
-      modeorig := '';
-      mode     := '';
-      submodeorig
-               := '';
-      submode  := '';
-      qsodate  := '';
-      time_on  := '';
-      qslr     := '';
-      //these are not needed with eQSL
-      qslrdate := '';
-      cqz      := '';
-      ituz     := '';
-      iota     := '';
-      grid     := '';
-      state    := '';
-      county   := '';
-
-      PosEOR   := 0;
-
-
-      while not ((PosEOR > 0) or eof(f)) do
+      rc := 0;
+      while not eof(f) do
       begin
-        qso_in_log := False;
-        CommonImport(PosEOR,f,call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
-                        qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
-        //for now on the mode is converted Cqrmode
-        if PosEOR > 0 then
+        call:=''; band:=''; mode:=''; modeorig:=''; submode:=''; submodeorig:='';
+        qsodate:=''; time_on:=''; qslr:=''; qslrdate:=''; cqz:=''; ituz:='';
+        iota:=''; grid:=''; state:=''; county:='';
+        PosEOR := 0;
+        while not ((PosEOR > 0) or eof(f)) do //read all records
         begin
-          if LocalDbg then
+          FForm.CommonImport(PosEOR,f,call,band,modeorig,mode,submodeorig,submode,qsodate,time_on,qslr,
+                        qslrdate,cqz,ituz,iota,grid,state,county,qsorecord);
+          //from now on the mode is converted to Cqrmode
+          if PosEOR > 0 then
           begin
-            Writeln('------------------------------------------------');
-            Writeln('Call:     ',call);
-            Writeln('Band:     ',band);
-            Writeln('Mode:     ',modeorig);
-            Writeln('Submode:  ',submodeorig);
-            Writeln('CqrMode:  ',mode);
-            Writeln('QSO_date: ',qsodate);
-            Writeln('Time_on:  ',time_on);
-            Writeln('QSLR:     ',qslr);
-            Writeln('------------------------------------------------');
-          end;
-          qsodate  := dmUtils.ADIFDateToDate(qsodate);
+            qsodate := dmUtils.ADIFDateToDate(qsodate);
+            eqslMin := StrToIntDef(copy(time_on,1,2),0)*60 + StrToIntDef(copy(time_on,3,2),0);
 
-          dmData.Q.Close;
-
-          //we compare Cqrmode in log to mode and submode received and Cqrmode created.
-          //If any of these is ok, qso is ok by mode.
-          //this makes backward compatible to old cqrlog loggings.
-          //Actually qso is ok even without mode check if other items fit!
-          dmData.Q.SQL.Text := 'select id_cqrlog_main,eqsl_qsl_rcvd,time_on from cqrlog_main ' +
-                                 'where (qsodate ='+QuotedStr(qsodate)+') '+
-                                 'and ('+
-                                      '(mode = ' + QuotedStr(mode) +') or '+
-                                      '(mode = ' + QuotedStr(modeorig)+') or '+
-                                      '(mode = ' + QuotedStr(submodeorig)+') '+
-                                      ')' +
-                                 'and (band = ' + QuotedStr(band) + ') '+
-                                 'and (callsign = ' + QuotedStr(call) + ')';
-
-          if LocalDbg  then Writeln(dmData.Q.SQL.Text);
-          //if dmData.trQ.Active then dmData.trQ.Rollback;
-          //dmData.trQ.StartTransaction;
-          dmData.Q.Open();
-          dmData.Q.First;
-          if dmData.Q.Eof then  qso_in_log := False;
-          while not dmData.Q.Eof do
-          begin
-            qso_in_log := False;
-
-            t_eQSL := EncodeTime(StrToInt(copy(time_on,1,2)),
-                      StrToInt(copy(time_on,3,2)),0,0);
-
-            t_log  := EncodeTime(StrToInt(copy(dmData.Q.Fields[2].AsString,1,2)),
-                      StrToInt(copy(dmData.Q.Fields[2].AsString,4,2)),0,0);
-
-             if copy(time_on,1,2)='00' then
-                t_eQSL_min := 0      //if eqsl time is from 1st hour 00:00-00:59 low limit must be set to 00:00
-              else                   //as day is set at sql query and we can not go backwards to yesterday
-                t_eQSL_min := t_eQSL-60/1440;
-
+            recs[rc].call        := call;
+            recs[rc].band        := band;
+            recs[rc].mode        := mode;
+            recs[rc].modeorig    := modeorig;
+            recs[rc].submodeorig := submodeorig;
+            recs[rc].qsodate     := qsodate;
+            recs[rc].time_on     := time_on;
+            recs[rc].qslr        := qslr;
+            recs[rc].qslrdate    := qslrdate;
+            recs[rc].cqz         := cqz;
+            recs[rc].ituz        := ituz;
+            recs[rc].iota        := iota;
+            recs[rc].grid        := grid;
+            recs[rc].state       := state;
+            recs[rc].county      := county;
+            //accepted log-time window in minutes-of-day (+-60 min, with the same 00:xx / 23:xx
+            //edge handling the original per-QSO code used - the SQL pins the date so we can not
+            //cross midnight in either direction)
+            if copy(time_on,1,2)='00' then
+              recs[rc].lo := 0
+            else
+              recs[rc].lo := eqslMin - 60;
             if copy(time_on,1,2)='23' then
-                t_eQSL_max :=EncodeTime(23,59,0,0)
-                                     //this fails too in qsos past 23:xx as we can not set high limit to next day
-              else                   //as day is set at sql query and we can not go forward to tomorrow
-                t_eQSL_max := t_eQSL+60/1440;
+              recs[rc].hi := 23*60+59
+            else
+              recs[rc].hi := eqslMin + 60;
 
-            if LocalDbg  then Writeln(call,'|',TimeToStr(t_log),' | ',TimeToStr(t_eQSL_min),'|',TimeToStr(t_eQSL_max));
-
-            if (t_log >=t_eQSL_min) and (t_log<=t_eQSL_max)  then
+            inc(rc);
+            inc(num);
+            if rc = BATCH then
             begin
-              if eQSLShowNew and (dmData.Q.Fields[1].AsString <> 'E') then
-                eQSLQSOList.Add(qsodate+ ' ' + call + ' ' + band + ' ' + mode);
-              if (dmData.Q.Fields[1].AsString <> 'E') then
-              begin
-                dmData.Q1.Close;
-                dmData.Q1.SQL.Clear;
-                dmData.Q1.SQL.Add('update cqrlog_main set eqsl_qsl_rcvd = ' + QuotedStr('E'));
-                dmData.Q1.SQL.Add(',eqsl_qslrdate = ' + QuotedStr(dmUtils.DateInRightFormat(now)));
-                dmData.Q1.SQL.Add(' where id_cqrlog_main = ' + dmData.Q.Fields[0].AsString);
-                if LocalDbg then Writeln(dmData.Q1.SQL.Text);
-                dmData.Q1.ExecSQL
-              end;
-              qso_in_log := True;
-              Break //should only be one qso confirmed, if we have several answers we stop looping those if found one match
-            end;
-            dmData.Q.Next
-          end;
-          if not qso_in_log then
-          begin
-            WriteErrorRecord('E',call,band,modeorig,submodeorig,qsodate,time_on,qslr,qslrdate,cqz,ituz,iota,grid,state,county,qsorecord,l);
-            inc(ErrorCount)
+              ProcessBatch(recs,rc,qsln,ErrorCount,l);
+              rc := 0;
+              //commit periodically so row locks on cqrlog_main are released frequently
+              FConn.T.CommitRetaining;
+              FSyncStr := IntToStr(num);
+              Synchronize(@SyncCount)
+            end
           end
         end
       end;
-      inc(num);
-      lblCount.Caption:= IntToStr(num);
-      if num mod 100 = 0 then
-        Repaint
-    end;
-    dmData.trQ1.Commit;
-    CloseFile(f);
-    if ErrorCount > 0 then
-    begin
-      l.SaveToFile(dmData.UsrHomeDir + C_EErrorFile);
-      if Application.MessageBox(PChar(IntToStr(ErrorCount)+' QSO(s) were not found in your log.'+LineEnding+'QSO(s) are stored to '+dmData.UsrHomeDir + C_EErrorFile +
-                                LineEnding+LineEnding+'Do you want to show the file?'),'Question ....',mb_YesNo+mb_IconQuestion)=idYes then
-      frmAdifImport.OpenInTextEditor(dmData.UsrHomeDir + C_EErrorFile)
+      if rc > 0 then
+        ProcessBatch(recs,rc,qsln,ErrorCount,l);
+      FConn.T.Commit;
+      FForm.eQSLSuccess := True;
+      FSyncStr := IntToStr(num);
+      Synchronize(@SyncCount);
+      if ErrorCount > 0 then
+      begin
+        l.SaveToFile(dmData.UsrHomeDir + C_EErrorFile);
+        FErrorCount := ErrorCount;
+        Synchronize(@SyncErrorsDlg)
+      end
     end
+    else
+      FForm.eQSLErrMsg := 'Invalid adif file header - the downloaded file does not look like an eQSL report.'
   finally
+    if FConn.T.Active then
+      FConn.T.Rollback;
     l.Free;
-    if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) then
-      dmLogUpload.EnableOnlineLogSupport(False);
-    Close
+    CloseFile(f);
+    FreeAndNil(FConn);
+    if ignoreOnline then
+      Synchronize(@SyncEnableOnlineLog)
   end
 end;
 

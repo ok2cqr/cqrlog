@@ -267,7 +267,7 @@ begin
   else begin
     WindowState := wsMaximized
   end;
-  edtTqsl.Text := cqrini.ReadString('LoTWExp','cmd','/usr/bin/tqsl -d -l "your qth name" %f -x');
+  edtTqsl.Text := cqrini.ReadString('LoTWExp', dmUtils.PlatformKey('cmd'), dmUtils.DefaultToolPath('tqsl', '/usr/bin/tqsl') + ' -d -l "your qth name" %f -x');
   if pgLoTWExport.ActivePageIndex = 1 then
     rbWebExportNotExported.SetFocus
 end;
@@ -291,7 +291,7 @@ begin
   else begin
     cqrini.WriteBool('LoTWExp','Max', True)
   end;
-  cqrini.WriteString('LoTWExp','cmd',edtTqsl.Text);
+  cqrini.WriteString('LoTWExp', dmUtils.PlatformKey('cmd'), edtTqsl.Text);
   AProcess.Free;
   dmData.Q1.Close
 end;

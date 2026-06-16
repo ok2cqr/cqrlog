@@ -34,4 +34,12 @@ cqrlog
 tools/cqrlog.?.gz
 .idea
 
+# appimage and build artifacts
+AppDir/
+*.AppImage
+*.deb
 
+# vscode and sample adif
+.vscode/*
+*.adi
+*.adif

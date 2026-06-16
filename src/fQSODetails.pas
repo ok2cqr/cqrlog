@@ -167,7 +167,7 @@ begin
   dmUtils.LoadFontSettings(self);
   f := TFont.Create;
   try
-    f.Name := cqrini.ReadString('Fonts','Buttons','Sans 10');
+    f.Name := cqrini.ReadString('Fonts',dmUtils.PlatformKey('Buttons'),cDefaultSansFont + ' 10');
     Details.SetFont(f)
   finally
     f.Free

@@ -88,15 +88,15 @@ uses dUtils, dData, fGrayline;
 procedure TfrmRotControl.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(frmRotControl);
-  rbRotor1.Caption := cqrini.ReadString('ROT1','Desc','Rotor 1');
-  rbRotor2.Caption := cqrini.ReadString('ROT2','Desc','Rotor 2');
-  btnLeft.Visible:=cqrini.ReadBool('ROT','DirBtns',False);
-  btnRight.Visible:=cqrini.ReadBool('ROT','DirBtns',False);
-  mnuDirBtns.Checked:=cqrini.ReadBool('ROT','DirBtns',False);;
-  pnlMinMax.Visible:=cqrini.ReadBool('ROT','MinMax',False);
-  mnuMinMax.Checked:=cqrini.ReadBool('ROT','MinMax',False);;
-  btnStop.Visible:=cqrini.ReadBool('ROT','Stopbtn',False);
-  mnuStopbtn.Checked:=cqrini.ReadBool('ROT','Stopbtn',False);
+  rbRotor1.Caption := cqrini.ReadString('ROT1',dmUtils.PlatformKey('Desc'),'Rotor 1');
+  rbRotor2.Caption := cqrini.ReadString('ROT2',dmUtils.PlatformKey('Desc'),'Rotor 2');
+  btnLeft.Visible:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('DirBtns'),False);
+  btnRight.Visible:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('DirBtns'),False);
+  mnuDirBtns.Checked:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('DirBtns'),False);;
+  pnlMinMax.Visible:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('MinMax'),False);
+  mnuMinMax.Checked:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('MinMax'),False);;
+  btnStop.Visible:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('Stopbtn'),False);
+  mnuStopbtn.Checked:=cqrini.ReadBool('ROT',dmUtils.PlatformKey('Stopbtn'),False);
   if pnlMinMax.Visible then gbAzimuth.Height:=70;
   Beamdir:=-1;
 end;
@@ -122,7 +122,7 @@ begin
    mnuDirbtns.Checked:= not mnuDirbtns.Checked;
    btnLeft.Visible:=mnuDirbtns.Checked;
    btnRight.Visible:=mnuDirbtns.Checked;
-   cqrini.WriteBool('ROT','DirBtns',mnuDirbtns.Checked);
+   cqrini.WriteBool('ROT',dmUtils.PlatformKey('DirBtns'),mnuDirbtns.Checked);
 end;
 
 procedure TfrmRotControl.mnuMinMaxClick(Sender: TObject);
@@ -130,7 +130,7 @@ begin
   mnuMinMax.Checked:= not mnuMinMax.Checked;
   if mnuMinMax.Checked then gbAzimuth.Height:=70 else gbAzimuth.Height:=50;
   pnlMinMax.Visible:=mnuMinMax.Checked;
-  cqrini.WriteBool('ROT','MinMax',pnlMinMax.Visible);
+  cqrini.WriteBool('ROT',dmUtils.PlatformKey('MinMax'),pnlMinMax.Visible);
 end;
 
 procedure TfrmRotControl.mnuPreferencesClick(Sender: TObject);
@@ -143,18 +143,18 @@ procedure TfrmRotControl.mnuStopbtnClick(Sender: TObject);
 begin
   mnuStopbtn.Checked:= not  mnuStopbtn.Checked;
   btnStop.Visible:=mnuStopbtn.Checked;
-  cqrini.WriteBool('ROT','Stopbtn',btnStop.Visible);
+  cqrini.WriteBool('ROT',dmUtils.PlatformKey('Stopbtn'),btnStop.Visible);
 end;
 
 procedure TfrmRotControl.rbRotor1Click(Sender: TObject);
 begin
-  cqrini.WriteBool('ROT','Use1',rbRotor1.Checked);
+  cqrini.WriteBool('ROT',dmUtils.PlatformKey('Use1'),rbRotor1.Checked);
   InicializeRot
 end;
 
 procedure TfrmRotControl.rbRotor2Click(Sender: TObject);
 begin
-  cqrini.WriteBool('ROT','Use1',rbRotor1.Checked);
+  cqrini.WriteBool('ROT',dmUtils.PlatformKey('Use1'),rbRotor1.Checked);
   InicializeRot
 end;
 
@@ -372,7 +372,7 @@ begin
   rotor := TRotControl.Create;
   if dmData.DebugLevel>0 then
     rotor.DebugMode := True;
-  if not TryStrToInt(cqrini.ReadString('ROT'+n,'model',''),id) then
+  if not TryStrToInt(cqrini.ReadString('ROT'+n,dmUtils.PlatformKey('model'),''),id) then
     rotor.RotId := 1
   else
     rotor.RotId := id;
@@ -388,18 +388,18 @@ begin
   //cqrini.Write does not make difference in config file if variable is saved as String or Integer
   //both results look same in .cfg file.
 
-  port:= cqrini.ReadInteger('ROT'+n, 'RotCtldPort', 4533);
+  port:= cqrini.ReadInteger('ROT'+n, dmUtils.PlatformKey('RotCtldPort'), 4533);
   if ((port>65534) or (port<1024)) then port := 4533;  //limit values
 
-  poll:=cqrini.ReadInteger('ROT'+n, 'poll', 500);
+  poll:=cqrini.ReadInteger('ROT'+n, dmUtils.PlatformKey('poll'), 500);
   if ((poll>60000) or (poll<10)) then  poll := 500;  //limit values
 
-  rotor.RotCtldPath := cqrini.ReadString('ROT','RotCtldPath','/usr/bin/rotctld');
+  rotor.RotCtldPath := cqrini.ReadString('ROT', dmUtils.PlatformKey('RotCtldPath'), dmUtils.DefaultRotCtldPath);
   rotor.RotCtldArgs := dmUtils.GetRotorRotCtldCommandLine(StrToInt(n));
-  rotor.RunRotCtld  := cqrini.ReadBool('ROT'+n,'RunRotCtld',False);
-  rotor.RotDevice   := cqrini.ReadString('ROT'+n,'device','');
+  rotor.RunRotCtld  := cqrini.ReadBool('ROT'+n,dmUtils.PlatformKey('RunRotCtld'),False);
+  rotor.RotDevice   := cqrini.ReadString('ROT'+n, dmUtils.PlatformKey('device'), '');
   rotor.RotCtldPort := port;
-  rotor.RotCtldHost := cqrini.ReadString('ROT'+n,'host','localhost');
+  rotor.RotCtldHost := cqrini.ReadString('ROT'+n,dmUtils.PlatformKey('host'),'localhost');
   rotor.RotPoll     := poll;
 
   tmrRotor.Interval := rotor.RotPoll;

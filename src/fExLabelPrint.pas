@@ -80,7 +80,7 @@ end;
 
 procedure TfrmExLabelPrint.FormShow(Sender: TObject);
 begin
-  edtFile.Text := cqrini.ReadString('QslExport','Path',dmData.DataDir+'qsl.csv');
+  edtFile.Text := cqrini.ReadString('QslExport', dmUtils.PlatformKey('Path'), dmData.DataDir+'qsl.csv');
   dlgSave.InitialDir := ExtractFilePath(edtFile.Text);
   gchkExport.Checked[0] := True;
   gchkExport.Checked[2] := True;
@@ -675,7 +675,7 @@ end;
 procedure TfrmExLabelPrint.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  cqrini.WriteString('QslExport','Path',edtFile.Text);
+  cqrini.WriteString('QslExport', dmUtils.PlatformKey('Path'), edtFile.Text);
   cqrini.WriteString('QslExport','QSOs',edtQSOsToLabel.Text);
   cqrini.WriteString('QslExport','Remarks',edtRemarks.Text);
   cqrini.WriteBool('QSLExport', 'KeepCsvStructure', chkKeepCsvStructure.Checked);

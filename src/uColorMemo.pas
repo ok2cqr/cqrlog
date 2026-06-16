@@ -192,7 +192,9 @@ constructor TcolorMemo.Create(TheOwner: TComponent);
     AutoScroll:=false;
     refr_en:=0;
 
+    {$IFNDEF LCLCocoa}
     DoubleBuffered:=true;
+    {$ENDIF}
     caption:='';
     
     pab:=Tpaintbox.Create(self);
@@ -517,22 +519,45 @@ function TcolorMemo.LastLineNumber:longint;
 
 
 procedure TcolorMemo.aktualizujpozici(sender:Tobject);
-var z:longint;
+var z, maxTextW, tw, bottomMargin: longint;
   begin
+    maxTextW := 0;
+    for z := 0 to vetp do
+    begin
+      tw := pab.Canvas.TextWidth(vety[z]^.te) + 10;
+      if tw > maxTextW then maxTextW := tw;
+    end;
+
+    if maxTextW > (width - sbs.width - 8) then
+    begin
+      sbv.Visible := True;
+      bottomMargin := sbv.Height + 2;
+    end
+    else
+    begin
+      sbv.Visible := False;
+      sbv.Position := 0;
+      bottomMargin := 0;
+    end;
+
     sbs.left:=width-sbs.width-2;
     sbs.top:=2;
-    sbs.height:=height-sbs.width-4;
-    
+    sbs.height:=height - bottomMargin - 4;
 
-    sbv.Top:=height-sbv.height-2;
-    sbv.Left:=2;
-    sbv.Width:=width-sbv.height-4;
-    
+    if sbv.Visible then
+    begin
+      sbv.Top:=height-sbv.height-2;
+      sbv.Left:=2;
+      sbv.Width:=width-sbv.height-4;
+      sbv.Min := 0;
+      sbv.Max := (maxTextW - (width - sbs.width - 8)) div 8 + 1;
+    end;
+
     pab.left:=2;
     pab.top:=2;
     pab.Width:=sbs.left-4;
     pab.height:=sbs.height-4;
-    
+
     sbs.Min:=0;
     z:=(vetp-(pab.height div vyska_radku)+1);
     if z<0 then z:=0;
@@ -547,6 +572,9 @@ var z,x:longint;
     b1,b2:TColor;
   begin
    if refr_en<>0 then exit;
+    pab.Canvas.Font := pab.Font;
+    pab.Canvas.Brush.Color := Color;
+    pab.Canvas.FillRect(0, 0, pab.Width, pab.Height);
     x:=sbs.Position;
     for z:=0 to pab.height div vyska_radku do
       begin
@@ -557,10 +585,8 @@ var z,x:longint;
               else
               begin b2:=vety[z+x]^.bpo;b1:=vety[z+x]^.bpi;end;
             pab.Canvas.Brush.Color:=b2;
-            pab.Canvas.FillRect(0,1+z*vyska_radku,width-1,1+(z+1)*vyska_radku-1);
+            pab.Canvas.FillRect(0,1+z*vyska_radku,pab.Width,1+(z+1)*vyska_radku-1);
             pab.Canvas.font.Color:=b1;
-//            pab.Canvas.font.style:=[fsBold,fsItalic];
-//            pab.font.style:=[fsBold,fsItalic];
             pab.Canvas.TextOut(5-sbv.Position*8,5+(z)*vyska_radku,vety[x+z]^.te);
           end;
       end;
@@ -704,6 +730,8 @@ var z:longint;
 
 procedure TcolorMemo.SetFont(f:Tfont);
   begin
+    if Screen.Fonts.IndexOf(f.Name) < 0 then
+      f.Name := {$IFDEF LCLCocoa}'Menlo'{$ELSE}'Monospace'{$ENDIF};
     pab.font:=f;
     pab.canvas.Font:=f;
     vyska_radku:=pab.canvas.TextHeight('WTIjpyg')+4;

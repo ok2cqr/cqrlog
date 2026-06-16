@@ -38,12 +38,10 @@ type
     procedure btnPreferencesClick(Sender: TObject);
     procedure mStatChange(Sender: TObject);
   private
-    Done : Boolean;
-    FileSize : Int64;
-    procedure SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
+    { private declarations }
   public
     { public declarations }
-  end; 
+  end;
 
 var
   frmImportLoTWWeb: TfrmImportLoTWWeb;
@@ -82,15 +80,13 @@ procedure TfrmImportLoTWWeb.btnDownloadClick(Sender: TObject);
 var
   user : String = '';
   pass : String = '';
-  http : THTTPSend;
-  m    : TFileStream;
   url  : String = '';
   AdifFile : String = '';
   QSOList : TStringList;
   Count : Word = 0;
+  Success : Boolean = False;
+  ErrMsg  : String = '';
 begin
-  Done := False;
-  FileSize := 0;
   mStat.Clear;
   Application.ProcessMessages;
   if not dmUtils.IsDateOK(edtDateFrom.Text) then
@@ -100,18 +96,31 @@ begin
     exit
   end;
 
+  user := cqrini.ReadString('LoTW','LoTWName','');
+  pass := dmUtils.EncodeURLData(cqrini.ReadString('LoTW','LoTWPass',''));
+  if (user = '') or (pass='') then
+  begin
+    mStat.Lines.Add('User name or password is not set!');
+    exit
+  end;
+
   cqrini.WriteString('LoTWImp','Call',edtCall.Text);
+  cqrini.WriteString('LoTWImp','DateFrom',edtDateFrom.Text);
+
   AdifFile := dmData.HomeDir + 'lotw/'+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
-  QSOList  := TStringList.Create;
-  http     := THTTPSend.Create;
+  url := 'https://LoTW.arrl.org/lotwuser/lotwreport.adi?login='+user+'&password='+pass+'&qso_query=1&qso_qsldetail="yes"'+
+         '&qso_qslsince='+edtDateFrom.Text;
+  if edtCall.Text <> '' then
+    url := url+'&qso_owncall='+edtCall.Text;
 
   if dmData.DebugLevel>=1 then
   begin
     Writeln('DLLSSLName:',DLLSSLName);
-    Writeln('DLLUtilName:',DLLUtilName)
+    Writeln('DLLUtilName:',DLLUtilName);
+    Writeln(url)
   end;
 
-  m        := TFileStream.Create(AdifFile,fmCreate);
+  QSOList := TStringList.Create;
   try
     btnClose.Enabled       := False;
     btnDownload.Enabled    := False;
@@ -119,87 +128,51 @@ begin
     edtDateFrom.Enabled    := False;
     edtCall.Enabled        := False;
 
-    user := cqrini.ReadString('LoTW','LoTWName','');
-    pass :=dmUtils.EncodeURLData(cqrini.ReadString('LoTW','LoTWPass',''));
-    http.Sock.OnStatus := @SockCallBack;
-    HTTP.ProxyHost := cqrini.ReadString('Program','Proxy','');
-    HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
-    HTTP.UserName  := cqrini.ReadString('Program','User','');
-    HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-
-    if (user = '') or (pass='') then
-    begin
-      mStat.Lines.Add('User name or password is not set!');
-      exit
-    end;
-    cqrini.WriteString('LoTWImp','DateFrom',edtDateFrom.Text);
-
-    url := 'https://LoTW.arrl.org/lotwuser/lotwreport.adi?login='+user+'&password='+pass+'&qso_query=1&qso_qsldetail="yes"'+
-           '&qso_qslsince='+edtDateFrom.Text;
-
-    if edtCall.Text <> '' then
-      url := url+'&qso_owncall='+edtCall.Text;
-    if dmData.DebugLevel>=1 then Writeln(url);
-    http.MimeType := 'text/xml';
-    http.Protocol := '1.1';
-    if http.HTTPMethod('GET',url) then
-    begin
-      http.Document.Seek(0,soBeginning);
-      m.CopyFrom(http.Document,HTTP.Document.Size);
-      http.Clear;
-      mStat.Lines.Add('File downloaded successfully');
-      mStat.Lines.Add('File: '+ AdifFile);
-      Done := True;
-      Repaint;
-      Application.ProcessMessages;
-      mStat.Lines.Add('Preparing import ....');
-      if not FileExists(AdifFile) then
+    mStat.Lines.Add('Downloading from LoTW and importing ...');
+    //Download and import run in a background thread inside the progress window,
+    //so this (main) thread - and the whole UI - stays responsive.
+    with TfrmImportProgress.Create(self) do
+    try
+      FileName    := AdifFile;
+      LoTWUrl     := url;
+      ImportType  := imptImportLoTWAdif;
+      LoTWShowNew := chkShowNew.Checked;
+      LoTWSuccess := False;
+      ShowModal;
+      Success := LoTWSuccess;
+      ErrMsg  := LoTWErrMsg;
+      if Success then
       begin
-        mStat.Lines.Add('File: '+ AdifFile);
-        mStat.Lines.Add('DOES NOT exist!');
-        exit
-      end;
-      with TfrmImportProgress.Create(self) do
-      try
-        FileName    := AdifFile;
-        ImportType  := imptImportLoTWAdif;
-        LoTWShowNew := chkShowNew.Checked;
-        ShowModal;
         QSOList.Text := LoTWQSOList.Text;
         Count        := LoTWQSOList.Count
-      finally
-        Free
-      end;
+      end
+    finally
+      Free
+    end;
+
+    if Success then
+    begin
       mStat.Lines.Add('Import complete ...');
       if chkChangeDate.Checked then
-        Begin
-         edtDateFrom.Caption:= FormatDateTime('YYYY-MM-DD', IncDay(Today, -1));
-         cqrini.WriteString('LoTWImp','DateFrom',FormatDateTime('YYYY-MM-DD', IncDay(Today, -1)));
-        end;
+      begin
+        edtDateFrom.Caption := FormatDateTime('YYYY-MM-DD', IncDay(Today, -1));
+        cqrini.WriteString('LoTWImp','DateFrom',FormatDateTime('YYYY-MM-DD', IncDay(Today, -1)))
+      end;
       if chkShowNew.Checked then
       begin
         mStat.Lines.Add('');
         mStat.Lines.Add('New QSOs confirmed by LoTW:');
         mStat.Lines.AddStrings(QSOList);
         mStat.Lines.Add('-----------------------------');
-        mStat.Lines.Add('Total: ' + IntToStr(Count) + ' new QSOs');
-      end;
+        mStat.Lines.Add('Total: ' + IntToStr(Count) + ' new QSOs')
+      end
     end
     else begin
-      if dmData.DebugLevel >= 1 then
-      begin
-        http.Document.Seek(0,soBeginning);
-        m.CopyFrom(http.Document,HTTP.Document.Size);
-        mStat.Lines.LoadFromStream(m)
-      end;
-      mStat.Lines.Add('NOT logged');
-      mStat.Lines.Add('Error: '+IntToStr(http.Sock.LastError));
-      mStat.Lines.Add('Error: '+http.Sock.LastErrorDesc);
-      mStat.Lines.Add('Error: '+http.Sock.SSL.LibName)
+      mStat.Lines.Add('Download/import was not successful.');
+      if ErrMsg <> '' then
+        mStat.Lines.Add(ErrMsg)
     end
   finally
-    http.Free;
-    m.Free;
     QSOList.Free;
     btnClose.Enabled       := True;
     btnDownload.Enabled    := True;
@@ -217,8 +190,7 @@ begin
   edtDateFrom.Text   := cqrini.ReadString('LoTWImp','DateFrom','1990-01-01');
   edtCall.Text       := cqrini.ReadString('LoTWImp','Call',
                         cqrini.ReadString('Station','Call',''));
-  cbImports.Checked  := cqrini.ReadBool('LoTWImp','Import',True);
-  Done := False
+  cbImports.Checked  := cqrini.ReadBool('LoTWImp','Import',True)
 end;
 
 procedure TfrmImportLoTWWeb.FormCloseQuery(Sender: TObject;
@@ -235,28 +207,6 @@ end;
 procedure TfrmImportLoTWWeb.chkChangeDateChange(Sender: TObject);
 begin
   cqrini.WriteBool('LoTWImp','ChangeDate',chkChangeDate.Checked);
-end;
-
-procedure TfrmImportLoTWWeb.SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
-begin
-  case Reason of
-      HR_Connect :  Begin
-                     if dmData.DebugLevel>=1 then Writeln( 'Connected to LoTW server');
-                     mStat.Lines.Add('Connected to LoTW server');
-                     mStat.Lines.Add('Downloading...');
-                     Repaint;
-                     Application.ProcessMessages
-                    end;
-
-      HR_ReadCount: begin
-                      FileSize := FileSize + StrToInt(Value);
-                      if not Done then
-                        mStat.Lines.Strings[mStat.Lines.Count-1] := 'Downloading size: '+ IntToStr(FileSize);
-                      Repaint;
-                      Application.ProcessMessages
-                    end;
-
-  end;
 end;
 
 end.

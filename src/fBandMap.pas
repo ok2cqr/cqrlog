@@ -699,8 +699,8 @@ begin
   dmUtils.LoadFontSettings(self);
   f := TFont.Create;
   try
-    f.Name := cqrini.ReadString('BandMap','BandFont','Monospace');
-    f.Size := cqrini.ReadInteger('BandMap','FontSize',8);
+    f.Name := cqrini.ReadString('BandMap',dmUtils.PlatformKey('BandFont'),cDefaultMonoFont);
+    f.Size := cqrini.ReadInteger('BandMap',dmUtils.PlatformKey('FontSize'),8);
     BandMap.SetFont(f)
   finally
     f.Free
@@ -713,13 +713,13 @@ var
 begin
   dmUtils.LoadFontSettings(self);
   f := TFont.Create;
-    f.Name := cqrini.ReadString('BandMap','BandFont','Monospace');
-    f.Size := cqrini.ReadInteger('BandMap','FontSize',8);
+    f.Name := cqrini.ReadString('BandMap',dmUtils.PlatformKey('BandFont'),cDefaultMonoFont);
+    f.Size := cqrini.ReadInteger('BandMap',dmUtils.PlatformKey('FontSize'),8);
   dlgFont.Font :=(f);
   if dlgFont.Execute then
   begin
-    cqrini.WriteString('BandMap','BandFont',dlgFont.Font.Name);
-    cqrini.WriteInteger('BandMap','FontSize',dlgFont.Font.Size);
+    cqrini.WriteString('BandMap',dmUtils.PlatformKey('BandFont'),dlgFont.Font.Name);
+    cqrini.WriteInteger('BandMap',dmUtils.PlatformKey('FontSize'),dlgFont.Font.Size);
     LoadFonts;
   end;
   btnEatFocus.SetFocus

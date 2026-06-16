@@ -2,6 +2,7 @@ program cqrlog;
 
 {$mode objfpc}{$H+}
 uses
+  uQtWorkaround,
   cmem,cthreads,uScrollBars,
   Interfaces, // this includes the LCL widgetset
   Forms, sysutils, Classes, fMain, fPreferences, dUtils, fNewQSO, dialogs,

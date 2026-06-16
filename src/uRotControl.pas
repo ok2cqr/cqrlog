@@ -91,7 +91,7 @@ var
 
 implementation
 
-uses fRotControl, uMyIni;
+uses fRotControl, uMyIni, dUtils;
 
 constructor TRotControl.Create;
 begin
@@ -200,8 +200,8 @@ begin
     tmrRotPoll.Interval := fRotPoll;
     tmrRotPoll.Enabled  := True;
 
-    UseState := ( (cqrini.ReadBool('ROT1', 'RotAzMinMax', False) and (frmRotControl.rbRotor1.Checked)) or
-                  (cqrini.ReadBool('ROT2', 'RotAzMinMax', False) and (frmRotControl.rbRotor2.Checked)) );
+    UseState := ( (cqrini.ReadBool('ROT1', dmUtils.PlatformKey('RotAzMinMax'), False) and (frmRotControl.rbRotor1.Checked)) or
+                  (cqrini.ReadBool('ROT2', dmUtils.PlatformKey('RotAzMinMax'), False) and (frmRotControl.rbRotor2.Checked)) );
 
     if UseState then RotCommand.Add('+\dump_state'+LineEnding); //user defined limits
                        //RotCommand.Add('+\dump_caps'+LineEnding);  //factory values
