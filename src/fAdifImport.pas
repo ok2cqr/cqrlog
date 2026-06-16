@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Buttons, lcltype, ComCtrls, ExtCtrls, EditBtn, Menus, iniFiles, sqldb,
-  dateutils, strutils, LazUTF8, RegExpr;
+  dateutils, strutils, LazUTF8, RegExpr, LazFileUtils;
 
 {$include uADIFhash.pas}
 
@@ -85,6 +85,8 @@ type TnewQSOEntry=record   //represents a new qso entry in the log
       SAT_NAME : String[l_SAT_NAME];
       FREQ_RX  : String[l_FREQ_RX];
       OP:String[l_OP];
+      APP_CQRLOG_SIGNATURE:String; { GNUPG_AUTH - AnsiString; PGP signatures exceed shortstring limit }
+      GNUPG_SIGVERIFY:string[1]; { GNUPG_AUTH }
      end;
 type
 
@@ -155,12 +157,16 @@ type
     FFilteredOutRecNr: integer;
     FFilterByDate: boolean;
     FFilterDateRange: array [0..1] of TDateString;
+    imgGnuPGVerify: TImage; { GNUPG_AUTH }
+    FVerifyCallsign: string; { GNUPG_AUTH }
+    procedure SyncGnuPGKeyFetch; { GNUPG_AUTH }
     function ValidateFilter: boolean;
     procedure WriteWrongADIF(lines : Array of String; error : String);
     function generateAdifTagHash(aaa:String):longint;
     function fillTypeVariableWithTagData(h:longint;var data:string;var D:TnewQSOEntry;adifTag:String):boolean;
     procedure initializeTypeVariable(var d:TnewQSOEntry);
     function saveNewEntryFromADIFinDatabase(var d:TnewQSOEntry; var err : String) : Boolean;
+    procedure UpdateGnuPGVerifyIcon(AValid: Boolean; AKeyFound: Boolean); { GNUPG_AUTH }
     function TrimDataLen(adifTag:String;adifdata:String;maxlen:integer): String;
     { private declarations }
   public
@@ -177,11 +183,48 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, dDXCC, fMain, uMyIni, uVersion;
+uses dData, dUtils, dDXCC, fMain, uMyIni, uVersion, uGnuPG; { GNUPG_AUTH }
 
 resourcestring
   INVALID_DATE_RANGE_ENTERED = 'Invalid date range is entered';
 
+function GnuPGStripSignatureTag(const AAdif: string): string; { GNUPG_AUTH }
+var
+  p: Integer;
+begin
+  Result := AAdif;
+  p := Pos('<APP_CQRLOG_SIGNATURE:', UpperCase(Result));
+  if p > 0 then
+    Result := Copy(Result, 1, p - 1);
+end;
+
+procedure TfrmAdifImport.SyncGnuPGKeyFetch; { GNUPG_AUTH }
+begin
+  sb.Panels[0].Text := 'Fetching GnuPG key for ' + FVerifyCallsign + ' ...';
+  Repaint;
+end;
+
+procedure TfrmAdifImport.UpdateGnuPGVerifyIcon(AValid: Boolean; AKeyFound: Boolean); { GNUPG_AUTH }
+var
+  IconFile: string;
+begin
+  if not Assigned(imgGnuPGVerify) then
+    Exit;
+  if AValid then
+    IconFile := 'open.svg'
+  else if not AKeyFound then
+    IconFile := 'key-error.svg'
+  else
+  begin
+    imgGnuPGVerify.Visible := False;
+    Exit;
+  end;
+  if FileExistsUTF8(GnuPGIconFile(IconFile)) then
+  begin
+    imgGnuPGVerify.Picture.LoadFromFile(GnuPGIconFile(IconFile));
+    imgGnuPGVerify.Visible := True;
+  end;
+end;
 
 function TfrmAdifImport.generateAdifTagHash(aaa:String):longint;
 var z,x:longint;
@@ -327,6 +370,7 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
     h_APP_CQRLOG_PROFILE            :d.APP_CQRLOG_PROFILE:=TrimDataLen(adifTag,data,l_APP_CQRLOG_PROFILE);
     h_APP_CQRLOG_QSLR               :d.APP_CQRLOG_QSLR:=TrimDataLen(adifTag,data,l_APP_CQRLOG_QSLR);
     h_APP_CQRLOG_COUNTY             :d.APP_CQRLOG_COUNTY:=TrimDataLen(adifTag,data,l_APP_CQRLOG_COUNTY);
+    h_APP_CQRLOG_SIGNATURE          :d.APP_CQRLOG_SIGNATURE:=data; { GNUPG_AUTH - no trim, signature is multiline }
     h_CQZ                           :d.CQZ:=TrimDataLen(adifTag,data,l_CQZ);
     h_STATE                         :d.STATE:=UpperCase(TrimDataLen(adifTag,data,l_STATE));
     h_AWARD                         :d.AWARD:=TrimDataLen(adifTag,data,l_AWARD);
@@ -346,7 +390,9 @@ function TfrmAdifImport.fillTypeVariableWithTagData(h:longint;var data:string;va
 procedure TfrmAdifImport.initializeTypeVariable(var d:TnewQSOEntry);
 // fills the type with 0 values
 begin
+  d.APP_CQRLOG_SIGNATURE := ''; { GNUPG_AUTH - release before fillchar }
   fillchar(d,sizeof(d),0);
+  d.APP_CQRLOG_SIGNATURE := ''; { GNUPG_AUTH - restore managed field after fillchar }
 end;
 
 
@@ -613,13 +659,13 @@ begin
                    'remarks,county,adif,idcall,award,band,state,cont,profile,lotw_qslsdate,lotw_qsls,'+
                    'lotw_qslrdate,lotw_qslr,qsls_date,qslr_date,eqsl_qslsdate,eqsl_qsl_sent,'+
                    'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string,'+
-                   'srx_string, contestname, dok, operator) values('+
+                   'srx_string, contestname, dok, operator, gnupg_signature, gnupg_sigverify) values('+ { GNUPG_AUTH }
                    ':qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,:qth,'+
                    ':qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:itu,:waz,:loc,:my_loc,:remarks,:county,:adif,'+
                    ':idcall,:award,:band,:state,:cont,:profile,:lotw_qslsdate,:lotw_qsls,:lotw_qslrdate,'+
                    ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
                    ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq, :stx, :srx, :stx_string, :srx_string,'+
-                   ':contestname,:dok,:operator)';
+                   ':contestname,:dok,:operator,:gnupg_signature,:gnupg_sigverify)'; { GNUPG_AUTH }
     if LocalDbg then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
@@ -748,6 +794,15 @@ begin
       Q1.Params[47].AsString := d.OP
     else
       Q1.Params[47].Clear;
+    { GNUPG_AUTH }
+    if d.APP_CQRLOG_SIGNATURE <> '' then
+      Q1.Params[48].AsString := d.APP_CQRLOG_SIGNATURE
+    else
+      Q1.Params[48].Clear;
+    if d.GNUPG_SIGVERIFY <> '' then
+      Q1.Params[49].AsString := d.GNUPG_SIGVERIFY
+    else
+      Q1.Params[49].Clear;
 
     if LocalDbg then Writeln(Q1.SQL.Text);
     Q1.ExecSQL;
@@ -773,6 +828,8 @@ var
   hh,m,s,ms : Word;
   ErrText : String = '';
   tmp : String='';
+  vres : TGnuPGVerifyResult; { GNUPG_AUTH }
+  vCall, vFp : String; { GNUPG_AUTH }
 begin
   if lblFileName.Caption='' then exit;
   CutErrText :='';
@@ -819,6 +876,30 @@ begin
         h:=generateAdifTagHash(adifTag);
         if ((h=h_EOH) or (h=h_EOR)) then
         begin
+          { GNUPG_AUTH }
+          if cqrini.ReadBool('Signing', 'Enable', False) and (d.APP_CQRLOG_SIGNATURE <> '') then
+          begin
+            FVerifyCallsign := d.CALL; { GNUPG_AUTH }
+            vres := GnuPGVerifyWithKeyLookup(GnuPGStripSignatureTag(tmp),
+              d.APP_CQRLOG_SIGNATURE, d.CALL, vCall, vFp, @SyncGnuPGKeyFetch);
+            case vres of
+              vgValid:
+                begin
+                  d.GNUPG_SIGVERIFY := 'V';
+                  UpdateGnuPGVerifyIcon(True, True);
+                end;
+              vgKeyNotFound:
+                begin
+                  d.GNUPG_SIGVERIFY := 'K';
+                  UpdateGnuPGVerifyIcon(False, False);
+                end;
+            else
+              begin
+                d.GNUPG_SIGVERIFY := 'I';
+                UpdateGnuPGVerifyIcon(False, True);
+              end;
+            end;
+          end;
           if not saveNewEntryFromADIFinDatabase(d,ErrText) then
             WriteWrongADIF(tmp,ErrText);
           if (CutErrText<>'') and (h=h_EOR)then
@@ -974,6 +1055,16 @@ begin
     FormatSettings.TimeSeparator := tmp
   end;
   lblErrorLog.Visible:=false;
+  { GNUPG_AUTH }
+  imgGnuPGVerify := TImage.Create(Self);
+  imgGnuPGVerify.Parent := sb;
+  imgGnuPGVerify.Width := 16;
+  imgGnuPGVerify.Height := 16;
+  imgGnuPGVerify.Stretch := True;
+  imgGnuPGVerify.Top := 2;
+  imgGnuPGVerify.Left := sb.Width - 24;
+  imgGnuPGVerify.Anchors := [akTop, akRight];
+  imgGnuPGVerify.Visible := False;
   //set debug rules for this form
   // bit 1, %1,  ---> -2 for routines in this form
   LocalDbg := dmData.DebugLevel >= 1 ;

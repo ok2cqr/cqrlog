@@ -919,6 +919,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit124>
+      <Unit125>
+        <Filename Value="uGnuPG.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit125>
+      <Unit126>
+        <Filename Value="uGnuPGKeyCache.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit126>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

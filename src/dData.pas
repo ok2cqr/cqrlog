@@ -24,7 +24,7 @@ uses
 
 const
   cDB_LIMIT = 500;
-  cDB_MAIN_VER = 20;
+  cDB_MAIN_VER = 21; { GNUPG_AUTH: 20 = upstream LoTW index; 21 = gnupg columns }
   cDB_COMN_VER = 6;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
@@ -352,6 +352,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
+  uGnuPGKeyCache, { GNUPG_AUTH }
      fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership;
 
 procedure TdmData.CheckForDatabases;
@@ -760,6 +761,8 @@ begin
     Q.Close();
     trQ.Rollback
   end;
+
+  GnuPGKeyCacheInit(MainCon); { GNUPG_AUTH }
 
   dmUtils.TimeOffset     := cqrini.ReadFloat('Program','offset',0);
   dmUtils.GrayLineOffset := cqrini.ReadFloat('Program','GraylineOffset',0);
@@ -3240,6 +3243,26 @@ begin
                 trQ1.Commit;
               end;
       end;
+
+      if (old_version < 21) then { GNUPG_AUTH }
+            begin
+              if (not FieldExists('cqrlog_main', 'gnupg_signature')) then
+              begin
+                trQ1.StartTransaction;
+                Q1.SQL.Text := 'alter table cqrlog_main add gnupg_signature mediumtext null';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+                trQ1.Commit;
+              end;
+              if (not FieldExists('cqrlog_main', 'gnupg_sigverify')) then
+              begin
+                trQ1.StartTransaction;
+                Q1.SQL.Text := 'alter table cqrlog_main add gnupg_sigverify varchar(1) null';
+                if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+                Q1.ExecSQL;
+                trQ1.Commit;
+              end;
+            end;
 
       if (old_version < 19) then
             begin

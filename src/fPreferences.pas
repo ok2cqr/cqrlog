@@ -947,6 +947,13 @@ type
     tabZipCode: TTabSheet;
     tabXplanet: TTabSheet;
     tabStation: TTabSheet;
+    grpSigning: TGroupBox; { GNUPG_AUTH }
+    chkGnuPGEnableSigning: TCheckBox; { GNUPG_AUTH }
+    lblGnuPGFingerprint: TLabel; { GNUPG_AUTH }
+    edtGnuPGKeyFingerprint: TEdit; { GNUPG_AUTH }
+    btnGnuPGDetect: TButton; { GNUPG_AUTH }
+    lblGnuPGKeyserver: TLabel; { GNUPG_AUTH }
+    edtGnuPGKeyserver: TEdit; { GNUPG_AUTH }
     tabFont: TTabSheet;
     tabIOTA: TTabSheet;
     tabMemebership: TTabSheet;
@@ -1061,6 +1068,7 @@ type
     procedure btnSetSecondClick(Sender: TObject);
     procedure btnSetThirdClick(Sender: TObject);
     procedure btnTestXplanetClick(Sender: TObject);
+    procedure btnGnuPGDetectClick(Sender: TObject); { GNUPG_AUTH }
     procedure chkUseProfilesChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -1115,7 +1123,7 @@ implementation
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,fRotControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
-  fRadioMemories, dMembership, dLogUpload;
+  fRadioMemories, dMembership, dLogUpload, uGnuPG; { GNUPG_AUTH }
 
 
 
@@ -1149,6 +1157,18 @@ begin
   cqrini.WriteString('Station', 'ZipCity', edtZipCity.Text);
   cqrini.WriteString('Station', 'Email', edtEmail.Text);
   cqrini.WriteString('Station', 'Club', edtClub.Text);
+
+  { GNUPG_AUTH }
+  cqrini.WriteBool('Signing', 'Enable', chkGnuPGEnableSigning.Checked);
+  cqrini.WriteString('Signing', 'KeyFingerprint', Trim(edtGnuPGKeyFingerprint.Text));
+  cqrini.WriteString('Signing', 'Keyserver', Trim(edtGnuPGKeyserver.Text));
+  if chkGnuPGEnableSigning.Checked and (Trim(edtGnuPGKeyFingerprint.Text) <> '') then
+  begin
+    if not GnuPGKeyExistsInKeyring(Trim(edtGnuPGKeyFingerprint.Text)) then
+      Application.MessageBox(
+        PChar('The configured signing key fingerprint was not found in the local GnuPG keyring.'),
+        PChar('GnuPG signing'), mb_OK + mb_IconWarning);
+  end;
 
   cqrini.WriteString('NewQSO', 'RST_S', edtRST_S.Text);
   cqrini.WriteString('NewQSO', 'RST_R', edtRST_R.Text);
@@ -1958,6 +1978,17 @@ begin
     finally
       Free
     end;
+end;
+
+procedure TfrmPreferences.btnGnuPGDetectClick(Sender: TObject); { GNUPG_AUTH }
+var
+  fp: string;
+begin
+  if GnuPGGetLocalKeyFingerprint(fp) then
+    edtGnuPGKeyFingerprint.Text := fp
+  else
+    Application.MessageBox('No secret GnuPG key found in the local keyring.',
+      'GnuPG signing', mb_OK + mb_IconWarning);
 end;
 
 procedure TfrmPreferences.btnTestXplanetClick(Sender: TObject);
@@ -2816,6 +2847,11 @@ begin
   edtZipCity.Text := cqrini.ReadString('Station', 'ZipCity', '');
   edtEmail.Text := cqrini.ReadString('Station', 'Email', '');
   edtClub.Text := cqrini.ReadString('Station', 'Club', '');
+
+  { GNUPG_AUTH }
+  chkGnuPGEnableSigning.Checked := cqrini.ReadBool('Signing', 'Enable', False);
+  edtGnuPGKeyFingerprint.Text := cqrini.ReadString('Signing', 'KeyFingerprint', '');
+  edtGnuPGKeyserver.Text := cqrini.ReadString('Signing', 'Keyserver', 'hkps://keys.openpgp.org');
 
   edtRST_S.Text := cqrini.ReadString('NewQSO', 'RST_S', '599');
   edtRST_R.Text := cqrini.ReadString('NewQSO', 'RST_R', '599');

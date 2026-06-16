@@ -1266,6 +1266,12 @@ object frmMain: TfrmMain
       object MenuItem55: TMenuItem
         Caption = '-'
       end
+      object mnuVerifySignature: TMenuItem
+        Action = acVerifySignature
+      end
+      object MenuItemGnuPGSep: TMenuItem
+        Caption = '-'
+      end
       object MenuItem56: TMenuItem
         Caption = 'LoTW'
         object MenuItem57: TMenuItem
@@ -1767,6 +1773,10 @@ object frmMain: TfrmMain
       Caption = 'ADIF'
       OnExecute = acImportADIFExecute
       ShortCut = 16457
+    end
+    object acVerifySignature: TAction
+      Caption = 'Verify signature'
+      OnExecute = acVerifySignatureExecute
     end
     object acGrayline: TAction
       Caption = 'Grayline'
