@@ -192,7 +192,10 @@ modules:
       # The dir source carries the host working tree, including stale macOS
       # build artifacts (src/cqrlog, *.o, *.ppu) - wipe them before compiling.
       - make clean
-      - lazbuild --ws=qt6 -q --compiler=$PPC --pcp=. --lazarusdir="$LAZARUSDIR" src/cqrlog.lpi
+      # lazbuild treats --compiler as a literal file path (it does NOT search
+      # PATH), so the bare name "ppcx64" fails its existence check. Point it at
+      # the absolute symlink the fpc module installs in /app/lib/sdk/.../bin.
+      - lazbuild --ws=qt6 -q --compiler=/app/lib/sdk/freepascal/bin/$PPC --pcp=. --lazarusdir="$LAZARUSDIR" src/cqrlog.lpi
       - gzip -c tools/cqrlog.1 > tools/cqrlog.1.gz
       - make DESTDIR=${FLATPAK_DEST} WS=qt6 install
       # Rename desktop entry, metainfo and icons to the Flatpak app-id.
