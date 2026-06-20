@@ -82,7 +82,7 @@ modules:
     build-commands:
       - mkdir -p ${PREFIX} && cp -r fpcsrc ${PREFIX}/
       - mkdir fpcpre
-      - tar -xf binary.*.tar && tar -C fpcpre -xf base.*.tar.gz
+      - tar --no-same-owner -xf binary.*.tar && tar --no-same-owner -C fpcpre -xf base.*.tar.gz
       - rm *.tar.gz *.tar
       - make -C fpcsrc compiler_cycle PP=`pwd`/fpcpre/lib/fpc/${fpcver}/${PPNAME}
       - make -C fpcsrc rtl_clean rtl_smart PP=`pwd`/fpcsrc/compiler/${PPNAME}
