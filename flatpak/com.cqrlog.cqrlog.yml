@@ -138,6 +138,9 @@ modules:
   - name: mariadb-connector-c
     buildsystem: cmake-ninja
     config-opts:
+      # mariadb-connector-c 3.4.3 still declares cmake_minimum_required < 3.5,
+      # which CMake 4.x (in the KDE 6.x SDK) refuses; opt back into the old policy.
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DINSTALL_LIBDIR=lib
       - -DINSTALL_INCLUDEDIR=include/mariadb
