@@ -3430,7 +3430,13 @@ begin
   {$IFDEF DARWIN}
   Result := Key + '_mac';
   {$ELSE}
-  Result := Key;
+  //Flatpak ships helper tools at different paths (/app/bin) than a native Linux
+  //install yet shares the same ~/.config/cqrlog (HOME is the real home), so give
+  //it its own settings keys - otherwise the two clobber each other's paths.
+  if InFlatpak then
+    Result := Key + '_flatpak'
+  else
+    Result := Key;
   {$ENDIF}
 end;
 
@@ -3450,6 +3456,11 @@ begin
   Result := '/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:/opt/local/bin:/usr/sbin:/usr/local/sbin';
   {$ELSE}
   Result := '/bin:/usr/bin:/usr/local/bin:~/.local/bin:/sbin:/usr/sbin:/usr/local/sbin';
+  //Fallback for Flatpak: DefaultToolPath already finds tools next to the cqrlog
+  //binary (/app/bin), but if ParamStr(0) is not absolute this keeps the bundled
+  //hamlib (/app/bin) reachable for any FindExecutable() lookup inside the sandbox.
+  if InFlatpak then
+    Result := '/app/bin:' + Result;
   {$ENDIF}
 end;
 
@@ -3489,18 +3500,21 @@ begin
 end;
 
 function TdmUtils.DefaultToolPath(const ToolName, LinuxDefault: string): string;
-{$IFDEF DARWIN}
 var
   BundlePath: String;
-{$ENDIF}
 begin
-  {$IFDEF DARWIN}
+  //Prefer a helper binary shipped next to the running cqrlog executable. This
+  //covers every self-contained layout the same way: macOS .app/Contents/MacOS,
+  //Linux AppImage usr/bin, and Flatpak /app/bin - rigctld/rotctld/etc. all live
+  //alongside cqrlog there.
   BundlePath := ExtractFilePath(ParamStr(0)) + ToolName;
   if FileExists(BundlePath) then
   begin
     Result := BundlePath;
     exit;
   end;
+
+  {$IFDEF DARWIN}
   if ToolName = 'tqsl' then
   begin
     if FileExists('/Applications/TrustedQSL/tqsl.app/Contents/MacOS/tqsl') then
@@ -3510,6 +3524,7 @@ begin
     end;
   end;
   {$ENDIF}
+
   Result := FindExecutable(ToolName);
   if Result = '' then
     Result := LinuxDefault;
