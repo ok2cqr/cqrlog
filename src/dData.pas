@@ -28,14 +28,17 @@ const
   cDB_COMN_VER = 6;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
-  //Connection params controlling TLS. mariadb-connector-c >= 3.4 enforces TLS
-  //by default, which breaks the common no-TLS server with "SSL is required".
-  //FPC's mysqlconn maps a Param named like a mysql_option onto mysql_options().
-  //We connect plaintext first (cConnSSLParam); if the server mandates TLS
-  //(require_secure_transport=ON) it rejects that with "secure transport
-  //required" and we retry once with TLS enforced (cConnTLSParam).
-  cConnSSLParam = 'MYSQL_OPT_SSL_ENFORCE=0';  //plaintext, no TLS
-  cConnTLSParam = 'MYSQL_OPT_SSL_ENFORCE=1';  //require TLS (cert not verified)
+  //Connection params controlling TLS. mariadb-connector-c >= 3.4 refuses to
+  //connect to a server without TLS ("SSL is required") unless cert verification
+  //is turned off; MYSQL_OPT_SSL_VERIFY_SERVER_CERT=0 makes it use TLS when
+  //available but fall back to plaintext otherwise (and skip cert checks for
+  //self-signed certs). FPC's mysqlconn maps a Param named like a mysql_option
+  //onto mysql_options(). We connect with that first; only if the server
+  //*mandates* TLS (require_secure_transport=ON) and somehow still refuses do we
+  //retry with TLS additionally enforced. NB: plain MYSQL_OPT_SSL_ENFORCE=0 is
+  //NOT enough on its own - verified empirically against the 3.4.3 connector.
+  cDBSSLNoVerify = 'MYSQL_OPT_SSL_VERIFY_SERVER_CERT=0';  //TLS optional, no cert check
+  cDBSSLForceTLS = 'MYSQL_OPT_SSL_ENFORCE=1';             //require TLS (retry only)
   //server-side errno when require_secure_transport=ON rejects a plaintext conn.
   //FPC hides the server message ("Server connect failed."), so we match errno.
   cErrSecureTransportRequired = 3159;         //ER_SECURE_TRANSPORT_REQUIRED
@@ -551,7 +554,7 @@ var
     if BandMapCon.Connected   then BandMapCon.Connected   := False;
   end;
 
-  //sslParam is one of cConnSSLParam (plaintext) / cConnTLSParam (require TLS)
+  //sslParam holds one or more FPC mysql_option Params (newline-separated)
   procedure ApplyParams(const sslParam : String);
 
     procedure Setup(con : TSQLConnection);
@@ -585,9 +588,10 @@ begin
   Result := True;
   CloseAll;
 
-  //Prefer plaintext (the common no-TLS case). If the server mandates TLS it
-  //rejects this with "secure transport required" -> retry once with TLS.
-  ApplyParams(cConnSSLParam);
+  //TLS optional + no cert verify (connects to no-TLS servers, which is the
+  //common case). If the server still mandates TLS it rejects with "secure
+  //transport required" -> retry with TLS additionally enforced.
+  ApplyParams(cDBSSLNoVerify);
   try
     OpenAll;
   except
@@ -603,7 +607,7 @@ begin
       if fDebugLevel >= 1 then
         Writeln('Server requires secure transport, retrying connection with TLS enabled');
       CloseAll;
-      ApplyParams(cConnTLSParam);
+      ApplyParams(cDBSSLNoVerify + LineEnding + cDBSSLForceTLS);
       try
         OpenAll
       except
@@ -3550,7 +3554,7 @@ begin
     MainCon.Connected := False;
 
   MainCon.HostName     := '127.0.0.1';
-  MainCon.Params.Text  := 'Port=64000'+LineEnding+cConnSSLParam;
+  MainCon.Params.Text  := 'Port=64000'+LineEnding+cDBSSLNoVerify;
   MainCon.DatabaseName := 'information_schema';
   MainCon.UserName     := 'cqrlog';
   MainCon.Password     := 'cqrlog';

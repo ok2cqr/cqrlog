@@ -76,9 +76,12 @@ end;
 
 function TInternalConnection.getNewMySQLConnection : TConnectionName;
 const
-  cSSLOff = 'MYSQL_OPT_SSL_ENFORCE=0';     //plaintext, no TLS
-  cSSLOn  = 'MYSQL_OPT_SSL_ENFORCE=1';     //require TLS (cert not verified)
-  cErrSecureTransportRequired = 3159;      //ER_SECURE_TRANSPORT_REQUIRED
+  //MYSQL_OPT_SSL_VERIFY_SERVER_CERT=0 lets mariadb-connector-c >= 3.4 connect
+  //to a no-TLS server (plain MYSQL_OPT_SSL_ENFORCE=0 is NOT enough). Force TLS
+  //only on retry if the server mandates it. (Mirrors dData.OpenConnections.)
+  cSSLNoVerify = 'MYSQL_OPT_SSL_VERIFY_SERVER_CERT=0';  //TLS optional, no cert check
+  cSSLForceTLS = 'MYSQL_OPT_SSL_ENFORCE=1';             //require TLS (retry only)
+  cErrSecureTransportRequired = 3159;                   //ER_SECURE_TRANSPORT_REQUIRED
 var
   Conn : TConnectionName;
 
@@ -100,7 +103,7 @@ begin
   // common no-TLS server with "SSL is required". If the server instead
   // mandates TLS (require_secure_transport=ON) it rejects plaintext with
   // errno 3159, so retry once with TLS enforced. (Mirrors dData.OpenConnections.)
-  Configure(cSSLOff);
+  Configure(cSSLNoVerify);
   try
     Conn.Connected := true;
   except
@@ -109,7 +112,7 @@ begin
       if E.ErrorCode <> cErrSecureTransportRequired then
         raise;
       Conn.Connected := false;
-      Configure(cSSLOn);
+      Configure(cSSLNoVerify + LineEnding + cSSLForceTLS);
       Conn.Connected := true;
     end;
   end;
