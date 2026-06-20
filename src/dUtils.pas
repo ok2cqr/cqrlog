@@ -342,6 +342,8 @@ type
     procedure OpenWithDesktop(const Target : String);
     function  DefaultToolPath(const ToolName, LinuxDefault : String) : String;
     function  DefaultRotCtldPath : String;
+    function  InFlatpak : Boolean;
+    procedure SetupHostProcess(AProcess : TProcess; ParamList : TStrings);
 
 end;
 
@@ -2494,7 +2496,9 @@ begin
   Result := cqrini.ReadString('xplanet', PlatformKey('path'), DefaultToolPath('xplanet', '/usr/bin/xplanet'));
   myloc := cqrini.ReadString('Station', 'LOC', '');
   customloc := cqrini.ReadString('xplanet', 'loc', '');
-  if not FileExists(Result) then
+  //Inside Flatpak xplanet lives on the host, so the sandbox cannot stat it;
+  //skip the existence check and let flatpak-spawn --host resolve it.
+  if (not InFlatpak) and (not FileExists(Result)) then
   begin
     Result := '';
     exit;
@@ -2529,24 +2533,16 @@ end;
 procedure TdmUtils.RunXplanet;
 var
   AProcess: TProcess;
-  index     :integer;
   paramList :TStringList;
 begin
   if dmData.DebugLevel>=1 then Writeln('RunXplanet - start');
   if (GetXplanetCommand = '') then exit;
   AProcess := TProcess.Create(nil);
   try
-    index:=0;
     paramList := TStringList.Create;
     paramList.Delimiter := ' ';
     paramList.DelimitedText := GetXplanetCommand;
-    AProcess.Parameters.Clear;
-    while index < paramList.Count do
-    begin
-      if (index = 0) then AProcess.Executable := paramList[index]
-        else AProcess.Parameters.Add(paramList[index]);
-      inc(index);
-    end;
+    SetupHostProcess(AProcess, paramList);
     paramList.Free;
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute;
@@ -3434,7 +3430,13 @@ begin
   {$IFDEF DARWIN}
   Result := Key + '_mac';
   {$ELSE}
-  Result := Key;
+  //Flatpak ships helper tools at different paths (/app/bin) than a native Linux
+  //install yet shares the same ~/.config/cqrlog (HOME is the real home), so give
+  //it its own settings keys - otherwise the two clobber each other's paths.
+  if InFlatpak then
+    Result := Key + '_flatpak'
+  else
+    Result := Key;
   {$ENDIF}
 end;
 
@@ -3454,6 +3456,11 @@ begin
   Result := '/bin:/usr/bin:/usr/local/bin:/opt/homebrew/bin:/opt/local/bin:/usr/sbin:/usr/local/sbin';
   {$ELSE}
   Result := '/bin:/usr/bin:/usr/local/bin:~/.local/bin:/sbin:/usr/sbin:/usr/local/sbin';
+  //Fallback for Flatpak: DefaultToolPath already finds tools next to the cqrlog
+  //binary (/app/bin), but if ParamStr(0) is not absolute this keeps the bundled
+  //hamlib (/app/bin) reachable for any FindExecutable() lookup inside the sandbox.
+  if InFlatpak then
+    Result := '/app/bin:' + Result;
   {$ENDIF}
 end;
 
@@ -3493,18 +3500,21 @@ begin
 end;
 
 function TdmUtils.DefaultToolPath(const ToolName, LinuxDefault: string): string;
-{$IFDEF DARWIN}
 var
   BundlePath: String;
-{$ENDIF}
 begin
-  {$IFDEF DARWIN}
+  //Prefer a helper binary shipped next to the running cqrlog executable. This
+  //covers every self-contained layout the same way: macOS .app/Contents/MacOS,
+  //Linux AppImage usr/bin, and Flatpak /app/bin - rigctld/rotctld/etc. all live
+  //alongside cqrlog there.
   BundlePath := ExtractFilePath(ParamStr(0)) + ToolName;
   if FileExists(BundlePath) then
   begin
     Result := BundlePath;
     exit;
   end;
+
+  {$IFDEF DARWIN}
   if ToolName = 'tqsl' then
   begin
     if FileExists('/Applications/TrustedQSL/tqsl.app/Contents/MacOS/tqsl') then
@@ -3514,6 +3524,7 @@ begin
     end;
   end;
   {$ENDIF}
+
   Result := FindExecutable(ToolName);
   if Result = '' then
     Result := LinuxDefault;
@@ -3528,6 +3539,37 @@ begin
   //swap the binary name, so rotctld follows rigctld (app bundle / system / homebrew).
   rigCtldPath := cqrini.ReadString('TRX', PlatformKey('RigCtldPath'), DefaultToolPath('rigctld', '/usr/bin/rigctld'));
   Result := ExtractFilePath(rigCtldPath) + 'rotctld';
+end;
+
+function TdmUtils.InFlatpak : Boolean;
+begin
+  //Flatpak always mounts this file inside the sandbox. Used to decide whether
+  //host-only helper tools (tqsl, xplanet) must be launched via flatpak-spawn.
+  Result := FileExists('/.flatpak-info');
+end;
+
+procedure TdmUtils.SetupHostProcess(AProcess : TProcess; ParamList : TStrings);
+var
+  index : Integer;
+begin
+  //Configure AProcess from a parsed command line (ParamList[0] = executable,
+  //rest = arguments). Inside a Flatpak sandbox the bundled binaries are not the
+  //ones the user has installed (tqsl/xplanet), so run them on the host through
+  //flatpak-spawn --host. Outside Flatpak this behaves exactly as before.
+  AProcess.Parameters.Clear;
+  if InFlatpak then
+  begin
+    AProcess.Executable := 'flatpak-spawn';
+    AProcess.Parameters.Add('--host');
+    for index := 0 to ParamList.Count-1 do
+      AProcess.Parameters.Add(ParamList[index]);
+  end
+  else
+  begin
+    AProcess.Executable := ParamList[0];
+    for index := 1 to ParamList.Count-1 do
+      AProcess.Parameters.Add(ParamList[index]);
+  end;
 end;
 
 

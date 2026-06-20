@@ -1,0 +1,29 @@
+name: Flatpak Bundle (Qt6, testing)
+
+# Self-hosted single-file flatpak bundle, built on a test branch only.
+# Not wired into releases yet - see flatpak/README.md.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "flatpak" ]
+  pull_request:
+    branches: [ "flatpak" ]
+
+jobs:
+  flatpak:
+    name: Build Flatpak (x86_64)
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:kde-6.7
+      options: --privileged
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build flatpak bundle
+      uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      with:
+        bundle: cqrlog.flatpak
+        manifest-path: flatpak/com.cqrlog.cqrlog.yml
+        cache-key: flatpak-builder-${{ hashFiles('flatpak/com.cqrlog.cqrlog.yml') }}
+        arch: x86_64

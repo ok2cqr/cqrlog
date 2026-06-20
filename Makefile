@@ -22,7 +22,7 @@ PWD = $(shell pwd)
 .PHONY : help dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
          docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
-         install_macos dmg
+         install_macos dmg flatpak docker-flatpak
 
 cqrlog: src/cqrlog.lpi
 	$(LAZBUILD) --ws=$(WS) src/cqrlog.lpi
@@ -350,6 +350,31 @@ docker-deb-src: docker-build ## Build a deb-src package using the binaries from 
 	--security-opt apparmor:unconfined \
 	pavelmc/cqrlog-build \
 	make deb_src
+
+# Flatpak (Qt6, self-hosted single-file bundle) -------------------------------
+FLATPAK_ID       = com.cqrlog.cqrlog
+FLATPAK_MANIFEST = flatpak/$(FLATPAK_ID).yml
+FLATPAK_RUNTIME  = 6.10
+# Keep builder state OUTSIDE the source tree: the cqrlog module pulls in the
+# repo via a `dir` source, so a state dir under the repo would be copied into
+# itself.
+FLATPAK_WORK     ?= $(tmpdir)/cqrlog-flatpak
+FLATPAK_BUNDLE   ?= cqrlog.flatpak
+
+flatpak: ## Build a single-file flatpak bundle (needs flatpak + flatpak-builder + org.kde.Sdk//6.10)
+	flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+	flatpak --user install -y flathub org.kde.Platform//$(FLATPAK_RUNTIME) org.kde.Sdk//$(FLATPAK_RUNTIME)
+	flatpak-builder --user --force-clean --install-deps-from=flathub \
+		--state-dir=$(FLATPAK_WORK)/state --repo=$(FLATPAK_WORK)/repo \
+		$(FLATPAK_WORK)/build $(FLATPAK_MANIFEST)
+	flatpak build-bundle $(FLATPAK_WORK)/repo $(FLATPAK_BUNDLE) $(FLATPAK_ID)
+	@echo "Flatpak bundle created: $(FLATPAK_BUNDLE)"
+
+docker-flatpak: ## Build the flatpak bundle inside a Fedora flatpak-builder container
+	docker build -t cqrlog-flatpak-build flatpak/
+	docker run --rm --privileged \
+		-v $(PWD):/build -w /build \
+		cqrlog-flatpak-build make flatpak
 
 help: ## List the make options available
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

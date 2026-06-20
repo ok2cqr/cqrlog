@@ -300,14 +300,15 @@ procedure TfrmLoTWExport.btnExportSignClick(Sender: TObject);
 var
   tmp : String;
   paramList :TStringList;
-  index,
   res : Integer;
 begin
   MarkAfter := False;
   mStat.Clear;
   FileName := dmData.HomeDir + 'lotw'+PathDelim+FormatDateTime('yyyy-mm-dd_hh-mm-ss',now)+'.adi';
   tmp := copy(edtTqsl.Text,1,Pos(' ',edtTqsl.Text)-1);
-  if not FileExists(tmp) then
+  //Inside Flatpak tqsl is the user's host binary launched via flatpak-spawn,
+  //so the sandbox cannot stat it; skip the local existence check there.
+  if (not dmUtils.InFlatpak) and (not FileExists(tmp)) then
   begin
     mStat.Lines.Add('tqsl file not found!');
     mStat.Lines.Add(tmp);
@@ -335,17 +336,10 @@ begin
   mStat.Lines.Add('Signing adif file ...');
   Application.ProcessMessages;
 
-  index:=0;
   paramList := TStringList.Create;
   paramList.Delimiter := ' ';
   paramList.DelimitedText := StringReplace(edtTqsl.Text,'%f',FileName,[]);
-  AProcess.Parameters.Clear;
-  while index < paramList.Count do
-  begin
-    if (index = 0) then AProcess.Executable := paramList[index]
-      else AProcess.Parameters.Add(paramList[index]);
-    inc(index);
-  end;
+  dmUtils.SetupHostProcess(AProcess, paramList);
   paramList.Free;
   AProcess.Options := [poUsePipes];
   if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);

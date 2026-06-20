@@ -1,0 +1,222 @@
+# Flatpak manifest for CQRLOG (Qt6, self-hosted single-file bundle).
+#
+# Design notes (see flatpak/README.md):
+#  * Built on the KDE runtime so the Lazarus qt6 widgetset has Qt6 available.
+#  * The toolchain (FPC 3.2.2 + Lazarus 4.2 + libQt6Pas) is built from source,
+#    mirroring the proven recipe used by io.github.cudatext.CudaText-Qt on Flathub.
+#  * NO MariaDB *server* is bundled. CQRLOG runs in its "remote MySQL" mode and
+#    connects to a MariaDB server the user runs on the host (reachable on
+#    127.0.0.1 thanks to --share=network). Only the client library is shipped.
+#  * hamlib is bundled, so rigctld/rotctld are found on PATH (/app/bin) in-sandbox.
+#  * Host-only helpers (tqsl, xplanet) are launched via flatpak-spawn --host;
+#    the app detects the sandbox (/.flatpak-info) and prefixes those commands.
+app-id: com.cqrlog.cqrlog
+runtime: org.kde.Platform
+runtime-version: '6.10'
+sdk: org.kde.Sdk
+command: cqrlog
+
+build-options:
+  append-path: /app/lib/sdk/freepascal/bin
+  env:
+    PPC_CONFIG_PATH: /app/lib/sdk/freepascal/etc
+    FPCDIR: /app/lib/sdk/freepascal/fpcsrc
+    FPC_DIR: /app/lib/sdk/freepascal/fpcsrc
+    LAZARUSDIR: /app/lib/sdk/freepascal/share/lazarus
+
+cleanup-commands:
+  # The Pascal/Lazarus toolchain is only needed at build time.
+  - rm -rf /app/lib/sdk/freepascal
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /share/aclocal
+  - /share/man
+  - '*.a'
+
+finish-args:
+  # FPC's mysql57dyn dlopen()s the soname "libmysqlclient.so.20", but ldconfig
+  # indexes our compat symlinks under libmariadb's real SONAME, so the cache has
+  # no "libmysqlclient.so.20" entry. dlopen-by-soname only scans LD_LIBRARY_PATH
+  # and the cache - never /app/lib by filename - and flatpak leaves it empty.
+  # Put /app/lib on the path so the symlink resolves. (See flatpak/README.md.)
+  - --env=LD_LIBRARY_PATH=/app/lib
+  - --share=network                       # host MariaDB on loopback, RBN, online log uploads, WSJT-X/fldigi
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio                    # voice keyer audio
+  - --share=ipc
+  - --device=all                           # serial rigs: /dev/ttyUSB*, /dev/ttyACM*, /dev/serial/by-id/*
+  - --talk-name=org.freedesktop.Flatpak    # required for flatpak-spawn --host (tqsl, xplanet)
+  - --filesystem=home                      # ADIF import/export
+
+modules:
+
+  # ---------------------------------------------------------------------------
+  # Free Pascal compiler (build-time only). Recipe from CudaText-Qt on Flathub.
+  # ---------------------------------------------------------------------------
+  - name: fpc
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        url: https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar
+        sha256: 5adac308a5534b6a76446d8311fc340747cbb7edeaacfe6b651493ff3fe31e83
+      - type: archive
+        only-arches:
+          - aarch64
+        url: https://downloads.sourceforge.net/project/freepascal/Linux/3.2.2/fpc-3.2.2.aarch64-linux.tar
+        sha256: b39470f9b6b5b82f50fc8680a5da37d2834f2129c65c24c5628a80894d565451
+      - type: archive
+        url: https://downloads.sourceforge.net/project/freepascal/Source/3.2.2/fpcbuild-3.2.2.tar.gz
+        sha256: 85ef993043bb83f999e2212f1bca766eb71f6f973d362e2290475dbaaf50161f
+      - type: patch
+        options: ['-d', 'fpcsrc']
+        path: fpc-3.2.0--glibc-2.34.patch
+    buildsystem: simple
+    build-options:
+      env:
+        - fpcver=3.2.2
+        - PREFIX=/app/lib/sdk/freepascal
+      arch:
+        aarch64:
+          env: [PPNAME=ppca64]
+        x86_64:
+          env: [PPNAME=ppcx64]
+    build-commands:
+      - mkdir -p ${PREFIX} && cp -r fpcsrc ${PREFIX}/
+      - mkdir fpcpre
+      - tar --no-same-owner -xf binary.*.tar && tar --no-same-owner -C fpcpre -xf base.*.tar.gz
+      - rm *.tar.gz *.tar
+      - make -C fpcsrc compiler_cycle PP=`pwd`/fpcpre/lib/fpc/${fpcver}/${PPNAME}
+      - make -C fpcsrc rtl_clean rtl_smart PP=`pwd`/fpcsrc/compiler/${PPNAME}
+      - make -C fpcsrc packages_smart utils_all PP=`pwd`/fpcsrc/compiler/${PPNAME}
+      - make -C fpcsrc compiler_distinstall rtl_distinstall packages_distinstall utils_distinstall
+        INSTALL_PREFIX=${PREFIX}
+        PP=`pwd`/fpcsrc/compiler/${PPNAME}
+        FPCMAKE=`pwd`/fpcsrc/utils/fpcm/bin/${FLATPAK_ARCH}-linux/fpcmake
+      - ${PREFIX}/lib/fpc/${fpcver}/samplecfg ${PREFIX}/lib/fpc/${fpcver} ${PREFIX}/etc
+      - echo '-Fl/app/lib' >> ${PREFIX}/etc/fpc.cfg
+      - ln -s ../lib/fpc/${fpcver}/${PPNAME} ${PREFIX}/bin/${PPNAME}
+      - ln -s ppca64 ${PREFIX}/bin/ppcaarch64
+
+  # ---------------------------------------------------------------------------
+  # Lazarus (provides lazbuild + LCL incl. the qt6 widgetset). Build-time only.
+  # ---------------------------------------------------------------------------
+  - name: lazarus
+    sources:
+      - type: archive
+        url: https://gitlab.com/freepascal.org/lazarus/lazarus/-/archive/lazarus_4_2/lazarus-lazarus_4_2.tar.gz
+        sha256: 3e3b037ffb81a479db54abb94242d7f42fe9dd6d1a431a914336a99e211162a8
+    buildsystem: simple
+    build-options:
+      append-path: /app/lib/sdk/freepascal/bin
+      env:
+        - INSTALL_PREFIX=/app/lib/sdk/freepascal
+    build-commands:
+      - find . -type f -iname makefile.fpc -exec fpcmake -Tall '{}' ';'
+      - make lazbuild OPT='-gl'
+      - touch lazarus startlazarus
+      - make install
+      - sed -i -e "s#__LAZARUSDIR__#$LAZARUSDIR/#" -e "s#__FPCSRCDIR__#$FPCDIR/#" -e "s#/app/bin/fpc#$INSTALL_PREFIX/bin/fpc#"
+        tools/install/linux/environmentoptions.xml
+      - install -Dm644 -t $LAZARUSDIR tools/install/linux/environmentoptions.xml
+
+  # ---------------------------------------------------------------------------
+  # libQt6Pas - the Qt6<->Pascal binding the qt6 widgetset links against.
+  # ---------------------------------------------------------------------------
+  - name: qt6pas
+    sources:
+      - type: archive
+        url: https://github.com/davidbannon/libqt6pas/archive/refs/tags/v6.2.10.tar.gz
+        sha256: dbcc13559f991958fb69de31d67c85575bbe278fdff0813b51787da50720d591
+    buildsystem: qmake
+    subdir: cbindings
+    build-commands:
+      - sed -e"s/target.path = .\+/target.path = '\/app\/lib'/" -i ./Qt6Pas.pro
+
+  # ---------------------------------------------------------------------------
+  # MariaDB client library only (NO server). CQRLOG's mysqlXXdyn units dlopen
+  # libmysqlclient.so at runtime, so we provide compat symlinks to libmariadb.
+  # ---------------------------------------------------------------------------
+  - name: mariadb-connector-c
+    buildsystem: cmake-ninja
+    config-opts:
+      # mariadb-connector-c 3.4.3 still declares cmake_minimum_required < 3.5,
+      # which CMake 4.x (in the KDE 6.x SDK) refuses; opt back into the old policy.
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      # The SDK's GCC defaults to C23, where `bool` is a keyword; this old code
+      # does `typedef char bool;`. Build against gnu17 so it stays a plain ident.
+      - -DCMAKE_C_FLAGS=-std=gnu17
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DINSTALL_LIBDIR=lib
+      - -DINSTALL_INCLUDEDIR=include/mariadb
+      - -DINSTALL_PLUGINDIR=lib/mariadb/plugin
+      - -DWITH_UNIT_TESTS=OFF
+      - -DWITH_SSL=OPENSSL
+    sources:
+      - type: archive
+        url: https://github.com/mariadb-corporation/mariadb-connector-c/archive/refs/tags/v3.4.3.tar.gz
+        sha256: 7c2180a62a3ca7ae58a1cbb1d912ab1c19bb5c112db2f6742b809d134bdac169
+    post-install:
+      # FPC's mysqlXXdyn loads the historic MySQL soname; alias it to libmariadb.
+      - ln -sf libmariadb.so   ${FLATPAK_DEST}/lib/libmysqlclient.so
+      - ln -sf libmariadb.so.3 ${FLATPAK_DEST}/lib/libmysqlclient.so.18
+      - ln -sf libmariadb.so.3 ${FLATPAK_DEST}/lib/libmysqlclient.so.19
+      - ln -sf libmariadb.so.3 ${FLATPAK_DEST}/lib/libmysqlclient.so.20
+      - ln -sf libmariadb.so.3 ${FLATPAK_DEST}/lib/libmysqlclient.so.21
+
+  # ---------------------------------------------------------------------------
+  # hamlib - bundled rigctld/rotctld (found on /app/bin via PATH in-sandbox).
+  # ---------------------------------------------------------------------------
+  - name: hamlib
+    buildsystem: autotools
+    config-opts:
+      - --disable-static
+      - --without-cxx-binding
+    sources:
+      - type: archive
+        url: https://github.com/Hamlib/Hamlib/releases/download/4.5.5/hamlib-4.5.5.tar.gz
+        sha256: 601c89f32ed225e9527ade3d64d0d05d23202c05ae21ffa77e59d70ee4597fcd
+
+  # ---------------------------------------------------------------------------
+  # CQRLOG itself - compiled with the qt6 widgetset against the in-tree sources.
+  # ---------------------------------------------------------------------------
+  - name: cqrlog
+    buildsystem: simple
+    build-options:
+      arch:
+        x86_64:
+          env:
+            PPC: ppcx64
+        aarch64:
+          env:
+            PPC: ppca64
+    build-commands:
+      # The dir source carries the host working tree, including stale macOS
+      # build artifacts (src/cqrlog, *.o, *.ppu) - wipe them before compiling.
+      - make clean
+      # lazbuild treats --compiler as a literal file path (it does NOT search
+      # PATH), so the bare name "ppcx64" fails its existence check. Point it at
+      # the absolute symlink the fpc module installs in /app/lib/sdk/.../bin.
+      - lazbuild --ws=qt6 -q --compiler=/app/lib/sdk/freepascal/bin/$PPC --pcp=. --lazarusdir="$LAZARUSDIR" src/cqrlog.lpi
+      - gzip -c tools/cqrlog.1 > tools/cqrlog.1.gz
+      - make DESTDIR=${FLATPAK_DEST} WS=qt6 install
+      # Rename desktop entry, metainfo and icons to the Flatpak app-id.
+      - mv ${FLATPAK_DEST}/share/applications/cqrlog.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - desktop-file-edit --set-icon=${FLATPAK_ID} ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - sed -i "s#cqrlog.desktop#${FLATPAK_ID}.desktop#" ${FLATPAK_DEST}/share/metainfo/com.cqrlog.cqrlog.appdata.xml
+      - mv ${FLATPAK_DEST}/share/metainfo/com.cqrlog.cqrlog.appdata.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - for s in 32 48 64 128 256; do mv ${FLATPAK_DEST}/share/icons/hicolor/${s}x${s}/apps/cqrlog.png ${FLATPAK_DEST}/share/icons/hicolor/${s}x${s}/apps/${FLATPAK_ID}.png; done
+    sources:
+      - type: dir
+        path: ..
+        # `path: ..` is the repo root, which also hosts the builder state and
+        # VCS metadata - skip them so the source isn't copied into itself.
+        skip:
+          - .git
+          - .flatpak-builder
+          - flatpak_app
+          - cqrlog.flatpak
