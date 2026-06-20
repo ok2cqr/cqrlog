@@ -37,6 +37,12 @@ cleanup:
   - '*.a'
 
 finish-args:
+  # FPC's mysql57dyn dlopen()s the soname "libmysqlclient.so.20", but ldconfig
+  # indexes our compat symlinks under libmariadb's real SONAME, so the cache has
+  # no "libmysqlclient.so.20" entry. dlopen-by-soname only scans LD_LIBRARY_PATH
+  # and the cache - never /app/lib by filename - and flatpak leaves it empty.
+  # Put /app/lib on the path so the symlink resolves. (See flatpak/README.md.)
+  - --env=LD_LIBRARY_PATH=/app/lib
   - --share=network                       # host MariaDB on loopback, RBN, online log uploads, WSJT-X/fldigi
   - --socket=wayland
   - --socket=fallback-x11

@@ -10,9 +10,19 @@ widgetset on the KDE runtime.
 | CQRLOG (Qt6) | ✅ | built from the in-tree sources with `lazbuild --ws=qt6` |
 | FPC + Lazarus + libQt6Pas | build-time only | removed from the final image |
 | hamlib (`rigctld`/`rotctld`) | ✅ | found on `PATH` (`/app/bin`) inside the sandbox |
-| MariaDB **client** library | ✅ | `libmariadb`, aliased to `libmysqlclient.so*` |
+| MariaDB **client** library | ✅ | `libmariadb`, aliased to `libmysqlclient.so*` (see note) |
 | MariaDB **server** (`mysqld`) | ❌ | **you run it on the host** — see below |
 | tqsl, xplanet | ❌ | the app calls your **host** copies via `flatpak-spawn --host` |
+
+> **Note on the MariaDB client library.** FPC's `mysql57dyn` `dlopen()`s the
+> historic soname `libmysqlclient.so.20`, so the manifest aliases `libmariadb`
+> to `libmysqlclient.so*` with symlinks in `/app/lib`. But `dlopen`-by-soname
+> only consults `LD_LIBRARY_PATH` and the `ld.so.cache` — and `ldconfig` indexes
+> those symlinks under libmariadb's *real* SONAME, so no `libmysqlclient.so.20`
+> cache entry exists. The symlinks on disk are therefore invisible unless
+> `/app/lib` is on `LD_LIBRARY_PATH`, which flatpak leaves empty. Hence the
+> `--env=LD_LIBRARY_PATH=/app/lib` in `finish-args`; without it the app fails
+> with *"Can not load default MySQL library"* at database-connect time.
 
 ## Prerequisite: a MariaDB/MySQL server on the host
 
