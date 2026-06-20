@@ -141,6 +141,9 @@ modules:
       # mariadb-connector-c 3.4.3 still declares cmake_minimum_required < 3.5,
       # which CMake 4.x (in the KDE 6.x SDK) refuses; opt back into the old policy.
       - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      # The SDK's GCC defaults to C23, where `bool` is a keyword; this old code
+      # does `typedef char bool;`. Build against gnu17 so it stays a plain ident.
+      - -DCMAKE_C_FLAGS=-std=gnu17
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DINSTALL_LIBDIR=lib
       - -DINSTALL_INCLUDEDIR=include/mariadb
