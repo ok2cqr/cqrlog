@@ -75,17 +75,44 @@ begin
 end;
 
 function TInternalConnection.getNewMySQLConnection : TConnectionName;
+const
+  cSSLOff = 'MYSQL_OPT_SSL_ENFORCE=0';     //plaintext, no TLS
+  cSSLOn  = 'MYSQL_OPT_SSL_ENFORCE=1';     //require TLS (cert not verified)
+  cErrSecureTransportRequired = 3159;      //ER_SECURE_TRANSPORT_REQUIRED
 var
   Conn : TConnectionName;
+
+  procedure Configure(const sslParam : String);
+  begin
+    Conn.HostName     := _ConnectionInfo.HostName;
+    Conn.Params.Text  := 'Port=' + _ConnectionInfo.Port + LineEnding + sslParam;
+    Conn.UserName     := _ConnectionInfo.UserName;
+    Conn.Password     := _ConnectionInfo.Password;
+    Conn.DatabaseName := 'information_schema';
+  end;
+
 begin
   Conn := getNewMySQLConnectionObject();
   Conn.Transaction := TC;
-  Conn.HostName := _ConnectionInfo.HostName;
-  Conn.Params.Text  := 'Port=' + _ConnectionInfo.Port;
-  Conn.UserName := _ConnectionInfo.UserName;
-  Conn.Password := _ConnectionInfo.Password;
-  Conn.DatabaseName := 'information_schema';
-  Conn.Connected := true;
+
+  // This connects to the SAME server as the main app. Prefer plaintext;
+  // mariadb-connector-c >= 3.4 enforces TLS by default and would break the
+  // common no-TLS server with "SSL is required". If the server instead
+  // mandates TLS (require_secure_transport=ON) it rejects plaintext with
+  // errno 3159, so retry once with TLS enforced. (Mirrors dData.OpenConnections.)
+  Configure(cSSLOff);
+  try
+    Conn.Connected := true;
+  except
+    on E : ESQLDatabaseError do
+    begin
+      if E.ErrorCode <> cErrSecureTransportRequired then
+        raise;
+      Conn.Connected := false;
+      Configure(cSSLOn);
+      Conn.Connected := true;
+    end;
+  end;
 
   Conn.ExecuteDirect(
     'SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'+QuotedStr('ONLY_FULL_GROUP_BY')+','+QuotedStr('')+'));'

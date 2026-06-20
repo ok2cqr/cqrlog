@@ -28,6 +28,17 @@ const
   cDB_COMN_VER = 6;
   cDB_PING_INT = 300;  //ping interval for database connection in seconds
                        //program crashed after long time of inactivity
+  //Connection params controlling TLS. mariadb-connector-c >= 3.4 enforces TLS
+  //by default, which breaks the common no-TLS server with "SSL is required".
+  //FPC's mysqlconn maps a Param named like a mysql_option onto mysql_options().
+  //We connect plaintext first (cConnSSLParam); if the server mandates TLS
+  //(require_secure_transport=ON) it rejects that with "secure transport
+  //required" and we retry once with TLS enforced (cConnTLSParam).
+  cConnSSLParam = 'MYSQL_OPT_SSL_ENFORCE=0';  //plaintext, no TLS
+  cConnTLSParam = 'MYSQL_OPT_SSL_ENFORCE=1';  //require TLS (cert not verified)
+  //server-side errno when require_secure_transport=ON rejects a plaintext conn.
+  //FPC hides the server message ("Server connect failed."), so we match errno.
+  cErrSecureTransportRequired = 3159;         //ER_SECURE_TRANSPORT_REQUIRED
                        //so now after cDB_PING_INT will be run simple sql query
                        //which refresh connection
 
@@ -530,60 +541,90 @@ end;
 function TdmData.OpenConnections(host,port,user,pass : String) : Boolean;
 var
   sql : String;
-begin
-  Result := True;
 
-  if MainCon.Connected then
-    MainCon.Connected := False;
-  if dbDXC.Connected then
-    dbDXC.Connected := False;
-  if LogUploadCon.Connected then
-    LogUploadCon.Connected := False;
-  if RbnMonCon.Connected then
-    RbnMonCon.Connected := False;
+  procedure CloseAll;
+  begin
+    if MainCon.Connected      then MainCon.Connected      := False;
+    if dbDXC.Connected        then dbDXC.Connected        := False;
+    if LogUploadCon.Connected then LogUploadCon.Connected := False;
+    if RbnMonCon.Connected    then RbnMonCon.Connected    := False;
+    if BandMapCon.Connected   then BandMapCon.Connected   := False;
+  end;
 
-  MainCon.CharSet:='UTF8';
-  MainCon.HostName     := host;
-  MainCon.Params.Text  := 'Port='+port;
-  MainCon.UserName     := user;
-  MainCon.Password     := pass;
-  MainCon.DatabaseName := 'information_schema';
+  //sslParam is one of cConnSSLParam (plaintext) / cConnTLSParam (require TLS)
+  procedure ApplyParams(const sslParam : String);
 
-  BandMapCon.CharSet:='UTF8';
-  BandMapCon.HostName     := host;
-  BandMapCon.Params.Text  := 'Port='+port;
-  BandMapCon.UserName     := user;
-  BandMapCon.Password     := pass;
-  BandMapCon.DatabaseName := 'information_schema';
+    procedure Setup(con : TSQLConnection);
+    begin
+      con.CharSet      := 'UTF8';
+      con.HostName     := host;
+      con.Params.Text  := 'Port='+port+LineEnding+sslParam;
+      con.UserName     := user;
+      con.Password     := pass;
+      con.DatabaseName := 'information_schema';
+    end;
 
-  RbnMonCon.CharSet:='UTF8';
-  RbnMonCon.HostName     := host;
-  RbnMonCon.Params.Text  := 'Port='+port;
-  RbnMonCon.UserName     := user;
-  RbnMonCon.Password     := pass;
-  RbnMonCon.DatabaseName := 'information_schema';
+  begin
+    Setup(MainCon);
+    Setup(BandMapCon);
+    Setup(RbnMonCon);
+    Setup(dbDXC);
+    Setup(LogUploadCon);
+  end;
 
-  dbDXC.CharSet:='UTF8';
-  dbDXC.HostName     := host;
-  dbDXC.Params.Text  := 'Port='+port;
-  dbDXC.UserName     := user;
-  dbDXC.Password     := pass;
-  dbDXC.DatabaseName := 'information_schema';
-
-  LogUploadCon.CharSet:='UTF8';
-  LogUploadCon.HostName     := host;
-  LogUploadCon.Params.Text  := 'Port='+port;
-  LogUploadCon.UserName     := user;
-  LogUploadCon.Password     := pass;
-  LogUploadCon.DatabaseName := 'information_schema';
-
-  try
+  procedure OpenAll;
+  begin
     MainCon.Connected      := True;
     dbDXC.Connected        := True;
     LogUploadCon.Connected := True;
     BandMapCon.Connected   := True;
     RbnMonCon.Connected    := True;
+  end;
 
+begin
+  Result := True;
+  CloseAll;
+
+  //Prefer plaintext (the common no-TLS case). If the server mandates TLS it
+  //rejects this with "secure transport required" -> retry once with TLS.
+  ApplyParams(cConnSSLParam);
+  try
+    OpenAll;
+  except
+    //Only an ESQLDatabaseError carries the server errno; anything else is fatal.
+    on E : ESQLDatabaseError do
+    begin
+      if E.ErrorCode <> cErrSecureTransportRequired then
+      begin
+        Application.MessageBox(PChar('Error during connection to database: '+E.Message),
+                               'Error',mb_ok + mb_IconError);
+        Exit(False)
+      end;
+      if fDebugLevel >= 1 then
+        Writeln('Server requires secure transport, retrying connection with TLS enabled');
+      CloseAll;
+      ApplyParams(cConnTLSParam);
+      try
+        OpenAll
+      except
+        on E2 : Exception do
+        begin
+          Application.MessageBox(PChar('Error during connection to database: '+E2.Message),
+                                 'Error',mb_ok + mb_IconError);
+          Exit(False)
+        end
+      end
+    end;
+    on E : Exception do
+    begin
+      Application.MessageBox(PChar('Error during connection to database: '+E.Message),
+                             'Error',mb_ok + mb_IconError);
+      Exit(False)
+    end
+  end;
+
+  //connections are open now (plaintext or TLS) - apply the session sql_mode
+  try
     sql := 'SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'+QuotedStr('ONLY_FULL_GROUP_BY')+','+QuotedStr('')+'));';
 
     MainCon.ExecuteDirect(sql);
@@ -3509,7 +3550,7 @@ begin
     MainCon.Connected := False;
 
   MainCon.HostName     := '127.0.0.1';
-  MainCon.Params.Text  := 'Port=64000';
+  MainCon.Params.Text  := 'Port=64000'+LineEnding+cConnSSLParam;
   MainCon.DatabaseName := 'information_schema';
   MainCon.UserName     := 'cqrlog';
   MainCon.Password     := 'cqrlog';
