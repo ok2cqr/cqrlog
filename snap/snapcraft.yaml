@@ -138,10 +138,16 @@ parts:
     build-packages: [g++, make, qt6-base-dev, qt6-base-private-dev]
     override-build: |
       set -eux
+      # The kde-neon-6 extension puts its (newer) Qt6 on LD_LIBRARY_PATH, which
+      # the apt qmake6 then loads -> private-symbol mismatch. Build entirely
+      # against the apt Qt6 by clearing LD_LIBRARY_PATH and using /usr/bin/qmake6;
+      # the resulting libQt6Pas only needs public sonames (libQt6Core.so.6, ...)
+      # which the extension's ABI-compatible Qt6 satisfies at runtime.
+      unset LD_LIBRARY_PATH
       cd cbindings
       # Install the shared lib where the runtime linker (LD_LIBRARY_PATH) looks.
       sed -i "s|target.path = .\+|target.path = '/usr/lib'|" Qt6Pas.pro
-      qmake6 Qt6Pas.pro
+      /usr/bin/qmake6 Qt6Pas.pro
       make -j"${CRAFT_PARALLEL_BUILD_COUNT:-2}"
       make install INSTALL_ROOT="$CRAFT_PART_INSTALL"
 
