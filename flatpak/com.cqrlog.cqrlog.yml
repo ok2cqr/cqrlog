@@ -45,7 +45,12 @@ finish-args:
   - --env=LD_LIBRARY_PATH=/app/lib
   - --share=network                       # host MariaDB on loopback, RBN, online log uploads, WSJT-X/fldigi
   - --socket=wayland
-  - --socket=fallback-x11
+  # The app forces QT_QPA_PLATFORM=xcb (src/uQtWorkaround.pas) to dodge Qt
+  # Wayland bugs, so it always needs a reachable X display. fallback-x11 only
+  # shares the X socket when the host is NOT Wayland, so on a Wayland session
+  # (Fedora default) xcb had no display and the app failed to start. Use the
+  # unconditional x11 socket: on Wayland hosts XWayland provides it.
+  - --socket=x11
   - --socket=pulseaudio                    # voice keyer audio
   - --share=ipc
   - --device=all                           # serial rigs: /dev/ttyUSB*, /dev/ttyACM*, /dev/serial/by-id/*
