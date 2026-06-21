@@ -157,9 +157,10 @@ parts:
   # ---------------------------------------------------------------------------
   helpers:
     plugin: nil
+    # libhamlib-utils provides rigctld/rotctld and pulls the matching libhamlib
+    # runtime as a dependency (its soname differs on noble due to the t64 ABI).
     stage-packages:
-      - hamlib-utils
-      - libhamlib4
+      - libhamlib-utils
       - xplanet
 
   # ---------------------------------------------------------------------------
