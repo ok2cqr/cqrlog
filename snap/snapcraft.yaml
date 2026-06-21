@@ -86,6 +86,10 @@ parts:
         PP="$work/fpcsrc/compiler/$PPNAME" \
         FPCMAKE="$work/fpcsrc/utils/fpcm/bin/$ARCH-linux/fpcmake"
       "$PREFIX/lib/fpc/$fpcver/samplecfg" "$PREFIX/lib/fpc/$fpcver" "$PREFIX/etc"
+      # samplecfg bakes this part's INSTALL dir into fpc.cfg's unit -Fu paths,
+      # but lazarus/cqrlog invoke fpc from the shared STAGE dir - rewrite the
+      # paths so the staged compiler finds its RTL units (Can't find unit system).
+      sed -i "s|$CRAFT_PART_INSTALL/usr/local/freepascal|$CRAFT_STAGE/usr/local/freepascal|g" "$PREFIX/etc/fpc.cfg"
       # Build-time linker path for libQt6Pas (staged by the qt6pas part).
       echo "-Fl$CRAFT_STAGE/usr/lib" >> "$PREFIX/etc/fpc.cfg"
       ln -sf "../lib/fpc/$fpcver/$PPNAME" "$PREFIX/bin/$PPNAME"
@@ -106,6 +110,7 @@ parts:
     override-build: |
       set -eux
       export PATH="$CRAFT_STAGE/usr/local/freepascal/bin:$PATH"
+      export PPC_CONFIG_PATH="$CRAFT_STAGE/usr/local/freepascal/etc"
       export INSTALL_PREFIX="$CRAFT_PART_INSTALL/usr/local/freepascal"
       export FPCDIR="$CRAFT_STAGE/usr/local/freepascal/fpcsrc"
       export LAZARUSDIR="$INSTALL_PREFIX/share/lazarus"
@@ -178,6 +183,7 @@ parts:
     override-build: |
       set -eux
       export PATH="$CRAFT_STAGE/usr/local/freepascal/bin:$PATH"
+      export PPC_CONFIG_PATH="$CRAFT_STAGE/usr/local/freepascal/etc"
       export LAZARUSDIR="$CRAFT_STAGE/usr/local/freepascal/share/lazarus"
       case "$CRAFT_ARCH_BUILD_FOR" in
         amd64) PPC=ppcx64 ;;
