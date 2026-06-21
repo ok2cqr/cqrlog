@@ -1,0 +1,241 @@
+# Snapcraft recipe for CQRLOG (Qt6, strict confinement).
+#
+# Design notes (see snap/README.md):
+#  * Mirrors the Flatpak (flatpak/com.cqrlog.cqrlog.yml): the same FPC 3.2.2 +
+#    Lazarus 4.2 + libQt6Pas toolchain is built from source, and CQRLOG is
+#    compiled with the qt6 widgetset.
+#  * Qt6 itself is NOT rebuilt - the kde-neon-6 extension provides Qt6 at build
+#    AND runtime (the snap analogue of the flatpak's org.kde.Platform 6.10),
+#    plus fonts/themes/XDG and the XWayland wiring the forced-xcb app needs.
+#  * NO MariaDB *server* is bundled. CQRLOG runs in "remote MySQL" mode and
+#    connects to a MariaDB server reachable over the network (--plug network).
+#    Only the client library (libmariadb3) is shipped.
+#  * hamlib (rigctld/rotctld) and xplanet are bundled under $SNAP/usr/bin and
+#    run integrated in-sandbox. The app detects the snap (isSnap, $SNAP) and
+#    keeps that dir on its tool search path (src/dUtils.pas PlatformSearchPath).
+#  * tqsl (LoTW) is NOT bundled - that integration is a known v1 limitation.
+name: cqrlog
+title: CQRLOG
+version: '3.0.0'
+summary: Advanced ham radio logger
+description: |
+  CQRLOG is an advanced ham radio logger based on MariaDB/MySQL database.
+  It offers QSO logging, DXCC tracking, online callbook lookups, LoTW/eQSL,
+  rig control via hamlib, DX cluster, grayline map and much more.
+
+  This snap runs in "remote MySQL" mode: point CQRLOG at a MariaDB/MySQL
+  server reachable over the network (for example one running on your LAN).
+license: GPL-2.0-or-later
+
+base: core24
+confinement: strict
+grade: stable
+compression: lzo
+
+platforms:
+  amd64:
+  arm64:
+
+parts:
+
+  # ---------------------------------------------------------------------------
+  # Free Pascal compiler (build-time only). Recipe ported from the Flatpak.
+  # ---------------------------------------------------------------------------
+  fpc:
+    plugin: nil
+    # Local source only to carry the glibc patch reused from the flatpak dir.
+    # Paths are relative to the project root (the dir containing snap/).
+    source: flatpak
+    source-type: local
+    build-packages: [wget, ca-certificates, build-essential, binutils]
+    override-build: |
+      set -eux
+      fpcver=3.2.2
+      case "$CRAFT_ARCH_BUILD_FOR" in
+        amd64) ARCH=x86_64;  PPNAME=ppcx64 ;;
+        arm64) ARCH=aarch64; PPNAME=ppca64 ;;
+        *) echo "unsupported arch $CRAFT_ARCH_BUILD_FOR"; exit 1 ;;
+      esac
+      PREFIX="$CRAFT_PART_INSTALL/usr/local/freepascal"
+      work="$CRAFT_PART_BUILD/w"; rm -rf "$work"; mkdir -p "$work"; cd "$work"
+      wget -O fpc-bin.tar "https://downloads.sourceforge.net/project/freepascal/Linux/$fpcver/fpc-$fpcver.$ARCH-linux.tar"
+      wget -O fpcbuild.tar.gz "https://downloads.sourceforge.net/project/freepascal/Source/$fpcver/fpcbuild-$fpcver.tar.gz"
+      case "$ARCH" in
+        x86_64)  echo "5adac308a5534b6a76446d8311fc340747cbb7edeaacfe6b651493ff3fe31e83  fpc-bin.tar" | sha256sum -c - ;;
+        aarch64) echo "b39470f9b6b5b82f50fc8680a5da37d2834f2129c65c24c5628a80894d565451  fpc-bin.tar" | sha256sum -c - ;;
+      esac
+      echo "85ef993043bb83f999e2212f1bca766eb71f6f973d362e2290475dbaaf50161f  fpcbuild.tar.gz" | sha256sum -c -
+      tar --no-same-owner -xf fpcbuild.tar.gz
+      mv "fpcbuild-$fpcver/fpcsrc" fpcsrc
+      patch -p1 -d fpcsrc < "$CRAFT_PART_SRC/fpc-3.2.0--glibc-2.34.patch"
+      # Lazarus needs the FPC sources (FPCDIR) at runtime of lazbuild - ship them.
+      mkdir -p "$PREFIX"
+      cp -r fpcsrc "$PREFIX/fpcsrc"
+      # Unpack the bootstrap compiler. The fpc-X-linux.tar has a single leading
+      # dir (fpc-3.2.2.<arch>-linux/) holding binary.<arch>-linux.tar + install.sh;
+      # strip it (flatpak-builder did this implicitly) so the globs below match.
+      mkdir fpcpre
+      tar --no-same-owner --strip-components=1 -xf fpc-bin.tar
+      tar --no-same-owner -xf binary.*.tar
+      tar --no-same-owner -C fpcpre -xf base.*.tar.gz
+      make -C fpcsrc compiler_cycle PP="$work/fpcpre/lib/fpc/$fpcver/$PPNAME"
+      make -C fpcsrc rtl_clean rtl_smart PP="$work/fpcsrc/compiler/$PPNAME"
+      make -C fpcsrc packages_smart utils_all PP="$work/fpcsrc/compiler/$PPNAME"
+      make -C fpcsrc compiler_distinstall rtl_distinstall packages_distinstall utils_distinstall \
+        INSTALL_PREFIX="$PREFIX" \
+        PP="$work/fpcsrc/compiler/$PPNAME" \
+        FPCMAKE="$work/fpcsrc/utils/fpcm/bin/$ARCH-linux/fpcmake"
+      "$PREFIX/lib/fpc/$fpcver/samplecfg" "$PREFIX/lib/fpc/$fpcver" "$PREFIX/etc"
+      # samplecfg bakes this part's INSTALL dir into fpc.cfg's unit -Fu paths,
+      # but lazarus/cqrlog invoke fpc from the shared STAGE dir - rewrite the
+      # paths so the staged compiler finds its RTL units (Can't find unit system).
+      sed -i "s|$CRAFT_PART_INSTALL/usr/local/freepascal|$CRAFT_STAGE/usr/local/freepascal|g" "$PREFIX/etc/fpc.cfg"
+      # Build-time linker path for libQt6Pas (staged by the qt6pas part).
+      echo "-Fl$CRAFT_STAGE/usr/lib" >> "$PREFIX/etc/fpc.cfg"
+      ln -sf "../lib/fpc/$fpcver/$PPNAME" "$PREFIX/bin/$PPNAME"
+      [ "$ARCH" = aarch64 ] && ln -sf ppca64 "$PREFIX/bin/ppcaarch64" || true
+    # Toolchain is build-time only - keep it out of the final snap.
+    prime:
+      - -usr/local/freepascal
+
+  # ---------------------------------------------------------------------------
+  # Lazarus (provides lazbuild + LCL incl. the qt6 widgetset). Build-time only.
+  # ---------------------------------------------------------------------------
+  lazarus:
+    after: [fpc]
+    plugin: nil
+    source: https://gitlab.com/freepascal.org/lazarus/lazarus/-/archive/lazarus_4_2/lazarus-lazarus_4_2.tar.gz
+    source-checksum: sha256/3e3b037ffb81a479db54abb94242d7f42fe9dd6d1a431a914336a99e211162a8
+    build-packages: [build-essential]
+    override-build: |
+      set -eux
+      export PATH="$CRAFT_STAGE/usr/local/freepascal/bin:$PATH"
+      export PPC_CONFIG_PATH="$CRAFT_STAGE/usr/local/freepascal/etc"
+      export INSTALL_PREFIX="$CRAFT_PART_INSTALL/usr/local/freepascal"
+      export FPCDIR="$CRAFT_STAGE/usr/local/freepascal/fpcsrc"
+      export LAZARUSDIR="$INSTALL_PREFIX/share/lazarus"
+      find . -type f -iname makefile.fpc -exec fpcmake -Tall '{}' ';'
+      make lazbuild OPT='-gl'
+      touch lazarus startlazarus
+      make install
+      sed -i -e "s#__LAZARUSDIR__#$LAZARUSDIR/#" -e "s#__FPCSRCDIR__#$FPCDIR/#" \
+        -e "s#/app/bin/fpc#$INSTALL_PREFIX/bin/fpc#" \
+        tools/install/linux/environmentoptions.xml || true
+      install -Dm644 -t "$LAZARUSDIR" tools/install/linux/environmentoptions.xml || true
+    prime:
+      - -usr/local/freepascal
+
+  # ---------------------------------------------------------------------------
+  # libQt6Pas - the Qt6<->Pascal binding the qt6 widgetset links against.
+  # Built with the distro's Qt6 dev headers/qmake6 (the kde-neon-6 extension does
+  # not expose qmake6 to part scriptlets); at RUNTIME it uses the extension's Qt6,
+  # which is ABI-compatible (Qt keeps backward compat within the Qt6 series).
+  # ---------------------------------------------------------------------------
+  qt6pas:
+    plugin: nil
+    source: https://github.com/davidbannon/libqt6pas/archive/refs/tags/v6.2.10.tar.gz
+    source-checksum: sha256/dbcc13559f991958fb69de31d67c85575bbe278fdff0813b51787da50720d591
+    build-packages: [g++, make, qt6-base-dev, qt6-base-private-dev]
+    override-build: |
+      set -eux
+      # The kde-neon-6 extension puts its (newer) Qt6 on LD_LIBRARY_PATH, which
+      # the apt qmake6 then loads -> private-symbol mismatch. Build entirely
+      # against the apt Qt6 by clearing LD_LIBRARY_PATH and using /usr/bin/qmake6;
+      # the resulting libQt6Pas only needs public sonames (libQt6Core.so.6, ...)
+      # which the extension's ABI-compatible Qt6 satisfies at runtime.
+      unset LD_LIBRARY_PATH
+      cd cbindings
+      # Install the shared lib where the runtime linker (LD_LIBRARY_PATH) looks.
+      sed -i "s|target.path = .\+|target.path = '/usr/lib'|" Qt6Pas.pro
+      /usr/bin/qmake6 Qt6Pas.pro
+      make -j"${CRAFT_PARALLEL_BUILD_COUNT:-2}"
+      make install INSTALL_ROOT="$CRAFT_PART_INSTALL"
+
+  # ---------------------------------------------------------------------------
+  # MariaDB client library only (NO server). CQRLOG's mysqlXXdyn units dlopen
+  # libmysqlclient.so by its historic soname; alias those to libmariadb.
+  # ---------------------------------------------------------------------------
+  mariadb-client:
+    plugin: nil
+    stage-packages: [libmariadb3]
+    override-prime: |
+      craftctl default
+      d="$CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR"
+      ln -sf libmariadb.so.3 "$d/libmysqlclient.so"
+      ln -sf libmariadb.so.3 "$d/libmysqlclient.so.18"
+      ln -sf libmariadb.so.3 "$d/libmysqlclient.so.19"
+      ln -sf libmariadb.so.3 "$d/libmysqlclient.so.20"
+      ln -sf libmariadb.so.3 "$d/libmysqlclient.so.21"
+
+  # ---------------------------------------------------------------------------
+  # hamlib (rigctld/rotctld) and xplanet - bundled, run integrated in-sandbox.
+  # ---------------------------------------------------------------------------
+  helpers:
+    plugin: nil
+    # libhamlib-utils provides rigctld/rotctld and pulls the matching libhamlib
+    # runtime as a dependency (its soname differs on noble due to the t64 ABI).
+    stage-packages:
+      - libhamlib-utils
+      - xplanet
+
+  # ---------------------------------------------------------------------------
+  # CQRLOG itself - compiled with the qt6 widgetset against the in-tree sources.
+  # ---------------------------------------------------------------------------
+  cqrlog:
+    after: [fpc, lazarus, qt6pas]
+    plugin: nil
+    # The project root (dir containing snap/) is the repo root with src/, Makefile.
+    source: .
+    source-type: local
+    build-packages: [gzip]
+    override-build: |
+      set -eux
+      export PATH="$CRAFT_STAGE/usr/local/freepascal/bin:$PATH"
+      export PPC_CONFIG_PATH="$CRAFT_STAGE/usr/local/freepascal/etc"
+      export LAZARUSDIR="$CRAFT_STAGE/usr/local/freepascal/share/lazarus"
+      case "$CRAFT_ARCH_BUILD_FOR" in
+        amd64) PPC=ppcx64 ;;
+        arm64) PPC=ppca64 ;;
+        *) echo "unsupported arch $CRAFT_ARCH_BUILD_FOR"; exit 1 ;;
+      esac
+      # The local source carries the host working tree, including any stale
+      # build artifacts (src/cqrlog, *.o, *.ppu) - wipe them before compiling.
+      make clean
+      lazbuild --ws=qt6 -q \
+        --compiler="$CRAFT_STAGE/usr/local/freepascal/bin/$PPC" \
+        --pcp=. --lazarusdir="$LAZARUSDIR" src/cqrlog.lpi
+      gzip -c tools/cqrlog.1 > tools/cqrlog.1.gz
+      make DESTDIR="$CRAFT_PART_INSTALL/usr" WS=qt6 install
+      # Keep the short desktop name (the extension rewrites Exec/Icon); do NOT
+      # rename to the app-id like the flatpak does.
+      desk="$CRAFT_PART_INSTALL/usr/share/applications/cqrlog.desktop"
+      sed -i 's|^Exec=.*|Exec=cqrlog|; s|^Icon=.*|Icon=cqrlog|' "$desk"
+      # make install lays everything under usr/ already (DESTDIR=.../usr):
+      # binary at usr/bin/cqrlog, data at usr/share/cqrlog - nothing to reorganize.
+
+apps:
+  cqrlog:
+    command: usr/bin/cqrlog
+    extensions: [kde-neon-6]
+    common-id: com.cqrlog.cqrlog
+    desktop: usr/share/applications/cqrlog.desktop
+    environment:
+      # libQt6Pas (usr/lib) + libmariadb & libmysqlclient symlinks (triplet dir).
+      # FPC dlopen()s libmysqlclient.so.20 by soname, which only LD_LIBRARY_PATH
+      # resolves inside a snap - keep both dirs on the path.
+      LD_LIBRARY_PATH: $SNAP/usr/lib:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
+      # Bundled rigctld/rotctld/xplanet live here.
+      PATH: $SNAP/usr/bin:$PATH
+    plugs:
+      - network          # host MariaDB, RBN, online log uploads, WSJT-X/fldigi
+      - network-bind     # rigctld/rotctld listen on localhost
+      - home             # ADIF import/export, config under ~/snap/cqrlog
+      - removable-media  # ADIF import/export from /media
+      - raw-usb          # USB serial rigs: CP210x/FTDI -> /dev/ttyUSB*, /dev/ttyACM*
+      - serial-port      # classic /dev/ttyS* (manual/gadget connection)
+      - audio-playback   # voice keyer
+      - opengl
+      - x11              # REQUIRED: the app forces QT_QPA_PLATFORM=xcb
+      - wayland
+      - desktop
+      - desktop-legacy

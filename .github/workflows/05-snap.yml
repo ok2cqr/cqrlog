@@ -1,0 +1,53 @@
+name: Snap Package (Qt6)
+
+# Strictly-confined snap of CQRLOG (Qt6). Built only on release tags (v*),
+# matching the Draft Release and Flatpak workflows, plus on-demand via
+# workflow_dispatch. See snap/README.md.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  snap:
+    name: Build Snap (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build snap
+      uses: snapcore/action-build@v1
+      id: build
+
+    - name: Upload snap artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cqrlog-snap-${{ matrix.arch }}
+        path: ${{ steps.build.outputs.snap }}
+
+    # On a release tag, attach the .snap to the draft release created by the
+    # Draft Release workflow (03-release.yml). Wait for that draft to exist so
+    # the three tag-triggered workflows don't race to create duplicate drafts.
+    - name: Attach snap to draft release
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        for i in $(seq 1 30); do
+          if gh release view "${{ github.ref_name }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then break; fi
+          echo "waiting for draft release ${{ github.ref_name }} ... ($i)"; sleep 10
+        done
+        gh release upload "${{ github.ref_name }}" "${{ steps.build.outputs.snap }}" --repo "${{ github.repository }}" --clobber

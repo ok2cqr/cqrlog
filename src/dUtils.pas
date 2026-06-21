@@ -343,6 +343,7 @@ type
     function  DefaultToolPath(const ToolName, LinuxDefault : String) : String;
     function  DefaultRotCtldPath : String;
     function  InFlatpak : Boolean;
+    function  isSnap : Boolean;
     procedure SetupHostProcess(AProcess : TProcess; ParamList : TStrings);
 
 end;
@@ -3432,9 +3433,13 @@ begin
   {$ELSE}
   //Flatpak ships helper tools at different paths (/app/bin) than a native Linux
   //install yet shares the same ~/.config/cqrlog (HOME is the real home), so give
-  //it its own settings keys - otherwise the two clobber each other's paths.
+  //it its own settings keys - otherwise the two clobber each other's paths. The
+  //snap bundles its tools under $SNAP/usr/bin, so it likewise gets its own keys
+  //(also a safety net under classic confinement where HOME is the real home).
   if InFlatpak then
     Result := Key + '_flatpak'
+  else if isSnap then
+    Result := Key + '_snap'
   else
     Result := Key;
   {$ENDIF}
@@ -3459,8 +3464,11 @@ begin
   //Fallback for Flatpak: DefaultToolPath already finds tools next to the cqrlog
   //binary (/app/bin), but if ParamStr(0) is not absolute this keeps the bundled
   //hamlib (/app/bin) reachable for any FindExecutable() lookup inside the sandbox.
+  //The snap bundles the same helpers under $SNAP/usr/bin - keep them reachable too.
   if InFlatpak then
-    Result := '/app/bin:' + Result;
+    Result := '/app/bin:' + Result
+  else if isSnap then
+    Result := GetEnvironmentVariable('SNAP') + '/usr/bin:' + Result;
   {$ENDIF}
 end;
 
@@ -3505,8 +3513,8 @@ var
 begin
   //Prefer a helper binary shipped next to the running cqrlog executable. This
   //covers every self-contained layout the same way: macOS .app/Contents/MacOS,
-  //Linux AppImage usr/bin, and Flatpak /app/bin - rigctld/rotctld/etc. all live
-  //alongside cqrlog there.
+  //Linux AppImage usr/bin, Flatpak /app/bin and snap $SNAP/usr/bin - rigctld/
+  //rotctld/etc. all live alongside cqrlog there.
   BundlePath := ExtractFilePath(ParamStr(0)) + ToolName;
   if FileExists(BundlePath) then
   begin
@@ -3546,6 +3554,15 @@ begin
   //Flatpak always mounts this file inside the sandbox. Used to decide whether
   //host-only helper tools (tqsl, xplanet) must be launched via flatpak-spawn.
   Result := FileExists('/.flatpak-info');
+end;
+
+function TdmUtils.isSnap : Boolean;
+begin
+  //The snap runtime always exports SNAP=/snap/cqrlog/current. Used (like
+  //InFlatpak) to give the snap its own settings keys (PlatformKey) and to keep
+  //the bundled helper tools under $SNAP/usr/bin on the search path. Unlike
+  //Flatpak the snap runs those tools in-sandbox, so no host-spawn is needed.
+  Result := GetEnvironmentVariable('SNAP') <> '';
 end;
 
 procedure TdmUtils.SetupHostProcess(AProcess : TProcess; ParamList : TStrings);

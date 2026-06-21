@@ -9,6 +9,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   flatpak:
     name: Build Flatpak (x86_64)
@@ -27,3 +30,34 @@ jobs:
         manifest-path: flatpak/com.cqrlog.cqrlog.yml
         cache-key: flatpak-builder-${{ hashFiles('flatpak/com.cqrlog.cqrlog.yml') }}
         arch: x86_64
+
+    - name: Upload flatpak artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: flatpak-bundle
+        path: cqrlog.flatpak
+
+  # On a release tag, attach the bundle to the draft release created by the
+  # Draft Release workflow (03-release.yml). Runs on a normal runner (the build
+  # container has no gh CLI). Waits for the draft so the tag-triggered workflows
+  # don't race to create duplicate drafts.
+  release:
+    name: Attach flatpak to draft release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: flatpak
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download flatpak artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: flatpak-bundle
+
+    - name: Attach to draft release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        for i in $(seq 1 30); do
+          if gh release view "${{ github.ref_name }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then break; fi
+          echo "waiting for draft release ${{ github.ref_name }} ... ($i)"; sleep 10
+        done
+        gh release upload "${{ github.ref_name }}" cqrlog.flatpak --repo "${{ github.repository }}" --clobber
