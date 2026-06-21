@@ -69,6 +69,7 @@ type
     acAttach: TAction;
     acEditDetails: TAction;
     acQSLImage: TAction;
+    acVerifySignature: TAction; { GNUPG_AUTH }
     acQRZ: TAction;
     acRebuildMembStat: TAction;
     acBigSquares: TAction;
@@ -429,6 +430,7 @@ type
     procedure acExHTMLExecute(Sender: TObject);
     procedure acGraylineExecute(Sender: TObject);
     procedure acImportADIFExecute(Sender: TObject);
+    procedure acVerifySignatureExecute(Sender: TObject); { GNUPG_AUTH }
     procedure acQSL_RExecute(Sender: TObject);
     procedure acQSL_SExecute(Sender: TObject);
     procedure acRegenDXCCStatExecute(Sender: TObject);
@@ -465,7 +467,9 @@ type
     InRefresh  : Boolean;
     WhatUpNext : TWhereToUpload;
     DistColumnIndex :integer;
+    imgGnuPGStatus: TImage; { GNUPG_AUTH }
     procedure ChechkSelRecords;
+    procedure UpdateGnuPGQSOIcon; { GNUPG_AUTH }
     { private declarations }
   public
     ShowWidths : Boolean;
@@ -493,7 +497,7 @@ uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCSta
   fImportLoTWWeb, fLoTWExport, fGroupEdit, fCustomStat, fSQLConsole, fCallAttachment,
   fEditDetails, fQSLViewer, uMyIni, fRebuildMembStat, fAbout, fBigSquareStat,
   feQSLUpload, feQSLDownload, fSOTAExport, fEDIExport, fCabrilloExport, fRotControl,
-  fLogUploadStatus, fExportPref,uVersion, fCountyStat;
+  fLogUploadStatus, fExportPref,uVersion, fCountyStat, uGnuPG; { GNUPG_AUTH }
 
 procedure TfrmMain.ReloadGrid;
 begin
@@ -556,7 +560,8 @@ end;
 procedure TfrmMain.dbgrdMainCellClick(Column: TColumn);
 begin
   ChechkSelRecords;
-  CheckAttachment
+  CheckAttachment;
+  UpdateGnuPGQSOIcon; { GNUPG_AUTH }
 end;
 
 procedure TfrmMain.lblQSOCountClick(Sender: TObject);
@@ -2331,8 +2336,135 @@ begin
   mnuShowButtons.Checked := pnlButtons.Visible;
   mnuShowToolBar.Checked := toolMain.Visible;
   mnuShowDetails.Checked := pnlDetails.Visible;
+  { GNUPG_AUTH - locked.svg copied to images/icon/ but not wired (future encryption UI) }
+  if not Assigned(imgGnuPGStatus) then
+  begin
+    imgGnuPGStatus := TImage.Create(Self);
+    imgGnuPGStatus.Parent := sbMain;
+    imgGnuPGStatus.Width := 16;
+    imgGnuPGStatus.Height := 16;
+    imgGnuPGStatus.Stretch := True;
+    imgGnuPGStatus.Top := 1;
+    imgGnuPGStatus.Left := sbMain.Width - 20;
+    imgGnuPGStatus.Anchors := [akTop, akRight];
+    imgGnuPGStatus.Visible := False;
+  end;
+  UpdateGnuPGQSOIcon;
   //Sets AutoSizeColumns to saved value
   acAutoSizeColumnsExecute(nil);
+end;
+
+procedure TfrmMain.UpdateGnuPGQSOIcon; { GNUPG_AUTH }
+var
+  IconFile: string;
+  SigStatus: string;
+begin
+  if not Assigned(imgGnuPGStatus) then
+    Exit;
+  if not cqrini.ReadBool('Signing', 'Enable', False) then
+  begin
+    imgGnuPGStatus.Visible := False;
+    Exit;
+  end;
+  if (not dmData.qCQRLOG.IsEmpty) and
+     (dmData.qCQRLOG.FindField('gnupg_sigverify') <> nil) then
+  begin
+    SigStatus := dmData.qCQRLOG.FieldByName('gnupg_sigverify').AsString;
+    if SigStatus = 'V' then
+      IconFile := 'open.svg'
+    else if SigStatus = 'K' then
+      IconFile := 'key-error.svg'
+    else if (SigStatus = 'I') then
+    begin
+      imgGnuPGStatus.Visible := False;
+      Exit;
+    end
+    else if cqrini.ReadString('Signing', 'KeyFingerprint', '') <> '' then
+      IconFile := 'key.svg'
+    else
+    begin
+      imgGnuPGStatus.Visible := False;
+      Exit;
+    end;
+  end
+  else if cqrini.ReadString('Signing', 'KeyFingerprint', '') <> '' then
+    IconFile := 'key.svg'
+  else
+  begin
+    imgGnuPGStatus.Visible := False;
+    Exit;
+  end;
+  if FileExistsUTF8(GnuPGIconFile(IconFile)) then
+  begin
+    imgGnuPGStatus.Picture.LoadFromFile(GnuPGIconFile(IconFile));
+    imgGnuPGStatus.Visible := True;
+  end;
+end;
+
+procedure TfrmMain.acVerifySignatureExecute(Sender: TObject); { GNUPG_AUTH }
+var
+  sig, adifData, vCall, vFp, qsodate, statusChar, msg: string;
+  vres: TGnuPGVerifyResult;
+begin
+  if not cqrini.ReadBool('Signing', 'Enable', False) then
+  begin
+    ShowMessage('GnuPG signing is disabled in Preferences.');
+    Exit;
+  end;
+  if dmData.qCQRLOG.IsEmpty then
+    Exit;
+  if dmData.qCQRLOG.FindField('gnupg_signature') = nil then
+  begin
+    ShowMessage('This log database has no GnuPG signature storage.');
+    Exit;
+  end;
+  sig := dmData.qCQRLOG.FieldByName('gnupg_signature').AsString;
+  if sig = '' then
+  begin
+    ShowMessage('The selected QSO has no stored signature.');
+    Exit;
+  end;
+  qsodate := dmData.qCQRLOG.FieldByName('qsodate').AsString;
+  qsodate := copy(qsodate, 1, 4) + copy(qsodate, 6, 2) + copy(qsodate, 9, 2);
+  adifData := dmUtils.StringToADIF('<CALL',
+    dmData.qCQRLOG.FieldByName('callsign').AsString);
+  adifData := adifData + dmUtils.StringToADIF('<QSO_DATE', qsodate);
+  adifData := adifData + dmUtils.StringToADIF('<TIME_ON',
+    StringReplace(dmData.qCQRLOG.FieldByName('time_on').AsString, ':', '', []));
+  adifData := adifData + dmUtils.StringToADIF('<MODE',
+    dmData.qCQRLOG.FieldByName('mode').AsString);
+  adifData := adifData + dmUtils.StringToADIF('<FREQ',
+    dmData.qCQRLOG.FieldByName('freq').AsString);
+  vres := GnuPGVerifyWithKeyLookup(adifData, sig,
+    dmData.qCQRLOG.FieldByName('callsign').AsString, vCall, vFp);
+  case vres of
+    vgValid: statusChar := 'V';
+    vgKeyNotFound: statusChar := 'K';
+    vgInvalidSignature: statusChar := 'I';
+  else
+    statusChar := 'I';
+  end;
+  dmData.Q.Close;
+  dmData.trQ.StartTransaction;
+  try
+    dmData.Q.SQL.Text := 'update cqrlog_main set gnupg_sigverify=' +
+      QuotedStr(statusChar) + ' where id_cqrlog_main=' +
+      dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsString;
+    dmData.Q.ExecSQL;
+    dmData.trQ.Commit;
+    dmData.qCQRLOG.Refresh;
+  except
+    dmData.trQ.Rollback;
+  end;
+  UpdateGnuPGQSOIcon;
+  case vres of
+    vgValid: msg := 'Signature is valid.';
+    vgKeyNotFound: msg := 'Public key not found for callsign.';
+    vgInvalidSignature: msg := 'Signature is invalid.';
+  else
+    msg := 'Signature verification failed.';
+  end;
+  ShowMessage(msg);
 end;
 
 procedure TfrmMain.ShowFields;

@@ -601,6 +601,7 @@ type
     procedure tmrWsjtSpdTimer(Sender: TObject);
     procedure tmrWsjtxTimer(Sender: TObject);
   private
+    imgGnuPGSigning: TImage; { GNUPG_AUTH }
     StartUpCount : integer;
     StartRun    : Boolean;
     old_stat_adif : Word;
@@ -830,7 +831,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, f
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat;
+     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat, uGnuPG; { GNUPG_AUTH }
 
 
 
@@ -1457,6 +1458,28 @@ begin
   sbNewQSO.Panels[3].Text  := 'Ver. '+ dmData.VersionString;
   sbNewQSO.Panels[3].Width := 150;
   sbNewQSO.Panels[4].Width :=  50;
+
+  { GNUPG_AUTH }
+  if not Assigned(imgGnuPGSigning) then
+  begin
+    imgGnuPGSigning := TImage.Create(Self);
+    imgGnuPGSigning.Parent := sbNewQSO;
+    imgGnuPGSigning.Width := 16;
+    imgGnuPGSigning.Height := 16;
+    imgGnuPGSigning.Stretch := True;
+    imgGnuPGSigning.Top := 1;
+    imgGnuPGSigning.Left := sbNewQSO.Width - 20;
+    imgGnuPGSigning.Anchors := [akTop, akRight];
+  end;
+  if cqrini.ReadBool('Signing', 'Enable', False) and
+     (cqrini.ReadString('Signing', 'KeyFingerprint', '') <> '') and
+     FileExistsUTF8(GnuPGIconFile('key.svg')) then
+  begin
+    imgGnuPGSigning.Picture.LoadFromFile(GnuPGIconFile('key.svg'));
+    imgGnuPGSigning.Visible := True;
+  end
+  else if Assigned(imgGnuPGSigning) then
+    imgGnuPGSigning.Visible := False;
 
   dmUtils.LoadWindowPos(frmNewQSO);
 

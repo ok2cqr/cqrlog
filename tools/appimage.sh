@@ -93,9 +93,11 @@ ICONS="${ROOTFOLDER}/images/icon/"
 TARGET="${ROOTFOLDER}/AppDir/usr/share/icons/hicolor"
 mkdir -p ${TARGET}
 for i in $(ls $ICONS) ; do
-    echo "Adding icons for '$i' sizes"
-    mkdir -p "${TARGET}/${i}/apps/"
-    cp "$ICONS/$i/cqrlog.png" "${TARGET}/${i}/apps/"
+    if [ -f "$ICONS/$i/cqrlog.png" ] ; then
+        echo "Adding icons for '$i' sizes"
+        mkdir -p "${TARGET}/${i}/apps/"
+        cp "$ICONS/$i/cqrlog.png" "${TARGET}/${i}/apps/"
+    fi
 done
 
 # detect libmysqlclient.so lib

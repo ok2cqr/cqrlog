@@ -4,6 +4,10 @@ CQRLOG is an advanced ham radio logger based on MySQL database. Provides radio c
 
 ![Image of CQRLOG](https://cqrlog.com/images/users/ok2cqr.png)
 
+## Documentation
+
+* [GnuPG signing and verification](doc/gnupg_signing.md) — optional ADIF signing and signature verification (requires `/usr/bin/gpg`; disabled by default)
+
 ## How to contribute?
 
 You have to have at least Lazarus 4.6, fpc 3.2.2 compiler, MySQL (MariaDB) server and client installed. CQRLOG is developed on Ubuntu 24.04, Lazarus and FreePascal are available in my personal repo  https://launchpad.net/~ok2cqr/+archive/lazarus; but packages on most modern Linux distros should work fine. 
