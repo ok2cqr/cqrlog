@@ -1,0 +1,36 @@
+name: Snap Package (Qt6, testing)
+
+# Strictly-confined snap of CQRLOG (Qt6), built on a test branch only.
+# Not wired into releases yet - see snap/README.md.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "snap" ]
+  pull_request:
+    branches: [ "snap" ]
+
+jobs:
+  snap:
+    name: Build Snap (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build snap
+      uses: snapcore/action-build@v1
+      id: build
+
+    - name: Upload snap artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cqrlog-snap-${{ matrix.arch }}
+        path: ${{ steps.build.outputs.snap }}
