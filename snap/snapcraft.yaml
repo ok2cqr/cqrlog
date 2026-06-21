@@ -44,7 +44,8 @@ parts:
   fpc:
     plugin: nil
     # Local source only to carry the glibc patch reused from the flatpak dir.
-    source: ../flatpak
+    # Paths are relative to the project root (the dir containing snap/).
+    source: flatpak
     source-type: local
     build-packages: [wget, ca-certificates, build-essential, binutils]
     override-build: |
@@ -167,7 +168,8 @@ parts:
   cqrlog:
     after: [fpc, lazarus, qt6pas]
     plugin: nil
-    source: ..
+    # The project root (dir containing snap/) is the repo root with src/, Makefile.
+    source: .
     source-type: local
     build-packages: [gzip]
     override-build: |
