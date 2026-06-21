@@ -71,9 +71,11 @@ parts:
       # Lazarus needs the FPC sources (FPCDIR) at runtime of lazbuild - ship them.
       mkdir -p "$PREFIX"
       cp -r fpcsrc "$PREFIX/fpcsrc"
-      # Unpack the bootstrap compiler.
+      # Unpack the bootstrap compiler. The fpc-X-linux.tar has a single leading
+      # dir (fpc-3.2.2.<arch>-linux/) holding binary.<arch>-linux.tar + install.sh;
+      # strip it (flatpak-builder did this implicitly) so the globs below match.
       mkdir fpcpre
-      tar --no-same-owner -xf fpc-bin.tar
+      tar --no-same-owner --strip-components=1 -xf fpc-bin.tar
       tar --no-same-owner -xf binary.*.tar
       tar --no-same-owner -C fpcpre -xf base.*.tar.gz
       make -C fpcsrc compiler_cycle PP="$work/fpcpre/lib/fpc/$fpcver/$PPNAME"
