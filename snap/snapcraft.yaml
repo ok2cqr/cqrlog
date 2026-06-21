@@ -127,13 +127,15 @@ parts:
 
   # ---------------------------------------------------------------------------
   # libQt6Pas - the Qt6<->Pascal binding the qt6 widgetset links against.
-  # Built against the kde-neon-6 extension's Qt6 (no Qt rebuild).
+  # Built with the distro's Qt6 dev headers/qmake6 (the kde-neon-6 extension does
+  # not expose qmake6 to part scriptlets); at RUNTIME it uses the extension's Qt6,
+  # which is ABI-compatible (Qt keeps backward compat within the Qt6 series).
   # ---------------------------------------------------------------------------
   qt6pas:
     plugin: nil
     source: https://github.com/davidbannon/libqt6pas/archive/refs/tags/v6.2.10.tar.gz
     source-checksum: sha256/dbcc13559f991958fb69de31d67c85575bbe278fdff0813b51787da50720d591
-    build-packages: [g++, make]
+    build-packages: [g++, make, qt6-base-dev, qt6-base-private-dev]
     override-build: |
       set -eux
       cd cbindings
