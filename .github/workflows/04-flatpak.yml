@@ -1,13 +1,13 @@
-name: Flatpak Bundle (Qt6, testing)
+name: Flatpak Bundle (Qt6)
 
-# Self-hosted single-file flatpak bundle, built on a test branch only.
-# Not wired into releases yet - see flatpak/README.md.
+# Self-hosted single-file flatpak bundle. Built only on release tags (v*),
+# matching the Draft Release workflow, plus on-demand via workflow_dispatch.
+# See flatpak/README.md.
 on:
   workflow_dispatch:
   push:
-    branches: [ "flatpak" ]
-  pull_request:
-    branches: [ "flatpak" ]
+    tags:
+      - 'v*'
 
 jobs:
   flatpak:
