@@ -144,7 +144,7 @@ parts:
     stage-packages: [libmariadb3]
     override-prime: |
       craftctl default
-      d="$CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET"
+      d="$CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR"
       ln -sf libmariadb.so.3 "$d/libmysqlclient.so"
       ln -sf libmariadb.so.3 "$d/libmysqlclient.so.18"
       ln -sf libmariadb.so.3 "$d/libmysqlclient.so.19"
@@ -191,9 +191,8 @@ parts:
       # rename to the app-id like the flatpak does.
       desk="$CRAFT_PART_INSTALL/usr/share/applications/cqrlog.desktop"
       sed -i 's|^Exec=.*|Exec=cqrlog|; s|^Icon=.*|Icon=cqrlog|' "$desk"
-    organize:
-      # make install lays everything under usr/ already (DESTDIR=.../usr) - nothing
-      # to reorganize; binary at usr/bin/cqrlog, data at usr/share/cqrlog.
+      # make install lays everything under usr/ already (DESTDIR=.../usr):
+      # binary at usr/bin/cqrlog, data at usr/share/cqrlog - nothing to reorganize.
 
 apps:
   cqrlog:
@@ -205,7 +204,7 @@ apps:
       # libQt6Pas (usr/lib) + libmariadb & libmysqlclient symlinks (triplet dir).
       # FPC dlopen()s libmysqlclient.so.20 by soname, which only LD_LIBRARY_PATH
       # resolves inside a snap - keep both dirs on the path.
-      LD_LIBRARY_PATH: $SNAP/usr/lib:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
+      LD_LIBRARY_PATH: $SNAP/usr/lib:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
       # Bundled rigctld/rotctld/xplanet live here.
       PATH: $SNAP/usr/bin:$PATH
     plugs:
