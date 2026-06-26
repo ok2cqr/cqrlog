@@ -1,15 +1,16 @@
 object frmDbSqlSel: TfrmDbSqlSel
-  Left = 393
-  Height = 306
-  Top = 141
-  Width = 441
+  Left = 513
+  Height = 456
+  Top = 391
+  Width = 501
   Caption = 'Select SQL for logs'
-  ClientHeight = 306
-  ClientWidth = 441
+  ClientHeight = 456
+  ClientWidth = 501
   Color = clWhite
+  LCLVersion = '4.6.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '2.2.6.0'
+  OnShow = FormShow
   object gbLocalUser: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = rbExternal
@@ -17,67 +18,71 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 6
-    Height = 89
-    Top = 177
-    Width = 429
+    Height = 137
+    Top = 159
+    Width = 489
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 6
     BorderSpacing.Top = 12
     BorderSpacing.Right = 6
     Caption = 'Define Local SQL user'
-    ClientHeight = 71
-    ClientWidth = 427
+    ClientHeight = 110
+    ClientWidth = 479
+    ParentBackground = False
     TabOrder = 6
     TabStop = True
     Visible = False
     object edtUserName: TEdit
-      AnchorSideTop.Control = gbLocalUser
-      AnchorSideTop.Side = asrCenter
+      AnchorSideLeft.Control = gbLocalUser
+      AnchorSideTop.Control = lblUsername
+      AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = edtPassword
-      Left = 229
-      Height = 34
-      Top = 18
-      Width = 90
-      Anchors = [akTop, akRight]
+      Left = 0
+      Height = 21
+      Top = 71
+      Width = 171
       BorderSpacing.Right = 12
-      OnExit = edtUserNameExit
       TabOrder = 2
       Text = 'cqrlog'
+      OnExit = edtUserNameExit
     end
     object edtPassword: TEdit
-      AnchorSideTop.Control = gbLocalUser
-      AnchorSideTop.Side = asrCenter
+      AnchorSideLeft.Control = edtUserName
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = lblUsername
+      AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = gbLocalUser
       AnchorSideRight.Side = asrBottom
-      Left = 331
-      Height = 34
-      Top = 18
-      Width = 90
-      Anchors = [akTop, akRight]
+      Left = 183
+      Height = 21
+      Top = 71
+      Width = 137
       BorderSpacing.Right = 6
-      OnExit = edtPasswordExit
       TabOrder = 3
       Text = 'cqrlog'
+      OnExit = edtPasswordExit
     end
     object lblPass: TLabel
       AnchorSideLeft.Control = edtPassword
       AnchorSideBottom.Control = edtPassword
-      Left = 331
-      Height = 17
-      Top = 1
-      Width = 62
+      Left = 183
+      Height = 16
+      Top = 55
+      Width = 58
       Anchors = [akLeft, akBottom]
       Caption = 'Password'
       ParentColor = False
     end
     object lblUsername: TLabel
-      AnchorSideLeft.Control = edtUserName
+      AnchorSideLeft.Control = gbLocalUser
+      AnchorSideTop.Control = edtIP
+      AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Control = edtUserName
-      Left = 229
-      Height = 17
-      Top = 1
-      Width = 67
-      Anchors = [akLeft, akBottom]
+      Left = 0
+      Height = 16
+      Top = 55
+      Width = 62
+      BorderSpacing.Top = 10
       Caption = 'Username'
       ParentColor = False
     end
@@ -85,52 +90,57 @@ object frmDbSqlSel: TfrmDbSqlSel
       AnchorSideLeft.Control = edtIP
       AnchorSideBottom.Control = edtIP
       Left = 6
-      Height = 17
-      Top = 1
-      Width = 60
-      Anchors = [akLeft, akBottom]
+      Height = 16
+      Top = 8
+      Width = 57
       Caption = 'IP addres'
       ParentColor = False
     end
     object lblPort: TLabel
-      AnchorSideLeft.Control = edtPort
+      AnchorSideLeft.Control = edtIP
+      AnchorSideTop.Control = gbLocalUser
       AnchorSideBottom.Control = edtPort
-      Left = 108
-      Height = 17
-      Top = 1
-      Width = 26
-      Anchors = [akLeft, akBottom]
+      Left = 272
+      Height = 16
+      Top = 7
+      Width = 25
+      Anchors = [akTop]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 7
       Caption = 'Port'
       ParentColor = False
     end
     object edtPort: TEdit
       AnchorSideLeft.Control = edtIP
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = gbLocalUser
-      AnchorSideTop.Side = asrCenter
-      Left = 108
-      Height = 34
-      Top = 18
+      AnchorSideTop.Control = lblPort
+      AnchorSideTop.Side = asrBottom
+      Left = 272
+      Height = 21
+      Top = 24
       Width = 90
+      Anchors = [akTop]
       BorderSpacing.Left = 12
+      BorderSpacing.Top = 1
       MaxLength = 5
       NumbersOnly = True
-      OnExit = edtPortExit
       TabOrder = 1
       Text = '3306'
+      OnExit = edtPortExit
     end
     object edtIP: TEdit
       AnchorSideLeft.Control = gbLocalUser
-      AnchorSideTop.Control = gbLocalUser
-      AnchorSideTop.Side = asrCenter
+      AnchorSideTop.Control = lblIp
+      AnchorSideTop.Side = asrBottom
       Left = 6
-      Height = 34
-      Top = 18
-      Width = 90
+      Height = 21
+      Top = 24
+      Width = 242
+      Anchors = [akTop]
       BorderSpacing.Left = 6
-      OnExit = edtIPExit
       TabOrder = 0
       Text = 'localhost'
+      OnExit = edtIPExit
     end
   end
   object lblQuestion: TLabel
@@ -138,10 +148,10 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = pnlWelcome
     AnchorSideTop.Side = asrBottom
-    Left = 21
-    Height = 34
-    Top = 44
-    Width = 398
+    Left = 84
+    Height = 32
+    Top = 43
+    Width = 332
     BorderSpacing.Top = 6
     Caption = 'It seems you are trying to run this program for '#10'the first time. Do you want to save your Log data to:'
     Font.Style = [fsBold]
@@ -153,53 +163,53 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideTop.Control = lblQuestion
     AnchorSideTop.Side = asrBottom
     Left = 24
-    Height = 23
+    Height = 18
     Hint = 'Log data is saved to ~/.config/cqrlog/database folder. '#10'Access to that data is done by starting a new SQL server thread for that.'#10'Unfortunately using this way to save logs causes most of database '#10'connection problems with CQRLOG.'#10'_______________________________________________'#10'For further information press "Please read"-button'
-    Top = 90
-    Width = 284
+    Top = 87
+    Width = 251
     BorderSpacing.Left = 24
     BorderSpacing.Top = 12
     Caption = 'your linux user folder (CQRLOG default)'
     Checked = True
-    OnClick = rbFolderClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
     TabStop = True
+    OnClick = rbFolderClick
   end
   object rbLocal: TRadioButton
     AnchorSideLeft.Control = rbFolder
     AnchorSideTop.Control = rbFolder
     AnchorSideTop.Side = asrBottom
     Left = 24
-    Height = 23
+    Height = 18
     Hint = 'Use SQL server already installed to your machine. Both Mysql or MariDB should work.'#10'CQRLOG tries first create SQL user with proper privileges to use the SQL server'#10'and then set proper values to "Database connection" window.'#10'This is done by ~/create_cqr_user.sh scipt that is tried to run with most common'#10'terminals xterm, gnome-terminal or lxterminal.'#10'If that fails you have to run script manually from your command-line console.'#10'_______________________________________________'#10'For further information press "Please read"-button'
-    Top = 116
-    Width = 202
+    Top = 108
+    Width = 180
     BorderSpacing.Top = 3
     Caption = 'local machine''s SQL server'
-    OnChange = rbLocalChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
     TabStop = True
+    OnChange = rbLocalChange
   end
   object rbExternal: TRadioButton
     AnchorSideLeft.Control = rbFolder
     AnchorSideTop.Control = rbLocal
     AnchorSideTop.Side = asrBottom
     Left = 24
-    Height = 23
+    Height = 18
     Hint = 'Use SQL server anywhere. Both Mysql or MariDB should work.'#10'You have to define values to connect SQL server by yourself:'#10'Address, port, user and password required to connect to external SQL server.'#10'SQL user and privileges have to be created by SQL server administrator.'#10'Server can exist in your home network or Internet.'#10'With external networks VPN or SSH tunnel is recommended for security reasons.'#10'_______________________________________________'#10'For further information press "Please read"-button'
-    Top = 142
-    Width = 226
+    Top = 129
+    Width = 201
     BorderSpacing.Top = 3
     Caption = 'external networked SQL server'
-    OnChange = rbExternalChange
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
     TabStop = True
+    OnChange = rbExternalChange
   end
   object btnOK: TButton
     AnchorSideTop.Side = asrBottom
@@ -207,19 +217,19 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 354
+    Left = 414
     Height = 25
     Hint = 'Confirm your selection and continue.'#10'______________________________________________________________'#10'If you made wrong selection remove ~/.config/cqrlog folder'#10'(before saving any qsos, all will be deleted if 1st option was used)'#10'and then start Cqrlog again to get back to this screen.'
-    Top = 269
+    Top = 419
     Width = 75
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 12
     BorderSpacing.Bottom = 12
     Caption = 'OK'
-    OnClick = btnOKClick
     ParentShowHint = False
     ShowHint = True
     TabOrder = 5
+    OnClick = btnOKClick
   end
   object pnlWelcome: TPanel
     AnchorSideLeft.Control = Owner
@@ -227,17 +237,18 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 30
-    Height = 32
+    Height = 31
     Top = 6
-    Width = 381
+    Width = 441
     Anchors = [akTop, akLeft, akRight]
     AutoSize = True
     BorderSpacing.Left = 30
     BorderSpacing.Top = 6
     BorderSpacing.Right = 30
-    ClientHeight = 32
-    ClientWidth = 381
+    ClientHeight = 31
+    ClientWidth = 441
     Color = clWhite
+    ParentBackground = False
     ParentColor = False
     TabOrder = 0
     object lblWelcome: TLabel
@@ -245,10 +256,10 @@ object frmDbSqlSel: TfrmDbSqlSel
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = pnlWelcome
       AnchorSideTop.Side = asrCenter
-      Left = 46
-      Height = 30
+      Left = 96
+      Height = 29
       Top = 1
-      Width = 289
+      Width = 249
       Caption = 'Welcome to CQRLOG'
       Font.Color = clOlive
       Font.Height = 25
@@ -261,9 +272,9 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideLeft.Control = btnOK
     AnchorSideTop.Control = rbFolder
     AnchorSideRight.Side = asrBottom
-    Left = 354
+    Left = 414
     Height = 64
-    Top = 90
+    Top = 87
     Width = 64
     Picture.Data = {
       1754506F727461626C654E6574776F726B47726170686963E423000089504E47
@@ -563,17 +574,18 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
-    Left = 30
+    Left = 8
     Height = 89
-    Top = 177
-    Width = 381
-    Anchors = [akTop, akLeft, akRight]
+    Top = 304
+    Width = 441
+    Anchors = []
     BorderSpacing.Left = 30
     BorderSpacing.Top = 12
     BorderSpacing.Right = 30
     ClientHeight = 89
-    ClientWidth = 381
+    ClientWidth = 441
     Color = clWhite
+    ParentBackground = False
     ParentColor = False
     TabOrder = 4
     Visible = False
@@ -582,9 +594,9 @@ object frmDbSqlSel: TfrmDbSqlSel
       AnchorSideTop.Control = pnlInfo
       AnchorSideRight.Control = pnlInfo
       Left = 1
-      Height = 34
+      Height = 32
       Top = 1
-      Width = 366
+      Width = 337
       Caption = 'Cqrlog is creatng your first log, it might take some time.'#10'Please be patient!'
       Font.Color = clMaroon
       ParentColor = False
@@ -599,7 +611,7 @@ object frmDbSqlSel: TfrmDbSqlSel
     AnchorSideBottom.Side = asrBottom
     Left = 6
     Height = 1
-    Top = 293
+    Top = 443
     Width = 1
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 6
@@ -610,10 +622,10 @@ object frmDbSqlSel: TfrmDbSqlSel
   object btnHelp: TSpeedButton
     AnchorSideTop.Control = btnOK
     AnchorSideRight.Control = btnOK
-    Left = 232
+    Left = 292
     Height = 25
     Hint = 'Did you read help of first start ?'#10'___________________'#10'PLEASE DO IT NOW !'
-    Top = 269
+    Top = 419
     Width = 116
     Anchors = [akTop, akRight]
     BorderSpacing.Right = 6
@@ -652,8 +664,8 @@ object frmDbSqlSel: TfrmDbSqlSel
       FF00E2A289A4D0927FD7D49078DAD39079DAD5927BDAD7947CDAD8947DDADB96
       7FDADB9880DADC9A81DAE19F86DBD4937CAEFFFFFF00FFFFFF00
     }
-    OnClick = btnHelpClick
     ShowHint = True
     ParentShowHint = False
+    OnClick = btnHelpClick
   end
 end

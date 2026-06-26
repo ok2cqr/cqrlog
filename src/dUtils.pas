@@ -242,6 +242,8 @@ type
     procedure ClearStatGrid(g:TStringGrid);
     procedure AddBandsToStatGrid(g:TStringGrid);
     procedure ShowStatistic(ref_adif,old_stat_adif:Word; g:TStringGrid; call:String='');
+    procedure OpenWithDesktop(const Target : String);
+    procedure SetupHostProcess(AProcess : TProcess; ParamList : TStrings);
 
     function  BandFromArray(tmp:Currency):string;
     function  MyDefaultBrowser:String;
@@ -339,13 +341,11 @@ type
     function  IsCmdCtrl(Shift : TShiftState) : Boolean;
     function  PlatformSearchPath : String;
     function  FindExecutable(const ExeName : String) : String;
-    procedure OpenWithDesktop(const Target : String);
     function  DefaultToolPath(const ToolName, LinuxDefault : String) : String;
     function  DefaultRotCtldPath : String;
     function  InFlatpak : Boolean;
     function  isSnap : Boolean;
-    procedure SetupHostProcess(AProcess : TProcess; ParamList : TStrings);
-
+    function  isMacOS : Boolean;
 end;
 
 var
@@ -3563,6 +3563,16 @@ begin
   //the bundled helper tools under $SNAP/usr/bin on the search path. Unlike
   //Flatpak the snap runs those tools in-sandbox, so no host-spawn is needed.
   Result := GetEnvironmentVariable('SNAP') <> '';
+end;
+
+
+function TdmUtils.isMacOS : Boolean;
+begin
+  {$IFDEF DARWIN}
+  Result := True;
+  {$ELSE}
+  Result := False;
+  {$ENDIF}
 end;
 
 procedure TdmUtils.SetupHostProcess(AProcess : TProcess; ParamList : TStrings);

@@ -42,6 +42,7 @@ type
     procedure edtUserNameExit(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure rbExternalChange(Sender: TObject);
     procedure rbFolderClick(Sender: TObject);
     procedure rbLocalChange(Sender: TObject);
@@ -71,7 +72,7 @@ implementation
 
 { TfrmDbSqlSel }
 
-uses fDBConnect, dUtils;
+uses fDBConnect, dUtils, dData;
 
 procedure TfrmDbSqlSel.rbLocalChange(Sender: TObject);
 begin
@@ -319,12 +320,8 @@ begin
 end;
 
 procedure TfrmDbSqlSel.btnHelpClick(Sender: TObject);
-var
-  pathToHelp : string;
 begin
-  pathToHelp := ExpandFileNameUTF8('..' + DirectorySeparator + 'share' + DirectorySeparator + 'cqrlog' + DirectorySeparator +
-                                   'help' + DirectorySeparator + 'firsttime.html');
-  dmUtils.OpenWithDesktop(pathToHelp);
+  dmUtils.OpenInApp(dmData.HelpDir + 'firsttime.html');
 end;
 
 procedure TfrmDbSqlSel.ChkValues;
@@ -402,6 +399,16 @@ begin
   lblError.Visible := False;
   DeleteFile('/tmp/cqrSQLUsrCreate');
   DeleteFile('/tmp/cqrBashDone');
+end;
+
+procedure TfrmDbSqlSel.FormShow(Sender: TObject);
+begin
+  if (dmUtils.isSnap or dmUtils.InFlatpak or dmUtils.isMacOS) then
+  begin
+    rbFolder.Checked := False;
+    rbFolder.Enabled := False;
+    rbLocal.Checked := True;
+  end;
 end;
 
 
