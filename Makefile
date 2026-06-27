@@ -8,7 +8,7 @@ ifeq ($(UNAME_S),Darwin)
   WS      ?= cocoa
 else
   DESTDIR  = /usr
-  WS      ?= gtk2
+  WS      ?= qt6
 endif
 #
 datadir  = $(DESTDIR)/share/cqrlog
@@ -98,7 +98,7 @@ deb: dependencies ## Build a deb package (Linux, via tools/makedeb.sh)
 deb_src: ## Build a deb package with source (Linux)
 	dpkg-buildpackage -rfakeroot -i -I -S
 debug:
-	$(LAZBUILD) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	$(LAZBUILD) --ws=$(WS) --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 cqrlog_qt5: src/cqrlog.lpi
@@ -117,6 +117,17 @@ cqrlog_qt6: src/cqrlog.lpi
 
 cqrlog_qt6_debug: src/cqrlog.lpi
 	$(LAZBUILD) --ws=qt6 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
+# GTK2 fallback build (Linux). Default build is QT6; use these only if a GTK2
+# binary is ever needed again.
+cqrlog_gtk2: src/cqrlog.lpi
+	$(LAZBUILD) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
+	$(ST) src/cqrlog
+	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
+
+cqrlog_gtk2_debug: src/cqrlog.lpi
+	$(LAZBUILD) --ws=gtk2 --pcp=$(tmpdir)/.lazarus src/cqrlog.lpi
 	gzip tools/cqrlog.1 -c > tools/cqrlog.1.gz
 
 # macOS .app bundle
@@ -251,11 +262,12 @@ dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
 		echo "Dependencies already installed" ; \
 	else \
 		sudo apt-get update && sudo apt-get install -y \
-		git lazarus-ide lcl lcl-gtk2 lcl-nogui \
+		git lazarus-ide lcl lcl-gtk2 lcl-qt6 lcl-nogui \
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \
-		libqt5pas1 libqt5pas-dev libfuse2 libsquashfuse0 \
+		libqt5pas1 libqt5pas-dev libqt6pas6 libqt6pas-dev \
+		qt6-base-dev-tools libfuse2 libsquashfuse0 \
 		wget devscripts qt5-qmake-bin qtchooser \
 		mariadb-server mariadb-client ; \
 	fi
@@ -275,8 +287,8 @@ hamlib: dependencies ## Install latest hamlib 4.5.5 from git.
 		sudo cp /usr/local/lib/libhamlib* /lib/ ; \
 	fi
 
-appimage: dependencies clean cqrlog hamlib ## Build an appimage (Linux, GTK2)
-	./tools/appimage.sh
+appimage: dependencies clean cqrlog hamlib ## Build an appimage (Linux, QT6)
+	./tools/appimage.sh QT6
 
 appimage-qt5: dependencies clean cqrlog_qt5 hamlib ## Build an appimage (Linux, QT5)
 	./tools/appimage.sh QT5

@@ -1,4 +1,3 @@
-# Set base image to Ubuntu 24.04 LTS Jammy, as fpc fails on Focal
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -15,7 +14,7 @@ RUN apt-get update
 RUN apt-get install -y \
         git \
         lazarus-ide \
-        lcl lcl-gtk2 \
+        lcl lcl-gtk2 lcl-qt6 \
         lcl-nogui \
         lcl-units \
         lcl-utils \
@@ -34,6 +33,9 @@ RUN apt-get install -y \
         libfl-dev \
         libqt5pas1 \
         libqt5pas-dev \
+        libqt6pas6 \
+        libqt6pas-dev \
+        qt6-base-dev-tools \
         libfuse2 \
         libsquashfuse0 \
         wget \

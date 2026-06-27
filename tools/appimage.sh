@@ -117,15 +117,20 @@ echo " "
 # download & set all needed tools
 wget -c -nv "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${ARCH}.AppImage"
 wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-${ARCH}.AppImage"
-if [ "$DE" == "QT5" ] ; then
+if [[ "$DE" == QT* ]] ; then
     wget -c -nv "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${ARCH}.AppImage"
 fi
 chmod a+x *.AppImage
 
 # build (optional QT plugin if set)
 QT=""
-if [ "$DE" == "QT5" ] ; then
+if [[ "$DE" == QT* ]] ; then
     QT="-p qt"
+    # linuxdeploy-plugin-qt needs qmake to locate the Qt install; Qt5 is found
+    # via the default qmake, for Qt6 point it at qmake6 explicitly.
+    if [ "$DE" == "QT6" ] && command -v qmake6 >/dev/null 2>&1 ; then
+        export QMAKE=$(command -v qmake6)
+    fi
 fi
 ./linuxdeploy-${ARCH}.AppImage \
     -e "$APP" \
