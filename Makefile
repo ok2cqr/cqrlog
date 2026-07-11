@@ -17,6 +17,16 @@ sharedir = $(DESTDIR)/share
 tmpdir   = /tmp
 PWD = $(shell pwd)
 
+# Version derived from src/uVersion.pas so it never drifts from the app
+CQR_MAJOR   := $(shell sed -n 's/^[[:space:]]*cMAJOR[[:space:]]*=[[:space:]]*\([0-9][0-9]*\).*/\1/p' src/uVersion.pas)
+CQR_MINOR   := $(shell sed -n 's/^[[:space:]]*cMINOR[[:space:]]*=[[:space:]]*\([0-9][0-9]*\).*/\1/p' src/uVersion.pas)
+CQR_RELEASE := $(shell sed -n 's/^[[:space:]]*cRELEAS[[:space:]]*=[[:space:]]*\([0-9][0-9]*\).*/\1/p' src/uVersion.pas)
+CQR_VERSION := $(CQR_MAJOR).$(CQR_MINOR).$(CQR_RELEASE)
+# Monotonic build number for CFBundleVersion: git commit count (auto-grows per
+# commit), falling back to cBUILD from src/uVersion.pas when there is no git repo
+CQR_BUILD_FALLBACK := $(shell sed -n 's/^[[:space:]]*cBUILD[[:space:]]*=[[:space:]]*\([0-9][0-9]*\).*/\1/p' src/uVersion.pas)
+CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_FALLBACK))
+
 .DEFAULT_GOAL := cqrlog
 
 .PHONY : help dependencies hamlib clean install deb deb_src debug \
@@ -195,9 +205,9 @@ install_macos:
 	  <key>CFBundlePackageType</key>\n\
 	  <string>APPL</string>\n\
 	  <key>CFBundleShortVersionString</key>\n\
-	  <string>2.6.0</string>\n\
+	  <string>$(CQR_VERSION)</string>\n\
 	  <key>CFBundleVersion</key>\n\
-	  <string>119</string>\n\
+	  <string>$(CQR_BUILD)</string>\n\
 	  <key>NSHighResolutionCapable</key>\n\
 	  <true/>\n\
 	</dict>\n\
@@ -237,7 +247,7 @@ install_macos:
 	codesign --force --sign - --timestamp=none $(APPFWDIR)/*.dylib $(APPMACOSDIR)/rigctld $(APPMACOSDIR)/rotctld
 	@echo "Application bundle created at $(APPBUNDLE)"
 
-DMGNAME = CQRLOG-2.6.0-macOS
+DMGNAME = CQRLOG-$(CQR_VERSION)-macOS
 dmg: install_macos
 	@echo "Creating DMG..."
 	rm -f $(DESTDIR)/$(DMGNAME).dmg
