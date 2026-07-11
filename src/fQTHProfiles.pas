@@ -33,6 +33,7 @@ type
     Panel1: TPanel;
     procedure btnHideShowProfileClick(Sender: TObject);
     procedure dbgrdProfilesCellClick(Column: TColumn);
+    procedure dbgrdProfilesColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
     procedure dbgrdProfilesColumnSized(Sender: TObject);
     procedure dbgrdProfilesDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -87,6 +88,12 @@ procedure TfrmQTHProfiles.FormShow(Sender: TObject);
 begin
   dmUtils.LoadWindowPos(self);
   RefreshGrid
+end;
+
+procedure TfrmQTHProfiles.dbgrdProfilesColumnMoved(Sender: TObject;
+  FromIndex, ToIndex: Integer);
+begin
+  dmUtils.SaveForm(self)
 end;
 
 procedure TfrmQTHProfiles.dbgrdProfilesColumnSized(Sender: TObject);
