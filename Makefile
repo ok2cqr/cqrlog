@@ -267,7 +267,7 @@ dmg: install_macos
 # the macOS build is left untouched.
 # ---------------------------------------------------------------------------
 
-dependencies: ## Install all dependencies assuming a Ubuntu 22.04 LTS machine
+dependencies: ## Install all dependencies assuming a Ubuntu 24.04 LTS machine
 	if [ -e /usr/bin/fpc ]; then \
 		echo "Dependencies already installed" ; \
 	else \
