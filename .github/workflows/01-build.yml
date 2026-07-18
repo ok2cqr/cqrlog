@@ -19,7 +19,7 @@ jobs:
       run: make dependencies
 
     - name: Run Build GTK2
-      run: make cqrlog
+      run: make cqrlog_gtk2
 
     - name: Run Build QT5
       run: make cqrlog_qt5

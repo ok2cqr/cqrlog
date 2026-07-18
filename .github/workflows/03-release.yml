@@ -22,9 +22,6 @@ jobs:
       - name: version
         run: echo "tag_ver=$(./tools/get_version.sh)" >> $GITHUB_ENV
 
-      - name: Run Build Appimage GTK2
-        run: make appimage
-
       - name: Run Build Appimage QT5
         run: make appimage-qt5
 
@@ -44,7 +41,6 @@ jobs:
           body_path: CHANGELOG.latest
           files: |
             cqrlog_*.deb
-            CQRLOG-*-GTK2-*.AppImage
             CQRLOG-*-QT5-*.AppImage
         env:
           GITHUB_TOKEN: ${{ github.token }}

@@ -18,9 +18,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Run Build Appimage GTK2
-      run: make appimage
-
     - name: Run Build Appimage QT5
       run: make appimage-qt5
 
