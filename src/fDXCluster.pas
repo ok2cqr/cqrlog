@@ -987,7 +987,7 @@ begin
         lTelnet.SendMessage(telUser+#13+#10);
       if (Pos('PASSWORD',UpperCase(tmp)) > 0) and (telPass <> '') then
         lTelnet.SendMessage(telPass+#13+#10);
-      TelSpots.AddLine(tmp,clBlack,clWhite,0)
+      TelSpots.AddLine(tmp,clWindowText,clWindow,0)
     end;
     sStart := sStop + 1;
     if sStart > Length(Buffer) then
@@ -1006,7 +1006,7 @@ begin
   if lTelnet.Connected then
   begin
     lTelnet.SendMessage(cmd + #13#10);
-    TelSpots.AddLine(cmd,clBlack,clWhite,0)
+    TelSpots.AddLine(cmd,clWindowText,clWindow,0)
   end
 end;
 
@@ -1705,7 +1705,7 @@ begin
   if ConTelnet then
   begin
     ChatSpots.DisableAutoRepaint(true);
-    ChatSpots.AddLine(ThChat,clBlack,ChBckColor,0);
+    ChatSpots.AddLine(ThChat,clWindowText,ChBckColor,0);
     ChatSpots.DisableAutoRepaint(false)
   end;
 end;

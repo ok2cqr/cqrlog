@@ -356,10 +356,10 @@ begin
     item := item + ' ... ' + SyncUpdate;
     Writeln('Item:',item);
     //prepis_vetu(te:string;bpi,bpo:Tcolor;pom:longint;kam:longint;msk:longint):boolean;
-    mStatus.ReplaceLine(item,SyncColor,clWhite,0,mStatus.LastLineNumber,0)
+    mStatus.ReplaceLine(item,SyncColor,clWindow,0,mStatus.LastLineNumber,0)
   end
   else
-    mStatus.AddLine(SyncMsg,SyncColor,clWhite,0);
+    mStatus.AddLine(SyncMsg,SyncColor,clWindow,0);
 
   if (Pos('Done ...',SyncMsg)>0) or (Pos('All QSO already uploaded',SyncMsg)>0) then
   begin

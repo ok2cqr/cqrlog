@@ -249,16 +249,16 @@ begin
     if Lwaz.Text = '' then
       ShowWAZInfo
     else
-      Details.AddLine(Lwaz.Text,Lwaz.Color,clWhite,0);
+      Details.AddLine(Lwaz.Text,Lwaz.Color,clWindow,0);
     if Litu.Text = '' then
       ShowITUInfo
     else
-      Details.AddLine(Litu.Text,Litu.Color,clWhite,0);
+      Details.AddLine(Litu.Text,Litu.Color,clWindow,0);
     if Liota.Text = '' then
       ShowIOTAInfo
     else begin
-      Details.AddLine(Liota.Text,Liota.Color,clWhite,0);
-      Details.AddLine(Liota.island,Liota.color,clWhite,0);
+      Details.AddLine(Liota.Text,Liota.Color,clWindow,0);
+      Details.AddLine(Liota.island,Liota.color,clWindow,0);
     end;
     ShowClubInfo;
   finally
@@ -280,7 +280,7 @@ begin
     3 : Lwaz.Color := cqrini.ReadInteger('Zones','QSLWAZ',0);
     4 : Lwaz.Color := clBlack
   end;
-  Details.AddLine(Lwaz.Text,Lwaz.Color,clWhite,0)
+  Details.AddLine(Lwaz.Text,Lwaz.Color,clWindow,0)
 end;
 
 procedure TfrmQSODetails.ShowITUInfo;
@@ -297,7 +297,7 @@ begin
     3 : Litu.Color := cqrini.ReadInteger('Zones','QSLITU',0);
     4 : Litu.Color := clBlack
   end;
-  Details.AddLine(Litu.Text,Litu.Color,clWhite,0)
+  Details.AddLine(Litu.Text,Litu.Color,clWindow,0)
 end;
 
 procedure TfrmQSODetails.ShowIOTAInfo;
@@ -314,8 +314,8 @@ begin
     2 : Liota.Color := cqrini.ReadInteger('IOTA','QSLIOTA',0);
     3 : Liota.Color := clBlack
   end; //case
-  Details.AddLine(Liota.Text,Liota.color,clWhite,0);
-  Details.AddLine(Liota.island,Liota.color,clWhite,0)
+  Details.AddLine(Liota.Text,Liota.color,clWindow,0);
+  Details.AddLine(Liota.island,Liota.color,clWindow,0)
 end;
 
 procedure TfrmQSODetails.ShowClubInfo;
@@ -324,23 +324,23 @@ begin
   try
     if LClub1.Text <> '' then
     begin
-      Details.AddLine(LClub1.Text,LClub1.Color,clWhite,0);
+      Details.AddLine(LClub1.Text,LClub1.Color,clWindow,0);
     end;
     if LClub2.Text <> '' then
     begin
-      Details.AddLine(LClub2.Text,LClub2.Color,clWhite,0);
+      Details.AddLine(LClub2.Text,LClub2.Color,clWindow,0);
     end;
     if LClub3.Text <> '' then
     begin
-      Details.AddLine(LClub3.Text,LClub3.Color,clWhite,0);
+      Details.AddLine(LClub3.Text,LClub3.Color,clWindow,0);
     end;
     if LClub4.Text <> '' then
     begin
-      Details.AddLine(LClub4.Text,LClub4.Color,clWhite,0);
+      Details.AddLine(LClub4.Text,LClub4.Color,clWindow,0);
     end;
     if LClub5.Text <> '' then
     begin
-      Details.AddLine(LClub5.Text,LClub5.Color,clWhite,0);
+      Details.AddLine(LClub5.Text,LClub5.Color,clWindow,0);
     end;
   finally
     Details.DisableAutoRepaint(false)

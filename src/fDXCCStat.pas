@@ -106,8 +106,8 @@ begin
 
   if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
   begin
-    grdDXCCStat.AlternateColor:=$00E7FFEB;
-    grdStatSum.AlternateColor:=$00E7FFEB;
+    grdDXCCStat.AlternateColor:=dmUtils.GreenBarColor;
+    grdStatSum.AlternateColor:=dmUtils.GreenBarColor;
     grdDXCCStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
     grdStatSum.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
   end

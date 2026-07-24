@@ -292,6 +292,8 @@ type
     function  IncludesNum(text : String) : Boolean;
     function  GetRigError(err : Integer) : String;
     function  IncColor(AColor: TColor; AQuantity: Byte) : TColor;
+    function  DarkThemeActive : Boolean;
+    function  GreenBarColor : TColor;
     function  IsItIOTA(spot : String) : Boolean;
     function  GetXplanetCommand : String;
     function  GetLastUpgradeDate : TDateTime;
@@ -1917,7 +1919,7 @@ begin
 
       if cqrini.ReadBool('Fonts', 'GridGreenBar', False) = True then
       begin
-        (aForm.Components[i] as TDBGrid).AlternateColor := $00E7FFEB
+        (aForm.Components[i] as TDBGrid).AlternateColor := GreenBarColor
       end
       else begin
         (aForm.Components[i] as TDBGrid).AlternateColor := clWindow
@@ -1950,7 +1952,7 @@ begin
       (aForm.Components[i] as TStringGrid).Font.Size := fgSize;
       if cqrini.ReadBool('Fonts', 'GridGreenBar', False) = True then
       begin
-        (aForm.Components[i] as TStringGrid).AlternateColor := $00E7FFEB;
+        (aForm.Components[i] as TStringGrid).AlternateColor := GreenBarColor;
         (aForm.Components[i] as TStringGrid).Options :=
           [goRowSelect, goRangeSelect, goSmoothScroll, goVertLine, goFixedVertLine]
       end
@@ -2371,6 +2373,27 @@ begin
   G := Max(0, integer(G) + AQuantity);
   B := Max(0, integer(B) + AQuantity);
   Result := RGBToColor(R, G, B);
+end;
+
+function TdmUtils.DarkThemeActive: Boolean;
+var
+  R, G, B: byte;
+  WindowLum, TextLum: integer;
+begin
+  //no direct dark theme api in LCL, so compare luminance of system colors
+  RedGreenBlue(ColorToRGB(clWindow), R, G, B);
+  WindowLum := (R*299 + G*587 + B*114) div 1000;
+  RedGreenBlue(ColorToRGB(clWindowText), R, G, B);
+  TextLum := (R*299 + G*587 + B*114) div 1000;
+  Result := WindowLum < TextLum
+end;
+
+function TdmUtils.GreenBarColor: TColor;
+begin
+  if DarkThemeActive then
+    Result := $00243A1E  //dark green, system font color is light
+  else
+    Result := $00E7FFEB  //pale green, system font color is dark
 end;
 
 function TdmUtils.IsItIOTA(spot: string): boolean;

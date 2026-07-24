@@ -161,6 +161,7 @@ type
 
 
        function my_2_index(z:longint):longint;
+       function ReadableTextColor(fg,bg:TColor):TColor;
        procedure generuj_klik(Sender: TObject; X,Y: Integer;Button: TMouseButton;Shift: TShiftState);
 
        procedure priselpopup(sender:Tobject);
@@ -567,6 +568,35 @@ var z, maxTextW, tw, bottomMargin: longint;
   end;
 
 
+function TcolorMemo.ReadableTextColor(fg,bg:TColor):TColor;
+var r,g,b:byte;
+    lfg,lbg:longint;
+  begin
+    {stored colors may combine a fixed color with a system color that flips
+     in dark mode (e.g. white clWindowText on light LoTW background), so
+     text color has to be adjusted to stay readable against the background}
+    RedGreenBlue(ColorToRGB(fg),r,g,b);
+    lfg:=(r*299+g*587+b*114) div 1000;
+    RedGreenBlue(ColorToRGB(bg),r,g,b);
+    lbg:=(r*299+g*587+b*114) div 1000;
+    if abs(lfg-lbg)>=90 then
+      exit(fg);
+    RedGreenBlue(ColorToRGB(fg),r,g,b);
+    if lbg>127 then
+      begin //light background - darken text, keep its hue
+        r:=r div 3;
+        g:=g div 3;
+        b:=b div 3;
+      end
+    else
+      begin //dark background - lighten text, keep its hue
+        r:=r+(255-r)*2 div 3;
+        g:=g+(255-g)*2 div 3;
+        b:=b+(255-b)*2 div 3;
+      end;
+    result:=RGBToColor(r,g,b);
+  end;
+
 procedure TcolorMemo.jmonpaint(sender:Tobject);
 var z,x:longint;
     b1,b2:TColor;
@@ -586,7 +616,7 @@ var z,x:longint;
               begin b2:=vety[z+x]^.bpo;b1:=vety[z+x]^.bpi;end;
             pab.Canvas.Brush.Color:=b2;
             pab.Canvas.FillRect(0,1+z*vyska_radku,pab.Width,1+(z+1)*vyska_radku-1);
-            pab.Canvas.font.Color:=b1;
+            pab.Canvas.font.Color:=ReadableTextColor(b1,b2);
             pab.Canvas.TextOut(5-sbv.Position*8,5+(z)*vyska_radku,vety[x+z]^.te);
           end;
       end;

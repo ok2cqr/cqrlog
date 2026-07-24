@@ -242,8 +242,8 @@ begin
   // Another grid style tom@dl7bj.de, 2014-06-20
   if cqrini.ReadBool('Fonts','GridGreenBar',False) = True then
   begin
-    grdSumStat.AlternateColor:=$00E7FFEB;
-    grdStat.AlternateColor:=$00E7FFEB;
+    grdSumStat.AlternateColor:=dmUtils.GreenBarColor;
+    grdStat.AlternateColor:=dmUtils.GreenBarColor;
     grdSumStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
     grdStat.Options:=[goRowSelect,goRangeSelect,goSmoothScroll,goVertLine,goFixedVertLine];
   end else begin

@@ -125,7 +125,7 @@ object frmQSODetails: TfrmQSODetails
     Top = 0
     Width = 266
     Align = alClient
-    Color = clWhite
+    Color = clWindow
     ParentColor = False
     TabOrder = 0
   end
