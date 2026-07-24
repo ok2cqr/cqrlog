@@ -4160,7 +4160,13 @@ begin
     for i:= 1 to grid.RowCount-1 do
     begin
       qFreqMemGrid.Prepare;
+      {$IFDEF DARWIN}
+      //macOS compiler bug: FPC 3.2.2 for aarch64 with -O2 miscompiles
+      //TParam.AsFloat (silently stores 0); the Currency path avoids it
+      qFreqMemGrid.Params[0].AsCurrency := StrToCurr(grid.Cells[0,i]);
+      {$ELSE}
       qFreqMemGrid.Params[0].AsFloat   := StrToFloat(grid.Cells[0,i]);
+      {$ENDIF}
       qFreqMemGrid.Params[1].AsString  := grid.Cells[1,i];
       qFreqMemGrid.Params[2].AsInteger := StrToInt(grid.Cells[2,i]);
       qFreqMemGrid.Params[3].AsUTF8String  := grid.Cells[3,i];

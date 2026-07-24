@@ -366,7 +366,11 @@ var
   profile    : String;
   dxcc_adif  : Integer;
   len        : Integer=0;
+  {$IFDEF DARWIN}
+  RxFreq : Currency = 0; //macOS compiler bug workaround, see Params[40] below
+  {$ELSE}
   RxFreq : Double = 0;
+  {$ENDIF}
 
   function IsQsoDateInRange: boolean;
   begin
@@ -626,7 +630,14 @@ begin
     Q1.Params[1].AsString   := d.TIME_ON;
     Q1.Params[2].AsString   := d.TIME_OFF;
     Q1.Params[3].AsString   := d.CALL;
+    {$IFDEF DARWIN}
+    //macOS compiler bug: FPC 3.2.2 for aarch64 with -O2 miscompiles
+    //TParam.AsFloat (the Double->Variant conversion silently stores 0),
+    //so freq would always be imported as 0; the Currency path avoids it
+    Q1.Params[4].AsCurrency := StrToCurr(freq);
+    {$ELSE}
     Q1.Params[4].AsFloat    := StrToFloat(freq);
+    {$ENDIF}
     Q1.Params[5].AsString   := d.MODE;
     Q1.Params[6].AsString   := d.RST_SENT;
     Q1.Params[7].AsString   := d.RST_RCVD;
@@ -733,10 +744,19 @@ begin
     end;
     Q1.Params[38].AsString := d.PROP_MODE;
     Q1.Params[39].AsString := d.SAT_NAME;
+    {$IFDEF DARWIN}
+    //macOS compiler bug: FPC 3.2.2 for aarch64 with -O2 miscompiles
+    //TParam.AsFloat (silently stores 0); the Currency path avoids it
+    if TryStrToCurr(d.FREQ_RX, RxFreq) then
+      Q1.Params[40].AsCurrency := RxFreq
+    else
+      Q1.Params[40].AsCurrency := 0;
+    {$ELSE}
     if TryStrToFloat(d.FREQ_RX, RxFreq) then
       Q1.Params[40].AsFloat := RxFreq
     else
       Q1.Params[40].AsFloat := 0;
+    {$ENDIF}
 
     Q1.Params[41].AsString := d.STX;
     Q1.Params[42].AsString := d.SRX;

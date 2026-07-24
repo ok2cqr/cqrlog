@@ -250,11 +250,24 @@ begin
       else
         dmData.Q.ParamByName('remarks').AsString  := edtRemarks.Text;
 
+      {$IFDEF DARWIN}
+      //macOS compiler bug: FPC 3.2.2 for aarch64 with -O2 miscompiles
+      //TParam.AsDateTime (silently stores 0, i.e. 1899-12-30); the string
+      //path avoids it (qsodate field formats as yyyy-mm-dd)
+      dmData.Q.ParamByName('qsodate').AsString    := dmData.qCQRLOG.FieldByName('qsodate').AsString;
+      {$ELSE}
       dmData.Q.ParamByName('qsodate').AsDateTime  := dmData.qCQRLOG.FieldByName('qsodate').AsDateTime;
+      {$ENDIF}
       dmData.Q.ParamByName('time_on').AsString    := dmData.qCQRLOG.FieldByName('time_on').AsString;
       dmData.Q.ParamByName('time_off').AsString   := dmData.qCQRLOG.FieldByName('time_off').AsString;
       dmData.Q.ParamByName('callsign').AsString   := dmData.qCQRLOG.FieldByName('callsign').AsString;
+      {$IFDEF DARWIN}
+      //macOS compiler bug: FPC 3.2.2 for aarch64 with -O2 miscompiles
+      //TParam.AsFloat (silently stores 0); the Currency path avoids it
+      dmData.Q.ParamByName('freq').AsCurrency     := dmData.qCQRLOG.FieldByName('freq').AsCurrency;
+      {$ELSE}
       dmData.Q.ParamByName('freq').AsFloat        := dmData.qCQRLOG.FieldByName('freq').AsFloat;
+      {$ENDIF}
       dmData.Q.ParamByName('mode').AsString       := dmData.qCQRLOG.FieldByName('mode').AsString;
       dmData.Q.ParamByName('rst_s').AsString      := dmData.qCQRLOG.FieldByName('rst_s').AsString;
       dmData.Q.ParamByName('rst_r').AsString      := dmData.qCQRLOG.FieldByName('rst_r').AsString;
