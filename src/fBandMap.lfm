@@ -95,14 +95,6 @@ object frmBandMap: TfrmBandMap
         Action = acFilterSettings
         Visible = False
       end
-      object btnEatFocus: TButton
-        Left = 131
-        Height = 22
-        Top = 2
-        Width = 2
-        Caption = 'btnEatFocus'
-        TabOrder = 0
-      end
     end
   end
   object pnlBandMap: TPanel

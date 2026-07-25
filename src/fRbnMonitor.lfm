@@ -5,7 +5,6 @@ object frmRbnMonitor: TfrmRbnMonitor
   Width = 665
   HelpType = htKeyword
   HelpKeyword = 'help/h31.html'
-  ActiveControl = btnEatFocus
   Caption = 'RBN Monitor'
   ClientHeight = 602
   ClientWidth = 665
@@ -101,15 +100,6 @@ object frmRbnMonitor: TfrmRbnMonitor
       Top = 2
       Caption = 'ToolButton11'
       Style = tbsDivider
-    end
-    object btnEatFocus: TButton
-      Left = 210
-      Height = 22
-      Top = 2
-      Width = 0
-      Caption = 'btnEatFocus'
-      TabOrder = 0
-      OnClick = btnEatFocusClick
     end
     object ToolButton3: TToolButton
       Left = 187

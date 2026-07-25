@@ -67,7 +67,6 @@ type
     acClear: TAction;
     acFont: TAction;
     acHelp: TAction;
-    btnEatFocus: TButton;
     dlgFont: TFontDialog;
     imglBandMap: TImageList;
     Panel1: TPanel;
@@ -118,6 +117,7 @@ type
     FOnlyLoTW       : Boolean;
     FOnlyEQSL       : Boolean;
 
+    procedure ParkFocus;
     procedure SortBandMapArray(l,r : Integer; Rev:boolean);
     procedure BandMapDbClick(where:longint;mb:TmouseButton;ms:TShiftState);
     procedure EmitBandMapClick(Sender:TObject;Call,Mode : String; Freq : Currency);
@@ -640,6 +640,14 @@ begin
   //shown again. The thread lives as long as the form does, see FormDestroy
 end;
 
+//Moves keyboard focus off any child control. With no ActiveControl set, LCL
+//focuses the form window itself (see TCustomForm.SetWindowFocus), so KeyPreview
+//keeps routing keys to FormKeyUp and Esc still returns to the NewQSO window.
+procedure TfrmBandMap.ParkFocus;
+begin
+  ActiveControl := nil
+end;
+
 procedure TfrmBandMap.acFilterExecute(Sender: TObject);
 var
   f : TfrmBandMapFilter;
@@ -651,7 +659,7 @@ begin
   finally
     FreeAndNil(f)
   end ;
-  btnEatFocus.SetFocus
+  ParkFocus
   end;
 
 procedure TfrmBandMap.acHelpExecute(Sender: TObject);
@@ -664,7 +672,7 @@ begin
    // /usr/bin/opera %s does work, xdg-open %s does not (even calls opera). So we should use preferences/program/browser
    // to init Lazarus help viewer.
    ShowHelp;
-   btnEatFocus.SetFocus
+   ParkFocus
 end;
 
 procedure TfrmBandMap.FormActivate(Sender: TObject);
@@ -691,7 +699,7 @@ begin
         LeaveCriticalSection(BandMapCrit)
     end;
    end;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 procedure TfrmBandMap.LoadFonts;
 var
@@ -723,7 +731,7 @@ begin
     cqrini.WriteInteger('BandMap',dmUtils.PlatformKey('FontSize'),dlgFont.Font.Size);
     LoadFonts;
   end;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
 procedure TfrmBandMap.FormDestroy(Sender: TObject);

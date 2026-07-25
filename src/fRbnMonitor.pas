@@ -87,7 +87,6 @@ type
     acHelp : TAction;
     acClear: TAction;
     acLinkToBandMap: TAction;
-    btnEatFocus : TButton;
     dlgFont: TFontDialog;
     imgRbnMonitor: TImageList;
     popRbnMonitor: TPopupMenu;
@@ -118,7 +117,6 @@ type
     procedure acLinkToBandMapExecute(Sender: TObject);
     procedure acRbnServerExecute(Sender: TObject);
     procedure acScrollDownExecute(Sender : TObject);
-    procedure btnEatFocusClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -144,6 +142,7 @@ type
 
     function  GetModeFromFreq(freq: string): string;
 
+    procedure ParkFocus;
     procedure lConnect(aSocket: TLSocket);
     procedure lDisconnect(aSocket: TLSocket);
     procedure lReceive(aSocket: TLSocket);
@@ -562,7 +561,7 @@ begin
   lTelnet.Port := port;
   if dmData.DebugLevel>=2 then Writeln(server,'   ',port);
   lTelnet.Connect;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
 procedure TfrmRbnMonitor.acClearExecute(Sender: TObject);
@@ -590,7 +589,7 @@ begin
   finally
     Free
   end;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
 procedure TfrmRbnMonitor.acLinkToBandMapExecute(Sender: TObject);
@@ -611,7 +610,7 @@ begin
     cqrini.WriteInteger('RBNMonitor','FontSize',dlgFont.Font.Size);
     sgRbn.Font := dlgFont.Font
   end;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
 procedure TfrmRbnMonitor.acHelpExecute(Sender : TObject);
@@ -633,18 +632,22 @@ begin
   finally
     Free
   end;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
 procedure TfrmRbnMonitor.acScrollDownExecute(Sender : TObject);
 begin
   sgRbn.Row := sgRbn.RowCount;
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
-procedure TfrmRbnMonitor.btnEatFocusClick(Sender: TObject);
+//Moves keyboard focus off any child control. With no ActiveControl set, LCL
+//focuses the form window itself (see TCustomForm.SetWindowFocus), so KeyPreview
+//keeps routing keys to FormKeyUp and Esc still returns to the NewQSO window.
+//Leaving sgRbn focused would also keep the monitor in the PAUSED state, see sgRbnEnter.
+procedure TfrmRbnMonitor.ParkFocus;
 begin
-
+  ActiveControl := nil
 end;
 
 procedure TfrmRbnMonitor.FormClose(Sender: TObject;
@@ -763,7 +766,7 @@ end;
 procedure TfrmRbnMonitor.sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
   Index: Integer);
 begin
-  btnEatFocus.SetFocus
+  ParkFocus
 end;
 
 procedure TfrmRbnMonitor.FormDeactivate(Sender: TObject);
