@@ -622,7 +622,7 @@ begin
   Randomize;
   ClearAll;
   BandMapThread := TBandMapThread.Create(True);
-  BandMapThread.FreeOnTerminate := True;
+  BandMapThread.FreeOnTerminate := False; //owned by the form, torn down in FormDestroy
   BandMapThread.Start
 end;
 
@@ -635,8 +635,9 @@ procedure TfrmBandMap.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   dmUtils.SaveWindowPos(frmBandMap);
   if cqrini.ReadBool('BandMap', 'Save', False) then
-     frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv');
-  BandMapThread.Terminate
+     frmBandMap.SaveBandMapItemsToFile(dmData.HomeDir+'bandmap.csv')
+  //do not terminate BandMapThread here, the window is only hidden and can be
+  //shown again. The thread lives as long as the form does, see FormDestroy
 end;
 
 procedure TfrmBandMap.acFilterExecute(Sender: TObject);
@@ -727,6 +728,12 @@ end;
 
 procedure TfrmBandMap.FormDestroy(Sender: TObject);
 begin
+  if Assigned(BandMapThread) then
+  begin
+    BandMapThread.Terminate;
+    BandMapThread.WaitFor;
+    FreeAndNil(BandMapThread)
+  end;
   DoneCriticalsection(BandMapCrit)
 end;
 
