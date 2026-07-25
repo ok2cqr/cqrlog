@@ -428,6 +428,8 @@ type
     clBoxQSLWAZ: TColorBox;
     cmbFirstClub: TComboBox;
     cmbQSOBandColor: TColorBox;
+    cmbRbnBandColor: TColorBox;
+    lblRbnBandColor: TLabel;
     cmbFrmDXCColor: TColorBox;
     cmbFirstZip: TComboBox;
     cmbFirstSaveTo: TComboBox;
@@ -1115,7 +1117,7 @@ implementation
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,fRotControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
-  fRadioMemories, dMembership, dLogUpload;
+  fRadioMemories, dMembership, dLogUpload, fRbnMonitor;
 
 
 
@@ -1437,6 +1439,7 @@ begin
   cqrini.WriteInteger('BandMap', 'SecondAging', StrToInt(edtSecond.Text));
   cqrini.WriteInteger('BandMap', 'Disep', StrToInt(edtDisep.Text));
   cqrini.WriteInteger('BandMap', 'ClusterColor', cmbFrmDXCColor.Selected);
+  cqrini.WriteInteger('BandMap', 'RbnColor', cmbRbnBandColor.Selected);
   cqrini.WriteBool('BandMap', 'OnlyActiveBand', chkShowActiveBand.Checked);
   cqrini.WriteBool('BandMap', 'OnlyActiveMode', chkShowActiveMode.Checked);
   cqrini.WriteBool('BandMap', 'DeleteAfterQSO', chkDeleteAfterQSO.Checked);
@@ -1702,6 +1705,7 @@ begin
   cqrini.SaveToDisk;
   dmData.SaveConfigFile;
   frmDXCluster.ReloadSettings;
+  frmRbnMonitor.LoadConfigToThread;  //picks up the new RbnColor without a reconnect
   ModalResult := mrOk;
   frmGrayline.LoadSettings();
   dmUtils.LoadBandLabelSettins;
@@ -3125,6 +3129,7 @@ begin
   edtSecond.Text := IntToStr(cqrini.ReadInteger('BandMap', 'SecondAging', 8));
   edtDisep.Text := IntToStr(cqrini.ReadInteger('BandMap', 'Disep', 12));
   cmbFrmDXCColor.Selected := cqrini.ReadInteger('BandMap', 'ClusterColor', clBlack);
+  cmbRbnBandColor.Selected := cqrini.ReadInteger('BandMap', 'RbnColor', clWindowText);
   chkShowActiveBand.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveBand', False);
   chkShowActiveMode.Checked := cqrini.ReadBool('BandMap', 'OnlyActiveMode', False);
   chkDeleteAfterQSO.Checked := cqrini.ReadBool('BandMap', 'DeleteAfterQSO', True);

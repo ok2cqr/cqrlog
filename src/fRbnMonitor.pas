@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ActnList, StdCtrls, Grids, lNetComponents, lNet, lclType, ExtCtrls,
-  RegExpr;
+  Menus, RegExpr;
 
 const
   C_MAX_ROWS = 1000; //max lines in the list of RBN spots
@@ -34,7 +34,8 @@ type
     reg : TRegExpr;
     fRbnSpot : TRbnSpot;
     FOnShowSpot : TOnShowSpotEvent;
-    function AllowedSpot(spotter, dxstn, freq, mode, LoTW, eQSL : String; var dxinfo : String) : Boolean;
+    function AllowedSpot(spotter, dxstn, freq, mode, LoTW, eQSL : String;
+                         var dxinfo : String; var band, lat, long : String) : Boolean;
 
     procedure ShowSpot;
   protected
@@ -62,6 +63,11 @@ type
     fil_eQSLOnly              : Boolean;
     fil_NewDXCOnly            : Boolean;
 
+    //band map config, pushed from the main thread by LoadConfigToThread.
+    //bm_ prefix keeps it apart from the fil_ spot filter config above
+    bm_ToBandMap              : Boolean;
+    bm_RbnColor               : LongInt;
+
     property OnShowSpot : TOnShowSpotEvent read FOnShowSpot write FOnShowSpot;
 end;
 
@@ -80,9 +86,12 @@ type
     acScrollDown : TAction;
     acHelp : TAction;
     acClear: TAction;
+    acLinkToBandMap: TAction;
     btnEatFocus : TButton;
     dlgFont: TFontDialog;
     imgRbnMonitor: TImageList;
+    popRbnMonitor: TPopupMenu;
+    pumToBandMap: TMenuItem;
     sbRbn: TStatusBar;
     sgRbn: TStringGrid;
     tmrUnfocus: TTimer;
@@ -93,6 +102,7 @@ type
     ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     tbtnServer: TToolButton;
+    ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     tbtnFilter: TToolButton;
     tbtnFont: TToolButton;
@@ -105,8 +115,10 @@ type
     procedure acFilterExecute(Sender: TObject);
     procedure acFontSettingsExecute(Sender: TObject);
     procedure acHelpExecute(Sender : TObject);
+    procedure acLinkToBandMapExecute(Sender: TObject);
     procedure acRbnServerExecute(Sender: TObject);
     procedure acScrollDownExecute(Sender : TObject);
+    procedure btnEatFocusClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -122,6 +134,7 @@ type
     procedure sgRbnHeaderSized(Sender: TObject; IsColumn: Boolean;
       Index: Integer);
     procedure tmrUnfocusTimer(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
   private
     RbnMonThread : TRbnThread;
     lTelnet      : TLTelnetClientComponent;
@@ -150,7 +163,8 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline;
+uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,
+     fBandMap;
 
 { TfrmRbnMonitor }
 
@@ -162,7 +176,8 @@ begin
   end;
 end;
 
-function TRBNThread.AllowedSpot(spotter, dxstn, freq, mode, LoTW, eQSL : String; var dxinfo : String) : Boolean;
+function TRBNThread.AllowedSpot(spotter, dxstn, freq, mode, LoTW, eQSL : String;
+                                var dxinfo : String; var band, lat, long : String) : Boolean;
 var
   SrcCont  : String;
   DestCont : String;
@@ -171,7 +186,6 @@ var
   pfx      : String;
   LastDate : String;
   LastTime : String;
-  Band     : String;
   adif     : Word;
   index    : Integer;
   f        : Double;
@@ -179,6 +193,8 @@ var
   SpotterOk: Boolean;
 begin
   Result := False;
+  lat    := '';   //cleared here so the ~15 early exits below cannot leak
+  long   := '';   //the coordinates of the previously accepted spot
 
   if (fil_SrcCalls.Count>0) then
    Begin
@@ -266,7 +282,9 @@ begin
     exit
   end;
 
-  adif := dmDXCluster.id_country(dxstn,now,Pfx,Country,waz,itu,DestCont);
+  //9 arg overload, superset of the 7 arg one. It picks up lat/long for the band map
+  //at the same lookup, so there is no extra DB round trip
+  adif := dmDXCluster.id_country(dxstn,now,Pfx,Country,waz,itu,DestCont,lat,long);
 
   if (Pos(DestCont+',',fil_AllowCont+',') = 0) and (fil_AllowCont<>'') then
   begin
@@ -363,8 +381,18 @@ var
   RbnSpot : TRbnSpot;
   index   : Integer;
   band    : String;
+  lat     : String;
+  long    : String;
+  fkHz    : Double;
+  cLat    : Currency;
+  cLng    : Currency;
+  fsRbn   : TFormatSettings;
 begin
   reg := TRegExpr.Create;
+  //RBN always sends the frequency with a literal dot. Parsing it with the locale
+  //settings would silently drop every spot on a comma decimal locale
+  fsRbn := DefaultFormatSettings;
+  fsRbn.DecimalSeparator := '.';
   try try
     while not Terminated do
     begin
@@ -398,7 +426,7 @@ begin
       else
         eQSL := '';
 
-      if AllowedSpot(spotter,dxstn,freq,mode,LoTW,eQSL,dxinfo) then
+      if AllowedSpot(spotter,dxstn,freq,mode,LoTW,eQSL,dxinfo,band,lat,long) then
       begin
         fRbnSpot.spotter := spotter;
         fRbnSpot.dxstn   := dxstn;
@@ -407,6 +435,20 @@ begin
         fRbnSpot.qsl     := LoTW+eQSL;
         fRbnSpot.dxinfo  := dxinfo;
         fRbnSpot.signal  := stren;
+
+        //done here, on the worker, and not in SynRbnMonitor. AddToBandMap only appends
+        //to an array under a critical section, so it must not be put behind the
+        //Synchronize bottleneck nor behind the sgRbn.Focused grid stall
+        if bm_ToBandMap and frmBandMap.Showing then
+        begin
+          if TryStrToFloat(freq,fkHz,fsRbn) then    //RBN freq is already in kHz
+          begin
+            dmDXCluster.GetRealCoordinate(lat,long,cLat,cLng);
+            frmBandMap.AddToBandMap(fkHz,dxstn,mode,band,'',cLat,cLng,
+                                    bm_RbnColor,clWindow,False,(LoTW='L'),(eQSL='E'))
+          end
+        end;
+
         Synchronize(@ShowSpot)
       end;
       Sleep(100)
@@ -551,6 +593,15 @@ begin
   btnEatFocus.SetFocus
 end;
 
+procedure TfrmRbnMonitor.acLinkToBandMapExecute(Sender: TObject);
+begin
+  acLinkToBandMap.Checked := not acLinkToBandMap.Checked;
+  cqrini.WriteBool('RBNMonitor','ToBandMap',acLinkToBandMap.Checked);
+  //pushed straight to the worker so the toggle takes effect without a reconnect
+  if Assigned(RbnMonThread) then
+    RbnMonThread.bm_ToBandMap := acLinkToBandMap.Checked
+end;
+
 procedure TfrmRbnMonitor.acFontSettingsExecute(Sender: TObject);
 begin
   dlgFont.Font := sgRbn.Font;
@@ -589,6 +640,11 @@ procedure TfrmRbnMonitor.acScrollDownExecute(Sender : TObject);
 begin
   sgRbn.Row := sgRbn.RowCount;
   btnEatFocus.SetFocus
+end;
+
+procedure TfrmRbnMonitor.btnEatFocusClick(Sender: TObject);
+begin
+
 end;
 
 procedure TfrmRbnMonitor.FormClose(Sender: TObject;
@@ -659,6 +715,10 @@ begin
   sgRbn.Cells[5,0] := 'Qsl';
   sgRbn.Cells[6,0] := 'DXCC';
 
+  //restored in FormShow, not FormCreate, because cqrini is re-created on log switch.
+  //must happen before acConnectExecute below, LoadConfigToThread reads this action
+  acLinkToBandMap.Checked := cqrini.ReadBool('RBNMonitor','ToBandMap',False);
+
   if ((not(TRbnThread = nil)) and ( cqrini.ReadBool('RBN','AutoConnectM',False) )) then
      acConnectExecute(nil);
 end;
@@ -728,6 +788,12 @@ begin
   tmrUnfocus.Enabled:=false;
   acScrollDownExecute(nil);
 end;
+
+procedure TfrmRbnMonitor.ToolButton3Click(Sender: TObject);
+begin
+  popRbnMonitor.PopUp;
+end;
+
 //-------------------------------------------------
 procedure TfrmRbnMonitor.LoadConfigToThread;
 
@@ -762,7 +828,13 @@ begin
     RbnMonThread.fil_LoTWOnly := cqrini.ReadBool('RBNFilter','LoTWOnly',False);
     RbnMonThread.fil_eQSLOnly := cqrini.ReadBool('RBNFilter','eQSLOnly',False);
 
-    RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False)
+    RbnMonThread.fil_NewDXCOnly := cqrini.ReadBool('RBNFilter','NewDXCOnly',False);
+
+    RbnMonThread.bm_ToBandMap := acLinkToBandMap.Checked;
+    //resolved to a plain RGB here, on the main thread. The band map ages item colors
+    //from its worker thread, so a system color like clWindowText would otherwise be
+    //asked of the widgetset off the main thread on every aging tick
+    RbnMonThread.bm_RbnColor  := ColorToRGB(cqrini.ReadInteger('BandMap','RbnColor',clWindowText))
   end;
 
 end;
