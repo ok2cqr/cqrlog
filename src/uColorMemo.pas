@@ -57,6 +57,10 @@ type
        constructor Create(TheOwner: TComponent); override;
        destructor Destroy; override;
 
+       //stateless helper, public so other custom-painted windows (fBandMapGfx)
+       //can reuse the same dark mode contrast rule instead of duplicating it
+       class function ReadableTextColor(fg,bg:TColor):TColor;
+
 
        function  AddLine(LineText:string;StringColor,BackgroundColor:Tcolor;pom:longint):boolean;
 
@@ -161,7 +165,6 @@ type
 
 
        function my_2_index(z:longint):longint;
-       function ReadableTextColor(fg,bg:TColor):TColor;
        procedure generuj_klik(Sender: TObject; X,Y: Integer;Button: TMouseButton;Shift: TShiftState);
 
        procedure priselpopup(sender:Tobject);
@@ -568,7 +571,7 @@ var z, maxTextW, tw, bottomMargin: longint;
   end;
 
 
-function TcolorMemo.ReadableTextColor(fg,bg:TColor):TColor;
+class function TcolorMemo.ReadableTextColor(fg,bg:TColor):TColor;
 var r,g,b:byte;
     lfg,lbg:longint;
   begin

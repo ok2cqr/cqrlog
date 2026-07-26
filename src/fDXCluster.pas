@@ -231,7 +231,7 @@ implementation
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
-     uMyIni, fPreferences;
+     uMyIni, fPreferences, uBandMapStore;
 
 procedure TfrmDXCluster.ConnectToWeb;
 var
@@ -1423,6 +1423,18 @@ begin
       else
         frmBandMap.AddToBandMap(kmitocet,call,mode,band,splitstr,cLat,cLng,
                                 cfgClusterColor,ThBckColor, False, isLoTW, isEQSL)
+    end;
+
+    //graphical band map keeps a store of its own, with its own visibility gate,
+    //so the text band map above is not affected either way
+    if ToBandMap and Assigned(BandMapStore) and BandMapStore.Enabled then
+    begin
+      if cfgUseDXCColors then
+        BandMapStore.Add(kmitocet,call,mode,band,splitstr,sColor,ThBckColor,
+                         gssCluster,isLoTW,isEQSL)
+      else
+        BandMapStore.Add(kmitocet,call,mode,band,splitstr,cfgClusterColor,ThBckColor,
+                         gssCluster,isLoTW,isEQSL)
     end
   end;
 

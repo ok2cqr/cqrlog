@@ -49,6 +49,7 @@ type
     acDetails: TAction;
     acQSOperMode: TAction;
     acShowBandMap: TAction;
+    acShowBandMapGfx: TAction;
     acAddToBandMap: TAction;
     acLongNote: TAction;
     acDXCCCfm: TAction;
@@ -303,6 +304,7 @@ type
     MenuItem69: TMenuItem;
     MenuItem70: TMenuItem;
     MenuItem71: TMenuItem;
+    mnuShowBandMapGfx: TMenuItem;
     MenuItem72: TMenuItem;
     MenuItem73: TMenuItem;
     MenuItem74: TMenuItem;
@@ -489,6 +491,7 @@ type
     procedure acPreferencesExecute(Sender: TObject);
     procedure acQSOperModeExecute(Sender: TObject);
     procedure acShowBandMapExecute(Sender: TObject);
+    procedure acShowBandMapGfxExecute(Sender: TObject);
     procedure acTRXControlExecute(Sender: TObject);
     procedure acViewQSOExecute(Sender: TObject);
     procedure acWACCfmExecute(Sender: TObject);
@@ -830,7 +833,8 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, f
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat;
+     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat,
+     fBandMapGfx, uBandMapStore;
 
 
 
@@ -1530,6 +1534,12 @@ begin
     frmBandMap.BringToFront
   end;
 
+  if cqrini.ReadBool('Window','BandMapGfx',False) then
+  begin
+    frmBandMapGfx.Show;
+    frmBandMapGfx.BringToFront
+  end;
+
   if cqrini.ReadBool('Window','SCP',False) then
   begin
     frmSCP.Show;
@@ -1594,6 +1604,7 @@ begin
 
   frmBandMap.LoadSettings;
   frmBandMap.LoadFonts;
+  frmBandMapGfx.LoadSettings;
 
   if cqrini.ReadBool('BandMap', 'Save', False) then
     frmBandMap.LoadBandMapItemsFromFile(dmData.HomeDir+'bandmap.csv');
@@ -1676,6 +1687,14 @@ begin
     end
     else
       cqrini.WriteBool('Window','BandMap',False);
+
+    if frmBandMapGfx.Showing then
+    begin
+      frmBandMapGfx.Close;
+      cqrini.WriteBool('Window','BandMapGfx',True)
+    end
+    else
+      cqrini.WriteBool('Window','BandMapGfx',False);
 
     if frmPropagation.Showing then
     begin
@@ -3406,7 +3425,9 @@ begin
       if cqrini.ReadBool('BandMap','AddAfterQSO',False) then
         acAddToBandMap.Execute;
       if Delete then
-        frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
+        frmBandMap.DeleteFromBandMap(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text));
+      if Delete and Assigned(BandMapStore) then
+        BandMapStore.Remove(edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text))
     end;
     dmData.SaveQSO(date,
                    edtStartTime.Text,
@@ -4446,7 +4467,11 @@ begin
     f := StrToFloat(cmbFreq.Text);
   dmUtils.GetRealCoordinate(lblLat.Caption,lblLong.Caption,lat,lng);
   frmBandMap.AddToBandMap(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',lat,
-                          lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible)
+                          lng,clBlack,clWhite,True,sbtnLoTW.Visible,sbtneQSL.Visible);
+  //graphical band map: system colours, it has to stay readable in dark mode
+  if Assigned(BandMapStore) and BandMapStore.Enabled then
+    BandMapStore.Add(f*1000,edtCall.Text,cmbMode.Text,dmUtils.GetBandFromFreq(cmbFreq.Text),'',
+                     clWindowText,clWindow,gssManual,sbtnLoTW.Visible,sbtneQSL.Visible)
 end;
 
 procedure TfrmNewQSO.acCWMessagesExecute(Sender: TObject);
@@ -5277,6 +5302,14 @@ begin
     frmBandMap.BringToFront
   else
     frmBandMap.Show;
+end;
+
+procedure TfrmNewQSO.acShowBandMapGfxExecute(Sender: TObject);
+begin
+  if frmBandMapGfx.Showing then
+    frmBandMapGfx.BringToFront
+  else
+    frmBandMapGfx.Show;
 end;
 
 procedure TfrmNewQSO.acTRXControlExecute(Sender: TObject);
@@ -7061,6 +7094,8 @@ begin
     frmTRXControl.BringToFront;
   if frmBandMap.Showing then
     frmBandMap.BringToFront;
+  if frmBandMapGfx.Showing then
+    frmBandMapGfx.BringToFront;
   if frmDXCluster.Showing then
     frmDXCluster.BringToFront;
   if frmQSODetails.Showing then

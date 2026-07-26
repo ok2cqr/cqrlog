@@ -237,6 +237,61 @@ So any time you like you can make it larger and chat lines are there to check.</
                 <br><br>When band map form is active new spots are not added. This helps to locate needed
                 line from all spot lines. Form name changes to <b>BM PAUSED!</b> to remind that nothing will be
                  added until focus is moved to any other form by a mouse click.
+                <br><br><b>Band map (graphical)</b> is a second, separate band map window, opened from the
+                <b>Window</b> menu. Instead of a list of lines it draws a vertical frequency ruler and puts
+                every spot at its real place on it, so the distance on the screen is the distance on the band
+                and you can see at a glance where there is a free spot to call CQ. A cursor marks where the
+                radio is tuned and the ruler follows it while you tune; it only jumps when the radio leaves
+                the middle of the visible range, so slow tuning does not make the window move.
+                <b>When there is no radio</b> (switched off, not connected, or no rig set up at all) the
+                window follows the frequency typed into the <b>frequency field of the New QSO window</b>
+                instead, so you can still change band by hand. This does not need the
+                'Use NewQSO freq/mode' option in Preferences - that one only affects the classic band map.
+                <ul>
+                    <li>The visible range (2 kHz up to 600 kHz) is set with the combo box, the <b>+</b> /
+                        <b>-</b> buttons or the mouse wheel over the map. The wide steps are meant for bands
+                        a 200 kHz view cannot cover - 20 m is 350 kHz wide and 2 m is 2 MHz.</li>
+                    <li><b>Drag the map up or down with the mouse</b> to look at another part of the band -
+                        useful when you are zoomed in. While you drag, the window stops following the radio,
+                        so tuning does not pull it back under your hands. It starts following again as soon
+                        as the radio tunes out of the visible slice, when you change band, or when you close
+                        and reopen the window. A short click never counts as a drag, so double clicking a
+                        spot still works as usual.</li>
+                    <li>The view never reaches more than 5 kHz past a band edge - there is nothing to show
+                        out there. Near the edge of a band the window slides instead of centering on the
+                        radio, and the part outside the band is shaded. If the whole band is narrower than
+                        the selected range (30 m, for example), the band is simply centered.</li>
+                    <li><b>M</b> opens a menu holding everything except zoom, so the toolbar stays out of the
+                        way: the <b>CQ frequency</b> items, <b>Filter settings</b>, <b>Remove all spots</b>
+                        and <b>Help</b>. Items that make no sense at the moment are greyed out.</li>
+                    <li>The <b>CQ frequency</b> items in that menu: 'Mark this as my CQ frequency' draws a
+                        dashed line at the frequency the radio is on, so you can find your run frequency
+                        again after chasing a spot; 'Go back to my CQ frequency' tunes the radio there
+                        without touching the New QSO fields (double clicking the dashed line does the same);
+                        'Forget my CQ frequency' removes the line. If the marker is outside the visible
+                        range, an arrow shows which way to tune back.</li>
+                    <li>Double click on a spot puts the call into the New QSO window and tunes the radio to it,
+                        the same as in the classic band map. Double click on the CQ line only tunes the radio
+                        back, it does not touch the New QSO fields.</li>
+                    <li>When more spots are almost on the same frequency, the calls are moved down so they do
+                        not overlap; the line still points at the real frequency. If some do not fit, the
+                        number of hidden spots is shown in the bottom right corner.</li>
+                    <li><b>Filter settings</b> in the M menu opens the same filter window as the classic band
+                        map, and both windows use the same settings - so 'not worked since', 'only LoTW',
+                        'only eQSL' and 'show active band' work in both the same way, as does 'show active
+                        mode' from <b>Preferences/Bandmap</b>. Changing the filter in one window therefore
+                        changes it in the other too. The M button caption shows a star (<b>M*</b>) whenever
+                        any filter is switched on, so spots missing from the map are never a surprise. The
+                        'reverse order' and the frequency/call column widths have no meaning here and are
+                        ignored.</li>
+                </ul>
+                Just like in the classic band map the filters are applied when a spot arrives, so switching a
+                filter on does not remove spots that are already displayed - they disappear when they age out.
+                <br><br>
+                Both band maps can be open at the same time and each of them collects spots on its own -
+                closing one does not affect the other. The graphical band map does <b>not</b> do xplanet
+                export or saving spots to disk; use the classic band map when you need those. Aging times and
+                the font are shared with the classic band map and are set in <b>Preferences/Bandmap</b>.
                 </div>
         </td>
     </tr>

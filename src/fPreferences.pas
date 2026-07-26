@@ -1117,7 +1117,7 @@ implementation
 uses dUtils, dData, fMain, fFreq, fQTHProfiles, fSerialPort, fClubSettings, fLoadClub,
   fGrayline, fNewQSO, fBandMap, fBandMapWatch, fDefaultFreq, fKeyTexts, fTRXControl,fRotControl,
   fSplitSettings, uMyIni, fNewQSODefValues, fDXCluster, fCallAlert, fConfigStorage, fPropagation,
-  fRadioMemories, dMembership, dLogUpload, fRbnMonitor;
+  fRadioMemories, dMembership, dLogUpload, fRbnMonitor, fBandMapGfx;
 
 
 
@@ -1636,6 +1636,8 @@ begin
   frmNewQSO.UseSpaceBar := chkUseSpaceBar.Checked;
   if frmBandMap.Showing then
     frmBandMap.LoadFonts;
+  if frmBandMapGfx.Showing then
+    frmBandMapGfx.LoadSettings;
   cqrini.SaveToDisk;
   if TRXChanged then
     frmTRXControl.InitializeRig;

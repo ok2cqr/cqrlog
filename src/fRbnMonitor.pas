@@ -163,7 +163,7 @@ implementation
 {$R *.lfm}
 
 uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,
-     fBandMap;
+     fBandMap, uBandMapStore;
 
 { TfrmRbnMonitor }
 
@@ -446,6 +446,15 @@ begin
             frmBandMap.AddToBandMap(fkHz,dxstn,mode,band,'',cLat,cLng,
                                     bm_RbnColor,clWindow,False,(LoTW='L'),(eQSL='E'))
           end
+        end;
+
+        //graphical band map keeps a store of its own, with its own visibility
+        //gate, so the text band map above is not affected either way
+        if bm_ToBandMap and Assigned(BandMapStore) and BandMapStore.Enabled then
+        begin
+          if TryStrToFloat(freq,fkHz,fsRbn) then    //RBN freq is already in kHz
+            BandMapStore.Add(fkHz,dxstn,mode,band,'',bm_RbnColor,clWindow,
+                             gssRbn,(LoTW='L'),(eQSL='E'))
         end;
 
         Synchronize(@ShowSpot)

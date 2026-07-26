@@ -1,0 +1,136 @@
+object frmBandMapGfx: TfrmBandMapGfx
+  Left = 1030
+  Height = 560
+  Top = 30
+  Width = 300
+  HelpType = htKeyword
+  HelpKeyword = 'help/h21.html#bh19'
+  Caption = 'Band map (graphical)'
+  ClientHeight = 560
+  ClientWidth = 300
+  KeyPreview = True
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyUp = FormKeyUp
+  OnShow = FormShow
+  LCLVersion = '2.0.4.0'
+  object pnlTop: TPanel
+    Left = 0
+    Height = 28
+    Top = 0
+    Width = 300
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 28
+    ClientWidth = 300
+    TabOrder = 0
+    object btnZoomOut: TSpeedButton
+      Left = 97
+      Height = 22
+      Top = 3
+      Width = 22
+      Caption = '-'
+      Hint = 'Zoom out - show a wider part of the band'
+      OnClick = btnZoomOutClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnZoomIn: TSpeedButton
+      Left = 120
+      Height = 22
+      Top = 3
+      Width = 22
+      Caption = '+'
+      Hint = 'Zoom in - show a narrower part of the band'
+      OnClick = btnZoomInClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnMenu: TSpeedButton
+      Left = 148
+      Height = 22
+      Top = 3
+      Width = 40
+      Caption = 'M ▼'
+      Hint = 'Menu - CQ frequency, filter, clear, help'
+      OnClick = btnMenuClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object cmbSpan: TComboBox
+      Left = 3
+      Height = 23
+      Top = 2
+      Width = 78
+      Hint = 'How much of the band is visible'
+      ItemHeight = 15
+      OnChange = cmbSpanChange
+      ParentShowHint = False
+      ShowHint = True
+      Style = csDropDownList
+      TabOrder = 0
+    end
+  end
+  object pnlPlot: TPanel
+    Left = 0
+    Height = 509
+    Top = 28
+    Width = 300
+    Align = alClient
+    BevelOuter = bvNone
+    Color = clWindow
+    ParentColor = False
+    TabOrder = 1
+  end
+  object sbStatus: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 537
+    Width = 300
+    Panels = <
+      item
+        Width = 400
+      end>
+    SimplePanel = False
+  end
+  object tmrPoll: TTimer
+    Enabled = False
+    OnTimer = tmrPollTimer
+    left = 240
+    top = 120
+  end
+  object popMenu: TPopupMenu
+    left = 160
+    top = 120
+    object pumMarkCq: TMenuItem
+      Caption = 'Mark this as my CQ frequency'
+      OnClick = pumMarkCqClick
+    end
+    object pumGotoCq: TMenuItem
+      Caption = 'Go back to my CQ frequency'
+      OnClick = pumGotoCqClick
+    end
+    object pumClearCq: TMenuItem
+      Caption = 'Forget my CQ frequency'
+      OnClick = pumClearCqClick
+    end
+    object pumSep1: TMenuItem
+      Caption = '-'
+    end
+    object pumFilter: TMenuItem
+      Caption = 'Filter settings...'
+      OnClick = pumFilterClick
+    end
+    object pumClearMap: TMenuItem
+      Caption = 'Remove all spots'
+      OnClick = pumClearMapClick
+    end
+    object pumSep2: TMenuItem
+      Caption = '-'
+    end
+    object pumHelp: TMenuItem
+      Caption = 'Help'
+      OnClick = pumHelpClick
+    end
+  end
+end

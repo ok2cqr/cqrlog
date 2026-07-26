@@ -27,7 +27,7 @@ uses
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
   fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2,
-  fDbSqlSel, fProgress, fDbError, fCountyStat;
+  fDbSqlSel, fProgress, fDbError, fCountyStat, uBandMapStore, fBandMapGfx;
 var
   Splash : TfrmSplash;
 
@@ -101,6 +101,7 @@ begin
   Application.CreateForm(TdmMembership, dmMembership);
   Application.CreateForm(TdmSatellite, dmSatellite);
   Application.CreateForm(TfrmProgress, frmProgress);
+  Application.CreateForm(TfrmBandMapGfx, frmBandMapGfx);
 
   Splash.Update;
   application.ProcessMessages;

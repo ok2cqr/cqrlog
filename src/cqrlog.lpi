@@ -42,12 +42,6 @@
         <CommandLineParams Value="--debug=0"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
-      <environment>
-        <UserOverrides Count="2">
-          <Variable0 Name="FIREBIRD" Value="/home/ok2cqr/projekty/cqrlog/testing"/>
-          <Variable1 Name="HEAPTRC" Value="1"/>
-        </UserOverrides>
-      </environment>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
@@ -105,7 +99,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="125">
+    <Units Count="127">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -919,6 +913,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit124>
+      <Unit125>
+        <Filename Value="uBandMapStore.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit125>
+      <Unit126>
+        <Filename Value="fBandMapGfx.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmBandMapGfx"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit126>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -947,7 +952,7 @@
       <Verbosity>
         <ShowNotes Value="False"/>
         <ShowHints Value="False"/>
-        <ShoLineNum Value="True"/>
+        <ShowLineNum Value="True"/>
         <ShowDebugInfo Value="True"/>
       </Verbosity>
       <CustomOptions Value="-dNO_CONTEST"/>
