@@ -9,11 +9,11 @@ object frmBandMapGfx: TfrmBandMapGfx
   ClientHeight = 560
   ClientWidth = 300
   KeyPreview = True
+  LCLVersion = '4.6.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  LCLVersion = '2.0.4.0'
   object pnlTop: TPanel
     Left = 0
     Height = 28
@@ -24,70 +24,52 @@ object frmBandMapGfx: TfrmBandMapGfx
     ClientHeight = 28
     ClientWidth = 300
     TabOrder = 0
-    object btnZoomOut: TSpeedButton
-      Left = 97
-      Height = 22
-      Top = 3
-      Width = 22
-      Caption = '-'
-      Hint = 'Zoom out - show a wider part of the band'
-      OnClick = btnZoomOutClick
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object btnZoomIn: TSpeedButton
-      Left = 120
-      Height = 22
-      Top = 3
-      Width = 22
-      Caption = '+'
-      Hint = 'Zoom in - show a narrower part of the band'
-      OnClick = btnZoomInClick
-      ParentShowHint = False
-      ShowHint = True
-    end
     object btnMenu: TSpeedButton
-      Left = 148
+      AnchorSideLeft.Control = cmbSpan
+      AnchorSideLeft.Side = asrBottom
+      Left = 49
       Height = 22
-      Top = 3
-      Width = 40
-      Caption = 'M ▼'
       Hint = 'Menu - CQ frequency, filter, clear, help'
-      OnClick = btnMenuClick
-      ParentShowHint = False
+      Top = 2
+      Width = 40
+      BorderSpacing.Left = 8
+      Caption = 'M ▼'
       ShowHint = True
+      ParentShowHint = False
+      OnClick = btnMenuClick
     end
     object cmbSpan: TComboBox
       Left = 3
-      Height = 23
+      Height = 19
+      Hint = 'How much of the band is visible. Mouse wheel over the map zooms too'
       Top = 2
-      Width = 78
-      Hint = 'How much of the band is visible'
+      Width = 38
       ItemHeight = 15
-      OnChange = cmbSpanChange
       ParentShowHint = False
       ShowHint = True
       Style = csDropDownList
       TabOrder = 0
+      OnChange = cmbSpanChange
     end
   end
   object pnlPlot: TPanel
     Left = 0
-    Height = 509
+    Height = 514
     Top = 28
     Width = 300
     Align = alClient
     BevelOuter = bvNone
     Color = clWindow
+    ParentBackground = False
     ParentColor = False
     TabOrder = 1
   end
   object sbStatus: TStatusBar
     Left = 0
-    Height = 23
-    Top = 537
+    Height = 18
+    Top = 542
     Width = 300
-    Panels = <
+    Panels = <    
       item
         Width = 400
       end>
@@ -96,12 +78,12 @@ object frmBandMapGfx: TfrmBandMapGfx
   object tmrPoll: TTimer
     Enabled = False
     OnTimer = tmrPollTimer
-    left = 240
-    top = 120
+    Left = 240
+    Top = 120
   end
   object popMenu: TPopupMenu
-    left = 160
-    top = 120
+    Left = 160
+    Top = 120
     object pumMarkCq: TMenuItem
       Caption = 'Mark this as my CQ frequency'
       OnClick = pumMarkCqClick

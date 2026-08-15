@@ -46,8 +46,6 @@ type
     pumClearMap: TMenuItem;
     pumSep2: TMenuItem;
     pumHelp: TMenuItem;
-    btnZoomIn: TSpeedButton;
-    btnZoomOut: TSpeedButton;
     cmbSpan: TComboBox;
     pnlPlot: TPanel;
     pnlTop: TPanel;
@@ -60,8 +58,6 @@ type
     procedure pumClearCqClick(Sender: TObject);
     procedure pumFilterClick(Sender: TObject);
     procedure pumHelpClick(Sender: TObject);
-    procedure btnZoomInClick(Sender: TObject);
-    procedure btnZoomOutClick(Sender: TObject);
     procedure cmbSpanChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -558,16 +554,6 @@ end;
 procedure TfrmBandMapGfx.cmbSpanChange(Sender: TObject);
 begin
   SetSpanIndex(cmbSpan.ItemIndex)
-end;
-
-procedure TfrmBandMapGfx.btnZoomInClick(Sender: TObject);
-begin
-  SetSpanIndex(FSpanIndex-1)
-end;
-
-procedure TfrmBandMapGfx.btnZoomOutClick(Sender: TObject);
-begin
-  SetSpanIndex(FSpanIndex+1)
 end;
 
 procedure TfrmBandMapGfx.btnMenuClick(Sender: TObject);
