@@ -312,7 +312,7 @@ dependencies: ## Install all dependencies assuming a Ubuntu 24.04 LTS machine
 		echo "Dependencies already installed" ; \
 	else \
 		sudo apt-get update && sudo apt-get install -y \
-		git lazarus-ide lcl lcl-gtk2 lcl-qt5 lcl-nogui \
+		build-essential git lazarus-ide lcl lcl-gtk2 lcl-qt5 lcl-nogui \
 		lcl-units lcl-utils lazarus lazarus-doc \
 		lazarus-src fp-units-misc fp-units-rtl \
 		fp-utils fpc fpc-source libssl-dev libfl-dev \

@@ -46,7 +46,11 @@ echo ""
 # get version numbres
 VER=$(./tools/get_version.sh)
 VER_NUMBER=$(./tools/get_version.sh 1)
-export VERSION="${VER}_(${VER_NUMBER})"
+if [ -n "$VER_NUMBER" ] ; then
+    export VERSION="${VER}_(${VER_NUMBER})"
+else
+    export VERSION="${VER}"
+fi
 
 # version notice
 echo "You are building CQRLOG version: $VERSION"
@@ -156,8 +160,7 @@ if [ $RESULT -ne 0 ] ; then
     exit 1
 else
     # success, adding the DE variables
-    NAME=$(ls CQRLOG-*\)-${ARCH}.AppImage | cut -d ")" -f1)
-    mv CQRLOG-*\)-${ARCH}.AppImage ${NAME}\)-${DE}-${ARCH}.AppImage
+    mv "CQRLOG-${VERSION}-${ARCH}.AppImage" "CQRLOG-${VERSION}-${DE}-${ARCH}.AppImage"
     echo ""
     echo "Success build, check your built apps files:"
     ls -lh CQRLOG-*.AppImage

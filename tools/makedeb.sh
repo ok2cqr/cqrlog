@@ -54,4 +54,5 @@ if [ "$(ls *.deb)" ] ; then
     echo "Build is a success"
 else
     echo "Build failed, no .deb file present"
+    exit 1
 fi
