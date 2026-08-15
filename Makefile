@@ -32,7 +32,7 @@ CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_F
 .PHONY : help dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
          docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
-         install_macos dmg flatpak docker-flatpak
+         install_macos sign_macos dmg flatpak docker-flatpak
 
 cqrlog: src/cqrlog.lpi
 	$(LAZBUILD) --ws=$(WS) src/cqrlog.lpi
@@ -247,18 +247,58 @@ install_macos:
 	codesign --force --sign - --timestamp=none $(APPFWDIR)/*.dylib $(APPMACOSDIR)/rigctld $(APPMACOSDIR)/rotctld
 	@echo "Application bundle created at $(APPBUNDLE)"
 
+# Code signing and notarization. Notarization needs one-time credential setup:
+#   xcrun notarytool store-credentials cqrlog \
+#     --apple-id <apple-id-email> --team-id Z6YWGVCB3Q
+# (asks for an app-specific password from https://account.apple.com)
+SIGN_IDENTITY  ?= Developer ID Application: CalmBit s.r.o. (Z6YWGVCB3Q)
+NOTARY_PROFILE ?= cqrlog
+ENTITLEMENTS    = $(tmpdir)/cqrlog-entitlements.plist
+
+sign_macos:
+	@echo "Signing bundle with '$(SIGN_IDENTITY)'..."
+	@printf '<?xml version="1.0" encoding="UTF-8"?>\n\
+	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n\
+	<plist version="1.0">\n\
+	<dict>\n\
+	  <key>com.apple.security.cs.disable-library-validation</key>\n\
+	  <true/>\n\
+	</dict>\n\
+	</plist>\n' > $(ENTITLEMENTS)
+	@# Strip Finder metadata (resource forks etc.) that codesign refuses
+	xattr -cr $(APPBUNDLE)
+	find $(APPBUNDLE) -name .DS_Store -delete
+	codesign --force --timestamp --options runtime --sign "$(SIGN_IDENTITY)" \
+	  $(APPFWDIR)/*.dylib
+	codesign --force --timestamp --options runtime --sign "$(SIGN_IDENTITY)" \
+	  $(APPMACOSDIR)/rigctld $(APPMACOSDIR)/rotctld
+	codesign --force --timestamp --options runtime \
+	  --entitlements $(ENTITLEMENTS) --sign "$(SIGN_IDENTITY)" \
+	  $(APPMACOSDIR)/cqrlog
+	codesign --force --timestamp --options runtime \
+	  --entitlements $(ENTITLEMENTS) --sign "$(SIGN_IDENTITY)" \
+	  $(APPBUNDLE)
+	codesign --verify --strict --deep $(APPBUNDLE)
+	@echo "Bundle signed."
+
 DMGNAME = CQRLOG-$(CQR_VERSION)-macOS
-dmg: install_macos
+dmg: install_macos sign_macos
 	@echo "Creating DMG..."
 	rm -f $(DESTDIR)/$(DMGNAME).dmg
 	rm -rf $(tmpdir)/cqrlog-dmg
 	mkdir -p $(tmpdir)/cqrlog-dmg
-	cp -R $(APPBUNDLE) $(tmpdir)/cqrlog-dmg/
+	ditto $(APPBUNDLE) $(tmpdir)/cqrlog-dmg/CQRLOG.app
 	ln -s /Applications $(tmpdir)/cqrlog-dmg/Applications
 	hdiutil create -volname "CQRLOG" -srcfolder $(tmpdir)/cqrlog-dmg \
 	  -ov -format UDZO $(DESTDIR)/$(DMGNAME).dmg
 	rm -rf $(tmpdir)/cqrlog-dmg
-	@echo "DMG created at $(DESTDIR)/$(DMGNAME).dmg"
+	codesign --force --timestamp --sign "$(SIGN_IDENTITY)" $(DESTDIR)/$(DMGNAME).dmg
+	@echo "Notarizing (Apple usually takes 1-5 minutes)..."
+	xcrun notarytool submit $(DESTDIR)/$(DMGNAME).dmg \
+	  --keychain-profile "$(NOTARY_PROFILE)" --wait
+	xcrun stapler staple $(DESTDIR)/$(DMGNAME).dmg
+	spctl -a -t open --context context:primary-signature $(DESTDIR)/$(DMGNAME).dmg
+	@echo "Signed and notarized DMG created at $(DESTDIR)/$(DMGNAME).dmg"
 
 # ---------------------------------------------------------------------------
 # Linux packaging targets (AppImage / deb / Docker). Imported from PR #564

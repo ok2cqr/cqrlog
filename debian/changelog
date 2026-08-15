@@ -1,34 +1,68 @@
-cqrlog (2.6.0-1) unstable; urgency=low
+cqrlog (3.0.0-1) unstable; urgency=low
 
+  * macOS support - native Cocoa build (Petr, OK2CQR)
+  * macOS DMG is signed and notarized by Apple (Petr, OK2CQR)
+  * GTK3 widget set support (Saku, OH1KH)
+  * Flatpak package - Qt6 single-file bundle; forces XWayland so it starts on Wayland sessions (Petr, OK2CQR)
+  * Snap package - Qt6, strict confinement, bundled hamlib/xplanet, remote MySQL mode (Petr, OK2CQR)
+  * LoTW import runs in a separate thread (Petr, OK2CQR)
+  * eQSL import runs in a separate thread (Petr, OK2CQR)
+  * ADIF/log export speed-up (Petr, OK2CQR)
+  * Serial (COM) port auto-detection (Petr, OK2CQR)
+  * macOS-specific keyboard shortcuts (Petr, OK2CQR)
+  * UDP log uploader based on N1MM+ format (Steven, M1SDH)
+  * NewQSO: 'Call statistic' tab showing wkd/L/E status per band (Saku, OH1KH)
+  * extra F1-F10 CW message set for Contest RUN mode (Saku, OH1KH)
+  * eQSL import: option to set Rcvd date to current date -1 (Saku, OH1KH)
+  * Group edit: QSL sent/received date can be cleared (Saku, OH1KH)
   * new button "URL" to row below "Comment to callsign" (Saku, OH1KH)
   * many improvements to working with WSJTX (Saku, OH1KH)
-  * Clear RIT after saving QSO cleats also XIT (Saku, OH1KH)
-  * TO-108 / CAMSAT 6 added (Florian, DF2ET)
-  * XW-3 (CAS-9) satellite added (Florian, DF2ET)
-  * more options to error.adi file created in ADIF import added 
-    see help (Saku, OH1KH)  
-  * saving contest window state after save 
-    (Petr, OK2CQR && Saku, OH1KH)  
+  * Clear RIT after saving QSO clears also XIT (Saku, OH1KH)
+  * more options to error.adi file created in ADIF import added
+    see help (Saku, OH1KH)
+  * saving contest window state after save
+    (Petr, OK2CQR && Saku, OH1KH)
   * CQRLOG can start directly to Remote mode (Saku, OH1KH)
   * DOK editing in Edit group (Florian, DF2ET)
+  * TO-108 / CAMSAT 6 and XW-3 (CAS-9) satellites added (Florian, DF2ET)
   * Bandmap improvements (Saku, OH1KH)
-  * Grayline fixes (Saku, OH1KH)
+  * Grayline fixes incl. showing directions (Saku, OH1KH && Petr, OK2CQR)
+  * EDI/file export: fix opening certain filenames and paths (Thomas, SM3XCS)
+  * Rig power-on (auto_power) handling fixes (Saku, OH1KH)
+  * Preferences layout, modes and CW interface fixes (Saku, OH1KH)
+  * RBN monitor fixes (Saku, OH1KH)
+  * QSO offline input fix (Saku, OH1KH)
+  * editing QSO from the NewQSO window (Petr, OK2CQR)
+  * club data import now truncates the table before import (Petr, OK2CQR)
+  * macOS: TRX prefs saving, rotctld/rigctld paths and CW interface config
+    (Petr, OK2CQR)
+  * ClubLog endpoint updated to clublog.org (Greg, VK6LH)
+  * MASTER.SCP file max length fix (Petr, OK2CQR)
+  * Hamlib CW/keyer command updates for recent Hamlib releases (Saku, OH1KH)
+  * HamQTH & ClubLog online-log error handling improvements (Florian, DF2ET)
+  * updated satellite names (Florian, DF2ET)
   * DX cluster CW fixes (Saku, OH1KH)
-  * Hamlib CW fixes (Saku, OH1KH)
   * Contest window fixes (Petr, OK2CQR && Saku, OH1KH)
-  * ADIF submode fixes (Saku, OH1KH)
+  * ADIF submode and text-field length fixes (Saku, OH1KH)
   * WSJT CQ monitor fixes (Saku, OH1KH)
-  * group edit (Saku, OH1KH)
-  * ADIF text field length crash (Saku, OH1KH)
-  * label export fields (Florian, DF2ET)
-  * RBN filter (Saku, OH1KH)
-  * Statistics/Big squares (Saku, OH1KH)
-  * show recent qsos before popup (Saku, OH1KH)
-  * cabrillo export (Saku, OH1KH)
-  * docker build fixes (Dawid, SQ6EMM)
-  * microwave band fixes (Dawid, SQ6EMM)  
-  
- -- Petr Hlozek <petr@ok2cqr.com>  Sun, 29 May 2022 13:44:14 +0100
+  * RBN filter, Statistics/Big squares, cabrillo export fixes (Saku, OH1KH)
+  * QSO list display when using dark theme (George, N3GB)
+  * dark theme readability: green bar rows in grids, DX cluster spots and
+    texts, band map, Details and log upload windows (Petr, OK2CQR)
+  * macOS: ADIF import saved frequency as 0 on Apple Silicon; also affected
+    label print and frequency memories - FPC compiler bug workaround
+    (Petr, OK2CQR)
+  * Build fix for FPC 3.2.4 (suve)
+  * Modernized AppStream metadata, desktop icon install and README (AsciiWolf)
+  * Added flexibility to 'make install', easier install into /usr/local
+    or ~/.local (George, N3GB)
+  * Docker build / Makefile fixes (Dawid, SQ6EMM)
+  * GitHub Actions: release on v* tags, AppImage/.deb packaging, replaced
+    archived actions (Petr, OK2CQR && Pavel, CO7WT)
+  * AppImage: fixed build dependencies - Qt5 packages instead of Qt6
+    (Petr, OK2CQR)
+
+ -- Petr Hlozek <petr@ok2cqr.com>  Sat, 15 Aug 2026 12:00:00 +0200
 
 cqrlog (2.5.2-1) unstable; urgency=low
 

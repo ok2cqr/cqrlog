@@ -3,13 +3,13 @@ Section: hamradio
 Priority: extra
 Maintainer: Petr Hlozek <petr@ok2cqr.com>
 Uploaders: Petr Hlozek <petr@ok2cqr.com>, Kamal Mostafa <kamal@whence.com>, Colin Tuckley <colint@debian.org>
-Build-Depends: debhelper (>= 9), lazarus-ide, lcl, lcl-qt6, lcl-units, lcl-utils, fp-utils, fp-units-misc, fp-units-gfx, fp-units-db, fp-units-math, fp-units-net, libqt6pas-dev
+Build-Depends: debhelper (>= 9), lazarus-ide, lcl, lcl-qt5, lcl-units, lcl-utils, fp-utils, fp-units-misc, fp-units-gfx, fp-units-db, fp-units-math, fp-units-net, libqt5pas-dev
 Standards-Version: 3.9.5
 Homepage: http://www.cqrlog.com
 
 Package: cqrlog
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libssl-dev, mariadb-server, mariadb-client, libhamlib4, libhamlib-utils, libmariadb-dev | libmariadbclient-dev, libmariadb-dev-compat | libmariadbclient-dev-compat, libqt6pas6
+Depends: ${shlibs:Depends}, ${misc:Depends}, libssl-dev, mariadb-server, mariadb-client, libhamlib4, libhamlib-utils, libmariadb-dev | libmariadbclient-dev, libmariadb-dev-compat | libmariadbclient-dev-compat, libqt5pas1
 Description: Advanced logging program for hamradio operators
  CQRLOG is an advanced ham radio logger based on MySQL embedded database. 
  Provides radio control based on hamlib libraries (currently support of 140+ 

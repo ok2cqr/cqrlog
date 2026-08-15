@@ -11,3 +11,9 @@
 
 %:
 	dh  $@
+
+# Default Makefile widgetset is qt6, but the .deb is built against Qt5
+# (lcl-qt5 / libqt5pas) since the qt6 Lazarus toolchain is not in the apt
+# repositories. Pin WS=qt5 so the binary matches the declared dependencies.
+override_dh_auto_build:
+	dh_auto_build -- WS=qt5
