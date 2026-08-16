@@ -32,7 +32,7 @@ CQR_BUILD := $(shell git rev-list --count HEAD 2>/dev/null || echo $(CQR_BUILD_F
 .PHONY : help dependencies hamlib clean install deb deb_src debug \
          appimage appimage-qt5 docker-image docker docker-build docker-install \
          docker-appimage docker-appimage-qt5 docker-deb docker-deb-src \
-         install_macos sign_macos dmg flatpak docker-flatpak
+         install_macos sign_macos dmg_create dmg test-dmg flatpak docker-flatpak
 
 cqrlog: src/cqrlog.lpi
 	$(LAZBUILD) --ws=$(WS) src/cqrlog.lpi
@@ -282,7 +282,9 @@ sign_macos:
 	@echo "Bundle signed."
 
 DMGNAME = CQRLOG-$(CQR_VERSION)-macOS
-dmg: install_macos sign_macos
+
+# Builds and signs the DMG (shared by dmg and test-dmg)
+dmg_create: install_macos sign_macos
 	@echo "Creating DMG..."
 	rm -f $(DESTDIR)/$(DMGNAME).dmg
 	rm -rf $(tmpdir)/cqrlog-dmg
@@ -293,12 +295,19 @@ dmg: install_macos sign_macos
 	  -ov -format UDZO $(DESTDIR)/$(DMGNAME).dmg
 	rm -rf $(tmpdir)/cqrlog-dmg
 	codesign --force --timestamp --sign "$(SIGN_IDENTITY)" $(DESTDIR)/$(DMGNAME).dmg
+
+dmg: dmg_create
 	@echo "Notarizing (Apple usually takes 1-5 minutes)..."
 	xcrun notarytool submit $(DESTDIR)/$(DMGNAME).dmg \
 	  --keychain-profile "$(NOTARY_PROFILE)" --wait
 	xcrun stapler staple $(DESTDIR)/$(DMGNAME).dmg
 	spctl -a -t open --context context:primary-signature $(DESTDIR)/$(DMGNAME).dmg
 	@echo "Signed and notarized DMG created at $(DESTDIR)/$(DMGNAME).dmg"
+
+# Signed but NOT notarized — for local testing only (Gatekeeper may complain
+# on other machines; right-click > Open, or: xattr -dr com.apple.quarantine CQRLOG.app)
+test-dmg: dmg_create
+	@echo "Signed (NOT notarized) test DMG created at $(DESTDIR)/$(DMGNAME).dmg"
 
 # ---------------------------------------------------------------------------
 # Linux packaging targets (AppImage / deb / Docker). Imported from PR #564
