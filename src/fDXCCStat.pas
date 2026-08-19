@@ -444,7 +444,7 @@ begin
   Writeln(f,'</fieldset>');
 
   Writeln(f,'<BR> <BR>');
-  Writeln(f,'<H5 ALIGN=CENTER> <A HREF="http://www.cqrlog.com">CQRLOG ver. ' + dmData.VersionString  + ' </A></H5>');
+  Writeln(f,'<H5 ALIGN=CENTER> <A HREF="https://www.cqrlog.com">CQRLOG ver. ' + dmData.VersionString  + ' </A></H5>');
   Writeln(f,'</BODY>');
   Writeln(f,'</HTML>');
 

@@ -3264,7 +3264,7 @@ begin
   edtHaUserName.Text     := cqrini.ReadString('OnlineLog','HaUserName','');
   edtHaPasswd.Text       := cqrini.ReadString('OnlineLog','HaPasswd','');
   cmbHaColor.Selected    := cqrini.ReadInteger('OnlineLog','HaColor',clBlue);
-  edtHamQTHurl.Text      := cqrini.ReadString('OnlineLog','HaUrl','http://www.hamqth.com/qso_realtime.php');
+  edtHamQTHurl.Text      := cqrini.ReadString('OnlineLog','HaUrl','https://www.hamqth.com/qso_realtime.php');
   chkHaUpEnabledChange(nil);
 
   chkClUpEnabled.Checked := cqrini.ReadBool('OnlineLog','ClUP',False);
@@ -3282,7 +3282,7 @@ begin
   edtHrUserName.Text     := cqrini.ReadString('OnlineLog','HrUserName','');
   edtHrCode.Text         := cqrini.ReadString('OnlineLog','HrCode','');
   cmbHrColor.Selected    := cqrini.ReadInteger('OnlineLog','HrColor',clPurple);
-  edtHrdUrl.Text         := cqrini.ReadString('OnlineLog','HrUrl','http://robot.hrdlog.net/NewEntry.aspx');
+  edtHrdUrl.Text         := cqrini.ReadString('OnlineLog','HrUrl','https://robot.hrdlog.net/NewEntry.aspx');
   chkHrUpEnabledChange(nil);
 
   chkUdUpEnabled.Checked := cqrini.ReadBool('OnlineLog','UdUP',False);
@@ -3297,7 +3297,7 @@ begin
   chkIgnoreQSL.Checked   := cqrini.ReadBool('OnlineLog','IgnoreQSL',False);
   chkIgnoreEdit.Checked  := cqrini.ReadBool('OnlineLog','IgnoreEdit',False);
 
-  edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','http://www.hamqsl.com/solarbrief.php');
+  edtCondxImageUrl.Text      := cqrini.ReadString('prop','Url','https://www.hamqsl.com/solarbrief.php');
   edtCondxTextUrl.Text       := cqrini.ReadString('prop','UrlTxt','https://www.hamqsl.com/solarxml.php' );
   rbCondxAsImage.Checked     := cqrini.ReadBool('prop','AsImage',True);
   rbCondxAsText.Checked      := cqrini.ReadBool('prop','AsText',False);

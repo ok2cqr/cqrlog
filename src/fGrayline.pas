@@ -595,7 +595,7 @@ for f:=1 to distcount do
 end;
 
 procedure TfrmGrayline.PlotGreatCircleArcLine(longitude1,latitude1,longitude2,latitude2:extended; LongP:integer);
- { Ref: http://www.movable-type.co.uk/scripts/latlong.html }
+ { Ref: https://www.movable-type.co.uk/scripts/latlong.html }
 
 Const
   MEC       = 170  *pi/180;       // Map image horizontal Edge Crossing "no print" limit in degrees (converted to radians)

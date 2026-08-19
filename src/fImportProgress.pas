@@ -566,7 +566,7 @@ begin
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
 
-    if HTTP.HTTPMethod('GET', 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/cqrlog-cty.tar.gz') then
+    if HTTP.HTTPMethod('GET', 'https://www.ok2cqr.com/linux/cqrlog/ctyfiles/cqrlog-cty.tar.gz') then
     begin
       http.Document.Seek(0,soBeginning);
       m.CopyFrom(http.Document,HTTP.Document.Size);
@@ -631,7 +631,7 @@ begin
     HTTP.ProxyPort := cqrini.ReadString('Program','Port','');
     HTTP.UserName  := cqrini.ReadString('Program','User','');
     HTTP.Password  := cqrini.ReadString('Program','Passwd','');
-    if HTTP.HTTPMethod('GET', 'http://www.ok2cqr.com/linux/cqrlog/qslmgr/qslmgr.tar.gz') then
+    if HTTP.HTTPMethod('GET', 'https://www.ok2cqr.com/linux/cqrlog/qslmgr/qslmgr.tar.gz') then
     begin
       http.Document.Seek(0,soBeginning);
       m.CopyFrom(http.Document,HTTP.Document.Size);
@@ -1065,7 +1065,7 @@ begin
   l.Add('LoTW import errors from CQRLOG for Linux version '+dmData.VersionString);
   l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
   l.Add('');
-  l.Add('Internet: http://www.cqrlog.com');
+  l.Add('Internet: https://www.cqrlog.com');
   l.Add('');
   l.Add('<EOH>');
   l.Add('');
@@ -1565,7 +1565,7 @@ begin
   l.Add('eQSL import errors from CQRLOG for Linux version '+dmData.VersionString);
   l.Add('Copyright (C) '+FormatDateTime('YYYY',now)+' by Petr, OK2CQR and Martin, OK1RR');
   l.Add('');
-  l.Add('Internet: http://www.cqrlog.com');
+  l.Add('Internet: https://www.cqrlog.com');
   l.Add('');
   l.Add('<EOH>');
   l.Add('');

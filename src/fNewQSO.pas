@@ -27,9 +27,9 @@ const
   cRefCall = 'Ref.call (CTRL+R): ';
   cMyLoc   = 'My Loc (CTRL+L): ';
   cOperator ='Operator (ALT+O): ';
-  cQSLMgrVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat';
+  cQSLMgrVersionCheckUrl = 'https://www.ok2cqr.com/linux/cqrlog/qslmgr/ver.dat';
   cDOKVersionCheckUrl = 'https://www.df2et.de/cqrlog/ver.dat';
-  cCntyVersionCheckUrl = 'http://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
+  cCntyVersionCheckUrl = 'https://www.ok2cqr.com/linux/cqrlog/ctyfiles/ver.dat';
 
 type
   TRemoteModeType = (rmtFldigi, rmtWsjt, rmtADIF);
@@ -5224,7 +5224,7 @@ begin
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable := cqrini.ReadString('Program', dmUtils.PlatformKey('WebBrowser'), dmUtils.MyDefaultBrowser);
-    AProcess.Parameters.Add('http://www.ik3qar.it/manager/man_result.php?call='+
+    AProcess.Parameters.Add('https://www.ik3qar.it/manager/man_result.php?call='+
                             dmData.qQSOBefore.Fields[4].AsString);
     if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute

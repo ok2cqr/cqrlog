@@ -838,14 +838,14 @@ function TdmLogUpload.GetUploadUrl(where : TWhereToUpload; cmd : String) : Strin
 begin
   Result := '';
   case where of
-    upHamQTH  : Result := cqrini.ReadString('OnlineLog','HaUrl','http://www.hamqth.com/qso_realtime.php');
+    upHamQTH  : Result := cqrini.ReadString('OnlineLog','HaUrl','https://www.hamqth.com/qso_realtime.php');
     upClubLog : begin
                   if (cmd='DELETE') then
                     Result := cqrini.ReadString('OnlineLog','ClUrlDel','https://clublog.org/delete.php')
                   else
                     Result := cqrini.ReadString('OnlineLog','ClUrl','https://clublog.org/realtime.php');
                 end;
-    upHrdLog  : Result := cqrini.ReadString('OnlineLog','HrUrl','http://robot.hrdlog.net/NewEntry.aspx');
+    upHrdLog  : Result := cqrini.ReadString('OnlineLog','HrUrl','https://robot.hrdlog.net/NewEntry.aspx');
   end //case
 end;
 

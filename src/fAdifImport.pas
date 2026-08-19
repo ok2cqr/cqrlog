@@ -1058,7 +1058,7 @@ begin
     Writeln(f);
     Writeln(f,'ADIF export from CQRLOG for Linux version ' + dmData.VersionString);
     Writeln(f,'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
-    Writeln(f,'Internet: http://www.cqrlog.com');
+    Writeln(f,'Internet: https://www.cqrlog.com');
     Writeln(f,'');
     Writeln(f,'ERROR QSOs FROM ADIF IMPORT');
     Writeln(f,'<ADIF_VER:5>3.1.0');

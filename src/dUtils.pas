@@ -665,7 +665,7 @@ var
 begin
   // loading the contest list from ~/.config/cqrlog/ContestNames.tab
   // Format of File   CONTEST_ID|CONTEST_DESCRIPTION
-  // see ADIF 3.0.9 http://www.adif.org/309/ADIF_309.htm#Contest_ID
+  // see ADIF 3.0.9 https://www.adif.org/309/ADIF_309.htm#Contest_ID
   // File have to be UTF8 without BOM
   ListOfContests:= TStringList.Create;
   ListOfContests.Clear;
@@ -4259,7 +4259,7 @@ begin
     http.ProxyPort := cqrini.ReadString('Program', 'Port', '');
     http.UserName := cqrini.ReadString('Program', 'User', '');
     http.Password := cqrini.ReadString('Program', 'Passwd', '');
-    req := 'http://www.hamqth.com/xml.php?u=' + cqrini.ReadString('CallBook', 'CbHamQTHUser', '') +
+    req := 'https://www.hamqth.com/xml.php?u=' + cqrini.ReadString('CallBook', 'CbHamQTHUser', '') +
       '&p=' + EncodeURLData(cqrini.ReadString('CallBook', 'CbHamQTHPass', '')) + '&prg=Cqrlog_'+uVersion.cVERSION;
     //Writeln(req);
     if not HTTP.HTTPMethod('GET', req) then
@@ -4320,7 +4320,7 @@ begin
       ErrMsg := 'Callsign field empty!';
       exit;
     end;
-    req := 'http://www.hamqth.com/xml.php?id=' + fHamQTHSession + '&callsign=' +
+    req := 'https://www.hamqth.com/xml.php?id=' + fHamQTHSession + '&callsign=' +
       GetIDCall(call) + '&prg=CQRLOG';
     if not HTTP.HTTPMethod('GET', req) then
       ErrMsg := '(' + IntToStr(http.ResultCode) + '):' + http.ResultString
@@ -4391,7 +4391,7 @@ begin
   AProcess := TProcess.Create(nil);
   try
     AProcess.Executable  := cqrini.ReadString('Program', PlatformKey('WebBrowser'), MyDefaultBrowser);
-    AProcess.Parameters.Add('http://www.hamqth.com/' + GetIDCall(call));
+    AProcess.Parameters.Add('https://www.hamqth.com/' + GetIDCall(call));
     if dmData.DebugLevel>=1 then ;
     Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
     AProcess.Execute

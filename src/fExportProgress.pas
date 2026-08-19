@@ -450,7 +450,7 @@ begin   //TfrmExportProgress
   Writeln(f, 'ADIF export from CQRLOG for Linux version '+dmData.VersionString);
   Writeln(f, 'Copyright (C) ',YearOf(now),' by Petr, OK2CQR and Martin, OK1RR');
   Writeln(f);
-  Writeln(f, 'Internet: http://www.cqrlog.com');
+  Writeln(f, 'Internet: https://www.cqrlog.com');
   Writeln(f);
   Writeln(f, '<ADIF_VER:5>3.1.0');
   Writeln(f,'<CREATED_TIMESTAMP:15>',FormatDateTime('YYYYMMDD hhmmss',dmUtils.GetDateTime(0)));
@@ -1358,7 +1358,7 @@ begin
     end;
     Writeln(f,'</table>');
     Writeln(f,'<br> <br>');
-    Writeln(f,'<h5 class="cntr"> <a href="http://www.cqrlog.com">CQRLOG ver. ' + dmData.VersionString  + ' </a></h5>');
+    Writeln(f,'<h5 class="cntr"> <a href="https://www.cqrlog.com">CQRLOG ver. ' + dmData.VersionString  + ' </a></h5>');
     Writeln(f,'</body>');
     Writeln(f,'</html>')
   finally

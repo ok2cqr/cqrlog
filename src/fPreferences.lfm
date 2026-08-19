@@ -9513,7 +9513,7 @@ object frmPreferences: TfrmPreferences
           Top = 18
           Width = 600
           TabOrder = 2
-          Text = 'http://www.hamqth.com/qso_realtime.php'
+          Text = 'https://www.hamqth.com/qso_realtime.php'
         end
       end
       object GroupBox45: TGroupBox
@@ -9830,7 +9830,7 @@ object frmPreferences: TfrmPreferences
           Top = 18
           Width = 600
           TabOrder = 2
-          Text = 'http://robot.hrdlog.net/NewEntry.aspx'
+          Text = 'https://robot.hrdlog.net/NewEntry.aspx'
         end
       end
       object chkCloseAfterUpload: TCheckBox
@@ -10080,7 +10080,7 @@ object frmPreferences: TfrmPreferences
         Height = 16
         Top = 85
         Width = 360
-        Caption = 'Look at http://www.hamqsl.com/solar.html for more variants'
+        Caption = 'Look at https://www.hamqsl.com/solar.html for more variants'
         ParentColor = False
       end
       object edtCondxTextUrl: TEdit

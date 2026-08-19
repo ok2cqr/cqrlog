@@ -908,7 +908,7 @@ object frmAbout: TfrmAbout
         Top = 183
         Width = 139
         BorderSpacing.Left = 16
-        Caption = 'http://www.cqrlog.com'
+        Caption = 'https://www.cqrlog.com'
         Font.Color = clBlue
         Font.Style = [fsUnderline]
         ParentColor = False
