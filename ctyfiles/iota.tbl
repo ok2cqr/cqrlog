@@ -407,7 +407,7 @@ EU-062|Nordland / Nord-Trondelag County group|LA|
 EU-063|Spitsbergen's Coastal Islands (aka Svalbard's Coastal Islands)|JW|
 EU-064|Pays de la Loire Region group|F|
 EU-065|Bretagne (Finistere North West) Region group|F|
-EU-066|Solovetskiye Islands|UA(EU)|
+EU-066|Solovetskiye Islands|UA(EU)|RI1
 EU-067|Kyklades (Cyclades)|SV|
 EU-068|Bretagne (Finistere South West) Region group|F|
 EU-069|Columbretes Islands|EA|
@@ -423,11 +423,11 @@ EU-078|Gerona Province group|EA|
 EU-079|More og Romsdal County South group|LA|
 EU-080|Pontevedra Province group|EA|
 EU-081|Basse-Normandie (Manche East) Region group|F|
-EU-082|Barents Sea Coast West group|UA(EU)|
+EU-082|Barents Sea Coast West group|UA(EU)|RI1
 EU-083|Liguria Region group|I|IP1
 EU-084|Uppsala / Stockholm County group|SM|
-EU-085|Kolguev Island|UA(EU)|
-EU-086|Pechorskoye Sea Coast East group|UA(EU)|
+EU-085|Kolguev Island|UA(EU)|RI1
+EU-086|Pechorskoye Sea Coast East group|UA(EU)|RI1
 EU-087|Vasternorrland County group|SM|
 EU-088|Kattegat group|OZ|
 EU-089|Western Azores group|CT8|CT8
@@ -442,7 +442,7 @@ EU-097|Etela-Suomi (Uusimaa) Province group|OH|
 EU-099|Les Minquiers Islands|GJ|
 EU-100|Cerbicales Islands|TK|
 EU-101|Lansi-Suomi (Vaasa) Province group|OH|
-EU-102|Pechorskoye Sea Coast Centre group|UA(EU)|
+EU-102|Pechorskoye Sea Coast Centre group|UA(EU)|RI1
 EU-103|Saltee Islands|EI|
 EU-104|Sanguinaires Islands|TK|
 EU-105|Bretagne (Finistere North) Region group|F|
@@ -460,7 +460,7 @@ EU-115|Ireland (Ireland / Northern Ireland)|GI|
 EU-116|Isle of Man|GD|GD
 EU-117|Malyy Vysotskiy Island|R1(M)|R1M
 EU-118|Flannan Isles|GM|
-EU-119|White Sea Coast East group|UA(EU)|
+EU-119|White Sea Coast East group|UA(EU)|RI1
 EU-120|English Coastal Islands|G|
 EU-121|Irish Coastal Islands|EI|
 EU-122|Northern Irish Coastal Islands|GI|
@@ -475,7 +475,7 @@ EU-129|Usedom Island (aka Uznam Island)|DL|
 EU-130|Friuli-Venezia Giulia Region group|I|IL3
 EU-131|Veneto Region group|I|IL3
 EU-132|Szczecin / Koszalin Province group|SP|
-EU-133|Gulf of Finland group|UA(EU)|
+EU-133|Gulf of Finland group|UA(EU)|RI1
 EU-134|Bilbao / San Sebastian (Basque Country) Province group|EA|
 EU-135|Vasterbotten County group|SM|
 EU-136|Kvarner group|9A|
@@ -489,21 +489,21 @@ EU-143|Cadiz / Huelva Province group|EA|
 EU-144|Calabria / Basilicata region group|I|ID8
 EU-145|Algarve Province group|CT|
 EU-146|Zuid Holland / Zeeland Province group|PA|
-EU-147|White Sea Coast group|UA(EU)|
+EU-147|White Sea Coast group|UA(EU)|RI1
 EU-148|Languedoc-Roussillon Region group|F|
 EU-149|Tallinn & Harjumaa / Virumaa County group|ES|
 EU-150|Minho / Douro Litoral / Beira Litoral Province group|CT|
 EU-151|Castellon / Valencia Province group|EA|
 EU-152|Almeria / Grande / Malaga Province group|EA|
-EU-153|White Sea Coast West group|UA(EU)|
+EU-153|White Sea Coast West group|UA(EU)|RI1
 EU-155|Emilia Romagna Region group|I|IL4
 EU-156|Basse-Normandie (Manche West) Region group|F|
 EU-157|Bretagne (Cotes-d'Armor East / Ille et Vilaine) Region group|F|
 EU-158|Peloponnisos (Messinia) Region group|SV|
 EU-159|Aquitaine Region group|F|
-EU-160|Barents Sea Coast group|UA(EU)|
-EU-161|Barents Sea Coast East group|UA(EU)|
-EU-162|White Sea Coast group|UA(EU)|
+EU-160|Barents Sea Coast group|UA(EU)|RI1
+EU-161|Barents Sea Coast East group|UA(EU)|RI1
+EU-162|White Sea Coast group|UA(EU)|RI1
 EU-163|Montenegro group (aka Crna Gora group)|4O|
 EU-164|Corsica's Coastal Islands|TK|
 EU-165|Sardinia's Coastal Islands|IS|IM0
@@ -522,14 +522,15 @@ EU-177|Sodermanland / Ostergotland County group|SM|
 EU-178|Parnumaa County / Saaremaa County South group|ES|ES8
 EU-179|Black Sea Coast group|UT|
 EU-180|Black Sea Coast group|UT|
+EU-180|Black Sea Coast group|UA(EU)|RI1
 EU-181|Bulgaria group|LZ|
 EU-182|Black Sea Coast group|UT|
 EU-183|Romania group|YO|
 EU-184|Oulu Province group|OH|
-EU-185|Black Sea Coast group|UA(EU)|
+EU-185|Black Sea Coast group|UA(EU)|R6
 EU-186|Turkey group|TA|
 EU-187|Crete's Coastal Islands|SV9|
-EU-188|Pechorskoye Sea Coast West group|UA(EU)|
+EU-188|Pechorskoye Sea Coast West group|UA(EU)|RI1
 EU-189|Isle of Rockall|GM|
 EU-190|Viktoriya Isl.|R1(F)|
 EU-191|Fericirii Isl|YO|
@@ -1149,7 +1150,7 @@ SA-046|Pernambuco State group|PY|
 SA-047|Parana State group|PY|
 SA-048|Sucre State East group|YV|
 SA-049|Tierra del Fuego's Coastal Islands|LU|
-SA-050|Antartica Chilena Province group|CE|
+SA-050|Antartica Chilean Province group|CE|
 SA-051|Las Aves Islands|YV|
 SA-052|Lima Department group|OA|
 SA-053|Aisen Region South group|CE|

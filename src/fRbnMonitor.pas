@@ -163,7 +163,7 @@ implementation
 {$R *.lfm}
 
 uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,
-     fBandMap, uBandMapStore;
+     fBandMap, uBandMapStore, uDebugLog;
 
 { TfrmRbnMonitor }
 
@@ -386,7 +386,12 @@ var
   cLat    : Currency;
   cLng    : Currency;
   fsRbn   : TFormatSettings;
+  nSpots  : Int64 = 0;
+  tBeat   : TDateTime;
 begin
+  DbgLog('RBN','thread started');
+  tBeat := Now;
+  spot := ''; spotter := ''; dxstn := ''; freq := ''; mode := '';
   reg := TRegExpr.Create;
   //RBN always sends the frequency with a literal dot. Parsing it with the locale
   //settings would silently drop every spot on a comma decimal locale
@@ -407,11 +412,20 @@ begin
       finally
         LeaveCriticalsection(frmRbnMonitor.csRbnMonitor)
       end;
+      //heartbeat, so the log distinguishes "thread died" from "no spots arrived"
+      if (Now - tBeat) > (5/1440) then
+      begin
+        tBeat := Now;
+        DbgLog('RBN','alive, spots processed=' + IntToStr(nSpots) +
+                     ' queue=' + IntToStr(frmRbnMonitor.slRbnSpots.Count))
+      end;
+
       if (spot='') then
       begin
         sleep(200);
         Continue
       end;
+      Inc(nSpots);
 
       ParseSpot(spot, spotter, dxstn, freq, mode, stren);
 
@@ -463,9 +477,18 @@ begin
     end
   except
     on E: Exception do
-      Writeln('*********',E.Message)
+    begin
+      //this except used to be a bare Writeln, which is invisible when CQRLOG is
+      //started from a launcher rather than a terminal -- and reaching it kills
+      //the thread, so RBN silently stops updating
+      Writeln('*********',E.Message);
+      DbgLogException('RBN','spot=' + spot + ' dxstn=' + dxstn +
+                            ' spotter=' + spotter + ' freq=' + freq +
+                            ' mode=' + mode, E)
+    end
   end
   finally
+    DbgLog('RBN','thread leaving Execute, Terminated=' + BoolToStr(Terminated,True));
     FreeAndNil(reg)
   end
 end;
@@ -485,12 +508,14 @@ end;
 
 procedure TfrmRbnMonitor.lConnect(aSocket: TLSocket);
 begin
+  DbgLog('RBN','socket connected');
   tbtnConnect.Action   := acDisconnect;
   sbRbn.Panels[0].Text := 'Connected to RBN'
 end;
 
 procedure TfrmRbnMonitor.lDisconnect(aSocket: TLSocket);
 begin
+  DbgLog('RBN','socket disconnected');
   tbtnConnect.Action := acConnect;
   sbRbn.Panels[0].Text := 'Disconected'
 end;

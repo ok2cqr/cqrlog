@@ -3,9 +3,9 @@ Country files README
 
 The country file set for CQRLOG is distributed in a tar.gz archive with an
 unique name, ie. cqrlog-cty120812.tar.gz. The number (here 120812) denotes
-version number which is the same as the  release date.
+version number which is the same as the release date.
 
-Contents of the country file set (8 files):
+Contents of the country file set (14 files):
 
 AreaOK1RR.tbl (a file containing call areas, provinces, districts etc.)
 CallResolution.tbl (a file containing call exceptions)
@@ -15,6 +15,12 @@ iota.tbl (the IOTA list)
 Exceptions.tbl (a list of two-character appendices which should be ignored,
      ie. DL1ABC/LH is still Germany, not Norway)
 Ambiguous.tbl (a list of ambiguous prefixes)
+MASTER.SCP (super check partials for the contest module)
+eqsl.txt (list of eQSL AG users)
+lotw1.txt (list of LoTW users)
+sat_name.tab (satellite names list)
+prop_mode.tab (list of supported propagation modes)
+us_states.tab (US states list)
 README (this file)
 
 Since version 0.4.0 (2008-06-21) CQRLOG has an auto update option which provides

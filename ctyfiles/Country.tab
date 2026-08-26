@@ -9,7 +9,7 @@
 3D2|Fiji|OC|-12|18.1163S|178.4243E|56|32|176||
 3D2(C)|Conway Reef (Ceva-I-Ra)|OC|-12|21.7389S|174.6397E|56|32|489||1989/01/01-
 3D2(R)|Rotuma Island|OC|-12|12.4993S|177.0474E|56|32|460||1989/01/01-
-3DA|The Kingdom of eSwatini (Swaziland)|AF|-2|26.32S|31.14E|57|38|468||
+3DA|The Kingdom of Eswatini (Swaziland)|AF|-2|26.32S|31.14E|57|38|468||
 3V|Tunisia|AF|-1|36.85N|10.16E|37|33|474||
 3W|Viet Nam|AS|-7|21.04N|105.82E|49|26|293||
 3X|Guinea|AF|0|9.54N|13.67W|46|35|107||
@@ -90,10 +90,10 @@ CY0|Sable Island|NA|4|43.9295N|59.9301W|09|05|211||
 CY9|Saint Paul Island|NA|4|47.2103N|60.1616W|09|05|252||
 D2|Angola|AF|-1|8.78S|13.24E|52|36|401||
 D4|Cape Verde|AF|1|14.9357N|23.5466W|46|35|409||
-D6|Comoros|AF|-3|11.71S|43.24E|53|39|411||1975/07/06-
+D6|Comoros|AF|-3|11.6833S|43.2667E|53|39|411||1975/07/06-
 DL|Federal Republic of Germany|EU|-1|52.52N|13.42E|28|14|230||1973/09/17-
 DU|Philippines|OC|-8|14.63N|121.03E|50|27|375||
-E3|Eritrea|AF|-3|15.34N|38.90E|48|37|51||-1962/11/14 1991/05/24-
+E3|Eritrea|AF|-3|15.34N|38.90E|48|37|51||1991/05/24-
 E4|Palestine|AS|-2|31.30N|34.27E|39|20|510||1999/02/01-
 E51(N)|North Cook Islands|OC|10|10.2476S|161.0237W|62|32|191||
 E51(S)|South Cook Islands|OC|10|21.2251S|159.7856W|63|32|234||
@@ -134,7 +134,7 @@ FT(T)|Tromelin Island|AF|-4|15.8873S|54.5209E|53|39|276||
 FT(W)|Crozet Island|AF|-5|46.4232S|51.7696E|68|39|41||
 FT(X)|Kerguelen Islands|AF|-5|49.35S|70.2167E|68|39|131||
 FT(Z)|Amsterdam & Saint Paul Islands|AF|-5|37.8441S|77.5564E|68|39|10||
-FW|Wallis & Futuna Islands|OC|-12|13.315S|176.16W|62|32|298||
+FW|Wallis (Uvea) & Futuna Islands|OC|-12|13.315S|176.16W|62|32|298||
 FY|French Guiana|SA|3|6.83N|58.16W|12|09|63||
 G|England|EU|0|51.53N|0.12W|27|14|223||
 GD|Isle of Man|EU|0|54.17N|4.50W|27|14|114||
@@ -224,7 +224,7 @@ PY0(S)|Saint Peter & Saint Paul Rocks|SA|2|0.9512N|29.3695W|13|11|253||
 PY0(T)|Trindade & Martim Vaz Islands|SA|2|20.5154S|29.3162W|15|11|273||
 PZ|Suriname|SA|3|5.83N|55.16W|12|09|140||
 R1(F)|Franz Josef Land, [Russian Territory] (FJ)|EU|-3|80.788N|50.4864E|75|40|61||
-S0|Western Sahara|AF|0|27.16N|13.20W|37|33|302||
+S0|Western Sahara (Saharawi Republic)|AF|0|27.16N|13.20W|37|33|302||
 S2|Bangladesh (East Pakistan)|AS|-6|23.71N|90.407E|41|22|305||
 S5|Slovenia|EU|-1|46.06N|14.50E|28|15|499||1991/06/26-
 S7|Seychelles|AF|-4|4.63S|55.44E|53|39|379||
@@ -282,6 +282,8 @@ VK9(M)|Mellish Reef|OC|-10|17.4398S|155.8609E|56|30|171||
 VK9(N)|Norfolk Island|OC|-11.5|29.0548S|167.9667E|60|32|189||
 VK9(W)|Willis Island|OC|-10|16.1133S|150.0324E|55|30|303||
 VK9(X)|Christmas Island|OC|-7|10.4470S|105.6892E|54|29|35||
+VP0G|South Georgia (San Pedro) Islands|AN|2|54.2815S|36.508W|73|13|235||
+VP0S|South Sandwich Islands|AN|2|59.4212S|27.2304W|73|13|240||
 VP2E|Anguilla|NA|4|18.2254N|63.0633W|11|08|12||
 VP2M|Montserrat|NA|4|16.6799N|62.2005W|11|08|96||
 VP2V|British Virgin Islands|NA|4|18.4115N|64.6127W|11|08|65||
@@ -289,10 +291,8 @@ VP5|Turks & Caicos Islands|NA|5|21.47N|72.17W|11|08|89||
 VP6|Pitcairn Island|OC|8|25.0672S|130.1019W|63|32|172||
 VP6(D)|Ducie Atoll|OC|8|24.682S|124.7887W|63|32|513||2001/11/16-
 VP8(F) VP8|Falkland Islands|SA|4|51.67S|57.89W|16|13|141||
-VP8(G)|South Georgia (San Pedro) Islands|AN|2|54.2815S|36.508W|73|13|235||
 VP8(H)|South Shetland Islands|AN|4|62.9833S|60.5667W|73|13|241||
 VP8(O)|South Orkney Islands|AN|3|60.7167S|45.6W|73|13|238||
-VP8(S)|South Sandwich Islands|AN|2|59.4212S|27.2304W|73|13|240||
 VP9|Bermuda|NA|4|32.3032N|64.7980W|11|05|64||
 VQ9|Chagos (Diego Garcia Isl.)|AF|-6|7.3220S|72.4226E|41|39|33||
 VR|Hong Kong|AS|-8|22.31N|114.17E|44|24|321||
@@ -332,7 +332,7 @@ ZD9|Tristan da Cunha & Gough Islands|AF|0|37.3038S|12.5099W|66|38|274||
 ZF|Cayman Islands|NA|5|19.33N|81.21W|11|08|69||
 ZK3|Tokelau Island|OC|-13|9.1819S|171.8207W|62|31|270||
 ZL|New Zealand|OC|-12|36.83S|174.73E|60|32|170||
-ZL7|Chatham Island|OC|-12.75|43.8500S|176.5533W|60|32|34||
+ZL7|Chatham Island (Rēkohu)|OC|-12.75|43.8500S|176.5533W|60|32|34||
 ZL8|Kermadec Island|OC|-12|29.2459S|177.9268W|60|32|133||
 ZL9|New Zealand Subantarctic Islands|OC|-12|50.5447S|166.2086E|60|32|16||
 ZP|Paraguay|SA|4|25.28S|57.63W|14|11|132||

@@ -930,7 +930,7 @@
     <Version Value="11"/>
     <SearchPaths>
       <Libraries Value="$(LazarusDir)/lcl;../../../.lazarus/lib/LCLBase/units/x86_64-linux"/>
-      <OtherUnitFiles Value="lnet/lib;synapse"/>
+      <OtherUnitFiles Value="lnet/lib;synapse;dxcc-parser"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>

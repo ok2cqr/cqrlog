@@ -26,7 +26,7 @@ uses
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
   dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
-  fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2,
+  fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2, uDebugLog,
   fDbSqlSel, fProgress, fDbError, fCountyStat, uBandMapStore, fBandMapGfx;
 var
   Splash : TfrmSplash;

@@ -1,0 +1,14 @@
+# Compiled units (lib/ is already covered by the top-level .gitignore, but be
+# explicit -- this tree is built with plain fpc, not lazbuild).
+lib/
+
+# Test runner and helper binaries.
+tests/dxcctests
+tools/dumpcollation
+
+# Fixtures rebuilt from ../../ctyfiles by tools/mkdxccdata.sh.  Around 3 MB and
+# fully derived, so there is no reason to track them.
+tests/data/generated/
+
+# Real-log comparison tool.
+tools/logdiff

@@ -231,7 +231,7 @@ implementation
 { TfrmDXCluster }
 
 uses dUtils, fDXClusterList, dData, dDXCluster, fMain, fTRXControl, fNewQSO, fBandMap,
-     uMyIni, fPreferences, uBandMapStore;
+     uMyIni, fPreferences, uBandMapStore, uDebugLog;
 
 procedure TfrmDXCluster.ConnectToWeb;
 var
@@ -814,12 +814,14 @@ end;
 
 procedure TfrmDXCluster.lConnect(aSocket: TLSocket);
 begin
+  DbgLog('DXC','telnet socket connected');
   btnTelConnect.Caption := 'Disconnect';
   ConTelnet := True;
 end;
 
 procedure TfrmDXCluster.lDisconnect(aSocket: TLSocket);
 begin
+  DbgLog('DXC','telnet socket disconnected');
   btnTelConnect.Caption := 'Connect';
   ConTelnet := False;
 end;
@@ -1459,16 +1461,30 @@ var
   dx      : String;
   sColor  : TColor;
   Country : String;
+  nSpots  : Int64 = 0;
+  tBeat   : TDateTime;
 begin
+  DbgLog('DXC','telnet thread started');
+  dx := '';
+  tBeat := Now;
+  try
   while true do
   begin
+    //heartbeat, so the log distinguishes "thread died" from "no spots arrived"
+    if (Now - tBeat) > (5/1440) then
+    begin
+      tBeat := Now;
+      DbgLog('DXC','telnet alive, spots processed=' + IntToStr(nSpots) +
+                   ' queue=' + IntToStr(Spots.Count))
+    end;
     while Spots.Count > 0 do
     begin
       if dmData.DebugLevel>=2 then Writeln('TelThread.Execute - enter critical section ');
       EnterCriticalsection(frmDXCluster.csTelnet);
       try
         dx := dmUtils.MyTrim(spots.Strings[0]);
-        spots.Delete(0)
+        spots.Delete(0);
+        Inc(nSpots)
       finally
         LeaveCriticalsection(frmDXCluster.csTelnet);
         if dmData.DebugLevel>=2 then Writeln('TelThread.Execute - leave critical section ');
@@ -1513,6 +1529,11 @@ begin
 
     sleep(500)
   end
+  except
+    on E: Exception do
+      DbgLogException('DXC','telnet spot=' + dx, E)
+  end;
+  DbgLog('DXC','telnet thread leaving Execute')
 end;
 
 procedure TWebThread.Execute;

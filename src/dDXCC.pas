@@ -93,7 +93,6 @@ type
     DXCCRefArray   : Array of TDXCCRef;
     DXCCDelArray   : Array of Integer;
     AmbiguousArray : Array of String;
-    ExceptionArray : Array of String;
     USStatesArray  : Array of TUSStates;
 
     function  CoVyhodnocovat(znacka : String; datum : TDateTime; var UzNasel : Boolean;var ADIF : Integer) : String;
@@ -139,25 +138,31 @@ implementation
 
 { TdmDXCC }
 
-uses dUtils, dData, znacmech, uMyIni;
+uses dUtils, dData, znacmech, uMyIni,
+     uDxccTable, uDxccEntry, uDxccResolver, uDxccSuffixRules, uDebugLog;
 
-type Tchyb1 = object(Tchyby) // podedim objekt a prepisu "hlaseni"
-       //procedure hlaseni(vzkaz,kdo:string);virtual;
-     end;
-     Pchyb1=^Tchyb1;
+{ The DXCC engine.  TabValid/TabDeleted replace the Tseznam pair, Resolver
+  replaces CoVyhodnocovat and Rules replaces the ExceptionArray scan.  See
+  src/dxcc-parser/README.md for what is preserved from the old engine and why.
 
+  znacmech is still in uses: string_mdz is what keeps the 40-character
+  truncation of the search key that the old engine performed implicitly. }
 var
-  uhej   : Pseznam;
-  sez1   : Pseznam;
-  chy1   : Pchyb1;
-  sez2   : Pseznam;
-{
-procedure Tchyb1.hlaseni(vzkaz,kdo:string);
+  TabValid   : TDxccTable;
+  TabDeleted : TDxccTable;
+  Rules      : TDxccSuffixRules;
+  Resolver   : TDxccResolver;
+
+{ dDXCC's NotExactly/Exactly/ExNoEquals onto the table's match modes. }
+function MatchMode(presne : Integer) : TDxccMatchMode;
 begin
-  if dmData.DebugLevel >=2 then
-    Writeln(vzkaz);
+  case presne of
+    Exactly    : Result := dmExact;
+    ExNoEquals : Result := dmExactNoEquals;
+  else
+    Result := dmPrefix
+  end
 end;
-}
 
 function TdmDXCC.MyTryStrToInt(s : String; var i : Integer) : Boolean;
 begin
@@ -321,38 +326,8 @@ begin
 end;
 
 function TdmDXCC.IsException(call : String) : Boolean;
-
-  function IsString(call : String) : Boolean;
-  var
-    i : Integer;
-  begin
-    Result := True;
-    for i:=1 to Length(call) do
-    begin
-      if (call[i] in ['0'..'9']) then
-      begin
-        Result := False;
-        break
-      end
-    end;
-  end;
-
-var
-  y : Integer;
 begin
-  Result := False;
-  for y:=0 to Length(ExceptionArray)-1 do
-  begin
-    if ExceptionArray[y] = call then
-    begin
-      Result := True;
-      Break
-    end
-  end;
-  if (call = 'QRP') or (call='QRPP') or (call='P') then
-    Result := True;
-  if (IsString(call) and (Length(call) > 3)) then
-    Result := True
+  Result := Rules.IsIgnoredSuffix(call)
 end;
 
 function TdmDXCC.Explode(const cSeparator, vString: String): TExplodeArray;
@@ -390,21 +365,23 @@ var
   sADIF  : String;
   sdatum : String;
   x      : LongInt;
+  E      : TDxccEntry;
 begin
   Result := False;
   sZnac  := znacka;
   sDatum  := DateToDDXCCDate(Datum);
-  x := sez2^.najdis_s2(sZnac,sDatum,presne);
+  x := TabDeleted.Find(sZnac,sDatum,MatchMode(presne));
   if x <>-1 then
   begin
-    country  := sez2^.znacka_popis_ex(x,0);
-    ITU      := sez2^.znacka_popis_ex(x,5);
-    WAZ      := sez2^.znacka_popis_ex(x,6);
-    posun    := sez2^.znacka_popis_ex(x,2);
-    lat      := sez2^.znacka_popis_ex(x,3);
-    long     := sez2^.znacka_popis_ex(x,4);
-    sADIF    := sez2^.znacka_popis_ex(x,11);
-    cont     := UpperCase(sez2^.znacka_popis_ex(x,1));
+    E        := TabDeleted.Entry(x);
+    country  := E.Country;
+    ITU      := E.Itu;
+    WAZ      := E.Waz;
+    posun    := E.UtcOffset;
+    lat      := E.Latitude;
+    long     := E.Longitude;
+    sADIF    := E.Adif;
+    cont     := UpperCase(E.Continent);
     Result   := True;
     if not TryStrToInt(sAdif,ADIF) then
       ADIF := 0;
@@ -414,17 +391,18 @@ begin
     pfx := '!'
   end;
 
-  x := uhej^.najdis_s2(sZnac,sDatum,presne);
+  x := TabValid.Find(sZnac,sDatum,MatchMode(presne));
   if x <>-1 then
   begin
-    country  := uhej^.znacka_popis_ex(x,0);
-    ITU      := uhej^.znacka_popis_ex(x,5);
-    WAZ      := uhej^.znacka_popis_ex(x,6);
-    posun    := uhej^.znacka_popis_ex(x,2);
-    lat      := uhej^.znacka_popis_ex(x,3);
-    long     := uhej^.znacka_popis_ex(x,4);
-    sADIF    := uhej^.znacka_popis_ex(x,11);
-    cont     := UpperCase(uhej^.znacka_popis_ex(x,1));
+    E        := TabValid.Entry(x);
+    country  := E.Country;
+    ITU      := E.Itu;
+    WAZ      := E.Waz;
+    posun    := E.UtcOffset;
+    lat      := E.Latitude;
+    long     := E.Longitude;
+    sADIF    := E.Adif;
+    cont     := UpperCase(E.Continent);
     Result   := True;
     if not TryStrToInt(sAdif,ADIF) then
       ADIF := 0
@@ -447,197 +425,17 @@ end;
 
 
 function TdmDXCC.CoVyhodnocovat(znacka : String; datum : TDateTime; var UzNasel : Boolean;var ADIF : Integer) : String;
-var
-  Pole  : TExplodeArray;
-  pocet : Integer;
-  pred_lomitkem : String;
-  za_lomitkem   : String;
-  mezi_lomitky  : String;
-  tmp : Integer;
-  Error : Integer;
 begin
-  tmp := 0;
-  Result := znacka;
-  if pos('/',znacka) > 0 then
-  begin
-    if NaselCountry(znacka,datum,adif,Exactly) then
+  try
+    Result := Resolver.EffectiveCallsign(znacka,DateToDDXCCDate(datum),UzNasel,ADIF)
+  except
+    on E: Exception do
     begin
-      Result  := znacka;
-      UzNasel := True;
-      exit
-    end;
-
-    SetLength(pole,0);
-    pole  := Explode('/',znacka);
-    pocet := Length(pole)-1;
-    case pocet of
-      1: begin
-           pred_lomitkem := pole[0];
-           za_lomitkem   := pole[1];
-           if ((MyTryStrToInt(za_lomitkem,tmp)) and (Length(za_lomitkem)>1)) then
-           begin
-             Result := pred_lomitkem;
-             exit
-           end;
-
-           if (Length(pred_lomitkem) = 0) then
-           begin
-             Result := za_lomitkem;
-             exit
-           end;
-           if (Length(za_lomitkem) = 0) then
-           begin
-             Result := pred_lomitkem;
-             exit
-           end;
-           //if (((za_lomitkem[1]='M') and (za_lomitkem[2]='M')) or (za_lomitkem='AM')) then //nevim kde je
-           if (za_lomitkem='MM') or (za_lomitkem='MM1')  or (za_lomitkem='MM2') or (za_lomitkem='MM3') or (za_lomitkem='AM') then
-           begin
-             Result := '?';
-             exit
-           end;
-           if (length(za_lomitkem) = 1) then
-           begin
-             if (((za_lomitkem[1] = 'M') or (za_lomitkem[1] = 'P')) and (Pos('LU',pred_lomitkem) <> 1)) then
-             begin
-               Result := pred_lomitkem;
-               exit
-             end;
-             if (za_lomitkem[1] in ['0'..'9']) then   //SP2AD/1
-             begin
-               if (((pred_lomitkem[1] = 'A') and (pred_lomitkem[2] in ['A'..'L']))  or
-                  (pred_lomitkem[1] = 'K') or (pred_lomitkem[1] = 'W') or  (pred_lomitkem[1] = 'N'))   then  //KL7AA/1 = W1
-                 Result := 'W'+za_lomitkem
-               else begin
-                 pred_lomitkem[3] := za_lomitkem[1];
-                 Result := pred_lomitkem;//Result := copy(pred_lomitkem,1,3);
-               end;
-             end
-             else begin
-               if ((za_lomitkem[1] in ['A'..'D','E','H','J','L'..'V','X'..'Z'])) then //pokud je za lomitkem jen pismeno,
-               begin                                    //nesmime zapomenout na chudaky Argentince
-                 if (Pos('LU',pred_lomitkem) = 1) or (Pos('LW',pred_lomitkem) = 1) or
-                 (Pos('AY',pred_lomitkem) = 1) or (Pos('AZ',pred_lomitkem) = 1) or
-                 (Pos('LO',pred_lomitkem) = 1) or (Pos('LP',pred_lomitkem) = 1) or
-                 (Pos('LQ',pred_lomitkem) = 1) or (Pos('LR',pred_lomitkem) = 1) or
-                 (Pos('LS',pred_lomitkem) = 1) or (Pos('LT',pred_lomitkem) = 1) or
-                 (Pos('LV',pred_lomitkem) = 1) then
-                 begin
-                   pred_lomitkem[4] := za_lomitkem[1];
-                   Result := pred_lomitkem;
-                   exit
-                 end
-                 else                 //pokud to neni chudak Argentinec, nechame znacku napokoji
-                   Result := znacka;
-               end
-               else begin
-                 UzNasel := True;
-                 Result  := za_lomitkem;
-               end;
-               if NaselCountry(copy(pred_lomitkem,1,2)+'/'+za_lomitkem,datum,ADIF) then
-               begin
-                 UzNasel := True;
-                 Result  := copy(pred_lomitkem,1,2)+'/'+za_lomitkem;
-                 exit;
-               end;
-             end;
-           end
-           else begin //za lomitkem je vic jak jedno pismenko
-            if IsException(za_lomitkem) then
-               Result := pred_lomitkem
-             else begin
-               if Length(za_lomitkem) >= Length(pred_lomitkem) then
-               begin
-                 if not NaselCountry(pred_lomitkem,datum,ADIF,ExNoEquals) then
-                 begin
-                   Result  := za_lomitkem;
-                   UzNasel := True;
-                   exit;
-                 end
-                 else begin
-                   Result  := pred_lomitkem;
-                   exit
-                 end;
-               end
-               else begin  //pred lomitkem je to delsi nebo rovno
-                 if not NaselCountry(za_lomitkem,datum,ADIF,ExNoEquals) then
-                 begin
-                   Result  := pred_lomitkem;
-                   UzNasel := True;
-                   exit;
-                 end
-                 else begin
-                   Result  := za_lomitkem;
-                   UzNasel := True;
-                   exit
-                 end;
-               end;
-             end;
-           end;
-
-         end; // 1 lomitko
-
-      2: begin
-           pred_lomitkem := pole[0];
-           mezi_lomitky  := pole[1];
-           za_lomitkem   := pole[2];
-           if Length(za_lomitkem) = 0 then
-           begin
-             Result := pred_lomitkem;
-             exit
-           end;
-           if (((za_lomitkem[1]='M') and (za_lomitkem[2]='M')) or (za_lomitkem='AM')) then //nevim kde je
-           begin
-             Result := '?';
-             exit
-           end;
-
-           if Length(mezi_lomitky) > 0 then
-           begin
-             if (mezi_lomitky[1] in ['0'..'9']) then
-             begin
-               if (((pred_lomitkem[1] = 'A') and (pred_lomitkem[2] in ['A'..'L']))  or
-                  (pred_lomitkem[1] = 'K') or (pred_lomitkem[1] = 'W'))   then  //KL7AA/1 = W1
-                   Result := 'W'+mezi_lomitky
-               else begin
-                 if pred_lomitkem[2] in ['0'..'9'] then //RA1AAA/2/M
-                   pred_lomitkem[2] := mezi_lomitky[1]
-                 else
-                   pred_lomitkem[3] := mezi_lomitky[1];
-                   Result := pred_lomitkem;
-                 exit;
-               end;
-             end;
-           end;
-           
-           if ((length(za_lomitkem) = 1) and (za_lomitkem[1] in ['A'..'Z'])) then
-           begin
-             if NaselCountry(pred_lomitkem + '/'+za_lomitkem,datum,ADIF) then
-             begin
-               Result  := pred_lomitkem + '/'+za_lomitkem;
-               UzNasel := True;
-             end
-             else begin
-               Result := pred_lomitkem
-             end;
-           end
-           else begin
-             if ((length(za_lomitkem) = 1) and (za_lomitkem[1] in ['0'..'9'])) then
-             begin
-               if NaselCountry(pred_lomitkem[1]+pred_lomitkem[2]+za_lomitkem,datum, ADIF) then //ZL1AMO/C
-               begin
-                 Result  := pred_lomitkem[1]+pred_lomitkem[2]+za_lomitkem;
-                 UzNasel := True;
-               end
-               else
-                 Result := pred_lomitkem
-             end
-             else
-               Result := pred_lomitkem
-           end;
-         end; // 2 lomitka
-    end; //case
-  end;
+      DbgLogException('DXCC','CoVyhodnocovat call=' + znacka +
+                             ' date=' + DateToDDXCCDate(datum), E);
+      raise
+    end
+  end
 end;
 
 function TdmDXCC.id_country(callsign : String;QsoDate : TDateTime) : String;
@@ -696,6 +494,7 @@ var
   sZnac : string_mdz;
   sADIF : String;
   us_adif : Integer;
+  E : TDxccEntry;
 begin
   Result := 0;
   if (length(znacka)=0) then
@@ -708,17 +507,18 @@ begin
   sZnac := znacka;
   sZnac := CoVyhodnocovat(znacka,datum,UzNasel,ADIF);
   sDatum  := DateToDDXCCDate(Datum);// DateToStr(Datum);
-  x := sez2^.najdis_s2(sZnac,sDatum,NotExactly);
+  x := TabDeleted.Find(sZnac,sDatum,dmPrefix);
   if x <>-1 then
   begin
-    country  := sez2^.znacka_popis_ex(x,0);
-    ITU      := sez2^.znacka_popis_ex(x,5);
-    WAZ      := sez2^.znacka_popis_ex(x,6);
-    posun    := sez2^.znacka_popis_ex(x,2);
-    lat      := sez2^.znacka_popis_ex(x,3);
-    long     := sez2^.znacka_popis_ex(x,4);
-    sADIF    := sez2^.znacka_popis_ex(x,11);
-    cont     := UpperCase(sez2^.znacka_popis_ex(x,1));
+    E        := TabDeleted.Entry(x);
+    country  := E.Country;
+    ITU      := E.Itu;
+    WAZ      := E.Waz;
+    posun    := E.UtcOffset;
+    lat      := E.Latitude;
+    long     := E.Longitude;
+    sADIF    := E.Adif;
+    cont     := UpperCase(E.Continent);
     NoDXCC   := Pos('no DXCC',country) > 0;
     if TryStrToInt(sAdif,ADIF) then
     begin
@@ -731,6 +531,10 @@ begin
           if us_adif > 0 then
             ADIF := us_adif
         end;
+        //instrumentation: this index has never been bounds-checked
+        if (adif < 0) or (adif > High(DXCCRefArray)) then
+          DbgLog('DXCC','ADIF outside DXCCRefArray: adif='+IntToStr(adif)+
+                ' high='+IntToStr(High(DXCCRefArray))+' call='+znacka);
         pfx := DXCCRefArray[adif].pref;
         Result := ADIF
       end
@@ -751,17 +555,18 @@ begin
     Result := 0
   end;
 
-  x := uhej^.najdis_s2(sZnac,sDatum,NotExactly);
+  x := TabValid.Find(sZnac,sDatum,dmPrefix);
   if x <>-1 then
   begin
-    country  := uhej^.znacka_popis_ex(x,0);
-    ITU      := uhej^.znacka_popis_ex(x,5);
-    WAZ      := uhej^.znacka_popis_ex(x,6);
-    posun    := uhej^.znacka_popis_ex(x,2);
-    lat      := uhej^.znacka_popis_ex(x,3);
-    long     := uhej^.znacka_popis_ex(x,4);
-    sADIF    := uhej^.znacka_popis_ex(x,11);
-    cont     := UpperCase(uhej^.znacka_popis_ex(x,1));
+    E        := TabValid.Entry(x);
+    country  := E.Country;
+    ITU      := E.Itu;
+    WAZ      := E.Waz;
+    posun    := E.UtcOffset;
+    lat      := E.Latitude;
+    long     := E.Longitude;
+    sADIF    := E.Adif;
+    cont     := UpperCase(E.Continent);
     NoDXCC   := Pos('no DXCC',country) > 0;
     if TryStrToInt(sAdif,ADIF) then
     begin
@@ -774,6 +579,10 @@ begin
           if us_adif > 0 then
             ADIF := us_adif
         end;
+        //instrumentation: this index has never been bounds-checked
+        if (adif < 0) or (adif > High(DXCCRefArray)) then
+          DbgLog('DXCC','ADIF outside DXCCRefArray: adif='+IntToStr(adif)+
+                ' high='+IntToStr(High(DXCCRefArray))+' call='+znacka);
         pfx    := DXCCRefArray[adif].pref;
         Result := ADIF
       end
@@ -811,10 +620,12 @@ begin
   trDeleted.DataBase := dmData.MainCon;
   qDeleted.DataBase  := dmData.MainCon;
 
-  chy1 := new(Pchyb1,init);
-  sez1 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country.tab',chy1));
-  uhej := sez1;
-  sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country_del.tab',chy1));
+  TabValid := TDxccTable.Create;
+  TabValid.LoadFromFile(dmData.HomeDir + 'dxcc_data' + PathDelim + 'country.tab');
+  TabDeleted := TDxccTable.Create;
+  TabDeleted.LoadFromFile(dmData.HomeDir + 'dxcc_data' + PathDelim + 'country_del.tab');
+  Rules := TDxccSuffixRules.Create;
+  Resolver := TDxccResolver.Create(TabValid,TabDeleted,Rules);
 
   //after upgrade from version 1.9.1 and older, this file won't exist
   //but we need it
@@ -832,8 +643,10 @@ begin
   if dmData.DebugLevel >=2 then
     Writeln('Complete end dmDXCC');
   if dmData.DebugLevel>=1 then Writeln('Closing dDXCC');
-  dispose(sez1,done);
-  dispose(sez2,done)
+  FreeAndNil(Resolver);
+  FreeAndNil(Rules);
+  FreeAndNil(TabValid);
+  FreeAndNil(TabDeleted)
 end;
 
 procedure TdmDXCC.QBeforeOpen(DataSet: TDataSet);
@@ -911,14 +724,38 @@ begin
 end;
 
 procedure TdmDXCC.ReloadDXCCTables;
+var
+  NewValid, NewDeleted : TDxccTable;
+  OldValid, OldDeleted, OldRules, OldResolver : TObject;
 begin
-  dispose(sez1,done);
-  dispose(sez2,done);
+  //a TDxccTable is immutable once loaded, so build the replacements first and
+  //only then swap the references the resolver reads.  Rules is rebuilt here as
+  //well: the old engine reloaded the tables but not ExceptionArray, so a fresh
+  //Exceptions.tab only took effect after a restart.
+  NewValid := TDxccTable.Create;
+  NewValid.LoadFromFile(dmData.HomeDir + 'dxcc_data' + PathDelim + 'country.tab');
+  NewDeleted := TDxccTable.Create;
+  NewDeleted.LoadFromFile(dmData.HomeDir + 'dxcc_data' + PathDelim + 'country_del.tab');
 
-  chy1 := new(Pchyb1,init);
-  sez1 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country.tab',chy1));
-  uhej := sez1;
-  sez2 := new(Pseznam,init(dmData.HomeDir + 'dxcc_data/country_del.tab',chy1));
+  OldResolver := Resolver;
+  OldValid    := TabValid;
+  OldDeleted  := TabDeleted;
+  OldRules    := Rules;
+
+  Rules := TDxccSuffixRules.Create;
+  Rules.LoadExceptions(dmData.HomeDir + 'dxcc_data' + PathDelim + 'exceptions.tab');
+  Rules.LoadAmbiguous(dmData.HomeDir + 'dxcc_data' + PathDelim + 'ambiguous.tab');
+  TabValid   := NewValid;
+  TabDeleted := NewDeleted;
+  Resolver   := TDxccResolver.Create(TabValid,TabDeleted,Rules);
+
+  OldResolver.Free;
+  OldValid.Free;
+  OldDeleted.Free;
+  OldRules.Free;
+
+  //same story for AmbiguousArray, which IsAmbiguous reads directly
+  LoadAmbiguousArray;
   LoadDXCCRefArray;
   LoadUSStates
 end;
@@ -1017,6 +854,10 @@ var
   s    : String;
 begin
   SetLength(AmbiguousArray,0);
+  //ReloadDXCCTables calls this too now, and on a fresh profile the file may
+  //not be there yet; TDxccSuffixRules is tolerant the same way
+  if not FileExistsUTF8(dmData.HomeDir+'dxcc_data'+PathDelim+'ambiguous.tab') then
+    exit;
   AssignFile(f,dmData.HomeDir+'dxcc_data'+PathDelim+'ambiguous.tab');
   Reset(f);
   while not Eof(f) do
@@ -1030,21 +871,10 @@ begin
 end;
 
 procedure TdmDXCC.LoadExceptionArray;
-var
-  f    : TextFile;
-  s    : String;
 begin
-  SetLength(ExceptionArray,0);
-  AssignFile(f,dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
-  Reset(f);
-  while not Eof(f) do
-  begin
-    ReadLn(f,s);
-    //file has only a few lines so there is no need to SetLength in higher blocks
-    SetLength(ExceptionArray,Length(ExceptionArray)+1);
-    ExceptionArray[Length(ExceptionArray)-1]:=s
-  end;
-  CloseFile(f)
+  Rules.LoadExceptions(dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
+  //the resolver does not consume this one, but keep Rules fully populated
+  Rules.LoadAmbiguous(dmData.HomeDir+'dxcc_data'+PathDelim+'ambiguous.tab')
 end;
 
 procedure TdmDXCC.LoadUSStates;

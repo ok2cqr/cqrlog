@@ -1,0 +1,30 @@
+TEST|Plain Prefix Land|EU|-1|50.00N|14.00E|28|15|999||
+TA TB TC|Multi Mark Land|AS|-2|39.00N|35.00E|39|20|998||
+TD1 TD2|Multi Mark With Adif|AF|0|10.00N|20.00E|46|33||R|=997
+=TE1ABC|Exact Match Station|NA|5|40.00N|75.00W|08|05||R|=996
+=TE2ABC =TE2XYZ|Exact Multi Station|NA|5|41.00N|76.00W|08|05||R|=995
+TF#|Digit Wildcard Land|EU|0|64.00N|22.00W|17|40||R|=994
+TG[A-C]|Range Class Land|NA|6|14.00N|90.00W|12|07||R|=993
+TH[XYZ]|Enum Class Land|SA|3|10.00S|55.00W|13|11||R|=992
+TI%|Percent Wildcard Land|NA|6|10.00N|84.00W|11|07||R|=991
+TJ?|Question Wildcard Land|OC|-9|13.00N|144.00E|64|27||R|=990
+TK#[A-C]%|Mixed Pattern Land|EU|-1|42.00N|9.00E|28|15||R|=989
+TL|Dated Land Current|AF|-1|4.00N|18.00E|47|36||R|1990/01/01-2049/12/31=988
+TL|Dated Land Historic|AF|-1|4.00N|18.00E|47|36||R|1945/01/01-1989/12/31=987
+TM|Open Ended From|EU|-1|46.00N|2.00E|27|14||R|2000/06/15=986
+TN|Deleted Style Land|AF|-1|4.00S|15.00E|52|36|985|D|-1975/07/01
+TOLONG|Longer Literal Wins|AS|-8|35.00N|103.00E|42|24||R|=984
+TO|Shorter Literal Loses|AS|-8|35.00N|103.00E|42|24||R|=983
+TP#X|Specific Beats Wildcard|EU|-2|38.00N|23.00E|28|20||R|=982
+TP%X|Wildcard Loses To Digit|EU|-2|38.00N|23.00E|28|20||R|=981
+=TQ1AA|Exact Beats Pattern|OC|-10|17.00S|149.00W|63|32||R|=980
+TQ1|Pattern Behind Exact|OC|-10|17.00S|149.00W|63|32||R|=979
+TR[A-]|Degenerate Range|AF|-1|1.00S|11.00E|52|36||R|=978
+TS[C-A]|Reversed Range|AF|-1|33.00N|10.00E|37|33||R|=977
+TU|Shared Description Land|AF|0|7.00N|5.00W|46|35||R|=976
+TV|Shared Description Land|AF|0|7.00N|5.00W|46|35||R|=976
+X|Single Char Prefix|EU|-1|52.00N|13.00E|28|14||R|=975
+XY|Two Char Prefix|AS|-6|21.00N|96.00E|49|26||R|=974
+XY1|Three Char Prefix|AS|-6|21.00N|96.00E|49|26||R|=973
+%A|Leading Percent Land|OC|-10|21.00S|175.00W|62|32||R|=972
+ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ|Over Length Mark|EU|0|0.00N|0.00E|01|01||R|=971
