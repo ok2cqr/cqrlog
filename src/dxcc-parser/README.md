@@ -384,12 +384,17 @@ not implement yet.
 may call `Find` concurrently. Reloading is not safe in place — build a new
 instance and swap the reference.
 
-Worth noting for the integration stage: the legacy `najdis_s2` already uses
-only locals, so *lookups* were reentrant. What is not safe is
-`ReloadDXCCTables` (`dDXCC.pas:914`), which does `dispose` + `init` with no
-lock while `fRbnMonitor.pas:428` and `fDXCluster.pas:1226` read the same tables
-from worker threads. The duplication between `dDXCC` and `dDXCluster` is driven
-by the separate MySQL connection per thread, not by this engine.
+The legacy `najdis_s2` already used only locals, so *lookups* were always
+reentrant. What was never safe is a reload that frees the old tables while a
+worker thread is reading them.
+
+Both are settled now. `src/uDxccService.pas` holds the one instance of the
+engine that the whole application shares, behind a single lock, with this
+contract: **every reader holds the lock for the whole read, so `ReloadTables`
+can build outside it, swap under it, and free after it.** `dDXCC` and
+`dDXCluster` both delegate; they remain separate data modules only because
+their *queries* are bound to different MySQL connections (`MainCon` and
+`dbDXC`), which is what the split was always really about.
 
 ## A note on `uLegacySplitter`
 
@@ -450,5 +455,6 @@ callsign and has a second form for slashed calls. `AmbiguousArray` and
 - The US-state override in `id_country` (`dDXCC.pas:727`), which has no
   counterpart here yet. It still works — it operates on the lookup's outputs,
   so it was untouched by the swap.
-- The duplication between `dDXCC` and `dDXCluster`. The driver is one MySQL
-  connection per thread, not the parser.
+- ~~The duplication between `dDXCC` and `dDXCluster`.~~ Done: the engine moved
+  to `src/uDxccService.pas` and both modules delegate to it. The data modules
+  stay, because their queries live on different MySQL connections.

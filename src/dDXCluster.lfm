@@ -57,23 +57,6 @@ object dmDXCluster: TdmDXCluster
     left = 82
     top = 60
   end
-  object trDXCCRef: TSQLTransaction
-    Active = False
-    Action = caNone
-    Options = []
-    left = 216
-    top = 120
-  end
-  object qDXCCRef: TSQLQuery
-    FieldDefs = <>
-    BeforeOpen = qDXCCRefBeforeOpen
-    Transaction = trDXCCRef
-    Options = []
-    Params = <>
-    ParseSQL = False
-    left = 216
-    top = 60
-  end
   object trCallAlert: TSQLTransaction
     Active = False
     Options = []

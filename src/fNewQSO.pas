@@ -962,8 +962,7 @@ begin
     end;
     if (edtCall.Text = '') then
       ClearAll;                //reload combo boxes with prop modes and satelite names
-    dmDXCC.ReloadDXCCTables;
-    dmDXCluster.ReloadDXCCTables
+    dmDXCC.ReloadDXCCTables
   end
 end;
 

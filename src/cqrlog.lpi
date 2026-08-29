@@ -99,7 +99,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="127">
+    <Units Count="128">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -924,6 +924,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit126>
+      <Unit127>
+        <Filename Value="uDxccService.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit127>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

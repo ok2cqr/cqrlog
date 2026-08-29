@@ -814,12 +814,11 @@ begin
   //qCQRLOG.Open;
   fSortType := stDate;
 
+  //dxcc_ref is the one part of the DXCC engine that comes from the database.
+  //dmDXCC reads it on MainCon and hands it to the shared DxccService; the
+  //file-backed tables are already loaded by then (dmDXCC.DataModuleCreate).
+  //dmDXCluster used to repeat both of these on dbDXC.
   dmDXCC.LoadDXCCRefArray;
-  dmDXCC.LoadAmbiguousArray;
-  dmDXCC.LoadExceptionArray;
-
-  dmDXCluster.LoadDXCCRefArray;
-  dmDXCluster.LoadExceptionArray;
 
   dmUtils.LoadBandsSettings;
 

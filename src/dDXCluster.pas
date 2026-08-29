@@ -18,29 +18,10 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Dialogs, Graphics,
   inifiles, sqldb, mysql51conn, db, mysql55conn, process, mysql56conn,
-  mysql56dyn, mysql57dyn, mysql57conn,strutils;
+  mysql56dyn, mysql57dyn, mysql57conn,strutils, uDxccService;
 
-type
-  TExplodeArray = Array of String;
-
-type
-  TDXCCRef = record
-    adif    : Word;
-    pref    : String[20];
-    name    : String[100];
-    cont    : String[6];
-    utc     : String[12];
-    lat     : String[10];
-    longit  : String[10];
-    itu     : String[20];
-    waz     : String[20];
-    deleted : Word
-  end;
-
-const
-   NotExactly = 0; 
-   Exactly    = 1; 
-   ExNoEquals = 2; 
+{ TExplodeArray, TDXCCRef and NotExactly/Exactly/ExNoEquals come from
+  uDxccService now -- see the note above TdmDXCluster.id_country. }
 
 type
   { TdmDXCluster }
@@ -49,9 +30,7 @@ type
     Q1: TSQLQuery;
     Q: TSQLQuery;
     qCallAlert: TSQLQuery;
-    qDXCCRef: TSQLQuery;
     trCallAlert: TSQLTransaction;
-    trDXCCRef: TSQLTransaction;
     trQ: TSQLTransaction;
     trQ1: TSQLTransaction;
     trBands: TSQLTransaction;
@@ -60,32 +39,19 @@ type
     procedure Q1BeforeOpen(DataSet: TDataSet);
     procedure qBandsBeforeOpen(DataSet: TDataSet);
     procedure QBeforeOpen(DataSet: TDataSet);
-    procedure qDXCCRefBeforeOpen(DataSet: TDataSet);
   private
-    DXCCRefArray   : Array of TDXCCRef;
-    DXCCDelArray   : Array of Integer;
-    csDX           : TRTLCriticalSection;
+    csDX : TRTLCriticalSection;
 
-    function  IsException(call : String) : Boolean;
-    function  CoVyhodnocovat(znacka : String; datum : TDateTime; var UzNasel : Boolean;var ADIF : Integer) : String;
-    function  NaselCountry(znacka : String; datum : TDateTime; var ADIF : Integer;presne : Integer = NotExactly) : Boolean; overload;
-    function  NaselCountry(znacka : String; datum : TDateTime; var pfx, country,
-              cont, ITU, WAZ, posun, lat, long : String; var ADIF : Integer; presne : Integer = NotExactly) : Boolean;
-    function  Explode(const cSeparator, vString: String): TExplodeArray;
-    function  DateToDDXCCDate(date : TDateTime) : String;
-    function  MyTryStrToInt(s : String; var i : Integer) : Boolean;
-
-    //procedure VyhodnotZnacku(znacka : String; datum : TDateTime; var pfx, country, cont, ITU, WAZ, posun, lat, long : String);
   public
     function  LetterFromMode(mode : String) : String;
     function  DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  UseseQSL(call : String) : Boolean;
-    function  id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
-                               posun, ITU, lat, long: string) : Word; overload;
-    function  id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont : String) : Word; overload;
-    function  id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont,lat,long : String): Word; overload;
-    function  id_country(znacka : String;var lat,long : String): Word; overload;
+    function  id_country(callsign: string;QsoDate : TDateTime; var pfx, cont, country, WAZ,
+                               UtcOffset, ITU, lat, long: string) : Word; overload;
+    function  id_country(callsign : String; QsoDate : TDateTime; var pfx,country,waz,itu,cont : String) : Word; overload;
+    function  id_country(callsign : String; QsoDate : TDateTime; var pfx,country,waz,itu,cont,lat,long : String): Word; overload;
+    function  id_country(callsign : String;var lat,long : String): Word; overload;
     function  PfxFromADIF(adif : Word) : String;
     function  CountryFromADIF(adif : Word) : String;
     function  GetBandFromFreq(freq : string; kHz : Boolean=false): String;
@@ -93,9 +59,6 @@ type
 
     procedure AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
     procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
-    procedure ReloadDXCCTables;
-    procedure LoadDXCCRefArray;
-    procedure LoadExceptionArray;
     procedure RunCallAlertCmd(call,band,mode,freq,freeText : String);
     procedure GetSplitSpot(Spot:String;var call,freq,info:String);
 
@@ -109,30 +72,20 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, znacmech, uMyini, fTRXControl,
-     uDxccTable, uDxccEntry, uDxccResolver, uDxccSuffixRules, uDebugLog;
+uses dUtils, dData, uMyini, fTRXControl;
 
-{ Second, independent instance of the DXCC engine.  The duplication is driven
-  by the separate MySQL connection this module needs for its worker threads,
-  not by the parser -- see src/dxcc-parser/README.md, "Threading".
+{ The DXCC engine used to be duplicated here in full -- its own TDxccTable
+  pair built from the same two files, its own DXCCRefArray filled by the same
+  SELECT, its own copy of every resolution routine.  It now lives once in
+  uDxccService and this module only delegates.
 
-  znacmech stays in uses for string_mdz, which preserves the 40-character
-  truncation of the search key. }
-var
-  TabValid   : TDxccTable;
-  TabDeleted : TDxccTable;
-  Rules      : TDxccSuffixRules;
-  Resolver   : TDxccResolver;
-
-function MatchMode(presne : Integer) : TDxccMatchMode;
-begin
-  case presne of
-    Exactly    : Result := dmExact;
-    ExNoEquals : Result := dmExactNoEquals;
-  else
-    Result := dmPrefix
-  end
-end;
+  csDX stays: it guards Q/trQ/qBands/qCallAlert on dmData.dbDXC, which three
+  worker threads (TTelThread and TWebThread in fDXCluster, TRbnThread in
+  fRbnMonitor) share.  That was always the real reason for the separate data
+  module, and it has not changed.  The delegating lookups below do NOT take it
+  -- the service has a lock of its own, and holding csDX across them would make
+  RBN lookups block cluster database work for no reason. }
+//no csDX: pure string work on its arguments, touches no shared state
 Procedure TdmDXCluster.GetSplitSpot(Spot:String;var call,freq,info:String);
 var
  i,n,r : integer;
@@ -181,20 +134,6 @@ Begin
       else     //should not happen
        info:=s;
    end;
-end;
-
-function TdmDXCluster.MyTryStrToInt(s : String; var i : Integer) : Boolean;
-begin
-  i := 0;
-  s := UpperCase(s);
-  if (length(s) > 0) and (s[1] = 'X') then
-  begin // when the string starts with X, trystrtoint expecs it's number in hexa, that is wrong e.g. XE1 is not valid integer
-    result := false;
-    exit
-  end
-  else begin
-    result := TryStrToInt(s,i)
-  end
 end;
 
 function TdmDXCluster.BandModFromFreq(freq : String;var mode,band : String) : Boolean;
@@ -347,284 +286,44 @@ begin
   end
 end;
 
-function TdmDXCluster.IsException(call : String) : Boolean;
-begin
-  Result := Rules.IsIgnoredSuffix(call)
-end;
-
-
-function TdmDXCluster.Explode(const cSeparator, vString: String): TExplodeArray;
+function TdmDXCluster.id_country(callsign : String; QsoDate : TDateTime; var pfx,country,waz,itu,cont : String) : Word;
 var
-  i: Integer;
-  S: String;
+  UtcOffset, lat, long: string;
 begin
-  S := vString;
-  SetLength(Result, 0);
-  i := 0;
-  while Pos(cSeparator, S) > 0 do begin
-    SetLength(Result, Length(Result) +1);
-    Result[i] := Copy(S, 1, Pos(cSeparator, S) -1);
-    Inc(i);
-    S := Copy(S, Pos(cSeparator, S) + Length(cSeparator), Length(S));
-  end;
-  SetLength(Result, Length(Result) +1);
-  Result[i] := Copy(S, 1, Length(S));
+  cont := '';WAZ := '';UtcOffset := '';ITU := '';lat := '';long := '';
+  //declared order: the master takes (WAZ, UtcOffset, ITU).  These three used to
+  //be passed rotated, so waz came back holding the UTC offset, itu holding the
+  //WAZ zone, and the real ITU zone was discarded into the local.
+  Result := id_country(callsign,QsoDate,pfx,cont,country,waz,UtcOffset,itu,lat,long)
 end;
 
-
-function TdmDXCluster.NaselCountry(znacka : String; datum : TDateTime; var pfx, country,
-   cont, ITU, WAZ, posun, lat, long : String; var ADIF : Integer; presne : Integer = NotExactly) : Boolean;
-
-   function Datumek(sdatum : String) : TDateTime;
-   var
-     tmp : TExplodeArray;
-   begin
-     tmp    := Explode('.',sdatum);
-     Result := EncodeDate(StrToInt(tmp[2]),StrToInt(tmp[1]),strToInt(tmp[0]));
-   end;
-
+function TdmDXCluster.id_country(callsign : String; QsoDate : TDateTime; var pfx,country,waz,itu,cont,lat,long : String) : Word;
 var
-  sZnac  : string_mdz;
-  sADIF  : String;
-  sdatum : String;
-  x      : LongInt;
-  E      : TDxccEntry;
+  UtcOffset : string;
 begin
-  Result := False;
-  sZnac  := znacka;
-  sDatum  := DateToDDXCCDate(Datum);
-  x := TabDeleted.Find(sZnac,sDatum,MatchMode(presne));
-  if x <>-1 then
-  begin
-    //no UpperCase on cont here, unlike dDXCC -- preserved as it was
-    E        := TabDeleted.Entry(x);
-    country  := E.Country;
-    ITU      := E.Itu;
-    WAZ      := E.Waz;
-    posun    := E.UtcOffset;
-    lat      := E.Latitude;
-    long     := E.Longitude;
-    sADIF    := E.Adif;
-    cont     := E.Continent;
-    Result   := True;
-    if not TryStrToInt(sAdif,ADIF) then
-      ADIF := 0;
-    exit
-  end
-  else begin
-    pfx := '!';
-  end;
-
-  x := TabValid.Find(sZnac,sDatum,MatchMode(presne));
-  if x <>-1 then
-  begin
-    E        := TabValid.Entry(x);
-    country  := E.Country;
-    ITU      := E.Itu;
-    WAZ      := E.Waz;
-    posun    := E.UtcOffset;
-    lat      := E.Latitude;
-    long     := E.Longitude;
-    sADIF    := E.Adif;
-    cont     := E.Continent;
-    Result   := True;
-    if not TryStrToInt(sAdif,ADIF) then
-      ADIF := 0;
-  end
-  else begin
-    pfx := '!';
-  end
+  cont := '';WAZ := '';UtcOffset := '';ITU := '';lat := '';long := '';
+  Result := id_country(callsign,QsoDate,pfx,cont,country,waz,UtcOffset,itu,lat,long)
 end;
 
-function TdmDXCluster.NaselCountry(znacka : String; datum : TDateTime; var ADIF : Integer;presne : Integer = NotExactly) : Boolean;
+function TdmDXCluster.id_country(callsign : String;var lat,long : String): Word;
 var
-  pfx,cont,country,itu,waz,posun,lat,long : String;
-begin
-  cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';pfx := '';
-  Country := '';
-  Result := NaselCountry(znacka,datum,pfx,cont,country,itu,waz,
-            posun,lat,long,adif,presne);
-end;
-
-
-
-function TdmDXCluster.CoVyhodnocovat(znacka : String; datum : TDateTime; var UzNasel : Boolean;var ADIF : Integer) : String;
-begin
-  try
-    Result := Resolver.EffectiveCallsign(znacka,DateToDDXCCDate(datum),UzNasel,ADIF)
-  except
-    on E: Exception do
-    begin
-      DbgLogException('DXC','CoVyhodnocovat call=' + znacka +
-                            ' date=' + DateToDDXCCDate(datum), E);
-      raise
-    end
-  end
-end;
-
-function TdmDXCluster.id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont : String) : Word;
-var
-  posun, lat, long: string;
-begin
-  EnterCriticalsection(csDX);
-  try
-    cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-    Result := id_country(znacka,datum,pfx,cont,country,itu,waz,posun,lat,long)
-  finally
-    LeaveCriticalsection(csDX)
-  end
-end;
-
-function TdmDXCluster.id_country(znacka : String; Datum : TDateTime; var pfx,country,waz,itu,cont,lat,long : String) : Word;
-var
-  posun : string;
-begin
-  EnterCriticalsection(csDX);
-  try
-    cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-    Result := id_country(znacka,datum,pfx,cont,country,itu,waz,posun,lat,long)
-  finally
-    LeaveCriticalsection(csDX)
-  end
-end;
-
-function TdmDXCluster.id_country(znacka : String;var lat,long : String): Word;
-var
-  posun : String;
+  UtcOffset : String;
   cont  : String;
   WAZ   : String;
   ITU   : String;
   pfx   : String;
   country : String;
 begin
-  EnterCriticalsection(csDX);
-  try
-    cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
-    Result := id_country(znacka,now,pfx,cont,country,itu,waz,posun,lat,long)
-  finally
-    LeaveCriticalsection(csDX)
-  end
+  cont := '';WAZ := '';UtcOffset := '';ITU := '';lat := '';long := '';
+  Result := id_country(callsign,now,pfx,cont,country,waz,UtcOffset,itu,lat,long)
 end;
 
-function TdmDXCluster.id_country(znacka: string;datum : TDateTime; var pfx, cont, country, WAZ,
-  posun, ITU, lat, long: string) : Word;
-var
-  ADIF   : Integer;
-  UzNasel : Boolean;
-  sdatum : String;
-  NoDXCC : Boolean;
-  x :longint;
-  sZnac : string_mdz;
-  sADIF : String;
-  E : TDxccEntry;
+function TdmDXCluster.id_country(callsign: string;QsoDate : TDateTime; var pfx, cont, country, WAZ,
+  UtcOffset, ITU, lat, long: string) : Word;
 begin
-  EnterCriticalsection(csDX);
-  try
-   try
-    sZnac := '';
-    if (length(znacka)=0) then
-    begin
-      exit;
-    end;
-    UzNasel := False;
-    ADIF := 0;
-
-    sZnac := znacka;
-    sZnac := CoVyhodnocovat(znacka,datum,UzNasel,ADIF);
-    sDatum  := DateToDDXCCDate(Datum);// DateToStr(Datum);
-    x := TabDeleted.Find(sZnac,sDatum,dmPrefix);
-    if x <>-1 then
-    begin
-      E        := TabDeleted.Entry(x);
-      country  := E.Country;
-      ITU      := E.Itu;
-      WAZ      := E.Waz;
-      posun    := E.UtcOffset;
-      lat      := E.Latitude;
-      long     := E.Longitude;
-      sADIF    := E.Adif;
-      cont     := UpperCase(E.Continent);
-      NoDXCC   := Pos('no DXCC',country) > 0;
-      if TryStrToInt(sAdif,ADIF) then
-      begin
-        if ADIF > 0 then
-        begin
-          //instrumentation: this index has never been bounds-checked
-          if (adif < 0) or (adif > High(DXCCRefArray)) then
-            DbgLog('DXC','ADIF outside DXCCRefArray: adif='+IntToStr(adif)+
-                  ' high='+IntToStr(High(DXCCRefArray))+' call='+znacka);
-          pfx := DXCCRefArray[adif].pref;
-          Result := ADIF
-        end
-        else begin
-          if NoDXCC then
-            pfx := '#'
-          else
-            pfx := '!';
-          Result := 0
-        end
-      end
-      else
-        Result := 0;
-      exit
-    end
-    else begin
-      pfx := '!';
-      Result := 0
-    end;
-
-    x := TabValid.Find(sZnac,sDatum,dmPrefix);
-    if x <>-1 then
-    begin
-      E        := TabValid.Entry(x);
-      country  := E.Country;
-      ITU      := E.Itu;
-      WAZ      := E.Waz;
-      posun    := E.UtcOffset;
-      lat      := E.Latitude;
-      long     := E.Longitude;
-      sADIF    := E.Adif;
-      cont     := UpperCase(E.Continent);
-      NoDXCC   := Pos('no DXCC',country) > 0;
-      if TryStrToInt(sAdif,ADIF) then
-      begin
-        if ADIF > 0 then
-        begin
-          //instrumentation: this index has never been bounds-checked
-          if (adif < 0) or (adif > High(DXCCRefArray)) then
-            DbgLog('DXC','ADIF outside DXCCRefArray: adif='+IntToStr(adif)+
-                  ' high='+IntToStr(High(DXCCRefArray))+' call='+znacka);
-          pfx    := DXCCRefArray[adif].pref;
-          Result := ADIF
-        end
-        else begin
-          if NoDXCC then
-            pfx := '#'
-          else
-            pfx := '!';
-          Result := 0
-        end;
-        exit
-      end
-    end
-    else begin
-      pfx := '!';
-      Result := 0
-    end
-   except
-     on Ex: Exception do
-     begin
-       //instrumentation: names the input that killed the lookup.  If the log
-       //also carries a CoVyhodnocovat line for the same callsign the splitter
-       //raised; if not, it came from the table lookup or DXCCRefArray.
-       DbgLogException('DXC','id_country call=' + znacka + ' key=' + sZnac +
-                             ' date=' + DateToDDXCCDate(datum), Ex);
-       raise
-     end
-   end
-  finally
-    LeaveCriticalsection(csDX)
-  end
+  //the cluster never has a US state to offer, so it passes an empty one; that
+  //is the only thing this overload ever did differently from dDXCC's.
+  Result := DxccService.IdCountry(callsign,'',QsoDate,pfx,cont,country,WAZ,UtcOffset,ITU,lat,long)
 end;
 
 function TdmDXCluster.GetBandFromFreq(freq : string; kHz : Boolean=false): String;
@@ -689,23 +388,12 @@ begin
       (Components[i] as TSQLTransaction).DataBase := dmData.dbDXC
   end;
 
-  TabValid := TDxccTable.Create;
-  TabValid.LoadFromFile(dmData.HomeDir + 'dxcc_data' + PathDelim + 'country.tab');
-  TabDeleted := TDxccTable.Create;
-  TabDeleted.LoadFromFile(dmData.HomeDir + 'dxcc_data' + PathDelim + 'country_del.tab');
-  Rules := TDxccSuffixRules.Create;
-  Resolver := TDxccResolver.Create(TabValid,TabDeleted,Rules);
-
+  //the shared engine is loaded by dmDXCC, which cqrlog.lpr creates first
   qBands.SQL.Text := 'SELECT * FROM bands ORDER BY b_begin';
-  qDXCCRef.SQL.Text  := 'SELECT * FROM dxcc_ref ORDER BY adif';
 end;
 
 procedure TdmDXCluster.DataModuleDestroy(Sender: TObject);
 begin
-  FreeAndNil(Resolver);
-  FreeAndNil(Rules);
-  FreeAndNil(TabValid);
-  FreeAndNil(TabDeleted);
   dmData.dbDXC.Connected := False;
   DoneCriticalsection(csDX)
 end;
@@ -723,11 +411,6 @@ end;
 procedure TdmDXCluster.QBeforeOpen(DataSet: TDataSet);
 begin
   if dmData.DebugLevel>=1 then Writeln(Q.SQL.Text)
-end;
-
-procedure TdmDXCluster.qDXCCRefBeforeOpen(DataSet: TDataSet);
-begin
-  if dmData.DebugLevel>=1 then Writeln(qDXCCRef.SQL.Text)
 end;
 
 procedure TdmDXCluster.AddToMarkFile(prefix,call : String;sColor : Integer;Max,lat,long : String);
@@ -791,63 +474,6 @@ begin
   end
 end;
 
-function TdmDXCluster.DateToDDXCCDate(date : TDateTime) : String;
-var
-  d,m,y : Word;
-  sd,sm : String;
-begin
-  DecodeDate(date,y,m,d);
-  if d < 10 then
-    sd := '0'+IntToStr(d)
-  else
-    sd := IntToStr(d);
-  if m < 10 then
-    sm := '0'+IntToStr(m)
-  else
-    sm := IntToStr(m);
-  Result := IntToStr(y) + '/' + sm + '/' + sd
-end;
-
-procedure TdmDXCluster.ReloadDXCCTables;
-var
-  NewValid, NewDeleted : TDxccTable;
-  NewRules : TDxccSuffixRules;
-  OldValid, OldDeleted : TDxccTable;
-  OldRules : TDxccSuffixRules;
-  OldResolver : TDxccResolver;
-begin
-  //a TDxccTable is immutable once loaded, so build the replacements outside the
-  //lock and keep the critical section down to the reference swap
-  NewValid := TDxccTable.Create;
-  NewValid.LoadFromFile(dmData.HomeDir + 'dxcc_data'+PathDelim+'country.tab');
-  NewDeleted := TDxccTable.Create;
-  NewDeleted.LoadFromFile(dmData.HomeDir + 'dxcc_data'+PathDelim+'country_del.tab');
-  NewRules := TDxccSuffixRules.Create;
-  NewRules.LoadExceptions(dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab');
-
-  EnterCriticalsection(csDX);
-  try
-    OldResolver := Resolver;
-    OldValid    := TabValid;
-    OldDeleted  := TabDeleted;
-    OldRules    := Rules;
-
-    TabValid   := NewValid;
-    TabDeleted := NewDeleted;
-    Rules      := NewRules;
-    Resolver   := TDxccResolver.Create(TabValid,TabDeleted,Rules);
-
-    LoadDXCCRefArray
-  finally
-    LeaveCriticalsection(csDX)
-  end;
-
-  OldResolver.Free;
-  OldValid.Free;
-  OldDeleted.Free;
-  OldRules.Free
-end;
-
 function TdmDXCluster.UseseQSL(call : String) : Boolean;
 var
   l : Integer;
@@ -873,117 +499,27 @@ begin
   end
 end;
 
-procedure TdmDXCluster.LoadDXCCRefArray;
-var
-  adif : Integer;
-begin
-  EnterCriticalsection(csDX);
-  try
-    if trQ.Active then
-      trQ.Rollback;
-    Q.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY ADIF';
-    try
-      trQ.StartTransaction;
-      Q.Open;
-      Q.Last;
-      SetLength(DXCCRefArray,StrToInt(Q.FieldByName('adif').AsString)+1);
-      SetLength(DXCCDelArray,0);
-      DXCCRefArray[0].adif := 0;
-      Q.First;
-      while not Q.Eof do
-      begin
-        adif := StrToInt(Q.FieldByName('adif').AsString);
-        DXCCRefArray[adif].adif    := adif;
-        DXCCRefArray[adif].pref    := Q.FieldByName('pref').AsString;
-        DXCCRefArray[adif].name    := Q.FieldByName('name').AsString;
-        DXCCRefArray[adif].cont    := Q.FieldByName('cont').AsString;
-        DXCCRefArray[adif].utc     := Q.FieldByName('utc').AsString;
-        DXCCRefArray[adif].lat     := Q.FieldByName('lat').AsString;
-        DXCCRefArray[adif].longit  := Q.FieldByName('longit').AsString;
-        DXCCRefArray[adif].itu     := Q.FieldByName('itu').AsString;
-        DXCCRefArray[adif].waz     := Q.FieldByName('waz').AsString;
-        DXCCRefArray[adif].deleted := Q.FieldByName('deleted').AsInteger;
-        if DXCCRefArray[adif].deleted > 0 then
-        begin
-          SetLength(DXCCDelArray,Length(DXCCDelArray)+1);
-          DXCCDelArray[Length(DXCCDelArray)-1] := adif
-        end;
-        Q.Next
-      end;
-    finally
-      Q.Close;
-      trQ.Rollback
-    end
-  finally
-    LeaveCriticalsection(csDX)
-  end
-end;
-
 function TdmDXCluster.PfxFromADIF(adif : Word) : String;
 begin
-    EnterCriticalsection(csDX);
-  try
-    Result := DXCCRefArray[adif].pref
-  finally
-    LeaveCriticalsection(csDX)
-  end
+  Result := DxccService.PfxFromAdif(adif)
 end;
 
 function TdmDXCluster.CountryFromADIF(adif : Word) : String;
 begin
-  EnterCriticalsection(csDX);
-  try
-    Result := DXCCRefArray[adif].name
-  finally
-    LeaveCriticalsection(csDX)
-  end
+  Result := DxccService.CountryFromAdif(adif)
 end;
 
-procedure TdmDXCluster.LoadExceptionArray;
-begin
-  EnterCriticalsection(csDX);
-  try
-    Rules.LoadExceptions(dmData.HomeDir+'dxcc_data'+PathDelim+'exceptions.tab')
-  finally
-    LeaveCriticalsection(csDX)
-  end
-end;
-
+//no csDX: pure arithmetic on its arguments, touches nothing shared.
+//Kept only so cluster callers do not have to reach for dmUtils; the body was a
+//verbatim third copy of TdmUtils.GetRealCoordinate, which AddToMarkFile above
+//was already calling.
 procedure TdmDXCluster.GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
-var
-  s,d : String;
 begin
-  s := lat;
-  d := long;
-  if ((Length(s)=0) or (Length(d)=0)) then
-  begin
-    longitude := 0;
-    latitude  := 0;
-    exit
-  end;
-
-  if s[Length(s)] = 'S' then
-    s := '-' +s ;
-  s := copy(s,1,Length(s)-1);
-  if pos('.',s) > 0 then
-    s[pos('.',s)] := FormatSettings.DecimalSeparator;
-  if not TryStrToCurr(s,latitude) then
-    latitude := 0;
-
-  if d[Length(d)] = 'W' then
-    d := '-' + d ;
-  d := copy(d,1,Length(d)-1);
-  if pos('.',d) > 0 then
-    d[pos('.',d)] := FormatSettings.DecimalSeparator;
-  if not TryStrToCurr(d,longitude) then
-    longitude := 0;
-  if dmData.DebugLevel>=4 then
-  begin
-    //Writeln('Lat:  ',latitude);
-    //Writeln('Long: ',longitude);
-  end;
+  dmUtils.GetRealCoordinate(lat,long,latitude,longitude)
 end;
 
+//deliberately no csDX: this spawns an external program, and holding the lock
+//across it would stall every spot on whatever the user configured
 procedure TdmDXCluster.RunCallAlertCmd(call,band,mode,freq,freeText : String);
 var
   AProcess : TProcess;
@@ -1004,22 +540,33 @@ begin
       cmd := StringReplace(cmd,'$MSG',freeText,[rfReplaceAll, rfIgnoreCase]);
       index:=0;
       paramList := TStringList.Create;
-      paramList.Delimiter := ' ';
-      paramList.DelimitedText := cmd;
-      if not  FileExists(paramList[0]) then
-       begin
-         if dmData.DebugLevel>=1 then
-                         Writeln('AProcess.Executable: ', paramList[0],' Not found!');
-         exit;
-       end;
-      AProcess.Parameters.Clear;
-      while index < paramList.Count do
-      begin
-        if (index = 0) then AProcess.Executable := paramList[index]
-          else AProcess.Parameters.Add(paramList[index]);
-        inc(index);
+      try
+        paramList.Delimiter := ' ';
+        paramList.DelimitedText := cmd;
+        //a command of nothing but separators splits into no words at all, and
+        //this runs on a cluster worker -- paramList[0] would take the thread down
+        if paramList.Count = 0 then
+        begin
+          if dmData.DebugLevel>=1 then
+            Writeln('AProcess.Executable: alert command is empty after splitting');
+          exit
+        end;
+        if not  FileExists(paramList[0]) then
+         begin
+           if dmData.DebugLevel>=1 then
+                           Writeln('AProcess.Executable: ', paramList[0],' Not found!');
+           exit;
+         end;
+        AProcess.Parameters.Clear;
+        while index < paramList.Count do
+        begin
+          if (index = 0) then AProcess.Executable := paramList[index]
+            else AProcess.Parameters.Add(paramList[index]);
+          inc(index);
+        end;
+      finally
+        paramList.Free
       end;
-      paramList.Free;
       if dmData.DebugLevel>=1 then Writeln('AProcess.Executable: ',AProcess.Executable,' Parameters: ',AProcess.Parameters.Text);
       AProcess.Execute
     finally
@@ -1036,6 +583,10 @@ const
    C_RGX_SEL = 'select * from call_alert where %s regexp callsign';
 begin
   Result := False;
+  //qCallAlert/trCallAlert live on dbDXC, and this is reached from TTelThread
+  //and TWebThread while TRbnThread may be issuing its own queries on the same
+  //connection.  It never took the lock; that was a live race on one MySQL handle.
+  EnterCriticalsection(csDX);
   try
     if RegExp then
        qCallAlert.SQL.Text := Format(C_RGX_SEL,[QuotedStr(call)])
@@ -1064,6 +615,7 @@ begin
   finally
     qCallAlert.Close;
     trCallAlert.Rollback;
+    LeaveCriticalsection(csDX)
   end
 end;
 

@@ -588,8 +588,7 @@ begin
       finally
         Free
       end;
-      dmDXCC.ReloadDXCCTables;
-      dmDXCluster.ReloadDXCCTables
+      dmDXCC.ReloadDXCCTables
      end
     else
      ShowMessage('File not found!');

@@ -783,41 +783,6 @@ begin
 end;
 procedure TfrmGrayline.AddSpotToList(spot : String);
 
-  procedure GetRealCoordinate(lat,long : String; var latitude, longitude: Currency);
-  var
-    s,d : String;
-  begin
-    s := lat;
-    d := long;
-    if ((Length(s)=0) or (Length(d)=0)) then
-    begin
-      longitude := 0;
-      latitude  := 0;
-      exit
-    end;
-
-    if s[Length(s)] = 'S' then
-      s := '-' +s ;
-    s := copy(s,1,Length(s)-1);
-    if pos('.',s) > 0 then
-      s[pos('.',s)] := FormatSettings.DecimalSeparator;
-    if not TryStrToCurr(s,latitude) then
-      latitude := 0;
-
-    if d[Length(d)] = 'W' then
-      d := '-' + d ;
-    d := copy(d,1,Length(d)-1);
-    if pos('.',d) > 0 then
-      d[pos('.',d)] := FormatSettings.DecimalSeparator;
-    if not TryStrToCurr(d,longitude) then
-      longitude := 0;
-    if LocalDbg then
-    begin
-      Writeln('Lat:  ',latitude);
-      Writeln('Long: ',longitude);
-    end;
-  end;
-
   procedure ParseSpot(spot : String; var spotter, dxstn, freq, mode, stren : String);
   var
      i: integer;
@@ -890,7 +855,8 @@ begin
   else
     frmGrayline.RBNSpotList[index].strengt := 0;
 
-  GetRealCoordinate(lat,long,latitude, longitude);
+  //was a verbatim nested copy of TdmUtils.GetRealCoordinate
+  dmUtils.GetRealCoordinate(lat,long,latitude, longitude);
   frmGrayline.RBNSpotList[index].lat  := latitude;
   frmGrayline.RBNSpotList[index].long := longitude;
   if  LocalDbg then
@@ -901,7 +867,10 @@ begin
     Write('Add freq:   ',freq);
     Write('Add band:   ',band);
     Write('Add Lat:    ',lat);
-    Writeln('Add Long:   ',long)
+    Write('Add Long:   ',long);
+    //the copy that used to live here printed the parsed pair under LocalDbg
+    Write(' -> Lat:    ',latitude);
+    Writeln(' Long:   ',longitude)
    end;
 end;
 
