@@ -507,7 +507,7 @@ begin
       end
       else begin
         old_adif := dmData.Q1.Fields[3].AsInteger;
-        id       := dmData.qCQRLOG.Fields[0].AsInteger;
+        id       := dmData.Q1.Fields[0].AsInteger;
         adif     := dmDXCC.id_country(dmData.Q1.Fields[2].AsString, dmUtils.StrToDateFormat(
                                       dmData.Q1.Fields[1].AsString),
                                       tmp, cont, tmp, waz, tmp, itu, tmp, tmp);
