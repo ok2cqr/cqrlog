@@ -45,6 +45,19 @@ type
     procedure DeleteComment(const Id : Integer);
     function  CallNoteExists(const Callsign : String) : Boolean;
 
+    // long_note
+    function  GetLongNote(out IsNew : Boolean) : String;
+    procedure SaveLongNote(const Note : String; const IsNew : Boolean);
+
+    // call_alert
+    procedure AddCallAlert(const Callsign, Band, Mode : String);
+    procedure EditCallAlert(const Id : Integer; const Callsign, Band, Mode : String);
+    procedure DeleteCallAlert(const Id : Integer);
+    function  GetLastCallAlertId(const Callsign, Band, Mode : String) : Integer;
+
+    // profiles
+    function  GetProfileLocator(const Nr : Integer) : String;
+
     // profiles
     function SqlAllProfiles : String;
     function SqlProfileGrid : String;
@@ -112,6 +125,9 @@ begin
   FT := TSQLTransaction.Create(Self);
   FT.Action := caNone;
   FQ := TSQLQuery.Create(Self);
+  //as on dData's Q, Q1 and qComment: sqldb must not rewrite the statement.
+  //ParamCheck stays on, so :name parameters are still extracted.
+  FQ.ParseSQL := False;
   FQ.Transaction := FT
 end;
 
@@ -245,6 +261,146 @@ begin
   finally
     FQ.Close;
     FT.Rollback
+  end
+end;
+
+{ long_note operations }
+
+function TdmSqlUserData.GetLongNote(out IsNew : Boolean) : String;
+begin
+  IsNew := False;
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FQ.SQL.Text := SqlLongNote;
+  if dmData.DebugLevel >= 1 then Writeln(FQ.SQL.Text);
+  FT.StartTransaction;
+  try
+    FQ.Open;
+    if FQ.Fields[0].IsNull then
+      IsNew := True;
+    Result := FQ.Fields[1].AsString
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
+
+procedure TdmSqlUserData.SaveLongNote(const Note : String; const IsNew : Boolean);
+begin
+  if IsNew then
+    FQ.SQL.Text := SqlInsertLongNote
+  else
+    FQ.SQL.Text := SqlUpdateLongNote;
+  try try
+    FQ.Params[0].AsString := Note;
+    FT.StartTransaction;
+    FQ.ExecSQL;
+    FT.Commit;
+    FQ.Close
+  except
+    FT.Rollback
+  end
+  finally
+    if FT.Active then
+      FT.Commit;
+    FQ.Close
+  end
+end;
+
+{ call_alert operations }
+
+procedure TdmSqlUserData.AddCallAlert(const Callsign, Band, Mode : String);
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  try
+    FT.StartTransaction;
+    FQ.SQL.Text := SqlInsertCallAlert;
+    if dmData.DebugLevel>=1 then Writeln(FQ.SQL.Text);
+    FQ.Prepare;
+    FQ.Params[0].AsString := Callsign;
+    FQ.Params[1].AsString := Mode;
+    FQ.Params[2].AsString := Band;
+    FQ.ExecSQL
+  finally
+    FT.Commit;
+    FQ.Close
+  end
+end;
+
+procedure TdmSqlUserData.EditCallAlert(const Id : Integer; const Callsign, Band, Mode : String);
+var
+  i : Integer;
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  try
+    FT.StartTransaction;
+    FQ.SQL.Text := SqlUpdateCallAlert;
+    if dmData.DebugLevel>=1 then Writeln(FQ.SQL.Text);
+    FQ.Prepare;
+    FQ.Params[0].AsString  := Callsign;
+    FQ.Params[1].AsString  := Band;
+    FQ.Params[2].AsString  := Mode;
+    FQ.Params[3].AsInteger := Id;
+    if dmData.DebugLevel>-1 then
+    begin
+      for i:=0 to FQ.Params.Count-1 do
+        Writeln(FQ.Params[i].Name,':',FQ.Params[i].Value)
+    end;
+    FQ.ExecSQL
+  finally
+    FT.Commit;
+    FQ.Close
+  end
+end;
+
+procedure TdmSqlUserData.DeleteCallAlert(const Id : Integer);
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  try
+    FT.StartTransaction;
+    FQ.SQL.Text := SqlDeleteCallAlert(Id);
+    if dmData.DebugLevel>=1 then Writeln(FQ.SQL.Text);
+    FQ.ExecSQL
+  finally
+    FT.Commit;
+    FQ.Close
+  end
+end;
+
+function TdmSqlUserData.GetLastCallAlertId(const Callsign, Band, Mode : String) : Integer;
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  try
+    FT.StartTransaction;
+    FQ.SQL.Text := SqlLastCallAlertId(Callsign, Band, Mode);
+    if dmData.DebugLevel>=1 then Writeln(FQ.SQL.Text);
+    FQ.Open;
+    Result := FQ.Fields[0].AsInteger
+  finally
+    FT.Rollback;
+    FQ.Close
+  end
+end;
+
+{ profile operations }
+
+function TdmSqlUserData.GetProfileLocator(const Nr : Integer) : String;
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FQ.SQL.Text := SqlProfileLocator(Nr);
+  if dmData.DebugLevel >= 1 then Writeln(FQ.SQL.Text);
+  FT.StartTransaction;
+  try
+    FQ.Open;
+    Result := FQ.Fields[0].AsString
+  finally
+    FT.RollBack;
+    FQ.Close
   end
 end;
 

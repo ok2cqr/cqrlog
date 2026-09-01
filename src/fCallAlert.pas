@@ -77,8 +77,8 @@ begin
         band := ''
       else
         band := F.cmbBand.Text;
-      dmData.AddCallAlert(F.edtCall.Text,band,mode);
-      RefreshCallsignList(dmData.GetLastAllertCallId(F.edtCall.Text,band,mode))
+      dmSqlUserData.AddCallAlert(F.edtCall.Text,band,mode);
+      RefreshCallsignList(dmSqlUserData.GetLastCallAlertId(F.edtCall.Text,band,mode))
     end
   finally
     FreeAndNil(F)
@@ -117,7 +117,7 @@ begin
       else
         band := F.cmbBand.Text;
 
-      dmData.EditCallAlert(dmData.Q2.Fields[0].AsInteger,F.edtCall.Text,band,mode);
+      dmSqlUserData.EditCallAlert(dmData.Q2.Fields[0].AsInteger,F.edtCall.Text,band,mode);
       RefreshCallsignList(dmData.Q2.Fields[0].AsInteger)
     end
   finally
@@ -130,7 +130,7 @@ procedure TfrmCallAlert.acDeleteExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to delete this callsign?','Question',mb_YesNo + mb_IconQuestion) = idYes then
   begin
-    dmData.DeleteCallAlert(dmData.Q2.Fields[0].AsInteger);
+    dmSqlUserData.DeleteCallAlert(dmData.Q2.Fields[0].AsInteger);
     RefreshCallsignList();
     dbgrdCallAlert.SetFocus
   end

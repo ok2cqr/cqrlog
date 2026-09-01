@@ -286,7 +286,6 @@ type
     function  QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
     function  BandModFromFreq(freq : String;var mode,band : String) : Boolean;
     function  TriggersExistsOnCqrlog_main : Boolean;
-    function  GetLastAllertCallId(const callsign,band,mode : String) : Integer;
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
     function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
@@ -332,9 +331,6 @@ type
     procedure CreateQSLTmpTable;
     procedure DropQSLTmpTable;
     procedure StartMysqldProcess;
-    procedure DeleteCallAlert(const id : Integer);
-    procedure AddCallAlert(const callsign, band, mode : String);
-    procedure EditCallAlert(const id : Integer; const callsign, band, mode : String);
     procedure MarkAllAsUploadedToeQSL;
     procedure MarkAllAsUploadedToLoTW;
     procedure RemoveeQSLUploadedFlag(id : Integer);
@@ -2283,14 +2279,7 @@ var
   nr : Integer;
 begin
   nr := GetNRFromProfile(Profile);
-  Q.Close;
-  Q.SQL.Text := dmSqlUserData.SqlProfileLocator(nr);
-  if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
-  trQ.StartTransaction;
-  Q.Open();
-  Result := Q.Fields[0].AsString;
-  trQ.RollBack;
-  Q.Close()
+  Result := dmSqlUserData.GetProfileLocator(nr)
 end;
 
 function TdmData.SendQSL(call,mode,freq : String; adif : Word) : String;
@@ -3524,83 +3513,6 @@ begin
   finally
     Q.Close;
     trQ.RollBack
-  end
-end;
-
-procedure TdmData.DeleteCallAlert(const id : Integer);
-begin
-  Q1.Close;
-  if trQ1.Active then trQ1.Rollback;
-  try
-    trQ1.StartTransaction;
-    Q1.SQL.Text := dmSqlUserData.SqlDeleteCallAlert(id);
-    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-    Q1.ExecSQL
-  finally
-    trQ1.Commit;
-    Q1.Close
-  end
-end;
-
-procedure TdmData.AddCallAlert(const callsign, band, mode : String);
-begin
-  Q1.Close;
-  if trQ1.Active then trQ1.Rollback;
-  try
-    trQ1.StartTransaction;
-    Q1.SQL.Text := dmSqlUserData.SqlInsertCallAlert;
-    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-    Q1.Prepare;
-    Q1.Params[0].AsString := callsign;
-    Q1.Params[1].AsString := mode;
-    Q1.Params[2].AsString := band;
-    Q1.ExecSQL
-  finally
-    trQ1.Commit;
-    Q1.Close
-  end
-end;
-
-procedure TdmData.EditCallAlert(const id : Integer; const callsign, band, mode : String);
-var
-  i : Integer;
-begin
-  Q1.Close;
-  if trQ1.Active then trQ1.Rollback;
-  try
-    trQ1.StartTransaction;
-    Q1.SQL.Text := dmSqlUserData.SqlUpdateCallAlert;
-    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-    Q1.Prepare;
-    Q1.Params[0].AsString  := callsign;
-    Q1.Params[1].AsString  := band;
-    Q1.Params[2].AsString  := mode;
-    Q1.Params[3].AsInteger := id;
-    if fDebugLevel>-1 then
-    begin
-      for i:=0 to Q1.Params.Count-1 do
-        Writeln(Q1.Params[i].Name,':',Q1.Params[i].Value)
-    end;
-    Q1.ExecSQL
-  finally
-    trQ1.Commit;
-    Q1.Close
-  end
-end;
-
-function TdmData.GetLastAllertCallId(const callsign,band,mode : String) : Integer;
-begin
-  Q1.Close;
-  if trQ1.Active then trQ1.Rollback;
-  try
-    trQ1.StartTransaction;
-    Q1.SQL.Text := dmSqlUserData.SqlLastCallAlertId(callsign,band,mode);
-    if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-    Q1.Open;
-    Result := Q1.Fields[0].AsInteger
-  finally
-    trQ1.Rollback;
-    Q1.Close
   end
 end;
 

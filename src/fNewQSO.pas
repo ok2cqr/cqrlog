@@ -4366,41 +4366,10 @@ var
 begin
   with TfrmLongNote.Create(self) do
   try
-    dmData.qLongNote.Close();
-    if dmData.trLongNote.Active then dmData.trLongNote.Rollback;
-    dmData.qLongNote.SQL.Text := dmSqlUserData.SqlLongNote;
-    dmData.trLongNote.StartTransaction;
-    try
-      dmData.qLongNote.Open();
-      if dmData.qLongNote.Fields[0].IsNull then
-        new := True;
-      mNote.Lines.Text := dmData.qLongNote.Fields[1].AsString;
-    finally
-      dmData.qLongNote.Close();
-      dmData.trLongNote.Rollback
-    end;
+    mNote.Lines.Text := dmSqlUserData.GetLongNote(new);
     ShowModal;
     if ModalResult = mrOK then
-    begin
-      if new then
-        dmData.qLongNote.SQL.Text := dmSqlUserData.SqlInsertLongNote
-      else
-        dmData.qLongNote.SQL.Text := dmSqlUserData.SqlUpdateLongNote;
-      try try
-        dmData.qLongNote.Params[0].AsString := mNote.Text;
-        dmData.trLongNote.StartTransaction;
-        dmData.qLongNote.ExecSQL;
-      dmData.trLongNote.Commit;
-      dmData.qLongNote.Close();
-      except
-        dmData.trLongNote.Rollback
-      end
-      finally
-        if dmData.trLongNote.Active then
-          dmData.trLongNote.Commit;
-        dmData.qLongNote.Close()
-      end
-    end
+      dmSqlUserData.SaveLongNote(mNote.Text, new)
   finally
     Free
   end
