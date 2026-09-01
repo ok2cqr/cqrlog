@@ -177,7 +177,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, dDXCC, fMain, uMyIni, uVersion;
+uses dData, dSqlUserData, dUtils, dDXCC, fMain, uMyIni, uVersion;
 
 resourcestring
   INVALID_DATE_RANGE_ENTERED = 'Invalid date range is entered';
@@ -500,28 +500,25 @@ begin
             pNote := pAr[4];
 
           Q4.Close;
-          Q4.SQL.Text := 'SELECT nr FROM profiles WHERE locator='+QuotedStr(pLoc) +
-                         ' and qth='+QuotedStr(pQTH)+' and rig='+QuotedStr(pEq) +
-                         ' and remarks='+QuotedStr(pNote);
+          Q4.SQL.Text := dmSqlUserData.SqlProfileByFields(pLoc, pQTH, pEq, pNote);
           if LocalDbg then Writeln(Q4.SQL.Text);
           Q4.Open;
           if Q4.Fields[0].AsInteger = 0 then
           begin
             Q4.Close();
-            Q4.SQL.Text := 'select nr from profiles where nr = '+pProf;
+            Q4.SQL.Text := dmSqlUserData.SqlProfileNumberExists(pProf);
             if LocalDbg then Writeln(Q4.SQL.Text);
             Q4.Open();
             if (Q4.Fields[0].AsInteger > 0) then //if profile with this number doesnt exists,
             begin                           //we can save the number
               Q4.Close();
-              Q4.SQL.Text := 'select max(nr) from profiles';
+              Q4.SQL.Text := dmSqlUserData.SqlMaxProfileNumber;
               if LocalDbg then Writeln(Q4.SQL.Text);
               Q4.Open();
               pProf := IntToStr(Q4.Fields[0].AsInteger+1)
             end;
             Q4.Close;
-            Q4.SQL.Text := 'insert into profiles (nr,locator,qth,rig,remarks,visible) values ('+
-                           ':nr,:locator,:qth,:rig,:remarks,:visible)';
+            Q4.SQL.Text := dmSqlUserData.SqlInsertImportedProfile;
             Q4.Prepare;
             Q4.Params[0].AsString  := pProf;
             Q4.Params[1].AsString  := pLoc;

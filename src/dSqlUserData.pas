@@ -41,6 +41,10 @@ type
     function SqlProfileInUse : String;
     function SqlDeleteProfile : String;
     function SqlUpdateProfileVisibility : String;
+    function SqlProfileByFields(const Locator, Qth, Equipment, Remarks : String) : String;
+    function SqlProfileNumberExists(const ProfileNumber : String) : String;
+    function SqlMaxProfileNumber : String;
+    function SqlInsertImportedProfile : String;
 
     // notes
     function SqlNoteId(const Callsign : String) : String;
@@ -53,12 +57,19 @@ type
     function SqlCallNoteExists(const Callsign : String) : String;
     function SqlNotesByCallsign : String;
 
+    // long_note
+    function SqlLongNote : String;
+    function SqlInsertLongNote : String;
+    function SqlUpdateLongNote : String;
+
     // call_alert
     function SqlCallAlertsByCallsign : String;
     function SqlDeleteCallAlert(const Id : Integer) : String;
     function SqlInsertCallAlert : String;
     function SqlUpdateCallAlert : String;
     function SqlLastCallAlertId(const Callsign, Band, Mode : String) : String;
+    function SqlCallAlert(const Callsign : String) : String;
+    function SqlCallAlertRegExp(const Callsign : String) : String;
 
     // freqmem
     function SqlInsertFreqMemory : String;
@@ -155,6 +166,29 @@ begin
   Result := 'update profiles set visible = :visible where nr = :profile_number limit 1'
 end;
 
+function TdmSqlUserData.SqlProfileByFields(const Locator, Qth, Equipment, Remarks : String) : String;
+begin
+  Result := 'SELECT nr FROM profiles WHERE locator='+QuotedStr(Locator) +
+            ' and qth='+QuotedStr(Qth)+' and rig='+QuotedStr(Equipment) +
+            ' and remarks='+QuotedStr(Remarks)
+end;
+
+function TdmSqlUserData.SqlProfileNumberExists(const ProfileNumber : String) : String;
+begin
+  Result := 'select nr from profiles where nr = '+ProfileNumber
+end;
+
+function TdmSqlUserData.SqlMaxProfileNumber : String;
+begin
+  Result := 'select max(nr) from profiles'
+end;
+
+function TdmSqlUserData.SqlInsertImportedProfile : String;
+begin
+  Result := 'insert into profiles (nr,locator,qth,rig,remarks,visible) values ('+
+            ':nr,:locator,:qth,:rig,:remarks,:visible)'
+end;
+
 { notes }
 
 function TdmSqlUserData.SqlNoteId(const Callsign : String) : String;
@@ -214,6 +248,23 @@ begin
   Result := 'select * from notes order by callsign'
 end;
 
+{ long_note }
+
+function TdmSqlUserData.SqlLongNote : String;
+begin
+  Result := 'SELECT id_long_note, note FROM long_note'
+end;
+
+function TdmSqlUserData.SqlInsertLongNote : String;
+begin
+  Result := 'insert into long_note(id_long_note,note) values (1,:note)'
+end;
+
+function TdmSqlUserData.SqlUpdateLongNote : String;
+begin
+  Result := 'UPDATE long_note set note = :note where id_long_note = 1'
+end;
+
 { call_alert }
 
 function TdmSqlUserData.SqlCallAlertsByCallsign : String;
@@ -243,6 +294,24 @@ const
   C_SEL = 'select max(id) from call_alert where (callsign=%s) and (band=%s) and (mode=%s)';
 begin
   Result := Format(C_SEL, [QuotedStr(Callsign), QuotedStr(Band), QuotedStr(Mode)])
+end;
+
+// With a complete callsign it makes no difference whether %s or the
+// call_alert/callsign column is the target.
+function TdmSqlUserData.SqlCallAlert(const Callsign : String) : String;
+const
+  C_SEL = 'select * from call_alert where callsign = %s';
+begin
+  Result := Format(C_SEL, [QuotedStr(Callsign)])
+end;
+
+// With partial callsigns %s is the target and the call_alert/callsign column
+// holds the regexp condition.
+function TdmSqlUserData.SqlCallAlertRegExp(const Callsign : String) : String;
+const
+  C_RGX_SEL = 'select * from call_alert where %s regexp callsign';
+begin
+  Result := Format(C_RGX_SEL, [QuotedStr(Callsign)])
 end;
 
 { freqmem }

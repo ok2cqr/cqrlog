@@ -833,7 +833,7 @@ uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, f
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
      fQSLViewer, fCWKeys, uMyIni, fDBConnect, fAbout, uVersion, fChangelog,
      fBigSquareStat, fSCP, fRotControl, fLogUploadStatus, fRbnMonitor, fException, fCommentToCall,
-     fRemind, fContest, fXfldigi, dMembership, dSatellite, fCountyStat,
+     fRemind, fContest, fXfldigi, dMembership, dSatellite, dSqlUserData, fCountyStat,
      fBandMapGfx, uBandMapStore;
 
 
@@ -4368,7 +4368,7 @@ begin
   try
     dmData.qLongNote.Close();
     if dmData.trLongNote.Active then dmData.trLongNote.Rollback;
-    dmData.qLongNote.SQL.Text := 'SELECT id_long_note, note FROM long_note';
+    dmData.qLongNote.SQL.Text := dmSqlUserData.SqlLongNote;
     dmData.trLongNote.StartTransaction;
     try
       dmData.qLongNote.Open();
@@ -4383,9 +4383,9 @@ begin
     if ModalResult = mrOK then
     begin
       if new then
-        dmData.qLongNote.SQL.Text := 'insert into long_note(id_long_note,note) values (1,:note)'
+        dmData.qLongNote.SQL.Text := dmSqlUserData.SqlInsertLongNote
       else
-        dmData.qLongNote.SQL.Text := 'UPDATE long_note set note = :note where id_long_note = 1';
+        dmData.qLongNote.SQL.Text := dmSqlUserData.SqlUpdateLongNote;
       try try
         dmData.qLongNote.Params[0].AsString := mNote.Text;
         dmData.trLongNote.StartTransaction;

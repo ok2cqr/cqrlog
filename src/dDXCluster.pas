@@ -72,7 +72,7 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, uMyini, fTRXControl;
+uses dUtils, dData, dSqlUserData, uMyini, fTRXControl;
 
 { The DXCC engine used to be duplicated here in full -- its own TDxccTable
   pair built from the same two files, its own DXCCRefArray filled by the same
@@ -576,11 +576,6 @@ begin
 end;
 
 function TdmDXCluster.IsAlertCall(const call,band,mode : String;RegExp :Boolean) : Boolean;
-const
-   //with complete call search %s or "call_alert/callsign" can be target. No difference.
-   C_SEL = 'select * from call_alert where callsign = %s';
-   //with "pertial callsigns" %s is target and column "call_alert/callsign" contains regexp condition
-   C_RGX_SEL = 'select * from call_alert where %s regexp callsign';
 begin
   Result := False;
   //qCallAlert/trCallAlert live on dbDXC, and this is reached from TTelThread
@@ -589,9 +584,9 @@ begin
   EnterCriticalsection(csDX);
   try
     if RegExp then
-       qCallAlert.SQL.Text := Format(C_RGX_SEL,[QuotedStr(call)])
+       qCallAlert.SQL.Text := dmSqlUserData.SqlCallAlertRegExp(call)
     else
-      qCallAlert.SQL.Text := Format(C_SEL,[QuotedStr(call)]);
+      qCallAlert.SQL.Text := dmSqlUserData.SqlCallAlert(call);
     if dmData.DebugLevel>=1 then Writeln('Alert: ',qCallAlert.SQL.Text);
     trCallAlert.StartTransaction;
     qCallAlert.Open;
