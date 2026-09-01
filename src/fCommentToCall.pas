@@ -88,7 +88,7 @@ begin
   try
     if frmNewCommentToCall.ShowModal = mrOK then
     begin
-      dmData.SaveComment(frmNewCommentToCall.edtCallsign.Text,frmNewCommentToCall.mNote.Text);
+      dmSqlUserData.SaveComment(frmNewCommentToCall.edtCallsign.Text,frmNewCommentToCall.mNote.Text);
       RefreshData(frmNewCommentToCall.edtCallsign.Text)
     end
   finally
@@ -112,7 +112,7 @@ begin
     frmNewCommentToCall.mNote.Lines.Text    := dmData.qComment.Fields[2].AsString;
     if frmNewCommentToCall.ShowModal = mrOK then
     begin
-      dmData.SaveComment(frmNewCommentToCall.edtCallsign.Text,frmNewCommentToCall.mNote.Text);
+      dmSqlUserData.SaveComment(frmNewCommentToCall.edtCallsign.Text,frmNewCommentToCall.mNote.Text);
       RefreshData(frmNewCommentToCall.edtCallsign.Text)
     end
   finally
@@ -127,7 +127,7 @@ begin
 
   if Application.MessageBox('Do you really want to delete this note?','Question',mb_YesNo+mb_IconQuestion) = idYes then
   begin
-    dmData.DeleteComment(dmData.qComment.Fields[0].AsInteger);
+    dmSqlUserData.DeleteComment(dmData.qComment.Fields[0].AsInteger);
     RefreshData()
   end
 end;

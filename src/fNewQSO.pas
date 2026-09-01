@@ -3308,7 +3308,7 @@ begin
     exit
   end;
 
-  dmData.SaveComment(edtCall.Text,mComment.Text);
+  dmSqlUserData.SaveComment(edtCall.Text,mComment.Text);
 
   if fEditQSO then
     myloc := copy(sbNewQSO.Panels[0].Text,Length(cMyLoc)+1,6)
@@ -5606,7 +5606,7 @@ begin
   tabDXCCStat.Caption:=edtDXCCRef.Text+' statistic';
   tabCallStat.Caption:=edtCall.Text+' statistic';
   CalculateDistanceEtc;
-  mComment.Text := dmData.GetComment(edtCall.Text);
+  mComment.Text := dmSqlUserData.GetComment(edtCall.Text);
   if (lblDXCC.Caption <> '!') and (lblDXCC.Caption <> '#') then
   begin
     if frmGrayline.Showing then

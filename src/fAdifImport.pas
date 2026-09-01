@@ -607,7 +607,7 @@ begin
        d.CONT := mycont;
 
     if d.NOTES <> '' then
-      dmData.SaveComment(d.CALL,d.NOTES);
+      dmSqlUserData.SaveComment(d.CALL,d.NOTES);
 
     Q1.SQL.Text := 'insert into cqrlog_main (qsodate,time_on,time_off,callsign,freq,mode,'+
                    'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+

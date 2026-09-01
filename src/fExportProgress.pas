@@ -49,7 +49,7 @@ implementation
 {$R *.lfm}
 
 { TfrmExportProgress }
-uses dUtils, dData, uMyIni, dDXCC, uVersion, dSatellite;
+uses dUtils, dData, dSqlUserData, uMyIni, dDXCC, uVersion, dSatellite;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -464,7 +464,7 @@ begin   //TfrmExportProgress
     pBarProg.Max := dmData.GetQSOCount;
     dmData.PrepareProfileExport;
     if ExNote then
-      dmData.LoadCommentCache(CommentCache);
+      dmSqlUserData.LoadCommentCache(CommentCache);
 
     if AutoBackup or (not dmData.IsFilter) then
     begin

@@ -256,8 +256,6 @@ type
 
     property MySQLVersion : Currency read fMySQLVersion write fMySQLVersion;
 
-    function  GetComment(call : String) : String;
-    procedure LoadCommentCache(cache : TFPStringHashTable);
     function  GetProfileText(nr : Integer) : String;
     function  GetCompleteProfileText(nr : Integer) : String;
     function  GetExportProfileText(nr : Integer) : String;
@@ -292,7 +290,6 @@ type
     function  CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
     function  RbnMonDXCCInfo(adif : Word; band, mode : String;DxccWithLoTW:Boolean;  var index : integer) : String;
     function  RbnCallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
-    function  CallNoteExists(Callsign : String) : Boolean;
     function  GetNewLogNumber : Integer;
     function  getNewMySQLConnectionObject : TMySQL57Connection;
 
@@ -310,8 +307,6 @@ type
                       qso_dxcc : Boolean; profile : Integer; PropMode, Satellite : String;
                       RxFreq : Currency; idx : LongInt;srx : String;stx : String;srx_string : String;stx_string : String;
                       contestname : String; Op : String);
-    procedure SaveComment(call,text : String);
-    procedure DeleteComment(id : Integer);
     procedure PrepareImport;
     procedure DoAfterImport;
     procedure InsertProfiles(cmbProfile : TComboBox; ShowAll : Boolean);
@@ -1220,6 +1215,10 @@ begin
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
 
+  //dSqlUserData runs on its own cursor and is not one of our components, so
+  //the loop above does not reach it
+  dmSqlUserData.AttachTo(MainCon);
+
   //special connection for band map thread
   BandMapCon.Transaction    := trBandMapFil;
   qBandMapFil.Transaction   := trBandMapFil;
@@ -1528,122 +1527,6 @@ begin
   Q.ExecSQL;
   trQ.Commit;
   Q.Close;
-end;
-
-procedure TdmData.SaveComment(call,text : String);
-begin
-  text := Trim(text);
-  if fDebugLevel >=1 then Writeln('Note:',text);
-  qComment.Close;
-  if trComment.Active then trComment.Rollback;
-
-  try try
-    trComment.StartTransaction;
-    qComment.SQL.Text := dmSqlUserData.SqlNoteId(call);
-    qComment.Open;
-
-    if (text = '') and (qComment.Fields[0].IsNull) then
-      exit; //nothing to save
-
-    if (text = '') and (not qComment.Fields[0].IsNull) then
-    begin                //user deleted the note
-      qComment.Close;
-      qComment.SQL.Text := dmSqlUserData.SqlDeleteNoteByCallsign(call);
-      qComment.ExecSQL;
-      exit
-    end;
-
-    if qComment.Fields[0].IsNull then
-    begin
-      qComment.Close;
-      qComment.SQL.Text := dmSqlUserData.SqlInsertNote(call, text);
-      qComment.ExecSQL
-    end
-    else begin
-      qComment.Close;
-      qComment.SQL.Text := dmSqlUserData.SqlUpdateNote(call, text);
-      qComment.ExecSQL
-    end
-  except
-    on E : Exception do
-    begin
-      ShowMessage('Error saving comment to QSO.'+LineEnding+E.Message);
-      trComment.Rollback
-    end
-  end
-  finally
-    if trComment.Active then
-      trComment.Commit;
-    qComment.Close
-  end
-end;
-
-function TdmData.GetComment(call : String) : String;
-begin
-  qComment.Close;
-  trComment.StartTransaction;
-  qComment.SQL.Text := dmSqlUserData.SqlNoteText(call);
-  qComment.Open;
-  Result := qComment.Fields[0].AsString;
-  qComment.Close;
-  trComment.Rollback
-end;
-
-// Load all notes in a single query into an in-memory map (callsign -> longremarks).
-// Used by ADIF export to avoid one DB round-trip per QSO (see fExportProgress).
-procedure TdmData.LoadCommentCache(cache : TFPStringHashTable);
-begin
-  qComment.Close;
-  trComment.StartTransaction;
-  qComment.SQL.Text := dmSqlUserData.SqlAllNotes;
-  qComment.Open;
-  while not qComment.Eof do
-  begin
-    if qComment.Fields[1].AsString <> '' then
-      cache[qComment.Fields[0].AsString] := qComment.Fields[1].AsString;
-    qComment.Next
-  end;
-  qComment.Close;
-  trComment.Rollback
-end;
-
-procedure TdmData.DeleteComment(id : Integer);
-begin
-  qComment.Close;
-  if trComment.Active then
-    trComment.Rollback;
-
-  trComment.StartTransaction;
-  try try
-    qComment.SQL.Text := dmSqlUserData.SqlDeleteNote(id);
-    qComment.ExecSQL
-  except
-    on E : Exception do
-    begin
-      Writeln(E.Message);
-      trComment.Rollback
-    end
-  end
-  finally
-    if trComment.Active then
-      trComment.Commit
-  end
-end;
-
-function TdmData.CallNoteExists(Callsign : String) : Boolean;
-begin
-  Result := False;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  try
-    dmData.Q.SQL.Text := dmSqlUserData.SqlCallNoteExists(Callsign);
-    dmData.Q.Open;
-    Result := dmData.Q.RecordCount > 0
-  finally
-    dmData.Q.Close;
-    dmData.trQ.Rollback
-  end
 end;
 
 procedure TdmData.PrepareImport;

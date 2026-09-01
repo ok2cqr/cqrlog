@@ -33,7 +33,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils;
+uses dData, dSqlUserData, dUtils;
 
 { TfrmNewCommentToCall }
 
@@ -48,7 +48,7 @@ begin
 
   if edtCallsign.Enabled then
   begin
-    if dmData.CallNoteExists(edtCallsign.Text) then
+    if dmSqlUserData.CallNoteExists(edtCallsign.Text) then
     begin
       Application.MessageBox('Note to this callsign already exists','Error',mb_OK+mb_IconError);
       edtCallsign.SetFocus;

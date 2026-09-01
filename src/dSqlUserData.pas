@@ -8,10 +8,15 @@
  ***************************************************************************
 *)
 
-// SQL for the user's own data: QTH profiles, per-callsign notes, callsign
-// alerts and frequency memories.  The builders return the statement text and
-// nothing else -- they open no transaction and touch no query object, so the
-// caller keeps full control over which cursor asks and when.
+// The user's own data: QTH profiles, per-callsign notes, callsign alerts and
+// frequency memories.
+//
+// Two layers live here.  The Sql* builders return statement text and nothing
+// else.  Above them sit the operations, which run that text on this module's
+// own cursor -- a TSQLQuery and TSQLTransaction nobody outside can reach.
+// That is the point: a note being saved no longer rolls back whatever
+// transaction the caller had open on a shared cursor, and no longer closes a
+// dataset some grid is showing.
 
 unit dSqlUserData;
 
@@ -20,11 +25,26 @@ unit dSqlUserData;
 interface
 
 uses
-  Classes, SysUtils, LResources;
+  Classes, SysUtils, LResources, sqldb, contnrs;
 
 type
   TdmSqlUserData = class(TDataModule)
+    procedure DataModuleCreate(Sender : TObject);
+  private
+    FQ : TSQLQuery;
+    FT : TSQLTransaction;
   public
+    // Wired from TdmData once MainCon exists -- this module is not one of
+    // dData's components, so its bulk DataBase assignment does not reach it.
+    procedure AttachTo(Connection : TSQLConnection);
+
+    // notes
+    function  GetComment(const Callsign : String) : String;
+    procedure SaveComment(const Callsign, Note : String);
+    procedure LoadCommentCache(Cache : TFPStringHashTable);
+    procedure DeleteComment(const Id : Integer);
+    function  CallNoteExists(const Callsign : String) : Boolean;
+
     // profiles
     function SqlAllProfiles : String;
     function SqlProfileGrid : String;
@@ -84,6 +104,149 @@ var
 implementation
 
 {$R *.lfm}
+
+uses Dialogs, dData;
+
+procedure TdmSqlUserData.DataModuleCreate(Sender : TObject);
+begin
+  FT := TSQLTransaction.Create(Self);
+  FT.Action := caNone;
+  FQ := TSQLQuery.Create(Self);
+  FQ.Transaction := FT
+end;
+
+procedure TdmSqlUserData.AttachTo(Connection : TSQLConnection);
+begin
+  FT.DataBase := Connection;
+  FQ.DataBase := Connection
+end;
+
+{ note operations }
+
+function TdmSqlUserData.GetComment(const Callsign : String) : String;
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FT.StartTransaction;
+  try
+    FQ.SQL.Text := SqlNoteText(Callsign);
+    FQ.Open;
+    Result := FQ.Fields[0].AsString
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
+
+procedure TdmSqlUserData.SaveComment(const Callsign, Note : String);
+var
+  Text : String;
+begin
+  Text := Trim(Note);
+  if dmData.DebugLevel >= 1 then Writeln('Note:',Text);
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+
+  try try
+    FT.StartTransaction;
+    FQ.SQL.Text := SqlNoteId(Callsign);
+    FQ.Open;
+
+    if (Text = '') and (FQ.Fields[0].IsNull) then
+      exit; //nothing to save
+
+    if (Text = '') and (not FQ.Fields[0].IsNull) then
+    begin                //user deleted the note
+      FQ.Close;
+      FQ.SQL.Text := SqlDeleteNoteByCallsign(Callsign);
+      FQ.ExecSQL;
+      exit
+    end;
+
+    if FQ.Fields[0].IsNull then
+    begin
+      FQ.Close;
+      FQ.SQL.Text := SqlInsertNote(Callsign, Text);
+      FQ.ExecSQL
+    end
+    else begin
+      FQ.Close;
+      FQ.SQL.Text := SqlUpdateNote(Callsign, Text);
+      FQ.ExecSQL
+    end
+  except
+    on E : Exception do
+    begin
+      ShowMessage('Error saving comment to QSO.'+LineEnding+E.Message);
+      FT.Rollback
+    end
+  end
+  finally
+    if FT.Active then
+      FT.Commit;
+    FQ.Close
+  end
+end;
+
+// Load all notes in a single query into an in-memory map (callsign -> longremarks).
+// Used by ADIF export to avoid one DB round-trip per QSO (see fExportProgress).
+procedure TdmSqlUserData.LoadCommentCache(Cache : TFPStringHashTable);
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FT.StartTransaction;
+  try
+    FQ.SQL.Text := SqlAllNotes;
+    FQ.Open;
+    while not FQ.Eof do
+    begin
+      if FQ.Fields[1].AsString <> '' then
+        Cache[FQ.Fields[0].AsString] := FQ.Fields[1].AsString;
+      FQ.Next
+    end
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
+
+procedure TdmSqlUserData.DeleteComment(const Id : Integer);
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+
+  FT.StartTransaction;
+  try try
+    FQ.SQL.Text := SqlDeleteNote(Id);
+    FQ.ExecSQL
+  except
+    on E : Exception do
+    begin
+      Writeln(E.Message);
+      FT.Rollback
+    end
+  end
+  finally
+    if FT.Active then
+      FT.Commit
+  end
+end;
+
+function TdmSqlUserData.CallNoteExists(const Callsign : String) : Boolean;
+begin
+  Result := False;
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FT.StartTransaction;
+  try
+    FQ.SQL.Text := SqlCallNoteExists(Callsign);
+    FQ.Open;
+    Result := FQ.RecordCount > 0
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
 
 { profiles }
 
