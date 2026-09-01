@@ -56,16 +56,14 @@ implementation
 {$R *.lfm}
 
 { TfrmQTHProfiles }
-uses dData, fNewQTHProfile, dUtils, dQTHProfile;
+uses dData, dSqlUserData, fNewQTHProfile, dUtils, dQTHProfile;
 
 procedure TfrmQTHProfiles.RefreshGrid(profile : String = '');
-const
-    C_SEL = 'SELECT * FROM profiles ORDER BY nr';
 begin
   dmData.qProfiles.Close;
 
   dbgrdProfiles.DataSource  := dmData.dsrProfiles;
-  dmData.qProfiles.SQL.Text := C_SEL;
+  dmData.qProfiles.SQL.Text := dmSqlUserData.SqlProfileGrid;
   if dmData.trProfiles.Active then
     dmData.trProfiles.Rollback;
   dmData.trProfiles.StartTransaction;

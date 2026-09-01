@@ -15,7 +15,7 @@ unit dQTHProfile;
 interface
 
 uses
-  Classes, SysUtils, LResources, uDbUtils, uInternalConnection;
+  Classes, SysUtils, LResources, dSqlUserData, uDbUtils, uInternalConnection;
 
 type
   TdmQTHProfile = class(TDataModule)
@@ -38,14 +38,12 @@ var
 implementation
 
 function TdmQTHProfile.GetNewProfileNumber() : Integer;
-const
-  SQL = 'select max(nr) as nr from profiles';
 var
   Connection : TInternalConnection;
 begin
   Connection := GetNewInternalConnection();
   try
-    Connection.Q.SQL.Text := SQL;
+    Connection.Q.SQL.Text := dmSqlUserData.SqlNewProfileNumber;
     Connection.Q.Open;
 
     Result := Connection.Q.Fields[0].AsInteger + 1;
@@ -56,15 +54,13 @@ begin
 end;
 
 procedure TdmQTHProfile.AddNewProfile(ProfileNumber, Locator, Qth, Equipment, Remarks : String; ProfileVisible : Integer);
-const
-  C_INS = 'INSERT INTO profiles (nr, locator, qth, rig, remarks, visible) VALUES (:nr, :locator, :qth, :rig, :remarks, :visible)';
 var
   C : TInternalConnection;
 begin
   C := GetNewInternalConnection();
   try
     C.T.StartTransaction;
-    C.Q.SQL.Text := C_INS;
+    C.Q.SQL.Text := dmSqlUserData.SqlInsertProfile;
     C.Q.Prepare;
     C.Q.ParamByName('nr').AsString := ProfileNumber;
     C.Q.ParamByName('locator').AsString := Locator;
@@ -80,16 +76,13 @@ begin
 end;
 
 procedure TdmQTHProfile.UpdateNewProfile(OldProfileNumber, ProfileNumber, Locator, Qth, Equipment, Remarks : String; ProfileVisible : Integer);
-const
-  UPD_PROF = 'update profiles set locator = :locator, qth = :qth, rig = :rig, remarks = :remarks, visible = :visible, nr = :nr where nr = :old_nr';
-  UPD_MAIN = 'update cqrlog_main set profile = :new_profile  where profile = :old_profile';
 var
   C : TInternalConnection;
 begin
   C := GetNewInternalConnection();
   try
     C.T.StartTransaction;
-    C.Q.SQL.Text := UPD_PROF;
+    C.Q.SQL.Text := dmSqlUserData.SqlUpdateProfile;
     C.Q.Prepare;
     C.Q.ParamByName('nr').AsString := ProfileNumber;
     C.Q.ParamByName('locator').AsString := Locator;
@@ -103,7 +96,7 @@ begin
 
     if (OldProfileNumber <> ProfileNumber) then
     begin
-      C.Q.SQL.Text := UPD_MAIN;
+      C.Q.SQL.Text := dmSqlUserData.SqlUpdateQsoProfile;
       C.Q.Prepare;
       C.Q.ParamByName('new_profile').AsString := ProfileNumber;
       C.Q.ParamByName('old_profile').AsString := OldProfileNumber;
@@ -116,14 +109,12 @@ begin
 end;
 
 function TdmQTHProfile.ProfileExists(ProfileNumber : String) : Boolean;
-const
-  C_SEL = 'select nr from profiles where nr = :profile_number';
 var
   C : TinternalConnection;
 begin
   C := GetNewInternalConnection();
   try
-    C.Q.SQL.Text := C_SEL;
+    C.Q.SQL.Text := dmSqlUserData.SqlProfileExists;
     C.Q.Prepare;
     C.Q.ParamByName('profile_number').AsString := ProfileNumber;
     C.Q.Open;
@@ -137,14 +128,12 @@ begin
 end;
 
 function TdmQTHProfile.ProfileInUse(ProfileNumber : String) : Boolean;
-const
-  C_SEL = 'select id_cqrlog_main from cqrlog_main where (profile = :profile_number) limit 1';
 var
   C : TinternalConnection;
 begin
   C := GetNewInternalConnection();
   try
-    C.Q.SQL.Text := C_SEL;
+    C.Q.SQL.Text := dmSqlUserData.SqlProfileInUse;
     C.Q.Prepare;
     C.Q.ParamByName('profile_number').AsString := ProfileNumber;
     C.Q.Open;
@@ -158,15 +147,13 @@ begin
 end;
 
 procedure TdmQTHProfile.DeleteProfile(ProfileNumber : String);
-const
-  C_DEL = 'delete from profiles where nr = :profile_number limit 1';
 var
   C : TinternalConnection;
 begin
   C := GetNewInternalConnection();
   try
     C.T.StartTransaction;
-    C.Q.SQL.Text := C_DEL;
+    C.Q.SQL.Text := dmSqlUserData.SqlDeleteProfile;
     C.Q.Prepare;
     C.Q.ParamByName('profile_number').AsString := ProfileNumber;
     C.Q.ExecSQL;
@@ -178,15 +165,13 @@ begin
 end;
 
 procedure TdmQTHProfile.UpdateVisibility(ProfileNumber : String; Visible : Boolean);
-const
-  C_UPD = 'update profiles set visible = :visible where nr = :profile_number limit 1';
 var
   C : TinternalConnection;
 begin
   C := GetNewInternalConnection();
   try
     C.T.StartTransaction;
-    C.Q.SQL.Text := C_UPD;
+    C.Q.SQL.Text := dmSqlUserData.SqlUpdateProfileVisibility;
     C.Q.Prepare;
     if (Visible) then
     begin

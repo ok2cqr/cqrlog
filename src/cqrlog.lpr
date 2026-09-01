@@ -25,7 +25,7 @@ uses
   fRadioMemories, fAddRadioMemory, fException, fCommentToCall,
   fNewCommentToCall, fFindCommentToCall, frExportPref, fExportPref,
   fWorkedGrids, fPropDK0WCY, fRemind, fContest, fMonWsjtx, fXfldigi,
-  dMembership, dSatellite, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
+  dMembership, dSatellite, dSqlUserData, uRigControl, uRotControl, azidis3, aziloc, fDOKStat,
   fCabrilloExport, uDbUtils, dQTHProfile, uConnectionInfo, znacmech, gline2, uDebugLog,
   fDbSqlSel, fProgress, fDbError, fCountyStat, uBandMapStore, fBandMapGfx;
 var
@@ -74,6 +74,7 @@ begin
   application.ProcessMessages;
   Sleep(500);
   Application.CreateForm(TfrmNewQSO, frmNewQSO);
+  Application.CreateForm(TdmSqlUserData, dmSqlUserData);
   Application.CreateForm(TdmData, dmData);
   Application.CreateForm(TdmLogUpload, dmLogUpload);
   Application.CreateForm(TfrmMain, frmMain);

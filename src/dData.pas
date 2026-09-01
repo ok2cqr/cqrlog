@@ -366,7 +366,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -1531,11 +1531,6 @@ begin
 end;
 
 procedure TdmData.SaveComment(call,text : String);
-const
-  C_SEL = 'select id_notes from notes where callsign = %s limit 1';
-  C_DEL = 'delete from notes where callsign = %s';
-  C_INS = 'insert into notes (callsign, longremarks) values (%s, %s)';
-  C_UPD = 'update notes set longremarks = %s where callsign = %s';
 begin
   text := Trim(text);
   if fDebugLevel >=1 then Writeln('Note:',text);
@@ -1544,7 +1539,7 @@ begin
 
   try try
     trComment.StartTransaction;
-    qComment.SQL.Text := Format(C_SEL, [QuotedStr(call)]);
+    qComment.SQL.Text := dmSqlUserData.SqlNoteId(call);
     qComment.Open;
 
     if (text = '') and (qComment.Fields[0].IsNull) then
@@ -1553,7 +1548,7 @@ begin
     if (text = '') and (not qComment.Fields[0].IsNull) then
     begin                //user deleted the note
       qComment.Close;
-      qComment.SQL.Text := Format(C_DEL, [QuotedStr(call)]);
+      qComment.SQL.Text := dmSqlUserData.SqlDeleteNoteByCallsign(call);
       qComment.ExecSQL;
       exit
     end;
@@ -1561,12 +1556,12 @@ begin
     if qComment.Fields[0].IsNull then
     begin
       qComment.Close;
-      qComment.SQL.Text := Format(C_INS, [QuotedStr(call), QuotedStr(text)]);
+      qComment.SQL.Text := dmSqlUserData.SqlInsertNote(call, text);
       qComment.ExecSQL
     end
     else begin
       qComment.Close;
-      qComment.SQL.Text := Format(C_UPD, [QuotedStr(text), QuotedStr(call)]);
+      qComment.SQL.Text := dmSqlUserData.SqlUpdateNote(call, text);
       qComment.ExecSQL
     end
   except
@@ -1587,7 +1582,7 @@ function TdmData.GetComment(call : String) : String;
 begin
   qComment.Close;
   trComment.StartTransaction;
-  qComment.SQL.Text := 'SELECT longremarks FROM notes WHERE callsign = ' + QuotedStr(call);
+  qComment.SQL.Text := dmSqlUserData.SqlNoteText(call);
   qComment.Open;
   Result := qComment.Fields[0].AsString;
   qComment.Close;
@@ -1600,7 +1595,7 @@ procedure TdmData.LoadCommentCache(cache : TFPStringHashTable);
 begin
   qComment.Close;
   trComment.StartTransaction;
-  qComment.SQL.Text := 'SELECT callsign, longremarks FROM notes';
+  qComment.SQL.Text := dmSqlUserData.SqlAllNotes;
   qComment.Open;
   while not qComment.Eof do
   begin
@@ -1613,9 +1608,6 @@ begin
 end;
 
 procedure TdmData.DeleteComment(id : Integer);
-const
-  C_DEL = 'delete from notes where id_notes = %d';
-
 begin
   qComment.Close;
   if trComment.Active then
@@ -1623,7 +1615,7 @@ begin
 
   trComment.StartTransaction;
   try try
-    qComment.SQL.Text := Format(C_DEL,[id]);
+    qComment.SQL.Text := dmSqlUserData.SqlDeleteNote(id);
     qComment.ExecSQL
   except
     on E : Exception do
@@ -1639,15 +1631,13 @@ begin
 end;
 
 function TdmData.CallNoteExists(Callsign : String) : Boolean;
-const
-  C_SEL = 'select id_notes from notes where callsign=%s';
 begin
   Result := False;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
   try
-    dmData.Q.SQL.Text := Format(C_SEL,[QuotedStr(Callsign)]);
+    dmData.Q.SQL.Text := dmSqlUserData.SqlCallNoteExists(Callsign);
     dmData.Q.Open;
     Result := dmData.Q.RecordCount > 0
   finally
@@ -1917,9 +1907,9 @@ begin
   cmbProfile.Items.Add('');
   qProfiles.Close;
   if ShowAll then
-    qProfiles.SQL.Text := 'SELECT * FROM profiles ORDER BY nr'
+    qProfiles.SQL.Text := dmSqlUserData.SqlAllProfiles
   else
-    qProfiles.SQL.Text := 'SELECT * FROM profiles WHERE visible > 0 ORDER BY nr';
+    qProfiles.SQL.Text := dmSqlUserData.SqlVisibleProfiles;
   if fDebugLevel >= 1 then Writeln(qProfiles.SQL.Text);
   if trProfiles.Active then
     trProfiles.Rollback;
@@ -1954,7 +1944,7 @@ begin
   rig := cqrini.ReadBool('Profiles','RIG',False);
 
   qProfiles.Close;
-  qProfiles.SQL.Text := 'SELECT * FROM profiles WHERE nr = '+IntToStr(nr);
+  qProfiles.SQL.Text := dmSqlUserData.SqlProfile(nr);
   if fDebugLevel >=1 then Writeln(qProfiles.SQL.Text);
   if trProfiles.Active then
     trProfiles.Rollback;
@@ -1988,7 +1978,7 @@ begin
   if nr = 0 then
     exit;
   qProfiles.Close;
-  qProfiles.SQL.Text := 'SELECT * FROM profiles WHERE nr = '+IntToStr(nr);
+  qProfiles.SQL.Text := dmSqlUserData.SqlCompleteProfile(nr);
   if fDebugLevel >=1 then Writeln(qProfiles.SQL.Text);
   if trProfiles.Active then
     trProfiles.Rollback;
@@ -2411,7 +2401,7 @@ var
 begin
   nr := GetNRFromProfile(Profile);
   Q.Close;
-  Q.SQL.Text := 'select locator from profiles where nr = '+IntToStr(nr);
+  Q.SQL.Text := dmSqlUserData.SqlProfileLocator(nr);
   if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
   trQ.StartTransaction;
   Q.Open();
@@ -2781,7 +2771,7 @@ var
 begin
   SetLength(aProf,0);
   qProfiles.Close;
-  qProfiles.SQL.Text := 'select * from profiles order by nr';
+  qProfiles.SQL.Text := dmSqlUserData.SqlProfilesForExport;
   if fDebugLevel >=1 then Writeln(qProfiles.SQL.Text);
   if trProfiles.Active then  trProfiles.Rollback;
   trProfiles.StartTransaction;
@@ -3655,14 +3645,12 @@ begin
 end;
 
 procedure TdmData.DeleteCallAlert(const id : Integer);
-const
-  C_DEL = 'delete from call_alert where id = %d';
 begin
   Q1.Close;
   if trQ1.Active then trQ1.Rollback;
   try
     trQ1.StartTransaction;
-    Q1.SQL.Text := Format(C_DEL,[id]);
+    Q1.SQL.Text := dmSqlUserData.SqlDeleteCallAlert(id);
     if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
     Q1.ExecSQL
   finally
@@ -3672,14 +3660,12 @@ begin
 end;
 
 procedure TdmData.AddCallAlert(const callsign, band, mode : String);
-const
-  C_INS = 'insert into call_alert(callsign,mode,band) values (:callsign,:mode,:band)';
 begin
   Q1.Close;
   if trQ1.Active then trQ1.Rollback;
   try
     trQ1.StartTransaction;
-    Q1.SQL.Text := C_INS;
+    Q1.SQL.Text := dmSqlUserData.SqlInsertCallAlert;
     if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString := callsign;
@@ -3693,8 +3679,6 @@ begin
 end;
 
 procedure TdmData.EditCallAlert(const id : Integer; const callsign, band, mode : String);
-const
-  C_UPD = 'update call_alert set callsign=:callsing,band =:band,mode =:mode where id=:id';
 var
   i : Integer;
 begin
@@ -3702,7 +3686,7 @@ begin
   if trQ1.Active then trQ1.Rollback;
   try
     trQ1.StartTransaction;
-    Q1.SQL.Text := C_UPD;
+    Q1.SQL.Text := dmSqlUserData.SqlUpdateCallAlert;
     if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString  := callsign;
@@ -3722,14 +3706,12 @@ begin
 end;
 
 function TdmData.GetLastAllertCallId(const callsign,band,mode : String) : Integer;
-const
-  C_SEL = 'select max(id) from call_alert where (callsign=%s) and (band=%s) and (mode=%s)';
 begin
   Q1.Close;
   if trQ1.Active then trQ1.Rollback;
   try
     trQ1.StartTransaction;
-    Q1.SQL.Text := Format(C_SEL,[QuotedStr(callsign),QuotedStr(band),QuotedStr(mode)]);
+    Q1.SQL.Text := dmSqlUserData.SqlLastCallAlertId(callsign,band,mode);
     if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
     Q1.Open;
     Result := Q1.Fields[0].AsInteger
@@ -4140,9 +4122,6 @@ begin
 end;
 
 procedure TdmData.StoreFreqMemories(grid : TStringGrid);
-const
-  C_INS = 'insert into freqmem (freq,mode,bandwidth,info) values (:freq,:mode,:bandwidth,:info)';
-  C_DEL = 'delete from freqmem';
 var
   i : Integer;
 begin
@@ -4150,12 +4129,12 @@ begin
     dmData.qFreqMemGrid.Close;
     if dmData.trFreqMemGrid.Active then  dmData.trFreqMemGrid.Rollback;
     dmData.trFreqMemGrid.StartTransaction;
-    dmData.qFreqMemGrid.SQL.Text := C_DEL;
+    dmData.qFreqMemGrid.SQL.Text := dmSqlUserData.SqlDeleteFreqMemories;
     dmData.qFreqMemGrid.ExecSQL;
     dmData.trFreqMemGrid.Commit;
 
     dmData.trFreqMemGrid.StartTransaction;
-    dmData.qFreqMemGrid.SQL.Text := C_INS;
+    dmData.qFreqMemGrid.SQL.Text := dmSqlUserData.SqlInsertFreqMemory;
     for i:= 1 to grid.RowCount-1 do
     begin
       qFreqMemGrid.Prepare;
@@ -4183,8 +4162,6 @@ begin
 end;
 
 procedure TdmData.LoadFreqMemories(grid : TStringGrid);
-const
-  C_SEL = 'select freq,mode,bandwidth,info from freqmem order by freq';
 begin
   try
     grid.clear;
@@ -4192,7 +4169,7 @@ begin
     dmData.qFreqMemGrid.Close;
     if  dmData.trFreqMemGrid.Active then dmData.trFreqMemGrid.Rollback;
     dmData.trFreqMemGrid.StartTransaction;
-    dmData.qFreqMemGrid.SQL.Text := C_SEL;
+    dmData.qFreqMemGrid.SQL.Text := dmSqlUserData.SqlFreqMemoriesForGrid;
     dmData.qFreqMemGrid.Open;
     while not dmData.qFreqMemGrid.Eof do
     begin
@@ -4211,8 +4188,6 @@ begin
 end;
 
 procedure TdmData.OpenFreqMemories(mode : String);
-const
-  C_SEL = 'select id,freq,mode,bandwidth,info from freqmem';
 var
   c : integer;
 begin
@@ -4221,21 +4196,7 @@ begin
 
   if not cqrini.ReadBool('TRX',dmUtils.PlatformKey('MemModeRelated'),False) then mode:='';   //use related settings!!
 
-  if (mode='') then qFreqMem.SQL.Text := C_SEL + ' order by id'
-  else
-   begin
-    case mode of
-         'LSB','USB','FM','AM'     :qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('LSB') +') or ' +
-                                                           '(mode = ' + QuotedStr('USB') + ') or (mode = ' + QuotedStr('FM') + ') or ' +
-                                                           '(mode = ' + QuotedStr('AM')+ ') order by id';
-         'RTTY','PKTLSB','PKTUSB',
-         'PKTFM','DATA'            :qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr('RTTY') +') or ' +
-                                                           '(mode = ' + QuotedStr('PKTLSB') + ') or (mode = ' + QuotedStr('PKTUSB') + ') or ' +
-                                                           '(mode = ' + QuotedStr('PKTFM') + ') or (mode = ' + QuotedStr('DATA')+ ') order by id';
-     else
-      qFreqMem.SQL.Text := C_SEL + ' where (mode = ' + QuotedStr(mode) +') order by id'
-    end;
-   end;
+  qFreqMem.SQL.Text := dmSqlUserData.SqlFreqMemoriesForMode(mode);
   if fDebugLevel>=1 then
                     Writeln('FreqmemSql:',qFreqMem.SQL.Text);
   trFreqMem.StartTransaction;

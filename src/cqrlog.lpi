@@ -99,7 +99,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="128">
+    <Units Count="129">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -928,6 +928,13 @@
         <Filename Value="uDxccService.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit127>
+      <Unit128>
+        <Filename Value="dSqlUserData.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dmSqlUserData"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+      </Unit128>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

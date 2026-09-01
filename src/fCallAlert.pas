@@ -44,7 +44,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, fNewCallAlert;
+uses dUtils, dData, dSqlUserData, fNewCallAlert;
 
 { TfrmCallAlert }
 
@@ -146,7 +146,7 @@ begin
   dmData.Q2.Close;
   if dmData.trQ2.Active then dmData.trQ2.Rollback;
   dmData.trQ2.StartTransaction;
-  dmData.Q2.SQL.Text := 'select * from call_alert order by callsign';
+  dmData.Q2.SQL.Text := dmSqlUserData.SqlCallAlertsByCallsign;
   dmData.Q2.Open;
   dbgrdCallAlert.Columns[0].Visible := False;
   dbgrdCallAlert.Columns[1].Width   := 100;

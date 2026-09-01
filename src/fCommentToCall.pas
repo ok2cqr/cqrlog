@@ -46,7 +46,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, fNewCommentToCall, fFindCommentToCall;
+uses dData, dSqlUserData, dUtils, fNewCommentToCall, fFindCommentToCall;
 
 { TfrmCommentToCall }
 
@@ -140,12 +140,10 @@ begin
 end;
 
 procedure TfrmCommentToCall.RefreshData(Callsign : String = '');
-const
-  C_SEL = 'select * from notes order by callsign';
 begin
   if dmData.trComment.Active then
     dmData.trComment.Rollback;
-  dmData.qComment.SQL.Text := C_SEL;
+  dmData.qComment.SQL.Text := dmSqlUserData.SqlNotesByCallsign;
   dmData.trComment.StartTransaction;
   dmData.qComment.Open;
 
