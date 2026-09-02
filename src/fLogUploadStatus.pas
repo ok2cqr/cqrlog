@@ -71,7 +71,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, uMyIni, fNewQSO;
+uses dData, dUtils, uMyIni, fNewQSO, dSqlUpload;
 
 function TUploadThread.CheckEnabledOnlineLogs : Boolean;
 const
@@ -127,9 +127,6 @@ begin
 end;
 
 procedure TUploadThread.Execute;
-const
-  C_SEL_UPLOAD_STATUS = 'select * from upload_status where logname=%s';
-  C_SEL_LOG_CHANGES   = 'select * from log_changes where id > %d order by id';
 var
   data       : TStringList;
   err        : String = '';
@@ -164,12 +161,12 @@ begin
     dmLogUpload.trQ.StartTransaction;
     try try
       dmLogUpload.Q.Close;
-      dmLogUpload.Q.SQL.Text := Format(C_SEL_UPLOAD_STATUS,[QuotedStr(GetLogName)]);
+      dmLogUpload.Q.SQL.Text := dmSqlUpload.SqlUploadStatus(GetLogName);
       dmLogUpload.Q.Open;
       LastId := dmLogUpload.Q.FieldByName('id_log_changes').AsInteger;
 
       dmLogUpload.Q.Close;
-      dmLogUpload.Q.SQL.Text := Format(C_SEL_LOG_CHANGES,[LastId]);
+      dmLogUpload.Q.SQL.Text := dmSqlUpload.SqlLogChangesAfter(LastId);
       dmLogUpload.Q.Open;
       if dmLogUpload.Q.Fields[0].IsNull then
       begin

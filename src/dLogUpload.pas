@@ -74,7 +74,7 @@ var
 implementation
   {$R *.lfm}
 
-uses dData, dDXCluster, uMyIni;
+uses dData, dDXCluster, uMyIni, dSqlUpload;
 
 procedure TdmLogUpload.DataModuleCreate(Sender: TObject);
 var
@@ -283,20 +283,20 @@ begin
     Q.Close;
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
-    Q.SQL.Text := 'insert into log_changes (cmd) values('+QuotedStr(C_ALLDONE)+')';
+    Q.SQL.Text := dmSqlUpload.SqlInsertAllDoneMark;
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
-    Q.SQL.Text := 'select max(id) from log_changes';
+    Q.SQL.Text := dmSqlUpload.SqlLastLogChangeId;
     Q.Open;
     max := Q.Fields[0].AsInteger;
     Q.Close;
 
-    Q.SQL.Text := 'update upload_status set id_log_changes='+IntToStr(max);
+    Q.SQL.Text := dmSqlUpload.SqlSetAllUploadStatus(max);
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
-    Q.SQL.Text := 'delete from log_changes where id < '+IntToStr(max);
+    Q.SQL.Text := dmSqlUpload.SqlDeleteLogChangesBefore(max);
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL
   except
@@ -327,16 +327,16 @@ begin
     Q.Close;
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
-    Q.SQL.Text := 'insert into log_changes (cmd) values('+QuotedStr(LogName+'DONE')+')';
+    Q.SQL.Text := dmSqlUpload.SqlInsertLogDoneMark(LogName);
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
-    Q.SQL.Text := 'select max(id) from log_changes';
+    Q.SQL.Text := dmSqlUpload.SqlLastLogChangeIdForLog;
     Q.Open;
     max := Q.Fields[0].AsInteger;
 
     Q.Close;
-    Q.SQL.Text := 'update upload_status set id_log_changes='+IntToStr(max);
+    Q.SQL.Text := dmSqlUpload.SqlSetAllUploadStatusForLog(max);
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL
   except
@@ -387,7 +387,7 @@ begin
 
   trQ1.StartTransaction;
   try
-    Q1.SQL.Text := 'select * from cqrlog_main where id_cqrlog_main = '+IntToStr(id_cqrlog_main);
+    Q1.SQL.Text := dmSqlUpload.SqlQsoForAdif(id_cqrlog_main);
     Q1.Open;
 
     if Q1.Fields[0].IsNull then
@@ -590,7 +590,7 @@ begin
 
   trQ1.StartTransaction;
   try
-    Q1.SQL.Text := 'select * from cqrlog_main where id_cqrlog_main = '+IntToStr(id_cqrlog_main);
+    Q1.SQL.Text := dmSqlUpload.SqlQsoForKeyValue(id_cqrlog_main);
     Q1.Open;
 
     if Q1.Fields[0].IsNull then
@@ -703,8 +703,6 @@ begin
 end;
 
 procedure TdmLogUpload.PrepareInsertHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
-const
-  C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
 var
   adif    : String;
   qsodate : String;
@@ -713,7 +711,7 @@ begin
   Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try
-    Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
+    Q2.SQL.Text := dmSqlUpload.SqlLogChangeForInsert(id_log_changes);
     Q2.Open;
     if Q2.Fields[0].IsNull then exit; //this shouldn't happen
 
@@ -775,8 +773,6 @@ begin
 end;
 
 procedure TdmLogUpload.PrepareDeleteHeader(where : TWhereToUpload; id_log_changes,id_cqrlog_main : Integer; data : TStringList);
-const
-  C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
 var
   adif    : String;
   time_on : String;
@@ -785,7 +781,7 @@ begin
   Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try
-    Q2.SQL.Text := Format(C_SEL_LOG_CHANGES,[id_log_changes]);
+    Q2.SQL.Text := dmSqlUpload.SqlLogChangeForDelete(id_log_changes);
     Q2.Open;
     if Q2.Fields[0].IsNull then exit; //this shouldn't happen
 
@@ -939,15 +935,13 @@ begin
 end;
 
 procedure TdmLogUpload.MarkAsUploaded(LogName : String; id_log_changes : Integer);
-const
-  C_UPD = 'update upload_status set id_log_changes = %d where logname = %s';
 var
   err : Boolean = False;
 begin
   Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try try
-    Q2.SQL.Text := Format(C_UPD,[id_log_changes,QuotedStr(LogName)]);
+    Q2.SQL.Text := dmSqlUpload.SqlMarkUploaded(LogName, id_log_changes);
     if dmData.DebugLevel >= 1 then Writeln(Q2.SQL.Text);
     Q2.ExecSQL
   except
@@ -967,15 +961,13 @@ begin
 end;
 
 procedure TdmLogUpload.MarkAsUpDeleted(id_log_upload : Integer);
-const
-  C_UPD = 'update log_changes set upddeleted=0 where id = %d';
 var
   err : Boolean = False;
 begin
   Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try try
-    Q2.SQL.Text := Format(C_UPD,[id_log_upload]);
+    Q2.SQL.Text := dmSqlUpload.SqlMarkUpDeleted(id_log_upload);
     if dmData.DebugLevel >= 1 then Writeln(Q2.SQL.Text);
     Q2.ExecSQL
   except
@@ -1003,8 +995,6 @@ begin
 end;
 
 procedure TdmLogUpload.DisableOnlineLogSupport;
-const
-  C_DROP = 'DROP TRIGGER IF EXISTS %s';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -1018,15 +1008,15 @@ begin
     t.DataBase    := dmData.MainCon;
 
     try
-      t.SQL.Text := Format(C_DROP,['cqrlog_main_bd']);
+      t.SQL.Text := dmSqlUpload.SqlDropTrigger('cqrlog_main_bd');
       if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
       t.ExecSQL;
 
-      t.SQL.Text := Format(C_DROP,['cqrlog_main_ai']);
+      t.SQL.Text := dmSqlUpload.SqlDropTrigger('cqrlog_main_ai');
       if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
       t.ExecSQL;
 
-      t.SQL.Text := Format(C_DROP,['cqrlog_main_bu']);
+      t.SQL.Text := dmSqlUpload.SqlDropTrigger('cqrlog_main_bu');
       if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
       t.ExecSQL;
 
@@ -1042,8 +1032,6 @@ begin
 end;
 
 procedure TdmLogUpload.EnableOnlineLogSupport(RemoveOldChanges : Boolean = True);
-const
-  C_DEL = 'DELETE FROM %s';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -1059,11 +1047,11 @@ begin
     begin
       try
         tr.StartTransaction;
-        t.SQL.Text := Format(C_DEL,['upload_status']);
+        t.SQL.Text := dmSqlUpload.SqlClearTable('upload_status');
         if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
         t.ExecSQL;
 
-        t.SQL.Text := Format(C_DEL,['log_changes']);
+        t.SQL.Text := dmSqlUpload.SqlClearTable('log_changes');
         if dmData.DebugLevel>=1 then Writeln(t.SQL.Text);
         t.ExecSQL;
 
