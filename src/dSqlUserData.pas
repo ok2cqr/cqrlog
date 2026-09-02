@@ -502,7 +502,7 @@ end;
 
 function TdmSqlUserData.GetExportProfileText(const Nr : Integer) : String;
 begin
-  if Nr > Length(FExportProfiles) then
+  if (Nr < 0) or (Nr >= Length(FExportProfiles)) then
     Result := ''
   else
     Result := FExportProfiles[Nr]
