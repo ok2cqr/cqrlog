@@ -486,7 +486,7 @@ implementation
 {$R *.lfm}
 
 { TfrmMain }
-uses fNewQSO, fPreferences, dUtils, dData, dDXCC, dDXCluster, fMarkQSL, fDXCCStat,
+uses fNewQSO, fPreferences, dUtils, dData, dSqlQsl, dDXCC, dDXCluster, fMarkQSL, fDXCCStat,
   fSort, fFilter, fContestFilter, fImportProgress, fGrayline, fCallbook, fTRXControl,
   fAdifImport, fSplash, fSearch, fExportProgress, fDXCluster, fQSLMgr,
   fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fDatabaseUpdate, fExLabelPrint,
@@ -932,7 +932,7 @@ begin
   frmQSLMgr := TfrmQSLMgr.Create(self);
   try
     dmData.qQSLMgr.Close;
-    dmData.qQSLMgr.SQL.Text := 'select callsign,qsl_via,fromdate from cqrlog_common.qslmgr order by callsign,fromDate';
+    dmData.qQSLMgr.SQL.Text := dmSqlQsl.SqlQslManagerList;
     if dmData.trQSLMgr.Active then
       dmData.trQSLMgr.Rollback;
     dmData.trQSLMgr.StartTransaction;
@@ -2172,9 +2172,7 @@ var
   procedure MarkRec;
   begin
     idx := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
-    dmData.Q.SQL.Text := 'UPDATE cqrlog_main SET qsl_r = ' + QuotedStr('Q') +
-    ', qslr_date = '+ QuotedStr(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0))) +
-    ' WHERE id_cqrlog_main = ' + IntToStr(idx);
+    dmData.Q.SQL.Text := dmSqlQsl.SqlMarkQslReceived(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)), idx);
     if dmData.DebugLevel >= 1 then
       Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL;
@@ -2561,9 +2559,7 @@ var
     end;
 
     dmData.Q.Close;
-    dmData.Q.SQL.Text := 'UPDATE cqrlog_main SET qsl_s = ' + QuotedStr(qsl) +
-      ', qsls_date = '+ QuotedStr(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0))) +
-      ' WHERE id_cqrlog_main = ' + IntToStr(idx);
+    dmData.Q.SQL.Text := dmSqlQsl.SqlMarkQslSent(qsl, dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)), idx);
     dmData.Q.ExecSQL
   end;
 

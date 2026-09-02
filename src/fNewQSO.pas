@@ -827,7 +827,7 @@ implementation
 
 { TfrmNewQSO }
 
-uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, fMain, fSelectDXCC, fGrayline,
+uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl, fMain, fSelectDXCC, fGrayline,
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
      fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
@@ -4282,7 +4282,7 @@ procedure TfrmNewQSO.btnQSLMgrClick(Sender: TObject);
 begin
   frmQSLMgr := TfrmQSLMgr.Create(self);
   try
-    dmData.qQSLMgr.SQL.Text := 'select callsign,qsl_via,fromdate from cqrlog_common.qslmgr order by callsign,fromDate';
+    dmData.qQSLMgr.SQL.Text := dmSqlQsl.SqlQslManagerListForNewQso;
     if dmData.trQSLMgr.Active then
       dmData.trQSLMgr.Rollback;
     dmData.trQSLMgr.StartTransaction;

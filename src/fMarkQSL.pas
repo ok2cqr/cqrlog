@@ -46,7 +46,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, dDXCC, UMyIni, dLogUpload;
+uses dUtils, dData, dDXCC, UMyIni, dLogUpload, dSqlQsl;
 
 procedure TfrmMarkQSL.FormShow(Sender: TObject);
 begin
@@ -61,7 +61,7 @@ var
   band  : String = '';
   Call  : String = '';
   adif  : Integer = 0;
-  sql   : String = '';
+  filter : String = '';
   id    : Integer = 0;
   nr    : Integer = 0;
 
@@ -84,7 +84,7 @@ begin
   tmp := copy(tmp,Pos('WHERE',tmp)+5,Length(tmp) - Pos('WHERE',tmp));
   if pos('ORDER',tmp) > 0 then
     tmp := copy(tmp,1,Pos('ORDER',tmp)-1);
-  sql := 'select max(id_cqrlog_main) from  cqrlog_main where (not (' + tmp + ') ';
+  filter := tmp;
   dmData.qCQRLOG.First;
   while not dmData.qCQRLOG.EOF do
   begin
@@ -112,8 +112,7 @@ begin
         Continue
       end;
       dmData.Q.Close();
-      dmData.Q.SQL.Text := sql + ' and adif=' + IntToStr(adif) + ' and mode = '+QuotedStr(mode)+
-                           ' and band='+QuotedStr(band)+' and qsl_r='+QuotedStr('Q')+')';
+      dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxccBandModeQslQ(filter, adif, mode, band);
       if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -121,7 +120,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS4(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;
@@ -147,11 +146,9 @@ begin
       end;
       dmData.Q.Close();
       if cmbType.ItemIndex = 0 then
-        dmData.Q.SQL.Text := sql + ' and callsign=' + QuotedStr(Call) + ' and mode = '+QuotedStr(mode)+
-                             ' and band='+QuotedStr(band)+')'
+        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByCallBandMode(filter, Call, mode, band)
       else
-        dmData.Q.SQL.Text := sql + ' and adif=' + IntToStr(adif) + ' and mode = '+QuotedStr(mode)+
-                             ' and band='+QuotedStr(band)+')';
+        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxccBandMode(filter, adif, mode, band);
       if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -159,7 +156,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS3(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;
@@ -188,9 +185,9 @@ begin
 
       dmData.Q.Close();
       if cmbType.ItemIndex = 0 then
-        dmData.Q.SQL.Text := sql + ' and callsign=' + QuotedStr(Call) + ' and band='+QuotedStr(band)+')'
+        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByCallBand(filter, Call, band)
       else
-        dmData.Q.SQL.Text := sql + ' and adif=' + IntToStr(adif) + ' and band='+QuotedStr(band)+')';
+        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxccBand(filter, adif, band);
       if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -198,7 +195,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS2(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;
@@ -225,9 +222,9 @@ begin
 
       dmData.Q.Close();
       if cmbType.ItemIndex = 0 then
-        dmData.Q.SQL.Text := sql + ' and callsign=' + QuotedStr(Call)+')'
+        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByCall(filter, Call)
       else
-        dmData.Q.SQL.Text := sql + ' and adif=' + IntToStr(adif)+')';
+        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxcc(filter, adif);
       if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -235,7 +232,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := 'update cqrlog_main set qsl_s=' + QuotedStr(cmbQSLS.Text) + ' where id_cqrlog_main = ' + IntToStr(id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;

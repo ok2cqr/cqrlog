@@ -63,7 +63,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC,fMain, dLOgUpload;
+uses dUtils, dData, uMyIni, fQSLExpPref, dDXCC,fMain, dLOgUpload, dSqlQsl;
 { TfrmExLabelPrint }
 
 procedure TfrmExLabelPrint.edtQSOsToLabelExit(Sender: TObject);
@@ -172,12 +172,7 @@ begin
     if dmData.trQ.Active then dmData.trQ.Rollback;
     dmData.trQ.StartTransaction;
     dmData.Q.Close;
-    dmData.Q.SQL.Text := 'insert into qslexport (idcall,id_cqrlog_main,dxcc,qsodate,time_on,time_off,callsign,freq,mode,rst_s,rst_r, '+
-                         'name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,loc,my_loc,award,remarks,band,qslmsg,prop_mode,satellite,'+
-                         'contestname,stx,stx_string,srx,srx_string) values('+
-                         ':idcall,:id_cqrlog_main,:dxcc,:qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,'+
-                         ':qth,:qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:loc,:my_loc,:award,:remarks,:band,:qslmsg,:prop_mode,:satellite,'+
-                         ':contestname,:stx,:stx_string,:srx,:srx_string)';
+    dmData.Q.SQL.Text := dmSqlQsl.SqlInsertQslExport;
     if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
     dmData.qCQRLOG.First;
     while not dmData.qCQRLOG.Eof do
@@ -587,7 +582,7 @@ begin
     Rewrite(f);
     dmData.trQ.StartTransaction;
     dmData.trQ1.StartTransaction;
-    dmData.Q.SQL.Text := 'select * from qslexport order by dxcc,idcall';
+    dmData.Q.SQL.Text := dmSqlQsl.SqlQslExportRows;
     dmData.Q.Open;
 
     while not dmData.Q.Eof do
@@ -607,9 +602,8 @@ begin
           end
         end;
 
-        dmData.Q1.SQL.Text := 'update cqrlog_main set qsl_s ='+QuotedStr(qsl_s)  +
-                              ', qsls_date = '+ QuotedStr(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0))) +
-                              ' where id_cqrlog_main='+IntToStr(dmData.Q.Fields[2].AsInteger);
+        dmData.Q1.SQL.Text := dmSqlQsl.SqlMarkQslSentFromLabels(qsl_s, dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)),
+                                                                 dmData.Q.Fields[2].AsInteger);
         if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
         dmData.Q1.ExecSQL
       end;

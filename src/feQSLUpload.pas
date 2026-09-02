@@ -53,7 +53,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils,dData,uMyIni, fPreferences, uVersion, dLogUpload, dSatellite;
+uses dUtils,dData,uMyIni, fPreferences, uVersion, dLogUpload, dSatellite, dSqlQsl;
 
 procedure TfrmeQSLUpload.SockCallBack(Sender: TObject; Reason:  THookSocketReason; const  Value: string);
 begin
@@ -81,14 +81,12 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then dmData.trQ.Rollback;
   if rbWebExportNotExported.Checked then
-    dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq '+
-                         'from cqrlog_main where eqsl_qslsdate is null'
+    dmData.Q.SQL.Text := dmSqlQsl.SqlQsosForEqslNotExported
   else begin
     if dmData.IsFilter then
       dmData.Q.SQL.Text := dmData.qCQRLOG.SQL.Text
     else
-      dmData.Q.SQL.Text := 'select id_cqrlog_main,qsodate,time_on,callsign,mode,band,freq,rst_s,rst_r,remarks, satellite, prop_mode, rxfreq '+
-                           'from cqrlog_main'
+      dmData.Q.SQL.Text := dmSqlQsl.SqlQsosForEqslAll
   end;
   dmData.Q.Open;
   dmData.Q.First;
@@ -414,9 +412,7 @@ begin
         dmData.Q.First;
         while not dmData.Q.Eof do
         begin
-          dmData.Q1.SQL.Text := 'update cqrlog_main set eqsl_qsl_sent = ' + QuotedStr('Y') +
-                               ',eqsl_qslsdate = ' + QuotedStr(date) + 'where id_cqrlog_main = '+
-                               dmData.Q.FieldByName('id_cqrlog_main').AsString;
+          dmData.Q1.SQL.Text := dmSqlQsl.SqlMarkEqslSent(date, dmData.Q.FieldByName('id_cqrlog_main').AsString);
           if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
           dmData.Q1.ExecSQL;
           dmData.Q.Next

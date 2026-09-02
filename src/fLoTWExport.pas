@@ -77,7 +77,7 @@ implementation
 
 { TfrmLoTWExport }
 
-uses dData, dUtils, uMyIni, dLogUpload;
+uses dData, dUtils, uMyIni, dLogUpload, dSqlQsl;
 
 procedure TfrmLoTWExport.btnFileBrowseClick(Sender: TObject);
 begin
@@ -174,9 +174,7 @@ begin
         dmData.trQ.StartTransaction;
         while not dmData.Q1.Eof do
         begin
-          dmData.Q.SQL.Text := 'update cqrlog_main set lotw_qsls = ' + QuotedStr('Y') +
-                               ',lotw_qslsdate = ' + QuotedStr(date) + 'where id_cqrlog_main = '+
-                               dmData.Q1.FieldByName('id_cqrlog_main').AsString;
+          dmData.Q.SQL.Text := dmSqlQsl.SqlMarkLotwSent(date, dmData.Q1.FieldByName('id_cqrlog_main').AsString);
           if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
           dmData.Q.ExecSQL;
           dmData.Q1.Next
@@ -400,9 +398,9 @@ begin
   end
   else begin
      if rbWebExportAll.Checked then
-       dmData.Q1.SQL.Text := 'select * from cqrlog_main'
+       dmData.Q1.SQL.Text := dmSqlQsl.SqlQsosForLotwAll
      else
-       dmData.Q1.SQL.Text := 'select * from cqrlog_main where lotw_qslsdate is null'
+       dmData.Q1.SQL.Text := dmSqlQsl.SqlQsosForLotwNotExported
   end;
   dmData.trQ1.StartTransaction;
   if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
@@ -485,9 +483,7 @@ begin
       inc(nr);
       if MarkAfter and (pgLoTWExport.ActivePageIndex = 0) then
       begin
-        dmData.Q.SQL.Text := 'update cqrlog_main set lotw_qsls = ' + QuotedStr('Y') +
-                             ',lotw_qslsdate = ' + QuotedStr(date) + ' where id_cqrlog_main = '+
-                             dmData.Q1.FieldByName('id_cqrlog_main').AsString;
+        dmData.Q.SQL.Text := dmSqlQsl.SqlMarkLotwSentAfterExport(date, dmData.Q1.FieldByName('id_cqrlog_main').AsString);
         dmData.Q.ExecSQL
       end;
       dmData.Q1.Next

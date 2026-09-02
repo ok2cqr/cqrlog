@@ -343,7 +343,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -1834,8 +1834,7 @@ begin
 
   qsl_via := '';
   trQSLMgr.StartTransaction;
-  qQSLMgr.SQL.Text := 'select * from cqrlog_common.qslmgr where (callsign = '+QuotedStr(call)+
-                      ') and (fromDate <= '+QuotedStr(date)+') order by fromDate';
+  qQSLMgr.SQL.Text := dmSqlQsl.SqlQslManager(call, date);
   if fDebugLevel >=1 then Writeln(qQSLMgr.SQL.Text);
   qQSLMgr.Open();
   qQSLMgr.Last;
@@ -3144,11 +3143,9 @@ begin
 end;
 
 procedure TdmData.DropQSLTmpTable;
-const
-  C_SQL = 'DROP TABLE qslexport';
 begin
   trQ.StartTransaction;
-  Q.SQL.Text := C_SQL;
+  Q.SQL.Text := dmSqlQsl.SqlDropQslExport;
   Q.ExecSQL;
   trQ.Commit
 end;
@@ -3373,14 +3370,12 @@ begin
 end;
 
 procedure TdmData.MarkAllAsUploadedToeQSL;
-const
-  C_UPD = 'update cqrlog_main set eqsl_qsl_sent = %s,eqsl_qslsdate=%s where (eqsl_qsl_sent="" and eqsl_qslsdate is NULL)';
 begin
   Q1.Close;
   if trQ1.Active then
     trQ1.Active := False;
   try try
-    Q1.SQL.Text := Format(C_UPD,[QuotedStr('Y'),QuotedStr(dmUtils.DateToSQLIteDate(now))]);
+    Q1.SQL.Text := dmSqlQsl.SqlMarkAllEqslSent(dmUtils.DateToSQLIteDate(now));
     Q1.ExecSQL
   except
     trQ1.Rollback
@@ -3392,14 +3387,12 @@ begin
   end
 end;
 procedure TdmData.MarkAllAsUploadedToLoTW;
-const
-  C_UPD = 'update cqrlog_main set lotw_qsls = %s, lotw_qslsdate = %s where (lotw_qsls="" and lotw_qslsdate is NULL)';
 begin
   Q1.Close;
   if trQ1.Active then
     trQ1.Active := False;
   try try
-    Q1.SQL.Text := Format(C_UPD,[QuotedStr('Y'),QuotedStr(dmUtils.DateToSQLIteDate(now))]);
+    Q1.SQL.Text := dmSqlQsl.SqlMarkAllLotwSent(dmUtils.DateToSQLIteDate(now));
     Q1.ExecSQL
   except
     trQ1.Rollback
@@ -3532,8 +3525,6 @@ eqsl_qsl_sent varchar(1) default '' not null,
 eqsl_qslsdate date default null,
 }
 procedure TdmData.RemoveeQSLUploadedFlag(id : Integer);
-const
-  C_UPD = 'update cqrlog_main set eqsl_qsl_sent=%s,eqsl_qslsdate=NULL where id_cqrlog_main=%d';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -3548,7 +3539,7 @@ begin
     t.DataBase    := MainCon;
 
     tr.StartTransaction;
-    t.SQL.Text := Format(C_UPD,[QuotedStr(''),id]);
+    t.SQL.Text := dmSqlQsl.SqlClearEqslSent(id);
     if fDebugLevel>=1 then Writeln(t.SQL.Text);
     t.ExecSQL
   except
@@ -3576,8 +3567,6 @@ lotw_qslsdate DATE default null,
 lotw_qsls VARCHAR(3) DEFAULT '' not null,
 }
 procedure TdmData.RemoveLoTWUploadedFlag(id : Integer);
-const
-  C_UPD = 'update cqrlog_main set lotw_qsls=%s,lotw_qslsdate=NULL where id_cqrlog_main=%d';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -3592,7 +3581,7 @@ begin
     t.DataBase    := MainCon;
 
     tr.StartTransaction;
-    t.SQL.Text := Format(C_UPD,[QuotedStr(''),id]);
+    t.SQL.Text := dmSqlQsl.SqlClearLotwSent(id);
     if fDebugLevel>=1 then Writeln(t.SQL.Text);
     t.ExecSQL
   except
