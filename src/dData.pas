@@ -81,7 +81,6 @@ type
     qLogList: TSQLQuery;
     qQSLMgr: TSQLQuery;
     qCallBook: TSQLQuery;
-    qLongNote: TSQLQuery;
     qProfiles: TSQLQuery;
     qIOTAList: TSQLQuery;
     qBands: TSQLQuery;
@@ -120,7 +119,6 @@ type
     trBands: TSQLTransaction;
     trIOTAList: TSQLTransaction;
     trProfiles: TSQLTransaction;
-    trLongNote: TSQLTransaction;
     trCallBook: TSQLTransaction;
     trQSLMgr: TSQLTransaction;
     trSQLConsole: TSQLTransaction;
@@ -143,7 +141,6 @@ type
     procedure mQBeforeOpen(DataSet: TDataSet);
     procedure qCQRLOGBeforeOpen(DataSet: TDataSet);
     procedure qLogListBeforeOpen(DataSet: TDataSet);
-    procedure qLongNoteBeforeOpen(DataSet: TDataSet);
     procedure scLogException(Sender: TObject; Statement: TStrings;
       TheException: Exception; var Continue: boolean);
     procedure scViewsException(Sender: TObject; Statement: TStrings;
@@ -250,7 +247,6 @@ type
     property MySQLVersion : Currency read fMySQLVersion write fMySQLVersion;
 
     function  GetProfileText(nr : Integer) : String;
-    function  GetCompleteProfileText(nr : Integer) : String;
     function  GetNRFromProfile(text : String) : Integer;
     function  GetDefaultProfileText : String;
     function  QSLMgrFound(call,date : String; var qsl_via : String) : Boolean;
@@ -1305,10 +1301,6 @@ begin
   if fDebugLevel>=1 then Writeln(qLogList.SQL.Text)
 end;
 
-procedure TdmData.qLongNoteBeforeOpen(DataSet: TDataSet);
-begin
-  if fDebugLevel >=1 then Writeln(qLongNote.SQL.Text)
-end;
 procedure TdmData.W1BeforeOpen(DataSet: TDataSet);
 begin
    if fDebugLevel >=1 then Writeln(W1.SQL.Text)
@@ -1787,35 +1779,6 @@ begin
   qth := cqrini.ReadBool('Profiles','QTH',True);
   rig := cqrini.ReadBool('Profiles','RIG',False);
   Result := dmSqlUserData.GetProfileText(nr, loc, qth, rig)
-end;
-
-function TdmData.GetCompleteProfileText(nr : Integer) : String;
-var
-  tmp : String;
-begin
-  Result := '0|';
-  if nr = 0 then
-    exit;
-  qProfiles.Close;
-  qProfiles.SQL.Text := dmSqlUserData.SqlCompleteProfile(nr);
-  if fDebugLevel >=1 then Writeln(qProfiles.SQL.Text);
-  if trProfiles.Active then
-    trProfiles.Rollback;
-  trProfiles.StartTransaction;
-  try
-    qProfiles.Open;
-    if qProfiles.RecordCount > 0 then
-    begin
-      tmp := IntToStr(qProfiles.Fields[1].AsInteger)+'|';
-      tmp := tmp + trim(qProfiles.Fields[2].AsString)+'|';
-      tmp := tmp + trim(qProfiles.Fields[3].AsString)+'|';
-      tmp := tmp + trim(qProfiles.Fields[4].AsString)+'|';
-      Result := tmp
-    end
-  finally
-     qProfiles.Close;
-     trProfiles.Rollback
-  end
 end;
 
 function TdmData.GetNRFromProfile(text : String) : Integer;

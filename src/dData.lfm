@@ -515,21 +515,6 @@ object dmData: TdmData
     Left = 24
     Top = 144
   end
-  object trLongNote: TSQLTransaction
-    Active = False
-    Action = caNone
-    Left = 728
-    Top = 144
-  end
-  object qLongNote: TSQLQuery
-    FieldDefs = <>
-    BeforeOpen = qLongNoteBeforeOpen
-    Transaction = trLongNote
-    Params = <>
-    Macros = <>
-    Left = 728
-    Top = 80
-  end
   object qProfiles: TSQLQuery
     FieldDefs = <>
     Transaction = trProfiles

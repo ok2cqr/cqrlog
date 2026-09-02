@@ -151,9 +151,6 @@ begin
 end;
 
 procedure TfrmQTHProfiles.btnEditClick(Sender: TObject);
-const
-  UPD_PROF = 'update profiles set locator = :locator, qth = :qth, rig = :rig, remarks = :remarks, visible = :visible, nr = :nr where nr = :old_nr';
-  UPD_MAIN = 'update cqrlog_main set profile = %s  where profile = %s';
 var
   OldProfileNumber : String = '';
   ProfileVisible : Integer;

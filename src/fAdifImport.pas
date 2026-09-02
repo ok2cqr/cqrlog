@@ -526,12 +526,6 @@ begin
             Q4.Params[3].AsString  := pEq;
             Q4.Params[4].AsString  := pNote;
             Q4.Params[5].AsInteger := 1;
-
-            {
-            Q4.SQL.Text := 'insert into profiles (nr,locator,qth,rig,remarks,visible) values (' +
-                           pProf+','+QuotedStr(pLoc)+','+QuotedStr(pQTH)+','+QuotedStr(pEq)+','+
-                           QuotedStr(pNote)+',1)';
-            }
             if LocalDbg then Writeln(Q4.SQL.Text);
             Q4.ExecSQL;
             Q4.Close();

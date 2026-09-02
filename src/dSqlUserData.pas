@@ -71,7 +71,6 @@ type
     function SqlProfileGrid : String;
     function SqlVisibleProfiles : String;
     function SqlProfile(const Nr : Integer) : String;
-    function SqlCompleteProfile(const Nr : Integer) : String;
     function SqlProfileLocator(const Nr : Integer) : String;
     function SqlProfilesForExport : String;
     function SqlNewProfileNumber : String;
@@ -534,12 +533,6 @@ begin
 end;
 
 function TdmSqlUserData.SqlProfile(const Nr : Integer) : String;
-begin
-  Result := 'SELECT * FROM profiles WHERE nr = '+IntToStr(Nr)
-end;
-
-// Same statement as SqlProfile -- see the note on SqlProfileGrid.
-function TdmSqlUserData.SqlCompleteProfile(const Nr : Integer) : String;
 begin
   Result := 'SELECT * FROM profiles WHERE nr = '+IntToStr(Nr)
 end;
