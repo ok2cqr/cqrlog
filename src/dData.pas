@@ -50,12 +50,6 @@ Type TCurPos = (cpBegin,cpEnd);
 type TSortType = (stDate,stCall);
 
 type
-  TExpProfile = record
-    ProfNr : Word;
-    text   : String;
-end;
-
-type
   TZipCode  = record
     Name       : String;
     LongName   : String;
@@ -177,7 +171,6 @@ type
     fShareDir    : String;
     fFirstMemId  : Integer;
     fLastMemId   : Integer;
-    aProf : Array of TExpProfile;
     aSCP  : Array of String[20];
     MySQLProcess : TProcess;
     csPreviousQSO : TRTLCriticalSection;
@@ -258,7 +251,6 @@ type
 
     function  GetProfileText(nr : Integer) : String;
     function  GetCompleteProfileText(nr : Integer) : String;
-    function  GetExportProfileText(nr : Integer) : String;
     function  GetNRFromProfile(text : String) : Integer;
     function  GetDefaultProfileText : String;
     function  QSLMgrFound(call,date : String; var qsl_via : String) : Boolean;
@@ -322,8 +314,6 @@ type
     procedure SaveConfigFile;
     procedure CloseDatabases;
     procedure TruncateTables(nr : Word);
-    procedure PrepareProfileExport;
-    procedure CloseProfileExport;
     procedure LoadLoTWCalls;
     procedure LoadeQSLCalls;
     procedure LoadMasterSCP;
@@ -1779,40 +1769,15 @@ begin
 end;
 
 procedure TdmData.InsertProfiles(cmbProfile : TComboBox; ShowAll,loc,qth,rig : Boolean);
-var
-  tmp : String;
 begin
   cmbProfile.Clear;
   cmbProfile.Items.Add('');
-  qProfiles.Close;
-  if ShowAll then
-    qProfiles.SQL.Text := dmSqlUserData.SqlAllProfiles
-  else
-    qProfiles.SQL.Text := dmSqlUserData.SqlVisibleProfiles;
-  if fDebugLevel >= 1 then Writeln(qProfiles.SQL.Text);
-  if trProfiles.Active then
-    trProfiles.Rollback;
-  trProfiles.StartTransaction;
-  qProfiles.Open;
-  qProfiles.First;
-  while not dmData.qProfiles.EOF do
-  begin
-    tmp := IntToStr(qProfiles.Fields[1].AsInteger)+'-';
-    if loc then
-      tmp := tmp + trim(qProfiles.Fields[2].AsString)+';';
-    if qth then
-      tmp := tmp + trim(qProfiles.Fields[3].AsString)+';';
-    if rig then
-      tmp := tmp + trim(qProfiles.Fields[4].AsString)+';';
-    cmbProfile.Items.Add(tmp);
-    qProfiles.Next
-  end
+  dmSqlUserData.ListProfiles(cmbProfile.Items, ShowAll, loc, qth, rig)
 end;
 
 function TdmData.GetProfileText(nr : Integer) : String;
 var
   loc, qth, rig : Boolean;
-  tmp : String;
 begin
   Result := '';
   if nr = 0 then
@@ -1821,32 +1786,7 @@ begin
   loc := cqrini.ReadBool('Profiles','Locator',True);
   qth := cqrini.ReadBool('Profiles','QTH',True);
   rig := cqrini.ReadBool('Profiles','RIG',False);
-
-  qProfiles.Close;
-  qProfiles.SQL.Text := dmSqlUserData.SqlProfile(nr);
-  if fDebugLevel >=1 then Writeln(qProfiles.SQL.Text);
-  if trProfiles.Active then
-    trProfiles.Rollback;
-  trProfiles.StartTransaction;
-  try
-    qProfiles.Open;
-    if qProfiles.RecordCount > 0 then
-    begin
-      tmp := IntToStr(qProfiles.Fields[1].AsInteger)+'-';
-      if loc then
-        tmp := tmp + trim(qProfiles.Fields[2].AsString)+';';
-      if qth then
-        tmp := tmp + trim(qProfiles.Fields[3].AsString)+';';
-      if rig then
-        tmp := tmp + trim(qProfiles.Fields[4].AsString)+';';
-      Result := tmp
-    end
-    else
-      Result := ''
-  finally
-    qProfiles.Close;
-    trProfiles.Rollback
-  end
+  Result := dmSqlUserData.GetProfileText(nr, loc, qth, rig)
 end;
 
 function TdmData.GetCompleteProfileText(nr : Integer) : String;
@@ -2635,51 +2575,6 @@ begin
     FreeAndNil(lQ);
     FreeAndNil(lTr)
   end
-end;
-
-procedure TdmData.PrepareProfileExport;
-var
-  tmp : String;
-begin
-  SetLength(aProf,0);
-  qProfiles.Close;
-  qProfiles.SQL.Text := dmSqlUserData.SqlProfilesForExport;
-  if fDebugLevel >=1 then Writeln(qProfiles.SQL.Text);
-  if trProfiles.Active then  trProfiles.Rollback;
-  trProfiles.StartTransaction;
-  try
-    qProfiles.Open;
-    if qProfiles.RecordCount = 0 then exit;
-    qProfiles.Last;
-    SetLength(aProf,qProfiles.Fields[1].AsInteger+1);
-    qProfiles.First;
-    while not qProfiles.Eof do
-    begin
-      aProf[qProfiles.Fields[1].AsInteger].ProfNr := qProfiles.Fields[1].AsInteger;
-      tmp := IntToStr(qProfiles.Fields[1].AsInteger)+'|';
-      tmp := tmp + trim(qProfiles.Fields[2].AsString)+'|';
-      tmp := tmp + trim(qProfiles.Fields[3].AsString)+'|';
-      tmp := tmp + trim(qProfiles.Fields[4].AsString)+'|';
-      aProf[qProfiles.Fields[1].AsInteger].text := tmp;
-      qProfiles.Next
-    end
-  finally
-     qProfiles.Close;
-     trProfiles.Rollback
-  end
-end;
-
-function TdmData.GetExportProfileText(nr : Integer) : String;
-begin
-  if nr > Length(aProf) then
-    Result := ''
-  else
-    Result := aProf[nr].text
-end;
-
-procedure TdmData.CloseProfileExport;
-begin
-  SetLength(aProf,0)
 end;
 
 

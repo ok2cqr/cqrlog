@@ -350,7 +350,7 @@ var
     begin
       Writeln(f);
       leng := 0;
-      tmp := dmData.GetExportProfileText(StrToInt(profile));
+      tmp := dmSqlUserData.GetExportProfileText(StrToInt(profile));
       tmp := Trim(tmp);
       SaveTag(dmUtils.StringToADIF('<APP_CQRLOG_PROFILE',tmp),leng);
     end;
@@ -462,7 +462,7 @@ begin   //TfrmExportProgress
   CommentCache := TFPStringHashTable.Create;
   try
     pBarProg.Max := dmData.GetQSOCount;
-    dmData.PrepareProfileExport;
+    dmSqlUserData.PrepareProfileExport;
     if ExNote then
       dmSqlUserData.LoadCommentCache(CommentCache);
 
@@ -609,7 +609,7 @@ begin   //TfrmExportProgress
       end;
       DeleteFileUTF8(Dir + FileName)
     end;
-    dmData.CloseProfileExport;
+    dmSqlUserData.CloseProfileExport;
     CommentCache.Free;
     Close
   end
@@ -965,7 +965,7 @@ var
       tmp := '&nbsp;';
       if (profile<>'0') and (profile<>'-1') then
           begin
-            tmp := dmData.GetExportProfileText(StrToInt(profile));
+            tmp := dmSqlUserData.GetExportProfileText(StrToInt(profile));
             writeln('here ',tmp);
             trim(tmp);
           end;
@@ -1249,7 +1249,7 @@ begin
   i := 0;
 
   pBarProg.Max := QSOcnt;
-  dmData.PrepareProfileExport;
+  dmSqlUserData.PrepareProfileExport;
 
   if not dmData.IsFilter then
   begin

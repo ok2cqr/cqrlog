@@ -33,6 +33,9 @@ type
   private
     FQ : TSQLQuery;
     FT : TSQLTransaction;
+    // Filled by PrepareProfileExport, indexed by profile number.
+    FExportProfiles : array of String;
+    function ProfileLabel(const WithLocator, WithQth, WithRig : Boolean) : String;
   public
     // Wired from TdmData once MainCon exists -- this module is not one of
     // dData's components, so its bulk DataBase assignment does not reach it.
@@ -57,6 +60,11 @@ type
 
     // profiles
     function  GetProfileLocator(const Nr : Integer) : String;
+    procedure ListProfiles(Items : TStrings; const ShowAll, WithLocator, WithQth, WithRig : Boolean);
+    function  GetProfileText(const Nr : Integer; const WithLocator, WithQth, WithRig : Boolean) : String;
+    procedure PrepareProfileExport;
+    function  GetExportProfileText(const Nr : Integer) : String;
+    procedure CloseProfileExport;
 
     // profiles
     function SqlAllProfiles : String;
@@ -402,6 +410,107 @@ begin
     FT.RollBack;
     FQ.Close
   end
+end;
+
+// nr-locator;qth;rig; built from the row FQ stands on: the label the profile
+// combo boxes show and the QSO stores.
+function TdmSqlUserData.ProfileLabel(const WithLocator, WithQth, WithRig : Boolean) : String;
+begin
+  Result := IntToStr(FQ.Fields[1].AsInteger)+'-';
+  if WithLocator then
+    Result := Result + trim(FQ.Fields[2].AsString)+';';
+  if WithQth then
+    Result := Result + trim(FQ.Fields[3].AsString)+';';
+  if WithRig then
+    Result := Result + trim(FQ.Fields[4].AsString)+';'
+end;
+
+procedure TdmSqlUserData.ListProfiles(Items : TStrings; const ShowAll, WithLocator, WithQth, WithRig : Boolean);
+begin
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  if ShowAll then
+    FQ.SQL.Text := SqlAllProfiles
+  else
+    FQ.SQL.Text := SqlVisibleProfiles;
+  if dmData.DebugLevel >= 1 then Writeln(FQ.SQL.Text);
+  FT.StartTransaction;
+  try
+    FQ.Open;
+    FQ.First;
+    while not FQ.EOF do
+    begin
+      Items.Add(ProfileLabel(WithLocator, WithQth, WithRig));
+      FQ.Next
+    end
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
+
+function TdmSqlUserData.GetProfileText(const Nr : Integer; const WithLocator, WithQth, WithRig : Boolean) : String;
+begin
+  Result := '';
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FQ.SQL.Text := SqlProfile(Nr);
+  if dmData.DebugLevel >= 1 then Writeln(FQ.SQL.Text);
+  FT.StartTransaction;
+  try
+    FQ.Open;
+    if FQ.RecordCount > 0 then
+      Result := ProfileLabel(WithLocator, WithQth, WithRig)
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
+
+// Reads every profile once so the ADIF export does not query per QSO;
+// GetExportProfileText then serves from memory until CloseProfileExport.
+procedure TdmSqlUserData.PrepareProfileExport;
+var
+  Nr : Integer;
+begin
+  SetLength(FExportProfiles, 0);
+  FQ.Close;
+  if FT.Active then FT.Rollback;
+  FQ.SQL.Text := SqlProfilesForExport;
+  if dmData.DebugLevel >= 1 then Writeln(FQ.SQL.Text);
+  FT.StartTransaction;
+  try
+    FQ.Open;
+    if FQ.RecordCount = 0 then exit;
+    FQ.Last;
+    SetLength(FExportProfiles, FQ.Fields[1].AsInteger+1);
+    FQ.First;
+    while not FQ.Eof do
+    begin
+      Nr := FQ.Fields[1].AsInteger;
+      FExportProfiles[Nr] := IntToStr(Nr)+'|' +
+                             trim(FQ.Fields[2].AsString)+'|' +
+                             trim(FQ.Fields[3].AsString)+'|' +
+                             trim(FQ.Fields[4].AsString)+'|';
+      FQ.Next
+    end
+  finally
+    FQ.Close;
+    FT.Rollback
+  end
+end;
+
+function TdmSqlUserData.GetExportProfileText(const Nr : Integer) : String;
+begin
+  if Nr > Length(FExportProfiles) then
+    Result := ''
+  else
+    Result := FExportProfiles[Nr]
+end;
+
+procedure TdmSqlUserData.CloseProfileExport;
+begin
+  SetLength(FExportProfiles, 0)
 end;
 
 { profiles }
