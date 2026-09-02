@@ -182,7 +182,7 @@ implementation
 {$R *.lfm}
 
 { TfrmFilter }
-uses dData, dUtils,fSelectDXCC, dMembership, uMyini,dSatellite;
+uses dData, dUtils,fSelectDXCC, dMembership, uMyini,dSatellite, dSqlRef;
 
 procedure TfrmFilter.btnOKClick(Sender: TObject);
 var
@@ -561,7 +561,7 @@ begin
      if (band<>'') then
       begin
            dmData.qBands.Close;
-           dmData.qBands.SQL.Text := 'select band,b_begin,b_end from cqrlog_common.bands where band="'+Band+'"';
+           dmData.qBands.SQL.Text := dmSqlRef.SqlBandRange(Band);
            dmData.qBands.Open;
 
            if (dmData.qBands.RecordCount > 0) then

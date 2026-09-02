@@ -827,7 +827,7 @@ implementation
 
 { TfrmNewQSO }
 
-uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl, fMain, fSelectDXCC, fGrayline,
+uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl, dSqlRef, fMain, fSelectDXCC, fGrayline,
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
      fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
@@ -1189,7 +1189,7 @@ begin
   end
   else begin
      dmDXCC.qDXCCRef.Close;
-     dmDXCC.qDXCCRef.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE adif = ' + IntToStr(adif);
+     dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdif(adif);
      dmDXCC.qDXCCRef.Open;
      if dmDXCC.qDXCCRef.RecordCount > 0 then
      begin

@@ -162,7 +162,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, uMyIni, dData, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,
+uses dUtils, uMyIni, dData, dSqlRef, fRbnServer, dDXCluster, fRbnFilter, fNewQSO, fGrayline,
      fBandMap, uBandMapStore, uDebugLog;
 
 { TfrmRbnMonitor }
@@ -934,7 +934,7 @@ begin
 
   band := dmDXCluster.GetBandFromFreq(freq, True);
   dmData.qRbnMon.Close;
-  dmData.qRbnMon.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
+  dmData.qRbnMon.SQL.Text := dmSqlRef.SqlBandForRbn(band);
   if dmData.DebugLevel>=1 then Writeln(dmData.qRbnMon.SQL.Text);
   if dmData.trRbnMon.Active then
     dmData.trRbnMon.Rollback;

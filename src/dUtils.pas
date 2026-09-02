@@ -357,7 +357,7 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest;
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef;
 
 function TdmUtils.LetterFromMode(mode: string): string;
 begin
@@ -377,7 +377,7 @@ var
 Begin
   BandCount := 0;
   dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands ';
+  dmData.qBands.SQL.Text := dmSqlRef.SqlAllBands;
   if dmData.trBands.Active then
     dmData.trBands.Rollback;
   dmData.trBands.StartTransaction;
@@ -420,8 +420,7 @@ begin
   Result := '';
   band := GetBandFromFreq(freq);
   dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands WHERE band = ' +
-    QuotedStr(band);
+  dmData.qBands.SQL.Text := dmSqlRef.SqlBand(band);
   if dmData.trBands.Active then
     dmData.trBands.Rollback;
   dmData.trBands.StartTransaction;
@@ -1180,8 +1179,7 @@ var
 begin
   //dmDXCC.trDXCCRef.StartTransaction;
   dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE pref=' +
-    QuotedStr(pfx);
+  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByPrefix(pfx);
   dmDXCC.qDXCCRef.Open;
   s := dmDXCC.qDXCCRef.Fields[4].AsString;
   d := dmDXCC.qDXCCRef.Fields[5].AsString;
@@ -1253,8 +1251,7 @@ begin
   Result := '';
   tmp := '';
   dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := 'SELECT utc FROM cqrlog_common.dxcc_ref WHERE pref = ' +
-    QuotedStr(pfx);
+  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccUtcOffset(pfx);
   dmDXCC.qDXCCRef.Open;
   if dmDXCC.qDXCCRef.RecordCount > 0 then
   begin
@@ -1339,7 +1336,7 @@ begin
     end;
 
   dmData.qBands.Close;
-  dmData.qBands.SQL.Text := 'SELECT '+mode+' FROM cqrlog_common.bands WHERE band = ' + QuotedStr(band);
+  dmData.qBands.SQL.Text := dmSqlRef.SqlBandModeSegment(mode, band);
   if dmData.DebugLevel >=1 then
      Writeln(dmData.qBands.SQL.Text);
 

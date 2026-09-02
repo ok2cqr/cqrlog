@@ -56,7 +56,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData,dUtils, dDXCC;
+uses dData,dUtils, dDXCC, dSqlRef;
 
 { TfrmSelectDXCC }
 
@@ -105,7 +105,7 @@ begin
   dbgrdValid.DataSource   := dmDXCC.dsrValid;
   dbgrdDeleted.DataSource := dmDXCC.dsrDeleted;
 
-  dmDXCC.qValid.SQL.Text  := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE deleted = 0 ORDER BY pref';
+  dmDXCC.qValid.SQL.Text  := dmSqlRef.SqlValidDxcc;
   if dmData.DebugLevel >=1 then Writeln(dmDXCC.qValid.SQL.Text);
   if dmDXCC.trValid.Active then
     dmDXCC.trValid.Rollback;
@@ -114,7 +114,7 @@ begin
 
   dmDXCC.trDeleted.DataBase := dmData.MainCon;
   dmDXCC.qDeleted.Database := dmData.MainCon;
-  dmDXCC.qDeleted.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE deleted = 1 ORDER BY pref';
+  dmDXCC.qDeleted.SQL.Text := dmSqlRef.SqlDeletedDxcc;
   if dmData.DebugLevel >=1 then Writeln(dmDXCC.qDeleted.SQL.Text);
   if dmDXCC.trDeleted.Active then
     dmDXCC.trDeleted.Rollback;

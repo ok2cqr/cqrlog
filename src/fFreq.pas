@@ -40,7 +40,7 @@ implementation
 {$R *.lfm}
 
 { TfrmFreq }
-uses dData, fChangeFreq, dUtils;
+uses dData, fChangeFreq, dUtils, dSqlRef;
 
 procedure TfrmFreq.FormShow(Sender: TObject);
 begin
@@ -101,15 +101,13 @@ begin
 end;
 
 procedure TfrmFreq.RefreshData(band : String = '');
-const
-  C_SEL = 'SELECT * FROM cqrlog_common.bands ORDER BY b_begin';
 var
   i : Integer;
 begin
   if dmData.trFreqs.Active then
     dmData.trFreqs.Rollback;
 
-  dmData.qFreqs.SQL.Text := C_SEL;
+  dmData.qFreqs.SQL.Text := dmSqlRef.SqlBandsByBegin;
   dmData.trFreqs.StartTransaction;
   dmData.qFreqs.Open;
 

@@ -81,7 +81,7 @@ implementation
 
 { TdmDXCC }
 
-uses dUtils, dData, uMyIni;
+uses dUtils, dData, uMyIni, dSqlRef;
 
 { The DXCC engine itself lives in uDxccService, shared with dDXCluster.  This
   module keeps only what is bound to dmData.MainCon -- the queries, the two
@@ -302,7 +302,7 @@ procedure TdmDXCC.DataModuleCreate(Sender: TObject);
 begin
   trDXCCRef.DataBase := dmData.MainCon;
   qDXCCRef.Database  := dmData.MainCon;
-  qDXCCRef.SQL.Text  := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY adif';
+  qDXCCRef.SQL.Text  := dmSqlRef.SqlDxccRefByAdifOrder;
 
   trQ.DataBase := dmData.MainCon;
   Q.DataBase   := dmData.MainCon;
@@ -384,7 +384,7 @@ var
 begin
   if trQ.Active then
     trQ.Rollback;
-  Q.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY ADIF';
+  Q.SQL.Text := dmSqlRef.SqlDxccRefForParser;
   try
     trQ.StartTransaction;
     Q.Open;

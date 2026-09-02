@@ -54,7 +54,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, dData, uMyIni, dMembership;
+uses dUtils, dData, uMyIni, dMembership, dSqlRef;
 
 { TfrmLoadClub }
 
@@ -141,7 +141,7 @@ begin
   dmData.trQ.StartTransaction;
   try try
     dmData.Q.Close;
-    dmData.Q.SQL.Text := 'TRUNCATE TABLE club'+DBnum;
+    dmData.Q.SQL.Text := dmSqlRef.SqlClearClub(DBnum);
     dmData.Q.ExecSQL;
     while not Eof(sF) do
     begin
@@ -222,9 +222,7 @@ begin
       if clubnr='' then
         clubnr := call;
       if dmData.DebugLevel >=1 then WriteLn(clubnr,';',call,';',fromdate,';',todate);
-      dmData.Q.SQL.Text := 'INSERT INTO club'+DBnum+' (club_nr,clubcall,fromdate,todate) '+
-                           'VALUES ('+QuotedStr(clubnr)+','+QuotedStr(call)+','+QuotedStr(fromDate)+','+
-                           QuotedStr(toDate)+')';
+      dmData.Q.SQL.Text := dmSqlRef.SqlInsertClubMember(DBnum, clubnr, call, fromDate, toDate);
       dmData.Q.ExecSQL
     end
   except

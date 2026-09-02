@@ -72,7 +72,7 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, dSqlUserData, uMyini, fTRXControl;
+uses dUtils, dData, dSqlUserData, dSqlRef, uMyini, fTRXControl;
 
 { The DXCC engine used to be duplicated here in full -- its own TDxccTable
   pair built from the same two files, its own DXCCRefArray filled by the same
@@ -154,8 +154,7 @@ begin
     freq := FloatToStr(tmp);
 
     qBands.Close;
-    qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
-                        freq+') ORDER BY b_begin';
+    qBands.SQL.Text := dmSqlRef.SqlBandByFreqForCluster(freq);
     if dmData.DebugLevel >= 1 then
       Writeln(qBands.SQL.Text);
     if trBands.Active then
@@ -389,7 +388,7 @@ begin
   end;
 
   //the shared engine is loaded by dmDXCC, which cqrlog.lpr creates first
-  qBands.SQL.Text := 'SELECT * FROM bands ORDER BY b_begin';
+  qBands.SQL.Text := dmSqlRef.SqlBandsOnClusterDb;
 end;
 
 procedure TdmDXCluster.DataModuleDestroy(Sender: TObject);

@@ -40,7 +40,7 @@ implementation
 {$R *.lfm}
 
 { TfrmDXClusterList }
-uses dData, dUtils, fNewDXCluster;
+uses dData, dUtils, fNewDXCluster, dSqlRef;
 
 procedure TfrmDXClusterList.RefreshData(const id:Integer=0);
 begin
@@ -49,7 +49,7 @@ begin
     dmData.qDXClusters.Close;
     if dmData.trDXClusters.Active then dmData.trDXClusters.Rollback;
     dmData.trDXClusters.StartTransaction;
-    dmData.qDXClusters.SQL.Text := 'select * from cqrlog_common.dxclusters order by description';
+    dmData.qDXClusters.SQL.Text := dmSqlRef.SqlDxClusters;
     dmData.qDXClusters.Open;
     if id > 0 then
       dmData.QueryLocate(dmData.qDXClusters,'id_dxclusters',id,False)
@@ -101,7 +101,7 @@ begin
   id := dmData.qDXClusters.FieldByName('id_dxclusters').AsInteger;
   dmData.qDXClusters.Close;
   if dmData.trDXClusters.Active then dmData.trDXClusters.Rollback;
-  dmData.qDXClusters.SQL.Text := 'delete from cqrlog_common.dxclusters where id_dxclusters = ' + IntToStr(id);
+  dmData.qDXClusters.SQL.Text := dmSqlRef.SqlDeleteDxCluster(id);
   if dmData.DebugLevel >=1 then Writeln(dmData.qDXClusters.SQL.Text);
   dmData.trDXClusters.StartTransaction;
   dmData.qDXClusters.ExecSQL;
@@ -126,12 +126,8 @@ begin
     if ModalResult = mrOK then
     begin
       dmData.qDXClusters.Close;
-      dmData.qDXClusters.SQL.Text := 'UPDATE cqrlog_common.dxclusters SET description='+QuotedStr(edtDescription.Text)+
-                                      ',address='+QuotedStr(edtAddress.Text)+
-                                      ',port='+QuotedStr(edtPort.Text)+
-                                      ',dxcuser='+QuotedStr(edtUserName.Text)+
-                                      ',dxcpass='+QuotedStr(edtPassword.Text)+
-                                      ' WHERE id_dxclusters = '+IntToStr(id);
+      dmData.qDXClusters.SQL.Text := dmSqlRef.SqlUpdateDxCluster(edtDescription.Text, edtAddress.Text, edtPort.Text,
+                                                                  edtUserName.Text, edtPassword.Text, id);
       if dmData.DebugLevel >=1 then Writeln(dmData.qDXClusters.SQL.Text);
       dmData.trDXClusters.Rollback;
       dmData.trDXClusters.StartTransaction;
@@ -155,10 +151,8 @@ begin
     if ModalResult = mrOK then
     begin
       dmData.qDXClusters.Close;
-      dmData.qDXClusters.SQL.Text := 'INSERT INTO cqrlog_common.dxclusters (description,address,port,dxcuser,dxcpass) ' +
-                'values ('+QuotedStr(edtDescription.Text) + ',' + QuotedStr(edtAddress.Text) +
-                ','+QuotedStr(edtPort.Text)+','+QuotedStr(edtUserName.Text)+
-                ','+QuotedStr(edtPassword.Text)+')';
+      dmData.qDXClusters.SQL.Text := dmSqlRef.SqlInsertDxCluster(edtDescription.Text, edtAddress.Text, edtPort.Text,
+                                                                  edtUserName.Text, edtPassword.Text);
       if dmData.DebugLevel >=1 then Writeln(dmData.qDXClusters.SQL.Text);
       dmData.trDXClusters.Rollback;
       dmData.trDXClusters.StartTransaction;

@@ -343,7 +343,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl, dSqlRef;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -735,12 +735,11 @@ begin
   cqrini.LoadLocalSectionsList;
 
   trQ.StartTransaction;
-  Q.SQL.Text := 'truncate table dxcc_id';
+  Q.SQL.Text := dmSqlRef.SqlClearDxccId;
   Q.ExecSQL;
-  Q.SQL.Text := 'insert into '+fDBName+'.dxcc_id select id_dxcc_ref,adif,pref,name from cqrlog_common.dxcc_ref';
+  Q.SQL.Text := dmSqlRef.SqlFillDxccId(fDBName);
   Q.ExecSQL;
-  Q.SQL.Text := 'insert into '+fDBName+'.dxcc_id (adif,dxcc_ref,country) values (0,'+QuotedStr('!')+','+
-                QuotedStr('Unknown country')+')';
+  Q.SQL.Text := dmSqlRef.SqlUnknownDxccId(fDBName);
   Q.ExecSQL;
   trQ.Commit;
 
@@ -2005,8 +2004,7 @@ begin
   if not dmUtils.IsIOTAOK(iota) then
     exit;
   Q.Close;
-  Q.SQL.Text := 'SELECT island_name FROM cqrlog_common.iota_list WHERE iota_nr = ' +
-                       QuotedStr(iota);
+  Q.SQL.Text := dmSqlRef.SqlIotaName(iota);
   trQ.StartTransaction;
   Q.Open();
   Result := Q.Fields[0].AsString;
@@ -2025,8 +2023,7 @@ begin
   if (pref = '') or (pref='!') or (pref='#') or (pref = '?') then
    exit;
   Q.Close();
-  Q.SQL.Text := 'SELECT iota_nr,pref FROM cqrlog_common.iota_list WHERE dxcc_ref = ' + QuotedStr(pref) +
-                ' ORDER BY iota_nr';
+  Q.SQL.Text := dmSqlRef.SqlIotaForDxcc(pref);
   trQ.StartTransaction;
   Q.Open();
   Q.First;
@@ -2107,7 +2104,7 @@ begin
     if fDebugLevel>=1 then Writeln('ZipCode: ',ZipCode);
     if trQ.Active then trQ.Rollback;
     Q.Close;
-    Q.SQL.Text := 'SELECT county from zipcode1 where zip = '+QuotedStr(ZipCode);
+    Q.SQL.Text := dmSqlRef.SqlCountyByZip1(ZipCode);
     trQ.StartTransaction;
     Q.Open();
     Result  := Trim(Q.Fields[0].AsString);
@@ -2127,7 +2124,7 @@ begin
     ZipCode    := dmUtils.ExtractZipCode(qth,Zip2.ZipPos);
     if trQ.Active then trQ.Rollback;
     Q.Close;
-    Q.SQL.Text := 'SELECT county from zipcode2 where zip = '+QuotedStr(ZipCode);
+    Q.SQL.Text := dmSqlRef.SqlCountyByZip2(ZipCode);
     trQ.StartTransaction;
     Q.Open();
     Result  := Trim(Q.Fields[0].AsString);
@@ -2147,7 +2144,7 @@ begin
     ZipCode    := dmUtils.ExtractZipCode(qth,Zip3.ZipPos);
     if trQ.Active then trQ.Rollback;
     Q.Close;
-    Q.SQL.Text := 'SELECT county from zipcode3 where zip = '+QuotedStr(ZipCode);
+    Q.SQL.Text := dmSqlRef.SqlCountyByZip3(ZipCode);
     trQ.StartTransaction;
     Q.Open();
     Result  := Trim(Q.Fields[0].AsString);
@@ -3307,8 +3304,7 @@ begin
   freq := FloatToStr(tmp);
 
   qBands.Close;
-  qBands.SQL.Text := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+freq+' AND b_end >='+
-                      freq+') ORDER BY b_begin';
+  qBands.SQL.Text := dmSqlRef.SqlBandByFreq(freq);
   if dmData.DebugLevel >= 1 then
     Writeln(qBands.SQL.Text);
   if trBands.Active then
@@ -3921,9 +3917,6 @@ end;
 
 
 procedure TdmData.SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
-const
-  C_UPD = 'update cqrlog_common.bands set b_begin = :b_begin, b_end = :b_end, cw = :cw, rtty = :rtty, '+
-          'ssb = :ssb, rx_offset = :rx_offset, tx_offset = :tx_offset where band = :band';
 begin
   qBands.Close;
   if trBands.Active then
@@ -3931,7 +3924,7 @@ begin
 
   trBands.StartTransaction;
   try try
-    qBands.SQL.Text := C_UPD;
+    qBands.SQL.Text := dmSqlRef.SqlUpdateBand;
     qBands.Prepare;
     qBands.Params[0].AsCurrency := BandBegin;
     qBands.Params[1].AsCurrency := BandEnd;
@@ -3956,9 +3949,6 @@ begin
 end;
 
 procedure TdmData.GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
-const
-  C_SEL = 'select rx_offset, tx_offset from cqrlog_common.bands where b_begin <= :b_begin '+
-          'and b_end >= :b_end';
 begin
   RXOffset := 0;
   TXOffset := 0;
@@ -3969,7 +3959,7 @@ begin
 
   trBands.StartTransaction;
   try try
-    qBands.SQL.Text := C_SEL;
+    qBands.SQL.Text := dmSqlRef.SqlBandOffsets;
     qBands.Prepare;
     qBands.Params[0].AsCurrency := Freq;
     qBands.Params[1].AsCurrency := Freq;

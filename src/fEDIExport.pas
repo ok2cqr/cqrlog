@@ -62,7 +62,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData,dUtils,dDXCC,fWorkedGrids, uMyIni;
+uses dData,dUtils,dDXCC,fWorkedGrids, uMyIni, dSqlRef;
 
 { TfrmEDIExport }
 
@@ -207,7 +207,7 @@ begin
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
   adif := dmDXCC.id_country(mycall,date,pfx,country,cont,itu,waz,posun,lat,long);
   dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE adif = ' + IntToStr(adif);
+  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdifForEdi(adif);
   dmDXCC.qDXCCRef.Open;
   if dmDXCC.qDXCCRef.RecordCount > 0 then
   begin
