@@ -49,7 +49,7 @@ implementation
 {$R *.lfm}
 
 { TfrmExportProgress }
-uses dUtils, dData, dSqlUserData, uMyIni, dDXCC, uVersion, dSatellite;
+uses dUtils, dData, dSqlUserData, dSqlImpExp, uMyIni, dDXCC, uVersion, dSatellite;
 
 procedure TfrmExportProgress.FormCreate(Sender: TObject);
 begin
@@ -470,9 +470,9 @@ begin   //TfrmExportProgress
     begin
       dmData.Q.Close;
       if ExAscTime then
-        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
+        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForAdifExportAsc
       else
-        dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
+        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForAdifExport;
       dmData.trQ.StartTransaction;
       dmData.Q.Open;
       Source := dmData.Q
@@ -1255,9 +1255,9 @@ begin
   begin
     dmData.Q.Close;
     if ExAscTime then
-      dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
+      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForHtmlExportAsc
     else
-      dmData.Q.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate';
+      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForHtmlExport;
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
     Source := dmData.Q

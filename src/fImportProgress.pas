@@ -95,7 +95,7 @@ implementation
 { TfrmImportProgress }
 
 uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership, dSatellite, fAdifImport,
-     uInternalConnection, uDbUtils;
+     uInternalConnection, uDbUtils, dSqlImpExp;
 
 type
   //One parsed LoTW QSO record, buffered so a whole batch can be matched against the log
@@ -267,7 +267,7 @@ begin
     dmDXCC.trDXCCRef.Rollback;
 
   dmDXCC.trDXCCRef.StartTransaction;
-  dmDXCC.qDXCCRef.SQL.Text := 'DELETE FROM cqrlog_common.dxcc_ref';
+  dmDXCC.qDXCCRef.SQL.Text := dmSqlImpExp.SqlClearDxccRef;
   dmDXCC.qDXCCRef.ExecSQL;
   dmDXCC.trDXCCRef.Commit;
   c := 0;
@@ -287,13 +287,8 @@ begin
       ADIF := StrToInt(Result[8]);
       if ADIF > 0 then
       begin
-        dmDXCC.qDXCCRef.SQL.Text := 'INSERT INTO cqrlog_common.dxcc_ref (pref,name,cont,utc,lat,'+
-                                    'longit,itu,waz,adif,deleted) VALUES ('+
-                                    QuotedStr(Prefixes[0])+','+ QuotedStr(Result[1])+','+
-                                    QuotedStr(Result[2])+','+QuotedStr(Result[3])+','+
-                                    QuotedStr(Result[4])+','+QuotedStr(Result[5])+','+
-                                    QuotedStr(Result[6])+','+QuotedStr(Result[7])+','+
-                                    IntToStr(ADIF)+',0)';
+        dmDXCC.qDXCCRef.SQL.Text := dmSqlImpExp.SqlInsertDxccRef(Prefixes[0], Result[1], Result[2], Result[3],
+                                                                  Result[4], Result[5], Result[6], Result[7], ADIF);
         if LocalDbg then Writeln(dmDXCC.qDXCCRef.SQL.Text);
         dmDXCC.qDXCCRef.ExecSQL;
       end;
@@ -313,13 +308,8 @@ begin
       ADIF := StrToInt(Result[8]);
       if ADIF > 0 then
       begin
-        dmDXCC.qDXCCRef.SQL.Text := 'INSERT INTO cqrlog_common.dxcc_ref (pref,name,cont,utc,lat,'+
-                                    'longit,itu,waz,adif,deleted) VALUES ('+
-                                    QuotedStr(Prefixes[0]+'*')+','+ QuotedStr(Result[1])+','+
-                                    QuotedStr(Result[2])+','+QuotedStr(Result[3])+','+
-                                    QuotedStr(Result[4])+','+QuotedStr(Result[5])+','+
-                                    QuotedStr(Result[6])+','+QuotedStr(Result[7])+','+
-                                    IntToStr(ADIF)+','+'1'+')';
+        dmDXCC.qDXCCRef.SQL.Text := dmSqlImpExp.SqlInsertDeletedDxccRef(Prefixes[0]+'*', Result[1], Result[2], Result[3],
+                                                                         Result[4], Result[5], Result[6], Result[7], ADIF);
         if LocalDbg  then
           Writeln(dmDXCC.qDXCCRef.SQL.Text);
         dmDXCC.qDXCCRef.ExecSQL;
@@ -413,7 +403,7 @@ begin
     lblComment.Caption := 'Importing IOTA table ...';
     Application.ProcessMessages;
     dmData.qIOTAList.Close();
-    dmData.qIOTAList.SQL.Text := 'DELETE FROM cqrlog_common.iota_list';
+    dmData.qIOTAList.SQL.Text := dmSqlImpExp.SqlClearIotaList;
     dmData.trIOTAList.StartTransaction;
     dmData.qIOTAList.ExecSQL;
     dmData.trIOTAList.Commit;
@@ -425,17 +415,12 @@ begin
     begin
       Result := dmUtils.Explode('|',f.Strings[i]);
       if Length(Result) = 3 then
-        dmData.qIOTAList.SQL.Text := 'INSERT INTO cqrlog_common.iota_list (iota_nr,island_name,dxcc_ref)'+
-                                     ' VALUES ('+QuotedStr(Result[0]) + ',' +
-                                     QuotedStr(Result[1]) + ',' + QuotedStr(Result[2]) + ')'
+        dmData.qIOTAList.SQL.Text := dmSqlImpExp.SqlInsertIota(Result[0], Result[1], Result[2])
       else begin
         tmp := Result[3];
         if pos('/',tmp) > 0 then
           tmp := Copy(tmp,1,pos('/',tmp)-1)+ '.*' + Copy(tmp,pos('/',tmp),Length(tmp)-pos('/',tmp)+1);
-        dmData.qIOTAList.SQL.Text := 'INSERT INTO cqrlog_common.iota_list (iota_nr,island_name,dxcc_ref,pref)'+
-                                     ' VALUES ('+QuotedStr(Result[0]) + ',' +
-                                     QuotedStr(Result[1]) + ',' + QuotedStr(Result[2])
-                                     + ',' + QuotedStr(tmp) + ')';
+        dmData.qIOTAList.SQL.Text := dmSqlImpExp.SqlInsertIotaWithPrefix(Result[0], Result[1], Result[2], tmp);
       end;
       if LocalDbg then
         Writeln(dmData.qIOTAList.SQL.Text);
@@ -450,7 +435,7 @@ begin
 
   finally
     //dmDXCC.trDXCCRef.StartTransaction;
-    dmDXCC.qDXCCRef.SQL.Text := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY adif';
+    dmDXCC.qDXCCRef.SQL.Text := dmSqlImpExp.SqlDxccRefAfterImport;
     dmDXCC.qDXCCRef.Open;
     f.Free;
     List.Free;
@@ -481,7 +466,7 @@ begin
     Repaint;
 
     if dmData.trQ.Active then dmData.trQ.RollBack;
-    dmData.Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main';
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsoCount;
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
     pBarProg.Max := dmData.Q.Fields[0].AsInteger;
@@ -490,7 +475,7 @@ begin
 
     dmData.Q1.Close;
     if dmData.trQ1.Active then dmData.trQ1.Rollback;
-    dmData.Q1.SQL.Text := 'select id_cqrlog_main,qsodate,callsign,adif,qso_dxcc from cqrlog_main';
+    dmData.Q1.SQL.Text := dmSqlImpExp.SqlQsosForDxccRebuild;
     dmData.trQ1.StartTransaction;
     dmData.Q1.Open;
     dmData.Q1.First;
@@ -516,9 +501,9 @@ begin
           cont := copy(cont,1,2);
           dmUtils.ModifyWAZITU(waz,itu);
           if adif =  0 then
-            dmData.Q.SQL.Text := 'UPDATE cqrlog_main SET adif=0,waz=null,itu=null,cont=null WHERE id_cqrlog_main='+IntToStr(id)
+            dmData.Q.SQL.Text := dmSqlImpExp.SqlClearQsoDxcc(id)
           else
-            dmData.Q.SQL.Text := 'UPDATE cqrlog_main SET adif='+IntToStr(adif)+',waz ='+waz+',itu ='+itu+',cont='+QuotedStr(cont)+' WHERE id_cqrlog_main='+IntToStr(id);
+            dmData.Q.SQL.Text := dmSqlImpExp.SqlSetQsoDxcc(adif, waz, itu, cont, id);
           dmData.Q.ExecSQL
         end
       end;
@@ -933,24 +918,22 @@ type
   end;
 var
   i, j, nc, logMin : Integer;
-  sql : String;
+  keys : String;
   cand : array of TCandRow;
   found : Boolean;
   mId, mQslr, mLoc, mState, mCounty : String;
 begin
   if cnt = 0 then Exit;
 
-  sql := 'select callsign,qsodate,band,time_on,mode,lotw_qslr,loc,state,county,id_cqrlog_main '+
-         'from cqrlog_main where (callsign,qsodate,band) in (';
+  keys := '';
   for i := 0 to cnt-1 do
   begin
-    if i > 0 then sql := sql + ',';
-    sql := sql + '(' + QuotedStr(recs[i].call) + ',' + QuotedStr(recs[i].qsodate) + ',' + QuotedStr(recs[i].band) + ')'
+    if i > 0 then keys := keys + ',';
+    keys := keys + dmSqlImpExp.SqlQsoKey(recs[i].call, recs[i].qsodate, recs[i].band)
   end;
-  sql := sql + ')';
 
   FConn.Q.Close;
-  FConn.Q.SQL.Text := sql;
+  FConn.Q.SQL.Text := dmSqlImpExp.SqlQsosForLotwImport(keys);
   FConn.Q.Open;
   nc := 0;
   SetLength(cand, 256);
@@ -1177,8 +1160,6 @@ begin
 end;
 
 procedure TfrmImportProgress.ImportQSLMgrs;
-const
-  C_INS = 'INSERT INTO cqrlog_common.qslmgr (callsign,qsl_via,fromdate) VALUES (:callsign,:qsl_via, :fromdate)';
 var
   sF : TextFile;
   a  : TExplodeArray;
@@ -1207,9 +1188,9 @@ begin
     dmData.qQSLMgr.Close;
     if dmData.trQSLMgr.Active then dmData.trQSLMgr.Rollback;
     dmData.trQSLMgr.StartTransaction;
-    dmData.qQSLMgr.SQL.Text := 'delete from cqrlog_common.qslmgr';
+    dmData.qQSLMgr.SQL.Text := dmSqlImpExp.SqlClearQslManagers;
     dmData.qQSLMgr.ExecSQL;
-    dmData.qQSLMgr.SQL.Text := C_INS;
+    dmData.qQSLMgr.SQL.Text := dmSqlImpExp.SqlInsertQslManager;
     while not Eof(sF) do
     begin
       readln(sF,line);
@@ -1265,8 +1246,7 @@ begin
          dmData.QSLMgrFound(dmData.qCQRLOG.Fields[4].AsString,dmData.qCQRLOG.Fields[1].AsString,qsl_via) then
       begin
         dmData.trQ.StartTransaction;
-        dmData.Q.SQL.Text := 'update cqrlog_main set qsl_via = ' + QuotedStr(qsl_via) +
-                             ' where id_cqrlog_main = '+ IntToStr(dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger);
+        dmData.Q.SQL.Text := dmSqlImpExp.SqlSetQslVia(qsl_via, dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger);
         if LocalDbg then Writeln(dmData.Q.SQL.Text);
         dmData.Q.ExecSQL;
         dmData.trQ.Commit
@@ -1449,24 +1429,22 @@ type
   end;
 var
   i, j, nc, logMin : Integer;
-  sql, nowStr : String;
+  keys, nowStr : String;
   cand : array of TCandRow;
   found : Boolean;
   mId, mRcvd : String;
 begin
   if cnt = 0 then Exit;
 
-  sql := 'select callsign,qsodate,band,time_on,mode,eqsl_qsl_rcvd,id_cqrlog_main '+
-         'from cqrlog_main where (callsign,qsodate,band) in (';
+  keys := '';
   for i := 0 to cnt-1 do
   begin
-    if i > 0 then sql := sql + ',';
-    sql := sql + '(' + QuotedStr(recs[i].call) + ',' + QuotedStr(recs[i].qsodate) + ',' + QuotedStr(recs[i].band) + ')'
+    if i > 0 then keys := keys + ',';
+    keys := keys + dmSqlImpExp.SqlQsoKey(recs[i].call, recs[i].qsodate, recs[i].band)
   end;
-  sql := sql + ')';
 
   FConn.Q.Close;
-  FConn.Q.SQL.Text := sql;
+  FConn.Q.SQL.Text := dmSqlImpExp.SqlQsosForEqslImport(keys);
   FConn.Q.Open;
   nc := 0;
   SetLength(cand, 256);
@@ -1683,7 +1661,7 @@ begin
   Application.ProcessMessages;
   try try
     dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := 'create table tempdupes like cqrlog_main';
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlCreateDupesTable;
     if LocalDbg then Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL;
     dmData.trQ.Commit;
@@ -1693,16 +1671,15 @@ begin
     sleep(200);
 
     dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := 'insert into tempdupes ' +
-                         '  select * from cqrlog_main group by qsodate,time_on,callsign,mode,band';
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlCollectUniqueQsos;
     if LocalDbg then Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL;
 
-    dmData.Q.SQL.Text := 'delete from cqrlog_main';
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlDeleteAllQsos;
     if LocalDbg then Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL;
 
-    dmData.Q.SQL.Text := 'insert into cqrlog_main select * from tempdupes';
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlRestoreUniqueQsos;
     if LocalDbg then Writeln(dmData.Q.SQL.Text);
     dmData.Q.ExecSQL
   except
@@ -1723,7 +1700,7 @@ begin
     Sleep(500);
 
     dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := 'drop table tempdupes';
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlDropDupesTable;
     dmData.Q.ExecSQL;
     dmData.trQ.Commit;
     Close
@@ -1740,8 +1717,6 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
   end;
 
   procedure ImportMembeshipFileToDatabase(l : TStringList; ClubFileName : String);
-  const
-    C_INS = 'insert into %s (club_nr,clubcall,fromdate,todate) values (:club_nr, :clubcall, :fromdate, :todate)';
   var
     ClubTableName : String;
     i : Integer;
@@ -1755,7 +1730,7 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
     dmData.q.Close;
     try try
       dmData.trQ.StartTransaction;
-      dmData.Q.SQL.Text := 'TRUNCATE TABLE ' + ClubTableName;
+      dmData.Q.SQL.Text := dmSqlImpExp.SqlClearClubTable(ClubTableName);
       dmData.Q.ExecSQL;
       for i:=0 to l.Count-1 do
       begin
@@ -1765,7 +1740,7 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
 
         ClubLine := dmMembership.GetMembershipStructure(l.Strings[i]);
 
-        dmData.Q.SQL.Text := Format(C_INS, [ClubTableName]);
+        dmData.Q.SQL.Text := dmSqlImpExp.SqlInsertClubMemberParams(ClubTableName);
         dmData.Q.Prepare;
         dmData.Q.Params[0].AsString := ClubLine.club_nr;
         dmData.Q.Params[1].AsString := ClubLine.club_call;

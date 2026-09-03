@@ -177,7 +177,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dSqlUserData, dUtils, dDXCC, fMain, uMyIni, uVersion;
+uses dData, dSqlUserData, dSqlImpExp, dUtils, dDXCC, fMain, uMyIni, uVersion;
 
 resourcestring
   INVALID_DATE_RANGE_ENTERED = 'Invalid date range is entered';
@@ -542,9 +542,7 @@ begin
     if Not chkNoCheckOnDuplicates.Checked then
     begin
       dmData.Q.Close;
-      dmData.Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main WHERE qsodate = ' + QuotedStr(d.QSO_DATE) +
-                           ' AND time_on = ' + QuotedStr(d.TIME_ON) + ' AND callsign = '+QuotedStr(d.CALL)+
-                           ' AND band = ' + QuotedStr(d.BAND) + ' AND mode = '+QuotedStr(d.MODE);
+      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsoExists(d.QSO_DATE, d.TIME_ON, d.CALL, d.BAND, d.MODE);
 
       if LocalDbg then
                   Writeln(dmData.Q.SQL.Text);
@@ -603,18 +601,7 @@ begin
     if d.NOTES <> '' then
       dmSqlUserData.SaveComment(d.CALL,d.NOTES);
 
-    Q1.SQL.Text := 'insert into cqrlog_main (qsodate,time_on,time_off,callsign,freq,mode,'+
-                   'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
-                   'remarks,county,adif,idcall,award,band,state,cont,profile,lotw_qslsdate,lotw_qsls,'+
-                   'lotw_qslrdate,lotw_qslr,qsls_date,qslr_date,eqsl_qslsdate,eqsl_qsl_sent,'+
-                   'eqsl_qslrdate,eqsl_qsl_rcvd, prop_mode, satellite, rxfreq, stx, srx, stx_string,'+
-                   'srx_string, contestname, dok, operator) values('+
-                   ':qsodate,:time_on,:time_off,:callsign,:freq,:mode,:rst_s,:rst_r,:name,:qth,'+
-                   ':qsl_s,:qsl_r,:qsl_via,:iota,:pwr,:itu,:waz,:loc,:my_loc,:remarks,:county,:adif,'+
-                   ':idcall,:award,:band,:state,:cont,:profile,:lotw_qslsdate,:lotw_qsls,:lotw_qslrdate,'+
-                   ':lotw_qslr,:qsls_date,:qslr_date,:eqsl_qslsdate,:eqsl_qsl_sent,:eqsl_qslrdate,'+
-                   ':eqsl_qsl_rcvd, :prop_mode, :satellite, :rxfreq, :stx, :srx, :stx_string, :srx_string,'+
-                   ':contestname,:dok,:operator)';
+    Q1.SQL.Text := dmSqlImpExp.SqlInsertImportedQso;
     if LocalDbg then Writeln(Q1.SQL.Text);
     Q1.Prepare;
     Q1.Params[0].AsString   := d.QSO_DATE;
