@@ -544,34 +544,9 @@ var
     if ShowDel then
     begin
       dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandByMode(GetStatTypeWhere(StatType), mode);
-      {
-      case StatType of
-         stCfmOnly  : dmData.Q.SQL.Text := C_SEL + '(qsl_r = '+QuotedStr('Q')+') and '+mode+' group by band';
-         stCfmLoTW  : dmData.Q.SQL.Text := C_SEL + '((qsl_r = '+QuotedStr('Q')+') or (lotw_qslr='+
-                                            QuotedStr('L')+')) and ' + mode + ' group by band';
-         stLoTWOnly : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and (lotw_qslr = '+QuotedStr('L')+') and ' + mode +
-                                           ' group by band'
-      end //case
-      }
     end
     else begin
       dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandByModeExcluding(GetStatTypeWhere(StatType), sql2, mode);
-      {
-
-      case StatType of
-         stCfmOnly  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and (qsl_r = '+QuotedStr('Q')+') and '+ sql2+
-                                           ' and '+ mode + ' group by band';
-         stCfmLoTW  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and ((qsl_r = '+QuotedStr('Q')+') or (lotw_qslr='+
-                                            QuotedStr('L')+')) and ' + sql2+ ' and '+ mode +
-                                            ' group by band';
-         stLoTWOnly : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and (lotw_qslr = '+QuotedStr('L')+') and '+sql2+
-                                           ' and ' + mode + ' group by band'
-      end //case
-      }
     end;
   end;
 
@@ -611,31 +586,9 @@ begin
     if ShowDel then
     begin
       dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBand(GetStatTypeWhere(StatType))
-      {case StatType of
-
-        stCfmOnly  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and qsl_r = '+QuotedStr('Q')+' group by band';
-         stCfmLoTW  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                            'where adif <> 0 and ((qsl_r = '+QuotedStr('Q')+') or (lotw_qslr='+
-                                            QuotedStr('L')+')) group by band';
-         stLoTWOnly : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and lotw_qslr = '+QuotedStr('L')+' group by band';
-
-      end //case}
     end
     else begin
       dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandExcluding(GetStatTypeWhere(StatType), sql2)
-      {case StatType of
-         stCfmOnly  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and (qsl_r = '+QuotedStr('Q')+') and '+ sql2+
-                                           ' group by band';
-         stCfmLoTW  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and ((qsl_r = '+QuotedStr('Q')+') or (lotw_qslr='+
-                                            QuotedStr('L')+')) and ' + sql2+ ' group by band';
-         stLoTWOnly : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                                           'where adif <> 0 and (lotw_qslr = '+QuotedStr('L')+') and '+sql2+
-                                           ' group by band';
-      end //case}
     end;
     dmData.Q.Open;
     WriteToGrid(2);

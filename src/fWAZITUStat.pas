@@ -471,21 +471,6 @@ begin
                 sql := dmSqlStat.SqlWasStations(qslr)
               else
                 sql := dmSqlStat.SqlWasStationsByMode(qslr, gmode);
-              {if gmode = '' then
-                sql := 'select subsel.id_cqrlog_main, main.callsign, main.freq,main.mode,main.state from ( '+
-                       'select state,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(state <> '+QuotedStr('')+') and ((dxcc_ref = '+QuotedStr('W(USA)')+') or (dxcc_ref='+
-                       QuotedStr('KL')+') or (dxcc_ref='+QuotedStr('KH6')+')) and '+ qslr +
-                       'group by state,band,qsl_r order by state,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by freq,state'
-              else
-                sql := 'select subsel.id_cqrlog_main, main.callsign, main.freq,main.mode,main.state from ( '+
-                       'select state,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(state <> '+QuotedStr('')+') and ((dxcc_ref = '+QuotedStr('W(USA)')+') or (dxcc_ref='+
-                       QuotedStr('KL')+') or (dxcc_ref='+QuotedStr('KH6')+')) and '+qslr+
-                       ' and ' + gmode +' group by state,band,qsl_r order by state,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by freq,state';
-                }
                 l.Add('USA states')
             end
     end;
