@@ -572,10 +572,18 @@ begin
           for y := 0 to l.Count - 1 do
           begin
             Ident := l[y];
-            Grid.Columns.Add.DisplayName := Ident;
-            TColumn(Grid.Columns[y]).FieldName := Ident;
-            Grid.Columns[y].Width := cqrini.ReadInteger(section, Ident, 100, cqrini.LocalOnly('WindowSize'))
-            // Writeln('Loading:  Section: ',Section,' Ident: ',Ident,' Width: ',Grid.Columns[y].Width)
+            //every key names a field; an empty or damaged one is a column that
+            //was saved by mistake (fNewQSO.ShowFields once read past its column
+            //list) and would come back as a nameless column on every start.
+            //Skipping it here lets the next SaveForm rewrite the section clean.
+            if not IsValidIdent(Ident) then
+              Continue;
+            with TColumn(Grid.Columns.Add) do
+            begin
+              DisplayName := Ident;
+              FieldName   := Ident;
+              Width       := cqrini.ReadInteger(section, Ident, 100, cqrini.LocalOnly('WindowSize'))
+            end
           end
         finally
           Grid.DataSource := D;
