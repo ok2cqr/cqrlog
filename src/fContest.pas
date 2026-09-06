@@ -1606,15 +1606,6 @@ Begin
     Begin
     //last qso since
     //--------------------------------------------------------------
-      {dmData.CQ.Close;
-      if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-      'select sec_to_time(timestampdiff(second,concat(qsodate," ",time_off),utc_timestamp())) as last from cqrlog_main order by id_cqrlog_main desc limit 1';
-      if dmData.DebugLevel >=1 then
-                                       Writeln(dmData.CQ.SQL.Text);
-      dmData.CQ.Open();
-      lblQsoSince.Caption:=dmData.CQ.FieldByName('last').AsString;
-      }
       inc(QsoSince);
       //print format here MM:SS
       lblQsoSince.Caption:='QS: '+Format('%.2d', [QsoSince div 60])+':'+Format('%.2d', [QsoSince mod 60]);
