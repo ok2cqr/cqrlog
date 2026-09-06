@@ -84,14 +84,15 @@ var
   sum_cfm : integer = 0;
   db : TBufDataset;
   TableName : String;
+  bigSquares : TStringList;
+  squares    : TStringList;
+  i, y       : Integer;
 begin
   tmrBlink.Enabled:=False;
   TableName:='cqrlog_main';
+  bigSquares := TStringList.Create;
+  squares    := TStringList.Create;
   try
-    dmData.Q.Close;
-    dmData.Q1.Close;
-    if dmData.trQ.Active then dmData.trQ.Rollback;
-    if dmData.trQ1.Active then dmData.trQ1.Rollback;
     if chkQSL.Checked then
     begin
       tmp := '(qsl_r = '+QuotedStr('Q')+') or';
@@ -114,171 +115,131 @@ begin
      else
       bnd:= ' and band='+QuotedStr(cmbBands.Text);
 
-    dmData.trQ.StartTransaction;
-    dmData.trQ1.StartTransaction;
-    try
-      if dmData.IsFilter then
-         begin
-          try
-            TableName:='statistic_filter';
-            dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlDropStatView(TableName);
-            dmData.Q.ExecSQL;
-            dmData.trQ.Commit;
-            dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateStatView(TableName, dmData.IsFilterSQL);
-            dmData.Q.ExecSQL;
-            dmData.trQ.Commit;
-            dmData.Q.Close;
-          except
-           on E : EDatabaseError do
-            Begin
-              ShowMessage('Can not create filter view!');
-              Exit;
-            end;
-          end;
-         end;
-      dmData.Q.SQL.Text := dmSqlStat.SqlBigSquaresWorked(TableName);
-      dmData.Q.Open;
-      dmData.Q.Last;
-      allwkdBig:=dmData.Q.RecordCount;
-      dmData.Q.Close;
-
-      dmData.Q.SQL.Text := dmSqlStat.SqlSquaresWorked(TableName);
-      dmData.Q.Open;
-      dmData.Q.Last;
-      allwkd:=dmData.Q.RecordCount;
-      dmData.Q.Close;
-
-      dmData.Q.SQL.Text := dmSqlStat.SqlBigSquaresOnBand(TableName, bnd);
-      dmData.Q.Open;
-      dmData.Q.Last;
-      WriteHMTLHeader;
-      writeln(f,'<table>');
-      pbTot.Max:=dmData.Q.RecordCount;
-      thiswkd:= dmData.Q.RecordCount;
-      dmData.Q.First;
-      while not dmData.Q.Eof do
-      begin
-        inc(TotPos);
-        pbTot.Position:=TotPos;
-        Application.ProcessMessages;
-        ll := dmData.Q.Fields[0].AsString;
-        writeln(f,'<tr>'+LineEnding+'<td valign="middle">'+LineEnding+'<font color="black"><b>'+ll+'</b></font>'+LineEnding+'</td>');
-        writeln(f,'<td align="left">');
-        writeln(f,'<font color="black">');
-        dmData.Q1.Close;
-        dmData.Q1.SQL.Text := dmSqlStat.SqlSquaresInBigSquare(TableName, ll, bnd);
-        dmData.Q1.Open;
-
-        db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
-        try
-          db.FieldDefs.Clear;
-          db.FieldDefs.Add('loc', ftString, 4);
-          db.IndexDefs.Add('loc','loc',[ixPrimary]);
-          db.FieldDefs.Add('cfm',ftBoolean);
-          db.CreateDataset;
-
-          db.Open;
-          wkd := 0;
-          while not dmData.Q1.Eof do
-          begin
-            db.Append;
-            db.Fields[0].AsString  := dmData.Q1.Fields[0].AsString;
-            db.Fields[1].AsBoolean := False;
-            db.Post;
-            inc(wkd);
-            dmData.Q1.Next
-          end;
-          sum_wkd := sum_wkd + wkd;
-          if tmp <> '' then
-          begin
-            dmData.Q1.Close;
-            dmData.Q1.SQL.Text := dmSqlStat.SqlSquaresInBigSquareCfm(TableName, ll, bnd, tmp);
-            dmData.Q1.Open;
-            cfm := 0;
-            while not dmData.Q1.Eof do
-            begin
-              if db.Locate('LOC',dmData.Q1.Fields[0].AsString,[]) then
-              begin
-                db.Edit;
-                db.Fields[1].AsBoolean := True;
-                db.Post
-              end;
-              inc(cfm);
-              dmData.Q1.Next
-            end;
-            sum_cfm := sum_cfm + cfm
-          end;
-          dmData.Q1.Close;
-
-          db.IndexFieldNames := 'loc';
-          db.First;
-          while not db.Eof do
-          begin
-            if db.Bof then
-            begin
-              if db.Fields[1].AsBoolean then
-                Write(f,'<font color="black">',db.Fields[0].AsString,'</font>')
-              else
-                Write(f,'<font color="gray">',db.Fields[0].AsString,'</font>')
-            end
-            else begin
-              if db.Fields[1].AsBoolean then
-                Write(f,', <font color="black">',db.Fields[0].AsString,'</font>')
-              else
-                Write(f,', <font color="gray">',db.Fields[0].AsString,'</font>')
-            end;
-            db.Next;
-          end;
-          Writeln(f,'</font>');
-          Writeln(f,'</td>');
-          Writeln(f,'<td valign="middle" align="left">');
-          Writeln(f,'<font color="black">');
-          Writeln(f,'<b>WKD: ',wkd,'</b><br>');
-          if tmp<>'' then
-            Writeln(f,'<font color="black"><b>CFM: ',cfm,'</font></b>');
-          Writeln(f,'</font>');
-          Writeln(f,'</td>');
-          Writeln(f,'</tr>');
-          dmData.Q.Next
-        finally
-          FreeAndNil(db)
+    if dmData.IsFilter then
+    begin
+      try
+        TableName:='statistic_filter';
+        dmSqlStat.DropStatView(TableName);
+        dmSqlStat.CreateStatView(TableName, dmData.IsFilterSQL)
+      except
+        on E : EDatabaseError do
+        begin
+          ShowMessage('Can not create filter view!');
+          Exit;
         end;
       end;
-      Writeln(f,'</table>');
-      Writeln(f,'<hr>');
-      Writeln(f,'<font color="black">'+LineEnding+'<b>Total:</b><br>');
-      Writeln(f,'Worked:',sum_wkd,'<br>');
-      Writeln(f,'Confirmed:',sum_cfm,'<br>');
-      Writeln(f,'<b>Different squares:</b><br>');
-      if cmbBands.Text<>'ALL' then  Writeln(f,'On this band:',thiswkd,'<br>');
-      Writeln(f,'On all bands:',allwkdBig,'/',allwkd);
-      Writeln(f,'</font>');
-      Writeln(f,'</body>');
-      Writeln(f,'</html>');
-      CloseFile(f);
-
-      if dmData.IsFilter then
-         begin
-          try
-            dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlDropStatView(TableName);
-            dmData.Q.ExecSQL;
-            dmData.trQ.Commit;
-          Finally
-          end;
-         end;
-
-    finally
-      dmData.trQ.Rollback;
-      dmData.trQ1.Rollback
     end;
+    allwkdBig := dmSqlStat.CountBigSquaresWorked(TableName);
+    allwkd    := dmSqlStat.CountSquaresWorked(TableName);
+
+    dmSqlStat.ListBigSquaresOnBand(TableName, bnd, bigSquares);
+    WriteHMTLHeader;
+    writeln(f,'<table>');
+    pbTot.Max:=bigSquares.Count;
+    thiswkd:= bigSquares.Count;
+    for i := 0 to bigSquares.Count-1 do
+    begin
+      inc(TotPos);
+      pbTot.Position:=TotPos;
+      Application.ProcessMessages;
+      ll := bigSquares[i];
+      writeln(f,'<tr>'+LineEnding+'<td valign="middle">'+LineEnding+'<font color="black"><b>'+ll+'</b></font>'+LineEnding+'</td>');
+      writeln(f,'<td align="left">');
+      writeln(f,'<font color="black">');
+      squares.Clear;
+      dmSqlStat.ListSquaresInBigSquare(TableName, ll, bnd, squares);
+
+      db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
+      try
+        db.FieldDefs.Clear;
+        db.FieldDefs.Add('loc', ftString, 4);
+        db.IndexDefs.Add('loc','loc',[ixPrimary]);
+        db.FieldDefs.Add('cfm',ftBoolean);
+        db.CreateDataset;
+
+        db.Open;
+        wkd := 0;
+        for y := 0 to squares.Count-1 do
+        begin
+          db.Append;
+          db.Fields[0].AsString  := squares[y];
+          db.Fields[1].AsBoolean := False;
+          db.Post;
+          inc(wkd)
+        end;
+        sum_wkd := sum_wkd + wkd;
+        if tmp <> '' then
+        begin
+          squares.Clear;
+          dmSqlStat.ListSquaresInBigSquareCfm(TableName, ll, bnd, tmp, squares);
+          cfm := 0;
+          for y := 0 to squares.Count-1 do
+          begin
+            if db.Locate('LOC',squares[y],[]) then
+            begin
+              db.Edit;
+              db.Fields[1].AsBoolean := True;
+              db.Post
+            end;
+            inc(cfm)
+          end;
+          sum_cfm := sum_cfm + cfm
+        end;
+
+        db.IndexFieldNames := 'loc';
+        db.First;
+        while not db.Eof do
+        begin
+          if db.Bof then
+          begin
+            if db.Fields[1].AsBoolean then
+              Write(f,'<font color="black">',db.Fields[0].AsString,'</font>')
+            else
+              Write(f,'<font color="gray">',db.Fields[0].AsString,'</font>')
+          end
+          else begin
+            if db.Fields[1].AsBoolean then
+              Write(f,', <font color="black">',db.Fields[0].AsString,'</font>')
+            else
+              Write(f,', <font color="gray">',db.Fields[0].AsString,'</font>')
+          end;
+          db.Next;
+        end;
+        Writeln(f,'</font>');
+        Writeln(f,'</td>');
+        Writeln(f,'<td valign="middle" align="left">');
+        Writeln(f,'<font color="black">');
+        Writeln(f,'<b>WKD: ',wkd,'</b><br>');
+        if tmp<>'' then
+          Writeln(f,'<font color="black"><b>CFM: ',cfm,'</font></b>');
+        Writeln(f,'</font>');
+        Writeln(f,'</td>');
+        Writeln(f,'</tr>')
+      finally
+        FreeAndNil(db)
+      end;
+    end;
+    Writeln(f,'</table>');
+    Writeln(f,'<hr>');
+    Writeln(f,'<font color="black">'+LineEnding+'<b>Total:</b><br>');
+    Writeln(f,'Worked:',sum_wkd,'<br>');
+    Writeln(f,'Confirmed:',sum_cfm,'<br>');
+    Writeln(f,'<b>Different squares:</b><br>');
+    if cmbBands.Text<>'ALL' then  Writeln(f,'On this band:',thiswkd,'<br>');
+    Writeln(f,'On all bands:',allwkdBig,'/',allwkd);
+    Writeln(f,'</font>');
+    Writeln(f,'</body>');
+    Writeln(f,'</html>');
+    CloseFile(f);
+
+    if dmData.IsFilter then
+      dmSqlStat.DropStatView(TableName);
+
     CopyFile(TmpFile,ExtractFileNameWithoutExt(TmpFile)+'.html');
     IpHtmlPanel1.OpenURL(expandLocalHtmlFileName(ExtractFileNameWithoutExt(TmpFile)+'.html'))
   finally
-    //db.Close;
-    //FreeAndNil(db)
+    squares.Free;
+    bigSquares.Free
   end
 end;
 
