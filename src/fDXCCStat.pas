@@ -968,8 +968,7 @@ begin
          ') or (mode='+QuotedStr('FM')+'))';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;
@@ -1016,8 +1015,7 @@ begin
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
   tmp := tmp + ' and ((mode='+QuotedStr('SSB')+') or (mode = '+QuotedStr('AM')+
          ') or (mode='+QuotedStr('FM')+'))';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE  cqrlog_main.adif <> 0 and '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;
@@ -1034,8 +1032,7 @@ begin
   tmp := '((mode='+QuotedStr('CW')+') or (mode = '+QuotedStr('CWR')+'))';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;
@@ -1053,8 +1050,7 @@ begin
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
   tmp := tmp + ' and ((mode='+QuotedStr('CW')+') or (mode = '+QuotedStr('CWR')+'))';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;
@@ -1073,8 +1069,7 @@ begin
          'and (mode<>'+QuotedStr('AM')+')';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;
@@ -1094,8 +1089,7 @@ begin
          'and (mode<>'+QuotedStr('AM')+')';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;
@@ -1117,8 +1111,7 @@ begin
   tmp := GetStatTypeWhere(StatType);
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                       'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and  '+tmp+') as foo';
+  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
   Result := dmData.Q.Fields[0].AsInteger;

@@ -56,6 +56,7 @@ type
     function SqlIotaList(const Where : String) : String;
     function SqlIotaCount(const Where : String) : String;
     // DXCC statistics window (fDXCCStat)
+    function SqlDistinctDxccCount(const Where : String) : String;
     function SqlDxccPerBand : String;
     function SqlDxccPerBandExcluding(const DeletedList : String) : String;
     function SqlDxccPerBandByMode(const ModeCond : String) : String;
@@ -266,6 +267,14 @@ begin
 end;
 
 { DXCC statistics window }
+
+// The seven Get*Count functions of fDXCCStat: how many entities in the log
+// satisfy Where (mode, confirmation, deleted or not).
+function TdmSqlStat.SqlDistinctDxccCount(const Where : String) : String;
+begin
+  Result := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
+            'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif <> 0 and '+Where+') as foo'
+end;
 
 // The two consts below are one statement; fDXCCStat declared it twice.
 const
