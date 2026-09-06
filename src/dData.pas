@@ -1172,9 +1172,10 @@ begin
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
 
-  //dSqlUserData runs on its own cursor and is not one of our components, so
-  //the loop above does not reach it
+  //dSqlUserData and dSqlStat run on their own cursors and are not our
+  //components, so the loop above does not reach them
   dmSqlUserData.AttachTo(MainCon);
+  dmSqlStat.AttachTo(MainCon);
 
   //special connection for band map thread
   BandMapCon.Transaction    := trBandMapFil;

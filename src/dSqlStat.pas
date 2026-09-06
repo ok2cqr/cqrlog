@@ -12,10 +12,25 @@
 // the per-band grids of the DXCC, WAZ, ITU, WAC, WAS, DOK and IOTA windows,
 // the locator, county and worked-grids maps and the custom statistic.
 //
-// Builders only.  The statistics compose their WHERE clauses from window
-// state (confirmation type, mode, band, deleted entities), and that
-// composition stays in the forms; a builder takes the composed condition
-// as a string and wraps the statement around it.
+// Two layers.  The Sql* builders return statement text and nothing else;
+// the statistics compose their WHERE clauses from window state
+// (confirmation type, mode, band, deleted entities), that composition
+// stays in the forms, and a builder takes the composed condition as a
+// string and wraps the statement around it.
+//
+// Above the builders sit the operations, which run that text on this
+// module's own cursors.  A scalar (a count, a "does this QSO exist") comes
+// back as a value.  A row pass lends the module's row cursor: OpenXxxRows
+// opens the statement and returns the dataset, the window walks it with
+// Fields[...] as before, CloseRows gives it back.  Where the window keeps
+// the message loop running while it walks (the locator and county pages),
+// the rows are copied into a list instead, so nothing that runs meanwhile
+// can close the dataset under it.
+//
+// The two cursors: FRows is the one lent out, FQ serves scalars, list
+// fills and writes.  A scalar called from inside a borrowed row pass must
+// not close the dataset the caller is still reading, hence the split; a
+// row pass must never be opened while another is borrowed.
 
 unit dSqlStat;
 
@@ -24,11 +39,86 @@ unit dSqlStat;
 interface
 
 uses
-  Classes, SysUtils, LResources;
+  Classes, SysUtils, LResources, sqldb, db, uSqlCursor;
 
 type
+  // What the log says about an entity on a band and mode, strongest claim
+  // first: confirmed there; worked there but not confirmed; worked on the
+  // band in another mode; worked on another band; never worked.
+  TDxccStatus = (dsConfirmed, dsQslNeeded, dsNewMode, dsNewBand, dsNewCountry);
+
   TdmSqlStat = class(TDataModule)
+    procedure DataModuleCreate(Sender : TObject);
+  private
+    FQ    : TSqlCursor;   // scalars, list fills, writes
+    FRows : TSqlCursor;   // lent out by the Open...Rows operations
+    function  OpenRows(const Sql : String) : TDataSet;
+    function  GetValue(const Sql : String) : Integer;
+    function  GetRowCount(const Sql : String) : Integer;
+    function  QsoExists(const Sql : String) : Boolean;
+    procedure ListFirstColumn(const Sql : String; Items : TStrings);
   public
+    // Wired from TdmData once MainCon exists -- this module is not one of
+    // dData's components, so its bulk DataBase assignment does not reach it.
+    procedure AttachTo(Connection : TSQLConnection);
+
+    // DXCC counts and probes (dDXCC)
+    // DeletedList is the "(adif<>..) and .." list to leave out, or empty
+    // to count deleted entities too.
+    function GetDxccCount(const DeletedList : String) : Integer;
+    function GetDxccCfmCount(const Where : String) : Integer;
+    function GetDxccStatus(const Adif : Word; const Band, Mode : String; const IncLotw : Boolean) : TDxccStatus;
+
+    // worked/confirmed grid in NewQSO (dUtils)
+    function OpenCfmBandsModesRows(const Adif : Integer; const CallCond : String; const IncLotw : Boolean) : TDataSet;
+    function OpenWorkedBandsModesRows(const Adif : Integer; const CallCond : String) : TDataSet;
+
+    // IOTA window (fIOTAStat)
+    function OpenIotaListRows(const Where : String) : TDataSet;
+    function GetIotaCount(const Where : String) : Integer;
+
+    // DXCC statistics window (fDXCCStat)
+    // ModeCond empty means all modes; DeletedList is read only when
+    // ShowDeleted is False.
+    function GetDistinctDxccCount(const Where : String) : Integer;
+    function OpenDxccPerBandRows(const ShowDeleted : Boolean; const DeletedList, ModeCond : String) : TDataSet;
+    function OpenDxccCfmPerBandRows(const CfmCond : String; const ShowDeleted : Boolean; const DeletedList, ModeCond : String) : TDataSet;
+    function OpenDxccStatRows(const ShowDeleted : Boolean) : TDataSet;
+
+    // WAZ / ITU / WAC / WAS window (fWAZITUStat); ModeCond empty = all modes
+    function OpenWazStatRows(const Where : String) : TDataSet;
+    function OpenItuStatRows(const Where : String) : TDataSet;
+    function OpenWacStatRows(const Where : String) : TDataSet;
+    function OpenWasStatRows(const Where : String) : TDataSet;
+    function OpenWazStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+    function OpenItuStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+    function OpenWacStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+    function OpenWasStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+
+    // DOK window (fDOKStat)
+    function OpenDokStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+    function OpenDoksWorkedRows : TDataSet;
+    function OpenDokStatRows(const Where : String) : TDataSet;
+
+    // big square / locator window (fBigSquareStat) and county window
+    // (fCountyStat); both walk their rows with the message loop running,
+    // so the rows come back as lists
+    procedure DropStatView(const TableName : String);
+    procedure CreateStatView(const TableName, FilterSql : String);
+    function  CountBigSquaresWorked(const TableName : String) : Integer;
+    function  CountSquaresWorked(const TableName : String) : Integer;
+    procedure ListBigSquaresOnBand(const TableName, BandCond : String; Items : TStrings);
+    procedure ListSquaresInBigSquare(const TableName, BigSquare, BandCond : String; Items : TStrings);
+    procedure ListSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String; Items : TStrings);
+    function  CountCountiesWorked(const TableName : String) : Integer;
+    procedure ListCountiesOnBand(const TableName, BandCond : String; Items : TStrings);
+    function  GetCountyQsoCount(const TableName, County, BandCond : String) : Integer;
+    function  GetCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : Integer;
+
+    // Every Open...Rows above lends the same cursor; give it back before
+    // the next row pass.
+    procedure CloseRows;
+
     // DXCC counts and probes (dDXCC)
     function SqlDxccCount : String;
     function SqlDxccCountExcluding(const DeletedList : String) : String;
@@ -126,6 +216,327 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure TdmSqlStat.DataModuleCreate(Sender : TObject);
+begin
+  FQ    := TSqlCursor.Create(Self);
+  FRows := TSqlCursor.Create(Self)
+end;
+
+procedure TdmSqlStat.AttachTo(Connection : TSQLConnection);
+begin
+  FQ.AttachTo(Connection);
+  FRows.AttachTo(Connection)
+end;
+
+{ the four shapes every operation below takes }
+
+function TdmSqlStat.OpenRows(const Sql : String) : TDataSet;
+begin
+  FRows.Prepare(Sql);
+  FRows.Open;
+  Result := FRows.Query
+end;
+
+procedure TdmSqlStat.CloseRows;
+begin
+  FRows.Release
+end;
+
+// The first column of the single row the statement returns.
+function TdmSqlStat.GetValue(const Sql : String) : Integer;
+begin
+  FQ.Prepare(Sql);
+  try
+    FQ.Open;
+    Result := FQ.Query.Fields[0].AsInteger
+  finally
+    FQ.Release
+  end
+end;
+
+// How many rows the statement returns; Last, because a TSQLQuery only
+// counts what it has fetched.
+function TdmSqlStat.GetRowCount(const Sql : String) : Integer;
+begin
+  FQ.Prepare(Sql);
+  try
+    FQ.Open;
+    FQ.Query.Last;
+    Result := FQ.Query.RecordCount
+  finally
+    FQ.Release
+  end
+end;
+
+// The "LIMIT 1" probes: a row means yes.  An empty result reads as 0 --
+// AsInteger of a field with no current record -- as the callers always
+// tested it.
+function TdmSqlStat.QsoExists(const Sql : String) : Boolean;
+begin
+  Result := GetValue(Sql) > 0
+end;
+
+procedure TdmSqlStat.ListFirstColumn(const Sql : String; Items : TStrings);
+begin
+  FQ.Prepare(Sql);
+  try
+    FQ.Open;
+    while not FQ.Query.Eof do
+    begin
+      Items.Add(FQ.Query.Fields[0].AsString);
+      FQ.Query.Next
+    end
+  finally
+    FQ.Release
+  end
+end;
+
+{ DXCC counts and probes (dDXCC) }
+
+function TdmSqlStat.GetDxccCount(const DeletedList : String) : Integer;
+begin
+  if DeletedList = '' then
+    Result := GetValue(SqlDxccCount)
+  else
+    Result := GetValue(SqlDxccCountExcluding(DeletedList))
+end;
+
+function TdmSqlStat.GetDxccCfmCount(const Where : String) : Integer;
+begin
+  Result := GetValue(SqlDxccCfmCount(Where))
+end;
+
+function TdmSqlStat.GetDxccStatus(const Adif : Word; const Band, Mode : String; const IncLotw : Boolean) : TDxccStatus;
+var
+  sAdif : String;
+  cfm   : String;
+begin
+  sAdif := IntToStr(Adif);
+  if IncLotw then
+    cfm := SqlQsoCfmOnBandModeIncLotw(sAdif, Band, Mode)
+  else
+    cfm := SqlQsoCfmOnBandMode(sAdif, Band, Mode);
+  if QsoExists(cfm) then
+    Result := dsConfirmed
+  else if QsoExists(SqlQsoOnBandMode(sAdif, Band, Mode)) then
+    Result := dsQslNeeded
+  else if QsoExists(SqlQsoOnBand(sAdif, Band)) then
+    Result := dsNewMode
+  else if QsoExists(SqlQsoWithDxcc(sAdif)) then
+    Result := dsNewBand
+  else
+    Result := dsNewCountry
+end;
+
+{ worked/confirmed grid in NewQSO (dUtils) }
+
+function TdmSqlStat.OpenCfmBandsModesRows(const Adif : Integer; const CallCond : String; const IncLotw : Boolean) : TDataSet;
+begin
+  if IncLotw then
+    Result := OpenRows(SqlCfmBandsModesIncLotw(Adif, CallCond))
+  else
+    Result := OpenRows(SqlCfmBandsModes(Adif, CallCond))
+end;
+
+function TdmSqlStat.OpenWorkedBandsModesRows(const Adif : Integer; const CallCond : String) : TDataSet;
+begin
+  Result := OpenRows(SqlWorkedBandsModes(Adif, CallCond))
+end;
+
+{ IOTA window }
+
+function TdmSqlStat.OpenIotaListRows(const Where : String) : TDataSet;
+begin
+  Result := OpenRows(SqlIotaList(Where))
+end;
+
+function TdmSqlStat.GetIotaCount(const Where : String) : Integer;
+begin
+  Result := GetValue(SqlIotaCount(Where))
+end;
+
+{ DXCC statistics window }
+
+function TdmSqlStat.GetDistinctDxccCount(const Where : String) : Integer;
+begin
+  Result := GetValue(SqlDistinctDxccCount(Where))
+end;
+
+function TdmSqlStat.OpenDxccPerBandRows(const ShowDeleted : Boolean; const DeletedList, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+  begin
+    if ShowDeleted then
+      Result := OpenRows(SqlDxccPerBand)
+    else
+      Result := OpenRows(SqlDxccPerBandExcluding(DeletedList))
+  end
+  else begin
+    if ShowDeleted then
+      Result := OpenRows(SqlDxccPerBandByMode(ModeCond))
+    else
+      Result := OpenRows(SqlDxccPerBandByModeExcluding(DeletedList, ModeCond))
+  end
+end;
+
+function TdmSqlStat.OpenDxccCfmPerBandRows(const CfmCond : String; const ShowDeleted : Boolean; const DeletedList, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+  begin
+    if ShowDeleted then
+      Result := OpenRows(SqlDxccCfmPerBand(CfmCond))
+    else
+      Result := OpenRows(SqlDxccCfmPerBandExcluding(CfmCond, DeletedList))
+  end
+  else begin
+    if ShowDeleted then
+      Result := OpenRows(SqlDxccCfmPerBandByMode(CfmCond, ModeCond))
+    else
+      Result := OpenRows(SqlDxccCfmPerBandByModeExcluding(CfmCond, DeletedList, ModeCond))
+  end
+end;
+
+function TdmSqlStat.OpenDxccStatRows(const ShowDeleted : Boolean) : TDataSet;
+begin
+  if ShowDeleted then
+    Result := OpenRows(SqlDxccStatRows)
+  else
+    Result := OpenRows(SqlDxccStatRowsNoDeleted)
+end;
+
+{ WAZ / ITU / WAC / WAS window }
+
+function TdmSqlStat.OpenWazStatRows(const Where : String) : TDataSet;
+begin
+  Result := OpenRows(SqlWazStat(Where))
+end;
+
+function TdmSqlStat.OpenItuStatRows(const Where : String) : TDataSet;
+begin
+  Result := OpenRows(SqlItuStat(Where))
+end;
+
+function TdmSqlStat.OpenWacStatRows(const Where : String) : TDataSet;
+begin
+  Result := OpenRows(SqlWacStat(Where))
+end;
+
+function TdmSqlStat.OpenWasStatRows(const Where : String) : TDataSet;
+begin
+  Result := OpenRows(SqlWasStat(Where))
+end;
+
+function TdmSqlStat.OpenWazStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+    Result := OpenRows(SqlWazStations(CfmCond))
+  else
+    Result := OpenRows(SqlWazStationsByMode(CfmCond, ModeCond))
+end;
+
+function TdmSqlStat.OpenItuStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+    Result := OpenRows(SqlItuStations(CfmCond))
+  else
+    Result := OpenRows(SqlItuStationsByMode(CfmCond, ModeCond))
+end;
+
+function TdmSqlStat.OpenWacStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+    Result := OpenRows(SqlWacStations(CfmCond))
+  else
+    Result := OpenRows(SqlWacStationsByMode(CfmCond, ModeCond))
+end;
+
+function TdmSqlStat.OpenWasStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+    Result := OpenRows(SqlWasStations(CfmCond))
+  else
+    Result := OpenRows(SqlWasStationsByMode(CfmCond, ModeCond))
+end;
+
+{ DOK window }
+
+function TdmSqlStat.OpenDokStationsRows(const CfmCond, ModeCond : String) : TDataSet;
+begin
+  if ModeCond = '' then
+    Result := OpenRows(SqlDokStations(CfmCond))
+  else
+    Result := OpenRows(SqlDokStationsByMode(CfmCond, ModeCond))
+end;
+
+function TdmSqlStat.OpenDoksWorkedRows : TDataSet;
+begin
+  Result := OpenRows(SqlDoksWorked)
+end;
+
+function TdmSqlStat.OpenDokStatRows(const Where : String) : TDataSet;
+begin
+  Result := OpenRows(SqlDokStat(Where))
+end;
+
+{ big square / locator and county windows }
+
+procedure TdmSqlStat.DropStatView(const TableName : String);
+begin
+  FQ.Prepare(SqlDropStatView(TableName));
+  FQ.ExecAndCommit
+end;
+
+procedure TdmSqlStat.CreateStatView(const TableName, FilterSql : String);
+begin
+  FQ.Prepare(SqlCreateStatView(TableName, FilterSql));
+  FQ.ExecAndCommit
+end;
+
+function TdmSqlStat.CountBigSquaresWorked(const TableName : String) : Integer;
+begin
+  Result := GetRowCount(SqlBigSquaresWorked(TableName))
+end;
+
+function TdmSqlStat.CountSquaresWorked(const TableName : String) : Integer;
+begin
+  Result := GetRowCount(SqlSquaresWorked(TableName))
+end;
+
+procedure TdmSqlStat.ListBigSquaresOnBand(const TableName, BandCond : String; Items : TStrings);
+begin
+  ListFirstColumn(SqlBigSquaresOnBand(TableName, BandCond), Items)
+end;
+
+procedure TdmSqlStat.ListSquaresInBigSquare(const TableName, BigSquare, BandCond : String; Items : TStrings);
+begin
+  ListFirstColumn(SqlSquaresInBigSquare(TableName, BigSquare, BandCond), Items)
+end;
+
+procedure TdmSqlStat.ListSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String; Items : TStrings);
+begin
+  ListFirstColumn(SqlSquaresInBigSquareCfm(TableName, BigSquare, BandCond, CfmCond), Items)
+end;
+
+function TdmSqlStat.CountCountiesWorked(const TableName : String) : Integer;
+begin
+  Result := GetRowCount(SqlCountiesWorked(TableName))
+end;
+
+procedure TdmSqlStat.ListCountiesOnBand(const TableName, BandCond : String; Items : TStrings);
+begin
+  ListFirstColumn(SqlCountiesOnBand(TableName, BandCond), Items)
+end;
+
+function TdmSqlStat.GetCountyQsoCount(const TableName, County, BandCond : String) : Integer;
+begin
+  Result := GetValue(SqlCountyQsoCount(TableName, County, BandCond))
+end;
+
+function TdmSqlStat.GetCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : Integer;
+begin
+  Result := GetValue(SqlCountyQsoCountCfm(TableName, County, BandCond, CfmCond))
+end;
 
 { DXCC counts and probes }
 
