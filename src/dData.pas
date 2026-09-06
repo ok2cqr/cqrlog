@@ -1409,75 +1409,46 @@ begin
   Q.Close;
 end;
 
+const
+  //the indexes of cqrlog_main that PrepareImport drops for speed and
+  //DoAfterImport rebuilds: name, columns
+  C_MAIN_INDEXES : array[0..7] of array[0..1] of String = (
+    ('main_index', 'qsodate DESC,time_on DESC'),
+    ('callsign', 'callsign'),
+    ('name', 'name'),
+    ('qth', 'QTH'),
+    ('adif', 'adif'),
+    ('idcall', 'idcall'),
+    ('band', 'band'),
+    ('callsign_qsodate_band', 'callsign,qsodate,band'));
+
 procedure TdmData.PrepareImport;
+var
+  i : Integer;
 begin
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
-  dmData.Q.SQL.Text := 'DROP INDEX main_index ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX callsign ON cqrlog_main;';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX name ON cqrlog_main;';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX qth ON cqrlog_main;';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX adif ON cqrlog_main;';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX idcall ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX band ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX callsign_qsodate_band ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  {
-  dmData.Q.SQL.Text := 'DROP INDEX club_nr1 ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX club_nr2 ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX club_nr3 ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX club_nr4 ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'DROP INDEX club_nr5 ON cqrlog_main';
-  dmData.Q.ExecSQL;
-  }
+  for i := Low(C_MAIN_INDEXES) to High(C_MAIN_INDEXES) do
+  begin
+    dmData.Q.SQL.Text := dmSqlSchema.SqlDropIndex(C_MAIN_INDEXES[i][0]);
+    dmData.Q.ExecSQL
+  end;
   dmData.trQ.Commit
 end;
 
 procedure TdmData.DoAfterImport;
+var
+  i : Integer;
 begin
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
-  dmData.Q.SQL.Text := 'CREATE INDEX main_index ON cqrlog_main(qsodate DESC,time_on DESC);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX callsign ON cqrlog_main(callsign);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX name ON cqrlog_main(name);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX qth ON cqrlog_main(QTH);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX adif ON cqrlog_main(adif);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX idcall ON cqrlog_main(idcall);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX band ON cqrlog_main(band);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX callsign_qsodate_band ON cqrlog_main(callsign,qsodate,band);';
-  dmData.Q.ExecSQL;
-  {
-  dmData.Q.SQL.Text := 'CREATE INDEX club_nr1 ON cqrlog_main(club_nr1);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX club_nr2 ON cqrlog_main(club_nr2);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX club_nr3 ON cqrlog_main(club_nr3);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX club_nr4 ON cqrlog_main(club_nr4);';
-  dmData.Q.ExecSQL;
-  dmData.Q.SQL.Text := 'CREATE INDEX club_nr5 ON cqrlog_main(club_nr5);';
-  dmData.Q.ExecSQL;
-  }
+  for i := Low(C_MAIN_INDEXES) to High(C_MAIN_INDEXES) do
+  begin
+    dmData.Q.SQL.Text := dmSqlSchema.SqlCreateIndex(C_MAIN_INDEXES[i][0], C_MAIN_INDEXES[i][1]);
+    dmData.Q.ExecSQL
+  end;
   dmData.trQ.Commit
 end;
 

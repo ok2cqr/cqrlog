@@ -88,6 +88,10 @@ type
     function SqlTruncateZipcode2 : String;
     function SqlTruncateZipcode3 : String;
 
+    // the indexes of cqrlog_main PrepareImport drops and DoAfterImport rebuilds
+    function SqlDropIndex(const IndexName : String) : String;
+    function SqlCreateIndex(const IndexName, Columns : String) : String;
+
     // information_schema and repair
     function SqlTableExists(const Db, TableName : String) : String;
     function SqlFieldExists(const Db, TableName, FieldName : String) : String;
@@ -423,6 +427,18 @@ end;
 function TdmSqlSchema.SqlTruncateZipcode3 : String;
 begin
   Result := 'TRUNCATE zipcode3;'
+end;
+
+{ indexes of cqrlog_main }
+
+function TdmSqlSchema.SqlDropIndex(const IndexName : String) : String;
+begin
+  Result := 'DROP INDEX '+IndexName+' ON cqrlog_main'
+end;
+
+function TdmSqlSchema.SqlCreateIndex(const IndexName, Columns : String) : String;
+begin
+  Result := 'CREATE INDEX '+IndexName+' ON cqrlog_main('+Columns+')'
 end;
 
 { information_schema and repair }
