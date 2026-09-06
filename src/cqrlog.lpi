@@ -99,7 +99,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="136">
+    <Units Count="137">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -984,6 +984,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
       </Unit135>
+      <Unit136>
+        <Filename Value="uSqlCursor.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit136>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
