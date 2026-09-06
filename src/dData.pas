@@ -1306,42 +1306,7 @@ begin
 end;
 
 procedure TdmData.tmrDBPingTimer(Sender: TObject);
-{
-var
-  pq : TSQLQuery;
-  tq : TSQLTransaction;
-}
 begin
-{
-  pq := TSQLQuery.Create(nil);
-  tq := TSQLTransaction.Create(nil);
-  try
-    if (MainCon.Connected) and (fDBName<>'') then
-    begin
-      pq.DataBase := MainCon;
-      tq.DataBase := MainCon;
-      pq.Transaction := tq;
-      pq.SQL.Text := 'select * from '+fDBName+'.db_version';
-      tq.StartTransaction;
-      if fDebugLevel>=1 then Writeln('DBPing - ',pq.SQL.Text);
-      pq.Open;
-      pq.Close;
-      tq.Rollback;
-      pq.DataBase := dmDXCluster.dbDXC;
-      tq.DataBase := dmDXCluster.dbDXC;
-      pq.Transaction := tq;
-      pq.SQL.Text := 'select * from '+fDBName+'.db_version';
-      tq.StartTransaction;
-      if fDebugLevel>=1 then Writeln('DBPing - ',pq.SQL.Text);
-      pq.Open;
-      pq.Close;
-      tq.Rollback
-    end
-  finally
-    pq.Free;
-    tq.Free
-  end
-}
 end;
 
 
@@ -2697,24 +2662,6 @@ begin
       if old_version < 8 then
       begin
         PrepareEmptyLogUploadStatusTables(Q1,trQ1);
-        {
-        trQ1.StartTransaction;
-        Q1.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-
-        Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HAMQTH)+',1)';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-
-        Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_CLUBLOG)+',1)';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-
-        Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        trQ1.Commit}
       end;
 
       if old_version < 9 then
