@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
-  ExtCtrls, Grids, Buttons, StdCtrls;
+  ExtCtrls, Grids, Buttons, StdCtrls, db;
 
 type
   TStatType = (tsWAZ,tsITU,tsWAC,tsWAS);
@@ -176,6 +176,7 @@ end;
 
 procedure TfrmWAZITUStat.CreateWAZStat;
 var
+  rows     : TDataSet;
   zone     : Integer;
   i        : Integer = 1;
   y        : Integer;
@@ -195,40 +196,39 @@ begin
   for i:=1 to 40 do
   grdStat.Cells[0,i] := IntToStr(i);
 
-  dmData.Q.Close;
   if gmode <> '' then
-    dmData.Q.SQL.Text := dmSqlStat.SqlWazStat('where '+gmode)
+    rows := dmSqlStat.OpenWazStatRows('where '+gmode)
   else
-    dmData.Q.SQL.Text := dmSqlStat.SqlWazStat('');
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  dmData.Q.First;
-  while not dmData.Q.Eof do
-  begin
-    zone := dmData.Q.Fields[0].AsInteger;
-    BandPos := dmUtils.GetBandPos(dmData.Q.Fields[1].AsString);
-    if BandPos = -1 then
+    rows := dmSqlStat.OpenWazStatRows('');
+  try
+    rows.First;
+    while not rows.Eof do
     begin
-      dmData.Q.Next;
-      Continue
-    end;
-    BandPos := BandPos+1;
-    QSL_R   := dmData.Q.Fields[2].AsString;
-    LoTW    := dmData.Q.Fields[3].AsString;
-    eQSL    := dmData.Q.Fields[4].AsString;
+      zone := rows.Fields[0].AsInteger;
+      BandPos := dmUtils.GetBandPos(rows.Fields[1].AsString);
+      if BandPos = -1 then
+      begin
+        rows.Next;
+        Continue
+      end;
+      BandPos := BandPos+1;
+      QSL_R   := rows.Fields[2].AsString;
+      LoTW    := rows.Fields[3].AsString;
+      eQSL    := rows.Fields[4].AsString;
 
-    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,zone);
+      ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,zone);
 
-    dmData.Q.Next
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
   end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback;
   CreateSummary
 end;
 
 procedure TfrmWAZITUStat.CreateITUStat;
 var
+  rows     : TDataSet;
   zone     : Integer;
   i        : Integer = 1;
   y        : Integer;
@@ -250,37 +250,35 @@ begin
   grdStat.Cells[0,76] := '78';
   grdStat.Cells[0,77] := '90';
 
-  dmData.Q.Close;
   if gmode <> '' then
-    dmData.Q.SQL.Text := dmSqlStat.SqlItuStat('where '+gmode)
+    rows := dmSqlStat.OpenItuStatRows('where '+gmode)
   else
-    dmData.Q.SQL.Text := dmSqlStat.SqlItuStat('');
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  dmData.Q.First;
-  while not dmData.Q.Eof do
-  begin
-    zone := dmData.Q.Fields[0].AsInteger;
-    BandPos := dmUtils.GetBandPos(dmData.Q.Fields[1].AsString);
-    if BandPos = -1 then
+    rows := dmSqlStat.OpenItuStatRows('');
+  try
+    rows.First;
+    while not rows.Eof do
     begin
-      dmData.Q.Next;
-      Continue
-    end;
-    BandPos := BandPos+1;
-    QSL_R   := dmData.Q.Fields[2].AsString;
-    LoTW    := dmData.Q.Fields[3].AsString;
-    eQSL    := dmData.Q.Fields[4].AsString;
+      zone := rows.Fields[0].AsInteger;
+      BandPos := dmUtils.GetBandPos(rows.Fields[1].AsString);
+      if BandPos = -1 then
+      begin
+        rows.Next;
+        Continue
+      end;
+      BandPos := BandPos+1;
+      QSL_R   := rows.Fields[2].AsString;
+      LoTW    := rows.Fields[3].AsString;
+      eQSL    := rows.Fields[4].AsString;
 
-    if (zone=78) then zone:=76; //line 76 in the gird
-    if (zone=90) then zone:=77;
+      if (zone=78) then zone:=76; //line 76 in the gird
+      if (zone=90) then zone:=77;
 
-    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,zone);
-    dmData.Q.Next
+      ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,zone);
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
   end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback;
   CreateSummary
 end;
 
@@ -434,7 +432,7 @@ end;
 
 procedure TfrmWAZITUStat.btnShowSationListClick(Sender: TObject);
 var
-  sql : String;
+  rows : TDataSet = nil;
   l   : TStringList;
   b   : String = '';
   oldb : String = '';
@@ -446,56 +444,42 @@ begin
     qslr := GetStatTypeWhere(CfmType);
     case StatType of
       tsWAZ   : begin
-              if gmode = '' then
-                sql := dmSqlStat.SqlWazStations(qslr)
-              else
-                sql := dmSqlStat.SqlWazStationsByMode(qslr, gmode);
+              rows := dmSqlStat.OpenWazStationsRows(qslr, gmode);
               l.Add('WAZ')
             end;//waz
       tsITU   : begin
-              if gmode = '' then
-                sql := dmSqlStat.SqlItuStations(qslr)
-              else
-                sql := dmSqlStat.SqlItuStationsByMode(qslr, gmode);
+              rows := dmSqlStat.OpenItuStationsRows(qslr, gmode);
               l.Add('ITU')
             end;//itu
       tsWAC  : begin
-              if gmode = '' then
-                sql := dmSqlStat.SqlWacStations(qslr)
-              else
-                sql := dmSqlStat.SqlWacStationsByMode(qslr, gmode);
+              rows := dmSqlStat.OpenWacStationsRows(qslr, gmode);
               l.Add('WAC')
             end;//wac
       tsWAS   : begin
-              if gmode = '' then
-                sql := dmSqlStat.SqlWasStations(qslr)
-              else
-                sql := dmSqlStat.SqlWasStationsByMode(qslr, gmode);
-                l.Add('USA states')
+              rows := dmSqlStat.OpenWasStationsRows(qslr, gmode);
+              l.Add('USA states')
             end
     end;
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := sql;
-    if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    dmData.Q.First;
-
-    while not dmData.Q.Eof do
-    begin
-      b := dmUtils.GetBandFromFreq(dmData.Q.Fields[1].AsString);
-      if (oldb <> b) then
+    try
+      rows.First;
+      while not rows.Eof do
       begin
-        l.Add('');
-        oldb := dmUtils.GetBandFromFreq(dmData.Q.Fields[1].AsString)
-      end;
+        b := dmUtils.GetBandFromFreq(rows.Fields[1].AsString);
+        if (oldb <> b) then
+        begin
+          l.Add('');
+          oldb := dmUtils.GetBandFromFreq(rows.Fields[1].AsString)
+        end;
 
-
-      tmp  := dmUtils.SetSize(dmData.Q.Fields[0].AsString,20) +
-              dmUtils.SetSize(dmUtils.GetLabelBand(dmData.Q.Fields[1].AsString),8)+
-              dmUtils.SetSize(dmData.Q.Fields[2].AsString,5)+
-              dmUtils.SetSize(dmData.Q.Fields[3].AsString,5);
-      l.Add(tmp);
-      dmData.Q.Next
+        tmp  := dmUtils.SetSize(rows.Fields[0].AsString,20) +
+                dmUtils.SetSize(dmUtils.GetLabelBand(rows.Fields[1].AsString),8)+
+                dmUtils.SetSize(rows.Fields[2].AsString,5)+
+                dmUtils.SetSize(rows.Fields[3].AsString,5);
+        l.Add(tmp);
+        rows.Next
+      end
+    finally
+      dmSqlStat.CloseRows
     end;
     with TfrmShowStations.Create(self) do
     try
@@ -505,8 +489,6 @@ begin
       Free
     end
   finally
-    dmData.Q.Close;
-    dmData.trQ.Rollback;
     l.Free
   end
 end;
@@ -772,6 +754,7 @@ const
 
 
 var
+  rows    : TDataSet;
   i       : Integer = 1;
   y       : Integer;
   BandPos : Integer;
@@ -797,35 +780,32 @@ begin
   grdStat.Cells[0,pOC] := 'OC';
   grdStat.Cells[0,pSA] := 'SA';
 
-  dmData.Q.Close;
   if gmode <> '' then
-    dmData.Q.SQL.Text := dmSqlStat.SqlWacStat('where '+gmode)
+    rows := dmSqlStat.OpenWacStatRows('where '+gmode)
   else
-    dmData.Q.SQL.Text := dmSqlStat.SqlWacStat('');
-
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  dmData.Q.First;
-  while not dmData.Q.Eof do
-  begin
-    BandPos := dmUtils.GetBandPos(dmData.Q.Fields[1].AsString);
-    if BandPos = -1 then
+    rows := dmSqlStat.OpenWacStatRows('');
+  try
+    rows.First;
+    while not rows.Eof do
     begin
-      dmData.Q.Next;
-      Continue
-    end;
-    BandPos := BandPos+1;
-    QSL_R   := dmData.Q.Fields[2].AsString;
-    LoTW    := dmData.Q.Fields[3].AsString;
-    eQSL    := dmData.Q.Fields[4].AsString;
+      BandPos := dmUtils.GetBandPos(rows.Fields[1].AsString);
+      if BandPos = -1 then
+      begin
+        rows.Next;
+        Continue
+      end;
+      BandPos := BandPos+1;
+      QSL_R   := rows.Fields[2].AsString;
+      LoTW    := rows.Fields[3].AsString;
+      eQSL    := rows.Fields[4].AsString;
 
-    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,ContPos(dmData.Q.Fields[0].AsString));
+      ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,ContPos(rows.Fields[0].AsString));
 
-    dmData.Q.Next
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
   end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback;
   CreateSummary
 end;
 
@@ -844,6 +824,7 @@ procedure TfrmWAZITUStat.CreateWASStat;
   end;
 
 var
+  rows    : TDataSet;
   i,y : Integer;
   BandPos : Integer;
   QSL_R   : String;
@@ -916,36 +897,33 @@ begin
   LoadBandsSettings;
   Caption := 'WAS statistic';
 
-  dmData.Q.Close;
   where := '((adif=291) or (adif=6) or (adif=110))';
   if gmode <> '' then
     where := where + ' and '+ gmode;
 
-  dmData.Q.SQL.Text := dmSqlStat.SqlWasStat('where '+where);
-
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  dmData.Q.First;
-  while not dmData.Q.Eof do
-  begin
-    BandPos := dmUtils.GetBandPos(dmData.Q.Fields[1].AsString);
-    if BandPos = -1 then
+  rows := dmSqlStat.OpenWasStatRows('where '+where);
+  try
+    rows.First;
+    while not rows.Eof do
     begin
-      dmData.Q.Next;
-      Continue
-    end;
-    BandPos := BandPos+1;
-    QSL_R   := dmData.Q.Fields[2].AsString;
-    LoTW    := dmData.Q.Fields[3].AsString;
-    eQSL    := dmData.Q.Fields[4].AsString;
+      BandPos := dmUtils.GetBandPos(rows.Fields[1].AsString);
+      if BandPos = -1 then
+      begin
+        rows.Next;
+        Continue
+      end;
+      BandPos := BandPos+1;
+      QSL_R   := rows.Fields[2].AsString;
+      LoTW    := rows.Fields[3].AsString;
+      eQSL    := rows.Fields[4].AsString;
 
-    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,StatePos(dmData.Q.Fields[0].AsString));
+      ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,StatePos(rows.Fields[0].AsString));
 
-    dmData.Q.Next
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
   end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback;
   CreateSummary
 {
 AK  	Alaska

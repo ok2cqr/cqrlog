@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Grids,
-  ExtCtrls, Buttons, iniFiles, TAGraph, StdCtrls, memds;
+  ExtCtrls, Buttons, iniFiles, TAGraph, StdCtrls, memds, db;
 
 type
   TStat = (
@@ -511,43 +511,29 @@ var
   sql2    : String;
   ShowDel : Boolean;
 
-  procedure WriteToGrid(const Row : Integer);
+  // Walks the rows lent by dmSqlStat into grid row Row and gives them back.
+  procedure WriteToGrid(rows : TDataSet; const Row : Integer);
   begin
-    dmData.Q.First;
-    while not dmData.Q.Eof do
-    begin
-      BandPos := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString);
-      if BandPos = -1 then
+    try
+      rows.First;
+      while not rows.Eof do
       begin
-        dmData.Q.Next;
-        Continue
-      end;
-      BandPos := BandPos + 1;
-      if dmData.Q.Fields[1].AsString = '' then
-        grdStatSum.Cells[BandPos,Row] := '0'
-      else
-        grdStatSum.Cells[BandPos,Row] := dmData.Q.Fields[1].AsString;
-      dmData.Q.Next
+        BandPos := dmUtils.GetBandPos(rows.Fields[0].AsString);
+        if BandPos = -1 then
+        begin
+          rows.Next;
+          Continue
+        end;
+        BandPos := BandPos + 1;
+        if rows.Fields[1].AsString = '' then
+          grdStatSum.Cells[BandPos,Row] := '0'
+        else
+          grdStatSum.Cells[BandPos,Row] := rows.Fields[1].AsString;
+        rows.Next
+      end
+    finally
+      dmSqlStat.CloseRows
     end
-  end;
-
-  procedure GetSQLMode(const mode : String);
-  begin
-    if ShowDel then
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBandByMode(mode)
-    else
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBandByModeExcluding(sql2, mode)
-  end;
-
-  procedure GetCfmSQLMode(const mode : String);
-  begin
-    if ShowDel then
-    begin
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandByMode(GetStatTypeWhere(StatType), mode);
-    end
-    else begin
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandByModeExcluding(GetStatTypeWhere(StatType), sql2, mode);
-    end;
   end;
 
 begin
@@ -571,66 +557,29 @@ begin
   else
     sql2 := dmDXCC.GetDelDXCCAdifList;
 
-  dmData.Q.Close;
-  dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  try
-    if ShowDel then
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBand
-    else
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBandExcluding(sql2);
-    dmData.Q.Open;
-    WriteToGrid(1);
-    dmData.Q.Close;
+  WriteToGrid(dmSqlStat.OpenDxccPerBandRows(ShowDel, sql2, ''), 1);
+  WriteToGrid(dmSqlStat.OpenDxccCfmPerBandRows(GetStatTypeWhere(StatType), ShowDel, sql2, ''), 2);
 
-    if ShowDel then
-    begin
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBand(GetStatTypeWhere(StatType))
-    end
-    else begin
-      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandExcluding(GetStatTypeWhere(StatType), sql2)
-    end;
-    dmData.Q.Open;
-    WriteToGrid(2);
-    dmData.Q.Close;
+  WriteToGrid(dmSqlStat.OpenDxccPerBandRows(ShowDel, sql2,
+              '((mode='+QuotedStr('SSB')+') or (mode='+QuotedStr('AM')+') '+
+              'or (mode ='+QuotedStr('FM')+'))'), 4);
+  WriteToGrid(dmSqlStat.OpenDxccCfmPerBandRows(GetStatTypeWhere(StatType), ShowDel, sql2,
+              '((mode='+QuotedStr('SSB')+') or (mode='+QuotedStr('AM')+') '+
+              'or (mode ='+QuotedStr('FM')+'))'), 5);
 
-    GetSQLMode('((mode='+QuotedStr('SSB')+') or (mode='+QuotedStr('AM')+') '+
-               'or (mode ='+QuotedStr('FM')+'))');
-    dmData.Q.Open;
-    WriteToGrid(4);
-    dmData.Q.Close;
-    GetCfmSQLMode('((mode='+QuotedStr('SSB')+') or (mode='+QuotedStr('AM')+') '+
-               'or (mode ='+QuotedStr('FM')+'))');
-    dmData.Q.Open;
-    WriteToGrid(5);
-    dmData.Q.Close;
+  WriteToGrid(dmSqlStat.OpenDxccPerBandRows(ShowDel, sql2,
+              '((mode='+QuotedStr('CW')+') or (mode='+QuotedStr('CWR')+'))'), 6);
+  WriteToGrid(dmSqlStat.OpenDxccCfmPerBandRows(GetStatTypeWhere(StatType), ShowDel, sql2,
+              '((mode='+QuotedStr('CW')+') or (mode='+QuotedStr('CWR')+'))'), 7);
 
-    GetSQLMode('((mode='+QuotedStr('CW')+') or (mode='+QuotedStr('CWR')+'))');
-    dmData.Q.Open;
-    WriteToGrid(6);
-    dmData.Q.Close;
-    GetCfmSQLMode('((mode='+QuotedStr('CW')+') or (mode='+QuotedStr('CWR')+'))');
-    dmData.Q.Open;
-    WriteToGrid(7);
-    dmData.Q.Close;
-
-
-    GetSQLMode('((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
-               'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
-               'and (mode<>'+QuotedStr('AM')+'))');
-    dmData.Q.Open;
-    WriteToGrid(8);
-    dmData.Q.Close;
-    GetCfmSQLMode('((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
-                  'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
-                  'and (mode<>'+QuotedStr('AM')+'))');
-    dmData.Q.Open;
-    WriteToGrid(9);
-    dmData.Q.Close
-  finally
-    dmData.Q.Close;
-    dmData.trQ.Rollback
-  end
+  WriteToGrid(dmSqlStat.OpenDxccPerBandRows(ShowDel, sql2,
+              '((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
+              'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
+              'and (mode<>'+QuotedStr('AM')+'))'), 8);
+  WriteToGrid(dmSqlStat.OpenDxccCfmPerBandRows(GetStatTypeWhere(StatType), ShowDel, sql2,
+              '((mode<>'+QuotedStr('CW')+') and (mode<>'+QuotedStr('CWR')+') '+
+              'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+')'+
+              'and (mode<>'+QuotedStr('AM')+'))'), 9)
 end;
 
 procedure TfrmDXCCStat.CreateStatistic;
@@ -674,17 +623,7 @@ begin
   mDXCC := TMemDataset.Create(nil);
   try
     try
-      dmData.Q.Close;
-      if Deleted then
-        dmData.Q.SQL.Text := dmSqlStat.SqlDxccStatRows
-      else
-        dmData.Q.SQL.Text := dmSqlStat.SqlDxccStatRowsNoDeleted;
-
-
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open;
-
-      mDXCC.CopyFromDataset(dmData.Q);
+      mDXCC.CopyFromDataset(dmSqlStat.OpenDxccStatRows(Deleted));
       mDXCC.Open;
       mDXCC.Append;
       mDXCC.Fields[0].AsString := '';
@@ -692,8 +631,7 @@ begin
       mDXCC.Post;
       mDXCC.First
     finally
-      dmData.Q.Close;
-      dmData.trQ.Rollback
+      dmSqlStat.CloseRows
     end;
     Prefix    := mDXCC.Fields[0].AsString;
     Country   := mDXCC.Fields[1].AsString;
@@ -963,17 +901,11 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := '((mode='+QuotedStr('SSB')+') or (mode = '+QuotedStr('AM')+
          ') or (mode='+QuotedStr('FM')+'))';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 function TfrmDXCCStat.GetStatTypeWhere(st : TStat) : String;
@@ -1009,18 +941,12 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := GetStatTypeWhere(StatType);
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
   tmp := tmp + ' and ((mode='+QuotedStr('SSB')+') or (mode = '+QuotedStr('AM')+
          ') or (mode='+QuotedStr('FM')+'))';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 function TfrmDXCCStat.GetDXCCCWCount(deleted : Boolean) : Word;
@@ -1028,16 +954,10 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := '((mode='+QuotedStr('CW')+') or (mode = '+QuotedStr('CWR')+'))';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 function TfrmDXCCStat.GetDXCCCWCfmCount(deleted : Boolean) : Word;
@@ -1045,17 +965,11 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := GetStatTypeWhere(StatType);
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
   tmp := tmp + ' and ((mode='+QuotedStr('CW')+') or (mode = '+QuotedStr('CWR')+'))';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 function TfrmDXCCStat.GetDXCCDigiCount(deleted : Boolean) : Word;
@@ -1063,18 +977,12 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := '(mode<>'+QuotedStr('CW')+') and (mode <> '+QuotedStr('CWR')+')'+
          'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+') '+
          'and (mode<>'+QuotedStr('AM')+')';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 function TfrmDXCCStat.GetDXCCDigiCfmCount(deleted : Boolean) : Word;
@@ -1082,19 +990,13 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := GetStatTypeWhere(StatType);
   tmp := tmp +' and (mode<>'+QuotedStr('CW')+') and (mode <> '+QuotedStr('CWR')+')'+
          'and (mode<>'+QuotedStr('SSB')+') and (mode<>'+QuotedStr('FM')+') '+
          'and (mode<>'+QuotedStr('AM')+')';
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 function TfrmDXCCStat.GetMixCount(deleted : Boolean) : Word;
@@ -1107,16 +1009,10 @@ var
   tmp : String = '';
 begin
   Result := 0;
-  dmData.Q.Close;
   tmp := GetStatTypeWhere(StatType);
   if not deleted then
     tmp := tmp + ' and (dxcc_id.dxcc_ref not like '+QuotedStr('%*')+')';
-  dmData.Q.SQL.Text := dmSqlStat.SqlDistinctDxccCount(tmp);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  Result := dmData.Q.Fields[0].AsInteger;
-  dmData.Q.Close();
-  dmData.trQ.Rollback
+  Result := dmSqlStat.GetDistinctDxccCount(tmp)
 end;
 
 procedure TfrmDXCCStat.CreateTotalStatistic;

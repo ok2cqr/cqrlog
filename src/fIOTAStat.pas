@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls, Grids, inifiles;
+  Buttons, StdCtrls, Grids, inifiles, db;
 
 type
   TStat = (
@@ -132,11 +132,11 @@ var
   i       : Integer = 0;
   where   : String = '';
   sumiota : Integer = 0;
+  cnt     : Integer;
+  rows    : TDataSet;
 begin
   mIOTA.Clear;
   cqrini.WriteInteger('IOTA','LastStat',cmbCfmType.ItemIndex);
-  dmData.Q.Close;
-  dmData.trQ.StartTransaction;
   for i:=0 to 6 do
   begin
     if chkOnlyCFM.Checked then
@@ -145,40 +145,33 @@ begin
     else
       where := ' where (iota like '+QuotedStr(aIOTA[i]+'-%') + ')';
 
-    dmData.Q.SQL.Text := dmSqlStat.SqlIotaList(where);
-    dmData.Q.Open();
-    while not dmData.Q.Eof do
-    begin
-      mIOTA.Lines.Add(dmData.Q.Fields[0].AsString + #9 + dmData.Q.Fields[1].AsString);
-      dmData.Q.Next
+    rows := dmSqlStat.OpenIotaListRows(where);
+    try
+      while not rows.Eof do
+      begin
+        mIOTA.Lines.Add(rows.Fields[0].AsString + #9 + rows.Fields[1].AsString);
+        rows.Next
+      end
+    finally
+      dmSqlStat.CloseRows
     end;
-    dmData.Q.Close();
     mIOTA.Lines.Add('')
   end;
-  dmData.trQ.Rollback;
 
-  dmData.trQ.StartTransaction;
-  try
-    mIOTA.Lines.Add('------------------');
-    for i:=0 to 6 do
-    begin
-      if chkOnlyCFM.Checked then
-        where := ' where ' + GetStatTypeWhere(TStat(cmbCfmType.ItemIndex)) +
-                 ' and (iota like '+QuotedStr(aIOTA[i]+'-%') + ')'
-      else
-        where := ' where (iota like '+QuotedStr(aIOTA[i]+'-%') + ')';
-      dmData.Q.SQL.Text := dmSqlStat.SqlIotaCount(where);
-      dmData.Q.Open;
-      mIOTA.Lines.Add(aIOTA[i]+' islands: '+IntToStr(dmData.Q.Fields[0].AsInteger));
-      sumiota := sumiota + dmData.Q.Fields[0].AsInteger;
-      dmData.Q.Close
-    end;
-    mIOTA.Lines.Add('-------------------');
-    mIOTA.Lines.Add('Total: ' + IntToStr(sumiota))
-  finally
-    dmData.Q.Close;
-    dmData.trQ.Rollback
-  end
+  mIOTA.Lines.Add('------------------');
+  for i:=0 to 6 do
+  begin
+    if chkOnlyCFM.Checked then
+      where := ' where ' + GetStatTypeWhere(TStat(cmbCfmType.ItemIndex)) +
+               ' and (iota like '+QuotedStr(aIOTA[i]+'-%') + ')'
+    else
+      where := ' where (iota like '+QuotedStr(aIOTA[i]+'-%') + ')';
+    cnt := dmSqlStat.GetIotaCount(where);
+    mIOTA.Lines.Add(aIOTA[i]+' islands: '+IntToStr(cnt));
+    sumiota := sumiota + cnt
+  end;
+  mIOTA.Lines.Add('-------------------');
+  mIOTA.Lines.Add('Total: ' + IntToStr(sumiota))
 end;
 
 end.

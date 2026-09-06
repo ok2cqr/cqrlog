@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, inifiles,
-  ExtCtrls, Grids, Buttons, StdCtrls, FileUtil, LazFileUtils;
+  ExtCtrls, Grids, Buttons, StdCtrls, FileUtil, LazFileUtils, db;
 
 type
   TStatType = (tsDOK);
@@ -327,7 +327,7 @@ end;
 
 procedure TfrmDOKStat.btnShowStationListClick(Sender: TObject);
 var
-  sql : String;
+  rows : TDataSet = nil;
   l   : TStringList;
   b   : String = '';
   oldb : String = '';
@@ -338,35 +338,28 @@ begin
   try
     qslr := GetStatTypeWhere(CfmType);
     case StatType of
-      tsDOK   : begin
-              if gmode = '' then
-                sql := dmSqlStat.SqlDokStations(qslr)
-              else
-                sql := dmSqlStat.SqlDokStationsByMode(qslr, gmode);
-            end
+      tsDOK   : rows := dmSqlStat.OpenDokStationsRows(qslr, gmode)
     end;
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := sql;
-    if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    dmData.Q.First;
-
-    while not dmData.Q.Eof do
-    begin
-      b := dmUtils.GetBandFromFreq(dmData.Q.Fields[1].AsString);
-      if (oldb <> b) then
+    try
+      rows.First;
+      while not rows.Eof do
       begin
-        l.Add('');
-        oldb := dmUtils.GetBandFromFreq(dmData.Q.Fields[1].AsString)
-      end;
+        b := dmUtils.GetBandFromFreq(rows.Fields[1].AsString);
+        if (oldb <> b) then
+        begin
+          l.Add('');
+          oldb := dmUtils.GetBandFromFreq(rows.Fields[1].AsString)
+        end;
 
-
-      tmp  := dmUtils.SetSize(dmData.Q.Fields[0].AsString,20) +
-              dmUtils.SetSize(dmUtils.GetLabelBand(dmData.Q.Fields[1].AsString),8)+
-              dmUtils.SetSize(dmData.Q.Fields[2].AsString,7)+
-              dmUtils.SetSize(dmData.Q.Fields[3].AsString,12);
-      l.Add(tmp);
-      dmData.Q.Next
+        tmp  := dmUtils.SetSize(rows.Fields[0].AsString,20) +
+                dmUtils.SetSize(dmUtils.GetLabelBand(rows.Fields[1].AsString),8)+
+                dmUtils.SetSize(rows.Fields[2].AsString,7)+
+                dmUtils.SetSize(rows.Fields[3].AsString,12);
+        l.Add(tmp);
+        rows.Next
+      end
+    finally
+      dmSqlStat.CloseRows
     end;
     with TfrmShowStations.Create(self) do
     try
@@ -376,8 +369,6 @@ begin
       Free
     end
   finally
-    dmData.Q.Close;
-    dmData.trQ.Rollback;
     l.Free
   end
 end;
@@ -715,6 +706,7 @@ var
   LoTW    : String;
   eQSL    : String;
   where   : String;
+  rows    : TDataSet;
 begin
 
   // initialize grid and writing header
@@ -744,31 +736,31 @@ begin
   end
   else begin
       grdStat.RowCount := 1;
-      dmData.Q.Close;
-      dmData.Q.SQL.Text := dmSqlStat.SqlDoksWorked;
-      if dmData.trQ.Active then dmData.trQ.Rollback;
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open();
-      dmData.Q.First;
-      row := 0;
-      while not dmData.Q.Eof do
-      begin
-        if (cbChoosingDokType.ItemIndex = 1) and (FindDOKType(dmData.Q.Fields[0].AsString) <> 'DOK') then
+      rows := dmSqlStat.OpenDoksWorkedRows;
+      try
+        rows.First;
+        row := 0;
+        while not rows.Eof do
         begin
-          dmData.Q.Next;
-          continue;
-        end;
-        if (cbChoosingDokType.ItemIndex = 2) and (FindDOKType(dmData.Q.Fields[0].AsString) <> 'SDOK') then
-        begin
-          dmData.Q.Next;
-          continue;
-        end;
+          if (cbChoosingDokType.ItemIndex = 1) and (FindDOKType(rows.Fields[0].AsString) <> 'DOK') then
+          begin
+            rows.Next;
+            continue;
+          end;
+          if (cbChoosingDokType.ItemIndex = 2) and (FindDOKType(rows.Fields[0].AsString) <> 'SDOK') then
+          begin
+            rows.Next;
+            continue;
+          end;
 
-        inc(row);
-        grdStat.RowCount := row + 1;
-        grdStat.Cells[0,row] := dmData.Q.Fields[0].AsString;
-        grdStat.Cells[1,row] := FindDOKName(dmData.Q.Fields[0].AsString);
-        dmData.Q.Next;
+          inc(row);
+          grdStat.RowCount := row + 1;
+          grdStat.Cells[0,row] := rows.Fields[0].AsString;
+          grdStat.Cells[1,row] := FindDOKName(rows.Fields[0].AsString);
+          rows.Next;
+        end
+      finally
+        dmSqlStat.CloseRows
       end;
   end;
 
@@ -779,32 +771,28 @@ begin
   if gmode <> '' then
     where := where + ' and '+ gmode;
 
-  dmData.Q.Close;
-  dmData.Q.SQL.Text := dmSqlStat.SqlDokStat('where '+where);
-
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open();
-  dmData.Q.First;
-
-  while not dmData.Q.Eof do
-  begin
-    BandPos := dmUtils.GetBandPos(dmData.Q.Fields[1].AsString);
-    if BandPos = -1 then
+  rows := dmSqlStat.OpenDokStatRows('where '+where);
+  try
+    rows.First;
+    while not rows.Eof do
     begin
-      dmData.Q.Next;
-      Continue
-    end;
-    BandPos := BandPos+2;
-    QSL_R   := dmData.Q.Fields[2].AsString;
-    LoTW    := dmData.Q.Fields[3].AsString;
-    eQSL    := dmData.Q.Fields[4].AsString;
+      BandPos := dmUtils.GetBandPos(rows.Fields[1].AsString);
+      if BandPos = -1 then
+      begin
+        rows.Next;
+        Continue
+      end;
+      BandPos := BandPos+2;
+      QSL_R   := rows.Fields[2].AsString;
+      LoTW    := rows.Fields[3].AsString;
+      eQSL    := rows.Fields[4].AsString;
 
-    ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,DOKPos(dmData.Q.Fields[0].AsString));
-    dmData.Q.Next
+      ShowCharInGrid(QSL_R,LoTW,eQSL,BandPos,DOKPos(rows.Fields[0].AsString));
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
   end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback;
 
   CreateSummary;
 end;
