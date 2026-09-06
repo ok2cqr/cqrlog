@@ -54,12 +54,14 @@ type
     function SqlBandRange(const Band : String) : String;
     function SqlUpdateBand : String;
     function SqlBandOffsets : String;
+    function SqlInsertBand(const Band, BBegin, BEnd, Cw, Rtty, Ssb : String) : String;
 
     // dxclusters
     function SqlDxClusters : String;
     function SqlDeleteDxCluster(const Id : Integer) : String;
     function SqlUpdateDxCluster(const Description, Address, Port, User, Password : String; const Id : Integer) : String;
     function SqlInsertDxCluster(const Description, Address, Port, User, Password : String) : String;
+    function SqlInsertDefaultDxCluster(const Description, Address, Port : String) : String;
 
     // iota_list
     function SqlIotaName(const Iota : String) : String;
@@ -222,6 +224,14 @@ begin
   Result := C_SEL
 end;
 
+// The band edges arrive as SQL number literals in text, the way the band
+// table in dData.PrepareBandDatabase spells them.
+function TdmSqlRef.SqlInsertBand(const Band, BBegin, BEnd, Cw, Rtty, Ssb : String) : String;
+begin
+  Result := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
+            QuotedStr(Band)+','+BBegin+','+BEnd+','+Cw+','+Rtty+','+Ssb+')'
+end;
+
 { dxclusters }
 
 function TdmSqlRef.SqlDxClusters : String;
@@ -250,6 +260,14 @@ begin
             'values ('+QuotedStr(Description) + ',' + QuotedStr(Address) +
             ','+QuotedStr(Port)+','+QuotedStr(User)+
             ','+QuotedStr(Password)+')'
+end;
+
+// The three clusters a fresh cqrlog_common starts with; no user/password.
+function TdmSqlRef.SqlInsertDefaultDxCluster(const Description, Address, Port : String) : String;
+begin
+  Result := 'INSERT INTO dxclusters (description,address,port) ' +
+            'VALUES ('+QuotedStr(Description) + ',' + QuotedStr(Address) +
+            ','+QuotedStr(Port)+')'
 end;
 
 { iota_list }

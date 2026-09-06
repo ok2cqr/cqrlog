@@ -343,7 +343,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl, dSqlRef, dSqlStat, dSqlQso, dSqlSchema;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlQso, dSqlSchema;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -1482,135 +1482,53 @@ begin
 end;
 
 procedure TdmData.PrepareBandDatabase;
+const
+  //band, b_begin, b_end, cw, rtty, ssb -- the edges as SQL number literals;
+  //cw is where CW ends, rtty and ssb where they begin
+  C_BANDS : array[0..30] of array[0..5] of String = (
+    ('2190M', '0.135', '0.139', '0.135', '0.139', '0.139'),
+    ('630M', '0.472', '0.480', '0.472', '0.472', '0.480'),
+    ('160M', '1.80', '2.0', '1.838', '1.839', '1.843'),
+    ('80M', '3.5', '3.8', '3.580', '3.580', '3.620'),
+    ('60M', '5.0', '5.9', '5.2', '5.2', '5.3'),
+    ('40M', '7.0', '7.200', '7.035', '7.035', '7.043'),
+    ('30M', '10.100', '10.150', '10.140', '10.142', '10.150'),
+    ('20M', '14.000', '14.350', '14.070', '14.070', '14.112'),
+    ('17M', '18.068', '18.168', '18.095', '18.095', '18.111'),
+    ('15M', '21.000', '21.450', '21.070', '21.070', '21.120'),
+    ('12M', '24.890', '24.990', '24.915', '24.915', '24.931'),
+    ('10M', '28.000', '30.000', '28.070', '28.070', '28.300'),
+    ('8M', '40.0000', '45.0000', '40.3000', '40.3000', '40.6800'),
+    ('6M', '50.000', '52.000', '50.110', '50.110', '50.120'),
+    ('5M', '54.0000', '69.9000', '59.5000', '59.6000', '59.6000'),
+    ('4M', '70.000', '71.000', '70.150', '70.150', '70.150'),
+    ('2M', '144.00', '146.00', '144.110', '144.110', '144.150'),
+    ('1.25M', '219.00', '225.00', '221.0', '221.0', '222.0'),
+    ('70CM', '430.000', '440.000', '432.100', '432.100', '433.600'),
+    ('33CM', '902.000', '928.000', '903.000', '903.000', '910.000'),
+    ('23CM', '1240.000', '1300.000', '1245.000', '1250.000', '1260.000'),
+    ('13CM', '2300', '2450', '2310', '2310', '2320'),
+    ('9CM', '3400', '3475', '3400', '3400', '3420'),
+    ('6CM', '5650', '5850', '5670', '5670', '5675'),
+    ('3CM', '10000', '10500', '10500', '10500', '10500'),
+    ('1.25CM', '24000', '24250', '24240', '24250', '24250'),
+    ('6MM', '47000', '47200', '47100', '47100', '47200'),
+    ('4MM', '75500', '81500', '75500', '81500', '81500'),
+    ('2.5MM', '122250', '123000', '122250', '123000', '123000'),
+    ('2MM', '134000', '141000', '141000', '141000', '141000'),
+    ('1MM', '241000', '248000', '241000', '248000', '248000'));
+var
+  i : Integer;
 begin
   trQ.StartTransaction;
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                 QuotedStr('2190M')+',0.135,0.139,0.135,0.139,0.139)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                 QuotedStr('630M')+',0.472,0.480,0.472,0.472,0.480)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('160M')+',1.80,2.0,1.838,1.839,1.843)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('80M')+',3.5,3.8,3.580,3.580,3.620)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('60M')+',5.0,5.9,5.2,5.2,5.3)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('40M')+',7.0,7.200,7.035,7.035,7.043)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('30M')+',10.100,10.150,10.140,10.142,10.150)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('20M')+',14.000,14.350,14.070,14.070,14.112)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('17M')+',18.068,18.168,18.095,18.095,18.111)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('15M')+',21.000,21.450,21.070,21.070,21.120)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('12M')+',24.890,24.990,24.915,24.915,24.931)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('10M')+',28.000,30.000,28.070,28.070,28.300)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                         QuotedStr('8M')+',40.0000,45.0000,40.3000,40.3000,40.6800)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('6M')+',50.000,52.000,50.110,50.110,50.120)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('5M')+',54.0000,69.9000,59.5000,59.6000,59.6000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('4M')+',70.000,71.000,70.150,70.150,70.150)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('2M')+',144.00,146.00,144.110,144.110,144.150)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('1.25M')+',219.00,225.00,221.0,221.0,222.0)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('70CM')+',430.000,440.000,432.100,432.100,433.600)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('33CM')+',902.000,928.000,903.000,903.000,910.000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('23CM')+',1240.000,1300.000,1245.000,1250.000,1260.000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('13CM')+',2300,2450,2310,2310,2320)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('9CM')+',3400,3475,3400,3400,3420)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('6CM')+',5650,5850,5670,5670,5675)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('3CM')+',10000,10500,10500,10500,10500)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('1.25CM')+',24000,24250,24240,24250,24250)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('6MM')+',47000,47200,47100,47100,47200)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('4MM')+',75500,81500,75500,81500,81500)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('2.5MM')+',122250,123000,122250,123000,123000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('2MM')+',134000,141000,141000,141000,141000)';
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                QuotedStr('1MM')+',241000,248000,241000,248000,248000)';
-  Q.ExecSQL;
-
+  for i := Low(C_BANDS) to High(C_BANDS) do
+  begin
+    Q.SQL.Text := dmSqlRef.SqlInsertBand(C_BANDS[i][0], C_BANDS[i][1], C_BANDS[i][2],
+                                         C_BANDS[i][3], C_BANDS[i][4], C_BANDS[i][5]);
+    Q.ExecSQL
+  end;
   trQ.Commit;
   Q.Close
-           //band,begin,end,cw,rtty,ssb - cw to, rtty from, ssb from
 end;
 
 function TdmData.QueryLocate(qry : TSQLQuery; Column : String; Value : Variant; DisableGrid : Boolean; exatly : Boolean = True) : Boolean;
@@ -1704,30 +1622,24 @@ begin
 end;
 
 procedure TdmData.PrepareDXClusterDatabase;
+const
+  //description, address, port
+  C_CLUSTERS : array[0..2] of array[0..2] of String = (
+    ('OK0DXH', '194.213.40.187', '41112'),
+    ('OZ2DXC', '80.198.77.12', '8000'),
+    ('HamQTH', 'hamqth.com', '7300'));
+var
+  i : Integer;
 begin
   Q.Close;
   trQ.StartTransaction;
-  Q.SQL.Text := 'INSERT INTO dxclusters (description,address,port) ' +
-                'VALUES ('+QuotedStr('OK0DXH') + ',' + QuotedStr('194.213.40.187') +
-                ','+QuotedStr('41112')+')';
-  if fDebugLevel >=1 then
-    Writeln(Q.SQL.Text);
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO dxclusters (description,address,port) ' +
-                'VALUES ('+QuotedStr('OZ2DXC') + ',' + QuotedStr('80.198.77.12') +
-                ','+QuotedStr('8000')+')';
-  if fDebugLevel >=1 then
-    Writeln(Q.SQL.Text);
-  Q.ExecSQL;
-
-  Q.SQL.Text := 'INSERT INTO dxclusters (description,address,port) ' +
-                'VALUES ('+QuotedStr('HamQTH') + ',' + QuotedStr('hamqth.com') +
-                ','+QuotedStr('7300')+')';
-  if fDebugLevel >=1 then
-    Writeln(Q.SQL.Text);
-  Q.ExecSQL;
-
+  for i := Low(C_CLUSTERS) to High(C_CLUSTERS) do
+  begin
+    Q.SQL.Text := dmSqlRef.SqlInsertDefaultDxCluster(C_CLUSTERS[i][0], C_CLUSTERS[i][1], C_CLUSTERS[i][2]);
+    if fDebugLevel >=1 then
+      Writeln(Q.SQL.Text);
+    Q.ExecSQL
+  end;
   trQ.Commit
 end;
 
@@ -2433,8 +2345,7 @@ begin
     try try
       if old_version < 3 then
       begin
-        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('2190M')+',0.472,0.480,0.472,0.472,0.480)';
+        Q1.SQL.Text := dmSqlRef.SqlInsertBand('2190M', '0.472', '0.480', '0.472', '0.472', '0.480');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
       end;
@@ -2452,28 +2363,23 @@ begin
 
       if old_version < 5 then
       begin
-        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('2.5MM')+',122250.0,123000.0,122251.0,122251.0,122251.0)';
+        Q1.SQL.Text := dmSqlRef.SqlInsertBand('2.5MM', '122250.0', '123000.0', '122251.0', '122251.0', '122251.0');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('2MM')+',134000.0,141000.0,134930.0,134930.0,134930.0)';
+        Q1.SQL.Text := dmSqlRef.SqlInsertBand('2MM', '134000.0', '141000.0', '134930.0', '134930.0', '134930.0');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                        QuotedStr('1MM')+',241000.0,250000.0,248000.0,248000.0,248000.0)';
+        Q1.SQL.Text := dmSqlRef.SqlInsertBand('1MM', '241000.0', '250000.0', '248000.0', '248000.0', '248000.0');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
       end;
 
       if old_version < 6 then
       begin
-        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('8M')+',40.0000,45.0000,40.3000,40.3000,40.6800)';
+        Q1.SQL.Text := dmSqlRef.SqlInsertBand('8M', '40.0000', '45.0000', '40.3000', '40.3000', '40.6800');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'INSERT INTO cqrlog_common.bands (band,b_begin,b_end,cw,rtty,ssb) VALUES (' +
-                       QuotedStr('5M')+',54.0000,69.9000,59.5000,59.6000,59.6000)';
+        Q1.SQL.Text := dmSqlRef.SqlInsertBand('5M', '54.0000', '69.9000', '59.5000', '59.6000', '59.6000');
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
       end;
@@ -3360,33 +3266,27 @@ end;
 
 
 procedure TdmData.PrepareEmptyLogUploadStatusTables(lQ : TSQLQuery;lTr : TSQLTransaction);
+const
+  C_LOGS : array[0..3] of String = (C_HAMQTH, C_CLUBLOG, C_HRDLOG, C_UDPLOG);
 var
   Commit : Boolean = False;
+  i : Integer;
 begin
   Commit := not lTr.Active;
 
   if Commit then
     lTr.StartTransaction;
 
-  lQ.SQL.Text := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')';
+  lQ.SQL.Text := dmSqlUpload.SqlSeedLogChangesDone;
   if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
   lQ.ExecSQL;
 
-  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HAMQTH)+',1)';
-  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
-  lQ.ExecSQL;
-
-  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_CLUBLOG)+',1)';
-  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
-  lQ.ExecSQL;
-
-  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_HRDLOG)+',1)';
-  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
-  lQ.ExecSQL;
-
-  lQ.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_UDPLOG)+',1)';
-  if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
-  lQ.ExecSQL;
+  for i := Low(C_LOGS) to High(C_LOGS) do
+  begin
+    lQ.SQL.Text := dmSqlUpload.SqlSeedUploadStatus(C_LOGS[i]);
+    if fDebugLevel>=1 then Writeln(lQ.SQL.Text);
+    lQ.ExecSQL
+  end;
 
   if Commit then
     lTr.Commit

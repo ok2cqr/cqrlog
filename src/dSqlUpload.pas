@@ -43,6 +43,8 @@ type
     function SqlSetAllUploadStatusForLog(const Id : Integer) : String;
     function SqlMarkUploaded(const LogName : String; const Id : Integer) : String;
     function SqlUploadStatus(const LogName : String) : String;
+    function SqlSeedLogChangesDone : String;
+    function SqlSeedUploadStatus(const LogName : String) : String;
 
     // the QSO a change refers to
     function SqlQsoForAdif(const Id : Integer) : String;
@@ -148,6 +150,18 @@ const
   C_SEL_UPLOAD_STATUS = 'select * from upload_status where logname=%s';
 begin
   Result := Format(C_SEL_UPLOAD_STATUS,[QuotedStr(LogName)])
+end;
+
+// A fresh log starts with one ALLDONE row in log_changes and one
+// upload_status row per online log pointing at it.
+function TdmSqlUpload.SqlSeedLogChangesDone : String;
+begin
+  Result := 'insert into log_changes (id,cmd) values(1,'+QuotedStr(C_ALLDONE)+')'
+end;
+
+function TdmSqlUpload.SqlSeedUploadStatus(const LogName : String) : String;
+begin
+  Result := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(LogName)+',1)'
 end;
 
 { the QSO a change refers to }
