@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, LCLType, LazFileUtils, StrUtils;
+  StdCtrls, ComCtrls, LCLType, LazFileUtils, StrUtils, db;
 
 type
 
@@ -170,6 +170,7 @@ procedure TfrmEDIExport.btnExportClick(Sender: TObject);
 var
   AllQSO     : Boolean=False;
   f          : TextFile;
+  rows       : TDataSet;
   mycall     : String;
   myloc, loc : String;
   myname     : String;
@@ -246,12 +247,6 @@ begin
   pbExport.Position := 0;
   lblDone.Visible   := False;
   pbExport.Visible  := True;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.Close;
-  if AllQSO then
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosByDateForExport
-  else
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlFilteredQsosByDate(dmData.qCQRLOG.SQL.Text);
   s := TStringList.Create;
   wwls := TStringList.Create;
   new_wwl := '';
@@ -261,57 +256,59 @@ begin
   Operators := TStringList.Create;
   OpString := '';
   try try
-    dmData.trQ.StartTransaction;
-    dmData.Q.Open;
-    dmData.Q.Last; //to get proper count
-    pbExport.Max := dmData.Q.RecordCount;
-    DBRecordCount :=  dmData.Q.RecordCount;
-    dmData.Q.First;
-    while not dmData.Q.Eof do
+    if AllQSO then
+      rows := dmSqlImpExp.OpenQsosByDateRows
+    else
+      rows := dmSqlImpExp.OpenFilteredQsosByDateRows(dmData.qCQRLOG.SQL.Text);
+    rows.Last; //to get proper count
+    pbExport.Max := rows.RecordCount;
+    DBRecordCount :=  rows.RecordCount;
+    rows.First;
+    while not rows.Eof do
     begin
       inc(QsoMax);
       // Check for missing mandatory fields
-      if (dmData.Q.FieldByName('rst_s').AsString = '') then
+      if (rows.FieldByName('rst_s').AsString = '') then
       begin
         pbExport.StepIt;
-        dmData.Q.Next;
+        rows.Next;
         Continue;
       end;
-      if (dmData.Q.FieldByName('rst_r').AsString = '') then
+      if (rows.FieldByName('rst_r').AsString = '') then
       begin
         pbExport.StepIt;
-        dmData.Q.Next;
+        rows.Next;
         Continue;
       end;
       if chcSerialNr.Checked then
       begin;
-        if (dmData.Q.FieldByName('stx').AsString = '') then
+        if (rows.FieldByName('stx').AsString = '') then
         begin
           pbExport.StepIt;
-          dmData.Q.Next;
+          rows.Next;
           Continue;
         end;
-        if (dmData.Q.FieldByName('srx').AsString = '') then
+        if (rows.FieldByName('srx').AsString = '') then
         begin
           pbExport.StepIt;
-          dmData.Q.Next;
+          rows.Next;
           Continue;
         end;
       end;
-      loc := UpperCase(dmData.Q.FieldByName('srx_string').AsString);
+      loc := UpperCase(rows.FieldByName('srx_string').AsString);
       if (loc = '') then //or not frmWorkedGrids.GridOK(loc) then
       begin
         pbExport.StepIt;
-        dmData.Q.Next;
+        rows.Next;
         Continue;
       end;
       i := i+1;
       if (i = 1)
       then
-         startdate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
+         startdate := StringReplace(rows.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
       if (i = DBRecordCount)
       then
-         enddate := StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
+         enddate := StringReplace(rows.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]);
       if length(loc) = 4 then loc := loc +'LL';
       qrb:='';
       dmUtils.DistanceFromLocator(dmUtils.CompleteLoc(myloc),loc, qrb, qrc);
@@ -319,7 +316,7 @@ begin
       if StrToInt(qrb) > odx then
       begin
          odx := StrToInt(qrb);
-         odx_call := dmData.Q.FieldByName('callsign').AsString;
+         odx_call := rows.FieldByName('callsign').AsString;
          odx_wwl  := loc;
       end;
       if (wwls.IndexOf(LeftStr(loc,4)) < 0) then
@@ -333,23 +330,23 @@ begin
              dxccs.Add(prefix);
              new_dxcc := 'N';
       end;
-      if (callsign_list.IndexOf(dmData.Q.FieldByName('callsign').AsString) >= 0)
+      if (callsign_list.IndexOf(rows.FieldByName('callsign').AsString) >= 0)
       then
               dupe := 'D'
       else
-              callsign_list.Add(dmData.Q.FieldByName('callsign').AsString);
+              callsign_list.Add(rows.FieldByName('callsign').AsString);
 
-      if (dmData.Q.FieldByName('operator').AsString <> '') and (Operators.IndexOf(dmData.Q.FieldByName('operator').AsString) < 0) then
-         Operators.Add(dmData.Q.FieldByName('operator').AsString);
+      if (rows.FieldByName('operator').AsString <> '') and (Operators.IndexOf(rows.FieldByName('operator').AsString) < 0) then
+         Operators.Add(rows.FieldByName('operator').AsString);
 
-      s.Add(RightStr(StringReplace(dmData.Q.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]),6)+';'+
-            StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+';'+
-            dmData.Q.FieldByName('callsign').AsString+';'+
-            EdiMode(dmData.Q.FieldByName('mode').AsString)+';'+
-            dmData.Q.FieldByName('rst_s').AsString+';'+
-            dmData.Q.FieldByName('stx').AsString+';'+
-            dmData.Q.FieldByName('rst_r').AsString+';'+
-            dmData.Q.FieldByName('srx').AsString+';'+
+      s.Add(RightStr(StringReplace(rows.FieldByName('qsodate').AsString,'-','',[rfReplaceAll, rfIgnoreCase]),6)+';'+
+            StringReplace(rows.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+';'+
+            rows.FieldByName('callsign').AsString+';'+
+            EdiMode(rows.FieldByName('mode').AsString)+';'+
+            rows.FieldByName('rst_s').AsString+';'+
+            rows.FieldByName('stx').AsString+';'+
+            rows.FieldByName('rst_r').AsString+';'+
+            rows.FieldByName('srx').AsString+';'+
             ';'+                                                   //Received Exchange empty for now ...
             loc+';'+
             qrb+';'+
@@ -362,7 +359,7 @@ begin
       new_dxcc := '';
       dupe := '';
       pbExport.StepIt;
-      dmData.Q.Next
+      rows.Next
     end;
   except
     on E : Exception do
@@ -373,8 +370,7 @@ begin
   end
   finally
     lblDone.Visible := True;
-    dmData.trQ.Rollback;
-    dmData.Q.Close
+    dmSqlImpExp.CloseRows
   end;
   for j:=0 to pred(Operators.Count) do
   begin

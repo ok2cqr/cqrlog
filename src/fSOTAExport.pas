@@ -6,7 +6,7 @@ interface
 
 uses
   Classes,SysUtils,FileUtil,LResources,Forms,Controls,Graphics,Dialogs,StdCtrls,
-  ComCtrls,ExtCtrls, LCLType, LazFileUtils;
+  ComCtrls,ExtCtrls, LCLType, LazFileUtils, db;
 
 type
 
@@ -110,6 +110,7 @@ procedure TfrmSOTAExport.btnExportClick(Sender : TObject);
 var
   AllQSO  : Boolean=False;
   f       : TextFile;
+  rows    : TDataSet;
   sota    : String;
   note    : String;
   HisSota : String='';
@@ -145,35 +146,31 @@ begin
   pbExport.Position := 0;
   lblDone.Visible   := False;
   pbExport.Visible  := True;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  dmData.Q.Close;
-  if AllQSO then
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosByDateForExport
-  else
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlFilteredQsosByDate(dmData.qCQRLOG.SQL.Text);
   try try
     AssignFile(f,edtFileName.Text);
     Rewrite(f);
-    dmData.trQ.StartTransaction;
-    dmData.Q.Open;
-    dmData.Q.Last; //to get proper count
-    pbExport.Max := dmData.Q.RecordCount;
-    dmData.Q.First;
-    while not dmData.Q.Eof do
+    if AllQSO then
+      rows := dmSqlImpExp.OpenQsosByDateRows
+    else
+      rows := dmSqlImpExp.OpenFilteredQsosByDateRows(dmData.qCQRLOG.SQL.Text);
+    rows.Last; //to get proper count
+    pbExport.Max := rows.RecordCount;
+    rows.First;
+    while not rows.Eof do
     begin
       if rbSotaLog.Checked then
       begin
         sota := '';
         case cmbSota.ItemIndex of
-          0 : sota := dmData.Q.FieldByName('award').AsString;
-          1 : sota := dmData.Q.FieldByName('remarks').AsString;
-          2 : sota := dmData.Q.FieldByName('qth').AsString
+          0 : sota := rows.FieldByName('award').AsString;
+          1 : sota := rows.FieldByName('remarks').AsString;
+          2 : sota := rows.FieldByName('qth').AsString
         end //case
       end
       else
         sota := edtSota.Text;
       if rbAddLogNote.Checked then
-        note := dmData.Q.FieldByName('remarks').AsString
+        note := rows.FieldByName('remarks').AsString
       else
         note := edtNotes.Text;
       note := StringReplace(note,',',' ',[rfReplaceAll, rfIgnoreCase]);
@@ -181,9 +178,9 @@ begin
       if chkHisSota.Checked then
       begin
         case cmbHisSota.ItemIndex of
-           0 : HisSota := dmData.Q.FieldByName('award').AsString;
-           1 : HisSota := dmData.Q.FieldByName('remarks').AsString;
-           2 : HisSota := dmData.Q.FieldByName('qth').AsString
+           0 : HisSota := rows.FieldByName('award').AsString;
+           1 : HisSota := rows.FieldByName('remarks').AsString;
+           2 : HisSota := rows.FieldByName('qth').AsString
          end //case
       end;
 
@@ -191,31 +188,31 @@ begin
               'V2,',
               edtCallsign.Text+',',  //callsign
               sota+',',              //sota
-              dmUtils.DateInSOTAFormat(dmData.Q.FieldByName('qsodate').AsDateTime)+',',
-              StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+',',
-              FormatFloat('0.00;;',dmData.Q.FieldByName('freq').AsFloat),'MHz,',
+              dmUtils.DateInSOTAFormat(rows.FieldByName('qsodate').AsDateTime)+',',
+              StringReplace(rows.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase])+',',
+              FormatFloat('0.00;;',rows.FieldByName('freq').AsFloat),'MHz,',
               //2022-05-05 OH1KH It seems that SOTA mode can be CqrMode (mainly CW,SSB,FM,AM)(I.E. no mode+submode pairs needed)
               //otherwise use dmUtils.ModeFromCqr to get mode and submode at this point
-              dmData.Q.FieldByName('mode').AsString,',',
+              rows.FieldByName('mode').AsString,',',
 
-              dmData.Q.FieldByName('callsign').AsString,',',  //his callsign
+              rows.FieldByName('callsign').AsString,',',  //his callsign
               HisSota+',', //his summit
               note  //comments
       );
 
       {
       Writeln(f,edtCallsign.Text,',',
-              dmUtils.DateInSOTAFormat(dmData.Q.FieldByName('qsodate').AsDateTime),',',
-              StringReplace(dmData.Q.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase]),',',
+              dmUtils.DateInSOTAFormat(rows.FieldByName('qsodate').AsDateTime),',',
+              StringReplace(rows.FieldByName('time_on').AsString,':','',[rfReplaceAll, rfIgnoreCase]),',',
               sota,',',
-              FormatFloat('0.00;;',dmData.Q.FieldByName('freq').AsFloat),'MHz,',
-              dmData.Q.FieldByName('mode').AsString,',',
-              dmData.Q.FieldByName('callsign').AsString,',',
+              FormatFloat('0.00;;',rows.FieldByName('freq').AsFloat),'MHz,',
+              rows.FieldByName('mode').AsString,',',
+              rows.FieldByName('callsign').AsString,',',
               note
               );
       }
       pbExport.StepIt;
-      dmData.Q.Next
+      rows.Next
     end;
     CloseFile(f)
   except
@@ -227,8 +224,7 @@ begin
   end
   finally
     lblDone.Visible := True;
-    dmData.trQ.Rollback;
-    dmData.Q.Close
+    dmSqlImpExp.CloseRows
   end
 end;
 

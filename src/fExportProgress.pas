@@ -467,16 +467,7 @@ begin   //TfrmExportProgress
       dmSqlUserData.LoadCommentCache(CommentCache);
 
     if AutoBackup or (not dmData.IsFilter) then
-    begin
-      dmData.Q.Close;
-      if ExAscTime then
-        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExportAsc
-      else
-        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExport;
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open;
-      Source := dmData.Q
-    end
+      Source := dmSqlImpExp.OpenQsosForExportRows(ExAscTime)
     else
       Source := dmData.qCQRLOG;
 
@@ -571,9 +562,7 @@ begin   //TfrmExportProgress
       end
      finally
        Source.EnableControls;
-       dmData.Q.Close;
-       if dmData.trQ.Active then
-         dmData.trQ.Rollback
+       dmSqlImpExp.CloseRows
      end;
   finally
     CloseFile(f);
@@ -1252,16 +1241,7 @@ begin
   dmSqlUserData.PrepareProfileExport;
 
   if not dmData.IsFilter then
-  begin
-    dmData.Q.Close;
-    if ExAscTime then
-      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExportAsc
-    else
-      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExport;
-    dmData.trQ.StartTransaction;
-    dmData.Q.Open;
-    Source := dmData.Q
-  end
+    Source := dmSqlImpExp.OpenQsosForExportRows(ExAscTime)
   else
     Source := dmData.qCQRLOG;
 
@@ -1364,9 +1344,7 @@ begin
   finally
     CloseFile(f);
     Source.EnableControls;
-    dmData.Q.Close;
-    if dmData.trQ.Active then
-      dmData.trQ.Rollback;
+    dmSqlImpExp.CloseRows;
     ShowMessage('Export complete.'#13'File: ' + FileName);
     Close
   end
