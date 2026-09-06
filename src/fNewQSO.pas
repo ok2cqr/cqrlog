@@ -6297,8 +6297,14 @@ begin
         dbgrdQSOBefore.Columns[i].Title.Font.Name := fQsoGr;
         dbgrdQSOBefore.Columns[i].Title.Font.Size := fqSize
       end
-    end
+    end;
 
+    if dmData.DebugLevel >= 1 then
+      for i := 0 to dbgrdQSOBefore.Columns.Count-1 do
+        Writeln('ShowFields column ', i, ': FieldName=', QuotedStr(dbgrdQSOBefore.Columns[i].FieldName),
+                ' Title=', QuotedStr(dbgrdQSOBefore.Columns[i].Title.Caption),
+                ' Field=', BoolToStr(dbgrdQSOBefore.Columns[i].Field <> nil, 'set', 'nil'),
+                ' Visible=', dbgrdQSOBefore.Columns[i].Visible)
   finally
     dbgrdQSOBefore.DataSource.DataSet.EnableControls
   end

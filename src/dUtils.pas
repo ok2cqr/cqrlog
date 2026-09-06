@@ -562,6 +562,8 @@ begin
         l.Clear;
         cqrini.ReadSection(Section, l, cqrini.LocalOnly('WindowSize'));
         l.Text := Trim(l.Text);
+        if dmData.DebugLevel >= 1 then
+          Writeln('LoadForm ', Section, ': ', Grid.Columns.Count, ' columns before, keys=', QuotedStr(l.CommaText));
         if l.Text = '' then
           exit;
         D := Grid.DataSource;
