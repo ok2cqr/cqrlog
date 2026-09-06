@@ -14,8 +14,19 @@
 // removing duplicate QSOs through tempdupes, and the QSO selections the
 // ADIF, HTML and EDI exports walk.
 //
-// Builders only.  Every caller still runs these on the cursor it always
-// used; this unit says what is asked, not who asks.
+// Two layers.  The Sql* builders return statement text and nothing else;
+// the tables that reload from files (dxcc_ref, iota_list, qslmgr) and the
+// LoTW/eQSL matching keep running them on their own cursors and threads.
+// Above the builders sit the operations for what used to run on dmData.Q:
+// the duplicate check of the ADIF import as a value, the export walks
+// and the DXCC rebuild as a lent row cursor, and the writes.
+//
+// Three cursors.  FRows is the one lent out (OpenXxxRows ... CloseRows);
+// FQ serves scalars and writes that commit on their own; FBatch holds a
+// batch -- several writes in one transaction the caller ends with
+// CommitBatch or RollbackBatch -- so that a scalar asked meanwhile cannot
+// roll the batch back by preparing on top of it.  The DXCC rebuild, the
+// duplicate removal and the club import are batches, as they were on trQ.
 
 unit dSqlImpExp;
 
@@ -24,11 +35,59 @@ unit dSqlImpExp;
 interface
 
 uses
-  Classes, SysUtils, LResources;
+  Classes, SysUtils, LResources, sqldb, db, uSqlCursor;
 
 type
   TdmSqlImpExp = class(TDataModule)
+    procedure DataModuleCreate(Sender : TObject);
+  private
+    FQ     : TSqlCursor;   // scalars and writes that commit on their own
+    FRows  : TSqlCursor;   // lent out by the Open...Rows operations
+    FBatch : TSqlCursor;   // several writes in one transaction the caller ends
+    function OpenRows(const Sql : String) : TDataSet;
   public
+    // Wired from TdmData once MainCon exists -- this module is not one of
+    // dData's components, so its bulk DataBase assignment does not reach it.
+    procedure AttachTo(Connection : TSQLConnection);
+
+    // ADIF import (fAdifImport): is this QSO in the log already
+    function ImportedQsoExists(const QsoDate, TimeOn, Call, Band, Mode : String) : Boolean;
+
+    // DXCC rebuild over the whole log (fImportProgress.RegenerateDXCCStat):
+    // the rows are lent, the fixes are one batch
+    function  OpenQsosForDxccRebuildRows : TDataSet;
+    procedure ClearQsoDxcc(const Id : Integer);
+    procedure SetQsoDxcc(const Adif : Integer; const Waz, Itu, Cont : String; const Id : Integer);
+
+    // QSL managers: one QSO's qsl_via, committed on its own
+    procedure SetQslVia(const QslVia : String; const Id : Integer);
+
+    // duplicate QSOs: the temporary table comes and goes on its own, the
+    // three moves between the tables are one batch
+    procedure CreateDupesTable;
+    procedure CollectUniqueQsos;
+    procedure DeleteAllQsos;
+    procedure RestoreUniqueQsos;
+    procedure DropDupesTable;
+
+    // club membership: the clear and the inserts are one batch
+    procedure ClearClubTable(const TableName : String);
+    procedure InsertClubMember(const TableName, ClubNr, ClubCall, FromDate, ToDate : String);
+
+    // The batch is the writes marked so above, in one transaction; the
+    // caller ends it with one of these.
+    procedure CommitBatch;
+    procedure RollbackBatch;
+
+    // export walks (fExportProgress, fEDIExport, fSOTAExport)
+    function OpenQsosForExportRows(const Ascending : Boolean) : TDataSet;
+    function OpenQsosByDateRows : TDataSet;
+    function OpenFilteredQsosByDateRows(const GridSql : String) : TDataSet;
+
+    // Every Open...Rows above lends the same cursor; give it back before
+    // the next row pass.
+    procedure CloseRows;
+
     // DXCC and IOTA tables (fImportProgress.ImportDXCCTables)
     function SqlClearDxccRef : String;
     function SqlInsertDxccRef(const Pref, CountryName, Cont, Utc, Lat, Longit, Itu, Waz : String; const Adif : Integer) : String;
@@ -80,6 +139,154 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure TdmSqlImpExp.DataModuleCreate(Sender : TObject);
+begin
+  FQ     := TSqlCursor.Create(Self);
+  FRows  := TSqlCursor.Create(Self);
+  FBatch := TSqlCursor.Create(Self)
+end;
+
+procedure TdmSqlImpExp.AttachTo(Connection : TSQLConnection);
+begin
+  FQ.AttachTo(Connection);
+  FRows.AttachTo(Connection);
+  FBatch.AttachTo(Connection)
+end;
+
+function TdmSqlImpExp.OpenRows(const Sql : String) : TDataSet;
+begin
+  FRows.Prepare(Sql);
+  FRows.Open;
+  Result := FRows.Query
+end;
+
+procedure TdmSqlImpExp.CloseRows;
+begin
+  FRows.Release
+end;
+
+procedure TdmSqlImpExp.CommitBatch;
+begin
+  FBatch.Commit;
+  FBatch.Release
+end;
+
+procedure TdmSqlImpExp.RollbackBatch;
+begin
+  FBatch.Release
+end;
+
+{ ADIF import }
+
+function TdmSqlImpExp.ImportedQsoExists(const QsoDate, TimeOn, Call, Band, Mode : String) : Boolean;
+begin
+  FQ.Prepare(SqlQsoExists(QsoDate, TimeOn, Call, Band, Mode));
+  try
+    FQ.Open;
+    Result := FQ.Query.Fields[0].AsInteger > 0
+  finally
+    FQ.Release
+  end
+end;
+
+{ DXCC rebuild }
+
+function TdmSqlImpExp.OpenQsosForDxccRebuildRows : TDataSet;
+begin
+  Result := OpenRows(SqlQsosForDxccRebuild)
+end;
+
+procedure TdmSqlImpExp.ClearQsoDxcc(const Id : Integer);
+begin
+  FBatch.PrepareNext(SqlClearQsoDxcc(Id));
+  FBatch.Exec
+end;
+
+procedure TdmSqlImpExp.SetQsoDxcc(const Adif : Integer; const Waz, Itu, Cont : String; const Id : Integer);
+begin
+  FBatch.PrepareNext(SqlSetQsoDxcc(Adif, Waz, Itu, Cont, Id));
+  FBatch.Exec
+end;
+
+{ QSL managers }
+
+procedure TdmSqlImpExp.SetQslVia(const QslVia : String; const Id : Integer);
+begin
+  FQ.Prepare(SqlSetQslVia(QslVia, Id));
+  FQ.ExecAndCommit
+end;
+
+{ duplicate QSOs }
+
+procedure TdmSqlImpExp.CreateDupesTable;
+begin
+  FQ.Prepare(SqlCreateDupesTable);
+  FQ.ExecAndCommit
+end;
+
+procedure TdmSqlImpExp.CollectUniqueQsos;
+begin
+  FBatch.PrepareNext(SqlCollectUniqueQsos);
+  FBatch.Exec
+end;
+
+procedure TdmSqlImpExp.DeleteAllQsos;
+begin
+  FBatch.PrepareNext(SqlDeleteAllQsos);
+  FBatch.Exec
+end;
+
+procedure TdmSqlImpExp.RestoreUniqueQsos;
+begin
+  FBatch.PrepareNext(SqlRestoreUniqueQsos);
+  FBatch.Exec
+end;
+
+procedure TdmSqlImpExp.DropDupesTable;
+begin
+  FQ.Prepare(SqlDropDupesTable);
+  FQ.ExecAndCommit
+end;
+
+{ club membership }
+
+procedure TdmSqlImpExp.ClearClubTable(const TableName : String);
+begin
+  FBatch.PrepareNext(SqlClearClubTable(TableName));
+  FBatch.Exec
+end;
+
+procedure TdmSqlImpExp.InsertClubMember(const TableName, ClubNr, ClubCall, FromDate, ToDate : String);
+begin
+  FBatch.PrepareNext(SqlInsertClubMemberParams(TableName));
+  FBatch.Query.Prepare;
+  FBatch.Query.Params[0].AsString := ClubNr;
+  FBatch.Query.Params[1].AsString := ClubCall;
+  FBatch.Query.Params[2].AsString := FromDate;
+  FBatch.Query.Params[3].AsString := ToDate;
+  FBatch.Exec
+end;
+
+{ export walks }
+
+function TdmSqlImpExp.OpenQsosForExportRows(const Ascending : Boolean) : TDataSet;
+begin
+  if Ascending then
+    Result := OpenRows(SqlQsosForExportAsc)
+  else
+    Result := OpenRows(SqlQsosForExport)
+end;
+
+function TdmSqlImpExp.OpenQsosByDateRows : TDataSet;
+begin
+  Result := OpenRows(SqlQsosByDateForExport)
+end;
+
+function TdmSqlImpExp.OpenFilteredQsosByDateRows(const GridSql : String) : TDataSet;
+begin
+  Result := OpenRows(SqlFilteredQsosByDate(GridSql))
+end;
 
 { DXCC and IOTA tables }
 

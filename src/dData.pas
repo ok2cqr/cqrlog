@@ -343,7 +343,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlQso, dSqlSchema;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlUpload, dSqlQsl, dSqlRef, dSqlStat, dSqlImpExp, dSqlQso, dSqlSchema;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -1172,10 +1172,11 @@ begin
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
 
-  //dSqlUserData and dSqlStat run on their own cursors and are not our
-  //components, so the loop above does not reach them
+  //dSqlUserData, dSqlStat and dSqlImpExp run on their own cursors and are
+  //not our components, so the loop above does not reach them
   dmSqlUserData.AttachTo(MainCon);
   dmSqlStat.AttachTo(MainCon);
+  dmSqlImpExp.AttachTo(MainCon);
 
   //special connection for band map thread
   BandMapCon.Transaction    := trBandMapFil;
