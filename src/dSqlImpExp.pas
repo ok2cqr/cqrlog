@@ -36,10 +36,8 @@ type
     function SqlClearIotaList : String;
     function SqlInsertIota(const IotaNr, IslandName, DxccRef : String) : String;
     function SqlInsertIotaWithPrefix(const IotaNr, IslandName, DxccRef, Pref : String) : String;
-    function SqlDxccRefAfterImport : String;
 
     // DXCC rebuild over the whole log
-    function SqlQsoCount : String;
     function SqlQsosForDxccRebuild : String;
     function SqlClearQsoDxcc(const Id : Integer) : String;
     function SqlSetQsoDxcc(const Adif : Integer; const Waz, Itu, Cont : String; const Id : Integer) : String;
@@ -70,12 +68,9 @@ type
     function SqlInsertImportedQso : String;
 
     // export
-    function SqlQsosForAdifExportAsc : String;
-    function SqlQsosForAdifExport : String;
-    function SqlQsosForHtmlExportAsc : String;
-    function SqlQsosForHtmlExport : String;
-    function SqlQsosForEdiExport : String;
-    function SqlQsosForSotaExport : String;
+    function SqlQsosForExportAsc : String;
+    function SqlQsosForExport : String;
+    function SqlQsosByDateForExport : String;
   end;
 
 var
@@ -136,21 +131,7 @@ begin
             + ',' + QuotedStr(Pref) + ')'
 end;
 
-// Same statement as dSqlRef.SqlDxccRefByAdifOrder; fImportProgress reopens
-// dDXCC's cursor with it once the tables are reloaded.  Kept separate so
-// this extraction leaves the SQL inventory (tools/sql-inventory) untouched;
-// the merge pass collapses them.
-function TdmSqlImpExp.SqlDxccRefAfterImport : String;
-begin
-  Result := 'SELECT * FROM cqrlog_common.dxcc_ref ORDER BY adif'
-end;
-
 { DXCC rebuild }
-
-function TdmSqlImpExp.SqlQsoCount : String;
-begin
-  Result := 'SELECT COUNT(*) FROM cqrlog_main'
-end;
 
 function TdmSqlImpExp.SqlQsosForDxccRebuild : String;
 begin
@@ -278,37 +259,17 @@ end;
 
 { export }
 
-function TdmSqlImpExp.SqlQsosForAdifExportAsc : String;
+function TdmSqlImpExp.SqlQsosForExportAsc : String;
 begin
   Result := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
 end;
 
-function TdmSqlImpExp.SqlQsosForAdifExport : String;
+function TdmSqlImpExp.SqlQsosForExport : String;
 begin
   Result := 'SELECT * FROM view_cqrlog_main_by_qsodate'
 end;
 
-// Same two statements as the ADIF pair, opened by ExportHTML.  Kept
-// separate -- see the note on SqlDxccRefAfterImport.
-function TdmSqlImpExp.SqlQsosForHtmlExportAsc : String;
-begin
-  Result := 'SELECT * FROM view_cqrlog_main_by_qsodate_asc'
-end;
-
-function TdmSqlImpExp.SqlQsosForHtmlExport : String;
-begin
-  Result := 'SELECT * FROM view_cqrlog_main_by_qsodate'
-end;
-
-function TdmSqlImpExp.SqlQsosForEdiExport : String;
-begin
-  Result := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
-            'from view_cqrlog_main_by_qsodate order by qsodate,time_on'
-end;
-
-// Same statement as SqlQsosForEdiExport.  Kept separate -- see the note on
-// SqlDxccRefAfterImport.
-function TdmSqlImpExp.SqlQsosForSotaExport : String;
+function TdmSqlImpExp.SqlQsosByDateForExport : String;
 begin
   Result := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
             'from view_cqrlog_main_by_qsodate order by qsodate,time_on'

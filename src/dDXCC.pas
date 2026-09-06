@@ -107,7 +107,7 @@ begin
     if tmp <> '' then
       Q.SQL.Text := dmSqlStat.SqlDxccCountExcluding(tmp)
     else
-      Q.SQL.Text := dmSqlStat.SqlDxccCountNoDeletedList
+      Q.SQL.Text := dmSqlStat.SqlDxccCount
   end;
 
 

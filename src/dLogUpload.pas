@@ -331,12 +331,12 @@ begin
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL;
 
-    Q.SQL.Text := dmSqlUpload.SqlLastLogChangeIdForLog;
+    Q.SQL.Text := dmSqlUpload.SqlLastLogChangeId;
     Q.Open;
     max := Q.Fields[0].AsInteger;
 
     Q.Close;
-    Q.SQL.Text := dmSqlUpload.SqlSetAllUploadStatusForLog(max);
+    Q.SQL.Text := dmSqlUpload.SqlSetAllUploadStatus(max);
     if dmData.DebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.ExecSQL
   except
@@ -387,7 +387,7 @@ begin
 
   trQ1.StartTransaction;
   try
-    Q1.SQL.Text := dmSqlUpload.SqlQsoForAdif(id_cqrlog_main);
+    Q1.SQL.Text := dmSqlUpload.SqlQsoForUpload(id_cqrlog_main);
     Q1.Open;
 
     if Q1.Fields[0].IsNull then
@@ -590,7 +590,7 @@ begin
 
   trQ1.StartTransaction;
   try
-    Q1.SQL.Text := dmSqlUpload.SqlQsoForKeyValue(id_cqrlog_main);
+    Q1.SQL.Text := dmSqlUpload.SqlQsoForUpload(id_cqrlog_main);
     Q1.Open;
 
     if Q1.Fields[0].IsNull then
@@ -711,7 +711,7 @@ begin
   Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try
-    Q2.SQL.Text := dmSqlUpload.SqlLogChangeForInsert(id_log_changes);
+    Q2.SQL.Text := dmSqlUpload.SqlLogChange(id_log_changes);
     Q2.Open;
     if Q2.Fields[0].IsNull then exit; //this shouldn't happen
 
@@ -781,7 +781,7 @@ begin
   Q2.Close;
   if trQ2.Active then trQ2.RollBack;
   try
-    Q2.SQL.Text := dmSqlUpload.SqlLogChangeForDelete(id_log_changes);
+    Q2.SQL.Text := dmSqlUpload.SqlLogChange(id_log_changes);
     Q2.Open;
     if Q2.Fields[0].IsNull then exit; //this shouldn't happen
 

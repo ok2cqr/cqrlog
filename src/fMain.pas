@@ -1854,9 +1854,9 @@ begin
     if counted < cDB_LIMIT then
     begin
       if dmData.SortType =  stDate then
-        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDateAfterUp(cDB_LIMIT)
+        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDate(cDB_LIMIT)
       else
-        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByCallAfterUp(cDB_LIMIT)
+        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByCall(cDB_LIMIT)
     end
     else begin
       if dmData.SortType =  stDate then
@@ -1905,9 +1905,9 @@ begin
     if counted < cDB_LIMIT then
     begin
       if dmData.SortType =  stDate then
-        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlLastPageByDateAfterDown(cDB_LIMIT)
+        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlLastPageByDate(cDB_LIMIT)
       else
-        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlLastPageByCallAfterDown(cDB_LIMIT)
+        dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlLastPageByCall(cDB_LIMIT)
     end
     else begin
       if dmData.SortType =  stDate then
@@ -1975,7 +1975,7 @@ begin
   try
     dmData.qCQRLOG.Close;
     dmData.trCQRLOG.Rollback;
-    dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDateOnRefresh(cDB_LIMIT);
+    dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDate(cDB_LIMIT);
     dmData.trCQRLOG.StartTransaction;
     dmData.qCQRLOG.Open
   finally

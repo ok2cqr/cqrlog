@@ -63,7 +63,7 @@ begin
   dmData.qProfiles.Close;
 
   dbgrdProfiles.DataSource  := dmData.dsrProfiles;
-  dmData.qProfiles.SQL.Text := dmSqlUserData.SqlProfileGrid;
+  dmData.qProfiles.SQL.Text := dmSqlUserData.SqlAllProfiles;
   if dmData.trProfiles.Active then
     dmData.trProfiles.Rollback;
   dmData.trProfiles.StartTransaction;

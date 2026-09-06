@@ -934,7 +934,7 @@ begin
 
   band := dmDXCluster.GetBandFromFreq(freq, True);
   dmData.qRbnMon.Close;
-  dmData.qRbnMon.SQL.Text := dmSqlRef.SqlBandForRbn(band);
+  dmData.qRbnMon.SQL.Text := dmSqlRef.SqlBand(band);
   if dmData.DebugLevel>=1 then Writeln(dmData.qRbnMon.SQL.Text);
   if dmData.trRbnMon.Active then
     dmData.trRbnMon.Rollback;

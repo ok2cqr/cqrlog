@@ -68,7 +68,6 @@ type
 
     // profiles
     function SqlAllProfiles : String;
-    function SqlProfileGrid : String;
     function SqlVisibleProfiles : String;
     function SqlProfile(const Nr : Integer) : String;
     function SqlProfileLocator(const Nr : Integer) : String;
@@ -515,14 +514,6 @@ end;
 { profiles }
 
 function TdmSqlUserData.SqlAllProfiles : String;
-begin
-  Result := 'SELECT * FROM profiles ORDER BY nr'
-end;
-
-// Same statement as SqlAllProfiles.  Kept separate so this extraction leaves
-// the SQL inventory (tools/sql-inventory) untouched; merging the two is a
-// follow-up commit of its own.
-function TdmSqlUserData.SqlProfileGrid : String;
 begin
   Result := 'SELECT * FROM profiles ORDER BY nr'
 end;

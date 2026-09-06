@@ -38,9 +38,6 @@ type
     function SqlEarlierQsoByCall(const FilterWhere, Call : String) : String;
     function SqlEarlierQsoByDxcc(const FilterWhere : String; const Adif : Integer) : String;
     function SqlSetQslS(const QslS : String; const Id : Integer) : String;
-    function SqlSetQslS2(const QslS : String; const Id : Integer) : String;
-    function SqlSetQslS3(const QslS : String; const Id : Integer) : String;
-    function SqlSetQslS4(const QslS : String; const Id : Integer) : String;
     function SqlMarkQslSent(const QslS, Date : String; const Id : Integer) : String;
     function SqlMarkQslReceived(const Date : String; const Id : Integer) : String;
     function SqlMarkQslSentFromLabels(const QslS, Date : String; const Id : Integer) : String;
@@ -49,7 +46,6 @@ type
     function SqlQsosForLotwAll : String;
     function SqlQsosForLotwNotExported : String;
     function SqlMarkLotwSent(const Date, Id : String) : String;
-    function SqlMarkLotwSentAfterExport(const Date, Id : String) : String;
     function SqlMarkAllLotwSent(const Date : String) : String;
     function SqlClearLotwSent(const Id : Integer) : String;
 
@@ -68,7 +64,6 @@ type
     // qslmgr
     function SqlQslManager(const Call, Date : String) : String;
     function SqlQslManagerList : String;
-    function SqlQslManagerListForNewQso : String;
   end;
 
 var
@@ -126,26 +121,9 @@ begin
   Result := SqlEarlierQsoBase(FilterWhere) + ' and adif=' + IntToStr(Adif)+')'
 end;
 
-// One statement, four copies -- one per branch of TfrmMarkQSL.btnOKClick
-// (first QSO, first band, first band/mode, first band/mode with QSL
-// received).  Kept separate so this extraction leaves the SQL inventory
-// (tools/sql-inventory) untouched; the merge pass collapses them.
+// The four branches of TfrmMarkQSL.btnOKClick (first QSO, first band,
+// first band/mode, first band/mode with QSL received) all mark with this.
 function TdmSqlQsl.SqlSetQslS(const QslS : String; const Id : Integer) : String;
-begin
-  Result := 'update cqrlog_main set qsl_s=' + QuotedStr(QslS) + ' where id_cqrlog_main = ' + IntToStr(Id)
-end;
-
-function TdmSqlQsl.SqlSetQslS2(const QslS : String; const Id : Integer) : String;
-begin
-  Result := 'update cqrlog_main set qsl_s=' + QuotedStr(QslS) + ' where id_cqrlog_main = ' + IntToStr(Id)
-end;
-
-function TdmSqlQsl.SqlSetQslS3(const QslS : String; const Id : Integer) : String;
-begin
-  Result := 'update cqrlog_main set qsl_s=' + QuotedStr(QslS) + ' where id_cqrlog_main = ' + IntToStr(Id)
-end;
-
-function TdmSqlQsl.SqlSetQslS4(const QslS : String; const Id : Integer) : String;
 begin
   Result := 'update cqrlog_main set qsl_s=' + QuotedStr(QslS) + ' where id_cqrlog_main = ' + IntToStr(Id)
 end;
@@ -183,15 +161,9 @@ begin
   Result := 'select * from cqrlog_main where lotw_qslsdate is null'
 end;
 
+// Marks one QSO as uploaded to LoTW; fLoTWExport runs it per QSO after a
+// file export and after a web upload.
 function TdmSqlQsl.SqlMarkLotwSent(const Date, Id : String) : String;
-begin
-  Result := 'update cqrlog_main set lotw_qsls = ' + QuotedStr('Y') +
-            ',lotw_qslsdate = ' + QuotedStr(Date) + 'where id_cqrlog_main = '+ Id
-end;
-
-// Same update as SqlMarkLotwSent; the tail differs by one space, which the
-// inventory does not see.  Kept separate -- see the note on SqlSetQslS.
-function TdmSqlQsl.SqlMarkLotwSentAfterExport(const Date, Id : String) : String;
 begin
   Result := 'update cqrlog_main set lotw_qsls = ' + QuotedStr('Y') +
             ',lotw_qslsdate = ' + QuotedStr(Date) + ' where id_cqrlog_main = '+ Id
@@ -278,13 +250,6 @@ begin
 end;
 
 function TdmSqlQsl.SqlQslManagerList : String;
-begin
-  Result := 'select callsign,qsl_via,fromdate from cqrlog_common.qslmgr order by callsign,fromDate'
-end;
-
-// Same statement as SqlQslManagerList (fMain opens the list from the menu,
-// fNewQSO from its button).  Kept separate -- see the note on SqlSetQslS.
-function TdmSqlQsl.SqlQslManagerListForNewQso : String;
 begin
   Result := 'select callsign,qsl_via,fromdate from cqrlog_common.qslmgr order by callsign,fromDate'
 end;

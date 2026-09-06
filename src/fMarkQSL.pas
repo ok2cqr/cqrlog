@@ -120,7 +120,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS4(cmbQSLS.Text, id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;
@@ -156,7 +156,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS3(cmbQSLS.Text, id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;
@@ -195,7 +195,7 @@ begin
       begin
         dmData.Q.Close;
         dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS2(cmbQSLS.Text, id);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
         if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
         dmData.trQ.StartTransaction;
         dmData.Q.ExecSQL;

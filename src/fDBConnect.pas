@@ -499,7 +499,7 @@ begin
       dmData.SaveConfigFile;
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := dmSqlSchema.SqlConfigFileForExport(db);
+    dmData.Q.SQL.Text := dmSqlSchema.SqlConfigFile(db);
     dmData.trQ.StartTransaction;
     l := TStringList.Create;
     try
@@ -531,7 +531,7 @@ begin
         db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
         dmData.Q.Close;
         if dmData.trQ.Active then dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlSchema.SqlSetConfigFileFromImport(db);
+        dmData.Q.SQL.Text := dmSqlSchema.SqlSetConfigFile(db);
         dmData.trQ.StartTransaction;
         l := TStringList.Create;
         try try

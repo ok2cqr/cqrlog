@@ -4280,7 +4280,7 @@ procedure TfrmNewQSO.btnQSLMgrClick(Sender: TObject);
 begin
   frmQSLMgr := TfrmQSLMgr.Create(self);
   try
-    dmData.qQSLMgr.SQL.Text := dmSqlQsl.SqlQslManagerListForNewQso;
+    dmData.qQSLMgr.SQL.Text := dmSqlQsl.SqlQslManagerList;
     if dmData.trQSLMgr.Active then
       dmData.trQSLMgr.Rollback;
     dmData.trQSLMgr.StartTransaction;
@@ -5534,7 +5534,7 @@ begin
     if cqrini.ReadBool('NewQSO','AllVariants',False) then
       dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlQsosWithIdCall(dmUtils.GetIDCall(edtCall.Text))
     else
-      dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlQsosWithCallForEntry(edtCall.Text);
+      dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlQsosWithCall(edtCall.Text);
 
     if dmData.DebugLevel >=1 then Writeln(dmData.qQSOBefore.SQL.Text);
     if dmData.trQSOBefore.Active then

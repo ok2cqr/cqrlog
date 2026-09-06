@@ -185,7 +185,7 @@ var
       dmData.trQ.Commit
     end
     else begin
-      dmData.Q.SQL.Text := dmSqlQso.SqlSetQsoFieldsGroup(sql, idx);
+      dmData.Q.SQL.Text := dmSqlQso.SqlSetQsoFields(sql, idx);
       if dmData.DebugLevel>=1 then
                        Writeln(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;

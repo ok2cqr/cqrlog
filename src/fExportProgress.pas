@@ -470,9 +470,9 @@ begin   //TfrmExportProgress
     begin
       dmData.Q.Close;
       if ExAscTime then
-        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForAdifExportAsc
+        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExportAsc
       else
-        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForAdifExport;
+        dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExport;
       dmData.trQ.StartTransaction;
       dmData.Q.Open;
       Source := dmData.Q
@@ -1255,9 +1255,9 @@ begin
   begin
     dmData.Q.Close;
     if ExAscTime then
-      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForHtmlExportAsc
+      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExportAsc
     else
-      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForHtmlExport;
+      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForExport;
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
     Source := dmData.Q

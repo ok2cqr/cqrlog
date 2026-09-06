@@ -14,7 +14,7 @@
 // probes, and the version-by-version migrations of UpgradeMainDatabase and
 // UpgradeCommonDatabase.
 //
-// Builders only, one per call site (see dSqlStat for why).  The DDL that
+// Builders only.  The DDL that
 // creates a fresh database still lives in dData.lfm (scCommon, scLog,
 // scViews) and the CREATE TABLE blocks the upgrades add line by line stay
 // as they are -- both are the plan's step 2.  The database name comes in
@@ -34,11 +34,10 @@ type
   public
     // cqrlog_common and the log list
     function SqlCommonDbExists : String;
-    function SqlInsertCommonVersion(const Nr : Integer) : String;
+    function SqlInsertVersion(const Nr : Integer) : String;
     function SqlCommonVersion : String;
     function SqlSetCommonVersion(const Nr : Integer) : String;
     function SqlLogList : String;
-    function SqlLogListRefresh : String;
     function SqlLogNumbers : String;
     function SqlLogExists(const Nr : Integer) : String;
     function SqlInsertLog(const Nr : Integer; const LogName : String) : String;
@@ -48,14 +47,7 @@ type
     // one log database
     function SqlCreateLogDatabase(const Db : String) : String;
     function SqlDropLogDatabase(const Db : String) : String;
-    function SqlUseDbSemi(const Db : String) : String;
     function SqlUseDb(const Db : String) : String;
-    function SqlUseDbForCluster(const Db : String) : String;
-    function SqlUseDbForUpload(const Db : String) : String;
-    function SqlUseDbForBandMap(const Db : String) : String;
-    function SqlUseDbForRbn(const Db : String) : String;
-    function SqlUseDbForTruncate(const Db : String) : String;
-    function SqlInsertLogVersion(const Nr : Integer) : String;
     function SqlLogVersion : String;
     function SqlSetLogVersion(const Nr : Integer) : String;
 
@@ -65,9 +57,7 @@ type
     function SqlInsertConfig(const Db : String) : String;
     function SqlUpdateConfig(const Db : String) : String;
     function SqlConfigFile(const Db : String) : String;
-    function SqlConfigFileForExport(const Db : String) : String;
     function SqlSetConfigFile(const Db : String) : String;
-    function SqlSetConfigFileFromImport(const Db : String) : String;
 
     // clearing a log (TruncateTables)
     function SqlTruncateClub1 : String;
@@ -145,7 +135,6 @@ type
     function SqlAddDok : String;
     function SqlAddOperator : String;
     function SqlDropLogChangesFk : String;
-    function SqlLastLogChangeIdForUpgrade : String;
     function SqlSeedUdpLogStatus(const Max : Integer) : String;
     function SqlCallDateBandIndexExists : String;
     function SqlCreateCallDateBandIndex : String;
@@ -172,7 +161,7 @@ begin
             QuotedStr('cqrlog_common')
 end;
 
-function TdmSqlSchema.SqlInsertCommonVersion(const Nr : Integer) : String;
+function TdmSqlSchema.SqlInsertVersion(const Nr : Integer) : String;
 begin
   Result := 'insert into db_version (nr) values('+IntToStr(Nr)+')'
 end;
@@ -188,14 +177,6 @@ begin
 end;
 
 function TdmSqlSchema.SqlLogList : String;
-begin
-  Result := 'SELECT log_nr,log_name FROM cqrlog_common.log_list order by log_nr'
-end;
-
-// Same statement as SqlLogList, opened again by RefreshLogList.  Kept
-// separate so this extraction leaves the SQL inventory (tools/sql-inventory)
-// untouched; the merge pass collapses them.
-function TdmSqlSchema.SqlLogListRefresh : String;
 begin
   Result := 'SELECT log_nr,log_name FROM cqrlog_common.log_list order by log_nr'
 end;
@@ -243,49 +224,9 @@ begin
   Result := 'DROP DATABASE '+Db
 end;
 
-// "use" is issued once per cursor that has its own connection state:
-// OpenDatabase switches five of them, TruncateTables its local one.  Six
-// copies of one statement, kept separate -- see the note on SqlLogListRefresh.
-function TdmSqlSchema.SqlUseDbSemi(const Db : String) : String;
-begin
-  Result := 'use '+Db+';'
-end;
-
 function TdmSqlSchema.SqlUseDb(const Db : String) : String;
 begin
   Result := 'use ' + Db
-end;
-
-function TdmSqlSchema.SqlUseDbForCluster(const Db : String) : String;
-begin
-  Result := 'use ' + Db
-end;
-
-function TdmSqlSchema.SqlUseDbForUpload(const Db : String) : String;
-begin
-  Result := 'use ' + Db
-end;
-
-function TdmSqlSchema.SqlUseDbForBandMap(const Db : String) : String;
-begin
-  Result := 'use ' + Db
-end;
-
-function TdmSqlSchema.SqlUseDbForRbn(const Db : String) : String;
-begin
-  Result := 'use ' + Db
-end;
-
-function TdmSqlSchema.SqlUseDbForTruncate(const Db : String) : String;
-begin
-  Result := 'use '+ Db
-end;
-
-// Same statement as SqlInsertCommonVersion, run on the log's own db_version.
-// Kept separate -- see the note on SqlLogListRefresh.
-function TdmSqlSchema.SqlInsertLogVersion(const Nr : Integer) : String;
-begin
-  Result := 'insert into db_version (nr) values('+IntToStr(Nr)+')'
 end;
 
 function TdmSqlSchema.SqlLogVersion : String;
@@ -327,17 +268,7 @@ begin
   Result := 'select config_file from '+Db+'.cqrlog_config'
 end;
 
-function TdmSqlSchema.SqlConfigFileForExport(const Db : String) : String;
-begin
-  Result := 'select config_file from '+Db+'.cqrlog_config'
-end;
-
 function TdmSqlSchema.SqlSetConfigFile(const Db : String) : String;
-begin
-  Result := 'update '+Db+'.cqrlog_config set config_file =:config_file'
-end;
-
-function TdmSqlSchema.SqlSetConfigFileFromImport(const Db : String) : String;
 begin
   Result := 'update '+Db+'.cqrlog_config set config_file =:config_file'
 end;
@@ -711,13 +642,6 @@ end;
 function TdmSqlSchema.SqlDropLogChangesFk : String;
 begin
   Result := 'ALTER TABLE log_changes DROP FOREIGN KEY log_changes_ibfk_1'
-end;
-
-// Same statement as dSqlUpload.SqlLastLogChangeId.  Kept separate -- see
-// the note on SqlLogListRefresh.
-function TdmSqlSchema.SqlLastLogChangeIdForUpgrade : String;
-begin
-  Result := 'select max(id) from log_changes'
 end;
 
 function TdmSqlSchema.SqlSeedUdpLogStatus(const Max : Integer) : String;

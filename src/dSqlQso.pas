@@ -13,7 +13,7 @@
 // probes NewQSO and the spot windows run, and the contest window's
 // scoring queries.
 //
-// Builders only, one per call site (see dSqlStat for why).  Every caller
+// Builders only.  Every caller
 // still runs these on the cursor it always used -- qCQRLOG, Q, Q1, CQ,
 // qQSOBefore, qBandMapFil, qRbnMon -- and the critical sections around
 // qBandMapFil and the DX cluster cursors are untouched.
@@ -35,17 +35,10 @@ type
     function SqlQsosByIds(const IdList : String) : String;
     function SqlLastPageByDate(const Limit : Integer) : String;
     function SqlLastPageByCall(const Limit : Integer) : String;
-    function SqlLastPageByDateAfterDown(const Limit : Integer) : String;
-    function SqlLastPageByCallAfterDown(const Limit : Integer) : String;
     function SqlFirstPageByDate(const Limit : Integer) : String;
     function SqlFirstPageByCall(const Limit : Integer) : String;
-    function SqlFirstPageByDateAfterUp(const Limit : Integer) : String;
-    function SqlFirstPageByCallAfterUp(const Limit : Integer) : String;
-    function SqlFirstPageByDateOnRefresh(const Limit : Integer) : String;
     function SqlFirstPageByDateOffset0(const Limit : Integer) : String;
-    function SqlFirstPageByDateSorted(const Limit : Integer) : String;
     function SqlFirstPageByDateAsc(const Limit : Integer) : String;
-    function SqlFirstPageByCallSorted(const Limit : Integer) : String;
     function SqlFirstQsoIdByDate : String;
     function SqlFirstQsoIdByCall : String;
     function SqlOldestQsoId : String;
@@ -93,7 +86,7 @@ type
     function SqlQsoLocators : String;
     function SqlSquareCountFiltered(const Where : String) : String;
     function SqlSquareCount : String;
-    function SqlQsoCountAll : String;
+    function SqlQsoCount : String;
     function SqlQsoAfter(const Call, Band, Mode, LastDate, LastTime : String) : String;
     function SqlQsoAfterParams : String;
 
@@ -111,7 +104,6 @@ type
     function SqlRecentQsos(const Since : String) : String;
     function SqlQsosWithCall(const Call : String) : String;
     function SqlQsosWithIdCall(const IdCall : String) : String;
-    function SqlQsosWithCallForEntry(const Call : String) : String;
     function SqlLastQsoForSpot : String;
     function SqlLastQsoDetailsForSpot : String;
 
@@ -123,7 +115,6 @@ type
 
     // group edit, edit details, callbook update
     function SqlQsoForDxccCheck(const Id : Integer) : String;
-    function SqlSetQsoFieldsGroup(const SetList : String; const Id : Integer) : String;
     function SqlSetQsoFields(const SetList : String; const Id : Integer) : String;
     function SqlLastNameForCall(const Call : String) : String;
     function SqlUpdateQsoFromCallbook(const StnName, Qth, QslVia, County, Award, State, Remarks, Iota, Waz, Itu : String; const Id : Integer) : String;
@@ -142,9 +133,7 @@ implementation
 // newest QSOs (the views order by date descending) or the callsigns from
 // A; "last page" the oldest / from Z, re-ordered so the grid reads the
 // same way.  The same select is opened from several places -- Ctrl+Home,
-// scrolling past the first row, a refresh, the sort window -- and each
-// keeps its own builder for the SQL inventory; the merge pass collapses
-// them.
+// scrolling past the first row, a refresh, the sort window.
 
 function TdmSqlQso.SqlDeleteQso(const Id : Integer) : String;
 begin
@@ -168,18 +157,6 @@ begin
   Result := 'select * from (select * from view_cqrlog_main_by_callsign order by callsign DESC LIMIT '+IntToStr(Limit)+') as foo order by callsign'
 end;
 
-function TdmSqlQso.SqlLastPageByDateAfterDown(const Limit : Integer) : String;
-begin
-  Result := 'select * from (select * from view_cqrlog_main_by_qsodate order by qsodate, time_on LIMIT '+
-            IntToStr(Limit)+') as foo order by qsodate DESC,time_on DESC'
-end;
-
-function TdmSqlQso.SqlLastPageByCallAfterDown(const Limit : Integer) : String;
-begin
-  Result := 'select * from (select * from view_cqrlog_main_by_callsign order by callsign DESC LIMIT '+
-            IntToStr(Limit)+') as foo order by callsign'
-end;
-
 function TdmSqlQso.SqlFirstPageByDate(const Limit : Integer) : String;
 begin
   Result := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(Limit)
@@ -190,39 +167,14 @@ begin
   Result := 'select * from view_cqrlog_main_by_callsign LIMIT '+IntToStr(Limit)
 end;
 
-function TdmSqlQso.SqlFirstPageByDateAfterUp(const Limit : Integer) : String;
-begin
-  Result := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(Limit)
-end;
-
-function TdmSqlQso.SqlFirstPageByCallAfterUp(const Limit : Integer) : String;
-begin
-  Result := 'select * from view_cqrlog_main_by_callsign LIMIT '+IntToStr(Limit)
-end;
-
-function TdmSqlQso.SqlFirstPageByDateOnRefresh(const Limit : Integer) : String;
-begin
-  Result := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(Limit)
-end;
-
 function TdmSqlQso.SqlFirstPageByDateOffset0(const Limit : Integer) : String;
 begin
   Result := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(Limit)+' OFFSET 0'
 end;
 
-function TdmSqlQso.SqlFirstPageByDateSorted(const Limit : Integer) : String;
-begin
-  Result := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(Limit)
-end;
-
 function TdmSqlQso.SqlFirstPageByDateAsc(const Limit : Integer) : String;
 begin
   Result := 'select * from view_cqrlog_main_by_qsodate_asc LIMIT '+IntToStr(Limit)
-end;
-
-function TdmSqlQso.SqlFirstPageByCallSorted(const Limit : Integer) : String;
-begin
-  Result := 'select * from view_cqrlog_main_by_callsign LIMIT '+IntToStr(Limit)
 end;
 
 function TdmSqlQso.SqlFirstQsoIdByDate : String;
@@ -499,10 +451,8 @@ begin
   Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" '
 end;
 
-// Same statement as dSqlImpExp.SqlQsoCount.  Kept separate so this
-// extraction leaves the SQL inventory untouched; the merge pass collapses
-// them.
-function TdmSqlQso.SqlQsoCountAll : String;
+// GetQSOCount without a filter, and the DXCC rebuild after an import.
+function TdmSqlQso.SqlQsoCount : String;
 begin
   Result := 'SELECT COUNT(*) FROM cqrlog_main'
 end;
@@ -598,14 +548,6 @@ begin
             QuotedStr(IdCall)+' ORDER BY qsodate,time_on'
 end;
 
-// Same statement as SqlQsosWithCall, opened while the callsign is being
-// typed.  Kept separate -- see the note on SqlQsoCountAll.
-function TdmSqlQso.SqlQsosWithCallForEntry(const Call : String) : String;
-begin
-  Result := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE callsign = '+
-            QuotedStr(Call)+' ORDER BY qsodate,time_on'
-end;
-
 function TdmSqlQso.SqlLastQsoForSpot : String;
 begin
   Result := 'SELECT callsign,freq,rxfreq FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1'
@@ -660,14 +602,8 @@ begin
             'cqrlog_main where id_cqrlog_main = ' + IntToStr(Id)
 end;
 
-// SetList is the "col = value, .." list the window composes.
-function TdmSqlQso.SqlSetQsoFieldsGroup(const SetList : String; const Id : Integer) : String;
-begin
-  Result := 'update cqrlog_main set '+SetList+' where id_cqrlog_main='+IntToStr(Id)
-end;
-
-// Same shape as SqlSetQsoFieldsGroup, from the QSL-dates dialog.  Kept
-// separate -- see the note on SqlQsoCountAll.
+// SetList is the "col = value, .." list the window composes (group edit,
+// the QSL-dates dialog).
 function TdmSqlQso.SqlSetQsoFields(const SetList : String; const Id : Integer) : String;
 begin
   Result := 'update cqrlog_main set '+SetList+

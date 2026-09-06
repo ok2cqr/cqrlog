@@ -483,7 +483,7 @@ begin
       inc(nr);
       if MarkAfter and (pgLoTWExport.ActivePageIndex = 0) then
       begin
-        dmData.Q.SQL.Text := dmSqlQsl.SqlMarkLotwSentAfterExport(date, dmData.Q1.FieldByName('id_cqrlog_main').AsString);
+        dmData.Q.SQL.Text := dmSqlQsl.SqlMarkLotwSent(date, dmData.Q1.FieldByName('id_cqrlog_main').AsString);
         dmData.Q.ExecSQL
       end;
       dmData.Q1.Next

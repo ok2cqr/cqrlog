@@ -207,7 +207,7 @@ begin
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
   adif := dmDXCC.id_country(mycall,date,pfx,country,cont,itu,waz,posun,lat,long);
   dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdifForEdi(adif);
+  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdif(adif);
   dmDXCC.qDXCCRef.Open;
   if dmDXCC.qDXCCRef.RecordCount > 0 then
   begin
@@ -250,7 +250,7 @@ begin
   if dmData.trQ.Active then dmData.trQ.Rollback;
     dmData.Q.Close;
   if AllQSO then
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForEdiExport
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosByDateForExport
   else begin
     q := dmData.qCQRLOG.SQL.Text;
     if Pos('order by',LowerCase(q)) > 0 then

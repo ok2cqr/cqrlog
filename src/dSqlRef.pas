@@ -29,7 +29,6 @@ type
   public
     // dxcc_ref
     function SqlDxccRefByAdif(const Adif : Integer) : String;
-    function SqlDxccRefByAdifForEdi(const Adif : Integer) : String;
     function SqlDxccRefByPrefix(const Pfx : String) : String;
     function SqlDxccUtcOffset(const Pfx : String) : String;
     function SqlDxccRefByAdifOrder : String;
@@ -45,10 +44,8 @@ type
     // bands
     function SqlAllBands : String;
     function SqlBand(const Band : String) : String;
-    function SqlBandForRbn(const Band : String) : String;
     function SqlBandModeSegment(const Mode, Band : String) : String;
     function SqlBandByFreq(const Freq : String) : String;
-    function SqlBandByFreqForCluster(const Freq : String) : String;
     function SqlBandsByBegin : String;
     function SqlBandsOnClusterDb : String;
     function SqlBandRange(const Band : String) : String;
@@ -88,14 +85,6 @@ implementation
 { dxcc_ref }
 
 function TdmSqlRef.SqlDxccRefByAdif(const Adif : Integer) : String;
-begin
-  Result := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE adif = ' + IntToStr(Adif)
-end;
-
-// Same statement as SqlDxccRefByAdif (fNewQSO fills the QSO, fEDIExport the
-// header).  Kept separate so this extraction leaves the SQL inventory
-// (tools/sql-inventory) untouched; the merge pass collapses them.
-function TdmSqlRef.SqlDxccRefByAdifForEdi(const Adif : Integer) : String;
 begin
   Result := 'SELECT * FROM cqrlog_common.dxcc_ref WHERE adif = ' + IntToStr(Adif)
 end;
@@ -165,12 +154,6 @@ begin
     QuotedStr(Band)
 end;
 
-// Same statement as SqlBand -- see the note on SqlDxccRefByAdifForEdi.
-function TdmSqlRef.SqlBandForRbn(const Band : String) : String;
-begin
-  Result := 'SELECT * FROM cqrlog_common.bands WHERE band = ' + QuotedStr(Band)
-end;
-
 // Mode is a column name here: cw, ssb or rtty, the start of that segment.
 function TdmSqlRef.SqlBandModeSegment(const Mode, Band : String) : String;
 begin
@@ -178,14 +161,6 @@ begin
 end;
 
 function TdmSqlRef.SqlBandByFreq(const Freq : String) : String;
-begin
-  Result := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+Freq+' AND b_end >='+
-            Freq+') ORDER BY b_begin'
-end;
-
-// Same statement as SqlBandByFreq, run by dDXCluster on its own connection.
-// Kept separate -- see the note on SqlDxccRefByAdifForEdi.
-function TdmSqlRef.SqlBandByFreqForCluster(const Freq : String) : String;
 begin
   Result := 'SELECT * FROM cqrlog_common.bands where (b_begin <='+Freq+' AND b_end >='+
             Freq+') ORDER BY b_begin'

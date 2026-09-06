@@ -31,24 +31,20 @@ type
     function SqlInsertAllDoneMark : String;
     function SqlInsertLogDoneMark(const LogName : String) : String;
     function SqlLastLogChangeId : String;
-    function SqlLastLogChangeIdForLog : String;
     function SqlDeleteLogChangesBefore(const Id : Integer) : String;
-    function SqlLogChangeForInsert(const Id : Integer) : String;
-    function SqlLogChangeForDelete(const Id : Integer) : String;
+    function SqlLogChange(const Id : Integer) : String;
     function SqlLogChangesAfter(const Id : Integer) : String;
     function SqlMarkUpDeleted(const Id : Integer) : String;
 
     // upload_status
     function SqlSetAllUploadStatus(const Id : Integer) : String;
-    function SqlSetAllUploadStatusForLog(const Id : Integer) : String;
     function SqlMarkUploaded(const LogName : String; const Id : Integer) : String;
     function SqlUploadStatus(const LogName : String) : String;
     function SqlSeedLogChangesDone : String;
     function SqlSeedUploadStatus(const LogName : String) : String;
 
     // the QSO a change refers to
-    function SqlQsoForAdif(const Id : Integer) : String;
-    function SqlQsoForKeyValue(const Id : Integer) : String;
+    function SqlQsoForUpload(const Id : Integer) : String;
 
     // triggers
     function SqlDropTrigger(const TriggerName : String) : String;
@@ -81,29 +77,12 @@ begin
   Result := 'select max(id) from log_changes'
 end;
 
-// Same statement as SqlLastLogChangeId.  Kept separate so this extraction
-// leaves the SQL inventory (tools/sql-inventory) untouched; merging the two
-// is a follow-up commit of its own.
-function TdmSqlUpload.SqlLastLogChangeIdForLog : String;
-begin
-  Result := 'select max(id) from log_changes'
-end;
-
 function TdmSqlUpload.SqlDeleteLogChangesBefore(const Id : Integer) : String;
 begin
   Result := 'delete from log_changes where id < '+IntToStr(Id)
 end;
 
-function TdmSqlUpload.SqlLogChangeForInsert(const Id : Integer) : String;
-const
-  C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
-begin
-  Result := Format(C_SEL_LOG_CHANGES,[Id])
-end;
-
-// Same statement as SqlLogChangeForInsert -- see the note on
-// SqlLastLogChangeIdForLog.
-function TdmSqlUpload.SqlLogChangeForDelete(const Id : Integer) : String;
+function TdmSqlUpload.SqlLogChange(const Id : Integer) : String;
 const
   C_SEL_LOG_CHANGES = 'select * from log_changes where id = %d';
 begin
@@ -127,13 +106,6 @@ end;
 { upload_status }
 
 function TdmSqlUpload.SqlSetAllUploadStatus(const Id : Integer) : String;
-begin
-  Result := 'update upload_status set id_log_changes='+IntToStr(Id)
-end;
-
-// Same statement as SqlSetAllUploadStatus -- see the note on
-// SqlLastLogChangeIdForLog.
-function TdmSqlUpload.SqlSetAllUploadStatusForLog(const Id : Integer) : String;
 begin
   Result := 'update upload_status set id_log_changes='+IntToStr(Id)
 end;
@@ -166,13 +138,7 @@ end;
 
 { the QSO a change refers to }
 
-function TdmSqlUpload.SqlQsoForAdif(const Id : Integer) : String;
-begin
-  Result := 'select * from cqrlog_main where id_cqrlog_main = '+IntToStr(Id)
-end;
-
-// Same statement as SqlQsoForAdif -- see the note on SqlLastLogChangeIdForLog.
-function TdmSqlUpload.SqlQsoForKeyValue(const Id : Integer) : String;
+function TdmSqlUpload.SqlQsoForUpload(const Id : Integer) : String;
 begin
   Result := 'select * from cqrlog_main where id_cqrlog_main = '+IntToStr(Id)
 end;

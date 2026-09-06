@@ -369,7 +369,7 @@ begin
 
     trmQ.StartTransaction;
     mQ.Close;
-    mQ.SQL.Text := dmSqlSchema.SqlInsertCommonVersion(cDB_COMN_VER);
+    mQ.SQL.Text := dmSqlSchema.SqlInsertVersion(cDB_COMN_VER);
     mQ.ExecSQL;
     trmQ.Commit;
 
@@ -453,7 +453,7 @@ begin
   mQ.ExecSQL;
   trmQ.Commit;
 
-  mQ.SQL.Text := dmSqlSchema.SqlUseDbSemi(db);
+  mQ.SQL.Text := dmSqlSchema.SqlUseDb(db);
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   trmQ.StartTransaction;
   mQ.ExecSQL;
@@ -480,7 +480,7 @@ begin
   CreateViews;
 
   trmQ.StartTransaction;
-  mQ.SQL.Text := dmSqlSchema.SqlInsertLogVersion(cDB_MAIN_VER);
+  mQ.SQL.Text := dmSqlSchema.SqlInsertVersion(cDB_MAIN_VER);
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   mQ.ExecSQL;
   trmQ.Commit;
@@ -630,7 +630,7 @@ begin
   qLogList.Close;
   if trLogList.Active then
     trLogList.Rollback;
-  qLogList.SQL.Text := dmSqlSchema.SqlLogListRefresh;
+  qLogList.SQL.Text := dmSqlSchema.SqlLogList;
   trLogList.StartTransaction;
   qLogList.Open;
   if nr > 0 then
@@ -685,7 +685,7 @@ begin
   if dmDXCluster.trQ.Active then
     dmDXCluster.trQ.Rollback;
   dmDXCluster.Q.Close;
-  dmDXCluster.Q.SQL.Text := dmSqlSchema.SqlUseDbForCluster(fDBName);
+  dmDXCluster.Q.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
   if fDebugLevel>=1 then Writeln(dmDXCluster.Q.SQL.Text);
   dmDXCluster.trQ.StartTransaction;
   dmDXCluster.Q.ExecSQL;
@@ -693,21 +693,21 @@ begin
 
   if dmLogUpload.trQ.Active then dmLogUpload.trQ.Rollback;
   dmLogUpload.Q.Close;
-  dmLogUpload.Q.SQL.Text := dmSqlSchema.SqlUseDbForUpload(fDBName);
+  dmLogUpload.Q.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
   if fDebugLevel>=1 then Writeln(dmLogUpload.Q.SQL.Text);
   dmLogUpload.Q.ExecSQL;
   dmLogUpload.trQ.Commit;
 
   if trBandMapFil.Active then trBandMapFil.Rollback;
   qBandMapFil.Close;
-  qBandMapFil.SQL.Text := dmSqlSchema.SqlUseDbForBandMap(fDBName);
+  qBandMapFil.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
   if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
   qBandMapFil.ExecSQL;
   trBandMapFil.Commit;
 
   if trRbnMon.Active then trRbnMon.Rollback;
   qRbnMon.Close;
-  qRbnMon.SQL.Text := dmSqlSchema.SqlUseDbForRbn(fDBName);
+  qRbnMon.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
   if (fDebugLevel>=1) then Writeln(qRbnMon.SQL.Text);
   trRbnMon.StartTransaction;
   qRbnMon.ExecSQL;
@@ -2232,7 +2232,7 @@ begin
     end
   end
   else begin
-    Q.SQL.Text := dmSqlQso.SqlQsoCountAll;
+    Q.SQL.Text := dmSqlQso.SqlQsoCount;
     trQ.StartTransaction;
     try
       Q.Open;
@@ -2257,7 +2257,7 @@ begin
     lTr.DataBase := MainCon;
     lQ.Transaction := lTr;
 
-    lQ.SQL.Text := dmSqlSchema.SqlUseDbForTruncate(GetProperDBName(nr));
+    lQ.SQL.Text := dmSqlSchema.SqlUseDb(GetProperDBName(nr));
     lQ.ExecSQL;
     lTr.Commit;
 
@@ -2761,7 +2761,7 @@ begin
               if (old_version >= 8) then
               begin
                 trQ1.StartTransaction;
-                Q1.SQL.Text := dmSqlSchema.SqlLastLogChangeIdForUpgrade;
+                Q1.SQL.Text := dmSqlUpload.SqlLastLogChangeId;
                 Q1.Open;
                 max := Q1.Fields[0].AsInteger;
                 Q1.Close;
@@ -3393,7 +3393,7 @@ begin
     if DxccWithLoTW then
       qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoCfmOnBandModeIncLotw(dmData.DBName, sAdif, band, mode)
     else
-      qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoCfmOnBandMode(dmData.DBName, sAdif, band, mode);
+      qRbnMon.SQL.Text := dmSqlStat.SqlSpotQsoCfmOnBandMode(dmData.DBName, sAdif, band, mode);
     trRbnMon.StartTransaction;
     qRbnMon.Open;
     if qRbnMon.Fields[0].AsInteger > 0 then
@@ -3403,7 +3403,7 @@ begin
     end
     else begin
       qRbnMon.Close;
-      qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoOnBandMode(dmData.DBName, sAdif, band, mode);
+      qRbnMon.SQL.Text := dmSqlStat.SqlSpotQsoOnBandMode(dmData.DBName, sAdif, band, mode);
       qRbnMon.Open;
       if qRbnMon.Fields[0].AsInteger > 0 then
       begin
@@ -3412,7 +3412,7 @@ begin
       end
       else begin
         qRbnMon.Close;
-        qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoOnBand(dmData.DBName, sAdif, band);
+        qRbnMon.SQL.Text := dmSqlStat.SqlSpotQsoOnBand(dmData.DBName, sAdif, band);
         qRbnMon.Open;
         if qRbnMon.Fields[0].AsInteger > 0 then
         begin
@@ -3421,7 +3421,7 @@ begin
         end
         else begin
           qRbnMon.Close;
-          qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoWithDxcc(dmData.DBName, sAdif);
+          qRbnMon.SQL.Text := dmSqlStat.SqlSpotQsoWithDxcc(dmData.DBName, sAdif);
           qRbnMon.Open;
           if qRbnMon.Fields[0].AsInteger>0 then
           begin

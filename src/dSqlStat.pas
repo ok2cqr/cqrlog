@@ -12,13 +12,10 @@
 // the per-band grids of the DXCC, WAZ, ITU, WAC, WAS, DOK and IOTA windows,
 // the locator, county and worked-grids maps and the custom statistic.
 //
-// Builders only, and one builder per call site.  The statistics compose
-// their WHERE clauses from window state (confirmation type, mode, band,
-// deleted entities), and that composition stays in the forms; a builder
-// takes the composed condition as a string and wraps the statement around
-// it.  Several builders therefore share a body -- one per site keeps the
-// SQL inventory (tools/sql-inventory) unchanged; the merge pass collapses
-// them.
+// Builders only.  The statistics compose their WHERE clauses from window
+// state (confirmation type, mode, band, deleted entities), and that
+// composition stays in the forms; a builder takes the composed condition
+// as a string and wraps the statement around it.
 
 unit dSqlStat;
 
@@ -35,7 +32,6 @@ type
     // DXCC counts and probes (dDXCC)
     function SqlDxccCount : String;
     function SqlDxccCountExcluding(const DeletedList : String) : String;
-    function SqlDxccCountNoDeletedList : String;
     function SqlDxccCfmCount(const Where : String) : String;
     function SqlQsoCfmOnBandModeIncLotw(const Adif, Band, Mode : String) : String;
     function SqlQsoCfmOnBandMode(const Adif, Band, Mode : String) : String;
@@ -88,23 +84,19 @@ type
     function SqlDokStat(const Where : String) : String;
 
     // big square / locator window (fBigSquareStat)
-    function SqlDropSquareStatView(const TableName : String) : String;
-    function SqlCreateSquareStatView(const TableName, FilterSql : String) : String;
+    function SqlDropStatView(const TableName : String) : String;
+    function SqlCreateStatView(const TableName, FilterSql : String) : String;
     function SqlBigSquaresWorked(const TableName : String) : String;
     function SqlSquaresWorked(const TableName : String) : String;
     function SqlBigSquaresOnBand(const TableName, BandCond : String) : String;
     function SqlSquaresInBigSquare(const TableName, BigSquare, BandCond : String) : String;
     function SqlSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String) : String;
-    function SqlDropSquareStatViewAfter(const TableName : String) : String;
 
     // county window (fCountyStat)
-    function SqlDropCountyStatView(const TableName : String) : String;
-    function SqlCreateCountyStatView(const TableName, FilterSql : String) : String;
     function SqlCountiesWorked(const TableName : String) : String;
     function SqlCountiesOnBand(const TableName, BandCond : String) : String;
     function SqlCountyQsoCount(const TableName, County, BandCond : String) : String;
     function SqlCountyQsoCountCfm(const TableName, County, BandCond, CfmCond : String) : String;
-    function SqlDropCountyStatViewAfter(const TableName : String) : String;
 
     // worked grids map (fWorkedGrids)
     function SqlQsoCountIn(const LogTable : String) : String;
@@ -118,18 +110,14 @@ type
     function SqlWkdQsoCounts(const DayLimit, BandCond : String) : String;
 
     // "new one" probes for a spot, on the log's own database (dDXCluster and
-    // dData.RbnMonDXCCInfo; the same ladder as SqlQsoCfmOnBandModeIncLotw
-    // above, with the database name spelled out and one copy per window)
+    // dData.RbnMonDXCCInfo share them; the same ladder as
+    // SqlQsoCfmOnBandModeIncLotw above, with the database name spelled out)
     function SqlSpotQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
     function SqlSpotQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
     function SqlSpotQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
     function SqlSpotQsoOnBand(const DbName, Adif, Band : String) : String;
     function SqlSpotQsoWithDxcc(const DbName, Adif : String) : String;
     function SqlRbnQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
-    function SqlRbnQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
-    function SqlRbnQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
-    function SqlRbnQsoOnBand(const DbName, Adif, Band : String) : String;
-    function SqlRbnQsoWithDxcc(const DbName, Adif : String) : String;
   end;
 
 var
@@ -150,14 +138,6 @@ function TdmSqlStat.SqlDxccCountExcluding(const DeletedList : String) : String;
 begin
   Result := 'select count(*) from (select distinct adif from cqrlog_main'+
             ' where adif <> 0 and '+DeletedList+') as foo '
-end;
-
-// Same statement as SqlDxccCount, taken when there is no deleted-entity
-// list to exclude.  Kept separate so this extraction leaves the SQL
-// inventory untouched; the merge pass collapses them.
-function TdmSqlStat.SqlDxccCountNoDeletedList : String;
-begin
-  Result := 'select count(*) from (select distinct adif from cqrlog_main where adif <> 0) as foo '
 end;
 
 function TdmSqlStat.SqlDxccCfmCount(const Where : String) : String;
@@ -497,12 +477,12 @@ end;
 // creates first; TableName is whichever applies.  BandCond is empty or
 // " and band='..'", CfmCond the confirmation condition.
 
-function TdmSqlStat.SqlDropSquareStatView(const TableName : String) : String;
+function TdmSqlStat.SqlDropStatView(const TableName : String) : String;
 begin
   Result := 'DROP VIEW IF EXISTS '+TableName
 end;
 
-function TdmSqlStat.SqlCreateSquareStatView(const TableName, FilterSql : String) : String;
+function TdmSqlStat.SqlCreateStatView(const TableName, FilterSql : String) : String;
 begin
   Result := 'CREATE VIEW '+TableName+' AS '+FilterSql
 end;
@@ -535,27 +515,9 @@ begin
             QuotedStr(BigSquare+'%')+BandCond+'and ('+CfmCond+') group by lll order by loc'
 end;
 
-// Same statement as SqlDropSquareStatView, run once more when the window
-// is done.  Kept separate -- see the note on SqlDxccCountNoDeletedList.
-function TdmSqlStat.SqlDropSquareStatViewAfter(const TableName : String) : String;
-begin
-  Result := 'DROP VIEW IF EXISTS '+TableName
-end;
-
 { county window }
 
-// Same shape as the locator window above, including the view; the four
-// DROP/CREATE builders are copies kept separate for the inventory.
-
-function TdmSqlStat.SqlDropCountyStatView(const TableName : String) : String;
-begin
-  Result := 'DROP VIEW IF EXISTS '+TableName
-end;
-
-function TdmSqlStat.SqlCreateCountyStatView(const TableName, FilterSql : String) : String;
-begin
-  Result := 'CREATE VIEW '+TableName+' AS '+FilterSql
-end;
+// Same shape as the locator window above, including the view.
 
 function TdmSqlStat.SqlCountiesWorked(const TableName : String) : String;
 begin
@@ -579,11 +541,6 @@ begin
   Result := 'select count(id_cqrlog_main) FROM '+TableName+' where upper(county)='+
             QuotedStr(County)+BandCond+
             'and ('+CfmCond+')'
-end;
-
-function TdmSqlStat.SqlDropCountyStatViewAfter(const TableName : String) : String;
-begin
-  Result := 'DROP VIEW IF EXISTS '+TableName
 end;
 
 { worked grids map }
@@ -733,32 +690,6 @@ begin
             Adif+' AND band='+QuotedStr(Band)+' AND ((qsl_r='+
             QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
             QuotedStr(Mode)+' LIMIT 1'
-end;
-
-function TdmSqlStat.SqlRbnQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
-begin
-  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
-            Adif+' AND band='+QuotedStr(Band)+' AND qsl_r='+
-            QuotedStr('Q')+ ' AND mode='+QuotedStr(Mode)+' LIMIT 1'
-end;
-
-function TdmSqlStat.SqlRbnQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
-begin
-  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
-            Adif+' AND band='+QuotedStr(Band)+' AND mode='+
-            QuotedStr(Mode)+' LIMIT 1'
-end;
-
-function TdmSqlStat.SqlRbnQsoOnBand(const DbName, Adif, Band : String) : String;
-begin
-  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
-            Adif+' AND band='+QuotedStr(Band)+' LIMIT 1'
-end;
-
-function TdmSqlStat.SqlRbnQsoWithDxcc(const DbName, Adif : String) : String;
-begin
-  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
-            Adif+' LIMIT 1'
 end;
 
 end.

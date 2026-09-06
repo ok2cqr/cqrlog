@@ -59,7 +59,7 @@ begin
   DisableFilter;
   dmData.SortType := stDate;
   dmData.qCQRLOG.Close;
-  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDateSorted(cDB_LIMIT);
+  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDate(cDB_LIMIT);
   dmData.RefreshMainDatabase()
 end;
 
@@ -77,7 +77,7 @@ begin
   DisableFilter;
   dmData.SortType := stCall;
   dmData.qCQRLOG.Close;
-  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByCallSorted(cDB_LIMIT);
+  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByCall(cDB_LIMIT);
   dmData.RefreshMainDatabase()
 end;
 

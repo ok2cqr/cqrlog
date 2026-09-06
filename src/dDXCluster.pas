@@ -154,7 +154,7 @@ begin
     freq := FloatToStr(tmp);
 
     qBands.Close;
-    qBands.SQL.Text := dmSqlRef.SqlBandByFreqForCluster(freq);
+    qBands.SQL.Text := dmSqlRef.SqlBandByFreq(freq);
     if dmData.DebugLevel >= 1 then
       Writeln(qBands.SQL.Text);
     if trBands.Active then

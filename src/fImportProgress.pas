@@ -95,7 +95,7 @@ implementation
 { TfrmImportProgress }
 
 uses dData, dUtils, fImportTest, dDXCC, uMyini, dLogUpload, dMembership, dSatellite, fAdifImport,
-     uInternalConnection, uDbUtils, dSqlImpExp;
+     uInternalConnection, uDbUtils, dSqlImpExp, dSqlRef, dSqlQso;
 
 type
   //One parsed LoTW QSO record, buffered so a whole batch can be matched against the log
@@ -435,7 +435,7 @@ begin
 
   finally
     //dmDXCC.trDXCCRef.StartTransaction;
-    dmDXCC.qDXCCRef.SQL.Text := dmSqlImpExp.SqlDxccRefAfterImport;
+    dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdifOrder;
     dmDXCC.qDXCCRef.Open;
     f.Free;
     List.Free;
@@ -466,7 +466,7 @@ begin
     Repaint;
 
     if dmData.trQ.Active then dmData.trQ.RollBack;
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsoCount;
+    dmData.Q.SQL.Text := dmSqlQso.SqlQsoCount;
     dmData.trQ.StartTransaction;
     dmData.Q.Open;
     pBarProg.Max := dmData.Q.Fields[0].AsInteger;

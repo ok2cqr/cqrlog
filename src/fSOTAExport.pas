@@ -149,7 +149,7 @@ begin
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.Q.Close;
   if AllQSO then
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForSotaExport
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosByDateForExport
   else begin
     q := dmData.qCQRLOG.SQL.Text;
     if Pos('order by',LowerCase(q)) > 0 then

@@ -120,11 +120,11 @@ begin
           try
             TableName:='statistic_filter';
             dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlDropCountyStatView(TableName);
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropStatView(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateCountyStatView(TableName, dmData.IsFilterSQL);
+            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateStatView(TableName, dmData.IsFilterSQL);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
@@ -204,7 +204,7 @@ begin
          begin
           try
             dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlDropCountyStatViewAfter(TableName);
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropStatView(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
           Finally

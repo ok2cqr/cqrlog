@@ -122,11 +122,11 @@ begin
           try
             TableName:='statistic_filter';
             dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlDropSquareStatView(TableName);
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropStatView(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateSquareStatView(TableName, dmData.IsFilterSQL);
+            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateStatView(TableName, dmData.IsFilterSQL);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
@@ -263,7 +263,7 @@ begin
          begin
           try
             dmData.Q.Close;
-            dmData.Q.SQL.Text:=dmSqlStat.SqlDropSquareStatViewAfter(TableName);
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropStatView(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
           Finally
