@@ -357,7 +357,7 @@ implementation
   {$R *.lfm}
 
 { TdmUtils }
-uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef;
+uses dData, dDXCC, fEnterFreq, fTRXControl, uMyini, fNewQSO, uVersion, fContest, dSqlRef, dSqlStat;
 
 function TdmUtils.LetterFromMode(mode: string): string;
 begin
@@ -760,15 +760,13 @@ end;
 procedure TdmUtils.InsertWorkedContests(cmbContest: TComboBox);
 var
   i: integer;
-const
-  C_SEL = 'SELECT DISTINCT `contestname` FROM `cqrlog_main` WHERE `contestname` IS NOT NULL and `contestname` != "" ORDER BY `contestname` ASC';
 begin
   cmbContest.Clear;
   dmData.qWorkedContests.Close;
   try
-   dmData.qWorkedContests.SQL.Text := 'SET CHARACTER SET "utf8"';
+   dmData.qWorkedContests.SQL.Text := dmSqlStat.SqlSetCharacterSetUtf8;
    dmData.qWorkedContests.ExecSQL;
-   dmData.qWorkedContests.SQL.Text := C_SEL;
+   dmData.qWorkedContests.SQL.Text := dmSqlStat.SqlWorkedContests;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.qWorkedContests.SQL.Text);
     dmData.qWorkedContests.Open;
@@ -5575,14 +5573,9 @@ begin
 
   ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
   if ShowLoTW then
-    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
-                         IntToStr(ref_adif) + tmpq + ' and ((qsl_r='+QuotedStr('Q')+') or '+
-                         '(lotw_qslr = '+QuotedStr('L')+') or (eqsl_qsl_rcvd='+QuotedStr('E')+
-                         ')) group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd'
+    dmData.Q.SQL.Text := dmSqlStat.SqlCfmBandsModesIncLotw(ref_adif, tmpq)
   else
-    dmData.Q.SQL.Text := 'select band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main where adif='+
-                         IntToStr(ref_adif) + tmpq + ' and (qsl_r = '+QuotedStr('Q')+') '+
-                         'group by band,mode,qsl_r,lotw_qslr,eqsl_qsl_rcvd';
+    dmData.Q.SQL.Text := dmSqlStat.SqlCfmBandsModes(ref_adif, tmpq);
   dmData.trQ.StartTransaction;
   dmData.Q.Open;
   while not dmData.Q.Eof do
@@ -5636,8 +5629,7 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := 'select band,mode from cqrlog_main where adif='+
-                       IntToStr(ref_adif) + tmpq +' group by band,mode';
+  dmData.Q.SQL.Text := dmSqlStat.SqlWorkedBandsModes(ref_adif, tmpq);
   dmData.trQ.StartTransaction;
   dmData.Q.Open;
   while not dmData.Q.Eof do

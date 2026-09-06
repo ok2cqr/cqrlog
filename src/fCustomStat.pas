@@ -53,7 +53,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dUtils, fSelectDXCC, dData, uMyIni, dDXCC;
+uses dUtils, fSelectDXCC, dData, uMyIni, dDXCC, dSqlStat;
 { TfrmCustomStat }
 procedure TfrmCustomStat.GetVisibleBands;
 begin
@@ -235,8 +235,7 @@ begin
   end;
   where := Trim(where);
   where := copy(where,1,Length(where)-3);
-  dmData.Q.SQL.Text := 'select ' + cmbField.Text + ' from cqrlog_main ' +
-                        where + 'order by ' + cmbField.Text;
+  dmData.Q.SQL.Text := dmSqlStat.SqlCustomStat(cmbField.Text, where);
   if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text)
 end;
 

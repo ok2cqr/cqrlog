@@ -81,7 +81,7 @@ implementation
 {$R *.lfm}
 
 { TfrmDXCCStat }
-uses dData, dUtils, dDXCC, uMyIni;
+uses dData, dUtils, dDXCC, uMyIni, dSqlStat;
 
 procedure TfrmDXCCStat.ChangeCaption;
 const
@@ -534,20 +534,16 @@ var
   procedure GetSQLMode(const mode : String);
   begin
     if ShowDel then
-      dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                           'where adif <> 0 and' + mode + ' group by band'
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBandByMode(mode)
     else
-      dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                           '  where adif <> 0 and (' + sql2 +') and '+mode+' group by band'
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBandByModeExcluding(sql2, mode)
   end;
 
   procedure GetCfmSQLMode(const mode : String);
-  const
-    C_DISTSEL = 'select band,count(distinct adif) from cqrlog_main where adif <> 0 and ';
   begin
     if ShowDel then
     begin
-      dmData.Q.SQL.Text := C_DISTSEL+GetStatTypeWhere(StatType)+ ' and '+ mode +' group by band';
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandByMode(GetStatTypeWhere(StatType), mode);
       {
       case StatType of
          stCfmOnly  : dmData.Q.SQL.Text := C_SEL + '(qsl_r = '+QuotedStr('Q')+') and '+mode+' group by band';
@@ -560,7 +556,7 @@ var
       }
     end
     else begin
-      dmData.Q.SQL.Text := C_DISTSEL+GetStatTypeWhere(StatType)+ ' and ' +sql2+ ' and '+mode+' group by band';
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandByModeExcluding(GetStatTypeWhere(StatType), sql2, mode);
       {
 
       case StatType of
@@ -578,9 +574,6 @@ var
       }
     end;
   end;
-
-const
-  C_SEL = 'select band,count(distinct adif) from cqrlog_main where adif <> 0 and ';
 
 begin
   grdStatSum.ColWidths[0] := 110;
@@ -608,18 +601,16 @@ begin
   dmData.trQ.StartTransaction;
   try
     if ShowDel then
-      dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main where adif <> 0'+
-                           ' group by band'
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBand
     else
-      dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
-                           '  where adif <> 0 and ' + sql2 +' group by band';
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccPerBandExcluding(sql2);
     dmData.Q.Open;
     WriteToGrid(1);
     dmData.Q.Close;
 
     if ShowDel then
     begin
-      dmData.Q.SQL.Text := C_SEL+GetStatTypeWhere(StatType)+' group by band'
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBand(GetStatTypeWhere(StatType))
       {case StatType of
 
         stCfmOnly  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
@@ -633,7 +624,7 @@ begin
       end //case}
     end
     else begin
-      dmData.Q.SQL.Text := C_SEL+GetStatTypeWhere(StatType)+' and '+sql2+' group by band'
+      dmData.Q.SQL.Text := dmSqlStat.SqlDxccCfmPerBandExcluding(GetStatTypeWhere(StatType), sql2)
       {case StatType of
          stCfmOnly  : dmData.Q.SQL.Text := 'select band,count(distinct adif) from cqrlog_main '+
                                            'where adif <> 0 and (qsl_r = '+QuotedStr('Q')+') and '+ sql2+
@@ -732,14 +723,9 @@ begin
     try
       dmData.Q.Close;
       if Deleted then
-        dmData.Q.SQL.Text := 'select d.dxcc_ref,d.country, c.band, c.mode, c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd from cqrlog_main c '+
-                             'left join dxcc_id d on c.adif = d.adif where d.dxcc_ref<>'+QuotedStr('')+' and d.dxcc_ref<>'+QuotedStr('!')+
-                             ' group by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd order by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd'
+        dmData.Q.SQL.Text := dmSqlStat.SqlDxccStatRows
       else
-        dmData.Q.SQL.Text := 'select d.dxcc_ref,d.country, c.band, c.mode, c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd from cqrlog_main c '+
-                             'left join dxcc_id d on c.adif = d.adif where (d.dxcc_ref<>'+QuotedStr('')+') and d.dxcc_ref<>'+QuotedStr('!')+
-                             ' and (d.dxcc_ref not like '+QuotedStr('%*')+') group by d.dxcc_ref,c.band,c.mode,'+
-                             'c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd order by d.dxcc_ref,c.band,c.mode,c.qsl_r,c.lotw_qslr,c.eqsl_qsl_rcvd';
+        dmData.Q.SQL.Text := dmSqlStat.SqlDxccStatRowsNoDeleted;
 
 
       dmData.trQ.StartTransaction;

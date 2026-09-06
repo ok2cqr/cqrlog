@@ -98,7 +98,7 @@ var
 implementation
 
 {$R *.lfm}
-uses fNewQSO, fTRXControl, dData, dUtils, uMyIni,fContest;
+uses fNewQSO, fTRXControl, dData, dUtils, uMyIni,fContest, dSqlStat;
 
 { TfrmWorkedGrids }
  //441H      753W
@@ -162,7 +162,7 @@ begin
   dmData.W1.Close;
   if dmData.trW1.Active then
     dmData.trW1.Rollback;
-  dmData.W1.SQL.Text := 'select count(callsign) from ' + LogTable;
+  dmData.W1.SQL.Text := dmSqlStat.SqlQsoCountIn(LogTable);
   dmData.trW1.StartTransaction;
   try
     dmData.W1.Open;
@@ -202,16 +202,7 @@ var
     if dmData.trW.Active then dmData.trW.Rollback;
 
     try
-      dmData.W.SQL.Text :='select count(loc) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+daylimit;
+      dmData.W.SQL.Text := dmSqlStat.SqlWkdMainGrid(LogTable, L2, band, mode, daylimit);
 
 
       if LocalDbg then Write('Main loc query: ');
@@ -260,27 +251,7 @@ begin
   if dmData.trW.Active then dmData.trW.Rollback;
 
   try
-    dmData.W.SQL.Text := 'select count(loc) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where loc like '+#39+L4+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L4+ '%'+#39+
-                          ' and band='+#39+band+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L4+ '%'+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+
-                          ' and band='+#39+band+#39+daylimit+
-                          'union all '+
-                          'select count(loc) from '+LogTable+
-                          ' where loc like '+#39+L2+ '%'+#39+daylimit ;
+    dmData.W.SQL.Text := dmSqlStat.SqlWkdGrid(LogTable, L4, L2, band, mode, daylimit);
 
     if LocalDbg then Write('loc query: ');
     dmData.W.Open;
@@ -327,16 +298,7 @@ begin
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
   try
-     dmData.W.SQL.Text := 'select count(callsign) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where callsign='+#39+call+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
-                          'union all '+
-                          'select count(callsign) from '+LogTable+
-                          ' where callsign='+#39+call+#39+
-                          ' and band='+#39+band+#39+daylimit+
-                          'union all '+
-                          'select count(callsign) from '+LogTable+
-                          ' where callsign='+#39+call+#39+daylimit;
+     dmData.W.SQL.Text := dmSqlStat.SqlWkdCall(LogTable, call, band, mode, daylimit);
 
     if LocalDbg then Write('call query: ');
     dmData.W.Open;
@@ -375,16 +337,7 @@ begin
   dmData.W.Close;
   if dmData.trW.Active then dmData.trW.Rollback;
   try
-     dmData.W.SQL.Text := 'select count(state) as '+#39+'sum'+#39+' from '+LogTable+
-                          ' where state='+#39+state+#39+
-                          ' and band='+#39+band+#39+' and mode='+#39+mode+#39+daylimit+
-                          'union all '+
-                          'select count(state) from '+LogTable+
-                          ' where state='+#39+state+#39+
-                          ' and band='+#39+band+#39+daylimit+
-                          'union all '+
-                          'select count(state) from '+LogTable+
-                          ' where state='+#39+state+#39+daylimit;
+     dmData.W.SQL.Text := dmSqlStat.SqlWkdState(LogTable, state, band, mode, daylimit);
 
     if LocalDbg then Write('state query: ');
     dmData.W.Open;
@@ -854,13 +807,10 @@ begin
     if BandSelector.ItemIndex > 0 then //band selected
     begin
       //0:the base query string
-      SQLCfm[0] := 'select upper(left(loc,4)) as lo from ' + LogTable +
-        ' where band=' + #39 + BandSelector.items[BandSelector.ItemIndex] +
-        #39 + 'and loc<>' + #39 + #39 + SQLModeTail;
+      SQLCfm[0] := dmSqlStat.SqlWkdSquaresOnBand(LogTable, BandSelector.items[BandSelector.ItemIndex], SQLModeTail);
     end
     else begin //band "all"                 //as
-      SQLCfm[0] := 'select upper(left(loc,4)) as lo from ' + LogTable +
-        ' where loc<>' + #39 + #39 + SQLModeTail;
+      SQLCfm[0] := dmSqlStat.SqlWkdSquares(LogTable, SQLModeTail);
     end;
     if ZooMap.Visible then  //coming from zoomed grid
     begin
@@ -884,8 +834,7 @@ begin
       end;
 
       //locator counts
-      dmData.W.SQL.Text := 'select count(distinct upper(left(loc,2))) as main,count(distinct upper(left(loc,4))) as sub'+
-                           copy(SQLCfm[0],pos('from', SQLCfm[0])-1,length(SQLCfm[0]))+daylimit;
+      dmData.W.SQL.Text := dmSqlStat.SqlWkdSquareCounts(copy(SQLCfm[0],pos('from', SQLCfm[0])-1,length(SQLCfm[0])), daylimit);
       dmData.W.Open;
       if not dmData.W.EOF then
        Begin
@@ -906,8 +855,7 @@ begin
         else   //can be else than 0, means all bands
         SQLBand := SQLModeTail;
 
-      dmData.W.SQL.Text := 'select count(callsign) as qso from cqrlog_main where callsign<>'+#39+#39+daylimit+
-                            'union all select count(callsign) from cqrlog_main where callsign<>'+#39+#39 + SQLBand +daylimit ;
+      dmData.W.SQL.Text := dmSqlStat.SqlWkdQsoCounts(daylimit, SQLBand);
       dmData.W.Open;
       if not dmData.W.EOF then FullQsoCount := dmData.W.FieldByName('qso').AsString;
       dmData.W.Next;

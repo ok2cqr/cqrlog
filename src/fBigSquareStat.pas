@@ -54,7 +54,7 @@ implementation
 {$R *.lfm}
 
 { TfrmBigSquareStat }
-uses dUtils,dData, uMyIni, uVersion;
+uses dUtils,dData, uMyIni, uVersion, dSqlStat;
 
 procedure TfrmBigSquareStat.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
@@ -122,11 +122,11 @@ begin
           try
             TableName:='statistic_filter';
             dmData.Q.Close;
-            dmData.Q.SQL.Text:='DROP VIEW IF EXISTS '+TableName;
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropSquareStatView(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
-            dmData.Q.SQL.Text:='CREATE VIEW '+TableName+' AS '+dmData.IsFilterSQL;
+            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateSquareStatView(TableName, dmData.IsFilterSQL);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
@@ -138,20 +138,19 @@ begin
             end;
           end;
          end;
-      dmData.Q.SQL.Text := 'select left(loc,2) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll';
+      dmData.Q.SQL.Text := dmSqlStat.SqlBigSquaresWorked(TableName);
       dmData.Q.Open;
       dmData.Q.Last;
       allwkdBig:=dmData.Q.RecordCount;
       dmData.Q.Close;
 
-      dmData.Q.SQL.Text := 'select left(loc,4) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll';
+      dmData.Q.SQL.Text := dmSqlStat.SqlSquaresWorked(TableName);
       dmData.Q.Open;
       dmData.Q.Last;
       allwkd:=dmData.Q.RecordCount;
       dmData.Q.Close;
 
-      dmData.Q.SQL.Text := 'select upper(left(loc,2)) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+
-                           bnd+' group by ll';
+      dmData.Q.SQL.Text := dmSqlStat.SqlBigSquaresOnBand(TableName, bnd);
       dmData.Q.Open;
       dmData.Q.Last;
       WriteHMTLHeader;
@@ -169,8 +168,7 @@ begin
         writeln(f,'<td align="left">');
         writeln(f,'<font color="black">');
         dmData.Q1.Close;
-        dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM '+TableName+' where loc like '+
-                              QuotedStr(ll+'%')+bnd+' group by lll order by loc';
+        dmData.Q1.SQL.Text := dmSqlStat.SqlSquaresInBigSquare(TableName, ll, bnd);
         dmData.Q1.Open;
 
         db := TBufDataset.Create(nil); //I was not able to clear all records from TBufDataset without this workaround
@@ -196,8 +194,7 @@ begin
           if tmp <> '' then
           begin
             dmData.Q1.Close;
-            dmData.Q1.SQL.Text := 'select upper(left(loc,4)) as lll FROM '+TableName+' where loc like '+
-                                  QuotedStr(ll+'%')+bnd+'and ('+tmp+') group by lll order by loc';
+            dmData.Q1.SQL.Text := dmSqlStat.SqlSquaresInBigSquareCfm(TableName, ll, bnd, tmp);
             dmData.Q1.Open;
             cfm := 0;
             while not dmData.Q1.Eof do
@@ -266,7 +263,7 @@ begin
          begin
           try
             dmData.Q.Close;
-            dmData.Q.SQL.Text:='DROP VIEW IF EXISTS '+TableName;
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropSquareStatViewAfter(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
           Finally

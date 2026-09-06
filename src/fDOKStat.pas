@@ -99,7 +99,7 @@ implementation
 {$R *.lfm}
 
 { TfrmDOKStat }
-uses dUtils, dData, fQTHProfiles, fShowStations, uMyIni;
+uses dUtils, dData, fQTHProfiles, fShowStations, uMyIni, dSqlStat;
 
 procedure TfrmDOKStat.ShowCharInGrid(QSL_R,LoTW,eQSL : String;BandPos,y : Integer);
 begin
@@ -340,12 +340,9 @@ begin
     case StatType of
       tsDOK   : begin
               if gmode = '' then
-                sql := 'select callsign,freq,mode,dok from cqrlog_main '+
-                        ' where (dok <> '+QuotedStr('')+') and (adif=230) and '+ qslr +' order by convert(freq,signed),dok'
+                sql := dmSqlStat.SqlDokStations(qslr)
               else
-                sql := 'select callsign,freq,mode,dok from cqrlog_main'+
-                        ' where (dok <> '+QuotedStr('')+') and (adif=230) and '+ qslr +' AND '+gmode+
-                        'order by convert(freq,signed),dok';
+                sql := dmSqlStat.SqlDokStationsByMode(qslr, gmode);
             end
     end;
     dmData.trQ.StartTransaction;
@@ -718,7 +715,6 @@ var
   LoTW    : String;
   eQSL    : String;
   where   : String;
-  sql     : String;
 begin
 
   // initialize grid and writing header
@@ -749,10 +745,7 @@ begin
   else begin
       grdStat.RowCount := 1;
       dmData.Q.Close;
-      dmData.Q.SQL.Text := 'select distinct dok from cqrlog_main '+
-                           'where (adif=230) '+
-                           'having (dok <> '''') '+
-                           'order by dok';
+      dmData.Q.SQL.Text := dmSqlStat.SqlDoksWorked;
       if dmData.trQ.Active then dmData.trQ.Rollback;
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -782,17 +775,12 @@ begin
   LoadBandsSettings;
 
   // now filling with the data
-  sql := 'select dok,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main '+
-         '%s '+
-         'group by dok,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd '+
-         'having (dok <> '''') '+
-         'order by dok';
   where := '(adif=230)';
   if gmode <> '' then
     where := where + ' and '+ gmode;
 
   dmData.Q.Close;
-  dmData.Q.SQL.Text := Format(sql,['where '+where]);
+  dmData.Q.SQL.Text := dmSqlStat.SqlDokStat('where '+where);
 
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;

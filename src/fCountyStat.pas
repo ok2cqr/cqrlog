@@ -54,7 +54,7 @@ implementation
 {$R *.lfm}
 
 { TfrmCountyStat }
-uses dUtils,dData, uMyIni, uVersion;
+uses dUtils,dData, uMyIni, uVersion, dSqlStat;
 
 procedure TfrmCountyStat.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
@@ -120,11 +120,11 @@ begin
           try
             TableName:='statistic_filter';
             dmData.Q.Close;
-            dmData.Q.SQL.Text:='DROP VIEW IF EXISTS '+TableName;
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropCountyStatView(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
-            dmData.Q.SQL.Text:='CREATE VIEW '+TableName+' AS '+dmData.IsFilterSQL;
+            dmData.Q.SQL.Text:=dmSqlStat.SqlCreateCountyStatView(TableName, dmData.IsFilterSQL);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
             dmData.Q.Close;
@@ -136,14 +136,13 @@ begin
             end;
           end;
          end;
-      dmData.Q.SQL.Text := 'select upper(county) as ll FROM '+TableName+' where county <> '+QuotedStr('')+' group by ll';
+      dmData.Q.SQL.Text := dmSqlStat.SqlCountiesWorked(TableName);
       dmData.Q.Open;
       dmData.Q.Last;  //this is needed to get proper record count
       allwkd:=dmData.Q.RecordCount;
       dmData.Q.Close;
 
-      dmData.Q.SQL.Text := 'select upper(county) as ll FROM '+TableName+' where county <> '+QuotedStr('')+
-                           bnd+' group by ll';
+      dmData.Q.SQL.Text := dmSqlStat.SqlCountiesOnBand(TableName, bnd);
       dmData.Q.Open;
       dmData.Q.Last;  //this is needed to get proper record count
       pbTot.Max:=dmData.Q.RecordCount;
@@ -161,8 +160,7 @@ begin
         writeln(f,'<td align="left">');
         writeln(f,'<font color="black">');
         dmData.Q1.Close;
-        dmData.Q1.SQL.Text := 'select count(id_cqrlog_main) FROM '+TableName+' where upper(county)='+
-                              QuotedStr(ll)+bnd;
+        dmData.Q1.SQL.Text := dmSqlStat.SqlCountyQsoCount(TableName, ll, bnd);
         dmData.Q1.Open;
 
       wkd := dmData.Q1.Fields[0].AsInteger;
@@ -170,9 +168,7 @@ begin
       if tmp <> '' then
       begin
         dmData.Q1.Close;
-        dmData.Q1.SQL.Text := 'select count(id_cqrlog_main) FROM '+TableName+' where upper(county)='+
-                          QuotedStr(ll)+bnd+
-                              'and ('+tmp+')';
+        dmData.Q1.SQL.Text := dmSqlStat.SqlCountyQsoCountCfm(TableName, ll, bnd, tmp);
         dmData.Q1.Open;
         cfm := dmData.Q1.Fields[0].AsInteger;
         sum_cfm := sum_cfm + cfm
@@ -208,7 +204,7 @@ begin
          begin
           try
             dmData.Q.Close;
-            dmData.Q.SQL.Text:='DROP VIEW IF EXISTS '+TableName;
+            dmData.Q.SQL.Text:=dmSqlStat.SqlDropCountyStatViewAfter(TableName);
             dmData.Q.ExecSQL;
             dmData.trQ.Commit;
           Finally

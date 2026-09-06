@@ -99,7 +99,7 @@
         <MinVersion Major="1" Minor="2" Release="1" Valid="True"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="133">
+    <Units Count="134">
       <Unit0>
         <Filename Value="cqrlog.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -963,6 +963,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
       </Unit132>
+      <Unit133>
+        <Filename Value="dSqlStat.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dmSqlStat"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+      </Unit133>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

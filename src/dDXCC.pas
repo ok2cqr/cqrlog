@@ -81,7 +81,7 @@ implementation
 
 { TdmDXCC }
 
-uses dUtils, dData, uMyIni, dSqlRef;
+uses dUtils, dData, uMyIni, dSqlRef, dSqlStat;
 
 { The DXCC engine itself lives in uDxccService, shared with dDXCluster.  This
   module keeps only what is bound to dmData.MainCon -- the queries, the two
@@ -101,14 +101,13 @@ begin
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
   if ShowDel then
-    Q.SQL.Text := 'select count(*) from (select distinct adif from cqrlog_main where adif <> 0) as foo '
+    Q.SQL.Text := dmSqlStat.SqlDxccCount
   else begin
     tmp := GetDelDXCCAdifList;
     if tmp <> '' then
-      Q.SQL.Text := 'select count(*) from (select distinct adif from cqrlog_main'+
-                    ' where adif <> 0 and '+tmp+') as foo '
+      Q.SQL.Text := dmSqlStat.SqlDxccCountExcluding(tmp)
     else
-      Q.SQL.Text := 'select count(*) from (select distinct adif from cqrlog_main where adif <> 0) as foo '
+      Q.SQL.Text := dmSqlStat.SqlDxccCountNoDeletedList
   end;
 
 
@@ -145,8 +144,7 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
-  Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-                'dxcc_id.adif = cqrlog_main.adif WHERE cqrlog_main.adif<>0 and '+where+') as foo';
+  Q.SQL.Text := dmSqlStat.SqlDxccCfmCount(where);
 
   //Q.SQL.Text := 'SELECT COUNT(DISTINCT dxcc_ref) FROM view_cqrlog_main_by_qsodate WHERE '+where;
   trQ.StartTransaction;
@@ -181,14 +179,9 @@ begin
 
   try
     if lotw then
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                    sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                    QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
-                    QuotedStr(mode)+' LIMIT 1'
+      Q.SQL.Text := dmSqlStat.SqlQsoCfmOnBandModeIncLotw(sAdif, band, mode)
     else
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
-                     QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+      Q.SQL.Text := dmSqlStat.SqlQsoCfmOnBandMode(sAdif, band, mode);
     trQ.StartTransaction;
     Q.Open;
     if Q.Fields[0].AsInteger > 0 then
@@ -198,9 +191,7 @@ begin
     end
     else begin
       Q.Close;
-      Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND mode='+
-                     QuotedStr(mode)+' LIMIT 1';
+      Q.SQL.Text := dmSqlStat.SqlQsoOnBandMode(sAdif, band, mode);
       Q.Open;
       if Q.Fields[0].AsInteger > 0 then
       begin
@@ -209,8 +200,7 @@ begin
       end
       else begin
         Q.Close;
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+        Q.SQL.Text := dmSqlStat.SqlQsoOnBand(sAdif, band);
         Q.Open;
         if Q.Fields[0].AsInteger > 0 then
         begin
@@ -219,8 +209,7 @@ begin
         end
         else begin
           Q.Close;
-          Q.SQL.Text := 'SELECT id_cqrlog_main FROM cqrlog_main WHERE adif='+
-                         sAdif+' LIMIT 1';
+          Q.SQL.Text := dmSqlStat.SqlQsoWithDxcc(sAdif);
           Q.Open;
           if Q.Fields[0].AsInteger>0 then
           begin

@@ -90,7 +90,7 @@ implementation
 {$R *.lfm}
 
 { TfrmWAZITUStat }
-uses dUtils,dData, fQTHProfiles, fShowStations, uMyIni;
+uses dUtils,dData, fQTHProfiles, fShowStations, uMyIni, dSqlStat;
 
 procedure TfrmWAZITUStat.ShowBandChar(band : String;y : Integer;bchar : Char);
 var
@@ -175,12 +175,6 @@ begin
 end;
 
 procedure TfrmWAZITUStat.CreateWAZStat;
-const
-  C_SEL = 'select waz,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main '+
-          '%s '+
-          'group by waz,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd '+
-          'having (waz > 0) and (waz < 41) '+
-          'order by waz';
 var
   zone     : Integer;
   i        : Integer = 1;
@@ -203,9 +197,9 @@ begin
 
   dmData.Q.Close;
   if gmode <> '' then
-    dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
+    dmData.Q.SQL.Text := dmSqlStat.SqlWazStat('where '+gmode)
   else
-    dmData.Q.SQL.Text := Format(C_SEL,['']);
+    dmData.Q.SQL.Text := dmSqlStat.SqlWazStat('');
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
@@ -234,12 +228,6 @@ begin
 end;
 
 procedure TfrmWAZITUStat.CreateITUStat;
-const
-  C_SEL = 'select itu,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main '+
-          '%s '+
-          'group by itu,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd '+
-          'having (itu > 0) and (itu < 91) '+
-          'order by itu';
 var
   zone     : Integer;
   i        : Integer = 1;
@@ -264,9 +252,9 @@ begin
 
   dmData.Q.Close;
   if gmode <> '' then
-    dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
+    dmData.Q.SQL.Text := dmSqlStat.SqlItuStat('where '+gmode)
   else
-    dmData.Q.SQL.Text := Format(C_SEL,['']);
+    dmData.Q.SQL.Text := dmSqlStat.SqlItuStat('');
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
   dmData.Q.Open();
@@ -459,57 +447,30 @@ begin
     case StatType of
       tsWAZ   : begin
               if gmode = '' then
-                sql := 'select main.callsign, main.freq,main.mode,main.waz from ( '+
-                       'select waz,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(waz <> 0) and '+ qslr +
-                       'group by waz,band,qsl_r order by waz,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by convert(freq,signed),waz'
+                sql := dmSqlStat.SqlWazStations(qslr)
               else
-                sql := 'select main.callsign,main.freq,main.mode,main.waz from ( '+
-                       'select waz,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(waz <> 0) and '+ qslr + ' and ' + gmode +' '+
-                       'group by waz,band,qsl_r order by waz,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by convert(freq,signed),waz';
+                sql := dmSqlStat.SqlWazStationsByMode(qslr, gmode);
               l.Add('WAZ')
             end;//waz
       tsITU   : begin
               if gmode = '' then
-                sql := 'select main.callsign, main.freq,main.mode,main.itu from ( '+
-                       'select itu,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(itu <> 0) and '+ qslr +
-                       'group by itu,band,qsl_r order by itu,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by convert(freq,signed),itu'
+                sql := dmSqlStat.SqlItuStations(qslr)
               else
-                sql := 'select main.callsign,main.freq,main.mode,main.itu from ( '+
-                       'select itu,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(itu <> 0) and '+ qslr + ' and ' + gmode +' '+
-                       'group by itu,band,qsl_r order by itu,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by convert(freq,signed),itu';
+                sql := dmSqlStat.SqlItuStationsByMode(qslr, gmode);
               l.Add('ITU')
             end;//itu
       tsWAC  : begin
               if gmode = '' then
-                sql := 'select main.callsign, main.freq,main.mode,main.cont from ( '+
-                       'select cont,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(cont <> '+QuotedStr('')+') and '+ qslr +
-                       'group by cont,band,qsl_r order by cont,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by convert(freq,signed),cont'
+                sql := dmSqlStat.SqlWacStations(qslr)
               else
-                sql := 'select main.callsign, main.freq,main.mode,main.cont from ( '+
-                       'select cont,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
-                       '(cont <> '+QuotedStr('')+') and '+ qslr + ' and ' + gmode +' '+
-                       'group by cont,band,qsl_r order by cont,band)'+
-                       'subsel join cqrlog_main main on subsel.id_cqrlog_main = main.id_cqrlog_main  order by convert(freq,signed),cont';
+                sql := dmSqlStat.SqlWacStationsByMode(qslr, gmode);
               l.Add('WAC')
             end;//wac
       tsWAS   : begin
               if gmode = '' then
-                sql := 'select callsign,freq,mode,state from cqrlog_main '+
-                        ' where (state <> '+QuotedStr('')+') and ((adif=291) or (adif=6) or (adif=110)) and '+ qslr +' order by convert(freq,signed),state'
+                sql := dmSqlStat.SqlWasStations(qslr)
               else
-                sql := 'select callsign,freq,mode,state from cqrlog_main'+
-                        ' where (state <> '+QuotedStr('')+') and ((adif=291) or (adif=6) or (adif=110)) and '+ qslr +' AND '+gmode+
-                        'order by convert(freq,signed),state';
+                sql := dmSqlStat.SqlWasStationsByMode(qslr, gmode);
               {if gmode = '' then
                 sql := 'select subsel.id_cqrlog_main, main.callsign, main.freq,main.mode,main.state from ( '+
                        'select state,band,qsl_r,max(a.id_cqrlog_main) as id_cqrlog_main from cqrlog_main a where '+
@@ -823,12 +784,6 @@ const
       Result := pSA
   end;
 
-const
-  C_SEL = 'select cont,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main '+
-          '%s '+
-          'group by cont,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd '+
-          'having (cont <> '''') '+
-          'order by cont';
 
 
 var
@@ -859,9 +814,9 @@ begin
 
   dmData.Q.Close;
   if gmode <> '' then
-    dmData.Q.SQL.Text := Format(C_SEL,['where '+gmode])
+    dmData.Q.SQL.Text := dmSqlStat.SqlWacStat('where '+gmode)
   else
-    dmData.Q.SQL.Text := Format(C_SEL,['']);
+    dmData.Q.SQL.Text := dmSqlStat.SqlWacStat('');
 
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;
@@ -903,12 +858,6 @@ procedure TfrmWAZITUStat.CreateWASStat;
       end
   end;
 
-const
-  C_SEL = 'select state,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd from cqrlog_main '+
-          '%s '+
-          'group by state,band,qsl_r,lotw_qslr,eqsl_qsl_rcvd '+
-          'having (state <> '''') '+
-          'order by state';
 var
   i,y : Integer;
   BandPos : Integer;
@@ -987,7 +936,7 @@ begin
   if gmode <> '' then
     where := where + ' and '+ gmode;
 
-  dmData.Q.SQL.Text := Format(C_SEL,['where '+where]);
+  dmData.Q.SQL.Text := dmSqlStat.SqlWasStat('where '+where);
 
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.trQ.StartTransaction;

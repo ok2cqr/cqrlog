@@ -32,7 +32,7 @@ var
 implementation
   {$R *.lfm}
 
-uses dData;
+uses dData, dSqlStat;
 
 procedure TfrmGraphStat.FormShow(Sender: TObject);
 begin
@@ -64,7 +64,7 @@ begin
 
 
   dmData.Q.Close();
-  dmData.Q.SQL.Text := 'select count(mode) as cnt,mode from cqrlog_main group by mode order by cnt';
+  dmData.Q.SQL.Text := dmSqlStat.SqlQsoCountPerMode;
   if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
   dmData.Q.Open;
   dmData.Q.First;

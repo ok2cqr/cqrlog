@@ -54,7 +54,7 @@ implementation
 {$R *.lfm}
 
 { TfrmIOTAStat }
-uses dData,dUtils, uMyIni;
+uses dData,dUtils, uMyIni, dSqlStat;
 
 function TfrmIOTAStat.GetStatTypeWhere(st : TStat) : String;
 begin
@@ -128,9 +128,6 @@ begin
 end;
 
 procedure TfrmIOTAStat.CreateStat;
-const
-  C_SEL = 'select distinct iota,callsign from cqrlog_main %s group by iota order by iota';
-  C_SUM = 'select count(*) from (select count(iota) from cqrlog_main %s group by iota) as aa';
 var
   i       : Integer = 0;
   where   : String = '';
@@ -148,7 +145,7 @@ begin
     else
       where := ' where (iota like '+QuotedStr(aIOTA[i]+'-%') + ')';
 
-    dmData.Q.SQL.Text := Format(C_SEL,[where]);
+    dmData.Q.SQL.Text := dmSqlStat.SqlIotaList(where);
     dmData.Q.Open();
     while not dmData.Q.Eof do
     begin
@@ -170,7 +167,7 @@ begin
                  ' and (iota like '+QuotedStr(aIOTA[i]+'-%') + ')'
       else
         where := ' where (iota like '+QuotedStr(aIOTA[i]+'-%') + ')';
-      dmData.Q.SQL.Text := Format(C_SUM,[where]);
+      dmData.Q.SQL.Text := dmSqlStat.SqlIotaCount(where);
       dmData.Q.Open;
       mIOTA.Lines.Add(aIOTA[i]+' islands: '+IntToStr(dmData.Q.Fields[0].AsInteger));
       sumiota := sumiota + dmData.Q.Fields[0].AsInteger;
