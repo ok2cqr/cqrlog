@@ -72,7 +72,7 @@ implementation
   {$R *.lfm}
 
 { TdmDXCluster }
-uses dUtils, dData, dSqlUserData, dSqlRef, uMyini, fTRXControl;
+uses dUtils, dData, dSqlUserData, dSqlRef, dSqlStat, uMyini, fTRXControl;
 
 { The DXCC engine used to be duplicated here in full -- its own TDxccTable
   pair built from the same two files, its own DXCCRefArray filled by the same
@@ -217,15 +217,9 @@ begin
 
     try try
       if lotw then
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                      sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                      QuotedStr('Q')+') OR (lotw_qslr='+ QuotedStr('L')+
-                      ') OR (eqsl_qsl_rcvd='+ QuotedStr('E')+')) AND mode='+
-                      QuotedStr(mode)+' LIMIT 1'
+        Q.SQL.Text := dmSqlStat.SqlSpotQsoCfmOnBandModeIncLotw(dmData.DBName, sAdif, band, mode)
       else
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
-                       QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+        Q.SQL.Text := dmSqlStat.SqlSpotQsoCfmOnBandMode(dmData.DBName, sAdif, band, mode);
 
       trQ.StartTransaction;
       Q.Open;
@@ -236,9 +230,7 @@ begin
       end
       else begin
         Q.Close;
-        Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' AND mode='+
-                       QuotedStr(mode)+' LIMIT 1';
+        Q.SQL.Text := dmSqlStat.SqlSpotQsoOnBandMode(dmData.DBName, sAdif, band, mode);
         Q.Open;
         if Q.Fields[0].AsInteger > 0 then
         begin
@@ -247,8 +239,7 @@ begin
         end
         else begin
           Q.Close;
-          Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                         sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+          Q.SQL.Text := dmSqlStat.SqlSpotQsoOnBand(dmData.DBName, sAdif, band);
           Q.Open;
           if Q.Fields[0].AsInteger > 0 then
           begin
@@ -257,8 +248,7 @@ begin
           end
           else begin
             Q.Close;
-            Q.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                           sAdif+' LIMIT 1';
+            Q.SQL.Text := dmSqlStat.SqlSpotQsoWithDxcc(dmData.DBName, sAdif);
             Q.Open;
             if Q.Fields[0].AsInteger>0 then
             begin

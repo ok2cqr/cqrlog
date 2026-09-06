@@ -73,6 +73,7 @@ type
     // club1..5
     function SqlClearClub(const DbNum : String) : String;
     function SqlInsertClubMember(const DbNum, ClubNr, Call, FromDate, ToDate : String) : String;
+    function SqlClubMember(const ClubTable, ClubField, Value, Date : String) : String;
   end;
 
 var
@@ -294,6 +295,15 @@ begin
   Result := 'INSERT INTO club'+DbNum+' (club_nr,clubcall,fromdate,todate) '+
             'VALUES ('+QuotedStr(ClubNr)+','+QuotedStr(Call)+','+QuotedStr(FromDate)+','+
             QuotedStr(ToDate)+')'
+end;
+
+// Is Value a member of the club on Date?  ClubField is the column the club
+// definition says to match (call or number).
+function TdmSqlRef.SqlClubMember(const ClubTable, ClubField, Value, Date : String) : String;
+begin
+  Result := 'select * from '+ClubTable+ ' where '+ ClubField +
+            ' = ' + QuotedStr(Value) + ' and fromdate <= ' + QuotedStr(Date) +
+            ' and todate >= '+QuotedStr(Date)
 end;
 
 end.

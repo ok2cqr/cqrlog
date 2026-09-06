@@ -41,7 +41,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, dDXCC;
+uses dData, dUtils, dDXCC, dSqlQso;
 
 { TfrmEditDetails }
 
@@ -128,9 +128,8 @@ begin
     sql6          := 'eqsl_qslrdate='+QuotedStr(edteQSLRDate.Text)+',eqsl_qsl_rcvd='+QuotedStr('E');
 
   dmData.Q.Close;
-  dmData.Q.SQL.Text := 'update cqrlog_main set '+sql1+','+sql2+','+sql3+','+sql4+','+sql5+','+sql6+
-                       ' where id_cqrlog_main='+
-                       IntToStr(dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsLongint);
+  dmData.Q.SQL.Text := dmSqlQso.SqlSetQsoFields(sql1+','+sql2+','+sql3+','+sql4+','+sql5+','+sql6,
+                                                dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsLongint);
   if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
   dmData.trQ.StartTransaction;
   dmData.Q.ExecSQL;

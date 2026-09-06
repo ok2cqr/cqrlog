@@ -827,7 +827,7 @@ implementation
 
 { TfrmNewQSO }
 
-uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl, dSqlRef, fMain, fSelectDXCC, fGrayline,
+uses dUtils, fChangeLocator, fChangeOperator, dDXCC, dDXCluster, dData, dSqlQsl, dSqlRef, dSqlQso, fMain, fSelectDXCC, fGrayline,
      fTRXControl, fPreferences, fSplash, fDXCluster, fDXCCStat,fQSLMgr, fSendSpot,
      fQSODetails, fWAZITUStat, fDOKStat, fIOTAStat, fGraphStat, fImportProgress, fBandMap,
      fLongNote, fRefCall, fKeyTexts, fCWType, fExportProgress, fPropagation, fCallAttachment,
@@ -1412,10 +1412,8 @@ begin
     since := dmUtils.MyDateToStr(now - RecentQSOCount);
     dmData.qQSOBefore.Close;
     dmData.trQSOBefore.Rollback;
-    dmData.qQSOBefore.SQL.Text := 'select * from view_cqrlog_main_by_qsodate where qsodate >= '+QuotedStr(since)+
-                                   ' order by qsodate,time_on';
-       if ShowB4call then dmData.qQSOBefore.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE callsign = '+
-                                    QuotedStr(was_call)+' ORDER BY qsodate,time_on';
+    dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlRecentQsos(since);
+       if ShowB4call then dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlQsosWithCall(was_call);
     if dmData.DebugLevel>=1 then Writeln(dmData.qQSOBefore.SQL.Text);
     dmData.trQSOBefore.StartTransaction;
     dmData.qQSOBefore.Open;
@@ -5534,11 +5532,9 @@ begin
   begin
     dmData.qQSOBefore.Close;
     if cqrini.ReadBool('NewQSO','AllVariants',False) then
-      dmData.qQSOBefore.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE idcall = '+
-                                    QuotedStr(dmUtils.GetIDCall(edtCall.Text))+' ORDER BY qsodate,time_on'
+      dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlQsosWithIdCall(dmUtils.GetIDCall(edtCall.Text))
     else
-      dmData.qQSOBefore.SQL.Text := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE callsign = '+
-                                    QuotedStr(edtCall.Text)+' ORDER BY qsodate,time_on';
+      dmData.qQSOBefore.SQL.Text := dmSqlQso.SqlQsosWithCallForEntry(edtCall.Text);
 
     if dmData.DebugLevel >=1 then Writeln(dmData.qQSOBefore.SQL.Text);
     if dmData.trQSOBefore.Active then
@@ -7169,7 +7165,7 @@ begin
   else begin
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := 'SELECT callsign,freq,rxfreq FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := dmSqlQso.SqlLastQsoForSpot;
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
@@ -7182,7 +7178,7 @@ begin
     dmData.trQ.Rollback;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := 'SELECT mode,rst_s,loc,prop_mode,my_loc,stx,stx_string,srx,srx_string,name FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := dmSqlQso.SqlLastQsoDetailsForSpot;
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);

@@ -343,7 +343,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl, dSqlRef;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl, dSqlRef, dSqlStat, dSqlQso;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -1389,35 +1389,13 @@ begin
   qth     := copy(qth,1,60);
   trQ.StartTransaction;
   qsodate := (FormatDateTime('YYYY-MM-DD',date));
-  Q.SQL.Text :=  'insert into cqrlog_main (qsodate,time_on,time_off,callsign,freq,mode,'+
-                 'rst_s,rst_r,name,qth,qsl_s,qsl_r,qsl_via,iota,pwr,itu,waz,loc,my_loc,'+
-                 'county,award,remarks,adif,idcall,state,qso_dxcc,band,profile,cont,club_nr1,'+
-                 'club_nr2,club_nr3,club_nr4,club_nr5, prop_mode, satellite, rxfreq, srx, stx,'+
-                 'srx_string, stx_string, contestname, dok, operator) values('+QuotedStr(qsodate) +
-                 ','+QuotedStr(time_on)+','+QuotedStr(time_off)+
-                 ','+QuotedStr(call)+','+FloatToStr(freq)+
-                 ','+QuotedStr(mode)+','+QuotedStr(rst_s)+
-                 //','+QuotedStr(rst_r)+','+QuotedStr(dmUtils.MyTrim(stn_name))+
-                 //','+QuotedStr(dmUtils.MyTrim(qth))+','+QuotedStr(qsl_s)+
-                 ','+QuotedStr(rst_r)+','+QuotedStr(trim(stn_name))+
-                 ','+QuotedStr(trim(qth))+','+QuotedStr(qsl_s)+
-                 ','+QuotedStr(qsl_r)+','+QuotedStr(qsl_via)+
-                 ','+QuotedStr(iota)+','+QuotedStr(pwr)+
-                 ','+sITU+','+sWAZ+
-                    //here we make final check that for now on locator writing format is by std in database
-                 ','+QuotedStr(dmUtils.StdFormatLocator(loc))+','+QuotedStr(dmUtils.StdFormatLocator(my_loc))+
-                 //','+QuotedStr(dmUtils.MyTrim(county))+',' + QuotedStr(dmUtils.MyTrim(award)) + ','+QuotedStr(dmUtils.MyTrim(remarks))+
-                 ','+QuotedStr(trim(county))+',' + QuotedStr(trim(award)) + ','+QuotedStr(trim(remarks))+
-                 ','+IntToStr(adif)+','+ QuotedStr(idcall) + ','+ QuotedStr(state) +','+IntToStr(changed)+
-                 ','+QuotedStr(band)+','+ IntToStr(profile) +','+QuotedStr(cont)+
-                 ','+QuotedStr(nclub1)+','+QuotedStr(nclub2)+','+QuotedStr(nclub3)+
-                 ','+QuotedStr(nclub4)+','+QuotedStr(nclub5)+','+QuotedStr(PropMode)+','+QuotedStr(Satellite)+','+rx_freq+
-                 ','+QuotedStr(srx)+','+QuotedStr(stx)+','+QuotedStr(srx_string)+','+QuotedStr(stx_string)+','+QuotedStr(contestname)+
-                 ','+QuotedStr(dok);
-  if (Op <> '') then
-     Q.SQL.Text := Q.SQL.Text+','+QuotedStr(Op)+')'
-  else
-     Q.SQL.Text := Q.SQL.Text+', NULL)';
+  //locators go in normalised, the free-text fields trimmed
+  Q.SQL.Text := dmSqlQso.SqlInsertQso(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r,
+                  trim(stn_name), trim(qth), qsl_s, qsl_r, qsl_via, iota, pwr, sITU, sWAZ,
+                  dmUtils.StdFormatLocator(loc), dmUtils.StdFormatLocator(my_loc),
+                  trim(county), trim(award), trim(remarks), adif, idcall, state, changed, band,
+                  profile, cont, nclub1, nclub2, nclub3, nclub4, nclub5, PropMode, Satellite, rx_freq,
+                  srx, stx, srx_string, stx_string, contestname, dok, Op);
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
   Q.ExecSQL;
@@ -1459,26 +1437,10 @@ begin
   cont := UpperCase(copy(cont,1,2));
   qth  := copy(qth,1,60);
   qsodate := (FormatDateTime('YYYY-MM-DD',date));
-  Q.SQL.Text := 'UPDATE cqrlog_main set qsodate = '+ QuotedStr(qsodate) +', time_on = '+QuotedStr(time_on) +
-           ', time_off = ' + QuotedStr(time_off) + ', callsign = '+QuotedStr(call) +
-           ', freq = ' + FloatToStr(freq) + ', mode = ' + QuotedStr(mode) +
-           ', rst_s = ' + QuotedStr(rst_s) + ', rst_r = ' + QuotedStr(rst_r)+ ', qsl_s = '+QuotedStr(qsl_s)+
-           ', qsl_r =' + QuotedStr(qsl_r) + ', qsl_via = ' + QuotedStr(qsl_via) + ', iota = ' + QuotedStr(iota)+
-           ', pwr = ' + QuotedStr(pwr) + ', waz = ' + sWAZ +
-           ', itu = ' + sITU + ', loc = ' + QuotedStr(loc) +
-           ', my_loc = ' + QuotedStr(my_loc) + ', county = ' + QuotedStr(county) +
-           ', remarks = ' + QuotedStr(Trim(remarks)) + ', adif = ' + IntToStr(adif) +
-           ', qso_dxcc = '+ IntToStr(changed) + ', name = ' +QuotedStr(Trim(stn_name)) +
-           ', qth = ' + QuotedStr(Trim(qth)) + ', award = ' + QuotedStr(award) +', band = ' + QuotedStr(band) +
-           ', profile = ' + IntToStr(profile) + ', idcall = ' + QuotedStr(idcall) + ', state=' + QuotedStr(state) +
-           ', cont = ' + QuotedStr(cont)+ ', prop_mode = ' + QuotedStr(PropMode) + ', satellite = ' + QuotedStr(Satellite)+
-           ', rxfreq = ' + rx_freq + ', stx = ' + QuotedStr(stx)+ ', stx_string = ' + QuotedStr(stx_string) + ', srx = ' + QuotedStr(srx)+
-           ', srx_string = ' + QuotedStr(srx_string) + ', contestname = ' + QuotedStr(contestname) + ', dok = ' + QuotedStr(dok);
-  if (Op <> '') then
-    Q.SQL.Text := Q.SQL.Text+', operator = ' + QuotedStr(Op)
-  else
-    Q.SQL.Text := Q.SQL.Text+', operator = NULL';
-  Q.SQL.Text := Q.SQL.Text+' where id_cqrlog_main = ' + IntToStr(idx);
+  Q.SQL.Text := dmSqlQso.SqlUpdateQso(qsodate, time_on, time_off, call, freq, mode, rst_s, rst_r,
+                  qsl_s, qsl_r, qsl_via, iota, pwr, sWAZ, sITU, loc, my_loc, county, Trim(remarks),
+                  adif, changed, Trim(stn_name), Trim(qth), award, band, profile, idcall, state, cont,
+                  PropMode, Satellite, rx_freq, stx, stx_string, srx, srx_string, contestname, dok, Op, idx);
   if fDebugLevel >=1 then
     Writeln(Q.SQL.Text);
   trQ.StartTransaction;
@@ -1863,26 +1825,20 @@ begin
     exit;
   band := dmUtils.GetBandFromFreq(freq);
   Q.Close();
-  Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE waz = ' + waz +
-                ' AND band = ' + QuotedStr(band) +
-                ' AND ( QSL_R = ' + QuotedStr('Q')+ ' OR lotw_qslr= ' + QuotedStr('L')+
-                ' OR eqsl_qsl_rcvd= ' + QuotedStr('E')+
-                ') LIMIT 1';
+  Q.SQL.Text := dmSqlQso.SqlWazCfmOnBand(waz, band);
   trQ.StartTransaction;
   Q.Open();
   if Q.Fields[0].AsInteger > 0 then
     Result := 4 //waz already confirmed
   else begin
     Q.Close();
-    Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE waz = ' + waz +
-                  ' AND band = ' + QuotedStr(band) + ' LIMIT 1';
+    Q.SQL.Text := dmSqlQso.SqlWazOnBand(waz, band);
     Q.Open();
     if Q.Fields[0].AsInteger > 0 then
       Result := 3 //qsl needed
     else begin
       Q.Close();
-      Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE waz = ' + waz+
-                    ' LIMIT 1';
+      Q.SQL.Text := dmSqlQso.SqlWazWorked(waz);
       Q.Open();
       if Q.Fields[0].AsInteger > 0 then
         Result := 2 //new band waz zone
@@ -1919,25 +1875,20 @@ begin
     exit;
   band := dmUtils.GetBandFromFreq(freq);
   Q.Close();
-  Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE itu = ' + itu +
-                ' AND band = ' + QuotedStr(band) +
-                ' AND ( QSL_R = ' + QuotedStr('Q')+ ' OR lotw_qslr= ' + QuotedStr('L')+
-                ' ) LIMIT 1';
+  Q.SQL.Text := dmSqlQso.SqlItuCfmOnBand(itu, band);
   trQ.StartTransaction;
   Q.Open();
   if Q.Fields[0].AsInteger > 0 then
     Result := 4 //itu already confirmed
   else begin
     Q.Close();
-    Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE itu = ' + itu +
-                  ' AND band = ' + QuotedStr(band)+' LIMIT 1';
+    Q.SQL.Text := dmSqlQso.SqlItuOnBand(itu, band);
     Q.Open();
     if Q.Fields[0].AsInteger > 0 then
       Result := 3 //qsl needed
     else begin
       Q.Close();
-      Q.SQL.Text := 'select id_cqrlog_main FROM cqrlog_main WHERE itu = ' + itu+
-                    ' LIMIT 1';
+      Q.SQL.Text := dmSqlQso.SqlItuWorked(itu);
       Q.Open();
       if Q.Fields[0].AsInteger > 0 then
         Result := 2 //new band itu zone
@@ -1966,8 +1917,7 @@ begin
   if not dmUtils.IsIOTAOK(iota) then
     exit;
   Q.Close();
-  Q.SQL.Text := 'SELECT MAX(id_cqrlog_main) FROM cqrlog_main WHERE iota = ' + QuotedStr(iota) +
-                ' AND QSL_R = ' + QuotedStr('Q');
+  Q.SQL.Text := dmSqlQso.SqlIotaCfm(iota);
   if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
   trQ.StartTransaction;
   Q.Open();
@@ -1975,8 +1925,7 @@ begin
     Result := 3 //iota already confirmed
   else begin
     Q.Close();
-    Q.SQL.Text := 'SELECT MAX(id_cqrlog_main) FROM cqrlog_main WHERE iota = ' +
-                  QuotedStr(iota);
+    Q.SQL.Text := dmSqlQso.SqlIotaWorked(iota);
     if fDebugLevel >= 1 then Writeln(Q.SQL.Text);
     Q.Open();
     if Q.Fields[0].AsInteger > 0 then
@@ -2174,11 +2123,7 @@ begin
       Q.Close();
       trQ.StartTransaction;
       try
-        Q.SQL.Text := 'select id_cqrlog_main from cqrlog_main where adif = '+
-                      IntToStr(adif)+' and mode='+QuotedStr(mode)+' and qsl_s<>'+QuotedStr('');
-        if not cqrini.ReadBool('NewQSO','AutoDQSLS',False) then
-          Q.SQL.Text := Q.SQL.Text +  ' and callsign='+QuotedStr(call);
-        Q.SQL.Text := Q.SQL.Text + ' LIMIT 1';
+        Q.SQL.Text := dmSqlQso.SqlQslAlreadySent(adif, mode, not cqrini.ReadBool('NewQSO','AutoDQSLS',False), call);
         Q.Open();
         if Q.Fields[0].AsInteger = 0 then
           Result := cqrini.ReadString('NewQSO','QSL_S','')
@@ -2396,7 +2341,7 @@ begin
     end
   end
   else begin
-    Q.SQL.Text := 'SELECT my_loc,loc FROM cqrlog_main';
+    Q.SQL.Text := dmSqlQso.SqlQsoLocators;
     trQ.StartTransaction;
     try
       Q.Open;
@@ -2411,10 +2356,9 @@ begin
     end
   end;
   if pos('WHERE', Q.SQL.Text) > 0 then
-       Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM view_cqrlog_main_by_qsodate WHERE left(loc,4) <> "" AND '
-      + copy(Q.SQL.Text, pos('WHERE', Q.SQL.Text)+5, length(Q.SQL.Text))
+       Q.SQL.Text := dmSqlQso.SqlSquareCountFiltered(copy(Q.SQL.Text, pos('WHERE', Q.SQL.Text)+5, length(Q.SQL.Text)))
    else
-    Q.SQL.Text := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> "" ';
+    Q.SQL.Text := dmSqlQso.SqlSquareCount;
    trQ.StartTransaction;
     try
       Q.Open;
@@ -2445,7 +2389,7 @@ begin
     end
   end
   else begin
-    Q.SQL.Text := 'SELECT COUNT(*) FROM cqrlog_main';
+    Q.SQL.Text := dmSqlQso.SqlQsoCountAll;
     trQ.StartTransaction;
     try
       Q.Open;
@@ -3601,8 +3545,6 @@ begin
 end;
 
 function TdmData.CallExistsInLog(callsign,band,mode,LastDate,LastTime : String) : Boolean;
-var
-  sql : String;
 begin
   EnterCriticalsection(csPreviousQSO);
   try
@@ -3611,10 +3553,7 @@ begin
 
     //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
     //too late to rewrite it (Petr, OK2CQR)
-    sql := 'select id_cqrlog_main from cqrlog_main where (callsign= '+QuotedStr(callsign)+') and (band = '+QuotedStr(band)+') '+
-           'and (mode = '+QuotedStr(mode)+') and (str_to_date(concat(qsodate,'+QuotedStr(' ')+',time_on), '+
-           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date('+QuotedStr(LastDate+' '+LastTime)+', '+QuotedStr('%Y-%m-%d %H:%i')+')';
-    qBandMapFil.SQL.Text := sql;
+    qBandMapFil.SQL.Text := dmSqlQso.SqlQsoAfter(callsign, band, mode, LastDate, LastTime);
     if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
     qBandMapFil.Open;
     Result := qBandMapFil.RecordCount > 0
@@ -3648,14 +3587,9 @@ begin
 
   try try
     if DxccWithLoTW then
-      qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                    sAdif+' AND band='+QuotedStr(band)+' AND ((qsl_r='+
-                    QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
-                    QuotedStr(mode)+' LIMIT 1'
+      qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoCfmOnBandModeIncLotw(dmData.DBName, sAdif, band, mode)
     else
-      qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND qsl_r='+
-                     QuotedStr('Q')+ ' AND mode='+QuotedStr(mode)+' LIMIT 1';
+      qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoCfmOnBandMode(dmData.DBName, sAdif, band, mode);
     trRbnMon.StartTransaction;
     qRbnMon.Open;
     if qRbnMon.Fields[0].AsInteger > 0 then
@@ -3665,9 +3599,7 @@ begin
     end
     else begin
       qRbnMon.Close;
-      qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                     sAdif+' AND band='+QuotedStr(band)+' AND mode='+
-                     QuotedStr(mode)+' LIMIT 1';
+      qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoOnBandMode(dmData.DBName, sAdif, band, mode);
       qRbnMon.Open;
       if qRbnMon.Fields[0].AsInteger > 0 then
       begin
@@ -3676,8 +3608,7 @@ begin
       end
       else begin
         qRbnMon.Close;
-        qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                       sAdif+' AND band='+QuotedStr(band)+' LIMIT 1';
+        qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoOnBand(dmData.DBName, sAdif, band);
         qRbnMon.Open;
         if qRbnMon.Fields[0].AsInteger > 0 then
         begin
@@ -3686,8 +3617,7 @@ begin
         end
         else begin
           qRbnMon.Close;
-          qRbnMon.SQL.Text := 'SELECT id_cqrlog_main FROM '+dmData.DBName+'.cqrlog_main WHERE adif='+
-                         sAdif+' LIMIT 1';
+          qRbnMon.SQL.Text := dmSqlStat.SqlRbnQsoWithDxcc(dmData.DBName, sAdif);
           qRbnMon.Open;
           if qRbnMon.Fields[0].AsInteger>0 then
           begin
@@ -3721,9 +3651,7 @@ begin
 
     //this ugly query is because I made a stupid mistake when stored qsodate and time_on as Varchar(), now it's probably
     //too late to rewrite it (Petr, OK2CQR)
-    qRbnMon.SQL.Text := 'select id_cqrlog_main from cqrlog_main where (callsign= :callsign) and (band = :band) '+
-           'and (mode = :mode) and (str_to_date(concat(qsodate, '+QuotedStr(' ')+',time_on), '+
-           QuotedStr('%Y-%m-%d %H:%i')+')) > str_to_date(:last_date_time, '+QuotedStr('%Y-%m-%d %H:%i')+')';
+    qRbnMon.SQL.Text := dmSqlQso.SqlQsoAfterParams;
 
     qRbnMon.Prepare;
     qRbnMon.ParamByName('callsign').AsString := callsign;

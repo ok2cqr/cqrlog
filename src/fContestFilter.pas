@@ -47,11 +47,11 @@ implementation
 {$R *.lfm}
 
 { TfrmContestFilter }
-uses dData, dUtils, fContest;
+uses dData, dUtils, fContest, dSqlQso;
 
 procedure TfrmContestFilter.btnOKClick(Sender: TObject);
 begin
-  tmp := 'SELECT * FROM view_cqrlog_main_by_qsodate WHERE `contestname` = "' + cmbContestName.Text + '"';
+  tmp := dmSqlQso.SqlQsosOfContest(cmbContestName.Text);
   if (tmp <> '') then
   begin
     dmData.qCQRLOG.Close;

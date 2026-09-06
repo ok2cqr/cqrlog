@@ -45,7 +45,7 @@ implementation
 
 { TfrmSort }
 
-uses dData, dUtils, fMain;
+uses dData, dUtils, fMain, dSqlQso;
 
 procedure TfrmSort.DisableFilter;
 begin
@@ -59,7 +59,7 @@ begin
   DisableFilter;
   dmData.SortType := stDate;
   dmData.qCQRLOG.Close;
-  dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate LIMIT '+IntToStr(cDB_LIMIT);
+  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDateSorted(cDB_LIMIT);
   dmData.RefreshMainDatabase()
 end;
 
@@ -68,7 +68,7 @@ begin
   DisableFilter;
   dmData.SortType := stDate;
   dmData.qCQRLOG.Close;
-  dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_qsodate_asc LIMIT '+IntToStr(cDB_LIMIT);
+  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByDateAsc(cDB_LIMIT);
   dmData.RefreshMainDatabase()
 end;
 
@@ -77,7 +77,7 @@ begin
   DisableFilter;
   dmData.SortType := stCall;
   dmData.qCQRLOG.Close;
-  dmData.qCQRLOG.SQL.Text := 'select * from view_cqrlog_main_by_callsign LIMIT '+IntToStr(cDB_LIMIT);
+  dmData.qCQRLOG.SQL.Text := dmSqlQso.SqlFirstPageByCallSorted(cDB_LIMIT);
   dmData.RefreshMainDatabase()
 end;
 

@@ -53,7 +53,7 @@ implementation
 {$R *.lfm}
 
 { TfrmGroupEdit }
-uses dUtils, dData, dDXCC, fMain,dSatellite;
+uses dUtils, dData, dDXCC, fMain,dSatellite, dSqlQso;
 
 procedure TfrmGroupEdit.cmbFieldChange(Sender: TObject);
 begin
@@ -166,8 +166,7 @@ var
       dmData.Q.Close;
       if dmData.trQ.Active then
         dmData.trQ.RollBack;
-      dmData.Q.SQL.Text := 'select qsodate,freq,mode,qsl_r,lotw_qslr,dxcc_ref from '+
-                           'cqrlog_main where id_cqrlog_main = ' + IntToStr(idx);
+      dmData.Q.SQL.Text := dmSqlQso.SqlQsoForDxccCheck(idx);
       if dmData.DebugLevel >=1 then Writeln(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -186,7 +185,7 @@ var
       dmData.trQ.Commit
     end
     else begin
-      dmData.Q.SQL.Text := 'update cqrlog_main set '+sql+' where id_cqrlog_main='+IntToStr(idx);
+      dmData.Q.SQL.Text := dmSqlQso.SqlSetQsoFieldsGroup(sql, idx);
       if dmData.DebugLevel>=1 then
                        Writeln(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;

@@ -56,7 +56,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData,dUtils, uMyIni;
+uses dData,dUtils, uMyIni, dSqlImpExp;
 
 { TfrmSOTAExport }
 
@@ -149,8 +149,7 @@ begin
   if dmData.trQ.Active then dmData.trQ.Rollback;
   dmData.Q.Close;
   if AllQSO then
-    dmData.Q.SQL.Text := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
-                         'from view_cqrlog_main_by_qsodate order by qsodate,time_on'
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosForSotaExport
   else begin
     q := dmData.qCQRLOG.SQL.Text;
     if Pos('order by',LowerCase(q)) > 0 then

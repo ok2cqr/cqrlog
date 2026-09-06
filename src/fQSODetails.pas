@@ -129,7 +129,7 @@ implementation
 {$R *.lfm}
 
 { TfrmQSODetails }
-uses dUtils, dData, fNewQSO, uMyIni, dMembership;
+uses dUtils, dData, fNewQSO, uMyIni, dMembership, dSqlRef, dSqlQso;
 
 {
  %l - long club name
@@ -422,9 +422,7 @@ begin
   dmData.Q.Close;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := 'select * from '+ClubTable+ ' where '+ Club.ClubField +
-                       ' = ' + QuotedStr(data) + ' and fromdate <= ' + QuotedStr(fClubDate) +
-                       ' and todate >= '+QuotedStr(fClubDate);
+  dmData.Q.SQL.Text := dmSqlRef.SqlClubMember(ClubTable, Club.ClubField, data, fClubDate);
   dmData.trQ.StartTransaction;
   try
     dmData.Q.Open();
@@ -447,11 +445,7 @@ begin
     dmData.Q.Close;
     if (Club.NewInfo <> '') or (Club.StoreField <> '') then
     begin
-      dmData.Q.SQL.Text := 'select id_cqrlog_main from cqrlog_main where club_nr'+ IntToStr(num) +
-                           ' = '+QuotedStr(ClubNR) + ' and qsodate >= ' + QuotedStr(frmDate) +
-                           ' and qsodate <= ' + QuotedStr(toDate) + ' and band = ' +
-                           QuotedStr(dmUtils.GetBandFromFreq(ffreq)) + ' and mode = ' +
-                           QuotedStr(fmode) + ' and qsl_r = '+QuotedStr('Q')+' LIMIT 1';
+      dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoCfm(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode);
       dmData.Q.Open();
       if (dmData.Q.Fields[0].AsInteger > 0) then //already conf
       begin
@@ -463,11 +457,7 @@ begin
       end
       else begin
         dmData.Q.Close();
-        dmData.Q.SQL.Text := 'select id_cqrlog_main from cqrlog_main where club_nr'+ IntToStr(num) +
-                               ' = '+QuotedStr(ClubNR) + ' and qsodate >= ' + QuotedStr(frmDate) +
-                               ' and qsodate <= ' + QuotedStr(toDate) + ' and band = ' +
-                               QuotedStr(dmUtils.GetBandFromFreq(ffreq)) + 'and mode = ' +
-                               QuotedStr(fmode)+' LIMIT 1';
+        dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoOnBandMode(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode);
         dmData.Q.Open();
         if (dmData.Q.Fields[0].AsInteger > 0) then //qsl needed
         begin
@@ -480,10 +470,7 @@ begin
         end
         else begin
           dmData.Q.Close();
-          dmData.Q.SQL.Text := 'select id_cqrlog_main from cqrlog_main where club_nr'+ IntToStr(num) +
-                               ' = '+QuotedStr(ClubNR) + ' and qsodate >= ' + QuotedStr(frmDate) +
-                               ' and qsodate <= ' + QuotedStr(toDate) + ' and band = ' +
-                               QuotedStr(dmUtils.GetBandFromFreq(ffreq)) + ' LIMIT 1';
+          dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoOnBand(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq));
           dmData.Q.Open();
           if (dmData.Q.Fields[0].AsInteger > 0) then //new mode
           begin
@@ -495,9 +482,7 @@ begin
           end
           else begin
             dmData.Q.Close();
-            dmData.Q.SQL.Text := 'select id_cqrlog_main from cqrlog_main where club_nr'+ IntToStr(num) +
-                                 ' = '+QuotedStr(ClubNR) + ' and qsodate >= ' + QuotedStr(frmDate) +
-                                 ' and qsodate <= ' + QuotedStr(toDate) +' LIMIT 1';
+            dmData.Q.SQL.Text := dmSqlQso.SqlClubQso(num, ClubNR, frmDate, toDate);
             dmData.Q.Open();
             if (dmData.Q.Fields[0].AsInteger > 0) then //new band
             begin

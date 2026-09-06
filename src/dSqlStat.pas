@@ -115,6 +115,20 @@ type
     function SqlWkdSquares(const LogTable, ModeTail : String) : String;
     function SqlWkdSquareCounts(const FromClause, DayLimit : String) : String;
     function SqlWkdQsoCounts(const DayLimit, BandCond : String) : String;
+
+    // "new one" probes for a spot, on the log's own database (dDXCluster and
+    // dData.RbnMonDXCCInfo; the same ladder as SqlQsoCfmOnBandModeIncLotw
+    // above, with the database name spelled out and one copy per window)
+    function SqlSpotQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
+    function SqlSpotQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+    function SqlSpotQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+    function SqlSpotQsoOnBand(const DbName, Adif, Band : String) : String;
+    function SqlSpotQsoWithDxcc(const DbName, Adif : String) : String;
+    function SqlRbnQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
+    function SqlRbnQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+    function SqlRbnQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+    function SqlRbnQsoOnBand(const DbName, Adif, Band : String) : String;
+    function SqlRbnQsoWithDxcc(const DbName, Adif : String) : String;
   end;
 
 var
@@ -665,6 +679,77 @@ function TdmSqlStat.SqlWkdQsoCounts(const DayLimit, BandCond : String) : String;
 begin
   Result := 'select count(callsign) as qso from cqrlog_main where callsign<>'+#39+#39+DayLimit+
             'union all select count(callsign) from cqrlog_main where callsign<>'+#39+#39 + BandCond +DayLimit
+end;
+
+{ spot probes }
+
+function TdmSqlStat.SqlSpotQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' AND ((qsl_r='+
+            QuotedStr('Q')+') OR (lotw_qslr='+ QuotedStr('L')+
+            ') OR (eqsl_qsl_rcvd='+ QuotedStr('E')+')) AND mode='+
+            QuotedStr(Mode)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlSpotQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' AND qsl_r='+
+            QuotedStr('Q')+ ' AND mode='+QuotedStr(Mode)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlSpotQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' AND mode='+
+            QuotedStr(Mode)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlSpotQsoOnBand(const DbName, Adif, Band : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlSpotQsoWithDxcc(const DbName, Adif : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlRbnQsoCfmOnBandModeIncLotw(const DbName, Adif, Band, Mode : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' AND ((qsl_r='+
+            QuotedStr('Q')+') OR (lotw_qslr='+QuotedStr('L')+')) AND mode='+
+            QuotedStr(Mode)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlRbnQsoCfmOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' AND qsl_r='+
+            QuotedStr('Q')+ ' AND mode='+QuotedStr(Mode)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlRbnQsoOnBandMode(const DbName, Adif, Band, Mode : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' AND mode='+
+            QuotedStr(Mode)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlRbnQsoOnBand(const DbName, Adif, Band : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' AND band='+QuotedStr(Band)+' LIMIT 1'
+end;
+
+function TdmSqlStat.SqlRbnQsoWithDxcc(const DbName, Adif : String) : String;
+begin
+  Result := 'SELECT id_cqrlog_main FROM '+DbName+'.cqrlog_main WHERE adif='+
+            Adif+' LIMIT 1'
 end;
 
 end.

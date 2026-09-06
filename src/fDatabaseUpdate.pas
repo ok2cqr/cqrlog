@@ -45,7 +45,7 @@ implementation
 {$R *.lfm}
 
 { TfrmDatabaseUpdate }
-uses dUtils, dData, uMyIni, fMain;
+uses dUtils, dData, uMyIni, fMain, dSqlQso;
 
 var
   CanCancelAtStart  : boolean;
@@ -122,8 +122,7 @@ var
     if frmDatabaseUpdate.NameFromLog then
     begin
       dmData.Q.Close;
-      dmData.Q.SQL.Text := 'select max(id_cqrlog_main),callsign,name from cqrlog_main where name <> '+QuotedStr('')+
-                           ' and callsign = '+QuotedStr(dbCall)+' group by callsign,name';
+      dmData.Q.SQL.Text := dmSqlQso.SqlLastNameForCall(dbCall);
       if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
       dmData.trQ.StartTransaction;
       dmData.Q.Open();
@@ -263,13 +262,8 @@ var
     if (c_itu<>'') then
       dbITU := c_itu;
 
-    dmData.Q1.SQL.Text := 'update cqrlog_main set name=' + QuotedStr(
-      dbName) + ',qth=' + QuotedStr(dbQTH) + ',qsl_via=' +
-      QuotedStr(dbQSLVia) + ',county=' + QuotedStr(dbCounty) +
-      ',award=' + QuotedStr(dbAward) + ',state =' +
-      QuotedStr(dbState) + ',remarks=' + QuotedStr(dbRemQSO) +
-      ',iota='+QuotedStr(dbIota)+',waz='+QuotedStr(dbWAZ)+',itu='+QuotedStr(dbITU)+
-      ' where id_cqrlog_main = ' + IntToStr(dbId);
+    dmData.Q1.SQL.Text := dmSqlQso.SqlUpdateQsoFromCallbook(dbName, dbQTH, dbQSLVia, dbCounty, dbAward, dbState,
+                                                            dbRemQSO, dbIota, dbWAZ, dbITU, dbId);
     dmData.trQ1.StartTransaction;
     if dmData.DebugLevel >= 1 then
       Writeln(dmData.Q1.SQL.Text);

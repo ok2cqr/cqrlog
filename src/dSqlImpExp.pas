@@ -75,6 +75,7 @@ type
     function SqlQsosForHtmlExportAsc : String;
     function SqlQsosForHtmlExport : String;
     function SqlQsosForEdiExport : String;
+    function SqlQsosForSotaExport : String;
   end;
 
 var
@@ -300,6 +301,14 @@ begin
 end;
 
 function TdmSqlImpExp.SqlQsosForEdiExport : String;
+begin
+  Result := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
+            'from view_cqrlog_main_by_qsodate order by qsodate,time_on'
+end;
+
+// Same statement as SqlQsosForEdiExport.  Kept separate -- see the note on
+// SqlDxccRefAfterImport.
+function TdmSqlImpExp.SqlQsosForSotaExport : String;
 begin
   Result := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
             'from view_cqrlog_main_by_qsodate order by qsodate,time_on'

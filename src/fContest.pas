@@ -206,7 +206,7 @@ implementation
 
 {$R *.lfm}
 
-uses dData, dUtils, dDXCC, fNewQSO, fMain, fWorkedGrids, fTRXControl, fCWKeys, fCWType, uMyIni;
+uses dData, dUtils, dDXCC, fNewQSO, fMain, fWorkedGrids, fTRXControl, fCWKeys, fCWType, uMyIni, dSqlQso;
 
 procedure TfrmContest.FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 var
@@ -1196,7 +1196,7 @@ Begin
    try
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := 'SELECT srx_string FROM cqrlog_main ORDER BY qsodate DESC, time_on DESC LIMIT 1';
+    dmData.Q.SQL.Text := dmSqlQso.SqlLastSrxString;
     dmData.trQ.StartTransaction;
     if dmData.DebugLevel >=1 then
       Writeln(dmData.Q.SQL.Text);
@@ -1282,9 +1282,7 @@ Begin
           Mlist[band]:='....................................' ; //A-Z0-9
           dmData.CQ.Close;
           if dmData.trCQ.Active then dmData.trCQ.Rollback;
-          dmData.CQ.SQL.Text :=
-               'SELECT ASCII(MID(callsign,LENGTH(callsign),1)) AS SuffixEnd FROM cqrlog_main WHERE contestname='+
-               QuotedStr(cmbContestName.Text)+' AND band='+QuotedStr(bands[band])+' AND mode='+QuotedStr('CW');
+          dmData.CQ.SQL.Text := dmSqlQso.SqlContestSuffixEnds(cmbContestName.Text, bands[band]);
 
           if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
@@ -1354,9 +1352,7 @@ Begin
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
-    dmData.CQ.SQL.Text :=
-        'SELECT  COUNT(callsign) AS Qcount FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
-         ' AND freq > 27.99999';
+    dmData.CQ.SQL.Text := dmSqlQso.SqlContestVhfQsoCount(cmbContestName.Text);
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
@@ -1366,9 +1362,7 @@ Begin
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
-    dmData.CQ.SQL.Text :=
-        'SELECT  my_loc,loc,band FROM cqrlog_main WHERE contestname='+ QuotedStr(cmbContestName.Text)+
-         ' AND freq > 27.99999';
+    dmData.CQ.SQL.Text := dmSqlQso.SqlContestVhfLocators(cmbContestName.Text);
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
@@ -1405,9 +1399,7 @@ Begin
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
-    dmData.CQ.SQL.Text :=
-        'SELECT DISTINCT(SUBSTRING(UPPER(loc),1,4)) AS MainLoc FROM cqrlog_main WHERE contestname='+
-        QuotedStr(cmbContestName.Text)+' ORDER BY MainLoc ASC';
+    dmData.CQ.SQL.Text := dmSqlQso.SqlContestMainLocators(cmbContestName.Text);
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
      dmData.CQ.Open();
@@ -1459,10 +1451,7 @@ var
         //--------------------------------------------------------------
         dmData.CQ.Close;
         if dmData.trCQ.Active then dmData.trCQ.Rollback;
-        dmData.CQ.SQL.Text :=
-           'SELECT COUNT(callsign) AS QSOs, COUNT(DISTINCT(adif)) AS Countries,'+
-           'COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
-             QuotedStr(cmbContestName.Text);
+        dmData.CQ.SQL.Text := dmSqlQso.SqlContestTotals(cmbContestName.Text);
 
         if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
@@ -1482,9 +1471,7 @@ var
     Begin
       dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-          'SELECT COUNT(callsign) AS DXs  FROM cqrlog_main WHERE contestname='+
-           QuotedStr(cmbContestName.Text)+' AND cont<>'+QuotedStr(mycont);
+      dmData.CQ.SQL.Text := dmSqlQso.SqlContestDxQsoCount(cmbContestName.Text, mycont);
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
@@ -1497,9 +1484,7 @@ var
     Begin
       dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-          'SELECT COUNT(DISTINCT(adif)) AS DXCntrs  FROM cqrlog_main WHERE contestname='+
-           QuotedStr(cmbContestName.Text)+' AND cont<>'+QuotedStr(mycont);
+      dmData.CQ.SQL.Text := dmSqlQso.SqlContestDxCountryCount(cmbContestName.Text, mycont);
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
@@ -1512,11 +1497,7 @@ var
     begin
       dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-         'SELECT DISTINCT(pref) FROM cqrlog_common.dxcc_ref RIGHT JOIN cqrlog_main ON '+
-         'cqrlog_common.dxcc_ref.adif = cqrlog_main.adif WHERE contestname='+
-           QuotedStr(cmbContestName.Text)+' AND cqrlog_main.cont<>'+QuotedStr(mycont)
-           +' ORDER BY cqrlog_common.dxcc_ref.pref ASC';
+      dmData.CQ.SQL.Text := dmSqlQso.SqlContestDxPrefixes(cmbContestName.Text, mycont);
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
@@ -1538,9 +1519,7 @@ var
     begin
       dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-          'SELECT COUNT(DISTINCT(adif)) AS MYCntrs  FROM cqrlog_main WHERE contestname='+
-           QuotedStr(cmbContestName.Text)+' AND cont='+QuotedStr(Mycont);
+      dmData.CQ.SQL.Text := dmSqlQso.SqlContestHomeCountryCount(cmbContestName.Text, Mycont);
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
@@ -1553,11 +1532,7 @@ var
     begin
       dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-      'SELECT DISTINCT(pref) FROM cqrlog_common.dxcc_ref RIGHT JOIN cqrlog_main ON '+
-      'cqrlog_common.dxcc_ref.adif = cqrlog_main.adif WHERE contestname='+
-        QuotedStr(cmbContestName.Text)+' AND cqrlog_main.cont='+QuotedStr(Mycont)
-        +' ORDER BY cqrlog_common.dxcc_ref.pref ASC';
+      dmData.CQ.SQL.Text := dmSqlQso.SqlContestHomePrefixes(cmbContestName.Text, Mycont);
        if dmData.DebugLevel >=1 then
                                         Writeln(dmData.CQ.SQL.Text);
        dmData.CQ.Open();
@@ -1583,10 +1558,7 @@ var
         begin
             dmData.CQ.Close;
               if dmData.trCQ.Active then dmData.trCQ.Rollback;
-              dmData.CQ.SQL.Text :=
-                 'SELECT COUNT(DISTINCT(UPPER(srx_string))) AS Msgs FROM cqrlog_main WHERE contestname='+
-                   QuotedStr(cmbContestName.Text)+ ' AND band='+QuotedStr(dUtils.cBands[ContestBandPtr[b]])+
-                   ' AND srx_string<>""';
+              dmData.CQ.SQL.Text := dmSqlQso.SqlContestMsgCountOnBand(cmbContestName.Text, dUtils.cBands[ContestBandPtr[b]]);
 
               if dmData.DebugLevel >=1 then
                                            Writeln(dmData.CQ.SQL.Text);
@@ -1608,10 +1580,7 @@ var
         begin
           dmData.CQ.Close;
           if dmData.trCQ.Active then dmData.trCQ.Rollback;
-          dmData.CQ.SQL.Text :=
-              'SELECT DISTINCT(UPPER(srx_string)) AS srx_msg FROM cqrlog_main WHERE contestname='+
-               QuotedStr(cmbContestName.Text)+ ' AND band='+QuotedStr(dUtils.cBands[ContestBandPtr[b]])
-               +' ORDER BY srx_msg ASC';
+          dmData.CQ.SQL.Text := dmSqlQso.SqlContestMsgsOnBand(cmbContestName.Text, dUtils.cBands[ContestBandPtr[b]]);
           if dmData.DebugLevel >=1 then
                                            Writeln(dmData.CQ.SQL.Text);
            dmData.CQ.Open();
@@ -1654,8 +1623,7 @@ Begin
     //--------------------------------------------------------------
       dmData.CQ.Close;
       if dmData.trCQ.Active then dmData.trCQ.Rollback;
-      dmData.CQ.SQL.Text :=
-      'select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate," ",time_off),utc_timestamp())<10';
+      dmData.CQ.SQL.Text := dmSqlQso.SqlQsoRate10;
       if dmData.DebugLevel >=1 then
                                        Writeln(dmData.CQ.SQL.Text);
       dmData.CQ.Open();
@@ -1665,8 +1633,7 @@ Begin
     //--------------------------------------------------------------
     dmData.CQ.Close;
     if dmData.trCQ.Active then dmData.trCQ.Rollback;
-    dmData.CQ.SQL.Text :=
-    'select count(callsign) as rate from cqrlog_main where timestampdiff(minute,concat(qsodate," ",time_off),utc_timestamp())<60';
+    dmData.CQ.SQL.Text := dmSqlQso.SqlQsoRate60;
     if dmData.DebugLevel >=1 then
                                      Writeln(dmData.CQ.SQL.Text);
     dmData.CQ.Open();
