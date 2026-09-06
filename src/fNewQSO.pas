@@ -6275,7 +6275,7 @@ begin
       end
     end;
 
-    for i:=0 to Length(aColumns) do
+    for i:=0 to Length(aColumns)-1 do
     begin
       if (aColumns[i].Visible) and (not aColumns[i].Exists) then
       begin
