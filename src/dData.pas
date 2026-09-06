@@ -343,7 +343,7 @@ implementation
   {$R *.lfm}
 
 uses dUtils, dDXCC, fMain, fWorking, fUpgrade, fImportProgress, fNewQSO, dDXCluster, uMyIni,
-     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl, dSqlRef, dSqlStat, dSqlQso;
+     fTRXControl, fRotControl, uVersion, dLogUpload, fDbError, dMembership, dSqlUserData, dSqlQsl, dSqlRef, dSqlStat, dSqlQso, dSqlSchema;
 
 procedure TdmData.CheckForDatabases;
 var
@@ -352,8 +352,7 @@ begin
   if trmQ.Active then
     trmQ.Rollback;
   mQ.SQL.Clear;
-  mQ.SQL.Text := 'select * from tables where table_schema = '+
-                  QuotedStr('cqrlog_common');
+  mQ.SQL.Text := dmSqlSchema.SqlCommonDbExists;
   trmQ.StartTransaction;
   mQ.Open;
   if mQ.RecordCount > 0 then
@@ -370,7 +369,7 @@ begin
 
     trmQ.StartTransaction;
     mQ.Close;
-    mQ.SQL.Text := 'insert into db_version (nr) values('+IntToStr(cDB_COMN_VER)+')';
+    mQ.SQL.Text := dmSqlSchema.SqlInsertCommonVersion(cDB_COMN_VER);
     mQ.ExecSQL;
     trmQ.Commit;
 
@@ -406,7 +405,7 @@ begin
   qLogList.Close;
   if trLogList.Active then
     trLogList.Rollback;
-  qLogList.SQL.Text := 'SELECT log_nr,log_name FROM cqrlog_common.log_list order by log_nr';
+  qLogList.SQL.Text := dmSqlSchema.SqlLogList;
   trLogList.StartTransaction;
   qLogList.Open;
 end;
@@ -444,8 +443,7 @@ begin
     trmQ.Rollback;
 
   mQ.SQL.Clear;
-  mQ.SQL.Text := 'CREATE DATABASE IF NOT EXISTS '+db+' DEFAULT CHARACTER SET = '+
-                 'utf8 DEFAULT COLLATE = utf8_bin;';
+  mQ.SQL.Text := dmSqlSchema.SqlCreateLogDatabase(db);
 //"if not exists is" because bug in TSQLScript caused that database was created but without
 //any table, so if user try to create new database which already exists but it is not in the
 //log list, database will be created and added to the log list
@@ -455,7 +453,7 @@ begin
   mQ.ExecSQL;
   trmQ.Commit;
 
-  mQ.SQL.Text := 'use '+db+';';
+  mQ.SQL.Text := dmSqlSchema.SqlUseDbSemi(db);
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   trmQ.StartTransaction;
   mQ.ExecSQL;
@@ -482,13 +480,12 @@ begin
   CreateViews;
 
   trmQ.StartTransaction;
-  mQ.SQL.Text := 'insert into db_version (nr) values('+IntToStr(cDB_MAIN_VER)+')';
+  mQ.SQL.Text := dmSqlSchema.SqlInsertLogVersion(cDB_MAIN_VER);
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   mQ.ExecSQL;
   trmQ.Commit;
 
-  mQ.SQL.Text := 'insert into cqrlog_common.log_list (log_nr,log_name) values '+
-                 '('+IntToStr(nr)+','+QuotedStr(log_name)+')';
+  mQ.SQL.Text := dmSqlSchema.SqlInsertLog(nr, log_name);
   trmQ.StartTransaction;
   if fDebugLevel>=1 then Writeln(mQ.SQL.Text);
   mQ.ExecSQL;
@@ -608,8 +605,7 @@ function TdmData.LogExists(nr : Word) : Boolean;
 begin
   if trmQ.Active then
     trmQ.Rollback;
-  mQ.SQL.Text := 'select log_nr from cqrlog_common.log_list where log_nr = '+
-                 IntToStr(nr);
+  mQ.SQL.Text := dmSqlSchema.SqlLogExists(nr);
   trmQ.StartTransaction;
   mQ.Open;
   Result := mQ.RecordCount > 0;
@@ -622,8 +618,7 @@ begin
   mQ.Close;
   if trmQ.Active then
     trmQ.Rollback;
-  mQ.SQL.Text := 'UPDATE cqrlog_common.log_list SET log_name = '+
-                 QuotedStr(log_name) + ' where log_nr = '+IntToStr(nr);
+  mQ.SQL.Text := dmSqlSchema.SqlRenameLog(log_name, nr);
   trmQ.StartTransaction;
   mQ.ExecSQL;
   trmQ.Commit;
@@ -635,7 +630,7 @@ begin
   qLogList.Close;
   if trLogList.Active then
     trLogList.Rollback;
-  qLogList.SQL.Text := 'SELECT log_nr,log_name FROM cqrlog_common.log_list order by log_nr';
+  qLogList.SQL.Text := dmSqlSchema.SqlLogListRefresh;
   trLogList.StartTransaction;
   qLogList.Open;
   if nr > 0 then
@@ -651,10 +646,10 @@ begin
   mQ.Close;
   if trmQ.Active then
     trmQ.Rollback;
-  mQ.SQL.Text := 'DROP DATABASE '+db;
+  mQ.SQL.Text := dmSqlSchema.SqlDropLogDatabase(db);
   trmQ.StartTransaction;
   mQ.ExecSQL;
-  mQ.SQL.Text := 'DELETE FROM cqrlog_common.log_list WHERE log_nr = '+IntToStr(nr);
+  mQ.SQL.Text := dmSqlSchema.SqlDeleteLog(nr);
   mQ.ExecSQL;
   trmQ.Commit;
   RefreshLogList()
@@ -681,7 +676,7 @@ begin
   fDBName := GetProperDBName(nr);
   if trQ.Active then
     trQ.Rollback;
-  Q.SQL.Text := 'use ' + fDBName;
+  Q.SQL.Text := dmSqlSchema.SqlUseDb(fDBName);
   if fDebugLevel>=1 then Writeln(Q.SQL.Text);
   trQ.StartTransaction;
   Q.ExecSQL;
@@ -690,7 +685,7 @@ begin
   if dmDXCluster.trQ.Active then
     dmDXCluster.trQ.Rollback;
   dmDXCluster.Q.Close;
-  dmDXCluster.Q.SQL.Text := 'use ' + fDBName;
+  dmDXCluster.Q.SQL.Text := dmSqlSchema.SqlUseDbForCluster(fDBName);
   if fDebugLevel>=1 then Writeln(dmDXCluster.Q.SQL.Text);
   dmDXCluster.trQ.StartTransaction;
   dmDXCluster.Q.ExecSQL;
@@ -698,27 +693,27 @@ begin
 
   if dmLogUpload.trQ.Active then dmLogUpload.trQ.Rollback;
   dmLogUpload.Q.Close;
-  dmLogUpload.Q.SQL.Text := 'use ' + fDBName;
+  dmLogUpload.Q.SQL.Text := dmSqlSchema.SqlUseDbForUpload(fDBName);
   if fDebugLevel>=1 then Writeln(dmLogUpload.Q.SQL.Text);
   dmLogUpload.Q.ExecSQL;
   dmLogUpload.trQ.Commit;
 
   if trBandMapFil.Active then trBandMapFil.Rollback;
   qBandMapFil.Close;
-  qBandMapFil.SQL.Text := 'use ' + fDBName;
+  qBandMapFil.SQL.Text := dmSqlSchema.SqlUseDbForBandMap(fDBName);
   if fDebugLevel>=1 then Writeln(qBandMapFil.SQL.Text);
   qBandMapFil.ExecSQL;
   trBandMapFil.Commit;
 
   if trRbnMon.Active then trRbnMon.Rollback;
   qRbnMon.Close;
-  qRbnMon.SQL.Text := 'use ' + fDBName;
+  qRbnMon.SQL.Text := dmSqlSchema.SqlUseDbForRbn(fDBName);
   if (fDebugLevel>=1) then Writeln(qRbnMon.SQL.Text);
   trRbnMon.StartTransaction;
   qRbnMon.ExecSQL;
   trRbnMon.Commit;
 
-  Q.SQL.Text := 'SELECT * FROM cqrlog_config';
+  Q.SQL.Text := dmSqlSchema.SqlConfig;
   trQ.StartTransaction;
   l := TStringList.Create;
   Q.Open;
@@ -745,7 +740,7 @@ begin
 
   trQ.StartTransaction;
   try
-    Q.SQL.Text := 'select * from db_version';
+    Q.SQL.Text := dmSqlSchema.SqlLogVersion;
     Q.Open;
     UpgradeMainDatabase(Q.Fields[0].AsInteger)
   finally
@@ -755,7 +750,7 @@ begin
 
   trQ.StartTransaction;
   try
-    Q.SQL.Text := 'select * from cqrlog_common.db_version';
+    Q.SQL.Text := dmSqlSchema.SqlCommonVersion;
     Q.Open;
     UpgradeCommonDatabase(Q.Fields[0].AsInteger)
   finally
@@ -806,14 +801,14 @@ begin
   l := TStringList.Create;
   try
     l.LoadFromFile(cqrini.IniFileName);
-    Q.SQL.Text := 'select count(*) from '+fDBName+'.cqrlog_config';
+    Q.SQL.Text := dmSqlSchema.SqlConfigCount(fDBName);
     Q.Open;
     ins := Q.Fields[0].AsInteger = 0;
     Q.Close;
     if ins then
-      Q.SQL.Text := 'insert into '+fDBName+'.cqrlog_config (config_file) values(:cnf)'
+      Q.SQL.Text := dmSqlSchema.SqlInsertConfig(fDBName)
     else
-      Q.SQL.Text := 'update '+fDBName+'.cqrlog_config set config_file = :cnf';
+      Q.SQL.Text := dmSqlSchema.SqlUpdateConfig(fDBName);
     Q.Prepare;
     Q.Params[0].AsString := l.Text;
     Q.ExecSQL;
@@ -2414,44 +2409,44 @@ begin
     lTr.DataBase := MainCon;
     lQ.Transaction := lTr;
 
-    lQ.SQL.Text := 'use '+ GetProperDBName(nr);
+    lQ.SQL.Text := dmSqlSchema.SqlUseDbForTruncate(GetProperDBName(nr));
     lQ.ExecSQL;
     lTr.Commit;
 
     lTr.StartTransaction;
-    lQ.SQL.Text := 'TRUNCATE club1;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateClub1;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club2;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateClub2;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club3;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateClub3;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club4;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateClub4;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE club5;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateClub5;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE cqrlog_config;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateConfig;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'delete from cqrlog_main;';
+    lQ.SQL.Text := dmSqlSchema.SqlDeleteAllQsosForTruncate;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'delete from upload_status';
+    lQ.SQL.Text := dmSqlSchema.SqlDeleteUploadStatus;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'delete from log_changes';
+    lQ.SQL.Text := dmSqlSchema.SqlDeleteLogChanges;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE dxcc_id;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateDxccId;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE long_note;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateLongNote;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE notes;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateNotes;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE profiles;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateProfiles;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE version;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateVersion;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE zipcode1;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateZipcode1;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE zipcode2;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateZipcode2;
     lQ.ExecSQL;
-    lQ.SQL.Text := 'TRUNCATE zipcode3;';
+    lQ.SQL.Text := dmSqlSchema.SqlTruncateZipcode3;
     lQ.ExecSQL;
     lTr.Commit
   finally
@@ -2481,11 +2476,11 @@ begin
 
       if (old_version < 4) then
       begin
-        Q1.SQL.Text := 'alter table cqrlog_common.bands add rx_offset numeric(10,4) default 0';
+        Q1.SQL.Text := dmSqlSchema.SqlAddBandRxOffset;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
-        Q1.SQL.Text := 'alter table cqrlog_common.bands add tx_offset numeric(10,4) default 0';
+        Q1.SQL.Text := dmSqlSchema.SqlAddBandTxOffset;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL
       end;
@@ -2518,7 +2513,7 @@ begin
         Q1.ExecSQL;
       end;
 
-      Q1.SQL.Text := 'update cqrlog_common.db_version set nr='+IntToStr(cDB_COMN_VER);
+      Q1.SQL.Text := dmSqlSchema.SqlSetCommonVersion(cDB_COMN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL
     except
@@ -2550,16 +2545,16 @@ begin
       if old_version < 2 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add eqsl_qsl_sent varchar(1) null';
+        Q1.SQL.Text := dmSqlSchema.SqlAddEqslQslSent;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main add eqsl_qslsdate date null';
+        Q1.SQL.Text := dmSqlSchema.SqlAddEqslQslsDate;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main add eqsl_qsl_rcvd varchar(1) null';
+        Q1.SQL.Text := dmSqlSchema.SqlAddEqslQslRcvd;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main add eqsl_qslrdate date null';
+        Q1.SQL.Text := dmSqlSchema.SqlAddEqslQslrDate;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2568,45 +2563,45 @@ begin
       if old_version < 4 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'update cqrlog_main set eqsl_qsl_sent = '+QuotedStr('')+' where eqsl_qsl_sent is null';
+        Q1.SQL.Text := dmSqlSchema.SqlFixNullEqslQslSent;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'update cqrlog_main set eqsl_qsl_rcvd = '+QuotedStr('')+' where eqsl_qsl_rcvd is null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-
-        Q1.SQL.Text := 'update cqrlog_main set qsl_s = '+QuotedStr('')+' where qsl_s is null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        Q1.SQL.Text := 'update cqrlog_main set qsl_r = '+QuotedStr('')+' where qsl_r is null';
+        Q1.SQL.Text := dmSqlSchema.SqlFixNullEqslQslRcvd;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
-        Q1.SQL.Text := 'update cqrlog_main set lotw_qsls = '+QuotedStr('')+' where lotw_qsls is null';
+        Q1.SQL.Text := dmSqlSchema.SqlFixNullQslS;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'update cqrlog_main set lotw_qslr = '+QuotedStr('')+' where lotw_qslr is null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-
-        Q1.SQL.Text := 'alter table cqrlog_main change qsl_s qsl_s varchar(3) default '+QuotedStr('')+ 'not null';
-        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
-        Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main change qsl_r qsl_r varchar(3) default '+QuotedStr('')+ 'not null';
+        Q1.SQL.Text := dmSqlSchema.SqlFixNullQslR;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
-        Q1.SQL.Text := 'alter table cqrlog_main change lotw_qsls lotw_qsls varchar(1) default '+QuotedStr('')+ 'not null';
+        Q1.SQL.Text := dmSqlSchema.SqlFixNullLotwQsls;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main change lotw_qslr lotw_qslr varchar(1) default '+QuotedStr('')+ 'not null';
+        Q1.SQL.Text := dmSqlSchema.SqlFixNullLotwQslr;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
-        Q1.SQL.Text := 'alter table cqrlog_main change eqsl_qsl_sent eqsl_qsl_sent varchar(1) default '+QuotedStr('')+ 'not null';
+        Q1.SQL.Text := dmSqlSchema.SqlQslSNotNull;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main change eqsl_qsl_rcvd eqsl_qsl_rcvd varchar(1) default '+QuotedStr('')+ 'not null';
+        Q1.SQL.Text := dmSqlSchema.SqlQslRNotNull;
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
+        Q1.SQL.Text := dmSqlSchema.SqlLotwQslsNotNull;
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := dmSqlSchema.SqlLotwQslrNotNull;
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+
+        Q1.SQL.Text := dmSqlSchema.SqlEqslQslSentNotNull;
+        if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
+        Q1.ExecSQL;
+        Q1.SQL.Text := dmSqlSchema.SqlEqslQslRcvdNotNull;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL ;
         trQ1.Commit
@@ -2615,7 +2610,7 @@ begin
       if old_version < 5 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main change qsl_s qsl_s varchar(4) default '+QuotedStr('')+ ' not null';
+        Q1.SQL.Text := dmSqlSchema.SqlQslSWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2624,7 +2619,7 @@ begin
       if old_version < 6 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(10) not null';
+        Q1.SQL.Text := dmSqlSchema.SqlModeNotNull;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2725,7 +2720,7 @@ begin
       if old_version < 9 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table log_changes add upddeleted int(1) default 0';
+        Q1.SQL.Text := dmSqlSchema.SqlAddUpdDeleted;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2746,11 +2741,11 @@ begin
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'ALTER TABLE call_alert ADD INDEX (id);';
+        Q1.SQL.Text := dmSqlSchema.SqlIndexCallAlertId;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
-        Q1.SQL.Text := 'ALTER TABLE call_alert ADD INDEX (callsign);';
+        Q1.SQL.Text := dmSqlSchema.SqlIndexCallAlertCallsign;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2775,10 +2770,10 @@ begin
       if old_version < 12 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main change loc loc varchar(10) default ' + QuotedStr('');
+        Q1.SQL.Text := dmSqlSchema.SqlLocDefault;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
-        Q1.SQL.Text := 'alter table cqrlog_main change my_loc my_loc varchar(10) default ' + QuotedStr('');
+        Q1.SQL.Text := dmSqlSchema.SqlMyLocDefault;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2787,31 +2782,31 @@ begin
       if old_version < 14 then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main change mode mode varchar(12) not null';
+        Q1.SQL.Text := dmSqlSchema.SqlModeWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table log_changes change mode mode varchar(12) null';
+        Q1.SQL.Text := dmSqlSchema.SqlLogChangesModeWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table log_changes change old_mode old_mode varchar(12) null';
+        Q1.SQL.Text := dmSqlSchema.SqlLogChangesOldModeWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table call_alert change mode mode varchar(12) null';
+        Q1.SQL.Text := dmSqlSchema.SqlCallAlertModeWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table freqmem change mode mode varchar(12) null';
+        Q1.SQL.Text := dmSqlSchema.SqlFreqMemModeWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
 
@@ -2821,19 +2816,19 @@ begin
       if (old_version < 15) then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add rxfreq numeric(10,4) null';
+        Q1.SQL.Text := dmSqlSchema.SqlAddRxFreq;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add satellite varchar(30) default '+QuotedStr('');
+        Q1.SQL.Text := dmSqlSchema.SqlAddSatellite;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table cqrlog_main add prop_mode varchar(30) default '+QuotedStr('');
+        Q1.SQL.Text := dmSqlSchema.SqlAddPropMode;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2844,7 +2839,7 @@ begin
         if (not FieldExists('cqrlog_main', 'stx')) then
         begin
           trQ1.StartTransaction;
-          Q1.SQL.Text := 'alter table cqrlog_main add stx varchar(6) null';
+          Q1.SQL.Text := dmSqlSchema.SqlAddStx;
           if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
           Q1.ExecSQL;
           trQ1.Commit;
@@ -2853,7 +2848,7 @@ begin
         if (not FieldExists('cqrlog_main', 'srx')) then
         begin
           trQ1.StartTransaction;
-          Q1.SQL.Text := 'alter table cqrlog_main add srx varchar(6) null';
+          Q1.SQL.Text := dmSqlSchema.SqlAddSrx;
           if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
           Q1.ExecSQL;
           trQ1.Commit;
@@ -2863,7 +2858,7 @@ begin
         if (not FieldExists('cqrlog_main', 'stx_string')) then
         begin
           trQ1.StartTransaction;
-          Q1.SQL.Text := 'alter table cqrlog_main add stx_string varchar(50) null';
+          Q1.SQL.Text := dmSqlSchema.SqlAddStxString;
           if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
           Q1.ExecSQL;
           trQ1.Commit;
@@ -2872,7 +2867,7 @@ begin
         if (not FieldExists('cqrlog_main', 'srx_string')) then
         begin
           trQ1.StartTransaction;
-          Q1.SQL.Text := 'alter table cqrlog_main add srx_string varchar(50) null';
+          Q1.SQL.Text := dmSqlSchema.SqlAddSrxString;
           if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
           Q1.ExecSQL;
           trQ1.Commit;
@@ -2881,14 +2876,14 @@ begin
         if (not FieldExists('cqrlog_main', 'contestname')) then
         begin
           trQ1.StartTransaction;
-          Q1.SQL.Text := 'alter table cqrlog_main add contestname varchar(40) null';
+          Q1.SQL.Text := dmSqlSchema.SqlAddContestName;
           if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
           Q1.ExecSQL;
           trQ1.Commit;
         end;
 
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'alter table log_changes modify cmd varchar(20)';
+        Q1.SQL.Text := dmSqlSchema.SqlLogChangesCmdWiden;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit;
@@ -2896,7 +2891,7 @@ begin
         if (not FieldExists('freqmem', 'info')) then
         begin
           trQ1.StartTransaction;
-          Q1.SQL.Text := 'alter table freqmem add info varchar(25) null';
+          Q1.SQL.Text := dmSqlSchema.SqlAddFreqMemInfo;
           Q1.ExecSQL;
           trQ1.Commit
         end;
@@ -2907,7 +2902,7 @@ begin
               if (not FieldExists('cqrlog_main', 'dok')) then
               begin
                 trQ1.StartTransaction;
-                Q1.SQL.Text := 'alter table cqrlog_main add dok varchar(12) null';
+                Q1.SQL.Text := dmSqlSchema.SqlAddDok;
                 if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
                 Q1.ExecSQL;
                 trQ1.Commit;
@@ -2919,7 +2914,7 @@ begin
               if (not FieldExists('cqrlog_main', 'operator')) then
               begin
                 trQ1.StartTransaction;
-                Q1.SQL.Text := 'alter table cqrlog_main add operator varchar(20) null';
+                Q1.SQL.Text := dmSqlSchema.SqlAddOperator;
                 if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
                 Q1.ExecSQL;
                 trQ1.Commit;
@@ -2931,7 +2926,7 @@ begin
               if (ConstraintExists('log_changes', 'log_changes_ibfk_1')) then
               begin
                 trQ1.StartTransaction;
-                Q1.SQL.Text := 'ALTER TABLE log_changes DROP FOREIGN KEY log_changes_ibfk_1';
+                Q1.SQL.Text := dmSqlSchema.SqlDropLogChangesFk;
                 if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
                 Q1.ExecSQL;
                 trQ1.Commit;
@@ -2942,11 +2937,11 @@ begin
               if (old_version >= 8) then
               begin
                 trQ1.StartTransaction;
-                Q1.SQL.Text := 'select max(id) from log_changes';
+                Q1.SQL.Text := dmSqlSchema.SqlLastLogChangeIdForUpgrade;
                 Q1.Open;
                 max := Q1.Fields[0].AsInteger;
                 Q1.Close;
-                Q1.SQL.Text := 'insert into upload_status (logname, id_log_changes) values ('+QuotedStr(C_UDPLOG)+','+IntToStr(max)+')';
+                Q1.SQL.Text := dmSqlSchema.SqlSeedUdpLogStatus(max);
                 if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
                 Q1.ExecSQL;
                 trQ1.Commit;
@@ -2959,14 +2954,13 @@ begin
               //(callsign, qsodate, band) - turns the per-QSO lookup into one indexed lookup.
               //On a large log creating it can take a while; it runs once during the upgrade.
               trQ1.StartTransaction;
-              Q1.SQL.Text := 'select count(*) from information_schema.statistics where table_schema = database() '+
-                             'and table_name = ''cqrlog_main'' and index_name = ''callsign_qsodate_band''';
+              Q1.SQL.Text := dmSqlSchema.SqlCallDateBandIndexExists;
               Q1.Open;
               max := Q1.Fields[0].AsInteger;
               Q1.Close;
               if max = 0 then
               begin
-                Q1.SQL.Text := 'create index callsign_qsodate_band on cqrlog_main (callsign, qsodate, band)';
+                Q1.SQL.Text := dmSqlSchema.SqlCreateCallDateBandIndex;
                 if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
                 Q1.ExecSQL;
               end;
@@ -2976,7 +2970,7 @@ begin
       if TableExists('view_cqrlog_main_by_callsign') then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'drop view view_cqrlog_main_by_callsign';
+        Q1.SQL.Text := dmSqlSchema.SqlDropViewByCallsign;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2985,7 +2979,7 @@ begin
       if TableExists('view_cqrlog_main_by_qsodate') then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate';
+        Q1.SQL.Text := dmSqlSchema.SqlDropViewByQsodate;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -2994,7 +2988,7 @@ begin
       if TableExists('view_cqrlog_main_by_qsodate_asc') then
       begin
         trQ1.StartTransaction;
-        Q1.SQL.Text := 'drop view view_cqrlog_main_by_qsodate_asc';
+        Q1.SQL.Text := dmSqlSchema.SqlDropViewByQsodateAsc;
         if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
         Q1.ExecSQL;
         trQ1.Commit
@@ -3003,7 +2997,7 @@ begin
       CreateViews;
 
       trQ1.StartTransaction;
-      Q1.SQL.Text := 'update db_version set nr='+IntToStr(cDB_MAIN_VER);
+      Q1.SQL.Text := dmSqlSchema.SqlSetLogVersion(cDB_MAIN_VER);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL;
       trQ1.Commit
@@ -3029,7 +3023,7 @@ begin
   try
     if trQ.Active then trQ.RollBack;
     trQ.StartTransaction;
-    Q.SQL.Text := 'select table_name from information_schema.tables where  table_schema='+QuotedStr(db)+' and table_type ='+ QuotedStr('BASE TABLE');
+    Q.SQL.Text := dmSqlSchema.SqlBaseTables(db);
     Q.Open;
     while not Q.Eof do
     begin
@@ -3037,7 +3031,7 @@ begin
       if trQ1.Active then trQ1.Rollback;
 
       trQ1.StartTransaction;
-      Q1.SQL.Text := 'REPAIR TABLE '+db+'.'+Q.Fields[0].AsString;
+      Q1.SQL.Text := dmSqlSchema.SqlRepairTable(db, Q.Fields[0].AsString);
       if fDebugLevel>=1 then Writeln(Q1.SQL.Text);
       Q1.ExecSQL;
       trQ1.Commit;
@@ -3277,13 +3271,11 @@ begin
 end;
 
 function TdmData.TriggersExistsOnCqrlog_main : Boolean;
-const
-  C_SEL = 'show triggers from %s';
 begin
   Q.Close;
   if trQ.Active then trQ.Rollback;
   try
-    Q.SQL.Text := Format(C_SEL,[fDBName]);
+    Q.SQL.Text := dmSqlSchema.SqlShowTriggers(fDBName);
     Q.Open;
     Result := Q.RecordCount > 0
   finally
@@ -3345,8 +3337,6 @@ begin
 end;
 
 function TdmData.TableExists(TableName : String) : Boolean;
-const
-  C_SEL = 'select table_name from information_schema.tables where table_schema=%s and table_name=%s';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -3359,7 +3349,7 @@ begin
     tr.DataBase   := MainCon;
     t.DataBase    := MainCon;
 
-    t.SQL.Text := Format(C_SEL,[QuotedStr(fDBName),QuotedStr(TableName)]);
+    t.SQL.Text := dmSqlSchema.SqlTableExists(fDBName, TableName);
     if fDebugLevel>=1 then Writeln(t.SQL.Text);
     t.Open;
     Result := t.RecordCount>0
@@ -3372,8 +3362,6 @@ begin
 end;
 
 function TdmData.FieldExists(TableName, FieldName : String) : Boolean;
-const
-  C_SEL = 'select column_name from information_schema.columns where table_schema=%s and table_name=%s and column_name=%s';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -3386,7 +3374,7 @@ begin
     tr.DataBase   := MainCon;
     t.DataBase    := MainCon;
 
-    t.SQL.Text := Format(C_SEL,[QuotedStr(fDBName),QuotedStr(TableName), QuotedStr(FieldName)]);
+    t.SQL.Text := dmSqlSchema.SqlFieldExists(fDBName, TableName, FieldName);
     if fDebugLevel>=1 then Writeln(t.SQL.Text);
     t.Open;
     Result := t.RecordCount>0
@@ -3399,8 +3387,6 @@ begin
 end;
 
 function TdmData.ConstraintExists(TableName, ConstraintName : String) : Boolean;
-const
-  C_SEL = 'select constraint_name from information_schema.table_constraints where table_schema=%s and table_name=%s and constraint_name=%s';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -3413,7 +3399,7 @@ begin
     tr.DataBase   := MainCon;
     t.DataBase    := MainCon;
 
-    t.SQL.Text := Format(C_SEL,[QuotedStr(fDBName),QuotedStr(TableName), QuotedStr(ConstraintName)]);
+    t.SQL.Text := dmSqlSchema.SqlConstraintExists(fDBName, TableName, ConstraintName);
     if fDebugLevel>=1 then Writeln(t.SQL.Text);
     t.Open;
     Result := t.RecordCount>0
@@ -3930,8 +3916,6 @@ begin
 end;
 
 function TdmData.GetNewLogNumber : Integer;
-const
-  C_SEL = 'select log_nr from cqrlog_common.log_list order by log_nr';
 var
   t  : TSQLQuery;
   tr : TSQLTransaction;
@@ -3945,7 +3929,7 @@ begin
     tr.DataBase   := MainCon;
     t.DataBase    := MainCon;
 
-    t.SQL.Text := C_SEL;
+    t.SQL.Text := dmSqlSchema.SqlLogNumbers;
     if fDebugLevel>=1 then Writeln(t.SQL.Text);
     t.Open;
 

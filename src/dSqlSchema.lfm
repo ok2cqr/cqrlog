@@ -1,0 +1,8 @@
+object dmSqlSchema: TdmSqlSchema
+  OldCreateOrder = False
+  Height = 150
+  HorizontalOffset = 1227
+  VerticalOffset = 345
+  Width = 150
+  PPI = 96
+end

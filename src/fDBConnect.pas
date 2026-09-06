@@ -90,7 +90,7 @@ var
 implementation
 {$R *.lfm}
 
-uses dData, dUtils, fNewLog, fDbSqlSel;
+uses dData, dUtils, fNewLog, fDbSqlSel, dSqlSchema;
 
 { TfrmDBConnect }
 
@@ -338,7 +338,7 @@ begin
             dmData.SaveConfigFile;
           dmData.Q.Close;
           if dmData.trQ.Active then dmData.trQ.Rollback;
-          dmData.Q.SQL.Text := 'select config_file from '+db+'.cqrlog_config';
+          dmData.Q.SQL.Text := dmSqlSchema.SqlConfigFile(db);
           dmData.trQ.StartTransaction;
           l := TStringList.Create;
           try  try
@@ -348,7 +348,7 @@ begin
             db := dmData.GetProperDBName(nr);
             dmData.Q.Close;
             if dmData.trQ.Active then dmData.trQ.Rollback;
-            dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
+            dmData.Q.SQL.Text := dmSqlSchema.SqlSetConfigFile(db);
             dmData.trQ.StartTransaction;
             dmData.Q.Params[0].AsString := l.Text;
             dmData.Q.ExecSQL
@@ -499,7 +499,7 @@ begin
       dmData.SaveConfigFile;
     dmData.Q.Close;
     if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := 'select config_file from '+db+'.cqrlog_config';
+    dmData.Q.SQL.Text := dmSqlSchema.SqlConfigFileForExport(db);
     dmData.trQ.StartTransaction;
     l := TStringList.Create;
     try
@@ -531,7 +531,7 @@ begin
         db := dmData.GetProperDBName(dmData.qLogList.Fields[0].AsInteger);
         dmData.Q.Close;
         if dmData.trQ.Active then dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := 'update '+db+'.cqrlog_config set config_file =:config_file';
+        dmData.Q.SQL.Text := dmSqlSchema.SqlSetConfigFileFromImport(db);
         dmData.trQ.StartTransaction;
         l := TStringList.Create;
         try try
