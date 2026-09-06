@@ -112,7 +112,6 @@ var
   f       : TextFile;
   sota    : String;
   note    : String;
-  q       : String;
   HisSota : String='';
 begin
   SaveSettings;
@@ -150,13 +149,8 @@ begin
   dmData.Q.Close;
   if AllQSO then
     dmData.Q.SQL.Text := dmSqlImpExp.SqlQsosByDateForExport
-  else begin
-    q := dmData.qCQRLOG.SQL.Text;
-    if Pos('order by',LowerCase(q)) > 0 then
-      q := copy(q,1,Pos('order by',LowerCase(q))-1);
-    q := q + ' order by qsodate,time_on';
-    dmData.Q.SQL.Text := q;
-  end;
+  else
+    dmData.Q.SQL.Text := dmSqlImpExp.SqlFilteredQsosByDate(dmData.qCQRLOG.SQL.Text);
   try try
     AssignFile(f,edtFileName.Text);
     Rewrite(f);

@@ -71,6 +71,7 @@ type
     function SqlQsosForExportAsc : String;
     function SqlQsosForExport : String;
     function SqlQsosByDateForExport : String;
+    function SqlFilteredQsosByDate(const GridSql : String) : String;
   end;
 
 var
@@ -273,6 +274,16 @@ function TdmSqlImpExp.SqlQsosByDateForExport : String;
 begin
   Result := 'select qsodate,time_on,callsign,freq,mode,award,qth,remarks '+
             'from view_cqrlog_main_by_qsodate order by qsodate,time_on'
+end;
+
+// The EDI and SOTA exports of a filtered log walk the grid's own statement,
+// with whatever ORDER BY it carries replaced by date and time.
+function TdmSqlImpExp.SqlFilteredQsosByDate(const GridSql : String) : String;
+begin
+  Result := GridSql;
+  if Pos('order by',LowerCase(Result)) > 0 then
+    Result := copy(Result,1,Pos('order by',LowerCase(Result))-1);
+  Result := Result + ' order by qsodate,time_on'
 end;
 
 end.
