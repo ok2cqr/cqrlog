@@ -5539,6 +5539,7 @@ var
   QSLR,LoTW,eQSL : String;
   tmps,tmpq : String;
   space: String;
+  rows : TDataSet;
 
 begin
   tmpq:='';
@@ -5577,88 +5578,79 @@ begin
     g.Cells[i+1,3] := space+space+space;
   end;
 
-  if dmData.trQ.Active then
-    dmData.trQ.RollBack;
-  dmData.Q.Close;
-
   ShowLoTW := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
-  if ShowLoTW then
-    dmData.Q.SQL.Text := dmSqlStat.SqlCfmBandsModesIncLotw(ref_adif, tmpq)
-  else
-    dmData.Q.SQL.Text := dmSqlStat.SqlCfmBandsModes(ref_adif, tmpq);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open;
-  while not dmData.Q.Eof do
-  begin
-    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
-    mode := dmData.Q.Fields[1].AsString;
-    QSLR := dmData.Q.Fields[2].AsString;
-    LoTW := dmData.Q.Fields[3].AsString;
-    eQSL := dmData.Q.Fields[4].AsString;
-    if i > 0 then
+  rows := dmSqlStat.OpenCfmBandsModesRows(ref_adif, tmpq, ShowLoTW);
+  try
+    while not rows.Eof do
     begin
-      if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
+      i    := dmUtils.GetBandPos(rows.Fields[0].AsString)+1;
+      mode := rows.Fields[1].AsString;
+      QSLR := rows.Fields[2].AsString;
+      LoTW := rows.Fields[3].AsString;
+      eQSL := rows.Fields[4].AsString;
+      if i > 0 then
       begin
-        tmps := g.Cells[i,1] ;
-        if QSLR = 'Q' then
-          tmps[1] := 'Q';
-        if (LoTW = 'L') then
-          tmps[2] := 'L';
-        if (eQSL = 'E') then
-          tmps[3] := 'E';
-       g.Cells[i,1] := tmps
-      end
-      else begin
-        if (Mode='CW') or (Mode='CWQ') then
+        if (Mode = 'SSB') or (Mode='FM') or (Mode='AM') then
         begin
-          tmps := g.Cells[i,2] ;
+          tmps := g.Cells[i,1] ;
           if QSLR = 'Q' then
             tmps[1] := 'Q';
           if (LoTW = 'L') then
             tmps[2] := 'L';
           if (eQSL = 'E') then
             tmps[3] := 'E';
-          g.Cells[i,2] := tmps
+         g.Cells[i,1] := tmps
         end
         else begin
-          tmps := g.Cells[i,3] ;
-          if QSLR = 'Q' then
-            tmps[1] := 'Q';
-          if (LoTW = 'L') then
-            tmps[2] := 'L';
-          if (eQSL = 'E') then
-            tmps[3] := 'E';
-          g.Cells[i,3] := tmps
-        end
+          if (Mode='CW') or (Mode='CWQ') then
+          begin
+            tmps := g.Cells[i,2] ;
+            if QSLR = 'Q' then
+              tmps[1] := 'Q';
+            if (LoTW = 'L') then
+              tmps[2] := 'L';
+            if (eQSL = 'E') then
+              tmps[3] := 'E';
+            g.Cells[i,2] := tmps
+          end
+          else begin
+            tmps := g.Cells[i,3] ;
+            if QSLR = 'Q' then
+              tmps[1] := 'Q';
+            if (LoTW = 'L') then
+              tmps[2] := 'L';
+            if (eQSL = 'E') then
+              tmps[3] := 'E';
+            g.Cells[i,3] := tmps
+          end
+        end;
       end;
-    end;
-    dmData.Q.Next
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
   end;
-  dmData.trQ.Rollback;
 
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := dmSqlStat.SqlWorkedBandsModes(ref_adif, tmpq);
-  dmData.trQ.StartTransaction;
-  dmData.Q.Open;
-  while not dmData.Q.Eof do
-  begin
-    i    := dmUtils.GetBandPos(dmData.Q.Fields[0].AsString)+1;
-    mode := dmData.Q.Fields[1].AsString;
-    if i > 0 then
-      begin
-        if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
-          if(g.Cells[i,1] = space+space+space) then g.Cells[i,1] := ' X ';
-        if ((mode = 'CW') or (mode = 'CWR')) then
-          if (g.Cells[i,2] = space+space+space) then g.Cells[i,2] := ' X ';
-        if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
-          if (g.Cells[i,3] = space+space+space) then g.Cells[i,3] := ' X '
-      end;
-      dmData.Q.Next;
-  end;
-  dmData.Q.Close;
-  dmData.trQ.Rollback
+  rows := dmSqlStat.OpenWorkedBandsModesRows(ref_adif, tmpq);
+  try
+    while not rows.Eof do
+    begin
+      i    := dmUtils.GetBandPos(rows.Fields[0].AsString)+1;
+      mode := rows.Fields[1].AsString;
+      if i > 0 then
+        begin
+          if ((mode = 'SSB') or (mode = 'FM') or (mode = 'AM')) then
+            if(g.Cells[i,1] = space+space+space) then g.Cells[i,1] := ' X ';
+          if ((mode = 'CW') or (mode = 'CWR')) then
+            if (g.Cells[i,2] = space+space+space) then g.Cells[i,2] := ' X ';
+          if ((mode <> 'SSB') and (mode <>'FM') and (mode <> 'AM') and (mode <> 'CW') and (mode <> 'CWR')) then
+            if (g.Cells[i,3] = space+space+space) then g.Cells[i,3] := ' X '
+        end;
+      rows.Next
+    end
+  finally
+    dmSqlStat.CloseRows
+  end
 end;
 
 end.

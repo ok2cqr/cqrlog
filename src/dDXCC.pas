@@ -94,33 +94,17 @@ uses dUtils, dData, uMyIni, dSqlRef, dSqlStat;
 function TdmDXCC.DXCCCount : Integer;
 var
   ShowDel : Boolean = False;
-  tmp : String;
 begin
   ShowDel := cqrini.ReadBool('Program','ShowDeleted',False);
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  if ShowDel then
-    Q.SQL.Text := dmSqlStat.SqlDxccCount
-  else begin
-    tmp := GetDelDXCCAdifList;
-    if tmp <> '' then
-      Q.SQL.Text := dmSqlStat.SqlDxccCountExcluding(tmp)
-    else
-      Q.SQL.Text := dmSqlStat.SqlDxccCount
-  end;
-
-
   //Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
     //              'dxcc_id.adif = cqrlog_main.adif WHERE dxcc_ref not like '+QuotedStr('%*')+') as foo';
     //              ^^ much faster
     //Q.SQL.Text := 'SELECT COUNT(DISTINCT dxcc_ref) FROM view_cqrlog_main_by_qsodate WHERE dxcc_ref not like ' +
     //               QuotedStr('%*');
-  trQ.StartTransaction;
-  Q.Open;
-  Result := Q.Fields[0].AsInteger;
-  Q.Close;
-  trQ.Rollback
+  if ShowDel then
+    Result := dmSqlStat.GetDxccCount('')
+  else
+    Result := dmSqlStat.GetDxccCount(GetDelDXCCAdifList)
 end;
 
 function TdmDXCC.DXCCCmfCount : Integer;
@@ -141,17 +125,8 @@ begin
   else
     where := where + '(qsl_r = '+QuotedStr('Q')+')';
 
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  Q.SQL.Text := dmSqlStat.SqlDxccCfmCount(where);
-
   //Q.SQL.Text := 'SELECT COUNT(DISTINCT dxcc_ref) FROM view_cqrlog_main_by_qsodate WHERE '+where;
-  trQ.StartTransaction;
-  Q.Open;
-  Result := Q.Fields[0].AsInteger;
-  Q.Close;
-  trQ.Rollback
+  Result := dmSqlStat.GetDxccCfmCount(where)
 end;
 
 function TdmDXCC.DXCCInfo(adif : Word;freq,mode : String; var index : integer) : String;
@@ -161,7 +136,6 @@ var               // index : 0 - no QSL needed (unknown country, or confirmed)
                   // index : 1 - QSL needed (new country, or new on this band or mode)
   band : String;
   lotw   : Boolean = False;
-  sAdif : String = '';
 begin
   lotw := cqrini.ReadBool('LoTW','NewQSOLoTW',False);
   if (adif = 0) then
@@ -171,61 +145,17 @@ begin
     exit
   end;
   index := 1;
-  sAdif := IntToStr(adif);
 
   band := dmUtils.GetBandFromFreq(freq);
-  if trQ.Active then
-    trQ.Rollback;
-
-  try
-    if lotw then
-      Q.SQL.Text := dmSqlStat.SqlQsoCfmOnBandModeIncLotw(sAdif, band, mode)
-    else
-      Q.SQL.Text := dmSqlStat.SqlQsoCfmOnBandMode(sAdif, band, mode);
-    trQ.StartTransaction;
-    Q.Open;
-    if Q.Fields[0].AsInteger > 0 then
-    begin
-      Result := 'Confirmed country!!';
-      index  := 0
-    end
-    else begin
-      Q.Close;
-      Q.SQL.Text := dmSqlStat.SqlQsoOnBandMode(sAdif, band, mode);
-      Q.Open;
-      if Q.Fields[0].AsInteger > 0 then
-      begin
-        Result := 'QSL needed !!';
-        index := 1
-      end
-      else begin
-        Q.Close;
-        Q.SQL.Text := dmSqlStat.SqlQsoOnBand(sAdif, band);
-        Q.Open;
-        if Q.Fields[0].AsInteger > 0 then
-        begin
-          Result := 'New mode country!!';
-          index  := 1
-        end
-        else begin
-          Q.Close;
-          Q.SQL.Text := dmSqlStat.SqlQsoWithDxcc(sAdif);
-          Q.Open;
-          if Q.Fields[0].AsInteger>0 then
-          begin
-            Result := 'New band country!!';
-            index  := 1
-          end
-          else begin
-            Result := 'New country!!';
-            index  := 1
-          end
-        end
-      end
-    end
-  finally
-    Q.Close;
-    trQ.Rollback
+  case dmSqlStat.GetDxccStatus(adif, band, mode, lotw) of
+    dsConfirmed  : begin
+                     Result := 'Confirmed country!!';
+                     index  := 0
+                   end;
+    dsQslNeeded  : Result := 'QSL needed !!';
+    dsNewMode    : Result := 'New mode country!!';
+    dsNewBand    : Result := 'New band country!!';
+    dsNewCountry : Result := 'New country!!'
   end
 end;
 
