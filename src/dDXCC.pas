@@ -96,11 +96,6 @@ var
   ShowDel : Boolean = False;
 begin
   ShowDel := cqrini.ReadBool('Program','ShowDeleted',False);
-  //Q.SQL.Text := 'select count(*) from (select distinct dxcc_id.dxcc_ref from dxcc_id left join cqrlog_main on '+
-    //              'dxcc_id.adif = cqrlog_main.adif WHERE dxcc_ref not like '+QuotedStr('%*')+') as foo';
-    //              ^^ much faster
-    //Q.SQL.Text := 'SELECT COUNT(DISTINCT dxcc_ref) FROM view_cqrlog_main_by_qsodate WHERE dxcc_ref not like ' +
-    //               QuotedStr('%*');
   if ShowDel then
     Result := dmSqlStat.GetDxccCount('')
   else
@@ -125,7 +120,6 @@ begin
   else
     where := where + '(qsl_r = '+QuotedStr('Q')+')';
 
-  //Q.SQL.Text := 'SELECT COUNT(DISTINCT dxcc_ref) FROM view_cqrlog_main_by_qsodate WHERE '+where;
   Result := dmSqlStat.GetDxccCfmCount(where)
 end;
 
