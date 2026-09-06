@@ -541,16 +541,7 @@ begin
     // begin proof if qso allready exist in log
     if Not chkNoCheckOnDuplicates.Checked then
     begin
-      dmData.Q.Close;
-      dmData.Q.SQL.Text := dmSqlImpExp.SqlQsoExists(d.QSO_DATE, d.TIME_ON, d.CALL, d.BAND, d.MODE);
-
-      if LocalDbg then
-                  Writeln(dmData.Q.SQL.Text);
-      if dmData.trQ.Active then
-        dmData.trQ.Rollback;
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open;
-      if dmData.Q.Fields[0].AsInteger > 0 then
+      if dmSqlImpExp.ImportedQsoExists(d.QSO_DATE, d.TIME_ON, d.CALL, d.BAND, d.MODE) then
       begin
         tmp:= d.QSO_DATE+' '+d.TIME_ON+' '+d.CALL+' '+d.BAND+' '+d.MODE+
               #13'It looks like this QSO is in the log.'#13'Do you really want to import it again?';
@@ -566,22 +557,16 @@ begin
         case Qvalue of
         idNo        :begin
                       btnImport.Enabled := True;
-                      dmData.Q.Close();
-                      dmData.trQ.Rollback;
                       exit;
                      end;
         idCancel    :begin
                       btnImport.Enabled := True;
-                      dmData.Q.Close();
-                      dmData.trQ.Rollback;
                       AbortImport :=true;
                       exit;
                      end;
         end;
         tmp:='';
-      end;
-      dmData.Q.Close();
-      dmData.trQ.Rollback
+      end
     end;
 
     if Pos(',',d.FREQ) > 0 then

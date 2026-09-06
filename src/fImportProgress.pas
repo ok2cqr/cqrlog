@@ -18,7 +18,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ComCtrls,lcltype, synachar, ExtCtrls, httpsend, blcksock, iniFiles, FileUtil,
-  LazFileUtils;
+  LazFileUtils, db;
 
 const
   C_EErrorFile ='errors_eQSL.adi';
@@ -453,6 +453,7 @@ var
   itu      : String;
   cont     : String;
   tmp      : String;
+  rows     : TDataSet;
 begin
   lblComment.Caption := 'Rebuilding DXCC statistics ...';
   Caption := lblComment.Caption;
@@ -473,41 +474,35 @@ begin
     dmData.Q.Close;
     dmData.trQ.Rollback;
 
-    dmData.Q1.Close;
-    if dmData.trQ1.Active then dmData.trQ1.Rollback;
-    dmData.Q1.SQL.Text := dmSqlImpExp.SqlQsosForDxccRebuild;
-    dmData.trQ1.StartTransaction;
-    dmData.Q1.Open;
-    dmData.Q1.First;
+    rows := dmSqlImpExp.OpenQsosForDxccRebuildRows;
+    rows.First;
 
-    dmData.trQ.StartTransaction;
-    while not dmData.Q1.Eof do
+    while not rows.Eof do
     begin
       inc(i);
-      if dmData.Q1.Fields[4].AsInteger > 0 then
+      if rows.Fields[4].AsInteger > 0 then
       begin
-        dmData.Q1.Next;
+        rows.Next;
         pBarProg.StepIt;
         Continue
       end
       else begin
-        old_adif := dmData.Q1.Fields[3].AsInteger;
-        id       := dmData.Q1.Fields[0].AsInteger;
-        adif     := dmDXCC.id_country(dmData.Q1.Fields[2].AsString, dmUtils.StrToDateFormat(
-                                      dmData.Q1.Fields[1].AsString),
+        old_adif := rows.Fields[3].AsInteger;
+        id       := rows.Fields[0].AsInteger;
+        adif     := dmDXCC.id_country(rows.Fields[2].AsString, dmUtils.StrToDateFormat(
+                                      rows.Fields[1].AsString),
                                       tmp, cont, tmp, waz, tmp, itu, tmp, tmp);
         if adif<>old_adif then
         begin
           cont := copy(cont,1,2);
           dmUtils.ModifyWAZITU(waz,itu);
           if adif =  0 then
-            dmData.Q.SQL.Text := dmSqlImpExp.SqlClearQsoDxcc(id)
+            dmSqlImpExp.ClearQsoDxcc(id)
           else
-            dmData.Q.SQL.Text := dmSqlImpExp.SqlSetQsoDxcc(adif, waz, itu, cont, id);
-          dmData.Q.ExecSQL
+            dmSqlImpExp.SetQsoDxcc(adif, waz, itu, cont, id)
         end
       end;
-      dmData.Q1.Next;
+      rows.Next;
       pBarProg.StepIt;
       lblCount.Caption := IntToStr(i);
       if (i mod 100 = 0) then
@@ -520,13 +515,12 @@ begin
     on E : Exception do
     begin
       Writeln('Exception: ',E.Message);
-      dmData.trQ.RollBack
+      dmSqlImpExp.RollbackBatch
     end
   end;
-  dmData.trQ.Commit
+  dmSqlImpExp.CommitBatch
   finally
-    dmData.Q1.Close;
-    dmData.trQ1.Rollback;
+    dmSqlImpExp.CloseRows;
     dmData.qCQRLOG.Close;
     dmData.qCQRLOG.Open;
     dmData.qCQRLOG.EnableControls
@@ -1245,11 +1239,7 @@ begin
       if (dmData.qCQRLOG.FieldByName('qsl_via').AsString = '') and
          dmData.QSLMgrFound(dmData.qCQRLOG.Fields[4].AsString,dmData.qCQRLOG.Fields[1].AsString,qsl_via) then
       begin
-        dmData.trQ.StartTransaction;
-        dmData.Q.SQL.Text := dmSqlImpExp.SqlSetQslVia(qsl_via, dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger);
-        if LocalDbg then Writeln(dmData.Q.SQL.Text);
-        dmData.Q.ExecSQL;
-        dmData.trQ.Commit
+        dmSqlImpExp.SetQslVia(qsl_via, dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger)
       end;
       dmData.qCQRLOG.Next;
       pBarProg.StepIt;
@@ -1660,28 +1650,15 @@ begin
   lblComment.Caption := 'Creating temporary table';
   Application.ProcessMessages;
   try try
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlCreateDupesTable;
-    if LocalDbg then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.ExecSQL;
-    dmData.trQ.Commit;
+    dmSqlImpExp.CreateDupesTable;
 
     lblComment.Caption := 'Checking for dupe QSOs';
     Application.ProcessMessages;
     sleep(200);
 
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlCollectUniqueQsos;
-    if LocalDbg then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.ExecSQL;
-
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlDeleteAllQsos;
-    if LocalDbg then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.ExecSQL;
-
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlRestoreUniqueQsos;
-    if LocalDbg then Writeln(dmData.Q.SQL.Text);
-    dmData.Q.ExecSQL
+    dmSqlImpExp.CollectUniqueQsos;
+    dmSqlImpExp.DeleteAllQsos;
+    dmSqlImpExp.RestoreUniqueQsos
   except
     on E : Exception do
     begin
@@ -1691,18 +1668,15 @@ begin
   end
   finally
     if err then
-      dmData.trQ.Rollback
+      dmSqlImpExp.RollbackBatch
     else
-      dmData.trQ.Commit;
+      dmSqlImpExp.CommitBatch;
 
     lblComment.Caption := 'Done ...';
     Application.ProcessMessages;
     Sleep(500);
 
-    dmData.trQ.StartTransaction;
-    dmData.Q.SQL.Text := dmSqlImpExp.SqlDropDupesTable;
-    dmData.Q.ExecSQL;
-    dmData.trQ.Commit;
+    dmSqlImpExp.DropDupesTable;
     Close
   end
 end;
@@ -1727,11 +1701,8 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
     pBarProg.Position := 0;
     pBarProg.Max := l.Count-1;
 
-    dmData.q.Close;
     try try
-      dmData.trQ.StartTransaction;
-      dmData.Q.SQL.Text := dmSqlImpExp.SqlClearClubTable(ClubTableName);
-      dmData.Q.ExecSQL;
+      dmSqlImpExp.ClearClubTable(ClubTableName);
       for i:=0 to l.Count-1 do
       begin
         //ship file header
@@ -1740,13 +1711,8 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
 
         ClubLine := dmMembership.GetMembershipStructure(l.Strings[i]);
 
-        dmData.Q.SQL.Text := dmSqlImpExp.SqlInsertClubMemberParams(ClubTableName);
-        dmData.Q.Prepare;
-        dmData.Q.Params[0].AsString := ClubLine.club_nr;
-        dmData.Q.Params[1].AsString := ClubLine.club_call;
-        dmData.Q.Params[2].AsString := ClubLine.fromdate;
-        dmData.Q.Params[3].AsString := ClubLine.todate;
-        dmData.Q.ExecSQL;
+        dmSqlImpExp.InsertClubMember(ClubTableName, ClubLine.club_nr, ClubLine.club_call,
+                                     ClubLine.fromdate, ClubLine.todate);
         pBarProg.StepIt;
         Application.ProcessMessages
       end
@@ -1754,13 +1720,11 @@ procedure TfrmImportProgress.UpdateMembershipFiles;
       on E : Exception do
       begin
         Application.MessageBox(PChar('ERROR:' + LineEnding + LineEnding + E.ToString), 'Error', mb_OK + mb_IconError);
-        dmData.trQ.Rollback
+        dmSqlImpExp.RollbackBatch
       end
     end
     finally
-      dmData.Q.Close;
-      if dmData.trQ.Active then
-        dmData.trQ.Commit
+      dmSqlImpExp.CommitBatch
     end
   end;
 
