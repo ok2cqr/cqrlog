@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ExtCtrls, lcltype, iniFiles, process, httpsend, ssl_openssl, synautil,
-  blcksock, ssl_openssl_lib, dateutils, synacode;
+  blcksock, ssl_openssl_lib, dateutils, synacode, db;
 
 type
 
@@ -60,6 +60,10 @@ type
     MarkAfter : Boolean;
     AProcess  : TProcess;
     FileSize : Int64;
+    // The selection ExportToAdif walked, so that the marking after a web
+    // upload walks the same rows.
+    FLotwAll       : Boolean;
+    FLotwFilterSql : String;
 
     function ExportToAdif : Word;
     procedure SockCallBack (Sender: TObject; Reason:  THookSocketReason; const  Value: string);
@@ -107,6 +111,7 @@ var
   suc  : Boolean = False;
   date : String = '';
   url  : String = '';
+  rows : TDataSet;
 begin
   btnUpload.Enabled:=false; //allow only one click
   mStat.Lines.Add('');
@@ -159,30 +164,20 @@ begin
     if suc then
     begin
       date := FormatDateTime('yyyy-mm-dd',now);
-      dmData.Q1.Close();
-      dmData.trQ1.Rollback;
-      dmData.trQ1.StartTransaction;
       try
         if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
           dmLogUpload.DisableOnlineLogSupport;
 
-        dmData.Q1.Open();
-        dmData.Q1.First;
-        dmData.Q.Close;
-        if dmData.trQ.Active then
-          dmData.trQ.RollBack;
-        dmData.trQ.StartTransaction;
-        while not dmData.Q1.Eof do
+        rows := dmSqlQsl.OpenQsosForLotwRows(FLotwAll, FLotwFilterSql);
+        rows.First;
+        while not rows.Eof do
         begin
-          dmData.Q.SQL.Text := dmSqlQsl.SqlMarkLotwSent(date, dmData.Q1.FieldByName('id_cqrlog_main').AsString);
-          if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
-          dmData.Q.ExecSQL;
-          dmData.Q1.Next
+          dmSqlQsl.MarkLotwSent(date, rows.FieldByName('id_cqrlog_main').AsString);
+          rows.Next
         end;
       finally
-        dmData.Q.Close();
-        dmData.trQ.Commit;
-        dmData.trQ1.Rollback;
+        dmSqlQsl.CommitBatch;
+        dmSqlQsl.CloseRows;
         if cqrini.ReadBool('OnlineLog','IgnoreLoTWeQSL',False) and dmLogUpload.LogUploadEnabled then
           dmLogUpload.EnableOnlineLogSupport(False)
       end
@@ -291,7 +286,7 @@ begin
   end;
   cqrini.WriteString('LoTWExp', dmUtils.PlatformKey('cmd'), edtTqsl.Text);
   AProcess.Free;
-  dmData.Q1.Close
+  dmSqlQsl.CloseRows
 end;
 
 procedure TfrmLoTWExport.btnExportSignClick(Sender: TObject);
@@ -363,6 +358,7 @@ var
   date,
   ModeOut,
   SubmodeOut: String;
+  rows      : TDataSet;
 begin
   if FileExists(FileName) then
     DeleteFile(FileName);
@@ -389,34 +385,22 @@ begin
   Writeln(f);
   Writeln(f, '<EOH>');
 
-  if dmData.trQ1.Active then
-    dmData.trQ1.RollBack;
-  dmData.Q1.Close;
   if (dmData.IsFilter and (rbWebExportAll.Checked or rbFileExportAll.Checked)) then
-  begin
-    dmData.Q1.SQL.Text := dmData.qCQRLOG.SQL.Text
-  end
-  else begin
-     if rbWebExportAll.Checked then
-       dmData.Q1.SQL.Text := dmSqlQsl.SqlQsosForLotwAll
-     else
-       dmData.Q1.SQL.Text := dmSqlQsl.SqlQsosForLotwNotExported
-  end;
-  dmData.trQ1.StartTransaction;
-  if dmData.DebugLevel >= 1 then Writeln(dmData.Q1.SQL.Text);
-  dmData.Q1.Open();
-  if MarkAfter then
-    dmData.trQ.StartTransaction;
+    FLotwFilterSql := dmData.qCQRLOG.SQL.Text
+  else
+    FLotwFilterSql := '';
+  FLotwAll := rbWebExportAll.Checked;
+  rows := dmSqlQsl.OpenQsosForLotwRows(FLotwAll, FLotwFilterSql);
   try
-    dmData.Q1.First;
-    while not dmData.Q1.EOF do
+    rows.First;
+    while not rows.EOF do
     begin
       lblInfo.Caption := 'Exporting QSO nr. ' + IntToStr(Nr);
       if not rbWebExportAll.Checked then
       begin
-        if dmData.Q1.FieldByName('lotw_qsls').AsString <> '' then
+        if rows.FieldByName('lotw_qsls').AsString <> '' then
         begin
-          dmData.Q1.Next;
+          rows.Next;
           Continue
         end
       end;
@@ -424,26 +408,26 @@ begin
       //DL7OAP 2020-06-14: github.com/ok2cqr/cqrlog/issues/292
       //Propagation type RPT (repeater) should not be uploaded to LoTW
       //because repeater contacts don't count and do not match the LoTW rule
-      if (uppercase(dmData.Q1.FieldByName('prop_mode').AsString) = 'RPT') then
+      if (uppercase(rows.FieldByName('prop_mode').AsString) = 'RPT') then
       begin
-        dmData.Q1.Next;
+        rows.Next;
         Continue
       end;
 
-      tmp :=  dmData.Q1.FieldByName('qsodate').AsString;
+      tmp :=  rows.FieldByName('qsodate').AsString;
       tmp := copy(tmp,1,4) + copy(tmp,6,2) +copy(tmp,9,2);
       tmp := dmUtils.StringToADIF('<QSO_DATE',tmp);
       Writeln(f, tmp);
 
-      tmp := dmData.Q1.FieldByName('time_on').AsString;
+      tmp := rows.FieldByName('time_on').AsString;
       tmp := copy(tmp,1,2) + copy(tmp,4,2);
       tmp := dmUtils.StringToADIF('<TIME_ON',tmp);
       Writeln(f, tmp);
 
-      tmp := dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(dmData.Q1.FieldByName('callsign').AsString));
+      tmp := dmUtils.StringToADIF('<CALL',dmUtils.RemoveSpaces(rows.FieldByName('callsign').AsString));
       Writeln(f,tmp);
 
-      dmUtils.ModeFromCqr(dmData.Q1.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
+      dmUtils.ModeFromCqr(rows.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
       tmp := dmUtils.StringToADIF('<MODE',ModeOut);
       Writeln(f,tmp);
       if SubmodeOut<>'' then
@@ -452,26 +436,26 @@ begin
                           Writeln(f,tmp);
                         end;
 
-      tmp :=dmUtils.StringToADIF( '<BAND' , dmData.Q1.FieldByName('band').AsString);
+      tmp :=dmUtils.StringToADIF( '<BAND' , rows.FieldByName('band').AsString);
       Writeln(f,tmp);
 
-      tmp := dmUtils.StringToADIF('<FREQ' , dmData.Q1.FieldByName('freq').AsString);
+      tmp := dmUtils.StringToADIF('<FREQ' , rows.FieldByName('freq').AsString);
       Writeln(f,tmp);
 
-      tmp := dmUtils.StringToADIF('<RST_SENT' , dmData.Q1.FieldByName('rst_s').AsString);
+      tmp := dmUtils.StringToADIF('<RST_SENT' , rows.FieldByName('rst_s').AsString);
       Writeln(f,tmp);
 
-      tmp := dmUtils.StringToADIF('<RST_RCVD' ,dmData.Q1.FieldByName('rst_r').AsString);
+      tmp := dmUtils.StringToADIF('<RST_RCVD' ,rows.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
 
-      if (dmData.Q1.FieldByName('prop_mode').AsString <> '') then
-        Writeln(f, dmUtils.StringToADIF('<PROP_MODE' ,dmData.Q1.FieldByName('prop_mode').AsString));
+      if (rows.FieldByName('prop_mode').AsString <> '') then
+        Writeln(f, dmUtils.StringToADIF('<PROP_MODE' ,rows.FieldByName('prop_mode').AsString));
 
-      if (dmData.Q1.FieldByName('satellite').AsString <> '') then
-        Writeln(f, dmUtils.StringToADIF('<SAT_NAME' ,dmData.Q1.FieldByName('satellite').AsString));
+      if (rows.FieldByName('satellite').AsString <> '') then
+        Writeln(f, dmUtils.StringToADIF('<SAT_NAME' ,rows.FieldByName('satellite').AsString));
 
-      if (dmData.Q1.FieldByName('rxfreq').AsString <> '') then
-        Writeln(f, dmUtils.StringToADIF('<FREQ_RX' , dmData.Q1.FieldByName('rxfreq').AsString));
+      if (rows.FieldByName('rxfreq').AsString <> '') then
+        Writeln(f, dmUtils.StringToADIF('<FREQ_RX' , rows.FieldByName('rxfreq').AsString));
 
       Writeln(f,'<EOR>');
       Writeln(f);
@@ -482,11 +466,8 @@ begin
       end;
       inc(nr);
       if MarkAfter and (pgLoTWExport.ActivePageIndex = 0) then
-      begin
-        dmData.Q.SQL.Text := dmSqlQsl.SqlMarkLotwSent(date, dmData.Q1.FieldByName('id_cqrlog_main').AsString);
-        dmData.Q.ExecSQL
-      end;
-      dmData.Q1.Next
+        dmSqlQsl.MarkLotwSent(date, rows.FieldByName('id_cqrlog_main').AsString);
+      rows.Next
     end;
     if nr=1 then
     begin
@@ -494,10 +475,9 @@ begin
       Result := 1
     end
   finally
-   if MarkAfter  and (pgLoTWExport.ActivePageIndex = 0)  then
-      dmData.trQ.Commit;
-    dmData.Q1.Close();
-    dmData.trQ1.Rollback;
+    if MarkAfter and (pgLoTWExport.ActivePageIndex = 0) then
+      dmSqlQsl.CommitBatch;
+    dmSqlQsl.CloseRows;
     CloseFile(f)
   end
 end;

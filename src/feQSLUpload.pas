@@ -6,7 +6,7 @@ interface
 
 uses
   Classes,SysUtils,FileUtil,LResources,Forms,Controls,Graphics,Dialogs,StdCtrls,
-  ExtCtrls, httpsend, blcksock, synautil, lcltype, dateutils, synacode;
+  ExtCtrls, httpsend, blcksock, synautil, lcltype, dateutils, synacode, db;
 
 type
 
@@ -34,6 +34,10 @@ type
   private
     FileSize     : Int64;
     QSOCount     : Integer;
+    // The selection ExportData walked, so that the marking after the
+    // upload walks the same rows.
+    FEqslNotExported : Boolean;
+    FEqslFilterSql   : String;
     function  ExportData(const FileName : String) : Boolean;
     function  HttpPostFile(const URL, FieldName, FileName: string;
                 const Data: TStream; const ResultData: TStrings; var err : String): Boolean;
@@ -74,27 +78,22 @@ var
   ModeOut,
   SubmodeOut : String;
   f          : TextFile;
+  rows       : TDataSet;
 
 begin
   QSOCount := 0;
   Result := True;
-  dmData.Q.Close;
-  if dmData.trQ.Active then dmData.trQ.Rollback;
-  if rbWebExportNotExported.Checked then
-    dmData.Q.SQL.Text := dmSqlQsl.SqlQsosForEqslNotExported
-  else begin
-    if dmData.IsFilter then
-      dmData.Q.SQL.Text := dmData.qCQRLOG.SQL.Text
-    else
-      dmData.Q.SQL.Text := dmSqlQsl.SqlQsosForEqslAll
-  end;
-  dmData.Q.Open;
-  dmData.Q.First;
-  if dmData.Q.RecordCount = 0 then
+  FEqslNotExported := rbWebExportNotExported.Checked;
+  if dmData.IsFilter then
+    FEqslFilterSql := dmData.qCQRLOG.SQL.Text
+  else
+    FEqslFilterSql := '';
+  rows := dmSqlQsl.OpenQsosForEqslRows(FEqslNotExported, FEqslFilterSql);
+  rows.First;
+  if rows.RecordCount = 0 then
   begin
     Application.MessageBox('Nothing to export ... ','Info ...',mb_Ok+mb_IconInformation);
-    dmData.Q.Close;
-    dmData.trQ.Rollback;
+    dmSqlQsl.CloseRows;
     Result := False;
     exit
   end;
@@ -118,23 +117,23 @@ begin
     Writeln(f,dmUtils.StringToADIF('<EQSL_USER',cqrini.ReadString('LoTW','eQSLName','')));
     Writeln(f,dmUtils.StringToADIF('<EQSL_PSWD',cqrini.ReadString('LoTW','eQSLPass','')));
     Writeln(f,'<EOH>');
-    while not dmData.Q.Eof do
+    while not rows.Eof do
     begin
       lblInfo.Caption := 'Exporting QSO nr. ' + IntToStr(Nr);
-      tmp :=  dmData.Q.FieldByName('qsodate').AsString;
+      tmp :=  rows.FieldByName('qsodate').AsString;
       tmp := copy(tmp,1,4) + copy(tmp,6,2) +copy(tmp,9,2);
       tmp := dmUtils.StringToADIF('<QSO_DATE',tmp);
       Writeln(f, tmp);
 
-      tmp := dmData.Q.FieldByName('time_on').AsString;
+      tmp := rows.FieldByName('time_on').AsString;
       tmp := copy(tmp,1,2) + copy(tmp,4,2);
       tmp := dmUtils.StringToADIF('<TIME_ON',tmp);
       Writeln(f, tmp);
 
-      tmp := dmUtils.StringToADIF('<CALL' ,dmUtils.RemoveSpaces(dmData.Q.FieldByName('callsign').AsString));
+      tmp := dmUtils.StringToADIF('<CALL' ,dmUtils.RemoveSpaces(rows.FieldByName('callsign').AsString));
       Writeln(f,tmp);
 
-      dmUtils.ModeFromCqr(dmData.Q.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
+      dmUtils.ModeFromCqr(rows.FieldByName('mode').AsString,ModeOut,SubmodeOut,dmData.DebugLevel >= 1);
       tmp := dmUtils.StringToADIF('<MODE',ModeOut);
       Writeln(f,tmp);
       if SubmodeOut<>'' then
@@ -143,40 +142,40 @@ begin
                          Writeln(f,tmp);
                        end;
 
-      tmp := dmUtils.StringToADIF('<BAND' ,dmData.Q.FieldByName('band').AsString);
+      tmp := dmUtils.StringToADIF('<BAND' ,rows.FieldByName('band').AsString);
       Writeln(f,tmp);
 
-      tmp := dmUtils.StringToADIF( '<FREQ' ,dmData.Q.FieldByName('freq').AsString);
+      tmp := dmUtils.StringToADIF( '<FREQ' ,rows.FieldByName('freq').AsString);
       Writeln(f,tmp);
 
-      tmp := dmUtils.StringToADIF('<RST_SENT' , dmData.Q.FieldByName('rst_s').AsString);
+      tmp := dmUtils.StringToADIF('<RST_SENT' , rows.FieldByName('rst_s').AsString);
       Writeln(f,tmp);
 
-      tmp := dmUtils.StringToADIF('<RST_RCVD' ,dmData.Q.FieldByName('rst_r').AsString);
+      tmp := dmUtils.StringToADIF('<RST_RCVD' ,rows.FieldByName('rst_r').AsString);
       Writeln(f,tmp);
 
-      if (dmData.Q.FieldByName('prop_mode').AsString <> '') then
+      if (rows.FieldByName('prop_mode').AsString <> '') then
       begin
-        Writeln(f, dmUtils.StringToADIF('<PROP_MODE' ,dmData.Q.FieldByName('prop_mode').AsString));
-        if (dmData.Q.FieldByName('prop_mode').AsString = 'SAT') then
+        Writeln(f, dmUtils.StringToADIF('<PROP_MODE' ,rows.FieldByName('prop_mode').AsString));
+        if (rows.FieldByName('prop_mode').AsString = 'SAT') then
         begin
-          tmp := dmSatellite.GetSatMode(dmData.Q.FieldByName('freq').AsString, dmData.Q.FieldByName('rxfreq').AsString);
+          tmp := dmSatellite.GetSatMode(rows.FieldByName('freq').AsString, rows.FieldByName('rxfreq').AsString);
           if (tmp <> '') then
             Writeln(f, dmUtils.StringToADIF('<SAT_MODE' , tmp));
         end;
       end;
 
-      if (dmData.Q.FieldByName('satellite').AsString <> '') then
-        Writeln(f, dmUtils.StringToADIF('<SAT_NAME' ,dmData.Q.FieldByName('satellite').AsString));
+      if (rows.FieldByName('satellite').AsString <> '') then
+        Writeln(f, dmUtils.StringToADIF('<SAT_NAME' ,rows.FieldByName('satellite').AsString));
 
-      if (dmData.Q.FieldByName('rxfreq').AsString <> '') then
-        Writeln(f, dmUtils.StringToADIF('<FREQ_RX' ,dmData.Q.FieldByName('rxfreq').AsString));
+      if (rows.FieldByName('rxfreq').AsString <> '') then
+        Writeln(f, dmUtils.StringToADIF('<FREQ_RX' ,rows.FieldByName('rxfreq').AsString));
 
-      if (dmData.Q.FieldByName('remarks').AsString<>'') and cqrini.ReadBool('LoTW', 'ExpComment', True) then
+      if (rows.FieldByName('remarks').AsString<>'') and cqrini.ReadBool('LoTW', 'ExpComment', True) then
       begin
-        tmp := dmUtils.StringToADIF('<COMMENT' ,dmData.Q.FieldByName('remarks').AsString);
+        tmp := dmUtils.StringToADIF('<COMMENT' ,rows.FieldByName('remarks').AsString);
         Writeln(f,tmp);
-        tmp := dmUtils.StringToADIF('<QSLMSG' ,dmData.Q.FieldByName('remarks').AsString);
+        tmp := dmUtils.StringToADIF('<QSLMSG' ,rows.FieldByName('remarks').AsString);
         Writeln(f,tmp)
       end;
 
@@ -192,7 +191,7 @@ begin
       end;
       inc(nr);
       Inc(QSOCount);
-      dmData.Q.Next
+      rows.Next
     end
   except
     on E : Exception do
@@ -203,8 +202,7 @@ begin
   end
   finally
     lblInfo.Caption := 'Done ...';
-    dmData.Q.Close;
-    dmData.trQ.Rollback;
+    dmSqlQsl.CloseRows;
     CloseFile(f)
   end
 end;
@@ -360,6 +358,7 @@ const
   LF = #$0a;
   CRLF = CR + LF;
 var
+  rows : TDataSet;
   m    : TMemoryStream;
   url : String = '';
   res  : Boolean;
@@ -403,24 +402,17 @@ begin
     if suc then
     begin
       date := FormatDateTime('yyyy-mm-dd',now);
-      dmData.Q1.Close();
-      if dmData.trQ1.Active then dmData.trQ1.Rollback;
-      dmData.trQ1.StartTransaction;
-      dmData.trQ.StartTransaction;
       try
-        dmData.Q.Open;
-        dmData.Q.First;
-        while not dmData.Q.Eof do
+        rows := dmSqlQsl.OpenQsosForEqslRows(FEqslNotExported, FEqslFilterSql);
+        rows.First;
+        while not rows.Eof do
         begin
-          dmData.Q1.SQL.Text := dmSqlQsl.SqlMarkEqslSent(date, dmData.Q.FieldByName('id_cqrlog_main').AsString);
-          if dmData.DebugLevel>=1 then Writeln(dmData.Q1.SQL.Text);
-          dmData.Q1.ExecSQL;
-          dmData.Q.Next
+          dmSqlQsl.MarkEqslSent(date, rows.FieldByName('id_cqrlog_main').AsString);
+          rows.Next
         end
       finally
-        dmData.Q.Close();
-        dmData.trQ1.Commit;
-        dmData.trQ.Rollback;
+        dmSqlQsl.CommitBatch;
+        dmSqlQsl.CloseRows;
         lblInfo.Caption := 'Upload complete!'
       end
     end
