@@ -294,42 +294,38 @@ var
   adif : Integer;
   Ref  : TDXCCRefArray;
   Del  : TDXCCDelArray;
+  rows : TDataSet;
 begin
-  if trQ.Active then
-    trQ.Rollback;
-  Q.SQL.Text := dmSqlRef.SqlDxccRefForParser;
+  rows := dmSqlRef.OpenDxccRefForParserRows;
   try
-    trQ.StartTransaction;
-    Q.Open;
-    Q.Last;
-    SetLength(Ref,StrToInt(Q.FieldByName('adif').AsString)+1);
+    rows.Last;
+    SetLength(Ref,StrToInt(rows.FieldByName('adif').AsString)+1);
     SetLength(Del,0);
     Ref[0].adif := 0;
     Ref[0].pref := '';
-    Q.First;
-    while not Q.Eof do
+    rows.First;
+    while not rows.Eof do
     begin
-      adif := StrToInt(Q.FieldByName('adif').AsString);
+      adif := StrToInt(rows.FieldByName('adif').AsString);
       Ref[adif].adif    := adif;
-      Ref[adif].pref    := Q.FieldByName('pref').AsString;
-      Ref[adif].name    := Q.FieldByName('name').AsString;
-      Ref[adif].cont    := Q.FieldByName('cont').AsString;
-      Ref[adif].utc     := Q.FieldByName('utc').AsString;
-      Ref[adif].lat     := Q.FieldByName('lat').AsString;
-      Ref[adif].longit  := Q.FieldByName('longit').AsString;
-      Ref[adif].itu     := Q.FieldByName('itu').AsString;
-      Ref[adif].waz     := Q.FieldByName('waz').AsString;
-      Ref[adif].deleted := Q.FieldByName('deleted').AsInteger;
+      Ref[adif].pref    := rows.FieldByName('pref').AsString;
+      Ref[adif].name    := rows.FieldByName('name').AsString;
+      Ref[adif].cont    := rows.FieldByName('cont').AsString;
+      Ref[adif].utc     := rows.FieldByName('utc').AsString;
+      Ref[adif].lat     := rows.FieldByName('lat').AsString;
+      Ref[adif].longit  := rows.FieldByName('longit').AsString;
+      Ref[adif].itu     := rows.FieldByName('itu').AsString;
+      Ref[adif].waz     := rows.FieldByName('waz').AsString;
+      Ref[adif].deleted := rows.FieldByName('deleted').AsInteger;
       if Ref[adif].deleted > 0 then
       begin
         SetLength(Del,Length(Del)+1);
         Del[Length(Del)-1] := adif
       end;
-      Q.Next
+      rows.Next
     end;
   finally
-    Q.Close;
-    trQ.Rollback
+    dmSqlRef.CloseRows
   end;
   DxccService.SetDxccRef(Ref,Del)
 end;

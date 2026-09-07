@@ -1163,6 +1163,7 @@ end;
 
 procedure TfrmNewQSO.ShowDXCCInfo(ref_adif : Word = 0);
 var
+  ref : TDxccRefRow;
   cont, country, WAZ, ITU, pfx : string;
   Date : TDateTime;
   lat, long : String;
@@ -1188,21 +1189,17 @@ begin
     sDelta := posun
   end
   else begin
-     dmDXCC.qDXCCRef.Close;
-     dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdif(adif);
-     dmDXCC.qDXCCRef.Open;
-     if dmDXCC.qDXCCRef.RecordCount > 0 then
+     if dmSqlRef.GetDxccRefByAdif(adif, ref) then
      begin
-       pfx     := dmDXCC.qDXCCRef.FieldByName('pref').AsString;
-       cont    := dmDXCC.qDXCCRef.FieldByName('CONT').AsString;
-       lat     := dmDXCC.qDXCCRef.FieldByName('LAT').AsString;
-       long    := dmDXCC.qDXCCRef.FieldByName('longit').AsString;
-       country := dmDXCC.qDXCCRef.FieldByName('name').AsString;;
-       waz     := dmDXCC.qDXCCRef.FieldByName('WAZ').AsString;
-       itu     := dmDXCC.qDXCCRef.FieldByName('ITU').AsString;
-       sDelta  := dmDXCC.qDXCCRef.FieldByName('utc').AsString
-     end;
-     dmDXCC.qDXCCRef.Close
+       pfx     := ref.Pref;
+       cont    := ref.Cont;
+       lat     := ref.Lat;
+       long    := ref.Long;
+       country := ref.Country;
+       waz     := ref.Waz;
+       itu     := ref.Itu;
+       sDelta  := ref.Utc
+     end
   end;
   if not TryStrToCurr(sDelta,Delta) then
     Delta := 0;

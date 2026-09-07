@@ -171,6 +171,7 @@ var
   AllQSO     : Boolean=False;
   f          : TextFile;
   rows       : TDataSet;
+  ref        : TDxccRefRow;
   mycall     : String;
   myloc, loc : String;
   myname     : String;
@@ -206,13 +207,8 @@ begin
   mycall := cqrini.ReadString('Station','Call','');
   cont := '';WAZ := '';posun := '';ITU := '';lat := '';long := '';
   adif := dmDXCC.id_country(mycall,date,pfx,country,cont,itu,waz,posun,lat,long);
-  dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByAdif(adif);
-  dmDXCC.qDXCCRef.Open;
-  if dmDXCC.qDXCCRef.RecordCount > 0 then
-  begin
-    country := dmDXCC.qDXCCRef.FieldByName('name').AsString;
-  end;
+  if dmSqlRef.GetDxccRefByAdif(adif, ref) then
+    country := ref.Country;
   myloc  := cqrini.ReadString('Station','LOC','');
   if length(myloc) = 4 then myloc := myloc +'LL';
   myname := cqrini.ReadString('Station','Name','');
