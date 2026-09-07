@@ -111,26 +111,13 @@ begin
         dmData.qCQRLOG.Next;
         Continue
       end;
-      dmData.Q.Close();
-      dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxccBandModeQslQ(filter, adif, mode, band);
-      if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open();
-      if (dmData.Q.Fields[0].AsInteger = 0) then
+      if not dmSqlQsl.EarlierQsoExists(eqBandModeQslReceived, False, filter, Call, adif, band, mode) then
       begin
-        dmData.Q.Close;
-        dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
-        if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-        dmData.trQ.StartTransaction;
-        dmData.Q.ExecSQL;
-        dmData.trQ.Commit;
+        dmSqlQsl.SetQslS(cmbQSLS.Text, id);
         QSLNeeded := QSLNeeded + tmp;
         dmData.qCQRLOG.Next;
         Continue
-      end;
-      dmData.Q.Close();
-      dmData.trQ.Rollback
+      end
     end;
 
     if chgQSL.Checked[2] then //first band/mode
@@ -144,30 +131,12 @@ begin
         dmData.qCQRLOG.Next;
         Continue
       end;
-      dmData.Q.Close();
-      if cmbType.ItemIndex = 0 then
-        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByCallBandMode(filter, Call, mode, band)
-      else
-        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxccBandMode(filter, adif, mode, band);
-      if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open();
-      if (dmData.Q.Fields[0].AsInteger = 0) then
+      if not dmSqlQsl.EarlierQsoExists(eqBandMode, cmbType.ItemIndex = 0, filter, Call, adif, band, mode) then
       begin
-        dmData.Q.Close;
-        dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
-        if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-        dmData.trQ.StartTransaction;
-        dmData.Q.ExecSQL;
-        dmData.trQ.Commit;
+        dmSqlQsl.SetQslS(cmbQSLS.Text, id);
         FirstMode := FirstMode + tmp;
         dmData.qCQRLOG.Next;
         Continue
-      end
-      else begin
-        dmData.Q.Close();
-        dmData.trQ.Rollback
       end
     end;
 
@@ -183,29 +152,13 @@ begin
         Continue
       end;
 
-      dmData.Q.Close();
-      if cmbType.ItemIndex = 0 then
-        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByCallBand(filter, Call, band)
-      else
-        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxccBand(filter, adif, band);
-      if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open();
-      if (dmData.Q.Fields[0].AsInteger = 0) then
+      if not dmSqlQsl.EarlierQsoExists(eqBand, cmbType.ItemIndex = 0, filter, Call, adif, band, mode) then
       begin
-        dmData.Q.Close;
-        dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
-        if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-        dmData.trQ.StartTransaction;
-        dmData.Q.ExecSQL;
-        dmData.trQ.Commit;
+        dmSqlQsl.SetQslS(cmbQSLS.Text, id);
         FirstBand := FirstBand + tmp;
         dmData.qCQRLOG.Next;
         Continue
-      end;
-      dmData.Q.Close();
-      dmData.trQ.Rollback
+      end
     end;
 
     if chgQSL.Checked[0] then //first
@@ -220,29 +173,13 @@ begin
         Continue
       end;
 
-      dmData.Q.Close();
-      if cmbType.ItemIndex = 0 then
-        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByCall(filter, Call)
-      else
-        dmData.Q.SQL.Text := dmSqlQsl.SqlEarlierQsoByDxcc(filter, adif);
-      if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.Open();
-      if (dmData.Q.Fields[0].AsInteger = 0) then
+      if not dmSqlQsl.EarlierQsoExists(eqAny, cmbType.ItemIndex = 0, filter, Call, adif, band, mode) then
       begin
-        dmData.Q.Close;
-        dmData.trQ.Rollback;
-        dmData.Q.SQL.Text := dmSqlQsl.SqlSetQslS(cmbQSLS.Text, id);
-        if dmData.DebugLevel >= 1 then WriteLn(dmData.Q.SQL.Text);
-        dmData.trQ.StartTransaction;
-        dmData.Q.ExecSQL;
-        dmData.trQ.Commit;
+        dmSqlQsl.SetQslS(cmbQSLS.Text, id);
         FirstQSO := FirstQSO + tmp;
         dmData.qCQRLOG.Next;
         Continue
-      end;
-      dmData.Q.Close();
-      dmData.trQ.Rollback
+      end
     end;
     dmData.qCQRLOG.Next
   end;
