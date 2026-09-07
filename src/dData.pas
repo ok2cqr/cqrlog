@@ -726,14 +726,7 @@ begin
   cqrini := TMyIni.Create(fHomeDir+IntToStr(nr)+'cqrlog.cfg',fHomeDir+IntToStr(nr)+'local.cfg');
   cqrini.LoadLocalSectionsList;
 
-  trQ.StartTransaction;
-  Q.SQL.Text := dmSqlRef.SqlClearDxccId;
-  Q.ExecSQL;
-  Q.SQL.Text := dmSqlRef.SqlFillDxccId(fDBName);
-  Q.ExecSQL;
-  Q.SQL.Text := dmSqlRef.SqlUnknownDxccId(fDBName);
-  Q.ExecSQL;
-  trQ.Commit;
+  dmSqlRef.RebuildDxccId(fDBName);
 
   trQ.StartTransaction;
   try
@@ -1169,12 +1162,13 @@ begin
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
 
-  //dSqlUserData, dSqlStat, dSqlImpExp and dSqlQsl run on their own cursors
-  //and are not our components, so the loop above does not reach them
+  //dSqlUserData, dSqlStat, dSqlImpExp, dSqlQsl and dSqlRef run on their own
+  //cursors and are not our components, so the loop above does not reach them
   dmSqlUserData.AttachTo(MainCon);
   dmSqlStat.AttachTo(MainCon);
   dmSqlImpExp.AttachTo(MainCon);
   dmSqlQsl.AttachTo(MainCon);
+  dmSqlRef.AttachTo(MainCon);
 
   //special connection for band map thread
   BandMapCon.Transaction    := trBandMapFil;
@@ -1795,18 +1789,13 @@ begin
   Result := '';
   if not dmUtils.IsIOTAOK(iota) then
     exit;
-  Q.Close;
-  Q.SQL.Text := dmSqlRef.SqlIotaName(iota);
-  trQ.StartTransaction;
-  Q.Open();
-  Result := Q.Fields[0].AsString;
-  trQ.RollBack;
-  Q.Close()
+  Result := dmSqlRef.GetIotaName(iota)
 end;
 
 function TdmData.GetIOTAForDXCC(call,pref : String;cmbIOTA : TComboBox; date : TDateTime) : Boolean;
 var
   tmp  : String = '';
+  rows : TDataSet;
 begin
   if fDebugLevel>=1 then Writeln('GetIOTAForDXCC');
   Result := False;
@@ -1814,27 +1803,26 @@ begin
   cmbIOTA.Items.Clear;
   if (pref = '') or (pref='!') or (pref='#') or (pref = '?') then
    exit;
-  Q.Close();
-  Q.SQL.Text := dmSqlRef.SqlIotaForDxcc(pref);
-  trQ.StartTransaction;
-  Q.Open();
-  Q.First;
-  while not Q.Eof do
-  begin
-    cmbIOTA.Items.Add(Q.Fields[0].AsString);
-    if Q.Fields[1].AsString <> '' then
+  rows := dmSqlRef.OpenIotaForDxccRows(pref);
+  try
+    rows.First;
+    while not rows.Eof do
     begin
-      reg.Expression  := Q.Fields[1].AsString;
-      reg.InputString := call;
-      if reg.ExecPos(1) then
+      cmbIOTA.Items.Add(rows.Fields[0].AsString);
+      if rows.Fields[1].AsString <> '' then
       begin
-        tmp := Q.Fields[0].AsString;
+        reg.Expression  := rows.Fields[1].AsString;
+        reg.InputString := call;
+        if reg.ExecPos(1) then
+        begin
+          tmp := rows.Fields[0].AsString;
+        end;
       end;
-    end;
-    Q.Next;
+      rows.Next;
+    end
+  finally
+    dmSqlRef.CloseRows
   end;
-  trQ.RollBack;
-  Q.Close();
   Result := cmbIOTA.Items.Count > 0;
   cmbIOTA.Text := tmp
 end;
@@ -1894,15 +1882,8 @@ begin
   begin
     ZipCode  := dmUtils.ExtractZipCode(qth,Zip1.ZipPos);
     if fDebugLevel>=1 then Writeln('ZipCode: ',ZipCode);
-    if trQ.Active then trQ.Rollback;
-    Q.Close;
-    Q.SQL.Text := dmSqlRef.SqlCountyByZip1(ZipCode);
-    trQ.StartTransaction;
-    Q.Open();
-    Result  := Trim(Q.Fields[0].AsString);
-    StoreTo := Zip1.StoreField;
-    trQ.RollBack;
-    Q.Close
+    Result  := dmSqlRef.GetCountyByZip(1, ZipCode);
+    StoreTo := Zip1.StoreField
   end
 end;
 
@@ -1914,15 +1895,8 @@ begin
   if (Zip2.StoreField <> '') and (Zip2.Name<>'') and (Pos(pfx+';',Zip2.DXCC) > 0) then
   begin
     ZipCode    := dmUtils.ExtractZipCode(qth,Zip2.ZipPos);
-    if trQ.Active then trQ.Rollback;
-    Q.Close;
-    Q.SQL.Text := dmSqlRef.SqlCountyByZip2(ZipCode);
-    trQ.StartTransaction;
-    Q.Open();
-    Result  := Trim(Q.Fields[0].AsString);
-    StoreTo := Zip2.StoreField;
-    trQ.RollBack;
-    Q.Close
+    Result  := dmSqlRef.GetCountyByZip(2, ZipCode);
+    StoreTo := Zip2.StoreField
   end
 end;
 
@@ -1934,15 +1908,8 @@ begin
   if (Zip3.StoreField <> '') and (Zip3.Name<>'') and (Pos(pfx+';',Zip3.DXCC) > 0) then
   begin
     ZipCode    := dmUtils.ExtractZipCode(qth,Zip3.ZipPos);
-    if trQ.Active then trQ.Rollback;
-    Q.Close;
-    Q.SQL.Text := dmSqlRef.SqlCountyByZip3(ZipCode);
-    trQ.StartTransaction;
-    Q.Open();
-    Result  := Trim(Q.Fields[0].AsString);
-    StoreTo := Zip3.StoreField;
-    trQ.RollBack;
-    Q.Close
+    Result  := dmSqlRef.GetCountyByZip(3, ZipCode);
+    StoreTo := Zip3.StoreField
   end
 end;
 
@@ -3048,6 +3015,7 @@ function TdmData.BandModFromFreq(freq : String;var mode,band : String) : Boolean
 var
   tmp : Extended;
   cw, ssb : Extended;
+  rows : TDataSet;
 begin
   Result := False;
   if (freq = '') then
@@ -3057,22 +3025,19 @@ begin
   tmp := tmp/1000;
   freq := FloatToStr(tmp);
 
-  qBands.Close;
-  qBands.SQL.Text := dmSqlRef.SqlBandByFreq(freq);
-  if dmData.DebugLevel >= 1 then
-    Writeln(qBands.SQL.Text);
-  if trBands.Active then
-    trBands.RollBack;
-  trBands.StartTransaction;
-  qBands.Open;
-  qBands.Last;   //to get proper record count
-  if dmData.DebugLevel>=1 then Writeln('qBands.RecorfdCount: ',qBands.RecordCount);
-  if qBands.RecordCount = 0 then
-    exit;
-  qBands.First;
-  band := qBands.Fields[1].AsString;
-  cw   := qBands.Fields[4].AsFloat;
-  ssb  := qBands.Fields[6].AsFloat;
+  rows := dmSqlRef.OpenBandByFreqRows(freq);
+  try
+    rows.Last;   //to get proper record count
+    if dmData.DebugLevel>=1 then Writeln('qBands.RecorfdCount: ',rows.RecordCount);
+    if rows.RecordCount = 0 then
+      exit;
+    rows.First;
+    band := rows.Fields[1].AsString;
+    cw   := rows.Fields[4].AsFloat;
+    ssb  := rows.Fields[6].AsFloat
+  finally
+    dmSqlRef.CloseRows
+  end;
 
   Result := True;
   if (tmp <= cw) then
@@ -3607,66 +3572,12 @@ end;
 
 procedure TdmData.SaveBandChanges(band : String; BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset : Currency);
 begin
-  qBands.Close;
-  if trBands.Active then
-    trBands.Rollback;
-
-  trBands.StartTransaction;
-  try try
-    qBands.SQL.Text := dmSqlRef.SqlUpdateBand;
-    qBands.Prepare;
-    qBands.Params[0].AsCurrency := BandBegin;
-    qBands.Params[1].AsCurrency := BandEnd;
-    qBands.Params[2].AsCurrency := BandCW;
-    qBands.Params[3].AsCurrency := BandRTTY;
-    qBands.Params[4].AsCurrency := BandSSB;
-    qBands.Params[5].AsCurrency := RXOffset;
-    qBands.Params[6].AsCurrency := TXOffset;
-    qBands.Params[7].AsString   := band;
-    qBands.ExecSQL
-  except
-    on E : Exception do
-    begin
-      Writeln(E.Message);
-      trBands.Rollback
-    end
-  end
-  finally
-    if trBands.Active then
-      trBands.Commit
-  end
+  dmSqlRef.SaveBand(band, BandBegin, BandEnd, BandCW, BandRTTY, BandSSB, RXOffset, TXOffset)
 end;
 
 procedure TdmData.GetRXTXOffset(Freq : Currency; var RXOffset,TXOffset : Currency);
 begin
-  RXOffset := 0;
-  TXOffset := 0;
-
-  qBands.Close;
-  if trBands.Active then
-    trBands.Rollback;
-
-  trBands.StartTransaction;
-  try try
-    qBands.SQL.Text := dmSqlRef.SqlBandOffsets;
-    qBands.Prepare;
-    qBands.Params[0].AsCurrency := Freq;
-    qBands.Params[1].AsCurrency := Freq;
-    qBands.Open;
-
-    if qBands.RecordCount > 0 then
-    begin
-      RXOffset := qBands.Fields[0].AsCurrency;
-      TXOffset := qBands.Fields[1].AsCurrency
-    end
-  except
-    on E : Exception do
-      Writeln(E.Message)
-  end
-  finally
-    qBands.Close;
-    trBands.Rollback
-  end
+  dmSqlRef.GetBandOffsets(Freq, RXOffset, TXOffset)
 end;
 
 procedure TdmData.CreateDBConnections;

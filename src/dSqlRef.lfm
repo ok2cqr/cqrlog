@@ -1,4 +1,5 @@
 object dmSqlRef: TdmSqlRef
+  OnCreate = DataModuleCreate
   OldCreateOrder = False
   Height = 150
   HorizontalOffset = 1227
