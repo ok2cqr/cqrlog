@@ -83,7 +83,6 @@ type
     qCallBook: TSQLQuery;
     qProfiles: TSQLQuery;
     qIOTAList: TSQLQuery;
-    qBands: TSQLQuery;
     qWorkedContests: TSQLQuery;
     qDXClusters: TSQLQuery;
     qComment: TSQLQuery;
@@ -116,7 +115,6 @@ type
     trException: TSQLTransaction;
     trComment: TSQLTransaction;
     trDXClusters: TSQLTransaction;
-    trBands: TSQLTransaction;
     trIOTAList: TSQLTransaction;
     trProfiles: TSQLTransaction;
     trCallBook: TSQLTransaction;
@@ -127,7 +125,6 @@ type
     dsrQSLMgr: TDatasource;
     dsrDXCluster: TDatasource;
     dsrProfiles: TDatasource;
-    dsrBands: TDatasource;
     dsrWorkedContests: TDatasource;
     dsrImport: TDatasource;
     dsrQSOBefore: TDatasource;
@@ -136,7 +133,6 @@ type
     procedure DataModuleDestroy(Sender: TObject);
     procedure Q1BeforeOpen(DataSet: TDataSet);
     procedure Q2BeforeOpen(DataSet: TDataSet);
-    procedure qBandsBeforeOpen(DataSet: TDataSet);
     procedure QBeforeOpen(DataSet: TDataSet);
     procedure mQBeforeOpen(DataSet: TDataSet);
     procedure qCQRLOGBeforeOpen(DataSet: TDataSet);
@@ -1245,10 +1241,6 @@ begin
    if fDebugLevel >=1 then Writeln(Q2.SQL.Text)
 end;
 
-procedure TdmData.qBandsBeforeOpen(DataSet: TDataSet);
-begin
-  if fDebugLevel>=1 then Writeln(qBands.SQL.Text)
-end;
 
 procedure TdmData.QBeforeOpen(DataSet: TDataSet);
 begin

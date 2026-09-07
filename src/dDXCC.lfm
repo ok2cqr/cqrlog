@@ -6,39 +6,6 @@ object dmDXCC: TdmDXCC
   HorizontalOffset = 689
   VerticalOffset = 352
   Width = 434
-  object Q: TSQLQuery
-    FieldDefs = <>
-    BeforeOpen = QBeforeOpen
-    Transaction = trQ
-    Options = []
-    Params = <>
-    ParseSQL = False
-    left = 168
-    top = 24
-  end
-  object trQ: TSQLTransaction
-    Active = False
-    Action = caNone
-    Options = []
-    left = 168
-    top = 80
-  end
-  object Q1: TSQLQuery
-    FieldDefs = <>
-    Transaction = trQ1
-    Options = []
-    Params = <>
-    ParseSQL = False
-    left = 112
-    top = 24
-  end
-  object trQ1: TSQLTransaction
-    Active = False
-    Action = caNone
-    Options = []
-    left = 112
-    top = 80
-  end
   object qDXCCRef: TSQLQuery
     FieldDefs = <>
     Transaction = trDXCCRef

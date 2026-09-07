@@ -32,22 +32,14 @@ type
   TdmDXCC = class(TDataModule)
     dsrDeleted: TDatasource;
     dsrValid: TDatasource;
-
-
-    Q: TSQLQuery;
-    Q1: TSQLQuery;
     qDXCCRef: TSQLQuery;
     qValid: TSQLQuery;
     qDeleted: TSQLQuery;
     trDeleted: TSQLTransaction;
     trValid: TSQLTransaction;
     trDXCCRef: TSQLTransaction;
-    trQ1: TSQLTransaction;
-    trQ: TSQLTransaction;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
-    procedure QBeforeOpen(DataSet: TDataSet);
-    procedure trQStartTransaction(Sender: TObject);
   private
 
   public
@@ -217,12 +209,6 @@ begin
   qDXCCRef.Database  := dmData.MainCon;
   qDXCCRef.SQL.Text  := dmSqlRef.SqlDxccRefByAdifOrder;
 
-  trQ.DataBase := dmData.MainCon;
-  Q.DataBase   := dmData.MainCon;
-
-  trQ1.DataBase := dmData.MainCon;
-  Q1.DataBase   := dmData.MainCon;
-
   trValid.DataBase := dmData.MainCon;
   qValid.DataBase  := dmData.MainCon;
 
@@ -251,22 +237,6 @@ begin
   if dmData.DebugLevel>=1 then Writeln('Closing dDXCC');
   //the engine is a unit singleton in uDxccService and frees itself
 end;
-
-procedure TdmDXCC.QBeforeOpen(DataSet: TDataSet);
-begin
-  if dmData.DebugLevel>=1 then WriteLn(Q.SQL.Text)
-end;
-
-
-procedure TdmDXCC.trQStartTransaction(Sender: TObject);
-begin
-  if dmData.DebugLevel >=2 then
-  begin
-    Write('Start Q:');
-    Writeln(Q.SQL.Text);
-  end;
-end;
-
 
 function TdmDXCC.IsAmbiguous(call : String) : Boolean;
 begin

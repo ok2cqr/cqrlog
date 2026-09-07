@@ -20,11 +20,6 @@ object dmData: TdmData
     Left = 728
     Top = 528
   end
-  object dsrBands: TDataSource
-    DataSet = qBands
-    Left = 112
-    Top = 552
-  end
   object dsrWorkedContests: TDataSource
     DataSet = qWorkedContests
     Left = 416
@@ -545,27 +540,11 @@ object dmData: TdmData
     Left = 24
     Top = 288
   end
-  object trBands: TSQLTransaction
-    Active = False
-    Action = caNone
-    Left = 88
-    Top = 288
-  end
   object trWorkedContests: TSQLTransaction
     Active = False
     Action = caNone
     Left = 304
     Top = 368
-  end
-  object qBands: TSQLQuery
-    FieldDefs = <>
-    BeforeOpen = qBandsBeforeOpen
-    Transaction = trBands
-    Params = <>
-    Macros = <>
-    ParseSQL = False
-    Left = 88
-    Top = 216
   end
   object qWorkedContests: TSQLQuery
     FieldDefs = <>
@@ -1027,7 +1006,6 @@ object dmData: TdmData
   end
   object qFreqs: TSQLQuery
     FieldDefs = <>
-    BeforeOpen = qBandsBeforeOpen
     Transaction = trFreqs
     Params = <>
     Macros = <>
