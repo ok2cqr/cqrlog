@@ -403,6 +403,7 @@ var
   toDate   : String = '';
   ClubNR   : String = '';
   ClubCall : String = '';
+  Member   : TClubMember;
 begin
   if data = '' then
     exit;
@@ -419,30 +420,27 @@ begin
     exit;
   ClubInfo^.Text := '';
   ClubTable := 'club'+IntToStr(num);
+  if not dmSqlRef.GetClubMember(ClubTable, Club.ClubField, data, fClubDate, Member) then  //this data is not in club database
+    exit;
+
+  ClubNR   := Member.Nr;
+  ClubCall := Member.Call;
+  frmDate  := Member.FromDate;
+  toDate   := Member.ToDate;
+
+  case num of
+    1 : fClubNR1 := ClubNR;
+    2 : fClubNR2 := ClubNR;
+    3 : fClubNR3 := ClubNR;
+    4 : fClubNR4 := ClubNR;
+    5 : fClubNR5 := ClubNR
+  end;
+
   dmData.Q.Close;
   if dmData.trQ.Active then
     dmData.trQ.Rollback;
-  dmData.Q.SQL.Text := dmSqlRef.SqlClubMember(ClubTable, Club.ClubField, data, fClubDate);
   dmData.trQ.StartTransaction;
   try
-    dmData.Q.Open();
-    if (Trim(dmData.Q.Fields[0].AsString) = '') and (Trim(dmData.Q.Fields[1].AsString) = '') then  //this data is not in club database
-      exit;
-
-    ClubNR   := trim(dmData.Q.Fields[1].AsString);
-    ClubCall := trim(dmData.Q.Fields[2].AsString);
-    frmDate  := dmData.Q.Fields[3].AsString;
-    toDate   := dmData.Q.Fields[4].AsString;
-
-    case num of
-      1 : fClubNR1 := ClubNR;
-      2 : fClubNR2 := ClubNR;
-      3 : fClubNR3 := ClubNR;
-      4 : fClubNR4 := ClubNR;
-      5 : fClubNR5 := ClubNR
-    end;
-
-    dmData.Q.Close;
     if (Club.NewInfo <> '') or (Club.StoreField <> '') then
     begin
       dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoCfm(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode);

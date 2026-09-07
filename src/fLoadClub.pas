@@ -136,13 +136,8 @@ begin
   readln(sF,tmp);
   mLoad.Lines.Add('Working ....');
   mLoad.Repaint;
-  if dmData.trQ.Active then
-  dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
   try try
-    dmData.Q.Close;
-    dmData.Q.SQL.Text := dmSqlRef.SqlClearClub(DBnum);
-    dmData.Q.ExecSQL;
+    dmSqlRef.ClearClub(DBnum);
     while not Eof(sF) do
     begin
       clubnr := '';
@@ -222,13 +217,12 @@ begin
       if clubnr='' then
         clubnr := call;
       if dmData.DebugLevel >=1 then WriteLn(clubnr,';',call,';',fromdate,';',todate);
-      dmData.Q.SQL.Text := dmSqlRef.SqlInsertClubMember(DBnum, clubnr, call, fromDate, toDate);
-      dmData.Q.ExecSQL
+      dmSqlRef.InsertClubMember(DBnum, clubnr, call, fromDate, toDate)
     end
   except
     on Ex : Exception do
     begin
-      dmData.trQ.Rollback;
+      dmSqlRef.RollbackBatch;
       mLoad.Lines.Add('EX: '+ Ex.Message);
       e := True
     end
@@ -237,11 +231,10 @@ begin
     if not e then
     begin
       mLoad.Lines.Add(IntToStr(num) + ' records converted');
-      dmData.trQ.Commit
+      dmSqlRef.CommitBatch
     end
     else
         mLoad.Lines.Add('0 records converted');
-    dmData.Q.Close;
     CloseFile(sF)
   end
 end;
