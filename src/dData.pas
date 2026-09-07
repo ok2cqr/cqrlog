@@ -315,10 +315,7 @@ type
     procedure LoadMasterSCP;
     procedure RepairTables(nr : Word);
     procedure CreateQSLTmpTable;
-    procedure DropQSLTmpTable;
     procedure StartMysqldProcess;
-    procedure MarkAllAsUploadedToeQSL;
-    procedure MarkAllAsUploadedToLoTW;
     procedure RemoveeQSLUploadedFlag(id : Integer);
     procedure RemoveLoTWUploadedFlag(id : Integer);
     procedure StoreFreqMemories(grid : TStringGrid);
@@ -1172,11 +1169,12 @@ begin
       (Components[i] as TSQLTransaction).DataBase := MainCon
   end;
 
-  //dSqlUserData, dSqlStat and dSqlImpExp run on their own cursors and are
-  //not our components, so the loop above does not reach them
+  //dSqlUserData, dSqlStat, dSqlImpExp and dSqlQsl run on their own cursors
+  //and are not our components, so the loop above does not reach them
   dmSqlUserData.AttachTo(MainCon);
   dmSqlStat.AttachTo(MainCon);
   dmSqlImpExp.AttachTo(MainCon);
+  dmSqlQsl.AttachTo(MainCon);
 
   //special connection for band map thread
   BandMapCon.Transaction    := trBandMapFil;
@@ -2903,14 +2901,6 @@ begin
 //second database - no effect. My workaround works. Semicolon is a delimitter.
 end;
 
-procedure TdmData.DropQSLTmpTable;
-begin
-  trQ.StartTransaction;
-  Q.SQL.Text := dmSqlQsl.SqlDropQslExport;
-  Q.ExecSQL;
-  trQ.Commit
-end;
-
 function TdmData.GetMysqldPath : String;
 var
   l : TStringList;
@@ -3125,41 +3115,6 @@ begin
     Res := FindNext(SearchRec)
   end;
   FindClose(SearchRec)
-end;
-
-procedure TdmData.MarkAllAsUploadedToeQSL;
-begin
-  Q1.Close;
-  if trQ1.Active then
-    trQ1.Active := False;
-  try try
-    Q1.SQL.Text := dmSqlQsl.SqlMarkAllEqslSent(dmUtils.DateToSQLIteDate(now));
-    Q1.ExecSQL
-  except
-    trQ1.Rollback
-  end
-  finally
-    if trQ1.Active then
-      trQ1.Commit;
-    Q.Close
-  end
-end;
-procedure TdmData.MarkAllAsUploadedToLoTW;
-begin
-  Q1.Close;
-  if trQ1.Active then
-    trQ1.Active := False;
-  try try
-    Q1.SQL.Text := dmSqlQsl.SqlMarkAllLotwSent(dmUtils.DateToSQLIteDate(now));
-    Q1.ExecSQL
-  except
-    trQ1.Rollback
-  end
-  finally
-    if trQ1.Active then
-      trQ1.Commit;
-    Q.Close
-  end
 end;
 
 function TdmData.TableExists(TableName : String) : Boolean;

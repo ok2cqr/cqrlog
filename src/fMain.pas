@@ -1651,7 +1651,7 @@ procedure TfrmMain.acMarkAlleQSLExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to mark all QSO as uploaded to eQSL?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
   begin
-    dmData.MarkAllAsUploadedToeQSL;
+    dmSqlQsl.MarkAllEqslSent(dmUtils.DateToSQLIteDate(now));
     acRefresh.Execute
   end
 end;
@@ -1721,7 +1721,7 @@ procedure TfrmMain.acUploadAllToLoTWExecute(Sender: TObject);
 begin
   if Application.MessageBox('Do you really want to mark all QSO as uploaded to LoTW?','Question ...',mb_YesNo + mb_IconQuestion) = idYes then
   begin
-    dmData.MarkAllAsUploadedToLoTW;
+    dmSqlQsl.MarkAllLotwSent(dmUtils.DateToSQLIteDate(now));
     acRefresh.Execute
   end
 end;
@@ -2157,32 +2157,32 @@ var
   procedure MarkRec;
   begin
     idx := dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsInteger;
-    dmData.Q.SQL.Text := dmSqlQsl.SqlMarkQslReceived(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)), idx);
-    if dmData.DebugLevel >= 1 then
-      Writeln(dmData.Q.SQL.Text);
-    dmData.Q.ExecSQL;
+    dmSqlQsl.MarkQslReceived(dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)), idx)
   end;
 
 begin
-  dmData.Q.Close;
-  dmData.trQ.StartTransaction;
   if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
      dmLogUpload.DisableOnlineLogSupport;
 
-  if dbgrdMain.SelectedRows.Count < 2 then
-  begin
-    MarkRec
-  end
-  else
-  begin
-    for i := 0 to dbgrdMain.SelectedRows.Count - 1 do
+  try
+    if dbgrdMain.SelectedRows.Count < 2 then
     begin
-      dbgrdMain.DataSource.DataSet.GotoBookmark(
-        Pointer(dbgrdMain.SelectedRows.Items[i]));
       MarkRec
     end
+    else
+    begin
+      for i := 0 to dbgrdMain.SelectedRows.Count - 1 do
+      begin
+        dbgrdMain.DataSource.DataSet.GotoBookmark(
+          Pointer(dbgrdMain.SelectedRows.Items[i]));
+        MarkRec
+      end
+    end;
+    dmSqlQsl.CommitBatch
+  except
+    dmSqlQsl.RollbackBatch;
+    raise
   end;
-  dmData.trQ.Commit;
   dmData.qCQRLOG.Close;
   dmData.RefreshMainDatabase(idx);
   dbgrdMain.SelectedRows.Clear;
@@ -2543,32 +2543,31 @@ var
         qsl := 'MB'
     end;
 
-    dmData.Q.Close;
-    dmData.Q.SQL.Text := dmSqlQsl.SqlMarkQslSent(qsl, dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)), idx);
-    dmData.Q.ExecSQL
+    dmSqlQsl.MarkQslSent(qsl, dmUtils.DateInRightFormat(dmUtils.GetDateTime(0)), idx)
   end;
 
 begin
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
    if cqrini.ReadBool('OnlineLog','IgnoreQSL',False) then
      dmLogUpload.DisableOnlineLogSupport;
 
-  if dbgrdMain.SelectedRows.Count = 0 then
-  begin
-    MarkRec
-  end
-  else begin
-    for i := 0 to dbgrdMain.SelectedRows.Count - 1 do
+  try
+    if dbgrdMain.SelectedRows.Count = 0 then
     begin
-      dbgrdMain.DataSource.DataSet.GotoBookmark(
-        Pointer(dbgrdMain.SelectedRows.Items[i]));
       MarkRec
     end
+    else begin
+      for i := 0 to dbgrdMain.SelectedRows.Count - 1 do
+      begin
+        dbgrdMain.DataSource.DataSet.GotoBookmark(
+          Pointer(dbgrdMain.SelectedRows.Items[i]));
+        MarkRec
+      end
+    end;
+    dmSqlQsl.CommitBatch
+  except
+    dmSqlQsl.RollbackBatch;
+    raise
   end;
-  dmData.trQ.Commit;
 
   dmData.qCQRLOG.Close;
   dbgrdMain.SelectedRows.Clear;
