@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, MaskEdit, lcltype, ExtDlgs, EditBtn, inifiles, strutils;
+  Buttons, MaskEdit, lcltype, ExtDlgs, EditBtn, inifiles, strutils, db;
 
 type
 
@@ -549,6 +549,7 @@ end;
 procedure TfrmFilter.cmbBandSelectorChange(Sender: TObject);
 var
   Band :String;
+  rows : TDataSet;
 begin
   if (cmbBandSelector.ItemIndex < 1 ) then
    Begin
@@ -560,19 +561,19 @@ begin
      Band:= cmbBandSelector.items[cmbBandSelector.ItemIndex];
      if (band<>'') then
       begin
-           dmData.qBands.Close;
-           dmData.qBands.SQL.Text := dmSqlRef.SqlBandRange(Band);
-           dmData.qBands.Open;
-
-           if (dmData.qBands.RecordCount > 0) then
-            begin
-              if (dmData.qBands.FieldByName('band').AsString = Band) then
-               Begin
-                 edtFreqFrom.Text:=dmData.qBands.FieldByName('b_begin').AsString;
-                 edtFreqTo.Text := dmData.qBands.FieldByName('b_end').AsString;
-               end;
-            end;
-           dmData.qBands.Close;
+           rows := dmSqlRef.OpenBandRangeRows(Band);
+           try
+             if (rows.RecordCount > 0) then
+              begin
+                if (rows.FieldByName('band').AsString = Band) then
+                 Begin
+                   edtFreqFrom.Text:=rows.FieldByName('b_begin').AsString;
+                   edtFreqTo.Text := rows.FieldByName('b_end').AsString;
+                 end;
+              end
+           finally
+             dmSqlRef.CloseRows
+           end;
       end;
     end;
 

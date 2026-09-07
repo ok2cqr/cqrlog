@@ -374,26 +374,21 @@ end;
 Procedure TdmUtils.BandFromDbase;
 var
   BandCount: integer;
+  rows : TDataSet;
 Begin
   BandCount := 0;
-  dmData.qBands.Close;
-  dmData.qBands.SQL.Text := dmSqlRef.SqlAllBands;
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
-  dmData.trBands.StartTransaction;
+  rows := dmSqlRef.OpenAllBandsRows;
   try
-    dmData.qBands.Open;
-    while not dmData.qBands.Eof  do
+    while not rows.Eof  do
      Begin
-       BandFreq[BandCount].band:= dmData.qBands.FieldByName('band').AsString;
-       BandFreq[BandCount].b_begin:=dmData.qBands.FieldByName('b_begin').AsCurrency;
-       BandFreq[BandCount].b_end:=dmData.qBands.FieldByName('b_end').AsCurrency;
+       BandFreq[BandCount].band:= rows.FieldByName('band').AsString;
+       BandFreq[BandCount].b_begin:=rows.FieldByName('b_begin').AsCurrency;
+       BandFreq[BandCount].b_end:=rows.FieldByName('b_end').AsCurrency;
        inc(BandCount);
-       dmData.qBands.Next;
+       rows.Next;
      end;
   finally
-    dmData.qBands.Close;
-    dmData.trBands.Rollback
+    dmSqlRef.CloseRows
   end;
 end;
 function TdmUtils.BandFromArray(tmp:Currency):string;
@@ -416,30 +411,26 @@ function TdmUtils.GetModeFromFreq(freq: string): string; //freq in MHz
 var
   Band: string;
   tmp: extended;
+  rows: TDataSet;
 begin
   Result := '';
   band := GetBandFromFreq(freq);
-  dmData.qBands.Close;
-  dmData.qBands.SQL.Text := dmSqlRef.SqlBand(band);
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
-  dmData.trBands.StartTransaction;
+  rows := dmSqlRef.OpenBandRows(band);
   try
-    dmData.qBands.Open;
     tmp := StrToFloat(freq);
-    if dmData.qBands.RecordCount > 0 then
+    if rows.RecordCount > 0 then
     begin
-      if ((tmp >= dmData.qBands.FieldByName('B_BEGIN').AsCurrency) and
-        (tmp <= dmData.qBands.FieldByName('CW').AsCurrency)) then
+      if ((tmp >= rows.FieldByName('B_BEGIN').AsCurrency) and
+        (tmp <= rows.FieldByName('CW').AsCurrency)) then
         Result := 'CW'
       else
       begin
-        if ((tmp > dmData.qBands.FieldByName('RTTY').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('SSB').AsCurrency)) then
+        if ((tmp > rows.FieldByName('RTTY').AsCurrency) and
+          (tmp <= rows.FieldByName('SSB').AsCurrency)) then
           Result := 'RTTY';
 
-        if ((tmp > dmData.qBands.FieldByName('SSB').AsCurrency) and
-          (tmp <= dmData.qBands.FieldByName('B_END').AsCurrency)) then
+        if ((tmp > rows.FieldByName('SSB').AsCurrency) and
+          (tmp <= rows.FieldByName('B_END').AsCurrency)) then
         begin
           if (tmp > 5) and (tmp < 6) then
             Result := 'USB'
@@ -453,8 +444,7 @@ begin
       end
     end
   finally
-    dmData.qBands.Close;
-    dmData.trBands.Rollback
+    dmSqlRef.CloseRows
   end;
 end;
 
@@ -1185,12 +1175,7 @@ procedure TdmUtils.GetCoordinate(pfx: string; var latitude, longitude: currency)
 var
   s, d: string;
 begin
-  //dmDXCC.trDXCCRef.StartTransaction;
-  dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccRefByPrefix(pfx);
-  dmDXCC.qDXCCRef.Open;
-  s := dmDXCC.qDXCCRef.Fields[4].AsString;
-  d := dmDXCC.qDXCCRef.Fields[5].AsString;
+  dmSqlRef.GetDxccLatLong(pfx, s, d);
 
   if ((Length(s) = 0) or (Length(d) = 0)) then
   begin
@@ -1258,12 +1243,8 @@ begin
   fDelta := 0;
   Result := '';
   tmp := '';
-  dmDXCC.qDXCCRef.Close;
-  dmDXCC.qDXCCRef.SQL.Text := dmSqlRef.SqlDxccUtcOffset(pfx);
-  dmDXCC.qDXCCRef.Open;
-  if dmDXCC.qDXCCRef.RecordCount > 0 then
+  if dmSqlRef.GetDxccUtc(pfx, delta) then
   begin
-    delta := dmDXCC.qDXCCRef.Fields[0].AsString;
     if not TryStrToCurr(delta, fdelta) then
       delta := '0';
     Date := dmUtils.GetDateTime(StrToCurr(delta));
@@ -1326,6 +1307,8 @@ begin
 end;
 
 function TdmUtils.FreqFromBand(band, mode: string): string;
+var
+  rows : TDataSet;
 begin
   Result := '';
   mode := LowerCase(mode);
@@ -1343,23 +1326,14 @@ begin
        mode:='rtty'  //this covers all modes not phone or cw
     end;
 
-  dmData.qBands.Close;
-  dmData.qBands.SQL.Text := dmSqlRef.SqlBandModeSegment(mode, band);
-  if dmData.DebugLevel >=1 then
-     Writeln(dmData.qBands.SQL.Text);
-
-  if dmData.trBands.Active then
-    dmData.trBands.Rollback;
-  dmData.trBands.StartTransaction;
+  rows := dmSqlRef.OpenBandModeSegmentRows(mode, band);
   try
-    dmData.qBands.Open;
-    if dmData.qBands.RecordCount > 0 then
-      Result:= dmData.qBands.FieldByName(mode).AsString;
+    if rows.RecordCount > 0 then
+      Result:= rows.FieldByName(mode).AsString;
   finally
     if dmData.DebugLevel >=1 then
      Writeln('FreqFromBand('+band+','+mode+')='+Result);
-    dmData.qBands.Close;
-    dmData.trBands.Rollback
+    dmSqlRef.CloseRows
   end;
 
 end;
