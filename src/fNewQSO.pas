@@ -7137,6 +7137,7 @@ end;
 
 procedure TfrmNewQSO.SendSpot;
 var
+  rows : TDataSet;
   call,rst_s,stx,stx_str,srx,srx_str,HisName,HelloMsg : String;
   tmp  : String;
   ModRst,
@@ -7166,37 +7167,30 @@ begin
     end;
   end
   else begin
-    dmData.Q.Close;
-    if dmData.trQ.Active then dmData.trQ.Rollback;
-    dmData.Q.SQL.Text := dmSqlQso.SqlLastQsoForSpot;
-    dmData.trQ.StartTransaction;
-    if dmData.DebugLevel >=1 then
-      Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    call := dmData.Q.Fields[0].AsString;
-    freq := FloatToStrF(dmData.Q.Fields[1].AsCurrency*1000,ffFixed,8,1);
-    if (cqrini.ReadBool('DXCluster','SpotRX',False)) then
-      freq := FloatToStrF(dmData.Q.Fields[2].AsCurrency*1000,ffFixed,8,1);
-    dmData.Q.Close();
-    dmData.trQ.Rollback;
+    rows := dmSqlQso.OpenLastQsoForSpotRows;
+    try
+      call := rows.Fields[0].AsString;
+      freq := FloatToStrF(rows.Fields[1].AsCurrency*1000,ffFixed,8,1);
+      if (cqrini.ReadBool('DXCluster','SpotRX',False)) then
+        freq := FloatToStrF(rows.Fields[2].AsCurrency*1000,ffFixed,8,1)
+    finally
+      dmSqlQso.CloseRows
+    end;
     tmp  := 'DX ' + freq + ' ' + call;
 
-    dmData.Q.SQL.Text := dmSqlQso.SqlLastQsoDetailsForSpot;
-    dmData.trQ.StartTransaction;
-    if dmData.DebugLevel >=1 then
-      Writeln(dmData.Q.SQL.Text);
-    dmData.Q.Open();
-    ModRst  := dmData.Q.Fields[0].AsString+' '+dmData.Q.Fields[1].AsString;
-    HMLoc   := dmData.Q.Fields[4].AsString+'<'+dmData.Q.Fields[3].AsString+'>'+dmData.Q.Fields[2].AsString;
-    rst_s := dmData.Q.Fields[1].AsString;
-    stx :=  dmData.Q.Fields[5].AsString;
-    stx_str:=dmData.Q.Fields[6].AsString;
-    srx :=  dmData.Q.Fields[7].AsString;
-    srx_str:=dmData.Q.Fields[8].AsString;
-    HisName:= dmData.Q.Fields[9].AsString;
-    dmData.Q.Close();
-    dmData.trQ.Rollback;
-
+    rows := dmSqlQso.OpenLastQsoDetailsForSpotRows;
+    try
+      ModRst  := rows.Fields[0].AsString+' '+rows.Fields[1].AsString;
+      HMLoc   := rows.Fields[4].AsString+'<'+rows.Fields[3].AsString+'>'+rows.Fields[2].AsString;
+      rst_s := rows.Fields[1].AsString;
+      stx :=  rows.Fields[5].AsString;
+      stx_str:=rows.Fields[6].AsString;
+      srx :=  rows.Fields[7].AsString;
+      srx_str:=rows.Fields[8].AsString;
+      HisName:= rows.Fields[9].AsString
+    finally
+      dmSqlQso.CloseRows
+    end
   end;
   if (call = '') then
   exit;

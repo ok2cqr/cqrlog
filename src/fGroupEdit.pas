@@ -184,14 +184,8 @@ var
       dmData.Q.ExecSQL;
       dmData.trQ.Commit
     end
-    else begin
-      dmData.Q.SQL.Text := dmSqlQso.SqlSetQsoFields(sql, idx);
-      if dmData.DebugLevel>=1 then
-                       Writeln(dmData.Q.SQL.Text);
-      dmData.trQ.StartTransaction;
-      dmData.Q.ExecSQL;
-      dmData.trQ.Commit
-    end;
+    else
+      dmSqlQso.SetQsoFields(sql, idx);
 
     inc(nr);
     pnlGrpEdt.Color:=clYellow;

@@ -466,13 +466,7 @@ begin
     lblComment.Caption := 'Rebuilding DXCC statistics ...';
     Repaint;
 
-    if dmData.trQ.Active then dmData.trQ.RollBack;
-    dmData.Q.SQL.Text := dmSqlQso.SqlQsoCount;
-    dmData.trQ.StartTransaction;
-    dmData.Q.Open;
-    pBarProg.Max := dmData.Q.Fields[0].AsInteger;
-    dmData.Q.Close;
-    dmData.trQ.Rollback;
+    pBarProg.Max := dmSqlQso.GetQsoCount('');
 
     rows := dmSqlImpExp.OpenQsosForDxccRebuildRows;
     rows.First;

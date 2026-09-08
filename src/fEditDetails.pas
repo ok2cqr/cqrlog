@@ -127,13 +127,8 @@ begin
   else
     sql6          := 'eqsl_qslrdate='+QuotedStr(edteQSLRDate.Text)+',eqsl_qsl_rcvd='+QuotedStr('E');
 
-  dmData.Q.Close;
-  dmData.Q.SQL.Text := dmSqlQso.SqlSetQsoFields(sql1+','+sql2+','+sql3+','+sql4+','+sql5+','+sql6,
-                                                dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsLongint);
-  if dmData.DebugLevel>=1 then Writeln(dmData.Q.SQL.Text);
-  dmData.trQ.StartTransaction;
-  dmData.Q.ExecSQL;
-  dmData.trQ.Commit;
+  dmSqlQso.SetQsoFields(sql1+','+sql2+','+sql3+','+sql4+','+sql5+','+sql6,
+                        dmData.qCQRLOG.FieldByName('id_cqrlog_main').AsLongint);
   ModalResult := mrOK
 end;
 

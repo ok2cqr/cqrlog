@@ -436,73 +436,48 @@ begin
     5 : fClubNR5 := ClubNR
   end;
 
-  dmData.Q.Close;
-  if dmData.trQ.Active then
-    dmData.trQ.Rollback;
-  dmData.trQ.StartTransaction;
-  try
-    if (Club.NewInfo <> '') or (Club.StoreField <> '') then
+  if (Club.NewInfo <> '') or (Club.StoreField <> '') then
+  begin
+    if dmSqlQso.ClubQsoConfirmed(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode) then //already conf
     begin
-      dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoCfm(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode);
-      dmData.Q.Open();
-      if (dmData.Q.Fields[0].AsInteger > 0) then //already conf
-      begin
-        ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.AlreadyCfmInfo);
-        ClubInfo^.Color := Club.AlreadyColor;
-        frmNewQSO.StoreClubInfo(
-          Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
-        )
-      end
-      else begin
-        dmData.Q.Close();
-        dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoOnBandMode(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode);
-        dmData.Q.Open();
-        if (dmData.Q.Fields[0].AsInteger > 0) then //qsl needed
-        begin
-          ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.QSLNeededInfo);
-          ClubInfo^.Color := Club.QSLColor;
-          frmNewQSO.StoreClubInfo(
-            Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
-          );
-          exit
-        end
-        else begin
-          dmData.Q.Close();
-          dmData.Q.SQL.Text := dmSqlQso.SqlClubQsoOnBand(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq));
-          dmData.Q.Open();
-          if (dmData.Q.Fields[0].AsInteger > 0) then //new mode
-          begin
-            ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.NewModeInfo);
-            ClubInfo^.Color := Club.ModeColor;
-            frmNewQSO.StoreClubInfo(
-              Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
-            )
-          end
-          else begin
-            dmData.Q.Close();
-            dmData.Q.SQL.Text := dmSqlQso.SqlClubQso(num, ClubNR, frmDate, toDate);
-            dmData.Q.Open();
-            if (dmData.Q.Fields[0].AsInteger > 0) then //new band
-            begin
-              ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.NewBandInfo);
-              ClubInfo^.Color := Club.BandColor;
-              frmNewQSO.StoreClubInfo(
-                Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
-              )
-            end
-            else begin
-              ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.NewInfo);
-              ClubInfo^.Color := Club.NewColor;
-              frmNewQSO.StoreClubInfo(
-                Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
-              )
-            end
-          end
-        end
-      end
+      ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.AlreadyCfmInfo);
+      ClubInfo^.Color := Club.AlreadyColor;
+      frmNewQSO.StoreClubInfo(
+        Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
+      )
     end
-  finally
-    dmData.trQ.RollBack
+    else if dmSqlQso.ClubQsoWorkedOnBandMode(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq), fmode) then //qsl needed
+    begin
+      ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.QSLNeededInfo);
+      ClubInfo^.Color := Club.QSLColor;
+      frmNewQSO.StoreClubInfo(
+        Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
+      );
+      exit
+    end
+    else if dmSqlQso.ClubQsoWorkedOnBand(num, ClubNR, frmDate, toDate, dmUtils.GetBandFromFreq(ffreq)) then //new mode
+    begin
+      ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.NewModeInfo);
+      ClubInfo^.Color := Club.ModeColor;
+      frmNewQSO.StoreClubInfo(
+        Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
+      )
+    end
+    else if dmSqlQso.ClubQsoWorked(num, ClubNR, frmDate, toDate) then //new band
+    begin
+      ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.NewBandInfo);
+      ClubInfo^.Color := Club.BandColor;
+      frmNewQSO.StoreClubInfo(
+        Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
+      )
+    end
+    else begin
+      ClubInfo^.Text  := SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.NewInfo);
+      ClubInfo^.Color := Club.NewColor;
+      frmNewQSO.StoreClubInfo(
+        Club.StoreField,SetStoreText(ClubCall,ClubNR,Club.LongName,Club.Name,Club.StoreText)
+      )
+    end
   end
 end;
 
