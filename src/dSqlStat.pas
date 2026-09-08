@@ -900,29 +900,29 @@ end;
 
 function TdmSqlStat.SqlBigSquaresWorked(const TableName : String) : String;
 begin
-  Result := 'select left(loc,2) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll'
+  Result := 'select substr(loc,1,2) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll'
 end;
 
 function TdmSqlStat.SqlSquaresWorked(const TableName : String) : String;
 begin
-  Result := 'select left(loc,4) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll'
+  Result := 'select substr(loc,1,4) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+' group by ll'
 end;
 
 function TdmSqlStat.SqlBigSquaresOnBand(const TableName, BandCond : String) : String;
 begin
-  Result := 'select upper(left(loc,2)) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+
+  Result := 'select upper(substr(loc,1,2)) as ll FROM '+TableName+' where loc <> '+QuotedStr('')+
             BandCond+' group by ll'
 end;
 
 function TdmSqlStat.SqlSquaresInBigSquare(const TableName, BigSquare, BandCond : String) : String;
 begin
-  Result := 'select upper(left(loc,4)) as lll FROM '+TableName+' where loc like '+
+  Result := 'select upper(substr(loc,1,4)) as lll FROM '+TableName+' where loc like '+
             QuotedStr(BigSquare+'%')+BandCond+' group by lll order by loc'
 end;
 
 function TdmSqlStat.SqlSquaresInBigSquareCfm(const TableName, BigSquare, BandCond, CfmCond : String) : String;
 begin
-  Result := 'select upper(left(loc,4)) as lll FROM '+TableName+' where loc like '+
+  Result := 'select upper(substr(loc,1,4)) as lll FROM '+TableName+' where loc like '+
             QuotedStr(BigSquare+'%')+BandCond+'and ('+CfmCond+') group by lll order by loc'
 end;
 
@@ -1033,14 +1033,14 @@ end;
 
 function TdmSqlStat.SqlWkdSquaresOnBand(const LogTable, Band, ModeTail : String) : String;
 begin
-  Result := 'select upper(left(loc,4)) as lo from ' + LogTable +
+  Result := 'select upper(substr(loc,1,4)) as lo from ' + LogTable +
             ' where band=' + #39 + Band +
             #39 + 'and loc<>' + #39 + #39 + ModeTail
 end;
 
 function TdmSqlStat.SqlWkdSquares(const LogTable, ModeTail : String) : String;
 begin
-  Result := 'select upper(left(loc,4)) as lo from ' + LogTable +
+  Result := 'select upper(substr(loc,1,4)) as lo from ' + LogTable +
             ' where loc<>' + #39 + #39 + ModeTail
 end;
 
@@ -1048,7 +1048,7 @@ end;
 // square query, so both counts see the same rows.
 function TdmSqlStat.SqlWkdSquareCounts(const FromClause, DayLimit : String) : String;
 begin
-  Result := 'select count(distinct upper(left(loc,2))) as main,count(distinct upper(left(loc,4))) as sub'+
+  Result := 'select count(distinct upper(substr(loc,1,2))) as main,count(distinct upper(substr(loc,1,4))) as sub'+
             FromClause+DayLimit
 end;
 

@@ -780,13 +780,13 @@ end;
 // Where is what follows WHERE in the grid's current query.
 function TdmSqlQso.SqlSquareCountFiltered(const Where : String) : String;
 begin
-  Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM view_cqrlog_main_by_qsodate WHERE left(loc,4) <> '+QuotedStr('')+' AND '
+  Result := 'SELECT COUNT(DISTINCT(substr(loc,1,4))) FROM view_cqrlog_main_by_qsodate WHERE substr(loc,1,4) <> '+QuotedStr('')+' AND '
             + Where
 end;
 
 function TdmSqlQso.SqlSquareCount : String;
 begin
-  Result := 'SELECT COUNT(DISTINCT(LEFT(loc,4))) FROM cqrlog_main WHERE left(loc,4) <> '+QuotedStr('')+' '
+  Result := 'SELECT COUNT(DISTINCT(substr(loc,1,4))) FROM cqrlog_main WHERE substr(loc,1,4) <> '+QuotedStr('')+' '
 end;
 
 // GetQSOCount without a filter, and the DXCC rebuild after an import.
